@@ -1,0 +1,115 @@
+<mockup version="1.0" skin="sketch" measuredW="1299" measuredH="633" mockupW="1130" mockupH="621">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="159" y="2" w="870" h="621" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderColor>15132390</borderColor>
+        <color>15132390</color>
+      </controlProperties>
+    </control>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::Canvas" x="159" y="2" w="869" h="107" measuredW="100" measuredH="70" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>3355443</color>
+      </controlProperties>
+    </control>
+    <control controlID="2" controlTypeID="com.balsamiq.mockups::Title" x="175" y="7" w="-1" h="-1" measuredW="134" measuredH="51" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Empresa</text>
+        <color>16777215</color>
+        <size>32</size>
+      </controlProperties>
+    </control>
+    <control controlID="3" controlTypeID="com.balsamiq.mockups::Paragraph" x="780" y="19" w="220" h="26" measuredW="200" measuredH="140" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Cuenta%20%20Configuraci%F3n%20%20Ayuda</text>
+        <align>right</align>
+        <color>16777215</color>
+        <size>11</size>
+      </controlProperties>
+    </control>
+    <control controlID="4" controlTypeID="com.balsamiq.mockups::Paragraph" x="179" y="68" w="287" h="26" measuredW="200" measuredH="140" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Inventario%20%20%7C%20%20Compras%20%20%7C%20%20Ventas%20%20%7C%20%20Gastos</text>
+        <align>left</align>
+        <color>16777215</color>
+        <size>13</size>
+      </controlProperties>
+    </control>
+    <control controlID="5" controlTypeID="com.balsamiq.mockups::Title" x="208" y="117" w="-1" h="-1" measuredW="88" measuredH="51" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Lotes</text>
+        <size>32</size>
+      </controlProperties>
+    </control>
+    <control controlID="6" controlTypeID="com.balsamiq.mockups::Canvas" x="208" y="176" w="771" h="432" measuredW="100" measuredH="70" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderColor>16777215</borderColor>
+      </controlProperties>
+    </control>
+    <control controlID="7" controlTypeID="com.balsamiq.mockups::Canvas" x="208" y="175" w="771" h="433" measuredW="100" measuredH="70" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderColor>16777215</borderColor>
+      </controlProperties>
+    </control>
+    <control controlID="8" controlTypeID="com.balsamiq.mockups::DataGrid" x="222" y="270" w="742" h="283" measuredW="688" measuredH="109" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <selectedIndex>-1</selectedIndex>
+        <alternateRowColor>15594478</alternateRowColor>
+        <verticalScrollbar>false</verticalScrollbar>
+        <vLines>false</vLines>
+        <underline>false</underline>
+        <hLines>false</hLines>
+        <text>Fecha%2C%20Descripci%F3n%2C%20Lugar%2C%20Total%2C%20Aprobado%2C%20%0A1%20Ene%202010%2C%20Primer%20lote%202010%2C%20Tienda%201%20La%20Paz%2C20500.00%2C%2C%20%5Bver%5D%20%5Beditar%5D%20%5Bborrar%5D%0A29%20Dic%202009%2C%20Ultimo%20lote%202009%2C%20Tienda%202%20Santa%20Cruz%2C20500.00%2C%2C%5Bver%5D%0A12%20Dic%202009%2C%20Entrega%20especial%20Concepci%F3n%2C%20Tienda%204%20Cochabamba%2C12500.00%2C%2C%5Bver%5D</text>
+        <rowHeight>27</rowHeight>
+        <borderStyle>none</borderStyle>
+        <bold>false</bold>
+        <hasHeader>true</hasHeader>
+      </controlProperties>
+    </control>
+    <control controlID="9" controlTypeID="com.balsamiq.mockups::Canvas" x="208" y="175" w="771" h="64" measuredW="100" measuredH="70" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderColor>11776947</borderColor>
+        <color>11776947</color>
+      </controlProperties>
+    </control>
+    <control controlID="10" controlTypeID="com.balsamiq.mockups::LinkBar" x="800" y="568" w="-1" h="-1" measuredW="162" measuredH="25" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>%3C%3C%2C%201%2C2%2C3%2C%20%3E%3E</text>
+      </controlProperties>
+    </control>
+    <control controlID="11" controlTypeID="com.balsamiq.mockups::Link" x="228" y="196" w="-1" h="-1" measuredW="108" measuredH="25" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>%20%20%20Adicionar%20lote</text>
+      </controlProperties>
+    </control>
+    <control controlID="12" controlTypeID="com.balsamiq.mockups::Icon" x="228" y="199" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="12" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>CircledPlusIcon%7Cxsmall</icon>
+      </controlProperties>
+    </control>
+    <control controlID="14" controlTypeID="com.balsamiq.mockups::IconLabel" x="754" y="296" w="-1" h="-1" measuredW="72" measuredH="25" zOrder="13" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>aprobar</text>
+        <labelPosition>right</labelPosition>
+        <icon>RightFillTriangleIcon%7Cxsmall</icon>
+        <color>5000268</color>
+      </controlProperties>
+    </control>
+    <control controlID="17" controlTypeID="com.balsamiq.mockups::StickyNote" x="1036" y="215" w="253" h="121" measuredW="109" measuredH="123" zOrder="14" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Cuando%20se%20aprueba%20se%20genera%0Aen%20el%20Stock%20los%20items%20que%20fueron%0Acreados</text>
+      </controlProperties>
+    </control>
+    <control controlID="19" controlTypeID="com.balsamiq.mockups::Label" x="754" y="323" w="-1" h="-1" measuredW="61" measuredH="25" zOrder="15" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>aprobado</text>
+        <color>32768</color>
+      </controlProperties>
+    </control>
+    <control controlID="20" controlTypeID="com.balsamiq.mockups::Label" x="756" y="349" w="-1" h="-1" measuredW="61" measuredH="25" zOrder="16" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>aprobado</text>
+        <color>32768</color>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

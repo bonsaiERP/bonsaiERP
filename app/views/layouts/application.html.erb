@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+
+  <title></title>
+  <%= stylesheet_link_tag "style", :cache => "styles" %>
+  <%= javascript_include_tag "jquery-1.4.2", "rails", "application", :cache => "scripts" %>
+</head>
+  <body>
+
+    <% if Rails.env == "development" %>
+    <div id="debug-error" style="display:none; width: 640px; height: 480px; overflow: auto; z-index: 10000; background:#FFF;color:#000">
+      <iframe id="cont-iframe" width="100%" height="100%"></iframe>
+    </div>
+    <% end %>
+
+    <div id="cont">
+      <div id="flashNotice"><%= flash[:notice] %></div>
+      <div id="flashError"><%= flash[:error] %></div>
+
+      <%= yield %>
+    </div>
+
+  </body>
+</html>
+

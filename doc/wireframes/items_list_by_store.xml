@@ -1,0 +1,145 @@
+<mockup version="1.0" skin="sketch" measuredW="1233" measuredH="713" mockupW="1064" mockupH="701">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="159" y="2" w="870" h="701" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderColor>15132390</borderColor>
+        <color>15132390</color>
+      </controlProperties>
+    </control>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::Canvas" x="159" y="2" w="869" h="107" measuredW="100" measuredH="70" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>3355443</color>
+      </controlProperties>
+    </control>
+    <control controlID="2" controlTypeID="com.balsamiq.mockups::Title" x="175" y="7" w="-1" h="-1" measuredW="134" measuredH="51" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Empresa</text>
+        <size>32</size>
+        <color>16777215</color>
+      </controlProperties>
+    </control>
+    <control controlID="3" controlTypeID="com.balsamiq.mockups::Paragraph" x="780" y="19" w="220" h="26" measuredW="200" measuredH="140" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Cuenta%20%20Configuraci%F3n%20%20Ayuda</text>
+        <align>right</align>
+        <size>11</size>
+        <color>16777215</color>
+      </controlProperties>
+    </control>
+    <control controlID="4" controlTypeID="com.balsamiq.mockups::Paragraph" x="179" y="68" w="287" h="26" measuredW="200" measuredH="140" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Almacenes%20%20%7C%20%20Compras%20%20%7C%20%20Ventas%20%20%7C%20%20Gastos</text>
+        <align>left</align>
+        <size>13</size>
+        <color>16777215</color>
+      </controlProperties>
+    </control>
+    <control controlID="5" controlTypeID="com.balsamiq.mockups::Title" x="208" y="117" w="-1" h="-1" measuredW="458" measuredH="51" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Detalle%20de%20items%20por%20almacen</text>
+        <size>32</size>
+      </controlProperties>
+    </control>
+    <control controlID="6" controlTypeID="com.balsamiq.mockups::Canvas" x="208" y="176" w="771" h="493" measuredW="100" measuredH="70" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderColor>16777215</borderColor>
+      </controlProperties>
+    </control>
+    <control controlID="7" controlTypeID="com.balsamiq.mockups::DataGrid" x="222" y="271" w="742" h="283" measuredW="602" measuredH="181" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <selectedIndex>-1</selectedIndex>
+        <borderStyle>none</borderStyle>
+        <hLines>false</hLines>
+        <text>C%F3digo%2C%20Item%2C%20Cantidad%2C%20Precio%20Unitario%5Crpromedio%2C%20Subtotal%0APMMCL1%2C%20Parlantes%20multimedia%20Creative%2C%20100%2C%20150.0%2C%2015000.00%0AMS20F%2C%20Monitor%20de%2020%22%20Samsumg%2C%20100%2C%20150.0%2C%2015000.00%0ASMDTK232%2C%20Microprocesador%20Intel%20Core2%20Quad%202.6%20Gz%2C%2010%2C%20200%2C%202000.00%0A%20%0A%2C%20%2C%20%2C%20%2C%20</text>
+        <vLines>false</vLines>
+        <verticalScrollbar>false</verticalScrollbar>
+        <underline>false</underline>
+        <rowHeight>27</rowHeight>
+        <alternateRowColor>15594478</alternateRowColor>
+        <hasHeader>true</hasHeader>
+        <bold>false</bold>
+      </controlProperties>
+    </control>
+    <control controlID="8" controlTypeID="com.balsamiq.mockups::Canvas" x="208" y="176" w="771" h="64" measuredW="100" measuredH="70" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderColor>11776947</borderColor>
+        <color>11776947</color>
+      </controlProperties>
+    </control>
+    <control controlID="9" controlTypeID="com.balsamiq.mockups::StickyNote" x="987" y="280" w="236" h="103" measuredW="109" measuredH="123" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Cuando%20un%20item%20este%20desabilitado%20debe%20tener%20un%20color%20mas%20claro</text>
+      </controlProperties>
+    </control>
+    <control controlID="10" controlTypeID="com.balsamiq.mockups::LinkBar" x="795" y="631" w="-1" h="-1" measuredW="162" measuredH="25" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>%3C%3C%2C%201%2C2%2C3%2C%20%3E%3E</text>
+      </controlProperties>
+    </control>
+    <control controlID="11" controlTypeID="com.balsamiq.mockups::Paragraph" x="228" y="398" w="736" h="33" measuredW="200" measuredH="140" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>ABHTY23%20%20%20%20%20%20%20%20%20%20%20Disco%20Duro%20de%20100GB%20IBM%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20</text>
+        <bold>false</bold>
+        <color>6710886</color>
+      </controlProperties>
+    </control>
+    <control controlID="12" controlTypeID="com.balsamiq.mockups::Paragraph" x="821" y="568" w="150" h="35" measuredW="200" measuredH="140" zOrder="12" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Total%3A%2032%2C000.00</text>
+        <size>16</size>
+      </controlProperties>
+    </control>
+    <control controlID="13" controlTypeID="com.balsamiq.mockups::Paragraph" x="658" y="425" w="50" h="31" measuredW="200" measuredH="140" zOrder="13" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>10</text>
+        <bold>true</bold>
+        <color>13576743</color>
+      </controlProperties>
+    </control>
+    <control controlID="14" controlTypeID="com.balsamiq.mockups::Paragraph" x="329" y="424" w="126" h="31" measuredW="200" measuredH="140" zOrder="14" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Blue%20Ray%20Panasonic</text>
+        <bold>false</bold>
+        <color>13576743</color>
+      </controlProperties>
+    </control>
+    <control controlID="15" controlTypeID="com.balsamiq.mockups::Paragraph" x="227" y="425" w="102" h="24" measuredW="200" measuredH="140" zOrder="15" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>BRDP101</text>
+        <bold>false</bold>
+        <color>13576743</color>
+      </controlProperties>
+    </control>
+    <control controlID="16" controlTypeID="com.balsamiq.mockups::StickyNote" x="964" y="413" w="236" h="103" measuredW="109" measuredH="123" zOrder="16" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Cuando%20un%20item%20tiene%20una%20cantidad%20menor%20al%20la%20que%20se%20establece%20debe%20marcar%20con%20Rojo</text>
+      </controlProperties>
+    </control>
+    <control controlID="17" controlTypeID="com.balsamiq.mockups::Paragraph" x="742" y="424" w="50" h="31" measuredW="200" measuredH="140" zOrder="17" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>200.00</text>
+        <bold>false</bold>
+        <color>13576743</color>
+      </controlProperties>
+    </control>
+    <control controlID="18" controlTypeID="com.balsamiq.mockups::Paragraph" x="871" y="425" w="50" h="31" measuredW="200" measuredH="140" zOrder="18" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>2000.00</text>
+        <bold>false</bold>
+        <color>13576743</color>
+      </controlProperties>
+    </control>
+    <control controlID="19" controlTypeID="com.balsamiq.mockups::TabBar" x="222" y="242" w="742" h="29" measuredW="282" measuredH="100" zOrder="19" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderStyle>none</borderStyle>
+        <text>Todos%2C%20Almacen1%2C%20Almacen2</text>
+      </controlProperties>
+    </control>
+    <control controlID="20" controlTypeID="com.balsamiq.mockups::StickyNote" x="922" y="114" w="236" h="115" measuredW="109" measuredH="123" zOrder="20" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>En%20caso%20de%20que%20solo%20tenga%20un%20almacen%20solo%20debe%20mostrar%20es%20sin%20el%20tab%20de%20*Todos*</text>
+        <bold>false</bold>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>
