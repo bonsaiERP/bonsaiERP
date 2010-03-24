@@ -160,10 +160,49 @@
         <icon>CircledMinusIcon%7Cxsmall</icon>
       </controlProperties>
     </control>
-    <control controlID="28" controlTypeID="com.balsamiq.mockups::Icon" x="880" y="568" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="26" locked="false" isInGroup="-1">
+    <control controlID="28" controlTypeID="com.balsamiq.mockups::Icon" x="880" y="568" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="27" locked="false" isInGroup="-1">
       <controlProperties>
         <icon>CircledMinusIcon%7Cxsmall</icon>
       </controlProperties>
     </control>
+    <control controlID="29" controlTypeID="com.balsamiq.mockups::TitleWindow" x="363" y="293" w="450" h="211" measuredW="450" measuredH="400" zOrder="28" locked="false" isInGroup="-1">
+      <controlProperties>
+        <close>true</close>
+        <topheight>26</topheight>
+        <verticalScrollbar>false</verticalScrollbar>
+        <bottomheight>0</bottomheight>
+        <text>Nueva%20unidad%20de%20medida</text>
+        <maximizeRestore>false</maximizeRestore>
+        <minimize>false</minimize>
+      </controlProperties>
+    </control>
+    <control controlID="30" controlTypeID="com.balsamiq.mockups::TextInput" x="477" y="349" w="268" h="-1" measuredW="50" measuredH="29" zOrder="29" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Metro</text>
+        <bold>false</bold>
+      </controlProperties>
+    </control>
+    <control controlID="31" controlTypeID="com.balsamiq.mockups::Label" x="407" y="352" w="53" h="25" measuredW="53" measuredH="25" zOrder="30" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Nombre</text>
+      </controlProperties>
+    </control>
+    <control controlID="32" controlTypeID="com.balsamiq.mockups::TextInput" x="477" y="390" w="268" h="-1" measuredW="34" measuredH="29" zOrder="31" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>mt.</text>
+        <bold>false</bold>
+      </controlProperties>
+    </control>
+    <control controlID="33" controlTypeID="com.balsamiq.mockups::Label" x="389" y="393" w="75" h="25" measuredW="75" measuredH="25" zOrder="32" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Abreviaci%F3n</text>
+      </controlProperties>
+    </control>
+    <control controlID="34" controlTypeID="com.balsamiq.mockups::Button" x="543" y="451" w="63" h="-1" measuredW="63" measuredH="28" zOrder="33" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Salvar</text>
+      </controlProperties>
+    </control>
+    <control controlID="35" controlTypeID="com.balsamiq.mockups::ModalScreen" x="159" y="8" w="867" h="738" measuredW="320" measuredH="240" zOrder="26" locked="false" isInGroup="-1"/>
   </controls>
 </mockup>

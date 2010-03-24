@@ -11,3 +11,4 @@ nbproject
 *.vim
 public/javascripts/plugins.js
 public/javascripts/scripts.js
+doc/wireframes/images/*.*
