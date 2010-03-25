@@ -1,0 +1,22 @@
+en:
+  default:
+    edit: "Edit"
+    update: "Update"
+    destroy: "Destroy"
+    show: "Show"
+  users:
+    new_user: "New user"
+    edit_user: "Edit user"
+    delete_user: "Delete user"
+    user: "User"
+    form:
+      first_name: "First name"
+      last_name: "Last name"
+      email: "Email"
+      phone: "Phone"
+      mobile: "Mobile"
+      website: "Website"
+      description: "Description"
+      password: "Password"
+      password_confirmation: "Password confirmation"
+

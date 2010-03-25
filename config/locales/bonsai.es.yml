@@ -1,0 +1,7 @@
+es:
+  users:
+    new_user: "Nuevo usuario"
+    form:
+      email: "Email"
+      phone: "Teléfono"
+      mobile: "Móbil"

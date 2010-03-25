@@ -26,15 +26,19 @@ gem "sqlite3-ruby", :require => "sqlite3"
 gem "devise", "1.1.pre4"
 gem "simple_form", ">=1.1.2"
 gem "will_paginate", "3.0.pre"
+gem "ruby-debug"
 
 # Test
 group :test do  
   gem "rspec", ">=2.0.0.beta.4"  
   gem "rspec-rails", ">=2.0.0.beta.4"  
   gem "webrat"  
+  # gem "factory_girl"
 end  
 
 # Cucumber
 gem "capybara"
 gem "database_cleaner"
 gem "cucumber-rails"
+
+gem "less", "1.2.21"

@@ -1,0 +1,13 @@
+<% simple_form_for @user do |f| -%>
+  <%= f.input :first_name, :label => I18n.t("users.form.first_name") %>
+  <%= f.input :last_name, :label => I18n.t("users.form.last_name") %>
+  <%= f.input :email, :label => I18n.t("users.form.email") %>
+  <%= f.input :phone, :label => I18n.t("users.form.phone"), :required => false %>
+  <%= f.input :mobile, :label => I18n.t("users.form.mobile"), :required => false %>
+  <%= f.input :website, :label => I18n.t("users.form.website"), :required => false %>
+  <%= f.input :password, :label => I18n.t("users.form.password") %>
+  <%= f.input :password_confirmation, :label => I18n.t("users.form.password_confirmation") %>
+  <%= f.input :description, :label => I18n.t("users.form.description"), :required => false %>
+
+  <%= f.button :submit %>
+<% end -%>
