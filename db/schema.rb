@@ -9,12 +9,37 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100324202441) do
+ActiveRecord::Schema.define(:version => 20100325221629) do
+
+  create_table "countries", :force => true do |t|
+    t.string   "name",        :limit => 50
+    t.string   "abreviation", :limit => 10
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "organisations", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "country_id"
+    t.string   "name",        :limit => 100
+    t.string   "address"
+    t.string   "address_alt"
+    t.string   "phone",       :limit => 20
+    t.string   "phone_alt",   :limit => 20
+    t.string   "mobile",      :limit => 20
+    t.string   "email"
+    t.string   "website"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "organisations", ["country_id"], :name => "index_organisations_on_country_id"
+  add_index "organisations", ["user_id"], :name => "index_organisations_on_user_id"
 
   create_table "users", :force => true do |t|
-    t.string   "email",                              :null => false
-    t.string   "encrypted_password",   :limit => 40, :null => false
-    t.string   "password_salt",                      :null => false
+    t.string   "email",                               :null => false
+    t.string   "encrypted_password",   :limit => 40,  :null => false
+    t.string   "password_salt",                       :null => false
     t.string   "confirmation_token",   :limit => 20
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
@@ -28,12 +53,16 @@ ActiveRecord::Schema.define(:version => 20100324202441) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "first_name"
-    t.string   "last_name"
+    t.string   "first_name",           :limit => 80
+    t.string   "last_name",            :limit => 80
+    t.string   "phone",                :limit => 20
+    t.string   "mobile",               :limit => 20
+    t.string   "website",              :limit => 200
+    t.string   "account_type",         :limit => 15
     t.text     "description"
-    t.string   "phone"
-    t.string   "mobile"
-    t.string   "website"
   end
+
+  add_index "users", ["first_name"], :name => "index_users_on_first_name"
+  add_index "users", ["last_name"], :name => "index_users_on_last_name"
 
 end

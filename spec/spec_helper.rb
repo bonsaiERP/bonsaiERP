@@ -18,3 +18,8 @@ Rspec.configure do |config|
   # config.mock_with :rr
   config.mock_with :rspec
 end
+
+class ActionController::TestCase
+  include Devise::TestHelpers
+end
+

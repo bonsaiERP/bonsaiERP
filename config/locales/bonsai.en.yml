@@ -1,10 +1,15 @@
 en:
+  flash:
+    error: "There are errors"
   default:
     edit: "Edit"
     update: "Update"
     destroy: "Destroy"
     show: "Show"
-  users:
+  user:
+    class_name: "Usuario"
+    flash:
+      create: "The user was created!"
     new_user: "New user"
     edit_user: "Edit user"
     delete_user: "Delete user"
@@ -19,4 +24,6 @@ en:
       description: "Description"
       password: "Password"
       password_confirmation: "Password confirmation"
-
+  country:
+    name: "Name"
+    abreviation: "Abreviation"

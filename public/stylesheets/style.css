@@ -14,3 +14,10 @@ ul.show li label {
   font-weight: bold;
   margin-right: 5px;
 }
+label {
+  font-weight: bold;
+  vertical-align: top;
+  float: left;
+  text-align: right;
+}
+form div { margin-top: 4px; }

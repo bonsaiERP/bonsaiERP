@@ -1,4 +1,8 @@
 Bonsaierp::Application.routes.draw do |map|
+  resources :organisations
+
+  resources :countries
+
   devise_for :users
   resources :users
   root :to => "home#index"

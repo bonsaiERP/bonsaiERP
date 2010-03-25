@@ -1,0 +1,53 @@
+<p>
+  <b>User:</b>
+  <%= @organisation.user %>
+</p>
+
+<p>
+  <b>Country:</b>
+  <%= @organisation.country %>
+</p>
+
+<p>
+  <b>Name:</b>
+  <%= @organisation.name %>
+</p>
+
+<p>
+  <b>Address:</b>
+  <%= @organisation.address %>
+</p>
+
+<p>
+  <b>Address alt:</b>
+  <%= @organisation.address_alt %>
+</p>
+
+<p>
+  <b>Phone:</b>
+  <%= @organisation.phone %>
+</p>
+
+<p>
+  <b>Phone alt:</b>
+  <%= @organisation.phone_alt %>
+</p>
+
+<p>
+  <b>Mobile:</b>
+  <%= @organisation.mobile %>
+</p>
+
+<p>
+  <b>Email:</b>
+  <%= @organisation.email %>
+</p>
+
+<p>
+  <b>Website:</b>
+  <%= @organisation.website %>
+</p>
+
+
+<%= link_to 'Edit', edit_organisation_path(@organisation) %> |
+<%= link_to 'Back', organisations_path %>

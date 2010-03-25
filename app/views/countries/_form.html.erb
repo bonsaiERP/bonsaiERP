@@ -1,0 +1,19 @@
+<style>
+  label{
+    width: 20em;
+    display: block;
+    font-size: 1.2em;
+    text-align: left;
+    float: none;
+  }
+</style>
+<% simple_form_for(@country) do |f| %>
+  <div class="inputs">
+    <%= f.input :name, :label => I18n.t("country.name") %>
+    <%= f.input :abreviation, :label => I18n.t("country.abreviation") %>
+  </div>
+
+  <div class="actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

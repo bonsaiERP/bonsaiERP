@@ -8,8 +8,7 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(params[:user])
-    flash[:notice] if @user.save
-    debugger
+    flash[:error] = "user.create.error"unless @user.save
     respond_with(@user)
   end
 

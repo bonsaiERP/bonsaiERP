@@ -10,6 +10,12 @@ module NavigationHelpers
     
     when /the home\s?page/
       '/'
+    when /the new organisation page/
+      new_organisation_path
+
+    when /the new country page/
+      new_country_path
+
     when /the new user page/
       new_user_path
 

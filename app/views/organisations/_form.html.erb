@@ -1,0 +1,18 @@
+<% simple_form_for(@organisation) do |f| %>
+  <div class="inputs">
+    <%= f.association :user %>
+    <%= f.association :country %>
+    <%= f.input :name %>
+    <%= f.input :address %>
+    <%= f.input :address_alt %>
+    <%= f.input :phone %>
+    <%= f.input :phone_alt %>
+    <%= f.input :mobile %>
+    <%= f.input :email %>
+    <%= f.input :website %>
+  </div>
+
+  <div class="actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>
