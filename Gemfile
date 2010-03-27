@@ -33,6 +33,7 @@ group :test do
   gem "rspec", ">=2.0.0.beta.4"  
   gem "rspec-rails", ">=2.0.0.beta.4"  
   gem "webrat"  
+  gem "mocha"
   # gem "factory_girl"
 end  
 
