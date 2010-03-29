@@ -1,6 +1,6 @@
 en:
   flash:
-    error: "There are errors"
+    error: "Please correct errors"
   default:
     edit: "Edit"
     update: "Update"
@@ -14,7 +14,7 @@ en:
     edit_user: "Edit user"
     delete_user: "Delete user"
     user: "User"
-    form:
+    attributes:
       first_name: "First name"
       last_name: "Last name"
       email: "Email"

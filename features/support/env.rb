@@ -57,3 +57,7 @@ if defined?(ActiveRecord::Base)
   rescue LoadError => ignore_if_database_cleaner_not_present
   end
 end
+
+# Added support files to make tests
+require File.join(File.dirname(__FILE__), 'data')
+

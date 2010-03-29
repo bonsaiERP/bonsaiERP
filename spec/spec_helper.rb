@@ -3,6 +3,8 @@
 ENV["RAILS_ENV"] ||= 'test'
 require File.dirname(__FILE__) + "/../config/environment" unless defined?(RAILS_ROOT)
 require 'rspec/rails'
+# To use fixtures and data
+require 'factories'
 
 # Requires supporting files with custom matchers and macros, etc,
 # in ./support/ and its subdirectories.

@@ -1,9 +1,9 @@
 ActionMailer::Base.smtp_settings = {
-  :address => "smtp.gmail.com",
-  :port => "587",
+  :address => "localhost",#"smtp.gmail.com",
+  :port => "25",#"587",
   :domain => "ecuanime.net",
-  :user_name => "boris.barroso",
-  :password => "tr7b3h3mot",
+  #:user_name => "boris.barroso",
+  #:password => "tr7b3h3mot",
   :authentication => "plain",
   :enable_starttls_auto => true
 }
