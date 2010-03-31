@@ -1,9 +1,13 @@
 class Organisation < ActiveRecord::Base
   # callbacks
+  after_create :create_taxes # There is an error with the relationship
 
   # relationships
   belongs_to :user
   belongs_to :country
+
+  has_many :taxes, :class_name => "Tax", :dependent => :destroy
+#  accepts_nested_attributes_for :tax_rates
 
   # validations
   validates_associated :user
@@ -18,8 +22,16 @@ class Organisation < ActiveRecord::Base
     %Q(name)
   end
 
+  # Sets the user for the current organisation
   def set_user(current_user_id)
     write_attribute(:user_id, current_user_id)
   end
 
+protected
+  # Adds the default taxes for each country
+  def create_taxes
+    country.taxes.each do |tax|
+      taxes << Tax.new(tax)
+    end
+  end
 end

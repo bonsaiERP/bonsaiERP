@@ -1,0 +1,12 @@
+<% simple_form_for(@tax) do |f| %>
+  <div class="inputs">
+    <%= f.input :name %>
+    <%= f.input :abbreviation %>
+    <%= f.input :rate %>
+    <%= f.association :organisation %>
+  </div>
+
+  <div class="actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

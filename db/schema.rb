@@ -9,13 +9,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100325221629) do
+ActiveRecord::Schema.define(:version => 20100330214802) do
 
   create_table "countries", :force => true do |t|
-    t.string   "name",        :limit => 50
-    t.string   "abreviation", :limit => 10
+    t.string   "name",         :limit => 50
+    t.string   "abbreviation", :limit => 10
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "taxes"
   end
 
   create_table "organisations", :force => true do |t|
@@ -35,6 +36,17 @@ ActiveRecord::Schema.define(:version => 20100325221629) do
 
   add_index "organisations", ["country_id"], :name => "index_organisations_on_country_id"
   add_index "organisations", ["user_id"], :name => "index_organisations_on_user_id"
+
+  create_table "taxes", :force => true do |t|
+    t.string   "name"
+    t.string   "abbreviation",    :limit => 10
+    t.decimal  "rate",                          :precision => 5, :scale => 2
+    t.integer  "organisation_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "taxes", ["organisation_id"], :name => "index_taxes_on_organisation_id"
 
   create_table "users", :force => true do |t|
     t.string   "email",                               :null => false

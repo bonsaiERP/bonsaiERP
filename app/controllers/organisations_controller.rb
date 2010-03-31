@@ -34,6 +34,7 @@ class OrganisationsController < ApplicationController
     @organisation.set_user(current_user) # Sets the current user with de organization
     if @organisation.save
       flash[:notice] = I18n.t("organisation.flash.create")
+      redirect_to(organisation_url(@organisation))
     else
       add_flash_error(@organisation)
       flash[:notice] = I18n.t("organisation.flash.error")

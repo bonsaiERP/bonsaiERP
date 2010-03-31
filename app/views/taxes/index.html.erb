@@ -1,0 +1,29 @@
+<h1>Listing taxes</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Abbreviation</th>
+    <th>Rate</th>
+    <th>Organisation</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @taxes.each do |tax| %>
+  <tr>
+    <td><%= tax.name %></td>
+    <td><%= tax.abbreviation %></td>
+    <td><%= tax.rate %></td>
+    <td><%= tax.organisation %></td>
+    <td><%= link_to 'Show', tax %></td>
+    <td><%= link_to 'Edit', edit_tax_path(tax) %></td>
+    <td><%= link_to 'Destroy', tax, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New tax', new_tax_path %>

@@ -1,53 +1,68 @@
 <p>
-  <b>User:</b>
+  <b><%= t("organisation.attributes.user") %>:</b>
   <%= @organisation.user %>
 </p>
 
 <p>
-  <b>Country:</b>
+  <b><%= t("organisation.attributes.country") %></b>
   <%= @organisation.country %>
 </p>
 
 <p>
-  <b>Name:</b>
+  <b><%= t("organisation.attributes.name") %></b>
   <%= @organisation.name %>
 </p>
 
 <p>
-  <b>Address:</b>
+  <b><%= t("organisation.attributes.address") %></b>
   <%= @organisation.address %>
 </p>
 
 <p>
-  <b>Address alt:</b>
+  <b><%= t("organisation.attributes.address_alt") %></b>
   <%= @organisation.address_alt %>
 </p>
 
 <p>
-  <b>Phone:</b>
+  <b><%= t("organisation.attributes.phone") %></b>
   <%= @organisation.phone %>
 </p>
 
 <p>
-  <b>Phone alt:</b>
+  <b><%= t("organisation.attributes.phone_alt") %></b>
   <%= @organisation.phone_alt %>
 </p>
 
 <p>
-  <b>Mobile:</b>
-  <%= @organisation.mobile %>
+  <b><%= t("organisation.attributes.mobile") %></b>
+   <%= @organisation.mobile %>
 </p>
 
 <p>
-  <b>Email:</b>
+  <b><%= t("organisation.attributes.email") %></b>
   <%= @organisation.email %>
 </p>
 
 <p>
-  <b>Website:</b>
+  <b><%= t("organisation.attributes.website") %></b>
   <%= @organisation.website %>
 </p>
 
+<h2><%= t("tax.class_name_plural") %></h2>
+<table>
+  <tr>
+    <th><%= t("tax.attributes.name") %></th>
+    <th><%= t("tax.attributes.abbreviation") %></th>
+    <th><%= t("tax.attributes.rate") %> %</th>
+  </tr>
+  <% @organisation.taxes.each do |tax| %>
+  <tr>
+    <td><%= tax.name %></td>
+    <td><%= tax.abbreviation %></td>
+    <td><%= tax.rate.round(2) %>%</td>
+  </tr>
+  <% end %>
+</table>
 
-<%= link_to 'Edit', edit_organisation_path(@organisation) %> |
-<%= link_to 'Back', organisations_path %>
+<%= link_to t("default.edit"), edit_organisation_path(@organisation) %> |
+<%= link_to t("default.index"), organisations_path %>

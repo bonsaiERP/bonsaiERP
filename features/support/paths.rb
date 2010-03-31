@@ -10,6 +10,9 @@ module NavigationHelpers
     
     when /the home\s?page/
       '/'
+    when /the new tax page/
+      new_tax_path
+
     when /the new organisation page/
       new_organisation_path
 

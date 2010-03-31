@@ -1,0 +1,23 @@
+<p>
+  <b>Name:</b>
+  <%= @tax.name %>
+</p>
+
+<p>
+  <b>Abbreviation:</b>
+  <%= @tax.abbreviation %>
+</p>
+
+<p>
+  <b>Rate:</b>
+  <%= @tax.rate %>
+</p>
+
+<p>
+  <b>Organisation:</b>
+  <%= @tax.organisation %>
+</p>
+
+
+<%= link_to 'Edit', edit_tax_path(@tax) %> |
+<%= link_to 'Back', taxes_path %>

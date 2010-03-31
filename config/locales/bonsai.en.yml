@@ -6,6 +6,7 @@ en:
     update: "Update"
     destroy: "Destroy"
     show: "Show"
+    index: "List"
   user:
     class_name: "Usuario"
     flash:
@@ -27,3 +28,22 @@ en:
   country:
     name: "Name"
     abreviation: "Abreviation"
+  organisation:
+    attributes:
+      user: "User"
+      country: "Country"
+      name: "Name"
+      address: "Address"
+      address_alt: "Alternative address"
+      phone: "Phone"
+      phone_alt: "Alternative phone"
+      mobile: "Mobile"
+      email: "Email"
+      website: "Website"
+  tax:
+    class_name: "Tax"
+    class_name_plural: "Tax"
+    attributes:
+      name: "Name"
+      abbreviation: "Abbreviation"
+      rate: "Rate"
