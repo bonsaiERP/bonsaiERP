@@ -15,7 +15,7 @@ class CreateUsers < ActiveRecord::Migration
       t.string :mobile, :limit => 20
       t.string :website, :limit => 200
       t.string :account_type, :limit => 15
-      t.text :description
+      t.string :description, :limit => 255
 
       t.timestamps
     end

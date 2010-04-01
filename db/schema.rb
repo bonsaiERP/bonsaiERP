@@ -9,18 +9,27 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100330214802) do
+ActiveRecord::Schema.define(:version => 20100401192000) do
 
   create_table "countries", :force => true do |t|
     t.string   "name",         :limit => 50
     t.string   "abbreviation", :limit => 10
+    t.text     "taxes"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "taxes"
+  end
+
+  create_table "links", :force => true do |t|
+    t.integer  "organisation_id"
+    t.integer  "user_id"
+    t.string   "role"
+    t.string   "settings"
+    t.boolean  "creator"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "organisations", :force => true do |t|
-    t.integer  "user_id"
     t.integer  "country_id"
     t.string   "name",        :limit => 100
     t.string   "address"
@@ -30,12 +39,12 @@ ActiveRecord::Schema.define(:version => 20100330214802) do
     t.string   "mobile",      :limit => 20
     t.string   "email"
     t.string   "website"
+    t.integer  "user_key"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "organisations", ["country_id"], :name => "index_organisations_on_country_id"
-  add_index "organisations", ["user_id"], :name => "index_organisations_on_user_id"
 
   create_table "taxes", :force => true do |t|
     t.string   "name"
@@ -71,7 +80,7 @@ ActiveRecord::Schema.define(:version => 20100330214802) do
     t.string   "mobile",               :limit => 20
     t.string   "website",              :limit => 200
     t.string   "account_type",         :limit => 15
-    t.text     "description"
+    t.string   "description"
   end
 
   add_index "users", ["first_name"], :name => "index_users_on_first_name"

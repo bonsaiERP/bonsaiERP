@@ -3,7 +3,8 @@ class User < ActiveRecord::Base
   devise :authenticatable, :confirmable, :recoverable, :rememberable, :trackable, :validatable
 
   # Relationships
-  has_many :organisations
+  has_many :links
+  has_many :organisations, :through => :links
 
   # Validations
   validates_presence_of :first_name, :last_name

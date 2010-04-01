@@ -29,13 +29,19 @@ end
 Then /^I should see organisation with (\w+), (\w+)$/ do |name, country|
   page.has_content?(name).should == true
   page.has_content?(country).should == true
+  organisation = Organisation.last
 
-  country = Country.find_by_name(country)
-
-  country.taxes.each do |v|
+  # Show taxes added in Organisation callback
+  organisation.country.taxes.each do |v|
     page.has_content?(v[:name]).should == true
     page.has_content?(v[:abbreviation]).should == true
     page.has_content?(v[:rate].to_s).should == true
   end
-  
+
+  # Show links created in Organisation
+  organisation.links.each do |l|
+    page.has_content?(l.user.to_s).should == true
+    page.has_content?(l.role).should == true
+  end
+
 end

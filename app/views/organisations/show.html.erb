@@ -1,7 +1,4 @@
-<p>
-  <b><%= t("organisation.attributes.user") %>:</b>
-  <%= @organisation.user %>
-</p>
+<h1><%= @organisation.name %></h1>
 
 <p>
   <b><%= t("organisation.attributes.country") %></b>
@@ -47,6 +44,20 @@
   <b><%= t("organisation.attributes.website") %></b>
   <%= @organisation.website %>
 </p>
+
+<h2><%= t("user.class_name_plural") %></h2>
+<table>
+  <tr>
+    <th><%= t("user.attributes.name") %></th>
+    <th><%= t("link.attributes.role") %></th>
+  </tr>
+  <% @organisation.links.each do |l| %>
+  <tr>
+    <td><%= l.user %></td>
+    <td><%= l.role %></td>
+  </tr>
+  <% end %>
+</table>
 
 <h2><%= t("tax.class_name_plural") %></h2>
 <table>

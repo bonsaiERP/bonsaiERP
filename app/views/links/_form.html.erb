@@ -1,0 +1,13 @@
+<% simple_form_for(@link) do |f| %>
+  <div class="inputs">
+    <%= f.input :name %>
+    <%= f.association :organisation %>
+    <%= f.association :user %>
+    <%= f.input :role %>
+    <%= f.input :settings %>
+  </div>
+
+  <div class="actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

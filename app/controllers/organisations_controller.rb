@@ -31,7 +31,8 @@ class OrganisationsController < ApplicationController
   # POST /organisations.xml
   def create
     @organisation = Organisation.new(params[:organisation])
-    @organisation.set_user(current_user) # Sets the current user with de organization
+    @organisation.set_user_key(current_user.id)
+
     if @organisation.save
       flash[:notice] = I18n.t("organisation.flash.create")
       redirect_to(organisation_url(@organisation))

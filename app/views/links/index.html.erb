@@ -1,0 +1,31 @@
+<h1>Listing links</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Organisation</th>
+    <th>User</th>
+    <th>Role</th>
+    <th>Settings</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @links.each do |link| %>
+  <tr>
+    <td><%= link.name %></td>
+    <td><%= link.organisation %></td>
+    <td><%= link.user %></td>
+    <td><%= link.role %></td>
+    <td><%= link.settings %></td>
+    <td><%= link_to 'Show', link %></td>
+    <td><%= link_to 'Edit', edit_link_path(link) %></td>
+    <td><%= link_to 'Destroy', link, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New link', new_link_path %>

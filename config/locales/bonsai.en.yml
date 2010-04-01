@@ -8,7 +8,8 @@ en:
     show: "Show"
     index: "List"
   user:
-    class_name: "Usuario"
+    class_name: "User"
+    class_name_plural: "Users"
     flash:
       create: "The user was created!"
     new_user: "New user"

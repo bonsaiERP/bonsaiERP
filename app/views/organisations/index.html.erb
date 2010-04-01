@@ -2,7 +2,6 @@
 
 <table>
   <tr>
-    <th>User</th>
     <th>Country</th>
     <th>Name</th>
     <th>Address</th>
@@ -12,9 +11,6 @@
     <th>Mobile</th>
     <th>Email</th>
     <th>Website</th>
-    <th></th>
-    <th></th>
-    <th></th>
   </tr>
 
 <% @organisations.each do |organisation| %>
@@ -29,8 +25,6 @@
     <td><%= organisation.mobile %></td>
     <td><%= organisation.email %></td>
     <td><%= organisation.website %></td>
-    <td><%= link_to 'Show', organisation %></td>
-    <td><%= link_to 'Edit', edit_organisation_path(organisation) %></td>
     <td><%= link_to 'Destroy', organisation, :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
 <% end %>

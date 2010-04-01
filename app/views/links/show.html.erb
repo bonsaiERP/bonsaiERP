@@ -1,0 +1,28 @@
+<p>
+  <b>Name:</b>
+  <%= @link.name %>
+</p>
+
+<p>
+  <b>Organisation:</b>
+  <%= @link.organisation %>
+</p>
+
+<p>
+  <b>User:</b>
+  <%= @link.user %>
+</p>
+
+<p>
+  <b>Role:</b>
+  <%= @link.role %>
+</p>
+
+<p>
+  <b>Settings:</b>
+  <%= @link.settings %>
+</p>
+
+
+<%= link_to 'Edit', edit_link_path(@link) %> |
+<%= link_to 'Back', links_path %>
