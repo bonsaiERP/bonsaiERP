@@ -27,12 +27,14 @@ describe Organisation do
   it 'should only set user_id with set_user_key' do
     @org = Organisation.new(@params)
     @org.set_user_key(1)
-    @org.valid?.should == true
+    @org.user_key.should == 1
   end
 
-  it 'should save' do
+  it 'should have callback for create_taxes' do
     @org = Organisation.new(@params)
     @org.set_user_key(1)
+    @org.should_receive(:create_taxes)
+    @org.should_receive(:create_link)
     @org.save.should == true
   end
 
