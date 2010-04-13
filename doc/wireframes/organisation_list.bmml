@@ -19,63 +19,67 @@
         <color>16777215</color>
       </controlProperties>
     </control>
-    <control controlID="4" controlTypeID="com.balsamiq.mockups::Paragraph" x="179" y="68" w="472" h="26" measuredW="200" measuredH="140" zOrder="3" locked="false" isInGroup="-1">
+    <control controlID="36" controlTypeID="com.balsamiq.mockups::Paragraph" x="239" y="191" w="680" h="50" measuredW="200" measuredH="140" zOrder="7" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Almacenes%20%20%7C%20%20Compras%20%20%7C%20%20Ventas%20%20%7C%20%20Gastos%20%20%7C%20Contactos%20%20%7C%20%20Reportes</text>
-        <align>left</align>
-        <size>13</size>
-        <color>16777215</color>
+        <text>Haga%20click%20en%20cualquiera%20de%20organizaci%F3n%20para%20poder%20comenzar</text>
+        <italic>true</italic>
+        <size>14</size>
+        <bold>false</bold>
+        <color>3355443</color>
       </controlProperties>
     </control>
-    <control controlID="5" controlTypeID="com.balsamiq.mockups::Title" x="208" y="117" w="-1" h="-1" measuredW="400" measuredH="51" zOrder="4" locked="false" isInGroup="-1">
+    <control controlID="5" controlTypeID="com.balsamiq.mockups::Title" x="208" y="117" w="-1" h="-1" measuredW="400" measuredH="51" zOrder="3" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Listado%20de%20organizaciones</text>
         <size>32</size>
       </controlProperties>
     </control>
-    <control controlID="6" controlTypeID="com.balsamiq.mockups::Canvas" x="208" y="176" w="771" h="481" measuredW="100" measuredH="70" zOrder="5" locked="false" isInGroup="-1">
+    <control controlID="6" controlTypeID="com.balsamiq.mockups::Canvas" x="208" y="176" w="771" h="481" measuredW="100" measuredH="70" zOrder="4" locked="false" isInGroup="-1">
       <controlProperties>
         <borderColor>16777215</borderColor>
       </controlProperties>
     </control>
-    <control controlID="39" controlTypeID="com.balsamiq.mockups::Link" x="256" y="320" w="-1" h="-1" measuredW="96" measuredH="34" zOrder="11" locked="false" isInGroup="-1">
+    <control controlID="39" controlTypeID="com.balsamiq.mockups::Link" x="254" y="330" w="-1" h="-1" measuredW="89" measuredH="34" zOrder="9" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>bonsaierp</text>
+        <text>ecu%E1nime</text>
         <size>20</size>
       </controlProperties>
     </control>
-    <control controlID="9" controlTypeID="com.balsamiq.mockups::Button" x="544" y="599" w="100" h="-1" measuredW="63" measuredH="28" zOrder="6" locked="false" isInGroup="-1">
+    <control controlID="9" controlTypeID="com.balsamiq.mockups::Button" x="544" y="599" w="100" h="-1" measuredW="63" measuredH="28" zOrder="5" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Salvar</text>
         <color>33023</color>
       </controlProperties>
     </control>
-    <control controlID="35" controlTypeID="com.balsamiq.mockups::IconLabel" x="239" y="248" w="-1" h="-1" measuredW="146" measuredH="25" zOrder="8" locked="false" isInGroup="-1">
+    <control controlID="43" controlTypeID="com.balsamiq.mockups::Image" x="245" y="242" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="11" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>%5BCrear%20oraganizaci%F3n%5D</text>
-        <icon>CircledPlusIcon%7Cxsmall</icon>
-        <labelPosition>right</labelPosition>
+        <src>./assets/add.png</src>
       </controlProperties>
     </control>
-    <control controlID="36" controlTypeID="com.balsamiq.mockups::Paragraph" x="239" y="191" w="680" h="50" measuredW="200" measuredH="140" zOrder="9" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>Haga%20click%20en%20cualquiera%20de%20sus%20organizaciones%20para%20poder%20comenzar%20la%20sesi%F3n</text>
-        <italic>true</italic>
-        <bold>false</bold>
-        <color>3355443</color>
-      </controlProperties>
-    </control>
-    <control controlID="37" controlTypeID="com.balsamiq.mockups::DataGrid" x="239" y="273" w="716" h="100" measuredW="397" measuredH="88" zOrder="7" locked="false" isInGroup="-1">
+    <control controlID="37" controlTypeID="com.balsamiq.mockups::DataGrid" x="239" y="273" w="716" h="100" measuredW="397" measuredH="88" zOrder="6" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Organizaci%F3n%2C%20Permisos%2C%20Ultima%20visita%2C%20Pago%0A%2Cadministrador%2C%2012%20Feb%202010%2012%3A30%2C%20120.00%0A%2Cvisita%2C%2013%20Mar%202010%2019%3A15%2C%20</text>
+        <borderStyle>none</borderStyle>
         <vLines>false</vLines>
         <bold>true</bold>
       </controlProperties>
     </control>
-    <control controlID="38" controlTypeID="com.balsamiq.mockups::Link" x="256" y="293" w="-1" h="-1" measuredW="89" measuredH="34" zOrder="10" locked="false" isInGroup="-1">
+    <control controlID="38" controlTypeID="com.balsamiq.mockups::Link" x="256" y="293" w="-1" h="-1" measuredW="83" measuredH="34" zOrder="8" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>ecuanime</text>
+        <text>Empresa</text>
         <size>20</size>
+        <href>dashboard%26bm%3Bdashboard.bmml%26bm%3Bdashboard.bmml%26bm%3Bdashboard.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2297%2C291%2C180%2C325%22%20href%3D%22dashboard.bmml%22%20alt%3D%22dashboard%22%20id%3D%2238%22/%3E</map>
+      </controlProperties>
+    </control>
+    <control controlID="41" controlTypeID="com.balsamiq.mockups::PointyButton" x="239" y="234" w="179" h="-1" measuredW="184" measuredH="32" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>%20%20%20Crear%20organizaci%F3n</text>
+        <direction>center</direction>
+        <color>15132390</color>
+        <bold>true</bold>
+        <size>16</size>
+        <customID>create_new</customID>
       </controlProperties>
     </control>
   </controls>

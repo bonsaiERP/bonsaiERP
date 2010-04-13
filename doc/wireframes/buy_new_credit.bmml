@@ -145,7 +145,7 @@
         <text>Tienda%201%20Cochabamba</text>
       </controlProperties>
     </control>
-    <control controlID="23" controlTypeID="com.balsamiq.mockups::Label" x="310" y="369" w="-1" h="-1" measuredW="85" measuredH="25" zOrder="23" locked="false" isInGroup="-1">
+    <control controlID="23" controlTypeID="com.balsamiq.mockups::Label" x="310" y="369" w="-1" h="-1" measuredW="84" measuredH="25" zOrder="23" locked="false" isInGroup="-1">
       <controlProperties>
         <text>*Impuesto*%20%28%25%29</text>
         <bold>false</bold>
@@ -281,10 +281,10 @@
     </control>
     <control controlID="50" controlTypeID="com.balsamiq.mockups::IconLabel" x="620" y="355" w="-1" h="-1" measuredW="66" measuredH="29" zOrder="47" locked="false" isInGroup="-1">
       <controlProperties>
-        <icon>HourGlassIcon%7Csmall</icon>
         <text>Pago</text>
-        <size>16</size>
         <labelPosition>right</labelPosition>
+        <icon>HourGlassIcon%7Csmall</icon>
+        <size>16</size>
       </controlProperties>
     </control>
   </controls>
