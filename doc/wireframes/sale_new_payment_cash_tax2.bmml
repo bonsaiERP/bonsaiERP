@@ -168,12 +168,12 @@
     </control>
     <control controlID="152" controlTypeID="com.balsamiq.mockups::PointyButton" x="537" y="791" w="113" h="-1" measuredW="76" measuredH="35" zOrder="46" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Salvar</text>
         <direction>center</direction>
+        <href>sale_aprove_credit%26bm%3Bsale_aprove_credit.bmml%26bm%3Bsale_aprove_credit.bmml%26bm%3Bsale_aprove_credit.bmml</href>
+        <color>2848996</color>
+        <text>Salvar</text>
         <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22378%2C789%2C491%2C824%22%20href%3D%22sale_aprove_credit.bmml%22%20alt%3D%22sale_aprove_credit%22%20id%3D%22152%22/%3E</map>
         <size>18</size>
-        <color>2848996</color>
-        <href>sale_aprove_credit%26bm%3Bsale_aprove_credit.bmml%26bm%3Bsale_aprove_credit.bmml%26bm%3Bsale_aprove_credit.bmml</href>
       </controlProperties>
     </control>
     <control controlID="136" controlTypeID="com.balsamiq.mockups::Image" x="940" y="647" w="16" h="16" measuredW="16" measuredH="16" zOrder="38" locked="false" isInGroup="-1">
@@ -270,16 +270,16 @@
         <bold>false</bold>
       </controlProperties>
     </control>
-    <control controlID="148" controlTypeID="com.balsamiq.mockups::RadioButton" x="296" y="434" w="71" h="23" measuredW="70" measuredH="22" zOrder="42" locked="false" isInGroup="-1">
+    <control controlID="148" controlTypeID="com.balsamiq.mockups::RadioButton" x="296" y="434" w="71" h="23" measuredW="72" measuredH="22" zOrder="42" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Contado</text>
+        <text>Efectivo</text>
         <state>selected</state>
         <bold>false</bold>
       </controlProperties>
     </control>
     <control controlID="149" controlTypeID="com.balsamiq.mockups::RadioButton" x="411" y="433" w="66" h="23" measuredW="66" measuredH="22" zOrder="43" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Credito</text>
+        <text>Cr%E9dito</text>
         <state>up</state>
         <bold>false</bold>
         <href>sale_new_payment_credit%26bm%3Bsale_new_payment_credit.bmml%26bm%3Bsale_new_payment_credit.bmml%26bm%3Bsale_new_payment_credit.bmml</href>
@@ -290,10 +290,10 @@
       <controlProperties>
         <direction>center</direction>
         <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2267%2C680%2C192%2C708%22%20href%3D%22sale_new_new_item.bmml%22%20alt%3D%22sale_new_new_item%22%20id%3D%22139%22/%3E</map>
-        <href>sale_new_new_item%26bm%3Bsale_new_new_item.bmml%26bm%3Bsale_new_new_item.bmml%26bm%3Bsale_new_new_item.bmml</href>
+        <color>15132390</color>
         <text>%20%20%20%20Adicionar%20%EDtem</text>
         <bold>false</bold>
-        <color>15132390</color>
+        <href>sale_new_new_item%26bm%3Bsale_new_new_item.bmml%26bm%3Bsale_new_new_item.bmml%26bm%3Bsale_new_new_item.bmml</href>
       </controlProperties>
     </control>
     <control controlID="50" controlTypeID="com.balsamiq.mockups::Label" x="624" y="269" w="55" h="26" measuredW="55" measuredH="25" zOrder="19" locked="false" isInGroup="-1">
