@@ -17,18 +17,26 @@ And /^a list of countries is created$/ do |table|
   end
 end
 
-And /^I fill data with (\w+), (\w+), (\w+), (\w+)$/ do |name, country, address, phone|
+And /^a list of currencies is created$/ do |table|
+  table.hashes.each do |currency|
+    Currency.create!(currency)
+  end
+end
+
+And /^I fill data with (\w+), (\w+), (\w+), (\w+), (\w+)$/ do |name, country, address, phone, currency|
   fill_in "organisation_name", :with => name
   select country, :from => "organisation_country_id"
+  select currency, :from => "organisation_currency_id"
   fill_in "organisation_address", :with => address
   fill_in "organisation_phone", :with => phone
 
   click_button("Create")
 end
 
-Then /^I should see organisation with (\w+), (\w+)$/ do |name, country|
+Then /^I should see organisation with (\w+), (\w+), (\w+)$/ do |name, country, currency|
   page.has_content?(name).should == true
   page.has_content?(country).should == true
+  page.has_content?(currency).should == true
   organisation = Organisation.last
 
   # Show taxes added in Organisation callback

@@ -28,9 +28,9 @@
         <color>3355443</color>
       </controlProperties>
     </control>
-    <control controlID="5" controlTypeID="com.balsamiq.mockups::Title" x="208" y="117" w="-1" h="-1" measuredW="400" measuredH="51" zOrder="3" locked="false" isInGroup="-1">
+    <control controlID="5" controlTypeID="com.balsamiq.mockups::Title" x="208" y="117" w="-1" h="-1" measuredW="322" measuredH="51" zOrder="3" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Listado%20de%20organizaciones</text>
+        <text>Listado%20de%20empresas</text>
         <size>32</size>
       </controlProperties>
     </control>
@@ -72,14 +72,16 @@
         <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2297%2C291%2C180%2C325%22%20href%3D%22dashboard.bmml%22%20alt%3D%22dashboard%22%20id%3D%2238%22/%3E</map>
       </controlProperties>
     </control>
-    <control controlID="41" controlTypeID="com.balsamiq.mockups::PointyButton" x="239" y="234" w="179" h="-1" measuredW="184" measuredH="32" zOrder="10" locked="false" isInGroup="-1">
+    <control controlID="41" controlTypeID="com.balsamiq.mockups::PointyButton" x="239" y="234" w="154" h="-1" measuredW="153" measuredH="32" zOrder="10" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>%20%20%20Crear%20organizaci%F3n</text>
         <direction>center</direction>
-        <color>15132390</color>
-        <bold>true</bold>
         <size>16</size>
+        <color>15132390</color>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2280%2C232%2C234%2C264%22%20href%3D%22organisation_new.bmml%22%20alt%3D%22organisation_new%22%20id%3D%2241%22/%3E</map>
+        <text>%20%20%20Crear%20empresa</text>
         <customID>create_new</customID>
+        <bold>true</bold>
+        <href>organisation_new%26bm%3Borganisation_new.bmml%26bm%3Borganisation_new.bmml%26bm%3Borganisation_new.bmml</href>
       </controlProperties>
     </control>
   </controls>

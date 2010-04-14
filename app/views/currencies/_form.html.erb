@@ -1,0 +1,10 @@
+<% simple_form_for(@currency) do |f| %>
+  <div class="inputs">
+    <%= f.input :name %>
+    <%= f.input :symbol %>
+  </div>
+
+  <div class="actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

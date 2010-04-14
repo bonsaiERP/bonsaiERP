@@ -1,12 +1,11 @@
 en:
   flash:
     error: "Please correct errors"
-  default:
-    edit: "Edit"
-    update: "Update"
-    destroy: "Destroy"
-    show: "Show"
-    index: "List"
+  edit: "Edit"
+  update: "Update"
+  destroy: "Destroy"
+  show: "Show"
+  index: "List"
   user:
     class_name: "User"
     class_name_plural: "Users"
@@ -41,6 +40,7 @@ en:
       mobile: "Mobile"
       email: "Email"
       website: "Website"
+      currency: "Currency"
   tax:
     class_name: "Tax"
     class_name_plural: "Tax"

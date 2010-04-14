@@ -13,12 +13,18 @@ Feature: Manage organisations
       |Bolivia| bo          |[{:name => "Impuesto al Valor Agregado", :rate => 13, :abbreviation => "IVA"}, {:name => "Impuesto a las transacciones", :rate => 1.5, :abbreviation => "IT"}]|
       |Brasil| br|[{:name => "Brasilian", :abbreviation => "bbr", :rate => 15.5}]|
 
+    And a list of currencies is created
+      |name     |symbol|
+      |boliviano|Bs.   |
+      |dolar    |$     |
+      |euro     |€     |
+
     Then Iam on "/organisations/new"
-    And I fill data with <name>, <country>, <address>, <phone>
-    Then I should see organisation with <name>, <country>
+    And I fill data with <name>, <country>, <address>, <phone>, <currency>
+    Then I should see organisation with <name>, <country>, <currency>
 
 
 
   Examples:
-    |name|country|address|phone|
-    |ecuanime|Bolivia|Mallasa|2745620|
+    |name|country|address|phone|currency|
+    |ecuanime|Bolivia|Mallasa|2745620|boliviano|

@@ -35,13 +35,13 @@
         <color>16777215</color>
       </controlProperties>
     </control>
-    <control controlID="5" controlTypeID="com.balsamiq.mockups::Title" x="208" y="117" w="-1" h="-1" measuredW="94" measuredH="51" zOrder="1" locked="false" isInGroup="-1">
+    <control controlID="5" controlTypeID="com.balsamiq.mockups::Title" x="208" y="117" w="-1" h="-1" measuredW="94" measuredH="51" zOrder="2" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Venta</text>
         <size>32</size>
       </controlProperties>
     </control>
-    <control controlID="6" controlTypeID="com.balsamiq.mockups::Canvas" x="211" y="175" w="771" h="574" measuredW="100" measuredH="70" zOrder="2" locked="false" isInGroup="-1">
+    <control controlID="6" controlTypeID="com.balsamiq.mockups::Canvas" x="209" y="109" w="771" h="640" measuredW="100" measuredH="70" zOrder="1" locked="false" isInGroup="-1">
       <controlProperties>
         <borderColor>16777215</borderColor>
       </controlProperties>
@@ -122,9 +122,9 @@
         <color>16777215</color>
       </controlProperties>
     </control>
-    <control controlID="83" controlTypeID="com.balsamiq.mockups::DataGrid" x="220" y="490" w="750" h="111" measuredW="623" measuredH="106" zOrder="17" locked="false" isInGroup="-1">
+    <control controlID="83" controlTypeID="com.balsamiq.mockups::DataGrid" x="220" y="490" w="750" h="111" measuredW="575" measuredH="106" zOrder="17" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Item%2C%20Inventario%20%5Crdisponible%2CCantidad%2C%20Precion%20Unitario%2C%20Total%20Fila%2C%0AComputadora%20portable%20HP%20Pavillon%201243DZ%2C%2010%2C%205%2C%201000.00%2C%205000.00%2C%20%20%0AParlantes%20Multimedia%20Altec%20lansig%20AL123%2C%2030%2C%2010%2C%20200.00%2C%20%202000.00%2C</text>
+        <text>Item%2C%20Inventario%20%5Crdisponible%2CCantidad%2C%20Precio%5Crunitario%2C%20Total%20fila%2C%0AComputadora%20portable%20HP%20Pavillon%201243DZ%2C%2010%2C%205%2C%201000.00%2C%205000.00%2C%20%20%0AParlantes%20Multimedia%20Altec%20lansig%20AL123%2C%2030%2C%2010%2C%20200.00%2C%20%202000.00%2C</text>
         <borderStyle>none</borderStyle>
         <vLines>false</vLines>
         <bold>false</bold>
@@ -138,11 +138,11 @@
     </control>
     <control controlID="86" controlTypeID="com.balsamiq.mockups::PointyButton" x="537" y="696" w="113" h="-1" measuredW="76" measuredH="35" zOrder="20" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Salvar</text>
         <direction>center</direction>
-        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22378%2C694%2C491%2C729%22%20href%3D%22sale_aprove_credit.bmml%22%20alt%3D%22sale_aprove_credit%22%20id%3D%2286%22/%3E</map>
-        <size>18</size>
         <color>2848996</color>
+        <size>18</size>
+        <text>Salvar</text>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22378%2C694%2C491%2C729%22%20href%3D%22sale_aprove_credit.bmml%22%20alt%3D%22sale_aprove_credit%22%20id%3D%2286%22/%3E</map>
         <href>sale_aprove_credit%26bm%3Bsale_aprove_credit.bmml%26bm%3Bsale_aprove_credit.bmml%26bm%3Bsale_aprove_credit.bmml</href>
       </controlProperties>
     </control>
@@ -188,6 +188,7 @@
     <control controlID="99" controlTypeID="com.balsamiq.mockups::Canvas" x="159" y="2" w="869" h="107" measuredW="100" measuredH="70" zOrder="21" locked="false" isInGroup="-1">
       <controlProperties>
         <color>3355443</color>
+        <borderStyle>none</borderStyle>
       </controlProperties>
     </control>
     <control controlID="100" controlTypeID="com.balsamiq.mockups::Title" x="175" y="7" w="-1" h="-1" measuredW="134" measuredH="51" zOrder="22" locked="false" isInGroup="-1">

@@ -1,4 +1,7 @@
 class User < ActiveRecord::Base
+  # callbacks
+
+
   # devise
   devise :authenticatable, :confirmable, :recoverable, :rememberable, :trackable, :validatable
 
@@ -7,7 +10,7 @@ class User < ActiveRecord::Base
   has_many :organisations, :through => :links
 
   # Validations
-  validates_presence_of :first_name, :last_name
+  #validates_presence_of :first_name, :last_name
 
   # attr
   attr_protected :account_type

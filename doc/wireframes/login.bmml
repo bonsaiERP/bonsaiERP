@@ -13,8 +13,8 @@
     </control>
     <control controlID="6" controlTypeID="com.balsamiq.mockups::Canvas" x="361" y="144" w="463" h="291" measuredW="100" measuredH="70" zOrder="2" locked="false" isInGroup="-1">
       <controlProperties>
-        <borderColor>16777215</borderColor>
         <borderStyle>none</borderStyle>
+        <borderColor>16777215</borderColor>
         <color>16777215</color>
       </controlProperties>
     </control>
@@ -34,12 +34,12 @@
     </control>
     <control controlID="137" controlTypeID="com.balsamiq.mockups::PointyButton" x="530" y="374" w="113" h="-1" measuredW="95" measuredH="35" zOrder="4" locked="false" isInGroup="-1">
       <controlProperties>
-        <size>18</size>
-        <color>2848996</color>
         <direction>center</direction>
         <text>Ingresar</text>
-        <href>organisation_list%26bm%3Borganisation_list.bmml%26bm%3Borganisation_list.bmml%26bm%3Borganisation_list.bmml</href>
         <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22371%2C374%2C484%2C409%22%20href%3D%22organisation_list.bmml%22%20alt%3D%22organisation_list%22%20id%3D%22137%22/%3E</map>
+        <href>organisation_list%26bm%3Borganisation_list.bmml%26bm%3Borganisation_list.bmml%26bm%3Borganisation_list.bmml</href>
+        <color>2848996</color>
+        <size>18</size>
       </controlProperties>
     </control>
     <control controlID="138" controlTypeID="com.balsamiq.mockups::Title" x="358" y="83" w="-1" h="-1" measuredW="265" measuredH="51" zOrder="5" locked="false" isInGroup="-1">
@@ -57,14 +57,14 @@
     </control>
     <control controlID="140" controlTypeID="com.balsamiq.mockups::TextInput" x="400" y="208" w="337" h="-1" measuredW="262" measuredH="38" zOrder="7" locked="false" isInGroup="-1">
       <controlProperties>
-        <size>20</size>
         <text>amaru.barroso@gmail.com</text>
+        <size>20</size>
       </controlProperties>
     </control>
     <control controlID="141" controlTypeID="com.balsamiq.mockups::TextInput" x="400" y="285" w="337" h="-1" measuredW="101" measuredH="38" zOrder="8" locked="false" isInGroup="-1">
       <controlProperties>
-        <size>20</size>
         <text>%5C*%5C*%5C*%5C*%5C*%5C*%5C*%5C*</text>
+        <size>20</size>
       </controlProperties>
     </control>
     <control controlID="142" controlTypeID="com.balsamiq.mockups::Paragraph" x="205" y="18" w="287" h="26" measuredW="200" measuredH="140" zOrder="9" locked="false" isInGroup="-1">

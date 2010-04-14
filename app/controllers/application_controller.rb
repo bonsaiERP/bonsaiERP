@@ -1,5 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
+  before_filter :set_user_session
+  before_filter :set_organisation
 
   # Adds an error with format to display
   #   @param ActiveRecord::Base (model)
@@ -12,4 +14,18 @@ class ApplicationController < ActionController::Base
       flash[:error] << "<ul>"
     end
   end
+
+  private
+  # Uses the helper methods from devise to made them available in the models
+  def set_user_session
+    UserSession.current_user = current_user
+  end
+
+  # Sets the organisation_id to help to set in the models
+  def set_organisation
+    unless session[:organisation]
+      OrganisationSession.organisation = session[:organisation]
+    end
+  end
+
 end

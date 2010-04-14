@@ -1,8 +1,9 @@
-    <% simple_form_for(@organisation) do |f| %>
+    <%= simple_form_for(@organisation) do |f| %>
       <div class="inputs">
         <%= f.association :country, :label => t("organisation.attributes.country") %>
+        <%= f.association :currency, :label => t("organisation.attributes.currency") %>
         <%= f.input :name, :label => t("organisation.attributes.name") %>
-        <%= f.input :address, :label => t("organisation.attributes.address") %>
+        <%= f.input :address, :as => :text, :label => t("organisation.attributes.address") %>
         <%= f.input :address_alt, :label => t("organisation.attributes.address_alt") %>
         <%= f.input :phone, :label => t("organisation.attributes.phone") %>
         <%= f.input :phone_alt, :label => t("organisation.attributes.phone_alt") %>

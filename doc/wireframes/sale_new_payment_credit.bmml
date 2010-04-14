@@ -9,6 +9,7 @@
     <control controlID="1" controlTypeID="com.balsamiq.mockups::Canvas" x="159" y="2" w="869" h="107" measuredW="100" measuredH="70" zOrder="1" locked="false" isInGroup="-1">
       <controlProperties>
         <color>3355443</color>
+        <borderStyle>none</borderStyle>
       </controlProperties>
     </control>
     <control controlID="2" controlTypeID="com.balsamiq.mockups::Title" x="175" y="7" w="-1" h="-1" measuredW="134" measuredH="51" zOrder="2" locked="true" isInGroup="-1">
@@ -71,24 +72,24 @@
         <bold>false</bold>
       </controlProperties>
     </control>
-    <control controlID="139" controlTypeID="com.balsamiq.mockups::PointyButton" x="229" y="792" w="125" h="-1" measuredW="124" measuredH="28" zOrder="36" locked="false" isInGroup="-1">
+    <control controlID="139" controlTypeID="com.balsamiq.mockups::PointyButton" x="229" y="812" w="125" h="-1" measuredW="124" measuredH="28" zOrder="36" locked="false" isInGroup="-1">
       <controlProperties>
         <direction>center</direction>
         <color>15132390</color>
-        <href>sale_new_new_item%26bm%3Bsale_new_new_item.bmml%26bm%3Bsale_new_new_item.bmml%26bm%3Bsale_new_new_item.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2270%2C810%2C195%2C838%22%20href%3D%22sale_new_new_item.bmml%22%20alt%3D%22sale_new_new_item%22%20id%3D%22139%22/%3E</map>
         <text>%20%20%20%20Adicionar%20%EDtem</text>
-        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2270%2C790%2C195%2C818%22%20href%3D%22sale_new_new_item.bmml%22%20alt%3D%22sale_new_new_item%22%20id%3D%22139%22/%3E</map>
+        <href>sale_new_new_item%26bm%3Bsale_new_new_item.bmml%26bm%3Bsale_new_new_item.bmml%26bm%3Bsale_new_new_item.bmml</href>
         <bold>false</bold>
       </controlProperties>
     </control>
-    <control controlID="140" controlTypeID="com.balsamiq.mockups::Image" x="235" y="798" w="16" h="16" measuredW="16" measuredH="16" zOrder="37" locked="false" isInGroup="-1">
+    <control controlID="140" controlTypeID="com.balsamiq.mockups::Image" x="235" y="818" w="16" h="16" measuredW="16" measuredH="16" zOrder="37" locked="false" isInGroup="-1">
       <controlProperties>
         <src>./assets/add.png</src>
       </controlProperties>
     </control>
-    <control controlID="141" controlTypeID="com.balsamiq.mockups::DataGrid" x="220" y="691" w="750" h="91" measuredW="618" measuredH="88" zOrder="38" locked="false" isInGroup="-1">
+    <control controlID="141" controlTypeID="com.balsamiq.mockups::DataGrid" x="220" y="691" w="750" h="106" measuredW="571" measuredH="106" zOrder="38" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Item%2C%20Inventario%2CCantidad%2C%20Precion%20Unitario%2C%20Total%20fila%2C%0AComputadora%20portable%20HP%20Pavillon%201243DZ%2C%2010%2C%205%2C%201000.00%2C%205000.00%2C%20%20%0AParlantes%20Multimedia%20Altec%20lansig%20AL123%2C%203%2C%2010%2C%20200.00%2C%20%202000.00%2C</text>
+        <text>Item%2C%20Inventario%5Crdisponible%2CCantidad%2C%20Precion%5Cr%20unitario%2C%20Total%20fila%2C%0AComputadora%20portable%20HP%20Pavillon%201243DZ%2C%2010%2C%205%2C%201000.00%2C%205000.00%2C%20%20%0AParlantes%20Multimedia%20Altec%20lansig%20AL123%2C%203%2C%2010%2C%20200.00%2C%20%202000.00%2C</text>
         <borderStyle>none</borderStyle>
         <vLines>false</vLines>
         <bold>false</bold>
@@ -101,12 +102,7 @@
         <color>2848996</color>
       </controlProperties>
     </control>
-    <control controlID="143" controlTypeID="com.balsamiq.mockups::Icon" x="939" y="722" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="39" locked="false" isInGroup="-1">
-      <controlProperties>
-        <icon>CircledMinusIcon%7Cxsmall</icon>
-      </controlProperties>
-    </control>
-    <control controlID="136" controlTypeID="com.balsamiq.mockups::CheckBox" x="642" y="425" w="105" h="23" measuredW="104" measuredH="22" zOrder="33" locked="false" isInGroup="-1">
+    <control controlID="136" controlTypeID="com.balsamiq.mockups::CheckBox" x="642" y="425" w="105" h="23" measuredW="103" measuredH="22" zOrder="33" locked="false" isInGroup="-1">
       <controlProperties>
         <text>IVA%20%28*13.0%25*%29</text>
         <state>selected</state>
@@ -138,30 +134,31 @@
         <color>16777215</color>
       </controlProperties>
     </control>
-    <control controlID="150" controlTypeID="com.balsamiq.mockups::RadioButton" x="411" y="433" w="66" h="23" measuredW="66" measuredH="22" zOrder="44" locked="false" isInGroup="-1">
+    <control controlID="150" controlTypeID="com.balsamiq.mockups::RadioButton" x="411" y="433" w="66" h="23" measuredW="66" measuredH="22" zOrder="42" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Cr%E9dito</text>
         <state>selected</state>
         <bold>false</bold>
       </controlProperties>
     </control>
-    <control controlID="151" controlTypeID="com.balsamiq.mockups::Canvas" x="285" y="417" w="38" h="19" measuredW="100" measuredH="70" zOrder="45" locked="false" isInGroup="-1">
+    <control controlID="151" controlTypeID="com.balsamiq.mockups::Canvas" x="285" y="417" w="38" h="19" measuredW="100" measuredH="70" zOrder="43" locked="false" isInGroup="-1">
       <controlProperties>
         <borderStyle>none</borderStyle>
         <color>15132390</color>
       </controlProperties>
     </control>
-    <control controlID="144" controlTypeID="com.balsamiq.mockups::Icon" x="939" y="751" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="40" locked="false" isInGroup="-1">
+    <control controlID="152" controlTypeID="com.balsamiq.mockups::Label" x="289" y="414" w="30" h="26" measuredW="30" measuredH="25" zOrder="44" locked="false" isInGroup="-1">
       <controlProperties>
-        <icon>CircledMinusIcon%7Cxsmall</icon>
+        <text>Tipo</text>
+        <color>5000268</color>
       </controlProperties>
     </control>
-    <control controlID="153" controlTypeID="com.balsamiq.mockups::ComboBox" x="266" y="502" w="130" h="-1" measuredW="57" measuredH="25" zOrder="47" locked="false" isInGroup="-1">
+    <control controlID="153" controlTypeID="com.balsamiq.mockups::ComboBox" x="266" y="502" w="130" h="-1" measuredW="57" measuredH="25" zOrder="45" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Mes</text>
       </controlProperties>
     </control>
-    <control controlID="146" controlTypeID="__group__" x="716" y="792" w="-1" h="-1" measuredW="307" measuredH="78" zOrder="41" locked="false" isInGroup="-1">
+    <control controlID="146" controlTypeID="__group__" x="716" y="812" w="-1" h="-1" measuredW="307" measuredH="78" zOrder="39" locked="false" isInGroup="-1">
       <groupChildrenDescriptors>
         <control controlID="14" controlTypeID="com.balsamiq.mockups::Paragraph" x="63" y="50" w="153" h="28" measuredW="200" measuredH="140" zOrder="0" locked="false" isInGroup="60">
           <controlProperties>
@@ -197,7 +194,7 @@
         <color>5000268</color>
       </controlProperties>
     </control>
-    <control controlID="148" controlTypeID="com.balsamiq.mockups::RadioButton" x="296" y="434" w="71" h="23" measuredW="72" measuredH="22" zOrder="43" locked="false" isInGroup="-1">
+    <control controlID="148" controlTypeID="com.balsamiq.mockups::RadioButton" x="296" y="434" w="71" h="23" measuredW="72" measuredH="22" zOrder="41" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Efectivo</text>
         <state>up</state>
@@ -206,50 +203,54 @@
         <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22137%2C432%2C208%2C455%22%20href%3D%22sale_new_payment_cash_tax2.bmml%22%20alt%3D%22sale_new_payment_cash_tax2%22%20id%3D%22148%22/%3E</map>
       </controlProperties>
     </control>
-    <control controlID="157" controlTypeID="com.balsamiq.mockups::Label" x="421" y="541" w="103" h="25" measuredW="78" measuredH="25" zOrder="51" locked="false" isInGroup="-1">
+    <control controlID="157" controlTypeID="com.balsamiq.mockups::Label" x="421" y="541" w="103" h="25" measuredW="78" measuredH="25" zOrder="49" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Primer%20pago</text>
         <align>left</align>
       </controlProperties>
     </control>
-    <control controlID="158" controlTypeID="com.balsamiq.mockups::DateChooser" x="420" y="560" w="139" h="-1" measuredW="150" measuredH="29" zOrder="52" locked="false" isInGroup="-1">
+    <control controlID="158" controlTypeID="com.balsamiq.mockups::DateChooser" x="420" y="560" w="139" h="-1" measuredW="150" measuredH="29" zOrder="50" locked="false" isInGroup="-1">
       <controlProperties>
         <text>%2012%20Dic%202009%20%20%20</text>
       </controlProperties>
     </control>
-    <control controlID="159" controlTypeID="com.balsamiq.mockups::PointyButton" x="555" y="897" w="113" h="-1" measuredW="76" measuredH="35" zOrder="53" locked="false" isInGroup="-1">
+    <control controlID="159" controlTypeID="com.balsamiq.mockups::PointyButton" x="537" y="917" w="113" h="-1" measuredW="76" measuredH="35" zOrder="51" locked="false" isInGroup="-1">
       <controlProperties>
         <direction>center</direction>
         <href>sale_aprove_credit%26bm%3Bsale_aprove_credit.bmml%26bm%3Bsale_aprove_credit.bmml%26bm%3Bsale_aprove_credit.bmml</href>
-        <size>18</size>
-        <text>Salvar</text>
-        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22396%2C895%2C509%2C930%22%20href%3D%22sale_aprove_credit.bmml%22%20alt%3D%22sale_aprove_credit%22%20id%3D%22159%22/%3E</map>
         <color>2848996</color>
+        <text>Salvar</text>
+        <size>18</size>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22378%2C915%2C491%2C950%22%20href%3D%22sale_aprove_credit.bmml%22%20alt%3D%22sale_aprove_credit%22%20id%3D%22159%22/%3E</map>
       </controlProperties>
     </control>
-    <control controlID="152" controlTypeID="com.balsamiq.mockups::Label" x="289" y="414" w="30" h="26" measuredW="30" measuredH="25" zOrder="46" locked="false" isInGroup="-1">
+    <control controlID="160" controlTypeID="com.balsamiq.mockups::Image" x="940" y="740" w="16" h="16" measuredW="16" measuredH="16" zOrder="52" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Tipo</text>
-        <color>5000268</color>
+        <src>./assets/delete.png</src>
       </controlProperties>
     </control>
-    <control controlID="154" controlTypeID="com.balsamiq.mockups::Label" x="425" y="482" w="103" h="25" measuredW="84" measuredH="25" zOrder="48" locked="false" isInGroup="-1">
+    <control controlID="161" controlTypeID="com.balsamiq.mockups::Image" x="940" y="771" w="16" h="16" measuredW="16" measuredH="16" zOrder="53" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/delete.png</src>
+      </controlProperties>
+    </control>
+    <control controlID="154" controlTypeID="com.balsamiq.mockups::Label" x="425" y="482" w="103" h="25" measuredW="84" measuredH="25" zOrder="46" locked="false" isInGroup="-1">
       <controlProperties>
         <text>N%BA%20de%20Pagos</text>
         <align>left</align>
       </controlProperties>
     </control>
-    <control controlID="155" controlTypeID="com.balsamiq.mockups::TextInput" x="270" y="559" w="123" h="-1" measuredW="32" measuredH="29" zOrder="49" locked="false" isInGroup="-1">
+    <control controlID="155" controlTypeID="com.balsamiq.mockups::TextInput" x="270" y="559" w="123" h="-1" measuredW="32" measuredH="29" zOrder="47" locked="false" isInGroup="-1">
       <controlProperties>
         <text>2.5</text>
         <state>up</state>
         <bold>false</bold>
       </controlProperties>
     </control>
-    <control controlID="147" controlTypeID="com.balsamiq.mockups::Canvas" x="266" y="422" w="257" h="50" measuredW="100" measuredH="70" zOrder="42" locked="false" isInGroup="-1">
+    <control controlID="147" controlTypeID="com.balsamiq.mockups::Canvas" x="266" y="422" w="257" h="50" measuredW="100" measuredH="70" zOrder="40" locked="false" isInGroup="-1">
       <controlProperties>
-        <borderStyle>square</borderStyle>
         <backgroundAlpha>1</backgroundAlpha>
+        <borderStyle>square</borderStyle>
         <borderColor>11776947</borderColor>
         <color>15132390</color>
       </controlProperties>
@@ -261,14 +262,14 @@
         <color>16777215</color>
       </controlProperties>
     </control>
-    <control controlID="156" controlTypeID="com.balsamiq.mockups::Label" x="272" y="540" w="103" h="25" measuredW="76" measuredH="25" zOrder="50" locked="false" isInGroup="-1">
+    <control controlID="156" controlTypeID="com.balsamiq.mockups::Label" x="272" y="540" w="103" h="25" measuredW="77" measuredH="25" zOrder="48" locked="false" isInGroup="-1">
       <controlProperties>
         <text>*Interes*%20%28*%25*%29</text>
         <align>left</align>
         <bold>false</bold>
       </controlProperties>
     </control>
-    <control controlID="137" controlTypeID="com.balsamiq.mockups::CheckBox" x="642" y="449" w="105" h="23" measuredW="87" measuredH="22" zOrder="34" locked="false" isInGroup="-1">
+    <control controlID="137" controlTypeID="com.balsamiq.mockups::CheckBox" x="642" y="449" w="105" h="23" measuredW="88" measuredH="22" zOrder="34" locked="false" isInGroup="-1">
       <controlProperties>
         <text>IT%20%28*1.5%25*%29</text>
         <state>selected</state>

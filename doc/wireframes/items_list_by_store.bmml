@@ -49,15 +49,15 @@
       <controlProperties>
         <selectedIndex>-1</selectedIndex>
         <borderStyle>none</borderStyle>
-        <hLines>false</hLines>
-        <text>C%F3digo%2C%20Item%2C%20Cantidad%2C%20Precio%20Unitario%5Crpromedio%2C%20Subtotal%0APMMCL1%2C%20Parlantes%20multimedia%20Creative%2C%20100%2C%20150.0%2C%2015000.00%0AMS20F%2C%20Monitor%20de%2020%22%20Samsumg%2C%20100%2C%20150.0%2C%2015000.00%0ASMDTK232%2C%20Microprocesador%20Intel%20Core2%20Quad%202.6%20Gz%2C%2010%2C%20200%2C%202000.00%0A%20%0A%2C%20%2C%20%2C%20%2C%20</text>
         <vLines>false</vLines>
-        <verticalScrollbar>false</verticalScrollbar>
         <underline>false</underline>
-        <rowHeight>27</rowHeight>
-        <alternateRowColor>15594478</alternateRowColor>
-        <hasHeader>true</hasHeader>
         <bold>false</bold>
+        <alternateRowColor>15594478</alternateRowColor>
+        <text>C%F3digo%2C%20Item%2C%20Cantidad%2C%20Precio%20Unitario%5Crpromedio%2C%20Subtotal%0APMMCL1%2C%20Parlantes%20multimedia%20Creative%2C%20100%2C%20150.0%2C%2015000.00%0AMS20F%2C%20Monitor%20de%2020%22%20Samsumg%2C%20100%2C%20150.0%2C%2015000.00%0ASMDTK232%2C%20Microprocesador%20Intel%20Core2%20Quad%202.6%20Gz%2C%2010%2C%20200%2C%202000.00%0A%20%0A%2C%20%2C%20%2C%20%2C%20</text>
+        <verticalScrollbar>false</verticalScrollbar>
+        <hLines>false</hLines>
+        <rowHeight>27</rowHeight>
+        <hasHeader>true</hasHeader>
       </controlProperties>
     </control>
     <control controlID="8" controlTypeID="com.balsamiq.mockups::Canvas" x="208" y="176" w="771" h="64" measuredW="100" measuredH="70" zOrder="8" locked="false" isInGroup="-1">
@@ -71,7 +71,7 @@
         <text>Cuando%20un%20item%20este%20desabilitado%20debe%20tener%20un%20color%20mas%20claro</text>
       </controlProperties>
     </control>
-    <control controlID="10" controlTypeID="com.balsamiq.mockups::LinkBar" x="795" y="631" w="-1" h="-1" measuredW="162" measuredH="25" zOrder="10" locked="false" isInGroup="-1">
+    <control controlID="10" controlTypeID="com.balsamiq.mockups::LinkBar" x="795" y="631" w="-1" h="-1" measuredW="163" measuredH="25" zOrder="10" locked="false" isInGroup="-1">
       <controlProperties>
         <text>%3C%3C%2C%201%2C2%2C3%2C%20%3E%3E</text>
       </controlProperties>
@@ -129,10 +129,11 @@
         <color>13576743</color>
       </controlProperties>
     </control>
-    <control controlID="19" controlTypeID="com.balsamiq.mockups::TabBar" x="222" y="242" w="742" h="29" measuredW="282" measuredH="100" zOrder="19" locked="false" isInGroup="-1">
+    <control controlID="19" controlTypeID="com.balsamiq.mockups::TabBar" x="222" y="242" w="742" h="29" measuredW="281" measuredH="100" zOrder="19" locked="false" isInGroup="-1">
       <controlProperties>
         <borderStyle>none</borderStyle>
         <text>Todos%2C%20Almacen1%2C%20Almacen2</text>
+        <selectedIndex>0</selectedIndex>
       </controlProperties>
     </control>
     <control controlID="20" controlTypeID="com.balsamiq.mockups::StickyNote" x="922" y="114" w="236" h="115" measuredW="109" measuredH="123" zOrder="20" locked="false" isInGroup="-1">

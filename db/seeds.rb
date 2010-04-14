@@ -5,3 +5,10 @@
 #
 #   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
 #   Mayor.create(:name => 'Daley', :city => cities.first)
+#
+taxes = [{:name => "Impuesto al Valor Agregado", :rate => 13, :abbreviation => "IVA"}, {:name => "Impuesto a las transacciones", :rate => 1.5, :abbreviation => "IT"}]
+Country.create(:name => 'Bolivia', :abbreviation => 'bo', :taxes => taxes)
+
+Currency.create(:name => "boliviano", :symbol => "Bs.")
+Currency.create(:name => "dolar", :symbol => "$")
+Currency.create(:name => "euro", :symbol => "€")

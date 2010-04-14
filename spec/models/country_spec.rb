@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Country do
   before(:each) do
-    @params = {:name => "Bolivia", :abreviation => "bo"}
+    @params = {:name => "Bolivia", :abbreviation => "bo"}
   end
 
   it 'should create a valid' do

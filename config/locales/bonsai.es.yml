@@ -1,7 +1,32 @@
-es:
-  users:
-    new_user: "Nuevo usuario"
-    form:
-      email: "Email"
-      phone: "Teléfono"
-      mobile: "Móbil"
+es: 
+  tax: 
+    class_name: Tax
+    attributes: 
+      name: Nombre
+      rate: Porcentaje
+      abbreviation: "Abreviaci\xC3\xB3n"
+    class_name_plural: Tax
+  edit: Editar
+  country: 
+    name: Nombre
+    abreviation: "Abreviaci\xC3\xB3n"
+  destroy: Eliminar
+  organisation: 
+    attributes: 
+      name: Nombre
+      address: Dirección
+      country: País
+      phone_alt: Telefono alternativo
+      mobile: Móvil
+      phone: Teléfono
+      website: Sitio web
+      user: User
+      address_alt: Dirección alternativa
+      email: Email
+  index: Lista
+  show: Ver
+  user: 
+    new_user: Nuevo usuario
+  flash: 
+    error: Por favor corrija los errores
+  update: Actualizar

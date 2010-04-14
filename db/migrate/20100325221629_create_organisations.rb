@@ -2,6 +2,7 @@ class CreateOrganisations < ActiveRecord::Migration
   def self.up
     create_table :organisations do |t|
       t.references :country
+      t.references :currency
       t.string :name, :limit => 100
       t.string :address
       t.string :address_alt
@@ -10,11 +11,12 @@ class CreateOrganisations < ActiveRecord::Migration
       t.string :mobile, :limit => 20
       t.string :email
       t.string :website
-      t.integer :user_key
+      t.integer :user_id
 
       t.timestamps
     end
     add_index :organisations, :country_id
+    add_index :organisations, :currency_id
   end
 
   def self.down
