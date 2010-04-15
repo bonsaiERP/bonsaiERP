@@ -8,7 +8,14 @@
 
 
 
-*/ul.show li { margin: 3px 0px; }
+*/body {
+  font-size: 0.9em;
+  font-family: tahoma, arial, verdana, sans-serif;
+  background-color: #e9e9e9;
+  margin: 0px;
+  padding: 0px;
+}
+ul.show li { margin: 3px 0px; }
 ul.show li label {
   display: table;
   font-weight: bold;
@@ -17,7 +24,41 @@ ul.show li label {
 label {
   font-weight: bold;
   vertical-align: top;
-  float: left;
-  text-align: right;
+  display: block;
 }
 form div { margin-top: 4px; }
+.ui-state-default {
+  border: 1px solid #c5dbec;
+  background: #dfeffc url(images/ui-bg_flat_85_dfeffc_40x100.png) 50% 50% repeat-x;
+  font-weight: bold;
+  color: #2e6e9e;
+}
+table.decorated { border-collapse: collapse; }
+table.decorated th {
+  border: 1px solid #c5dbec;
+  background: #dfeffc url(images/ui-bg_flat_85_dfeffc_40x100.png) 50% 50% repeat-x;
+  font-weight: bold;
+  color: #2e6e9e;
+  padding: 4px 8px;
+}
+#header {
+  width: 1000px;
+  min-height: 100px;
+  background-color: #333333;
+}
+#wrapper {
+  width: 1000px;
+  background-color: #c6c6c6;
+  margin: 0px auto 30px;
+}
+#cont-wrapper { padding: 0px 25px 30px; }
+#cont {
+  margin: auto;
+  padding: 20px;
+  background-color: #ffffff;
+}
+form abbr { display: none; }
+form.required abbr {
+  display: inline;
+  color: green;
+}

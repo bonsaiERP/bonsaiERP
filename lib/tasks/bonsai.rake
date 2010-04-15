@@ -9,7 +9,7 @@ namespace :bonsai do
     ["es"].each do |locale|
       locale_file = en.gsub(/bonsai.en.yml/, "bonsai.#{locale}.yml")
       yaml_locale = YAML::parse(File.open(locale_file)).transform
-      final = {locale => yaml_en["en"].merge(yaml_locale[locale]) }
+      final = {locale => yaml_en["en"].keep_merge(yaml_locale[locale]) }
       f = File.new(locale_file, "w+")
       f.write(final.to_yaml.gsub(/^--- \n/, ""))
       f.close

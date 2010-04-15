@@ -6,15 +6,17 @@ en:
   destroy: "Destroy"
   show: "Show"
   index: "List"
+  devise:
+    sign_in:
+      in: "Log in" 
   user:
-    class_name: "User"
-    class_name_plural: "Users"
+    name: "User"
+    plural: "Users"
     flash:
       create: "The user was created!"
     new_user: "New user"
     edit_user: "Edit user"
     delete_user: "Delete user"
-    user: "User"
     attributes:
       first_name: "First name"
       last_name: "Last name"
@@ -26,9 +28,14 @@ en:
       password: "Password"
       password_confirmation: "Password confirmation"
   country:
-    name: "Name"
-    abreviation: "Abreviation"
+    name: "Country"
+    plural: "Countries"
+    attributes:
+      name: "Name"
+      abreviation: "Abreviation"
   organisation:
+    name: "Organisation"
+    plural: "Organisations"
     attributes:
       user: "User"
       country: "Country"
@@ -42,8 +49,8 @@ en:
       website: "Website"
       currency: "Currency"
   tax:
-    class_name: "Tax"
-    class_name_plural: "Tax"
+    name: "Tax"
+    plural: "Taxes"
     attributes:
       name: "Name"
       abbreviation: "Abbreviation"

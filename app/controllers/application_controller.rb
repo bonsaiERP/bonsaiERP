@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-  before_filter :set_user_session
-  before_filter :set_organisation
+  before_filter :set_user_session, :if => :user_signed_in?
+  # before_filter :set_organisation, :unless => session[:organisation_id].nil?
 
   # Adds an error with format to display
   #   @param ActiveRecord::Base (model)
@@ -23,9 +23,7 @@ class ApplicationController < ActionController::Base
 
   # Sets the organisation_id to help to set in the models
   def set_organisation
-    unless session[:organisation]
-      OrganisationSession.organisation = session[:organisation]
-    end
+      OrganisationSession.organisation_id = session[:organisation_id] if session[:organisation_id]
   end
 
 end

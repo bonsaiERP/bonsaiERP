@@ -7,13 +7,14 @@ Bundler.require :default, Rails.env
 
 module Bonsaierp
   class Application < Rails::Application
+    # Loads all *.rb files form lib/ folder
+    Dir.glob(File.join(Rails.root, "lib", "*.rb") ).each{|file| require file}
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
-
     # Add additional load paths for your own custom dirs
     # config.load_paths += %W( #{config.root}/extras )
-
+    #require 'lib/class_extensions'
     # Only load the plugins named here, in the order given (default is alphabetical).
     # :all can be used as a placeholder for all plugins not explicitly named
     # config.plugins = [ :exception_notification, :ssl_requirement, :all ]
@@ -38,5 +39,7 @@ module Bonsaierp
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters << :password
+
+    config.secret_token = '4b774a3e141bfb47522cf1cd0f256f2d37acafb0c8623646f97ceb807f7d87bf4d10b334120d749cdc55c1cbb8121ad8caf2e5515833bc0c41082208cd09aff1'
   end
 end

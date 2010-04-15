@@ -1,30 +1,26 @@
-<h1>Listing organisations</h1>
+<h1>organisations</h1>
 
-<table>
+<table class="decorated">
   <tr>
-    <th>Country</th>
-    <th>Name</th>
-    <th>Address</th>
-    <th>Address alt</th>
-    <th>Phone</th>
-    <th>Phone alt</th>
-    <th>Mobile</th>
-    <th>Email</th>
-    <th>Website</th>
+    <th style="width:200px"><%= t("organisation.attributes.name") %></th style="width:px">
+    <th style="width:100px"><%= t("organisation.attributes.country") %></th style="width:px">
+    <th style="width:100px"><%= t("organisation.attributes.currency") %></th style="width:px">
+    <th style="width:100px"><%= t("organisation.attributes.address") %></th style="width:px">
+    <th style="width:100px"><%= t("organisation.attributes.phone") %></th style="width:px">
+    <th style="width:100px"><%= t("organisation.attributes.mobile") %></th style="width:px">
+    <th style="width:100px"><%= t("organisation.attributes.email") %></th style="width:px">
   </tr>
 
 <% @organisations.each do |organisation| %>
   <tr>
+    <td><%= organisation.name %></td>
     <td><%= organisation.user %></td>
     <td><%= organisation.country %></td>
-    <td><%= organisation.name %></td>
+    <td><%= organisation.currency %></td>
     <td><%= organisation.address %></td>
-    <td><%= organisation.address_alt %></td>
     <td><%= organisation.phone %></td>
-    <td><%= organisation.phone_alt %></td>
     <td><%= organisation.mobile %></td>
     <td><%= organisation.email %></td>
-    <td><%= organisation.website %></td>
     <td><%= link_to 'Destroy', organisation, :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
 <% end %>

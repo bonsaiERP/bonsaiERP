@@ -2,7 +2,7 @@
 source 'http://gemcutter.org'
 
 
-gem "rails", "3.0.0.beta2"
+gem "rails", "3.0.0.beta3"
 
 ## Bundle edge rails:
 # gem "rails", :git => "git://github.com/rails/rails.git"
@@ -23,7 +23,7 @@ gem "sqlite3-ruby", :require => "sqlite3"
 #   gem "webrat"
 # end
 
-gem "devise", "1.1.pre4"
+gem "devise", "1.1.rc1"
 gem "simple_form", ">=1.1.2"
 gem "will_paginate", "3.0.pre"
 gem "ruby-debug"

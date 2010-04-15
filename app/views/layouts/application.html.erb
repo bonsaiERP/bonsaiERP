@@ -6,7 +6,7 @@
   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 
   <title></title>
-  <%= stylesheet_link_tag "style", :cache => "styles" %>
+  <%= stylesheet_link_tag "style", "jquery-ui-1.8.custom", :cache => "styles" %>
   <%= javascript_include_tag "jquery-1.4.2", "rails", "application", :cache => "scripts" %>
 </head>
   <body>
@@ -17,12 +17,23 @@
     </div>
     <% end %>
 
-    <div id="cont">
-      <div id="flashNotice"><%= flash[:notice] %></div>
-      <div id="flashError"><%= flash[:error] %></div>
 
-      <%= yield %>
+    <div id="wrapper">
+      <div id="header">
+      </div>
+
+      <div id="cont-wrapper">
+        <div id="cont">
+
+          <div id="flashNotice"><%= flash[:notice] %></div>
+          <div id="flashError"><%= flash[:error] %></div>
+
+          <%= yield %>
+        </div>
+      </div>
+
     </div>
+
 
   </body>
 </html>

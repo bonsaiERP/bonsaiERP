@@ -2,28 +2,28 @@ en:
   errors:
     messages:
       not_found: "no encontrado"
-      already_confirmed: "was already confirmed"
-      not_locked: "was not locked"
+      already_confirmed: "ya fue confirmado"
+      not_locked: "no fue bloqueado"
 
   devise:
     sessions:
-      link: 'Sign in'
-      signed_in: 'Signed in successfully.'
-      signed_out: 'Signed out successfully.'
-      unauthenticated: 'You need to sign in or sign up before continuing.'
-      unconfirmed: 'You have to confirm your account before continuing.'
-      locked: 'Your account is locked.'
-      invalid: 'Invalid email or password.'
-      invalid_token: 'Invalid authentication token.'
-      timeout: 'Your session expired, please sign in again to continue.'
-      inactive: 'Your account was not activated yet.'
+      link: 'Ingresar'
+      signed_in: 'Ingreso correctamente.'
+      signed_out: 'Salio correctamente.'
+      unauthenticated: 'Necesita ingresar o registrarse para continuar.'
+      unconfirmed: 'Debe confirmar su cuenta para poder continuar.'
+      locked: 'Su cuenta esta bloqueada.'
+      invalid: 'E-mail o contraseña inválida.'
+      invalid_token: 'Token de autenticación incorrecto.'
+      timeout: 'Su sesión a expirado, por favor ingrese de nuevo para continuar.'
+      inactive: 'Su cuenta no ha sido activada todavía.'
     passwords:
-      link: 'Forgot password?'
-      send_instructions: 'You will receive an email with instructions about how to reset your password in a few minutes.'
-      updated: 'Your password was changed successfully. You are now signed in.'
+      link: 'Olvido su contraseña?'
+      send_instructions: 'Recibira un email con instrucciones acerca de como resetear su contraseña en algunos momentos.'
+      updated: 'Su contraseña fue correctamente actualizada, Ahora ya a ingresado.'
     confirmations:
-      link: "Didn't receive confirmation instructions?"
-      send_instructions: 'You will receive an email with instructions about how to confirm your account in a few minutes.'
+      link: "No recibio las instrucciones para confirmación?"
+      send_instructions: 'Usted recibira un email con las instrucciones de como confirmar su cuenta en unos minutos.'
       confirmed: 'Your account was successfully confirmed. You are now signed in.'
     registrations:
       link: 'Sign up'

@@ -1,12 +1,12 @@
-# Used to access the authenticated user in the models
+# Used to access the organisation_id in the models
 class OrganisationSession
-  attr_accessor :organisation
+  attr_accessor :organisation_id
   # Stores using de application_controller the current_user for devise
-  def self.organisation=(session)
-    @organisation = session
+  def self.organisation_id=(organisation_id)
+    @organisation_id = organisation_id
   end
 
-  def self.organisation
-    @organisation
+  def self.organisation_id
+    @organisation_id
   end
 end

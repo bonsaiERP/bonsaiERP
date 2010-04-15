@@ -20,6 +20,14 @@
 @dark-black:
 */
 
+body{
+  font-size: 0.9em;
+  font-family: tahoma,arial,verdana,sans-serif;
+  background-color: #E9E9E9;
+  margin: 0px;
+  padding: 0px;
+}
+
 /*Forms*/
 ul.show{
   li{
@@ -35,8 +43,7 @@ ul.show{
 label{
   font-weight: bold;
   vertical-align: top;
-  float:left;
-  text-align: right;
+  display: block;
 }
 /*
 input:focus{
@@ -52,4 +59,49 @@ form{
   div{
     margin-top: 4px;
   }
+}
+
+.ui-state-default{ 
+  border: 1px solid #c5dbec; 
+  background: #dfeffc url(images/ui-bg_flat_85_dfeffc_40x100.png) 50% 50% repeat-x;
+  font-weight: bold;
+  color: #2e6e9e; 
+}
+
+table.decorated{
+  border-collapse: collapse;
+  th{
+    .ui-state-default;
+    padding: 4px 8px;
+  }
+}
+
+#header{
+  width: 1000px;
+  min-height: 100px;
+  background-color:#333;
+}
+
+#wrapper{
+  width: 1000px;
+  background-color: #C6C6C6;
+  margin: 0px auto 30px;
+}
+
+#cont-wrapper{
+  padding: 0px 25px 30px;
+}
+#cont{
+  margin: auto;
+  padding: 20px;
+  background-color: #FFF;
+}
+
+form abbr{
+  display: none;
+}
+
+form.required abbr{
+  display: inline;
+  color: green;
 }

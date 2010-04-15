@@ -1,4 +1,4 @@
-en:
+es:
   errors:
     messages:
       not_found: "no encontrado"
@@ -7,7 +7,7 @@ en:
 
   devise:
     sessions:
-      link: 'Ingreso'
+      link: 'Ingresar'
       signed_in: 'Ingreso correctamente.'
       signed_out: 'Salio correctamente.'
       unauthenticated: 'Necesita ingresar o registrarse para continuar.'
@@ -18,7 +18,7 @@ en:
       timeout: 'Su sesión a expirado, por favor ingrese de nuevo para continuar.'
       inactive: 'Su cuenta no ha sido activada todavía.'
     passwords:
-      link: 'No recuerda su contraseña?'
+      link: 'Olvido su contraseña?'
       send_instructions: 'Recibira un email con instrucciones acerca de como resetear su contraseña en algunos momentos.'
       updated: 'Su contraseña fue correctamente actualizada, Ahora ya a ingresado.'
     confirmations:
@@ -26,7 +26,7 @@ en:
       send_instructions: 'Usted recibira un email con las instrucciones de como confirmar su cuenta en unos minutos.'
       confirmed: 'Your account was successfully confirmed. You are now signed in.'
     registrations:
-      link: 'Sign up'
+      link: 'Registrarse'
       signed_up: 'You have signed up successfully.'
       updated: 'You updated your account successfully.'
       destroyed: 'Bye! Your account was successfully cancelled. We hope to see you again soon.'

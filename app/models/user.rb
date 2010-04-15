@@ -10,10 +10,9 @@ class User < ActiveRecord::Base
   has_many :organisations, :through => :links
 
   # Validations
-  #validates_presence_of :first_name, :last_name
 
-  # attr
-  attr_protected :account_type
+  #attr_protected :account_type
+  attr_accessible :email, :password, :password_confirmation, :first_name, :last_name, :phone, :mobile, :website, :description
 
 
   def to_s
