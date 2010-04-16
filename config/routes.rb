@@ -1,4 +1,6 @@
 Bonsaierp::Application.routes.draw do |map|
+  resources :units
+
   resources :currencies
 
   resources :links

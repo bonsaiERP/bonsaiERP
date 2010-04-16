@@ -19,3 +19,6 @@ namespace :bonsai do
   end  
 
 end
+
+# example to export the file
+# SELECT * INTO OUTFILE '/tmp/backup.csv' FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' ESCAPED BY '\\' LINES TERMINATED BY '\n' FROM exportar WHERE type_id=2

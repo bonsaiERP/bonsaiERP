@@ -6,7 +6,7 @@ describe Organisation do
     # @country = Country.new(:id => 1, :name => "Bolivia", :abbreviation => "bo", :blank? => true).stubs(:id => 1)
     @methods = {:blank? => false, :is_a? => false, :valid? => true, :destroyed? => false, :new_record? => false}
 
-    Currency.stubs(:find).returns(stub({:id => 1, :name => "boliviano"}.merge(@methods) ))
+    Currency.stubs(:find).returns(stub({:id => 1, :name => "boliviano"}.merge(@methods) ) )
 
     @taxes = [{:name => "Impuesto al Valor Agregado", :rate => 13, :abbreviation => "IVA"}, {:name => "Impuesto a las transacciones", :rate => 1.5, :abbreviation => "IT"}]
     @methods.merge({:taxes => @taxes})

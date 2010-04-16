@@ -25,3 +25,4 @@ class ActionController::TestCase
   include Devise::TestHelpers
 end
 
+@@spec_model_methods = {:blank? => false, :is_a? => false, :valid? => true, :destroyed? => false, :new_record? => false}

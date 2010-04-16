@@ -1,5 +1,5 @@
-# Module that helps to add users
-module Organisation
+# Module that helps to add organisation_id
+module Grouped
   def self.included(base)
     base.send(:include, ClassMethods)
   end
