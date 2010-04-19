@@ -34,3 +34,11 @@ en:
       confirmation_instructions: 'Confirmation instructions'
       reset_password_instructions: 'Reset password instructions'
       unlock_instructions: 'Unlock Instructions'
+    views:
+      sign_in: "Sign in"
+      sign_up: "Sign up"
+      confirmation_link: "Didn't receive confirmation instructions?"
+      unlock_link: "Didn't receive unlock instructions?"
+      password_forgot: "Forgot your password?"
+      password_submit: "Send me reset password instructions"
+

@@ -63,10 +63,7 @@ class OrganisationsController < ApplicationController
     @organisation = Organisation.find(params[:id])
     @organisation.destroy
 
-    respond_to do |format|
-      format.html { redirect_to(organisations_url) }
-      format.xml  { head :ok }
-    end
+    respond_with(@organisation)
   end
 
 end

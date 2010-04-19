@@ -1,8 +1,8 @@
 class Organisation < ActiveRecord::Base
   # callbacks
   before_create :set_user
-  before_create :create_taxes # There is an error with the relationship
-  before_create :create_link
+  after_create :create_taxes # There is an error with the relationship
+  after_create :create_link
 
 
   # relationships
