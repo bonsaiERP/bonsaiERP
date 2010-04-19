@@ -3,8 +3,8 @@ class User < ActiveRecord::Base
 
 
   # devise
-  devise :database_authenticatable, :confirmable, :recoverable, :rememberable, :trackable, :validatable
-
+  devise :database_authenticatable, :registerable, :confirmable,
+         :recoverable, :rememberable, :trackable, :validatable
   # Relationships
   has_many :links
   has_many :organisations, :through => :links
