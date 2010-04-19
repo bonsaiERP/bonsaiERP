@@ -30,6 +30,7 @@ protected
 
   # Adds the default taxes for each country
   def create_taxes
+    OrganisationSession.organisation_id = id
     country.taxes.each do |tax|
       taxes << Tax.new(tax)
     end

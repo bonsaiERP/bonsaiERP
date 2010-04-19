@@ -1,54 +1,22 @@
 <h1><%= @organisation.name %></h1>
+<% show_for @organisation do |org| %>
+  <div class="half fl">
+    <%= org.attribute :name %>
+    <%= org.attribute :country %>
+    <%= org.attribute :currency %>
+    <%= org.attribute :address %>
+    <%= org.attribute :address_alt %>
+  </div>
+  <div class="half fl">
+    <%= org.attribute :phone %>
+    <%= org.attribute :phone_alt %>
+    <%= org.attribute :mobile %>
+    <%= org.attribute :email %>
+    <%= org.attribute :website %>
+  </div>
+<% end %>
 
-<p>
-  <b><%= t("organisation.attributes.country") %></b>
-  <%= @organisation.country %>
-</p>
 
-<p>
-  <b><%= t("organisation.attributes.currency") %></b>
-  <%= @organisation.currency %>
-</p>
-
-<p>
-  <b><%= t("organisation.attributes.name") %></b>
-  <%= @organisation.name %>
-</p>
-
-<p>
-  <b><%= t("organisation.attributes.address") %></b>
-  <%= @organisation.address %>
-</p>
-
-<p>
-  <b><%= t("organisation.attributes.address_alt") %></b>
-  <%= @organisation.address_alt %>
-</p>
-
-<p>
-  <b><%= t("organisation.attributes.phone") %></b>
-  <%= @organisation.phone %>
-</p>
-
-<p>
-  <b><%= t("organisation.attributes.phone_alt") %></b>
-  <%= @organisation.phone_alt %>
-</p>
-
-<p>
-  <b><%= t("organisation.attributes.mobile") %></b>
-   <%= @organisation.mobile %>
-</p>
-
-<p>
-  <b><%= t("organisation.attributes.email") %></b>
-  <%= @organisation.email %>
-</p>
-
-<p>
-  <b><%= t("organisation.attributes.website") %></b>
-  <%= @organisation.website %>
-</p>
 
 <h2><%= t("user.class_name_plural") %></h2>
 <table>
@@ -80,5 +48,5 @@
   <% end %>
 </table>
 
-<%= link_to t("default.edit"), edit_organisation_path(@organisation) %> |
-<%= link_to t("default.index"), organisations_path %>
+<%= link_to t("edit"), edit_organisation_path(@organisation) %> |
+<%= link_to t("list"), organisations_path %>

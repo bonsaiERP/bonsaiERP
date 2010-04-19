@@ -4,7 +4,7 @@
         <%= f.association :currency, :label => t("organisation.attributes.currency") %>
         <%= f.input :name, :label => t("organisation.attributes.name") %>
         <%= f.input :address, :as => :text, :label => t("organisation.attributes.address") %>
-        <%= f.input :address_alt, :label => t("organisation.attributes.address_alt") %>
+        <%= f.input :address_alt, :as => :text, :label => t("organisation.attributes.address_alt") %>
         <%= f.input :phone, :label => t("organisation.attributes.phone") %>
         <%= f.input :phone_alt, :label => t("organisation.attributes.phone_alt") %>
         <%= f.input :mobile, :label => t("organisation.attributes.mobile") %>

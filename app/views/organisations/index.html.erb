@@ -1,31 +1,37 @@
 <h1>organisations</h1>
 
-<table class="decorated">
-  <tr>
-    <th style="width:200px"><%= t("organisation.attributes.name") %></th style="width:px">
-    <th style="width:100px"><%= t("organisation.attributes.country") %></th style="width:px">
-    <th style="width:100px"><%= t("organisation.attributes.currency") %></th style="width:px">
-    <th style="width:100px"><%= t("organisation.attributes.address") %></th style="width:px">
-    <th style="width:100px"><%= t("organisation.attributes.phone") %></th style="width:px">
-    <th style="width:100px"><%= t("organisation.attributes.mobile") %></th style="width:px">
-    <th style="width:100px"><%= t("organisation.attributes.email") %></th style="width:px">
-  </tr>
+    <% bonsai_th Organisation.new do |org| %>
+      <%= org.t "name", :width => 150 %>
+      <%= org.t "country", :width => 90 %>
+      <%= org.t "currency", :width => 90 %>
+      <%= org.t "address", :width => 90 %>
+      <%= org.t "phone", :width => 70 %>
+      <%= org.t "mobile", :width => 80 %>
+      <%= org.t "email", :width => 100 %>
+    <% end %>
 
-<% @organisations.each do |organisation| %>
-  <tr>
-    <td><%= organisation.name %></td>
-    <td><%= organisation.user %></td>
-    <td><%= organisation.country %></td>
-    <td><%= organisation.currency %></td>
-    <td><%= organisation.address %></td>
-    <td><%= organisation.phone %></td>
-    <td><%= organisation.mobile %></td>
-    <td><%= organisation.email %></td>
-    <td><%= link_to 'Destroy', organisation, :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
-<% end %>
-</table>
+    <%= link_to 'New organisation', new_organisation_path, :class => :new %>
+  <ul>
+  <% @organisations.each do |organisation| %>
+    <li>
+      <h2><%= link_to organisation.name, organisation %></h2>
+      <% show_for organisation do |org| %>
+        <div class="half fl">
+          <%= org.attribute :country %>
+          <%= org.attribute :currency %>
+          <%= org.attribute :address %>
+          <%= org.attribute :address_alt %>
+        </div>
+        <div class="half fl">
+          <%= org.attribute :phone %>
+          <%= org.attribute :phone_alt %>
+          <%= org.attribute :mobile %>
+          <%= org.attribute :email %>
+          <%= org.attribute :website %>
+        </div>
+      <% end %>
+    </li>
+  <% end %>
+  </ul>
 
-<br />
 
-<%= link_to 'New organisation', new_organisation_path %>

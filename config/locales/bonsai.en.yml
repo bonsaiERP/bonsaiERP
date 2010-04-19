@@ -1,4 +1,26 @@
 en:
+  show:"Show"
+  edit: "edit"
+  destroy: "Destroy"
+  list: "List"
+  confirm_delete: "Are you sure to delete the selected record?"
+  activerecord:
+    models:
+      organisation: "Organisation"
+    attributes:
+      organisation:
+        user: "User"
+        country: "Country"
+        name: "Name"
+        address: "Address"
+        address_alt: "Alternative address"
+        phone: "Phone"
+        phone_alt: "Alternative phone"
+        mobile: "Mobile"
+        email: "Email"
+        website: "Website"
+        currency: "Currency"
+
   flash:
     error: "Please correct errors"
   edit: "Edit"
@@ -39,7 +61,7 @@ en:
     attributes:
       user: "User"
       country: "Country"
-      name: "Name"
+      name: "Name--"
       address: "Address"
       address_alt: "Alternative address"
       phone: "Phone"

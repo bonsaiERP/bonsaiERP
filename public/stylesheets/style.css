@@ -41,6 +41,7 @@ table.decorated th {
   color: #2e6e9e;
   padding: 4px 8px;
 }
+table.decorated td { font-size: 0.95em; }
 #header {
   width: 1000px;
   min-height: 100px;
@@ -62,3 +63,5 @@ form.required abbr {
   display: inline;
   color: green;
 }
+.half { width: 49%; }
+.fl { float: left; }
