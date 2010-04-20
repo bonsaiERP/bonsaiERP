@@ -32,7 +32,7 @@ class UnitsController < ApplicationController
   # POST /units
   # POST /units.xml
   def create
-    @unit = Unit.new(params[:unit])
+    @unit = Unit.create(params[:unit])
     respond_with @unit
   end
 
@@ -40,6 +40,7 @@ class UnitsController < ApplicationController
   # PUT /units/1.xml
   def update
     @unit = Unit.find(params[:id])
+    @unit.update_attributes(params[:unit])
     respond_with @unit
   end
 

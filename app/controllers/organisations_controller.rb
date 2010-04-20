@@ -1,4 +1,6 @@
 class OrganisationsController < ApplicationController
+  before_filter :destroy_organisation_id
+
   respond_to :html, :xml, :json
   # GET /organisations
   # GET /organisations.xml
@@ -45,16 +47,8 @@ class OrganisationsController < ApplicationController
   # PUT /organisations/1.xml
   def update
     @organisation = Organisation.find(params[:id])
-
-    respond_to do |format|
-      if @organisation.update_attributes(params[:organisation])
-        format.html { redirect_to(@organisation, :notice => 'Organisation was successfully updated.') }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @organisation.errors, :status => :unprocessable_entity }
-      end
-    end
+    @organisation.update_attributes(params[:organisation])
+    respond_with(@organisation)
   end
 
   # DELETE /organisations/1
@@ -72,4 +66,8 @@ class OrganisationsController < ApplicationController
     redirect_to dashboard_url
   end
 
+private
+  def destroy_organisation_id
+    session[:organisation_id] = nil
+  end
 end

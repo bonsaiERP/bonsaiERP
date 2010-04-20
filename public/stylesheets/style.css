@@ -9,8 +9,8 @@
 
 
 */body {
-  font-size: 0.9em;
-  font-family: "Trebuchet MS", verdana, arial, sans-serif;
+  font-size: 12px;
+  font-family: Tahoma, sans-serif;
   background-color: #e9e9e9;
   margin: 0px;
   padding: 0px;
@@ -26,6 +26,8 @@ label {
   vertical-align: top;
   display: block;
 }
+input, select, textarea { font-size: 12px; }
+.inline label { display: inline; }
 form div { margin-top: 4px; }
 .ui-state-default {
   border: 1px solid #c5dbec;
@@ -33,7 +35,10 @@ form div { margin-top: 4px; }
   font-weight: bold;
   color: #2e6e9e;
 }
-table.decorated { border-collapse: collapse; }
+table.decorated {
+  border-collapse: collapse;
+  width: 100%;
+}
 table.decorated th {
   border: 1px solid #c5dbec;
   background: #dfeffc url(images/ui-bg_flat_85_dfeffc_40x100.png) 50% 50% repeat-x;
@@ -41,7 +46,7 @@ table.decorated th {
   color: #2e6e9e;
   padding: 4px 8px;
 }
-table.decorated td { font-size: 0.95em; }
+table.decorated tr { border-bottom: 1px solid #c6c6c6; }
 #header {
   width: 1000px;
   min-height: 100px;
@@ -63,7 +68,10 @@ form.required abbr {
   display: inline;
   color: green;
 }
-.half { width: 49%; }
+.half {
+  width: 47%;
+  margin: 1.2%;
+}
 .fl { float: left; }
 #logo {
   float: left;
@@ -134,6 +142,7 @@ div#nav ul#main_menu li ul {
   padding: 0px;
   margin: 0px;
   z-index: 100;
+  width: 130%;
 }
 div#nav ul#main_menu li ul li {
   margin: 0px;
@@ -143,13 +152,16 @@ div#nav ul#main_menu li ul li {
 div#nav ul#main_menu li ul li a {
   float: none;
   padding: 3px 20px;
-  font-size: 0.9em;
   font-weight: normal;
 }
 div#nav ul#main_menu li ul li a:hover {
   background-image: url(images/ui-bg_glass_40_ffc73d_1x400.png);
   background-position: 50%;
   color: #000000;
+}
+div#nav ul#main_menu li:hover ul {
+  display: block;
+  position: absolute;
 }
 div#nav ul#main_menu li:hover a span {
   background-image: url(images/ui-icons_d8e7f3_256x240.png);
@@ -158,9 +170,72 @@ div#nav ul#main_menu li:hover a span {
   display: inline-block;
   margin-left: 2px;
   vertical-align: middle;
-  background-position: -64px -16px;
+  background-position: 0px -16px;
 }
-div#nav ul#main_menu li:hover ul {
-  display: block;
-  position: absolute;
+.error { color: #ff0000; }
+.link {
+  font-weight: bold;
+  padding-left: 20px;
+  text-decoration: none;
+  display: inline-block;
+  margin: 10px 2px;
+}
+.edit {
+  font-weight: bold;
+  padding-left: 20px;
+  text-decoration: none;
+  display: inline-block;
+  margin: 10px 2px;
+  background: url(images/pencil.png) no-repeat;
+}
+.destroy {
+  font-weight: bold;
+  padding-left: 20px;
+  text-decoration: none;
+  display: inline-block;
+  margin: 10px 2px;
+  background: url(images/delete.png) no-repeat;
+}
+.list {
+  font-weight: bold;
+  padding-left: 20px;
+  text-decoration: none;
+  display: inline-block;
+  margin: 10px 2px;
+  background: url(images/table.png) no-repeat;
+}
+.show {
+  font-weight: bold;
+  padding-left: 20px;
+  text-decoration: none;
+  display: inline-block;
+  margin: 10px 2px;
+  background: url(images/zoom.png) no-repeat;
+}
+.icon {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  text-indent: -1000em;
+}
+.show_icon {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  text-indent: -1000em;
+  background: url(images/zoom.png) no-repeat;
+}
+.edit_icon {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  text-indent: -1000em;
+  background: url(images/pencil.png) no-repeat;
+}
+.destroy_icon {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  text-indent: -1000em;
+  background: url(images/delete.png) no-repeat;
 }

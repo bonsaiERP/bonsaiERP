@@ -3,7 +3,7 @@ class CreateUnits < ActiveRecord::Migration
     create_table :units do |t|
       t.string :name
       t.string :symbol
-      t.boolean :integer
+      t.boolean :integer, :default => false
 
       t.integer :organisation_id
 

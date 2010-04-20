@@ -1,18 +1,20 @@
-    <%= simple_form_for(@organisation) do |f| %>
-      <div class="inputs">
-        <%= f.association :country, :label => t("organisation.attributes.country") %>
-        <%= f.association :currency, :label => t("organisation.attributes.currency") %>
-        <%= f.input :name, :label => t("organisation.attributes.name") %>
-        <%= f.input :address, :as => :text, :label => t("organisation.attributes.address") %>
-        <%= f.input :address_alt, :as => :text, :label => t("organisation.attributes.address_alt") %>
-        <%= f.input :phone, :label => t("organisation.attributes.phone") %>
-        <%= f.input :phone_alt, :label => t("organisation.attributes.phone_alt") %>
-        <%= f.input :mobile, :label => t("organisation.attributes.mobile") %>
-        <%= f.input :email, :label => t("organisation.attributes.email") %>
-        <%= f.input :website, :label => t("organisation.attributes.website") %>
-      </div>
+<%= simple_form_for(@organisation) do |f| %>
+  <div class="inputs half fl">
+    <%= f.association :country %>
+    <%= f.association :currency %>
+    <%= f.input :name %>
+    <%= f.input :phone %>
+    <%= f.input :address, :as => :text, :input_html => {:rows => 5} %>
+  </div>
+  <div class="half fl">
+    <%= f.input :email %>
+    <%= f.input :website %>
+    <%= f.input :mobile %>
+    <%= f.input :phone_alt %>
+    <%= f.input :address_alt, :as => :text, :input_html => {:rows => 5} %>
+  </div>
+  <div class="actions">
+    <%= f.button :submit %>
+  </div>
 
-      <div class="actions">
-        <%= f.button :submit %>
-      </div>
-    <% end %>
+<% end %>

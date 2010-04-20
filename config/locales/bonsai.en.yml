@@ -1,14 +1,57 @@
 en:
-  show:"Show"
-  edit: "edit"
   destroy: "Destroy"
+  new: "New"
   list: "List"
+  show: "Show"
+  edit: "Edit"
   confirm_delete: "Are you sure to delete the selected record?"
+  "yes": "Yes"
+  "no": "No"
+  role: "Role"
+  organisation:
+    flash:
+      create: "The organisation has been created"
+      update: "The organisation has been updated"
   controllers:
-    dashboard: "Dashboard"
-    inventories: "Inventories"
-    operations: "Operations"
-    reports: "Reports"
+    users:
+      one: "User"
+      other: "Users"
+    dashboard: 
+      one: "Dashboard"
+      other: "Dashboard"
+    inventories: 
+      one: "Inventory"
+      other: "Inventories"
+    operations: 
+      one: "Operation"
+      other: "Operations"
+    reports:
+      one: "Report"
+      other: "Reports"
+    units:
+     one: "Measure unit"
+     other: "Measure units"
+    tax:
+      one: "Tax"
+      other: "Taxes"
+    organisations:
+      one: "Organisation"
+      other: "Organisations"
+  simple_form:
+    labels:
+      organisation:
+        user: "User"
+        country: "Coountry"
+        name: "Name"
+        address: "Address"
+        address_alt: "Alternative address"
+        phone: "Phone"
+        phone_alt: "Alternative phone"
+        mobile: "Mobile"
+        email: "Email"
+        website: "Website"
+        currency: "Currency"
+    hints:
   activerecord:
     models:
       organisation: "Organisation"
@@ -25,17 +68,31 @@ en:
         email: "Email"
         website: "Website"
         currency: "Currency"
+      user:
+        name: "Name"
+        first_name: "First name"
+        last_name: "Last name"
+        email: "Email"
+        phone: "Phone"
+        mobile: "Mobile"
+        website: "Website"
+        description: "Description"
+        password: "Password"
+        password_confirmation: "Password confirmation"
+      country:
+        name: "Name"
+        abreviation: "Abreviation"
+      tax:
+        name: "Name"
+        abbreviation: "Abbreviation"
+        rate: "Rate"
+      unit:
+        name: "Name"
+        symbol: "Symbol"
+        integer: "Integer"
 
   flash:
     error: "Please correct errors"
-  edit: "Edit"
-  update: "Update"
-  destroy: "Destroy"
-  show: "Show"
-  index: "List"
-  devise:
-    sign_in:
-      in: "Log in" 
   user:
     name: "User"
     plural: "Users"
@@ -44,41 +101,9 @@ en:
     new_user: "New user"
     edit_user: "Edit user"
     delete_user: "Delete user"
-    attributes:
-      first_name: "First name"
-      last_name: "Last name"
-      email: "Email"
-      phone: "Phone"
-      mobile: "Mobile"
-      website: "Website"
-      description: "Description"
-      password: "Password"
-      password_confirmation: "Password confirmation"
   country:
     name: "Country"
     plural: "Countries"
-    attributes:
-      name: "Name"
-      abreviation: "Abreviation"
-  organisation:
-    name: "Organisation"
-    plural: "Organisations"
-    attributes:
-      user: "User"
-      country: "Country"
-      name: "Name--"
-      address: "Address"
-      address_alt: "Alternative address"
-      phone: "Phone"
-      phone_alt: "Alternative phone"
-      mobile: "Mobile"
-      email: "Email"
-      website: "Website"
-      currency: "Currency"
   tax:
     name: "Tax"
     plural: "Taxes"
-    attributes:
-      name: "Name"
-      abbreviation: "Abbreviation"
-      rate: "Rate"

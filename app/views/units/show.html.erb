@@ -1,25 +1,10 @@
-<p class="notice"><%= notice %></p>
+<h1><%= bonsai_title %></h1>
 
-<p>
-  <b>Name:</b>
-  <%= @unit.name %>
-</p>
+<% show_for @unit do |unit| %>
+  <%= unit.attribute :name %>
+  <%= unit.attribute :symbol %>
+  <%= unit.attribute :integer %>
+<% end %>
 
-<p>
-  <b>Abbreviation:</b>
-  <%= @unit.abbreviation %>
-</p>
-
-<p>
-  <b>Description:</b>
-  <%= @unit.description %>
-</p>
-
-<p>
-  <b>Integer:</b>
-  <%= @unit.integer %>
-</p>
-
-
-<%= link_to 'Edit', edit_unit_path(@unit) %> |
-<%= link_to 'Back', units_path %>
+<%= link_to t("edit"), edit_unit_path(@unit), :class => "edit" %> |
+<%= link_to t("list"), units_path, :class => "list" %>

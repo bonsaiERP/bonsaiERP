@@ -1,29 +1,23 @@
-<h1>Listing units</h1>
+<h1><%= bonsai_title %></h1>
 
-<table>
+<%= link_to 'New Unit', new_unit_path %>
+
+<table class="decorated" style="width:50%">
   <tr>
-    <th>Name</th>
-    <th>Abbreviation</th>
-    <th>Description</th>
-    <th>Integer</th>
-    <th></th>
-    <th></th>
-    <th></th>
+    <% bonsai_th "unit" do |unit| %>
+      <%= unit.t :name, :width => 200 %>
+      <%= unit.t :symbol %>
+      <%= unit.t :integer %>
+    <% end %>
   </tr>
 
 <% @units.each do |unit| %>
   <tr>
-    <td><%= unit.name %></td>
-    <td><%= unit.abbreviation %></td>
-    <td><%= unit.description %></td>
-    <td><%= unit.integer %></td>
-    <td><%= link_to 'Show', unit %></td>
-    <td><%= link_to 'Edit', edit_unit_path(unit) %></td>
-    <td><%= link_to 'Destroy', unit, :confirm => 'Are you sure?', :method => :delete %></td>
+    <td><%= link_to unit.name, unit %></td>
+    <td><%= unit.symbol %></td>
+    <td><%= unit.integer? %></td>
+    <td><%=  raw bonsai_links(unit) %></td>
   </tr>
 <% end %>
 </table>
 
-<br />
-
-<%= link_to 'New Unit', new_unit_path %>

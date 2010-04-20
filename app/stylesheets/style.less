@@ -9,9 +9,6 @@
 @green: 
 @light-green:
 @dark-green:
-@grey: 
-@light-grey:
-@dark-grey:
 @yellow: 
 @light-yellow:
 @dark-yellow:
@@ -19,18 +16,22 @@
 @light-black:
 @dark-black:
 */
+@red: #FF0000;
 @black: #000;
 @dark: #333;
-@light-dark:#6F6F6F;
+@light_dark:#6F6F6F;
+@grey: #C6C6C6;
+@font_size: 12px;
 
 body{
-  font-size: 0.9em;
-  font-family: "Trebuchet MS", verdana, arial, sans-serif;
+  font-size: @font_size;
+  font-family: Tahoma, sans-serif;
   background-color: #E9E9E9;
   margin: 0px;
   padding: 0px;
 }
 
+/*********************************************************/
 /*Forms*/
 ul.show{
   li{
@@ -48,6 +49,13 @@ label{
   vertical-align: top;
   display: block;
 }
+input, select, textarea{
+  font-size: @font_size;
+}
+
+.inline label{
+  display: inline;
+}
 /*
 input:focus{
   border-color:@orange;
@@ -58,11 +66,13 @@ abbr{
 }
 */
 
+/*********************************/
 form{
   div{
     margin-top: 4px;
   }
 }
+
 
 .ui-state-default{ 
   border: 1px solid #c5dbec; 
@@ -73,12 +83,13 @@ form{
 
 table.decorated{
   border-collapse: collapse;
+  width: 100%;
   th{
     .ui-state-default;
     padding: 4px 8px;
   }
-  td{
-    font-size: 0.95em;
+  tr{
+    border-bottom: 1px solid @grey;
   }
 }
 
@@ -90,7 +101,7 @@ table.decorated{
 
 #wrapper{
   width: 1000px;
-  background-color: #C6C6C6;
+  background-color: @grey;
   margin: 0px auto 30px;
 }
 
@@ -112,7 +123,10 @@ form.required abbr{
   color: green;
 }
 
-.half{ width: 49%; }
+.half{ 
+  width: 47%;
+  margin: 1.2%;
+}
 .fl{ float: left; }
 
 /**********************************************************/
@@ -137,7 +151,7 @@ form.required abbr{
   font-weight: bold;
   padding: 5px 15px;
   border-right: 1px solid @dark;
-  border-left: 1px solid @light-dark;
+  border-left: 1px solid @light_dark;
 }
 .menu_icon{
   background-image: url(images/ui-icons_d8e7f3_256x240.png);
@@ -177,6 +191,7 @@ div#nav{
         padding: 0px;
         margin: 0px;
         z-index: 100;
+        width: 130%;
         li{
           margin: 0px;
           padding: 0px;
@@ -184,7 +199,6 @@ div#nav{
           a{
             float: none;
             padding: 3px 20px;
-            font-size: 0.9em;
             font-weight: normal;
           }
           a:hover{
@@ -196,16 +210,64 @@ div#nav{
       }
     }
     li:hover{
-      a{
-        span{
-          .menu_icon;
-          background-position: -64px -16px;
-        }
-      }
       ul{
         display: block;
         position: absolute;
       }
+      a{
+        span{
+          .menu_icon;
+          background-position: 0px -16px;
+        }
+      }
     }
   }
+}
+
+/**************************************************************/
+.error{
+  color: @red;
+}
+.link{
+  font-weight: bold;
+  padding-left: 20px;
+  text-decoration: none;
+  display: inline-block;
+  margin: 10px 2px;
+}
+.edit{
+  .link;
+  background: url(images/pencil.png) no-repeat;
+}
+
+.destroy{
+  .link;
+  background: url(images/delete.png) no-repeat;
+}
+.list{
+  .link;
+  background: url(images/table.png) no-repeat;
+}
+.show{
+  .link;
+  background: url(images/zoom.png) no-repeat;
+}
+
+.icon{
+  width:16px;
+  height: 16px;
+  display: inline-block;
+  text-indent: -1000em;
+}
+.show_icon{
+  .icon;
+  background: url(images/zoom.png) no-repeat;
+}
+.edit_icon{
+  .icon;
+  background: url(images/pencil.png) no-repeat;
+}
+.destroy_icon{
+  .icon;
+  background: url(images/delete.png) no-repeat;
 }

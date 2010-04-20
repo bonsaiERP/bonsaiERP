@@ -72,7 +72,7 @@ ActiveRecord::Schema.define(:version => 20100416193705) do
   create_table "units", :force => true do |t|
     t.string   "name"
     t.string   "symbol"
-    t.boolean  "integer"
+    t.boolean  "integer",         :default => false
     t.integer  "organisation_id"
     t.datetime "created_at"
     t.datetime "updated_at"

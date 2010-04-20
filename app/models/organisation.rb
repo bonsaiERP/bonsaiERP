@@ -47,10 +47,10 @@ protected
   # creates default units the units accordins to the locale
   def create_units
     path = File.join(Rails.root, "config", "defaults", "units.#{I18n.locale}.yml" )
-    YAML::parse(File.open(Rails.root) ).transform do |vals|
-      unit = Unit.new(vals)
-      unit.save(:validation => false)
+    YAML::parse(File.open(path) ).transform.each do |vals|
+      unit = Unit.create(vals)
     end
+    s=0
   end
 
   # Sets the user_id, needed to define the scope of uniquenes_of :name

@@ -17,36 +17,41 @@
 <% end %>
 
 
+<div class="half fl">
+  <h2><%= t("controllers.users.one") %></h2>
+  <table class="decorated">
+    <tr>
+      <th><%= t("activerecord.attributes.user.name") %></th>
+      <th><%= t("role") %></th>
+    </tr>
+    <% @organisation.links.each do |l| %>
+    <tr>
+      <td><%= l.user %></td>
+      <td><%= l.role %></td>
+    </tr>
+    <% end %>
+  </table>
+</div>
 
-<h2><%= t("user.class_name_plural") %></h2>
-<table>
-  <tr>
-    <th><%= t("user.attributes.name") %></th>
-    <th><%= t("link.attributes.role") %></th>
-  </tr>
-  <% @organisation.links.each do |l| %>
-  <tr>
-    <td><%= l.user %></td>
-    <td><%= l.role %></td>
-  </tr>
-  <% end %>
-</table>
-
-<h2><%= t("tax.class_name_plural") %></h2>
-<table>
-  <tr>
-    <th><%= t("tax.attributes.name") %></th>
-    <th><%= t("tax.attributes.abbreviation") %></th>
-    <th><%= t("tax.attributes.rate") %> %</th>
-  </tr>
-  <% @organisation.taxes.each do |tax| %>
-  <tr>
-    <td><%= tax.name %></td>
-    <td><%= tax.abbreviation %></td>
-    <td><%= tax.rate.round(2) %>%</td>
-  </tr>
-  <% end %>
-</table>
+<div class="half fl">
+  <h2><%= t("controllers.tax.other") %></h2>
+  <table class="decorated">
+    <tr>
+      <% bonsai_th "tax" do |tax| %>
+        <%= tax.t :name %>
+        <%= tax.t :abbreviation %>
+        <%= tax.t :rate %>
+      <% end %>
+    </tr>
+    <% @organisation.taxes.each do |tax| %>
+    <tr>
+      <td><%= tax.name %></td>
+      <td><%= tax.abbreviation %></td>
+      <td><%= tax.rate.round(2) %>%</td>
+    </tr>
+    <% end %>
+  </table>
+</div>
 
 <%= link_to t("edit"), edit_organisation_path(@organisation) %> |
 <%= link_to t("list"), organisations_path %>
