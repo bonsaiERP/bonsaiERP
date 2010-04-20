@@ -13,3 +13,5 @@ public/javascripts/plugins.js
 public/javascripts/scripts.js
 doc/wireframes/images/*.*
 *.pid
+rerun.txt
+db/test.sqlite3-journal

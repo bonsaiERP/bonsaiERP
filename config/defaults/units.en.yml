@@ -1,0 +1,11 @@
+--- 
+- :symbol: kg
+  :name: kilogram
+- :symbol: mt
+  :name: meter
+- :symbol: un
+  :name: unit
+- :symbol: srv
+  :name: service
+- :symbol: litre
+  :name: L

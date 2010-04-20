@@ -1,8 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
   before_filter :set_user_session, :if => :user_signed_in?
-  # before_filter :set_organisation, :unless => session[:organisation_id].nil?
-
+  before_filter :set_organisation
   # Adds an error with format to display
   #   @param ActiveRecord::Base (model)
   def add_flash_error(model)
@@ -23,7 +22,11 @@ class ApplicationController < ActionController::Base
 
   # Sets the organisation_id to help to set in the models
   def set_organisation
-      OrganisationSession.organisation_id = session[:organisation_id] if session[:organisation_id]
+    OrganisationSession.organisation_id = session[:organisation_id] unless session[:organisation_id].nil?
+  end
+
+  def check_organisation
+    redirect_to organisations_path if session[:organisation_id].nil?
   end
 
 end

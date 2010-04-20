@@ -66,4 +66,10 @@ class OrganisationsController < ApplicationController
     respond_with(@organisation)
   end
 
+  # GET /organisation/1/select
+  def select
+    session[:organisation_id] = params[:id].to_i
+    redirect_to dashboard_url
+  end
+
 end

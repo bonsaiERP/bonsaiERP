@@ -3,6 +3,7 @@ class Organisation < ActiveRecord::Base
   before_create :set_user
   after_create :create_taxes # There is an error with the relationship
   after_create :create_link
+  after_create :create_units
 
 
   # relationships
@@ -41,6 +42,15 @@ protected
     link = Link.new
     link.set_user_creator_role(user_id)
     links << link
+  end
+
+  # creates default units the units accordins to the locale
+  def create_units
+    path = File.join(Rails.root, "config", "defaults", "units.#{I18n.locale}.yml" )
+    YAML::parse(File.open(Rails.root) ).transform do |vals|
+      unit = Unit.new(vals)
+      unit.save(:validation => false)
+    end
   end
 
   # Sets the user_id, needed to define the scope of uniquenes_of :name

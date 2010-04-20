@@ -2,8 +2,7 @@ class CreateUnits < ActiveRecord::Migration
   def self.up
     create_table :units do |t|
       t.string :name
-      t.string :abbreviation
-      t.string :description
+      t.string :symbol
       t.boolean :integer
 
       t.integer :organisation_id

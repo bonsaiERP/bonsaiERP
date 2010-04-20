@@ -4,6 +4,11 @@ en:
   destroy: "Destroy"
   list: "List"
   confirm_delete: "Are you sure to delete the selected record?"
+  controllers:
+    dashboard: "Dashboard"
+    inventories: "Inventories"
+    operations: "Operations"
+    reports: "Reports"
   activerecord:
     models:
       organisation: "Organisation"

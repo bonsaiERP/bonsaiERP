@@ -1,36 +1,12 @@
 <h1>organisations</h1>
 
-    <% bonsai_th Organisation.new do |org| %>
-      <%= org.t "name", :width => 150 %>
-      <%= org.t "country", :width => 90 %>
-      <%= org.t "currency", :width => 90 %>
-      <%= org.t "address", :width => 90 %>
-      <%= org.t "phone", :width => 70 %>
-      <%= org.t "mobile", :width => 80 %>
-      <%= org.t "email", :width => 100 %>
-    <% end %>
-
     <%= link_to 'New organisation', new_organisation_path, :class => :new %>
   <ul>
   <% @organisations.each do |organisation| %>
     <li>
-      <h2><%= link_to organisation.name, organisation %></h2>
-      <% show_for organisation do |org| %>
-        <div class="half fl">
-          <%= org.attribute :country %>
-          <%= org.attribute :currency %>
-          <%= org.attribute :address %>
-          <%= org.attribute :address_alt %>
-        </div>
-        <div class="half fl">
-          <%= org.attribute :phone %>
-          <%= org.attribute :phone_alt %>
-          <%= org.attribute :mobile %>
-          <%= org.attribute :email %>
-          <%= org.attribute :website %>
-        </div>
-      <% end %>
-    </li>
+      <h2><%= link_to organisation.name, select_organisation_path(organisation) %></h2>
+      <%=  raw bonsai_links(organisation) %>
+     </li>
   <% end %>
   </ul>
 

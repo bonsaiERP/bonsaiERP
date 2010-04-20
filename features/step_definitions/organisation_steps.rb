@@ -34,7 +34,6 @@ And /^I fill data with (\w+), (\w+), (\w+), (\w+), (\w+)$/ do |name, country, ad
 end
 
 Then /^I should see organisation with (\w+), (\w+), (\w+)$/ do |name, country, currency|
-debugger
   page.has_content?(name).should == true
   page.has_content?(country).should == true
   page.has_content?(currency).should == true

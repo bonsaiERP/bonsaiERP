@@ -65,3 +65,102 @@ form.required abbr {
 }
 .half { width: 49%; }
 .fl { float: left; }
+#logo {
+  float: left;
+  height: 65px;
+  width: 400px;
+}
+#other_menu {
+  width: 600px;
+  float: right;
+  height: 65px;
+}
+.a_menu {
+  color: #ffffff;
+  text-decoration: none;
+  display: block;
+  font-weight: bold;
+  padding: 5px 15px;
+  border-right: 1px solid #333333;
+  border-left: 1px solid #6f6f6f;
+}
+.menu_icon {
+  background-image: url(images/ui-icons_d8e7f3_256x240.png);
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  margin-left: 2px;
+  vertical-align: middle;
+}
+div#nav { height: 25px; }
+div#nav ul#main_menu {
+  margin: 0px;
+  margin-left: 10px;
+  padding: 0px;
+  background-image: url(images/bg_tr_group_headers_hover.png);
+  background-position: 30% 50%;
+  height: 20px;
+  display: inline-block;
+}
+div#nav ul#main_menu li {
+  list-style: none;
+  float: left;
+  margin: 0px;
+  padding: 0px;
+  display: inline;
+  position: relative;
+}
+div#nav ul#main_menu li a {
+  color: #ffffff;
+  text-decoration: none;
+  display: block;
+  font-weight: bold;
+  padding: 5px 15px;
+  border-right: 1px solid #333333;
+  border-left: 1px solid #6f6f6f;
+}
+div#nav ul#main_menu li a span {
+  background-image: url(images/ui-icons_d8e7f3_256x240.png);
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  margin-left: 2px;
+  vertical-align: middle;
+  background-position: -64px -16px;
+}
+div#nav ul#main_menu li ul {
+  display: none;
+  background-color: #333333;
+  padding: 0px;
+  margin: 0px;
+  z-index: 100;
+}
+div#nav ul#main_menu li ul li {
+  margin: 0px;
+  padding: 0px;
+  float: none;
+}
+div#nav ul#main_menu li ul li a {
+  float: none;
+  padding: 3px 20px;
+  font-size: 0.9em;
+  font-weight: normal;
+}
+div#nav ul#main_menu li ul li a:hover {
+  background-image: url(images/ui-bg_glass_40_ffc73d_1x400.png);
+  background-position: 50%;
+  color: #000000;
+}
+div#nav ul#main_menu li:hover a span {
+  background-image: url(images/ui-icons_d8e7f3_256x240.png);
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  margin-left: 2px;
+  vertical-align: middle;
+  background-position: -64px -16px;
+}
+div#nav ul#main_menu li:hover ul {
+  display: block;
+  position: absolute;
+}

@@ -1,3 +1,4 @@
+# Especial methods created to make easier the development
 module BonsaiHelper
 
   class TranslateBlock

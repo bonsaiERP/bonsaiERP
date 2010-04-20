@@ -20,6 +20,12 @@
 
     <div id="wrapper">
       <div id="header">
+        
+        <%= render :partial => "/extras/other_menu" %>
+        <% if organisation? %>
+          <%= render :partial => "/extras/logo" %>
+          <%= render :partial => "/extras/main_menu" %>
+        <% end %>
       </div>
 
       <div id="cont-wrapper">

@@ -1,35 +1,26 @@
 class TaxesController < ApplicationController
+  before_filter :check_organisation
+  respond_to :html, :xml, :json, :js
+
   # GET /taxes
   # GET /taxes.xml
   def index
     @taxes = Tax.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @taxes }
-    end
+    respond_with @taxes
   end
 
   # GET /taxes/1
   # GET /taxes/1.xml
   def show
     @tax = Tax.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @tax }
-    end
+    respond_with @tax
   end
 
   # GET /taxes/new
   # GET /taxes/new.xml
   def new
     @tax = Tax.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @tax }
-    end
+    respond_with @tax
   end
 
   # GET /taxes/1/edit

@@ -7,13 +7,21 @@ Bonsaierp::Application.routes.draw do |map|
 
   resources :taxes
 
-  resources :organisations
+  resources :organisations do |org|
+    get :select, :on => :member
+  end
+
 
   resources :countries
 
   devise_for :users
   resources :users
+
+  match "/dashboard" => "dashboard#index", :as => :dashboard
+
   root :to => "home#index"
+
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

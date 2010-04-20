@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100414180825) do
+ActiveRecord::Schema.define(:version => 20100416193705) do
 
   create_table "countries", :force => true do |t|
     t.string   "name",         :limit => 50
@@ -68,6 +68,17 @@ ActiveRecord::Schema.define(:version => 20100414180825) do
   end
 
   add_index "taxes", ["organisation_id"], :name => "index_taxes_on_organisation_id"
+
+  create_table "units", :force => true do |t|
+    t.string   "name"
+    t.string   "symbol"
+    t.boolean  "integer"
+    t.integer  "organisation_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "units", ["organisation_id"], :name => "index_units_on_organisation_id"
 
   create_table "users", :force => true do |t|
     t.string   "email",                               :default => "", :null => false

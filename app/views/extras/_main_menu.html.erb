@@ -1,0 +1,32 @@
+<div id="nav">
+  <ul id="main_menu">
+    <li><%= link_to t("controllers.dashboard"), dashboard_path %></li>
+    <li>
+      <a href="javascript:"><%= t("controllers.inventories") %><span class="down">&nbsp;</span></a>
+      <ul class="sub">
+        <li><%= link_to "Stores" %></li>
+        <li><%= link_to "Items" %></li>
+        <li><%= link_to "Stoks" %></li>
+        <li><%= link_to "Transferences" %></li>
+      </ul>
+    </li>
+    <li>
+      <a href="javascript:"><%= t("controllers.operations") %><span>&nbsp;</span></a>
+      <ul class="sub">
+        <li><%= link_to "Sales" %></li>
+        <li><%= link_to "Buys" %></li>
+        <li><%= link_to "Expenses" %></li>
+        <li><%= link_to "Transferences" %></li>
+      </ul>
+    </li>
+    <li>
+      <a href="javascript:"><%= t("controllers.reports") %><span>&nbsp;</span></a>
+      <ul class="sub">
+        <li><%= link_to "General" %></li>
+        <li><%= link_to "Item" %></li>
+        <li><%= link_to "Stoks" %></li>
+        <li><%= link_to "in vs. out" %></li>
+      </ul>
+    </li>
+  </ul>
+</div>
