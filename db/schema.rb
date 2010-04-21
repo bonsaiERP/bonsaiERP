@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100416193705) do
+ActiveRecord::Schema.define(:version => 20100421174307) do
 
   create_table "countries", :force => true do |t|
     t.string   "name",         :limit => 50
@@ -25,6 +25,26 @@ ActiveRecord::Schema.define(:version => 20100416193705) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "items", :force => true do |t|
+    t.integer  "unit_id"
+    t.integer  "itemable_id"
+    t.string   "itemable_type"
+    t.string   "name"
+    t.string   "description"
+    t.string   "type"
+    t.integer  "integer",         :default => 0
+    t.boolean  "product"
+    t.boolean  "stockable"
+    t.integer  "organisation_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "items", ["itemable_id"], :name => "index_items_on_itemable_id"
+  add_index "items", ["itemable_type"], :name => "index_items_on_itemable_type"
+  add_index "items", ["organisation_id"], :name => "index_items_on_organisation_id"
+  add_index "items", ["unit_id"], :name => "index_items_on_unit_id"
 
   create_table "links", :force => true do |t|
     t.integer  "organisation_id"
@@ -70,9 +90,10 @@ ActiveRecord::Schema.define(:version => 20100416193705) do
   add_index "taxes", ["organisation_id"], :name => "index_taxes_on_organisation_id"
 
   create_table "units", :force => true do |t|
-    t.string   "name"
-    t.string   "symbol"
-    t.boolean  "integer",         :default => false
+    t.string   "name",            :limit => 100
+    t.string   "symbol",          :limit => 20
+    t.boolean  "integer",                        :default => false
+    t.boolean  "visible",                        :default => false
     t.integer  "organisation_id"
     t.datetime "created_at"
     t.datetime "updated_at"

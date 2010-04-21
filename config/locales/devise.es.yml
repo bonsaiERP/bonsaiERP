@@ -37,5 +37,6 @@ es:
     views:
       sign_in: "Ingresar"
       sign_up: "Registro"
+      sign_out: "Salir"
       
 

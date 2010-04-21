@@ -15,8 +15,8 @@ module Err
 
       module InstanceMethods
         def set_organisation_id
-          raise "You have not set OrganisationSession" if OrganisationSession.organisation_id.nil?
-          self.organisation_id = OrganisationSession.organisation_id
+          raise "You have not set OrganisationSession" if OrganisationSession.id.nil?
+          self.organisation_id = OrganisationSession.id
         end
       end
     end

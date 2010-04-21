@@ -1,20 +1,18 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
-#   Mayor.create(:name => 'Daley', :city => cities.first)
-#
-@user = User.create(:email => "boris@example.com", :password => "demo123", :password_confirmation => "demo123")
+# Used to create sample data
+user = User.create(:email => "boris@example.com", :password => "demo123", :password_confirmation => "demo123", :first_name => "Boris", :last_name => "Barroso Camberos")
 
-User.confirm_by_token(@user.confirmation_token)
+User.confirm_by_token(user.confirmation_token)
+
+UserSession.current_user = user
 
 taxes = [{:name => "Impuesto al Valor Agregado", :rate => 13, :abbreviation => "IVA"}, {:name => "Impuesto a las transacciones", :rate => 1.5, :abbreviation => "IT"}]
-Country.create(:name => 'Bolivia', :abbreviation => 'bo', :taxes => taxes)
+# Countries
+country = Country.create(:name => 'Bolivia', :abbreviation => 'bo', :taxes => taxes)
+# Currencies
+currency = Currency.create(:name => "boliviano", :symbol => "Bs.")
+Currency.create(:name => "dolar", :symbol => "$")
+Currency.create(:name => "euro", :symbol => "€")
 
-#Currency.create(:name => "boliviano", :symbol => "Bs.")
-#Currency.create(:name => "dolar", :symbol => "$")
-#Currency.create(:name => "euro", :symbol => "€")
-
+# When it is crated OrganisationSession.set is called to set for a model session
+Organisation.create(:name => 'ecuanime', :country_id => country.id, :currency_id => currency.id, :phone => 2745620, :mobile => '70681101', :address => 'Mallasa calle 4 Nº 71 (La Paz - Bolivia)')
 

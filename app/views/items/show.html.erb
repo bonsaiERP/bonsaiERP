@@ -1,0 +1,14 @@
+<% show_for @item do |o| %>
+  <%= o.association :unit %>
+  <%= o.attribute :itemable_id %>
+  <%= o.attribute :itemable_type %>
+  <%= o.attribute :name %>
+  <%= o.attribute :description %>
+  <%= o.attribute :type %>
+  <%= o.attribute :integer %>
+  <%= o.attribute :product %>
+  <%= o.attribute :stockable %>
+<% end %>
+
+<%= link_to 'Edit', edit_item_path(@item) %> |
+<%= link_to 'Back', items_path %>

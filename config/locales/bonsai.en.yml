@@ -51,6 +51,9 @@ en:
         email: "Email"
         website: "Website"
         currency: "Currency"
+      user:
+        email: "Email"
+        password: "Password"
     hints:
   activerecord:
     models:

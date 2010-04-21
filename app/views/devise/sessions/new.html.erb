@@ -1,8 +1,8 @@
 <h2><%= t("devise.views.sign_in") %></h2>
 
 <%= simple_form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
-  <%= f.input :email, :label => t("user.attributes.email") %>
-  <%= f.input :password, :label => t("user.attributes.password") %>
+  <%= f.input :email %>
+  <%= f.input :password %>
 
   <% if devise_mapping.rememberable? -%>
     <div><%= f.check_box :remember_me %> <%= f.label :remember_me, :style => "display: inline" %></div>

@@ -49,6 +49,8 @@ Then /^I should see organisation with (\w+), (\w+), (\w+)$/ do |name, country, c
     page.has_content?(v[:rate].to_s).should == true
   end
 
+  organisation.taxes.size.should == Item.all.size
+
   # Show links created in Organisation
   organisation.links.each do |l|
     page.has_content?(l.user.to_s).should == true

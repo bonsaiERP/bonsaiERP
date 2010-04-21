@@ -9,7 +9,7 @@
 
 
 */body {
-  font-size: 12px;
+  font-size: 11.5px;
   font-family: Tahoma, sans-serif;
   background-color: #e9e9e9;
   margin: 0px;
@@ -26,7 +26,7 @@ label {
   vertical-align: top;
   display: block;
 }
-input, select, textarea { font-size: 12px; }
+input, select, textarea { font-size: 11.5px; }
 .inline label { display: inline; }
 form div { margin-top: 4px; }
 .ui-state-default {
@@ -77,12 +77,27 @@ form.required abbr {
   float: left;
   height: 65px;
   width: 400px;
+  color: #ffffff;
 }
+#logo h1 { margin: 15px; }
+#logo h2 { margin: 15px; }
 #other_menu {
   width: 600px;
   float: right;
   height: 65px;
 }
+#other_menu ul {
+  list-style: none;
+  float: right;
+  margin: 10px;
+}
+#other_menu ul li { display: inline; }
+#other_menu ul li a {
+  color: #ffffff;
+  text-decoration: underline;
+  margin: 0px 4px;
+}
+#other_menu ul li a:hover { text-decoration: none; }
 .a_menu {
   color: #ffffff;
   text-decoration: none;
@@ -238,4 +253,12 @@ div#nav ul#main_menu li:hover a span {
   display: inline-block;
   text-indent: -1000em;
   background: url(images/delete.png) no-repeat;
+}
+a.user {
+  padding-left: 18px;
+  background: url(images/user_gray.png) no-repeat;
+}
+a.logout {
+  padding-left: 18px;
+  background: url(images/logout.png) no-repeat;
 }

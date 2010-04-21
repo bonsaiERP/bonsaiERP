@@ -1,9 +1,7 @@
 class Organisation < ActiveRecord::Base
   # callbacks
   before_create :set_user
-  after_create :create_taxes # There is an error with the relationship
-  after_create :create_link
-  after_create :create_units
+  after_create :create_all_records
 
 
   # relationships
@@ -24,14 +22,21 @@ class Organisation < ActiveRecord::Base
   attr_protected :user_id
   
   def to_s
-    %Q(name)
+    name
   end
 
 protected
 
+  # Creates all registers needed when an organisation is created
+  def create_all_records
+    OrganisationSession.set = { :id => id, :name => name }
+    create_taxes
+    create_link
+    create_units
+  end
+
   # Adds the default taxes for each country
   def create_taxes
-    OrganisationSession.organisation_id = id
     country.taxes.each do |tax|
       taxes << Tax.new(tax)
     end
@@ -50,7 +55,6 @@ protected
     YAML::parse(File.open(path) ).transform.each do |vals|
       unit = Unit.create(vals)
     end
-    s=0
   end
 
   # Sets the user_id, needed to define the scope of uniquenes_of :name

@@ -1,2 +1,6 @@
 <div id="other_menu">
+  <ul>
+    <li><%= link_to current_user, user_path(current_user), :class => 'user' %></li>
+    <li><%= link_to t("devise.views.sign_out"), 'users/sign_out', :class => 'logout' %></li>
+  </ul>
 </div>

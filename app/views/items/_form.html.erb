@@ -1,0 +1,17 @@
+<% simple_form_for(@item) do |f| %>
+  <div class="inputs">
+    <%= f.association :unit %>
+    <%= f.input :itemable_id %>
+    <%= f.input :itemable_type %>
+    <%= f.input :name %>
+    <%= f.input :description %>
+    <%= f.input :type %>
+    <%= f.input :integer %>
+    <%= f.input :product %>
+    <%= f.input :stockable %>
+  </div>
+
+  <div class="actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

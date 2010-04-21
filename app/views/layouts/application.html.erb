@@ -21,8 +21,8 @@
     <div id="wrapper">
       <div id="header">
         
-        <%= render :partial => "/extras/other_menu" %>
-        <% if organisation? %>
+        <%= render :partial => "/extras/other_menu" if user_signed_in? %>
+        <% if organisation? and user_signed_in? %>
           <%= render :partial => "/extras/logo" %>
           <%= render :partial => "/extras/main_menu" %>
         <% end %>

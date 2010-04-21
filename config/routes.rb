@@ -1,4 +1,6 @@
 Bonsaierp::Application.routes.draw do |map|
+  resources :items
+
   resources :units
 
   resources :currencies
@@ -7,19 +9,19 @@ Bonsaierp::Application.routes.draw do |map|
 
   resources :taxes
 
-  resources :organisations do |org|
+  resources :organisations do
     get :select, :on => :member
   end
 
 
   resources :countries
 
-  devise_for :users
+  devise_for :users#, :path_names => { :sign_in => '/login', :sign_out => '/logout' }
   resources :users
 
   match "/dashboard" => "dashboard#index", :as => :dashboard
 
-  root :to => "home#index"
+  root :to => "organisations#index"
 
 
   # The priority is based upon order of creation:

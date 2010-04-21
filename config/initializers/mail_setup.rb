@@ -3,7 +3,7 @@ ActionMailer::Base.smtp_settings = {
   :port => "25",#"587",
   :domain => "ecuanime.net",
   #:user_name => "boris.barroso",
-  #:password => "tr7b3h3mot",
+  #:password => "",
   :authentication => "plain",
   :enable_starttls_auto => true
 }

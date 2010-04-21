@@ -1,5 +1,6 @@
 class OrganisationsController < ApplicationController
-  before_filter :destroy_organisation_id
+  before_filter :authenticate_user!
+  before_filter :destroy_organisation_session!, :except => :select
 
   respond_to :html, :xml, :json
   # GET /organisations
@@ -61,13 +62,11 @@ class OrganisationsController < ApplicationController
   end
 
   # GET /organisation/1/select
+  # sets the organisation session
   def select
-    session[:organisation_id] = params[:id].to_i
+    @organisation = Organisation.find(params[:id])
+    session[:organisation] = {:id => @organisation.id, :name => @organisation.name}
     redirect_to dashboard_url
   end
 
-private
-  def destroy_organisation_id
-    session[:organisation_id] = nil
-  end
 end

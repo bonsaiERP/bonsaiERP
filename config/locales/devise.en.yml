@@ -37,6 +37,7 @@ en:
     views:
       sign_in: "Sign in"
       sign_up: "Sign up"
+      sign_out: "Sign out"
       confirmation_link: "Didn't receive confirmation instructions?"
       unlock_link: "Didn't receive unlock instructions?"
       password_forgot: "Forgot your password?"

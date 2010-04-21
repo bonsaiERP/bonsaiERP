@@ -41,5 +41,6 @@ module Bonsaierp
     config.filter_parameters << :password
 
     config.secret_token = '4b774a3e141bfb47522cf1cd0f256f2d37acafb0c8623646f97ceb807f7d87bf4d10b334120d749cdc55c1cbb8121ad8caf2e5515833bc0c41082208cd09aff1'
+    config.session_store :cookie_store, :key => 'bonsaierp_session'
   end
 end

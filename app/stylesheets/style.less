@@ -16,17 +16,19 @@
 @light-black:
 @dark-black:
 */
+@white: #FFF;
 @red: #FF0000;
 @black: #000;
 @dark: #333;
 @light_dark:#6F6F6F;
 @grey: #C6C6C6;
-@font_size: 12px;
+@light_grey:#E9E9E9;
+@font_size: 11.5px;
 
 body{
   font-size: @font_size;
   font-family: Tahoma, sans-serif;
-  background-color: #E9E9E9;
+  background-color: @light_grey ;
   margin: 0px;
   padding: 0px;
 }
@@ -134,6 +136,8 @@ form.required abbr{
   float: left;
   height: 65px;
   width: 400px;
+  color: @white;
+  h1, h2{ margin: 15px; }
 }
 
 
@@ -141,6 +145,22 @@ form.required abbr{
   width: 600px;
   float: right;
   height: 65px;
+  ul{
+    list-style: none;
+    float: right;
+    margin: 10px;
+    li{
+      display: inline;
+      a{
+        color: @white;
+        text-decoration: underline;
+        margin: 0px 4px;
+      }
+      a:hover{
+        text-decoration: none;
+      }
+    }
+  }
 }
 
 /*********************************************************/
@@ -270,4 +290,13 @@ div#nav{
 .destroy_icon{
   .icon;
   background: url(images/delete.png) no-repeat;
+}
+
+a.user{
+  padding-left: 18px;
+  background: url(images/user_gray.png) no-repeat;
+}
+a.logout{
+  padding-left: 18px;
+  background: url(images/logout.png) no-repeat;
 }
