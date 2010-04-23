@@ -1,8 +1,8 @@
 class Tax < ActiveRecord::Base
 
   # callbacks
-
   acts_as_org
+
   before_save :update_or_create_item
   
   has_one :item, :as => :itemable
@@ -11,18 +11,13 @@ class Tax < ActiveRecord::Base
   belongs_to :organisation
 
   #validations
-  validates_presence_of :name, :abbreviation
+  validates_presence_of :name, :abbreviation, :organisation_id
   validates_numericality_of :rate, :greater_than_or_equal_to => 0
   validates_numericality_of :rate, :less_than_or_equal_to => 100
   validates_associated :organisation
 
   attr_accessible :name, :abbreviation, :rate
 
-  # Used to set when organisation is created
-#  def set_organisation_id(org_id)
-#    write_attribute(:organisation_id, organisation_id)
-#  end
-#  alias set_organisation_id= set_organisation_id
 private
 
   # Creates a realated item with tax
@@ -31,20 +26,22 @@ private
   def update_or_create_item
     if self.new_record?
       unless unit = Unit.invisible.find_by_name("tax")
-        unit = Unit.new(:name => 'tax', :symbol => "__tx" )
-        unit.visible = false
-        unit.save
+        unit = create_unit
       end
-      create_item(unit)
-    elsif not self.changes[:name]
+      item = Item.new(:name => name, :unit_id => unit.id)
+      item.visible = false
+      self.item = item
+    elsif self.changes[:name]
       self.item.name = name
     end
   end
 
-  # Sets the item
-  # @param [Unit] Instance of Unit model
-  def create_item(unit)
-    item = Item.new(:name => name, :unit_id => unit.id)
-    self.item = item
+  # Creates a new tax unit
+  def create_unit
+    unit = Unit.new(:name => 'tax', :symbol => "__tx" )
+    unit.visible = false
+    unit.save
+    unit
   end
+
 end 

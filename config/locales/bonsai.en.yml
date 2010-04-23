@@ -8,6 +8,9 @@ en:
   "yes": "Yes"
   "no": "No"
   role: "Role"
+  errors_in_form:
+    one: "There is an error in your form"
+    other: "There are errors in your form"
   organisation:
     flash:
       create: "The organisation has been created"
@@ -54,7 +57,16 @@ en:
       user:
         email: "Email"
         password: "Password"
+      item:
+        name: "Name"
+        product: "Is a product?"
+        unit_id: "Unit"
+        description: "Description"
+        stockable: "Stockable?"
+        description: "Description"
     hints:
+      item:
+        stockable: "This product will change your stock inventory"
   activerecord:
     models:
       organisation: "Organisation"
@@ -93,7 +105,13 @@ en:
         name: "Name"
         symbol: "Symbol"
         integer: "Integer"
-
+      item:
+        name: "Name"
+        product: "Product"
+        unit: "Unit"
+        description: "Description"
+        stockable: "Stockable"
+        description: "Description"
   flash:
     error: "Please correct errors"
   user:

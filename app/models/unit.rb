@@ -11,13 +11,12 @@ class Unit < ActiveRecord::Base
 
   validates_presence_of :name, :symbol
 
-  def integer?
-    integer ? I18n.t("yes") : I18n.t("no")
+  def to_s
+    %Q(#{name} (#{symbol}))
   end
 
-  def strip_attributes
-    name.strip!
-    symbol.strip!
+  def integer?
+    integer ? I18n.t("yes") : I18n.t("no")
   end
 
   # Retrives all invisible records
@@ -29,4 +28,11 @@ class Unit < ActiveRecord::Base
   def self.all_records
     Unit.with_exclusive_scope { where("1=1") }
   end
+
+protected
+  def strip_attributes
+    name.strip!
+    symbol.strip!
+  end
+
 end

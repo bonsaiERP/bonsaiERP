@@ -57,12 +57,27 @@ module BonsaiHelper
   #
   def bonsai_title()
     if params[:action] == "index"
-      t("controllers.#{params[:controller]}.other")
+      t("controllers.#{ params[:controller] }.other")
     elsif params[:action] == "show"
-      t("controllers.#{params[:controller]}.one")
+      t("controllers.#{ params[:controller] }.one")
     else
       t(params[:action]) + ' ' + t("controllers.#{params[:controller]}.one").downcase
     end
   end
 
+  # Shows the base errors
+  # @param [FormBuilder]
+  def bonsai_form_error(f)
+    unless f.object.errors.empty?
+      html = "<h2>#{ t("errors_in_form", :count => f.object.errors.size) }</h2>"
+      unless f.object.errors[:base].empty?
+        html << "<ul>" + f.object.errors[:base].inject("") { |t, v|  t << "<li>#{v}</li>" } + "</ul>"
+      end
+      "<div class='errorExplanation'>#{ html }</div>"
+    end
+  end
+
+  def bonsai?(val)
+    val == true ? t("yes") : t("no")
+  end
 end

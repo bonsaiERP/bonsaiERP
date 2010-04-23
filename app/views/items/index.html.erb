@@ -1,39 +1,29 @@
 <h1>Listing items</h1>
 
-<table>
-  <tr>
-    <th>Unit</th>
-    <th>Itemable</th>
-    <th>Itemable type</th>
-    <th>Name</th>
-    <th>Description</th>
-    <th>Type</th>
-    <th>Integer</th>
-    <th>Product</th>
-    <th>Stockable</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
+<%= link_to 'New Item', new_item_path, :class => "new" %>
 
-<% @items.each do |item| %>
-  <tr>
-    <td><%= item.unit %></td>
-    <td><%= item.itemable_id %></td>
-    <td><%= item.itemable_type %></td>
-    <td><%= item.name %></td>
-    <td><%= item.description %></td>
-    <td><%= item.type %></td>
-    <td><%= item.integer %></td>
-    <td><%= item.product %></td>
-    <td><%= item.stockable %></td>
-    <td><%= link_to 'Show', item %></td>
-    <td><%= link_to 'Edit', edit_item_path(item) %></td>
-    <td><%= link_to 'Destroy', item, :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
-<% end %>
-</table>
 
-<br />
+  <table class="decorated">
+    <tr>
+      <% bonsai_th "item" do |item| %>
+        <%= item.t :name %>
+        <%= item.t :unit %>
+        <%= item.t :description %>
+        <%= item.t :product %>
+        <%= item.t :stockable %>
+      <% end %>
+      <th></th>
+    </tr>
 
-<%= link_to 'New Item', new_item_path %>
+  <% @items.each do |item| %>
+    <tr>
+      <td><%= item.name %></td>
+      <td><%= item.unit.name %></td>
+      <td><%= item.description %></td>
+      <td><%= bonsai? item.product %></td>
+      <td><%= bonsai? item.stockable %></td>
+      <td><%= raw bonsai_links(item) %></td>
+    </tr>
+  <% end %>
+  </table>
+

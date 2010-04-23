@@ -1,6 +1,6 @@
 <h1><%= bonsai_title %></h1>
 
-<%= link_to 'New Unit', new_unit_path %>
+<%= link_to 'New Unit', new_unit_path, :class => "new" %>
 
 <table class="decorated" style="width:50%">
   <tr>
@@ -8,6 +8,7 @@
       <%= unit.t :name, :width => 200 %>
       <%= unit.t :symbol %>
       <%= unit.t :integer %>
+      <th></th>
     <% end %>
   </tr>
 

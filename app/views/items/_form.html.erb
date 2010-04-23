@@ -1,17 +1,20 @@
 <% simple_form_for(@item) do |f| %>
-  <div class="inputs">
+  <%= raw bonsai_form_error(f) %>
+
+  <div class="inputs half fl">
     <%= f.association :unit %>
-    <%= f.input :itemable_id %>
-    <%= f.input :itemable_type %>
+    <%# f.input :itemable_id %>
+    <%# f.input :itemable_type %>
     <%= f.input :name %>
-    <%= f.input :description %>
-    <%= f.input :type %>
-    <%= f.input :integer %>
     <%= f.input :product %>
     <%= f.input :stockable %>
   </div>
+  <div class="inputs half fl">
+    <%= f.input :description, :as => :text, :input_html => {:rows => 5} %>
+    <%# f.input :type %>    <%# f.input :integer %>
+  </div>
 
-  <div class="actions">
+  <div class="actions" style="clear:both">
     <%= f.button :submit %>
   </div>
 <% end %>

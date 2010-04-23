@@ -30,11 +30,11 @@ describe Tax do
     tax = Tax.create!(@params)
     @params[:name] = "Impuesto a las transacciones"
     tax = Tax.create!(@params)
-    Item.all.size.should == 2
+    Item.invisible.size.should == 2
   end
 
   # Not UNIT TEST
-  it 'should create a unit' do
+  it 'should create a unit when two taxes area created' do
     tax = Tax.create!(@params)
     @params[:name] = "Impuesto a las transacciones"
     tax = Tax.create!(@params)

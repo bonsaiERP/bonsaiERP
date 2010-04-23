@@ -34,8 +34,9 @@ ActiveRecord::Schema.define(:version => 20100421174307) do
     t.string   "description"
     t.string   "type"
     t.integer  "integer",         :default => 0
-    t.boolean  "product"
-    t.boolean  "stockable"
+    t.boolean  "product",         :default => false
+    t.boolean  "stockable",       :default => false
+    t.boolean  "visible",         :default => true
     t.integer  "organisation_id"
     t.datetime "created_at"
     t.datetime "updated_at"

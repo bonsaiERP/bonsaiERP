@@ -25,6 +25,7 @@ label {
   font-weight: bold;
   vertical-align: top;
   display: block;
+  color: #30383e;
 }
 input, select, textarea { font-size: 11.5px; }
 .inline label { display: inline; }
@@ -37,20 +38,20 @@ form div { margin-top: 4px; }
 }
 table.decorated {
   border-collapse: collapse;
+  border: 1px solid #c6c6c6;
   width: 100%;
 }
 table.decorated th {
-  border: 1px solid #c5dbec;
-  background: #dfeffc url(images/ui-bg_flat_85_dfeffc_40x100.png) 50% 50% repeat-x;
-  font-weight: bold;
-  color: #2e6e9e;
   padding: 4px 8px;
+  text-align: left;
+  color: #ffffff;
+  background-color: #30383e;
 }
 table.decorated tr { border-bottom: 1px solid #c6c6c6; }
 #header {
   width: 1000px;
   min-height: 100px;
-  background-color: #333333;
+  background-color: #30383e;
 }
 #wrapper {
   width: 1000px;
@@ -104,7 +105,7 @@ form.required abbr {
   display: block;
   font-weight: bold;
   padding: 5px 15px;
-  border-right: 1px solid #333333;
+  border-right: 1px solid #30383e;
   border-left: 1px solid #6f6f6f;
 }
 .menu_icon {
@@ -120,7 +121,7 @@ div#nav ul#main_menu {
   margin: 0px;
   margin-left: 10px;
   padding: 0px;
-  background-image: url(images/bg_tr_group_headers_hover.png);
+  background-image: url(images/bg-darkblue-gradient.png);
   background-position: 30% 50%;
   height: 20px;
   display: inline-block;
@@ -139,7 +140,7 @@ div#nav ul#main_menu li a {
   display: block;
   font-weight: bold;
   padding: 5px 15px;
-  border-right: 1px solid #333333;
+  border-right: 1px solid #30383e;
   border-left: 1px solid #6f6f6f;
 }
 div#nav ul#main_menu li a span {
@@ -153,7 +154,7 @@ div#nav ul#main_menu li a span {
 }
 div#nav ul#main_menu li ul {
   display: none;
-  background-color: #333333;
+  background-color: #30383e;
   padding: 0px;
   margin: 0px;
   z-index: 100;
@@ -195,6 +196,17 @@ div#nav ul#main_menu li:hover a span {
   display: inline-block;
   margin: 10px 2px;
 }
+a.new {
+  font-weight: bold;
+  padding-left: 20px;
+  text-decoration: none;
+  display: inline-block;
+  margin: 10px 2px;
+  font-size: 1.3em;
+  background: url(images/add.png) no-repeat;
+  color: #538447;
+}
+a.new:hover { text-decoration: underline; }
 .edit {
   font-weight: bold;
   padding-left: 20px;
@@ -262,3 +274,19 @@ a.logout {
   padding-left: 18px;
   background: url(images/logout.png) no-repeat;
 }
+.boolean { vertical-align: middle; }
+.boolean label { display: inline-block; }
+.boolean input:checkbox { float: left; }
+.hint {
+  display: block;
+  color: #6f6f6f;
+  font-style: italic;
+}
+.inputs > div { margin-top: 10px; }
+.errorExplanation {
+  color: #ff0000;
+  background-color: #fef1ec;
+  border: 1px solid #ff0000;
+  padding: 5px 15px;
+}
+.errorExplanation ul { list-style: none; }

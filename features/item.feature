@@ -10,3 +10,6 @@ Feature: Manage items
     Then Iam on "/users/sign_in"
     Then I fill my email and password
  
+
+  Examples:
+    |name|description|
