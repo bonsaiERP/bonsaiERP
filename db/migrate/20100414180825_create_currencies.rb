@@ -1,11 +1,13 @@
 class CreateCurrencies < ActiveRecord::Migration
   def self.up
-    create_table :currencies do |t|
+    create_table :currencies, :id => false do |t|
+      t.string :id, :limit => 36, :null => false
       t.string :name, :limit => 100
-      t.string :symbol, :litmi => 20
+      t.string :symbol, :limit => 20
 
       t.timestamps
     end
+    add_index(:currencies, :id)
   end
 
   def self.down

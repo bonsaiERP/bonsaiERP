@@ -1,4 +1,6 @@
 class Unit < ActiveRecord::Base
+  include UUIDHelper
+
   acts_as_org
 
   before_save :strip_attributes

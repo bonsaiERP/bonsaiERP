@@ -1,4 +1,6 @@
 class Item < ActiveRecord::Base
+  include UUIDHelper
+
   acts_as_org
 
   belongs_to :unit

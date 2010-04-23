@@ -1,4 +1,6 @@
 class Country < ActiveRecord::Base
+  include UUIDHelper
+
   has_many :organisations
 
   validates_presence_of :name, :abbreviation

@@ -4,7 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe Unit do
 
   before(:each) do
-    OrganisationSession.stubs(:id => 1, :name => 'ecuanime')
+    OrganisationSession.stubs(:id => @@spec_uuid, :name => 'ecuanime')
     @params = {:name => "kilogram", :symbol => "kg", :integer => false}
   end
 
@@ -31,8 +31,7 @@ describe Unit do
   end
 
   it 'should set organisation_id' do
-    OrganisationSession.stubs(:id).returns(5)
     unit = Unit.create(@params)
-    unit.organisation_id.should == 5
+    unit.organisation_id.should == @@spec_uuid
   end
 end

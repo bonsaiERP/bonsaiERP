@@ -34,13 +34,13 @@ And /^I fill data with (\w+), (\w+), (\w+), (\w+), (\w+)$/ do |name, country, ad
 end
 
 Then /^I should see organisation with (\w+), (\w+), (\w+)$/ do |name, country, currency|
-  # Creation of default units
-  Unit.all.size.should > 1
+  # Creation of units for tax, tax unit creation
+  Unit.invisible.size.should == 1
   # Presentation
   page.has_content?(name).should == true
   page.has_content?(country).should == true
   page.has_content?(currency).should == true
-  organisation = Organisation.last
+  organisation = Organisation.find_by_name(name)
 
   # Show taxes added in Organisation callback
   organisation.country.taxes.each do |v|
@@ -49,7 +49,8 @@ Then /^I should see organisation with (\w+), (\w+), (\w+)$/ do |name, country, c
     page.has_content?(v[:rate].to_s).should == true
   end
 
-  organisation.taxes.size.should == Item.all.size
+  # Show invisible Items created
+  organisation.taxes.size.should == Item.invisible.size
 
   # Show links created in Organisation
   organisation.links.each do |l|

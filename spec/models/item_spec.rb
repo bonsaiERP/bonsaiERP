@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe Item do
   before(:each) do
-    OrganisationSession.stubs(:id => 1, :name => 'ecuanime')
+    OrganisationSession.stubs(:id => @@spec_uuid, :name => 'ecuanime')
     @params = { :name => 'First item', :unit_id => 1 }
     Unit.stubs(:find).returns(stub( @@spec_model_methods.merge({ :id => 1 } )) )
   end
@@ -13,9 +13,8 @@ describe Item do
   end
 
   it 'should be set organisation_id' do
-    OrganisationSession.stubs(:id => 4, :name => 'ecuanime')
     item = Item.create!(@params)
-    item.organisation_id.should == 4
+    item.organisation_id.should == @@spec_uuid
   end
 
   it 'should not have invisible items' do

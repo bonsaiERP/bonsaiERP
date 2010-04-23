@@ -26,3 +26,5 @@ class ActionController::TestCase
 end
 
 @@spec_model_methods = {:blank? => false, :is_a? => false, :valid? => true, :destroyed? => false, :new_record? => false}
+
+@@spec_uuid = '91900899-9474-43fa-9b39-cb6f750710d3'

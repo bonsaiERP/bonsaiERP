@@ -23,7 +23,7 @@ gem "sqlite3-ruby", :require => "sqlite3"
 #   gem "webrat"
 # end
 
-gem "uuidtools"
+gem "uuid"
 gem "devise", "1.1.rc1"
 gem "simple_form", ">=1.1.2"
 gem "show_for"

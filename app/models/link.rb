@@ -1,4 +1,5 @@
 class Link < ActiveRecord::Base
+  include UUIDHelper
 
   belongs_to :organisation
   belongs_to :user
