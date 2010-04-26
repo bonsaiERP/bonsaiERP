@@ -16,6 +16,11 @@
   padding: 0px;
   background: #f0f0f1 url(images/background_header.png) repeat-x;
 }
+a {
+  color: #6793ce;
+  text-decoration: underline;
+}
+a:hover { text-decoration: none; }
 ul.show li { margin: 3px 0px; }
 ul.show li label {
   display: table;
@@ -87,7 +92,7 @@ table.decorated td { padding: 2px 8px; }
 #header ul li a {
   vertical-align: middle;
   display: block;
-  padding: 5px 10px 5px 20px;
+  padding: 7px 10px 7px 20px;
   color: #ffe374;
   text-decoration: none;
 }

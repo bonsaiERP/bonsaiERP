@@ -11,6 +11,7 @@
 @dark_grey: #616161;
 @font_size: 11.5px;
 @orange: #FECD0A;
+@light_orange: #ffe374;
 @blue: #6793CE;
 
 body{
@@ -21,7 +22,13 @@ body{
   padding: 0px;
 	background: @light_grey url(images/background_header.png) repeat-x;
 }
-
+a{
+  color: @blue;
+  text-decoration: underline;
+}
+a:hover{
+  text-decoration: none;
+}
 
 /*********************************************************/
 /*Forms*/
@@ -139,8 +146,8 @@ table.decorated{
       a{
         vertical-align: middle;
         display: block;
-        padding: 5px 10px 5px 20px;
-        color: #ffe374;
+        padding: 7px 10px 7px 20px;
+        color: @light_orange;
         text-decoration: none;
       }
       a:hover{
