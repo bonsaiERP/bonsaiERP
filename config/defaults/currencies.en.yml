@@ -1,0 +1,8 @@
+---
+  - name: boliviano
+    symbol: "bs."
+  - name: dolar
+    symbol: "$"
+  - name: euro
+    symbol: "€"
+

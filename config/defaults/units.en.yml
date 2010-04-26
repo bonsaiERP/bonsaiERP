@@ -14,3 +14,6 @@
 - :symbol: L
   :name: litre
   :integer: false
+- :symbol: H
+  :name: hour
+  :integer: false

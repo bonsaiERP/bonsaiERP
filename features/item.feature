@@ -4,12 +4,20 @@ Feature: Manage items
   and create a new oranisation
 
   Scenario Outline:
-    Given I create and go to login page
-    And I create data
-    And Iam on "/users/sign_out"
-    Then Iam on "/users/sign_in"
-    Then I fill my email and password
+    Given I create one organisation ecuanime
+    Then I login
+    Then Iam on "/organisations"
+    And I click the ecuanime link
+    Then Iam on "/items"
+    And I click the New link
+    Then I fill the item form with <name>, <unit>, <product>, <stockable>
+    And I should see item with <name>, <unit>, <product>, <stockable>
+
+
  
 
   Examples:
-    |name|description|
+    |name             |unit   |product|stockable|
+    |Web site creation|service|true| false|
+    |Personal computer|unit|true| false|
+    |Inventory cost|hour|false| false|

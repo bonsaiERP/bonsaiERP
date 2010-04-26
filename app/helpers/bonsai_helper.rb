@@ -37,7 +37,7 @@ module BonsaiHelper
 
   # Creates the links show, edit, destroy
   def bonsai_links(klass, options={})
-    ["show", "edit", "destroy"].inject([]) do |t, m|
+    ["edit", "destroy"].inject([]) do |t, m|
       t << bonsai_method_path(m, klass)
     end.join(" ")
   end
@@ -48,8 +48,8 @@ module BonsaiHelper
     case(m)
       when "new" then link_to t("new"), send("new_#{k}_path", klass) 
       when "show" then link_to t("show"), klass, :class => "show_icon", :title => t("show")
-      when "edit" then link_to t("edit"), send("edit_#{k}_path", klass), :class => "edit_icon", :title => t("edit")
-      when "destroy" then link_to t("destroy"), klass, :method => :destroy, :confirm => t("confirm_delete"), :class => "destroy_icon", :title => t("destroy")
+      when "edit" then link_to t("edit"), send("edit_#{k}_path", klass), :class => "edit_icon", :title => t("edit"), :remote => true
+      when "destroy" then link_to t("destroy"), klass, :method => :delete, :confirm => t("confirm_delete"), :class => "destroy_icon", :title => t("destroy"), :remote => true
       else ""
     end
   end

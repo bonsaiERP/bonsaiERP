@@ -6,7 +6,7 @@
   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 
   <title></title>
-  <%= stylesheet_link_tag "style", "jquery-ui-1.8.custom", :cache => "styles" %>
+  <%= stylesheet_link_tag "style", "jquery-ui-1.8.custom" %>
   <%= javascript_include_tag "jquery-1.4.2", "rails", "application", :cache => "scripts" %>
 </head>
   <body>
@@ -19,28 +19,30 @@
 
 
     <div id="wrapper">
-      <div id="header">
-        
-        <%= render :partial => "/extras/other_menu" if user_signed_in? %>
-        <% if organisation? and user_signed_in? %>
-          <%= render :partial => "/extras/logo" %>
-          <%= render :partial => "/extras/main_menu" %>
-        <% end %>
-      </div>
+      <div id="wrap_in">
+        <div id="header">
+          <%= render :partial => "/extras/usersettings_menu" if user_signed_in? %>
+          <% if organisation? %>
+            <h1><%= session[:organisation][:name]  %></h1>
+          <% end %>
+        </div>
+        <div id="menu">
+          <%= render :partial => "/extras/main_menu" if organisation? %>
+        </div>
 
-      <div id="cont-wrapper">
         <div id="cont">
+          <div id="cont-in">
+            <div id="flashNotice"><%= flash[:notice] %></div>
+            <div id="flashError"><%= flash[:error] %></div>
 
-          <div id="flashNotice"><%= flash[:notice] %></div>
-          <div id="flashError"><%= flash[:error] %></div>
-
-          <%= yield %>
+            <%= yield %>
+          </div>
           <div style="clear:both"></div>
         </div>
+
+        <div id="foot"></div>
       </div>
-
     </div>
-
 
   </body>
 </html>

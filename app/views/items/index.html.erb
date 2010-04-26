@@ -1,14 +1,14 @@
-<h1>Listing items</h1>
+<h1><%= bonsai_title %></h1>
 
-<%= link_to 'New Item', new_item_path, :class => "new" %>
+<%= link_to t("new"), new_item_path, :class => "new" %>
 
 
   <table class="decorated">
     <tr>
       <% bonsai_th "item" do |item| %>
-        <%= item.t :name %>
+        <%= item.t :name, :width => 200 %>
         <%= item.t :unit %>
-        <%= item.t :description %>
+        <%= item.t :description, :width => 270 %>
         <%= item.t :product %>
         <%= item.t :stockable %>
       <% end %>
@@ -17,7 +17,7 @@
 
   <% @items.each do |item| %>
     <tr>
-      <td><%= item.name %></td>
+      <td><%= link_to item.name, item %></td>
       <td><%= item.unit.name %></td>
       <td><%= item.description %></td>
       <td><%= bonsai? item.product %></td>

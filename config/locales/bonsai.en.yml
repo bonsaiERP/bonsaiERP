@@ -25,6 +25,9 @@ en:
     inventories: 
       one: "Inventory"
       other: "Inventories"
+    items:
+      one: "Item"
+      other: "Items"
     operations: 
       one: "Operation"
       other: "Operations"

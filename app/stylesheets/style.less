@@ -1,21 +1,4 @@
 /* Colors */
-/*
-@red: 
-@light-red:
-@dark-red:
-@blue: 
-@light-blue:
-@dark-blue:
-@green: 
-@light-green:
-@dark-green:
-@yellow: 
-@light-yellow:
-@dark-yellow:
-@black: 
-@light-black:
-@dark-black:
-*/
 @dark_green: #538447;
 @white: #FFF;
 @red: #FF0000;
@@ -24,9 +7,11 @@
 @dark: #30383E;//#202020;
 @light_dark:#6F6F6F;
 @grey: #C6C6C6;
-@light_grey:#E9E9E9;
+@light_grey:#F0F0F1;
 @dark_grey: #616161;
 @font_size: 11.5px;
+@orange: #FECD0A;
+@blue: #6793CE;
 
 body{
   font-size: @font_size;
@@ -34,7 +19,9 @@ body{
   background-color: @light_grey ;
   margin: 0px;
   padding: 0px;
+	background: @light_grey url(images/background_header.png) repeat-x;
 }
+
 
 /*********************************************************/
 /*Forms*/
@@ -94,34 +81,184 @@ table.decorated{
   th{
     padding: 4px 8px;
     text-align: left;
-    color: @white;
-    background-color: @dark;
+    color: @dark;
+    background: transparent url(images/th.png) repeat-x 0% 50%;
+    height: 32px;
   }
   tr{
     border-bottom: 1px solid @grey;
   }
+  td{
+    padding: 2px 8px;
+  }
+}
+
+/*********************************************************/
+/*MAIN CONTENT WRAPPERS*/
+#wrapper{
+  margin: auto;
+  width: 968px;
+  background:transparent url(images/background.png) repeat-y;
+}
+
+#wrap_in{
+  background: transparent url(images/menu.png) no-repeat;
+}
+
+#cont{
+  background-color: #FFF;
+  width: 950px;
+  margin: auto;
+}
+
+#cont-in{
+  padding: 10px 15px 40px;
 }
 
 #header{
-  width: 1000px;
-  min-height: 100px;
-  background-color: @dark;
+  height: 59px;
+  h1{
+    width: 50%;
+		float: left;
+		color: #FFF;
+		margin: 3px 15px;
+		vertical-align: top;
+  }
+  ul{
+		float: right;
+		margin: 10px 15px;
+		padding: 0px;
+		height: 29px;
+		background: transparent url(images/set_background.png) repeat-x;
+
+    li{
+      list-style: none;
+      margin: 0px;
+      padding: 0px;
+      float: left;
+      a{
+        vertical-align: middle;
+        display: block;
+        padding: 5px 10px 5px 20px;
+        color: #ffe374;
+        text-decoration: none;
+      }
+      a:hover{
+        text-decoration: underline;
+      }
+	  }
+      
+
+    li.left{
+      background: url(images/set_left.png);
+      width: 7px;
+      height: 29px;
+    }
+    li.right{
+      background: url(images/set_right.png);
+      width: 7px;
+      height: 29px;
+    }
+  }
+
 }
 
-#wrapper{
-  width: 1000px;
-  background-color: @grey;
-  margin: 0px auto 30px;
+#foot{
+  background: transparent url(images/foot.png) no-repeat;
+  height: 32px;
+}
+/*********************************************************/
+/*MENU*/
+.a_menu{
+  color: #FFF; 
+  text-decoration: none;
+  display: block;
+  font-weight: bold;
+  padding: 5px 15px;
+  border-right: 1px solid @dark;
+  border-left: 1px solid @light_dark;
 }
 
-#cont-wrapper{
-  padding: 0px 25px 30px;
+ul#main_menu{
+  height: 31px;
+  margin: 10px;
+  padding: 0px;
+  position: relative;
+  li{
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+    display: inline;
+    float: left;
+    a{
+      font-weight: bold;
+      display: block;
+      color: @orange;
+      text-decoration: none;
+      padding: 5px 15px;
+      span{
+        width: 16px;
+        height: 16px;
+        display: inline-block;
+        margin-left: 2px;
+        vertical-align: middle;
+        background: transparent url(images/sub_menu.png) no-repeat 0px -16px;
+      }
+    }
+    a:hover{
+      span{
+        background-position: 0px 0px !important;
+      }
+    }
+    /*SUB MENU*/
+    ul{
+      display: none;
+      padding: 0px;
+      margin: 0px;
+      padding-top: 4px;
+      z-index: 100;
+      background-color: @blue;
+      li{
+        float: none;
+        margin: 0px;
+        padding: 0px;
+      }
+      a{
+        float: none;
+        padding: 3px 20px;
+        font-weight: normal;
+      }
+      a:hover{
+        background-image: url(images/ui-bg_glass_40_ffc73d_1x400.png);
+        background-position: 50%;
+        color: @black;
+      }
+    }
+    /****/
+  }
+  li:hover{
+    ul{
+      display: block;
+      position: absolute;
+    }
+  }
+
 }
-#cont{
-  margin: auto;
-  padding: 20px;
-  background-color: #FFF;
+
+a.cog{
+  background: transparent url(images/cog.png) no-repeat 0 50%;
+  padding-left: 20px !important;
 }
+a.user{
+  background: transparent url(images/user.png) no-repeat 0 50%;
+  padding-left: 20px !important;
+}
+a.logout{
+  background: transparent url(images/logout.png) no-repeat 0 50%;
+  padding-left: 20px !important;
+}
+
+/***************************************************/
 
 form abbr{
   display: none;
@@ -138,120 +275,14 @@ form.required abbr{
 }
 .fl{ float: left; }
 
-/**********************************************************/
-#logo{
-  float: left;
-  height: 65px;
-  width: 400px;
-  color: @white;
-  h1, h2{ margin: 15px; }
-}
-
-
-#other_menu{
-  width: 600px;
-  float: right;
-  height: 65px;
-  ul{
-    list-style: none;
-    float: right;
-    margin: 10px;
-    li{
-      display: inline;
-      a{
-        color: @white;
-        text-decoration: underline;
-        margin: 0px 4px;
-      }
-      a:hover{
-        text-decoration: none;
-      }
-    }
-  }
-}
-
-/*********************************************************/
-.a_menu{
-  color: #FFF; 
-  text-decoration: none;
-  display: block;
-  font-weight: bold;
-  padding: 5px 15px;
-  border-right: 1px solid @dark;
-  border-left: 1px solid @light_dark;
-}
-.menu_icon{
-  background-image: url(images/ui-icons_d8e7f3_256x240.png);
-  width: 16px;
-  height: 16px;
-  display: inline-block;
-  margin-left: 2px;
-  vertical-align: middle;
-}
-div#nav{
-  height: 25px;
-  ul#main_menu{
-    margin: 0px;
-    margin-left: 10px;
-    padding: 0px;
-    background-image: url(images/bg-darkblue-gradient.png);/*bg_tr_group_headers_hover.png);*/
-    background-position: 30% 50%;
-    height: 20px;
-    display: inline-block;
-    li{
-      list-style: none;
-      float: left;
-      margin: 0px;
-      padding: 0px;
-      display: inline;
-      position: relative;
-      a{ 
-        .a_menu;
-        span{
-          .menu_icon;
-          background-position: -64px -16px;
-        }
-      }
-      ul{
-        display: none;
-        background-color: @dark;
-        padding: 0px;
-        margin: 0px;
-        z-index: 100;
-        width: 130%;
-        li{
-          margin: 0px;
-          padding: 0px;
-          float: none;
-          a{
-            float: none;
-            padding: 3px 20px;
-            font-weight: normal;
-          }
-          a:hover{
-            background-image: url(images/ui-bg_glass_40_ffc73d_1x400.png);
-            background-position: 50%;
-            color: @black;
-          }
-        }
-      }
-    }
-    li:hover{
-      ul{
-        display: block;
-        position: absolute;
-      }
-      a{
-        span{
-          .menu_icon;
-          background-position: 0px -16px;
-        }
-      }
-    }
-  }
-}
 
 /**************************************************************/
+#cont-in h1{
+  margin: 4px 0px;
+}
+
+
+
 .error{
   color: @red;
 }
@@ -261,32 +292,37 @@ div#nav{
   text-decoration: none;
   display: inline-block;
   margin: 10px 2px;
+  color: @dark_green;
+  font-size: 1.2em;
 }
 a.new{
   .link;
-  font-size: 1.3em;
+  font-size: 1.4em;
   background: url(images/add.png) no-repeat;
   color: @dark_green;
 }
 a.new:hover{
   text-decoration: underline;
 }
-.edit{
+a.edit{
   .link;
   background: url(images/pencil.png) no-repeat;
 }
 
-.destroy{
+a.destroy{
   .link;
   background: url(images/delete.png) no-repeat;
 }
-.list{
+a.list{
   .link;
   background: url(images/table.png) no-repeat;
 }
-.show{
+a.show{
   .link;
   background: url(images/zoom.png) no-repeat;
+}
+a.show:hover, a.edit:hover, a.destroy:hover, a.list:hover{
+  text-decoration: underline;
 }
 
 .icon{
@@ -307,16 +343,6 @@ a.new:hover{
   .icon;
   background: url(images/delete.png) no-repeat;
 }
-
-a.user{
-  padding-left: 18px;
-  background: url(images/user_gray.png) no-repeat;
-}
-a.logout{
-  padding-left: 18px;
-  background: url(images/logout.png) no-repeat;
-}
-
 /****************************/
 /* CSS Forms*/
 .boolean{

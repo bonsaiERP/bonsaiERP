@@ -1,6 +1,6 @@
-<h1>Editing item</h1>
+<h1><%= bonsai_title %></h1>
 
 <%= render 'form' %>
 
-<%= link_to 'Show', @item %> |
-<%= link_to 'Back', items_path %>
+<%= link_to t("show"), @item, :class => 'show' %>
+<%= link_to t("list"), items_path, :class => 'list' %>

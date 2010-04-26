@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  layout lambda{|c| c.request.xhr? ? false : "application" }
+
   protect_from_forgery
   before_filter :set_user_session, :if => :user_signed_in?
   before_filter :set_organisation, :if => :organisation?

@@ -1,13 +1,13 @@
 # Used to access the organisation_id in the models
 class OrganisationSession
-  attr_reader :id, :name
 
   ##############
   class << self
+    attr_reader :id, :name
     # Stores using de application_controller the current_user for devise
     # @param [Hash] details from the organisation
     def set(organisation)
-      raise "The 'organisation' param must be a Hash" unless organisation.is_a? Hash
+      raise "The OrganisationSession couln't be set' the param must be a hash" unless organisation.is_a? Hash
       @id = organisation[:id]
       @name = organisation[:name]
     end
@@ -15,11 +15,7 @@ class OrganisationSession
 
     # Initialize variables
     def destroy
-      @id = @name = nil
-    end
-
-    def id
-      @id
+      @id = @org_name = nil
     end
 
   end
