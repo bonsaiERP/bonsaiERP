@@ -1,0 +1,20 @@
+<% show_for @contact do |o| %>
+<div class="fl half">
+  <%= o.attribute :name %>
+  <%= o.attribute :phone %>
+  <%= o.attribute :mobile %>
+  <%= o.attribute :type %>
+  <%= o.attribute :email %>
+  <%= o.attribute :tax_number %>
+</div>
+<div class="fl half">
+
+  <%= o.attribute :address %>
+  <%= o.attribute :address_alt %>
+  <%= o.attribute :aditional_info %>
+</div>
+<% end %>
+<div style="clear:both"></div>
+
+<%= link_to t("edit"), edit_contact_path(@contact), :class => 'edit' %>
+<%= link_to t("list"), contacts_path, :class => 'list' %>

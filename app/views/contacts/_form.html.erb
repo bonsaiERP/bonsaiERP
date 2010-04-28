@@ -1,0 +1,18 @@
+<% simple_form_for(@contact) do |f| %>
+  <div class="inputs fl half">
+    <%= f.input :name %>
+    <%= f.input :phone %>
+    <%= f.input :mobile %>
+    <%= f.input :email %>
+    <%= f.input :tax_number %>
+  </div>
+  <div class="inputs fl half">
+    <%= f.input :address, :as => :text, :input_html => {:rows => 5} %>
+    <%= f.input :address_alt, :as => :text, :input_html => {:rows => 5} %>
+    <%= f.input :aditional_info, :as => :text, :input_html => {:rows => 5} %>
+  </div>
+
+  <div class="actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

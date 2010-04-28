@@ -4,9 +4,9 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe Tax do
   before(:each) do
     @params = {:name => "Impuesto al valor agregado", :abbreviation => "IVA", :rate => 13.0}
-    OrganisationSession.stubs(:id => 1, :name => 'ecuanime')
+    OrganisationSession.stubs(:id => @@spec_uuid, :name => 'ecuanime')
     
-    Organisation.stubs(:find).returns( stub(@@spec_model_methods.merge({:id => 1})) )
+    Organisation.stubs(:find).returns( stub(@@spec_model_methods.merge({:id => @@spec_uuid})) )
   end
 
   it 'should create an instance' do
@@ -14,9 +14,9 @@ describe Tax do
   end
 
   it 'should set the organisation_id' do
-    OrganisationSession.stubs(:id).returns(3)
+    #OrganisationSession.stubs(:id).returns(3)
     tax = Tax.create!(@params)
-    tax.organisation_id.should == 3
+    tax.organisation_id.should == @@spec_uuid
   end
 
   # Not a UNIT TEST
@@ -38,7 +38,17 @@ describe Tax do
     tax = Tax.create!(@params)
     @params[:name] = "Impuesto a las transacciones"
     tax = Tax.create!(@params)
+    OrganisationSession.stubs(:id).returns(@@spec_uuid)
     Unit.invisible.size.should == 1
+  end
+  
+  # NOt UNIT TEST
+  it 'should update the item name' do
+    tax = Tax.create!(@params)
+    tax.name = "Updated tax name"
+    tax.save
+    tax.item.name.should == "Updated tax name"
+    tax.item.valid?.should == true
   end
 
 

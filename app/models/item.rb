@@ -7,7 +7,6 @@ class Item < ActiveRecord::Base
 
   belongs_to :itemable, :polymorphic => true
 
-  default_scope :conditions => { :visible => true }
 
   attr_accessible :name, :unit_id, :product, :stockable, :description
 
@@ -15,18 +14,14 @@ class Item < ActiveRecord::Base
   validates_presence_of :name, :unit_id
   validates_associated :unit
 
+  scope :all, :conditions => { :organisation_id => OrganisationSession.id, :visible => true }
+
   def to_s
     name
   end
 
-  # scoped find method
   def self.invisible
-    Item.with_exclusive_scope  { where(:visible => false) }
-  end
-
-  # scoped find method
-  def self.all_records
-    Item.with_exclusive_scope  { where("1=1") }
+    Item.where( :organisation_id => OrganisationSession.id, :visible => false )
   end
 
 end

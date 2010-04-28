@@ -1,4 +1,6 @@
 Bonsaierp::Application.routes.draw do |map|
+  resources :contacts
+
   resources :items
 
   resources :units

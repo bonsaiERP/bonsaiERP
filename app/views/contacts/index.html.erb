@@ -1,0 +1,33 @@
+<h1><%= bonsai_title %></h1>
+
+<%= link_to t("new"), new_contact_path, :class => 'new' %>
+
+<table class="decorated">
+  <tr>
+    <% bonsai_th "contact" do |contact| %>
+      <%= contact.t :name %>
+      <%= contact.t :address %>
+      <%= contact.t :phone %>
+      <%= contact.t :mobile %>
+      <%= contact.t :email %>
+      <%= contact.t :tax_number %>
+    <% end %>
+  </tr>
+
+<% @contacts.each do |contact| %>
+  <tr>
+    <td><%= link_to contact.name, contact %></td>
+    <td><%= contact.address %></td>
+    <td><%= contact.phone %></td>
+    <td><%= contact.mobile %></td>
+    <td><%= contact.email %></td>
+    <td><%= contact.tax_number %></td>
+    <td>
+      <%= raw bonsai_links(contact) %>
+    </td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+

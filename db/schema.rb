@@ -9,7 +9,26 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100421174307) do
+ActiveRecord::Schema.define(:version => 20100427190727) do
+
+  create_table "contacts", :id => false, :force => true do |t|
+    t.string   "id",              :limit => 36,  :null => false
+    t.string   "name",            :limit => 100
+    t.string   "address",         :limit => 250
+    t.string   "address_alt",     :limit => 250
+    t.string   "phone",           :limit => 20
+    t.string   "mobile",          :limit => 20
+    t.string   "type"
+    t.string   "email",           :limit => 200
+    t.string   "tax_number",      :limit => 30
+    t.string   "aditional_info",  :limit => 250
+    t.string   "organisation_id", :limit => 36,  :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "contacts", ["id"], :name => "index_contacts_on_id"
+  add_index "contacts", ["organisation_id"], :name => "index_contacts_on_organisation_id"
 
   create_table "countries", :id => false, :force => true do |t|
     t.string   "id",           :limit => 36, :null => false

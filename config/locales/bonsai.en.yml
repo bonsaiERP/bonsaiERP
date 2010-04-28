@@ -37,12 +37,15 @@ en:
     units:
      one: "Measure unit"
      other: "Measure units"
-    tax:
+    taxes:
       one: "Tax"
       other: "Taxes"
     organisations:
       one: "Organisation"
       other: "Organisations"
+    contacts:
+      one: "Contact"
+      other: "Contacts"
   simple_form:
     labels:
       organisation:
@@ -67,6 +70,15 @@ en:
         description: "Description"
         stockable: "Stockable?"
         description: "Description"
+      contact:
+        name: "Name"
+        address: "Address"
+        address_alt: "Alternative address"
+        phone: "Phone"
+        mobile: "Mobile"
+        email: "Email"
+        tax_number: "Tax number"
+        aditional_info: "Aditional info."
     hints:
       item:
         stockable: "This product will change your stock inventory"
@@ -115,6 +127,13 @@ en:
         description: "Description"
         stockable: "Stockable"
         description: "Description"
+      contact:
+        name: "Name"
+        address: "Address"
+        phone: "Phone"
+        mobile: "Mobile"
+        email: "Email"
+        tax_number: "Tax number"
   flash:
     error: "Please correct errors"
   user:

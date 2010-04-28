@@ -3,7 +3,7 @@ class Tax < ActiveRecord::Base
   # callbacks
   acts_as_org
 
-  before_save :update_or_create_item
+  before_save :create_or_update_item
   
   has_one :item, :as => :itemable
 
@@ -18,12 +18,15 @@ class Tax < ActiveRecord::Base
 
   attr_accessible :name, :abbreviation, :rate
 
+  # scopes
+  scope  :all, :conditions => { :organisation_id => OrganisationSession.id, :visible => true }
+
 private
 
   # Creates a realated item with tax
   # This method creates a special Unit that cannot be visible used for
   # the creation of an item
-  def update_or_create_item
+  def create_or_update_item
     if self.new_record?
       unless unit = Unit.invisible.find_by_name("tax")
         unit = create_unit
@@ -40,8 +43,13 @@ private
   def create_unit
     unit = Unit.new(:name => 'tax', :symbol => "__tx" )
     unit.visible = false
-    unit.save
+    unit.save!
     unit
+  end
+
+  # Finds all invisible records
+  def self.invisible
+   where( :organisation_id => OrganisationSession.id, :visible => false )
   end
 
 end 

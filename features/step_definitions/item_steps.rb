@@ -17,7 +17,7 @@ Then /I login/ do
   click_button("Sign in")
 end
 
-And /I click the (\w+) link/ do |link|
+And /I click the ([\w\s]+) link/ do |link|
   click_link(link)
 end
 
