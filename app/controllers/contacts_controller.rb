@@ -1,3 +1,4 @@
+# encoding: utf-8
 class ContactsController < ApplicationController
   respond_to :html, :xml, :json
   # GET /contacts

@@ -28,7 +28,12 @@ gem "devise", "1.1.rc1"
 gem "simple_form", ">=1.1.2"
 gem "show_for"
 gem "will_paginate", "3.0.pre"
-gem "ruby-debug"
+if RUBY_VERSION=="1.9.1"
+  gem "ruby-debug19"
+else
+  gem "ruby-debug"
+end
+
 
 # Test
 group :test do  
@@ -40,8 +45,8 @@ group :test do
 end  
 
 # Cucumber
-gem "capybara"
-gem "database_cleaner"
-gem "cucumber-rails"
+#gem "capybara"
+#gem "database_cleaner"
+#gem "cucumber-rails"
 
 gem "less", "1.2.21"

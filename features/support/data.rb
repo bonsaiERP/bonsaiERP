@@ -1,3 +1,4 @@
+# encoding: utf-8
 module DataSupport
 
   def self.create_user(*args)
