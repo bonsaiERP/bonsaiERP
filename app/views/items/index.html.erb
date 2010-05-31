@@ -1,17 +1,15 @@
-<h1><%= bonsai_title %></h1>
+<h1>Items</h1>
 
-<%= link_to t("new"), new_item_path, :class => "new" %>
+<%= link_to "Nuevo", new_item_path, :class => "new" %>
 
 
   <table class="decorated">
     <tr>
-      <% bonsai_th "item" do |item| %>
-        <%= item.t :name, :width => 200 %>
-        <%= item.t :unit %>
-        <%= item.t :description, :width => 270 %>
-        <%= item.t :product %>
-        <%= item.t :stockable %>
-      <% end %>
+      <th>Nombre</th>
+      <th>Unidad</th>
+      <th>Descripción</th>
+      <th>Producto</th>
+      <th>Stockable</th>
       <th></th>
     </tr>
 

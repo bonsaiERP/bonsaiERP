@@ -46,10 +46,10 @@ module BonsaiHelper
   def bonsai_method_path(m, klass)
     k = klass.class.to_s.underscore
     case(m)
-      when "new" then link_to t("new"), send("new_#{k}_path", klass) 
-      when "show" then link_to t("show"), klass, :class => "show_icon", :title => t("show")
-      when "edit" then link_to t("edit"), send("edit_#{k}_path", klass), :class => "edit_icon", :title => t("edit")
-      when "destroy" then link_to t("destroy"), klass, :method => :delete, :confirm => t("confirm_delete"), :class => "destroy_icon", :title => t("destroy"), :remote => true
+      when "new" then link_to "nuevo", send("new_#{k}_path", klass) 
+      when "show" then link_to "ver", klass, :class => "show_icon", :title => "Ver"
+      when "edit" then link_to "editar", send("edit_#{k}_path", klass), :class => "edit_icon", :title => "Editar"
+      when "destroy" then link_to "borrar", klass, :method => :delete, :confirm => "Esta seguro?", :class => "destroy_icon", :title => "Borrar", :remote => true
       else ""
     end
   end
@@ -69,7 +69,8 @@ module BonsaiHelper
   # @param [FormBuilder]
   def bonsai_form_error(f)
     unless f.object.errors.empty?
-      html = "<h2>#{ t("errors_in_form", :count => f.object.errors.size) }</h2>"
+      #html = "<h2>#{ t("errors_in_form", :count => f.object.errors.size) }</h2>"
+      html = content_tag('h2', 'Exiten errores en el formulario')
       unless f.object.errors[:base].empty?
         html << "<ul>" + f.object.errors[:base].inject("") { |t, v|  t << "<li>#{v}</li>" } + "</ul>"
       end
@@ -78,6 +79,7 @@ module BonsaiHelper
   end
 
   def bonsai?(val)
-    val == true ? t("yes") : t("no")
+    #val == true ? t("yes") : t("no")
+    val ? "Si" : "No"
   end
 end

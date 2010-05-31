@@ -21,7 +21,8 @@ class Unit < ActiveRecord::Base
   end
 
   def integer?
-    integer ? I18n.t("yes") : I18n.t("no")
+    # integer ? I18n.t("yes") : I18n.t("no")
+    integer ? "Si" : "No"
   end
 
   # Retrives all invisible records

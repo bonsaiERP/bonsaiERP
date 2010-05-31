@@ -1,4 +1,4 @@
-<h1><%= bonsai_title %></h1>
+<h1>Ver item</h1>
 <% show_for @item do |o| %>
 <div class="fl half">
   <%= o.association :unit %>
@@ -12,5 +12,5 @@
 <% end %>
 
 <div style="clear:both"></div>
-<%= link_to t("edit"), edit_item_path(@item) , :class => 'edit' %>
-<%= link_to t("list"), items_path, :class => 'list' %>
+<%= link_to "Editar", edit_item_path(@item) , :class => 'edit' %>
+<%= link_to "List", items_path, :class => 'list' %>

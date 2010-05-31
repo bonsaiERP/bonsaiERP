@@ -1,15 +1,13 @@
-<h1><%= bonsai_title %></h1>
+<h1>Unidades de medida</h1>
 
-<%= link_to 'New Unit', new_unit_path, :class => "new" %>
+<%= link_to 'Nueva unidad', new_unit_path, :class => "new" %>
 
 <table class="decorated" style="width:50%">
   <tr>
-    <% bonsai_th "unit" do |unit| %>
-      <%= unit.t :name, :width => 200 %>
-      <%= unit.t :symbol %>
-      <%= unit.t :integer %>
-      <th></th>
-    <% end %>
+    <th>Nombre</th>
+    <th>Simbolo</th>
+    <th>Entero</th>
+    <th></th>
   </tr>
 
 <% @units.each do |unit| %>
