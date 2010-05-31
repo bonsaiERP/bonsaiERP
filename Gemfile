@@ -37,8 +37,8 @@ end
 
 # Test
 group :test do  
-  gem "rspec", ">=2.0.0.beta.7"
-  gem "rspec-rails", ">=2.0.0.beta.7"
+  gem "rspec", ">=2.0.0.beta.9"
+  gem "rspec-rails", ">=2.0.0.beta.9"
   gem "webrat"  
   gem "mocha"
   # gem "factory_girl"
@@ -49,4 +49,4 @@ end
 #gem "database_cleaner"
 #gem "cucumber-rails"
 
-gem "less", "1.2.21"
+gem "less", ">=1.2.21"

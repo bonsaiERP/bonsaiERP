@@ -1,0 +1,243 @@
+/* For the details, see: http://flowplayer.org/tools/dateinput/index.html#skinning */
+
+/************************************************************/
+/* DATE */
+
+/* the input field */
+.date {
+	/*border:1px solid #ccc;
+	font-size:18px;
+	padding:4px;
+	text-align:center;
+	width:194px;		
+	-moz-box-shadow:0 0 10px #eee inset;*/
+}
+
+/* calendar root element */
+#calroot {
+	margin-top:-1px;
+	width:198px;
+	padding:2px;
+	background-color:#fff;
+	font-size:11px;
+  z-index: 1000;
+	border:1px solid #ccc;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	-moz-box-shadow: 0 0 15px #666;
+	-webkit-box-shadow: 0 0 15px #666;	
+}
+
+/* head. contains title, prev/next month controls and possible month/year selectors */
+#calhead {	
+	padding:2px 0;
+	height:22px;
+} 
+
+#caltitle {
+	font-size:14px;
+	color:#0150D1;	
+	float:left;
+	text-align:center;
+	width:155px;
+	line-height:20px;
+	text-shadow:0 1px 0 #ddd;
+}
+
+#calnext, #calprev {
+	display:block;
+	width:20px;
+	height:20px;
+	background:transparent url(images/prev.gif) no-repeat scroll center center;
+	float:left;
+	cursor:pointer;
+}
+
+#calnext {
+	background-image:url(images/next.gif);
+	float:right;
+}
+
+#calprev.caldisabled, #calnext.caldisabled {
+	visibility:hidden;	
+}
+
+/* year/month selector */
+#caltitle select {
+	font-size:10px;	
+}
+
+/* names of the days */
+#caldays {
+	height:14px;
+	border-bottom:1px solid #ddd;
+}
+
+#caldays span {
+	display:block;
+	float:left;
+	width:28px;
+	text-align:center;
+}
+
+/* container for weeks */
+#calweeks {
+	background-color:#fff;
+	margin-top:4px;
+}
+
+/* single week */
+.calweek {
+	clear:left;
+	height:22px;
+}
+
+/* single day */
+.calweek a {
+	display:block;
+	float:left;
+	width:27px;
+	height:20px;
+	text-decoration:none;
+	font-size:11px;
+	margin-left:1px;
+	text-align:center;
+	line-height:20px;
+	color:#666;
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px; 		
+} 
+
+/* different states */
+.calweek a:hover, .calfocus {
+	background-color:#ddd;
+}
+
+/* sunday */
+a.calsun {
+	color:red;		
+}
+
+/* offmonth day */
+a.caloff {
+	color:#ccc;		
+}
+
+a.caloff:hover {
+	background-color:rgb(245, 245, 250);		
+}
+
+
+/* unselecteble day */
+a.caldisabled {
+	background-color:#efefef !important;
+	color:#ccc	!important;
+	cursor:default;
+}
+
+/* current day */
+#calcurrent {
+	background-color:#498CE2;
+	color:#fff;
+}
+
+/* today */
+#caltoday {
+	background-color:#333;
+	color:#fff;
+}
+
+
+/* TABS */
+/************************************************************/
+
+.tabs { 
+	list-style:none; 
+	margin:0 !important; 
+	padding:0;
+	height:30px;
+	border-bottom:1px solid #666;	
+}
+
+/* single tab */
+.tabs li { 
+	float:left;	 
+	text-indent:0;
+	padding:0;
+	margin:0 !important;
+	list-style-image:none !important; 
+}
+
+/* link inside the tab. uses a background image */
+.tabs a { 
+	background: url(images/tabs.png) no-repeat 0 0;
+	font-size:12px;
+	display:block;
+	height: 30px;  
+	line-height:30px;
+	width: 194px;
+	text-align:center;	
+	text-decoration:none;
+	color:#000;
+	padding:0px;
+	margin:0px;	
+	position:relative;
+	top:1px;
+}
+
+.tabs a:active {
+	outline:none;		
+}
+
+/* when mouse enters the tab move the background image */
+.tabs a:hover {
+	background-position: 0px -31px;	
+	color:#fff;	
+}
+
+/* active tab uses a class name "current". it's highlight is also done by moving the background image. */
+.tabs .current, .tabs .current:hover, .tabs li.current a {
+	background-position: 0px -62px;		
+	cursor:default !important; 
+	color:#000 !important;
+}
+
+/* Different widths for tabs: use a class name: w1, w2, w3 or w2 */
+
+
+/* width 1 */
+.tabs .w1 			{ background-position: -519px 0; width:134px; }
+.tabs .w1:hover 	{ background-position: -519px -31px; }
+.tabs .w1.current { background-position: -519px -62px; }
+
+/* width 2 */
+.tabs .w2 			{ background-position: -366px -0px; width:154px; }
+.tabs .w2:hover 	{ background-position: -366px -31px; }
+.tabs .w2.current { background-position: -366px -62px; }
+
+
+/* width 3 */
+.tabs .w3 			{ background-position: -193px -0px; width:174px; }
+.tabs .w3:hover 	{ background-position: -193px -31px; }
+.tabs .w3.current { background-position: -193px -62px; }
+
+/* width 4 */
+.tabs .w4 			{ background-position: -0px -0px; width:194px; }
+.tabs .w4:hover 	{ background-position: -0px -31px; }
+.tabs .w4.current { background-position: -0px -62px; }
+
+
+/* initially all panes are hidden */ 
+.panes .pane {
+	display:none;		
+}
+.panes div {
+  background-color:#FFFFFF;
+  border-color:-moz-use-text-color #999999 #999999;
+  border-right:1px solid #999999;
+  border-style:none solid solid;
+  border-width:0 1px 1px;
+  display:none;
+  height:100px;
+  padding:15px 10px;
+}

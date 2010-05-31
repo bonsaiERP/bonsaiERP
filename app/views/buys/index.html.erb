@@ -1,0 +1,28 @@
+<h1>Compras</h1>
+
+<%= link_to 'Nueva compra', new_buy_path, :class => 'new' %>
+
+<input id="fecha" name="" type="text" class="date" />
+
+<ul class="buy-types tabs">
+	<li>
+    <a href="<%= buys_path %>">Todas</a>
+	</li>
+	<li>
+    <a href="<%= buys_path(:type => 'aprove') %>">Por aprobar con contenido</a>
+	</li>
+	<li>
+    <a href="<%= buys_path(:type => 'pay') %>">Por pagar</a>
+	</li>
+</ul>
+
+<div class="buy-panes panes">
+	<div style="display:block"></div>
+</div>
+
+
+<script type="text/javascript">
+  jQuery(function($) {
+    $('ul.buy-types').tabs('div.buy-panes > div', {effect: 'ajax'});
+  });
+</script>

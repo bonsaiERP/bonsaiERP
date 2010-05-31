@@ -1,0 +1,46 @@
+es: 
+  tax: 
+    name: Impuesto
+    attributes: 
+      name: Nombre
+      rate: Porcentaje
+      abbreviation: "Abreviaci\xC3\xB3n"
+    plural: Impuestos
+  edit: Editar
+  country: 
+    name: !binary |
+      UGHDrXM=
+
+    attributes: 
+      name: Nombre
+      abreviation: "Abreviaci\xC3\xB3n"
+    plural: Paises
+  destroy: Eliminar
+  organisation: 
+    attributes: 
+      name: Nombre
+      address: "Direcci\xC3\xB3n"
+      country: !binary |
+        UGHDrXM=
+
+      phone_alt: Telefono alternativo
+      mobile: !binary |
+        TcOzdmls
+
+      phone: "Tel\xC3\xA9fono"
+      website: Sitio web
+      user: Usuario
+      email: Email
+      address_alt: "Direcci\xC3\xB3n alternativa"
+  index: Lista
+  show: Ver
+  user: 
+    new_user: Nuevo usuario
+    attributes: 
+      first_name: Nombres
+      last_name: Apellidos
+      email: Email
+      password: "Contaseña"
+  flash: 
+    error: Por favor corrija los errores
+  update: Actualizar

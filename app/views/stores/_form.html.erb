@@ -1,0 +1,22 @@
+<% simple_form_for(@store) do |f| %>
+  <div class="inputs">
+    
+    <div class="half fl">
+        <%= f.input :name, :label => "Nombre" %>
+        <%= f.input :address, :label => "Dirección", :as => :text, :input_html => { :rows => 5 }  %>
+        <%= f.input :phone, :label => "Teléfono" %>
+    </div>
+
+    <div class="half fl">
+        <%= f.input :active, :label => "Activo" %>
+        <%= f.input :description, :label => "Descripción", :as => :text, :input_html => { :rows => 5 } %>
+    </div>
+
+    <div class="cb"></div>
+  </div>
+
+
+  <div class="actions">
+    <%= f.button :submit, "Salvar" %>
+  </div>
+<% end %>

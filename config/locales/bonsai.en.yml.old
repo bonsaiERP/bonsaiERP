@@ -1,0 +1,152 @@
+en:
+  destroy: "Destroy"
+  new: "New"
+  list: "List"
+  show: "Show"
+  edit: "Edit"
+  confirm_delete: "Are you sure to delete the selected record?"
+  "yes": "Yes"
+  "no": "No"
+  role: "Role"
+  errors_in_form:
+    one: "There is an error in your form"
+    other: "There are errors in your form"
+  organisation:
+    flash:
+      create: "The organisation has been created"
+      update: "The organisation has been updated"
+  controllers:
+    users:
+      one: "User"
+      other: "Users"
+    dashboard: 
+      one: "Dashboard"
+      other: "Dashboard"
+    inventories: 
+      one: "Inventory"
+      other: "Inventories"
+    items:
+      one: "Item"
+      other: "Items"
+    operations: 
+      one: "Operation"
+      other: "Operations"
+    reports:
+      one: "Report"
+      other: "Reports"
+    units:
+     one: "Measure unit"
+     other: "Measure units"
+    taxes:
+      one: "Tax"
+      other: "Taxes"
+    organisations:
+      one: "Organisation"
+      other: "Organisations"
+    contacts:
+      one: "Contact"
+      other: "Contacts"
+  simple_form:
+    labels:
+      organisation:
+        user: "User"
+        country: "Coountry"
+        name: "Name"
+        address: "Address"
+        address_alt: "Alternative address"
+        phone: "Phone"
+        phone_alt: "Alternative phone"
+        mobile: "Mobile"
+        email: "Email"
+        website: "Website"
+        currency: "Currency"
+      user:
+        email: "Email"
+        password: "Password"
+      item:
+        name: "Name"
+        product: "Is a product?"
+        unit_id: "Unit"
+        description: "Description"
+        stockable: "Stockable?"
+        description: "Description"
+      contact:
+        name: "Name"
+        address: "Address"
+        address_alt: "Alternative address"
+        phone: "Phone"
+        mobile: "Mobile"
+        email: "Email"
+        tax_number: "Tax number"
+        aditional_info: "Aditional info."
+    hints:
+      item:
+        stockable: "This product will change your stock inventory"
+  activerecord:
+    models:
+      organisation: "Organisation"
+    attributes:
+      organisation:
+        user: "User"
+        country: "Country"
+        name: "Name"
+        address: "Address"
+        address_alt: "Alternative address"
+        phone: "Phone"
+        phone_alt: "Alternative phone"
+        mobile: "Mobile"
+        email: "Email"
+        website: "Website"
+        currency: "Currency"
+      user:
+        name: "Name"
+        first_name: "First name"
+        last_name: "Last name"
+        email: "Email"
+        phone: "Phone"
+        mobile: "Mobile"
+        website: "Website"
+        description: "Description"
+        password: "Password"
+        password_confirmation: "Password confirmation"
+      country:
+        name: "Name"
+        abreviation: "Abreviation"
+      tax:
+        name: "Name"
+        abbreviation: "Abbreviation"
+        rate: "Rate"
+      unit:
+        name: "Name"
+        symbol: "Symbol"
+        integer: "Integer"
+      item:
+        name: "Name"
+        product: "Product"
+        unit: "Unit"
+        description: "Description"
+        stockable: "Stockable"
+        description: "Description"
+      contact:
+        name: "Name"
+        address: "Address"
+        phone: "Phone"
+        mobile: "Mobile"
+        email: "Email"
+        tax_number: "Tax number"
+  flash:
+    error: "Please correct errors"
+  user:
+    name: "User"
+    plural: "Users"
+    flash:
+      create: "The user was created!"
+    new_user: "New user"
+    edit_user: "Edit user"
+    delete_user: "Delete user"
+  country:
+    name: "Country"
+    plural: "Countries"
+  tax:
+    name: "Tax"
+    plural: "Taxes"

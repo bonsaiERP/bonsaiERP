@@ -3,22 +3,22 @@
   <li>
     <a href="javascript:">Inventarios<span class="down">&nbsp;</span></a>
     <ul>
-      <li><%= link_to "Stores" %></li>
+      <li><%= link_to "Tiendas", stores_path %></li>
       <li><%= link_to "Items", items_path %></li>
-      <li><%= link_to "Mesure units", units_path %></li>
-      <li><%= link_to "Stoks" %></li>
-      <li><%= link_to "Transferences" %></li>
+      <li><%= link_to "Unidades de medida", units_path %></li>
+      <li><%= link_to "Stocks" %></li>
+      <li><%= link_to "Compras", buys_path %></li>
+      <li><%= link_to "Transferencias" %></li>
     </ul>
   </li>
   <li>
-    <a href="javascript:">Otros<span>&nbsp;</span></a>
+    <a href="javascript:">Ingresos - Egresos<span>&nbsp;</span></a>
     <ul>
-      <li><%= link_to "Sales" %></li>
-      <li><%= link_to "Buys" %></li>
-      <li><%= link_to "Expenses" %></li>
-      <li><%= link_to t("controllers.contacts.other"), contacts_path %></li>
-      <li><%= link_to t("controllers.taxes.other"), taxes_path %></li>
-      <li><%= link_to "Transferences" %></li>
+      <li><%= link_to "Ingresos" %></li>
+      <li><%= link_to "Egresos" %></li>
+      <li><%= link_to "Contactos", contacts_path %></li>
+      <li><%= link_to "Impuestos", taxes_path %></li>
+      <li><%= link_to "Transferencias entre cuentas" %></li>
     </ul>
   </li>
   <li>

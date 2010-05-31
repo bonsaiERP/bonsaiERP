@@ -309,3 +309,4 @@ a.list:hover { text-decoration: underline; }
   padding: 5px 15px;
 }
 .errorExplanation ul { list-style: none; }
+.cb { clear: both; }

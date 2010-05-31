@@ -10,7 +10,7 @@ Feature: Manage contacts
     Then Iam on "/organisations"
     And I click the ecuanime link
     Then Iam on "/contacts"
-    And I click the New link
+    And I click the Nuevo link
     Then I fill the contact form with <name>, <email>, <address>, <phone>, <mobile>, <tax_id>
     And I should see contact with <name>, <email>, <address>, <phone>, <mobile>, <tax_id>
     And I click the Edit link

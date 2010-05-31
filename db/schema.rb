@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100427190727) do
+ActiveRecord::Schema.define(:version => 20100531144645) do
 
   create_table "contacts", :id => false, :force => true do |t|
     t.string   "id",              :limit => 36,  :null => false
@@ -110,6 +110,21 @@ ActiveRecord::Schema.define(:version => 20100427190727) do
   add_index "organisations", ["currency_id"], :name => "index_organisations_on_currency_id"
   add_index "organisations", ["id"], :name => "index_organisations_on_id"
 
+  create_table "stores", :id => false, :force => true do |t|
+    t.string   "id",              :limit => 36, :null => false
+    t.string   "name"
+    t.string   "address"
+    t.string   "phone"
+    t.boolean  "active"
+    t.string   "description"
+    t.string   "organisation_id", :limit => 36, :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "stores", ["id"], :name => "index_stores_on_id"
+  add_index "stores", ["organisation_id"], :name => "index_stores_on_organisation_id"
+
   create_table "taxes", :id => false, :force => true do |t|
     t.string   "id",              :limit => 36,                               :null => false
     t.string   "name"
@@ -122,6 +137,29 @@ ActiveRecord::Schema.define(:version => 20100427190727) do
 
   add_index "taxes", ["id"], :name => "index_taxes_on_id"
   add_index "taxes", ["organisation_id"], :name => "index_taxes_on_organisation_id"
+
+  create_table "transactions", :id => false, :force => true do |t|
+    t.string   "id",                   :limit => 36,                                :null => false
+    t.string   "parent_id",            :limit => 36
+    t.string   "contact_id"
+    t.string   "transactionable_id",   :limit => 36
+    t.string   "transactionable_type"
+    t.string   "name"
+    t.string   "type",                 :limit => 20
+    t.decimal  "total",                              :precision => 14, :scale => 2
+    t.boolean  "active"
+    t.string   "description"
+    t.string   "state"
+    t.string   "organisation_id",      :limit => 36,                                :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "transactions", ["id"], :name => "index_transactions_on_id"
+  add_index "transactions", ["organisation_id"], :name => "index_transactions_on_organisation_id"
+  add_index "transactions", ["state"], :name => "index_transactions_on_state"
+  add_index "transactions", ["transactionable_id"], :name => "index_transactions_on_transactionable_id"
+  add_index "transactions", ["transactionable_type"], :name => "index_transactions_on_transactionable_type"
 
   create_table "units", :id => false, :force => true do |t|
     t.string   "id",              :limit => 36,                     :null => false

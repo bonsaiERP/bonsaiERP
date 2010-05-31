@@ -1,0 +1,29 @@
+<h1>Tiendas</h1>
+
+<%= link_to 'Nueva tienda', new_store_path, :class => 'new' %>
+
+<table class="decorated">
+  <tr>
+    <th>Nombre</th>
+    <th>Dirección</th>
+    <th>Teléfono</th>
+    <th>Activa</th>
+    <th>Descripción</th>
+    <th></th>
+  </tr>
+
+<% @stores.each do |store| %>
+  <tr>
+    <td><%= link_to store.name, store %></td>
+    <td><%= store.address %></td>
+    <td><%= store.phone %></td>
+    <td><%= store.active %></td>
+    <td><%= store.description %></td>
+    <td>
+      <%= raw bonsai_links(store) %>
+    </td>
+  </tr>
+<% end %>
+</table>
+
+
