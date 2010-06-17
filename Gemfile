@@ -2,7 +2,7 @@
 source 'http://gemcutter.org'
 
 
-gem "rails", "3.0.0.beta3"
+gem "rails", "3.0.0.beta4"
 
 ## Bundle edge rails:
 # gem "rails", :git => "git://github.com/rails/rails.git"
@@ -24,22 +24,22 @@ gem "sqlite3-ruby", :require => "sqlite3"
 # end
 
 gem "uuid"
-gem "devise", "1.1.rc1"
-gem "simple_form", ">=1.1.2"
-gem "show_for"
+gem "devise",:git => "git://github.com/plataformatec/devise.git"
+gem "simple_form", ">=1.2.0"
+gem "show_for", ">=0.2.2"
 gem "will_paginate", "3.0.pre"
-if RUBY_VERSION=="1.9.1"
-  gem "ruby-debug19"
-else
-  gem "ruby-debug"
-end
+#if RUBY_VERSION=="1.9.1"
+#  gem "ruby-debug19"
+#else
+#  gem "ruby-debug"
+#end
 
 
 # Test
 group :test do  
   gem "rspec", ">=2.0.0.beta.9"
   gem "rspec-rails", ">=2.0.0.beta.9"
-  gem "webrat"  
+  #gem "webrat"  
   gem "mocha"
   # gem "factory_girl"
 end  

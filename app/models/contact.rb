@@ -7,10 +7,13 @@ class Contact < ActiveRecord::Base
 
   has_one :item, :as => :itemable, :dependent => :destroy
 
-
   validates_presence_of :name, :address
 
-  attr_accessible :name, :address, :addres_alt, :phone, :mobile, :email, :tax_number, :aditional_info
+  attr_accessible :name, :address, :addres_alt, :phone, :mobile, :email, :tax_number, :aditional_info, :type
+  
+  TYPES = [ 'Client', 'Supplier' ]
+
+  
   # scopes
   #scope :all, :conditions => { :organisation_id => OrganisationSession.id }
 

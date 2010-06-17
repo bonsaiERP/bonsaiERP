@@ -3,7 +3,14 @@ class BuysController < ApplicationController
   # GET /buys
   # GET /buys.xml
   def index
-    @buys = Buy.all
+    case(params[:type])
+      when 'pay'
+        @buys = Buy.pay
+      when 'aprove'
+        @buys = Buy.aprove
+      else
+        @buys = Buy.all
+    end
     respond_with @buys
   end
 

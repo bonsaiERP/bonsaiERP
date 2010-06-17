@@ -2,4 +2,9 @@
 class Transaction < ActiveRecord::Base
   include UUIDHelper
   acts_as_org
+
+  scope :pay, :conditions => { :organisation_id => OrganisationSession.id, :state => 'due' }
+  scope :aprove, :conditions => { :organisation_id => OrganisationSession.id, :state => 'draft' }
+  scope :all, :conditions => { :organisation_id => OrganisationSession.id }
+
 end

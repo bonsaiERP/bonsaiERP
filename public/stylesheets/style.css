@@ -35,6 +35,7 @@ label {
 }
 input, select, textarea { font-size: 11.5px; }
 .inline label { display: inline; }
+.optional label.collection_radio { display: inline-table; }
 form div { margin-top: 4px; }
 .ui-state-default {
   border: 1px solid #c5dbec;

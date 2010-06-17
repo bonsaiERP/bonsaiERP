@@ -5,6 +5,16 @@
     <%= f.input :mobile, :label => "Móvil" %>
     <%= f.input :email, :lanel => "Email" %>
     <%= f.input :tax_number, :label => "NIT" %>
+    <div class="input">
+      <%= f.label :type, "Tipo" %>
+      <label for="">
+        <%= f.radio_button :type, Contact::TYPES.first %> Cliente
+      </label>
+      <label for="">
+        <%= f.radio_button :type, Contact::TYPES.first %> Proveedor
+      </label>
+
+    </div>
   </div>
   <div class="inputs fl half">
     <%= f.input :address, :as => :text, :input_html => {:rows => 5}, :label => "Dirección" %>
