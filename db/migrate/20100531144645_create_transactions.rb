@@ -14,6 +14,7 @@ class CreateTransactions < ActiveRecord::Migration
       t.string :state
 
       t.string :organisation_id, :limit => 36, :null => false
+      t.date :date
 
       t.timestamps
     end

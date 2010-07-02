@@ -151,6 +151,7 @@ ActiveRecord::Schema.define(:version => 20100531144645) do
     t.string   "description"
     t.string   "state"
     t.string   "organisation_id",      :limit => 36,                                :null => false
+    t.date     "date"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
