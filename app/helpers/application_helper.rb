@@ -12,4 +12,8 @@ module ApplicationHelper
     session[:organisation][:name]
   end
 
+  def verdad?(val)
+    val ? "Si": "No"
+  end
+
 end

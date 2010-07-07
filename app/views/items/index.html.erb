@@ -20,7 +20,10 @@
       <td><%= item.description %></td>
       <td><%= bonsai? item.product %></td>
       <td><%= bonsai? item.stockable %></td>
-      <td><%= raw bonsai_links(item) %></td>
+      <td>
+        <%= link_to "editar", edit_item_path(item), :class => 'edit_icon' %> 
+        <%= link_to "borrar", item, :class => 'delete_icon', :remote => true %> 
+      </td>
     </tr>
   <% end %>
   </table>

@@ -1,6 +1,7 @@
 <%= simple_form_for @buy do |f| %>
   <div class="inputs half fl">
     <%= f.input :contact_id, :collection => Supplier.all, :label => 'Proveedor' %>
+    <%= f.input :store_id %>
   </div>
 
   <div class="half fl">
