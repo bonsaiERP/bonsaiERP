@@ -1,14 +1,12 @@
 class CreateCountries < ActiveRecord::Migration
   def self.up
-    create_table :countries, :id => false do |t|
-      t.string :id, :limit => 36, :null => false
+    create_table :countries do |t|
       t.string :name, :limit => 50
       t.string :abbreviation, :limit => 10
       t.text :taxes
 
       t.timestamps
     end
-    add_index(:countries, :id)
   end
 
   def self.down

@@ -1,9 +1,8 @@
 class CreateItems < ActiveRecord::Migration
   def self.up
-    create_table :items, :id => false do |t|
-      t.string :id, :limit => 36, :null => false
-      t.string :unit_id, :limit => 36
-      t.string :itemable_id, :limit => 36
+    create_table :items do |t|
+      t.integer :unit_id
+      t.integer :itemable_id
       t.string :itemable_type
       t.string :name
       t.string :description
@@ -13,11 +12,10 @@ class CreateItems < ActiveRecord::Migration
       t.boolean :stockable, :default => false
       t.boolean :visible, :default => true
 
-      t.string :organisation_id, :limit => 36
+      t.integer :organisation_id
 
       t.timestamps
     end
-    add_index :items, :id
     add_index :items, :organisation_id
     add_index :items, :unit_id
     add_index :items, :itemable_id

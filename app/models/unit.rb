@@ -1,5 +1,4 @@
 class Unit < ActiveRecord::Base
-  include UUIDHelper
 
   acts_as_org
 

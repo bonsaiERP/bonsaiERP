@@ -1,7 +1,6 @@
 class CreateContacts < ActiveRecord::Migration
   def self.up
-    create_table :contacts, :id => false do |t|
-      t.string :id, :limit => 36, :null => false
+    create_table :contacts do |t|
       t.string :name, :limit => 100
       t.string :address, :limit => 250
       t.string :address_alt, :limit => 250
@@ -12,12 +11,11 @@ class CreateContacts < ActiveRecord::Migration
       t.string :tax_number, :limit => 30
       t.string :aditional_info, :limit => 250
 
-      t.string :organisation_id, :limit => 36, :null => false
+      t.integer :organisation_id, :null => false
 
       t.timestamps
     end
 
-    add_index(:contacts, :id)
     add_index(:contacts, :organisation_id)
   end
 

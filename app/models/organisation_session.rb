@@ -1,3 +1,4 @@
+# encoding: utf-8
 # Used to access the organisation_id in the models
 class OrganisationSession
 

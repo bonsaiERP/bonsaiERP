@@ -1,5 +1,4 @@
 class Country < ActiveRecord::Base
-  include UUIDHelper
 
   has_many :organisations
 

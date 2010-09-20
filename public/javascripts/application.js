@@ -14,9 +14,9 @@ jQuery(function($) {
 });
 
 /**
- * Changes the selects from date to a dateselect field
- * @param selector jQuery
- */
+* Changes the selects from date to a dateselect field
+* @param selector jQuery
+*/
 function changeDateSelect(sel) {
   var datesel = document.createElement('input');
   $(datesel).attr('type', 'text');
@@ -30,7 +30,7 @@ function changeDateSelect(sel) {
 
   $(datesel).dateinput({
     'format': dateFormat,
-    'lang': 'es', 
+    'lang': 'es',
     'selectors': true,
     'firstDay': 1,
     'change': function() {

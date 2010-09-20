@@ -1,7 +1,6 @@
 class CreateUsers < ActiveRecord::Migration
   def self.up
-    create_table :users, :id => false do |t|
-      t.string :id, :limit => 36, :null => false
+    create_table :users do |t|
       # devise
       t.authenticatable
       t.confirmable
@@ -20,7 +19,6 @@ class CreateUsers < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :users, :id
     add_index :users, :first_name
     add_index :users, :last_name
 

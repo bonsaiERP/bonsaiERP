@@ -23,16 +23,16 @@ gem 'sqlite3-ruby', :require => 'sqlite3'
 #   gem "webrat"
 # end
 
-gem 'uuid'
 gem 'devise' #,:git => "git://github.com/plataformatec/devise.git"
 gem 'simple_form', '>=1.2.0'
 gem 'show_for' # ">=0.2.2"
 gem 'will_paginate', '3.0.pre2'
-#if RUBY_VERSION=="1.9.1"
-#  gem "ruby-debug19"
-#else
-#  gem "ruby-debug"
-#end
+
+if RUBY_VERSION=="1.9.2"
+  gem "ruby-debug19"
+else
+  gem "ruby-debug"
+end
 
 
 # Test

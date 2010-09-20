@@ -1,5 +1,4 @@
 class Organisation < ActiveRecord::Base
-  include UUIDHelper
   # callbacks
   before_create :set_user
   after_create :create_all_records

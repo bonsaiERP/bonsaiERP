@@ -1,4 +1,4 @@
-Bonsaierp::Application.routes.draw do |map|
+Bonsaierp::Application.routes.draw do
   resources :buys
 
   resources :stores
@@ -19,7 +19,6 @@ Bonsaierp::Application.routes.draw do |map|
     get :select, :on => :member
   end
 
-
   resources :countries
 
   devise_for :users#, :path_names => { :sign_in => '/login', :sign_out => '/logout' }
@@ -28,8 +27,6 @@ Bonsaierp::Application.routes.draw do |map|
   match '/dashboard' => 'dashboard#index', :as => :dashboard
 
   root :to => 'organisations#index'
-
-
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
@@ -47,12 +44,12 @@ Bonsaierp::Application.routes.draw do |map|
   # Sample resource route with options:
   #   resources :products do
   #     member do
-  #       get :short
-  #       post :toggle
+  #       get 'short'
+  #       post 'toggle'
   #     end
   #
   #     collection do
-  #       get :sold
+  #       get 'sold'
   #     end
   #   end
 
@@ -66,7 +63,7 @@ Bonsaierp::Application.routes.draw do |map|
   #   resources :products do
   #     resources :comments
   #     resources :sales do
-  #       get :recent, :on => :collection
+  #       get 'recent', :on => :collection
   #     end
   #   end
 

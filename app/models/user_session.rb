@@ -1,3 +1,4 @@
+# encoding: utf-8
 # Used to access the authenticated user in the models
 class UserSession
   attr_accessor :session

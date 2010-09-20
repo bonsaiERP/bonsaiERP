@@ -1,6 +1,5 @@
 # encoding: utf-8
 class Buy < Transaction
-  include UUIDHelper
   acts_as_org
 
   belongs_to :supplier, :foreign_key => 'contact_id'

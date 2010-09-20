@@ -1,6 +1,5 @@
 class User < ActiveRecord::Base
   # callbacks
-  include UUIDHelper
 
   # devise
   devise :database_authenticatable, :registerable, :confirmable,

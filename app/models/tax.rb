@@ -1,5 +1,4 @@
 class Tax < ActiveRecord::Base
-  include UUIDHelper
   # callbacks
   acts_as_org
 

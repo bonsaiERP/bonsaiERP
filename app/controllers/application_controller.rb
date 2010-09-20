@@ -8,18 +8,17 @@ class ApplicationController < ActionController::Base
   before_filter :destroy_organisation_session!, :unless => :user_signed_in?
 
 
-
 #
 #  # Used to redirect after a user has signed_in
-#  def after_sign_in_path_for(resource)
-#    debugger
-#    s=0
-#    if resource.is_a?(User)
-#      new_organisation_url
-#    else
-#      super
-#    end
-#  end
+  def after_sign_in_path_for(resource)
+    debugger
+    s=0
+    if resource.is_a?(User)
+      new_organisation_url
+    else
+      super
+    end
+  end
 #
   # Adds an error with format to display
   # @param ActiveRecord::Base (model)
