@@ -2,14 +2,14 @@
 source 'http://gemcutter.org'
 
 
-gem "rails", "3.0.0.beta4"
+gem 'rails', '3.0.0'
 
 ## Bundle edge rails:
 # gem "rails", :git => "git://github.com/rails/rails.git"
 
 # ActiveRecord requires a database adapter. By default,
 # Rails has selected sqlite3.
-gem "sqlite3-ruby", :require => "sqlite3"
+gem 'sqlite3-ruby', :require => 'sqlite3'
 
 ## Bundle the gems you use:
 # gem "bj"
@@ -23,11 +23,11 @@ gem "sqlite3-ruby", :require => "sqlite3"
 #   gem "webrat"
 # end
 
-gem "uuid"
-gem "devise",:git => "git://github.com/plataformatec/devise.git"
-gem "simple_form", ">=1.2.0"
-gem "show_for", ">=0.2.2"
-gem "will_paginate", "3.0.pre"
+gem 'uuid'
+gem 'devise' #,:git => "git://github.com/plataformatec/devise.git"
+gem 'simple_form', '>=1.2.0'
+gem 'show_for' # ">=0.2.2"
+gem 'will_paginate', '3.0.pre2'
 #if RUBY_VERSION=="1.9.1"
 #  gem "ruby-debug19"
 #else

@@ -21,8 +21,7 @@
       <td><%= bonsai? item.product %></td>
       <td><%= bonsai? item.stockable %></td>
       <td>
-        <%= link_to "editar", edit_item_path(item), :class => 'edit_icon' %> 
-        <%= link_to "borrar", item, :class => 'delete_icon', :remote => true %> 
+        <%= bonsai_links item %>
       </td>
     </tr>
   <% end %>

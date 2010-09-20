@@ -39,7 +39,7 @@ module BonsaiHelper
   def bonsai_links(klass, options={})
     ["edit", "destroy"].inject([]) do |t, m|
       t << bonsai_method_path(m, klass)
-    end.join(" ")
+    end.join(" ").html_safe
   end
 
   # Set the method and link for  new, edit, destroy, show

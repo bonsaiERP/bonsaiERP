@@ -9,7 +9,7 @@
 
 
 */body {
-  font-size: 11.5px;
+  font-size: 70%;
   font-family: Tahoma, sans-serif;
   background-color: #f0f0f1;
   margin: 0px;
@@ -33,7 +33,7 @@ label {
   display: block;
   color: #30383e;
 }
-input, select, textarea { font-size: 11.5px; }
+input, select, textarea { font-size: 70%; }
 .inline label { display: inline; }
 .optional label.collection_radio { display: inline-table; }
 form div { margin-top: 4px; }
@@ -56,7 +56,7 @@ table.decorated th {
   height: 32px;
 }
 table.decorated tr { border-bottom: 1px solid #c6c6c6; }
-table.decorated td { padding: 2px 8px; }
+table.decorated td { padding: 4px 8px; }
 #wrapper {
   margin: auto;
   width: 968px;
@@ -233,7 +233,7 @@ a.edit {
   font-size: 1.2em;
   background: url(images/pencil.png) no-repeat;
 }
-a.destroy {
+a.destroy, a.delete {
   font-weight: bold;
   padding-left: 20px;
   text-decoration: none;
