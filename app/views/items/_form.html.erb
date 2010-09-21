@@ -1,5 +1,5 @@
 <%= simple_form_for(@item) do |f| %>
-  <%= raw bonsai_form_error(f) %>
+  <%= bonsai_form_error(f) %>
 
   <div class="inputs half fl">
     <%= f.association :unit, :label => "Unidad" %>

@@ -1,3 +1,33 @@
 <h1>Nueva compra</h1>
 
-<%= render "form" %>
+<%= render :partial => "form" %>
+
+<style type="text/css">
+  .prueba{
+    list-style:none;
+    padding: 0px;
+    margin: 0px;
+  }
+  .prueba li{
+    display:inline;
+    float:left;
+  }
+  .prueba a{
+    display: block;
+    padding: 5px 15px;
+    -moz-border-radius: 4px;
+    /*-moz-box-shadow: -1px -1px 0px #CFCFCF;*/
+    border: 1px solid #CFCFCF;
+    margin-left: -1px;
+    color: #FFF;
+    background: #6889AF url("/stylesheets/images/set_background.png") repeat-y scroll;
+  }
+</style>
+<ul class="prueba">
+  <li>
+  	<a href="">Uno</a>
+  </li>
+  <li>
+  	<a href="">Dos</a>
+  </li>
+</ul>

@@ -69,12 +69,11 @@ module BonsaiHelper
   # @param [FormBuilder]
   def bonsai_form_error(f)
     unless f.object.errors.empty?
-      #html = "<h2>#{ t("errors_in_form", :count => f.object.errors.size) }</h2>"
       html = content_tag('h2', 'Exiten errores en el formulario')
       unless f.object.errors[:base].empty?
         html << "<ul>" + f.object.errors[:base].inject("") { |t, v|  t << "<li>#{v}</li>" } + "</ul>"
       end
-      "<div class='errorExplanation'>#{ html }</div>"
+      "<div class='errorExplanation'>#{ html }</div>".html_safe
     end
   end
 

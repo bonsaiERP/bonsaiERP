@@ -5,7 +5,6 @@
 @light_red: #FEF1EC;
 @black: #000;
 @dark: #30383E;//#202020;
-@light_dark:#6F6F6F;
 @grey: #C6C6C6;
 @light_grey:#F0F0F1;
 @dark_grey: #616161;
@@ -102,6 +101,13 @@ table.decorated{
     padding: 4px 8px;
   }
 }
+table.nwl{ 
+  td:last-child{ white-space: nowrap; }
+}
+table.nwf{
+  td:first-child{ white-space: nowrap; }
+}
+
 
 /*********************************************************/
 /*MAIN CONTENT WRAPPERS*/
@@ -186,7 +192,7 @@ table.decorated{
   font-weight: bold;
   padding: 5px 15px;
   border-right: 1px solid @dark;
-  border-left: 1px solid @light_dark;
+  border-left: 1px solid @dark_grey;
 }
 
 ul#main_menu{
@@ -235,7 +241,7 @@ ul#main_menu{
       }
       a{
         float: none;
-        padding: 3px 20px;
+        padding: 4px 20px;
         font-weight: normal;
       }
       a:hover{
@@ -270,14 +276,7 @@ a.logout{
 
 /***************************************************/
 
-form abbr{
-  display: none;
-}
 
-form.required abbr{
-  display: inline;
-  color: green;
-}
 
 .half{ 
   width: 47%;
@@ -354,7 +353,7 @@ a.show:hover, a.edit:hover, a.destroy:hover, a.list:hover{
   background: url(images/delete.png) no-repeat;
 }
 /****************************/
-/* CSS Forms*/
+/* Forms */
 .boolean{
   vertical-align: middle;
   label{
@@ -364,24 +363,70 @@ a.show:hover, a.edit:hover, a.destroy:hover, a.list:hover{
     float: left;
   }
 }
+form abbr{
+  display: none;
+}
+
+form.required abbr{
+  display: inline;
+  color: green;
+}
 
 .hint{
   display: block;
-  color: @light_dark;
+  color: @dark_grey;
   font-style: italic;
 }
 
 .inputs>div{
   margin-top: 10px;
 }
+
 .errorExplanation{
   color: @red;
   background-color: @light_red;
-  border: 1px solid @red;
+  border: 2px solid @red;
   padding: 5px 15px;
   ul{
     list-style: none;
   }
+  h2{ font-weight:normal;}
+}
+span.error{
+  display: block;
 }
 
+/* End */
+
+/****************************************/
+/* Flash */
+.flash{
+  padding:10px;
+  border-width:2px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  font-size: 120%;
+}
+#flashNotice{
+  .flash;
+  border-color: @dark_green;
+  color:@dark_green;
+}
+
+#flashError{
+  .flash;
+  border-color: @red;
+  color:@red;
+}
+/* End */
+
 .cb{ clear:both;}
+
+._120{
+  font-size: 120%;
+  input, select, textarea{
+    font-size: 120%;
+  }
+}
+
