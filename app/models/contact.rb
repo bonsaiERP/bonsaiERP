@@ -8,9 +8,9 @@ class Contact < ActiveRecord::Base
 
   validates_presence_of :name, :address
 
-  attr_accessible :name, :address, :addres_alt, :phone, :mobile, :email, :tax_number, :aditional_info, :type
+  attr_accessible :name, :address, :addres_alt, :phone, :mobile, :email, :tax_number, :aditional_info, :ctype
   
-  TYPES = [ 'Client', 'Supplier' ]
+  TYPES = [ 'Cliente', 'Proveedor', 'Cliente/Proveedor' ]
 
   
   # scopes

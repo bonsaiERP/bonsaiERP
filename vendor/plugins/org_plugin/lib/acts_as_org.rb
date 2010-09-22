@@ -9,7 +9,6 @@ module Acts
     module ClassMethods
       def acts_as_org
         attr_readonly :organisation_id
-        include Acts::Org::InstanceMethods
         before_validation :set_organisation_id, :if => :new_record?
         validates_presence_of :organisation_id
       end

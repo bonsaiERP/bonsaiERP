@@ -2,8 +2,6 @@ var dateFormat = 'dd, mmm yyyy';
 
 jQuery(function($) {
 
-  //$('input.date').dateinput({ 'format': dateFormat, 'lang': 'es', 'firstDay': 1 });
-
   $('div.date, div.datetime').each(function(i, el) {
      var sel = $(el).find('select:eq(2)');
      if(sel.length > 0) {
@@ -41,7 +39,7 @@ function changeDateSelect(el) {
       self = this.getInput();
       $(val).each(function(i, el) {
         var val = el.replace(/^0([0-9]+$)/, '$1');
-        $(self).siblings('select[name*=' + (i + 1) + ']').val(val);
+        $(self).siblings('select[name*=' + (i + 1) + 'i]').val(val);
       });
     }
   });

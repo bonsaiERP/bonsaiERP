@@ -1,19 +1,45 @@
-<% show_for @contact do |o| %>
 <div class="fl half">
-  <%= o.attribute :name %>
-  <%= o.attribute :phone %>
-  <%= o.attribute :mobile %>
-  <%= o.attribute :type %>
-  <%= o.attribute :email %>
-  <%= o.attribute :tax_number %>
+  <p>
+    <label for="">Nombre</label>
+    <%= @contact.name %>
+  </p>
+  <p>
+    <label for="">Teléfono</label>
+    <%= @contact.phone %>
+  </p>
+  <p>
+    <label for="">Móvil</label>
+    <%= @contact.mobile %>
+  </p>
+  <p>
+    <label for="">Tipo</label>
+    <%= @contact.ctype %>
+  </p>
+  <p>
+  	<label for="">E-mail</label>
+    <%= @contact.email %>
+  </p>
+  <p>
+    <label for="">NIT</label>
+    <%= @contact.tax_number %>
+  </p>
 </div>
 <div class="fl half">
+  <p>
+  	<label for="">Dirección</label>
+    <%= @contact.address %>
+  </p>
+  <p>
+  	<label for="">Dirección alternativa</label>
+    <%= @contact.address_alt %>
+  </p>
+  <p>
+  	<label for="">Información adicional</label>
+    <%= @contact.aditional_info %>
+  </p>
 
-  <%= o.attribute :address %>
-  <%= o.attribute :address_alt %>
-  <%= o.attribute :aditional_info %>
 </div>
-<% end %>
+
 <div style="clear:both"></div>
 
 <%= link_to 'Editar', edit_contact_path(@contact), :class => 'edit' %>

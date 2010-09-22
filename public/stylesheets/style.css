@@ -45,7 +45,6 @@ form div { margin-top: 4px; }
 }
 table.decorated {
   border-collapse: collapse;
-  border: 1px solid #c6c6c6;
   width: 100%;
 }
 table.decorated th {

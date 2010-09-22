@@ -1,4 +1,6 @@
-<% simple_form_for(@contact) do |f| %>
+<%= simple_form_for(@contact) do |f| %>
+  <%= bonsai_form_error(f) %>
+
   <div class="inputs fl half">
     <%= f.input :name, :label => "Nombre" %>
     <%= f.input :phone, :label => "Teléfono" %>
@@ -6,16 +8,13 @@
     <%= f.input :email, :lanel => "Email" %>
     <%= f.input :tax_number, :label => "NIT" %>
     <div class="input">
-      <%= f.label :type, "Tipo" %>
-      <label for="">
-        <%= f.radio_button :type, Contact::TYPES.first %> Cliente
-      </label>
-      <label for="">
-        <%= f.radio_button :type, Contact::TYPES.first %> Proveedor
-      </label>
-
+      <label for="">Tipo</label>
+      <% Contact::TYPES.each do |v| %>
+        <label for="contact_ctype_<%= v %>"><%= f.radio_button :ctype, v %> <%= v %></label>
+      <% end %>
     </div>
   </div>
+
   <div class="inputs fl half">
     <%= f.input :address, :as => :text, :input_html => {:rows => 5}, :label => "Dirección" %>
     <%= f.input :address_alt, :as => :text, :input_html => {:rows => 5}, :label => "Dirección alternativa" %>

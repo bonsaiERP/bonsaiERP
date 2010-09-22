@@ -6,7 +6,7 @@ class CreateContacts < ActiveRecord::Migration
       t.string :address_alt, :limit => 250
       t.string :phone, :limit => 20
       t.string :mobile, :limit => 20
-      t.string :type
+      t.string :type, :limit => 40
       t.string :email, :limit => 200
       t.string :tax_number, :limit => 30
       t.string :aditional_info, :limit => 250

@@ -2,12 +2,9 @@ class CreateItems < ActiveRecord::Migration
   def self.up
     create_table :items do |t|
       t.integer :unit_id
-      t.integer :itemable_id
-      t.string :itemable_type
       t.string :name
       t.string :description
-      t.string :type
-      t.boolean :integer, :default => false
+      t.boolean :integer, :default => false # denormalized data
       t.boolean :product, :default => false
       t.boolean :stockable, :default => false
       t.boolean :visible, :default => true
