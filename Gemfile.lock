@@ -32,14 +32,29 @@ GEM
       activesupport (~> 3.0.0)
     bcrypt-ruby (2.1.2)
     builder (2.1.2)
+    capybara (0.3.9)
+      culerity (>= 0.2.4)
+      mime-types (>= 1.16)
+      nokogiri (>= 1.3.3)
+      rack (>= 1.0.0)
+      rack-test (>= 0.5.4)
+      selenium-webdriver (>= 0.0.3)
     columnize (0.3.1)
+    culerity (0.2.12)
     devise (1.1.2)
       bcrypt-ruby (~> 2.1.2)
       warden (~> 0.10.7)
     diff-lcs (1.1.2)
     erubis (2.6.6)
       abstract (>= 1.0.0)
+    factory_girl (1.3.2)
+    factory_girl_rails (1.0)
+      factory_girl (~> 1.3)
+      rails (>= 3.0.0.beta4)
+    ffi (0.6.3)
+      rake (>= 0.8.7)
     i18n (0.4.1)
+    json_pure (1.4.6)
     less (1.2.21)
       mutter (>= 0.4.2)
       treetop (>= 1.4.2)
@@ -52,6 +67,7 @@ GEM
     mocha (0.9.8)
       rake
     mutter (0.5.3)
+    nokogiri (1.4.3.1)
     polyglot (0.3.1)
     rack (1.2.1)
     rack-mount (0.6.13)
@@ -89,9 +105,16 @@ GEM
       ruby-debug-base (~> 0.10.3.0)
     ruby-debug-base (0.10.3)
       linecache (>= 0.3)
+    rubyzip (0.9.4)
+    selenium-webdriver (0.0.28)
+      ffi (>= 0.6.1)
+      json_pure
+      rubyzip
     show_for (0.2.3)
     simple_form (1.2.2)
     sqlite3-ruby (1.3.1)
+    steak (1.0.0.beta.2)
+      rspec
     thor (0.14.1)
     treetop (1.4.8)
       polyglot (>= 0.3.1)
@@ -104,14 +127,17 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  capybara
   devise
+  factory_girl_rails
   less (>= 1.2.21)
   mocha
   rails (= 3.0.0)
-  rspec (>= 2.0.0.beta.9)
-  rspec-rails (>= 2.0.0.beta.9)
+  rspec (>= 2.0.0.beta.22)
+  rspec-rails (>= 2.0.0.beta.22)
   ruby-debug
   show_for
   simple_form (>= 1.2.0)
   sqlite3-ruby
-  will_paginate (= 3.0.pre2)
+  steak (>= 1.0.0.beta.2)
+  will_paginate (~> 3.0.pre2)

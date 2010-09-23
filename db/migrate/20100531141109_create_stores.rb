@@ -7,7 +7,7 @@ class CreateStores < ActiveRecord::Migration
       t.boolean :active
       t.string :description
 
-      t.integer :organisation_id
+      t.integer :organisation_id, :null => false
 
       t.timestamps
     end

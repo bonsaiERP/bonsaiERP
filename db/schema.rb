@@ -18,7 +18,7 @@ ActiveRecord::Schema.define(:version => 20100531144645) do
     t.string   "address_alt",     :limit => 250
     t.string   "phone",           :limit => 20
     t.string   "mobile",          :limit => 20
-    t.string   "type"
+    t.string   "ctype",           :limit => 40
     t.string   "email",           :limit => 200
     t.string   "tax_number",      :limit => 30
     t.string   "aditional_info",  :limit => 250
@@ -46,29 +46,24 @@ ActiveRecord::Schema.define(:version => 20100531144645) do
 
   create_table "items", :force => true do |t|
     t.integer  "unit_id"
-    t.integer  "itemable_id"
-    t.string   "itemable_type"
     t.string   "name"
     t.string   "description"
-    t.string   "type"
     t.boolean  "integer",         :default => false
     t.boolean  "product",         :default => false
     t.boolean  "stockable",       :default => false
     t.boolean  "visible",         :default => true
-    t.integer  "organisation_id"
+    t.integer  "organisation_id",                    :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "items", ["itemable_id"], :name => "index_items_on_itemable_id"
-  add_index "items", ["itemable_type"], :name => "index_items_on_itemable_type"
   add_index "items", ["organisation_id"], :name => "index_items_on_organisation_id"
   add_index "items", ["unit_id"], :name => "index_items_on_unit_id"
 
   create_table "links", :force => true do |t|
     t.integer  "organisation_id"
     t.integer  "user_id"
-    t.string   "role"
+    t.integer  "rol_id"
     t.string   "settings"
     t.boolean  "creator"
     t.datetime "created_at"
@@ -103,7 +98,7 @@ ActiveRecord::Schema.define(:version => 20100531144645) do
     t.string   "phone"
     t.boolean  "active"
     t.string   "description"
-    t.integer  "organisation_id"
+    t.integer  "organisation_id", :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -114,7 +109,7 @@ ActiveRecord::Schema.define(:version => 20100531144645) do
     t.string   "name"
     t.string   "abbreviation",    :limit => 10
     t.decimal  "rate",                          :precision => 5, :scale => 2
-    t.integer  "organisation_id"
+    t.integer  "organisation_id",                                             :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -122,35 +117,29 @@ ActiveRecord::Schema.define(:version => 20100531144645) do
   add_index "taxes", ["organisation_id"], :name => "index_taxes_on_organisation_id"
 
   create_table "transactions", :force => true do |t|
-    t.integer  "parent_id"
     t.integer  "contact_id"
-    t.integer  "transactionable_id",   :limit => 36
-    t.string   "transactionable_type"
-    t.string   "name"
-    t.string   "type",                 :limit => 20
-    t.decimal  "total",                              :precision => 14, :scale => 2
-    t.boolean  "active"
+    t.string   "type",            :limit => 20
+    t.decimal  "total",                         :precision => 14, :scale => 2
+    t.boolean  "active",                                                       :default => true
     t.string   "description"
-    t.string   "state"
-    t.integer  "organisation_id"
+    t.string   "state",           :limit => 20
     t.date     "date"
+    t.decimal  "balance",                       :precision => 14, :scale => 2
+    t.integer  "organisation_id",                                                                :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "transactions", ["contact_id"], :name => "index_transactions_on_contact_id"
   add_index "transactions", ["organisation_id"], :name => "index_transactions_on_organisation_id"
-  add_index "transactions", ["parent_id"], :name => "index_transactions_on_parent_id"
   add_index "transactions", ["state"], :name => "index_transactions_on_state"
-  add_index "transactions", ["transactionable_id"], :name => "index_transactions_on_transactionable_id"
-  add_index "transactions", ["transactionable_type"], :name => "index_transactions_on_transactionable_type"
 
   create_table "units", :force => true do |t|
     t.string   "name",            :limit => 100
     t.string   "symbol",          :limit => 20
     t.boolean  "integer",                        :default => false
     t.boolean  "visible",                        :default => true
-    t.integer  "organisation_id"
+    t.integer  "organisation_id",                                   :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

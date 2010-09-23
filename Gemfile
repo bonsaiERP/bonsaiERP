@@ -1,7 +1,6 @@
 # Edit this Gemfile to bundle your application's dependencies.
 source 'http://gemcutter.org'
 
-
 gem 'rails', '3.0.0'
 
 ## Bundle edge rails:
@@ -11,42 +10,28 @@ gem 'rails', '3.0.0'
 # Rails has selected sqlite3.
 gem 'sqlite3-ruby', :require => 'sqlite3'
 
-## Bundle the gems you use:
-# gem "bj"
-# gem "hpricot", "0.6"
-# gem "sqlite3-ruby", :require => "sqlite3"
-# gem "aws-s3", :require => "aws/s3"
 
-## Bundle gems used only in certain environments:
-# gem "rspec", :group => :test
-# group :test do
-#   gem "webrat"
-# end
-
-gem 'devise' #,:git => "git://github.com/plataformatec/devise.git"
+gem 'devise'
 gem 'simple_form', '>=1.2.0'
-gem 'show_for' # ">=0.2.2"
-gem 'will_paginate', '3.0.pre2'
+gem 'show_for'
+gem 'will_paginate', '~> 3.0.pre2'
+gem 'less', ">=1.2.21"
 
-if RUBY_VERSION=="1.9.2"
-  gem "ruby-debug19"
+if RUBY_VERSION == '1.9.2'
+  gem 'ruby-debug19'
 else
-  gem "ruby-debug"
+  gem 'ruby-debug'
 end
 
 
 # Test
 group :test do  
-  gem "rspec", ">=2.0.0.beta.9"
-  gem "rspec-rails", ">=2.0.0.beta.9"
-  #gem "webrat"  
-  gem "mocha"
-  # gem "factory_girl"
+  gem 'rspec', '>=2.0.0.beta.22'
+  gem 'rspec-rails', '>=2.0.0.beta.22'
+  gem 'mocha'
+  gem 'steak', '>= 1.0.0.beta.2'
+  gem 'capybara'
+  gem 'factory_girl_rails'
+  # gem 'database_cleaner'
 end  
 
-# Cucumber
-#gem "capybara"
-#gem "database_cleaner"
-#gem "cucumber-rails"
-
-gem "less", ">=1.2.21"

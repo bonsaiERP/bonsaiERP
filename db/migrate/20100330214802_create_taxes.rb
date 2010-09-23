@@ -5,7 +5,7 @@ class CreateTaxes < ActiveRecord::Migration
       t.string :abbreviation, :limit => 10
       t.decimal :rate, :precision => 5, :scale => 2
 
-      t.integer :organisation_id
+      t.integer :organisation_id, :null => false
 
       t.timestamps
     end

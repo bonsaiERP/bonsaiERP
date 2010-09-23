@@ -6,7 +6,7 @@ class Contact < ActiveRecord::Base
 
   has_one :item, :as => :itemable, :dependent => :destroy
 
-  validates_presence_of :name, :address
+  validates_presence_of :name, :address, :ctype
 
   attr_accessible :name, :address, :addres_alt, :phone, :mobile, :email, :tax_number, :aditional_info, :ctype
   

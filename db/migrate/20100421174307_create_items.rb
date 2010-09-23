@@ -9,14 +9,12 @@ class CreateItems < ActiveRecord::Migration
       t.boolean :stockable, :default => false
       t.boolean :visible, :default => true
 
-      t.integer :organisation_id
+      t.integer :organisation_id, :null => false
 
       t.timestamps
     end
     add_index :items, :organisation_id
     add_index :items, :unit_id
-    add_index :items, :itemable_id
-    add_index :items, :itemable_type
   end
 
   def self.down

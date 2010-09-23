@@ -3,7 +3,7 @@ class CreateLinks < ActiveRecord::Migration
     create_table :links do |t|
       t.integer :organisation_id
       t.integer :user_id
-      t.string :role
+      t.integer :rol_id
       t.string :settings
       t.boolean :creator
 

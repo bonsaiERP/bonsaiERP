@@ -6,7 +6,7 @@ class CreateUnits < ActiveRecord::Migration
       t.boolean :integer, :default => false
       t.boolean :visible, :default => true
 
-      t.integer :organisation_id
+      t.integer :organisation_id, :null => false
 
       t.timestamps
     end
