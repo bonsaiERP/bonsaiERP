@@ -125,7 +125,7 @@
       <controlProperties>
         <bold>false</bold>
         <borderStyle>none</borderStyle>
-        <text>Item%2C%20Inventario%20%5Crdisponible%2CCantidad%2C%20Precio%5Crunitario%2C%20Total%20fila%2C%0AComputadora%20portable%20HP%20Pavillon%201243DZ%2C%2010%2C%205%2C%201000.00%2C%205000.00%2C%20%20%0AParlantes%20Multimedia%20Altec%20lansig%20AL123%2C%2030%2C%2010%2C%20200.00%2C%20%202000.00%2C</text>
+        <text>*Item*%2C%20Inventario%20%5Crdisponible%2CCantidad%2C%20Precio%5Crunitario%2C%20Total%20fila%2C%0AComputadora%20portable%20HP%20Pavillon%201243DZ%2C%2010%2C%205%2C%201000.00%2C%205000.00%2C%20%20%0AParlantes%20Multimedia%20Altec%20lansig%20AL123%2C%2030%2C%2010%2C%20200.00%2C%20%202000.00%2C</text>
         <vLines>false</vLines>
       </controlProperties>
     </control>

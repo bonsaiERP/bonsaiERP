@@ -11,6 +11,7 @@ class Link < ActiveRecord::Base
   validates_associated :user
   validates_associated :organisation
 
+  scope :orgs, where(:user_id => UserSession.user_id)
 
   # Sets the current user and other attributes
   def set_user_creator_role(user_key)

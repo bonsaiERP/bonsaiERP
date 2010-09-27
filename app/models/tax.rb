@@ -2,7 +2,7 @@ class Tax < ActiveRecord::Base
   # callbacks
   acts_as_org
 
-  before_save :create_or_update_item
+  # before_save :create_or_update_item
   
   has_one :item, :as => :itemable
 

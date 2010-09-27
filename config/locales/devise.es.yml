@@ -31,9 +31,12 @@ es:
       send_instructions: 'Usted recinira un email con las instrucciones para desbloquear su cuenta en unos minutos.'
       unlocked: 'Su cuenta fue desbloqueada. Ahora ingreso al sistema.'
     mailer:
-      confirmation_instructions: 'Instrucciones de confirmación'
-      reset_password_instructions: 'Instrucciones para resetear la contraseña'
-      unlock_instructions: 'Instrucciones para desbloquear'
+      confirmation_instructions:
+        subject: 'Instrucciones de confirmación'
+      reset_password_instructions:
+        subject: 'Instrucciones para resetear la contraseña'
+      unlock_instructions:
+        subject: 'Instrucciones para desbloquear'
     views:
       sign_in: "Ingresar"
       sign_up: "Registro"

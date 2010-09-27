@@ -4,7 +4,7 @@ class Item < ActiveRecord::Base
 
   belongs_to :unit
 
-  belongs_to :itemable, :polymorphic => true
+  # belongs_to :itemable, :polymorphic => true
 
 
   attr_accessible :name, :unit_id, :product, :stockable, :description

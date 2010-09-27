@@ -1,3 +1,6 @@
+# encoding: utf-8
+# author: Boris Barroso
+# email: boriscyber@gmail.com
 class OrganisationsController < ApplicationController
   before_filter :authenticate_user!
   before_filter :destroy_organisation_session!, :except => :select
@@ -64,9 +67,15 @@ class OrganisationsController < ApplicationController
   # GET /organisation/1/select
   # sets the organisation session
   def select
-    @organisation = Organisation.find(params[:id])
-    session[:organisation] = {:id => @organisation.id, :name => @organisation.name}
-    redirect_to dashboard_url
+    links = Link.orgs
+    @organisation = links.find_by_organisation_id(params[:id])
+    if @organisation
+      session[:organisation] = {:id => @organisation.id, :name => @organisation.name}
+      redirect_to dashboard_url
+    else
+      flash[:error] = "Debe seleccionar una organización válida"
+      redirect_to organisations_path
+    end
   end
 
 end

@@ -32,9 +32,7 @@
 
         <div id="cont">
           <div id="cont-in">
-            <div id="flashNotice"><%= flash[:notice] %></div>
-            <div id="flashError"><%= flash[:error] %></div>
-
+            <%= render :partial => "layouts/flash" %>
             <%= yield %>
           </div>
           <div style="clear:both"></div>

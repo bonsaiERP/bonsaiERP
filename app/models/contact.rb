@@ -2,44 +2,26 @@ class Contact < ActiveRecord::Base
   acts_as_org
 
   # callbacks
-  before_save :create_or_update_item
+  # before_save :create_or_update_item
 
-  has_one :item, :as => :itemable, :dependent => :destroy
+  # has_one :item, :as => :itemable, :dependent => :destroy
 
-  validates_presence_of :name, :address, :ctype
+  TYPES = [ 'Cliente', 'Proveedor', 'Cliente/Proveedor' ]
+
+  validates_presence_of :name, :ctype
+  validates_inclusion_of :ctype, :in => TYPES
 
   attr_accessible :name, :address, :addres_alt, :phone, :mobile, :email, :tax_number, :aditional_info, :ctype
   
-  TYPES = [ 'Cliente', 'Proveedor', 'Cliente/Proveedor' ]
-
+  default_scope where(:organisation_id => OrganisationSession.id)
   
   # scopes
-  #scope :all, :conditions => { :organisation_id => OrganisationSession.id }
+  #scope :all, where(:organisation_id => OrganisationSession.id)
 
 private
-  def create_or_update_item
-    if self.new_record?
-      unless unit = Unit.invisible.find_by_name("contact")
-        unit = create_unit
-      end
-      item = Item.new(:name => name, :unit_id => unit.id)
-      item.visible = false
-      self.item = item
-    elsif self.changes[:name]
-      self.item.name = name
-    end
-  end
 
-  # Creates a new contact unit
-  def create_unit
-    unit = Unit.new(:name => 'contact', :symbol => "__ct" )
-    unit.visible = false
-    unit.save!
-    unit
-  end
-
-  def self.all
-    Contact.where( :organisation_id => OrganisationSession.id )
-  end
+  #def self.all
+  #  Contact.where( :organisation_id => OrganisationSession.id )
+  #end
 
 end

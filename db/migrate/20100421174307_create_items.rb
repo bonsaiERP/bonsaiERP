@@ -13,6 +13,7 @@ class CreateItems < ActiveRecord::Migration
 
       t.timestamps
     end
+
     add_index :items, :organisation_id
     add_index :items, :unit_id
   end

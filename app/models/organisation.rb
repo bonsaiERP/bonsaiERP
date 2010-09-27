@@ -20,9 +20,13 @@ class Organisation < ActiveRecord::Base
   validates_uniqueness_of :name, :scope => :user_id
 
   attr_protected :user_id
-  
+
   def to_s
     name
+  end
+
+  def self.all
+    find(Link.orgs.map(&:organisation_id))
   end
 
 protected

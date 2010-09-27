@@ -10,4 +10,8 @@ class UserSession
   def self.current_user
     @session
   end
+
+  def self.user_id
+    @session.id
+  end
 end
