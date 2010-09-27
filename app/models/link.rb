@@ -19,7 +19,7 @@ class Link < ActiveRecord::Base
     # set_creator_role if id.nil?
     write_attribute(:user_id, user_key)
     write_attribute(:creator, true)
-    write_attribute(:role, "admin")
+    #write_attribute(:role, "admin")
   end
 
   

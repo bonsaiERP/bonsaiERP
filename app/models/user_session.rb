@@ -12,6 +12,6 @@ class UserSession
   end
 
   def self.user_id
-    @session.id
+    @session.id unless @session.nil? 
   end
 end
