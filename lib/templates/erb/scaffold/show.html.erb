@@ -2,7 +2,7 @@
 
 <% for attribute in attributes -%>
 <p>
-  <b><%= attribute.human_name %>:</b>
+  <label><%= attribute.human_name %>:</label>
   <%%= @<%= singular_table_name %>.<%= attribute.name %> %>
 </p>
 <% end -%>

@@ -13,7 +13,7 @@ gem 'sqlite3-ruby', :require => 'sqlite3'
 
 gem 'devise'
 gem 'simple_form', '>=1.2.0'
-gem 'show_for'
+# gem 'show_for'
 gem 'will_paginate', '~> 3.0.pre2'
 gem 'less', ">=1.2.21"
 

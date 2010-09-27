@@ -18,8 +18,8 @@
       <td><%= link_to item.name, item %></td>
       <td><%= item.unit.name %></td>
       <td><%= item.description %></td>
-      <td><%= bonsai? item.product %></td>
-      <td><%= bonsai? item.stockable %></td>
+      <td class="<%= item.product %>"></td>
+      <td class="<%= item.stockable %>"></td>
       <td>
         <%= bonsai_links item %>
       </td>

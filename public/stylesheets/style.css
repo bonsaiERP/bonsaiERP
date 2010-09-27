@@ -347,3 +347,5 @@ span.error { display: block; }
 }
 .fl { float: left; }
 .clear { clear: both; }
+.true { background: transparent url(images/tick.png) no-repeat center 50%; }
+.false { background: transparent url(images/cross.png) no-repeat center 50%; }
