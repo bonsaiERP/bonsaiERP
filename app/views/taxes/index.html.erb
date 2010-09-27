@@ -1,29 +1,22 @@
-<h1>Listing taxes</h1>
+<h1>Impuestos</h1>
 
-<table>
+<%= link_to 'Nuevo impuesto', new_taxis_path, :class => 'new' %>
+
+<table class="decorated">
   <tr>
-    <th>Name</th>
-    <th>Abbreviation</th>
-    <th>Rate</th>
-    <th>Organisation</th>
-    <th></th>
-    <th></th>
+    <th>Nombre</th>
+    <th>Abreviación</th>
+    <th>Cantidad</th>
     <th></th>
   </tr>
 
 <% @taxes.each do |tax| %>
   <tr>
-    <td><%= tax.name %></td>
+    <td><%= link_to tax.name, tax %></td>
     <td><%= tax.abbreviation %></td>
-    <td><%= tax.rate %></td>
-    <td><%= tax.organisation %></td>
-    <td><%= link_to 'Show', tax %></td>
-    <td><%= link_to 'Edit', edit_tax_path(tax) %></td>
-    <td><%= link_to 'Destroy', tax, :confirm => 'Are you sure?', :method => :delete %></td>
+    <td><%= tax.rate %> %</td>
+    <td><%= bonsai_links tax %></td>
   </tr>
 <% end %>
 </table>
 
-<br />
-
-<%= link_to 'New tax', new_tax_path %>

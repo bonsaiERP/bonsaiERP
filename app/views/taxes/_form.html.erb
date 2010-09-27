@@ -1,12 +1,11 @@
 <% simple_form_for(@tax) do |f| %>
   <div class="inputs">
-    <%= f.input :name %>
-    <%= f.input :abbreviation %>
-    <%= f.input :rate %>
-    <%= f.association :organisation %>
+    <%= f.input :name, :label => 'Nombre' %>
+    <%= f.input :abbreviation, :label => 'Abreviación' %>
+    <%= f.input :rate, :label => 'Cantidad' %>
   </div>
 
   <div class="actions">
-    <%= f.button :submit %>
+    <%= f.submit "Salvar" %>
   </div>
 <% end %>

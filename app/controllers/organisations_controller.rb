@@ -68,8 +68,8 @@ class OrganisationsController < ApplicationController
   def select
     @organisation = Link.orgs.find{ |v| v.id == params[:id].to_i }
 
-    if @organisation
-      session[:organisation] = {:id => @organisation.id, :name => @organisation.name }
+    unless @organisation.blank?
+      set_organisation_session(@organisation)
       redirect_to dashboard_url
     else
       flash[:error] = "Debe seleccionar una organización válida"

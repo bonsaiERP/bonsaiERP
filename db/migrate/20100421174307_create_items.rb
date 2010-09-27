@@ -7,6 +7,7 @@ class CreateItems < ActiveRecord::Migration
       t.boolean :integer, :default => false # denormalized data
       t.boolean :product, :default => false
       t.boolean :stockable, :default => false
+      t.boolean :active, :default => true
       t.boolean :visible, :default => true
 
       t.integer :organisation_id, :null => false

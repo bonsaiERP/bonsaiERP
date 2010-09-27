@@ -21,13 +21,13 @@
     <div id="wrapper">
       <div id="wrap_in">
         <div id="header">
-          <%= render :partial => '/extras/usersettings_menu' if user_signed_in? %>
+          <%= render :partial => 'layouts/usersettings_menu' if user_signed_in? %>
           <% if organisation? %>
             <h1><%= session[:organisation][:name]  %></h1>
           <% end %>
         </div>
         <div id="menu">
-          <%= render :partial => '/extras/main_menu' if organisation? %>
+          <%= render :partial => 'layouts/main_menu' if organisation? %>
         </div>
 
         <div id="cont">

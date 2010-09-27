@@ -18,7 +18,9 @@ class Tax < ActiveRecord::Base
   attr_accessible :name, :abbreviation, :rate
 
   # scopes
-  scope  :all, :conditions => { :organisation_id => OrganisationSession.id, :visible => true }
+  # scope  :all, :conditions => { :organisation_id => OrganisationSession.id, :visible => true }
+
+  default_scope where( :organisation_id => OrganisationSession.id )
 
 private
 

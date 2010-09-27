@@ -13,7 +13,9 @@ class Item < ActiveRecord::Base
   validates_presence_of :name, :unit_id
   validates_associated :unit
 
-  scope :all, :conditions => { :organisation_id => OrganisationSession.id, :visible => true }
+  #scope :all, :conditions => { :organisation_id => OrganisationSession.id, :visible => true }
+
+  default_scope where(:organisation_id => OrganisationSession.id)
 
   def to_s
     name

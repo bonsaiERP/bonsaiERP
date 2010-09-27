@@ -44,7 +44,7 @@ module BonsaiHelper
 
   # Set the method and link for  new, edit, destroy, show
   def bonsai_method_path(m, klass)
-    k = klass.class.to_s.underscore
+    k = klass.class.to_s.underscore.pluralize.singularize
     case(m)
       when "new" then link_to "nuevo", send("new_#{k}_path", klass) 
       when "show" then link_to "ver", klass, :class => "show_icon", :title => "Ver"

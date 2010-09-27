@@ -39,7 +39,13 @@ class ApplicationController < ActionController::Base
   end
 
 
+
 private
+  # Sets the session for the organisation
+  def set_organisation_session(organisation)
+    session[:organisation] = {:id => organisation.id, :name => organisation.name }
+  end
+
   def destroy_organisation_session!
     session[:organisation] = {}
     OrganisationSession.destroy

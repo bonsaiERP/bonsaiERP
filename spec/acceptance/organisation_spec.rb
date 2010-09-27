@@ -32,6 +32,8 @@ feature "Organisation", "In order to create an organisation I must login" do
 
     click_link 'Prueba'
 
+    page.should have_css('#header>h1', :text => 'Prueba')
     page.should have_css('h1', :text => 'Bienvenido')
+
   end
 end
