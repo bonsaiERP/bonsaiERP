@@ -1,0 +1,7 @@
+---
+- name: boliviano
+  symbol: "Bs."
+  code: BOB
+- name: dolar americano
+  symbol: "$us."
+  code: USD

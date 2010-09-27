@@ -8,4 +8,9 @@
     - name: "Impuesto a las transacciones"
       rate: 1.5
       abbreviation: "IT"
-
+- name: Estados Unidos
+  abbreviation: usa
+  taxes:
+    - name: "Test"
+      rate: 5
+      abbreviation: "test"

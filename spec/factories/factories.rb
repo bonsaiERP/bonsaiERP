@@ -1,4 +1,18 @@
-# encoding:utf-8
+# encoding: utf-8
+# author: Boris Barroso
+# email: boriscyber@gmail.com
+Factory.define :country do |c|
+  c.name 'Boliva'
+  c.abbreviation 'bo'
+  c.taxes []
+end
+
+Factory.define :currency do |c|
+  c.name 'boliviano'
+  c.symbol 'Bs.'
+  c.code 'BOB'
+end
+
 Factory.define :user do |u|
   u.first_name "Boris" 
   u.last_name "Barroso"
@@ -11,8 +25,3 @@ Factory.define :user do |u|
   u.description "Una descripción"
 end
 
-#user_factory = {:firs_name => "Boris Barroso", 
-#  :email => 'admin@example.com', 
-#  :password => "",
-#  :password_confirmation => ""
-#}

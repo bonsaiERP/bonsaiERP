@@ -1,19 +1,19 @@
 --- 
 - :symbol: kg
-  :name: kilogram
+  :name: kilogramo
   :integer: false
 - :symbol: mt
-  :name: meter
+  :name: metro
   :integer: false
 - :symbol: un
-  :name: unit
+  :name: unidad
   :integer: true
 - :symbol: srv
-  :name: service
+  :name: servicio
   :integer: false
 - :symbol: L
-  :name: litre
+  :name: litro
   :integer: false
 - :symbol: H
-  :name: hour
+  :name: hora
   :integer: false

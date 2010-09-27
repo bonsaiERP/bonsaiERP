@@ -1,3 +1,6 @@
+# encoding: utf-8
+# author: Boris Barroso
+# email: boriscyber@gmail.com
 class CreateUsers < ActiveRecord::Migration
   def self.up
     create_table :users do |t|

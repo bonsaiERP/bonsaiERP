@@ -1,8 +1,11 @@
 ---
   - name: boliviano
     symbol: "bs."
+    code: BOB
   - name: dolar
     symbol: "$"
+    code: USD
   - name: euro
     symbol: "€"
+    code: EUR
 

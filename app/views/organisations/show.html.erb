@@ -1,4 +1,4 @@
-<h1><%= @organisation.name %></h1>
+<h1><%= link_to @organisation.name, select_organisation_path(@organisation) %></h1>
 <% show_for @organisation do |org| %>
   <div class="half fl">
     <%= org.attribute :name %>
@@ -18,30 +18,28 @@
 
 
 <div class="half fl">
-  <h2><%= t("controllers.users.one") %></h2>
+  <h2>Usuarios</h2>
   <table class="decorated">
     <tr>
-      <th><%= t("activerecord.attributes.user.name") %></th>
-      <th><%= t("role") %></th>
+      <th>Nombre</th>
+      <th>Rol</th>
     </tr>
     <% @organisation.links.each do |l| %>
     <tr>
       <td><%= l.user %></td>
-      <td><%= l.role %></td>
+      <td><%# l.role %></td>
     </tr>
     <% end %>
   </table>
 </div>
 
 <div class="half fl">
-  <h2><%= t("controllers.tax.other") %></h2>
+  <h2>Impuestos</h2>
   <table class="decorated">
     <tr>
-      <% bonsai_th "tax" do |tax| %>
-        <%= tax.t :name %>
-        <%= tax.t :abbreviation %>
-        <%= tax.t :rate %>
-      <% end %>
+      <th>nombre</th>
+      <th>Abreviación</th>
+      <th>Porcentaje</th>
     </tr>
     <% @organisation.taxes.each do |tax| %>
     <tr>
@@ -53,5 +51,5 @@
   </table>
 </div>
 
-<%= link_to t("edit"), edit_organisation_path(@organisation) %> |
-<%= link_to t("list"), organisations_path %>
+<%= link_to "Editar", edit_organisation_path(@organisation), :class => 'edit' %> 
+<%= link_to "Lista", organisations_path, :class => 'list' %>

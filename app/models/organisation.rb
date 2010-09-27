@@ -1,3 +1,6 @@
+# encoding: utf-8
+# author: Boris Barroso
+# email: boriscyber@gmail.com
 class Organisation < ActiveRecord::Base
   # callbacks
   before_create :set_user
@@ -48,9 +51,9 @@ protected
 
   # Creates the link to the user
   def create_link
-    link = Link.new
-    link.set_user_creator_role(user_id)
-    links << link
+    link = Link.new(:organisation_id => self.id)
+    link.set_user_creator(user_id)
+    link.save!
   end
 
   # creates default units the units accordins to the locale

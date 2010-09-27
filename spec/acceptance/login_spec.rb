@@ -1,3 +1,6 @@
+# encoding: utf-8
+# author: Boris Barroso
+# email: boriscyber@gmail.com
 require File.dirname(__FILE__) + '/acceptance_helper'
 
 feature "Login" do
@@ -6,7 +9,7 @@ feature "Login" do
     @user = Factory.create(:user)
     User.confirm_by_token(@user.confirmation_token)
     UserSession.current_user = @user
-    #login_as @user
+    login_as @user
   end
 
   scenario "Scenario login" do
@@ -18,4 +21,6 @@ feature "Login" do
     page.should have_css('#flashNotice', :text => 'Ingreso correctamente')
     page.should have_css('h1', :text => 'Empresas')
   end
+
 end
+

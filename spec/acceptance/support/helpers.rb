@@ -1,18 +1,44 @@
+# encoding: utf-8
+# author: Boris Barroso
+# email: boriscyber@gmail.com
 module HelperMethods
   # Put helper methods you need to be available in all tests here.
   
-  def create_user(email = nil, password = nil)
-    user = Factory.build(:user)
+  # Create a user
+  def create_user(attributes = {})
+    attributes.delete(:password)
+    attributes.delete(:password_confirmation)
+    user = Factory.create(:user, attributes)
     User.confirm_by_token(user.confirmation_token)
     UserSession.current_user = user
+    user
   end
 
-  def login_with(user)
+  # login
+  def login_as(user)
     visit '/'
     fill_in 'user[email]', :with => 'boris@example.com'
     fill_in 'user[password]', :with => 'demo123'
     click_button 'Ingresar'
   end
+
+  # Creates a user logins and creates and organisation
+  def create_organisation(attributes)
+    
+  end
+
+  def create_currencies
+    YAML.load_file("#{Rails.root}/config/defaults/currencies.yml").each do |c|
+      Factory.create :currency, c
+    end
+  end
+
+  def create_countries
+    YAML.load_file("#{Rails.root}/config/defaults/countries.yml").each do |c|
+      Factory.create :country, c
+    end
+  end
+
 end
 
 RSpec.configuration.include HelperMethods, :type => :acceptance

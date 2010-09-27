@@ -39,8 +39,7 @@ class OrganisationsController < ApplicationController
     @organisation = Organisation.new(params[:organisation])
 
     if @organisation.save
-      flash[:notice] = I18n.t("organisation.flash.create")
-      redirect_to(organisation_url(@organisation))
+      redirect_to(organisation_url(@organisation), :notice => "Se ha creado la empresa")
     else
       add_flash_error(@organisation)
       flash[:notice] = I18n.t("organisation.flash.error")
@@ -67,10 +66,10 @@ class OrganisationsController < ApplicationController
   # GET /organisation/1/select
   # sets the organisation session
   def select
-    links = Link.orgs
-    @organisation = links.find_by_organisation_id(params[:id])
+    @organisation = Link.orgs.find{ |v| v.id == params[:id].to_i }
+
     if @organisation
-      session[:organisation] = {:id => @organisation.id, :name => @organisation.name}
+      session[:organisation] = {:id => @organisation.id, :name => @organisation.name }
       redirect_to dashboard_url
     else
       flash[:error] = "Debe seleccionar una organización válida"

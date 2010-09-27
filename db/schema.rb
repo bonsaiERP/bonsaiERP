@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(:version => 20100531144645) do
   create_table "currencies", :force => true do |t|
     t.string   "name",       :limit => 100
     t.string   "symbol",     :limit => 20
+    t.string   "code",       :limit => 5
     t.datetime "created_at"
     t.datetime "updated_at"
   end
