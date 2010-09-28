@@ -1,3 +1,6 @@
+# encoding: utf-8
+# author: Boris Barroso
+# email: boriscyber@gmail.com
 class Tax < ActiveRecord::Base
   # callbacks
   acts_as_org
@@ -18,9 +21,7 @@ class Tax < ActiveRecord::Base
   attr_accessible :name, :abbreviation, :rate
 
   # scopes
-  # scope  :all, :conditions => { :organisation_id => OrganisationSession.id, :visible => true }
-
-  default_scope where( :organisation_id => OrganisationSession.id )
+  default_scope where( :organisation_id => OrganisationSession.organisation_id )
 
 private
 

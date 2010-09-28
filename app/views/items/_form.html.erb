@@ -3,15 +3,13 @@
 
   <div class="inputs half fl">
     <%= f.association :unit, :label => "Unidad" %>
-    <%# f.input :itemable_id %>
-    <%# f.input :itemable_type %>
     <%= f.input :name, :label => "Nombre" %>
     <%= f.input :product, :label => "Producto" %>
     <%= f.input :stockable, :hint => "Indica si el producto puede guardarse en stock" %>
   </div>
   <div class="inputs half fl">
+    <%= f.input :code, :label => 'Código' %>
     <%= f.input :description, :as => :text, :input_html => {:rows => 5}, :label => "Descripción" %>
-    <%# f.input :type %>    <%# f.input :integer %>
   </div>
 
   <div class="actions" style="clear:both">

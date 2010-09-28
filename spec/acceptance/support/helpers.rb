@@ -16,7 +16,7 @@ module HelperMethods
 
   # login
   def login_as(user)
-    visit '/'
+    visit '/users/sign_out'
     fill_in 'user[email]', :with => 'boris@example.com'
     fill_in 'user[password]', :with => 'demo123'
     click_button 'Ingresar'
@@ -39,6 +39,21 @@ module HelperMethods
     end
   end
 
+  def set_organisation
+    create_countries
+    create_currencies
+    @user = create_user
+    login_as @user
+
+    click_link "Nueva empresa"
+
+    select 'Bolivia', :from => 'organisation[country_id]'
+    select 'boliviano', :from => 'organisation[currency_id]'
+    fill_in 'organisation[name]', :with => 'Prueba'
+    fill_in 'organisation[address]', :with => 'Cerror #51'
+    fill_in 'organisation[phone]', :with => 'empresa@mail.com'
+    click_button 'Crear'
+  end
 end
 
 RSpec.configuration.include HelperMethods, :type => :acceptance

@@ -4,6 +4,7 @@ class CreateItems < ActiveRecord::Migration
       t.integer :unit_id
       t.string :name
       t.string :description
+      t.string :code, :limit => 100
       t.boolean :integer, :default => false # denormalized data
       t.boolean :product, :default => false
       t.boolean :stockable, :default => false
@@ -17,6 +18,7 @@ class CreateItems < ActiveRecord::Migration
 
     add_index :items, :organisation_id
     add_index :items, :unit_id
+    add_index :items, :code
   end
 
   def self.down

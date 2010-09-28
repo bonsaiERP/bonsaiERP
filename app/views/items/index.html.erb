@@ -6,6 +6,7 @@
   <table class="decorated">
     <tr>
       <th>Nombre</th>
+      <th>Código</th>
       <th>Unidad</th>
       <th>Descripción</th>
       <th>Producto</th>
@@ -16,6 +17,7 @@
   <% @items.each do |item| %>
     <tr>
       <td><%= link_to item.name, item %></td>
+      <td><%= item.code %></td>
       <td><%= item.unit.name %></td>
       <td><%= item.description %></td>
       <td class="<%= item.product %>"></td>

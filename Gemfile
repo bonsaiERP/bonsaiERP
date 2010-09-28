@@ -31,6 +31,7 @@ group :test do
   gem 'steak', '>= 1.0.0.beta.2'
   gem 'capybara'
   gem 'factory_girl_rails'
+  gem 'spork'
   # gem 'database_cleaner'
 end  
 

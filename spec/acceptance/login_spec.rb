@@ -13,7 +13,7 @@ feature "Login" do
   end
 
   scenario "Scenario login" do
-    visit '/'
+    visit '/users/sign_out'
     fill_in 'user[email]', :with => 'boris@example.com'
     fill_in 'user[password]', :with => 'demo123'
     click_button 'Ingresar'

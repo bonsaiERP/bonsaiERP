@@ -2,6 +2,7 @@ class Unit < ActiveRecord::Base
 
   acts_as_org
 
+  belongs_to :organisation
   before_save :strip_attributes
 
   has_many :items
@@ -12,8 +13,8 @@ class Unit < ActiveRecord::Base
 
   validates_presence_of :name, :symbol
 
-  scope :all, :conditions => { :visible => true, :organisation_id => OrganisationSession.id }
-  #scope :invisible, :conditions => { :visible => false, :organisation_id => OrganisationSession.id }
+  # scopes
+  default_scope where(:organisation_id => OrganisationSession.organisation_id)
 
   def to_s
     %Q(#{name} (#{symbol}))

@@ -5,14 +5,14 @@ class TaxesController < ApplicationController
   # GET /taxes
   # GET /taxes.xml
   def index
-    @taxes = Tax.all
+    @taxes = Tax.org
     respond_with @taxes
   end
 
   # GET /taxes/1
   # GET /taxes/1.xml
   def show
-    @tax = Tax.find(params[:id])
+    @tax = Tax.org.find(params[:id])
     respond_with @tax
   end
 

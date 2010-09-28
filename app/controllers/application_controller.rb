@@ -39,11 +39,11 @@ class ApplicationController < ActionController::Base
   end
 
 
-
 private
   # Sets the session for the organisation
   def set_organisation_session(organisation)
     session[:organisation] = {:id => organisation.id, :name => organisation.name }
+    set_organisation
   end
 
   def destroy_organisation_session!
@@ -64,7 +64,7 @@ private
 
   # Sets the organisation_id to help to set in the models
   def set_organisation
-    raise "You must set the organisation" if session[:organisation] and session[:organisation].size <= 0
+    raise "You must set the organisation" if session[:organisation].blank?
     OrganisationSession.set session[:organisation]
   end
 

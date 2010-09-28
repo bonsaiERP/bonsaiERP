@@ -9,6 +9,7 @@ class OrganisationsController < ApplicationController
   # GET /organisations
   # GET /organisations.xml
   def index
+    destroy_organisation_session!
     @organisations = Organisation.all
     respond_with(@organisations)
   end
@@ -17,6 +18,7 @@ class OrganisationsController < ApplicationController
   # GET /organisations/1.xml
   def show
     @organisation = Organisation.find(params[:id])
+    set_organisation_session(@organisation)
     respond_with(@organisation)
   end
 

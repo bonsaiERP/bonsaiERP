@@ -14,6 +14,7 @@ class Organisation < ActiveRecord::Base
   has_many :taxes, :class_name => "Tax", :dependent => :destroy
   has_many :links
   has_many :users, :through => :links
+  has_many :units, :dependent => :destroy
 
   # validations
   validates_associated :country
@@ -29,14 +30,14 @@ class Organisation < ActiveRecord::Base
   end
 
   def self.all
-    find(Link.orgs.map(&:organisation_id))
+    Link.orgs
   end
 
 protected
 
   # Creates all registers needed when an organisation is created
   def create_all_records
-    OrganisationSession.set = { :id => id, :name => name }
+    OrganisationSession.set = { :id => self.id, :name => self.name }
     create_taxes
     create_link
     create_units
@@ -45,7 +46,7 @@ protected
   # Adds the default taxes for each country
   def create_taxes
     country.taxes.each do |tax|
-      taxes << Tax.new(tax)
+      Tax.create!(tax)
     end
   end
 
@@ -60,7 +61,7 @@ protected
   def create_units
     path = File.join(Rails.root, "config", "defaults", "units.#{I18n.locale}.yml" )
     YAML::parse(File.open(path) ).transform.each do |vals|
-      unit = Unit.create(vals)
+      unit = Unit.create!(vals)
     end
   end
 

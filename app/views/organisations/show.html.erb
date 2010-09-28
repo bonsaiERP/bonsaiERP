@@ -1,21 +1,49 @@
 <h1><%= link_to @organisation.name, select_organisation_path(@organisation) %></h1>
-<% show_for @organisation do |org| %>
-  <div class="half fl">
-    <%= org.attribute :name %>
-    <%= org.attribute :country %>
-    <%= org.attribute :currency %>
-    <%= org.attribute :address %>
-    <%= org.attribute :address_alt %>
-  </div>
-  <div class="half fl">
-    <%= org.attribute :phone %>
-    <%= org.attribute :phone_alt %>
-    <%= org.attribute :mobile %>
-    <%= org.attribute :email %>
-    <%= org.attribute :website %>
-  </div>
-<% end %>
 
+<div class="half fl">
+  <div>
+  	<label for="">Nombre</label>
+    <%= @organisation.name %>
+  </div>
+  <div>
+  	<label for="">País</label>
+    <%= @organisation.country %>
+  </div>
+  <div>
+  	<label for="">Moneda</label>
+    <%= @organisation.currency %>
+  </div>
+  <div>
+  	<label for="">Dirección</label>
+    <%= @organisation.address %>
+  </div>
+  <div>
+  	<label for="">Dirección alternativa</label>
+    <%= @organisation.address_alt %>
+  </div>
+</div>
+<div class="half fl">
+  <div>
+  	<label for="">Teléfono</label>
+    <%= @organisation.phone %>
+  </div>
+  <div>
+  	<label for="">Teléfono alternativo</label>
+    <%= @organisation.phone_alt %>
+  </div>
+  <div>
+  	<label for="">Móvil</label>
+    <%= @organisation.mobile %>
+  </div>
+  <div>
+  	<label for="">E-mail</label>
+    <%= @organisation.email %>
+  </div>
+  <div>
+  	<label for="">Sitio web</label>
+    <%= @organisation.website %>
+  </div>
+</div>
 
 <div class="half fl">
   <h2>Usuarios</h2>

@@ -21,7 +21,7 @@ feature "Organisation", "In order to create an organisation I must login" do
     fill_in 'organisation[name]', :with => 'Prueba'
     fill_in 'organisation[address]', :with => 'Cerror #51'
     fill_in 'organisation[phone]', :with => 'empresa@mail.com'
-    click_button 'Crear empresa'
+    click_button 'Crear'
 
     page.should have_css('#flashNotice', :text => 'Se ha creado la empresa')
     # Verify Organisation Params
@@ -29,6 +29,9 @@ feature "Organisation", "In order to create an organisation I must login" do
     org.links.size.should == 1
     org.users.size.should == 1
     org.taxes.size.should > 0
+    org.units.size.should > 0
+    #Tax.unscoped.where(:organisation_id => org.id).size.should > 0
+    #Unit.unscoped.where(:organisation_id => org.id).size.should > 0
 
     click_link 'Prueba'
 

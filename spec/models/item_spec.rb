@@ -4,7 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe Item do
   before(:each) do
     OrganisationSession.stubs(:id => @@spec_uuid, :name => 'ecuanime')
-    @params = { :name => 'First item', :unit_id => 1 }
+    @params = { :name => 'First item', :unit_id => 1, :code => 'AU101' }
     Unit.stubs(:find).returns(stub( @@spec_model_methods.merge({ :id => 1 } )) )
   end
 

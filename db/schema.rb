@@ -49,15 +49,18 @@ ActiveRecord::Schema.define(:version => 20100531144645) do
     t.integer  "unit_id"
     t.string   "name"
     t.string   "description"
-    t.boolean  "integer",         :default => false
-    t.boolean  "product",         :default => false
-    t.boolean  "stockable",       :default => false
-    t.boolean  "visible",         :default => true
-    t.integer  "organisation_id",                    :null => false
+    t.string   "code",            :limit => 100
+    t.boolean  "integer",                        :default => false
+    t.boolean  "product",                        :default => false
+    t.boolean  "stockable",                      :default => false
+    t.boolean  "active",                         :default => true
+    t.boolean  "visible",                        :default => true
+    t.integer  "organisation_id",                                   :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "items", ["code"], :name => "index_items_on_code"
   add_index "items", ["organisation_id"], :name => "index_items_on_organisation_id"
   add_index "items", ["unit_id"], :name => "index_items_on_unit_id"
 

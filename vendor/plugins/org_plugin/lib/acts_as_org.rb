@@ -1,3 +1,6 @@
+# encoding: utf-8
+# author: Boris Barroso
+# email: boriscyber@gmail.com
 module Acts
   module Org
 
@@ -16,8 +19,8 @@ module Acts
 
     module InstanceMethods
       def set_organisation_id
-        raise "You have not set OrganisationSession" if OrganisationSession.id.nil?
-        self.organisation_id = OrganisationSession.id
+        raise "You have not set OrganisationSession" if OrganisationSession.organisation_id.nil?
+        self.organisation_id = OrganisationSession.organisation_id
       end
     end
   end

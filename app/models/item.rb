@@ -6,16 +6,15 @@ class Item < ActiveRecord::Base
 
   # belongs_to :itemable, :polymorphic => true
 
-
-  attr_accessible :name, :unit_id, :product, :stockable, :description
+  attr_accessible :name, :unit_id, :code, :product, :stockable, :description
 
   # Validations
-  validates_presence_of :name, :unit_id
+  validates_presence_of :name, :unit_id, :code
   validates_associated :unit
+  validates :code, :uniqueness => { :scope => :organisation_id }
 
-  #scope :all, :conditions => { :organisation_id => OrganisationSession.id, :visible => true }
-
-  default_scope where(:organisation_id => OrganisationSession.id)
+  # scopes
+  default_scope where(:organisation_id => OrganisationSession.organisation_id)
 
   def to_s
     name
