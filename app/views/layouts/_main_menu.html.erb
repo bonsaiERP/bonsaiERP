@@ -1,4 +1,5 @@
 <ul id="main_menu">
+<% if organisation? %>
   <li><%= link_to "Dashboard", dashboard_path %></li>
   <li>
     <a href="javascript:">Inventarios<span class="down">&nbsp;</span></a>
@@ -30,4 +31,5 @@
       <li><%= link_to "in vs. out" %></li>
     </ul>
   </li>
+<% end %>
 </ul>

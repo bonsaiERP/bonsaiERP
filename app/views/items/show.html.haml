@@ -2,24 +2,27 @@
 
 %div{ :class=> "fl half" }
   %p
-  	%label Unidad de medida
+    %label Unidad de medida
     = @item.unit
   %p
-  	%label Nombre
+    %label Nombre
     = @item.name
   %p
-  	%label Es producto
-    %span{ :class => "<%= @item.product %> icon" }
+    %label Es producto
+    %span{ :class => "#{ @item.product } icon" }
 
 %div{ :class => "fl half" }
   %p
     %label Código
     = @item.code 
   %p
-  	%label Se puede almacenar
-    %span{ :class => "icon <%= @item.stockable %>" }
+    %label Se puede almacenar
+    %span{ :class => "icon #{@item.stockable}" }
   %p
-  	%label Descripción
+    %label Etiquetas
+    = @item.tag_list
+  %p
+    %label Descripción
     = @item.description
 
 %div{ :class => "clear" }

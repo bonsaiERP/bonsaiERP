@@ -15,6 +15,7 @@
   %div{ :class => 'inputs half fl'}
     = f.association :unit, :label => "Unidad", :input_html => { 'data-path' => new_unit_path }
     = f.input :active, :label => "Activo", :as => :radio
+    = f.input :tag_list, :label => 'Etiquetas', :hint => 'Escriba las palabras que usara como etiquetas separadas por comas, Ej: grande, costoso'
     = f.input :description, :as => :text, :input_html => {:rows => 5}, :label => "Descripción"
 
   %div{ :class => "clear" }

@@ -1,12 +1,17 @@
+# encoding: utf-8
+# author: Boris Barroso
+# email: boriscyber@gmail.com
 class Item < ActiveRecord::Base
 
   acts_as_org
+  # acts_as_taggable_on :tags
+  acts_as_taggable
 
   belongs_to :unit
 
   # belongs_to :itemable, :polymorphic => true
 
-  attr_accessible :name, :unit_id, :code, :product, :stockable, :description, :price, :discount
+  attr_accessible :name, :unit_id, :code, :product, :stockable, :description, :price, :discount, :tag_list
 
   # Validations
   validates_presence_of :name, :unit_id, :code

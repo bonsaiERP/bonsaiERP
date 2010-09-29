@@ -2,7 +2,10 @@ class ActsAsTaggableOnMigration < ActiveRecord::Migration
   def self.up
     create_table :tags do |t|
       t.string :name
+      t.integer :organisation_id
     end
+
+    add_index :tags, :organisation_id
 
     create_table :taggings do |t|
       t.references :tag
