@@ -33,9 +33,16 @@ label {
   display: block;
   color: #30383e;
 }
-input, select, textarea { font-size: 11.5px; }
+input, select, textarea {
+  font-size: 11.5px;
+  padding: 1px 2px;
+}
 .inline label { display: inline; }
 .optional label.collection_radio { display: inline-table; }
+option.new {
+  color: #30383e;
+  font-weight: bold;
+}
 form div { margin-top: 4px; }
 .ui-state-default {
   border: 1px solid #c5dbec;
@@ -288,6 +295,7 @@ a.list:hover { text-decoration: underline; }
 .boolean { vertical-align: middle; }
 .boolean label { display: inline-block; }
 .boolean input:checkbox { float: left; }
+.numeric input { text-align: right; }
 form abbr { display: none; }
 form.required abbr {
   display: inline;
@@ -349,3 +357,5 @@ span.error { display: block; }
 .clear { clear: both; }
 .true { background: transparent url(images/tick.png) no-repeat center 50%; }
 .false { background: transparent url(images/cross.png) no-repeat center 50%; }
+.hide { display: none; }
+._30 { width: 30%; }

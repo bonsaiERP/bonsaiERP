@@ -49,7 +49,7 @@ require 'rspec/rails'
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
-@@stub_model_methods = {}
+@@stub_model_methods = {:blank? => false, :is_a? => false, :valid? => true, :destroyed? => false, :new_record? => false}
 
 RSpec.configure do |config|
   # == Mock Framework

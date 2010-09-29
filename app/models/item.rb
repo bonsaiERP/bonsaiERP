@@ -6,12 +6,16 @@ class Item < ActiveRecord::Base
 
   # belongs_to :itemable, :polymorphic => true
 
-  attr_accessible :name, :unit_id, :code, :product, :stockable, :description
+  attr_accessible :name, :unit_id, :code, :product, :stockable, :description, :price, :discount
 
   # Validations
   validates_presence_of :name, :unit_id, :code
   validates_associated :unit
   validates :code, :uniqueness => { :scope => :organisation_id }
+  validates :price, :numericality => { :greater_than_or_equal_to => 0, :if => lambda { |i| i.product? } }
+  validates :discount, :numericality => { :greater_than_or_equal_to => 0, :less_than_or_equal_to => 100 }
+
+
 
   # scopes
   default_scope where(:organisation_id => OrganisationSession.organisation_id)

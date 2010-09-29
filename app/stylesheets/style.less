@@ -50,13 +50,17 @@ label{
 }
 input, select, textarea{
   font-size: @font_size;
+  padding: 1px 2px;
 }
-
 .inline label{
   display: inline;
 }
 .optional label.collection_radio{
   display: inline-table;
+}
+option.new{
+  color: @dark;
+  font-weight: bold;
 }
 /*
 input:focus{
@@ -67,13 +71,12 @@ abbr{
   color: @green;
 }
 */
-
-/*********************************/
 form{
   div{
     margin-top: 4px;
   }
 }
+/*********************************/
 
 
 .ui-state-default{ 
@@ -350,6 +353,10 @@ a.show:hover, a.edit:hover, a.destroy:hover, a.list:hover{
     float: left;
   }
 }
+
+.numeric input{ text-align: right; }
+
+
 form abbr{
   display: none;
 }
@@ -434,4 +441,10 @@ span.error{
 }
 .false{
   background: transparent url(images/cross.png) no-repeat center 50%;
+}
+.hide{
+  display: none;
+}
+._30{
+  width: 30%;
 }

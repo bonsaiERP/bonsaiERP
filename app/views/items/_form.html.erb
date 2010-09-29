@@ -2,13 +2,23 @@
   <%= bonsai_form_error(f) %>
 
   <div class="inputs half fl">
-    <%= f.association :unit, :label => "Unidad" %>
     <%= f.input :name, :label => "Nombre" %>
-    <%= f.input :product, :label => "Producto" %>
-    <%= f.input :stockable, :hint => "Indica si el producto puede guardarse en stock" %>
+    <%= f.input :code, :label => 'Código' %>
+    <%= f.input :stockable, :hint => "Indica si el ítem puede guardarse en stock" %>
+    <%= f.input :product, :label => "Comercializable como producto", :as => :radio %>
+    
+      <div class="price_details <%= 'hide' unless f.object.product? %>">
+        <div class="_30 fl">
+          <%= f.input :price, :label => 'Precio', :input_html => { :size => 12 } %>
+        </div>
+        <div class="_30 fl">
+          <%= f.input :discount, :label => 'Descuento (%)', :input_html => { :size => 12 } %>
+        </div>
+      </div>
   </div>
   <div class="inputs half fl">
-    <%= f.input :code, :label => 'Código' %>
+    <%= f.association :unit, :label => "Unidad", :input_html => { 'data-path' => new_unit_path } %>
+    <%= f.input :active, :label => "Activo", :as => :radio %>
     <%= f.input :description, :as => :text, :input_html => {:rows => 5}, :label => "Descripción" %>
   </div>
 
@@ -16,3 +26,27 @@
     <%= f.button :submit, "Salvar" %>
   </div>
 <% end %>
+<script type="text/javascript">
+  $(function() {
+    $('input:radio[name="item[product]"]').click(function() {
+      if( $(this).val() === 'true' ) {
+        $('div.price_details input').attr('disabled', false);
+        $('div.price_details').show('medium');
+      }else {
+        $('div.price_details input').attr('disabled', true);
+        $('div.price_details').hide('medium');
+      }
+    });
+
+    $('select option:first').attr({ 'disabled': true, 'text': 'seleccione..'} );
+    $('select[data-path]').live('change', function() {
+      var opt = $(this).find('option:selected');
+      if(opt.hasClass('new')) {
+        alert('Adicionar');
+      }
+    });
+    $('select[data-path]').prepend('<option class="new" value="" >Adicionar nuevo</option>');
+
+  });
+
+</script>
