@@ -15,6 +15,8 @@ gem 'devise'
 gem 'simple_form', '>=1.2.0'
 gem 'will_paginate', '~> 3.0.pre2'
 gem 'less', ">=1.2.21"
+gem 'haml'
+gem 'acts-as-taggable-on'
 
 if RUBY_VERSION == '1.9.2'
   gem 'ruby-debug19'

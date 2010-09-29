@@ -1,0 +1,27 @@
+%h1 Ver item
+
+%div{ :class=> "fl half" }
+  %p
+  	%label Unidad de medida
+    = @item.unit
+  %p
+  	%label Nombre
+    = @item.name
+  %p
+  	%label Es producto
+    %span{ :class => "<%= @item.product %> icon" }
+
+%div{ :class => "fl half" }
+  %p
+    %label Código
+    = @item.code 
+  %p
+  	%label Se puede almacenar
+    %span{ :class => "icon <%= @item.stockable %>" }
+  %p
+  	%label Descripción
+    = @item.description
+
+%div{ :class => "clear" }
+= link_to "Editar", edit_item_path(@item) , :class => 'edit'
+= link_to "Lista", items_path, :class => 'list'

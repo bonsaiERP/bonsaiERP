@@ -28,6 +28,7 @@ GEM
       activemodel (= 3.0.0)
       activesupport (= 3.0.0)
     activesupport (3.0.0)
+    acts-as-taggable-on (2.0.6)
     arel (1.0.1)
       activesupport (~> 3.0.0)
     bcrypt-ruby (2.1.2)
@@ -53,6 +54,7 @@ GEM
       rails (>= 3.0.0.beta4)
     ffi (0.6.3)
       rake (>= 0.8.7)
+    haml (3.0.19)
     i18n (0.4.1)
     json_pure (1.4.6)
     less (1.2.21)
@@ -127,9 +129,11 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  acts-as-taggable-on
   capybara
   devise
   factory_girl_rails
+  haml
   less (>= 1.2.21)
   mocha
   rails (= 3.0.0)

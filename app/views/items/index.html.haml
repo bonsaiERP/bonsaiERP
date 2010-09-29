@@ -1,0 +1,23 @@
+%h1 Items Haml
+
+= link_to "Nuevo", new_item_path, :class => "new"
+
+%table{ :class=> "decorated" }
+  %tr
+    %th Nombre
+    %th Código
+    %th Unidad
+    %th Descripción
+    %th Producto
+    %th Stockable
+    %th
+
+  - @items.each do |item|
+    %tr
+      %td= link_to item.name, item
+      %td= item.code 
+      %td= item.unit.name 
+      %td= item.description 
+      %td{ :class => item.product }
+      %td{ :class => item.stockable }
+      %td= bonsai_links(item)
