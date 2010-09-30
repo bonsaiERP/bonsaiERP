@@ -12,7 +12,7 @@ feature "Items", "I must be able to create and list items with prices" do
     visit "/items"
     page.should have_css('a.new', :text => "Nuevo")
 
-    click_link "Nuevo"
+    click_link "Nuevo ítem"
 
     fill_in "item[name]", :with => 'Pipocas'
     fill_in "item[code]", :with => 'PIP101'

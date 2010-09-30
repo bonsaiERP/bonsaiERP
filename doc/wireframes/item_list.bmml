@@ -1,4 +1,4 @@
-<mockup version="1.0" skin="sketch" measuredW="1228" measuredH="653" mockupW="1063" mockupH="643">
+<mockup version="1.0" skin="sketch" measuredW="1228" measuredH="653" mockupW="1216" mockupH="643">
   <controls>
     <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="155" y="20" w="870" h="623" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="-1">
       <controlProperties>
@@ -22,7 +22,7 @@
         <borderColor>16777215</borderColor>
       </controlProperties>
     </control>
-    <control controlID="7" controlTypeID="com.balsamiq.mockups::DataGrid" x="214" y="255" w="757" h="283" measuredW="716" measuredH="163" zOrder="4" locked="false" isInGroup="-1">
+    <control controlID="7" controlTypeID="com.balsamiq.mockups::DataGrid" x="214" y="255" w="757" h="283" measuredW="717" measuredH="163" zOrder="4" locked="false" isInGroup="-1">
       <controlProperties>
         <alternateRowColor>15594478</alternateRowColor>
         <bold>false</bold>
@@ -37,21 +37,9 @@
         <vLines>false</vLines>
       </controlProperties>
     </control>
-    <control controlID="9" controlTypeID="com.balsamiq.mockups::LinkBar" x="796" y="553" w="-1" h="-1" measuredW="162" measuredH="25" zOrder="5" locked="false" isInGroup="-1">
+    <control controlID="9" controlTypeID="com.balsamiq.mockups::LinkBar" x="796" y="553" w="-1" h="-1" measuredW="162" measuredH="25" zOrder="6" locked="false" isInGroup="-1">
       <controlProperties>
         <text>%3C%3C%2C%201%2C2%2C3%2C%20%3E%3E</text>
-      </controlProperties>
-    </control>
-    <control controlID="41" controlTypeID="com.balsamiq.mockups::PointyButton" x="225" y="193" w="145" h="-1" measuredW="124" measuredH="32" zOrder="6" locked="false" isInGroup="-1">
-      <controlProperties>
-        <bold>true</bold>
-        <color>15132390</color>
-        <customID>create_new</customID>
-        <direction>center</direction>
-        <href>item_new%26bm%3Bitem_new.bmml%26bm%3Bitem_new.bmml%26bm%3Bitem_new.bmml</href>
-        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2270%2C193%2C215%2C225%22%20href%3D%22item_new.bmml%22%20alt%3D%22item_new%22%20id%3D%2241%22/%3E</map>
-        <size>16</size>
-        <text>%20%20Nuevo%20Item</text>
       </controlProperties>
     </control>
     <control controlID="42" controlTypeID="com.balsamiq.mockups::Image" x="234" y="201" w="16" h="16" measuredW="16" measuredH="16" zOrder="7" locked="false" isInGroup="-1">
@@ -71,7 +59,7 @@
       <controlProperties>
         <color>16777215</color>
         <href>lot_list%26bm%3Blot_list.bmml%26bm%3Blot_list.bmml%26bm%3Blot_list.bmml</href>
-        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2220%2C70%2C96%2C95%22%20href%3D%22lot_list.bmml%22%20alt%3D%22lot_list%22%20id%3D%2244%22/%3E</map>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22173%2C70%2C249%2C95%22%20href%3D%22lot_list.bmml%22%20alt%3D%22lot_list%22%20id%3D%2244%22/%3E</map>
         <text>Inventarios</text>
       </controlProperties>
     </control>
@@ -79,7 +67,7 @@
       <controlProperties>
         <color>16777215</color>
         <href>buy_list%26bm%3Bbuy_list.bmml%26bm%3Bbuy_list.bmml%26bm%3Bbuy_list.bmml</href>
-        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22119%2C70%2C173%2C95%22%20href%3D%22buy_list.bmml%22%20alt%3D%22buy_list%22%20id%3D%2245%22/%3E</map>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22272%2C70%2C326%2C95%22%20href%3D%22buy_list.bmml%22%20alt%3D%22buy_list%22%20id%3D%2245%22/%3E</map>
         <text>Compras</text>
       </controlProperties>
     </control>
@@ -87,7 +75,7 @@
       <controlProperties>
         <color>16777215</color>
         <href>sale_list%26bm%3Bsale_list.bmml%26bm%3Bsale_list.bmml%26bm%3Bsale_list.bmml</href>
-        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22206%2C70%2C252%2C95%22%20href%3D%22sale_list.bmml%22%20alt%3D%22sale_list%22%20id%3D%2246%22/%3E</map>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22359%2C70%2C405%2C95%22%20href%3D%22sale_list.bmml%22%20alt%3D%22sale_list%22%20id%3D%2246%22/%3E</map>
         <text>Ventas</text>
       </controlProperties>
     </control>
@@ -101,7 +89,7 @@
       <controlProperties>
         <color>16777215</color>
         <href>expense_list%26bm%3Bexpense_list.bmml%26bm%3Bexpense_list.bmml%26bm%3Bexpense_list.bmml</href>
-        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22288%2C70%2C334%2C95%22%20href%3D%22expense_list.bmml%22%20alt%3D%22expense_list%22%20id%3D%2248%22/%3E</map>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22441%2C70%2C487%2C95%22%20href%3D%22expense_list.bmml%22%20alt%3D%22expense_list%22%20id%3D%2248%22/%3E</map>
         <text>Gastos</text>
       </controlProperties>
     </control>
@@ -115,7 +103,7 @@
       <controlProperties>
         <color>16777215</color>
         <href>contacts_list%26bm%3Bcontacts_list.bmml%26bm%3Bcontacts_list.bmml%26bm%3Bcontacts_list.bmml</href>
-        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22360%2C70%2C426%2C95%22%20href%3D%22contacts_list.bmml%22%20alt%3D%22contacts_list%22%20id%3D%2250%22/%3E</map>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22513%2C70%2C579%2C95%22%20href%3D%22contacts_list.bmml%22%20alt%3D%22contacts_list%22%20id%3D%2250%22/%3E</map>
         <text>Contactos</text>
       </controlProperties>
     </control>
@@ -129,7 +117,7 @@
       <controlProperties>
         <color>16777215</color>
         <href>reports%26bm%3Breports.bmml%26bm%3Breports.bmml%26bm%3Breports.bmml</href>
-        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22446%2C70%2C506%2C95%22%20href%3D%22reports.bmml%22%20alt%3D%22reports%22%20id%3D%2252%22/%3E</map>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22599%2C70%2C659%2C95%22%20href%3D%22reports.bmml%22%20alt%3D%22reports%22%20id%3D%2252%22/%3E</map>
         <text>Reportes</text>
       </controlProperties>
     </control>
@@ -149,7 +137,7 @@
       <controlProperties>
         <color>16777215</color>
         <href>dashboard%26bm%3Bdashboard.bmml%26bm%3Bdashboard.bmml%26bm%3Bdashboard.bmml</href>
-        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2220%2C7%2C154%2C58%22%20href%3D%22dashboard.bmml%22%20alt%3D%22dashboard%22%20id%3D%2255%22/%3E</map>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22173%2C7%2C307%2C58%22%20href%3D%22dashboard.bmml%22%20alt%3D%22dashboard%22%20id%3D%2255%22/%3E</map>
         <size>32</size>
         <text>Empresa</text>
       </controlProperties>
@@ -207,6 +195,33 @@
           </controlProperties>
         </control>
       </groupChildrenDescriptors>
+    </control>
+    <control controlID="64" controlTypeID="com.balsamiq.mockups::Canvas" x="227" y="195" w="145" h="108" measuredW="100" measuredH="70" zOrder="5" locked="false" isInGroup="-1"/>
+    <control controlID="65" controlTypeID="com.balsamiq.mockups::Label" x="255" y="198" w="-1" h="-1" measuredW="44" measuredH="25" zOrder="27" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>545684</color>
+        <text>Nuevo</text>
+      </controlProperties>
+    </control>
+    <control controlID="66" controlTypeID="com.balsamiq.mockups::List" x="234" y="221" w="130" h="77" measuredW="100" measuredH="126" zOrder="28" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>false</bold>
+        <borderStyle>none</borderStyle>
+        <hrefs>item_new%26bm%3Bitem_new.bmml%26bm%3Bitem_new.bmml%26bm%3Bitem_new.bmml%2Citem_product_new%26bm%3Bitem_product_new.bmml%26bm%3Bitem_product_new.bmml%26bm%3Bitem_product_new.bmml%2Citem_service_new%26bm%3Bitem_service_new.bmml%26bm%3Bitem_service_new.bmml%26bm%3Bitem_service_new.bmml</hrefs>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22232%2C221%2C362%2C242%22%20href%3D%22item_new.bmml%22%20alt%3D%22item_new%22%20id%3D%2266_0%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22232%2C242%2C362%2C263%22%20href%3D%22item_product_new.bmml%22%20alt%3D%22item_product_new%22%20id%3D%2266_1%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22232%2C263%2C362%2C284%22%20href%3D%22item_service_new.bmml%22%20alt%3D%22item_service_new%22%20id%3D%2266_2%22/%3E%0A</map>
+        <text>%5BNuevo%20Item%5D%0A%5BNuevo%20Producto%5D%0A%5BNuevo%20Servicio%5D</text>
+      </controlProperties>
+    </control>
+    <control controlID="67" controlTypeID="com.balsamiq.mockups::StickyNote" x="2" y="231" w="187" h="123" measuredW="109" measuredH="123" zOrder="29" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Menu%20que%20aparece%20cuando%20se%20mueve%20encima</text>
+      </controlProperties>
+    </control>
+    <control controlID="68" controlTypeID="com.balsamiq.mockups::Icon" x="300" y="202" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="30" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>2848996</color>
+        <icon>DownTriangleIcon%7Cxsmall</icon>
+      </controlProperties>
     </control>
   </controls>
 </mockup>

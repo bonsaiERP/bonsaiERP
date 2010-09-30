@@ -6,6 +6,7 @@ Bonsaierp::Application.routes.draw do
   resources :contacts
 
   resources :items
+  #match ':controller/new/:ctype' => 'items#new'
 
   resources :units
 

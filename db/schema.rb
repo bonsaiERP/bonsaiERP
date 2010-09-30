@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100929160843) do
+ActiveRecord::Schema.define(:version => 20100930210039) do
 
   create_table "contacts", :force => true do |t|
     t.string   "name",            :limit => 100
@@ -50,18 +50,19 @@ ActiveRecord::Schema.define(:version => 20100929160843) do
     t.string   "name"
     t.string   "description"
     t.string   "code",            :limit => 100
-    t.boolean  "integer",                                                       :default => false
-    t.boolean  "product",                                                       :default => false
-    t.boolean  "stockable",                                                     :default => false
-    t.boolean  "active",                                                        :default => true
-    t.decimal  "price",                          :precision => 14, :scale => 2
-    t.decimal  "discount",                       :precision => 5,  :scale => 2, :default => 0.0
-    t.string   "quantities"
-    t.boolean  "visible",                                                       :default => true
-    t.integer  "organisation_id",                                                                  :null => false
+    t.boolean  "integer",                        :default => false
+    t.boolean  "stockable",                      :default => false
+    t.boolean  "active",                         :default => true
+    t.decimal  "price"
+    t.string   "discount",                       :default => "0.0"
+    t.boolean  "visible",                        :default => true
+    t.integer  "organisation_id",                                   :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "ctype",           :limit => 20
   end
+
+  add_index "items", ["ctype"], :name => "index_items_on_ctype"
 
   create_table "links", :force => true do |t|
     t.integer  "organisation_id"

@@ -1,8 +1,19 @@
-%h1 Items Haml
+%h1 Items, productos y Servicios
 
-= link_to "Nuevo item", new_item_path, :class => "new"
+%ul{:class => 'menu'}
+  %li
+    %a{ :href => 'javascript:', :class => 'new' } 
+      Nuevo <span class="more"></span>
+    %ul
+      %li
+        = link_to "Nuevo ítem", new_item_path(:ctype => Item::TYPES[0])
+      %li
+        = link_to "Nuevo producto", new_item_path(:ctype => Item::TYPES[1])
+      %li
+        = link_to "Nuevo servicio", new_item_path(:ctype => Item::TYPES[2])
 
-%table{ :class=> "decorated" }
+
+%table{ :class=> "decorated mt10" }
   %tr
     %th Nombre
     %th Código

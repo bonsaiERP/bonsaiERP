@@ -17,8 +17,12 @@ class ItemsController < ApplicationController
   # GET /items/new
   # GET /items/new.xml
   def new
-    @item = Item.new
-    respond_with @item
+    if Item::TYPES.include?( params[:ctype] )
+      @item = Item.new
+      respond_with @item
+    else
+      redirect_to items_path
+    end
   end
 
   # GET /items/1/edit

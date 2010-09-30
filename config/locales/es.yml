@@ -126,6 +126,8 @@ es:
         odd: "debe ser impar"
         even: "debe ser par"
         record_invalid: "registro inválido"
+        # Added for ranges
+        invalid_range_percentage: "El porcentaje en los rangos debe ser menor a 100"
 
         # Append your own errors here or at the model/attributes scope.
 
