@@ -3,7 +3,7 @@
 # email: boriscyber@gmail.com
 require File.dirname(__FILE__) + '/acceptance_helper'
 
-feature "Organisation", "In order to create an organisation I must login" do
+feature "Organisations", "In order to create an organisation I must login" do
 
   background do
     create_countries

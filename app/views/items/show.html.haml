@@ -2,22 +2,29 @@
 
 %div{ :class=> "fl half" }
   %p
-    %label Unidad de medida
-    = @item.unit
-  %p
     %label Nombre
     = @item.name
   %p
+    %label Código
+    = @item.code 
+  %p{ :class => 'stockable' }
+    %label Se puede almacenar
+    %span{ :class => "icon #{@item.stockable}" }
+  %p{ :class => 'product' }
     %label Es producto
     %span{ :class => "#{ @item.product } icon" }
+  - if @item.product
+    %p
+      %label Precio
+      = @item.price
+    %p
+      %label Descuento
+      = @item.discount
 
 %div{ :class => "fl half" }
   %p
-    %label Código
-    = @item.code 
-  %p
-    %label Se puede almacenar
-    %span{ :class => "icon #{@item.stockable}" }
+    %label Unidad de medida
+    = @item.unit
   %p
     %label Etiquetas
     = @item.tag_list
