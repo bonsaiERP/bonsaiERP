@@ -43,4 +43,63 @@
     });
     $('select[data-path]').prepend('<option class="new" value="" >Adicionar nuevo</option>');
 
+    /**
+     * Splits the value for range string and values
+     * @param String
+     * @return Array
+     */
+    function splitAndReturnValues(val) {
+      var val = val.replace(/\s*$/, "");
+      var arr = [];
+      $(val.split(/\s+/)).each(function(i, el) {
+        var tmp = el.split(":");
+        arr[arr.length] = [parseFloat(tmp[0]), parseFloat(tmp[1]) ];
+      });
+      return arr;
+    }
+
+    /**
+     * Creates an HTML table to display ranges
+     * @param Array
+     * @return String
+     */
+    function createDiscountTable(values) {
+      var html = [];
+      $(values).each(function(i, el) {
+        if(values[i + 1]) {
+          txt = el[0] + ' a ' + values[i + 1][0];
+        }else {
+          txt = 'desde ' + el[0] + ' adelante';
+        }
+        html.push(['<tr>', '<td>', txt, '</td><td>', el[1],'</td></tr>']);
+      });
+
+      return '<table class="decorated" id="item_discount_table"><tr><th>Rango</th><th>Porcentaje (%)</th>' + html.join("") + '</table>';
+    }
+
+    function createItemDiscountDiv() {
+      div = document.createElement(div);
+      $(div).attr({'id': 'item_discount_div'});
+      $('#item_discount').after(div);
+      $(div).css({
+        'position': 'absolute', 'width': '300px', 'padding': '5px',
+        'background-color': '#FFF', 'border': '1px solid #DFDFDF'
+      });
+    }
+
+    var reg_range_discount = /^((?-mix:([\d]+(\.[\d]+)?)):(?-mix:([\d]+(\.[\d]+)?))\s+)+((?-mix:([\d]+(\.[\d]+)?)):(?-mix:([\d]+(\.[\d]+)?))\s*)$;
+    // Events for the item discount
+    $('#item_discount').focus(function() {
+      if($('#item_discount_div').length <= 0) {
+        document.createElement
+      }
+      var value = $(this).val()
+      if(reg_range_discount.test(value)) {
+        var table = createDiscountTable(splitAndReturnValues(value) );
+      }
+    });
+    $('#item_discount').blur(function() {
+      $('#item_discount_div').hide();
+    })
+
   });
