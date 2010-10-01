@@ -77,7 +77,7 @@ describe Item do
   it 'should not allow percentages greater than 100' do
     @params[:ctype] = Item::TYPES[1]
     @params[:price] = 25
-    @params[:discount] = "10:5 20:100.01"
+    @params[:discount] = "10:5 20:100.1"
     item = Item.new(@params)
     p item.errors[:discount]
     item.valid?.should == false
@@ -85,14 +85,24 @@ describe Item do
 
   it 'test range regular expression' do
     reg_num = /([\d]+(\.[\d]+)?)/ 
-    reg = /^(#{reg_num}:#{reg_num}\s+)+(#{reg_num}:#{reg_num}\s*)$/
+    reg = Item.reg_discount_range
 
     !!("10:5.5 20:7.5 " =~ reg).should == true
     !!("10.5:5.5 20:7.5" =~ reg).should == true
     !!("10.5:5.5 20:7 " =~ reg).should == true
-    !!("10.5:5.5 20.33:7.11 " =~ reg).should == true
-
-    !!("10.5:5.5 -20.33:7.11 " =~ reg).should == false
+    # Just one decimal point for percentage
+    !!("10.5:5.5 20.33:7.11 " =~ reg).should == false
+    # Just with one decimal percentage and quantity with many
+    !!("10.55:5.5 20.33:7.1 " =~ reg).should == true
+    # negative numbers are not allowed
+    !!("10.5:5.5 -20.33:7.1 " =~ reg).should == false
+    # Single value
+    !!("10.5:5.5 " =~ reg).should == true
+    # Single value
+    !!("10.5:5.5" =~ reg).should == true
+    # empty string
+    !!("" =~ reg).should == false
+    !!(" " =~ reg).should == false
   end
 
 end

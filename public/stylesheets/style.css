@@ -395,7 +395,10 @@ ul.menu li:hover ul {
 .true { background: transparent url(images/tick.png) no-repeat center 50%; }
 .false { background: transparent url(images/cross.png) no-repeat center 50%; }
 .hide { display: none; }
-._30 { width: 30%; }
+.dark { color: #30383e; }
+._30, .w30 { width: 30%; }
+._33, .w33 { width: 33%; }
+.w50 { width: 49%; }
 .mt10 { margin-top: 10px; }
 .mt20 { margin-top: 20px; }
 .mb10, .mb20 { margin-bottom: 20px; }

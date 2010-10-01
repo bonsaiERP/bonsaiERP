@@ -62,7 +62,10 @@ ActiveRecord::Schema.define(:version => 20100930210039) do
     t.string   "ctype",           :limit => 20
   end
 
+  add_index "items", ["code"], :name => "index_items_on_code"
   add_index "items", ["ctype"], :name => "index_items_on_ctype"
+  add_index "items", ["organisation_id"], :name => "index_items_on_organisation_id"
+  add_index "items", ["unit_id"], :name => "index_items_on_unit_id"
 
   create_table "links", :force => true do |t|
     t.integer  "organisation_id"

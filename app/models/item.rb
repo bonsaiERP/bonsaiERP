@@ -41,11 +41,19 @@ class Item < ActiveRecord::Base
     [1, 2].map { |i| TYPES[i] }.include? self.ctype
   end 
 
+  # Returns the recular expression for rang
+  #
+  # # Returns the recular expression for range
+  def self.reg_discount_range
+    reg_num = "[\\d]+(\\.[\\d]+)?"
+    reg_per = "[\\d]+(\\.\\d)?"
+    Regexp.new("^(#{reg_num}:#{reg_per}\\s+)*(#{reg_num}:#{reg_per}\\s*)?$")
+  end
 
 private
   # Validations for discount
   def validate_discount
-    if self.discount =~ /^([+-]?[0-9]+)(\.[0-9]+)?$/
+    if self.discount =~ /^([+-]?[0-9]+)(\.\d)?$/
       validate_discount_number
     else
       validate_discount_range
@@ -62,10 +70,10 @@ private
     end
   end
 
+
   # validates the discount if it is a range
   def validate_discount_range
-    reg_num = /([\d]+(\.[\d]+)?)/
-    if self.discount =~ /^(#{reg_num}:#{reg_num}\s+)+(#{reg_num}:#{reg_num}\s*)$/
+    if self.discount =~ self.class.reg_discount_range and !self.discount.blank?
       validate_discount_range_values
     else
       self.errors.add(:discount, I18n.t("activerecord.errors.messages.invalid") )

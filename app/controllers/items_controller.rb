@@ -18,7 +18,7 @@ class ItemsController < ApplicationController
   # GET /items/new.xml
   def new
     if Item::TYPES.include?( params[:ctype] )
-      @item = Item.new
+      @item = Item.new(:ctype => params[:ctype])
       respond_with @item
     else
       redirect_to items_path
