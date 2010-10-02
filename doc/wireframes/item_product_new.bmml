@@ -76,7 +76,7 @@
         <text>Datos%20generales</text>
       </controlProperties>
     </control>
-    <control controlID="13" controlTypeID="com.balsamiq.mockups::PointyButton" x="523" y="586" w="113" h="-1" measuredW="76" measuredH="35" zOrder="13" locked="false" isInGroup="-1">
+    <control controlID="13" controlTypeID="com.balsamiq.mockups::PointyButton" x="523" y="599" w="113" h="-1" measuredW="76" measuredH="35" zOrder="13" locked="false" isInGroup="-1">
       <controlProperties>
         <color>2848996</color>
         <direction>center</direction>
@@ -84,12 +84,12 @@
         <text>Salvar</text>
       </controlProperties>
     </control>
-    <control controlID="14" controlTypeID="com.balsamiq.mockups::Label" x="603" y="412" w="-1" h="-1" measuredW="74" measuredH="25" zOrder="14" locked="false" isInGroup="-1">
+    <control controlID="14" controlTypeID="com.balsamiq.mockups::Label" x="603" y="467" w="-1" h="-1" measuredW="74" measuredH="25" zOrder="14" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Descripci%F3n</text>
       </controlProperties>
     </control>
-    <control controlID="15" controlTypeID="com.balsamiq.mockups::TextArea" x="601" y="433" w="307" h="98" measuredW="200" measuredH="140" zOrder="15" locked="false" isInGroup="-1">
+    <control controlID="15" controlTypeID="com.balsamiq.mockups::TextArea" x="601" y="488" w="307" h="98" measuredW="200" measuredH="140" zOrder="15" locked="false" isInGroup="-1">
       <controlProperties>
         <bold>false</bold>
         <text>Este%20producto%20tiene%20tratamiento%20especial</text>
@@ -314,6 +314,18 @@
           </controlProperties>
         </control>
       </groupChildrenDescriptors>
+    </control>
+    <control controlID="55" controlTypeID="com.balsamiq.mockups::TextInput" x="603" y="431" w="297" h="-1" measuredW="220" measuredH="29" zOrder="45" locked="false" isInGroup="-1">
+      <controlProperties>
+        <align>left</align>
+        <bold>false</bold>
+        <text>parlante%2C%20multimedia%2C%20computadora</text>
+      </controlProperties>
+    </control>
+    <control controlID="56" controlTypeID="com.balsamiq.mockups::Label" x="605" y="408" w="-1" h="-1" measuredW="63" measuredH="25" zOrder="46" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Etiquetas</text>
+      </controlProperties>
     </control>
   </controls>
 </mockup>

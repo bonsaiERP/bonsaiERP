@@ -196,20 +196,20 @@
         </control>
       </groupChildrenDescriptors>
     </control>
-    <control controlID="64" controlTypeID="com.balsamiq.mockups::Canvas" x="227" y="195" w="145" h="108" measuredW="100" measuredH="70" zOrder="5" locked="false" isInGroup="-1"/>
+    <control controlID="64" controlTypeID="com.balsamiq.mockups::Canvas" x="227" y="195" w="164" h="128" measuredW="100" measuredH="70" zOrder="5" locked="false" isInGroup="-1"/>
     <control controlID="65" controlTypeID="com.balsamiq.mockups::Label" x="255" y="198" w="-1" h="-1" measuredW="44" measuredH="25" zOrder="27" locked="false" isInGroup="-1">
       <controlProperties>
         <color>545684</color>
         <text>Nuevo</text>
       </controlProperties>
     </control>
-    <control controlID="66" controlTypeID="com.balsamiq.mockups::List" x="234" y="221" w="130" h="77" measuredW="100" measuredH="126" zOrder="28" locked="false" isInGroup="-1">
+    <control controlID="66" controlTypeID="com.balsamiq.mockups::List" x="234" y="221" w="148" h="94" measuredW="100" measuredH="126" zOrder="28" locked="false" isInGroup="-1">
       <controlProperties>
         <bold>false</bold>
         <borderStyle>none</borderStyle>
-        <hrefs>item_new%26bm%3Bitem_new.bmml%26bm%3Bitem_new.bmml%26bm%3Bitem_new.bmml%2Citem_product_new%26bm%3Bitem_product_new.bmml%26bm%3Bitem_product_new.bmml%26bm%3Bitem_product_new.bmml%2Citem_service_new%26bm%3Bitem_service_new.bmml%26bm%3Bitem_service_new.bmml%26bm%3Bitem_service_new.bmml</hrefs>
-        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22232%2C221%2C362%2C242%22%20href%3D%22item_new.bmml%22%20alt%3D%22item_new%22%20id%3D%2266_0%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22232%2C242%2C362%2C263%22%20href%3D%22item_product_new.bmml%22%20alt%3D%22item_product_new%22%20id%3D%2266_1%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22232%2C263%2C362%2C284%22%20href%3D%22item_service_new.bmml%22%20alt%3D%22item_service_new%22%20id%3D%2266_2%22/%3E%0A</map>
-        <text>%5BNuevo%20Item%5D%0A%5BNuevo%20Producto%5D%0A%5BNuevo%20Servicio%5D</text>
+        <hrefs>item_new%26bm%3Bitem_new.bmml%26bm%3Bitem_new.bmml%26bm%3Bitem_new.bmml%2C%2Citem_product_new%26bm%3Bitem_product_new.bmml%26bm%3Bitem_product_new.bmml%26bm%3Bitem_product_new.bmml%2Citem_service_new%26bm%3Bitem_service_new.bmml%26bm%3Bitem_service_new.bmml%26bm%3Bitem_service_new.bmml</hrefs>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22232%2C221%2C380%2C242%22%20href%3D%22item_new.bmml%22%20alt%3D%22item_new%22%20id%3D%2266_0%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22232%2C263%2C380%2C284%22%20href%3D%22item_product_new.bmml%22%20alt%3D%22item_product_new%22%20id%3D%2266_1%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22232%2C284%2C380%2C305%22%20href%3D%22item_service_new.bmml%22%20alt%3D%22item_service_new%22%20id%3D%2266_2%22/%3E%0A</map>
+        <text>%5BNuevo%20item%5D%0A%5BNuevo%20item%20de%20gasto%5D%0A%5BNuevo%20producto%5D%0A%5BNuevo%20servicio%5D</text>
       </controlProperties>
     </control>
     <control controlID="67" controlTypeID="com.balsamiq.mockups::StickyNote" x="2" y="231" w="187" h="123" measuredW="109" measuredH="123" zOrder="29" locked="false" isInGroup="-1">
