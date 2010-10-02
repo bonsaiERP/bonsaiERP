@@ -1,0 +1,46 @@
+%div{ :class => "fl half" }
+  %p
+    %label Nombre
+    = @contact.name 
+  
+  %p
+    %label Teléfono
+    = @contact.phone 
+  
+  %p
+    %label Móvil
+    = @contact.mobile 
+  
+  %p
+    %label Tipo
+    = @contact.ctype 
+  
+  %p
+    %label E-mail
+    = @contact.email 
+  
+  %p
+    %label NIT
+    = @contact.tax_number 
+  
+
+%div{ :class => "fl half" }
+  %p
+    %label Dirección
+    = @contact.address 
+  
+  %p
+    %label Dirección alternativa
+    = @contact.address_alt 
+  
+  %p
+    %label Información adicional
+    = @contact.aditional_info 
+  
+
+
+%div{ :style => "clear:both" }
+
+%p
+  = link_to 'Editar', edit_contact_path(@contact), :class => 'edit' 
+  = link_to 'Lista', contacts_path, :class => 'list' 

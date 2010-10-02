@@ -1,0 +1,21 @@
+= simple_form_for(@contact) do |f|
+  = bonsai_form_error(f)
+
+  %div{ :class => "inputs fl half" }
+    = f.input :name, :label => "Nombre"
+    = f.input :phone, :label => "Teléfono"
+    = f.input :mobile, :label => "Móvil"
+    = f.input :email, :lanel => "Email"
+    = f.input :tax_number, :label => "NIT"
+    %div{ :class => "input" }
+      %label Tipo
+      - Contact::TYPES.each do |v|
+        %label{ :for => "contact_ctype_#{v}"}= "#{ f.radio_button(:ctype, v) } #{v}".html_safe
+
+  %div{ :class => "inputs fl half"}
+    = f.input :address, :as => :text, :input_html => {:rows => 5}, :label => "Dirección" 
+    = f.input :address_alt, :as => :text, :input_html => {:rows => 5}, :label => "Dirección alternativa" 
+    = f.input :aditional_info, :as => :text, :input_html => {:rows => 5}, :label => "Información adicional" 
+
+  %div{ :class => "actions" }
+    = f.submit "Salvar"
