@@ -1,0 +1,19 @@
+%h1= plural_table_name
+
+%p= link_to "Nuevo <%= singular_name %>", new_<%= singular_name %>_path, :class => 'new'
+
+%table{ :class => 'decorated nwl' }
+  %thead
+    %tr
+<% for attribute in attributes -%>
+      %th= <%= class_name %>.human_attribute_name :<%= attribute.name %>
+<% end -%>
+      %th
+  
+  %tbody
+    - for <%= singular_name %> in @<%= plural_name %>
+      %tr{ :class => cycle(:odd, :even) }
+<% for attribute in attributes -%>
+        %td= <%= singular_name %>.<%= attribute.name %>
+<% end -%>
+        %td.action= bonsai_links(<%= singular_name %>)

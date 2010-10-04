@@ -1,0 +1,5 @@
+%h1= Editar <%= singular_name %>
+= render :partial => 'form'
+%p
+  = link_to t('back'), <%= plural_name %>_path
+  = link_to t('show'), @<%= singular_name %>

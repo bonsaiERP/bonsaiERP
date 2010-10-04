@@ -1,0 +1,8 @@
+= simple_form_for(@<%= singular_name %>) do |f|
+  = bonsai_error(f)
+<% for attribute in attributes -%>
+  = f.<%= attribute.reference? ? :association : :input %> :<%= attribute.name %>
+<% end -%>
+
+  .actions
+    = f.submit 'Salvar'
