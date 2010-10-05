@@ -3,7 +3,8 @@
 # email: boriscyber@gmail.com
 class Item < ActiveRecord::Base
 
-  TYPES = ['Item', 'Product', 'Service']
+  before_save :set_stockable
+  TYPES = ['Item', 'Expense item', 'Product', 'Service']
 
   acts_as_org
   # acts_as_taggable_on :tags
@@ -21,7 +22,6 @@ class Item < ActiveRecord::Base
   validates :ctype, :presence => true, :inclusion => { :in => TYPES }
   validates :code, :uniqueness => { :scope => :organisation_id }
   validates :price, :numericality => { :greater_than_or_equal_to => 0, :if => lambda { |i| i.product? } }
-  #validates :discount, :numericality => { :greater_than_or_equal_to => 0, :less_than_or_equal_to => 100 }
   validate :validate_discount
 
 
@@ -38,7 +38,7 @@ class Item < ActiveRecord::Base
 
   # validation for Services or products
   def product?
-    [1, 2].map { |i| TYPES[i] }.include? self.ctype
+    [2, 3].map { |i| TYPES[i] }.include? self.ctype
   end 
 
   # Returns the recular expression for rang
@@ -48,6 +48,11 @@ class Item < ActiveRecord::Base
     reg_num = "[\\d]+(\\.[\\d]+)?"
     reg_per = "[\\d]+(\\.\\d)?"
     Regexp.new("^(#{reg_num}:#{reg_per}\\s+)*(#{reg_num}:#{reg_per}\\s*)?$")
+  end
+
+  # creates an array with values  [quantity, percentage]
+  def discount_values
+
   end
 
 private
@@ -92,4 +97,7 @@ private
     end
   end
 
+  def set_stockable
+    self.stockable = ( self.ctype != TYPES.last )
+  end
 end

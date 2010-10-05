@@ -20,7 +20,7 @@ class Unit < ActiveRecord::Base
   default_scope where(:organisation_id => OrganisationSession.organisation_id)
 
   def to_s
-    %Q(#{name} (#{symbol}))
+    "#{name} (#{symbol})"
   end
 
   def integer?

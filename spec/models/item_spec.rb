@@ -35,12 +35,21 @@ describe Item do
     item.discount.to_f.should == 0
   end
 
-  it 'price should be greater or equal to 0' do
+  it 'should assing if the product is stockable' do
+    item = Item.create(@params)
+    item.stockable.should == true
+    item.price = 20
+    item.ctype = Item::TYPES.last
+    item.save
+    item.stockable.should == false
+  end
+
+  it 'price should be greater or equal to 2' do
     @params[:price] = -0.1
-    @params[:ctype] = Item::TYPES[1]
+    @params[:ctype] = Item::TYPES[2]
     item = Item.new(@params)
     item.valid?.should == false
-    item.ctype = Item::TYPES[2]
+    item.ctype = Item::TYPES[3]
     item.valid?.should == false
   end
 
@@ -59,7 +68,7 @@ describe Item do
   end
 
   it 'should be valid with ranges' do
-    @params[:ctype] = Item::TYPES[1]
+    @params[:ctype] = Item::TYPES[2]
     @params[:price] = 25
     @params[:discount] = "10:5 20:5.5"
     item = Item.new(@params)
@@ -67,7 +76,7 @@ describe Item do
   end
 
   it 'should not allow bad discount ranges' do
-    @params[:ctype] = Item::TYPES[1]
+    @params[:ctype] = Item::TYPES[2]
     @params[:price] = 25
     @params[:discount] = "10:5 20:"
     item = Item.new(@params)
@@ -75,7 +84,7 @@ describe Item do
   end
 
   it 'should not allow percentages greater than 100' do
-    @params[:ctype] = Item::TYPES[1]
+    @params[:ctype] = Item::TYPES[2]
     @params[:price] = 25
     @params[:discount] = "10:5 20:100.1"
     item = Item.new(@params)

@@ -1,7 +1,8 @@
-%h1 Editar item
-
-= render :partial => 'form'
+%h1= "Editar item_type"
 
 %p
   = link_to "Ver", @item, :class => 'show'
   = link_to "Lista", items_path, :class => 'list'
+
+= render :partial => 'form'
+

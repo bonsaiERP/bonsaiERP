@@ -1,6 +1,6 @@
-%h1 Nuevo item
-
-= render :partial => 'form'
+%h1= "Nuevo #{item_type}"
 
 %p
   = link_to "Lista", items_path, :class => 'list'
+= render :partial => 'form'
+

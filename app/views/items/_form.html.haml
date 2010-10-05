@@ -1,10 +1,10 @@
 = simple_form_for(@item) do |f|
   = bonsai_form_error(f)
+  = f.input :ctype
 
   %div{ :class => 'inputs half fl'}
     = f.input :name, :label => 'Nombre'
     = f.input :code, :label => 'Código'
-    = f.object.ctype
     - if f.object.product?
       = f.input :price, :label => 'Precio'
       = f.input :discount, :label => 'Descuento (%)'
@@ -18,127 +18,13 @@
   %div{ :class => "clear" }
   
   = f.submit "Salvar"
+= javascript_include_tag 'item'
 
 :javascript
   
   $(function() {
-    $('input:radio[name="item[product]"]').click(function() {
-      if( $(this).val() === 'true' ) {
-        $('div.price_details input').attr('disabled', false);
-        $('div.price_details').show('medium');
-      }else {
-        $('div.price_details input').attr('disabled', true);
-        $('div.price_details').hide('medium');
-      }
-    });
 
-    $('select option:first').attr({ 'disabled': true, 'text': 'seleccione..'} );
-    $('select[data-path]').live('change', function() {
-      var opt = $(this).find('option:selected');
-      if(opt.hasClass('new')) {
-        alert('Adicionar');
-      }
-    });
     $('select[data-path]').prepend('<option class="new" value="" >Adicionar nuevo</option>');
-
-    /**
-    * Class that creates the table of ranges
-    */
-    DiscountRange = function(field_id) {
-      this.initialize(field_id);
-    }
-    DiscountRange.prototype = {
-      'reg_range_discount': /^([\d]+(\.[\d]+)?:[\d]+(\.\d)?\s+)*([\d]+(\.[\d]+)?:[\d]+(\.\d)?\s*)?$/,
-      /**
-      * Constructor function
-      * @param String : Id of the field
-      */
-      'initialize': function(field_id) {
-        var self = this;
-        self['field_id'] = field_id;
-        self.setEvents();
-      },
-      // Events for the field
-      'setEvents': function() {
-        var self = this;
-        // focus
-        $('#' + this.field_id).focus(function() {
-          if($('#' + self.field_id + '_div').length <= 0) {
-            self.createDiv();
-          }
-          var value = $(this).val();
-          $('#' + self.field_id + '_div').show();
-        });
-
-        // blur
-        $('#' + self.field_id).blur(function() {
-          $('#' + self.field_id + '_div').hide();
-        });
-
-        // keyup
-        $('#' + self.field_id).keyup(function() {
-          $('#' + self.field_id + '_table').replaceWith(self.createTable() );
-        });
-      },
-      /**
-       * Splits the value for range string and values
-       * @param String
-       * @return Array
-       */
-      'splitValues': function(val) {
-        var val = val.replace(/\s*$/, "");
-        var arr = [];
-        var self = this;
-        if( self.reg_range_discount.test( val ) && !( /^\s*$/.test( val ) ) ) {
-          $(val.split(/\s+/)).each(function(i, el) {
-            var tmp = el.split(":");
-            arr[arr.length] = [parseFloat(tmp[0]), parseFloat(tmp[1]) ];
-          });
-        }
-        return arr;
-      },
-      /**
-       * Creates an HTML table to display ranges
-       * @param Array
-       * @return String
-       */
-      'createTable': function() {
-        var html = '';
-        var self = this;
-        var values = self.splitValues( $('#' + self.field_id ).val() );
-        var create = false;
-
-        $(values).each(function(i, el) {
-          if(values[i + 1]) {
-            txt = el[0] + ' o menor que ' + values[i + 1][0];
-          }else {
-            txt = 'mayores o igual a ' + el[0];
-          }
-          html += '<tr><td>' + txt + '</td><td>' + el[1] + '</td></tr>';
-        });
-
-        return '<table class="decorated" id="' + self.field_id + '_table"><tr><th>Rango</th><th>Porcentaje (%)</th>' + html + '</table>';
-      },
-      /**
-      * Creates the div for the field
-      */
-      'createDiv': function() {
-        var div = document.createElement('div');
-        var self = this;
-        $(div).attr({'id': self.field_id + '_div'});
-
-        $('#' + self.field_id).after(div);
-        $(div).css({
-          'position': 'absolute', 'width': '300px', 'padding': '5px', 'margin-top': '-1px',
-          'background-color': '#FFF', 'border': '1px solid #DFDFDF'
-        });
-
-        var html = '<p class="hint">Ingrese un número o ingrese rangos Ej.:<br />10:5 20:7 40:7.5</p><h3 class="dark">Rangos</h3>';
-        html += self.createTable();
-        $(div).html( html );
-        $('#' + self.field_id).after(div);
-      }
-    }
 
     var item_discount_div = new DiscountRange('item_discount');
   });

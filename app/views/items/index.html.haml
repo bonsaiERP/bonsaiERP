@@ -1,17 +1,6 @@
-%h1 Items, productos y Servicios
+%h1= item_title
 
-%ul{:class => 'menu'}
-  %li
-    %a{ :href => 'javascript:', :class => 'new' } 
-      Nuevo <span class="more"></span>
-    %ul
-      %li
-        = link_to "Nuevo ítem", new_item_path(:ctype => Item::TYPES[0])
-      %li
-        = link_to "Nuevo producto", new_item_path(:ctype => Item::TYPES[1])
-      %li
-        = link_to "Nuevo servicio", new_item_path(:ctype => Item::TYPES[2])
-
+= link_new_item
 
 %table{ :class=> "decorated mt10" }
   %tr

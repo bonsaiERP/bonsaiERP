@@ -12,8 +12,8 @@
     %span{ :class => "icon #{@item.stockable}" }
   %p{ :class => 'product' }
     %label Es producto
-    %span{ :class => "#{ @item.product } icon" }
-  - if @item.product
+    %span{ :class => "#{ @item.product? } icon" }
+  - if @item.product?
     %p
       %label Precio
       = @item.price
