@@ -72,7 +72,7 @@ DiscountRange.prototype = {
     var self = this;
     var create = false;
 
-    $(values).map(function(i, el) {
+    $(values).each(function(i, el) {
       if(values[i + 1]) {
         txt = el[0] + ' o menor que ' + values[i + 1][0];
       }else {

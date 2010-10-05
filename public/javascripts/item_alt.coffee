@@ -1,0 +1,70 @@
+class DiscountRange
+  # Constructor
+  # @param String # Id of the field
+  constructor: (field_id)->
+    self = this
+    self['field_id'] = field_id
+    self.setEvents()
+  # regular expression to test
+  reg_range_discount: /^([\d]+(\.[\d]+)?:[\d]+(\.\d)?\s+)*([\d]+(\.[\d]+)?:[\d]+(\.\d)?\s*)?$/
+  # setEvents
+  setEvents: ->
+    self = this
+    # focus
+    $('#' + self.field_id ).focus(->
+      if $('#' + self.field_id + '_div').length <= 0
+        self.createDiv()
+      $('#' + self.field_id + '_div').show()
+    )
+    # blur
+    $('#' + self.field_id ).blur(->
+      $('#' + self.field_id + '_div').hide()
+    )
+    # keyup
+    $('#' + self.field_id ).keyup(->
+      self.setTable()
+    )
+  # Sets the table
+  setTable: ->
+    self = this
+    values = self.splitValues( $('#' + self.field_id).val() )
+    $('#' + self.field_id + '_table').replaceWith( self.createTable(values))
+  # Split the values
+  # @param String
+  # @return Array
+  splitValues: (val)->
+    self = this
+    val = val.replace(/\s*$/, '')
+    if( self.reg_range_discount.test( val ) && ! ( /^\s*$/.test(val) ) )
+      $(val.split(" ")).map( (i, el)->
+        [$(el.split(":")).map( (i, elem)->
+          parseFloat(elem)
+        ).toArray()]
+      ).toArray()
+  # Create table
+  # @param Array values
+  createTable: (values)->
+    html = ''
+    self = this
+    $(values).each((i, el)->
+      if( values[i + 1])
+        txt = el[0] + ' o menor que ' + values[i + 1][0]
+      else
+        txt = 'mayores o igual a ' + el[0]
+      html += '<tr><td>' + txt + '</td><td>' + el[1] + ' %</td></tr>'
+    )
+    '<table class="decorated" id="' + self.field_id + '_table"><tr><th>Rango</th><th>Porcentaje (%)</th>' + html + '</table>'
+  # creates a Div with the table
+  createDiv: ->
+    self = this
+    values = self.splitValues( $('#' + self.field_id).val() )
+    html = ['<p class="hint">Ingrese rangos con formato (cantidad:porcentaje) Ej.: 10:5 20:7 40:7.5<br/>',
+        'o oferta única Ej.: 0:3<br />', 'Nota: el porcetaje acepta solo números con 1 decimal</p>',
+        '<h3 class="dark">Rangos</h3>', self.createTable( values )
+    ].join("")
+    $('<div \>').attr({'id': self.field_id + '_div'}).css({
+      'position': 'absolute', 'width': '300px', 'padding': '5px', 'margin-top': '-1px',
+      'background-color': '#FFF', 'border': '1px solid #DFDFDF'
+    }).html( html ).insertAfter('#' + self.field_id)
+
+window.DiscountRange = DiscountRange
