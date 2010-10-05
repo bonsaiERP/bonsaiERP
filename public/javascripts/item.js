@@ -43,8 +43,7 @@ DiscountRange.prototype = {
   'setTable': function() {
     var self = this;
     var values = self.splitValues( $('#' + self.field_id ).val() );
-    if(values.length > 0)
-      $('#' + self.field_id + '_table').replaceWith(self.createTable(values) );
+    $('#' + self.field_id + '_table').replaceWith(self.createTable(values) );
   },
   /**
    * Splits the value for range string and values
@@ -73,13 +72,13 @@ DiscountRange.prototype = {
     var self = this;
     var create = false;
 
-    $(values).each(function(i, el) {
+    $(values).map(function(i, el) {
       if(values[i + 1]) {
         txt = el[0] + ' o menor que ' + values[i + 1][0];
       }else {
         txt = 'mayores o igual a ' + el[0];
       }
-      html += '<tr><td>' + txt + '</td><td>' + el[1] + '</td></tr>';
+      html += '<tr><td>' + txt + '</td><td>' + el[1] + ' %</td></tr>';
     });
 
     return '<table class="decorated" id="' + self.field_id + '_table"><tr><th>Rango</th><th>Porcentaje (%)</th>' + html + '</table>';
@@ -88,10 +87,12 @@ DiscountRange.prototype = {
   * Creates the div for the field
   */
   'createDiv': function() {
-    var div = document.createElement('div');
     var self = this;
-    var html = '<p class="hint">Ingrese rangos Ej.: 10:5 20:7 40:7.5 <br /> o oferta única Ej.: 0:3</p><h3 class="dark">Rangos</h3>';
-    html += self.createTable();
+    var div = document.createElement('div');
+    var values = self.splitValues( $('#' + self.field_id ).val() );
+    var html = ['<p class="hint">Ingrese rangos con formato (cantidad:porcentaje) Ej.: 10:5 20:7 40:7.5<br/>', 
+        'o oferta única Ej.: 0:3<br />', 'Nota: el porcetaje acepta solo números con 1 decimal</p>',
+        '<h3 class="dark">Rangos</h3>', self.createTable( values ) ].join("");
     $(div).attr({'id': self.field_id + '_div'})
     .css({
       'position': 'absolute', 'width': '300px', 'padding': '5px', 'margin-top': '-1px',

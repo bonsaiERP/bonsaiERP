@@ -1,17 +1,18 @@
 = simple_form_for(@item) do |f|
   = bonsai_form_error(f)
-  = f.input :ctype
+  = f.input :ctype, :as => :hidden
 
   %div{ :class => 'inputs half fl'}
     = f.input :name, :label => 'Nombre'
     = f.input :code, :label => 'Código'
+    = f.association :unit, :label => "Unidad", :input_html => { 'data-path' => new_unit_path }
+    = f.input :active, :label => "Activo", :as => :radio
+
+  %div{ :class => 'inputs half fl'}
     - if f.object.product?
       = f.input :price, :label => 'Precio'
       = f.input :discount, :label => 'Descuento (%)'
 
-  %div{ :class => 'inputs half fl'}
-    = f.association :unit, :label => "Unidad", :input_html => { 'data-path' => new_unit_path }
-    = f.input :active, :label => "Activo", :as => :radio
     = f.input :tag_list, :label => 'Etiquetas', :hint => 'Escriba las palabras que usara como etiquetas separadas por comas, Ej: grande, costoso'
     = f.input :description, :as => :text, :input_html => {:rows => 5}, :label => "Descripción"
 

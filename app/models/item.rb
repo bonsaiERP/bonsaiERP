@@ -52,7 +52,8 @@ class Item < ActiveRecord::Base
 
   # creates an array with values  [quantity, percentage]
   def discount_values
-
+    return [] if self.discount.blank?
+    self.discount.squish.split(" ").map { |v| v.split(":").map(&:to_f) }
   end
 
 private
@@ -89,7 +90,7 @@ private
   # [number]:[percentage]
   # A translation for activerecord.errors.messages.invalid_range_percentage must be added
   def validate_discount_range_values
-    self.discount.squish.split(" ").map { |v| v.split(":").map(&:to_f) }.each do |val, per|
+    discount_values.each do |val, per|
       if per > 100
         self.errors.add(:discount, I18n.t("activerecord.errors.messages.invalid_range_percentage"))
         break

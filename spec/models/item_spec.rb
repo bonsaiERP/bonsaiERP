@@ -75,6 +75,14 @@ describe Item do
     item.valid?.should == true
   end
 
+  it 'shoul show a list of values for discount' do
+    @params[:ctype] = Item::TYPES[2]
+    @params[:price] = 25
+    @params[:discount] = "10:5 20:5.5"
+    item = Item.new(@params)
+    item.discount_values.should == [[10.0, 5.0], [20.0, 5.5]]
+  end
+
   it 'should not allow bad discount ranges' do
     @params[:ctype] = Item::TYPES[2]
     @params[:price] = 25
