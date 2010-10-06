@@ -27,7 +27,7 @@
     });
     $('#' + self.field_id).blur(function() {
       $('#' + self.field_id + '_div').hide();
-      return self.validateSecuence();
+      return self.validateSecuence(self.splitValues($('#' + self.field_id).val()));
     });
     return $('#' + self.field_id).keyup(function() {
       return self.setTable();
@@ -82,7 +82,23 @@
       'border': '1px solid #DFDFDF'
     }).html(html).insertAfter('#' + self.field_id);
   };
-  DiscountRange.prototype.validateSecuence = function() {};
+  DiscountRange.prototype.validateSecuence = function(values) {
+    var curr_per, curr_val, first;
+    console.log(values);
+    curr_val = (curr_per = 0);
+    first = true;
+    return $(values).each(function(i, el) {
+      if (!first) {
+        if ((el[0] <= curr_val) || (el[1] <= curr_per)) {
+          alert('La secuencia de un rango de descuento debe ser de menor a mayor Ej.: 10:2 15:2.5');
+          return false;
+        }
+      }
+      first = false;
+      curr_val = el[0];
+      return (curr_per = el[1]);
+    });
+  };
   window.DiscountRange = DiscountRange;
   DiscountRangeShow = function(field_id) {
     var self;

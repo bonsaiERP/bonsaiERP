@@ -19,7 +19,7 @@ class DiscountRange
     # blur
     $('#' + self.field_id ).blur(->
       $('#' + self.field_id + '_div').hide()
-      self.validateSecuence()
+      self.validateSecuence( self.splitValues( $('#' + self.field_id ).val() ) )
     )
     # keyup
     $('#' + self.field_id ).keyup(->
@@ -68,8 +68,19 @@ class DiscountRange
       'background-color': '#FFF', 'border': '1px solid #DFDFDF'
     }).html( html ).insertAfter('#' + self.field_id)
   # Validates that the secuence goes from minor to greater
-  validateSecuence: ->
-    #values = self.splitValues()
+  validateSecuence: (values)->
+    console.log(values)
+    curr_val = curr_per = 0
+    first = true
+    $(values).each( (i, el)->
+      if( !first )
+        if el[0] <= curr_val or el[1] <= curr_per
+          alert('La secuencia de un rango de descuento debe ser de menor a mayor Ej.: 10:2 15:2.5')
+          return false;
+      first = false
+      curr_val = el[0]
+      curr_per = el[1]
+    )
 
 
 window.DiscountRange = DiscountRange
