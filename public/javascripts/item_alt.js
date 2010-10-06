@@ -1,5 +1,13 @@
 (function() {
-  var DiscountRange;
+  var DiscountRange, DiscountRangeShow;
+  var __extends = function(child, parent) {
+    var ctor = function(){};
+    ctor.prototype = parent.prototype;
+    child.prototype = new ctor();
+    child.prototype.constructor = child;
+    if (typeof parent.extended === "function") parent.extended(child);
+    child.__super__ = parent.prototype;
+  };
   DiscountRange = function(field_id) {
     var self;
     self = this;
@@ -18,7 +26,8 @@
       return $('#' + self.field_id + '_div').show();
     });
     $('#' + self.field_id).blur(function() {
-      return $('#' + self.field_id + '_div').hide();
+      $('#' + self.field_id + '_div').hide();
+      return self.validateSecuence();
     });
     return $('#' + self.field_id).keyup(function() {
       return self.setTable();
@@ -73,5 +82,19 @@
       'border': '1px solid #DFDFDF'
     }).html(html).insertAfter('#' + self.field_id);
   };
+  DiscountRange.prototype.validateSecuence = function() {};
   window.DiscountRange = DiscountRange;
+  DiscountRangeShow = function(field_id) {
+    var self;
+    self = this;
+    self['field_id'] = field_id;
+    return this;
+  };
+  __extends(DiscountRangeShow, DiscountRange);
+  DiscountRangeShow.prototype.tableForField = function(value) {
+    var self;
+    self = this;
+    return $(self.createTable(self.splitValues(value))).insertAfter('#' + self.field_id);
+  };
+  window.DiscountRangeShow = DiscountRangeShow;
 })();

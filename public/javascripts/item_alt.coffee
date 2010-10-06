@@ -19,6 +19,7 @@ class DiscountRange
     # blur
     $('#' + self.field_id ).blur(->
       $('#' + self.field_id + '_div').hide()
+      self.validateSecuence()
     )
     # keyup
     $('#' + self.field_id ).keyup(->
@@ -66,5 +67,21 @@ class DiscountRange
       'position': 'absolute', 'width': '300px', 'padding': '5px', 'margin-top': '-1px',
       'background-color': '#FFF', 'border': '1px solid #DFDFDF'
     }).html( html ).insertAfter('#' + self.field_id)
+  # Validates that the secuence goes from minor to greater
+  validateSecuence: ->
+    #values = self.splitValues()
+
 
 window.DiscountRange = DiscountRange
+
+# Alternative class that shows the range and not binded to an event
+class DiscountRangeShow extends DiscountRange
+  constructor: (field_id)->
+    self = this
+    self['field_id'] = field_id
+  # Creates a table for a field
+  tableForField: (value)->
+    self = this
+    $(self.createTable(self.splitValues(value) ) ).insertAfter('#' + self.field_id)
+
+window.DiscountRangeShow = DiscountRangeShow

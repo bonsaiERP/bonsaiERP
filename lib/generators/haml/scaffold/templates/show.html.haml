@@ -1,9 +1,9 @@
 %h1= <%= singular_name %>
-%p
+%p.links
   = link_to t('Editar'), edit_<%= singular_name %>_path(@<%= singular_name %>), :class => 'edit'
-  = link_to t('Lista'), <%= plural_name %>_path, :class => 'lsit'
+  = link_to t('Lista'), <%= plural_name %>_path, :class => 'list'
 
-%dl
+%div
 <% for attribute in attributes -%>
   %label= <%= class_name %>.human_attribute_name :<%= attribute.name %>
   %span= @<%= singular_name %>.<%= attribute.name %>

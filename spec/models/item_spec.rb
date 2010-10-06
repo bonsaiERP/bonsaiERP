@@ -75,12 +75,26 @@ describe Item do
     item.valid?.should == true
   end
 
-  it 'shoul show a list of values for discount' do
+  it 'should show a list of values for discount' do
     @params[:ctype] = Item::TYPES[2]
     @params[:price] = 25
     @params[:discount] = "10:5 20:5.5"
     item = Item.new(@params)
     item.discount_values.should == [[10.0, 5.0], [20.0, 5.5]]
+  end
+
+  it 'should validate a range secuence form minor to greater' do
+    @params[:ctype] = Item::TYPES[2]
+    @params[:price] = 25
+    @params[:discount] = "10:5 9:5.5"
+    item = Item.new(@params)
+    item.valid?.should == false
+    # Mantain the same percentage
+    item.discount = "10:5 11:5.0"
+    item.valid?.should == false
+    # Lower percentage
+    item.discount = "10:5 11:5.5 15:5 20:6"
+    item.valid?.should == false
   end
 
   it 'should not allow bad discount ranges' do

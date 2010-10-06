@@ -1,5 +1,9 @@
 %h1 Ver item
 
+%p
+  = link_to "Editar", edit_item_path(@item) , :class => 'edit'
+  = link_to "Lista", items_path, :class => 'list'
+
 %div{ :class=> "fl half" }
   %p
     %label Nombre
@@ -17,9 +21,9 @@
     %p
       %label Precio
       = @item.price
-    %p
+    %p#item_discount
       %label Descuento
-      = @item.discount
+      %span= @item.discount
 
 %div{ :class => "fl half" }
   %p
@@ -33,5 +37,13 @@
     = @item.description
 
 %div{ :class => "clear" }
-= link_to "Editar", edit_item_path(@item) , :class => 'edit'
-= link_to "Lista", items_path, :class => 'list'
+
+= javascript_include_tag 'item_alt'
+:javascript
+  $(function() {
+    if( $('#item_discount').length > 0 ) {
+      var val = $('#item_discount span').html();
+      var item_discount = new DiscountRangeShow('item_discount');
+      item_discount.tableForField(val);
+    }
+  });

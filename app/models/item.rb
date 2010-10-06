@@ -90,11 +90,21 @@ private
   # [number]:[percentage]
   # A translation for activerecord.errors.messages.invalid_range_percentage must be added
   def validate_discount_range_values
+    curr_val = curr_per = 0
+    first = true
     discount_values.each do |val, per|
       if per > 100
         self.errors.add(:discount, I18n.t("activerecord.errors.messages.invalid_range_percentage"))
         break
       end
+      unless first
+        if val <= curr_val or per <= curr_per
+          self.errors.add(:discount, I18n.t("activerecord.errors.messages.invalid_range_secuence"))
+          break
+        end
+      end
+      first = false
+      curr_val, curr_per = val, per
     end
   end
 

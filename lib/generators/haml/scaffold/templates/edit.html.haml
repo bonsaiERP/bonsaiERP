@@ -1,5 +1,6 @@
 %h1= Editar <%= singular_name %>
+%p.links
+  = link_to 'Ver', @<%= singular_name %>, :class => 'list'
+  = link_to 'Lista', <%= plural_name %>_path, :class => 'show'
+
 = render :partial => 'form'
-%p
-  = link_to t('back'), <%= plural_name %>_path
-  = link_to t('show'), @<%= singular_name %>
