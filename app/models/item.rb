@@ -4,13 +4,16 @@
 class Item < ActiveRecord::Base
 
   before_save :set_stockable
-  TYPES = ['Item', 'Expense item', 'Product', 'Service']
+  after_save :create_price
+
+  TYPES = ['Item', 'ExpenseItem', 'Product', 'Service']
 
   acts_as_org
   # acts_as_taggable_on :tags
   acts_as_taggable
 
   belongs_to :unit
+  has_many :prices
 
   # belongs_to :itemable, :polymorphic => true
 
@@ -21,6 +24,7 @@ class Item < ActiveRecord::Base
   validates_associated :unit
   validates :ctype, :presence => true, :inclusion => { :in => TYPES }
   validates :code, :uniqueness => { :scope => :organisation_id }
+  validates :unitary_cost, :numericality => { :greater_than_or_equal_to => 0 }
   validates :price, :numericality => { :greater_than_or_equal_to => 0, :if => lambda { |i| i.product? } }
   validate :validate_discount
 
@@ -57,6 +61,11 @@ class Item < ActiveRecord::Base
   end
 
 private
+  # Creates a price to check in the history
+  def create_price 
+    Price.create_from_item(self)
+  end
+
   # Validations for discount
   def validate_discount
     if self.discount =~ /^([+-]?[0-9]+)(\.\d)?$/

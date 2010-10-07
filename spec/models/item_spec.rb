@@ -6,7 +6,8 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe Item do
   before(:each) do
     OrganisationSession.set = {:id => 1, :name => 'ecuanime'}
-    @params = { :name => 'First item', :unit_id => 1, :code => 'AU101', :ctype => 'Item'}
+    Item.stubs(:create_price => true)
+    @params = { :name => 'First item', :unit_id => 1, :code => 'AU101', :ctype => 'Item', :unitary_cost => 10}
     Unit.stubs(:find).returns(stub(@@stub_model_methods.merge(:id => 1) ) )
   end
 

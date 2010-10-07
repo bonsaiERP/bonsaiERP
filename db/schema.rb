@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100930210039) do
+ActiveRecord::Schema.define(:version => 20101006212223) do
 
   create_table "contacts", :force => true do |t|
     t.string   "name",            :limit => 100
@@ -47,19 +47,19 @@ ActiveRecord::Schema.define(:version => 20100930210039) do
 
   create_table "items", :force => true do |t|
     t.integer  "unit_id"
+    t.decimal  "unitary_cost",                   :precision => 14, :scale => 2
+    t.decimal  "price",                          :precision => 14, :scale => 2
     t.string   "name"
     t.string   "description"
     t.string   "code",            :limit => 100
-    t.boolean  "integer",                        :default => false
-    t.boolean  "stockable",                      :default => false
-    t.boolean  "active",                         :default => true
-    t.decimal  "price"
-    t.string   "discount",                       :default => "0.0"
-    t.boolean  "visible",                        :default => true
-    t.integer  "organisation_id",                                   :null => false
+    t.boolean  "integer",                                                       :default => false
+    t.boolean  "stockable",                                                     :default => false
+    t.boolean  "active",                                                        :default => true
+    t.string   "discount"
+    t.string   "ctype",           :limit => 20
+    t.integer  "organisation_id",                                                                  :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "ctype",           :limit => 20
   end
 
   add_index "items", ["code"], :name => "index_items_on_code"
@@ -98,6 +98,15 @@ ActiveRecord::Schema.define(:version => 20100930210039) do
 
   add_index "organisations", ["country_id"], :name => "index_organisations_on_country_id"
   add_index "organisations", ["currency_id"], :name => "index_organisations_on_currency_id"
+
+  create_table "prices", :force => true do |t|
+    t.integer  "item_id"
+    t.decimal  "unitary_cost", :precision => 14, :scale => 2
+    t.decimal  "price",        :precision => 14, :scale => 2
+    t.string   "discount"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "stores", :force => true do |t|
     t.string   "name"
