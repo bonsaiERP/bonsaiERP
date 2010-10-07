@@ -1,3 +1,6 @@
+# encoding: utf-8
+# author: Boris Barroso
+# email: boriscyber@gmail.com
 class UnitsController < ApplicationController
   respond_to :html, :json, :xml, :js
   before_filter :check_organisation

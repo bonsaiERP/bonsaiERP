@@ -1,3 +1,6 @@
+# encoding: utf-8
+# author: Boris Barroso
+# email: boriscyber@gmail.com
 module ApplicationHelper
   # Checks if is set the organisation session
   # @return [True, False]

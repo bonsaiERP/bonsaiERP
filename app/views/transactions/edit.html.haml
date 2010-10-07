@@ -1,0 +1,6 @@
+%h1= Editar transaction
+%p.links
+  = link_to 'Ver', @transaction, :class => 'list'
+  = link_to 'Lista', transactions_path, :class => 'show'
+
+= render :partial => 'form'

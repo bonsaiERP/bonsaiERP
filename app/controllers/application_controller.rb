@@ -1,3 +1,6 @@
+# encoding: utf-8
+# author: Boris Barroso
+# email: boriscyber@gmail.com
 class ApplicationController < ActionController::Base
   layout lambda{|c| c.request.xhr? ? false : "application" }
 

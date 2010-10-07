@@ -1,3 +1,6 @@
+# encoding: utf-8
+# author: Boris Barroso
+# email: boriscyber@gmail.com
 class LinksController < ApplicationController
   # GET /links
   # GET /links.xml

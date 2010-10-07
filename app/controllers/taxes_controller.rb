@@ -1,3 +1,6 @@
+# encoding: utf-8
+# author: Boris Barroso
+# email: boriscyber@gmail.com
 class TaxesController < ApplicationController
   before_filter :check_organisation
   respond_to :html, :xml, :json, :js

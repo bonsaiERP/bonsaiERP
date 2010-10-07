@@ -1,14 +1,5 @@
-#require 'spec_helper'
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require 'spec_helper'
 
 describe Transaction do
-  before(:each) do
-    @params = {  }
-    OrganisationSession.set = { :name => "ecuanime", :id => @@spec_uuid }
-    Organisation.stubs(:find).returns( stub(@@spec_model_methods.merge({:id => @@spec_uuid})) )
-  end
-
-  it 'should create an instance' do
-    
-  end
+  pending "add some examples to (or delete) #{__FILE__}"
 end

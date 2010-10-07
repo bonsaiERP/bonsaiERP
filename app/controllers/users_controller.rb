@@ -1,3 +1,6 @@
+# encoding: utf-8
+# author: Boris Barroso
+# email: boriscyber@gmail.com
 class UsersController < ApplicationController
   respond_to :html, :xml, :json
 

@@ -1,0 +1,33 @@
+%h1= Transacción
+%p.links
+  = link_to t('Editar'), edit_transaction_path(@transaction), :class => 'edit'
+  = link_to t('Lista'), transactions_path, :class => 'list'
+
+%div
+  %p
+    %label= Transaction.human_attribute_name :contact_id
+    %span= @transaction.contact_id
+  %p
+    %label= Transaction.human_attribute_name :type
+    %span= @transaction.type
+  %p
+    %label= Transaction.human_attribute_name :total
+    %span= @transaction.total
+  %p
+    %label= Transaction.human_attribute_name :active
+    %span= @transaction.active
+  %p
+    %label= Transaction.human_attribute_name :description
+    %span= @transaction.description
+  %p
+    %label= Transaction.human_attribute_name :state
+    %span= @transaction.state
+  %p
+    %label= Transaction.human_attribute_name :date
+    %span= @transaction.date
+  %p
+    %label= Transaction.human_attribute_name :ref_number
+    %span= @transaction.ref_number
+  %p
+    %label= Transaction.human_attribute_name :balance
+    %span= @transaction.balance

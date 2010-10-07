@@ -5,6 +5,7 @@
 
 %div
 <% for attribute in attributes -%>
-  %label= <%= class_name %>.human_attribute_name :<%= attribute.name %>
-  %span= @<%= singular_name %>.<%= attribute.name %>
+  %p
+    %label= <%= class_name %>.human_attribute_name :<%= attribute.name %>
+    %span= @<%= singular_name %>.<%= attribute.name %>
 <% end -%>

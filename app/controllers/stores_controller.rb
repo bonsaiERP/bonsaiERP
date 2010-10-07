@@ -1,3 +1,6 @@
+# encoding: utf-8
+# author: Boris Barroso
+# email: boriscyber@gmail.com
 class StoresController < ApplicationController
   # GET /stores
   # GET /stores.xml

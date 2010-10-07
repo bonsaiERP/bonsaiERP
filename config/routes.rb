@@ -1,4 +1,6 @@
 Bonsaierp::Application.routes.draw do
+  resources :transactions
+
   resources :buys
 
   resources :stores
