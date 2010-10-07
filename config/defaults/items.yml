@@ -1,0 +1,25 @@
+---
+- :name: 'Pipocas'
+  :unit_id: 1
+  :unitary_cost: 1.5
+  :code: 'PIP101'
+  :ctype: 'Item'
+- :name: 'Servicio Internet AXS'
+  :unit_id: 1
+  :unitary_cost: 1.5
+  :code: 'PIP101'
+  :ctype: 'ExpenseItem'
+- :name: 'Parlantes multimedia'
+  :unit_id: 3
+  :unitary_cost: 10.5
+  :price: 15.5
+  :discount: '10:2 20:2.5 30:3'
+  :code: 'PAR101'
+  :ctype: 'Product'
+- :name: 'Desarrollo Web'
+  :unit_id: 6
+  :unitary_cost: 10.0
+  :price: 15.0
+  :discount: '40:1 80:2 120:3'
+  :code: 'WEBDEV102'
+  :ctype: 'Service'

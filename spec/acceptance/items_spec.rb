@@ -21,6 +21,7 @@ feature "Items", "I must be able to create and list items with prices" do
     #fill_in "item[price]", :with => 25.00
     #fill_in "item[discount]", :with => 5
     select "kg", :from => "item[unit_id]"
+    fill_in "item[unitary_cost]", :with => 2
     fill_in "item[tag_list]", :with => 'grano, maiz, delicioso'
     fill_in "item[description]", :with => 'Grano de pipoca de alta calidad'
     click_button 'Salvar'
@@ -43,6 +44,7 @@ feature "Items", "I must be able to create and list items with prices" do
     page.should have_css('h1', :text => 'Nuevo producto')
     fill_in "item[name]", :with => 'Parlantes creative'
     fill_in "item[code]", :with => 'CLP2021'
+    fill_in "item[unitary_cost]", :with => 18.0
     fill_in "item[price]", :with => 25.00
     fill_in "item[discount]", :with => '10:2 20:2.5'
     select "kg", :from => "item[unit_id]"

@@ -9,6 +9,7 @@
     = f.input :active, :label => "Activo", :as => :radio
 
   %div{ :class => 'inputs half fl'}
+    = f.input :unitary_cost, :label => 'Costo unitario'
     - if f.object.product?
       = f.input :price, :label => 'Precio'
       = f.input :discount, :label => 'Descuento (%)'
