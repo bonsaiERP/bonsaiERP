@@ -11,6 +11,9 @@ class CreateTransactions < ActiveRecord::Migration
       t.date :date
       t.string :ref_number
 
+      t.integer :currency_id
+      t.decimal :currency_exchange_rate, :precision => 14, :scale => 6
+
       t.integer :organisation_id
 
       t.timestamps

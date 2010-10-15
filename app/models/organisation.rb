@@ -16,6 +16,8 @@ class Organisation < ActiveRecord::Base
   has_many :users, :through => :links
   has_many :units, :dependent => :destroy
 
+  has_and_belongs_to_many :currencies
+
   # validations
   validates_associated :country
   validates_associated :currency

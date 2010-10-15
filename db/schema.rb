@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101007032653) do
+ActiveRecord::Schema.define(:version => 20101015152754) do
 
   create_table "contacts", :force => true do |t|
     t.string   "name",            :limit => 100
@@ -43,6 +43,11 @@ ActiveRecord::Schema.define(:version => 20101007032653) do
     t.string   "code",       :limit => 5
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "currencies_organisations", :id => false, :force => true do |t|
+    t.integer "currency_id"
+    t.integer "organisation_id"
   end
 
   create_table "items", :force => true do |t|
@@ -154,14 +159,16 @@ ActiveRecord::Schema.define(:version => 20101007032653) do
 
   create_table "transactions", :force => true do |t|
     t.integer  "contact_id"
-    t.string   "type",            :limit => 20
-    t.decimal  "total",                         :precision => 14, :scale => 2
-    t.decimal  "balance",                       :precision => 14, :scale => 2
+    t.string   "type",                   :limit => 20
+    t.decimal  "total",                                :precision => 14, :scale => 2
+    t.decimal  "balance",                              :precision => 14, :scale => 2
     t.boolean  "active"
     t.string   "description"
     t.string   "state"
     t.date     "date"
     t.string   "ref_number"
+    t.integer  "currency_id"
+    t.decimal  "currency_exchange_rate",               :precision => 14, :scale => 6
     t.integer  "organisation_id"
     t.datetime "created_at"
     t.datetime "updated_at"

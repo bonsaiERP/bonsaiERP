@@ -38,6 +38,8 @@ class OrganisationsController < ApplicationController
   # POST /organisations
   # POST /organisations.xml
   def create
+    # extra step because it gives error in the model
+    params[:organisation][:currency_ids] = [ params[:organisation][:currency_id] ]
     @organisation = Organisation.new(params[:organisation])
 
     if @organisation.save

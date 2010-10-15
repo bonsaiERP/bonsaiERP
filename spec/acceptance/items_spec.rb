@@ -51,8 +51,6 @@ feature "Items", "I must be able to create and list items with prices" do
     fill_in "item[tag_list]", :with => 'multimedia, calidad, creative'
     fill_in "item[description]", :with => 'Parlantes multimedia de alta calidad'
     click_button 'Salvar'
-
-
   end
 
 end

@@ -20,5 +20,6 @@ YAML.load_file('config/defaults/currencies.yml').each { |c| Currency.create!(c) 
 
 # When it is crated OrganisationSession.set is called to set for a model session
 OrganisationSession.set = {:id => 1, :name => 'ecuanime'}
-Organisation.create!(:name => 'ecuanime', :country_id => 1, :currency_id => 1, :phone => 2745620, :mobile => '70681101', :address => 'Mallasa calle 4 Nº 71 (La Paz - Bolivia)')
+org = Organisation.create!(:name => 'ecuanime', :country_id => 1, :currency_id => 1, :phone => 2745620, :mobile => '70681101', :address => 'Mallasa calle 4 Nº 71 (La Paz - Bolivia)')
 
+org.currency_ids = [1]

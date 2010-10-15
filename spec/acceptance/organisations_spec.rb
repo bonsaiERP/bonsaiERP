@@ -30,6 +30,8 @@ feature "Organisations", "In order to create an organisation I must login" do
     org.users.size.should == 1
     org.taxes.size.should > 0
     org.units.size.should > 0
+    puts org.currency_ids.join(", ") + "\n"
+    org.currency_ids.should == [org.currency_id]
     #Tax.unscoped.where(:organisation_id => org.id).size.should > 0
     #Unit.unscoped.where(:organisation_id => org.id).size.should > 0
 
