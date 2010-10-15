@@ -28,10 +28,10 @@ end
 
 # Test
 group :test do  
-  gem 'rspec', '>=2.0.0.beta.22'
-  gem 'rspec-rails', '>=2.0.0.beta.22'
+  gem 'rspec', '>=2.0.0'
+  gem 'rspec-rails', '>=2.0.0'
   gem 'mocha'
-  gem 'steak', '>= 1.0.0.beta.2'
+  gem 'steak', '>= 1.0.0.rc.1'
   gem 'capybara'
   gem 'factory_girl_rails'
   gem 'spork'

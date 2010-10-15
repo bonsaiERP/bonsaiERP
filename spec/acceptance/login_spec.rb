@@ -22,5 +22,11 @@ feature "Login" do
     page.should have_css('h1', :text => 'Empresas')
   end
 
+  scenario "User should not be able to access dashboard if not logged" do
+    visit '/users/sign_out'
+    visit '/dashboard'
+    page.current_path.should == '/users/sign_in'
+    #page.response.should be_redirect
+  end
 end
 
