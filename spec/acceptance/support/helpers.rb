@@ -17,14 +17,28 @@ module HelperMethods
   # login
   def login_as(user)
     visit '/users/sign_out'
-    fill_in 'user[email]', :with => 'boris@example.com'
+    fill_in 'user[email]', :with => user.email
     fill_in 'user[password]', :with => 'demo123'
     click_button 'Ingresar'
   end
 
   # Creates a user logins and creates and organisation
-  def create_organisation(attributes)
-    
+  def create_organisation(attributes = {})
+    if attributes.empty?
+      y = YAML.load_file("#{Rails.root}/config/defaults/organisations.yml")
+      attributes = y.first
+    end
+    @user = create_user
+    create_countries
+    create_currencies
+    OrganisationSession.set = {:id => 1, :name => 'ecuanime'}
+    org = Organisation.create!(attributes)
+    org.currency_ids = [1]
+  end
+
+  # Create organisaton and items
+  def create_organisation_items
+    create_organisation
   end
 
   def create_currencies
