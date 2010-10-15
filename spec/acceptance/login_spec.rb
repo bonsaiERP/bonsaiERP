@@ -26,7 +26,6 @@ feature "Login" do
     visit '/users/sign_out'
     visit '/dashboard'
     page.current_path.should == '/users/sign_in'
-    #page.response.should be_redirect
   end
 end
 

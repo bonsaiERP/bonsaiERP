@@ -16,4 +16,4 @@
 <% for attribute in attributes -%>
         %td= <%= singular_name %>.<%= attribute.name %>
 <% end -%>
-        %td.action= bonsai_links(<%= singular_name %>)
+        %td.actions= bonsai_links(<%= singular_name %>)

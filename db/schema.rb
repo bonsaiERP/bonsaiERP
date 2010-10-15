@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101006212223) do
+ActiveRecord::Schema.define(:version => 20101007032653) do
 
   create_table "contacts", :force => true do |t|
     t.string   "name",            :limit => 100
@@ -156,19 +156,22 @@ ActiveRecord::Schema.define(:version => 20101006212223) do
     t.integer  "contact_id"
     t.string   "type",            :limit => 20
     t.decimal  "total",                         :precision => 14, :scale => 2
-    t.boolean  "active",                                                       :default => true
-    t.string   "description"
-    t.string   "state",           :limit => 20
-    t.date     "date"
     t.decimal  "balance",                       :precision => 14, :scale => 2
-    t.integer  "organisation_id",                                                                :null => false
+    t.boolean  "active"
+    t.string   "description"
+    t.string   "state"
+    t.date     "date"
+    t.string   "ref_number"
+    t.integer  "organisation_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "transactions", ["active"], :name => "index_transactions_on_active"
   add_index "transactions", ["contact_id"], :name => "index_transactions_on_contact_id"
+  add_index "transactions", ["date"], :name => "index_transactions_on_date"
   add_index "transactions", ["organisation_id"], :name => "index_transactions_on_organisation_id"
-  add_index "transactions", ["state"], :name => "index_transactions_on_state"
+  add_index "transactions", ["ref_number"], :name => "index_transactions_on_ref_number"
 
   create_table "units", :force => true do |t|
     t.string   "name",            :limit => 100

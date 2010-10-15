@@ -147,7 +147,6 @@ DEPENDENCIES
   less (>= 1.2.21)
   mocha
   rails (= 3.0.0)
-  rspec (>= 2.0.0)
   rspec-rails (>= 2.0.0)
   ruby-debug19
   simple_form (>= 1.2.0)
