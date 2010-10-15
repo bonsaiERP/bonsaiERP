@@ -1,0 +1,23 @@
+%h1 Ingresos
+
+%p.links= link_to "Nuevo ingreso", new_income_path, :class => 'new'
+
+%table{ :class => 'decorated nwl' }
+  %thead
+    %tr
+      %th Contacto
+      %th Fecha
+      %th{ :title => 'Número de referencia' } Num. Ref.
+      %th Total
+      %th Saldo
+      %th
+  
+  %tbody
+    - for income in @incomes
+      %tr{ :class => cycle(:odd, :even) }
+        %td= income.contact
+        %td= income.date
+        %td= income.ref_number
+        %td= income.total
+        %td= income.balance
+        %td.actions= bonsai_links(income)

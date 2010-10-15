@@ -117,6 +117,9 @@ private
   end
 
   def set_stockable
-    self.stockable = ( self.ctype != TYPES.last )
+    self.stockable = ( self.ctype != 'Service' )
+    # Must return true, sometimes assigment is false and returns false so the
+    # transaction rollsback
+    true
   end
 end

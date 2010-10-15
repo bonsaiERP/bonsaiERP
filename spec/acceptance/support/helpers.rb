@@ -53,6 +53,18 @@ module HelperMethods
     end
   end
 
+  def create_contacts
+    YAML.load_file("#{Rails.root}/config/defaults/contacts.yml").each do |c|
+      Factory.create :contact, c
+    end
+  end
+
+  def create_items
+    YAML.load_file("#{Rails.root}/config/defaults/items.yml").each do |i|
+      Factory.create :item, i
+    end
+  end
+
   def set_organisation
     create_countries
     create_currencies

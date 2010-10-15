@@ -1,0 +1,2 @@
+module IncomesHelper
+end

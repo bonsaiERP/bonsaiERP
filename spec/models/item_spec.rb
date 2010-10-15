@@ -40,7 +40,7 @@ describe Item do
     item = Item.create(@params)
     item.stockable.should == true
     item.price = 20
-    item.update_attributes(:ctype => Item::TYPES.last)
+    item.update_attributes(:ctype => 'Service')
     item.stockable.should == false
   end
 
@@ -118,6 +118,17 @@ describe Item do
     item = Item.new(@params)
     p item.errors[:discount]
     item.valid?.should == false
+  end
+
+  it 'should save when the item is a service' do
+    @params[:ctype] = Item::TYPES.last
+    @params[:price] = 15.0
+    @params[:unitary_cost] = 10.0
+    @params[:discount] = "40:1 80:2 120:3"
+    Item.create!(@params)
+
+    #puts  "Item id: #{item.errors}"
+    #item.valid?.should == true
   end
 
   it 'test range regular expression' do

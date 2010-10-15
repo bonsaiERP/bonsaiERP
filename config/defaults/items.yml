@@ -7,7 +7,7 @@
 - :name: 'Servicio Internet AXS'
   :unit_id: 1
   :unitary_cost: 1.5
-  :code: 'PIP101'
+  :code: 'INT102'
   :ctype: 'ExpenseItem'
 - :name: 'Parlantes multimedia'
   :unit_id: 3
@@ -21,5 +21,5 @@
   :unitary_cost: 10.0
   :price: 15.0
   :discount: '40:1 80:2 120:3'
-  :code: 'WEBDEV102'
+  :code: 'DEVH101'
   :ctype: 'Service'

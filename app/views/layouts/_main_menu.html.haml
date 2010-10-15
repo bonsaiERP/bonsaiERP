@@ -11,16 +11,16 @@
         %li= link_to "Servicios", items_path(:ctype => Item::TYPES[3])
         %li= link_to "Unidades de medida", units_path 
         %li= link_to "Stocks" 
-        %li= link_to "Compras", buys_path 
         %li= link_to "Transferencias" 
     
     %li
       %a{ :href => "javascript:"} Ingresos - Egresos <span class=\"down\">&nbsp;</span>
       %ul
-        %li= link_to "Ingresos" 
-        %li= link_to "Egresos" 
-        %li= link_to "Contactos", contacts_path 
-        %li= link_to "Impuestos", taxes_path 
+        %li= link_to "Ingresos", '/incomes' # incomes_path 
+        %li= link_to "Compras", '/buys' # incomes_path 
+        %li= link_to "Egresos", '/expenses' 
+        %li= link_to "Contactos", '/contacts' # contacts_path 
+        %li= link_to "Impuestos", '/taxes' 
         %li= link_to "Transferencias entre cuentas" 
     
     %li

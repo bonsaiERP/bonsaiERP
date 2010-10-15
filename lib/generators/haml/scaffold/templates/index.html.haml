@@ -1,4 +1,4 @@
-%h1= plural_table_name
+%h1= <%= plural_table_name %>
 
 %p.links= link_to "Nuevo <%= singular_name %>", new_<%= singular_name %>_path, :class => 'new'
 
@@ -6,7 +6,7 @@
   %thead
     %tr
 <% for attribute in attributes -%>
-      %th= <%= class_name %>.human_attribute_name :<%= attribute.name %>
+      %th= <%= attribute.name %>
 <% end -%>
       %th
   

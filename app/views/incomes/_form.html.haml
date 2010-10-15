@@ -1,0 +1,14 @@
+= simple_form_for(@income) do |f|
+  = bonsai_form_error(f)
+  = f.input :contact_id
+  = f.input :type
+  = f.input :total
+  = f.input :active
+  = f.input :description
+  = f.input :state
+  = f.input :date
+  = f.input :ref_number
+  = f.input :balance
+
+  .actions
+    = f.submit 'Salvar'

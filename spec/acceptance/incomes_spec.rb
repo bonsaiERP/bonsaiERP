@@ -6,6 +6,8 @@ require File.dirname(__FILE__) + '/acceptance_helper'
 feature "Income", "In order to make sales and recive incomes" do
   background do
     create_organisation
+    create_contacts
+    create_items
     @user = User.first
   end
 
@@ -20,6 +22,9 @@ feature "Income", "In order to make sales and recive incomes" do
     login_as(@user)
     page.current_path.should == "/"
     click_link "ecuanime"
-    page.current_path.should == "/dashboard"
+    Item.all.size.should > 1
+    click_link "Ingresos"
+    page.current_path.should == "/incomes"
+    click_link "Nuevo"
   end
 end

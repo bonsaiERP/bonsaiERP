@@ -1,0 +1,14 @@
+---
+- :name: 'Karina Luna Pizarro'
+  :organisation_name: "Casita"
+  :email: 'venuska76@gmail.com'
+  :address: "Mallasa\ncalle Nº 4"
+  :phone: '2745620'
+  :mobile: '70113217'
+  :tax_number: '3376951'
+- :name: 'Carlos Ramos'
+  :organisation_name: "Codibri"
+  :email: 'carakan@gmail.com'
+  :address: "Buenos Aires\nCentro"
+  :phone: '123456'
+  :mobile: '77205110'

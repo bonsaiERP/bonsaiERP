@@ -2,6 +2,7 @@ class CreateContacts < ActiveRecord::Migration
   def self.up
     create_table :contacts do |t|
       t.string :name, :limit => 100
+      t.string :organisation_name, :limit => 100
       t.string :address, :limit => 250
       t.string :address_alt, :limit => 250
       t.string :phone, :limit => 20
