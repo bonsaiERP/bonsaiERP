@@ -3,13 +3,17 @@ class CreateTransactions < ActiveRecord::Migration
     create_table :transactions do |t|
       t.integer :contact_id
       t.string :type, :limit => 20
+      
       t.decimal :total, :precision => 14, :scale => 2
       t.decimal :balance, :precision => 14, :scale => 2 # Saldo
+      t.decimal :tax_percent, :precision => 5, :scale => 2
+
       t.boolean :active
       t.string :description
       t.string :state
       t.date :date
       t.string :ref_number
+      t.string :bill_number # factura
 
       t.integer :currency_id
       t.decimal :currency_exchange_rate, :precision => 14, :scale => 6

@@ -1,14 +1,34 @@
 = simple_form_for(@income) do |f|
   = bonsai_form_error(f)
   = f.input :contact_id
-  = f.input :type
-  = f.input :total
   = f.input :active
   = f.input :description
-  = f.input :state
   = f.input :date
   = f.input :ref_number
-  = f.input :balance
+
+  %h2.dark Items
+
+  %table.decorated
+    %tr
+      %th Item
+      %th Descripción
+      %th Precio <br/>unitario
+      %th Cantidad
+      %th Total fila
+    = f.simple_fields_for :transaction_details do |fd|
+      %tr
+        %td= fd.input :item_id, :label => false, :collection => Item.all
+        %td= fd.input :description, :label => false
+        %td= fd.input :price, :input_html => { :size => 8 }
+        %td= fd.input :quantity, :input_html => { :size => 8 }
+        %td
+  %p
+    %a#add_item.add{:href => 'javascript:' } Adicionar ítem
 
   .actions
     = f.submit 'Salvar'
+
+:javascript
+  items = #{ Item.javascript.to_json };
+  $(function() {
+  })

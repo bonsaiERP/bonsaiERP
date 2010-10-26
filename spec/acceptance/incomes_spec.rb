@@ -25,11 +25,12 @@ feature "Income", "In order to make sales and recive incomes" do
     Item.all.size.should > 1
     click_link "Ingresos"
     page.current_path.should == "/incomes"
-    #click_link "Nuevo"
+    click_link "Nuevo"
     #visit '/transactions'
-    puts "Antes de post"
-    post :create, :par => {:prueba => 'VALOR'}
-    puts page.body
-    puts "Fin"
+    p page.body
+    #puts "Antes de post"
+    #post :create, :par => {:prueba => 'VALOR'}
+    #puts page.body
+    #puts "Fin"
   end
 end

@@ -14,6 +14,7 @@ class Item < ActiveRecord::Base
 
   belongs_to :unit
   has_many :prices
+  has_many :transaction_details
 
   # belongs_to :itemable, :polymorphic => true
 
@@ -31,6 +32,8 @@ class Item < ActiveRecord::Base
 
   # scopes
   default_scope where(:organisation_id => OrganisationSession.organisation_id)
+
+  scope :javascript, select(:id, :name, :price, :discount)
 
   def to_s
     name

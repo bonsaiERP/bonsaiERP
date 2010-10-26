@@ -1,5 +1,13 @@
 %h1= item_title
 
+%div.search
+  =form_tag "/items", :method => 'get'
+  =hidden_field_tag 'ctype', params[:ctype]
+  %strong.dark Nombre o código
+  =text_field_tag 'name_code', params[:name_code], :size => 40
+  =submit_tag 'Buscar'
+
+
 %p.links= link_new_item
 
 %table{ :class=> "decorated mt10" }

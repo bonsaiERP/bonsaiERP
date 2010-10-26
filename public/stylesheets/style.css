@@ -198,6 +198,15 @@ a.new {
   padding: 5px 8px 5px 26px;
 }
 a.new:hover { text-decoration: underline; }
+a.add {
+  font-weight: bold;
+  padding-left: 20px;
+  text-decoration: none;
+  margin: 10px 5px;
+  color: #538447;
+  font-size: 110%;
+  background: url(images/add.png) no-repeat 0px 50%;
+}
 a.edit {
   font-weight: bold;
   padding-left: 20px;
@@ -292,6 +301,17 @@ form.required abbr {
   font-style: italic;
 }
 .inputs > div { margin-top: 10px; }
+input[type=submit] {
+  background-color: #6793ce;
+  color: #ffffff;
+  border: 0px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  padding: 4px 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
 .errorExplanation {
   color: #ff0000;
   background-color: #fef1ec;
@@ -375,6 +395,13 @@ ul.menu li:hover ul {
   height: 16px;
   display: inline-block;
   vertical-align: middle;
+}
+.search {
+  background-color: #f0f0f1;
+  padding: 6px 12px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
 }
 .half {
   width: 47%;

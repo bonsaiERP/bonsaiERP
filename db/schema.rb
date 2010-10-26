@@ -10,21 +10,22 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101015152754) do
+ActiveRecord::Schema.define(:version => 20101026230758) do
 
   create_table "contacts", :force => true do |t|
-    t.string   "name",            :limit => 100
-    t.string   "address",         :limit => 250
-    t.string   "address_alt",     :limit => 250
-    t.string   "phone",           :limit => 20
-    t.string   "mobile",          :limit => 20
-    t.string   "ctype",           :limit => 40
-    t.string   "email",           :limit => 200
-    t.string   "tax_number",      :limit => 30
-    t.string   "aditional_info",  :limit => 250
-    t.integer  "organisation_id",                :null => false
+    t.string   "name",              :limit => 100
+    t.string   "address",           :limit => 250
+    t.string   "address_alt",       :limit => 250
+    t.string   "phone",             :limit => 20
+    t.string   "mobile",            :limit => 20
+    t.string   "ctype",             :limit => 40
+    t.string   "email",             :limit => 200
+    t.string   "tax_number",        :limit => 30
+    t.string   "aditional_info",    :limit => 250
+    t.integer  "organisation_id",                  :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "organisation_name"
   end
 
   add_index "contacts", ["organisation_id"], :name => "index_contacts_on_organisation_id"
@@ -157,6 +158,25 @@ ActiveRecord::Schema.define(:version => 20101015152754) do
 
   add_index "taxes", ["organisation_id"], :name => "index_taxes_on_organisation_id"
 
+  create_table "transaction_details", :force => true do |t|
+    t.integer  "transaction_id"
+    t.integer  "item_id"
+    t.decimal  "quantity",        :precision => 14, :scale => 2
+    t.decimal  "price",           :precision => 14, :scale => 2
+    t.string   "description"
+    t.decimal  "minimun",         :precision => 14, :scale => 2
+    t.decimal  "maximun",         :precision => 14, :scale => 2
+    t.string   "type"
+    t.decimal  "discount",        :precision => 14, :scale => 2
+    t.integer  "organisation_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "transaction_details", ["item_id"], :name => "index_transaction_details_on_item_id"
+  add_index "transaction_details", ["organisation_id"], :name => "index_transaction_details_on_organisation_id"
+  add_index "transaction_details", ["transaction_id"], :name => "index_transaction_details_on_transaction_id"
+
   create_table "transactions", :force => true do |t|
     t.integer  "contact_id"
     t.string   "type",                   :limit => 20
@@ -172,6 +192,7 @@ ActiveRecord::Schema.define(:version => 20101015152754) do
     t.integer  "organisation_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.decimal  "tax_percent",                          :precision => 5,  :scale => 2
   end
 
   add_index "transactions", ["active"], :name => "index_transactions_on_active"

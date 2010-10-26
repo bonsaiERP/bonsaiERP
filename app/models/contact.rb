@@ -7,6 +7,9 @@ class Contact < ActiveRecord::Base
   # callbacks
   before_save :change_nl2br, :unless => lambda { |c| c.address.blank? }
 
+  # relations
+  has_many :transactions
+
   # TYPES = [ 'Cliente', 'Proveedor', 'Cliente/Proveedor' ]
 
   validates_presence_of :name, :organisation_name

@@ -28,6 +28,7 @@ class IncomesController < ApplicationController
   # GET /incomes/new.xml
   def new
     @income = Income.new
+    @income.transaction_details.build
 
     respond_to do |format|
       format.html # new.html.erb

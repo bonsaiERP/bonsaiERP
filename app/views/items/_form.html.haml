@@ -14,13 +14,13 @@
       = f.input :price, :label => 'Precio'
       = f.input :discount, :label => 'Descuento (%)'
 
-    = f.input :tag_list, :label => 'Etiquetas', :hint => 'Escriba las palabras que usara como etiquetas separadas por comas, Ej: grande, costoso'
+    = f.input :tag_list, :label => 'Etiquetas', :hint => 'Escriba palabras separadas por comas, Ej.: grande, costoso'
     = f.input :description, :as => :text, :input_html => {:rows => 5}, :label => "Descripción"
 
   %div{ :class => "clear" }
   
   = f.submit "Salvar"
-= javascript_include_tag 'item_alt'
+= javascript_include_tag 'item'
 
 :javascript
   
