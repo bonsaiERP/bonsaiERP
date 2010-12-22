@@ -4,7 +4,8 @@ $(document).ready(->
   # csfr
   csfr_token = $('meta[name=csfr-token]').attr('content')
   # Date format
-  $.datepicker._defaults.dateFormat = 'dd M yy'
+  $.dateInputFormat = $.fn.dateInputFormat = 'dd mmm yyyy'
+
   # Parsea la fecha con formato seleciando a un objeto Date
   # @param String fecha
   # @param String tipo : Tipo de dato a devolver
@@ -18,35 +19,51 @@ $(document).ready(->
 
   # Returns the date
 
-  # Changes a date or datetime field for a jquery date jquerytools
-  changeDateSelect = (el)->
-    input = document.createElement('input')
-    $(input).attr('type', 'text')
-    $(el).find('select:eq(2)').after(input)
+  # Transforms the hour to just select 00, 15, 30, 
+  transformMinuteSelect = (el, step = 5)->
+    $el = $(el)
+    val = $el.val()
+    steps = parseInt(60/5) - 1
+    options = []
+    for k in [0..steps]
+      if el == val then sel = 'selected="selected"' else sel =""
+      options.push('<option value="' + (5 * k) + '" ' + sel + '>' + (5 * k) + '</option>')
+    options = options.join("")
 
-    currentDate = []
-    $(el).find('select:lt(3)').hide()
-    year = $(el).find('select[name*=1i]').hide().val()
-    month = parseInt( $(el).find('select[name*=2i]').hide().val() ) - 1
-    day = $(el).find('select[name*=3i]').hide().after( input ).val()
+    $(el).html(options)
 
-    currentDate = new Date(year, month, day)
+  # Transforms a dateselect field in rails to jQueryUI
+  transformDateSelect = (elem)->
+    $(elem).find('.date, .datetime').each((i, el)->
+      # hide fields
+      input = $('<input/>').attr({ 'class': 'date-transform', 'type': 'text', 'size': 12})
+      year = $(el).find('select[name*=1i]').hide().val()
+      month = (1 * $(el).find('select[name*=2i]').hide().val()) - 1
+      # append input
+      day = $(el).find('select[name*=3i]').hide().after( input ).val()
+      minute = $(el).find('select[name*=5i]')
 
-    $(input).dateinput(
-      'format': dateFormat
-      'lang': 'es'
-      'selectors': true
-      'firstDay': 1
-      'change': ->
-        val = this.getValue('yyyy-mm-dd')
-        val = val.split('-')
-        self = this.getInput()
-        $(val).each( (i, el)->
-          value = el.replace(/^0([0-9]+$)/, '$1')
-          $(self).siblings('select[name*=' + (i + 1) + 'i]').val(value)
-        )
+      if minute.length > 0 then transformMinuteSelect(minute)
+
+      $(input).dateinput(
+        'format': $.dateInputFormat
+        'lang': 'es',
+        'selectors': true,
+        'firstDay': 1,
+        'change': ->
+          val = this.getValue('yyyy-mm-dd')
+          val = val.split('-')
+          self = this.getInput()
+          $(val).each( (i, el)->
+            value = el.replace(/^0([0-9]+$)/, '$1')
+            $(self).siblings('select[name*=' + (i + 1) + 'i]').val(value)
+          )
+      )
     )
-    $(input).data('dateinput').setValue(currentDate)
+
+  $.transformDateSelect = $.fn.transformDateSelect = transformDateSelect
+
+
   ##################################################
 
   # Asignar la fecha a los elementos siblings del campo con datepicker
@@ -84,22 +101,6 @@ $(document).ready(->
     $(this).html('Ver más').removeClass('less').addClass('more').next('.hidden').hide(speed)
   )
 
-  # To present images in bigger size
-  # Image must be set
-  $('img.mini').live('click', ->(size)
-    size = size || 'original'
-    lista = $(this).attr("src").split("/")
-    l = lista.length - 1
-    lista[l] = lista[l].replace(/^mini/, size)
-    div = document.createElement('div')
-    $(div).html(['<img', ' src=', '"', lista.join("/") , '"', " />"].join("") )
-
-    $(div).dialog(
-        'width': 700, 'height': 500
-        'close': (e, ui)->
-          $(div).dialog('destroy')
-    )
-  )
 
   # Creates the dialog container
   createDialog = (params)->
@@ -279,10 +280,7 @@ $(document).ready(->
   $.mark = $.fn.mark = mark
 
   start = ->
-    $('div.date, div.datetime')
-    sel = $(el).find('select:eq(2)')
-     if(sel.length > 0) 
-       changeDateSelect(el)
+    transformDateSelect('body')
 
   start()
 )

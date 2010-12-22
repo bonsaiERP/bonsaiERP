@@ -1,10 +1,11 @@
 = simple_form_for(@income) do |f|
   = bonsai_form_error(f)
-  = f.input :contact_id
-  = f.input :active
-  = f.input :description
-  = f.input :date
-  = f.input :ref_number
+  = f.input :ref_number, :label => 'Nº de referencia'
+  = f.input :date, :label => 'Fecha'
+  .clear
+  = f.input :contact_id, :label => 'Cliente'
+  = f.input :description, :label => 'Descripción', :as => :text, :input_html => {:rows => 4, :cols => 40}
+  .clear
 
   %h2.dark Items
 

@@ -34,6 +34,11 @@ option.new {
   font-weight: bold;
 }
 form div { margin-top: 4px; }
+form .input {
+  width: 49%;
+  float: left;
+  margin: 8px 0px;
+}
 .ui-state-default {
   border: 1px solid #c5dbec;
   background: #dfeffc url(images/ui-bg_flat_85_dfeffc_40x100.png) 50% 50% repeat-x;

@@ -2,22 +2,21 @@
   = bonsai_form_error(f)
   = f.input :ctype, :as => :hidden
 
-  %div{ :class => 'inputs half fl'}
-    = f.input :name, :label => 'Nombre'
-    = f.input :code, :label => 'Código'
-    = f.association :unit, :label => "Unidad", :input_html => { 'data-path' => new_unit_path }
-    = f.input :active, :label => "Activo", :as => :radio
+  = f.input :name, :label => 'Nombre'
+  = f.input :code, :label => 'Código'
+  .clear
+  = f.association :unit, :label => "Unidad", :input_html => { 'data-path' => new_unit_path }
+  = f.input :active, :label => "Activo", :as => :radio
+  .clear
 
-  %div{ :class => 'inputs half fl'}
-    = f.input :unitary_cost, :label => 'Costo unitario'
-    - if f.object.product?
-      = f.input :price, :label => 'Precio'
-      = f.input :discount, :label => 'Descuento (%)'
-
-    = f.input :tag_list, :label => 'Etiquetas', :hint => 'Escriba palabras separadas por comas, Ej.: grande, costoso'
-    = f.input :description, :as => :text, :input_html => {:rows => 5}, :label => "Descripción"
-
-  %div{ :class => "clear" }
+  = f.input :unitary_cost, :label => 'Costo unitario'
+  - if f.object.product?
+    = f.input :price, :label => 'Precio'
+    = f.input :discount, :label => 'Descuento (%)'
+  .clear
+  = f.input :tag_list, :label => 'Etiquetas', :hint => 'Escriba palabras separadas por comas, Ej.: grande, costoso'
+  = f.input :description, :as => :text, :input_html => {:rows => 5}, :label => "Descripción"
+  .clear
   
   = f.submit "Salvar"
 = javascript_include_tag 'item'

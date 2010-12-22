@@ -9,7 +9,6 @@ class Item < ActiveRecord::Base
   TYPES = ['Item', 'ExpenseItem', 'Product', 'Service']
 
   acts_as_org
-  # acts_as_taggable_on :tags
   acts_as_taggable
 
   belongs_to :unit
@@ -33,7 +32,7 @@ class Item < ActiveRecord::Base
   # scopes
   default_scope where(:organisation_id => OrganisationSession.organisation_id)
 
-  scope :javascript, select(:id, :name, :price, :discount)
+  scope :javascript, select("id, name, price, discount")
 
   def to_s
     name

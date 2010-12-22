@@ -14,6 +14,7 @@ ActiveRecord::Schema.define(:version => 20101026230758) do
 
   create_table "contacts", :force => true do |t|
     t.string   "name",              :limit => 100
+    t.string   "organisation_name", :limit => 100
     t.string   "address",           :limit => 250
     t.string   "address_alt",       :limit => 250
     t.string   "phone",             :limit => 20
@@ -25,7 +26,6 @@ ActiveRecord::Schema.define(:version => 20101026230758) do
     t.integer  "organisation_id",                  :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "organisation_name"
   end
 
   add_index "contacts", ["organisation_id"], :name => "index_contacts_on_organisation_id"
@@ -161,6 +161,7 @@ ActiveRecord::Schema.define(:version => 20101026230758) do
   create_table "transaction_details", :force => true do |t|
     t.integer  "transaction_id"
     t.integer  "item_id"
+    t.integer  "currency_id"
     t.decimal  "quantity",        :precision => 14, :scale => 2
     t.decimal  "price",           :precision => 14, :scale => 2
     t.string   "description"
@@ -182,17 +183,18 @@ ActiveRecord::Schema.define(:version => 20101026230758) do
     t.string   "type",                   :limit => 20
     t.decimal  "total",                                :precision => 14, :scale => 2
     t.decimal  "balance",                              :precision => 14, :scale => 2
+    t.decimal  "tax_percent",                          :precision => 5,  :scale => 2
     t.boolean  "active"
     t.string   "description"
     t.string   "state"
     t.date     "date"
     t.string   "ref_number"
+    t.string   "bill_number"
     t.integer  "currency_id"
     t.decimal  "currency_exchange_rate",               :precision => 14, :scale => 6
     t.integer  "organisation_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "tax_percent",                          :precision => 5,  :scale => 2
   end
 
   add_index "transactions", ["active"], :name => "index_transactions_on_active"
