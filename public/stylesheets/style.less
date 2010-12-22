@@ -242,23 +242,35 @@ ul#main_menu{
       display: none;
       padding: 0px;
       margin: 0px;
-      padding-top: 4px;
+      padding-t:op: 4px;
       z-index: 100;
       background-color: @blue;
       li{
         float: none;
         margin: 0px;
         padding: 0px;
+        display: block;
       }
       a{
         float: none;
         padding: 4px 20px;
         font-weight: normal;
+        display: inline-block;
+      }
+      a.add{
+        text-indent: -1000em;
+        width: 18px;
+        padding: 0px;
+        margin: 0px 0px 0px 20px;
+      }
+      a.add_left{
+        padding-left: 0px;
       }
       a:hover{
-        background-image: url(images/ui-bg_glass_40_ffc73d_1x400.png);
+        /*background-image: url(images/ui-bg_glass_40_ffc73d_1x400.png);
         background-position: 50%;
-        color: @black;
+        color: @black;*/
+        text-decoration: underline;
       }
     }
     /****/

@@ -1,18 +1,30 @@
 = simple_form_for(@contact) do |f|
   = bonsai_form_error(f)
 
-  %div{ :class => "inputs fl half" }
-    = f.input :name, :label => "Nombre completo"
-    = f.input :organisation_name, :label => "Empresa"
-    = f.input :phone, :label => "Teléfono"
-    = f.input :mobile, :label => "Móvil"
-    = f.input :email, :lanel => "Email"
-    = f.input :tax_number, :label => "NIT"
+  = f.input :name, :label => "Nombre", :hint => 'Usado para notas de ingreso/egreso'
+  = f.input :matchcode, :label => "Código de identificación", :hint => 'Código que permite identificar contactos con un mismo nombre'
+  .clear
+  = f.input :organisation_name, :label => "Empresa"
+  .clear
+  = f.input :phone, :label => "Teléfono"
+  = f.input :mobile, :label => "Móvil"
+  .clear
+  = f.input :email, :lanel => "Email"
+  = f.input :tax_number, :label => "NIT"
 
-  %div{ :class => "inputs fl half"}
-    = f.input :address, :as => :text, :input_html => {:rows => 5}, :label => "Dirección" 
-    = f.input :address_alt, :as => :text, :input_html => {:rows => 5}, :label => "Dirección alternativa" 
-    = f.input :aditional_info, :as => :text, :input_html => {:rows => 5}, :label => "Información adicional" 
+  = f.input :address, :as => :text, :input_html => {:rows => 4}, :label => "Dirección" 
+  = f.input :address_alt, :as => :text, :input_html => {:rows => 4}, :label => "Dirección alternativa" 
+  .clear
+  = f.input :aditional_info, :as => :text, :input_html => {:rows => 4}, :label => "Información adicional" 
 
-  %div{ :class => "actions" }
+  .clear
+  %div.actions
     = f.submit "Salvar"
+
+:javascript
+  $(function() {
+    $('#contact_name').blur(function() {
+      if($('#contact_matchcode').val() == '')
+        $('#contact_matchcode').val($(this).val());
+    });
+  })

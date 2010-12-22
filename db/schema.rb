@@ -13,6 +13,7 @@
 ActiveRecord::Schema.define(:version => 20101026230758) do
 
   create_table "contacts", :force => true do |t|
+    t.string   "matchcode",         :limit => 250
     t.string   "name",              :limit => 100
     t.string   "organisation_name", :limit => 100
     t.string   "address",           :limit => 250

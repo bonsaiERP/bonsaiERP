@@ -33,6 +33,7 @@ class Item < ActiveRecord::Base
   default_scope where(:organisation_id => OrganisationSession.organisation_id)
 
   scope :javascript, select("id, name, price, discount")
+  scope :income, where(["ctype IN (?)", TYPES.slice(2, 2)])
 
   def to_s
     name
@@ -40,7 +41,7 @@ class Item < ActiveRecord::Base
 
   # validation for Services or products
   def product?
-    [2, 3].map { |i| TYPES[i] }.include? self.ctype
+    TYPES.slice(2, 2).include? self.ctype
   end 
 
   # Returns the recular expression for rang

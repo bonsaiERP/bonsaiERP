@@ -1,4 +1,4 @@
-%ul{ :id => "main_menu" }
+%ul#main_menu
   - if organisation?
     %li= link_to "Dashboard", dashboard_path 
     %li
@@ -16,7 +16,9 @@
     %li
       %a{ :href => "javascript:"} Ingresos - Egresos <span class=\"down\">&nbsp;</span>
       %ul
-        %li= link_to "Ingresos", '/incomes' # incomes_path 
+        %li
+          = link_to "Nuevo", '/incomes/new', :class => 'add', :title => 'Nuevo'
+          = link_to "Ingresos", '/incomes', :class => 'add_left'
         %li= link_to "Compras", '/buys' # incomes_path 
         %li= link_to "Egresos", '/expenses' 
         %li= link_to "Contactos", '/contacts' # contacts_path 

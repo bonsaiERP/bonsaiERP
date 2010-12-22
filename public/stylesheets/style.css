@@ -157,7 +157,7 @@ ul#main_menu li ul {
   display: none;
   padding: 0px;
   margin: 0px;
-  padding-top: 4px;
+  padding-t: op: 4px;
   z-index: 100;
   background-color: #6793ce;
 }
@@ -165,17 +165,22 @@ ul#main_menu li ul li {
   float: none;
   margin: 0px;
   padding: 0px;
+  display: block;
 }
 ul#main_menu li ul a {
   float: none;
   padding: 4px 20px;
   font-weight: normal;
+  display: inline-block;
 }
-ul#main_menu li ul a:hover {
-  background-image: url(images/ui-bg_glass_40_ffc73d_1x400.png);
-  background-position: 50%;
-  color: #000000;
+ul#main_menu li ul a.add {
+  text-indent: -1000em;
+  width: 18px;
+  padding: 0px;
+  margin: 0px 0px 0px 20px;
 }
+ul#main_menu li ul a.add_left { padding-left: 0px; }
+ul#main_menu li ul a:hover { text-decoration: underline; }
 ul#main_menu li:hover ul {
   display: block;
   position: absolute;
