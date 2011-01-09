@@ -53,6 +53,12 @@ class Item < ActiveRecord::Base
     Regexp.new("^(#{reg_num}:#{reg_per}\\s+)*(#{reg_num}:#{reg_per}\\s*)?$")
   end
 
+  # Searches using ctype, and searches the name and code atributes
+  def self.index(s_type = TYPES.first, options )
+    query = [ ["name", "code"].map {|v| "items.#{v} LIKE ?"}.join(" OR ") ] + Array.new(2, "%#{options[:search]}%")
+    where(:ctype => s_type).where(query)
+  end
+
   # creates an array with values  [quantity, percentage]
   def discount_values
     return [] if self.discount.blank?

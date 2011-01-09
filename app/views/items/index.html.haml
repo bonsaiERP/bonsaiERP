@@ -4,7 +4,7 @@
   =form_tag "/items", :method => 'get'
   =hidden_field_tag 'ctype', params[:ctype]
   %strong.dark Nombre o código
-  =text_field_tag 'name_code', params[:name_code], :size => 40
+  =text_field_tag 'search', params[:name_code], :size => 40
   =submit_tag 'Buscar'
 
 
