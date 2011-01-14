@@ -13,23 +13,27 @@
 ActiveRecord::Schema.define(:version => 20101026230758) do
 
   create_table "contacts", :force => true do |t|
-    t.string   "matchcode",         :limit => 250
+    t.string   "matchcode"
     t.string   "name",              :limit => 100
     t.string   "organisation_name", :limit => 100
     t.string   "address",           :limit => 250
     t.string   "address_alt",       :limit => 250
     t.string   "phone",             :limit => 20
     t.string   "mobile",            :limit => 20
-    t.string   "ctype",             :limit => 40
+    t.boolean  "client",                           :default => false
+    t.boolean  "supplier",                         :default => false
     t.string   "email",             :limit => 200
     t.string   "tax_number",        :limit => 30
     t.string   "aditional_info",    :limit => 250
-    t.integer  "organisation_id",                  :null => false
+    t.integer  "organisation_id",                                     :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "contacts", ["client"], :name => "index_contacts_on_client"
+  add_index "contacts", ["matchcode"], :name => "index_contacts_on_matchcode"
   add_index "contacts", ["organisation_id"], :name => "index_contacts_on_organisation_id"
+  add_index "contacts", ["supplier"], :name => "index_contacts_on_supplier"
 
   create_table "countries", :force => true do |t|
     t.string   "name",         :limit => 50

@@ -29,8 +29,9 @@ Factory.define :item do |it|
   it.name 'Pipocas'
   it.unit_id 1
   it.unitary_cost 1.5
+  it.price 2
   it.code 'PIP101'
-  it.ctype Item::TYPES.first
+  it.discount '10:2 20:3 30:3.5'
 end
 
 Factory.define :contact do |c|

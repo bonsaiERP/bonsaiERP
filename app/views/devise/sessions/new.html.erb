@@ -4,7 +4,9 @@
 
   <%= simple_form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
     <%= f.input :email, :label => 'E-mail' %>
+    <div class="clear"></div>
     <%= f.input :password, :label => 'Contraseña' %>
+    <div class="clear"></div>
 
     <% if devise_mapping.rememberable? -%>
       <div><%= f.check_box :remember_me %> <%= f.label :remember_me, 'Recordarme', :style => "display: inline" %></div>

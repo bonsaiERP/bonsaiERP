@@ -11,19 +11,12 @@
   %p
     %label Código
     = @item.code 
-  %p{ :class => 'stockable' }
-    %label Se puede almacenar
-    %span{ :class => "icon #{@item.stockable}" }
-  %p{ :class => 'product' }
-    %label Es producto
-    %span{ :class => "#{ @item.product? } icon" }
-  - if @item.product?
-    %p
-      %label Precio
-      = @item.price
-    %p#item_discount
-      %label Descuento
-      %span= @item.discount
+  %p
+    %label Precio
+    = @item.price
+  %p#item_discount
+    %label Descuento
+    %span= @item.discount
 
 %div{ :class => "fl half" }
   %p
@@ -42,6 +35,7 @@
 :javascript
   $(function() {
     if( $('#item_discount').length > 0 ) {
+      $('#item_discount span').hide();
       var val = $('#item_discount span').html();
       var item_discount = new DiscountRangeShow('item_discount');
       item_discount.tableForField(val);

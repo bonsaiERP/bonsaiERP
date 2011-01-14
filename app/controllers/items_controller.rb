@@ -3,12 +3,12 @@
 # email: boriscyber@gmail.com
 class ItemsController < ApplicationController
   respond_to :html, :json, :xml
-  before_filter :set_ctype # Set the @ctype variable
+  #before_filter :set_ctype # Set the @ctype variable
 
   # GET /items
   # GET /items.xml
   def index
-    @items = Item.where(:ctype => @ctype).includes(:unit)
+    @items = Item.includes(:unit)#Item.where(:ctype => @ctype).includes(:unit)
     respond_with @items
   end
 
@@ -22,7 +22,7 @@ class ItemsController < ApplicationController
   # GET /items/new
   # GET /items/new.xml
   def new
-    @item = Item.new(:ctype => params[:ctype])
+    @item = Item.new#(:ctype => params[:ctype])
     respond_with @item
   end
 
@@ -57,15 +57,15 @@ class ItemsController < ApplicationController
 
 private
   # Sets the type for the Item
-  def set_ctype
-    ctype = params[:ctype]
-    # In case that is create or udpate method
-    ctype = params[:item][:ctype] if request.post? or request.put?
-    if Item::TYPES.include?(ctype)
-      @ctype = params[:ctype]
-    else
-      @ctype = Item::TYPES[0]
-    end
-  end
+  #def set_ctype
+  #  ctype = params[:ctype]
+  #  # In case that is create or udpate method
+  #  ctype = params[:item][:ctype] if request.post? or request.put?
+  #  if Item::TYPES.include?(ctype)
+  #    @ctype = params[:ctype]
+  #  else
+  #    @ctype = Item::TYPES[0]
+  #  end
+  #end
 
 end

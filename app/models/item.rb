@@ -3,10 +3,10 @@
 # email: boriscyber@gmail.com
 class Item < ActiveRecord::Base
 
-  before_save :set_stockable
+  #before_save :set_stockable
   after_save :create_price
 
-  TYPES = ['Item', 'ExpenseItem', 'Product', 'Service']
+  #TYPES = ['Item', 'ExpenseItem', 'Product', 'Service']
 
   acts_as_org
   acts_as_taggable
@@ -17,15 +17,15 @@ class Item < ActiveRecord::Base
 
   # belongs_to :itemable, :polymorphic => true
 
-  attr_accessible :name, :unit_id, :code, :description, :price, :discount, :tag_list, :ctype, :unitary_cost
+  attr_accessible :name, :unit_id, :code, :description, :price, :discount, :tag_list, :unitary_cost
 
   # Validations
   validates_presence_of :name, :unit_id, :code
   validates_associated :unit
   validates_numericality_of :unitary_cost, :greater_than_or_equal_to => 0
-  validates :ctype, :presence => true, :inclusion => { :in => TYPES }
+  #validates :ctype, :presence => true, :inclusion => { :in => TYPES }
   validates :code, :uniqueness => { :scope => :organisation_id }
-  validates :price, :numericality => { :greater_than_or_equal_to => 0, :if => lambda { |i| i.product? } }
+  validates :price, :numericality => { :greater_than_or_equal_to => 0, :if => lambda { |i| i.price.present? } }
   validate :validate_discount
 
 
@@ -33,16 +33,16 @@ class Item < ActiveRecord::Base
   default_scope where(:organisation_id => OrganisationSession.organisation_id)
 
   scope :javascript, select("id, name, price, discount")
-  scope :income, where(["ctype IN (?)", TYPES.slice(2, 2)])
+  #scope :income, where(["ctype IN (?)", TYPES.slice(2, 2)])
 
   def to_s
-    name
+    "#{code} - #{name}"
   end
 
   # validation for Services or products
-  def product?
-    TYPES.slice(2, 2).include? self.ctype
-  end 
+  #def product?
+  #  TYPES.slice(2, 2).include? self.ctype
+  #end 
 
   # Returns the recular expression for rang
   #
@@ -68,7 +68,6 @@ private
 
   # Validations for discount
   def validate_discount
-    return true unless self.product?
     return true if self.discount.blank?
     if self.discount =~ /^([+-]?[0-9]+)(\.\d)?$/
       validate_discount_number
@@ -104,10 +103,10 @@ private
     curr_val = curr_per = 0
     first = true
     discount_values.each do |val, per|
-      if per > 100
-        self.errors.add(:discount, I18n.t("activerecord.errors.messages.invalid_range_percentage"))
-        break
-      end
+      #if per > 100
+      #  self.errors.add(:discount, I18n.t("activerecord.errors.messages.invalid_range_percentage"))
+      #  break
+      #end
       unless first
         if val <= curr_val or per <= curr_per
           self.errors.add(:discount, I18n.t("activerecord.errors.messages.invalid_range_secuence"))
@@ -119,10 +118,10 @@ private
     end
   end
 
-  def set_stockable
-    self.stockable = ( self.ctype != 'Service' )
-    # Must return true, sometimes assigment is false and returns false so the
-    # transaction rollsback
-    true
-  end
+  #def set_stockable
+  #  self.stockable = ( self.ctype != 'Service' )
+  #  # Must return true, sometimes assigment is false and returns false so the
+  #  # transaction rollsback
+  #  true
+  #end
 end

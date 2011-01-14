@@ -12,8 +12,6 @@ class Contact < ActiveRecord::Base
 
   validates_presence_of :name#, :organisation_name
   validates :matchcode, :uniqueness => true, :presence => true
-  #, :ctype
-  #  validates_inclusion_of :ctype, :in => TYPES
 
   attr_accessible :name, :matchcode, :organisation_name, :address, :addres_alt, :phone, :mobile, :email, :tax_number, :aditional_info
   
