@@ -366,5 +366,43 @@
         <text>Aprovar</text>
       </controlProperties>
     </control>
+    <control controlID="166" controlTypeID="com.balsamiq.mockups::TextInput" x="617" y="603" w="71" h="-1" measuredW="27" measuredH="29" zOrder="53" locked="false" isInGroup="-1">
+      <controlProperties>
+        <align>right</align>
+        <bold>false</bold>
+        <text>10</text>
+      </controlProperties>
+    </control>
+    <control controlID="167" controlTypeID="com.balsamiq.mockups::TextInput" x="695" y="603" w="71" h="-1" measuredW="21" measuredH="29" zOrder="54" locked="false" isInGroup="-1">
+      <controlProperties>
+        <align>right</align>
+        <bold>false</bold>
+        <text>5</text>
+      </controlProperties>
+    </control>
+    <control controlID="168" controlTypeID="com.balsamiq.mockups::TextInput" x="616" y="635" w="71" h="-1" measuredW="29" measuredH="29" zOrder="55" locked="false" isInGroup="-1">
+      <controlProperties>
+        <align>right</align>
+        <bold>false</bold>
+        <text>30</text>
+      </controlProperties>
+    </control>
+    <control controlID="169" controlTypeID="com.balsamiq.mockups::TextInput" x="694" y="635" w="71" h="-1" measuredW="27" measuredH="29" zOrder="56" locked="false" isInGroup="-1">
+      <controlProperties>
+        <align>right</align>
+        <bold>false</bold>
+        <text>10</text>
+      </controlProperties>
+    </control>
+    <control controlID="170" controlTypeID="com.balsamiq.mockups::ComboBox" x="226" y="604" w="382" h="-1" measuredW="294" measuredH="25" zOrder="57" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Computadora%20portable%20HP%20Pavillon%201243DZ</text>
+      </controlProperties>
+    </control>
+    <control controlID="171" controlTypeID="com.balsamiq.mockups::ComboBox" x="226" y="636" w="382" h="-1" measuredW="285" measuredH="25" zOrder="58" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Parlantes%20Multimedia%20Altec%20lansig%20AL123</text>
+      </controlProperties>
+    </control>
   </controls>
 </mockup>
