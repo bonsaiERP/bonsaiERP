@@ -6,7 +6,8 @@ class Item < ActiveRecord::Base
   #before_save :set_stockable
   after_save :create_price
 
-  #TYPES = ['Item', 'ExpenseItem', 'Product', 'Service']
+  TYPES = ["item", "expense", "service", "product"]
+
 
   acts_as_org
   acts_as_taggable
@@ -17,13 +18,13 @@ class Item < ActiveRecord::Base
 
   # belongs_to :itemable, :polymorphic => true
 
-  attr_accessible :name, :unit_id, :code, :description, :price, :discount, :tag_list, :unitary_cost
+  attr_accessible :name, :unit_id, :code, :description, :price, :discount, :tag_list, :unitary_cost, :ctype, :active
 
   # Validations
   validates_presence_of :name, :unit_id, :code
   validates_associated :unit
   validates_numericality_of :unitary_cost, :greater_than_or_equal_to => 0
-  #validates :ctype, :presence => true, :inclusion => { :in => TYPES }
+  validates :ctype, :presence => true, :inclusion => { :in => TYPES }
   validates :code, :uniqueness => { :scope => :organisation_id }
   validates :price, :numericality => { :greater_than_or_equal_to => 0, :if => lambda { |i| i.price.present? } }
   validate :validate_discount
@@ -37,6 +38,19 @@ class Item < ActiveRecord::Base
 
   def to_s
     "#{code} - #{name}"
+  end
+
+  # Method to get the localized types
+  def self.get_types
+    case I18n.locale
+    when :es
+      ["Insumo", "Item de Gasto", "Servicio", "Producto"].zip(TYPES)
+    end
+  end
+
+  # gets the localized type for the item
+  def get_type
+    self.class.get_types.find {|v| v.last == self.ctype }.first
   end
 
   # validation for Services or products

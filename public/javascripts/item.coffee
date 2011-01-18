@@ -93,6 +93,6 @@ class DiscountRangeShow extends DiscountRange
   # Creates a table for a field
   tableForField: (value)->
     self = this
-    $(self.createTable(self.splitValues(value) ) ).insertAfter('#' + self.field_id)
+    $(self.createTable(self.splitValues(value) ) ).appendTo('#' + self.field_id)
 
 window.DiscountRangeShow = DiscountRangeShow

@@ -5,17 +5,18 @@
   = f.input :code, :label => 'Código'
   = f.input :name, :label => 'Nombre'
   .clear
+  = f.input :ctype, :label => 'Tipo', :collection => Item.get_types, :as => :radio
   = f.association :unit, :label => "Unidad", :input_html => { 'data-path' => new_unit_path }
+  .clear
   = f.input :active, :label => "Activo", :as => :radio
   .clear
-
-  = f.input :unitary_cost, :label => 'Costo unitario de compra'
-  /- if f.object.product?
-  = f.input :price, :label => 'Precio unitario de venta'
-  = f.input :discount, :label => 'Descuento en venta (%)', :hint => 'Ej: 10:2.5 20:4'
+  = f.input :unitary_cost, :label => 'Costo unitario'
+  = f.input :price, :label => 'Precio de venta'
   .clear
+  = f.input :discount, :label => 'Descuento en venta (%)', :hint => 'Ej: 10:2.5 20:4'
   = f.input :tag_list, :label => 'Etiquetas', :hint => 'Escriba palabras separadas por comas, Ej.: grande, costoso'
-  = f.input :description, :as => :text, :input_html => {:rows => 5}, :label => "Descripción"
+  .clear
+  = f.input :description, :as => :text, :input_html => {:rows => 5}
   .clear
   
   = f.submit "Salvar"

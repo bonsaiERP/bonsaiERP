@@ -8,7 +8,7 @@
     child.__super__ = parent.prototype;
     return child;
   };
-  DiscountRange = function() {
+  DiscountRange = (function() {
     function DiscountRange(field_id) {
       var self;
       self = this;
@@ -102,21 +102,21 @@
       });
     };
     return DiscountRange;
-  }();
+  })();
   window.DiscountRange = DiscountRange;
-  DiscountRangeShow = function() {
+  DiscountRangeShow = (function() {
+    __extends(DiscountRangeShow, DiscountRange);
     function DiscountRangeShow(field_id) {
       var self;
       self = this;
       self['field_id'] = field_id;
     }
-    __extends(DiscountRangeShow, DiscountRange);
     DiscountRangeShow.prototype.tableForField = function(value) {
       var self;
       self = this;
-      return $(self.createTable(self.splitValues(value))).insertAfter('#' + self.field_id);
+      return $(self.createTable(self.splitValues(value))).appendTo('#' + self.field_id);
     };
     return DiscountRangeShow;
-  }();
+  })();
   window.DiscountRangeShow = DiscountRangeShow;
 }).call(this);

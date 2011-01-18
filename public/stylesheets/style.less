@@ -45,11 +45,37 @@ ul.show{
   }
 }
 
+/*
+input:focus{
+  border-color:@orange;
+  background-color:light-orange;
+}
+abbr{
+  color: @green;
+}
+*/
+
+/*************************************/
+/*FORM STYLES*/
+form{
+  div{
+    margin-top: 4px;
+  }
+
+}
+.input{
+  width:49%;
+  float:left;
+  margin: 8px 0px;
+}
 label{
   font-weight: bold;
   vertical-align: top;
   display: block;
   color: @dark;
+}
+label.collection_radio{
+  font-weight:normal;
 }
 input, select, textarea{
   font-size: @font_size;
@@ -64,26 +90,6 @@ input, select, textarea{
 option.new{
   color: @dark;
   font-weight: bold;
-}
-/*
-input:focus{
-  border-color:@orange;
-  background-color:light-orange;
-}
-abbr{
-  color: @green;
-}
-*/
-form{
-  div{
-    margin-top: 4px;
-  }
-
-  .input{
-    width:49%;
-    float:left;
-    margin: 8px 0px;
-  }
 }
 /*********************************/
 
@@ -413,8 +419,10 @@ input[type=submit]{
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
   border-radius: 4px;
-  padding: 4px 6px;
+  padding: 4px 16px;
+  margin: 10px 0px;
   font-weight: bold;
+  font-size: 1.1em;
   cursor: pointer;
 }
 .errorExplanation{
