@@ -8,7 +8,7 @@ class TaxesController < ApplicationController
   # GET /taxes
   # GET /taxes.xml
   def index
-    @taxes = Tax.org
+    @taxes = Tax.all
     respond_with @taxes
   end
 

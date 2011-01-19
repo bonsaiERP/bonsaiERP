@@ -11,35 +11,33 @@
     %label Nombre
     = @item.name
   .clear
-  .input
-    %label Unidad de medida
+  .input._25
+    %label Unidad
     = @item.unit
-  .input
+  .input._25
     %label Activo
     %span.icon{:class => @item.active.to_s}
-  .clear
-  .input
-    %label Costo unitario
-    = @item.unitary_cost
-  .input
-    %label Precio de venta
-    = @item.price
-  .clear
   .input
     %label Tipo
     = @item.get_type
+  .clear
+  .input._25
+    %label Costo unitario
+    = @item.unitary_cost
+  .input._25
+    %label Precio de venta
+    = @item.price
   .input#item_discount
     %label Descuento
     %span= @item.discount
-
+  .clear
   .input
     %label Etiquetas
     = @item.tag_list
   .input
     %label Descripción
     = @item.description
-
-%div{ :class => "clear" }
+  .clear
 
 = javascript_include_tag 'item'
 :javascript

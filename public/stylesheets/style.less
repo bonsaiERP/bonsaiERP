@@ -24,10 +24,10 @@ body{
 }
 a{
   color: @blue;
-  text-decoration: underline;
+  text-decoration: none;
 }
 a:hover{
-  text-decoration: none;
+  text-decoration: underline;
 }
 
 
@@ -74,7 +74,7 @@ label{
   display: block;
   color: @dark;
 }
-label.collection_radio{
+label.collection_radio, label.collection_check_boxes{
   font-weight:normal;
 }
 input, select, textarea{
@@ -106,7 +106,7 @@ table.decorated{
   width: 100%;
   th{
     padding: 4px 8px;
-    text-align: left;
+    text-align: center;
     color: @dark;
     background: transparent url(images/th.png) repeat-x 0% 50%;
     height: 32px;
@@ -305,7 +305,6 @@ ul#main_menu{
 .link{
   font-weight: bold;
   padding-left: 20px;
-  text-decoration: none;
   margin: 10px 5px;
   color: @dark_green;
   font-size: 110%;
@@ -317,9 +316,6 @@ a.new{
   background: url(images/add.png) no-repeat scroll 4px 50%;
   border: 1px solid @light_grey;
   padding: 5px 8px 5px 26px;
-}
-a.new:hover{
-  text-decoration: underline;
 }
 a.add{
   .link;
@@ -341,9 +337,6 @@ a.list{
 a.show{
   .link;
   background: url(images/zoom.png) no-repeat;
-}
-a.show:hover, a.edit:hover, a.destroy:hover, a.list:hover{
-  text-decoration: underline;
 }
 
 a.cog{
@@ -562,11 +555,20 @@ ul.menu{
   display: none;
 }
 
+.l{ text-align: left; }
+.c{ text-align: center; }
+.r{ text-align: right; }
+
 .dark{ color: @dark; }
 
 ._30, .w30{ width: 30%;}
 ._33, .w33{ width: 33%;}
+._25, .w33{ width: 24%;}
+._50, .w33{ width: 49%;}
 .w50 { width: 49%; }
+.p100 { width: 100px; }
+.p200 { width: 200px; }
+.p300 { width: 300px; }
 
 .mt10{ margin-top: 10px; }
 .mt20{ margin-top: 20px; }

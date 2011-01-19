@@ -5,17 +5,17 @@
   = f.input :matchcode, :label => "Código de identificación", :hint => 'Código que permite identificar contactos con un mismo nombre'
   .clear
   = f.input :organisation_name, :label => "Empresa"
-  .clear
-  = f.input :phone, :label => "Teléfono"
-  = f.input :mobile, :label => "Móvil"
+  .input
+    = f.input :phone, :label => "Teléfono"
+    = f.input :mobile, :label => "Móvil"
   .clear
   = f.input :email, :lanel => "Email"
   = f.input :tax_number, :label => "NIT"
 
-  = f.input :address, :as => :text, :input_html => {:rows => 4}, :label => "Dirección" 
-  = f.input :address_alt, :as => :text, :input_html => {:rows => 4}, :label => "Dirección alternativa" 
+  = f.input :address, :as => :text, :input_html => {:rows => 4}, :label => "Dirección", :value => br2nl(@contact.address)
+  = f.input :address_alt, :as => :text, :input_html => {:rows => 4}, :label => "Dirección alternativa", :value => br2nl(@contact.address_alt)
   .clear
-  = f.input :aditional_info, :as => :text, :input_html => {:rows => 4}, :label => "Información adicional" 
+  = f.input :aditional_info, :as => :text, :input_html => {:rows => 4}, :label => "Información adicional", :value => br2nl(@contact.aditional_info)
 
   .clear
   %div.actions

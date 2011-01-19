@@ -5,7 +5,7 @@ class Contact < ActiveRecord::Base
   acts_as_org
 
   # callbacks
-  before_save :change_nl2br, :unless => lambda { |c| c.address.blank? }
+  #before_save :change_nl2br#, :unless => lambda { |c| c.address.blank? }
 
   # relations
   has_many :transactions
@@ -19,14 +19,7 @@ class Contact < ActiveRecord::Base
   default_scope where(:organisation_id => OrganisationSession.organisation_id)
 
   def to_s
-    name
-  end
-
-private
-
-  # Format addres to present on the
-  def change_nl2br
-    self.address.gsub!("\n", "<br/>")
+    matchcode
   end
 
 end

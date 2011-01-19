@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101026230758) do
+ActiveRecord::Schema.define(:version => 20110119160057) do
 
   create_table "contacts", :force => true do |t|
     t.string   "matchcode"
@@ -119,6 +119,19 @@ ActiveRecord::Schema.define(:version => 20101026230758) do
     t.datetime "updated_at"
   end
 
+  create_table "projects", :force => true do |t|
+    t.string   "name"
+    t.boolean  "active"
+    t.date     "date_start"
+    t.date     "date_end"
+    t.integer  "organisation_id", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "projects", ["active"], :name => "index_projects_on_active"
+  add_index "projects", ["organisation_id"], :name => "index_projects_on_organisation_id"
+
   create_table "stores", :force => true do |t|
     t.string   "name"
     t.string   "address"
@@ -163,6 +176,15 @@ ActiveRecord::Schema.define(:version => 20101026230758) do
 
   add_index "taxes", ["organisation_id"], :name => "index_taxes_on_organisation_id"
 
+  create_table "taxes_transactions", :id => false, :force => true do |t|
+    t.integer "tax_id"
+    t.integer "transaction_id"
+  end
+
+  add_index "taxes_transactions", ["tax_id", "transaction_id"], :name => "index_taxes_transactions_on_tax_id_and_transaction_id"
+  add_index "taxes_transactions", ["tax_id"], :name => "index_taxes_transactions_on_tax_id"
+  add_index "taxes_transactions", ["transaction_id"], :name => "index_taxes_transactions_on_transaction_id"
+
   create_table "transaction_details", :force => true do |t|
     t.integer  "transaction_id"
     t.integer  "item_id"
@@ -200,12 +222,15 @@ ActiveRecord::Schema.define(:version => 20101026230758) do
     t.integer  "organisation_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "project_id"
+    t.decimal  "discount",                             :precision => 5,  :scale => 2
   end
 
   add_index "transactions", ["active"], :name => "index_transactions_on_active"
   add_index "transactions", ["contact_id"], :name => "index_transactions_on_contact_id"
   add_index "transactions", ["date"], :name => "index_transactions_on_date"
   add_index "transactions", ["organisation_id"], :name => "index_transactions_on_organisation_id"
+  add_index "transactions", ["project_id"], :name => "index_transactions_on_project_id"
   add_index "transactions", ["ref_number"], :name => "index_transactions_on_ref_number"
 
   create_table "units", :force => true do |t|

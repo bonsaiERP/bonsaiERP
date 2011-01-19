@@ -1,9 +1,18 @@
 = simple_form_for(@income) do |f|
   = bonsai_form_error(f)
-  = f.input :ref_number, :label => 'Nº de referencia'
-  = f.input :date, :label => 'Fecha'
-  .clear
+  .input
+    = f.input :ref_number, :label => 'Nº de referencia', :input_html => {:size => 20}
+    = f.input :date, :label => 'Fecha'
   = f.association :contact, :label => 'Cliente'
+  .clear
+  = f.association :project, :label => 'Proyecto'
+  = f.association :currency, :label => 'Moneda'
+  .clear
+  .input
+    = f.input :discount, :label => 'Descuento (%)', :input_html => {:size => 10}
+    = f.input :bill_number, :label => 'Nº de Factura', :input_html => {:size => 20}
+  =f.association :taxes, :as => :check_boxes, :label => 'Impuestos'
+  .clear
   = f.input :description, :label => 'Descripción', :as => :text, :input_html => {:rows => 4, :cols => 40}
   .clear
 

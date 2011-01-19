@@ -8,9 +8,9 @@ body {
 }
 a {
   color: #6793ce;
-  text-decoration: underline;
+  text-decoration: none;
 }
-a:hover { text-decoration: none; }
+a:hover { text-decoration: underline; }
 ul.show li { margin: 3px 0px; }
 ul.show li label {
   display: table;
@@ -29,7 +29,7 @@ label {
   display: block;
   color: #30383e;
 }
-label.collection_radio { font-weight: normal; }
+label.collection_radio, label.collection_check_boxes { font-weight: normal; }
 input, select, textarea {
   font-size: 11.5px;
   padding: 1px 2px;
@@ -52,7 +52,7 @@ table.decorated {
 }
 table.decorated th {
   padding: 4px 8px;
-  text-align: left;
+  text-align: center;
   color: #30383e;
   background: transparent url(images/th.png) repeat-x 0% 50%;
   height: 32px;
@@ -191,7 +191,6 @@ ul#main_menu li:hover ul {
 .link {
   font-weight: bold;
   padding-left: 20px;
-  text-decoration: none;
   margin: 10px 5px;
   color: #538447;
   font-size: 110%;
@@ -199,7 +198,6 @@ ul#main_menu li:hover ul {
 a.new {
   font-weight: bold;
   padding-left: 20px;
-  text-decoration: none;
   margin: 10px 5px;
   color: #538447;
   font-size: 110%;
@@ -208,11 +206,9 @@ a.new {
   border: 1px solid #f0f0f1;
   padding: 5px 8px 5px 26px;
 }
-a.new:hover { text-decoration: underline; }
 a.add {
   font-weight: bold;
   padding-left: 20px;
-  text-decoration: none;
   margin: 10px 5px;
   color: #538447;
   font-size: 110%;
@@ -221,7 +217,6 @@ a.add {
 a.edit {
   font-weight: bold;
   padding-left: 20px;
-  text-decoration: none;
   margin: 10px 5px;
   color: #538447;
   font-size: 110%;
@@ -230,7 +225,6 @@ a.edit {
 a.destroy, a.delete {
   font-weight: bold;
   padding-left: 20px;
-  text-decoration: none;
   margin: 10px 5px;
   color: #538447;
   font-size: 110%;
@@ -239,7 +233,6 @@ a.destroy, a.delete {
 a.list {
   font-weight: bold;
   padding-left: 20px;
-  text-decoration: none;
   margin: 10px 5px;
   color: #538447;
   font-size: 110%;
@@ -248,16 +241,11 @@ a.list {
 a.show {
   font-weight: bold;
   padding-left: 20px;
-  text-decoration: none;
   margin: 10px 5px;
   color: #538447;
   font-size: 110%;
   background: url(images/zoom.png) no-repeat;
 }
-a.show:hover { text-decoration: underline; }
-a.edit:hover { text-decoration: underline; }
-a.destroy:hover { text-decoration: underline; }
-a.list:hover { text-decoration: underline; }
 a.cog {
   background: transparent url(images/cog.png) no-repeat 0 50%;
   padding-left: 20px !important;
@@ -425,10 +413,17 @@ ul.menu li:hover ul {
 .true { background: transparent url(images/tick.png) no-repeat center 50%; }
 .false { background: transparent url(images/cross.png) no-repeat center 50%; }
 .hide { display: none; }
+.l { text-align: left; }
+.c { text-align: center; }
+.r { text-align: right; }
 .dark { color: #30383e; }
 ._30, .w30 { width: 30%; }
 ._33, .w33 { width: 33%; }
-.w50 { width: 49%; }
+._25, .w33 { width: 24%; }
+._50, .w33, .w50 { width: 49%; }
+.p100 { width: 100px; }
+.p200 { width: 200px; }
+.p300 { width: 300px; }
 .mt10 { margin-top: 10px; }
 .mt20 { margin-top: 20px; }
 .mb10, .mb20 { margin-bottom: 20px; }

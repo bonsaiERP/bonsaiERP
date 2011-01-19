@@ -144,7 +144,7 @@ es:
       # Use the strftime parameters for formats.
       # When no format has been given, it uses default.
       # You can provide other formats here if you like!
-      default: "%e/%m/%Y"
+      default: "%d %b %Y"
       short: "%e de %b"
       long: "%e de %B de %Y"
 

@@ -12,16 +12,19 @@
 %table{ :class=> "decorated mt10" }
   %tr
     %th Código
-    %th Nombre
+    %th.300 Nombre
+    %th Tipo
     %th Unidad
-    %th Precio<br/>de compra
+    %th Costo<br/>Unitario
     %th Precio<br/>de Venta
+    %th
 
   - @items.each do |item|
     %tr
       %td= link_to item.code, item
       %td= item.name
+      %td= item.get_type
       %td= item.unit.name 
-      %td= item.unitary_cost
-      %td= item.price
+      %td.r= ntc( item.unitary_cost )
+      %td.r= ntc( item.price )
       %td= bonsai_links(item)

@@ -19,4 +19,24 @@ module ApplicationHelper
     val ? "Si": "No"
   end
 
+  # Presents number to currency
+  def ntc(val = nil)
+    val ||= 0
+    number_to_currency(val)
+  end
+
+  # Format addres to present on the
+  def nl2br(val)
+    val.gsub!("\n", "<br/>").html_safe unless val.nil?
+  end
+
+  # Changes the <br/> for a \n
+  def br2nl(val)
+    val.gsub!("<br/>", "\n") unless val.nil?
+  end
+
+  # Used for localization
+  def lo(val)
+    localize(val) unless val.nil?
+  end
 end

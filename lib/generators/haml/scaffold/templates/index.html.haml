@@ -1,12 +1,12 @@
-%h1= <%= plural_table_name %>
+%h1 <%= plural_table_name %>
 
 %p.links= link_to "Nuevo <%= singular_name %>", new_<%= singular_name %>_path, :class => 'new'
 
-%table{ :class => 'decorated nwl' }
+%table.decorated.nwl 
   %thead
     %tr
 <% for attribute in attributes -%>
-      %th <%= attribute.name %>
+      %th <%= attribute.name.humanize %>
 <% end -%>
       %th
   
