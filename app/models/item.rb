@@ -12,11 +12,13 @@ class Item < ActiveRecord::Base
   acts_as_org
   acts_as_taggable
 
+  # relationships
   belongs_to :unit
   has_many :prices
   has_many :transaction_details
 
   # belongs_to :itemable, :polymorphic => true
+  
 
   attr_accessible :name, :unit_id, :code, :description, :price, :discount, :tag_list, :unitary_cost, :ctype, :active
 
@@ -34,7 +36,7 @@ class Item < ActiveRecord::Base
   default_scope where(:organisation_id => OrganisationSession.organisation_id)
 
   scope :javascript, select("id, name, price, discount")
-  #scope :income, where(["ctype IN (?)", TYPES.slice(2, 2)])
+  scope :income, where(["ctype IN (?)", TYPES.slice(2, 2)])
 
   def to_s
     "#{code} - #{name}"

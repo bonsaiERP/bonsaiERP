@@ -13,14 +13,13 @@
     %li
       %a{ :href => "javascript:"} Ingresos - Egresos <span class=\"down\">&nbsp;</span>
       %ul
-        %li
-          = link_to "Nuevo", '/incomes/new', :class => 'add', :title => 'Nuevo'
-          = link_to "Ingresos", '/incomes', :class => 'add_left'
-        %li= link_to "Compras", '/buys' # incomes_path 
-        %li= link_to "Egresos", '/expenses' 
-        %li= link_to "Contactos", '/contacts' # contacts_path 
-        %li= link_to "Impuestos", '/taxes' 
-        %li= link_to "Transferencias entre cuentas" 
+        %li= link_to "Ingresos", '/incomes'
+        %li= link_to "Compras", '/buys' # incomes_path
+        %li= link_to "Egresos", '/expenses'
+        %li= link_to "Proyectos", '/projects'
+        %li= link_to "Contactos", '/contacts' # contacts_path
+        %li= link_to "Impuestos", '/taxes'
+        %li= link_to "Transferencias entre cuentas"
     
     %li
       %a{ :href => "javascript:"} Reportes <span class=\"down\">&nbsp;</span>
