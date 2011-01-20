@@ -2,6 +2,8 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class IncomesController < ApplicationController
+
+  before_filter :set_default_currency, :only => [:new, :edit]
   # GET /incomes
   # GET /incomes.xml
   def index
@@ -27,7 +29,7 @@ class IncomesController < ApplicationController
   # GET /incomes/new
   # GET /incomes/new.xml
   def new
-    @income = Income.new
+    @income = Income.new(:date => Date.today, :currency_id => @currency_id )
     @income.transaction_details.build
 
     respond_to do |format|
@@ -84,5 +86,10 @@ class IncomesController < ApplicationController
       format.html { redirect_to(incomes_url) }
       format.xml  { head :ok }
     end
+  end
+
+private
+  def set_default_currency
+    @currency_id = Organisation.find(session[:organisation][:id]).currency_id
   end
 end

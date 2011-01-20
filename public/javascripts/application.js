@@ -1,9 +1,9 @@
 (function() {
   $(document).ready(function() {
-    var createDialog, csfr_token, mark, parsearFecha, roundVal, serializeFormElements, setFechaDateSelect, setIframePostEvents, speed, start, toByteSize, transformDateSelect, transformMinuteSelect;
+    var createDialog, csfr_token, mark, parsearFecha, roundVal, serializeFormElements, setDateSelect, setIframePostEvents, speed, start, toByteSize, transformDateSelect, transformMinuteSelect;
     speed = 300;
     csfr_token = $('meta[name=csfr-token]').attr('content');
-    $.dateInputFormat = $.fn.dateInputFormat = 'dd mmm yyyy';
+    $.datepicker._defaults.dateFormat = 'dd M yy';
     parsearFecha = function(fecha, tipo) {
       var d;
       fecha = $.datepicker.parseDate($.datepicker._defaults.dateFormat, fecha);
@@ -14,6 +14,14 @@
         return d;
       }
     };
+    setDateSelect = function(el) {
+      var fecha;
+      fecha = parsearFecha($(el).val());
+      $(el).siblings('select[name*=1i]').val(fecha[0]);
+      $(el).siblings('select[name*=2i]').val(fecha[1]);
+      return $(el).siblings('select[name*=3i]').val(fecha[2]);
+    };
+    $.setDateSelect = $.fn.setDateSelect = setDateSelect;
     transformMinuteSelect = function(el, step) {
       var $el, k, options, sel, steps, val;
       if (step == null) {
@@ -37,10 +45,11 @@
     transformDateSelect = function(elem) {
       return $(elem).find('.date, .datetime').each(function(i, el) {
         var day, input, minute, month, year;
-        input = $('<input/>').attr({
+        input = document.createElement('input');
+        $(input).attr({
           'class': 'date-transform',
           'type': 'text',
-          'size': 12
+          'size': 10
         });
         year = $(el).find('select[name*=1i]').hide().val();
         month = (1 * $(el).find('select[name*=2i]').hide().val()) - 1;
@@ -49,33 +58,21 @@
         if (minute.length > 0) {
           transformMinuteSelect(minute);
         }
-        return $(input).dateinput({
-          'format': $.dateInputFormat,
-          'lang': 'es',
-          'selectors': true,
-          'firstDay': 1,
-          'change': function() {
-            var self, val;
-            val = this.getValue('yyyy-mm-dd');
-            val = val.split('-');
-            self = this.getInput();
-            return $(val).each(function(i, el) {
-              var value;
-              value = el.replace(/^0([0-9]+$)/, '$1');
-              return $(self).siblings('select[name*=' + (i + 1) + 'i]').val(value);
-            });
+        $(input).datepicker({
+          yearRange: '1900:',
+          showOn: 'both',
+          buttonImageOnly: true,
+          buttonImage: '/stylesheets/images/calendar.gif',
+          onSelect: function(dateText, inst) {
+            return $.setDateSelect(inst.input);
           }
         });
+        if (year !== '' && month !== '' && day !== '') {
+          return $(input).datepicker("setDate", new Date(year, month, day));
+        }
       });
     };
     $.transformDateSelect = $.fn.transformDateSelect = transformDateSelect;
-    setFechaDateSelect = function(el) {
-      var fecha;
-      fecha = parsearFecha($(el).val());
-      $(el).siblings('select[name*=1i]').val(fecha[0]);
-      $(el).siblings('select[name*=2i]').val(fecha[1]);
-      return $(el).siblings('select[name*=3i]').val(fecha[2]);
-    };
     $('[tooltip]').live('mouseover mouseout', function(e) {
       var div, pos;
       div = '#tooltip';
@@ -252,25 +249,32 @@
     serializeFormElements = function(elem) {
       var params;
       params = {};
-      $(elem).find('input, select, textarea').each(function(i, el) {
+      $(elem).find('input:not(:radio):not(:checkbox), select, textarea').each(function(i, el) {
+        if ($(el).val()) {
+          return params[$(el).attr('name')] = $(el).val();
+        }
+      });
+      $(elem).find('input:radio:checked, input:checkbox:checked').each(function(i, el) {
         return params[$(el).attr('name')] = $(el).val();
       });
       return params;
     };
     $.serializeFormElements = $.fn.serializeFormElements = serializeFormElements;
     mark = function(selector, velocity, val) {
+      var self;
+      self = selector || this;
       val = val || 0;
-      velocity = velocity || 7;
-      $(selector).css({
+      velocity = velocity || 30;
+      $(self).css({
         'background': 'rgb(255,255,' + val + ')'
       });
       if (val >= 255) {
-        $(selector).attr("style", "");
+        $(self).attr("style", "");
         return false;
       }
       return setTimeout(function() {
         val += 5;
-        return mark(selector, velocity, val);
+        return mark(self, velocity, val);
       }, velocity);
     };
     $.mark = $.fn.mark = mark;

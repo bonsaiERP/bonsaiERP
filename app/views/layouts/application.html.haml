@@ -5,8 +5,8 @@
     %meta{ 'http-equiv'  => "content-type", :content => "text/html;charset=UTF-8" }
 
     %title Bonsai
-    = stylesheet_link_tag 'style', 'jquerytools' 
-    = javascript_include_tag 'jquery-1.4.2', 'jquery.tools.min', 'localization', 'application', :cache => 'scripts' 
+    = stylesheet_link_tag 'style', 'jquery-ui-1.8.custom.css' 
+    = javascript_include_tag 'jquery-1.4.4.min', 'jquery-ui-1.8.8.custom.min.js', 'jquery.ui.datepicker-es.js', 'application', :cache => 'scripts' 
   %body
 
     - if Rails.env == 'development'

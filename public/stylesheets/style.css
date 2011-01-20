@@ -59,6 +59,7 @@ table.decorated th {
 }
 table.decorated tr { border-bottom: 1px solid #c6c6c6; }
 table.decorated td { padding: 4px 8px; }
+table.decorated tr.extra { border-bottom: none !important; }
 table.nwl td:last-child { white-space: nowrap; }
 table.nwf td:first-child { white-space: nowrap; }
 #wrapper {
@@ -413,6 +414,8 @@ ul.menu li:hover ul {
 .true { background: transparent url(images/tick.png) no-repeat center 50%; }
 .false { background: transparent url(images/cross.png) no-repeat center 50%; }
 .hide { display: none; }
+.b { font-weight: bold; }
+.i { font-style: italic; }
 .l { text-align: left; }
 .c { text-align: center; }
 .r { text-align: right; }

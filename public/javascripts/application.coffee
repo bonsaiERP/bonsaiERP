@@ -4,7 +4,7 @@ $(document).ready(->
   # csfr
   csfr_token = $('meta[name=csfr-token]').attr('content')
   # Date format
-  $.dateInputFormat = $.fn.dateInputFormat = 'dd mmm yyyy'
+  $.datepicker._defaults.dateFormat = 'dd M yy'
 
   # Parsea la fecha con formato seleciando a un objeto Date
   # @param String fecha
@@ -17,7 +17,14 @@ $(document).ready(->
     else
       d
 
-  # Returns the date
+  # Sets rails select fields with the correct datthe correct date
+  setDateSelect = (el)->
+    fecha = parsearFecha( $(el).val() )
+    $(el).siblings('select[name*=1i]').val(fecha[0])
+    $(el).siblings('select[name*=2i]').val(fecha[1])
+    $(el).siblings('select[name*=3i]').val(fecha[2])
+
+  $.setDateSelect = $.fn.setDateSelect = setDateSelect
 
   # Transforms the hour to just select 00, 15, 30, 
   transformMinuteSelect = (el, step = 5)->
@@ -36,29 +43,28 @@ $(document).ready(->
   transformDateSelect = (elem)->
     $(elem).find('.date, .datetime').each((i, el)->
       # hide fields
-      input = $('<input/>').attr({ 'class': 'date-transform', 'type': 'text', 'size': 12})
+      input = document.createElement('input')
+      $(input).attr({ 'class': 'date-transform', 'type': 'text', 'size': 10 })
       year = $(el).find('select[name*=1i]').hide().val()
       month = (1 * $(el).find('select[name*=2i]').hide().val()) - 1
-      # append input
       day = $(el).find('select[name*=3i]').hide().after( input ).val()
       minute = $(el).find('select[name*=5i]')
 
       if minute.length > 0 then transformMinuteSelect(minute)
 
-      $(input).dateinput(
-        'format': $.dateInputFormat
-        'lang': 'es',
-        'selectors': true,
-        'firstDay': 1,
-        'change': ->
-          val = this.getValue('yyyy-mm-dd')
-          val = val.split('-')
-          self = this.getInput()
-          $(val).each( (i, el)->
-            value = el.replace(/^0([0-9]+$)/, '$1')
-            $(self).siblings('select[name*=' + (i + 1) + 'i]').val(value)
-          )
+      # Solo despues de haber adicionado al DOM hay que 
+      # usar datepicker si se define el boton
+      $(input).datepicker(
+        yearRange: '1900:',
+        showOn: 'both',
+        buttonImageOnly: true,
+        buttonImage: '/stylesheets/images/calendar.gif',
+        onSelect: (dateText, inst)->
+          $.setDateSelect(inst.input)
       )
+
+      if year != '' and month != '' and day != ''
+        $(input).datepicker("setDate", new Date(year, month, day))
     )
 
   $.transformDateSelect = $.fn.transformDateSelect = transformDateSelect
@@ -66,15 +72,7 @@ $(document).ready(->
 
   ##################################################
 
-  # Asignar la fecha a los elementos siblings del campo con datepicker
-  # cuando los campos son select
-  setFechaDateSelect = (el)->
-    fecha = parsearFecha( $(el).val() )
-    $(el).siblings('select[name*=1i]').val(fecha[0])
-    $(el).siblings('select[name*=2i]').val(fecha[1])
-    $(el).siblings('select[name*=3i]').val(fecha[2])
-
-  # Presenta un tooltip
+  # Presents a tooltip
   $('[tooltip]').live('mouseover mouseout', (e)->
     div = '#tooltip'
     if($(this).hasClass('error') )
@@ -93,7 +91,7 @@ $(document).ready(->
 
   )
 
-  # Para poder presentar mas o menos
+  # Presents more or less links
   $('a.more').live("click", ->
     $(this).html('Ver menos').removeClass('more').addClass('less').next('.hidden').show(speed)
   )
@@ -114,8 +112,6 @@ $(document).ready(->
     delete(params['title'])
     $(div).dialog( params )
     div
-
-  #$.fn.createDialog = createDialog
 
   # Presents an AJAX form
   $('a.ajax').live("click", (e)->
@@ -215,16 +211,6 @@ $(document).ready(->
   )
   # End submit ajax form
 
-
-  # Cambiar icono para more y less
-  #$('ul.menu>li').live('mouseover mouseout', (e)->
-  #  $span = $(this).find('.more, .less')
-  #  if(e.type == 'mouseover')
-  #    $span.removeClass('more').addClass('less')
-  #  else
-  #    $span.removeClass('less').addClass('more')
-  #)
-
   # Delete an Item
   $('a.delete').live("click", (e)->
     $(this).parents("tr:first, li:first").addClass('marked')
@@ -254,11 +240,15 @@ $(document).ready(->
   serializeFormElements = (elem)->
     params = {}
 
-    $(elem).find('input, select, textarea').each((i, el)->
+    $(elem).find('input:not(:radio):not(:checkbox), select, textarea').each((i, el)->
+      if $(el).val()
+        params[ $(el).attr('name') ] = $(el).val()
+    )
+    $(elem).find('input:radio:checked, input:checkbox:checked').each((i, el)->
       params[ $(el).attr('name') ] = $(el).val()
     )
 
-    return params
+    params
 
   $.serializeFormElements = $.fn.serializeFormElements = serializeFormElements
 
@@ -266,15 +256,16 @@ $(document).ready(->
   # @param String // jQuery selector
   # @param Integer velocity
   mark = (selector, velocity, val)->
+    self = selector or this
     val = val or 0
-    velocity = velocity or 7
-    $(selector).css({'background': 'rgb(255,255,'+val+')'})
+    velocity = velocity or 30
+    $(self).css({'background': 'rgb(255,255,'+val+')'})
     if(val >= 255)
-      $(selector).attr("style", "")
+      $(self).attr("style", "")
       return false
     setTimeout(->
       val += 5
-      mark(selector, velocity, val)
+      mark(self, velocity, val)
     , velocity)
 
   $.mark = $.fn.mark = mark
