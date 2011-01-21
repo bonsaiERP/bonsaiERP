@@ -78,20 +78,20 @@
         %td= fd.input :quantity, :input_html => { :size => 8, :class => 'quantity' }, :label => false
         %td.total_row.r
     %tr.extra
-      %td{:colspan => 3}
-      %td.b.r Subtotal
+      %td{:colspan => 2}
+      %td.b.r{:colspan => 2} Subtotal
       %td#subtotal.b.r
     %tr.extra
-      %td{:colspan => 3} <a href="javascript:" id="add_item">Adicionar ítem</a>
-      %td.b.r Descuento (<span id="discount_percentage">#{ntc @income.discount}</span>%)
+      %td{:colspan => 2} <a href="javascript:" id="add_item" class="add">Adicionar ítem</a>
+      %td.b.r{:colspan => 2} Descuento (<span id="discount_percentage" data-val="#{@income.discount}">#{ntc @income.discount}</span>%)
       %td#discount_total.b.r
     %tr.extra
-      %td{:colspan => 3}
-        %td.b.r Impuestos (<span id="taxes_percentage">#{ntc @income.total_taxes}</span>%)
+      %td{:colspan => 2}
+      %td.b.r{:colspan => 2} Impuestos (<span id="taxes_percentage" data-val="#{@income.total_taxes}">#{ntc @income.total_taxes}</span>%)
       %td#taxes_total.b.r
     %tr.extra
-      %td{:colspan => 3}
-      %td.r <h3>Total</h3>
+      %td{:colspan => 2}
+      %td.r{:colspan => 2} <h3>Total</h3>
       %td.r <h3 id="total_value"></h3>
 
   .actions

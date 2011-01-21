@@ -10,7 +10,8 @@ class Transaction
     'discount_percentage_id': '#discount_percentage',
     'discount_total_id': '#discount_total',
     'taxes_total_id': '#taxes_total',
-    'taxes_percentage_id': '#taxes_percentage'
+    'taxes_percentage_id': '#taxes_percentage',
+    'total_id': '#total_value'
   },
   # Construnctor
   # params Object conf
@@ -20,10 +21,18 @@ class Transaction
     self.set_events()
   # Sets the events
   set_events: ->
+    this.set_discount_event()
     this.set_taxes_event()
     this.set_item_change_event("table select.item", "input.price")
     this.set_price_quantity_change_event("table", "input.price", "input.quantity")
-    #set_product_change('')
+  # Event when changed discount rate
+  set_discount_event: ->
+    self = this
+    $(@conf.discount_id).live("change", ->
+      val = $(this).val() * 1
+      $(self.conf.discount_percentage_id).html(_b.ntc(val)).data("val", val)
+      self.calculate_discount()
+    )
   # Sets the events for calculating taxes, triggering body
   # with arguments: Ej. [{checked: true, rate: 12.3}]
   # @param String id
@@ -31,8 +40,8 @@ class Transaction
     self = this
     $(id).find("input:checkbox").live('click', ->
       sum = 0
-      sum += 1 * $(k).siblings("span").data("rate") for k in $(@conf.taxes_id).find("input:checkbox:checked")
-      $(@conf.taxes_percentage_id).html("#{_b.ntc(sum)} %").data("val", sum)
+      sum += 1 * $(k).siblings("span").data("rate") for k in $(self.conf.taxes_id).find("input:checkbox:checked")
+      $(self.conf.taxes_percentage_id).html("#{_b.ntc(sum)} %").data("val", sum)
       self.calculate_taxes()
     )
     #$(self.trigger).trigger("tax:calculated", [taxes_subtotal] )
@@ -71,19 +80,20 @@ class Transaction
     )
     $(@conf.subtotal_id).html(_b.ntc(sum)).data("val", sum)
     this.calculate_discount()
-  # Calculates the total taxes
   # Calculates the total amount of discount
   calculate_discount: ->
-    val = ( 1 * $(@conf.discount_id).val() )/100 * $(@conf.subtotal_id).data("val")
-    $(@conf.discount_percentage_id).html(_b.ntc(val)).data("val", val)
+    val = ( -1 * $(@conf.discount_id).val() )/100 * $(@conf.subtotal_id).data("val")
+    $(@conf.discount_total_id).html(_b.ntc(val)).data("val", val)
     this.calculate_taxes()
-  # Event to capture the percentage and calculate
-  # @param String tax_id
-  # @param String tax_subtotal_id
+  # Calculates the total taxes
   calculate_taxes: ()->
-    val = ($(@conf.subtotal_id).data("val") - $(@conf.discount_percentage_id).data("val")) * $(@conf.discount_percentage_id).data("val")
+    val = ($(@conf.subtotal_id).data("val") + $(@conf.discount_total_id).data("val")) * $(@conf.taxes_percentage_id).data("val")/100
     $(@conf.taxes_total_id).html(_b.ntc(val)).data("val", val)
-    console.log(sum)
+    this.calculate_total()
+  # Calculate total price
+  calculate_total: ()->
+    sum = $(@conf.subtotal_id).data("val") + $(@conf.discount_total_id).data("val") + $(@conf.taxes_total_id).data("val")
+    $(@conf.total_id).html(_b.ntc(sum)).data("val", sum)
   # returns the item from a list
   search_item: (id)->
     id = parseInt(id)

@@ -9,7 +9,8 @@
       'discount_percentage_id': '#discount_percentage',
       'discount_total_id': '#discount_total',
       'taxes_total_id': '#taxes_total',
-      'taxes_percentage_id': '#taxes_percentage'
+      'taxes_percentage_id': '#taxes_percentage',
+      'total_id': '#total_value'
     };
     function Transaction(items, trigger, conf) {
       var self;
@@ -23,9 +24,20 @@
       self.set_events();
     }
     Transaction.prototype.set_events = function() {
+      this.set_discount_event();
       this.set_taxes_event();
       this.set_item_change_event("table select.item", "input.price");
       return this.set_price_quantity_change_event("table", "input.price", "input.quantity");
+    };
+    Transaction.prototype.set_discount_event = function() {
+      var self;
+      self = this;
+      return $(this.conf.discount_id).live("change", function() {
+        var val;
+        val = $(this).val() * 1;
+        $(self.conf.discount_percentage_id).html(_b.ntc(val)).data("val", val);
+        return self.calculate_discount();
+      });
     };
     Transaction.prototype.set_taxes_event = function(id) {
       var self;
@@ -36,12 +48,12 @@
       return $(id).find("input:checkbox").live('click', function() {
         var k, sum, _i, _len, _ref;
         sum = 0;
-        _ref = $(this.conf.taxes_id).find("input:checkbox:checked");
+        _ref = $(self.conf.taxes_id).find("input:checkbox:checked");
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           k = _ref[_i];
           sum += 1 * $(k).siblings("span").data("rate");
         }
-        $(this.conf.taxes_percentage_id).html("" + (_b.ntc(sum)) + " %").data("val", sum);
+        $(self.conf.taxes_percentage_id).html("" + (_b.ntc(sum)) + " %").data("val", sum);
         return self.calculate_taxes();
       });
     };
@@ -83,15 +95,20 @@
     };
     Transaction.prototype.calculate_discount = function() {
       var val;
-      val = (1 * $(this.conf.discount_id).val()) / 100 * $(this.conf.subtotal_id).data("val");
-      $(this.conf.discount_percentage_id).html(_b.ntc(val)).data("val", val);
+      val = (-1 * $(this.conf.discount_id).val()) / 100 * $(this.conf.subtotal_id).data("val");
+      $(this.conf.discount_total_id).html(_b.ntc(val)).data("val", val);
       return this.calculate_taxes();
     };
     Transaction.prototype.calculate_taxes = function() {
       var val;
-      val = ($(this.conf.subtotal_id).data("val") - $(this.conf.discount_percentage_id).data("val")) * $(this.conf.discount_percentage_id).data("val");
+      val = ($(this.conf.subtotal_id).data("val") + $(this.conf.discount_total_id).data("val")) * $(this.conf.taxes_percentage_id).data("val") / 100;
       $(this.conf.taxes_total_id).html(_b.ntc(val)).data("val", val);
-      return console.log(sum);
+      return this.calculate_total();
+    };
+    Transaction.prototype.calculate_total = function() {
+      var sum;
+      sum = $(this.conf.subtotal_id).data("val") + $(this.conf.discount_total_id).data("val") + $(this.conf.taxes_total_id).data("val");
+      return $(this.conf.total_id).html(_b.ntc(sum)).data("val", sum);
     };
     Transaction.prototype.search_item = function(id) {
       var k, _i, _len, _ref;
