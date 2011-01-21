@@ -1,4 +1,5 @@
 :css
+  input.price, input.quantity{ text-align: right; }
   /*
   .ui-datepicker-header{
     background: #FFF !important;
@@ -37,7 +38,7 @@
     background: transparent;
   }
   */
-= simple_form_for(@income) do |f|
+= simple_form_for(@income, :html => {:id => 'income_form'}) do |f|
   = bonsai_form_error(f)
   .input
     = f.input :ref_number, :label => 'Nº de referencia', :input_html => {:size => 20}
@@ -51,7 +52,7 @@
     = f.input :discount, :label => 'Descuento (%)', :input_html => {:size => 10}
     = f.input :bill_number, :label => 'Nº de Factura', :input_html => {:size => 20}
   =f.association :taxes, :as => :check_boxes, :label => 'Impuestos', :wrapper_html => {:id => 'taxes'},
-    :label_method => lambda{|tax| "<span data-rate='#{tax.rate}'>#{tax.to_s}</span>".html_safe }
+    :label_method => lambda{|tax| "<span data-rate='#{tax.rate}' title =\"#{tax.name}\">#{tax.abbreviation} (#{ntc tax.rate}%)</span>".html_safe }
 
   .clear
   = f.input :description, :label => 'Descripción', :as => :text, :input_html => {:rows => 4, :cols => 40}
@@ -70,37 +71,35 @@
     = f.simple_fields_for :transaction_details do |fd|
       %tr
         %td
-          %a.fl{:title => 'Inventario', :href => 'javascript:'} inv
-          = fd.input :item_id, :label => false, :collection => Item.income.order(:name), :wrapper_html => {:class => 'fl'}
+          <a href=":javascript" title="Inventatio" class="inventario">inv</a>
+          = fd.input :item_id, :label => false, :collection => Item.income.order(:name), :input_html => {:class => 'item fl'}
         %td= fd.input :description, :label => false
-        %td= fd.input :price, :input_html => { :size => 8 }, :label => false
-        %td= fd.input :quantity, :input_html => { :size => 8 }, :label => false
-        %td.subtotal
+        %td= fd.input :price, :input_html => { :size => 8, :class => 'price' }, :label => false
+        %td= fd.input :quantity, :input_html => { :size => 8, :class => 'quantity' }, :label => false
+        %td.total_row.r
     %tr.extra
       %td{:colspan => 3}
       %td.b.r Subtotal
       %td#subtotal.b.r
     %tr.extra
-      %td{:colspan => 3}
-        %a#add_item.add{:href => 'javascript:' } Adicionar ítem
-      %td.b.r Impuestos (<span id="taxes_percentage"></span>%)
-      %td#taxes_subtotal.b.r
+      %td{:colspan => 3} <a href="javascript:" id="add_item">Adicionar ítem</a>
+      %td.b.r Descuento (<span id="discount_percentage">#{ntc @income.discount}</span>%)
+      %td#discount_total.b.r
     %tr.extra
       %td{:colspan => 3}
-      %td.b.r Descuento (<span id="discount_percentage"></span>%)
-      %td#discount_subtotal.b.r
+        %td.b.r Impuestos (<span id="taxes_percentage">#{ntc @income.total_taxes}</span>%)
+      %td#taxes_total.b.r
     %tr.extra
       %td{:colspan => 3}
-      %td.r
-        %h3 Total
-      %td.r
-        %h3#total_value
+      %td.r <h3>Total</h3>
+      %td.r <h3 id="total_value"></h3>
 
   .actions
     = f.submit 'Salvar'
 
+= javascript_include_tag("transactions")
 :javascript
-  #{ ActiveRecord::Base.include_root_in_json = false }
-  items = #{ Item.javascript.to_json };
   $(function() {
+    var items = #{ Item.income.json.to_json };
+    var transaction = new Transaction(items, "#income_form");
   })

@@ -29,7 +29,7 @@ class IncomesController < ApplicationController
   # GET /incomes/new
   # GET /incomes/new.xml
   def new
-    @income = Income.new(:date => Date.today, :currency_id => @currency_id )
+    @income = Income.new(:date => Date.today, :currency_id => @currency_id, :discount => 0 )
     @income.transaction_details.build
 
     respond_to do |format|

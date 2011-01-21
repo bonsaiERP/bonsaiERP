@@ -35,7 +35,7 @@ class Item < ActiveRecord::Base
   # scopes
   default_scope where(:organisation_id => OrganisationSession.organisation_id)
 
-  scope :javascript, select("id, name, price, discount")
+  scope :json, select("id, name, price")
   scope :income, where(["ctype IN (?)", TYPES.slice(2, 2)])
 
   def to_s

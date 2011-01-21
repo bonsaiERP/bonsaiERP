@@ -1,4 +1,6 @@
 $(document).ready(->
+  _b = {}
+  window._b = _b
   # Velocidad en milisegundos
   speed = 300
   # csfr
@@ -133,6 +135,37 @@ $(document).ready(->
 
   $.roundVal = $.fn.roundVal = roundVal
 
+  currency = {'separator': ",", 'delimiter': '.', 'precision': 2}
+  _b.currency = currency
+  # ntc similar function to Ruby on rails number_to_currency
+  # @param [String, Decimal, Integer] val
+  ntc = (val)->
+    val = if typeof val == 'string' then (1 * val) else val
+    if val < 0 then sign = "-" else sign = ""
+    val = val.toFixed(_b.currency.precision)
+    vals = val.toString().replace(/^-/, "").split(".")
+    val = vals[0]
+    l = val.length - 1
+    ar = val.split("")
+    arr = []
+    tmp = ""
+    c = 0
+    for i in [l..0]
+      tmp = ar[i] + tmp
+      if (l - i + 1)%3 == 0 and i < l
+        arr.push(tmp)
+        tmp = ''
+      c++
+
+    t = arr.reverse().join(_b.currency.delimiter)
+    if tmp != ""
+      sep = if t.length > 0 then _b.currency.delimiter else ""
+      t = tmp + sep + t
+    sign + t + _b.currency.separator + vals[1]
+
+  # Set the global variable
+  _b.ntc = ntc
+
   # presents the dimesion in bytes
   toByteSize = (bytes)->
     switch true
@@ -145,7 +178,8 @@ $(document).ready(->
       else
         roundVal( bytes/ Math.pow(1024, 6)) + " EB"
 
-  window.tobyteSize = $.toByteSize = $.fn.toByteSize = toByteSize
+  # Set the global variable
+  _b.tobyteSize = toByteSize
 
   # Creation of Iframe to make submits like AJAX requests with files
   setIframePostEvents = (iframe, created)->

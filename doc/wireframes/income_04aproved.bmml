@@ -570,7 +570,7 @@
     <control controlID="177" controlTypeID="com.balsamiq.mockups::StickyNote" x="8" y="126" w="226" h="188" measuredW="109" measuredH="123" zOrder="63" locked="false" isInGroup="-1">
       <controlProperties>
         <bold>false</bold>
-        <text>Solo%20personas%20con%20un%20nivel%20de%20autorizaci%F3n%20alto%20pueden%20anular%20una%20nota%20de%20venta%2C%20en%20caso%20de%20que%20se%20anule%20todos%20los%20cobros%20realizados%20crean%20una%20contra%20nota.</text>
+        <text>Solo%20personas%20con%20un%20nivel%20de%20autorizaci%F3n%20alto%20pueden%20anular%20una%20nota%20de%20venta%2C%20en%20caso%20de%20anular%20la%20nota%20de%20venta%20todos%20los%20cobros%20realizados%20seran%20revertidos.</text>
       </controlProperties>
     </control>
     <control controlID="178" controlTypeID="__group__" x="1121" y="1191" w="394" h="287" measuredW="394" measuredH="287" zOrder="60" locked="false" isInGroup="-1">

@@ -1,6 +1,8 @@
 (function() {
   $(document).ready(function() {
-    var createDialog, csfr_token, mark, parsearFecha, roundVal, serializeFormElements, setDateSelect, setIframePostEvents, speed, start, toByteSize, transformDateSelect, transformMinuteSelect;
+    var createDialog, csfr_token, currency, mark, ntc, parsearFecha, roundVal, serializeFormElements, setDateSelect, setIframePostEvents, speed, start, toByteSize, transformDateSelect, transformMinuteSelect, _b;
+    _b = {};
+    window._b = _b;
     speed = 300;
     csfr_token = $('meta[name=csfr-token]').attr('content');
     $.datepicker._defaults.dateFormat = 'dd M yy';
@@ -137,6 +139,44 @@
       return Math.round(val * Math.pow(10, dec)) / Math.pow(10, dec);
     };
     $.roundVal = $.fn.roundVal = roundVal;
+    currency = {
+      'separator': ",",
+      'delimiter': '.',
+      'precision': 2
+    };
+    _b.currency = currency;
+    ntc = function(val) {
+      var ar, arr, c, i, l, sep, sign, t, tmp, vals;
+      val = typeof val === 'string' ? 1 * val : val;
+      if (val < 0) {
+        sign = "-";
+      } else {
+        sign = "";
+      }
+      val = val.toFixed(_b.currency.precision);
+      vals = val.toString().replace(/^-/, "").split(".");
+      val = vals[0];
+      l = val.length - 1;
+      ar = val.split("");
+      arr = [];
+      tmp = "";
+      c = 0;
+      for (i = l; (l <= 0 ? i <= 0 : i >= 0); (l <= 0 ? i += 1 : i -= 1)) {
+        tmp = ar[i] + tmp;
+        if ((l - i + 1) % 3 === 0 && i < l) {
+          arr.push(tmp);
+          tmp = '';
+        }
+        c++;
+      }
+      t = arr.reverse().join(_b.currency.delimiter);
+      if (tmp !== "") {
+        sep = t.length > 0 ? _b.currency.delimiter : "";
+        t = tmp + sep + t;
+      }
+      return sign + t + _b.currency.separator + vals[1];
+    };
+    _b.ntc = ntc;
     toByteSize = function(bytes) {
       switch (true) {
         case bytes < 1024:
@@ -155,7 +195,7 @@
           return roundVal(bytes / Math.pow(1024, 6)) + " EB";
       }
     };
-    window.tobyteSize = $.toByteSize = $.fn.toByteSize = toByteSize;
+    _b.tobyteSize = toByteSize;
     setIframePostEvents = function(iframe, created) {
       return iframe.onload = function() {
         var html, posts, postsSize;

@@ -38,12 +38,12 @@
         <vLines>false</vLines>
       </controlProperties>
     </control>
-    <control controlID="10" controlTypeID="com.balsamiq.mockups::LinkBar" x="800" y="528" w="-1" h="-1" measuredW="162" measuredH="25" zOrder="6" locked="false" isInGroup="-1">
+    <control controlID="10" controlTypeID="com.balsamiq.mockups::LinkBar" x="800" y="528" w="-1" h="-1" measuredW="161" measuredH="25" zOrder="6" locked="false" isInGroup="-1">
       <controlProperties>
         <text>%3C%3C%2C%201%2C2%2C3%2C%20%3E%3E</text>
       </controlProperties>
     </control>
-    <control controlID="17" controlTypeID="com.balsamiq.mockups::TabBar" x="208" y="248" w="772" h="317" measuredW="614" measuredH="100" zOrder="4" locked="false" isInGroup="-1">
+    <control controlID="17" controlTypeID="com.balsamiq.mockups::TabBar" x="208" y="248" w="772" h="317" measuredW="613" measuredH="100" zOrder="4" locked="false" isInGroup="-1">
       <controlProperties>
         <bold>false</bold>
         <borderStyle>none</borderStyle>
