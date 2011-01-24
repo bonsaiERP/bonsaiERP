@@ -10,11 +10,7 @@ class Income < Transaction
                   :description, :transaction_details_attributes
 
 
-  accepts_nested_attributes_for :transaction_details, :allow_destroy => true
+  #accepts_nested_attributes_for :transaction_details, :allow_destroy => true
   #validations
 
-  # Calculates the total amout of taxes
-  def total_taxes
-    taxes.inject(0) {|v, sum| sum += v.rate }
-  end
 end
