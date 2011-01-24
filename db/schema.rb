@@ -189,13 +189,13 @@ ActiveRecord::Schema.define(:version => 20110119160057) do
     t.integer  "transaction_id"
     t.integer  "item_id"
     t.integer  "currency_id"
-    t.decimal  "quantity",        :precision => 14, :scale => 2
-    t.decimal  "price",           :precision => 14, :scale => 2
+    t.decimal  "quantity",                            :precision => 14, :scale => 2
+    t.decimal  "price",                               :precision => 14, :scale => 2
     t.string   "description"
-    t.decimal  "minimun",         :precision => 14, :scale => 2
-    t.decimal  "maximun",         :precision => 14, :scale => 2
-    t.string   "type"
-    t.decimal  "discount",        :precision => 14, :scale => 2
+    t.decimal  "minimun",                             :precision => 14, :scale => 2
+    t.decimal  "maximun",                             :precision => 14, :scale => 2
+    t.string   "ctype",                  :limit => 30
+    t.decimal  "discount",                            :precision => 14, :scale => 2
     t.integer  "organisation_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -204,6 +204,7 @@ ActiveRecord::Schema.define(:version => 20110119160057) do
   add_index "transaction_details", ["item_id"], :name => "index_transaction_details_on_item_id"
   add_index "transaction_details", ["organisation_id"], :name => "index_transaction_details_on_organisation_id"
   add_index "transaction_details", ["transaction_id"], :name => "index_transaction_details_on_transaction_id"
+  add_index "transaction_details", ["ctype"], :name => "index_transaction_details_on_ctype"
 
   create_table "transactions", :force => true do |t|
     t.integer  "contact_id"

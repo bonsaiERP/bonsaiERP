@@ -10,7 +10,7 @@ class CreateTransactionDetails < ActiveRecord::Migration
       t.string :description
       t.decimal :minimun, :precision => 14, :scale => 2
       t.decimal :maximun, :precision => 14, :scale => 2
-      t.string :type
+      t.string :ctype, :limit => 30
       t.decimal :discount, :precision => 14, :scale => 2
 
       t.integer :organisation_id
@@ -21,6 +21,7 @@ class CreateTransactionDetails < ActiveRecord::Migration
     add_index :transaction_details, :transaction_id
     add_index :transaction_details, :item_id
     add_index :transaction_details, :organisation_id
+    add_index :transaction_details, :ctype
   end
 
   def self.down

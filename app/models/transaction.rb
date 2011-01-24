@@ -4,6 +4,9 @@
 class Transaction < ActiveRecord::Base
   acts_as_org
 
+  # callbacks
+  before_save :set_details_type
+
   # relationships
   belongs_to :contact
   belongs_to :currency
@@ -14,4 +17,10 @@ class Transaction < ActiveRecord::Base
 
   # scopes
   default_scope where(:organisation_id => OrganisationSession.organisation_id )
+
+private
+  # Sets the type of the class making the transaction
+  def set_details_type
+    self.transaction_details.each{ |v| v.type = self.class.to_s }
+  end
 end
