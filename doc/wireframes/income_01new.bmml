@@ -6,10 +6,10 @@
         <color>15132390</color>
       </controlProperties>
     </control>
-    <control controlID="5" controlTypeID="com.balsamiq.mockups::Title" x="247" y="151" w="-1" h="-1" measuredW="286" measuredH="46" zOrder="2" locked="false" isInGroup="-1">
+    <control controlID="5" controlTypeID="com.balsamiq.mockups::Title" x="247" y="151" w="-1" h="-1" measuredW="257" measuredH="46" zOrder="2" locked="false" isInGroup="-1">
       <controlProperties>
         <size>28</size>
-        <text>Proforma%20de%20Ingreso</text>
+        <text>Proforma%20de%20venta</text>
       </controlProperties>
     </control>
     <control controlID="6" controlTypeID="com.balsamiq.mockups::Canvas" x="209" y="109" w="771" h="739" measuredW="100" measuredH="70" zOrder="1" locked="false" isInGroup="-1">

@@ -37,7 +37,7 @@
         <text>*Creado%20por%3A*%20Boris%20Barroso</text>
       </controlProperties>
     </control>
-    <control controlID="48" controlTypeID="com.balsamiq.mockups::StickyNote" x="393" y="202" w="216" h="128" measuredW="109" measuredH="123" zOrder="41" locked="false" isInGroup="-1">
+    <control controlID="48" controlTypeID="com.balsamiq.mockups::StickyNote" x="14" y="112" w="216" h="128" measuredW="109" measuredH="123" zOrder="41" locked="false" isInGroup="-1">
       <controlProperties>
         <bold>false</bold>
         <text>El%20bot%F3n%20de%20*Aprobar*%20solo%20aparece%20para%20usuarios%20con%20privilegios.</text>
@@ -452,6 +452,21 @@
       <controlProperties>
         <bold>false</bold>
         <text>Solo%20usuarios%20autorizados%20puden%20realizar%20*Planificacion%20de%20cobros*</text>
+      </controlProperties>
+    </control>
+    <control controlID="133" controlTypeID="com.balsamiq.mockups::Label" x="420" y="224" w="-1" h="-1" measuredW="361" measuredH="25" zOrder="54" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>false</bold>
+        <color>3355443</color>
+        <italic>true</italic>
+        <text>Para%20pagar%20a%20*cr%E9dito*%20edite%20la%20planificaci%F3n%20de%20cobros%20abajo</text>
+      </controlProperties>
+    </control>
+    <control controlID="134" controlTypeID="com.balsamiq.mockups::Label" x="422" y="202" w="-1" h="-1" measuredW="141" measuredH="32" zOrder="55" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>2575891</color>
+        <size>18</size>
+        <text>Pago%20al%20contado</text>
       </controlProperties>
     </control>
   </controls>

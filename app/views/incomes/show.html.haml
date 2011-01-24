@@ -1,33 +1,61 @@
-%h1= Transacción
+%h1 Transacción
 %p.links
-  = link_to t('Editar'), edit_transaction_path(@transaction), :class => 'edit'
-  = link_to t('Lista'), transactions_path, :class => 'list'
+  = link_to 'Editar', edit_income_path(@income), :class => 'edit'
+  = link_to 'Lista', income_path, :class => 'list'
 
-%div
-  %p
-    %label= Transaction.human_attribute_name :contact_id
-    %span= @transaction.contact_id
-  %p
-    %label= Transaction.human_attribute_name :type
-    %span= @transaction.type
-  %p
-    %label= Transaction.human_attribute_name :total
-    %span= @transaction.total
-  %p
-    %label= Transaction.human_attribute_name :active
-    %span= @transaction.active
-  %p
-    %label= Transaction.human_attribute_name :description
-    %span= @transaction.description
-  %p
-    %label= Transaction.human_attribute_name :state
-    %span= @transaction.state
-  %p
-    %label= Transaction.human_attribute_name :date
-    %span= @transaction.date
-  %p
-    %label= Transaction.human_attribute_name :ref_number
-    %span= @transaction.ref_number
-  %p
-    %label= Transaction.human_attribute_name :balance
-    %span= @transaction.balance
+.input
+  .input
+    %label Nº de referencia
+    = @income.ref_number
+  .input
+    %label Fecha
+    = lo @income.date
+.input
+  %label Cliente
+  = @income.contact
+.clear
+.input
+  %label Proyecto
+  = @income.project
+.input
+  %label Moneda
+  = @income.currency
+.clear
+.input
+  .input
+    %label Descuento (%)
+    = @income.discount
+  .input
+    %label Nº de Factura
+    = @income.bill_number
+.input
+  %label Impuestos
+  %ul
+    - @income.taxes.each do |t|
+      %li= t
+
+.clear
+.input
+  %label Descripción
+  =@income.description
+
+
+%h2.dark Items
+
+%table#items_table.decorated
+  %thead
+    %tr
+      %th Item
+      %th Descripción
+      %th Precio <br/>unitario
+      %th Cantidad
+      %th Total fila
+    - @income.transaction_details.each do |det|
+      %tr
+        %td
+          <a href=":javascript" title="Inventatio" class="inventario">inv</a>
+          = det.item
+        %td= det.description
+        %td= ntc det.price
+        %td= det.quantity
+        %td.total_row.r

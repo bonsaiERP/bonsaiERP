@@ -46,18 +46,17 @@ class IncomesController < ApplicationController
   # POST /incomes
   # POST /incomes.xml
   def create
-    render :text => params.to_json
-    #@income = Income.new(params[:income])
-
-    #respond_to do |format|
-    #  if @income.save
-    #    format.html { redirect_to(@income, :notice => 'Incomes was successfully created.') }
-    #    format.xml  { render :xml => @income, :status => :created, :location => @income }
-    #  else
-    #    format.html { render :action => "new" }
-    #    format.xml  { render :xml => @income.errors, :status => :unprocessable_entity }
-    #  end
-    #end
+    #render :text => params.to_json
+    @income = Income.new(params[:income])
+    respond_to do |format|
+      if @income.save
+        format.html { redirect_to(@income, :notice => 'Se ha creado una proforma de venta.') }
+        format.xml  { render :xml => @income, :status => :created, :location => @income }
+      else
+        format.html { render :action => "new" }
+        format.xml  { render :xml => @income.errors, :status => :unprocessable_entity }
+      end
+    end
   end
 
   # PUT /incomes/1

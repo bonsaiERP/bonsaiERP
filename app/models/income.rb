@@ -7,7 +7,10 @@ class Income < Transaction
   attr_accessible :ref_number, :date, :contact_id,
                   :project_id, :currency_id,
                   :discount, :bill_number, :taxis_ids,
-                  :description
+                  :description, :transaction_details_attributes
+
+
+  accepts_nested_attributes_for :transaction_details, :allow_destroy => true
   #validations
 
   # Calculates the total amout of taxes

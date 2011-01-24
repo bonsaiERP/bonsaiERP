@@ -33,9 +33,12 @@ group :test do
   gem 'rspec-rails'
   gem 'mocha'
   gem 'steak', '>= 1.0.0.rc.1'
+  gem 'cucumber-rails', '~>0.3.2'
   gem 'capybara'
+  gem 'database_cleaner'
   gem 'factory_girl_rails'
   gem 'spork'
+
   # gem 'database_cleaner'
 end  
 

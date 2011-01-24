@@ -6,10 +6,10 @@
         <color>15132390</color>
       </controlProperties>
     </control>
-    <control controlID="5" controlTypeID="com.balsamiq.mockups::Title" x="222" y="119" w="-1" h="-1" measuredW="105" measuredH="40" zOrder="2" locked="false" isInGroup="-1">
+    <control controlID="5" controlTypeID="com.balsamiq.mockups::Title" x="222" y="119" w="-1" h="-1" measuredW="84" measuredH="40" zOrder="2" locked="false" isInGroup="-1">
       <controlProperties>
         <size>24</size>
-        <text>Ingresos</text>
+        <text>Ventas</text>
       </controlProperties>
     </control>
     <control controlID="6" controlTypeID="com.balsamiq.mockups::Canvas" x="208" y="176" w="771" h="432" measuredW="100" measuredH="70" zOrder="3" locked="false" isInGroup="-1">
@@ -38,7 +38,7 @@
         <vLines>false</vLines>
       </controlProperties>
     </control>
-    <control controlID="10" controlTypeID="com.balsamiq.mockups::LinkBar" x="800" y="528" w="-1" h="-1" measuredW="161" measuredH="25" zOrder="6" locked="false" isInGroup="-1">
+    <control controlID="10" controlTypeID="com.balsamiq.mockups::LinkBar" x="800" y="528" w="-1" h="-1" measuredW="163" measuredH="25" zOrder="6" locked="false" isInGroup="-1">
       <controlProperties>
         <text>%3C%3C%2C%201%2C2%2C3%2C%20%3E%3E</text>
       </controlProperties>
@@ -162,7 +162,7 @@
     </control>
     <control controlID="76" controlTypeID="__group__" x="228" y="191" w="148" h="32" measuredW="148" measuredH="32" zOrder="9" locked="false" isInGroup="-1">
       <groupChildrenDescriptors>
-        <control controlID="0" controlTypeID="com.balsamiq.mockups::PointyButton" x="0" y="0" w="148" h="-1" measuredW="138" measuredH="32" zOrder="0" locked="false" isInGroup="76">
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::PointyButton" x="0" y="0" w="148" h="-1" measuredW="126" measuredH="32" zOrder="0" locked="false" isInGroup="76">
           <controlProperties>
             <bold>true</bold>
             <color>15132390</color>
@@ -171,7 +171,7 @@
             <href>income_01new%26bm%3Bincome_01new.bmml%26bm%3Bincome_01new.bmml%26bm%3Bincome_01new.bmml</href>
             <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2269%2C189%2C217%2C221%22%20href%3D%22income_01new.bmml%22%20alt%3D%22income_01new%22%20id%3D%220%22/%3E</map>
             <size>16</size>
-            <text>%20%20Crear%20ingreso</text>
+            <text>%20%20Crear%20venta</text>
           </controlProperties>
         </control>
         <control controlID="1" controlTypeID="com.balsamiq.mockups::Image" x="9" y="8" w="16" h="16" measuredW="16" measuredH="16" zOrder="1" locked="false" isInGroup="76">

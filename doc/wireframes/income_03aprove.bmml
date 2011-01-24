@@ -474,5 +474,20 @@
         <icon>XIcon%7Cxsmall</icon>
       </controlProperties>
     </control>
+    <control controlID="136" controlTypeID="com.balsamiq.mockups::Label" x="411" y="202" w="-1" h="-1" measuredW="369" measuredH="25" zOrder="56" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>false</bold>
+        <color>3355443</color>
+        <italic>true</italic>
+        <text>Para%20pagar%20al%20*contado*%20edite%20la%20planificaci%F3n%20de%20cobros%20abajo</text>
+      </controlProperties>
+    </control>
+    <control controlID="137" controlTypeID="com.balsamiq.mockups::Label" x="413" y="180" w="-1" h="-1" measuredW="132" measuredH="32" zOrder="57" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>2575891</color>
+        <size>18</size>
+        <text>Pago%20a%20cr%E9dito</text>
+      </controlProperties>
+    </control>
   </controls>
 </mockup>

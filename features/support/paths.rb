@@ -7,22 +7,10 @@ module NavigationHelpers
   #
   def path_to(page_name)
     case page_name
-    
+
     when /the home\s?page/
       '/'
-    when /the new tax page/
-      new_tax_path
 
-    when /the new organisation page/
-      new_organisation_path
-
-    when /the new country page/
-      new_country_path
-
-    when /the new user page/
-      new_user_path
-
-    
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
     #
@@ -30,8 +18,14 @@ module NavigationHelpers
     #     user_profile_path(User.find_by_login($1))
 
     else
-      raise "Can't find mapping from \"#{page_name}\" to a path.\n" +
-        "Now, go and add a mapping in #{__FILE__}"
+      begin
+        page_name =~ /the (.*) page/
+        path_components = $1.split(/\s+/)
+        self.send(path_components.push('path').join('_').to_sym)
+      rescue Object => e
+        raise "Can't find mapping from \"#{page_name}\" to a path.\n" +
+          "Now, go and add a mapping in #{__FILE__}"
+      end
     end
   end
 end
