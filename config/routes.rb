@@ -1,5 +1,11 @@
 Bonsaierp::Application.routes.draw do
 
+  resources :currency_rates do
+    member do
+      get 'check'
+    end
+  end
+
   resources :projects
 
   resources :transactions

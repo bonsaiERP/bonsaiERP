@@ -8,6 +8,6 @@ class Currency < ActiveRecord::Base
   validates_presence_of :name, :symbol
 
   def to_s
-    %Q(#{name} #{symbol})
+    %Q(#{symbol} #{name})
   end
 end

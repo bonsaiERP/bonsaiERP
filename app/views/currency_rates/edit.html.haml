@@ -1,0 +1,6 @@
+%h1 Editar currency_rate
+%p.links
+  = link_to 'Ver', @currency_rate, :class => 'list'
+  = link_to 'Lista', currency_rates_path, :class => 'show'
+
+= render :partial => 'form'

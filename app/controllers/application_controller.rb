@@ -13,15 +13,15 @@ class ApplicationController < ActionController::Base
 
 #
 #  # Used to redirect after a user has signed_in
-  def after_sign_in_path_for(resource)
-    debugger
-    s=0
-    if resource.is_a?(User)
-      new_organisation_url
-    else
-      super
-    end
-  end
+  #def after_sign_in_path_for(resource)
+  #  debugger
+  #  s=0
+  #  if resource.is_a?(User)
+  #    new_organisation_url
+  #  else
+  #    super
+  #  end
+  #end
 #
   # Adds an error with format to display
   # @param ActiveRecord::Base (model)
@@ -41,11 +41,20 @@ class ApplicationController < ActionController::Base
     s=0
   end
 
+  # especial redirect for ajax requests
+  def redirect_ajax(klass, options = {})
+    url = options[:url] || klass
+    if request.xhr?
+      render :json => klass
+    else
+      redirect_to url, options
+    end
+  end
 
 private
   # Sets the session for the organisation
   def set_organisation_session(organisation)
-    session[:organisation] = {:id => organisation.id, :name => organisation.name }
+    session[:organisation] = {:id => organisation.id, :name => organisation.name, :currency_id => organisation.currency_id }
     set_organisation
   end
 

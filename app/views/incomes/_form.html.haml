@@ -47,6 +47,7 @@
   .clear
   = f.association :project, :label => 'Proyecto'
   = f.association :currency, :label => 'Moneda'
+  = f.input :currency_exchnage_rate, :as => :hidden
   .clear
   .input
     = f.input :discount, :label => 'Descuento (%)', :input_html => {:size => 10}

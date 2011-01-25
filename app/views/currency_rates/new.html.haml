@@ -1,0 +1,4 @@
+%h1= "Tipo de cambio del día para el (#{@organisation.currency.name})"
+/%p.links= link_to 'Lista', currency_rates_path, :class => 'list'
+%p Puede ingresar el tipo de cambio hasta con <strong>6 decimales</strong>
+= render :partial => 'form'

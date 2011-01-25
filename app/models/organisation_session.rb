@@ -5,13 +5,14 @@
 class OrganisationSession
 
   class << self
-    attr_reader :organisation_id, :name
+    attr_reader :organisation_id, :name, :currency_id
     # Stores using de application_controller the current_user for devise
     # @param [Hash] details from the organisation
     def set(organisation)
       raise "The OrganisationSession couln't be set' the param must be a hash" unless organisation.is_a? Hash
       @organisation_id = organisation[:id]
       @name = organisation[:name]
+      @currency_id = organisation[:currency_id]
     end
     alias set= set
 

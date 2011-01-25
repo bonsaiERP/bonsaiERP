@@ -29,7 +29,7 @@ class IncomesController < ApplicationController
   # GET /incomes/new
   # GET /incomes/new.xml
   def new
-    @income = Income.new(:date => Date.today, :currency_id => @currency_id, :discount => 0 )
+    @income = Income.new(:date => Date.today, :currency_id => @currency.id, :discount => 0, :currency_exchange_rate => @currency.rate )
     @income.transaction_details.build
 
     respond_to do |format|
@@ -89,6 +89,6 @@ class IncomesController < ApplicationController
 
 private
   def set_default_currency
-    @currency_id = Organisation.find(session[:organisation][:id]).currency_id
+    @currency = Currency.find(session[:organisation][:currency_id])
   end
 end

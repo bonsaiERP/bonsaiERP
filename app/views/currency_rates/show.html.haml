@@ -1,0 +1,8 @@
+%h1 currency_rate
+%p.links
+  = link_to 'Editar', edit_currency_rate_path(@currency_rate), :class => 'edit'
+  = link_to 'Lista', currency_rates_path, :class => 'list'
+
+.input
+  %label #<Rails::Generators::GeneratedAttribute:0xba3095c>
+  %span= @currency_rate.rate

@@ -5,6 +5,6 @@
 
 <% for attribute in attributes -%>
 .input
-  %label <%= attribute.humanize %>
+  %label <%= attribute %>
   %span= @<%= singular_name %>.<%= attribute.name %>
 <% end -%>

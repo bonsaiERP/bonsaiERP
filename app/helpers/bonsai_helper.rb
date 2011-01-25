@@ -80,6 +80,19 @@ module BonsaiHelper
     end
   end
 
+  # Presents and error for forms
+  def present_error(text = nil)
+    text ||= 'Exiten errores en el formulario.'
+    content_tag('h2', text)
+  end
+
+  # Presents the error for a field
+  def present_field_error(klass, field)
+    if klass.errors[field].present?
+      "<span class=\"error\">#{ klass.errors[field].join(" ") }</span>".html_safe
+    end
+  end
+
   def bonsai?(val)
     #val == true ? t("yes") : t("no")
     val ? "Si" : "No"

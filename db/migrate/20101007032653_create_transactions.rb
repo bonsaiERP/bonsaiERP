@@ -15,7 +15,7 @@ class CreateTransactions < ActiveRecord::Migration
       t.string :ref_number
       t.string :bill_number # factura
 
-      t.integer :currency_id
+      t.integer :currency_rate_id
       t.decimal :currency_exchange_rate, :precision => 14, :scale => 6
 
       t.integer :organisation_id
@@ -28,6 +28,7 @@ class CreateTransactions < ActiveRecord::Migration
     add_index :transactions, :ref_number
     add_index :transactions, :date
     add_index :transactions, :organisation_id
+    add_index :transactions, :currency_rate_id
   end
 
   def self.down
