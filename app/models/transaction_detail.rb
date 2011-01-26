@@ -15,4 +15,9 @@ class TransactionDetail < ActiveRecord::Base
     price * quantity
   end
 
+  def after_initialize
+    self.price ||= 0
+    self.quantity ||= 0
+  end
+
 end

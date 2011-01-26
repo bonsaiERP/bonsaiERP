@@ -1,9 +1,15 @@
 (function() {
-  var Transaction;
+  var Income, Transaction;
+  var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
+    for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
+    function ctor() { this.constructor = child; }
+    ctor.prototype = parent.prototype;
+    child.prototype = new ctor;
+    child.__super__ = parent.prototype;
+    return child;
+  };
   Transaction = (function() {
     Transaction.prototype.conf = {
-      'currency_id': '#income_currency_id',
-      'discount_id': '#income_discount',
       'taxes_id': '#taxes',
       'subtotal_id': '#subtotal',
       'discount_percentage_id': '#discount_percentage',
@@ -12,7 +18,8 @@
       'taxes_percentage_id': '#taxes_percentage',
       'total_id': '#total_value',
       'items_table_id': '#items_table',
-      'add_item_id': '#add_item'
+      'add_item_id': '#add_item',
+      'default_currency_id': 1
     };
     function Transaction(items, trigger, conf) {
       var self;
@@ -26,11 +33,32 @@
       self.set_events();
     }
     Transaction.prototype.set_events = function() {
+      this.set_currency_event();
+      this.set_edit_rate_link_event();
       this.set_discount_event();
       this.set_taxes_event();
       this.set_item_change_event("table select.item", "input.price");
       this.set_price_quantity_change_event("table", "input.price", "input.quantity");
       return this.set_add_item_event();
+    };
+    Transaction.prototype.set_currency_event = function() {
+      var self;
+      self = this;
+      return $(this.conf.currency_id).live("change keyup", function() {
+        return self.set_exchange_rate();
+      });
+    };
+    Transaction.prototype.set_edit_rate_link_event = function() {
+      var self;
+      self = this;
+      return $('#edit_rate_link').live("click", function() {
+        var rate;
+        rate = prompt("Tipo de cambio") * 1;
+        if (rate > 0) {
+          $(self.conf.currency_exchange_rate_id).val(rate);
+          return self.set_exchange_rate_html();
+        }
+      });
     };
     Transaction.prototype.set_discount_event = function() {
       var self;
@@ -83,6 +111,49 @@
       return $(this.conf.add_item_id).live("click", function() {
         return self.add_item();
       });
+    };
+    Transaction.prototype.set_exchange_rate = function() {
+      var base, change, currency_id, k, rate, _i, _len, _ref;
+      currency_id = 1 * $(this.conf.currency_id).val();
+      if (this.conf.default_currency_id === currency_id) {
+        return $(this.conf.currency_id).siblings("label").find("span").html("");
+      } else {
+        base = this.find_currency(this.conf.default_currency_id);
+        change = this.find_currency(currency_id);
+        _ref = this.exchange_rates;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          k = _ref[_i];
+          if (k.currency_id === currency_id) {
+            rate = k.rate;
+          }
+        }
+        $(this.conf.currency_exchange_rate_id).val(rate);
+        $(this.conf.currency_id).data({
+          'base': base,
+          'change': change
+        });
+        return this.set_exchange_rate_html();
+      }
+    };
+    Transaction.prototype.set_exchange_rate_html = function() {
+      var $span, base, change, html, rate;
+      $span = $(this.conf.currency_id).siblings("label").find("span");
+      rate = $(this.conf.currency_exchange_rate_id).val() * 1;
+      base = $(this.conf.currency_id).data('base');
+      change = $(this.conf.currency_id).data('change');
+      html = "1 " + change.symbol + " " + change.name + " = " + rate + " " + base.symbol + " " + base.name + "s ";
+      html += "<a id='edit_rate_link' href='javascript:'>editar</a>";
+      return $span.html(html).mark();
+    };
+    Transaction.prototype.find_currency = function(currency_id) {
+      var k, _i, _len, _ref;
+      _ref = this.currencies;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        k = _ref[_i];
+        if (k.id === currency_id) {
+          return k;
+        }
+      }
     };
     Transaction.prototype.calculate_total_row = function(el, selectors, res) {
       var $tr, tot;
@@ -145,4 +216,26 @@
     return Transaction;
   })();
   window.Transaction = Transaction;
+  Income = (function() {
+    __extends(Income, Transaction);
+    function Income(items, trigger, conf, currencies, exchange_rates) {
+      var self;
+      this.items = items;
+      this.trigger = trigger != null ? trigger : 'body';
+      if (conf == null) {
+        conf = {};
+      }
+      this.currencies = currencies;
+      this.exchange_rates = exchange_rates;
+      self = this;
+      this.conf['currency_id'] = '#income_currency_id';
+      this.conf['discount_id'] = '#income_discount';
+      this.conf['currency_exchange_rate_id'] = '#income_currency_exchange_rate';
+      this.conf['edit_rate_link_id'] = '#edit_rate_link';
+      this.conf['insert_exchange_rate_prompt'] = "Ingrese el tipo de cambio";
+      Income.__super__.constructor.apply(this, arguments);
+    }
+    return Income;
+  })();
+  window.Income = Income;
 }).call(this);

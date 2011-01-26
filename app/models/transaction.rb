@@ -5,7 +5,7 @@ class Transaction < ActiveRecord::Base
   acts_as_org
 
   # callbacks
-  before_save :set_discount_and_taxes
+  #before_save :set_discount_and_taxes
   before_save :set_details_type
   before_save :calculate_total_and_set_balance
 
@@ -23,7 +23,11 @@ class Transaction < ActiveRecord::Base
 
   # quantity without discount and taxes
   def subtotal
-    self.transaction_details.inject(0) {|sum, v| sum += v }
+    self.transaction_details.inject(0) {|sum, v| sum += v.total }
+  end
+
+  def after_initialize
+    initialize_values
   end
 
   # Calculates the amount for taxes
@@ -36,9 +40,10 @@ class Transaction < ActiveRecord::Base
   end
 private
   # set default values for discount and taxes
-  def set_discount_and_taxes
+  def initialize_values
     self.discount ||= 0
     self.tax_percent = taxes.inject(0) {|sum, t| sum += t.rate }
+    self.gross_total ||= 0
   end
 
   # Sets the type of the class making the transaction

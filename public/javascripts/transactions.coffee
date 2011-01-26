@@ -3,8 +3,6 @@
 class Transaction
   # default configuration with ids from the form
   conf: {
-    'currency_id': '#income_currency_id',
-    'discount_id': '#income_discount',
     'taxes_id': '#taxes',
     'subtotal_id': '#subtotal',
     'discount_percentage_id': '#discount_percentage',
@@ -13,7 +11,8 @@ class Transaction
     'taxes_percentage_id': '#taxes_percentage',
     'total_id': '#total_value',
     'items_table_id': '#items_table',
-    'add_item_id': '#add_item'
+    'add_item_id': '#add_item',
+    'default_currency_id': 1
   },
   # Construnctor
   # params Object conf
@@ -23,11 +22,27 @@ class Transaction
     self.set_events()
   # Sets the events
   set_events: ->
+    this.set_currency_event()
+    this.set_edit_rate_link_event()
     this.set_discount_event()
     this.set_taxes_event()
     this.set_item_change_event("table select.item", "input.price")
     this.set_price_quantity_change_event("table", "input.price", "input.quantity")
     this.set_add_item_event()
+  # Event for currency change
+  set_currency_event: ->
+    self = this
+    $(@conf.currency_id).live("change keyup", ->
+      self.set_exchange_rate()
+    )
+   set_edit_rate_link_event: ->
+     self = this
+     $('#edit_rate_link').live("click", ->
+       rate = prompt("Tipo de cambio") * 1
+       if rate > 0
+         $(self.conf.currency_exchange_rate_id).val(rate)
+         self.set_exchange_rate_html()
+     )
   # Event when changed discount rate
   set_discount_event: ->
     self = this
@@ -69,6 +84,35 @@ class Transaction
     $(@conf.add_item_id).live("click", ->
       self.add_item()
     )
+  # Sets the exchange rate for the current
+  set_exchange_rate: ->
+    currency_id = 1 * $(@conf.currency_id).val()
+    if @conf.default_currency_id == currency_id
+      $(@conf.currency_id).siblings("label").find("span").html("")
+    else
+      base = this.find_currency(@conf.default_currency_id)
+      change = this.find_currency(currency_id)
+      for k in @exchange_rates
+        rate = k.rate if k.currency_id == currency_id
+      # set value
+      $(@conf.currency_exchange_rate_id).val(rate)
+      $(@conf.currency_id).data({'base': base, 'change': change})
+      this.set_exchange_rate_html()
+
+   # sets the HTML for the span of exchange rate
+  set_exchange_rate_html: ->
+    $span = $(@conf.currency_id).siblings("label").find("span")
+    rate = $(@conf.currency_exchange_rate_id).val() * 1
+    base = $(@conf.currency_id).data('base')
+    change = $(@conf.currency_id).data('change')
+    html = "1 #{change.symbol} #{change.name} = #{rate} #{base.symbol} #{base.name}s "
+    html += "<a id='edit_rate_link' href='javascript:'>editar</a>"
+    $span.html( html ).mark()
+
+  # Returs the details for a currency
+  find_currency: (currency_id)->
+    for k in @currencies
+      return k if k.id == currency_id
   # Calculates the total for a row in the grid
   # @param DOM el
   # @param String selectors "input.price,input.name"
@@ -119,3 +163,18 @@ class Transaction
       return k if id == k.id
 
 window.Transaction = Transaction
+
+# Class for incomes
+class Income extends Transaction
+  # Construnctor
+  # params Object conf
+  constructor: (@items, @trigger = 'body', conf = {}, @currencies, @exchange_rates)->
+    self = this
+    @conf['currency_id'] = '#income_currency_id'
+    @conf['discount_id'] = '#income_discount'
+    @conf['currency_exchange_rate_id'] = '#income_currency_exchange_rate'
+    @conf['edit_rate_link_id'] = '#edit_rate_link'
+    @conf['insert_exchange_rate_prompt'] = "Ingrese el tipo de cambio"
+    super
+
+window.Income = Income

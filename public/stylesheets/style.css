@@ -429,6 +429,7 @@ ul.menu li:hover ul {
 .false { background: transparent url(images/cross.png) no-repeat center 50%; }
 .hide { display: none; }
 .b { font-weight: bold; }
+.n { font-weight: normal; }
 .i { font-style: italic; }
 .l { text-align: left; }
 .c { text-align: center; }

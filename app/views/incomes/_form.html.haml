@@ -46,8 +46,8 @@
   = f.association :contact, :label => 'Cliente'
   .clear
   = f.association :project, :label => 'Proyecto'
-  = f.association :currency, :label => 'Moneda'
-  = f.input :currency_exchnage_rate, :as => :hidden
+  = f.association :currency, :label => 'Moneda. <span class="n"></span>'.html_safe, :include_blank => false
+  = f.input :currency_exchange_rate, :as => :hidden
   .clear
   .input
     = f.input :discount, :label => 'Descuento (%)', :input_html => {:size => 10}
@@ -81,11 +81,11 @@
     %tr.extra
       %td{:colspan => 2}
       %td.b.r{:colspan => 2} Subtotal
-      %td#subtotal.b.r
+      %td#subtotal.b.r= ntc(@income.subtotal)
     %tr.extra
       %td{:colspan => 2} <a href="javascript:" id="add_item" class="add">Adicionar ítem</a>
       %td.b.r{:colspan => 2} Descuento (<span id="discount_percentage" data-val="#{@income.discount}">#{ntc @income.discount}</span>%)
-      %td#discount_total.b.r
+      %td#discount_total.b.r= ntc(@income.total_discount)
     %tr.extra
       %td{:colspan => 2}
       %td.b.r{:colspan => 2} Impuestos (<span id="taxes_percentage" data-val="#{@income.total_taxes}">#{ntc @income.total_taxes}</span>%)
@@ -102,5 +102,7 @@
 :javascript
   $(function() {
     var items = #{ Item.income.json.to_json };
-    var transaction = new Transaction(items, "#income_form");
+    var currencies = #{ Currency.select("id, name, symbol").to_json };
+    var exchange_rates = #{ CurrencyRate.active.select("rate, currency_id").to_json };
+    var income = new Income(items, "#income_form", {'default_currency_id': #{@currency.id} }, currencies, exchange_rates );
   })

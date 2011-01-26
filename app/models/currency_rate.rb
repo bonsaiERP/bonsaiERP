@@ -16,7 +16,6 @@ class CurrencyRate < ActiveRecord::Base
 
   # scopes
   default_scope where(:organisation_id => OrganisationSession.organisation_id)
-  scope :current, lambda {|org_id| where(["created_at"])}
   scope :active, where(:active => true)
 
   # returns if the currency has been updated for the date and organisation

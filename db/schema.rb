@@ -234,7 +234,7 @@ ActiveRecord::Schema.define(:version => 20110125144327) do
     t.date     "date"
     t.string   "ref_number"
     t.string   "bill_number"
-    t.integer  "currency_rate_id"
+    t.integer  "currency_id"
     t.decimal  "currency_exchange_rate",               :precision => 14, :scale => 6
     t.integer  "organisation_id"
     t.datetime "created_at"
@@ -248,7 +248,7 @@ ActiveRecord::Schema.define(:version => 20110125144327) do
   add_index "transactions", ["active"], :name => "index_transactions_on_active"
   add_index "transactions", ["cash"], :name => "index_transactions_on_cash"
   add_index "transactions", ["contact_id"], :name => "index_transactions_on_contact_id"
-  add_index "transactions", ["currency_rate_id"], :name => "index_transactions_on_currency_rate_id"
+  add_index "transactions", ["currency_id"], :name => "index_transactions_on_currency_id"
   add_index "transactions", ["date"], :name => "index_transactions_on_date"
   add_index "transactions", ["organisation_id"], :name => "index_transactions_on_organisation_id"
   add_index "transactions", ["project_id"], :name => "index_transactions_on_project_id"
