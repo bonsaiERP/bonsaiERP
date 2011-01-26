@@ -235,8 +235,8 @@
     <control controlID="161" controlTypeID="com.balsamiq.mockups::ComboBox" x="617" y="300" w="204" h="-1" measuredW="117" measuredH="25" zOrder="36" locked="false" isInGroup="-1">
       <controlProperties>
         <bold>false</bold>
-        <href>income_new_exchange_rate%26bm%3Bincome_new_exchange_rate.bmml%26bm%3Bincome_new_exchange_rate.bmml%26bm%3Bincome_new_exchange_rate.bmml</href>
-        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22587%2C298%2C791%2C323%22%20href%3D%22income_new_exchange_rate.bmml%22%20alt%3D%22income_new_exchange_rate%22%20id%3D%22161%22/%3E</map>
+        <href>income_02new_exchange_rate%26bm%3Bincome_02new_exchange_rate.bmml%26bm%3Bincome_02new_exchange_rate.bmml%26bm%3Bincome_02new_exchange_rate.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22587%2C298%2C791%2C323%22%20href%3D%22income_02new_exchange_rate.bmml%22%20alt%3D%22income_02new_exchange_rate%22%20id%3D%22161%22/%3E</map>
         <text>Boliviano%20%28Bs.%29</text>
       </controlProperties>
     </control>

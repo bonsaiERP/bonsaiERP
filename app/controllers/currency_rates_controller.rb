@@ -1,3 +1,6 @@
+# encoding: utf-8
+# author: Boris Barroso
+# email: boriscyber@gmail.com
 class CurrencyRatesController < ApplicationController
   # GET /currency_rates
   # GET /currency_rates.xml
@@ -24,10 +27,10 @@ class CurrencyRatesController < ApplicationController
   # GET /currency_rates/new
   # GET /currency_rates/new.xml
   def new
-    if CurrencyRate.current?(params[:organisation_id])
-      # TODO: Must log and set error
+    if CurrencyRate.current?
+      redirect_to "/dashboard", :notice => "Ya se ingreso los tipos de cambio para el día #{l Date.today}."
     else
-      @organisation = Organisation.find(params[:organisation_id])
+      @organisation = Organisation.find(session[:organisation][:id])
       @currency_rates = CurrencyRate.build_currencies(@organisation)
     end
   end
@@ -40,17 +43,13 @@ class CurrencyRatesController < ApplicationController
   # POST /currency_rates
   # POST /currency_rates.xml
   def create
-    unless current_user.check_organisation?(params[:currency_rate][:organisation_id])
-      # TODO: Must log and set that the current user is hacking
+    @currency_rates = CurrencyRate.create_currencies(params[:currency_rates])
+
+    unless @currency_rates.map(&:id).include?(nil)
+      redirect_ajax @currency_rates.first, :url => params[:referer]
     else
-      values = params[:currency_rates].map{ |v| v.last.merge(:organisation_id => params[:currency_rate][:organisation_id] ) }
-      @currency_rates = CurrencyRate.create(values)
-      unless @currency_rates.map(&:id).include?(nil)
-        redirect_ajax @currency_rates.first, :url => currency_rates_path
-      else
-        @organisation = Organisation.find(params[:currency_rate][:organisation_id])
-        render :action => 'new'
-      end
+      @organisation = Organisation.find(session[:organisation][:id])
+      render :action => 'new'
     end
   end
 

@@ -84,4 +84,12 @@ private
     redirect_to organisations_path if session[:organisation][:id].nil?
   end
 
+  # Checks if the currency has been set
+  def check_currency_set
+    unless CurrencyRate.current?
+      flash[:warning] = "Debe actualizar los tipos de cambio."
+      redirect_to new_currency_rate_path
+    end
+  end
+  
 end

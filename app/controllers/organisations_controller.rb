@@ -38,15 +38,14 @@ class OrganisationsController < ApplicationController
   # POST /organisations
   # POST /organisations.xml
   def create
-    # extra step because it gives error in the model
-    params[:organisation][:currency_ids] = [ params[:organisation][:currency_id] ]
     @organisation = Organisation.new(params[:organisation])
 
     if @organisation.save
-      redirect_to(organisation_url(@organisation), :notice => "Se ha creado la empresa")
+      params[:id] = @organisation.id
+      #redirect_to(organisation_url(@organisation), :notice => "Se ha creado la empresa")
+      select
     else
-      add_flash_error(@organisation)
-      flash[:notice] = I18n.t("organisation.flash.error")
+      render :action => 'new'
     end
   end
 
@@ -73,7 +72,8 @@ class OrganisationsController < ApplicationController
     @organisation = Link.orgs.find{ |v| v.id == params[:id].to_i }
 
     unless @organisation.blank?
-      set_organisation_session(@organisation)
+      set_organisation_session(@organisation)  
+      flash[:warning] = "Debe actualizar los tipos de cambio. <a href=\"#{new_currency_rate_path}\">Actualizar</a>".html_safe unless CurrencyRate.current?
       redirect_to dashboard_url
     else
       flash[:error] = "Debe seleccionar una organización válida"

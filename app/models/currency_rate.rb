@@ -2,6 +2,8 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class CurrencyRate < ActiveRecord::Base
+  acts_as_org
+
   before_create :update_active
 
   # relationships
@@ -12,13 +14,27 @@ class CurrencyRate < ActiveRecord::Base
   validates_presence_of :currency_id, :organisation_id
   validates :rate, :presence => true, :numericality => {:greater_than => 0}
 
+  # scopes
+  default_scope where(:organisation_id => OrganisationSession.organisation_id)
   scope :current, lambda {|org_id| where(["created_at"])}
   scope :active, where(:active => true)
 
   # returns if the currency has been updated for the date and organisation
   # @param Integer 
-  def self.current?(organisation_id)
-    where(["active=? AND organisation_id=? AND created_at>=?", true, organisation_id, Date.today]).any?
+  def self.current?
+    organisation_id ||= OrganisationSession.organisation_id
+    where(["active=? AND created_at>=?", true, Date.today]).any?
+  end
+
+  # Method to create new currencies
+  def self.create_currencies(values)
+    values = values.map{ |v| v.last } if values.is_a? Hash
+    created_currencies = []
+    CurrencyRate.transaction do
+      created_currencies = CurrencyRate.create(values)
+      raise ActiveRecord::Rollback if created_currencies.map(&:id).include?(nil)
+    end
+    created_currencies
   end
 
   # Prepares a list of CurrencyRate instances
@@ -30,7 +46,7 @@ class CurrencyRate < ActiveRecord::Base
 private
   # sets to inactive all other active currency_rates
   def update_active
-    CurrencyRate.update_all(["active=?", false], ["active=? AND currency_id=?", true, currency_id])
+    CurrencyRate.update_all(["active=?", false], ["active=? AND currency_id=? AND organisation_id=?", true, currency_id, OrganisationSession.organisation_id])
     self.active = true
   end
 

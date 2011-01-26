@@ -13,6 +13,9 @@
 @orange: #FECD0A;
 @light_orange: #ffe374;
 @blue: #6793CE;
+@yellow:#FFFF00;
+@light_yellow:#FFFFC5;
+@dark_yellow:#D0D02A;
 
 .grey{ color: @grey; }
 .green{ color: @green; }
@@ -462,6 +465,12 @@ span.error{
   .flash;
   border-color: @red;
   color:@red;
+}
+#flashWarning{
+  .flash;
+  color: @dark;
+  border-color:@yellow;
+  background-color:@light_yellow;
 }
 /* End */
 

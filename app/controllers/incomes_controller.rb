@@ -3,7 +3,10 @@
 # email: boriscyber@gmail.com
 class IncomesController < ApplicationController
 
+  before_filter :check_currency_set, :only => [:new, :edit, :create, :update]
   before_filter :set_default_currency, :only => [:new, :edit]
+
+
   # GET /incomes
   # GET /incomes.xml
   def index
