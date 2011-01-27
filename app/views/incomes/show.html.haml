@@ -51,42 +51,51 @@
 .input
   %label Descripción
   =@income.description
+.clear
 
+#items
+  %h2.dark Items
 
-%h2.dark Items
-
-%table#items_table.decorated
-  %thead
-    %tr
-      %th Item
-      %th Descripción
-      %th Precio <br/>unitario
-      %th Cantidad
-      %th Total fila
-    - @income.transaction_details.each do |det|
+  %table#items_table.decorated
+    %thead
       %tr
-        %td
-          <a href=":javascript" title="Inventatio" class="inventario">inv</a>
-          = det.item
-        %td= det.description
-        %td= ntc det.price
-        %td= det.quantity
-        %td.total_row.r= ntc det.total
+        %th Item
+        %th Descripción
+        %th Precio <br/>unitario
+        %th Cantidad
+        %th Total fila
+      - @income.transaction_details.each do |det|
+        %tr
+          %td
+            <a href=":javascript" title="Inventatio" class="inventario">inv</a>
+            = det.item
+          %td= det.description
+          %td= ntc det.price
+          %td= det.quantity
+          %td.total_row.r= ntc det.total
 
-  %tr.extra
-    %td{:colspan => 2}
-    %td.b.r{:colspan => 2} Subtotal
-    %td#subtotal.b.r= @income.gross_total
-  %tr.extra
-    %td{:colspan => 2}
-    %td.b.r{:colspan => 2} Descuento (<span id="discount_percentage" data-val="#{@income.total_discount}">#{ntc @income.tax_percent}</span>%)
-    %td#discount_total.b.r= "-#{ntc @income.total_discount}"
-  %tr.extra
-    %td{:colspan => 2}
-    %td.b.r{:colspan => 2} Impuestos (<span id="taxes_percentage" data-val="#{@income.total_taxes}">#{ntc @income.total_taxes}</span>%)
-    %td#taxes_total.b.r= ntc @income.total_taxes
-  %tr.extra
-    %td{:colspan => 2}
-    %td.r{:colspan => 2} <h3>Total</h3>
-    %td.r <h3 id="total_value">#{ntc @income.total}</h3>
+    %tr.extra
+      %td{:colspan => 2}
+      %td.b.r{:colspan => 2} Subtotal
+      %td#subtotal.b.r= @income.gross_total
+    %tr.extra
+      %td{:colspan => 2}
+      %td.b.r{:colspan => 2} Descuento (<span id="discount_percentage" data-val="#{@income.total_discount}">#{ntc @income.tax_percent}</span>%)
+      %td#discount_total.b.r= "-#{ntc @income.total_discount}"
+    %tr.extra
+      %td{:colspan => 2}
+      %td.b.r{:colspan => 2} Impuestos (<span id="taxes_percentage" data-val="#{@income.total_taxes}">#{ntc @income.total_taxes}</span>%)
+      %td#taxes_total.b.r= ntc @income.total_taxes
+    %tr.extra
+      %td{:colspan => 2}
+      %td.r{:colspan => 2} <h3>Total</h3>
+      %td.r <h3 id="total_value">#{ntc @income.total}</h3>
+    %tr.extra
+      %td{:colspan => 2}
+      %td.r{:colspan => 2} <h3>Saldo</h3>
+      %td.r <h3 id="total_value">#{ntc @income.balance}</h3>
 
+.clear
+/=render :partial => "pay_plans" unless @income.payment?
+.clear
+=render :partial => "pay_plans"

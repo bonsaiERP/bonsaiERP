@@ -130,17 +130,22 @@ ActiveRecord::Schema.define(:version => 20110127181906) do
     t.integer  "organisation_id"
     t.integer  "transaction_id"
     t.integer  "currency_id"
-    t.decimal  "amount",              :precision => 14, :scale => 2
-    t.decimal  "interests_penalties", :precision => 14, :scale => 2
-    t.date     "payment_day"
+    t.decimal  "amount",                            :precision => 14, :scale => 2
+    t.decimal  "interests_penalties",               :precision => 14, :scale => 2
+    t.date     "payment_date"
     t.date     "alert_date"
     t.boolean  "email"
+    t.string   "ctype",               :limit => 10
+    t.string   "description"
+    t.boolean  "paid",                                                             :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "pay_plans", ["ctype"], :name => "index_pay_plans_on_ctype"
   add_index "pay_plans", ["organisation_id"], :name => "index_pay_plans_on_organisation_id"
-  add_index "pay_plans", ["payment_day"], :name => "index_pay_plans_on_payment_day"
+  add_index "pay_plans", ["paid"], :name => "index_pay_plans_on_paid"
+  add_index "pay_plans", ["payment_date"], :name => "index_pay_plans_on_payment_date"
   add_index "pay_plans", ["transaction_id"], :name => "index_pay_plans_on_transaction_id"
 
   create_table "prices", :force => true do |t|

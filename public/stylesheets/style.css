@@ -56,7 +56,7 @@ table.decorated {
 }
 table.decorated th {
   padding: 4px 8px;
-  text-align: center;
+  text-align: left;
   color: #30383e;
   background: transparent url(images/th.png) repeat-x 0% 50%;
   height: 32px;
@@ -437,6 +437,11 @@ ul.menu li:hover ul {
 .clear { clear: both; }
 .true { background: transparent url(images/tick.png) no-repeat center 50%; }
 .false { background: transparent url(images/cross.png) no-repeat center 50%; }
+span.true, span.false {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
 .hide { display: none; }
 .b { font-weight: bold; }
 .n { font-weight: normal; }

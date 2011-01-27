@@ -5,6 +5,7 @@ class Transaction < ActiveRecord::Base
   acts_as_org
 
   # callbacks
+  after_initialize :initialize_values
   before_save :set_details_type
   before_save :calculate_total_and_set_balance
 
@@ -13,6 +14,7 @@ class Transaction < ActiveRecord::Base
   belongs_to :currency
   belongs_to :project
 
+  has_many :pay_plans
   has_many :transaction_details
   accepts_nested_attributes_for :transaction_details
   has_and_belongs_to_many :taxes, :class_name => 'Tax'
@@ -25,9 +27,6 @@ class Transaction < ActiveRecord::Base
     self.transaction_details.inject(0) {|sum, v| sum += v.total }
   end
 
-  def after_initialize
-    initialize_values
-  end
 
   # Calculates the amount for taxes
   def total_taxes
