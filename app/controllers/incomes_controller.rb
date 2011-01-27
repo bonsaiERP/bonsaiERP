@@ -4,7 +4,7 @@
 class IncomesController < ApplicationController
 
   before_filter :check_currency_set, :only => [:new, :edit, :create, :update]
-  before_filter :set_default_currency, :only => [:new, :edit]
+  before_filter :set_default_currency, :except => [:index, :destroy]
 
 
   # GET /incomes
@@ -88,6 +88,11 @@ class IncomesController < ApplicationController
       format.html { redirect_to(incomes_url) }
       format.xml  { head :ok }
     end
+  end
+  
+  # PUT /incomes/1/aprove
+  # Method to aprove an income
+  def aprove
   end
 
 private

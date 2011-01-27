@@ -69,6 +69,7 @@
         %th Precio <br/>unitario
         %th Cantidad
         %th Total fila
+        %th
     = f.simple_fields_for :transaction_details do |fd|
       %tr
         %td
@@ -77,24 +78,28 @@
         %td= fd.input :description, :label => false
         %td= fd.input :price, :input_html => { :size => 8, :class => 'price' }, :label => false
         %td= fd.input :quantity, :input_html => { :size => 8, :class => 'quantity' }, :label => false
-        %td.total_row.r
+        %td.total_row.r{'data-val' => fd.object.total }= ntc fd.object.total
+        %td.del <a href="javascript:" class="delete" title="Borrar">&nbsp;</a>
     %tr.extra
       %td{:colspan => 2}
       %td.b.r{:colspan => 2} Subtotal
-      %td#subtotal.b.r= ntc(@income.subtotal)
+      %td#subtotal.b.r{'data-val' => @income.subtotal}= ntc(@income.subtotal)
     %tr.extra
       %td{:colspan => 2} <a href="javascript:" id="add_item" class="add">Adicionar ítem</a>
       %td.b.r{:colspan => 2} Descuento (<span id="discount_percentage" data-val="#{@income.discount}">#{ntc @income.discount}</span>%)
-      %td#discount_total.b.r= ntc(@income.total_discount)
+      %td#discount_total.b.r{'data-val' => @income.total_discount}= "-#{ntc(@income.total_discount)}"
     %tr.extra
       %td{:colspan => 2}
-      %td.b.r{:colspan => 2} Impuestos (<span id="taxes_percentage" data-val="#{@income.total_taxes}">#{ntc @income.total_taxes}</span>%)
-      %td#taxes_total.b.r
+      %td.b.r{:colspan => 2} Impuestos (<span id="taxes_percentage" data-val="#{@income.tax_percent}">#{ntc @income.tax_percent}</span>%)
+      %td#taxes_total.b.r{'data-val' => @income.total_taxes}= ntc @income.total_taxes
     %tr.extra
       %td{:colspan => 2}
       %td.r{:colspan => 2} <h3>Total</h3>
-      %td.r <h3 id="total_value"></h3>
-
+      %td.r <h3 id="total_value" data-val="#{@income.total}">#{ntc @income.total}</h3>
+    %tr.extra
+      %td{:colspan => 2}
+      %td.r{:colspan => 2} <h3 id="curerncy_symbol"></h3>
+      %td.r <h3 id="total_value_currency"></h3>
   .actions
     = f.submit 'Salvar'
 
@@ -104,5 +109,6 @@
     var items = #{ Item.income.json.to_json };
     var currencies = #{ Currency.select("id, name, symbol").to_json };
     var exchange_rates = #{ CurrencyRate.active.select("rate, currency_id").to_json };
-    var income = new Income(items, "#income_form", {'default_currency_id': #{@currency.id} }, currencies, exchange_rates );
+    var default_currency_id = #{@currency.id};
+    var income = new Income(items, "#income_form", {'default_currency_id': default_currency_id }, currencies, exchange_rates );
   })

@@ -11,7 +11,7 @@ class Contact < ActiveRecord::Base
   has_many :transactions
 
   validates_presence_of :name#, :organisation_name
-  validates :matchcode, :uniqueness => true, :presence => true
+  validates :matchcode, :uniqueness => { :scope => :organisation_id }, :presence => true 
 
   attr_accessible :name, :matchcode, :organisation_name, :address, :addres_alt, :phone, :mobile, :email, :tax_number, :aditional_info
   

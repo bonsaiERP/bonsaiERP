@@ -5,7 +5,6 @@ class Transaction < ActiveRecord::Base
   acts_as_org
 
   # callbacks
-  #before_save :set_discount_and_taxes
   before_save :set_details_type
   before_save :calculate_total_and_set_balance
 
@@ -38,9 +37,24 @@ class Transaction < ActiveRecord::Base
   def total_discount
     gross_total * discount/100
   end
+
+  # Presents the currency symbol name if not default currency
+  def present_currency
+    unless Organisation.find(OrganisationSession.organisation_id).id == self.currency_id
+      self.currency.to_s
+    end
+  end
+
+  # Presents the total in currency unless the default currency
+  def total_currency
+    unless Organisation.find(OrganisationSession.organisation_id).id == self.currency_id
+      self.total/self.currency_exchange_rate
+    end
+  end
 private
   # set default values for discount and taxes
   def initialize_values
+    self.cash ||= 1
     self.discount ||= 0
     self.tax_percent = taxes.inject(0) {|sum, t| sum += t.rate }
     self.gross_total ||= 0

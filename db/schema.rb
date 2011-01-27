@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110125144327) do
+ActiveRecord::Schema.define(:version => 20110127181906) do
 
   create_table "contacts", :force => true do |t|
     t.string   "matchcode"
@@ -125,6 +125,23 @@ ActiveRecord::Schema.define(:version => 20110125144327) do
 
   add_index "organisations", ["country_id"], :name => "index_organisations_on_country_id"
   add_index "organisations", ["currency_id"], :name => "index_organisations_on_currency_id"
+
+  create_table "pay_plans", :force => true do |t|
+    t.integer  "organisation_id"
+    t.integer  "transaction_id"
+    t.integer  "currency_id"
+    t.decimal  "amount",              :precision => 14, :scale => 2
+    t.decimal  "interests_penalties", :precision => 14, :scale => 2
+    t.date     "payment_day"
+    t.date     "alert_date"
+    t.boolean  "email"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "pay_plans", ["organisation_id"], :name => "index_pay_plans_on_organisation_id"
+  add_index "pay_plans", ["payment_day"], :name => "index_pay_plans_on_payment_day"
+  add_index "pay_plans", ["transaction_id"], :name => "index_pay_plans_on_transaction_id"
 
   create_table "prices", :force => true do |t|
     t.integer  "item_id"

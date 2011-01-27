@@ -29,6 +29,7 @@ class Transaction
     this.set_item_change_event("table select.item", "input.price")
     this.set_price_quantity_change_event("table", "input.price", "input.quantity")
     this.set_add_item_event()
+    this.check_currency_data()
   # Event for currency change
   set_currency_event: ->
     self = this
@@ -89,6 +90,7 @@ class Transaction
     currency_id = 1 * $(@conf.currency_id).val()
     if @conf.default_currency_id == currency_id
       $(@conf.currency_id).siblings("label").find("span").html("")
+      $(@conf.currency_exchange_rate_id).val(1)
     else
       base = this.find_currency(@conf.default_currency_id)
       change = this.find_currency(currency_id)
@@ -105,7 +107,7 @@ class Transaction
     rate = $(@conf.currency_exchange_rate_id).val() * 1
     base = $(@conf.currency_id).data('base')
     change = $(@conf.currency_id).data('change')
-    html = "1 #{change.symbol} #{change.name} = #{rate} #{base.symbol} #{base.name}s "
+    html = "1 #{change.symbol} #{change.name} = #{rate} #{base.symbol} #{base.name} "
     html += "<a id='edit_rate_link' href='javascript:'>editar</a>"
     $span.html( html ).mark()
 
@@ -156,6 +158,16 @@ class Transaction
       $(el).attr("name", name).val("")
     )
     $tr.insertBefore("#{@conf.items_table_id} tr.extra:first")
+  # checks that the currency data is available
+  check_currency_data: ->
+    currency_id = $(@conf.currency_id).val() * 1
+    if @conf.default_currency_id != currency_id
+      base = this.find_currency(@conf.default_currency_id)
+      change = this.find_currency(currency_id)
+      change.rate = $(@conf.currency_exchange_rate_id).val() * 1
+      $(@conf.currency_id).data({'base': base, 'change': change})
+      this.set_exchange_rate_html()
+
   # returns the item from a list
   search_item: (id)->
     id = parseInt(id)

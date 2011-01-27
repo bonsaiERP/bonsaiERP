@@ -10,4 +10,5 @@ class Currency < ActiveRecord::Base
   def to_s
     %Q(#{symbol} #{name})
   end
+
 end

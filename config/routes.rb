@@ -10,7 +10,11 @@ Bonsaierp::Application.routes.draw do
 
   resources :transactions
 
-  resources :incomes
+  resources :incomes do
+    member do
+      put 'aprove'
+    end
+  end
 
   resources :buys
 

@@ -79,4 +79,28 @@ describe Transaction do
     transaction.save
     transaction.total_taxes.to_f.should == 49.93075
   end
+
+  it 'should not present the currency' do
+    transaction = Transaction.new(@params)
+    transaction.save
+    o = Object.new
+    o.stubs(:id => 1)
+    Organisation.stubs(:find => o)
+    
+    transaction.present_currency.to_s.should == ""
+  end
+
+
+  it 'should present the currency' do
+    transaction = Transaction.new(@params)
+    transaction.save
+    o = Object.new
+    o.stubs(:id => 2)
+    Organisation.stubs(:find => o)
+    cur = Object.new
+    cur.stubs(:to_s => "Symbol Name")
+    Transaction.any_instance.stubs(:currency => cur)
+    
+    transaction.present_currency.to_s.should == "Symbol Name"
+  end
 end

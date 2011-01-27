@@ -1,8 +1,18 @@
-%h1 Transacción
-%p.links
+%h1 Proforma de venta (#{cash @income.cash})
+%p.links._50.fl
   = link_to 'Editar', edit_income_path(@income), :class => 'edit'
   = link_to 'Lista', income_path, :class => 'list'
+._50.fl.r
+  - unless @income.aproved?
+    = simple_form_for @income, :url => aprove_income_path(@income) do |f|
+      .submit
+        =f.submit "Aprobar", :class => 'bg_green'
 
+.clear
+= link_to "Email","", :class => 'email'
+&nbsp;&nbsp;
+= link_to "Imprimir","", :class => 'print'
+.clear
 .input
   .input
     %label Nº de referencia
@@ -20,6 +30,9 @@
 .input
   %label Moneda
   = @income.currency
+  - unless @income.currency_id == @currency.id
+    <br/>
+    %strong 1 #{@income.currency} = #{@income.currency_exchange_rate} #{@currency}
 .clear
 .input
   .input
@@ -76,3 +89,4 @@
     %td{:colspan => 2}
     %td.r{:colspan => 2} <h3>Total</h3>
     %td.r <h3 id="total_value">#{ntc @income.total}</h3>
+

@@ -39,7 +39,8 @@
       this.set_taxes_event();
       this.set_item_change_event("table select.item", "input.price");
       this.set_price_quantity_change_event("table", "input.price", "input.quantity");
-      return this.set_add_item_event();
+      this.set_add_item_event();
+      return this.check_currency_data();
     };
     Transaction.prototype.set_currency_event = function() {
       var self;
@@ -116,7 +117,8 @@
       var base, change, currency_id, k, rate, _i, _len, _ref;
       currency_id = 1 * $(this.conf.currency_id).val();
       if (this.conf.default_currency_id === currency_id) {
-        return $(this.conf.currency_id).siblings("label").find("span").html("");
+        $(this.conf.currency_id).siblings("label").find("span").html("");
+        return $(this.conf.currency_exchange_rate_id).val(1);
       } else {
         base = this.find_currency(this.conf.default_currency_id);
         change = this.find_currency(currency_id);
@@ -141,7 +143,7 @@
       rate = $(this.conf.currency_exchange_rate_id).val() * 1;
       base = $(this.conf.currency_id).data('base');
       change = $(this.conf.currency_id).data('change');
-      html = "1 " + change.symbol + " " + change.name + " = " + rate + " " + base.symbol + " " + base.name + "s ";
+      html = "1 " + change.symbol + " " + change.name + " = " + rate + " " + base.symbol + " " + base.name + " ";
       html += "<a id='edit_rate_link' href='javascript:'>editar</a>";
       return $span.html(html).mark();
     };
@@ -201,6 +203,20 @@
         return $(el).attr("name", name).val("");
       });
       return $tr.insertBefore("" + this.conf.items_table_id + " tr.extra:first");
+    };
+    Transaction.prototype.check_currency_data = function() {
+      var base, change, currency_id;
+      currency_id = $(this.conf.currency_id).val() * 1;
+      if (this.conf.default_currency_id !== currency_id) {
+        base = this.find_currency(this.conf.default_currency_id);
+        change = this.find_currency(currency_id);
+        change.rate = $(this.conf.currency_exchange_rate_id).val() * 1;
+        $(this.conf.currency_id).data({
+          'base': base,
+          'change': change
+        });
+        return this.set_exchange_rate_html();
+      }
     };
     Transaction.prototype.search_item = function(id) {
       var k, _i, _len, _ref;
