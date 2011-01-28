@@ -33,4 +33,23 @@ describe Income do
     i.pay_plans.first.email.should == false
     i.pay_plans.first.paid.should == false
   end
+
+  it 'should return a correct state based on the languagge and cache values' do
+    I18n.locale = :es
+    i = Income.new
+    i.state = 'draft'
+    i.show_state.should == "Borrador"
+    # Cached
+    I18n.locale = :en
+    i.show_state.should_not == "Draft"
+  end
+
+  it 'should retrun Draf for english' do
+    I18n.locale = :en
+    i = Income.new
+    i.state = 'draft'
+    i.show_state.should == "Draft"
+    # Set to default languagge
+    I18n.locale = :es
+  end
 end

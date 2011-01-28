@@ -1,7 +1,7 @@
 %h1 Proforma de venta (#{cash @income.cash})
 %p.links._50.fl
   = link_to 'Editar', edit_income_path(@income), :class => 'edit'
-  = link_to 'Lista', income_path, :class => 'list'
+  = link_to 'Lista', incomes_path, :class => 'list'
 ._50.fl.r
   - unless @income.aproved?
     = simple_form_for @income, :url => aprove_income_path(@income) do |f|
@@ -96,6 +96,6 @@
       %td.r <h3 id="total_value">#{ntc @income.balance}</h3>
 
 .clear
-/=render :partial => "pay_plans" unless @income.payment?
+/=render :partial => "payments" unless @income.payment?
 .clear
-=render :partial => "pay_plans"
+=render :partial => "/pay_plans/pay_plans", :locals => {:klass => @income, :pay_type => 'cobro'}

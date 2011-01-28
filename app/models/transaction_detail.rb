@@ -3,6 +3,8 @@
 # email: boriscyber@gmail.com
 class TransactionDetail < ActiveRecord::Base
   acts_as_org
+  # callbacks
+  after_initialize :set_defaults
 
   # relationships
   belongs_to :transaction
@@ -15,7 +17,8 @@ class TransactionDetail < ActiveRecord::Base
     price * quantity
   end
 
-  def after_initialize
+private
+  def set_defaults
     self.price ||= 0
     self.quantity ||= 0
   end

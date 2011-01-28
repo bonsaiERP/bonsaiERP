@@ -19,6 +19,14 @@ $(document).ready(->
     else
       d
 
+  # Transforms a string date in a default 
+  _b.dateFormat = (date, format)->
+    format = format || $.datepicker._defaults.dateFormat
+    if date
+      d = $.datepicker.parseDate('yy-mm-dd', date )
+      $.datepicker.formatDate($.datepicker._defaults.dateFormat, d)
+    else
+      ""
   # Sets rails select fields with the correct datthe correct date
   setDateSelect = (el)->
     fecha = parsearFecha( $(el).val() )
@@ -104,36 +112,42 @@ $(document).ready(->
 
   # Creates the dialog container
   createDialog = (params)->
+    data = params['data']
+    delete(params['data'])
     params = $.extend({
-      'id': new Date().getTime(), 'title': '', 'width': 800, 'height' : 400, 'modal': true, 'resizable' : false
+      'id': new Date().getTime(), 'title': '', 'width': 800, 'height' : 400, 'modal': true, 'resizable' : false,
+      'close': (e, ui)->
+        $('#' + div_id ).parents("[role=dialog]").detach()
     }, params)
+    div_id = params.id
     div = document.createElement('div')
-    $(div).attr( { 'id': params['id'], 'title': params['title'], 'data-ajax_id': params['id'] } )
-    .addClass('ajax-modal').css( { 'z-index': 1000 } )
+    $(div).attr( { 'id': params['id'], 'title': params['title'] } ).data(data)
+    .addClass('ajax-modal').css( { 'z-index': 10000 } )
     delete(params['id'])
     delete(params['title'])
     $(div).dialog( params )
     div
 
+  # Gets if the request is new, edit, show
+  getAjaxType = (el)->
+    if $(el).hasClass("new")
+      'new'
+    else if $(el).hasClass("edit")
+      'edit'
+    else
+      'show'
+
+  window.getAjaxType = getAjaxType
+
   # Presents an AJAX form
   $('a.ajax').live("click", (e)->
-    id = new Date().getTime().toString()
-    $(this).attr('data-ajax_id', id)
-
-    div = createDialog( { 'title': $(this).attr('data-title') } )
+    div = createDialog( { 'title': $(this).attr('title'), 'data': {trigger: $(this).data('trigger'), 'ajax-type': getAjaxType(this) } } )
     $(div).load( $(this).attr("href"), (e)->
       $(div).find('a.new[href*=/], a.edit[href*=/], a.list[href*=/]').hide()
     )
     e.stopPropagation()
     false
   )
-
-  # Para redondear decimales
-  roundVal = (val, dec)->
-  	dec = dec or 2
-	  Math.round(val*Math.pow(10,dec))/Math.pow(10,dec)
-
-  $.roundVal = $.fn.roundVal = roundVal
 
   currency = {'separator': ",", 'delimiter': '.', 'precision': 2}
   _b.currency = currency
@@ -221,6 +235,9 @@ $(document).ready(->
 
     data = serializeFormElements(this)
     el = this
+    $div = $(this).parents('.ajax-modal')
+    new_record = if $div.data('ajax-type') == 'new' then true else false
+    trigger = $div.data('trigger')
 
     $.ajax(
       'url': $(el).attr('action')
@@ -229,16 +246,20 @@ $(document).ready(->
       'data':data
       'type': (data['_method'] || $(this).attr('method') )
       'success': (resp, status, xhr)->
-        if $(resp).find('input:submit').length <= 0
+        try
+          data = $.parseJSON(resp)
+          data['new_record'] = new_record
           p = $(el).parents('div.ajax-modal')
-          id = $(p).attr('data-ajax_id')
-          $(p).dialog('destroy')
-          #$(p).remove()
-          $('body').trigger('ajax:complete', [resp])
-        else
-          $(el).parents('div.ajax-modal:first').html(resp)
+          $(p).html('').dialog('destroy')
+          $('body').trigger(trigger, [data])
+        catch e
+          div = $(el).parents('div.ajax-modal:first')
+          div.html(resp)
+          setTimeout(->
+            transformDateSelect(div)
+          ,200)
       'error': (resp)->
-        alert('Existen errores en su formulario por favor corrija los errores')
+        alert('There are errors in the form please correct them')
     )
 
     false

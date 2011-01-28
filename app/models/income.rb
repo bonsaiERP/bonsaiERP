@@ -23,10 +23,8 @@ class Income < Transaction
 
   # Presents a localized name for state
   def show_state
-    case I18n.locale
-    when :es
-      ["Borrador", "Aprobado", "Pagado"]
-    end    
+    @hash ||= create_states_hash
+    @hash[state]
   end
 
   def aproved?
@@ -36,6 +34,19 @@ class Income < Transaction
 private
   def set_state
     self.state = STATES.first
+  end
+
+  # Creates a states hash based on the locale
+  def create_states_hash
+    arr = case I18n.locale
+    when :es
+      ["Borrador", "Aprobado", "Pagado"]
+    when :en
+      ["Draft", "Aproved", "Paid"]
+    when :pt
+      ["Borracha", "Aprovado", "Pagado"]
+    end
+    Hash[STATES.zip(arr)]
   end
 
   # Creates the first payment for cash payments

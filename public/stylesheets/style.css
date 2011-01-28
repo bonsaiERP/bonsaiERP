@@ -63,6 +63,30 @@ table.decorated th {
 }
 table.decorated tr { border-bottom: 1px solid #c6c6c6; }
 table.decorated td { padding: 4px 8px; }
+table.decorated td a.edit {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  text-indent: -1000em;
+  margin: 0px;
+  padding: 0px;
+}
+table.decorated td a.delete {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  text-indent: -1000em;
+  margin: 0px;
+  padding: 0px;
+}
+table.decorated td a.destroy {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  text-indent: -1000em;
+  margin: 0px;
+  padding: 0px;
+}
 table.decorated tr.extra { border-bottom: none !important; }
 table.decorated tr.extra h3 { margin: 3px 0px; }
 table.nwl td:last-child { white-space: nowrap; }
@@ -234,7 +258,7 @@ a.destroy, a.delete {
   margin: 10px 5px;
   color: #538447;
   font-size: 110%;
-  background: url(images/delete.png) no-repeat 0px 50%;
+  background: url(images/trash.png) no-repeat 0px 50%;
 }
 a.list {
   font-weight: bold;

@@ -1,6 +1,6 @@
 (function() {
   $(document).ready(function() {
-    var createDialog, csfr_token, currency, mark, ntc, parsearFecha, roundVal, serializeFormElements, setDateSelect, setIframePostEvents, speed, start, toByteSize, transformDateSelect, transformMinuteSelect, _b;
+    var createDialog, csfr_token, currency, getAjaxType, mark, ntc, parsearFecha, serializeFormElements, setDateSelect, setIframePostEvents, speed, start, toByteSize, transformDateSelect, transformMinuteSelect, _b;
     _b = {};
     window._b = _b;
     speed = 300;
@@ -14,6 +14,16 @@
         return d.join("-");
       } else {
         return d;
+      }
+    };
+    _b.dateFormat = function(date, format) {
+      var d;
+      format = format || $.datepicker._defaults.dateFormat;
+      if (date) {
+        d = $.datepicker.parseDate('yy-mm-dd', date);
+        return $.datepicker.formatDate($.datepicker._defaults.dateFormat, d);
+      } else {
+        return "";
       }
     };
     setDateSelect = function(el) {
@@ -99,34 +109,51 @@
       return $(this).html('Ver más').removeClass('less').addClass('more').next('.hidden').hide(speed);
     });
     createDialog = function(params) {
-      var div;
+      var data, div, div_id;
+      data = params['data'];
+      delete params['data'];
       params = $.extend({
         'id': new Date().getTime(),
         'title': '',
         'width': 800,
         'height': 400,
         'modal': true,
-        'resizable': false
+        'resizable': false,
+        'close': function(e, ui) {
+          return $('#' + div_id).parents("[role=dialog]").detach();
+        }
       }, params);
+      div_id = params.id;
       div = document.createElement('div');
       $(div).attr({
         'id': params['id'],
-        'title': params['title'],
-        'data-ajax_id': params['id']
-      }).addClass('ajax-modal').css({
-        'z-index': 1000
+        'title': params['title']
+      }).data(data).addClass('ajax-modal').css({
+        'z-index': 10000
       });
       delete params['id'];
       delete params['title'];
       $(div).dialog(params);
       return div;
     };
+    getAjaxType = function(el) {
+      if ($(el).hasClass("new")) {
+        return 'new';
+      } else if ($(el).hasClass("edit")) {
+        return 'edit';
+      } else {
+        return 'show';
+      }
+    };
+    window.getAjaxType = getAjaxType;
     $('a.ajax').live("click", function(e) {
-      var div, id;
-      id = new Date().getTime().toString();
-      $(this).attr('data-ajax_id', id);
+      var div;
       div = createDialog({
-        'title': $(this).attr('data-title')
+        'title': $(this).attr('title'),
+        'data': {
+          trigger: $(this).data('trigger'),
+          'ajax-type': getAjaxType(this)
+        }
       });
       $(div).load($(this).attr("href"), function(e) {
         return $(div).find('a.new[href*=/], a.edit[href*=/], a.list[href*=/]').hide();
@@ -134,11 +161,6 @@
       e.stopPropagation();
       return false;
     });
-    roundVal = function(val, dec) {
-      dec = dec || 2;
-      return Math.round(val * Math.pow(10, dec)) / Math.pow(10, dec);
-    };
-    $.roundVal = $.fn.roundVal = roundVal;
     currency = {
       'separator': ",",
       'delimiter': '.',
@@ -236,9 +258,12 @@
       return false;
     });
     $('div.ajax-modal form[enctype!=multipart/form-data]').live('submit', function() {
-      var data, el;
+      var $div, data, el, new_record, trigger;
       data = serializeFormElements(this);
       el = this;
+      $div = $(this).parents('.ajax-modal');
+      new_record = $div.data('ajax-type') === 'new' ? true : false;
+      trigger = $div.data('trigger');
       $.ajax({
         'url': $(el).attr('action'),
         'cache': false,
@@ -246,18 +271,23 @@
         'data': data,
         'type': data['_method'] || $(this).attr('method'),
         'success': function(resp, status, xhr) {
-          var id, p;
-          if ($(resp).find('input:submit').length <= 0) {
+          var div, p;
+          try {
+            data = $.parseJSON(resp);
+            data['new_record'] = new_record;
             p = $(el).parents('div.ajax-modal');
-            id = $(p).attr('data-ajax_id');
-            $(p).dialog('destroy');
-            return $('body').trigger('ajax:complete', [resp]);
-          } else {
-            return $(el).parents('div.ajax-modal:first').html(resp);
+            $(p).html('').dialog('destroy');
+            return $('body').trigger(trigger, [data]);
+          } catch (e) {
+            div = $(el).parents('div.ajax-modal:first');
+            div.html(resp);
+            return setTimeout(function() {
+              return transformDateSelect(div);
+            }, 200);
           }
         },
         'error': function(resp) {
-          return alert('Existen errores en su formulario por favor corrija los errores');
+          return alert('There are errors in the form please correct them');
         }
       });
       return false;

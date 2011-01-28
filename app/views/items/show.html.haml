@@ -27,25 +27,27 @@
   .input._25
     %label Precio de venta
     = @item.price
-  .input#item_discount
-    %label Descuento
-    %span= @item.discount
-  .clear
+  /.input#item_discount
+  /%label Descuento
+  /%span= @item.discount
   .input
     %label Etiquetas
     = @item.tag_list
+  .clear
   .input
     %label Descripción
     = @item.description
   .clear
 
-= javascript_include_tag 'item'
+/= javascript_include_tag 'app/item'
 :javascript
   $(function() {
     if( $('#item_discount').length > 0 ) {
+      /*
       $('#item_discount span').hide();
       var val = $('#item_discount span').html();
       var item_discount = new DiscountRangeShow('item_discount');
       item_discount.tableForField(val);
+      */
     }
   });

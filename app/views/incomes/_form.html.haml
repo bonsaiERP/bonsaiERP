@@ -103,7 +103,7 @@
   .actions
     = f.submit 'Salvar'
 
-= javascript_include_tag("transactions")
+= javascript_include_tag "app/transactions"
 :javascript
   $(function() {
     var items = #{ Item.income.json.to_json };

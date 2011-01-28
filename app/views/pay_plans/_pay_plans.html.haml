@@ -1,0 +1,71 @@
+#pay_plans
+  %h2.dark Plan de #{pay_type.pluralize} (#{cash klass.cash})
+
+  =link_to "Nuevo #{pay_type}", 
+    new_pay_plan_path(:type => klass.class.to_s, :id => klass.id, :pay_type => pay_type),
+    :class => 'new ajax', 'title' => "Nuevo #{pay_type.singularize}", 'data-trigger' => 'pay_plan'
+
+  %table.decorated
+    %thead
+      %th Fecha
+      %th Alertar el
+      %th Cantidad
+      %th Intereses<br/>Penalidades
+      %th Descripción
+      %th Estado
+      %th{:title => 'Enviar email'} Email
+      %th
+    - klass.pay_plans.each do |pp|
+      %tr{:id => pp.id}
+        %td= lo pp.payment_date
+        %td= lo pp.alert_date
+        %td= ntc pp.amount
+        %td= ntc pp.interests_penalties
+        %td= pp.description
+        %td= pp.state
+        %td.c <span class='#{pp.email}'>&nbsp;</span>
+        %td
+          = link_to 'editar', edit_pay_plan_path(pp, :pay_type => pay_type),
+            :class => 'ajax edit', :title => "Editar Plan de #{pay_type}", 'data-trigger' => "pay_plan"
+          = link_to 'borrar', pp, :class => 'ajax destroy', :title => "Borrar plan de #{pay_type}"
+
+= hidden_field_tag "current_date", Date.today
+:javascript
+  $(function() {
+    var template = [
+      '<tr id="${id}">',
+        '<td>${_b.dateFormat(payment_date)}</td>',
+        '<td>${_b.dateFormat(alert_date)}</td>',
+        '<td>${_b.ntc(amount)}</td>',
+        '<td>${_b.ntc(interests_penalties)}</td>',
+        '<td>${description}</td>',
+        '<td>${payPlanState(payment_date)}</td>',
+        '<td class="c"><span class="${email}">&nbsp;</span></td>',
+        '<td>',
+          '<a title="Editar Plan de #{pay_type}" data-trigger="pay_plan" class="ajax edit" href="/pay_plans/${id}/edit?pay_type=cobro">editar</a> ',
+          '<a title="Borrar plan de #{pay_type}" class="ajax destroy" href="/pay_plans/${id}">borrar</a>',
+        '</td>',
+      '</tr>'
+    ].join("")
+
+    payPlanState = function(payment_date) {
+      var payment_date = $.datepicker.parseDate('yy-mm-dd', payment_date );
+      var current_date =  $.datepicker.parseDate('yy-mm-dd', $('#current_date').val() );
+      if(payment_date < current_date) {
+        txt = "Atrasado"
+      }else{
+        txt = "Válido"
+      }
+
+      return txt;
+    }
+    //window.payPlanState = payPlanState;
+
+
+    $('body').live("pay_plan", function(e, resp) {
+      $.tmpl(template, resp).appendTo('#pay_plans table.decorated');
+      if(resp.new_record) {
+      }else{
+      }
+    });
+  });

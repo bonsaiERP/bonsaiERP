@@ -1,0 +1,2 @@
+module PayPlansHelper
+end

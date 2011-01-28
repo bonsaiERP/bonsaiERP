@@ -13,14 +13,14 @@
   .input
     = f.input :unitary_cost, :label => 'Costo unitario', :input_html => {:size => 12}
     = f.input :price, :label => 'Precio de venta', :input_html => {:size => 12}
-  = f.input :discount, :label => 'Descuento en venta (%)', :hint => 'Ej: 10:2.5 20:4'
-  .clear
+  /= f.input :discount, :label => 'Descuento en venta (%)', :hint => 'Ej: 10:2.5 20:4'
   = f.input :tag_list, :label => 'Etiquetas', :hint => 'Escriba palabras separadas por comas, Ej.: grande, costoso'
+  .clear
   = f.input :description, :as => :text, :input_html => {:rows => 5}
   .clear
   
   = f.submit "Salvar"
-= javascript_include_tag 'item'
+/= javascript_include_tag 'app/item'
 
 :javascript
   
@@ -28,5 +28,5 @@
 
     $('select[data-path]').prepend('<option class="new" value="" >Adicionar nuevo</option>');
 
-    var item_discount_div = new DiscountRange('item_discount');
+    //var item_discount_div = new DiscountRange('item_discount');
   });
