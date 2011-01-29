@@ -4,6 +4,7 @@
 class PayPlan < ActiveRecord::Base
   acts_as_org
   after_initialize :set_defaults
+  before_save :set_currency_id
 
   STATES = ["valid", "delayed", "payed"]
 
@@ -38,5 +39,9 @@ private
   def set_defaults
     self.amount ||= 0.0
     self.interests_penalties ||= 0.0
+  end
+
+  def set_currency_id
+    self.currency_id = self.transaction.currency_id
   end
 end

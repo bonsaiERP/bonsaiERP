@@ -351,6 +351,7 @@ input[type=submit] {
   font-size: 1.1em;
   cursor: pointer;
 }
+input[type=submit]:hover { opacity: 0.9; }
 .errorExplanation {
   color: #ff0000;
   background-color: #fef1ec;

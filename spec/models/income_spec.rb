@@ -21,18 +21,18 @@ describe Income do
   end
 
   # NOT Test Unit
-  it 'should create a pay method' do
-    i = Income.create(@params)
-    i.pay_plans.first.amount.should == i.total
-    # Test the date
-    i.pay_plans.first.payment_date.should == i.date
-    i.pay_plans.first.alert_date.should == i.date
-    i.pay_plans.first.organisation_id.should == i.organisation_id
-    i.pay_plans.first.ctype.should == i.class.to_s
-    i.pay_plans.first.currency_id.should == i.currency_id
-    i.pay_plans.first.email.should == false
-    i.pay_plans.first.paid.should == false
-  end
+  #it 'should create a pay method' do
+  #  i = Income.create(@params)
+  #  i.pay_plans.first.amount.should == i.total
+  #  # Test the date
+  #  i.pay_plans.first.payment_date.should == i.date
+  #  i.pay_plans.first.alert_date.should == i.date
+  #  i.pay_plans.first.organisation_id.should == i.organisation_id
+  #  i.pay_plans.first.ctype.should == i.class.to_s
+  #  i.pay_plans.first.currency_id.should == i.currency_id
+  #  i.pay_plans.first.email.should == false
+  #  i.pay_plans.first.paid.should == false
+  #end
 
   it 'should return a correct state based on the languagge and cache values' do
     I18n.locale = :es

@@ -1,6 +1,6 @@
 (function() {
   $(document).ready(function() {
-    var createDialog, csfr_token, currency, getAjaxType, mark, ntc, parsearFecha, serializeFormElements, setDateSelect, setIframePostEvents, speed, start, toByteSize, transformDateSelect, transformMinuteSelect, _b;
+    var createDialog, csfr_token, currency, getAjaxType, mark, ntc, parsearFecha, serializeFormElements, setDateSelect, setIframePostEvents, speed, start, toByteSize, transformDateSelect, transformMinuteSelect, updateTemplateRow, _b;
     _b = {};
     window._b = _b;
     speed = 300;
@@ -54,8 +54,8 @@
       options = options.join("");
       return $(el).html(options);
     };
-    transformDateSelect = function(elem) {
-      return $(elem).find('.date, .datetime').each(function(i, el) {
+    transformDateSelect = function() {
+      return $(this).find('.date, .datetime').each(function(i, el) {
         var day, input, minute, month, year;
         input = document.createElement('input');
         $(input).attr({
@@ -80,8 +80,9 @@
           }
         });
         if (year !== '' && month !== '' && day !== '') {
-          return $(input).datepicker("setDate", new Date(year, month, day));
+          $(input).datepicker("setDate", new Date(year, month, day));
         }
+        return $('.ui-datepicker').not('.ui-datepicker-inline').hide();
       });
     };
     $.transformDateSelect = $.fn.transformDateSelect = transformDateSelect;
@@ -156,7 +157,7 @@
         }
       });
       $(div).load($(this).attr("href"), function(e) {
-        return $(div).find('a.new[href*=/], a.edit[href*=/], a.list[href*=/]').hide();
+        return $(div).transformDateSelect();
       });
       e.stopPropagation();
       return false;
@@ -282,7 +283,7 @@
             div = $(el).parents('div.ajax-modal:first');
             div.html(resp);
             return setTimeout(function() {
-              return transformDateSelect(div);
+              return $(div).transformDateSelect();
             }, 200);
           }
         },
@@ -292,6 +293,20 @@
       });
       return false;
     });
+    updateTemplateRow = function(template, data, selector, node) {
+      var $node, tmp;
+      node = node || 'tr';
+      if (data['new_record']) {
+        $node = $.tmpl(template, data).appendTo(selector);
+      } else {
+        $node = $(selector).find("" + node + "#" + data.id);
+        tmp = $.tmpl(template, data).appendTo(selector).insertAfter($node);
+        $node.detach();
+        $node = tmp;
+      }
+      return $node.mark();
+    };
+    $.updateTemplateRow = $.fn.updateTemplateRow = updateTemplateRow;
     $('a.delete').live("click", function(e) {
       var el, url;
       $(this).parents("tr:first, li:first").addClass('marked');
@@ -349,7 +364,7 @@
     };
     $.mark = $.fn.mark = mark;
     start = function() {
-      return transformDateSelect('body');
+      return $('body').transformDateSelect();
     };
     return start();
   });

@@ -1,5 +1,5 @@
 #pay_plans
-  %h2.dark Plan de #{pay_type.pluralize} (#{cash klass.cash})
+  %h2.dark Plan de #{pay_type.pluralize} a crédito
 
   =link_to "Nuevo #{pay_type}", 
     new_pay_plan_path(:type => klass.class.to_s, :id => klass.id, :pay_type => pay_type),
@@ -29,7 +29,6 @@
             :class => 'ajax edit', :title => "Editar Plan de #{pay_type}", 'data-trigger' => "pay_plan"
           = link_to 'borrar', pp, :class => 'ajax destroy', :title => "Borrar plan de #{pay_type}"
 
-= hidden_field_tag "current_date", Date.today
 :javascript
   $(function() {
     var template = [
@@ -50,7 +49,9 @@
 
     payPlanState = function(payment_date) {
       var payment_date = $.datepicker.parseDate('yy-mm-dd', payment_date );
-      var current_date =  $.datepicker.parseDate('yy-mm-dd', $('#current_date').val() );
+      var current_date =  $.datepicker.parseDate('yy-mm-dd', $('#current_date').data('val') );
+      if( !current_date )
+        throw("You must set the current_date for the function payPlanState");
       if(payment_date < current_date) {
         txt = "Atrasado"
       }else{
@@ -63,9 +64,19 @@
 
 
     $('body').live("pay_plan", function(e, resp) {
-      $.tmpl(template, resp).appendTo('#pay_plans table.decorated');
-      if(resp.new_record) {
-      }else{
+      $.updateTemplateRow(template, resp, '#pay_plans table.decorated');
+      /*var selector = '#pay_plan table.decorated';
+
+      if(data['new_record'])
+        $node = $.tmpl(template, resp).appendTo('#pay_plan table.decorated');
+        console.log("Aqui");
+      else{
+        $node = $(selector).find('tr#' + resp.id);
+        tmp = $.tmpl(template, resp).appendTo(selector).insertAfter($node);
+        $node.detach();
+        $node = tmp;
       }
+      $node.mark()
+      */
     });
   });

@@ -1,7 +1,7 @@
 $(document).ready(->
   _b = {}
   window._b = _b
-  # Velocidad en milisegundos
+  # Speed in milliseconds
   speed = 300
   # csfr
   csfr_token = $('meta[name=csfr-token]').attr('content')
@@ -50,8 +50,8 @@ $(document).ready(->
     $(el).html(options)
 
   # Transforms a dateselect field in rails to jQueryUI
-  transformDateSelect = (elem)->
-    $(elem).find('.date, .datetime').each((i, el)->
+  transformDateSelect = ->
+    $(this).find('.date, .datetime').each((i, el)->
       # hide fields
       input = document.createElement('input')
       $(input).attr({ 'class': 'date-transform', 'type': 'text', 'size': 10 })
@@ -75,6 +75,7 @@ $(document).ready(->
 
       if year != '' and month != '' and day != ''
         $(input).datepicker("setDate", new Date(year, month, day))
+      $('.ui-datepicker').not('.ui-datepicker-inline').hide()
     )
 
   $.transformDateSelect = $.fn.transformDateSelect = transformDateSelect
@@ -143,7 +144,8 @@ $(document).ready(->
   $('a.ajax').live("click", (e)->
     div = createDialog( { 'title': $(this).attr('title'), 'data': {trigger: $(this).data('trigger'), 'ajax-type': getAjaxType(this) } } )
     $(div).load( $(this).attr("href"), (e)->
-      $(div).find('a.new[href*=/], a.edit[href*=/], a.list[href*=/]').hide()
+      #$(div).find('a.new[href*=/], a.edit[href*=/], a.list[href*=/]').hide()
+      $(div).transformDateSelect()
     )
     e.stopPropagation()
     false
@@ -228,9 +230,8 @@ $(document).ready(->
   )
 
 
-  # Hacer submit de un formulario AJAX que permite crear nuevos datos
-  # Si al retornar no hay formulario significa que reenvia a una vista
-  # y que la transaccion a sido completada
+  # Makes that a dialog opened window makes an AJAX request and returns a JSON response
+  # if response is JSON then trigger event stored in dialog else present the HTML
   $('div.ajax-modal form[enctype!=multipart/form-data]').live('submit', ->
 
     data = serializeFormElements(this)
@@ -256,7 +257,7 @@ $(document).ready(->
           div = $(el).parents('div.ajax-modal:first')
           div.html(resp)
           setTimeout(->
-            transformDateSelect(div)
+            $(div).transformDateSelect()
           ,200)
       'error': (resp)->
         alert('There are errors in the form please correct them')
@@ -266,10 +267,29 @@ $(document).ready(->
   )
   # End submit ajax form
 
+  # Function that handles the return of an AJAX request and process if add or replace
+  # @param String template: HTML template
+  # @param Object data: JSON data
+  # @param String selector: jQuery selector CSS3
+  # @param String node: Indicates the node type ['tr', 'li']
+  updateTemplateRow = (template, data, selector, node)->
+    node = node || 'tr'
+    if(data['new_record'])
+      $node = $.tmpl(template, data).appendTo(selector)
+    else
+      $node = $(selector).find("#{node}##{data.id}")
+      tmp = $.tmpl(template, data).appendTo(selector).insertAfter($node)
+      $node.detach()
+      $node = tmp
+
+    $node.mark()
+
+  $.updateTemplateRow = $.fn.updateTemplateRow = updateTemplateRow
+
   # Delete an Item
   $('a.delete').live("click", (e)->
     $(this).parents("tr:first, li:first").addClass('marked')
-    if(confirm('Esta seguro de borrar el item seleccionado')) 
+    if(confirm('Esta seguro de borrar el item seleccionado'))
       url = $(this).attr('href')
       el = this
 
@@ -326,7 +346,7 @@ $(document).ready(->
   $.mark = $.fn.mark = mark
 
   start = ->
-    transformDateSelect('body')
+    $('body').transformDateSelect()
 
   start()
 )

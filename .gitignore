@@ -4,6 +4,7 @@
 *.kpf
 *.sqlite3
 *.sqlite
+*.rbc
 *~
 nbproject
 !pub.txt

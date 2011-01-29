@@ -1,4 +1,4 @@
-%h1 Proforma de venta (#{cash @income.cash})
+%h1 Proforma de venta (<span id="cash_credit_title">#{cash @income.cash}</span>)
 %p.links._50.fl
   = link_to 'Editar', edit_income_path(@income), :class => 'edit'
   = link_to 'Lista', incomes_path, :class => 'list'
@@ -19,7 +19,7 @@
     = @income.ref_number
   .input
     %label Fecha
-    = lo @income.date
+    %span#current_date{'data-val' => @income.date }= lo @income.date
 .input
   %label Cliente
   = @income.contact
