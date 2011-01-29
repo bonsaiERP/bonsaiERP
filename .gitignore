@@ -11,6 +11,7 @@ nbproject
 .~lock*
 ç
 *.vim
+config/database.yml
 public/javascripts/plugins.js
 public/javascripts/scripts.js
 doc/wireframes/images/*.*
