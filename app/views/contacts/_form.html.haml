@@ -11,11 +11,11 @@
   .clear
   = f.input :email, :lanel => "Email"
   = f.input :tax_number, :label => "NIT"
-
-  = f.input :address, :as => :text, :input_html => {:rows => 4}, :label => "Dirección", :value => br2nl(@contact.address)
-  = f.input :address_alt, :as => :text, :input_html => {:rows => 4}, :label => "Dirección alternativa", :value => br2nl(@contact.address_alt)
   .clear
-  = f.input :aditional_info, :as => :text, :input_html => {:rows => 4}, :label => "Información adicional", :value => br2nl(@contact.aditional_info)
+  = f.input :address, :as => :text, :input_html => {:rows => 4}, :label => "Dirección"
+  = f.input :address_alt, :as => :text, :input_html => {:rows => 4}, :label => "Dirección alternativa"
+  .clear
+  = f.input :aditional_info, :as => :text, :input_html => {:rows => 4}, :label => "Información adicional"
 
   .clear
   %div.actions

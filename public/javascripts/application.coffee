@@ -8,12 +8,12 @@ $(document).ready(->
   # Date format
   $.datepicker._defaults.dateFormat = 'dd M yy'
 
-  # Parsea la fecha con formato seleciando a un objeto Date
-  # @param String fecha
-  # @param String tipo : Tipo de dato a devolver
-  parsearFecha = (fecha, tipo)->
-    fecha = $.datepicker.parseDate($.datepicker._defaults.dateFormat, fecha )
-    d = [ fecha.getFullYear(), fecha.getMonth() + 1, fecha.getDate() ]
+  # Parses the date with a predefined format
+  # @param String date
+  # @param String type : Type to return
+  parseDate = (date, tipo)->
+    date = $.datepicker.parseDate($.datepicker._defaults.dateFormat, date )
+    d = [ date.getFullYear(), date.getMonth() + 1, date.getDate() ]
     if 'string' == tipo
       d.join("-")
     else
@@ -29,10 +29,11 @@ $(document).ready(->
       ""
   # Sets rails select fields with the correct datthe correct date
   setDateSelect = (el)->
-    fecha = parsearFecha( $(el).val() )
-    $(el).siblings('select[name*=1i]').val(fecha[0])
-    $(el).siblings('select[name*=2i]').val(fecha[1])
-    $(el).siblings('select[name*=3i]').val(fecha[2])
+    el = el || this
+    date = parseDate( $(el).val() )
+    $(el).siblings('select[name*=1i]').val(date[0]).trigger("change")
+    $(el).siblings('select[name*=2i]').val(date[1]).trigger("change")
+    $(el).siblings('select[name*=3i]').val(date[2]).trigger("change")
 
   $.setDateSelect = $.fn.setDateSelect = setDateSelect
 
@@ -68,9 +69,13 @@ $(document).ready(->
         yearRange: '1900:',
         showOn: 'both',
         buttonImageOnly: true,
-        buttonImage: '/stylesheets/images/calendar.gif',
-        onSelect: (dateText, inst)->
-          $.setDateSelect(inst.input)
+        buttonImage: '/stylesheets/images/calendar.gif'
+        #onSelect: (dateText, inst)->
+          #  $.setDateSelect(inst.input)
+      )
+      $(input).change((e)->
+        $.setDateSelect(this)
+        $(this).trigger("change:datetime", this)
       )
 
       if year != '' and month != '' and day != ''

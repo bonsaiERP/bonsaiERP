@@ -10,8 +10,12 @@ class Contact < ActiveRecord::Base
   # relations
   has_many :transactions
 
-  validates_presence_of :name#, :organisation_name
-  validates :matchcode, :uniqueness => { :scope => :organisation_id }, :presence => true 
+  validates_presence_of   :name, :matchcode, :address
+  validates_uniqueness_of :matchcode, :scope => :organisation_id
+  validates_format_of     :email, :with => User.email_regexp, :allow_blank => true
+  validates_format_of     :phone, :with =>/^\d+[\d\s-]+\d$/, :allow_blank => true
+  validates_format_of     :mobile, :with =>/^\d+[\d\s-]+\d$/, :allow_blank => true
+
 
   attr_accessible :name, :matchcode, :organisation_name, :address, :addres_alt, :phone, :mobile, :email, :tax_number, :aditional_info
   

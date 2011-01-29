@@ -1,15 +1,15 @@
 (function() {
   $(document).ready(function() {
-    var createDialog, csfr_token, currency, getAjaxType, mark, ntc, parsearFecha, serializeFormElements, setDateSelect, setIframePostEvents, speed, start, toByteSize, transformDateSelect, transformMinuteSelect, updateTemplateRow, _b;
+    var createDialog, csfr_token, currency, getAjaxType, mark, ntc, parseDate, serializeFormElements, setDateSelect, setIframePostEvents, speed, start, toByteSize, transformDateSelect, transformMinuteSelect, updateTemplateRow, _b;
     _b = {};
     window._b = _b;
     speed = 300;
     csfr_token = $('meta[name=csfr-token]').attr('content');
     $.datepicker._defaults.dateFormat = 'dd M yy';
-    parsearFecha = function(fecha, tipo) {
+    parseDate = function(date, tipo) {
       var d;
-      fecha = $.datepicker.parseDate($.datepicker._defaults.dateFormat, fecha);
-      d = [fecha.getFullYear(), fecha.getMonth() + 1, fecha.getDate()];
+      date = $.datepicker.parseDate($.datepicker._defaults.dateFormat, date);
+      d = [date.getFullYear(), date.getMonth() + 1, date.getDate()];
       if ('string' === tipo) {
         return d.join("-");
       } else {
@@ -27,11 +27,12 @@
       }
     };
     setDateSelect = function(el) {
-      var fecha;
-      fecha = parsearFecha($(el).val());
-      $(el).siblings('select[name*=1i]').val(fecha[0]);
-      $(el).siblings('select[name*=2i]').val(fecha[1]);
-      return $(el).siblings('select[name*=3i]').val(fecha[2]);
+      var date;
+      el = el || this;
+      date = parseDate($(el).val());
+      $(el).siblings('select[name*=1i]').val(date[0]).trigger("change");
+      $(el).siblings('select[name*=2i]').val(date[1]).trigger("change");
+      return $(el).siblings('select[name*=3i]').val(date[2]).trigger("change");
     };
     $.setDateSelect = $.fn.setDateSelect = setDateSelect;
     transformMinuteSelect = function(el, step) {
@@ -74,10 +75,11 @@
           yearRange: '1900:',
           showOn: 'both',
           buttonImageOnly: true,
-          buttonImage: '/stylesheets/images/calendar.gif',
-          onSelect: function(dateText, inst) {
-            return $.setDateSelect(inst.input);
-          }
+          buttonImage: '/stylesheets/images/calendar.gif'
+        });
+        $(input).change(function(e) {
+          $.setDateSelect(this);
+          return $(this).trigger("change:datetime", this);
         });
         if (year !== '' && month !== '' && day !== '') {
           $(input).datepicker("setDate", new Date(year, month, day));

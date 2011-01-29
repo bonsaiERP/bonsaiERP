@@ -13,6 +13,7 @@ class PayPlan < ActiveRecord::Base
 
   # validations
   validate :income_or_interests_penalties_filled
+  validates_presence_of :payment_date, :alert_date
 
   # scopes
   default_scope where(:organisation_id => OrganisationSession.organisation_id)
@@ -39,6 +40,8 @@ private
   def set_defaults
     self.amount ||= 0.0
     self.interests_penalties ||= 0.0
+    self.payment_date ||= Date.today
+    self.alert_date ||= self.payment_date
   end
 
   def set_currency_id
