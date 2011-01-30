@@ -2,6 +2,7 @@
 .green { color: #5bbf3b; }
 .dark_green { color: #538447; }
 .bg_green { background-color: #5bbf3b !important; }
+.bg_light_grey { background-color: #f0f0f1; }
 body {
   font-size: 11.5px;
   font-family: Tahoma, sans-serif;
@@ -11,7 +12,7 @@ body {
   background: #f0f0f1 url(images/background_header.png) repeat-x;
 }
 a {
-  color: #6793ce;
+  color: #547299;
   text-decoration: none;
 }
 a:hover { text-decoration: underline; }
@@ -34,6 +35,7 @@ label {
   color: #30383e;
 }
 label.collection_radio, label.collection_check_boxes { font-weight: normal; }
+.show label { margin-bottom: 5px; }
 input, select, textarea {
   font-size: 11.5px;
   padding: 1px 2px;
@@ -216,7 +218,10 @@ ul#main_menu li:hover ul {
   display: block;
   position: absolute;
 }
-#cont-in h1 { margin: 4px 0px 20px; }
+#cont-in h1 {
+  margin: 4px 0px 20px;
+  color: #30383e;
+}
 .error { color: #ff0000; }
 .link {
   font-weight: bold;
@@ -351,7 +356,7 @@ input[type=submit] {
   font-size: 1.1em;
   cursor: pointer;
 }
-input[type=submit]:hover { opacity: 0.9; }
+input[type=submit]:hover { opacity: 0.65; }
 .errorExplanation {
   color: #ff0000;
   background-color: #fef1ec;
@@ -475,10 +480,18 @@ span.true, span.false {
 .c { text-align: center; }
 .r { text-align: right; }
 .dark { color: #30383e; }
+.main {
+  margin: 25px -5px;
+  padding: 5px;
+}
 ._30, .w30 { width: 30%; }
 ._33, .w33 { width: 33%; }
 ._25, .w33 { width: 24%; }
-._50, .w33, .w50 { width: 49%; }
+._50, .w33 { width: 49%; }
+._60, .w33 { width: 59%; }
+._70, .w33 { width: 69%; }
+._100 { width: 100%; }
+.w50 { width: 49%; }
 .p100 { width: 100px; }
 .p200 { width: 200px; }
 .p300 { width: 300px; }

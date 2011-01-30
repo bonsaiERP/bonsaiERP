@@ -103,4 +103,33 @@ describe Transaction do
     
     transaction.present_currency.to_s.should == "Symbol Name"
   end
+
+  # Returns an array ob stubed objects
+  def create_stubs_array(array)
+    arr = []
+    array.each do |v|
+      o = Object.new
+      o.stubs(v)
+      arr << o
+    end
+    arr
+  end
+
+  it 'should sum the total amout of pay plans' do
+    transaction = Transaction.new(@params)
+    transaction.save
+    arr = create_stubs_array([{:amount => 10, :id => 1}, {:id =>2, :amount => 20}])
+    transaction.stubs(:pay_plans => arr)
+    
+    transaction.pay_plans_total.should == 30
+  end
+
+  it 'should return the pay plans balance' do
+    transaction = Transaction.new(@params)
+    transaction.save
+    arr = create_stubs_array([{:amount => 10, :id => 1}, {:id =>2, :amount => 20}])
+    transaction.stubs(:pay_plans => arr)
+    
+    transaction.pay_plans_balance.should == (transaction.total - 30)
+  end
 end

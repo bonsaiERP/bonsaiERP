@@ -30,7 +30,7 @@ class PayPlansController < ApplicationController
   def new
     begin
       transaction = Transaction.find_by_type_and_id( params[:type], params[:id] )
-      @pay_plan = PayPlan.new(:transaction_id => transaction.id, :ctype => transaction.type)
+      @pay_plan = PayPlan.new(:transaction_id => transaction.id, :ctype => transaction.type, :amount => transaction.pay_plans_balance)
     rescue
       redirect_to request.referer
     end

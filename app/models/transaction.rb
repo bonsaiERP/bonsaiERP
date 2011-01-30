@@ -50,6 +50,17 @@ class Transaction < ActiveRecord::Base
       self.total/self.currency_exchange_rate
     end
   end
+
+  # Returns the total value of pay plans
+  def pay_plans_total
+    pay_plans.inject(0) {|sum, v| sum += v.amount }
+  end
+
+  # Returns the total amount to be paid
+  def pay_plans_balance
+    self.total - pay_plans_total
+  end
+
 private
   # set default values for discount and taxes
   def initialize_values

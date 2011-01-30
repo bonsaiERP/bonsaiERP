@@ -13,18 +13,20 @@
   %tr
     %th Código
     %th.300 Nombre
-    %th Tipo
-    %th Unidad
     %th Costo<br/>Unitario
     %th Precio<br/>de Venta
+    %th Tipo
+    %th Unidad
+    %th Activo
     %th
 
   - @items.each do |item|
     %tr
       %td= link_to item.code, item
       %td= item.name
-      %td= item.get_type
-      %td= item.unit.name 
       %td.r= ntc( item.unitary_cost )
       %td.r= ntc( item.price )
+      %td= item.get_type
+      %td= item.unit.name 
+      %td.c <span class="#{item.active}"></span>
       %td= bonsai_links(item)

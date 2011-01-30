@@ -13,6 +13,7 @@ class PayPlan < ActiveRecord::Base
 
   # validations
   validate :income_or_interests_penalties_filled
+  validate :pay_plans_positive_balance
   validates_presence_of :payment_date, :alert_date
 
   # scopes
@@ -46,5 +47,10 @@ private
 
   def set_currency_id
     self.currency_id = self.transaction.currency_id
+  end
+
+  # Checks that all pay_plans amounts sum <= transaction.total
+  def pay_plans_positive_balance
+
   end
 end

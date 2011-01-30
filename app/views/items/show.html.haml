@@ -4,12 +4,20 @@
   = link_to "Editar", edit_item_path(@item) , :class => 'edit'
   = link_to "Lista", items_path(:ctype => @item.ctype), :class => 'list'
 
+.show
   .input
     %label Código
     = @item.code 
   .input
     %label Nombre
     = @item.name
+  .clear
+  .input
+    %label Costo unitario
+    .b= ntc @item.unitary_cost
+  .input
+    %label Precio de venta
+    .b= ntc @item.price
   .clear
   .input._25
     %label Unidad
@@ -21,12 +29,6 @@
     %label Tipo
     = @item.get_type
   .clear
-  .input._25
-    %label Costo unitario
-    = @item.unitary_cost
-  .input._25
-    %label Precio de venta
-    = @item.price
   /.input#item_discount
   /%label Descuento
   /%span= @item.discount

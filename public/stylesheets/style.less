@@ -17,11 +17,14 @@
 @light_yellow:#FFFFC5;
 @dark_yellow:#D0D02A;
 
+@link: #547299;
+
 .grey{ color: @grey; }
 .green{ color: @green; }
 .dark_green{ color: @dark_green; }
 .bg_green{ background-color: @green !important; }
-
+.bg_light_grey{ background-color: @light_grey; }
+  
 body{
   font-size: @font_size;
   font-family: Tahoma, sans-serif;
@@ -31,7 +34,7 @@ body{
 	background: @light_grey url(images/background_header.png) repeat-x;
 }
 a{
-  color: @blue;
+  color: @link;
   text-decoration: none;
 }
 a:hover{
@@ -85,6 +88,7 @@ label{
 label.collection_radio, label.collection_check_boxes{
   font-weight:normal;
 }
+.show label{ margin-bottom: 5px; }
 input, select, textarea{
   font-size: @font_size;
   padding: 1px 2px;
@@ -174,7 +178,7 @@ table.nwf{
   h1{
     width: 50%;
 		float: left;
-		color: #FFF;
+		color: @white;
 		margin: 3px 15px;
 		vertical-align: top;
   }
@@ -314,6 +318,7 @@ ul#main_menu{
 /**************************************************************/
 #cont-in h1{
   margin: 4px 0px 20px;
+  color: @dark;
 }
 
 .error{
@@ -609,10 +614,19 @@ span.true, span.false{
 
 .dark{ color: @dark; }
 
+/*Container styles*/
+.main{
+  margin: 25px -5px;
+  padding: 5px;
+}
+
 ._30, .w30{ width: 30%;}
 ._33, .w33{ width: 33%;}
 ._25, .w33{ width: 24%;}
 ._50, .w33{ width: 49%;}
+._60, .w33{ width: 59%;}
+._70, .w33{ width: 69%;}
+._100 {width: 100%; }
 .w50 { width: 49%; }
 .p100 { width: 100px; }
 .p200 { width: 200px; }

@@ -16,13 +16,13 @@
         <borderColor>16777215</borderColor>
       </controlProperties>
     </control>
-    <control controlID="17" controlTypeID="com.balsamiq.mockups::TabBar" x="208" y="248" w="772" h="317" measuredW="613" measuredH="100" zOrder="3" locked="false" isInGroup="-1">
+    <control controlID="17" controlTypeID="com.balsamiq.mockups::TabBar" x="208" y="248" w="772" h="317" measuredW="511" measuredH="100" zOrder="3" locked="false" isInGroup="-1">
       <controlProperties>
         <bold>false</bold>
         <borderStyle>none</borderStyle>
         <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22524%2C246%2C627%2C275%22%20href%3D%22sale_list_repeat.bmml%22%20alt%3D%22sale_list_repeat%22%20id%3D%2217_0%22/%3E%0A</map>
         <selectedIndex>1</selectedIndex>
-        <text>Todas%2C%20Esperando%20Aprobaci%F3n%20%28*2*%29%2C%20Esperando%20Cobro%20%28*3*%29%2C%20Cobradas%2C%20Repetitivas%20%28*1*%29</text>
+        <text>Todas%2C%20Esperando%20Aprobaci%F3n%20%28*2*%29%2C%20Esperando%20Cobro%20%28*3*%29%2C%20Cobradas</text>
       </controlProperties>
     </control>
     <control controlID="27" controlTypeID="com.balsamiq.mockups::Canvas" x="159" y="2" w="869" h="107" measuredW="100" measuredH="70" zOrder="4" locked="false" isInGroup="-1">
@@ -134,7 +134,7 @@
     </control>
     <control controlID="82" controlTypeID="__group__" x="228" y="191" w="148" h="32" measuredW="148" measuredH="32" zOrder="19" locked="false" isInGroup="-1">
       <groupChildrenDescriptors>
-        <control controlID="0" controlTypeID="com.balsamiq.mockups::PointyButton" x="0" y="0" w="148" h="-1" measuredW="126" measuredH="32" zOrder="0" locked="false" isInGroup="82">
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::PointyButton" x="0" y="0" w="148" h="-1" measuredW="129" measuredH="32" zOrder="0" locked="false" isInGroup="82">
           <controlProperties>
             <bold>true</bold>
             <color>15132390</color>
@@ -143,7 +143,7 @@
             <href>income_01new%26bm%3Bincome_01new.bmml%26bm%3Bincome_01new.bmml%26bm%3Bincome_01new.bmml</href>
             <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22107%2C189%2C255%2C221%22%20href%3D%22income_01new.bmml%22%20alt%3D%22income_01new%22%20id%3D%220%22/%3E</map>
             <size>16</size>
-            <text>%20%20Crear%20venta</text>
+            <text>%20%20Nueva%20venta</text>
           </controlProperties>
         </control>
         <control controlID="1" controlTypeID="com.balsamiq.mockups::Image" x="9" y="8" w="16" h="16" measuredW="16" measuredH="16" zOrder="1" locked="false" isInGroup="82">

@@ -1,4 +1,7 @@
-%h1 Proforma de venta (<span id="cash_credit_title">#{cash @income.cash}</span>)
+%h1._50.fl Proforma de venta (<span id="cash_credit_title">#{cash @income.cash}</span>)
+= link_to "Planificar crédito", "#pay_plans", :class => 'fl', :style => 'margin-top:15px', :id => 'pay_plan_anchor'
+.clear
+
 %p.links._50.fl
   = link_to 'Editar', edit_income_path(@income), :class => 'edit'
   = link_to 'Lista', incomes_path, :class => 'list'
@@ -13,45 +16,46 @@
 &nbsp;&nbsp;
 = link_to "Imprimir","", :class => 'print'
 .clear
-.input
-  .input
-    %label Nº de referencia
-    = @income.ref_number
-  .input
-    %label Fecha
-    %span#current_date{'data-val' => @income.date }= lo @income.date
-.input
-  %label Cliente
-  = @income.contact
-.clear
-.input
-  %label Proyecto
-  = @income.project
-.input
-  %label Moneda
-  = @income.currency
-  - unless @income.currency_id == @currency.id
-    <br/>
-    %strong 1 #{@income.currency} = #{@income.currency_exchange_rate} #{@currency}
-.clear
-.input
-  .input
-    %label Descuento (%)
-    = @income.discount
-  .input
-    %label Nº de Factura
-    = @income.bill_number
-.input
-  %label Impuestos
-  %ul
-    - @income.taxes.each do |t|
-      %li= t
 
-.clear
-.input
-  %label Descripción
-  =@income.description
-.clear
+.main
+  .input
+    .input.b{:style => 'font-size:1.2em' }= @income.ref_number
+    %div#curren_date.input.b{'data-val' => @income.date}= lo @income.date
+  .input
+    .input._100= link_to @income.contact, "#", :title => "Historial cliente"
+  .clear
+
+.show
+  .clear
+  .input
+    %label Proyecto
+    = @income.project
+  .input
+    %label Moneda
+    = @income.currency
+    - unless @income.currency_id == @currency.id
+      <br/>
+      1 #{@income.currency} = #{@income.currency_exchange_rate} #{@currency}
+  .clear
+  .input
+    .input
+      %label Descuento (%)
+      .b= "#{ ntc @income.discount }%"
+    .input
+      %label Nº de Factura
+      = @income.bill_number
+  .input
+    %label Impuestos (%)
+    .b= "#{ntc @income.tax_percent}%"
+    %ul
+      - @income.taxes.each do |t|
+        %li= t
+
+  .clear
+  .input
+    %label Descripción
+    =@income.description
+  .clear
 
 #items
   %h2.dark Items
@@ -99,3 +103,8 @@
 /=render :partial => "payments" unless @income.payment?
 .clear
 =render :partial => "/pay_plans/pay_plans", :locals => {:klass => @income, :pay_type => 'cobro'}
+
+:javascript
+  $(function () {
+    $('#pay_plan_anchor').click(function() { $('#pay_plans').mark(); });
+  });
