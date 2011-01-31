@@ -115,7 +115,11 @@
     updateTransactionPayPlanStatus = function(data, url) {
     }
     // Deleted data
-    $('body').live("ajax:delete", function(data, url) {
-      //
+    $('body').live("ajax:delete pay_plan", function() {
+      if( $('#pay_plans_table tr[id]').length > 0 ) {
+        $('#cash_credit_title').html('a crédito');
+      }else{
+        $('#cash_credit_title').html('al contado');
+      }
     });
   });

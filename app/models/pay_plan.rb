@@ -6,6 +6,7 @@ class PayPlan < ActiveRecord::Base
   after_initialize :set_defaults
   before_save :set_currency_id
   after_save :update_transaction_data
+  after_destroy :update_transaction_cash
 
   STATES = ["valid", "delayed", "payed"]
 
@@ -50,18 +51,41 @@ private
     self.currency_id = self.transaction.currency_id
   end
 
-  def update_transaction_data
-    self.transaction.cash = false
-    if payment_date < self.transaction.payment_date
-      self.transaction.update_attribute(:payment_date, payment_date) #payment_date = payment_date 
+  def set_transaction_cash
+    if transaction.pay_plans.size > 0
+      self.transaction.cash = false
+    else
+      self.transaction.cash = true
     end
+  end
 
-    self.transaction.save
+  def update_transaction_cash
+    set_transaction_cash
+    transaction.save
+  end
+
+  def set_transaction_payment_date
+    if payment_date < transaction.payment_date or transaction.pay_plans.size <= 0 or transaction.cash?
+      self.transaction.payment_date = payment_date
+    end
+  end
+
+  # Updates related data of transaction
+  def update_transaction_data
+    set_transaction_cash
+    set_transaction_payment_date
+
+    transaction.save
   end
 
   # Checks that all pay_plans amounts sum <= transaction.total
   def valid_pay_plans_total_amount
-    if (transaction.pay_plans_total + amount) > transaction.balance
+    #debugger
+
+    minus = changes[:amount] ? changes[:amount].first.to_f : self.amount
+    tot = transaction.pay_plans_total + amount - minus
+
+    if tot > transaction.balance
       self.errors.add(:amount, "La cantidad que ingreso supera al total de la Nota de #{transaction.type_translated}")
     end
   end

@@ -76,8 +76,8 @@ class Transaction < ActiveRecord::Base
 private
   # set default values for discount and taxes
   def initialize_values
-    self.cash ||= true
-    self.active ||= true
+    self.cash = cash.nil? ? true : cash
+    self.active = active.nil? ? true : active
     self.discount ||= 0
     self.tax_percent = taxes.inject(0) {|sum, t| sum += t.rate }
     self.gross_total ||= 0
