@@ -127,9 +127,16 @@ describe Transaction do
   it 'should return the pay plans balance' do
     transaction = Transaction.new(@params)
     transaction.save
-    arr = create_stubs_array([{:amount => 10, :id => 1}, {:id =>2, :amount => 20}])
+    arr = create_stubs_array([{:amount => 10, :id => 1, :paid? => false}, {:id =>2, :amount => 20, :paid? => true}])
     transaction.stubs(:pay_plans => arr)
     
-    transaction.pay_plans_balance.should == (transaction.total - 30)
+    transaction.pay_plans_balance.should == (transaction.balance - 10)
   end
+
+  it 'should set the payment date' do
+    transaction = Transaction.create(@params)
+
+    transaction.payment_date.should == transaction.date
+  end
+
 end

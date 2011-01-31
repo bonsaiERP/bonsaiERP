@@ -84,10 +84,7 @@ class IncomesController < ApplicationController
     @income = Income.find(params[:id])
     @income.destroy
 
-    respond_to do |format|
-      format.html { redirect_to(incomes_url) }
-      format.xml  { head :ok }
-    end
+    redirect_ajax @income
   end
   
   # PUT /incomes/1/aprove

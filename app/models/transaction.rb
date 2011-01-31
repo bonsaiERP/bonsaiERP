@@ -4,8 +4,10 @@
 class Transaction < ActiveRecord::Base
   acts_as_org
 
+  TYPES = ['Income', 'Expense', 'Buy']
   # callbacks
   after_initialize :initialize_values
+  before_create :set_payment_date
   before_save :set_details_type
   before_save :calculate_total_and_set_balance
 
@@ -22,11 +24,20 @@ class Transaction < ActiveRecord::Base
   # scopes
   default_scope where(:organisation_id => OrganisationSession.organisation_id )
 
+
+  # Transalates the type for any language
+  def type_translated
+    arr = case I18n.locale
+      when :es
+        ['Venta', 'Gasto', 'Compra']
+    end
+    Hash[TYPES.zip(arr)][type]
+  end
+
   # quantity without discount and taxes
   def subtotal
     self.transaction_details.inject(0) {|sum, v| sum += v.total }
   end
-
 
   # Calculates the amount for taxes
   def total_taxes
@@ -58,13 +69,15 @@ class Transaction < ActiveRecord::Base
 
   # Returns the total amount to be paid
   def pay_plans_balance
-    self.total - pay_plans_total
+    sum = pay_plans.inject(0) {|sum, v| sum += v.amount unless v.paid? ; sum}
+    balance - sum
   end
 
 private
   # set default values for discount and taxes
   def initialize_values
-    self.cash ||= 1
+    self.cash ||= true
+    self.active ||= true
     self.discount ||= 0
     self.tax_percent = taxes.inject(0) {|sum, t| sum += t.rate }
     self.gross_total ||= 0
@@ -79,5 +92,10 @@ private
   def calculate_total_and_set_balance
     self.gross_total = transaction_details.inject(0) {|sum, det| sum += det.total }
     self.total = self.balance = gross_total - total_discount + total_taxes
+  end
+
+  # Sets a default payment date
+  def set_payment_date
+    self.payment_date = self.date
   end
 end

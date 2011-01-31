@@ -1,6 +1,6 @@
 (function() {
   $(document).ready(function() {
-    var createDialog, csfr_token, currency, getAjaxType, mark, ntc, parseDate, serializeFormElements, setDateSelect, setIframePostEvents, speed, start, toByteSize, transformDateSelect, transformMinuteSelect, updateTemplateRow, _b;
+    var createDialog, createErrorLog, csfr_token, currency, getAjaxType, mark, ntc, parseDate, serializeFormElements, setDateSelect, setIframePostEvents, speed, start, toByteSize, transformDateSelect, transformMinuteSelect, updateTemplateRow, _b;
     _b = {};
     window._b = _b;
     speed = 300;
@@ -295,23 +295,25 @@
       });
       return false;
     });
-    updateTemplateRow = function(template, data, selector, node) {
-      var $node, tmp;
+    updateTemplateRow = function(template, data) {
+      var $node, node, tmp;
       node = node || 'tr';
       if (data['new_record']) {
-        $node = $.tmpl(template, data).appendTo(selector);
+        $node = $.tmpl(template, data).appendTo(this);
       } else {
-        $node = $(selector).find("" + node + "#" + data.id);
-        tmp = $.tmpl(template, data).appendTo(selector).insertAfter($node);
+        $node = $(this).find("" + node + "#" + data.id);
+        tmp = $.tmpl(template, data).insertBefore($node);
         $node.detach();
         $node = tmp;
       }
-      return $node.mark();
+      $node.mark();
+      return $('body').trigger("update:template", [$node, data]);
     };
     $.updateTemplateRow = $.fn.updateTemplateRow = updateTemplateRow;
     $('a.delete').live("click", function(e) {
-      var el, url;
-      $(this).parents("tr:first, li:first").addClass('marked');
+      var el, self, url;
+      self = this;
+      $(self).parents("tr:first, li:first").addClass('marked');
       if (confirm('Esta seguro de borrar el item seleccionado')) {
         url = $(this).attr('href');
         el = this;
@@ -319,12 +321,23 @@
           'url': url,
           'type': 'delete',
           'context': el,
-          'success': function() {
-            $(el).parents("tr:first, li:first").remove();
-            return $('body').trigger('ajax:delete', url);
+          'success': function(resp, status, xhr) {
+            var data;
+            try {
+              data = $.parseJSON(resp);
+              if (data.destroyed) {
+                $(el).parents("tr:first, li:first").remove();
+              } else {
+                $(self).parents("tr:first, li:first").removeClass('marked');
+                alert("Error: " + data.base_error);
+              }
+              return $('body').trigger('ajax:delete', [data, url]);
+            } catch (e) {
+              return $(self).parents("tr:first, li:first").removeClass('marked');
+            }
           },
           'error': function() {
-            return alert('Existio un error al borrar');
+            return $(self).parents("tr:first, li:first").removeClass('marked');
           }
         });
       } else {
@@ -368,6 +381,27 @@
     start = function() {
       return $('body').transformDateSelect();
     };
+    createErrorLog = function(data) {
+      if (!($('#error-log').length > 0)) {
+        $('<div id="error-log"></div>').dialog({
+          title: 'Error',
+          width: 900,
+          height: 500
+        });
+      }
+      return $('#error-log').html(data).dialog("open");
+    };
+    $.ajaxSetup({
+      dataType: "html",
+      beforeSend: function(xhr) {},
+      error: function(event) {},
+      complete: function(event) {
+        if ($.inArray(event.status, [404, 422, 500]) >= 0) {
+          return createErrorLog(event.responseText);
+        }
+      },
+      success: function(event) {}
+    });
     return start();
   });
 }).call(this);

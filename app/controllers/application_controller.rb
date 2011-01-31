@@ -45,7 +45,15 @@ class ApplicationController < ActionController::Base
   def redirect_ajax(klass, options = {})
     url = options[:url] || klass
     if request.xhr?
-      render :text => klass.to_json
+      if request.delete?
+        if klass.destroyed?
+          render :text => klass.attributes.merge(:destroyed => klass.destroyed?).to_json
+        else
+          render :text => klass.attributes.merge(:destroyed => klass.destroyed?, :base_error => klass.errors[:base]).to_json
+        end
+      else
+        render :text => klass.to_json
+      end
     else
       redirect_to url, options
     end

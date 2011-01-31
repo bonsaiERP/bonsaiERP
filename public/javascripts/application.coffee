@@ -277,23 +277,24 @@ $(document).ready(->
   # @param Object data: JSON data
   # @param String selector: jQuery selector CSS3
   # @param String node: Indicates the node type ['tr', 'li']
-  updateTemplateRow = (template, data, selector, node)->
+  updateTemplateRow = (template, data)->
     node = node || 'tr'
     if(data['new_record'])
-      $node = $.tmpl(template, data).appendTo(selector)
+      $node = $.tmpl(template, data).appendTo(this)
     else
-      $node = $(selector).find("#{node}##{data.id}")
-      tmp = $.tmpl(template, data).appendTo(selector).insertAfter($node)
+      $node = $(this).find("#{node}##{data.id}")
+      tmp = $.tmpl(template, data).insertBefore($node)
       $node.detach()
       $node = tmp
-
     $node.mark()
+    $('body').trigger("update:template", [$node, data])
 
   $.updateTemplateRow = $.fn.updateTemplateRow = updateTemplateRow
 
   # Delete an Item
   $('a.delete').live("click", (e)->
-    $(this).parents("tr:first, li:first").addClass('marked')
+    self = this
+    $(self).parents("tr:first, li:first").addClass('marked')
     if(confirm('Esta seguro de borrar el item seleccionado'))
       url = $(this).attr('href')
       el = this
@@ -302,18 +303,27 @@ $(document).ready(->
         'url': url
         'type': 'delete'
         'context': el
-        'success': ->
-          $(el).parents("tr:first, li:first").remove()
-          $('body').trigger('ajax:delete', url)
+        'success': (resp, status, xhr)->
+          try
+            data = $.parseJSON(resp)
+            if data.destroyed
+              $(el).parents("tr:first, li:first").remove()
+            else
+              $(self).parents("tr:first, li:first").removeClass('marked')
+              alert("Error: #{data.base_error}")
+            $('body').trigger('ajax:delete', [data, url])
+          catch e
+            $(self).parents("tr:first, li:first").removeClass('marked')
+            #alert('Existio un error al borrar')
         'error': ->
-          alert('Existio un error al borrar')
+          $(self).parents("tr:first, li:first").removeClass('marked')
       )
 
     else
       $(this).parents("tr:first, li:first").removeClass('marked')
       e.stopPropagation()
 
-    return false
+    false
   )
 
   # Serializes values from a form to be send via AJAX
@@ -352,6 +362,28 @@ $(document).ready(->
 
   start = ->
     $('body').transformDateSelect()
+
+  createErrorLog = (data)->
+    unless $('#error-log').length > 0
+      $('<div id="error-log"></div>').dialog({title: 'Error', width: 900, height: 500})
+
+    $('#error-log').html(data).dialog("open")
+
+  # AJAX setup
+  $.ajaxSetup ({
+      dataType : "html",
+      beforeSend : (xhr)->
+        #$('#cargando').show();
+      error : (event) ->
+        #$('#cargando').hide(1000)
+        #createErrorLog(event.responseText)
+      complete : (event)->
+        if $.inArray(event.status, [404, 422, 500]) >= 0
+          createErrorLog(event.responseText)
+        #$('#cargando').hide(1000)
+      success : (event)->
+        #$('#cargando').hide(1000)
+    })
 
   start()
 )

@@ -1,4 +1,4 @@
-<mockup version="1.0" skin="sketch" measuredW="1128" measuredH="651" mockupW="1100" mockupH="649">
+<mockup version="1.0" skin="sketch" measuredW="1085" measuredH="651" mockupW="1057" mockupH="649">
   <controls>
     <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="159" y="2" w="870" h="649" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="-1">
       <controlProperties>
@@ -22,7 +22,7 @@
         <borderColor>16777215</borderColor>
       </controlProperties>
     </control>
-    <control controlID="8" controlTypeID="com.balsamiq.mockups::DataGrid" x="224" y="303" w="738" h="205" measuredW="627" measuredH="107" zOrder="5" locked="false" isInGroup="-1">
+    <control controlID="8" controlTypeID="com.balsamiq.mockups::DataGrid" x="224" y="303" w="738" h="205" measuredW="632" measuredH="124" zOrder="5" locked="false" isInGroup="-1">
       <controlProperties>
         <alternateRowColor>15594478</alternateRowColor>
         <bold>false</bold>
@@ -32,13 +32,13 @@
         <rowHeight>27</rowHeight>
         <selectedIndex>-1</selectedIndex>
         <size>12</size>
-        <text>*Cliente*%2C%20*Referencia*%2C%20*Fecha*%2C%20*Vence%20el*%2C%20*Total*%2C%20*Saldo*%2C%20*Vencido*%2C%20*Estado*%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%2C%202010-0003%2C%201%20Ene%202010%2C%205%20Feb%202010%2C%2020500.00%2C%2010000.00%2C%202000.00%2C%20%20%20%20%20%20%20%20%0A%5BAntalis%5D%2C%202010-0002%2C%2029%20Dic%202009%2C%2010%20Ene%202010%2C%2020500.00%2C%2015000.00%2C%2C%20%0A%5BPapirus%5D%2C%202009-0125%2C12%20Dic%202009%2C%20%2C%2012500.00%2C0%2C%2C%20%20%20%20%20</text>
+        <text>*Cliente*%2C%20*Referencia*%2C%20*Fecha*%2C%20*Vence%20el*%2C%20*Total*%2C%20*Saldo*%2C%20*Dinero%5Cratrasado*%2C%20*Estado*%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%2C%202010-0003%2C%201%20Ene%202010%2C%205%20Feb%202010%2C%2020500.00%2C%2010000.00%2C%20%2C%20%20%20%20%20%20%20%20%0A%5BAntalis%5D%2C%202010-0002%2C%2029%20Dic%202009%2C%2010%20Ene%202010%2C%2020500.00%2C%2015000.00%2C%2C%20%0A%5BPapirus%5D%2C%202009-0125%2C12%20Dic%202009%2C%20%2C%2012500.00%2C0%2C%2C%20%20%20%20%20</text>
         <underline>false</underline>
         <verticalScrollbar>false</verticalScrollbar>
         <vLines>false</vLines>
       </controlProperties>
     </control>
-    <control controlID="10" controlTypeID="com.balsamiq.mockups::LinkBar" x="800" y="528" w="-1" h="-1" measuredW="163" measuredH="25" zOrder="6" locked="false" isInGroup="-1">
+    <control controlID="10" controlTypeID="com.balsamiq.mockups::LinkBar" x="800" y="528" w="-1" h="-1" measuredW="164" measuredH="25" zOrder="6" locked="false" isInGroup="-1">
       <controlProperties>
         <text>%3C%3C%2C%201%2C2%2C3%2C%20%3E%3E</text>
       </controlProperties>
@@ -154,10 +154,10 @@
         <text>%7C</text>
       </controlProperties>
     </control>
-    <control controlID="75" controlTypeID="com.balsamiq.mockups::StickyNote" x="963" y="284" w="165" h="98" measuredW="109" measuredH="123" zOrder="22" locked="false" isInGroup="-1">
+    <control controlID="75" controlTypeID="com.balsamiq.mockups::StickyNote" x="895" y="345" w="190" h="115" measuredW="109" measuredH="123" zOrder="22" locked="false" isInGroup="-1">
       <controlProperties>
         <bold>false</bold>
-        <text>Utilizar%20colores%20para%20los%20estados</text>
+        <text>Cuando%20se%20pasa%20el%20raton%20por%20encima%20muestra%20el%20estado</text>
       </controlProperties>
     </control>
     <control controlID="76" controlTypeID="__group__" x="228" y="191" w="148" h="32" measuredW="148" measuredH="32" zOrder="9" locked="false" isInGroup="-1">
@@ -187,11 +187,11 @@
         <text>El%20vinculo%20abre%20la%20nota%20de%20ingreso</text>
       </controlProperties>
     </control>
-    <control controlID="78" controlTypeID="com.balsamiq.mockups::Link" x="226" y="327" w="-1" h="-1" measuredW="68" measuredH="23" zOrder="24" locked="false" isInGroup="-1">
+    <control controlID="78" controlTypeID="com.balsamiq.mockups::Link" x="226" y="345" w="-1" h="-1" measuredW="68" measuredH="23" zOrder="24" locked="false" isInGroup="-1">
       <controlProperties>
         <bold>false</bold>
         <href>income_04aproved%26bm%3Bincome_04aproved.bmml%26bm%3Bincome_04aproved.bmml%26bm%3Bincome_04aproved.bmml</href>
-        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22198%2C325%2C266%2C348%22%20href%3D%22income_04aproved.bmml%22%20alt%3D%22income_04aproved%22%20id%3D%2278%22/%3E</map>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22198%2C343%2C266%2C366%22%20href%3D%22income_04aproved.bmml%22%20alt%3D%22income_04aproved%22%20id%3D%2278%22/%3E</map>
         <size>12</size>
         <text>Juan%20Perez</text>
       </controlProperties>
@@ -202,62 +202,70 @@
         <text>Presenta%20en%20orden%20descendente%20por%20fecha</text>
       </controlProperties>
     </control>
-    <control controlID="86" controlTypeID="__group__" x="806" y="328" w="80" h="20" measuredW="80" measuredH="20" zOrder="26" locked="false" isInGroup="-1">
+    <control controlID="86" controlTypeID="__group__" x="823" y="373" w="33" h="20" measuredW="33" measuredH="20" zOrder="26" locked="false" isInGroup="-1">
       <groupChildrenDescriptors>
-        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="2" w="80" h="18" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="86">
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="2" w="33" h="18" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="86">
           <controlProperties>
             <borderStyle>none</borderStyle>
             <color>11820806</color>
           </controlProperties>
         </control>
-        <control controlID="1" controlTypeID="com.balsamiq.mockups::Label" x="2" y="0" w="75" h="18" measuredW="60" measuredH="23" zOrder="1" locked="false" isInGroup="86">
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Label" x="0" y="0" w="30" h="18" measuredW="12" measuredH="23" zOrder="1" locked="false" isInGroup="86">
           <controlProperties>
             <align>center</align>
             <bold>false</bold>
             <color>16777215</color>
             <size>12</size>
-            <text>Pendiente</text>
+            <text>P</text>
           </controlProperties>
         </control>
       </groupChildrenDescriptors>
     </control>
-    <control controlID="87" controlTypeID="__group__" x="806" y="358" w="80" h="20" measuredW="80" measuredH="20" zOrder="27" locked="false" isInGroup="-1">
+    <control controlID="87" controlTypeID="__group__" x="822" y="345" w="32" h="20" measuredW="32" measuredH="20" zOrder="27" locked="false" isInGroup="-1">
       <groupChildrenDescriptors>
-        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="2" w="80" h="18" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="87">
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="2" w="32" h="18" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="87">
           <controlProperties>
             <borderStyle>none</borderStyle>
             <color>13369344</color>
           </controlProperties>
         </control>
-        <control controlID="1" controlTypeID="com.balsamiq.mockups::Label" x="2" y="0" w="75" h="18" measuredW="49" measuredH="23" zOrder="1" locked="false" isInGroup="87">
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Label" x="1" y="0" w="30" h="18" measuredW="13" measuredH="23" zOrder="1" locked="false" isInGroup="87">
           <controlProperties>
             <align>center</align>
             <bold>false</bold>
             <color>16777215</color>
             <size>12</size>
-            <text>Vencido</text>
+            <text>V</text>
           </controlProperties>
         </control>
       </groupChildrenDescriptors>
     </control>
-    <control controlID="88" controlTypeID="__group__" x="806" y="384" w="80" h="20" measuredW="80" measuredH="20" zOrder="28" locked="false" isInGroup="-1">
+    <control controlID="88" controlTypeID="__group__" x="823" y="402" w="31" h="20" measuredW="31" measuredH="20" zOrder="28" locked="false" isInGroup="-1">
       <groupChildrenDescriptors>
-        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="2" w="80" h="18" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="88">
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="2" w="31" h="18" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="88">
           <controlProperties>
             <borderStyle>none</borderStyle>
             <color>40463</color>
           </controlProperties>
         </control>
-        <control controlID="1" controlTypeID="com.balsamiq.mockups::Label" x="2" y="0" w="75" h="18" measuredW="44" measuredH="23" zOrder="1" locked="false" isInGroup="88">
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Label" x="1" y="0" w="29" h="18" measuredW="12" measuredH="23" zOrder="1" locked="false" isInGroup="88">
           <controlProperties>
             <align>center</align>
             <bold>false</bold>
             <color>16777215</color>
             <size>12</size>
-            <text>Pagado</text>
+            <text>P</text>
           </controlProperties>
         </control>
       </groupChildrenDescriptors>
+    </control>
+    <control controlID="89" controlTypeID="com.balsamiq.mockups::Label" x="736" y="347" w="-1" h="-1" measuredW="52" measuredH="23" zOrder="29" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>false</bold>
+        <color>13576743</color>
+        <size>12</size>
+        <text>2%2C000.00</text>
+      </controlProperties>
     </control>
   </controls>
 </mockup>

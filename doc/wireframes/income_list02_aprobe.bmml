@@ -159,7 +159,7 @@
         <text>Ventas</text>
       </controlProperties>
     </control>
-    <control controlID="84" controlTypeID="com.balsamiq.mockups::DataGrid" x="224" y="303" w="738" h="205" measuredW="607" measuredH="80" zOrder="21" locked="false" isInGroup="-1">
+    <control controlID="84" controlTypeID="com.balsamiq.mockups::DataGrid" x="224" y="303" w="738" h="205" measuredW="612" measuredH="97" zOrder="21" locked="false" isInGroup="-1">
       <controlProperties>
         <alternateRowColor>15594478</alternateRowColor>
         <bold>false</bold>
@@ -169,7 +169,7 @@
         <rowHeight>27</rowHeight>
         <selectedIndex>-1</selectedIndex>
         <size>12</size>
-        <text>*Cliente*%2C%20*Referencia*%2C%20*Fecha*%2C%20*Vence%20el*%2C%20*Total*%2C%20*Saldo*%2C%20*Vencido*%2C%20*Estado*%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%0A%5BAntalis%5D%2C%202010-0002%2C%2029%20Dic%202009%2C%20%2C12000.00%2C%2C%2C%20Borrador%2C%20%0A%5BPapirus%5D%2C%202009-0125%2C12%20Dic%202009%2C%20%2C%2012500.00%2C%2C%2C%20Borrador</text>
+        <text>*Cliente*%2C%20*Referencia*%2C%20*Fecha*%2C%20*Vence%20el*%2C%20*Total*%2C%20*Saldo*%2C%20*Dinero%5Cratrasado*%2C%20*Estado*%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%0A%5BAntalis%5D%2C%202010-0002%2C%2029%20Dic%202009%2C%20%2C12000.00%2C%2C%2C%20Borrador%2C%20%0A%5BPapirus%5D%2C%202009-0125%2C12%20Dic%202009%2C%20%2C%2012500.00%2C%2C%2C%20Borrador</text>
         <underline>false</underline>
         <verticalScrollbar>false</verticalScrollbar>
         <vLines>false</vLines>

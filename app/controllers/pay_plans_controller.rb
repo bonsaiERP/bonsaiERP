@@ -68,11 +68,11 @@ class PayPlansController < ApplicationController
   # DELETE /pay_plans/1.xml
   def destroy
     @pay_plan = PayPlan.find(params[:id])
+    #require 'mocha'
+    #@pay_plan = Object.new
+    #@pay_plan.stubs(:destroyed? => false, :attributes => {}, :errors => {:base => 'Fua'})
     @pay_plan.destroy
 
-    respond_to do |format|
-      format.html { redirect_to(pay_plans_url) }
-      format.xml  { head :ok }
-    end
+    redirect_ajax @pay_plan
   end
 end

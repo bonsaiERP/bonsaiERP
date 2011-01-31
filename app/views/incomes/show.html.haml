@@ -20,7 +20,7 @@
 .main
   .input
     .input.b{:style => 'font-size:1.2em' }= @income.ref_number
-    %div#curren_date.input.b{'data-val' => @income.date}= lo @income.date
+    = lo @income.date
   .input
     .input._100= link_to @income.contact, "#", :title => "Historial cliente"
   .clear
@@ -107,4 +107,15 @@
 :javascript
   $(function () {
     $('#pay_plan_anchor').click(function() { $('#pay_plans').mark(); });
+
+    /**
+    * Updates the status for a transaction (Income, Buy, Expense)
+    * @params Object data
+    */
+    updateTransactionPayPlanStatus = function(data, url) {
+    }
+    // Deleted data
+    $('body').live("ajax:delete", function(data, url) {
+      //
+    });
   });
