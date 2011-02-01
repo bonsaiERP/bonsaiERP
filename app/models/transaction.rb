@@ -7,9 +7,9 @@ class Transaction < ActiveRecord::Base
   TYPES = ['Income', 'Expense', 'Buy']
   # callbacks
   after_initialize :initialize_values
-  before_create :set_payment_date
   before_save :set_details_type
   before_save :calculate_total_and_set_balance
+  after_create :update_payment_date
 
   # relationships
   belongs_to :contact
@@ -17,6 +17,7 @@ class Transaction < ActiveRecord::Base
   belongs_to :project
 
   has_many :pay_plans
+  has_many :payments
   has_many :transaction_details
   accepts_nested_attributes_for :transaction_details
   has_and_belongs_to_many :taxes, :class_name => 'Tax'
@@ -73,6 +74,21 @@ class Transaction < ActiveRecord::Base
     balance - sum
   end
 
+  # Updates cash based on the pay_plans
+  def update_pay_plans_cash
+    self.cash = ( pay_plans.size > 0 )
+    self.save
+  end
+
+  # Sets a default payment date
+  def update_payment_date
+    if pay_plans.size > 0
+      self.payment_date = self.pay_plans.map(&:payment_date).sort.first
+    else
+      self.payment_date = self.date
+    end
+  end
+
 private
   # set default values for discount and taxes
   def initialize_values
@@ -94,8 +110,4 @@ private
     self.total = self.balance = gross_total - total_discount + total_taxes
   end
 
-  # Sets a default payment date
-  def set_payment_date
-    self.payment_date = self.date
-  end
 end

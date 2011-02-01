@@ -31,6 +31,15 @@ class Income < Transaction
     self.state != "draft"
   end
 
+  def aprove!
+    if aproved?
+      false
+    else
+      self.state = "aproved"
+      self.save
+    end
+  end
+
 private
   def set_state
     self.state = STATES.first

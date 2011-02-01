@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110131152955) do
+ActiveRecord::Schema.define(:version => 20110201144429) do
 
   create_table "contacts", :force => true do |t|
     t.string   "matchcode"
@@ -148,6 +148,23 @@ ActiveRecord::Schema.define(:version => 20110131152955) do
   add_index "pay_plans", ["payment_date"], :name => "index_pay_plans_on_payment_date"
   add_index "pay_plans", ["transaction_id"], :name => "index_pay_plans_on_transaction_id"
 
+  create_table "payments", :force => true do |t|
+    t.integer  "transaction_id"
+    t.integer  "organisation_id"
+    t.string   "ctype"
+    t.date     "date"
+    t.decimal  "amount",              :precision => 14, :scale => 2
+    t.decimal  "interests_penalties", :precision => 14, :scale => 2
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "payments", ["ctype"], :name => "index_payments_on_ctype"
+  add_index "payments", ["date"], :name => "index_payments_on_date"
+  add_index "payments", ["organisation_id"], :name => "index_payments_on_organisation_id"
+  add_index "payments", ["transaction_id"], :name => "index_payments_on_transaction_id"
+
   create_table "prices", :force => true do |t|
     t.integer  "item_id"
     t.decimal  "unitary_cost", :precision => 14, :scale => 2
@@ -264,7 +281,7 @@ ActiveRecord::Schema.define(:version => 20110131152955) do
     t.integer  "project_id"
     t.decimal  "discount",                             :precision => 5,  :scale => 2
     t.decimal  "gross_total",                          :precision => 14, :scale => 2
-    t.boolean  "cash",                                                                :default => true
+    t.boolean  "cash"
     t.date     "payment_date"
   end
 

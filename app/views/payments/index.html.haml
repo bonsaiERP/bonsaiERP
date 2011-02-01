@@ -1,0 +1,21 @@
+%h1 payments
+
+%p.links= link_to "Nuevo payment", new_payment_path, :class => 'new'
+
+%table.decorated.nwl 
+  %thead
+    %tr
+      %th date
+      %th amount
+      %th interests_penalties
+      %th description
+      %th
+  
+  %tbody
+    - for payment in @payments
+      %tr{ :class => cycle(:odd, :even) }
+        %td= payment.date
+        %td= payment.amount
+        %td= payment.interests_penalties
+        %td= payment.description
+        %td.actions= bonsai_links(payment)

@@ -1,5 +1,7 @@
 Bonsaierp::Application.routes.draw do
 
+  resources :payments
+
   resources :pay_plans
 
   resources :currency_rates do

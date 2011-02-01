@@ -1,7 +1,7 @@
 class AddTransactionGrossTotalCash < ActiveRecord::Migration
   def self.up
     add_column :transactions, :gross_total, :decimal, :precision => 14, :scale => 2
-    add_column :transactions, :cash, :boolean, :default => true
+    add_column :transactions, :cash, :boolean
     add_index :transactions, :cash
   end
 

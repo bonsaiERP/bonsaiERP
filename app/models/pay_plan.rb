@@ -5,8 +5,9 @@ class PayPlan < ActiveRecord::Base
   acts_as_org
   after_initialize :set_defaults
   before_save :set_currency_id
-  after_save :update_transaction_data
-  after_destroy :update_transaction_cash
+  after_save :update_transaction
+  #after_save :update_transaction_payment_date
+  after_destroy :update_transaction
 
   STATES = ["valid", "delayed", "payed"]
 
@@ -51,37 +52,31 @@ private
     self.currency_id = self.transaction.currency_id
   end
 
-  def set_transaction_cash
-    if transaction.pay_plans.size > 0
-      self.transaction.cash = false
+  def get_transaction_cash
+    if self.destroyed?
+      PayPlan.where(:transaction_id => transaction_id).size <= 0
     else
-      self.transaction.cash = true
+      false
     end
   end
 
-  def update_transaction_cash
-    set_transaction_cash
-    transaction.save
-  end
-
-  def set_transaction_payment_date
-    if payment_date < transaction.payment_date or transaction.pay_plans.size <= 0 or transaction.cash?
-      self.transaction.payment_date = payment_date
+  def get_transaction_payment_date
+    pp = PayPlan.where(:transaction_id => transaction_id)
+    if pp.size > 0
+      pp.order("payment_date ASC").limit(1).first.payment_date
+    else
+      nil
     end
   end
 
-  # Updates related data of transaction
-  def update_transaction_data
-    set_transaction_cash
-    set_transaction_payment_date
-
+  def update_transaction
+    transaction.cash = get_transaction_cash
+    transaction.payment_date = get_transaction_payment_date || Date.today#transaction.payment_date
     transaction.save
   end
 
   # Checks that all pay_plans amounts sum <= transaction.total
   def valid_pay_plans_total_amount
-    #debugger
-
     minus = changes[:amount] ? changes[:amount].first.to_f : self.amount
     tot = transaction.pay_plans_total + amount - minus
 

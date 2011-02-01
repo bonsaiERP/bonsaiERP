@@ -4,15 +4,15 @@
 require File.dirname(__FILE__) + '/acceptance_helper'
 
 feature "Income", "In order to make sales and recive incomes" do
-  background do
-    create_organisation
-    create_contacts
-    create_items
-    @user = User.first
-  end
-
-  #scenario "Test create_organisation" do
-  #  create_organisation
+#  background do
+#    create_organisation
+#    create_contacts
+#    create_items
+#    @user = User.first
+#  end
+#
+#  #scenario "Test create_organisation" do
+#  #  create_organisation
   #  org = Organisation.first
   #  org.id.should == 1
   #  org.name == 'ecuanime'

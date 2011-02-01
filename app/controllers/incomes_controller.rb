@@ -90,6 +90,13 @@ class IncomesController < ApplicationController
   # PUT /incomes/1/aprove
   # Method to aprove an income
   def aprove
+    @income = Income.find(params[:id])
+    if @income.aprove!
+      flash[:notice] = "La nota de venta fue aprobada"
+    else
+      flash[:error] = "Existio un problema con la aprovación"
+    end
+    redirect_to @income
   end
 
 private

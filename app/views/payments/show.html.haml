@@ -1,0 +1,17 @@
+%h1 payment
+%p.links
+  = link_to 'Editar', edit_payment_path(@payment), :class => 'edit'
+  = link_to 'Lista', payments_path, :class => 'list'
+
+.input
+  %label #<Rails::Generators::GeneratedAttribute:0xb4422ac>
+  %span= @payment.date
+.input
+  %label #<Rails::Generators::GeneratedAttribute:0xb4421a8>
+  %span= @payment.amount
+.input
+  %label #<Rails::Generators::GeneratedAttribute:0xb4420b8>
+  %span= @payment.interests_penalties
+.input
+  %label #<Rails::Generators::GeneratedAttribute:0xb441fc8>
+  %span= @payment.description

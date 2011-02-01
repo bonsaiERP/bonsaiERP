@@ -1,0 +1,9 @@
+= simple_form_for(@payment) do |f|
+  = bonsai_form_error(f)
+  = f.input :date
+  = f.input :amount
+  = f.input :interests_penalties
+  = f.input :description
+
+  .actions
+    = f.submit 'Salvar'

@@ -14,6 +14,7 @@ describe PayPlan do
 
   it 'should not allow pay_plans total greater transaction.total' do
     p2 = @params.merge(:amount => 200)
+
   end
 
   # Creates a transaction for payment
@@ -31,6 +32,22 @@ describe PayPlan do
     ]
     params[:transaction_details_attributes] = details
     Transaction.create(params)
+  end
+
+  it 'should create an instance' do
+    t = create_transaction
+    params = @params.merge(:transaction_id => t.id)
+
+    PayPlan.create!(params)
+  end
+
+  it 'should create 2 instances' do
+    t = create_transaction
+    params = @params.merge(:transaction_id => t.id)
+
+    PayPlan.create!(params)
+    
+    PayPlan.create!(params)
   end
 
   # NOT test unit
@@ -62,18 +79,28 @@ describe PayPlan do
   it 'should change transaction to credit' do
     transaction = create_transaction
     transaction.cash.should == true
-
-    pp = PayPlan.create!(@params.merge(:transaction_id => transaction.id) )
+    
+    params = @params.merge(:transaction_id => transaction.id)
+    pp = PayPlan.create!( params )
     pp.transaction.cash.should == false
   end
 
   it 'should not allow a greater amount than the transaction balance' do
     transaction = create_transaction
     #puts transaction.pay_plans_total
-    pp = PayPlan.new(@params.merge(:transaction_id => transaction.id, :amount => transaction.balance + 100))
+    pp = PayPlan.create(@params.merge(:transaction_id => transaction.id, :amount => transaction.balance + 100))
+
+    puts PayPlan.find(pp.id).attributes
+
     pp.save.should == false
 
     pp.errors[:amount].should_not == blank?
   end
 
+  it 'should create a tra' do
+    t = create_transaction
+    t.cash = false
+    t.save
+    Transaction.find(t.id).cash.should == false
+  end
 end

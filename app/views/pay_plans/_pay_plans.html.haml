@@ -1,7 +1,7 @@
 #pay_plans
   %h2.dark Plan de #{pay_type.pluralize} a crédito
 
-  =link_to "Nuevo #{pay_type}", 
+  =link_to "Nuevo plan de #{pay_type}", 
     new_pay_plan_path(:type => klass.class.to_s, :id => klass.id, :pay_type => pay_type),
     :class => 'new ajax', 'title' => "Nuevo #{pay_type.singularize}", 'data-trigger' => 'pay_plan'
 

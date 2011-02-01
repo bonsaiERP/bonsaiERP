@@ -139,4 +139,21 @@ describe Transaction do
     transaction.payment_date.should == transaction.date
   end
 
+  # Test for pay_plan
+
+  def pay_plan_params(transaction_id)
+    d = Date.today
+    { :alert_date => (d - 5.days), :payment_date => d,
+     :amount => 100, :interests_penalties => 0,
+     :ctype => 'Income', :description => 'Prueba de vida!', 
+     :email => true, :transaction_id => transaction_id}
+  end
+
+  #it 'should create a payment' do
+  #  transaction = Transaction.create(@params)
+
+  #  pp = PayPlan.create!(pay_plan_params(transaction.id))
+
+  #  #transaction.pay_plans.size.should == 1
+  #end
 end
