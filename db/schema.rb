@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110201161907) do
+ActiveRecord::Schema.define(:version => 20110201203527) do
 
   create_table "account_ledgers", :force => true do |t|
     t.integer  "organisation_id"
@@ -197,8 +197,10 @@ ActiveRecord::Schema.define(:version => 20110201161907) do
     t.string   "description"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "account_id"
   end
 
+  add_index "payments", ["account_id"], :name => "index_payments_on_account_id"
   add_index "payments", ["ctype"], :name => "index_payments_on_ctype"
   add_index "payments", ["date"], :name => "index_payments_on_date"
   add_index "payments", ["organisation_id"], :name => "index_payments_on_organisation_id"

@@ -3,7 +3,7 @@
 
   =link_to "Nuevo plan de #{pay_type}", 
     new_pay_plan_path(:type => klass.class.to_s, :id => klass.id, :pay_type => pay_type),
-    :class => 'new ajax', 'title' => "Nuevo #{pay_type.singularize}", 'data-trigger' => 'pay_plan'
+    :class => 'new ajax', 'title' => "Nuevo #{pay_type.singularize}", 'data-trigger' => 'pay_plan', 'data-width' => '700'
 
   %table.decorated#pay_plans_table
     %thead

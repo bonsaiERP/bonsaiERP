@@ -3,6 +3,8 @@ require 'spec_helper'
 describe Transaction do
   before(:each) do
     OrganisationSession.set(:id => 1, :name => 'ecuanime')
+    OrganisationSession.stubs(:id => 1)
+
     @params = {"active"=>nil, "bill_number"=>"56498797", "contact_id"=>1, 
       "currency_exchange_rate"=>1, "currency_id"=>1, "date"=>'2011-01-24', 
       "description"=>"Esto es una prueba", "discount"=>3, "project_id"=>1, 
@@ -139,21 +141,24 @@ describe Transaction do
     transaction.payment_date.should == transaction.date
   end
 
-  # Test for pay_plan
-
-  def pay_plan_params(transaction_id)
+  #####################################
+  # Params to test pay_plan
+  def pay_plan_params(params)
     d = Date.today
-    { :alert_date => (d - 5.days), :payment_date => d,
-     :amount => 100, :interests_penalties => 0,
+    params[:payment_date] = params[:date] || d
+    params[:alert_date] = params[:date] || (d - 5.days)
+    { :amount => 100, :interests_penalties => 0,
      :ctype => 'Income', :description => 'Prueba de vida!', 
-     :email => true, :transaction_id => transaction_id}
+     :email => true}.merge(params)
   end
 
-  #it 'should create a payment' do
-  #  transaction = Transaction.create(@params)
-
-  #  pp = PayPlan.create!(pay_plan_params(transaction.id))
-
-  #  #transaction.pay_plans.size.should == 1
-  #end
+  # Payments
+  it 'should prepare a payment paymets or cash' do
+    t = Transaction.create(@params)
+    
+    p = t.new_payment
+    p.class.should == Payment
+    p.amount.should == t.balance
+    p.transaction_id.should == t.id
+  end
 end

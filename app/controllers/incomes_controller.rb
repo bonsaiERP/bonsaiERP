@@ -11,11 +11,6 @@ class IncomesController < ApplicationController
   # GET /incomes.xml
   def index
     @incomes = Income.paginate(:page => @page)
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @incomes }
-    end
   end
 
   # GET /incomes/1
@@ -34,16 +29,15 @@ class IncomesController < ApplicationController
   def new
     @income = Income.new(:date => Date.today, :discount => 0, :currency_exchange_rate => 1, :currency_id => @currency.id )
     @income.transaction_details.build
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @income }
-    end
   end
 
   # GET /incomes/1/edit
   def edit
     @income = Income.find(params[:id])
+
+    if @income.aproved?
+      redirect_income
+    end
   end
 
   # POST /incomes
@@ -67,13 +61,13 @@ class IncomesController < ApplicationController
   def update
     @income = Income.find(params[:id])
 
-    respond_to do |format|
+    if @income.aproved?
+      redirect_income
+    else
       if @income.update_attributes(params[:income])
-        format.html { redirect_to(@income, :notice => 'Incomes was successfully updated.') }
-        format.xml  { head :ok }
+        redirect_to @income, :notice => 'La proforma de venta fue actualizada!.'
       else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @income.errors, :status => :unprocessable_entity }
+        render :action => "edit"
       end
     end
   end
@@ -82,9 +76,12 @@ class IncomesController < ApplicationController
   # DELETE /incomes/1.xml
   def destroy
     @income = Income.find(params[:id])
-    @income.destroy
-
-    redirect_ajax @income
+    if @income.aproved
+      redirect_income
+    else
+      @income.destroy
+      redirect_ajax @income
+    end
   end
   
   # PUT /incomes/1/aprove
@@ -99,8 +96,18 @@ class IncomesController < ApplicationController
     redirect_to @income
   end
 
+  # Nulls an invoice
+  def null
+  end
+
 private
   def set_default_currency
     @currency = Organisation.find(session[:organisation][:id]).currency
+  end
+
+  # Redirects in case that someone is trying to edit or destroy an  aproved income
+  def redirect_income
+    flash[:warning] = "No es posible editar una nota ya aprobada!"
+    redirect_to incomes_path
   end
 end

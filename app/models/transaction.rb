@@ -89,6 +89,17 @@ class Transaction < ActiveRecord::Base
     end
   end
 
+  # Prepares a payment with the current notes to pay
+  def new_payment
+    if cash?
+      Payment.new(:amount => balance, :transaction_id => id)
+    else
+      pp = pay_plans.where(:paid => false).order("payment_date ASC").limit(1).first
+      Payment.new(:amount => pp.amount, :interests_penalties => pp.interests_penalties,
+                  :transaction_id => id)
+    end
+  end
+
 private
   # set default values for discount and taxes
   def initialize_values

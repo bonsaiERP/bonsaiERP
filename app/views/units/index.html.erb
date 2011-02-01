@@ -14,7 +14,7 @@
   <tr>
     <td><%= link_to unit.name, unit %></td>
     <td><%= unit.symbol %></td>
-    <td><%= unit.integer? %></td>
+    <td class="c"><span class="<%= unit.integer %>"></span></td>
     <td><%=  raw bonsai_links(unit) %></td>
   </tr>
 <% end %>

@@ -113,8 +113,7 @@
     });
     createDialog = function(params) {
       var data, div, div_id;
-      data = params['data'];
-      delete params['data'];
+      data = params;
       params = $.extend({
         'id': new Date().getTime(),
         'title': '',
@@ -150,14 +149,12 @@
     };
     window.getAjaxType = getAjaxType;
     $('a.ajax').live("click", function(e) {
-      var div;
-      div = createDialog({
+      var data, div;
+      data = $.extend({
         'title': $(this).attr('title'),
-        'data': {
-          trigger: $(this).data('trigger'),
-          'ajax-type': getAjaxType(this)
-        }
-      });
+        'ajax-type': getAjaxType(this)
+      }, $(this).data());
+      div = createDialog(data);
       $(div).load($(this).attr("href"), function(e) {
         return $(div).transformDateSelect();
       });

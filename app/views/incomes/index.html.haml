@@ -21,5 +21,6 @@
         %td= lo income.date
         %td= income.total
         %td= income.balance
-        %td= income.show_state
-        %td.actions= bonsai_links(income)
+        %td <span class="#{income.state}">#{income.show_state}</span>
+        %td.actions
+          = bonsai_links(income) unless income.aproved?

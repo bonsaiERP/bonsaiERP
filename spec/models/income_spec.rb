@@ -52,4 +52,5 @@ describe Income do
     # Set to default languagge
     I18n.locale = :es
   end
+
 end

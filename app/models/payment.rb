@@ -9,6 +9,7 @@ class Payment < ActiveRecord::Base
 
   # relationships
   belongs_to :transaction
+  belongs_to :account
 
   # scopes
   default_scope where(:organisation_id => OrganisationSession.organisation_id)

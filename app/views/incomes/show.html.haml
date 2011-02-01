@@ -1,20 +1,25 @@
 %h1._50.fl #{note_title(@income)} de venta (<span id="cash_credit_title">#{cash @income.cash}</span>)
 - if @income.aproved?
-  = link_to("Realizar cobros", "#payments", :class => 'fl', :style => 'margin:15px 15px 0px 0px', :id => 'payments_anchor')
+  = link_to("Realizar cobros", "#payments", :class => 'fl', :style => 'margin:15px 15px 0px 0px', :id => 'payments_anchor', :class => 'money')
   &nbsp;&nbsp;&nbsp;
 
 
-= link_to "Planificar crédito", "#pay_plans", :class => 'fl', :style => 'margin-top:15px', :id => 'pay_plan_anchor'
+= link_to "Planificar crédito", "#pay_plans", :class => 'fl', :style => 'margin-top:16px', :id => 'pay_plan_anchor', :class => 'calendar'
 .clear
 
 %p.links._50.fl
-  = link_to 'Editar', edit_income_path(@income), :class => 'edit'
+  - unless @income.aproved?
+    = link_to 'Editar', edit_income_path(@income), :class => 'edit'
   = link_to 'Lista', incomes_path, :class => 'list'
 ._50.fl.r
   - unless @income.aproved?
     = simple_form_for @income, :url => aprove_income_path(@income) do |f|
       .submit
         =f.submit "Aprobar", :class => 'bg_green'
+  - else
+    = simple_form_for @income, :url => null_income_path(@income) do |f|
+      .submit
+        =f.submit "Anular", :class => 'bg_red'
 
 .clear
 = link_to "Email","", :class => 'email'

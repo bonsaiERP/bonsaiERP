@@ -118,8 +118,7 @@ $(document).ready(->
 
   # Creates the dialog container
   createDialog = (params)->
-    data = params['data']
-    delete(params['data'])
+    data = params
     params = $.extend({
       'id': new Date().getTime(), 'title': '', 'width': 800, 'height' : 400, 'modal': true, 'resizable' : false,
       'close': (e, ui)->
@@ -147,7 +146,8 @@ $(document).ready(->
 
   # Presents an AJAX form
   $('a.ajax').live("click", (e)->
-    div = createDialog( { 'title': $(this).attr('title'), 'data': {trigger: $(this).data('trigger'), 'ajax-type': getAjaxType(this) } } )
+    data = $.extend({'title': $(this).attr('title'), 'ajax-type': getAjaxType(this) }, $(this).data() )
+    div = createDialog( data )
     $(div).load( $(this).attr("href"), (e)->
       #$(div).find('a.new[href*=/], a.edit[href*=/], a.list[href*=/]').hide()
       $(div).transformDateSelect()
