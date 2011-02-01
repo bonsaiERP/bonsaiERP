@@ -1,0 +1,6 @@
+%h1 Editar account
+%p.links
+  = link_to 'Ver', @account, :class => 'list'
+  = link_to 'Lista', accounts_path, :class => 'show'
+
+= render :partial => 'form'

@@ -484,6 +484,7 @@ span.true, span.false {
   margin: 25px -5px;
   padding: 5px;
 }
+.ajax-modal .links { display: none; }
 .marked { background-color: #d0def1; }
 ._30, .w30 { width: 30%; }
 ._33, .w33 { width: 33%; }

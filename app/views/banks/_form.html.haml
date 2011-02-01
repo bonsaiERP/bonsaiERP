@@ -1,0 +1,17 @@
+= simple_form_for(@bank) do |f|
+  = bonsai_form_error(f)
+  .main.bg_light_grey
+    = f.input :number, :label => 'Número de cuenta'
+    = f.input :name, :label => 'Banco'
+    .clear
+    = f.association :currency, :collection => OrganisationSession.currencies, :label => 'Moneda'
+    = f.input :total_amount, :label => 'Total en cuenta', :input_html => {:size => 12}
+    .clear
+  = f.input :address, :label => 'Dirección', :as => :text, :input_html => {:rows => 4, :cols => 35}
+  = f.input :phone, :label => 'Teléfono'
+  .clear
+  = f.input :email
+  = f.input :website, :label => 'Sitio web'
+  .clear
+  .actions
+    = f.submit 'Salvar'

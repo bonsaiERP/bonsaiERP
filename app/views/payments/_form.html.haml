@@ -1,5 +1,7 @@
 = simple_form_for(@payment) do |f|
   = bonsai_form_error(f)
+  = hidden_field_tag "payment_type", params[:payment_type]
+  = f.input :transaction_id, :as => :hidden
   = f.input :date
   = f.input :amount
   = f.input :interests_penalties

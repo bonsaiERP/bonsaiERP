@@ -1,7 +1,7 @@
 #payments
   %h2.dark #{pay_type.pluralize}
 
-  %p.links= link_to "Nuevo #{pay_type}", new_payment_path, :class => 'new'
+  %p.links= link_to "Nuevo #{pay_type}", new_payment_path(:type => klass.type.to_s, :id => klass.id, :payment_type => pay_type), :class => 'new ajax', :title => "Nuevo #{pay_type}"
 
   %table.decorated.nwl 
     %thead

@@ -21,5 +21,11 @@ class OrganisationSession
       @organisation_id = @org_name = nil
     end
 
+    # Returns the currencies of the current organisation
+    def currencies
+      o = Organisation.find(@organisation_id)
+      [o.currency]+ o.currencies
+    end
+
   end
 end

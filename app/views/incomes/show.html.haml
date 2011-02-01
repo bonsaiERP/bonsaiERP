@@ -105,7 +105,7 @@
       %td.r <h3 id="total_value">#{ntc @income.balance}</h3>
 
 .clear
-=render :partial => "/payments/payments", :locals => {:klass => @income,:pay_type => 'Cobro'} if @income.aproved?
+=render :partial => "/payments/payments", :locals => {:klass => @income,:pay_type => 'cobro'} if @income.aproved?
 .clear
 =render :partial => "/pay_plans/pay_plans", :locals => {:klass => @income, :pay_type => 'cobro'}
 

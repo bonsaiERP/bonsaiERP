@@ -24,11 +24,11 @@ class PaymentsController < ApplicationController
   # GET /payments/new
   # GET /payments/new.xml
   def new
-    @payment = Payment.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @payment }
+    begin
+      transaction = Transaction.find_by_type_and_id( params[:type], params[:id] )
+      @payment = Payment.new(:transaction_id => transaction.id, :ctype => transaction.type)
+    rescue
+      redirect_to request.referer
     end
   end
 

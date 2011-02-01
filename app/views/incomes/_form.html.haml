@@ -49,7 +49,7 @@
 
   .clear
   = f.association :project, :label => 'Proyecto'
-  = f.association :currency, :label => 'Moneda. <span class="n"></span>'.html_safe, :include_blank => false
+  = f.association :currency, :collection => OrganisationSession.currencies, :label => 'Moneda. <span class="n"></span>'.html_safe, :include_blank => false
   = f.input :currency_exchange_rate, :as => :hidden
   .clear
   .input

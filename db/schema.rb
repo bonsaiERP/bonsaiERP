@@ -10,7 +10,46 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110201144429) do
+ActiveRecord::Schema.define(:version => 20110201161907) do
+
+  create_table "account_ledgers", :force => true do |t|
+    t.integer  "organisation_id"
+    t.integer  "account_id"
+    t.integer  "currency_id"
+    t.decimal  "amount",          :precision => 14, :scale => 2
+    t.date     "date"
+    t.integer  "payment_id"
+    t.boolean  "income"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "account_ledgers", ["account_id"], :name => "index_account_ledgers_on_account_id"
+  add_index "account_ledgers", ["currency_id"], :name => "index_account_ledgers_on_currency_id"
+  add_index "account_ledgers", ["date"], :name => "index_account_ledgers_on_date"
+  add_index "account_ledgers", ["income"], :name => "index_account_ledgers_on_income"
+  add_index "account_ledgers", ["organisation_id"], :name => "index_account_ledgers_on_organisation_id"
+  add_index "account_ledgers", ["payment_id"], :name => "index_account_ledgers_on_payment_id"
+
+  create_table "accounts", :force => true do |t|
+    t.integer  "organisation_id"
+    t.integer  "currency_id"
+    t.string   "name"
+    t.string   "address"
+    t.string   "phone"
+    t.string   "email"
+    t.string   "website"
+    t.string   "number",          :limit => 50
+    t.string   "type",            :limit => 20
+    t.decimal  "total_amount",                  :precision => 14, :scale => 2
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "accounts", ["currency_id"], :name => "index_accounts_on_currency_id"
+  add_index "accounts", ["number"], :name => "index_accounts_on_number"
+  add_index "accounts", ["organisation_id"], :name => "index_accounts_on_organisation_id"
+  add_index "accounts", ["type"], :name => "index_accounts_on_type"
 
   create_table "contacts", :force => true do |t|
     t.string   "matchcode"

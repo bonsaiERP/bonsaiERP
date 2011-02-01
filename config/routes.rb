@@ -1,5 +1,9 @@
 Bonsaierp::Application.routes.draw do
 
+  resources :banks
+
+  resources :cash_registers
+
   resources :payments
 
   resources :pay_plans
