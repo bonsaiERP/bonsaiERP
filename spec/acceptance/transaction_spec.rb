@@ -55,7 +55,86 @@ feature "Transaction", "test features" do
   end
 
   scenario "Pay a cash transaction" do
+    i = Income.create!(income_params)
+    i.aprove!
+    i = Income.find(i.id)
+    i.state.should == "aproved"
+    p = i.new_payment
 
+    p.amount.should == i.balance
+    p.save!
+    i = Income.find(i.id)
+    i.balance.should == 0
+    i.state.should == 'paid'
+  end
+
+  scenario "Pay a credit transaction" do
+    i = Income.create!(income_params)
+    pp = PayPlan.new(pay_plan_params(:transaction_id => i.id, :amount => 100, :interests_penalties => 10))
+    pp.save
+
+    pp = PayPlan.new(pay_plan_params(:transaction_id => i.id, :payment_date => Date.today + 20.days))
+    pp.amount.should == (i.balance - 100)
+    pp.save
+
+    i = Income.find(i.id)
+    i.pay_plans.size.should == 2
+    i.pay_plans.first.amount.should == 100
+    i.pay_plans.last.amount.should == ( i.balance - 100 )
+    i.aprove!
+
+    # First payment
+    old_balance = i.balance
+    p = i.new_payment
+    p.amount.should == 100
+    p.save
+    i = Income.find(i.id)
+
+    i = Income.find(i.id)
+    pp = i.pay_plans.first
+    pp = PayPlan.find(pp.id)
+    pp.paid.should == true
+
+    i.balance.should == (old_balance - 100)
+    i.state.should == "aproved"
+
+    p = i.new_payment
+    p.amount.should == (old_balance - 100)
+
+    p.save
+    i = Income.find(i.id)
+    i.state.should == "paid"
+    i.balance.should == 0
+    
+  end
+
+  scenario "Pay a credit transaction with a higher amount" do
+    i = Income.create!(income_params)
+    pp = PayPlan.new(pay_plan_params(:transaction_id => i.id, :amount => 100, :interests_penalties => 10))
+    pp.save
+
+    pp = PayPlan.new(pay_plan_params(:transaction_id => i.id, :payment_date => Date.today + 20.days))
+    pp.amount.should == (i.balance - 100)
+    pp.save
+
+    i = Income.find(i.id)
+    i.aprove!
+
+    # First payment
+    old_balance = i.balance
+    p = i.new_payment
+    p.amount = 200
+    p.interests_penalties = 0
+    p.save
+    p.pay_plan.class.should == PayPlan
+    p.pay_plan.amount.should == (i.total - 200)
+
+    i = Income.find(i.id)
+    i.pay_plans.unpaid.size.should == 1
+    pp = i.pay_plans.unpaid.first
+
+    pp.amount.should == (old_balance - 200)
+    pp.interests_penalties.should == 10
   end
 end
 

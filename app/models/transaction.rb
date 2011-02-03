@@ -5,10 +5,12 @@ class Transaction < ActiveRecord::Base
   acts_as_org
 
   TYPES = ['Income', 'Expense', 'Buy']
+  # Determines if the oprations is made on transaction or pay_plan or payment
+  attr_reader :trans
   # callbacks
   after_initialize :initialize_values
   before_save :set_details_type
-  before_save :calculate_total_and_set_balance
+  before_save :calculate_total_and_set_balance, :if => :trans?
   after_create :update_payment_date
 
   # relationships
@@ -16,7 +18,7 @@ class Transaction < ActiveRecord::Base
   belongs_to :currency
   belongs_to :project
 
-  has_many :pay_plans
+  has_many :pay_plans, :order => "payment_date ASC"
   has_many :payments
   has_many :transaction_details
   accepts_nested_attributes_for :transaction_details
@@ -65,7 +67,7 @@ class Transaction < ActiveRecord::Base
 
   # Returns the total value of pay plans
   def pay_plans_total
-    pay_plans.inject(0) {|sum, v| sum += v.amount }
+    pay_plans.unpaid.inject(0) {|sum, v| sum += v.amount }
   end
 
   # Returns the total amount to be paid
@@ -100,9 +102,25 @@ class Transaction < ActiveRecord::Base
     end
   end
 
+  # Adds a payment and updates the balance
+  def add_payment(amount)
+    if amount > balance
+      return false
+    else
+      @trans = false
+      self.balance = (balance - amount)
+      self.save
+    end
+  end
+
+  def set_trans(value)
+    @trans = value
+  end
+
 private
   # set default values for discount and taxes
   def initialize_values
+    @trans = true
     self.cash = cash.nil? ? true : cash
     self.active = active.nil? ? true : active
     self.discount ||= 0
@@ -121,4 +139,8 @@ private
     self.total = self.balance = gross_total - total_discount + total_taxes
   end
 
+  # Determines if it is a transaction or other operation
+  def trans?
+    @trans
+  end
 end

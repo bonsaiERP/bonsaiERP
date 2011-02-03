@@ -160,5 +160,7 @@ describe Transaction do
     p.class.should == Payment
     p.amount.should == t.balance
     p.transaction_id.should == t.id
+
   end
+
 end

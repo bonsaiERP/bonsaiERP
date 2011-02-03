@@ -21,6 +21,7 @@ class PayPlan < ActiveRecord::Base
 
   # scopes
   default_scope where(:organisation_id => OrganisationSession.organisation_id)
+  scope :unpaid, where(:paid => false)
 
   # Returns the current state of the payment
   def state
@@ -70,6 +71,7 @@ private
   end
 
   def update_transaction
+    transaction.set_trans(false)
     transaction.cash = get_transaction_cash
     transaction.payment_date = get_transaction_payment_date || Date.today#transaction.payment_date
     transaction.save

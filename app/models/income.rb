@@ -5,8 +5,7 @@ class Income < Transaction
   acts_as_org
   
   # callbacks
-  before_create :set_state
-  #before_create :create_first_pay_plan
+  before_save :set_state
 
   STATES = ["draft", "aproved", "payed"]
 
@@ -32,7 +31,7 @@ class Income < Transaction
   end
 
   def aprove!
-    if aproved?
+    if state != "draft"
       false
     else
       self.state = "aproved"
@@ -42,8 +41,13 @@ class Income < Transaction
 
 private
   def set_state
-    self.state = STATES.first
+    if balance <= 0
+      self.state = "paid"
+    elsif state.blank?
+      self.state = "draft"
+    end
   end
+
 
   # Creates a states hash based on the locale
   def create_states_hash
@@ -58,11 +62,4 @@ private
     Hash[STATES.zip(arr)]
   end
 
-  # Creates the first payment for cash payments
-  #def create_first_pay_plan
-  #  pay_plan = self.pay_plans.build(:currency_id => currency_id, :amount => total, :ctype => self.class.to_s,
-  #                                 :interests_penalties => 0, :payment_date => self.date,
-  #                                 :alert_date => self.date, :email => false )
-  #  pay_plan.save
-  #end
 end
