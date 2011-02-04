@@ -8,6 +8,7 @@ class AccountLedger < ActiveRecord::Base
 
   # relationships
   belongs_to :account
+  belongs_to :payment
 
   # validations
   validates_presence_of :account_id, :currency_id

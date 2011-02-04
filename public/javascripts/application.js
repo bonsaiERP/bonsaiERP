@@ -375,6 +375,9 @@
       }, velocity);
     };
     $.mark = $.fn.mark = mark;
+    $('select[data-new-url]').each(function(i, el) {
+      return $(el).after(" <a href='" + ($(el).data('new-url')) + "' class='ajax' title='" + ($(el).data('title')) + "' data-new_option='true'>Nuevo</a>");
+    });
     start = function() {
       return $('body').transformDateSelect();
     };
@@ -401,4 +404,11 @@
     });
     return start();
   });
+  String.prototype.pluralize = function() {
+    if (/[aeiou]$/.test(this)) {
+      return this + "s";
+    } else {
+      return this + "es";
+    }
+  };
 }).call(this);

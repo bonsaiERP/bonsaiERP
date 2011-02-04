@@ -51,6 +51,14 @@ class Transaction < ActiveRecord::Base
     gross_total * discount/100
   end
 
+  def total_payments
+    payments.active.inject(0) {|sum, v| sum += v.amount }
+  end
+
+  def total_payments_with_interests
+    payments.active.inject(0) {|sum, v| sum += v.amount + v.interests_penalties }
+  end
+
   # Presents the currency symbol name if not default currency
   def present_currency
     unless Organisation.find(OrganisationSession.organisation_id).id == self.currency_id
@@ -92,13 +100,14 @@ class Transaction < ActiveRecord::Base
   end
 
   # Prepares a payment with the current notes to pay
-  def new_payment
+  # @param Hash options
+  def new_payment(options = {})
     if cash?
-      Payment.new(:amount => balance, :transaction_id => id)
+      Payment.new({:amount => balance, :transaction_id => id}.merge(options))
     else
       pp = pay_plans.where(:paid => false).order("payment_date ASC").limit(1).first
-      Payment.new(:amount => pp.amount, :interests_penalties => pp.interests_penalties,
-                  :transaction_id => id)
+      Payment.new({:amount => pp.amount, :interests_penalties => pp.interests_penalties,
+                  :transaction_id => id}.merge(options))
     end
   end
 

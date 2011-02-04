@@ -10,6 +10,7 @@
         %th Descripción
         %th Intereses<br/>Penalidades
         %th Cantidad
+        %th Total fila
         %th
     
     %tbody
@@ -17,14 +18,28 @@
         %tr{ :class => cycle(:odd, :even) }
           %td= lo payment.date
           %td= payment.description
-          %td= ntc payment.interests_penalties
-          %td= ntc payment.amount
-          %td
-          %td.actions= bonsai_links(payment)
+          %td.r= ntc payment.interests_penalties
+          %td.r= ntc payment.amount
+          %td.r= ntc payment.total_amount
+          %td.actions= link_to "Anular #{pay_type}", payment, 'data-method' => 'put', :class => 'null_payment'
 
-    %tr.extra
-      %td{:colspan => 2}
-      %td
+    %tr.extra.pad_top
+      %td{:colspan => 2} 
+      %td.r.b{:colspan => 2} #{pay_type.pluralize} + Intereses/Penalidades
+      %td.r.b= ntc klass.total_payments_with_interests
 
 
 <br/><br/><br/><br/>
+:javascript
+  $(function() {
+    $('a.null_payment').live("click", function() {
+      $(this).parents('tr').addClass('marked');
+      if(confirm("Esta seguro de anular el #{pay_type} seleccionado?")) {
+        $(this).parents('tr').removeClass('marked');
+        return false;
+      }else{
+        $(this).parents('tr').removeClass('marked');
+        return false;
+      }
+    });
+  })

@@ -1,6 +1,6 @@
 %h1._50.fl #{note_title(@income)} de venta (<span id="cash_credit_title">#{cash @income.cash}</span>)
 - if @income.aproved?
-  = link_to("Realizar cobros", "#payments", :class => 'fl', :style => 'margin:15px 15px 0px 0px', :id => 'payments_anchor', :class => 'money')
+  = link_to("Realizar cobros", "#payments", :class => 'fl', :style => 'margin:15px 15px 0px 0px', :id => 'payment_anchor', :class => 'money')
   &nbsp;&nbsp;&nbsp;
 
 
@@ -27,10 +27,10 @@
 = link_to "Imprimir","", :class => 'print'
 .clear
 
-.main
+.main{:style => 'font-size:1.2em;'}
   .input
     .input.b{:style => 'font-size:1.2em' }= @income.ref_number
-    = lo @income.date
+    .input= lo @income.date
   .input
     .input._100= link_to @income.contact, "#", :title => "Historial cliente"
   .clear
@@ -41,11 +41,11 @@
     %label Proyecto
     = @income.project
   .input
-    %label Moneda
-    = @income.currency
+    %label Moneda/Tipo de cambio
     - unless @income.currency_id == @currency.id
-      <br/>
-      1 #{@income.currency} = #{@income.currency_exchange_rate} #{@currency}
+      1 #{@income.currency.name} = <span class="b">#{@income.currency_exchange_rate}</span> #{@currency.name.pluralize}
+    - else
+      = @income.currency.name
   .clear
   .input
     .input
@@ -78,6 +78,7 @@
         %th Precio <br/>unitario
         %th Cantidad
         %th Total fila
+        %th
       - @income.transaction_details.each do |det|
         %tr
           %td
@@ -88,35 +89,41 @@
           %td= det.quantity
           %td.total_row.r= ntc det.total
 
+    %tr.extra.pad_top
+      %td{:colspan => 2}
+      %td.r{:colspan => 2} Subtotal
+      %td#subtotal.r= ntc @income.gross_total
     %tr.extra
       %td{:colspan => 2}
-      %td.b.r{:colspan => 2} Subtotal
-      %td#subtotal.b.r= @income.gross_total
+      %td.r{:colspan => 2} Descuento (<span id="discount_percentage" data-val="#{@income.total_discount}">#{ntc @income.tax_percent}</span>%)
+      %td#discount_total.r= "-#{ntc @income.total_discount}"
     %tr.extra
       %td{:colspan => 2}
-      %td.b.r{:colspan => 2} Descuento (<span id="discount_percentage" data-val="#{@income.total_discount}">#{ntc @income.tax_percent}</span>%)
-      %td#discount_total.b.r= "-#{ntc @income.total_discount}"
+      %td.r.line{:colspan => 2} Impuestos (<span id="taxes_percentage" data-val="#{@income.total_taxes}">#{ntc @income.total_taxes}</span>%)
+      %td#taxes_total.r.line= ntc @income.total_taxes
     %tr.extra
       %td{:colspan => 2}
-      %td.b.r{:colspan => 2} Impuestos (<span id="taxes_percentage" data-val="#{@income.total_taxes}">#{ntc @income.total_taxes}</span>%)
-      %td#taxes_total.b.r= ntc @income.total_taxes
+      %td.r.b{:colspan => 2} Total
+      %td#total_value.r.b= ntc @income.total
     %tr.extra
       %td{:colspan => 2}
-      %td.r{:colspan => 2} <h3>Total</h3>
-      %td.r <h3 id="total_value">#{ntc @income.total}</h3>
+      %td.r.b.line{:colspan => 2} Cobrado
+      %td#total_payments.r.b.line= "-" + ntc( @income.total_payments) 
     %tr.extra
       %td{:colspan => 2}
-      %td.r{:colspan => 2} <h3>Saldo</h3>
-      %td.r <h3 id="total_value">#{ntc @income.balance}</h3>
+      %td.r.b{:colspan => 2} Saldo
+      %td#balance.r.b= ntc @income.balance
 
 .clear
 =render :partial => "/payments/payments", :locals => {:klass => @income,:pay_type => 'cobro'} if @income.aproved?
 .clear
-=render :partial => "/pay_plans/pay_plans", :locals => {:klass => @income, :pay_type => 'cobro'}
+=render :partial => "/pay_plans/pay_plans", :locals => {:klass => @income, :pay_type => 'cobro'} unless @income.cash
 
 :javascript
   $(function () {
     $('#pay_plan_anchor').click(function() { $('#pay_plans').mark(); });
+    $('#payment_anchor').click(function() { $('#payments').mark(); });
+
 
     /**
     * Updates the status for a transaction (Income, Buy, Expense)

@@ -29,6 +29,11 @@ end
 feature "Transaction", "test features" do
   background do
     OrganisationSession.set(:id => 1, :name => 'ecuanime')
+    begin
+      Bank.find(1)
+    rescue
+      Bank.create!(:number => '123', :currency_id => 1, :name => 'Bank JE') {|a| a.id = 1 }
+    end
   end
 
   scenario "Create a payment with nearest pay_plan" do
@@ -37,7 +42,7 @@ feature "Transaction", "test features" do
     pp.save
 
     i = Income.find(i.id)
-    p = i.new_payment
+    p = i.new_payment(:account_id => 1)
     p.class.should == Payment
 
     p.amount.should == pp.amount
@@ -46,7 +51,7 @@ feature "Transaction", "test features" do
     pp2 = PayPlan.new(pay_plan_params(:transaction_id => i.id, :amount => 50, :interests_penalties => 5, :payment_date => Date.today + 5.days))
 
     i = Income.find(i.id)
-    p = i.new_payment
+    p = i.new_payment(:account_id => 1)
     p.class.should == Payment
 
     p.amount.should == pp.amount
@@ -59,7 +64,7 @@ feature "Transaction", "test features" do
     i.aprove!
     i = Income.find(i.id)
     i.state.should == "aproved"
-    p = i.new_payment
+    p = i.new_payment(:account_id => 1)
 
     p.amount.should == i.balance
     p.save!
@@ -70,12 +75,16 @@ feature "Transaction", "test features" do
 
   scenario "Pay a credit transaction" do
     i = Income.create!(income_params)
+    # Fist PayPlan
     pp = PayPlan.new(pay_plan_params(:transaction_id => i.id, :amount => 100, :interests_penalties => 10))
     pp.save
+    pp1_id = pp.id
 
+    # Second PayPlan
     pp = PayPlan.new(pay_plan_params(:transaction_id => i.id, :payment_date => Date.today + 20.days))
     pp.amount.should == (i.balance - 100)
     pp.save
+    pp2_id = pp.id
 
     i = Income.find(i.id)
     i.pay_plans.size.should == 2
@@ -85,25 +94,36 @@ feature "Transaction", "test features" do
 
     # First payment
     old_balance = i.balance
-    p = i.new_payment
+    p = i.new_payment(:account_id => 1)
     p.amount.should == 100
-    p.save
+
+    p.save.should == true
+    p.updated_pay_plan_ids.should == [pp1_id]
+    
+    # Check for account_ledger
+    p.account_ledger.class.should == AccountLedger
+    p.account_ledger.amount.should == p.amount + p.interests_penalties
+
     i = Income.find(i.id)
 
     i = Income.find(i.id)
     pp = i.pay_plans.first
     pp = PayPlan.find(pp.id)
+    
     pp.paid.should == true
 
     i.balance.should == (old_balance - 100)
     i.state.should == "aproved"
 
-    p = i.new_payment
+    p = i.new_payment(:account_id => 1)
     p.amount.should == (old_balance - 100)
-
-    p.save
+    
+    p.save.should == true
+    p.updated_pay_plan_ids.should == [pp2_id]
+    
     i = Income.find(i.id)
     i.state.should == "paid"
+    
     i.balance.should == 0
     
   end
@@ -112,23 +132,30 @@ feature "Transaction", "test features" do
     i = Income.create!(income_params)
     pp = PayPlan.new(pay_plan_params(:transaction_id => i.id, :amount => 100, :interests_penalties => 10))
     pp.save
+    pp1_id = pp.id
 
     pp = PayPlan.new(pay_plan_params(:transaction_id => i.id, :payment_date => Date.today + 20.days))
     pp.amount.should == (i.balance - 100)
     pp.save
+    pp2_id = pp.id
 
     i = Income.find(i.id)
     i.aprove!
 
     # First payment
     old_balance = i.balance
-    p = i.new_payment
+    p = i.new_payment(:account_id => 1)
     p.amount = 200
     p.interests_penalties = 0
     p.save
     p.pay_plan.class.should == PayPlan
     p.pay_plan.amount.should == (i.total - 200)
-
+    p.updated_pay_plan_ids.should == [pp1_id, pp2_id]
+    
+    # Check for account_ledger
+    p.account_ledger.class.should == AccountLedger
+    p.account_ledger.amount.should == p.amount
+    
     i = Income.find(i.id)
     i.pay_plans.unpaid.size.should == 1
     pp = i.pay_plans.unpaid.first

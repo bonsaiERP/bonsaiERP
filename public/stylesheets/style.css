@@ -4,6 +4,7 @@
 .bg_red { background-color: #ff0000 !important; }
 .bg_green { background-color: #5bbf3b !important; }
 .bg_light_grey { background-color: #f0f0f1; }
+.bg_white_tan { background-color: #f7f7f7; }
 body {
   font-size: 11.5px;
   font-family: Tahoma, sans-serif;
@@ -90,8 +91,11 @@ table.decorated td a.destroy {
   margin: 0px;
   padding: 0px;
 }
+table.decorated td.line { border-bottom: 1px solid #c6c6c6; }
 table.decorated tr.extra { border-bottom: none !important; }
-table.decorated tr.extra h3 { margin: 3px 0px; }
+table.decorated tr.extra h3 { margin: 1px 0px; }
+table.decorated tr.extra td { padding: 6px; }
+table.decorated tr.pad_top td { padding-top: 15px; }
 table.nwl td:last-child { white-space: nowrap; }
 table.nwf td:first-child { white-space: nowrap; }
 #wrapper {
@@ -231,9 +235,16 @@ a.new {
   color: #538447;
   font-size: 110%;
   display: table;
-  background: url(images/add.png) no-repeat scroll 4px 50%;
-  border: 1px solid #f0f0f1;
+  background: #f7f7f7 url(images/add.png) no-repeat scroll 4px 50%;
+  border: 1px solid #c6c6c6;
   padding: 5px 8px 5px 26px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+}
+a.new:hover {
+  color: #5bbf3b;
+  background-color: #ffffff;
 }
 a.add {
   font-weight: bold;
@@ -302,6 +313,11 @@ a.money {
 a.calendar {
   background: transparent url(images/calendar.gif) no-repeat 0 50%;
   padding-left: 20px !important;
+}
+a.trash {
+  background: transparent url(images/trash.png) no-repeat 0 50%;
+  padding-left: 20px !important;
+  min-height: 20px;
 }
 .icon {
   width: 16px;

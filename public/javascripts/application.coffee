@@ -360,6 +360,11 @@ $(document).ready(->
 
   $.mark = $.fn.mark = mark
 
+  # Adds a new link to any select with a data-new-url
+  $('select[data-new-url]').each((i, el)->
+    $(el).after(" <a href='#{$(el).data('new-url')}' class='ajax' title='#{$(el).data('title')}' data-new_option='true'>Nuevo</a>")
+  )
+
   start = ->
     $('body').transformDateSelect()
 
@@ -387,3 +392,9 @@ $(document).ready(->
 
   start()
 )
+# Extendig base claeses
+String.prototype.pluralize = ->
+  if /[aeiou]$/.test(this)
+    return this + "s"
+  else
+    return this + "es"

@@ -3,7 +3,7 @@
 
   =link_to "Nuevo plan de #{pay_type}", 
     new_pay_plan_path(:type => klass.class.to_s, :id => klass.id, :pay_type => pay_type),
-    :class => 'new ajax', 'title' => "Nuevo #{pay_type.singularize}", 'data-trigger' => 'pay_plan', 'data-width' => '700'
+    :class => 'new ajax', 'title' => "Nuevo plan de #{pay_type.singularize}", 'data-trigger' => 'pay_plan', 'data-width' => '700'
 
   %table.decorated#pay_plans_table
     %thead
@@ -25,9 +25,10 @@
         %td= pp.state
         %td.c <span class='#{pp.email}'>&nbsp;</span>
         %td
-          = link_to 'editar', edit_pay_plan_path(pp, :pay_type => pay_type),
-            :class => 'ajax edit', :title => "Editar Plan de #{pay_type}", 'data-trigger' => "pay_plan"
-          = link_to 'borrar', pp, :class => 'delete', :title => "Borrar plan de #{pay_type}", 'data-method' => 'delete'
+          - unless pp.paid?
+            = link_to 'editar', edit_pay_plan_path(pp, :pay_type => pay_type),
+              :class => 'ajax edit', :title => "Editar Plan de #{pay_type}", 'data-trigger' => "pay_plan"
+            = link_to 'borrar', pp, :class => 'delete', :title => "Borrar plan de #{pay_type}", 'data-method' => 'delete'
 
 = hidden_field_tag "current_date", Date.today
 :javascript

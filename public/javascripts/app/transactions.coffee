@@ -33,13 +33,15 @@ class Transaction
   # Event for currency change
   set_currency_event: ->
     self = this
-    $(@conf.currency_id).live("change keyup", ->
+    $(@conf.currency_id).live("change keyup", (e)->
+      if e.type == "keyup" and not (e.keyCode == $.ui.keyCode.UP or e.keyCode == $.ui.keyCode.DOWN)
+        return false
       self.set_exchange_rate()
     )
    set_edit_rate_link_event: ->
      self = this
      $('#edit_rate_link').live("click", ->
-       rate = prompt("Tipo de cambio") * 1
+       rate = prompt("Tipo de cambio", $(self.conf.currency_exchange_rate_id).val()) * 1
        if rate > 0
          $(self.conf.currency_exchange_rate_id).val(rate)
          self.set_exchange_rate_html()
@@ -67,10 +69,11 @@ class Transaction
   # Sets the item change event
   set_item_change_event: (item_sel, price_sel)->
     self = this
-    $(item_sel).live("change keyup", ->
+    $(item_sel).live("change keyup", (e)->
       id = $(this).val()
       item = self.search_item(id)
-      $(this).parents("tr:first").find(price_sel).val( item.price ).trigger("change")
+      if id != ""
+        $(this).parents("tr:first").find(price_sel).val( item.price ).trigger("change")
       #$(self.trigger).trigger("item:change", [this, item])
     )
   # triggers the price and qunaitty change
@@ -107,7 +110,7 @@ class Transaction
     rate = $(@conf.currency_exchange_rate_id).val() * 1
     base = $(@conf.currency_id).data('base')
     change = $(@conf.currency_id).data('change')
-    html = "1 #{change.symbol} #{change.name} = #{rate} #{base.symbol} #{base.name} "
+    html = "1 #{change.name} = <span class='b'>#{rate}</span> #{base.name.pluralize()} "
     html += "<a id='edit_rate_link' href='javascript:'>editar</a>"
     $span.html( html ).mark()
 
@@ -157,6 +160,7 @@ class Transaction
       name = $(el).attr("name").replace(/\[\d+\]/, "[#{pos}]")
       $(el).attr("name", name).val("")
     )
+    $tr.find("td.total_row").html(_b.ntc(0))
     $tr.insertBefore("#{@conf.items_table_id} tr.extra:first")
   # checks that the currency data is available
   check_currency_data: ->

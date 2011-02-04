@@ -45,7 +45,10 @@
     Transaction.prototype.set_currency_event = function() {
       var self;
       self = this;
-      return $(this.conf.currency_id).live("change keyup", function() {
+      return $(this.conf.currency_id).live("change keyup", function(e) {
+        if (e.type === "keyup" && !(e.keyCode === $.ui.keyCode.UP || e.keyCode === $.ui.keyCode.DOWN)) {
+          return false;
+        }
         return self.set_exchange_rate();
       });
     };
@@ -54,7 +57,7 @@
       self = this;
       return $('#edit_rate_link').live("click", function() {
         var rate;
-        rate = prompt("Tipo de cambio") * 1;
+        rate = prompt("Tipo de cambio", $(self.conf.currency_exchange_rate_id).val()) * 1;
         if (rate > 0) {
           $(self.conf.currency_exchange_rate_id).val(rate);
           return self.set_exchange_rate_html();
@@ -92,11 +95,13 @@
     Transaction.prototype.set_item_change_event = function(item_sel, price_sel) {
       var self;
       self = this;
-      return $(item_sel).live("change keyup", function() {
+      return $(item_sel).live("change keyup", function(e) {
         var id, item;
         id = $(this).val();
         item = self.search_item(id);
-        return $(this).parents("tr:first").find(price_sel).val(item.price).trigger("change");
+        if (id !== "") {
+          return $(this).parents("tr:first").find(price_sel).val(item.price).trigger("change");
+        }
       });
     };
     Transaction.prototype.set_price_quantity_change_event = function(grid_sel, price_sel, quantity_sel) {
@@ -143,7 +148,7 @@
       rate = $(this.conf.currency_exchange_rate_id).val() * 1;
       base = $(this.conf.currency_id).data('base');
       change = $(this.conf.currency_id).data('change');
-      html = "1 " + change.symbol + " " + change.name + " = " + rate + " " + base.symbol + " " + base.name + " ";
+      html = "1 " + change.name + " = <span class='b'>" + rate + "</span> " + (base.name.pluralize()) + " ";
       html += "<a id='edit_rate_link' href='javascript:'>editar</a>";
       return $span.html(html).mark();
     };
@@ -202,6 +207,7 @@
         name = $(el).attr("name").replace(/\[\d+\]/, "[" + pos + "]");
         return $(el).attr("name", name).val("");
       });
+      $tr.find("td.total_row").html(_b.ntc(0));
       return $tr.insertBefore("" + this.conf.items_table_id + " tr.extra:first");
     };
     Transaction.prototype.check_currency_data = function() {
