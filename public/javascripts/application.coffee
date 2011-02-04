@@ -362,7 +362,7 @@ $(document).ready(->
 
   # Adds a new link to any select with a data-new-url
   $('select[data-new-url]').each((i, el)->
-    $(el).after(" <a href='#{$(el).data('new-url')}' class='ajax' title='#{$(el).data('title')}' data-new_option='true'>Nuevo</a>")
+    $(el).after(" <a href='#{$(el).data('new-url')}' class='ajax' title='#{$(el).data('title')}' data-new_option='true'>#{$(el).data('title')}</a>")
   )
 
   start = ->

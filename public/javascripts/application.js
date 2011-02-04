@@ -376,7 +376,7 @@
     };
     $.mark = $.fn.mark = mark;
     $('select[data-new-url]').each(function(i, el) {
-      return $(el).after(" <a href='" + ($(el).data('new-url')) + "' class='ajax' title='" + ($(el).data('title')) + "' data-new_option='true'>Nuevo</a>");
+      return $(el).after(" <a href='" + ($(el).data('new-url')) + "' class='ajax' title='" + ($(el).data('title')) + "' data-new_option='true'>" + ($(el).data('title')) + "</a>");
     });
     start = function() {
       return $('body').transformDateSelect();

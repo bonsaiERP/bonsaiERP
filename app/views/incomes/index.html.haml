@@ -23,4 +23,4 @@
         %td= income.balance
         %td <span class="#{income.state}">#{income.show_state}</span>
         %td.actions
-          = bonsai_links(income) unless income.aproved?
+          = bonsai_links(income) if income.draft?

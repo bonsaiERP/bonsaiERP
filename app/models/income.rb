@@ -26,8 +26,22 @@ class Income < Transaction
     @hash[state]
   end
 
-  def aproved?
-    self.state != "draft"
+  def show_pay_plans?
+    if state == "draft"
+      true
+    elsif state == "aproved" and !cash
+      true
+    else
+      false
+    end
+  end
+
+  def show_payments?
+    state != 'draft'
+  end
+
+  def draft?
+    state == 'draft'
   end
 
   def aprove!
