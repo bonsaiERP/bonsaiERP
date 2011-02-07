@@ -64,21 +64,21 @@
      * Creates a note to notify pay_plans
      */
     Payment = {
-      message: "",
-      payPlansMessage: function(resp) {
-      },
-      newPayPlanMessage: function(pay_plan) {
+      message: [],
+      /**
+      * Main function after reciving the AJAX response from payments controller
+      */
+      create: function(resp) {
+        $('#payments_table').updateTemplateRow(template, resp);
+        this.triggerPayPlan(resp.pay_plan);
+        this.updatePayPlans(resp.updated_pay_plan_ids);
+        this.creataMessage(resp);
       },
       /**
-      * Hides the payPlans links for edit and destroy that payment changed state
+      * Triggers event to add a new pay_plan in case there is a new one
       */
-      hidePayPlanLinks: function(ids) {
-        $(ids).each(function(i, el) {
-          $('#pay_plans_table').find("tr#" + el).find("a.edit, a.delete").hide();
-        });
-      },
-      triggerPayment: function(payment) {
-        if(resp.pay_plan) {
+      triggerPayPlan: function(pay_plan) {
+        if(pay_plan) {
           $('body').trigger('pay_plan', [resp.pay_plan]);
         }
       },
@@ -86,28 +86,43 @@
       * Creates a message about the payment
       */
       createMessage: function(resp) {
-        this.message = "";
+        this.message = [];
         this.payPlansMessage(resp.updated_pay_plan_ids);
-      }
+        this.newPayPlanMessage(resp.pay_plan);
+        if(this.message.length > 0)
+          $('#payments h2').after('<div class="message">' + this.message.join("<br/>") + '</div>');
+      },
       /**
-      * Main function after reciving the AJAX response from payments controller
+      * Message for pay_plans
       */
-      create: function(resp) {
-        $('#payments_table').updateTemplateRow(template, resp);
-        this.triggerPayment(resp.payment);
-        this.creataMessage(resp);
+      payPlansMessage: function(ids) {
+        if(ids > 1) {
+          this.message.push("Se ha anulado los planes de pago " + ids.join(", ") );
+        }else if(ids == 1) {
+          this.message.push("Se ha anulado 1 plan de pago");
+        }
+      },
+      /**
+      * Creates a pay_plan message if one was created
+      */
+      newPayPlanMessage: function(pay_plan) {
+        if(pay_plan) {
+          this.message = "Se ha creado un nuevo <a href='javascript:' class='pay_plan' data-id='" + pay_plan.id + "'>plan de pago</a>";
+        }
+      },
+      /**
+      * Hides the payPlans links for edit and destroy that payment changed state and setsa new state
+      * @param Array ids
+      */
+      updatePayPlans: function(ids) {
+        $(ids).each(function(i, el) {
+          $tr = $('#pay_plans_table').find("tr#" + el)
+          $tr.find("a.edit, a.delete, a.email").hide();
+          $tr.find('td.state').html('Pagado').removeClass("red").addClass("dark_green");
+        });
       }
     }
     
-    
-    function(resp) {
-      if(resp.updated_pay_plan_ids > 1) {
-        txt = "Se ha anulado los planes de pago " + resp.updated_pay_plan_ids.join(", ");
-      }else{
-        txt = "Se ha anulado 1 plan de pago";
-      }
-    }
-    window.hideLinksAndcreateNote = hideLinksAndcreateNote;
 
     /**
     * Method of payment
