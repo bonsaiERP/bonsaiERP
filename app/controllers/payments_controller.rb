@@ -24,12 +24,14 @@ class PaymentsController < ApplicationController
   # GET /payments/new
   # GET /payments/new.xml
   def new
-    begin
-      transaction = Transaction.find_by_type_and_id( params[:type], params[:id] )
-      @payment = transaction.new_payment
-    rescue
-      redirect_to request.referer
-    end
+    session[:payment] = {}
+    #begin
+    transaction = Transaction.find_by_type_and_id( params[:type], params[:id] )
+    session[:payment][:transaction_id] = transaction.id
+    @payment = transaction.new_payment
+    #rescue
+      #redirect_to request.referer
+    #end
   end
 
   # GET /payments/1/edit
@@ -41,15 +43,15 @@ class PaymentsController < ApplicationController
   # POST /payments.xml
   def create
     @payment = Payment.new(params[:payment])
-
-    respond_to do |format|
+    if params[:payment][:transaction_id].to_i == session[:payment][:transaction_id]
       if @payment.save
-        format.html { redirect_to(@payment, :notice => 'Payment was successfully created.') }
-        format.xml  { render :xml => @payment, :status => :created, :location => @payment }
+        redirect_ajax @payment
       else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @payment.errors, :status => :unprocessable_entity }
+        render :action => "new"
       end
+    else
+      render :text => "Hacking attemp!"
+      #TODO Log error and recognize a Hacking attack
     end
   end
 

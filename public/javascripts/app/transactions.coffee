@@ -3,6 +3,7 @@
 class Transaction
   # default configuration with ids from the form
   conf: {
+    'table_id': '#items_table',
     'taxes_id': '#taxes',
     'subtotal_id': '#subtotal',
     'discount_percentage_id': '#discount_percentage',
@@ -12,7 +13,8 @@ class Transaction
     'total_id': '#total_value',
     'items_table_id': '#items_table',
     'add_item_id': '#add_item',
-    'default_currency_id': 1
+    'default_currency_id': 1,
+    'one_item_table_warning': "Error: Debe existir al menos un ítem"
   },
   # Construnctor
   # params Object conf
@@ -29,6 +31,7 @@ class Transaction
     this.set_item_change_event("table select.item", "input.price")
     this.set_price_quantity_change_event("table", "input.price", "input.quantity")
     this.set_add_item_event()
+    this.set_delete_item_event()
     this.check_currency_data()
   # Event for currency change
   set_currency_event: ->
@@ -82,11 +85,26 @@ class Transaction
     $(grid_sel).find("#{price_sel}, #{quantity_sel}").live("change", ->
       self.calculate_total_row(this, "input.price,input.quantity", "td.total_row")
     )
-  #  Set the venet for add_item row to the table
+  #  Set the event for add_item row to the table
   set_add_item_event: ->
     self = this
     $(@conf.add_item_id).live("click", ->
       self.add_item()
+    )
+  # Sets the event for removing items from the list
+  set_delete_item_event: ->
+    self = this
+    $(@conf.table_id).find("a.destroy").live("click", ->
+      if $(self.conf.table_id).find("tr.item").length <= 1
+        alert(self.conf.one_item_table_warning)
+        return false
+      $tr = $(this).parents('tr')
+      $input = $tr.next('input:hidden')
+      $tr.detach()
+      name = $input.attr("name").replace("[id]", "[_destroy]")
+      dest = $('<input/>').attr({'type': 'hidden', 'value': 1, 'name': name})
+      $input.after(dest)
+      self.calculate_total_row($(self.conf.table_id).find("tr:first"), "input.price,input.quantity", "td.total_row")
     )
   # Sets the exchange rate for the current
   set_exchange_rate: ->
@@ -177,6 +195,7 @@ class Transaction
     id = parseInt(id)
     for k in @items
       return k if id == k.id
+  # Removes an item from the list
 
 window.Transaction = Transaction
 

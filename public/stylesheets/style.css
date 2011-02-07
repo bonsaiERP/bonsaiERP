@@ -1,4 +1,7 @@
+.red { color: #ff0000; }
+.bg_red { background-color: #ff0000; }
 .grey { color: #c6c6c6; }
+.dark_grey { color: #717171; }
 .green { color: #5bbf3b; }
 .dark_green { color: #538447; }
 .bg_red { background-color: #ff0000 !important; }
@@ -34,7 +37,7 @@ label {
   font-weight: bold;
   vertical-align: top;
   display: block;
-  color: #30383e;
+  color: #717171;
 }
 label.collection_radio, label.collection_check_boxes { font-weight: normal; }
 .show label { margin-bottom: 5px; }
@@ -45,7 +48,7 @@ input, select, textarea {
 .inline label { display: inline; }
 .optional label.collection_radio { display: inline-table; }
 option.new {
-  color: #30383e;
+  color: #484a4c;
   font-weight: bold;
 }
 .ui-state-default {
@@ -61,7 +64,7 @@ table.decorated {
 table.decorated th {
   padding: 4px 8px;
   text-align: left;
-  color: #30383e;
+  color: #484a4c;
   background: transparent url(images/th.png) repeat-x 0% 50%;
   height: 32px;
 }
@@ -159,8 +162,8 @@ table.nwf td:first-child { white-space: nowrap; }
   display: block;
   font-weight: bold;
   padding: 5px 15px;
-  border-right: 1px solid #30383e;
-  border-left: 1px solid #616161;
+  border-right: 1px solid #484a4c;
+  border-left: 1px solid #717171;
 }
 ul#main_menu {
   height: 31px;
@@ -218,7 +221,7 @@ ul#main_menu li:hover ul {
 }
 #cont-in h1 {
   margin: 4px 0px 20px;
-  color: #30383e;
+  color: #484a4c;
 }
 .error { color: #ff0000; }
 .link {
@@ -357,7 +360,7 @@ form.required abbr {
 }
 .hint {
   display: block;
-  color: #616161;
+  color: #717171;
   font-style: italic;
 }
 .inputs > div { margin-top: 10px; }
@@ -419,7 +422,7 @@ span.error { display: block; }
   -webkit-border-radius: 4px;
   border-radius: 4px;
   font-size: 120%;
-  color: #30383e;
+  color: #484a4c;
   border-color: #ffff00;
   background-color: #ffffc5;
 }
@@ -479,6 +482,7 @@ a.more { background: transparent url(images/bullet_arrow_down.png) no-repeat 0 r
 .clear { clear: both; }
 .true { background: transparent url(images/tick.png) no-repeat center 50%; }
 .false { background: transparent url(images/cross.png) no-repeat center 50%; }
+tr.true, tr.false { background: transparent; }
 span.true, span.false {
   width: 16px;
   height: 16px;
@@ -491,7 +495,7 @@ span.true, span.false {
 .l { text-align: left; }
 .c { text-align: center; }
 .r { text-align: right; }
-.dark { color: #30383e; }
+.dark { color: #484a4c; }
 .main {
   margin: 25px -5px;
   padding: 5px;

@@ -1,37 +1,53 @@
 #payments
-  %h2.dark #{pay_type.pluralize.titleize}
+  %h2.dark #{pay_type.pluralize.titleize} realizados
 
-  %p.links= link_to "Nuevo #{pay_type}", new_payment_path(:type => klass.type.to_s, :id => klass.id, :payment_type => pay_type), :class => 'new ajax', :title => "Nuevo #{pay_type}", 'data-width' => "700", 'data-trigger' => 'payment'
+  = link_to "Nuevo #{pay_type}", new_payment_path(:type => klass.type.to_s, :id => klass.id, :payment_type => pay_type), :class => 'new ajax', :title => "Nuevo #{pay_type}", 'data-width' => "700", 'data-trigger' => 'payment' unless klass.paid?
 
-  %table.decorated.nwl 
+  %table.decorated.nwl#payments_table
     %thead
       %tr
         %th Fecha
         %th Descripción
-        %th Intereses<br/>Penalidades
+        %th Cuenta
         %th Cantidad
+        %th Intereses<br/>Penalidades
         %th Total fila
         %th
     
     %tbody
-      - for payment in klass.payments
-        %tr{ :class => cycle(:odd, :even) }
+      - klass.payments.each do |payment|
+        %tr{ :id => payment.id, :class => payment.active }
           %td= lo payment.date
           %td= payment.description
-          %td.r= ntc payment.interests_penalties
+          %td= payment.account
           %td.r= ntc payment.amount
+          %td.r= ntc payment.interests_penalties
           %td.r= ntc payment.total_amount
-          %td.actions= link_to "Anular #{pay_type}", payment, 'data-method' => 'put', :class => 'null_payment'
+          %td.actions= link_to "Anular #{pay_type}", payment, 'data-method' => 'put', :class => 'null null_payment'
 
     %tr.extra.pad_top
       %td{:colspan => 2} 
-      %td.r.b{:colspan => 2} #{pay_type.pluralize} + Intereses/Penalidades
+      %td.r.b{:colspan => 2} Total #{pay_type.pluralize} + Intereses/Penalidades
       %td.r.b= ntc klass.total_payments_with_interests
 
-
-<br/><br/><br/><br/>
 :javascript
   $(function() {
+    var template = [
+      '<tr id="${id}" class="${active}">',
+          '<td>${date}</td>',
+          '<td>${description}</td>',
+          '<td>${account}</td>',
+          '<td class="r">${_b.ntc(amount)}</td>',
+          '<td class="r">${_b.ntc(interests_penalties)}</td>',
+          '<td class="r">${_b.ntc(total_amount)}</td>',
+          '<td class="actions">',
+          '<a data-method="put" class="null null_payment" href="/payments/6">Anular cobro</a></td>',
+        '</tr>'
+    ].join("");
+    
+    /**
+    * Nulls a payments
+    */
     $('a.null_payment').live("click", function() {
       $(this).parents('tr').addClass('marked');
       if(confirm("Esta seguro de anular el #{pay_type} seleccionado?")) {
@@ -41,5 +57,62 @@
         $(this).parents('tr').removeClass('marked');
         return false;
       }
+    });
+    
+
+    /**
+     * Creates a note to notify pay_plans
+     */
+    Payment = {
+      message: "",
+      payPlansMessage: function(resp) {
+      },
+      newPayPlanMessage: function(pay_plan) {
+      },
+      /**
+      * Hides the payPlans links for edit and destroy that payment changed state
+      */
+      hidePayPlanLinks: function(ids) {
+        $(ids).each(function(i, el) {
+          $('#pay_plans_table').find("tr#" + el).find("a.edit, a.delete").hide();
+        });
+      },
+      triggerPayment: function(payment) {
+        if(resp.pay_plan) {
+          $('body').trigger('pay_plan', [resp.pay_plan]);
+        }
+      },
+      /**
+      * Creates a message about the payment
+      */
+      createMessage: function(resp) {
+        this.message = "";
+        this.payPlansMessage(resp.updated_pay_plan_ids);
+      }
+      /**
+      * Main function after reciving the AJAX response from payments controller
+      */
+      create: function(resp) {
+        $('#payments_table').updateTemplateRow(template, resp);
+        this.triggerPayment(resp.payment);
+        this.creataMessage(resp);
+      }
+    }
+    
+    
+    function(resp) {
+      if(resp.updated_pay_plan_ids > 1) {
+        txt = "Se ha anulado los planes de pago " + resp.updated_pay_plan_ids.join(", ");
+      }else{
+        txt = "Se ha anulado 1 plan de pago";
+      }
+    }
+    window.hideLinksAndcreateNote = hideLinksAndcreateNote;
+
+    /**
+    * Method of payment
+    */
+    $('body').live('payment', function(e, resp) {
+      Payment.create(resp);
     });
   })

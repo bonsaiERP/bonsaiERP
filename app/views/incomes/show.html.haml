@@ -11,7 +11,7 @@
   - if @income.draft?
     = link_to 'Editar', edit_income_path(@income), :class => 'edit'
   = link_to 'Lista', incomes_path, :class => 'list'
-._50.fl.r
+._50.fl
   - if @income.draft?
     = simple_form_for @income, :url => aprove_income_path(@income) do |f|
       .submit

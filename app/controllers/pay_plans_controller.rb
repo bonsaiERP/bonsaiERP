@@ -75,4 +75,10 @@ class PayPlansController < ApplicationController
 
     redirect_ajax @pay_plan
   end
+
+  # Sends and email message with the current pay_plan
+  # GET: /pay_plan/:id/email
+  def email
+
+  end
 end

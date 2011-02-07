@@ -35,7 +35,7 @@ class IncomesController < ApplicationController
   def edit
     @income = Income.find(params[:id])
 
-    if @income.aproved?
+    if @income.state == 'aproved'
       redirect_income
     end
   end

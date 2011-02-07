@@ -29,7 +29,7 @@ class Payment < ActiveRecord::Base
 
   # Overide the dault to_json method
   def to_json
-    self.attributes.merge(:updated_pay_plan_ids => @updated_pay_plan_ids, :pay_plan => @pay_plan).to_json
+    self.attributes.merge(:updated_pay_plan_ids => @updated_pay_plan_ids, :pay_plan => @pay_plan, :account => account.to_s, :total_amount => total_amount).to_json
   end
 
   # Sums the amount plus the interests and penalties

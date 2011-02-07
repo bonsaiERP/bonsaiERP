@@ -21,7 +21,7 @@ class Transaction < ActiveRecord::Base
   has_many :pay_plans, :order => "payment_date ASC"
   has_many :payments
   has_many :transaction_details
-  accepts_nested_attributes_for :transaction_details
+  accepts_nested_attributes_for :transaction_details, :allow_destroy => true
   has_and_belongs_to_many :taxes, :class_name => 'Tax'
 
   # scopes
@@ -106,8 +106,12 @@ class Transaction < ActiveRecord::Base
       Payment.new({:amount => balance, :transaction_id => id}.merge(options))
     else
       pp = pay_plans.where(:paid => false).order("payment_date ASC").limit(1).first
-      Payment.new({:amount => pp.amount, :interests_penalties => pp.interests_penalties,
+      if pp
+        Payment.new({:amount => pp.amount, :interests_penalties => pp.interests_penalties,
                   :transaction_id => id}.merge(options))
+      else
+        Payment.new({:transaction_id => id, :amount => balance}.merge(options))
+      end
     end
   end
 
@@ -144,7 +148,7 @@ private
 
   # Calculates the total value and stores it
   def calculate_total_and_set_balance
-    self.gross_total = transaction_details.inject(0) {|sum, det| sum += det.total }
+    self.gross_total = transaction_details.select{|t| !t.marked_for_destruction? }.inject(0) {|sum, det| sum += det.total }
     self.total = self.balance = gross_total - total_discount + total_taxes
   end
 

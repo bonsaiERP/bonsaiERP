@@ -7,7 +7,7 @@ class Income < Transaction
   # callbacks
   before_save :set_state
 
-  STATES = ["draft", "aproved", "payed"]
+  STATES = ["draft", "aproved", "paid"]
 
 
   attr_accessible :ref_number, :date, :contact_id,
@@ -19,6 +19,15 @@ class Income < Transaction
   #accepts_nested_attributes_for :transaction_details, :allow_destroy => true
   #validations
   validates_presence_of :ref_number, :date
+  
+  # Define boolean methods for states
+  STATES.each do |state|
+    class_eval <<-CODE, __FILE__, __LINE__ + 1
+      def #{state}?
+        "#{state}" == state ? true : false
+      end
+    CODE
+  end
 
   # Presents a localized name for state
   def show_state
@@ -44,6 +53,7 @@ class Income < Transaction
     state == 'draft'
   end
 
+
   def aprove!
     if state != "draft"
       false
@@ -52,6 +62,7 @@ class Income < Transaction
       self.save
     end
   end
+
 
 private
   def set_state
