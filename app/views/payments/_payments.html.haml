@@ -19,7 +19,7 @@
         %tr.payment{ :id => payment.id, :class => payment.active }
           %td= lo payment.date
           %td= payment.description
-          %td= payment.account
+          %td.account= payment.account
           %td.r.amount{'data-val' => payment.amount}= ntc payment.amount
           %td.r.interests_penalties{'data-val' => payment.interests_penalties}= ntc payment.interests_penalties
           %td.r.total_amount{'data-val' => payment.total_amount}= ntc payment.total_amount
@@ -36,7 +36,7 @@
       '<tr id="${id}" class="${active} payment">',
           '<td>${date}</td>',
           '<td>${description}</td>',
-          '<td>${account}</td>',
+          '<td class="account">${account}</td>',
           '<td class="r amount" data-val="${amount}">${_b.ntc(amount)}</td>',
           '<td class="r interests_penalties" data-val="${interests_penalties}">${_b.ntc(interests_penalties)}</td>',
           '<td class="r total_amount" data-val="${total_amount}">${_b.ntc(total_amount)}</td>',
@@ -48,13 +48,15 @@
     /**
     * Nulls a payments
     */
-    $('a.null_payment').live("click", function() {
-      $(this).parents('tr').addClass('marked');
-      if(confirm("Esta seguro de anular el #{pay_type} seleccionado?")) {
-        $(this).parents('tr').removeClass('marked');
+    $('#payments_table a.null_payment').live("click", function() {
+      var account = $(this).parents('tr').addClass('selected').find('td.account').html();
+      var txt = "Al anular el #{pay_type} seleccionado se creara un registro en la cuenta \n" + account + " con valor negativo";
+      txt +=",\n Esta seguro de borrar?";
+      if(confirm(txt)) {
+        $(this).parents('tr').removeClass('selected');
         return false;
       }else{
-        $(this).parents('tr').removeClass('marked');
+        $(this).parents('tr').removeClass('selected');
         return false;
       }
     });
@@ -91,6 +93,7 @@
       */
       triggerPayPlan: function(pay_plan) {
         if(pay_plan) {
+          pay_plan['new_record'] = true;
           $('body').trigger('pay_plan', [pay_plan]);
         }
       },
@@ -101,9 +104,11 @@
         this.messages = [];
         this.payPlansMessage(resp.updated_pay_plan_ids);
         this.newPayPlanMessage(resp.pay_plan);
-        $('#payment_message').remove();
-        if(this.messages.length > 0)
-          $('#payments h2').after('<div class="message" id="payment_message"><p>' + this.messages.join("</p><p>") + '</p></div>');
+        $('#payment_message').hide("slow").remove();
+        if(this.messages.length > 0) {
+          $('#payments h2').after('<div class="message" id="payment_message" style="display:none"><p>' + this.messages.join("</p><p>") + '</p></div>'); 
+          $('#payment_message').show("slow");
+        }
       },
       /**
       * Message for pay_plans

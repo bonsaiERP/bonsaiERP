@@ -11,7 +11,7 @@
         %td.r= "1 #{cur.currency} = "
         %td
           = text_field_tag "currency_rates[#{i}][rate]", cur.rate, :size => 12, :class => 'r'
-          = @organisation.currency.name.pluralize
+          = @organisation.currency_name.pluralize
           = present_field_error(cur, :rate)
    
   .submit

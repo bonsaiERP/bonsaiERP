@@ -3,4 +3,4 @@
   = link_to 'Ver', @bank, :class => 'list'
   = link_to 'Lista', banks_path, :class => 'show'
 
-= render :partial => 'form'
+= render 'form', :bank => @bank
