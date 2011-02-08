@@ -292,13 +292,15 @@
       });
       return false;
     });
-    updateTemplateRow = function(template, data) {
-      var $node, node, tmp;
-      node = node || 'tr';
+    updateTemplateRow = function(template, data, macro) {
+      var $node, tmp;
+      if ($.inArray(macro, ["insertBefore", "insertAfter", "appendTo"]) < 0) {
+        macro = "insertAfter";
+      }
       if (data['new_record']) {
-        $node = $.tmpl(template, data).appendTo(this);
+        $node = $.tmpl(template, data)[macro](this);
       } else {
-        $node = $(this).find("" + node + "#" + data.id);
+        $node = $(this).find("#" + data.id);
         tmp = $.tmpl(template, data).insertBefore($node);
         $node.detach();
         $node = tmp;

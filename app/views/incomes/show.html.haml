@@ -104,15 +104,15 @@
     %tr.extra
       %td{:colspan => 2}
       %td.r.b{:colspan => 2} Total
-      %td#total_value.r.b= ntc @income.total
+      %td#total_value.r.b{'data-val' => @income.total}= ntc @income.total
     %tr.extra
       %td{:colspan => 2}
       %td.r.b.line{:colspan => 2} Cobrado
-      %td#total_payments.r.b.line= "-" + ntc( @income.total_payments) 
+      %td#total_payments.r.b.line{'data-val' => @income.total_payments}= "-" + ntc( @income.total_payments) 
     %tr.extra
       %td{:colspan => 2}
       %td.r.b{:colspan => 2} Saldo
-      %td#balance.r.b= ntc @income.balance
+      %td#balance.r.b{'data-val' => @income.balance}= ntc @income.balance
 
 .clear
 =render :partial => "/payments/payments", :locals => {:klass => @income,:pay_type => 'cobro'} if @income.show_payments?
@@ -138,5 +138,10 @@
       }else{
         $('#cash_credit_title').html('al contado');
       }
+    }).live('payments',function(e, resp) {
+      // Calculates the total for AJAX events
+      $('#items_table #total_payments').html("-" + _b.ntc(resp.amount));
+      var balance = $('#items_table #total_value').data('val') - resp.amount;
+      $('#items_table #balance').html(_b.ntc(balance) );
     });
   });

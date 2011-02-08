@@ -16,7 +16,7 @@
       %th
       %th
     - klass.pay_plans.each do |pp|
-      %tr{:id => pp.id}
+      %tr.pay_plan{:id => pp.id}
         %td.payment_date= lo pp.payment_date
         %td= lo pp.alert_date
         %td.amount= ntc pp.amount
@@ -34,7 +34,7 @@
 :javascript
   $(function() {
     var template = [
-      '<tr id="${id}">',
+      '<tr id="${id}" class="pay_plan">',
         '<td class="payment_date">${_b.dateFormat(payment_date)}</td>',
         '<td>${_b.dateFormat(alert_date)}</td>',
         '<td class="amount">${_b.ntc(amount)}</td>',
@@ -84,11 +84,15 @@
     window.setStatesColor = setStatesColor;
 
     $('body').live("pay_plan", function(e, resp) {
-      $('#pay_plans table.decorated').updateTemplateRow(template, resp);
+      $('#pay_plans_table').updateTemplateRow(template, resp, 'appendTo');
       setTimeout("setStatesColor()",200);
     });
 
 
     setStatesColor();
 
+    // For links in other places to show
+    $('a.pay_plan_link').live("click", function() {
+      $('#pay_plans_table #' + $(this).data('id')).mark();
+    });
   });

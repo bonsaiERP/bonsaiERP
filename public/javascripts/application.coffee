@@ -275,14 +275,16 @@ $(document).ready(->
   # Function that handles the return of an AJAX request and process if add or replace
   # @param String template: HTML template
   # @param Object data: JSON data
-  # @param String selector: jQuery selector CSS3
+  # @param String macro: jQuery function for insert, ["insertBefore", "insertAfter", "appendTo"]
   # @param String node: Indicates the node type ['tr', 'li']
-  updateTemplateRow = (template, data)->
-    node = node || 'tr'
+  updateTemplateRow = (template, data, macro)->
+    if $.inArray(macro, ["insertBefore", "insertAfter", "appendTo"]) < 0
+      macro = "insertAfter"
+
     if(data['new_record'])
-      $node = $.tmpl(template, data).appendTo(this)
+      $node = $.tmpl(template, data)[macro](this)
     else
-      $node = $(this).find("#{node}##{data.id}")
+      $node = $(this).find("##{data.id}")
       tmp = $.tmpl(template, data).insertBefore($node)
       $node.detach()
       $node = tmp
