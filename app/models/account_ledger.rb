@@ -14,6 +14,8 @@ class AccountLedger < ActiveRecord::Base
   validates_presence_of :account_id, :currency_id
   validates_numericality_of :amount
 
+  delegate :amount, :interests_penalties, :date, :to => :payment, :prefix => true
+
   # scopes
   default_scope where(:organisation_id => OrganisationSession.organisation_id)
 

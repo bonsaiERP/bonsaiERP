@@ -29,3 +29,5 @@
 .input
   %label Sitio web
   %span= @bank.website
+
+= render "account_ledgers/list", :account_ledgers => @bank.account_ledgers.includes(:payment)

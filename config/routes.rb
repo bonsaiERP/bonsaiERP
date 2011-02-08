@@ -1,5 +1,7 @@
 Bonsaierp::Application.routes.draw do
 
+  resources :account_ledgers
+
   resources :banks
 
   resources :cash_registers
