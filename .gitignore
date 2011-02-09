@@ -3,6 +3,7 @@
 *.log
 *.kpf
 *.sqlite3
+*.sqlite
 *~
 nbproject
 !pub.txt
