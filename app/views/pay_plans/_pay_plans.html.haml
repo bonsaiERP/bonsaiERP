@@ -1,0 +1,106 @@
+#pay_plans
+  %h2.dark Plan de #{pay_type.pluralize} a crédito
+
+  =link_to "Nuevo plan de #{pay_type}", 
+    new_pay_plan_path(:type => klass.class.to_s, :id => klass.id, :pay_type => pay_type),
+    :id => 'new_pay_plan_link', :class => 'new ajax', 'title' => "Nuevo plan de #{pay_type.singularize}",
+    'data-trigger' => 'pay_plan', 'data-width' => '700' unless klass.state == "paid"
+
+  %table.decorated#pay_plans_table
+    %thead
+      %th Fecha
+      %th Alertar el
+      %th Cantidad
+      %th Intereses<br/>Penalidades
+      %th Descripción
+      %th Estado
+      %th
+      %th
+    - klass.pay_plans.each do |pp|
+      %tr.pay_plan{:id => pp.id}
+        %td.payment_date= lo pp.payment_date
+        %td= lo pp.alert_date
+        %td.amount= ntc pp.amount
+        %td= ntc pp.interests_penalties
+        %td= pp.description
+        %td.state= pp.state
+        %td= link_to "Enviar email", email_pay_plan_path(pp), :class => 'email' unless pp.paid?
+        %td
+          - unless pp.paid?
+            = link_to 'editar', edit_pay_plan_path(pp, :pay_type => pay_type),
+              :class => 'ajax edit', :title => "Editar Plan de #{pay_type}", 'data-trigger' => "pay_plan"
+            = link_to 'borrar', pp, :class => 'delete', :title => "Borrar plan de #{pay_type}", 'data-method' => 'delete'
+
+= hidden_field_tag "current_date", Date.today
+:javascript
+  $(function() {
+    var template = [
+      '<tr id="${id}" class="pay_plan">',
+        '<td class="payment_date">${_b.dateFormat(payment_date)}</td>',
+        '<td>${_b.dateFormat(alert_date)}</td>',
+        '<td class="amount">${_b.ntc(amount)}</td>',
+        '<td>${_b.ntc(interests_penalties)}</td>',
+        '<td>${description}</td>',
+        '<td class="state">${payPlanState(payment_date)}</td>',
+        '<td><a href="/pay_plans/${id}/email" class="email">Enviar email</a></td>',
+        '<td>',
+          '<a title="Editar Plan de #{pay_type}" data-trigger="pay_plan" class="ajax edit" href="/pay_plans/${id}/edit?pay_type=#{pay_type}">editar</a> ',
+          '<a title="Borrar plan de #{pay_type}" class="delete" href="/pay_plans/${id}">borrar</a>',
+        '</td>',
+      '</tr>'
+    ].join("")
+
+    payPlanState = function(payment_date) {
+      var payment_date = $.datepicker.parseDate('yy-mm-dd', payment_date );
+      var current_date =  $.datepicker.parseDate('yy-mm-dd', $('#current_date').val() );
+      if( !current_date )
+        throw("You must set the current_date for the function payPlanState");
+      if(payment_date < current_date) {
+        txt = "Atrasado";
+      }else{
+        txt = "Válido";
+      }
+
+      return txt;
+    }
+
+    window.payPlanState = payPlanState;
+
+    /**
+    * Checks for the td.state cells and sets the correct color for each
+    */
+    setStatesColor = function() {
+      $('#pay_plans_table').find('td.state').each(function(i, el) {
+        switch($(el).html() ) {
+          case "Atrasado":
+            $(el).addClass("red");
+          break;
+          case "Pagado":
+            $(el).addClass("dark_green");
+          break;
+        }
+      });
+    }
+
+    window.setStatesColor = setStatesColor;
+
+    $('body').live("pay_plan", function(e, resp) {
+      $('#pay_plans_table').updateTemplateRow(template, resp, 'appendTo');
+      setTimeout("setStatesColor()",200);
+    }).live('transaction_paid', function(e, value) {
+      if(value) {
+        $('#new_pay_plan_link').remove();
+      }else if( $('#new_pay_plan_link').length <= 0 ) {
+        var html = '<a title="Nuevo plan de #{pay_type}" id="new_pay_plan_link" data-width="700" data-trigger="pay_plan" class="new ajax" href="/pay_plans/new?id=1&amp;pay_type=#{pay_type}&amp;type=Income">Nuevo plan de #{pay_type}</a>';
+        $('#pay_plans h2:first').after(html);
+      }
+    });
+
+
+    setStatesColor();
+
+    // For links in other places to show
+    $('a.pay_plan_link').live("click", function() {
+      $('#pay_plans_table #' + $(this).data('id')).mark();
+    });
+  });

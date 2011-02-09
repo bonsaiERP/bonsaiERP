@@ -2,21 +2,21 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class IncomesController < ApplicationController
+
+  before_filter :check_currency_set, :only => [:new, :edit, :create, :update]
+  before_filter :set_default_currency, :except => [:index, :destroy]
+
+
   # GET /incomes
   # GET /incomes.xml
   def index
-    @incomes = Income.paginate(:page => @page)
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @incomes }
-    end
+    @incomes = Income.includes(:contact, :pay_plans).paginate(:page => @page)
   end
 
   # GET /incomes/1
   # GET /incomes/1.xml
   def show
-    @income = Income.find(params[:id])
+    @income = Income.includes(:transaction_details, :payments, :pay_plans).find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -27,35 +27,33 @@ class IncomesController < ApplicationController
   # GET /incomes/new
   # GET /incomes/new.xml
   def new
-    @income = Income.new
+    @income = Income.new(:date => Date.today, :discount => 0, :currency_exchange_rate => 1, :currency_id => @currency.id )
     @income.transaction_details.build
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @income }
-    end
   end
 
   # GET /incomes/1/edit
   def edit
     @income = Income.find(params[:id])
+
+    if @income.state == 'aproved'
+      redirect_income
+    end
   end
 
   # POST /incomes
   # POST /incomes.xml
   def create
-    render :text => params.to_json
-    #@income = Income.new(params[:income])
-
-    #respond_to do |format|
-    #  if @income.save
-    #    format.html { redirect_to(@income, :notice => 'Incomes was successfully created.') }
-    #    format.xml  { render :xml => @income, :status => :created, :location => @income }
-    #  else
-    #    format.html { render :action => "new" }
-    #    format.xml  { render :xml => @income.errors, :status => :unprocessable_entity }
-    #  end
-    #end
+    #render :text => params.to_json
+    @income = Income.new(params[:income])
+    respond_to do |format|
+      if @income.save
+        format.html { redirect_to(@income, :notice => 'Se ha creado una proforma de venta.') }
+        format.xml  { render :xml => @income, :status => :created, :location => @income }
+      else
+        format.html { render :action => "new" }
+        format.xml  { render :xml => @income.errors, :status => :unprocessable_entity }
+      end
+    end
   end
 
   # PUT /incomes/1
@@ -63,13 +61,13 @@ class IncomesController < ApplicationController
   def update
     @income = Income.find(params[:id])
 
-    respond_to do |format|
+    if @income.aproved?
+      redirect_income
+    else
       if @income.update_attributes(params[:income])
-        format.html { redirect_to(@income, :notice => 'Incomes was successfully updated.') }
-        format.xml  { head :ok }
+        redirect_to @income, :notice => 'La proforma de venta fue actualizada!.'
       else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @income.errors, :status => :unprocessable_entity }
+        render :action => "edit"
       end
     end
   end
@@ -78,11 +76,38 @@ class IncomesController < ApplicationController
   # DELETE /incomes/1.xml
   def destroy
     @income = Income.find(params[:id])
-    @income.destroy
-
-    respond_to do |format|
-      format.html { redirect_to(incomes_url) }
-      format.xml  { head :ok }
+    if @income.aproved
+      redirect_income
+    else
+      @income.destroy
+      redirect_ajax @income
     end
+  end
+  
+  # PUT /incomes/1/aprove
+  # Method to aprove an income
+  def aprove
+    @income = Income.find(params[:id])
+    if @income.aprove!
+      flash[:notice] = "La nota de venta fue aprobada"
+    else
+      flash[:error] = "Existio un problema con la aprovación"
+    end
+    redirect_to @income
+  end
+
+  # Nulls an invoice
+  def null
+  end
+
+private
+  def set_default_currency
+    @currency = Organisation.find(session[:organisation][:id]).currency
+  end
+
+  # Redirects in case that someone is trying to edit or destroy an  aproved income
+  def redirect_income
+    flash[:warning] = "No es posible editar una nota ya aprobada!"
+    redirect_to incomes_path
   end
 end

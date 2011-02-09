@@ -1,0 +1,23 @@
+%h1 accounts
+
+%p.links= link_to "Nuevo account", new_account_path, :class => 'new'
+
+%table.decorated.nwl 
+  %thead
+    %tr
+      %th name
+      %th address
+      %th email
+      %th website
+      %th number
+      %th
+  
+  %tbody
+    - for account in @accounts
+      %tr{ :class => cycle(:odd, :even) }
+        %td= account.name
+        %td= account.address
+        %td= account.email
+        %td= account.website
+        %td= account.number
+        %td.actions= bonsai_links(account)

@@ -1,33 +1,156 @@
-%h1= Transacción
-%p.links
-  = link_to t('Editar'), edit_transaction_path(@transaction), :class => 'edit'
-  = link_to t('Lista'), transactions_path, :class => 'list'
+%h1._50.fl #{note_title(@income)} de venta (<span id="cash_credit_title">#{cash @income.cash}</span>)
 
-%div
-  %p
-    %label= Transaction.human_attribute_name :contact_id
-    %span= @transaction.contact_id
-  %p
-    %label= Transaction.human_attribute_name :type
-    %span= @transaction.type
-  %p
-    %label= Transaction.human_attribute_name :total
-    %span= @transaction.total
-  %p
-    %label= Transaction.human_attribute_name :active
-    %span= @transaction.active
-  %p
-    %label= Transaction.human_attribute_name :description
-    %span= @transaction.description
-  %p
-    %label= Transaction.human_attribute_name :state
-    %span= @transaction.state
-  %p
-    %label= Transaction.human_attribute_name :date
-    %span= @transaction.date
-  %p
-    %label= Transaction.human_attribute_name :ref_number
-    %span= @transaction.ref_number
-  %p
-    %label= Transaction.human_attribute_name :balance
-    %span= @transaction.balance
+- payment_action, pay_plan_action = @income.state == "paid" ? ["Ver", "Ver"] : ["Realizar", "Planificar"]
+
+- if @income.show_payments?
+  = link_to("#{payment_action} cobros", "#payments", :class => 'fl', :style => 'margin:15px 15px 0px 0px', :id => 'payment_anchor', :class => 'money')
+  &nbsp;&nbsp;&nbsp;
+
+= link_to "#{pay_plan_action} crédito", "#pay_plans", :class => 'fl', :style => 'margin-top:16px', :id => 'pay_plan_anchor', :class => 'calendar' if @income.show_pay_plans?
+.clear
+
+
+%p.links._50.fl
+  - if @income.draft?
+    = link_to 'Editar', edit_income_path(@income), :class => 'edit'
+  = link_to 'Lista', incomes_path, :class => 'list'
+._50.fl
+  - if @income.draft?
+    = simple_form_for @income, :url => aprove_income_path(@income) do |f|
+      .submit
+        =f.submit "Aprobar", :class => 'bg_green'
+  - else
+    = simple_form_for @income, :url => null_income_path(@income) do |f|
+      .submit
+        =f.submit "Anular", :class => 'bg_red'
+
+.clear
+= link_to "Email","", :class => 'email'
+&nbsp;&nbsp;
+= link_to "Imprimir","", :class => 'print'
+.clear
+
+.main{:style => 'font-size:1.2em;'}
+  .input
+    .input.b{:style => 'font-size:1.2em' }= @income.ref_number
+    .input= lo @income.date
+  .input
+    .input._100= link_to @income.contact, "#", :title => "Historial cliente"
+  .clear
+
+.show
+  .clear
+  .input
+    %label Proyecto
+    = @income.project
+  .input
+    %label Moneda/Tipo de cambio
+    - unless @income.currency_id == @currency.id
+      1 #{@income.currency.name} = <span class="b">#{@income.currency_exchange_rate}</span> #{@currency.name.pluralize}
+    - else
+      = @income.currency.name
+  .clear
+  .input
+    .input
+      %label Descuento (%)
+      .b= "#{ ntc @income.discount }%"
+    .input
+      %label Nº de Factura
+      = @income.bill_number
+  .input
+    %label Impuestos (%)
+    .b= "#{ntc @income.tax_percent}%"
+    %ul
+      - @income.taxes.each do |t|
+        %li= t
+
+  .clear
+  .input
+    %label Descripción
+    =@income.description
+  .clear
+
+#items
+  %h2.dark Items
+
+  %table#items_table.decorated
+    %thead
+      %tr
+        %th Item
+        %th Descripción
+        %th Precio <br/>unitario
+        %th Cantidad
+        %th Total fila
+        %th
+      - @income.transaction_details.each do |det|
+        %tr
+          %td= det.item
+          %td= det.description
+          %td= ntc det.price
+          %td= det.quantity
+          %td.total_row.r= ntc det.total
+
+    %tr.extra.pad_top
+      %td{:colspan => 2}
+      %td.r{:colspan => 2} Subtotal
+      %td#subtotal.r= ntc @income.gross_total
+    %tr.extra
+      %td{:colspan => 2}
+      %td.r{:colspan => 2} Descuento (<span id="discount_percentage" data-val="#{@income.total_discount}">#{ntc @income.tax_percent}</span>%)
+      %td#discount_total.r= "-#{ntc @income.total_discount}"
+    %tr.extra
+      %td{:colspan => 2}
+      %td.r.line{:colspan => 2} Impuestos (<span id="taxes_percentage" data-val="#{@income.total_taxes}">#{ntc @income.total_taxes}</span>%)
+      %td#taxes_total.r.line= ntc @income.total_taxes
+    %tr.extra
+      %td{:colspan => 2}
+      %td.r.b{:colspan => 2} Total
+      %td#total_value.r.b{'data-val' => @income.total}= ntc @income.total
+    %tr.extra
+      %td{:colspan => 2}
+      %td.r.b.line{:colspan => 2} Cobrado
+      %td#total_payments.r.b.line{'data-val' => @income.total_payments}= "-" + ntc( @income.total_payments) 
+    %tr.extra
+      %td{:colspan => 2}
+      %td.r.b{:colspan => 2} Saldo
+      %td#balance.r.b{'data-val' => @income.balance}= ntc @income.balance
+
+.clear
+=render :partial => "/payments/payments", :locals => {:klass => @income,:pay_type => 'cobro'} if @income.show_payments?
+.clear
+=render :partial => "/pay_plans/pay_plans", :locals => {:klass => @income, :pay_type => 'cobro'} if @income.show_pay_plans?
+
+:javascript
+  $(function () {
+    $('#pay_plan_anchor').click(function() { $('#pay_plans').mark(); });
+    $('#payment_anchor').click(function() { $('#payments').mark(); });
+
+
+    /**
+    * Updates the status for a transaction (Income, Buy, Expense)
+    * @params Object data
+    */
+    updateTransactionPayPlanStatus = function(data, url) {
+    }
+    // Deleted data
+    $('body').live("ajax:delete pay_plan", function() {
+      if( $('#pay_plans_table tr[id]').length > 0 ) {
+        $('#cash_credit_title').html('a crédito');
+      }else{
+        $('#cash_credit_title').html('al contado');
+      }
+    }).live('payments',function(e, resp) {
+      // Calculates the total for AJAX events
+      $('#items_table #total_payments').html("-" + _b.ntc(resp.amount));
+      var balance = $('#items_table #total_value').data('val') - resp.amount;
+      $('#items_table #balance').html(_b.ntc(balance) );
+    }).live('transaction_paid', function(e, value) {
+      if(value) {
+        $('#payment_anchor').html('Ver cobros');
+        $('#pay_plan_anchor').html('Ver crédito');
+      }else {
+        $('#payment_anchor').html('Realizar cobros');
+        $('#pay_plan_anchor').html('Planificar crédito');
+      }
+    });
+  });

@@ -1,35 +1,149 @@
-= simple_form_for(@income) do |f|
+:css
+  input.price, input.quantity{ text-align: right; }
+  /*
+  .ui-datepicker-header{
+    background: #FFF !important;
+    color: #498CE2 !important;
+    border: none !important;
+    font-weight: normal !important;
+    font-size: 1.1em !important;
+  }
+  .ui-datepicker table{
+    background: #FFF !important;
+  }
+  .ui-datepicker td a{
+    background: transparent !important;
+    border: none !important;
+    font-weight: normal !important;
+    color: #000;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    color: #666666 !important;
+    text-align: center;
+  }
+  .ui-datepicker td a.ui-state-hover{
+    background-color: #AFAFAF !important;
+  }
+  .ui-datepicker td a.ui-state-active{
+    background-color: #498CE2 !important;
+    color: #FFF !important;
+  }
+  .ui-datepicker thead tr{
+    border-bottom: 1px solid grey !important;
+  }
+    
+  .ui-datepicker-week-end{
+    border:none;
+    background: transparent;
+  }
+  */
+= simple_form_for(@income, :html => {:id => 'income_form'}) do |f|
   = bonsai_form_error(f)
-  = f.input :ref_number, :label => 'Nº de referencia'
-  = f.input :date, :label => 'Fecha'
+  .main.bg_light_grey
+    .input
+      = f.input :ref_number, :label => 'Nº de referencia', :input_html => {:size => 20}
+      = f.input :date, :label => 'Fecha'
+    = f.association :contact, :label => 'Contacto',
+      :input_html => {'data-new_url' => new_contact_path, 'data-title' => 'Nuevo contacto', 'data-trigger' => 'new_contact' }
+    .clear
+
   .clear
-  = f.association :contact, :label => 'Cliente'
+  = f.association :project, :label => 'Proyecto'
+  = f.association :currency, :collection => OrganisationSession.currencies, :label => 'Moneda/Tipo de cambio. <span class="n"></span>'.html_safe, :include_blank => false
+  = f.input :currency_exchange_rate, :as => :hidden
+  .clear
+  .input
+    = f.input :discount, :label => 'Descuento (%)', :input_html => {:size => 10}
+    = f.input :bill_number, :label => 'Nº de Factura', :input_html => {:size => 20}
+  =f.association :taxes, :as => :check_boxes, :label => 'Impuestos', :wrapper_html => {:id => 'taxes'},
+    :label_method => lambda{|tax| "<span data-rate='#{tax.rate}' title =\"#{tax.name}\">#{tax.abbreviation} (#{ntc tax.rate}%)</span>".html_safe }
+
+  .clear
   = f.input :description, :label => 'Descripción', :as => :text, :input_html => {:rows => 4, :cols => 40}
   .clear
 
   %h2.dark Items
 
-  %table.decorated
-    %tr
-      %th Item
-      %th Descripción
-      %th Precio <br/>unitario
-      %th Cantidad
-      %th Total fila
-    = f.simple_fields_for :transaction_details do |fd|
+  %table#items_table.decorated
+    %thead
       %tr
-        %td= fd.input :item_id, :label => false, :collection => Item.income
+        %th Item
+        %th Descripción
+        %th Precio <br/>unitario
+        %th Cantidad
+        %th Total fila
+        %th
+    = f.simple_fields_for :transaction_details do |fd|
+      %tr.item
+        %td= fd.input :item_id, :label => false, :collection => Item.income.order(:name), :input_html => {:class => 'item fl'}
         %td= fd.input :description, :label => false
-        %td= fd.input :price, :input_html => { :size => 8 }, :label => false
-        %td= fd.input :quantity, :input_html => { :size => 8 }, :label => false
-        %td.subtotal
-  %p
-    %a#add_item.add{:href => 'javascript:' } Adicionar ítem
-
+        %td= fd.input :price, :input_html => { :size => 8, :class => 'price' }, :label => false
+        %td= fd.input :quantity, :input_html => { :size => 8, :class => 'quantity' }, :label => false
+        %td.total_row.r{'data-val' => fd.object.total }= ntc fd.object.total
+        %td.del <a href="javascript:" class="destroy" title="Borrar">&nbsp;</a>
+    %tr.extra.pad_top
+      %td{:colspan => 2}
+      %td.r{:colspan => 2} Subtotal
+      %td#subtotal.r{'data-val' => @income.subtotal}= ntc(@income.subtotal)
+    %tr.extra
+      %td{:colspan => 2} <a href="javascript:" id="add_item" class="add">Adicionar ítem</a>
+      %td.r{:colspan => 2} Descuento (<span id="discount_percentage" data-val="#{@income.discount}">#{ntc @income.discount}</span>%)
+      %td#discount_total.r{'data-val' => @income.total_discount}= "-#{ntc(@income.total_discount)}"
+    %tr.extra
+      %td{:colspan => 2}
+      %td.r.line{:colspan => 2} Impuestos (<span id="taxes_percentage" data-val="#{@income.tax_percent}">#{ntc @income.tax_percent}</span>%)
+      %td#taxes_total.r.line{'data-val' => @income.total_taxes}= ntc @income.total_taxes
+    %tr.extra
+      %td{:colspan => 2}
+      %td.r.b{:colspan => 2} Total
+      %td#total_value.b.r{ 'data-val'=>@income.total}= ntc @income.total
+    %tr.extra
+      %td{:colspan => 2}
+      %td.r{:colspan => 2} <h3 id="curerncy_symbol"></h3>
+      %td.r <h3 id="total_value_currency"></h3>
   .actions
     = f.submit 'Salvar'
 
+
+= javascript_include_tag "app/transactions"
 :javascript
-  items = #{ Item.javascript.to_json };
   $(function() {
+    var items = #{ Item.income.json.to_json };
+    var currencies = #{ Currency.select("id, name, symbol").to_json };
+    var exchange_rates = #{ CurrencyRate.active.select("rate, currency_id").to_json };
+    var default_currency_id = #{@currency.id};
+    var income = new Income(items, "#income_form", {'default_currency_id': default_currency_id }, currencies, exchange_rates );
+
+
+    $('<a/>').text('Inventario').addClass('inventario').css({'display':'none', 'position': 'absolute', 'background': '#FFF', 'padding': '4px 10px'})
+    .attr({'href':'javascript:', 'title':'Ver inventario'}).appendTo('body');
+    // Shon inventory
+    $('.decorated select').live("mouseover", function() {
+      if($(this).val() == "")
+        return false;
+      var pos = $(this).position();
+      $('a.inventario').css({'top': (pos.top + 2) + 'px', 'left':(pos.left - 80) + 'px'})
+      .attr({'href': ''}).show().data('target', this);
+    }).live("mouseout", function() {
+      setTimeout(function() {
+        if( !$('a.inventario').data('over')) {
+          $('a.inventario').hide();
+        }
+      }, 500);
+    });
+    $('a.inventario').live("mouseout mouseover", function(e) {
+      if(e.type == "mouseover") {
+        $(this).data('over', true).show()
+      }else{
+        $(this).data('over', false).hide();
+      }
+    });
+
+    $('a.inventario').hide();
+
+    // Functions for the select boxes
+    $('body').live('new_contact', function(e, resp) {
+      $('#income_contact_id').createSelectOption(resp.id, resp.matchcode)
+    });
   })

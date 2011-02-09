@@ -1,0 +1,3 @@
+%h1 Nuevo #{params[:payment_type]}
+%p.links= link_to 'Lista', payments_path, :class => 'list'
+= render :partial => 'form'

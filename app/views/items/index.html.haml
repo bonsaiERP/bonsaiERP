@@ -1,29 +1,38 @@
-%h1= item_title
+%h1 Items
 
 %div.search
   =form_tag "/items", :method => 'get'
+<<<<<<< HEAD
   =hidden_field_tag 'ctype', params[:ctype]
   %strong.dark Nombre o código
   =text_field_tag 'search', params[:name_code], :size => 40
+=======
+  %strong.dark Código o nombre
+  =text_field_tag 'name_code', params[:search], :size => 40
+>>>>>>> dev
   =submit_tag 'Buscar'
 
 
-%p.links= link_new_item
+%p.links= link_to "Nuevo ítem", new_item_path, :class => 'new'
 
 %table{ :class=> "decorated mt10" }
   %tr
-    %th Nombre
     %th Código
+    %th.300 Nombre
+    %th Costo<br/>Unitario
+    %th Precio<br/>de Venta
+    %th Tipo
     %th Unidad
-    %th Descripción
-    %th Stockable
+    %th Activo
     %th
 
   - @items.each do |item|
     %tr
-      %td= link_to item.name, item
-      %td= item.code 
+      %td= link_to item.code, item
+      %td= item.name
+      %td.r= ntc( item.unitary_cost )
+      %td.r= ntc( item.price )
+      %td= item.get_type
       %td= item.unit.name 
-      %td= item.description 
-      %td{ :class => item.stockable }
+      %td.c <span class="#{item.active}"></span>
       %td= bonsai_links(item)

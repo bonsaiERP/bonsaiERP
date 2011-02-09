@@ -13,15 +13,15 @@ class ApplicationController < ActionController::Base
 
 #
 #  # Used to redirect after a user has signed_in
-  def after_sign_in_path_for(resource)
-    debugger
-    s=0
-    if resource.is_a?(User)
-      new_organisation_url
-    else
-      super
-    end
-  end
+  #def after_sign_in_path_for(resource)
+  #  debugger
+  #  s=0
+  #  if resource.is_a?(User)
+  #    new_organisation_url
+  #  else
+  #    super
+  #  end
+  #end
 #
   # Adds an error with format to display
   # @param ActiveRecord::Base (model)
@@ -41,11 +41,28 @@ class ApplicationController < ActionController::Base
     s=0
   end
 
+  # especial redirect for ajax requests
+  def redirect_ajax(klass, options = {})
+    url = options[:url] || klass
+    if request.xhr?
+      if request.delete?
+        if klass.destroyed?
+          render :text => klass.attributes.merge(:destroyed => klass.destroyed?).to_json
+        else
+          render :text => klass.attributes.merge(:destroyed => klass.destroyed?, :base_error => klass.errors[:base]).to_json
+        end
+      else
+        render :text => klass.to_json
+      end
+    else
+      redirect_to url, options
+    end
+  end
 
 private
   # Sets the session for the organisation
   def set_organisation_session(organisation)
-    session[:organisation] = {:id => organisation.id, :name => organisation.name }
+    session[:organisation] = {:id => organisation.id, :name => organisation.name, :currency_id => organisation.currency_id }
     set_organisation
   end
 
@@ -75,4 +92,12 @@ private
     redirect_to organisations_path if session[:organisation][:id].nil?
   end
 
+  # Checks if the currency has been set
+  def check_currency_set
+    unless CurrencyRate.current?
+      flash[:warning] = "Debe actualizar los tipos de cambio."
+      redirect_to new_currency_rate_path
+    end
+  end
+  
 end

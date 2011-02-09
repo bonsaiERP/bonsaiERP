@@ -4,12 +4,17 @@
 *.kpf
 *.sqlite3
 *.sqlite
+<<<<<<< HEAD
+=======
+*.rbc
+>>>>>>> dev
 *~
 nbproject
 !pub.txt
 .~lock*
 ç
 *.vim
+config/database.yml
 public/javascripts/plugins.js
 public/javascripts/scripts.js
 doc/wireframes/images/*.*

@@ -1,0 +1,21 @@
+%h1 Projects
+
+%p.links= link_to "Nuevo proyecto", new_project_path, :class => 'new'
+
+%table{ :class => 'decorated nwl' }
+  %thead
+    %tr
+      %th Nombre
+      %th Activo
+      %th Fecha de inicio
+      %th Fecha de fin
+      %th
+  
+  %tbody
+    - for project in @projects
+      %tr{ :class => cycle(:odd, :even) }
+        %td= link_to(project.name, project)
+        %td{:class => project.active }
+        %td= lo(project.date_start)
+        %td= lo(project.date_end)
+        %td.actions= bonsai_links(project)

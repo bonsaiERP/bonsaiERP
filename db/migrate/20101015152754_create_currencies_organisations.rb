@@ -5,7 +5,7 @@ class CreateCurrenciesOrganisations < ActiveRecord::Migration
       t.integer :organisation_id
     end
 
-    add_index :currencies_organisations, [:currency_id, :organisation_id]
+    add_index :currencies_organisations, [:currency_id, :organisation_id], :name => 'currencies_orgs_c_id_org_id'
   end
 
   def self.down

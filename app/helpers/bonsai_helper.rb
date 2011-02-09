@@ -51,8 +51,8 @@ module BonsaiHelper
     case(m)
       when "new" then link_to "nuevo", send("new_#{k}_path", klass) 
       when "show" then link_to "ver", klass, :class => "show_icon", :title => "Ver"
-      when "edit" then link_to "editar", send("edit_#{k}_path", klass), :class => "edit_icon", :title => "Editar"
-      when "destroy" then link_to "borrar", klass, :method => :delete, :confirm => "Esta seguro?", :class => "destroy_icon", :title => "Borrar", :remote => true
+      when "edit" then link_to "editar", send("edit_#{k}_path", klass), :class => "edit", :title => "Editar"
+      when "destroy" then link_to "borrar", klass, :method => :delete, :confirm => "Esta seguro?", :class => "destroy", :title => "Borrar", :remote => true
       else ""
     end
   end
@@ -77,6 +77,19 @@ module BonsaiHelper
         html << "<ul>#{ f.object.errors[:base].inject("") { |t, v|  t << "<li>#{v}</li>" } }</ul>"
       end
       "<div class='errorExplanation'>#{ html }</div>".html_safe
+    end
+  end
+
+  # Presents and error for forms
+  def present_error(text = nil)
+    text ||= 'Exiten errores en el formulario.'
+    content_tag('h2', text)
+  end
+
+  # Presents the error for a field
+  def present_field_error(klass, field)
+    if klass.errors[field].present?
+      "<span class=\"error\">#{ klass.errors[field].join(" ") }</span>".html_safe
     end
   end
 

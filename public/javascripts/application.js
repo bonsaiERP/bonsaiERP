@@ -1,19 +1,40 @@
 (function() {
   $(document).ready(function() {
-    var createDialog, csfr_token, mark, parsearFecha, roundVal, serializeFormElements, setFechaDateSelect, setIframePostEvents, speed, start, toByteSize, transformDateSelect, transformMinuteSelect;
+    var createDialog, createErrorLog, createSelectOption, csfr_token, currency, getAjaxType, mark, ntc, parseDate, serializeFormElements, setDateSelect, setIframePostEvents, speed, start, toByteSize, transformDateSelect, transformMinuteSelect, updateTemplateRow, _b;
+    _b = {};
+    window._b = _b;
     speed = 300;
     csfr_token = $('meta[name=csfr-token]').attr('content');
-    $.dateInputFormat = $.fn.dateInputFormat = 'dd mmm yyyy';
-    parsearFecha = function(fecha, tipo) {
+    $.datepicker._defaults.dateFormat = 'dd M yy';
+    parseDate = function(date, tipo) {
       var d;
-      fecha = $.datepicker.parseDate($.datepicker._defaults.dateFormat, fecha);
-      d = [fecha.getFullYear(), fecha.getMonth() + 1, fecha.getDate()];
+      date = $.datepicker.parseDate($.datepicker._defaults.dateFormat, date);
+      d = [date.getFullYear(), date.getMonth() + 1, date.getDate()];
       if ('string' === tipo) {
         return d.join("-");
       } else {
         return d;
       }
     };
+    _b.dateFormat = function(date, format) {
+      var d;
+      format = format || $.datepicker._defaults.dateFormat;
+      if (date) {
+        d = $.datepicker.parseDate('yy-mm-dd', date);
+        return $.datepicker.formatDate($.datepicker._defaults.dateFormat, d);
+      } else {
+        return "";
+      }
+    };
+    setDateSelect = function(el) {
+      var date;
+      el = el || this;
+      date = parseDate($(el).val());
+      $(el).siblings('select[name*=1i]').val(date[0]).trigger("change");
+      $(el).siblings('select[name*=2i]').val(date[1]).trigger("change");
+      return $(el).siblings('select[name*=3i]').val(date[2]).trigger("change");
+    };
+    $.setDateSelect = $.fn.setDateSelect = setDateSelect;
     transformMinuteSelect = function(el, step) {
       var $el, k, options, sel, steps, val;
       if (step == null) {
@@ -34,13 +55,14 @@
       options = options.join("");
       return $(el).html(options);
     };
-    transformDateSelect = function(elem) {
-      return $(elem).find('.date, .datetime').each(function(i, el) {
+    transformDateSelect = function() {
+      return $(this).find('.date, .datetime').each(function(i, el) {
         var day, input, minute, month, year;
-        input = $('<input/>').attr({
+        input = document.createElement('input');
+        $(input).attr({
           'class': 'date-transform',
           'type': 'text',
-          'size': 12
+          'size': 10
         });
         year = $(el).find('select[name*=1i]').hide().val();
         month = (1 * $(el).find('select[name*=2i]').hide().val()) - 1;
@@ -49,33 +71,23 @@
         if (minute.length > 0) {
           transformMinuteSelect(minute);
         }
-        return $(input).dateinput({
-          'format': $.dateInputFormat,
-          'lang': 'es',
-          'selectors': true,
-          'firstDay': 1,
-          'change': function() {
-            var self, val;
-            val = this.getValue('yyyy-mm-dd');
-            val = val.split('-');
-            self = this.getInput();
-            return $(val).each(function(i, el) {
-              var value;
-              value = el.replace(/^0([0-9]+$)/, '$1');
-              return $(self).siblings('select[name*=' + (i + 1) + 'i]').val(value);
-            });
-          }
+        $(input).datepicker({
+          yearRange: '1900:',
+          showOn: 'both',
+          buttonImageOnly: true,
+          buttonImage: '/stylesheets/images/calendar.gif'
         });
+        $(input).change(function(e) {
+          $.setDateSelect(this);
+          return $(this).trigger("change:datetime", this);
+        });
+        if (year !== '' && month !== '' && day !== '') {
+          $(input).datepicker("setDate", new Date(year, month, day));
+        }
+        return $('.ui-datepicker').not('.ui-datepicker-inline').hide();
       });
     };
     $.transformDateSelect = $.fn.transformDateSelect = transformDateSelect;
-    setFechaDateSelect = function(el) {
-      var fecha;
-      fecha = parsearFecha($(el).val());
-      $(el).siblings('select[name*=1i]').val(fecha[0]);
-      $(el).siblings('select[name*=2i]').val(fecha[1]);
-      return $(el).siblings('select[name*=3i]').val(fecha[2]);
-    };
     $('[tooltip]').live('mouseover mouseout', function(e) {
       var div, pos;
       div = '#tooltip';
@@ -100,46 +112,93 @@
       return $(this).html('Ver más').removeClass('less').addClass('more').next('.hidden').hide(speed);
     });
     createDialog = function(params) {
-      var div;
+      var data, div, div_id;
+      data = params;
       params = $.extend({
         'id': new Date().getTime(),
         'title': '',
         'width': 800,
         'height': 400,
         'modal': true,
-        'resizable': false
+        'resizable': false,
+        'close': function(e, ui) {
+          return $('#' + div_id).parents("[role=dialog]").detach();
+        }
       }, params);
+      div_id = params.id;
       div = document.createElement('div');
       $(div).attr({
         'id': params['id'],
-        'title': params['title'],
-        'data-ajax_id': params['id']
-      }).addClass('ajax-modal').css({
-        'z-index': 1000
+        'title': params['title']
+      }).data(data).addClass('ajax-modal').css({
+        'z-index': 10000
       });
       delete params['id'];
       delete params['title'];
       $(div).dialog(params);
       return div;
     };
+    getAjaxType = function(el) {
+      if ($(el).hasClass("new")) {
+        return 'new';
+      } else if ($(el).hasClass("edit")) {
+        return 'edit';
+      } else {
+        return 'show';
+      }
+    };
+    window.getAjaxType = getAjaxType;
     $('a.ajax').live("click", function(e) {
-      var div, id;
-      id = new Date().getTime().toString();
-      $(this).attr('data-ajax_id', id);
-      div = createDialog({
-        'title': $(this).attr('data-title')
-      });
+      var data, div;
+      data = $.extend({
+        'title': $(this).attr('title'),
+        'ajax-type': getAjaxType(this)
+      }, $(this).data());
+      div = createDialog(data);
       $(div).load($(this).attr("href"), function(e) {
-        return $(div).find('a.new[href*=/], a.edit[href*=/], a.list[href*=/]').hide();
+        return $(div).transformDateSelect();
       });
       e.stopPropagation();
       return false;
     });
-    roundVal = function(val, dec) {
-      dec = dec || 2;
-      return Math.round(val * Math.pow(10, dec)) / Math.pow(10, dec);
+    currency = {
+      'separator': ",",
+      'delimiter': '.',
+      'precision': 2
     };
-    $.roundVal = $.fn.roundVal = roundVal;
+    _b.currency = currency;
+    ntc = function(val) {
+      var ar, arr, c, i, l, sep, sign, t, tmp, vals;
+      val = typeof val === 'string' ? 1 * val : val;
+      if (val < 0) {
+        sign = "-";
+      } else {
+        sign = "";
+      }
+      val = val.toFixed(_b.currency.precision);
+      vals = val.toString().replace(/^-/, "").split(".");
+      val = vals[0];
+      l = val.length - 1;
+      ar = val.split("");
+      arr = [];
+      tmp = "";
+      c = 0;
+      for (i = l; (l <= 0 ? i <= 0 : i >= 0); (l <= 0 ? i += 1 : i -= 1)) {
+        tmp = ar[i] + tmp;
+        if ((l - i + 1) % 3 === 0 && i < l) {
+          arr.push(tmp);
+          tmp = '';
+        }
+        c++;
+      }
+      t = arr.reverse().join(_b.currency.delimiter);
+      if (tmp !== "") {
+        sep = t.length > 0 ? _b.currency.delimiter : "";
+        t = tmp + sep + t;
+      }
+      return sign + t + _b.currency.separator + vals[1];
+    };
+    _b.ntc = ntc;
     toByteSize = function(bytes) {
       switch (true) {
         case bytes < 1024:
@@ -158,7 +217,7 @@
           return roundVal(bytes / Math.pow(1024, 6)) + " EB";
       }
     };
-    window.tobyteSize = $.toByteSize = $.fn.toByteSize = toByteSize;
+    _b.tobyteSize = toByteSize;
     setIframePostEvents = function(iframe, created) {
       return iframe.onload = function() {
         var html, posts, postsSize;
@@ -199,9 +258,12 @@
       return false;
     });
     $('div.ajax-modal form[enctype!=multipart/form-data]').live('submit', function() {
-      var data, el;
+      var $div, data, el, new_record, trigger;
       data = serializeFormElements(this);
       el = this;
+      $div = $(this).parents('.ajax-modal');
+      new_record = $div.data('ajax-type') === 'new' ? true : false;
+      trigger = $div.data('trigger');
       $.ajax({
         'url': $(el).attr('action'),
         'cache': false,
@@ -209,25 +271,48 @@
         'data': data,
         'type': data['_method'] || $(this).attr('method'),
         'success': function(resp, status, xhr) {
-          var id, p;
-          if ($(resp).find('input:submit').length <= 0) {
+          var div, p;
+          try {
+            data = $.parseJSON(resp);
+            data['new_record'] = new_record;
             p = $(el).parents('div.ajax-modal');
-            id = $(p).attr('data-ajax_id');
-            $(p).dialog('destroy');
-            return $('body').trigger('ajax:complete', [resp]);
-          } else {
-            return $(el).parents('div.ajax-modal:first').html(resp);
+            $(p).html('').dialog('destroy');
+            return $('body').trigger(trigger, [data]);
+          } catch (e) {
+            div = $(el).parents('div.ajax-modal:first');
+            div.html(resp);
+            return setTimeout(function() {
+              return $(div).transformDateSelect();
+            }, 200);
           }
         },
         'error': function(resp) {
-          return alert('Existen errores en su formulario por favor corrija los errores');
+          return alert('There are errors in the form please correct them');
         }
       });
       return false;
     });
+    updateTemplateRow = function(template, data, macro) {
+      var $node, tmp;
+      if ($.inArray(macro, ["insertBefore", "insertAfter", "appendTo"]) < 0) {
+        macro = "insertAfter";
+      }
+      if (data['new_record']) {
+        $node = $.tmpl(template, data)[macro](this);
+      } else {
+        $node = $(this).find("#" + data.id);
+        tmp = $.tmpl(template, data).insertBefore($node);
+        $node.detach();
+        $node = tmp;
+      }
+      $node.mark();
+      return $('body').trigger("update:template", [$node, data]);
+    };
+    $.updateTemplateRow = $.fn.updateTemplateRow = updateTemplateRow;
     $('a.delete').live("click", function(e) {
-      var el, url;
-      $(this).parents("tr:first, li:first").addClass('marked');
+      var el, self, url;
+      self = this;
+      $(self).parents("tr:first, li:first").addClass('marked');
       if (confirm('Esta seguro de borrar el item seleccionado')) {
         url = $(this).attr('href');
         el = this;
@@ -235,12 +320,23 @@
           'url': url,
           'type': 'delete',
           'context': el,
-          'success': function() {
-            $(el).parents("tr:first, li:first").remove();
-            return $('body').trigger('ajax:delete', url);
+          'success': function(resp, status, xhr) {
+            var data;
+            try {
+              data = $.parseJSON(resp);
+              if (data.destroyed) {
+                $(el).parents("tr:first, li:first").remove();
+              } else {
+                $(self).parents("tr:first, li:first").removeClass('marked');
+                alert("Error: " + data.base_error);
+              }
+              return $('body').trigger('ajax:delete', [data, url]);
+            } catch (e) {
+              return $(self).parents("tr:first, li:first").removeClass('marked');
+            }
           },
           'error': function() {
-            return alert('Existio un error al borrar');
+            return $(self).parents("tr:first, li:first").removeClass('marked');
           }
         });
       } else {
@@ -252,31 +348,77 @@
     serializeFormElements = function(elem) {
       var params;
       params = {};
-      $(elem).find('input, select, textarea').each(function(i, el) {
+      $(elem).find('input:not(:radio):not(:checkbox), select, textarea').each(function(i, el) {
+        if ($(el).val()) {
+          return params[$(el).attr('name')] = $(el).val();
+        }
+      });
+      $(elem).find('input:radio:checked, input:checkbox:checked').each(function(i, el) {
         return params[$(el).attr('name')] = $(el).val();
       });
       return params;
     };
     $.serializeFormElements = $.fn.serializeFormElements = serializeFormElements;
     mark = function(selector, velocity, val) {
+      var self;
+      self = selector || this;
       val = val || 0;
-      velocity = velocity || 7;
-      $(selector).css({
+      velocity = velocity || 30;
+      $(self).css({
         'background': 'rgb(255,255,' + val + ')'
       });
       if (val >= 255) {
-        $(selector).attr("style", "");
+        $(self).attr("style", "");
         return false;
       }
       return setTimeout(function() {
         val += 5;
-        return mark(selector, velocity, val);
+        return mark(self, velocity, val);
       }, velocity);
     };
     $.mark = $.fn.mark = mark;
-    start = function() {
-      return transformDateSelect('body');
+    $('select[data-new_url]').each(function(i, el) {
+      var data;
+      data = $(el).data();
+      return $(el).after(" <a href='" + ($(el).data('new_url')) + "' class='ajax' title='" + data.title + "' data-trigger='" + data.trigger + "'>" + data.title + "</a>");
+    });
+    createSelectOption = function(value, label) {
+      var opt;
+      opt = "<option selected='selected' value='" + value + "'>" + label + "</option>";
+      return $(this).append(opt).val(value);
     };
+    $.createSelectOption = $.fn.createSelectOption = createSelectOption;
+    start = function() {
+      return $('body').transformDateSelect();
+    };
+    createErrorLog = function(data) {
+      if (!($('#error-log').length > 0)) {
+        $('<div id="error-log"></div>').dialog({
+          title: 'Error',
+          width: 900,
+          height: 500
+        });
+      }
+      return $('#error-log').html(data).dialog("open");
+    };
+    $.ajaxSetup({
+      dataType: "html",
+      beforeSend: function(xhr) {},
+      error: function(event) {},
+      complete: function(event) {
+        if ($.inArray(event.status, [404, 422, 500]) >= 0) {
+          return createErrorLog(event.responseText);
+        }
+      },
+      success: function(event) {}
+    });
     return start();
   });
+  String.prototype.pluralize = function() {
+    if (/[aeiou]$/.test(this)) {
+      return this + "s";
+    } else {
+      return this + "es";
+    }
+  };
 }).call(this);

@@ -1,13 +1,14 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+#require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require 'spec_helper'
 
 describe Item do
   before(:each) do
     OrganisationSession.set = {:id => 1, :name => 'ecuanime'}
     Item.stubs(:create_price => true)
-    @params = { :name => 'First item', :unit_id => 1, :unitary_cost => 10, :code => 'AU101', :ctype => Item::TYPES[0] }
+    @params = { :name => 'First item', :unit_id => 1, :unitary_cost => 10, :code => 'AU101' }
     Unit.stubs(:find).returns(stub(@@stub_model_methods.merge(:id => 1) ) )
   end
 
@@ -20,13 +21,13 @@ describe Item do
     item.organisation_id.should == 1
   end
 
-  it 'should not be valid if ctype is not in Item::TYPES' do
-    @params[:ctype] = nil
-    item = Item.new(@params)
-    item.valid?.should_not == true
-    item.ctype = 'Other'
-    item.valid?.should_not == true
-  end
+  #it 'should not be valid if ctype is not in Item::TYPES' do
+  #  @params[:ctype] = nil
+  #  item = Item.new(@params)
+  #  item.valid?.should_not == true
+  #  item.ctype = 'Other'
+  #  item.valid?.should_not == true
+  #end
 
 
   it 'should assing discount a value of 0' do
@@ -52,7 +53,7 @@ describe Item do
 
   it 'price should be greater or equal to 2' do
     @params[:price] = -0.1
-    @params[:ctype] = Item::TYPES[2]
+    #@params[:ctype] = Item::TYPES[2]
     item = Item.new(@params)
     item.valid?.should == false
     item.ctype = Item::TYPES[3]
@@ -74,7 +75,7 @@ describe Item do
   #end
 
   it 'should be valid with ranges' do
-    @params[:ctype] = Item::TYPES[2]
+    #@params[:ctype] = Item::TYPES[2]
     @params[:price] = 25
     @params[:discount] = "10:5 20:5.5"
     item = Item.new(@params)
@@ -82,7 +83,7 @@ describe Item do
   end
 
   it 'should show a list of values for discount' do
-    @params[:ctype] = Item::TYPES[2]
+    #@params[:ctype] = Item::TYPES[2]
     @params[:price] = 25
     @params[:discount] = "10:5 20:5.5"
     item = Item.new(@params)
@@ -90,7 +91,7 @@ describe Item do
   end
 
   it 'should validate a range secuence form minor to greater' do
-    @params[:ctype] = Item::TYPES[2]
+    #@params[:ctype] = Item::TYPES[2]
     @params[:price] = 25
     @params[:discount] = "10:5 9:5.5"
     item = Item.new(@params)
@@ -104,32 +105,32 @@ describe Item do
   end
 
   it 'should not allow bad discount ranges' do
-    @params[:ctype] = Item::TYPES[2]
+    #@params[:ctype] = Item::TYPES[2]
     @params[:price] = 25
     @params[:discount] = "10:5 20:"
     item = Item.new(@params)
     item.valid?.should == false
   end
 
-  it 'should not allow percentages greater than 100' do
-    @params[:ctype] = Item::TYPES[2]
-    @params[:price] = 25
-    @params[:discount] = "10:5 20:100.1"
-    item = Item.new(@params)
-    p item.errors[:discount]
-    item.valid?.should == false
-  end
+  #it 'should not allow percentages greater than 100' do
+  #  #@params[:ctype] = Item::TYPES[2]
+  #  @params[:price] = 25
+  #  @params[:discount] = "10:5 20:100.1"
+  #  item = Item.new(@params)
+  #  p item.errors[:discount]
+  #  item.valid?.should == false
+  #end
 
-  it 'should save when the item is a service' do
-    @params[:ctype] = Item::TYPES.last
-    @params[:price] = 15.0
-    @params[:unitary_cost] = 10.0
-    @params[:discount] = "40:1 80:2 120:3"
-    Item.create!(@params)
+  #it 'should save when the item is a service' do
+  #  #@params[:ctype] = Item::TYPES.last
+  #  @params[:price] = 15.0
+  #  @params[:unitary_cost] = 10.0
+  #  @params[:discount] = "40:1 80:2 120:3"
+  #  Item.create!(@params)
 
-    #puts  "Item id: #{item.errors}"
-    #item.valid?.should == true
-  end
+  #  #puts  "Item id: #{item.errors}"
+  #  #item.valid?.should == true
+  #end
 
   it 'test range regular expression' do
     reg_num = /([\d]+(\.[\d]+)?)/ 

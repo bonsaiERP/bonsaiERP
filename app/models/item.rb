@@ -3,21 +3,24 @@
 # email: boriscyber@gmail.com
 class Item < ActiveRecord::Base
 
-  before_save :set_stockable
+  #before_save :set_stockable
   after_save :create_price
 
-  TYPES = ['Item', 'ExpenseItem', 'Product', 'Service']
+  TYPES = ["item", "expense", "service", "product"]
+
 
   acts_as_org
   acts_as_taggable
 
+  # relationships
   belongs_to :unit
   has_many :prices
   has_many :transaction_details
 
   # belongs_to :itemable, :polymorphic => true
+  
 
-  attr_accessible :name, :unit_id, :code, :description, :price, :discount, :tag_list, :ctype, :unitary_cost
+  attr_accessible :name, :unit_id, :code, :description, :price, :discount, :tag_list, :unitary_cost, :ctype, :active
 
   # Validations
   validates_presence_of :name, :unit_id, :code
@@ -25,24 +28,37 @@ class Item < ActiveRecord::Base
   validates_numericality_of :unitary_cost, :greater_than_or_equal_to => 0
   validates :ctype, :presence => true, :inclusion => { :in => TYPES }
   validates :code, :uniqueness => { :scope => :organisation_id }
-  validates :price, :numericality => { :greater_than_or_equal_to => 0, :if => lambda { |i| i.product? } }
+  validates :price, :numericality => { :greater_than_or_equal_to => 0, :if => lambda { |i| i.price.present? } }
   validate :validate_discount
 
 
   # scopes
   default_scope where(:organisation_id => OrganisationSession.organisation_id)
 
-  scope :javascript, select("id, name, price, discount")
+  scope :json, select("id, name, price")
   scope :income, where(["ctype IN (?)", TYPES.slice(2, 2)])
 
   def to_s
-    name
+    "#{code} - #{name}"
+  end
+
+  # Method to get the localized types
+  def self.get_types
+    case I18n.locale
+    when :es
+      ["Insumo", "Item de Gasto", "Servicio", "Producto"].zip(TYPES)
+    end
+  end
+
+  # gets the localized type for the item
+  def get_type
+    self.class.get_types.find {|v| v.last == self.ctype }.first
   end
 
   # validation for Services or products
-  def product?
-    TYPES.slice(2, 2).include? self.ctype
-  end 
+  #def product?
+  #  TYPES.slice(2, 2).include? self.ctype
+  #end 
 
   # Returns the recular expression for rang
   #
@@ -74,7 +90,6 @@ private
 
   # Validations for discount
   def validate_discount
-    return true unless self.product?
     return true if self.discount.blank?
     if self.discount =~ /^([+-]?[0-9]+)(\.\d)?$/
       validate_discount_number
@@ -110,10 +125,10 @@ private
     curr_val = curr_per = 0
     first = true
     discount_values.each do |val, per|
-      if per > 100
-        self.errors.add(:discount, I18n.t("activerecord.errors.messages.invalid_range_percentage"))
-        break
-      end
+      #if per > 100
+      #  self.errors.add(:discount, I18n.t("activerecord.errors.messages.invalid_range_percentage"))
+      #  break
+      #end
       unless first
         if val <= curr_val or per <= curr_per
           self.errors.add(:discount, I18n.t("activerecord.errors.messages.invalid_range_secuence"))
@@ -125,10 +140,10 @@ private
     end
   end
 
-  def set_stockable
-    self.stockable = ( self.ctype != 'Service' )
-    # Must return true, sometimes assigment is false and returns false so the
-    # transaction rollsback
-    true
-  end
+  #def set_stockable
+  #  self.stockable = ( self.ctype != 'Service' )
+  #  # Must return true, sometimes assigment is false and returns false so the
+  #  # transaction rollsback
+  #  true
+  #end
 end

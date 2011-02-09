@@ -21,4 +21,9 @@ class User < ActiveRecord::Base
     %Q(#{first_name} #{last_name})
   end
 
+  # Checks the user and the priviledges
+  def check_organisation?(organisation_id)
+    organisations.map(&:id).include?(organisation_id.to_i)
+  end
+
 end

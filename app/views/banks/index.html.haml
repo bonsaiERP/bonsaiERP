@@ -1,0 +1,23 @@
+%h1 Bancos
+
+%p.links= link_to "Nuevo banco", new_bank_path, :class => 'new'
+
+%table.decorated.nwl 
+  %thead
+    %tr
+      %th Número de cuenta
+      %th Banco
+      %th Moneda
+      %th Total en cuenta
+      %th Dirección
+      %th
+  
+  %tbody
+    - for bank in @banks
+      %tr{ :class => cycle(:odd, :even) }
+        %td= link_to bank.number, bank
+        %td= bank.name
+        %td= bank.currency
+        %td.r= "#{ntc bank.total_amount} #{bank.currency.symbol}"
+        %td= bank.address
+        %td.actions= bonsai_links(bank)

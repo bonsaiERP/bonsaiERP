@@ -11,6 +11,7 @@ class Tax < ActiveRecord::Base
 
   # relationships
   belongs_to :organisation
+  has_and_belongs_to_many :transactions
 
   #validations
   validates_presence_of :name, :abbreviation, :organisation_id
@@ -23,6 +24,9 @@ class Tax < ActiveRecord::Base
   # scopes
   default_scope where( :organisation_id => OrganisationSession.organisation_id )
 
+  def to_s
+    "#{abbreviation} (#{rate}%)"
+  end
 private
 
   # Creates a realated item with tax

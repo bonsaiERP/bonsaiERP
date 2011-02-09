@@ -1,0 +1,10 @@
+= simple_form_for(@account) do |f|
+  = bonsai_form_error(f)
+  = f.input :name
+  = f.input :address
+  = f.input :email
+  = f.input :website
+  = f.input :number
+
+  .actions
+    = f.submit 'Salvar'

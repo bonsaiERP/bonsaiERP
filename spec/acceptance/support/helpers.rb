@@ -21,7 +21,7 @@ module HelperMethods
     fill_in 'user[password]', :with => 'demo123'
     click_button 'Ingresar'
   end
-
+  
   # Creates a user logins and creates and organisation
   def create_organisation(attributes = {})
     if attributes.empty?
@@ -79,6 +79,10 @@ module HelperMethods
     fill_in 'organisation[address]', :with => 'Cerror #51'
     fill_in 'organisation[phone]', :with => 'empresa@mail.com'
     click_button 'Crear'
+  end
+
+  def set_exchange_rate
+
   end
 end
 

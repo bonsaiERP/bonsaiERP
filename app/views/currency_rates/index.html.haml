@@ -1,0 +1,15 @@
+%h1 currency_rates
+
+%p.links= link_to "Nuevo currency_rate", new_currency_rate_path, :class => 'new'
+
+%table.decorated.nwl 
+  %thead
+    %tr
+      %th Rate
+      %th
+  
+  %tbody
+    - for currency_rate in @currency_rates
+      %tr{ :class => cycle(:odd, :even) }
+        %td= currency_rate.rate
+        %td.actions= bonsai_links(currency_rate)

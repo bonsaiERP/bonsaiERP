@@ -2,31 +2,32 @@
   - if organisation?
     %li= link_to "Dashboard", dashboard_path 
     %li
-      %a{ :href => "javascript:"} Inventarios <span class=\"down\">&nbsp;</span>
+      %a.more{ :href => "javascript:"} Inventarios
       %ul
-        %li= link_to "Almacenes", stores_path 
-        %li= link_to "Items", items_path 
-        %li= link_to "Items de gasto", items_path(:ctype => Item::TYPES[1])
-        %li= link_to "Productos", items_path(:ctype => Item::TYPES[2])
-        %li= link_to "Servicios", items_path(:ctype => Item::TYPES[3])
-        %li= link_to "Unidades de medida", units_path 
-        %li= link_to "Stocks" 
-        %li= link_to "Transferencias" 
+        %li <a href="/stores">Almacenes</a>
+        %li <a href="/items">Items</a>
+        %li <a href="/units">Unidades de medida</a> 
+        %li <a href="/stocks">Stocks</a>
+        %li <a href="/transferences">Transferencias</a>
     
     %li
-      %a{ :href => "javascript:"} Ingresos - Egresos <span class=\"down\">&nbsp;</span>
+      %a.more{ :href => "javascript:"} Ingresos - Egresos
       %ul
-        %li
-          = link_to "Nuevo", '/incomes/new', :class => 'add', :title => 'Nuevo'
-          = link_to "Ingresos", '/incomes', :class => 'add_left'
-        %li= link_to "Compras", '/buys' # incomes_path 
-        %li= link_to "Egresos", '/expenses' 
-        %li= link_to "Contactos", '/contacts' # contacts_path 
-        %li= link_to "Impuestos", '/taxes' 
-        %li= link_to "Transferencias entre cuentas" 
+        %li <a href="/incomes">Ventas</a>
+        %li <a href="/buys">Compras</a>
+        %li <a href="/expenses">Egresos</a>
+        %li <a href="/projects">Proyectos</a>
+        %li <a href="/contacts">Contactos</a>
+        %li <a href="/taxes">Impuestos</a>
+        %li <a href="#">Transferencias entre cuentas</a>
+    %li
+      %a.more{ :href => "javascript:"} Cuentas
+      %ul
+        %li <a href="/banks">Bancos</a>
+        %li <a href="/cash_registers">Cajas</a>
     
     %li
-      %a{ :href => "javascript:"} Reportes <span class=\"down\">&nbsp;</span>
+      %a.more{ :href => "javascript:"} Reportes
       %ul
         %li= link_to "General" 
         %li= link_to "Item" 

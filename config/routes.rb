@@ -1,7 +1,35 @@
 Bonsaierp::Application.routes.draw do
 
+  resources :account_ledgers
+
+  resources :banks
+
+  resources :cash_registers
+
+  resources :payments
+
+  resources :pay_plans do
+    member do
+      get :email
+    end
+  end
+
+  resources :currency_rates do
+    member do
+      get 'check'
+    end
+  end
+
+  resources :projects
+
   resources :transactions
-  resources :incomes
+
+  resources :incomes do
+    member do
+      put 'aprove'
+      put 'null'
+    end
+  end
 
   resources :buys
 

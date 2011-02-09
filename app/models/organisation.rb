@@ -18,6 +18,8 @@ class Organisation < ActiveRecord::Base
 
   has_and_belongs_to_many :currencies
 
+  delegate :code, :name, :symbol, :to => :currency, :prefix => true
+
   # validations
   validates_associated :country
   validates_associated :currency

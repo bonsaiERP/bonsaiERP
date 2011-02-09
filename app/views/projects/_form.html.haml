@@ -1,0 +1,11 @@
+= simple_form_for(@project) do |f|
+  = bonsai_form_error(f)
+  = f.input :name, :label => 'Nombre'
+  .input
+    = f.input :active, :label => 'Activo', :wrapper_html => {:class => '_33'}
+    = f.input :date_start, :label => 'Fecha de inicio', :wrapper_html => {:class => '_33'}, :include_blank => true
+    = f.input :date_end, :label => 'Fecha de fin', :wrapper_html => {:class => '_33'}, :include_blank => true
+  .clear
+
+  .actions
+    = f.submit 'Salvar'

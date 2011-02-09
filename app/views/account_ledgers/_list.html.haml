@@ -1,0 +1,12 @@
+%table.decorated._50
+  %tr
+    %th Fecha
+    %th Cantidad
+    %th Pago
+  - account_ledgers.each do |al|
+    %tr
+      %td= lo al.date
+      %td.r= ntc al.amount
+      %td= with_payment(al)
+
+

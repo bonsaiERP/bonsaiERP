@@ -1,25 +1,25 @@
 = simple_form_for(@item) do |f|
   = bonsai_form_error(f)
-  = f.input :ctype, :as => :hidden
+  /= f.input :ctype, :as => :hidden
 
-  = f.input :name, :label => 'Nombre'
   = f.input :code, :label => 'Código'
+  = f.input :name, :label => 'Nombre'
   .clear
-  = f.association :unit, :label => "Unidad", :input_html => { 'data-path' => new_unit_path }
-  = f.input :active, :label => "Activo", :as => :radio
+  = f.input :unitary_cost, :label => 'Costo unitario', :input_html => {:size => 12}
+  = f.input :price, :label => 'Precio de venta', :input_html => {:size => 12}
   .clear
-
-  = f.input :unitary_cost, :label => 'Costo unitario'
-  - if f.object.product?
-    = f.input :price, :label => 'Precio'
-    = f.input :discount, :label => 'Descuento (%)'
+  .input
+    = f.association :unit, :label => "Unidad", :input_html => { 'data-path' => new_unit_path }
+    = f.input :active, :label => "Activo", :as => :radio
+  = f.input :ctype, :label => 'Tipo', :collection => Item.get_types, :as => :radio
   .clear
+  /= f.input :discount, :label => 'Descuento en venta (%)', :hint => 'Ej: 10:2.5 20:4'
   = f.input :tag_list, :label => 'Etiquetas', :hint => 'Escriba palabras separadas por comas, Ej.: grande, costoso'
-  = f.input :description, :as => :text, :input_html => {:rows => 5}, :label => "Descripción"
+  = f.input :description, :as => :text, :input_html => {:rows => 5}
   .clear
   
   = f.submit "Salvar"
-= javascript_include_tag 'item'
+/= javascript_include_tag 'app/item'
 
 :javascript
   
@@ -27,5 +27,5 @@
 
     $('select[data-path]').prepend('<option class="new" value="" >Adicionar nuevo</option>');
 
-    var item_discount_div = new DiscountRange('item_discount');
+    //var item_discount_div = new DiscountRange('item_discount');
   });

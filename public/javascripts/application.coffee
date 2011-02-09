@@ -1,23 +1,41 @@
 $(document).ready(->
-  # Velocidad en milisegundos
+  _b = {}
+  window._b = _b
+  # Speed in milliseconds
   speed = 300
   # csfr
   csfr_token = $('meta[name=csfr-token]').attr('content')
   # Date format
-  $.dateInputFormat = $.fn.dateInputFormat = 'dd mmm yyyy'
+  $.datepicker._defaults.dateFormat = 'dd M yy'
 
-  # Parsea la fecha con formato seleciando a un objeto Date
-  # @param String fecha
-  # @param String tipo : Tipo de dato a devolver
-  parsearFecha = (fecha, tipo)->
-    fecha = $.datepicker.parseDate($.datepicker._defaults.dateFormat, fecha )
-    d = [ fecha.getFullYear(), fecha.getMonth() + 1, fecha.getDate() ]
+  # Parses the date with a predefined format
+  # @param String date
+  # @param String type : Type to return
+  parseDate = (date, tipo)->
+    date = $.datepicker.parseDate($.datepicker._defaults.dateFormat, date )
+    d = [ date.getFullYear(), date.getMonth() + 1, date.getDate() ]
     if 'string' == tipo
       d.join("-")
     else
       d
 
-  # Returns the date
+  # Transforms a string date in a default 
+  _b.dateFormat = (date, format)->
+    format = format || $.datepicker._defaults.dateFormat
+    if date
+      d = $.datepicker.parseDate('yy-mm-dd', date )
+      $.datepicker.formatDate($.datepicker._defaults.dateFormat, d)
+    else
+      ""
+  # Sets rails select fields with the correct datthe correct date
+  setDateSelect = (el)->
+    el = el || this
+    date = parseDate( $(el).val() )
+    $(el).siblings('select[name*=1i]').val(date[0]).trigger("change")
+    $(el).siblings('select[name*=2i]').val(date[1]).trigger("change")
+    $(el).siblings('select[name*=3i]').val(date[2]).trigger("change")
+
+  $.setDateSelect = $.fn.setDateSelect = setDateSelect
 
   # Transforms the hour to just select 00, 15, 30, 
   transformMinuteSelect = (el, step = 5)->
@@ -33,32 +51,36 @@ $(document).ready(->
     $(el).html(options)
 
   # Transforms a dateselect field in rails to jQueryUI
-  transformDateSelect = (elem)->
-    $(elem).find('.date, .datetime').each((i, el)->
+  transformDateSelect = ->
+    $(this).find('.date, .datetime').each((i, el)->
       # hide fields
-      input = $('<input/>').attr({ 'class': 'date-transform', 'type': 'text', 'size': 12})
+      input = document.createElement('input')
+      $(input).attr({ 'class': 'date-transform', 'type': 'text', 'size': 10 })
       year = $(el).find('select[name*=1i]').hide().val()
       month = (1 * $(el).find('select[name*=2i]').hide().val()) - 1
-      # append input
       day = $(el).find('select[name*=3i]').hide().after( input ).val()
       minute = $(el).find('select[name*=5i]')
 
       if minute.length > 0 then transformMinuteSelect(minute)
 
-      $(input).dateinput(
-        'format': $.dateInputFormat
-        'lang': 'es',
-        'selectors': true,
-        'firstDay': 1,
-        'change': ->
-          val = this.getValue('yyyy-mm-dd')
-          val = val.split('-')
-          self = this.getInput()
-          $(val).each( (i, el)->
-            value = el.replace(/^0([0-9]+$)/, '$1')
-            $(self).siblings('select[name*=' + (i + 1) + 'i]').val(value)
-          )
+      # Solo despues de haber adicionado al DOM hay que 
+      # usar datepicker si se define el boton
+      $(input).datepicker(
+        yearRange: '1900:',
+        showOn: 'both',
+        buttonImageOnly: true,
+        buttonImage: '/stylesheets/images/calendar.gif'
+        #onSelect: (dateText, inst)->
+          #  $.setDateSelect(inst.input)
       )
+      $(input).change((e)->
+        $.setDateSelect(this)
+        $(this).trigger("change:datetime", this)
+      )
+
+      if year != '' and month != '' and day != ''
+        $(input).datepicker("setDate", new Date(year, month, day))
+      $('.ui-datepicker').not('.ui-datepicker-inline').hide()
     )
 
   $.transformDateSelect = $.fn.transformDateSelect = transformDateSelect
@@ -66,15 +88,7 @@ $(document).ready(->
 
   ##################################################
 
-  # Asignar la fecha a los elementos siblings del campo con datepicker
-  # cuando los campos son select
-  setFechaDateSelect = (el)->
-    fecha = parsearFecha( $(el).val() )
-    $(el).siblings('select[name*=1i]').val(fecha[0])
-    $(el).siblings('select[name*=2i]').val(fecha[1])
-    $(el).siblings('select[name*=3i]').val(fecha[2])
-
-  # Presenta un tooltip
+  # Presents a tooltip
   $('[tooltip]').live('mouseover mouseout', (e)->
     div = '#tooltip'
     if($(this).hasClass('error') )
@@ -93,7 +107,7 @@ $(document).ready(->
 
   )
 
-  # Para poder presentar mas o menos
+  # Presents more or less links
   $('a.more').live("click", ->
     $(this).html('Ver menos').removeClass('more').addClass('less').next('.hidden').show(speed)
   )
@@ -104,38 +118,74 @@ $(document).ready(->
 
   # Creates the dialog container
   createDialog = (params)->
+    data = params
     params = $.extend({
-      'id': new Date().getTime(), 'title': '', 'width': 800, 'height' : 400, 'modal': true, 'resizable' : false
+      'id': new Date().getTime(), 'title': '', 'width': 800, 'height' : 400, 'modal': true, 'resizable' : false,
+      'close': (e, ui)->
+        $('#' + div_id ).parents("[role=dialog]").detach()
     }, params)
+    div_id = params.id
     div = document.createElement('div')
-    $(div).attr( { 'id': params['id'], 'title': params['title'], 'data-ajax_id': params['id'] } )
-    .addClass('ajax-modal').css( { 'z-index': 1000 } )
+    $(div).attr( { 'id': params['id'], 'title': params['title'] } ).data(data)
+    .addClass('ajax-modal').css( { 'z-index': 10000 } )
     delete(params['id'])
     delete(params['title'])
     $(div).dialog( params )
     div
 
-  #$.fn.createDialog = createDialog
+  # Gets if the request is new, edit, show
+  getAjaxType = (el)->
+    if $(el).hasClass("new")
+      'new'
+    else if $(el).hasClass("edit")
+      'edit'
+    else
+      'show'
+
+  window.getAjaxType = getAjaxType
 
   # Presents an AJAX form
   $('a.ajax').live("click", (e)->
-    id = new Date().getTime().toString()
-    $(this).attr('data-ajax_id', id)
-
-    div = createDialog( { 'title': $(this).attr('data-title') } )
+    data = $.extend({'title': $(this).attr('title'), 'ajax-type': getAjaxType(this) }, $(this).data() )
+    div = createDialog( data )
     $(div).load( $(this).attr("href"), (e)->
-      $(div).find('a.new[href*=/], a.edit[href*=/], a.list[href*=/]').hide()
+      #$(div).find('a.new[href*=/], a.edit[href*=/], a.list[href*=/]').hide()
+      $(div).transformDateSelect()
     )
     e.stopPropagation()
     false
   )
 
-  # Para redondear decimales
-  roundVal = (val, dec)->
-  	dec = dec or 2
-	  Math.round(val*Math.pow(10,dec))/Math.pow(10,dec)
+  currency = {'separator': ",", 'delimiter': '.', 'precision': 2}
+  _b.currency = currency
+  # ntc similar function to Ruby on rails number_to_currency
+  # @param [String, Decimal, Integer] val
+  ntc = (val)->
+    val = if typeof val == 'string' then (1 * val) else val
+    if val < 0 then sign = "-" else sign = ""
+    val = val.toFixed(_b.currency.precision)
+    vals = val.toString().replace(/^-/, "").split(".")
+    val = vals[0]
+    l = val.length - 1
+    ar = val.split("")
+    arr = []
+    tmp = ""
+    c = 0
+    for i in [l..0]
+      tmp = ar[i] + tmp
+      if (l - i + 1)%3 == 0 and i < l
+        arr.push(tmp)
+        tmp = ''
+      c++
 
-  $.roundVal = $.fn.roundVal = roundVal
+    t = arr.reverse().join(_b.currency.delimiter)
+    if tmp != ""
+      sep = if t.length > 0 then _b.currency.delimiter else ""
+      t = tmp + sep + t
+    sign + t + _b.currency.separator + vals[1]
+
+  # Set the global variable
+  _b.ntc = ntc
 
   # presents the dimesion in bytes
   toByteSize = (bytes)->
@@ -149,7 +199,8 @@ $(document).ready(->
       else
         roundVal( bytes/ Math.pow(1024, 6)) + " EB"
 
-  window.tobyteSize = $.toByteSize = $.fn.toByteSize = toByteSize
+  # Set the global variable
+  _b.tobyteSize = toByteSize
 
   # Creation of Iframe to make submits like AJAX requests with files
   setIframePostEvents = (iframe, created)->
@@ -184,13 +235,15 @@ $(document).ready(->
   )
 
 
-  # Hacer submit de un formulario AJAX que permite crear nuevos datos
-  # Si al retornar no hay formulario significa que reenvia a una vista
-  # y que la transaccion a sido completada
+  # Makes that a dialog opened window makes an AJAX request and returns a JSON response
+  # if response is JSON then trigger event stored in dialog else present the HTML
   $('div.ajax-modal form[enctype!=multipart/form-data]').live('submit', ->
 
     data = serializeFormElements(this)
     el = this
+    $div = $(this).parents('.ajax-modal')
+    new_record = if $div.data('ajax-type') == 'new' then true else false
+    trigger = $div.data('trigger')
 
     $.ajax(
       'url': $(el).attr('action')
@@ -199,36 +252,52 @@ $(document).ready(->
       'data':data
       'type': (data['_method'] || $(this).attr('method') )
       'success': (resp, status, xhr)->
-        if $(resp).find('input:submit').length <= 0
+        try
+          data = $.parseJSON(resp)
+          data['new_record'] = new_record
           p = $(el).parents('div.ajax-modal')
-          id = $(p).attr('data-ajax_id')
-          $(p).dialog('destroy')
-          #$(p).remove()
-          $('body').trigger('ajax:complete', [resp])
-        else
-          $(el).parents('div.ajax-modal:first').html(resp)
+          $(p).html('').dialog('destroy')
+          $('body').trigger(trigger, [data])
+        catch e
+          div = $(el).parents('div.ajax-modal:first')
+          div.html(resp)
+          setTimeout(->
+            $(div).transformDateSelect()
+          ,200)
       'error': (resp)->
-        alert('Existen errores en su formulario por favor corrija los errores')
+        alert('There are errors in the form please correct them')
     )
 
     false
   )
   # End submit ajax form
 
+  # Function that handles the return of an AJAX request and process if add or replace
+  # @param String template: HTML template
+  # @param Object data: JSON data
+  # @param String macro: jQuery function for insert, ["insertBefore", "insertAfter", "appendTo"]
+  # @param String node: Indicates the node type ['tr', 'li']
+  updateTemplateRow = (template, data, macro)->
+    if $.inArray(macro, ["insertBefore", "insertAfter", "appendTo"]) < 0
+      macro = "insertAfter"
 
-  # Cambiar icono para more y less
-  #$('ul.menu>li').live('mouseover mouseout', (e)->
-  #  $span = $(this).find('.more, .less')
-  #  if(e.type == 'mouseover')
-  #    $span.removeClass('more').addClass('less')
-  #  else
-  #    $span.removeClass('less').addClass('more')
-  #)
+    if(data['new_record'])
+      $node = $.tmpl(template, data)[macro](this)
+    else
+      $node = $(this).find("##{data.id}")
+      tmp = $.tmpl(template, data).insertBefore($node)
+      $node.detach()
+      $node = tmp
+    $node.mark()
+    $('body').trigger("update:template", [$node, data])
+
+  $.updateTemplateRow = $.fn.updateTemplateRow = updateTemplateRow
 
   # Delete an Item
   $('a.delete').live("click", (e)->
-    $(this).parents("tr:first, li:first").addClass('marked')
-    if(confirm('Esta seguro de borrar el item seleccionado')) 
+    self = this
+    $(self).parents("tr:first, li:first").addClass('marked')
+    if(confirm('Esta seguro de borrar el item seleccionado'))
       url = $(this).attr('href')
       el = this
 
@@ -236,29 +305,42 @@ $(document).ready(->
         'url': url
         'type': 'delete'
         'context': el
-        'success': ->
-          $(el).parents("tr:first, li:first").remove()
-          $('body').trigger('ajax:delete', url)
+        'success': (resp, status, xhr)->
+          try
+            data = $.parseJSON(resp)
+            if data.destroyed
+              $(el).parents("tr:first, li:first").remove()
+            else
+              $(self).parents("tr:first, li:first").removeClass('marked')
+              alert("Error: #{data.base_error}")
+            $('body').trigger('ajax:delete', [data, url])
+          catch e
+            $(self).parents("tr:first, li:first").removeClass('marked')
+            #alert('Existio un error al borrar')
         'error': ->
-          alert('Existio un error al borrar')
+          $(self).parents("tr:first, li:first").removeClass('marked')
       )
 
     else
       $(this).parents("tr:first, li:first").removeClass('marked')
       e.stopPropagation()
 
-    return false
+    false
   )
 
   # Serializes values from a form to be send via AJAX
   serializeFormElements = (elem)->
     params = {}
 
-    $(elem).find('input, select, textarea').each((i, el)->
+    $(elem).find('input:not(:radio):not(:checkbox), select, textarea').each((i, el)->
+      if $(el).val()
+        params[ $(el).attr('name') ] = $(el).val()
+    )
+    $(elem).find('input:radio:checked, input:checkbox:checked').each((i, el)->
       params[ $(el).attr('name') ] = $(el).val()
     )
 
-    return params
+    params
 
   $.serializeFormElements = $.fn.serializeFormElements = serializeFormElements
 
@@ -266,21 +348,62 @@ $(document).ready(->
   # @param String // jQuery selector
   # @param Integer velocity
   mark = (selector, velocity, val)->
+    self = selector or this
     val = val or 0
-    velocity = velocity or 7
-    $(selector).css({'background': 'rgb(255,255,'+val+')'})
+    velocity = velocity or 30
+    $(self).css({'background': 'rgb(255,255,'+val+')'})
     if(val >= 255)
-      $(selector).attr("style", "")
+      $(self).attr("style", "")
       return false
     setTimeout(->
       val += 5
-      mark(selector, velocity, val)
+      mark(self, velocity, val)
     , velocity)
 
   $.mark = $.fn.mark = mark
 
+  # Adds a new link to any select with a data-new-url
+  $('select[data-new_url]').each((i, el)->
+    data = $(el).data()
+    $(el).after(" <a href='#{$(el).data('new_url')}' class='ajax' title='#{data.title}' data-trigger='#{data.trigger}'>#{data.title}</a>")
+  )
+
+  createSelectOption = (value, label)->
+    opt = "<option selected='selected' value='#{value}'>#{label}</option>"
+    $(this).append(opt).val(value)
+
+  $.createSelectOption = $.fn.createSelectOption = createSelectOption
+
   start = ->
-    transformDateSelect('body')
+    $('body').transformDateSelect()
+
+  createErrorLog = (data)->
+    unless $('#error-log').length > 0
+      $('<div id="error-log"></div>').dialog({title: 'Error', width: 900, height: 500})
+
+    $('#error-log').html(data).dialog("open")
+
+  # AJAX setup
+  $.ajaxSetup ({
+      dataType : "html",
+      beforeSend : (xhr)->
+        #$('#cargando').show();
+      error : (event) ->
+        #$('#cargando').hide(1000)
+        #createErrorLog(event.responseText)
+      complete : (event)->
+        if $.inArray(event.status, [404, 422, 500]) >= 0
+          createErrorLog(event.responseText)
+        #$('#cargando').hide(1000)
+      success : (event)->
+        #$('#cargando').hide(1000)
+    })
 
   start()
 )
+# Extendig base claeses
+String.prototype.pluralize = ->
+  if /[aeiou]$/.test(this)
+    return this + "s"
+  else
+    return this + "es"

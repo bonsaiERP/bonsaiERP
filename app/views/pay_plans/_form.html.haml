@@ -1,0 +1,36 @@
+= simple_form_for @pay_plan do |f|
+  = hidden_field_tag "pay_type", params[:pay_type]
+  = f.input :ctype, :as => :hidden
+  = f.input :transaction_id, :as => :hidden
+  = f.input :payment_date, :label => 'Fecha de cobro'
+  = f.input :alert_date, :label => 'Fecha de advertencia'
+  .clear
+  = f.input :amount, :label => 'Cantidad', :input_html => {:size => 12}
+  = f.input :interests_penalties, :label => 'Intereses/Penalidades', :input_html => {:size => 12}
+  .clear
+  /= f.input :email, :hint => 'Envía un email automaticamente el la fecha de advertencia'
+  = f.input :description, :as => :text, :input_html => {:rows => 4, :cols => 35 }
+  .clear
+  .submit
+    = f.submit "Salvar"
+:javascript
+  $(function() {
+    /**
+    * Sets the alert days before the date
+    * @param Date date
+    */
+    setAlertDate = function(date) {
+      days = 5;// Has to be defined in conf in the future
+      var before = new Date( date.getTime() - 1000 * 3600 * 24 * days );
+      date = $.datepicker.formatDate($.datepicker._defaults.dateFormat, before);
+      $('#pay_plan_alert_date_1i').siblings('input.hasDatepicker').datepicker("setDate", date).trigger("change");
+    }
+
+    // Die all events
+    $('#pay_plan_payment_date_1i').die();
+    // Set event
+    $('#pay_plan_payment_date_1i').live("change", function() {
+      var date = $(this).siblings('input.hasDatepicker').datepicker("getDate");
+      setAlertDate( date );
+    });
+  });

@@ -28,6 +28,7 @@ class CreateTransactions < ActiveRecord::Migration
     add_index :transactions, :ref_number
     add_index :transactions, :date
     add_index :transactions, :organisation_id
+    add_index :transactions, :currency_id
   end
 
   def self.down

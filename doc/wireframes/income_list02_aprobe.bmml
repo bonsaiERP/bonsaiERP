@@ -1,0 +1,179 @@
+<mockup version="1.0" skin="sketch" measuredW="1029" measuredH="651" mockupW="908" mockupH="649">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="159" y="2" w="870" h="649" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderColor>15132390</borderColor>
+        <color>15132390</color>
+      </controlProperties>
+    </control>
+    <control controlID="6" controlTypeID="com.balsamiq.mockups::Canvas" x="208" y="176" w="771" h="432" measuredW="100" measuredH="70" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderColor>16777215</borderColor>
+      </controlProperties>
+    </control>
+    <control controlID="7" controlTypeID="com.balsamiq.mockups::Canvas" x="208" y="107" w="771" h="494" measuredW="100" measuredH="70" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderColor>16777215</borderColor>
+      </controlProperties>
+    </control>
+    <control controlID="17" controlTypeID="com.balsamiq.mockups::TabBar" x="208" y="248" w="772" h="317" measuredW="511" measuredH="100" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>false</bold>
+        <borderStyle>none</borderStyle>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22524%2C246%2C627%2C275%22%20href%3D%22sale_list_repeat.bmml%22%20alt%3D%22sale_list_repeat%22%20id%3D%2217_0%22/%3E%0A</map>
+        <selectedIndex>1</selectedIndex>
+        <text>Todas%2C%20Esperando%20Aprobaci%F3n%20%28*2*%29%2C%20Esperando%20Cobro%20%28*3*%29%2C%20Cobradas</text>
+      </controlProperties>
+    </control>
+    <control controlID="27" controlTypeID="com.balsamiq.mockups::Canvas" x="159" y="2" w="869" h="107" measuredW="100" measuredH="70" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderStyle>none</borderStyle>
+        <color>3355443</color>
+      </controlProperties>
+    </control>
+    <control controlID="29" controlTypeID="com.balsamiq.mockups::Paragraph" x="780" y="19" w="220" h="26" measuredW="200" measuredH="140" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <align>right</align>
+        <color>16777215</color>
+        <size>11</size>
+        <text>Cuenta%20%20Configuraci%F3n%20%20Ayuda</text>
+      </controlProperties>
+    </control>
+    <control controlID="44" controlTypeID="com.balsamiq.mockups::Title" x="175" y="7" w="-1" h="-1" measuredW="134" measuredH="51" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>16777215</color>
+        <href>dashboard%26bm%3Bdashboard.bmml%26bm%3Bdashboard.bmml%26bm%3Bdashboard.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2254%2C5%2C188%2C56%22%20href%3D%22dashboard.bmml%22%20alt%3D%22dashboard%22%20id%3D%2244%22/%3E</map>
+        <size>32</size>
+        <text>Empresa</text>
+      </controlProperties>
+    </control>
+    <control controlID="45" controlTypeID="com.balsamiq.mockups::Label" x="175" y="70" w="-1" h="-1" measuredW="76" measuredH="25" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>16777215</color>
+        <href>lot_list%26bm%3Blot_list.bmml%26bm%3Blot_list.bmml%26bm%3Blot_list.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2254%2C68%2C130%2C93%22%20href%3D%22lot_list.bmml%22%20alt%3D%22lot_list%22%20id%3D%2245%22/%3E</map>
+        <text>Inventarios</text>
+      </controlProperties>
+    </control>
+    <control controlID="46" controlTypeID="com.balsamiq.mockups::Label" x="274" y="70" w="-1" h="-1" measuredW="54" measuredH="25" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>16777215</color>
+        <href>buy_list%26bm%3Bbuy_list.bmml%26bm%3Bbuy_list.bmml%26bm%3Bbuy_list.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22153%2C68%2C207%2C93%22%20href%3D%22buy_list.bmml%22%20alt%3D%22buy_list%22%20id%3D%2246%22/%3E</map>
+        <text>Compras</text>
+      </controlProperties>
+    </control>
+    <control controlID="47" controlTypeID="com.balsamiq.mockups::Label" x="361" y="70" w="-1" h="-1" measuredW="46" measuredH="25" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>16777215</color>
+        <href>sale_list%26bm%3Bsale_list.bmml%26bm%3Bsale_list.bmml%26bm%3Bsale_list.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22240%2C68%2C286%2C93%22%20href%3D%22sale_list.bmml%22%20alt%3D%22sale_list%22%20id%3D%2247%22/%3E</map>
+        <text>Ventas</text>
+      </controlProperties>
+    </control>
+    <control controlID="48" controlTypeID="com.balsamiq.mockups::Label" x="337" y="70" w="10" h="25" measuredW="10" measuredH="25" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>16777215</color>
+        <text>%7C</text>
+      </controlProperties>
+    </control>
+    <control controlID="49" controlTypeID="com.balsamiq.mockups::Label" x="443" y="70" w="-1" h="-1" measuredW="46" measuredH="25" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>16777215</color>
+        <href>expense_list%26bm%3Bexpense_list.bmml%26bm%3Bexpense_list.bmml%26bm%3Bexpense_list.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22322%2C68%2C368%2C93%22%20href%3D%22expense_list.bmml%22%20alt%3D%22expense_list%22%20id%3D%2249%22/%3E</map>
+        <text>Gastos</text>
+      </controlProperties>
+    </control>
+    <control controlID="50" controlTypeID="com.balsamiq.mockups::Label" x="420" y="70" w="10" h="25" measuredW="10" measuredH="25" zOrder="12" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>16777215</color>
+        <text>%7C</text>
+      </controlProperties>
+    </control>
+    <control controlID="51" controlTypeID="com.balsamiq.mockups::Label" x="515" y="70" w="66" h="25" measuredW="66" measuredH="25" zOrder="13" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>16777215</color>
+        <href>contacts_list%26bm%3Bcontacts_list.bmml%26bm%3Bcontacts_list.bmml%26bm%3Bcontacts_list.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22394%2C68%2C460%2C93%22%20href%3D%22contacts_list.bmml%22%20alt%3D%22contacts_list%22%20id%3D%2251%22/%3E</map>
+        <text>Contactos</text>
+      </controlProperties>
+    </control>
+    <control controlID="52" controlTypeID="com.balsamiq.mockups::Label" x="502" y="70" w="10" h="25" measuredW="10" measuredH="25" zOrder="14" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>16777215</color>
+        <text>%7C</text>
+      </controlProperties>
+    </control>
+    <control controlID="53" controlTypeID="com.balsamiq.mockups::Label" x="601" y="70" w="-1" h="-1" measuredW="60" measuredH="25" zOrder="15" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>16777215</color>
+        <href>reports%26bm%3Breports.bmml%26bm%3Breports.bmml%26bm%3Breports.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22480%2C68%2C540%2C93%22%20href%3D%22reports.bmml%22%20alt%3D%22reports%22%20id%3D%2253%22/%3E</map>
+        <text>Reportes</text>
+      </controlProperties>
+    </control>
+    <control controlID="54" controlTypeID="com.balsamiq.mockups::Label" x="584" y="70" w="10" h="25" measuredW="10" measuredH="25" zOrder="16" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>16777215</color>
+        <text>%7C</text>
+      </controlProperties>
+    </control>
+    <control controlID="55" controlTypeID="com.balsamiq.mockups::Label" x="255" y="70" w="10" h="25" measuredW="10" measuredH="25" zOrder="17" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>16777215</color>
+        <text>%7C</text>
+      </controlProperties>
+    </control>
+    <control controlID="76" controlTypeID="com.balsamiq.mockups::Label" x="121" y="347" w="-1" h="-1" measuredW="45" measuredH="25" zOrder="18" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>16777215</color>
+        <text>Borrar</text>
+      </controlProperties>
+    </control>
+    <control controlID="82" controlTypeID="__group__" x="228" y="191" w="148" h="32" measuredW="148" measuredH="32" zOrder="19" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::PointyButton" x="0" y="0" w="148" h="-1" measuredW="129" measuredH="32" zOrder="0" locked="false" isInGroup="82">
+          <controlProperties>
+            <bold>true</bold>
+            <color>15132390</color>
+            <customID>create_new</customID>
+            <direction>center</direction>
+            <href>income_01new%26bm%3Bincome_01new.bmml%26bm%3Bincome_01new.bmml%26bm%3Bincome_01new.bmml</href>
+            <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22107%2C189%2C255%2C221%22%20href%3D%22income_01new.bmml%22%20alt%3D%22income_01new%22%20id%3D%220%22/%3E</map>
+            <size>16</size>
+            <text>%20%20Nueva%20venta</text>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Image" x="9" y="8" w="16" h="16" measuredW="16" measuredH="16" zOrder="1" locked="false" isInGroup="82">
+          <controlProperties>
+            <src>./assets/add.png</src>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="83" controlTypeID="com.balsamiq.mockups::Title" x="222" y="119" w="-1" h="-1" measuredW="84" measuredH="40" zOrder="20" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>24</size>
+        <text>Ventas</text>
+      </controlProperties>
+    </control>
+    <control controlID="84" controlTypeID="com.balsamiq.mockups::DataGrid" x="224" y="303" w="738" h="205" measuredW="612" measuredH="97" zOrder="21" locked="false" isInGroup="-1">
+      <controlProperties>
+        <alternateRowColor>15594478</alternateRowColor>
+        <bold>false</bold>
+        <borderStyle>none</borderStyle>
+        <hasHeader>true</hasHeader>
+        <hLines>false</hLines>
+        <rowHeight>27</rowHeight>
+        <selectedIndex>-1</selectedIndex>
+        <size>12</size>
+        <text>*Cliente*%2C%20*Referencia*%2C%20*Fecha*%2C%20*Vence%20el*%2C%20*Total*%2C%20*Saldo*%2C%20*Dinero%5Cratrasado*%2C%20*Estado*%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%0A%5BAntalis%5D%2C%202010-0002%2C%2029%20Dic%202009%2C%20%2C12000.00%2C%2C%2C%20Borrador%2C%20%0A%5BPapirus%5D%2C%202009-0125%2C12%20Dic%202009%2C%20%2C%2012500.00%2C%2C%2C%20Borrador</text>
+        <underline>false</underline>
+        <verticalScrollbar>false</verticalScrollbar>
+        <vLines>false</vLines>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

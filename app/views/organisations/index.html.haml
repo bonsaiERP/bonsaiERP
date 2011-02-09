@@ -1,0 +1,25 @@
+%h1 Empresas
+
+%p= link_to 'Nueva empresa', new_organisation_path, :class => 'new'
+%ul#organisations_list
+  -@organisations.each do |organisation|
+    %li
+      %h2= link_to organisation.name, select_organisation_path(organisation), :id => organisation.id
+      =raw bonsai_links(organisation)
+
+:javascript
+  $(function() {
+    /*
+      $('#organisations_list li h2 a').live("click", function(){
+      var self = this, id = $(this).attr("id");
+      $.getJSON('/currency_rates/' + id + '/check', function(resp) {
+        if(resp.success) {
+          window.location = $(self).attr("href");
+        }else{
+          alert("You must update rates");
+        }
+      });
+      return false;
+    })
+    */
+  })

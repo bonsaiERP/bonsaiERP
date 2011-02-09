@@ -1,0 +1,19 @@
+%h1 Proyecto
+%p.links
+  = link_to 'Editar', edit_project_path(@project), :class => 'edit'
+  = link_to 'Lista', projects_path, :class => 'list'
+
+.input
+  %label  Nombre
+  = @project.name
+.input
+  %label Activo
+  %span.icon{:class => @project.active }
+.clear
+.input._25
+  %label Fecha de inicio
+  = lo @project.date_start
+.input._25
+  %label Fecha de fin
+  = lo @project.date_end
+.clear

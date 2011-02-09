@@ -8,7 +8,8 @@ class CreateContacts < ActiveRecord::Migration
       t.string :address_alt, :limit => 250
       t.string :phone, :limit => 20
       t.string :mobile, :limit => 20
-      t.string :ctype, :limit => 40 # Types ['Cliente', 'Proveedor', 'Cliente/Proveedor']
+      t.boolean :client, :default => false
+      t.boolean :supplier, :default => false
       t.string :email, :limit => 200
       t.string :tax_number, :limit => 30
       t.string :aditional_info, :limit => 250
@@ -20,6 +21,8 @@ class CreateContacts < ActiveRecord::Migration
 
     add_index(:contacts, :organisation_id)
     add_index(:contacts, :matchcode)
+    add_index(:contacts, :client)
+    add_index(:contacts, :supplier)
   end
 
   def self.down

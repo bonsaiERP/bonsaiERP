@@ -1,0 +1,20 @@
+%h1 account
+%p.links
+  = link_to 'Editar', edit_account_path(@account), :class => 'edit'
+  = link_to 'Lista', accounts_path, :class => 'list'
+
+.input
+  %label #<Rails::Generators::GeneratedAttribute:0xc2d34b0>
+  %span= @account.name
+.input
+  %label #<Rails::Generators::GeneratedAttribute:0xc2d335c>
+  %span= @account.address
+.input
+  %label #<Rails::Generators::GeneratedAttribute:0xc2d32a8>
+  %span= @account.email
+.input
+  %label #<Rails::Generators::GeneratedAttribute:0xc2d31a4>
+  %span= @account.website
+.input
+  %label #<Rails::Generators::GeneratedAttribute:0xc2d30a0>
+  %span= @account.number

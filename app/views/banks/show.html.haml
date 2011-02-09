@@ -1,0 +1,33 @@
+%h1 Banco
+%p.links
+  = link_to 'Editar', edit_bank_path(@bank), :class => 'edit'
+  = link_to 'Lista', banks_path, :class => 'list'
+.main
+  .input
+    %h3= @bank.number
+  .input
+    %span.b= @bank.name
+  .clear
+  .input
+    %label Moneda
+    %span= @bank.currency
+  .input
+    %label Total en cuenta
+    %span= ntc @bank.total_amount
+  .clear
+.clear
+.input
+  %label Dirección
+  %span= @bank.address
+.input
+  %label Teléfono
+  %span= @bank.phone
+.clear
+.input
+  %label Email
+  %span= @bank.email
+.input
+  %label Sitio web
+  %span= @bank.website
+
+= render "account_ledgers/list", :account_ledgers => @bank.account_ledgers.includes(:payment)

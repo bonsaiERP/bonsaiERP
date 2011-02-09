@@ -1,0 +1,6 @@
+%h1 Editar proyecto
+%p.links
+  = link_to 'Ver', @project, :class => 'list'
+  = link_to 'Lista', projects_path, :class => 'show'
+
+= render :partial => 'form'
