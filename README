@@ -1,10 +1,8 @@
 = Bonsai
 
 Bonsai is a financiery system that provides a simple solution to the comon needs
-to control an organisation finances
+to control an organisation finances. Beatiful, simple
 
-Rails is a web-application framework that includes everything needed to create 
-database-backed web applications according to the Model-View-Control pattern. 
 
 This pattern splits the view (also called the presentation) into "dumb" templates
 that are primarily responsible for inserting pre-built data in between HTML tags.
