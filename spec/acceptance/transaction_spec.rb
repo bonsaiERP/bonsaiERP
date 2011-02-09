@@ -126,6 +126,9 @@ feature "Transaction", "test features" do
     
     i.balance.should == 0
     
+    # Null last payment
+    p.null_payment
+
   end
 
   scenario "Pay a credit transaction with a higher amount" do

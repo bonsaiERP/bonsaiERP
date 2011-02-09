@@ -157,13 +157,20 @@
       */
       calculateTotal: function() {
         var amount = 0, total_amount = 0, interests_penalties = 0;
-        $('#payments_table tr.payment').each(function(i, el) {
+        $('#payments_table tr.payment.true').each(function(i, el) {
           amount += $(el).find('td.amount').data('val');
           total_amount += $(el).find('td.total_amount').data('val');
           interests_penalties += $(el).find('td.interests_penalties').data('val');
         });
         $('#payments_table #total_payment').html(_b.ntc(total_amount));
-        $('body').trigger('payments', [{'amount': amount, 'total_amount': total_amount, 'interests_penalties': interests_penalties}]);
+        // Trigger payments
+        this.triggerPayments({'amount': amount, 'total_amount': total_amount, 'interests_penalties': interests_penalties});
+      },
+      /**
+      * Triggers the event for calculation
+      */
+      triggerPayments: function(payments) {
+        $('body').trigger('payments', [payments]);
       }
     };
 

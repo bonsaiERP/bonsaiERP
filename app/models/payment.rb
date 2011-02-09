@@ -18,7 +18,7 @@ class Payment < ActiveRecord::Base
   belongs_to :account
   has_one :account_ledger
 
-  delegate :state, :to => :transaction, :prefix => true
+  delegate :state, :type, :to => :transaction, :prefix => true
 
   # validations
   validates_presence_of :account_id, :transaction_id
@@ -44,6 +44,14 @@ class Payment < ActiveRecord::Base
   def total_amount
     amount + interests_penalties
   end
+
+  # Nulls a payment
+  def null_payment
+    if transaction.type == 'Income'
+      self.update_attribute(:active, false)
+    end
+  end
+
 private
   def set_defaults
     self.amount ||= 0
@@ -107,8 +115,15 @@ private
 
   # Creates an account ledger for the account and payment
   def create_account_ledger
-    income = transaction.type == "Income" ? true : false
+    if transaction.type == "Income"
+      tot, income = [total_amount, true]
+      tot, income = [-total_amount, false] unless active?
+    else
+      tot, income = [-total_amount, true]
+      tot, income = [total_amount, false] unless active?
+    end
+
     AccountLedger.create!(:account_id => account_id, :payment_id => id, :currency_id => currency_id,
-                         :amount => total_amount, :date => date, :income => income)
+                         :amount => tot, :date => date, :income => income)
   end
 end
