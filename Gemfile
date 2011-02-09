@@ -37,12 +37,8 @@ end
 group :test do  
   gem 'rspec', '~>2.4.0'
   gem 'mocha'
-<<<<<<< HEAD
   gem 'steak', '~>1.0.0'
-=======
-  gem 'steak', '>= 1.0.0.rc.1'
   gem 'cucumber-rails', '~>0.3.2'
->>>>>>> dev
   gem 'capybara'
   gem 'database_cleaner'
   gem 'factory_girl_rails'
