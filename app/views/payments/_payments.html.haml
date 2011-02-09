@@ -1,7 +1,9 @@
 #payments
   %h2.dark #{pay_type.pluralize.titleize} realizados
 
-  = link_to "Nuevo #{pay_type}", new_payment_path(:type => klass.type.to_s, :id => klass.id, :payment_type => pay_type), :class => 'new ajax', :title => "Nuevo #{pay_type}", 'data-width' => "700", 'data-trigger' => 'payment' unless klass.paid?
+  = link_to "Nuevo #{pay_type}", new_payment_path(:type => klass.type.to_s, :id => klass.id, :payment_type => pay_type),
+    :class => 'new ajax', :title => "Nuevo #{pay_type}", :id => 'new_payment_link',
+    'data-width' => "700", 'data-trigger' => 'payment' unless klass.paid?
 
   %table.decorated.nwl#payments_table
     %thead
@@ -26,7 +28,7 @@
           %td.actions= link_to "Anular #{pay_type}", payment, 'data-method' => 'put', :class => 'null null_payment'
 
     %tr.extra.pad_top
-      %td{:colspan => 2} 
+      %td{:colspan => 3}
       %td.r.b{:colspan => 2} Total #{pay_type.pluralize} + Intereses/Penalidades
       %td.r.b#total_payment= ntc klass.total_payments_with_interests
 
@@ -41,7 +43,7 @@
           '<td class="r interests_penalties" data-val="${interests_penalties}">${_b.ntc(interests_penalties)}</td>',
           '<td class="r total_amount" data-val="${total_amount}">${_b.ntc(total_amount)}</td>',
           '<td class="actions">',
-          '<a data-method="put" class="null null_payment" href="/payments/6">Anular cobro</a></td>',
+          '<a data-method="put" class="null null_payment" href="/payments/6">Anular #{pay_type}</a></td>',
         '</tr>'
     ].join("");
     
@@ -77,6 +79,7 @@
         this.updatePayPlans(resp.updated_pay_plan_ids);
         this.createMessage(resp);
         setTimeout(function() { self.calculateTotal() }, 200);
+        $('body').trigger('transaction_paid', resp.transaction_paid);
       },
       /**
        * Inserts a new row for payments dependig in the row
@@ -176,6 +179,12 @@
     */
     $('body').live('payment', function(e, resp) {
       Payment.create(resp);
+    }).live('transaction_paid', function(e, value) {
+      if(value) {
+        $('#new_payment_link').remove();
+      }else if($('#new_payment_link').length <= 0){
+        var html = '<a title="Nuevo #{pay_type}" id="new_payment_link" data-width="700" data-trigger="payment" class="new ajax" href="/payments/new?id=1&amp;payment_type=#{pay_type}&amp;type=Income">Nuevo #{pay_type}</a>';
+        $('#payments h2.dark:first').after(html);
+      }
     });
-
   })

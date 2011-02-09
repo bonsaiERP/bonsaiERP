@@ -10,13 +10,13 @@ class IncomesController < ApplicationController
   # GET /incomes
   # GET /incomes.xml
   def index
-    @incomes = Income.paginate(:page => @page)
+    @incomes = Income.includes(:contact, :pay_plans).paginate(:page => @page)
   end
 
   # GET /incomes/1
   # GET /incomes/1.xml
   def show
-    @income = Income.find(params[:id])
+    @income = Income.includes(:transaction_details, :payments, :pay_plans).find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb

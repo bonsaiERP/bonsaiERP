@@ -7,4 +7,12 @@ module IncomesHelper
       "Nota"
     end
   end
+
+  def cash_credit(cash)
+    if cash
+      "Contado"
+    else
+      "Crédito"
+    end
+  end
 end

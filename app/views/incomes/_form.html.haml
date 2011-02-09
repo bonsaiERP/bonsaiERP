@@ -44,11 +44,12 @@
     .input
       = f.input :ref_number, :label => 'Nº de referencia', :input_html => {:size => 20}
       = f.input :date, :label => 'Fecha'
-    = f.association :contact, :label => 'Contacto', :input_html => {'data-new-url' => new_contact_path, 'data-title' => 'Nuevo contacto'}
+    = f.association :contact, :label => 'Contacto',
+      :input_html => {'data-new_url' => new_contact_path, 'data-title' => 'Nuevo contacto', 'data-trigger' => 'new_contact' }
     .clear
 
   .clear
-  = f.association :project, :label => 'Proyecto', :input_html => {'data-new-url' => new_project_path, 'data-title' => 'Nuevo proyecto'}
+  = f.association :project, :label => 'Proyecto'
   = f.association :currency, :collection => OrganisationSession.currencies, :label => 'Moneda/Tipo de cambio. <span class="n"></span>'.html_safe, :include_blank => false
   = f.input :currency_exchange_rate, :as => :hidden
   .clear
@@ -141,4 +142,8 @@
 
     $('a.inventario').hide();
 
+    // Functions for the select boxes
+    $('body').live('new_contact', function(e, resp) {
+      $('#income_contact_id').createSelectOption(resp.id, resp.matchcode)
+    });
   })

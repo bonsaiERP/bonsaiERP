@@ -3,7 +3,8 @@
 
   =link_to "Nuevo plan de #{pay_type}", 
     new_pay_plan_path(:type => klass.class.to_s, :id => klass.id, :pay_type => pay_type),
-    :class => 'new ajax', 'title' => "Nuevo plan de #{pay_type.singularize}", 'data-trigger' => 'pay_plan', 'data-width' => '700'
+    :id => 'new_pay_plan_link', :class => 'new ajax', 'title' => "Nuevo plan de #{pay_type.singularize}",
+    'data-trigger' => 'pay_plan', 'data-width' => '700' unless klass.state == "paid"
 
   %table.decorated#pay_plans_table
     %thead
@@ -43,7 +44,7 @@
         '<td class="state">${payPlanState(payment_date)}</td>',
         '<td><a href="/pay_plans/${id}/email" class="email">Enviar email</a></td>',
         '<td>',
-          '<a title="Editar Plan de #{pay_type}" data-trigger="pay_plan" class="ajax edit" href="/pay_plans/${id}/edit?pay_type=cobro">editar</a> ',
+          '<a title="Editar Plan de #{pay_type}" data-trigger="pay_plan" class="ajax edit" href="/pay_plans/${id}/edit?pay_type=#{pay_type}">editar</a> ',
           '<a title="Borrar plan de #{pay_type}" class="delete" href="/pay_plans/${id}">borrar</a>',
         '</td>',
       '</tr>'
@@ -86,6 +87,13 @@
     $('body').live("pay_plan", function(e, resp) {
       $('#pay_plans_table').updateTemplateRow(template, resp, 'appendTo');
       setTimeout("setStatesColor()",200);
+    }).live('transaction_paid', function(e, value) {
+      if(value) {
+        $('#new_pay_plan_link').remove();
+      }else if( $('#new_pay_plan_link').length <= 0 ) {
+        var html = '<a title="Nuevo plan de #{pay_type}" id="new_pay_plan_link" data-width="700" data-trigger="pay_plan" class="new ajax" href="/pay_plans/new?id=1&amp;pay_type=#{pay_type}&amp;type=Income">Nuevo plan de #{pay_type}</a>';
+        $('#pay_plans h2:first').after(html);
+      }
     });
 
 

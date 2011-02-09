@@ -38,10 +38,8 @@ class Income < Transaction
   def show_pay_plans?
     if state == "draft"
       true
-    elsif state == "aproved" and !cash
+    elsif state != "draft" and !cash
       true
-    else
-      false
     end
   end
 

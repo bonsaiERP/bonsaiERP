@@ -1,6 +1,6 @@
 (function() {
   $(document).ready(function() {
-    var createDialog, createErrorLog, csfr_token, currency, getAjaxType, mark, ntc, parseDate, serializeFormElements, setDateSelect, setIframePostEvents, speed, start, toByteSize, transformDateSelect, transformMinuteSelect, updateTemplateRow, _b;
+    var createDialog, createErrorLog, createSelectOption, csfr_token, currency, getAjaxType, mark, ntc, parseDate, serializeFormElements, setDateSelect, setIframePostEvents, speed, start, toByteSize, transformDateSelect, transformMinuteSelect, updateTemplateRow, _b;
     _b = {};
     window._b = _b;
     speed = 300;
@@ -377,9 +377,17 @@
       }, velocity);
     };
     $.mark = $.fn.mark = mark;
-    $('select[data-new-url]').each(function(i, el) {
-      return $(el).after(" <a href='" + ($(el).data('new-url')) + "' class='ajax' title='" + ($(el).data('title')) + "' data-new_option='true'>" + ($(el).data('title')) + "</a>");
+    $('select[data-new_url]').each(function(i, el) {
+      var data;
+      data = $(el).data();
+      return $(el).after(" <a href='" + ($(el).data('new_url')) + "' class='ajax' title='" + data.title + "' data-trigger='" + data.trigger + "'>" + data.title + "</a>");
     });
+    createSelectOption = function(value, label) {
+      var opt;
+      opt = "<option selected='selected' value='" + value + "'>" + label + "</option>";
+      return $(this).append(opt).val(value);
+    };
+    $.createSelectOption = $.fn.createSelectOption = createSelectOption;
     start = function() {
       return $('body').transformDateSelect();
     };

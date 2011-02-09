@@ -18,6 +18,8 @@ class Payment < ActiveRecord::Base
   belongs_to :account
   has_one :account_ledger
 
+  delegate :state, :to => :transaction, :prefix => true
+
   # validations
   validates_presence_of :account_id, :transaction_id
   validate :valid_payment_amount
@@ -29,7 +31,13 @@ class Payment < ActiveRecord::Base
 
   # Overide the dault to_json method
   def to_json
-    self.attributes.merge(:updated_pay_plan_ids => @updated_pay_plan_ids, :pay_plan => @pay_plan, :account => account.to_s, :total_amount => total_amount).to_json
+    self.attributes.merge(
+      :updated_pay_plan_ids => @updated_pay_plan_ids, 
+      :pay_plan => @pay_plan, 
+      :account => account.to_s, 
+      :total_amount => total_amount,
+      :transaction_paid => transaction_state == 'paid'
+    ).to_json
   end
 
   # Sums the amount plus the interests and penalties

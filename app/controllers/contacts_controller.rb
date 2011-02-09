@@ -2,54 +2,60 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class ContactsController < ApplicationController
-  respond_to :html, :xml, :json
+  before_filter :find_contact, :only => [:show, :edit, :update, :destroy]
+
+  #respond_to :html, :xml, :json
   # GET /contacts
   # GET /contacts.xml
   def index
     @contacts = Contact.all
-    respond_with @contacts
   end
 
   # GET /contacts/1
   # GET /contacts/1.xml
   def show
-    @contact = Contact.find(params[:id])
-    respond_with(@contact)
   end
 
   # GET /contacts/new
   # GET /contacts/new.xml
   def new
     @contact = Contact.new
-    respond_with(@contact)
   end
 
   # GET /contacts/1/edit
   def edit
-    @contact = Contact.find(params[:id])
   end
 
   # POST /contacts
   # POST /contacts.xml
   def create
     @contact = Contact.new(params[:contact])
-    @contact.save
-    respond_with(@contact)
+    if @contact.save
+      redirect_ajax(@contact)
+    else
+      render :action => 'new'
+    end
   end
 
   # PUT /contacts/1
   # PUT /contacts/1.xml
   def update
-    @contact = Contact.find(params[:id])
-    @contact.update_attributes(params[:contact])
-    respond_with(@contact)
+    if @contact.update_attributes(params[:contact])
+      redirect_ajax(@contact)
+    else
+      render :action => 'edit'
+    end
   end
 
   # DELETE /contacts/1
   # DELETE /contacts/1.xml
   def destroy
-    @contact = Contact.find(params[:id])
     @contact.destroy
-    respond_with(@contact)
+    respond_ajax(@contact)
+  end
+
+  protected
+  def find_contact
+    @contact = Contact.find(params[:id])
   end
 end

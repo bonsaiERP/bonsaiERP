@@ -11,6 +11,8 @@
       %th Total
       %th Saldo
       %th Estado
+      %th Contado<br/>Crédito
+      %th Vence el
       %th
   
   %tbody
@@ -22,5 +24,7 @@
         %td= income.total
         %td= income.balance
         %td <span class="#{income.state}">#{income.show_state}</span>
+        %td= cash_credit(income.cash)
+        %td 
         %td.actions
           = bonsai_links(income) if income.draft?
