@@ -5,6 +5,7 @@ class AccountLedger < ActiveRecord::Base
   acts_as_org
   # callbacks
   before_save :set_income
+  after_save :update_account_balance
 
   # relationships
   belongs_to :account
@@ -27,5 +28,9 @@ private
       self.income = true
     end
     true
+  end
+
+  def update_account_balance
+    self.account.update_attribute(:total_amount, (self.account.total_amount + amount) )
   end
 end
