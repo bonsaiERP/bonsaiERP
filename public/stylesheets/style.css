@@ -505,6 +505,7 @@ span.true, span.false {
 ._30, .w30 { width: 30% !important; }
 ._33, .w33 { width: 33% !important; }
 ._25, .w33 { width: 24% !important; }
+._40, .w33 { width: 39% !important; }
 ._50, .w33 { width: 49% !important; }
 ._60, .w33 { width: 59% !important; }
 ._70, .w33 { width: 69% !important; }
@@ -516,3 +517,55 @@ span.true, span.false {
 .mt10 { margin-top: 10px; }
 .mt20 { margin-top: 20px; }
 .mb10, .mb20 { margin-bottom: 20px; }
+.dashlet {
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  padding: 2px 3px;
+  color: #ffffff;
+}
+.paid {
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  padding: 2px 3px;
+  color: #ffffff;
+  background-color: #5bbf3b;
+}
+.draft {
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  padding: 2px 3px;
+  color: #ffffff;
+  background-color: #717171;
+}
+.aproved {
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  padding: 2px 3px;
+  color: #ffffff;
+  background-color: #484a4c;
+}
+.due {
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  padding: 2px 3px;
+  color: #ffffff;
+  background-color: #ff0000;
+}
+ul.tabs {
+  list-style: none;
+  background-color: #f7f7f7;
+  height: 35px;
+  padding: 0px 15px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #c6c6c6;
+}
+ul.tabs li { display: inline; }
+ul.tabs li a {
+  display: block;
+  float: left;
+  padding: 12px;
+}
+ul.tabs li a.active {
+  font-weight: bold;
+  color: #484a4c;
+}

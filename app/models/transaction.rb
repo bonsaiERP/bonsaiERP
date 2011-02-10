@@ -8,7 +8,7 @@ class Transaction < ActiveRecord::Base
   # Determines if the oprations is made on transaction or pay_plan or payment
   attr_reader :trans
   # callbacks
-  after_initialize :initialize_values
+  after_initialize :initialize_values, :if => :new_record?
   before_save :set_details_type
   before_save :calculate_total_and_set_balance, :if => :trans?
   after_create :update_payment_date
@@ -124,6 +124,14 @@ class Transaction < ActiveRecord::Base
       self.balance = (balance - amount)
       self.save
     end
+  end
+
+  # Substract the amount from the balance
+  def substract_payment(amount)
+    @trans = false
+    self.balance = (balance + amount)
+    self.state = 'aproved'
+    self.save
   end
 
   def set_trans(value)

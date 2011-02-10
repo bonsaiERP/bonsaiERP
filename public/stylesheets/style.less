@@ -665,3 +665,49 @@ span.true, span.false{
 .mt20{ margin-top: 20px; }
 .mb10{ margin-bottom: 20px; }
 .mb20{ margin-bottom: 20px; }
+
+/*States*/
+.dashlet{
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  padding: 2px 3px;
+  color: @white;
+}
+
+.paid{ 
+  .dashlet;
+  background-color: @green;
+}
+.draft{ 
+  .dashlet;
+  background-color: @dark_grey;
+}
+.aproved{  
+  .dashlet;
+  background-color: @dark;
+}
+.due{
+  .dashlet;
+  background-color: @red; 
+}
+
+ul.tabs{
+  list-style: none;
+  background-color: @white_tan;
+  height: 35px;
+  padding: 0px 15px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid @grey;
+  li{
+    display: inline;
+    a{
+      display:block;
+      float:left;
+      padding: 12px;
+    }
+    a.active{
+      font-weight: bold;
+      color: @dark;
+    }
+  }
+}

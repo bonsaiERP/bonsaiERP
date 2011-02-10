@@ -7,7 +7,7 @@ class Payment < ActiveRecord::Base
   attr_reader :pay_plan, :updated_pay_plan_ids
 
   # callbacks
-  after_initialize :set_defaults
+  after_initialize :set_defaults, :if => :new_record?
   before_save :set_currency_id
   after_save  :update_transaction
   after_save  :update_pay_plan
@@ -16,14 +16,14 @@ class Payment < ActiveRecord::Base
   # relationships
   belongs_to :transaction
   belongs_to :account
-  has_one :account_ledger
+  has_many :account_ledgers
 
   delegate :state, :type, :to => :transaction, :prefix => true
 
   # validations
   validates_presence_of :account_id, :transaction_id
-  validate :valid_payment_amount
-  validate :valid_amount_or_interests_penalties
+  validate :valid_payment_amount, :if => :active?
+  validate :valid_amount_or_interests_penalties, :if => :active?
 
   # scopes
   default_scope where(:organisation_id => OrganisationSession.organisation_id)
@@ -47,8 +47,9 @@ class Payment < ActiveRecord::Base
 
   # Nulls a payment
   def null_payment
-    if transaction.type == 'Income'
-      self.update_attribute(:active, false)
+    if transaction_type == 'Income'
+      self.active = false
+      self.save
     end
   end
 
@@ -60,7 +61,11 @@ private
   end
 
   def update_transaction
-    transaction.add_payment(amount)
+    if active
+      transaction.add_payment(amount)
+    else
+      transaction.substract_payment(amount)
+    end
   end
 
   def set_currency_id
@@ -123,7 +128,7 @@ private
       tot, income = [total_amount, false] unless active?
     end
 
-    AccountLedger.create!(:account_id => account_id, :payment_id => id, :currency_id => currency_id,
+    AccountLedger.create(:account_id => account_id, :payment_id => id, :currency_id => currency_id,
                          :amount => tot, :date => date, :income => income)
   end
 end

@@ -2,6 +2,13 @@
 
 %p.links= link_to "Nueva venta", new_income_path, :class => 'new'
 
+%ul.tabs
+  %li= link_incomes "Todas", 'all'
+  %li= link_incomes "Esperando aprobación", 'draft'
+  %li= link_incomes "Ventas a crédito", 'credit'
+  %li= link_incomes "Vencidas", 'due'
+  %li= link_incomes "Pagadas", 'paid'
+
 %table{ :class => 'decorated nwl' }
   %thead
     %tr
@@ -23,8 +30,8 @@
         %td= lo income.date
         %td= income.total
         %td= income.balance
-        %td <span class="#{income.state}">#{income.show_state}</span>
+        %td <span class="#{income.real_state}">#{income.show_state}</span>
         %td= cash_credit(income.cash)
-        %td 
+        %td= lo income.payment_date unless income.paid?
         %td.actions
           = bonsai_links(income) if income.draft?

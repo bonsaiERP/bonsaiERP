@@ -26,5 +26,6 @@ private
     else
       self.income = true
     end
+    true
   end
 end
