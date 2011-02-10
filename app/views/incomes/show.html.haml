@@ -125,7 +125,9 @@
     $('#pay_plan_anchor').click(function() { $('#pay_plans').mark(); });
     $('#payment_anchor').click(function() { $('#payments').mark(); });
 
-
+    if(!#{@income.paid?} && #{@income.cash}) {
+      $('#new_payment_link').trigger('click');
+    }
     /**
     * Updates the status for a transaction (Income, Buy, Expense)
     * @params Object data

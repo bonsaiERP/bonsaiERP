@@ -6,7 +6,7 @@
   = f.input :date, :label => 'Fecha'
   = f.association :account, :label => 'Cuenta'
   .clear
-  = f.input :amount, :input_html => {:size => 12}, :label => 'Cantidad'
+  = f.input :amount, :input_html => {:size => 12, :disabled => @payment.transaction_cash}, :label => 'Cantidad'
   = f.input :interests_penalties, :input_html => {:size => 12}, :label => 'Intereses/Penalidades'
   .clear
   = f.input :description, :label => 'Descripción', :as => :text, :input_html => {:rows => 4, :cols => 35}

@@ -8,7 +8,8 @@ class Payment < ActiveRecord::Base
 
   # callbacks
   after_initialize :set_defaults, :if => :new_record?
-  before_save :set_currency_id
+  before_create :set_currency_id, :if => :new_record?
+  before_create :set_cash_amount, :if => :transaction_cash?
   after_save  :update_transaction
   after_save  :update_pay_plan
   after_save  :create_account_ledger
@@ -18,7 +19,7 @@ class Payment < ActiveRecord::Base
   belongs_to :account
   has_many :account_ledgers
 
-  delegate :state, :type, :to => :transaction, :prefix => true
+  delegate :state, :type, :cash, :cash?, :balance, :to => :transaction, :prefix => true
 
   # validations
   validates_presence_of :account_id, :transaction_id
@@ -130,5 +131,10 @@ private
 
     AccountLedger.create(:account_id => account_id, :payment_id => id, :currency_id => currency_id,
                          :amount => tot, :date => date, :income => income)
+  end
+
+  # Sets the amount for cash
+  def set_cash_amount
+    self.amount = transaction_balance
   end
 end

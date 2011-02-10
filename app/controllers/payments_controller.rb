@@ -34,10 +34,6 @@ class PaymentsController < ApplicationController
     #end
   end
 
-  # GET /payments/1/edit
-  def edit
-    @payment = Payment.find(params[:id])
-  end
 
   # POST /payments
   # POST /payments.xml
@@ -55,31 +51,11 @@ class PaymentsController < ApplicationController
     end
   end
 
-  # PUT /payments/1
-  # PUT /payments/1.xml
-  def update
+  # PUT /payments/:id/null_payment
+  def null_payment
     @payment = Payment.find(params[:id])
-
-    respond_to do |format|
-      if @payment.update_attributes(params[:payment])
-        format.html { redirect_to(@payment, :notice => 'Payment was successfully updated.') }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @payment.errors, :status => :unprocessable_entity }
-      end
-    end
+    @payment.null_payment
+    redirect_ajax @payment
   end
 
-  # DELETE /payments/1
-  # DELETE /payments/1.xml
-  def destroy
-    @payment = Payment.find(params[:id])
-    @payment.destroy
-
-    respond_to do |format|
-      format.html { redirect_to(payments_url) }
-      format.xml  { head :ok }
-    end
-  end
 end

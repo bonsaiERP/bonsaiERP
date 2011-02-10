@@ -6,7 +6,11 @@ Bonsaierp::Application.routes.draw do
 
   resources :cash_registers
 
-  resources :payments
+  resources :payments do
+    member do
+      put :null_payment
+    end
+  end
 
   resources :pay_plans do
     member do
