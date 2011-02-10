@@ -99,6 +99,7 @@ table.decorated tr.extra { border-bottom: none !important; }
 table.decorated tr.extra h3 { margin: 1px 0px; }
 table.decorated tr.extra td { padding: 6px; }
 table.decorated tr.pad_top td { padding-top: 15px; }
+table.decorated tr.false { color: #717171; }
 table.nwl td:last-child { white-space: nowrap; }
 table.nwf td:first-child { white-space: nowrap; }
 #wrapper {
@@ -501,7 +502,7 @@ span.true, span.false {
   padding: 5px;
 }
 .ajax-modal .links { display: none; }
-.marked { background-color: #d0def1; }
+.marked { background-color: #d0def1 !important; }
 ._30, .w30 { width: 30% !important; }
 ._33, .w33 { width: 33% !important; }
 ._25, .w33 { width: 24% !important; }

@@ -19,7 +19,7 @@ class Payment < ActiveRecord::Base
   belongs_to :account
   has_many :account_ledgers
 
-  delegate :state, :type, :cash, :cash?, :balance, :to => :transaction, :prefix => true
+  delegate :state, :type, :cash, :cash?, :paid?, :balance, :to => :transaction, :prefix => true
 
   # validations
   validates_presence_of :account_id, :transaction_id
@@ -37,7 +37,7 @@ class Payment < ActiveRecord::Base
       :pay_plan => @pay_plan, 
       :account => account.to_s, 
       :total_amount => total_amount,
-      :transaction_paid => transaction_state == 'paid'
+      :transaction_paid => transaction_paid?
     ).to_json
   end
 
@@ -48,7 +48,7 @@ class Payment < ActiveRecord::Base
 
   # Nulls a payment
   def null_payment
-    if transaction_type == 'Income'
+    if active and !transaction_paid?
       self.active = false
       self.save
     end

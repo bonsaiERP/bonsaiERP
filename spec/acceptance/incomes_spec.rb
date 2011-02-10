@@ -73,6 +73,22 @@ feature "Transaction", "test features" do
     i.state.should == 'paid'
   end
 
+  scenario "Pay cash and set a differen amount in payment" do
+    i = Income.create!(income_params)
+    i.aprove!
+    i = Income.find(i.id)
+    i.state.should == "aproved"
+    p = i.new_payment(:account_id => 1, :amount => 10)
+
+    p.amount.should_not == i.balance
+    p.save!
+    p.amount.should == i.balance
+    
+    i = Income.find(i.id)
+    i.balance.should == 0
+    i.state.should == 'paid'
+  end
+
   scenario "Pay a credit transaction" do
     i = Income.create!(income_params)
     # Fist PayPlan
@@ -126,13 +142,10 @@ feature "Transaction", "test features" do
     
     i.balance.should == 0
     
-    # Null last payment
+    # Nulling last payment should not allow
     p.null_payment
     i = Income.find(i.id)
-    p.account_ledgers.size.should == 2
-    p.account_ledgers.last.amount.should == -(p.amount + p.interests_penalties)
-    i.balance.should == p.amount
-    i.state.should == "aproved"
+    i.state.should == "paid"
   end
 
   scenario "Pay a credit transaction with a higher amount" do
@@ -169,6 +182,30 @@ feature "Transaction", "test features" do
 
     pp.amount.should == (old_balance - 200)
     pp.interests_penalties.should == 10
+  end
+
+  scenario "Pay a credit transaction and null payment" do
+    i = Income.create!(income_params)
+    pp = PayPlan.new(pay_plan_params(:transaction_id => i.id, :amount => 100, :interests_penalties => 10))
+    pp.save
+    pp1_id = pp.id
+
+    pp = PayPlan.new(pay_plan_params(:transaction_id => i.id, :payment_date => Date.today + 20.days))
+    pp.amount.should == (i.balance - 100)
+    pp.save
+    pp2_id = pp.id
+
+    i = Income.find(i.id)
+    i.aprove!
+    old_balance = i.balance
+    # First payment
+    p = i.new_payment(:account_id => 1)
+    p.save
+    p.null_payment
+    p.account_ledgers.size.should == 2
+    p.account_ledgers.last.amount.should == -(p.amount + p.interests_penalties)
+    i = Income.find(i.id)
+    i.balance.should == old_balance
   end
 end
 

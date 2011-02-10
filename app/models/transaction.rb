@@ -130,7 +130,6 @@ class Transaction < ActiveRecord::Base
   def substract_payment(amount)
     @trans = false
     self.balance = (balance + amount)
-    self.state = 'aproved'
     self.save
   end
 

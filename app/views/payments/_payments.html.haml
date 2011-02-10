@@ -18,14 +18,14 @@
     
     %tbody
       - klass.payments.each do |payment|
-        %tr.payment{ :id => payment.id, :class => payment.active }
+        %tr.payment{ :id => payment.id, :class => payment.active.to_s }
           %td= lo payment.date
           %td= payment.description
           %td.account= payment.account
           %td.r.amount{'data-val' => payment.amount}= ntc payment.amount
           %td.r.interests_penalties{'data-val' => payment.interests_penalties}= ntc payment.interests_penalties
           %td.r.total_amount{'data-val' => payment.total_amount}= ntc payment.total_amount
-          %td.actions= link_to "Anular #{pay_type}", payment, 'data-method' => 'put', :class => 'null null_payment'
+          %td.actions= nulled_payment(pay_type, payment)
 
     %tr.extra.pad_top
       %td{:colspan => 3}
@@ -51,19 +51,19 @@
     * Nulls a payments
     */
     $('#payments_table a.null_payment').live("click", function() {
-      var account = $(this).parents('tr').addClass('selected').find('td.account').html();
+      var account = $(this).parents('tr').addClass('marked').find('td.account').html();
       var txt = "Al anular el #{pay_type} seleccionado se creara un registro en la cuenta \n" + account + " con valor negativo";
-      txt +=",\n Esta seguro de borrar?";
+      txt +=",\n Esta seguro de anular el #{pay_type}?";
       if(confirm(txt)) {
-        $(this).parents('tr').removeClass('selected');
+        $(this).parents('tr').removeClass('marked');
+        Payment.nullPayment(this);
         return false;
       }else{
-        $(this).parents('tr').removeClass('selected');
+        $(this).parents('tr').removeClass('marked');
         return false;
       }
     });
     
-
     /**
      * Creates a note to notify pay_plans
      */
@@ -78,8 +78,35 @@
         this.triggerPayPlan(resp.pay_plan);
         this.updatePayPlans(resp.updated_pay_plan_ids);
         this.createMessage(resp);
-        setTimeout(function() { self.calculateTotal() }, 200);
+        setTimeout(function() { 
+          var r = self.calculateTotal() 
+          self.triggerPayments(r)
+        }, 200);
         $('body').trigger('transaction_paid', resp.transaction_paid);
+      },
+      /**
+      * nulls a payments
+      * @param Dom link
+      */
+      nullPayment: function(link) {
+        var self = this;
+        $(link).css('visivility', 'hidden');
+        $.ajax({
+          'url': $(link).attr("href"),
+          'type': 'put',
+          'success':function(resp) {
+            $(link).parents('tr:first').removeClass('true').addClass('false').mark();
+            $(link).parents('td:first').html('Anulado');
+            self.triggerNullPayment(resp);
+          }
+        });
+      },
+      /**
+      * triggers the null_payment event and sets inactive a row
+      */
+      triggerNullPayment: function(resp) {
+        $('#payments tr#'+resp.id).addClass('false');
+        this.triggerPayments(this.calculateTotal());
       },
       /**
        * Inserts a new row for payments dependig in the row
@@ -163,8 +190,8 @@
           interests_penalties += $(el).find('td.interests_penalties').data('val');
         });
         $('#payments_table #total_payment').html(_b.ntc(total_amount));
-        // Trigger payments
-        this.triggerPayments({'amount': amount, 'total_amount': total_amount, 'interests_penalties': interests_penalties});
+
+        return {'amount': amount, 'total_amount': total_amount, 'interests_penalties': interests_penalties};
       },
       /**
       * Triggers the event for calculation
@@ -189,6 +216,7 @@
     }).live('transaction_paid', function(e, value) {
       if(value) {
         $('#new_payment_link').remove();
+        $('#payments_table a.null_payment').remove();
       }else if($('#new_payment_link').length <= 0){
         var html = '<a title="Nuevo #{pay_type}" id="new_payment_link" data-width="700" data-trigger="payment" class="new ajax" href="/payments/new?id=1&amp;payment_type=#{pay_type}&amp;type=Income">Nuevo #{pay_type}</a>';
         $('#payments h2.dark:first').after(html);

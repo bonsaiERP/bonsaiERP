@@ -153,6 +153,7 @@ table.decorated{
   tr.pad_top{
     td{ padding-top: 15px; }
   }
+  tr.false{ color: @dark_grey; }
 }
 table.nwl{ 
   td:last-child{ white-space: nowrap; }
@@ -646,7 +647,7 @@ span.true, span.false{
   .links{ display: none; }
 }
 
-.marked{ background-color: @light_blue; }
+.marked{ background-color: @light_blue !important; }
 
 ._30, .w30{ width: 30% !important;}
 ._33, .w33{ width: 33% !important;}
@@ -691,6 +692,7 @@ span.true, span.false{
   background-color: @red; 
 }
 
+/*especial tabs*/
 ul.tabs{
   list-style: none;
   background-color: @white_tan;

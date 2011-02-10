@@ -90,6 +90,7 @@
     }).live('transaction_paid', function(e, value) {
       if(value) {
         $('#new_pay_plan_link').remove();
+        $('#pay_plans_table a').remove();
       }else if( $('#new_pay_plan_link').length <= 0 ) {
         var html = '<a title="Nuevo plan de #{pay_type}" id="new_pay_plan_link" data-width="700" data-trigger="pay_plan" class="new ajax" href="/pay_plans/new?id=1&amp;pay_type=#{pay_type}&amp;type=Income">Nuevo plan de #{pay_type}</a>';
         $('#pay_plans h2:first').after(html);
