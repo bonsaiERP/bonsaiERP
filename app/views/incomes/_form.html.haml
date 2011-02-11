@@ -1,43 +1,6 @@
 :css
   input.price, input.quantity{ text-align: right; }
-  /*
-  .ui-datepicker-header{
-    background: #FFF !important;
-    color: #498CE2 !important;
-    border: none !important;
-    font-weight: normal !important;
-    font-size: 1.1em !important;
-  }
-  .ui-datepicker table{
-    background: #FFF !important;
-  }
-  .ui-datepicker td a{
-    background: transparent !important;
-    border: none !important;
-    font-weight: normal !important;
-    color: #000;
-    -moz-border-radius: 2px;
-    -webkit-border-radius: 2px;
-    border-radius: 2px;
-    color: #666666 !important;
-    text-align: center;
-  }
-  .ui-datepicker td a.ui-state-hover{
-    background-color: #AFAFAF !important;
-  }
-  .ui-datepicker td a.ui-state-active{
-    background-color: #498CE2 !important;
-    color: #FFF !important;
-  }
-  .ui-datepicker thead tr{
-    border-bottom: 1px solid grey !important;
-  }
-    
-  .ui-datepicker-week-end{
-    border:none;
-    background: transparent;
-  }
-  */
+
 = simple_form_for(@income, :html => {:id => 'income_form'}) do |f|
   = bonsai_form_error(f)
   .main.bg_light_grey
@@ -63,16 +26,16 @@
   = f.input :description, :label => 'Descripción', :as => :text, :input_html => {:rows => 4, :cols => 40}
   .clear
 
-  %h2.dark Items
+  %h2.dark#items_header Items
 
   %table#items_table.decorated
     %thead
       %tr
-        %th Item
-        %th Descripción
-        %th Precio <br/>unitario
-        %th Cantidad
-        %th Total fila
+        %th.item Item
+        %th.description Descripción
+        %th.price Precio <br/>unitario
+        %th.quantity Cantidad
+        %th.total_row Total fila
         %th
     = f.simple_fields_for :transaction_details do |fd|
       %tr.item
@@ -100,8 +63,8 @@
       %td#total_value.b.r{ 'data-val'=>@income.total}= ntc @income.total
     %tr.extra
       %td{:colspan => 2}
-      %td.r{:colspan => 2} <h3 id="curerncy_symbol"></h3>
-      %td.r <h3 id="total_value_currency"></h3>
+      %td.r.b#currency_symbol{:colspan => 2}
+      %td.r.b#total_value_currency
   .actions
     = f.submit 'Salvar'
 
@@ -114,7 +77,7 @@
     var exchange_rates = #{ CurrencyRate.active.select("rate, currency_id").to_json };
     var default_currency_id = #{@currency.id};
     var income = new Income(items, "#income_form", {'default_currency_id': default_currency_id }, currencies, exchange_rates );
-
+    window.income = income;
 
     $('<a/>').text('Inventario').addClass('inventario').css({'display':'none', 'position': 'absolute', 'background': '#FFF', 'padding': '4px 10px'})
     .attr({'href':'javascript:', 'title':'Ver inventario'}).appendTo('body');

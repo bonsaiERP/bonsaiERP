@@ -234,10 +234,10 @@ $(document).ready(->
     false
   )
 
-
   # Makes that a dialog opened window makes an AJAX request and returns a JSON response
   # if response is JSON then trigger event stored in dialog else present the HTML
-  $('div.ajax-modal form[enctype!=multipart/form-data]').live('submit', ->
+  $('div.ajax-modal form').live('submit', ->
+    return true if $(this).attr('enctype') == 'multipart/form-data'
 
     data = serializeFormElements(this)
     el = this
@@ -269,6 +269,7 @@ $(document).ready(->
     )
 
     false
+
   )
   # End submit ajax form
 
@@ -382,6 +383,11 @@ $(document).ready(->
       $('<div id="error-log"></div>').dialog({title: 'Error', width: 900, height: 500})
 
     $('#error-log').html(data).dialog("open")
+
+  # Hide message
+  $('.message .close').live("click", ->
+    $(this).parents(".message:first").hide("slow").delay(500).remove()
+  )
 
   # AJAX setup
   $.ajaxSetup ({

@@ -485,10 +485,18 @@ input[type=submit]:hover{
   background-color: @light_red;
   border: 2px solid @red;
   padding: 5px 15px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
   ul{
     list-style: none;
+    padding: 0px 10px;
   }
-  h2{ font-weight:normal;}
+  h2{ 
+    font-weight:normal;
+    font-size: 1.2em;
+    margin: 4px 0px;
+  }
 }
 span.error{
   display: block;
@@ -711,5 +719,28 @@ ul.tabs{
       font-weight: bold;
       color: @dark;
     }
+  }
+}
+
+.message{
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  border: 2px solid @green;
+  color: @dark;
+  margin: 4px 0;
+  padding: 10px;
+  width: 50%;
+  position: relative;
+  span.close{
+    background-position: -96px -128px;
+    background-image: url("images/ui-icons_469bdd_256x240.png");
+    height: 16px;
+    width: 16px;
+    display:block;
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    cursor: pointer;
   }
 }

@@ -116,9 +116,9 @@
       %td#balance.r.b{'data-val' => @income.balance}= ntc @income.balance
 
 .clear
-=render :partial => "/payments/payments", :locals => {:klass => @income,:pay_type => 'cobro'} if @income.show_payments?
+=render "/payments/payments", :klass => @income, :pay_type => 'cobro' if @income.show_payments?
 .clear
-=render :partial => "/pay_plans/pay_plans", :locals => {:klass => @income, :pay_type => 'cobro'} if @income.show_pay_plans?
+=render "/pay_plans/pay_plans", :klass => @income, :pay_type => 'cobro' if @income.show_pay_plans?
 
 :javascript
   $(function () {

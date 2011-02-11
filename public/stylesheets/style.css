@@ -384,9 +384,19 @@ input[type=submit]:hover { opacity: 0.65; }
   background-color: #fef1ec;
   border: 2px solid #ff0000;
   padding: 5px 15px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
 }
-.errorExplanation ul { list-style: none; }
-.errorExplanation h2 { font-weight: normal; }
+.errorExplanation ul {
+  list-style: none;
+  padding: 0px 10px;
+}
+.errorExplanation h2 {
+  font-weight: normal;
+  font-size: 1.2em;
+  margin: 4px 0px;
+}
 span.error { display: block; }
 .flash {
   padding: 10px;
@@ -569,4 +579,26 @@ ul.tabs li a {
 ul.tabs li a.active {
   font-weight: bold;
   color: #484a4c;
+}
+.message {
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  border: 2px solid #5bbf3b;
+  color: #484a4c;
+  margin: 4px 0;
+  padding: 10px;
+  width: 50%;
+  position: relative;
+}
+.message span.close {
+  background-position: -96px -128px;
+  background-image: url("images/ui-icons_469bdd_256x240.png");
+  height: 16px;
+  width: 16px;
+  display: block;
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  cursor: pointer;
 }

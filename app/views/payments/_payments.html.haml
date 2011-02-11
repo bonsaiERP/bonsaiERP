@@ -136,7 +136,7 @@
         this.newPayPlanMessage(resp.pay_plan);
         $('#payment_message').hide("slow").remove();
         if(this.messages.length > 0) {
-          $('#payments h2').after('<div class="message" id="payment_message" style="display:none"><p>' + this.messages.join("</p><p>") + '</p></div>'); 
+          $('#payments h2').after('<div class="message" id="payment_message" style="display:none"><span class="close"></span><p>' + this.messages.join("</p><p>") + '</p></div>'); 
           $('#payment_message').show("slow");
         }
       },

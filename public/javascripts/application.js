@@ -257,8 +257,11 @@
       $(div).load($(this).attr("href"));
       return false;
     });
-    $('div.ajax-modal form[enctype!=multipart/form-data]').live('submit', function() {
+    $('div.ajax-modal form').live('submit', function() {
       var $div, data, el, new_record, trigger;
+      if ($(this).attr('enctype') === 'multipart/form-data') {
+        return true;
+      }
       data = serializeFormElements(this);
       el = this;
       $div = $(this).parents('.ajax-modal');
@@ -401,6 +404,9 @@
       }
       return $('#error-log').html(data).dialog("open");
     };
+    $('.message .close').live("click", function() {
+      return $(this).parents(".message:first").hide("slow").delay(500).remove();
+    });
     $.ajaxSetup({
       dataType: "html",
       beforeSend: function(xhr) {},
