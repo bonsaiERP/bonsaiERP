@@ -23,7 +23,7 @@ class Transaction
   constructor: (@items, @trigger = 'body', conf = {})->
     self = this
     @conf = $.extend(@conf, conf)
-    this.currency_id = @conf.default_currency_id
+    this.currency_id = $(@conf.currency_id).val() * 1
     self.set_events()
   # Sets the events
   set_events: ->
@@ -135,7 +135,8 @@ class Transaction
     $span = $(@conf.currency_id).siblings("label").find("span")
     currency = this.find_currency(@conf.default_currency_id)
     change = this.find_currency(this.currency_id)
-    html = "1 #{change.name} = <span class='b'>#{self.exchange_rate}</span> #{currency.name.pluralize()} "
+    exchange_rate = $(@conf.currency_exchange_rate_id).val() * 1
+    html = "1 #{change.name} = <span class='b'>#{_b.ntc(exchange_rate)}</span> #{currency.name.pluralize()} "
     html += "<a id='edit_rate_link' href='javascript:'>editar</a>"
     $span.html( html ).mark()
 
@@ -195,12 +196,11 @@ class Transaction
     $tr.insertBefore("#{@conf.items_table_id} tr.extra:first")
   # checks that the currency data is available
   check_currency_data: ->
-    currency_id = $(@conf.currency_id).val() * 1
-    if @conf.default_currency_id != currency_id
-      base = this.find_currency(@conf.default_currency_id)
-      change = this.find_currency(currency_id)
-      change.rate = $(@conf.currency_exchange_rate_id).val() * 1
-      $(@conf.currency_id).data({'base': base, 'change': change})
+    if @conf.default_currency_id != this.currency_id
+      #base = this.find_currency(@conf.default_currency_id)
+      #change = this.find_currency(this.currency_id)
+      #change.rate = $(@conf.currency_exchange_rate_id).val() * 1
+      #$(@conf.currency_id).data({'base': base, 'change': change})
       this.set_exchange_rate_html()
 
   # returns the item from a list

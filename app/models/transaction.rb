@@ -9,6 +9,7 @@ class Transaction < ActiveRecord::Base
   attr_reader :trans
   # callbacks
   after_initialize :initialize_values, :if => :new_record?
+  after_initialize :set_trans_to_true
   before_save :set_details_type
   before_save :calculate_total_and_set_balance, :if => :trans?
   after_create :update_payment_date
@@ -23,6 +24,8 @@ class Transaction < ActiveRecord::Base
   has_many :transaction_details
   accepts_nested_attributes_for :transaction_details, :allow_destroy => true
   has_and_belongs_to_many :taxes, :class_name => 'Tax'
+
+  delegate :name, :symbol, :to => :currency, :prefix => true
 
   # scopes
   default_scope where(:organisation_id => OrganisationSession.organisation_id )
@@ -68,9 +71,9 @@ class Transaction < ActiveRecord::Base
 
   # Presents the total in currency unless the default currency
   def total_currency
-    unless Organisation.find(OrganisationSession.organisation_id).id == self.currency_id
-      self.total/self.currency_exchange_rate
-    end
+    #unless Organisation.find(OrganisationSession.organisation_id).id == self.currency_id
+    self.total/self.currency_exchange_rate
+    #end
   end
 
   # Returns the total value of pay plans
@@ -133,6 +136,10 @@ class Transaction < ActiveRecord::Base
     self.save
   end
 
+  def real_total
+    total / currency_exchange_rate
+  end
+
   def set_trans(value)
     @trans = value
   end
@@ -140,12 +147,15 @@ class Transaction < ActiveRecord::Base
 private
   # set default values for discount and taxes
   def initialize_values
-    @trans = true
     self.cash = cash.nil? ? true : cash
     self.active = active.nil? ? true : active
     self.discount ||= 0
     self.tax_percent = taxes.inject(0) {|sum, t| sum += t.rate }
     self.gross_total ||= 0
+  end
+
+  def set_trans_to_true
+    @trans = true
   end
 
   # Sets the type of the class making the transaction
@@ -156,7 +166,8 @@ private
   # Calculates the total value and stores it
   def calculate_total_and_set_balance
     self.gross_total = transaction_details.select{|t| !t.marked_for_destruction? }.inject(0) {|sum, det| sum += det.total }
-    self.total = self.balance = gross_total - total_discount + total_taxes
+    self.total = gross_total - total_discount + total_taxes
+    self.balance = total / currency_exchange_rate
   end
 
   # Determines if it is a transaction or other operation

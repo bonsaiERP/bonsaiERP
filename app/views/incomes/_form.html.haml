@@ -63,8 +63,8 @@
       %td#total_value.b.r{ 'data-val'=>@income.total}= ntc @income.total
     %tr.extra
       %td{:colspan => 2}
-      %td.r.b#currency_symbol{:colspan => 2}
-      %td.r.b#total_value_currency
+      %td.r.b#currency_symbol{:colspan => 2}= currency_name(@income)
+      %td.r.b#total_value_currency= total_currency(@income)
   .actions
     = f.submit 'Salvar'
 

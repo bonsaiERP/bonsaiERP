@@ -34,7 +34,7 @@
       }
       self = this;
       this.conf = $.extend(this.conf, conf);
-      this.currency_id = this.conf.default_currency_id;
+      this.currency_id = $(this.conf.currency_id).val() * 1;
       self.set_events();
     }
     Transaction.prototype.set_events = function() {
@@ -169,12 +169,13 @@
       }
     };
     Transaction.prototype.set_exchange_rate_html = function() {
-      var $span, change, currency, html, self;
+      var $span, change, currency, exchange_rate, html, self;
       self = this;
       $span = $(this.conf.currency_id).siblings("label").find("span");
       currency = this.find_currency(this.conf.default_currency_id);
       change = this.find_currency(this.currency_id);
-      html = "1 " + change.name + " = <span class='b'>" + self.exchange_rate + "</span> " + (currency.name.pluralize()) + " ";
+      exchange_rate = $(this.conf.currency_exchange_rate_id).val() * 1;
+      html = "1 " + change.name + " = <span class='b'>" + (_b.ntc(exchange_rate)) + "</span> " + (currency.name.pluralize()) + " ";
       html += "<a id='edit_rate_link' href='javascript:'>editar</a>";
       return $span.html(html).mark();
     };
@@ -249,16 +250,7 @@
       return $tr.insertBefore("" + this.conf.items_table_id + " tr.extra:first");
     };
     Transaction.prototype.check_currency_data = function() {
-      var base, change, currency_id;
-      currency_id = $(this.conf.currency_id).val() * 1;
-      if (this.conf.default_currency_id !== currency_id) {
-        base = this.find_currency(this.conf.default_currency_id);
-        change = this.find_currency(currency_id);
-        change.rate = $(this.conf.currency_exchange_rate_id).val() * 1;
-        $(this.conf.currency_id).data({
-          'base': base,
-          'change': change
-        });
+      if (this.conf.default_currency_id !== this.currency_id) {
         return this.set_exchange_rate_html();
       }
     };

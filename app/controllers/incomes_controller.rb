@@ -10,7 +10,7 @@ class IncomesController < ApplicationController
   # GET /incomes
   # GET /incomes.xml
   def index
-    @incomes = Income.includes(:contact, :pay_plans).order("date DESC").paginate(:page => @page)
+    @incomes = Income.includes(:contact, :pay_plans, :currency).order("date DESC").paginate(:page => @page)
   end
 
   # GET /incomes/1
@@ -43,7 +43,6 @@ class IncomesController < ApplicationController
   # POST /incomes
   # POST /incomes.xml
   def create
-    #render :text => params.to_json
     @income = Income.new(params[:income])
     respond_to do |format|
       if @income.save

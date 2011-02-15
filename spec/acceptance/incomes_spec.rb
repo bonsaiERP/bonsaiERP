@@ -11,7 +11,7 @@ def income_params
       "ref_number"=>"987654"
     }
     details = [
-      { "description"=>"jejeje", "item_id"=>2, "organisation_id"=>1, "price"=>15.5, "quantity"=> 10},
+      { "description"=>"jejeje", "item_id"=>1, "organisation_id"=>1, "price"=>15.5, "quantity"=> 10},
       { "description"=>"jejeje", "item_id"=>2, "organisation_id"=>1, "price"=>10, "quantity"=> 20}
     ]
     @income_params[:transaction_details_attributes] = details
@@ -28,7 +28,7 @@ end
 
 feature "Transaction", "test features" do
   background do
-    OrganisationSession.set(:id => 1, :name => 'ecuanime')
+    OrganisationSession.set(:id => 1, :name => 'ecuanime', :currency_id => 1)
     begin
       Bank.find(1)
     rescue
