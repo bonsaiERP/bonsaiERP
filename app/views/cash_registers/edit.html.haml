@@ -1,6 +1,6 @@
-%h1 Editar account
+%h1 Editar caja
 %p.links
-  = link_to 'Ver', @account, :class => 'list'
-  = link_to 'Lista', accounts_path, :class => 'show'
+  = link_to 'Ver', @cash_register, :class => 'list'
+  = link_to 'Lista', cash_registers_path, :class => 'show'
 
-= render :partial => 'form'
+= render 'form'

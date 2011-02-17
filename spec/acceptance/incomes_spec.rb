@@ -26,7 +26,7 @@ def pay_plan_params(options)
    :email => true, :transaction_id => 1}.merge(options)
 end
 
-feature "Transaction", "test features" do
+feature "Income", "test features" do
   background do
     OrganisationSession.set(:id => 1, :name => 'ecuanime', :currency_id => 1)
     begin
@@ -207,5 +207,25 @@ feature "Transaction", "test features" do
     i = Income.find(i.id)
     i.balance.should == old_balance
   end
+
+  scenario "Pay with another currency" do
+    @params = income_params.merge(:discount => 0)
+    i = Income.new(@params)
+    total = @params[:transaction_details_attributes].inject(0) {|s, v| s+= v["price"] * v["quantity"] } 
+    total = total
+    total_cur = total / 2
+
+    i.currency_id = 2
+    i.currency_exchange_rate = 2
+    i.save
+    
+    i.total.should == total
+    i.total_currency.should == total_cur
+    i.balance.should == total_cur
+
+    pp = PayPlan.new(:transaction_id => i.id, :ctype => i.type )
+    pp.amount.should == total_cur
+  end
+
 end
 

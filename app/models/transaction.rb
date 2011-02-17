@@ -106,14 +106,14 @@ class Transaction < ActiveRecord::Base
   # @param Hash options
   def new_payment(options = {})
     if cash?
-      Payment.new({:amount => balance, :transaction_id => id}.merge(options))
+      Payment.new({:amount => balance, :transaction_id => id, :currency_id => currency_id}.merge(options))
     else
       pp = pay_plans.where(:paid => false).order("payment_date ASC").limit(1).first
       if pp
         Payment.new({:amount => pp.amount, :interests_penalties => pp.interests_penalties,
-                  :transaction_id => id}.merge(options))
+                  :transaction_id => id, :currency_id => currency_id}.merge(options))
       else
-        Payment.new({:transaction_id => id, :amount => balance}.merge(options))
+        Payment.new({:transaction_id => id, :amount => balance, :currency_id => currency_id}.merge(options))
       end
     end
   end

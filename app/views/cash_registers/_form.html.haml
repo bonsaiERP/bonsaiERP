@@ -1,10 +1,15 @@
-= simple_form_for(@account) do |f|
+= simple_form_for(@cash_register) do |f|
   = bonsai_form_error(f)
-  = f.input :name
-  = f.input :address
-  = f.input :email
-  = f.input :website
-  = f.input :number
+  = f.input :name, :label => 'Nombre de caja'
+  -if @cash_register.new_record?
+    = f.association :currency, :collection => OrganisationSession.currencies, :label => 'Moneda'
+  -else
+    .input
+      %label Moneda
+      =@cash_register.currency
+  .clear
+  = f.input :address, :label => 'Dirección', :as => :text, :input_html => {:rows => 4, :cols => 35}
 
+  .clear
   .actions
     = f.submit 'Salvar'

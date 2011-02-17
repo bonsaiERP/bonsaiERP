@@ -23,7 +23,7 @@ class BanksController < ApplicationController
   # GET /banks/new
   # GET /banks/new.xml
   def new
-    @bank = Bank.new
+    @bank = Bank.new(:currency_id => params[:currency_id])
 
     respond_to do |format|
       format.html # new.html.erb

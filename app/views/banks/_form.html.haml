@@ -4,8 +4,17 @@
     = f.input :number, :label => 'Número de cuenta'
     = f.input :name, :label => 'Banco'
     .clear
-    = f.association :currency, :collection => OrganisationSession.currencies, :label => 'Moneda'
-    = f.input :total_amount, :label => 'Total en cuenta', :input_html => {:size => 12}
+    -if bank.new_record?
+      = f.association :currency, :collection => OrganisationSession.currencies, :label => 'Moneda'
+      = f.input :total_amount, :label => 'Total en cuenta', :input_html => {:size => 12}
+    -else
+      .input
+        %label Moneda
+        = bank.currency
+      .input
+        %label Total en cuenta
+        = "#{bank.currency_name.pluralize} #{ntc(bank.total_amount)}"
+
     .clear
   = f.input :address, :label => 'Dirección', :as => :text, :input_html => {:rows => 4, :cols => 35}
   = f.input :phone, :label => 'Teléfono'

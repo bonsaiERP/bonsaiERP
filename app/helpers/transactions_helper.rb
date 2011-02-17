@@ -23,4 +23,16 @@ module TransactionsHelper
       ntc(amount)
     end
   end
+
+  # Adds the currency to the label
+  # @param String
+  # @param Object [Transaction, Payment, PayPlan, ..]
+  def currency_label(text_label, klass)
+    unless klass.currency_id == session[:organisation][:currency_id]
+      "#{text_label} (#{klass.currency_symbol} #{klass.currency_name.pluralize})"
+    else
+      text_label
+    end
+  end
+
 end

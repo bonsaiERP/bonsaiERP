@@ -653,6 +653,13 @@ span.true, span.false{
 }
 .ajax-modal{
   .links{ display: none; }
+  a{
+    color: @link !important;
+    text-decoration: none;
+  }
+  a:hover{
+    text-decoration: underline;
+  }
 }
 
 .marked{ background-color: @light_blue !important; }
@@ -689,7 +696,7 @@ span.true, span.false{
 }
 .draft{ 
   .dashlet;
-  background-color: @dark_grey;
+  background-color: @grey;
 }
 .aproved{  
   .dashlet;

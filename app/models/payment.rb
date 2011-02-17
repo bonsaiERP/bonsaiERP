@@ -17,9 +17,12 @@ class Payment < ActiveRecord::Base
   # relationships
   belongs_to :transaction
   belongs_to :account
+  belongs_to :currency
   has_many :account_ledgers
 
   delegate :state, :type, :cash, :cash?, :paid?, :balance, :to => :transaction, :prefix => true
+
+  delegate :name, :symbol, :to => :currency, :prefix => true
 
   # validations
   validates_presence_of :account_id, :transaction_id

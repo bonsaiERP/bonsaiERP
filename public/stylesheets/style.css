@@ -512,6 +512,11 @@ span.true, span.false {
   padding: 5px;
 }
 .ajax-modal .links { display: none; }
+.ajax-modal a {
+  color: #547299 !important;
+  text-decoration: none;
+}
+.ajax-modal a:hover { text-decoration: underline; }
 .marked { background-color: #d0def1 !important; }
 ._30, .w30 { width: 30% !important; }
 ._33, .w33 { width: 33% !important; }
@@ -546,7 +551,7 @@ span.true, span.false {
   -webkit-border-radius: 3px;
   padding: 2px 3px;
   color: #ffffff;
-  background-color: #717171;
+  background-color: #c6c6c6;
 }
 .aproved {
   -moz-border-radius: 3px;

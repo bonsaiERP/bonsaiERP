@@ -13,6 +13,10 @@ class PayPlan < ActiveRecord::Base
 
   # relationships
   belongs_to :transaction
+  belongs_to :currency
+
+  delegate :currency_id, :pay_plans_balance, :pay_plans_total , :to => :transaction, :prefix => true
+  delegate :name, :symbol, :to => :currency, :prefix => true
 
   # validations
   validate :valid_income_or_interests_penalties_filled
@@ -43,14 +47,14 @@ private
   end
 
   def set_defaults
-    self.amount ||= self.transaction.pay_plans_balance
+    self.amount ||= self.transaction_pay_plans_balance
     self.interests_penalties ||= 0.0
     self.payment_date ||= Date.today
     self.alert_date ||= self.payment_date
   end
 
   def set_currency_id
-    self.currency_id = self.transaction.currency_id
+    self.currency_id = self.transaction_currency_id
   end
 
   def get_transaction_cash
@@ -80,7 +84,7 @@ private
   # Checks that all pay_plans amounts sum <= transaction.total
   def valid_pay_plans_total_amount
     minus = changes[:amount] ? changes[:amount].first.to_f : self.amount
-    tot = transaction.pay_plans_total + amount - minus
+    tot = transaction_pay_plans_total + amount - minus
 
     if tot > transaction.balance
       self.errors.add(:amount, "La cantidad que ingreso supera al total de la Nota de #{transaction.type_translated}")

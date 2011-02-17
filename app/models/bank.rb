@@ -7,8 +7,12 @@ class Bank < Account
   after_create     :create_account_ledger
 
   # validations
-  validates_presence_of :currency_id, :name, :number
-  validates_numericality_of :total_amount, :greater_than_or_equal_to => 0, :on => :create
+  validates_presence_of :name, :number
+  validates_uniqueness_of :number, :scope => [:name, :organisation_id]
+
+  def to_s
+    "#{name} - #{number}"
+  end
 
 private
   def set_defaults

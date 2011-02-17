@@ -1,23 +1,19 @@
-%h1 accounts
+%h1 Cajas
 
-%p.links= link_to "Nuevo account", new_account_path, :class => 'new'
+%p.links= link_to "Nueva caja", new_cash_register_path, :class => 'new'
 
 %table.decorated.nwl 
   %thead
     %tr
-      %th name
-      %th address
-      %th email
-      %th website
-      %th number
+      %th Nombre
+      %th Moneda
+      %th Dirección
       %th
   
   %tbody
-    - for account in @accounts
+    - for account in @cash_registers
       %tr{ :class => cycle(:odd, :even) }
         %td= account.name
-        %td= account.address
-        %td= account.email
-        %td= account.website
-        %td= account.number
+        %td= account.currency
+        %td= nl2br account.address
         %td.actions= bonsai_links(account)

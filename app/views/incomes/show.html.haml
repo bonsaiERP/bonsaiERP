@@ -1,3 +1,5 @@
+%span.b{:class => @income.real_state, :style => 'font-size:1.3em'}= @income.show_state
+.clear
 %h1._50.fl #{note_title(@income)} de venta (<span id="cash_credit_title">#{cash_credit @income.cash}</span>)
 
 - payment_action, pay_plan_action = @income.state == "paid" ? ["Ver", "Ver"] : ["Realizar", "Planificar"]
@@ -9,9 +11,7 @@
 = link_to "#{pay_plan_action} crédito", "#pay_plans", :class => 'fl', :style => 'margin-top:16px', :id => 'pay_plan_anchor', :class => 'calendar' if @income.show_pay_plans?
 .clear
 
-%span.b{:class => @income.real_state, :style => 'font-size:1.3em'}= @income.show_state
 
-.clar
 
 %p.links._50.fl
   - if @income.draft?
@@ -109,18 +109,28 @@
       %td{:colspan => 2}
       %td.r.b{:colspan => 2} Total
       %td#total_value.r.b{'data-val' => @income.total}= ntc @income.total
-    %tr.extra
-      %td{:colspan => 2}
-      %td.r.b.line{:colspan => 2} Cobrado
-      %td#total_payments.r.b.line{'data-val' => @income.total_payments}= "-" + ntc( @income.total_payments) 
-    %tr.extra
-      %td{:colspan => 2}
-      %td.r.b{:colspan => 2} Saldo
-      %td#balance.r.b{'data-val' => @income.balance}= ntc @income.balance
-    %tr.extra
-      %td{:colspan => 2}
-      %td.r.b{:colspan => 2} Saldo
-      %td#balance.r.b{'data-val' => @income.balance}= ntc @income.balance
+    - unless @income == session[:organisation][:currency_id]
+      %tr.extra
+        %td{:colspan => 2}
+          %td.r.b{:colspan => 2} Total #{@income.currency_name.pluralize}
+        %td#total_value.r.b{'data-val' => @income.total_currency} #{@income.currency_symbol} #{ntc @income.total_currency}
+      %tr.extra
+        %td{:colspan => 2}
+        %td.r.b.line{:colspan => 2} Cobrado #{@income.currency_name.pluralize}
+        %td#total_payments.r.b.line{'data-val' => @income.total_payments} - #{@income.currency_symbol} #{ntc( @income.total_payments)}
+      %tr.extra
+        %td{:colspan => 2}
+          %td.r.b{:colspan => 2} Saldo #{@income.currency_name.pluralize}
+        %td#balance.r.b{'data-val' => @income.balance} #{@income.currency_symbol} #{ntc @income.balance}
+    - else
+      %tr.extra
+        %td{:colspan => 2}
+        %td.r.b.line{:colspan => 2} Cobrado
+        %td#total_payments.r.b.line{'data-val' => @income.total_payments}= "-" + ntc( @income.total_payments) 
+      %tr.extra
+        %td{:colspan => 2}
+        %td.r.b{:colspan => 2} Saldo
+        %td#balance.r.b{'data-val' => @income.balance}= ntc @income.balance
 
 .clear
 =render "/payments/payments", :klass => @income, :pay_type => 'cobro' if @income.show_payments?
