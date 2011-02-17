@@ -15,6 +15,11 @@ module Acts
         before_validation :set_organisation_id, :if => :new_record?
         validates_presence_of :organisation_id
       end
+
+
+      def org
+        where(:organisation_id => OrganisationSession.organisation_id)
+      end
     end
 
     module InstanceMethods

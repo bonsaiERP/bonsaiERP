@@ -18,8 +18,20 @@ class OrganisationSession
 
     # Initialize variables
     def destroy
-      @organisation_id = @org_name = nil
+      @organisation_id = @org_name = @currency_id = nil
     end
+
+    #def organisation_id
+    #  @organisation_id
+    #end
+
+    #def currency_id
+    #  @currency_id
+    #end
+
+    #def name
+    #  @name
+    #end
 
     # Returns the currencies of the current organisation
     def currencies

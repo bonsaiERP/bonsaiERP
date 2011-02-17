@@ -1,8 +1,9 @@
 class PaymentsController < ApplicationController
+  before_filter :set_payment, :only => [:show, :edit, :update, :destroy, :null_payment]
   # GET /payments
   # GET /payments.xml
   def index
-    @payments = Payment.all
+    @payments = Payment.org.all
 
     respond_to do |format|
       format.html # index.html.erb
@@ -13,7 +14,6 @@ class PaymentsController < ApplicationController
   # GET /payments/1
   # GET /payments/1.xml
   def show
-    @payment = Payment.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -53,9 +53,12 @@ class PaymentsController < ApplicationController
 
   # PUT /payments/:id/null_payment
   def null_payment
-    @payment = Payment.find(params[:id])
     @payment.null_payment
     redirect_ajax @payment
   end
 
+private
+  def set_payment
+    @payment = Payment.org.find(params[:id])
+  end
 end

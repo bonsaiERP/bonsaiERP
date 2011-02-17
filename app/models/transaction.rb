@@ -27,9 +27,6 @@ class Transaction < ActiveRecord::Base
 
   delegate :name, :symbol, :to => :currency, :prefix => true
 
-  # scopes
-  default_scope where(:organisation_id => OrganisationSession.organisation_id )
-
 
   # Transalates the type for any language
   def type_translated

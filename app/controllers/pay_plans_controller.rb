@@ -2,11 +2,12 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class PayPlansController < ApplicationController
-
+  
+  before_filter :set_pay_plan, :only => [:show, :edit, :update, :destroy]
   # GET /pay_plans
   # GET /pay_plans.xml
   def index
-    @pay_plans = PayPlan.paginate(:page => @page)
+    @pay_plans = PayPlan.org.paginate(:page => @page)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -17,7 +18,6 @@ class PayPlansController < ApplicationController
   # GET /pay_plans/1
   # GET /pay_plans/1.xml
   def show
-    @pay_plan = PayPlan.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -38,7 +38,6 @@ class PayPlansController < ApplicationController
 
   # GET /pay_plans/1/edit
   def edit
-    @pay_plan = PayPlan.find(params[:id])
   end
 
   # POST /pay_plans
@@ -55,7 +54,6 @@ class PayPlansController < ApplicationController
   # PUT /pay_plans/1
   # PUT /pay_plans/1.xml
   def update
-    @pay_plan = PayPlan.find(params[:id])
 
     if @pay_plan.update_attributes(params[:pay_plan])
       redirect_ajax(@pay_plan, :notice => 'PayPlans was successfully updated.')
@@ -67,18 +65,13 @@ class PayPlansController < ApplicationController
   # DELETE /pay_plans/1
   # DELETE /pay_plans/1.xml
   def destroy
-    @pay_plan = PayPlan.find(params[:id])
-    #require 'mocha'
-    #@pay_plan = Object.new
-    #@pay_plan.stubs(:destroyed? => false, :attributes => {}, :errors => {:base => 'Fua'})
     @pay_plan.destroy
 
     redirect_ajax @pay_plan
   end
 
-  # Sends and email message with the current pay_plan
-  # GET: /pay_plan/:id/email
-  def email
-
+private
+  def set_pay_plan
+    @pay_plan = PayPlan.org.find(params[:id])
   end
 end

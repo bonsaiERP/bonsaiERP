@@ -2,10 +2,11 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class CurrencyRatesController < ApplicationController
+
   # GET /currency_rates
   # GET /currency_rates.xml
   def index
-    @currency_rates = CurrencyRate.all
+    @currency_rates = CurrencyRate.org.all
 
     respond_to do |format|
       format.html # index.html.erb

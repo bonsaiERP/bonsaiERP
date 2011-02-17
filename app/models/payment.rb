@@ -30,7 +30,7 @@ class Payment < ActiveRecord::Base
   validate :valid_amount_or_interests_penalties, :if => :active?
 
   # scopes
-  default_scope where(:organisation_id => OrganisationSession.organisation_id)
+  #default_scope where(:organisation_id => OrganisationSession.organisation_id)
   scope :active, where(:active => true)
 
   # Overide the dault to_json method

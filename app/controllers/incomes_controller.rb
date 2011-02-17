@@ -5,19 +5,18 @@ class IncomesController < ApplicationController
 
   before_filter :check_currency_set, :only => [:new, :edit, :create, :update]
   before_filter :set_default_currency, :except => [:index, :destroy]
+  before_filter :set_income, :only => [:show, :edit, :update, :destroy, :aprove]
 
 
   # GET /incomes
   # GET /incomes.xml
   def index
-    @incomes = Income.includes(:contact, :pay_plans, :currency).order("date DESC").paginate(:page => @page)
+    @incomes = Income.org.includes(:contact, :pay_plans, :currency).order("date DESC").paginate(:page => @page)
   end
 
   # GET /incomes/1
   # GET /incomes/1.xml
   def show
-    @income = Income.includes(:transaction_details, :payments, :pay_plans).find(params[:id])
-
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @income }
@@ -33,8 +32,6 @@ class IncomesController < ApplicationController
 
   # GET /incomes/1/edit
   def edit
-    @income = Income.find(params[:id])
-
     if @income.state == 'aproved'
       redirect_income
     end
@@ -58,8 +55,6 @@ class IncomesController < ApplicationController
   # PUT /incomes/1
   # PUT /incomes/1.xml
   def update
-    @income = Income.find(params[:id])
-
     if @income.aproved?
       redirect_income
     else
@@ -74,7 +69,6 @@ class IncomesController < ApplicationController
   # DELETE /incomes/1
   # DELETE /incomes/1.xml
   def destroy
-    @income = Income.find(params[:id])
     if @income.aproved
       redirect_income
     else
@@ -86,7 +80,6 @@ class IncomesController < ApplicationController
   # PUT /incomes/1/aprove
   # Method to aprove an income
   def aprove
-    @income = Income.find(params[:id])
     if @income.aprove!
       flash[:notice] = "La nota de venta fue aprobada"
     else
@@ -108,5 +101,9 @@ private
   def redirect_income
     flash[:warning] = "No es posible editar una nota ya aprobada!"
     redirect_to incomes_path
+  end
+
+  def set_income
+    @income = Income.org.find(params[:id])
   end
 end

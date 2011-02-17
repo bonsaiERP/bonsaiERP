@@ -2,7 +2,6 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class Income < Transaction
-  acts_as_org
 
   after_initialize :set_ref_number, :if => :new_record?
   

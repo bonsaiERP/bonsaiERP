@@ -20,7 +20,7 @@ class Contact < ActiveRecord::Base
   attr_accessible :name, :matchcode, :organisation_name, :address, :addres_alt, :phone, :mobile, :email, :tax_number, :aditional_info
   
   # scopes
-  default_scope where(:organisation_id => OrganisationSession.organisation_id)
+  #default_scope where(:organisation_id => OrganisationSession.organisation_id)
 
   def to_s
     matchcode

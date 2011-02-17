@@ -18,7 +18,7 @@ class AccountLedger < ActiveRecord::Base
   delegate :amount, :interests_penalties, :date, :to => :payment, :prefix => true
 
   # scopes
-  default_scope where(:organisation_id => OrganisationSession.organisation_id)
+  #default_scope where(:organisation_id => OrganisationSession.organisation_id)
 
 private
   def set_income
