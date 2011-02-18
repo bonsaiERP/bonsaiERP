@@ -13,6 +13,13 @@
   %label Total en cuenta
   %span.b #{@cash_register.currency_symbol} #{ntc @cash_register.total_amount}
 .clear
-.input
+
+._55.fl
+  %h2.dark Ultimas transacciones
+  = render "account_ledgers/list", :account_ledgers => @cash_register.account_ledgers.includes(:payment)
+
+
+.clear
+._40.fr
   %label Dirección
   %span= nl2br @cash_register.address

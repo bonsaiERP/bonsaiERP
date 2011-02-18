@@ -46,7 +46,7 @@ class CashRegistersController < ApplicationController
 
     respond_to do |format|
       if @cash_register.save
-        format.html { redirect_to(@cash_register, :notice => 'CashRegister was successfully created.') }
+        format.html { redirect_to(@cash_register, :notice => 'La caja fue creada.') }
         format.xml  { render :xml => @cash_register, :status => :created, :location => @cash_register }
       else
         format.html { render :action => "new" }
@@ -62,7 +62,7 @@ class CashRegistersController < ApplicationController
 
     respond_to do |format|
       if @cash_register.update_attributes(params[:cash_register])
-        format.html { redirect_to(@cash_register, :notice => 'CashRegister was successfully updated.') }
+        format.html { redirect_to(@cash_register, :notice => 'La caja fue actualizada.') }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }

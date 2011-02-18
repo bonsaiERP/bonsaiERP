@@ -88,8 +88,8 @@ GEM
     mocha (0.9.10)
       rake
     mutter (0.5.3)
-    mysql2 (0.2.6)
     nokogiri (1.4.4)
+    pg (0.10.1)
     polyglot (0.3.1)
     rack (1.2.1)
     rack-mount (0.6.13)
@@ -168,7 +168,7 @@ DEPENDENCIES
   haml
   less (>= 1.2.21)
   mocha
-  mysql2
+  pg
   rails
   rspec-rails
   ruby-debug19

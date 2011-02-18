@@ -41,13 +41,13 @@ protected
 
   # Creates all registers needed when an organisation is created
   def create_all_records
-    OrganisationSession.set = { :id => self.id, :name => self.name }
+    OrganisationSession.set = { :id => self.id, :name => self.name, :curency_id => self.currency_id }
     create_taxes
     create_link
     create_units
   end
 
-  # Adds the default taxes for each country
+  # Adds the default taxes for each country using a serialized value from the database
   def create_taxes
     country.taxes.each do |tax|
       Tax.create!(tax)
