@@ -20,4 +20,4 @@ rerun.txt
 db/test.sqlite3-journal
 Gemfile.lock
 *.*~
-config/intialiazers/host.rb
+config/initializers/host.rb
