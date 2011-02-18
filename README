@@ -42,3 +42,8 @@ to control an organisation finances. Beatiful, simple
     background: transparent;
   }
   */
+
+PostgreSQL
+sudo -u postgres psql template1
+
+CREATE USER demo WITH CREATEDB PASSWORD 'demo123';

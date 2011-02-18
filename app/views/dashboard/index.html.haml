@@ -1,1 +1,14 @@
-%h1 Bienvenido
+:css
+  p, li{font-size: 120%; padding: 7px;}
+%h1 Bienvenido, <span class="dark_green">aún estamos en desarrollo intensivo! :)</span>
+
+%p 
+  Te recomendamos:
+  %ol
+    - if Bank.org.size == 0
+      %li= link_to "Crea una cuenta de banco", new_bank_path
+
+    - if Item.org.size == 0
+      %li= link_to "Crea un ítem", new_item_path
+
+    %li= link_to "Crear una venta", new_item_path

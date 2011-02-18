@@ -1,5 +1,5 @@
 = simple_form_for(@organisation) do |f|
-  =f.input :name, :label => 'Nombre'
+  =f.input :name, :label => 'Nombre de su empresa'
   =f.association :country, :label => 'País'
   .clear
   =f.association :currency, :label => 'Moneda base', :hint => 'Todas las transacciones se realizaran en esta moneda.'

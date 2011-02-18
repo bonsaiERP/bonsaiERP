@@ -3,7 +3,7 @@
   %li
     %a{ :href => "#", :class => "cog" } Configuración
   %li
-    %a{ :href => "#{ user_path(current_user) }", :class => "user"}= current_user.to_s
+    %a{ :href => "#{ user_path(current_user) }", :class => "user"}= current_user.email
   %li
     %a{ :href =>"/users/sign_out", :class => "logout"} Salir
   %li{ :class => "right" }

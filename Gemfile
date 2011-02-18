@@ -26,13 +26,14 @@ group :development do
   else
     gem 'ruby-debug'
   end
+  gem 'steak', '~>1.1.0'
 end
 
 # Test
 group :test do  
-  gem 'rspec-rails'
+  gem 'rspec-rails', '~>2.5.0'
   gem 'mocha'
-  gem 'steak', '>= 1.0.0.rc.1'
+  gem 'steak', '~>1.1.0'
   gem 'cucumber-rails', '~>0.3.2'
   gem 'capybara'
   gem 'database_cleaner'
