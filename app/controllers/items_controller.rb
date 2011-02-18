@@ -3,7 +3,7 @@
 # email: boriscyber@gmail.com
 class ItemsController < ApplicationController
   respond_to :html, :json, :xml
-  before_filter :set_income, :only => [:show, :edit, :update, :destroy]
+  before_filter :set_item, :only => [:show, :edit, :update, :destroy]
 
   # GET /items
   # GET /items.xml

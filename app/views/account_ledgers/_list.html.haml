@@ -1,12 +1,14 @@
-%table.decorated._50
+%table.decorated
   %tr
     %th Fecha
     %th Cantidad
+    %th Contacto
     %th Pago
-  - account_ledgers.each do |al|
+  - account_ledgers.includes(:payment, :contact).each do |al|
     %tr
       %td= lo al.date
       %td.r= ntc al.amount
+      %td= link_to al.contact, al.contact
       %td= with_payment(al)
 
 

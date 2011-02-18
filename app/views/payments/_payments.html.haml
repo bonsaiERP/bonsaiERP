@@ -156,7 +156,7 @@
       createPayPlanLinks: function(ids) {
         var html = [];
         $(ids).map(function(i, el) { 
-          html.push('<a href="#pay_plans_table" data-id="' + el + '" class="pay_plan_link">' + el + '</a>');
+          html.push('<a href="#pay_plans_table" data-id="' + el + '" class="pay_plan_link">plan de pago ' + el + '</a>');
         });
         return html.join(", ");
       },
@@ -165,7 +165,7 @@
       */
       newPayPlanMessage: function(pay_plan) {
         if(pay_plan) {
-          this.messages.push( "Se ha creado un nuevo <a href='#pay_plans_table' class='pay_plan_link' data-id='" + pay_plan.id + "'>plan de pago</a>");
+          this.messages.push( "Se ha creado un <a href='#pay_plans_table' class='pay_plan_link' data-id='" + pay_plan.id + "'>nuevo plan de pago</a>");
         }
       },
       /**

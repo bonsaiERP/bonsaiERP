@@ -438,10 +438,6 @@ span.error { display: block; }
   background-color: #ffffc5;
 }
 .cb { clear: both; }
-._120 { font-size: 120%; }
-._120 input { font-size: 120%; }
-._120 select { font-size: 120%; }
-._120 textarea { font-size: 120%; }
 ul.menu {
   position: relative;
   padding: 0px;
@@ -490,6 +486,7 @@ a.more { background: transparent url(images/bullet_arrow_down.png) no-repeat 0 r
   margin: 1.2%;
 }
 .fl { float: left; }
+.fr { float: right; }
 .clear { clear: both; }
 .true { background: transparent url(images/tick.png) no-repeat center 50%; }
 .false { background: transparent url(images/cross.png) no-repeat center 50%; }
@@ -506,6 +503,12 @@ span.true, span.false {
 .l { text-align: left; }
 .c { text-align: center; }
 .r { text-align: right; }
+.fs11 { font-size: 110%; }
+.fs12 { font-size: 120%; }
+._120 { font-size: 120%; }
+._120 input { font-size: 120%; }
+._120 select { font-size: 120%; }
+._120 textarea { font-size: 120%; }
 .dark { color: #484a4c; }
 .main {
   margin: 25px -5px;

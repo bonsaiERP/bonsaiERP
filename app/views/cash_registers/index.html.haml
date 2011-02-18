@@ -7,13 +7,15 @@
     %tr
       %th Nombre
       %th Moneda
+      %th Total en caja
       %th Dirección
       %th
   
   %tbody
-    - for account in @cash_registers
+    - for cr in @cash_registers
       %tr{ :class => cycle(:odd, :even) }
-        %td= account.name
-        %td= account.currency
-        %td= nl2br account.address
-        %td.actions= bonsai_links(account)
+        %td= link_to cr.name, cr
+        %td= cr.currency
+        %td.r= "#{cr.currency.symbol} #{ntc cr.total_amount}"
+        %td= nl2br cr.address
+        %td.actions= bonsai_links(cr)

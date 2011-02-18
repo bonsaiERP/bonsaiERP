@@ -115,6 +115,10 @@ class Transaction < ActiveRecord::Base
     end
   end
 
+  def new_pay_plan
+    PayPlan.new(:transaction_id => id, :ctype => type, :currency_id => currency_id)
+  end
+
   # Adds a payment and updates the balance
   def add_payment(amount)
     if amount > balance

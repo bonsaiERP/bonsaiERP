@@ -9,13 +9,12 @@ class Account < ActiveRecord::Base
   has_many :account_ledgers, :order => "date DESC"
   has_many :payments
 
-
   delegate :name, :symbol, :to => :currency, :prefix => true
 
   #validations
   validates_numericality_of :total_amount, :greater_than_or_equal_to => 0
   validates_presence_of :currency_id
-  validate :valid_amount_and_currency, :unless => :new_record?
+  validate :valid_amount_and_currency_not_changed, :unless => :new_record?
 
   # scopes
   #default_scope where(:organisation_id => OrganisationSession.organisation_id)
@@ -24,4 +23,8 @@ class Account < ActiveRecord::Base
     "#{name} #{number}"
   end
 
+  # If update occurs it should not allow
+  def valid_amount_and_currency_not_changed
+    self.errors.add(:base, "No puede modificar total en cuenta o la moneda") if changes[:total_amount] or changes[:currency_id]
+  end
 end

@@ -1,0 +1,59 @@
+#items
+  %h2.dark Items
+
+  %table#items_table.decorated
+    %thead
+      %tr
+        %th Item
+        %th Descripción
+        %th Precio <br/>unitario
+        %th Cantidad
+        %th Total fila
+        %th
+      - income.transaction_details.each do |det|
+        %tr
+          %td= det.item
+          %td= det.description
+          %td= ntc det.price
+          %td= det.quantity
+          %td.total_row.r= ntc det.total
+
+    %tr.extra.pad_top
+      %td{:colspan => 2}
+      %td.r{:colspan => 2} Subtotal
+      %td#subtotal.r= ntc income.gross_total
+    %tr.extra
+      %td{:colspan => 2}
+      %td.r{:colspan => 2} Descuento (<span id="discount_percentage" data-val="#{income.total_discount}">#{ntc income.tax_percent}</span>%)
+      %td#discount_total.r= "-#{ntc income.total_discount}"
+    %tr.extra
+      %td{:colspan => 2}
+      %td.r.line{:colspan => 2} Impuestos (<span id="taxes_percentage" data-val="#{income.total_taxes}">#{ntc income.total_taxes}</span>%)
+      %td#taxes_total.r.line= ntc income.total_taxes
+    %tr.extra
+      %td{:colspan => 2}
+      %td.r.b{:colspan => 2} Total
+      %td#total_value.r.b{'data-val' => income.total}= ntc income.total
+    - unless income == session[:organisation][:currency_id]
+      %tr.extra
+        %td{:colspan => 2}
+          %td.r.b{:colspan => 2} Total #{income.currency_name.pluralize}
+        %td#total_value.r.b{'data-val' => income.total_currency} #{income.currency_symbol} #{ntc income.total_currency}
+      %tr.extra
+        %td{:colspan => 2}
+        %td.r.b.line{:colspan => 2} Cobrado #{income.currency_name.pluralize}
+        %td#total_payments.r.b.line{'data-val' => income.total_payments} - #{income.currency_symbol} #{ntc( income.total_payments)}
+      %tr.extra
+        %td{:colspan => 2}
+          %td.r.b{:colspan => 2} Saldo #{income.currency_name.pluralize}
+        %td#balance.r.b{'data-val' => income.balance} #{income.currency_symbol} #{ntc income.balance}
+    - else
+      %tr.extra
+        %td{:colspan => 2}
+        %td.r.b.line{:colspan => 2} Cobrado
+        %td#total_payments.r.b.line{'data-val' => income.total_payments}= "-" + ntc( income.total_payments) 
+      %tr.extra
+        %td{:colspan => 2}
+        %td.r.b{:colspan => 2} Saldo
+        %td#balance.r.b{'data-val' => income.balance}= ntc income.balance
+

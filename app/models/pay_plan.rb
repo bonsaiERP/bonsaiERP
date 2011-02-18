@@ -51,6 +51,7 @@ private
     self.interests_penalties ||= 0.0
     self.payment_date ||= Date.today
     self.alert_date ||= self.payment_date
+    self.currency_id ||= transaction_currency_id
   end
 
   def set_currency_id

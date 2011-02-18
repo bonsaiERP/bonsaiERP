@@ -18,6 +18,7 @@ class Payment < ActiveRecord::Base
   belongs_to :transaction
   belongs_to :account
   belongs_to :currency
+  belongs_to :contact
   has_many :account_ledgers
 
   delegate :state, :type, :cash, :cash?, :paid?, :balance, :to => :transaction, :prefix => true
