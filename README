@@ -47,3 +47,5 @@ PostgreSQL
 sudo -u postgres psql template1
 
 CREATE USER demo WITH CREATEDB PASSWORD 'demo123';
+
+git in server: demo4321
