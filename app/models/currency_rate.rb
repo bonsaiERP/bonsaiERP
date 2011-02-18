@@ -20,9 +20,12 @@ class CurrencyRate < ActiveRecord::Base
 
   # returns if the currency has been updated for the date and organisation
   # @param Integer 
-  def self.current?
-    organisation_id ||= OrganisationSession.organisation_id
-    where(["active=? AND created_at>=?", true, Date.today]).any?
+  def self.current?(org)
+    if org.currency_ids.any?
+      CurrencyRate.org.where(["active=? AND created_at>=?", true, Date.today]).any?
+    else
+      true
+    end
   end
 
   # Method to create new currencies

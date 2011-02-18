@@ -94,7 +94,8 @@ private
 
   # Checks if the currency has been set
   def check_currency_set
-    unless CurrencyRate.current?
+    org = Organisation.find(OrganisationSession.organisation_id)
+    unless CurrencyRate.current?(org)
       flash[:warning] = "Debe actualizar los tipos de cambio."
       redirect_to new_currency_rate_path
     end
