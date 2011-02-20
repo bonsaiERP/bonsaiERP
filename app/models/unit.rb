@@ -16,8 +16,6 @@ class Unit < ActiveRecord::Base
 
   validates_presence_of :name, :symbol
 
-  # scopes
-  default_scope where(:organisation_id => OrganisationSession.organisation_id)
 
   def to_s
     "#{name} (#{symbol})"
