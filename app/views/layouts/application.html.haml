@@ -15,20 +15,21 @@
       %div{ :id => "debug-error", :style => "display:none; width: 640px; height: 480px; overflow: auto; z-index: 10000; background:#FFF;color:#000" }
         %iframe{ :id => "cont-iframe", :width => "100%", :height => "100%"}
 
-    %div{ :id => "wrapper"}
-      %div{ :id => "wrap_in" }
-        %div{ :id => "header" }
-          = render :partial => 'layouts/usersettings_menu' if user_signed_in?
-          - if organisation?
-            %h1= session[:organisation][:name]
-        %div{ :id => "menu" }
-          = render :partial => 'layouts/main_menu'
+    #main_wrap
+      #wrapper
+        #wrap_in
+          #logo
+          #header
+            = render 'layouts/usersettings_menu' if user_signed_in?
+            - if organisation?
+              %h1= session[:organisation][:name]
+          #menu
+            = render 'layouts/main_menu'
 
-        %div{ :id => "cont" }
-          %div{ :id => "cont-in" }
-            = render :partial => "layouts/flash"
-            = yield
-          %div{ :style => "clear:both" }
-
-        %div{ :id => "foot"}
+          #cont
+            #cont-in
+              = render "layouts/flash"
+              = yield
+            .clear
+          #foot
 

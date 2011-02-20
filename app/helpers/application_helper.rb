@@ -27,12 +27,15 @@ module ApplicationHelper
 
   # Format addres to present on the
   def nl2br(val)
-    val.gsub!("\n", "<br/>").html_safe unless val.blank?
+    unless val.blank?
+      val.gsub!("\n", "<br/>")
+      val.html_safe
+    end
   end
 
   # Changes the <br/> for a \n
   def br2nl(val)
-    val.gsub!("<br/>", "\n") unless val.blank?
+    val.to_s.gsub!("<br/>", "\n") unless val.blank?
   end
 
   # Used for localization

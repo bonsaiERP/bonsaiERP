@@ -73,8 +73,6 @@ class OrganisationsController < ApplicationController
 
     unless @organisation.blank?
       set_organisation_session(@organisation)
-
-      flash[:warning] = "Debe actualizar los tipos de cambio. <a href=\"#{new_currency_rate_path}\">Actualizar</a>".html_safe unless CurrencyRate.current?(@organisation)
       redirect_to dashboard_url
     else
       flash[:error] = "Debe seleccionar una organización válida"

@@ -1,8 +1,8 @@
 = simple_form_for(bank) do |f|
   = bonsai_form_error(f)
   .main.bg_light_grey
-    = f.input :number, :label => 'Número de cuenta'
     = f.input :name, :label => 'Banco'
+    = f.input :number, :label => 'Número de cuenta'
     .clear
     -if bank.new_record?
       = f.association :currency, :collection => OrganisationSession.currencies, :label => 'Moneda'

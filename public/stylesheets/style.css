@@ -11,10 +11,9 @@
 body {
   font-size: 11.5px;
   font-family: Tahoma, sans-serif;
-  background-color: #f0f0f1;
+  background-color: #e2e2e2;
   margin: 0px;
   padding: 0px;
-  background: #f0f0f1 url(images/background_header.png) repeat-x;
 }
 a {
   color: #547299;
@@ -102,32 +101,53 @@ table.decorated tr.pad_top td { padding-top: 15px; }
 table.decorated tr.false { color: #717171; }
 table.nwl td:last-child { white-space: nowrap; }
 table.nwf td:first-child { white-space: nowrap; }
+#main_wrap {
+  width: 100%;
+  background: transparent url(images/back_combined.png) repeat-x 0px -101px;
+}
 #wrapper {
   margin: auto;
   width: 968px;
-  background: transparent url(images/background.png) repeat-y;
 }
-#wrap_in { background: transparent url(images/menu.png) no-repeat; }
+#wrap_in { position: relative; }
+#logo {
+  position: absolute;
+  height: 90px;
+  width: 80px;
+  background: url("images/back_combined.png") no-repeat scroll left top transparent;
+  z-index: 1000;
+  right: 10px;
+}
 #cont {
-  background-color: #ffffff;
+  background: #ffffff;
   width: 950px;
   margin: auto;
+  -moz-border-radius: 0px 0px 10px 10px;
+  -webkit-border-radius: 0px 0px 10px 10px;
+  border-radius: 0px 0px 10px 10px;
 }
 #cont-in { padding: 10px 15px 90px; }
-#header { height: 59px; }
+#header {
+  height: 59px;
+  position: relative;
+}
 #header h1 {
   width: 50%;
   float: left;
   color: #ffffff;
-  margin: 3px 15px;
+  margin: 15px;
   vertical-align: top;
 }
 #header ul {
-  float: right;
-  margin: 10px 15px;
-  padding: 0px;
+  position: absolute;
+  top: 4px;
+  right: 90px;
+  padding: 0px 5px;
   height: 29px;
-  background: transparent url(images/set_background.png) repeat-x;
+  background-color: #494949;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
 }
 #header ul li {
   list-style: none;
@@ -153,10 +173,8 @@ table.nwf td:first-child { white-space: nowrap; }
   width: 7px;
   height: 29px;
 }
-#foot {
-  background: transparent url(images/foot.png) no-repeat;
-  height: 32px;
-}
+#menu { height: 42px; }
+#foot { height: 32px; }
 .a_menu {
   color: #ffffff;
   text-decoration: none;
@@ -168,9 +186,10 @@ table.nwf td:first-child { white-space: nowrap; }
 }
 ul#main_menu {
   height: 31px;
-  margin: 10px;
-  padding: 0px;
+  margin: 0px;
+  padding: 10px 10px 0px;
   position: relative;
+  font-size: 110%;
 }
 ul#main_menu li {
   list-style: none;
@@ -194,7 +213,7 @@ ul#main_menu li ul {
   margin: 0px;
   padding-t: op: 4px;
   z-index: 100;
-  background-color: #6793ce;
+  background-color: #7fbd42;
 }
 ul#main_menu li ul li {
   float: none;

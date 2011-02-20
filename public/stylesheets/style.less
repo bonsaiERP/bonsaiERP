@@ -1,5 +1,6 @@
 /* Colors */
 @green:#5BBF3B;
+@menu_green:#7FBD42;
 @dark_green: #538447;
 @white: #FFF;
 @white_tan: #F7F7F7;
@@ -35,10 +36,9 @@
 body{
   font-size: @font_size;
   font-family: Tahoma, sans-serif;
-  background-color: @light_grey ;
+  background-color: #E2E2E2;
   margin: 0px;
   padding: 0px;
-	background: @light_grey url(images/background_header.png) repeat-x;
 }
 a{
   color: @link;
@@ -165,20 +165,34 @@ table.nwf{
 
 /*********************************************************/
 /*MAIN CONTENT WRAPPERS*/
+#main_wrap{
+  width: 100%;
+  background: transparent url(images/back_combined.png) repeat-x 0px -101px;
+}
 #wrapper{
   margin: auto;
   width: 968px;
-  background:transparent url(images/background.png) repeat-y;
 }
 
 #wrap_in{
-  background: transparent url(images/menu.png) no-repeat;
+  position: relative;
+}
+#logo{
+  position: absolute;
+  height: 90px;
+  width: 80px;
+  background:url("images/back_combined.png") no-repeat scroll left top transparent;
+  z-index: 1000;
+  right: 10px;
 }
 
 #cont{
-  background-color: #FFF;
+  background:#FFF; 
   width: 950px;
   margin: auto;
+  -moz-border-radius: 0px 0px 10px 10px;
+  -webkit-border-radius: 0px 0px 10px 10px;
+  border-radius: 0px 0px 10px 10px;
 }
 
 #cont-in{
@@ -187,20 +201,24 @@ table.nwf{
 
 #header{
   height: 59px;
+  position: relative;
   h1{
     width: 50%;
 		float: left;
 		color: @white;
-		margin: 3px 15px;
+		margin: 15px;
 		vertical-align: top;
   }
   ul{
-		float: right;
-		margin: 10px 15px;
-		padding: 0px;
+    position: absolute;
+    top: 4px;
+    right: 90px;
+		padding: 0px 5px;
 		height: 29px;
-		background: transparent url(images/set_background.png) repeat-x;
-
+    background-color: #494949;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
     li{
       list-style: none;
       margin: 0px;
@@ -232,9 +250,11 @@ table.nwf{
   }
 
 }
+#menu{
+  height: 42px;
+}
 
 #foot{
-  background: transparent url(images/foot.png) no-repeat;
   height: 32px;
 }
 /*********************************************************/
@@ -251,9 +271,10 @@ table.nwf{
 
 ul#main_menu{
   height: 31px;
-  margin: 10px;
-  padding: 0px;
+  margin: 0px;
+  padding: 10px 10px 0px;
   position: relative;
+  font-size: 110%;
   li{
     list-style: none;
     padding: 0px;
@@ -280,7 +301,7 @@ ul#main_menu{
       margin: 0px;
       padding-t:op: 4px;
       z-index: 100;
-      background-color: @blue;
+      background-color: @menu_green;
       li{
         float: none;
         margin: 0px;

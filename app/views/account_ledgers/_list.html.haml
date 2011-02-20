@@ -8,7 +8,7 @@
     %tr
       %td= lo al.date
       %td.r= ntc al.amount
-      %td= link_to al.contact, al.contact
+      %td= link_to al.contact, al.contact if al.contact_id
       %td= with_payment(al)
 
 

@@ -7,7 +7,7 @@
     %tr
       %th Nombre
       %th Moneda
-      %th Total en caja
+      %th Total en cuenta
       %th Dirección
       %th
   
@@ -17,5 +17,5 @@
         %td= link_to cr.name, cr
         %td= cr.currency
         %td.r= "#{cr.currency.symbol} #{ntc cr.total_amount}"
-        %td= nl2br cr.address
+        %td= nl2br(cr.address)
         %td.actions= bonsai_links(cr)

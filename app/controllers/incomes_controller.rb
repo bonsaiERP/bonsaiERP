@@ -3,7 +3,7 @@
 # email: boriscyber@gmail.com
 class IncomesController < ApplicationController
 
-  before_filter :check_currency_set, :only => [:new, :edit, :create, :update]
+  #before_filter :check_currency_set, :only => [:new, :edit, :create, :update]
   before_filter :set_default_currency, :except => [:index, :destroy]
   before_filter :set_income, :only => [:show, :edit, :update, :destroy, :aprove]
 
