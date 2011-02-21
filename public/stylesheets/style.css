@@ -201,12 +201,12 @@ ul#main_menu li {
 ul#main_menu li a {
   font-weight: bold;
   display: block;
-  color: #fecd0a;
+  color: #f7eaa3;
   text-decoration: none;
-  padding: 5px 15px;
+  padding: 3px 15px;
 }
 ul#main_menu li a:hover span { background-position: 0px 0px !important; }
-ul#main_menu li a.more { background: url("images/sub_menu.png") no-repeat scroll right -12px transparent !important; }
+ul#main_menu li a.more { background: url("images/up_down.png") no-repeat scroll right -12px transparent !important; }
 ul#main_menu li ul {
   display: none;
   padding: 0px;
@@ -385,19 +385,12 @@ form.required abbr {
 }
 .inputs > div { margin-top: 10px; }
 input[type=submit] {
-  background-color: #6793ce;
-  color: #ffffff;
-  border: 0px;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  border-radius: 4px;
   padding: 4px 16px;
   margin: 10px 0px;
   font-weight: bold;
   font-size: 1.1em;
   cursor: pointer;
 }
-input[type=submit]:hover { opacity: 0.65; }
 .errorExplanation {
   color: #ff0000;
   background-color: #fef1ec;
