@@ -21,7 +21,7 @@ class Payment < ActiveRecord::Base
   belongs_to :contact
   has_many :account_ledgers
 
-  delegate :state, :type, :cash, :cash?, :paid?, :balance, :to => :transaction, :prefix => true
+  delegate :state, :type, :cash, :cash?, :paid?, :balance, :contact_id, :to => :transaction, :prefix => true
 
   delegate :name, :symbol, :to => :currency, :prefix => true
 
@@ -133,7 +133,8 @@ private
       tot, income = [total_amount, false] unless active?
     end
 
-    AccountLedger.create(:account_id => account_id, :payment_id => id, :currency_id => currency_id,
+    AccountLedger.create(:account_id => account_id, :payment_id => id, 
+                         :currency_id => currency_id, :contact_id => transaction_contact_id,
                          :amount => tot, :date => date, :income => income)
   end
 
