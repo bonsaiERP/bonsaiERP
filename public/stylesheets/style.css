@@ -205,7 +205,6 @@ ul#main_menu li a {
   text-decoration: none;
   padding: 3px 15px;
 }
-ul#main_menu li a:hover span { background-position: 0px 0px !important; }
 ul#main_menu li a.more { background: url("images/up_down.png") no-repeat scroll right -12px transparent !important; }
 ul#main_menu li ul {
   display: none;
@@ -223,9 +222,10 @@ ul#main_menu li ul li {
 }
 ul#main_menu li ul a {
   float: none;
-  padding: 4px 20px;
+  color: #ffffff;
+  padding: 7px 30px 7px 20px;
   font-weight: normal;
-  display: inline-block;
+  display: block;
 }
 ul#main_menu li ul a.add {
   text-indent: -1000em;
@@ -234,7 +234,7 @@ ul#main_menu li ul a.add {
   margin: 0px 0px 0px 20px;
 }
 ul#main_menu li ul a.add_left { padding-left: 0px; }
-ul#main_menu li ul a:hover { text-decoration: underline; }
+ul#main_menu li ul a:hover { background-color: #4e8f19; }
 ul#main_menu li:hover ul {
   display: block;
   position: absolute;
@@ -373,11 +373,6 @@ a.trash {
 .boolean label { display: inline-block; }
 .boolean input:checkbox { float: left; }
 .numeric input { text-align: right; }
-form abbr { display: none; }
-form.required abbr {
-  display: inline;
-  color: green;
-}
 .hint {
   display: block;
   color: #717171;

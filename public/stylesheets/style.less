@@ -288,11 +288,6 @@ ul#main_menu{
       text-decoration: none;
       padding: 3px 15px;
     }
-    a:hover{
-      span{
-        background-position: 0px 0px !important;
-      }
-    }
     a.more{ background: url("images/up_down.png") no-repeat scroll right -12px transparent !important; }
     /*SUB MENU*/
     ul{
@@ -310,9 +305,10 @@ ul#main_menu{
       }
       a{
         float: none;
-        padding: 4px 20px;
+        color: @white;
+        padding: 7px 30px 7px 20px;
         font-weight: normal;
-        display: inline-block;
+        display: block;
       }
       a.add{
         text-indent: -1000em;
@@ -324,10 +320,11 @@ ul#main_menu{
         padding-left: 0px;
       }
       a:hover{
+        background-color:#4E8F19;
         /*background-image: url(images/ui-bg_glass_40_ffc73d_1x400.png);
         background-position: 50%;
-        color: @black;*/
-        text-decoration: underline;
+        color: @black;
+        text-decoration: underline;*/
       }
     }
     /****/
@@ -464,16 +461,6 @@ a.trash{
 }
 
 .numeric input{ text-align: right; }
-
-
-form abbr{
-  display: none;
-}
-
-form.required abbr{
-  display: inline;
-  color: green;
-}
 
 .hint{
   display: block;

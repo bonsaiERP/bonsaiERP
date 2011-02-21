@@ -6,7 +6,7 @@
     .clear
     -if bank.new_record?
       = f.association :currency, :collection => OrganisationSession.currencies, :label => 'Moneda'
-      = f.input :total_amount, :label => 'Total en cuenta', :input_html => {:size => 12}
+      = f.input :total_amount, :label => 'Total en cuenta', :input_html => {:size => 12}, :required => true
     -else
       .input
         %label Moneda
@@ -16,10 +16,10 @@
         = "#{bank.currency_name.pluralize} #{ntc(bank.total_amount)}"
 
     .clear
-  = f.input :address, :label => 'Dirección', :as => :text, :input_html => {:rows => 4, :cols => 35}
-  = f.input :phone, :label => 'Teléfono'
+  = f.input :address, :label => 'Dirección', :as => :text, :input_html => {:rows => 4, :cols => 35}, :required => false
+  = f.input :phone, :label => 'Teléfono', :required => false
   .clear
-  = f.input :email
+  = f.input :email, :required => false
   = f.input :website, :label => 'Sitio web'
   .clear
   .actions
