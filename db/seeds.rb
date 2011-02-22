@@ -17,7 +17,7 @@ YAML.load_file('config/defaults/currencies.yml').each do |c|
 end
 puts "Currencies have been created."
 
-org = Organisation.create!(:name => 'Zenlabs', :country_id => 1, :currency_id => 1, :phone => 2745620, :mobile => '70681101', :address => "Mallasa calle 4 Nº 71\n (La Paz - Bolivia)", :currency_ids => [2,3])
+org = Organisation.create!(:name => 'Zenlabs', :country_id => 1, :currency_id => 1, :phone => 2745620, :mobile => '70681101', :address => "Mallasa calle 4 Nº 71\n (La Paz - Bolivia)")
 
 puts "The organisation #{org.name} has been created"
 
