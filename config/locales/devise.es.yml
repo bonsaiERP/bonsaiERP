@@ -41,5 +41,7 @@ es:
       sign_in: "Ingresar"
       sign_up: "Registrate"
       sign_out: "Salir"
+      password_forgot: "Olvido su cotraseña?"
+      password_submit: ""
       
 
