@@ -15,10 +15,10 @@ gem 'mysql2'
 
 gem 'devise'
 gem 'simple_form', '>=1.2.0'
-gem 'kaminari'
 gem 'less', ">=1.2.21"
 gem 'haml'
 gem 'acts-as-taggable-on'
+gem 'kaminari'
 gem 'nokogiri'
 #gem 'escape_utils'
 

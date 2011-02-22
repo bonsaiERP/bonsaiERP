@@ -11,7 +11,7 @@ class IncomesController < ApplicationController
   # GET /incomes
   # GET /incomes.xml
   def index
-    @incomes = Income.org.includes(:contact, :pay_plans, :currency).order("date DESC").paginate(:page => @page)
+    @incomes = Income.org.includes(:contact, :pay_plans, :currency).order("date DESC").page(@page)
   end
 
   # GET /incomes/1

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110222165506) do
+ActiveRecord::Schema.define(:version => 20110222181837) do
 
   create_table "account_ledgers", :force => true do |t|
     t.integer  "organisation_id"
@@ -98,11 +98,13 @@ ActiveRecord::Schema.define(:version => 20110222165506) do
     t.boolean  "active",                                     :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.date     "date"
   end
 
   add_index "currency_rates", ["active"], :name => "index_currency_rates_on_active"
   add_index "currency_rates", ["created_at"], :name => "index_currency_rates_on_created_at"
   add_index "currency_rates", ["currency_id"], :name => "index_currency_rates_on_currency_id"
+  add_index "currency_rates", ["date"], :name => "index_currency_rates_on_date"
 
   create_table "items", :force => true do |t|
     t.integer  "unit_id"

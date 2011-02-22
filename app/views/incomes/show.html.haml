@@ -47,8 +47,9 @@
 .show
   .clear
   .input
-    %label Proyecto
-    = @income.project
+    - if @income.project_id
+      %label Proyecto
+      = @income.project
   .input
     %label Moneda/Tipo de cambio
     - unless @income.currency_id == @currency.id
@@ -58,11 +59,13 @@
   .clear
   .input
     .input
-      %label Descuento (%)
-      .b= "#{ ntc @income.discount }%"
+      - if @income.discount > 0
+        %label Descuento (%)
+        .b= "#{ ntc @income.discount }%"
     .input
-      %label Nº de Factura
-      = @income.bill_number
+      - unless @income.bill_number.blank?
+        %label Nº de Factura
+        = @income.bill_number
   .input
     %label Impuestos (%)
     .b= "#{ntc @income.tax_percent}%"
@@ -72,8 +75,9 @@
 
   .clear
   .input
-    %label Descripción
-    =@income.description
+    - unless @income.description.blank?
+      %label Descripción
+      =@income.description
   .clear
 
 = render 'items', :income => @income
@@ -113,7 +117,7 @@
       if(value) {
         $('#payment_anchor').html('Ver cobros');
         $('#pay_plan_anchor').html('Ver crédito');
-        $('#income_state').html('Pagado').removeClass('aproved').addClass('paid');
+        $('#income_state').html('Pagado').attr('class', '').addClass('b paid');
       }else {
         $('#payment_anchor').html('Realizar cobros');
         $('#pay_plan_anchor').html('Planificar crédito');

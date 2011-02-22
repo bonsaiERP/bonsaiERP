@@ -25,6 +25,11 @@ module ApplicationHelper
     number_to_currency(val)
   end
 
+  def nwd(val)
+    val ||= 0
+    number_with_delimiter(val)
+  end
+
   # Format addres to present on the
   def nl2br(val)
     unless val.blank?

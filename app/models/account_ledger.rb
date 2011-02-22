@@ -11,12 +11,14 @@ class AccountLedger < ActiveRecord::Base
   belongs_to :account
   belongs_to :payment
   belongs_to :contact
+  belongs_to :currency
 
   # validations
   validates_presence_of :account_id, :currency_id
   validates_numericality_of :amount
 
   delegate :amount, :interests_penalties, :date, :to => :payment, :prefix => true
+  delegate :name, :symbol, :to => :currency, :prefix => true
 
   # scopes
   #default_scope where(:organisation_id => OrganisationSession.organisation_id)

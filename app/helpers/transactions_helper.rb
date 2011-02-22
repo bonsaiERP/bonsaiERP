@@ -18,9 +18,9 @@ module TransactionsHelper
 
   def show_money(klass, amount)
     unless klass.currency_id == session[:organisation][:currency_id]
-      "#{ klass.currency_symbol } #{ntc amount}"
+      "#{ klass.currency_symbol } #{nwd amount}"
     else
-      ntc(amount)
+      nwd(amount)
     end
   end
 

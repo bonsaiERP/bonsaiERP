@@ -12,8 +12,8 @@
     .clear
 
   .clear
-  = f.association :project, :label => 'Proyecto'
-  = f.association :currency, :collection => OrganisationSession.currencies, :label => 'Moneda/Tipo de cambio. <span class="n"></span>'.html_safe, :include_blank => false
+  = f.association :project, :label => 'Proyecto', :collection => Project.org
+  = f.association :currency, :label => 'Moneda/Tipo de cambio. <span class="n"></span>'.html_safe, :include_blank => false
   = f.input :currency_exchange_rate, :as => :hidden
   .clear
   .input
