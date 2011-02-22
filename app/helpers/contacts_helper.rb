@@ -2,8 +2,10 @@ module ContactsHelper
   def contact_type(type)
     if type == 'clients'
       'Clientes'
-    else
+    elsif type == "suppliers"
       'Proveedores'
+    else
+      'Todos los contactos'
     end
   end
 end

@@ -29,7 +29,7 @@ class Contact < ActiveRecord::Base
     if TYPES.include?(params[:type])
       params[:type]     
     else
-      'clients'
+      false
     end
   end
 
