@@ -4,7 +4,7 @@
     = f.input :name, :label => 'Nombre de caja'
     -if @cash_register.new_record?
       ._25.fl
-        = f.association :currency, :collection => OrganisationSession.currencies, :label => 'Moneda'
+        = f.association :currency, :label => 'Moneda'
       ._25.fl
         = f.input :total_amount, :label => 'Total en cuenta', :input_html => {:size => 12}
     -else

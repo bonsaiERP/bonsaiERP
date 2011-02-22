@@ -1,6 +1,10 @@
-%h1 Contactos
+%h1= contact_type @type
 
 %p.links= link_to "Nuevo contacto", new_contact_path, :class => 'new'
+
+%p.hint Un contacto se convierte en <strong>Cliente</strong> cuando se aprueba una venta y en <strong>Proveedor</strong> cuando se aprueba un compra o gasto
+
+= paginate(@contacts)
 
 %table{ :class => "decorated nwf nwl" }
   %tr
@@ -15,7 +19,7 @@
   - @contacts.each do |contact|
     %tr
       %td= link_to contact.name, contact
-      %td= contact.address
+      %td= nl2br contact.address
       %td= contact.phone
       %td= contact.mobile
       %td= mail_to contact.email

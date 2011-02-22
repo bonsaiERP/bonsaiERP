@@ -7,6 +7,7 @@ class Income < Transaction
   
   # callbacks
   before_save :set_state
+  after_save :set_client, :if => :aproving?
 
   STATES = ["draft", "aproved", "paid", "due"]
 
@@ -62,17 +63,22 @@ class Income < Transaction
     state == 'draft'
   end
 
-
+  attr_reader :aproving
   def aprove!
     if state != "draft"
       false
     else
+      @aproving = true
       self.state = "aproved"
       self.save
     end
   end
 
 private
+  def aproving?
+    aproving
+  end
+
   def set_state
     if balance <= 0
       self.state = "paid"
@@ -106,4 +112,7 @@ private
     self.errors.add(:base, "Debe ingresar seleccionar al menos un ítem") unless self.transaction_details.any?
   end
 
+  def set_client
+    contact.update_attribute(:client, true)
+  end
 end

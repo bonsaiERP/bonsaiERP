@@ -104,6 +104,7 @@ table.nwf td:first-child { white-space: nowrap; }
 #main_wrap {
   width: 100%;
   background: transparent url(images/back_combined.png) repeat-x 0px -101px;
+  min-height: 500px;
 }
 #wrapper {
   margin: auto;

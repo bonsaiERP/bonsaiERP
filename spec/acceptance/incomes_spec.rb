@@ -34,6 +34,12 @@ feature "Income", "test features" do
     rescue
       Bank.create!(:number => '123', :currency_id => 1, :name => 'Bank JE') {|a| a.id = 1 }
     end
+
+    begin
+      Contact.find(1)
+    rescue
+      Contact.create!(:name => 'karina', :matchcode => 'karina', :address => 'Mallasa') {|c| c.id = 1 }
+    end
   end
 
   scenario "Create a payment with nearest pay_plan" do
@@ -64,6 +70,7 @@ feature "Income", "test features" do
     i.aprove!
     i = Income.find(i.id)
     i.state.should == "aproved"
+    Contact.find(1).client.should == true # Check that is client now
     p = i.new_payment(:account_id => 1)
 
     p.amount.should == i.balance

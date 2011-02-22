@@ -5,7 +5,7 @@
     = f.input :number, :label => 'Número de cuenta'
     .clear
     -if bank.new_record?
-      = f.association :currency, :collection => OrganisationSession.currencies, :label => 'Moneda'
+      = f.association :currency, :label => 'Moneda'
       = f.input :total_amount, :label => 'Total en cuenta', :input_html => {:size => 12}, :required => true
     -else
       .input

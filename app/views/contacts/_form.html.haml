@@ -13,10 +13,7 @@
   = f.input :tax_number, :label => "NIT"
   .clear
   = f.input :address, :as => :text, :input_html => {:rows => 4}, :label => "Dirección"
-  = f.input :address_alt, :as => :text, :input_html => {:rows => 4}, :label => "Dirección alternativa"
-  .clear
   = f.input :aditional_info, :as => :text, :input_html => {:rows => 4}, :label => "Información adicional"
-
   .clear
   %div.actions
     = f.submit "Salvar"

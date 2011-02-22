@@ -8,7 +8,8 @@ class ContactsController < ApplicationController
   # GET /contacts
   # GET /contacts.xml
   def index
-    @contacts = Contact.org.all
+    @type = Contact.get_type(params)
+    @contacts = Contact.org.send(@type).page(@page)
   end
 
   # GET /contacts/1

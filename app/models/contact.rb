@@ -4,6 +4,8 @@
 class Contact < ActiveRecord::Base
   acts_as_org
 
+  TYPES = ['clients', 'suppliers']
+
   # callbacks
   #before_save :change_nl2br#, :unless => lambda { |c| c.address.blank? }
 
@@ -20,7 +22,16 @@ class Contact < ActiveRecord::Base
   attr_accessible :name, :matchcode, :organisation_name, :address, :addres_alt, :phone, :mobile, :email, :tax_number, :aditional_info
   
   # scopes
-  #default_scope where(:organisation_id => OrganisationSession.organisation_id)
+  scope :clients, where(:client => true)
+  scope :suppliers, where(:supplier => true)
+
+  def self.get_type(params = {})
+    if TYPES.include?(params[:type])
+      params[:type]     
+    else
+      'clients'
+    end
+  end
 
   def to_s
     matchcode
