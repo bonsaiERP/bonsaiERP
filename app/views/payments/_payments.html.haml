@@ -93,6 +93,7 @@
         $(link).css('visivility', 'hidden');
         $.ajax({
           'url': $(link).attr("href"),
+          'data': {'authenticity_token': csrf_token },
           'type': 'put',
           'success':function(resp) {
             $(link).parents('tr:first').removeClass('true').addClass('false').mark();

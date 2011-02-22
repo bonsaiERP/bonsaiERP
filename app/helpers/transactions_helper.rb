@@ -16,11 +16,12 @@ module TransactionsHelper
     "Total #{transaction.currency_name.pluralize}" unless session[:organisation][:currency_id] == transaction.currency_id
   end
 
-  def show_money(klass, amount)
+  def show_money(klass, amount, options = {})
+    options = {:precision => 2}.merge(options)
     unless klass.currency_id == session[:organisation][:currency_id]
-      "#{ klass.currency_symbol } #{nwd amount}"
+      "#{ klass.currency_symbol } #{number_to_currency amount, options}"
     else
-      nwd(amount)
+      number_to_currency(amount, options)
     end
   end
 

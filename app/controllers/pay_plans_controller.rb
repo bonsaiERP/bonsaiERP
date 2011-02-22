@@ -54,7 +54,7 @@ class PayPlansController < ApplicationController
   # PUT /pay_plans/1
   # PUT /pay_plans/1.xml
   def update
-
+    debugger
     if @pay_plan.update_attributes(params[:pay_plan])
       redirect_ajax(@pay_plan, :notice => 'PayPlans was successfully updated.')
     else

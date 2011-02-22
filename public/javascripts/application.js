@@ -1,10 +1,11 @@
 (function() {
   $(document).ready(function() {
-    var createDialog, createErrorLog, createSelectOption, csfr_token, currency, getAjaxType, mark, ntc, parseDate, serializeFormElements, setDateSelect, setIframePostEvents, speed, start, toByteSize, transformDateSelect, transformMinuteSelect, updateTemplateRow, _b;
+    var createDialog, createErrorLog, createSelectOption, csrf_token, currency, getAjaxType, mark, ntc, parseDate, serializeFormElements, setDateSelect, setIframePostEvents, speed, start, toByteSize, transformDateSelect, transformMinuteSelect, updateTemplateRow, _b;
     _b = {};
     window._b = _b;
     speed = 300;
-    csfr_token = $('meta[name=csfr-token]').attr('content');
+    csrf_token = $('meta[name=csrf-token]').attr('content');
+    window.csrf_token = csrf_token;
     $.datepicker._defaults.dateFormat = 'dd M yy';
     parseDate = function(date, tipo) {
       var d;

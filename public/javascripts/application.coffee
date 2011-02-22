@@ -4,7 +4,8 @@ $(document).ready(->
   # Speed in milliseconds
   speed = 300
   # csfr
-  csfr_token = $('meta[name=csfr-token]').attr('content')
+  csrf_token = $('meta[name=csrf-token]').attr('content')
+  window.csrf_token = csrf_token
   # Date format
   $.datepicker._defaults.dateFormat = 'dd M yy'
 

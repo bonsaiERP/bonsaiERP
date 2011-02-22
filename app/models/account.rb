@@ -6,7 +6,7 @@ class Account < ActiveRecord::Base
 
   # relationships
   belongs_to :currency
-  has_many :account_ledgers, :order => "date DESC"
+  has_many :account_ledgers, :order => "created_at DESC"
   has_many :payments
 
   delegate :name, :symbol, :to => :currency, :prefix => true
