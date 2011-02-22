@@ -42,7 +42,6 @@ class OrganisationsController < ApplicationController
 
     if @organisation.save
       params[:id] = @organisation.id
-      #redirect_to(organisation_url(@organisation), :notice => "Se ha creado la empresa")
       select
     else
       render :action => 'new'

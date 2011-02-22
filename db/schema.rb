@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110218155540) do
+ActiveRecord::Schema.define(:version => 20110222165506) do
 
   create_table "account_ledgers", :force => true do |t|
     t.integer  "organisation_id"
@@ -92,18 +92,10 @@ ActiveRecord::Schema.define(:version => 20110218155540) do
     t.datetime "updated_at"
   end
 
-  create_table "currencies_organisations", :id => false, :force => true do |t|
-    t.integer "currency_id"
-    t.integer "organisation_id"
-  end
-
-  add_index "currencies_organisations", ["currency_id", "organisation_id"], :name => "currencies_orgs_c_id_org_id"
-
   create_table "currency_rates", :force => true do |t|
     t.integer  "currency_id"
-    t.decimal  "rate",            :precision => 14, :scale => 6
-    t.boolean  "active",                                         :default => false
-    t.integer  "organisation_id"
+    t.decimal  "rate",        :precision => 14, :scale => 6
+    t.boolean  "active",                                     :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -111,7 +103,6 @@ ActiveRecord::Schema.define(:version => 20110218155540) do
   add_index "currency_rates", ["active"], :name => "index_currency_rates_on_active"
   add_index "currency_rates", ["created_at"], :name => "index_currency_rates_on_created_at"
   add_index "currency_rates", ["currency_id"], :name => "index_currency_rates_on_currency_id"
-  add_index "currency_rates", ["organisation_id"], :name => "index_currency_rates_on_organisation_id"
 
   create_table "items", :force => true do |t|
     t.integer  "unit_id"

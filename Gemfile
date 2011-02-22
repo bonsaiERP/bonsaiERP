@@ -9,7 +9,8 @@ gem 'rails' #, '3.0.0'
 # ActiveRecord requires a database adapter. By default,
 # Rails has selected sqlite3.
 #gem 'sqlite3-ruby', :require => 'sqlite3'
-gem 'pg'
+#gem 'pg'
+gem 'mysql2'
 
 
 gem 'devise'
@@ -18,6 +19,7 @@ gem 'kaminari'
 gem 'less', ">=1.2.21"
 gem 'haml'
 gem 'acts-as-taggable-on'
+gem 'nokogiri'
 #gem 'escape_utils'
 
 group :development do
