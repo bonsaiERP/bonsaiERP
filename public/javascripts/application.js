@@ -313,17 +313,21 @@
       return $('body').trigger("update:template", [$node, data]);
     };
     $.updateTemplateRow = $.fn.updateTemplateRow = updateTemplateRow;
-    $('a.delete').live("click", function(e) {
+    $('a.delete[data-remote=true]').live("click", function(e) {
       var el, self, url;
       self = this;
       $(self).parents("tr:first, li:first").addClass('marked');
       if (confirm('Esta seguro de borrar el item seleccionado')) {
         url = $(this).attr('href');
         el = this;
+        console.log(csrf_token);
         $.ajax({
           'url': url,
           'type': 'delete',
           'context': el,
+          'data': {
+            'authenticity_token': csrf_token
+          },
           'success': function(resp, status, xhr) {
             var data;
             try {

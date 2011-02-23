@@ -311,7 +311,7 @@ ActiveRecord::Schema.define(:version => 20110222181837) do
     t.decimal  "tax_percent",                          :precision => 5,  :scale => 2
     t.boolean  "active"
     t.string   "description"
-    t.string   "state"
+    t.string   "state"                   :limit => 20
     t.date     "date"
     t.string   "ref_number"
     t.string   "bill_number"
@@ -336,6 +336,7 @@ ActiveRecord::Schema.define(:version => 20110222181837) do
   add_index "transactions", ["payment_date"], :name => "index_transactions_on_payment_date"
   add_index "transactions", ["project_id"], :name => "index_transactions_on_project_id"
   add_index "transactions", ["ref_number"], :name => "index_transactions_on_ref_number"
+  add_index "transactions", ["state"], :name => "index_transactions_on_state"
 
   create_table "units", :force => true do |t|
     t.string   "name",            :limit => 100

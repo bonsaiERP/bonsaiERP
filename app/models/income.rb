@@ -26,6 +26,13 @@ class Income < Transaction
   validates_presence_of :date
   validates :ref_number, :presence => true ,:uniqueness => {:scope => :organisation_id, :allow_blank => false}
   validate :valid_number_of_items
+
+  # scopes
+  scope :draft, where(:state => 'draft')
+  scope :aproved, where(:state => 'aproved')
+  scope :paid, where(:state => 'paid')
+  scope :due, where(["transactions.state = ? AND transactions.payment_date < ?", 'aproved', Date.today])
+  scope :credit, where(:cash => false)
   
   # Define boolean methods for states
   STATES.each do |state|
@@ -34,6 +41,22 @@ class Income < Transaction
         "#{state}" == state ? true : false
       end
     CODE
+  end
+
+  def self.all_states
+    STATES + ["awaiting_payment"]
+  end
+
+  # Finds using the state
+  def self.find_with_state(state)
+    state = 'all' unless all_states.include?(state)
+    ret = Income.org.includes(:contact, :pay_plans, :currency).order("date DESC")
+    case state
+    when 'all' then ret
+    when 'awaiting_payment' then ret.aproved.credit
+    else
+      ret.send(state)
+    end
   end
 
   # Presents a localized name for state

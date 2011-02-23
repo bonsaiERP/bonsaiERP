@@ -296,17 +296,18 @@ $(document).ready(->
   $.updateTemplateRow = $.fn.updateTemplateRow = updateTemplateRow
 
   # Delete an Item
-  $('a.delete').live("click", (e)->
+  $('a.delete[data-remote=true]').live("click", (e)->
     self = this
     $(self).parents("tr:first, li:first").addClass('marked')
     if(confirm('Esta seguro de borrar el item seleccionado'))
       url = $(this).attr('href')
       el = this
-
+      console.log(csrf_token)
       $.ajax(
         'url': url
         'type': 'delete'
         'context': el
+        'data': {'authenticity_token': csrf_token }
         'success': (resp, status, xhr)->
           try
             data = $.parseJSON(resp)

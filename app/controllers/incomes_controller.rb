@@ -11,7 +11,7 @@ class IncomesController < ApplicationController
   # GET /incomes
   # GET /incomes.xml
   def index
-    @incomes = Income.org.includes(:contact, :pay_plans, :currency).order("date DESC").page(@page)
+    @incomes = Income.find_with_state(params[:option]).page(@page)
   end
 
   # GET /incomes/1
@@ -69,7 +69,7 @@ class IncomesController < ApplicationController
   # DELETE /incomes/1
   # DELETE /incomes/1.xml
   def destroy
-    if @income.aproved
+    if @income.aproved?
       redirect_income
     else
       @income.destroy
