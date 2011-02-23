@@ -21,9 +21,10 @@ class Transaction < ActiveRecord::Base
 
   has_many :pay_plans, :order => "payment_date ASC"
   has_many :payments
-  has_many :transaction_details
-  accepts_nested_attributes_for :transaction_details, :allow_destroy => true
   has_and_belongs_to_many :taxes, :class_name => 'Tax'
+  has_many :transaction_details
+  # nested attributes
+  accepts_nested_attributes_for :transaction_details, :allow_destroy => true
 
   delegate :name, :symbol, :to => :currency, :prefix => true
 

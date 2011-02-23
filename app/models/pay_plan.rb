@@ -24,7 +24,6 @@ class PayPlan < ActiveRecord::Base
   validates_presence_of :payment_date, :alert_date
 
   # scopes
-  #default_scope where(:organisation_id => OrganisationSession.organisation_id)
   scope :unpaid, where(:paid => false)
 
   # Returns the current state of the payment

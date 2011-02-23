@@ -14,9 +14,6 @@ class TransactionDetail < ActiveRecord::Base
   validates_presence_of :item_id
   validates_numericality_of :quantity, :greater_than => 0
 
-  # scopes
-  default_scope where(:organisation_id => OrganisationSession.organisation_id )
-
   def total
     price * quantity
   end

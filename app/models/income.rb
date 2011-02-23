@@ -12,11 +12,14 @@ class Income < Transaction
   STATES = ["draft", "aproved", "paid", "due"]
 
 
+  #relationships
+
   attr_accessible :ref_number, :date, :contact_id,
                   :project_id, :currency_id, :currency_exchange_rate,
                   :discount, :bill_number, :taxis_ids,
                   :description, :transaction_details_attributes
 
+  
 
   #accepts_nested_attributes_for :transaction_details, :allow_destroy => true
   #validations
@@ -103,7 +106,7 @@ private
   # Initialized  the ref_number
   def set_ref_number
     if ref_number.blank?
-      refs = Income.order("ref_number DESC").limit(1)
+      refs = Income.org.order("ref_number DESC").limit(1)
       self.ref_number = refs.any? ? refs.first.ref_number.next : "V-00001"
     end
   end

@@ -5,15 +5,15 @@ class Unit < ActiveRecord::Base
 
   acts_as_org
 
+  # relationships
   belongs_to :organisation
   before_save :strip_attributes
 
   has_many :items
 
-  #default_scope :conditions => { :organisation_id => OrganisationSession.id }
-
   attr_accessible :name, :symbol, :integer
 
+  # validations
   validates_presence_of :name, :symbol
 
 

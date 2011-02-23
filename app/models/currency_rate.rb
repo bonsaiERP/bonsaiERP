@@ -13,7 +13,6 @@ class CurrencyRate < ActiveRecord::Base
   validates :rate, :presence => true, :numericality => {:greater_than => 0}
 
   # scopes
-  #default_scope where(:organisation_id => OrganisationSession.organisation_id)
   scope :active, where(:active => true)
 
   # returns if the currency has been updated for the date and organisation
