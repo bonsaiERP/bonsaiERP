@@ -37,48 +37,31 @@
 .clear
 
 .main{:style => 'font-size:1.2em;'}
-  .input
-    .input.b{:style => 'font-size:1.2em' }= @income.ref_number
-    .input= lo @income.date
-  .input
-    .input._100= link_to @income.contact, "#", :title => "Historial cliente"
-  .clear
-
-.show
-  .clear
-  .input
-    - if @income.project_id
-      %label Proyecto
-      = @income.project
-  .input
-    %label Moneda/Tipo de cambio
-    - unless @income.currency_id == @currency.id
-      1 #{@income.currency.name} = <span class="b">#{@income.currency_exchange_rate}</span> #{@currency.name.pluralize}
-    - else
-      = @income.currency.name
-  .clear
-  .input
-    .input
-      - if @income.discount > 0
-        %label Descuento (%)
-        .b= "#{ ntc @income.discount }%"
-    .input
+  .input._40
+    .input._40
+      .b{:title => 'número de referencia'}= @income.ref_number
       - unless @income.bill_number.blank?
-        %label Nº de Factura
-        = @income.bill_number
+        %span.dark_grey{:style => 'font-size:85%'} Nº de Factura<br/>
+        %span{:title => 'factura'}= @income.bill_number 
+    .input
+      = lo @income.date
+      %br/
+      %span.dark_grey{:style => 'font-size:85%'} Cliente<br/>
+      = link_to @income.contact, "#", :title => "Historial cliente"
   .input
-    %label Impuestos (%)
-    .b= "#{ntc @income.tax_percent}%"
-    %ul
-      - @income.taxes.each do |t|
-        %li= t
+    .input
+      - unless @income.currency_id == @currency.id
+        1 #{@income.currency.name} = <span class="b">#{@income.currency_exchange_rate}</span> #{@currency.name.pluralize}
+      - else
+        = @income.currency.name
+      - if @income.project_id
+        %br/
+        %span.dark_grey{:style => 'font-size:85%'} Proyecto<br/>
+        = link_to @income.project, @income.project
+    .input{:style => 'font-size:90%'}= @income.description unless @income.description.blank?
 
-  .clear
-  .input
-    - unless @income.description.blank?
-      %label Descripción
-      =@income.description
-  .clear
+
+.clear
 
 = render 'items', :income => @income
 

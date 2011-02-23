@@ -24,11 +24,11 @@
       %td#subtotal.r= ntc income.gross_total
     %tr.extra
       %td{:colspan => 2}
-      %td.r{:colspan => 2} Descuento (<span id="discount_percentage" data-val="#{income.total_discount}">#{ntc income.tax_percent}</span>%)
+      %td.r{:colspan => 2} Descuento (<span id="discount_percentage" data-val="#{income.total_discount}">#{ntc income.discount}</span>%)
       %td#discount_total.r= "-#{ntc income.total_discount}"
     %tr.extra
       %td{:colspan => 2}
-      %td.r.line{:colspan => 2} Impuestos (<span id="taxes_percentage" data-val="#{income.total_taxes}">#{ntc income.total_taxes}</span>%)
+      %td.r.line{:colspan => 2} Impuestos #{list_taxes income} (<span id="taxes_percentage" data-val="#{income.total_taxes}">#{ntc income.tax_percent}</span>%)
       %td#taxes_total.r.line= ntc income.total_taxes
     %tr.extra
       %td{:colspan => 2}

@@ -520,7 +520,7 @@ span.true, span.false {
 ._120 textarea { font-size: 120%; }
 .dark { color: #484a4c; }
 .main {
-  margin: 25px -5px;
+  margin: 5px -5px;
   padding: 5px;
 }
 .ajax-modal .links { display: none; }

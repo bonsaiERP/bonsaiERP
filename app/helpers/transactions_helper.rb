@@ -36,4 +36,8 @@ module TransactionsHelper
     end
   end
 
+  def list_taxes(klass)
+    klass.taxes.map(&:abbreviation).join(" + ")
+  end
+
 end
