@@ -1,10 +1,23 @@
-%h1= contact_type @type
+%h1= contact_type params[:option]
 
 %p.links= link_to "Nuevo contacto", new_contact_path, :class => 'new'
 
-%p.hint Un contacto se convierte en <strong>Cliente</strong> cuando se aprueba una venta y en <strong>Proveedor</strong> cuando se aprueba un compra o gasto
+%p.hint
+  - if params[:option] == 'clients'
+    Un contacto se convierte en <strong>Cliente</strong> cuando se aprueba una 
+    =link_to "venta", incomes_path
+  -elsif params[:option] == 'suppliers'
+    Un contacto se convierte en <strong>Proveedor</strong> cuando se aprueba una 
+    = link_to "compra", "/buys"
+    o 
+    = link_to "gasto", "/expenses"
 
 = paginate(@contacts)
+
+%ul.tabs
+  %li= link_tab "Todos", contacts_path, "all"
+  %li= link_tab "Clientes", "/contacts", "clients"
+  %li= link_tab "Proveedores", "/contacts", "suppliers"
 
 %table{ :class => "decorated nwf nwl" }
   %tr

@@ -16,7 +16,7 @@ body {
   padding: 0px;
 }
 a {
-  color: #547299;
+  color: #1255b0;
   text-decoration: none;
 }
 a:hover { text-decoration: underline; }
@@ -123,6 +123,7 @@ table.nwf td:first-child { white-space: nowrap; }
   background: #ffffff;
   width: 950px;
   margin: auto;
+  padding-bottom: 50px;
   -moz-border-radius: 0px 0px 10px 10px;
   -webkit-border-radius: 0px 0px 10px 10px;
   border-radius: 0px 0px 10px 10px;
@@ -524,7 +525,7 @@ span.true, span.false {
 }
 .ajax-modal .links { display: none; }
 .ajax-modal a {
-  color: #547299 !important;
+  color: #1255b0 !important;
   text-decoration: none;
 }
 .ajax-modal a:hover { text-decoration: underline; }

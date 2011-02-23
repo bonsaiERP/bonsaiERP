@@ -25,11 +25,14 @@ class Contact < ActiveRecord::Base
   scope :clients, where(:client => true)
   scope :suppliers, where(:supplier => true)
 
-  def self.get_type(params = {})
-    if TYPES.include?(params[:type])
-      params[:type]     
-    else
-      false
+  # Finds a contact using the type
+  # @param String
+  def self.find_with_type(type)
+    type = 'all' unless TYPES.include?(type)
+    case type
+    when 'clients' then Contact.org.clients
+    when 'suppliers' then Contact.org.suppliers
+    when 'all' then Contact.org
     end
   end
 

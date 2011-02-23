@@ -47,4 +47,16 @@ module ApplicationHelper
   def lo(val)
     localize(val) unless val.nil?
   end
+
+  # Links for presenting filtered data
+  # @param String
+  # @param String
+  # @param String
+  # @param Hash
+  # @return String
+  def link_tab(text, uri, option, options = {})
+    params[:option] = 'all' if params[:option].nil?
+    active = (params[:option] == option) ? "active" : ""
+    link_to text, "#{uri}?option=#{option}", options.merge(:class => active)
+  end
 end

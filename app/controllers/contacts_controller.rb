@@ -8,12 +8,7 @@ class ContactsController < ApplicationController
   # GET /contacts
   # GET /contacts.xml
   def index
-    @type = Contact.get_type(params)
-    if @type
-      @contacts = Contact.org.send(@type).page(@page)
-    else
-      @contacts = Contact.org.page(@page)
-    end
+    @contacts = Contact.find_with_type(params[:option]).page(@page)
   end
 
   # GET /contacts/1
