@@ -311,7 +311,7 @@ ActiveRecord::Schema.define(:version => 20110222181837) do
     t.decimal  "tax_percent",                          :precision => 5,  :scale => 2
     t.boolean  "active"
     t.string   "description"
-    t.string   "state"                   :limit => 20
+    t.string   "state",                  :limit => 20
     t.date     "date"
     t.string   "ref_number"
     t.string   "bill_number"

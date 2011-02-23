@@ -53,3 +53,7 @@ git in server: demo4321
 cylobo75
 
 GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, FILE, INDEX, ALTER, CREATE TEMPORARY TABLES, EXECUTE, CREATE VIEW, SHOW VIEW, CREATE ROUTINE, ALTER ROUTINE, EVENT, TRIGGER ON *.* TO 'demo'@'localhost';
+
+
+taps server mysql://demo:demo123@localhost/bonsai_dev?encoding=utf8 demo demo123
+taps pull postgres://demo:demo123@localhost/bonsai_dev http://demo:demo123@localhost:5000
