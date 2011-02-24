@@ -102,11 +102,16 @@ feature "Income", "test features" do
     pp = PayPlan.new(pay_plan_params(:transaction_id => i.id, :amount => 100, :interests_penalties => 10))
     pp.save
     pp1_id = pp.id
+    i = Income.find(i.id)
+    i.payment_date.should == pp.payment_date
 
+    last_pay_date = Date.today + 20.days
     # Second PayPlan
-    pp = PayPlan.new(pay_plan_params(:transaction_id => i.id, :payment_date => Date.today + 20.days))
+    pp = PayPlan.new(pay_plan_params(:transaction_id => i.id, :payment_date => last_pay_date))
     pp.amount.should == (i.balance - 100)
     pp.save
+    i = Income.find(i.id)
+    i.payment_date.should_not == pp.payment_date
     pp2_id = pp.id
 
     i = Income.find(i.id)
@@ -121,8 +126,11 @@ feature "Income", "test features" do
     p.amount.should == 100
 
     p.save.should == true
+
     p.updated_pay_plan_ids.should == [pp1_id]
-    
+    i = Income.find(i.id)
+    i.payment_date.should == last_pay_date
+
     # Check for account_ledger
     p.account_ledgers.first.class.should == AccountLedger
     p.account_ledgers.first.amount.should == p.amount + p.interests_penalties
@@ -138,9 +146,10 @@ feature "Income", "test features" do
     i.balance.should == (old_balance - 100)
     i.state.should == "aproved"
 
+    # payments
     p = i.new_payment(:account_id => 1)
     p.amount.should == (old_balance - 100)
-    
+ 
     p.save.should == true
     p.updated_pay_plan_ids.should == [pp2_id]
     
@@ -149,6 +158,7 @@ feature "Income", "test features" do
     
     i.balance.should == 0
     
+ 
     # Nulling last payment should not allow
     p.null_payment
     i = Income.find(i.id)

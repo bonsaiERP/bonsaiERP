@@ -10,8 +10,9 @@ class Payment < ActiveRecord::Base
   after_initialize :set_defaults, :if => :new_record?
   before_create :set_currency_id, :if => :new_record?
   before_create :set_cash_amount, :if => :transaction_cash?
-  after_save  :update_transaction
+  # update_pay_plan must run before update_transaction
   after_save  :update_pay_plan
+  after_save  :update_transaction
   after_save  :create_account_ledger
 
   # relationships

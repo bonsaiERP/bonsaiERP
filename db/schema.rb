@@ -311,7 +311,7 @@ ActiveRecord::Schema.define(:version => 20110222181837) do
     t.decimal  "tax_percent",                          :precision => 5,  :scale => 2
     t.boolean  "active"
     t.string   "description"
-    t.string   "state",                  :limit => 20
+    t.string   "state"
     t.date     "date"
     t.string   "ref_number"
     t.string   "bill_number"
@@ -323,7 +323,7 @@ ActiveRecord::Schema.define(:version => 20110222181837) do
     t.integer  "project_id"
     t.decimal  "discount",                             :precision => 5,  :scale => 2
     t.decimal  "gross_total",                          :precision => 14, :scale => 2
-    t.boolean  "cash"
+    t.boolean  "cash",                                                                :default => true
     t.date     "payment_date"
   end
 
@@ -336,7 +336,6 @@ ActiveRecord::Schema.define(:version => 20110222181837) do
   add_index "transactions", ["payment_date"], :name => "index_transactions_on_payment_date"
   add_index "transactions", ["project_id"], :name => "index_transactions_on_project_id"
   add_index "transactions", ["ref_number"], :name => "index_transactions_on_ref_number"
-  add_index "transactions", ["state"], :name => "index_transactions_on_state"
 
   create_table "units", :force => true do |t|
     t.string   "name",            :limit => 100
@@ -351,9 +350,9 @@ ActiveRecord::Schema.define(:version => 20110222181837) do
   add_index "units", ["organisation_id"], :name => "index_units_on_organisation_id"
 
   create_table "users", :force => true do |t|
-    t.string   "email",                               :default => "", :null => false
-    t.string   "encrypted_password",   :limit => 128, :default => "", :null => false
-    t.string   "password_salt",                       :default => "", :null => false
+    t.string   "email",                                              :null => false
+    t.string   "encrypted_password",   :limit => 128,                :null => false
+    t.string   "password_salt",                                      :null => false
     t.string   "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"

@@ -91,10 +91,11 @@ class Transaction < ActiveRecord::Base
     self.save
   end
 
-  # Sets a default payment date
+  # Sets a default payment date using PayPlan
   def update_payment_date
-    if pay_plans.size > 0
-      self.payment_date = self.pay_plans.map(&:payment_date).sort.first
+    pp = PayPlan.unpaid.where(:transaction_id => id).limit(1)
+    if pp.size > 0
+      self.payment_date = pp.first.payment_date
     else
       self.payment_date = self.date
     end
@@ -127,6 +128,7 @@ class Transaction < ActiveRecord::Base
     else
       @trans = false
       self.balance = (balance - amount)
+      update_payment_date
       self.save
     end
   end
@@ -135,6 +137,7 @@ class Transaction < ActiveRecord::Base
   def substract_payment(amount)
     @trans = false
     self.balance = (balance + amount)
+    update_payment_date
     self.save
   end
 
