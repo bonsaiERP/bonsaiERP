@@ -65,7 +65,6 @@ class PayPlansController < ApplicationController
   # DELETE /pay_plans/1.xml
   def destroy
     @pay_plan.destroy
-
     redirect_ajax @pay_plan
   end
 

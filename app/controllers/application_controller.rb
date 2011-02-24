@@ -42,16 +42,17 @@ class ApplicationController < ActionController::Base
     s=0
   end
 
-  # especial redirect for ajax requests
+    # especial redirect for ajax requests
   def redirect_ajax(klass, options = {})
     url = options[:url] || klass
     if request.xhr?
       if request.delete?
-        if klass.destroyed?
-          render :text => klass.attributes.merge(:destroyed => klass.destroyed?).to_json
-        else
-          render :text => klass.attributes.merge(:destroyed => klass.destroyed?, :base_error => klass.errors[:base]).to_json
-        end
+        render :text => set_delete_json(klass)
+        #if klass.destroyed?
+        #  render :text => klass.attributes.merge(:destroyed => klass.destroyed?).to_json
+        #else
+        #  render :text => klass.attributes.merge(:destroyed => klass.destroyed?, :base_error => klass.errors[:base]).to_json
+        #end
       else
         render :text => klass.to_json
       end
@@ -61,6 +62,18 @@ class ApplicationController < ActionController::Base
   end
 
 private
+  # Adds to the hash of json becaise of ovreriding
+  def set_delete_json(klass)
+    txt = klass.to_json
+    txt = txt.slice(0, txt.size - 1)
+    txt << ",\"destroyed\": #{klass.destroyed?}"
+    if klass.destroyed?
+      txt << "}"
+    else
+      txt << ",\"base_error\": #{klass.errors[:base]} }" 
+    end
+  end
+
   def set_page
     @page = params[:page] || 1
   end

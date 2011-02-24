@@ -22,7 +22,8 @@ class Payment < ActiveRecord::Base
   belongs_to :contact
   has_many :account_ledgers
 
-  delegate :state, :type, :cash, :cash?, :paid?, :balance, :contact_id, :to => :transaction, :prefix => true
+  delegate :state, :type, :cash, :cash?, :real_state, :balance, :contact_id, :paid?,
+    :to => :transaction, :prefix => true
 
   delegate :name, :symbol, :to => :currency, :prefix => true
 
@@ -41,7 +42,8 @@ class Payment < ActiveRecord::Base
       :pay_plan => @pay_plan, 
       :account => account.to_s, 
       :total_amount => total_amount,
-      :transaction_paid => transaction_paid?
+      :transaction_real_state => transaction_real_state,
+      :transaction_balance => transaction_balance
     ).to_json
   end
 
@@ -52,7 +54,7 @@ class Payment < ActiveRecord::Base
 
   # Nulls a payment
   def null_payment
-    if active and !transaction_paid?
+    if active and not transaction_paid?
       self.active = false
       self.save
     end

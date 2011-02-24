@@ -43,7 +43,7 @@
           '<td class="r interests_penalties" data-val="${interests_penalties}">${_b.ntc(interests_penalties)}</td>',
           '<td class="r total_amount" data-val="${total_amount}">${_b.ntc(total_amount)}</td>',
           '<td class="actions">',
-          '<a data-method="put" class="null null_payment" href="/payments/6">Anular #{pay_type}</a></td>',
+          '<a data-method="put" class="null null_payment" href="/payments/${id}/null">Anular #{pay_type}</a></td>',
         '</tr>'
     ].join("");
     
@@ -66,7 +66,8 @@
     
     /**
      * Creates a note to notify pay_plans
-     */
+     * triggers ['payments', 'pay_plan']
+    **/
     Payment = {
       messages: [],
       /**
@@ -79,10 +80,10 @@
         this.updatePayPlans(resp.updated_pay_plan_ids);
         this.createMessage(resp);
         setTimeout(function() { 
-          var r = self.calculateTotal() 
-          self.triggerPayments(r)
+          var r = self.calculateTotal();
+          self.triggerPayments(r);
         }, 200);
-        $('body').trigger('transaction_paid', resp.transaction_paid);
+        //$('body').trigger('transaction', [resp]);
       },
       /**
       * nulls a payments
@@ -214,8 +215,8 @@
     */
     $('body').live('payment', function(e, resp) {
       Payment.create(resp);
-    }).live('transaction_paid', function(e, value) {
-      if(value) {
+    }).live('transaction', function(e, value) {
+      if(value == 'paid') {
         $('#new_payment_link').remove();
         $('#payments_table a.null_payment').remove();
       }else if($('#new_payment_link').length <= 0){

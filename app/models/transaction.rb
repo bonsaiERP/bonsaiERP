@@ -38,6 +38,9 @@ class Transaction < ActiveRecord::Base
     Hash[TYPES.zip(arr)][type]
   end
 
+  # Functions that other clases should have
+  # def real_state end
+
   # quantity without discount and taxes
   def subtotal
     self.transaction_details.inject(0) {|sum, v| sum += v.total }
@@ -117,8 +120,8 @@ class Transaction < ActiveRecord::Base
     end
   end
 
-  def new_pay_plan
-    PayPlan.new(:transaction_id => id, :ctype => type, :currency_id => currency_id)
+  def new_pay_plan(options = {})
+    PayPlan.new({:transaction_id => id, :ctype => type, :currency_id => currency_id}.merge(options))
   end
 
   # Adds a payment and updates the balance

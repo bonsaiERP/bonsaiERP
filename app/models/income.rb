@@ -65,6 +65,7 @@ class Income < Transaction
     @hash[real_state]
   end
 
+  # Returns the real state based on state and checked payment_date
   def real_state
     if state == "aproved" and !payment_date.blank? and payment_date < Date.today
       "due"

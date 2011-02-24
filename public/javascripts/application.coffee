@@ -235,10 +235,13 @@ $(document).ready(->
     false
   )
 
+
   # Makes that a dialog opened window makes an AJAX request and returns a JSON response
   # if response is JSON then trigger event stored in dialog else present the HTML
   $('div.ajax-modal form').live('submit', ->
     return true if $(this).attr('enctype') == 'multipart/form-data'
+
+    $(this).find('input, select, textarea').attr('disabled', true)
 
     data = serializeFormElements(this)
     el = this
@@ -295,14 +298,17 @@ $(document).ready(->
 
   $.updateTemplateRow = $.fn.updateTemplateRow = updateTemplateRow
 
-  # Delete an Item
+
+  # Delete an Item from a list, deletes a tr or li
+  # Very important with default fallback for trigger
   $('a.delete[data-remote=true]').live("click", (e)->
     self = this
     $(self).parents("tr:first, li:first").addClass('marked')
+    trigger = $(self).data('trigger')
+
     if(confirm('Esta seguro de borrar el item seleccionado'))
       url = $(this).attr('href')
       el = this
-      console.log(csrf_token)
       $.ajax(
         'url': url
         'type': 'delete'
@@ -316,14 +322,16 @@ $(document).ready(->
             else
               $(self).parents("tr:first, li:first").removeClass('marked')
               alert("Error: #{data.base_error}")
-            $('body').trigger('ajax:delete', [data, url])
+            if trigger
+              $('body').trigger(trigger, [data, url])
+             else
+              $('body').trigger('ajax:delete', [data, url])
           catch e
             $(self).parents("tr:first, li:first").removeClass('marked')
             #alert('Existio un error al borrar')
         'error': ->
           $(self).parents("tr:first, li:first").removeClass('marked')
       )
-
     else
       $(this).parents("tr:first, li:first").removeClass('marked')
       e.stopPropagation()

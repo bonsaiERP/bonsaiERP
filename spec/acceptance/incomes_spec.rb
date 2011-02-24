@@ -101,6 +101,7 @@ feature "Income", "test features" do
     # Fist PayPlan
     pp = PayPlan.new(pay_plan_params(:transaction_id => i.id, :amount => 100, :interests_penalties => 10))
     pp.save
+
     pp1_id = pp.id
     i = Income.find(i.id)
     i.payment_date.should == pp.payment_date
@@ -119,6 +120,8 @@ feature "Income", "test features" do
     i.pay_plans.first.amount.should == 100
     i.pay_plans.last.amount.should == ( i.balance - 100 )
     i.aprove!
+
+    i.real_state.should == 'aproved'
 
     # First payment
     old_balance = i.balance
@@ -244,5 +247,23 @@ feature "Income", "test features" do
     pp.amount.should == total_cur
   end
 
-end
+  scenario "Change the state of a income when changing pay_plans" do
+    @params = income_params.merge(:discount => 0)
+    i = Income.new(@params)
+    i.save
+    
+    pp = i.new_pay_plan(:amount => 100)
+    pp.save
+    pp.amount.should == 100
+    i.aprove!
 
+    i.real_state.should == 'aproved'
+
+    pp = i.new_pay_plan(:payment_date => 5.days.ago)
+
+    pp.save.should == true
+    Income.find(i.id).real_state.should == 'due'
+
+  end
+
+end

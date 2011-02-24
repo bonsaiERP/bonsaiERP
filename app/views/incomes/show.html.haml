@@ -78,32 +78,56 @@
     if(!#{@income.paid?} && #{@income.cash}) {
       $('#new_payment_link').trigger('click');
     }
+
     /**
-    * Updates the status for a transaction (Income, Buy, Expense)
-    * @params Object data
+    * Sets the state for Income
+    * @param String state
     */
-    updateTransactionPayPlanStatus = function(data, url) {
-    }
-    // Deleted data
-    $('body').live("ajax:delete pay_plan", function() {
-      if( $('#pay_plans_table tr[id]').length > 0 ) {
-        $('#cash_credit_title').html('a crédito');
-      }else{
-        $('#cash_credit_title').html('al contado');
-      }
-    }).live('payments',function(e, resp) {
-      // Calculates the total for AJAX events
-      $('#items_table #total_payments').html("-" + _b.ntc(resp.amount));
-      var balance = $('#items_table #total_value').data('val') - resp.amount;
-      $('#items_table #balance').html(_b.ntc(balance) );
-    }).live('transaction_paid', function(e, value) {
-      if(value) {
+    function setIncomeState(state) {
+      if(state == 'paid') {
         $('#payment_anchor').html('Ver cobros');
         $('#pay_plan_anchor').html('Ver crédito');
         $('#income_state').html('Pagado').attr('class', '').addClass('b paid');
-      }else {
+      }else{
+        if(state == 'due') {
+          $('#income_state').attr("class", '').addClass("b " + state).html("Vencido");
+        }else{
+          $('#income_state').attr("class", '').addClass("b " + state).html("Aprobado");
+        }
         $('#payment_anchor').html('Realizar cobros');
         $('#pay_plan_anchor').html('Planificar crédito');
       }
-    });
+    }
+
+
+    // Only when in edition
+    if("#{@income.state}" == "draft") {
+      // Deleted data
+      $('body').live("del-pay_plan", function(resp) {
+        try{
+          if(resp.transaction_cash == true) {
+            $('#cash_credit_title').html('Crédito');
+          }else if(resp.transaction_cash == false){
+            $('#cash_credit_title').html('Contado');
+          }
+        } catch(e) {}
+      }).live('transaction', function(e, resp) {
+        if(resp.transaction_cash) {
+          $('#cash_credit_title').html("Contado");
+        }else{
+          $('#cash_credit_title').html("Crédito");
+        }
+      });
+    }else {
+      // When it has been aproved
+      $('body').live('payments',function(e, resp) {
+        // Calculates the total for AJAX events
+        $('#items_table #total_payments').html("-" + _b.ntc(resp.amount));
+        $('#items_table #balance').html(_b.ntc(resp.transaction_balance) );
+      }).live('transaction', function(e, resp) {
+        setIncomeState(resp.transaction_real_state);
+      }).live('del-pay_plan', function(e, resp) {
+        setIncomeState(resp.transaction_real_state);
+      });
+    }
   });

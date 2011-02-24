@@ -263,6 +263,7 @@
       if ($(this).attr('enctype') === 'multipart/form-data') {
         return true;
       }
+      $(this).find('input, select, textarea').attr('disabled', true);
       data = serializeFormElements(this);
       el = this;
       $div = $(this).parents('.ajax-modal');
@@ -314,13 +315,13 @@
     };
     $.updateTemplateRow = $.fn.updateTemplateRow = updateTemplateRow;
     $('a.delete[data-remote=true]').live("click", function(e) {
-      var el, self, url;
+      var el, self, trigger, url;
       self = this;
       $(self).parents("tr:first, li:first").addClass('marked');
+      trigger = $(self).data('trigger');
       if (confirm('Esta seguro de borrar el item seleccionado')) {
         url = $(this).attr('href');
         el = this;
-        console.log(csrf_token);
         $.ajax({
           'url': url,
           'type': 'delete',
@@ -338,7 +339,11 @@
                 $(self).parents("tr:first, li:first").removeClass('marked');
                 alert("Error: " + data.base_error);
               }
-              return $('body').trigger('ajax:delete', [data, url]);
+              if (trigger) {
+                return $('body').trigger(trigger, [data, url]);
+              } else {
+                return $('body').trigger('ajax:delete', [data, url]);
+              }
             } catch (e) {
               return $(self).parents("tr:first, li:first").removeClass('marked');
             }
