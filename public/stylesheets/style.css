@@ -20,6 +20,12 @@ a {
   text-decoration: none;
 }
 a:hover { text-decoration: underline; }
+hr {
+  border: 0px;
+  background-color: #c6c6c6;
+  color: #c6c6c6;
+  height: 1px;
+}
 ul.show li { margin: 3px 0px; }
 ul.show li label {
   display: table;
@@ -66,6 +72,7 @@ table.decorated th {
   color: #484a4c;
   background: transparent url(images/th.png) repeat-x 0% 50%;
   height: 32px;
+  border-right: 1px solid #efcfcf;
 }
 table.decorated tr { border-bottom: 1px solid #c6c6c6; }
 table.decorated td { padding: 4px 8px; }
@@ -252,6 +259,14 @@ ul#main_menu li:hover ul {
   margin: 10px 5px;
   color: #538447;
   font-size: 110%;
+}
+.links {
+  font-weight: bold;
+  padding-left: 20px;
+  color: #538447;
+  width: 40%;
+  float: right;
+  text-align: right;
 }
 a.new {
   font-weight: bold;
@@ -514,6 +529,9 @@ span.true, span.false {
 .r { text-align: right; }
 .fs11 { font-size: 110%; }
 .fs12 { font-size: 120%; }
+.fs13 { font-size: 130%; }
+.fs14 { font-size: 140%; }
+.fs15 { font-size: 150%; }
 ._120 { font-size: 120%; }
 ._120 input { font-size: 120%; }
 ._120 select { font-size: 120%; }
@@ -542,9 +560,14 @@ span.true, span.false {
 .p100 { width: 100px; }
 .p200 { width: 200px; }
 .p300 { width: 300px; }
-.mt10 { margin-top: 10px; }
-.mt20 { margin-top: 20px; }
-.mb10, .mb20 { margin-bottom: 20px; }
+.mt5 { margin-top: 5px !important; }
+.mt10 { margin-top: 10px !important; }
+.mt15 { margin-top: 15px !important; }
+.mt20 { margin-top: 20px !important; }
+.mb5 { margin-bottom: 5px !important; }
+.mb10 { margin-bottom: 10px !important; }
+.mb15 { margin-bottom: 15px !important; }
+.mb20 { margin-bottom: 20px !important; }
 .dashlet {
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
@@ -618,4 +641,30 @@ ul.tabs li a.active {
   top: 2px;
   right: 2px;
   cursor: pointer;
+}
+ul.breadcrumps {
+  list-style: none;
+  padding: 0px;
+  margin: 5px;
+  float: left;
+  width: 50%;
+}
+ul.breadcrumps li { display: inline; }
+ul.breadcrumps li span {
+  font-size: 70%;
+  position: relative;
+  top: -1px;
+  padding: 0px 5px;
+}
+.pagination {
+  font-weight: bold;
+  float: left;
+  margin: 10px;
+}
+a.search {
+  font-weight: bold;
+  float: left;
+  margin: 10px !important;
+  padding: 0px 0px 0px 20px;
+  background: transparent url(images/zoom.png) no-repeat;
 }

@@ -1,38 +1,51 @@
-%p.links
+:css
+  #bank_info{
+    display: none;
+  }
+
+%ul.breadcrumps
+  %li #{link_to "Bancos", banks_path}<span>&gt;</span>
+.links
+  = link_to 'Nuevo', new_bank_path, :class => 'add'
   = link_to 'Editar', edit_bank_path(@bank), :class => 'edit'
-  = link_to 'Lista', banks_path, :class => 'list'
-%h1 Banco
-.main
-  .fs12 
-    %span.dark_grey Banco:
-    #{@bank.name}&nbsp;&nbsp;&nbsp; 
-    <span class="dark_grey">Cuenta:</span> #{@bank.number}&nbsp;&nbsp;&nbsp;
-    %span.dark_grey Total en cuenta:
-    %span.b #{@bank.currency_symbol} #{ntc @bank.total_amount}
-  .clear
-    
 .clear
 
-._55.fl
-  %h2.dark Ultimas transacciones
-  = render "account_ledgers/list", :account_ledgers => @bank.account_ledgers.includes(:payment)
+%h1.mb5= @bank.name
+%h2.mt5.dark_grey= "#{@bank.number} (en #{@bank.currency.name.pluralize})"
+%hr/
 
+.main.fs13._50.fl
+  %span.dark_grey Total en cuenta:<br/>
+  %span.b #{@bank.currency_symbol} #{ntc @bank.total_amount}
 ._40.fr
-  .input
-    %label Moneda
-    %span= @bank.currency
-  .input
-    %label Dirección
-    %span= nl2br(@bank.address)
+  <a id="show_bank_info" href="javascript:">Ver información</a>
+  #bank_info
+    .input
+      %label Dirección
+      %span= nl2br(@bank.address)
+    .input
+      .input._100
+        %label Teléfono
+        %span= @bank.phone
+      .input._100
+        %label Email
+        %span= @bank.email
+      .input._100
+        %label Sitio web
+        %span= @bank.website
   .clear
-  .input
-    %label Teléfono
-    %span= @bank.phone
-  .input
-    %label Email
-    %span= @bank.email
-  .clear
-  .input
-    %label Sitio web
-    %span= @bank.website
+.clear
 
+%h2.dark Transacciones
+= render "account_ledgers/list", :account_ledgers => @bank.account_ledgers.includes(:payment)
+
+:javascript
+  $('#show_bank_info').click(function() {
+    if($(this).html() == "Ver información") {
+      $('#bank_info').show("slow")
+      $(this).html("Ocultar información");
+    }else{
+      $('#bank_info').hide("slow")
+      $(this).html("Ver información");
+    }
+  });

@@ -48,7 +48,11 @@ a{
 a:hover{
   text-decoration: underline;
 }
-
+hr{ border:0px;
+  background-color: @grey;
+  color: @grey;
+  height: 1px;
+}
 
 
 /*********************************************************/
@@ -130,6 +134,7 @@ table.decorated{
     color: @dark;
     background: transparent url(images/th.png) repeat-x 0% 50%;
     height: 32px;
+    border-right: 1px solid #EFCFCF;
   }
   tr{
     border-bottom: 1px solid @grey;
@@ -360,6 +365,15 @@ ul#main_menu{
   margin: 10px 5px;
   color: @dark_green;
   font-size: 110%;
+}
+
+.links{
+  font-weight: bold;
+  padding-left: 20px;
+  color: @dark_green;
+  width: 40%;
+  float:right;
+  text-align: right;
 }
 
 a.new{
@@ -653,6 +667,9 @@ span.true, span.false{
 
 .fs11{ font-size: 110%; }
 .fs12{ font-size: 120%; }
+.fs13{ font-size: 130%; }
+.fs14{ font-size: 140%; }
+.fs15{ font-size: 150%; }
 
 
 ._120{
@@ -695,10 +712,14 @@ span.true, span.false{
 .p200 { width: 200px; }
 .p300 { width: 300px; }
 
-.mt10{ margin-top: 10px; }
-.mt20{ margin-top: 20px; }
-.mb10{ margin-bottom: 20px; }
-.mb20{ margin-bottom: 20px; }
+.mt5{ margin-top: 5px !important; }
+.mt10{ margin-top: 10px !important; }
+.mt15{ margin-top: 15px !important; }
+.mt20{ margin-top: 20px !important; }
+.mb5{ margin-bottom: 5px !important; }
+.mb10{ margin-bottom: 10px !important; }
+.mb15{ margin-bottom: 15px !important; }
+.mb20{ margin-bottom: 20px !important; }
 
 /*States*/
 .dashlet{
@@ -768,4 +789,34 @@ ul.tabs{
     right: 2px;
     cursor: pointer;
   }
+}
+/* Breadcrumps*/
+ul.breadcrumps{
+  list-style: none;
+  padding: 0px;
+  margin: 5px;
+  float:left;
+  width: 50%;
+  li{
+    display: inline;
+    span{ 
+      font-size: 70%;
+      position:relative;
+      top: -1px;
+      padding: 0px 5px;
+    }
+  }
+}
+
+.pagination{
+  font-weight: bold;
+  float:left;
+  margin: 10px;
+}
+a.search{
+  font-weight: bold;
+  float:left;
+  margin: 10px !important;
+  padding: 0px 0px 0px 20px;
+  background: transparent url(images/zoom.png) no-repeat;
 }

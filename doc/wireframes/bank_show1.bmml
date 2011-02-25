@@ -1,0 +1,216 @@
+<mockup version="1.0" skin="sketch" measuredW="1395" measuredH="848" mockupW="1236" mockupH="846">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="159" y="2" w="870" h="830" measuredW="100" measuredH="70" zOrder="0" locked="true" isInGroup="-1">
+      <controlProperties>
+        <borderColor>15132390</borderColor>
+        <color>15132390</color>
+      </controlProperties>
+    </control>
+    <control controlID="6" controlTypeID="com.balsamiq.mockups::Canvas" x="209" y="109" w="771" h="739" measuredW="100" measuredH="70" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderColor>16777215</borderColor>
+      </controlProperties>
+    </control>
+    <control controlID="99" controlTypeID="com.balsamiq.mockups::Canvas" x="159" y="2" w="869" h="107" measuredW="100" measuredH="70" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderStyle>none</borderStyle>
+        <color>3355443</color>
+      </controlProperties>
+    </control>
+    <control controlID="100" controlTypeID="com.balsamiq.mockups::Title" x="175" y="7" w="-1" h="-1" measuredW="134" measuredH="51" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>16777215</color>
+        <href>dashboard%26bm%3Bdashboard.bmml%26bm%3Bdashboard.bmml%26bm%3Bdashboard.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2216%2C5%2C150%2C56%22%20href%3D%22dashboard.bmml%22%20alt%3D%22dashboard%22%20id%3D%22100%22/%3E</map>
+        <size>32</size>
+        <text>Empresa</text>
+      </controlProperties>
+    </control>
+    <control controlID="101" controlTypeID="com.balsamiq.mockups::Paragraph" x="780" y="19" w="220" h="26" measuredW="200" measuredH="140" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <align>right</align>
+        <color>16777215</color>
+        <size>11</size>
+        <text>Cuenta%20%20Configuraci%F3n%20%20Ayuda</text>
+      </controlProperties>
+    </control>
+    <control controlID="129" controlTypeID="com.balsamiq.mockups::Label" x="179" y="72" w="-1" h="-1" measuredW="76" measuredH="25" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>16777215</color>
+        <href>lot_list%26bm%3Blot_list.bmml%26bm%3Blot_list.bmml%26bm%3Blot_list.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2220%2C70%2C96%2C95%22%20href%3D%22lot_list.bmml%22%20alt%3D%22lot_list%22%20id%3D%22129%22/%3E</map>
+        <text>Inventarios</text>
+      </controlProperties>
+    </control>
+    <control controlID="130" controlTypeID="com.balsamiq.mockups::Label" x="278" y="72" w="-1" h="-1" measuredW="54" measuredH="25" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>16777215</color>
+        <href>buy_list%26bm%3Bbuy_list.bmml%26bm%3Bbuy_list.bmml%26bm%3Bbuy_list.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22119%2C70%2C173%2C95%22%20href%3D%22buy_list.bmml%22%20alt%3D%22buy_list%22%20id%3D%22130%22/%3E</map>
+        <text>Compras</text>
+      </controlProperties>
+    </control>
+    <control controlID="131" controlTypeID="com.balsamiq.mockups::Label" x="365" y="72" w="-1" h="-1" measuredW="46" measuredH="25" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>16777215</color>
+        <href>sale_list%26bm%3Bsale_list.bmml%26bm%3Bsale_list.bmml%26bm%3Bsale_list.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22206%2C70%2C252%2C95%22%20href%3D%22sale_list.bmml%22%20alt%3D%22sale_list%22%20id%3D%22131%22/%3E</map>
+        <text>Ventas</text>
+      </controlProperties>
+    </control>
+    <control controlID="132" controlTypeID="com.balsamiq.mockups::Label" x="341" y="72" w="10" h="25" measuredW="10" measuredH="25" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>16777215</color>
+        <text>%7C</text>
+      </controlProperties>
+    </control>
+    <control controlID="133" controlTypeID="com.balsamiq.mockups::Label" x="447" y="72" w="-1" h="-1" measuredW="46" measuredH="25" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>16777215</color>
+        <href>expense_list%26bm%3Bexpense_list.bmml%26bm%3Bexpense_list.bmml%26bm%3Bexpense_list.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22288%2C70%2C334%2C95%22%20href%3D%22expense_list.bmml%22%20alt%3D%22expense_list%22%20id%3D%22133%22/%3E</map>
+        <text>Gastos</text>
+      </controlProperties>
+    </control>
+    <control controlID="134" controlTypeID="com.balsamiq.mockups::Label" x="424" y="72" w="10" h="25" measuredW="10" measuredH="25" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>16777215</color>
+        <text>%7C</text>
+      </controlProperties>
+    </control>
+    <control controlID="135" controlTypeID="com.balsamiq.mockups::Label" x="519" y="72" w="66" h="25" measuredW="66" measuredH="25" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>16777215</color>
+        <href>contacts_list%26bm%3Bcontacts_list.bmml%26bm%3Bcontacts_list.bmml%26bm%3Bcontacts_list.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22360%2C70%2C426%2C95%22%20href%3D%22contacts_list.bmml%22%20alt%3D%22contacts_list%22%20id%3D%22135%22/%3E</map>
+        <text>Contactos</text>
+      </controlProperties>
+    </control>
+    <control controlID="136" controlTypeID="com.balsamiq.mockups::Label" x="506" y="72" w="10" h="25" measuredW="10" measuredH="25" zOrder="12" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>16777215</color>
+        <text>%7C</text>
+      </controlProperties>
+    </control>
+    <control controlID="137" controlTypeID="com.balsamiq.mockups::Label" x="605" y="72" w="-1" h="-1" measuredW="60" measuredH="25" zOrder="13" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>16777215</color>
+        <href>reports%26bm%3Breports.bmml%26bm%3Breports.bmml%26bm%3Breports.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22446%2C70%2C506%2C95%22%20href%3D%22reports.bmml%22%20alt%3D%22reports%22%20id%3D%22137%22/%3E</map>
+        <text>Reportes</text>
+      </controlProperties>
+    </control>
+    <control controlID="138" controlTypeID="com.balsamiq.mockups::Label" x="588" y="72" w="10" h="25" measuredW="10" measuredH="25" zOrder="14" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>16777215</color>
+        <text>%7C</text>
+      </controlProperties>
+    </control>
+    <control controlID="139" controlTypeID="com.balsamiq.mockups::Label" x="259" y="72" w="10" h="25" measuredW="10" measuredH="25" zOrder="15" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>16777215</color>
+        <text>%7C</text>
+      </controlProperties>
+    </control>
+    <control controlID="217" controlTypeID="com.balsamiq.mockups::Title" x="237" y="145" w="-1" h="-1" measuredW="299" measuredH="40" zOrder="16" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>true</bold>
+        <color>3355443</color>
+        <size>24</size>
+        <text>Banco%20Nacional%20de%20Bolivia</text>
+      </controlProperties>
+    </control>
+    <control controlID="218" controlTypeID="com.balsamiq.mockups::BreadCrumbs" x="244" y="123" w="-1" h="-1" measuredW="86" measuredH="25" zOrder="17" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Bancos</text>
+      </controlProperties>
+    </control>
+    <control controlID="219" controlTypeID="com.balsamiq.mockups::Title" x="237" y="175" w="-1" h="-1" measuredW="227" measuredH="32" zOrder="18" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>true</bold>
+        <color>3355443</color>
+        <size>18</size>
+        <text>55-7899-02%20%28en%20Dolares%29</text>
+      </controlProperties>
+    </control>
+    <control controlID="221" controlTypeID="com.balsamiq.mockups::Label" x="244" y="220" w="-1" h="-1" measuredW="125" measuredH="29" zOrder="19" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>6710886</color>
+        <size>16</size>
+        <text>Total%20en%20cuenta</text>
+      </controlProperties>
+    </control>
+    <control controlID="222" controlTypeID="com.balsamiq.mockups::Label" x="244" y="243" w="-1" h="-1" measuredW="123" measuredH="29" zOrder="20" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>16</size>
+        <text>%24us%2012%2C500.00</text>
+      </controlProperties>
+    </control>
+    <control controlID="223" controlTypeID="com.balsamiq.mockups::Paragraph" x="1042" y="132" w="-1" h="-1" measuredW="200" measuredH="140" zOrder="21" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>false</bold>
+        <text>-Direcci%F3n%3A-%0AAv.%20Marical%20Santa%20Cruz%0AEdif%20Bisa.%20N%BA%201222</text>
+      </controlProperties>
+    </control>
+    <control controlID="224" controlTypeID="com.balsamiq.mockups::Paragraph" x="1230" y="132" w="165" h="128" measuredW="200" measuredH="140" zOrder="22" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>false</bold>
+        <text>-Tel%E9fono%3A-%0A2782654%0A-Email%3A-%0Ainfo@bisa.com%0A-Sitio%20Web%3A-%0A%5Bhttp%3A//bisa.com%5D</text>
+      </controlProperties>
+    </control>
+    <control controlID="225" controlTypeID="com.balsamiq.mockups::Link" x="807" y="235" w="-1" h="-1" measuredW="126" measuredH="25" zOrder="23" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>ver%20mas%20informaci%F3n</text>
+      </controlProperties>
+    </control>
+    <control controlID="226" controlTypeID="com.balsamiq.mockups::HRule" x="232" y="207" w="733" h="-1" measuredW="100" measuredH="5" zOrder="24" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>6710886</color>
+      </controlProperties>
+    </control>
+    <control controlID="227" controlTypeID="com.balsamiq.mockups::Link" x="816" y="122" w="-1" h="-1" measuredW="44" measuredH="25" zOrder="25" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Nuevo</text>
+      </controlProperties>
+    </control>
+    <control controlID="228" controlTypeID="com.balsamiq.mockups::Link" x="875" y="122" w="-1" h="-1" measuredW="44" measuredH="25" zOrder="26" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Editar</text>
+      </controlProperties>
+    </control>
+    <control controlID="229" controlTypeID="com.balsamiq.mockups::Title" x="244" y="295" w="-1" h="-1" measuredW="139" measuredH="34" zOrder="27" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>true</bold>
+        <color>3355443</color>
+        <size>20</size>
+        <text>Transacciones</text>
+      </controlProperties>
+    </control>
+    <control controlID="230" controlTypeID="com.balsamiq.mockups::DataGrid" x="244" y="357" w="689" h="301" measuredW="558" measuredH="58" zOrder="28" locked="false" isInGroup="-1">
+      <controlProperties>
+        <align>left</align>
+        <bold>false</bold>
+        <borderStyle>none</borderStyle>
+        <hLines>false</hLines>
+        <text>Fecha%2C%20Ref/N%BA%20de%20Cheque%2C%20Monto%2C%20Contacto%2C%20Descripci%F3n%2C%20%20%20%0A2%20Feb%202011%2C%20324234%2C%2012.000%5C%2C00%2C%20%5BJuan%20Perez%5D%2C%20%5BNota%20de%20Venta%20V-00023%5D%0A%7B15L%2C%2010L%2C%2010R%2C%2030L%2C%2030L%7D</text>
+        <vLines>false</vLines>
+      </controlProperties>
+    </control>
+    <control controlID="233" controlTypeID="com.balsamiq.mockups::Label" x="325" y="331" w="-1" h="-1" measuredW="122" measuredH="25" zOrder="29" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>%5B1%5D%2C%202%2C%20%5B3%5D%2C%20%5BSiguiente%5D</text>
+      </controlProperties>
+    </control>
+    <control controlID="234" controlTypeID="com.balsamiq.mockups::Link" x="244" y="332" w="-1" h="-1" measuredW="46" measuredH="25" zOrder="30" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>buscar</text>
+      </controlProperties>
+    </control>
+    <control controlID="235" controlTypeID="com.balsamiq.mockups::StickyNote" x="926" y="367" w="265" h="144" measuredW="109" measuredH="123" zOrder="31" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>false</bold>
+        <text>El%20vinculo%20de%20la%20descripci%F3n%20debe%20ser%20de%20acuerdo%20a%20si%20se%20ha%20realizado%20una%20*Venta*%2C%20*Compra*%2C%20*Gasto*%20o%20alguna%20*Transacci%F3n*</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

@@ -1,12 +1,18 @@
-%p.links._50.fl
+%ul.breadcrumps
+  %li #{link_to "Ventas", incomes_path}<span>&gt;</span>
+
+.links
   - if @income.draft?
     = link_to 'Editar', edit_income_path(@income), :class => 'edit'
-  = link_to 'Lista', incomes_path, :class => 'list'
+  = link_to 'Nueva', new_income_path, :class => 'add'
 .clear
+
 %span.b#income_state{:class => @income.real_state, :style => 'font-size:1.3em'}= @income.show_state
 .clear
-  
-%h1._50.fl #{note_title(@income)} de venta (<span id="cash_credit_title">#{cash_credit @income.cash}</span>)
+
+._50.fl
+  %h1.mb5 #{note_title(@income)} de venta #{@income.ref_number}
+  %h2.dark_grey.mt5 <span id="cash_credit_title">#{cash_credit @income.cash}</span>
 
 - payment_action, pay_plan_action = @income.state == "paid" ? ["Ver", "Ver"] : ["Realizar", "Planificar"]
 
@@ -17,7 +23,7 @@
 = link_to "#{pay_plan_action} crédito", "#pay_plans", :class => 'fl', :style => 'margin-top:16px', :id => 'pay_plan_anchor', :class => 'calendar' if @income.show_pay_plans?
 .clear
 
-
+%hr/
 
 ._50.fl
   = link_to "Email","", :class => 'email'
@@ -37,28 +43,21 @@
 .clear
 
 .main{:style => 'font-size:1.2em;'}
-  .input._40
-    .input._40
-      .b{:title => 'número de referencia'}= @income.ref_number
-      - unless @income.bill_number.blank?
-        %span.dark_grey{:style => 'font-size:85%'} Nº de Factura<br/>
-        %span{:title => 'factura'}= @income.bill_number 
-    .input
-      = lo @income.date
-      %br/
-      %span.dark_grey{:style => 'font-size:85%'} Cliente<br/>
-      = link_to @income.contact, "#", :title => "Historial cliente"
+  %span.dark.b.i= lo @income.date
+  = link_to @income.contact, "#", :title => "Historial cliente"
+
+.input
   .input
-    .input
-      - unless @income.currency_id == @currency.id
-        1 #{@income.currency.name} = <span class="b">#{@income.currency_exchange_rate}</span> #{@currency.name.pluralize}
-      - else
-        = @income.currency.name
-      - if @income.project_id
-        %br/
-        %span.dark_grey{:style => 'font-size:85%'} Proyecto<br/>
-        = link_to @income.project, @income.project
-    .input{:style => 'font-size:90%'}= @income.description unless @income.description.blank?
+    - unless @income.currency_id == @currency.id
+      1 #{@income.currency.name} = <span class="b">#{@income.currency_exchange_rate}</span> #{@currency.name.pluralize}
+    - else
+      = @income.currency.name
+    - if @income.project_id
+  .input
+    %span.dark_grey 
+      -if @income.project_id
+        Proyecto #{link_to @income.project.to_s, @income.project, :title => 'Proyecto'}
+.input= @income.description unless @income.description.blank?
 
 
 .clear

@@ -24,6 +24,7 @@ class Income < Transaction
   #accepts_nested_attributes_for :transaction_details, :allow_destroy => true
   #validations
   validates_presence_of :date
+  validates_length_of :description, :within => 0..255
   validates :ref_number, :presence => true ,:uniqueness => {:scope => :organisation_id, :allow_blank => false}
   validate :valid_number_of_items
 

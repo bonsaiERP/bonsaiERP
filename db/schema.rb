@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110222181837) do
+ActiveRecord::Schema.define(:version => 20110225214624) do
 
   create_table "account_ledgers", :force => true do |t|
     t.integer  "organisation_id"
@@ -187,8 +187,8 @@ ActiveRecord::Schema.define(:version => 20110222181837) do
     t.integer  "organisation_id"
     t.string   "ctype"
     t.date     "date"
-    t.decimal  "amount",              :precision => 14, :scale => 2
-    t.decimal  "interests_penalties", :precision => 14, :scale => 2
+    t.decimal  "amount",                            :precision => 14, :scale => 2
+    t.decimal  "interests_penalties",               :precision => 14, :scale => 2
     t.string   "description"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -196,6 +196,7 @@ ActiveRecord::Schema.define(:version => 20110222181837) do
     t.integer  "currency_id"
     t.boolean  "active"
     t.integer  "contact_id"
+    t.string   "reference",           :limit => 50
   end
 
   add_index "payments", ["account_id"], :name => "index_payments_on_account_id"
@@ -205,6 +206,7 @@ ActiveRecord::Schema.define(:version => 20110222181837) do
   add_index "payments", ["currency_id"], :name => "index_payments_on_currency_id"
   add_index "payments", ["date"], :name => "index_payments_on_date"
   add_index "payments", ["organisation_id"], :name => "index_payments_on_organisation_id"
+  add_index "payments", ["reference"], :name => "index_payments_on_reference"
   add_index "payments", ["transaction_id"], :name => "index_payments_on_transaction_id"
 
   create_table "prices", :force => true do |t|

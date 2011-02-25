@@ -1,19 +1,31 @@
 :css
   .false_in{ color: #FF0000; }
+  td.r{width: 110px; }
+  td.check{width: 120px;}
+  td.d{ width: 70px; }
+
 - ledgers = account_ledgers.includes(:payment, :contact).page(@page)
-= paginate ledgers
+
+= link_to "Nueva transacción", new_account_ledger_path, :class => 'new'
+
+= link_to "Buscar", "#", :class => 'search'
+/"#", :style => 'display:block;float:left;margin:10px'
+.fl._50= paginate ledgers
 
 %table.decorated
   %tr
     %th Fecha
-    %th Cantidad
+    %th Ref/Nº Cheque
+    %th Monto
     %th Contacto
-    %th Pago
+    %th Descripción
+    %th
   - ledgers.each do |al|
     %tr{:class => al.income.to_s + '_in' }
-      %td= lo al.date
+      %td.d= lo al.date
+      %td.check
       %td.r= with_currency(al, al.amount)
       %td= link_to al.contact, al.contact if al.contact_id
-      %td= with_payment(al)
-
+      %td
+      %td= link_to "borrar", "", :class => 'delete'
 

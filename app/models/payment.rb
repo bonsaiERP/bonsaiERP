@@ -22,13 +22,13 @@ class Payment < ActiveRecord::Base
   belongs_to :contact
   has_many :account_ledgers
 
-  delegate :state, :type, :cash, :cash?, :real_state, :balance, :contact_id, :paid?,
+  delegate :state, :type, :cash, :cash?, :real_state, :balance, :contact_id, :paid?, :ref_number,
     :to => :transaction, :prefix => true
 
   delegate :name, :symbol, :to => :currency, :prefix => true
 
   # validations
-  validates_presence_of :account_id, :transaction_id
+  validates_presence_of :account_id, :transaction_id, :reference
   validate :valid_payment_amount, :if => :active?
   validate :valid_amount_or_interests_penalties, :if => :active?
 

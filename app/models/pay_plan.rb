@@ -16,7 +16,8 @@ class PayPlan < ActiveRecord::Base
   belongs_to :transaction
   belongs_to :currency
 
-  delegate :currency_id, :pay_plans_balance, :pay_plans_total, :payment_date, :real_state, :paid?, :cash , :to => :transaction, :prefix => true
+  delegate :currency_id, :pay_plans_balance, :pay_plans_total, :payment_date, :real_state, :paid?, :cash, :ref_number,
+    :to => :transaction, :prefix => true
   delegate :name, :symbol, :to => :currency, :prefix => true
 
   # validations
