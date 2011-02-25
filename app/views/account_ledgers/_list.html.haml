@@ -27,5 +27,5 @@
       %td.r= with_currency(al, al.amount)
       %td= link_to al.contact, al.contact if al.contact_id
       %td
-      %td= link_to "borrar", "", :class => 'delete'
+      %td= link_to "borrar", "", :class => 'delete', 'data-remote' => true, :title => 'Borrar'
 

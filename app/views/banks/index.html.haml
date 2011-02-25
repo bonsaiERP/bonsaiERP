@@ -5,8 +5,8 @@
 %table.decorated.nwl 
   %thead
     %tr
-      %th Número de cuenta
       %th Banco
+      %th Número de cuenta
       %th Moneda
       %th Total en cuenta
       %th Dirección
@@ -15,8 +15,8 @@
   %tbody
     - for bank in @banks
       %tr{ :class => cycle(:odd, :even) }
-        %td= link_to bank.number, bank
-        %td= bank.name
+        %td= link_to bank.name, bank
+        %td= bank.number
         %td= bank.currency
         %td.r= "#{bank.currency.symbol} #{ntc bank.total_amount}"
         %td= bank.address
