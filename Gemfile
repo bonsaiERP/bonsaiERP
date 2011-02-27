@@ -32,16 +32,15 @@ group :development do
 end
 
 # Test
-group :test do  
+group :test do
+  gem 'akephalos'
   gem 'rspec-rails', '~>2.5.0'
   gem 'mocha'
   gem 'steak', '~>1.1.0'
-  gem 'cucumber-rails', '~>0.3.2'
   gem 'capybara'
   gem 'database_cleaner'
   gem 'factory_girl_rails'
   gem 'spork'
-
-  # gem 'database_cleaner'
+  gem 'database_cleaner'
 end  
 

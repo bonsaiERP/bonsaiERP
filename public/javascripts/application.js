@@ -149,6 +149,45 @@
       }
     };
     window.getAjaxType = getAjaxType;
+    $('div.ajax-modal form').live('submit', function() {
+      var $div, data, el, new_record, trigger;
+      if ($(this).attr('enctype') === 'multipart/form-data') {
+        return true;
+      }
+      $(this).find('input, select, textarea').attr('disabled', true);
+      data = serializeFormElements(this);
+      el = this;
+      $div = $(this).parents('.ajax-modal');
+      new_record = $div.data('ajax-type') === 'new' ? true : false;
+      trigger = $div.data('trigger');
+      $.ajax({
+        'url': $(el).attr('action'),
+        'cache': false,
+        'context': el,
+        'data': data,
+        'type': data['_method'] || $(this).attr('method'),
+        'success': function(resp, status, xhr) {
+          var div, p;
+          try {
+            data = $.parseJSON(resp);
+            data['new_record'] = new_record;
+            p = $(el).parents('div.ajax-modal');
+            $(p).html('').dialog('destroy');
+            return $('body').trigger(trigger, [data]);
+          } catch (e) {
+            div = $(el).parents('div.ajax-modal:first');
+            div.html(resp);
+            return setTimeout(function() {
+              return $(div).transformDateSelect();
+            }, 200);
+          }
+        },
+        'error': function(resp) {
+          return alert('There are errors in the form please correct them');
+        }
+      });
+      return false;
+    });
     $('a.ajax').live("click", function(e) {
       var data, div;
       data = $.extend({
@@ -256,45 +295,6 @@
         div = $('#create_post_dialog').dialog("open").html("");
       }
       $(div).load($(this).attr("href"));
-      return false;
-    });
-    $('div.ajax-modal form').live('submit', function() {
-      var $div, data, el, new_record, trigger;
-      if ($(this).attr('enctype') === 'multipart/form-data') {
-        return true;
-      }
-      $(this).find('input, select, textarea').attr('disabled', true);
-      data = serializeFormElements(this);
-      el = this;
-      $div = $(this).parents('.ajax-modal');
-      new_record = $div.data('ajax-type') === 'new' ? true : false;
-      trigger = $div.data('trigger');
-      $.ajax({
-        'url': $(el).attr('action'),
-        'cache': false,
-        'context': el,
-        'data': data,
-        'type': data['_method'] || $(this).attr('method'),
-        'success': function(resp, status, xhr) {
-          var div, p;
-          try {
-            data = $.parseJSON(resp);
-            data['new_record'] = new_record;
-            p = $(el).parents('div.ajax-modal');
-            $(p).html('').dialog('destroy');
-            return $('body').trigger(trigger, [data]);
-          } catch (e) {
-            div = $(el).parents('div.ajax-modal:first');
-            div.html(resp);
-            return setTimeout(function() {
-              return $(div).transformDateSelect();
-            }, 200);
-          }
-        },
-        'error': function(resp) {
-          return alert('There are errors in the form please correct them');
-        }
-      });
       return false;
     });
     updateTemplateRow = function(template, data, macro) {

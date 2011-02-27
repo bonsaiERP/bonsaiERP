@@ -1,0 +1,11 @@
+%ul.breadcrumps
+  %li #{link_to "Bancos", banks_path}<span>&gt;</span>
+  %li #{link_to @account_ledger.account, @account_ledger.account}<span>&gt;</span>
+.links
+  = link_to 'Nuevo', new_account_ledger_path, :class => 'add'
+.clear
+
+%h1 Transacción del #{lo @account_ledger.date}
+
+%span.b #{@account_ledger.currency_symbol} #{ntc(@account_ledger.amount)}
+=link_description @account_ledger

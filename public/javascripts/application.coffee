@@ -145,6 +145,49 @@ $(document).ready(->
 
   window.getAjaxType = getAjaxType
 
+
+  # Must be before any ajax click event to work with HTMLUnit
+  # Makes that a dialog opened window makes an AJAX request and returns a JSON response
+  # if response is JSON then trigger event stored in dialog else present the HTML
+  $('div.ajax-modal form').live('submit', ->
+    return true if $(this).attr('enctype') == 'multipart/form-data'
+
+    $(this).find('input, select, textarea').attr('disabled', true)
+
+    data = serializeFormElements(this)
+    el = this
+    $div = $(this).parents('.ajax-modal')
+    new_record = if $div.data('ajax-type') == 'new' then true else false
+    trigger = $div.data('trigger')
+
+    $.ajax(
+      'url': $(el).attr('action')
+      'cache': false
+      'context':el
+      'data':data
+      'type': (data['_method'] || $(this).attr('method') )
+      'success': (resp, status, xhr)->
+        try
+          data = $.parseJSON(resp)
+          data['new_record'] = new_record
+          p = $(el).parents('div.ajax-modal')
+          $(p).html('').dialog('destroy')
+          $('body').trigger(trigger, [data])
+        catch e
+          div = $(el).parents('div.ajax-modal:first')
+          div.html(resp)
+          setTimeout(->
+            $(div).transformDateSelect()
+          ,200)
+      'error': (resp)->
+        alert('There are errors in the form please correct them')
+    )
+
+    false
+
+  )
+  # End submit ajax form
+
   # Presents an AJAX form
   $('a.ajax').live("click", (e)->
     data = $.extend({'title': $(this).attr('title'), 'ajax-type': getAjaxType(this) }, $(this).data() )
@@ -235,47 +278,6 @@ $(document).ready(->
     false
   )
 
-
-  # Makes that a dialog opened window makes an AJAX request and returns a JSON response
-  # if response is JSON then trigger event stored in dialog else present the HTML
-  $('div.ajax-modal form').live('submit', ->
-    return true if $(this).attr('enctype') == 'multipart/form-data'
-
-    $(this).find('input, select, textarea').attr('disabled', true)
-
-    data = serializeFormElements(this)
-    el = this
-    $div = $(this).parents('.ajax-modal')
-    new_record = if $div.data('ajax-type') == 'new' then true else false
-    trigger = $div.data('trigger')
-
-    $.ajax(
-      'url': $(el).attr('action')
-      'cache': false
-      'context':el
-      'data':data
-      'type': (data['_method'] || $(this).attr('method') )
-      'success': (resp, status, xhr)->
-        try
-          data = $.parseJSON(resp)
-          data['new_record'] = new_record
-          p = $(el).parents('div.ajax-modal')
-          $(p).html('').dialog('destroy')
-          $('body').trigger(trigger, [data])
-        catch e
-          div = $(el).parents('div.ajax-modal:first')
-          div.html(resp)
-          setTimeout(->
-            $(div).transformDateSelect()
-          ,200)
-      'error': (resp)->
-        alert('There are errors in the form please correct them')
-    )
-
-    false
-
-  )
-  # End submit ajax form
 
   # Function that handles the return of an AJAX request and process if add or replace
   # @param String template: HTML template
