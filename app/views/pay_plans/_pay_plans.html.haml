@@ -20,8 +20,8 @@
       %tr.pay_plan{:id => pp.id}
         %td.payment_date= lo pp.payment_date
         %td= lo pp.alert_date
-        %td.amount= ntc pp.amount
-        %td= ntc pp.interests_penalties
+        %td.r.amount= ntc pp.amount
+        %td.r= ntc pp.interests_penalties
         %td= pp.description
         %td.state= pp.state
         %td= link_to "Enviar email", email_pay_plan_path(pp), :class => 'email' unless pp.paid?
@@ -38,8 +38,8 @@
       '<tr id="${id}" class="pay_plan">',
         '<td class="payment_date">${_b.dateFormat(payment_date)}</td>',
         '<td>${_b.dateFormat(alert_date)}</td>',
-        '<td class="amount">${_b.ntc(amount)}</td>',
-        '<td>${_b.ntc(interests_penalties)}</td>',
+        '<td class="amount r">${_b.ntc(amount)}</td>',
+        '<td class="r">${_b.ntc(interests_penalties)}</td>',
         '<td>${description}</td>',
         '<td class="state">${payPlanState(payment_date)}</td>',
         '<td><a href="/pay_plans/${id}/email" class="email">Enviar email</a></td>',

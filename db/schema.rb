@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110225214624) do
+ActiveRecord::Schema.define(:version => 20110227164725) do
 
   create_table "account_ledgers", :force => true do |t|
     t.integer  "organisation_id"
@@ -23,15 +23,21 @@ ActiveRecord::Schema.define(:version => 20110225214624) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "contact_id"
+    t.boolean  "conciliation"
+    t.text     "description"
+    t.integer  "transaction_id"
   end
 
   add_index "account_ledgers", ["account_id"], :name => "index_account_ledgers_on_account_id"
+  add_index "account_ledgers", ["conciliation"], :name => "index_account_ledgers_on_conciliation"
   add_index "account_ledgers", ["contact_id"], :name => "index_account_ledgers_on_contact_id"
   add_index "account_ledgers", ["currency_id"], :name => "index_account_ledgers_on_currency_id"
   add_index "account_ledgers", ["date"], :name => "index_account_ledgers_on_date"
+  add_index "account_ledgers", ["description"], :name => "index_account_ledgers_on_description"
   add_index "account_ledgers", ["income"], :name => "index_account_ledgers_on_income"
   add_index "account_ledgers", ["organisation_id"], :name => "index_account_ledgers_on_organisation_id"
   add_index "account_ledgers", ["payment_id"], :name => "index_account_ledgers_on_payment_id"
+  add_index "account_ledgers", ["transaction_id"], :name => "index_account_ledgers_on_transaction_id"
 
   create_table "accounts", :force => true do |t|
     t.integer  "organisation_id"

@@ -1,4 +1,4 @@
-- @accounts = Account.where(:currency_id => @payment.currency_id)
+- @accounts = Account.org.where(:currency_id => @payment.currency_id)
 - if @accounts.any?
   = simple_form_for(@payment) do |f|
     = bonsai_form_error(f)

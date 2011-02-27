@@ -22,7 +22,7 @@ class Payment < ActiveRecord::Base
   belongs_to :contact
   has_many :account_ledgers
 
-  delegate :state, :type, :cash, :cash?, :real_state, :balance, :contact_id, :paid?, :ref_number,
+  delegate :state, :type, :cash, :cash?, :real_state, :balance, :contact_id, :paid?, :ref_number, :type,
     :to => :transaction, :prefix => true
 
   delegate :name, :symbol, :to => :currency, :prefix => true
@@ -137,7 +137,17 @@ private
 
     AccountLedger.create(:account_id => account_id, :payment_id => id, 
                          :currency_id => currency_id, :contact_id => transaction_contact_id,
-                         :amount => tot, :date => date, :income => income)
+                         :amount => tot, :date => date, :income => income, :transaction_id => transaction_id,
+                         :description => set_account_ledger_text)
+  end
+
+  # Creates the account_ledger text
+  def set_account_ledger_text
+    case
+    when 'Income' then "Cobro venta #{transaction_ref_number}"
+    when 'Buy' then "Pago compra #{transaction_ref_number}"
+    when 'Expense' then "Pago gasto #{transaction_ref_number}"
+    end
   end
 
   # Sets the amount for cash

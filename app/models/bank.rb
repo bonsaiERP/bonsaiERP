@@ -19,10 +19,14 @@ private
     self.total_amount ||= 0.0
   end
 
-  # Creates the first income for the
+  # Creates the first income for the bank
   def create_account_ledger
-    if total_amount > 0
-      bl = self.account_ledgers.build(:amount => total_amount, :date => Date.today, :currency_id => currency_id)
+    val = amount
+    val = val.to_f
+    if val > 0
+      bl = self.account_ledgers.build(:amount => amount, :date => Date.today, 
+                                      :currency_id => currency_id,
+                                      :description => 'Primer ingreso por creación de banco')
       bl.save
     end
   end

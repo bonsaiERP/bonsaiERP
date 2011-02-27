@@ -1,3 +1,6 @@
+# encoding: utf-8
+# author: Boris Barroso
+# email: boriscyber@gmail.com
 class BanksController < ApplicationController
   before_filter :find_bank, :only => [:show, :edit, :update, :destroy]
   # GET /banks
@@ -42,7 +45,7 @@ class BanksController < ApplicationController
 
     respond_to do |format|
       if @bank.save
-        format.html { redirect_to(@bank, :notice => 'El banco fue creado.') }
+        format.html { redirect_to(@bank, :notice => 'El banco fue creado. Por favor realice la concilición de la primera transacción para actualizar su saldo en cuenta') }
         format.xml  { render :xml => @bank, :status => :created, :location => @bank }
       else
         format.html { render :action => "new" }
