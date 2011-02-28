@@ -10,7 +10,7 @@ class Item < ActiveRecord::Base
 
 
   acts_as_org
-  acts_as_taggable
+  #acts_as_taggable
 
   # relationships
   belongs_to :unit
