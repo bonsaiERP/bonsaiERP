@@ -126,10 +126,6 @@ class Transaction < ActiveRecord::Base
     end
   end
 
-  def new_pay_plan(options = {})
-    PayPlan.new({:transaction_id => id, :ctype => type, :currency_id => currency_id}.merge(options))
-  end
-
 
   # Adds a payment and updates the balance
   def add_payment(amount)
