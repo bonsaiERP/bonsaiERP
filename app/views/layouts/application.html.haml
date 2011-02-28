@@ -11,7 +11,7 @@
       'jquery.tmpl.min', :cache => 'javascripts'
     = javascript_include_tag 'application'
 
-    - if Rails.env == 'test' or Rails.enc == 'cucumber'
+    - if Rails.env == 'test'
       :javascript
         $.ajaxSetup({ async: false });
 

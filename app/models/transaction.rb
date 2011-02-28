@@ -28,6 +28,12 @@ class Transaction < ActiveRecord::Base
 
   delegate :name, :symbol, :to => :currency, :prefix => true
 
+  ###############################
+  # Methods for pay_plans
+  include PayPlansModule
+  ###############################
+
+
 
   # Transalates the type for any language
   def type_translated
@@ -37,6 +43,7 @@ class Transaction < ActiveRecord::Base
     end
     Hash[TYPES.zip(arr)][type]
   end
+
 
   # Functions that other clases should have
   # def real_state end
@@ -77,15 +84,14 @@ class Transaction < ActiveRecord::Base
     #end
   end
 
-  # Returns the total value of pay plans
+  # Returns the total value of pay plans that haven't been paid'
   def pay_plans_total
-    pay_plans.unpaid.inject(0) {|sum, v| sum += v.amount }
+    pay_plans.unpaid.sum('amount')
   end
 
   # Returns the total amount to be paid
   def pay_plans_balance
-    sum = pay_plans.inject(0) {|sum, v| sum += v.amount unless v.paid? ; sum}
-    balance - sum
+    balance - pay_plans_total
   end
 
   # Updates cash based on the pay_plans
@@ -123,6 +129,7 @@ class Transaction < ActiveRecord::Base
   def new_pay_plan(options = {})
     PayPlan.new({:transaction_id => id, :ctype => type, :currency_id => currency_id}.merge(options))
   end
+
 
   # Adds a payment and updates the balance
   def add_payment(amount)

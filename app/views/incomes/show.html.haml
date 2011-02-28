@@ -63,11 +63,14 @@
 .clear
 
 = render 'items', :income => @income
+.clear
 
-.clear
-=render "/payments/payments", :klass => @income, :pay_type => 'cobro' if @income.show_payments?
-.clear
-=render "/pay_plans/pay_plans", :klass => @income, :pay_type => 'cobro' if @income.show_pay_plans?
+#income_payments
+  =render "/payments/payments", :klass => @income, :pay_type => 'cobro' if @income.show_payments?
+  .clear
+
+#income_pay_plans
+  =render "/pay_plans/pay_plans", :klass => @income, :pay_type => 'cobro' if @income.show_pay_plans?
 
 :javascript
   $(function () {

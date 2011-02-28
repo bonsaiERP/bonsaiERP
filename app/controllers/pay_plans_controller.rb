@@ -43,11 +43,16 @@ class PayPlansController < ApplicationController
   # POST /pay_plans
   # POST /pay_plans.xml
   def create
-    @pay_plan = PayPlan.new(params[:pay_plan])
-    if @pay_plan.save
-      redirect_ajax(@pay_plan, :notice => 'Se ha creado una proforma de venta.')
-    else
-      render :action => "new"
+    begin
+      @transaction = Transaction.org.find(params[:pay_plan][:transaction_id])
+      @pay_plan = @transaction.new_pay_plan(params[:pay_plan])
+      if @pay_plan.valid? and @transaction.create_pay_plans(params[:pay_plans])
+        #redirect_ajax(@pay_plan, :notice => 'Se ha creado una proforma de venta.')
+        render :text => @transaction.pay_plans.to_json
+      else
+        render :action => "new"
+      end
+    rescue
     end
   end
 

@@ -117,24 +117,6 @@ describe Transaction do
     arr
   end
 
-  it 'should sum the total amout of pay plans' do
-    transaction = Transaction.new(@params)
-    transaction.save
-    arr = create_stubs_array([{:amount => 10, :id => 1}, {:id =>2, :amount => 20}])
-    transaction.stubs(:pay_plans => arr)
-    
-    transaction.pay_plans_total.should == 30
-  end
-
-  it 'should return the pay plans balance' do
-    transaction = Transaction.new(@params)
-    transaction.save
-    arr = create_stubs_array([{:amount => 10, :id => 1, :paid? => false}, {:id =>2, :amount => 20, :paid? => true}])
-    transaction.stubs(:pay_plans => arr)
-    
-    transaction.pay_plans_balance.should == (transaction.balance - 10)
-  end
-
   it 'should set the payment date' do
     transaction = Transaction.create(@params)
 
@@ -160,7 +142,39 @@ describe Transaction do
     p.class.should == Payment
     p.amount.should == t.balance
     p.transaction_id.should == t.id
+  end
 
+  ##############################
+  # PayPlans
+  it 'should create a complete pay_plan balance' do
+    t = Transaction.create(@params)
+    d = Date.today
+    pp = t.new_pay_plan(:amount => 100, :payment_date => d + 10.days)
+    pp.save
+    t.pay_plans.unpaid.size.should == 2
+    t.pay_plans_total.should == t.balance
+    t.pay_plans.last.payment_date.should == d + 11.days
+  end
+
+  it 'should update the last pay_plan' do
+    t = Transaction.create(@params)
+    pp = t.create_update_pay_plans(:amount => 100)
+    pp.save
+
+    pp = t.pay_plans.first
+    d = Date.today
+    pp.update_attributes(:payment_date => d + 10.days , :alert_date => d + 8.days)
+
+    t = Transaction.find(t.id)
+    t.pay_plans.last.payment_date.should == d + 10.days
+    t.pay_plans.last.alert_date.should == d + 8.days
+  end
+
+  it 'should move update the date for the next payment' do
+    d = Date.today
+    t = Transaction.create(@params)
+    pp = t.new_pay_plan(:amount => 100, :payment_date => d + 20.days, :alert_date => d + 10.days)
+    pp.save
   end
 
 end

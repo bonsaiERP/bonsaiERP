@@ -6,9 +6,9 @@ class PayPlan < ActiveRecord::Base
   after_initialize :set_defaults
   before_save :set_currency_id
   before_destroy :check_if_paid
-  after_save :update_transaction
+  #after_save :update_transaction
   #after_save :update_transaction_payment_date
-  after_destroy :update_transaction
+  #after_destroy :update_transaction
 
   STATES = ["valid", "delayed", "payed"]
 
@@ -16,7 +16,7 @@ class PayPlan < ActiveRecord::Base
   belongs_to :transaction
   belongs_to :currency
 
-  delegate :currency_id, :pay_plans_balance, :pay_plans_total, :payment_date, :real_state, :paid?, :cash, :ref_number,
+  delegate :currency_id, :pay_plans_balance, :pay_plans_total, :payment_date, :real_state, :paid?, :cash, :ref_number, :draft?, :balance, :state,
     :to => :transaction, :prefix => true
   delegate :name, :symbol, :to => :currency, :prefix => true
 
@@ -60,7 +60,7 @@ private
     self.amount ||= self.transaction_pay_plans_balance
     self.interests_penalties ||= 0.0
     self.payment_date ||= Date.today
-    self.alert_date ||= self.payment_date
+    self.alert_date ||= self.payment_date - 5.days
     self.currency_id ||= transaction_currency_id
   end
 
@@ -76,6 +76,10 @@ private
     end
   end
 
+  #############################3
+  # Transaction methods
+
+  # returns the payment_date for the transaction
   def get_transaction_payment_date
     pp = PayPlan.unpaid.where(:transaction_id => transaction_id)
     if pp.size > 0
@@ -85,12 +89,24 @@ private
     end
   end
 
+  # updates transaction data
   def update_transaction
+    unless transaction_pay_plans_balance == transaction_balance
+      return false unless create_pay_plan_to_complete_transaction
+    end
     transaction.set_trans(false)
-    transaction.cash = get_transaction_cash if transaction.state == 'draft'
+    transaction.cash = false if transaction_state == 'draft'
     transaction.payment_date = get_transaction_payment_date || Date.today
     transaction.save
   end
+
+  # Creates a pay_plan to complete the balance for the transaction
+  def create_pay_plan_to_complete_transaction
+    pp = transaction.new_pay_plan(:amount => transaction_pay_plans_balance, :payment_date => payment_date + 1.day, :alert_date => alert_date + 1.day)
+    pp.save
+  end
+
+  #################
 
   # Checks that all pay_plans amounts sum <= transaction.total
   def valid_pay_plans_total_amount
