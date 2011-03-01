@@ -9,6 +9,9 @@ class PayPlan < ActiveRecord::Base
   #after_save :update_transaction
   #after_save :update_transaction_payment_date
   #after_destroy :update_transaction
+  
+  # attr accesor 
+  attr_protected :pivot
 
   STATES = ["valid", "delayed", "payed"]
 
@@ -16,6 +19,7 @@ class PayPlan < ActiveRecord::Base
   belongs_to :transaction
   belongs_to :currency
 
+  # delegations
   delegate :currency_id, :pay_plans_balance, :pay_plans_total, :payment_date, :real_state, :paid?, :cash, :ref_number, :draft?, :balance, :state,
     :to => :transaction, :prefix => true
   delegate :name, :symbol, :to => :currency, :prefix => true
@@ -27,6 +31,10 @@ class PayPlan < ActiveRecord::Base
 
   # scopes
   scope :unpaid, where(:paid => false)
+
+  def self.pivot
+    where(:pivot => true).first
+  end
 
   # Returns the current state of the payment
   def state
@@ -90,30 +98,33 @@ private
   end
 
   # updates transaction data
-  def update_transaction
-    unless transaction_pay_plans_balance == transaction_balance
-      return false unless create_pay_plan_to_complete_transaction
-    end
-    transaction.set_trans(false)
-    transaction.cash = false if transaction_state == 'draft'
-    transaction.payment_date = get_transaction_payment_date || Date.today
-    transaction.save
-  end
+  #def update_transaction
+  #  unless transaction_pay_plans_balance == transaction_balance
+  #    return false unless create_pay_plan_to_complete_transaction
+  #  end
+  #  transaction.set_trans(false)
+  #  transaction.cash = false if transaction_state == 'draft'
+  #  transaction.payment_date = get_transaction_payment_date || Date.today
+  #  transaction.save
+  #end
 
-  # Creates a pay_plan to complete the balance for the transaction
-  def create_pay_plan_to_complete_transaction
-    pp = transaction.new_pay_plan(:amount => transaction_pay_plans_balance, :payment_date => payment_date + 1.day, :alert_date => alert_date + 1.day)
-    pp.save
-  end
+  ## Creates a pay_plan to complete the balance for the transaction
+  #def create_pay_plan_to_complete_transaction
+  #  pp = transaction.new_pay_plan(:amount => transaction_pay_plans_balance, :payment_date => payment_date + 1.day, :alert_date => alert_date + 1.day)
+  #  pp.save
+  #end
 
   #################
 
   # Checks that all pay_plans amounts sum <= transaction.total
   def valid_pay_plans_total_amount
-    minus = changes[:amount] ? changes[:amount].first.to_f : self.amount
-    tot = transaction_pay_plans_total + amount - minus
+    pivot_amount = 0
+    piv = transaction.pay_plans.pivot
+    if piv
+      pivot_amount = piv.amount
+    end
 
-    if tot > transaction.balance
+    if amount > (transaction.pay_plans_balance + pivot_amount)
       self.errors.add(:amount, "La cantidad que ingreso supera al total de la Nota de #{transaction.type_translated}")
     end
   end

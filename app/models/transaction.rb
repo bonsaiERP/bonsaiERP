@@ -89,7 +89,7 @@ class Transaction < ActiveRecord::Base
     pay_plans.unpaid.sum('amount')
   end
 
-  # Returns the total amount to be paid
+  # Returns the total amount to be paid for unpaid pay_plans
   def pay_plans_balance
     balance - pay_plans_total
   end
