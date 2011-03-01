@@ -118,13 +118,13 @@ private
 
   # Checks that all pay_plans amounts sum <= transaction.total
   def valid_pay_plans_total_amount
-    pivot_amount = 0
+    pivot_amount = transaction_pay_plans_balance
     piv = transaction.pay_plans.pivot
     if piv
       pivot_amount = piv.amount
     end
 
-    if amount > (transaction.pay_plans_balance + pivot_amount)
+    if amount > pivot_amount
       self.errors.add(:amount, "La cantidad que ingreso supera al total de la Nota de #{transaction.type_translated}")
     end
   end

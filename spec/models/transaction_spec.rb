@@ -164,28 +164,30 @@ describe Transaction do
     p.errors[:amount].should_not == blank?
   end
 
+  it 'should create a complete pay_plan balance' do
+    t = Transaction.create(@params)
+    d = Date.today
+    pp = t.create_pay_plan(:amount => 100, :payment_date => d + 10.days)
 
-  #it 'should create a complete pay_plan balance' do
-  #  t = Transaction.create(@params)
-  #  d = Date.today
-  #  t.create_pay_plans(:amount => 100, :payment_date => d + 10.days)
-  #  t.pay_plans.unpaid.size.should == 2
-  #  t.pay_plans_total.should == t.balance
+    pp.class.should == PayPlan
+    pp.should == t.pay_plans.unpaid.first
+    t.pay_plans.unpaid.size.should == 2
+    t.pay_plans_total.should == t.balance
 
-  #  t.pay_plans.pivot.amount.should == t.balance - 100
-  #  t.pay_plans.last.payment_date.should == d + 11.days
-  #  t.pay_plans_balance.should == 0
-  #end
+    t.pay_plans.pivot.amount.should == t.balance - 100
+    t.pay_plans.last.payment_date.should == d + 11.days
+    t.pay_plans_balance.should == 0
+  end
 
   it 'should update pivot' do
     t = Transaction.create(@params)
     d = Date.today
-    t.create_pay_plans(:amount => 100, :payment_date => d + 10.days)
+    t.create_pay_plan(:amount => 100, :payment_date => d + 10.days)
     pp = t.new_pay_plan
     # Check
     pp.amount.should == t.pay_plans.pivot.amount
 
-    t.create_pay_plans(:amount => 110, :payment_date => d + 20.days)
+    t.create_pay_plan(:amount => 110, :payment_date => d + 20.days)
 
     t.pay_plans.unpaid.size.should == 3
     t.pay_plans_total.should == t.balance
@@ -194,19 +196,17 @@ describe Transaction do
     t.pay_plans_balance.should == 0
   end
 
-  #it 'should update the last pay_plan' do
-  #  t = Transaction.create(@params)
-  #  pp = t.create_update_pay_plans(:amount => 100)
-  #  pp.save
+  it 'should update the pivot' do
+    t = Transaction.create(@params)
+    pp = t.create_pay_plan(:amount => 100)
+    t.pay_plans.pivot.amount.should == t.balance - 100
 
-  #  pp = t.pay_plans.first
-  #  d = Date.today
-  #  pp.update_attributes(:payment_date => d + 10.days , :alert_date => d + 8.days)
 
-  #  t = Transaction.find(t.id)
-  #  t.pay_plans.last.payment_date.should == d + 10.days
-  #  t.pay_plans.last.alert_date.should == d + 8.days
-  #end
+    t.update_pay_plan(:id => pp.id, :amount => 150)
+    puts t.pay_plans.pivot.amount
+    t.pay_plans.pivot.amount.should == t.balance - 150
+    t.pay_plans.unpaid.size.should == 2
+  end
 
   #it 'should move update the date for the next payment' do
   #  d = Date.today

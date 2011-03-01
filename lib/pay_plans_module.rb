@@ -1,7 +1,7 @@
 module PayPlansModule
   # method to create pay plans
   # @param Hash
-  def create_pay_plans(params = {})
+  def create_pay_plan(params = {})
     @current_pay_plan = nil
     @saved_pay_plan = true
     @pivot = pay_plans.pivot
@@ -17,13 +17,20 @@ module PayPlansModule
     @current_pay_plan
   end
 
+  def update_pay_plan(params = {})
+    @current_pay_plan = pay_plans.unpaid.find(params[:id])
+    @saved_pay_plan = true
+    Transaction.transaction do
+      @saved_pay_plan = @current_pay_plan.update_attributes(params)
+      @saved_pay_plan = create_or_update_pivot
+
+      raise ActiveRecord::Rollback unless @saved_pay_plan
+    end
+  end
+
   # Creates or udpates the pivot pay_plan
   def create_or_update_pivot
     if not @pivot and @current_pay_plan.amount == pay_plans_balance
-      @current_pay_plan.pivot = true
-      @current_pay_plan.save
-    elsif @pivot and @pivot.amount == @current_pay_plan.amount
-      @pivot.destroy
       @current_pay_plan.pivot = true
       @current_pay_plan.save
     elsif not @pivot
@@ -32,18 +39,17 @@ module PayPlansModule
                             :alert_date => @current_pay_plan.alert_date + 1.day )
       @pivot.pivot = true
       @pivot.save
-    else
-      if @pivot.amount == pay_plans_balance
-        @current_pay_plan.pivot = true
-        @pivot.destroy
-        @pivot = @current_pay_plan
-        @current_pay_plan.save
-      else
-        @pivot.amount = @pivot.amount + pay_plans_balance
-        last_pay_plan = pay_plans.unpaid.last
-        @pivot.payment_date = last_pay_plan.payment_date + 1.day
-        @pivot.alert_date = last_pay_plan.alert_date + 1.day
+    # pivot has been updated
+    elsif @pivot and @current_pay_plan.id == @pivot.id
+      true
+    elsif
+      @pivot.amount = @pivot.amount + pay_plans_balance
+      last_pay_plan = pay_plans.unpaid.last
+      if last_pay_plan.id == @pivot.id
         @pivot.save
+      elsif last_pay_plan.id != @pivot.id and pay_plans_balance == 0
+
+      else
       end
     end
   end
@@ -58,9 +64,6 @@ module PayPlansModule
     pay_plans_balance == 0
   end
 
-  def update_pay_plans(pay_plan)
-
-  end
 
 
   # returns the amount to be paid
