@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110301190638) do
+ActiveRecord::Schema.define(:version => 20110227164725) do
 
   create_table "account_ledgers", :force => true do |t|
     t.integer  "organisation_id"
@@ -180,7 +180,6 @@ ActiveRecord::Schema.define(:version => 20110301190638) do
     t.boolean  "paid",                                                             :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "pivot",                                                            :default => false
   end
 
   add_index "pay_plans", ["ctype"], :name => "index_pay_plans_on_ctype"
