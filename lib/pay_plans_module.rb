@@ -48,7 +48,7 @@ module PayPlansModule
   private :save_pay_plans_list
 
   def delete_pay_plans(pay_plans_list, index)
-    ids = pay_plans_list.slice(index, pay_plans_list.size - index).map(&:id)
+    ids = pay_plans_list.slice(index, pay_plans_list.size - index).map(&:id).compact
     PayPlan.destroy_all(:id => ids) if ids.any?
   end
 
@@ -81,19 +81,33 @@ private
     pay_plans_list.slice(0, index).inject(0) {|sum, pp| sum += pp.amount }
   end
 
+  def delete_repeat_pay_plans_ids(pay_plans_list, ids)
+    ids = ids - pay_plans_list.map(&:id).compact
+    PayPlan.destroy_all(:id => ids) if ids.any?
+  end
+
   # Creates a list with the sorted pay_plans list
   def create_pay_plans_repeat_list(pay_plans_list)
     pos = pay_plans_list.index(@current_pay_plan) + 1
 
+    ids = pay_plans_list.map(&:id).compact if pay_plans_list.any?
+
     sum = sum_until(pay_plans_list, pos)
     pay_plans_list = pay_plans_list.slice(0, pos)
+
+    delete_repeat_pay_plans_ids(pay_plans_list, ids)
+    
+    ids - pay_plans_list.map(&:id).compact
+    #puts "#{ids.to_json} #{}" if ids.any?
+
+
     int_pen_per = @current_pay_plan.interests_penalties/(balance - (sum - @current_pay_plan.amount))
 
     if sum < balance
       actual_pay_plan = @current_pay_plan
       while_list = true
       while while_list
-        actual_pay_plan = @pay_plans_list.last
+        actual_pay_plan = pay_plans_list.last
         amount = actual_pay_plan.amount
         if sum + @current_pay_plan.amount > balance
           amount = balance - sum

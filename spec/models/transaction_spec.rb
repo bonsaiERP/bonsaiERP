@@ -197,6 +197,29 @@ describe Transaction do
     t.pay_plans_total.should == t.balance
   end
 
+  it 'should create a new pay_plan and delete all other if a new is created with repeat' do
+    t = Transaction.create(@params)
+    d = Date.today
+    pp = t.create_pay_plan(:amount => 100, :payment_date => d + 10.days, :interests_penalties => 34.43)
+
+    t = Transaction.find(t.id)
+    t.pay_plans.unpaid.size.should == 4
+    
+    puts "----------------"
+    t.create_pay_plan(:amount => 50, :payment_date => d + 15.days, :repeat => true)
+    t = Transaction.find(t.id)
+
+    #t.pay_plans.unpaid.each{|pp| puts "#{pp.id} #{pp.amount} #{pp.payment_date}"}
+    t.pay_plans_total.should == t.balance
+    t.pay_plans[1].amount.should == 50
+    d2 = d + 15.days
+    t.pay_plans[1].payment_date.should == d2
+    t.pay_plans[2].payment_date.should == d2 + 1.month
+    t.pay_plans[3].payment_date.should == d2 + 2.months
+    t.pay_plans[4].payment_date.should == d2 + 3.months
+    t.pay_plans[5].payment_date.should == d2 + 4.months
+  end
+
   #it 'should update pivot' do
   #  t = Transaction.create(@params)
   #  d = Date.today
