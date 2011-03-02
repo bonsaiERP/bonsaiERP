@@ -27,7 +27,6 @@ module PayPlansModule
         #puts "#{total_sum} :: #{balance}"
         if (total_sum + pp.amount) >= balance
           pp.amount =  balance - total_sum
-          puts "#{total_sum}"
           @end = true
         end
 
@@ -42,9 +41,16 @@ module PayPlansModule
         break if @end or not @saved
       end
     end
+
+    delete_pay_plans(@pay_plans_list, i)
   end
   
   private :save_pay_plans_list
+
+  def delete_pay_plans(pay_plans_list, index)
+    ids = pay_plans_list.slice(index, pay_plans_list.size - index).map(&:id)
+    PayPlan.destroy_all(:id => ids) if ids.any?
+  end
 
   # Sets the amount and the data for last pay_plan
   def new_pay_plan(params = {})
@@ -63,31 +69,6 @@ module PayPlansModule
     end
   end
 
-  # Creates or udpates the pivot pay_plan
-  def create_or_update_pivot
-    if not @pivot and @current_pay_plan.amount == pay_plans_balance
-      @current_pay_plan.pivot = true
-      @current_pay_plan.save
-    elsif not @pivot
-      @pivot = new_pay_plan(:amount => pay_plans_balance, 
-                            :payment_date => @current_pay_plan.payment_date + 1.day, 
-                            :alert_date => @current_pay_plan.alert_date + 1.day )
-      @pivot.pivot = true
-      @pivot.save
-    # pivot has been updated
-    elsif @pivot and @current_pay_plan.id == @pivot.id
-      true
-    elsif
-      @pivot.amount = @pivot.amount + pay_plans_balance
-      last_pay_plan = pay_plans.unpaid.last
-      if last_pay_plan.id == @pivot.id
-        @pivot.save
-      elsif last_pay_plan.id != @pivot.id and pay_plans_balance == 0
-
-      else
-      end
-    end
-  end
 
 
 private

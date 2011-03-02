@@ -171,10 +171,30 @@ describe Transaction do
 
     pp.class.should == PayPlan
     #pp.should == t.pay_plans.unpaid.first
+    t = Transaction.find(t.id)
 
-    t.pay_plans.size.should == 4
+    t.pay_plans.unpaid.size.should == 4
     t.pay_plans_total.should == t.balance
 
+  end
+
+  it 'should create a complete pay_plan balance and update the list' do
+    t = Transaction.create(@params)
+    d = Date.today
+    pp = t.create_pay_plan(:amount => 100, :payment_date => d + 10.days, :interests_penalties => 34.43)
+
+    t = Transaction.find(t.id)
+    t.pay_plans.unpaid.size.should == 4
+    
+    t.create_pay_plan(:amount => 200, :payment_date => d + 15.days)
+    t = Transaction.find(t.id)
+
+    #t.pay_plans.unpaid.each{|pp| puts "#{pp.id} #{pp.amount}"}
+    t.pay_plans.size.should == 3
+    t.pay_plans[0].amount.should == 100
+    t.pay_plans[1].amount.should == 200
+    t.pay_plans[2].amount.should == (t.balance - 300)
+    t.pay_plans_total.should == t.balance
   end
 
   #it 'should update pivot' do
