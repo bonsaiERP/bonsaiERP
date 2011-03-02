@@ -10,6 +10,21 @@ module PayPlansModule
     @current_pay_plan
   end
 
+  def update_pay_plan(params = {})
+    @pay_plans_list = pay_plans.unpaid
+    index = @pay_plans_list.index{|p| p.id == params[:id].to_i}
+    @current_pay_plan = @pay_plans_list[index]
+
+    protected_attributes = PayPlan.protected_attributes.to_a.map(&:to_s)
+    params.each do |k , v|
+      @current_pay_plan.send(:"#{k}=", v) unless protected_attributes.include?(k.to_s)
+    end
+
+    save_pay_plans_list
+
+    @current_pay_plan
+  end
+
     # Saves the list of PayPlans
   def save_pay_plans_list
     @pay_plans_list = sort_pay_plans_list(@pay_plans_list)
@@ -24,6 +39,7 @@ module PayPlansModule
       while not @end
         pp = @pay_plans_list[i]
 
+        #puts pp.id.to_s + ' ' + pp.amount.to_s if pp == @current_pay_plan
         #puts "#{total_sum} :: #{balance}"
         if (total_sum + pp.amount) >= balance
           pp.amount =  balance - total_sum
@@ -57,18 +73,6 @@ module PayPlansModule
     repeat = params[:repeat].nil? ? not(pay_plans.unpaid.any?) : params[:repeat]
     PayPlan.new(params.merge(:transaction_id => id, :ctype => type, :repeat => repeat))
   end
-
-  def update_pay_plan(params = {})
-    @current_pay_plan = pay_plans.unpaid.find(params[:id])
-    @saved_pay_plan = true
-    Transaction.transaction do
-      @saved_pay_plan = @current_pay_plan.update_attributes(params)
-      @saved_pay_plan = create_or_update_pivot
-
-      raise ActiveRecord::Rollback unless @saved_pay_plan
-    end
-  end
-
 
 
 private

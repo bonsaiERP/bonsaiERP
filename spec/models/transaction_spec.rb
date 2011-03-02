@@ -205,7 +205,6 @@ describe Transaction do
     t = Transaction.find(t.id)
     t.pay_plans.unpaid.size.should == 4
     
-    puts "----------------"
     t.create_pay_plan(:amount => 50, :payment_date => d + 15.days, :repeat => true)
     t = Transaction.find(t.id)
 
@@ -220,40 +219,21 @@ describe Transaction do
     t.pay_plans[5].payment_date.should == d2 + 4.months
   end
 
-  #it 'should update pivot' do
-  #  t = Transaction.create(@params)
-  #  d = Date.today
-  #  t.create_pay_plan(:amount => 100, :payment_date => d + 10.days)
-  #  pp = t.new_pay_plan
-  #  # Check
-  #  pp.amount.should == t.pay_plans.pivot.amount
+  it 'should update' do
+    t = Transaction.create(@params)
+    d = Date.today
+    pp = t.create_pay_plan(:amount => 100, :payment_date => d + 10.days, :interests_penalties => 34.43)
 
-  #  t.create_pay_plan(:amount => 110, :payment_date => d + 20.days)
+    t = Transaction.find(t.id)
+    pp = t.pay_plans.unpaid[1]
+    puts "---------"
+    t.update_pay_plan(:id => pp.id, :amount => 150)
 
-  #  t.pay_plans.unpaid.size.should == 3
-  #  t.pay_plans_total.should == t.balance
-  #  t.pay_plans[1].payment_date.should == d + 20.days
-  #  t.pay_plans.last.payment_date.should == d + 21.days
-  #  t.pay_plans_balance.should == 0
-  #end
-
-  #it 'should update the pivot' do
-  #  t = Transaction.create(@params)
-  #  pp = t.create_pay_plan(:amount => 100)
-  #  t.pay_plans.pivot.amount.should == t.balance - 100
+    t = Transaction.find(t.id)
+    t.pay_plans_total.should == t.balance
+    t.pay_plans.unpaid[1].amount.should == 150
+  end
 
 
-  #  t.update_pay_plan(:id => pp.id, :amount => 150)
-  #  puts t.pay_plans.pivot.amount
-  #  t.pay_plans.pivot.amount.should == t.balance - 150
-  #  t.pay_plans.unpaid.size.should == 2
-  #end
-
-  #it 'should move update the date for the next payment' do
-  #  d = Date.today
-  #  t = Transaction.create(@params)
-  #  pp = t.new_pay_plan(:amount => 100, :payment_date => d + 20.days, :alert_date => d + 10.days)
-  #  pp.save
-  #end
 
 end
