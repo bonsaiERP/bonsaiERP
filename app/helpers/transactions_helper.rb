@@ -12,10 +12,6 @@ module TransactionsHelper
     ntc(transaction.total_currency) unless session[:organisation][:currency_id] == transaction.currency_id
   end
 
-  def currency_name(transaction)
-    "Total #{transaction.currency_name.pluralize}" unless session[:organisation][:currency_id] == transaction.currency_id
-  end
-
   def show_money(klass, amount, options = {})
     options = {:precision => 2}.merge(options)
     unless klass.currency_id == session[:organisation][:currency_id]

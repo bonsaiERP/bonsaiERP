@@ -11,7 +11,9 @@ class ApplicationController < ActionController::Base
 
   before_filter :destroy_organisation_session!, :unless => :user_signed_in?
 
-
+  # Helper methods for organisation
+  include OrganisationHelpers
+  helper_method OrganisationHelpers.organisation_helper_methods
 #
 #  # Used to redirect after a user has signed_in
   #def after_sign_in_path_for(resource)
@@ -80,7 +82,10 @@ private
 
   # Sets the session for the organisation
   def set_organisation_session(organisation)
-    session[:organisation] = {:id => organisation.id, :name => organisation.name, :currency_id => organisation.currency_id }
+    session[:organisation] = {
+      :id => organisation.id, :name => organisation.name, 
+      :currency_id => organisation.currency_id, :currency_name => organisation.currency_name,
+      :currency_symbol => organisation.currency_symbol }
     set_organisation
   end
 

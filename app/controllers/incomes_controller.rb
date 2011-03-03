@@ -4,7 +4,7 @@
 class IncomesController < ApplicationController
 
   #before_filter :check_currency_set, :only => [:new, :edit, :create, :update]
-  before_filter :set_default_currency, :except => [:index, :destroy]
+  #before_filter :set_default_currency, :except => [:index, :destroy]
   before_filter :set_income, :only => [:show, :edit, :update, :destroy, :aprove]
 
 
@@ -93,9 +93,9 @@ class IncomesController < ApplicationController
   end
 
 private
-  def set_default_currency
-    @currency = Organisation.find(session[:organisation][:id]).currency
-  end
+  #def set_default_currency
+  #  @currency = Organisation.find(currency_id).currency
+  #end
 
   # Redirects in case that someone is trying to edit or destroy an  aproved income
   def redirect_income

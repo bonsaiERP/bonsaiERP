@@ -5,6 +5,7 @@ class Transaction < ActiveRecord::Base
   acts_as_org
 
   TYPES = ['Income', 'Expense', 'Buy']
+  DECIMALS = 2
   # Determines if the oprations is made on transaction or pay_plan or payment
   attr_reader :trans
   # callbacks
@@ -12,6 +13,7 @@ class Transaction < ActiveRecord::Base
   after_initialize :set_trans_to_true
   before_save :set_details_type
   before_save :calculate_total_and_set_balance, :if => :trans?
+  after_update :update_transaction_pay_plans, :if => :trans?
   after_create :update_payment_date
 
   # relationships
@@ -79,9 +81,7 @@ class Transaction < ActiveRecord::Base
 
   # Presents the total in currency unless the default currency
   def total_currency
-    #unless Organisation.find(OrganisationSession.organisation_id).id == self.currency_id
-    self.total/self.currency_exchange_rate
-    #end
+    (self.total/self.currency_exchange_rate).round(DECIMALS)
   end
 
   # Returns the total value of pay plans that haven't been paid'
@@ -153,6 +153,14 @@ class Transaction < ActiveRecord::Base
 
   def set_trans(value)
     @trans = value
+  end
+
+  # Returs the pay_type for the current instance
+  def pay_type
+    case type
+    when "Income" then "cobro"
+    when "Buy", "Expense" then "pago"
+    end
   end
 
 private

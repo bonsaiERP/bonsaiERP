@@ -46,24 +46,31 @@ class PayPlansController < ApplicationController
     begin
       @transaction = Transaction.org.find(params[:pay_plan][:transaction_id])
       @pay_plan = @transaction.new_pay_plan(params[:pay_plan])
-      #if @pay_plan.valid? and @transaction.create_pay_plans(params[:pay_plans])
-        #redirect_ajax(@pay_plan, :notice => 'Se ha creado una proforma de venta.')
-        render :partial => 'pay_plans', :locals => { :klass => @transaction, :pay_type => 'cobroT' }
-        #render :text => @transaction.pay_plans.to_json
-      #else
-      #  render :action => "new"
-      #end
+
+      if @pay_plan.valid? and @transaction.create_pay_plan(params[:pay_plan])
+        render :partial => 'pay_plans', :locals => { :klass => @transaction }
+      else
+        render :action => "new"
+      end
     rescue
+      render :text => "Existio un error por favor cierre la ventana."
     end
   end
 
   # PUT /pay_plans/1
   # PUT /pay_plans/1.xml
   def update
-    if @pay_plan.update_attributes(params[:pay_plan])
-      redirect_ajax(@pay_plan, :notice => 'PayPlans was successfully updated.')
-    else
-      render :action => "edit"
+    begin
+      @transaction = Transaction.org.find(params[:pay_plan][:transaction_id])
+      @pay_plan = @transaction.pay_plans.unpaid.find(params[:id])
+
+      if @pay_plan.valid? and @transaction.update_pay_plan(params[:pay_plan])
+        render :partial => 'pay_plans', :locals => { :klass => @transaction }
+      else
+        render :action => "new"
+      end
+    rescue
+      render :text => "Existio un error por favor cierre la ventana."
     end
   end
 

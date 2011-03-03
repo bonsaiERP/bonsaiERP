@@ -59,4 +59,9 @@ module ApplicationHelper
     active = (params[:option] == option) ? "active" : ""
     link_to text, "#{uri}?option=#{option}", options.merge(:class => active)
   end
+
+  # returns the minus image with a size
+  def minus_image(size = 16)
+    raw "<img src=\"/stylesheets/images/minus.png\" width=\"#{size}\" height=\"#{size}\" alt =\"menos\"/>"
+  end
 end

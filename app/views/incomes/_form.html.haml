@@ -1,5 +1,11 @@
 :css
-  input.price, input.quantity{ text-align: right; }
+  /*input.price, input.quantity{ text-align: right; }*/
+  input.price{
+    display: none;
+  }
+  #items_table .input{
+    margin: 2px 0px;
+  }
 
 = simple_form_for(@income, :html => {:id => 'income_form'}) do |f|
   = bonsai_form_error(f)
@@ -41,30 +47,38 @@
       %tr.item
         %td= fd.input :item_id, :label => false, :collection => Item.org.income.order(:name), :input_html => {:class => 'item fl'}
         %td= fd.input :description, :label => false
-        %td= fd.input :price, :input_html => { :size => 8, :class => 'price' }, :label => false
+        %td.cur
+          = fd.hidden_field :price, :class => 'price'
+          <span class="price_html">#{ntc fd.object.price}</span>
+        /, :input_html => { :size => 8, :class => 'price' }, :label => false
         %td= fd.input :quantity, :input_html => { :size => 8, :class => 'quantity' }, :label => false
         %td.total_row.r{'data-val' => fd.object.total }= ntc fd.object.total
         %td.del <a href="javascript:" class="destroy" title="Borrar">&nbsp;</a>
+    
     %tr.extra.pad_top
       %td{:colspan => 2}
-      %td.r{:colspan => 2} Subtotal
+      %td.cur{:colspan => 2} Subtotal
       %td#subtotal.r{'data-val' => @income.subtotal}= ntc(@income.subtotal)
+    
     %tr.extra
       %td{:colspan => 2} <a href="javascript:" id="add_item" class="add">Adicionar ítem</a>
-      %td.r{:colspan => 2} Descuento (<span id="discount_percentage" data-val="#{@income.discount}">#{ntc @income.discount}</span>%)
-      %td#discount_total.r{'data-val' => @income.total_discount}= "-#{ntc(@income.total_discount)}"
+      %td.cur{:colspan => 2} #{minus_image} Descuento (<span id="discount_percentage" data-val="#{@income.discount}">#{ntc @income.discount}</span>%)
+      %td#discount_total.r{'data-val' => @income.total_discount} #{ntc(@income.total_discount)}
+    
     %tr.extra
       %td{:colspan => 2}
-      %td.r.line{:colspan => 2} Impuestos (<span id="taxes_percentage" data-val="#{@income.tax_percent}">#{ntc @income.tax_percent}</span>%)
+      %td.cur.line{:colspan => 2} Impuestos (<span id="taxes_percentage" data-val="#{@income.tax_percent}">#{ntc @income.tax_percent}</span>%)
       %td#taxes_total.r.line{'data-val' => @income.total_taxes}= ntc @income.total_taxes
+    
     %tr.extra
       %td{:colspan => 2}
-      %td.r.b{:colspan => 2} Total
-      %td#total_value.b.r{ 'data-val'=>@income.total}= ntc @income.total
+      %td.r.b.dark{:colspan => 2} Total
+      %td#total_value.b.cur{ 'data-val'=>@income.total} #{currency_symbol} #{ntc @income.total}
+
     %tr.extra
       %td{:colspan => 2}
-      %td.r.b#currency_symbol{:colspan => 2}= currency_name(@income)
-      %td.r.b#total_value_currency= total_currency(@income)
+      %td.r.b.dark#currency_symbol{:colspan => 2}= @income.currency_name.pluralize
+      %td.cur.b#total_value_currency #{@income.currency_symbol} #{@income.total_currency}
   .actions
     = f.submit 'Salvar'
 
@@ -75,9 +89,15 @@
     var items = #{ Item.income.json.to_json };
     var currencies = #{ Currency.select("id, name, symbol").to_json };
     var exchange_rates = #{ CurrencyRate.active.select("rate, currency_id").to_json };
-    var default_currency_id = #{@currency.id};
+
+    var default_currency_id = #{currency_id};
     var income = new Income(items, "#income_form", {'default_currency_id': default_currency_id }, currencies, exchange_rates );
     window.income = income;
+
+    // Present hidden prices
+    $('.price').live('change', function() {
+      $(this).siblings('.price_html').html(_b.ntc($(this).val() ) );
+    });
 
     $('<a/>').text('Inventario').addClass('inventario').css({'display':'none', 'position': 'absolute', 'background': '#FFF', 'padding': '4px 10px'})
     .attr({'href':'javascript:', 'title':'Ver inventario'}).appendTo('body');

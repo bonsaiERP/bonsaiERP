@@ -54,14 +54,11 @@ module PayPlansModule
     @end = false
     i = 0
     total_sum = 0
-    #@pay_plans_list.each_with_index{|pp, ind| puts "amt: #{pp.amount}; i: #{ind}"}
 
     Transaction.transaction do
       while not @end
         pp = @pay_plans_list[i]
 
-        #puts pp.id.to_s + ' ' + pp.amount.to_s if pp == @current_pay_plan
-        #puts "#{total_sum} :: #{balance}"
         if (total_sum + pp.amount) >= balance
           pp.amount =  balance - total_sum
           @end = true
@@ -138,7 +135,6 @@ private
     delete_repeat_pay_plans_ids(pay_plans_list, ids)
     
     ids - pay_plans_list.map(&:id).compact
-    #puts "#{ids.to_json} #{}" if ids.any?
 
     int_pen_per = @current_pay_plan.interests_penalties/(balance - (sum - @current_pay_plan.amount))
 
@@ -166,6 +162,15 @@ private
     end
 
     pay_plans_list
+  end
+
+  # Method used when is working on edit the items or currency_exchange_rate
+  def update_transaction_pay_plans
+    @pay_plans_list = pay_plans.unpaid
+    if not (balance == pay_plans_total) and @pay_plans_list.any?
+      @current_pay_plan = @pay_plans_list.first
+      save_pay_plans_list
+    end
   end
 
 end

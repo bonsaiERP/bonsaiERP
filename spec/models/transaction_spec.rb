@@ -281,4 +281,21 @@ describe Transaction do
     t.pay_plans.unpaid.select{|v| v.id == pp.id }.size.should == 0
     #t.pay_plans.unpaid.each{|pp| puts "#{pp.id} #{pp.amount} #{pp.payment_date}"}
   end
+
+  it 'should update if transaction exchage_rate changes' do
+    t = Transaction.create(@params)
+    d = Date.today
+    pp = t.create_pay_plan(:amount => 100, :payment_date => d + 10.days, :interests_penalties => 34.43)
+    t = Transaction.find(t.id)
+
+    old_balance = t.balance
+
+    t.update_attributes(:currency_exchange_rate => 2)
+    t = Transaction.find(t.id)
+    
+    t.currency_exchange_rate.should == 2
+    t.balance.should == (old_balance/2).round(2)
+
+    t.pay_plans_total.should == t.balance
+  end
 end

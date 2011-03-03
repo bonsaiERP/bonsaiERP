@@ -16,3 +16,7 @@ end
 watch("app/(.*/.*)\.rb") do |match|
   run_spec %{spec/#{match[1]}_spec.rb}
 end
+
+watch("lib/pay_plans_module.rb") do
+  run_spec %{spec/models/transaction_spec.rb}
+end

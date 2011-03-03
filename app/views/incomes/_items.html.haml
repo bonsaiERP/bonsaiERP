@@ -14,46 +14,54 @@
         %tr
           %td= det.item
           %td= det.description
-          %td= ntc det.price
-          %td= det.quantity
-          %td.total_row.r= ntc det.total
+          %td.cur= ntc det.price
+          %td.cur= det.quantity
+          %td.total_row.cur= ntc det.total
 
     %tr.extra.pad_top
       %td{:colspan => 2}
       %td.r{:colspan => 2} Subtotal
       %td#subtotal.r= ntc income.gross_total
+
     %tr.extra
       %td{:colspan => 2}
-      %td.r{:colspan => 2} Descuento (<span id="discount_percentage" data-val="#{income.total_discount}">#{ntc income.discount}</span>%)
-      %td#discount_total.r= "-#{ntc income.total_discount}"
+      %td.r{:colspan => 2} #{minus_image} Descuento (<span id="discount_percentage" data-val="#{income.total_discount}">#{ntc income.discount}</span>%)
+      %td#discount_total.r= ntc income.total_discount
+
     %tr.extra
       %td{:colspan => 2}
       %td.r.line{:colspan => 2} Impuestos #{list_taxes income} (<span id="taxes_percentage" data-val="#{income.total_taxes}">#{ntc income.tax_percent}</span>%)
       %td#taxes_total.r.line= ntc income.total_taxes
+
     %tr.extra
       %td{:colspan => 2}
-      %td.r.b{:colspan => 2} Total
-      %td#total_value.r.b{'data-val' => income.total}= ntc income.total
-    - unless income == session[:organisation][:currency_id]
+        %td.r.b.dark{:colspan => 2} Total
+      %td#total_value.r.b{'data-val' => income.total} #{currency_symbol} #{ntc income.total}
+
+
+    - if not income.currency_id == currency_id
       %tr.extra
         %td{:colspan => 2}
-          %td.r.b{:colspan => 2} Total #{income.currency_name.pluralize}
+          %td.r.b.dark{:colspan => 2} Total #{income.currency_name.pluralize}
         %td#total_value.r.b{'data-val' => income.total_currency} #{income.currency_symbol} #{ntc income.total_currency}
+
+      - unless income.state == 'draft'
+        %tr.extra
+          %td{:colspan => 2}
+          %td.r.b.line.dark{:colspan => 2} #{minus_image} Cobrado #{income.currency_name.pluralize}
+          %td#total_payments.r.b.line{'data-val' => income.total_payments} #{income.currency_symbol} #{ntc( income.total_payments)}
+        %tr.extra
+          %td{:colspan => 2}
+            %td.r.b.dark{:colspan => 2} Saldo #{income.currency_name.pluralize}
+          %td#balance.r.b{'data-val' => income.balance} #{income.currency_symbol} #{ntc income.balance}
+
+    - elsif not income.state == 'draft'
       %tr.extra
         %td{:colspan => 2}
-        %td.r.b.line{:colspan => 2} Cobrado #{income.currency_name.pluralize}
-        %td#total_payments.r.b.line{'data-val' => income.total_payments} - #{income.currency_symbol} #{ntc( income.total_payments)}
+        %td.r.b.line.dark{:colspan => 2} #{minus_image} Cobrado
+        %td#total_payments.r.b.line{'data-val' => income.total_payments} #{income.currency_symbol} #{ntc( income.total_payments)}
       %tr.extra
         %td{:colspan => 2}
-          %td.r.b{:colspan => 2} Saldo #{income.currency_name.pluralize}
+        %td.r.b.dark{:colspan => 2} Saldo
         %td#balance.r.b{'data-val' => income.balance} #{income.currency_symbol} #{ntc income.balance}
-    - else
-      %tr.extra
-        %td{:colspan => 2}
-        %td.r.b.line{:colspan => 2} Cobrado
-        %td#total_payments.r.b.line{'data-val' => income.total_payments}= "-" + ntc( income.total_payments) 
-      %tr.extra
-        %td{:colspan => 2}
-        %td.r.b{:colspan => 2} Saldo
-        %td#balance.r.b{'data-val' => income.balance}= ntc income.balance
 

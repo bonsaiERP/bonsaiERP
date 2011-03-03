@@ -1,10 +1,10 @@
 #pay_plans
-  %h2.dark Plan de #{pay_type.pluralize} a crédito
+  %h2.dark Plan de #{transaction.pay_type.pluralize} a crédito
 
-  =link_to "Nuevo plan de #{pay_type}", 
-    new_pay_plan_path(:type => klass.class.to_s, :id => klass.id, :pay_type => pay_type),
-    :id => 'new_pay_plan_link', :class => 'new ajax', 'title' => "Nuevo plan de #{pay_type.singularize}",
-    'data-trigger' => 'pay_plan', 'data-width' => '700' unless klass.state == "paid"
+  =link_to "Nuevo plan de #{transaction.pay_type}", 
+    new_pay_plan_path(:type => transaction.class.to_s, :id => transaction.id, :pay_type => transaction.pay_type),
+    :id => 'new_pay_plan_link', :class => 'new ajax', 'title' => "Nuevo plan de #{transaction.pay_type.singularize}",
+    'data-trigger' => 'pay_plan', 'data-width' => '700' unless transaction.state == "paid"
 
   %table.decorated#pay_plans_table
     %thead
@@ -16,20 +16,20 @@
       %th Estado
       %th
       %th
-    - klass.pay_plans.each do |pp|
+    - transaction.pay_plans.each do |pp|
       %tr.pay_plan{:id => pp.id}
         %td.payment_date= lo pp.payment_date
         %td= lo pp.alert_date
-        %td.r.amount= ntc pp.amount
-        %td.r= ntc pp.interests_penalties
+        %td.r.amount #{transaction.currency_symbol} #{ntc pp.amount}
+        %td.r #{transaction.currency_symbol} #{ntc pp.interests_penalties}
         %td= pp.description
         %td.state= pp.state
         %td= link_to "Enviar email", email_pay_plan_path(pp), :class => 'email' unless pp.paid?
         %td
           - unless pp.paid?
-            = link_to 'editar', edit_pay_plan_path(pp, :pay_type => pay_type),
-              :class => 'ajax edit', :title => "Editar Plan de #{pay_type}", 'data-trigger' => "pay_plan"
-            = link_to 'borrar', pp, :class => 'delete', :title => "Borrar plan de #{pay_type}", 'data-remote' => true, 'data-trigger' => 'del-pay_plan'
+            = link_to 'editar', edit_pay_plan_path(pp, :pay_type => transaction.pay_type),
+              :class => 'ajax edit', :title => "Editar Plan de #{transaction.pay_type}", 'data-trigger' => "pay_plan"
+            = link_to 'borrar', pp, :class => 'delete', :title => "Borrar plan de #{transaction.pay_type}", 'data-remote' => true, 'data-trigger' => 'del-pay_plan'
 
 - id = Time.now.to_i
 %div{:id => id }
@@ -88,7 +88,7 @@
         $('#new_pay_plan_link').remove();
         $('#pay_plans_table a').remove();
       }else if( $('#new_pay_plan_link').length <= 0 ) {
-        var html = '<a title="Nuevo plan de #{pay_type}" id="new_pay_plan_link" data-width="700" data-trigger="pay_plan" class="new ajax" href="/pay_plans/new?id=1&amp;pay_type=#{pay_type}&amp;type=Income">Nuevo plan de #{pay_type}</a>';
+        var html = '<a title="Nuevo plan de #{transaction.pay_type}" id="new_pay_plan_link" data-width="700" data-trigger="pay_plan" class="new ajax" href="/pay_plans/new?id=1&amp;transaction.pay_type=#{transaction.pay_type}&amp;type=Income">Nuevo plan de #{transaction.pay_type}</a>';
         $('#pay_plans h2:first').after(html);
       }
     });

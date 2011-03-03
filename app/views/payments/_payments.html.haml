@@ -1,9 +1,9 @@
 #payments
-  %h2.dark #{pay_type.pluralize.titleize} realizados
+  %h2.dark #{transaction.pay_type.pluralize.titleize} realizados
 
-  = link_to "Nuevo #{pay_type}", new_payment_path(:type => klass.type.to_s, :id => klass.id, :payment_type => pay_type),
-    :class => 'new ajax', :title => "Nuevo #{pay_type}", :id => 'new_payment_link',
-    'data-width' => "700", 'data-trigger' => 'payment' unless klass.paid?
+  = link_to "Nuevo #{transaction.pay_type}", new_payment_path(:type => transaction.type.to_s, :id => transaction.id, :payment_type => transaction.pay_type),
+    :class => 'new ajax', :title => "Nuevo #{transaction.pay_type}", :id => 'new_payment_link',
+    'data-width' => "700", 'data-trigger' => 'payment' unless transaction.paid?
 
   %table.decorated.nwl#payments_table
     %thead
@@ -17,20 +17,20 @@
         %th
     
     %tbody
-      - klass.payments.each do |payment|
+      - transaction.payments.each do |payment|
         %tr.payment{ :id => payment.id, :class => payment.active.to_s }
           %td= lo payment.date
           %td= payment.description
           %td.account= payment.account
-          %td.r.amount{'data-val' => payment.amount}= ntc payment.amount
-          %td.r.interests_penalties{'data-val' => payment.interests_penalties}= ntc payment.interests_penalties
+          %td.r.amount{'data-val' => payment.amount} #{transaction.currency_symbol} #{ntc payment.amount}
+          %td.r.interests_penalties{'data-val' => payment.interests_penalties} #{transaction.currency_symbol} #{ntc payment.interests_penalties}
           %td.r.total_amount{'data-val' => payment.total_amount}= ntc payment.total_amount
-          %td.actions= nulled_payment(pay_type, payment)
+          %td.actions= nulled_payment(transaction.pay_type, payment)
 
     %tr.extra.pad_top
       %td{:colspan => 3}
-      %td.r.b{:colspan => 2} Total #{pay_type.pluralize} + Intereses/Penalidades
-      %td.r.b#total_payment= ntc klass.total_payments_with_interests
+      %td.r.b{:colspan => 2} Total #{transaction.pay_type.pluralize} + Intereses/Penalidades
+      %td.r.b#total_payment= ntc transaction.total_payments_with_interests
 
 :javascript
   $(function() {
@@ -43,7 +43,7 @@
           '<td class="r interests_penalties" data-val="${interests_penalties}">${_b.ntc(interests_penalties)}</td>',
           '<td class="r total_amount" data-val="${total_amount}">${_b.ntc(total_amount)}</td>',
           '<td class="actions">',
-          '<a data-method="put" class="null null_payment" href="/payments/${id}/null">Anular #{pay_type}</a></td>',
+          '<a data-method="put" class="null null_payment" href="/payments/${id}/null">Anular #{transaction.pay_type}</a></td>',
         '</tr>'
     ].join("");
     
@@ -52,8 +52,8 @@
     */
     $('#payments_table a.null_payment').live("click", function() {
       var account = $(this).parents('tr').addClass('marked').find('td.account').html();
-      var txt = "Al anular el #{pay_type} seleccionado se creara un registro en la cuenta \n" + account + " con valor negativo";
-      txt +=",\n Esta seguro de anular el #{pay_type}?";
+      var txt = "Al anular el #{transaction.pay_type} seleccionado se creara un registro en la cuenta \n" + account + " con valor negativo";
+      txt +=",\n Esta seguro de anular el #{transaction.pay_type}?";
       if(confirm(txt)) {
         $(this).parents('tr').removeClass('marked');
         Payment.nullPayment(this);
@@ -220,7 +220,7 @@
         $('#new_payment_link').remove();
         $('#payments_table a.null_payment').remove();
       }else if($('#new_payment_link').length <= 0){
-        var html = '<a title="Nuevo #{pay_type}" id="new_payment_link" data-width="700" data-trigger="payment" class="new ajax" href="/payments/new?id=1&amp;payment_type=#{pay_type}&amp;type=Income">Nuevo #{pay_type}</a>';
+        var html = '<a title="Nuevo #{transaction.pay_type}" id="new_payment_link" data-width="700" data-trigger="payment" class="new ajax" href="/payments/new?id=1&amp;payment_type=#{transaction.pay_type}&amp;type=Income">Nuevo #{transaction.pay_type}</a>';
         $('#payments h2.dark:first').after(html);
       }
     });

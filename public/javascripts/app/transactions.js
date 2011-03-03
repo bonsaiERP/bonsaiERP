@@ -21,9 +21,10 @@
       'items_table_id': '#items_table',
       'add_item_id': '#add_item',
       'default_currency_id': 1,
-      'one_item_table_warning': "Error: Debe existir al menos un ítem"
+      'one_item_table_warning': "Error: Debe existir al menos un ítem",
+      'currency_exchange_rate_id': ""
     };
-    Transaction.prototype.currency_id = 0;
+    Transaction.prototype.currency_id = 1;
     Transaction.prototype.exchange_rate = 1;
     function Transaction(items, trigger, conf) {
       var self;
@@ -35,6 +36,7 @@
       self = this;
       this.conf = $.extend(this.conf, conf);
       this.currency_id = $(this.conf.currency_id).val() * 1;
+      this.exchange_rate = $(this.conf.currency_exchange_rate_id).val() * 1;
       self.set_events();
     }
     Transaction.prototype.set_events = function() {
@@ -221,8 +223,8 @@
     };
     Transaction.prototype.calculate_discount = function() {
       var val;
-      val = (-1 * $(this.conf.discount_id).val()) / 100 * $(this.conf.subtotal_id).data("val") || 0;
-      $(this.conf.discount_total_id).html(_b.ntc(val)).data("val", val);
+      val = $(this.conf.discount_id).val() / 100 * $(this.conf.subtotal_id).data("val") || 0;
+      $(this.conf.discount_total_id).html(_b.ntc(val)).data("val", -1 * val);
       return this.calculate_taxes();
     };
     Transaction.prototype.calculate_taxes = function() {
@@ -232,9 +234,10 @@
       return this.calculate_total();
     };
     Transaction.prototype.calculate_total = function() {
-      var sum;
+      var currency, sum;
       sum = $(this.conf.subtotal_id).data("val") + $(this.conf.discount_total_id).data("val") + $(this.conf.taxes_total_id).data("val") || 0;
-      $(this.conf.total_id).html(_b.ntc(sum)).data("val", sum);
+      currency = this.find_currency(this.conf.default_currency_id);
+      $(this.conf.total_id).html("" + currency.symbol + " " + (_b.ntc(sum))).data("val", sum);
       return $('body').trigger('total', [sum]);
     };
     Transaction.prototype.add_item = function() {
@@ -310,7 +313,7 @@
       var currency, tot_currency;
       tot_currency = $(this.conf.total_id).data('val') / this.exchange_rate || 0;
       currency = this.find_currency(this.currency_id);
-      $('#total_value_currency').html("" + (_b.ntc(tot_currency)));
+      $('#total_value_currency').html("" + currency.symbol + " " + (_b.ntc(tot_currency)));
       return $('#currency_symbol').html("Total " + (currency.name.pluralize()));
     };
     Income.prototype.create_currency_message = function(currency) {
