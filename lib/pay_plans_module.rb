@@ -30,13 +30,23 @@ module PayPlansModule
     @current_pay_plan
   end
 
-  # Creates a pay plan to complete list
-  def add_new_pay_plan(total_sum)
-    p_last = @pay_plans_list.last
-    @pay_plans_list << new_pay_plan(:amount => balance - total_sum, :payment_date => p_last.payment_date + PAY_PLANS_DATE_SEPARATION)
+  # Destroys a pay plan
+  def destroy_pay_plan(pay_plan_id)
+    pay_plan_id = pay_plan_id.to_i
+    @pay_plans_list = pay_plans.unpaid
+    @pay_plans_list.each do |pp| 
+      if pp.id == pay_plan_id
+        pp.destroy_in_list = true 
+        @current_pay_plan = pp
+      end
+    end
+
+    save_pay_plans_list
+
+    @pay_plans_list.select{|v| v.id }.first
   end
 
-    # Saves the list of PayPlans
+  # Saves the list of PayPlans
   def save_pay_plans_list
     @pay_plans_list = sort_pay_plans_list(@pay_plans_list)
     @pay_plans_list = create_pay_plans_repeat_list(@pay_plans_list) if @current_pay_plan.repeat?
@@ -57,8 +67,14 @@ module PayPlansModule
           @end = true
         end
 
+        if pp.destroy_in_list
+          pp.destroy
+          @saved = pp.destroyed?
+          total_sum -= pp.amount
+        elsif pp.changed?
+          @saved = pp.save
+        end
 
-        @saved = pp.save if pp.changed?
         raise ActiveRecord::Rollback unless @saved
 
         total_sum += pp.amount
@@ -102,6 +118,12 @@ private
   def delete_repeat_pay_plans_ids(pay_plans_list, ids)
     ids = ids - pay_plans_list.map(&:id).compact
     PayPlan.destroy_all(:id => ids) if ids.any?
+  end
+
+  # Creates a pay plan to complete list
+  def add_new_pay_plan(total_sum)
+    p_last = @pay_plans_list.last
+    @pay_plans_list << new_pay_plan(:amount => balance - total_sum, :payment_date => p_last.payment_date + PAY_PLANS_DATE_SEPARATION)
   end
 
   # Creates a list with the sorted pay_plans list

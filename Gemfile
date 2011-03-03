@@ -42,5 +42,6 @@ group :test do
   gem 'factory_girl_rails'
   gem 'spork', '~>0.9.0.rc4'
   gem 'database_cleaner'
+  gem 'watchr'
 end  
 

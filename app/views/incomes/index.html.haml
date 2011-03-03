@@ -29,9 +29,9 @@
       %tr{ :class => cycle(:odd, :even) }
         %td= link_to income.ref_number, income
         %td= income.contact
-        %td= lo income.date
-        %td.r= with_currency income, income.real_total
-        %td.r= with_currency income, income.balance
+        %td.nw= lo income.date
+        %td.cur= with_currency income, income.real_total
+        %td.cur= with_currency income, income.balance
         %td <span class="#{income.real_state}">#{income.show_state}</span>
         %td= cash_credit(income.cash)
         %td= lo income.payment_date unless income.paid?

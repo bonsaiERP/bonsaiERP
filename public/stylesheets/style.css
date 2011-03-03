@@ -106,6 +106,10 @@ table.decorated tr.extra h3 { margin: 1px 0px; }
 table.decorated tr.extra td { padding: 6px; }
 table.decorated tr.pad_top td { padding-top: 15px; }
 table.decorated tr.false { color: #717171; }
+table.decorated td.cur {
+  text-align: right;
+  white-space: nowrap;
+}
 table.nwl td:last-child { white-space: nowrap; }
 table.nwf td:first-child { white-space: nowrap; }
 #main_wrap {
@@ -527,6 +531,7 @@ span.true, span.false {
 .l { text-align: left; }
 .c { text-align: center; }
 .r { text-align: right; }
+.nw { white-space: nowrap; }
 .fs11 { font-size: 110%; }
 .fs12 { font-size: 120%; }
 .fs13 { font-size: 130%; }

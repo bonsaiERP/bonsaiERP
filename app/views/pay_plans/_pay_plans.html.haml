@@ -31,25 +31,12 @@
               :class => 'ajax edit', :title => "Editar Plan de #{pay_type}", 'data-trigger' => "pay_plan"
             = link_to 'borrar', pp, :class => 'delete', :title => "Borrar plan de #{pay_type}", 'data-remote' => true, 'data-trigger' => 'del-pay_plan'
 
+- id = Time.now.to_i
+%div{:id => id }
+
 = hidden_field_tag "current_date", Date.today
 :javascript
   $(function() {
-    var template = [
-      '<tr id="${id}" class="pay_plan">',
-        '<td class="payment_date">${_b.dateFormat(payment_date)}</td>',
-        '<td>${_b.dateFormat(alert_date)}</td>',
-        '<td class="amount r">${_b.ntc(amount)}</td>',
-        '<td class="r">${_b.ntc(interests_penalties)}</td>',
-        '<td>${description}</td>',
-        '<td class="state">${payPlanState(payment_date)}</td>',
-        '<td><a href="/pay_plans/${id}/email" class="email">Enviar email</a></td>',
-        '<td>',
-          '<a title="Editar Plan de #{pay_type}" data-trigger="pay_plan" class="ajax edit" href="/pay_plans/${id}/edit?pay_type=#{pay_type}">editar</a> ',
-          '<a title="Borrar plan de #{pay_type}" class="delete" data-remote="true" data-trigger="del-pay_plan" href="/pay_plans/${id}">borrar</a>',
-        '</td>',
-      '</tr>'
-    ].join("")
-
     payPlanState = function(payment_date) {
       var payment_date = $.datepicker.parseDate('yy-mm-dd', payment_date );
       var current_date =  $.datepicker.parseDate('yy-mm-dd', $('#current_date').val() );
@@ -64,7 +51,13 @@
       return txt;
     }
 
+    //var $modal = $('##{id}').parents(".ajax-modal");
+    //$modal.dialog("close");
+    //alert($modal.html());
+
     window.payPlanState = payPlanState;
+
+
 
     /**
     * Checks for the td.state cells and sets the correct color for each

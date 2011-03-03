@@ -11,7 +11,8 @@ class PayPlan < ActiveRecord::Base
   #after_destroy :update_transaction
   
   # repeat repeats the pay_plan over until it fills the balance of a transaction
-  attr_accessor :repeat
+  attr_accessor :repeat, :destroy_in_list
+  attr_protected :destroy_in_list
 
   STATES = ["valid", "delayed", "payed"]
 

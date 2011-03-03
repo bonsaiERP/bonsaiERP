@@ -46,12 +46,13 @@ class PayPlansController < ApplicationController
     begin
       @transaction = Transaction.org.find(params[:pay_plan][:transaction_id])
       @pay_plan = @transaction.new_pay_plan(params[:pay_plan])
-      if @pay_plan.valid? and @transaction.create_pay_plans(params[:pay_plans])
+      #if @pay_plan.valid? and @transaction.create_pay_plans(params[:pay_plans])
         #redirect_ajax(@pay_plan, :notice => 'Se ha creado una proforma de venta.')
-        render :text => @transaction.pay_plans.to_json
-      else
-        render :action => "new"
-      end
+        render :partial => 'pay_plans', :locals => { :klass => @transaction, :pay_type => 'cobroT' }
+        #render :text => @transaction.pay_plans.to_json
+      #else
+      #  render :action => "new"
+      #end
     rescue
     end
   end
