@@ -208,6 +208,8 @@ describe Transaction do
 
     #t.pay_plans.unpaid.each{|pp| puts "#{pp.id} #{pp.amount} #{pp.payment_date}"}
     t.pay_plans_total.should == t.balance
+    t.cash.should == false
+
     t.pay_plans[1].amount.should == 50
     d2 = d + 15.days
     t.pay_plans[1].payment_date.should == d2
@@ -277,7 +279,6 @@ describe Transaction do
 
     t = Transaction.find(t.id)
     t.pay_plans_total.should == t.balance
-    #lambda{ raise "Error"}.should raise_error
     t.pay_plans.unpaid.select{|v| v.id == pp.id }.size.should == 0
     #t.pay_plans.unpaid.each{|pp| puts "#{pp.id} #{pp.amount} #{pp.payment_date}"}
   end

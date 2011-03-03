@@ -21,13 +21,13 @@ module PayPlansModule
     @current_pay_plan = @pay_plans_list[index]
 
     protected_attributes = PayPlan.protected_attributes.to_a.map(&:to_s)
-    params.each do |k , v|
-      @current_pay_plan.send(:"#{k}=", v) unless protected_attributes.include?(k.to_s)
-    end
+    @current_pay_plan.attributes = params
 
     save_pay_plans_list
 
     @current_pay_plan
+
+    @saved
   end
 
   # Destroys a pay plan
@@ -56,6 +56,10 @@ module PayPlansModule
     total_sum = 0
 
     Transaction.transaction do
+      set_trans(false)
+      self.cash = false
+      @saved = self.save
+
       while not @end
         pp = @pay_plans_list[i]
 

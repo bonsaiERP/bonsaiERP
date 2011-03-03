@@ -48,7 +48,8 @@ class PayPlansController < ApplicationController
       @pay_plan = @transaction.new_pay_plan(params[:pay_plan])
 
       if @pay_plan.valid? and @transaction.create_pay_plan(params[:pay_plan])
-        render :partial => 'pay_plans', :locals => { :klass => @transaction }
+        params[:ajax_modal] = true
+        render :partial => 'pay_plans', :locals => { :transaction => @transaction }
       else
         render :action => "new"
       end
@@ -62,12 +63,15 @@ class PayPlansController < ApplicationController
   def update
     begin
       @transaction = Transaction.org.find(params[:pay_plan][:transaction_id])
-      @pay_plan = @transaction.pay_plans.unpaid.find(params[:id])
+      @pay_plan = @transaction.new_pay_plan(params[:pay_plan])
+      options = params[:pay_plan].merge(:id => params[:id])
 
-      if @pay_plan.valid? and @transaction.update_pay_plan(params[:pay_plan])
-        render :partial => 'pay_plans', :locals => { :klass => @transaction }
+      if @pay_plan.valid? and @transaction.update_pay_plan(options) 
+        params[:ajax_modal] = true
+        render :partial => 'pay_plans', :locals => { :transaction => @transaction }
       else
-        render :action => "new"
+        @pay_plan.id = params[:id].to_i
+        render :action => "edit"
       end
     rescue
       render :text => "Existio un error por favor cierre la ventana."
@@ -77,8 +81,18 @@ class PayPlansController < ApplicationController
   # DELETE /pay_plans/1
   # DELETE /pay_plans/1.xml
   def destroy
-    @pay_plan.destroy
-    redirect_ajax @pay_plan
+    begin
+      @pay_plan = PayPlan.find(params[:id])
+      @transaction = Transaction.org.find(@pay_plan.transaction_id)
+
+      if @transaction.destroy_pay_plan(@pay_plan.id)
+        render :partial => 'pay_plans', :locals => { :transaction => @transaction }
+      else
+        render :text => {:success => false}.to_json
+      end
+    rescue
+      render :text => "Existio un error por favor cierre la ventana."
+    end
   end
 
 private
