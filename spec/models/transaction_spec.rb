@@ -282,7 +282,7 @@ describe Transaction do
     #t.pay_plans.unpaid.each{|pp| puts "#{pp.id} #{pp.amount} #{pp.payment_date}"}
   end
 
-  it 'should update if transaction exchage_rate changes' do
+  it 'should update if transaction updates balance' do
     t = Transaction.create(@params)
     d = Date.today
     pp = t.create_pay_plan(:amount => 100, :payment_date => d + 10.days, :interests_penalties => 34.43)
@@ -298,4 +298,5 @@ describe Transaction do
 
     t.pay_plans_total.should == t.balance
   end
+
 end
