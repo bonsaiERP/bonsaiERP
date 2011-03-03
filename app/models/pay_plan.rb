@@ -20,7 +20,7 @@ class PayPlan < ActiveRecord::Base
   belongs_to :currency
 
   # delegations
-  delegate :currency_id, :pay_plans_balance, :pay_plans_total, :payment_date, :real_state, :paid?, :cash, :ref_number, :draft?, :balance, :state,
+  delegate :currency_id, :pay_plans_balance, :pay_plans_total, :payment_date, :real_state, :paid?, :cash, :ref_number, :draft?, :balance, :state, :type,
     :to => :transaction, :prefix => true
   delegate :name, :symbol, :to => :currency, :prefix => true
 
@@ -28,6 +28,7 @@ class PayPlan < ActiveRecord::Base
   validate :valid_income_or_interests_penalties_filled
   #validate :valid_pay_plans_total_amount
   validates_presence_of :payment_date, :alert_date
+  validate :valid_payment_date_alert_date
 
   # scopes
   scope :unpaid, where(:paid => false)
@@ -56,11 +57,26 @@ class PayPlan < ActiveRecord::Base
     ).to_json
   end
 
+  # method that describes the type of payment
+  def pay_type
+    case transaction_type
+    when "Income" then "cobro"
+    when "Buy", "Expense" then "pago"
+    end
+  end
+
 private
   # checks if income or interests_penalties is filled
   def valid_income_or_interests_penalties_filled
     if amount <= 0 and interests_penalties <= 0
       errors.add(:amount, "Cantidad o Intereses/Penalidades debe ser mayor a 0")
+    end
+  end
+
+  # checks that payment_date is greater or equal to alert_date
+  def valid_payment_date_alert_date
+    if alert_date > payment_date
+      errors.add(:alert_date, "La fecha de alerta debe ser inferior o igual a la fecha de #{pay_type}")
     end
   end
 

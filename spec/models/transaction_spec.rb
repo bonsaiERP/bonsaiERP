@@ -153,21 +153,12 @@ describe Transaction do
     p.amount.should == t.pay_plans_balance
     p.payment_date.should == d
   end
-  
-  #it 'should not allow a quantity greater than the balance' do
-  #  t = Transaction.create(@params)
-  #  d = Date.today
-  #  
-  #  p = t.new_pay_plan(:amount => t.balance + 10, :payment_date => d + 3.days)
-  #  p.amount.should == t.balance + 10
-  #  p.valid?.should == false
-  #  p.errors[:amount].should_not == blank?
-  #end
 
-  it 'should create a complete pay_plan balance' do
+  it 'should create a complete pay_plan balance with interests' do
     t = Transaction.create(@params)
     d = Date.today
-    pp = t.create_pay_plan(:amount => 100, :payment_date => d + 10.days, :interests_penalties => 34.43)
+    pp = t.create_pay_plan(:amount => 100, :payment_date => d + 10.days, :interests_penalties => 34.44)
+
 
     pp.class.should == PayPlan
     #pp.should == t.pay_plans.unpaid.first
@@ -175,6 +166,13 @@ describe Transaction do
 
     t.pay_plans.unpaid.size.should == 4
     t.pay_plans_total.should == t.balance
+
+    t.pay_plans.unpaid[0].amount.should == 100
+    #t.pay_plans.unpaid.each{|pp| puts "#{pp.id} #{pp.amount} #{pp.interests_penalties} #{pp.payment_date}"}
+    t.pay_plans.unpaid[0].interests_penalties.should == (t.balance * 0.10).round(2)
+    t.pay_plans.unpaid[1].interests_penalties.should == ((t.balance - 100) * 0.10).round(2)
+    t.pay_plans.unpaid[2].interests_penalties.should == ((t.balance - 200) * 0.10).round(2)
+    t.pay_plans.unpaid[3].interests_penalties.should == ((t.balance - 300) * 0.10).round(2)
 
   end
 
@@ -219,14 +217,13 @@ describe Transaction do
     t.pay_plans[5].payment_date.should == d2 + 4.months
   end
 
-  it 'should update' do
+  it 'should update with a greater amount' do
     t = Transaction.create(@params)
     d = Date.today
     pp = t.create_pay_plan(:amount => 100, :payment_date => d + 10.days, :interests_penalties => 34.43)
 
     t = Transaction.find(t.id)
     pp = t.pay_plans.unpaid[1]
-    puts "---------"
     t.update_pay_plan(:id => pp.id, :amount => 150)
 
     t = Transaction.find(t.id)
@@ -234,6 +231,37 @@ describe Transaction do
     t.pay_plans.unpaid[1].amount.should == 150
   end
 
+  it 'should update with repeat' do
+    t = Transaction.create(@params)
+    d = Date.today
+    pp = t.create_pay_plan(:amount => 100, :payment_date => d + 10.days, :interests_penalties => 34.43)
 
+    t = Transaction.find(t.id)
+    pp = t.pay_plans.unpaid[1]
+    t.update_pay_plan(:id => pp.id, :amount => 50, :repeat => '1')
+    
+    t = Transaction.find(t.id)
+    t.pay_plans_total.should == t.balance
+    t.pay_plans.unpaid[1].amount.should == 50
+    t.pay_plans.unpaid[2].amount.should == 50
+    t.pay_plans.unpaid[3].amount.should == 50
+    t.pay_plans.unpaid[4].amount.should == 50
+    t.pay_plans.unpaid[5].amount.should_not == 50
+  end
+
+  it 'should allow a an update with less amount' do
+    t = Transaction.create(@params)
+    d = Date.today
+    pp = t.create_pay_plan(:amount => 100, :payment_date => d + 10.days, :interests_penalties => 34.43)
+
+    t = Transaction.find(t.id)
+
+    pp = t.pay_plans.unpaid.first
+    t.update_pay_plan(:id => pp.id, :amount => 80)
+
+    t = Transaction.find(t.id)
+    t.pay_plans.unpaid.first.amount.should == 80
+    t.pay_plans_total.should == t.balance
+  end
 
 end

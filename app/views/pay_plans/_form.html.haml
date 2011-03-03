@@ -2,7 +2,7 @@
   = hidden_field_tag "pay_type", params[:pay_type]
   = f.input :ctype, :as => :hidden
   = f.input :transaction_id, :as => :hidden
-  = f.input :payment_date, :label => 'Fecha de cobro'
+  = f.input :payment_date, :label => "Fecha de #{@pay_plan.pay_type}"
   = f.input :alert_date, :label => 'Fecha de advertencia'
   .clear
   = f.input :amount, :label => currency_label('Cantidad', @pay_plan), :input_html => {:size => 12}

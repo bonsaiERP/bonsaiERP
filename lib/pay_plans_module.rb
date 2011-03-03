@@ -1,4 +1,9 @@
 module PayPlansModule
+
+  MAX_PAY_PLANS_SIZE = 50
+  PAY_PLANS_DATE_SEPARATION = 1.month
+  DECIMALS = 2
+
   # method to create pay plans
   # @param Hash
   def create_pay_plan(params = {})
@@ -25,6 +30,12 @@ module PayPlansModule
     @current_pay_plan
   end
 
+  # Creates a pay plan to complete list
+  def add_new_pay_plan(total_sum)
+    p_last = @pay_plans_list.last
+    @pay_plans_list << new_pay_plan(:amount => balance - total_sum, :payment_date => p_last.payment_date + PAY_PLANS_DATE_SEPARATION)
+  end
+
     # Saves the list of PayPlans
   def save_pay_plans_list
     @pay_plans_list = sort_pay_plans_list(@pay_plans_list)
@@ -46,6 +57,7 @@ module PayPlansModule
           @end = true
         end
 
+
         @saved = pp.save if pp.changed?
         raise ActiveRecord::Rollback unless @saved
 
@@ -54,6 +66,8 @@ module PayPlansModule
         if total_sum >= balance
           @end = true
         end
+
+        add_new_pay_plan(total_sum) if @pay_plans_list.size == i
         break if @end or not @saved
       end
     end
@@ -104,7 +118,6 @@ private
     ids - pay_plans_list.map(&:id).compact
     #puts "#{ids.to_json} #{}" if ids.any?
 
-
     int_pen_per = @current_pay_plan.interests_penalties/(balance - (sum - @current_pay_plan.amount))
 
     if sum < balance
@@ -119,14 +132,13 @@ private
         else
           amount = @current_pay_plan.amount
         end
-        #int_pen = int_pen_per * (balance - sum)
 
-        int_pen = sum 
+        int_pen = ( (balance - sum) * int_pen_per ).round(DECIMALS)
         sum += amount
-        pp_payment_date = actual_pay_plan.payment_date + 1.month
+        pp_payment_date = actual_pay_plan.payment_date + PAY_PLANS_DATE_SEPARATION
         pp_alert_date = actual_pay_plan.payment_date - 5.days
 
-        pay_plans_list << new_pay_plan(:payment_date => pp_payment_date, 
+        pay_plans_list << new_pay_plan(:payment_date => pp_payment_date, :interests_penalties  => int_pen,
                                       :alert_date => pp_alert_date, :amount => amount)
       end
     end
