@@ -31,19 +31,32 @@ module PayPlansModule
   end
 
   # Destroys a pay plan
-  def destroy_pay_plan(pay_plan_id)
+  def destroy_pay_plan(pay_plan_id = nil)
     pay_plan_id = pay_plan_id.to_i
     @pay_plans_list = pay_plans.unpaid
-    @pay_plans_list.each do |pp| 
-      if pp.id == pay_plan_id
-        pp.destroy_in_list = true 
-        @current_pay_plan = pp
+
+    if @pay_plans_list.size == 1 and @pay_plans_list.first.id == pay_plan_id
+      destroy_last_pay_plan(pay_plan_id)
+    else
+      @current_pay_plan = @pay_plans_list.select{|pp| pp.id == pay_plan_id }.first
+
+      if @pay_plans_list.last.id == @current_pay_plan.id
+        pp = @pay_plans_list.size[@pay_plans_list.size - 2]
+      else
+        pp = @pay_plans_list.last
       end
+
+      pp.amount = pp.amount + @current_pay_plan.amount
+      @pay_plans_list.delete(@current_pay_plan)
+      
+      Transaction.transaction do
+        raise ActiveRecord::Rollback unless pp.save
+        @current_pay_plan.destroy
+        raise ActiveRecord::Rollback unless @current_pay_plan.destroyed?
+      end
+      
+      @current_pay_plan
     end
-
-    save_pay_plans_list
-
-    @pay_plans_list.select{|v| v.id }.first
   end
 
   # Saves the list of PayPlans
@@ -56,9 +69,7 @@ module PayPlansModule
     total_sum = 0
 
     Transaction.transaction do
-      set_trans(false)
-      self.cash = false
-      @saved = self.save
+      @saved = update_transaction_cash(false) if cash?
 
       while not @end
         pp = @pay_plans_list[i]
@@ -68,11 +79,11 @@ module PayPlansModule
           @end = true
         end
 
-        if pp.destroy_in_list
-          pp.destroy
-          @saved = pp.destroyed?
-          total_sum -= pp.amount
-        elsif pp.changed?
+        #if pp.destroy_in_list
+        #  pp.destroy
+        #  @saved = pp.destroyed?
+        #  total_sum -= pp.amount
+        if pp.changed?
           @saved = pp.save
         end
 
@@ -177,4 +188,21 @@ private
     end
   end
 
+  def update_transaction_cash(val)
+    set_trans(val)
+    self.cash = val
+    self.save
+  end
+
+  def destroy_last_pay_plan(pay_plan_id)
+    saved = true
+    Transaction.transaction do 
+      saved = pay_plans.find(pay_plan_id).destroy.destroyed?
+      raise ActiveRecord::Rollback unless saved
+      saved = update_transaction_cash(true)
+      raise ActiveRecord::Rollback unless saved
+    end
+
+    saved
+  end
 end

@@ -300,4 +300,38 @@ describe Transaction do
     t.pay_plans_total.should == t.balance
   end
 
+  it 'should destroy all and update transaction' do
+    t = Transaction.create(@params)
+    d = Date.today
+    pp = t.create_pay_plan(:amount => 100, :payment_date => d + 10.days, :interests_penalties => 34.43)
+    t = Transaction.find(t.id)
+    t.pay_plans.unpaid.size.should == 4
+    
+    t.cash.should == false
+
+    ids = t.pay_plans.unpaid.map(&:id)
+    t.destroy_pay_plan(ids[0])
+
+    t = Transaction.find(t.id)
+    t.pay_plans.unpaid.size.should == 3
+    t.pay_plans_total.should == t.balance
+
+    t.destroy_pay_plan(ids[1])
+    t = Transaction.find(t.id)
+    t.pay_plans.unpaid.size.should == 2
+    t.pay_plans_total.should == t.balance
+
+    t.destroy_pay_plan(ids[2])
+    t = Transaction.find(t.id)
+    t.pay_plans.unpaid.size.should == 1
+    t.pay_plans_total.should == t.balance
+
+    puts "---------"
+    puts t.pay_plans.unpaid.size
+    #pp_id = t.pay_plans.unpaid.first.id
+    t.destroy_pay_plan(ids[3])
+    t = Transaction.find(t.id)
+    t.pay_plans.unpaid.size.should == 0
+    t.cash.should == true
+  end
 end
