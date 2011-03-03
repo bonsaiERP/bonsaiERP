@@ -326,8 +326,6 @@ describe Transaction do
     t.pay_plans.unpaid.size.should == 1
     t.pay_plans_total.should == t.balance
 
-    puts "---------"
-    puts t.pay_plans.unpaid.size
     #pp_id = t.pay_plans.unpaid.first.id
     t.destroy_pay_plan(ids[3])
     t = Transaction.find(t.id)
