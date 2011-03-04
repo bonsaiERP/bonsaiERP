@@ -1,5 +1,5 @@
 #payments
-  %h2.dark #{transaction.pay_type.pluralize.titleize} realizados
+  %h2 #{transaction.pay_type.pluralize.titleize} realizados
 
   = link_to "Nuevo #{transaction.pay_type}", new_payment_path(:type => transaction.type.to_s, :id => transaction.id, :payment_type => transaction.pay_type),
     :class => 'new ajax', :title => "Nuevo #{transaction.pay_type}", :id => 'new_payment_link',
@@ -221,7 +221,7 @@
         $('#payments_table a.null_payment').remove();
       }else if($('#new_payment_link').length <= 0){
         var html = '<a title="Nuevo #{transaction.pay_type}" id="new_payment_link" data-width="700" data-trigger="payment" class="new ajax" href="/payments/new?id=1&amp;payment_type=#{transaction.pay_type}&amp;type=Income">Nuevo #{transaction.pay_type}</a>';
-        $('#payments h2.dark:first').after(html);
+        $('#payments h2:first').after(html);
       }
     });
   })

@@ -3,16 +3,22 @@
   td.r{width: 110px; }
   td.check{width: 120px;}
   td.d{ width: 70px; }
+  a.concile{
+    float:left;
+    display: inline-block;
+    margin-right: 4px;
+  }
 
 - ledgers = account_ledgers.includes(:payment, :contact).page(@page)
 
 = link_to "Nueva transacción", new_account_ledger_path, :class => 'new'
 
+.clear
 = link_to "Buscar", "#", :class => 'search'
 /"#", :style => 'display:block;float:left;margin:10px'
-.fl._50= paginate ledgers
+= paginate ledgers
 
-%table.decorated
+%table.decorated.nwl.nwf
   %tr
     %th Fecha
     %th Ref/Nº Cheque
@@ -23,11 +29,11 @@
   - ledgers.each do |al|
     %tr{:class => al.income.to_s + '_in' }
       %td.d= link_to(lo(al.date), al)
-      %td.check
+      %td.check= al.reference
       %td.r= with_currency(al, al.amount)
       %td= link_to al.contact, al.contact if al.contact_id
       %td= link_description al
       %td
-        = link_to "Conciliar", al
+        = link_to "Conciliar", al, :class => 'concile'
         = link_to "borrar", "", :class => 'delete', 'data-remote' => true, :title => 'Borrar'
 

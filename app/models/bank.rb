@@ -26,6 +26,7 @@ private
     if val > 0
       bl = self.account_ledgers.build(:amount => amount, :date => Date.today, 
                                       :currency_id => currency_id,
+                                      :reference => 'NE',
                                       :description => 'Primer ingreso por creación de banco')
       bl.save
     end

@@ -1,15 +1,17 @@
 %h1 Items
 
-%div.search
+%div.search{:style => 'display:none'}
   =form_tag "/items", :method => 'get'
   %strong.dark Código o nombre
   =text_field_tag 'name_code', params[:search], :size => 40
   =submit_tag 'Buscar'
 
+= link_to "Nuevo ítem", new_item_path, :class => 'new'
+.clear
 
-%p.links= link_to "Nuevo ítem", new_item_path, :class => 'new'
-
-%table{ :class=> "decorated mt10" }
+= link_to "Buscar", "#", :class => 'search'
+= paginate @items
+%table{ :class=> "decorated" }
   %tr
     %th Código
     %th.300 Nombre

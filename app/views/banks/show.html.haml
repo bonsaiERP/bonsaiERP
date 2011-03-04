@@ -36,7 +36,7 @@
   .clear
 .clear
 
-%h2.dark Transacciones
+%h2 Transacciones
 = render "account_ledgers/list", :account_ledgers => @bank.account_ledgers.includes(:payment)
 
 :javascript

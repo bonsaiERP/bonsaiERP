@@ -10,13 +10,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110227164725) do
+ActiveRecord::Schema.define(:version => 20110304192835) do
 
   create_table "account_ledgers", :force => true do |t|
     t.integer  "organisation_id"
     t.integer  "account_id"
     t.integer  "currency_id"
-    t.decimal  "amount",          :precision => 14, :scale => 2
+    t.decimal  "amount",                         :precision => 14, :scale => 2
     t.date     "date"
     t.integer  "payment_id"
     t.boolean  "income"
@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(:version => 20110227164725) do
     t.boolean  "conciliation"
     t.text     "description"
     t.integer  "transaction_id"
+    t.string   "reference",       :limit => 100
   end
 
   add_index "account_ledgers", ["account_id"], :name => "index_account_ledgers_on_account_id"
@@ -37,6 +38,7 @@ ActiveRecord::Schema.define(:version => 20110227164725) do
   add_index "account_ledgers", ["income"], :name => "index_account_ledgers_on_income"
   add_index "account_ledgers", ["organisation_id"], :name => "index_account_ledgers_on_organisation_id"
   add_index "account_ledgers", ["payment_id"], :name => "index_account_ledgers_on_payment_id"
+  add_index "account_ledgers", ["reference"], :name => "index_account_ledgers_on_reference"
   add_index "account_ledgers", ["transaction_id"], :name => "index_account_ledgers_on_transaction_id"
 
   create_table "accounts", :force => true do |t|
@@ -193,8 +195,8 @@ ActiveRecord::Schema.define(:version => 20110227164725) do
     t.integer  "organisation_id"
     t.string   "ctype"
     t.date     "date"
-    t.decimal  "amount",              :precision => 14, :scale => 2
-    t.decimal  "interests_penalties", :precision => 14, :scale => 2
+    t.decimal  "amount",                            :precision => 14, :scale => 2
+    t.decimal  "interests_penalties",               :precision => 14, :scale => 2
     t.string   "description"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -202,7 +204,8 @@ ActiveRecord::Schema.define(:version => 20110227164725) do
     t.integer  "currency_id"
     t.boolean  "active"
     t.integer  "contact_id"
-    t.string   "reference"
+    t.string   "reference",           :limit => 50
+    t.string   "state",               :limit => 20
   end
 
   add_index "payments", ["account_id"], :name => "index_payments_on_account_id"
@@ -213,6 +216,7 @@ ActiveRecord::Schema.define(:version => 20110227164725) do
   add_index "payments", ["date"], :name => "index_payments_on_date"
   add_index "payments", ["organisation_id"], :name => "index_payments_on_organisation_id"
   add_index "payments", ["reference"], :name => "index_payments_on_reference"
+  add_index "payments", ["state"], :name => "index_payments_on_state"
   add_index "payments", ["transaction_id"], :name => "index_payments_on_transaction_id"
 
   create_table "prices", :force => true do |t|

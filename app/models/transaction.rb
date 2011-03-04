@@ -44,6 +44,11 @@ class Transaction < ActiveRecord::Base
     CODE
   end
 
+  # downcased type
+  def typed
+    type.downcase
+  end
+
   # Transalates the type for any language
   def type_translated
     arr = case I18n.locale

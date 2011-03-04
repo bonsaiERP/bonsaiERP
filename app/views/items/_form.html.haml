@@ -14,7 +14,7 @@
   = f.input :ctype, :label => 'Tipo', :collection => Item.get_types, :as => :radio
   .clear
   /= f.input :discount, :label => 'Descuento en venta (%)', :hint => 'Ej: 10:2.5 20:4'
-  = f.input :tag_list, :label => 'Etiquetas', :hint => 'Escriba palabras separadas por comas, Ej.: grande, costoso'
+  /= f.input :tag_list, :label => 'Etiquetas', :hint => 'Escriba palabras separadas por comas, Ej.: grande, costoso'
   = f.input :description, :as => :text, :input_html => {:rows => 5}
   .clear
   

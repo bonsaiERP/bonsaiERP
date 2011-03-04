@@ -1,5 +1,5 @@
 #pay_plans
-  %h2.dark Plan de #{transaction.pay_type.pluralize} a crédito
+  %h2 Plan de #{transaction.pay_type.pluralize} a crédito
 
   =link_to "Nuevo plan de #{transaction.pay_type}", 
     new_pay_plan_path(:type => transaction.class.to_s, :id => transaction.id, :pay_type => transaction.pay_type),
@@ -31,7 +31,7 @@
           - unless pp.paid?
             = link_to 'editar', edit_pay_plan_path(pp, :pay_type => transaction.pay_type),
               :class => 'ajax edit', :title => "Editar Plan de #{transaction.pay_type}", 'data-trigger' => "pay_plan"
-            = link_to 'borrar', pp, :class => 'delete', :title => "Borrar plan de #{transaction.pay_type}", 'data-remote' => true, 'data-trigger' => 'del-pay_plan'
+            = link_to 'borrar', pp, :class => 'destroy', :title => "Borrar plan de #{transaction.pay_type}", 'data-remote' => true, 'data-trigger' => 'del-pay_plan'
 
 
 -if params[:ajax_modal]
@@ -40,13 +40,33 @@
   :javascript
     $(function() {
       var $modal = $("##{id}").parents('.ajax-modal');
-      $('##{transaction.type.downcase}_pay_plans').html($modal.html()).mark();
+      $('##{transaction.typed}_pay_plans').html($modal.html()).mark();
       $modal.dialog("close");
       $('body').trigger('transaction', [{'credit': #{transaction.cash} }]);
     })
 -else
   :javascript
     $(function() {
+      $('#pay_plans_table').find('a.destroy').live('click', function() {
+        $(this).parents('tr').addClass('marked');
+
+        if(comfirm("Esta seguro de borrar el plan #{transaction.pay_type}"))
+          var link = this;
+          $.ajax({
+            'url': $(link).attr("href"),
+            'data': {'authenticity_token': csrf_token },
+            'type': 'delete',
+            'success':function(resp) {
+              $('##{transaction.typed}_pay_plans').html(resp);
+            },
+            'error': function() {
+              alert("Existio un error al borrar");
+              $(this).parents('tr').removeClass('marked');
+            }
+          });
+        return false;
+      });
+
       payPlanState = function(payment_date) {
         var payment_date = $.datepicker.parseDate('yy-mm-dd', payment_date );
         var current_date =  $.datepicker.parseDate('yy-mm-dd', $('#current_date').val() );

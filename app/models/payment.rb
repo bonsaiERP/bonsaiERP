@@ -5,27 +5,32 @@ class Payment < ActiveRecord::Base
   acts_as_org
 
   attr_reader :pay_plan, :updated_pay_plan_ids
+  attr_protected :state
+  STATES = ['conciliation', 'paid']
 
   # callbacks
   after_initialize :set_defaults, :if => :new_record?
   before_create :set_currency_id, :if => :new_record?
   before_create :set_cash_amount, :if => :transaction_cash?
+  before_save :set_state, :if => :nil_state?
   # update_pay_plan must run before update_transaction
-  after_save  :update_pay_plan
-  after_save  :update_transaction
-  after_save  :create_account_ledger
+  after_save  :update_pay_plan, :if => :paid?
+  after_save  :update_transaction, :if => :paid?
+  after_save  :create_account_ledger, :if => :conciliation?
 
   # relationships
   belongs_to :transaction
   belongs_to :account
   belongs_to :currency
   belongs_to :contact
-  has_many :account_ledgers
+  has_one :account_ledger
 
   delegate :state, :type, :cash, :cash?, :real_state, :balance, :contact_id, :paid?, :ref_number, :type,
     :to => :transaction, :prefix => true
 
   delegate :name, :symbol, :to => :currency, :prefix => true
+
+  delegate :type, :name, :number, :to => :account, :prefix => true
 
   # validations
   validates_presence_of :account_id, :transaction_id, :reference
@@ -34,6 +39,14 @@ class Payment < ActiveRecord::Base
 
   # scopes
   scope :active, where(:active => true)
+
+  STATES.each do |st|
+    class_eval <<-CODE, __FILE__, __LINE__ + 1
+      def #{st}?
+        "#{st}" == state
+      end
+    CODE
+  end
 
   # Overide the dault to_json method
   def to_json
@@ -138,7 +151,7 @@ private
     AccountLedger.create(:account_id => account_id, :payment_id => id, 
                          :currency_id => currency_id, :contact_id => transaction_contact_id,
                          :amount => tot, :date => date, :income => income, :transaction_id => transaction_id,
-                         :description => set_account_ledger_text)
+                         :description => set_account_ledger_text, :reference => reference)
   end
 
   # Creates the account_ledger text
@@ -153,5 +166,19 @@ private
   # Sets the amount for cash
   def set_cash_amount
     self.amount = transaction_balance
+  end
+
+  def nil_state?
+    state.blank?
+  end
+
+  # Sets the state accoording to the account
+  def set_state
+    case account_type
+    when "Bank" 
+      self.state = "conciliation"
+    when "CashRegister" 
+      self.state = "paid"
+    end
   end
 end

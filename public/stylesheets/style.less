@@ -144,10 +144,13 @@ table.decorated{
     a.edit, a.delete, a.destroy{
       width:16px;
       height: 16px;
-      display: inline-block;
+      display: block;
+      float: left;
       text-indent: -1000em;
+      overflow: hidden;
+      font-size: 0px;
       margin: 0px;
-      padding: 0px;
+      padding: 0px 2px;
     }
   }
   td.line{ border-bottom: 1px solid @grey; }
@@ -211,6 +214,7 @@ table.nwf{
 #cont-in{
   padding: 10px 15px 90px;
 }
+
 
 #header{
   height: 59px;
@@ -356,7 +360,9 @@ ul#main_menu{
   margin: 4px 0px 20px;
   color: @dark;
 }
-
+h1{ font-size: 2.2em; color: @dark; }
+h2{ font-size: 1.7em; color: @dark;}
+h3{ font-size: 1.3em; color: @dark;}
 .error{
   color: @red;
 }
@@ -379,11 +385,12 @@ ul#main_menu{
   width: 40%;
   float:right;
   text-align: right;
+  clear: both;
 }
 
 a.new{
   .link;
-  display: table;
+  display: inline-block;
   background: @white_tan url(images/add.png) no-repeat scroll 4px 50%;
   border: 1px solid @grey;
   padding: 5px 8px 5px 26px;
@@ -693,6 +700,7 @@ span.true, span.false{
   padding: 5px;
 }
 .ajax-modal{
+  background-color: #FFF !important;
   .links{ display: none; }
   a{
     color: @link !important;
@@ -758,7 +766,7 @@ ul.tabs{
   background-color: @white_tan;
   height: 35px;
   padding: 0px 15px;
-  margin-bottom: 20px;
+  margin:0px 0px 20px;
   border-bottom: 1px solid @grey;
   li{
     display: inline;
@@ -818,6 +826,12 @@ ul.breadcrumps{
   font-weight: bold;
   float:left;
   margin: 10px;
+}
+/*IE7*/
+.prev, .page, .next{
+  font-weight: bold;
+  display: inline-block;
+  margin: 0px 3px;
 }
 a.search{
   font-weight: bold;

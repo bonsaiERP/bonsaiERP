@@ -205,6 +205,9 @@
       e.stopPropagation();
       return false;
     });
+    $('a.search').live("click", function() {
+      return $(this).siblings("div.search").show(speed);
+    });
     currency = {
       'separator': ",",
       'delimiter': '.',

@@ -65,7 +65,7 @@ class ProjectsController < ApplicationController
   end
 
 private
-  def set_payment
+  def set_project
     @project = Project.org.find(params[:id])
   end
 end

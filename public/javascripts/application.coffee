@@ -205,6 +205,11 @@ $(document).ready(->
     false
   )
 
+  # To present the search
+  $('a.search').live("click", ->
+    $(this).siblings("div.search").show(speed)
+  )
+
   currency = {'separator': ",", 'delimiter': '.', 'precision': 2}
   _b.currency = currency
   # ntc similar function to Ruby on rails number_to_currency

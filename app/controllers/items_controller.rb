@@ -8,7 +8,7 @@ class ItemsController < ApplicationController
   # GET /items
   # GET /items.xml
   def index
-    @items = Item.org.includes(:unit)#Item.where(:ctype => @ctype).includes(:unit)
+    @items = Item.org.includes(:unit).page(@page)#Item.where(:ctype => @ctype).includes(:unit)
     respond_with @items
   end
 

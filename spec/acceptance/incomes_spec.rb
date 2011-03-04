@@ -7,8 +7,7 @@ def income_params
     d = Date.today
     @income_params = {"active"=>nil, "bill_number"=>"56498797", "contact_id"=>1, 
       "currency_exchange_rate"=>1, "currency_id"=>1, "date"=>d, 
-      "description"=>"Esto es una prueba", "discount"=>3, "project_id"=>1, 
-      "ref_number"=>"987654"
+      "description"=>"Esto es una prueba", "discount"=>3, "project_id"=>1 
     }
     details = [
       { "description"=>"jejeje", "item_id"=>1, "organisation_id"=>1, "price"=>15.5, "quantity"=> 10},
@@ -23,51 +22,69 @@ def pay_plan_params(options)
   {:alert_date => (d - 5.days), :payment_date => d,
    :interests_penalties => 0,
    :ctype => 'Income', :description => 'Prueba de vida!', 
-   :email => true, :transaction_id => 1}.merge(options)
+   :email => true }.merge(options)
 end
 
 feature "Income", "test features" do
   background do
     OrganisationSession.set(:id => 1, :name => 'ecuanime', :currency_id => 1)
-    begin
-      Bank.find(1)
-    rescue
-      Bank.create!(:number => '123', :currency_id => 1, :name => 'Bank JE', :amount => 0) {|a| a.id = 1 }
-    end
+    
+    Bank.destroy_all()
+    Bank.create!(:number => '123', :currency_id => 1, :name => 'Bank JE', :amount => 0) {|a| a.id = 1 }
 
-    begin
-      Contact.find(1)
-    rescue
-      Contact.create!(:name => 'karina', :matchcode => 'karina', :address => 'Mallasa') {|c| c.id = 1 }
-    end
+    CashRegister.destroy_all()
+    CashRegister.create!(:name => 'Cash register Bs.', :amount => 0, :currency_id => 1, :address => 'Uno') {|cr| cr.id = 2}
+
+    Contact.destroy_all
+    Contact.create!(:name => 'karina', :matchcode => 'karina', :address => 'Mallasa') {|c| c.id = 1 }
   end
 
   scenario "Create a payment with nearest pay_plan" do
-    i = Income.create!(income_params)
-    pp = PayPlan.new(pay_plan_params(:transaction_id => i.id, :amount => 100, :interests_penalties => 10))
-    pp.save
+    ref_num = Income.last.ref_number
+    i = Income.new(income_params)
+
+    i.save.should == true
+    pp = i.create_pay_plan(pay_plan_params(:amount => 100, :interests_penalties => 10))
 
     i = Income.find(i.id)
-    puts i.balance
-    puts i.pay_plans_balance
     i.pay_plans.unpaid.size.should == 2
-    i.balance.should == i.pay_plans_balance
+    i.balance.should == i.pay_plans_total
 
-    p = i.new_payment(:account_id => 1)
+    p = i.new_payment(:account_id => 1, :reference => 'NA')
     p.class.should == Payment
 
-    p.amount.should == pp.amount
-    p.interests_penalties.should == pp.interests_penalties
-    
-    pp2 = PayPlan.new(pay_plan_params(:transaction_id => i.id, :amount => 50, :interests_penalties => 5, :payment_date => Date.today + 5.days))
+    p.amount.should == 100
+    p.interests_penalties.should == 10
+
+    p.save.should == true
+    p.state.should == 'conciliation'
+
+    al1 = p.account_ledger
 
     i = Income.find(i.id)
-    p = i.new_payment(:account_id => 1)
+  
+    i.balance.should == i.total
+    i.pay_plans.unpaid.size.should == 2
+
+    p = i.new_payment(:account_id => 1, :reference => '232322')
     p.class.should == Payment
 
-    p.amount.should == pp.amount
-    p.interests_penalties.should == pp.interests_penalties
+    p.amount.should == i.pay_plans.unpaid.first.amount
+    p.save.should == true
 
+    al2 = p.account_ledger
+
+    al1.conciliate_account.should == true
+    al1.conciliation.should == true
+
+    p_id = al1.payment.id
+    Payment.find(p_id).state.should == 'paid'
+
+    i = Income.find(i.id)
+    i.balance.should_not == i.total
+    i.balance.should == i.total - 100
+    #i.pay_plans.unpaid.size.should == 1
+    # Concilication
   end
 
 #  scenario "Pay a cash transaction" do
