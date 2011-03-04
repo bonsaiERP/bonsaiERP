@@ -87,6 +87,7 @@ private
     self.payment_date ||= Date.today
     self.alert_date ||= self.payment_date - 5.days
     self.currency_id ||= transaction_currency_id
+    self.email = email.nil? ? false : email
   end
 
   def set_currency_id

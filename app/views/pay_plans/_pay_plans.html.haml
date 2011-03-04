@@ -14,7 +14,8 @@
       %th Intereses<br/>Penalidades
       %th Descripción
       %th Estado
-      %th
+      - if transaction.income?
+        %th{:title => 'Envia un email de alerta automaticamente al contacto'} Email de<br/>alerta
       %th
     - transaction.pay_plans.each do |pp|
       %tr.pay_plan{:id => pp.id}
@@ -24,7 +25,8 @@
         %td.r #{transaction.currency_symbol} #{ntc pp.interests_penalties}
         %td= pp.description
         %td.state= pp.state
-        %td= link_to "Enviar email", email_pay_plan_path(pp), :class => 'email' unless pp.paid?
+        - if transaction.income?
+          %td{:class => pp.email.to_s}
         %td
           - unless pp.paid?
             = link_to 'editar', edit_pay_plan_path(pp, :pay_type => transaction.pay_type),

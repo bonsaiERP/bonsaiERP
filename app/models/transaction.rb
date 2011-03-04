@@ -9,7 +9,7 @@ class Transaction < ActiveRecord::Base
   # Determines if the oprations is made on transaction or pay_plan or payment
   attr_reader :trans
   # callbacks
-  after_initialize :initialize_values, :if => :new_record?
+  after_initialize :set_defaults, :if => :new_record?
   after_initialize :set_trans_to_true
   before_save :set_details_type
   before_save :calculate_total_and_set_balance, :if => :trans?
@@ -35,7 +35,14 @@ class Transaction < ActiveRecord::Base
   include PayPlansModule
   ###############################
 
-
+  # Define methods for the types of transactions
+  TYPES.each do |type|
+    class_eval <<-CODE, __FILE__, __LINE__ + 1
+      def #{type.downcase}?
+        "#{type}" == type
+      end
+    CODE
+  end
 
   # Transalates the type for any language
   def type_translated
@@ -165,12 +172,13 @@ class Transaction < ActiveRecord::Base
 
 private
   # set default values for discount and taxes
-  def initialize_values
+  def set_defaults
     self.cash = cash.nil? ? true : cash
     self.active = active.nil? ? true : active
     self.discount ||= 0
     self.tax_percent = taxes.inject(0) {|sum, t| sum += t.rate }
     self.gross_total ||= 0
+    self.total ||= 0
   end
 
   def set_trans_to_true

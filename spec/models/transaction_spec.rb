@@ -154,10 +154,23 @@ describe Transaction do
     p.payment_date.should == d
   end
 
-  it 'should create a complete pay_plan balance with interests' do
+  it 'should create two pay_plans' do
     t = Transaction.create(@params)
     d = Date.today
     pp = t.create_pay_plan(:amount => 100, :payment_date => d + 10.days, :interests_penalties => 34.44)
+
+    t = Transaction.find(t.id)
+    t.pay_plans.unpaid.size.should == 2
+    t.balance.should == t.pay_plans_total
+
+    t.pay_plans.unpaid[0].amount.should == 100
+    t.pay_plans.unpaid[1].amount.should == (t.balance - 100)
+  end
+
+  it 'should create a complete pay_plan balance with interests' do
+    t = Transaction.create(@params)
+    d = Date.today
+    pp = t.create_pay_plan(:amount => 100, :payment_date => d + 10.days, :interests_penalties => 34.44, :repeat => true)
 
 
     pp.class.should == PayPlan
@@ -179,7 +192,7 @@ describe Transaction do
   it 'should create a complete pay_plan balance and update the list' do
     t = Transaction.create(@params)
     d = Date.today
-    pp = t.create_pay_plan(:amount => 100, :payment_date => d + 10.days, :interests_penalties => 34.43)
+    pp = t.create_pay_plan(:amount => 100, :payment_date => d + 10.days, :interests_penalties => 34.43, :repeat => true)
 
     t = Transaction.find(t.id)
     t.pay_plans.unpaid.size.should == 4
@@ -198,7 +211,7 @@ describe Transaction do
   it 'should create a new pay_plan and delete all other if a new is created with repeat' do
     t = Transaction.create(@params)
     d = Date.today
-    pp = t.create_pay_plan(:amount => 100, :payment_date => d + 10.days, :interests_penalties => 34.43)
+    pp = t.create_pay_plan(:amount => 100, :payment_date => d + 10.days, :interests_penalties => 34.43, :repeat => true)
 
     t = Transaction.find(t.id)
     t.pay_plans.unpaid.size.should == 4
@@ -222,7 +235,7 @@ describe Transaction do
   it 'should update with a greater amount' do
     t = Transaction.create(@params)
     d = Date.today
-    pp = t.create_pay_plan(:amount => 100, :payment_date => d + 10.days, :interests_penalties => 34.43)
+    pp = t.create_pay_plan(:amount => 100, :payment_date => d + 10.days, :interests_penalties => 34.43, :repeat => true)
 
     t = Transaction.find(t.id)
     pp = t.pay_plans.unpaid[1]
@@ -303,7 +316,7 @@ describe Transaction do
   it 'should destroy all and update transaction' do
     t = Transaction.create(@params)
     d = Date.today
-    pp = t.create_pay_plan(:amount => 100, :payment_date => d + 10.days, :interests_penalties => 34.43)
+    pp = t.create_pay_plan(:amount => 100, :payment_date => d + 10.days, :interests_penalties => 34.43, :repeat => true)
     t = Transaction.find(t.id)
     t.pay_plans.unpaid.size.should == 4
     

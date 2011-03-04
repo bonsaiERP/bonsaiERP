@@ -8,7 +8,9 @@
   = f.input :amount, :label => currency_label('Cantidad', @pay_plan), :input_html => {:size => 12}
   = f.input :interests_penalties, :label => currency_label('Intereses/Penalidades', @pay_plan), :input_html => {:size => 12}
   .clear
-  /= f.input :email, :hint => 'Envía un email automaticamente el la fecha de advertencia'
+  - if @pay_plan.transaction.income?
+    = f.input :email, :label => 'Enviar email de alerta', :hint => 'Envía un <strong>email automaticamente</strong> en la fecha de advertencia'.html_safe
+  =f.input :repeat, :as => :radio, :label => 'Repetir patrón', :hint => 'Repite la cantidad hasta completar el saldo automaticamente'
   = f.input :description, :as => :text, :input_html => {:rows => 4, :cols => 35 }
   .clear
   .submit

@@ -116,19 +116,24 @@ $(document).ready(->
     $(this).html('Ver más').removeClass('less').addClass('more').next('.hidden').hide(speed)
   )
 
+  # Ajax preloader content
+  AjaxLoadingHTML = ->
+    "<div class='c'><img src='/images/ajax-loader.gif' alt='Cargando' /><br/>Cargando...</div>"
+
+  window.AjaxLoadingHTML = AjaxLoadingHTML
 
   # Creates the dialog container
   createDialog = (params)->
     data = params
     params = $.extend({
-      'id': new Date().getTime(), 'title': '', 'width': 800, 'height' : 400, 'modal': true, 'resizable' : false,
+      'id': new Date().getTime(), 'title': '', 'width': 800, 'modal': true, 'resizable' : false, 'position': 'top',
       'close': (e, ui)->
         $('#' + div_id ).parents("[role=dialog]").detach()
     }, params)
     div_id = params.id
     div = document.createElement('div')
     $(div).attr( { 'id': params['id'], 'title': params['title'] } ).data(data)
-    .addClass('ajax-modal').css( { 'z-index': 10000 } )
+    .addClass('ajax-modal').css( { 'z-index': 10000 } ).html(AjaxLoadingHTML())
     delete(params['id'])
     delete(params['title'])
     $(div).dialog( params )
@@ -159,7 +164,7 @@ $(document).ready(->
     $div = $(this).parents('.ajax-modal')
     new_record = if $div.data('ajax-type') == 'new' then true else false
     trigger = $div.data('trigger')
-
+    
     $.ajax(
       'url': $(el).attr('action')
       'cache': false

@@ -1,6 +1,6 @@
 (function() {
   $(document).ready(function() {
-    var createDialog, createErrorLog, createSelectOption, csrf_token, currency, getAjaxType, mark, ntc, parseDate, serializeFormElements, setDateSelect, setIframePostEvents, speed, start, toByteSize, transformDateSelect, transformMinuteSelect, updateTemplateRow, _b;
+    var AjaxLoadingHTML, createDialog, createErrorLog, createSelectOption, csrf_token, currency, getAjaxType, mark, ntc, parseDate, serializeFormElements, setDateSelect, setIframePostEvents, speed, start, toByteSize, transformDateSelect, transformMinuteSelect, updateTemplateRow, _b;
     _b = {};
     window._b = _b;
     speed = 300;
@@ -112,6 +112,10 @@
     $('a.less').live('click', function() {
       return $(this).html('Ver más').removeClass('less').addClass('more').next('.hidden').hide(speed);
     });
+    AjaxLoadingHTML = function() {
+      return "<div class='c'><img src='/images/ajax-loader.gif' alt='Cargando' /><br/>Cargando...</div>";
+    };
+    window.AjaxLoadingHTML = AjaxLoadingHTML;
     createDialog = function(params) {
       var data, div, div_id;
       data = params;
@@ -119,9 +123,9 @@
         'id': new Date().getTime(),
         'title': '',
         'width': 800,
-        'height': 400,
         'modal': true,
         'resizable': false,
+        'position': 'top',
         'close': function(e, ui) {
           return $('#' + div_id).parents("[role=dialog]").detach();
         }
@@ -133,7 +137,7 @@
         'title': params['title']
       }).data(data).addClass('ajax-modal').css({
         'z-index': 10000
-      });
+      }).html(AjaxLoadingHTML());
       delete params['id'];
       delete params['title'];
       $(div).dialog(params);

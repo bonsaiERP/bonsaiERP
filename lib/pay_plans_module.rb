@@ -112,8 +112,8 @@ module PayPlansModule
 
   # Sets the amount and the data for last pay_plan
   def new_pay_plan(params = {})
-    repeat = params[:repeat].nil? ? not(pay_plans.unpaid.any?) : params[:repeat]
-    PayPlan.new(params.merge(:transaction_id => id, :ctype => type, :repeat => repeat))
+    #repeat = params[:repeat].nil? ? not(pay_plans.unpaid.any?) : params[:repeat]
+    PayPlan.new(params.merge(:transaction_id => id, :ctype => type))
   end
 
 
@@ -172,7 +172,7 @@ private
         pp_alert_date = actual_pay_plan.payment_date - 5.days
 
         pay_plans_list << new_pay_plan(:payment_date => pp_payment_date, :interests_penalties  => int_pen,
-                                      :alert_date => pp_alert_date, :amount => amount)
+                                      :alert_date => pp_alert_date, :amount => amount, :email => @current_pay_plan.email)
       end
     end
 
