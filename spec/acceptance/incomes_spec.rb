@@ -44,17 +44,18 @@ feature "Income", "test features" do
     i = Income.new(income_params)
 
     i.save.should == true
-    pp = i.create_pay_plan(pay_plan_params(:amount => 100, :interests_penalties => 10))
+    pp = i.create_pay_plan(pay_plan_params(:amount => 100))
 
     i = Income.find(i.id)
     i.pay_plans.unpaid.size.should == 2
     i.balance.should == i.pay_plans_total
 
-    p = i.new_payment(:account_id => 1, :reference => 'NA')
+    #i.pay_plans.unpaid.each{|pp| puts "#{pp.amount}"}
+
+    p = i.new_payment(:account_id => 1, :reference => '54654654654', :date => Date.today, :amount => 100)
     p.class.should == Payment
 
     p.amount.should == 100
-    p.interests_penalties.should == 10
 
     p.save.should == true
     p.state.should == 'conciliation'
@@ -66,13 +67,19 @@ feature "Income", "test features" do
     i.balance.should == i.total
     i.pay_plans.unpaid.size.should == 2
 
-    p = i.new_payment(:account_id => 1, :reference => '232322')
-    p.class.should == Payment
+    # Register cash payment
+    p = i.new_payment(:account_id => 2, :reference => 'NA', :date => Date.today + 2.days)
+    amt =  i.balance - 100
+    p.amount.should == amt
 
-    p.amount.should == i.pay_plans.unpaid.first.amount
     p.save.should == true
+    
+    al2 = p.account_ledger#AccountLedger.find_by_payment_id(p.id)
+    al2.class.should == AccountLedger
+    al2.conciliation.should == true
 
-    al2 = p.account_ledger
+    i = Income.find(i.id)
+    i.balance.should_not == i.total
 
     al1.conciliate_account.should == true
     al1.conciliation.should == true
@@ -81,10 +88,8 @@ feature "Income", "test features" do
     Payment.find(p_id).state.should == 'paid'
 
     i = Income.find(i.id)
-    i.balance.should_not == i.total
-    i.balance.should == i.total - 100
-    #i.pay_plans.unpaid.size.should == 1
-    # Concilication
+    i.balance.should == 0
+    i.pay_plans.unpaid.size.should == 0
   end
 
 #  scenario "Pay a cash transaction" do

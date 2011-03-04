@@ -14,9 +14,9 @@ class Payment < ActiveRecord::Base
   before_create :set_cash_amount, :if => :transaction_cash?
   before_save :set_state, :if => :nil_state?
   # update_pay_plan must run before update_transaction
-  after_save  :update_pay_plan, :if => :paid?
+  after_create  :create_account_ledger#, :if => :conciliation?
   after_save  :update_transaction, :if => :paid?
-  after_save  :create_account_ledger, :if => :conciliation?
+  after_save  :update_pay_plan, :if => :paid?
 
   # relationships
   belongs_to :transaction
@@ -33,7 +33,7 @@ class Payment < ActiveRecord::Base
   delegate :type, :name, :number, :to => :account, :prefix => true
 
   # validations
-  validates_presence_of :account_id, :transaction_id, :reference
+  validates_presence_of :account_id, :transaction_id, :reference, :date
   validate :valid_payment_amount, :if => :active?
   validate :valid_amount_or_interests_penalties, :if => :active?
 
@@ -148,10 +148,16 @@ private
       tot, income = [total_amount, false] unless active?
     end
 
-    AccountLedger.create(:account_id => account_id, :payment_id => id, 
+    al = AccountLedger.create(:account_id => account_id, :payment_id => id, 
                          :currency_id => currency_id, :contact_id => transaction_contact_id,
                          :amount => tot, :date => date, :income => income, :transaction_id => transaction_id,
-                         :description => set_account_ledger_text, :reference => reference)
+                         :description => set_account_ledger_text, :reference => reference
+                        ) {|al| al.conciliation = get_conciliation }
+  end
+
+  # Returns the conciliation value
+  def get_conciliation
+    "CashRegister" == account_type
   end
 
   # Creates the account_ledger text

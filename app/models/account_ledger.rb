@@ -24,7 +24,7 @@ class AccountLedger < ActiveRecord::Base
   validates_numericality_of :amount
 
   delegate :name, :number, :to => :account, :prefix => true
-  delegate :amount, :interests_penalties, :date, :to => :payment, :prefix => true
+  delegate :amount, :interests_penalties, :date, :state, :to => :payment, :prefix => true
   delegate :name, :symbol, :to => :currency, :prefix => true
 
   # scopes
@@ -56,8 +56,10 @@ private
 
   # Updates the payment state
   def update_account_payment
-    payment.state = 'paid'
-    payment.save
+    unless payment_state == 'paid'
+      payment.state = 'paid'
+      payment.save
+    end
   end
 
   # Updates the total amount for the account
