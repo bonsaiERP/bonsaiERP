@@ -16,7 +16,7 @@ body {
   padding: 0px;
 }
 a {
-  color: #1255b0;
+  color: #095495;
   text-decoration: none;
 }
 a:hover { text-decoration: underline; }
@@ -586,7 +586,7 @@ span.true, span.false {
 .ajax-modal { background-color: #ffffff !important; }
 .ajax-modal .links { display: none; }
 .ajax-modal a {
-  color: #1255b0 !important;
+  color: #095495 !important;
   text-decoration: none;
 }
 .ajax-modal a:hover { text-decoration: underline; }

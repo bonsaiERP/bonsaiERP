@@ -2,7 +2,7 @@
   %h2 #{transaction.pay_type.pluralize.titleize} realizados
 
   = link_to "Nuevo #{transaction.pay_type}", new_payment_path(:type => transaction.type.to_s, :id => transaction.id, :payment_type => transaction.pay_type),
-    :class => 'new ajax', :title => "Nuevo #{transaction.pay_type}", :id => 'new_payment_link',
+    :class => 'new ajax button', :title => "Nuevo #{transaction.pay_type}", :id => 'new_payment_link',
     'data-width' => "700", 'data-trigger' => 'payment' unless transaction.paid?
 
   %table.decorated.nwl#payments_table

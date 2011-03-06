@@ -1,7 +1,8 @@
 #pay_plans
-  %h2 Plan de #{transaction.pay_type.pluralize} a crédito
+  %h2 Planificación de crédito
+  /%h2 Plan de #{transaction.pay_type.pluralize} a crédito
 
-  =link_to "Nuevo plan de #{transaction.pay_type}", 
+  =link_to "Nuevo crédito", 
     new_pay_plan_path(:type => transaction.class.to_s, :id => transaction.id, :pay_type => transaction.pay_type),
     :id => 'new_pay_plan_link', :class => 'new button ajax', 'title' => "Nuevo plan de #{transaction.pay_type.singularize}",
     'data-trigger' => 'pay_plan', 'data-width' => '700' unless transaction.state == "paid"
