@@ -22,7 +22,7 @@
 @link: #1255B0;
 /* #547299;*/
 
-.red{ color: @red; }
+.red{ color: @red !important; }
 .bg_red{ background-color: @red; }
 .grey{ color: @grey; }
 .dark_grey{ color: @dark_grey; }
@@ -210,6 +210,11 @@ table.nwf{
   -webkit-border-radius: 0px 0px 10px 10px;
   border-radius: 0px 0px 10px 10px;
 }
+#links{
+  background: @light_grey;
+  padding: 10px 15px;
+  overflow: hidden;
+}
 
 #cont-in{
   padding: 10px 15px 90px;
@@ -385,22 +390,36 @@ h3{ font-size: 1.3em; color: @dark;}
   width: 40%;
   float:right;
   text-align: right;
-  clear: both;
+  a:hover{ 
+    text-decoration: none;
+    color: @green;
+  }
 }
 
 a.new{
-  .link;
+  font-weight: bold;
+  padding-left: 22px;
+  color: @dark_green;
   display: inline-block;
-  background: @white_tan url(images/add.png) no-repeat scroll 4px 50%;
+  background: transparent url(images/add.png) no-repeat scroll 4px 50%;
+  font-size: 120%;
+}
+a.button{
   border: 1px solid @grey;
   padding: 5px 8px 5px 26px;
+  margin: 5px;
+  background-color:@light_grey;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
   border-radius: 3px;
 }
 a.new:hover{ 
   color: @green;
+  text-decoration: none;
+}
+a.button:hover{
   background-color: @white;
+  text-decoration: none !important;
 }
 a.add{
   .link;
@@ -808,7 +827,7 @@ ul.tabs{
 ul.breadcrumps{
   list-style: none;
   padding: 0px;
-  margin: 5px;
+  margin: 0px;
   float:left;
   width: 50%;
   li{

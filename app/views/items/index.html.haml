@@ -1,3 +1,9 @@
+- content_for :links do
+  %ul.breadcrumps
+    %li #{ link_to "Inicio", "/dashboard" }<span>&gt;</span>
+
+  .links= link_to "Nuevo ítem", new_item_path, :class => 'new'
+
 %h1 Items
 
 %div.search{:style => 'display:none'}
@@ -6,7 +12,7 @@
   =text_field_tag 'name_code', params[:search], :size => 40
   =submit_tag 'Buscar'
 
-= link_to "Nuevo ítem", new_item_path, :class => 'new'
+
 .clear
 
 = link_to "Buscar", "#", :class => 'search'

@@ -1,6 +1,12 @@
+- content_for :links do
+  %ul.breadcrumps
+    %li #{link_to "Incio", "/dashboard"}<span>&gt;</span>
+
+  .links= link_to "Nueva venta", new_income_path, :class => 'new'
+
+
 %h1 Ventas
 
-= link_to "Nueva venta", new_income_path, :class => 'new'
 
 %ul.tabs
   %li= link_incomes "Todas", 'all'
