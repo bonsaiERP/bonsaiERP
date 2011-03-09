@@ -32,7 +32,7 @@ class Transaction < ActiveRecord::Base
 
   ###############################
   # Methods for pay_plans
-  include PayPlansModule
+  include ::Transaction::PayPlans
   ###############################
 
   # Define methods for the types of transactions

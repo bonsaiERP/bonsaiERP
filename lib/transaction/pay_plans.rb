@@ -1,4 +1,4 @@
-module PayPlansModule
+module ::Transaction::PayPlans
 
   MAX_PAY_PLANS_SIZE = 50
   PAY_PLANS_DATE_SEPARATION = 1.month
