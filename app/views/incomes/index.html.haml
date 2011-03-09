@@ -36,8 +36,8 @@
         %td= link_to income.ref_number, income
         %td= income.contact
         %td.nw= lo income.date
-        %td.cur= with_currency income, income.real_total
-        %td.cur= with_currency income, income.balance
+        %td.cur= with_currency income, :real_total
+        %td.cur= with_currency income, :balance
         %td <span class="#{income.real_state}">#{income.show_state}</span>
         %td= cash_credit(income.cash)
         %td= lo income.payment_date unless income.paid?

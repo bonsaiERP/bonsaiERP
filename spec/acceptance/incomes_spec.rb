@@ -52,25 +52,29 @@ feature "Income", "test features" do
     #i.pay_plans.unpaid.each{|pp| puts "#{pp.amount}"} ###
 
     # BANK payment
-    p = i.new_payment(:account_id => 1, :reference => '54654654654', :date => Date.today, :amount => 100)
+    p = i.new_payment(:account_id => 1, :reference => '54654654654', :date => Date.today)
+
     p.class.should == Payment
+    p.amount.should == 100.0
     p.paid?.should == false
 
     p.amount.should == 100
 
     p.save.should == true
     p.state.should == 'conciliation'
+    p.paid?.should == false
 
     al1 = p.account_ledger
 
     i = Income.find(i.id)
-  
-    i.balance.should == i.total
+    i.payments.first.state.should_not == 'paid'
+
+    i.balance.should == i.total_currency
     i.pay_plans.unpaid.size.should == 2
 
     # CASH payment
-    p = i.new_payment(:account_id => 2, :reference => 'NA', :date => Date.today + 2.days)
     amt =  i.balance - 100
+    p = i.new_payment(:account_id => 2, :reference => 'NA', :date => Date.today + 2.days, :amount => amt)
     p.amount.should == amt
 
     p.save.should == true
@@ -110,6 +114,7 @@ feature "Income", "test features" do
     i.pay_plans.unpaid[0].alert_date.should == d - 5.days
     i.pay_plans.unpaid[1].payment_date.should == d + 1.month
 
+    # PayPlan date for payment
     pdate = i.pay_plans.unpaid[1].payment_date
     adate =  i.pay_plans.unpaid[1].alert_date
 
@@ -119,10 +124,35 @@ feature "Income", "test features" do
     p.save.should == true
 
     i = Income.find(i.id)
-    i.pay_plans.unpaid.first.payment_date.should == d + 1.month
+    i.pay_plans.unpaid.first.payment_date.should == pdate
+
 
     i.balance.should == bal - 150
     i.balance.should == i.pay_plans_total
+  end
+
+  scenario "Destroy a payment when destroying account_ledger" do
+
+    d = Date.today
+    i = Income.new(income_params.merge(:date => d))
+    
+    i.save.should == true
+    bal = i.balance
+
+    pp = i.create_pay_plan(pay_plan_params(:amount => 100, :payment_date => d, :repeat => true))
+    i = Income.find(i.id)
+
+    p = i.new_payment(:account_id => 2, :reference => 'NA', :date => d, :amount => 150)
+    
+    p.amount.should == 150
+    p.save.should == true
+    i.payments.size.should == 1
+
+    pid = p.id
+    p.account_ledger.destroy
+
+    i = Income.find(i.id)
+    i.payments.size.should == 0
   end
 
 end

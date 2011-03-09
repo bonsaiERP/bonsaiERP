@@ -125,6 +125,16 @@ class Transaction < ActiveRecord::Base
   # Prepares a payment with the current notes to pay
   # @param Hash options
   def new_payment(options = {})
+    amt = int_pen = 0
+    if pay_plans.unpaid.any?
+      pp = pay_plans.unpaid.first
+      amt, int_pen =  [pp.amount, pp.interests_penalties]
+    else
+      amt = balance
+    end
+
+    options[:amount] = options[:amount] || amt
+    options[:interests_penalties] = options[:interests_penalties] || int_pen
     Payment.new({:amount => balance - total_payments, :transaction_id => id, :currency_id => currency_id}.merge(options))
   end
 

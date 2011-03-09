@@ -10,7 +10,9 @@ module ::Transaction::PayPlans
     @pay_plans_list = pay_plans.unpaid
     @current_pay_plan = new_pay_plan(params)
     @pay_plans_list << @current_pay_plan
+
     save_pay_plans_list
+    update_transaction_payment_date
 
     @current_pay_plan
   end
@@ -24,9 +26,10 @@ module ::Transaction::PayPlans
     @current_pay_plan.attributes = params
 
     save_pay_plans_list
+    update_transaction_payment_date
 
     @current_pay_plan
-
+    
     @saved
   end
 
@@ -55,6 +58,8 @@ module ::Transaction::PayPlans
         raise ActiveRecord::Rollback unless @current_pay_plan.destroyed?
       end
       
+      update_transaction_payment_date
+
       @current_pay_plan
     end
   end
@@ -116,6 +121,13 @@ module ::Transaction::PayPlans
     PayPlan.new(params.merge(:transaction_id => id, :ctype => type))
   end
 
+  def update_transaction_payment_date
+    pps = PayPlan.unpaid.where(:transaction_id => id).order("payment_date ASC")
+    if pps.unpaid.any?
+      self.payment_date = pps.first.payment_date
+      self.save
+    end
+  end
 
 private
   def sort_pay_plans_list(pay_plans_list)
@@ -205,4 +217,5 @@ private
 
     saved
   end
+
 end

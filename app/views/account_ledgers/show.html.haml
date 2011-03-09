@@ -1,11 +1,34 @@
-%ul.breadcrumps
-  %li #{link_to "Bancos", banks_path}<span>&gt;</span>
-  %li #{link_to @account_ledger.account, @account_ledger.account}<span>&gt;</span>
-.links
-  = link_to 'Nuevo', new_account_ledger_path, :class => 'add'
-.clear
+-content_for :links do
+  %ul.breadcrumps
+    %li #{link_to "Bancos", banks_path}<span>&gt;</span>
+    %li #{link_to @account_ledger.account, @account_ledger.account}<span>&gt;</span>
+  .links
+    = link_to 'Nuevo', new_account_ledger_path, :class => 'add'
 
 %h1 Transacción del #{lo @account_ledger.date}
 
-%span.b #{@account_ledger.currency_symbol} #{ntc(@account_ledger.amount)}
-=link_description @account_ledger
+.moneybox.fl
+  = in_out @account_ledger.income?, :class => 'b'
+  %h3= with_currency @account_ledger
+.clear
+<br/>
+._15.fl.i= lo @account_ledger.date
+._30.fl <span class="grey">Ref/Nº de cheque:</span> #{@account_ledger.reference}
+._20.fl=link_description @account_ledger
+._20.fl=link_to link_to @account_ledger.contact, @account_ledger.contact
+
+.clear
+- unless @account_ledger.conciliation?
+  .conciliation
+    = simple_form_for @account_ledger, :url => conciliate_account_ledger_path(@account_ledger) do |f|
+      = f.submit "Conciliar transacción"
+  :javascript
+    $(function() {
+      $('.conciliation form').submit(function() {
+        if(confirm("Conciliar una transacción es una operación irreversible, esta seguro?")) {
+          return true;
+        }else{
+          return false;
+        }
+      });
+    });

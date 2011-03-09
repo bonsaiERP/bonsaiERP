@@ -95,6 +95,12 @@ class PayPlansController < ApplicationController
     end
   end
 
+  def show
+    @transaction = Transaction.org.find(params[:id])
+    params[:ajax_modal] = true
+    render :partial => 'pay_plans', :locals => { :transaction => @transaction }
+  end
+
 private
   def set_pay_plan
     @pay_plan = PayPlan.org.find(params[:id])

@@ -13,10 +13,11 @@ class Payment < ActiveRecord::Base
   before_create :set_currency_id, :if => :new_record?
   before_create :set_cash_amount, :if => :transaction_cash?
   before_save :set_state, :if => :nil_state?
+
   # update_pay_plan must run before update_transaction
   after_create  :create_account_ledger#, :if => :conciliation?
-  after_save  :update_transaction, :if => :paid?
   after_save  :update_pay_plan, :if => :paid?
+  after_save  :update_transaction, :if => :paid?
 
   # relationships
   belongs_to :transaction
@@ -27,6 +28,7 @@ class Payment < ActiveRecord::Base
 
   delegate :state, :type, :cash, :cash?, :real_state, :balance, :contact_id, :paid?, :ref_number, :type,
     :to => :transaction, :prefix => true
+  delegate :id, :to => :account_ledger, :prefix => true
 
   delegate :name, :symbol, :to => :currency, :prefix => true
 
@@ -38,7 +40,9 @@ class Payment < ActiveRecord::Base
   validate :valid_amount_or_interests_penalties, :if => :active?
 
   # scopes
-  scope :active, where(:active => true)
+  scope :active,       where(:active => true)
+  #scope :paid,         where(:state => 'paid')
+  #scope :conciliation, where(:state => 'conciliation')
 
   # Creates methods of paid? conciliation?
   STATES.each do |st|
@@ -57,7 +61,8 @@ class Payment < ActiveRecord::Base
       :account => account.to_s, 
       :total_amount => total_amount,
       :transaction_real_state => transaction_real_state,
-      :transaction_balance => transaction_balance
+      :transaction_balance => transaction_balance,
+      :account_ledger_id => account_ledger_id
     ).to_json
   end
 
@@ -87,6 +92,8 @@ private
     else
       transaction.substract_payment(amount)
     end
+
+    transaction.update_transaction_payment_date
   end
 
   def set_currency_id
@@ -124,7 +131,6 @@ private
   def create_pay_plan(amt, int_pen, pp)
     amt = amt < 0 ? -1 * amt : 0
     int_pen = int_pen < 0 ? -1 * int_pen : 0
-    d = Date.today + 1.day
     p = PayPlan.create(:transaction_id => transaction_id, :amount => amt, :interests_penalties => int_pen,
                     :payment_date => pp.payment_date, :alert_date => pp.alert_date )
   end
@@ -152,7 +158,7 @@ private
       tot, income = [total_amount, false] unless active?
     end
 
-    al = AccountLedger.create(:account_id => account_id, :payment_id => id, 
+    AccountLedger.create(:account_id => account_id, :payment_id => id, 
                          :currency_id => currency_id, :contact_id => transaction_contact_id,
                          :amount => tot, :date => date, :income => income, :transaction_id => transaction_id,
                          :description => set_account_ledger_text, :reference => reference
@@ -185,7 +191,7 @@ private
   # Sets the state accoording to the account
   def set_state
     case account_type
-    when "Bank" 
+    when "Bank"
       self.state = "conciliation"
     when "CashRegister" 
       self.state = "paid"

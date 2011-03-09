@@ -28,12 +28,13 @@
     %th
   - ledgers.each do |al|
     %tr{:class => al.income.to_s + '_in' }
-      %td.d= link_to(lo(al.date), al)
+      %td.d= link_to lo(al.date), al, :class => 'b'
       %td.check= al.reference
-      %td.r= with_currency(al, al.amount)
-      %td= link_to al.contact, al.contact if al.contact_id
+      %td.r= with_currency al
+      %td= al.contact if al.contact_id
       %td= link_description al
       %td
-        = link_to "Conciliar", al, :class => 'concile'
-        = link_to "borrar", "", :class => 'delete', 'data-remote' => true, :title => 'Borrar'
+        - unless al.conciliation?
+          = link_to "Conciliar", al, :class => 'concile'
+          = link_to "borrar", al, :class => 'delete', 'data-remote' => true, :title => 'Borrar'
 
