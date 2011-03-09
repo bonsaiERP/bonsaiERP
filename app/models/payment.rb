@@ -40,6 +40,7 @@ class Payment < ActiveRecord::Base
   # scopes
   scope :active, where(:active => true)
 
+  # Creates methods of paid? conciliation?
   STATES.each do |st|
     class_eval <<-CODE, __FILE__, __LINE__ + 1
       def #{st}?
@@ -102,7 +103,7 @@ private
     interest_to_pay = interests_penalties
     @updated_pay_plan_ids = []
 
-    transaction.pay_plans.unpaid.each do |pp|
+    transaction.pay_plans.unpaid.each_with_index do |pp, i|
       amount_to_pay += - pp.amount
       interest_to_pay += - pp.interests_penalties
 
@@ -110,19 +111,22 @@ private
       @updated_pay_plan_ids << pp.id
 
       if amount_to_pay <= 0
-        @pay_plan = create_pay_plan(amount_to_pay, interest_to_pay) if amount_to_pay < 0 or interest_to_pay < 0
+        @pay_plan = create_pay_plan(amount_to_pay, interest_to_pay, pp) if amount_to_pay < 0 or interest_to_pay < 0
         break
       end
     end
   end
 
   # Creates a new pay_plan
-  def create_pay_plan(amt, int_pen)
+  # @param Decimal amt
+  # @param Decimal int_pen
+  # @param PayPlan pp
+  def create_pay_plan(amt, int_pen, pp)
     amt = amt < 0 ? -1 * amt : 0
     int_pen = int_pen < 0 ? -1 * int_pen : 0
     d = Date.today + 1.day
     p = PayPlan.create(:transaction_id => transaction_id, :amount => amt, :interests_penalties => int_pen,
-                    :payment_date => d, :alert_date => d )
+                    :payment_date => pp.payment_date, :alert_date => pp.alert_date )
   end
 
   def valid_payment_amount

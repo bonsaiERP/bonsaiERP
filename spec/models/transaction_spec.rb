@@ -187,6 +187,17 @@ describe Transaction do
     t.pay_plans.unpaid[2].interests_penalties.should == ((t.balance - 200) * 0.10).round(2)
     t.pay_plans.unpaid[3].interests_penalties.should == ((t.balance - 300) * 0.10).round(2)
 
+    t.pay_plans.unpaid[0].payment_date.should == d + 10.days
+    t.pay_plans.unpaid[1].payment_date.should == d + 10.days + 1.month
+    t.pay_plans.unpaid[2].payment_date.should == d + 10.days + 2.months
+    t.pay_plans.unpaid[3].payment_date.should == d + 10.days + 3.months
+
+    #t.pay_plans.unpaid.each{|pp| puts "#{pp.payment_date} :: #{pp.alert_date}" }
+
+    t.pay_plans.unpaid[0].alert_date.should == d + 10.days - 5.days
+    t.pay_plans.unpaid[1].alert_date.should == d + 10.days + 1.month - 5.days
+    t.pay_plans.unpaid[2].alert_date.should == d + 10.days + 2.months - 5.days
+    t.pay_plans.unpaid[3].alert_date.should == d + 10.days + 3.months - 5.days
   end
 
   it 'should create a complete pay_plan balance and update the list' do

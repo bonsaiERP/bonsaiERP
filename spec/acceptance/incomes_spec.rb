@@ -40,7 +40,6 @@ feature "Income", "test features" do
   end
 
   scenario "Create a payment with nearest pay_plan" do
-    ref_num = Income.last.ref_number
     i = Income.new(income_params)
 
     i.save.should == true
@@ -50,10 +49,12 @@ feature "Income", "test features" do
     i.pay_plans.unpaid.size.should == 2
     i.balance.should == i.pay_plans_total
 
-    #i.pay_plans.unpaid.each{|pp| puts "#{pp.amount}"}
+    #i.pay_plans.unpaid.each{|pp| puts "#{pp.amount}"} ###
 
+    # BANK payment
     p = i.new_payment(:account_id => 1, :reference => '54654654654', :date => Date.today, :amount => 100)
     p.class.should == Payment
+    p.paid?.should == false
 
     p.amount.should == 100
 
@@ -67,14 +68,15 @@ feature "Income", "test features" do
     i.balance.should == i.total
     i.pay_plans.unpaid.size.should == 2
 
-    # Register cash payment
+    # CASH payment
     p = i.new_payment(:account_id => 2, :reference => 'NA', :date => Date.today + 2.days)
     amt =  i.balance - 100
     p.amount.should == amt
 
     p.save.should == true
-    
-    al2 = p.account_ledger#AccountLedger.find_by_payment_id(p.id)
+
+    p.state.should == 'paid'
+    al2 = p.account_ledger #AccountLedger.find_by_payment_id(p.id)
     al2.class.should == AccountLedger
     al2.conciliation.should == true
 
@@ -90,6 +92,37 @@ feature "Income", "test features" do
     i = Income.find(i.id)
     i.balance.should == 0
     i.pay_plans.unpaid.size.should == 0
+  end
+
+  scenario "Pay many pay_plans at the same time" do
+    d = Date.today
+    i = Income.new(income_params.merge(:date => d))
+    
+    i.save.should == true
+    bal = i.balance
+
+    pp = i.create_pay_plan(pay_plan_params(:amount => 100, :payment_date => d, :repeat => true))
+    i = Income.find(i.id)
+    #i.pay_plans.unpaid.each{|pp| puts "#{pp.amount} #{pp.payment_date}"} ###
+
+    i.pay_plans.unpaid.size.should == 4
+    i.pay_plans.unpaid[0].payment_date.should == d
+    i.pay_plans.unpaid[0].alert_date.should == d - 5.days
+    i.pay_plans.unpaid[1].payment_date.should == d + 1.month
+
+    pdate = i.pay_plans.unpaid[1].payment_date
+    adate =  i.pay_plans.unpaid[1].alert_date
+
+    p = i.new_payment(:account_id => 2, :reference => 'NA', :date => d, :amount => 150)
+    
+    p.amount.should == 150
+    p.save.should == true
+
+    i = Income.find(i.id)
+    i.pay_plans.unpaid.first.payment_date.should == d + 1.month
+
+    i.balance.should == bal - 150
+    i.balance.should == i.pay_plans_total
   end
 
 #  scenario "Pay a cash transaction" do

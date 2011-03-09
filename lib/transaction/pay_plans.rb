@@ -169,7 +169,7 @@ private
         int_pen = ( (balance - sum) * int_pen_per ).round(DECIMALS)
         sum += amount
         pp_payment_date = actual_pay_plan.payment_date + PAY_PLANS_DATE_SEPARATION
-        pp_alert_date = actual_pay_plan.payment_date - 5.days
+        pp_alert_date = pp_payment_date - 5.days
 
         pay_plans_list << new_pay_plan(:payment_date => pp_payment_date, :interests_penalties  => int_pen,
                                       :alert_date => pp_alert_date, :amount => amount, :email => @current_pay_plan.email)
