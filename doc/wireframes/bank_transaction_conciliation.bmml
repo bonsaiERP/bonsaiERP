@@ -1,0 +1,98 @@
+<mockup version="1.0" skin="sketch" measuredW="1170" measuredH="1084" mockupW="1100" mockupH="1074">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::Image" x="60" y="0" w="-1" h="-1" measuredW="1100" measuredH="101" zOrder="2" locked="true" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/menu.png</src>
+      </controlProperties>
+    </control>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::Canvas" x="120" y="99" w="990" h="939" measuredW="100" measuredH="70" zOrder="1" locked="true" isInGroup="-1">
+      <controlProperties>
+        <borderStyle>none</borderStyle>
+      </controlProperties>
+    </control>
+    <control controlID="2" controlTypeID="com.balsamiq.mockups::Canvas" x="60" y="0" w="1100" h="1074" measuredW="100" measuredH="70" zOrder="0" locked="true" isInGroup="-1">
+      <controlProperties>
+        <borderStyle>none</borderStyle>
+        <color>13421772</color>
+      </controlProperties>
+    </control>
+    <control controlID="4" controlTypeID="com.balsamiq.mockups::Label" x="154" y="110" w="-1" h="-1" measuredW="238" measuredH="25" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>false</bold>
+        <text>%5BBancos%5D%20%20%20%3E%20%20%5BBanco%20Nacional%20de%20Bolivia%5D%20%20%3E</text>
+      </controlProperties>
+    </control>
+    <control controlID="5" controlTypeID="com.balsamiq.mockups::Title" x="154" y="149" w="-1" h="-1" measuredW="289" measuredH="46" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>4144959</color>
+        <size>28</size>
+        <text>Conciliar%20Transacci%F3n</text>
+      </controlProperties>
+    </control>
+    <control controlID="6" controlTypeID="com.balsamiq.mockups::Canvas" x="120" y="101" w="990" h="41" measuredW="100" measuredH="70" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderStyle>none</borderStyle>
+        <color>15658734</color>
+      </controlProperties>
+    </control>
+    <control controlID="11" controlTypeID="com.balsamiq.mockups::Label" x="508" y="301" w="236" h="25" measuredW="222" measuredH="25" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>0</color>
+        <text>-Referencia/N%BA%20Cheque%3A-%2023742546</text>
+      </controlProperties>
+    </control>
+    <control controlID="14" controlTypeID="com.balsamiq.mockups::PointyButton" x="154" y="345" w="-1" h="-1" measuredW="149" measuredH="28" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <direction>center</direction>
+        <text>Conciliar%20transacci%F3n</text>
+      </controlProperties>
+    </control>
+    <control controlID="15" controlTypeID="com.balsamiq.mockups::Title" x="154" y="195" w="-1" h="-1" measuredW="226" measuredH="32" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>4144959</color>
+        <size>18</size>
+        <text>Banco%20Nacional%20de%20Bolivia</text>
+      </controlProperties>
+    </control>
+    <control controlID="16" controlTypeID="com.balsamiq.mockups::Title" x="154" y="217" w="-1" h="-1" measuredW="166" measuredH="25" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>true</bold>
+        <color>3355443</color>
+        <size>13</size>
+        <text>55-7899-02%20%28en%20Dolares%29</text>
+      </controlProperties>
+    </control>
+    <control controlID="17" controlTypeID="com.balsamiq.mockups::Label" x="343" y="301" w="127" h="25" measuredW="112" measuredH="29" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>0</color>
+        <size>16</size>
+        <text>%24us%202.000%2C00</text>
+      </controlProperties>
+    </control>
+    <control controlID="19" controlTypeID="com.balsamiq.mockups::Label" x="226" y="301" w="-1" h="-1" measuredW="81" measuredH="25" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <italic>true</italic>
+        <text>2%20Feb%202011</text>
+      </controlProperties>
+    </control>
+    <control controlID="20" controlTypeID="com.balsamiq.mockups::Label" x="154" y="301" w="-1" h="-1" measuredW="52" measuredH="25" zOrder="12" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>3700253</color>
+        <text>Ingreso</text>
+      </controlProperties>
+    </control>
+    <control controlID="22" controlTypeID="com.balsamiq.mockups::Link" x="823" y="301" w="-1" h="-1" measuredW="79" measuredH="25" zOrder="13" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Karina%20Luna</text>
+      </controlProperties>
+    </control>
+    <control controlID="23" controlTypeID="com.balsamiq.mockups::Paragraph" x="154" y="244" w="726" h="53" measuredW="200" measuredH="140" zOrder="14" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>false</bold>
+        <color>5263440</color>
+        <italic>true</italic>
+        <text>Debe%20verificar%20su%20cuenta%20bancaria%20para%20poder%20asegurar%20de%20que%20la%20transacci%F3n%20efectivamente%20se%20realizo</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

@@ -1,83 +1,89 @@
-class AccountsController < ApplicationController
-  # GET /accounts
-  # GET /accounts.xml
+# encoding: utf-8
+# author: Boris Barroso
+# email: boriscyber@gmail.com
+class CashRegistersController < ApplicationController
+  before_filter :set_cash_register, :only => [:show, :edit, :update, :destroy]
+  # GET /cash_registers
+  # GET /cash_registers.xml
   def index
-    @accounts = Account.all
+    @cash_registers = CashRegister.org.all
 
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml => @accounts }
+      format.xml  { render :xml => @cash_registers }
     end
   end
 
-  # GET /accounts/1
-  # GET /accounts/1.xml
+  # GET /cash_registers/1
+  # GET /cash_registers/1.xml
   def show
-    @account = Account.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @account }
+      format.xml  { render :xml => @cash_register }
     end
   end
 
-  # GET /accounts/new
-  # GET /accounts/new.xml
+  # GET /cash_registers/new
+  # GET /cash_registers/new.xml
   def new
-    @account = Account.new
+    @cash_register = CashRegister.new(:currency_id => params[:currency_id])
 
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @account }
+      format.xml  { render :xml => @cash_register }
     end
   end
 
-  # GET /accounts/1/edit
+  # GET /cash_registers/1/edit
   def edit
-    @account = Account.find(params[:id])
   end
 
-  # POST /accounts
-  # POST /accounts.xml
+  # POST /cash_registers
+  # POST /cash_registers.xml
   def create
-    @account = Account.new(params[:account])
+    @cash_register = CashRegister.new(params[:cash_register])
 
     respond_to do |format|
-      if @account.save
-        format.html { redirect_to(@account, :notice => 'Account was successfully created.') }
-        format.xml  { render :xml => @account, :status => :created, :location => @account }
+      if @cash_register.save
+        format.html { redirect_to(@cash_register, :notice => 'La caja fue creada.') }
+        format.xml  { render :xml => @cash_register, :status => :created, :location => @cash_register }
       else
         format.html { render :action => "new" }
-        format.xml  { render :xml => @account.errors, :status => :unprocessable_entity }
+        format.xml  { render :xml => @cash_register.errors, :status => :unprocessable_entity }
       end
     end
   end
 
-  # PUT /accounts/1
-  # PUT /accounts/1.xml
+  # PUT /cash_registers/1
+  # PUT /cash_registers/1.xml
   def update
-    @account = Account.find(params[:id])
+    params[:cash_register].delete(:currency_id)
 
     respond_to do |format|
-      if @account.update_attributes(params[:account])
-        format.html { redirect_to(@account, :notice => 'Account was successfully updated.') }
+      if @cash_register.update_attributes(params[:cash_register])
+        format.html { redirect_to(@cash_register, :notice => 'La caja fue actualizada.') }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
-        format.xml  { render :xml => @account.errors, :status => :unprocessable_entity }
+        format.xml  { render :xml => @cash_register.errors, :status => :unprocessable_entity }
       end
     end
   end
 
-  # DELETE /accounts/1
-  # DELETE /accounts/1.xml
+  # DELETE /cash_registers/1
+  # DELETE /cash_registers/1.xml
   def destroy
-    @account = Account.find(params[:id])
-    @account.destroy
+    @cash_register.destroy
 
     respond_to do |format|
-      format.html { redirect_to(accounts_url) }
+      format.html { redirect_to(cash_registers_url) }
       format.xml  { head :ok }
     end
+  end
+
+private
+  def set_cash_register
+    @cash_register = CashRegister.org.find(params[:id])
   end
 end

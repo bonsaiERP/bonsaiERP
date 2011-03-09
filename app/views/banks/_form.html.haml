@@ -1,16 +1,25 @@
 = simple_form_for(bank) do |f|
   = bonsai_form_error(f)
   .main.bg_light_grey
-    = f.input :number, :label => 'Número de cuenta'
     = f.input :name, :label => 'Banco'
+    = f.input :number, :label => 'Número de cuenta'
     .clear
-    = f.association :currency, :collection => OrganisationSession.currencies, :label => 'Moneda'
-    = f.input :total_amount, :label => 'Total en cuenta', :input_html => {:size => 12}
+    -if bank.new_record?
+      = f.association :currency, :label => 'Moneda'
+      = f.input :amount, :label => 'Total en cuenta', :input_html => {:size => 12, :class => 'r'}, :required => true
+    -else
+      .input
+        %label Moneda
+        = bank.currency
+      .input
+        %label Total en cuenta
+        = "#{bank.currency_symbol} #{ntc(bank.total_amount)}"
+
     .clear
-  = f.input :address, :label => 'Dirección', :as => :text, :input_html => {:rows => 4, :cols => 35}
-  = f.input :phone, :label => 'Teléfono'
+  = f.input :address, :label => 'Dirección', :as => :text, :input_html => {:rows => 4, :cols => 35}, :required => false
+  = f.input :phone, :label => 'Teléfono', :required => false
   .clear
-  = f.input :email
+  = f.input :email, :required => false
   = f.input :website, :label => 'Sitio web'
   .clear
   .actions

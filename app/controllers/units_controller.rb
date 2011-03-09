@@ -9,7 +9,7 @@ class UnitsController < ApplicationController
   # GET /units
   # GET /units.xml
   def index
-    @units = Unit.all
+    @units = Unit.org
     respond_with @units
   end
 

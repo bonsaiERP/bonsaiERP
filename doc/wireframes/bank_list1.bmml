@@ -1,0 +1,180 @@
+<mockup version="1.0" skin="sketch" measuredW="1170" measuredH="1084" mockupW="1100" mockupH="1074">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::Image" x="60" y="0" w="-1" h="-1" measuredW="1100" measuredH="101" zOrder="2" locked="true" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/menu.png</src>
+      </controlProperties>
+    </control>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::Canvas" x="120" y="99" w="990" h="939" measuredW="100" measuredH="70" zOrder="1" locked="true" isInGroup="-1">
+      <controlProperties>
+        <borderStyle>none</borderStyle>
+      </controlProperties>
+    </control>
+    <control controlID="2" controlTypeID="com.balsamiq.mockups::Canvas" x="60" y="0" w="1100" h="1074" measuredW="100" measuredH="70" zOrder="0" locked="true" isInGroup="-1">
+      <controlProperties>
+        <borderStyle>none</borderStyle>
+        <color>13421772</color>
+      </controlProperties>
+    </control>
+    <control controlID="5" controlTypeID="com.balsamiq.mockups::Title" x="159" y="154" w="-1" h="-1" measuredW="96" measuredH="46" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>4144959</color>
+        <size>28</size>
+        <text>Bancos</text>
+      </controlProperties>
+    </control>
+    <control controlID="6" controlTypeID="com.balsamiq.mockups::Canvas" x="120" y="101" w="990" h="41" measuredW="100" measuredH="70" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderStyle>none</borderStyle>
+        <color>15658734</color>
+      </controlProperties>
+    </control>
+    <control controlID="39" controlTypeID="__group__" x="971" y="108" w="62" h="25" measuredW="103" measuredH="25" zOrder="5" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Image" x="0" y="4" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="0" locked="false" isInGroup="39">
+          <controlProperties>
+            <src>./assets/add.png</src>
+          </controlProperties>
+        </control>
+        <control controlID="3" controlTypeID="com.balsamiq.mockups::Label" x="18" y="0" w="-1" h="-1" measuredW="85" measuredH="25" zOrder="1" locked="false" isInGroup="39">
+          <controlProperties>
+            <color>3700253</color>
+            <text>Nuevo%20banco</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="85" controlTypeID="__group__" x="656" y="228" w="-1" h="-1" measuredW="169" measuredH="62" zOrder="7" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="0" w="169" h="62" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="85">
+          <controlProperties>
+            <borderStyle>none</borderStyle>
+            <color>15658734</color>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Label" x="7" y="5" w="-1" h="-1" measuredW="109" measuredH="25" zOrder="1" locked="false" isInGroup="85">
+          <controlProperties>
+            <color>5263440</color>
+            <text>Saldo%20a%20conciliar</text>
+          </controlProperties>
+        </control>
+        <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="7" y="26" w="-1" h="-1" measuredW="123" measuredH="29" zOrder="2" locked="false" isInGroup="85">
+          <controlProperties>
+            <color>0</color>
+            <size>16</size>
+            <text>%24us%2018.000%2C32</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="99" controlTypeID="com.balsamiq.mockups::Title" x="169" y="260" w="-1" h="-1" measuredW="161" measuredH="25" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>true</bold>
+        <color>3355443</color>
+        <size>13</size>
+        <text>N%BA%2055-7899-02%20Dolares</text>
+      </controlProperties>
+    </control>
+    <control controlID="108" controlTypeID="com.balsamiq.mockups::Link" x="169" y="228" w="-1" h="-1" measuredW="225" measuredH="32" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>18</size>
+        <text>Banco%20Nacional%20de%20Bolivia</text>
+      </controlProperties>
+    </control>
+    <control controlID="109" controlTypeID="__group__" x="484" y="228" w="-1" h="-1" measuredW="169" measuredH="62" zOrder="10" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="0" w="169" h="62" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="109">
+          <controlProperties>
+            <borderStyle>none</borderStyle>
+            <color>15658734</color>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Label" x="7" y="5" w="-1" h="-1" measuredW="107" measuredH="25" zOrder="1" locked="false" isInGroup="109">
+          <controlProperties>
+            <color>5263440</color>
+            <text>Saldo%20en%20Cuenta</text>
+          </controlProperties>
+        </control>
+        <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="7" y="26" w="-1" h="-1" measuredW="122" measuredH="29" zOrder="2" locked="false" isInGroup="109">
+          <controlProperties>
+            <color>0</color>
+            <size>16</size>
+            <text>%24us%2015.000%2C00</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="110" controlTypeID="com.balsamiq.mockups::Link" x="840" y="231" w="-1" h="-1" measuredW="175" measuredH="25" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>3%20conciliaciones%20pendientes</text>
+      </controlProperties>
+    </control>
+    <control controlID="111" controlTypeID="com.balsamiq.mockups::Canvas" x="157" y="209" w="918" h="115" measuredW="100" measuredH="70" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderStyle>square</borderStyle>
+      </controlProperties>
+    </control>
+    <control controlID="112" controlTypeID="com.balsamiq.mockups::Canvas" x="157" y="338" w="918" h="115" measuredW="100" measuredH="70" zOrder="12" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderStyle>square</borderStyle>
+      </controlProperties>
+    </control>
+    <control controlID="114" controlTypeID="com.balsamiq.mockups::Title" x="169" y="389" w="-1" h="-1" measuredW="165" measuredH="25" zOrder="13" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>true</bold>
+        <color>3355443</color>
+        <size>13</size>
+        <text>N%BA%20337994477%20Bolivianos</text>
+      </controlProperties>
+    </control>
+    <control controlID="115" controlTypeID="com.balsamiq.mockups::Link" x="169" y="357" w="-1" h="-1" measuredW="41" measuredH="32" zOrder="14" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>18</size>
+        <text>Bisa</text>
+      </controlProperties>
+    </control>
+    <control controlID="116" controlTypeID="__group__" x="484" y="357" w="-1" h="-1" measuredW="169" measuredH="62" zOrder="15" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="0" w="169" h="62" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="116">
+          <controlProperties>
+            <borderStyle>none</borderStyle>
+            <color>15658734</color>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Label" x="7" y="5" w="-1" h="-1" measuredW="107" measuredH="25" zOrder="1" locked="false" isInGroup="116">
+          <controlProperties>
+            <color>5263440</color>
+            <text>Saldo%20en%20Cuenta</text>
+          </controlProperties>
+        </control>
+        <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="7" y="26" w="-1" h="-1" measuredW="120" measuredH="29" zOrder="2" locked="false" isInGroup="116">
+          <controlProperties>
+            <color>0</color>
+            <size>16</size>
+            <text>Bs.%2075.870%2C00</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="117" controlTypeID="com.balsamiq.mockups::Title" x="670" y="362" w="-1" h="-1" measuredW="104" measuredH="25" zOrder="17" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>true</bold>
+        <color>3700253</color>
+        <size>13</size>
+        <text>Saldo%20conciliado</text>
+      </controlProperties>
+    </control>
+    <control controlID="119" controlTypeID="com.balsamiq.mockups::Canvas" x="657" y="356" w="169" h="62" measuredW="100" measuredH="70" zOrder="16" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderStyle>none</borderStyle>
+        <color>15658734</color>
+      </controlProperties>
+    </control>
+    <control controlID="121" controlTypeID="com.balsamiq.mockups::Icon" x="710" y="389" w="-1" h="-1" measuredW="24" measuredH="24" zOrder="18" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>3700253</color>
+        <icon>CheckMarkIcon%7Csmall</icon>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

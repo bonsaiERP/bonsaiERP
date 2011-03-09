@@ -1,6 +1,12 @@
+- content_for :links do
+  %ul.breadcrumps
+    %li #{ link_to "Inicio", "/dashboard" }<span>&gt;</span>
+
+  .links= link_to "Nuevo ítem", new_item_path, :class => 'new'
+
 %h1 Items
 
-%div.search
+%div.search{:style => 'display:none'}
   =form_tag "/items", :method => 'get'
 <<<<<<< HEAD
   =hidden_field_tag 'ctype', params[:ctype]
@@ -13,9 +19,11 @@
   =submit_tag 'Buscar'
 
 
-%p.links= link_to "Nuevo ítem", new_item_path, :class => 'new'
+.clear
 
-%table{ :class=> "decorated mt10" }
+= link_to "Buscar", "#", :class => 'search'
+= paginate @items
+%table{ :class=> "decorated" }
   %tr
     %th Código
     %th.300 Nombre

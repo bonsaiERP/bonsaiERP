@@ -21,8 +21,11 @@
       'items_table_id': '#items_table',
       'add_item_id': '#add_item',
       'default_currency_id': 1,
-      'one_item_table_warning': "Error: Debe existir al menos un ítem"
+      'one_item_table_warning': "Error: Debe existir al menos un ítem",
+      'currency_exchange_rate_id': ""
     };
+    Transaction.prototype.currency_id = 1;
+    Transaction.prototype.exchange_rate = 1;
     function Transaction(items, trigger, conf) {
       var self;
       this.items = items;
@@ -32,6 +35,8 @@
       }
       self = this;
       this.conf = $.extend(this.conf, conf);
+      this.currency_id = $(this.conf.currency_id).val() * 1;
+      this.exchange_rate = $(this.conf.currency_exchange_rate_id).val() * 1;
       self.set_events();
     }
     Transaction.prototype.set_events = function() {
@@ -63,6 +68,8 @@
         rate = prompt("Tipo de cambio", $(self.conf.currency_exchange_rate_id).val()) * 1;
         if (rate > 0) {
           $(self.conf.currency_exchange_rate_id).val(rate);
+          self.exchange_rate = rate;
+          $('body').trigger('total');
           return self.set_exchange_rate_html();
         }
       });
@@ -111,7 +118,7 @@
       var self;
       self = this;
       return $(grid_sel).find("" + price_sel + ", " + quantity_sel).live("change", function() {
-        return self.calculate_total_row(this, "input.price,input.quantity", "td.total_row");
+        return self.calculate_total_row(this, "input.price, input.quantity", "td.total_row");
       });
     };
     Transaction.prototype.set_add_item_event = function() {
@@ -144,36 +151,33 @@
       });
     };
     Transaction.prototype.set_exchange_rate = function() {
-      var base, change, currency_id, k, rate, _i, _len, _ref;
-      currency_id = 1 * $(this.conf.currency_id).val();
-      if (this.conf.default_currency_id === currency_id) {
+      var base, change, self;
+      self = this;
+      self.currency_id = 1 * $(this.conf.currency_id).val();
+      if (this.conf.default_currency_id === self.currency_id) {
         $(this.conf.currency_id).siblings("label").find("span").html("");
-        return $(this.conf.currency_exchange_rate_id).val(1);
+        $(this.conf.currency_exchange_rate_id).val(1);
+        return self.exchange_rate = 1;
       } else {
         base = this.find_currency(this.conf.default_currency_id);
-        change = this.find_currency(currency_id);
-        _ref = this.exchange_rates;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          k = _ref[_i];
-          if (k.currency_id === currency_id) {
-            rate = k.rate;
-          }
-        }
-        $(this.conf.currency_exchange_rate_id).val(rate);
+        change = this.find_currency(self.currency_id);
+        self.exchange_rate = self.find_exchange_rate(self.currency_id);
+        $(this.conf.currency_exchange_rate_id).val(self.exchange_rate);
         $(this.conf.currency_id).data({
           'base': base,
-          'change': change
+          'change': self.exchange_rate
         });
         return this.set_exchange_rate_html();
       }
     };
     Transaction.prototype.set_exchange_rate_html = function() {
-      var $span, base, change, html, rate;
+      var $span, change, currency, exchange_rate, html, self;
+      self = this;
       $span = $(this.conf.currency_id).siblings("label").find("span");
-      rate = $(this.conf.currency_exchange_rate_id).val() * 1;
-      base = $(this.conf.currency_id).data('base');
-      change = $(this.conf.currency_id).data('change');
-      html = "1 " + change.name + " = <span class='b'>" + rate + "</span> " + (base.name.pluralize()) + " ";
+      currency = this.find_currency(this.conf.default_currency_id);
+      change = this.find_currency(this.currency_id);
+      exchange_rate = $(this.conf.currency_exchange_rate_id).val() * 1;
+      html = "1 " + change.name + " = <span class='b'>" + (_b.ntc(exchange_rate)) + "</span> " + (currency.name.pluralize()) + " ";
       html += "<a id='edit_rate_link' href='javascript:'>editar</a>";
       return $span.html(html).mark();
     };
@@ -186,6 +190,17 @@
           return k;
         }
       }
+    };
+    Transaction.prototype.find_exchange_rate = function(currency_id) {
+      var k, rate, _i, _len, _ref;
+      _ref = this.exchange_rates;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        k = _ref[_i];
+        if (k.currency_id === currency_id) {
+          rate = k.rate * 1;
+        }
+      }
+      return rate;
     };
     Transaction.prototype.calculate_total_row = function(el, selectors, res) {
       var $tr, tot;
@@ -208,8 +223,8 @@
     };
     Transaction.prototype.calculate_discount = function() {
       var val;
-      val = (-1 * $(this.conf.discount_id).val()) / 100 * $(this.conf.subtotal_id).data("val") || 0;
-      $(this.conf.discount_total_id).html(_b.ntc(val)).data("val", val);
+      val = $(this.conf.discount_id).val() / 100 * $(this.conf.subtotal_id).data("val") || 0;
+      $(this.conf.discount_total_id).html(_b.ntc(val)).data("val", -1 * val);
       return this.calculate_taxes();
     };
     Transaction.prototype.calculate_taxes = function() {
@@ -219,9 +234,11 @@
       return this.calculate_total();
     };
     Transaction.prototype.calculate_total = function() {
-      var sum;
+      var currency, sum;
       sum = $(this.conf.subtotal_id).data("val") + $(this.conf.discount_total_id).data("val") + $(this.conf.taxes_total_id).data("val") || 0;
-      return $(this.conf.total_id).html(_b.ntc(sum)).data("val", sum);
+      currency = this.find_currency(this.conf.default_currency_id);
+      $(this.conf.total_id).html("" + currency.symbol + " " + (_b.ntc(sum))).data("val", sum);
+      return $('body').trigger('total', [sum]);
     };
     Transaction.prototype.add_item = function() {
       var $tr, pos;
@@ -236,16 +253,7 @@
       return $tr.insertBefore("" + this.conf.items_table_id + " tr.extra:first");
     };
     Transaction.prototype.check_currency_data = function() {
-      var base, change, currency_id;
-      currency_id = $(this.conf.currency_id).val() * 1;
-      if (this.conf.default_currency_id !== currency_id) {
-        base = this.find_currency(this.conf.default_currency_id);
-        change = this.find_currency(currency_id);
-        change.rate = $(this.conf.currency_exchange_rate_id).val() * 1;
-        $(this.conf.currency_id).data({
-          'base': base,
-          'change': change
-        });
+      if (this.conf.default_currency_id !== this.currency_id) {
         return this.set_exchange_rate_html();
       }
     };
@@ -280,8 +288,40 @@
       this.conf['currency_exchange_rate_id'] = '#income_currency_exchange_rate';
       this.conf['edit_rate_link_id'] = '#edit_rate_link';
       this.conf['insert_exchange_rate_prompt'] = "Ingrese el tipo de cambio";
+      this.set_total_event();
       Income.__super__.constructor.apply(this, arguments);
     }
+    Income.prototype.set_total_event = function() {
+      var self;
+      self = this;
+      return $('body').live('total', function() {
+        if (self.conf.default_currency_id !== self.currency_id) {
+          return self.set_total_currency();
+        }
+      });
+    };
+    Income.prototype.set_exchange_rate = function() {
+      Income.__super__.set_exchange_rate.apply(this, arguments);
+      if (this.conf.default_currency_id !== this.currency_id) {
+        return this.set_total_currency();
+      } else {
+        $('#total_value_currency').html("");
+        return $('#currency_symbol').html("");
+      }
+    };
+    Income.prototype.set_total_currency = function() {
+      var currency, tot_currency;
+      tot_currency = $(this.conf.total_id).data('val') / this.exchange_rate || 0;
+      currency = this.find_currency(this.currency_id);
+      $('#total_value_currency').html("" + currency.symbol + " " + (_b.ntc(tot_currency)));
+      return $('#currency_symbol').html("Total " + (currency.name.pluralize()));
+    };
+    Income.prototype.create_currency_message = function(currency) {
+      var message;
+      message = "Los items ahora tienen precios en <strong>" + (currency.name.pluralize()) + "</strong>, transformados con el tipo de cambio seleccionado";
+      $('#items_header').after("<div class='message' id='currency_message' style='display:none'><span class='close'>&nbsp;</span>" + message + "</div>");
+      return $('#currency_message').show("slow");
+    };
     return Income;
   })();
   window.Income = Income;

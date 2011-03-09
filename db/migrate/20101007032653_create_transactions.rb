@@ -10,7 +10,7 @@ class CreateTransactions < ActiveRecord::Migration
 
       t.boolean :active
       t.string :description
-      t.string :state
+      t.string :state, :limit => 20
       t.date :date
       t.string :ref_number
       t.string :bill_number # factura
@@ -29,6 +29,7 @@ class CreateTransactions < ActiveRecord::Migration
     add_index :transactions, :date
     add_index :transactions, :organisation_id
     add_index :transactions, :currency_id
+    add_index :transactions, :state
   end
 
   def self.down

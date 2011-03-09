@@ -15,4 +15,11 @@ module IncomesHelper
       "Crédito"
     end
   end
+
+  # Links for incomes
+  def link_incomes(text, option, options = {})
+    params[:option] = 'all' if params[:option].nil?
+    active = (params[:option] == option) ? "active" : ""
+    link_to text, incomes_path(:option => option), options.merge(:class => active)
+  end
 end

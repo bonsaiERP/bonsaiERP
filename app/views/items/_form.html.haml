@@ -9,12 +9,12 @@
   = f.input :price, :label => 'Precio de venta', :input_html => {:size => 12}
   .clear
   .input
-    = f.association :unit, :label => "Unidad", :input_html => { 'data-path' => new_unit_path }
+    = f.association :unit, :collection => Unit.org,:label => "Unidad", :input_html => { 'data-path' => new_unit_path }
     = f.input :active, :label => "Activo", :as => :radio
   = f.input :ctype, :label => 'Tipo', :collection => Item.get_types, :as => :radio
   .clear
   /= f.input :discount, :label => 'Descuento en venta (%)', :hint => 'Ej: 10:2.5 20:4'
-  = f.input :tag_list, :label => 'Etiquetas', :hint => 'Escriba palabras separadas por comas, Ej.: grande, costoso'
+  /= f.input :tag_list, :label => 'Etiquetas', :hint => 'Escriba palabras separadas por comas, Ej.: grande, costoso'
   = f.input :description, :as => :text, :input_html => {:rows => 5}
   .clear
   
@@ -25,7 +25,7 @@
   
   $(function() {
 
-    $('select[data-path]').prepend('<option class="new" value="" >Adicionar nuevo</option>');
+    //$('select[data-path]').prepend('<option class="new" value="" >Adicionar nuevo</option>');
 
     //var item_discount_div = new DiscountRange('item_discount');
   });

@@ -1,5 +1,5 @@
 = simple_form_for(@organisation) do |f|
-  =f.input :name, :label => 'Nombre'
+  =f.input :name, :label => 'Nombre de su empresa'
   =f.association :country, :label => 'País'
   .clear
   =f.association :currency, :label => 'Moneda base', :hint => 'Todas las transacciones se realizaran en esta moneda.'
@@ -14,7 +14,7 @@
   =f.input :phone_alt, :label => 'Teléfono alternativo' 
   =f.input :address_alt,:label => 'Dirección alternativa', :as => :text, :input_html => {:rows => 5} 
   .clear
-    = f.association :currencies, :label => 'Monedas de trabajo', :as => :check_boxes, :hint => 'Monedas con las cuales realizara las operaciones.', :wrapper_html => {:id => 'currencies'}
+    /= f.association :currencies, :label => 'Monedas de trabajo', :as => :check_boxes, :hint => 'Monedas con las cuales realizara las operaciones.', :wrapper_html => {:id => 'currencies'}
   .clear
   .submit
     = f.submit 'Crear empresa'
@@ -22,10 +22,10 @@
 
 :javascript
   $(function() {
-    $('#organisation_currency_id').live("click keyup", function () {
+    /*$('#organisation_currency_id').live("click keyup", function () {
       var val = $(this).val();
       $('#currencies input:checkbox').attr("disabled", false);
       $('#currencies label').removeClass("grey");
       $('#currencies input:checkbox[value=' + val + ']').attr("disabled", true).parent("label").addClass("grey");
-    });
+    });*/
   })

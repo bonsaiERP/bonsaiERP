@@ -8,7 +8,7 @@ class ContactsController < ApplicationController
   # GET /contacts
   # GET /contacts.xml
   def index
-    @contacts = Contact.all
+    @contacts = Contact.find_with_type(params[:option]).page(@page)
   end
 
   # GET /contacts/1
@@ -56,6 +56,6 @@ class ContactsController < ApplicationController
 
   protected
   def find_contact
-    @contact = Contact.find(params[:id])
+    @contact = Contact.org.find(params[:id])
   end
 end

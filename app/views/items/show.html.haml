@@ -1,8 +1,13 @@
-%h1 Ver item
+- content_for :links do
+  %ul.breadcrumps
+    %li #{link_to "Inicio", "/dashboard"}<span>&gt;</span>
+    %li #{ link_to "Items", "/items" }<span>&gt;</span>
 
-%p
-  = link_to "Editar", edit_item_path(@item) , :class => 'edit'
-  = link_to "Lista", items_path(:ctype => @item.ctype), :class => 'list'
+  .links
+    = link_to "Nuevo", new_item_path, :class => 'add'
+    = link_to "Editar", edit_item_path(@item) , :class => 'edit'
+    = link_to "Borrar", @item , :class => 'destroy red'
+%h1 Ver item
 
 .show
   .input
@@ -32,10 +37,6 @@
   /.input#item_discount
   /%label Descuento
   /%span= @item.discount
-  .input
-    %label Etiquetas
-    = @item.tag_list
-  .clear
   .input
     %label Descripción
     = @item.description

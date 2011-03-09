@@ -25,18 +25,43 @@ module ApplicationHelper
     number_to_currency(val)
   end
 
+  def nwd(val)
+    val ||= 0
+    number_with_delimiter(val)
+  end
+
   # Format addres to present on the
   def nl2br(val)
-    val.gsub!("\n", "<br/>").html_safe unless val.blank?
+    unless val.blank?
+      val.gsub!("\n", "<br/>")
+      val.html_safe
+    end
   end
 
   # Changes the <br/> for a \n
   def br2nl(val)
-    val.gsub!("<br/>", "\n") unless val.blank?
+    val.to_s.gsub!("<br/>", "\n") unless val.blank?
   end
 
   # Used for localization
   def lo(val)
     localize(val) unless val.nil?
+  end
+
+  # Links for presenting filtered data
+  # @param String
+  # @param String
+  # @param String
+  # @param Hash
+  # @return String
+  def link_tab(text, uri, option, options = {})
+    params[:option] = 'all' if params[:option].nil?
+    active = (params[:option] == option) ? "active" : ""
+    link_to text, "#{uri}?option=#{option}", options.merge(:class => active)
+  end
+
+  # returns the minus image with a size
+  def minus_image(size = 16)
+    raw "<img src=\"/stylesheets/images/minus.png\" width=\"#{size}\" height=\"#{size}\" alt =\"menos\"/>"
   end
 end

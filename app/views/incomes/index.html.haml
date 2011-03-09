@@ -1,6 +1,21 @@
+- content_for :links do
+  %ul.breadcrumps
+    %li #{link_to "Incio", "/dashboard"}<span>&gt;</span>
+
+  .links= link_to "Nueva venta", new_income_path, :class => 'new'
+
+
 %h1 Ventas
 
-%p.links= link_to "Nueva venta", new_income_path, :class => 'new'
+
+%ul.tabs
+  %li= link_incomes "Todas", 'all'
+  %li= link_incomes "Esperando aprobación", 'draft'
+  %li= link_incomes "Esperando cobro", 'awaiting_payment'
+  %li= link_incomes "Vencidas", 'due'
+  %li= link_incomes "Pagadas", 'paid'
+
+= paginate @incomes
 
 %table{ :class => 'decorated nwl' }
   %thead
@@ -20,11 +35,11 @@
       %tr{ :class => cycle(:odd, :even) }
         %td= link_to income.ref_number, income
         %td= income.contact
-        %td= lo income.date
-        %td= income.total
-        %td= income.balance
-        %td <span class="#{income.state}">#{income.show_state}</span>
+        %td.nw= lo income.date
+        %td.cur= with_currency income, income.real_total
+        %td.cur= with_currency income, income.balance
+        %td <span class="#{income.real_state}">#{income.show_state}</span>
         %td= cash_credit(income.cash)
-        %td 
+        %td= lo income.payment_date unless income.paid?
         %td.actions
           = bonsai_links(income) if income.draft?

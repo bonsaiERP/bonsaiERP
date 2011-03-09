@@ -10,26 +10,36 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110204170438) do
+ActiveRecord::Schema.define(:version => 20110304192835) do
 
   create_table "account_ledgers", :force => true do |t|
     t.integer  "organisation_id"
     t.integer  "account_id"
     t.integer  "currency_id"
-    t.decimal  "amount",          :precision => 14, :scale => 2
+    t.decimal  "amount",                         :precision => 14, :scale => 2
     t.date     "date"
     t.integer  "payment_id"
     t.boolean  "income"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "contact_id"
+    t.boolean  "conciliation"
+    t.text     "description"
+    t.integer  "transaction_id"
+    t.string   "reference",       :limit => 100
   end
 
   add_index "account_ledgers", ["account_id"], :name => "index_account_ledgers_on_account_id"
+  add_index "account_ledgers", ["conciliation"], :name => "index_account_ledgers_on_conciliation"
+  add_index "account_ledgers", ["contact_id"], :name => "index_account_ledgers_on_contact_id"
   add_index "account_ledgers", ["currency_id"], :name => "index_account_ledgers_on_currency_id"
   add_index "account_ledgers", ["date"], :name => "index_account_ledgers_on_date"
+  add_index "account_ledgers", ["description"], :name => "index_account_ledgers_on_description"
   add_index "account_ledgers", ["income"], :name => "index_account_ledgers_on_income"
   add_index "account_ledgers", ["organisation_id"], :name => "index_account_ledgers_on_organisation_id"
   add_index "account_ledgers", ["payment_id"], :name => "index_account_ledgers_on_payment_id"
+  add_index "account_ledgers", ["reference"], :name => "index_account_ledgers_on_reference"
+  add_index "account_ledgers", ["transaction_id"], :name => "index_account_ledgers_on_transaction_id"
 
   create_table "accounts", :force => true do |t|
     t.integer  "organisation_id"
@@ -90,26 +100,19 @@ ActiveRecord::Schema.define(:version => 20110204170438) do
     t.datetime "updated_at"
   end
 
-  create_table "currencies_organisations", :id => false, :force => true do |t|
-    t.integer "currency_id"
-    t.integer "organisation_id"
-  end
-
-  add_index "currencies_organisations", ["currency_id", "organisation_id"], :name => "currencies_orgs_c_id_org_id"
-
   create_table "currency_rates", :force => true do |t|
     t.integer  "currency_id"
-    t.decimal  "rate",            :precision => 14, :scale => 6
-    t.boolean  "active",                                         :default => false
-    t.integer  "organisation_id"
+    t.decimal  "rate",        :precision => 14, :scale => 6
+    t.boolean  "active",                                     :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.date     "date"
   end
 
   add_index "currency_rates", ["active"], :name => "index_currency_rates_on_active"
   add_index "currency_rates", ["created_at"], :name => "index_currency_rates_on_created_at"
   add_index "currency_rates", ["currency_id"], :name => "index_currency_rates_on_currency_id"
-  add_index "currency_rates", ["organisation_id"], :name => "index_currency_rates_on_organisation_id"
+  add_index "currency_rates", ["date"], :name => "index_currency_rates_on_date"
 
   create_table "items", :force => true do |t|
     t.integer  "unit_id"
@@ -192,22 +195,28 @@ ActiveRecord::Schema.define(:version => 20110204170438) do
     t.integer  "organisation_id"
     t.string   "ctype"
     t.date     "date"
-    t.decimal  "amount",              :precision => 14, :scale => 2
-    t.decimal  "interests_penalties", :precision => 14, :scale => 2
+    t.decimal  "amount",                            :precision => 14, :scale => 2
+    t.decimal  "interests_penalties",               :precision => 14, :scale => 2
     t.string   "description"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "account_id"
     t.integer  "currency_id"
     t.boolean  "active"
+    t.integer  "contact_id"
+    t.string   "reference",           :limit => 50
+    t.string   "state",               :limit => 20
   end
 
   add_index "payments", ["account_id"], :name => "index_payments_on_account_id"
   add_index "payments", ["active"], :name => "index_payments_on_active"
+  add_index "payments", ["contact_id"], :name => "index_payments_on_contact_id"
   add_index "payments", ["ctype"], :name => "index_payments_on_ctype"
   add_index "payments", ["currency_id"], :name => "index_payments_on_currency_id"
   add_index "payments", ["date"], :name => "index_payments_on_date"
   add_index "payments", ["organisation_id"], :name => "index_payments_on_organisation_id"
+  add_index "payments", ["reference"], :name => "index_payments_on_reference"
+  add_index "payments", ["state"], :name => "index_payments_on_state"
   add_index "payments", ["transaction_id"], :name => "index_payments_on_transaction_id"
 
   create_table "prices", :force => true do |t|
@@ -314,7 +323,7 @@ ActiveRecord::Schema.define(:version => 20110204170438) do
     t.decimal  "tax_percent",                          :precision => 5,  :scale => 2
     t.boolean  "active"
     t.string   "description"
-    t.string   "state"
+    t.string   "state",                  :limit => 20
     t.date     "date"
     t.string   "ref_number"
     t.string   "bill_number"
@@ -339,6 +348,7 @@ ActiveRecord::Schema.define(:version => 20110204170438) do
   add_index "transactions", ["payment_date"], :name => "index_transactions_on_payment_date"
   add_index "transactions", ["project_id"], :name => "index_transactions_on_project_id"
   add_index "transactions", ["ref_number"], :name => "index_transactions_on_ref_number"
+  add_index "transactions", ["state"], :name => "index_transactions_on_state"
 
   create_table "units", :force => true do |t|
     t.string   "name",            :limit => 100
@@ -353,9 +363,9 @@ ActiveRecord::Schema.define(:version => 20110204170438) do
   add_index "units", ["organisation_id"], :name => "index_units_on_organisation_id"
 
   create_table "users", :force => true do |t|
-    t.string   "email",                               :default => "", :null => false
-    t.string   "encrypted_password",   :limit => 128, :default => "", :null => false
-    t.string   "password_salt",                       :default => "", :null => false
+    t.string   "email",                                              :null => false
+    t.string   "encrypted_password",   :limit => 128,                :null => false
+    t.string   "password_salt",                                      :null => false
     t.string   "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"

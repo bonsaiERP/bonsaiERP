@@ -16,8 +16,6 @@ class Organisation < ActiveRecord::Base
   has_many :users, :through => :links
   has_many :units, :dependent => :destroy
 
-  has_and_belongs_to_many :currencies
-
   delegate :code, :name, :symbol, :to => :currency, :prefix => true
 
   # validations
@@ -41,13 +39,13 @@ protected
 
   # Creates all registers needed when an organisation is created
   def create_all_records
-    OrganisationSession.set = { :id => self.id, :name => self.name }
+    OrganisationSession.set = { :id => self.id, :name => self.name, :curency_id => self.currency_id }
     create_taxes
     create_link
     create_units
   end
 
-  # Adds the default taxes for each country
+  # Adds the default taxes for each country using a serialized value from the database
   def create_taxes
     country.taxes.each do |tax|
       Tax.create!(tax)

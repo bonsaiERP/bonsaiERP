@@ -1,12 +1,39 @@
-%table.decorated._50
+:css
+  .false_in{ color: #FF0000; }
+  td.r{width: 110px; }
+  td.check{width: 120px;}
+  td.d{ width: 70px; }
+  a.concile{
+    float:left;
+    display: inline-block;
+    margin-right: 4px;
+  }
+
+- ledgers = account_ledgers.includes(:payment, :contact).page(@page)
+
+= link_to "Nueva transacción", new_account_ledger_path, :class => 'new'
+
+.clear
+= link_to "Buscar", "#", :class => 'search'
+/"#", :style => 'display:block;float:left;margin:10px'
+= paginate ledgers
+
+%table.decorated.nwl.nwf
   %tr
     %th Fecha
-    %th Cantidad
-    %th Pago
-  - account_ledgers.each do |al|
-    %tr
-      %td= lo al.date
-      %td.r= ntc al.amount
-      %td= with_payment(al)
-
+    %th Ref/Nº Cheque
+    %th Monto
+    %th Contacto
+    %th Descripción
+    %th
+  - ledgers.each do |al|
+    %tr{:class => al.income.to_s + '_in' }
+      %td.d= link_to(lo(al.date), al)
+      %td.check= al.reference
+      %td.r= with_currency(al, al.amount)
+      %td= link_to al.contact, al.contact if al.contact_id
+      %td= link_description al
+      %td
+        = link_to "Conciliar", al, :class => 'concile'
+        = link_to "borrar", "", :class => 'delete', 'data-remote' => true, :title => 'Borrar'
 

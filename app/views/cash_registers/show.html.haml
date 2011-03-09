@@ -1,20 +1,25 @@
-%h1 account
 %p.links
-  = link_to 'Editar', edit_account_path(@account), :class => 'edit'
-  = link_to 'Lista', accounts_path, :class => 'list'
+  = link_to 'Editar', edit_cash_register_path(@cash_register), :class => 'edit'
+  = link_to 'Lista', cash_registers_path, :class => 'list'
+%h1 Caja
 
 .input
-  %label #<Rails::Generators::GeneratedAttribute:0xc2d34b0>
-  %span= @account.name
-.input
-  %label #<Rails::Generators::GeneratedAttribute:0xc2d335c>
-  %span= @account.address
-.input
-  %label #<Rails::Generators::GeneratedAttribute:0xc2d32a8>
-  %span= @account.email
-.input
-  %label #<Rails::Generators::GeneratedAttribute:0xc2d31a4>
-  %span= @account.website
-.input
-  %label #<Rails::Generators::GeneratedAttribute:0xc2d30a0>
-  %span= @account.number
+  %label Nombre de caja
+  %span= @cash_register.name
+._25.fl
+  %label Moneda
+  %span= @cash_register.currency
+._25.fl
+  %label Total en cuenta
+  %span.b #{@cash_register.currency_symbol} #{ntc @cash_register.total_amount}
+.clear
+
+._55.fl
+  %h2.dark Ultimas transacciones
+  = render "account_ledgers/list", :account_ledgers => @cash_register.account_ledgers.includes(:payment)
+
+
+.clear
+._40.fr
+  %label Dirección
+  %span= nl2br(@cash_register.address)

@@ -1,8 +1,9 @@
 class PaymentsController < ApplicationController
+  before_filter :set_payment, :only => [:show, :edit, :update, :destroy, :null_payment]
   # GET /payments
   # GET /payments.xml
   def index
-    @payments = Payment.all
+    @payments = Payment.org.all
 
     respond_to do |format|
       format.html # index.html.erb
@@ -13,7 +14,6 @@ class PaymentsController < ApplicationController
   # GET /payments/1
   # GET /payments/1.xml
   def show
-    @payment = Payment.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -34,10 +34,6 @@ class PaymentsController < ApplicationController
     #end
   end
 
-  # GET /payments/1/edit
-  def edit
-    @payment = Payment.find(params[:id])
-  end
 
   # POST /payments
   # POST /payments.xml
@@ -55,31 +51,14 @@ class PaymentsController < ApplicationController
     end
   end
 
-  # PUT /payments/1
-  # PUT /payments/1.xml
-  def update
-    @payment = Payment.find(params[:id])
-
-    respond_to do |format|
-      if @payment.update_attributes(params[:payment])
-        format.html { redirect_to(@payment, :notice => 'Payment was successfully updated.') }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @payment.errors, :status => :unprocessable_entity }
-      end
-    end
+  # PUT /payments/:id/null_payment
+  def null_payment
+    @payment.null_payment
+    redirect_ajax @payment
   end
 
-  # DELETE /payments/1
-  # DELETE /payments/1.xml
-  def destroy
-    @payment = Payment.find(params[:id])
-    @payment.destroy
-
-    respond_to do |format|
-      format.html { redirect_to(payments_url) }
-      format.xml  { head :ok }
-    end
+private
+  def set_payment
+    @payment = Payment.org.find(params[:id])
   end
 end

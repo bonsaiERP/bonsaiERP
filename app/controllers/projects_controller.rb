@@ -1,8 +1,9 @@
 class ProjectsController < ApplicationController
+  before_filter :set_project, :only => [:show, :edit, :update, :destroy]
   # GET /projects
   # GET /projects.xml
   def index
-    @projects = Project.all
+    @projects = Project.org.all
 
     respond_to do |format|
       format.html # index.html.erb
@@ -13,8 +14,6 @@ class ProjectsController < ApplicationController
   # GET /projects/1
   # GET /projects/1.xml
   def show
-    @project = Project.find(params[:id])
-
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @project }
@@ -34,7 +33,6 @@ class ProjectsController < ApplicationController
 
   # GET /projects/1/edit
   def edit
-    @project = Project.find(params[:id])
   end
 
   # POST /projects
@@ -52,8 +50,6 @@ class ProjectsController < ApplicationController
   # PUT /projects/1
   # PUT /projects/1.xml
   def update
-    @project = Project.find(params[:id])
-
     if @project.update_attributes(params[:project])
       redirect_to(@project, :notice => 'El project fue actualizado.')
     else
@@ -64,9 +60,12 @@ class ProjectsController < ApplicationController
   # DELETE /projects/1
   # DELETE /projects/1.xml
   def destroy
-    @project = Project.find(params[:id])
     @project.destroy
-
     redirect_ajax @project
+  end
+
+private
+  def set_project
+    @project = Project.org.find(params[:id])
   end
 end

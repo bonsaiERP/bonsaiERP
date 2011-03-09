@@ -22,9 +22,9 @@ es:
     confirmations:
       link: "No recibio las instrucciones para confirmación?"
       send_instructions: 'Usted recibira un email con las instrucciones de como confirmar su cuenta en unos minutos.'
-      confirmed: 'Your account was successfully confirmed. You are now signed in.'
+      confirmed: 'Su cuenta a sido confirmada, Es hora de usar bonsai'
     registrations:
-      signed_up: 'Se ha registrado correctamente y recibirá un email para confirmar su registro'
+      signed_up: 'Recibirás un email para confirmar tu registro'
       updated: 'Su cuenta fue actualizada correctamente.'
       destroyed: 'Hasta luego! Su cuenta ha sido cancelada. Esperamos verlo proto.'
     unlocks:
@@ -32,14 +32,16 @@ es:
       unlocked: 'Su cuenta fue desbloqueada. Ahora ingreso al sistema.'
     mailer:
       confirmation_instructions:
-        subject: 'Instrucciones de confirmación'
+        subject: 'Registro bonsaierp.com'
       reset_password_instructions:
         subject: 'Instrucciones para resetear la contraseña'
       unlock_instructions:
         subject: 'Instrucciones para desbloquear'
     views:
       sign_in: "Ingresar"
-      sign_up: "Registro"
+      sign_up: "Registrate"
       sign_out: "Salir"
+      password_forgot: "Olvido su cotraseña?"
+      password_submit: ""
       
 

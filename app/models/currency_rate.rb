@@ -2,27 +2,27 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class CurrencyRate < ActiveRecord::Base
-  acts_as_org
 
   before_create :update_active
 
   # relationships
   belongs_to :currency
-  belongs_to :organisation
 
   # validations
-  validates_presence_of :currency_id, :organisation_id
+  validates_presence_of :currency_id
   validates :rate, :presence => true, :numericality => {:greater_than => 0}
 
   # scopes
-  default_scope where(:organisation_id => OrganisationSession.organisation_id)
   scope :active, where(:active => true)
 
   # returns if the currency has been updated for the date and organisation
   # @param Integer 
-  def self.current?
-    organisation_id ||= OrganisationSession.organisation_id
-    where(["active=? AND created_at>=?", true, Date.today]).any?
+  def self.current?(org)
+    if org.currency_ids.any?
+      CurrencyRate.org.where(["active=? AND created_at>=?", true, Date.today]).any?
+    else
+      true
+    end
   end
 
   # Method to create new currencies
@@ -45,7 +45,7 @@ class CurrencyRate < ActiveRecord::Base
 private
   # sets to inactive all other active currency_rates
   def update_active
-    CurrencyRate.update_all(["active=?", false], ["active=? AND currency_id=? AND organisation_id=?", true, currency_id, OrganisationSession.organisation_id])
+    CurrencyRate.update_all(["active = ?", false], ["active = ? AND currency_id = ?", true, id])
     self.active = true
   end
 

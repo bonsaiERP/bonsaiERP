@@ -1,10 +1,11 @@
 (function() {
   $(document).ready(function() {
-    var createDialog, createErrorLog, createSelectOption, csfr_token, currency, getAjaxType, mark, ntc, parseDate, serializeFormElements, setDateSelect, setIframePostEvents, speed, start, toByteSize, transformDateSelect, transformMinuteSelect, updateTemplateRow, _b;
+    var AjaxLoadingHTML, createDialog, createErrorLog, createSelectOption, csrf_token, currency, getAjaxType, mark, ntc, parseDate, serializeFormElements, setDateSelect, setIframePostEvents, speed, start, toByteSize, transformDateSelect, transformMinuteSelect, updateTemplateRow, _b;
     _b = {};
     window._b = _b;
     speed = 300;
-    csfr_token = $('meta[name=csfr-token]').attr('content');
+    csrf_token = $('meta[name=csrf-token]').attr('content');
+    window.csrf_token = csrf_token;
     $.datepicker._defaults.dateFormat = 'dd M yy';
     parseDate = function(date, tipo) {
       var d;
@@ -111,6 +112,10 @@
     $('a.less').live('click', function() {
       return $(this).html('Ver más').removeClass('less').addClass('more').next('.hidden').hide(speed);
     });
+    AjaxLoadingHTML = function() {
+      return "<div class='c'><img src='/images/ajax-loader.gif' alt='Cargando' /><br/>Cargando...</div>";
+    };
+    window.AjaxLoadingHTML = AjaxLoadingHTML;
     createDialog = function(params) {
       var data, div, div_id;
       data = params;
@@ -118,9 +123,9 @@
         'id': new Date().getTime(),
         'title': '',
         'width': 800,
-        'height': 400,
         'modal': true,
         'resizable': false,
+        'position': 'top',
         'close': function(e, ui) {
           return $('#' + div_id).parents("[role=dialog]").detach();
         }
@@ -132,7 +137,7 @@
         'title': params['title']
       }).data(data).addClass('ajax-modal').css({
         'z-index': 10000
-      });
+      }).html(AjaxLoadingHTML());
       delete params['id'];
       delete params['title'];
       $(div).dialog(params);
@@ -148,6 +153,45 @@
       }
     };
     window.getAjaxType = getAjaxType;
+    $('div.ajax-modal form').live('submit', function() {
+      var $div, data, el, new_record, trigger;
+      if ($(this).attr('enctype') === 'multipart/form-data') {
+        return true;
+      }
+      $(this).find('input, select, textarea').attr('disabled', true);
+      data = serializeFormElements(this);
+      el = this;
+      $div = $(this).parents('.ajax-modal');
+      new_record = $div.data('ajax-type') === 'new' ? true : false;
+      trigger = $div.data('trigger');
+      $.ajax({
+        'url': $(el).attr('action'),
+        'cache': false,
+        'context': el,
+        'data': data,
+        'type': data['_method'] || $(this).attr('method'),
+        'success': function(resp, status, xhr) {
+          var div, p;
+          try {
+            data = $.parseJSON(resp);
+            data['new_record'] = new_record;
+            p = $(el).parents('div.ajax-modal');
+            $(p).html('').dialog('destroy');
+            return $('body').trigger(trigger, [data]);
+          } catch (e) {
+            div = $(el).parents('div.ajax-modal:first');
+            div.html(resp);
+            return setTimeout(function() {
+              return $(div).transformDateSelect();
+            }, 200);
+          }
+        },
+        'error': function(resp) {
+          return alert('There are errors in the form please correct them');
+        }
+      });
+      return false;
+    });
     $('a.ajax').live("click", function(e) {
       var data, div;
       data = $.extend({
@@ -160,6 +204,9 @@
       });
       e.stopPropagation();
       return false;
+    });
+    $('a.search').live("click", function() {
+      return $(this).siblings("div.search").show(speed);
     });
     currency = {
       'separator': ",",
@@ -257,41 +304,6 @@
       $(div).load($(this).attr("href"));
       return false;
     });
-    $('div.ajax-modal form[enctype!=multipart/form-data]').live('submit', function() {
-      var $div, data, el, new_record, trigger;
-      data = serializeFormElements(this);
-      el = this;
-      $div = $(this).parents('.ajax-modal');
-      new_record = $div.data('ajax-type') === 'new' ? true : false;
-      trigger = $div.data('trigger');
-      $.ajax({
-        'url': $(el).attr('action'),
-        'cache': false,
-        'context': el,
-        'data': data,
-        'type': data['_method'] || $(this).attr('method'),
-        'success': function(resp, status, xhr) {
-          var div, p;
-          try {
-            data = $.parseJSON(resp);
-            data['new_record'] = new_record;
-            p = $(el).parents('div.ajax-modal');
-            $(p).html('').dialog('destroy');
-            return $('body').trigger(trigger, [data]);
-          } catch (e) {
-            div = $(el).parents('div.ajax-modal:first');
-            div.html(resp);
-            return setTimeout(function() {
-              return $(div).transformDateSelect();
-            }, 200);
-          }
-        },
-        'error': function(resp) {
-          return alert('There are errors in the form please correct them');
-        }
-      });
-      return false;
-    });
     updateTemplateRow = function(template, data, macro) {
       var $node, tmp;
       if ($.inArray(macro, ["insertBefore", "insertAfter", "appendTo"]) < 0) {
@@ -309,10 +321,11 @@
       return $('body').trigger("update:template", [$node, data]);
     };
     $.updateTemplateRow = $.fn.updateTemplateRow = updateTemplateRow;
-    $('a.delete').live("click", function(e) {
-      var el, self, url;
+    $('a.delete[data-remote=true]').live("click", function(e) {
+      var el, self, trigger, url;
       self = this;
       $(self).parents("tr:first, li:first").addClass('marked');
+      trigger = $(self).data('trigger');
       if (confirm('Esta seguro de borrar el item seleccionado')) {
         url = $(this).attr('href');
         el = this;
@@ -320,6 +333,9 @@
           'url': url,
           'type': 'delete',
           'context': el,
+          'data': {
+            'authenticity_token': csrf_token
+          },
           'success': function(resp, status, xhr) {
             var data;
             try {
@@ -330,7 +346,11 @@
                 $(self).parents("tr:first, li:first").removeClass('marked');
                 alert("Error: " + data.base_error);
               }
-              return $('body').trigger('ajax:delete', [data, url]);
+              if (trigger) {
+                return $('body').trigger(trigger, [data, url]);
+              } else {
+                return $('body').trigger('ajax:delete', [data, url]);
+              }
             } catch (e) {
               return $(self).parents("tr:first, li:first").removeClass('marked');
             }
@@ -401,6 +421,9 @@
       }
       return $('#error-log').html(data).dialog("open");
     };
+    $('.message .close').live("click", function() {
+      return $(this).parents(".message:first").hide("slow").delay(500).remove();
+    });
     $.ajaxSetup({
       dataType: "html",
       beforeSend: function(xhr) {},

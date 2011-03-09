@@ -8,7 +8,7 @@ class TaxesController < ApplicationController
   # GET /taxes
   # GET /taxes.xml
   def index
-    @taxes = Tax.all
+    @taxes = Tax.org.all
     respond_with @taxes
   end
 
@@ -28,7 +28,7 @@ class TaxesController < ApplicationController
 
   # GET /taxes/1/edit
   def edit
-    @tax = Tax.find(params[:id])
+    @tax = Tax.org.find(params[:id])
   end
 
   # POST /taxes

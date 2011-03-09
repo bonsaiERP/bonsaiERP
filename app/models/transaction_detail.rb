@@ -10,8 +10,9 @@ class TransactionDetail < ActiveRecord::Base
   belongs_to :transaction
   belongs_to :item
 
-  # scopes
-  default_scope where(:organisation_id => OrganisationSession.organisation_id )
+  # validations
+  validates_presence_of :item_id
+  validates_numericality_of :quantity, :greater_than => 0
 
   def total
     price * quantity

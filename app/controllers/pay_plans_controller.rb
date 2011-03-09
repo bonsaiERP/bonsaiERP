@@ -2,11 +2,12 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class PayPlansController < ApplicationController
-
+  
+  before_filter :set_pay_plan, :only => [:show, :edit, :update, :destroy]
   # GET /pay_plans
   # GET /pay_plans.xml
   def index
-    @pay_plans = PayPlan.paginate(:page => @page)
+    @pay_plans = PayPlan.org.paginate(:page => @page)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -17,7 +18,6 @@ class PayPlansController < ApplicationController
   # GET /pay_plans/1
   # GET /pay_plans/1.xml
   def show
-    @pay_plan = PayPlan.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -30,7 +30,7 @@ class PayPlansController < ApplicationController
   def new
     begin
       transaction = Transaction.find_by_type_and_id( params[:type], params[:id] )
-      @pay_plan = PayPlan.new(:transaction_id => transaction.id, :ctype => transaction.type)
+      @pay_plan = transaction.new_pay_plan
     rescue
       redirect_to request.referer
     end
@@ -38,47 +38,65 @@ class PayPlansController < ApplicationController
 
   # GET /pay_plans/1/edit
   def edit
-    @pay_plan = PayPlan.find(params[:id])
   end
 
   # POST /pay_plans
   # POST /pay_plans.xml
   def create
-    @pay_plan = PayPlan.new(params[:pay_plan])
-    if @pay_plan.save
-      redirect_ajax(@pay_plan, :notice => 'Se ha creado una proforma de venta.')
-    else
-      render :action => "new"
+    begin
+      @transaction = Transaction.org.find(params[:pay_plan][:transaction_id])
+      @pay_plan = @transaction.new_pay_plan(params[:pay_plan])
+
+      if @pay_plan.valid? and @transaction.create_pay_plan(params[:pay_plan])
+        params[:ajax_modal] = true
+        render :partial => 'pay_plans', :locals => { :transaction => @transaction }
+      else
+        render :action => "new"
+      end
+    rescue
+      render :text => "Existio un error por favor cierre la ventana."
     end
   end
 
   # PUT /pay_plans/1
   # PUT /pay_plans/1.xml
   def update
-    @pay_plan = PayPlan.find(params[:id])
+    begin
+      @transaction = Transaction.org.find(params[:pay_plan][:transaction_id])
+      @pay_plan = @transaction.new_pay_plan(params[:pay_plan])
+      options = params[:pay_plan].merge(:id => params[:id])
 
-    if @pay_plan.update_attributes(params[:pay_plan])
-      redirect_ajax(@pay_plan, :notice => 'PayPlans was successfully updated.')
-    else
-      render :action => "edit"
+      if @pay_plan.valid? and @transaction.update_pay_plan(options) 
+        params[:ajax_modal] = true
+        render :partial => 'pay_plans', :locals => { :transaction => @transaction }
+      else
+        @pay_plan.id = params[:id].to_i
+        render :action => "edit"
+      end
+    rescue
+      render :text => "Existio un error por favor cierre la ventana."
     end
   end
 
   # DELETE /pay_plans/1
   # DELETE /pay_plans/1.xml
   def destroy
-    @pay_plan = PayPlan.find(params[:id])
-    #require 'mocha'
-    #@pay_plan = Object.new
-    #@pay_plan.stubs(:destroyed? => false, :attributes => {}, :errors => {:base => 'Fua'})
-    @pay_plan.destroy
+    begin
+      @pay_plan = PayPlan.find(params[:id])
+      @transaction = Transaction.org.find(@pay_plan.transaction_id)
 
-    redirect_ajax @pay_plan
+      if @transaction.destroy_pay_plan(@pay_plan.id)
+        render :partial => 'pay_plans', :locals => { :transaction => @transaction }
+      else
+        render :text => {:success => false}.to_json
+      end
+    rescue
+      render :text => "Existio un error por favor cierre la ventana."
+    end
   end
 
-  # Sends and email message with the current pay_plan
-  # GET: /pay_plan/:id/email
-  def email
-
+private
+  def set_pay_plan
+    @pay_plan = PayPlan.org.find(params[:id])
   end
 end

@@ -6,14 +6,28 @@ class Account < ActiveRecord::Base
 
   # relationships
   belongs_to :currency
-  has_many :account_ledgers, :order => "date DESC"
+  has_many :account_ledgers, :order => "created_at DESC", :dependent => :destroy
   has_many :payments
 
+  attr_accessor :amount
+  attr_protected :total_amount
+
+  delegate :name, :symbol, :to => :currency, :prefix => true
+
+
+  #validations
+  validates_numericality_of :amount, :greater_than_or_equal_to => 0, :if => :new_record?
+  validates_presence_of :currency_id
+  validate :valid_currency_not_changed, :unless => :new_record?
+
   # scopes
-  default_scope where(:organisation_id => OrganisationSession.organisation_id)
 
   def to_s
     "#{name} #{number}"
   end
 
+  # If update occurs it should not allow
+  def valid_currency_not_changed
+    self.errors.add(:base, "No puede modificar la moneda") if changes[:currency_id]
+  end
 end

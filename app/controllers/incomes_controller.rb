@@ -3,21 +3,20 @@
 # email: boriscyber@gmail.com
 class IncomesController < ApplicationController
 
-  before_filter :check_currency_set, :only => [:new, :edit, :create, :update]
-  before_filter :set_default_currency, :except => [:index, :destroy]
+  #before_filter :check_currency_set, :only => [:new, :edit, :create, :update]
+  #before_filter :set_default_currency, :except => [:index, :destroy]
+  before_filter :set_income, :only => [:show, :edit, :update, :destroy, :aprove]
 
 
   # GET /incomes
   # GET /incomes.xml
   def index
-    @incomes = Income.includes(:contact, :pay_plans).paginate(:page => @page)
+    @incomes = Income.find_with_state(params[:option]).page(@page)
   end
 
   # GET /incomes/1
   # GET /incomes/1.xml
   def show
-    @income = Income.includes(:transaction_details, :payments, :pay_plans).find(params[:id])
-
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @income }
@@ -27,14 +26,12 @@ class IncomesController < ApplicationController
   # GET /incomes/new
   # GET /incomes/new.xml
   def new
-    @income = Income.new(:date => Date.today, :discount => 0, :currency_exchange_rate => 1, :currency_id => @currency.id )
+    @income = Income.new(:date => Date.today, :discount => 0, :currency_exchange_rate => 1, :currency_id => currency_id )
     @income.transaction_details.build
   end
 
   # GET /incomes/1/edit
   def edit
-    @income = Income.find(params[:id])
-
     if @income.state == 'aproved'
       redirect_income
     end
@@ -43,7 +40,6 @@ class IncomesController < ApplicationController
   # POST /incomes
   # POST /incomes.xml
   def create
-    #render :text => params.to_json
     @income = Income.new(params[:income])
     respond_to do |format|
       if @income.save
@@ -59,8 +55,6 @@ class IncomesController < ApplicationController
   # PUT /incomes/1
   # PUT /incomes/1.xml
   def update
-    @income = Income.find(params[:id])
-
     if @income.aproved?
       redirect_income
     else
@@ -75,8 +69,7 @@ class IncomesController < ApplicationController
   # DELETE /incomes/1
   # DELETE /incomes/1.xml
   def destroy
-    @income = Income.find(params[:id])
-    if @income.aproved
+    if @income.aproved?
       redirect_income
     else
       @income.destroy
@@ -87,7 +80,6 @@ class IncomesController < ApplicationController
   # PUT /incomes/1/aprove
   # Method to aprove an income
   def aprove
-    @income = Income.find(params[:id])
     if @income.aprove!
       flash[:notice] = "La nota de venta fue aprobada"
     else
@@ -101,13 +93,17 @@ class IncomesController < ApplicationController
   end
 
 private
-  def set_default_currency
-    @currency = Organisation.find(session[:organisation][:id]).currency
-  end
+  #def set_default_currency
+  #  @currency = Organisation.find(currency_id).currency
+  #end
 
   # Redirects in case that someone is trying to edit or destroy an  aproved income
   def redirect_income
     flash[:warning] = "No es posible editar una nota ya aprobada!"
     redirect_to incomes_path
+  end
+
+  def set_income
+    @income = Income.org.find(params[:id])
   end
 end

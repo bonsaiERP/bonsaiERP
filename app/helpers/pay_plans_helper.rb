@@ -11,4 +11,5 @@ module PayPlansHelper
     end
     "<span class='#{css}'>#{state}</span>".html_safe
   end
+
 end

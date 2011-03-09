@@ -18,6 +18,24 @@ namespace :bonsai do
     end
   end  
 
+  desc 'Upates the currency rates with the latest from http://www.bcb.gob.bo/librerias/indicadores/otras/otras_imprimir.php?qdd=22&qmm=02&qaa=2011' 
+  task :update_currency_rates => :environment do
+    require 'open-uri'
+    d = Date.today
+    #month = "%02d" % d.day
+    n = Nokogiri::HTML(open('http://www.bcb.gob.bo/librerias/indicadores/otras/otras_imprimir.php'))
+    t = n.css('table.tablaborde').first
+    dolar = t.css('tr:eq(3) td:nth-child(4)').text.to_f
+    euro = t.css('tr:eq(4) td:nth-child(4)').text.to_f
+
+    currencies = [
+      {:date => d, :active => true, :currency_id => 2, :rate => dolar}, 
+      {:date => d, :active => true, :currency_id => 3, :rate => euro}, 
+    ]
+    date = n.css('table:eq(2)>tr:eq(1)>td:eq(1)>span:eq(3)').text
+    CurrencyRate.create_currencies(currencies)
+    puts "The dolar #{dolar} and euro #{euro} currencies have been updated, #{date}"
+  end
 end
 
 # example to export the file

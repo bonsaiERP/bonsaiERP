@@ -9,7 +9,8 @@ gem 'rails', '~>3.0.3'
 # ActiveRecord requires a database adapter. By default,
 # Rails has selected sqlite3.
 #gem 'sqlite3-ruby', :require => 'sqlite3'
-gem 'mysql2'
+gem 'pg'
+#gem 'mysql2'
 
 
 gem 'devise'
@@ -17,7 +18,9 @@ gem 'simple_form', '~>1.3.0'
 gem 'will_paginate', '~> 3.0.pre2'
 gem 'less', '~>1.2.21'
 gem 'haml'
-gem 'acts-as-taggable-on'
+#gem 'acts-as-taggable-on'
+gem 'kaminari'
+gem 'nokogiri'
 #gem 'escape_utils'
 
 #group :development do
@@ -26,24 +29,23 @@ gem 'acts-as-taggable-on'
   else
     gem 'ruby-debug'
   end
-#end
-
 group :development do
-  gem 'rspec-rails', '~>2.4.1'
-  gem 'steak', '~>1.0.0'
+  gem 'rspec-rails', '~>2.5.0'
+  gem 'steak', '~>1.1.0'
 end
 
+
 # Test
-group :test do  
-  gem 'rspec', '~>2.4.0'
+group :test do
+  gem 'akephalos'
+  gem 'rspec-rails', '~>2.5.0'
   gem 'mocha'
-  gem 'steak', '~>1.0.0'
-  gem 'cucumber-rails', '~>0.3.2'
+  gem 'steak', '~>1.1.0'
   gem 'capybara'
   gem 'database_cleaner'
   gem 'factory_girl_rails'
-  gem 'spork'
-
-  # gem 'database_cleaner'
+  gem 'spork', '~>0.9.0.rc4'
+  gem 'database_cleaner'
+  gem 'watchr'
 end  
 

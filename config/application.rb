@@ -20,6 +20,8 @@ module Bonsaierp
       config.autoload_paths << "#{config.root}/app/#{dir}"
     end
 
+    config.autoload_paths << "lib"
+
     # Only load the plugins named here, in the order given (default is alphabetical).
     # :all can be used as a placeholder for all plugins not explicitly named.
     # config.plugins = [ :exception_notification, :ssl_requirement, :all ]
@@ -47,6 +49,8 @@ module Bonsaierp
     config.generators do |g|
       g.template_engine :haml
     end
+
+    config.generators.helper = false
 
 
     # Hack for spork to work with rails 3

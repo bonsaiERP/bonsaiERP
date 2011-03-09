@@ -4,7 +4,8 @@ $(document).ready(->
   # Speed in milliseconds
   speed = 300
   # csfr
-  csfr_token = $('meta[name=csfr-token]').attr('content')
+  csrf_token = $('meta[name=csrf-token]').attr('content')
+  window.csrf_token = csrf_token
   # Date format
   $.datepicker._defaults.dateFormat = 'dd M yy'
 
@@ -115,19 +116,24 @@ $(document).ready(->
     $(this).html('Ver más').removeClass('less').addClass('more').next('.hidden').hide(speed)
   )
 
+  # Ajax preloader content
+  AjaxLoadingHTML = ->
+    "<div class='c'><img src='/images/ajax-loader.gif' alt='Cargando' /><br/>Cargando...</div>"
+
+  window.AjaxLoadingHTML = AjaxLoadingHTML
 
   # Creates the dialog container
   createDialog = (params)->
     data = params
     params = $.extend({
-      'id': new Date().getTime(), 'title': '', 'width': 800, 'height' : 400, 'modal': true, 'resizable' : false,
+      'id': new Date().getTime(), 'title': '', 'width': 800, 'modal': true, 'resizable' : false, 'position': 'top',
       'close': (e, ui)->
         $('#' + div_id ).parents("[role=dialog]").detach()
     }, params)
     div_id = params.id
     div = document.createElement('div')
     $(div).attr( { 'id': params['id'], 'title': params['title'] } ).data(data)
-    .addClass('ajax-modal').css( { 'z-index': 10000 } )
+    .addClass('ajax-modal').css( { 'z-index': 10000 } ).html(AjaxLoadingHTML())
     delete(params['id'])
     delete(params['title'])
     $(div).dialog( params )
@@ -144,6 +150,49 @@ $(document).ready(->
 
   window.getAjaxType = getAjaxType
 
+
+  # Must be before any ajax click event to work with HTMLUnit
+  # Makes that a dialog opened window makes an AJAX request and returns a JSON response
+  # if response is JSON then trigger event stored in dialog else present the HTML
+  $('div.ajax-modal form').live('submit', ->
+    return true if $(this).attr('enctype') == 'multipart/form-data'
+
+    $(this).find('input, select, textarea').attr('disabled', true)
+
+    data = serializeFormElements(this)
+    el = this
+    $div = $(this).parents('.ajax-modal')
+    new_record = if $div.data('ajax-type') == 'new' then true else false
+    trigger = $div.data('trigger')
+    
+    $.ajax(
+      'url': $(el).attr('action')
+      'cache': false
+      'context':el
+      'data':data
+      'type': (data['_method'] || $(this).attr('method') )
+      'success': (resp, status, xhr)->
+        try
+          data = $.parseJSON(resp)
+          data['new_record'] = new_record
+          p = $(el).parents('div.ajax-modal')
+          $(p).html('').dialog('destroy')
+          $('body').trigger(trigger, [data])
+        catch e
+          div = $(el).parents('div.ajax-modal:first')
+          div.html(resp)
+          setTimeout(->
+            $(div).transformDateSelect()
+          ,200)
+      'error': (resp)->
+        alert('There are errors in the form please correct them')
+    )
+
+    false
+
+  )
+  # End submit ajax form
+
   # Presents an AJAX form
   $('a.ajax').live("click", (e)->
     data = $.extend({'title': $(this).attr('title'), 'ajax-type': getAjaxType(this) }, $(this).data() )
@@ -154,6 +203,11 @@ $(document).ready(->
     )
     e.stopPropagation()
     false
+  )
+
+  # To present the search
+  $('a.search').live("click", ->
+    $(this).siblings("div.search").show(speed)
   )
 
   currency = {'separator': ",", 'delimiter': '.', 'precision': 2}
@@ -235,43 +289,6 @@ $(document).ready(->
   )
 
 
-  # Makes that a dialog opened window makes an AJAX request and returns a JSON response
-  # if response is JSON then trigger event stored in dialog else present the HTML
-  $('div.ajax-modal form[enctype!=multipart/form-data]').live('submit', ->
-
-    data = serializeFormElements(this)
-    el = this
-    $div = $(this).parents('.ajax-modal')
-    new_record = if $div.data('ajax-type') == 'new' then true else false
-    trigger = $div.data('trigger')
-
-    $.ajax(
-      'url': $(el).attr('action')
-      'cache': false
-      'context':el
-      'data':data
-      'type': (data['_method'] || $(this).attr('method') )
-      'success': (resp, status, xhr)->
-        try
-          data = $.parseJSON(resp)
-          data['new_record'] = new_record
-          p = $(el).parents('div.ajax-modal')
-          $(p).html('').dialog('destroy')
-          $('body').trigger(trigger, [data])
-        catch e
-          div = $(el).parents('div.ajax-modal:first')
-          div.html(resp)
-          setTimeout(->
-            $(div).transformDateSelect()
-          ,200)
-      'error': (resp)->
-        alert('There are errors in the form please correct them')
-    )
-
-    false
-  )
-  # End submit ajax form
-
   # Function that handles the return of an AJAX request and process if add or replace
   # @param String template: HTML template
   # @param Object data: JSON data
@@ -293,18 +310,22 @@ $(document).ready(->
 
   $.updateTemplateRow = $.fn.updateTemplateRow = updateTemplateRow
 
-  # Delete an Item
-  $('a.delete').live("click", (e)->
+
+  # Delete an Item from a list, deletes a tr or li
+  # Very important with default fallback for trigger
+  $('a.delete[data-remote=true]').live("click", (e)->
     self = this
     $(self).parents("tr:first, li:first").addClass('marked')
+    trigger = $(self).data('trigger')
+
     if(confirm('Esta seguro de borrar el item seleccionado'))
       url = $(this).attr('href')
       el = this
-
       $.ajax(
         'url': url
         'type': 'delete'
         'context': el
+        'data': {'authenticity_token': csrf_token }
         'success': (resp, status, xhr)->
           try
             data = $.parseJSON(resp)
@@ -313,14 +334,16 @@ $(document).ready(->
             else
               $(self).parents("tr:first, li:first").removeClass('marked')
               alert("Error: #{data.base_error}")
-            $('body').trigger('ajax:delete', [data, url])
+            if trigger
+              $('body').trigger(trigger, [data, url])
+             else
+              $('body').trigger('ajax:delete', [data, url])
           catch e
             $(self).parents("tr:first, li:first").removeClass('marked')
             #alert('Existio un error al borrar')
         'error': ->
           $(self).parents("tr:first, li:first").removeClass('marked')
       )
-
     else
       $(this).parents("tr:first, li:first").removeClass('marked')
       e.stopPropagation()
@@ -382,6 +405,11 @@ $(document).ready(->
       $('<div id="error-log"></div>').dialog({title: 'Error', width: 900, height: 500})
 
     $('#error-log').html(data).dialog("open")
+
+  # Hide message
+  $('.message .close').live("click", ->
+    $(this).parents(".message:first").hide("slow").delay(500).remove()
+  )
 
   # AJAX setup
   $.ajaxSetup ({

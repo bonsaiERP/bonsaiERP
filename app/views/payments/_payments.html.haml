@@ -1,9 +1,9 @@
 #payments
-  %h2.dark #{pay_type.pluralize.titleize} realizados
+  %h2 #{transaction.pay_type.pluralize.titleize} realizados
 
-  = link_to "Nuevo #{pay_type}", new_payment_path(:type => klass.type.to_s, :id => klass.id, :payment_type => pay_type),
-    :class => 'new ajax', :title => "Nuevo #{pay_type}", :id => 'new_payment_link',
-    'data-width' => "700", 'data-trigger' => 'payment' unless klass.paid?
+  = link_to "Nuevo #{transaction.pay_type}", new_payment_path(:type => transaction.type.to_s, :id => transaction.id, :payment_type => transaction.pay_type),
+    :class => 'new ajax button', :title => "Nuevo #{transaction.pay_type}", :id => 'new_payment_link',
+    'data-width' => "700", 'data-trigger' => 'payment' unless transaction.paid?
 
   %table.decorated.nwl#payments_table
     %thead
@@ -17,20 +17,20 @@
         %th
     
     %tbody
-      - klass.payments.each do |payment|
-        %tr.payment{ :id => payment.id, :class => payment.active }
+      - transaction.payments.each do |payment|
+        %tr.payment{ :id => payment.id, :class => payment.active.to_s }
           %td= lo payment.date
           %td= payment.description
           %td.account= payment.account
-          %td.r.amount{'data-val' => payment.amount}= ntc payment.amount
-          %td.r.interests_penalties{'data-val' => payment.interests_penalties}= ntc payment.interests_penalties
+          %td.r.amount{'data-val' => payment.amount} #{transaction.currency_symbol} #{ntc payment.amount}
+          %td.r.interests_penalties{'data-val' => payment.interests_penalties} #{transaction.currency_symbol} #{ntc payment.interests_penalties}
           %td.r.total_amount{'data-val' => payment.total_amount}= ntc payment.total_amount
-          %td.actions= link_to "Anular #{pay_type}", payment, 'data-method' => 'put', :class => 'null null_payment'
+          %td.actions= nulled_payment(transaction.pay_type, payment)
 
     %tr.extra.pad_top
       %td{:colspan => 3}
-      %td.r.b{:colspan => 2} Total #{pay_type.pluralize} + Intereses/Penalidades
-      %td.r.b#total_payment= ntc klass.total_payments_with_interests
+      %td.r.b{:colspan => 2} Total #{transaction.pay_type.pluralize} + Intereses/Penalidades
+      %td.r.b#total_payment= ntc transaction.total_payments_with_interests
 
 :javascript
   $(function() {
@@ -43,7 +43,7 @@
           '<td class="r interests_penalties" data-val="${interests_penalties}">${_b.ntc(interests_penalties)}</td>',
           '<td class="r total_amount" data-val="${total_amount}">${_b.ntc(total_amount)}</td>',
           '<td class="actions">',
-          '<a data-method="put" class="null null_payment" href="/payments/6">Anular #{pay_type}</a></td>',
+          '<a data-method="put" class="null null_payment" href="/payments/${id}/null">Anular #{transaction.pay_type}</a></td>',
         '</tr>'
     ].join("");
     
@@ -51,22 +51,23 @@
     * Nulls a payments
     */
     $('#payments_table a.null_payment').live("click", function() {
-      var account = $(this).parents('tr').addClass('selected').find('td.account').html();
-      var txt = "Al anular el #{pay_type} seleccionado se creara un registro en la cuenta \n" + account + " con valor negativo";
-      txt +=",\n Esta seguro de borrar?";
+      var account = $(this).parents('tr').addClass('marked').find('td.account').html();
+      var txt = "Al anular el #{transaction.pay_type} seleccionado se creara un registro en la cuenta \n" + account + " con valor negativo";
+      txt +=",\n Esta seguro de anular el #{transaction.pay_type}?";
       if(confirm(txt)) {
-        $(this).parents('tr').removeClass('selected');
+        $(this).parents('tr').removeClass('marked');
+        Payment.nullPayment(this);
         return false;
       }else{
-        $(this).parents('tr').removeClass('selected');
+        $(this).parents('tr').removeClass('marked');
         return false;
       }
     });
     
-
     /**
      * Creates a note to notify pay_plans
-     */
+     * triggers ['payments', 'pay_plan']
+    **/
     Payment = {
       messages: [],
       /**
@@ -78,8 +79,36 @@
         this.triggerPayPlan(resp.pay_plan);
         this.updatePayPlans(resp.updated_pay_plan_ids);
         this.createMessage(resp);
-        setTimeout(function() { self.calculateTotal() }, 200);
-        $('body').trigger('transaction_paid', resp.transaction_paid);
+        setTimeout(function() { 
+          var r = self.calculateTotal();
+          self.triggerPayments(r);
+        }, 200);
+        //$('body').trigger('transaction', [resp]);
+      },
+      /**
+      * nulls a payments
+      * @param Dom link
+      */
+      nullPayment: function(link) {
+        var self = this;
+        $(link).css('visivility', 'hidden');
+        $.ajax({
+          'url': $(link).attr("href"),
+          'data': {'authenticity_token': csrf_token },
+          'type': 'put',
+          'success':function(resp) {
+            $(link).parents('tr:first').removeClass('true').addClass('false').mark();
+            $(link).parents('td:first').html('Anulado');
+            self.triggerNullPayment(resp);
+          }
+        });
+      },
+      /**
+      * triggers the null_payment event and sets inactive a row
+      */
+      triggerNullPayment: function(resp) {
+        $('#payments tr#'+resp.id).addClass('false');
+        this.triggerPayments(this.calculateTotal());
       },
       /**
        * Inserts a new row for payments dependig in the row
@@ -109,7 +138,7 @@
         this.newPayPlanMessage(resp.pay_plan);
         $('#payment_message').hide("slow").remove();
         if(this.messages.length > 0) {
-          $('#payments h2').after('<div class="message" id="payment_message" style="display:none"><p>' + this.messages.join("</p><p>") + '</p></div>'); 
+          $('#payments h2').after('<div class="message" id="payment_message" style="display:none"><span class="close"></span><p>' + this.messages.join("</p><p>") + '</p></div>'); 
           $('#payment_message').show("slow");
         }
       },
@@ -129,7 +158,7 @@
       createPayPlanLinks: function(ids) {
         var html = [];
         $(ids).map(function(i, el) { 
-          html.push('<a href="#pay_plans_table" data-id="' + el + '" class="pay_plan_link">' + el + '</a>');
+          html.push('<a href="#pay_plans_table" data-id="' + el + '" class="pay_plan_link">plan de pago ' + el + '</a>');
         });
         return html.join(", ");
       },
@@ -138,7 +167,7 @@
       */
       newPayPlanMessage: function(pay_plan) {
         if(pay_plan) {
-          this.messages.push( "Se ha creado un nuevo <a href='#pay_plans_table' class='pay_plan_link' data-id='" + pay_plan.id + "'>plan de pago</a>");
+          this.messages.push( "Se ha creado un <a href='#pay_plans_table' class='pay_plan_link' data-id='" + pay_plan.id + "'>nuevo plan de pago</a>");
         }
       },
       /**
@@ -163,8 +192,8 @@
           interests_penalties += $(el).find('td.interests_penalties').data('val');
         });
         $('#payments_table #total_payment').html(_b.ntc(total_amount));
-        // Trigger payments
-        this.triggerPayments({'amount': amount, 'total_amount': total_amount, 'interests_penalties': interests_penalties});
+
+        return {'amount': amount, 'total_amount': total_amount, 'interests_penalties': interests_penalties};
       },
       /**
       * Triggers the event for calculation
@@ -186,12 +215,13 @@
     */
     $('body').live('payment', function(e, resp) {
       Payment.create(resp);
-    }).live('transaction_paid', function(e, value) {
-      if(value) {
+    }).live('transaction', function(e, value) {
+      if(value == 'paid') {
         $('#new_payment_link').remove();
+        $('#payments_table a.null_payment').remove();
       }else if($('#new_payment_link').length <= 0){
-        var html = '<a title="Nuevo #{pay_type}" id="new_payment_link" data-width="700" data-trigger="payment" class="new ajax" href="/payments/new?id=1&amp;payment_type=#{pay_type}&amp;type=Income">Nuevo #{pay_type}</a>';
-        $('#payments h2.dark:first').after(html);
+        var html = '<a title="Nuevo #{transaction.pay_type}" id="new_payment_link" data-width="700" data-trigger="payment" class="new ajax" href="/payments/new?id=1&amp;payment_type=#{transaction.pay_type}&amp;type=Income">Nuevo #{transaction.pay_type}</a>';
+        $('#payments h2:first').after(html);
       }
     });
   })

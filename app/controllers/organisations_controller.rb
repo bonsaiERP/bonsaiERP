@@ -42,7 +42,6 @@ class OrganisationsController < ApplicationController
 
     if @organisation.save
       params[:id] = @organisation.id
-      #redirect_to(organisation_url(@organisation), :notice => "Se ha creado la empresa")
       select
     else
       render :action => 'new'
@@ -72,8 +71,7 @@ class OrganisationsController < ApplicationController
     @organisation = Link.orgs.find{ |v| v.id == params[:id].to_i }
 
     unless @organisation.blank?
-      set_organisation_session(@organisation)  
-      flash[:warning] = "Debe actualizar los tipos de cambio. <a href=\"#{new_currency_rate_path}\">Actualizar</a>".html_safe unless CurrencyRate.current?
+      set_organisation_session(@organisation)
       redirect_to dashboard_url
     else
       flash[:error] = "Debe seleccionar una organización válida"

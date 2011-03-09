@@ -18,7 +18,11 @@ class User < ActiveRecord::Base
 
 
   def to_s
-    %Q(#{first_name} #{last_name})
+    unless first_name.blank? and last_name.blank?
+      %Q(#{first_name} #{last_name})
+    else
+      %Q(#{email})
+    end
   end
 
   # Checks the user and the priviledges

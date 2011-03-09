@@ -1,6 +1,5 @@
+%p= link_to "Lista", items_path, :class => 'list'
 %h1 Nuevo ítem
 
-%p
-  = link_to "Lista", items_path, :class => 'list'
-= render :partial => 'form'
+= render 'form'
 

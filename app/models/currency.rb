@@ -11,4 +11,7 @@ class Currency < ActiveRecord::Base
     %Q(#{symbol} #{name})
   end
 
+  def plural
+    %Q(#{name.pluralize} #{symbol})
+  end
 end
