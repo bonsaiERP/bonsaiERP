@@ -70,10 +70,10 @@ class BanksController < ApplicationController
 
   # DELETE /banks/1
   # DELETE /banks/1.xml
-  def destroy
-    @bank.destroy
-    respond_ajax @bank
-  end
+  #def destroy
+  #  @bank.destroy
+  #  respond_ajax @bank
+  #end
 
   protected
     def find_bank

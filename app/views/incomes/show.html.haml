@@ -8,14 +8,29 @@
     = link_to 'Nueva', new_income_path, :class => 'add'
 .clear
 
+._40.fr.r
+  = link_to "Email","", :class => 'email'
+  &nbsp;&nbsp;
+  = link_to "Imprimir","", :class => 'print'
 
 %h1.mb5{:style => 'display:inline-block;'} #{note_title(@income)} de venta #{@income.ref_number}
 %span.b#income_state{:class => @income.real_state, :style => 'font-size:1.3em'}= @income.show_state
 
-._50.fr
-  = link_to "Email","", :class => 'email'
-  &nbsp;&nbsp;
-  = link_to "Imprimir","", :class => 'print'
+.clear
+
+.moneybox
+  %label Total
+  %h3 #{@income.currency_symbol} #{ntc @income.total_currency}
+
+- unless @income.state == 'paid'
+  .moneybox
+    %label Saldo a cobrar
+    %h3 #{@income.currency_symbol} #{ntc @income.balance}
+  
+= "Vence el <strong>#{lo @income.payment_date}</strong>".html_safe unless @income.paid?
+
+.clear
+<br/>
 
 ._50.fl.r
   / FORM to null income
@@ -23,17 +38,17 @@
     = simple_form_for @income, :url => aprove_income_path(@income) do |f|
       .submit
         =f.submit "Aprobar", :class => 'dark_green', :id => 'income_aprove_button'
-  - elsif not @income.paid?
-    = simple_form_for @income, :url => null_income_path(@income) do |f|
-      .submit
-        =f.submit "Anular", :class => 'red', :id => 'income_null_button'
+  /- elsif not @income.paid?
+  /  = simple_form_for @income, :url => null_income_path(@income) do |f|
+  /    .submit
+  /      =f.submit "Anular", :class => 'red', :id => 'income_null_button'
 
 .clear
 #tabs
   %ul
-    %li <a href="#information">Información</a>
-    %li <a href="#income_payments">Cobros</a>
-    %li <a href="#income_pay_plans">Crédito</a>
+    %li <a href="#information" id="tab_info">Información</a>
+    %li <a href="#income_payments" id="tab_payments">Cobros</a>
+    %li <a href="#income_pay_plans" id="tab_pay_plans">Crédito</a>
 
   #information
 

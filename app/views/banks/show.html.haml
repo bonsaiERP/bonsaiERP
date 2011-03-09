@@ -3,20 +3,26 @@
     display: none;
   }
 
-%ul.breadcrumps
-  %li #{link_to "Bancos", banks_path}<span>&gt;</span>
-.links
-  = link_to 'Nuevo', new_bank_path, :class => 'add'
-  = link_to 'Editar', edit_bank_path(@bank), :class => 'edit'
-.clear
+-content_for :links do
+  %ul.breadcrumps
+    %li #{link_to "Bancos", banks_path}<span>&gt;</span>
+  .links
+    = link_to 'Nuevo', new_bank_path, :class => 'add'
+    = link_to 'Editar', edit_bank_path(@bank), :class => 'edit'
 
 %h1.mb5= @bank.name
-%h2.mt5.dark_grey= "#{@bank.number} (en #{@bank.currency.name.pluralize})"
+%h3.mt5.dark_grey= "#{@bank.number} (en #{@bank.currency.name.pluralize})"
 %hr/
 
-.main.fs13._50.fl
-  %span.dark_grey Saldo en cuenta:<br/>
-  %span.b #{@bank.currency_symbol} #{ntc @bank.total_amount}
+.moneybox.fl
+  %label Saldo en cuenta
+  %h3= with_currency @bank, :total_amount
+
+- if @bank.pendent_account_ledgers.any?
+  .moneybox.fl
+    %label Saldo a conciliar
+    %h3= with_currency @bank, :total_pendent
+
 ._40.fr
   <a id="show_bank_info" href="javascript:">Ver información</a>
   #bank_info

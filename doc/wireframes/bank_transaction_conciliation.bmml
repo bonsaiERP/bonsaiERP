@@ -1,4 +1,4 @@
-<mockup version="1.0" skin="sketch" measuredW="1170" measuredH="1084" mockupW="1100" mockupH="1074">
+<mockup version="1.0" skin="sketch" measuredW="1160" measuredH="1074" mockupW="1100" mockupH="1074">
   <controls>
     <control controlID="0" controlTypeID="com.balsamiq.mockups::Image" x="60" y="0" w="-1" h="-1" measuredW="1100" measuredH="101" zOrder="2" locked="true" isInGroup="-1">
       <controlProperties>
@@ -35,13 +35,13 @@
         <color>15658734</color>
       </controlProperties>
     </control>
-    <control controlID="11" controlTypeID="com.balsamiq.mockups::Label" x="508" y="301" w="236" h="25" measuredW="222" measuredH="25" zOrder="6" locked="false" isInGroup="-1">
+    <control controlID="11" controlTypeID="com.balsamiq.mockups::Label" x="524" y="325" w="236" h="25" measuredW="222" measuredH="25" zOrder="6" locked="false" isInGroup="-1">
       <controlProperties>
         <color>0</color>
         <text>-Referencia/N%BA%20Cheque%3A-%2023742546</text>
       </controlProperties>
     </control>
-    <control controlID="14" controlTypeID="com.balsamiq.mockups::PointyButton" x="154" y="345" w="-1" h="-1" measuredW="149" measuredH="28" zOrder="7" locked="false" isInGroup="-1">
+    <control controlID="14" controlTypeID="com.balsamiq.mockups::PointyButton" x="161" y="418" w="-1" h="-1" measuredW="149" measuredH="28" zOrder="7" locked="false" isInGroup="-1">
       <controlProperties>
         <direction>center</direction>
         <text>Conciliar%20transacci%F3n</text>
@@ -62,14 +62,14 @@
         <text>55-7899-02%20%28en%20Dolares%29</text>
       </controlProperties>
     </control>
-    <control controlID="17" controlTypeID="com.balsamiq.mockups::Label" x="343" y="301" w="127" h="25" measuredW="112" measuredH="29" zOrder="10" locked="false" isInGroup="-1">
+    <control controlID="17" controlTypeID="com.balsamiq.mockups::Label" x="154" y="324" w="127" h="25" measuredW="112" measuredH="29" zOrder="10" locked="false" isInGroup="-1">
       <controlProperties>
         <color>0</color>
         <size>16</size>
         <text>%24us%202.000%2C00</text>
       </controlProperties>
     </control>
-    <control controlID="19" controlTypeID="com.balsamiq.mockups::Label" x="226" y="301" w="-1" h="-1" measuredW="81" measuredH="25" zOrder="11" locked="false" isInGroup="-1">
+    <control controlID="19" controlTypeID="com.balsamiq.mockups::Label" x="362" y="325" w="-1" h="-1" measuredW="81" measuredH="25" zOrder="11" locked="false" isInGroup="-1">
       <controlProperties>
         <italic>true</italic>
         <text>2%20Feb%202011</text>
@@ -81,7 +81,7 @@
         <text>Ingreso</text>
       </controlProperties>
     </control>
-    <control controlID="22" controlTypeID="com.balsamiq.mockups::Link" x="823" y="301" w="-1" h="-1" measuredW="79" measuredH="25" zOrder="13" locked="false" isInGroup="-1">
+    <control controlID="22" controlTypeID="com.balsamiq.mockups::Link" x="161" y="370" w="-1" h="-1" measuredW="79" measuredH="25" zOrder="13" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Karina%20Luna</text>
       </controlProperties>
@@ -92,6 +92,11 @@
         <color>5263440</color>
         <italic>true</italic>
         <text>Debe%20verificar%20su%20cuenta%20bancaria%20para%20poder%20asegurar%20de%20que%20la%20transacci%F3n%20efectivamente%20se%20realizo</text>
+      </controlProperties>
+    </control>
+    <control controlID="24" controlTypeID="com.balsamiq.mockups::Link" x="366" y="369" w="-1" h="-1" measuredW="143" measuredH="25" zOrder="15" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Venta%20VE-2010-0005</text>
       </controlProperties>
     </control>
   </controls>

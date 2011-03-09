@@ -179,6 +179,7 @@ describe Transaction do
 
     t.pay_plans.unpaid.size.should == 4
     t.pay_plans_total.should == t.balance
+    t.payment_date.should == d + 10.days
 
     t.pay_plans.unpaid[0].amount.should == 100
     #t.pay_plans.unpaid.each{|pp| puts "#{pp.id} #{pp.amount} #{pp.interests_penalties} #{pp.payment_date}"}
@@ -356,4 +357,5 @@ describe Transaction do
     t.pay_plans.unpaid.size.should == 0
     t.cash.should == true
   end
+
 end

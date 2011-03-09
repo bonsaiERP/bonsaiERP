@@ -7,8 +7,9 @@ class AccountLedger < ActiveRecord::Base
   # callbacks
   after_initialize :set_defaults
   before_save :set_income
-  after_save :update_account_payment, :if => :payment?
+  after_save :update_payment, :if => :payment?
   after_save :update_account_balance, :if => :conciliation?
+  after_destroy :destroy_payment, :if => :payment?
 
   # relationships
   belongs_to :account
@@ -28,6 +29,8 @@ class AccountLedger < ActiveRecord::Base
   delegate :name, :symbol, :to => :currency, :prefix => true
 
   # scopes
+  scope :pendent,     where(:conciliation => false)
+  scope :conciliated, where(:conciliation => true)
 
   # Updates the conciliation state
   def conciliate_account
@@ -55,8 +58,8 @@ private
   end
 
   # Updates the payment state
-  def update_account_payment
-    unless payment_state == 'paid'
+  def update_payment
+    if conciliation == true and not payment_state == 'paid'
       payment.state = 'paid'
       payment.save
     end
@@ -66,5 +69,13 @@ private
   def update_account_balance
     self.account.total_amount = (self.account.total_amount + amount)
     self.account.save
+  end
+
+  def payment?
+    payment_id.present?
+  end
+
+  def destroy_payment
+    payment.destroy
   end
 end

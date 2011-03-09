@@ -25,7 +25,7 @@
           %td.r.amount{'data-val' => payment.amount} #{transaction.currency_symbol} #{ntc payment.amount}
           %td.r.interests_penalties{'data-val' => payment.interests_penalties} #{transaction.currency_symbol} #{ntc payment.interests_penalties}
           %td.r.total_amount{'data-val' => payment.total_amount}= ntc payment.total_amount
-          %td.actions= nulled_payment(transaction.pay_type, payment)
+          %td.actions= link_to "Conciliar banco", payment.account_ledger, :title => 'Conciliar con cuenta bancaria', :class => 'conciliate' unless payment.paid?
 
     %tr.extra.pad_top
       %td{:colspan => 3}
@@ -43,7 +43,7 @@
           '<td class="r interests_penalties" data-val="${interests_penalties}">${_b.ntc(interests_penalties)}</td>',
           '<td class="r total_amount" data-val="${total_amount}">${_b.ntc(total_amount)}</td>',
           '<td class="actions">',
-          '<a data-method="put" class="null null_payment" href="/payments/${id}/null">Anular #{transaction.pay_type}</a></td>',
+          '<a class="conciliate" href="/account_ledgers/${account_ledger_id}/conciliate" title="Conciliar con cuenta bancaria">Conciliar banco</a></td>',
         '</tr>'
     ].join("");
     
@@ -147,10 +147,15 @@
       */
       payPlansMessage: function(ids) {
         if(ids.length > 1) {
-          this.messages.push("Se ha anulado los planes de pago " + this.createPayPlanLinks(ids) );
+          //this.messages.push("Se ha anulado los planes de pago " + this.createPayPlanLinks(ids) );
+          this.messages.push("Se ha anulado varios planes de pago" );
         }else if(ids.length == 1) {
-          this.messages.push("Se ha anulado 1 plan de pago " + this.createPayPlanLinks(ids) );
+          this.messages.push("Se ha anulado 1 plan de pago");
+          //this.messages.push("Se ha anulado 1 plan de pago " + this.createPayPlanLinks(ids) );
         }
+        $('#tab_pay_plans').one('click', function() {
+          $('#').load("/pay_plans/#{transaction.id}")
+        });
       },
       /**
       * Crete a links for the pay_plans
@@ -205,7 +210,7 @@
 
     /* Test data for pay_plan_class
     var test_pay_plan = {"alert_date":"2011-02-08","amount":"165.0","created_at":"2011-02-08T12:58:10Z","ctype":"Income","currency_id":1,"description":null,"email":null,"id":41,"interests_penalties":"0.0","organisation_id":1,"paid":false,"payment_date":"2011-02-08","transaction_id":6,"updated_at":"2011-02-08T12:58:10Z", new_record: true};
-    var test = {"account_id":1,"active":true,"amount":"50.0","created_at":"2011-02-08T12:51:27Z","ctype":null,"currency_id":1,"date":"2011-02-08","description":null,"id":11,"interests_penalties":"0.0","organisation_id":1,"transaction_id":3,"updated_at":"2011-02-08T12:51:27Z","updated_pay_plan_ids":[37, 38],"pay_plan":test_pay_plan,"account":"Banco Nacional de Bolivia 5464654654","total_amount":"50.0", new_record: true};
+    var test = {"account_id":1,"active":true,"amount":"50.0","created_at":"2011-02-08T12:51:27Z","ctype":null,"currency_id":1,"date":"2011-02-08","description":null,"id":11,"interests_penalties":"0.0","organisation_id":1,"transaction_id":3,"updated_at":"2011-02-08T12:51:27Z","updated_pay_plan_ids":[37, 38],"pay_plan":test_pay_plan,"account":"Banco Nacional de Bolivia 5464654654","total_amount":"50.0", new_record: true, account_ledger_id => 0};
     */
 
     window.Payment = Payment;

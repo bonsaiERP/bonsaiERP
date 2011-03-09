@@ -14,6 +14,15 @@ class Bank < Account
     "#{name} - #{number}"
   end
 
+  def pendent_account_ledgers
+    account_ledgers.pendent
+  end
+
+  # Prensents the total plus the account_ledgers not conciliated
+  def total_pendent
+    pendent_account_ledgers.sum(:amount) + total_amount
+  end
+
 private
   def set_defaults
     self.total_amount ||= 0.0

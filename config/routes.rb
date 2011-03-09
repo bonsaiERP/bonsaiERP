@@ -1,6 +1,10 @@
 Bonsaierp::Application.routes.draw do
 
-  resources :account_ledgers
+  resources :account_ledgers do
+    member do
+      put :conciliate
+    end
+  end
 
   resources :banks
 
@@ -14,7 +18,7 @@ Bonsaierp::Application.routes.draw do
 
   resources :pay_plans do
     member do
-      get :email
+      post :email
     end
   end
 

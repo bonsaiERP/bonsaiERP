@@ -64,4 +64,13 @@ module ApplicationHelper
   def minus_image(size = 16)
     raw "<img src=\"/stylesheets/images/minus.png\" width=\"#{size}\" height=\"#{size}\" alt =\"menos\"/>"
   end
+
+  # Presents income/expense with color
+  # @param [Tru, False]
+  # @param Hash
+  def in_out(val, options = {})
+    css, txt = val ? [ "dark_green", "Ingreso" ] : [ "red", "Egreso" ]
+    options[:class] = options[:class].blank? ? css : options[:class] << " #{css}"
+    content_tag(:span, txt, options)
+  end
 end
