@@ -81,6 +81,11 @@
   #income_pay_plans
     =render "/pay_plans/pay_plans", :transaction => @income if @income.show_pay_plans?
 
+:coffeescript
+  uno = ->
+    alert "Uno"
+  uno()
+
 :javascript
   $(function () {
     $('#tabs').tabs();
@@ -135,7 +140,7 @@
       // When it has been aproved
       $('body').live('payments',function(e, resp) {
         // Calculates the total for AJAX events
-        $('#items_table #total_payments').html("-" + _b.ntc(resp.amount));
+        $('#items_table #total_payments').html("#{@income.currency_symbol} " + _b.ntc(resp.amount));
         $('#items_table #balance').html(_b.ntc(resp.transaction_balance) );
       }).live('transaction', function(e, resp) {
         setIncomeState(resp.transaction_real_state);

@@ -4,45 +4,6 @@ Bonsai is a financiery system that provides a simple solution to the comon needs
 to control an organisation finances. Beatiful, simple
 
 
-  /*
-  .ui-datepicker-header{
-    background: #FFF !important;
-    color: #498CE2 !important;
-    border: none !important;
-    font-weight: normal !important;
-    font-size: 1.1em !important;
-  }
-  .ui-datepicker table{
-    background: #FFF !important;
-  }
-  .ui-datepicker td a{
-    background: transparent !important;
-    border: none !important;
-    font-weight: normal !important;
-    color: #000;
-    -moz-border-radius: 2px;
-    -webkit-border-radius: 2px;
-    border-radius: 2px;
-    color: #666666 !important;
-    text-align: center;
-  }
-  .ui-datepicker td a.ui-state-hover{
-    background-color: #AFAFAF !important;
-  }
-  .ui-datepicker td a.ui-state-active{
-    background-color: #498CE2 !important;
-    color: #FFF !important;
-  }
-  .ui-datepicker thead tr{
-    border-bottom: 1px solid grey !important;
-  }
-    
-  .ui-datepicker-week-end{
-    border:none;
-    background: transparent;
-  }
-  */
-
 PostgreSQL
 sudo -u postgres psql template1
 

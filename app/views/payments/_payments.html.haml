@@ -30,7 +30,7 @@
     %tr.extra.pad_top
       %td{:colspan => 3}
       %td.r.b{:colspan => 2} Total #{transaction.pay_type.pluralize} + Intereses/Penalidades
-      %td.r.b#total_payment= ntc transaction.total_payments_with_interests
+      %td.r.b#total_payment= wcur transaction, :total_payments_with_interests
 
 :javascript
   $(function() {
@@ -39,9 +39,9 @@
           '<td>${date}</td>',
           '<td>${description}</td>',
           '<td class="account">${account}</td>',
-          '<td class="r amount" data-val="${amount}">${currency_symbol} ${_b.ntc(amount)}</td>',
+          '<td class="r amount" data-val="${amount}">#{transaction.currency_symbol} ${_b.ntc(amount)}</td>',
           '<td class="r interests_penalties" data-val="${interests_penalties}">${currency_symbol} ${_b.ntc(interests_penalties)}</td>',
-          '<td class="r total_amount" data-val="${total_amount}">${_b.wcur(total_amount)}</td>',
+          '<td class="r total_amount" data-val="${total_amount}">#{transaction.currency_symbol} ${_b.wcur(total_amount)}</td>',
           '<td class="actions">',
           '<a class="conciliate" href="/account_ledgers/${account_ledger_id}/conciliate" title="Conciliar con cuenta bancaria">Conciliar banco</a></td>',
         '</tr>'
@@ -54,6 +54,7 @@
       var account = $(this).parents('tr').addClass('marked').find('td.account').html();
       var txt = "Al anular el #{transaction.pay_type} seleccionado se creara un registro en la cuenta \n" + account + " con valor negativo";
       txt +=",\n Esta seguro de anular el #{transaction.pay_type}?";
+
       if(confirm(txt)) {
         $(this).parents('tr').removeClass('marked');
         Payment.nullPayment(this);
@@ -79,6 +80,7 @@
         this.triggerPayPlan(resp.pay_plan);
         this.updatePayPlans(resp.updated_pay_plan_ids);
         this.createMessage(resp);
+
         setTimeout(function() { 
           var r = self.calculateTotal();
           self.triggerPayments(r);
@@ -92,10 +94,12 @@
       nullPayment: function(link) {
         var self = this;
         $(link).css('visivility', 'hidden');
+
         $.ajax({
           'url': $(link).attr("href"),
           'data': {'authenticity_token': csrf_token },
           'type': 'put',
+
           'success':function(resp) {
             $(link).parents('tr:first').removeClass('true').addClass('false').mark();
             $(link).parents('td:first').html('Anulado');
@@ -137,6 +141,7 @@
         this.payPlansMessage(resp.updated_pay_plan_ids);
         this.newPayPlanMessage(resp.pay_plan);
         $('#payment_message').hide("slow").remove();
+
         if(this.messages.length > 0) {
           $('#payments h2').after('<div class="message" id="payment_message" style="display:none"><span class="close"></span><p>' + this.messages.join("</p><p>") + '</p></div>'); 
           $('#payment_message').show("slow");
@@ -148,11 +153,9 @@
       payPlansMessage: function(ids) {
         var link = '<a href="##{transaction.typed}_pay_plans" id="trigger_pay_plans">Ver</a>';
         if(ids.length > 1) {
-          //this.messages.push("Se ha anulado los planes de pago " + this.createPayPlanLinks(ids) );
           this.messages.push("Se ha anulado varios planes de #{transaction.pay_type} " + link );
         }else if(ids.length == 1) {
           this.messages.push("Se ha anulado 1 plan de #{transaction.pay_type} " + link);
-          //this.messages.push("Se ha anulado 1 plan de pago " + this.createPayPlanLinks(ids) );
         }else{
           this.messages.push("Se ha añadido un nuevo")
         }
@@ -204,6 +207,7 @@
           total_amount += $(el).find('td.total_amount').data('val');
           interests_penalties += $(el).find('td.interests_penalties').data('val');
         });
+
         $('#payments_table #total_payment').html("#{transaction.currency_symbol} " + _b.ntc(total_amount));
 
         return {'amount': amount, 'total_amount': total_amount, 'interests_penalties': interests_penalties};
@@ -228,6 +232,7 @@
     * Method of payment
     */
     $('body').live('payment', function(e, resp) {
+      //$('body').trigger('transaction', '');
       Payment.create(resp);
     }).live('transaction', function(e, value) {
       if(value == 'paid') {
