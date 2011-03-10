@@ -121,9 +121,19 @@ private
     end
   end
   
+  # Helper methods
+  def currency_name
+    session[:organisation][:currency_name]
+  end
+
+  def currency_symbol
+    session[:organisation][:currency_symbol]
+  end
+
+  def currency_id
+    session[:organisation][:currency_id]
+  end
+
+  helper_method :currency_id, :currency_name, :currency_symbol
 end
 
-ApplicationController.send(:include, OrganisationHelpers)
-class ApplicationController
-  helper_method OrganisationHelpers.organisation_helper_methods
-end
