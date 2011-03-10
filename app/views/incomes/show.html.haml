@@ -20,19 +20,16 @@
 
 .moneybox
   %label Total
-  %h3 #{@income.currency_symbol} #{ntc @income.total_currency}
+  %h3#total_currency #{@income.currency_symbol} #{ntc @income.total_currency}
 
 - unless @income.state == 'paid'
   .moneybox
     %label Saldo a cobrar
-    %h3 #{@income.currency_symbol} #{ntc @income.balance}
+    %h3#balance #{@income.currency_symbol} #{ntc @income.balance}
   
-= "Vence el <strong>#{lo @income.payment_date}</strong>".html_safe unless @income.paid?
+= "Vence el <strong id='due_on'>#{lo @income.payment_date}</strong></span>".html_safe unless @income.paid? or @income.draft?
 
-.clear
-<br/>
-
-._50.fl.r
+._50.fr.r
   / FORM to null income
   - if @income.draft?
     = simple_form_for @income, :url => aprove_income_path(@income) do |f|
@@ -47,7 +44,8 @@
 #tabs
   %ul
     %li <a href="#information" id="tab_info">Información</a>
-    %li <a href="#income_payments" id="tab_payments">Cobros</a>
+    - unless @income.draft?
+      %li <a href="#income_payments" id="tab_payments">Cobros</a>
     %li <a href="#income_pay_plans" id="tab_pay_plans">Crédito</a>
 
   #information
@@ -80,11 +78,6 @@
 
   #income_pay_plans
     =render "/pay_plans/pay_plans", :transaction => @income if @income.show_pay_plans?
-
-:coffeescript
-  uno = ->
-    alert "Uno"
-  uno()
 
 :javascript
   $(function () {
@@ -140,9 +133,14 @@
       // When it has been aproved
       $('body').live('payments',function(e, resp) {
         // Calculates the total for AJAX events
-        $('#items_table #total_payments').html("#{@income.currency_symbol} " + _b.ntc(resp.amount));
-        $('#items_table #balance').html(_b.ntc(resp.transaction_balance) );
+        $('#items_table #total_payments').html("#{@income.currency_symbol} " + _b.ntc(resp.conciliated_amount));
+        $('#items_table #balance').html("#{@income.currency_symbol} " + _b.ntc(resp.transaction_balance) );
       }).live('transaction', function(e, resp) {
+        
+        $('h3#balance').html("#{@income.currency_symbol} " + _b.ntc(resp.transaction_balance) );
+
+        $('#due_on').html(_b.dateFormat(resp.transaction_payment_date));
+
         setIncomeState(resp.transaction_real_state);
       }).live('del-pay_plan', function(e, resp) {
         setIncomeState(resp.transaction_real_state);

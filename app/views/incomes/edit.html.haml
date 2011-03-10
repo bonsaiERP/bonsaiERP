@@ -1,6 +1,9 @@
-%p.links
-  = link_to 'Ver', @income, :class => 'list'
-  = link_to 'Lista', incomes_path, :class => 'show'
+- content_for :links do
+  %ul.breadcrumps
+    %li #{link_to 'Lista', incomes_path} <span>&gt;</span>
+  .links
+    = link_to 'Ver', @income, :class => 'show'
+
 %h1 Editar proforma de venta
 
 = render :partial => 'form'

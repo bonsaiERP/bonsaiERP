@@ -155,4 +155,71 @@ feature "Income", "test features" do
     i.payments.size.should == 0
   end
 
+  scenario "Modify payments and check that balance stays" do
+    d = Date.today
+    i = Income.new(income_params.merge(:date => d))
+    
+    i.save.should == true
+
+    pp = i.create_pay_plan(pay_plan_params(:amount => 100, :payment_date => d, :repeat => true))
+
+    p = i.new_payment(:account_id => 2, :reference => 'NA', :date => d)
+    p.save.should == true
+
+    i = Income.find(i.id)
+    i.balance.should == i.total_currency - 100
+    
+    # Update pay_plan
+    pid = i.pay_plans.unpaid.first.id
+    i.update_pay_plan(:id => pid, :amount => 120)
+
+    i = Income.find(i.id)
+    i.pay_plans.unpaid.first.amount.should == 120
+    # One aplied with payment
+    i.pay_plans.unpaid.size.should == 3
+    i.balance.should == i.total_currency - 100
+
+    # Destroy pay_plan
+    i.destroy_pay_plan(pid)
+    i = Income.find(i.id)
+
+    i.pay_plans.unpaid.size.should == 2
+    i.balance.should == i.total_currency - 100
+    i.pay_plans_total == i.balance
+
+    # Create pay_plan
+    i.create_pay_plan(:payment_date => Date.today - 1.day, :amount => 50)
+    i = Income.find(i.id)
+
+    i.pay_plans.unpaid.size.should == 3
+    i.balance.should == i.total_currency - 100
+    i.pay_plans_total == i.balance
+
+    # Create repeated
+    d = Date.today - 2.days
+    i.create_pay_plan(:payment_date => d, :amount => 50, :repeat => true)
+    i = Income.find(i.id)
+
+    i.pay_plans.unpaid.each {|v| puts v.amount }
+    i.pay_plans.unpaid[0].amount.should == 50
+    i.pay_plans.unpaid[0].payment_date.should == d
+    i.pay_plans.unpaid[1].amount.should == 50
+    i.pay_plans.unpaid[1].payment_date.should == d + 1.month
+    i.pay_plans.unpaid[2].amount.should == 50
+    i.pay_plans.unpaid[2].payment_date.should == d + 2.months
+    
+    i.balance.should == i.total_currency - 100
+
+    # Update third with repeat
+    pid = i.pay_plans.unpaid[2].id
+    i.update_pay_plan(:id => pid, :amount => 30, :repeat => true)
+    i = Income.find(i.id)
+
+    
+    i.pay_plans.unpaid[2].amount.should == 30
+    i.pay_plans.unpaid[3].amount.should == 30
+
+    i.balance.should == i.total_currency - 100
+  end
+
 end

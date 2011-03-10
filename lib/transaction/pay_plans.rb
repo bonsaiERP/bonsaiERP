@@ -7,6 +7,8 @@ module ::Transaction::PayPlans
   # method to create pay plans
   # @param Hash
   def create_pay_plan(params = {})
+    set_trans(false)
+
     @pay_plans_list = pay_plans.unpaid
     @current_pay_plan = new_pay_plan(params)
     @pay_plans_list << @current_pay_plan
@@ -18,6 +20,8 @@ module ::Transaction::PayPlans
   end
 
   def update_pay_plan(params = {})
+    set_trans(false)
+
     @pay_plans_list = pay_plans.unpaid
     index = @pay_plans_list.index{|p| p.id == params[:id].to_i}
     @current_pay_plan = @pay_plans_list[index]
@@ -35,6 +39,8 @@ module ::Transaction::PayPlans
 
   # Destroys a pay plan
   def destroy_pay_plan(pay_plan_id = nil)
+    set_trans(false)
+
     pay_plan_id = pay_plan_id.to_i
     @pay_plans_list = pay_plans.unpaid
 

@@ -18,7 +18,7 @@
     
     %tbody
       - transaction.payments.each do |payment|
-        %tr.payment{ :id => payment.id, :class => payment.active.to_s }
+        %tr.payment{ :id => payment.id, :class => "p_#{payment.state}" }
           %td= lo payment.date
           %td= payment.description
           %td.account= payment.account
@@ -35,15 +35,15 @@
 :javascript
   $(function() {
     var template = [
-      '<tr id="${id}" class="${active} payment">',
+      '<tr id="${id}" class="p_${state} payment">',
           '<td>${date}</td>',
           '<td>${description}</td>',
           '<td class="account">${account}</td>',
           '<td class="r amount" data-val="${amount}">#{transaction.currency_symbol} ${_b.ntc(amount)}</td>',
           '<td class="r interests_penalties" data-val="${interests_penalties}">${currency_symbol} ${_b.ntc(interests_penalties)}</td>',
-          '<td class="r total_amount" data-val="${total_amount}">#{transaction.currency_symbol} ${_b.wcur(total_amount)}</td>',
+          '<td class="r total_amount" data-val="${total_amount}">#{transaction.currency_symbol} ${_b.ntc(amount)}</td>',
           '<td class="actions">',
-          '<a class="conciliate" href="/account_ledgers/${account_ledger_id}/conciliate" title="Conciliar con cuenta bancaria">Conciliar banco</a></td>',
+          '{{if(state == "conciliation")}}<a class="conciliate" href="/account_ledgers/${account_ledger_id}/conciliate" title="Conciliar con cuenta bancaria">Conciliar banco</a>{{/if}}</td>',
         '</tr>'
     ].join("");
     
@@ -82,7 +82,9 @@
         this.createMessage(resp);
 
         setTimeout(function() { 
-          var r = self.calculateTotal();
+          $('body').trigger('transaction', [resp]);
+          //////////////Error
+          var r = self.calculateTotal(resp);
           self.triggerPayments(r);
         }, 200);
         //$('body').trigger('transaction', [resp]);
@@ -112,7 +114,7 @@
       */
       triggerNullPayment: function(resp) {
         $('#payments tr#'+resp.id).addClass('false');
-        this.triggerPayments(this.calculateTotal());
+        this.triggerPayments(this.calculateTotal(resp));
       },
       /**
        * Inserts a new row for payments dependig in the row
@@ -199,18 +201,28 @@
       },
       /**
       * Calculates the total amount and triggers an event to update the balance in other sheets
+      * @param Object resp // JSON Response from AJAX Request
       */
-      calculateTotal: function() {
-        var amount = 0, total_amount = 0, interests_penalties = 0;
+      calculateTotal: function(resp) {
+        var amount = 0, total_amount = 0, interests_penalties = 0, conciliated_amount = 0;
         $('#payments_table tr.payment').each(function(i, el) {
           amount += $(el).find('td.amount').data('val');
           total_amount += $(el).find('td.total_amount').data('val');
+          if($(el).hasClass("p_paid")) {
+            conciliated_amount += $(el).find('td.total_amount').data('val');
+          }
           interests_penalties += $(el).find('td.interests_penalties').data('val');
         });
 
         $('#payments_table #total_payment').html("#{transaction.currency_symbol} " + _b.ntc(total_amount));
 
-        return {'amount': amount, 'total_amount': total_amount, 'interests_penalties': interests_penalties};
+        return {
+          'amount'              : amount,
+          'total_amount'        : total_amount,
+          'conciliated_amount'  : conciliated_amount,
+          'interests_penalties' : interests_penalties,
+          'transaction_balance' : resp.transaction_balance
+        };
       },
       /**
       * Triggers the event for calculation
