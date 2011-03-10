@@ -11,6 +11,9 @@ class ApplicationController < ActionController::Base
 
   before_filter :destroy_organisation_session!, :unless => :user_signed_in?
 
+  include OrganisationHelpers
+  helper_method OrganisationHelpers.organisation_helper_methods
+
 #
 #  # Used to redirect after a user has signed_in
   #def after_sign_in_path_for(resource)
@@ -121,19 +124,5 @@ private
     end
   end
   
-  # Helper methods
-  def currency_name
-    session[:organisation][:currency_name]
-  end
-
-  def currency_symbol
-    session[:organisation][:currency_symbol]
-  end
-
-  def currency_id
-    session[:organisation][:currency_id]
-  end
-
-  helper_method :currency_id, :currency_name, :currency_symbol
 end
 
