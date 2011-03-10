@@ -55,16 +55,15 @@
       = link_to @income.contact, "#", :title => "Historial cliente"
 
     .input
-      .input
-        - unless @income.currency_id == currency_id
+      - unless @income.currency_id == currency_id
+        .input
           1 #{@income.currency.name} = <span class="b">#{@income.currency_exchange_rate}</span> #{currency_name.pluralize}
-        - else
-          = @income.currency.name
-        - if @income.project_id
-      .input
-        %span.dark_grey 
-          -if @income.project_id
-            Proyecto #{link_to @income.project.to_s, @income.project, :title => 'Proyecto'}
+
+      - if @income.project_id
+        .input
+          %span.dark_grey 
+            -if @income.project_id
+              Proyecto #{link_to @income.project.to_s, @income.project, :title => 'Proyecto'}
     .input= @income.description unless @income.description.blank?
 
 
