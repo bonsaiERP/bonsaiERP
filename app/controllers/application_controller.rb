@@ -11,8 +11,6 @@ class ApplicationController < ActionController::Base
 
   before_filter :destroy_organisation_session!, :unless => :user_signed_in?
 
-  # Helper methods for organisation
-  helper_method OrganisationHelpers.organisation_helper_methods
 #
 #  # Used to redirect after a user has signed_in
   #def after_sign_in_path_for(resource)
@@ -125,4 +123,7 @@ private
   
 end
 
-ActionController.send(:include, OrganisationHelpers)
+ApplicationController.send(:include, OrganisationHelpers)
+class ApplicationController
+  helper_method OrganisationHelpers.organisation_helper_methods
+end
