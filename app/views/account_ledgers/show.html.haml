@@ -1,6 +1,6 @@
 -content_for :links do
   %ul.breadcrumps
-    %li #{link_to "Bancos", banks_path}<span>&gt;</span>
+    %li #{link_account @account_ledger}<span>&gt;</span>
     %li #{link_to @account_ledger.account, @account_ledger.account}<span>&gt;</span>
   .links
     = link_to 'Nuevo', new_account_ledger_path, :class => 'add'

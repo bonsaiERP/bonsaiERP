@@ -1,25 +1,24 @@
-%p.links
-  = link_to 'Editar', edit_cash_register_path(@cash_register), :class => 'edit'
-  = link_to 'Lista', cash_registers_path, :class => 'list'
-%h1 Caja
-
-.input
-  %label Nombre de caja
-  %span= @cash_register.name
-._25.fl
-  %label Moneda
-  %span= @cash_register.currency
-._25.fl
-  %label Total en cuenta
-  %span.b #{@cash_register.currency_symbol} #{ntc @cash_register.total_amount}
-.clear
-
-._55.fl
-  %h2.dark Ultimas transacciones
-  = render "account_ledgers/list", :account_ledgers => @cash_register.account_ledgers.includes(:payment)
+- content_for :links do
+  %ul.breadcrumps
+    %li #{link_to "Cajas", cash_registers_path}<span>&gt;</span>
+  .links
+    = link_to 'Editar', edit_cash_register_path(@cash_register), :class => 'edit'
+    = link_to 'Lista', cash_registers_path, :class => 'list'
 
 
-.clear
+%h1.mb5 <span class="dark_grey n">Caja:</span> #{@cash_register.name}
+%h3.mt5.dark_grey= @cash_register.currency
+
+.moneybox.fl
+  %label Saldo en caja
+  %h3= with_currency(@cash_register, :total_amount)
+
 ._40.fr
   %label Dirección
-  %span= nl2br(@cash_register.address)
+  = nl2br(@cash_register.address)
+.clear
+
+%h2.dark Transacciones
+= render "account_ledgers/list", :account_ledgers => @cash_register.account_ledgers.includes(:payment), :ref_title => 'Referencia'
+
+.clear

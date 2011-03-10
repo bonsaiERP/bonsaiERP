@@ -39,9 +39,9 @@
           '<td>${date}</td>',
           '<td>${description}</td>',
           '<td class="account">${account}</td>',
-          '<td class="r amount" data-val="${amount}">${_b.ntc(amount)}</td>',
-          '<td class="r interests_penalties" data-val="${interests_penalties}">${_b.ntc(interests_penalties)}</td>',
-          '<td class="r total_amount" data-val="${total_amount}">${_b.ntc(total_amount)}</td>',
+          '<td class="r amount" data-val="${amount}">${currency_symbol} ${_b.ntc(amount)}</td>',
+          '<td class="r interests_penalties" data-val="${interests_penalties}">${currency_symbol} ${_b.ntc(interests_penalties)}</td>',
+          '<td class="r total_amount" data-val="${total_amount}">${_b.wcur(total_amount)}</td>',
           '<td class="actions">',
           '<a class="conciliate" href="/account_ledgers/${account_ledger_id}/conciliate" title="Conciliar con cuenta bancaria">Conciliar banco</a></td>',
         '</tr>'
@@ -146,16 +146,24 @@
       * Message for pay_plans
       */
       payPlansMessage: function(ids) {
+        var link = '<a href="##{transaction.typed}_pay_plans" id="trigger_pay_plans">Ver</a>';
         if(ids.length > 1) {
           //this.messages.push("Se ha anulado los planes de pago " + this.createPayPlanLinks(ids) );
-          this.messages.push("Se ha anulado varios planes de pago" );
+          this.messages.push("Se ha anulado varios planes de #{transaction.pay_type} " + link );
         }else if(ids.length == 1) {
-          this.messages.push("Se ha anulado 1 plan de pago");
+          this.messages.push("Se ha anulado 1 plan de #{transaction.pay_type} " + link);
           //this.messages.push("Se ha anulado 1 plan de pago " + this.createPayPlanLinks(ids) );
+        }else{
+          this.messages.push("Se ha añadido un nuevo")
         }
-        $('#tab_pay_plans').one('click', function() {
-          $('#').load("/pay_plans/#{transaction.id}")
-        });
+
+        if(ids.length > 0) {
+          $('#tab_pay_plans').one('click', function() {
+            var cont = $(this).attr("href");
+            $(cont).html(AjaxLoadingHTML())
+            .load("/pay_plans/#{transaction.id}");
+          });
+        }
       },
       /**
       * Crete a links for the pay_plans
@@ -191,12 +199,12 @@
       */
       calculateTotal: function() {
         var amount = 0, total_amount = 0, interests_penalties = 0;
-        $('#payments_table tr.payment.true').each(function(i, el) {
+        $('#payments_table tr.payment').each(function(i, el) {
           amount += $(el).find('td.amount').data('val');
           total_amount += $(el).find('td.total_amount').data('val');
           interests_penalties += $(el).find('td.interests_penalties').data('val');
         });
-        $('#payments_table #total_payment').html(_b.ntc(total_amount));
+        $('#payments_table #total_payment').html("#{transaction.currency_symbol} " + _b.ntc(total_amount));
 
         return {'amount': amount, 'total_amount': total_amount, 'interests_penalties': interests_penalties};
       },
@@ -209,12 +217,13 @@
     };
 
     /* Test data for pay_plan_class
-    var test_pay_plan = {"alert_date":"2011-02-08","amount":"165.0","created_at":"2011-02-08T12:58:10Z","ctype":"Income","currency_id":1,"description":null,"email":null,"id":41,"interests_penalties":"0.0","organisation_id":1,"paid":false,"payment_date":"2011-02-08","transaction_id":6,"updated_at":"2011-02-08T12:58:10Z", new_record: true};
-    var test = {"account_id":1,"active":true,"amount":"50.0","created_at":"2011-02-08T12:51:27Z","ctype":null,"currency_id":1,"date":"2011-02-08","description":null,"id":11,"interests_penalties":"0.0","organisation_id":1,"transaction_id":3,"updated_at":"2011-02-08T12:51:27Z","updated_pay_plan_ids":[37, 38],"pay_plan":test_pay_plan,"account":"Banco Nacional de Bolivia 5464654654","total_amount":"50.0", new_record: true, account_ledger_id => 0};
+    var test_pay_plan = {"alert_date":"2011-02-08","amount":165.0,"created_at":"2011-02-08T12:58:10Z","ctype":"Income","currency_id":1,"description":null,"email":null,"id":41,"interests_penalties":0.0,"organisation_id":1,"paid":false,"payment_date":"2011-02-08","transaction_id":6,"updated_at":"2011-02-08T12:58:10Z", new_record: true};
+    var test = {"account_id":1,"active":true,"amount":50.0,"created_at":"2011-02-08T12:51:27Z","ctype":null,"currency_id":1,"date":"2011-02-08","description":null,"id":11,"interests_penalties":0.0,"organisation_id":1,"transaction_id":3,"updated_at":"2011-02-08T12:51:27Z","updated_pay_plan_ids":[37, 38],"account":"Banco Nacional de Bolivia 5464654654","total_amount":50.0, new_record: true, account_ledger_id: 0, "currency_symbol": "$"};
     */
 
     window.Payment = Payment;
 
+    $('#trigger_pay_plans').live('click', function() { $('#tab_pay_plans').trigger("click"); })
     /**
     * Method of payment
     */

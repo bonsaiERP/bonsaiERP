@@ -1,4 +1,7 @@
-%p.links= link_to 'Lista', cash_registers_path, :class => 'list'
+- content_for :links do
+  %ul.breadcrumps
+    %li #{link_to "Cajas", cash_registers_path} <span>&gt;</span>
+
 %h1 Nueva Caja
 
 = render 'form'

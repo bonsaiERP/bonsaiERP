@@ -73,4 +73,13 @@ module ApplicationHelper
     options[:class] = options[:class].blank? ? css : options[:class] << " #{css}"
     content_tag(:span, txt, options)
   end
+
+
+  # Presents a class with currency
+  def with_currency(klass, amount = :amount, options = {})
+    options = {:precision => 2}.merge(options)
+    "#{ klass.currency_symbol } #{number_to_currency klass.send(amount), options}"
+  end
+
+  alias :wcur :with_currency
 end

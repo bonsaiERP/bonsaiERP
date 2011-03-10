@@ -14,7 +14,7 @@ class PayPlan < ActiveRecord::Base
   attr_accessor :repeat, :destroy_in_list
   attr_protected :destroy_in_list
 
-  STATES = ["valid", "delayed", "payed"]
+  STATES = ["valid", "delayed", "applied"]
 
   # relationships
   belongs_to :transaction
@@ -37,7 +37,7 @@ class PayPlan < ActiveRecord::Base
   # Returns the current state of the payment
   def state
     if paid?
-      "Pagado"
+      "Aplicado"
     elsif payment_date < Date.today
       "Atrasado"
     else

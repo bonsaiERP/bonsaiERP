@@ -1,6 +1,7 @@
-%h1 Cajas
+- content_for :links do
+  .links= link_to "Nueva caja", new_cash_register_path, :class => 'new'
 
-%p.links= link_to "Nueva caja", new_cash_register_path, :class => 'new'
+%h1 Cajas
 
 %table.decorated.nwl 
   %thead

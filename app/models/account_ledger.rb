@@ -24,7 +24,7 @@ class AccountLedger < ActiveRecord::Base
   validates_presence_of :account_id, :currency_id, :reference
   validates_numericality_of :amount
 
-  delegate :name, :number, :to => :account, :prefix => true
+  delegate :name, :number, :type, :to => :account, :prefix => true
   delegate :amount, :interests_penalties, :date, :state, :to => :payment, :prefix => true
   delegate :name, :symbol, :to => :currency, :prefix => true
 

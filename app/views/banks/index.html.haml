@@ -20,6 +20,6 @@
         %td= link_to bank.name, bank
         %td= bank.number
         %td= bank.currency
-        %td.r= with_currency bank, :total_amount
+        %td.r= wcur bank, :total_amount
         %td= bank.address
         %td.actions= bonsai_links(bank)

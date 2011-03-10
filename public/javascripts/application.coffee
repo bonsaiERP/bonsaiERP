@@ -241,6 +241,7 @@ $(document).ready(->
   # Set the global variable
   _b.ntc = ntc
 
+
   # presents the dimesion in bytes
   toByteSize = (bytes)->
     switch true

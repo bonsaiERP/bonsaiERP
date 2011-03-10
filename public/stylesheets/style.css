@@ -149,7 +149,7 @@ table.nwf td:first-child { white-space: nowrap; }
   border-radius: 0px 0px 10px 10px;
 }
 #links {
-  background: #f0f0f1;
+  background: #f7f7f7;
   padding: 10px 15px;
   overflow: hidden;
 }
@@ -650,7 +650,7 @@ span.true, span.false {
 }
 ul.tabs {
   list-style: none;
-  background-color: #f7f7f7;
+  background-color: #f0f0f1;
   height: 35px;
   padding: 0px 15px;
   margin: 0px 0px 20px;

@@ -18,11 +18,9 @@ class PayPlansController < ApplicationController
   # GET /pay_plans/1
   # GET /pay_plans/1.xml
   def show
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @pay_plan }
-    end
+    params[:ajax_call] = true
+    @transaction = Transaction.org.find(params[:id])
+    render :partial => 'pay_plans', :locals => { :transaction => @transaction }
   end
 
   # GET /pay_plans/new
@@ -93,12 +91,6 @@ class PayPlansController < ApplicationController
     rescue
       render :text => "Existio un error por favor cierre la ventana."
     end
-  end
-
-  def show
-    @transaction = Transaction.org.find(params[:id])
-    params[:ajax_modal] = true
-    render :partial => 'pay_plans', :locals => { :transaction => @transaction }
   end
 
 private

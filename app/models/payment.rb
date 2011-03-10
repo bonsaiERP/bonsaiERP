@@ -57,6 +57,7 @@ class Payment < ActiveRecord::Base
   def to_json
     self.attributes.merge(
       :updated_pay_plan_ids => @updated_pay_plan_ids, 
+      :currency_symbol => currency_symbol,
       :pay_plan => @pay_plan, 
       :account => account.to_s, 
       :total_amount => total_amount,

@@ -2,8 +2,8 @@
 module PayPlansHelper
   def pay_plan_state(state)
     case state
-    when "Pagado"
-      css = "dark_green"
+    when "Aplicado"
+      css = "dark_grey"
     when "Válido"
       css = ""
     when "Atrasado"

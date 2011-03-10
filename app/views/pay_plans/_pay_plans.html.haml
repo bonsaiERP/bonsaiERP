@@ -25,7 +25,7 @@
         %td.r.amount #{transaction.currency_symbol} #{ntc pp.amount}
         %td.r #{transaction.currency_symbol} #{ntc pp.interests_penalties}
         %td= pp.description
-        %td.state= pp.state
+        %td.state= pay_plan_state pp.state
         - if transaction.income?
           %td{:class => pp.email.to_s}
         %td
@@ -45,6 +45,7 @@
       $modal.dialog("close");
       $('body').trigger('transaction', [{'credit': #{transaction.cash} }]);
     })
+-elsif params[:ajax_call]
 -else
   :javascript
     $(function() {
@@ -68,67 +69,4 @@
         return false;
       });
 
-      payPlanState = function(payment_date) {
-        var payment_date = $.datepicker.parseDate('yy-mm-dd', payment_date );
-        var current_date =  $.datepicker.parseDate('yy-mm-dd', $('#current_date').val() );
-        if( !current_date )
-          throw("You must set the current_date for the function payPlanState");
-        if(payment_date < current_date) {
-          txt = "Atrasado";
-        }else{
-          txt = "Válido";
-        }
-
-        return txt;
-      }
-
-      //var $modal = $('##{id}').parents(".ajax-modal");
-      //$modal.dialog("close");
-      //alert($modal.html());
-
-      window.payPlanState = payPlanState;
-
-
-
-      /**
-      * Checks for the td.state cells and sets the correct color for each
-      */
-      setStatesColor = function() {
-        $('#pay_plans_table').find('td.state').each(function(i, el) {
-          switch($(el).html() ) {
-            case "Atrasado":
-              $(el).addClass("red");
-            break;
-            case "Pagado":
-              $(el).addClass("dark_green");
-            break;
-          }
-        });
-      }
-
-      window.setStatesColor = setStatesColor;
-
-      $('body').live("pay_plan", function(e, resp) {
-        $('#pay_plans_table').updateTemplateRow(template, resp, 'appendTo');
-        setTimeout("setStatesColor()",200);
-        
-        $('body').trigger('transaction', [resp]);
-
-      }).live('transaction', function(e, value) {
-        if(value == 'paid') {
-          $('#new_pay_plan_link').remove();
-          $('#pay_plans_table a').remove();
-        }else if( $('#new_pay_plan_link').length <= 0 ) {
-          var html = '<a title="Nuevo plan de #{transaction.pay_type}" id="new_pay_plan_link" data-width="700" data-trigger="pay_plan" class="new ajax" href="/pay_plans/new?id=1&amp;transaction.pay_type=#{transaction.pay_type}&amp;type=Income">Nuevo plan de #{transaction.pay_type}</a>';
-          $('#pay_plans h2:first').after(html);
-        }
-      });
-
-
-      setStatesColor();
-
-      // For links in other places to show
-      $('a.pay_plan_link').live("click", function() {
-        $('#pay_plans_table #' + $(this).data('id')).mark();
-      });
     });

@@ -10,7 +10,7 @@
     = link_to 'Nuevo', new_bank_path, :class => 'add'
     = link_to 'Editar', edit_bank_path(@bank), :class => 'edit'
 
-%h1.mb5= @bank.name
+%h1.mb5 <span class="dark_grey n">Banco:</span> #{@bank.name}
 %h3.mt5.dark_grey= "#{@bank.number} (en #{@bank.currency.name.pluralize})"
 %hr/
 
@@ -43,7 +43,7 @@
 .clear
 
 %h2 Transacciones
-= render "account_ledgers/list", :account_ledgers => @bank.account_ledgers.includes(:payment)
+= render "account_ledgers/list", :account_ledgers => @bank.account_ledgers.includes(:payment), :ref_title => 'Ref./Nº Cheque'
 
 :javascript
   $('#show_bank_info').click(function() {
