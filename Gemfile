@@ -20,6 +20,7 @@ gem 'haml'
 #gem 'acts-as-taggable-on'
 gem 'kaminari'
 gem 'nokogiri'
+#gem 'barista', '~>1.0'
 #gem 'escape_utils'
 
 group :development do
