@@ -1,0 +1,20 @@
+%table{ :class => "decorated nwf nwl" }
+  %tr
+    %th Código Nombre
+    %th Dirección
+    %th Teléfono
+    %th Móvil
+    %th Email
+    %th NIT
+    %th
+
+  - list.each do |klass|
+    %tr
+      %td= link_to klass, klass, :class => 'b'
+      %td= nl2br klass.address
+      %td= klass.phone
+      %td= klass.mobile
+      %td= mail_to klass.email
+      %td= klass.tax_number
+      %td= bonsai_links(klass)
+

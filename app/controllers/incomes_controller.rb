@@ -4,7 +4,7 @@
 class IncomesController < ApplicationController
 
   #before_filter :check_currency_set, :only => [:new, :edit, :create, :update]
-  #before_filter :set_default_currency, :except => [:index, :destroy]
+  before_filter :set_currency_rates, :only => [:index, :show]
   before_filter :set_income, :only => [:show, :edit, :update, :destroy, :aprove]
 
 
@@ -105,5 +105,10 @@ private
 
   def set_income
     @income = Income.org.find(params[:id])
+  end
+
+  def set_currency_rates
+    @currency_rates = {}
+    CurrencyRate.active.each {|cr| @currency_rates[cr.currency_id] = cr.rate }
   end
 end

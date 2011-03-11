@@ -1,0 +1,6 @@
+- content_for :links do
+  %ul.breadcrumps
+    %li #{link_to "Proveedores", suppliers_path} <span>&gt;</span>
+
+%h1 Nuevo proveedor
+= render 'contacts/form', :klass => @supplier

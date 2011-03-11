@@ -1,0 +1,24 @@
+.input
+  %label Empresa
+  .b= klass.organisation_name
+.input._25
+  %label Teléfono
+  = klass.phone
+.input._25
+  %label Móvil
+  = klass.mobile
+.clear
+.input
+  %label Email
+  = mail_to klass.email, klass.email unless klass.email.blank?
+.input
+  %label NIT
+  = klass.tax_number
+.clear
+.input
+  %label Dirección
+  = nl2br(klass.address)
+.input
+  %label Información adicional
+  = nl2br(klass.aditional_info)
+

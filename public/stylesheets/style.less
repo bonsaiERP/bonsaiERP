@@ -6,6 +6,7 @@
 @white_tan: #F7F7F7;
 @red: #FF0000;
 @light_red: #FEF1EC;
+@red_hover: #FF5757;
 @black: #000;
 @dark: #484A4C;//#202020;
 @grey: #C6C6C6;
@@ -33,10 +34,12 @@
 .bg_light_grey{ background-color: @light_grey; }
 .bg_white_tan{ background-color: @white_tan; }
   
-@font_size: 11.5px;
+@font_size: 13px;
+
+html{ font-size: @font_size;}
 body{
-  font-size: @font_size;
-  font-family: Tahoma, sans-serif;
+  /*font-family: Tahoma, sans-serif;*/
+  font-family: Segoe UI, Arial, sans-serif;
   background-color: #F3F3F3;
   margin: 0px;
   padding: 0px;
@@ -140,7 +143,7 @@ table.decorated{
     border-bottom: 1px solid @grey;
   }
   td{
-    padding: 4px 8px;
+    padding: 7px 8px;
     a.edit, a.delete, a.destroy{
       width:16px;
       height: 16px;
@@ -378,9 +381,11 @@ h3{ font-size: 1.3em; color: @dark;}
 .link{
   font-weight: bold;
   padding-left: 20px;
-  margin: 10px 5px;
+  margin: 0px 5px;
   color: @dark_green;
   font-size: 110%;
+  display: inline-block;
+  min-height: 16px;
 }
 
 .links{
@@ -434,44 +439,58 @@ a.destroy, a.delete{
   .link;
   background: url(images/trash.png) no-repeat 0px 50%;
 }
+a.delete{color: @red;}
+a.delete:hover{ color: @red_hover !important; }
+
+.min-height{ min-height: 16px; display: inline-block;}
 a.list{
   .link;
+  .min-height;
   background: url(images/table.png) no-repeat 0px 50%;
 }
 a.show{
   .link;
+  .min-height;
   background: url(images/zoom.png) no-repeat;
 }
 
 a.cog{
+  .min-height;
   background: transparent url(images/cog.png) no-repeat 0 50%;
   padding-left: 20px !important;
 }
 a.user{
+  .min-height;
   background: transparent url(images/user.png) no-repeat 0 50%;
   padding-left: 20px !important;
 }
 a.logout{
+  .min-height;
   background: transparent url(images/logout.png) no-repeat 0 50%;
   padding-left: 20px !important;
 }
 a.email{
+  .min-height;
   background: transparent url(images/email.png) no-repeat 0 50%;
   padding-left: 20px !important;
 }
 a.print{
+  .min-height;
   background: transparent url(images/printer.png) no-repeat 0 50%;
   padding-left: 20px !important;
 }
 a.money{
+  .min-height;
   background: transparent url(images/money.png) no-repeat 0 50%;
   padding-left: 20px !important;
 }
 a.calendar{
+  .min-height;
   background: transparent url(images/calendar.gif) no-repeat 0 50%;
   padding-left: 20px !important;
 }
 a.trash{
+  .min-height;
   background: transparent url(images/trash.png) no-repeat 0 50%;
   padding-left: 20px !important;
   min-height: 20px;

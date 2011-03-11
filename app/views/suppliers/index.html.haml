@@ -1,0 +1,6 @@
+- content_for :links do
+  .links= link_to "Nuevo proveedor", new_supplier_path, :class => 'new'
+
+%h1 Proveedores
+
+= render 'contacts/list', :list => @suppliers

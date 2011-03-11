@@ -1,12 +1,7 @@
 - content_for :links do
-  %ul.breadcrumps
-    %li #{link_to "Incio", "/dashboard"}<span>&gt;</span>
-
   .links= link_to "Nueva venta", new_income_path, :class => 'new'
 
-
 %h1 Ventas
-
 
 %ul.tabs
   %li= link_incomes "Todas", 'all'
@@ -23,21 +18,23 @@
       %th{ :title => 'Número de referencia' } Num. Ref.
       %th Contacto
       %th Fecha
-      %th Total
-      %th Saldo
+      %th Total<br/>#{currency_plural}
+      %th Saldo<br/>#{currency_plural}
+      %th{:title => 'Moneda'} Mon.
       %th Estado
       %th Contado<br/>Crédito
       %th Vence el
       %th
-  
+
   %tbody
     - for income in @incomes
       %tr{ :class => cycle(:odd, :even) }
         %td= link_to income.ref_number, income, :class => 'b'
         %td= income.contact
         %td.nw= lo income.date
-        %td.cur= with_currency income, :real_total
-        %td.cur= with_currency income, :balance
+        %td.cur= exchange(income, :real_total, @currency_rates)
+        %td.cur= exchange(income, :balance, @currency_rates)
+        %td <span>#{income.currency_symbol}</span>
         %td <span class="#{income.real_state}">#{income.show_state}</span>
         %td= cash_credit(income.cash)
         %td= lo income.payment_date unless income.paid?

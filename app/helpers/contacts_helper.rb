@@ -1,11 +1,10 @@
 module ContactsHelper
-  def contact_type(type)
+  # Sets the contact type
+  def contact_type(type, plural = true)
     if type == 'clients'
-      'Clientes'
+      plural ? 'Clientes' : 'cliente'
     elsif type == "suppliers"
-      'Proveedores'
-    else
-      'Todos los contactos'
+      plural ? 'Proveedores' : 'proveedor'
     end
   end
 end

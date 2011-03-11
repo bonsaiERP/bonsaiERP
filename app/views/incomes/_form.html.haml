@@ -13,22 +13,26 @@
     .input
       = f.input :ref_number, :label => 'Nº de referencia', :input_html => {:size => 20}
       = f.input :date, :label => 'Fecha'
-    = f.association :contact, :label => 'Contacto', :collection => Contact.org,
-      :input_html => {'data-new_url' => new_contact_path, 'data-title' => 'Nuevo contacto', 'data-trigger' => 'new_contact' }
+
+    = f.association :contact, :label => 'Cliente', :collection => Client.org,
+      :input_html => {'data-new_url' => new_client_path, 'data-title' => 'Nuevo cliente', 'data-trigger' => 'new_client' }
     .clear
 
   .clear
-  = f.association :project, :label => 'Proyecto', :collection => Project.org
+
+  = f.association :project,  :label => 'Proyecto', :collection => Project.org
   = f.association :currency, :label => 'Moneda/Tipo de cambio. <span class="n"></span>'.html_safe, :include_blank => false
   = f.input :currency_exchange_rate, :as => :hidden
   .clear
+
   .input
-    = f.input :discount, :label => 'Descuento (%)', :input_html => {:size => 10}
+    = f.input :discount, :label => 'Descuento (%)', :input_html => {:size => 10, :type => 'decimal'}
     = f.input :bill_number, :label => 'Nº de Factura', :input_html => {:size => 20}
   =f.association :taxes, :as => :check_boxes, :label => 'Impuestos', :wrapper_html => {:id => 'taxes'}, :collection => Tax.org,
     :label_method => lambda{|tax| "<span data-rate='#{tax.rate}' title =\"#{tax.name}\">#{tax.abbreviation} (#{ntc tax.rate}%)</span>".html_safe }
 
   .clear
+
   = f.input :description, :label => 'Descripción', :as => :text, :input_html => {:rows => 4, :cols => 40}
   .clear
 
@@ -43,6 +47,7 @@
         %th.quantity Cantidad
         %th.total_row Total fila
         %th
+
     = f.simple_fields_for :transaction_details do |fd|
       %tr.item
         %td= fd.input :item_id, :label => false, :collection => Item.org.income.order(:name), :input_html => {:class => 'item fl'}
@@ -50,8 +55,9 @@
         %td.cur
           = fd.hidden_field :price, :class => 'price'
           <span class="price_html">#{ntc fd.object.price}</span>
-        /, :input_html => { :size => 8, :class => 'price' }, :label => false
-        %td= fd.input :quantity, :input_html => { :size => 8, :class => 'quantity' }, :label => false
+        /, :input_html => { :size => 8, :class => 'price', :type => 'decimal }, :label => false
+        %td= fd.input :quantity, :input_html => { :size => 8, :class => 'quantity', :type => 'decimal' }, :label => false
+
         %td.total_row.r{'data-val' => fd.object.total }= ntc fd.object.total
         %td.del <a href="javascript:" class="destroy" title="Borrar">&nbsp;</a>
     

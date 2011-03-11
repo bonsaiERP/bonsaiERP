@@ -1,0 +1,8 @@
+- content_for :links do
+  .links= link_to "Nuevo cliente", new_client_path, :class => 'new'
+
+%h1 Clientes
+
+= paginate(@clients)
+
+= render 'contacts/list', :list => @clients

@@ -1,8 +1,8 @@
-= simple_form_for(klass) do |f|
+= simple_form_for(@contact) do |f|
   = bonsai_form_error(f)
 
   = f.input :code, :label => "Código"
-  = f.input :name, :label => "Nombre"
+  = f.input :name, :label => "Nombre", :hint => 'Usado para notas de ingreso/egreso'
   .clear
   = f.input :organisation_name, :label => "Empresa"
   .input
@@ -17,3 +17,11 @@
   .clear
   %div.actions
     = f.submit "Salvar"
+
+:javascript
+  $(function() {
+    $('#contact_name').blur(function() {
+      if($('#contact_matchcode').val() == '')
+        $('#contact_matchcode').val($(this).val());
+    });
+  })

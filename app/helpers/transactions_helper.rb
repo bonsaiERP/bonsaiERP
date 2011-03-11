@@ -12,6 +12,20 @@ module TransactionsHelper
     ntc(transaction.total_currency) unless session[:organisation][:currency_id] == transaction.currency_id
   end
 
+  # Transforms to the default currency
+  # @param Transaction
+  # @param Symbol
+  # @param Hash
+  # @return String
+  def exchange(klass, method, currencies)
+    unless klass.currency_id == currency_id
+      rate = currencies[klass.currency_id].round(2)
+      ntc(klass.send(method) * rate)
+    else
+      ntc(klass.send(method))
+    end
+  end
+
   def show_money(klass, amount, options = {})
     options = {:precision => 2}.merge(options)
     unless klass.currency_id == session[:organisation][:currency_id]

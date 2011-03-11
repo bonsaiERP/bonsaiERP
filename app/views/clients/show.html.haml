@@ -1,0 +1,11 @@
+- content_for :links do
+  %ul.breadcrumps
+    %li #{link_to "Clientes", clients_path} <span>&gt;</span>
+  .links
+    = link_to 'Nuevo', new_client_path, :class => 'new'
+    = link_to 'Editar', edit_client_path(@client), :class => 'edit'
+    = link_to 'Borrar', @client, :class => 'delete'
+
+%h1= @client.matchcode
+
+= render 'contacts/show', :klass => @client

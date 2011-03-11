@@ -429,6 +429,7 @@ $(document).ready(->
     })
 
   start()
+
 )
 # Extendig base claeses
 String.prototype.pluralize = ->

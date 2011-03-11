@@ -1,0 +1,7 @@
+- content_for :links do
+  %ul.breadcrumps
+    %li #{link_to "Clientes", clients_path} <span>&gt;</span>
+
+%h1 Nuevo cliente
+= render 'contacts/form', :klass => @client
+

@@ -7,33 +7,34 @@ class Income < Transaction
   
   # callbacks
   before_save :set_state
-  after_save :set_client, :if => :aproving?
+  #after_save :set_client, :if => :aproving?
 
   STATES = ["draft", "aproved", "paid", "due"]
 
+  belongs_to :client
 
   #relationships
 
-  attr_accessible :ref_number, :date, :contact_id,
-                  :project_id, :currency_id, :currency_exchange_rate,
-                  :discount, :bill_number, :taxis_ids,
-                  :description, :transaction_details_attributes
+  attr_accessible  :ref_number,  :date,                          :contact_id,
+                   :project_id,  :currency_id,                   :currency_exchange_rate,
+                   :discount,    :bill_number,                   :taxis_ids,
+                   :description, :transaction_details_attributes
 
   
 
   #accepts_nested_attributes_for :transaction_details, :allow_destroy => true
   #validations
   validates_presence_of :date
-  validates_length_of :description, :within => 0..255
-  validates :ref_number, :presence => true ,:uniqueness => {:scope => :organisation_id, :allow_blank => false}
-  validate :valid_number_of_items
+  validates_length_of   :description,          :within => 0..255
+  validates             :ref_number,           :presence => true , :uniqueness => { :scope => :organisation_id, :allow_blank => false}
+  validate              :valid_number_of_items
 
   # scopes
-  scope :draft, where(:state => 'draft')
-  scope :aproved, where(:state => 'aproved')
-  scope :paid, where(:state => 'paid')
-  scope :due, where(["transactions.state = ? AND transactions.payment_date < ?", 'aproved', Date.today])
-  scope :credit, where(:cash => false)
+  scope :draft   , where(:state => 'draft')
+  scope :aproved , where(:state => 'aproved')
+  scope :paid    , where(:state => 'paid')
+  scope :due     , where(["transactions.state = ? AND transactions.payment_date < ?" , 'aproved' , Date.today])
+  scope :credit  , where(:cash => false)
   
   # Define boolean methods for states
   STATES.each do |state|
@@ -51,12 +52,12 @@ class Income < Transaction
   # Finds using the state
   def self.find_with_state(state)
     state = 'all' unless all_states.include?(state)
-    ret = Income.org.includes(:contact, :pay_plans, :currency).order("date DESC")
+    ret   = Income.org.includes(:contact, :pay_plans, :currency).order("date DESC")
+
     case state
     when 'all' then ret
     when 'awaiting_payment' then ret.aproved.credit
-    else
-      ret.send(state)
+    else ret.send(state)
     end
   end
 
@@ -119,11 +120,11 @@ private
   def create_states_hash
     arr = case I18n.locale
     when :es
-      ["Borrador", "Aprobado", "Pagado", "Vencido"]
+      ["Borrador" , "Aprobado" , "Pagado" , "Vencido"]
     when :en
-      ["Draft", "Aproved", "Paid", "Due"]
+      ["Draft"    , "Aproved"  , "Paid"   , "Due"]
     when :pt
-      ["Borracha", "Aprovado", "Pagado", "Vencido"]
+      ["Borracha" , "Aprovado" , "Pagado" , "Vencido"]
     end
     Hash[STATES.zip(arr)]
   end
@@ -131,7 +132,7 @@ private
   # Initialized  the ref_number
   def set_ref_number
     if ref_number.blank?
-      refs = Income.org.order("ref_number DESC").limit(1)
+      refs            = Income.org.order("ref_number DESC").limit(1)
       self.ref_number = refs.any? ? refs.first.ref_number.next : "V-00001"
     end
   end

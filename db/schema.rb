@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110304192835) do
+ActiveRecord::Schema.define(:version => 20110311171108) do
 
   create_table "account_ledgers", :force => true do |t|
     t.integer  "organisation_id"
@@ -77,12 +77,16 @@ ActiveRecord::Schema.define(:version => 20110304192835) do
     t.integer  "organisation_id",                                     :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "code"
+    t.string   "type"
   end
 
   add_index "contacts", ["client"], :name => "index_contacts_on_client"
+  add_index "contacts", ["code"], :name => "index_contacts_on_code"
   add_index "contacts", ["matchcode"], :name => "index_contacts_on_matchcode"
   add_index "contacts", ["organisation_id"], :name => "index_contacts_on_organisation_id"
   add_index "contacts", ["supplier"], :name => "index_contacts_on_supplier"
+  add_index "contacts", ["type"], :name => "index_contacts_on_type"
 
   create_table "countries", :force => true do |t|
     t.string   "name",         :limit => 50
@@ -204,7 +208,7 @@ ActiveRecord::Schema.define(:version => 20110304192835) do
     t.integer  "currency_id"
     t.boolean  "active"
     t.integer  "contact_id"
-    t.string   "reference",           :limit => 50
+    t.string   "reference"
     t.string   "state",               :limit => 20
   end
 
