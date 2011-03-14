@@ -26,6 +26,12 @@ class Account < ActiveRecord::Base
     "#{name} #{number}"
   end
 
+  def self.json
+    h = Hash.new {|h, v| h[v.id] = {:currency_id => v.currency_id , :type => v.type}  }
+    Account.org.each {|ac| h[ac] }
+    h
+  end
+
   # If update occurs it should not allow
   def valid_currency_not_changed
     self.errors.add(:base, "No puede modificar la moneda") if changes[:currency_id]
