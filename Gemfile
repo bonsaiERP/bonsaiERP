@@ -9,8 +9,8 @@ gem 'rails' #, '3.0.0'
 # ActiveRecord requires a database adapter. By default,
 # Rails has selected sqlite3.
 #gem 'sqlite3-ruby', :require => 'sqlite3'
-gem 'pg'
-#gem 'mysql2'
+#gem 'pg'
+gem 'mysql2'
 
 
 gem 'devise'
@@ -24,17 +24,15 @@ gem 'nokogiri'
 #gem 'escape_utils'
 
 group :development do
-  if RUBY_VERSION == '1.9.2'
-    gem 'ruby-debug19', :require => 'ruby-debug'
-  else
-    gem 'ruby-debug'
-  end
+  gem "ruby-debug", :platforms => :mri_18
+  gem "ruby-debug19", :platforms => :mri_19
+
   gem 'steak', '~>1.1.0'
 end
 
 # Test
 group :test do
-  gem 'akephalos'
+  gem 'akephalos', '~>0.2.5'
   gem 'rspec-rails', '~>2.5.0'
   gem 'mocha'
   gem 'steak', '~>1.1.0'

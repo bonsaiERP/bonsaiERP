@@ -29,14 +29,13 @@ feature "Income", "test features" do
   background do
     OrganisationSession.set(:id => 1, :name => 'ecuanime', :currency_id => 1)
     
-    Bank.destroy_all()
     Bank.create!(:number => '123', :currency_id => 1, :name => 'Bank JE', :amount => 0) {|a| a.id = 1 }
-
-    CashRegister.destroy_all()
     CashRegister.create!(:name => 'Cash register Bs.', :amount => 0, :currency_id => 1, :address => 'Uno') {|cr| cr.id = 2}
 
-    Contact.destroy_all
-    Contact.create!(:name => 'karina', :matchcode => 'karina', :address => 'Mallasa') {|c| c.id = 1 }
+    Contact.create!(:code => 'C-0001',:name => 'karina', :matchcode => 'karina', :address => 'Mallasa') {|c| c.id = 1 }
+
+    create_currencies
+    create_currency_rates
   end
 
   scenario "Create a payment with nearest pay_plan" do
@@ -200,7 +199,7 @@ feature "Income", "test features" do
     i.create_pay_plan(:payment_date => d, :amount => 50, :repeat => true)
     i = Income.find(i.id)
 
-    i.pay_plans.unpaid.each {|v| puts v.amount }
+    #i.pay_plans.unpaid.each {|v| puts v.amount }
     i.pay_plans.unpaid[0].amount.should == 50
     i.pay_plans.unpaid[0].payment_date.should == d
     i.pay_plans.unpaid[1].amount.should == 50
@@ -222,4 +221,62 @@ feature "Income", "test features" do
     i.balance.should == i.total_currency - 100
   end
 
+  scenario 'test with different exchange_rates' do
+    d = Date.today
+    i = Income.new(income_params.merge(:date => d, :currency_id => 2, :currency_exchange_rate => 7))
+
+    i.save.should == true
+    i = Income.find(i.id)
+    balance = i.balance
+
+    i.currency_exchange_rate.should == 7
+    i.balance.should == (i.total/7).round(2)
+    
+    pp = i.create_pay_plan(pay_plan_params(:amount => 20, :payment_date => d, :repeat => true))
+    i = Income.find(i.id)
+
+    
+    i.pay_plans[0].amount.should == 20
+    i.pay_plans[1].amount.should == 20
+    i.pay_plans[2].amount.should == balance - 40
+    
+    
+    p = i.new_payment(:account_id => 2, :reference => 'NA', :date => d)
+    p.currency_id.should == 2
+    p.amount.should == 20
+
+    p.save.should == true
+    i = Income.find(i.id)
+
+    i.balance.should == balance - 20
+    i.pay_plans.unpaid.size.should == 2
+
+    p = i.new_payment(:account_id => 2, :reference => 'NA', :date => d, :currency_id => 1, :amount => 20 * 7, :exchange_rate => 7)
+
+    p.save.should == true
+    i = Income.find(i.id)
+
+    i.balance.should == balance - 40
+    i.pay_plans.unpaid.size.should == 1
+
+    p = i.new_payment(:account_id => 2, :reference => 'NA', :date => d, :currency_id => 1, :amount => 1 * 7, :exchange_rate => 7)
+
+    p.save.should == true
+    i = Income.find(i.id)
+
+    i.balance.should == balance - 41
+    i.pay_plans.unpaid.first.amount.should == i.balance
+    i.pay_plans.unpaid.size.should == 1
+       
+    p = i.new_payment(:account_id => 2, :reference => 'NA', :date => d, :currency_id => 2)
+
+
+    p.save.should == true
+    i = Income.find(i.id)
+
+    i.balance.should == 0
+    i.pay_plans.unpaid.size.should == 0
+    i.state.should == 'paid'
+
+  end
 end

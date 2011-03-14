@@ -43,8 +43,13 @@ module HelperMethods
 
   def create_currencies
     YAML.load_file("#{Rails.root}/config/defaults/currencies.yml").each do |c|
-      Factory.create :currency, c
+      Currency.create!( c ) {|cur| cur.id = c[:id] }
     end
+  end
+
+  def create_currency_rates
+    CurrencyRate.create!(:currency_id => 2, :rate => 7) {|cr| cr.active = true }
+    CurrencyRate.create!(:currency_id => 3, :rate => 9.4) {|cr| cr.active = true }
   end
 
   def create_countries

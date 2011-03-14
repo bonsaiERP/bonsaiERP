@@ -6,7 +6,7 @@ require File.dirname(__FILE__) + '/acceptance_helper'
 feature "Login" do
 
   background do
-    @user = Factory.create(:user)
+    @user = ModelData::user
     User.confirm_by_token(@user.confirmation_token)
     UserSession.current_user = @user
     login_as @user

@@ -43,4 +43,3 @@ Factory.define :contact do |c|
   c.mobile '70113217'
   c.tax_number '3376951'
 end
-

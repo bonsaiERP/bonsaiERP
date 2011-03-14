@@ -9,10 +9,11 @@ class Payment < ActiveRecord::Base
   STATES = ['conciliation', 'paid']
 
   # callbacks
-  after_initialize :set_defaults,    :if => :new_record?
-  before_create    :set_currency_id, :if => :new_record?
-  before_create    :set_cash_amount, :if => :transaction_cash?
-  before_save      :set_state,       :if => :nil_state?
+  after_initialize  :set_defaults,      :if => :new_record?
+  before_validation :set_exchange_rate
+  before_create     :set_currency_id,   :if => :new_record?
+  before_create     :set_cash_amount,   :if => :transaction_cash?
+  before_save       :set_state,         :if => :nil_state?
 
   # update_pay_plan must run before update_transaction
   after_create :create_account_ledger#, : if => : conciliation?
@@ -39,6 +40,7 @@ class Payment < ActiveRecord::Base
 
   # validations
   validates_presence_of :account_id, :transaction_id, :reference, :date
+  validates             :exchange_rate, :numericality => {:greater_than => 0}, :presence => true
   validate              :valid_payment_amount, :if => :active?
   validate              :valid_amount_or_interests_penalties, :if => :active?
 
@@ -84,18 +86,23 @@ class Payment < ActiveRecord::Base
     end
   end
 
+  # amount in the currency
+  def amount_currency
+    amount/exchange_rate
+  end
 private
   def set_defaults
     self.amount              ||= 0
     self.interests_penalties ||= 0
     self.active                = true if active.nil?
+    self.exchange_rate       ||= 1
   end
 
   def update_transaction
     if active
-      transaction.add_payment(amount)
+      transaction.add_payment(amount_currency)
     else
-      transaction.substract_payment(amount)
+      transaction.substract_payment(amount_currency)
     end
 
     transaction.update_transaction_payment_date
@@ -111,7 +118,7 @@ private
     amount_to_pay         = 0
     interest_to_pay       = 0
     created_pay_plan      = nil
-    amount_to_pay         = amount
+    amount_to_pay         = amount_currency
     interest_to_pay       = interests_penalties
     @updated_pay_plan_ids = []
 
@@ -141,7 +148,7 @@ private
   end
 
   def valid_payment_amount
-    if amount > transaction.balance
+    if amount_currency > transaction.balance
       self.errors.add(:amount, "La cantidad ingresada es mayor que el saldo por pagar.")
     end
   end
@@ -156,11 +163,11 @@ private
   # Creates an account ledger for the account and payment
   def create_account_ledger
     if transaction.type == "Income"
-      tot, income = [total_amount, true]
-      tot, income = [-total_amount, false] unless active?
+      tot, income = [ total_amount, true ]
+      #tot, income = [-total_amount, false] unless active?
     else
-      tot, income = [-total_amount, true]
-      tot, income = [total_amount, false] unless active?
+      tot, income = [-total_amount, true ]
+      #tot, income = [ total_amount, false] unless active?
     end
 
     AccountLedger.create(:account_id => account_id, :payment_id => id, 
@@ -199,5 +206,9 @@ private
     when "Bank"         then self.state = "conciliation"
     when "CashRegister" then self.state = "paid"
     end
+  end
+
+  def set_exchange_rate
+    self.exchange_rate = 1 if currency_id == transaction.currency_id
   end
 end

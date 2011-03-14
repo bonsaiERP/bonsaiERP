@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110311171108) do
+ActiveRecord::Schema.define(:version => 20110314180243) do
 
   create_table "account_ledgers", :force => true do |t|
     t.integer  "organisation_id"
@@ -34,7 +34,6 @@ ActiveRecord::Schema.define(:version => 20110311171108) do
   add_index "account_ledgers", ["contact_id"], :name => "index_account_ledgers_on_contact_id"
   add_index "account_ledgers", ["currency_id"], :name => "index_account_ledgers_on_currency_id"
   add_index "account_ledgers", ["date"], :name => "index_account_ledgers_on_date"
-  add_index "account_ledgers", ["description"], :name => "index_account_ledgers_on_description"
   add_index "account_ledgers", ["income"], :name => "index_account_ledgers_on_income"
   add_index "account_ledgers", ["organisation_id"], :name => "index_account_ledgers_on_organisation_id"
   add_index "account_ledgers", ["payment_id"], :name => "index_account_ledgers_on_payment_id"
@@ -208,8 +207,9 @@ ActiveRecord::Schema.define(:version => 20110311171108) do
     t.integer  "currency_id"
     t.boolean  "active"
     t.integer  "contact_id"
-    t.string   "reference"
+    t.string   "reference",           :limit => 50
     t.string   "state",               :limit => 20
+    t.decimal  "exchange_rate",                     :precision => 14, :scale => 2
   end
 
   add_index "payments", ["account_id"], :name => "index_payments_on_account_id"
@@ -269,7 +269,6 @@ ActiveRecord::Schema.define(:version => 20110311171108) do
   end
 
   add_index "taggings", ["tag_id"], :name => "index_taggings_on_tag_id"
-  add_index "taggings", ["taggable_id", "taggable_type", "context"], :name => "index_taggings_on_taggable_id_and_taggable_type_and_context"
 
   create_table "tags", :force => true do |t|
     t.string  "name"
