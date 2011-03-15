@@ -31,6 +31,7 @@ feature "Income", "test features" do
     
     Bank.create!(:number => '123', :currency_id => 1, :name => 'Bank JE', :amount => 0) {|a| a.id = 1 }
     CashRegister.create!(:name => 'Cash register Bs.', :amount => 0, :currency_id => 1, :address => 'Uno') {|cr| cr.id = 2}
+    CashRegister.create!(:name => 'Cash register $.', :amount => 0, :currency_id => 2, :address => 'None') {|cr| cr.id = 3}
 
     Contact.create!(:code => 'C-0001',:name => 'karina', :matchcode => 'karina', :address => 'Mallasa') {|c| c.id = 1 }
 
@@ -222,6 +223,8 @@ feature "Income", "test features" do
   end
 
   scenario 'test with different exchange_rates' do
+    c =  Currency.first
+
     d = Date.today
     i = Income.new(income_params.merge(:date => d, :currency_id => 2, :currency_exchange_rate => 7))
 
@@ -240,8 +243,8 @@ feature "Income", "test features" do
     i.pay_plans[1].amount.should == 20
     i.pay_plans[2].amount.should == balance - 40
     
-    
-    p = i.new_payment(:account_id => 2, :reference => 'NA', :date => d)
+    # FIRST Payment
+    p = i.new_payment(:account_id => 3, :reference => 'NA', :date => d)
     p.currency_id.should == 2
     p.amount.should == 20
 
@@ -251,10 +254,14 @@ feature "Income", "test features" do
     i.balance.should == balance - 20
     i.pay_plans.unpaid.size.should == 2
 
+    # FIRST Payment
     p = i.new_payment(:account_id => 2, :reference => 'NA', :date => d, :currency_id => 1, :amount => 20 * 7, :exchange_rate => 7)
 
     p.save.should == true
+    p.account_ledger.description.should =~ /1 dolar = 7,00/
+
     i = Income.find(i.id)
+
 
     i.balance.should == balance - 40
     i.pay_plans.unpaid.size.should == 1

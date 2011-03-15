@@ -12,6 +12,8 @@ class CurrencyRate < ActiveRecord::Base
   validates_presence_of :currency_id
   validates :rate, :presence => true, :numericality => {:greater_than => 0}
 
+  delegate :name, :symbol, :code, :to => :currency, :prefix => true
+
   # scopes
   scope :active, where(:active => true)
 
@@ -40,6 +42,19 @@ class CurrencyRate < ActiveRecord::Base
   # @param Organisation organisation
   def self.build_currencies(organisation)
     organisation.currencies.inject([]) {|arr, c| arr << CurrencyRate.new(:currency_id => c.id) }
+  end
+
+  def self.json
+    hash = {}
+    CurrencyRate.active.includes(:currency).each do |ac| 
+      arr = json_fields.zip( json_fields.map {|val| ac.send(val) } )
+      hash[ac.currency_id] = Hash[ arr ]
+    end
+    hash
+  end
+
+  def self.json_fields
+    [:rate, :currency_name, :currency_symbol, :currency_code]
   end
 
 private

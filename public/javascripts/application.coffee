@@ -108,14 +108,6 @@ $(document).ready(->
 
   )
 
-  # Presents more or less links
-  $('a.more').live("click", ->
-    $(this).html('Ver menos').removeClass('more').addClass('less').next('.hidden').show(speed)
-  )
-  $('a.less').live('click', ->
-    $(this).html('Ver más').removeClass('less').addClass('more').next('.hidden').hide(speed)
-  )
-
   # Ajax preloader content
   AjaxLoadingHTML = ->
     "<div class='c'><img src='/images/ajax-loader.gif' alt='Cargando' /><br/>Cargando...</div>"
@@ -403,9 +395,11 @@ $(document).ready(->
 
   createErrorLog = (data)->
     unless $('#error-log').length > 0
-      $('<div id="error-log"></div>').dialog({title: 'Error', width: 900, height: 500})
+      $('<div id="error-log" style="background: #FFF"></div>').html("<iframe id='error-iframe' width='100%' height='100%'><body></body></iframe>")
+      .dialog({title: 'Error', width: 900, height: 500})
 
-    $('#error-log').html(data).dialog("open")
+    $('#error-iframe').contents().find('body').html(data)
+    $('#error-log').dialog("open")
 
   # Hide message
   $('.message .close').live("click", ->

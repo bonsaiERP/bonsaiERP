@@ -2,11 +2,15 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class Payment < ActiveRecord::Base
+  # include helper for account_ledger text
+  include ActionView::Helpers::NumberHelper
+
   acts_as_org
 
   attr_reader :pay_plan, :updated_pay_plan_ids
   attr_protected :state
   STATES = ['conciliation', 'paid']
+
 
   # callbacks
   after_initialize  :set_defaults,      :if => :new_record?
@@ -96,6 +100,7 @@ private
     self.interests_penalties ||= 0
     self.active                = true if active.nil?
     self.exchange_rate       ||= 1
+    self.currency_id           = transaction.currency_id
   end
 
   def update_transaction
@@ -173,7 +178,7 @@ private
     AccountLedger.create(:account_id => account_id, :payment_id => id, 
                          :currency_id => currency_id, :contact_id => transaction_contact_id,
                          :amount => tot, :date => date, :income => income, :transaction_id => transaction_id,
-                         :description => set_account_ledger_text, :reference => reference
+                         :description => get_account_ledger_text, :reference => reference
                         ) {|al| al.conciliation = get_conciliation }
   end
 
@@ -183,11 +188,21 @@ private
   end
 
   # Creates the account_ledger text
-  def set_account_ledger_text
+  def get_account_ledger_text
+    txt = get_exchange_rate_text
     case
-    when 'Income'  then "Cobro venta #{transaction_ref_number}"
-    when 'Buy'     then "Pago compra #{transaction_ref_number}"
-    when 'Expense' then "Pago gasto #{transaction_ref_number}"
+    when 'Income'  then "Cobro venta #{transaction_ref_number}#{txt}"
+    when 'Buy'     then "Pago compra #{transaction_ref_number}#{txt}"
+    when 'Expense' then "Pago gasto #{transaction_ref_number}#{txt}"
+    end
+  end
+
+  # Text for the account_ledger
+  def get_exchange_rate_text
+    unless transaction.currency_id == account.currency_id
+      cur = Currency.find(account.currency_id)
+      er = number_to_currency(exchange_rate)
+      " Tipo de cambio 1 #{transaction.currency_name} = #{er} #{cur.name.pluralize}"
     end
   end
 
@@ -208,7 +223,12 @@ private
     end
   end
 
+  # Sets the exchange rate in case it's ovwritten
   def set_exchange_rate
-    self.exchange_rate = 1 if currency_id == transaction.currency_id
+    if transaction.currency_id == account.currency_id or account_id.blank?
+      self.exchange_rate = 1
+    elsif exchange_rate == 0 or exchange_rate.blank? and account_id.present?
+      self.exchange_rate = CurrencyRate.active.find(account.currency_id).rate
+    end
   end
 end

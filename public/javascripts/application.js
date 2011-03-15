@@ -106,12 +106,6 @@
         return $(div).hide();
       }
     });
-    $('a.more').live("click", function() {
-      return $(this).html('Ver menos').removeClass('more').addClass('less').next('.hidden').show(speed);
-    });
-    $('a.less').live('click', function() {
-      return $(this).html('Ver más').removeClass('less').addClass('more').next('.hidden').hide(speed);
-    });
     AjaxLoadingHTML = function() {
       return "<div class='c'><img src='/images/ajax-loader.gif' alt='Cargando' /><br/>Cargando...</div>";
     };
@@ -413,13 +407,14 @@
     };
     createErrorLog = function(data) {
       if (!($('#error-log').length > 0)) {
-        $('<div id="error-log"></div>').dialog({
+        $('<div id="error-log" style="background: #FFF"></div>').html("<iframe id='error-iframe' width='100%' height='100%'><body></body></iframe>").dialog({
           title: 'Error',
           width: 900,
           height: 500
         });
       }
-      return $('#error-log').html(data).dialog("open");
+      $('#error-iframe').contents().find('body').html(data);
+      return $('#error-log').dialog("open");
     };
     $('.message .close').live("click", function() {
       return $(this).parents(".message:first").hide("slow").delay(500).remove();

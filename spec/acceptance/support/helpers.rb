@@ -43,7 +43,7 @@ module HelperMethods
 
   def create_currencies
     YAML.load_file("#{Rails.root}/config/defaults/currencies.yml").each do |c|
-      Currency.create!( c ) {|cur| cur.id = c[:id] }
+      Currency.create!( c ) {|cur| cur.id = c["id"] }
     end
   end
 

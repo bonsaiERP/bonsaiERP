@@ -9,7 +9,7 @@
 
     = f.input :date, :label => 'Fecha'
 
-    = f.association :account, :label => 'Cuenta <span class="n" id="cur"></span>'.html_safe, :collection => @accounts
+    = f.association :account, :label => 'Cuenta <span class="n black" id="cur"></span>'.html_safe, :collection => @accounts
     .clear
     = f.input :amount, :input_html => {:size => 12, :type => 'decimal', :disabled => @payment.transaction_cash}, :label => currency_label('Cantidad', @payment)
     = f.input :interests_penalties, :input_html => {:size => 12, :type => 'decimal'}, :label => currency_label('Intereses/Penalidades', @payment)
@@ -22,17 +22,84 @@
 
   :javascript
     $(function() {
-      var transaction_currency_id = #{@payment.transaction.currency_id};
-      var accounts = #{Account.json.to_json};
-      
-      $('#payment_account_id').live('change keyup', function() {
-        var account_id = $(this).val() * 1;
-        if(transaction_currency_id != accounts[account_id].currency_id) {
-          $('#cur').html("Tipo de cambio <a href=''>editar</a>");
-        }else{
-          $('#cur').html("");
+
+      function Payment(currency_id, accounts, rates) {
+        this.currency_id = currency_id;
+        this.accounts = accounts;
+        this.rates = rates;
+        this.setEvents();
+      };
+
+      Payment.prototype = {
+        currency_id: null,
+        accounts: null,
+        rates: null,
+        setEvents: function() {
+          this.accountIdEvent();
+          this.currencyRateEvent();
+        },
+        /**
+        * Sets the account_id Event
+        */
+        accountIdEvent: function() {
+          var self = this;
+
+          $('#payment_account_id').die().live('change keyup', function() {
+            var html = '';
+            var rate = 1;
+            try{
+              var currency_id = self.accounts[ $(this).val() ].currency_id;
+
+              if( self.currency_id != currency_id ) {
+                rate = self.rates[currency_id].rate;
+                html = self.createAccountIdLabel( currency_id, rate );
+              }
+            }catch(e) {}
+
+            $('#payment_exchange_rate').val(rate);            
+            $('#cur').html(html).mark();
+          });
+        },
+        /**
+        * Sets the edit rate link
+        */
+        currencyRateEvent: function() {
+          var self = this;
+
+          $('#cur_link').die().live("click", function() {
+            var rate = prompt("Tipo de cambio", $('#payment_exchange_rate').val() ) * 1;
+
+            if( rate > 0 ) {
+              $('#payment_exchange_rate').val(rate);
+              var currency_id = self.accounts[ $('#payment_account_id').val() ].currency_id;
+              $('#cur').html(self.createAccountIdLabel(currency_id, rate) ).mark();
+            }
+          });
+        },
+        /**
+        * Creates the HTML for account_id
+        * @param String account_id
+        */
+        createAccountIdLabel: function(currency_id, rate, join) {
+          rate = "<strong>" + _b.ntc(rate) + "</strong>";
+          join = join || true;
+
+          var link = '<a href="javascript:" id="cur_link">editar</a>';
+          var html = ["1", this.rates[currency_id].currency_name, 
+          "=", rate, "#{currency_plural}", link ];
+
+          if(join) {
+            html = html.join(" ");
+          }
+
+          return html;
         }
-      });
+      };
+
+      var accounts = #{Account.json.to_json};
+      var rates = #{CurrencyRate.json.to_json};
+
+      var payment = new Payment(#{@payment.transaction.currency_id}, accounts, rates);
     });
 
 -else
