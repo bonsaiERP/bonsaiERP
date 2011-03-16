@@ -20,7 +20,7 @@ class Payment < ActiveRecord::Base
   before_save       :set_state,         :if => :nil_state?
 
   # update_pay_plan must run before update_transaction
-  after_create :create_account_ledger#, : if => : conciliation?
+  after_create :create_account_ledger
   after_save   :update_pay_plan,    :if => :paid?
   after_save   :update_transaction, :if => :paid?
 
@@ -79,7 +79,7 @@ class Payment < ActiveRecord::Base
 
   # Sums the amount plus the interests and penalties
   def total_amount
-    amount + interests_penalties
+    (amount + interests_penalties) * exchange_rate
   end
 
   # Nulls a payment
@@ -92,22 +92,23 @@ class Payment < ActiveRecord::Base
 
   # amount in the currency
   def amount_currency
-    amount/exchange_rate
+    amount * exchange_rate
   end
+
 private
   def set_defaults
     self.amount              ||= 0
     self.interests_penalties ||= 0
     self.active                = true if active.nil?
-    self.exchange_rate       ||= 1
+    self.exchange_rate       ||= 1.0
     self.currency_id           = transaction.currency_id
   end
 
   def update_transaction
     if active
-      transaction.add_payment(amount_currency)
+      transaction.add_payment(amount)
     else
-      transaction.substract_payment(amount_currency)
+      transaction.substract_payment(amount)
     end
 
     transaction.update_transaction_payment_date
@@ -123,7 +124,7 @@ private
     amount_to_pay         = 0
     interest_to_pay       = 0
     created_pay_plan      = nil
-    amount_to_pay         = amount_currency
+    amount_to_pay         = amount
     interest_to_pay       = interests_penalties
     @updated_pay_plan_ids = []
 
@@ -153,7 +154,7 @@ private
   end
 
   def valid_payment_amount
-    if amount_currency > transaction.balance
+    if amount > transaction.balance
       self.errors.add(:amount, "La cantidad ingresada es mayor que el saldo por pagar.")
     end
   end
@@ -200,9 +201,9 @@ private
   # Text for the account_ledger
   def get_exchange_rate_text
     unless transaction.currency_id == account.currency_id
-      cur = Currency.find(account.currency_id)
+      #cur = Currency.find(account.currency_id)
       er = number_to_currency(exchange_rate)
-      " Tipo de cambio 1 #{transaction.currency_name} = #{er} #{cur.name.pluralize}"
+      " Tipo de cambio 1 #{transaction.currency_name} = #{er} #{account.currency_name.pluralize}"
     end
   end
 

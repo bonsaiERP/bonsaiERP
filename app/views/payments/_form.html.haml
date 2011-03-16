@@ -15,7 +15,13 @@
     = f.input :interests_penalties, :input_html => {:size => 12, :type => 'decimal'}, :label => currency_label('Intereses/Penalidades', @payment)
     .clear
       = f.input :reference, :label => 'Referencia/Nº Cheque', :input_html => {:size => 20}
-    = f.input :description, :label => 'Descripción', :as => :text, :input_html => {:rows => 4, :cols => 35}
+      .input.exchange_rate
+        = f.label :exchange_rate, "Tipo de cambio"
+        1 #{@payment.transaction.currency_name} = 
+        = f.text_field :exchange_rate, :size => 6, :class => 'r'
+        - if f.object.errors[:exchange_rate].present?
+          %span.error= f.object.errors
+    /= f.input :description, :label => 'Descripción', :as => :text, :input_html => {:rows => 4, :cols => 35}
     .clear
     .actions
       = f.submit 'Salvar'
@@ -58,7 +64,21 @@
 
             $('#payment_exchange_rate').val(rate);            
             $('#cur').html(html).mark();
+
           });
+        },
+        /**
+        * @param String
+        */
+        createAmountInterestLabel: function(currency_id) {
+          var cur = "#{currency_complete_plural}";
+          if(this.rates[currency_id]) {
+            var ra = this.rates[currency_id];
+            cur = ra.currency_symbol + " " + ra.currency_name.pluralize();
+          }
+
+          $('label[for=payment_amount]').html("Cantidad (" + cur + ")");
+          $('label[for=payment_interests_penalties]').html("Intereses/Penalidades (" + cur + ")");
         },
         /**
         * Sets the edit rate link
