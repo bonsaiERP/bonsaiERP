@@ -14,4 +14,10 @@ class Currency < ActiveRecord::Base
   def plural
     %Q(#{name.pluralize} #{symbol})
   end
+
+  def self.json
+    hash = Hash.new {|h,v| h[v.id] = {:name => v.name, :symbol => v.symbol, :code => v.code } }
+    Currency.all.each {|c| hash[c] }
+    hash
+  end
 end

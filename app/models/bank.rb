@@ -11,7 +11,7 @@ class Bank < Account
   validates_uniqueness_of :number, :scope => [:name, :organisation_id]
 
   def to_s
-    "#{name} - #{number}"
+    "#{name} #{number} ( #{currency_name.pluralize} )"
   end
 
   def pendent_account_ledgers

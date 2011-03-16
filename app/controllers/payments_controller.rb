@@ -26,7 +26,7 @@ class PaymentsController < ApplicationController
   def new
     session[:payment] = {}
     #begin
-    transaction = Transaction.find_by_type_and_id( params[:type], params[:id] )
+    transaction = Transaction.org.find_by_type_and_id( params[:type], params[:id] )
     session[:payment][:transaction_id] = transaction.id
     @payment = transaction.new_payment
     #rescue
@@ -39,6 +39,7 @@ class PaymentsController < ApplicationController
   # POST /payments.xml
   def create
     @payment = Payment.new(params[:payment])
+
     if params[:payment][:transaction_id].to_i == session[:payment][:transaction_id]
       if @payment.save
         redirect_ajax @payment

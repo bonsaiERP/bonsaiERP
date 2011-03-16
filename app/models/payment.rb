@@ -43,8 +43,10 @@ class Payment < ActiveRecord::Base
   delegate :type, :name, :number, :to => :account, :prefix => true
 
   # validations
-  validates_presence_of :account_id, :transaction_id, :reference, :date
-  validates             :exchange_rate, :numericality => {:greater_than => 0}, :presence => true
+  validates_presence_of     :account_id, :transaction_id, :reference, :date
+  validates                 :exchange_rate, :numericality => {:greater_than => 0}, :presence => true
+  validates_numericality_of :exchange_rate, :greater_than => 0, :if => :other_currency?
+
   validate              :valid_payment_amount, :if => :active?
   validate              :valid_amount_or_interests_penalties, :if => :active?
 
@@ -60,6 +62,13 @@ class Payment < ActiveRecord::Base
         "#{st}" == state
       end
     CODE
+  end
+
+  # Tells if the payment is in a differenc currency of the transaction
+  def other_currency?
+    if currency_id.present?
+      transaction.currency != account.currency_id
+    end
   end
 
   # Overide the dault to_json method

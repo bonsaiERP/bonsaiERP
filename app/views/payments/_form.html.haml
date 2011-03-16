@@ -5,24 +5,26 @@
     = hidden_field_tag "payment_type", params[:payment_type]
 
     = f.input :transaction_id, :as => :hidden
-    = f.input :exchange_rate, :as => :hidden
 
     = f.input :date, :label => 'Fecha'
-
     = f.association :account, :label => 'Cuenta <span class="n black" id="cur"></span>'.html_safe, :collection => @accounts
     .clear
+
     = f.input :amount, :input_html => {:size => 12, :type => 'decimal', :disabled => @payment.transaction_cash}, :label => currency_label('Cantidad', @payment)
     = f.input :interests_penalties, :input_html => {:size => 12, :type => 'decimal'}, :label => currency_label('Intereses/Penalidades', @payment)
     .clear
+
       = f.input :reference, :label => 'Referencia/Nº Cheque', :input_html => {:size => 20}
-      .input.exchange_rate
+      .input.exchange_rate{:style => 'display: none'}
         = f.label :exchange_rate, "Tipo de cambio"
         1 #{@payment.transaction.currency_name} = 
         = f.text_field :exchange_rate, :size => 6, :class => 'r'
+        %span#exchange_rate_cur
         - if f.object.errors[:exchange_rate].present?
           %span.error= f.object.errors
     /= f.input :description, :label => 'Descripción', :as => :text, :input_html => {:rows => 4, :cols => 35}
     .clear
+
     .actions
       = f.submit 'Salvar'
 
@@ -32,14 +34,14 @@
       function Payment(currency_id, accounts, rates) {
         this.currency_id = currency_id;
         this.accounts = accounts;
-        this.rates = rates;
+        this.currencies = currencies;
         this.setEvents();
       };
 
       Payment.prototype = {
         currency_id: null,
         accounts: null,
-        rates: null,
+        currencies: null,
         setEvents: function() {
           this.accountIdEvent();
           this.currencyRateEvent();
@@ -57,8 +59,12 @@
               var currency_id = self.accounts[ $(this).val() ].currency_id;
 
               if( self.currency_id != currency_id ) {
-                rate = self.rates[currency_id].rate;
-                html = self.createAccountIdLabel( currency_id, rate );
+                var name = self.currencies[currency_id].name.pluralize();
+
+                $('.exchange_rate').show('slow').mark();
+                $('#exchange_rate_cur').html(name);
+              }else{
+                $('.exchange_rate').hide('slow');
               }
             }catch(e) {}
 
@@ -72,8 +78,8 @@
         */
         createAmountInterestLabel: function(currency_id) {
           var cur = "#{currency_complete_plural}";
-          if(this.rates[currency_id]) {
-            var ra = this.rates[currency_id];
+          if(this.currencies[currency_id]) {
+            var ra = this.currencies[currency_id];
             cur = ra.currency_symbol + " " + ra.currency_name.pluralize();
           }
 
@@ -105,7 +111,7 @@
           join = join || true;
 
           var link = '<a href="javascript:" id="cur_link">editar</a>';
-          var html = ["1", this.rates[currency_id].currency_name, 
+          var html = ["1", this.currencies[currency_id].currency_name, 
           "=", rate, "#{currency_plural}", link ];
 
           if(join) {
@@ -117,9 +123,9 @@
       };
 
       var accounts = #{Account.json.to_json};
-      var rates = #{CurrencyRate.json.to_json};
+      var currencies = #{Currency.json.to_json};
 
-      var payment = new Payment(#{@payment.transaction.currency_id}, accounts, rates);
+      var payment = new Payment(#{@payment.transaction.currency_id}, accounts, currencies);
     });
 
 -else

@@ -9,40 +9,38 @@
     %thead
       %tr
         %th Fecha
-        %th Descripción
-        %th Cuenta
-        %th Cantidad
-        %th Intereses<br/>Penalidades
-        %th Total fila
-        %th
+        %th{:style => 'width: 300px'} Cuenta
+        %th Cantidad <br/>#{transaction.currency_plural}
+        %th{:title => 'Intenreses/Penalidades'} Int./Pena.<br/>#{transaction.currency_plural}
+        %th Total fila <br/>#{transaction.currency_plural}
+        %th{:style => 'width: 100px'}
     
     %tbody
       - transaction.payments.each do |payment|
         %tr.payment{ :id => payment.id, :class => "p_#{payment.state}" }
-          %td= lo payment.date
-          %td= payment.description
+          %td= link_to lo(payment.date), payment, :class => 'b'
           %td.account= payment.account
-          %td.r.amount{'data-val' => payment.amount} #{transaction.currency_symbol} #{ntc payment.amount}
-          %td.r.interests_penalties{'data-val' => payment.interests_penalties} #{transaction.currency_symbol} #{ntc payment.interests_penalties}
+          %td.r.amount{'data-val' => payment.amount} #{ntc payment.amount}
+          %td.r.interests_penalties{'data-val' => payment.interests_penalties} #{ntc payment.interests_penalties}
           %td.r.total_amount{'data-val' => payment.total_amount}= ntc payment.total_amount
           %td.actions= link_to "Conciliar banco", payment.account_ledger, :title => 'Conciliar con cuenta bancaria', :class => 'conciliate' unless payment.paid?
 
     %tr.extra.pad_top
-      %td{:colspan => 3}
-      %td.r.b{:colspan => 2} Total #{transaction.pay_type.pluralize} + Intereses/Penalidades
-      %td.r.b#total_payment= wcur transaction, :total_payments_with_interests
+      %td
+      %td.r.b{:colspan => 3} Total #{transaction.pay_type.pluralize} + Intereses/Penalidades
+      %td.r.b#total_payment= ntc transaction.total_payments_with_interests
 
 :javascript
   $(function() {
     var template = [
       '<tr id="${id}" class="p_${state} payment">',
-          '<td>${date}</td>',
-          '<td>${description}</td>',
+          '<td><a href="/payments/${id}" class="b">${date}</a></td>',
           '<td class="account">${account}</td>',
           '<td class="r amount" data-val="${amount}">#{transaction.currency_symbol} ${_b.ntc(amount)}</td>',
           '<td class="r interests_penalties" data-val="${interests_penalties}">${currency_symbol} ${_b.ntc(interests_penalties)}</td>',
           '<td class="r total_amount" data-val="${total_amount}">#{transaction.currency_symbol} ${_b.ntc(amount)}</td>',
           '<td class="actions">',
+          '${checkIfConciliation(state, account_ledger_id)}',
           '{{if(state == "conciliation")}}<a class="conciliate" href="/account_ledgers/${account_ledger_id}/conciliate" title="Conciliar con cuenta bancaria">Conciliar banco</a>{{/if}}</td>',
         '</tr>'
     ].join("");
@@ -64,6 +62,18 @@
         return false;
       }
     });
+
+    function checkIfConciliation(state, account_ledger_id) {
+      var arr = [];
+      ]
+      if(state == "conciliation") {
+        arr = ['<a class="conciliate" href="/account_ledgers/', account_ledger_id, 
+        '/conciliate" title="Conciliar con cuenta bancaria">Conciliar banco</a>'];
+      }else{
+      }
+
+      return arr.join("");
+    }
     
     /**
      * Creates a note to notify pay_plans

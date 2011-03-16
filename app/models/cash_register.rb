@@ -8,7 +8,7 @@ class CashRegister < Account
   validates :name, :uniqueness => {:scope => :organisation_id}
 
   def to_s
-    name
+    "#{name} ( #{currency_name.pluralize} )"
   end
 
 private

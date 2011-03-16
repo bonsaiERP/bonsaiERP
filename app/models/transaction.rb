@@ -28,7 +28,7 @@ class Transaction < ActiveRecord::Base
   # nested attributes
   accepts_nested_attributes_for :transaction_details, :allow_destroy => true
 
-  delegate :name, :symbol, :to => :currency, :prefix => true
+  delegate :name, :symbol, :plural, :code, :to => :currency, :prefix => true
 
   ###############################
   # Methods for pay_plans

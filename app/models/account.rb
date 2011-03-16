@@ -22,10 +22,6 @@ class Account < ActiveRecord::Base
 
   # scopes
 
-  def to_s
-    "#{name} #{number}"
-  end
-
   def self.json
     h = Hash.new {|h, v| h[v.id] = {:currency_id => v.currency_id , :type => v.type}  }
     Account.org.each {|ac| h[ac] }
