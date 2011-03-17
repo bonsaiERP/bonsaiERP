@@ -233,7 +233,11 @@
         </control>
       </groupChildrenDescriptors>
     </control>
-    <control controlID="111" controlTypeID="com.balsamiq.mockups::DateChooser" x="250" y="367" w="133" h="-1" measuredW="106" measuredH="29" zOrder="21" locked="false" isInGroup="-1"/>
+    <control controlID="111" controlTypeID="com.balsamiq.mockups::DateChooser" x="250" y="367" w="133" h="-1" measuredW="132" measuredH="29" zOrder="21" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>16%20Mar%202011</text>
+      </controlProperties>
+    </control>
     <control controlID="112" controlTypeID="com.balsamiq.mockups::Label" x="250" y="348" w="-1" h="-1" measuredW="42" measuredH="25" zOrder="22" locked="false" isInGroup="-1">
       <controlProperties>
         <color>6710886</color>
@@ -276,6 +280,19 @@
         <align>right</align>
         <bold>false</bold>
         <text>5.00</text>
+      </controlProperties>
+    </control>
+    <control controlID="119" controlTypeID="com.balsamiq.mockups::Label" x="250" y="476" w="-1" h="-1" measuredW="147" measuredH="25" zOrder="29" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>6710886</color>
+        <text>Referencia/N%BA%20Cheque</text>
+      </controlProperties>
+    </control>
+    <control controlID="120" controlTypeID="com.balsamiq.mockups::TextInput" x="250" y="497" w="133" h="-1" measuredW="69" measuredH="29" zOrder="30" locked="false" isInGroup="-1">
+      <controlProperties>
+        <align>right</align>
+        <bold>false</bold>
+        <text>4546499</text>
       </controlProperties>
     </control>
   </controls>

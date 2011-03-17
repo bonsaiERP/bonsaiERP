@@ -249,15 +249,18 @@ feature "Income", "test features" do
     p.amount.should == 20
 
     p.save.should == true
+    p.account_ledger.currency_id.should == 2
+    p.account_ledger.amount.should == 20
     i = Income.find(i.id)
 
     i.balance.should == balance - 20
     i.pay_plans.unpaid.size.should == 2
 
-    # FIRST Payment
+    # SECOND Payment
     p = i.new_payment(:account_id => 2, :reference => 'NA', :date => d, :currency_id => 1, :amount => 20, :exchange_rate => 7)
 
     p.save.should == true
+    p.account_ledger.currency_id.should == 1
     p.account_ledger.description.downcase.should =~ /1 dolar = 7,00 bolivianos/
     p.account_ledger.amount.should == 20 * 7
 
@@ -269,6 +272,7 @@ feature "Income", "test features" do
     p = i.new_payment(:account_id => 2, :reference => 'NA', :date => d, :currency_id => 1, :amount => 1, :exchange_rate => 7)
 
     p.save.should == true
+    p.account_ledger.currency_id.should == 1
     i = Income.find(i.id)
 
     i.balance.should == balance - 41

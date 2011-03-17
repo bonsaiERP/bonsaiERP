@@ -88,7 +88,7 @@ class Payment < ActiveRecord::Base
 
   # Sums the amount plus the interests and penalties
   def total_amount
-    (amount + interests_penalties) * exchange_rate
+    amount + interests_penalties
   end
 
   # Nulls a payment
@@ -101,7 +101,7 @@ class Payment < ActiveRecord::Base
 
   # amount in the currency
   def amount_currency
-    amount * exchange_rate
+    (amount + interests_penalties) * exchange_rate
   end
 
 private
@@ -178,15 +178,13 @@ private
   # Creates an account ledger for the account and payment
   def create_account_ledger
     if transaction.type == "Income"
-      tot, income = [ total_amount, true ]
-      #tot, income = [-total_amount, false] unless active?
+      tot, income = [ amount_currency, true ]
     else
-      tot, income = [-total_amount, true ]
-      #tot, income = [ total_amount, false] unless active?
+      tot, income = [-amount_currency, true ]
     end
 
     AccountLedger.create(:account_id => account_id, :payment_id => id, 
-                         :currency_id => currency_id, :contact_id => transaction_contact_id,
+                         :currency_id => account.currency_id, :contact_id => transaction_contact_id,
                          :amount => tot, :date => date, :income => income, :transaction_id => transaction_id,
                          :description => get_account_ledger_text, :reference => reference
                         ) {|al| al.conciliation = get_conciliation }

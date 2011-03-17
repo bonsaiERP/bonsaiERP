@@ -23,7 +23,9 @@
           %td.r.amount{'data-val' => payment.amount} #{ntc payment.amount}
           %td.r.interests_penalties{'data-val' => payment.interests_penalties} #{ntc payment.interests_penalties}
           %td.r.total_amount{'data-val' => payment.total_amount}= ntc payment.total_amount
-          %td.actions= link_to "Conciliar banco", payment.account_ledger, :title => 'Conciliar con cuenta bancaria', :class => 'conciliate' unless payment.paid?
+          %td.actions
+            = link_to "Conciliar banco", payment.account_ledger, :title => 'Conciliar con cuenta bancaria', :class => 'conciliate' unless payment.paid?
+            = link_to "borrar", payment, :class => 'destroy', :title => 'Borrar'
 
     %tr.extra.pad_top
       %td
@@ -46,31 +48,21 @@
     ].join("");
     
     /**
-    * Nulls a payments
+    * Deletes a payment
     */
-    $('#payments_table a.null_payment').live("click", function() {
-      var account = $(this).parents('tr').addClass('marked').find('td.account').html();
-      var txt = "Al anular el #{transaction.pay_type} seleccionado se creara un registro en la cuenta \n" + account + " con valor negativo";
-      txt +=",\n Esta seguro de anular el #{transaction.pay_type}?";
-
-      if(confirm(txt)) {
-        $(this).parents('tr').removeClass('marked');
-        Payment.nullPayment(this);
-        return false;
-      }else{
-        $(this).parents('tr').removeClass('marked');
-        return false;
-      }
+    $('#payments_table a.destroy').live("click", function() {
     });
 
-    function checkIfConciliation(state, account_ledger_id) {
+    function checkIfConciliation(state, account_ledger_id, id) {
       var arr = [];
-      ]
+      
       if(state == "conciliation") {
         arr = ['<a class="conciliate" href="/account_ledgers/', account_ledger_id, 
         '/conciliate" title="Conciliar con cuenta bancaria">Conciliar banco</a>'];
-      }else{
       }
+      
+      arr.push('<a href="' + account_ledger_id + '">borrar');
+      
 
       return arr.join("");
     }
