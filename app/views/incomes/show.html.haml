@@ -34,7 +34,7 @@
 ._50.fr.r
   / FORM to null income
   - if @income.draft?
-    = simple_form_for @income, :url => aprove_income_path(@income) do |f|
+    = simple_form_for @income, :url => approve_income_path(@income) do |f|
       .submit
         =f.submit "Aprobar", :class => 'dark_green', :id => 'income_aprove_button'
   /- elsif not @income.paid?

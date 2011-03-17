@@ -4,17 +4,21 @@
 class Transaction < ActiveRecord::Base
   acts_as_org
 
-  TYPES = ['Income', 'Expense', 'Buy']
+  STATES   = ["draft"  , "approved" , "paid" , "due"]
+  TYPES    = ['Income' , 'Expense'  , 'Buy']
   DECIMALS = 2
   # Determines if the oprations is made on transaction or pay_plan or payment
   attr_reader :trans
   # callbacks
   after_initialize :set_defaults, :if => :new_record?
   after_initialize :set_trans_to_true
-  before_save :set_details_type
-  before_save :calculate_total_and_set_balance, :if => :trans?
-  after_create :update_payment_date
-  after_update :update_transaction_pay_plans, :if => :trans?
+
+  before_save      :set_details_type
+  before_save      :calculate_total_and_set_balance, :if => :trans?
+  before_save      :update_payment_date
+  before_save      :set_state
+
+  after_update     :update_transaction_pay_plans, :if => :trans?
 
   # relationships
   belongs_to :contact
@@ -28,12 +32,44 @@ class Transaction < ActiveRecord::Base
   # nested attributes
   accepts_nested_attributes_for :transaction_details, :allow_destroy => true
 
+  # scopes
+  scope :draft    , where(:state => 'draft')
+  scope :approved , where(:state => 'approved')
+  scope :paid     , where(:state => 'paid')
+  scope :due      , where(["transactions.state = ? AND transactions.payment_date < ?" , 'aproved' , Date.today])
+  scope :credit   , where(:cash => false)
+
   delegate :name, :symbol, :plural, :code, :to => :currency, :prefix => true
 
   ###############################
   # Methods for pay_plans
   include ::Transaction::PayPlans
   ###############################
+
+  # Define boolean methods for states
+  STATES.each do |state|
+    class_eval <<-CODE, __FILE__, __LINE__ + 1
+      def #{state}?
+        "#{state}" == state ? true : false
+      end
+    CODE
+  end
+
+  def self.all_states
+    STATES + ["awaiting_payment"]
+  end
+
+  # Finds using the state
+  def self.find_with_state(state)
+    state = 'all' unless all_states.include?(state)
+    ret   = Income.org.includes(:contact, :pay_plans, :currency).order("date DESC")
+
+    case state
+    when 'all' then ret
+    when 'awaiting_payment' then ret.approved.credit
+    else ret.send(state)
+    end
+  end
 
   # Define methods for the types of transactions
   TYPES.each do |type|
@@ -58,9 +94,32 @@ class Transaction < ActiveRecord::Base
     Hash[TYPES.zip(arr)][type]
   end
 
+  # Presents a localized name for state
+  def show_state
+    @hash ||= create_states_hash
+    @hash[real_state]
+  end
 
-  # Functions that other clases should have
-  # def real_state end
+  # Returns the real state based on state and checked payment_date
+  def real_state
+    if state == "approved" and !payment_date.blank? and payment_date < Date.today
+      "due"
+    else
+      state
+    end
+  end
+
+  def show_pay_plans?
+    if state == "draft"
+      true
+    elsif state != "draft" and !cash
+      true
+    end
+  end
+
+  def show_payments?
+    state != 'draft'
+  end
 
   # quantity without discount and taxes
   def subtotal
@@ -114,8 +173,11 @@ class Transaction < ActiveRecord::Base
 
   # Sets a default payment date using PayPlan
   def update_payment_date
-    pp = PayPlan.unpaid.where(:transaction_id => id).limit(1)
-    if pp.size > 0
+    # Do not user PayPlan.unpaid.where(:transaction_id => id).limit(1) 
+    # because it can't find a created pay_pland in the middle of a transaction
+    pp = pay_plans.unpaid.where(:transaction_id => id).limit(1)
+
+    if pp.any?
       self.payment_date = pp.first.payment_date
     else
       self.payment_date = self.date
@@ -146,7 +208,6 @@ class Transaction < ActiveRecord::Base
     else
       @trans = false
       self.balance = (balance - amount)
-      update_payment_date
       self.save
     end
   end
@@ -155,7 +216,6 @@ class Transaction < ActiveRecord::Base
   def substract_payment(amount)
     @trans = false
     self.balance = (balance + amount)
-    update_payment_date
     self.save
   end
 
@@ -176,6 +236,17 @@ class Transaction < ActiveRecord::Base
   end
 
 private
+
+  def set_state
+    if balance.to_f <= 0
+      self.state = "paid"
+    elsif state == 'paid' and balance > 0
+      self.state = 'approved'
+    elsif state.blank?
+      self.state = "draft"
+    end
+  end
+
   # set default values for discount and taxes
   def set_defaults
     self.cash = cash.nil? ? true : cash
@@ -189,6 +260,7 @@ private
   def set_trans_to_true
     @trans = true
   end
+
 
   # Sets the type of the class making the transaction
   def set_details_type

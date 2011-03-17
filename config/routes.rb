@@ -34,7 +34,7 @@ Bonsaierp::Application.routes.draw do
 
   resources :incomes do
     member do
-      put 'aprove'
+      put 'approve'
       put 'null'
     end
   end

@@ -18,12 +18,13 @@ class Payment < ActiveRecord::Base
   before_create     :set_currency_id,   :if => :new_record?
   before_create     :set_cash_amount,   :if => :transaction_cash?
   before_save       :set_state,         :if => 'state.blank?'
+  before_destroy    :destroy_and_create_pay_plan
 
   # update_pay_plan must run before update_transaction
-  after_create  :create_account_ledger
-  after_save    :update_pay_plan#,    :if => :paid?
-  after_save    :update_transaction#, :if => :paid?
-  after_destroy :update_transaction
+  after_create   :create_account_ledger
+  after_save     :update_pay_plan#,    :if => :paid?
+  after_save     :update_transaction#, :if => :paid?
+  after_destroy  :update_transaction
 
   # relationships
   belongs_to :transaction
@@ -114,14 +115,17 @@ private
     self.currency_id           = transaction.currency_id
   end
 
+  def destroy_and_create_pay_plan
+    d = Date.today
+    create_pay_plan(amount, interests_penalties, d, d - 5.days)
+  end
+
   def update_transaction
     unless destroyed?
       transaction.add_payment(amount)
     else
       transaction.substract_payment(amount)
     end
-
-    transaction.update_transaction_payment_date
   end
 
   def set_currency_id
@@ -131,8 +135,6 @@ private
   # Updates the related pay_plans of a transaction setting to pay
   # according to the amount and interest penalties
   def update_pay_plan
-    amount_to_pay         = 0
-    interest_to_pay       = 0
     created_pay_plan      = nil
     amount_to_pay         = amount
     interest_to_pay       = interests_penalties
@@ -145,8 +147,8 @@ private
       pp.update_attribute(:paid, true)
       @updated_pay_plan_ids << pp.id
 
-      if amount_to_pay <= 0
-        @pay_plan = create_pay_plan(amount_to_pay, interest_to_pay, pp) if amount_to_pay < 0 or interest_to_pay < 0
+      if amount_to_pay < 0
+        @pay_plan = create_pay_plan(-amount_to_pay, -interest_to_pay, pp.payment_date, pp.alert_date) if amount_to_pay < 0 or interest_to_pay < 0
         break
       end
     end
@@ -156,11 +158,10 @@ private
   # @param Decimal amt
   # @param Decimal int_pen
   # @param PayPlan pp
-  def create_pay_plan(amt, int_pen, pp)
-    amt = amt < 0 ? -1 * amt : 0
+  def create_pay_plan(amt, int_pen, pp_pdate, pp_adate)
     int_pen = int_pen < 0 ? -1 * int_pen : 0
-    p = PayPlan.create( :transaction_id => transaction_id, :amount => amt,                :interests_penalties => int_pen,
-                        :payment_date => pp.payment_date,  :alert_date => pp.alert_date )
+    pp = PayPlan.create!( :transaction_id => transaction_id, :amount => amt, :interests_penalties => int_pen,
+                        :payment_date => pp_pdate,  :alert_date => pp_adate )
   end
 
   def valid_payment_amount

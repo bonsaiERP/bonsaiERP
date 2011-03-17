@@ -135,6 +135,15 @@ module ::Transaction::PayPlans
     end
   end
 
+  # Method used when is working on edit the items or currency_exchange_rate
+  def update_transaction_pay_plans
+    @pay_plans_list = pay_plans.unpaid
+    if not (balance == pay_plans_total) and @pay_plans_list.any?
+      @current_pay_plan = @pay_plans_list.first
+      save_pay_plans_list
+    end
+  end
+
 private
   def sort_pay_plans_list(pay_plans_list)
     pay_plans_list.sort{|a, b| a.payment_date <=> b.payment_date }
@@ -197,14 +206,6 @@ private
     pay_plans_list
   end
 
-  # Method used when is working on edit the items or currency_exchange_rate
-  def update_transaction_pay_plans
-    @pay_plans_list = pay_plans.unpaid
-    if not (balance == pay_plans_total) and @pay_plans_list.any?
-      @current_pay_plan = @pay_plans_list.first
-      save_pay_plans_list
-    end
-  end
 
   def update_transaction_cash(val)
     set_trans(val)

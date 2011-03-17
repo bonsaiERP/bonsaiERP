@@ -5,7 +5,7 @@ class IncomesController < ApplicationController
 
   #before_filter :check_currency_set, :only => [:new, :edit, :create, :update]
   before_filter :set_currency_rates, :only => [:index, :show]
-  before_filter :set_income, :only => [:show, :edit, :update, :destroy, :aprove]
+  before_filter :set_income, :only => [:show, :edit, :update, :destroy, :approve]
 
 
   # GET /incomes
@@ -32,7 +32,7 @@ class IncomesController < ApplicationController
 
   # GET /incomes/1/edit
   def edit
-    if @income.state == 'aproved'
+    if @income.state == 'approved'
       redirect_income
     end
   end
@@ -55,7 +55,7 @@ class IncomesController < ApplicationController
   # PUT /incomes/1
   # PUT /incomes/1.xml
   def update
-    if @income.aproved?
+    if @income.approved?
       redirect_income
     else
       if @income.update_attributes(params[:income])
@@ -69,7 +69,7 @@ class IncomesController < ApplicationController
   # DELETE /incomes/1
   # DELETE /incomes/1.xml
   def destroy
-    if @income.aproved?
+    if @income.approved?
       redirect_income
     else
       @income.destroy
@@ -77,10 +77,10 @@ class IncomesController < ApplicationController
     end
   end
   
-  # PUT /incomes/1/aprove
-  # Method to aprove an income
-  def aprove
-    if @income.aprove!
+  # PUT /incomes/1/approve
+  # Method to approve an income
+  def approve
+    if @income.approve!
       flash[:notice] = "La nota de venta fue aprobada"
     else
       flash[:error] = "Existio un problema con la aprovación"
@@ -97,7 +97,7 @@ private
   #  @currency = Organisation.find(currency_id).currency
   #end
 
-  # Redirects in case that someone is trying to edit or destroy an  aproved income
+  # Redirects in case that someone is trying to edit or destroy an  approved income
   def redirect_income
     flash[:warning] = "No es posible editar una nota ya aprobada!"
     redirect_to incomes_path
