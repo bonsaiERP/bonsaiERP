@@ -36,7 +36,7 @@
   - if @income.draft?
     = simple_form_for @income, :url => approve_income_path(@income) do |f|
       .submit
-        =f.submit "Aprobar", :class => 'dark_green', :id => 'income_aprove_button'
+        =f.submit "Aprobar", :class => 'dark_green', :id => 'income_approve_button'
   /- elsif not @income.paid?
   /  = simple_form_for @income, :url => null_income_path(@income) do |f|
   /    .submit
@@ -130,7 +130,7 @@
         }
       });
     }else {
-      // When it has been aproved
+      // When it has been approved
       $('body').live('payments',function(e, resp) {
         // Calculates the total for AJAX events
         $('#items_table #total_payments').html("#{@income.currency_symbol} " + _b.ntc(resp.conciliated_amount));
