@@ -6,10 +6,10 @@ class AccountLedger < ActiveRecord::Base
 
   # callbacks
   after_initialize :set_defaults
-  before_save :set_income
-  after_save :update_payment, :if => :payment?
-  after_save :update_account_balance, :if => :conciliation?
-  after_destroy :destroy_payment, :if => :payment?
+  before_save      :set_income
+  after_save       :update_payment,         :if => :payment?
+  after_save       :update_account_balance, :if => :conciliation?
+  after_destroy    :destroy_payment,        :if => :payment?
 
   # relationships
   belongs_to :account
@@ -24,6 +24,7 @@ class AccountLedger < ActiveRecord::Base
   validates_presence_of :account_id, :currency_id, :reference
   validates_numericality_of :amount
 
+  # delegates
   delegate :name, :number, :type, :to => :account, :prefix => true
   delegate :amount, :interests_penalties, :date, :state, :to => :payment, :prefix => true
   delegate :name, :symbol, :to => :currency, :prefix => true
@@ -57,11 +58,11 @@ private
     true
   end
 
-  # Updates the payment state
+  # Updates the payment state, without triggering any callbacks
   def update_payment
     if conciliation == true and not payment_state == 'paid'
       payment.state = 'paid'
-      payment.save
+      payment.save(:validate => false)
     end
   end
 

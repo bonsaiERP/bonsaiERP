@@ -1,0 +1,10 @@
+%tr.payment{ :id => payment.id, :class => "p_#{payment.state}" }
+  %td= link_to lo(payment.date), payment, :class => 'b'
+  %td.account= payment.account
+  %td.r.amount{'data-val' => payment.amount} #{ntc payment.amount}
+  %td.r.interests_penalties{'data-val' => payment.interests_penalties} #{ntc payment.interests_penalties}
+  %td.r.total_amount{'data-val' => payment.total_amount}= ntc payment.total_amount
+  %td.actions
+    = link_to "Conciliar banco", payment.account_ledger, :title => 'Conciliar con cuenta bancaria', :class => 'conciliate' unless payment.paid?
+    = link_to "borrar", payment, :class => 'destroy', :title => 'Borrar'
+

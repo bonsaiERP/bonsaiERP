@@ -51,7 +51,7 @@ feature "Income", "test features" do
 
     #i.pay_plans.unpaid.each{|pp| puts "#{pp.amount}"} ###
 
-    # BANK payment
+    # FIRS Bank payment
     p = i.new_payment(:account_id => 1, :reference => '54654654654', :date => Date.today)
 
     p.class.should == Payment
@@ -64,18 +64,23 @@ feature "Income", "test features" do
     p.state.should == 'conciliation'
     p.paid?.should == false
 
+    p = Payment.find(p.id)
+    p.state.should == 'conciliation'
+
     al1 = p.account_ledger
 
     i = Income.find(i.id)
     i.payments.first.state.should_not == 'paid'
 
-    i.balance.should == i.total_currency
-    i.pay_plans.unpaid.size.should == 2
 
-    # CASH payment
-    amt =  i.balance - 100
-    p = i.new_payment(:account_id => 2, :reference => 'NA', :date => Date.today + 2.days, :amount => amt)
-    p.amount.should == amt
+    i.balance.should == (i.total - 100)
+    i.pay_plans.unpaid.size.should == 1
+
+
+    # SECOND Cash payment
+    p = i.new_payment(:account_id => 2, :reference => 'NA', :date => Date.today + 2.days)
+    
+    p.amount.should == i.balance
 
     p.save.should == true
 
@@ -90,11 +95,14 @@ feature "Income", "test features" do
     al1.conciliate_account.should == true
     al1.conciliation.should == true
 
+
     p_id = al1.payment.id
-    Payment.find(p_id).state.should == 'paid'
+    p = Payment.find(p_id)
+    p.state.should == 'paid'
 
     i = Income.find(i.id)
     i.balance.should == 0
+
     i.pay_plans.unpaid.size.should == 0
   end
 
@@ -288,71 +296,83 @@ feature "Income", "test features" do
     i.balance.should == 0
     i.pay_plans.unpaid.size.should == 0
     i.state.should == 'paid'
-
   end
 
-  #scenario 'test with different exchange_rates sale on cur 1 and pay cur 2' do
-  #  c =  Currency.first
+  scenario 'delete payments' do
+    c =  Currency.first
 
-  #  d = Date.today
-  #  i = Income.new(income_params.merge(:date => d, :currency_id => 1, :currency_exchange_rate => 1))
+    d = Date.today
+    i = Income.new(income_params.merge(:date => d, :currency_id => 2, :currency_exchange_rate => 7))
 
-  #  i.save.should == true
-  #  i = Income.find(i.id)
-  #  balance = i.balance
+    i.save.should == true
+    i = Income.find(i.id)
+    balance = i.balance
 
-  #  i.currency_exchange_rate.should == 1
-  #  i.balance.should == i.total
-  #  
-  #  pp = i.create_pay_plan(pay_plan_params(:amount => 100, :payment_date => d, :repeat => true))
-  #  i = Income.find(i.id)
-  #  
-  #  # FIRST Payment
-  #  p = i.new_payment(:account_id => 3, :reference => 'NA', :date => d, :exchange_rate => 7)
-  #  p.currency_id.should == 1
-  #  p.amount.should == 100
+    i.currency_exchange_rate.should == 7
+    i.balance.should == (i.total/7).round(2)
+    
+    pp = i.create_pay_plan(pay_plan_params(:amount => 20, :payment_date => d, :repeat => true))
+    i = Income.find(i.id)
 
-  #  p.amount = 100/7
-  #  p.save.should == true
-  #  i = Income.find(i.id)
+    
+    i.pay_plans[0].amount.should == 20
+    i.pay_plans[1].amount.should == 20
+    i.pay_plans[2].amount.should == balance - 40
+    
+    # FIRST Payment
+    p = i.new_payment(:account_id => 3, :reference => 'NA', :date => d)
+    p.currency_id.should == 2
+    p.amount.should == 20
 
-  #  puts balance
-  #  puts p.amount_currency
+    p.save.should == true
+    p.account_ledger.currency_id.should == 2
+    p.account_ledger.amount.should == 20
+    i = Income.find(i.id)
 
-  #  i.balance.should == balance - 100
-  #  i.pay_plans.unpaid.size.should == 2
+    i.balance.should == balance - 20
+    i.pay_plans.unpaid.size.should == 2
+    i.payment_date.should == i.pay_plans[1].payment_date
 
-  #  # FIRST Payment
-  #  p = i.new_payment(:account_id => 2, :reference => 'NA', :date => d, :currency_id => 1, :amount => 20 * 7, :exchange_rate => 7)
+    # DELETE Payment
+    p.destroy
+    i = Income.find(i.id)
 
-  #  p.save.should == true
-  #  p.account_ledger.description.should =~ /1 dolar = 7,00/
+    i.balance.should == i.total_currency
+    #i.pay_plans.unpaid.size.should == 
+    #i.payment_date.should == i.pay_plans[0].payment_date
 
-  #  i = Income.find(i.id)
+    # SECOND Payment
+    #p = i.new_payment(:account_id => 2, :reference => 'NA', :date => d, :currency_id => 1, :amount => 20, :exchange_rate => 7)
+
+    #p.save.should == true
+    #p.account_ledger.currency_id.should == 1
+    #p.account_ledger.description.downcase.should =~ /1 dolar = 7,00 bolivianos/
+    #p.account_ledger.amount.should == 20 * 7
+
+    #i = Income.find(i.id)
+
+    #i.balance.should == balance - 40
+    #i.pay_plans.unpaid.size.should == 1
+
+    #p = i.new_payment(:account_id => 2, :reference => 'NA', :date => d, :currency_id => 1, :amount => 1, :exchange_rate => 7)
+
+    #p.save.should == true
+    #p.account_ledger.currency_id.should == 1
+    #i = Income.find(i.id)
+
+    #i.balance.should == balance - 41
+    #i.pay_plans.unpaid.first.amount.should == i.balance
+    #i.pay_plans.unpaid.size.should == 1
+    #   
+    #p = i.new_payment(:account_id => 2, :reference => 'NA', :date => d, :currency_id => 2)
 
 
-  #  i.balance.should == balance - 40
-  #  i.pay_plans.unpaid.size.should == 1
+    #p.save.should == true
+    #i = Income.find(i.id)
 
-  #  p = i.new_payment(:account_id => 2, :reference => 'NA', :date => d, :currency_id => 1, :amount => 1 * 7, :exchange_rate => 7)
-
-  #  p.save.should == true
-  #  i = Income.find(i.id)
-
-  #  i.balance.should == balance - 41
-  #  i.pay_plans.unpaid.first.amount.should == i.balance
-  #  i.pay_plans.unpaid.size.should == 1
-  #     
-  #  p = i.new_payment(:account_id => 2, :reference => 'NA', :date => d, :currency_id => 2)
-
-
-  #  p.save.should == true
-  #  i = Income.find(i.id)
-
-  #  i.balance.should == 0
-  #  i.pay_plans.unpaid.size.should == 0
-  #  i.state.should == 'paid'
-
-  #end
+    #i.balance.should == 0
+    #i.pay_plans.unpaid.size.should == 0
+    #i.state.should == 'paid'
+  end
 
 end

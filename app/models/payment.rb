@@ -17,12 +17,13 @@ class Payment < ActiveRecord::Base
   before_validation :set_exchange_rate
   before_create     :set_currency_id,   :if => :new_record?
   before_create     :set_cash_amount,   :if => :transaction_cash?
-  before_save       :set_state,         :if => :nil_state?
+  before_save       :set_state,         :if => 'state.blank?'
 
   # update_pay_plan must run before update_transaction
-  after_create :create_account_ledger
-  after_save   :update_pay_plan,    :if => :paid?
-  after_save   :update_transaction, :if => :paid?
+  after_create  :create_account_ledger
+  after_save    :update_pay_plan#,    :if => :paid?
+  after_save    :update_transaction#, :if => :paid?
+  after_destroy :update_transaction
 
   # relationships
   belongs_to :transaction
@@ -114,7 +115,7 @@ private
   end
 
   def update_transaction
-    if active
+    unless destroyed?
       transaction.add_payment(amount)
     else
       transaction.substract_payment(amount)
@@ -217,10 +218,6 @@ private
   # Sets the amount for cash
   def set_cash_amount
     self.amount = transaction_balance
-  end
-
-  def nil_state?
-    state.blank?
   end
 
   # Sets the state accoording to the account

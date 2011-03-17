@@ -13,8 +13,8 @@ class Transaction < ActiveRecord::Base
   after_initialize :set_trans_to_true
   before_save :set_details_type
   before_save :calculate_total_and_set_balance, :if => :trans?
-  after_update :update_transaction_pay_plans, :if => :trans?
   after_create :update_payment_date
+  after_update :update_transaction_pay_plans, :if => :trans?
 
   # relationships
   belongs_to :contact
