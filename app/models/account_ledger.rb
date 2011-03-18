@@ -18,6 +18,7 @@ class AccountLedger < ActiveRecord::Base
   belongs_to :currency
   belongs_to :transaction
 
+  attr_accessor  :payment_destroy
   attr_protected :conciliation
 
   # validations
@@ -60,7 +61,7 @@ private
 
   # Updates the payment state, without triggering any callbacks
   def update_payment
-    if conciliation == true and not payment_state == 'paid'
+    if conciliation == true and payment.present? and not(payment_state == 'paid')
       payment.state = 'paid'
       payment.save(:validate => false)
     end
@@ -76,7 +77,9 @@ private
     payment_id.present?
   end
 
+  # destroys a payment, in case the payment calls for destroying the account_ledger
+  # the if payment.present? will control if the payment was not already destroyed
   def destroy_payment
-    payment.destroy
+    payment.destroy if payment.present?
   end
 end

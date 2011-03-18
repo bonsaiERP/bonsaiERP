@@ -25,7 +25,7 @@
           %td.r.total_amount{'data-val' => payment.total_amount}= ntc payment.total_amount
           %td.actions
             = link_to "Conciliar banco", payment.account_ledger, :title => 'Conciliar con cuenta bancaria', :class => 'conciliate' unless payment.paid?
-            = link_to "borrar", payment, :class => 'destroy', :title => 'Borrar'
+            = link_to "borrar", payment_path(payment, :format => 'js'), :class => 'destroy', :remote => true, :method => :delete, :title => 'Borrar'
 
     %tr.extra.pad_top
       %td

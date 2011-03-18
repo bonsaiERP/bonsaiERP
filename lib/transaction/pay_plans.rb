@@ -124,7 +124,7 @@ module ::Transaction::PayPlans
   # Sets the amount and the data for last pay_plan
   def new_pay_plan(params = {})
     #repeat = params[:repeat].nil? ? not(pay_plans.unpaid.any?) : params[:repeat]
-    PayPlan.new(params.merge(:transaction_id => id, :ctype => type))
+    self.pay_plans.build(params.merge(:ctype => type, :transaction_id => id))
   end
 
   def update_transaction_payment_date

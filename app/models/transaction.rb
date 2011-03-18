@@ -136,11 +136,11 @@ class Transaction < ActiveRecord::Base
   end
 
   def total_payments
-    payments.active.inject(0) {|sum, v| sum += v.amount }
+    payments.inject(0) {|sum, v| sum += v.amount }
   end
 
   def total_payments_with_interests
-    payments.active.inject(0) {|sum, v| sum += v.amount + v.interests_penalties }
+    payments.inject(0) {|sum, v| sum += v.amount + v.interests_penalties }
   end
 
   # Presents the currency symbol name if not default currency
@@ -197,7 +197,7 @@ class Transaction < ActiveRecord::Base
 
     options[:amount] = options[:amount] || amt
     options[:interests_penalties] = options[:interests_penalties] || int_pen
-    Payment.new({:amount => balance - total_payments, :transaction_id => id, :currency_id => currency_id}.merge(options))
+    payments.build({:amount => balance - total_payments, :transaction_id => id, :currency_id => currency_id}.merge(options))
   end
 
 

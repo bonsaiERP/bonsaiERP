@@ -7,7 +7,7 @@ class Payment < ActiveRecord::Base
 
   acts_as_org
 
-  attr_reader :pay_plan, :updated_pay_plan_ids
+  attr_reader :pay_plan, :updated_pay_plan_ids, :account_ledger_created
   attr_protected :state
   STATES = ['conciliation', 'paid']
 
@@ -24,6 +24,7 @@ class Payment < ActiveRecord::Base
   after_create   :create_account_ledger
   after_save     :update_pay_plan#,    :if => :paid?
   after_save     :update_transaction#, :if => :paid?
+  after_destroy  :destroy_account_ledger
   after_destroy  :update_transaction
 
   # relationships
@@ -49,11 +50,12 @@ class Payment < ActiveRecord::Base
   validates                 :exchange_rate, :numericality => {:greater_than => 0}, :presence => true
   validates_numericality_of :exchange_rate, :greater_than => 0, :if => :other_currency?
 
-  validate              :valid_payment_amount, :if => :active?
-  validate              :valid_amount_or_interests_penalties, :if => :active?
+  validate              :valid_payment_amount
+  validate              :valid_amount_or_interests_penalties
 
   # scopes
-  scope :active,       where(:active => true)
+  default_scope where(:active => true)
+
   scope :paid,         where(:state => 'paid')
   scope :conciliation, where(:state => 'conciliation')
 
@@ -65,6 +67,9 @@ class Payment < ActiveRecord::Base
       end
     CODE
   end
+
+  alias_method :original_destroy, :destroy
+
 
   # Tells if the payment is in a differenc currency of the transaction
   def other_currency?
@@ -102,15 +107,16 @@ class Payment < ActiveRecord::Base
   end
 
   # amount in the currency
-  def amount_currency
+  def total_amount_currency
     (amount + interests_penalties) * exchange_rate
   end
 
 private
+
   def set_defaults
     self.amount              ||= 0
     self.interests_penalties ||= 0
-    self.active                = true if active.nil?
+    self.active                = true
     self.exchange_rate       ||= 1.0
     self.currency_id           = transaction.currency_id
   end
@@ -178,18 +184,47 @@ private
   end
 
   # Creates an account ledger for the account and payment
-  def create_account_ledger
+  # indicates the record has been destroyed
+  def create_account_ledger(destroy = false)
     if transaction.type == "Income"
-      tot, income = [ amount_currency, true ]
+      tot, income = [ total_amount_currency, true  ]
     else
-      tot, income = [-amount_currency, true ]
+      tot, income = [-total_amount_currency, false ]
     end
 
-    AccountLedger.create(:account_id => account_id, :payment_id => id, 
+    if destroy
+      tot = -1 * tot
+      income = not(income)
+    end
+
+    create_account_ledger_record(tot, income, get_conciliation, id)
+  end
+
+  # Destorys the account ledger in case it is not conciliated
+  # In case that is conciliated it creates a record with negative value
+  def destroy_account_ledger
+    if account_ledger.present?
+      unless account_ledger.conciliation?
+        account_ledger.destroy 
+      else
+        create_account_ledger(true)
+      end
+    end
+  end
+
+  # Creates a new record based on the paramas
+  # @param Decimal
+  # @param [True, False]
+  # @param [True, False]
+  # @param [Integer, Nil]
+  def create_account_ledger_record(tot, income, conciliation, id)
+    @account_ledger_created = AccountLedger.create(
+      :account_id => account_id, :payment_id => id, 
                          :currency_id => account.currency_id, :contact_id => transaction_contact_id,
                          :amount => tot, :date => date, :income => income, :transaction_id => transaction_id,
                          :description => get_account_ledger_text, :reference => reference
-                        ) {|al| al.conciliation = get_conciliation }
+                        ) {|al| al.conciliation = conciliation }
+    
   end
 
   # Returns the conciliation value
@@ -237,4 +272,5 @@ private
       self.exchange_rate = CurrencyRate.active.find(account.currency_id).rate
     end
   end
+
 end

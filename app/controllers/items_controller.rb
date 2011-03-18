@@ -48,7 +48,7 @@ class ItemsController < ApplicationController
   # DELETE /items/1.xml
   def destroy
     @item.destroy
-    respond_with @item
+    redirect_ajax @item
   end
 
 private

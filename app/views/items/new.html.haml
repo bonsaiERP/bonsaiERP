@@ -1,4 +1,7 @@
-%p= link_to "Lista", items_path, :class => 'list'
+- content_for :links do
+  %ul.breadcrumps
+    %li #{link_to "Items", items_path} <span>&gt;</span>
+
 %h1 Nuevo ítem
 
 = render 'form'

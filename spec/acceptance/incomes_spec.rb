@@ -156,7 +156,13 @@ feature "Income", "test features" do
     i.payments.size.should == 1
 
     pid = p.id
+    ac_id = p.account_ledger.account_id
+    ac_amount = p.account_ledger.account.total_amount
+
     p.account_ledger.destroy
+    #puts ac_amount
+    #puts Account.find(ac_id).total_amount
+
 
     i = Income.find(i.id)
     i.payments.size.should == 0
@@ -374,7 +380,17 @@ feature "Income", "test features" do
     i.state.should == 'paid'
 
     # DELETE to change state of transaction
+    account = p.account_ledger.account
     p.destroy
+    p.account_ledger.destroyed?.should == not(p.account_ledger.conciliation)
+
+    p.account_ledger.id.should_not == p.account_ledger_created.id
+    p.account_ledger.amount.should == -1 * p.account_ledger_created.amount
+
+    account_total = account.total_amount
+    account = Account.find(account.id)
+    account.total_amount.should == account_total - p.account_ledger.amount
+
 
     i = Income.find(i.id)
 

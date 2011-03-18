@@ -1,7 +1,4 @@
 - content_for :links do
-  %ul.breadcrumps
-    %li #{ link_to "Inicio", "/dashboard" }<span>&gt;</span>
-
   .links= link_to "Nuevo ítem", new_item_path, :class => 'new'
 
 %h1 Items
@@ -38,3 +35,8 @@
       %td= item.unit.name 
       %td.c <span class="#{item.active}"></span>
       %td= bonsai_links(item)
+
+:javascript
+  $(function() {
+    $('a').live("confirm", function() {console.log("Elemento marcado");  });
+  })

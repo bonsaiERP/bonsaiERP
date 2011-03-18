@@ -6,7 +6,7 @@
   .links
     = link_to "Nuevo", new_item_path, :class => 'add'
     = link_to "Editar", edit_item_path(@item) , :class => 'edit'
-    = link_to "Borrar", @item , :class => 'destroy red'
+    = link_to "Borrar", @item , :class => 'delete', :confirm => "Esta seguro de borra el ítem", :method => :delete
 %h1 Ver item
 
 .show

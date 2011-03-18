@@ -1,3 +1,6 @@
+# encoding: utf-8
+# author: Boris Barroso
+# email: boriscyber@gmail.com
 class PaymentsController < ApplicationController
   before_filter :set_payment, :only => [:show, :edit, :update, :destroy, :null_payment]
   # GET /payments
@@ -38,9 +41,11 @@ class PaymentsController < ApplicationController
   # POST /payments
   # POST /payments.xml
   def create
-    @payment = Payment.new(params[:payment])
 
     if params[:payment][:transaction_id].to_i == session[:payment][:transaction_id]
+      @transaction = Transaction.find(params[:payment][:transaction_id])
+      @payment = @transaction.new_payment
+
       if @payment.save
         redirect_ajax @payment
       else
@@ -56,6 +61,11 @@ class PaymentsController < ApplicationController
   # DELETE /payments/:id
   def destroy
     @payment.destroy
+    debugger
+
+    respond_to do |format|
+      format.js
+    end
   end
 
 private
