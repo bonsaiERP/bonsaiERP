@@ -47,15 +47,15 @@ class PaymentsController < ApplicationController
         render :action => "new"
       end
     else
-      render :text => "Hacking attemp!"
-      #TODO Log error and recognize a Hacking attack
+      logger.warn "Hacking attemp! by user #{current_user.id}"
+      flash[:error] = "No es posible realizar la operación"
+      render :text => "Error"
     end
   end
 
-  # PUT /payments/:id/null_payment
-  def null_payment
-    @payment.null_payment
-    redirect_ajax @payment
+  # DELETE /payments/:id
+  def destroy
+    @payment.destroy
   end
 
 private

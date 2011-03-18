@@ -381,6 +381,7 @@ feature "Income", "test features" do
     i.balance.should_not == 0
     i.pay_plans.unpaid.size.should == 1
     i.state.should_not == 'paid'
+    i.state.should == 'approved'
   end
 
 end
