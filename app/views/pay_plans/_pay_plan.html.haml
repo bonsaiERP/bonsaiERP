@@ -1,0 +1,15 @@
+%tr.pay_plan{:id => pay_plan.id}
+  %td.payment_date= lo pay_plan.payment_date
+  %td= lo pay_plan.alert_date
+  %td.r.amount #{pay_plan.transaction.currency_symbol} #{ntc pay_plan.amount}
+  %td.r #{pay_plan.transaction.currency_symbol} #{ntc pay_plan.interests_penalties}
+  %td= pay_plan.description
+  %td.state= pay_plan_state pay_plan.state
+  - if pay_plan.transaction.income?
+    %td{:class => pay_plan.email.to_s}
+  %td
+    - unless pay_plan.paid?
+      = link_to 'editar', edit_pay_plan_path(pay_plan),
+        :class => 'ajax edit', :title => "Editar Plan crédito", 'data-trigger' => "pay_plan"
+      = link_to 'borrar', pay_plan, :class => 'destroy', :title => "Borrar crédito", 'data-remote' => true, 'data-trigger' => 'del-pay_plan'
+

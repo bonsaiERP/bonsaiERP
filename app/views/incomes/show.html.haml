@@ -47,8 +47,8 @@
   %ul
     %li <a href="#information" id="tab_info">Información</a>
     - unless @income.draft?
-      %li <a href="#income_payments" id="tab_payments">Cobros</a>
-    %li <a href="#income_pay_plans" id="tab_pay_plans">Crédito</a>
+      %li <a href="#payments" id="tab_payments">Cobros</a>
+    %li <a href="#pay_plans" id="tab_pay_plans">Crédito</a>
 
   #information
 
@@ -72,19 +72,16 @@
 
     = render 'items', :income => @income
 
-  #income_payments
+  #payments
     =render "/payments/payments", :transaction => @income if @income.show_payments?
     .clear
 
-  #income_pay_plans
+  #pay_plans
     =render "/pay_plans/pay_plans", :transaction => @income if @income.show_pay_plans?
 
 :javascript
   $(function () {
     $('#tabs').tabs();
-
-    $('#pay_plan_anchor').click(function() { $('#pay_plans').mark(); });
-    $('#payment_anchor').click(function() { $('#payments').mark(); });
 
     if(!#{@income.paid?} && #{@income.cash}) {
       $('#new_payment_link').trigger('click');
@@ -105,8 +102,6 @@
         }else{
           $('#income_state').attr("class", '').addClass("b " + state).html("Aprobado");
         }
-        $('#payment_anchor').html('Realizar cobros');
-        $('#pay_plan_anchor').html('Planificar crédito');
       }
     }
 
@@ -131,19 +126,12 @@
       });
     }else {
       // When it has been approved
-      $('body').live('payments',function(e, resp) {
-        // Calculates the total for AJAX events
-        $('#items_table #total_payments').html("#{@income.currency_symbol} " + _b.ntc(resp.conciliated_amount));
-        $('#items_table #balance').html("#{@income.currency_symbol} " + _b.ntc(resp.transaction_balance) );
-      }).live('transaction', function(e, resp) {
+      $('body').live('transaction', function(e, resp) {
         
-        $('h3#balance').html("#{@income.currency_symbol} " + _b.ntc(resp.transaction_balance) );
+        $('h3#balance').html("#{@income.currency_symbol} " + _b.ntc(resp.balance) );
+        $('#due_on').html(_b.dateFormat(resp.payment_date));
 
-        $('#due_on').html(_b.dateFormat(resp.transaction_payment_date));
-
-        setIncomeState(resp.transaction_real_state);
-      }).live('del-pay_plan', function(e, resp) {
-        setIncomeState(resp.transaction_real_state);
+        setIncomeState(resp.real_state);
       });
     }
   });

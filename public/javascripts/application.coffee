@@ -146,6 +146,8 @@ $(document).ready(->
   # Must be before any ajax click event to work with HTMLUnit
   # Makes that a dialog opened window makes an AJAX request and returns a JSON response
   # if response is JSON then trigger event stored in dialog else present the HTML
+  # There are three types of response JSON, JavaScript and HTML
+  # JavaScript response must have "// javascript" at the beginning
   $('div.ajax-modal form').live('submit', ->
     return true if $(this).attr('enctype') == 'multipart/form-data'
 
@@ -156,7 +158,7 @@ $(document).ready(->
     $div = $(this).parents('.ajax-modal')
     new_record = if $div.data('ajax-type') == 'new' then true else false
     trigger = $div.data('trigger')
-    
+
     $.ajax(
       'url': $(el).attr('action')
       'cache': false
@@ -164,20 +166,23 @@ $(document).ready(->
       'data':data
       'type': (data['_method'] || $(this).attr('method') )
       'success': (resp, status, xhr)->
-        try
-          data = $.parseJSON(resp)
+        
+        if typeof resp == "object"
           data['new_record'] = new_record
           p = $(el).parents('div.ajax-modal')
           $(p).html('').dialog('destroy')
           $('body').trigger(trigger, [data])
-        catch e
+        else if resp.match(/^\/\/\s?javascript/)
+          p = $(el).parents('div.ajax-modal')
+          $(p).html('').dialog('destroy')
+        else
           div = $(el).parents('div.ajax-modal:first')
           div.html(resp)
           setTimeout(->
             $(div).transformDateSelect()
           ,200)
       'error': (resp)->
-        alert('There are errors in the form please correct them')
+        alert('Existe errores, por favor intente de nuevo.')
     )
 
     false
@@ -395,11 +400,20 @@ $(document).ready(->
 
   createErrorLog = (data)->
     unless $('#error-log').length > 0
-      $('<div id="error-log" style="background: #FFF"></div>').html("<iframe id='error-iframe' width='100%' height='100%'><body></body></iframe>")
+      $('<div id="error-log" style="background: #FFF"></div>')
+      #.html("<iframe id='error-iframe' width='100%' height='100%'><body></body></iframe>")
       .dialog({title: 'Error', width: 900, height: 500})
 
-    $('#error-iframe').contents().find('body').html(data)
-    $('#error-log').dialog("open")
+    #$('#error-iframe').contents().find('body').html(data)
+    $('#error-log').html(data).dialog("open")
+
+  # Creates a message window with the text passed
+  # @param String: HTML to insert inside the message div
+  # @param Object
+  createMessageCont = (text, options)->
+    "<div class='message'><span class='close'></span><p>#{text}</p></div>"
+
+  window.createMessageCont = createMessageCont
 
   # Hide message
   $('.message .close').live("click", ->
@@ -408,7 +422,7 @@ $(document).ready(->
 
   # AJAX setup
   $.ajaxSetup ({
-      dataType : "html",
+    #dataType : "html",
       beforeSend : (xhr)->
         #$('#cargando').show();
       error : (event) ->

@@ -23,10 +23,12 @@ module ::Transaction::PayPlans
     set_trans(false)
 
     @pay_plans_list = pay_plans.unpaid
-    index = @pay_plans_list.index{|p| p.id == params[:id].to_i}
+    index = @pay_plans_list.index{ |p| p.id == params[:id].to_i  }
+
+    return false unless index
+
     @current_pay_plan = @pay_plans_list[index]
 
-    protected_attributes = PayPlan.protected_attributes.to_a.map(&:to_s)
     @current_pay_plan.attributes = params
 
     save_pay_plans_list
@@ -111,13 +113,16 @@ module ::Transaction::PayPlans
       end
     end
 
-    delete_pay_plans(@pay_plans_list, i)
+    delete_pay_plans(i)
   end
   
   private :save_pay_plans_list
 
-  def delete_pay_plans(pay_plans_list, index)
-    ids = pay_plans_list.slice(index, pay_plans_list.size - index).map(&:id).compact
+  def delete_pay_plans(index)
+    pps = @pay_plans_list.slice(index, @pay_plans_list.size - index).compact
+    pps.each {|pp| @pay_plans_list.delete(pp) } if pps.any?
+
+    ids = pps.map(&:id)
     PayPlan.destroy_all(:id => ids) if ids.any?
   end
 
@@ -128,10 +133,11 @@ module ::Transaction::PayPlans
   end
 
   def update_transaction_payment_date
-    pps = PayPlan.unpaid.where(:transaction_id => id).order("payment_date ASC")
-    if pps.unpaid.any?
-      self.payment_date = pps.first.payment_date
-      self.save
+    #pps = pay_plans.unpaid.where(:transaction_id => id).order("payment_date ASC")
+    @pay_plans_list = sort_pay_plans_list(@pay_plans_list)
+    if @pay_plans_list.any?
+      self.payment_date = @pay_plans.first.payment_date
+      self.save(:validate => false)
     end
   end
 

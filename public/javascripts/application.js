@@ -1,6 +1,6 @@
 (function() {
   $(document).ready(function() {
-    var AjaxLoadingHTML, createDialog, createErrorLog, createSelectOption, csrf_token, currency, getAjaxType, mark, ntc, parseDate, serializeFormElements, setDateSelect, setIframePostEvents, speed, start, toByteSize, transformDateSelect, transformMinuteSelect, updateTemplateRow, _b;
+    var AjaxLoadingHTML, createDialog, createErrorLog, createMessageCont, createSelectOption, csrf_token, currency, getAjaxType, mark, ntc, parseDate, serializeFormElements, setDateSelect, setIframePostEvents, speed, start, toByteSize, transformDateSelect, transformMinuteSelect, updateTemplateRow, _b;
     _b = {};
     window._b = _b;
     speed = 300;
@@ -166,13 +166,15 @@
         'type': data['_method'] || $(this).attr('method'),
         'success': function(resp, status, xhr) {
           var div, p;
-          try {
-            data = $.parseJSON(resp);
+          if (typeof resp === "object") {
             data['new_record'] = new_record;
             p = $(el).parents('div.ajax-modal');
             $(p).html('').dialog('destroy');
             return $('body').trigger(trigger, [data]);
-          } catch (e) {
+          } else if (resp.match(/^\/\/\s?javascript/)) {
+            p = $(el).parents('div.ajax-modal');
+            return $(p).html('').dialog('destroy');
+          } else {
             div = $(el).parents('div.ajax-modal:first');
             div.html(resp);
             return setTimeout(function() {
@@ -181,7 +183,7 @@
           }
         },
         'error': function(resp) {
-          return alert('There are errors in the form please correct them');
+          return alert('Existe errores, por favor intente de nuevo.');
         }
       });
       return false;
@@ -407,20 +409,22 @@
     };
     createErrorLog = function(data) {
       if (!($('#error-log').length > 0)) {
-        $('<div id="error-log" style="background: #FFF"></div>').html("<iframe id='error-iframe' width='100%' height='100%'><body></body></iframe>").dialog({
+        $('<div id="error-log" style="background: #FFF"></div>').dialog({
           title: 'Error',
           width: 900,
           height: 500
         });
       }
-      $('#error-iframe').contents().find('body').html(data);
-      return $('#error-log').dialog("open");
+      return $('#error-log').html(data).dialog("open");
     };
+    createMessageCont = function(text, options) {
+      return "<div class='message'><span class='close'></span><p>" + text + "</p></div>";
+    };
+    window.createMessageCont = createMessageCont;
     $('.message .close').live("click", function() {
       return $(this).parents(".message:first").hide("slow").delay(500).remove();
     });
     $.ajaxSetup({
-      dataType: "html",
       beforeSend: function(xhr) {},
       error: function(event) {},
       complete: function(event) {

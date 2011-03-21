@@ -21,6 +21,7 @@ class PaymentsController < ApplicationController
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @payment }
+      format.js { render 'create' }
     end
   end
 
@@ -44,10 +45,10 @@ class PaymentsController < ApplicationController
 
     if params[:payment][:transaction_id].to_i == session[:payment][:transaction_id]
       @transaction = Transaction.find(params[:payment][:transaction_id])
-      @payment = @transaction.new_payment
+      @payment = @transaction.new_payment(params[:payment])
 
       if @payment.save
-        redirect_ajax @payment
+        render 'create'
       else
         render :action => "new"
       end
@@ -61,7 +62,6 @@ class PaymentsController < ApplicationController
   # DELETE /payments/:id
   def destroy
     @payment.destroy
-    debugger
 
     respond_to do |format|
       format.js

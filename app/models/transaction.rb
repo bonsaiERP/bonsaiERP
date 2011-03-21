@@ -25,10 +25,11 @@ class Transaction < ActiveRecord::Base
   belongs_to :currency
   belongs_to :project
 
-  has_many :pay_plans, :order => "payment_date ASC"
-  has_many :payments
+  has_many :pay_plans          , :dependent => :destroy , :order => "payment_date ASC"
+  has_many :payments           , :dependent => :destroy
+  has_many :transaction_details, :dependent => :destroy
+
   has_and_belongs_to_many :taxes, :class_name => 'Tax'
-  has_many :transaction_details
   # nested attributes
   accepts_nested_attributes_for :transaction_details, :allow_destroy => true
 
@@ -78,6 +79,10 @@ class Transaction < ActiveRecord::Base
         "#{type}" == type
       end
     CODE
+  end
+
+  def to_json
+    attributes.merge(:currency_symbol => currency_symbol, :real_state => real_state).to_json
   end
 
   # downcased type
@@ -155,6 +160,16 @@ class Transaction < ActiveRecord::Base
     (self.total/self.currency_exchange_rate).round(DECIMALS)
   end
 
+  # Sums the total of payments
+  def payments_total
+    payments.sum(:amount)
+  end
+
+  # Sums the total amount of the payments and interests
+  def payments_amount_interests_total
+    payments.sum(:amount) + payments.sum(:interests_penalties)
+  end
+
   # Returns the total value of pay plans that haven't been paid'
   def pay_plans_total
     pay_plans.unpaid.sum('amount')
@@ -197,7 +212,7 @@ class Transaction < ActiveRecord::Base
 
     options[:amount] = options[:amount] || amt
     options[:interests_penalties] = options[:interests_penalties] || int_pen
-    payments.build({:amount => balance - total_payments, :transaction_id => id, :currency_id => currency_id}.merge(options))
+    payments.build({:transaction_id => id, :currency_id => currency_id}.merge(options))
   end
 
 

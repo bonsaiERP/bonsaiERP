@@ -1,6 +1,6 @@
 - @accounts = Account.org
 - if @accounts.any?
-  = simple_form_for(@payment) do |f|
+  = simple_form_for(@payment, :remote => true) do |f|
     = bonsai_form_error(f)
     = hidden_field_tag "payment_type", params[:payment_type]
 

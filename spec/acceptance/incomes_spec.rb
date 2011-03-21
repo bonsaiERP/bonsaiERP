@@ -122,6 +122,19 @@ feature "Income", "test features" do
     i.pay_plans.unpaid[0].alert_date.should == d - 5.days
     i.pay_plans.unpaid[1].payment_date.should == d + 1.month
 
+    # UPDATE the first pay_plan date
+    pp_id = i.pay_plans.first.id
+    pdate = i.pay_plans.first.payment_date - 5.days
+    adate =  i.pay_plans.first.alert_date - 5.days
+
+    i.pay_plans.unpaid.first.payment_date.should_not == pdate
+
+    i.update_pay_plan(:id => pp_id, :payment_date => pdate, :alert_date => adate)
+    i = Income.find(i.id)
+
+    i.pay_plans.unpaid.first.payment_date.should == pdate
+    
+
     # PayPlan date for payment
     pdate = i.pay_plans.unpaid[1].payment_date
     adate =  i.pay_plans.unpaid[1].alert_date
@@ -398,6 +411,34 @@ feature "Income", "test features" do
     i.pay_plans.unpaid.size.should == 1
     i.state.should_not == 'paid'
     i.state.should == 'approved'
+  end
+
+  it 'should update correctly pay_plans after paymentes' do
+    
+    d = Date.today
+    i = Income.new(income_params.merge(:date => d, :currency_id => 1))
+
+    i.save.should == true
+    i.approve!
+    i = Income.find(i.id)
+    i.state.should == 'approved'
+
+    balance = i.balance
+    
+    pp = i.create_pay_plan(pay_plan_params(:amount => 20, :payment_date => d, :repeat => true))
+    i = Income.find(i.id)
+    pps = i.pay_plans.size
+
+    i.pay_plans_total.should == i.balance
+
+    p = i.new_payment(:amount => 30, :reference => 'NA', :account_id => 1, :date => Date.today)
+    p.save.should == true
+
+    i = Income.find(i.id)
+
+    i.total.should_not == i.balance
+    i.pay_plans_total.should == i.balance
+
   end
 
 end

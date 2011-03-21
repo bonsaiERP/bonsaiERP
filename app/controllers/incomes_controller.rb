@@ -85,7 +85,11 @@ class IncomesController < ApplicationController
     else
       flash[:error] = "Existio un problema con la aprovación"
     end
-    redirect_to @income
+
+    anchor = ''
+    anchor = '#income_payment' if @income.cash?
+
+    redirect_to income_path(@income, :anchor => anchor)
   end
 
   # Nulls an invoice

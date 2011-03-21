@@ -3,7 +3,7 @@
 # email: boriscyber@gmail.com
 class PayPlansController < ApplicationController
   
-  before_filter :set_pay_plan, :only => [:show, :edit, :update, :destroy]
+  before_filter :set_pay_plan, :only => [:edit, :update, :destroy]
   # GET /pay_plans
   # GET /pay_plans.xml
   def index
@@ -43,16 +43,19 @@ class PayPlansController < ApplicationController
   def create
     begin
       @transaction = Transaction.org.find(params[:pay_plan][:transaction_id])
-      @pay_plan = @transaction.new_pay_plan(params[:pay_plan])
-
-      if @pay_plan.valid? and @transaction.create_pay_plan(params[:pay_plan])
-        params[:ajax_modal] = true
-        render :partial => 'pay_plans', :locals => { :transaction => @transaction }
-      else
-        render :action => "new"
-      end
     rescue
       render :text => "Existio un error por favor cierre la ventana."
+      return false
+    end
+
+    @pay_plan = @transaction.new_pay_plan(params[:pay_plan])
+
+    if @pay_plan.valid? 
+      if @transaction.create_pay_plan(params[:pay_plan])
+        render 'create'
+      end
+    else
+      render :action => "new"
     end
   end
 
@@ -61,18 +64,19 @@ class PayPlansController < ApplicationController
   def update
     begin
       @transaction = Transaction.org.find(params[:pay_plan][:transaction_id])
-      @pay_plan = @transaction.new_pay_plan(params[:pay_plan])
-      options = params[:pay_plan].merge(:id => params[:id])
-
-      if @pay_plan.valid? and @transaction.update_pay_plan(options) 
-        params[:ajax_modal] = true
-        render :partial => 'pay_plans', :locals => { :transaction => @transaction }
-      else
-        @pay_plan.id = params[:id].to_i
-        render :action => "edit"
-      end
     rescue
       render :text => "Existio un error por favor cierre la ventana."
+    end
+
+    @pay_plan = @transaction.new_pay_plan(params[:pay_plan])
+    options = params[:pay_plan].merge(:id => params[:id])
+
+    if @pay_plan.valid? and @transaction.update_pay_plan(options) 
+      @transaction = Transaction.find(@transaction.id)
+      render 'create'
+    else
+      @pay_plan.id = params[:id].to_i
+      render :action => "edit"
     end
   end
 

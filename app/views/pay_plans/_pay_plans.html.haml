@@ -1,14 +1,13 @@
-#pay_plans
-  %h2 Planificación de crédito
-  /%h2 Plan de #{transaction.pay_type.pluralize} a crédito
+%h2 Planificación de crédito
 
-  =link_to "Nuevo crédito", 
-    new_pay_plan_path(:type => transaction.class.to_s, :id => transaction.id, :pay_type => transaction.pay_type),
-    :id => 'new_pay_plan_link', :class => 'new button ajax', 'title' => "Nuevo plan de #{transaction.pay_type.singularize}",
-    'data-trigger' => 'pay_plan', 'data-width' => '700' unless transaction.state == "paid"
+=link_to "Nuevo crédito", 
+  new_pay_plan_path(:type => transaction.class.to_s, :id => transaction.id, :pay_type => transaction.pay_type),
+  :id => 'new_pay_plan_link', :class => 'new button ajax', 'title' => "Nuevo plan de #{transaction.pay_type.singularize}",
+  'data-trigger' => 'pay_plan', 'data-width' => '700' unless transaction.state == "paid"
 
-  %table.decorated#pay_plans_table
-    %thead
+%table.decorated#pay_plans_table
+  %thead
+    %tr
       %th Fecha
       %th Alertar el
       %th Cantidad
@@ -18,66 +17,6 @@
       - if transaction.income?
         %th{:title => 'Envia un email de alerta automaticamente al contacto'} Email de<br/>alerta
       %th
-    - transaction.pay_plans.each do |pp|
-      %tr.pay_plan{:id => pp.id}
-        %td.payment_date= lo pp.payment_date
-        %td= lo pp.alert_date
-        %td.r.amount #{transaction.currency_symbol} #{ntc pp.amount}
-        %td.r #{transaction.currency_symbol} #{ntc pp.interests_penalties}
-        %td= pp.description
-        %td.state= pay_plan_state pp.state
-        - if transaction.income?
-          %td{:class => pp.email.to_s}
-        %td
-          - unless pp.paid?
-            = link_to 'editar', edit_pay_plan_path(pp, :pay_type => transaction.pay_type),
-              :class => 'ajax edit', :title => "Editar Plan de #{transaction.pay_type}", 'data-trigger' => "pay_plan"
-            = link_to 'borrar', pp, :class => 'destroy', :title => "Borrar plan de #{transaction.pay_type}", 'data-remote' => true, 'data-trigger' => 'del-pay_plan'
+  = render transaction.pay_plans.unpaid.includes(:transaction, :currency)
 
-- trans_hash = Hash.new {|h, k| h[:"transaction_#{k}"] = transaction.send(k) }
-- [:real_state, :balance, :total].each {|v| trans_hash[v] }
-
-:javascript
-  var transaction_js = #{trans_hash.to_json};
-
--if params[:ajax_modal]
-  - id = Time.now.to_i
-  %div{:id => id }
-  :javascript
-    $(function() {
-      var $modal = $("##{id}").parents('.ajax-modal');
-      $('##{transaction.typed}_pay_plans').html($modal.html()).mark();
-      $modal.dialog("close");
-      $('body').trigger('transaction', [transaction_js]);
-    });
--elsif params[:ajax_call]
-  :javascript
-    $(function() {
-      $('body').trigger('transaction', [transaction_js]);
-    });
--else
-  :javascript
-    $(function() {
-      $('#pay_plans_table').find('a.destroy').live('click', function() {
-        $(this).parents('tr').addClass('marked');
-
-        if(comfirm("Esta seguro de borrar el plan #{transaction.pay_type}")) {
-          var link = this;
-
-          $.ajax({
-            'url': $(link).attr("href"),
-            'data': {'authenticity_token': csrf_token },
-            'type': 'delete',
-            'success':function(resp) {
-              $('##{transaction.typed}_pay_plans').html(resp);
-            },
-            'error': function() {
-              alert("Existio un error al borrar");
-              $(this).parents('tr').removeClass('marked');
-            }
-          });
-        }
-        return false;
-      });
-
-    });
+  = render transaction.pay_plans.paid.includes(:transaction, :currency)

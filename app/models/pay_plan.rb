@@ -33,6 +33,7 @@ class PayPlan < ActiveRecord::Base
 
   # scopes
   scope :unpaid, where(:paid => false)
+  scope :paid,   where(:paid => true)
 
   # Returns the current state of the payment
   def state

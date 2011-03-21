@@ -14,9 +14,9 @@ class Payment < ActiveRecord::Base
 
   # callbacks
   after_initialize  :set_defaults,      :if => :new_record?
-  before_validation :set_exchange_rate
   before_create     :set_currency_id,   :if => :new_record?
   before_create     :set_cash_amount,   :if => :transaction_cash?
+  before_save       :set_exchange_rate
   before_save       :set_state,         :if => 'state.blank?'
   before_destroy    :destroy_and_create_pay_plan
 
@@ -48,7 +48,7 @@ class Payment < ActiveRecord::Base
   # validations
   validates_presence_of     :account_id, :transaction_id, :reference, :date
   validates                 :exchange_rate, :numericality => {:greater_than => 0}, :presence => true
-  validates_numericality_of :exchange_rate, :greater_than => 0, :if => :other_currency?
+  validates_numericality_of :exchange_rate, :greater_than => 0#, :if => :other_currency?
 
   validate              :valid_payment_amount
   validate              :valid_amount_or_interests_penalties
