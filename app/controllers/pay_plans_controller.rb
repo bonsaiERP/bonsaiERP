@@ -20,7 +20,6 @@ class PayPlansController < ApplicationController
   def show
     params[:ajax_call] = true
     @transaction = Transaction.org.find(params[:id])
-    render :partial => 'pay_plans', :locals => { :transaction => @transaction }
   end
 
   # GET /pay_plans/new
@@ -51,6 +50,7 @@ class PayPlansController < ApplicationController
     @pay_plan = @transaction.new_pay_plan(params[:pay_plan])
 
     if @pay_plan.valid? 
+      @pay_plan.destroy # Neccessary make work correctly the creation of pay_plans
       if @transaction.create_pay_plan(params[:pay_plan])
         render 'create'
       end
@@ -71,9 +71,12 @@ class PayPlansController < ApplicationController
     @pay_plan = @transaction.new_pay_plan(params[:pay_plan])
     options = params[:pay_plan].merge(:id => params[:id])
 
-    if @pay_plan.valid? and @transaction.update_pay_plan(options) 
-      @transaction = Transaction.find(@transaction.id)
-      render 'create'
+    if @pay_plan.valid? and  
+      @pay_plan.destroy # Neccessary make work correctly the creation of pay_plans
+      if @transaction.update_pay_plan(options)
+        @transaction = Transaction.find(@transaction.id)
+        render 'create'
+      end
     else
       @pay_plan.id = params[:id].to_i
       render :action => "edit"

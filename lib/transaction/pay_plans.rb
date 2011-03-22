@@ -9,7 +9,8 @@ module ::Transaction::PayPlans
   def create_pay_plan(params = {})
     set_trans(false)
 
-    @pay_plans_list = pay_plans.unpaid
+    @pay_plans_list = get_pay_plans
+
     @current_pay_plan = new_pay_plan(params)
     @pay_plans_list << @current_pay_plan
 
@@ -22,7 +23,7 @@ module ::Transaction::PayPlans
   def update_pay_plan(params = {})
     set_trans(false)
 
-    @pay_plans_list = pay_plans.unpaid
+    @pay_plans_list = get_pay_plans
     index = @pay_plans_list.index{ |p| p.id == params[:id].to_i  }
 
     return false unless index
@@ -44,7 +45,7 @@ module ::Transaction::PayPlans
     set_trans(false)
 
     pay_plan_id = pay_plan_id.to_i
-    @pay_plans_list = pay_plans.unpaid
+    @pay_plans_list = get_pay_plans
 
     if @pay_plans_list.size == 1 and @pay_plans_list.first.id == pay_plan_id
       destroy_last_pay_plan(pay_plan_id)
@@ -128,12 +129,10 @@ module ::Transaction::PayPlans
 
   # Sets the amount and the data for last pay_plan
   def new_pay_plan(params = {})
-    #repeat = params[:repeat].nil? ? not(pay_plans.unpaid.any?) : params[:repeat]
     self.pay_plans.build(params.merge(:ctype => type, :transaction_id => id))
   end
 
   def update_transaction_payment_date
-    #pps = pay_plans.unpaid.where(:transaction_id => id).order("payment_date ASC")
     @pay_plans_list = sort_pay_plans_list(@pay_plans_list)
     if @pay_plans_list.any?
       self.payment_date = @pay_plans.first.payment_date
@@ -143,7 +142,7 @@ module ::Transaction::PayPlans
 
   # Method used when is working on edit the items or currency_exchange_rate
   def update_transaction_pay_plans
-    @pay_plans_list = pay_plans.unpaid
+    @pay_plans_list = get_pay_plans
     if not (balance == pay_plans_total) and @pay_plans_list.any?
       @current_pay_plan = @pay_plans_list.first
       save_pay_plans_list
@@ -217,6 +216,11 @@ private
     set_trans(val)
     self.cash = val
     self.save
+  end
+
+  # Returns pay_plans filtering the ones that have been added and are not stored in the database
+  def get_pay_plans
+    pay_plans.unpaid.delete_if {|pp| pp.id.blank? }
   end
 
   def destroy_last_pay_plan(pay_plan_id)

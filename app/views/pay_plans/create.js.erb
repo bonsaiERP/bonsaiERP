@@ -1,2 +1,3 @@
-$('#pay_plans').html("<%= escape_javascript( render('pay_plans', :transaction => @transaction) ) %>");
+// javascript
+$('#pay_plans').html("<%= escape_javascript( render('pay_plans', :transaction => @transaction) ) %>").mark();
 $('body').trigger('transaction', [<%= raw @transaction.to_json %>] );

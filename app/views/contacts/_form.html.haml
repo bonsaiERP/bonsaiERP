@@ -1,8 +1,11 @@
 = simple_form_for(klass) do |f|
   = bonsai_form_error(f)
 
-  = f.input :code, :label => "Código"
-  = f.input :name, :label => "Nombre"
+  /= f.input :code, :label => "Código"
+  = f.input :name, :label => "Nombres", :input_html => { :class => 'name', :size => 20 }, :wrapper_html => {:class => "_25"}
+  = f.input :last_name, :label => "Apellidos", :input_html => { :class => 'last_name', :size => 20 }, :wrapper_html => {:class => "_25"}, :hint => "Paterno Materno"
+
+  = f.input :matchcode, :label => "Identificador", :hint => "Ej. Juan Perez (CBN L.P.), Juan Perez (SICSA)", :input_html => { :class => 'matchcode' }
   .clear
   = f.input :organisation_name, :label => "Empresa"
   .input
@@ -17,3 +20,11 @@
   .clear
   %div.actions
     = f.submit "Salvar"
+
+:javascript
+  $(function() {
+    $('input.name, input.last_name').blur(function() { 
+      var matchcode = $('input.name').val() + ' ' + $('input.last_name').val();
+      $('input.matchcode').val( matchcode ); 
+    });
+  });

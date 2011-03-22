@@ -413,7 +413,7 @@ feature "Income", "test features" do
     i.state.should == 'approved'
   end
 
-  it 'should update correctly pay_plans after paymentes' do
+  it 'should update correctly pay_plans after payments are destroyed' do
     
     d = Date.today
     i = Income.new(income_params.merge(:date => d, :currency_id => 1))
@@ -425,7 +425,10 @@ feature "Income", "test features" do
 
     balance = i.balance
     
-    pp = i.create_pay_plan(pay_plan_params(:amount => 20, :payment_date => d, :repeat => true))
+    pp = i.new_pay_plan(:amount => 20, :payment_date => d, :repeat => true)
+    pp.destroy
+    pp = i.create_pay_plan(pay_plan_params(:amount => 20, :payment_date => d, :repeat => true) )
+
     i = Income.find(i.id)
     pps = i.pay_plans.size
 
