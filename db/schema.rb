@@ -211,7 +211,7 @@ ActiveRecord::Schema.define(:version => 20110322132710) do
     t.integer  "contact_id"
     t.string   "reference",           :limit => 50
     t.string   "state",               :limit => 20
-    t.decimal  "exchange_rate",                     :precision => 14, :scale => 2
+    t.decimal  "exchange_rate",                     :precision => 14, :scale => 4
   end
 
   add_index "payments", ["account_id"], :name => "index_payments_on_account_id"

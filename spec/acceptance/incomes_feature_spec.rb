@@ -26,9 +26,14 @@ feature "Incomes Feature", %q{
     fill_in 'user[password]', :with => 'demo123'
     click_button 'Ingresar' 
 
-    Capybara.javascript_driver = :akephalos
-    page.evaluate_script("$('body').html('Hola')")
-    puts page.body
+    click_link "ecuanime"
+    
+    page.evaluate_script("1==1")
+    menu = page.find(:css, '#main_menu a.more')
+    menu.native.hover()
+    click_link "Ventas"
+    #puts page.body
+
 
     #within('#organisations_list') { click_link('a') }  
     #within('#main_menu') do

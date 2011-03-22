@@ -3,6 +3,7 @@ require "steak"
 require 'capybara/rails'
 
 RSpec.configuration.include Capybara, :type => :acceptance
+Capybara.ignore_hidden_elements = false
 
 # Put your acceptance spec helpers inside /spec/acceptance/support
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}

@@ -32,6 +32,7 @@ class CurrencyRate < ActiveRecord::Base
     values = values.map{ |v| v.last } if values.is_a? Hash
     created_currencies = []
     CurrencyRate.transaction do
+      CurrencyRate.update_all(["active=?", false], ["active=?", true])
       created_currencies = CurrencyRate.create(values)
       raise ActiveRecord::Rollback if created_currencies.map(&:id).include?(nil)
     end

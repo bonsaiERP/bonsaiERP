@@ -15,19 +15,29 @@
     .clear
 
       = f.input :reference, :label => 'Referencia/Nº Cheque', :input_html => {:size => 20}
-      .input.exchange_rate{:style => 'display: none'}
-        = f.label :exchange_rate, "Tipo de cambio"
+      - display = @payment.different_currency? ? 'block' : 'none'
+
+      .input.exchange_rate{:style => "display: #{display}"}
+        = f.label :exchange_rate, "Tipo de cambio &nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript:' id='cur_rates' class='n'>tipos de cambio</a>".html_safe
         1 #{@payment.transaction.currency_name} = 
         = f.text_field :exchange_rate, :size => 6, :class => 'r'
-        %span#exchange_rate_cur
+
+        - cur = @payment.account_id.present? ? @payment.account.currency_name.pluralize : ""
+        %span#exchange_rate_cur= cur
+        <span class="hint">Puede usar hasta 4 decimales</span>
         - if f.object.errors[:exchange_rate].present?
-          %span.error= f.object.errors
+          %span.error= f.object.errors[:exchange_rate].join(", ")
+
     /= f.input :description, :label => 'Descripción', :as => :text, :input_html => {:rows => 4, :cols => 35}
     .clear
 
     .actions
       = f.submit 'Salvar'
-
+    
+    .rates.bg_white{:style => 'display:none'}
+      %h3 Tipos de cambio moneda base "#{currency_name}"
+      = render 'currency_rates/active', :currency_rates => CurrencyRate.active
+  
   :javascript
     $(function() {
 
@@ -44,7 +54,6 @@
         currencies: null,
         setEvents: function() {
           this.accountIdEvent();
-          this.currencyRateEvent();
         },
         /**
         * Sets the account_id Event
@@ -85,40 +94,6 @@
 
           $('label[for=payment_amount]').html("Cantidad (" + cur + ")");
           $('label[for=payment_interests_penalties]').html("Intereses/Penalidades (" + cur + ")");
-        },
-        /**
-        * Sets the edit rate link
-        */
-        currencyRateEvent: function() {
-          var self = this;
-
-          $('#cur_link').die().live("click", function() {
-            var rate = prompt("Tipo de cambio", $('#payment_exchange_rate').val() ) * 1;
-
-            if( rate > 0 ) {
-              $('#payment_exchange_rate').val(rate);
-              var currency_id = self.accounts[ $('#payment_account_id').val() ].currency_id;
-              $('#cur').html(self.createAccountIdLabel(currency_id, rate) ).mark();
-            }
-          });
-        },
-        /**
-        * Creates the HTML for account_id
-        * @param String account_id
-        */
-        createAccountIdLabel: function(currency_id, rate, join) {
-          rate = "<strong>" + _b.ntc(rate) + "</strong>";
-          join = join || true;
-
-          var link = '<a href="javascript:" id="cur_link">editar</a>';
-          var html = ["1", this.currencies[currency_id].currency_name, 
-          "=", rate, "#{currency_plural}", link ];
-
-          if(join) {
-            html = html.join(" ");
-          }
-
-          return html;
         }
       };
 
@@ -126,6 +101,12 @@
       var currencies = #{Currency.json.to_json};
 
       var payment = new Payment(#{@payment.transaction.currency_id}, accounts, currencies);
+
+      // Display currency_rates in a new window
+      $('#cur_rates').die();
+      $('.rates').dialog("destroy");
+      $('.rates').dialog({title: 'Tipos de cambio para "#{currency_name}"', width: 450, autoOpen: false});
+      $('#cur_rates').live('click', function() { $('.rates').dialog("open"); });
     });
 
 -else

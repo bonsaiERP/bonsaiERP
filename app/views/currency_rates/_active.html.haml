@@ -1,0 +1,14 @@
+%table.decorated 
+  %thead
+    %tr
+      %th Moneda
+      %th Cambio
+      %th Inverso
+      %th
+  
+  %tbody
+    - for currency_rate in currency_rates
+      %tr{ :class => cycle(:odd, :even) }
+        %td.b= currency_rate.currency
+        %td= number_to_currency currency_rate.rate, :precision => 4
+        %td= number_to_currency(1/currency_rate.rate, :precision => 4)

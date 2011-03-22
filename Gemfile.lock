@@ -28,9 +28,6 @@ GEM
       activemodel (= 3.0.5)
       activesupport (= 3.0.5)
     activesupport (3.0.5)
-    akephalos (0.2.5)
-      capybara (~> 0.4.0)
-      jruby-jars
     archive-tar-minitar (0.5.2)
     arel (2.0.9)
     bcrypt-ruby (2.1.4)
@@ -48,6 +45,7 @@ GEM
     childprocess (0.1.7)
       ffi (~> 0.6.3)
     columnize (0.3.2)
+    configuration (1.2.0)
     culerity (0.2.15)
     database_cleaner (0.6.0)
     devise (1.1.7)
@@ -64,10 +62,12 @@ GEM
       rake (>= 0.8.7)
     haml (3.0.25)
     i18n (0.5.0)
-    jruby-jars (1.5.6)
     json_pure (1.5.1)
     kaminari (0.10.4)
       rails (>= 3.0.0)
+    launchy (0.3.7)
+      configuration (>= 0.0.5)
+      rake (>= 0.8.1)
     less (1.2.21)
       mutter (>= 0.4.2)
       treetop (>= 1.4.2)
@@ -157,13 +157,13 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  akephalos (~> 0.2.5)
   capybara
   database_cleaner
   devise
   factory_girl_rails
   haml
   kaminari
+  launchy
   less (>= 1.2.21)
   mocha
   mysql2

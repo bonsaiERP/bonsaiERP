@@ -32,7 +32,7 @@ end
 
 # Test
 group :test do
-  gem 'akephalos', '~>0.2.5'
+  #gem 'akephalos', '~>0.2.5'
   gem 'rspec-rails', '~>2.5.0'
   gem 'mocha'
   gem 'steak', '~>1.1.0'
@@ -42,5 +42,6 @@ group :test do
   gem 'spork', '~>0.9.0.rc4'
   gem 'database_cleaner'
   gem 'watchr'
+  gem 'launchy'
 end  
 

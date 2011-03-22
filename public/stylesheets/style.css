@@ -9,6 +9,7 @@
 .bg_green { background-color: #5bbf3b !important; }
 .bg_light_grey { background-color: #f0f0f1; }
 .bg_white_tan { background-color: #f7f7f7; }
+.bg_white { background-color: #ffffff !important; }
 html { font-size: 13px; }
 body {
   font-family: Segoe UI, Arial, sans-serif;
@@ -80,7 +81,7 @@ table.decorated td { padding: 7px 8px; }
 table.decorated td a.edit {
   width: 16px;
   height: 16px;
-  display: block;
+  display: inline-block;
   float: left;
   text-indent: -1000em;
   overflow: hidden;
@@ -91,7 +92,7 @@ table.decorated td a.edit {
 table.decorated td a.delete {
   width: 16px;
   height: 16px;
-  display: block;
+  display: inline-block;
   float: left;
   text-indent: -1000em;
   overflow: hidden;
@@ -102,7 +103,7 @@ table.decorated td a.delete {
 table.decorated td a.destroy {
   width: 16px;
   height: 16px;
-  display: block;
+  display: inline-block;
   float: left;
   text-indent: -1000em;
   overflow: hidden;

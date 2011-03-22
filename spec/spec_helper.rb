@@ -13,6 +13,8 @@ Spork.prefork do
   #end
   require File.expand_path("../../config/environment", __FILE__)
   require 'rspec/rails'
+  require 'capybara/rspec'
+
   Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
   Rspec.configure do |config|

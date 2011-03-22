@@ -16,7 +16,7 @@ class Payment < ActiveRecord::Base
   after_initialize  :set_defaults,      :if => :new_record?
   before_create     :set_currency_id,   :if => :new_record?
   before_create     :set_cash_amount,   :if => :transaction_cash?
-  before_save       :set_exchange_rate
+  before_validation :set_exchange_rate
   before_save       :set_state,         :if => 'state.blank?'
   before_destroy    :destroy_and_create_pay_plan
 
@@ -48,7 +48,6 @@ class Payment < ActiveRecord::Base
   # validations
   validates_presence_of     :account_id, :transaction_id, :reference, :date
   validates                 :exchange_rate, :numericality => {:greater_than => 0}, :presence => true
-  validates_numericality_of :exchange_rate, :greater_than => 0#, :if => :other_currency?
 
   validate              :valid_payment_amount
   validate              :valid_amount_or_interests_penalties
@@ -72,9 +71,13 @@ class Payment < ActiveRecord::Base
 
 
   # Tells if the payment is in a differenc currency of the transaction
-  def other_currency?
+  def different_currency?
     if currency_id.present?
-      transaction.currency != account.currency_id
+      if account_id.present?
+        transaction.currency != account.currency_id
+      else
+        false
+      end
     end
   end
 
@@ -117,7 +120,6 @@ private
     self.amount              ||= 0
     self.interests_penalties ||= 0
     self.active                = true
-    self.exchange_rate       ||= 1.0
     self.currency_id           = transaction.currency_id
   end
 
@@ -272,9 +274,10 @@ private
   # Sets the exchange rate in case it's ovwritten
   def set_exchange_rate
     if transaction.currency_id == account.currency_id or account_id.blank?
+      debugger
       self.exchange_rate = 1
-    elsif exchange_rate == 0 or exchange_rate.blank? and account_id.present?
-      self.exchange_rate = CurrencyRate.active.find(account.currency_id).rate
+      #elsif exchange_rate == 0 or exchange_rate.blank? and account_id.present?
+      #self.exchange_rate = CurrencyRate.active.find(account.currency_id).rate
     end
   end
 

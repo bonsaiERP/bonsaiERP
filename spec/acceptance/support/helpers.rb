@@ -33,7 +33,7 @@ module HelperMethods
     create_currencies
     OrganisationSession.set = {:id => 1, :name => 'ecuanime'}
     org = Organisation.create!(attributes)
-    org.currency_ids = [1]
+    #org.currency_ids = [1]
   end
 
   # Create organisaton and items
