@@ -2,7 +2,7 @@
 
 =link_to "Nuevo crédito", 
   new_pay_plan_path(:type => transaction.class.to_s, :id => transaction.id, :pay_type => transaction.pay_type),
-  :id => 'new_pay_plan_link', :class => 'new button ajax', 'title' => "Nuevo plan de #{transaction.pay_type.singularize}",
+  :id => 'new_pay_plan_link', :class => 'new button ajax', 'title' => "Nuevo crédito",
   'data-trigger' => 'pay_plan', 'data-width' => '700' unless transaction.state == "paid"
 
 %table.decorated#pay_plans_table

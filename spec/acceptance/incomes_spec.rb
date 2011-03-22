@@ -33,7 +33,7 @@ feature "Income", "test features" do
     CashRegister.create!(:name => 'Cash register Bs.', :amount => 0, :currency_id => 1, :address => 'Uno') {|cr| cr.id = 2}
     CashRegister.create!(:name => 'Cash register $.', :amount => 0, :currency_id => 2, :address => 'None') {|cr| cr.id = 3}
 
-    Contact.create!(:code => 'C-0001',:name => 'karina', :matchcode => 'karina', :address => 'Mallasa') {|c| c.id = 1 }
+    Contact.create!(:name => 'karina', :last_name => 'Luna Pizarro', :matchcode => 'Karina Luna', :address => 'Mallasa') {|c| c.id = 1 }
 
     create_currencies
     create_currency_rates
@@ -441,7 +441,24 @@ feature "Income", "test features" do
 
     i.total.should_not == i.balance
     i.pay_plans_total.should == i.balance
+    i.balance.should == balance - 30
 
+    p = i.new_payment(:amount => 20, :reference => 'NA', :account_id => 1, :date => Date.today)
+
+    p.save.should == true
+    p.account_ledger.account.class.should == Bank
+
+    i = Income.find(i.id)
+    i.balance.should == balance - 50
+    bal = i.balance
+
+    # Destroy a payment and check that the account_ledger is deleted because it's not conciliated
+    al_id = p.account_ledger.id
+    p.destroy
+    i = Income.find(i.id)
+
+    AccountLedger.where(:id => al_id).size.should == 0
+    i.balance.should == balance - 30
   end
 
 end

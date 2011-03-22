@@ -19,6 +19,6 @@
 .clear
 
 %h2.dark Transacciones
-= render "account_ledgers/list", :account_ledgers => @cash_register.account_ledgers.includes(:payment), :ref_title => 'Referencia'
+= render "account_ledgers/list", :account => @cash_register, :ref_title => 'Referencia'
 
 .clear

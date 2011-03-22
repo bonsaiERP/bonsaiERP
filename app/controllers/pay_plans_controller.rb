@@ -91,9 +91,9 @@ class PayPlansController < ApplicationController
       @transaction = Transaction.org.find(@pay_plan.transaction_id)
 
       if @transaction.destroy_pay_plan(@pay_plan.id)
-        render :partial => 'pay_plans', :locals => { :transaction => @transaction }
+        render 'destroy'
       else
-        render :text => {:success => false}.to_json
+        render :json => {:success => false}
       end
     rescue
       render :text => "Existio un error por favor cierre la ventana."

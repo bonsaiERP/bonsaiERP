@@ -1,0 +1,17 @@
+// javascript
+$('#payments_table').find('#<%= @payment.id %>').remove();
+$('#payments .message').remove();
+
+var msg = "El <%= transaction_payment_type @payment.transaction %> de monto <%= ntc(@payment.amount) %> y fecha <%= lo @payment.date %> fue eliminado<br/>";
+msg += 'Se ha actualizado el <a id="tab_pay_plan_link" href="#tab_pay_plans">crédito</a>'
+$('#payments h2').after(createMessageCont(msg));
+
+$('#tab_pay_plan_link').die().live('click', function() { $('#tab_pay_plans').trigger("click") });
+
+$('#tab_pay_plans').one('click', function() {
+  $('#pay_plans').html(AjaxLoadingHTML());
+  $.get('/pay_plans/<%= @payment.transaction_id %>');
+});
+
+$('#payments_table #total_payment').html("<%= ntc @payment.transaction.payments_amount_interests_total %>");
+$('body').trigger('transaction', [<%= raw @payment.transaction.to_json %>]);

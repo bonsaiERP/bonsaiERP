@@ -318,11 +318,12 @@
     };
     $.updateTemplateRow = $.fn.updateTemplateRow = updateTemplateRow;
     $('a.delete[data-remote=true]').live("click", function(e) {
-      var el, self, trigger, url;
+      var conf, el, self, trigger, url;
       self = this;
       $(self).parents("tr:first, li:first").addClass('marked');
-      trigger = $(self).data('trigger');
-      if (confirm('Esta seguro de borrar el item seleccionado')) {
+      trigger = $(self).data('trigger') || 'ajax:delete';
+      conf = $(self).data('confirm') || 'Esta seguro de borrar el item seleccionado';
+      if (confirm(conf)) {
         url = $(this).attr('href');
         el = this;
         $.ajax({
@@ -333,26 +334,25 @@
             'authenticity_token': csrf_token
           },
           'success': function(resp, status, xhr) {
-            var data;
-            try {
-              data = $.parseJSON(resp);
-              if (data.destroyed) {
+            var error;
+            if (typeof resp === "object") {
+              if (resp.destroyed || resp.success) {
                 $(el).parents("tr:first, li:first").remove();
+                return $('body').trigger(trigger, [resp, url]);
               } else {
                 $(self).parents("tr:first, li:first").removeClass('marked');
-                alert("Error: " + data.base_error);
+                error = resp.base_error || "no se pudo borrar";
+                return alert("Error: " + error);
               }
-              if (trigger) {
-                return $('body').trigger(trigger, [data, url]);
-              } else {
-                return $('body').trigger('ajax:delete', [data, url]);
-              }
-            } catch (e) {
+            } else if (resp.match(/^\/\/\s?javascript/)) {
               return $(self).parents("tr:first, li:first").removeClass('marked');
+            } else {
+              return alert('Existio un error al borrar');
             }
           },
           'error': function() {
-            return $(self).parents("tr:first, li:first").removeClass('marked');
+            $(self).parents("tr:first, li:first").removeClass('marked');
+            return alert('Existio un error al borrar');
           }
         });
       } else {

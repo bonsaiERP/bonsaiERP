@@ -43,7 +43,7 @@
 .clear
 
 %h2 Transacciones
-= render "account_ledgers/list", :account_ledgers => @bank.account_ledgers.includes(:payment), :ref_title => 'Ref./Nº Cheque'
+= render "account_ledgers/list", :account => @bank, :ref_title => 'Ref./Nº Cheque'
 
 :javascript
   $('#show_bank_info').click(function() {

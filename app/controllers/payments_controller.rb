@@ -62,10 +62,6 @@ class PaymentsController < ApplicationController
   # DELETE /payments/:id
   def destroy
     @payment.destroy
-
-    respond_to do |format|
-      format.js
-    end
   end
 
 private

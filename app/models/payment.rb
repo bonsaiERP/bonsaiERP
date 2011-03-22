@@ -235,10 +235,15 @@ private
   # Creates the account_ledger text
   def get_account_ledger_text
     txt = get_exchange_rate_text
+    del = ""
+    if destroyed?
+      del = "Borrado de "
+    end
+
     case
-    when 'Income'  then "Cobro venta #{transaction_ref_number}#{txt}"
-    when 'Buy'     then "Pago compra #{transaction_ref_number}#{txt}"
-    when 'Expense' then "Pago gasto #{transaction_ref_number}#{txt}"
+    when 'Income'  then "#{del}Cobro venta #{transaction_ref_number}#{txt}"
+    when 'Buy'     then "#{del}Pago compra #{transaction_ref_number}#{txt}"
+    when 'Expense' then "#{del}Pago gasto #{transaction_ref_number}#{txt}"
     end
   end
 

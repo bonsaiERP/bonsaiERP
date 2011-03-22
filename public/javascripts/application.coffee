@@ -166,7 +166,7 @@ $(document).ready(->
       'data':data
       'type': (data['_method'] || $(this).attr('method') )
       'success': (resp, status, xhr)->
-        
+ 
         if typeof resp == "object"
           data['new_record'] = new_record
           p = $(el).parents('div.ajax-modal')
@@ -314,9 +314,11 @@ $(document).ready(->
   $('a.delete[data-remote=true]').live("click", (e)->
     self = this
     $(self).parents("tr:first, li:first").addClass('marked')
-    trigger = $(self).data('trigger')
+    trigger = $(self).data('trigger') || 'ajax:delete'
 
-    if(confirm('Esta seguro de borrar el item seleccionado'))
+    conf = $(self).data('confirm') || 'Esta seguro de borrar el item seleccionado'
+
+    if(confirm(conf))
       url = $(this).attr('href')
       el = this
       $.ajax(
@@ -325,22 +327,21 @@ $(document).ready(->
         'context': el
         'data': {'authenticity_token': csrf_token }
         'success': (resp, status, xhr)->
-          try
-            data = $.parseJSON(resp)
-            if data.destroyed
+          if typeof resp == "object"
+            if resp.destroyed or resp.success
               $(el).parents("tr:first, li:first").remove()
+              $('body').trigger(trigger, [resp, url])
             else
               $(self).parents("tr:first, li:first").removeClass('marked')
-              alert("Error: #{data.base_error}")
-            if trigger
-              $('body').trigger(trigger, [data, url])
-             else
-              $('body').trigger('ajax:delete', [data, url])
-          catch e
+              error = resp.base_error || "no se pudo borrar"
+              alert("Error: #{error}")
+          else if resp.match(/^\/\/\s?javascript/)
             $(self).parents("tr:first, li:first").removeClass('marked')
-            #alert('Existio un error al borrar')
+          else
+            alert('Existio un error al borrar')
         'error': ->
           $(self).parents("tr:first, li:first").removeClass('marked')
+          alert('Existio un error al borrar')
       )
     else
       $(this).parents("tr:first, li:first").removeClass('marked')

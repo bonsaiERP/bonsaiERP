@@ -9,20 +9,19 @@
     margin-right: 4px;
   }
 
-- ledgers = account_ledgers.includes(:payment, :contact).page(@page)
-
 = link_to "Nueva transacción", new_account_ledger_path, :class => 'new'
 
 .clear
 = link_to "Buscar", "#", :class => 'search'
 /"#", :style => 'display:block;float:left;margin:10px'
+- ledgers = account.account_ledgers.includes(:payment, :transaction).page(@page)
 = paginate ledgers
 
 %table.decorated.nwl.nwf
   %tr
     %th Fecha
     %th= ref_title
-    %th Monto
+    %th Monto en<br/>#{account.currency}
     %th Contacto
     %th Descripción
     %th
@@ -30,7 +29,7 @@
     %tr{:class => al.income.to_s + '_in' }
       %td.d= link_to lo(al.date), al, :class => 'b'
       %td.check= al.reference
-      %td.r= with_currency al
+      %td.r= ntc al.amount
       %td= al.contact if al.contact_id
       %td= link_description al
       %td

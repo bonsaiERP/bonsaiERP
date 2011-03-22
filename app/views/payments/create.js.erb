@@ -1,5 +1,7 @@
 // javascript
 $('#payments_table').append("<%= escape_javascript(render('payment', :payment => @payment)) %>");
+$('#payments .message').remove();
+
 $('#payments h2').after(createMessageCont('Se ha actualizado el <a id="tab_pay_plan_link" href="#tab_pay_plans">crédito</a>'));
 $('#tab_pay_plan_link').die().live('click', function() { $('#tab_pay_plans').trigger("click") });
 
@@ -8,5 +10,5 @@ $('#tab_pay_plans').one('click', function() {
   $.get('/pay_plans/<%= @payment.transaction_id %>');
 });
 
-$('#payments_table #total_payment').html("<%= @payment.transaction.payments_amount_interests_total %>");
+$('#payments_table #total_payment').html("<%= ntc @payment.transaction.payments_amount_interests_total %>");
 $('body').trigger('transaction', [<%= raw @payment.transaction.to_json %>] );
