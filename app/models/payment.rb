@@ -121,6 +121,7 @@ private
     self.interests_penalties ||= 0
     self.active                = true
     self.currency_id           = transaction.currency_id
+    self.exchange_rate = 1 if exchange_rate.blank?
   end
 
   def destroy_and_create_pay_plan
@@ -273,8 +274,7 @@ private
 
   # Sets the exchange rate in case it's ovwritten
   def set_exchange_rate
-    if transaction.currency_id == account.currency_id or account_id.blank?
-      debugger
+    if account_id.blank? or transaction.currency_id == account.currency_id
       self.exchange_rate = 1
       #elsif exchange_rate == 0 or exchange_rate.blank? and account_id.present?
       #self.exchange_rate = CurrencyRate.active.find(account.currency_id).rate

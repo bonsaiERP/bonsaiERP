@@ -220,6 +220,7 @@ private
 
   # Returns pay_plans filtering the ones that have been added and are not stored in the database
   def get_pay_plans
+    pay_plans.each{|pp| pp.destroy if pp.id.blank? }
     pay_plans.unpaid.delete_if {|pp| pp.id.blank? }
   end
 

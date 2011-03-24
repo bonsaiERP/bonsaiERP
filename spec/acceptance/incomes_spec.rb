@@ -425,8 +425,9 @@ feature "Income", "test features" do
 
     balance = i.balance
     
+    # We must destroy the pay_plan to make it work
     pp = i.new_pay_plan(:amount => 20, :payment_date => d, :repeat => true)
-    pp.destroy
+    #pp.destroy
     pp = i.create_pay_plan(pay_plan_params(:amount => 20, :payment_date => d, :repeat => true) )
 
     i = Income.find(i.id)

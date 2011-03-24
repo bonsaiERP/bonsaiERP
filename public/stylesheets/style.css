@@ -213,58 +213,69 @@ table.nwf td:first-child { white-space: nowrap; }
   border-right: 1px solid #484a4c;
   border-left: 1px solid #717171;
 }
+ul#main_menu > li {
+  display: inline;
+  padding: 0px;
+  margin: 0px;
+  float: left;
+}
+ul#main_menu > li a.more { background: url("images/up_down.png") no-repeat scroll right -12px transparent !important; }
+ul#main_menu > li > a {
+  font-size: 110%;
+  font-weight: bold;
+  color: #f7eaa3;
+  padding: 3px 15px;
+  text-decoration: none;
+  display: block;
+}
+ul#main_menu > li { display: inline; }
 ul#main_menu {
   height: 31px;
   margin: 0px;
   padding: 10px 10px 0px;
   position: relative;
-  font-size: 110%;
 }
-ul#main_menu li {
-  list-style: none;
-  padding: 0px;
-  margin: 0px;
-  display: inline;
-  float: left;
-}
-ul#main_menu li a {
-  font-weight: bold;
-  display: block;
-  color: #f7eaa3;
-  text-decoration: none;
-  padding: 3px 15px;
-}
-ul#main_menu li a.more { background: url("images/up_down.png") no-repeat scroll right -12px transparent !important; }
-ul#main_menu li ul {
+ul#main_menu ul { display: none; }
+ul#main_menu ul.more {
   display: none;
+  position: absolute;
   padding: 0px;
   margin: 0px;
-  padding-t: op: 4px;
+  padding: 10px;
   z-index: 100;
-  background-color: #7fbd42;
+  background-color: rgba(0, 0, 0, 0.3);
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
 }
-ul#main_menu li ul li {
+ul#main_menu ul.more a {
+  color: #095495;
+  display: block;
+  padding: 2px 0px;
+}
+ul#main_menu ul.more a:hover { text-decoration: underline; }
+#main_menu li.more {
   float: none;
   margin: 0px;
-  padding: 0px;
+  padding: 4px;
   display: block;
+  background-color: #ffffff;
+  clear: both;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
 }
-ul#main_menu li ul a {
-  float: none;
-  color: #ffffff;
-  padding: 7px 30px 7px 20px;
-  font-weight: normal;
+#main_menu li.more ul {
   display: block;
+  padding: 0px 10px;
+  clear: both;
 }
-ul#main_menu li ul a.add {
-  text-indent: -1000em;
-  width: 18px;
-  padding: 0px;
-  margin: 0px 0px 0px 20px;
+#main_menu li.more li {
+  width: 100%;
+  padding: 3px;
+  list-style: none;
 }
-ul#main_menu li ul a.add_left { padding-left: 0px; }
-ul#main_menu li ul a:hover { background-color: #4e8f19; }
-ul#main_menu li:hover ul {
+#main_menu > li:hover ul.more {
   display: block;
   position: absolute;
 }
@@ -767,3 +778,12 @@ a.search {
   width: 130px;
 }
 .moneybox h3 { margin: 2px 0px; }
+.tooltip {
+  border: 1px solid #c6c6c6;
+  background: #ffffff;
+  color: #484a4c;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  padding: 4px;
+}

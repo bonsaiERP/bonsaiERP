@@ -434,6 +434,7 @@
       },
       success: function(event) {}
     });
+    $('[title]').tooltip();
     return start();
   });
   String.prototype.pluralize = function() {

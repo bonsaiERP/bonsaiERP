@@ -37,7 +37,7 @@ class Transaction < ActiveRecord::Base
   scope :draft    , where(:state => 'draft')
   scope :approved , where(:state => 'approved')
   scope :paid     , where(:state => 'paid')
-  scope :due      , where(["transactions.state = ? AND transactions.payment_date < ?" , 'aproved' , Date.today])
+  scope :due      , where(["transactions.state = ? AND transactions.payment_date < ?" , 'approved' , Date.today])
   scope :credit   , where(:cash => false)
 
   delegate :name, :symbol, :plural, :code, :to => :currency, :prefix => true

@@ -49,9 +49,7 @@ class PayPlansController < ApplicationController
 
     @pay_plan = @transaction.new_pay_plan(params[:pay_plan])
 
-    if @pay_plan.valid? 
-      @pay_plan.destroy # Neccessary make work correctly the creation of pay_plans
-      if @transaction.create_pay_plan(params[:pay_plan])
+    if @pay_plan.valid? and @transaction.create_pay_plan(params[:pay_plan])
         render 'create'
       end
     else
@@ -71,9 +69,7 @@ class PayPlansController < ApplicationController
     @pay_plan = @transaction.new_pay_plan(params[:pay_plan])
     options = params[:pay_plan].merge(:id => params[:id])
 
-    if @pay_plan.valid? and  
-      @pay_plan.destroy # Neccessary make work correctly the creation of pay_plans
-      if @transaction.update_pay_plan(options)
+    if @pay_plan.valid? and @transaction.update_pay_plan(options)
         @transaction = Transaction.find(@transaction.id)
         render 'create'
       end

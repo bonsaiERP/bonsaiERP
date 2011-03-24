@@ -3,17 +3,25 @@
     %li= link_to "Inicio", dashboard_path 
     %li
       %a.more{ :href => "javascript:"} Operaciones
-      %ul
-        %li <a href="/incomes">Ventas</a>
-        %li <a href="/buys">Compras</a>
-        %li <a href="/expenses">Gastos</a>
-        %li <a href="/projects">Proyectos</a>
-        %li <a href="/clients">Clientes</a>
-        %li <a href="/suppliers">Proveedores</a>
-        %li <a href="/taxes">Impuestos</a>
+      %ul.more{:style => 'width:350px;'}
+        %li.more
+          .input
+            %ul
+              %li.dark_grey.b Ingresos
+              %li <a href="/incomes">Ventas</a>
+              %li.dark_grey.b Egresos
+              %li <a href="/buys">Compras</a>
+              %li <a href="/expenses">Gastos</a>
+          .input
+            %ul
+              %li <a href="/projects">Proyectos</a>
+              %li <a href="/clients">Clientes</a>
+              %li <a href="/suppliers">Proveedores</a>
+              %li <a href="/taxes">Impuestos</a>
+          .clear
     %li
       %a.more{ :href => "javascript:"} Inventarios
-      %ul
+      %ul.more
         %li <a href="/stores">Almacenes</a>
         %li <a href="/items">Items</a>
         %li <a href="/units">Unidades de medida</a> 
@@ -22,13 +30,13 @@
     
     %li
       %a.more{ :href => "javascript:"} Cuentas
-      %ul
+      %ul.more
         %li <a href="/banks">Bancos</a>
         %li <a href="/cash_registers">Cajas</a>
     
     %li
       %a.more{ :href => "javascript:"} Reportes
-      %ul
+      %ul.more
         %li= link_to "General" 
         %li= link_to "Item" 
         %li= link_to "Stoks" 

@@ -437,6 +437,8 @@ $(document).ready(->
         #$('#cargando').hide(1000)
     })
 
+  $('[title]').tooltip()
+
   start()
 
 )

@@ -30,7 +30,7 @@ feature "Incomes Feature", %q{
     
     page.evaluate_script("1==1")
     menu = page.find(:css, '#main_menu a.more')
-    menu.native.hover()
+    menu.trigger(:mouseover)
     click_link "Ventas"
     #puts page.body
 
