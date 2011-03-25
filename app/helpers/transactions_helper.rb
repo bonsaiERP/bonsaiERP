@@ -55,6 +55,7 @@ module TransactionsHelper
     end
   end
 
+  # Label for contacts in transaction form
   def contact_label
     if params[:controller] == 'incomes'
       "Cliente"
@@ -63,11 +64,36 @@ module TransactionsHelper
     end
   end
 
+  # Returns the path for contacts
   def cont_path
     if params[:controller] == 'incomes'
       "/clients"
     else
       "/suppliers"
+    end
+  end
+
+  # Returns the title for transaction
+  def transaction_title(klass)
+    case klass.type
+    when "Income"
+      if klass.draft?
+        "Proforma de venta"
+      else
+        "Nota de venta"
+      end
+    when "Buy" then "Nota de compra"
+    when "Expense" then "Nota de gasto"
+    end
+  end
+
+
+  # Returns if the organisation has to pay or recive a payment
+  def transaction_pay_method
+    if params[:controller] == "incomes"
+      "Cobros"
+    else
+      "Pagos"
     end
   end
 

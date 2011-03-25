@@ -25,14 +25,28 @@ Bonsaierp::Application.routes.draw do
 
   resources :transactions
 
+  ############################
+  # IN/OUT
+  ############################
   resources :incomes do
     member do
       put 'approve'
-      put 'null'
     end
   end
 
-  resources :buys
+  resources :buys do
+    member do
+      put 'approve'
+    end
+  end
+
+  resources :expenses do
+    member do
+      put 'approve'
+    end
+  end
+
+  ###########################3
 
   resources :stores
 

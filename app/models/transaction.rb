@@ -8,7 +8,7 @@ class Transaction < ActiveRecord::Base
   TYPES    = ['Income' , 'Expense'  , 'Buy']
   DECIMALS = 2
   # Determines if the oprations is made on transaction or pay_plan or payment
-  attr_reader :trans
+  attr_reader :trans, :approving
   # callbacks
   after_initialize :set_defaults, :if => :new_record?
   after_initialize :set_trans_to_true
@@ -81,6 +81,17 @@ class Transaction < ActiveRecord::Base
     CODE
   end
 
+  # Aprove a transaction
+  def approve!
+    unless state == "draft"
+      false
+    else
+      @approving = true
+      self.state = "approved"
+      self.save(:validate => false)
+    end
+  end
+
   def to_json
     attributes.merge(:currency_symbol => currency_symbol, :real_state => real_state).to_json
   end
@@ -105,6 +116,18 @@ class Transaction < ActiveRecord::Base
     @hash[real_state]
   end
 
+  # Creates a states hash based on the locale
+  def create_states_hash
+    arr = case I18n.locale
+    when :es
+      ["Borrador" , "Aprobado" , "Pagado" , "Vencido"]
+    when :en
+      ["Draft"    , "Aproved"  , "Paid"   , "Due"]
+    when :pt
+      ["Borracha" , "Aprovado" , "Pagado" , "Vencido"]
+    end
+    Hash[STATES.zip(arr)]
+  end
   # Returns the real state based on state and checked payment_date
   def real_state
     if state == "approved" and !payment_date.blank? and payment_date < Date.today
@@ -124,6 +147,16 @@ class Transaction < ActiveRecord::Base
 
   def show_payments?
     state != 'draft'
+  end
+
+  def show_pay_plans?
+    if draft?
+      true
+    elsif cash?
+      false
+    else
+      true
+    end
   end
 
   # quantity without discount and taxes
@@ -301,5 +334,9 @@ private
   # Determines if it is a transaction or other operation
   def trans?
     @trans
+  end
+
+  def aproving?
+    aproving
   end
 end

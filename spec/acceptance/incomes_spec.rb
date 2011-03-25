@@ -37,6 +37,7 @@ feature "Income", "test features" do
 
     create_currencies
     create_currency_rates
+    create_items
   end
 
   scenario "Create a payment with nearest pay_plan" do
@@ -462,4 +463,38 @@ feature "Income", "test features" do
     i.balance.should == balance - 30
   end
 
+  it 'should conciliate the correct sum with payments' do
+    d = Date.today
+    i = Income.new(income_params.merge(:date => d, :currency_id => 1))
+
+    i.save.should == true
+    i.approve!
+    i = Income.find(i.id)
+    i.state.should == 'approved'
+
+    balance = i.balance
+    
+    # We must destroy the pay_plan to make it work
+    pp = i.new_pay_plan(:amount => 20, :payment_date => d, :repeat => true)
+    #pp.destroy
+    pp = i.create_pay_plan(pay_plan_params(:amount => 20, :payment_date => d, :repeat => true) )
+
+    i = Income.find(i.id)
+    pps = i.pay_plans.size
+
+    i.pay_plans_total.should == i.balance
+
+    balance = i.balance
+
+    p = i.new_payment(:amount => 30, :reference => 'NA', :account_id => 1, :date => Date.today)
+    p.save.should == true
+
+    i = Income.find(i.id) 
+   
+    i.balance.should == balance - 30
+    p.account_ledger.conciliate_account
+    i = Income.find(i.id)
+    i.balance.should == balance - 30
+    
+  end
 end

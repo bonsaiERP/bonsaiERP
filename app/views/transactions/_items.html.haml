@@ -10,7 +10,7 @@
         %th Cantidad
         %th Total fila
         %th
-      - income.transaction_details.each do |det|
+      - transaction.transaction_details.each do |det|
         %tr
           %td= det.item
           %td= det.description
@@ -21,47 +21,47 @@
     %tr.extra.pad_top
       %td{:colspan => 2}
       %td.r{:colspan => 2} Subtotal
-      %td#subtotal.r= ntc income.gross_total
+      %td#subtotal.r= ntc transaction.gross_total
 
     %tr.extra
       %td{:colspan => 2}
-      %td.r{:colspan => 2} #{minus_image} Descuento (<span id="discount_percentage" data-val="#{income.total_discount}">#{ntc income.discount}</span>%)
-      %td#discount_total.r= ntc income.total_discount
+      %td.r{:colspan => 2} #{minus_image} Descuento (<span id="discount_percentage" data-val="#{transaction.total_discount}">#{ntc transaction.discount}</span>%)
+      %td#discount_total.r= ntc transaction.total_discount
 
     %tr.extra
       %td{:colspan => 2}
-      %td.r.line{:colspan => 2} Impuestos #{list_taxes income} (<span id="taxes_percentage" data-val="#{income.total_taxes}">#{ntc income.tax_percent}</span>%)
-      %td#taxes_total.r.line= ntc income.total_taxes
+      %td.r.line{:colspan => 2} Impuestos #{list_taxes transaction} (<span id="taxes_percentage" data-val="#{transaction.total_taxes}">#{ntc transaction.tax_percent}</span>%)
+      %td#taxes_total.r.line= ntc transaction.total_taxes
 
     %tr.extra
       %td{:colspan => 2}
         %td.r.b.dark{:colspan => 2} Total
-      %td#total_value.r.b{'data-val' => income.total} #{currency_symbol} #{ntc income.total}
+      %td#total_value.r.b{'data-val' => transaction.total} #{currency_symbol} #{ntc transaction.total}
 
 
-    - if not income.currency_id == currency_id
+    - if not transaction.currency_id == currency_id
       %tr.extra
         %td{:colspan => 2}
-          %td.r.b.dark{:colspan => 2} Total #{income.currency_name.pluralize}
-        %td#total_value.r.b{'data-val' => income.total_currency} #{income.currency_symbol} #{ntc income.total_currency}
+          %td.r.b.dark{:colspan => 2} Total #{transaction.currency_name.pluralize}
+        %td#total_value.r.b{'data-val' => transaction.total_currency} #{transaction.currency_symbol} #{ntc transaction.total_currency}
 
-      - unless income.state == 'draft'
+      - unless transaction.state == 'draft'
         %tr.extra
           %td{:colspan => 2}
-          %td.r.b.line.dark{:colspan => 2} #{minus_image} Cobrado #{income.currency_name.pluralize}
-          %td#total_payments.r.b.line{'data-val' => income.total_payments} #{income.currency_symbol} #{ntc( income.total_payments)}
+          %td.r.b.line.dark{:colspan => 2} #{minus_image} Cobrado #{transaction.currency_name.pluralize}
+          %td#total_payments.r.b.line{'data-val' => transaction.total_payments} #{transaction.currency_symbol} #{ntc( transaction.total_payments)}
         %tr.extra
           %td{:colspan => 2}
-            %td.r.b.dark{:colspan => 2} Saldo #{income.currency_name.pluralize}
-          %td#balance.r.b{'data-val' => income.balance} #{income.currency_symbol} #{ntc income.balance}
+            %td.r.b.dark{:colspan => 2} Saldo #{transaction.currency_name.pluralize}
+          %td#balance.r.b{'data-val' => transaction.balance} #{transaction.currency_symbol} #{ntc transaction.balance}
 
-    - elsif not income.state == 'draft'
+    - elsif not transaction.state == 'draft'
       %tr.extra
         %td{:colspan => 2}
         %td.r.b.line.dark{:colspan => 2} #{minus_image} Cobrado
-        %td#total_payments.r.b.line{'data-val' => income.total_payments} #{income.currency_symbol} #{ntc( income.total_payments)}
+        %td#total_payments.r.b.line{'data-val' => transaction.total_payments} #{transaction.currency_symbol} #{ntc( transaction.total_payments)}
       %tr.extra
         %td{:colspan => 2}
         %td.r.b.dark{:colspan => 2} Saldo
-        %td#balance.r.b{'data-val' => income.balance} #{income.currency_symbol} #{ntc income.balance}
+        %td#balance.r.b{'data-val' => transaction.balance} #{transaction.currency_symbol} #{ntc transaction.balance}
 

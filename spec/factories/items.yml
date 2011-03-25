@@ -1,0 +1,53 @@
+--- 
+- active: true
+  code: P-101
+  ctype: product
+  description: ""
+  discount: ""
+  id: 1
+  integer: false
+  name: Pipocas
+  organisation_id: 1
+  price: 3.0
+  stockable: false
+  unit_id: 1
+  unitary_cost: 2.0
+- active: true
+  code: P-102
+  ctype: product
+  description: ""
+  discount: ""
+  id: 2
+  integer: false
+  name: DVD Mi villano favorito
+  organisation_id: 1
+  price: 5.0
+  stockable: false
+  unit_id: 3
+  unitary_cost: 3.0
+- active: false
+  code: P-103
+  ctype: product
+  description: ""
+  discount: 
+  id: 5
+  integer: false
+  name: DVD Megamente
+  organisation_id: 1
+  price: 5.0
+  stockable: false
+  unit_id: 3
+  unitary_cost: 3.0
+- active: true
+  code: I-0001
+  ctype: item
+  description: ""
+  discount: 
+  id: 3
+  integer: false
+  name: "Papel sabana tama\xC3\xB1o oficio"
+  organisation_id: 1
+  price: 
+  stockable: false
+  unit_id: 3
+  unitary_cost: 2.0

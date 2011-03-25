@@ -41,6 +41,12 @@ module HelperMethods
     create_organisation
   end
 
+  def create_items
+    YAML.load_file("#{Rails.root}/spec/factories/items.yml").each do |it|
+      Item.create!(it) {|item| item.id = it["id"] }
+    end
+  end
+
   def create_currencies
     YAML.load_file("#{Rails.root}/config/defaults/currencies.yml").each do |c|
       Currency.create!( c ) {|cur| cur.id = c["id"] }
@@ -64,11 +70,11 @@ module HelperMethods
     end
   end
 
-  def create_items
-    YAML.load_file("#{Rails.root}/config/defaults/items.yml").each do |i|
-      Factory.create :item, i
-    end
-  end
+  #def create_items
+  #  YAML.load_file("#{Rails.root}/config/defaults/items.yml").each do |i|
+  #    Factory.create :item, i
+  #  end
+  #end
 
   def set_organisation
     create_countries

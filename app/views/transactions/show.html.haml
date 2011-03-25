@@ -3,10 +3,10 @@
     %li #{link_to "Ventas", incomes_path}<span>&gt;</span>
 
   .links
-    = link_to 'Nueva', new_income_path, :class => 'add'
-    - if @income.draft?
-      = link_to 'Editar', edit_income_path(@income), :class => 'edit'
-      = link_to 'Borrar', @income, :class => 'delete'
+    = link_to 'Nueva', "/#{params[:controller]}/new", :class => 'add'
+    - if @transaction.draft?
+      = link_to 'Editar', "/#{params[:controller]}/#{@transaction.id}/edit", :class => 'edit'
+      = link_to 'Borrar', @transaction, :class => 'delete'
 .clear
 
 ._40.fr.r
@@ -15,31 +15,31 @@
   = link_to "Imprimir","", :class => 'print'
 
 
-%h1.mb5{:style => 'display:inline-block;'} #{note_title(@income)} de venta #{@income.ref_number}
-%span.b#income_state{:class => @income.real_state, :style => 'font-size:1.3em'}= @income.show_state
-%h2.n.mt5= link_to @income.contact, "#", :title => "Historial cliente"
+%h1.mb5{:style => 'display:inline-block;'} #{transaction_title(@transaction)}  #{@transaction.ref_number}
+%span.b#income_state{:class => @transaction.real_state, :style => 'font-size:1.3em'}= @transaction.show_state
+%h2.n.mt5= link_to @transaction.contact, "#", :title => "Historial cliente"
 
 .clear
 
 .moneybox
   %label Total
-  %h3#total_currency #{@income.currency_symbol} #{ntc @income.total_currency}
+  %h3#total_currency #{@transaction.currency_symbol} #{ntc @transaction.total_currency}
 
-- unless @income.state == 'paid'
+- unless @transaction.paid?
   .moneybox
-    %label Saldo a cobrar
-    %h3#balance #{@income.currency_symbol} #{ntc @income.balance}
+    %label Saldo
+    %h3#balance #{@transaction.currency_symbol} #{ntc @transaction.balance}
   
-= "Vence el <strong id='due_on'>#{lo @income.payment_date}</strong></span>".html_safe unless @income.paid? or @income.draft?
+= "Vence el <strong id='due_on'>#{lo @transaction.payment_date}</strong></span>".html_safe unless @transaction.paid? or @transaction.draft?
 
 ._50.fr.r
   / FORM to null income
-  - if @income.draft?
-    = simple_form_for @income, :url => approve_income_path(@income) do |f|
+  - if @transaction.draft?
+    = simple_form_for @transaction, :url => "/#{params[:controller]}/#{ @transaction.id }/approve" do |f|
       .submit
         =f.submit "Aprobar", :class => 'dark_green', :id => 'income_approve_button'
-  /- elsif not @income.paid?
-  /  = simple_form_for @income, :url => null_income_path(@income) do |f|
+  /- elsif not @transaction.paid?
+  /  = simple_form_for @transaction, :url => null_income_path(@transaction) do |f|
   /    .submit
   /      =f.submit "Anular", :class => 'red', :id => 'income_null_button'
 
@@ -47,44 +47,45 @@
 #tabs
   %ul
     %li <a href="#information" id="tab_info">Información</a>
-    - unless @income.draft?
-      %li <a href="#payments" id="tab_payments">Cobros</a>
-    %li <a href="#pay_plans" id="tab_pay_plans">Crédito</a>
+    - if @transaction.show_payments?
+      %li <a href="#payments" id="tab_payments">#{transaction_pay_method}</a>
+    - if @transaction.show_pay_plans?
+      %li <a href="#pay_plans" id="tab_pay_plans">Crédito</a>
 
   #information
 
     .main{:style => 'font-size:1.2em;'}
-      %span.dark.b.i= lo @income.date
+      %span.dark.b.i= lo @transaction.date
 
     .input
-      - unless @income.currency_id == currency_id
+      - unless @transaction.currency_id == currency_id
         .input
-          1 #{@income.currency.name} = <span class="b">#{@income.currency_exchange_rate}</span> #{currency_name.pluralize}
+          1 #{@transaction.currency.name} = <span class="b">#{@transaction.currency_exchange_rate}</span> #{currency_name.pluralize}
 
-      - if @income.project_id
+      - if @transaction.project_id
         .input
           %span.dark_grey 
-            -if @income.project_id
-              Proyecto #{link_to @income.project.to_s, @income.project, :title => 'Proyecto'}
-    .input= @income.description unless @income.description.blank?
+            -if @transaction.project_id
+              Proyecto #{link_to @transaction.project.to_s, @transaction.project, :title => 'Proyecto'}
+    .input= @transaction.description unless @transaction.description.blank?
 
 
     .clear
 
-    = render 'items', :income => @income
+    = render 'transactions/items', :transaction => @transaction
 
   #payments
-    =render "/payments/payments", :transaction => @income if @income.show_payments?
+    =render "/payments/payments", :transaction => @transaction if @transaction.show_payments?
     .clear
 
   #pay_plans
-    =render "/pay_plans/pay_plans", :transaction => @income if @income.show_pay_plans?
+    =render "/pay_plans/pay_plans", :transaction => @transaction if @transaction.show_pay_plans?
 
 :javascript
   $(function () {
     $('#tabs').tabs();
 
-    if(!#{@income.paid?} && #{@income.cash}) {
+    if(!#{@transaction.paid?} && #{@transaction.cash}) {
       $('#new_payment_link').trigger('click');
     }
 
@@ -108,7 +109,7 @@
 
 
     // Only when in edition
-    if("#{@income.state}" == "draft") {
+    if("#{@transaction.state}" == "draft") {
       // Deleted data
       $('body').live("del-pay_plan", function(resp) {
         try{
@@ -129,7 +130,7 @@
       // When it has been approved
       $('body').live('transaction', function(e, resp) {
         
-        $('h3#balance').html("#{@income.currency_symbol} " + _b.ntc(resp.balance) );
+        $('h3#balance').html("#{@transaction.currency_symbol} " + _b.ntc(resp.balance) );
         $('#due_on').html(_b.dateFormat(resp.payment_date));
 
         setIncomeState(resp.real_state);

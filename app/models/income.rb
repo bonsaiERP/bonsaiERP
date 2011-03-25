@@ -27,44 +27,14 @@ class Income < Transaction
   validates             :ref_number,           :presence => true , :uniqueness => { :scope => :organisation_id, :allow_blank => false}
   validate              :valid_number_of_items
 
-  def draft?
-    state == 'draft'
-  end
-
-  attr_reader :approving
-  def approve!
-    unless state == "draft"
-      false
-    else
-      @approving = true
-      self.state = "approved"
-      self.save(:validate => false)
-    end
-  end
 
 private
-  def aproving?
-    aproving
-  end
-
-  # Creates a states hash based on the locale
-  def create_states_hash
-    arr = case I18n.locale
-    when :es
-      ["Borrador" , "Aprobado" , "Pagado" , "Vencido"]
-    when :en
-      ["Draft"    , "Aproved"  , "Paid"   , "Due"]
-    when :pt
-      ["Borracha" , "Aprovado" , "Pagado" , "Vencido"]
-    end
-    Hash[STATES.zip(arr)]
-  end
 
   # Initialized  the ref_number
   def set_ref_number
     if ref_number.blank?
       refs            = Income.org.order("ref_number DESC").limit(1)
-      self.ref_number = refs.any? ? refs.first.ref_number.next : "V-#{Date.now.year}-0001"
+      self.ref_number = refs.any? ? refs.first.ref_number.next : "V-#{Date.today.year}-0001"
     end
   end
 

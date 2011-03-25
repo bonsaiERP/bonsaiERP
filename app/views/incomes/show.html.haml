@@ -3,10 +3,10 @@
     %li #{link_to "Ventas", incomes_path}<span>&gt;</span>
 
   .links
-    = link_to 'Nueva', new_income_path, :class => 'add'
-    - if @income.draft?
-      = link_to 'Editar', edit_income_path(@income), :class => 'edit'
-      = link_to 'Borrar', @income, :class => 'delete'
+    = link_to 'Nueva', "/#{params[:controller]}/new", :class => 'add'
+    - if transaction.draft?
+      = link_to 'Editar', "/#{params[:controller]}/#{transaction.id}/edit", :class => 'edit'
+      = link_to 'Borrar', transaction, :class => 'delete'
 .clear
 
 ._40.fr.r
@@ -25,7 +25,7 @@
   %label Total
   %h3#total_currency #{@income.currency_symbol} #{ntc @income.total_currency}
 
-- unless @income.state == 'paid'
+- unless transaction.paid?
   .moneybox
     %label Saldo a cobrar
     %h3#balance #{@income.currency_symbol} #{ntc @income.balance}
@@ -34,7 +34,7 @@
 
 ._50.fr.r
   / FORM to null income
-  - if @income.draft?
+  - if transaction.draft?
     = simple_form_for @income, :url => approve_income_path(@income) do |f|
       .submit
         =f.submit "Aprobar", :class => 'dark_green', :id => 'income_approve_button'

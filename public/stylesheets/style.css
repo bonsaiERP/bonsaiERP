@@ -786,7 +786,10 @@ a.search {
   margin: 5px 1px;
   width: 130px;
 }
-.moneybox h3 { margin: 2px 0px; }
+.moneybox h3 {
+  margin: 2px 0px;
+  color: #000000;
+}
 .tooltip {
   border: 1px solid #c6c6c6;
   background: #ffffff;

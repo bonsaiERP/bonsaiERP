@@ -5,7 +5,7 @@ class IncomesController < ApplicationController
 
   #before_filter :check_currency_set, :only => [:new, :edit, :create, :update]
   before_filter :set_currency_rates, :only => [:index, :show]
-  before_filter :set_income, :only => [:show, :edit, :update, :destroy, :approve]
+  before_filter :set_transaction, :only => [:show, :edit, :update, :destroy, :approve]
 
 
   # GET /incomes
@@ -19,7 +19,7 @@ class IncomesController < ApplicationController
   def show
     respond_to do |format|
       format.html { render 'transactions/show' }
-      format.xml  { render :xml => @income }
+      format.xml  { render :xml => @transaction }
     end
   end
 
@@ -33,7 +33,8 @@ class IncomesController < ApplicationController
   # GET /incomes/1/edit
   def edit
     if @income.state == 'approved'
-      redirect_income
+      flash[:warning] = "No es posible editar una nota de venta aprobada"
+      redirect_to @income
     end
   end
 
@@ -80,16 +81,16 @@ class IncomesController < ApplicationController
   # PUT /incomes/1/approve
   # Method to approve an income
   def approve
-    if @income.approve!
+    if @transaction.approve!
       flash[:notice] = "La nota de venta fue aprobada"
     else
       flash[:error] = "Existio un problema con la aprovación"
     end
 
     anchor = ''
-    anchor = '#income_payment' if @income.cash?
+    anchor = 'payments' if @transaction.cash?
 
-    redirect_to income_path(@income, :anchor => anchor)
+    redirect_to income_path(@transaction, :anchor => anchor)
   end
 
   # Nulls an invoice
@@ -107,8 +108,8 @@ private
     redirect_to incomes_path
   end
 
-  def set_income
-    @income = Income.org.find(params[:id])
+  def set_transaction
+    @transaction = Income.org.find(params[:id])
   end
 
   def set_currency_rates

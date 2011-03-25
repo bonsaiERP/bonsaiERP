@@ -8,7 +8,11 @@ class Payment < ActiveRecord::Base
   acts_as_org
 
   attr_reader :pay_plan, :updated_pay_plan_ids, :account_ledger_created
+
+  attr_reader :updated_account_ledger
+
   attr_protected :state
+
   STATES = ['conciliation', 'paid']
 
 
@@ -23,7 +27,7 @@ class Payment < ActiveRecord::Base
   # update_pay_plan must run before update_transaction
   after_create   :create_account_ledger
   after_save     :update_pay_plan#,    :if => :paid?
-  after_save     :update_transaction#, :if => :paid?
+  after_save     :update_transaction,    :unless => :updated_account_ledger?
   after_destroy  :destroy_account_ledger
   after_destroy  :update_transaction
 
@@ -114,7 +118,16 @@ class Payment < ActiveRecord::Base
     (amount + interests_penalties) * exchange_rate
   end
 
+  # the account ledger sets this if no
+  def set_updated_account_ledger(value = true)
+    @updated_account_ledger = value
+  end
+
 private
+
+  def updated_account_ledger?
+    not @updated_account_ledger.blank?
+  end
 
   def set_defaults
     self.amount              ||= 0

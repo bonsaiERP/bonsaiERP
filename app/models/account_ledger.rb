@@ -63,6 +63,7 @@ private
   def update_payment
     if conciliation == true and payment.present? and not(payment_state == 'paid')
       payment.state = 'paid'
+      payment.set_updated_account_ledger(true)
       payment.save(:validate => false)
     end
   end
