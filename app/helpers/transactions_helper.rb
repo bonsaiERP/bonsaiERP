@@ -54,4 +54,21 @@ module TransactionsHelper
       ntc klass.price
     end
   end
+
+  def contact_label
+    if params[:controller] == 'incomes'
+      "Cliente"
+    else
+      "Proveedor"
+    end
+  end
+
+  def cont_path
+    if params[:controller] == 'incomes'
+      "/clients"
+    else
+      "/suppliers"
+    end
+  end
+
 end

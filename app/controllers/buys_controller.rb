@@ -2,18 +2,14 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class BuysController < ApplicationController
+
+  before_filter :set_currency_rates, :only => [:index, :show]
+
   respond_to :html, :xml, :json
   # GET /buys
   # GET /buys.xml
   def index
-    case(params[:type])
-      when 'pay'
-        @buys = Buy.pay
-      when 'aprove'
-        @buys = Buy.aprove
-      else
-        @buys = Buy.all
-    end
+    @buys = Buy.find_with_state(params[:option]).page(@page)
     respond_with @buys
   end
 
@@ -27,7 +23,8 @@ class BuysController < ApplicationController
   # GET /buys/new
   # GET /buys/new.xml
   def new
-    @buy = Buy.new
+    @buy = Buy.new(:date => Date.today, :discount => 0, :currency_exchange_rate => 1, :currency_id => currency_id )
+    @buy.transaction_details.build
     respond_with(@buy)
   end
 
@@ -58,5 +55,11 @@ class BuysController < ApplicationController
     @buy = Buy.find(params[:id])
     @buy.destroy
     respond_with(@buy)
+  end
+
+private
+  def set_currency_rates
+    @currency_rates = {}
+    CurrencyRate.active.each {|cr| @currency_rates[cr.currency_id] = cr.rate }
   end
 end

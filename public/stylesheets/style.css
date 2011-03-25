@@ -257,7 +257,7 @@ ul#main_menu ul.more a:hover { text-decoration: underline; }
 #main_menu li.more {
   float: none;
   margin: 0px;
-  padding: 4px;
+  padding: 4px 4px 15px;
   display: block;
   background-color: #ffffff;
   clear: both;
@@ -272,7 +272,7 @@ ul#main_menu ul.more a:hover { text-decoration: underline; }
 }
 #main_menu li.more li {
   width: 100%;
-  margin-left: 5px;
+  margin-left: 7px;
   padding: 3px;
   color: #484a4c;
   list-style: disc;

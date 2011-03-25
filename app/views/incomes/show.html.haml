@@ -14,6 +14,7 @@
   &nbsp;&nbsp;
   = link_to "Imprimir","", :class => 'print'
 
+
 %h1.mb5{:style => 'display:inline-block;'} #{note_title(@income)} de venta #{@income.ref_number}
 %span.b#income_state{:class => @income.real_state, :style => 'font-size:1.3em'}= @income.show_state
 %h2.n.mt5= link_to @income.contact, "#", :title => "Historial cliente"

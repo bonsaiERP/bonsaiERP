@@ -36,8 +36,11 @@ class Item < ActiveRecord::Base
   #default_scope where(:active => true)
   scope :active, where(:active => true)
 
-  scope :json  , select("id, name, price")
-  scope :income, where(["ctype IN (?) AND active = ?", TYPES.slice(2, 2), true])
+  scope :json   , select("id, name, price")
+
+  scope :income , where(["ctype IN (?) AND active = ?", ['service', 'product'], true])
+  scope :buy    , where(["ctype IN (?) AND active = ?", ['item', 'product', 'service'], true])
+  scope :expense, where(["ctype IN (?) AND active = ?", ['expense'], true])
 
   def to_s
     "#{code} - #{name}"

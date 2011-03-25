@@ -18,7 +18,7 @@ class IncomesController < ApplicationController
   # GET /incomes/1.xml
   def show
     respond_to do |format|
-      format.html # show.html.erb
+      format.html { render 'transactions/show' }
       format.xml  { render :xml => @income }
     end
   end

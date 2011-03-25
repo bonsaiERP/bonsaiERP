@@ -63,7 +63,7 @@ class Transaction < ActiveRecord::Base
   # Finds using the state
   def self.find_with_state(state)
     state = 'all' unless all_states.include?(state)
-    ret   = Income.org.includes(:contact, :pay_plans, :currency).order("date DESC")
+    ret   = self.org.includes(:contact, :pay_plans, :currency).order("date DESC")
 
     case state
     when 'all' then ret
@@ -247,6 +247,15 @@ class Transaction < ActiveRecord::Base
     case type
     when "Income" then "cobro"
     when "Buy", "Expense" then "pago"
+    end
+  end
+
+  # returns the items dependig of what type is the transction
+  def get_items
+    case type
+    when "Income"  then Item.org.income
+    when "Buy"     then Item.org.buy
+    when "Expense" then Item.org.expense
     end
   end
 

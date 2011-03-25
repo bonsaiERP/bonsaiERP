@@ -1,5 +1,5 @@
 class Supplier < Contact
-  after_initialize :set_code, :if => :new_record?
+  #after_initialize :set_code, :if => :new_record?
 
 private
   def set_code

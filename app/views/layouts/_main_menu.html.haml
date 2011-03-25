@@ -3,22 +3,21 @@
     %li= link_to "Inicio", dashboard_path 
     %li
       %a.more{ :href => "javascript:"} Finanzas
-      %ul.more{:style => 'width:380px;'}
+      %ul.more{:style => 'width:350px;'}
         %li.more
-          .fl._33
+          .fl._50
             %ul
               %li <a href="/incomes">Ventas</a>
               %li <a href="/buys">Compras</a>
               %li <a href="/expenses">Gastos</a>
-          .fl._33
-            %ul
+              %hr/
               %li <a href="/clients">Clientes</a>
               %li <a href="/suppliers">Proveedores</a>
-              %hr/
+          .fl._50
+            %ul
               %li <a href="/banks">Bancos</a>
               %li <a href="/cash_registers">Cajas</a>
-          .fl._33
-            %ul
+              %hr/
               %li <a href="/projects">Proyectos</a>
               %li <a href="/taxes">Impuestos</a>
           .clear
@@ -33,8 +32,4 @@
             %li <a href="/stocks">Stocks</a>
             %li <a href="/transferences">Transferencias</a>
           .clear
-    
-    %li
-      %a.more{ :href => "javascript:"} Cuentas
-      %ul.more
     

@@ -4,15 +4,15 @@
     margin: 2px 0px;
   }
 
-= simple_form_for(@income, :html => {:id => 'income_form'}) do |f|
+= simple_form_for(transaction, :html => {:id => 'transaction_form'}) do |f|
   = bonsai_form_error(f)
   .main.bg_light_grey
     .input
       = f.input :ref_number, :label => 'Nº de referencia', :input_html => {:size => 20}
       = f.input :date, :label => 'Fecha'
 
-    = f.association :contact, :label => 'Cliente', :collection => Client.org,
-      :input_html => {'data-new_url' => new_client_path, 'data-title' => 'Nuevo cliente', 'data-trigger' => 'new_client' }
+    = f.association :contact, :label => contact_label, :collection => contacts,
+      :input_html => {'data-new_url' => "#{cont_path}/new", 'data-title' => "Nuevo #{contact_label}", 'data-trigger' => 'new_contact' }
     .clear
 
   .clear
@@ -23,7 +23,7 @@
   .clear
 
   .input
-    = f.input :discount, :label => 'Descuento (%)', :input_html => {:size => 10, :type => 'decimal'}
+    = f.input :discount, :label => 'Descuento (%)', :input_html => {:size => 10, :type => 'decimal'} if transaction.is_a? Income
     = f.input :bill_number, :label => 'Nº de Factura', :input_html => {:size => 20}
   =f.association :taxes, :as => :check_boxes, :label => 'Impuestos', :wrapper_html => {:id => 'taxes'}, :collection => Tax.org,
     :label_method => lambda{|tax| "<span data-rate='#{tax.rate}' title =\"#{tax.name}\">#{tax.abbreviation} (#{ntc tax.rate}%)</span>".html_safe }
@@ -45,9 +45,11 @@
         %th.total_row Total fila
         %th
 
+    - @items = transaction.get_items
+
     = f.simple_fields_for :transaction_details do |fd|
       %tr.item
-        %td.cur= fd.input :item_id, :label => false, :collection => Item.org.income.order(:name), :input_html => {:class => 'item fl', 'data-new_url' => new_item_path, 'data-title' => 'Nuevo producto/servicio', 'data-trigger' => 'new_client'}
+        %td.cur= fd.input :item_id, :label => false, :collection => @items, :input_html => {:class => 'item fl', 'data-new_url' => new_item_path, 'data-title' => 'Nuevo producto/servicio', 'data-trigger' => 'new_client'}
         %td= fd.input :description, :label => false
 
         %td= fd.input :price, :input_html => { :size => 8, :class => 'price', :type => 'decimal' }, :label => false
@@ -59,27 +61,27 @@
     %tr.extra.pad_top
       %td{:colspan => 2}
       %td.cur{:colspan => 2} Subtotal
-      %td#subtotal.r{'data-val' => @income.subtotal}= ntc(@income.subtotal)
+      %td#subtotal.r{'data-val' => transaction.subtotal}= ntc(transaction.subtotal)
     
     %tr.extra
       %td{:colspan => 2} <a href="javascript:" id="add_item" class="add">Adicionar ítem</a>
-      %td.cur{:colspan => 2} #{minus_image} Descuento (<span id="discount_percentage" data-val="#{@income.discount}">#{ntc @income.discount}</span>%)
-      %td#discount_total.r{'data-val' => @income.total_discount} #{ntc(@income.total_discount)}
+      %td.cur{:colspan => 2} #{minus_image} Descuento (<span id="discount_percentage" data-val="#{transaction.discount}">#{ntc transaction.discount}</span>%)
+      %td#discount_total.r{'data-val' => transaction.total_discount} #{ntc(transaction.total_discount)}
     
     %tr.extra
       %td{:colspan => 2}
-      %td.cur.line{:colspan => 2} Impuestos (<span id="taxes_percentage" data-val="#{@income.tax_percent}">#{ntc @income.tax_percent}</span>%)
-      %td#taxes_total.r.line{'data-val' => @income.total_taxes}= ntc @income.total_taxes
+      %td.cur.line{:colspan => 2} Impuestos (<span id="taxes_percentage" data-val="#{transaction.tax_percent}">#{ntc transaction.tax_percent}</span>%)
+      %td#taxes_total.r.line{'data-val' => transaction.total_taxes}= ntc transaction.total_taxes
     
     %tr.extra
       %td{:colspan => 2}
       %td.r.b.dark{:colspan => 2} Total
-      %td#total_value.b.cur{ 'data-val'=>@income.total} #{currency_symbol} #{ntc @income.total}
+      %td#total_value.b.cur{ 'data-val'=>transaction.total} #{currency_symbol} #{ntc transaction.total}
 
     %tr.extra
       %td{:colspan => 2}
-        %td.r.b.dark#currency_symbol{:colspan => 2} Total #{@income.currency_name.pluralize}
-      %td.cur.b#total_value_currency #{@income.currency_symbol} #{ntc @income.total_currency}
+        %td.r.b.dark#currency_symbol{:colspan => 2} Total #{transaction.currency_name.pluralize}
+      %td.cur.b#total_value_currency #{transaction.currency_symbol} #{ntc transaction.total_currency}
   .actions
     = f.submit 'Salvar'
 
@@ -87,16 +89,16 @@
 = javascript_include_tag "app/transactions"
 :javascript
   $(function() {
-    var items = #{ Item.income.json.to_json };
+    var items = #{ @items.json.to_json };
     var currencies = #{ Currency.select("id, name, symbol").to_json };
     var exchange_rates = #{ CurrencyRate.active.select("rate, currency_id").to_json };
 
     var default_currency_id = #{currency_id};
-    var income = new Income(items, "#income_form", {'default_currency_id': default_currency_id }, currencies, exchange_rates );
-    window.income = income;
+    var transaction = new #{transaction.type}(items, "#transaction_form", {'default_currency_id': default_currency_id }, currencies, exchange_rates );
+    window.income = transaction;
 
     // Functions for the select boxes
     $('body').live('new_contact', function(e, resp) {
-      $('#income_contact_id').createSelectOption(resp.id, resp.matchcode)
+      $('#income_contact_id').createSelectOption(resp.id, resp.matchcode);
     });
   })

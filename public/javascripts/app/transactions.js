@@ -1,5 +1,5 @@
 (function() {
-  var Income, Transaction;
+  var Buy, Expense, Income, Transaction;
   var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
     for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
     function ctor() { this.constructor = child; }
@@ -48,7 +48,15 @@
       this.set_price_quantity_change_event("table", "input.price", "input.quantity");
       this.set_add_item_event();
       this.set_delete_item_event();
+      this.set_total_event();
       return this.check_currency_data();
+    };
+    Transaction.prototype.set_total_event = function() {
+      var self;
+      self = this;
+      return $('body').live('total', function() {
+        return self.set_total_currency();
+      });
     };
     Transaction.prototype.set_currency_event = function() {
       var self;
@@ -157,7 +165,9 @@
       if (this.conf.default_currency_id === self.currency_id) {
         $(this.conf.currency_id).siblings("label").find("span").html("");
         $(this.conf.currency_exchange_rate_id).val(1);
-        return self.exchange_rate = 1;
+        self.exchange_rate = 1;
+        $('#total_value_currency').html("");
+        return $('#currency_symbol').html("");
       } else {
         base = this.find_currency(this.conf.default_currency_id);
         change = this.find_currency(self.currency_id);
@@ -167,7 +177,8 @@
           'base': base,
           'change': self.exchange_rate
         });
-        return this.set_exchange_rate_html();
+        this.set_exchange_rate_html();
+        return this.set_total_currency();
       }
     };
     Transaction.prototype.set_exchange_rate_html = function() {
@@ -177,7 +188,7 @@
       currency = this.find_currency(this.conf.default_currency_id);
       change = this.find_currency(this.currency_id);
       exchange_rate = $(this.conf.currency_exchange_rate_id).val() * 1;
-      html = "1 " + change.name + " = <span class='b'>" + (_b.ntc(exchange_rate)) + "</span> " + (currency.name.pluralize()) + " ";
+      html = "1 " + change.name + "                                   = <span class = 'b'>" + (_b.ntc(exchange_rate)) + "</span> " + (currency.name.pluralize()) + " ";
       html += "<a id='edit_rate_link' href='javascript:'>editar</a>";
       return $span.html(html).mark();
     };
@@ -268,6 +279,13 @@
         }
       }
     };
+    Transaction.prototype.set_total_currency = function() {
+      var currency, tot_currency;
+      tot_currency = $(this.conf.total_id).data('val') / this.exchange_rate || 0;
+      currency = this.find_currency(this.currency_id);
+      $('#total_value_currency').html("" + currency.symbol + " " + (_b.ntc(tot_currency)));
+      return $('#currency_symbol').html("Total " + (currency.name.pluralize()));
+    };
     return Transaction;
   })();
   window.Transaction = Transaction;
@@ -288,39 +306,53 @@
       this.conf['currency_exchange_rate_id'] = '#income_currency_exchange_rate';
       this.conf['edit_rate_link_id'] = '#edit_rate_link';
       this.conf['insert_exchange_rate_prompt'] = "Ingrese el tipo de cambio";
-      this.set_total_event();
       Income.__super__.constructor.apply(this, arguments);
     }
-    Income.prototype.set_total_event = function() {
-      var self;
-      self = this;
-      return $('body').live('total', function() {
-        return self.set_total_currency();
-      });
-    };
-    Income.prototype.set_exchange_rate = function() {
-      Income.__super__.set_exchange_rate.apply(this, arguments);
-      if (this.conf.default_currency_id !== this.currency_id) {
-        return this.set_total_currency();
-      } else {
-        $('#total_value_currency').html("");
-        return $('#currency_symbol').html("");
-      }
-    };
-    Income.prototype.set_total_currency = function() {
-      var currency, tot_currency;
-      tot_currency = $(this.conf.total_id).data('val') / this.exchange_rate || 0;
-      currency = this.find_currency(this.currency_id);
-      $('#total_value_currency').html("" + currency.symbol + " " + (_b.ntc(tot_currency)));
-      return $('#currency_symbol').html("Total " + (currency.name.pluralize()));
-    };
-    Income.prototype.create_currency_message = function(currency) {
-      var message;
-      message = "Los items ahora tienen precios en <strong>" + (currency.name.pluralize()) + "</strong>, transformados con el tipo de cambio seleccionado";
-      $('#items_header').after("<div class='message' id='currency_message' style='display:none'><span class='close'>&nbsp;</span>" + message + "</div>");
-      return $('#currency_message').show("slow");
-    };
     return Income;
   })();
   window.Income = Income;
+  Buy = (function() {
+    __extends(Buy, Transaction);
+    function Buy(items, trigger, conf, currencies, exchange_rates) {
+      var self;
+      this.items = items;
+      this.trigger = trigger != null ? trigger : 'body';
+      if (conf == null) {
+        conf = {};
+      }
+      this.currencies = currencies;
+      this.exchange_rates = exchange_rates;
+      self = this;
+      this.conf['currency_id'] = '#buy_currency_id';
+      this.conf['discount_id'] = '#buy_discount';
+      this.conf['currency_exchange_rate_id'] = '#buy_currency_exchange_rate';
+      this.conf['edit_rate_link_id'] = '#edit_rate_link';
+      this.conf['insert_exchange_rate_prompt'] = "Ingrese el tipo de cambio";
+      Buy.__super__.constructor.apply(this, arguments);
+    }
+    return Buy;
+  })();
+  window.Buy = Buy;
+  Expense = (function() {
+    __extends(Expense, Transaction);
+    function Expense(items, trigger, conf, currencies, exchange_rates) {
+      var self;
+      this.items = items;
+      this.trigger = trigger != null ? trigger : 'body';
+      if (conf == null) {
+        conf = {};
+      }
+      this.currencies = currencies;
+      this.exchange_rates = exchange_rates;
+      self = this;
+      this.conf['currency_id'] = '#expense_currency_id';
+      this.conf['discount_id'] = '#expense_discount';
+      this.conf['currency_exchange_rate_id'] = '#expense_currency_exchange_rate';
+      this.conf['edit_rate_link_id'] = '#edit_rate_link';
+      this.conf['insert_exchange_rate_prompt'] = "Ingrese el tipo de cambio";
+      Expense.__super__.constructor.apply(this, arguments);
+    }
+    return Expense;
+  })();
+  window.Buy = Buy;
 }).call(this);

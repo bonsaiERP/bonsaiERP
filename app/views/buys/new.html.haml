@@ -1,0 +1,8 @@
+- content_for :links do
+  %ul.breadcrumps
+    %li #{link_to 'Compras', buys_path} <span>&gt;</span>
+
+%h1 Nueva compra
+
+= render 'transactions/form', :transaction => @buy, :contacts => Supplier.org
+

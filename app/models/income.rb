@@ -64,7 +64,7 @@ private
   def set_ref_number
     if ref_number.blank?
       refs            = Income.org.order("ref_number DESC").limit(1)
-      self.ref_number = refs.any? ? refs.first.ref_number.next : "V-00001"
+      self.ref_number = refs.any? ? refs.first.ref_number.next : "V-#{Date.now.year}-0001"
     end
   end
 

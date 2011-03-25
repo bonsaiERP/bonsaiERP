@@ -2,16 +2,25 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class Buy < Transaction
-  acts_as_org
 
+  after_initialize :set_ref_number, :if => :new_record?
 
   STATES = ["draft", "aproved", "paid"]
 
   belongs_to :supplier, :foreign_key => 'contact_id'
 
-  attr_accessor :store_id
-  #scope :pay, :conditions => { :organisation_id => OrganisationSession.id, :state => 'due' }
-  #scope :aprove, :conditions => { :organisation_id => OrganisationSession.id, :state => 'draft' }
-  #scope :all, :conditions => { :organisation_id => OrganisationSession.id }
 
+  attr_accessible  :ref_number,  :date,                          :contact_id,
+                   :project_id,  :currency_id,                   :currency_exchange_rate,
+                   :bill_number, :taxis_ids,                     :description,
+                   :transaction_details_attributes
+
+private
+  # Initialized  the ref_number
+  def set_ref_number
+    if ref_number.blank?
+      refs            = Income.org.order("ref_number DESC").limit(1)
+      self.ref_number = refs.any? ? refs.first.ref_number.next : "C-#{Date.now.year}-0001"
+    end
+  end
 end
