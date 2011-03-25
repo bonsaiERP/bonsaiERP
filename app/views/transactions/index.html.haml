@@ -1,31 +1,42 @@
-%h1= plural_table_name
+- content_for :links do
+  .links= link_to "Nueva venta", new_income_path, :class => 'new'
 
-%p.links= link_to "Nuevo transaction", new_transaction_path, :class => 'new'
+%h1 Ventas
+
+%ul.tabs
+  %li= link_incomes "Todas", 'all'
+  %li= link_incomes "Esperando aprobación", 'draft'
+  %li= link_incomes "Esperando cobro", 'awaiting_payment'
+  %li= link_incomes "Vencidas", 'due'
+  %li= link_incomes "Pagadas", 'paid'
+
+= paginate @incomes
 
 %table{ :class => 'decorated nwl' }
   %thead
     %tr
-      %th= Transaction.human_attribute_name :contact_id
-      %th= Transaction.human_attribute_name :type
-      %th= Transaction.human_attribute_name :total
-      %th= Transaction.human_attribute_name :active
-      %th= Transaction.human_attribute_name :description
-      %th= Transaction.human_attribute_name :state
-      %th= Transaction.human_attribute_name :date
-      %th= Transaction.human_attribute_name :ref_number
-      %th= Transaction.human_attribute_name :balance
+      %th{ :title => 'Número de referencia' } Num. Ref.
+      %th Contacto
+      %th Fecha
+      %th Total<br/>#{currency_plural}
+      %th Saldo<br/>#{currency_plural}
+      %th{:title => 'Moneda'} Mon.
+      %th Estado
+      %th Contado<br/>Crédito
+      %th Vence el
       %th
-  
+
   %tbody
-    - for transaction in @transactions
+    - for income in @incomes
       %tr{ :class => cycle(:odd, :even) }
-        %td= transaction.contact_id
-        %td= transaction.type
-        %td= transaction.total
-        %td= transaction.active
-        %td= transaction.description
-        %td= transaction.state
-        %td= transaction.date
-        %td= transaction.ref_number
-        %td= transaction.balance
-        %td.action= bonsai_links(transaction)
+        %td= link_to income.ref_number, income, :class => 'b'
+        %td= income.contact
+        %td.nw= lo income.date
+        %td.cur= exchange(income, :real_total, @currency_rates)
+        %td.cur= exchange(income, :balance, @currency_rates)
+        %td <span>#{income.currency_symbol}</span>
+        %td <span class="#{income.real_state}">#{income.show_state}</span>
+        %td= cash_credit(income.cash)
+        %td= lo income.payment_date unless income.paid?
+        %td.actions
+          = bonsai_links(income) if income.draft?

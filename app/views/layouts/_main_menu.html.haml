@@ -2,43 +2,39 @@
   - if organisation?
     %li= link_to "Inicio", dashboard_path 
     %li
-      %a.more{ :href => "javascript:"} Operaciones
-      %ul.more{:style => 'width:350px;'}
+      %a.more{ :href => "javascript:"} Finanzas
+      %ul.more{:style => 'width:380px;'}
         %li.more
-          .input
+          .fl._33
             %ul
-              %li.dark_grey.b Ingresos
               %li <a href="/incomes">Ventas</a>
-              %li.dark_grey.b Egresos
               %li <a href="/buys">Compras</a>
               %li <a href="/expenses">Gastos</a>
-          .input
+          .fl._33
             %ul
-              %li <a href="/projects">Proyectos</a>
               %li <a href="/clients">Clientes</a>
               %li <a href="/suppliers">Proveedores</a>
+              %hr/
+              %li <a href="/banks">Bancos</a>
+              %li <a href="/cash_registers">Cajas</a>
+          .fl._33
+            %ul
+              %li <a href="/projects">Proyectos</a>
               %li <a href="/taxes">Impuestos</a>
           .clear
     %li
       %a.more{ :href => "javascript:"} Inventarios
       %ul.more
-        %li <a href="/stores">Almacenes</a>
-        %li <a href="/items">Items</a>
-        %li <a href="/units">Unidades de medida</a> 
-        %li <a href="/stocks">Stocks</a>
-        %li <a href="/transferences">Transferencias</a>
+        %li.more
+          %ul
+            %li <a href="/stores">Almacenes</a>
+            %li <a href="/items">Items</a>
+            %li <a href="/units">Unidades de medida</a> 
+            %li <a href="/stocks">Stocks</a>
+            %li <a href="/transferences">Transferencias</a>
+          .clear
     
     %li
       %a.more{ :href => "javascript:"} Cuentas
       %ul.more
-        %li <a href="/banks">Bancos</a>
-        %li <a href="/cash_registers">Cajas</a>
-    
-    %li
-      %a.more{ :href => "javascript:"} Reportes
-      %ul.more
-        %li= link_to "General" 
-        %li= link_to "Item" 
-        %li= link_to "Stoks" 
-        %li= link_to "in vs. out" 
     

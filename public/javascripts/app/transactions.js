@@ -295,9 +295,7 @@
       var self;
       self = this;
       return $('body').live('total', function() {
-        if (self.conf.default_currency_id !== self.currency_id) {
-          return self.set_total_currency();
-        }
+        return self.set_total_currency();
       });
     };
     Income.prototype.set_exchange_rate = function() {

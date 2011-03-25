@@ -363,7 +363,7 @@ ul#main_menu{
   border-radius: 4px;
 
   ul{ display: block; padding: 0px 10px; clear: both; }
-  li{ width: 100%; margin-left: 5px; padding: 3px; color: @dark; list-style: disc; }
+  li{ width: 100%; margin-right: 3px; padding: 3px; color: @dark; }
 
   li.tit{ font-weight: bold; border-top: 1px solid @grey; margin-top: 3px; }
   li.tit, li.b{ color: @dark !important; }

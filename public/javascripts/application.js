@@ -393,10 +393,11 @@
       }, velocity);
     };
     $.mark = $.fn.mark = mark;
-    $('select[data-new_url]').each(function(i, el) {
-      var data;
+    $('[data-new_url]').each(function(i, el) {
+      var data, title;
       data = $(el).data();
-      return $(el).after(" <a href='" + ($(el).data('new_url')) + "' class='ajax' title='" + data.title + "' data-trigger='" + data.trigger + "'>" + data.title + "</a>");
+      title = data.title || "Nuevo";
+      return $(el).after(" <a href='" + data.new_url + "' title='" + title + "' class='ajax add icon' data-trigger='" + data.trigger + "'></a>");
     });
     createSelectOption = function(value, label) {
       var opt;

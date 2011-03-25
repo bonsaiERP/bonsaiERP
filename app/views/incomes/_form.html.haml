@@ -1,8 +1,5 @@
 :css
   /*input.price, input.quantity{ text-align: right; }*/
-  input.price{
-    display: none;
-  }
   #items_table .input{
     margin: 2px 0px;
   }
@@ -50,12 +47,10 @@
 
     = f.simple_fields_for :transaction_details do |fd|
       %tr.item
-        %td= fd.input :item_id, :label => false, :collection => Item.org.income.order(:name), :input_html => {:class => 'item fl'}
+        %td.cur= fd.input :item_id, :label => false, :collection => Item.org.income.order(:name), :input_html => {:class => 'item fl', 'data-new_url' => new_item_path, 'data-title' => 'Nuevo producto/servicio', 'data-trigger' => 'new_client'}
         %td= fd.input :description, :label => false
-        %td.cur
-          = fd.hidden_field :price, :class => 'price'
-          <span class="price_html">#{ntc fd.object.price}</span>
-        /, :input_html => { :size => 8, :class => 'price', :type => 'decimal }, :label => false
+
+        %td= fd.input :price, :input_html => { :size => 8, :class => 'price', :type => 'decimal' }, :label => false
         %td= fd.input :quantity, :input_html => { :size => 8, :class => 'quantity', :type => 'decimal' }, :label => false
 
         %td.total_row.r{'data-val' => fd.object.total }= ntc fd.object.total
@@ -83,8 +78,8 @@
 
     %tr.extra
       %td{:colspan => 2}
-      %td.r.b.dark#currency_symbol{:colspan => 2}= @income.currency_name.pluralize
-      %td.cur.b#total_value_currency #{@income.currency_symbol} #{@income.total_currency}
+        %td.r.b.dark#currency_symbol{:colspan => 2} Total #{@income.currency_name.pluralize}
+      %td.cur.b#total_value_currency #{@income.currency_symbol} #{ntc @income.total_currency}
   .actions
     = f.submit 'Salvar'
 
@@ -99,37 +94,6 @@
     var default_currency_id = #{currency_id};
     var income = new Income(items, "#income_form", {'default_currency_id': default_currency_id }, currencies, exchange_rates );
     window.income = income;
-
-    // Present hidden prices
-    $('.price').live('change', function() {
-      $(this).siblings('.price_html').html(_b.ntc($(this).val() ) );
-    });
-
-    $('<a/>').text('Inventario').addClass('inventario').css({'display':'none', 'position': 'absolute', 'background': '#FFF', 'padding': '4px 10px'})
-    .attr({'href':'javascript:', 'title':'Ver inventario'}).appendTo('body');
-    // Shon inventory
-    $('.decorated select').live("mouseover", function() {
-      if($(this).val() == "")
-        return false;
-      var pos = $(this).position();
-      $('a.inventario').css({'top': (pos.top + 2) + 'px', 'left':(pos.left - 80) + 'px'})
-      .attr({'href': ''}).show().data('target', this);
-    }).live("mouseout", function() {
-      setTimeout(function() {
-        if( !$('a.inventario').data('over')) {
-          $('a.inventario').hide();
-        }
-      }, 500);
-    });
-    $('a.inventario').live("mouseout mouseover", function(e) {
-      if(e.type == "mouseover") {
-        $(this).data('over', true).show()
-      }else{
-        $(this).data('over', false).hide();
-      }
-    });
-
-    $('a.inventario').hide();
 
     // Functions for the select boxes
     $('body').live('new_contact', function(e, resp) {

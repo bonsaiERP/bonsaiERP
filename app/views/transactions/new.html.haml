@@ -1,3 +1,6 @@
-%h1= Nuevo transaction
-%p.links= link_to 'Lista', transactions_path, :class => 'list'
+- content_for :links do
+  %ul.breadcrumps
+    %li #{link_to 'Ventas', incomes_path} <span>&gt;</span>
+%h1 Nueva proforma de venta
+
 = render :partial => 'form'

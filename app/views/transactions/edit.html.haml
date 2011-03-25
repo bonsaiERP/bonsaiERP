@@ -1,6 +1,9 @@
-%h1= Editar transaction
-%p.links
-  = link_to 'Ver', @transaction, :class => 'list'
-  = link_to 'Lista', transactions_path, :class => 'show'
+- content_for :links do
+  %ul.breadcrumps
+    %li #{link_to 'Ventas', incomes_path} <span>&gt;</span>
+  .links
+    = link_to 'Ver', @income, :class => 'show'
+
+%h1 Editar proforma de venta
 
 = render :partial => 'form'

@@ -1,33 +1,137 @@
-%h1= Transacción
-%p.links
-  = link_to t('Editar'), edit_transaction_path(@transaction), :class => 'edit'
-  = link_to t('Lista'), transactions_path, :class => 'list'
+- content_for :links do
+  %ul.breadcrumps
+    %li #{link_to "Ventas", incomes_path}<span>&gt;</span>
 
-%div
-  %p
-    %label= Transaction.human_attribute_name :contact_id
-    %span= @transaction.contact_id
-  %p
-    %label= Transaction.human_attribute_name :type
-    %span= @transaction.type
-  %p
-    %label= Transaction.human_attribute_name :total
-    %span= @transaction.total
-  %p
-    %label= Transaction.human_attribute_name :active
-    %span= @transaction.active
-  %p
-    %label= Transaction.human_attribute_name :description
-    %span= @transaction.description
-  %p
-    %label= Transaction.human_attribute_name :state
-    %span= @transaction.state
-  %p
-    %label= Transaction.human_attribute_name :date
-    %span= @transaction.date
-  %p
-    %label= Transaction.human_attribute_name :ref_number
-    %span= @transaction.ref_number
-  %p
-    %label= Transaction.human_attribute_name :balance
-    %span= @transaction.balance
+  .links
+    = link_to 'Nueva', new_income_path, :class => 'add'
+    - if @income.draft?
+      = link_to 'Editar', edit_income_path(@income), :class => 'edit'
+      = link_to 'Borrar', @income, :class => 'delete'
+.clear
+
+._40.fr.r
+  = link_to "Email","", :class => 'email'
+  &nbsp;&nbsp;
+  = link_to "Imprimir","", :class => 'print'
+
+%h1.mb5{:style => 'display:inline-block;'} #{note_title(@income)} de venta #{@income.ref_number}
+%span.b#income_state{:class => @income.real_state, :style => 'font-size:1.3em'}= @income.show_state
+%h2.n.mt5= link_to @income.contact, "#", :title => "Historial cliente"
+
+.clear
+
+.moneybox
+  %label Total
+  %h3#total_currency #{@income.currency_symbol} #{ntc @income.total_currency}
+
+- unless @income.state == 'paid'
+  .moneybox
+    %label Saldo a cobrar
+    %h3#balance #{@income.currency_symbol} #{ntc @income.balance}
+  
+= "Vence el <strong id='due_on'>#{lo @income.payment_date}</strong></span>".html_safe unless @income.paid? or @income.draft?
+
+._50.fr.r
+  / FORM to null income
+  - if @income.draft?
+    = simple_form_for @income, :url => approve_income_path(@income) do |f|
+      .submit
+        =f.submit "Aprobar", :class => 'dark_green', :id => 'income_approve_button'
+  /- elsif not @income.paid?
+  /  = simple_form_for @income, :url => null_income_path(@income) do |f|
+  /    .submit
+  /      =f.submit "Anular", :class => 'red', :id => 'income_null_button'
+
+.clear
+#tabs
+  %ul
+    %li <a href="#information" id="tab_info">Información</a>
+    - unless @income.draft?
+      %li <a href="#payments" id="tab_payments">Cobros</a>
+    %li <a href="#pay_plans" id="tab_pay_plans">Crédito</a>
+
+  #information
+
+    .main{:style => 'font-size:1.2em;'}
+      %span.dark.b.i= lo @income.date
+
+    .input
+      - unless @income.currency_id == currency_id
+        .input
+          1 #{@income.currency.name} = <span class="b">#{@income.currency_exchange_rate}</span> #{currency_name.pluralize}
+
+      - if @income.project_id
+        .input
+          %span.dark_grey 
+            -if @income.project_id
+              Proyecto #{link_to @income.project.to_s, @income.project, :title => 'Proyecto'}
+    .input= @income.description unless @income.description.blank?
+
+
+    .clear
+
+    = render 'items', :income => @income
+
+  #payments
+    =render "/payments/payments", :transaction => @income if @income.show_payments?
+    .clear
+
+  #pay_plans
+    =render "/pay_plans/pay_plans", :transaction => @income if @income.show_pay_plans?
+
+:javascript
+  $(function () {
+    $('#tabs').tabs();
+
+    if(!#{@income.paid?} && #{@income.cash}) {
+      $('#new_payment_link').trigger('click');
+    }
+
+    /**
+    * Sets the state for Income
+    * @param String state
+    */
+    function setIncomeState(state) {
+      if(state == 'paid') {
+        $('#payment_anchor').html('Ver cobros');
+        $('#pay_plan_anchor').html('Ver crédito');
+        $('#income_state').html('Pagado').attr('class', '').addClass('b paid');
+      }else{
+        if(state == 'due') {
+          $('#income_state').attr("class", '').addClass("b " + state).html("Vencido");
+        }else{
+          $('#income_state').attr("class", '').addClass("b " + state).html("Aprobado");
+        }
+      }
+    }
+
+
+    // Only when in edition
+    if("#{@income.state}" == "draft") {
+      // Deleted data
+      $('body').live("del-pay_plan", function(resp) {
+        try{
+          if(resp.transaction_cash == true) {
+            $('#cash_credit_title').html('Crédito');
+          }else if(resp.transaction_cash == false){
+            $('#cash_credit_title').html('Contado');
+          }
+        } catch(e) {}
+      }).live('transaction', function(e, resp) {
+        if(resp.transaction_cash) {
+          $('#cash_credit_title').html("Contado");
+        }else{
+          $('#cash_credit_title').html("Crédito");
+        }
+      });
+    }else {
+      // When it has been approved
+      $('body').live('transaction', function(e, resp) {
+        
+        $('h3#balance').html("#{@income.currency_symbol} " + _b.ntc(resp.balance) );
+        $('#due_on').html(_b.dateFormat(resp.payment_date));
+
+        setIncomeState(resp.real_state);
+      });
+    }
+  });

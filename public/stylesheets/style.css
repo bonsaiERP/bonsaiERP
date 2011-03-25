@@ -272,9 +272,18 @@ ul#main_menu ul.more a:hover { text-decoration: underline; }
 }
 #main_menu li.more li {
   width: 100%;
+  margin-left: 5px;
   padding: 3px;
-  list-style: none;
+  color: #484a4c;
+  list-style: disc;
 }
+#main_menu li.more li.tit {
+  font-weight: bold;
+  border-top: 1px solid #c6c6c6;
+  margin-top: 3px;
+}
+#main_menu li.more li.tit { color: #484a4c !important; }
+#main_menu li.more li.b { color: #484a4c !important; }
 #main_menu > li:hover ul.more {
   display: block;
   position: absolute;

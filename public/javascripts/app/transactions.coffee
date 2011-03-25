@@ -247,8 +247,8 @@ class Income extends Transaction
   set_total_event: ->
     self = this
     $('body').live('total', ->
-      unless self.conf.default_currency_id == self.currency_id
-        self.set_total_currency()
+      #unless self.conf.default_currency_id == self.currency_id
+      self.set_total_currency()
     )
 
   # Override the default event because when the currency is changed the prices change#Event for currency change

@@ -51,7 +51,6 @@ class PayPlansController < ApplicationController
 
     if @pay_plan.valid? and @transaction.create_pay_plan(params[:pay_plan])
         render 'create'
-      end
     else
       render :action => "new"
     end
@@ -72,7 +71,6 @@ class PayPlansController < ApplicationController
     if @pay_plan.valid? and @transaction.update_pay_plan(options)
         @transaction = Transaction.find(@transaction.id)
         render 'create'
-      end
     else
       @pay_plan.id = params[:id].to_i
       render :action => "edit"

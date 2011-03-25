@@ -385,9 +385,10 @@ $(document).ready(->
   $.mark = $.fn.mark = mark
 
   # Adds a new link to any select with a data-new-url
-  $('select[data-new_url]').each((i, el)->
+  $('[data-new_url]').each((i, el)->
     data = $(el).data()
-    $(el).after(" <a href='#{$(el).data('new_url')}' class='ajax' title='#{data.title}' data-trigger='#{data.trigger}'>#{data.title}</a>")
+    title = data.title || "Nuevo"
+    $(el).after(" <a href='#{data.new_url}' title='#{title}' class='ajax add icon' data-trigger='#{data.trigger}'></a>")
   )
 
   createSelectOption = (value, label)->

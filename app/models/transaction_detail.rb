@@ -5,6 +5,9 @@ class TransactionDetail < ActiveRecord::Base
   acts_as_org
   # callbacks
   after_initialize :set_defaults
+  before_save      :set_original_price
+  
+  attr_protected :original_price
 
   # relationships
   belongs_to :transaction
@@ -18,10 +21,23 @@ class TransactionDetail < ActiveRecord::Base
     price * quantity
   end
 
+  # Indicates if in an Income the item price has changed
+  def changed_price?
+    if transaction.type == "Income"
+      not(price == original_price)
+    else
+      false
+    end
+  end
+
 private
   def set_defaults
     self.price ||= 0
     self.quantity ||= 0
   end
 
+  # sets the original price of the item
+  def set_original_price
+    self.original_price = item.price
+  end
 end

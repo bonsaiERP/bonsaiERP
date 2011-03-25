@@ -46,4 +46,12 @@ module TransactionsHelper
     klass.taxes.map(&:abbreviation).join(" + ")
   end
 
+  # Indicates if there was a price change only for Income
+  def price_change(klass)
+    if klass.changed_price?
+      "<span class='dark' title='Precio original: #{ntc klass.original_price}' >#{ntc klass.price}</span>".html_safe
+    else
+      ntc klass.price
+    end
+  end
 end
