@@ -334,7 +334,7 @@ ActiveRecord::Schema.define(:version => 20110324193213) do
     t.string   "ref_number"
     t.string   "bill_number"
     t.integer  "currency_id"
-    t.decimal  "currency_exchange_rate",               :precision => 14, :scale => 6
+    t.decimal  "currency_exchange_rate",               :precision => 14, :scale => 4
     t.integer  "organisation_id"
     t.datetime "created_at"
     t.datetime "updated_at"

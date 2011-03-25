@@ -267,7 +267,7 @@ private
   def get_exchange_rate_text
     unless transaction.currency_id == account.currency_id
       #cur = Currency.find(account.currency_id)
-      er = number_to_currency(exchange_rate)
+      er = number_to_currency(exchange_rate, :precision => 4)
       " Tipo de cambio 1 #{transaction.currency_name} = #{er} #{account.currency_name.pluralize}"
     end
   end

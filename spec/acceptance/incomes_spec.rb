@@ -291,7 +291,7 @@ feature "Income", "test features" do
 
     p.save.should == true
     p.account_ledger.currency_id.should == 1
-    p.account_ledger.description.downcase.should =~ /1 dolar = 7,00 bolivianos/
+    p.account_ledger.description.downcase.should =~ /1 dolar = 7,0000 bolivianos/
     p.account_ledger.amount.should == 20 * 7
 
     i = Income.find(i.id)
@@ -373,7 +373,7 @@ feature "Income", "test features" do
 
     p.save.should == true
     p.account_ledger.currency_id.should == 1
-    p.account_ledger.description.downcase.should =~ /1 dolar = 7,00 bolivianos/
+    p.account_ledger.description.downcase.should =~ /1 dolar = 7,0000 bolivianos/
     p.account_ledger.amount.should == 20 * 7
 
     i = Income.find(i.id)
