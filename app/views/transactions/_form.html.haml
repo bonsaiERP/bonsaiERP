@@ -80,13 +80,14 @@
 
     %tr.extra
       %td{:colspan => 2}
-        %td.r.b.dark#currency_symbol{:colspan => 2} Total #{transaction.currency_name.pluralize}
-      %td.cur.b#total_value_currency #{transaction.currency_symbol} #{ntc transaction.total_currency}
+      %td.r.b.dark#currency_symbol{:colspan => 2}= "Total #{transaction.currency_name.pluralize}" if transaction.currency_id.present?
+      %td.cur.b#total_value_currency= "#{transaction.try(:currency_symbol)} #{ntc transaction.total_currency}" if transaction.currency_id.present?
+
   .actions
     = f.submit 'Salvar'
 
-
 = javascript_include_tag "app/transactions"
+
 :javascript
   $(function() {
     var items = #{ @items.json.to_json };

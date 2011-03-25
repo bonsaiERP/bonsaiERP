@@ -312,6 +312,7 @@ private
     self.tax_percent = taxes.inject(0) {|sum, t| sum += t.rate }
     self.gross_total ||= 0
     self.total ||= 0
+    self.date ||= Date.today
   end
 
   def set_trans_to_true
@@ -328,7 +329,7 @@ private
   def calculate_total_and_set_balance
     self.gross_total = transaction_details.select{|t| !t.marked_for_destruction? }.inject(0) {|sum, det| sum += det.total }
     self.total = gross_total - total_discount + total_taxes
-    self.balance = total / currency_exchange_rate
+    self.balance = total / currency_exchange_rate if total > 0
   end
 
   # Determines if it is a transaction or other operation
@@ -339,4 +340,11 @@ private
   def aproving?
     aproving
   end
+
+  # To have at least one item
+  def valid_number_of_items
+    self.errors.add(:base, "Debe ingresar seleccionar al menos un ítem") unless self.transaction_details.any?
+  end
+
+
 end

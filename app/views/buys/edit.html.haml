@@ -1,8 +1,9 @@
 - content_for :links do
   %ul.breadcrumps
     %li #{link_to 'Compras', buys_path} <span>&gt;</span>
+  .links
+    = link_to 'Ver', @transaction, :class => 'show'
 
-%h1 Nueva compra
+%h1 Editar compra
 
 = render 'transactions/form', :transaction => @transaction, :contacts => Supplier.org
-

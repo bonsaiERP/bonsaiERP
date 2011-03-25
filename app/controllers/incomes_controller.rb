@@ -26,29 +26,31 @@ class IncomesController < ApplicationController
   # GET /incomes/new
   # GET /incomes/new.xml
   def new
-    @income = Income.new(:date => Date.today, :discount => 0, :currency_exchange_rate => 1, :currency_id => currency_id )
-    @income.transaction_details.build
+    @transaction = Income.new(:date => Date.today, :discount => 0, :currency_exchange_rate => 1, :currency_id => currency_id )
+    @transaction.transaction_details.build
   end
 
   # GET /incomes/1/edit
   def edit
-    if @income.state == 'approved'
+    if @transaction.state == 'approved'
       flash[:warning] = "No es posible editar una nota de venta aprobada"
-      redirect_to @income
+      redirect_to @transaction
     end
   end
 
   # POST /incomes
   # POST /incomes.xml
   def create
-    @income = Income.new(params[:income])
+    @transaction = Income.new(params[:transaction])
+
     respond_to do |format|
-      if @income.save
-        format.html { redirect_to(@income, :notice => 'Se ha creado una proforma de venta.') }
-        format.xml  { render :xml => @income, :status => :created, :location => @income }
+      if @transaction.save
+        format.html { redirect_to(@transaction, :notice => 'Se ha creado una proforma de venta.') }
+        format.xml  { render :xml => @transaction, :status => :created, :location => @transaction }
       else
+        @transaction.transaction_details.build unless @transaction.transaction_details.any?
         format.html { render :action => "new" }
-        format.xml  { render :xml => @income.errors, :status => :unprocessable_entity }
+        format.xml  { render :xml => @transaction.errors, :status => :unprocessable_entity }
       end
     end
   end
@@ -56,12 +58,13 @@ class IncomesController < ApplicationController
   # PUT /incomes/1
   # PUT /incomes/1.xml
   def update
-    if @income.approved?
-      redirect_income
+    if @transaction.approved?
+      redirect_transaction
     else
-      if @income.update_attributes(params[:income])
-        redirect_to @income, :notice => 'La proforma de venta fue actualizada!.'
+      if @transaction.update_attributes(params[:transaction])
+        redirect_to @transaction, :notice => 'La proforma de venta fue actualizada!.'
       else
+        @transaction.transaction_details.build unless @transaction.transaction_details.any?
         render :action => "edit"
       end
     end
@@ -70,11 +73,11 @@ class IncomesController < ApplicationController
   # DELETE /incomes/1
   # DELETE /incomes/1.xml
   def destroy
-    if @income.approved?
-      redirect_income
+    if @transaction.approved?
+      redirect_transaction
     else
-      @income.destroy
-      redirect_ajax @income
+      @transaction.destroy
+      redirect_ajax @transaction
     end
   end
   

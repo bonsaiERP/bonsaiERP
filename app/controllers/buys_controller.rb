@@ -31,20 +31,42 @@ class BuysController < ApplicationController
 
   # GET /buys/1/edit
   def edit
-    @transaction = Buy.find(params[:id])
+    if @transaction.state == 'approved'
+      flash[:warning] = "No es posible editar una nota de venta aprobada"
+      redirect_to @transaction
+    end
   end
+
 
   # POST /buys
   # POST /buys.xml
   def create
-    @transaction = Buy.new(params[:buy])
-    @transaction.save
+    @transaction = Buy.new(params[:transaction])
+    respond_to do |format|
+      if @transaction.save
+        format.html { redirect_to(@transaction, :notice => 'Se ha creado una proforma de venta.') }
+        format.xml  { render :xml => @transaction, :status => :created, :location => @transaction }
+      else
+        @transaction.transaction_details.build unless @transaction.transaction_details.any?
+        format.html { render :action =>  "new" }
+        format.xml  { render :xml => @transaction.errors, :status => :unprocessable_entity }
+      end
+    end
   end
 
   # PUT /buys/1
   # PUT /buys/1.xml
   def update
-    @transaction.update_attributes(params[:buy])
+    if @transaction.approved?
+      redirect_transaction
+    else
+      if @transaction.update_attributes(params[:transaction])
+        redirect_to @transaction, :notice => 'La proforma de venta fue actualizada!.'
+      else
+        @transaction.transaction_details.build unless @transaction.transaction_details.any?
+        render :action => "edit"
+      end
+    end
   end
 
   # DELETE /buys/1

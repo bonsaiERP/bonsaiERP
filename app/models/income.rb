@@ -20,10 +20,9 @@ class Income < Transaction
 
   
 
-  #accepts_nested_attributes_for :transaction_details, :allow_destroy => true
   #validations
-  validates_presence_of :date
-  validates_length_of   :description,          :within => 0..255
+  #validates_length_of   :description,          :within => 0..255
+  validates_presence_of :date, :contact_id
   validates             :ref_number,           :presence => true , :uniqueness => { :scope => :organisation_id, :allow_blank => false}
   validate              :valid_number_of_items
 
@@ -36,10 +35,6 @@ private
       refs            = Income.org.order("ref_number DESC").limit(1)
       self.ref_number = refs.any? ? refs.first.ref_number.next : "V-#{Date.today.year}-0001"
     end
-  end
-
-  def valid_number_of_items
-    self.errors.add(:base, "Debe ingresar seleccionar al menos un ítem") unless self.transaction_details.any?
   end
 
   def set_client

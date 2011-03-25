@@ -2,8 +2,8 @@
   %ul.breadcrumps
     %li #{link_to 'Ventas', incomes_path} <span>&gt;</span>
   .links
-    = link_to 'Ver', @income, :class => 'show'
+    = link_to 'Ver', @transaction, :class => 'show'
 
 %h1 Editar proforma de venta
 
-= render :partial => 'form'
+= render 'transactions/form', :transaction => @transaction, :contacts => Client.org

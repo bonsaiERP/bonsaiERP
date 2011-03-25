@@ -87,6 +87,13 @@ module TransactionsHelper
     end
   end
 
+  def transaction_type
+    case params[:controller]
+    when "incomes"  then "Ventas"
+    when "buys"     then "Compras"
+    when "expenses" then "Gastos"
+    end
+  end
 
   # Returns if the organisation has to pay or recive a payment
   def transaction_pay_method
