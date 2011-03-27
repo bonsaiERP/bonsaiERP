@@ -1,0 +1,47 @@
+- content_for :links do
+  .links= link_to "Nueva compra", new_buy_path, :class => 'new'
+
+%h1 Gastos
+
+%ul.tabs
+  %li= link_incomes "Todas", 'all'
+  %li= link_incomes "Esperando aprobación", 'draft'
+  %li= link_incomes "Esperando pago", 'awaiting_payment'
+  %li= link_incomes "Vencidas", 'due'
+  %li= link_incomes "Pagadas", 'paid'
+
+= paginate @buys
+
+%table{ :class => 'decorated nwl' }
+  %thead
+    %tr
+      %th{ :title => 'Número de referencia' } Num. Ref.
+      %th Contacto
+      %th Fecha
+      %th Total<br/>#{currency_plural}
+      %th Saldo<br/>#{currency_plural}
+      %th{:title => 'Moneda'} Mon.
+      %th Estado
+      %th Contado<br/>Crédito
+      %th Vence el
+      %th
+
+  %tbody
+    - for expense in @expenses
+      %tr{ :class => cycle(:odd, :even) }
+        %td= link_to expense.ref_number, expense, :class => 'b'
+        %td= expense.contact
+        %td.nw= lo expense.date
+        %td.cur= exchange(expense, :real_total, @currency_rates)
+        %td.cur= exchange(expense, :balance, @currency_rates)
+        %td <span>#{expense.currency_symbol}</span>
+        %td <span class="#{expense.real_state}">#{expense.show_state}</span>
+        %td= cash_credit(expense.cash)
+        %td= lo expense.payment_date unless expense.paid?
+        %td.actions
+          = bonsai_links(expense) if expense.draft?
+
+:javascript
+  jQuery(function($) {
+    $('ul.buy-types').tabs('div.buy-panes > div', {effect: 'ajax'});
+  });

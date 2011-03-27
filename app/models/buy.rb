@@ -5,8 +5,6 @@ class Buy < Transaction
 
   after_initialize :set_ref_number, :if => :new_record?
 
-  STATES = ["draft", "aproved", "paid"]
-
   belongs_to :supplier, :foreign_key => 'contact_id'
 
 

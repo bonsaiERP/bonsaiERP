@@ -1,7 +1,7 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class BuysController < ApplicationController
+class ExpensesController < ApplicationController
 
   before_filter :set_currency_rates, :only => [:index, :show]
   before_filter :set_transaction, :only => [:show, :edit, :update, :destroy, :approve]
@@ -10,7 +10,7 @@ class BuysController < ApplicationController
   # GET /buys
   # GET /buys.xml
   def index
-    @buys = Buy.find_with_state(params[:option]).page(@page)
+    @buys = Expense.find_with_state(params[:option]).page(@page)
   end
 
   # GET /buys/1
@@ -96,6 +96,6 @@ private
   end
 
   def set_transaction
-    @transaction = Buy.org.find(params[:id])
+    @transaction = Expense.org.find(params[:id])
   end
 end
