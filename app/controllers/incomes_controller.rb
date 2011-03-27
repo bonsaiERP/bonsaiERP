@@ -41,7 +41,7 @@ class IncomesController < ApplicationController
   # POST /incomes
   # POST /incomes.xml
   def create
-    @transaction = Income.new(params[:transaction])
+    @transaction = Income.new(params[:income])
 
     respond_to do |format|
       if @transaction.save
@@ -61,7 +61,7 @@ class IncomesController < ApplicationController
     if @transaction.approved?
       redirect_transaction
     else
-      if @transaction.update_attributes(params[:transaction])
+      if @transaction.update_attributes(params[:income])
         redirect_to @transaction, :notice => 'La proforma de venta fue actualizada!.'
       else
         @transaction.transaction_details.build unless @transaction.transaction_details.any?

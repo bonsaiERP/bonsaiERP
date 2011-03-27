@@ -24,6 +24,7 @@
     %th Monto en<br/>#{account.currency}
     %th Contacto
     %th Descripción
+    %th Conciliado
     %th
   - ledgers.each do |al|
     %tr{:class => al.income.to_s + '_in' }
@@ -32,8 +33,8 @@
       %td.r= ntc al.amount
       %td= al.contact if al.contact_id
       %td= link_description al
-      %td
+      %td{:class => al.conciliation.to_s}
+      %td.cur
         - unless al.conciliation?
-          = link_to "Conciliar", al, :class => 'concile'
-          = link_to "borrar", al, :class => 'delete', 'data-remote' => true, :title => 'Borrar'
+          = link_to "borrar", al, :class => 'delete fl', 'data-remote' => true, :title => 'Borrar'
 

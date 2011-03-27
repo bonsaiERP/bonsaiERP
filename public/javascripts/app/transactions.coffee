@@ -259,6 +259,7 @@ class Transaction
   set_total_currency: ->
     tot_currency = $(@conf.total_id).data('val') / this.exchange_rate || 0
     currency = this.find_currency(this.currency_id)
+
     $('#total_value_currency').html("#{currency.symbol} #{_b.ntc(tot_currency)}")
     $('#currency_symbol').html("Total #{currency.name.pluralize()}")
 
