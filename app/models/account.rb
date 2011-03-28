@@ -12,7 +12,7 @@ class Account < ActiveRecord::Base
   attr_accessor :amount
   attr_protected :total_amount
 
-  delegate :name, :symbol, :code, :to => :currency, :prefix => true
+  delegate :name, :symbol, :code, :plural, :to => :currency, :prefix => true
 
 
   #validations

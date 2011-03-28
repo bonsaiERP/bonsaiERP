@@ -1,5 +1,5 @@
 :css
-  .false_in{ color: #FF0000; }
+  .false_in td.col{ color: #FF0000; }
   td.r{width: 110px; }
   td.check{width: 120px;}
   td.d{ width: 70px; }
@@ -9,7 +9,14 @@
     margin-right: 4px;
   }
 
-= link_to "Nueva transacción", new_account_ledger_path, :class => 'new'
+%ul.menu
+  %li
+    = link_to "Nuevo <span class='more'></span>".html_safe, "#", :class => 'new'
+    
+    %ul
+      %li= link_to "Nuevo ingreso", new_account_ledger_path(:account_id => account.id, :income => true)
+      %li= link_to "Nuevo egreso", new_account_ledger_path(:account_id => account.id, :income => false)
+      %li= link_to "Nueva transferencia", ""
 
 .clear
 = link_to "Buscar", "#", :class => 'search'
@@ -29,8 +36,8 @@
   - ledgers.each do |al|
     %tr{:class => al.income.to_s + '_in' }
       %td.d= link_to lo(al.date), al, :class => 'b'
-      %td.check= al.reference
-      %td.r= ntc al.amount
+      %td.col.check= al.reference
+      %td.r.col= ntc al.amount
       %td= al.contact if al.contact_id
       %td= link_description al
       %td{:class => al.conciliation.to_s}

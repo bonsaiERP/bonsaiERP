@@ -3,7 +3,7 @@
     %li #{link_account @account_ledger}<span>&gt;</span>
     %li #{link_to @account_ledger.account, @account_ledger.account}<span>&gt;</span>
   .links
-    = link_to 'Nuevo', new_account_ledger_path, :class => 'add'
+    = link_to 'Nueva transacción', new_account_ledger_path, :class => 'add'
 
 %h1 Transacción del #{lo @account_ledger.date}
 

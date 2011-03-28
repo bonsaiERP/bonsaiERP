@@ -23,4 +23,29 @@ module AccountsHelper
     when"CashRegister" then link_to "Cajas", al.account
     end
   end
+
+  # Creates for income or outcome title
+  def account_ledger_title(klass)
+    if klass.income?
+      "<span class='dark_green'>ingreso</span>".html_safe
+    else
+      "<span class='red'>egreso</span>".html_safe
+    end
+  end
+
+  def account_ledger_contact_label(klass)
+    if klass.income?
+      "Cliente"
+    else
+      "Proveedor"
+    end
+  end
+
+  def account_ledger_contact_collection(klass)
+    if klass.income?
+      Client.org
+    else
+      Supplier.org
+    end
+  end
 end

@@ -6,7 +6,8 @@ class AccountLedger < ActiveRecord::Base
 
   # callbacks
   after_initialize :set_defaults
-  before_save      :set_income
+  before_save      :set_income              
+  before_save      :set_currency
   after_save       :update_payment,         :if => :payment?
   after_save       :update_account_balance, :if => :conciliation?
   after_destroy    :destroy_payment,        :if => :payment?
@@ -22,8 +23,9 @@ class AccountLedger < ActiveRecord::Base
   attr_protected :conciliation
 
   # validations
-  validates_presence_of :account_id, :currency_id, :reference
-  validates_numericality_of :amount
+  validates_presence_of :account_id, :date, :reference, :amount, :contact_id
+  validates_numericality_of :amount, :greater_than => 0, :unless => :conciliation?
+  validate :valid_organisation_account
 
   # delegates
   delegate :name, :number, :type, :to => :account, :prefix => true
@@ -42,6 +44,7 @@ class AccountLedger < ActiveRecord::Base
 
 private
   def set_defaults
+    self.date ||= Date.today
     self.conciliation = self.conciliation.nil? ? false : conciliation
   end
 
@@ -49,14 +52,17 @@ private
     payment_id.present? and conciliation?
   end
 
-  # Determinas if the amount is income or expense
+  #  set the amount depending if income or outcome
   def set_income
-    if amount < 0
-      self.income = false
-    else
-      self.income = true
+    self.income = false if income.blank?
+    if (not(income) and amount > 0) or (income and amount < 0)
+      self.amount = -1 * amount
     end
     true
+  end
+
+  def set_currency
+    self.currency_id = account.currency_id if account_id.present?
   end
 
   # Updates the payment state, without triggering any callbacks
@@ -82,5 +88,12 @@ private
   # the if payment.present? will control if the payment was not already destroyed
   def destroy_payment
     payment.destroy if payment.present?
+  end
+
+  def valid_organisation_account
+    unless Account.org.map(&:id).include?(account_id)
+      logger.warn "El usuario #{UserSession.user_id} trato de hackear account_ledger"
+      errors.add(:base, "Ha seleccionado una cuenta inexistente regrese a la cuenta")
+    end
   end
 end

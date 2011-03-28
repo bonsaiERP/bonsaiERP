@@ -202,14 +202,14 @@ private
   # Creates an account ledger for the account and payment
   # indicates the record has been destroyed
   def create_account_ledger(destroy = false)
+    tot = total_amount_currency
     if transaction.type == "Income"
-      tot, income = [ total_amount_currency, true  ]
+      income = true
     else
-      tot, income = [-total_amount_currency, false ]
+      income = false
     end
 
     if destroy
-      tot = -1 * tot
       income = not(income)
     end
 
@@ -289,8 +289,6 @@ private
   def set_exchange_rate
     if account_id.blank? or transaction.currency_id == account.currency_id
       self.exchange_rate = 1
-      #elsif exchange_rate == 0 or exchange_rate.blank? and account_id.present?
-      #self.exchange_rate = CurrencyRate.active.find(account.currency_id).rate
     end
   end
 
