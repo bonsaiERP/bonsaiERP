@@ -3,6 +3,8 @@ Bonsaierp::Application.routes.draw do
   resources :account_ledgers do
     member do
       put :conciliate
+      get :new_transference
+      put :transference
     end
   end
   # put 'account_ledgers/conciliate/:id' => 'account_ledgers#conciliate', :as => :conciliate

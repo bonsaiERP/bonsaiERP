@@ -12,6 +12,7 @@ class AccountLedger < ActiveRecord::Base
   after_save       :update_account_balance, :if => :conciliation?
   after_destroy    :destroy_payment,        :if => :payment?
 
+
   # relationships
   belongs_to :account
   belongs_to :payment
@@ -19,7 +20,7 @@ class AccountLedger < ActiveRecord::Base
   belongs_to :currency
   belongs_to :transaction
 
-  attr_accessor  :payment_destroy
+  attr_accessor  :payment_destroy, :to_account, :to_amount, :to_exchange_rate
   attr_protected :conciliation
 
   # validations
@@ -41,6 +42,17 @@ class AccountLedger < ActiveRecord::Base
     self.conciliation = true
     self.save
   end
+
+  def self.get_by_option(option)
+    ledgers = includes(:payment, :transaction, :contact) 
+    case option
+    when 'false' then ledgers.pendent
+    when 'true' then ledgers.conciliated
+    else
+      ledgers
+    end
+  end
+
 
 private
   def set_defaults

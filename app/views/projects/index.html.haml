@@ -1,6 +1,10 @@
+- content_for :links do
+  .links
+    =link_to "Nuevo proyecto", new_project_path, :class => 'new'
+
+
 %h1 Projects
 
-=link_to "Nuevo proyecto", new_project_path, :class => 'new'
 
 %table{ :class => 'decorated nwl' }
   %thead

@@ -1,0 +1,69 @@
+-content_for :links do
+  %ul.breadcrumps
+    %li #{link_account @account_ledger}<span>&gt;</span>
+    %li #{link_to @account_ledger.account, @account_ledger.account}<span>&gt;</span>
+
+%h1 Nueva transferencia
+
+= simple_form_for @account_ledger, :url => transference_account_ledger_path(@account.id)  do |f|
+
+  = f.input :account_id, :as => :hidden
+  
+  .input._40
+    %label De cuenta
+    = @account
+
+  .input._60
+    = f.input :to_account, :collection => Account.org.where(["id !=?", @account_ledger.account_id]), :label => 'A cuenta', :wrapper_html => {:class => '_70'}
+    = f.input :to_amount, :label => 'Cantidad <span id="cur_label"></span>'.html_safe, :input_html => {:size => 12, :type => 'decimal', :class => 'r'}, :wrapper_html => {:class => '_30'}
+  .clear
+
+  - disp = @to_account.present? ? 'block' : 'none'
+
+  #al_exchange_rate{:style => "display:#{disp}"}
+    = f.label :to_exchange_rate, "Tipo de cambio &nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript:' id='cur_rates' class='n'>tipos de cambio</a>".html_safe
+    1 #{@account.currency_name} = 
+    = f.text_field :to_exchange_rate, :size => 6, :class => 'r'
+
+    - cur = @to_account.present? ? @account_to.currency_name.pluralize : ""
+    %span#exchange_rate_cur= cur
+    <span class="hint">Puede usar hasta 4 decimales</span>
+    - if f.object.errors[:to_exchange_rate].present?
+      %span.error= f.object.errors[:exchange_rate].join(", ")
+
+  .clear
+  = f.submit "Transferir"
+
+
+.rates.bg_white{:style => 'display:none'}
+  %h3 Tipos de cambio moneda base "#{currency_name}"
+  = render 'currency_rates/active', :currency_rates => CurrencyRate.active
+
+:javascript
+  $(function() {
+    var accounts = #{Account.json.to_json};
+    var currencies = #{Currency.json.to_json};
+    window.currencies = currencies;
+
+    $('#account_ledger_to_account').live("change keyup", function() {
+      var currency_id = accounts[$(this).val()].currency_id;
+      var label, cur = '';
+
+      if(currency_id != "" && currency_id != "#{@account_ledger.account.currency_id}") {
+        cur = currencies[currency_id];
+        label = cur.symbol + ' ' + cur.name.pluralize();
+        $('#cur_label').html(label);
+        $('#exchange_rate_cur').html(cur.name.pluralize() );
+        $('#al_exchange_rate').show().mark();
+      }else{
+        cur = currencies["#{@account_ledger.account.currency_id}"];
+        label = cur.symbol + ' ' + cur.name.pluralize();
+        $('#cur_label').html(label);
+        $('#al_exchange_rate').hide();
+      }
+    });
+
+    $('#cur_rates').click(function() {
+      createDialog({title:"Uno", width: 450, html: $('.rates').html(), modal: false });
+    });
+  });

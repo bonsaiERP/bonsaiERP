@@ -11,17 +11,27 @@
 
 %ul.menu
   %li
-    = link_to "Nuevo <span class='more'></span>".html_safe, "#", :class => 'new'
+    = link_to "Nueva <span class='more'></span>".html_safe, "#", :class => 'new'
     
     %ul
       %li= link_to "Nuevo ingreso", new_account_ledger_path(:account_id => account.id, :income => true)
       %li= link_to "Nuevo egreso", new_account_ledger_path(:account_id => account.id, :income => false)
-      %li= link_to "Nueva transferencia", ""
+      %li= link_to "Nueva transferencia", new_transference_account_ledger_path(account.id)
+
+
+.clear
+<br/><br/>
+- ac_path = account.is_a?(Bank) ? "/banks" : "cash_registers"
+
+%ul.tabs
+  %li= link_to "Todas", "#{ac_path}/#{account.id}", :class => tabs_filter('all')
+  %li= link_to "Esperando conciliación #{size_or_blank(account.account_ledgers.pendent.size)}", "#{ac_path}/#{account.id}?option=false", :class => tabs_filter('false')
+  %li= link_to "Conciliadas", "#{ac_path}/#{account.id}?option=true", :class => tabs_filter('true')
 
 .clear
 = link_to "Buscar", "#", :class => 'search'
 /"#", :style => 'display:block;float:left;margin:10px'
-- ledgers = account.account_ledgers.includes(:payment, :transaction).page(@page)
+- ledgers = account.account_ledgers.get_by_option(params[:option]).page(@page)
 = paginate ledgers
 
 %table.decorated.nwl.nwf

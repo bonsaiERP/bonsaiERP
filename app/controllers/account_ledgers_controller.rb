@@ -39,6 +39,18 @@ class AccountLedgersController < ApplicationController
     redirect_ajax @account_ledger
   end
 
+  # GET
+  def new_transference
+    @account             = Account.org.find(params[:id])
+    @account_ledger      = @account.account_ledgers.build
+    session[:account_id] = @account.id
+  end
+
+  # PUT
+  def transference
+
+  end
+
   private
   def set_account_ledger
     @account_ledger = params[:id].present? ? AccountLedger.org.find(params[:id]) : AccountLedger.new(:account_id => params[:account_id], :income => params[:income])

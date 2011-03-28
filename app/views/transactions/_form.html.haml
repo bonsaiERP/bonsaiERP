@@ -17,7 +17,9 @@
 
   .clear
 
-  = f.association :project,  :label => 'Proyecto', :collection => Project.org
+  = f.association :project,  :label => 'Proyecto', :collection => Project.org,
+    :input_html => {'data-new_url' => new_project_path, 'data-title' => "Nuevo proyecto", 'data-trigger' => 'new_project' }
+
   = f.association :currency, :label => 'Moneda/Tipo de cambio. <span class="n black"></span>'.html_safe, :include_blank => false
   = f.input :currency_exchange_rate, :as => :hidden
   .clear
@@ -96,7 +98,8 @@
 
     var default_currency_id = #{currency_id};
     var transaction = new #{transaction.type}(items, "#transaction_form", {'default_currency_id': default_currency_id }, currencies, exchange_rates );
-    window.income = transaction;
+    window.transaction = transaction;
+
 
     // Functions for the select boxes
     $('body').live('new_contact', function(e, resp) {

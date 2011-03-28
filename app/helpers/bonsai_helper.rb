@@ -97,4 +97,19 @@ module BonsaiHelper
     #val == true ? t("yes") : t("no")
     val ? "Si" : "No"
   end
+
+  # returns an active value
+  def tabs_filter(val)
+    params[:option] ||= 'all'
+    if val == params[:option]
+      "active"
+    end
+  end
+
+  # returns size "(2)" if the size > 0
+  def size_or_blank(size)
+    if size > 0
+      "(#{size})"
+    end
+  end
 end

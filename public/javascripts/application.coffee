@@ -122,14 +122,17 @@ $(document).ready(->
       'close': (e, ui)->
         $('#' + div_id ).parents("[role=dialog]").detach()
     }, params)
+    html = params['html'] || AjaxLoadingHTML()
     div_id = params.id
     div = document.createElement('div')
     $(div).attr( { 'id': params['id'], 'title': params['title'] } ).data(data)
-    .addClass('ajax-modal').css( { 'z-index': 10000 } ).html(AjaxLoadingHTML())
+    .addClass('ajax-modal').css( { 'z-index': 10000 } ).html(html)
     delete(params['id'])
     delete(params['title'])
     $(div).dialog( params )
     div
+
+  window.createDialog = createDialog
 
   # Gets if the request is new, edit, show
   getAjaxType = (el)->
@@ -388,7 +391,11 @@ $(document).ready(->
   $('[data-new_url]').each((i, el)->
     data = $(el).data()
     title = data.title || "Nuevo"
-    $(el).after(" <a href='#{data.new_url}' title='#{title}' class='ajax add icon' data-trigger='#{data.trigger}'></a>")
+    $a = $('<a/>').attr({'href': data.new_url, 'class': 'ajax add icon', 'data-trigger': data.trigger })
+    $a.insertAfter(el)
+    setTimeout(->
+      $a.attr('title', title)
+    , 100)
   )
 
   createSelectOption = (value, label)->
@@ -438,7 +445,7 @@ $(document).ready(->
         #$('#cargando').hide(1000)
     })
 
-  $('[title]').tooltip()
+  $('[title]').tooltip({offset: [-5, 10]})
 
   start()
 

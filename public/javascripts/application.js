@@ -111,7 +111,7 @@
     };
     window.AjaxLoadingHTML = AjaxLoadingHTML;
     createDialog = function(params) {
-      var data, div, div_id;
+      var data, div, div_id, html;
       data = params;
       params = $.extend({
         'id': new Date().getTime(),
@@ -124,6 +124,7 @@
           return $('#' + div_id).parents("[role=dialog]").detach();
         }
       }, params);
+      html = params['html'] || AjaxLoadingHTML();
       div_id = params.id;
       div = document.createElement('div');
       $(div).attr({
@@ -131,12 +132,13 @@
         'title': params['title']
       }).data(data).addClass('ajax-modal').css({
         'z-index': 10000
-      }).html(AjaxLoadingHTML());
+      }).html(html);
       delete params['id'];
       delete params['title'];
       $(div).dialog(params);
       return div;
     };
+    window.createDialog = createDialog;
     getAjaxType = function(el) {
       if ($(el).hasClass("new")) {
         return 'new';
@@ -394,10 +396,18 @@
     };
     $.mark = $.fn.mark = mark;
     $('[data-new_url]').each(function(i, el) {
-      var data, title;
+      var $a, data, title;
       data = $(el).data();
       title = data.title || "Nuevo";
-      return $(el).after(" <a href='" + data.new_url + "' title='" + title + "' class='ajax add icon' data-trigger='" + data.trigger + "'></a>");
+      $a = $('<a/>').attr({
+        'href': data.new_url,
+        'class': 'ajax add icon',
+        'data-trigger': data.trigger
+      });
+      $a.insertAfter(el);
+      return setTimeout(function() {
+        return $a.attr('title', title);
+      }, 100);
     });
     createSelectOption = function(value, label) {
       var opt;
@@ -435,7 +445,9 @@
       },
       success: function(event) {}
     });
-    $('[title]').tooltip();
+    $('[title]').tooltip({
+      offset: [-5, 10]
+    });
     return start();
   });
   String.prototype.pluralize = function() {

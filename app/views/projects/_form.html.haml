@@ -1,11 +1,10 @@
 = simple_form_for(@project) do |f|
   = bonsai_form_error(f)
-  .input
-    = f.input :name, :label => 'Nombre',  :wrapper_html => {:class => '_70'}
-    = f.input :active, :label => 'Activo', :wrapper_html => {:class => '_25'}
-  .input
-    = f.input :date_start, :label => 'Fecha de inicio', :include_blank => true
-    = f.input :date_end, :label => 'Fecha de fin', :include_blank => true
+  = f.input :name, :label => 'Nombre',  :wrapper_html => {:class => '_50'}
+  = f.input :active, :label => 'Activo', :wrapper_html => {:class => '_10'}
+
+  = f.input :date_start, :label => 'Fecha de inicio', :include_blank => true, :wrapper_html => {:class => '_20'}
+  = f.input :date_end, :label => 'Fecha de fin', :include_blank => true, :wrapper_html => {:class => '_20'}
   .clear
 
   .actions
