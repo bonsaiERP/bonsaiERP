@@ -50,6 +50,7 @@ feature "Income", "test features" do
     i.pay_plans.unpaid.size.should == 2
     i.balance.should == i.pay_plans_total
 
+    i.approve!
     #i.pay_plans.unpaid.each{|pp| puts "#{pp.amount}"} ###
 
     # FIRS Bank payment
@@ -188,6 +189,7 @@ feature "Income", "test features" do
     
     i.save.should == true
     i = Income.find(i.id)
+    i.approve!.should == true
 
     i.payment_date.should == d
 
