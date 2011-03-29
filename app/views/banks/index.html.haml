@@ -1,25 +1,38 @@
 - content_for :links do
   .links= link_to "Nuevo banco", new_bank_path, :class => 'new'
 
+:css
+  #banks{ padding: 0px; margin: 0px; }
+  #banks li{ 
+    list-style: none; 
+    padding: 4px;
+    margin-bottom: 10px;
+    border-top: 1px solid #BFBFEF;
+    border-bottom: 1px solid #CFEFEF;
+  }
+  #banks li h3{ margin: 2px 4px; }
+  #banks li p{padding: 2px 5px; }
+
 %h1 Bancos
 
 
-%table.decorated.nwl 
-  %thead
-    %tr
-      %th Banco
-      %th Número de cuenta
-      %th Moneda
-      %th Total en cuenta
-      %th Dirección
-      %th
-  
-  %tbody
-    - for bank in @banks
-      %tr{ :class => cycle(:odd, :even) }
-        %td= link_to bank.name, bank
-        %td= bank.number
-        %td= bank.currency
-        %td.r= wcur bank, :total_amount
-        %td= bank.address
-        %td.actions= bonsai_links(bank)
+%ul#banks
+  - @banks.each do |bank|
+    %li
+      ._30.fl
+        %h3= link_to bank.name, bank
+        %h4.mt5.dark_grey= "#{bank.number} (en #{bank.currency.name.pluralize})"
+      ._70.fl
+        .moneybox.fl
+          %label Total en cuenta
+          %h3 #{bank.currency_symbol} #{ntc bank.total_amount}
+
+        - if bank.account_ledgers.pendent.any?
+          .moneybox.fl
+            %label Saldo a conciliar
+            %h3 #{bank.currency_symbol} #{ntc bank.total_pendent}
+          
+          %p.b.fl= link_to pluralize_conciliation(bank), "/banks/#{bank.id}?option=false"
+
+      .clear
+

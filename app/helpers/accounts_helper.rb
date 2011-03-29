@@ -1,3 +1,6 @@
+# encoding: utf-8
+# author: Boris Barroso
+# email: boriscyber@gmail.com
 module AccountsHelper
   def with_payment(al)
     if al.payment
@@ -49,4 +52,11 @@ module AccountsHelper
     end
   end
 
+  def pluralize_conciliation(klass)
+    if klass.account_ledgers.pendent.size == 1
+      "1 conciliación pendiente"
+    else
+      "#{klass.account_ledgers.pendent.size} conciliaciones pendientes"
+    end
+  end
 end
