@@ -7,20 +7,23 @@
 
 = simple_form_for @account_ledger, :url => transference_account_ledger_path(@account.id)  do |f|
 
+  = bonsai_form_error(f)
+  
   = f.input :account_id, :as => :hidden
   
-  .input._40
+  .input
     %label De cuenta
     = @account
-
-  .input._60
-    = f.input :to_account, :collection => Account.org.where(["id !=?", @account_ledger.account_id]), :label => 'A cuenta', :wrapper_html => {:class => '_70'}
-    = f.input :to_amount, :label => "Cantidad #{@account_ledger.account.currency_plural}", :input_html => {:size => 12, :type => 'decimal', :class => 'r'}, :wrapper_html => {:class => '_30'}
+  = f.input :to_account, :collection => Account.org.where(["id !=?", @account_ledger.account_id]), :label => 'A cuenta'
   .clear
+
+  = f.input :amount, :label => "Cantidad #{@account_ledger.account.currency_plural}", :input_html => {:size => 12, :type => 'decimal', :class => 'r'}, :wrapper_html => {:class => '_30'}
+
+  = f.input :date, :label => 'Fecha', :wrapper_html => {:class => '_20'}
 
   - disp = @account_ledger.show_exchange_rate? ? 'block' : 'none'
 
-  #al_exchange_rate{:style => "display:#{disp}"}
+  #al_exchange_rate._50.fl{:style => "display:#{disp}"}
     = f.label :to_exchange_rate, "Tipo de cambio &nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript:' id='cur_rates' class='n'>tipos de cambio</a>".html_safe
     1 #{@account.currency_name} = 
     = f.text_field :to_exchange_rate, :size => 6, :class => 'r'
@@ -32,6 +35,10 @@
       %span.error= f.object.errors[:to_exchange_rate].join(", ")
 
   .clear
+   
+  = f.input :description, :label => 'Descripción', :as => :text, :input_html => {:rows => 3, :cols => 40}
+  .clear
+
   = f.submit "Transferir"
 
 

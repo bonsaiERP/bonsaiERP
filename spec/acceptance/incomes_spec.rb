@@ -28,7 +28,8 @@ end
 feature "Income", "test features" do
   background do
     OrganisationSession.set(:id => 1, :name => 'ecuanime', :currency_id => 1)
-    
+    UserSession.current_user = User.new(:id => 1, :email => 'admin@example.com') {|u| u.id = 1}
+
     Bank.create!(:number => '123', :currency_id => 1, :name => 'Bank JE', :amount => 0) {|a| a.id = 1 }
     CashRegister.create!(:name => 'Cash register Bs.', :amount => 0, :currency_id => 1, :address => 'Uno') {|cr| cr.id = 2}
     CashRegister.create!(:name => 'Cash register $.', :amount => 0, :currency_id => 2, :address => 'None') {|cr| cr.id = 3}

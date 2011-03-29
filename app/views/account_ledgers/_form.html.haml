@@ -8,8 +8,10 @@
   .clear
 
   = f.input :reference, :label => 'Referencia/Nº de cheque', :input_html => {:size => 20}
-
   = f.association :contact, :label => account_ledger_contact_label(@account_ledger), :collection => account_ledger_contact_collection(@account_ledger)
+  .clear
+
+  = f.input :description, :label => 'Descripción', :as => :text, :input_html => {:rows => 3, :cols => 40}
   .clear
 
   = f.submit "Salvar"

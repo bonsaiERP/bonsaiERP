@@ -4,6 +4,9 @@
 class Account < ActiveRecord::Base
   acts_as_org
 
+  # callbacks
+  before_create :create_account_ledger
+
   # relationships
   belongs_to :currency
   has_many :account_ledgers, :order => "created_at DESC", :dependent => :destroy
@@ -31,5 +34,21 @@ class Account < ActiveRecord::Base
   # If update occurs it should not allow
   def valid_currency_not_changed
     self.errors.add(:base, "No puede modificar la moneda") if changes[:currency_id]
+  end
+
+  private
+  # Creates the first income for the bank
+  def create_account_ledger
+    val = amount
+    val = val.to_f
+    self.total_amount = val
+
+    if val > 0
+      bl = self.account_ledgers.build(:amount => amount, :date => Date.today, 
+                                      :currency_id => currency_id,
+                                      :income => true,
+                                      :reference => 'NE',
+                                      :description => 'Primer ingreso por creación de banco')
+    end
   end
 end

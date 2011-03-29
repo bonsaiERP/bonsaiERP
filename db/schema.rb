@@ -10,13 +10,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110324193213) do
+ActiveRecord::Schema.define(:version => 20110329150237) do
 
   create_table "account_ledgers", :force => true do |t|
     t.integer  "organisation_id"
     t.integer  "account_id"
     t.integer  "currency_id"
-    t.decimal  "amount",                         :precision => 14, :scale => 2
+    t.decimal  "amount",                           :precision => 14, :scale => 2
     t.date     "date"
     t.integer  "payment_id"
     t.boolean  "income"
@@ -26,7 +26,10 @@ ActiveRecord::Schema.define(:version => 20110324193213) do
     t.boolean  "conciliation"
     t.text     "description"
     t.integer  "transaction_id"
-    t.string   "reference",       :limit => 100
+    t.string   "reference",         :limit => 100
+    t.integer  "creator_id"
+    t.integer  "approver_id"
+    t.integer  "account_ledger_id"
   end
 
   add_index "account_ledgers", ["account_id"], :name => "index_account_ledgers_on_account_id"
@@ -343,6 +346,8 @@ ActiveRecord::Schema.define(:version => 20110324193213) do
     t.decimal  "gross_total",                          :precision => 14, :scale => 2
     t.boolean  "cash"
     t.date     "payment_date"
+    t.integer  "creator_id"
+    t.integer  "approver_id"
   end
 
   add_index "transactions", ["active"], :name => "index_transactions_on_active"

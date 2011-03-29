@@ -15,5 +15,6 @@ private
   def set_defaults
     self.total_amount ||= 0.0
   end
+
 end
 

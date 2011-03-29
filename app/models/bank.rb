@@ -4,7 +4,6 @@
 class Bank < Account
   # callbacks
   after_initialize :set_defaults
-  after_create     :create_account_ledger
 
   # validations
   validates_presence_of :name, :number
@@ -28,16 +27,4 @@ private
     self.total_amount ||= 0.0
   end
 
-  # Creates the first income for the bank
-  def create_account_ledger
-    val = amount
-    val = val.to_f
-    if val > 0
-      bl = self.account_ledgers.build(:amount => amount, :date => Date.today, 
-                                      :currency_id => currency_id,
-                                      :reference => 'NE',
-                                      :description => 'Primer ingreso por creación de banco')
-      bl.save
-    end
-  end
 end
