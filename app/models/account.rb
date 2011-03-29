@@ -36,6 +36,15 @@ class Account < ActiveRecord::Base
     self.errors.add(:base, "No puede modificar la moneda") if changes[:currency_id]
   end
 
+  def pendent_account_ledgers
+    account_ledgers.pendent
+  end
+
+  # Prensents the total plus the account_ledgers not conciliated
+  def total_pendent
+    pendent_account_ledgers.sum(:amount) + total_amount
+  end
+
   private
   # Creates the first income for the bank
   def create_account_ledger

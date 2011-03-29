@@ -25,12 +25,12 @@
       ._70.fl
         .moneybox.fl
           %label Total en cuenta
-          %h3 #{bank.currency_symbol} #{ntc bank.total_amount}
+          %h3= with_currency bank, :total_amount
 
         - if bank.account_ledgers.pendent.any?
           .moneybox.fl
             %label Saldo a conciliar
-            %h3 #{bank.currency_symbol} #{ntc bank.total_pendent}
+            %h3= with_currency bank, :total_pendent
           
           %p.b.fl= link_to pluralize_conciliation(bank), "/banks/#{bank.id}?option=false"
 

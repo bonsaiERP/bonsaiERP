@@ -38,6 +38,7 @@ class AccountLedger < ActiveRecord::Base
   with_options :if => :transference do |al|
     al.validate :validate_to_account
     al.validate :validate_to_exchange_rate
+    al.validate :validate_to_amount
   end
 
   # delegates
@@ -52,8 +53,16 @@ class AccountLedger < ActiveRecord::Base
   # Updates the conciliation state
   def conciliate_account
     self.approver_id  = UserSession.current_user.id
-    self.conciliation = true
-    self.save
+    unless income?
+      errors.add(:base, "El monto a conciliar es mayor al total en la cuenta") if amount.abs > account.total_amount
+    end
+
+    if errors.blank?
+      self.conciliation = true
+      self.save
+    else
+      false
+    end
   end
 
   # Returns a scope based on the option
@@ -89,11 +98,12 @@ class AccountLedger < ActiveRecord::Base
         ac2.account_id  = to_account
         ac2.income      = true
         ac2.amount      = amount * to_exchange_rate
-        ac2.description = "Transferencia desde cuenta #{account},#{txt}"
+        ac2.description = "Transferencia desde cuenta #{account}#{txt}"
 
-        ac2.account_ledger_id = id
         
         raise ActiveRecord::Rollback unless self.save
+        ac2.account_ledger_id = id
+
         raise ActiveRecord::Rollback unless ac2.save
         raise ActiveRecord::Rollback unless self.update_attribute(:account_ledger_id, ac2.id)
       end
@@ -146,6 +156,12 @@ private
       if to_exchange_rate <= 0
         errors.add(:to_exchange_rate, "Debe ingresar un valor mayor que 0")
       end
+    end
+  end
+
+  def validate_to_amount
+    if amount.to_f > 0
+      errors.add(:amount, "La cantidad que ingreso es mayor a la disponible") if (amount > account.total_amount)
     end
   end
 

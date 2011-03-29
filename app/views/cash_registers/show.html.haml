@@ -13,6 +13,11 @@
   %label Saldo en caja
   %h3= with_currency(@cash_register, :total_amount)
 
+- if @cash_register.pendent_account_ledgers.any?
+  .moneybox.fl
+    %label Saldo a conciliar
+    %h3= with_currency @cash_register, :total_pendent
+
 ._40.fr
   %label Dirección
   = nl2br(@cash_register.address)

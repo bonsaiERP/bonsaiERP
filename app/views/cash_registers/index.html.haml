@@ -1,22 +1,37 @@
 - content_for :links do
   .links= link_to "Nueva caja", new_cash_register_path, :class => 'new'
 
+:css
+  #cash_registers{ padding: 0px; margin: 0px; }
+  #cash_registers li{ 
+    list-style: none; 
+    padding: 4px;
+    margin-bottom: 10px;
+    border-top: 1px solid #BFBFEF;
+    border-bottom: 1px solid #CFEFEF;
+  }
+  #cash_registers li h3{ margin: 2px 4px; }
+  #cash_registers li p{padding: 2px 5px; }
+
 %h1 Cajas
 
-%table.decorated.nwl 
-  %thead
-    %tr
-      %th Nombre
-      %th Moneda
-      %th Total en cuenta
-      %th Dirección
-      %th
-  
-  %tbody
-    - for cr in @cash_registers
-      %tr{ :class => cycle(:odd, :even) }
-        %td= link_to cr.name, cr
-        %td= cr.currency
-        %td.r= "#{cr.currency.symbol} #{ntc cr.total_amount}"
-        %td= nl2br(cr.address)
-        %td.actions= bonsai_links(cr)
+%ul#cash_registers
+  - @cash_registers.each do |cash_register|
+    %li
+      ._30.fl
+        %h3= link_to cash_register.name, cash_register
+        %h4.mt5.dark_grey= "#{cash_register.number} (en #{cash_register.currency.name.pluralize})"
+      ._70.fl
+        .moneybox.fl
+          %label Total en cuenta
+          %h3= with_currency cash_register, :total_amount
+
+        - if cash_register.account_ledgers.pendent.any?
+          .moneybox.fl
+            %label Saldo a conciliar
+            %h3= with_currency cash_register, :total_pendent
+          
+          %p.b.fl= link_to pluralize_conciliation(cash_register), "/cash_registers/#{cash_register.id}?option=false"
+
+      .clear
+

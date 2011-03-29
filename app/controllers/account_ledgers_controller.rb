@@ -19,10 +19,13 @@ class AccountLedgersController < ApplicationController
   # PUT /account_ledgers/:i.more 
   def conciliate
     if @account_ledger.conciliate_account
-      redirect_to @account_ledger, :notice => "Se ha conciliado exitosamente la transacción"
+      flash[:notice] = "Se ha conciliado exitosamente la transacción"
+    else
+      flash[:error] = @account_ledger.error[:base].join(", ")
     end
-  end
+    redirect_to @account_ledger  end
 
+  # POST /account_ledgers
   def create
     @account_ledger = AccountLedger.new(params[:account_ledger])
 
@@ -34,19 +37,20 @@ class AccountLedgersController < ApplicationController
     end
   end
 
+  # DELETE /account_ledgers/:id
   def destroy
     @account_ledger.destroy
     redirect_ajax @account_ledger
   end
 
-  # GET
+  # GET /account_ledgers/:id/new_transference
   def new_transference
     @account             = Account.org.find(params[:id])
     @account_ledger      = @account.account_ledgers.build
     session[:account_id] = @account.id
   end
 
-  # PUT
+  # POST /account_ledgers/:id/transference
   def transference
     @account = Account.org.find(params[:id])
     params[:account_id] = @account.id
@@ -60,7 +64,8 @@ class AccountLedgersController < ApplicationController
     end
   end
 
-  private
+
+private
   def set_account_ledger
     @account_ledger = params[:id].present? ? AccountLedger.org.find(params[:id]) : AccountLedger.new(:account_id => params[:account_id], :income => params[:income])
   end

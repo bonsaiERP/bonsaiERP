@@ -15,7 +15,7 @@
 ._15.fl.i= lo @account_ledger.date
 ._30.fl <span class="grey">Ref/Nº de cheque:</span> #{@account_ledger.reference}
 ._20.fl=link_description @account_ledger
-._20.fl=link_to link_to @account_ledger.contact, @account_ledger.contact
+._20.fl= link_to @account_ledger.contact, @account_ledger.contact if @account_ledger.contact_id.present?
 
 .clear
 - unless @account_ledger.conciliation?

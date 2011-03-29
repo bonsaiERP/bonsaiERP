@@ -75,5 +75,27 @@ feature "Account Feature", "test all incomes as transference between accounts. "
     c2.account_ledgers.size.should == 2
     c2.total_amount.should == 1010
   end
+
+
+  scenario "Do not exeed the max amount, and control conciliation" do
+    trans = Bank.find(1).account_ledgers.build(:to_account => 2, :amount => 1100)
+    trans.create_transference.should == false
+
+    trans.errors[:amount].should_not == blank?
+
+    # Create an unconciliated amount
+    trans.amount = 1000
+    trans.create_transference.should == true
+
+    # Create an outcome
+    al = Bank.find(1).account_ledgers.build(:amount => 500, :income => false, :date => Date.today, :contact_id => 2, :reference => '123456789')
+    al.save.should == true
+    al.conciliate_account.should == true
+
+    trans = AccountLedger.find(trans.id)
+
+    trans.conciliate_account.should == false
+    trans.errors.should_not == blank?
+  end
 end
 
