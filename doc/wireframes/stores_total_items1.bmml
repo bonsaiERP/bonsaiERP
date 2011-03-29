@@ -1,0 +1,128 @@
+<mockup version="1.0" skin="sketch" measuredW="1290" measuredH="1074" mockupW="1230" mockupH="1074">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::Image" x="60" y="0" w="-1" h="-1" measuredW="1100" measuredH="101" zOrder="2" locked="true" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/menu.png</src>
+      </controlProperties>
+    </control>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::Canvas" x="120" y="99" w="990" h="939" measuredW="100" measuredH="70" zOrder="1" locked="true" isInGroup="-1">
+      <controlProperties>
+        <borderStyle>none</borderStyle>
+      </controlProperties>
+    </control>
+    <control controlID="2" controlTypeID="com.balsamiq.mockups::Canvas" x="60" y="0" w="1100" h="1074" measuredW="100" measuredH="70" zOrder="0" locked="true" isInGroup="-1">
+      <controlProperties>
+        <borderStyle>none</borderStyle>
+        <color>13421772</color>
+      </controlProperties>
+    </control>
+    <control controlID="5" controlTypeID="com.balsamiq.mockups::Title" x="159" y="154" w="-1" h="-1" measuredW="220" measuredH="46" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>4144959</color>
+        <size>28</size>
+        <text>Inventario%20total</text>
+      </controlProperties>
+    </control>
+    <control controlID="6" controlTypeID="com.balsamiq.mockups::Canvas" x="120" y="101" w="990" h="41" measuredW="100" measuredH="70" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderStyle>none</borderStyle>
+        <color>15658734</color>
+      </controlProperties>
+    </control>
+    <control controlID="39" controlTypeID="__group__" x="869" y="108" w="62" h="25" measuredW="62" measuredH="25" zOrder="5" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Image" x="0" y="4" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="0" locked="false" isInGroup="39">
+          <controlProperties>
+            <src>./assets/add.png</src>
+          </controlProperties>
+        </control>
+        <control controlID="3" controlTypeID="com.balsamiq.mockups::Label" x="18" y="0" w="-1" h="-1" measuredW="44" measuredH="25" zOrder="1" locked="false" isInGroup="39">
+          <controlProperties>
+            <color>3700253</color>
+            <text>Nuevo</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="40" controlTypeID="__group__" x="159" y="208" w="169" h="62" measuredW="169" measuredH="62" zOrder="6" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="0" w="169" h="62" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="40">
+          <controlProperties>
+            <borderStyle>none</borderStyle>
+            <color>15658734</color>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Label" x="7" y="5" w="-1" h="-1" measuredW="107" measuredH="25" zOrder="1" locked="false" isInGroup="40">
+          <controlProperties>
+            <color>5263440</color>
+            <text>Valor%20Inventario</text>
+          </controlProperties>
+        </control>
+        <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="7" y="26" w="-1" h="-1" measuredW="120" measuredH="29" zOrder="2" locked="false" isInGroup="40">
+          <controlProperties>
+            <color>0</color>
+            <size>16</size>
+            <text>Bs.%2015.000%2C00</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="41" controlTypeID="com.balsamiq.mockups::Paragraph" x="637" y="208" w="200" h="62" measuredW="200" measuredH="140" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>false</bold>
+        <text>Av.%20Juan%20pablo%20segundo%0AN%BA123</text>
+      </controlProperties>
+    </control>
+    <control controlID="42" controlTypeID="__group__" x="940" y="108" w="87" h="25" measuredW="87" measuredH="25" zOrder="8" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Image" x="0" y="4" w="16" h="16" measuredW="16" measuredH="16" zOrder="0" locked="false" isInGroup="42">
+          <controlProperties>
+            <src>./assets/pencil.png</src>
+          </controlProperties>
+        </control>
+        <control controlID="3" controlTypeID="com.balsamiq.mockups::Label" x="18" y="0" w="69" h="25" measuredW="44" measuredH="25" zOrder="1" locked="false" isInGroup="42">
+          <controlProperties>
+            <color>3700253</color>
+            <text>Editar</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="43" controlTypeID="__group__" x="1014" y="108" w="87" h="25" measuredW="87" measuredH="25" zOrder="9" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Image" x="0" y="4" w="16" h="16" measuredW="16" measuredH="16" zOrder="0" locked="false" isInGroup="43">
+          <controlProperties>
+            <src>./assets/delete.png</src>
+          </controlProperties>
+        </control>
+        <control controlID="3" controlTypeID="com.balsamiq.mockups::Label" x="18" y="0" w="69" h="25" measuredW="45" measuredH="25" zOrder="1" locked="false" isInGroup="43">
+          <controlProperties>
+            <color>13369344</color>
+            <text>Borrar</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="44" controlTypeID="com.balsamiq.mockups::DataGrid" x="167" y="322" w="885" h="283" measuredW="635" measuredH="109" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <alternateRowColor>15594478</alternateRowColor>
+        <bold>false</bold>
+        <borderStyle>none</borderStyle>
+        <hasHeader>true</hasHeader>
+        <hLines>false</hLines>
+        <rowHeight>27</rowHeight>
+        <selectedIndex>-1</selectedIndex>
+        <text>*Item*%2C%20*Cantidad*%2C%20*Precio%20Unitario*%2C%20*Subtotal*%0A*%5BPMMCL1-%20Parlantes%20multimedia%20Creative%5D*%2C%20100%5C%2C00%2C%20150%5C%2C00%2C%2015.000%5C%2C00%0A*%5BMS20F%20-%20Monitor%20de%2020%22%20Samsumg%5D*%2C%20100%5C%2C00%2C%20150%5C%2C00%2C%2015.000%5C%2C00%0A*%5BSMDTK232%20-%20Microprocesador%20Intel%20Core2%20Quad%202.6%20Gz%5D*%2C%2010%5C%2C00%2C%20200%5C%2C00%2C%202.000%5C%2C00%0A%7BL%2C%20R%2C%20R%2C%20R%7D</text>
+        <underline>false</underline>
+        <verticalScrollbar>false</verticalScrollbar>
+        <vLines>false</vLines>
+      </controlProperties>
+    </control>
+    <control controlID="45" controlTypeID="com.balsamiq.mockups::StickyNote" x="1106" y="254" w="184" h="141" measuredW="109" measuredH="123" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>false</bold>
+        <text>Se%20puede%20realizar%20la%20busqueda%20de%20items%20exactamente%20igual%20que%20en%20el%20controlador%20de%20items</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

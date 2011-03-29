@@ -24,12 +24,18 @@
     %li
       %a.more{ :href => "javascript:"} Inventarios
       %ul.more
-        %li.more
-          %ul
-            %li <a href="/stores">Almacenes</a>
-            %li <a href="/items">Items</a>
-            %li <a href="/units">Unidades de medida</a> 
-            %li <a href="/stocks">Stocks</a>
-            %li <a href="/transferences">Transferencias</a>
+        %li.more{:style => 'width:300px'}
+          .fl._40
+            %ul
+              %li <a href="/stores">Almacenes</a>
+              %li <a href="/items">Items</a>
+              %li <a href="/units">Unidades de medida</a> 
+              %li <a href="/stocks">Stocks</a>
+              %li <a href="/transferences">Transferencias</a>
+          .fl._60  
+            %ul
+              %li <a href="/">Ventas pendientes</a>
+              %li <a href="/">Compras pendientes</a>
+
           .clear
     

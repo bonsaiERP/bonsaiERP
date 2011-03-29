@@ -1,0 +1,65 @@
+<mockup version="1.0" skin="sketch" measuredW="1160" measuredH="1074" mockupW="1100" mockupH="1074">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::Image" x="60" y="0" w="-1" h="-1" measuredW="1100" measuredH="101" zOrder="2" locked="true" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/menu.png</src>
+      </controlProperties>
+    </control>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::Canvas" x="120" y="99" w="990" h="939" measuredW="100" measuredH="70" zOrder="1" locked="true" isInGroup="-1">
+      <controlProperties>
+        <borderStyle>none</borderStyle>
+      </controlProperties>
+    </control>
+    <control controlID="2" controlTypeID="com.balsamiq.mockups::Canvas" x="60" y="0" w="1100" h="1074" measuredW="100" measuredH="70" zOrder="0" locked="true" isInGroup="-1">
+      <controlProperties>
+        <borderStyle>none</borderStyle>
+        <color>13421772</color>
+      </controlProperties>
+    </control>
+    <control controlID="5" controlTypeID="com.balsamiq.mockups::Title" x="159" y="154" w="-1" h="-1" measuredW="145" measuredH="46" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>4144959</color>
+        <size>28</size>
+        <text>Almacenes</text>
+      </controlProperties>
+    </control>
+    <control controlID="6" controlTypeID="com.balsamiq.mockups::Canvas" x="120" y="101" w="990" h="41" measuredW="100" measuredH="70" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderStyle>none</borderStyle>
+        <color>15658734</color>
+      </controlProperties>
+    </control>
+    <control controlID="39" controlTypeID="__group__" x="947" y="108" w="115" h="25" measuredW="115" measuredH="25" zOrder="5" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Image" x="0" y="4" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="0" locked="false" isInGroup="39">
+          <controlProperties>
+            <src>./assets/add.png</src>
+          </controlProperties>
+        </control>
+        <control controlID="3" controlTypeID="com.balsamiq.mockups::Label" x="18" y="0" w="-1" h="-1" measuredW="97" measuredH="25" zOrder="1" locked="false" isInGroup="39">
+          <controlProperties>
+            <color>3700253</color>
+            <text>Nuevo%20almacen</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="40" controlTypeID="com.balsamiq.mockups::DataGrid" x="152" y="225" w="904" h="261" measuredW="376" measuredH="126" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>false</bold>
+        <borderStyle>none</borderStyle>
+        <hasHeader>true</hasHeader>
+        <selectedIndex>-1</selectedIndex>
+        <text>*Nombre*%2C%20*Direcci%F3n*%2C*Valor%5CrInventario*%0A*%5BAlmacen%20el%20alto%5D*%2C%20Av.%20Juan%20pablo%20segundo%5CrN%BA123%2C15.000%5C%2C00%0A*%5BAlmacen%20central%5D*%2C%20Calle%20la%20esperanza%5CrEdificio%20Je%20piso%202%20N%BA%201200%20%2C45.000%5C%2C00%0A%7BL%2C%20L%2C%20R%7D</text>
+        <vLines>false</vLines>
+      </controlProperties>
+    </control>
+    <control controlID="41" controlTypeID="com.balsamiq.mockups::Label" x="159" y="276" w="104" h="25" measuredW="17" measuredH="25" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <href>stores_show1%26bm%3Bstores_show1.bmml%26bm%3Bstores_show1.bmml%26bm%3Bstores_show1.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2299%2C276%2C203%2C301%22%20href%3D%22stores_show1.bmml%22%20alt%3D%22stores_show1%22%20id%3D%2241%22/%3E</map>
+        <text>%20%20</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>
