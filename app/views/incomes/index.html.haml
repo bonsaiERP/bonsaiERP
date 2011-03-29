@@ -3,12 +3,16 @@
 
 %h1 Ventas
 
+- @in = Income.org
+
 %ul.tabs
   %li= link_incomes "Todas", 'all'
-  %li= link_incomes "Esperando aprobación", 'draft'
-  %li= link_incomes "Esperando cobro", 'awaiting_payment'
-  %li= link_incomes "Vencidas", 'due'
+  %li= link_incomes "Esperando aprobación #{size_or_blank(@in.draft.size)}", 'draft'
+  %li= link_incomes "Esperando cobro #{size_or_blank(@in.approved.size)}", 'awaiting_payment'
+  %li= link_incomes "Vencidas #{size_or_blank(@in.due.size)}", 'due'
   %li= link_incomes "Cobradas", 'paid'
+
+= link_to "Buscar", "#search", :class => 'search'
 
 = paginate @incomes
 

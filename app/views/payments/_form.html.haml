@@ -63,7 +63,8 @@
 
           $('#payment_account_id').die().live('change keyup', function() {
             var html = '';
-            var rate = 1;
+            var rate = 0.0;
+            
             try{
               var currency_id = self.accounts[ $(this).val() ].currency_id;
 
@@ -76,8 +77,8 @@
                 $('.exchange_rate').hide('slow');
               }
             }catch(e) {}
-
-            $('#payment_exchange_rate').val(rate);            
+            
+            //$('#payment_exchange_rate').val(rate); 
             $('#cur').html(html).mark();
 
           });
@@ -104,9 +105,14 @@
 
       // Display currency_rates in a new window
       $('#cur_rates').die();
-      $('.rates').dialog("destroy");
-      $('.rates').dialog({title: 'Tipos de cambio para "#{currency_name}"', width: 450, autoOpen: false});
-      $('#cur_rates').live('click', function() { $('.rates').dialog("open"); });
+      $('#cur_rates').live('click', function() { 
+        createDialog({
+          'title' : "Tipos de cambio para #{currency_name}",
+          'html'  : $('.rates').html(),
+          'width' : 450,
+          'modal' : false
+        });
+      });
     });
 
 -else

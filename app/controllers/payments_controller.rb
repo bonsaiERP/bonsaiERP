@@ -33,9 +33,6 @@ class PaymentsController < ApplicationController
     transaction = Transaction.org.find_by_type_and_id( params[:type], params[:id] )
     session[:payment][:transaction_id] = transaction.id
     @payment = transaction.new_payment
-    #rescue
-      #redirect_to request.referer
-    #end
   end
 
 

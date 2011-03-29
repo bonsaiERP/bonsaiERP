@@ -21,16 +21,16 @@
 
 .clear
 
-.moneybox
+.moneybox.fl
   %label Total
   %h3#total_currency #{@transaction.currency_symbol} #{ntc @transaction.total_currency}
 
 - unless @transaction.paid?
-  .moneybox
+  .moneybox.fl
     %label Saldo
     %h3#balance #{@transaction.currency_symbol} #{ntc @transaction.balance}
   
-= "Vence el <strong id='due_on'>#{lo @transaction.payment_date}</strong></span>".html_safe unless @transaction.paid? or @transaction.draft?
+%p.fl{:style => 'padding:4px 10px'}= "Vence el <strong id='due_on'>#{lo @transaction.payment_date}</strong></span>".html_safe unless @transaction.paid? or @transaction.draft?
 
 ._50.fr.r
   / FORM to null income

@@ -75,7 +75,7 @@
         var rate;
         rate = prompt("Tipo de cambio", $(self.conf.currency_exchange_rate_id).val()) * 1;
         if (rate > 0) {
-          $(self.conf.currency_exchange_rate_id).val(rate);
+          $(self.conf.currency_exchange_rate_id).val(rate.toFixed(4));
           self.exchange_rate = rate;
           $('body').trigger('total');
           return self.set_exchange_rate_html();
@@ -188,7 +188,7 @@
       currency = this.find_currency(this.conf.default_currency_id);
       change = this.find_currency(this.currency_id);
       exchange_rate = $(this.conf.currency_exchange_rate_id).val() * 1;
-      html = "1 " + change.name + "                                   = <span class = 'b'>" + (_b.ntc(exchange_rate)) + "</span> " + (currency.name.pluralize()) + " ";
+      html = "1 " + change.name + "                                   = <span class = 'b'>" + (_b.ntc(exchange_rate, 4)) + "</span> " + (currency.name.pluralize()) + " ";
       html += "<a id='edit_rate_link' href='javascript:'>editar</a>";
       return $span.html(html).mark();
     };

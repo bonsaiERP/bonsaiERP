@@ -212,15 +212,16 @@
       'precision': 2
     };
     _b.currency = currency;
-    ntc = function(val) {
+    ntc = function(val, precision) {
       var ar, arr, c, i, l, sep, sign, t, tmp, vals;
+      precision || (precision = _b.currency.precision);
       val = typeof val === 'string' ? 1 * val : val;
       if (val < 0) {
         sign = "-";
       } else {
         sign = "";
       }
-      val = val.toFixed(_b.currency.precision);
+      val = val.toFixed(precision);
       vals = val.toString().replace(/^-/, "").split(".");
       val = vals[0];
       l = val.length - 1;
@@ -446,7 +447,13 @@
       success: function(event) {}
     });
     $('[title]').tooltip({
-      offset: [-5, 10]
+      offset: [-3, 10],
+      events: {
+        def: "mouseover,mouseout",
+        input: "focus,blur",
+        widget: "focus mouseover,blur mouseout",
+        tooltip: ""
+      }
     });
     return start();
   });

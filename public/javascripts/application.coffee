@@ -214,10 +214,11 @@ $(document).ready(->
   _b.currency = currency
   # ntc similar function to Ruby on rails number_to_currency
   # @param [String, Decimal, Integer] val
-  ntc = (val)->
+  ntc = (val, precision)->
+    precision ||= _b.currency.precision
     val = if typeof val == 'string' then (1 * val) else val
     if val < 0 then sign = "-" else sign = ""
-    val = val.toFixed(_b.currency.precision)
+    val = val.toFixed(precision)
     vals = val.toString().replace(/^-/, "").split(".")
     val = vals[0]
     l = val.length - 1
@@ -445,7 +446,15 @@ $(document).ready(->
         #$('#cargando').hide(1000)
     })
 
-  $('[title]').tooltip({offset: [-5, 10]})
+  $('[title]').tooltip({
+    offset: [-3, 10],
+    events: {
+      def    : "mouseover,mouseout",
+      input  : "focus,blur",
+      widget : "focus mouseover,blur mouseout",
+      tooltip: ""
+    }
+  })
 
   start()
 

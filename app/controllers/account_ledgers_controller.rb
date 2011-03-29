@@ -21,7 +21,7 @@ class AccountLedgersController < ApplicationController
     if @account_ledger.conciliate_account
       flash[:notice] = "Se ha conciliado exitosamente la transacción"
     else
-      flash[:error] = @account_ledger.error[:base].join(", ")
+      flash[:error] = @account_ledger.errors[:base].join(", ")
     end
     redirect_to @account_ledger  end
 

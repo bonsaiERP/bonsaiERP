@@ -23,15 +23,20 @@
 <br/><br/>
 - ac_path = account.is_a?(Bank) ? "/banks" : "cash_registers"
 
+
 %ul.tabs
   %li= link_to "Todas", "#{ac_path}/#{account.id}", :class => tabs_filter('all')
   %li= link_to "Esperando conciliación #{size_or_blank(account.account_ledgers.pendent.size)}", "#{ac_path}/#{account.id}?option=false", :class => tabs_filter('false')
   %li= link_to "Conciliadas", "#{ac_path}/#{account.id}?option=true", :class => tabs_filter('true')
 
+
 .clear
-= link_to "Buscar", "#", :class => 'search'
+
+
+= link_to "Buscar", "#search", :class => 'search'
 /"#", :style => 'display:block;float:left;margin:10px'
 - ledgers = account.account_ledgers.get_by_option(params[:option]).page(@page)
+
 = paginate ledgers
 
 %table.decorated.nwl.nwf

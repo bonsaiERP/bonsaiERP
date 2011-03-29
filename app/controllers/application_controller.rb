@@ -49,14 +49,9 @@ class ApplicationController < ActionController::Base
     url = options[:url] || klass
     if request.xhr?
       if request.delete?
-        render :text => set_delete_json(klass)
-        #if klass.destroyed?
-        #  render :text => klass.attributes.merge(:destroyed => klass.destroyed?).to_json
-        #else
-        #  render :text => klass.attributes.merge(:destroyed => klass.destroyed?, :base_error => klass.errors[:base]).to_json
-        #end
+        render :json => klass.attributes.merge(:destroyed => klass.destroyed?)
       else
-        render :text => klass.to_json
+        render :json => klass
       end
     else
       redirect_to url, options
@@ -64,17 +59,6 @@ class ApplicationController < ActionController::Base
   end
 
 private
-  # Adds to the hash of json becaise of ovreriding
-  def set_delete_json(klass)
-    txt = klass.to_json
-    txt = txt.slice(0, txt.size - 1)
-    txt << ",\"destroyed\": #{klass.destroyed?}"
-    if klass.destroyed?
-      txt << "}"
-    else
-      txt << ",\"base_error\": #{klass.errors[:base]} }" 
-    end
-  end
 
   def set_page
     @page = params[:page] || 1

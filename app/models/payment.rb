@@ -134,7 +134,7 @@ private
     self.interests_penalties ||= 0
     self.active                = true
     self.currency_id           = transaction.currency_id
-    self.exchange_rate = 1 if exchange_rate.blank?
+    self.exchange_rate = 0.0 if exchange_rate.blank?
   end
 
   def destroy_and_create_pay_plan
