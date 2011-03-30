@@ -81,12 +81,12 @@
             <text>Items</text>
           </controlProperties>
         </control>
-        <control controlID="2" controlTypeID="com.balsamiq.mockups::DataGrid" x="0" y="38" w="923" h="103" measuredW="232" measuredH="28" zOrder="2" locked="false" isInGroup="88">
+        <control controlID="2" controlTypeID="com.balsamiq.mockups::DataGrid" x="0" y="38" w="923" h="103" measuredW="335" measuredH="28" zOrder="2" locked="false" isInGroup="88">
           <controlProperties>
             <bold>false</bold>
             <borderStyle>none</borderStyle>
             <rowHeight>32</rowHeight>
-            <text>*Item*%2C%20*Cantidad*%2C%20*Inv.%20Almacen*%2C%0A%7B10L%2C%203L%2C%203R%2C%201L%7D</text>
+            <text>*Item*%2C%20*Cantidad*%2C%20*Costo%20unitario*%2C%20*Inv.%20Almacen*%2C%0A%7B10L%2C%203L%2C%203L%2C%203R%2C%201L%7D</text>
             <vLines>false</vLines>
           </controlProperties>
         </control>
@@ -131,14 +131,14 @@
             <text>Parlantes%20Multimedia%20Altec%20lansig%20AL123</text>
           </controlProperties>
         </control>
-        <control controlID="17" controlTypeID="com.balsamiq.mockups::TextInput" x="535" y="62" w="127" h="-1" measuredW="27" measuredH="29" zOrder="8" locked="false" isInGroup="88">
+        <control controlID="17" controlTypeID="com.balsamiq.mockups::TextInput" x="458" y="62" w="109" h="-1" measuredW="27" measuredH="29" zOrder="8" locked="false" isInGroup="88">
           <controlProperties>
             <align>right</align>
             <bold>false</bold>
             <text>10</text>
           </controlProperties>
         </control>
-        <control controlID="18" controlTypeID="com.balsamiq.mockups::TextInput" x="534" y="94" w="127" h="-1" measuredW="29" measuredH="29" zOrder="9" locked="false" isInGroup="88">
+        <control controlID="18" controlTypeID="com.balsamiq.mockups::TextInput" x="457" y="94" w="109" h="-1" measuredW="29" measuredH="29" zOrder="9" locked="false" isInGroup="88">
           <controlProperties>
             <align>right</align>
             <bold>false</bold>
@@ -155,6 +155,20 @@
           <controlProperties>
             <bold>false</bold>
             <text>50%2C00</text>
+          </controlProperties>
+        </control>
+        <control controlID="21" controlTypeID="com.balsamiq.mockups::TextInput" x="603" y="62" w="113" h="-1" measuredW="27" measuredH="29" zOrder="12" locked="false" isInGroup="88">
+          <controlProperties>
+            <align>right</align>
+            <bold>false</bold>
+            <text>10</text>
+          </controlProperties>
+        </control>
+        <control controlID="22" controlTypeID="com.balsamiq.mockups::TextInput" x="602" y="94" w="113" h="-1" measuredW="29" measuredH="29" zOrder="13" locked="false" isInGroup="88">
+          <controlProperties>
+            <align>right</align>
+            <bold>false</bold>
+            <text>20</text>
           </controlProperties>
         </control>
       </groupChildrenDescriptors>
@@ -210,20 +224,21 @@
         <text>VE-0001</text>
       </controlProperties>
     </control>
-    <control controlID="97" controlTypeID="com.balsamiq.mockups::Icon" x="950" y="281" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="18" locked="false" isInGroup="-1">
-      <controlProperties>
-        <icon>Info2Icon%7Cxsmall</icon>
-      </controlProperties>
-    </control>
-    <control controlID="98" controlTypeID="com.balsamiq.mockups::Label" x="165" y="327" w="73" h="25" measuredW="75" measuredH="25" zOrder="19" locked="false" isInGroup="-1">
+    <control controlID="98" controlTypeID="com.balsamiq.mockups::Label" x="165" y="327" w="73" h="25" measuredW="74" measuredH="25" zOrder="18" locked="false" isInGroup="-1">
       <controlProperties>
         <color>4144959</color>
         <text>Descripci%F3n</text>
       </controlProperties>
     </control>
-    <control controlID="99" controlTypeID="com.balsamiq.mockups::TextArea" x="165" y="345" w="364" h="66" measuredW="200" measuredH="140" zOrder="20" locked="false" isInGroup="-1">
+    <control controlID="99" controlTypeID="com.balsamiq.mockups::TextArea" x="165" y="345" w="364" h="66" measuredW="200" measuredH="140" zOrder="19" locked="false" isInGroup="-1">
       <controlProperties>
         <bold>false</bold>
+      </controlProperties>
+    </control>
+    <control controlID="100" controlTypeID="com.balsamiq.mockups::StickyNote" x="747" y="554" w="192" h="99" measuredW="109" measuredH="123" zOrder="20" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>false</bold>
+        <text>Por%20defecto%20se%20selecciona%20el%20costo%20unitario</text>
       </controlProperties>
     </control>
   </controls>

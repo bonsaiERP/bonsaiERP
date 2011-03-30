@@ -116,7 +116,6 @@ private
   end
 
   def set_currency_rates
-    @currency_rates = {}
-    CurrencyRate.active.each {|cr| @currency_rates[cr.currency_id] = cr.rate }
+    @currency_rates = CurrencyRate.current_hash
   end
 end

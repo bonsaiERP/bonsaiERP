@@ -103,7 +103,7 @@
         </control>
       </groupChildrenDescriptors>
     </control>
-    <control controlID="44" controlTypeID="com.balsamiq.mockups::DataGrid" x="167" y="322" w="885" h="283" measuredW="758" measuredH="136" zOrder="10" locked="false" isInGroup="-1">
+    <control controlID="44" controlTypeID="com.balsamiq.mockups::DataGrid" x="167" y="322" w="885" h="283" measuredW="759" measuredH="136" zOrder="10" locked="false" isInGroup="-1">
       <controlProperties>
         <alternateRowColor>15594478</alternateRowColor>
         <bold>false</bold>
@@ -155,7 +155,7 @@
           <controlProperties>
             <bottomheight>0</bottomheight>
             <close>true</close>
-            <text>Definir%20cantidad%20m%EDnima</text>
+            <text>Definir%20cantidad%20m%EDnima%20en%20existencia</text>
           </controlProperties>
         </control>
         <control controlID="1" controlTypeID="com.balsamiq.mockups::Paragraph" x="21" y="33" w="289" h="59" measuredW="200" measuredH="140" zOrder="1" locked="false" isInGroup="56">
@@ -233,6 +233,12 @@
       <controlProperties>
         <bold>false</bold>
         <text>%5BAlmacenes%5D%20%3E</text>
+      </controlProperties>
+    </control>
+    <control controlID="67" controlTypeID="com.balsamiq.mockups::StickyNote" x="137" y="466" w="191" h="95" measuredW="109" measuredH="123" zOrder="22" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>false</bold>
+        <text>Agregar%20unidad%20de%20medida%20del%20item</text>
       </controlProperties>
     </control>
   </controls>

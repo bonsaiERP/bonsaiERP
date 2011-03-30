@@ -32,8 +32,8 @@
         %td= link_to buy.ref_number, buy, :class => 'b'
         %td= buy.contact
         %td.nw= lo buy.date
-        %td.cur= exchange(buy, :real_total, @currency_rates)
-        %td.cur= exchange(buy, :balance, @currency_rates)
+        %td.cur= ntc exchange(buy, :real_total, @currency_rates)
+        %td.cur= ntc exchange(buy, :balance, @currency_rates)
         %td <span>#{buy.currency_symbol}</span>
         %td <span class="#{buy.real_state}">#{buy.show_state}</span>
         %td= cash_credit(buy.cash)

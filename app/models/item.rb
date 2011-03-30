@@ -4,7 +4,8 @@
 class Item < ActiveRecord::Base
 
   #before_save :set_stockable
-  after_save :create_price
+  after_save     :create_price
+  before_destroy :check_items
 
   TYPES = ["item", "expense", "service", "product"]
 
@@ -135,6 +136,16 @@ private
       end
       first = false
       curr_val, curr_per = val, per
+    end
+  end
+
+  # checks if there are any items on destruction
+  def check_items_destroy
+    if TransactionDetail.org.where(:item_id => id).any
+      errors.add(:base, "El item es usado en otros registros relacionados")
+      false
+    else
+      true
     end
   end
 

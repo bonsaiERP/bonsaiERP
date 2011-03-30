@@ -10,7 +10,7 @@ class OrganisationsController < ApplicationController
   # GET /organisations.xml
   def index
     destroy_organisation_session!
-    @organisations = Organisation.all
+    @organisations = current_user.organisations
     respond_with(@organisations)
   end
 
@@ -68,7 +68,11 @@ class OrganisationsController < ApplicationController
   # GET /organisation/1/select
   # sets the organisation session
   def select
-    @organisation = Link.orgs.find{ |v| v.id == params[:id].to_i }
+    begin
+      @organisation = current_user.organisations.find(params[:id])
+    rescue
+      @organisation = nil
+    end
 
     unless @organisation.blank?
       set_organisation_session(@organisation)

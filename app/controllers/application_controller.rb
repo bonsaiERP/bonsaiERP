@@ -66,10 +66,7 @@ private
 
   # Sets the session for the organisation
   def set_organisation_session(organisation)
-    session[:organisation] = {
-      :id => organisation.id, :name => organisation.name, 
-      :currency_id => organisation.currency_id, :currency_name => organisation.currency_name,
-      :currency_symbol => organisation.currency_symbol }
+    session[:organisation] = Hash[ OrganisationSession::KEYS.map {|k| [k, organisation.send(k)] } ]
     set_organisation
   end
 
@@ -86,7 +83,7 @@ private
    # Checks if is set the organisation session
   # @return [True, False]
   def organisation?
-    session[:organisation] and session[:organisation].size > 0
+    session[:organisation] and session[:organisation].any?
   end
 
   # Sets the organisation_id to help to set in the models

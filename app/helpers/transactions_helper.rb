@@ -20,9 +20,9 @@ module TransactionsHelper
   def exchange(klass, method, currencies)
     unless klass.currency_id == currency_id
       rate = currencies[klass.currency_id].round(2)
-      ntc(klass.send(method) * rate)
+      klass.send(method) * rate
     else
-      ntc(klass.send(method))
+      klass.send(method)
     end
   end
 

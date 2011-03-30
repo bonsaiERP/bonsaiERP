@@ -1,7 +1,57 @@
 :css
   p.dash, ol.dash li{font-size: 120%; padding: 7px;}
-%h1 Bienvenido, <span class="dark_green">aún estamos en desarrollo intensivo! :)</span>
+  .box{
+    border: 1px solid #CFCFCF;
+    margin: 7px;
+    padding: 5px;
+    float: left;
+    width: 430px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    -moz-box-shadow: 1px 1px 2px #AFAFAF;
+    -webkit-box-shadow: 1px 1px 2px #AFAFAF;
+    box-shadow: 1px 1px 2px #AFAFAF;
+  }
+  ul.list{ padding: 2px 0px; border-top: 1px solid #AFAFAF; }
+  ul.list>li{ list-style: none; margin: 8px 2px 5px; padding: 0px; }
+  .box h3, .box h4{ margin: 0px 0px 4px; }
 
+
+%h1 Bienvenido, aún estamos en desarrollo intensivo! :)
+
+
+
+.box
+  %h2 Cuentas por <span class="dark_green">cobrar</span>
+
+.box
+  %h2 Cuentas por <span class="red">pagar</span>
+
+.box
+  %h3 Cuentas
+  - tot = 0
+  - Account.org.includes(:account_ledgers, :currency).each do |ac|
+    %ul.list
+      %li
+        %h4= link_to ac, ac, :class => 'b'
+
+        - unless ac.currency_id == currency_id
+          - tot += exchange(ac, :total_amount, @currency_rates)
+          .b.fl._50 #{currency_symbol} #{ntc exchange(ac, :total_amount, @currency_rates)}
+        - else
+          - tot += ac.total_amount
+
+        .b.fl._50 #{with_currency ac, :total_amount}
+        .clear
+        = link_pendent_ledgers(ac)
+
+    %h3.black #{currency_symbol} #{ntc tot}
+
+.box
+  %h2 Ultimo movimiento
+
+.clear
 %p.dash
   Te recomendamos:
   %ol.dash

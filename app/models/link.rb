@@ -6,6 +6,8 @@ class Link < ActiveRecord::Base
   belongs_to :organisation
   belongs_to :user
 
+  has_many :organisations
+
   attr_protected :user_id, :creator
 
   # rol_id needs to be asgined with the Rol model
@@ -13,10 +15,6 @@ class Link < ActiveRecord::Base
   validates_associated :user
   validates_associated :organisation
 
-  def self.orgs
-    links = Link.where(:user_id => UserSession.current_user.try(:id) )
-    links.map(&:organisation)
-  end
   # scope :orgs, where(:user_id => UserSession.current_user.try(:id) )
 
   # Sets the current user and other attributes

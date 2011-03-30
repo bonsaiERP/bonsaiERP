@@ -36,8 +36,8 @@
         %td= link_to income.ref_number, income, :class => 'b'
         %td= income.contact
         %td.nw= lo income.date
-        %td.cur= exchange(income, :real_total, @currency_rates)
-        %td.cur= exchange(income, :balance, @currency_rates)
+        %td.cur= ntc exchange(income, :real_total, @currency_rates)
+        %td.cur= ntc exchange(income, :balance, @currency_rates)
         %td <span>#{income.currency_symbol}</span>
         %td <span class="#{income.real_state}">#{income.show_state}</span>
         %td= cash_credit(income.cash)

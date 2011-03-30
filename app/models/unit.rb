@@ -5,9 +5,12 @@ class Unit < ActiveRecord::Base
 
   acts_as_org
 
+  # callbacks
+  before_save    :strip_attributes
+  before_destroy :check_items_destroy
+
   # relationships
   belongs_to :organisation
-  before_save :strip_attributes
 
   has_many :items
 
@@ -40,6 +43,16 @@ protected
   def strip_attributes
     name.strip!
     symbol.strip!
+  end
+
+  # Returns false if there are
+  def check_items_destroy
+    if Item.org.where(:unit_id => id).any?
+      errors.add(:base, "Existen items que usan esta unidad de medidad")
+      false
+    else
+      true
+    end
   end
 
 end

@@ -4,6 +4,8 @@
 # Used to access the organisation_id in the models
 class OrganisationSession
 
+  KEYS = [:id, :name, :currency_id, :currency_name, :currency_symbol]
+
   class << self
     attr_reader :organisation_id, :name, :currency_id
     # Stores using de application_controller the current_user for devise

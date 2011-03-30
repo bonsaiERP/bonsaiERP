@@ -27,6 +27,11 @@ class CurrencyRate < ActiveRecord::Base
     end
   end
 
+  # Creates a Hash of the currency_rates
+  def self.current_hash
+    Hash[ CurrencyRate.active.map {|cr| [cr.currency_id, cr.rate] } ]
+  end
+
   # Method to create new currencies
   def self.create_currencies(values)
     values = values.map{ |v| v.last } if values.is_a? Hash

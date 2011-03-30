@@ -61,4 +61,8 @@ module AccountsHelper
       "#{klass.account_ledgers.pendent.size} conciliaciones pendientes"
     end
   end
+
+  def link_pendent_ledgers(klass)
+    link_to( "Conciliaciones pendientes (#{klass.account_ledgers.pendent.size})", "#{polymorphic_url(klass)}?option=false") if klass.account_ledgers.pendent.any?
+  end
 end
