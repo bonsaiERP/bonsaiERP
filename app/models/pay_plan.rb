@@ -34,6 +34,61 @@ class PayPlan < ActiveRecord::Base
   # scopes
   scope :unpaid, where(:paid => false)
   scope :paid,   where(:paid => true)
+  scope :date,   lambda {|d| where(["payment_date <= ?", d]) }
+  scope :in,     where(:ctype => "Income")
+  scope :out,    where(:ctype => ["Buy", "Expense"])
+
+  def self.in_to_currency(currency_id, date)
+    sum_with_exchange_rate( PayPlan.org.unpaid.in.date(date), currency_id )
+  end
+
+  def self.out_to_currency(currency_id, date)
+    sum_with_exchange_rate( PayPlan.org.unpaid.out.date(date), currency_id )
+  end
+
+  # Sums a list of objects with the exchange rate
+  def self.sum_with_exchange_rate(list, currency_id)
+    @exchange_rates ||= CurrencyRate.current_hash
+    tot = 0
+
+    list.each do |pp|
+      if currency_id == pp.currency_id
+        tot += pp.amount
+      else
+        tot += pp.amount * @exchange_rates[pp.currency_id]
+      end
+    end
+
+    tot
+  end
+
+  def self.get_most_important(currency_id, date, offset= 0,limit = 5)
+    sql = "SELECT id, amount, currency_id, payment_date, "
+    sql << create_currency_query(currency_id, date)
+    sql << "FROM pay_plans WHERE organisation_id = ? "
+    sql << "AND payment_date <= ? \n"
+    sql << "ORDER BY amount_currency DESC\n"
+    sql << "LIMIT #{offset}, #{5}"
+
+    Organisation.find_by_sql([sql, OrganisationSession.organisation_id, date.to_date])
+  end
+
+  # Creates the query for exchanging the rate
+  def self.create_currency_query(currency_id, date)
+    @exchange_rates ||= CurrencyRate.current_hash
+
+    sql = "CASE(currency_id)\n"
+    get_currency_ids(date).each do |cur_id|
+      sql << "WHEN #{cur_id} THEN amount * #{ @exchange_rates[cur_id] }\n"
+    end
+    sql << "ELSE amount\n"
+    sql << "END AS amount_currency\n"
+  end
+
+  def self.get_currency_ids(date)
+    pps = PayPlan.select("DISTINCT(currency_id) AS currency_id, amount, interests_penalties, payment_date, alert_date, email").org.unpaid.date(date).group("currency_id")
+    pps.map(&:currency_id) 
+  end
 
   # Returns the current state of the payment
   def state

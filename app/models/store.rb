@@ -5,4 +5,8 @@ class Store < ActiveRecord::Base
   acts_as_org
 
   validates_presence_of :name, :address
+
+  def to_s
+    name
+  end
 end

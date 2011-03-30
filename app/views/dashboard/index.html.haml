@@ -16,6 +16,8 @@
   ul.list{ padding: 2px 0px; border-top: 1px solid #AFAFAF; }
   ul.list>li{ list-style: none; margin: 8px 2px 5px; padding: 0px; }
   .box h3, .box h4{ margin: 0px 0px 4px; }
+  .box ul.norm{margin: 0px; padding: 0px; }
+  .box ul.norm li{list-style: none; padding: 4px; }
 
 
 %h1 Bienvenido, aún estamos en desarrollo intensivo! :)
@@ -23,10 +25,24 @@
 
 
 .box
-  %h2 Cuentas por <span class="dark_green">cobrar</span>
+  %h3._50.fl Cuentas por <span class="dark_green">cobrar</span>
+  .hint._50.fl En los siguientes 30 días
+  .clear
+  %h3.black #{currency_symbol} #{ntc PayPlan.in_to_currency(currency_id, 30.days.from_now) }
+
+  %h4 5 cuentas mas importantes
+  - PayPlan.get_most_important(currency_id, 30.days.from_now).each do |pp|
+    %ul.norm
+      %li= link_to "#{ntc pp.amount_currency} - #{l pp.payment_date}", ""
 
 .box
-  %h2 Cuentas por <span class="red">pagar</span>
+
+  %h3._50.fl Cuentas pagar <span class="red">cobrar</span>
+  .hint._50.fl En los siguientes 30 días
+  .clear
+  %h3.black #{currency_symbol} #{ntc PayPlan.out_to_currency(currency_id, 30.days.from_now) }
+.box
+.clear
 
 .box
   %h3 Cuentas
