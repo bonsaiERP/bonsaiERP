@@ -33,7 +33,9 @@
   %h4 5 cuentas mas importantes
   - PayPlan.get_most_important(currency_id, 30.days.from_now).each do |pp|
     %ul.norm
-      %li= link_to "#{ntc pp.amount_currency} - #{l pp.payment_date}", ""
+      %li
+        %span.b= "#{currency_symbol} #{ntc(pp.amount_currency)}"
+        = link_to l(pp.payment_date), "/incomes/#{ pp.transaction_id }"
 
 .box
 

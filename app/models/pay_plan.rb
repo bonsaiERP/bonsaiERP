@@ -63,7 +63,7 @@ class PayPlan < ActiveRecord::Base
   end
 
   def self.get_most_important(currency_id, date, offset= 0,limit = 5)
-    sql = "SELECT id, amount, currency_id, payment_date, "
+    sql = "SELECT id, amount, currency_id, payment_date, ctype, transaction_id, "
     sql << create_currency_query(currency_id, date)
     sql << "FROM pay_plans WHERE organisation_id = ? "
     sql << "AND payment_date <= ? \n"
