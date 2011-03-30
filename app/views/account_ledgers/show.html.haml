@@ -23,7 +23,7 @@
     = simple_form_for @account_ledger, :url => conciliate_account_ledger_path(@account_ledger) do |f|
       = f.submit "Conciliar transacción"
   :javascript
-    $(function() {
+    head.ready(function() {
       $('.conciliation form').submit(function() {
         if(confirm("Conciliar una transacción es una operación irreversible, esta seguro?")) {
           return true;

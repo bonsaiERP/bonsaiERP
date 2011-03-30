@@ -1,0 +1,13 @@
+- content_for :links do
+  %ul.breadcrumps
+    %li #{link_to "Unidades de medida", units_path} &gt;
+  
+  .links
+    = link_to 'Nuevo', @unit, :class => 'add'
+    = link_to 'Ver', @unit, :class => 'show'
+    = link_to 'Borrar', @unit, :class => 'delete'
+
+
+%h1
+  = @unit.to_s 
+  <span class="grey n">Entero:</span> <span class="#{@unit.integer.to_s}"></span>

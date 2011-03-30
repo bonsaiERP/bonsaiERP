@@ -43,7 +43,7 @@
 
 /= javascript_include_tag 'app/item'
 :javascript
-  $(function() {
+  head.ready(function() {
     if( $('#item_discount').length > 0 ) {
       /*
       $('#item_discount span').hide();

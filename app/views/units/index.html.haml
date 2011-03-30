@@ -1,0 +1,18 @@
+- content_for :links do
+  .links=link_to 'Nueva unidad', new_unit_path, :class => "new"
+
+%h1 Unidades de medida
+
+%table.decorated
+  %tr
+    %th Nombre
+    %th Simbolo
+    %th Entero
+    %th 
+
+  - @units.each do |unit|
+    %tr
+      %td= link_to unit.name, unit, :class => 'b'
+      %td= unit.symbol
+      %td.c <span class="#{ unit.integer}"></span>
+      %td=  raw bonsai_links(unit)

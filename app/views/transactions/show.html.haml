@@ -82,7 +82,7 @@
     =render "/pay_plans/pay_plans", :transaction => @transaction if @transaction.show_pay_plans?
 
 :javascript
-  $(function () {
+  head.ready(function () {
     $('#tabs').tabs();
 
     if(!#{@transaction.paid?} && #{@transaction.cash}) {
