@@ -7,14 +7,19 @@
 
     %title Bonsai
     = stylesheet_link_tag 'style', 'jquery-ui-1.8.10.custom.css' 
-    = javascript_include_tag 'jquery-1.5.min', 'jquery-ui-1.8.8.custom.min.js', 'jquery.ui.datepicker-es.js', 'tooltip.min', 'jquery.tmpl.min', :cache => 'javascripts'
-    = javascript_include_tag 'application'
+    =javascript_include_tag "head.min"
+    :javascript
+      head.js('/javascripts/jquery-1.5.min.js')
+          .js('/javascripts/jquery-ui-1.8.8.custom.min.js')
+          .js('/javascripts/jquery.ui.datepicker-es.js')
+          .js('/javascripts/tooltip.min.js')
+          .js('/javascripts/jquery.tmpl.min.js')
+          .js('/javascripts/application.js');
+
+
+    /= javascript_include_tag 'jquery-1.5.min', 'jquery-ui-1.8.8.custom.min.js', 'jquery.ui.datepicker-es.js', 'tooltip.min', 'jquery.tmpl.min', :cache => 'javascripts'
+    /= javascript_include_tag 'application'
     /, 'rails'
-
-    - if Rails.env == 'test'
-      :javascript
-        $.ajaxSetup({ async: false });
-
   %body
 
     - if Rails.env == 'development'

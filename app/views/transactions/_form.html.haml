@@ -88,10 +88,10 @@
   .actions
     = f.submit 'Salvar'
 
-= javascript_include_tag "app/transactions"
 
 :javascript
-  $(function() {
+  head.js('/javascripts/app/transactions.js', function() {
+  
     var items = #{ @items.json.to_json };
     var currencies = #{ Currency.select("id, name, symbol").to_json };
     var exchange_rates = #{ CurrencyRate.active.select("rate, currency_id").to_json };
@@ -105,4 +105,4 @@
     $('body').live('new_contact', function(e, resp) {
       $('#income_contact_id').createSelectOption(resp.id, resp.matchcode);
     });
-  })
+  });
