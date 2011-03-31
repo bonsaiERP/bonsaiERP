@@ -1,7 +1,7 @@
 class AddAccountLedgersConcilationDescription < ActiveRecord::Migration
   def self.up
     add_column :account_ledgers, :conciliation, :boolean
-    add_column :account_ledgers, :description, :text
+    add_column :account_ledgers, :description, :string
 
     add_index :account_ledgers, :conciliation
     add_index :account_ledgers, :description
