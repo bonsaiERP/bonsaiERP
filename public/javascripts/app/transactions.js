@@ -354,5 +354,5 @@
     }
     return Expense;
   })();
-  window.Buy = Buy;
+  window.Expense = Expense;
 }).call(this);

@@ -10,7 +10,7 @@ class ExpensesController < ApplicationController
   # GET /buys
   # GET /buys.xml
   def index
-    @buys = Expense.find_with_state(params[:option]).page(@page)
+    @expenses = Expense.find_with_state(params[:option]).page(@page)
   end
 
   # GET /buys/1
@@ -25,7 +25,7 @@ class ExpensesController < ApplicationController
   # GET /buys/new
   # GET /buys/new.xml
   def new
-    @transaction = Buy.new(:date => Date.today, :discount => 0, :currency_exchange_rate => 1, :currency_id => currency_id )
+    @transaction = Expense.new(:date => Date.today, :discount => 0, :currency_exchange_rate => 1, :currency_id => currency_id )
     @transaction.transaction_details.build
   end
 
@@ -41,7 +41,7 @@ class ExpensesController < ApplicationController
   # POST /buys
   # POST /buys.xml
   def create
-    @transaction = Buy.new(params[:buy])
+    @transaction = Expense.new(params[:buy])
     respond_to do |format|
       if @transaction.save
         format.html { redirect_to(@transaction, :notice => 'Se ha creado una proforma de venta.') }

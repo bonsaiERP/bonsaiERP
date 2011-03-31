@@ -320,4 +320,4 @@ class Expense extends Transaction
     @conf['insert_exchange_rate_prompt'] = "Ingrese el tipo de cambio"
     super
 
-window.Buy = Buy
+window.Expense = Expense

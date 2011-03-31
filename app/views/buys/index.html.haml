@@ -15,15 +15,16 @@
 %table{ :class => 'decorated nwl' }
   %thead
     %tr
-      %th{ :title => 'Número de referencia' } Num. Ref.
+      %th{ :title => 'Número de referencia' } Nº Ref.
       %th Proveedor
-      %th Fecha
-      %th Total<br/>#{currency_plural}
-      %th Saldo<br/>#{currency_plural}
+      %th Vence el
+      %th Total<br/>#{currency_symbol}
+      %th Saldo<br/>#{currency_symbol}
+      %th{:title => 'Saldo Inventario'} Saldo<br/>Inv. #{currency_symbol}
       %th{:title => 'Moneda'} Mon.
       %th Estado
       %th Contado<br/>Crédito
-      %th Vence el
+      %th Fecha
       %th
 
   %tbody
@@ -31,13 +32,14 @@
       %tr{ :class => cycle(:odd, :even) }
         %td= link_to buy.ref_number, buy, :class => 'b'
         %td= buy.contact
-        %td.nw= lo buy.date
+        %td= lo buy.payment_date unless buy.paid?
         %td.cur= ntc exchange(buy, :real_total, @currency_rates)
         %td.cur= ntc exchange(buy, :balance, @currency_rates)
+        %td.cur
         %td <span>#{buy.currency_symbol}</span>
         %td <span class="#{buy.real_state}">#{buy.show_state}</span>
         %td= cash_credit(buy.cash)
-        %td= lo buy.payment_date unless buy.paid?
+        %td.nw= lo buy.date
         %td.actions
           = bonsai_links(buy) if buy.draft?
 

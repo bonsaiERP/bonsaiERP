@@ -3,6 +3,9 @@
     %li #{link_to 'Gastos', expenses_path} <span>&gt;</span>
   .links
     = link_to 'Ver', @transaction, :class => 'show'
+    - if transaction.draft?
+      = link_to 'Editar', "/#{params[:controller]}/#{transaction.id}/edit", :class => 'edit'
+      = link_to 'Borrar', transaction, :class => 'delete'
 
 %h1 Editar editar
 

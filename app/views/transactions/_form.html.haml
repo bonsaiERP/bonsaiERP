@@ -100,9 +100,23 @@
     var transaction = new #{transaction.type}(items, "#transaction_form", {'default_currency_id': default_currency_id }, currencies, exchange_rates );
     window.transaction = transaction;
 
-
     // Functions for the select boxes
     $('body').live('new_contact', function(e, resp) {
       $('#income_contact_id').createSelectOption(resp.id, resp.matchcode);
     });
+
+
+    var type = "#{transaction.type.downcase}";
+    // Functions to add new contact and new project
+    $('body').live('new_contact', function(e, resp) {
+      $('#' + type + '_contact_id').createSelectOption(resp.id, resp.matchcode);
+    }).live('new_project', function(e, resp) {
+      $('#' + type + '_project_id').createSelectOption(resp.id, resp.name);
+    });
+
+    /**
+    * Test data
+    var c = {"address":"Av. Arce\nN\u00ba2017","address_alt":null,"aditional_info":null,"client":false,"code":null,"created_at":"2011-03-31T16:44:32Z","email":null,"id":19,"last_name":"Lamy","matchcode":"Clemente Lamy","mobile":null,"name":"Clemente","organisation_id":1,"organisation_name":"Ifaro","phone":null,"supplier":false,"tax_number":null,"updated_at":"2011-03-31T16:44:32Z"};
+
+    */
   });

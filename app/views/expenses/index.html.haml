@@ -1,5 +1,5 @@
 - content_for :links do
-  .links= link_to "Nueva compra", new_buy_path, :class => 'new'
+  .links= link_to "Nuevo gasto", new_expense_path, :class => 'new'
 
 %h1 Gastos
 
@@ -10,20 +10,20 @@
   %li= link_incomes "Vencidas", 'due'
   %li= link_incomes "Pagadas", 'paid'
 
-= paginate @buys
+= paginate @expenses
 
 %table{ :class => 'decorated nwl' }
   %thead
     %tr
-      %th{ :title => 'Número de referencia' } Num. Ref.
+      %th{ :title => 'Número de referencia' } Nº Ref.
       %th Proveedor
-      %th Fecha
-      %th Total<br/>#{currency_plural}
-      %th Saldo<br/>#{currency_plural}
+      %th Vence el
+      %th Total<br/>#{currency_symbol}
+      %th Saldo<br/>#{currency_symbol}
       %th{:title => 'Moneda'} Mon.
       %th Estado
       %th Contado<br/>Crédito
-      %th Vence el
+      %th Fecha
       %th
 
   %tbody
@@ -31,13 +31,13 @@
       %tr{ :class => cycle(:odd, :even) }
         %td= link_to expense.ref_number, expense, :class => 'b'
         %td= expense.contact
-        %td.nw= lo expense.date
+        %td= lo expense.payment_date unless expense.paid?
         %td.cur= ntc exchange(expense, :real_total, @currency_rates)
         %td.cur= ntc exchange(expense, :balance, @currency_rates)
         %td <span>#{expense.currency_symbol}</span>
         %td <span class="#{expense.real_state}">#{expense.show_state}</span>
         %td= cash_credit(expense.cash)
-        %td= lo expense.payment_date unless expense.paid?
+        %td.nw= lo expense.date
         %td.actions
           = bonsai_links(expense) if expense.draft?
 
