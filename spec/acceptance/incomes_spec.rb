@@ -541,14 +541,17 @@ feature "Income", "test features" do
     i.pay_plans(true).unpaid.size.should == 3
     i.pay_plans.unpaid.first.interests_penalties.should == interests.slice(0,5).sum - 50
     i.pay_plans_total.should == i.reload.balance
+    i.payments(true).size.should == 2
 
     #i.pay_plans(true).each {|pp| puts "#{pp.amount}  #{pp.interests_penalties} :: #{pp.paid}"}
-    # Create a new payment
+    # Create a new payment and display error because the amount does not cover interests
     p = i.new_payment(:amount => i.balance, :reference => 'NA', :account_id => 1, :date => Date.today, :interests_penalties => 0)
     p.save.should_not == true
     p.errors[:base].should_not == blank?
     
     i.pay_plans(true).unpaid.size.should == 3
+
+    i.payments(true).size.should == 2
   end
 
 end

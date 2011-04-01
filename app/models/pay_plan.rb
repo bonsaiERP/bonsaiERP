@@ -5,6 +5,7 @@ class PayPlan < ActiveRecord::Base
   acts_as_org
   after_initialize :set_defaults
   before_save      :set_currency_id
+  before_save      :set_ctype,      :if => 'ctype.blank?'
   before_destroy   :check_if_paid
   #after_save :update_transaction
   #after_save :update_transaction_payment_date
@@ -62,24 +63,24 @@ class PayPlan < ActiveRecord::Base
     tot
   end
 
-  def self.get_most_important(currency_id, date, offset= 0,limit = 5)
+  def self.get_most_important(currency_id, date, types, offset= 0,limit = 5)
     sql = "SELECT id, amount, currency_id, payment_date, ctype, transaction_id, "
     sql << create_currency_query(currency_id, date)
-    sql << "FROM pay_plans WHERE organisation_id = ? "
+    sql << "FROM pay_plans WHERE organisation_id = ? AND paid = ? "
     sql << "AND payment_date <= ? \n"
+    sql << "AND ctype IN (?) \n"
     sql << "ORDER BY amount_currency DESC\n"
-    sql << "LIMIT #{offset}, #{5}"
+    sql << "LIMIT #{offset}, #{limit}"
 
-    Organisation.find_by_sql([sql, OrganisationSession.organisation_id, date.to_date])
+    Organisation.find_by_sql([sql, OrganisationSession.organisation_id, false, date.to_date, types])
   end
 
   # Creates the query for exchanging the rate
   def self.create_currency_query(currency_id, date)
     @exchange_rates ||= CurrencyRate.current_hash
-
     sql = "CASE(currency_id)\n"
     get_currency_ids(date).each do |cur_id|
-      sql << "WHEN #{cur_id} THEN amount * #{ @exchange_rates[cur_id] }\n"
+      sql << "WHEN #{cur_id} THEN amount * #{ @exchange_rates[cur_id] }\n" unless currency_id == cur_id
     end
     sql << "ELSE amount\n"
     sql << "END AS amount_currency\n"
@@ -197,5 +198,9 @@ private
       self.errors.add(:base, text)
       text
     end
+  end
+
+  def set_ctype
+    ctype = transaction.type
   end
 end

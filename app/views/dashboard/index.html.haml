@@ -22,27 +22,35 @@
 
 %h1 Bienvenido, aún estamos en desarrollo intensivo! :)
 
+- fdate = 60
 
 .box
   %h3._50.fl Cuentas por <span class="dark_green">cobrar</span>
-  .hint._50.fl En los siguientes 30 días
+  .hint._50.fl En los siguientes #{fdate} días
   .clear
-  %h3.black #{currency_symbol} #{ntc PayPlan.in_to_currency(currency_id, 30.days.from_now) }
+  %h3.black #{currency_symbol} #{ntc PayPlan.in_to_currency(currency_id, fdate.days.from_now) }
 
-  %h4 5 cuentas mas importantes
-  - PayPlan.get_most_important(currency_id, 30.days.from_now).each do |pp|
-    %ul.norm
+  %h4 cuentas mas importantes
+  %ul.norm
+    - PayPlan.get_most_important(currency_id, fdate.days.from_now, ["Income"]).each do |pp|
       %li
         %span.b= "#{currency_symbol} #{ntc(pp.amount_currency)}"
         = link_to l(pp.payment_date), "/incomes/#{ pp.transaction_id }"
 
 .box
 
-  %h3._50.fl Cuentas pagar <span class="red">cobrar</span>
-  .hint._50.fl En los siguientes 30 días
+  %h3._50.fl Cuentas pagar <span class="red">pagar</span>
+  .hint._50.fl En los siguientes #{fdate} días
   .clear
-  %h3.black #{currency_symbol} #{ntc PayPlan.out_to_currency(currency_id, 30.days.from_now) }
-.box
+  %h3.black #{currency_symbol} #{ntc PayPlan.out_to_currency(currency_id, fdate.days.from_now) }
+
+  %h4 cuentas mas importantes
+  %ul.norm
+    - PayPlan.get_most_important(currency_id, fdate.days.from_now, ["Buy", "Expense"]).each do |pp|
+      %li
+        %span.b= "#{currency_symbol} #{ntc(pp.amount_currency)}"
+        = link_to l(pp.payment_date), "/incomes/#{ pp.transaction_id }"
+
 .clear
 
 .box

@@ -93,10 +93,6 @@ module ::Transaction::PayPlans
           @end = true
         end
 
-        #if pp.destroy_in_list
-        #  pp.destroy
-        #  @saved = pp.destroyed?
-        #  total_sum -= pp.amount
         if pp.changed?
           @saved = pp.save
         end

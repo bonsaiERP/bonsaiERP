@@ -3,6 +3,7 @@
   #items_table .input{
     margin: 2px 0px;
   }
+  input.hide{ display: none; }
 
 = simple_form_for(transaction, :html => {:id => 'transaction_form'}) do |f|
   = bonsai_form_error(f)
@@ -51,8 +52,12 @@
 
     = f.simple_fields_for :transaction_details do |fd|
       %tr.item
-        %td.cur= fd.input :item_id, :label => false, :collection => @items, :input_html => {:class => 'item fl', 'data-new_url' => new_item_path, 'data-title' => 'Nuevo producto/servicio', 'data-trigger' => 'new_client'}
-        %td= fd.input :description, :label => false
+        %td.cur
+          <input class="container" type="text" value="#{fd.object.item}" data-trigger="new_item" data-new_url="#{new_item_path(:type => transaction.type)}" size="35" />
+          = fd.input :item_id, :input_html => {:class => 'hide'}, :label => false
+        /%td.cur= text_field_tag :input_id, fd.object.item.to_s, :size => 35, 'data-new_url' => new_item_path, 'data-trigger' => 'new_item'
+        /%td.cur= fd.input :item_id, :label => false, :collection => @items, :input_html => {:class => 'item', 'data-new_url' => new_item_path, 'data-title' => 'Nuevo producto/servicio', 'data-trigger' => 'new_client'}
+        %td= fd.input :description, :label => false, :input_html => {:size => 20}
 
         %td= fd.input :price, :input_html => { :size => 8, :class => 'price', :type => 'decimal' }, :label => false
         %td= fd.input :quantity, :input_html => { :size => 8, :class => 'quantity', :type => 'decimal' }, :label => false
@@ -91,6 +96,10 @@
 
 :javascript
   head.js('/javascripts/app/transactions.js', function() {
+
+    $('a#add_item').click(function() {
+      $('#item_autocomplete').hide().insertAfter('#items_table');
+    });
   
     var items = #{ @items.json.to_json };
     var currencies = #{ Currency.select("id, name, symbol").to_json };
@@ -112,6 +121,31 @@
       $('#' + type + '_contact_id').createSelectOption(resp.id, resp.matchcode);
     }).live('new_project', function(e, resp) {
       $('#' + type + '_project_id').createSelectOption(resp.id, resp.name);
+    });
+
+
+    var source = [{"label":"Bulah Bernier","id":0},{"label":"Sincere Jacobson","id":1},{"label":"Rosie Kovacek","id":2},{"label":"Jalabela Yundt","id":3},{"label":"Logan Raynor","id":4},{"label":"Amelie Grady","id":5},{"label":"Alessandro Kuvalis","id":6},{"label":"Brenda Walter","id":7},{"label":"Cleve Trantow","id":8},{"label":"Assunta Marvin","id":9},{"label":"Nicolas Rath","id":10},{"label":"Toby Dicki","id":11},{"label":"Winifred Hagenes","id":12},{"label":"Oda Lesch","id":13},{"label":"Neha Wintheiser","id":14},{"label":"Allison Cartwright","id":15},{"label":"Otto Little","id":16},{"label":"Claudia Grant","id":17},{"label":"Isaac Konopelski","id":18},{"label":"Gabriel Batz","id":19},{"label":"Elvie Haag","id":20},{"label":"Sofia D'Amore","id":21},{"label":"Cristal Ledner","id":22},{"label":"Brooklyn Koelpin","id":23},{"label":"Jayda Howell","id":24},{"label":"Carroll Langosh","id":25},{"label":"Kallie Breitenberg","id":26},{"label":"Marjory Nicolas","id":27},{"label":"Sandy Davis","id":28},{"label":"Stewart Keebler","id":29},{"label":"Elda Hettinger","id":30},{"label":"General Nikolaus","id":31},{"label":"Missouri Witting","id":32},{"label":"Abdul Krajcik","id":33},{"label":"Evie Ferry","id":34},{"label":"Damaris Skiles","id":35},{"label":"Baby Kutch","id":36},{"label":"Jameson Bailey","id":37},{"label":"Sadye Dickinson","id":38},{"label":"Gaetano Johnson","id":39},{"label":"Ima Gerlach","id":40},{"label":"Mallie Swaniawski","id":41},{"label":"Gustave Denesik","id":42},{"label":"Emilie O'Connell","id":43},{"label":"Audie Lindgren","id":44},{"label":"Zane Nikolaus","id":45},{"label":"Jovani Schowalter","id":46},{"label":"Mary Greenholt","id":47},{"label":"Edgar Stoltenberg","id":48},{"label":"Charles Schuppe","id":49},{"label":"Nicola Kuphal","id":50},{"label":"Billy Rodriguez","id":51},{"label":"Fletcher Koch","id":52},{"label":"Golden Romaguera","id":53},{"label":"Ricky Thompson","id":54},{"label":"Celia O'Kon","id":55},{"label":"Gussie Lind","id":56},{"label":"Ike Jones","id":57},{"label":"Rocio Botsford","id":58},{"label":"Heather Hilpert","id":59},{"label":"Keanu Reichert","id":60},{"label":"Ollie Lind","id":61},{"label":"Aglae Hartmann","id":62},{"label":"Vincenza Rath","id":63},{"label":"Andre Purdy","id":64},{"label":"Lonie Marks","id":65},{"label":"Octavia Hegmann","id":66},{"label":"Nicholaus Nienow","id":67},{"label":"Murray Koepp","id":68},{"label":"Isadore Lindgren","id":69},{"label":"Lambert Bayer","id":70},{"label":"Scottie Wiza","id":71},{"label":"Ron Schnelabeler","id":72},{"label":"Kailey Mueller","id":73},{"label":"Liam Legros","id":74},{"label":"Filomena Ward","id":75},{"label":"Erich Hahn","id":76},{"label":"Skylar Hilpert","id":77},{"label":"Vlabela Fadel","id":78},{"label":"Adonis Christiansen","id":79},
+      {"label":"Opal Lowe","id":80},{"label":"Devyn Bartoletti","id":81},{"label":"Keely Connelly","id":82},{"label":"Bradly Smitham","id":83},{"label":"Mozelle Ward","id":84},{"label":"Jarrett Borer","id":85},{"label":"Lera Daugherty","id":86},{"label":"Xander Turcotte","id":87},{"label":"Bertrand Shields","id":88},{"label":"Rey Waters","id":89},{"label":"Nathanial Watsica","id":90},{"label":"Lenora Davis","id":91},{"label":"Ines Greenfelder","id":92},{"label":"Lindsay Wiza","id":93},{"label":"Chandler Larkin","id":94},{"label":"Vergie Rodriguez","id":95},{"label":"Elenora Huels","id":96},{"label":"Adam Lowe","id":97},{"label":"Lindsay Carter","id":98},{"label":"Destin Eichmann","id":99},{"label":"Rickie Kutch","id":100},{"label":"Jordan Harber","id":101},{"label":"Mara Moore","id":102},{"label":"Forrest Carter","id":103},{"label":"Alyce Tromp","id":104},{"label":"Walker Corwin","id":105},{"label":"Benjamin Will","id":106},{"label":"Theresa Pollich","id":107}];
+
+
+    $('<input/>').attr({'type':'text', 'id': 'item_autocomplete', 'size': 35}).appendTo('body').hide()
+    $('#item_autocomplete').live('focusout', function() {
+      $(this).siblings('input.container').show();
+      $(this).hide();
+    });
+
+    $('input.container').live('focusin', function() {
+      $(this).hide().after($('#item_autocomplete').show());
+      $('#item_autocomplete').val( $(this).val() ).focus();
+
+    });
+
+    $('#item_autocomplete').autocomplete({
+      source: source,
+      select: function(e, ui) {
+        $(this).siblings('div').find('input.hide').val(ui.item.id);
+        $(this).siblings('input.container').val(ui.item.label);
+      }
     });
 
     /**
