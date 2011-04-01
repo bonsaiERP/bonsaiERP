@@ -4,8 +4,8 @@
 class PayPlan < ActiveRecord::Base
   acts_as_org
   after_initialize :set_defaults
-  before_save :set_currency_id
-  before_destroy :check_if_paid
+  before_save      :set_currency_id
+  before_destroy   :check_if_paid
   #after_save :update_transaction
   #after_save :update_transaction_payment_date
   #after_destroy :update_transaction

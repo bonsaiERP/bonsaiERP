@@ -312,7 +312,7 @@ feature "Income", "test features" do
     i.pay_plans.unpaid.first.amount.should == i.balance
     i.pay_plans.unpaid.size.should == 1
        
-    p = i.new_payment(:account_id => 2, :reference => 'NA', :date => d, :currency_id => 2)
+    p = i.new_payment(:account_id => 2, :reference => 'NA', :date => d, :currency_id => 2, :exchange_rate => 7)
 
     p.save.should == true
     i = Income.find(i.id)
@@ -417,7 +417,7 @@ feature "Income", "test features" do
     i.state.should == 'approved'
   end
 
-  it 'should update correctly pay_plans after payments are destroyed' do
+  scenario 'should update correctly pay_plans after payments are destroyed' do
     
     d = Date.today
     i = Income.new(income_params.merge(:date => d, :currency_id => 1))
@@ -466,7 +466,7 @@ feature "Income", "test features" do
     i.balance.should == balance - 30
   end
 
-  it 'should conciliate the correct sum with payments' do
+  scenario 'should conciliate the correct sum with payments' do
     d = Date.today
     i = Income.new(income_params.merge(:date => d, :currency_id => 1))
 
@@ -500,4 +500,55 @@ feature "Income", "test features" do
     i.balance.should == balance - 30
     
   end
+
+  scenario 'payments with interests' do
+    d = Date.today
+    i = Income.new(income_params.merge(:date => d, :currency_id => 1))
+
+    i.save.should == true
+    i.approve!
+    i.state.should == 'approved'
+    #puts i.balance
+    # 344.35
+    #i = Income.find(i.id)
+    #i.state.should == 'approved'
+
+    #balance = i.balance
+    #
+    ## Create a new pay plan
+    pp = i.create_pay_plan(pay_plan_params(:amount => 50, :interests_penalties => 33.44, :payment_date => d, :repeat => true) )
+
+    pps = i.pay_plans.size
+
+    i.pay_plans(true).unpaid.size.should == 7
+    i.pay_plans.unpaid.first.interests_penalties.should == 33.44
+    interests = i.pay_plans.unpaid.map(&:interests_penalties)
+    #i.pay_plans.each {|pp| puts "#{pp.amount}  #{pp.interests_penalties} #{pp.paid}"}
+
+    p = i.new_payment(:amount => 50, :reference => 'NA', :account_id => 1, :date => Date.today, :interests_penalties => 0)
+    #puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    p.save.should == true
+
+    i.pay_plans(true).unpaid.size.should == 6
+    i.pay_plans.unpaid.first.interests_penalties.should == interests.slice(0,2).sum
+    tot_int = interests[0] + interests[1]
+    # 62.02 + 23.73 + 18.87
+
+    # Create a new payment
+    p = i.new_payment(:amount => 150, :reference => 'NA', :account_id => 1, :date => Date.today, :interests_penalties => 50)
+    p.save.should == true
+
+    i.pay_plans(true).unpaid.size.should == 3
+    i.pay_plans.unpaid.first.interests_penalties.should == interests.slice(0,5).sum - 50
+    i.pay_plans_total.should == i.reload.balance
+
+    #i.pay_plans(true).each {|pp| puts "#{pp.amount}  #{pp.interests_penalties} :: #{pp.paid}"}
+    # Create a new payment
+    p = i.new_payment(:amount => i.balance, :reference => 'NA', :account_id => 1, :date => Date.today, :interests_penalties => 0)
+    p.save.should_not == true
+    p.errors[:base].should_not == blank?
+    
+    i.pay_plans(true).unpaid.size.should == 3
+  end
+
 end

@@ -163,6 +163,7 @@ private
     @updated_pay_plan_ids = []
 
     transaction.pay_plans.unpaid.each_with_index do |pp, i|
+
       amount_to_pay += - pp.amount
       interest_to_pay += - pp.interests_penalties
 
@@ -171,6 +172,18 @@ private
 
       if amount_to_pay < 0
         @pay_plan = create_pay_plan(-amount_to_pay, -interest_to_pay, pp.payment_date, pp.alert_date) if amount_to_pay < 0 or interest_to_pay < 0
+        break
+      elsif amount_to_pay == 0 and interest_to_pay < 0
+        # Update the interests for the next pay_plan
+        if transaction.pay_plans.unpaid[i + 1]
+          ppn = transaction.pay_plans.unpaid[i + 1]
+          #puts "Act: #{pp.interests_penalties} ::Sig: #{ppn.interests_penalties} ::IntToPay #{interest_to_pay}"
+          ppn.interests_penalties = ppn.interests_penalties - interest_to_pay
+          ppn.save
+        else
+          raise ActiveRecord::Rollback
+          errors[:base] << "Existe un saldo en intereses pendiente, revise sus créditos"
+        end
         break
       end
     end
