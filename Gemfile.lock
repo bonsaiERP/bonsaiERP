@@ -1,6 +1,16 @@
+GIT
+  remote: git://github.com/sandal/prawn.git
+  revision: cdff170861da0b4ee2e3c4a1af849278f8a461b9
+  branch: stable
+  submodules: true
+  specs:
+    prawn (0.10.2)
+      pdf-reader (>= 0.8.1)
+
 GEM
   remote: http://gemcutter.org/
   specs:
+    Ascii85 (1.0.0)
     abstract (1.0.0)
     actionmailer (3.0.5)
       actionpack (= 3.0.5)
@@ -85,6 +95,8 @@ GEM
     mutter (0.5.3)
     mysql2 (0.2.6)
     nokogiri (1.4.4)
+    pdf-reader (0.9.1)
+      Ascii85 (>= 0.9)
     polyglot (0.3.1)
     rack (1.2.2)
     rack-mount (0.6.13)
@@ -168,6 +180,7 @@ DEPENDENCIES
   mocha
   mysql2
   nokogiri
+  prawn (~> 0.10.2)!
   rails
   rspec-rails (~> 2.5.0)
   ruby-debug

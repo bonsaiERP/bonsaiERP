@@ -20,6 +20,7 @@ gem 'haml'
 #gem 'acts-as-taggable-on'
 gem 'kaminari'
 gem 'nokogiri'
+gem 'prawn', '~>0.10.2', :git => 'git://github.com/sandal/prawn.git', :branch => "stable", :submodules => true
 #gem 'barista', '~>1.0'
 #gem 'escape_utils'
 

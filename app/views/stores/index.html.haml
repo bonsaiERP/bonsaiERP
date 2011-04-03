@@ -1,0 +1,20 @@
+- content_for :links do
+  .links= link_to 'Nuevo almacen', new_store_path, :class => 'new'
+
+%h1 Almacenes
+
+%table.decorated
+  %tr
+    %th Nombre
+    %th Teléfono
+    %th Dirección
+    %th Activo
+    %th 
+
+  - @stores.each do |store|
+    %tr
+      %td= link_to store.name, store, :class => 'b' 
+      %td= store.phone 
+      %td= nl2br store.address 
+      %td <span class="#{store.active.to_s }"></span>
+      %td= bonsai_links(store) 

@@ -1,0 +1,13 @@
+=simple_form_for(@store) do |f|
+    
+  = f.input :name, :label => "Nombre"
+  .input
+    = f.input :phone, :label => "Teléfono", :input_html => {:size => 20}
+    = f.input :active, :label => "Activo" 
+  .clear
+  = f.input :address, :label => "Dirección", :as => :text, :input_html => { :rows => 5 } 
+  .clear
+  /= f.input :description, :label => "Descripción", :as => :text, :input_html => { :rows => 5 } 
+
+  .clear
+  = f.button :submit, "Salvar"

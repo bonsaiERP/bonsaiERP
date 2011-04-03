@@ -1,0 +1,23 @@
+- content_for :links do
+  %ul.breadcrumps
+    %li #{ link_to "Almacenes", stores_path }<span>&gt;</span>
+
+  .links
+    = link_to "Nuevo", new_store_path, :class => 'add'
+    = link_to "Editar", edit_store_path(@store) , :class => 'edit'
+    = link_to "Borrar", @store , :class => 'delete', :confirm => "Esta seguro de borrar el almacen", :method => :delete
+
+%h1= @store
+
+.input
+  %label= "Nombre"
+  = @store.name
+.input._25
+  %label= "Teléfono"
+  = @store.phone
+.input._25
+  %label= "Activo"
+  = @store.active
+.input
+  %label= "Dirección"
+  = nl2br @store.address
