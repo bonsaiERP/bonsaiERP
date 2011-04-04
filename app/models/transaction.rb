@@ -13,6 +13,7 @@ class Transaction < ActiveRecord::Base
   after_initialize :set_defaults, :if => :new_record?
   after_initialize :set_trans_to_true
 
+  before_create    :set_creator
   before_save      :set_details_type
   before_save      :calculate_total_and_set_balance, :if => :trans?
   before_save      :update_payment_date
@@ -24,6 +25,8 @@ class Transaction < ActiveRecord::Base
   belongs_to :contact
   belongs_to :currency
   belongs_to :project
+  belongs_to :creator , :class_name => "User"
+  belongs_to :approver, :class_name => "User"
 
   has_many :pay_plans          , :dependent => :destroy , :order => "payment_date ASC"
   has_many :payments           , :dependent => :destroy
@@ -86,8 +89,9 @@ class Transaction < ActiveRecord::Base
     unless state == "draft"
       false
     else
-      @approving = true
-      self.state = "approved"
+      @approving       = true
+      self.state       = "approved"
+      self.approver_id = UserSession.user_id
       self.save(:validate => false)
     end
   end
@@ -346,5 +350,8 @@ private
     self.errors.add(:base, "Debe ingresar seleccionar al menos un ítem") unless self.transaction_details.any?
   end
 
+  def set_creator
+    self.creator_id = UserSession.user_id
+  end
 
 end

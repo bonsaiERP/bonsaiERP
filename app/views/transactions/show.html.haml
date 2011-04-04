@@ -81,6 +81,10 @@
   #pay_plans
     =render "/pay_plans/pay_plans", :transaction => @transaction if @transaction.show_pay_plans?
 
+#users
+  %div= "<span class='dark'>Creado por:</span> <strong>#{@transaction.creator}</strong>".html_safe    if @transaction.creator_id.present?
+  %div= "<span class='dark'>Aprovado por:</span> <strong>#{@transaction.approver}</strong>".html_safe if @transaction.approver_id.present?
+
 :javascript
   head.ready(function () {
     $('#tabs').tabs();
