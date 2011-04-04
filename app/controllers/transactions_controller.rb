@@ -83,4 +83,10 @@ class TransactionsController < ApplicationController
       format.xml  { head :ok }
     end
   end
+
+  # GET /transactions/:id/pdf
+  def pdf
+    i = InvoicePdf.new
+    i.generate_pdf("uno.pdf")
+  end
 end

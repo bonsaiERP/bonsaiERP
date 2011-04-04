@@ -30,5 +30,8 @@ class OrganisationSession
       [o.currency]+ o.currencies
     end
 
+    def current_organisaton
+      Organisation.find(organisation_id)
+    end
   end
 end

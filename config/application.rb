@@ -16,7 +16,7 @@ module Bonsaierp
     # config.autoload_paths += %W(#{config.root}/extras)
     
     # Add additional load paths for your own custom dirs
-    %w(observers mailers middleware).each do |dir|
+    %w(observers mailers middleware pdfs).each do |dir|
       config.autoload_paths << "#{config.root}/app/#{dir}"
     end
 

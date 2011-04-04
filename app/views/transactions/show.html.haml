@@ -12,7 +12,7 @@
 ._40.fr.r
   = link_to "Email","", :class => 'email'
   &nbsp;&nbsp;
-  = link_to "Imprimir","", :class => 'print'
+  = link_to "Imprimir", invoice_pdf_path(@transaction.id), :class => 'print'
 
 
 %h1.mb5{:style => 'display:inline-block;'} #{transaction_title(@transaction)}  #{@transaction.ref_number}

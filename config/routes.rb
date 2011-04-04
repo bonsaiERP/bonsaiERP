@@ -48,6 +48,8 @@ Bonsaierp::Application.routes.draw do
     end
   end
 
+  get "/transactions/pdf/:id" => "transactions#pdf", :as => :invoice_pdf
+
   ###########################3
 
   resources :stores

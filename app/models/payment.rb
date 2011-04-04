@@ -164,7 +164,6 @@ private
 
     transaction.pay_plans.unpaid.each_with_index do |pp, i|
 
-      puts "PP: #{pp.amount} #{amount_to_pay}"
       amount_to_pay += - pp.amount
       interest_to_pay += - pp.interests_penalties
 
@@ -176,7 +175,6 @@ private
         @pay_plan = create_pay_plan(-amount_to_pay, -interest_to_pay, pp.payment_date, pp.alert_date) if amount_to_pay < 0 or interest_to_pay < 0
         break
       elsif amount_to_pay == 0 and interest_to_pay < 0
-        puts "#{amount_to_pay} ::: #{interest_to_pay}"
         # Update the interests for the next pay_plan
         if transaction.pay_plans.unpaid[i + 1]
           ppn = transaction.pay_plans.unpaid[i + 1]
