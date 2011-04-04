@@ -77,6 +77,7 @@ module ::Transaction::PayPlans
   def save_pay_plans_list
     @pay_plans_list = sort_pay_plans_list(@pay_plans_list)
     @pay_plans_list = create_pay_plans_repeat_list(@pay_plans_list) if @current_pay_plan.repeat?
+
     @saved = true
     @end = false
     i = 0
@@ -163,7 +164,8 @@ private
   # Creates a pay plan to complete list
   def add_new_pay_plan(total_sum)
     p_last = @pay_plans_list.last
-    @pay_plans_list << new_pay_plan(:amount => balance - total_sum, :payment_date => p_last.payment_date + PAY_PLANS_DATE_SEPARATION)
+    amt = balance - total_sum
+    @pay_plans_list << new_pay_plan(:amount => balance - total_sum, :payment_date => p_last.payment_date + PAY_PLANS_DATE_SEPARATION) if amt > 0
   end
 
   # Creates a list with the sorted pay_plans list

@@ -523,6 +523,9 @@ feature "Income", "test features" do
     i.pay_plans(true).unpaid.size.should == 7
     i.pay_plans.unpaid.first.interests_penalties.should == 33.44
     interests = i.pay_plans.unpaid.map(&:interests_penalties)
+
+    i.reload
+    i.balance.should == i.pay_plans_total
     #i.pay_plans.each {|pp| puts "#{pp.amount}  #{pp.interests_penalties} #{pp.paid}"}
 
     p = i.new_payment(:amount => 50, :reference => 'NA', :account_id => 1, :date => Date.today, :interests_penalties => 0)
@@ -532,6 +535,9 @@ feature "Income", "test features" do
     i.pay_plans(true).unpaid.size.should == 6
     i.pay_plans.unpaid.first.interests_penalties.should == interests.slice(0,2).sum
     tot_int = interests[0] + interests[1]
+
+    i.reload
+    i.balance.should == i.pay_plans_total
     # 62.02 + 23.73 + 18.87
 
     # Create a new payment
@@ -543,6 +549,8 @@ feature "Income", "test features" do
     i.pay_plans_total.should == i.reload.balance
     i.payments(true).size.should == 2
 
+    i.reload
+    i.balance.should == i.pay_plans_total
     #i.pay_plans(true).each {|pp| puts "#{pp.amount}  #{pp.interests_penalties} :: #{pp.paid}"}
     # Create a new payment and display error because the amount does not cover interests
     p = i.new_payment(:amount => i.balance, :reference => 'NA', :account_id => 1, :date => Date.today, :interests_penalties => 0)
@@ -554,4 +562,37 @@ feature "Income", "test features" do
     i.payments(true).size.should == 2
   end
 
+
+  scenario 'create a payment with interests' do
+    d = Date.today
+    i = Income.new(income_params.merge(:date => d, :currency_id => 1, :contact_id => 1))
+
+    i.save.should == true
+    #puts i.balance
+    # 344.35
+    
+    pp = i.create_pay_plan(pay_plan_params(:amount => 200, :interests_penalties => 50, :payment_date => d) )
+    pps = i.pay_plans.size
+
+    #i.pay_plans.each { |pp| puts "#{ pp.amount } :: #{ pp.interests_penalties }" }
+
+    i.pay_plans.size.should == 2
+    i.pay_plans(true).unpaid.size.should == 2
+    i.balance.should == i.pay_plans_total
+    
+    i.approve!
+    i.state.should == 'approved'
+
+    i.reload
+    p = i.new_payment(:account_id => 1, :date => d, :reference => 'NA')
+
+    p.amount.should == 200
+    p.interests_penalties.should == 50
+
+    puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    p.save.should == true
+    p.account_ledger.amount.should == 250
+
+    i.pay_plans(true).size.should == 2
+  end
 end
