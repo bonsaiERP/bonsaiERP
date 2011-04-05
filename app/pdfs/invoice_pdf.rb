@@ -19,6 +19,8 @@ class InvoicePdf < BasePdf
     
     create_exchange_rate
     create_transaction_details
+    create_totals
+
     render_file(file_path)
   end
 
@@ -47,13 +49,6 @@ class InvoicePdf < BasePdf
     end
   end
 
-  #def create_footer_data
-  #  arr = [
-  #    [ "Ihre USt-IdNr.: #{@inquiry_detail.company.eu_ust_indent_number}\nUnsere USt-IdNr.:    DE 329 320 439\n#{@document.erloscode}"]
-  #  ]
-  #  table(arr, :width => 450, :cell_style => {:border_width => 0})
-  #end
-
   # Creates the table with the data of details
   def create_transaction_details
     table([["<b>Item</b>", "<b>Precio\nUnitario</b>", '<b>Cantidad</b>', "<b>Total\nFila</b>"]] + create_table_data, :header => true, 
@@ -76,15 +71,16 @@ class InvoicePdf < BasePdf
 
   # Creates te totals for the invoice
   def create_totals
-    arr = [["", "Summe:",   "#{number_to_currency(@document.total)}"]]
-    if @inquiry_detail.company.postal_country.name == "Deutschland"  
-      arr << ["", "MwSt 19%:",   "#{number_to_currency(@document.tax_total)}"]
-      arr << ["", "<b>Summe inkl. MwSt:</b>", "<b>#{number_to_currency(@document.total_with_tax)}</b>"]
-    end
-    table(arr, :width => 450, :column_widths => [150, 200, 100], :cell_style => {:border_width => 0, :align => :right, :inline_format => true } )
+    org = OrganisationSession
+    arr = [["Subtotal:",   "#{org.currency_symbol} #{number_to_currency(@transaction.total)}"]]
+    arr << ["Descuentos: #{number_to_currency(@transaction.discount)}",   "#{org.currency_symbol} #{number_to_currency(@transaction.tax_total)}"] if @transaction.discount.present? and @transaction.discount > 0
+    arr << ["Impuestos:",   "#{org.currency_symbol} #{number_to_currency(@transaction.total_taxes)}"] if @transaction.tax_percent.present? and @transaction.tax_percent > 0
+
+    arr << ["<b>Total #{org.currency_name.pluralize}</b>", "<b>#{org.currency_symbol} #{number_to_currency(@transaction.total)}</b>"]
+    arr << ["<b>Total #{@transaction.currency_name.pluralize}</b>", "<b>#{@transaction.currency_symbol} #{number_to_currency(@transaction.total_currency)}</b>"] unless org.currency_id == @transaction.currency_id
+
+    table(arr, :width => 450, :column_widths => [460, 80], :cell_style => {:border_width => 0, :align => :right, :inline_format => true } )
   end
 
-  def ren
-    generate_pdf(File.join(Rails.public_path, 'h.pdf'))
-  end
+
 end

@@ -30,8 +30,20 @@ class OrganisationSession
       [o.currency]+ o.currencies
     end
 
+    def currency_name
+      current_organisaton.currency_name
+    end
+
+    def currency_plural
+      current_organisaton.currency_plural
+    end
+
+    def currency_symbol
+      current_organisaton.currency_symbol
+    end
+
     def current_organisaton
-      Organisation.find(organisation_id)
+      @org ||= Organisation.find(organisation_id)
     end
   end
 end

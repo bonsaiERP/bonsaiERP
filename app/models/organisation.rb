@@ -16,7 +16,7 @@ class Organisation < ActiveRecord::Base
   has_many :users, :through => :links
   has_many :units, :dependent => :destroy
 
-  delegate :code, :name, :symbol, :to => :currency, :prefix => true
+  delegate :code, :name, :symbol, :plural, :to => :currency, :prefix => true
 
   # validations
   validates_associated :country
