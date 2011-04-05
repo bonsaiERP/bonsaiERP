@@ -86,7 +86,13 @@ class TransactionsController < ApplicationController
 
   # GET /transactions/:id/pdf
   def pdf
-    i = InvoicePdf.new
-    i.generate_pdf("uno.pdf")
+    t = Transaction.org.find(params[:id])
+    inv = InvoicePdf.new(t)
+ 
+    name = "#{Rails.root}/tmp/pdfs/#{ t.type }_#{t.id}.pdf"
+    inv.generate_pdf(name)
+
+    send_file name, :file_name => "#{t.pdf_name}.pdf"
+    File.delete(name)
   end
 end

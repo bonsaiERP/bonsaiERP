@@ -41,6 +41,10 @@ class Contact < ActiveRecord::Base
     matchcode
   end
 
+  def pdf_name
+    "#{name} #{last_name}"
+  end
+
 private
   def set_matchcode
     self.matchcode = "#{code} #{name}"

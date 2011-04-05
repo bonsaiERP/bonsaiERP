@@ -296,6 +296,27 @@ class Transaction < ActiveRecord::Base
     end
   end
 
+  def get_type
+    @t ||= case type
+    when "Income"  then "venta"
+    when "Expense" then "gasto"
+    when "Buy"     then "compra"
+    end
+  end
+
+  # Creates the name for the pdf
+  def pdf_name
+    "#{get_type}-#{ref_number}"
+  end
+
+  # Creates the pdf title based on the type
+  def pdf_title
+    t = get_type
+
+    n = draft? ? "Proforma" : "Nota"
+    "#{n} de #{t} #{ref_number}"
+  end
+
 private
 
   def set_state
