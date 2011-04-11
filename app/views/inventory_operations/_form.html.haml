@@ -1,9 +1,56 @@
+:css
+  #items_table .input{
+    margin: 2px 0px;
+  }
+
 = simple_form_for(@inventory_operation) do |f|
   = bonsai_form_error(f)
-  = f.input :date
-  = f.input :ref_number
-  = f.input :cotanct_id
-  = f.input :description
+  .main.bg_light_grey
+    .input
+      = f.input :ref_number, :input_html => {:size => 20}
+      = f.input :date
 
+    = f.association :contact, :collection => @inventory_operation.get_contact_list, :label => @inventory_operation.contact_label
+    .clear
+
+  = f.input :description, :as => :text, :input_html => {:rows => 4, :cols => 40}
+  .clear
+
+  %table.decorated#items_table
+    %tr
+      %th Item
+      %th Cantidad
+      - if @inventory_operation.operation == "in"
+        %th Costo<br/>unitario 
+      %th Inventario
+      %th
+
+    - @items = Item.inventory
+    - f.simple_fields_for :inventory_operation_details do |fd|
+      %tr.item
+        %td.cur
+          = fd.input :item_id, :label => false, :collection => @items, :input_html => {:class => 'item', 'data-new_url' => new_item_path(:scope => 'inventory'), 'data-title' => 'Nuevo producto/servicio', 'data-trigger' => 'new_client'}
+        %td= fd.input :quantity, :label => false, :input_html => { :size => 8, :class => 'quantity', :type => 'decimal' }
+
+        - if @inventory_operation.operation == "in"
+          %td= fd.input :unitary_cost, :label => false, :input_html => { :size => 8, :class => 'unitary_cost', :type => 'decimal' }
+
+        %td.cur.inventory
+        %td.del <a href="javascript:" class="destroy" title="Borrar">&nbsp;</a>
+  %p
+    <a href="javascript:" id="add_item" class="add">Adicionar ítem</a>
   .actions
     = f.submit 'Salvar'
+
+:javascript
+  head.ready(function() {
+    $('#add_item').live('click', function() {
+      var t = (new Date() ).getTime();
+      tr = $('#items_table tr.item:first').clone();
+      tr.find("input, select").each(function(i, el) {
+        var name = $(el).attr("name").replace(/\d+/, t);
+        $(el).attr("name", name);
+      });
+      tr.appendTo("#items_table");
+    });
+  });

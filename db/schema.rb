@@ -139,6 +139,7 @@ ActiveRecord::Schema.define(:version => 20110411184222) do
 
   create_table "inventory_operations", :force => true do |t|
     t.integer  "contact_id"
+    t.integer  "store_id"
     t.integer  "organisation_id"
     t.date     "date"
     t.string   "ref_number"
@@ -156,6 +157,7 @@ ActiveRecord::Schema.define(:version => 20110411184222) do
   add_index "inventory_operations", ["organisation_id"], :name => "index_inventory_operations_on_organisation_id"
   add_index "inventory_operations", ["ref_number"], :name => "index_inventory_operations_on_ref_number"
   add_index "inventory_operations", ["state"], :name => "index_inventory_operations_on_state"
+  add_index "inventory_operations", ["store_id"], :name => "index_inventory_operations_on_store_id"
 
   create_table "items", :force => true do |t|
     t.integer  "unit_id"

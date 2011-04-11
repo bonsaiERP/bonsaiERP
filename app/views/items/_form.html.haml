@@ -1,6 +1,7 @@
 = simple_form_for(@item) do |f|
   = bonsai_form_error(f)
   /= f.input :ctype, :as => :hidden
+  = hidden_field_tag "scope", params[:scope] if params[:scope].present?
 
   = f.input :code, :label => 'Código'
   = f.input :name, :label => 'Nombre'
@@ -11,7 +12,8 @@
   .input
     = f.association :unit, :collection => Unit.org,:label => "Unidad", :input_html => { 'data-path' => new_unit_path }
     = f.input :active, :label => "Activo", :as => :radio
-  = f.input :ctype, :label => 'Tipo', :collection => Item.get_types, :as => :radio
+
+  = f.input :ctype, :label => 'Tipo', :collection => Item.get_types(params[:scope]), :as => :radio
   .clear
   /= f.input :discount, :label => 'Descuento en venta (%)', :hint => 'Ej: 10:2.5 20:4'
   /= f.input :tag_list, :label => 'Etiquetas', :hint => 'Escriba palabras separadas por comas, Ej.: grande, costoso'

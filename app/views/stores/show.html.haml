@@ -9,6 +9,17 @@
 
 %h1= @store
 
+
+%ul.menu
+  %li 
+    <a href="#" class="new">Nueva operación <span class="more"></span></a>
+    %ul
+      %li= link_to "Nuevo ingreso", new_inventory_operation_path(:store_id => @store.id, :operation => 'in')
+      %li= link_to "Nuevo egreso", new_inventory_operation_path(:store_id => @store.id, :operation => 'out')
+      %li= link_to "Nueva transferencia", ""
+
+.clear
+
 .input
   %label= "Nombre"
   = @store.name

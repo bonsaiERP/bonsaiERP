@@ -24,7 +24,8 @@ class InventoryOperationsController < ApplicationController
   # GET /inventory_operations/new
   # GET /inventory_operations/new.xml
   def new
-    @inventory_operation = InventoryOperation.new
+    @inventory_operation = InventoryOperation.new(:store_id => params[:store_id], :operation => params[:operation])
+    @inventory_operation.inventory_operation_details.build
 
     respond_to do |format|
       format.html # new.html.erb
@@ -79,5 +80,12 @@ class InventoryOperationsController < ApplicationController
       format.html { redirect_to(inventory_operations_url) }
       format.xml  { head :ok }
     end
+  end
+
+private
+  def find_store
+    store_id = params[:store_id] || params[:inventory_operation][:store_id]
+
+    @store = Store.org.find(store_id)
   end
 end

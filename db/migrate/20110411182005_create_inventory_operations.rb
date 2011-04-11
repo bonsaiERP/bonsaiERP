@@ -2,6 +2,7 @@ class CreateInventoryOperations < ActiveRecord::Migration
   def self.up
     create_table :inventory_operations do |t|
       t.integer :contact_id
+      t.integer :store_id
       t.integer :organisation_id
 
       t.date :date
@@ -18,6 +19,7 @@ class CreateInventoryOperations < ActiveRecord::Migration
 
     add_index :inventory_operations, :contact_id
     add_index :inventory_operations, :organisation_id
+    add_index :inventory_operations, :store_id
     add_index :inventory_operations, :operation
     add_index :inventory_operations, :state
     add_index :inventory_operations, :date

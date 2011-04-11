@@ -38,6 +38,7 @@ module AccountsHelper
     end
   end
 
+
   def account_ledger_contact_label(klass)
     if klass.income?
       "Cliente"
@@ -45,6 +46,7 @@ module AccountsHelper
       "Proveedor"
     end
   end
+
 
   def account_ledger_contact_collection(klass)
     if klass.income?

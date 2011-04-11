@@ -7,7 +7,7 @@ class Item < ActiveRecord::Base
   after_save     :create_price
   before_destroy :check_items
 
-  TYPES = ["item", "expense", "service", "product"]
+  TYPES = ["item", "expense", "product", "service"]
 
 
   acts_as_org
@@ -35,23 +35,40 @@ class Item < ActiveRecord::Base
 
   # scopes
   #default_scope where(:active => true)
-  scope :active, where(:active => true)
+  scope :active   , where(:active => true)
 
-  scope :json   , select("id, name, price")
+  scope :json     , select("id, name, price")
 
-  scope :income , where(["ctype IN (?) AND active = ?", ['service', 'product'], true])
-  scope :buy    , where(["ctype IN (?) AND active = ?", ['item', 'product', 'service'], true])
-  scope :expense, where(["ctype IN (?) AND active = ?", ['expense'], true])
+  # Related scopes
+  scope :income   , where(["ctype IN (?) AND active = ?", ['service', 'product'], true])
+  scope :buy      , where(["ctype IN (?) AND active = ?", ['item', 'product', 'service'], true])
+  scope :expense  , where(["ctype IN (?) AND active = ?", ['expense'], true])
+  scope :inventory, where(["ctype IN (?)", ["item", "product"] ])
 
   def to_s
     "#{code} - #{name}"
   end
 
   # Method to get the localized types
-  def self.get_types
-    case I18n.locale
-    when :es
-      ["Insumo", "Item de Gasto", "Servicio", "Producto"].zip(TYPES)
+  def self.get_types(sc = nil)
+    if sc.blank?
+      ["Insumo", "Item de Gasto", "Producto", "Servicio"].zip(TYPES)
+    else
+      get_scoped_types(sc)
+    end
+  end
+
+  # gets the item scope
+  def self.get_scoped_types(sc)
+    case sc
+    when "income"
+      ["Producto", "Servicio"].zip(['product', 'service'])
+    when "buy"
+      ["Item", "Producto", "Servicio"].zip( ["item", "product", "service"] )
+    when "expense"
+      ["Item de gasto"].zip(["expense"])
+    when "inventory"
+      ["Item", "Producto"].zip( ["item", "product"] )
     end
   end
 

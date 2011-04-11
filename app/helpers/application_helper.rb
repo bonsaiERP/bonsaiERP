@@ -82,4 +82,6 @@ module ApplicationHelper
   end
 
   alias :wcur :with_currency
+  
+
 end

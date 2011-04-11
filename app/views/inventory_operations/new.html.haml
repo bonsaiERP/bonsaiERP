@@ -1,12 +1,17 @@
 - content_for :links do
   %ul.breadcrumps
-    %li #{link_to inventory_operations, inventory_operations_path}<span>&gt;</span>
+    %li #{link_to "Almacenes", stores_path}<span>&gt;</span>
+    %li #{link_to @inventory_operation.store, @inventory_operation.store}<span>&gt;</span>
 
   .links
     = link_to "Nuevo", inventory_operations_path, :class => 'add'
     = link_to "Ver", @inventory_operation, :class => 'show'
     = link_to "Borrar", @inventory_operation, :class => 'delete', :confirm => 'Esta seguro de borrar', :method => :delete
 
-%h1 Nuevo inventory_operation
+- css, txt = @inventory_operation.operation == "in" ? ["dark_green", "ingreso"] : ["red", "egreso"]
+
+
+%h1 Nuevo <span class="#{css}">#{txt}</span> almacen
+%h2= @inventory_operation.store
 
 = render :partial => 'form'
