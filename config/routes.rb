@@ -48,7 +48,9 @@ Bonsaierp::Application.routes.draw do
     end
   end
 
-  get "/transactions/pdf/:id" => "transactions#pdf", :as => :invoice_pdf
+  get  "/transactions/pdf/:id"       => "transactions#pdf", :as => :invoice_pdf
+  get  "/transactions/new_email/:id" => "transactions#new_email", :as => :new_invoice_email
+  post "/transactions/email/:id"     => "transactions#email"
 
   ###########################3
 

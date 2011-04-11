@@ -33,7 +33,7 @@ class InvoicePdf < BasePdf
     end
   end
 
-  # Creates te number for the invoice
+  # Creates the number for the invoice
   def create_invoice_title
     bounding_box([300, @h - 250], :width => 270, :height => 120) do
       text "#{@transaction.pdf_title}", :style => :bold, :size => 11

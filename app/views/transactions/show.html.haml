@@ -10,7 +10,7 @@
 .clear
 
 ._40.fr.r
-  = link_to "Email","", :class => 'email'
+  = link_to "Email", new_invoice_email_path(@transaction), :class => 'email ajax', :title => 'Email', 'data-width' => 450
   &nbsp;&nbsp;
   = link_to "Imprimir", invoice_pdf_path(@transaction.id), :class => 'print'
 

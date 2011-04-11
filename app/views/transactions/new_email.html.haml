@@ -1,0 +1,37 @@
+- if @transaction.contact.email.blank?
+  %h4 No es posible enviar el email debido a que el cliente no tiene email
+  = link_to "Editar cliente", edit_client_path(@transaction.contact), :class => 'edit', :target => '_blank'
+- else
+
+  %h3 Email
+  = form_tag("/transactions/email/#{@transaction.id}", :id => 'invoice_email_form') do
+
+    %p
+      = label_tag "title", "Título"
+      = text_field_tag "title", "#{@transaction.pdf_title} (#{OrganisationSession.name})", :size => 35
+
+    %p
+      = label_tag "body", "Contenido"
+      = text_area_tag "body", "Estimado cliente le hacemos llegar el adjunto con el detalle de la #{@transaction.pdf_title}\nSaludos coordiales.", :rows => 10, :cols => 40
+
+    %p= submit_tag "Enviar email"
+
+  :javascript
+    head.ready(function() {
+      $('#invoice_email_form').submit(function() {
+        var txt = "";
+        if ($('#title').val().length < 5)
+          txt += "Debe ingresar un título\n";
+
+        if ( $('#body').val().length < 10 )
+          txt += "Debe ingresar un contenido\n";
+
+        if(txt != "") {
+          alert(txt);
+          return false;
+        }else{
+          return true;
+        }
+
+      });
+    });
