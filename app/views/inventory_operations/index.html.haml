@@ -1,0 +1,23 @@
+- content_for :links do
+  .links
+    = link_to "Nuevo inventory_operation", new_inventory_operation_path, :class => 'new'
+
+%h1 inventory_operations
+
+%table.decorated.nwl 
+  %thead
+    %tr
+      %th date
+      %th ref_number
+      %th cotanct_id
+      %th description
+      %th
+  
+  %tbody
+    - @inventory_operations.each do |inventory_operation|
+      %tr{ :class => cycle(:odd, :even) }
+        %td= inventory_operation.date
+        %td= inventory_operation.ref_number
+        %td= inventory_operation.cotanct_id
+        %td= inventory_operation.description
+        %td.actions= bonsai_links(inventory_operation)

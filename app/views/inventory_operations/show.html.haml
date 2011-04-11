@@ -1,0 +1,26 @@
+- content_for :links do
+  %ul.breadcrumps
+    %li #{link_to inventory_operations, inventory_operations_path}<span>&gt;</span>
+
+  .links
+    = link_to "Nuevo", inventory_operations_path, :class => 'add'
+    = link_to "Ver", @inventory_operation, :class => 'show'
+    = link_to "Borrar", @inventory_operation, :class => 'delete', :confirm => 'Esta seguro de borrar', :method => :delete
+
+%h1 inventory_operation
+%p.links
+  = link_to 'Editar', edit_inventory_operation_path(@inventory_operation), :class => 'edit'
+  = link_to 'Lista', inventory_operations_path, :class => 'list'
+
+.input
+  %label #<Rails::Generators::GeneratedAttribute:0xbb46490>
+  %span= @inventory_operation.date
+.input
+  %label #<Rails::Generators::GeneratedAttribute:0xbb46350>
+  %span= @inventory_operation.ref_number
+.input
+  %label #<Rails::Generators::GeneratedAttribute:0xbb4629c>
+  %span= @inventory_operation.cotanct_id
+.input
+  %label #<Rails::Generators::GeneratedAttribute:0xbb46198>
+  %span= @inventory_operation.description

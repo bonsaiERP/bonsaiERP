@@ -1,6 +1,8 @@
-%h1 <%= plural_table_name %>
+- content_for :links do
+  .links
+    = link_to "Nuevo <%= singular_name %>", new_<%= singular_name %>_path, :class => 'new'
 
-%p.links= link_to "Nuevo <%= singular_name %>", new_<%= singular_name %>_path, :class => 'new'
+%h1 <%= plural_table_name %>
 
 %table.decorated.nwl 
   %thead
@@ -11,7 +13,7 @@
       %th
   
   %tbody
-    - for <%= singular_name %> in @<%= plural_name %>
+    - @<%= plural_name %>.each do |<%= singular_name %>|
       %tr{ :class => cycle(:odd, :even) }
 <% for attribute in attributes -%>
         %td= <%= singular_name %>.<%= attribute.name %>

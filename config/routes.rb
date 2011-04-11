@@ -1,5 +1,7 @@
 Bonsaierp::Application.routes.draw do
 
+  resources :inventory_operations
+
   resources :account_ledgers do
     member do
       put  :conciliate

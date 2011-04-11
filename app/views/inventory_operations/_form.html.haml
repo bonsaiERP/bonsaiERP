@@ -1,0 +1,9 @@
+= simple_form_for(@inventory_operation) do |f|
+  = bonsai_form_error(f)
+  = f.input :date
+  = f.input :ref_number
+  = f.input :cotanct_id
+  = f.input :description
+
+  .actions
+    = f.submit 'Salvar'

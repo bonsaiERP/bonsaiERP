@@ -41,6 +41,7 @@ class ItemsController < ApplicationController
   # PUT /items/1.xml
   def update
     @item.update_attributes(params[:item])
+    flash[:notice] = "Se actualizo correctamente el ítem"
     respond_with @item
   end
 

@@ -1,3 +1,12 @@
+- content_for :links do
+  %ul.breadcrumps
+    %li #{link_to <%= plural_name %>, <%= plural_name %>_path}<span>&gt;</span>
+
+  .links
+    = link_to "Nuevo", <%= plural_name %>_path, :class => 'add'
+    = link_to "Ver", @<%= singular_name %>, :class => 'show'
+    = link_to "Borrar", @<%= singular_name %>, :class => 'delete', :confirm => 'Esta seguro de borrar', :method => :delete
+
 %h1 Nuevo <%= singular_name %>
-%p.links= link_to 'Lista', <%= plural_name %>_path, :class => 'list'
+
 = render :partial => 'form'
