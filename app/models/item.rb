@@ -3,14 +3,13 @@
 # email: boriscyber@gmail.com
 class Item < ActiveRecord::Base
 
+  acts_as_org
   #before_save :set_stockable
   after_save     :create_price
-  before_destroy :check_items
+  before_destroy :check_items_destroy
 
   TYPES = ["item", "expense", "product", "service"]
 
-
-  acts_as_org
   #acts_as_taggable
 
   # relationships
@@ -158,7 +157,7 @@ private
 
   # checks if there are any items on destruction
   def check_items_destroy
-    if TransactionDetail.org.where(:item_id => id).any
+    if TransactionDetail.org.where(:item_id => id).any?
       errors.add(:base, "El item es usado en otros registros relacionados")
       false
     else

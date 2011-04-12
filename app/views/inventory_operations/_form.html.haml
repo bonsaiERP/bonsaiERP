@@ -54,11 +54,6 @@
       tr.appendTo("#items_table");
     });
 
-    // Remember the row for the clicked new item
-    $('#items_table a.add').live(click, function() {
-      $('#items_table').data('row', $(this).parents('tr:first') );
-    });
-
     // Delete an item from an inventory
     $('#items_table a.destroy').live('click', function() {
       if( $('tr.item').length <= 1 ) {
@@ -71,10 +66,16 @@
 
     // new_item trigger
     $('body').live('new_item', function(e, resp) {
-      var tr = $('#items_table').data('row');
       $('#items_table select').each(function(i, el) {
-
-        $(el).append([ '<option value="', el.id ,'">', el.name , '</option>' ].join("") );
+        $(el).append([ '<option value="', resp.id ,'">', resp.code, ' - ', resp.name , '</option>' ].join("") );
       });
+      var tr = $('#items_table').data('row');
+      tr.find('select').val(resp.id);
     });
+
+    // Remember the row for the clicked new item
+    $('#items_table a.add').live('click', function() {
+      $('#items_table').data('row', $(this).parents('tr:first') );
+    });
+
   });

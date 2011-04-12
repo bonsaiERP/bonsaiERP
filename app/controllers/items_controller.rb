@@ -33,8 +33,16 @@ class ItemsController < ApplicationController
   # POST /items.xml
   def create
     @item = Item.new(params[:item])
-    @item.save
-    respond_with @item
+
+    if @item.save
+      if request.xhr?
+        render :json => @item
+      else
+        redirect_to @item
+      end
+    else
+      render :action => 'new'
+    end
   end
 
   # PUT /items/1

@@ -154,9 +154,9 @@
       if ($(this).attr('enctype') === 'multipart/form-data') {
         return true;
       }
-      $(this).find('input, select, textarea').attr('disabled', true);
-      data = serializeFormElements(this);
       el = this;
+      data = $(el).serialize();
+      $(this).find('input, select, textarea').attr('disabled', true);
       $div = $(this).parents('.ajax-modal');
       new_record = $div.data('ajax-type') === 'new' ? true : false;
       trigger = $div.data('trigger');
@@ -172,7 +172,7 @@
             data['new_record'] = new_record;
             p = $(el).parents('div.ajax-modal');
             $(p).html('').dialog('destroy');
-            return $('body').trigger(trigger, [data]);
+            return $('body').trigger(trigger, [resp]);
           } else if (resp.match(/^\/\/\s?javascript/)) {
             p = $(el).parents('div.ajax-modal');
             return $(p).html('').dialog('destroy');

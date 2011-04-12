@@ -154,10 +154,10 @@ $(document).ready(->
   $('div.ajax-modal form').live('submit', ->
     return true if $(this).attr('enctype') == 'multipart/form-data'
 
-    $(this).find('input, select, textarea').attr('disabled', true)
-
-    data = serializeFormElements(this)
     el = this
+    data = $(el).serialize()
+    $(this).find('input, select, textarea').attr('disabled', true)
+    #serializeFormElements(this)
     $div = $(this).parents('.ajax-modal')
     new_record = if $div.data('ajax-type') == 'new' then true else false
     trigger = $div.data('trigger')
@@ -169,12 +169,12 @@ $(document).ready(->
       'data':data
       'type': (data['_method'] || $(this).attr('method') )
       'success': (resp, status, xhr)->
- 
+
         if typeof resp == "object"
           data['new_record'] = new_record
           p = $(el).parents('div.ajax-modal')
           $(p).html('').dialog('destroy')
-          $('body').trigger(trigger, [data])
+          $('body').trigger(trigger, [resp])
         else if resp.match(/^\/\/\s?javascript/)
           p = $(el).parents('div.ajax-modal')
           $(p).html('').dialog('destroy')
