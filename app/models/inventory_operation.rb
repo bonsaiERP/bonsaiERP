@@ -15,6 +15,8 @@ class InventoryOperation < ActiveRecord::Base
 
   accepts_nested_attributes_for :inventory_operation_details
 
+  validates_presence_of :ref_number, :date, :supplier_id
+
   def get_contact_list
     if operation == "in"
       Supplier.org

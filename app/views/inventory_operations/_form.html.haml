@@ -10,7 +10,9 @@
       = f.input :ref_number, :input_html => {:size => 20}
       = f.input :date
 
-    = f.association :contact, :collection => @inventory_operation.get_contact_list, :label => @inventory_operation.contact_label
+    - url, title = @inventory_operation.operation == "in" ? [new_supplier_path, "Nuevo proveedor"] : [new_client_path, "Nuevo cliente"]
+    = f.association :contact, :collection => @inventory_operation.get_contact_list, :label => @inventory_operation.contact_label,
+      :input_html => { 'data-new_url' => url, 'data-title' => title, 'data-trigger' => 'new_contact' }
     .clear
 
   = f.input :description, :as => :text, :input_html => {:rows => 4, :cols => 40}
@@ -63,6 +65,12 @@
         $(this).parents('tr:first').remove();
       }
     });
+
+    // New contact
+    $('body').live('new_contact', function(e, resp) {
+      $('#inventory_operation_contact_id').createSelectOption(resp.id, resp.matchcode);
+    });
+
 
     // new_item trigger
     $('body').live('new_item', function(e, resp) {
