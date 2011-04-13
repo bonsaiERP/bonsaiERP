@@ -6,7 +6,6 @@ GIT
   specs:
     prawn (0.10.2)
       pdf-reader (>= 0.8.1)
-
 GEM
   remote: http://gemcutter.org/
   specs:
