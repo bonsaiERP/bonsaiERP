@@ -14,7 +14,6 @@ gem 'mysql2'
 
 gem 'devise'
 gem 'simple_form', '~>1.3.0'
-gem 'will_paginate', '~> 3.0.pre2'
 gem 'less', '~>1.2.21'
 gem 'haml'
 #gem 'acts-as-taggable-on'
