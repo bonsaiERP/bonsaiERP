@@ -1,11 +1,12 @@
 GIT
-  remote: git://github.com/sandal/prawn.git
-  revision: cdff170861da0b4ee2e3c4a1af849278f8a461b9
+  remote: https://github.com/sandal/prawn.git
+  revision: 5cca37e61e77411737a35707219b71bf4841de05
   branch: stable
   submodules: true
   specs:
-    prawn (0.10.2)
-      pdf-reader (>= 0.8.1)
+    prawn (0.11.1)
+      pdf-reader (>= 0.9.0)
+      ttfunk (~> 1.0.0)
 
 GEM
   remote: http://gemcutter.org/
@@ -159,11 +160,11 @@ GEM
     thor (0.14.6)
     treetop (1.4.9)
       polyglot (>= 0.3.1)
+    ttfunk (1.0.1)
     tzinfo (0.3.26)
     warden (1.0.3)
       rack (>= 1.0.0)
     watchr (0.7)
-    will_paginate (3.0.pre2)
     xpath (0.1.3)
       nokogiri (~> 1.3)
 
@@ -182,7 +183,7 @@ DEPENDENCIES
   mocha
   mysql2
   nokogiri
-  prawn (~> 0.10.2)!
+  prawn (~> 0.11.1)!
   rails (~> 3.0.3)
   rspec-rails (~> 2.5.0)
   ruby-debug
@@ -191,4 +192,3 @@ DEPENDENCIES
   spork (~> 0.9.0.rc4)
   steak (~> 1.1.0)
   watchr
-  will_paginate (~> 3.0.pre2)
