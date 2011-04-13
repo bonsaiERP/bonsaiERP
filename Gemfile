@@ -12,7 +12,6 @@ gem 'rails', '~>3.0.3'
 #gem 'pg'
 gem 'mysql2'
 
-
 gem 'devise'
 gem 'simple_form', '~>1.3.0'
 gem 'will_paginate', '~> 3.0.pre2'
