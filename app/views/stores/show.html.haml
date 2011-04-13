@@ -18,17 +18,42 @@
       %li= link_to "Nuevo egreso", new_inventory_operation_path(:store_id => @store.id, :operation => 'out')
       %li= link_to "Nueva transferencia", ""
 
+.input.fr
+  <a href="#store_info" class="more_info">Ver información</a>
+  .clear
+  #store_info{:style => 'display:none'}
+    .input._25
+      %label= "Teléfono"
+      = @store.phone
+    .input._25
+      %label= "Activo"
+      <span class="#{@store.active.to_s}"></span>
+    .input
+      %label= "Dirección"
+      = nl2br @store.address
+
 .clear
 
-.input
-  %label= "Nombre"
-  = @store.name
-.input._25
-  %label= "Teléfono"
-  = @store.phone
-.input._25
-  %label= "Activo"
-  = @store.active
-.input
-  %label= "Dirección"
-  = nl2br @store.address
+%h2 Stock
+
+- @items = @store.stocks.includes(:item).page(@page)
+= paginate @items
+
+%table.decorated
+  %tr
+    %th Item
+    %th Cantidad
+    %th Costo unitario
+    %th Subtotal
+    %th{:title => 'Cantidad mínima'} Cat. min.
+    %th
+
+  - @items.each do |st|
+    %tr
+      %td= st.item
+      %td.cur= ntc st.quantity
+      %td.cur= ntc st.unitary_cost
+      %td.cur= ntc( st.quantity * st.unitary_cost )
+      %td.cur= ntc st.minimun_quantity
+      %td.cur= link_to "mínimo", "#"
+

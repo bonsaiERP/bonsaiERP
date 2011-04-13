@@ -13,7 +13,7 @@ class InventoryOperationsController < ApplicationController
   # GET /inventory_operations/1
   # GET /inventory_operations/1.xml
   def show
-    @inventory_operation = InventoryOperation.find(params[:id])
+    @inventory_operation = InventoryOperation.org.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -44,7 +44,7 @@ class InventoryOperationsController < ApplicationController
     @inventory_operation = InventoryOperation.new(params[:inventory_operation])
 
     respond_to do |format|
-      if @inventory_operation.store.save
+      if @inventory_operation.save
         format.html { redirect_to(@inventory_operation, :notice => 'Inventory operation was successfully created.') }
         format.xml  { render :xml => @inventory_operation, :status => :created, :location => @inventory_operation }
       else

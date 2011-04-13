@@ -24,7 +24,7 @@
     %h3= with_currency @bank, :total_pendent
 
 ._40.fr
-  <a id="show_bank_info" href="javascript:">Ver información</a>
+  <a class="more_info" href="#bank_info">Ver información</a>
   #bank_info
     .input
       %label Dirección
@@ -46,12 +46,14 @@
 = render "account_ledgers/list", :account => @bank, :ref_title => 'Ref./Nº Cheque'
 
 :javascript
-  $('#show_bank_info').click(function() {
-    if($(this).html() == "Ver información") {
-      $('#bank_info').show("slow")
-      $(this).html("Ocultar información");
-    }else{
-      $('#bank_info').hide("slow")
-      $(this).html("Ver información");
-    }
-  });
+  head.ready(function() {
+    $('#show_bank_info').click(function() {
+      if($(this).html() == "Ver información") {
+        $('#bank_info').show("slow")
+        $(this).html("Ocultar información");
+      }else{
+        $('#bank_info').hide("slow")
+        $(this).html("Ver información");
+      }
+    });
+  })

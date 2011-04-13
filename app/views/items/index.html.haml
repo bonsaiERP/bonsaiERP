@@ -5,14 +5,9 @@
 
 %div.search{:style => 'display:none'}
   =form_tag "/items", :method => 'get'
-<<<<<<< HEAD
   =hidden_field_tag 'ctype', params[:ctype]
   %strong.dark Nombre o código
-  =text_field_tag 'search', params[:name_code], :size => 40
-=======
-  %strong.dark Código o nombre
   =text_field_tag 'name_code', params[:search], :size => 40
->>>>>>> dev
   =submit_tag 'Buscar'
 
 
@@ -20,6 +15,7 @@
 
 = link_to "Buscar", "#", :class => 'search'
 = paginate @items
+
 %table{ :class=> "decorated" }
   %tr
     %th Código
@@ -41,8 +37,3 @@
       %td= item.unit.name 
       %td.c <span class="#{item.active}"></span>
       %td= bonsai_links(item)
-
-:javascript
-  $(function() {
-    $('a').live("confirm", function() {console.log("Elemento marcado");  });
-  })

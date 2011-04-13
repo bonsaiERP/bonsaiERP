@@ -5,12 +5,17 @@
 
 = simple_form_for(@inventory_operation) do |f|
   = bonsai_form_error(f)
+
+  = f.input :operation, :as => :hidden
+  = f.input :store_id, :as => :hidden
+
   .main.bg_light_grey
     .input
       = f.input :ref_number, :input_html => {:size => 20}
       = f.input :date
 
     - url, title = @inventory_operation.operation == "in" ? [new_supplier_path, "Nuevo proveedor"] : [new_client_path, "Nuevo cliente"]
+
     = f.association :contact, :collection => @inventory_operation.get_contact_list, :label => @inventory_operation.contact_label,
       :input_html => { 'data-new_url' => url, 'data-title' => title, 'data-trigger' => 'new_contact' }
     .clear
@@ -27,7 +32,7 @@
       %th Inventario
       %th
 
-    - @items = Item.inventory
+    - @items = Item.inventory.org
     - f.simple_fields_for :inventory_operation_details do |fd|
       %tr.item
         %td.cur

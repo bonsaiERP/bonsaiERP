@@ -436,6 +436,16 @@
     $('.message .close').live("click", function() {
       return $(this).parents(".message:first").hide("slow").delay(500).remove();
     });
+    $('a.more_info').live('click', function() {
+      if ($(this).html() === "Ver información") {
+        $(this).html("Ocultar información");
+        $($(this).attr('href')).show("slow");
+      } else {
+        $(this).html("Ver información");
+        $($(this).attr('href')).hide("slow");
+      }
+      return false;
+    });
     $.ajaxSetup({
       beforeSend: function(xhr) {},
       error: function(event) {},

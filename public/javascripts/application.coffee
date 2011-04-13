@@ -430,6 +430,17 @@ $(document).ready(->
     $(this).parents(".message:first").hide("slow").delay(500).remove()
   )
 
+  # Shows and hides info
+  $('a.more_info').live('click', ->
+    if $(this).html() == "Ver información"
+      $(this).html("Ocultar información")
+      $( $(this).attr('href') ).show("slow")
+    else
+      $(this).html("Ver información")
+      $( $(this).attr('href') ).hide("slow")
+    false
+  )
+
   # AJAX setup
   $.ajaxSetup ({
     #dataType : "html",
