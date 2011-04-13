@@ -26,27 +26,27 @@ payments table exchanege_rate change to decimal 14,4
 /home/bonsai/nginx
 
 
-----------------------------------------------------
+--------------------------------------------
+
 Nginx with Passenger support was successfully installed.
 
-The Nginx configuration file (/opt/nginx/conf/nginx.conf)
-must contain the correct configuration options in order for Phusion Passenger
-to function correctly.
-
-This installer has already modified the configuration file for you! The
-following configuration snippet was inserted:
+Please edit your Nginx configuration file (probably /opt/nginx/conf/nginx.conf),
+and set the passenger_root and passenger_ruby configuration options in the
+'http' block, like this:
 
   http {
       ...
-      passenger_root /usr/local/lib/ruby/gems/1.8/gems/passenger-3.0.6;
-      passenger_ruby /usr/local/bin/ruby;
+      passenger_root /home/bonsai/.rvm/gems/ruby-1.9.2-head/gems/passenger-3.0.6;
+      passenger_ruby /home/bonsai/.rvm/wrappers/ruby-1.9.2-head/ruby;
       ...
   }
 
-After you start Nginx, you are ready to deploy any number of Ruby on Rails
+After you (re)start Nginx, you are ready to deploy any number of Ruby on Rails
 applications on Nginx.
 
------------------------------------------------------------
+
+--------------------------------------------
+
 Deploying a Ruby on Rails application: an example
 
 Suppose you have a Ruby on Rails application in /somewhere. Add a server block
@@ -63,7 +63,7 @@ to your Nginx configuration file, set its root to /somewhere/public, and set
 And that's it! You may also want to check the Users Guide for security and
 optimization tips and other useful information:
 
-  /usr/local/lib/ruby/gems/1.8/gems/passenger-3.0.6/doc/Users guide Nginx.html
+  /home/bonsai/.rvm/gems/ruby-1.9.2-head/gems/passenger-3.0.6/doc/Users guide Nginx.html
 
 Enjoy Phusion Passenger, a product of Phusion (www.phusion.nl) :-)
 http://www.modrails.com/
