@@ -4,10 +4,7 @@
 *.kpf
 *.sqlite3
 *.sqlite
-<<<<<<< HEAD
-=======
 *.rbc
->>>>>>> dev
 *~
 nbproject
 !pub.txt
@@ -23,3 +20,4 @@ rerun.txt
 db/test.sqlite3-journal
 *.*~
 config/initializers/host.rb
+.bundle/config
