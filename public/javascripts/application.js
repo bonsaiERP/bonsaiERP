@@ -413,7 +413,7 @@
     createSelectOption = function(value, label) {
       var opt;
       opt = "<option selected='selected' value='" + value + "'>" + label + "</option>";
-      return $(this).append(opt).val(value);
+      return $(this).append(opt).val(value).mark();
     };
     $.createSelectOption = $.fn.createSelectOption = createSelectOption;
     start = function() {

@@ -78,7 +78,7 @@
         $(el).append([ '<option value="', resp.id ,'">', resp.code, ' - ', resp.name , '</option>' ].join("") );
       });
       var tr = $('#items_table').data('row');
-      tr.find('select').val(resp.id);
+      tr.find('select').val(resp.id).mark().trigger('change');
     });
 
     // Remember the row for the clicked new item

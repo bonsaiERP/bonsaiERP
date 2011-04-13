@@ -6,4 +6,6 @@ class InventoryOperationDetail < ActiveRecord::Base
 
   belongs_to :inventory_operation
   belongs_to :item
+
+  validates_presence_of :item_id, :quantity
 end

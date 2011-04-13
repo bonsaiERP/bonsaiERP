@@ -401,7 +401,7 @@ $(document).ready(->
 
   createSelectOption = (value, label)->
     opt = "<option selected='selected' value='#{value}'>#{label}</option>"
-    $(this).append(opt).val(value)
+    $(this).append(opt).val(value).mark()
 
   $.createSelectOption = $.fn.createSelectOption = createSelectOption
 

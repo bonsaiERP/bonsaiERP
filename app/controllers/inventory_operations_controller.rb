@@ -2,7 +2,7 @@ class InventoryOperationsController < ApplicationController
   # GET /inventory_operations
   # GET /inventory_operations.xml
   def index
-    @inventory_operations = InventoryOperation.all
+    @inventory_operations = InventoryOperation.org.page(@page)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -44,7 +44,7 @@ class InventoryOperationsController < ApplicationController
     @inventory_operation = InventoryOperation.new(params[:inventory_operation])
 
     respond_to do |format|
-      if @inventory_operation.save
+      if @inventory_operation.store.save
         format.html { redirect_to(@inventory_operation, :notice => 'Inventory operation was successfully created.') }
         format.xml  { render :xml => @inventory_operation, :status => :created, :location => @inventory_operation }
       else

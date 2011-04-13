@@ -130,7 +130,7 @@
       });
       transaction.items.push(resp);
       var tr = $('#items_table').data('row');
-      tr.find('select').val(resp.id).trigger('change');
+      tr.find('select').val(resp.id).mark().trigger('change');
     });
 
     // Functions to add new contact and new project

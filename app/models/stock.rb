@@ -8,4 +8,7 @@ class Stock < ActiveRecord::Base
 
   belongs_to :store
   belongs_to :item
+
+
+  scope :active, where(:state => 'active')
 end
