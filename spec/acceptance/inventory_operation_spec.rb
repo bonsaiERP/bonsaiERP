@@ -52,16 +52,56 @@ feature "Inventory Operation", "Test IN/OUT" do
     io.save.should == true
     io.reload
 
-    puts io.store.stocks.size
     io.store.stocks[0].item_id.should == 1
-
-    puts io.store.stocks[0].quantity
     io.store.stocks[0].quantity.should == 200
     io.store.stocks[0].unitary_cost.should == 2
 
     io.store.stocks[1].item_id.should == 2
     io.store.stocks[1].quantity.should == 400
     io.store.stocks[1].unitary_cost.should == 2.25
+
+  end
+
+  scenario "create OUT" do
+
+    puts "Create first and IN"
+    hash = {:ref_number => 'I-0001', :date => Date.today, :contact_id => 1, :operation => 'in', :store_id => 1,
+      :inventory_operation_details_attributes => [
+        {:item_id =>1, :quantity => 100, :unitary_cost => 2},
+        {:item_id =>2, :quantity => 200, :unitary_cost => 2.5}
+      ]
+    }
+    io = InventoryOperation.new(hash)
+    io.inventory_operation_details.size.should == 2
+    io.save.should == true
+
+    io.store.stocks[0].item_id.should == 1
+    io.store.stocks[0].quantity.should == 100
+    io.store.stocks[0].unitary_cost.should == 2
+
+    io.store.stocks[1].item_id.should == 2
+    io.store.stocks[1].quantity.should == 200
+    io.store.stocks[1].unitary_cost.should == 2.5
+
+    puts "Create an OUT"
+
+    hash = {:ref_number => 'I-0002', :date => Date.today, :contact_id => 1, :operation => 'out', :store_id => 1,
+      :inventory_operation_details_attributes => [
+        {:item_id =>1, :quantity => 50},
+        {:item_id =>2, :quantity => 100}
+      ]
+    }
+
+    io = InventoryOperation.new(hash)
+    io.save.should == true
+
+    io.store.stocks[0].item_id.should == 1
+    io.store.stocks[0].quantity.should == 50
+    io.store.stocks[0].unitary_cost.should == 2
+
+    io.store.stocks[1].item_id.should == 2
+    io.store.stocks[1].quantity.should == 100
+    io.store.stocks[1].unitary_cost.should == 2.5
 
   end
 end

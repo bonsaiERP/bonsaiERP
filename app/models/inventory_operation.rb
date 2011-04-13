@@ -45,10 +45,20 @@ class InventoryOperation < ActiveRecord::Base
       c, q = st.blank? ? [0, 0] : [st.unitary_cost, st.quantity]
       st.update_attribute(:state, 'inactive') unless st.blank?
 
-      cost = (c*q + det.unitary_cost*det.quantity)/ (det.quantity + q)
+      cost = calculate_cost(c, q, det.unitary_cost, det.quantity)
+      q = operation == "in" ? q + det.quantity : q - det.quantity
 
-      store.stocks.build(:item_id => det.item_id, :unitary_cost => cost, :quantity => q + det.quantity, :state => 'active')
+      store.stocks.build(:item_id => det.item_id, :unitary_cost => cost, :quantity => q, :state => 'active')
     end
     store.save
+  end
+
+  # Calculates the cost according the quantity and if is IN/OUT
+  def calculate_cost(c1, q1, c2, q2)
+    if operation == "in"
+      (c1*q1 + c2*q2)/ (q1 + q2)
+    else
+      c1
+    end
   end
 end
