@@ -12,7 +12,6 @@ gem 'rails' #, '3.0.0'
 #gem 'pg'
 gem 'mysql2'
 
-
 gem 'devise'
 gem 'simple_form', '>=1.2.0'
 gem 'less', ">=1.2.21"
