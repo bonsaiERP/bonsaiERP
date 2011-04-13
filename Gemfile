@@ -1,7 +1,7 @@
 # Edit this Gemfile to bundle your application's dependencies.
 source 'http://gemcutter.org'
 
-gem 'rails' #, '3.0.0'
+gem 'rails', '~>3.0.3'
 
 ## Bundle edge rails:
 # gem "rails", :git => "git://github.com/rails/rails.git"
@@ -14,8 +14,9 @@ gem 'mysql2'
 
 
 gem 'devise'
-gem 'simple_form', '>=1.2.0'
-gem 'less', ">=1.2.21"
+gem 'simple_form', '~>1.3.0'
+gem 'will_paginate', '~> 3.0.pre2'
+gem 'less', '~>1.2.21'
 gem 'haml'
 #gem 'acts-as-taggable-on'
 gem 'kaminari'
@@ -28,8 +29,10 @@ group :development do
   gem "ruby-debug", :platforms => :mri_18
   gem "ruby-debug19", :platforms => :mri_19
 
+  gem 'rspec-rails', '~>2.5.0'
   gem 'steak', '~>1.1.0'
 end
+
 
 # Test
 group :test do
