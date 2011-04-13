@@ -37,7 +37,7 @@
 %h2 Stock
 
 - @items = @store.stocks.includes(:item).page(@page)
-= paginate @items
+= paginate(@items)
 
 %table.decorated
   %tr
