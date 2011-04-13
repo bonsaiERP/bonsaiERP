@@ -20,3 +20,54 @@ taps server mysql://demo:demo123@localhost/bonsai_dev?encoding=utf8 demo demo123
 taps pull postgres://demo:demo123@localhost/bonsai_dev http://demo:demo123@localhost:5000
 transactions table currency_exchange_rate must be changed to decimal 14,4
 payments table exchanege_rate change to decimal 14,4
+
+----------------------------------------------------
+"/opt/nginx
+/home/bonsai/nginx
+
+
+----------------------------------------------------
+Nginx with Passenger support was successfully installed.
+
+The Nginx configuration file (/opt/nginx/conf/nginx.conf)
+must contain the correct configuration options in order for Phusion Passenger
+to function correctly.
+
+This installer has already modified the configuration file for you! The
+following configuration snippet was inserted:
+
+  http {
+      ...
+      passenger_root /usr/local/lib/ruby/gems/1.8/gems/passenger-3.0.6;
+      passenger_ruby /usr/local/bin/ruby;
+      ...
+  }
+
+After you start Nginx, you are ready to deploy any number of Ruby on Rails
+applications on Nginx.
+
+-----------------------------------------------------------
+Deploying a Ruby on Rails application: an example
+
+Suppose you have a Ruby on Rails application in /somewhere. Add a server block
+to your Nginx configuration file, set its root to /somewhere/public, and set
+'passenger_enabled on', like this:
+
+   server {
+      listen 80;
+      server_name www.yourhost.com;
+      root /somewhere/public;   # <--- be sure to point to 'public'!
+      passenger_enabled on;
+   }
+
+And that's it! You may also want to check the Users Guide for security and
+optimization tips and other useful information:
+
+  /usr/local/lib/ruby/gems/1.8/gems/passenger-3.0.6/doc/Users guide Nginx.html
+
+Enjoy Phusion Passenger, a product of Phusion (www.phusion.nl) :-)
+http://www.modrails.com/
+
+Phusion Passenger is a trademark of Hongli Lai & Ninh Bui.
+
+/home/bonsai/tmp/nginx-1.0.0
