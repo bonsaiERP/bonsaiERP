@@ -35,6 +35,16 @@ class InventoryOperation < ActiveRecord::Base
     end
   end
 
+  # Creates the details depending if it has transaction
+  def create_details
+    if transaction_id.blank?
+      inventory_operation_details.build
+    else
+      transaction.transaction_details.each do |det|
+        inventory_operation_details.build(:item_id => det.item_id, :quantity => det.balance)
+      end
+    end
+  end
 
   private
   # sets the stock for items
@@ -49,7 +59,9 @@ class InventoryOperation < ActiveRecord::Base
       q = operation == "in" ? q + det.quantity : q - det.quantity
 
       store.stocks.build(:item_id => det.item_id, :unitary_cost => cost, :quantity => q, :state => 'active')
+      #update_transaction_detail(det) if transaction_id.present?
     end
+
     store.save
   end
 

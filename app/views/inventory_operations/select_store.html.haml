@@ -1,0 +1,24 @@
+%h1 Seleccione el almacen 
+%h2.n= link_to @transaction, @transaction
+
+- op = @transaction.type == "Income" ? "out" : "in"
+
+= form_tag new_inventory_operation_path, :method => 'get', :id => 'select_store' do
+  = hidden_field_tag "transaction_id", @transaction.id
+  = hidden_field_tag "operation", op
+
+
+  %label Almacen
+  = select_tag "store_id", options_from_collection_for_select(Store.org, :id, :name), :include_blank => true
+  .submit
+    =submit_tag "Seleccionar almacen"
+
+:javascript
+  head.ready(function() {
+    $('form#select_store').live('submit', function() {
+      if($('#store_id').val() == "") {
+        alert("Debe seleccionar un almacen!");
+        return false;
+      }
+    })
+  });

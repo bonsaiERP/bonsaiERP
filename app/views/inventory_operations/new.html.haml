@@ -14,4 +14,7 @@
 %h1 Nuevo <span class="#{css}">#{txt}</span> almacen
 %h2= @inventory_operation.store
 
+- if @inventory_operation.transaction_id.present?
+  %h2.n= link_to @inventory_operation.transaction, @inventory_operation.transaction
+
 = render :partial => 'form'

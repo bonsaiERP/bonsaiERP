@@ -87,11 +87,12 @@ module TransactionsHelper
     end
   end
 
-  def transaction_type
-    case params[:controller]
-    when "incomes"  then "Ventas"
-    when "buys"     then "Compras"
-    when "expenses" then "Gastos"
+  def transaction_type(op = nil)
+    op ||= params[:controller]
+    case op
+    when "incomes", "Income"   then "Ventas"
+    when "buys", "Buy"         then "Compras"
+    when "expenses", "Expense" then "Gastos"
     end
   end
 

@@ -3,7 +3,18 @@
 # email: boriscyber@gmail.com
 require File.dirname(__FILE__) + '/acceptance_helper'
 
-def set_inventory_details(args)
+def income_params
+    d = Date.today
+    @income_params = {"active"=>nil, "bill_number"=>"56498797", "contact_id"=>1, 
+      "currency_exchange_rate"=>1, "currency_id"=>1, "date"=>d, 
+      "description"=>"Esto es una prueba", "discount"=>3, "project_id"=>1 
+    }
+    details = [
+      { "description"=>"jejeje", "item_id"=>1, "organisation_id"=>1, "price"=>15.5, "quantity"=> 10},
+      { "description"=>"jejeje", "item_id"=>2, "organisation_id"=>1, "price"=>10, "quantity"=> 20}
+    ]
+    @income_params[:transaction_details_attributes] = details
+    @income_params
 end
 
 feature "Inventory Operation", "Test IN/OUT" do
@@ -103,5 +114,35 @@ feature "Inventory Operation", "Test IN/OUT" do
     io.store.stocks[1].quantity.should == 100
     io.store.stocks[1].unitary_cost.should == 2.5
 
+  end
+
+  scenario "make OUT for Income" do
+    i = Income.new(income_params)
+    i.save.should == true
+    i.approve!
+    
+    Bank.create!(:number => '123', :currency_id => 1, :name => 'Bank JE', :amount => 0) {|a| a.id = 1 }
+
+    p = i.new_payment(:account_id => 1, :reference => "NA", :date => Date.today)
+    p.amount.should == i.balance
+    p.save.should == true
+
+    hash = {:ref_number => 'I-0001', :date => Date.today, :contact_id => 1, :operation => 'in', :store_id => 1,
+      :inventory_operation_details_attributes => [
+        {:item_id =>1, :quantity => 100, :unitary_cost => 2},
+        {:item_id =>2, :quantity => 200, :unitary_cost => 2.5}
+      ]
+    }
+    
+    io = InventoryOperation.new(hash)
+    io.save.should == true
+    
+    puts "Create and OUT for Income"
+
+    hash = hash.merge(:transaction_id => i.id, :operation => 'out')
+
+    io = InventoryOperation.new(hash)
+    puts "----------------------"
+    io.save.should == false
   end
 end

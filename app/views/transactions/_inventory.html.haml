@@ -1,6 +1,8 @@
 #inventory
   %h2 Inventario
 
+  = link_to "Ingresar inventario", select_store_inventory_operation_path(transaction), :class => "new"
+
   %table#inventory_table.decorated
     %thead
       %tr

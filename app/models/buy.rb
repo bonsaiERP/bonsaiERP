@@ -19,6 +19,9 @@ class Buy < Transaction
   validates             :ref_number,           :presence => true , :uniqueness => { :scope => :organisation_id, :allow_blank => false}
   validate              :valid_number_of_items
 
+  def to_s
+    "Compra #{ref_number}"
+  end
 
 private
   # Initialized  the ref_number

@@ -1,0 +1,14 @@
+- f.simple_fields_for :inventory_operation_details do |fd|
+  %tr.item
+    %td
+      = fd.input :item_id, :as => :hidden
+      = fd.object.item
+    %td= fd.input :quantity, :label => false, :input_html => { :size => 8, :class => 'quantity', :type => 'decimal' }
+
+    - if @inventory_operation.operation == "in"
+      %td= fd.input :unitary_cost, :label => false, :input_html => { :size => 8, :class => 'unitary_cost', :type => 'decimal' }
+
+    %td.cur.inventory
+    %td
+
+

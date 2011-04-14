@@ -1,6 +1,10 @@
 Bonsaierp::Application.routes.draw do
 
-  resources :inventory_operations
+  resources :inventory_operations do
+    member do
+      get :select_store
+    end
+  end
 
   resources :account_ledgers do
     member do

@@ -8,6 +8,7 @@
 
   = f.input :operation, :as => :hidden
   = f.input :store_id, :as => :hidden
+  = f.input :transaction_id, :as => :hidden
 
   .main.bg_light_grey
     .input
@@ -32,20 +33,15 @@
       %th Inventario
       %th
 
-    - @items = Item.inventory.org
-    - f.simple_fields_for :inventory_operation_details do |fd|
-      %tr.item
-        %td.cur
-          = fd.input :item_id, :label => false, :collection => @items, :input_html => {:class => 'item', 'data-new_url' => new_item_path(:scope => 'inventory'), 'data-title' => 'Nuevo producto/servicio', 'data-trigger' => 'new_item'}
-        %td= fd.input :quantity, :label => false, :input_html => { :size => 8, :class => 'quantity', :type => 'decimal' }
+    - if @inventory_operation.transaction_id.blank?
+      - @items = Item.inventory.org
+      = render "form_details", :f => f
+    - else
+      = render "form_details_transaction", :f => f
 
-        - if @inventory_operation.operation == "in"
-          %td= fd.input :unitary_cost, :label => false, :input_html => { :size => 8, :class => 'unitary_cost', :type => 'decimal' }
-
-        %td.cur.inventory
-        %td.del <a href="javascript:" class="destroy" title="Borrar">&nbsp;</a>
-  %p
-    <a href="javascript:" id="add_item" class="add">Adicionar ítem</a>
+  - if @inventory_operation.transaction_id.blank?
+    %p
+      <a href="javascript:" id="add_item" class="add">Adicionar ítem</a>
   .actions
     = f.submit 'Salvar'
 
