@@ -6,6 +6,7 @@ class TransactionDetail < ActiveRecord::Base
   # callbacks
   after_initialize :set_defaults
   before_save      :set_original_price
+  before_save      :set_balance
   
   attr_protected :original_price
 
@@ -19,6 +20,10 @@ class TransactionDetail < ActiveRecord::Base
 
   def total
     price * quantity
+  end
+
+  def valued_balance
+    price * balance
   end
 
   # Indicates if in an Income the item price has changed
@@ -39,5 +44,9 @@ private
   # sets the original price of the item
   def set_original_price
     self.original_price = item.price
+  end
+
+  def set_balance
+    self.balance = self.quantity
   end
 end
