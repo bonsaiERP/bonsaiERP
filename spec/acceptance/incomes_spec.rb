@@ -3,6 +3,8 @@
 # email: boriscyber@gmail.com
 require File.dirname(__FILE__) + '/acceptance_helper'
 
+#expect { t2.save }.to raise_error(ActiveRecord::StaleObjectError)
+
 def income_params
     d = Date.today
     @income_params = {"active"=>nil, "bill_number"=>"56498797", "contact_id"=>1, 

@@ -17,8 +17,14 @@
 
     - url, title = @inventory_operation.operation == "in" ? [new_supplier_path, "Nuevo proveedor"] : [new_client_path, "Nuevo cliente"]
 
-    = f.association :contact, :collection => @inventory_operation.get_contact_list, :label => @inventory_operation.contact_label,
-      :input_html => { 'data-new_url' => url, 'data-title' => title, 'data-trigger' => 'new_contact' }
+    - if @inventory_operation.transaction_id.blank?
+      = f.association :contact, :collection => @inventory_operation.get_contact_list, :label => @inventory_operation.contact_label,
+        :input_html => { 'data-new_url' => url, 'data-title' => title, 'data-trigger' => 'new_contact' }
+    - else
+      .input
+        = f.input :contact_id, :as => :hidden
+        %label Contacto
+        = link_to f.object.contact, f.object.contact, :target => '_blank'
     .clear
 
   = f.input :description, :as => :text, :input_html => {:rows => 4, :cols => 40}

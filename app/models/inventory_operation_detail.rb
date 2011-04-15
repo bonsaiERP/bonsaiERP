@@ -9,7 +9,7 @@ class InventoryOperationDetail < ActiveRecord::Base
 
   validates_presence_of :item_id, :quantity
   validates_numericality_of :quantity, :greater_than => 0
-  validate :valid_quantity_for_transaction
+  #validate :valid_quantity_for_transaction
 
 private
   # Validtes the quantiry for a transaction

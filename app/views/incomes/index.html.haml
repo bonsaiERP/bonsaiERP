@@ -39,10 +39,11 @@
         %td= lo income.payment_date unless income.paid?
         %td.cur= ntc exchange(income, :real_total, @currency_rates)
         %td.cur= ntc exchange(income, :balance, @currency_rates)
-        %td.cur
+        %td.cur= ntc income.balance_inventory
         %td <span>#{income.currency_symbol}</span>
         %td <span class="#{income.real_state}">#{income.show_state}</span>
         %td= cash_credit(income.cash)
         %td.nw= lo income.date
         %td.actions
           = bonsai_links(income) if income.draft?
+

@@ -40,6 +40,7 @@ class InventoryOperation < ActiveRecord::Base
     if transaction_id.blank?
       inventory_operation_details.build
     else
+      self.contact_id = transaction.contact_id
       transaction.transaction_details.each do |det|
         inventory_operation_details.build(:item_id => det.item_id, :quantity => det.balance)
       end
@@ -49,6 +50,8 @@ class InventoryOperation < ActiveRecord::Base
   private
   # sets the stock for items
   def set_stock
+    transaction.set_trans(false) if transaction_id.present?
+
     inventory_operation_details.each do |det|
       st = store.stocks.find_by_item_id(det.item_id)
 
@@ -59,9 +62,15 @@ class InventoryOperation < ActiveRecord::Base
       q = operation == "in" ? q + det.quantity : q - det.quantity
 
       store.stocks.build(:item_id => det.item_id, :unitary_cost => cost, :quantity => q, :state => 'active')
-      #update_transaction_detail(det) if transaction_id.present?
+      update_quantity_of_transaction(det) if transaction_id.present?
     end
 
+    #if transaction_id.present?
+    #  inventory_operation_details.each {|i| puts i.errors.blank? }
+    #end
+    if transaction_id.present?
+      return false unless check_and_save_transaction
+    end
     store.save
   end
 
@@ -73,4 +82,48 @@ class InventoryOperation < ActiveRecord::Base
       c1
     end
   end
+
+  def check_and_save_transaction
+    if valid_transaction
+      transaction.update_attribute(:balance_inventory, transaction.balance_inventory - inventory_transaction_value)
+    else
+      false
+    end
+  end
+
+  # Calculates the total value for the current operation
+  def inventory_transaction_value
+    sum = 0
+    inventory_operation_details.each do |det|
+      it = transaction.transaction_details.find_by_item_id(det.item_id)
+      sum += it.price * det.quantity
+    end
+
+    sum
+  end
+
+  # Checks if there are any errors related to the transaction
+  def valid_transaction
+    ret = true
+    inventory_operation_details.each do |det|
+      unless det.errors.blank?
+        return false
+      end
+    end
+
+    ret
+  end
+
+  # Updates and validtes the quantiry for a transaction
+  def update_quantity_of_transaction(det)
+    #puts "Trans: #{ transaction.transaction_details.map(&:item_id) } #{transaction.transaction_details.find_by_item_id(det.item_id)}"
+    it = transaction.transaction_details.find_by_item_id(det.item_id)
+
+    if det.quantity > it.balance
+      det.errors.add(:quantity, "Cantidad mayor a la permitida")
+    elsif det.quantity > 0
+      it.update_attribute(:balance, (it.balance - det.quantity) )
+    end
+  end
+
 end

@@ -120,12 +120,18 @@ feature "Inventory Operation", "Test IN/OUT" do
     i = Income.new(income_params)
     i.save.should == true
     i.approve!
+
+    i.balance.should == i.balance_inventory
+
+    det = i.transaction_details[0]
+    det.balance.should == det.quantity
     
     Bank.create!(:number => '123', :currency_id => 1, :name => 'Bank JE', :amount => 0) {|a| a.id = 1 }
 
     p = i.new_payment(:account_id => 1, :reference => "NA", :date => Date.today)
     p.amount.should == i.balance
     p.save.should == true
+
 
     hash = {:ref_number => 'I-0001', :date => Date.today, :contact_id => 1, :operation => 'in', :store_id => 1,
       :inventory_operation_details_attributes => [
@@ -142,7 +148,28 @@ feature "Inventory Operation", "Test IN/OUT" do
     hash = hash.merge(:transaction_id => i.id, :operation => 'out')
 
     io = InventoryOperation.new(hash)
-    puts "----------------------"
     io.save.should == false
+
+    io.inventory_operation_details[0].errors.should_not == blank?
+    io.inventory_operation_details[1].errors.should_not == blank?
+
+    puts "Saving correctly"
+    io.inventory_operation_details[0].quantity = 5
+    io.inventory_operation_details[1].quantity = 10
+
+    io.save.should == true
+
+    i.reload
+    i.balance_inventory.should_not == i.balance
+
+    dets = i.transaction_details(true)
+
+    det1 = dets[0]
+    det2 = dets[1]
+
+    i.balance_inventory.should == i.total - (5 * det1.price + 10 * det2.price)
+
+    det1.balance.should == 5
+    det2.balance.should == 10
   end
 end

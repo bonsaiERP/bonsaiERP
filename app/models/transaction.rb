@@ -18,6 +18,7 @@ class Transaction < ActiveRecord::Base
   before_save      :calculate_total_and_set_balance, :if => :trans?
   before_save      :update_payment_date
   before_save      :set_state
+  before_save      :set_balance_inventory, :if => :trans?
 
   after_update     :update_transaction_pay_plans, :if => :trans?
 
@@ -375,4 +376,7 @@ private
     self.creator_id = UserSession.user_id
   end
 
+  def set_balance_inventory
+    self.balance_inventory = total
+  end
 end

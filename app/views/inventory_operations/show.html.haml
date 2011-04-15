@@ -11,6 +11,10 @@
 
 %h2= @inventory_operation.store
 
+- if @inventory_operation.transaction_id.present?
+  %h2.n= link_to @inventory_operation.transaction, @inventory_operation.transaction
+
+
 %h3._25.fl{:style => 'margin: 0px'}= @inventory_operation.ref_number
 ._25.fl
   = lo @inventory_operation.date

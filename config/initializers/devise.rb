@@ -17,7 +17,7 @@ Devise.setup do |config|
   # authentication tools as :clearance_sha1, :authlogic_sha512 (then you should set
   # stretches above to 20 for default behavior) and :restful_authentication_sha1
   # (then you should set stretches to 10, and copy REST_AUTH_SITE_KEY to pepper)
-  config.encryptor = :bcrypt
+  #config.encryptor = :bcrypt
   config.pepper = "403fc497cb20fce73f1a78827caadbbb3f654e397ab9bed21b0991b096779290a3a9fffd05a7a31df309193b97e733e4a867ba30b4b87c3ba23fb5fde9d8ce508"
 
   # ==> Configuration for :confirmable
