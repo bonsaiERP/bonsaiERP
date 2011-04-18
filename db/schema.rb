@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110418180759) do
+ActiveRecord::Schema.define(:version => 20110418203934) do
 
   create_table "account_ledgers", :force => true do |t|
     t.integer  "organisation_id"
@@ -438,29 +438,30 @@ ActiveRecord::Schema.define(:version => 20110418180759) do
   add_index "units", ["organisation_id"], :name => "index_units_on_organisation_id"
 
   create_table "users", :force => true do |t|
-    t.string   "email",                               :default => "", :null => false
-    t.string   "encrypted_password",   :limit => 128, :default => "", :null => false
-    t.string   "password_salt",                       :default => "", :null => false
+    t.string   "email",                                  :default => "",    :null => false
+    t.string   "encrypted_password",      :limit => 128, :default => "",    :null => false
+    t.string   "password_salt",                          :default => "",    :null => false
     t.string   "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string   "reset_password_token"
     t.string   "remember_token"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                       :default => 0
+    t.integer  "sign_in_count",                          :default => 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "first_name",           :limit => 80
-    t.string   "last_name",            :limit => 80
-    t.string   "phone",                :limit => 20
-    t.string   "mobile",               :limit => 20
-    t.string   "website",              :limit => 200
-    t.string   "account_type",         :limit => 15
+    t.string   "first_name",              :limit => 80
+    t.string   "last_name",               :limit => 80
+    t.string   "phone",                   :limit => 20
+    t.string   "mobile",                  :limit => 20
+    t.string   "website",                 :limit => 200
+    t.string   "account_type",            :limit => 15
     t.string   "description"
+    t.boolean  "change_default_password",                :default => false
   end
 
   add_index "users", ["first_name"], :name => "index_users_on_first_name"

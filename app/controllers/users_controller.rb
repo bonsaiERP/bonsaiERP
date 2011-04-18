@@ -29,8 +29,15 @@ class UsersController < ApplicationController
   def create_user
     @user = User.new(params[:user])
     
-    @user.valid?
-    render :action => 'add_user'
+    @user.generate_random_password
+    @user.change_default_password = true
+    
+    if @user.save
+      flash[:notice] = "El usuario #{@user.email} ha sido adicionado"
+      redirect_to "/configuration"
+    else
+      render :action => 'add_user'
+    end
   end
 
   # GET /users/:id/edit_user

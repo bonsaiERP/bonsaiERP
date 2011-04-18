@@ -3,7 +3,6 @@
 # email: boriscyber@gmail.com
 class Link < ActiveRecord::Base
 
-
   belongs_to :organisation
   belongs_to :user
 
