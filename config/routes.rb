@@ -75,7 +75,7 @@ Bonsaierp::Application.routes.draw do
 
   resources :currencies
 
-  resources :links
+  #resources :links
 
   resources :taxes
 
@@ -86,9 +86,22 @@ Bonsaierp::Application.routes.draw do
   resources :countries
 
   devise_for :users#, :path_names => { :sign_in => '/login', :sign_out => '/logout' }
-  resources :users
+  resources :users do
+    collection do
+      get  :add_user
+      post :create_user
+    end
 
+    member do
+      get :edit_user
+      put :update_user
+    end
+  end
+
+  #resources :dashboard
+    
   match '/dashboard' => 'dashboard#index', :as => :dashboard
+  match '/configuration' => 'dashboard#configuration'
 
   root :to => 'organisations#index'
   # The priority is based upon order of creation:

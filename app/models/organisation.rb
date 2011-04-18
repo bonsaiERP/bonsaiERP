@@ -6,7 +6,6 @@ class Organisation < ActiveRecord::Base
   before_create :set_user
   after_create :create_all_records
 
-
   # relationships
   belongs_to :country
   belongs_to :currency

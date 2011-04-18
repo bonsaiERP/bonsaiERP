@@ -1,0 +1,33 @@
+%h1 Configuración
+
+#tabs
+  %ul
+    %li <a href="#users">Usuarios</a>
+    %li <a href="#organisation">Empresa</a>
+      
+
+  #users
+    =link_to "Adicionar usuario", "/users/add_user", :class => 'new'
+
+    %table.decorated
+      %tr
+        %th Nombre
+        %th Email
+        %th Rol
+        %th Activo
+        %th
+      
+      - @links.each do |link|
+        %tr
+          %td= link.user
+          %td= link.user.email
+          %td= link.rol
+          %td{:class => link.active.to_s }
+          %td= link_to "Editar", edit_user_user_path(link.user), :class => 'edit', :title => 'Editar usuario'
+
+  #organisation
+
+:javascript
+  head.ready(function() {
+    $('#tabs').tabs();
+  })

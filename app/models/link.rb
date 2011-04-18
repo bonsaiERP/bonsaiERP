@@ -3,6 +3,7 @@
 # email: boriscyber@gmail.com
 class Link < ActiveRecord::Base
 
+
   belongs_to :organisation
   belongs_to :user
 
@@ -26,5 +27,6 @@ class Link < ActiveRecord::Base
     # self.rol_id = 1
     # write_attribute(:rol_id, 1)
   end
+
   
 end

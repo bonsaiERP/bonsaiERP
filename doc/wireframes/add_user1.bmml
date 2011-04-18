@@ -1,0 +1,73 @@
+<mockup version="1.0" skin="sketch" measuredW="1170" measuredH="1084" mockupW="1100" mockupH="1074">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::Image" x="60" y="0" w="-1" h="-1" measuredW="1100" measuredH="101" zOrder="2" locked="true" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/menu.png</src>
+      </controlProperties>
+    </control>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::Canvas" x="120" y="99" w="990" h="939" measuredW="100" measuredH="70" zOrder="1" locked="true" isInGroup="-1">
+      <controlProperties>
+        <borderStyle>none</borderStyle>
+      </controlProperties>
+    </control>
+    <control controlID="2" controlTypeID="com.balsamiq.mockups::Canvas" x="60" y="0" w="1100" h="1074" measuredW="100" measuredH="70" zOrder="0" locked="true" isInGroup="-1">
+      <controlProperties>
+        <borderStyle>none</borderStyle>
+        <color>13421772</color>
+      </controlProperties>
+    </control>
+    <control controlID="6" controlTypeID="com.balsamiq.mockups::Canvas" x="120" y="101" w="990" h="41" measuredW="100" measuredH="70" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderStyle>none</borderStyle>
+        <color>15658734</color>
+      </controlProperties>
+    </control>
+    <control controlID="44" controlTypeID="com.balsamiq.mockups::Title" x="159" y="154" w="-1" h="-1" measuredW="184" measuredH="46" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>4144959</color>
+        <size>28</size>
+        <text>Configuraci%F3n</text>
+      </controlProperties>
+    </control>
+    <control controlID="45" controlTypeID="com.balsamiq.mockups::TabBar" x="159" y="215" w="757" h="385" measuredW="159" measuredH="100" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <selectedIndex>0</selectedIndex>
+        <text>Usuarios</text>
+      </controlProperties>
+    </control>
+    <control controlID="48" controlTypeID="__group__" x="201" y="269" w="62" h="25" measuredW="122" measuredH="25" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <href>add_user2%26bm%3Badd_user2.bmml%26bm%3Badd_user2.bmml%26bm%3Badd_user2.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22141%2C269%2C203%2C294%22%20href%3D%22add_user2.bmml%22%20alt%3D%22add_user2%22%20id%3D%2248%22/%3E</map>
+      </controlProperties>
+      <groupChildrenDescriptors>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Image" x="0" y="4" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="0" locked="false" isInGroup="48">
+          <controlProperties>
+            <src>./assets/add.png</src>
+          </controlProperties>
+        </control>
+        <control controlID="3" controlTypeID="com.balsamiq.mockups::Label" x="18" y="0" w="-1" h="-1" measuredW="104" measuredH="25" zOrder="1" locked="false" isInGroup="48">
+          <controlProperties>
+            <color>3700253</color>
+            <text>Agregar%20usuario</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="50" controlTypeID="com.balsamiq.mockups::DataGrid" x="194" y="327" w="557" h="124" measuredW="492" measuredH="118" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>false</bold>
+        <borderStyle>none</borderStyle>
+        <text>*Nombre*%2C%20*Email*%2C%20*Rol*%2C%20*Activo*%2C%0AAmaru%20Barroso%2C%20amaru.barroso@gmail.com%2C%20Administrador%2C%20SI%2C%20%5Beditar%5D%0AJuan%20Perez%2C%20juan@mail.com%2C%20Vendedor%2C%20SI%2C%20%5Beditar%5D%0ARosa%20Lina%2C%20rosalina@gmail.com%2C%20Gerencia%2C%20SI%2C%20%5Beditar%5D</text>
+        <vLines>false</vLines>
+      </controlProperties>
+    </control>
+    <control controlID="51" controlTypeID="com.balsamiq.mockups::Label" x="195" y="296" w="-1" h="-1" measuredW="239" measuredH="25" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>5263440</color>
+        <italic>true</italic>
+        <text>Puede%20tener%20hasta%203%20usuarios%20activos</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>
