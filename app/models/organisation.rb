@@ -4,6 +4,7 @@
 class Organisation < ActiveRecord::Base
   # callbacks
   before_create :set_user
+  after_create :update_link
   after_create :create_all_records
 
   # relationships
@@ -40,7 +41,6 @@ protected
   def create_all_records
     OrganisationSession.set = { :id => self.id, :name => self.name, :curency_id => self.currency_id }
     create_taxes
-    create_link
     create_units
   end
 
@@ -64,6 +64,13 @@ protected
     YAML::parse(File.open(path) ).transform.each do |vals|
       unit = Unit.create!(vals)
     end
+  end
+
+  # Updates the link for the user creator
+  def update_link
+    l = UserSession.current_user.link
+    l.organisation_id = id
+    l.save!
   end
 
   # Sets the user_id, needed to define the scope of uniquenes_of :name

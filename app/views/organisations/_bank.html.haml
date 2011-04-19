@@ -1,0 +1,25 @@
+%h2 Datos cuenta bancaria
+
+= simple_form_for(bank) do |f|
+  = bonsai_form_error(f)
+  =hidden_field_tag "step", 1
+
+  = f.input :name, :label => 'Banco'
+  = f.input :number, :label => 'Número de cuenta'
+  .clear
+  -if bank.new_record?
+    = f.association :currency, :label => 'Moneda'
+    = f.input :amount, :label => 'Total en cuenta', :input_html => {:size => 12, :class => 'r'}, :required => true
+  -else
+    .input
+      %label Moneda
+      = bank.currency
+    .input
+      %label Total en cuenta
+      = "#{bank.currency_symbol} #{ntc(bank.total_amount)}"
+  .clear
+
+  .submit
+    <button class="before but" data-url="/organisations/new?step=1">Anterior</button>
+    = f.submit 'Siguiente', :class => 'but fr'
+

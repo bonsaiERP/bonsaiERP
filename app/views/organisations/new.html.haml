@@ -1,0 +1,15 @@
+:css
+  .but{ margin: 4px 150px !important}
+  button.but{}
+
+%h1 Crear empresa
+
+/- debugger
+= render @partial, @local => @object
+
+:javascript
+  head.ready(function() {
+    $('button.before').live('click', function() {
+      return false;
+    })
+  })

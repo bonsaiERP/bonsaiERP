@@ -3,7 +3,7 @@
 # email: boriscyber@gmail.com
 class User < ActiveRecord::Base
   # callbacks
-  before_create :create_user_link#, :if => :change_default_password?
+  after_create :create_user_link#, :if => :change_default_password?
   
   ROLES = ['admin', 'gerency', 'inventory', 'sales']
 
@@ -61,11 +61,12 @@ class User < ActiveRecord::Base
 private
   def create_user_link
     if change_default_password?
-      links.build(:organisation_id => OrganisationSession.organisation_id, :rol => rolname, :creator => false)
+      l = links.build(:organisation_id => OrganisationSession.organisation_id, :rol => rolname, :creator => false)
     else
-      links.build(:rol => 'admin', :creator => true)
+      l = links.build(:rol => 'admin', :creator => true)
     end
 
+    raise AcitveRecord::Rollback unless l.save
   end
 
 end

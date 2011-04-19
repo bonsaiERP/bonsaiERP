@@ -83,5 +83,13 @@ module ApplicationHelper
 
   alias :wcur :with_currency
   
+  def organisation_creation_title(local)
+    case local
+    when :organisation then "Datos organización"
+    when :bank         then "Datos cuenta bancaria"
+    when :cash_regiser then "Datos cuenta caja"
+    when :view         then "Revisar datos"
+    end
+  end
 
 end
