@@ -1,4 +1,4 @@
-<mockup version="1.0" skin="sketch" measuredW="1405" measuredH="848" mockupW="1330" mockupH="846">
+<mockup version="1.0" skin="sketch" measuredW="1415" measuredH="858" mockupW="1330" mockupH="846">
   <controls>
     <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="159" y="2" w="870" h="830" measuredW="100" measuredH="70" zOrder="0" locked="true" isInGroup="-1">
       <controlProperties>
@@ -169,7 +169,7 @@
         <text>Boliviano%20bs.</text>
       </controlProperties>
     </control>
-    <control controlID="246" controlTypeID="com.balsamiq.mockups::Label" x="248" y="339" w="-1" h="-1" measuredW="44" measuredH="25" zOrder="19" locked="false" isInGroup="-1">
+    <control controlID="246" controlTypeID="com.balsamiq.mockups::Label" x="248" y="339" w="-1" h="-1" measuredW="45" measuredH="25" zOrder="19" locked="false" isInGroup="-1">
       <controlProperties>
         <bold>false</bold>
         <size>13</size>

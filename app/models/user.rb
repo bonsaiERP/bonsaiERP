@@ -3,7 +3,8 @@
 # email: boriscyber@gmail.com
 class User < ActiveRecord::Base
   # callbacks
-  after_create :create_user_link#, :if => :change_default_password?
+  after_create   :create_user_link#, :if => :change_default_password?
+  before_destroy :destroy_links
   
   ROLES = ['admin', 'gerency', 'inventory', 'sales']
 
@@ -66,7 +67,10 @@ private
       l = links.build(:rol => 'admin', :creator => true)
     end
 
-    raise AcitveRecord::Rollback unless l.save
+    raise AcitveRecord::Rollback unless l.save(:validate => false)
   end
 
+  def destroy_links
+    links.destroy_all
+  end
 end
