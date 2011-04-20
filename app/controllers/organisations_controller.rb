@@ -119,6 +119,8 @@ private
       @object = CashRegister.new(:currency_id => session[:org].currency_id)
     end
 
+    @object = session[:account] if params[:account] == session[:account].class.to_s
+
     @partial = @object.class.to_s.underscore
     @local = :"#{@object.class.to_s.underscore}"
   end
@@ -139,6 +141,15 @@ private
       @partial = @object.class.to_s.underscore
       @local = :"#{@object.class.to_s.underscore}"
     end
+  end
+
+  def get_step_3
+    @local = :view
+    @partial = "view"
+  end
+
+  def create_step_3
+
   end
 
   # Define the partial based on the step
