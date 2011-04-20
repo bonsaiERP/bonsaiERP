@@ -40,6 +40,7 @@ class OrganisationsController < ApplicationController
   # POST /organisations
   # POST /organisations.xml
   def create
+
     if params[:step].present? and params[:step].to_i < 4
       send(:"create_step_#{params[:step]}")
     else
@@ -59,12 +60,12 @@ class OrganisationsController < ApplicationController
 
   # DELETE /organisations/1
   # DELETE /organisations/1.xml
-  def destroy
-    @organisation = Organisation.find(params[:id])
-    @organisation.destroy
+  #def destroy
+  #  @organisation = Organisation.find(params[:id])
+  #  @organisation.destroy
 
-    respond_with(@organisation)
-  end
+  #  respond_with(@organisation)
+  #end
 
   # GET /organisation/1/select
   # sets the organisation session
@@ -95,9 +96,11 @@ private
   def create_step_1
     @object = Organisation.new(params[:organisation])
     if @object.valid?
-      session[:org]      = @organisation
+      session[:org]      = @object
       session[:step]     = 2
       session[:max_step] = 2 if session[:max_step] < 2
+    
+      session[:organisation] = {:id => 0, :name => @object.name, :currency_id => @object.currency_id}
       
       get_step_2
     else
@@ -107,12 +110,35 @@ private
   end
 
   def get_step_2
-    @object = params[:type] == "Bank" ? Bank.new(params[:bank]) : CashRegister.new(params[:cash_register])
-    @partial = "bank"
-    @local = :bank
+    params[:account] ||= "Bank"
+
+    case params[:account]
+    when "Bank"         then @object = Bank.new(:currency_id => session[:org].currency_id)
+    when "CashRegister" then @object = CashRegister.new(:currency_id => session[:org].currency_id)
+    else
+      @object = CashRegister.new(:currency_id => session[:org].currency_id)
+    end
+
+    @partial = @object.class.to_s.underscore
+    @local = :"#{@object.class.to_s.underscore}"
   end
 
   def create_step_2
+    OrganisationSession.set( :id => 1 )
+
+    @object = params[:bank].present? ? Bank.new(params[:bank]) : CashRegister.new(params[:cash_register])
+    @object.currency_id = session[:org].currency_id
+
+    if @object.valid?
+      session[:step]     = 3
+      session[:max_step] = 3 if session[:max_step] < 3
+      session[:account] = @object
+      @partial = "view"
+      @local = :view
+    else
+      @partial = @object.class.to_s.underscore
+      @local = :"#{@object.class.to_s.underscore}"
+    end
   end
 
   # Define the partial based on the step
