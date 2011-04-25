@@ -21,4 +21,24 @@
       window.location = $(this).data('url');
       return false;
     })
+
+    var action_is_post = false;
+    $("form").submit(function () {
+      action_is_post = true;
+    });
+
+    $('button.butl').live('click', function() {
+      action_is_post = true;
+    });
+
+    /*$(window).unload(function() {
+      return false;
+      if(!window.location.href.match(/step=\d/) && action_is_post == false) {
+        if(!confirm("Si actualiza la página perdera todos los datos ingresados para crear la empresa, desea actualizar?")) {
+          return false;
+        }else{
+          return true;
+        }
+      }
+    });*/
   })

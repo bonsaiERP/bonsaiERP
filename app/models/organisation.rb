@@ -4,9 +4,12 @@
 class Organisation < ActiveRecord::Base
   # callbacks
   before_create :set_user
-  after_create :update_link
   after_create :create_all_records
+  after_create :create_link
+  after_create :create_account
 
+  attr_accessor :account_info
+  
   # relationships
   belongs_to :country
   belongs_to :currency
@@ -51,13 +54,6 @@ protected
     end
   end
 
-  # Creates the link to the user
-  def create_link
-    link = Link.new(:organisation_id => self.id)
-    link.set_user_creator(user_id)
-    link.save!
-  end
-
   # creates default units the units accordins to the locale
   def create_units
     path = File.join(Rails.root, "config", "defaults", "units.#{I18n.locale}.yml" )
@@ -66,11 +62,43 @@ protected
     end
   end
 
+  # Creates the link to the user
+  def create_link
+    begin
+      link = Link.new(:organisation_id => self.id)
+      link.set_user_creator(user_id)
+      link.save!
+    rescue
+      false
+    end
+  end
+
+  # Creates the bank or CashRegister
+  def create_account
+    if account_info.is_a? Bank
+      unless Bank.create(account_info.attributes)
+        errors[:base] = "Error al crear cuenta de banco"
+        raise ActiveRecord::Rollback
+      end
+    elsif account_info.is_a? CashRegister
+      unless CashRegister.create(account_info.attributes)
+        errors[:base] = "Error al crear cuenta de caja"
+        raise ActiveRecord::Rollback
+      end
+    else
+      raise ActiveRecord::Rollback
+    end
+  end
+
   # Updates the link for the user creator
-  def update_link
-    l = UserSession.current_user.link
-    l.organisation_id = id
-    l.save!
+  def create_link
+    begin
+      l = links.build(:rol => 'admin')
+      l.set_user_creator(UserSession.user_id)
+      l.save!
+    rescue
+      false
+    end
   end
 
   # Sets the user_id, needed to define the scope of uniquenes_of :name

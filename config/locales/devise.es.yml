@@ -25,6 +25,7 @@ es:
       confirmed: 'Su cuenta a sido confirmada, Es hora de usar bonsai'
     registrations:
       signed_up: 'Recibirás un email para confirmar tu registro'
+      inactive_signed_up: 'Le hemos enviado un email con instrucciones para poder activar su cuenta.'
       updated: 'Su cuenta fue actualizada correctamente.'
       destroyed: 'Hasta luego! Su cuenta ha sido cancelada. Esperamos verlo proto.'
     unlocks:

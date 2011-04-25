@@ -11,8 +11,11 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(params[:user])
-    flash[:error] = t("flash.error") unless @user.save
-    respond_with(@user)
+    if @user.save
+      flash[:notice] = "Le hemos enviado un email para confirmar a: #{@user.email}"
+    else
+      render :action => 'new'
+    end
   end
 
   def show

@@ -9,9 +9,22 @@ class OrganisationsController < ApplicationController
   # GET /organisations
   # GET /organisations.xml
   def index
+    #debugger
     destroy_organisation_session!
+
     @organisations = current_user.organisations
-    respond_with(@organisations)
+    if current_user.organisations.any?
+      set_organisation_session(current_user.organisations.first)
+      @currency_rates = CurrencyRate.current_hash
+      render "/dashboard/index"
+    else
+      reset_org
+      session[:step] = params[:step] || 1
+      session[:max_step] ||= 1
+
+      send(:"get_step_#{session[:step]}")
+      render :action => 'new'
+    end
   end
 
   # GET /organisations/1
@@ -25,6 +38,7 @@ class OrganisationsController < ApplicationController
   # GET /organisations/new
   # GET /organisations/new.xml
   def new
+    reset_org unless params[:step]
     session[:step] = params[:step] || 1
     session[:max_step] ||= 1
 
@@ -48,6 +62,23 @@ class OrganisationsController < ApplicationController
     end
     
     render :action => 'new'
+  end
+
+  # POST /organisations/final_step
+  def final_step
+
+    @organisation = Organisation.new(session[:org].attributes)
+    @organisation.account_info = session[:account]
+
+    if @organisation.save
+      flash[:notice] = "Se ha creado su empresa correctamente."
+      params[:id] = @organisation.id
+      select
+    else
+      flash[:error] = @organisation.errors[:base].join(", ")
+      redirect_to "/organisations/new?step=3"
+    end
+
   end
 
   # PUT /organisations/1
@@ -86,6 +117,16 @@ class OrganisationsController < ApplicationController
   end
 
 private
+  def select_org()
+    @organisation = current_user.links.first.organisation
+    set_organisation_session(@organisation)
+  end
+
+  # resets the session org
+  def reset_org
+    session[:org]     = nil
+    session[:account] = nil
+  end
   # Steps for organisation creation
   def get_step_1
     @partial = "form"
@@ -146,10 +187,6 @@ private
   def get_step_3
     @local = :view
     @partial = "view"
-  end
-
-  def create_step_3
-
   end
 
   # Define the partial based on the step

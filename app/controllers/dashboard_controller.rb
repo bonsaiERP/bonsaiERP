@@ -13,4 +13,10 @@ class DashboardController < ApplicationController
   def configuration
     @links = Organisation.find( OrganisationSession.organisation_id).links.includes(:user)
   end
+
+private
+  def set_organisation
+    @organisation = Organisation.find(current_user.links.first.organisation_id)
+    set_organisation_session(@organisation)
+  end
 end

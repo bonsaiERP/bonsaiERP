@@ -80,7 +80,8 @@ Bonsaierp::Application.routes.draw do
   resources :taxes
 
   resources :organisations do
-    get :select, :on => :member
+    get  :select,     :on => :member
+    post :final_step, :on => :collection
   end
 
   resources :countries

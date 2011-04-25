@@ -6,6 +6,7 @@
 <h1>Registrate</h1>
 
 <%= simple_form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
+  <%= bonsai_form_error(f) %>
 
   <%= f.input :email, :wrapper_html => {:class =>'input _100'} %>
   <%= f.input :password, :label => 'Contraseña' , :wrapper_html => {:class =>'input _100'} %>

@@ -14,18 +14,7 @@ class ApplicationController < ActionController::Base
   include OrganisationHelpers
   helper_method OrganisationHelpers.organisation_helper_methods
 
-#
-#  # Used to redirect after a user has signed_in
-  #def after_sign_in_path_for(resource)
-  #  debugger
-  #  s=0
-  #  if resource.is_a?(User)
-  #    new_organisation_url
-  #  else
-  #    super
-  #  end
-  #end
-#
+
   # Adds an error with format to display
   # @param ActiveRecord::Base (model)
   def add_flash_error(model)
@@ -38,10 +27,15 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  #def after_sign_in_path_for(resource)
+  #  if current_user.organisations.any?
+  #    destroy_organisation_session!
+  #    set_organisation_session(current_user.organisations.first)
+  #    redirect_to dashboard_url
+  #  end
+  #end
   
   def after_logout_path_for(resource)
-    debugger
-    s=0
   end
 
     # especial redirect for ajax requests
