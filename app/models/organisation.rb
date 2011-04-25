@@ -76,12 +76,12 @@ protected
   # Creates the bank or CashRegister
   def create_account
     if account_info.is_a? Bank
-      unless Bank.create(account_info.attributes)
+      unless account_info.save
         errors[:base] = "Error al crear cuenta de banco"
         raise ActiveRecord::Rollback
       end
     elsif account_info.is_a? CashRegister
-      unless CashRegister.create(account_info.attributes)
+      unless account_info.save
         errors[:base] = "Error al crear cuenta de caja"
         raise ActiveRecord::Rollback
       end

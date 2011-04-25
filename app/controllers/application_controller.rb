@@ -27,6 +27,11 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def after_inactive_sing_up_path_for(resource)
+    flash[:notice] = "Se le ha enviado un email con instruciones a #{resource.email}, para que confirme su registro"
+    "/users/sign_in"
+  end
+
   #def after_sign_in_path_for(resource)
   #  if current_user.organisations.any?
   #    destroy_organisation_session!

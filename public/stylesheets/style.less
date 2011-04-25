@@ -593,7 +593,7 @@ span.error{
 /* Flash */
 .flash{
   padding:10px;
-  border-width:2px;
+  border:2px solid @dark;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
   border-radius: 4px;
@@ -610,10 +610,10 @@ span.error{
   border-color: @red;
   color:@red;
 }
-#flashWarning{
+#flashWarning, #flashAlert{
   .flash;
   color: @dark;
-  border-color:@yellow;
+  border-color:@dark_yellow;
   background-color:@light_yellow;
 }
 /* End */

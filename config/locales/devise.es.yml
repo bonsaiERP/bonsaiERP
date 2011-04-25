@@ -1,18 +1,24 @@
 es:
   errors:
     messages:
+      expired: "Ha expirado, por favor solicite una nueva"
       not_found: "no encontrado"
       already_confirmed: "ya fue confirmado"
       not_locked: "no fue bloqueado"
+      not_saved:
+        one: "1 error no permitio que el %{resource} sea salvado"
+        other: "%{count} errores no permitieron que el %{resource} sea salvado"
 
   devise:
     failure:
+      already_authenticated: "Ya ha ingresado."
       unauthenticated: 'Debe ingresar o registrarse para cotinuar.'
       unconfirmed: 'Debe confirmar su cuenta para continuar.'
       locked: 'Su cuenta esta bloqueada.'
       invalid: 'Email o contraseña inválida.'
       invalid_token: 'Token de autenticación inválido.'
       timeout: 'Su sesión a expirado, por favor ingrese de nuevo para continuar.'
+      inactive: "Su cuneta no fue activada"
     sessions:
       signed_in: 'Ingreso correctamente.'
       signed_out: 'Salio correctamente.'
@@ -20,7 +26,6 @@ es:
       send_instructions: 'Usted recibirá un email con instrucciones de como debe resetear su password en algunos minutos.'
       updated: 'Su password fue cambiado correctamente. Ahora ha ingresado al sistema.'
     confirmations:
-      link: "No recibio las instrucciones para confirmación?"
       send_instructions: 'Usted recibira un email con las instrucciones de como confirmar su cuenta en unos minutos.'
       confirmed: 'Su cuenta a sido confirmada, Es hora de usar bonsai'
     registrations:

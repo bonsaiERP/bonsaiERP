@@ -9,7 +9,6 @@ class OrganisationsController < ApplicationController
   # GET /organisations
   # GET /organisations.xml
   def index
-    #debugger
     destroy_organisation_session!
 
     @organisations = current_user.organisations
@@ -74,6 +73,9 @@ class OrganisationsController < ApplicationController
       flash[:notice] = "Se ha creado su empresa correctamente."
       params[:id] = @organisation.id
 
+      session[:account] = nil
+      session[:org] = nil
+      
       set_organisation_session(@organisation)
 
       redirect_to "/dashboard"
@@ -155,6 +157,7 @@ private
 
   def get_step_2
     params[:account] ||= "Bank"
+    params[:account] = "CashRegister" if session[:account].is_a?(CashRegister)
 
     case params[:account]
     when "Bank"         then @object = Bank.new(:currency_id => session[:org].currency_id)

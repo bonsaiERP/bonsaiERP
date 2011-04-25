@@ -15,6 +15,11 @@
   ._25.fl
     = f.input :amount, :label => 'Total en cuenta', :input_html => {:size => 12, :class => 'r'}
   .clear
+
+  = f.input :address, :label => 'Dirección', :as => :text, :input_html => {:rows => 4, :cols => 35}
+
+  .clear
+
   .submit
     <button class="butl" data-url="/organisations/new?step=1">Anterior</button>
     = f.submit 'Siguiente', :class => 'butr fr'

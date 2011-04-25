@@ -1,4 +1,4 @@
-<h3>Bienvenido <%= @resource.email %> a bonsaierp!</h3>
+<h4 style="font-weight:normal">Bienvenido <%= @resource.email %> a bonsaierp!</h4>
 
 <p> 
 Haga click en: <strong><%= link_to 'Confirmar mi cuenta', confirmation_url(@resource, :confirmation_token => @resource.confirmation_token) %></strong> para confirmar su registro.
