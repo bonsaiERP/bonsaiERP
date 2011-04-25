@@ -156,10 +156,10 @@ ActiveRecord::Schema.define(:version => 20110411184222) do
   add_index "inventory_operations", ["date"], :name => "index_inventory_operations_on_date"
   add_index "inventory_operations", ["operation"], :name => "index_inventory_operations_on_operation"
   add_index "inventory_operations", ["organisation_id"], :name => "index_inventory_operations_on_organisation_id"
-  add_index "inventory_operations", ["transaction_id"], :name => "index_inventory_operations_on_transaction_id"
   add_index "inventory_operations", ["ref_number"], :name => "index_inventory_operations_on_ref_number"
   add_index "inventory_operations", ["state"], :name => "index_inventory_operations_on_state"
   add_index "inventory_operations", ["store_id"], :name => "index_inventory_operations_on_store_id"
+  add_index "inventory_operations", ["transaction_id"], :name => "index_inventory_operations_on_transaction_id"
 
   create_table "items", :force => true do |t|
     t.integer  "unit_id"
