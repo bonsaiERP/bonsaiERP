@@ -1,0 +1,5 @@
+%p Bienvenido #{ @resource.email } a bonsaierp
+
+%p Puede confirmar su cuenta haciendo click en este vínculo
+  %strong= link_to "confirmar", confirmation_url(@resource, :confirmation_token => @res)
+

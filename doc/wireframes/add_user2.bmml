@@ -1,0 +1,116 @@
+<mockup version="1.0" skin="sketch" measuredW="1170" measuredH="1084" mockupW="1100" mockupH="1074">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::Image" x="60" y="0" w="-1" h="-1" measuredW="1100" measuredH="101" zOrder="2" locked="true" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/menu.png</src>
+      </controlProperties>
+    </control>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::Canvas" x="120" y="99" w="990" h="939" measuredW="100" measuredH="70" zOrder="1" locked="true" isInGroup="-1">
+      <controlProperties>
+        <borderStyle>none</borderStyle>
+      </controlProperties>
+    </control>
+    <control controlID="2" controlTypeID="com.balsamiq.mockups::Canvas" x="60" y="0" w="1100" h="1074" measuredW="100" measuredH="70" zOrder="0" locked="true" isInGroup="-1">
+      <controlProperties>
+        <borderStyle>none</borderStyle>
+        <color>13421772</color>
+      </controlProperties>
+    </control>
+    <control controlID="6" controlTypeID="com.balsamiq.mockups::Canvas" x="120" y="101" w="990" h="41" measuredW="100" measuredH="70" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderStyle>none</borderStyle>
+        <color>15658734</color>
+      </controlProperties>
+    </control>
+    <control controlID="44" controlTypeID="com.balsamiq.mockups::Title" x="159" y="154" w="-1" h="-1" measuredW="220" measuredH="46" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>4144959</color>
+        <size>28</size>
+        <text>Agregar%20usuario</text>
+      </controlProperties>
+    </control>
+    <control controlID="52" controlTypeID="com.balsamiq.mockups::Label" x="167" y="240" w="-1" h="-1" measuredW="36" measuredH="25" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>5263440</color>
+        <text>Email</text>
+      </controlProperties>
+    </control>
+    <control controlID="53" controlTypeID="com.balsamiq.mockups::TextInput" x="167" y="265" w="205" h="-1" measuredW="112" measuredH="29" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>false</bold>
+        <text>boris@gmail.com</text>
+      </controlProperties>
+    </control>
+    <control controlID="54" controlTypeID="com.balsamiq.mockups::Label" x="609" y="239" w="-1" h="-1" measuredW="24" measuredH="25" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>5263440</color>
+        <text>Rol</text>
+      </controlProperties>
+    </control>
+    <control controlID="55" controlTypeID="com.balsamiq.mockups::ComboBox" x="609" y="266" w="197" h="-1" measuredW="83" measuredH="25" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>false</bold>
+        <text>Almacen</text>
+      </controlProperties>
+    </control>
+    <control controlID="56" controlTypeID="com.balsamiq.mockups::Button" x="182" y="566" w="-1" h="-1" measuredW="130" measuredH="28" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Adicionar%20usuario</text>
+      </controlProperties>
+    </control>
+    <control controlID="58" controlTypeID="com.balsamiq.mockups::DataGrid" x="169" y="309" w="721" h="242" measuredW="446" measuredH="88" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>false</bold>
+        <text>%2C%20*Admin*%2C%20*Gerente*%2C%20%20%20%20%20%20%20%2C%20*Ventas*%0ACompras%5C%2C%20Ventas%20y%20Gastos%0AAprobar%20%28Compras%5C%2C%20ventas%20o%20gastos%29</text>
+        <vLines>false</vLines>
+      </controlProperties>
+    </control>
+    <control controlID="59" controlTypeID="com.balsamiq.mockups::Image" x="731" y="373" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/cross.png</src>
+      </controlProperties>
+    </control>
+    <control controlID="60" controlTypeID="com.balsamiq.mockups::Image" x="817" y="373" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="12" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/cross.png</src>
+      </controlProperties>
+    </control>
+    <control controlID="61" controlTypeID="com.balsamiq.mockups::Image" x="546" y="340" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="13" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/tick.png</src>
+      </controlProperties>
+    </control>
+    <control controlID="62" controlTypeID="com.balsamiq.mockups::Image" x="546" y="373" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="14" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/tick.png</src>
+      </controlProperties>
+    </control>
+    <control controlID="63" controlTypeID="com.balsamiq.mockups::Image" x="633" y="340" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="15" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/tick.png</src>
+      </controlProperties>
+    </control>
+    <control controlID="64" controlTypeID="com.balsamiq.mockups::Image" x="633" y="373" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="16" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/tick.png</src>
+      </controlProperties>
+    </control>
+    <control controlID="65" controlTypeID="com.balsamiq.mockups::Image" x="731" y="340" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="17" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/tick.png</src>
+      </controlProperties>
+    </control>
+    <control controlID="66" controlTypeID="com.balsamiq.mockups::Image" x="818" y="340" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="18" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/tick.png</src>
+      </controlProperties>
+    </control>
+    <control controlID="67" controlTypeID="com.balsamiq.mockups::Label" x="712" y="308" w="69" h="25" measuredW="67" measuredH="29" zOrder="19" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>2575891</color>
+        <size>16</size>
+        <text>Almacen</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

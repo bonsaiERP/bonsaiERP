@@ -2,6 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class AccountLedgersController < ApplicationController
+  before_filter :authenticate_user!
   before_filter :set_account_ledger, :only => [:show, :conciliate, :destroy, :new]
  
   # GET /account_ledger 

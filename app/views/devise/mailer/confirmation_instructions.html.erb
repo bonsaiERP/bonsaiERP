@@ -1,5 +1,11 @@
-<p>Bienvenido <%= @resource.email %> a bonsaierp!</p>
+<h4 style="font-weight:normal">Bienvenido <%= @resource.email %> a bonsaierp!</h4>
 
-<p>Puede confirmar su cuenta haciendo click al vínculo de abajo:</p>
+<p> 
+Haga click en: <strong><%= link_to 'Confirmar mi cuenta', confirmation_url(@resource, :confirmation_token => @resource.confirmation_token) %></strong> para confirmar su registro.
+</p>
 
-<p><%= link_to 'Confirmar mi cuenta', confirmation_url(@resource, :confirmation_token => @resource.confirmation_token) %></p>
+<% if @resource.change_default_password? %>
+  <p>
+    Su contraseña ahora es: <strong><%= @resource.temp_password %></strong>
+  </p>
+<% end %>

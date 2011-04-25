@@ -1,0 +1,32 @@
+%h2 Datos cuenta caja
+
+.boolean
+  %label.boolean #{ radio_button_tag "account", "Bank", false} Cuenta bancaria
+  %label.boolean #{ radio_button_tag "account", "CashRegiser", true} Cuenta caja
+
+= simple_form_for(cash_register, :url => "/organisations") do |f|
+  = bonsai_form_error(f)
+  = hidden_field_tag "step", 2
+
+  = f.input :name, :label => 'Nombre de caja'
+  .input._25
+    %label Moneda
+    =cash_register.currency
+  ._25.fl
+    = f.input :amount, :label => 'Total en cuenta', :input_html => {:size => 12, :class => 'r'}
+  .clear
+
+  = f.input :address, :label => 'Dirección', :as => :text, :input_html => {:rows => 4, :cols => 35}
+
+  .clear
+
+  .submit
+    <button class="butl" data-url="/organisations/new?step=1">Anterior</button>
+    = f.submit 'Siguiente', :class => 'butr fr'
+
+:javascript
+  head.ready(function() {
+    $('input:radio[name=account]').live('click', function() {
+      window.location = "/organisations/new?step=2&account=" + $(this).val();
+    });
+  })

@@ -33,8 +33,8 @@ module ApplicationHelper
   # Format addres to present on the
   def nl2br(val)
     unless val.blank?
-      val.gsub!("\n", "<br/>")
-      val.html_safe
+      t = val.gsub("\n", "<br/>")
+      t.html_safe
     end
   end
 
@@ -83,5 +83,13 @@ module ApplicationHelper
 
   alias :wcur :with_currency
   
+  def organisation_creation_title(local)
+    case local
+    when :organisation then "Datos organización"
+    when :bank         then "Datos cuenta bancaria"
+    when :cash_regiser then "Datos cuenta caja"
+    when :view         then "Revisar datos"
+    end
+  end
 
 end

@@ -1,31 +1,33 @@
-= simple_form_for(@organisation) do |f|
+%h2 Datos de la empresa
+
+= simple_form_for(organisation) do |f|
+  = bonsai_form_error(f)
+
+  =hidden_field_tag "step", 1
+
   =f.input :name, :label => 'Nombre de su empresa'
+  .input
+    %label Moneda
+    = organisation.currency
+  =f.input :currency_id, :as => :hidden
+  /=f.association :currency, :label => 'Moneda base', :hint => 'Todas las transacciones se realizaran en esta moneda.'
+  .clear
+    
   =f.association :country, :label => 'País'
+  .input
+    =f.input :phone, :label => 'Teléfono', :input_html => {:size => 15}
+    =f.input :mobile, :label => 'Móvil', :input_html => {:size => 15}
   .clear
-  =f.association :currency, :label => 'Moneda base', :hint => 'Todas las transacciones se realizaran en esta moneda.'
-  =f.input :phone, :label => 'Teléfono'
-  .clear
+
   =f.input :address, :label => 'Dirección', :as => :text, :input_html => {:rows => 5} 
   =f.input :email
-  .clear
-  =f.input :mobile, :label => 'Móvil'
-  =f.input :website, :label => 'Sitio Web'
-  .clear
-  =f.input :phone_alt, :label => 'Teléfono alternativo' 
-  =f.input :address_alt,:label => 'Dirección alternativa', :as => :text, :input_html => {:rows => 5} 
-  .clear
-    /= f.association :currencies, :label => 'Monedas de trabajo', :as => :check_boxes, :hint => 'Monedas con las cuales realizara las operaciones.', :wrapper_html => {:id => 'currencies'}
+  /.clear
+  /=f.input :website, :label => 'Sitio Web'
+  /.clear
+  /=f.input :phone_alt, :label => 'Teléfono alternativo' 
+  /=f.input :address_alt,:label => 'Dirección alternativa', :as => :text, :input_html => {:rows => 5} 
+  /.clear
   .clear
   .submit
-    = f.submit 'Crear empresa'
+    = f.submit 'Siguiente', :class => 'butr fr'
 .clear
-
-:javascript
-  $(function() {
-    /*$('#organisation_currency_id').live("click keyup", function () {
-      var val = $(this).val();
-      $('#currencies input:checkbox').attr("disabled", false);
-      $('#currencies label').removeClass("grey");
-      $('#currencies input:checkbox[value=' + val + ']').attr("disabled", true).parent("label").addClass("grey");
-    });*/
-  })

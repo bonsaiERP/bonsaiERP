@@ -26,5 +26,6 @@ class Link < ActiveRecord::Base
     # self.rol_id = 1
     # write_attribute(:rol_id, 1)
   end
+
   
 end

@@ -1,0 +1,104 @@
+- content_for :links do
+  %ul.breadcrumps
+    %li #{link_to "Configuración", "/configuration"} <span>&gt;</span>
+
+
+:css
+  #roles th{
+    width: 100px;
+  }
+  #roles th.first{
+    width: 300px;
+  }
+
+%h1 Adicionar usuario
+
+
+= simple_form_for @user, :url => "/users/create_user" do |f|
+  = bonsai_form_error(f)
+
+  = f.input :email
+  = f.input :rolname, :collection => User.get_roles
+
+  .clear
+  %table.decorated#roles
+    %tr
+      %th.first
+      - User.get_roles.each_with_index do |rol, ind|
+        %th{:class => rol.last, 'data-index' => ind + 2 }= rol.first
+    %tr
+      %td.b Puede crear ventas, compras y gastos
+      %td.true
+      %td.true
+      %td.true
+      %td.true
+
+    %tr
+      %td.b Puede aprobar ventas, compras y gastos
+      %td.true
+      %td.true
+      %td.false
+      %td.false
+
+    %tr
+      %td.b Puede crear items, clientes, proovedores y proyectos
+      %td.true
+      %td.true
+      %td.true
+      %td.true
+
+    %tr
+      %td.b Puede ingresar/egresar inventarios
+      %td.true
+      %td.true
+      %td.true
+      %td.false
+
+    %tr
+      %td.b Puede ver editar crear cuentas
+      %td.true
+      %td.true
+      %td.false
+      %td.false
+
+    %tr
+      %td.b Puede conciliar cuentas
+      %td.true
+      %td.true
+      %td.false
+      %td.false
+
+    %tr
+      %td.b Puede ver estados financieros
+      %td.true
+      %td.true
+      %td.false
+      %td.false
+
+    %tr
+      %td.b Puede adicionar usuarios
+      %td.true
+      %td.false
+      %td.false
+      %td.false
+
+  .actions
+    = f.submit "Adicionar usuario"
+
+
+:javascript
+  head.ready(function() {
+
+    function markRolColumn() {
+      $('#roles td').removeClass('marked');
+ 
+      if($('#user_rolname').val() != "") {
+        var ind = $('th.' + $('#user_rolname').val() ).data('index');
+        $('#roles td:nth-child(' + ind + ')').addClass('marked');
+      }
+    }
+
+    $('#user_rolname').live('change keyup', function () { markRolColumn(); });
+
+    markRolColumn();
+  })

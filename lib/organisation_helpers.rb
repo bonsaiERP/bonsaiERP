@@ -27,7 +27,11 @@ module OrganisationHelpers
     session[:organisation][:name]
   end
 
+  def organisation_id
+    session[:organisation][:id]
+  end
+
   def self.organisation_helper_methods
-    [:currency_id, :currency_name, :currency_symbol, :currency_complete, :currency_complete_plural, :currency_plural, :organisation_name]
+    [:currency_id, :currency_name, :currency_symbol, :currency_complete, :currency_complete_plural, :currency_plural, :organisation_name, :organisation_id]
   end
 end

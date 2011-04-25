@@ -1,0 +1,44 @@
+:css
+  .butl{ margin: 4px 0px !important}
+  .butr{ margin: 4px 150px !important}
+  
+  button.butl{
+    padding: 4px 16px;
+    margin: 10px 0px;
+    font-weight: bold;
+    font-size: 1.1em;
+    cursor: pointer;
+  }
+
+%h1.n Crear empresa (paso #{session[:step]} de 3)
+
+/- debugger
+= render @partial, @local => @object
+
+:javascript
+  head.ready(function() {
+    $('button.butl').live('click', function() {
+      window.location = $(this).data('url');
+      return false;
+    })
+
+    var action_is_post = false;
+    $("form").submit(function () {
+      action_is_post = true;
+    });
+
+    $('button.butl').live('click', function() {
+      action_is_post = true;
+    });
+
+    /*$(window).unload(function() {
+      return false;
+      if(!window.location.href.match(/step=\d/) && action_is_post == false) {
+        if(!confirm("Si actualiza la página perdera todos los datos ingresados para crear la empresa, desea actualizar?")) {
+          return false;
+        }else{
+          return true;
+        }
+      }
+    });*/
+  })

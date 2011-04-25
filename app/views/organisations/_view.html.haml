@@ -1,0 +1,76 @@
+%h2.n Revision de datos
+
+
+= simple_form_for(session[:org], :url => "/organisations/final_step", :html => {:id => 'organisation_form'} ) do |f|
+  
+  =hidden_field_tag "step", 3
+  
+  %hr/
+
+  %h2= link_to "Datos empresa (paso 1)", "/organisations/new?step=1"
+
+  .input
+    %label País
+    = session[:org].country
+  .input
+    .input
+      %label Teléfono
+      = session[:org].phone
+    .input
+      %label Móvil
+      = session[:org].mobile
+  .clear
+  .input
+    %label Dirección
+    = nl2br session[:org].address
+  .input
+    %label Email
+    = session[:org].email
+
+  .clear
+  %hr/
+  %h2= link_to "Datos cuenta (paso 2)", "/organisations/new?step=2"
+
+  -if session[:account].is_a? Bank
+    .input
+      %label Nombre de banco
+      = session[:account].name
+    .input
+      %label Número de cuenta
+      = session[:account].number
+    
+    .clear
+
+    .input
+      %label Moneda
+      = session[:account].currency
+    .input
+      %label Total en cuenta
+      = ntc session[:account].amount
+
+  -else
+
+    .input
+      %label Nombre de caja
+      = session[:account].name
+
+    .input
+      .input
+        %label Moneda
+        = session[:account].currency
+      .input
+        %label Total en cuenta
+        = ntc session[:account].amount
+
+  .clear
+  .submit
+    <button class="butl" data-url="/organisations/new?step=2">Anterior</button>
+    = f.submit 'Fin', :class => 'butr fr'
+
+:javascript
+  head.ready(function(){
+    $('#organisation_form').submit('live', function() {
+      if(!confirm("Esta seguro de que los datos son correctos"))
+        return false;
+    });
+  });
