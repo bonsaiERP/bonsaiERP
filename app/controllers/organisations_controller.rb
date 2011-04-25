@@ -73,7 +73,10 @@ class OrganisationsController < ApplicationController
     if @organisation.save
       flash[:notice] = "Se ha creado su empresa correctamente."
       params[:id] = @organisation.id
-      select
+
+      set_organisation_session(@organisation)
+
+      redirect_to "/dashboard"
     else
       flash[:error] = @organisation.errors[:base].join(", ")
       redirect_to "/organisations/new?step=3"

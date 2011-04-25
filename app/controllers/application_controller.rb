@@ -52,17 +52,20 @@ class ApplicationController < ActionController::Base
     end
   end
 
-private
-
-  def set_page
-    @page = params[:page] || 1
-  end
+protected
 
   # Sets the session for the organisation
   def set_organisation_session(organisation)
     session[:organisation] = Hash[ OrganisationSession::KEYS.map {|k| [k, organisation.send(k)] } ]
     set_organisation
   end
+
+private
+
+  def set_page
+    @page = params[:page] || 1
+  end
+
 
   def destroy_organisation_session!
     session[:organisation] = {}
