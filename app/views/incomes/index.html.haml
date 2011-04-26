@@ -10,6 +10,7 @@
   %li= link_incomes "Esperando aprobación #{size_or_blank(@in.draft.size)}", 'draft'
   %li= link_incomes "Esperando cobro #{size_or_blank(@in.approved.size)}", 'awaiting_payment'
   %li= link_incomes "Vencidas #{size_or_blank(@in.due.size)}", 'due'
+  %li= link_incomes "Con inventario pendiente #{size_or_blank(@in.inventory.size)}", 'inventory'
   %li= link_incomes "Cobradas", 'paid'
 
 = link_to "Buscar", "#search", :class => 'search'
@@ -24,8 +25,8 @@
       %th Vence el
       %th Total<br/>#{currency_symbol}
       %th Saldo<br/>#{currency_symbol}
-      %th{:title => 'Saldo Inventario'} Saldo<br/>Inv. #{currency_symbol}
-      %th{:title => 'Moneda'} Mon.
+      %th.tip{:title => 'Saldo Inventario'} Saldo<br/>Inv. #{currency_symbol}
+      %th.tip{:title => 'Moneda'} Mon.
       %th Estado
       %th Contado<br/>Crédito
       %th Fecha

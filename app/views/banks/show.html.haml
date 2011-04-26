@@ -5,7 +5,8 @@
 
 -content_for :links do
   %ul.breadcrumps
-    %li #{link_to "Bancos", banks_path}<span>&gt;</span>
+    %li #{link_to "Cuentas bancarias", banks_path}<span>&gt;</span>
+
   .links
     = link_to 'Nuevo', new_bank_path, :class => 'add'
     = link_to 'Editar', edit_bank_path(@bank), :class => 'edit'

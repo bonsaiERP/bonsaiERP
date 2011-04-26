@@ -49,7 +49,7 @@ module TransactionsHelper
   # Indicates if there was a price change only for Income
   def price_change(klass)
     if klass.changed_price?
-      "<span class='dark' title='Precio original: #{ntc klass.original_price}' >#{ntc klass.price}</span>".html_safe
+      "<span class='dark tip' title='Precio original: #{ntc klass.original_price}' >#{ntc klass.price}</span>".html_safe
     else
       ntc klass.price
     end
@@ -105,4 +105,26 @@ module TransactionsHelper
     end
   end
 
+  def note_title(income)
+    if income.state == "draft"
+      "Proforma"
+    else
+      "Nota"
+    end
+  end
+
+  def cash_credit(cash)
+    if cash
+      "Contado"
+    else
+      "Crédito"
+    end
+  end
+
+  # Links for incomes
+  def link_incomes(text, option, options = {})
+    params[:option] = 'all' if params[:option].nil?
+    active = (params[:option] == option) ? "active" : ""
+    link_to text, incomes_path(:option => option), options.merge(:class => active)
+  end
 end
