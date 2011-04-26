@@ -55,7 +55,8 @@
       %li <a href="#payments" id="tab_payments">#{transaction_pay_method}</a>
     - if @transaction.show_pay_plans?
       %li <a href="#pay_plans" id="tab_pay_plans">Crédito</a>
-    %li <a href="#inventory" id="tab_inventory">Inventario</a>
+    - unless @transaction.draft?
+      %li <a href="#inventory" id="tab_inventory">Inventario</a>
 
   #information
 
@@ -86,8 +87,9 @@
   #pay_plans
     =render "/pay_plans/pay_plans", :transaction => @transaction if @transaction.show_pay_plans?
 
-  #inventory
-    =render "/transactions/inventory", :transaction => @transaction
+  - unless @transaction.draft?
+    #inventory
+      =render "/transactions/inventory", :transaction => @transaction
 
 #users
   %div= "<span class='dark'>Creado por:</span> <strong>#{@transaction.creator}</strong>".html_safe    if @transaction.creator_id.present?

@@ -154,11 +154,13 @@ table.nwf td:first-child { white-space: nowrap; }
   background: #f7f7f7;
   padding: 10px 15px;
   overflow: hidden;
+  clear: both;
 }
 #cont-in { padding: 10px 15px 90px; }
 #header {
   height: 59px;
   position: relative;
+  clear: both;
 }
 #header h1 {
   width: 50%;
@@ -230,11 +232,14 @@ ul#main_menu > li > a {
 }
 ul#main_menu > li { display: inline; }
 ul#main_menu {
-  height: 31px;
-  margin: -3px 200px 0px 0px;
+  height: 29px;
+  margin: 0px;
+  margin: 0px;
   padding: 5px 10px;
   position: relative;
   float: left;
+  -webkit-margin-before: -10px;
+  clear: both;
 }
 ul#main_menu ul { display: none; }
 ul#main_menu ul.more {

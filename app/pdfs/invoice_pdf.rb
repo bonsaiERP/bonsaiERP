@@ -73,7 +73,7 @@ class InvoicePdf < BasePdf
   def create_totals
     org = OrganisationSession
     arr = [["Subtotal:",   "#{org.currency_symbol} #{number_to_currency(@transaction.total)}"]]
-    arr << ["Descuentos: #{number_to_currency(@transaction.discount)}",   "#{org.currency_symbol} #{number_to_currency(@transaction.tax_total)}"] if @transaction.discount.present? and @transaction.discount > 0
+    arr << ["Descuentos: #{number_to_currency(@transaction.discount)}",   "#{org.currency_symbol} #{number_to_currency(@transaction.total_taxes)}"] if @transaction.discount.present? and @transaction.discount > 0
     arr << ["Impuestos:",   "#{org.currency_symbol} #{number_to_currency(@transaction.total_taxes)}"] if @transaction.tax_percent.present? and @transaction.tax_percent > 0
 
     arr << ["<b>Total #{org.currency_name.pluralize}</b>", "<b>#{org.currency_symbol} #{number_to_currency(@transaction.total)}</b>"]

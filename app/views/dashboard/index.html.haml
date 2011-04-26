@@ -30,12 +30,7 @@
   .clear
   %h3.black #{currency_symbol} #{ntc PayPlan.in_to_currency(currency_id, fdate.days.from_now) }
 
-  %h4 cuentas mas importantes
-  %ul.norm
-    - PayPlan.get_most_important(currency_id, fdate.days.from_now, ["Income"]).each do |pp|
-      %li
-        %span.b= "#{currency_symbol} #{ntc(pp.amount_currency)}"
-        = link_to l(pp.payment_date), "/incomes/#{ pp.transaction_id }"
+  = link_to "Ver todas", "/pay_plans/"
 
 .box
 
@@ -43,13 +38,8 @@
   .hint._50.fl En los siguientes #{fdate} días
   .clear
   %h3.black #{currency_symbol} #{ntc PayPlan.out_to_currency(currency_id, fdate.days.from_now) }
-
-  %h4 cuentas mas importantes
-  %ul.norm
-    - PayPlan.get_most_important(currency_id, fdate.days.from_now, ["Buy", "Expense"]).each do |pp|
-      %li
-        %span.b= "#{currency_symbol} #{ntc(pp.amount_currency)}"
-        = link_to l(pp.payment_date), "/incomes/#{ pp.transaction_id }"
+  
+  = link_to "Ver todas", "/pay_plans/"
 
 .clear
 
