@@ -95,7 +95,9 @@
 
 
 :javascript
-  head.js('/javascripts/app/transactions.js', function() {
+  head.js('/javascripts/app/transactions.js');
+
+  head.ready( function() {
 
     $('a#add_item').click(function() {
       $('#item_autocomplete').hide().insertAfter('#items_table');

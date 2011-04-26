@@ -1,8 +1,77 @@
 (function() {
+  var currency, ntc, toByteSize, _b;
+  _b = {};
+  window._b = _b;
+  _b.dateFormat = function(date, format) {
+    var d;
+    format = format || $.datepicker._defaults.dateFormat;
+    if (date) {
+      d = $.datepicker.parseDate('yy-mm-dd', date);
+      return $.datepicker.formatDate($.datepicker._defaults.dateFormat, d);
+    } else {
+      return "";
+    }
+  };
+  currency = {
+    'separator': ",",
+    'delimiter': '.',
+    'precision': 2
+  };
+  _b.currency = currency;
+  ntc = function(val, precision) {
+    var ar, arr, c, i, l, sep, sign, t, tmp, vals;
+    precision || (precision = _b.currency.precision);
+    val = typeof val === 'string' ? 1 * val : val;
+    if (val < 0) {
+      sign = "-";
+    } else {
+      sign = "";
+    }
+    val = val.toFixed(precision);
+    vals = val.toString().replace(/^-/, "").split(".");
+    val = vals[0];
+    l = val.length - 1;
+    ar = val.split("");
+    arr = [];
+    tmp = "";
+    c = 0;
+    for (i = l; (l <= 0 ? i <= 0 : i >= 0); (l <= 0 ? i += 1 : i -= 1)) {
+      tmp = ar[i] + tmp;
+      if ((l - i + 1) % 3 === 0 && i < l) {
+        arr.push(tmp);
+        tmp = '';
+      }
+      c++;
+    }
+    t = arr.reverse().join(_b.currency.delimiter);
+    if (tmp !== "") {
+      sep = t.length > 0 ? _b.currency.delimiter : "";
+      t = tmp + sep + t;
+    }
+    return sign + t + _b.currency.separator + vals[1];
+  };
+  _b.ntc = ntc;
+  toByteSize = function(bytes) {
+    switch (true) {
+      case bytes < 1024:
+        return bytes + " bytes";
+      case bytes < Math.pow(1024, 2):
+        return roundVal(bytes / Math.pow(1024, 1)) + " Kb";
+      case bytes < Math.pow(1024, 3):
+        return roundVal(bytes / Math.pow(1024, 2)) + " MB";
+      case bytes < Math.pow(1024, 4):
+        return roundVal(bytes / Math.pow(1024, 3)) + " GB";
+      case bytes < Math.pow(1024, 5):
+        return roundVal(bytes / Math.pow(1024, 4)) + " TB";
+      case bytes < Math.pow(1024, 6):
+        return roundVal(bytes / Math.pow(1024, 5)) + " PB";
+      default:
+        return roundVal(bytes / Math.pow(1024, 6)) + " EB";
+    }
+  };
+  _b.tobyteSize = toByteSize;
   $(document).ready(function() {
-    var AjaxLoadingHTML, createDialog, createErrorLog, createMessageCont, createSelectOption, csrf_token, currency, getAjaxType, mark, ntc, parseDate, serializeFormElements, setDateSelect, setIframePostEvents, speed, start, toByteSize, transformDateSelect, transformMinuteSelect, updateTemplateRow, _b;
-    _b = {};
-    window._b = _b;
+    var AjaxLoadingHTML, createDialog, createErrorLog, createMessageCont, createSelectOption, csrf_token, getAjaxType, mark, parseDate, serializeFormElements, setDateSelect, setIframePostEvents, speed, start, transformDateSelect, transformMinuteSelect, updateTemplateRow;
     speed = 300;
     csrf_token = $('meta[name=csrf-token]').attr('content');
     window.csrf_token = csrf_token;
@@ -15,16 +84,6 @@
         return d.join("-");
       } else {
         return d;
-      }
-    };
-    _b.dateFormat = function(date, format) {
-      var d;
-      format = format || $.datepicker._defaults.dateFormat;
-      if (date) {
-        d = $.datepicker.parseDate('yy-mm-dd', date);
-        return $.datepicker.formatDate($.datepicker._defaults.dateFormat, d);
-      } else {
-        return "";
       }
     };
     setDateSelect = function(el) {
@@ -206,64 +265,6 @@
     $('a.search').live("click", function() {
       return $(this).siblings("div.search").show(speed);
     });
-    currency = {
-      'separator': ",",
-      'delimiter': '.',
-      'precision': 2
-    };
-    _b.currency = currency;
-    ntc = function(val, precision) {
-      var ar, arr, c, i, l, sep, sign, t, tmp, vals;
-      precision || (precision = _b.currency.precision);
-      val = typeof val === 'string' ? 1 * val : val;
-      if (val < 0) {
-        sign = "-";
-      } else {
-        sign = "";
-      }
-      val = val.toFixed(precision);
-      vals = val.toString().replace(/^-/, "").split(".");
-      val = vals[0];
-      l = val.length - 1;
-      ar = val.split("");
-      arr = [];
-      tmp = "";
-      c = 0;
-      for (i = l; (l <= 0 ? i <= 0 : i >= 0); (l <= 0 ? i += 1 : i -= 1)) {
-        tmp = ar[i] + tmp;
-        if ((l - i + 1) % 3 === 0 && i < l) {
-          arr.push(tmp);
-          tmp = '';
-        }
-        c++;
-      }
-      t = arr.reverse().join(_b.currency.delimiter);
-      if (tmp !== "") {
-        sep = t.length > 0 ? _b.currency.delimiter : "";
-        t = tmp + sep + t;
-      }
-      return sign + t + _b.currency.separator + vals[1];
-    };
-    _b.ntc = ntc;
-    toByteSize = function(bytes) {
-      switch (true) {
-        case bytes < 1024:
-          return bytes + " bytes";
-        case bytes < Math.pow(1024, 2):
-          return roundVal(bytes / Math.pow(1024, 1)) + " Kb";
-        case bytes < Math.pow(1024, 3):
-          return roundVal(bytes / Math.pow(1024, 2)) + " MB";
-        case bytes < Math.pow(1024, 4):
-          return roundVal(bytes / Math.pow(1024, 3)) + " GB";
-        case bytes < Math.pow(1024, 5):
-          return roundVal(bytes / Math.pow(1024, 4)) + " TB";
-        case bytes < Math.pow(1024, 6):
-          return roundVal(bytes / Math.pow(1024, 5)) + " PB";
-        default:
-          return roundVal(bytes / Math.pow(1024, 6)) + " EB";
-      }
-    };
-    _b.tobyteSize = toByteSize;
     setIframePostEvents = function(iframe, created) {
       return iframe.onload = function() {
         var html, posts, postsSize;

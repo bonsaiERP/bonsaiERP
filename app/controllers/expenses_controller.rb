@@ -41,7 +41,8 @@ class ExpensesController < ApplicationController
   # POST /buys
   # POST /buys.xml
   def create
-    @transaction = Expense.new(params[:buy])
+    @transaction = Expense.new(params[:expense])
+
     respond_to do |format|
       if @transaction.save
         format.html { redirect_to(@transaction, :notice => 'Se ha creado una proforma de venta.') }
@@ -60,7 +61,7 @@ class ExpensesController < ApplicationController
     if @transaction.approved?
       redirect_transaction
     else
-      if @transaction.update_attributes(params[:buy])
+      if @transaction.update_attributes(params[:expense])
         redirect_to @transaction, :notice => 'La proforma de venta fue actualizada!.'
       else
         @transaction.transaction_details.build unless @transaction.transaction_details.any?

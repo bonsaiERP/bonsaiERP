@@ -37,7 +37,8 @@
       this.conf = $.extend(this.conf, conf);
       this.currency_id = $(this.conf.currency_id).val() * 1;
       this.exchange_rate = $(this.conf.currency_exchange_rate_id).val() * 1;
-      self.set_events();
+      this.set_events();
+      $("" + this.conf.table_id + " select:first").trigger('change');
     }
     Transaction.prototype.set_events = function() {
       this.set_currency_event();

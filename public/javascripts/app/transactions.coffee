@@ -26,22 +26,24 @@ class Transaction
     self = this
     #self['currency_id'] = 2#conf.currency_id
     @conf              = $.extend(@conf, conf)
-    this.currency_id   = $(@conf.currency_id).val() * 1
-    this.exchange_rate = $(@conf.currency_exchange_rate_id).val() * 1
-    self.set_events()
+    @.currency_id   = $(@conf.currency_id).val() * 1
+    @.exchange_rate = $(@conf.currency_exchange_rate_id).val() * 1
+
+    @.set_events()
+    $("#{@conf.table_id} select:first").trigger('change')
 
   # Sets the events
   set_events: ->
-    this.set_currency_event()
-    this.set_edit_rate_link_event()
-    this.set_discount_event()
-    this.set_taxes_event()
-    this.set_item_change_event("table select.item", "input.price")
-    this.set_price_quantity_change_event("table", "input.price", "input.quantity")
-    this.set_add_item_event()
-    this.set_delete_item_event()
-    this.set_total_event()
-    this.check_currency_data()
+    @.set_currency_event()
+    @.set_edit_rate_link_event()
+    @.set_discount_event()
+    @.set_taxes_event()
+    @.set_item_change_event("table select.item", "input.price")
+    @.set_price_quantity_change_event("table", "input.price", "input.quantity")
+    @.set_add_item_event()
+    @.set_delete_item_event()
+    @.set_total_event()
+    @.check_currency_data()
 
   # Event for the total currency
   set_total_event: ->
@@ -95,7 +97,7 @@ class Transaction
 
   # Sets the item change event
   set_item_change_event: (item_sel, price_sel)->
-    self = this
+    self = @
 
     $(item_sel).live("change keyup", (e)->
       id = $(this).val()
@@ -108,10 +110,10 @@ class Transaction
 
   # triggers the price and qunaitty change
   set_price_quantity_change_event: (grid_sel, price_sel, quantity_sel)->
-    self = this
+    self = @
 
     $(grid_sel).find("#{price_sel}, #{quantity_sel}").live("change", ->
-      self.calculate_total_row(this, "input.price, input.quantity", "td.total_row")
+      self.calculate_total_row(@, "input.price, input.quantity", "td.total_row")
     )
 
   # Set the event for add_item row to the table
@@ -201,7 +203,7 @@ class Transaction
     )
     $tr.find(res).html(_b.ntc(tot)).data("val", tot)
 
-    this.calculate_subtotal("table #{res}")
+    @.calculate_subtotal("table #{res}")
 
   # Calculates the subtotal price for all items
   calculate_subtotal: (selector)->
@@ -211,19 +213,19 @@ class Transaction
     )
 
     $(@conf.subtotal_id).html(_b.ntc(sum)).data("val", sum)
-    this.calculate_discount()
+    @.calculate_discount()
 
   # Calculates the total amount of discount
   calculate_discount: ->
     val = $(@conf.discount_id).val()/100 * $(@conf.subtotal_id).data("val") || 0
     $(@conf.discount_total_id).html(_b.ntc(val)).data("val", -1 * val)
-    this.calculate_taxes()
+    @.calculate_taxes()
 
   # Calculates the total taxes
   calculate_taxes: ()->
     val = ($(@conf.subtotal_id).data("val") + $(@conf.discount_total_id).data("val")) * $(@conf.taxes_percentage_id).data("val")/100 || 0
     $(@conf.taxes_total_id).html(_b.ntc(val)).data("val", val)
-    this.calculate_total()
+    @.calculate_total()
 
   # Calculate total price
   calculate_total: ()->
