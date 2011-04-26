@@ -15,7 +15,7 @@
       %th Descripción
       %th Estado
       - if transaction.income?
-        %th{:title => 'Envia un email de alerta automaticamente al contacto'} Email de<br/>alerta
+        %th.tip{:title => 'Envia un email de alerta automaticamente al cliente'} Email de<br/>alerta
       %th
   = render transaction.pay_plans.unpaid.includes(:transaction, :currency)
 
