@@ -1,4 +1,9 @@
-%h1 Cuentas por cobrar
+- title = params[:option] == "out" ? "pagar" : "cobrar"
+%h1 Cuentas por #{title}
+
+%ul.tabs
+  %li= link_to "Cuentas por cobrar" , pay_plans_path(:option => "in"), :class => tabs_filter('in')
+  %li= link_to "Cuentas por pagar", pay_plans_path(:option => "out"), :class => tabs_filter('out')
 
 
 = paginate(@pay_plans)

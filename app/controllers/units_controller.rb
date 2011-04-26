@@ -2,7 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class UnitsController < ApplicationController
-  respond_to :html, :json, :xml, :js
+  respond_to :html, :json, :xml
   before_filter :check_organisation
 
 
@@ -10,7 +10,6 @@ class UnitsController < ApplicationController
   # GET /units.xml
   def index
     @units = Unit.org
-    respond_with @units
   end
 
   # GET /units/1
@@ -36,7 +35,12 @@ class UnitsController < ApplicationController
   # POST /units.xml
   def create
     @unit = Unit.create(params[:unit])
-    respond_with @unit
+
+    if @unit.save
+      redirect_ajax @unit
+    else
+      render :action => 'new'
+    end
   end
 
   # PUT /units/1

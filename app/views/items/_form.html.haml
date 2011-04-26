@@ -10,7 +10,7 @@
   = f.input :price, :label => 'Precio de venta', :input_html => {:size => 12}
   .clear
   .input
-    = f.association :unit, :collection => Unit.org,:label => "Unidad", :input_html => { 'data-path' => new_unit_path }
+    = f.association :unit, :collection => Unit.org,:label => "Unidad", :input_html => { 'data-new_url' => new_unit_path, 'data-trigger' => 'new_unit', 'data-title' => 'Nueva unidad de medidad' }
     = f.input :active, :label => "Activo", :as => :radio
 
   = f.input :ctype, :label => 'Tipo', :collection => Item.get_types(params[:scope]), :as => :radio
@@ -22,3 +22,10 @@
   
   = f.submit "Salvar"
 
+:javascript
+  head.ready(function() {
+    $('body').live('new_unit', function(e, resp) {
+      var label = resp.name + " (" + resp.symbol + ")";
+      $('#item_unit_id').createSelectOption(resp.id, label);
+    });
+  });
