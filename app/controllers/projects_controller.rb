@@ -1,3 +1,6 @@
+# encoding: utf-8
+# author: Boris Barroso
+# email: boriscyber@gmail.com
 class ProjectsController < ApplicationController
   before_filter :set_project, :only => [:show, :edit, :update, :destroy]
   # GET /projects

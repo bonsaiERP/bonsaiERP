@@ -1,3 +1,6 @@
+# encoding: utf-8
+# author: Boris Barroso
+# email: boriscyber@gmail.com
 class Client < Contact
   #after_initialize :set_code, :if => :new_record?
 
