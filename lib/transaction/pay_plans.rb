@@ -50,10 +50,10 @@ module ::Transaction::PayPlans
     if @pay_plans_list.size == 1 and @pay_plans_list.first.id == pay_plan_id
       destroy_last_pay_plan(pay_plan_id)
     else
-      @current_pay_plan = @pay_plans_list.select{|pp| pp.id == pay_plan_id }.first
+      @current_pay_plan = @pay_plans_list.select {|pp| pp.id == pay_plan_id }.first
 
       if @pay_plans_list.last.id == @current_pay_plan.id
-        pp = @pay_plans_list.size[@pay_plans_list.size - 2]
+        pp = @pay_plans_list[@pay_plans_list.size - 2]
       else
         pp = @pay_plans_list.last
       end

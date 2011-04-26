@@ -7,7 +7,7 @@ class PayPlansController < ApplicationController
   # GET /pay_plans
   # GET /pay_plans.xml
   def index
-    @pay_plans = PayPlan.org.paginate(:page => @page)
+    @pay_plans = PayPlan.org.unpaid.includes(:currency, :transaction).page(@page)
 
     respond_to do |format|
       format.html # index.html.erb

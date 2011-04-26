@@ -1,0 +1,26 @@
+%h1 Cuentas por cobrar
+
+
+= paginate(@pay_plans)
+
+%table.decorated#pay_plans_table
+  %thead
+    %tr
+      %th Fecha
+      %th Alertar el
+      %th Cantidad
+      %th Intereses<br/>Penalidades
+      %th Relacionado con
+      %th Estado
+      %th{:title => 'Envia un email de alerta automaticamente al contacto'} Email de<br/>alerta
+      %th
+    - @pay_plans.each do |pay_plan|
+      %tr.pay_plan{:id => pay_plan.id}
+        %td.payment_date= lo pay_plan.payment_date
+        %td= lo pay_plan.alert_date
+        %td.cur.amount #{pay_plan.currency_symbol} #{ntc pay_plan.amount}
+        %td.cur #{pay_plan.currency_symbol} #{ntc pay_plan.interests_penalties}
+        %td= link_to pay_plan.transaction, pay_plan.transaction
+        %td.state= pay_plan_state pay_plan.state
+        - if pay_plan.transaction.income?
+          %td{:class => pay_plan.email.to_s}
