@@ -4,7 +4,8 @@
 class InventoryOperation < ActiveRecord::Base
   acts_as_org
 
-  before_create :set_stock
+  before_create     :set_stock
+  before_validation :set_transaction_on_details, :if => 'transaction_id.present?'
 
   STATES = ["draft", "approved"]
   OPERATIONS = ["in", "out", "transference"]
@@ -124,6 +125,12 @@ class InventoryOperation < ActiveRecord::Base
     elsif det.quantity > 0
       it.update_attribute(:balance, (it.balance - det.quantity) )
     end
+  end
+
+  # Sets the transaction flag for details
+  def set_transaction_on_details
+    debugger
+    inventory_operation_details.each {|det| det.set_transaction = true }
   end
 
 end

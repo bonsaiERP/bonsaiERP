@@ -8,11 +8,13 @@
       %tr
         %th Item
         %th Cantidad
+        %th Precio
         %th{:title => 'Saldo cantidad'} Saldo cant.
         %th Saldo <br/>Valorado #{currency_symbol}
       - transaction.transaction_details.each do |det|
         %tr
           %td= det.item
+          %td.cur= ntc det.price
           %td.cur= ntc det.quantity
           %td.cur= ntc det.balance
           %td.cur= ntc det.valued_balance

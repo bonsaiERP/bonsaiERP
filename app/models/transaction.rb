@@ -4,7 +4,7 @@
 class Transaction < ActiveRecord::Base
   acts_as_org
 
-  STATES   = ["draft"  , "approved" , "paid" , "due"]
+  STATES   = ["draft"  , "approved" , "paid" , "due", "inventory"]
   TYPES    = ['Income' , 'Expense'  , 'Buy']
   DECIMALS = 2
   # Determines if the oprations is made on transaction or pay_plan or payment
@@ -41,7 +41,8 @@ class Transaction < ActiveRecord::Base
   scope :draft    , where(:state => 'draft')
   scope :approved , where(:state => 'approved')
   scope :paid     , where(:state => 'paid')
-  scope :due      , where(["transactions.state = ? AND transactions.payment_date < ?" , 'approved' , Date.today])
+  scope :due      , where("transactions.state = ? AND transactions.payment_date < ?" , 'approved' , Date.today)
+  scope :inventory, where("balance_inventory > 0")
   scope :credit   , where(:cash => false)
 
   delegate :name, :symbol, :plural, :code, :to => :currency, :prefix => true

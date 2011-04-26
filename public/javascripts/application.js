@@ -456,7 +456,7 @@
       },
       success: function(event) {}
     });
-    $('[title]').tooltip({
+    $('.tip').tooltip({
       offset: [-3, 10],
       events: {
         def: "mouseover,mouseout",

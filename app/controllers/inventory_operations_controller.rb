@@ -45,7 +45,7 @@ class InventoryOperationsController < ApplicationController
 
     respond_to do |format|
       if @inventory_operation.save
-        format.html { redirect_to(@inventory_operation, :notice => 'Inventory operation was successfully created.') }
+        format.html { redirect_to(@inventory_operation, :notice => 'La operación de inventario fue almacenada correctamente.') }
         format.xml  { render :xml => @inventory_operation, :status => :created, :location => @inventory_operation }
       else
         format.html { render :action => "new" }
@@ -56,31 +56,31 @@ class InventoryOperationsController < ApplicationController
 
   # PUT /inventory_operations/1
   # PUT /inventory_operations/1.xml
-  def update
-    @inventory_operation = InventoryOperation.find(params[:id])
+  #def update
+  #  @inventory_operation = InventoryOperation.find(params[:id])
 
-    respond_to do |format|
-      if @inventory_operation.update_attributes(params[:inventory_operation])
-        format.html { redirect_to(@inventory_operation, :notice => 'Inventory operation was successfully updated.') }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @inventory_operation.errors, :status => :unprocessable_entity }
-      end
-    end
-  end
+  #  respond_to do |format|
+  #    if @inventory_operation.update_attributes(params[:inventory_operation])
+  #      format.html { redirect_to(@inventory_operation, :notice => 'Inventory operation was successfully updated.') }
+  #      format.xml  { head :ok }
+  #    else
+  #      format.html { render :action => "edit" }
+  #      format.xml  { render :xml => @inventory_operation.errors, :status => :unprocessable_entity }
+  #    end
+  #  end
+  #end
 
   # DELETE /inventory_operations/1
   # DELETE /inventory_operations/1.xml
-  def destroy
-    @inventory_operation = InventoryOperation.find(params[:id])
-    @inventory_operation.destroy
+  #def destroy
+  #  @inventory_operation = InventoryOperation.find(params[:id])
+  #  @inventory_operation.destroy
 
-    respond_to do |format|
-      format.html { redirect_to(inventory_operations_url) }
-      format.xml  { head :ok }
-    end
-  end
+  #  respond_to do |format|
+  #    format.html { redirect_to(inventory_operations_url) }
+  #    format.xml  { head :ok }
+  #  end
+  #end
 
 
   # Selects a store for in out of a transaction

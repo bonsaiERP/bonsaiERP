@@ -3,11 +3,14 @@
 
 %h1 Compras
 
+- @bu = Buy.org
+
 %ul.tabs
   %li= link_incomes "Todas", 'all'
-  %li= link_incomes "Esperando aprobación", 'draft'
-  %li= link_incomes "Esperando pago", 'awaiting_payment'
-  %li= link_incomes "Vencidas", 'due'
+  %li= link_incomes "Esperando aprobación #{size_or_blank(@bu.draft.size)}", 'draft'
+  %li= link_incomes "Esperando pago #{size_or_blank(@bu.approved.size)}", 'awaiting_payment'
+  %li= link_incomes "Vencidas #{size_or_blank(@bu.due.size)}", 'due'
+  %li= link_incomes "Con inventario pendiente #{size_or_blank(@bu.inventory.size)}", 'inventory'
   %li= link_incomes "Pagadas", 'paid'
 
 = paginate @buys

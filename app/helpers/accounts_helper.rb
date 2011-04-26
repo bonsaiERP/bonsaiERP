@@ -24,8 +24,8 @@ module AccountsHelper
   # links to the correct account for account_ledger
   def link_account(al)
     case al.account_type
-    when"Bank" then link_to "Bancos", al.account
-    when"CashRegister" then link_to "Cajas", al.account
+    when"Bank" then link_to "Cuentas bancarias", al.account
+    when"CashRegister" then link_to "Cuentas caja", al.account
     end
   end
 
