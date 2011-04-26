@@ -30,7 +30,7 @@
   .clear
   %h3.black #{currency_symbol} #{ntc PayPlan.in_to_currency(currency_id, fdate.days.from_now) }
 
-  = link_to "Ver todas", "/pay_plans/"
+  = link_to "Ver todas", "/pay_plans/?type=income"
 
 .box
 
@@ -39,7 +39,7 @@
   .clear
   %h3.black #{currency_symbol} #{ntc PayPlan.out_to_currency(currency_id, fdate.days.from_now) }
   
-  = link_to "Ver todas", "/pay_plans/"
+  = link_to "Ver todas", "/pay_plans/?type=expense"
 
 .clear
 

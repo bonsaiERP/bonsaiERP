@@ -203,6 +203,6 @@ private
   end
 
   def set_ctype
-    ctype = transaction.type
+    ctype = transaction.class.to_s
   end
 end
