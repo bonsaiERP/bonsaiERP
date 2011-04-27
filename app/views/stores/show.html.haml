@@ -34,26 +34,65 @@
 
 .clear
 
-%h2 Stock
+#tabs
+  %ul
+    %li <a href="#items">Inventario de items</a>
+    %li <a href="#stocks">Operaciones realizadas</a>
 
-- @items = @store.stocks.includes(:item).page(@page)
-= paginate(@items)
+  #items
+    %h2 Inventario de items
 
-%table.decorated
-  %tr
-    %th Item
-    %th Cantidad
-    %th Costo unitario
-    %th Subtotal
-    %th{:title => 'Cantidad mínima'} Cat. min.
-    %th
+    - @items = @store.stocks.includes(:item).page(@page)
+    = paginate(@items)
 
-  - @items.each do |st|
-    %tr
-      %td= st.item
-      %td.cur= ntc st.quantity
-      %td.cur= ntc st.unitary_cost
-      %td.cur= ntc( st.quantity * st.unitary_cost )
-      %td.cur= ntc st.minimun_quantity
-      %td.cur= link_to "mínimo", "#"
+    %table.decorated
+      %tr
+        %th Item
+        %th Cantidad
+        %th Costo unitario
+        %th Subtotal
+        %th{:title => 'Cantidad mínima'} Cat. min.
+        %th
 
+      - @items.each do |st|
+        %tr
+          %td= st.item
+          %td.cur= ntc st.quantity
+          %td.cur= ntc st.unitary_cost
+          %td.cur= ntc( st.quantity * st.unitary_cost )
+          %td.cur= ntc st.minimun_quantity
+          %td.cur= link_to "mínimo", "#"
+
+  #stocks
+    %h2 Operaciones realizadas
+    - params[:page2] ||= 1
+    - @ops = @store.inventory_operations.page(params[:page2])
+
+    = paginate(@ops)
+
+    %table.decorated
+      %tr
+        %th Fecha
+        %th Operación
+        %th Costo unitario
+        %th Subtotal
+        %th{:title => 'Cantidad mínima'} Cat. min.
+        %th
+
+      - @ops.each do |op|
+        %tr
+          %td= st.item
+          %td.cur= ntc st.quantity
+          %td.cur= ntc st.unitary_cost
+          %td.cur= ntc( st.quantity * st.unitary_cost )
+          %td.cur= ntc st.minimun_quantity
+          %td.cur= link_to "mínimo", "#"
+
+
+
+:javascript
+  head.ready(function() {
+    $('#tabs').tabs({
+      show: function() { console.log(arguments)}
+    });
+  })

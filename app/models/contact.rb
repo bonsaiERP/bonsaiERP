@@ -14,7 +14,7 @@ class Contact < ActiveRecord::Base
 
   validates_presence_of   :name, :last_name, :address# :code
   #validates_uniqueness_of :code, :scope => :organisation_id
-  validates_uniqueness_of :matchcode, :scope => :organisation_id
+  validates_uniqueness_of :matchcode, :scope => [:organisation_id, :type]
 
   validates_format_of     :email,  :with => User.email_regexp, :allow_blank => true
   validates_format_of     :phone,  :with =>/^\d+[\d\s-]+\d$/,  :allow_blank => true

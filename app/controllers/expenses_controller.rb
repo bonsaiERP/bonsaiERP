@@ -45,7 +45,7 @@ class ExpensesController < ApplicationController
 
     respond_to do |format|
       if @transaction.save
-        format.html { redirect_to(@transaction, :notice => 'Se ha creado una proforma de venta.') }
+        format.html { redirect_to(@transaction, :notice => 'Se ha creado una nota de gasto.') }
         format.xml  { render :xml => @transaction, :status => :created, :location => @transaction }
       else
         @transaction.transaction_details.build unless @transaction.transaction_details.any?
@@ -80,7 +80,7 @@ class ExpensesController < ApplicationController
   # Method to approve an income
   def approve
     if @transaction.approve!
-      flash[:notice] = "La compra fue aprobada"
+      flash[:notice] = "El gasto fue aprobado"
     else
       flash[:error] = "Existio un problema con la aprovación"
     end
@@ -88,7 +88,7 @@ class ExpensesController < ApplicationController
     anchor = ''
     anchor = 'payments' if @transaction.cash?
 
-    redirect_to buy_path(@transaction, :anchor => anchor)
+    redirect_to expense_path(@transaction, :anchor => anchor)
   end
 private
   def set_currency_rates

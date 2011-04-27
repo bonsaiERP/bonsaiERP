@@ -1,6 +1,6 @@
 %tr.payment{ :id => payment.id, :class => "p_#{payment.state}" }
-  %td= link_to lo(payment.date), payment, :class => 'b'
-  %td.account= payment.account
+  %td= lo(payment.date)
+  %td.account= link_to payment.account, payment.account_ledger
   %td.r.amount{'data-val' => payment.amount} #{ntc payment.amount}
   %td.r.interests_penalties{'data-val' => payment.interests_penalties} #{ntc payment.interests_penalties}
   %td.r.total_amount{'data-val' => payment.total_amount}= ntc payment.total_amount

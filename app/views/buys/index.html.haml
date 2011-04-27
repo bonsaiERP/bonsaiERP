@@ -38,7 +38,7 @@
         %td= lo buy.payment_date unless buy.paid?
         %td.cur= ntc exchange(buy, :real_total, @currency_rates)
         %td.cur= ntc exchange(buy, :balance, @currency_rates)
-        %td.cur
+        %td.cur= ntc(buy.balance_inventory)
         %td <span>#{buy.currency_symbol}</span>
         %td <span class="#{buy.real_state}">#{buy.show_state}</span>
         %td= cash_credit(buy.cash)
