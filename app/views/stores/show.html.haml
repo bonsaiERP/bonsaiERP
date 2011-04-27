@@ -74,19 +74,13 @@
       %tr
         %th Fecha
         %th Operación
-        %th Costo unitario
-        %th Subtotal
-        %th{:title => 'Cantidad mínima'} Cat. min.
-        %th
+        %th Total #{currency_symbol}
 
       - @ops.each do |op|
         %tr
-          %td= st.item
-          %td.cur= ntc st.quantity
-          %td.cur= ntc st.unitary_cost
-          %td.cur= ntc( st.quantity * st.unitary_cost )
-          %td.cur= ntc st.minimun_quantity
-          %td.cur= link_to "mínimo", "#"
+          %td= lo op.date
+          %td= op.operation == 'in' ? 'Ingreso' : 'Egreso'
+          %td.cur= ntc op.total
 
 
 
