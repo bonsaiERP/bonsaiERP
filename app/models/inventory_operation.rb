@@ -4,6 +4,7 @@
 class InventoryOperation < ActiveRecord::Base
   acts_as_org
 
+  after_initialize  :set_operation, :if => :new_record?
   before_create     :set_stock
   before_validation :set_transaction_on_details, :if => 'transaction_id.present?'
 
@@ -19,6 +20,7 @@ class InventoryOperation < ActiveRecord::Base
   accepts_nested_attributes_for :inventory_operation_details
 
   validates_presence_of :ref_number, :date, :contact_id, :store_id
+
 
   def get_contact_list
     if operation == "in"
@@ -49,11 +51,16 @@ class InventoryOperation < ActiveRecord::Base
   end
 
   private
-  # sets the stock for items
+
+  # sets the stock for items and set the total amount for the operation
   def set_stock
     transaction.set_trans(false) if transaction_id.present?
 
+    sum = 0
+
     inventory_operation_details.each do |det|
+      next if det.quantity == 0
+
       st = store.stocks.find_by_item_id(det.item_id)
 
       c, q = st.blank? ? [0, 0] : [st.unitary_cost, st.quantity]
@@ -62,17 +69,28 @@ class InventoryOperation < ActiveRecord::Base
       cost = calculate_cost(c, q, det.unitary_cost, det.quantity)
       q = operation == "in" ? q + det.quantity : q - det.quantity
 
+      sum += det.quantity * get_cost(c, det.unitary_cost)
+
       store.stocks.build(:item_id => det.item_id, :unitary_cost => cost, :quantity => q, :state => 'active')
       update_quantity_of_transaction(det) if transaction_id.present?
     end
 
-    #if transaction_id.present?
-    #  inventory_operation_details.each {|i| puts i.errors.blank? }
-    #end
     if transaction_id.present?
       return false unless check_and_save_transaction
     end
+
+    self.total = sum
+
     store.save
+  end
+
+  # Return cos according if it's in or out
+  def get_cost(c1, c2)
+    if operation == "in"
+      c2
+    else
+      c1
+    end
   end
 
   # Calculates the cost according the quantity and if is IN/OUT
@@ -117,7 +135,6 @@ class InventoryOperation < ActiveRecord::Base
 
   # Updates and validtes the quantiry for a transaction
   def update_quantity_of_transaction(det)
-    #puts "Trans: #{ transaction.transaction_details.map(&:item_id) } #{transaction.transaction_details.find_by_item_id(det.item_id)}"
     it = transaction.transaction_details.find_by_item_id(det.item_id)
 
     if det.quantity > it.balance
@@ -127,9 +144,19 @@ class InventoryOperation < ActiveRecord::Base
     end
   end
 
+  # Sets the operation for
+  def set_operation
+    if transaction_id.present?
+      if transaction.is_a? Income
+        self.operation = "out"
+      else
+        self.operation = "in"
+      end
+    end
+  end
+
   # Sets the transaction flag for details
   def set_transaction_on_details
-    debugger
     inventory_operation_details.each {|det| det.set_transaction = true }
   end
 

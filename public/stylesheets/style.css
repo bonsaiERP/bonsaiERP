@@ -248,7 +248,7 @@ ul#main_menu ul.more {
   padding: 0px;
   margin: 0px;
   padding: 10px;
-  z-index: 100;
+  z-index: 200;
   background-color: rgba(0, 0, 0, 0.3);
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
@@ -573,6 +573,7 @@ ul.menu {
   position: relative;
   padding: 0px;
   margin: 0px;
+  z-index: 100;
 }
 ul.menu a {
   margin: 0px;

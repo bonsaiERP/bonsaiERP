@@ -1,21 +1,23 @@
 #inventory
   %h2 Inventario
 
-  = link_to "Ingresar inventario", select_store_inventory_operation_path(transaction), :class => "new"
+  = link_to "Registrar inventario", select_store_inventory_operation_path(transaction), :class => "new"
 
   %table#inventory_table.decorated
     %thead
       %tr
         %th Item
         %th Cantidad
+        %th Unidad
         %th Precio
         %th{:title => 'Saldo cantidad'} Saldo cant.
         %th Saldo <br/>Valorado #{currency_symbol}
-      - transaction.transaction_details.each do |det|
+      - transaction.transaction_details.includes(:item => :unit).each do |det|
         %tr
           %td= det.item
           %td.cur= ntc det.price
           %td.cur= ntc det.quantity
+          %td.cur= det.item.unit
           %td.cur= ntc det.balance
           %td.cur= ntc det.valued_balance
 

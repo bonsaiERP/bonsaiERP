@@ -23,6 +23,10 @@ class Expense < Transaction
     "Gasto #{ref_number}"
   end
 
+  def show_inventory?
+    false
+  end
+
 private
   # Initialized  the ref_number
   def set_ref_number

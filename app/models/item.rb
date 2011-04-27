@@ -31,6 +31,7 @@ class Item < ActiveRecord::Base
   validates :price, :numericality => { :greater_than_or_equal_to => 0, :if => lambda { |i| i.price.present? } }
   validate :validate_discount
 
+  delegate :symbol, :name, :to => :unit, :prefix => true
 
   # scopes
   #default_scope where(:active => true)
