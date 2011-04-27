@@ -4,11 +4,11 @@
 %h1 Gastos
 
 %ul.tabs
-  %li= link_incomes "Todas", 'all'
-  %li= link_incomes "Esperando aprobación", 'draft'
-  %li= link_incomes "Esperando pago", 'awaiting_payment'
-  %li= link_incomes "Vencidas", 'due'
-  %li= link_incomes "Pagadas", 'paid'
+  %li= link_to "Todas", expenses_path(:option => 'all'), :class => tabs_filter('all')
+  %li= link_to "Esperando aprobación", expenses_path(:option => 'draft'), :class => tabs_filter('draft')
+  %li= link_to "Esperando pago", expenses_path(:option => 'awaiting_payment' ), :class => tabs_filter('awaiting_payment')
+  %li= link_to "Vencidas", expenses_path(:option => 'due' ), :class => tabs_filter('due')
+  %li= link_to "Pagadas", expenses_path(:option => 'paid'), :class => tabs_filter('paid')
 
 = paginate @expenses
 
