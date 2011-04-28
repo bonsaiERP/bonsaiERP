@@ -3,7 +3,8 @@
   = link_to "Editar cliente", edit_client_path(@transaction.contact), :class => 'edit', :target => '_blank'
 - else
 
-  %h3 Email
+  %h3 Enviar email al cliente que adjunta la #{transaction_title(@transaction).downcase}
+
   = form_tag("/transactions/email/#{@transaction.id}", :id => 'invoice_email_form') do
 
     %p
