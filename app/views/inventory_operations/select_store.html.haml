@@ -9,16 +9,26 @@
 
 
   %label Almacen
-  = select_tag "store_id", options_from_collection_for_select(Store.org, :id, :name), :include_blank => true
+  = select_tag "store_id", options_from_collection_for_select(Store.org, :id, :name), :include_blank => true, 
+    'data-new_url' => new_store_path, 'data-trigger' => 'new_store', 'data-title' => 'Nuevo almacen'
   .submit
     =submit_tag "Seleccionar almacen"
 
 :javascript
   head.ready(function() {
-    $('form#select_store').live('submit', function() {
-      if($('#store_id').val() == "") {
-        alert("Debe seleccionar un almacen!");
-        return false;
-      }
+    $(document).ready(function() {
+      // Validate form
+      $('form#select_store').live('submit', function() {
+        if($('#store_id').val() == "") {
+          alert("Debe seleccionar un almacen!");
+          return false;
+        }
+      });
+
+      // New form
+      $('body').live('new_store', function(e, resp) {
+        $('#store_id').createSelectOption(resp.id, resp.name);
+      });
+    
     })
   });

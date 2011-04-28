@@ -536,6 +536,18 @@ span.error { display: block; }
   -webkit-border-radius: 4px;
   border-radius: 4px;
   font-size: 120%;
+  position: relative;
+  margin: 8px 0px;
+}
+.flash a.close {
+  text-indent: -1000em;
+  display: block;
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 2px;
+  right: 6px;
+  background: transparent url(images/close.png) no-repeat;
 }
 #flashNotice {
   padding: 10px;
@@ -544,8 +556,20 @@ span.error { display: block; }
   -webkit-border-radius: 4px;
   border-radius: 4px;
   font-size: 120%;
+  position: relative;
+  margin: 8px 0px;
   border-color: #538447;
   color: #538447;
+}
+#flashNotice a.close {
+  text-indent: -1000em;
+  display: block;
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 2px;
+  right: 6px;
+  background: transparent url(images/close.png) no-repeat;
 }
 #flashError {
   padding: 10px;
@@ -554,19 +578,66 @@ span.error { display: block; }
   -webkit-border-radius: 4px;
   border-radius: 4px;
   font-size: 120%;
+  position: relative;
+  margin: 8px 0px;
   border-color: #ff0000;
   color: #ff0000;
 }
-#flashWarning, #flashAlert {
+#flashError a.close {
+  text-indent: -1000em;
+  display: block;
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 2px;
+  right: 6px;
+  background: transparent url(images/close.png) no-repeat;
+}
+#flashWarning {
   padding: 10px;
   border: 2px solid #484a4c;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
   border-radius: 4px;
   font-size: 120%;
+  position: relative;
+  margin: 8px 0px;
   color: #484a4c;
   border-color: #d0d02a;
   background-color: #ffffc5;
+}
+#flashWarning a.close {
+  text-indent: -1000em;
+  display: block;
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 2px;
+  right: 6px;
+  background: transparent url(images/close.png) no-repeat;
+}
+#flashAlert {
+  padding: 10px;
+  border: 2px solid #484a4c;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  font-size: 120%;
+  position: relative;
+  margin: 8px 0px;
+  color: #484a4c;
+  border-color: #d0d02a;
+  background-color: #ffffc5;
+}
+#flashAlert a.close {
+  text-indent: -1000em;
+  display: block;
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 2px;
+  right: 6px;
+  background: transparent url(images/close.png) no-repeat;
 }
 .cb { clear: both; }
 ul.menu {

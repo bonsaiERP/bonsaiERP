@@ -191,7 +191,11 @@
       exchange_rate = $(this.conf.currency_exchange_rate_id).val() * 1;
       html = "1 " + change.name + "                                   = <span class = 'b'>" + (_b.ntc(exchange_rate, 4)) + "</span> " + (currency.name.pluralize()) + " ";
       html += "<a id='edit_rate_link' href='javascript:'>editar</a>";
-      return $span.html(html).mark();
+      try {
+        return $span.html(html).mark();
+      } catch (e) {
+
+      }
     };
     Transaction.prototype.find_currency = function(currency_id) {
       var k, _i, _len, _ref;

@@ -177,7 +177,9 @@ class Transaction
     html          = "1 #{change.name}                                   = <span class = 'b'>#{_b.ntc(exchange_rate, 4)}</span> #{currency.name.pluralize()} "
 
     html += "<a id='edit_rate_link' href='javascript:'>editar</a>"
-    $span.html( html ).mark()
+    try
+      $span.html( html ).mark()
+    catch e
 
   # Returs the details for a currency
   find_currency: (currency_id)->

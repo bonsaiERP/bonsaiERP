@@ -12,4 +12,11 @@ class Store < ActiveRecord::Base
   def to_s
     name
   end
+
+  # Returns a Hash of items with the item_id as key
+  def get_hash_of_items(*args)
+    args = [:quantity] unless args.any?
+    h = lambda {|v| Hash[args.map {|a| [a, v.send(a)] } ] }
+    Hash[ stocks.includes(:item).map {|st| [st.item_id , h.call(st) ] } ]
+  end
 end

@@ -75,15 +75,10 @@ module TransactionsHelper
 
   # Returns the title for transaction
   def transaction_title(klass)
-    case klass.type
-    when "Income"
-      if klass.draft?
-        "Proforma de venta"
-      else
-        "Nota de venta"
-      end
-    when "Buy" then "Nota de compra"
-    when "Expense" then "Nota de gasto"
+    if klass.draft?
+      "Proforma de #{klass.get_type}"
+    else
+      "Nota de #{klass.get_type}"
     end
   end
 

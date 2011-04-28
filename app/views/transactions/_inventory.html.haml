@@ -7,9 +7,9 @@
     %thead
       %tr
         %th Item
+        %th Precio #{currency_symbol}
         %th Cantidad
         %th Unidad
-        %th Precio
         %th{:title => 'Saldo cantidad'} Saldo cant.
         %th Saldo <br/>Valorado #{currency_symbol}
       - transaction.transaction_details.includes(:item => :unit).each do |det|

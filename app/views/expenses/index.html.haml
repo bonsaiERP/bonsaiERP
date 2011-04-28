@@ -3,12 +3,14 @@
 
 %h1 Gastos
 
+- @exp = Expense.org
+
 %ul.tabs
-  %li= link_to "Todas", expenses_path(:option => 'all'), :class => tabs_filter('all')
-  %li= link_to "Esperando aprobación", expenses_path(:option => 'draft'), :class => tabs_filter('draft')
-  %li= link_to "Esperando pago", expenses_path(:option => 'awaiting_payment' ), :class => tabs_filter('awaiting_payment')
-  %li= link_to "Vencidas", expenses_path(:option => 'due' ), :class => tabs_filter('due')
-  %li= link_to "Pagadas", expenses_path(:option => 'paid'), :class => tabs_filter('paid')
+  %li= link_to "Todas #{size_or_blank(@exp.size)}"                      , expenses_path(:option => 'all')               , :class => tabs_filter('all')
+  %li= link_to "Esperando aprobación #{size_or_blank(@exp.draft.size)}" , expenses_path(:option => 'draft')             , :class => tabs_filter('draft')
+  %li= link_to "Esperando pago #{size_or_blank(@exp.approved.size)}"     , expenses_path(:option => 'awaiting_payment' ) , :class => tabs_filter('awaiting_payment')
+  %li= link_to "Vencidas #{size_or_blank(@exp.due.size)}"               , expenses_path(:option => 'due' )              , :class => tabs_filter('due')
+  %li= link_to "Pagadas #{size_or_blank(@exp.paid.size)}"               , expenses_path(:option => 'paid')              , :class => tabs_filter('paid')
 
 = paginate @expenses
 

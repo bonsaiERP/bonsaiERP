@@ -42,7 +42,7 @@ class Transaction < ActiveRecord::Base
   scope :approved , where(:state => 'approved')
   scope :paid     , where(:state => 'paid')
   scope :due      , where("transactions.state = ? AND transactions.payment_date < ?" , 'approved' , Date.today)
-  scope :inventory, where("balance_inventory > 0")
+  scope :inventory, where("balance_inventory > 0 AND state != 'draft'")
   scope :credit   , where(:cash => false)
 
   delegate :name, :symbol, :plural, :code, :to => :currency, :prefix => true
@@ -72,7 +72,7 @@ class Transaction < ActiveRecord::Base
 
     case state
     when 'all' then ret
-    when 'awaiting_payment' then ret.approved.credit
+    when 'awaiting_payment' then ret.approved
     else ret.send(state)
     end
   end
