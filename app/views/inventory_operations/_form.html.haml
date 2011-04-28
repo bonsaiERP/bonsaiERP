@@ -12,7 +12,7 @@
 
   .main.bg_light_grey
     .input
-      = f.input :ref_number, :input_html => {:size => 20}
+      = f.input :ref_number, :input_html => {:size => 20}, :label => 'Numero de referencia'
       = f.input :date
 
     - url, title = @inventory_operation.operation == "in" ? [new_supplier_path, "Nuevo proveedor"] : [new_client_path, "Nuevo cliente"]
@@ -41,7 +41,7 @@
       - @items = Item.inventory.org
       = render "form_details", :f => f
     - else
-      = render "form_details_transaction", :f => f
+      = render "form_details_transaction", :f => f, :stocks => @inventory_operation.store.get_hash_of_items(:item_id => @inventory_operation.get_transaction_items.map(&:item_id))
 
   - if @inventory_operation.transaction_id.blank?
     %p
@@ -92,7 +92,7 @@
     });
 
     // Present the list of stocks for the store
-    var stocks = #{ @inventory_operation.store.get_hash_of_items.to_json};
+    var stocks = #{ @inventory_operation.store.get_hash_of_items.to_json unless @inventory_operation.transaction_id.present?};
     $('#items_table select').live('change keyup', function() {
       var val = 1 * $(this).val();
       val = stocks[val] || {'quantity': 0};

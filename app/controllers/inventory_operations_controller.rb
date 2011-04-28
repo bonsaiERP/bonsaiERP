@@ -91,6 +91,18 @@ class InventoryOperationsController < ApplicationController
     @transaction = Transaction.org.find(params[:id])
   end
 
+  # Presents the transactions tha are IN/OUT
+  def transactions
+    @currency_rates = CurrencyRate.current_hash
+    params[:operation] = "in" unless ["in", "out"].include?( params[:operation] )
+
+    if params[:operation] == "out"
+      @transactions = Income.org.inventory.page(@page)
+    else
+      @transactions = Buy.org.inventory.page(@page)
+    end
+  end
+
 private
   def find_store
     store_id = params[:store_id] || params[:inventory_operation][:store_id]

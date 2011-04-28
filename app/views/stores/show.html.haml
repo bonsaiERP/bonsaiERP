@@ -66,7 +66,7 @@
   #stocks
     %h2 Operaciones realizadas
     - params[:page2] ||= 1
-    - @ops = @store.inventory_operations.page(params[:page2])
+    - @ops = @store.inventory_operations.includes(:transaction).page(params[:page2])
 
     = paginate(@ops)
 
@@ -74,19 +74,19 @@
       %tr
         %th Fecha
         %th Operación
+        %th Operación financiera
         %th Total #{currency_symbol}
 
       - @ops.each do |op|
         %tr
-          %td= lo op.date
+          %td= link_to lo(op.date), op, :class => :b
           %td= op.operation == 'in' ? 'Ingreso' : 'Egreso'
+          %td= link_to op.transaction, op.transaction if op.transaction_id.present?
           %td.cur= ntc op.total
 
 
 
 :javascript
   head.ready(function() {
-    $('#tabs').tabs({
-      show: function() { console.log(arguments)}
-    });
+    $('#tabs').tabs();
   })

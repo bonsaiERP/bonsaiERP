@@ -38,6 +38,11 @@ class InventoryOperation < ActiveRecord::Base
     end
   end
 
+  # Returns an array with the details fo the transaction
+  def get_transaction_items
+    transaction.transaction_details
+  end
+
   # Creates the details depending if it has transaction
   def create_details
     if transaction_id.blank?
@@ -56,22 +61,16 @@ class InventoryOperation < ActiveRecord::Base
   def set_stock
     transaction.set_trans(false) if transaction_id.present?
 
-    sum = 0
-
     inventory_operation_details.each do |det|
       next if det.quantity == 0
 
       st = store.stocks.find_by_item_id(det.item_id)
-
       c, q = st.blank? ? [0, 0] : [st.unitary_cost, st.quantity]
-      st.update_attribute(:state, 'inactive') unless st.blank?
 
-      cost = calculate_cost(c, q, det.unitary_cost, det.quantity)
+      st.update_attribute(:state, 'inactive') unless st.blank?
       q = operation == "in" ? q + det.quantity : q - det.quantity
 
-      sum += det.quantity * get_cost(c, det.unitary_cost)
-
-      store.stocks.build(:item_id => det.item_id, :unitary_cost => cost, :quantity => q, :state => 'active')
+      store.stocks.build(:item_id => det.item_id, :quantity => q, :state => 'active')
       update_quantity_of_transaction(det) if transaction_id.present?
     end
 
@@ -79,19 +78,17 @@ class InventoryOperation < ActiveRecord::Base
       return false unless check_and_save_transaction
     end
 
-    self.total = sum
-
     store.save
   end
 
   # Return cos according if it's in or out
-  def get_cost(c1, c2)
-    if operation == "in"
-      c2
-    else
-      c1
-    end
-  end
+  #def get_cost(c1, c2)
+  #  if operation == "in"
+  #    c2
+  #  else
+  #    c1
+  #  end
+  #end
 
   # Calculates the cost according the quantity and if is IN/OUT
   def calculate_cost(c1, q1, c2, q2)

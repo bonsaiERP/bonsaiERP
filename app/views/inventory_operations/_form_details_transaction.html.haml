@@ -4,8 +4,7 @@
       = fd.input :item_id, :as => :hidden
       = fd.object.item
     %td= fd.input :quantity, :label => false, :input_html => { :size => 8, :class => 'quantity', :type => 'decimal' }
-
-    %td.cur.inventory= ntc(fd.object.item)
+    %td.cur.inventory= ntc(stocks[fd.object.item_id] ? stocks[fd.object.item_id][:quantity] : 0)
     %td
 
 

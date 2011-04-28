@@ -32,11 +32,10 @@ feature "Inventory Operation", "Test IN/OUT" do
   end
 
   scenario 'make an IN' do
-    #Item.org.each {|it| puts "#{it} :: #{it.ctype} :: #{it.unitary_cost}" }
     hash = {:ref_number => 'I-0001', :date => Date.today, :contact_id => 1, :operation => 'in', :store_id => 1,
       :inventory_operation_details_attributes => [
-        {:item_id =>1, :quantity => 100, :unitary_cost => 2},
-        {:item_id =>2, :quantity => 200, :unitary_cost => 2.5}
+        {:item_id =>1, :quantity => 100},
+        {:item_id =>2, :quantity => 200}
       ]
     }
     io = InventoryOperation.new(hash)
@@ -45,18 +44,16 @@ feature "Inventory Operation", "Test IN/OUT" do
 
     io.store.stocks[0].item_id.should == 1
     io.store.stocks[0].quantity.should == 100
-    io.store.stocks[0].unitary_cost.should == 2
 
     io.store.stocks[1].item_id.should == 2
     io.store.stocks[1].quantity.should == 200
-    io.store.stocks[1].unitary_cost.should == 2.5
 
     puts "Add the same items updates the cost and quantity"
 
     hash = {:ref_number => 'I-0002', :date => Date.today, :contact_id => 1, :operation => 'in', :store_id => 1,
       :inventory_operation_details_attributes => [
-        {:item_id =>1, :quantity => 100, :unitary_cost => 2},
-        {:item_id =>2, :quantity => 200, :unitary_cost => 2}
+        {:item_id =>1, :quantity => 100},
+        {:item_id =>2, :quantity => 200}
       ]
     }
     io = InventoryOperation.new(hash)
@@ -65,11 +62,9 @@ feature "Inventory Operation", "Test IN/OUT" do
 
     io.store.stocks[0].item_id.should == 1
     io.store.stocks[0].quantity.should == 200
-    io.store.stocks[0].unitary_cost.should == 2
 
     io.store.stocks[1].item_id.should == 2
     io.store.stocks[1].quantity.should == 400
-    io.store.stocks[1].unitary_cost.should == 2.25
 
   end
 
@@ -78,8 +73,8 @@ feature "Inventory Operation", "Test IN/OUT" do
     puts "Create first and IN"
     hash = {:ref_number => 'I-0001', :date => Date.today, :contact_id => 1, :operation => 'in', :store_id => 1,
       :inventory_operation_details_attributes => [
-        {:item_id =>1, :quantity => 100, :unitary_cost => 2},
-        {:item_id =>2, :quantity => 200, :unitary_cost => 2.5}
+        {:item_id =>1, :quantity => 100},
+        {:item_id =>2, :quantity => 200}
       ]
     }
     io = InventoryOperation.new(hash)
@@ -88,11 +83,9 @@ feature "Inventory Operation", "Test IN/OUT" do
 
     io.store.stocks[0].item_id.should == 1
     io.store.stocks[0].quantity.should == 100
-    io.store.stocks[0].unitary_cost.should == 2
 
     io.store.stocks[1].item_id.should == 2
     io.store.stocks[1].quantity.should == 200
-    io.store.stocks[1].unitary_cost.should == 2.5
 
     puts "Create an OUT"
 
@@ -108,11 +101,9 @@ feature "Inventory Operation", "Test IN/OUT" do
 
     io.store.stocks[0].item_id.should == 1
     io.store.stocks[0].quantity.should == 50
-    io.store.stocks[0].unitary_cost.should == 2
 
     io.store.stocks[1].item_id.should == 2
     io.store.stocks[1].quantity.should == 100
-    io.store.stocks[1].unitary_cost.should == 2.5
 
   end
 
@@ -136,8 +127,8 @@ feature "Inventory Operation", "Test IN/OUT" do
     # Create inventory for the stock
     hash = {:ref_number => 'I-0001', :date => Date.today, :contact_id => 1, :store_id => 1,
       :inventory_operation_details_attributes => [
-        {:item_id =>1, :quantity => 100, :unitary_cost => 2},
-        {:item_id =>2, :quantity => 200, :unitary_cost => 2.5}
+        {:item_id =>1, :quantity => 100},
+        {:item_id =>2, :quantity => 200}
       ]
     }
     
@@ -194,14 +185,13 @@ feature "Inventory Operation", "Test IN/OUT" do
     # Create inventory
     hash = {:ref_number => 'I-0001', :date => Date.today, :contact_id => 1, :operation => 'in', :store_id => 1,
       :inventory_operation_details_attributes => [
-        {:item_id =>1, :quantity => 100, :unitary_cost => 2},
-        {:item_id =>2, :quantity => 200, :unitary_cost => 2.5}
+        {:item_id =>1, :quantity => 100},
+        {:item_id =>2, :quantity => 200}
       ]
     }
     
     io = InventoryOperation.new(hash)
     io.save.should == true
-    io.total.should == (100 * 2 + 200 * 2.5)
 
     io.store.stocks(true).unscoped.size.should == 2
     # Check the stocks
@@ -216,7 +206,6 @@ feature "Inventory Operation", "Test IN/OUT" do
     io.inventory_operation_details[1].quantity = 10
 
     io.save.should == true
-    io.total.should == 10 * 2.5
 
     io.store.stocks(true)
     io.store.stocks.find_by_item_id(1).quantity.should == stocks[1]
