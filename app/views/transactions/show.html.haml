@@ -17,7 +17,7 @@
 
 %h1.mb5{:style => 'display:inline-block;'} #{transaction_title(@transaction)}  #{@transaction.ref_number}
 %span.b#income_state{:class => @transaction.real_state, :style => 'font-size:1.3em'}= @transaction.show_state
-%h2.n.mt5= link_to @transaction.contact, "#", :title => "Historial cliente"
+%h2.n.mt5= link_to @transaction.contact, @transaction.contact, :title => "Historial cliente", :target => '_blank'
 
 .clear
 

@@ -1,0 +1,29 @@
+- content_for :links do
+  .links
+    =link_to "Editar", edit_user_path(current_user), :class => 'edit'
+
+%h1= current_user
+
+.input
+  %label Nombres
+  = current_user.first_name
+
+.input
+  %label Apellidos
+  = current_user.last_name
+.clear
+
+.input
+  %label Teléfono
+  = current_user.phone
+.input
+  %label Móvil
+  = current_user.mobile
+.clear
+
+.input
+  %label Email
+  = mail_to current_user.email unless current_user.email.blank?
+.input
+  %label Dirección
+  = nl2br current_user.address

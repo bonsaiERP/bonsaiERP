@@ -20,7 +20,7 @@ class User < ActiveRecord::Base
   has_many :organisations, :through => :links
 
   #attr_protected :account_type
-  attr_accessible :email, :password, :password_confirmation, :first_name, :last_name, :phone, :mobile, :website, :description, :rolname
+  attr_accessible :email, :password, :password_confirmation, :first_name, :last_name, :phone, :mobile, :website, :description, :rolname, :address
 
   validates_presence_of  :rolname
   validates_inclusion_of :rolname, :in => ROLES

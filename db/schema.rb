@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110418203934) do
+ActiveRecord::Schema.define(:version => 20110428204455) do
 
   create_table "account_ledgers", :force => true do |t|
     t.integer  "organisation_id"
@@ -462,6 +462,7 @@ ActiveRecord::Schema.define(:version => 20110418203934) do
     t.string   "account_type",            :limit => 15
     t.string   "description"
     t.boolean  "change_default_password",                :default => false
+    t.string   "address"
   end
 
   add_index "users", ["first_name"], :name => "index_users_on_first_name"
