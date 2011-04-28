@@ -43,11 +43,18 @@ class UsersController < ApplicationController
     end
   end
 
-  # GET /users/:id/edit_user
-  def edit_user
+  # GET /users/:id/edit
+  def edit
   end
 
   # PUT /users/:id/update_user
-  def update_user
+  def update
+    @user = current_user
+
+    if @user.update_attributes(params[:user])
+      redirect_to current_user
+    else
+      render :action => 'edit'
+    end
   end
 end

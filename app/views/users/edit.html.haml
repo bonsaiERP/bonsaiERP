@@ -1,0 +1,14 @@
+%h1 Editar #{current_user}
+
+= simple_form_for(current_user) do |f|
+  = f.input :first_name, :label => 'Nombres'
+  = f.input :last_name, :label => 'Apellidos'
+  .clear
+
+  = f.input :phone, :label => 'Teléfono'
+  = f.input :mobile, :label => 'Móvil'
+  .clear
+  = f.input :address, :label => 'Dirección', :as => :text, :input_html => {:rows => 4, :cols => 35}
+
+  .clear
+  = f.submit "Actualizar"

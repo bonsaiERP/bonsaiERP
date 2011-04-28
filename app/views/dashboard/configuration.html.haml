@@ -11,7 +11,7 @@
 
     %table.decorated
       %tr
-        %th Nombre
+        %th Nombre Completo
         %th Email
         %th Rol
         %th Activo
@@ -19,12 +19,12 @@
       
       - @links.each do |link|
         %tr
-          %td= link.user
-          %td
-          /= link.user.try(:email)
+          %td= link_to link.user, link.user
+          %td= link.user.email
           %td= link.rol
           %td{:class => link.active.to_s }
-          %td= link_to "Editar", edit_user_user_path(link.user), :class => 'edit', :title => 'Editar usuario'
+          %td
+          /= link_to "Editar", edit_user_user_path(link.user), :class => 'edit', :title => 'Editar usuario'
 
   #organisation
 
