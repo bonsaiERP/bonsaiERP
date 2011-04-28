@@ -207,7 +207,7 @@ $(document).ready(->
     el = this
     data = $(el).serialize()
     $(this).find('input, select, textarea').attr('disabled', true)
-    #serializeFormElements(this)
+
     $div = $(this).parents('.ajax-modal')
     new_record = if $div.data('ajax-type') == 'new' then true else false
     trigger = $div.data('trigger')
@@ -357,21 +357,6 @@ $(document).ready(->
     false
   )
 
-  # Serializes values from a form to be send via AJAX
-  serializeFormElements = (elem)->
-    params = {}
-
-    $(elem).find('input:not(:radio):not(:checkbox), select, textarea').each((i, el)->
-      if $(el).val()
-        params[ $(el).attr('name') ] = $(el).val()
-    )
-    $(elem).find('input:radio:checked, input:checkbox:checked').each((i, el)->
-      params[ $(el).attr('name') ] = $(el).val()
-    )
-
-    params
-
-  $.serializeFormElements = $.fn.serializeFormElements = serializeFormElements
 
   # Mark
   # @param String // jQuery selector
@@ -400,6 +385,15 @@ $(document).ready(->
     setTimeout(->
       $a.attr('title', title)
     , 100)
+  )
+
+  # Closes the nearest div container
+  $('a.close').live('click', ->
+    self = @
+    $(@).parents('div:first').hide(speed)
+    setTimeout(->
+      self.remove()
+    ,speed)
   )
 
   createSelectOption = (value, label)->

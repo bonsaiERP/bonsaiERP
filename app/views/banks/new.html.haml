@@ -1,3 +1,6 @@
-%p.links= link_to 'Lista', banks_path, :class => 'list'
-%h1 Nuevo banco
+- content_for :links do
+  %ul.breadcrumps
+    %li #{link_to 'Cuentas bancarias', banks_path} <span>&gt;</span>
+
+%h1 Nueva cuenta bancaria
 = render 'form', :bank => @bank

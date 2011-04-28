@@ -71,7 +71,7 @@
   };
   _b.tobyteSize = toByteSize;
   $(document).ready(function() {
-    var AjaxLoadingHTML, createDialog, createErrorLog, createMessageCont, createSelectOption, csrf_token, getAjaxType, mark, parseDate, serializeFormElements, setDateSelect, setIframePostEvents, speed, start, transformDateSelect, transformMinuteSelect, updateTemplateRow;
+    var AjaxLoadingHTML, createDialog, createErrorLog, createMessageCont, createSelectOption, csrf_token, getAjaxType, mark, parseDate, setDateSelect, setIframePostEvents, speed, start, transformDateSelect, transformMinuteSelect, updateTemplateRow;
     speed = 300;
     csrf_token = $('meta[name=csrf-token]').attr('content');
     window.csrf_token = csrf_token;
@@ -365,20 +365,6 @@
       }
       return false;
     });
-    serializeFormElements = function(elem) {
-      var params;
-      params = {};
-      $(elem).find('input:not(:radio):not(:checkbox), select, textarea').each(function(i, el) {
-        if ($(el).val()) {
-          return params[$(el).attr('name')] = $(el).val();
-        }
-      });
-      $(elem).find('input:radio:checked, input:checkbox:checked').each(function(i, el) {
-        return params[$(el).attr('name')] = $(el).val();
-      });
-      return params;
-    };
-    $.serializeFormElements = $.fn.serializeFormElements = serializeFormElements;
     mark = function(selector, velocity, val) {
       var self;
       self = selector || this;
@@ -410,6 +396,14 @@
       return setTimeout(function() {
         return $a.attr('title', title);
       }, 100);
+    });
+    $('a.close').live('click', function() {
+      var self;
+      self = this;
+      $(this).parents('div:first').hide(speed);
+      return setTimeout(function() {
+        return self.remove();
+      }, speed);
     });
     createSelectOption = function(value, label) {
       var opt;

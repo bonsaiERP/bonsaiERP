@@ -1,3 +1,5 @@
 - unless session[:flash].blank?
   - session[:flash].each do |k, v|
-    %div{ :id => "flash#{ k.to_s.capitalize}"}= v
+    %div{ :id => "flash#{ k.to_s.capitalize}"}
+      <a href="#" class="close" title="Cerrar">Cerrar</a>
+      = v
