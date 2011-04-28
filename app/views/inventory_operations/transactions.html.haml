@@ -1,0 +1,36 @@
+%h1 Inventario pendiente de #{params[:operation] == "in" ? "ingreso" : "egreso"} 
+
+
+= paginate(@transactions)
+
+%table{ :class => 'decorated nwl' }
+  %thead
+    %tr
+      %th.tip{ :title => 'Número de referencia' } Nº Ref.
+      %th Cliente
+      %th Vence el
+      %th Total<br/>#{currency_symbol}
+      %th Saldo<br/>#{currency_symbol}
+      %th.tip{:title => 'Saldo Inventario'} Saldo<br/>Inv. #{currency_symbol}
+      %th.tip{:title => 'Moneda'} Mon.
+      %th Estado
+      %th Contado<br/>Crédito
+      %th Fecha
+      %th
+
+  %tbody
+    - for transaction in @transactions
+      %tr{ :class => cycle(:odd, :even) }
+        %td.tip{:title => 'Seleccionar almacen'}= link_to transaction.ref_number, select_store_inventory_operation_path(transaction), :class => 'b'
+        %td= transaction.contact
+        %td= lo transaction.payment_date unless transaction.paid?
+        %td.cur= ntc exchange(transaction, :real_total, @currency_rates)
+        %td.cur= ntc exchange(transaction, :balance, @currency_rates)
+        %td.cur= ntc transaction.balance_inventory
+        %td <span>#{transaction.currency_symbol}</span>
+        %td <span class="#{transaction.real_state}">#{transaction.show_state}</span>
+        %td= cash_credit(transaction.cash)
+        %td.nw= lo transaction.date
+        %td.actions
+          = bonsai_links(transaction) if transaction.draft?
+

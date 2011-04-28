@@ -4,6 +4,8 @@ Bonsaierp::Application.routes.draw do
     member do
       get :select_store
     end
+
+    get :transactions, :on => :collection
   end
 
   resources :account_ledgers do

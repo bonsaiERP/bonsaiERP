@@ -15,8 +15,14 @@ class Store < ActiveRecord::Base
 
   # Returns a Hash of items with the item_id as key
   def get_hash_of_items(*args)
+    options = args.extract_options!
     args = [:quantity] unless args.any?
     h = lambda {|v| Hash[args.map {|a| [a, v.send(a)] } ] }
-    Hash[ stocks.includes(:item).map {|st| [st.item_id , h.call(st) ] } ]
+    
+    st = stocks
+    st = st.where(options) if options
+
+    Hash[ st.includes(:item).map {|st| [st.item_id , h.call(st) ] } ]
   end
+
 end

@@ -167,6 +167,8 @@ table.nwf td:first-child { white-space: nowrap; }
   float: left;
   color: #ffffff;
   margin: 15px;
+  overflow: hidden;
+  height: 30px;
   vertical-align: top;
 }
 #header ul {

@@ -8,6 +8,7 @@
 
 %h1= @client.matchcode
 
+.clear
 = render 'contacts/show', :klass => @client
 
 - @currency_rates = CurrencyRate.current_hash
