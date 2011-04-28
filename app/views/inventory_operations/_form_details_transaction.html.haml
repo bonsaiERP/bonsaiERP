@@ -5,10 +5,7 @@
       = fd.object.item
     %td= fd.input :quantity, :label => false, :input_html => { :size => 8, :class => 'quantity', :type => 'decimal' }
 
-    - if @inventory_operation.operation == "in"
-      %td= fd.input :unitary_cost, :label => false, :input_html => { :size => 8, :class => 'unitary_cost', :type => 'decimal' }
-
-    %td.cur.inventory
+    %td.cur.inventory= ntc(fd.object.item)
     %td
 
 

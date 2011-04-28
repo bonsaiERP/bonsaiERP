@@ -34,8 +34,6 @@
     %tr
       %th Item
       %th Cantidad
-      - if @inventory_operation.operation == "in"
-        %th Costo<br/>unitario 
       %th Inventario
       %th
 
@@ -93,4 +91,12 @@
       $('#items_table').data('row', $(this).parents('tr:first') );
     });
 
+    // Present the list of stocks for the store
+    var stocks = #{ @inventory_operation.store.get_hash_of_items.to_json};
+    $('#items_table select').live('change keyup', function() {
+      var val = 1 * $(this).val();
+      val = stocks[val] || {'quantity': 0};
+      $(this).parents('td').siblings('td.inventory').html(  _b.ntc( val.quantity ) );
+    });
+ 
   });
