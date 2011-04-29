@@ -16,6 +16,16 @@ Bonsaierp::Application.configure do
 
   # Don't care if the mailer can't send
   config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+  config.action_mailer.smtp_settings = {
+    :address => "smtp.gmail.com",
+    :port => "587",
+    :domain => "gmail.com",
+    :user_name => "bonsaierp",
+    :password => "Demo1234",
+    :authentication => "plain",
+    :enable_starttls_auto => true
+  }
 
   #ºconfig.action_mailer.delivery_method = :sendmail
   #ºconfig.action_mailer.sendmail_settings = {:arguments => '-i'}
@@ -26,6 +36,5 @@ Bonsaierp::Application.configure do
   # Only use best-standards-support built into browsers
   config.action_dispatch.best_standards_support = :builtin
   # for devise
-  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
 end
 
