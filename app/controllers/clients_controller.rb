@@ -2,6 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class ClientsController < ApplicationController
+  before_filter :authenticate_user!
   before_filter :find_client, :only => [:show, :edit, :update, :destroy]
 
   #respond_to :html, :xml, :json

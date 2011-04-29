@@ -2,6 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class LinksController < ApplicationController
+  before_filter :authenticate_user!
   # GET /links
   # GET /links.xml
   def index
@@ -42,45 +43,45 @@ class LinksController < ApplicationController
 
   # POST /links
   # POST /links.xml
-  def create
-    @link = Link.new(params[:link])
+  #def create
+  #  @link = Link.new(params[:link])
 
-    respond_to do |format|
-      if @link.save
-        format.html { redirect_to(@link, :notice => 'Link was successfully created.') }
-        format.xml  { render :xml => @link, :status => :created, :location => @link }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @link.errors, :status => :unprocessable_entity }
-      end
-    end
-  end
+  #  respond_to do |format|
+  #    if @link.save
+  #      format.html { redirect_to(@link, :notice => 'Link was successfully created.') }
+  #      format.xml  { render :xml => @link, :status => :created, :location => @link }
+  #    else
+  #      format.html { render :action => "new" }
+  #      format.xml  { render :xml => @link.errors, :status => :unprocessable_entity }
+  #    end
+  #  end
+  #end
 
   # PUT /links/1
   # PUT /links/1.xml
-  def update
-    @link = Link.find(params[:id])
+  #def update
+  #  @link = Link.find(params[:id])
 
-    respond_to do |format|
-      if @link.update_attributes(params[:link])
-        format.html { redirect_to(@link, :notice => 'Link was successfully updated.') }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @link.errors, :status => :unprocessable_entity }
-      end
-    end
-  end
+  #  respond_to do |format|
+  #    if @link.update_attributes(params[:link])
+  #      format.html { redirect_to(@link, :notice => 'Link was successfully updated.') }
+  #      format.xml  { head :ok }
+  #    else
+  #      format.html { render :action => "edit" }
+  #      format.xml  { render :xml => @link.errors, :status => :unprocessable_entity }
+  #    end
+  #  end
+  #end
 
-  # DELETE /links/1
-  # DELETE /links/1.xml
-  def destroy
-    @link = Link.find(params[:id])
-    @link.destroy
+  ## DELETE /links/1
+  ## DELETE /links/1.xml
+  #def destroy
+  #  @link = Link.find(params[:id])
+  #  @link.destroy
 
-    respond_to do |format|
-      format.html { redirect_to(links_url) }
-      format.xml  { head :ok }
-    end
-  end
+  #  respond_to do |format|
+  #    format.html { redirect_to(links_url) }
+  #    format.xml  { head :ok }
+  #  end
+  #end
 end

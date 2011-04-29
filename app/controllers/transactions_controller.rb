@@ -2,6 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class TransactionsController < ApplicationController
+  before_filter :authenticate_user!
   # GET /transactions
   # GET /transactions.xml
   #def index

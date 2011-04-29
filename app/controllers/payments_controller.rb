@@ -2,6 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class PaymentsController < ApplicationController
+  before_filter :authenticate_user!
   before_filter :set_payment, :only => [:show, :edit, :update, :destroy, :null_payment]
   # GET /payments
   # GET /payments.xml

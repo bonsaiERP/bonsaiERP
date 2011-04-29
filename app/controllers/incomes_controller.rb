@@ -3,6 +3,7 @@
 # email: boriscyber@gmail.com
 class IncomesController < ApplicationController
 
+  before_filter :authenticate_user!
   #before_filter :check_currency_set, :only => [:new, :edit, :create, :update]
   before_filter :set_currency_rates, :only => [:index, :show]
   before_filter :set_transaction, :only => [:show, :edit, :update, :destroy, :approve]

@@ -3,9 +3,9 @@
 # email: boriscyber@gmail.com
 class User < ActiveRecord::Base
   # callbacks
-  before_validation :set_rolname, :unless => :change_default_password?
+  before_validation :set_rolname, :if => :new_record?#, :unless => :change_default_password?
   after_create      :create_user_link, :if => :change_default_password?
-  before_destroy :destroy_links
+  before_destroy    :destroy_links
   
   ROLES = ['admin', 'gerency', 'inventory', 'sales']
 
@@ -13,17 +13,17 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable, :confirmable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  attr_accessor :rolname, :temp_password
+  attr_accessor :temp_password, :rolname
 
   # Relationships
   has_many :links
   has_many :organisations, :through => :links
 
   #attr_protected :account_type
-  attr_accessible :email, :password, :password_confirmation, :first_name, :last_name, :phone, :mobile, :website, :description, :rolname, :address
+  attr_accessible :email, :password, :password_confirmation, :first_name, :last_name, :phone, :mobile, :website, :description, :rolname, :address, :rolname
 
-  validates_presence_of  :rolname
-  validates_inclusion_of :rolname, :in => ROLES
+  validates_presence_of  :rolname, :if => :new_record?
+  validates_inclusion_of :rolname, :in => ROLES, :if => :new_record?
 
   def to_s
     unless first_name.blank? and last_name.blank?
@@ -44,6 +44,14 @@ class User < ActiveRecord::Base
   # Checks the user and the priviledges
   def check_organisation?(organisation_id)
     organisations.map(&:id).include?(organisation_id.to_i)
+  end
+
+  def update_password(params)
+    self.password                = params[:password]
+    self.password_confirmation   = params[:password_confirmation]
+    self.change_default_password = false
+
+    self.save
   end
 
   # Generates a random password and sets it to the password field

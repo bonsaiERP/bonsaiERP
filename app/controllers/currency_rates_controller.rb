@@ -2,6 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class CurrencyRatesController < ApplicationController
+  before_filter :authenticate_user!
 
   # GET /currency_rates
   # GET /currency_rates.xml

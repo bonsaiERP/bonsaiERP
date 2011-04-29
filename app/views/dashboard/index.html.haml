@@ -22,6 +22,10 @@
 
 %h1 Bienvenido, aún estamos en desarrollo intensivo! :)
 
+- if current_user.change_default_password?
+  %h3= link_to "Le recomendamos crear una nueva contraseña", "/users/password"
+
+.clear
 - fdate = 60
 
 .box

@@ -3,6 +3,7 @@
 # email: boriscyber@gmail.com
 class UsersController < ApplicationController
   respond_to :html, :xml, :json
+  before_filter :authenticate_user!
 
   def new
     @user = User.new
@@ -55,6 +56,24 @@ class UsersController < ApplicationController
       redirect_to current_user
     else
       render :action => 'edit'
+    end
+  end
+
+  # /users/password
+  def password
+  end
+
+  # PUT /users/:id/update_password
+  def update_password
+    @user = current_user
+    p = params[:user]
+    @user.change_default_password = false
+
+    if @user.update_password(params[:user])
+      sign_in(@user, :bypass => true)
+      redirect_to "/users/#{@user.id}", :notice => "Su contraseña a sido actualizada."
+    else
+      render :action => 'password'
     end
   end
 end

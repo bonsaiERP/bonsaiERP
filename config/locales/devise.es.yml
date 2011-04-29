@@ -49,5 +49,11 @@ es:
       sign_out: "Salir"
       password_forgot: "Olvido su cotraseña?"
       password_submit: ""
-      
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            email:
+              taken: "El email que ingreso ya existe en nuestro sistema, tal ves ya se haya registrado antes."
 

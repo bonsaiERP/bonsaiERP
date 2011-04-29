@@ -2,7 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class PayPlansController < ApplicationController
-  
+  before_filter :authenticate_user!
   before_filter :set_pay_plan, :only => [:edit, :update, :destroy]
   # GET /pay_plans
   # GET /pay_plans.xml

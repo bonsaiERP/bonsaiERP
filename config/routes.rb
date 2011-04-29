@@ -92,12 +92,14 @@ Bonsaierp::Application.routes.draw do
   resources :users do
     collection do
       get  :add_user
+      get  :password
       post :create_user
     end
 
     member do
       get :edit_user
       put :update_user
+      put :update_password
     end
   end
 
@@ -106,7 +108,7 @@ Bonsaierp::Application.routes.draw do
   match '/dashboard' => 'dashboard#index', :as => :dashboard
   match '/configuration' => 'dashboard#configuration'
 
-  root :to => 'organisations#index'
+  root :to => 'home#index'
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
