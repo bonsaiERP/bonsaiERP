@@ -7,6 +7,8 @@ class HomeController < ApplicationController
       redirect_to "/users/sign_in"
     elsif current_user.organisations.any?
       set_organisation_session(current_user.organisations.first)
+      session[:user] = {:rol => current_user.link.rol }
+
       redirect_to "/dashboard"
     elsif current_user.organisations.empty?
       redirect_to "/organisations/new"

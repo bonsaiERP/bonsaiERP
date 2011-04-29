@@ -51,8 +51,10 @@ class UsersController < ApplicationController
   # PUT /users/:id/update_user
   def update
     @user = current_user
+    h = params[:user]
+    h.delete(:password)
 
-    if @user.update_attributes(params[:user])
+    if @user.update_attributes(h)
       redirect_to current_user
     else
       render :action => 'edit'

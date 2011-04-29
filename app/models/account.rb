@@ -50,7 +50,6 @@ class Account < ActiveRecord::Base
   def create_account_ledger
     val = amount
     val = val.to_f
-    self.total_amount = val
 
     if val > 0
       bl = self.account_ledgers.build(:amount => amount, :date => Date.today, 

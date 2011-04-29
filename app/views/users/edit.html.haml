@@ -1,3 +1,7 @@
+- content_for :links do
+  %ul.breadcrumps
+    %li #{link_to current_user, current_user} &gt;
+
 %h1 Editar #{current_user}
 
 = simple_form_for(current_user) do |f|

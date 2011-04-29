@@ -1,6 +1,7 @@
 - content_for :links do
   .links
-    =link_to "Editar", edit_user_path(current_user), :class => 'edit'
+    =link_to "Editar datos", edit_user_path(current_user), :class => 'edit'
+    =link_to "Cambiar contraseña", password_users_path, :class => 'key'
 
 %h1= current_user
 

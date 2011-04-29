@@ -389,6 +389,16 @@ a.destroy, a.delete {
   min-height: 16px;
   background: url(images/trash.png) no-repeat 0px 50%;
 }
+a.key {
+  font-weight: bold;
+  padding-left: 20px;
+  margin: 0px 5px;
+  color: #538447;
+  font-size: 110%;
+  display: inline-block;
+  min-height: 16px;
+  background: url(images/key.png) no-repeat 0px 50%;
+}
 a.delete { color: #ff0000; }
 a.delete:hover { color: #ff5757 !important; }
 .min-height {

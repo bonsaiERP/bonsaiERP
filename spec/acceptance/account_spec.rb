@@ -97,5 +97,6 @@ feature "Account Feature", "test all incomes as transference between accounts. "
     trans.conciliate_account.should == false
     trans.errors.should_not == blank?
   end
+
 end
 
