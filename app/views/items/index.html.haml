@@ -3,18 +3,19 @@
 
 %h1 Items
 
-%div.search{:style => 'display:none'}
-  =form_tag "/items", :method => 'get'
-  =hidden_field_tag 'ctype', params[:ctype]
-  %strong.dark Nombre o código
-  =text_field_tag 'name_code', params[:search], :size => 40
-  =submit_tag 'Buscar'
-
+#search_items.search
+  =form_tag "/items", :method => 'get' do
+    =hidden_field_tag "search_div_id", "search_items"
+    =hidden_field_tag 'ctype', params[:ctype]
+    %strong.dark Nombre o código
+    =text_field_tag 'name_code', params[:search], :size => 40
+    =submit_tag 'Buscar'
 
 .clear
 
-= link_to "Buscar", "#", :class => 'search'
+= link_to "Buscar", "#search_items", :class => 'search'
 = paginate @items
+
 
 %table{ :class=> "decorated" }
   %tr
@@ -37,3 +38,4 @@
       %td= item.unit.name 
       %td.c <span class="#{item.active}"></span>
       %td= bonsai_links(item)
+

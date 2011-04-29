@@ -1,5 +1,12 @@
 (function() {
   var currency, ntc, toByteSize, _b;
+  String.prototype.pluralize = function() {
+    if (/[aeiou]$/.test(this)) {
+      return this + "s";
+    } else {
+      return this + "es";
+    }
+  };
   _b = {};
   window._b = _b;
   _b.dateFormat = function(date, format) {
@@ -263,7 +270,9 @@
       return false;
     });
     $('a.search').live("click", function() {
-      return $(this).siblings("div.search").show(speed);
+      var search;
+      search = $(this).attr("href");
+      return $(search).show(speed);
     });
     setIframePostEvents = function(iframe, created) {
       return iframe.onload = function() {
@@ -462,11 +471,4 @@
     });
     return start();
   });
-  String.prototype.pluralize = function() {
-    if (/[aeiou]$/.test(this)) {
-      return this + "s";
-    } else {
-      return this + "es";
-    }
-  };
 }).call(this);

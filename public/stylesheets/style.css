@@ -240,8 +240,9 @@ ul#main_menu {
   padding: 5px 10px;
   position: relative;
   float: left;
-  -webkit-margin-before: -10px;
+  -webkit-margin-before: 0px;
   clear: both;
+  z-index: 200;
 }
 ul#main_menu ul { display: none; }
 ul#main_menu ul.more {
@@ -869,6 +870,7 @@ a.search {
   padding: 0px 0px 0px 20px;
   background: transparent url(images/zoom.png) no-repeat;
 }
+div.search { display: none; }
 .moneybox {
   background-color: #f0f0f1;
   padding: 8px;

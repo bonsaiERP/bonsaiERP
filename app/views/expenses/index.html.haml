@@ -43,7 +43,3 @@
         %td.actions
           = bonsai_links(expense) if expense.draft?
 
-:javascript
-  jQuery(function($) {
-    $('ul.buy-types').tabs('div.buy-panes > div', {effect: 'ajax'});
-  });

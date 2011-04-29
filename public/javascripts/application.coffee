@@ -1,3 +1,12 @@
+# Extendig base clases
+String::pluralize = ->
+  if /[aeiou]$/.test(this)
+    return this + "s"
+  else
+    return this + "es"
+# $.browser.msie
+# $.browser.version
+
 _b = {}
 window._b = _b
 
@@ -59,6 +68,12 @@ toByteSize = (bytes)->
 _b.tobyteSize = toByteSize
 
 $(document).ready(->
+  # Fix some issues with MSIE 7
+  #if $.browser.msie and $.browser.version < 8
+  #  $('#main_menu li.more').live("mouseover", ->
+  #    $(this).show()
+  #  )
+
   # Speed in milliseconds
   speed = 300
   # csfr
@@ -257,7 +272,8 @@ $(document).ready(->
 
   # To present the search
   $('a.search').live("click", ->
-    $(this).siblings("div.search").show(speed)
+    search = $(this).attr("href")
+    $(search).show(speed)
   )
 
 
@@ -467,9 +483,3 @@ $(document).ready(->
   start()
 
 )
-# Extendig base claeses
-String.prototype.pluralize = ->
-  if /[aeiou]$/.test(this)
-    return this + "s"
-  else
-    return this + "es"

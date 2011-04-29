@@ -92,7 +92,8 @@
     });
 
     // Present the list of stocks for the store
-    var stocks = #{ @inventory_operation.store.get_hash_of_items.to_json unless @inventory_operation.transaction_id.present?};
+    var stocks = #{@inventory_operation.transaction_id.present? ? {} : @inventory_operation.store.get_hash_of_items.to_json  };
+
     $('#items_table select').live('change keyup', function() {
       var val = 1 * $(this).val();
       val = stocks[val] || {'quantity': 0};
