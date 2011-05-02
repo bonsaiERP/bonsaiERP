@@ -1,5 +1,6 @@
 %h1 Configuración
 
+- debugger 
 #tabs
   %ul
     %li <a href="#users">Usuarios</a>
@@ -16,7 +17,6 @@
         %th Rol
         %th Activo
         %th
-      
       - @links.each do |link|
         %tr
           %td= link_to link.user, link.user

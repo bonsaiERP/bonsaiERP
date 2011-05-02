@@ -25,7 +25,7 @@ class Item < ActiveRecord::Base
   # Validations
   validates_presence_of :name, :unit_id, :code
   validates_associated :unit
-  validates_numericality_of :unitary_cost, :greater_than_or_equal_to => 0
+  #validates_numericality_of :unitary_cost, :greater_than_or_equal_to => 0
   validates :ctype, :presence => true, :inclusion => { :in => TYPES }
   validates :code, :uniqueness => { :scope => :organisation_id }
   validates :price, :numericality => { :greater_than_or_equal_to => 0, :if => lambda { |i| i.price.present? } }
