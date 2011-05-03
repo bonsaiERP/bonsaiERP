@@ -17,22 +17,18 @@
     = @item.name
   .clear
   .input
-    %label Costo unitario
-    .b= ntc @item.unitary_cost
-  .input
     %label Precio de venta
     .b= ntc @item.price
-  .clear
   .input._25
     %label Unidad
     = @item.unit
   .input._25
     %label Activo
     %span.icon{:class => @item.active.to_s}
+  .clear
   .input
     %label Tipo
     = @item.get_type
-  .clear
   /.input#item_discount
   /%label Descuento
   /%span= @item.discount

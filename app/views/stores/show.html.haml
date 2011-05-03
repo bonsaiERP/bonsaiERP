@@ -49,17 +49,13 @@
       %tr
         %th Item
         %th Cantidad
-        %th Costo unitario
-        %th Subtotal
-        %th{:title => 'Cantidad mínima'} Cat. min.
+        %th Cantidad minima
         %th
 
       - @items.each do |st|
         %tr
           %td= st.item
           %td.cur= ntc st.quantity
-          %td.cur= ntc st.unitary_cost
-          %td.cur= ntc( st.quantity * st.unitary_cost )
           %td.cur= ntc st.minimun_quantity
           %td.cur= link_to "mínimo", "#"
 

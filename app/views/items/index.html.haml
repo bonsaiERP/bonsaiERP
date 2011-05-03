@@ -30,7 +30,7 @@
 
   - @items.each do |item|
     %tr
-      %td= link_to item.code, item
+      %td= link_to item.code, item, :class => 'b'
       %td= item.name
       %td.r= ntc( item.unitary_cost )
       %td.r= ntc( item.price )
