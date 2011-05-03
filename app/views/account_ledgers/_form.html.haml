@@ -8,7 +8,10 @@
   .clear
 
   = f.input :reference, :label => 'Referencia/Nº de cheque', :input_html => {:size => 20}
-  = f.association :contact, :label => account_ledger_contact_label(@account_ledger), :collection => account_ledger_contact_collection(@account_ledger)
+
+  - url, tit = @account_ledger.income? ? [new_client_path, "cliente"] : [new_supplier_path, "proveedor"]
+  = f.association :contact, :label => account_ledger_contact_label(@account_ledger), :collection => account_ledger_contact_collection(@account_ledger), :input_html => {'data-new_url' => url, 'data-trigger' => 'new_contact', 'data-title' => "Nuevo #{tit}"}
+
   .clear
 
   = f.input :description, :label => 'Descripción', :as => :text, :input_html => {:rows => 3, :cols => 40}
@@ -16,3 +19,9 @@
 
   = f.submit "Salvar"
 
+:javascript
+  head.ready(function() {
+    $('body').live('new_contact', function(e, resp) {
+      $('#account_ledger_contact_id').createSelectOption(resp.id, resp.matchcode);
+    });
+  })

@@ -52,7 +52,7 @@ class Item < ActiveRecord::Base
   # Method to get the localized types
   def self.get_types(sc = nil)
     if sc.blank?
-      ["Insumo", "Item de Gasto", "Producto", "Servicio"].zip(TYPES)
+      ["Enseres", "Item de Gasto", "Producto", "Servicio"].zip(TYPES)
     else
       get_scoped_types(sc)
     end

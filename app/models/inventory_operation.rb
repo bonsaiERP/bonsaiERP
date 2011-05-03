@@ -65,7 +65,7 @@ class InventoryOperation < ActiveRecord::Base
       next if det.quantity == 0
 
       st = store.stocks.find_by_item_id(det.item_id)
-      c, q = st.blank? ? [0, 0] : [st.unitary_cost, st.quantity]
+      q = st.blank? ? 0 : st.quantity
 
       st.update_attribute(:state, 'inactive') unless st.blank?
       q = operation == "in" ? q + det.quantity : q - det.quantity
@@ -81,24 +81,6 @@ class InventoryOperation < ActiveRecord::Base
     store.save
   end
 
-  # Return cos according if it's in or out
-  #def get_cost(c1, c2)
-  #  if operation == "in"
-  #    c2
-  #  else
-  #    c1
-  #  end
-  #end
-
-  # Calculates the cost according the quantity and if is IN/OUT
-  def calculate_cost(c1, q1, c2, q2)
-    if operation == "in"
-      (c1*q1 + c2*q2)/ (q1 + q2)
-    else
-      c1
-    end
-  end
-
   def check_and_save_transaction
     if valid_transaction
       transaction.update_attribute(:balance_inventory, transaction.balance_inventory - inventory_transaction_value)
@@ -109,13 +91,11 @@ class InventoryOperation < ActiveRecord::Base
 
   # Calculates the total value for the current operation
   def inventory_transaction_value
-    sum = 0
-    inventory_operation_details.each do |det|
-      it = transaction.transaction_details.find_by_item_id(det.item_id)
+    transaction_details = transaction.transaction_details.all
+    inventory_operation_details.inject(0) do |sum, det|
+      it = transaction_details.find {|td| td.item_id == det.item_id }
       sum += it.price * det.quantity
     end
-
-    sum
   end
 
   # Checks if there are any errors related to the transaction
