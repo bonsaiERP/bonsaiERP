@@ -1,4 +1,7 @@
 - content_for :links do
+  %ul.breadcrumps
+    %li #{link_to "Gastos", expenses_path} &gt;
+
   .links= link_to "Nuevo gasto", new_expense_path, :class => 'new'
 
 %h1 Gastos
@@ -11,6 +14,24 @@
   %li= link_to "Esperando pago #{size_or_blank(@exp.approved.size)}"     , expenses_path(:option => 'awaiting_payment' ) , :class => tabs_filter('awaiting_payment')
   %li= link_to "Vencidas #{size_or_blank(@exp.due.size)}"               , expenses_path(:option => 'due' )              , :class => tabs_filter('due')
   %li= link_to "Pagadas #{size_or_blank(@exp.paid.size)}"               , expenses_path(:option => 'paid')              , :class => tabs_filter('paid')
+
+
+#search_expense.search{:style => show_if_search}
+  %a.close{:href => "#"} cerrar
+  %h3 Buscar gastos
+  =form_tag "/expenses", :method => 'get' do
+    =hidden_field_tag "search_div_id", "search_incomes"
+    .input
+      %label Proveedor o Nº de referencia
+      =text_field_tag 'search', params[:search], :size => 40
+    .input
+      %label Estado
+      =select_tag "option", options_for_select(list_expense_states, params[:option])
+    %div
+    =submit_tag 'Buscar'
+
+= link_to "Buscar", "#search_expense", :class => 'search'
+
 
 = paginate @expenses
 

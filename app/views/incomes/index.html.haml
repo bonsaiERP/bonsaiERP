@@ -1,5 +1,11 @@
 - content_for :links do
+  %ul.breadcrumps
+    %li #{link_to "Ventas", incomes_path} &gt;
+
   .links= link_to "Nueva venta", new_income_path, :class => 'new'
+
+:css
+  .search label{ width: 15em; }
 
 %h1 Ventas
 
@@ -13,7 +19,21 @@
   %li= link_incomes "Con inventario pendiente #{size_or_blank(@in.inventory.size)}", 'inventory'
   %li= link_incomes "Cobradas", 'paid'
 
-= link_to "Buscar", "#search", :class => 'search'
+#search_income.search{:style => show_if_search}
+  %a.close{:href => "#"} cerrar
+  %h3 Buscar ventas
+  =form_tag "/incomes", :method => 'get' do
+    =hidden_field_tag "search_div_id", "search_incomes"
+    .input
+      %label Cliente o Nº de referencia
+      =text_field_tag 'search', params[:search], :size => 40
+    .input
+      %label Estado
+      =select_tag "option", options_for_select(list_income_states, params[:option])
+    %div
+    =submit_tag 'Buscar'
+
+= link_to "Buscar", "#search_income", :class => 'search'
 
 = paginate @incomes
 

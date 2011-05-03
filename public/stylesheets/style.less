@@ -323,9 +323,9 @@ ul#main_menu>li{
 }
 
 ul#main_menu{
-  height: 29px;
+  height: 25px;
   margin: 0px;
-  margin: 0px;
+  margin: 2px 0px;
   padding: 5px 10px;
   position: relative;
   float: left;
@@ -612,16 +612,6 @@ span.error{
   font-size: 120%;
   position: relative;
   margin: 8px 0px;
-  a.close{
-    text-indent: -1000em;
-    display: block;
-    position: absolute;
-    width: 16px;
-    height: 16px;
-    top: 2px;
-    right: 6px;
-    background: transparent url(images/close.png) no-repeat;
-  }
 }
 #flashNotice{
   .flash;
@@ -697,6 +687,17 @@ a.more{
   background:transparent url(images/bullet_arrow_down.png) no-repeat 0 right;
 }
 
+a.close{
+  text-indent: -1000em;
+  display: block;
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 2px;
+  right: 6px;
+  background: transparent url(images/close.png) no-repeat;
+}
+
 /***************************************************/
 /* SEARCH FORM*/
 .search{
@@ -705,8 +706,12 @@ a.more{
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
   border-radius: 4px;
+  position: relative;
+  a.close{ top: 6px; right: 12px; }
+  h3{ margin: 2px 0px;}
+  label{ display: inline-block; text-align: right; }
+  .input{ width: 100%; }
 }
-
 
 
 /***************************************************/

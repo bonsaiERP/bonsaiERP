@@ -1,6 +1,5 @@
 %h1 Configuración
 
-- debugger 
 #tabs
   %ul
     %li <a href="#users">Usuarios</a>
@@ -30,5 +29,5 @@
 
 :javascript
   head.ready(function() {
-    $('#tabs').tabs();
+    setTimeout(function() { $('#tabs').tabs(); }, 300);
   })

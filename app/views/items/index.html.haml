@@ -1,14 +1,18 @@
 - content_for :links do
+  %ul.breadcrumps
+    %li #{link_to "Items", items_path} &gt;
+
   .links= link_to "Nuevo ítem", new_item_path, :class => 'new'
 
 %h1 Items
 
-#search_items.search
+#search_items.search{:style => show_if_search}
+  %a.close{:href => "#"} cerrar
   =form_tag "/items", :method => 'get' do
     =hidden_field_tag "search_div_id", "search_items"
     =hidden_field_tag 'ctype', params[:ctype]
-    %strong.dark Nombre o código
-    =text_field_tag 'name_code', params[:search], :size => 40
+    %label Nombre o código
+    =text_field_tag 'search', params[:search], :size => 40
     =submit_tag 'Buscar'
 
 .clear

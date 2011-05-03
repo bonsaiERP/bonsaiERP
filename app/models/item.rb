@@ -97,6 +97,10 @@ class Item < ActiveRecord::Base
     where(:ctype => s_type).where(query)
   end
 
+  def self.search(params)
+    self.org.includes(:unit).where("items.name LIKE :search OR items.code LIKE :search", :search => "%#{params[:search]}%")
+  end
+
   # creates an array with values  [quantity, percentage]
   def discount_values
     return [] if self.discount.blank?

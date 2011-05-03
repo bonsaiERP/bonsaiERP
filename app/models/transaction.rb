@@ -67,14 +67,27 @@ class Transaction < ActiveRecord::Base
 
   # Finds using the state
   def self.find_with_state(state)
-    state = 'all' unless all_states.include?(state)
     ret   = self.org.includes(:contact, :pay_plans, :currency).order("date DESC")
+    ret = ret.send(scoped_state(state)) if scoped_state(state)
+    ret
+  end
+
+  # Fins with state
+  def self.scoped_state(state)
+    state = 'all' unless all_states.include?(state)
 
     case state
-    when 'all' then ret
-    when 'awaiting_payment' then ret.approved
-    else ret.send(state)
+    when 'all' then false
+    when 'awaiting_payment' then 'approved'
+    else state
     end
+  end
+
+  # method used for searching
+  def self.search(options)
+    ret = self.org.includes(:contact, :pay_plans, :currency)
+    ret = ret.send(scoped_state(options[:option])) if scoped_state(options[:option])
+    ret.where("transactions.ref_number LIKE :code OR contacts.matchcode LIKE :code", :code => "%#{options[:search]}%")
   end
 
   # Define methods for the types of transactions

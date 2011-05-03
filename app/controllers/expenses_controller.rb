@@ -11,7 +11,11 @@ class ExpensesController < ApplicationController
   # GET /buys
   # GET /buys.xml
   def index
-    @expenses = Expense.find_with_state(params[:option]).page(@page)
+    if params[:search].present?
+      @expenses = Expense.search(params).page(@page)
+    else
+      @expenses = Expense.find_with_state(params[:option]).page(@page)
+    end
   end
 
   # GET /buys/1

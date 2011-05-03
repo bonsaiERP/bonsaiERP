@@ -407,9 +407,10 @@ $(document).ready(->
   $('a.close').live('click', ->
     self = @
     $(@).parents('div:first').hide(speed)
-    setTimeout(->
-      self.remove()
-    ,speed)
+    unless $(@).parents("div:first").hasClass("search")
+      setTimeout(->
+        self.remove()
+      ,speed)
   )
 
   createSelectOption = (value, label)->

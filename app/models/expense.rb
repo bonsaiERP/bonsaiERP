@@ -31,7 +31,7 @@ private
   # Initialized  the ref_number
   def set_ref_number
     if ref_number.blank?
-      refs            = Income.org.order("ref_number DESC").limit(1)
+      refs            = Expense.org.order("ref_number DESC").limit(1)
       self.ref_number = refs.any? ? refs.first.ref_number.next : "G-#{Date.today.year}-0001"
     end
   end

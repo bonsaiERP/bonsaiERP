@@ -122,4 +122,38 @@ module TransactionsHelper
     active = (params[:option] == option) ? "active" : ""
     link_to text, incomes_path(:option => option), options.merge(:class => active)
   end
+
+  def list_income_states
+    [
+      ["Todas", "all"], 
+      ["Esperando aprobación", "draft"], 
+      ["Esperando cobro", "awaiting_payment"], 
+      ["Vencidas", "due"], 
+      ["Con inventario pendiente", "inventory"], 
+      ["Cobradas", "paid"]
+    ]
+  end
+
+  def list_buy_states
+    [
+      ["Todas", "all"], 
+      ["Esperando aprobación", "draft"], 
+      ["Esperando pago", "awaiting_payment"], 
+      ["Vencidas", "due"], 
+      ["Con inventario pendiente", "inventory"], 
+      ["Pagadas", "paid"]
+    ]
+  end
+
+
+  def list_expense_states
+    [
+      ["Todas", "all"], 
+      ["Esperando aprobación", "draft"], 
+      ["Esperando pago", "awaiting_payment"], 
+      ["Vencidas", "due"], 
+      ["Pagadas", "paid"]
+    ]
+  end
+
 end

@@ -410,9 +410,11 @@
       var self;
       self = this;
       $(this).parents('div:first').hide(speed);
-      return setTimeout(function() {
-        return self.remove();
-      }, speed);
+      if (!$(this).parents("div:first").hasClass("search")) {
+        return setTimeout(function() {
+          return self.remove();
+        }, speed);
+      }
     });
     createSelectOption = function(value, label) {
       var opt;

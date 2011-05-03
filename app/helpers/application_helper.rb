@@ -92,4 +92,7 @@ module ApplicationHelper
     end
   end
 
+  def show_if_search
+    "display:block" if params[:search] or params[:search_div_id]
+  end
 end

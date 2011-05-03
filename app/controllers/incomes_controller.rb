@@ -12,7 +12,11 @@ class IncomesController < ApplicationController
   # GET /incomes
   # GET /incomes.xml
   def index
-    @incomes = Income.find_with_state(params[:option]).page(@page)
+    if params[:search].present?
+      @incomes = Income.search(params).page(@page)
+    else
+      @incomes = Income.find_with_state(params[:option]).page(@page)
+    end
   end
 
   # GET /incomes/1

@@ -6,14 +6,15 @@
     = csrf_meta_tag
 
     %title Bonsai
+    - scripts = ["jquery-1.6.min.js", "jquery-ui-1.8.12.custom.min.js", "jquery.ui.datepicker-es.js", "tooltip.min.js", 
+      "jquery.tmpl.min.js", "application.js"].map {|v| "\"#{ javascript_path(v) }\"" }
+
     = stylesheet_link_tag 'style', 'jquery-ui-1.8.10.custom.css' 
     =javascript_include_tag "head.min"
     :javascript
-      head.js('/javascripts/jquery-1.5.min.js', '/javascripts/jquery-ui-1.8.8.custom.min.js', '/javascripts/jquery.ui.datepicker-es.js', '/javascripts/tooltip.min.js', '/javascripts/jquery.tmpl.min.js', '/javascripts/application.js');
+      head.js(#{scripts.join(", ")});
 
-
-    /= javascript_include_tag 'jquery-1.5.min', 'jquery-ui-1.8.8.custom.min.js', 'jquery.ui.datepicker-es.js', 'tooltip.min', 'jquery.tmpl.min', :cache => 'javascripts'
-    /= javascript_include_tag 'application'
+    /= javascript_include_tag 'jquery-1.6.min', 'jquery-ui-1.8.8.custom.min.js', 'jquery.ui.datepicker-es.js', 'tooltip.min', 'jquery.tmpl.min', :cache => 'javascripts'
     /, 'rails'
   %body
 

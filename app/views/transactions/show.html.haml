@@ -97,7 +97,9 @@
   %div= "<span class='dark'>Aprovado por:</span> <strong>#{@transaction.approver}</strong>".html_safe if @transaction.approver_id.present?
 
 :javascript
+
   head.ready(function () {
+
     $('#tabs').tabs();
 
     if(!#{@transaction.paid?} && #{@transaction.cash}) {

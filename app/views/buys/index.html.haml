@@ -1,5 +1,11 @@
 - content_for :links do
+  %ul.breadcrumps
+    %li #{link_to "Compras", buys_path} &gt;
+
   .links= link_to "Nueva compra", new_buy_path, :class => 'new'
+
+:css
+  .search label{ width: 15em; }
 
 %h1 Compras
 
@@ -12,6 +18,22 @@
   %li= link_to "Vencidas #{size_or_blank(@bu.due.size)}"                       , buys_path(:option => 'due')              , :class => tabs_filter('due')
   %li= link_to "Con inventario pendiente #{size_or_blank(@bu.inventory.size)}" , buys_path(:option => 'inventory')        , :class => tabs_filter('inventory')
   %li= link_to "Pagadas"                                                       , buys_path(:option => 'paid')             , :class => tabs_filter('paid')
+
+#search_buy.search{:style => show_if_search}
+  %a.close{:href => "#"} cerrar
+  %h3 Buscar compras
+  =form_tag "/buys", :method => 'get' do
+    =hidden_field_tag "search_div_id", "search_incomes"
+    .input
+      %label Proveedor o Nº de referencia
+      =text_field_tag 'search', params[:search], :size => 40
+    .input
+      %label Estado
+      =select_tag "option", options_for_select(list_buy_states, params[:option])
+    %div
+    =submit_tag 'Buscar'
+
+= link_to "Buscar", "#search_buy", :class => 'search'
 
 = paginate @buys
 
