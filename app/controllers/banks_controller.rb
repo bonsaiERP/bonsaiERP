@@ -2,7 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class BanksController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :check_authorization!
   before_filter :find_bank, :only => [:show, :edit, :update, :destroy]
   # GET /banks
   # GET /banks.xml

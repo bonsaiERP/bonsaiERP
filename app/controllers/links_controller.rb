@@ -2,7 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class LinksController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :check_authorization!
   # GET /links
   # GET /links.xml
   def index

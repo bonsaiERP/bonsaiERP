@@ -3,7 +3,7 @@
 # email: boriscyber@gmail.com
 class UsersController < ApplicationController
   respond_to :html, :xml, :json
-  before_filter :authenticate_user!
+  before_filter :check_authorization!
 
   def new
     @user = User.new
@@ -31,7 +31,9 @@ class UsersController < ApplicationController
 
   # POST /users/create_user
   def create_user
-    @user = User.new(params[:user])
+    h = params[:user]
+    h[:rolname] = '' if params[:user][:rolname] == 'admin'
+    @user = User.new(h)
     
     @user.generate_random_password
     @user.change_default_password = true

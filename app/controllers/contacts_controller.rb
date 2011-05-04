@@ -2,7 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class ContactsController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :check_authorization!
   before_filter :find_contact, :only => [:show, :edit, :update, :destroy]
 
   #respond_to :html, :xml, :json

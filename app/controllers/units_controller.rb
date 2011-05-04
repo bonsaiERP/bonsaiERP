@@ -4,7 +4,7 @@
 class UnitsController < ApplicationController
   respond_to :html, :json, :xml
 
-  before_filter :authenticate_user!
+  before_filter :check_authorization!
   before_filter :check_organisation
 
 

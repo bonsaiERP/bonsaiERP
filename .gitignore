@@ -21,3 +21,6 @@ db/test.sqlite3-journal
 *.*~
 config/initializers/host.rb
 .bundle/config
+*.swl
+*.swm
+*.swn

@@ -11,7 +11,9 @@ class ApplicationController < ActionController::Base
 
   before_filter :destroy_organisation_session!, :unless => :user_signed_in?
 
-  include OrganisationHelpers
+  include Authorization
+  include OrganisationHelpers  
+
   helper_method OrganisationHelpers.organisation_helper_methods
 
 

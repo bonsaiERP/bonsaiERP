@@ -2,7 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class InventoryOperationsController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :check_authorization!
   # GET /inventory_operations
   # GET /inventory_operations.xml
   def index

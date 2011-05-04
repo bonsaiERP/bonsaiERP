@@ -2,7 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class ProjectsController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :check_authorization!
   before_filter :set_project, :only => [:show, :edit, :update, :destroy]
   # GET /projects
   # GET /projects.xml

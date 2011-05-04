@@ -2,7 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class SuppliersController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :check_authorization!
   before_filter :find_supplier, :only => [:show, :edit, :update, :destroy]
 
   #respond_to :html, :xml, :json

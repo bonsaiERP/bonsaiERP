@@ -20,8 +20,6 @@
   .box ul.norm li{list-style: none; padding: 4px; }
 
 
-%h1 Bienvenido, aún estamos en desarrollo intensivo! :)
-
 - if current_user.change_default_password?
   %h3= link_to "Le recomendamos crear una nueva contraseña", "/users/password"
 
@@ -67,17 +65,7 @@
 
   %h3.black #{currency_symbol} #{ntc tot}
 
-.box
-  %h2 Ultimo movimiento
+/.box
+/  %h2 Ultimo movimiento
 
 .clear
-%p.dash
-  Te recomendamos:
-  %ol.dash
-    - if Bank.org.size == 0
-      %li= link_to "Crea una cuenta de banco", new_bank_path
-
-    - if Item.org.size == 0
-      %li= link_to "Crea un ítem", new_item_path
-
-    %li= link_to "Crear una venta", new_income_path

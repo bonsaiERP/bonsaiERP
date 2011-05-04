@@ -2,7 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class CashRegistersController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :check_authorization!
   before_filter :set_cash_register, :only => [:show, :edit, :update, :destroy]
   # GET /cash_registers
   # GET /cash_registers.xml

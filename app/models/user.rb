@@ -79,6 +79,8 @@ private
   end
 
   def set_rolname
-    self.rolname = 'admin'
+    unless change_default_password?
+      self.rolname = 'admin'
+    end
   end
 end

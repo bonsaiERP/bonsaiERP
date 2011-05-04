@@ -4,7 +4,7 @@
 class ItemsController < ApplicationController
   respond_to :html, :json, :xml
 
-  before_filter :authenticate_user!
+  before_filter :check_authorization!
   before_filter :set_item, :only => [:show, :edit, :update, :destroy]
 
   # GET /items

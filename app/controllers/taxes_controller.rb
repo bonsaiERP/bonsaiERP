@@ -2,7 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class TaxesController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :check_organisation!
   before_filter :check_organisation
   respond_to :html, :xml, :json, :js
 

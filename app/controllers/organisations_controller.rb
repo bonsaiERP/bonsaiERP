@@ -2,7 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class OrganisationsController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :check_authorization!
   before_filter :destroy_organisation_session!, :except => :select
 
   respond_to :html, :xml, :json
