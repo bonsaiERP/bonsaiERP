@@ -116,7 +116,7 @@ class AccountLedger < ActiveRecord::Base
         end
 
         self.income      = false
-        self.description = "Transferencia a cuenta #{@ac2}#{txt}"
+        self.description = "Transferencia a cuenta #{Account.find(to_account)}#{txt}"
 
         ac2             = AccountLedger.new(self.attributes)
         ac2.account_id  = to_account

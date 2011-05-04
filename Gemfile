@@ -24,7 +24,7 @@ gem 'prawn', '~>0.11.1', :git => 'https://github.com/sandal/prawn.git', :branch 
 #gem 'escape_utils'
 
 group :development do
-  gem "ruby-debug", :platforms => :mri_18
+  #gem "ruby-debug", :platforms => :mri_18
   gem "ruby-debug19", :platforms => :mri_19
 
   gem 'rspec-rails', '~>2.5.0'
