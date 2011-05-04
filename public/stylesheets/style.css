@@ -631,11 +631,11 @@ a.close {
   text-indent: -1000em;
   display: block;
   position: absolute;
-  width: 16px;
-  height: 16px;
+  width: 12px;
+  height: 12px;
   top: 2px;
   right: 6px;
-  background: transparent url(images/close.png) no-repeat;
+  background: transparent url(images/close2.png) no-repeat;
 }
 .search {
   background-color: #f0f0f1;

@@ -26,9 +26,12 @@
 :javascript
   head.ready(function() {
     $('.conciliation form').submit(function() {
-      if(confirm("Conciliar una transacción es una operación irreversible, esta seguro?")) {
-        return true;
-      }else{
+      var conf_text = "Conciliar una transacción es una operación irreversible, esta seguro?";
+      if (#{@account_ledger.account_ledger_id.present?}) {
+        conf_text = "Conciliar esta cuenta tambien conciliara la cuenta relacionada con la transferencia. Desea conciliar?";
+      }
+
+      if(!confirm(conf_text)) {
         return false;
       }
     });

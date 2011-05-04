@@ -13,6 +13,7 @@ class AccountLedger < ActiveRecord::Base
   before_save      :set_currency
   after_save       :update_payment,         :if => :payment?
   after_save       :update_account_balance, :if => :conciliation?
+  before_destroy   :check_destroy_related
   after_destroy    :destroy_payment,        :if => :payment?
 
   # relationships
@@ -21,6 +22,7 @@ class AccountLedger < ActiveRecord::Base
   belongs_to :contact
   belongs_to :currency
   belongs_to :transaction
+  belongs_to :transferer, :class_name => 'AccountLedger', :foreign_key => :account_ledger_id
 
   belongs_to :creator,  :class_name => 'User'
   belongs_to :approver, :class_name => 'User'
@@ -52,6 +54,15 @@ class AccountLedger < ActiveRecord::Base
 
   # Updates the conciliation state
   def conciliate_account
+    if account_ledger_id.present?
+      conciliate_transference
+    else
+      conciliate_account_ledger
+    end
+  end
+
+  # conciliation of account ledger
+  def conciliate_account_ledger
     self.approver_id  = UserSession.current_user.id
     unless income?
       errors.add(:base, "El monto a conciliar es mayor al total en la cuenta") if amount.abs > account.total_amount
@@ -63,6 +74,19 @@ class AccountLedger < ActiveRecord::Base
     else
       false
     end
+  end
+
+  # Conciliation for transference
+  def conciliate_transference
+    saved = true
+    AccountLedger.transaction do
+      saved = false unless self.conciliate_account_ledger
+      if saved
+        saved = transferer.conciliate_account_ledger
+      end
+      raise ActiveRecord::Rollback unless saved
+    end
+    saved
   end
 
   # Returns a scope based on the option
@@ -221,5 +245,14 @@ private
 
   def set_creator_id
     self.creator_id = UserSession.current_user.id
+  end
+
+  # Destroys related for transference or validates if conciliation
+  def check_destroy_related
+    if conciliation?
+      false
+    elsif account_ledger_id.present?
+      transferer.delete.destroyed?
+    end
   end
 end

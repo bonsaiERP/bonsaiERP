@@ -12,9 +12,9 @@ module AccountsHelper
 
   # Creates a link to the transaction if exists
   def link_description(al)
-    if al.transaction_id
+    if al.transaction_id.present?
       link_to al.description, al.transaction
-    elsif al.account_ledger_id
+    elsif al.account_ledger_id.present?
       link_to al.description, "/account_ledgers/#{al.account_ledger_id}"
     else
       al.description
@@ -66,5 +66,14 @@ module AccountsHelper
 
   def link_pendent_ledgers(klass)
     link_to( "Conciliaciones pendientes (#{klass.account_ledgers.pendent.size})", "#{polymorphic_url(klass)}?option=false") if klass.account_ledgers.pendent.any?
+  end
+
+  # Confirmation for acccount_ledger destroy
+  def account_ledger_destroy_confirm_dialog(klass)
+    if klass.account_ledger_id.present?
+      "Borrar esta transacción tambien borrara la transacción relacionada con la transferencia, eta seguro de borrar?"
+    else
+      "Esta seguro de borrar la transacción?"
+    end
   end
 end

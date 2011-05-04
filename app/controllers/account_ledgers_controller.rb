@@ -17,14 +17,15 @@ class AccountLedgersController < ApplicationController
   def new
   end
 
-  # PUT /account_ledgers/:i.more 
+  # PUT /account_ledgers/:id/conciliate 
   def conciliate
     if @account_ledger.conciliate_account
       flash[:notice] = "Se ha conciliado exitosamente la transacción"
     else
       flash[:error] = @account_ledger.errors[:base].join(", ")
     end
-    redirect_to @account_ledger  end
+    redirect_to @account_ledger  
+  end
 
   # POST /account_ledgers
   def create
@@ -58,8 +59,8 @@ class AccountLedgersController < ApplicationController
     @account_ledger     = @account.account_ledgers.build(params[:account_ledger])
 
     if @account_ledger.create_transference
-      flash[:notice] = "Se ha realizado exitosamente la transferencia entre cuentas"
-      redirect_to @account
+      flash[:notice] = "Se ha realizado exitosamente la transferencia entre cuentas, ahora debe conciliarlas para completar la transferencia"
+      redirect_to @account_ledger
     else
       render :action => 'new_transference'
     end

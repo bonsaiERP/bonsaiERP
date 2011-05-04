@@ -10,8 +10,9 @@
 .clear
 
 ._40.fr.r
-  = link_to "Email", new_invoice_email_path(@transaction), :class => 'email ajax', :title => 'Email', 'data-width' => 450
-  &nbsp;&nbsp;
+  - if @transaction.income?
+    = link_to "Email", new_invoice_email_path(@transaction), :class => 'email ajax', :title => 'Email', 'data-width' => 450
+    &nbsp;&nbsp;
   = link_to "Imprimir", invoice_pdf_path(@transaction.id), :class => 'print'
 
 
@@ -40,7 +41,7 @@
 ._50.fr.r
   / FORM to null income
   - if @transaction.draft?
-    = simple_form_for @transaction, :url => "/#{params[:controller]}/#{ @transaction.id }/approve" do |f|
+    = simple_form_for @transaction, :url => "/#{params[:controller]}/#{ @transaction.id }/approve", :html => {:id => 'approve_form'} do |f|
       .submit
         =f.submit "Aprobar", :class => 'dark_green', :id => 'income_approve_button'
   /- elsif not @transaction.paid?
@@ -132,6 +133,11 @@
       }
     }
 
+    $('#approve_form').live('submit', function() {
+      if(!confirm("Esta seguro de aprobar la #{transaction_title(@transaction)} \"#{@transaction}\"")) {
+        return false;
+      }
+    });
 
     // Only when in edition
     if("#{@transaction.state}" == "draft") {
@@ -162,3 +168,4 @@
       });
     }
   });
+

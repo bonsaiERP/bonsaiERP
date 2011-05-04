@@ -60,5 +60,5 @@
         = al.approver if al.approver_id.present?
       %td.cur
         - unless al.conciliation?
-          = link_to "borrar", al, :class => 'delete fl', 'data-remote' => true, :title => 'Borrar'
+          = link_to "borrar", al, :class => 'delete fl', 'data-remote' => true, :title => 'Borrar', 'data-confirm' => account_ledger_destroy_confirm_dialog(al)
 

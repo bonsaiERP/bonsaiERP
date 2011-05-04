@@ -36,7 +36,7 @@ class BuysController < ApplicationController
   # GET /buys/1/edit
   def edit
     if @transaction.state == 'approved'
-      flash[:warning] = "No es posible editar una nota de venta aprobada"
+      flash[:warning] = "No es posible editar una nota de compra aprobada"
       redirect_to @transaction
     end
   end
@@ -48,7 +48,7 @@ class BuysController < ApplicationController
     @transaction = Buy.new(params[:buy])
     respond_to do |format|
       if @transaction.save
-        format.html { redirect_to(@transaction, :notice => 'Se ha creado una proforma de venta.') }
+        format.html { redirect_to(@transaction, :notice => 'Se ha creado una proforma de compra.') }
         format.xml  { render :xml => @transaction, :status => :created, :location => @transaction }
       else
         @transaction.transaction_details.build unless @transaction.transaction_details.any?
@@ -65,7 +65,7 @@ class BuysController < ApplicationController
       redirect_transaction
     else
       if @transaction.update_attributes(params[:buy])
-        redirect_to @transaction, :notice => 'La proforma de venta fue actualizada!.'
+        redirect_to @transaction, :notice => 'La proforma de compra fue actualizada!.'
       else
         @transaction.transaction_details.build unless @transaction.transaction_details.any?
         render :action => "edit"
