@@ -86,8 +86,9 @@ class Transaction
   # with arguments: Ej. [{checked: true, rate: 12.3}]
   # @param String id
   set_taxes_event: (id = @conf.taxes_id)->
-    self = this
-    $(id).find("input:checkbox").live('click', ->
+    self = @
+    #alert(id)
+    $(id).find("input").live('click', ->
       sum = 0
       sum += 1 * $(k).siblings("span").data("rate") for k in $(self.conf.taxes_id).find("input:checkbox:checked")
 

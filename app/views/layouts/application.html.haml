@@ -41,3 +41,26 @@
             .clear
           #foot
 
+:javascript
+  head.ready(function() {
+    if($.browser.msie && $.browser.version < 8) {
+      var menu = ["<li class='more' style='width: 200px'>",
+            "<ul>",
+              '<li><a href="/incomes">Ventas</a></li>',
+              '<li><a href="/buys">Compras</a></li>',
+              '<li><a href="/expenses">Gastos</a></li>',
+              '<li><hr></li>',
+              '<li><a href="/clients">Clientes</a></li>',
+              '<li><a href="/suppliers">Proveedores</a></li>',
+              '<li><hr></li>',
+              '<li><a href="/banks">Cuentas bancarias</a></li>',
+              '<li><a href="/cash_registers">Cuentas caja</a></li>',
+              '<li><hr></li>',
+              '<li><a href="/projects">Proyectos</a></li>',
+              '<li><a href="/taxes">Impuestos</a></li>',
+            '</ul>',
+          "<div class='clear'></div>",
+        '</li>'];
+      $('#main_menu ul.more:first').html(menu.join(''));
+    }
+  })

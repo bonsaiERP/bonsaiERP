@@ -19,3 +19,50 @@
   <%= render :partial => "devise/shared/links" %>
 
 </div>
+
+<script type="text/javascript" id="browser_script_html">
+<style type="text/css">
+  #browser_detection{ clear: both; }
+  #browser_detection a img{ border:none; }
+  #browser_detection .box{
+    width: 230px;
+    float: left;
+    margin: 0px 10px;
+  }
+  .update_msg{ color: red; font-size: 1.2em; font-weight: bold; }
+</style>
+<div id="browser_detection">
+  <div class="update_msg">Advertencia!, esta página web no funciona con el navegador que esta usando, le recomendamos instalar alguno de los navegadores que presentamos</div>
+    <div class="box">
+      <a href="http://www.mozilla.com/es-ES/firefox/" target="_blank">
+      <h3>Firefox</h3>
+      <img src="/images/firefox.png" alt="Firefox" />
+      </a>
+    </div>
+
+
+    <div class="box">
+      <a href="http://www.google.com/chrome/?hl=es" target="_blank">
+      <h3>Google chrome</h3>
+        <img src="/images/chrome.png" alt="Google chrome"/>
+      </a>
+    </div>
+
+    <div class="box">
+      <a href="http://windows.microsoft.com/es-ES/internet-explorer/products/ie/home" target="_blank">
+      <h3>IE 7 o superior</h3>
+        <img src="/images/ie.png" alt="Internet explorer"/>
+      </a>
+    </div>
+</div>
+<div style="clear:both"></div>
+</script>
+
+<script type="text/javascript">
+  head.ready(function() {
+      if($.browser.msie && $.browser.version < 7) {
+        $('form input').attr('disabled', true);
+        $('#cont-in').prepend($('#browser_script_html').html());
+      }
+  })
+</script>

@@ -25,9 +25,9 @@
   = f.input :currency_exchange_rate, :as => :hidden
   .clear
 
-  .input
-    = f.input :discount, :label => 'Descuento (%)', :input_html => {:size => 10, :type => 'decimal'} if transaction.is_a? Income
-    = f.input :bill_number, :label => 'Nº de Factura', :input_html => {:size => 20}
+  /.input
+  /  = f.input :discount, :label => 'Descuento (%)', :input_html => {:size => 10, :type => 'decimal'} if transaction.is_a? Income
+  = f.input :bill_number, :label => 'Nº de Factura', :input_html => {:size => 20}
   =f.association :taxes, :as => :check_boxes, :label => 'Impuestos', :wrapper_html => {:id => 'taxes'}, :collection => Tax.org,
     :label_method => lambda{|tax| "<span data-rate='#{tax.rate}' title =\"#{tax.name}\">#{tax.abbreviation} (#{ntc tax.rate}%)</span>".html_safe }
 
@@ -72,7 +72,13 @@
     
     %tr.extra
       %td{:colspan => 2} <a href="javascript:" id="add_item" class="add">Adicionar ítem</a>
-      %td.cur{:colspan => 2} #{minus_image} Descuento (<span id="discount_percentage" data-val="#{transaction.discount}">#{ntc transaction.discount}</span>%)
+      %td.cur.discount{:colspan => 2} 
+        - if transaction.is_a? Income
+          = f.input :discount, 
+            :label => "#{minus_image} Descuento (<span id=\"discount_percentage\" data-val=\"#{transaction.discount}\">#{ntc transaction.discount}</span>%)".html_safe, 
+            :input_html => {:size => 4, :type => 'decimal'}, :wrapper_html => {:class => 'boolean'}
+            
+        /#{minus_image} Descuento (<span id="discount_percentage" data-val="#{transaction.discount}">#{ntc transaction.discount}</span>%)
       %td#discount_total.r{'data-val' => transaction.total_discount} #{ntc(transaction.total_discount)}
     
     %tr.extra
@@ -154,6 +160,8 @@
     }).live('new_project', function(e, resp) {
       $('#' + type + '_project_id').createSelectOption(resp.id, resp.name);
     });
+
+    //$('#taxes').find("input").live('click', function() {alert('alertado')});
 
     /*
     var source = [{"label":"Bulah Bernier","id":0},{"label":"Sincere Jacobson","id":1},{"label":"Rosie Kovacek","id":2},{"label":"Jalabela Yundt","id":3},{"label":"Logan Raynor","id":4},{"label":"Amelie Grady","id":5},{"label":"Alessandro Kuvalis","id":6},{"label":"Brenda Walter","id":7},{"label":"Cleve Trantow","id":8},{"label":"Assunta Marvin","id":9},{"label":"Nicolas Rath","id":10},{"label":"Toby Dicki","id":11},{"label":"Winifred Hagenes","id":12},{"label":"Oda Lesch","id":13},{"label":"Neha Wintheiser","id":14},{"label":"Allison Cartwright","id":15},{"label":"Otto Little","id":16},{"label":"Claudia Grant","id":17},{"label":"Isaac Konopelski","id":18},{"label":"Gabriel Batz","id":19},{"label":"Elvie Haag","id":20},{"label":"Sofia D'Amore","id":21},{"label":"Cristal Ledner","id":22},{"label":"Brooklyn Koelpin","id":23},{"label":"Jayda Howell","id":24},{"label":"Carroll Langosh","id":25},{"label":"Kallie Breitenberg","id":26}];
