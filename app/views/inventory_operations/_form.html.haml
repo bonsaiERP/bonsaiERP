@@ -3,7 +3,8 @@
     margin: 2px 0px;
   }
 
-= simple_form_for(@inventory_operation) do |f|
+
+= simple_form_for(@inventory_operation, :url => get_inventory_operation_path(@inventory_operation)) do |f|
   = bonsai_form_error(f)
 
   = f.input :operation, :as => :hidden

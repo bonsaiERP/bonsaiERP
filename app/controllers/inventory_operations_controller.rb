@@ -58,6 +58,22 @@ class InventoryOperationsController < ApplicationController
     end
   end
 
+  # GET /inventory_operations/new_sale
+  def new_sale
+    @inventory_operation = InventoryOperation.new(:store_id => params[:store_id], :operation => params[:operation], :transaction_id => params[:transaction_id])
+    @inventory_operation.create_details
+
+    render :action => 'new'
+  end
+
+  def create_sale
+    if @inventory_operation.save
+      redirect_to(@inventory_operation, :notice => 'La operación de inventario fue almacenada correctamente.')
+    else
+      render :action => "new"
+    end
+  end
+
   # PUT /inventory_operations/1
   # PUT /inventory_operations/1.xml
   #def update

@@ -53,6 +53,8 @@ module Authorization
       'cash_registers' => {'index' => false, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false},
       'account_ledgers' => {'index' => false, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false,
                           'new_transference' => false, 'transference' => false, 'conciliate' => false},
+      'inventory_operations' => {'index' => false, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false, 
+                  'select_store' => true, 'new_sale' => true, 'create_sale' => true},
       'incomes' => {'approve' => false},
       'buys' => {'approve' => false},
       'expenses' => {'approve' => false}
@@ -71,7 +73,10 @@ module Authorization
       'expenses' => {'approve' => false},
       'stores' => {'index' => false, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false},
       'inventory_operations' => {'index' => false, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false, 
-                  'select_store' => false}
+                  'select_store' => false, 'new_sale' => false, 'create_sale' => false},
+      'items' => {'index' => true, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false, 'show' => true},
+      'projects' => {'index' => true, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false, 'show' => true},
+
     }
   end
 end

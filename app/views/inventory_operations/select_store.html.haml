@@ -1,9 +1,9 @@
 %h1 Seleccione el almacen 
 %h2.n= link_to @transaction, @transaction
 
-- op = @transaction.type == "Income" ? "out" : "in"
+- op, path = @transaction.type == "Income" ? ["out", new_sale_inventory_operations_path] : ["in", new_inventory_operation_path]
 
-= form_tag new_inventory_operation_path, :method => 'get', :id => 'select_store' do
+= form_tag path, :method => 'get', :id => 'select_store' do
   = hidden_field_tag "transaction_id", @transaction.id
   = hidden_field_tag "operation", op
 

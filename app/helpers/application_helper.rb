@@ -95,4 +95,15 @@ module ApplicationHelper
   def show_if_search
     "display:block" if params[:search] or params[:search_div_id]
   end
+
+  # Gets the path for inventory_operations depending if it's related to a sale
+  # @param InventoryOperation
+  # @return String : path
+  def get_inventory_operation_path(klass)
+    if klass.transaction_id.present? and klass.transaction.type == "Income"
+      create_sale_inventory_operations_path
+    else
+      inventory_operations_path
+    end
+  end
 end

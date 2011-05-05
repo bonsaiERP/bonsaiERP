@@ -6,6 +6,8 @@ Bonsaierp::Application.routes.draw do
     end
 
     get :transactions, :on => :collection
+    get :new_sale, :on => :collection
+    post :create_sale, :on => :collection
   end
 
   resources :account_ledgers do
