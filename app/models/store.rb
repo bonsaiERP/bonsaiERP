@@ -4,6 +4,8 @@
 class Store < ActiveRecord::Base
   acts_as_org
 
+  before_destroy :check_store_for_delete
+
   has_many :stocks, :conditions => {:state => 'active'}
   has_many :inventory_operations
 
@@ -25,4 +27,13 @@ class Store < ActiveRecord::Base
     Hash[ st.includes(:item).map {|st| [st.item_id , h.call(st) ] } ]
   end
 
+private
+  def check_store_for_delete
+    if stocks.any? or inventory_operations.any?
+      self.errors[:base] << "No es posible borrar debido a que tiene operaciones relacionadas"
+      false
+    else
+      true
+    end
+  end
 end

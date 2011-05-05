@@ -4,6 +4,7 @@
 class Organisation < ActiveRecord::Base
   # callbacks
   before_create :set_user
+  before_create :set_due_date
   after_create :create_all_records
   after_create :create_link
   after_create :create_account
@@ -104,5 +105,10 @@ protected
   # Sets the user_id, needed to define the scope of uniquenes_of :name
   def set_user
     write_attribute(:user_id, UserSession.current_user.id)
+  end
+
+  # Sets the expiry date for the organisation until ew payment
+  def set_due_date
+    self.due_date = 30.days.from_now.to_date
   end
 end

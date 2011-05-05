@@ -39,7 +39,7 @@ class UsersController < ApplicationController
     @user.change_default_password = true
     
     if @user.save
-      flash[:notice] = "El usuario #{@user.email} ha sido adicionado"
+      flash[:notice] = "El usuario #{@user} ha sido adicionado"
       redirect_to "/configuration"
     else
       render :action => 'add_user'
@@ -60,6 +60,29 @@ class UsersController < ApplicationController
       redirect_to current_user
     else
       render :action => 'edit'
+    end
+  end
+
+  # Method for the admins that control an organisation
+  # /users/:id/edit_user
+  def edit_user
+    @user = current_user.organisation.links.find_by_user_id(params[:id]).user
+    @user.rolname = @user.link.rol
+    @user.active_link = @user.link.active
+  end
+
+  # Method for the admins that control an organisation
+  # /users/:id/update_user
+  def update_user
+    h = params[:user]
+    h[:rolname] = '' if params[:user][:rolname] == 'admin'
+    @user = current_user.organisation.links.find_by_user_id(params[:id]).user
+    
+    if @user.update_user_role(params[:user])
+      flash[:notice] = "El usuario #{@user} ha sido actualizado"
+      redirect_to "/configuration"
+    else
+      render :action => 'edit_user'
     end
   end
 

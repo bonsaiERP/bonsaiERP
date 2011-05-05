@@ -13,7 +13,7 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable, :confirmable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  attr_accessor :temp_password, :rolname
+  attr_accessor :temp_password, :rolname, :active_link
 
   # Relationships
   has_many :links
@@ -33,8 +33,14 @@ class User < ActiveRecord::Base
     end
   end
 
+  # Returns the link with te organissation one is logged in
   def link
     @link ||= links.find_by_organisation_id(OrganisationSession.organisation_id)
+  end
+
+  # returns the organisation which one is logged in
+  def organisation
+    Organisation.find(OrganisationSession.organisation_id)
   end
 
   def rol
@@ -61,6 +67,11 @@ class User < ActiveRecord::Base
 
     self.password              = temp_password
     self.password_confirmation = temp_password
+  end
+
+  # Updates the priviledges of a user
+  def update_user_role(params)
+    self.link.update_attributes(:rol => params[:rolname], :active => params[:active_link])
   end
 
   # returns translated roles

@@ -2,8 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class TaxesController < ApplicationController
-  before_filter :check_organisation!
-  before_filter :check_organisation
+  before_filter :check_authorization!
   respond_to :html, :xml, :json, :js
 
   # GET /taxes
@@ -66,13 +65,13 @@ class TaxesController < ApplicationController
 
   # DELETE /taxes/1
   # DELETE /taxes/1.xml
-  def destroy
-    @tax = Tax.find(params[:id])
-    @tax.destroy
+  #def destroy
+  #  @tax = Tax.find(params[:id])
+  #  @tax.destroy
 
-    respond_to do |format|
-      format.html { redirect_to(taxes_url) }
-      format.xml  { head :ok }
-    end
-  end
+  #  respond_to do |format|
+  #    format.html { redirect_to(taxes_url) }
+  #    format.xml  { head :ok }
+  #  end
+  #end
 end

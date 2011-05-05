@@ -633,8 +633,8 @@ a.close {
   position: absolute;
   width: 12px;
   height: 12px;
-  top: 2px;
-  right: 6px;
+  top: 4px;
+  right: 4px;
   background: transparent url(images/close2.png) no-repeat;
 }
 .search {
@@ -647,7 +647,7 @@ a.close {
 }
 .search a.close {
   top: 6px;
-  right: 12px;
+  right: 6px;
 }
 .search h3 { margin: 2px 0px; }
 .search label {

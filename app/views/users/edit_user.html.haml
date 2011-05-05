@@ -11,20 +11,24 @@
     width: 300px;
   }
 
-%h1 Adicionar usuario
+%h1 Editar #{@user}
 
 
-= simple_form_for @user, :url => "/users/create_user" do |f|
+= simple_form_for @user, :url => update_user_user_path(@user) do |f|
   = bonsai_form_error(f)
-
-  = f.input :email
-  = f.input :rolname, :collection => User.get_roles.slice(1, 3), :label => 'Rol'
+  
+  .input
+    %label Email
+    = @user.email
+  .input
+    = f.input :rolname, :collection => User.get_roles.slice(1, 3), :label => 'Rol'
+    = f.input :active_link, :as => :radio, :label => 'Activo'
 
   .clear
   = render 'permissions'
 
   .actions
-    = f.submit "Adicionar usuario"
+    = f.submit "Editar usuario"
 
 
 :javascript
@@ -43,3 +47,4 @@
 
     markRolColumn();
   })
+

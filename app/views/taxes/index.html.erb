@@ -1,21 +1,25 @@
-<h1>Impuestos</h1>
+<% content_for :links do %>
+  <div class="links">
+    <%= link_to "Nuevo impuesto", new_taxis_path, :class => 'new' %>
+  </div>
+<% end %>
 
-<%= link_to 'Nuevo impuesto', new_taxis_path, :class => 'new' %>
+<h1>Impuestos</h1>
 
 <table class="decorated">
   <tr>
     <th>Nombre</th>
     <th>Abreviación</th>
     <th>Cantidad</th>
-    <th></th>
+    <!--<th></th>-->
   </tr>
 
 <% @taxes.each do |tax| %>
   <tr>
-    <td><%= link_to tax.name, tax %></td>
+    <td><%= tax.name  %></td>
     <td><%= tax.abbreviation %></td>
     <td><%= tax.rate %> %</td>
-    <td><%= bonsai_links tax %></td>
+    <!--<td><%= link_to tax, edit_taxis_path(tax), :class => 'edit', :title => 'Editar impuesto' %></td>-->
   </tr>
 <% end %>
 </table>

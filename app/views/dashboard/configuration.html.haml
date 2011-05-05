@@ -23,7 +23,7 @@
           %td= link.rol
           %td{:class => link.active.to_s }
           %td
-          /= link_to "Editar", edit_user_user_path(link.user), :class => 'edit', :title => 'Editar usuario'
+            = link_to "editar", edit_user_user_path(link.user), :class => 'edit', :title => 'Editar usuario'
 
   #organisation
 

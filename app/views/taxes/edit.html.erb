@@ -1,6 +1,9 @@
-<h1>Editing tax</h1>
+<% content_for :links do %>
+  <ul class="breadcrumps">
+  	<li><%= link_to "Inpuestos", taxes_path %> &gt;</li>
+  </ul>
+<% end %>
+
+<h1>Editar impuesto</h1>
 
 <%= render 'form' %>
-
-<%= link_to 'Ver', @tax, :class => 'show' %> 
-<%= link_to 'Lista', taxes_path, :class => 'list' %>

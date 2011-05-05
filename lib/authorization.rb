@@ -36,47 +36,40 @@ module Authorization
     end
   end
 
+  #Hashes of priviledges
   def admin_hash
     {}
   end
 
   def gerency_hash
-    {
-      'users' => {'add_user'=> false, 'create_user' => false}
-    }
+    admin_hash.merge(
+      'users' => {'add_user'=> false, 'create_user' => false, 'edit_user' => false, 'update_user' => false},
+      'taxes' => {'index' => false, 'show' => false, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false}
+    )
   end
 
   def inventory_hash
-    {
-      'users' => {'add_user'=> false, 'create_user' => false},
-      'banks' => {'index' => false, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false},
-      'cash_registers' => {'index' => false, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false},
-      'account_ledgers' => {'index' => false, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false,
+    gerency_hash.merge(
+      'banks' => {'index' => false, 'show' => false, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false},
+      'cash_registers' => {'index' => false, 'show' => false, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false},
+      'account_ledgers' => {'index' => false, 'show' => false, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false,
                           'new_transference' => false, 'transference' => false, 'conciliate' => false},
       'inventory_operations' => {'index' => false, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false, 
                   'select_store' => true, 'new_sale' => true, 'create_sale' => true},
       'incomes' => {'approve' => false},
       'buys' => {'approve' => false},
-      'expenses' => {'approve' => false}
-    }
+      'expenses' => {'approve' => false},
+      'projects' => {'index' => true, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false, 'show' => true},
+    )
   end
 
   def sales_hash
-    {
-      'users' => {'add_user'=> false, 'create_user' => false},
-      'banks' => {'index' => false, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false},
-      'cash_registers' => {'index' => false, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false},
-      'account_ledgers' => {'index' => false, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false,
-                          'new_transference' => false, 'transference' => false, 'conciliate' => false},
-      'incomes' => {'approve' => false},
-      'buys' => {'approve' => false},
-      'expenses' => {'approve' => false},
+    inventory_hash.merge(
+      'incomes' => {'approve' => true},
       'stores' => {'index' => false, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false},
       'inventory_operations' => {'index' => false, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false, 
                   'select_store' => false, 'new_sale' => false, 'create_sale' => false},
       'items' => {'index' => true, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false, 'show' => true},
-      'projects' => {'index' => true, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false, 'show' => true},
-
-    }
+    )
   end
 end

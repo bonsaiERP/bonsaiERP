@@ -1,0 +1,68 @@
+%table.decorated#roles
+  %tr
+    %th.first
+    - User.get_roles.each_with_index do |rol, ind|
+      %th{:class => rol.last, 'data-index' => ind + 2 }= rol.first
+  %tr
+    %td.b Puede crear ventas, compras y gastos
+    %td.true
+    %td.true
+    %td.true
+    %td.true
+
+  %tr
+    %td.b Puede aprobar ventas
+    %td.true
+    %td.true
+    %td.false
+    %td.true
+
+  %tr
+    %td.b Puede aprobar compras y gastos
+    %td.true
+    %td.true
+    %td.false
+    %td.false
+
+  %tr
+    %td.b Puede realizar operaciones con cuentas bancarias y caja
+    %td.true
+    %td.true
+    %td.false
+    %td.false
+
+  %tr
+    %td.b Puede crear clientes
+    %td.true
+    %td.true
+    %td.true
+    %td.true
+
+  %tr
+    %td.b Puede crear items, clientes, proovedores y proyectos
+    %td.true
+    %td.true
+    %td.false
+    %td.false
+
+  %tr
+    %td.b Puede ingresar/egresar inventarios
+    %td.true
+    %td.true
+    %td.true
+    %td.false
+
+  %tr
+    %td.b Puede ver estados financieros
+    %td.true
+    %td.true
+    %td.false
+    %td.false
+
+  %tr
+    %td.b Puede adicionar usuarios
+    %td.true
+    %td.false
+    %td.false
+    %td.false
+
