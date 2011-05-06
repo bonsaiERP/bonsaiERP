@@ -10,8 +10,8 @@ class Stock < ActiveRecord::Base
   belongs_to :item
 
 
-  scope :active, where(:state => 'active')
-
+  default_scope where(:state => 'active')
+  #scope :active, where(:state => 'active')
 
   delegate :name, :price, :code, :to_s, :type, :to => :item, :prefix => true
 end

@@ -25,10 +25,10 @@
   %tr
     %th Código
     %th.300 Nombre
-    %th Costo<br/>Unitario
     %th Precio<br/>de Venta
     %th Tipo
     %th Unidad
+    %th Inventario<br/>Total
     %th Activo
     %th
 
@@ -36,10 +36,12 @@
     %tr
       %td= link_to item.code, item, :class => 'b'
       %td= item.name
-      %td.r= ntc( item.unitary_cost )
       %td.r= ntc( item.price )
       %td= item.get_type
       %td= item.unit.name 
+      %td.r= ntc item.total_stock
       %td.c <span class="#{item.active}"></span>
       %td= bonsai_links(item)
 
+:javascript
+  head.ready(function() { $('#search_items').show() });

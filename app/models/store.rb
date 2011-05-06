@@ -6,7 +6,7 @@ class Store < ActiveRecord::Base
 
   before_destroy :check_store_for_delete
 
-  has_many :stocks, :conditions => {:state => 'active'}
+  has_many :stocks#, :conditions => {:state => 'active'}
   has_many :inventory_operations
 
   validates_presence_of :name, :address

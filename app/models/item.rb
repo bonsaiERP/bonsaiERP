@@ -15,6 +15,7 @@ class Item < ActiveRecord::Base
   # relationships
   belongs_to :unit
   has_many :prices
+  has_many :stocks
   has_many :transaction_details
 
   # belongs_to :itemable, :polymorphic => true
@@ -98,13 +99,18 @@ class Item < ActiveRecord::Base
   end
 
   def self.search(params)
-    self.org.includes(:unit).where("items.name LIKE :search OR items.code LIKE :search", :search => "%#{params[:search]}%")
+    self.org.includes(:unit, :stocks).where("items.name LIKE :search OR items.code LIKE :search", :search => "%#{params[:search]}%")
   end
 
   # creates an array with values  [quantity, percentage]
   def discount_values
     return [] if self.discount.blank?
     self.discount.squish.split(" ").map { |v| v.split(":").map(&:to_f) }
+  end
+
+  # Sums the stocks of a item
+  def total_stock
+    stocks.inject(0) {|sum,st| sum += st.quantity }
   end
 
 private

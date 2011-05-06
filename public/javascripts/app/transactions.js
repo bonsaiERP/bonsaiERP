@@ -73,14 +73,25 @@
       var self;
       self = this;
       return $('#edit_rate_link').live("click", function() {
-        var rate;
-        rate = prompt("Tipo de cambio", $(self.conf.currency_exchange_rate_id).val()) * 1;
-        if (rate > 0) {
-          $(self.conf.currency_exchange_rate_id).val(rate.toFixed(4));
-          self.exchange_rate = rate;
-          $('body').trigger('total');
-          return self.set_exchange_rate_html();
-        }
+        var val;
+        val = $(self.conf.currency_exchange_rate_id).val() * 1;
+        return $('<div/>').addClass('ajax-modal').html("<div class=\"boolean\"><label>Tipo de cambio:</label> <input type=\"text\" value=\"" + (val.toFixed(4)) + "\"/>").dialog({
+          modal: true,
+          buttons: {
+            'Aceptar': function() {
+              var rate;
+              rate = $(this).find('input').val() * 1;
+              $(self.conf.currency_exchange_rate_id).val(rate.toFixed(4));
+              self.exchange_rate = rate;
+              $('body').trigger('total');
+              self.set_exchange_rate_html();
+              return $(this).dialog("close");
+            },
+            'Cancelar': function() {
+              return $(this).dialog("close");
+            }
+          }
+        });
       });
     };
     Transaction.prototype.set_discount_event = function() {
