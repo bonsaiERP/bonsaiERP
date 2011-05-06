@@ -33,7 +33,7 @@
 
   .clear
 
-  = f.input :description, :label => 'Descripción', :as => :text, :input_html => {:rows => 4, :cols => 40}
+  = f.input :description, :label => 'Descripción', :as => :text, :input_html => {:rows => 3, :cols => 40}
   .clear
 
   %h2.dark#items_header Items
@@ -76,7 +76,7 @@
         - if transaction.is_a? Income
           = f.input :discount, 
             :label => "#{minus_image} Descuento (<span id=\"discount_percentage\" data-val=\"#{transaction.discount}\">#{ntc transaction.discount}</span>%)".html_safe, 
-            :input_html => {:size => 4, :type => 'decimal'}, :wrapper_html => {:class => 'boolean'}
+            :input_html => {:size => 4, :type => 'decimal'}, :wrapper_html => {:class => 'boolean _100'}
             
         /#{minus_image} Descuento (<span id="discount_percentage" data-val="#{transaction.discount}">#{ntc transaction.discount}</span>%)
       %td#discount_total.r{'data-val' => transaction.total_discount} #{ntc(transaction.total_discount)}
@@ -160,6 +160,11 @@
     }).live('new_project', function(e, resp) {
       $('#' + type + '_project_id').createSelectOption(resp.id, resp.name);
     });
+    
+    // Fi for IE
+    //if($.browser.msie) {
+    //  $('#taxes input').click(function() { $(this).trigger("click"); });
+    //}
 
     //$('#taxes').find("input").live('click', function() {alert('alertado')});
 

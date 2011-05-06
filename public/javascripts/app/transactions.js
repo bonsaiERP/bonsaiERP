@@ -99,7 +99,7 @@
         id = this.conf.taxes_id;
       }
       self = this;
-      return $(id).find("input").live('click', function() {
+      return $(id).find("input").click(function() {
         var k, sum, _i, _len, _ref;
         sum = 0;
         _ref = $(self.conf.taxes_id).find("input:checkbox:checked");
