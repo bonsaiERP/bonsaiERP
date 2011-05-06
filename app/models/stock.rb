@@ -14,4 +14,6 @@ class Stock < ActiveRecord::Base
   #scope :active, where(:state => 'active')
 
   delegate :name, :price, :code, :to_s, :type, :to => :item, :prefix => true
+
+
 end

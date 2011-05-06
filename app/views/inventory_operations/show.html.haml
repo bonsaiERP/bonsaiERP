@@ -29,13 +29,13 @@
   %tr
     %th Item
     %th Cantidad
-    - if @inventory_operation.operation == "in"
-      %th Costo<br/>unitario 
-    %th
-
-  - @inventory_operation.inventory_operation_details.each do |det|
+    %th Unidad
+    %th Inventario
+  
+  - items_hash = @inventory_operation.get_hash_of_items
+  - @inventory_operation.inventory_operation_details.includes(:item => :unit).each do |det|
     %tr.item
       %td= det.item
       %td.cur= ntc det.quantity
-      - if @inventory_operation.operation == "in"
-        %td.cur= ntc det.unitary_cost
+      %td= det.item.unit
+      %td.cur= ntc items_hash[det.item_id][:quantity]

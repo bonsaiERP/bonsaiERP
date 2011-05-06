@@ -55,6 +55,11 @@ class InventoryOperation < ActiveRecord::Base
     end
   end
 
+  # Returns the hash of items
+  def get_hash_of_items
+    self.store.get_hash_of_items(:item_id => inventory_operation_details.map(&:item_id))
+  end
+
   private
 
   # sets the stock for items and set the total amount for the operation

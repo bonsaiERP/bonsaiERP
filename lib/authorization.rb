@@ -7,11 +7,13 @@ module Authorization
   protected
   # general method to check authorization
   def check_authorization!
-    if current_user and session[:user][:rol]
+    if current_user and session[:user] and session[:user][:rol]
       unless check_user_by_rol(session[:user][:rol], params[:controller], params[:action])
         flash[:warning] = "Usted no tiene permitida esta acción"
         redirect_to current_user
       end
+    elsif current_user.link.nil?
+      true
     else
       redirect_to "/users/sign_in"
     end
