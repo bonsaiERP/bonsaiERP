@@ -11,6 +11,9 @@ class Store < ActiveRecord::Base
 
   validates_presence_of :name, :address
 
+  # scopes
+  scope :active, where(:active => true)
+
   def to_s
     name
   end
