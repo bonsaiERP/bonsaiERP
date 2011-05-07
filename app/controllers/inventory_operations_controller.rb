@@ -30,6 +30,7 @@ class InventoryOperationsController < ApplicationController
   def new
     @inventory_operation = InventoryOperation.new(:store_id => params[:store_id], :operation => params[:operation], :transaction_id => params[:transaction_id])
     @inventory_operation.create_details
+    @inventory_operation.create_ref_number
 
     respond_to do |format|
       format.html # new.html.erb
@@ -62,6 +63,7 @@ class InventoryOperationsController < ApplicationController
   def new_sale
     @inventory_operation = InventoryOperation.new(:store_id => params[:store_id], :operation => params[:operation], :transaction_id => params[:transaction_id])
     @inventory_operation.create_details
+    @inventory_operation.create_ref_number
 
     render :action => 'new'
   end

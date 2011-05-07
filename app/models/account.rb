@@ -50,13 +50,14 @@ class Account < ActiveRecord::Base
   def create_account_ledger
     val = amount
     val = val.to_f
+    ac = bank? ? "banco" : "caja"
 
     if val > 0
       bl = self.account_ledgers.build(:amount => amount, :date => Date.today, 
                                       :currency_id => currency_id,
                                       :income => true,
                                       :reference => 'NE',
-                                      :description => 'Primer ingreso por creación de banco')
+                                      :description => "Primer ingreso por creación de cuenta #{ac}")
     end
   end
 end

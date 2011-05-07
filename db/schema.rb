@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110505164027) do
+ActiveRecord::Schema.define(:version => 20110507141251) do
 
   create_table "account_ledgers", :force => true do |t|
     t.integer  "organisation_id"
@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(:version => 20110505164027) do
     t.integer  "creator_id"
     t.integer  "approver_id"
     t.integer  "account_ledger_id"
+    t.boolean  "pay_account",                                                     :default => false
   end
 
   add_index "account_ledgers", ["account_id"], :name => "index_account_ledgers_on_account_id"
@@ -39,6 +40,7 @@ ActiveRecord::Schema.define(:version => 20110505164027) do
   add_index "account_ledgers", ["date"], :name => "index_account_ledgers_on_date"
   add_index "account_ledgers", ["income"], :name => "index_account_ledgers_on_income"
   add_index "account_ledgers", ["organisation_id"], :name => "index_account_ledgers_on_organisation_id"
+  add_index "account_ledgers", ["pay_account"], :name => "index_account_ledgers_on_pay_account"
   add_index "account_ledgers", ["payment_id"], :name => "index_account_ledgers_on_payment_id"
   add_index "account_ledgers", ["reference"], :name => "index_account_ledgers_on_reference"
   add_index "account_ledgers", ["transaction_id"], :name => "index_account_ledgers_on_transaction_id"
@@ -399,7 +401,7 @@ ActiveRecord::Schema.define(:version => 20110505164027) do
     t.string   "ref_number"
     t.string   "bill_number"
     t.integer  "currency_id"
-    t.decimal  "currency_exchange_rate",               :precision => 14, :scale => 4
+    t.decimal  "currency_exchange_rate",               :precision => 14, :scale => 6
     t.integer  "organisation_id"
     t.datetime "created_at"
     t.datetime "updated_at"

@@ -35,10 +35,10 @@ class BuysController < ApplicationController
 
   # GET /buys/1/edit
   def edit
-    if @transaction.state == 'approved'
-      flash[:warning] = "No es posible editar una nota de compra aprobada"
-      redirect_to @transaction
-    end
+    #if @transaction.state == 'approved'
+    #  flash[:warning] = "No es posible editar una nota de compra aprobada"
+    #  redirect_to @transaction
+    #end
   end
 
 
