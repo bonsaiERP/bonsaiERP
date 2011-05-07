@@ -67,6 +67,8 @@ class InventoryOperationsController < ApplicationController
   end
 
   def create_sale
+    @inventory_operation = InventoryOperation.new(params[:inventory_operation])
+
     if @inventory_operation.save
       redirect_to(@inventory_operation, :notice => 'La operación de inventario fue almacenada correctamente.')
     else
