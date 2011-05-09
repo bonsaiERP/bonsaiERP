@@ -8,7 +8,7 @@ class PayPlansController < ApplicationController
   # GET /pay_plans.xml
   def index
     method = params[:option] == "out" ? :out : :in
-    @pay_plans = PayPlan.org.unpaid.send(method).includes(:currency, :transaction).page(@page)
+    @pay_plans = PayPlan.org.unpaid.send(method).includes([:currency, :transaction => :contact]).page(@page)
 
     respond_to do |format|
       format.html # index.html.erb

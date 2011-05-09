@@ -11,6 +11,15 @@ class CashRegister < Account
     "#{name} ( #{currency_name.pluralize} )"
   end
 
+  def bank?
+    false
+  end
+
+  # to identify STI
+  def cash_register?
+    true
+  end
+
 private
   def set_defaults
     self.total_amount ||= 0.0

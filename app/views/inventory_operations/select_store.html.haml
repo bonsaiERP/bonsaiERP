@@ -9,7 +9,7 @@
 
 
   %label Almacen
-  = select_tag "store_id", options_from_collection_for_select(Store.org, :id, :name), :include_blank => true, 
+  = select_tag "store_id", options_from_collection_for_select(Store.org.active, :id, :name), :include_blank => true, 
     'data-new_url' => new_store_path, 'data-trigger' => 'new_store', 'data-title' => 'Nuevo almacen'
   .submit
     =submit_tag "Seleccionar almacen"

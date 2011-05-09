@@ -30,6 +30,7 @@ class InventoryOperationsController < ApplicationController
   def new
     @inventory_operation = InventoryOperation.new(:store_id => params[:store_id], :operation => params[:operation], :transaction_id => params[:transaction_id])
     @inventory_operation.create_details
+    @inventory_operation.create_ref_number
 
     respond_to do |format|
       format.html # new.html.erb
@@ -42,6 +43,7 @@ class InventoryOperationsController < ApplicationController
     @inventory_operation = InventoryOperation.find(params[:id])
   end
 
+  # TODO: Iprove security
   # POST /inventory_operations
   # POST /inventory_operations.xml
   def create
@@ -60,13 +62,20 @@ class InventoryOperationsController < ApplicationController
 
   # GET /inventory_operations/new_sale
   def new_sale
-    @inventory_operation = InventoryOperation.new(:store_id => params[:store_id], :operation => params[:operation], :transaction_id => params[:transaction_id])
+    @inventory_operation = InventoryOperation.new(:store_id => params[:store_id], :operation => params[:operation], 
+                                                  :transaction_id => session[:inventory_operation_transaction_id])
     @inventory_operation.create_details
+    @inventory_operation.create_ref_number
 
     render :action => 'new'
   end
 
+  # /inventory_operations/create_sale
   def create_sale
+    h = params[:inventory_operation]
+    h.merge(:transaction_id => session[:inventory_operation_transaction_id])
+    @inventory_operation = InventoryOperation.new(h)
+
     if @inventory_operation.save
       redirect_to(@inventory_operation, :notice => 'La operación de inventario fue almacenada correctamente.')
     else
@@ -106,6 +115,7 @@ class InventoryOperationsController < ApplicationController
   # Selects a store for in out of a transaction
   def select_store
     @transaction = Transaction.org.find(params[:id])
+    session[:inventory_operation_transaction_id] = @transaction.id
   end
 
   # Presents the transactions tha are IN/OUT

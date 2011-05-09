@@ -7,7 +7,7 @@ class AccountLedger < ActiveRecord::Base
   include ActionView::Helpers::NumberHelper
 
   # callbacks
-  after_initialize :set_defaults
+  #after_initialize :set_defaults
   before_save      :set_income              
   before_save      :set_creator_id
   before_save      :set_currency
@@ -189,10 +189,10 @@ private
     end
   end
 
-  def set_defaults
-    self.date ||= Date.today
-    self.conciliation = self.conciliation.nil? ? false : conciliation
-  end
+  #def set_defaults
+  #  self.date ||= Date.today
+  #  self.conciliation = self.conciliation.nil? ? false : conciliation
+  #end
 
   def payment?
     payment_id.present? and conciliation?

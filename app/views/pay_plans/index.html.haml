@@ -16,6 +16,7 @@
       %th Cantidad
       %th Intereses<br/>Penalidades
       %th Relacionado con
+      %th Cliente/Proveedor
       %th Estado
       - if params[:option] == "out"
         %th{:title => 'Envia un email de alerta automaticamente al contacto'} Email de<br/>alerta
@@ -27,6 +28,7 @@
         %td.cur.amount #{pay_plan.currency_symbol} #{ntc pay_plan.amount}
         %td.cur #{pay_plan.currency_symbol} #{ntc pay_plan.interests_penalties}
         %td= link_to pay_plan.transaction, pay_plan.transaction
+        %td= link_to pay_plan.transaction.try(:contact), pay_plan.transaction.try(:contact)
         %td.state= pay_plan_state pay_plan.state
         - if params[:option] == "out"
           %td{:class => pay_plan.email.to_s}

@@ -33,7 +33,7 @@ class AccountLedgersController < ApplicationController
 
     if @account_ledger.save
       flash[:notice] = "Se ha creado exitosamente la transacción"
-      redirect_to @account_ledger.account
+      redirect_to @account_ledger
     else
       render :action => 'new'
     end
@@ -69,7 +69,7 @@ class AccountLedgersController < ApplicationController
 
 private
   def set_account_ledger
-    @account_ledger = params[:id].present? ? AccountLedger.org.find(params[:id]) : AccountLedger.new(:account_id => params[:account_id], :income => params[:income])
+    @account_ledger = params[:id].present? ? AccountLedger.org.find(params[:id]) : AccountLedger.new(:account_id => params[:account_id], :income => params[:income], :date => Date.today)
   end
 
 end

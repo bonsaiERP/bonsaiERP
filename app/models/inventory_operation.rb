@@ -21,7 +21,6 @@ class InventoryOperation < ActiveRecord::Base
 
   validates_presence_of :ref_number, :date, :contact_id, :store_id
 
-
   def get_contact_list
     if operation == "in"
       Supplier.org
@@ -58,6 +57,18 @@ class InventoryOperation < ActiveRecord::Base
   # Returns the hash of items
   def get_hash_of_items
     self.store.get_hash_of_items(:item_id => inventory_operation_details.map(&:item_id))
+  end
+
+  # Creates the ref number depending of the options
+  def create_ref_number
+    if transaction_id.present?
+      seq = InventoryOperation.where(:transaction_id => transaction_id).size + 1
+      self.ref_number = "#{transaction.ref_number}-#{"%02d" % seq}"
+    else
+      seq = operation == "in" ? "ING-" : "EGR-"
+      seq << "%04d" % (store.inventory_operations.size + 1)
+      self.ref_number = seq
+    end
   end
 
   private
