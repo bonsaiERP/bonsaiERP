@@ -1,4 +1,4 @@
-%tr.payment{ :id => payment.id, :class => "p_#{payment.state}" }
+%tr.payment{ :id => payment.id, :class => "p_#{payment.state} #{payment.active.to_s}"}
   %td= lo(payment.date)
   %td.account= link_to payment.account, payment.account_ledger
   %td.r.amount{'data-val' => payment.amount} #{ntc payment.amount}

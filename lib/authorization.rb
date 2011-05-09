@@ -12,7 +12,7 @@ module Authorization
         flash[:warning] = "Usted no tiene permitida esta acción"
         redirect_to current_user
       end
-    elsif current_user.link.nil?
+    elsif current_user and current_user.link.nil?
       true
     else
       redirect_to "/users/sign_in"

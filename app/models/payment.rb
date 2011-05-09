@@ -171,7 +171,6 @@ private
       @updated_pay_plan_ids << pp.id
 
       if amount_to_pay < 0
-        puts "#{amount_to_pay} ::: #{interest_to_pay}"
         @pay_plan = create_pay_plan(-amount_to_pay, -interest_to_pay, pp.payment_date, pp.alert_date) if amount_to_pay < 0 or interest_to_pay < 0
         break
       elsif amount_to_pay == 0 and interest_to_pay < 0

@@ -3,6 +3,6 @@
     %li
       %a{ :href => "/configuration", :class => "cog" } Configuración
   %li
-    %a{ :href => "#{ user_path(current_user) }", :class => "user"}= current_user
+    %a.limit{ :href => "#{ user_path(current_user) }", :class => "user"}= current_user
   %li
     %a{ :href =>"/users/sign_out", :class => "logout"} Salir

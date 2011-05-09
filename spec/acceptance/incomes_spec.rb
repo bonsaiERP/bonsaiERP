@@ -51,6 +51,7 @@ feature "Income", "test features" do
 
     i = Income.find(i.id)
     i.pay_plans.unpaid.size.should == 2
+    i.pay_plans.map(&:operation).uniq.should == ["in"]
     i.balance.should == i.pay_plans_total
 
     i.approve!
@@ -174,15 +175,17 @@ feature "Income", "test features" do
     i.payments.size.should == 1
 
     pid = p.id
-    ac_id = p.account_ledger.account_id
-    ac_amount = p.account_ledger.account.total_amount
+    al = p.account_ledger
+    #ac_id = p.account_ledger.account_id
+    #ac_amount = p.account_ledger.account.total_amount
 
-    p.account_ledger.destroy
+    al.destroy
+    puts al.errors
+    al.destroyed?.should == true
     #puts ac_amount
     #puts Account.find(ac_id).total_amount
 
-
-    i = Income.find(i.id)
+    i.reload
     i.payments.size.should == 0
   end
 

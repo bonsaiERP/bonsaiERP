@@ -27,8 +27,9 @@
   /.input
   /  = f.input :discount, :label => 'Descuento (%)', :input_html => {:size => 10, :type => 'decimal'} if transaction.is_a? Income
   = f.input :bill_number, :label => 'Nº de Factura', :input_html => {:size => 20}
-  =f.association :taxes, :as => :check_boxes, :label => 'Impuestos', :wrapper_html => {:id => 'taxes'}, :collection => Tax.org,
-    :label_method => lambda{|tax| "<span data-rate='#{tax.rate}' title =\"#{tax.name}\">#{tax.abbreviation} (#{ntc tax.rate}%)</span>".html_safe }
+  - if transaction.income?
+    =f.association :taxes, :as => :check_boxes, :label => 'Impuestos', :wrapper_html => {:id => 'taxes'}, :collection => Tax.org,
+      :label_method => lambda{|tax| "<span data-rate='#{tax.rate}' title =\"#{tax.name}\">#{tax.abbreviation} (#{ntc tax.rate}%)</span>".html_safe }
 
   .clear
 

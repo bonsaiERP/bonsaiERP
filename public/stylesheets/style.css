@@ -166,10 +166,11 @@ table.nwf td:first-child { white-space: nowrap; }
   width: 50%;
   float: left;
   color: #ffffff;
-  margin: 15px;
+  margin: 7px 0px 0px;
   overflow: hidden;
-  height: 30px;
+  height: 45px;
   vertical-align: top;
+  max-width: 400px;
 }
 #header ul {
   position: absolute;
@@ -194,6 +195,11 @@ table.nwf td:first-child { white-space: nowrap; }
   padding: 7px 10px 7px 20px;
   color: #ffe374;
   text-decoration: none;
+}
+#header ul li a.limit {
+  height: 10px;
+  overflow: hidden;
+  max-width: 250px;
 }
 #header ul li a:hover { text-decoration: underline; }
 #header ul li.left {
