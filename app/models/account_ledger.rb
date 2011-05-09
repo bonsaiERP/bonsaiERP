@@ -15,7 +15,7 @@ class AccountLedger < ActiveRecord::Base
   after_save        :update_payment,         :if => :payment?
   after_save        :update_account_balance, :if => :conciliation?
   before_destroy    :check_destroy_related,  :unless => 'payment_id.present?'
-  before_destroy   :destroy_payment,        :if => :payment?
+  before_destroy    :destroy_payment,        :if => :payment?
 
   # relationships
   belongs_to :account
@@ -212,11 +212,10 @@ private
     self.currency_id = account.currency_id if account_id.present?
   end
 
-  # Updates the payment state, without triggering any callbacks
+  # Updates the payment state, without validation
   def update_payment
-    if conciliation == true and payment.present? and not(payment_state == 'paid')
+    if conciliation? and payment.present? and not(payment_state == 'paid')
       payment.state = 'paid'
-      payment.set_updated_account_ledger(true)
       payment.save(:validate => false)
     end
   end

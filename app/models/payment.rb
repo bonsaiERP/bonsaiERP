@@ -28,7 +28,6 @@ class Payment < ActiveRecord::Base
 
   # update_pay_plan must run before update_transaction
   after_create   :create_account_ledger
-  after_destroy  :destroy_account_ledger
   #after_destroy  :update_transaction
 
   # relationships
@@ -137,15 +136,19 @@ private
     self.exchange_rate = 0.0 if exchange_rate.blank?
   end
 
+  # Destroys the account_ledger or creates a new one if it has been conciliated and creates
+  # a pay_plan if required
   def destroy_and_create_pay_plan
     d = Date.today
     if paid?
       Payment.transaction do
-        puts "trans"
-        create_pay_plan(amount, interests_penalties, d, d - 5.days)
+        raise ActiveRecord::Rollback unless destroy_account_ledger
+        raise ActiveRecord::Rollback unless create_pay_plan(amount, interests_penalties, d, d - 5.days)
         self.active = false
         raise ActiveRecord::Rollback unless transaction.substract_payment(amount)
+        self.save
       end
+
       false
     else
       account_ledger.delete.destroyed?
@@ -168,6 +171,7 @@ private
     amount_to_pay         = amount
     interest_to_pay       = interests_penalties
     @updated_pay_plan_ids = []
+    saved = true
 
     transaction.pay_plans.unpaid.each_with_index do |pp, i|
 
@@ -179,6 +183,7 @@ private
 
       if amount_to_pay < 0
         @pay_plan = create_pay_plan(-amount_to_pay, -interest_to_pay, pp.payment_date, pp.alert_date) if amount_to_pay < 0 or interest_to_pay < 0
+        saved = @pay_plan.persisted?
         break
       elsif amount_to_pay == 0 and interest_to_pay < 0
         # Update the interests for the next pay_plan
@@ -188,13 +193,15 @@ private
           ppn.save
         else
           errors[:base] << "Existe un saldo en intereses pendiente, revise sus créditos"
-          false
+          saved = false
         end
         break
       elsif amount_to_pay == 0
         break
       end
     end
+
+    saved
   end
 
   # Creates a new pay_plan
@@ -203,7 +210,7 @@ private
   # @param PayPlan pp
   def create_pay_plan(amt, int_pen, pp_pdate, pp_adate)
     int_pen = int_pen < 0 ? -1 * int_pen : 0
-    pp = PayPlan.create!( :transaction_id => transaction_id, :amount => amt, :interests_penalties => int_pen,
+    pp = PayPlan.create( :transaction_id => transaction_id, :amount => amt, :interests_penalties => int_pen,
                         :payment_date => pp_pdate,  :alert_date => pp_adate )
   end
 
@@ -222,7 +229,7 @@ private
 
   # Creates an account ledger for the account and payment
   # indicates the record has been destroyed
-  def create_account_ledger(destroy = false)
+  def create_account_ledger(dest = false)
     tot = total_amount_currency
     if transaction.type == "Income"
       income = true
@@ -230,11 +237,9 @@ private
       income = false
     end
 
-    if destroy
-      income = not(income)
-    end
+    income = not(income) if dest
 
-    create_account_ledger_record(tot, income, get_conciliation, id)
+    al = create_account_ledger_record(tot, income, get_conciliation, id)
   end
 
   # Destorys the account ledger in case it is not conciliated
@@ -242,9 +247,11 @@ private
   def destroy_account_ledger
     if account_ledger.present?
       unless account_ledger.conciliation?
-        account_ledger.destroy 
+        account_ledger.delete.destroyed?
       else
-        create_account_ledger(true)
+        al = create_account_ledger(true)
+        self.deleted_account_ledger_id = al.id
+        al.persisted?
       end
     end
   end

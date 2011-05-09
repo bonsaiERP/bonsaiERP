@@ -359,8 +359,10 @@ feature "Income", "test features" do
     p.amount.should == 20
 
     p.save.should == true
+    p.state.should == 'paid'
     p.account_ledger.currency_id.should == 2
     p.account_ledger.amount.should == 20
+    p.account_ledger.conciliation.should == true
 
     i.reload
 
@@ -369,13 +371,19 @@ feature "Income", "test features" do
     i.payment_date.should == i.pay_plans[1].payment_date
 
     # DELETE Payment
+    puts i.pay_plans.size
     puts "--------------------------------"
     p.destroy
     i.reload
+    puts ":::::::::::::::::::::"
+    puts i.pay_plans.size
+    puts i.balance
 
     i.balance.should == balance
     i.pay_plans_total.should == i.balance
     i.payment_date.should == i.pay_plans.unpaid.first.payment_date
+
+    p.deleted_account_ledger_id.is_a?(Integer).should == true
 
     #i.payment_date.should == i.pay_plans[0].payment_date
 
