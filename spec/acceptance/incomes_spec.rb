@@ -371,13 +371,8 @@ feature "Income", "test features" do
     i.payment_date.should == i.pay_plans[1].payment_date
 
     # DELETE Payment
-    puts i.pay_plans.size
-    puts "--------------------------------"
-    p.destroy
+    p.destroy_payment
     i.reload
-    puts ":::::::::::::::::::::"
-    puts i.pay_plans.size
-    puts i.balance
 
     i.balance.should == balance
     i.pay_plans_total.should == i.balance
@@ -414,7 +409,7 @@ feature "Income", "test features" do
 
     # DELETE to change state of transaction
     account = p.account_ledger.account
-    p.destroy
+    p.destroy_payment
     p.account_ledger.destroyed?.should == not(p.account_ledger.conciliation)
 
     p.account_ledger.id.should_not == p.account_ledger_created.id
@@ -447,7 +442,6 @@ feature "Income", "test features" do
     
     # We must destroy the pay_plan to make it work
     pp = i.new_pay_plan(:amount => 20, :payment_date => d, :repeat => true)
-    #pp.destroy
     pp = i.create_pay_plan(pay_plan_params(:amount => 20, :payment_date => d, :repeat => true) )
 
     i = Income.find(i.id)
@@ -464,21 +458,22 @@ feature "Income", "test features" do
     i.pay_plans_total.should == i.balance
     i.balance.should == balance - 30
 
+    # Second payment
     p = i.new_payment(:amount => 20, :reference => 'NA', :account_id => 1, :date => Date.today)
 
     p.save.should == true
     p.account_ledger.account.class.should == Bank
 
-    i = Income.find(i.id)
+    i.reload
     i.balance.should == balance - 50
     bal = i.balance
 
     # Destroy a payment and check that the account_ledger is deleted because it's not conciliated
     al_id = p.account_ledger.id
-    p.destroy
-    i = Income.find(i.id)
+    p.destroy_payment
+    i.reload
 
-    #AccountLedger.where(:id => al_id).size.should == 0
+    AccountLedger.where(:id => al_id).size.should == 0
     i.balance.should == balance - 30
   end
 

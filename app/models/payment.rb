@@ -23,12 +23,11 @@ class Payment < ActiveRecord::Base
   before_create     :update_pay_plan
   before_create     :update_transaction_balance
   before_validation :set_exchange_rate
-  before_save       :set_state,         :if => 'state.blank?'
-  before_destroy    :destroy_and_create_pay_plan
+  before_save       :set_state,                  :if => 'state.blank?'
+  #before_destroy    :destroy_and_create_pay_plan
 
   # update_pay_plan must run before update_transaction
   after_create   :create_account_ledger
-  #after_destroy  :update_transaction
 
   # relationships
   belongs_to :transaction
@@ -122,6 +121,27 @@ class Payment < ActiveRecord::Base
     @updated_account_ledger = value
   end
 
+  # Destroys the account_ledger or creates a new one if it has been conciliated and creates
+  # a pay_plan if required
+  def destroy_payment
+    d = Date.today
+    if paid?
+      Payment.transaction do
+        raise ActiveRecord::Rollback unless destroy_account_ledger
+        raise ActiveRecord::Rollback unless @pay_plan = create_pay_plan(amount, interests_penalties, d, d - 5.days)
+        raise ActiveRecord::Rollback unless transaction.substract_payment(amount)
+        self.active = false
+        raise ActiveRecord::Rollback unless self.save
+      end
+    else
+      Payment.transaction do
+        raise ActiveRecord::Rollback unless account_ledger.delete.destroyed?
+        raise ActiveRecord::Rollback unless transaction.substract_payment(amount)
+        raise ActiveRecord::Rollback unless self.update_attributes(:active => false)
+      end
+    end
+  end
+
 private
 
   def updated_account_ledger?
@@ -134,25 +154,6 @@ private
     self.active                = true
     self.currency_id           = transaction.currency_id
     self.exchange_rate = 0.0 if exchange_rate.blank?
-  end
-
-  # Destroys the account_ledger or creates a new one if it has been conciliated and creates
-  # a pay_plan if required
-  def destroy_and_create_pay_plan
-    d = Date.today
-    if paid?
-      Payment.transaction do
-        raise ActiveRecord::Rollback unless destroy_account_ledger
-        raise ActiveRecord::Rollback unless create_pay_plan(amount, interests_penalties, d, d - 5.days)
-        self.active = false
-        raise ActiveRecord::Rollback unless transaction.substract_payment(amount)
-        self.save
-      end
-
-      false
-    else
-      account_ledger.delete.destroyed?
-    end
   end
 
   # Updates the amount for transaction
