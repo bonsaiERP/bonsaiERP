@@ -8,13 +8,14 @@ class AccountLedger < ActiveRecord::Base
 
   # callbacks
   #after_initialize :set_defaults
-  before_save      :set_income              
-  before_save      :set_creator_id
-  before_save      :set_currency
-  after_save       :update_payment,         :if => :payment?
-  after_save       :update_account_balance, :if => :conciliation?
-  before_destroy   :check_destroy_related
-  after_destroy    :destroy_payment,        :if => :payment?
+  before_create     :set_conciliation
+  before_save       :set_income
+  before_save       :set_creator_id
+  before_save       :set_currency
+  after_save        :update_payment,         :if => :payment?
+  after_save        :update_account_balance, :if => :conciliation?
+  before_destroy    :check_destroy_related,  :unless => 'payment_id.present?'
+  before_destroy   :destroy_payment,        :if => :payment?
 
   # relationships
   belongs_to :account
@@ -195,7 +196,7 @@ private
   #end
 
   def payment?
-    payment_id.present? and conciliation?
+    payment_id.present? and not(conciliation?)
   end
 
   #  set the amount depending if income or outcome
@@ -233,7 +234,7 @@ private
   # destroys a payment, in case the payment calls for destroying the account_ledger
   # the if payment.present? will control if the payment was not already destroyed
   def destroy_payment
-    payment.destroy if payment.present?
+    payment.update_attributes(:active => false)
   end
 
   def valid_organisation_account
@@ -254,5 +255,10 @@ private
     elsif account_ledger_id.present?
       transferer.delete.destroyed?
     end
+  end
+
+  def set_conciliation
+    self.conciliation = false if conciliation.blank?
+    true
   end
 end

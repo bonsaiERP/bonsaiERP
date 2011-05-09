@@ -17,19 +17,19 @@ class Payment < ActiveRecord::Base
 
 
   # callbacks
-  after_initialize  :set_defaults,      :if => :new_record?
-  before_create     :set_currency_id,   :if => :new_record?
-  before_create     :set_cash_amount,   :if => :transaction_cash?
+  after_initialize  :set_defaults,               :if => :new_record?
+  before_create     :set_currency_id,            :if => :new_record?
+  before_create     :set_cash_amount,            :if => :transaction_cash?
+  before_create     :update_pay_plan
+  before_create     :update_transaction_balance
   before_validation :set_exchange_rate
   before_save       :set_state,         :if => 'state.blank?'
   before_destroy    :destroy_and_create_pay_plan
 
   # update_pay_plan must run before update_transaction
   after_create   :create_account_ledger
-  after_save     :update_pay_plan#,    :if => :paid?
-  after_save     :update_transaction,    :unless => :updated_account_ledger?
   after_destroy  :destroy_account_ledger
-  after_destroy  :update_transaction
+  #after_destroy  :update_transaction
 
   # relationships
   belongs_to :transaction
@@ -139,15 +139,22 @@ private
 
   def destroy_and_create_pay_plan
     d = Date.today
-    create_pay_plan(amount, interests_penalties, d, d - 5.days)
+    if paid?
+      Payment.transaction do
+        puts "trans"
+        create_pay_plan(amount, interests_penalties, d, d - 5.days)
+        self.active = false
+        raise ActiveRecord::Rollback unless transaction.substract_payment(amount)
+      end
+      false
+    else
+      account_ledger.delete.destroyed?
+    end
   end
 
-  def update_transaction
-    unless destroyed?
-      transaction.add_payment(amount)
-    else
-      transaction.substract_payment(amount)
-    end
+  # Updates the amount for transaction
+  def update_transaction_balance
+    transaction.add_payment(amount)
   end
 
   def set_currency_id
@@ -177,12 +184,11 @@ private
         # Update the interests for the next pay_plan
         if transaction.pay_plans.unpaid[i + 1]
           ppn = transaction.pay_plans.unpaid[i + 1]
-          #puts "Act: #{pp.interests_penalties} ::Sig: #{ppn.interests_penalties} ::IntToPay #{interest_to_pay}"
           ppn.interests_penalties = ppn.interests_penalties - interest_to_pay
           ppn.save
         else
-          raise ActiveRecord::Rollback
           errors[:base] << "Existe un saldo en intereses pendiente, revise sus créditos"
+          false
         end
         break
       elsif amount_to_pay == 0

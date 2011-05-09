@@ -2,7 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class CashRegister < Account
-  after_initialize :set_defaults
+  #after_initialize :set_defaults
 
   validates_presence_of :currency_id, :name, :address
   validates :name, :uniqueness => {:scope => :organisation_id}

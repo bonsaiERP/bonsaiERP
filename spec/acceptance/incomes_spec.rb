@@ -180,8 +180,9 @@ feature "Income", "test features" do
     #ac_amount = p.account_ledger.account.total_amount
 
     al.destroy
-    puts al.errors
     al.destroyed?.should == true
+    #
+    #al.payment(true).active.should == false
     #puts ac_amount
     #puts Account.find(ac_id).total_amount
 
@@ -360,17 +361,19 @@ feature "Income", "test features" do
     p.save.should == true
     p.account_ledger.currency_id.should == 2
     p.account_ledger.amount.should == 20
-    i = Income.find(i.id)
+
+    i.reload
 
     i.balance.should == balance - 20
     i.pay_plans.unpaid.size.should == 2
     i.payment_date.should == i.pay_plans[1].payment_date
 
     # DELETE Payment
+    puts "--------------------------------"
     p.destroy
-    i = Income.find(i.id)
+    i.reload
 
-    i.balance.should == i.total_currency
+    i.balance.should == balance
     i.pay_plans_total.should == i.balance
     i.payment_date.should == i.pay_plans.unpaid.first.payment_date
 
@@ -467,7 +470,7 @@ feature "Income", "test features" do
     p.destroy
     i = Income.find(i.id)
 
-    AccountLedger.where(:id => al_id).size.should == 0
+    #AccountLedger.where(:id => al_id).size.should == 0
     i.balance.should == balance - 30
   end
 
