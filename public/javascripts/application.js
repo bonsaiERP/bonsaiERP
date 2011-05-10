@@ -354,8 +354,8 @@
                 return $('body').trigger(trigger, [resp, url]);
               } else {
                 $(self).parents("tr:first, li:first").removeClass('marked');
-                error = resp.base_error || "no se pudo borrar";
-                return alert("Error: " + error);
+                error = resp.errors || "";
+                return alert("Error no se pudo borrar: " + error);
               }
             } else if (resp.match(/^\/\/\s?javascript/)) {
               return $(self).parents("tr:first, li:first").removeClass('marked');
@@ -373,6 +373,22 @@
         e.stopPropagation();
       }
       return false;
+    });
+    $('#links a.delete').live('click', function() {
+      var html, txt;
+      txt = $(this).data("confirm") || "Esta seguro de borrar";
+      if (!confirm(txt)) {
+        return false;
+      } else {
+        html = "<input type='hidden' name='utf-8' value='&#x2713;' />";
+        html += "<input type='hidden' name='authenticity_token' value='" + csrf_token + "' />";
+        html += "<input type='hidden' name='_method' value='delete' />";
+        $('<form/>').attr({
+          'method': 'post',
+          'action': $(this).attr('href')
+        }).html(html).appendTo('body').submit();
+        return false;
+      }
     });
     mark = function(selector, velocity, val) {
       var self;

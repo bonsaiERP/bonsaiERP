@@ -356,8 +356,8 @@ $(document).ready(->
               $('body').trigger(trigger, [resp, url])
             else
               $(self).parents("tr:first, li:first").removeClass('marked')
-              error = resp.base_error || "no se pudo borrar"
-              alert("Error: #{error}")
+              error = resp.errors || ""
+              alert("Error no se pudo borrar: #{error}")
           else if resp.match(/^\/\/\s?javascript/)
             $(self).parents("tr:first, li:first").removeClass('marked')
           else
@@ -373,6 +373,21 @@ $(document).ready(->
     false
   )
 
+  # Method to delete when it's in the .links in the top
+  $('#links a.delete').live('click', ->
+    txt = $(this).data("confirm") || "Esta seguro de borrar"
+    unless confirm(txt)
+      false
+    else
+      html = "<input type='hidden' name='utf-8' value='&#x2713;' />"
+      html += "<input type='hidden' name='authenticity_token' value='#{csrf_token}' />"
+      html += "<input type='hidden' name='_method' value='delete' />"
+
+      $('<form/>').attr({'method': 'post', 'action': $(this).attr('href') })
+      .html(html).appendTo('body').submit()
+
+      false
+  )
 
   # Mark
   # @param String // jQuery selector

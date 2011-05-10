@@ -6,8 +6,8 @@
       %th Fecha
       %th Cantidad <br/>#{transaction.currency_plural}
       %th.tip{:title => 'Intenreses/Penalidades'} Int./Pena.<br/>#{transaction.currency_plural}
-      %th.tip{:title => 'Cuenta creada al crear'} Cuenta creación
-      %th.tip{:title => 'Cuenta creada al borrar'} Cuenta elim.
+      %th.tip{:title => "Cuenta creada al crear el #{transaction.pay_type}"} Cuenta creación
+      %th.tip{:title => "Cuenta creada al borrar el #{transaction.pay_type}"} Cuenta elim.
   
   %tbody
     - transaction.payments.deleted.includes(:account_ledger => :account).each do |p|
@@ -20,9 +20,4 @@
             = link_to p.account_ledger.account, p.account_ledger
           - else
             Eliminada (No conciliada)
-        %td
-          - if p.deleted_account_ledger_id.present?
-            = link_to p.deleted_account_ledger.account, p.deleted_account_ledger
-          - else
-            No fue creada (No conciliada)
-
+        %td= link_payment_deleted_account(p)

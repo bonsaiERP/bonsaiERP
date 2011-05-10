@@ -1,8 +1,9 @@
 %h2 #{transaction.pay_type.pluralize.titleize} realizados
 
+- css = transaction.paid? ? "hide" : ""
 = link_to "Nuevo #{transaction.pay_type}", new_payment_path(:type => transaction.type.to_s, :id => transaction.id, :payment_type => transaction.pay_type),
-  :class => 'new ajax button new_payment_link', :title => "Nuevo #{transaction.pay_type}", :id => 'new_payment_link',
-  'data-width' => "700", 'data-trigger' => 'payment' unless transaction.paid?
+  :class => "new ajax button new_payment_link #{css}", :title => "Nuevo #{transaction.pay_type}", :id => 'new_payment_link',
+  'data-width' => "700", 'data-trigger' => 'payment'
 
 %table.decorated.nwl#payments_table
   %thead
@@ -10,7 +11,7 @@
       %th Fecha
       %th{:style => 'width: 300px'} Cuenta
       %th Cantidad <br/>#{transaction.currency_plural}
-      %th{:title => 'Intenreses/Penalidades'} Int./Pena.<br/>#{transaction.currency_plural}
+      %th.tip{:title => 'Intenreses/Penalidades'} Int./Pena.<br/>#{transaction.currency_plural}
       %th Total fila <br/>#{transaction.currency_plural}
       %th
   

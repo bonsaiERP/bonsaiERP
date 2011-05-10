@@ -485,6 +485,12 @@ a.trash {
   padding-left: 20px !important;
   min-height: 20px;
 }
+a.sync {
+  min-height: 16px;
+  display: inline-block;
+  background: transparent url(images/arrow_refresh_small.png) no-repeat 0 50%;
+  padding-left: 16px !important;
+}
 .icon {
   width: 16px;
   height: 16px;
