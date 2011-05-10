@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110507141251) do
+ActiveRecord::Schema.define(:version => 20110509175907) do
 
   create_table "account_ledgers", :force => true do |t|
     t.integer  "organisation_id"
@@ -215,6 +215,7 @@ ActiveRecord::Schema.define(:version => 20110507141251) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.date     "due_date"
+    t.text     "preferences"
   end
 
   add_index "organisations", ["country_id"], :name => "index_organisations_on_country_id"
@@ -235,9 +236,11 @@ ActiveRecord::Schema.define(:version => 20110507141251) do
     t.boolean  "paid",                                                             :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "operation",           :limit => 10
   end
 
   add_index "pay_plans", ["ctype"], :name => "index_pay_plans_on_ctype"
+  add_index "pay_plans", ["operation"], :name => "index_pay_plans_on_operation"
   add_index "pay_plans", ["organisation_id"], :name => "index_pay_plans_on_organisation_id"
   add_index "pay_plans", ["paid"], :name => "index_pay_plans_on_paid"
   add_index "pay_plans", ["payment_date"], :name => "index_pay_plans_on_payment_date"
@@ -248,8 +251,8 @@ ActiveRecord::Schema.define(:version => 20110507141251) do
     t.integer  "organisation_id"
     t.string   "ctype"
     t.date     "date"
-    t.decimal  "amount",                            :precision => 14, :scale => 2
-    t.decimal  "interests_penalties",               :precision => 14, :scale => 2
+    t.decimal  "amount",                                 :precision => 14, :scale => 2
+    t.decimal  "interests_penalties",                    :precision => 14, :scale => 2
     t.string   "description"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -257,9 +260,10 @@ ActiveRecord::Schema.define(:version => 20110507141251) do
     t.integer  "currency_id"
     t.boolean  "active"
     t.integer  "contact_id"
-    t.string   "reference",           :limit => 50
-    t.string   "state",               :limit => 20
-    t.decimal  "exchange_rate",                     :precision => 14, :scale => 4
+    t.string   "reference",                :limit => 50
+    t.string   "state",                    :limit => 20
+    t.decimal  "exchange_rate",                          :precision => 14, :scale => 4
+    t.integer  "deleted_account_ledger_id"
   end
 
   add_index "payments", ["account_id"], :name => "index_payments_on_account_id"
@@ -268,6 +272,7 @@ ActiveRecord::Schema.define(:version => 20110507141251) do
   add_index "payments", ["ctype"], :name => "index_payments_on_ctype"
   add_index "payments", ["currency_id"], :name => "index_payments_on_currency_id"
   add_index "payments", ["date"], :name => "index_payments_on_date"
+  add_index "payments", ["deleted_account_ledger_id"], :name => "index_payments_on_deleted_account_ledger_id"
   add_index "payments", ["organisation_id"], :name => "index_payments_on_organisation_id"
   add_index "payments", ["reference"], :name => "index_payments_on_reference"
   add_index "payments", ["state"], :name => "index_payments_on_state"

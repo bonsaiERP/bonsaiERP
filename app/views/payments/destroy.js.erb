@@ -9,6 +9,9 @@ msg += 'Se ha actualizado el <a id="tab_pay_plan_link" href="#tab_pay_plans">cr√
 
 $('#payments h2').after(createMessageCont(msg));
 
+$('#deleted_payments').html("<%= escape_javascript( render "/payments/deleted", :transaction => @payment.transaction ) %>")
+$('#new_payment_link').removeClass("show");
+
 $('#tab_pay_plan_link').die().live('click', function() { $('#tab_pay_plans').trigger("click") });
 
 $('#tab_pay_plans').one('click', function() {

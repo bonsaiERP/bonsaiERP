@@ -35,7 +35,7 @@
 
 = link_to "Buscar", "#search", :class => 'search'
 /"#", :style => 'display:block;float:left;margin:10px'
-- ledgers = account.account_ledgers.get_by_option(params[:option]).page(@page)
+- ledgers = account.account_ledgers.get_by_option(params[:option]).order("date DESC").page(@page)
 
 = paginate ledgers
 
@@ -43,21 +43,19 @@
   %tr
     %th Fecha
     %th= ref_title
-    %th Monto en<br/>#{account.currency}
+    %th Monto en #{account.currency_symbol}
     %th Contacto
     %th Descripción
-    %th Conciliado/Conciliador
+    %th Conciliador
     %th
   - ledgers.each do |al|
     %tr{:class => al.income.to_s + '_in' }
-      %td.d= link_to lo(al.date), al, :class => 'b'
-      %td.col.check= al.reference
+      %td.d= link_to lo(al.date), al, :class => "b #{conciliate_css(al)}"
+      %td.check= al.reference
       %td.r.col= ntc al.amount
       %td= al.contact if al.contact_id
       %td= link_description al
-      %td
-        %span{:class => al.conciliation.to_s}
-        = al.approver if al.approver_id.present?
+      %td= al.approver if al.approver_id.present?
       %td.cur
         - unless al.conciliation?
           = link_to "borrar", al, :class => 'delete fl', 'data-remote' => true, :title => 'Borrar', 'data-confirm' => account_ledger_destroy_confirm_dialog(al)

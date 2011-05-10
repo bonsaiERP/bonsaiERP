@@ -10,9 +10,10 @@ module Authorization
     if current_user and session[:user] and session[:user][:rol]
       unless check_user_by_rol(session[:user][:rol], params[:controller], params[:action])
         flash[:warning] = "Usted no tiene permitida esta acción"
-        redirect_to current_user
+        xhr = request.xhr? ? true : false
+        redirect_to user_path(current_user, :xhr => xhr)
       end
-    elsif current_user.link.nil?
+    elsif current_user and current_user.link.nil?
       true
     else
       redirect_to "/users/sign_in"
@@ -61,6 +62,7 @@ module Authorization
       'incomes' => {'approve' => false},
       'buys' => {'approve' => false},
       'expenses' => {'approve' => false},
+      'payments' => {'destroy' => false},
       'projects' => {'index' => true, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false, 'show' => true},
     )
   end
@@ -68,6 +70,7 @@ module Authorization
   def sales_hash
     inventory_hash.merge(
       'incomes' => {'approve' => true},
+      'items' => {'new' => false, 'create' => false, 'edit' => false, 'destroy' => false},
       'stores' => {'index' => false, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false},
       'inventory_operations' => {'index' => false, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false, 
                   'select_store' => false, 'new_sale' => false, 'create_sale' => false},

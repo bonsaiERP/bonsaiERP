@@ -1,0 +1,23 @@
+%h3 #{transaction.pay_type.pluralize.titleize} eliminados
+
+%table.decorated.nwl#payments_table
+  %thead
+    %tr
+      %th Fecha
+      %th Cantidad <br/>#{transaction.currency_plural}
+      %th.tip{:title => 'Intenreses/Penalidades'} Int./Pena.<br/>#{transaction.currency_plural}
+      %th.tip{:title => "Cuenta creada al crear el #{transaction.pay_type}"} Cuenta creación
+      %th.tip{:title => "Cuenta creada al borrar el #{transaction.pay_type}"} Cuenta elim.
+  
+  %tbody
+    - transaction.payments.deleted.includes(:account_ledger => :account).each do |p|
+      %tr
+        %td= lo p.date
+        %td= ntc p.amount
+        %td= ntc p.interests_penalties
+        %td
+          - if p.account_ledger.present?
+            = link_to p.account_ledger.account, p.account_ledger
+          - else
+            Eliminada (No conciliada)
+        %td= link_payment_deleted_account(p)

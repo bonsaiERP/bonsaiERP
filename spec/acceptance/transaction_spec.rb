@@ -28,16 +28,15 @@ end
 
 feature "Transaction", "test features" do
   background do
+    UserSession.current_user = User.new(:id => 1, :email => 'admin@example.com') {|u| u.id = 1}
     OrganisationSession.set(:id => 1, :name => 'ecuanime')
-    begin
-      Bank.find(1)
-    rescue
-      Bank.create!(:number => '123', :currency_id => 1, :name => 'Bank JE') {|a| a.id = 1 }
-    end
+    Bank.create(:number => '123', :currency_id => 1, :name => 'Bank JE', :amount => 10000) {|b| b.id = 1 }
   end
 
   scenario "Create a payment with nearest pay_plan" do
-    i = Income.create!(income_params)
+    i = Income.new(income_params)
+    puts income_params
+    i.save
     pp = PayPlan.new(pay_plan_params(:transaction_id => i.id, :amount => 100, :interests_penalties => 10))
     pp.save
 

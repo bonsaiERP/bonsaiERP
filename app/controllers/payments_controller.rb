@@ -59,7 +59,7 @@ class PaymentsController < ApplicationController
 
   # DELETE /payments/:id
   def destroy
-    @payment.destroy
+    @payment.destroy_payment
   end
 
 private

@@ -1,10 +1,10 @@
-%tr.payment{ :id => payment.id, :class => "p_#{payment.state}" }
-  %td= lo(payment.date)
+%tr.payment{ :id => payment.id, :class => "p_#{payment.state} #{payment.active.to_s}"}
+  %td.cur= lo(payment.date)
   %td.account= link_to payment.account, payment.account_ledger
-  %td.r.amount{'data-val' => payment.amount} #{ntc payment.amount}
-  %td.r.interests_penalties{'data-val' => payment.interests_penalties} #{ntc payment.interests_penalties}
-  %td.r.total_amount{'data-val' => payment.total_amount}= ntc payment.total_amount
+  %td.cur.amount{'data-val' => payment.amount} #{ntc payment.amount}
+  %td.cur.interests_penalties{'data-val' => payment.interests_penalties} #{ntc payment.interests_penalties}
+  %td.cur.total_amount{'data-val' => payment.total_amount}= ntc payment.total_amount
   %td.actions
-    = link_to "Conciliar banco", payment.account_ledger, :title => 'Conciliar con cuenta bancaria', :class => 'conciliate fl', :style => 'margin-right: 10px' unless payment.paid?
+    = link_to "Conciliar", payment.account_ledger, :title => 'Conciliar con cuenta bancaria', :class => 'conciliate sync fl', :style => 'margin-right: 10px' unless payment.paid?
     = link_to "borrar", payment, :class => 'delete', :title => 'Borrar', :remote => true, :confirm => delete_confirm(payment)
 

@@ -10,6 +10,8 @@ class Organisation < ActiveRecord::Base
   after_create :create_account
 
   attr_accessor :account_info
+
+  serialize :preferences, Hash
   
   # relationships
   belongs_to :country
@@ -35,9 +37,13 @@ class Organisation < ActiveRecord::Base
     name
   end
 
-  def self.all
-    Link.orgs
-  end
+  #def self.all
+  #  Link.orgs
+  #end
+
+  #def preferences
+  #  read_attribute(:preferences) || write_attribute(:preferences, {})
+  #end
 
 protected
 

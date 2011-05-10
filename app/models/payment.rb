@@ -17,25 +17,24 @@ class Payment < ActiveRecord::Base
 
 
   # callbacks
-  after_initialize  :set_defaults,      :if => :new_record?
-  before_create     :set_currency_id,   :if => :new_record?
-  before_create     :set_cash_amount,   :if => :transaction_cash?
+  after_initialize  :set_defaults,               :if => :new_record?
+  before_create     :set_currency_id,            :if => :new_record?
+  before_create     :set_cash_amount,            :if => :transaction_cash?
+  before_create     :update_pay_plan
+  before_create     :update_transaction_balance
   before_validation :set_exchange_rate
-  before_save       :set_state,         :if => 'state.blank?'
-  before_destroy    :destroy_and_create_pay_plan
+  before_save       :set_state,                  :if => 'state.blank?'
+  #before_destroy    :destroy_and_create_pay_plan
 
   # update_pay_plan must run before update_transaction
   after_create   :create_account_ledger
-  after_save     :update_pay_plan#,    :if => :paid?
-  after_save     :update_transaction,    :unless => :updated_account_ledger?
-  after_destroy  :destroy_account_ledger
-  after_destroy  :update_transaction
 
   # relationships
   belongs_to :transaction
   belongs_to :account
   belongs_to :currency
   belongs_to :contact
+  belongs_to :deleted_account_ledger, :class_name => 'AccountLedger'
   has_one    :account_ledger
 
   delegate  :state,        :type,       :cash,  :cash?,      :real_state,
@@ -61,6 +60,7 @@ class Payment < ActiveRecord::Base
 
   scope :paid,         where(:state => 'paid')
   scope :conciliation, where(:state => 'conciliation')
+  scope :deleted,      unscoped.where(:active => false)
 
   # Creates methods of paid? conciliation?
   STATES.each do |st|
@@ -123,6 +123,27 @@ class Payment < ActiveRecord::Base
     @updated_account_ledger = value
   end
 
+  # Destroys the account_ledger or creates a new one if it has been conciliated and creates
+  # a pay_plan if required
+  def destroy_payment
+    d = Date.today
+    if paid?
+      Payment.transaction do
+        raise ActiveRecord::Rollback unless destroy_account_ledger
+        raise ActiveRecord::Rollback unless @pay_plan = create_pay_plan(amount, interests_penalties, d, d - 5.days)
+        raise ActiveRecord::Rollback unless transaction.substract_payment(amount)
+        self.active = false
+        raise ActiveRecord::Rollback unless self.save
+      end
+    else
+      Payment.transaction do
+        raise ActiveRecord::Rollback unless account_ledger.delete.destroyed?
+        raise ActiveRecord::Rollback unless transaction.substract_payment(amount)
+        raise ActiveRecord::Rollback unless self.update_attributes(:active => false)
+      end
+    end
+  end
+
 private
 
   def updated_account_ledger?
@@ -137,17 +158,9 @@ private
     self.exchange_rate = 0.0 if exchange_rate.blank?
   end
 
-  def destroy_and_create_pay_plan
-    d = Date.today
-    create_pay_plan(amount, interests_penalties, d, d - 5.days)
-  end
-
-  def update_transaction
-    unless destroyed?
-      transaction.add_payment(amount)
-    else
-      transaction.substract_payment(amount)
-    end
+  # Updates the amount for transaction
+  def update_transaction_balance
+    transaction.add_payment(amount)
   end
 
   def set_currency_id
@@ -161,6 +174,7 @@ private
     amount_to_pay         = amount
     interest_to_pay       = interests_penalties
     @updated_pay_plan_ids = []
+    saved = true
 
     transaction.pay_plans.unpaid.each_with_index do |pp, i|
 
@@ -171,25 +185,26 @@ private
       @updated_pay_plan_ids << pp.id
 
       if amount_to_pay < 0
-        puts "#{amount_to_pay} ::: #{interest_to_pay}"
         @pay_plan = create_pay_plan(-amount_to_pay, -interest_to_pay, pp.payment_date, pp.alert_date) if amount_to_pay < 0 or interest_to_pay < 0
+        saved = @pay_plan.persisted?
         break
       elsif amount_to_pay == 0 and interest_to_pay < 0
         # Update the interests for the next pay_plan
         if transaction.pay_plans.unpaid[i + 1]
           ppn = transaction.pay_plans.unpaid[i + 1]
-          #puts "Act: #{pp.interests_penalties} ::Sig: #{ppn.interests_penalties} ::IntToPay #{interest_to_pay}"
           ppn.interests_penalties = ppn.interests_penalties - interest_to_pay
           ppn.save
         else
-          raise ActiveRecord::Rollback
           errors[:base] << "Existe un saldo en intereses pendiente, revise sus créditos"
+          saved = false
         end
         break
       elsif amount_to_pay == 0
         break
       end
     end
+
+    saved
   end
 
   # Creates a new pay_plan
@@ -198,7 +213,7 @@ private
   # @param PayPlan pp
   def create_pay_plan(amt, int_pen, pp_pdate, pp_adate)
     int_pen = int_pen < 0 ? -1 * int_pen : 0
-    pp = PayPlan.create!( :transaction_id => transaction_id, :amount => amt, :interests_penalties => int_pen,
+    pp = PayPlan.create( :transaction_id => transaction_id, :amount => amt, :interests_penalties => int_pen,
                         :payment_date => pp_pdate,  :alert_date => pp_adate )
   end
 
@@ -217,7 +232,7 @@ private
 
   # Creates an account ledger for the account and payment
   # indicates the record has been destroyed
-  def create_account_ledger(destroy = false)
+  def create_account_ledger(dest = false)
     tot = total_amount_currency
     if transaction.type == "Income"
       income = true
@@ -225,11 +240,9 @@ private
       income = false
     end
 
-    if destroy
-      income = not(income)
-    end
+    income = not(income) if dest
 
-    create_account_ledger_record(tot, income, get_conciliation, id)
+    al = create_account_ledger_record(tot, income, get_conciliation, id)
   end
 
   # Destorys the account ledger in case it is not conciliated
@@ -237,9 +250,11 @@ private
   def destroy_account_ledger
     if account_ledger.present?
       unless account_ledger.conciliation?
-        account_ledger.destroy 
+        account_ledger.delete.destroyed?
       else
-        create_account_ledger(true)
+        al = create_account_ledger(true)
+        self.deleted_account_ledger_id = al.id
+        al.persisted?
       end
     end
   end
@@ -268,11 +283,10 @@ private
   def get_account_ledger_text
     txt = get_exchange_rate_text
     del = ""
-    if destroyed?
-      del = "Borrado de "
-    end
+    
+    del = "Borrado de " if destroyed?
 
-    case
+    case transaction.class.to_s
     when 'Income'  then "#{del}Cobro venta #{transaction_ref_number}#{txt}"
     when 'Buy'     then "#{del}Pago compra #{transaction_ref_number}#{txt}"
     when 'Expense' then "#{del}Pago gasto #{transaction_ref_number}#{txt}"

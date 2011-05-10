@@ -3,7 +3,7 @@
 # email: boriscyber@gmail.com
 class Bank < Account
   # callbacks
-  after_initialize :set_defaults
+  #after_initialize :set_defaults
 
   # validations
   validates_presence_of :name, :number

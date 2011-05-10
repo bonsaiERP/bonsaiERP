@@ -52,7 +52,7 @@ class ClientsController < ApplicationController
   # DELETE /clients/1.xml
   def destroy
     @client.destroy
-    respond_ajax(@client)
+    redirect_ajax(@client)
   end
 
   protected

@@ -45,6 +45,11 @@ class Account < ActiveRecord::Base
     pendent_account_ledgers.sum(:amount) + total_amount
   end
 
+
+  def total_amount
+    read_attribute(:total_amount) || write_attribute(:total_amount, 0.0)
+  end
+
   private
   # Creates the first income for the bank
   def create_account_ledger

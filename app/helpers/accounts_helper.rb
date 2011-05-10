@@ -76,4 +76,9 @@ module AccountsHelper
       "Esta seguro de borrar la transacción?"
     end
   end
+
+  # Conciliation
+  def conciliate_css(klass)
+    klass.conciliation == false ? "sync" : ""
+  end
 end

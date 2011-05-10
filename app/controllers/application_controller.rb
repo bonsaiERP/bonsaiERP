@@ -2,7 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class ApplicationController < ActionController::Base
-  layout lambda{ |c| c.request.xhr? ? false : "application" }
+  layout lambda{ |c| (c.request.xhr? or params[:xhr]) ? false : "application" }
 
   protect_from_forgery
   before_filter :set_user_session, :if => :user_signed_in?
@@ -50,16 +50,27 @@ class ApplicationController < ActionController::Base
     url = options[:url] || klass
     if request.xhr?
       if request.delete?
-        render :json => klass.attributes.merge(:destroyed => klass.destroyed?)
+        render :json => klass.attributes.merge(:destroyed => klass.destroyed?, :errors => klass.errors[:base].join(", "))
       else
         render :json => klass
       end
     else
+      set_redirect_options(klass) if request.delete? and options.empty?
       redirect_to url, options
     end
   end
 
 protected
+  # Creates the flash messages when an item is deleted
+  def set_redirect_options(klass)
+    if klass.destroyed?
+      flash[:notice] = "Se ha eliminado correctamente" if flash[:notice].blank?
+    else
+      if flash[:error].blank? and klass.errors.any?
+        flash[:error] = "No se pudo borrar: #{klass.errors[:base].join(", ")}"
+      end
+    end
+  end
 
   # Sets the session for the organisation
   def set_organisation_session(organisation)

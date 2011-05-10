@@ -47,6 +47,8 @@ feature "Account Feature", "test all incomes as transference between accounts. "
 
     # Valid transference
     trans.to_exchange_rate = 1.0/7
+    trans.date = Date.today
+
     trans.create_transference.should == true
     trans.creator_id.should == 1
 
@@ -96,7 +98,9 @@ feature "Account Feature", "test all incomes as transference between accounts. "
 
     # Create an unconciliated amount
     trans.amount = 1000
+    trans.date = Date.today
     trans.create_transference.should == true
+    trans.conciliation.should == false
 
     # Create an outcome
     al = Bank.find(1).account_ledgers.build(:amount => 500, :income => false, :date => Date.today, :contact_id => 2, :reference => '123456789')
@@ -104,10 +108,11 @@ feature "Account Feature", "test all incomes as transference between accounts. "
     al.conciliate_account.should == true
 
     # Conciliation of the first transference and check amount
-    trans = AccountLedger.find(trans.id)
+    trans.reload# = AccountLedger.find(trans.id)
 
-    trans.conciliate_account
+    trans.conciliate_account.should == false
     trans.errors.should_not == blank?
+    puts trans.errors
     trans.conciliation.should == false
   end
 
@@ -122,7 +127,7 @@ feature "Account Feature", "test all incomes as transference between accounts. "
   end
 
   scenario "deleting one side of the account_ledger should delete the other side" do
-    trans = Bank.find(1).account_ledgers.build(:amount => 100, :to_account => 2)
+    trans = Bank.find(1).account_ledgers.build(:amount => 100, :to_account => 2, :date => Date.today)
     trans.create_transference.should == true
     trans.account_ledger_id.should_not == blank?
 
@@ -135,7 +140,7 @@ feature "Account Feature", "test all incomes as transference between accounts. "
 
 
   scenario "deleting one side with error the account_ledger should not delete the other side" do
-    trans = Bank.find(1).account_ledgers.build(:amount => 100, :to_account => 2)
+    trans = Bank.find(1).account_ledgers.build(:amount => 100, :to_account => 2, :date => Date.today)
     trans.create_transference.should == true
     trans.account_ledger_id.should_not == blank?
 
