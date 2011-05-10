@@ -5,6 +5,6 @@
   %td.r.interests_penalties{'data-val' => payment.interests_penalties} #{ntc payment.interests_penalties}
   %td.r.total_amount{'data-val' => payment.total_amount}= ntc payment.total_amount
   %td.actions
-    = link_to "Conciliar banco", payment.account_ledger, :title => 'Conciliar con cuenta bancaria', :class => 'conciliate fl', :style => 'margin-right: 10px' unless payment.paid?
+    = link_to "Conciliar cuenta", payment.account_ledger, :title => 'Conciliar con cuenta bancaria', :class => 'conciliate fl', :style => 'margin-right: 10px' unless payment.paid?
     = link_to "borrar", payment, :class => 'delete', :title => 'Borrar', :remote => true, :confirm => delete_confirm(payment)
 

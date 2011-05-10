@@ -84,6 +84,9 @@
 
   #payments
     =render "/payments/payments", :transaction => @transaction if @transaction.show_payments?
+    #deleted_payments
+      - if @transaction.payments.deleted.any?
+        =render "/payments/deleted", :transaction => @transaction
     .clear
 
   #pay_plans

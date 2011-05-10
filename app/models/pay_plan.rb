@@ -4,8 +4,9 @@
 class PayPlan < ActiveRecord::Base
   acts_as_org
   after_initialize :set_defaults
+  before_create    :set_operation
   before_save      :set_currency_id
-  before_save      :set_ctype,      :if => 'ctype.blank?'
+  #before_save      :set_ctype,      :if => 'ctype.blank?'
   before_destroy   :check_if_paid
   #after_save :update_transaction
   #after_save :update_transaction_payment_date
@@ -202,7 +203,15 @@ private
     end
   end
 
-  def set_ctype
-    ctype = transaction.class.to_s
+  #def set_ctype
+  #  ctype = transaction.class.to_s
+  #end
+
+  def set_operation
+    if transaction.is_a?(Income)
+      self.operation = 'in'
+    else
+      self.operation = 'out'
+    end
   end
 end

@@ -2,7 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class ApplicationController < ActionController::Base
-  layout lambda{ |c| c.request.xhr? ? false : "application" }
+  layout lambda{ |c| (c.request.xhr? or params[:xhr]) ? false : "application" }
 
   protect_from_forgery
   before_filter :set_user_session, :if => :user_signed_in?

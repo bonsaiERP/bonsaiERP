@@ -34,6 +34,7 @@ class Payment < ActiveRecord::Base
   belongs_to :account
   belongs_to :currency
   belongs_to :contact
+  belongs_to :deleted_account_ledger, :class_name => 'AccountLedger'
   has_one    :account_ledger
 
   delegate  :state,        :type,       :cash,  :cash?,      :real_state,
@@ -59,6 +60,7 @@ class Payment < ActiveRecord::Base
 
   scope :paid,         where(:state => 'paid')
   scope :conciliation, where(:state => 'conciliation')
+  scope :deleted,      unscoped.where(:active => false)
 
   # Creates methods of paid? conciliation?
   STATES.each do |st|
@@ -281,11 +283,10 @@ private
   def get_account_ledger_text
     txt = get_exchange_rate_text
     del = ""
-    if destroyed?
-      del = "Borrado de "
-    end
+    
+    del = "Borrado de " if destroyed?
 
-    case
+    case transaction.class.to_s
     when 'Income'  then "#{del}Cobro venta #{transaction_ref_number}#{txt}"
     when 'Buy'     then "#{del}Pago compra #{transaction_ref_number}#{txt}"
     when 'Expense' then "#{del}Pago gasto #{transaction_ref_number}#{txt}"
