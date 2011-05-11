@@ -383,7 +383,7 @@ $(document).ready(->
       html += "<input type='hidden' name='authenticity_token' value='#{csrf_token}' />"
       html += "<input type='hidden' name='_method' value='delete' />"
 
-      $('<form/>').attr({'method': 'post', 'action': $(this).attr('href') })
+      form = $('<form/>').attr({'method': 'post', 'action': $(this).attr('href') })
       .html(html).appendTo('body').submit()
 
       false

@@ -72,6 +72,8 @@ Bonsaierp::Application.routes.draw do
 
   resources :suppliers
 
+  resources :staffs
+
   resources :items
   #match ':controller/new/:ctype' => 'items#new'
 

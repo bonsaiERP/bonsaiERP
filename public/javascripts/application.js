@@ -375,7 +375,7 @@
       return false;
     });
     $('#links a.delete').live('click', function() {
-      var html, txt;
+      var form, html, txt;
       txt = $(this).data("confirm") || "Esta seguro de borrar";
       if (!confirm(txt)) {
         return false;
@@ -383,7 +383,7 @@
         html = "<input type='hidden' name='utf-8' value='&#x2713;' />";
         html += "<input type='hidden' name='authenticity_token' value='" + csrf_token + "' />";
         html += "<input type='hidden' name='_method' value='delete' />";
-        $('<form/>').attr({
+        form = $('<form/>').attr({
           'method': 'post',
           'action': $(this).attr('href')
         }).html(html).appendTo('body').submit();

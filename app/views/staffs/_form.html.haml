@@ -1,0 +1,33 @@
+= simple_form_for(klass) do |f|
+  = bonsai_form_error(f)
+
+  /= f.input :code, :label => "Código"
+  = f.input :name, :label => "Nombres", :input_html => { :class => 'name', :size => 20 }, :wrapper_html => {:class => "_25"}
+  = f.input :last_name, :label => "Apellidos", :input_html => { :class => 'last_name', :size => 20 }, :wrapper_html => {:class => "_25"}, :hint => "Paterno Materno"
+
+  = f.input :matchcode, :label => "Identificador", :hint => "Ej. Juan Perez (CBN L.P.), Juan Perez (SICSA)", :input_html => { :class => 'matchcode' }
+  .clear
+  .input  
+    = f.input :position, :label => "Cargo", :wrapper_html => {:class => '_70'}
+    = f.input :active, :label => "Activo", :wrapper_html => {:class => '_30'}
+
+  .input
+    = f.input :phone, :label => "Teléfono"
+    = f.input :mobile, :label => "Móvil"
+  .clear
+  = f.input :email, :lanel => "Email"
+  = f.input :tax_number, :label => "NIT"
+  .clear
+  = f.input :address, :as => :text, :input_html => {:rows => 4}, :label => "Dirección"
+  = f.input :aditional_info, :as => :text, :input_html => {:rows => 4}, :label => "Información adicional"
+  .clear
+  %div.actions
+    = f.submit "Salvar"
+
+:javascript
+  head.ready(function() {
+    $('input.name, input.last_name').blur(function() { 
+      var matchcode = $('input.name').val() + ' ' + $('input.last_name').val();
+      $('input.matchcode').val( matchcode ); 
+    });
+  });

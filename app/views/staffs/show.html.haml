@@ -1,0 +1,56 @@
+- content_for :links do
+  %ul.breadcrumps
+    %li #{link_to "Personal", staffs_path} <span>&gt;</span>
+  .links
+    = link_to 'Nuevo', new_staff_path, :class => 'new'
+    = link_to 'Editar', edit_staff_path(@staff), :class => 'edit'
+    = link_to 'Borrar', @staff, :class => 'delete', :method => 'delete', :confirm => "Esta seguro de borrar el trabajador(a)"
+
+%h1= @staff
+
+.clear
+._80
+  /<a href="#contact_data" class="more_info">Ver información</a>
+  /.clear
+  /#contact_data{:style => 'display:none'}
+  .input
+    %label Nombres
+    = @staff.name
+  .input
+    %label Apellidos
+    = @staff.last_name
+  .clear
+
+  .input
+    ._70.fl
+      %label Cargo
+      .b= @staff.position
+    ._30.fl
+      %label Activo
+      %span{:class => @staff.active.to_s}
+
+  .input._25
+    %label Teléfono
+    = @staff.phone
+  .input._25
+    %label Móvil
+    = @staff.mobile
+  .clear
+  .input
+    %label Email
+    = mail_to @staff.email, @staff.email unless @staff.email.blank?
+  .input
+    %label NIT
+    = @staff.tax_number
+  .clear
+  .input
+    %label Dirección
+    = nl2br(@staff.address)
+  .input
+    %label Información adicional
+    = nl2br(@staff.aditional_info)
+
+- @currency_rates = CurrencyRate.current_hash
+
+.clear
+
