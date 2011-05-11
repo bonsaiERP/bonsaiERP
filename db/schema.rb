@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110509175907) do
+ActiveRecord::Schema.define(:version => 20110511142832) do
 
   create_table "account_ledgers", :force => true do |t|
     t.integer  "organisation_id"
@@ -85,8 +85,11 @@ ActiveRecord::Schema.define(:version => 20110509175907) do
     t.string   "code"
     t.string   "type"
     t.string   "last_name",         :limit => 100
+    t.string   "position"
+    t.boolean  "active",                           :default => true
   end
 
+  add_index "contacts", ["active"], :name => "index_contacts_on_active"
   add_index "contacts", ["client"], :name => "index_contacts_on_client"
   add_index "contacts", ["code"], :name => "index_contacts_on_code"
   add_index "contacts", ["last_name"], :name => "index_contacts_on_last_name"
@@ -251,8 +254,8 @@ ActiveRecord::Schema.define(:version => 20110509175907) do
     t.integer  "organisation_id"
     t.string   "ctype"
     t.date     "date"
-    t.decimal  "amount",                                 :precision => 14, :scale => 2
-    t.decimal  "interests_penalties",                    :precision => 14, :scale => 2
+    t.decimal  "amount",                                  :precision => 14, :scale => 2
+    t.decimal  "interests_penalties",                     :precision => 14, :scale => 2
     t.string   "description"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -260,9 +263,9 @@ ActiveRecord::Schema.define(:version => 20110509175907) do
     t.integer  "currency_id"
     t.boolean  "active"
     t.integer  "contact_id"
-    t.string   "reference",                :limit => 50
-    t.string   "state",                    :limit => 20
-    t.decimal  "exchange_rate",                          :precision => 14, :scale => 4
+    t.string   "reference",                 :limit => 50
+    t.string   "state",                     :limit => 20
+    t.decimal  "exchange_rate",                           :precision => 14, :scale => 4
     t.integer  "deleted_account_ledger_id"
   end
 

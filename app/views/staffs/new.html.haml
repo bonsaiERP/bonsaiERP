@@ -1,0 +1,7 @@
+- content_for :links do
+  %ul.breadcrumps
+    %li #{link_to "Personal", staffs_path} <span>&gt;</span>
+
+%h1 Nuevo trabajador(a)
+= render 'form', :klass => @staff
+

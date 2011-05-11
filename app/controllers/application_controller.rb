@@ -55,19 +55,28 @@ class ApplicationController < ActionController::Base
         render :json => klass
       end
     else
-      set_redirect_options(klass) if request.delete? and options.empty?
-      redirect_to url, options
+      set_redirect_options(klass, options) if request.delete?
+      redirect_to url
     end
   end
 
 protected
   # Creates the flash messages when an item is deleted
-  def set_redirect_options(klass)
+  def set_redirect_options(klass, options)
     if klass.destroyed?
-      flash[:notice] = "Se ha eliminado correctamente" if flash[:notice].blank?
+      case
+      when (options[:notice].blank? and flash[:notice].blank?)
+        flash[:notice] = "Se ha eliminado el registro correctamente"
+      when (options[:notice] and flash[:notice].blank?)
+        flash[:notice] = options[:notice]
+      end
     else
       if flash[:error].blank? and klass.errors.any?
-        flash[:error] = "No se pudo borrar: #{klass.errors[:base].join(", ")}"
+        txt = options[:error] ? options[:error] : "No se pudo borrar el registro: #{klass.errors[:base].join(", ")}" 
+        flash[:error] = txt
+      elsif flash[:error].blank?
+        txt = options[:error] ? options[:error] : "No se pudo borrar el registro"
+        flash[:error] = txt
       end
     end
   end

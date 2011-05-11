@@ -63,13 +63,12 @@ class ItemsController < ApplicationController
   # DELETE /items/1.xml
   def destroy
     @item.destroy
-    if @item.destroyed?
-      flash[:notice] = "Se ha eliminado el ítem correctamente"
-    else
-      flash[:error] = "No se pudo eliminar el ítem: " + @item.errors[:base].join(", ")
-    end
+    options = {
+      :notice => "Se ha eliminado el ítem correctamente",
+      :error => "No se pudo eliminar el ítem: " + @item.errors[:base].join(", ")
+    }
 
-    redirect_ajax @item
+    redirect_ajax @item, options
   end
 
 private

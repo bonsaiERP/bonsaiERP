@@ -1,6 +1,15 @@
+- content_for :links do
+  .links= link_to "Nuevo trabajador(a)", new_staff_path, :class => 'new'
+
+%h1 Personal
+
+= paginate(@staffs)
+
 %table{ :class => "decorated nwf nwl" }
   %tr
     %th Identificación/Nombre
+    %th Cargo
+    %th Activo
     %th Dirección
     %th Teléfono
     %th Móvil
@@ -8,13 +17,14 @@
     %th NIT
     %th
 
-  - list.each do |klass|
+  - @staffs.each do |klass|
     %tr
       %td= link_to klass, klass, :class => 'b'
+      %td= klass.position
+      %td{:class => klass.active.to_s}
       %td= nl2br klass.address
       %td= klass.phone
       %td= klass.mobile
       %td= mail_to klass.email
       %td= klass.tax_number
       %td= bonsai_links(klass)
-
