@@ -112,6 +112,12 @@ Bonsaierp::Application.routes.draw do
   match '/dashboard' => 'dashboard#index', :as => :dashboard
   match '/configuration' => 'dashboard#configuration'
 
+  # Rails Metal
+  match "/client_autocomplete"   => AutocompleteApp.action(:client)
+  match "/supplier_autocomplete" => AutocompleteApp.action(:supplier)
+  match "/staff_autocomplete"    => AutocompleteApp.action(:staff)
+  match "/item_autocomplete"     => AutocompleteApp.action(:item)
+
   root :to => 'home#index'
   # The priority is based upon order of creation:
   # first created -> highest priority.

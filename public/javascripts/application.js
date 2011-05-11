@@ -78,7 +78,7 @@
   };
   _b.tobyteSize = toByteSize;
   $(document).ready(function() {
-    var AjaxLoadingHTML, createDialog, createErrorLog, createMessageCont, createSelectOption, csrf_token, getAjaxType, mark, parseDate, setDateSelect, setIframePostEvents, speed, start, transformDateSelect, transformMinuteSelect, updateTemplateRow;
+    var AjaxLoadingHTML, createAutocompleteField, createDialog, createErrorLog, createMessageCont, createSelectOption, csrf_token, getAjaxType, mark, parseDate, setDateSelect, setIframePostEvents, speed, start, transformDateSelect, transformMinuteSelect, updateTemplateRow;
     speed = 300;
     csrf_token = $('meta[name=csrf-token]').attr('content');
     window.csrf_token = csrf_token;
@@ -93,6 +93,11 @@
         return d;
       }
     };
+    createAutocompleteField = function() {
+      return $(this).hide().before("<input type='text' size='" + ($(this).attr('size')) + "' style='text-align:left' class='autocomplete_view'/>");
+    };
+    $.createAutocompleteField = $.fn.createAutocompleteField = createAutocompleteField;
+    $('input.autocomplete').createAutocompleteField();
     setDateSelect = function(el) {
       var date;
       el = el || this;

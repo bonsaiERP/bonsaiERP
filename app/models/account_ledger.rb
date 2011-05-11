@@ -30,10 +30,11 @@ class AccountLedger < ActiveRecord::Base
 
   attr_accessor  :payment_destroy, :to_account, :to_exchange_rate, :to_amount_currency
   attr_reader    :transference
-  attr_protected :conciliation
+  attr_protected :conciliation, :pay_account
 
   # validations
   validates_presence_of :account_id, :date, :reference, :amount
+  validates_presence_of :contact_id, :if => :pay_account?
   validates_numericality_of :amount, :greater_than => 0, :unless => :conciliation?
   validate :valid_organisation_account
 

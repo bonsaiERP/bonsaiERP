@@ -15,6 +15,12 @@ class AccountLedgersController < ApplicationController
   end
 
   def new
+    params[:account] = "Client"
+    begin
+      @account = Account.org.find(params[:account_id])
+    rescue
+      logger.warn "El usuario #{current_user.id} intento acceder a #{request.path} #{params[:account_id]}"
+    end
   end
 
   # PUT /account_ledgers/:id/conciliate 
@@ -29,6 +35,7 @@ class AccountLedgersController < ApplicationController
 
   # POST /account_ledgers
   def create
+    @account = Account.org.find(params[:account_ledger][:account_id])
     @account_ledger = AccountLedger.new(params[:account_ledger])
 
     if @account_ledger.save
@@ -66,6 +73,28 @@ class AccountLedgersController < ApplicationController
     end
   end
 
+  # Account to review
+  # /account_ledgers/:id/new_review
+  def new_review
+    @account = Account.find(params[:id])
+    @account_ledger = AccountLedger.new(:account_id => @account.id)
+    @account_ledger.pay_account = true
+  end
+
+  # Account review
+  # /account_ledgers/:id/review
+  def review
+    @account        = Account.find(params[:id])
+    @account_ledger = AccountLedger.new(params[:account_ledger])
+    @account_ledger.pay_account = true
+    @account_ledger.account_id  = @account.id
+
+    if @account_ledger.save
+      redirect_to @account_ledger
+    else
+      render :action => 'new_review'
+    end
+  end
 
 private
   def set_account_ledger

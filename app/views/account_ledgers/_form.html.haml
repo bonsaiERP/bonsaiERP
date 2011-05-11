@@ -10,8 +10,12 @@
   = f.input :reference, :label => 'Referencia/Nº de cheque', :input_html => {:size => 20}
 
   - url, tit = @account_ledger.income? ? [new_client_path, "cliente"] : [new_supplier_path, "proveedor"]
-  = f.association :contact, :label => account_ledger_contact_label(@account_ledger), :collection => account_ledger_contact_collection(@account_ledger), :input_html => {'data-new_url' => url, 'data-trigger' => 'new_contact', 'data-title' => "Nuevo #{tit}"}
-
+  .boolean
+    %label #{ radio_button_tag("account", "Client", params[:account] == "Client") } Cliente
+    %label #{ radio_button_tag "account" , "Supplier", params[:account] == "Supplier"} Proveedor
+    %label #{ radio_button_tag "account" , "Staff", params[:account] == "Staff"} Personal
+  /= f.association :contact, :label => "Cliente", :collection => account_ledger_contact_collection(@account_ledger), :input_html => {'data-new_url' => url, 'data-trigger' => 'new_contact', 'data-title' => "Nuevo #{tit}"}
+  = f.input :contact_id, :input_html => {:class => 'autocomplete', 'data-url' => '/'}, :label => 'Cliente'
   .clear
 
   = f.input :description, :label => 'Descripción', :as => :text, :input_html => {:rows => 3, :cols => 40}
@@ -23,5 +27,9 @@
   head.ready(function() {
     $('body').live('new_contact', function(e, resp) {
       $('#account_ledger_contact_id').createSelectOption(resp.id, resp.matchcode);
+    });
+
+    $('input[name=account]').click(function() {
+      alert($(this).val())
     });
   })
