@@ -39,7 +39,7 @@
       = render 'currency_rates/active', :currency_rates => CurrencyRate.active
   
   :javascript
-    head.ready(function() {
+    $(function() {
 
       function Payment(currency_id, accounts, rates) {
         this.currency_id = currency_id;

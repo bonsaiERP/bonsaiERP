@@ -68,7 +68,7 @@
     = f.submit 'Fin', :class => 'butr fr'
 
 :javascript
-  head.ready(function(){
+  $(function(){
     $('#organisation_form').submit('live', function() {
       if(!confirm("Esta seguro de que los datos son correctos"))
         return false;

@@ -25,7 +25,7 @@
     = f.submit "Salvar"
 
 :javascript
-  head.ready(function() {
+  $(function() {
     $('input.name, input.last_name').blur(function() { 
       var matchcode = $('input.name').val() + ' ' + $('input.last_name').val();
       $('input.matchcode').val( matchcode ); 

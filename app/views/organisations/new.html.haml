@@ -16,7 +16,7 @@
 = render @partial, @local => @object
 
 :javascript
-  head.ready(function() {
+  $(function() {
     $('button.butl').live('click', function() {
       window.location = $(this).data('url');
       return false;

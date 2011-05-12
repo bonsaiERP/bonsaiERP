@@ -95,8 +95,10 @@ $(document).ready(->
 
   # Creates an autocomplete field
   createAutocompleteField = ->
+    val = $(@).data('value') || ""
     $(@).hide()
-    .before("<input type='text' size='#{$(@).attr('size')}' style='text-align:left' class='autocomplete_view'/>")
+    .before("<input type='text' size='#{$(@).attr('size')}' style='text-align:left' class='autocomplete_view' value='#{val}'/>")
+    .autocomplete({source: $(@).data('url') } )
 
   $.createAutocompleteField = $.fn.createAutocompleteField = createAutocompleteField
 

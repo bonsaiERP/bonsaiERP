@@ -94,7 +94,11 @@
       }
     };
     createAutocompleteField = function() {
-      return $(this).hide().before("<input type='text' size='" + ($(this).attr('size')) + "' style='text-align:left' class='autocomplete_view'/>");
+      var val;
+      val = $(this).data('value') || "";
+      return $(this).hide().before("<input type='text' size='" + ($(this).attr('size')) + "' style='text-align:left' class='autocomplete_view' value='" + val + "'/>").autocomplete({
+        source: $(this).data('url')
+      });
     };
     $.createAutocompleteField = $.fn.createAutocompleteField = createAutocompleteField;
     $('input.autocomplete').createAutocompleteField();

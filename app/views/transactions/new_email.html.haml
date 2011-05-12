@@ -18,7 +18,7 @@
     %p= submit_tag "Enviar email"
 
   :javascript
-    head.ready(function() {
+    $(function() {
       $('#invoice_email_form').submit(function() {
         var txt = "";
         if ($('#title').val().length < 5)

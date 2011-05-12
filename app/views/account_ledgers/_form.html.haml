@@ -11,11 +11,11 @@
 
   - url, tit = @account_ledger.income? ? [new_client_path, "cliente"] : [new_supplier_path, "proveedor"]
   .boolean
-    %label #{ radio_button_tag("account", "Client", params[:account] == "Client") } Cliente
-    %label #{ radio_button_tag "account" , "Supplier", params[:account] == "Supplier"} Proveedor
-    %label #{ radio_button_tag "account" , "Staff", params[:account] == "Staff"} Personal
+    %label #{ radio_button_tag("contact", "Client", params[:account] == "Client") } Cliente
+    %label #{ radio_button_tag "contact" , "Supplier", params[:account] == "Supplier"} Proveedor
+    %label #{ radio_button_tag "contact" , "Staff", params[:account] == "Staff"} Personal
   /= f.association :contact, :label => "Cliente", :collection => account_ledger_contact_collection(@account_ledger), :input_html => {'data-new_url' => url, 'data-trigger' => 'new_contact', 'data-title' => "Nuevo #{tit}"}
-  = f.input :contact_id, :input_html => {:class => 'autocomplete', 'data-url' => '/'}, :label => 'Cliente'
+  = f.input :contact_id, :input_html => {'data-value' => f.object.contact, 'data-type' => f.object.class.to_s}, :label => ''
   .clear
 
   = f.input :description, :label => 'Descripción', :as => :text, :input_html => {:rows => 3, :cols => 40}
@@ -24,12 +24,77 @@
   = f.submit "Salvar"
 
 :javascript
-  head.ready(function() {
+  $(function() {
     $('body').live('new_contact', function(e, resp) {
       $('#account_ledger_contact_id').createSelectOption(resp.id, resp.matchcode);
     });
 
-    $('input[name=account]').click(function() {
-      alert($(this).val())
+    Autocomplete = {
+
+      setContactAutocomplete: function() {
+        var $field = $('#account_ledger_contact_id');
+        var $auto = $field.siblings('input.autocomplete_view'),
+        type = $('input[name=contact]:checked').val();
+
+        this.setLabelByType(type, $auto);
+
+        $field.data('type', type);
+        $auto.autocomplete("destroy")
+        .autocomplete({
+          'source': this.getUrlByType(type),
+          'select': function(event, ui) {
+            $field.val(ui.id).data('label', ui.label);
+          }
+        });
+      },
+      // Returns the URL to be used for autocomplete based on the selection
+      getUrlByType: function(type) {
+        switch(type) {
+          case "Client":
+            return "/client_autocomplete";
+            break
+          case "Supplier":
+            return "/supplier_autocomplete";
+            break
+          case "Staff":
+            return "/staff_autocomplete";
+            breaK
+        }
+      },
+      // Sets the correct label and 
+      setLabelByType: function(type, $auto) {
+        var label;
+        switch(type) {
+          case "Client":
+          label = "Cliente";
+          break
+          case "Supplier":
+          label = "Proveedor";
+          break
+          case "Staff":
+          label = "* Personal";
+          break
+        }
+
+        $auto.siblings('label').html(label);
+        if(type == "Staff" && $auto.siblings('span.hint').lenght <= 0) {
+          $auto.after("<span class='hint'></span>");
+        }else {
+          $auto.siblings('span.hint').remove();
+        }
+      }
+    }
+
+    // Sets the value and data depending on the clicked radio button in input[name=contact]
+
+    $('input[name=contact]').click(function() {
+      Autocomplete.setContactAutocomplete();
     });
-  })
+
+    if( $('input[name=contact]:checked').length <= 0 ) {
+      $('#account_ledger_contact_id').createAutocompleteField();
+
+      setTimeout(function() { $('input[name=contact]:first').attr('checked', true).trigger('click'); }, 200);
+    }
+
+  });

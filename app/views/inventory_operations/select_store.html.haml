@@ -15,20 +15,18 @@
     =submit_tag "Seleccionar almacen"
 
 :javascript
-  head.ready(function() {
-    $(document).ready(function() {
-      // Validate form
-      $('form#select_store').live('submit', function() {
-        if($('#store_id').val() == "") {
-          alert("Debe seleccionar un almacen!");
-          return false;
-        }
-      });
+  $(document).ready(function() {
+    // Validate form
+    $('form#select_store').live('submit', function() {
+      if($('#store_id').val() == "") {
+        alert("Debe seleccionar un almacen!");
+        return false;
+      }
+    });
 
-      // New form
-      $('body').live('new_store', function(e, resp) {
-        $('#store_id').createSelectOption(resp.id, resp.name);
-      });
-    
-    })
+    // New form
+    $('body').live('new_store', function(e, resp) {
+      $('#store_id').createSelectOption(resp.id, resp.name);
+    });
+  
   });

@@ -44,7 +44,7 @@
   = render 'currency_rates/active', :currency_rates => CurrencyRate.active
 
 :javascript
-  head.ready(function() {
+  $(function() {
     var accounts = #{Account.json.to_json};
     var currencies = #{Currency.json.to_json};
     window.currencies = currencies;

@@ -47,7 +47,7 @@
 = render "account_ledgers/list", :account => @bank, :ref_title => 'Ref./Nº Cheque'
 
 :javascript
-  head.ready(function() {
+  $(function() {
     $('#show_bank_info').click(function() {
       if($(this).html() == "Ver información") {
         $('#bank_info').show("slow")

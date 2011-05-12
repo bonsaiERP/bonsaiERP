@@ -15,7 +15,7 @@ class AccountLedgersController < ApplicationController
   end
 
   def new
-    params[:account] = "Client"
+    params[:contact] = "Client"
     begin
       @account = Account.org.find(params[:account_id])
     rescue

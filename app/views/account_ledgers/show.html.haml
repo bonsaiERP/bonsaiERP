@@ -24,7 +24,7 @@
   Conciliado por: <span class="b">#{@account_ledger.approver}</span>
 
 :javascript
-  head.ready(function() {
+  $(function() {
     $('.conciliation form').submit(function() {
       var conf_text = "Conciliar una transacción es una operación irreversible, esta seguro?";
       if (#{@account_ledger.account_ledger_id.present?}) {
