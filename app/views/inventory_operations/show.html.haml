@@ -38,4 +38,8 @@
       %td= det.item
       %td.cur= ntc det.quantity
       %td= det.item.unit
-      %td.cur= ntc items_hash[det.item_id][:quantity]
+      %td.cur
+        - if items_hash[det.item_id]
+          = ntc items_hash[det.item_id][:quantity]
+        - else
+          = ntc 0.0
