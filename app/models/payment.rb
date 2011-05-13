@@ -7,14 +7,17 @@ class Payment < ActiveRecord::Base
 
   acts_as_org
 
+  alias original_destroy destroy
+
+  def destroy; false; end
+
   attr_reader :pay_plan, :updated_pay_plan_ids, :account_ledger_created
 
   attr_reader :updated_account_ledger
 
-  attr_protected :state
+  attr_protected :state, :active
 
   STATES = ['conciliation', 'paid']
-
 
   # callbacks
   after_initialize  :set_defaults,               :if => :new_record?
@@ -24,7 +27,7 @@ class Payment < ActiveRecord::Base
   before_create     :update_transaction_balance
   before_validation :set_exchange_rate
   before_save       :set_state,                  :if => 'state.blank?'
-  #before_destroy    :destroy_and_create_pay_plan
+  # Do not use *_destroy callbacks due to how the transaction block works and in many times it updates more than one record
 
   # update_pay_plan must run before update_transaction
   after_create   :create_account_ledger
@@ -56,8 +59,6 @@ class Payment < ActiveRecord::Base
   validate              :valid_amount_or_interests_penalties
 
   # scopes
-  default_scope where(:active => true)
-
   scope :paid,         where(:state => 'paid')
   scope :conciliation, where(:state => 'conciliation')
   scope :deleted,      unscoped.where(:active => false)
@@ -71,7 +72,6 @@ class Payment < ActiveRecord::Base
     CODE
   end
 
-  alias_method :original_destroy, :destroy
 
 
   # Tells if the payment is in a differenc currency of the transaction
@@ -127,24 +127,33 @@ class Payment < ActiveRecord::Base
   # a pay_plan if required
   def destroy_payment
     d = Date.today
-    if paid?
-      Payment.transaction do
-        raise ActiveRecord::Rollback unless destroy_account_ledger
-        raise ActiveRecord::Rollback unless @pay_plan = create_pay_plan(amount, interests_penalties, d, d - 5.days)
-        raise ActiveRecord::Rollback unless transaction.substract_payment(amount)
-        self.active = false
-        raise ActiveRecord::Rollback unless self.save
-      end
+
+    if account_ledger.conciliation?
+      self.errors[:base] << "No es posible borrar"
+      @destroyed = false
     else
-      Payment.transaction do
-        raise ActiveRecord::Rollback unless account_ledger.delete.destroyed?
-        raise ActiveRecord::Rollback unless transaction.substract_payment(amount)
-        raise ActiveRecord::Rollback unless self.update_attributes(:active => false)
-      end
+      deactivate_payment_and_account_ledger
     end
+
   end
 
 private
+  # Updates the attributes of active = false for payment and account_ledger
+  def deactivate_payment_and_account_ledger
+    dest = true
+    Payment.transaction do
+      account_ledger.active = false
+      dest = account_ledger.save
+      
+      self.active = false
+      dest = dest and self.save
+      dest = dest and transaction.substract_payment(amount)
+
+      raise ActiveRecord::Rollback unless dest 
+    end
+
+    @destroyed = dest
+  end
 
   def updated_account_ledger?
     not @updated_account_ledger.blank?
@@ -250,11 +259,10 @@ private
   def destroy_account_ledger
     if account_ledger.present?
       unless account_ledger.conciliation?
-        account_ledger.delete.destroyed?
+        account_ledger.active = false
+        account_ledger.save
       else
-        al = create_account_ledger(true)
-        self.deleted_account_ledger_id = al.id
-        al.persisted?
+        false
       end
     end
   end

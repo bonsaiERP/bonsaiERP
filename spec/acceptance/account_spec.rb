@@ -136,11 +136,13 @@ feature "Account Feature", "test all incomes as transference between accounts. "
     trans.amount.should == -100
     trans.transferer.amount.should == 100
 
-    trans.destroy
+    trans.destroy_account_ledger
+    trans.reload
     trans.destroyed?.should == true
     ac = AccountLedger.org.where(:id => ac2_id).first
     #.size.should == 0
-    AccountLedger.unscoped.org.where(:id => ac2_id).size.should == 1
+    AccountLedger.org.active.where(:id => ac2_id).size.should == 0
+    AccountLedger.org.inactive.where(:id => ac2_id).size.should == 1
   end
 
 
@@ -153,7 +155,8 @@ feature "Account Feature", "test all incomes as transference between accounts. "
     ac2_id = trans.account_ledger_id
     trans.conciliate_account
 
-    trans.destroy
+    trans.destroy_account_ledger
+    trans.reload
     trans.destroyed?.should == false
     AccountLedger.where(:id => trans.id).size.should == 1
     AccountLedger.where(:id => ac2_id).size.should == 1

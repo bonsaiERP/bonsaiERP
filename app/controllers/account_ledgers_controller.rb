@@ -48,7 +48,7 @@ class AccountLedgersController < ApplicationController
 
   # DELETE /account_ledgers/:id
   def destroy
-    @account_ledger.destroy
+    @account_ledger.destroy_account_ledger
     redirect_ajax @account_ledger
   end
 

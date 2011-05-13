@@ -168,26 +168,24 @@ feature "Income", "test features" do
     pp = i.create_pay_plan(pay_plan_params(:amount => 100, :payment_date => d, :repeat => true))
     i = Income.find(i.id)
 
-    p = i.new_payment(:account_id => 2, :reference => 'NA', :date => d, :amount => 150)
+    p = i.new_payment(:account_id => 1, :reference => 'NA', :date => d, :amount => 150)
     
     p.amount.should == 150
     p.save.should == true
+    p.account_ledger.conciliation.should == false
     i.payments.size.should == 1
 
     pid = p.id
     al = p.account_ledger
-    #ac_id = p.account_ledger.account_id
-    #ac_amount = p.account_ledger.account.total_amount
 
-    al.destroy
+    al.destroy_account_ledger
     al.destroyed?.should == true
-    #
-    #al.payment(true).active.should == false
-    #puts ac_amount
-    #puts Account.find(ac_id).total_amount
+    al.reload
+    al.active.should == false
+    al.payment.active.should == false
 
-    i.reload
-    i.payments.size.should == 0
+    i = i.reload
+    i.payments.active.size.should == 0
   end
 
   scenario "Modify payments and check that balance stays" do
@@ -490,7 +488,6 @@ feature "Income", "test features" do
     
     # We must destroy the pay_plan to make it work
     pp = i.new_pay_plan(:amount => 20, :payment_date => d, :repeat => true)
-    #pp.destroy
     pp = i.create_pay_plan(pay_plan_params(:amount => 20, :payment_date => d, :repeat => true) )
 
     i = Income.find(i.id)

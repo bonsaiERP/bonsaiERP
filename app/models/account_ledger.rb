@@ -6,17 +6,17 @@ class AccountLedger < ActiveRecord::Base
 
   include ActionView::Helpers::NumberHelper
 
+  alias original_destroy destroy
+
+  def destroy; false; end
   # callbacks
-  #after_initialize :set_defaults
   before_create     :set_conciliation
   before_save       :set_income
   before_save       :set_creator_id
   before_save       :set_currency
   after_save        :update_payment,         :if => :payment?
   after_save        :update_account_balance, :if => :conciliation?
-  before_destroy    :check_destroy_related,  :unless => 'payment_id.present?'
-  before_destroy    :destroy_payment,        :if => :payment?
-  before_destroy    :update_active,          :unless => :destroyed?
+  # Do not use *_destroy callbacks due to how the transaction block works and in many times it updates more than one record
 
   # relationships
   belongs_to :account
@@ -36,7 +36,7 @@ class AccountLedger < ActiveRecord::Base
   # validations
   validates_presence_of :account_id, :date, :reference, :amount
   validates_presence_of :contact_id, :if => :pay_account?
-  validates_numericality_of :amount, :greater_than => 0, :unless => :conciliation?
+  validates_numericality_of :amount 
   validate :valid_organisation_account
 
   # transference
@@ -52,10 +52,10 @@ class AccountLedger < ActiveRecord::Base
   delegate :name, :symbol, :to => :currency, :prefix => true
 
   # scopes
-  default_scope where(:active => true)
-  
   scope :pendent,     where(:conciliation => false)
   scope :conciliated, where(:conciliation => true)
+  scope :active,      where(:active => true)
+  scope :inactive,    where(:active => false)
 
   # Updates the conciliation state
   def conciliate_account
@@ -158,6 +158,20 @@ class AccountLedger < ActiveRecord::Base
     @destroyed
   end
 
+  # Updates all data and changes active = false
+  def destroy_account_ledger
+    unless conciliation?
+      case 
+      when payment_id.present?        then destroy_payment
+      when account_ledger_id.present? then destroy_related
+      else
+        unset_active
+      end
+    else
+      false
+    end
+  end
+
 private
   
   # returns the account_to, using to_account id
@@ -252,37 +266,36 @@ private
   # destroys a payment, in case the payment calls for destroying the account_ledger
   # the if payment.present? will control if the payment was not already destroyed
   def destroy_payment
-    if conciliation?
-      @destroyed = false
-    else
-      self.class.transaction do
-        self.active = false
-        raise ActiveRecord::Rollback unless self.save
-        raise ActiveRecord::Rollback unless payment.update_attributes(:active => false)
-      end
+    dest = true
 
-      @destroyed = true
+    self.class.transaction do
+      self.active = false
+      dest = self.save
+
+      payment.active = false
+      dest = dest and payment.save
+
+      raise ActiveRecord::Rollback unless dest
     end
 
-    false
+    @destroyed = dest
   end
 
-  # Destroys related for transference or validates if conciliation
-  def check_destroy_related
-    if conciliation?
-      @destroyed = false
-    elsif account_ledger_id.present?
-      self.class.transaction do
-        self.active = false
-        raise ActiveRecord::Rollback unless self.save(:validate => false)
-        transferer.active = false
-        raise ActiveRecord::Rollback unless transferer.save(:validate => false)
-      end
 
-      @destroyed = true
+  # Destroys related for transference or validates if conciliation
+  def destroy_related
+    dest = true
+
+    self.class.transaction do
+      self.active = false
+      dest        = self.save
+
+      transferer.active = false
+      dest = dest and transferer.save
+      raise ActiveRecord::Rollback unless dest
     end
 
-    false
+    @destroyed = dest
   end
 
   def set_conciliation
@@ -291,12 +304,9 @@ private
   end
 
   # Updates active state for destroy
-  def update_active
-    unless self.conciliation?
-      self.active = false
-      self.save
-
-      false
-    end
+  def unset_active
+    self.active = false
+    @destroyed = self.save
   end
+      
 end

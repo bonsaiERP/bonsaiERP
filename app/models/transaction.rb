@@ -8,6 +8,11 @@ class Transaction < ActiveRecord::Base
   TYPES    = ['Income' , 'Expense'  , 'Buy']
   DECIMALS = 2
   # Determines if the oprations is made on transaction or pay_plan or payment
+  ###############################
+  # Methods for pay_plans
+  include ::Transaction::PayPlans
+  ###############################
+ 
   attr_reader :trans, :approving
   # callbacks
   after_initialize :set_defaults, :if => :new_record?
@@ -47,10 +52,6 @@ class Transaction < ActiveRecord::Base
 
   delegate :name, :symbol, :plural, :code, :to => :currency, :prefix => true
 
-  ###############################
-  # Methods for pay_plans
-  include ::Transaction::PayPlans
-  ###############################
 
   # Define boolean methods for states
   STATES.each do |state|
@@ -197,11 +198,11 @@ class Transaction < ActiveRecord::Base
   end
 
   def total_payments
-    payments.inject(0) {|sum, v| sum += v.amount }
+    payments.active.inject(0) {|sum, v| sum += v.amount }
   end
 
   def total_payments_with_interests
-    payments.inject(0) {|sum, v| sum += v.amount + v.interests_penalties }
+    payments.active.inject(0) {|sum, v| sum += v.amount + v.interests_penalties }
   end
 
   # Presents the currency symbol name if not default currency
@@ -218,12 +219,12 @@ class Transaction < ActiveRecord::Base
 
   # Sums the total of payments
   def payments_total
-    payments.sum(:amount)
+    payments.active.sum(:amount)
   end
 
   # Sums the total amount of the payments and interests
   def payments_amount_interests_total
-    payments.sum(:amount) + payments.sum(:interests_penalties)
+    payments.active.sum(:amount) + payments.active.sum(:interests_penalties)
   end
 
   # Returns the total value of pay plans that haven't been paid'
