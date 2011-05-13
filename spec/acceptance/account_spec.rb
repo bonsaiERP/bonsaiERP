@@ -112,7 +112,7 @@ feature "Account Feature", "test all incomes as transference between accounts. "
 
     trans.conciliate_account.should == false
     trans.errors.should_not == blank?
-    puts trans.errors
+    #puts trans.errors
     trans.conciliation.should == false
   end
 
@@ -126,31 +126,34 @@ feature "Account Feature", "test all incomes as transference between accounts. "
     trans.transferer.errors[:base].should_not == blank?
   end
 
-  scenario "deleting one side of the account_ledger should delete the other side" do
+  scenario "deleting one side of the account_ledger should change the state the other side" do
     trans = Bank.find(1).account_ledgers.build(:amount => 100, :to_account => 2, :date => Date.today)
     trans.create_transference.should == true
     trans.account_ledger_id.should_not == blank?
 
     ac2_id = trans.account_ledger_id
 
-    trans.destroy.destroyed?.should == true
-    AccountLedger.where(:id => ac2_id).size.should == 0
+    trans.amount.should == -100
+    trans.transferer.amount.should == 100
+
+    trans.destroy
+    trans.destroyed?.should == true
+    ac = AccountLedger.org.where(:id => ac2_id).first
+    #.size.should == 0
+    AccountLedger.unscoped.org.where(:id => ac2_id).size.should == 1
   end
 
 
 
-  scenario "deleting one side with error the account_ledger should not delete the other side" do
+  scenario "deleting one side with if conciliated on transference should not delete" do
     trans = Bank.find(1).account_ledgers.build(:amount => 100, :to_account => 2, :date => Date.today)
     trans.create_transference.should == true
     trans.account_ledger_id.should_not == blank?
 
     ac2_id = trans.account_ledger_id
-    t2 = trans.transferer
-    t2.stubs(:destroyed? => false)
-    t2.stubs(:delete => t2)
+    trans.conciliate_account
 
     trans.destroy
-
     trans.destroyed?.should == false
     AccountLedger.where(:id => trans.id).size.should == 1
     AccountLedger.where(:id => ac2_id).size.should == 1

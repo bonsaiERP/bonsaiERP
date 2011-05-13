@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110511142832) do
+ActiveRecord::Schema.define(:version => 20110513200354) do
 
   create_table "account_ledgers", :force => true do |t|
     t.integer  "organisation_id"
@@ -31,9 +31,11 @@ ActiveRecord::Schema.define(:version => 20110511142832) do
     t.integer  "approver_id"
     t.integer  "account_ledger_id"
     t.boolean  "pay_account",                                                     :default => false
+    t.boolean  "active",                                                          :default => true
   end
 
   add_index "account_ledgers", ["account_id"], :name => "index_account_ledgers_on_account_id"
+  add_index "account_ledgers", ["active"], :name => "index_account_ledgers_on_active"
   add_index "account_ledgers", ["conciliation"], :name => "index_account_ledgers_on_conciliation"
   add_index "account_ledgers", ["contact_id"], :name => "index_account_ledgers_on_contact_id"
   add_index "account_ledgers", ["currency_id"], :name => "index_account_ledgers_on_currency_id"
@@ -86,10 +88,8 @@ ActiveRecord::Schema.define(:version => 20110511142832) do
     t.string   "type"
     t.string   "last_name",         :limit => 100
     t.string   "position"
-    t.boolean  "active",                           :default => true
   end
 
-  add_index "contacts", ["active"], :name => "index_contacts_on_active"
   add_index "contacts", ["client"], :name => "index_contacts_on_client"
   add_index "contacts", ["code"], :name => "index_contacts_on_code"
   add_index "contacts", ["last_name"], :name => "index_contacts_on_last_name"
@@ -275,7 +275,7 @@ ActiveRecord::Schema.define(:version => 20110511142832) do
   add_index "payments", ["ctype"], :name => "index_payments_on_ctype"
   add_index "payments", ["currency_id"], :name => "index_payments_on_currency_id"
   add_index "payments", ["date"], :name => "index_payments_on_date"
-  add_index "payments", ["deleted_account_ledger_id"], :name => "index_payments_on_deleted_account_ledger_id"
+  add_index "payments", ["deleted_account_ledger_id"], :name => "index_payments_on_deleted_acount_ledger_id"
   add_index "payments", ["organisation_id"], :name => "index_payments_on_organisation_id"
   add_index "payments", ["reference"], :name => "index_payments_on_reference"
   add_index "payments", ["state"], :name => "index_payments_on_state"

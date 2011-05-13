@@ -16,6 +16,7 @@ class AccountLedger < ActiveRecord::Base
   after_save        :update_account_balance, :if => :conciliation?
   before_destroy    :check_destroy_related,  :unless => 'payment_id.present?'
   before_destroy    :destroy_payment,        :if => :payment?
+  before_destroy    :update_active,          :unless => :destroyed?
 
   # relationships
   belongs_to :account
@@ -29,8 +30,8 @@ class AccountLedger < ActiveRecord::Base
   belongs_to :approver, :class_name => 'User'
 
   attr_accessor  :payment_destroy, :to_account, :to_exchange_rate, :to_amount_currency
-  attr_reader    :transference
-  attr_protected :conciliation, :pay_account
+  attr_reader    :transference, :destroyed
+  attr_protected :conciliation, :pay_account, :active
 
   # validations
   validates_presence_of :account_id, :date, :reference, :amount
@@ -51,6 +52,8 @@ class AccountLedger < ActiveRecord::Base
   delegate :name, :symbol, :to => :currency, :prefix => true
 
   # scopes
+  default_scope where(:active => true)
+  
   scope :pendent,     where(:conciliation => false)
   scope :conciliated, where(:conciliation => true)
 
@@ -151,6 +154,10 @@ class AccountLedger < ActiveRecord::Base
     end
   end
 
+  def destroyed?
+    @destroyed
+  end
+
 private
   
   # returns the account_to, using to_account id
@@ -231,12 +238,6 @@ private
     payment_id.present?
   end
 
-  # destroys a payment, in case the payment calls for destroying the account_ledger
-  # the if payment.present? will control if the payment was not already destroyed
-  def destroy_payment
-    payment.update_attributes(:active => false)
-  end
-
   def valid_organisation_account
     unless Account.org.map(&:id).include?(account_id)
       logger.warn "El usuario #{UserSession.user_id} trato de hackear account_ledger"
@@ -248,17 +249,54 @@ private
     self.creator_id = UserSession.current_user.id
   end
 
+  # destroys a payment, in case the payment calls for destroying the account_ledger
+  # the if payment.present? will control if the payment was not already destroyed
+  def destroy_payment
+    if conciliation?
+      @destroyed = false
+    else
+      self.class.transaction do
+        self.active = false
+        raise ActiveRecord::Rollback unless self.save
+        raise ActiveRecord::Rollback unless payment.update_attributes(:active => false)
+      end
+
+      @destroyed = true
+    end
+
+    false
+  end
+
   # Destroys related for transference or validates if conciliation
   def check_destroy_related
     if conciliation?
-      false
+      @destroyed = false
     elsif account_ledger_id.present?
-      transferer.delete.destroyed?
+      self.class.transaction do
+        self.active = false
+        raise ActiveRecord::Rollback unless self.save(:validate => false)
+        transferer.active = false
+        raise ActiveRecord::Rollback unless transferer.save(:validate => false)
+      end
+
+      @destroyed = true
     end
+
+    false
   end
 
   def set_conciliation
     self.conciliation = false if conciliation.blank?
     true
+  end
+
+  # Updates active state for destroy
+  def update_active
+    unless self.conciliation?
+      self.active = false
+      self.save
+
+      false
+    end
   end
 end

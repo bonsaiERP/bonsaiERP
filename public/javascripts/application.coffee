@@ -94,11 +94,29 @@ $(document).ready(->
       d
 
   # Creates an autocomplete field
-  createAutocompleteField = ->
+  # @param Object
+  createAutocompleteField = (options)->
+    options = $.extend({}, options)
+    self = @
     val = $(@).data('value') || ""
-    $(@).hide()
-    .before("<input type='text' size='#{$(@).attr('size')}' style='text-align:left' class='autocomplete_view' value='#{val}'/>")
-    .autocomplete({source: $(@).data('url') } )
+    id = new Date().getTime()
+
+    $input = $('<input/>').attr({'size': $(this).attr('size'), 'type':'text', 'id': id})
+    .css({'text-align':'left'}).addClass('autocomplete_view')
+    .val(val)
+    $(@).hide().before($input)
+
+    $("##{id}").live('focusout', ->
+      if $(@).val() == ""
+        $(self).val('').data('value', '')
+      else
+        $(@).val($(self).data('value'))
+    ).autocomplete({
+      source: options.source || $(@).data('url'),
+      select: (e, ui)->
+        $(@).siblings('input').data('value', ui.item.label).val(ui.item.id)
+    })
+
 
   $.createAutocompleteField = $.fn.createAutocompleteField = createAutocompleteField
 

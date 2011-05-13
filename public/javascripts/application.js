@@ -93,11 +93,31 @@
         return d;
       }
     };
-    createAutocompleteField = function() {
-      var val;
+    createAutocompleteField = function(options) {
+      var $input, id, self, val;
+      options = $.extend({}, options);
+      self = this;
       val = $(this).data('value') || "";
-      return $(this).hide().before("<input type='text' size='" + ($(this).attr('size')) + "' style='text-align:left' class='autocomplete_view' value='" + val + "'/>").autocomplete({
-        source: $(this).data('url')
+      id = new Date().getTime();
+      $input = $('<input/>').attr({
+        'size': $(this).attr('size'),
+        'type': 'text',
+        'id': id
+      }).css({
+        'text-align': 'left'
+      }).addClass('autocomplete_view').val(val);
+      $(this).hide().before($input);
+      return $("#" + id).live('focusout', function() {
+        if ($(this).val() === "") {
+          return $(self).val('').data('value', '');
+        } else {
+          return $(this).val($(self).data('value'));
+        }
+      }).autocomplete({
+        source: options.source || $(this).data('url'),
+        select: function(e, ui) {
+          return $(this).siblings('input').data('value', ui.item.label).val(ui.item.id);
+        }
       });
     };
     $.createAutocompleteField = $.fn.createAutocompleteField = createAutocompleteField;

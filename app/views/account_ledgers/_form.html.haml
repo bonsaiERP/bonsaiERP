@@ -31,21 +31,16 @@
 
     Autocomplete = {
 
+      // Init the Autocomplete Object
       setContactAutocomplete: function() {
-        var $field = $('#account_ledger_contact_id');
-        var $auto = $field.siblings('input.autocomplete_view'),
+
+        var $field = $('#account_ledger_contact_id'),
         type = $('input[name=contact]:checked').val();
 
-        this.setLabelByType(type, $auto);
+        $field.siblings('input.autocomplete_view').remove().data('type', type);
+        $field.createAutocompleteField({'source': this.getUrlByType(type) });
 
-        $field.data('type', type);
-        $auto.autocomplete("destroy")
-        .autocomplete({
-          'source': this.getUrlByType(type),
-          'select': function(event, ui) {
-            $field.val(ui.id).data('label', ui.label);
-          }
-        });
+        this.setLabelByType(type, $field.siblings('input.autocomplete_view'));
       },
       // Returns the URL to be used for autocomplete based on the selection
       getUrlByType: function(type) {
@@ -72,13 +67,13 @@
           label = "Proveedor";
           break
           case "Staff":
-          label = "* Personal";
+          label = "Personal <abbr title='requerido'>*</abbr>";
           break
         }
 
         $auto.siblings('label').html(label);
-        if(type == "Staff" && $auto.siblings('span.hint').lenght <= 0) {
-          $auto.after("<span class='hint'></span>");
+        if(type == "Staff") {
+          $auto.after("<span class='hint'>Se genera cuenta pendiente de revisión</span>");
         }else {
           $auto.siblings('span.hint').remove();
         }
@@ -88,13 +83,15 @@
     // Sets the value and data depending on the clicked radio button in input[name=contact]
 
     $('input[name=contact]').click(function() {
+      $('#account_ledger_contact_id').data({'value': '', 'type': ''})
       Autocomplete.setContactAutocomplete();
     });
 
     if( $('input[name=contact]:checked').length <= 0 ) {
-      $('#account_ledger_contact_id').createAutocompleteField();
+      $('input[name=contact]:first').attr('checked', true)
+      Autocomplete.setContactAutocomplete();
 
-      setTimeout(function() { $('input[name=contact]:first').attr('checked', true).trigger('click'); }, 200);
+      //setTimeout(function() { $('input[name=contact]:first').attr('checked', true).trigger('click'); }, 200);
     }
 
   });
