@@ -51,7 +51,7 @@
     = f.submit 'Salvar'
 
 :javascript
-  head.ready(function() {
+  $(function() {
     $('#add_item').live('click', function() {
       var t = (new Date() ).getTime();
       tr = $('#items_table tr.item:first').clone();

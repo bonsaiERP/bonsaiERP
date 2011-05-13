@@ -10,8 +10,12 @@
   = f.input :reference, :label => 'Referencia/Nº de cheque', :input_html => {:size => 20}
 
   - url, tit = @account_ledger.income? ? [new_client_path, "cliente"] : [new_supplier_path, "proveedor"]
-  = f.association :contact, :label => account_ledger_contact_label(@account_ledger), :collection => account_ledger_contact_collection(@account_ledger), :input_html => {'data-new_url' => url, 'data-trigger' => 'new_contact', 'data-title' => "Nuevo #{tit}"}
-
+  .boolean
+    %label #{ radio_button_tag("contact", "Client", params[:account] == "Client") } Cliente
+    %label #{ radio_button_tag "contact" , "Supplier", params[:account] == "Supplier"} Proveedor
+    %label #{ radio_button_tag "contact" , "Staff", params[:account] == "Staff"} Personal
+  /= f.association :contact, :label => "Cliente", :collection => account_ledger_contact_collection(@account_ledger), :input_html => {'data-new_url' => url, 'data-trigger' => 'new_contact', 'data-title' => "Nuevo #{tit}"}
+  = f.input :contact_id, :input_html => {'data-value' => f.object.contact, 'data-type' => f.object.class.to_s}, :label => ''
   .clear
 
   = f.input :description, :label => 'Descripción', :as => :text, :input_html => {:rows => 3, :cols => 40}
@@ -20,8 +24,74 @@
   = f.submit "Salvar"
 
 :javascript
-  head.ready(function() {
+  $(function() {
     $('body').live('new_contact', function(e, resp) {
       $('#account_ledger_contact_id').createSelectOption(resp.id, resp.matchcode);
     });
-  })
+
+    Autocomplete = {
+
+      // Init the Autocomplete Object
+      setContactAutocomplete: function() {
+
+        var $field = $('#account_ledger_contact_id'),
+        type = $('input[name=contact]:checked').val();
+
+        $field.siblings('input.autocomplete_view').remove().data('type', type);
+        $field.createAutocompleteField({'source': this.getUrlByType(type) });
+
+        this.setLabelByType(type, $field.siblings('input.autocomplete_view'));
+      },
+      // Returns the URL to be used for autocomplete based on the selection
+      getUrlByType: function(type) {
+        switch(type) {
+          case "Client":
+            return "/client_autocomplete";
+            break
+          case "Supplier":
+            return "/supplier_autocomplete";
+            break
+          case "Staff":
+            return "/staff_autocomplete";
+            breaK
+        }
+      },
+      // Sets the correct label and 
+      setLabelByType: function(type, $auto) {
+        var label;
+        switch(type) {
+          case "Client":
+          label = "Cliente";
+          break
+          case "Supplier":
+          label = "Proveedor";
+          break
+          case "Staff":
+          label = "Personal <abbr title='requerido'>*</abbr>";
+          break
+        }
+
+        $auto.siblings('label').html(label);
+        if(type == "Staff") {
+          $auto.after("<span class='hint'>Se genera cuenta pendiente de revisión</span>");
+        }else {
+          $auto.siblings('span.hint').remove();
+        }
+      }
+    }
+
+    // Sets the value and data depending on the clicked radio button in input[name=contact]
+
+    $('input[name=contact]').click(function() {
+      $('#account_ledger_contact_id').data({'value': '', 'type': ''})
+      Autocomplete.setContactAutocomplete();
+    });
+
+    if( $('input[name=contact]:checked').length <= 0 ) {
+      $('input[name=contact]:first').attr('checked', true)
+      Autocomplete.setContactAutocomplete();
+
+      //setTimeout(function() { $('input[name=contact]:first').attr('checked', true).trigger('click'); }, 200);
+    }
+
+  });

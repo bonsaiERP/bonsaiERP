@@ -93,6 +93,36 @@ $(document).ready(->
     else
       d
 
+  # Creates an autocomplete field
+  # @param Object
+  createAutocompleteField = (options)->
+    options = $.extend({}, options)
+    self = @
+    val = $(@).data('value') || ""
+    id = new Date().getTime()
+
+    $input = $('<input/>').attr({'size': $(this).attr('size'), 'type':'text', 'id': id})
+    .css({'text-align':'left'}).addClass('autocomplete_view')
+    .val(val)
+    $(@).hide().before($input)
+
+    $("##{id}").live('focusout', ->
+      if $(@).val() == ""
+        $(self).val('').data('value', '')
+      else
+        $(@).val($(self).data('value'))
+    ).autocomplete({
+      source: options.source || $(@).data('url'),
+      select: (e, ui)->
+        $(@).siblings('input').data('value', ui.item.label).val(ui.item.id)
+    })
+
+
+  $.createAutocompleteField = $.fn.createAutocompleteField = createAutocompleteField
+
+  # Create autocomplete for items
+  $('input.autocomplete').createAutocompleteField()
+
   # Sets rails select fields with the correct datthe correct date
   setDateSelect = (el)->
     el = el || this
@@ -115,6 +145,7 @@ $(document).ready(->
     options = options.join("")
 
     $(el).html(options)
+
 
   # Transforms a dateselect field in rails to jQueryUI
   transformDateSelect = ->

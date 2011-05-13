@@ -24,7 +24,7 @@
     = f.submit 'Siguiente', :class => 'butr fr'
 
 :javascript
-  head.ready(function() {
+  $(function() {
     $('input:radio[name=account]').live('click', function() {
       window.location = "/organisations/new?step=2&account=" + $(this).val();
     });

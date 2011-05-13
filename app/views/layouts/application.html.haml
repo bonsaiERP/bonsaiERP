@@ -10,9 +10,8 @@
       "jquery.tmpl.min.js", "application.js"].map {|v| "\"#{ javascript_path(v) }\"" }
 
     = stylesheet_link_tag 'style', 'jquery-ui-1.8.10.custom.css' 
-    =javascript_include_tag "head.min"
-    :javascript
-      head.js(#{scripts.join(", ")});
+    =javascript_include_tag "jquery-1.6.min.js", "jquery-ui-1.8.12.custom.min.js", "jquery.ui.datepicker-es.js", "tooltip.min.js", 
+       "application.js"
 
     /= javascript_include_tag 'jquery-1.6.min', 'jquery-ui-1.8.8.custom.min.js', 'jquery.ui.datepicker-es.js', 'tooltip.min', 'jquery.tmpl.min', :cache => 'javascripts'
     /, 'rails'
@@ -42,7 +41,7 @@
           #foot
 
 :javascript
-  head.ready(function() {
+  $(function() {
     if($.browser.msie && $.browser.version < 8) {
       var menu = ["<li class='more' style='width: 200px'>",
             "<ul>",

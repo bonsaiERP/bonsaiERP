@@ -22,7 +22,7 @@
   = f.submit "Salvar"
 
 :javascript
-  head.ready(function() {
+  $(function() {
     $('body').live('new_unit', function(e, resp) {
       var label = resp.name + " (" + resp.symbol + ")";
       $('#item_unit_id').createSelectOption(resp.id, label);

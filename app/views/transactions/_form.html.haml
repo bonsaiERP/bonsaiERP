@@ -96,11 +96,11 @@
   .actions
     = f.submit 'Salvar'
 
+= javascript_include_tag 'app/transactions.js'
 
 :javascript
-  head.js('/javascripts/app/transactions.js');
 
-  head.ready( function() {
+  $( function() {
 
     $('a#add_item').click(function() {
       $('#item_autocomplete').hide().insertAfter('#items_table');
