@@ -58,22 +58,22 @@ module AccountsHelper
 
   def pluralize_conciliation(klass)
     if klass.account_ledgers.pendent.size == 1
-      "1 conciliación pendiente"
+      "1 renvisión pendiente"
     else
-      "#{klass.account_ledgers.pendent.size} conciliaciones pendientes"
+      "#{klass.account_ledgers.pendent.size} revisiones pendientes"
     end
   end
 
   def link_pendent_ledgers(klass)
-    link_to( "Conciliaciones pendientes (#{klass.account_ledgers.pendent.size})", "#{polymorphic_url(klass)}?option=false") if klass.account_ledgers.pendent.any?
+    link_to( "Revisiones pendientes (#{klass.account_ledgers.pendent.size})", "#{polymorphic_url(klass)}?option=false") if klass.account_ledgers.pendent.any?
   end
 
   # Confirmation for acccount_ledger destroy
   def account_ledger_destroy_confirm_dialog(klass)
     if klass.account_ledger_id.present?
-      "Borrar esta transacción tambien borrara la transacción relacionada con la transferencia, eta seguro de borrar?"
+      "Anular esta transacción tambien anulara la transacción relacionada con la transferencia, eta seguro de anularla?"
     else
-      "Esta seguro de borrar la transacción?"
+      "Esta seguro de anular la transacción?"
     end
   end
 

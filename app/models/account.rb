@@ -61,7 +61,8 @@ class Account < ActiveRecord::Base
       bl = self.account_ledgers.build(:amount => amount, :date => Date.today, 
                                       :currency_id => currency_id,
                                       :income => true,
-                                      :reference => 'NE',
+                                      :reference => 'Inicio',
+                                      :contact_id => UserSession.user_id,
                                       :description => "Primer ingreso por creación de cuenta #{ac}")
     end
   end

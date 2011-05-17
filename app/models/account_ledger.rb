@@ -11,6 +11,7 @@ class AccountLedger < ActiveRecord::Base
   def destroy; false; end
   # callbacks
   before_create     :set_conciliation
+  before_create     :set_personal
   before_save       :set_income
   before_save       :set_creator_id
   before_save       :set_currency
@@ -26,17 +27,24 @@ class AccountLedger < ActiveRecord::Base
   belongs_to :transaction
   belongs_to :transferer, :class_name => 'AccountLedger', :foreign_key => :account_ledger_id
 
-  belongs_to :creator,  :class_name => 'User'
-  belongs_to :approver, :class_name => 'User'
+  belongs_to :creator,           :class_name => 'User'
+  belongs_to :approver,          :class_name => 'User'
+  belongs_to :nuller,            :class_name => 'User'
+  belongs_to :personal_approver, :class_name => 'User'
+
+  has_many :personal_comments, :dependent => :destroy
+  has_one :personal_comment
+  accepts_nested_attributes_for :personal_comments
 
   attr_accessor  :payment_destroy, :to_account, :to_exchange_rate, :to_amount_currency
   attr_reader    :transference, :destroyed
-  attr_protected :conciliation, :pay_account, :active
+  attr_protected :conciliation, :personal, :active, :creator_id, :nuller_id, :personal_approver_id
+
 
   # validations
-  validates_presence_of :account_id, :date, :reference, :amount
-  validates_presence_of :contact_id, :if => :pay_account?
-  validates_numericality_of :amount 
+  validates_presence_of :account_id, :date, :amount, :contact_id
+  validates_numericality_of :amount
+  validates :reference, :presence => true, :length => {:maximum => 200}
   validate :valid_organisation_account
 
   # transference
@@ -52,10 +60,12 @@ class AccountLedger < ActiveRecord::Base
   delegate :name, :symbol, :to => :currency, :prefix => true
 
   # scopes
-  scope :pendent,     where(:conciliation => false)
-  scope :conciliated, where(:conciliation => true)
-  scope :active,      where(:active => true)
-  scope :inactive,    where(:active => false)
+  scope :pendent,          where(:conciliation => false)
+  scope :conciliated,      where(:conciliation => true)
+  scope :active,           where(:active => true)
+  scope :inactive,         where(:active => false)
+  scope :personal_pendant, where(:personal => 'personal')
+  scope :personal,         where(:personal => 'approved')
 
   # Updates the conciliation state
   def conciliate_account
@@ -96,10 +106,13 @@ class AccountLedger < ActiveRecord::Base
 
   # Returns a scope based on the option
   def self.get_by_option(option)
-    ledgers = includes(:payment, :transaction, :contact) 
+    ledgers = includes(:payment, :transaction, :contact, :creator, :approver, :nuller) 
     case option
-    when 'false' then ledgers.pendent
-    when 'true' then ledgers.conciliated
+    when 'false'    then ledgers.pendent
+    when 'true'     then ledgers.conciliated
+    when 'nil'      then ledgers.inactive
+    when 'personal' then ledgers.personal_pendant
+    when 'approved' then ledgers.personal
     else
       ledgers
     end
@@ -158,6 +171,11 @@ class AccountLedger < ActiveRecord::Base
     @destroyed
   end
 
+  # Tells if personal == 'personal'
+  def personal?
+    personal == 'personal'
+  end
+
   # Updates all data and changes active = false
   def destroy_account_ledger
     unless conciliation?
@@ -170,6 +188,13 @@ class AccountLedger < ActiveRecord::Base
     else
       false
     end
+  end
+
+  # Approves the account for personal
+  def approve_personal
+    self.personal_approver_id = UserSession.user_id
+    self.personal = 'approved'
+    self.save
   end
 
 private
@@ -269,8 +294,9 @@ private
     dest = true
 
     self.class.transaction do
-      self.active = false
-      dest = self.save
+      self.active    = false
+      self.nuller_id = UserSession.user_id
+      dest           = self.save
 
       payment.active = false
       dest = dest and payment.save
@@ -287,8 +313,9 @@ private
     dest = true
 
     self.class.transaction do
-      self.active = false
-      dest        = self.save
+      self.active    = false
+      self.nuller_id = UserSession.user_id
+      dest           = self.save
 
       transferer.active = false
       dest = dest and transferer.save
@@ -308,5 +335,9 @@ private
     self.active = false
     @destroyed = self.save
   end
-      
+    
+  # Sets the variable if the selected contact is a Staff  
+  def set_personal
+   self.personal = contact.is_a?(Staff) ? 'personal' : 'no'
+  end
 end

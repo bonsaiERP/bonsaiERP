@@ -13,6 +13,7 @@ Bonsaierp::Application.routes.draw do
   resources :account_ledgers do
     member do
       put  :conciliate
+      put  :personal
       get  :new_transference
       post :transference
     end

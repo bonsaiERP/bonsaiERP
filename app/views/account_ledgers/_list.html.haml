@@ -1,8 +1,11 @@
 :css
   .false_in td.col{ color: #FF0000; }
   td.r{width: 110px; }
-  td.check{width: 120px;}
+  td.check{width: 170px;}
   td.d{ width: 70px; }
+  td.desc {width: 300px; }
+  td.cont {width: 150px; }
+  td.rev {width: 200px; }
   a.concile{
     float:left;
     display: inline-block;
@@ -21,13 +24,16 @@
 
 .clear
 <br/><br/>
-- ac_path = account.is_a?(Bank) ? "/banks" : "cash_registers"
+- ac_path = account.is_a?(Bank) ? "/banks" : "/cash_registers"
 
 
 %ul.tabs
   %li= link_to "Todas", "#{ac_path}/#{account.id}", :class => tabs_filter('all')
-  %li= link_to "Esperando conciliación #{size_or_blank(account.account_ledgers.pendent.size)}", "#{ac_path}/#{account.id}?option=false", :class => tabs_filter('false')
-  %li= link_to "Conciliadas", "#{ac_path}/#{account.id}?option=true", :class => tabs_filter('true')
+  %li= link_to "Esperando revisión #{size_or_blank(account.account_ledgers.pendent.size)}", "#{ac_path}/#{account.id}?option=false", :class => tabs_filter('false')
+  %li= link_to "Pendientes personal #{size_or_blank(account.account_ledgers.personal_pendant.size)}", "#{ac_path}/#{account.id}?option=personal", :class => tabs_filter('personal')
+  %li= link_to "Aprobadas personal", "#{ac_path}/#{account.id}?option=approved", :class => tabs_filter('approved')
+  %li= link_to "Anuladas", "#{ac_path}/#{account.id}?option=nil", :class => tabs_filter('nil')
+  %li= link_to "Revisadas", "#{ac_path}/#{account.id}?option=true", :class => tabs_filter('true')
 
 
 .clear
@@ -41,22 +47,29 @@
 
 %table.decorated.nwl.nwf
   %tr
-    %th Fecha
-    %th= ref_title
+    %th 
+      Fecha<br/>
+      %span.tip{:title => 'Nº de cheque, razón, recibo, etc.'} Referencia
     %th Monto en #{account.currency_symbol}
     %th Contacto
     %th Descripción
-    %th Conciliador
+    %th 
+      (R) Revisado por<br/>
+      (A) Anulado por
     %th
   - ledgers.each do |al|
     %tr{:class => al.income.to_s + '_in' }
-      %td.d= link_to lo(al.date), al, :class => "b #{conciliate_css(al)}"
-      %td.check= al.reference
-      %td.r.col= ntc al.amount
-      %td= al.contact if al.contact_id
-      %td= link_description al
-      %td= al.approver if al.approver_id.present?
+      %td.d.check
+        = link_to lo(al.date), al, :class => "b #{conciliate_css(al)}"
+        %br/
+        = al.reference
+      %td.cur.col= ntc al.amount
+      %td.cont= al.contact if al.contact_id
+      %td.desc= link_description al
+      %td.rev
+        = "(R) #{al.approver}" if al.approver_id.present?
+        = "<br/><span class='dark_grey'>(A) #{al.nuller}</span>".html_safe if al.nuller_id.present?
       %td.cur
-        - unless al.conciliation?
+        - if not(al.conciliation?) and al.active?
           = link_to "borrar", al, :class => 'delete fl', 'data-remote' => true, :title => 'Borrar', 'data-confirm' => account_ledger_destroy_confirm_dialog(al)
 

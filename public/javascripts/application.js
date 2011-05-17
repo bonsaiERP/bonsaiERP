@@ -94,15 +94,17 @@
       }
     };
     createAutocompleteField = function(options) {
-      var $input, id, self, val;
+      var $input, id, required, self, val;
       options = $.extend({}, options);
       self = this;
       val = $(this).data('value') || "";
       id = new Date().getTime();
+      required = $(this).attr('required');
       $input = $('<input/>').attr({
         'size': $(this).attr('size'),
         'type': 'text',
-        'id': id
+        'id': id,
+        'required': required
       }).css({
         'text-align': 'left'
       }).addClass('autocomplete_view').val(val);

@@ -10,13 +10,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110513200354) do
+ActiveRecord::Schema.define(:version => 20110517214353) do
 
   create_table "account_ledgers", :force => true do |t|
     t.integer  "organisation_id"
     t.integer  "account_id"
     t.integer  "currency_id"
-    t.decimal  "amount",                           :precision => 14, :scale => 2
+    t.decimal  "amount",                             :precision => 14, :scale => 2
     t.date     "date"
     t.integer  "payment_id"
     t.boolean  "income"
@@ -26,12 +26,14 @@ ActiveRecord::Schema.define(:version => 20110513200354) do
     t.boolean  "conciliation"
     t.string   "description"
     t.integer  "transaction_id"
-    t.string   "reference",         :limit => 100
+    t.string   "reference"
     t.integer  "creator_id"
     t.integer  "approver_id"
     t.integer  "account_ledger_id"
-    t.boolean  "pay_account",                                                     :default => false
-    t.boolean  "active",                                                          :default => true
+    t.boolean  "active",                                                            :default => true
+    t.integer  "nuller_id"
+    t.string   "personal",             :limit => 15
+    t.integer  "personal_approver_id"
   end
 
   add_index "account_ledgers", ["account_id"], :name => "index_account_ledgers_on_account_id"
@@ -42,9 +44,11 @@ ActiveRecord::Schema.define(:version => 20110513200354) do
   add_index "account_ledgers", ["date"], :name => "index_account_ledgers_on_date"
   add_index "account_ledgers", ["description"], :name => "index_account_ledgers_on_description"
   add_index "account_ledgers", ["income"], :name => "index_account_ledgers_on_income"
+  add_index "account_ledgers", ["nuller_id"], :name => "index_account_ledgers_on_nuller_id"
   add_index "account_ledgers", ["organisation_id"], :name => "index_account_ledgers_on_organisation_id"
-  add_index "account_ledgers", ["pay_account"], :name => "index_account_ledgers_on_pay_account"
   add_index "account_ledgers", ["payment_id"], :name => "index_account_ledgers_on_payment_id"
+  add_index "account_ledgers", ["personal"], :name => "index_account_ledgers_on_personal"
+  add_index "account_ledgers", ["personal_approver_id"], :name => "index_account_ledgers_on_personal_approver_id"
   add_index "account_ledgers", ["reference"], :name => "index_account_ledgers_on_reference"
   add_index "account_ledgers", ["transaction_id"], :name => "index_account_ledgers_on_transaction_id"
 
@@ -88,8 +92,10 @@ ActiveRecord::Schema.define(:version => 20110513200354) do
     t.string   "type"
     t.string   "last_name",         :limit => 100
     t.string   "position"
+    t.boolean  "active",                           :default => true
   end
 
+  add_index "contacts", ["active"], :name => "index_contacts_on_active"
   add_index "contacts", ["client"], :name => "index_contacts_on_client"
   add_index "contacts", ["code"], :name => "index_contacts_on_code"
   add_index "contacts", ["last_name"], :name => "index_contacts_on_last_name"
@@ -275,11 +281,22 @@ ActiveRecord::Schema.define(:version => 20110513200354) do
   add_index "payments", ["ctype"], :name => "index_payments_on_ctype"
   add_index "payments", ["currency_id"], :name => "index_payments_on_currency_id"
   add_index "payments", ["date"], :name => "index_payments_on_date"
-  add_index "payments", ["deleted_account_ledger_id"], :name => "index_payments_on_deleted_acount_ledger_id"
+  add_index "payments", ["deleted_account_ledger_id"], :name => "index_payments_on_deleted_account_ledger_id"
   add_index "payments", ["organisation_id"], :name => "index_payments_on_organisation_id"
   add_index "payments", ["reference"], :name => "index_payments_on_reference"
   add_index "payments", ["state"], :name => "index_payments_on_state"
   add_index "payments", ["transaction_id"], :name => "index_payments_on_transaction_id"
+
+  create_table "personal_comments", :force => true do |t|
+    t.integer  "account_ledger_id"
+    t.integer  "organisation_id"
+    t.text     "comment"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "personal_comments", ["account_ledger_id"], :name => "index_personal_comments_on_account_ledger_id"
+  add_index "personal_comments", ["organisation_id"], :name => "index_personal_comments_on_organisation_id"
 
   create_table "prices", :force => true do |t|
     t.integer  "item_id"

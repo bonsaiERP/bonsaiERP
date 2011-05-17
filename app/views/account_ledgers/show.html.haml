@@ -19,20 +19,31 @@
 - unless @account_ledger.conciliation?
   .conciliation
     = simple_form_for @account_ledger, :url => conciliate_account_ledger_path(@account_ledger) do |f|
-      = f.submit "Conciliar transacción"
+      = f.submit "Revisar transacción"
 -else
+  - if @account_ledger.personal?
+    .personal
+      - @account_ledger.personal_comments.build
+      = simple_form_for @account_ledger, :url => personal_account_ledger_path(@account_ledger), :html => {:id => 'comment'} do |f|
+        - f.simple_fields_for :personal_comments do |fd|
+          = fd.input :comment, :label => 'Comentario', :input_html => {:rows => 5}
+        .clear
+        = f.submit "Aprobar cuenta de personal"
+
   Conciliado por: <span class="b">#{@account_ledger.approver}</span>
 
 :javascript
   $(function() {
     $('.conciliation form').submit(function() {
-      var conf_text = "Conciliar una transacción es una operación irreversible, esta seguro?";
+      var conf_text = "Revisar una transacción es una operación irreversible, esta seguro?";
       if (#{@account_ledger.account_ledger_id.present?}) {
-        conf_text = "Conciliar esta cuenta tambien conciliara la cuenta relacionada con la transferencia. Desea conciliar?";
+        conf_text = "Revisar esta cuenta tambien revisara la cuenta relacionada con la transferencia. Desea revisar?";
       }
 
       if(!confirm(conf_text)) {
         return false;
       }
+
+
     });
   });

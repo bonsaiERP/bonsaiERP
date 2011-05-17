@@ -13,20 +13,22 @@ feature "Account Feature", "test all incomes as transference between accounts. "
     b = Bank.create!(:number => '123', :currency_id => 1, :name => 'Bank JE', :amount => 1000) {|a| a.id = 1 }
     b.account_ledgers.first.conciliate_account
 
+
     c1 = CashRegister.create!(:name => 'Cash register Bs.', :amount => 1000, :currency_id => 1, :address => 'Uno') {|cr| cr.id = 2}
     c1.account_ledgers.first.conciliate_account
 
     c2 = CashRegister.create!(:name => 'Cash register $.', :amount => 1000, :currency_id => 2, :address => 'None') {|cr| cr.id = 3}
     c2.account_ledgers.first.conciliate_account
 
-    Contact.create!(:name => 'karina', :last_name => 'Luna Pizarro', :matchcode => 'Karina Luna', :address => 'Mallasa') {|c| c.id = 1 }
+    Client.create!(:name => 'karina', :last_name => 'Luna Pizarro', :matchcode => 'Karina Luna', :address => 'Mallasa') {|c| c.id = 1 }
+
 
     create_currencies
     create_currency_rates
   end
 
   scenario "Create a transference" do
-    trans = Bank.find(1).account_ledgers.build
+    trans = Bank.find(1).account_ledgers.build(:contact_id => 1)
     trans.create_transference.should == false
 
     # Invalid with all fields empty
@@ -91,7 +93,7 @@ feature "Account Feature", "test all incomes as transference between accounts. "
 
 
   scenario "Do not exeed the max amount, and control conciliation" do
-    trans = Bank.find(1).account_ledgers.build(:to_account => 2, :amount => 1100)
+    trans = Bank.find(1).account_ledgers.build(:to_account => 2, :amount => 1100, :contact_id => 1)
     trans.create_transference.should == false
 
     trans.errors[:amount].should_not == blank?
@@ -126,19 +128,23 @@ feature "Account Feature", "test all incomes as transference between accounts. "
     trans.transferer.errors[:base].should_not == blank?
   end
 
-  scenario "deleting one side of the account_ledger should change the state the other side" do
-    trans = Bank.find(1).account_ledgers.build(:amount => 100, :to_account => 2, :date => Date.today)
+  scenario "nulling one side of the account_ledger should change the state the other side" do
+    trans = Bank.find(1).account_ledgers.build(:amount => 100, :to_account => 2, :date => Date.today, :contact_id => 1)
+    
     trans.create_transference.should == true
     trans.account_ledger_id.should_not == blank?
+    trans.personal.should == 'no'
 
     ac2_id = trans.account_ledger_id
 
     trans.amount.should == -100
     trans.transferer.amount.should == 100
 
+    UserSession.current_user = User.new(:id => 1, :email => 'admin@example.com') {|u| u.id = 2}
     trans.destroy_account_ledger
     trans.reload
     trans.destroyed?.should == true
+    trans.nuller_id.should == 2
     ac = AccountLedger.org.where(:id => ac2_id).first
     #.size.should == 0
     AccountLedger.org.active.where(:id => ac2_id).size.should == 0
@@ -147,8 +153,8 @@ feature "Account Feature", "test all incomes as transference between accounts. "
 
 
 
-  scenario "deleting one side with if conciliated on transference should not delete" do
-    trans = Bank.find(1).account_ledgers.build(:amount => 100, :to_account => 2, :date => Date.today)
+  scenario "nulling one side with if conciliated on transference should not null" do
+    trans = Bank.find(1).account_ledgers.build(:amount => 100, :to_account => 2, :date => Date.today, :contact_id => 1)
     trans.create_transference.should == true
     trans.account_ledger_id.should_not == blank?
 
@@ -160,6 +166,25 @@ feature "Account Feature", "test all incomes as transference between accounts. "
     trans.destroyed?.should == false
     AccountLedger.where(:id => trans.id).size.should == 1
     AccountLedger.where(:id => ac2_id).size.should == 1
+  end
+
+  scenario "creating a transaction with a contact that is Saff should mark personal and the approve the transaction for personal" do
+    Staff.create!(:name => 'Julia', :last_name => 'Mendez' , :address => 'Ahi nomas' , :position => 'Diseñadora') {|s| s.id = 10 }
+
+    trans = Bank.find(1).account_ledgers.build(:amount => 100, :to_account => 2, :date => Date.today, :contact_id => 10, :reference => 'Test')
+    trans.valid?
+
+    trans.save.should == true
+    trans.reload
+
+    trans.personal.should == 'personal'
+    trans.personal_comment_attributes = {:comment => "It's Ok to give him the money"}
+    trans.approve_personal.should == true
+
+    trans.reload
+    trans.personal.should == 'approved'
+    trans.personal_approver_id.should == 1
+    trans.personal_comment.comment.should == "It's Ok to give him the money"
   end
 
 end

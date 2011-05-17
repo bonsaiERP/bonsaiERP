@@ -3,7 +3,7 @@
 # email: boriscyber@gmail.com
 class AccountLedgersController < ApplicationController
   before_filter :check_authorization!
-  before_filter :set_account_ledger, :only => [:show, :conciliate, :destroy, :new]
+  before_filter :set_account_ledger, :only => [:show, :conciliate, :destroy, :new, :personal]
  
   # GET /account_ledger 
   def index
@@ -26,11 +26,22 @@ class AccountLedgersController < ApplicationController
   # PUT /account_ledgers/:id/conciliate 
   def conciliate
     if @account_ledger.conciliate_account
-      flash[:notice] = "Se ha conciliado exitosamente la transacción"
+      flash[:notice] = "Se ha revisado exitosamente la transacción"
     else
       flash[:error] = @account_ledger.errors[:base].join(", ")
     end
     redirect_to @account_ledger  
+  end
+
+  # Approves the account
+  # PUT /account_ledgers/:id/personal
+  def personal
+    if @account_ledger.approve_personal
+      flash[:notice] = "Se ha aprobado la transacción de personal"
+    else
+      flash[:error] = @account_ledger.errors[:base].join(", ")
+    end
+    redirect_to @account_ledger
   end
 
   # POST /account_ledgers
@@ -75,26 +86,27 @@ class AccountLedgersController < ApplicationController
 
   # Account to review
   # /account_ledgers/:id/new_review
-  def new_review
-    @account = Account.find(params[:id])
-    @account_ledger = AccountLedger.new(:account_id => @account.id)
-    @account_ledger.pay_account = true
-  end
+  #def new_review
+  #  @account = Account.find(params[:id])
+  #  @account_ledger = AccountLedger.new(:account_id => @account.id)
+  #  @account_ledger.pay_account = true
+  #end
 
-  # Account review
-  # /account_ledgers/:id/review
-  def review
-    @account        = Account.find(params[:id])
-    @account_ledger = AccountLedger.new(params[:account_ledger])
-    @account_ledger.pay_account = true
-    @account_ledger.account_id  = @account.id
+  ## Account review
+  ## /account_ledgers/:id/review
+  #def review
+  #  @account        = Account.find(params[:id])
+  #  @account_ledger = AccountLedger.new(params[:account_ledger])
+  #  @account_ledger.pay_account = true
+  #  @account_ledger.account_id  = @account.id
 
-    if @account_ledger.save
-      redirect_to @account_ledger
-    else
-      render :action => 'new_review'
-    end
-  end
+  #  if @account_ledger.save
+  #    redirect_to @account_ledger
+  #  else
+  #    render :action => 'new_review'
+  #  end
+  #end
+
 
 private
   def set_account_ledger

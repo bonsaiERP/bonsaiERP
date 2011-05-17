@@ -36,6 +36,12 @@ namespace :bonsai do
     CurrencyRate.create_currencies(currencies)
     puts "The dolar #{dolar} and euro #{euro} currencies have been updated, #{date}"
   end
+
+  desc "Updates all nulled account_ledgers with the creator"
+  task :update_account_ledger_nuller => :environment do
+    AccountLedger.inactive.update_all("nuller_id = creator_id")
+  end
+
 end
 
 # example to export the file

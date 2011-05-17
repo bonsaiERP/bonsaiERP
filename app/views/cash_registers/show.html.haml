@@ -2,8 +2,8 @@
   %ul.breadcrumps
     %li #{link_to "Cuentas caja", cash_registers_path}<span>&gt;</span>
   .links
+    = link_to 'Nueva', new_cash_register_path, :class => 'new'
     = link_to 'Editar', edit_cash_register_path(@cash_register), :class => 'edit'
-    = link_to 'Lista', cash_registers_path, :class => 'list'
 
 
 %h1.mb5 <span class="dark_grey n">Caja:</span> #{@cash_register.name}

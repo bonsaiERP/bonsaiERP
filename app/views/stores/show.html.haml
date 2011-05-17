@@ -17,7 +17,7 @@
       %ul
         %li= link_to "Nuevo ingreso", new_inventory_operation_path(:store_id => @store.id, :operation => 'in')
         %li= link_to "Nuevo egreso", new_inventory_operation_path(:store_id => @store.id, :operation => 'out')
-        %li= link_to "Nueva transferencia", ""
+        /%li= link_to "Nueva transferencia", ""
 
 .input.fr
   <a href="#store_info" class="more_info">Ver información</a>
@@ -63,7 +63,7 @@
   #stocks
     %h2 Operaciones realizadas
     - params[:page2] ||= 1
-    - @ops = @store.inventory_operations.includes(:transaction).page(params[:page2])
+    - @ops = @store.inventory_operations.includes(:transaction).order("date desc").page(params[:page2])
 
     = paginate(@ops)
 

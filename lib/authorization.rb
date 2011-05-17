@@ -56,7 +56,7 @@ module Authorization
       'banks' => {'index' => false, 'show' => false, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false},
       'cash_registers' => {'index' => false, 'show' => false, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false},
       'account_ledgers' => {'index' => false, 'show' => false, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false,
-                          'new_transference' => false, 'transference' => false, 'conciliate' => false},
+                          'new_transference' => false, 'transference' => false, 'conciliate' => false, 'personal' => false},
       'inventory_operations' => {'index' => false, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false, 
                   'select_store' => true, 'new_sale' => true, 'create_sale' => true},
       'incomes' => {'approve' => false},

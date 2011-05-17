@@ -100,8 +100,10 @@ $(document).ready(->
     self = @
     val = $(@).data('value') || ""
     id = new Date().getTime()
+    required= $(@).attr('required')
 
-    $input = $('<input/>').attr({'size': $(this).attr('size'), 'type':'text', 'id': id})
+    $input = $('<input/>').attr({'size': $(this).attr('size'), 'type':'text', 'id': id, 'required': required})
+
     .css({'text-align':'left'}).addClass('autocomplete_view')
     .val(val)
     $(@).hide().before($input)

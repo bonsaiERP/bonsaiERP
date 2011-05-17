@@ -181,7 +181,8 @@ feature "Income", "test features" do
     al.destroy_account_ledger
     al.destroyed?.should == true
     al.reload
-    #puts i.reload.payments.map(&:active)
+
+    al.nuller_id.should == 1
     al.active.should == false
     al.payment.active.should == false
 
@@ -607,7 +608,6 @@ feature "Income", "test features" do
     p.amount.should == 200
     p.interests_penalties.should == 50
 
-    puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     p.save.should == true
     p.account_ledger.amount.should == 250
 

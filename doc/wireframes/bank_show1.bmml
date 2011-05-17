@@ -70,13 +70,13 @@
         <text>Imprimir</text>
       </controlProperties>
     </control>
-    <control controlID="57" controlTypeID="com.balsamiq.mockups::TabBar" x="159" y="393" w="919" h="37" measuredW="329" measuredH="100" zOrder="9" locked="false" isInGroup="-1">
+    <control controlID="57" controlTypeID="com.balsamiq.mockups::TabBar" x="159" y="393" w="919" h="37" measuredW="426" measuredH="100" zOrder="9" locked="false" isInGroup="-1">
       <controlProperties>
         <bold>true</bold>
         <borderStyle>none</borderStyle>
         <color>16777215</color>
         <selectedIndex>0</selectedIndex>
-        <text>Todas%2C%20Pendientes%20de%20conciliaci%F3n%20%28*2*%29</text>
+        <text>Todas%2C%20Esperando%20revisi%F3n%20%28*2*%29%2C%20Anuladas%2C%20Revisadas</text>
       </controlProperties>
     </control>
     <control controlID="85" controlTypeID="__group__" x="154" y="220" w="-1" h="-1" measuredW="169" measuredH="62" zOrder="10" locked="false" isInGroup="-1">
@@ -93,7 +93,7 @@
             <text>Saldo%20en%20Cuenta</text>
           </controlProperties>
         </control>
-        <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="7" y="26" w="-1" h="-1" measuredW="155" measuredH="34" zOrder="2" locked="false" isInGroup="85">
+        <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="7" y="26" w="-1" h="-1" measuredW="151" measuredH="34" zOrder="2" locked="false" isInGroup="85">
           <controlProperties>
             <color>0</color>
             <size>20</size>
@@ -116,7 +116,7 @@
             <text>Saldo%20a%20conciliar</text>
           </controlProperties>
         </control>
-        <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="13" y="26" w="-1" h="-1" measuredW="153" measuredH="34" zOrder="2" locked="false" isInGroup="86">
+        <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="13" y="26" w="-1" h="-1" measuredW="150" measuredH="34" zOrder="2" locked="false" isInGroup="86">
           <controlProperties>
             <color>0</color>
             <size>20</size>
@@ -132,7 +132,7 @@
         <text>Transacciones</text>
       </controlProperties>
     </control>
-    <control controlID="88" controlTypeID="com.balsamiq.mockups::DataGrid" x="159" y="467" w="910" h="125" measuredW="680" measuredH="118" zOrder="13" locked="false" isInGroup="-1">
+    <control controlID="88" controlTypeID="com.balsamiq.mockups::DataGrid" x="159" y="467" w="910" h="125" measuredW="681" measuredH="118" zOrder="13" locked="false" isInGroup="-1">
       <controlProperties>
         <bold>false</bold>
         <borderStyle>none</borderStyle>
@@ -169,7 +169,7 @@
         </control>
       </groupChildrenDescriptors>
     </control>
-    <control controlID="101" controlTypeID="com.balsamiq.mockups::LinkBar" x="250" y="433" w="-1" h="-1" measuredW="259" measuredH="25" zOrder="16" locked="false" isInGroup="-1">
+    <control controlID="101" controlTypeID="com.balsamiq.mockups::LinkBar" x="250" y="433" w="-1" h="-1" measuredW="256" measuredH="25" zOrder="16" locked="false" isInGroup="-1">
       <controlProperties>
         <text>%3CAnterior%2C%201%2C2%2C3%2C%20Siguiente%3E</text>
       </controlProperties>
@@ -187,7 +187,7 @@
         <text>Conciliar</text>
       </controlProperties>
     </control>
-    <control controlID="104" controlTypeID="com.balsamiq.mockups::Label" x="1015" y="492" w="-1" h="-1" measuredW="47" measuredH="25" zOrder="19" locked="false" isInGroup="-1">
+    <control controlID="104" controlTypeID="com.balsamiq.mockups::Label" x="1015" y="492" w="-1" h="-1" measuredW="45" measuredH="25" zOrder="19" locked="false" isInGroup="-1">
       <controlProperties>
         <bold>false</bold>
         <color>13369344</color>
