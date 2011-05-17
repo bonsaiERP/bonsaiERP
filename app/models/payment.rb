@@ -62,6 +62,7 @@ class Payment < ActiveRecord::Base
   scope :paid,         where(:state => 'paid')
   scope :conciliation, where(:state => 'conciliation')
   scope :deleted,      unscoped.where(:active => false)
+  scope :active,       unscoped.where(:active => true)
 
   # Creates methods of paid? conciliation?
   STATES.each do |st|
@@ -147,7 +148,12 @@ private
       
       self.active = false
       dest = dest and self.save
-      dest = dest and transaction.substract_payment(amount)
+      pp = create_pay_plan(amount, interests_penalties, Date.today, 5.days.ago)
+      dest = dest and pp.persisted?
+      transaction.balance += amount
+      transaction.payment_date = pp.payment_date
+      transaction.set_trans(false)
+      dest = dest and transaction.save
 
       raise ActiveRecord::Rollback unless dest 
     end
