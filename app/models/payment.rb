@@ -26,7 +26,7 @@ class Payment < ActiveRecord::Base
   before_create     :update_pay_plan
   before_create     :update_transaction_balance
   before_validation :set_exchange_rate
-  before_save       :set_state,                  :if => 'state.blank?'
+  before_create     :set_state,                  :if => 'state.blank?'
   # Do not use *_destroy callbacks due to how the transaction block works and in many times it updates more than one record
 
   # update_pay_plan must run before update_transaction

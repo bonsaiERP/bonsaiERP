@@ -190,6 +190,25 @@ feature "Income", "test features" do
     i.payments.active.size.should == 0
   end
 
+  scenario "Conciliating and account_ledger should update payment state" do
+    d = Date.today
+    i = Income.new(income_params.merge(:date => d))
+    
+    i.save.should == true
+
+    pp = i.create_pay_plan(pay_plan_params(:amount => 100, :payment_date => d, :repeat => true))
+    i = Income.find(i.id)
+
+    p = i.new_payment(:account_id => 1, :reference => 'NA', :date => d, :amount => 150)
+    p.save.should == true
+
+    p.state.should == 'conciliation'
+    p.account_ledger.conciliate_account.should == true
+    p.reload
+    p.state.should == 'paid'
+
+  end
+
   scenario "Modify payments and check that balance stays" do
     d = Date.today
     i = Income.new(income_params.merge(:date => d))
@@ -381,7 +400,6 @@ feature "Income", "test features" do
     i.reload
 
     i.balance.should == balance
-    puts i.pay_plans_total
     i.pay_plans_total.should == i.balance
     i.payment_date.should == i.pay_plans.unpaid.first.payment_date
 
