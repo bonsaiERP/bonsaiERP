@@ -23,14 +23,17 @@
 -else
   - if @account_ledger.personal?
     .personal
-      - @account_ledger.personal_comments.build
       = simple_form_for @account_ledger, :url => personal_account_ledger_path(@account_ledger), :html => {:id => 'comment'} do |f|
-        - f.simple_fields_for :personal_comments do |fd|
-          = fd.input :comment, :label => 'Comentario', :input_html => {:rows => 5}
+        = f.input :comment, :as => :text, :label => 'Comentario', :input_html => {:rows => 5}
         .clear
         = f.submit "Aprobar cuenta de personal"
 
-  Conciliado por: <span class="b">#{@account_ledger.approver}</span>
+  Revisado por: <span class="b">#{@account_ledger.approver}</span>
+  - if @account_ledger.is_personal?
+    %p 
+      Aprobado personal por: <span class="b">#{@account_ledger.personal_approver}</span>
+      .dark= @account_ledger.personal_comment.try(:comment)
+
 
 :javascript
   $(function() {
@@ -44,6 +47,15 @@
         return false;
       }
 
-
     });
+
+    if($('#comment').length > 0) {
+      $('#comment').submit(function() {
+        if( $('#account_ledger_comment').val().replace(/^\s+|\s+$/g, '').length < 5 ) {
+          alert("Error: Debe ingresar un comentario");
+          return false;
+        }
+      });
+    }
+
   });

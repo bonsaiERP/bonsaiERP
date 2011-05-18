@@ -36,7 +36,7 @@ class AccountLedgersController < ApplicationController
   # Approves the account
   # PUT /account_ledgers/:id/personal
   def personal
-    if @account_ledger.approve_personal
+    if @account_ledger.approve_personal(params[:account_ledger][:comment])
       flash[:notice] = "Se ha aprobado la transacción de personal"
     else
       flash[:error] = @account_ledger.errors[:base].join(", ")

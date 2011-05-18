@@ -178,8 +178,8 @@ feature "Account Feature", "test all incomes as transference between accounts. "
     trans.reload
 
     trans.personal.should == 'personal'
-    trans.personal_comment_attributes = {:comment => "It's Ok to give him the money"}
-    trans.approve_personal.should == true
+    #trans.personal_comment_attributes = {:comment => "It's Ok to give him the money"}
+    trans.approve_personal("It's Ok to give him the money").should == true
 
     trans.reload
     trans.personal.should == 'approved'

@@ -32,11 +32,11 @@ class AccountLedger < ActiveRecord::Base
   belongs_to :nuller,            :class_name => 'User'
   belongs_to :personal_approver, :class_name => 'User'
 
-  has_many :personal_comments, :dependent => :destroy
+  #has_many :personal_comments, :dependent => :destroy
   has_one :personal_comment
-  accepts_nested_attributes_for :personal_comments
+  accepts_nested_attributes_for :personal_comment
 
-  attr_accessor  :payment_destroy, :to_account, :to_exchange_rate, :to_amount_currency
+  attr_accessor  :payment_destroy, :to_account, :to_exchange_rate, :to_amount_currency, :comment
   attr_reader    :transference, :destroyed
   attr_protected :conciliation, :personal, :active, :creator_id, :nuller_id, :personal_approver_id
 
@@ -176,6 +176,10 @@ class AccountLedger < ActiveRecord::Base
     personal == 'personal'
   end
 
+  def is_personal?
+    ['personal', 'approved'].include?(personal)
+  end
+
   # Updates all data and changes active = false
   def destroy_account_ledger
     unless conciliation?
@@ -191,9 +195,10 @@ class AccountLedger < ActiveRecord::Base
   end
 
   # Approves the account for personal
-  def approve_personal
-    self.personal_approver_id = UserSession.user_id
-    self.personal = 'approved'
+  def approve_personal(comment)
+    self.personal_approver_id     = UserSession.user_id
+    self.personal                 = 'approved'
+    self.personal_comment_attributes = {:comment => comment}
     self.save
   end
 
