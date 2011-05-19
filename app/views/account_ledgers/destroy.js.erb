@@ -2,4 +2,6 @@ if(<%= @account_ledger.destroyed? %>) {
   $("#tr<%= @account_ledger.id %>").remove();
 }else{
   $("#tr<%= @account_ledger.id %>").removeClass('marked');
+  
+  createDialog({'title':'Error', 'width': 200, 'html': 'No es posible borrar la transacción'});
 }

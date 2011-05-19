@@ -182,7 +182,7 @@ class AccountLedger < ActiveRecord::Base
 
   # Updates all data and changes active = false
   def destroy_account_ledger
-    unless conciliation?
+    if can_destroy?
       case 
       when payment_id.present?        then destroy_payment
       when account_ledger_id.present? then destroy_related
@@ -200,6 +200,15 @@ class AccountLedger < ActiveRecord::Base
     self.personal                 = 'approved'
     self.personal_comment_attributes = {:comment => comment}
     self.save
+  end
+
+  # Checks if ir can be destroyed
+  def can_destroy?
+    if conciliation or not(active)
+      false
+    else
+      true
+    end
   end
 
 private

@@ -3,6 +3,9 @@
     %li #{link_account @account_ledger}<span>&gt;</span>
     %li #{link_to @account_ledger.account, @account_ledger.account}<span>&gt;</span>
 
+  .links
+    = link_to "Anular", @account_ledger, :class => 'delete', 'data-confirm' => 'Esta seguro de borrar la transacción' if @account_ledger.can_destroy?
+
 %h1 Transacción del #{lo @account_ledger.date}
 
 .moneybox.fl
@@ -28,11 +31,14 @@
         .clear
         = f.submit "Aprobar cuenta de personal"
 
-  Revisado por: <span class="b">#{@account_ledger.approver}</span>
-  - if @account_ledger.is_personal?
-    %p 
-      Aprobado personal por: <span class="b">#{@account_ledger.personal_approver}</span>
-      .dark= @account_ledger.personal_comment.try(:comment)
+  %p Revisado por: <span class="b">#{@account_ledger.approver}</span>
+- if @account_ledger.is_personal?
+  %p 
+    Aprobado personal por: <span class="b">#{@account_ledger.personal_approver}</span>
+    .dark= @account_ledger.personal_comment.try(:comment)
+
+- unless @account_ledger.active?
+  %p Anulado por: <span class="b">#{@account_ledger.nuller}</span>
 
 
 :javascript
