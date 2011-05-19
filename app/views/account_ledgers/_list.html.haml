@@ -58,7 +58,7 @@
       (A) Anulado por
     %th
   - ledgers.each do |al|
-    %tr{:class => al.income.to_s + '_in' }
+    %tr{:class => al.income.to_s + '_in', :id => "tr#{al.id}" }
       %td.d.check
         = link_to lo(al.date), al, :class => "b #{conciliate_css(al)}"
         %br/

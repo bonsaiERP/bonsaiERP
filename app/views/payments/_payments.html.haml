@@ -16,7 +16,7 @@
       %th
   
   %tbody
-    = render transaction.payments.includes(:account_ledger => :account)
+    = render transaction.payments.active.includes(:account_ledger => :account)
 
   %tr.extra.pad_top
     %td

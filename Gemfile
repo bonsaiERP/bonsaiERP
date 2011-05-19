@@ -21,6 +21,7 @@ gem 'kaminari'
 gem 'nokogiri'
 gem 'prawn', '~>0.11.1', :git => 'https://github.com/sandal/prawn.git', :branch => "stable", :submodules => true
 gem 'newrelic_rpm'
+#gem 'countries', :require => 'iso3166'
 #gem 'barista', '~>1.0'
 #gem 'escape_utils'
 

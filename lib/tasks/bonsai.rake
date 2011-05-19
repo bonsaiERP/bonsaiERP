@@ -42,6 +42,17 @@ namespace :bonsai do
     AccountLedger.inactive.update_all("nuller_id = creator_id")
   end
 
+  desc "Updates account_ledgers so all have the contact"
+  task :update_account_ledgers_contact_id => :environment do
+    Organisation.all.each do |o|
+      c = Contact.where(:organisation_id => o.id).first
+      if c
+        AccountLedger.where(:organisation_id => o.id, :contact_id => nil).update_all([ "contact_id=?", c.id ])
+      end
+    end
+
+    puts "Puts contacts for acount_ledgers have been updated"
+  end
 end
 
 # example to export the file

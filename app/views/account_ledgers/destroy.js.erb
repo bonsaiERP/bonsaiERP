@@ -1,0 +1,5 @@
+if(<%= @account_ledger.destroyed? %>) {
+  $("#tr<%= @account_ledger.id %>").remove();
+}else{
+  $("#tr<%= @account_ledger.id %>").removeClass('marked');
+}
