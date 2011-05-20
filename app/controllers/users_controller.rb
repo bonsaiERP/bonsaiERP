@@ -31,14 +31,8 @@ class UsersController < ApplicationController
 
   # POST /users/create_user
   def create_user
-    h = params[:user]
-    h[:rolname] = '' if params[:user][:rolname] == 'admin'
-    @user = User.new(h)
-    
-    @user.generate_random_password
-    @user.change_default_password = true
-    
-    if @user.save
+    @user = User.new
+    if @user.add_company_user(params[:user])
       flash[:notice] = "El usuario #{@user} ha sido adicionado"
       redirect_to "/configuration"
     else

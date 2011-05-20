@@ -55,8 +55,7 @@
     %li <a href="#information" id="tab_info">Información</a>
     - if @transaction.show_payments?
       %li <a href="#payments" id="tab_payments">#{transaction_pay_method}</a>
-    - if @transaction.show_pay_plans?
-      %li <a href="#pay_plans" id="tab_pay_plans">Crédito</a>
+    %li <a href="#pay_plans" id="tab_pay_plans">Crédito</a>
     - if @transaction.show_inventory?
       %li <a href="#inventory" id="tab_inventory">Inventario</a>
 

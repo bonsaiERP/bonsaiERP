@@ -62,11 +62,23 @@ class User < ActiveRecord::Base
 
   # Generates a random password and sets it to the password field
   def generate_random_password(size = 8)
-    arr = ('a'..'z').to_a + ('A'..'Z').to_a + (0..9).to_a
-    self.temp_password = (0..size).map{ arr[rand(arr.size)] }.join
+    self.password = self.password_confirmation = self.temp_password = SecureRandom.urlsafe_base64(size)
+  end
 
-    self.password              = temp_password
-    self.password_confirmation = temp_password
+  # Adds a new user for the company
+  def add_company_user(params)
+    self.email = params[:email]
+
+    if ROLES.slice(1,3).include?(params[:rolname])
+      self.rolname = params[:rolname]
+    else
+      self.rolname = nil
+    end
+
+    self.generate_random_password
+    self.change_default_password = true
+
+    self.save
   end
 
   # Updates the priviledges of a user

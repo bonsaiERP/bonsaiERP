@@ -4,6 +4,7 @@
 class PayPlansController < ApplicationController
   before_filter :check_authorization!
   before_filter :set_pay_plan, :only => [:edit, :update, :destroy]
+  before_filter :check_pay_plan_authorization, :only => [:new, :create, :edit, :update]
   # GET /pay_plans
   # GET /pay_plans.xml
   def index
@@ -98,5 +99,9 @@ class PayPlansController < ApplicationController
 private
   def set_pay_plan
     @pay_plan = PayPlan.org.find(params[:id])
+  end
+
+  # Checks if the current user has the rights to edit
+  def check_pay_plan_authorization
   end
 end
