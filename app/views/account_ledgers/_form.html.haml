@@ -97,9 +97,13 @@
           break
         }
 
-        $('#account_ledger_contact_id').siblings('a.add').attr({'title': title, 'href': href});
+        $('#account_ledger_contact_id').siblings('a.add').attr({'title': title, 'href': href, 'data-trigger': 'new_contact'});
       }
     }
+
+    $('body').live('new_contact', function(e, resp) {
+      $('#account_ledger_contact_id').val(resp.id).siblings('input.autocomplete_view').val(resp.matchcode);
+    });
 
     // Sets the value and data depending on the clicked radio button in input[name=contact]
 
