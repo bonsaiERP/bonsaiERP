@@ -53,7 +53,7 @@ class Payment < ActiveRecord::Base
 
   # validations
   validates_presence_of     :account_id, :transaction_id, :reference, :date
-  validates                 :exchange_rate, :numericality => {:greater_than => 0}, :presence => true
+  validates_numericality_of :amount, :exchange_rate, :greater_than_or_equal_to => 0
 
   validate              :valid_payment_amount
   validate              :valid_amount_or_interests_penalties
