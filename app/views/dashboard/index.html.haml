@@ -36,7 +36,7 @@
 
 .box
 
-  %h3._50.fl Cuentas pagar <span class="red">pagar</span>
+  %h3._50.fl Cuentas por <span class="red">pagar</span>
   .hint._50.fl En los siguientes #{fdate} días
   .clear
   %h3.black #{currency_symbol} #{ntc PayPlan.out_to_currency(currency_id, fdate.days.from_now) }
