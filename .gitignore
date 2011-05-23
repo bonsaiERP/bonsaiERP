@@ -24,3 +24,5 @@ config/initializers/host.rb
 *.swl
 *.swm
 *.swn
+public/javascripts/jquery.js
+public/javascripts/app.js
