@@ -3,7 +3,7 @@
 # email: boriscyber@gmail.com
 class OrganisationsController < ApplicationController
   before_filter :check_authorization!
-  before_filter :destroy_organisation_session!, :except => :select
+  before_filter :destroy_organisation_session!, :except => [ :select, :edit, :update ]
 
   respond_to :html, :xml, :json
   # GET /organisations
@@ -46,7 +46,7 @@ class OrganisationsController < ApplicationController
 
   # GET /organisations/1/edit
   def edit
-    @organisation = Organisation.find(params[:id])
+    @organisation = Organisation.find(session[:organisation][:id])
     respond_with(@organisation)
   end
 
@@ -89,9 +89,15 @@ class OrganisationsController < ApplicationController
   # PUT /organisations/1
   # PUT /organisations/1.xml
   def update
-    @organisation = Organisation.find(params[:id])
-    @organisation.update_attributes(params[:organisation])
-    respond_with(@organisation)
+    @organisation = Organisation.find(session[:organisation][:id])
+    if @organisation.update_attributes(params[:organisation])
+      set_organisation_session @organisation
+      flash[:notice] = "Se ha actualizado correctamente los datos de su empresa"
+
+      redirect_to "/configuration#organisation"
+    else
+      render :action => 'edit'
+    end
   end
 
   # DELETE /organisations/1

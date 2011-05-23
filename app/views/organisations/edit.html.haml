@@ -1,3 +1,5 @@
+%h1 Editar #{organisation_name}
+
 = simple_form_for(@organisation) do |f|
   = bonsai_form_error(f)
 
@@ -21,5 +23,5 @@
   =f.input :email
   .clear
   .submit
-    = f.submit 'Siguiente', :class => 'butr fr'
+    = f.submit 'Salvar'
 .clear

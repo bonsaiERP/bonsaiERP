@@ -26,6 +26,25 @@
             = link_to "editar", edit_user_user_path(link.user), :class => 'edit', :title => 'Editar usuario'
 
   #organisation
+    = link_to "Editar datos empresa", "/organisations/#{session[:organisation][:id]}/edit", :class => 'edit'
+    = link_to "Configuración empresa", "/", :class => 'cog link'
+
+    - @org = OrganisationSession.current_organisation
+    %h3= @org
+
+    .input
+      %span.grey Teléfono:
+      = @org.phone
+      %span.grey Movil:
+      = @org.mobile
+      %span.grey Email:
+      = @org.email
+      %span.grey Sitio web:
+      = @org.website
+
+    .input= nl2br(@org.address)
+
+    .clear
 
 :javascript
   $(function() { 

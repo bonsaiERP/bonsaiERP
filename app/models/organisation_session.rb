@@ -42,7 +42,7 @@ class OrganisationSession
       current_organisaton.currency_symbol
     end
 
-    def current_organisaton
+    def current_organisation
       @org ||= Organisation.find(organisation_id)
     end
   end
