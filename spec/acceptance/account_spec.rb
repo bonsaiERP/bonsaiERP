@@ -52,13 +52,20 @@ feature "Account Feature", "test all incomes as transference between accounts. "
     trans.date = Date.today
 
     trans.create_transference.should == true
+    trans.persisted?.should == true
+    trans.reload
+
     trans.creator_id.should == 1
 
     User.stubs(:find => User.new(:id => 1, :email => 'admin@example.com') {|u| u.id = 1})
     trans.creator.email.should == 'admin@example.com'
 
-    AccountLedger.find(trans.id).amount.should == -70
-    AccountLedger.find(trans.account_ledger_id).amount.should == (70.0/7).round(2)
+    trans.amount.should == -70
+    trans.transferer.amount.should == (70.0/7).round(2)
+
+    trans.personal.should == 'no'
+    trans.transferer.personal.should == 'no'
+
 
     # Conciliate should conciliate the two sides of transference
     trans.conciliate_account

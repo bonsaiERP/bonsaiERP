@@ -37,7 +37,7 @@ class AccountLedger < ActiveRecord::Base
   accepts_nested_attributes_for :personal_comment
 
   attr_accessor  :payment_destroy, :to_account, :to_exchange_rate, :to_amount_currency, :comment
-  attr_reader    :transference, :destroyed
+  attr_reader    :transference, :destroyed, :no_personal
   attr_protected :conciliation, :personal, :active, :creator_id, :nuller_id, :personal_approver_id
 
 
@@ -48,7 +48,7 @@ class AccountLedger < ActiveRecord::Base
   validate :valid_organisation_account
 
   # transference
-  with_options :if => :transference do |al|
+  with_options :if => :transference? do |al|
     al.validate :validate_to_account
     al.validate :validate_to_exchange_rate
     al.validate :validate_to_amount
@@ -125,6 +125,7 @@ class AccountLedger < ActiveRecord::Base
     self.to_exchange_rate = to_exchange_rate.to_f
     if valid?
       to_amount_currency = to_exchange_rate.round(4) * amount
+      res = true
 
       AccountLedger.transaction do
         txt = ""
@@ -135,21 +136,28 @@ class AccountLedger < ActiveRecord::Base
 
         self.income      = false
         self.description = "Transferencia a cuenta #{Account.find(to_account)}#{txt}"
+        self.personal = 'no'
 
-        ac2             = AccountLedger.new(self.attributes)
-        ac2.account_id  = to_account
-        ac2.income      = true
-        ac2.amount      = amount * to_exchange_rate
-        ac2.description = "Transferencia desde cuenta #{account}#{txt}"
-
+        ac2              = AccountLedger.new(self.attributes)
+        ac2.account_id   = self.to_account
+        ac2.income       = true
+        ac2.amount       = amount * to_exchange_rate
+        ac2.description  = "Transferencia desde cuenta #{account}#{txt}"
+        ac2.contact_id   = self.contact_id
+        ac2.personal = 'no'
         
-        raise ActiveRecord::Rollback unless self.save
-        ac2.account_ledger_id = id
+        res = res and self.save
+        ac2.account_ledger_id = self.id
 
-        raise ActiveRecord::Rollback unless ac2.save
-        raise ActiveRecord::Rollback unless self.update_attribute(:account_ledger_id, ac2.id)
+        res = res and ac2.save
+        res = res and self.update_attribute(:account_ledger_id, ac2.id)
+        unless res
+          raise ActiveRecord::Rollback
+          return false
+        end
       end
-      true
+      
+      res
     else
       false
     end
@@ -210,6 +218,11 @@ class AccountLedger < ActiveRecord::Base
       true
     end
   end
+
+  def set_transference(val)
+    @transference = val
+  end
+
 
 private
   
@@ -352,6 +365,16 @@ private
     
   # Sets the variable if the selected contact is a Staff  
   def set_personal
-   self.personal = contact.is_a?(Staff) ? 'personal' : 'no'
+    if self.personal.blank?
+     self.personal = contact.is_a?(Staff) ? 'personal' : 'no'
+    end
+  end
+
+  def transference?
+    if transference.nil? or transference == false
+      false
+    else
+      true
+    end
   end
 end

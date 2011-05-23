@@ -17,6 +17,8 @@
   = f.input :to_account, :collection => Account.org.where(["id !=?", @account_ledger.account_id]), :label => 'A cuenta'
   .clear
 
+  = f.input :contact_id, :collection => Staff.org, :label => 'Personal', :input_html => {'data-new_url' => '/staffs/new', 'data-trigger' => 'new_contact', 'data-title' => 'Nuevo trabajador(a)'}
+
   = f.input :amount, :label => "Cantidad #{@account_ledger.account.currency_plural}", :input_html => {:size => 12, :type => 'decimal', :class => 'r'}, :wrapper_html => {:class => '_30'}
 
   = f.input :date, :label => 'Fecha', :wrapper_html => {:class => '_20'}
@@ -61,6 +63,10 @@
         cur = currencies["#{@account_ledger.account.currency_id}"];
         $('#al_exchange_rate').hide();
       }
+    });
+
+    $('body').live('new_contact', function(e, resp) {
+      $('#account_ledger_contact_id').createSelectOption(resp.id, resp.matchcode);
     });
 
     $('#cur_rates').click(function() {
