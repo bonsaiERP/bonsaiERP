@@ -89,6 +89,9 @@ Bonsaierp::Application.routes.draw do
   resources :organisations do
     get  :select,     :on => :member
     post :final_step, :on => :collection
+
+    get  :edit_preferences,   :on => :member
+    put  :update_preferences, :on => :member
   end
 
   resources :countries

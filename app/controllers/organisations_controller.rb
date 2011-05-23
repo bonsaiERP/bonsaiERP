@@ -3,7 +3,7 @@
 # email: boriscyber@gmail.com
 class OrganisationsController < ApplicationController
   before_filter :check_authorization!
-  before_filter :destroy_organisation_session!, :except => [ :select, :edit, :update ]
+  before_filter :destroy_organisation_session!, :except => [ :select, :edit, :update, :edit_preferences, :update_preferences ]
 
   respond_to :html, :xml, :json
   # GET /organisations
@@ -124,6 +124,25 @@ class OrganisationsController < ApplicationController
     else
       flash[:error] = "Debe seleccionar una organización válida"
       redirect_to organisations_path
+    end
+  end
+
+  # set preferences
+  # GET /organisations/:id/edit_preferences
+  def edit_preferences
+    @organisation = Organisation.find(organisation_id)
+  end
+
+  # GET /organisations/:id/update_preferences
+  def update_preferences
+    @organisation = Organisation.find(organisation_id)
+    if @organisation.update_preferences(params[:organisation])
+      flash[:notice] = "Se ha actualizado correctamente las preferencias de #{@organisation}"
+      set_organisation_session(@organisation)
+
+      redirect_to "/configuration#organisation"
+    else
+      render :action => 'edit_preferences'
     end
   end
 

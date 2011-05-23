@@ -37,6 +37,37 @@ class Organisation < ActiveRecord::Base
     name
   end
 
+  # Updates the preferences for the organisation
+  # @param Hash
+  # @return [True, False]
+  def update_preferences(options)
+    options = options[:preferences].symbolize_keys
+    options.merge( set_preferences_abs(options) ).merge(transform_preferences_boolean(options))
+    self.preferences = options
+
+    self.save
+  end
+
+  # Converts to abs to all numeric values
+  # @params Hash
+  # @return Hash
+  def set_preferences_abs(options)
+    [:item_discount, :general_discount].each do |par|
+      options[par] = options[par].to_f.abs
+    end
+
+    options
+  end
+
+  def transform_preferences_boolean(options)
+    [:open_prices].each do |par|
+      options[par] = (options[par] == "1")
+    end
+
+    options
+  end
+
+
   #def self.all
   #  Link.orgs
   #end

@@ -27,24 +27,40 @@
 
   #organisation
     = link_to "Editar datos empresa", "/organisations/#{session[:organisation][:id]}/edit", :class => 'edit'
-    = link_to "Configuración empresa", "/", :class => 'cog link'
+    = link_to "Preferencias", "/organisations/#{organisation_id}/edit_preferences", :class => 'cog link'
 
     - @org = OrganisationSession.current_organisation
-    %h3= @org
+    
+    %h3 Datos #{@org}
 
     .input
-      %span.grey Teléfono:
+      %span.dark_grey Teléfono:
       = @org.phone
-      %span.grey Movil:
+      %span.dark_grey Movil:
       = @org.mobile
-      %span.grey Email:
+      %span.dark_grey Email:
       = @org.email
-      %span.grey Sitio web:
+      %span.dark_grey Sitio web:
       = @org.website
 
     .input= nl2br(@org.address)
 
     .clear
+
+    %h3 Preferencias #{@org}
+    .input.boolean._100
+      %span.dark_grey.b Precios abiertos
+      %span{:class => @org.preferences[:open_prices].to_s}
+      <br/>
+      - if @org.preferences[:open_prices]
+        %span.dark_grey.b Descuento por ítem: 
+        <strong>#{ntc @org.preferences[:item_discount]} %</strong>
+    .clear
+    .input._100
+      %span.dark_grey Descuento general 
+      <strong>#{ntc @org.preferences[:general_discount]} %</strong>
+    .clear
+
 
 :javascript
   $(function() { 

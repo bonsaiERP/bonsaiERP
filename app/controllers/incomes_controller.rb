@@ -89,16 +89,22 @@ class IncomesController < ApplicationController
   # PUT /incomes/1/approve
   # Method to approve an income
   def approve
-    if @transaction.approve!
-      flash[:notice] = "La nota de venta fue aprobada"
+    if @transaction.can_approve?(session)
+
+      if @transaction.approve
+        flash[:notice] = "La nota de venta fue aprobada"
+      else
+        flash[:error] = "Existio un problema con la aprovación"
+      end
+
+      anchor = ''
+      anchor = 'payments' if @transaction.cash?
+
+      redirect_to income_path(@transaction, :anchor => anchor)
     else
-      flash[:error] = "Existio un problema con la aprovación"
+      flash[:error] = "Usted no puede aprobar la venta"
+      redirect_to @transaction
     end
-
-    anchor = ''
-    anchor = 'payments' if @transaction.cash?
-
-    redirect_to income_path(@transaction, :anchor => anchor)
   end
 
   # Nulls an invoice

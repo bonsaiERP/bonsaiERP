@@ -101,7 +101,8 @@ class Transaction < ActiveRecord::Base
   end
 
   # Aprove a transaction
-  def approve!
+  # @param Hash # Hass of prefereces where you can read the user and organisation preferences
+  def approve
     unless state == "draft"
       false
     else
@@ -109,6 +110,15 @@ class Transaction < ActiveRecord::Base
       self.state       = "approved"
       self.approver_id = UserSession.user_id
       self.save(:validate => false)
+    end
+  end
+
+  # Tells if the user can approve a transaction based on the preferences
+  def can_approve?(session)
+    if User::ROLES.slice(0,2).include?(session[:user][:rol])
+      true
+    else
+      false
     end
   end
 
