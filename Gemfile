@@ -41,7 +41,7 @@ group :test do
   gem 'capybara'
   gem 'database_cleaner'
   gem 'factory_girl_rails'
-  gem 'spork', '~>0.9.0.rc4'
+  gem 'spork', '~>0.9.0.rc7'
   gem 'database_cleaner'
   gem 'watchr'
   gem 'launchy'

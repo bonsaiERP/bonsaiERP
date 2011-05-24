@@ -123,41 +123,31 @@ class AccountLedger < ActiveRecord::Base
     @transference         = true
     self.reference        = 'Transferencia'
     self.to_exchange_rate = to_exchange_rate.to_f
+
     if valid?
       to_amount_currency = to_exchange_rate.round(4) * amount
-      res = true
 
-      AccountLedger.transaction do
-        txt = ""
-        unless account_to.currency_id == account.currency_id
-          txt = ", tipo de cambio 1 #{account.currency} = #{number_to_currency to_exchange_rate, :precision => 4}" 
-          txt << " #{account.currency_plural}"
-        end
-
-        self.income      = false
-        self.description = "Transferencia a cuenta #{Account.find(to_account)}#{txt}"
-        self.personal = 'no'
-
-        ac2              = AccountLedger.new(self.attributes)
-        ac2.account_id   = self.to_account
-        ac2.income       = true
-        ac2.amount       = amount * to_exchange_rate
-        ac2.description  = "Transferencia desde cuenta #{account}#{txt}"
-        ac2.contact_id   = self.contact_id
-        ac2.personal = 'no'
-        
-        res = res and self.save
-        ac2.account_ledger_id = self.id
-
-        res = res and ac2.save
-        res = res and self.update_attribute(:account_ledger_id, ac2.id)
-        unless res
-          raise ActiveRecord::Rollback
-          return false
-        end
+      txt = ""
+      unless account_to.currency_id == account.currency_id
+        txt = ", tipo de cambio 1 #{account.currency} = #{number_to_currency to_exchange_rate, :precision => 4}" 
+        txt << " #{account.currency_plural}"
       end
+
+      self.income      = false
+      self.description = "Transferencia a cuenta #{Account.find(to_account)}#{txt}"
+      self.personal = 'no'
+
+      self.transferer = AccountLedger.new(self.attributes.merge(
+        :account_id => to_account, 
+        :amount => amount * to_exchange_rate,
+        :description => "Transferencia desde cuenta #{account}#{txt}"
+        ) 
+      )
+
+      self.transferer.income   = true
+      self.transferer.personal = 'no'
       
-      res
+      self.save
     else
       false
     end

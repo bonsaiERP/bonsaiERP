@@ -175,11 +175,22 @@ feature "Account Feature", "test all incomes as transference between accounts. "
     AccountLedger.where(:id => ac2_id).size.should == 1
   end
 
+  scenario "error on the other side of the transference should not allow to save" do
+    trans = Bank.find(1).account_ledgers.build(:amount => 100, :date => Date.today, :contact_id => 1, :reference => 'Test')
+
+    trans.create_transference.should == false
+    trans.to_account = 2
+
+    trans.create_transference.should == true
+    trans.reload
+    trans.transferer.id.should == trans.account_ledger_id
+    trans.transferer.amount.should == (-1 * trans.amount)
+  end
+
   scenario "creating a transaction with a contact that is Saff should mark personal and the approve the transaction for personal" do
     Staff.create!(:name => 'Julia', :last_name => 'Mendez' , :address => 'Ahi nomas' , :position => 'Diseñadora') {|s| s.id = 10 }
 
     trans = Bank.find(1).account_ledgers.build(:amount => 100, :to_account => 2, :date => Date.today, :contact_id => 10, :reference => 'Test')
-    trans.valid?
 
     trans.save.should == true
     trans.reload

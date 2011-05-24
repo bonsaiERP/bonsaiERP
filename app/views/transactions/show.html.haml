@@ -85,7 +85,7 @@
     .clear
 
   #pay_plans
-    =render "/pay_plans/pay_plans", :transaction => @transaction if @transaction.show_pay_plans?
+    =render "/pay_plans/pay_plans", :transaction => @transaction
 
   - if @transaction.show_inventory?
     #inventory
