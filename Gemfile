@@ -27,15 +27,14 @@ gem 'newrelic_rpm'
 
 group :development do
   gem "ruby-debug19", :require => 'ruby-debug'# :platforms => :mri_19
-  gem 'rspec-rails', '~>2.5.0'
+  gem 'rspec-rails', '~>2.6.0'
   gem 'steak', '~>1.1.0'
 end
 
 
 # Test
 group :test do
-  #gem 'akephalos', '~>0.2.5'
-  gem 'rspec-rails', '~>2.5.0'
+  gem 'rspec-rails', '~>2.6.0'
   gem 'mocha'
   gem 'steak', '~>1.1.0'
   gem 'capybara'

@@ -82,12 +82,6 @@ feature "Account Feature", "test all incomes as transference between accounts. "
     c2.account_ledgers.size.should == 2
     c2.total_amount.should == 1010
 
-    # Conciliation
-    #trans.conciliate_account
-    #trans.approver_id.should == 1
-    #b1 = Account.org.find(1)
-    #b1.account_ledgers.size.should == 2
-    #b1.total_amount.should == 930
 
     # Stub to test for other user
     UserSession.current_user.stubs(:id => 2)

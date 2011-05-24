@@ -20,7 +20,7 @@ class Payment < ActiveRecord::Base
   STATES = ['conciliation', 'paid']
 
   # callbacks
-  after_initialize  :set_defaults,               :if => :new_record?
+  before_create     :set_defaults#,               :if => :new_record?
   before_create     :set_currency_id,            :if => :new_record?
   before_create     :set_cash_amount,            :if => :transaction_cash?
   before_create     :update_pay_plan

@@ -91,7 +91,7 @@ class IncomesController < ApplicationController
   def approve
     if @transaction.can_approve?(session)
 
-      if @transaction.approve
+      if @transaction.approve!
         flash[:notice] = "La nota de venta fue aprobada"
       else
         flash[:error] = "Existio un problema con la aprovación"

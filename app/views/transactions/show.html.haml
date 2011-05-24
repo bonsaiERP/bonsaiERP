@@ -101,17 +101,15 @@
 
     $('#tabs').tabs();
 
-    if(!#{@transaction.paid?} && #{@transaction.cash}) {
+    /*if(!#{@transaction.paid?} && #{@transaction.cash}) {
       $('#new_payment_link').trigger('click');
-    }
+    }*/
 
-    $(document).ready(function() {
-      var cash = #{@transaction.paid? ? false : not(@transaction.credit?)};
-      if(cash) {
-        $('#tab_payments').trigger('click');
-        $('a#new_payment_link').trigger('click');
-      }
-    });
+    var cash = #{@transaction.paid? ? false : not(@transaction.credit?)};
+    if(cash) {
+      $('#tab_payments').trigger('click');
+      $('a#new_payment_link').trigger('click');
+    }
 
     /**
     * Sets the state for Income

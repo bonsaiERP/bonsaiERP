@@ -102,7 +102,7 @@ class Transaction < ActiveRecord::Base
 
   # Aprove a transaction
   # @param Hash # Hass of prefereces where you can read the user and organisation preferences
-  def approve
+  def approve!
     unless state == "draft"
       false
     else
