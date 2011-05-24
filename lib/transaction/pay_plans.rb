@@ -1,3 +1,6 @@
+# encoding: utf-8
+# author: Boris Barroso
+# email: boriscyber@gmail.com
 module ::Transaction::PayPlans
 
   MAX_PAY_PLANS_SIZE = 50
@@ -41,6 +44,7 @@ module ::Transaction::PayPlans
   end
 
   # Destroys a pay plan
+  # @param Integer
   def destroy_pay_plan(pay_plan_id = nil)
     set_trans(false)
 

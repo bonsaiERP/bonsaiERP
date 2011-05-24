@@ -15,17 +15,17 @@ class Transaction < ActiveRecord::Base
  
   attr_reader :trans, :approving
   # callbacks
-  after_initialize :set_defaults, :if => :new_record?
-  after_initialize :set_trans_to_true
+  before_validation :set_defaults, :if => :new_record?
+  #after_initialize :set_trans_to_true
 
-  before_create    :set_creator
-  before_save      :set_details_type
-  before_save      :calculate_total_and_set_balance, :if => :trans?
-  before_save      :update_payment_date
-  before_save      :set_state
-  before_save      :set_balance_inventory, :if => :trans?
+  before_create     :set_creator
+  before_save       :set_details_type
+  before_save       :calculate_total_and_set_balance, :if => :trans?
+  before_save       :update_payment_date
+  before_save       :set_state
+  before_save       :set_balance_inventory, :if => :trans?
 
-  after_update     :update_transaction_pay_plans, :if => :trans?
+  after_update      :update_transaction_pay_plans, :if => :trans?
 
   # relationships
   belongs_to :contact
@@ -372,6 +372,7 @@ private
     self.gross_total ||= 0
     self.total ||= 0
     self.date ||= Date.today
+    @trans = true
   end
 
   def set_trans_to_true

@@ -165,6 +165,7 @@ private
     not @updated_account_ledger.blank?
   end
 
+  # Set default values before creating
   def set_defaults
     self.amount              ||= 0
     self.interests_penalties ||= 0

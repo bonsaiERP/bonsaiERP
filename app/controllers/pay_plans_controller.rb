@@ -28,7 +28,7 @@ class PayPlansController < ApplicationController
   # GET /pay_plans/new.xml
   def new
     begin
-      transaction = Transaction.find_by_type_and_id( params[:type], params[:id] )
+      transaction = Transaction.org.find_by_type_and_id( params[:type], params[:id] )
       @pay_plan = transaction.new_pay_plan
     rescue
       redirect_to request.referer

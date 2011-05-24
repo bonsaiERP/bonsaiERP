@@ -47,9 +47,11 @@ feature "Income", "test features" do
     i = Income.new(income_params)
 
     i.save.should == true
+    i.cash.should == true
     pp = i.create_pay_plan(pay_plan_params(:amount => 100))
 
-    i = Income.find(i.id)
+    i.reload
+    i.cash.should == false
     i.pay_plans.unpaid.size.should == 2
     i.pay_plans.map(&:operation).uniq.should == ["in"]
     i.balance.should == i.pay_plans_total
