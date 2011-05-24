@@ -141,13 +141,20 @@ class AccountLedger < ActiveRecord::Base
         :account_id => to_account, 
         :amount => amount * to_exchange_rate,
         :description => "Transferencia desde cuenta #{account}#{txt}"
-        ) 
+        )
       )
 
       self.transferer.income   = true
       self.transferer.personal = 'no'
-      
-      self.save
+
+      res = true
+      AccountLedger.transaction do
+        res = self.save
+        res = res and self.transferer.update_attribute(:account_ledger_id, self.id)
+        raise AcitveRecord::Rollback unless res
+      end
+
+      res 
     else
       false
     end

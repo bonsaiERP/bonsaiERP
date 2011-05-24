@@ -179,6 +179,7 @@ feature "Account Feature", "test all incomes as transference between accounts. "
     trans.reload
     trans.transferer.id.should == trans.account_ledger_id
     trans.transferer.amount.should == (-1 * trans.amount)
+    trans.transferer.account_ledger_id.should == trans.id
   end
 
   scenario "creating a transaction with a contact that is Saff should mark personal and the approve the transaction for personal" do
