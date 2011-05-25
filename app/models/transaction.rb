@@ -352,6 +352,11 @@ class Transaction < ActiveRecord::Base
     not(draft?)
   end
 
+  # method for new
+  def set_defaults_new
+    set_defaults
+  end
+
 private
 
   def set_state

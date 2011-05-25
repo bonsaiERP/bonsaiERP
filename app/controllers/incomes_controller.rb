@@ -31,7 +31,10 @@ class IncomesController < ApplicationController
   # GET /incomes/new
   # GET /incomes/new.xml
   def new
-    @transaction = Income.new(:date => Date.today, :discount => 0, :currency_exchange_rate => 1, :currency_id => currency_id )
+    @transaction = Income.new
+    #(:date => Date.today, :discount => 0, :currency_exchange_rate => 1, :currency_id => currency_id, 
+    #                          :gross_total => 0, :tax_percent => 0 )
+    @transaction.set_defaults_new
     @transaction.transaction_details.build
   end
 
@@ -94,7 +97,7 @@ class IncomesController < ApplicationController
       if @transaction.approve!
         flash[:notice] = "La nota de venta fue aprobada"
       else
-        flash[:error] = "Existio un problema con la aprovación"
+        flash[:error] = "Existio un problema con la aprobación"
       end
 
       anchor = ''

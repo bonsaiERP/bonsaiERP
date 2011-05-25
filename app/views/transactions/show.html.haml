@@ -93,7 +93,7 @@
 
 #users
   %div= "<span class='dark'>Creado por:</span> <strong>#{@transaction.creator}</strong>".html_safe    if @transaction.creator_id.present?
-  %div= "<span class='dark'>Aprovado por:</span> <strong>#{@transaction.approver}</strong>".html_safe if @transaction.approver_id.present?
+  %div= "<span class='dark'>Aprobado por:</span> <strong>#{@transaction.approver}</strong>".html_safe if @transaction.approver_id.present?
 
 :javascript
 

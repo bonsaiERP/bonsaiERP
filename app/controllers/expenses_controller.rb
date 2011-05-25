@@ -30,7 +30,8 @@ class ExpensesController < ApplicationController
   # GET /buys/new
   # GET /buys/new.xml
   def new
-    @transaction = Expense.new(:date => Date.today, :discount => 0, :currency_exchange_rate => 1, :currency_id => currency_id )
+    @transaction = Expense.new
+    @transaction.set_defaults_new
     @transaction.transaction_details.build
   end
 
@@ -87,7 +88,7 @@ class ExpensesController < ApplicationController
     if @transaction.approve!
       flash[:notice] = "El gasto fue aprobado"
     else
-      flash[:error] = "Existio un problema con la aprovación"
+      flash[:error] = "Existio un problema con la aprobación"
     end
 
     anchor = ''

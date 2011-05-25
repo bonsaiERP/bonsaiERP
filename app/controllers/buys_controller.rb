@@ -29,7 +29,8 @@ class BuysController < ApplicationController
   # GET /buys/new
   # GET /buys/new.xml
   def new
-    @transaction = Buy.new(:date => Date.today, :discount => 0, :currency_exchange_rate => 1, :currency_id => currency_id )
+    @transaction = Buy.new
+    @transaction.set_defaults_new
     @transaction.transaction_details.build
   end
 
@@ -85,7 +86,7 @@ class BuysController < ApplicationController
     if @transaction.approve!
       flash[:notice] = "La compra fue aprobada"
     else
-      flash[:error] = "Existio un problema con la aprovación"
+      flash[:error] = "Existio un problema con la aprobación"
     end
 
     anchor = ''
