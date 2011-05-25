@@ -23,6 +23,9 @@
 - if current_user.change_default_password?
   %h3= link_to "Le recomendamos crear una nueva contraseña", "/users/password"
 
+- if Account.org.empty?
+  %h3 Por favor le recomendamos crear una #{link_to "cuenta bancaria", new_bank_path } o #{link_to "cuenta de caja", new_cash_register_path}
+
 .clear
 - fdate = 60
 
