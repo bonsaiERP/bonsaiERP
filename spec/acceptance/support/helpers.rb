@@ -60,7 +60,7 @@ module HelperMethods
 
   def create_countries
     YAML.load_file("#{Rails.root}/config/defaults/countries.yml").each do |c|
-      Factory.create :country, c
+      OrgCountry.create c
     end
   end
 

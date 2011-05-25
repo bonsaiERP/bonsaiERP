@@ -1,7 +1,9 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class Country < ActiveRecord::Base
+class OrgCountry < ActiveRecord::Base
+
+  set_table_name "countries"
 
   has_many :organisations
 

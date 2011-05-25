@@ -1,8 +1,6 @@
 = simple_form_for(@organisation) do |f|
   = bonsai_form_error(f)
 
-  =hidden_field_tag "step", 1
-
   =f.input :name, :label => 'Nombre de su empresa'
   .input
     %label Moneda
@@ -11,7 +9,7 @@
   /=f.association :currency, :label => 'Moneda base', :hint => 'Todas las transacciones se realizaran en esta moneda.'
   .clear
     
-  =f.association :country, :label => 'País'
+  =f.association :org_country, :label => 'País'
   .input
     =f.input :phone, :label => 'Teléfono', :input_html => {:size => 15}
     =f.input :mobile, :label => 'Móvil', :input_html => {:size => 15}
@@ -20,6 +18,53 @@
   =f.input :address, :label => 'Dirección', :as => :text, :input_html => {:rows => 5} 
   =f.input :email
   .clear
-  .submit
-    = f.submit 'Siguiente', :class => 'butr fr'
-.clear
+
+  .input._100.boolean
+    %label{:for => 'organisation_preferences_open_prices'}
+      = check_box_tag "organisation[preferences][open_prices]", "1", @organisation.preferences[:open_prices]
+      Precios abiertos
+    .open_prices.inside
+      %label Descuento por item
+      = text_field_tag "organisation[preferences][item_discount]", @organisation.preferences[:item_discount], :size => 4
+      .hint Si el ítem supera el <strong>descuento de <span id="item_discount"></span>%</strong> en una venta, se requerira aprobación de genrencia 
+
+  .input._100.boolean
+    %label{:for => 'organisation_preferences_general_discount' } Descuento general
+    = text_field_tag "organisation[preferences][general_discount]", @organisation.preferences[:general_discount], :size => 4
+    .hint Si se supera el porcentage en Descuento general en una venta, se requerira aprobación de gerencia 
+  .clear
+    = f.submit "Salvar"
+
+:javascript
+  $(function() {
+    function showHideOpenPrices() {
+      if($('#organisation_preferences_open_prices').attr('checked') ) {
+        $('.open_prices').show(300);
+      }else{
+        $('.open_prices').hide(300);
+      }
+    }
+
+    function testDecimal(val) {
+      return /^\d{1,3}(\.\d+)?$/.test(val);
+    }
+    
+    $('#organisation_preferences_open_prices').live('click', function() { showHideOpenPrices() });
+
+    $('#organisation_preferences_item_discount').live('focusout', function() {
+      if (testDecimal( $(this).val() ) ) {
+        console.log($(this).val());
+        $('#item_discount').html(_b.ntc( $(this).val() ) );
+      }else{
+        $('#item_discount').html(_b.ntc(0));
+      }
+    });
+
+    $('#organisation_preferences_item_discount, #organisation_preferences_general_discount').live('focusout', function() {
+      if( ! testDecimal($(this).val()) ) {
+        $(this).val(0);
+      }
+    });
+
+
+  })

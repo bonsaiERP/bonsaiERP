@@ -13,7 +13,7 @@
   .boolean
     %label #{ radio_button_tag("contact", "Client", params[:contact] == "Client") } Cliente
     %label #{ radio_button_tag "contact" , "Supplier", params[:contact] == "Supplier"} Proveedor
-    %label #{ radio_button_tag "contact" , "Staff", params[:contact] == "Staff"} Personal
+    /%label #{ radio_button_tag "contact" , "Staff", params[:contact] == "Staff"} Personal
   /= f.association :contact, :label => "Cliente", :collection => account_ledger_contact_collection(@account_ledger), :input_html => {'data-new_url' => url, 'data-trigger' => 'new_contact', 'data-title' => "Nuevo #{tit}"}
   = f.input :contact_id, :input_html => {'data-value' => f.object.contact, 'data-type' => f.object.class.to_s}, :label => ''
   .clear

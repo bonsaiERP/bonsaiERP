@@ -3,7 +3,8 @@
 # email: boriscyber@gmail.com
 class Unit < ActiveRecord::Base
 
-  acts_as_org
+  before_create :set_organisation, :unless => 'organisation_id.present?'
+  #acts_as_org
 
   # callbacks
   before_save    :strip_attributes
@@ -17,7 +18,7 @@ class Unit < ActiveRecord::Base
   attr_accessible :name, :symbol, :integer
 
   # validations
-  validates_presence_of :name, :symbol
+  validates_presence_of :name, :symbol, :organisation_id
 
 
   def to_s
@@ -55,4 +56,8 @@ protected
     end
   end
 
+private
+  def set_organisation
+    self.organisation_id = OrganisationSession.organisation_id
+  end
 end

@@ -36,12 +36,31 @@ class OrganisationsController < ApplicationController
 
   # GET /organisations/new
   # GET /organisations/new.xml
-  def new
-    reset_org unless params[:step]
-    session[:step] = params[:step] || 1
-    session[:max_step] ||= 1
+  #def new
+  #  reset_org unless params[:step]
+  #  session[:step] = params[:step] || 1
+  #  session[:max_step] ||= 1
 
-    send(:"get_step_#{session[:step]}")
+  #  send(:"get_step_#{session[:step]}")
+  #end
+
+  def new
+    @organisation = Organisation.new(:currency_id => 1)
+  end
+
+  def create
+    @organisation = Organisation.new(params[:organisation])
+
+    if @organisation.save
+      flash[:notice] = "Se ha creado su empresa correctamente."
+      params[:id] = @organisation.id
+
+      set_organisation_session(@organisation)
+
+      redirect_to "/dashboard"
+    else
+      render :action => 'new'
+    end
   end
 
   # GET /organisations/1/edit
@@ -52,16 +71,16 @@ class OrganisationsController < ApplicationController
 
   # POST /organisations
   # POST /organisations.xml
-  def create
+  #def create
 
-    if params[:step].present? and params[:step].to_i < 4
-      send(:"create_step_#{params[:step]}")
-    else
-      get_step_1
-    end
-    
-    render :action => 'new'
-  end
+  #  if params[:step].present? and params[:step].to_i < 4
+  #    send(:"create_step_#{params[:step]}")
+  #  else
+  #    get_step_1
+  #  end
+  #  
+  #  render :action => 'new'
+  #end
 
   # POST /organisations/final_step
   def final_step
@@ -145,7 +164,6 @@ class OrganisationsController < ApplicationController
       render :action => 'edit_preferences'
     end
   end
-
 private
   def select_org()
     @organisation = current_user.links.first.organisation

@@ -6,39 +6,31 @@ require File.dirname(__FILE__) + '/acceptance_helper'
 feature "Organisations", "In order to create an organisation I must login" do
 
   background do
+    UserSession.current_user = User.new(:first_name => 'Violeta', :last_name => 'Barroso') {|u| u.id = 1}
     create_countries
     create_currencies
-    @user = create_user
-    login_as @user
   end
 
   scenario "Scenario create organisation" do
 
-    click_link "Nueva empresa"
+    o = Organisation.new(:name => 'Violetas', :currency_id => 1, :country_id => 1, 
+                         :phone => '7881221', :mobile => '789123434',
+                        :address => 'Mallasa calle 4 Nº 222', 
+                        :preferences => {"open_prices" => "1", "item_discount" => "2", "general_discount" => "0.5" })
 
-    select 'Bolivia', :from => 'organisation[country_id]'
-    select 'boliviano', :from => 'organisation[currency_id]'
-    fill_in 'organisation[name]', :with => 'Prueba'
-    fill_in 'organisation[address]', :with => 'Cerror #51'
-    fill_in 'organisation[phone]', :with => 'empresa@mail.com'
-    click_button 'Crear'
+    o.save.should == true
 
-    page.should have_css('#flashNotice', :text => 'Se ha creado la empresa')
-    # Verify Organisation Params
-    org = Organisation.find_by_name('Prueba')
-    org.links.size.should == 1
-    org.users.size.should == 1
-    org.taxes.size.should > 0
-    org.units.size.should > 0
-    puts org.currency_ids.join(", ") + "\n"
-    org.currency_ids.should == [org.currency_id]
-    #Tax.unscoped.where(:organisation_id => org.id).size.should > 0
-    #Unit.unscoped.where(:organisation_id => org.id).size.should > 0
+    o.reload
+    o.taxes.map(&:organisation_id).uniq.should == [o.id]
+    o.units.map(&:organisation_id).uniq.should == [o.id]
 
-    click_link 'Prueba'
+    o.due_date.should == 30.days.from_now.to_date
+    o.links.first.user_id.should == 1
+    o.links.first.creator.should == true
 
-    page.should have_css('#header>h1', :text => 'Prueba')
-    page.should have_css('h1', :text => 'Bienvenido')
+    # Preferences
+    o.preferences.should == {:open_prices => true, :item_discount => 2, :general_discount => 0.5 }
 
   end
+
 end

@@ -20,6 +20,7 @@ class Link < ActiveRecord::Base
   # Sets the current user and other attributes
   def set_user_creator(user_key)
     # raise NoMethodError, "No method \"current_user\" exists you must login to set it" if current_user.nil?
+    self.rol = 'admin'
     write_attribute(:user_id, user_key)
     write_attribute(:creator, true)
     # Needs to be updated to use the Rol model

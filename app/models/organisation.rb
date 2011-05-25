@@ -3,29 +3,30 @@
 # email: boriscyber@gmail.com
 class Organisation < ActiveRecord::Base
   # callbacks
-  before_create :set_user
+  before_validation :set_user, :if => :new_record?
   before_create :set_due_date
-  after_create :create_all_records
-  after_create :create_link
-  after_create :create_account
+  before_create :set_preferences
+  before_create :create_all_records
+  before_create { links.build(:rol => 'admin') {|l| l.set_user_creator(UserSession.user_id) } }
+  #after_create :create_account
 
   attr_accessor :account_info
 
   serialize :preferences, Hash
   
   # relationships
-  belongs_to :country
+  belongs_to :org_country, :foreign_key => :country_id
   belongs_to :currency
 
   has_many :taxes, :class_name => "Tax", :dependent => :destroy
-  has_many :links
+  has_many :links, :dependent => :destroy
   has_many :users, :through => :links
   has_many :units, :dependent => :destroy
 
   delegate :code, :name, :symbol, :plural, :to => :currency, :prefix => true
 
   # validations
-  validates_associated :country
+  validates_associated :org_country
   validates_associated :currency
 
   validates_presence_of :name, :address, :phone, :country_id, :currency_id
@@ -36,6 +37,18 @@ class Organisation < ActiveRecord::Base
   def to_s
     name
   end
+
+  # Sets default preferences
+  def preferences
+    read_attribute(:preferences) || write_attribute(:preferences, {:open_prices => true, :item_discount => 0, :general_discount => 0})
+  end
+
+  # Method to save preferences for callback before_create
+  def set_preferences
+    self.preferences = preferences.symbolize_keys
+    self.preferences.merge(set_preferences_abs(preferences)).merge(transform_preferences_boolean(preferences))
+  end
+  private :set_preferences
 
   # Updates the preferences for the organisation
   # @param Hash
@@ -59,6 +72,7 @@ class Organisation < ActiveRecord::Base
     options
   end
 
+  # Method to transform checkboxes values to true
   def transform_preferences_boolean(options)
     [:open_prices].each do |par|
       options[par] = (options[par] == "1")
@@ -67,75 +81,25 @@ class Organisation < ActiveRecord::Base
     options
   end
 
-
-  #def self.all
-  #  Link.orgs
-  #end
-
-  #def preferences
-  #  read_attribute(:preferences) || write_attribute(:preferences, {})
-  #end
-
 protected
 
   # Creates all registers needed when an organisation is created
   def create_all_records
-    OrganisationSession.set = { :id => self.id, :name => self.name, :curency_id => self.currency_id }
-    create_taxes
-    create_units
+    build_taxes
+    build_units
   end
 
   # Adds the default taxes for each country using a serialized value from the database
-  def create_taxes
-    country.taxes.each do |tax|
-      Tax.create!(tax)
+  def build_taxes
+    org_country.taxes.each do |tax|
+      taxes.build(tax)
     end
   end
 
   # creates default units the units accordins to the locale
-  def create_units
-    path = File.join(Rails.root, "config", "defaults", "units.#{I18n.locale}.yml" )
-    YAML::parse(File.open(path) ).transform.each do |vals|
-      unit = Unit.create!(vals)
-    end
-  end
-
-  # Creates the link to the user
-  def create_link
-    begin
-      link = Link.new(:organisation_id => self.id)
-      link.set_user_creator(user_id)
-      link.save!
-    rescue
-      false
-    end
-  end
-
-  # Creates the bank or CashRegister
-  def create_account
-    if account_info.is_a? Bank
-      unless account_info.save
-        errors[:base] = "Error al crear cuenta de banco"
-        raise ActiveRecord::Rollback
-      end
-    elsif account_info.is_a? CashRegister
-      unless account_info.save
-        errors[:base] = "Error al crear cuenta de caja"
-        raise ActiveRecord::Rollback
-      end
-    else
-      raise ActiveRecord::Rollback
-    end
-  end
-
-  # Updates the link for the user creator
-  def create_link
-    begin
-      l = links.build(:rol => 'admin')
-      l.set_user_creator(UserSession.user_id)
-      l.save!
-    rescue
-      false
+  def build_units
+    YAML.load_file(File.join(Rails.root, "config/defaults/units.#{I18n.locale}.yml")).each do |vals|
+      units.build(vals)
     end
   end
 

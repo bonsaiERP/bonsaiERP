@@ -115,6 +115,7 @@ class Transaction < ActiveRecord::Base
 
   # Tells if the user can approve a transaction based on the preferences
   def can_approve?(session)
+    return false unless draft?
     if User::ROLES.slice(0,2).include?(session[:user][:rol])
       true
     else

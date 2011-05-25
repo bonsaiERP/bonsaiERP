@@ -3,7 +3,7 @@
 # email: boriscyber@gmail.com
 class Tax < ActiveRecord::Base
   # callbacks
-  acts_as_org
+  before_create :set_organisation, :unless => 'organisation_id.present?'
 
   # before_save :create_or_update_item
   
@@ -55,6 +55,10 @@ private
   # Finds all invisible records
   def self.invisible
    where( :organisation_id => OrganisationSession.id, :visible => false )
+  end
+
+  def set_organisation
+    self.organisation_id = OrganisationSession.organisation_id
   end
 
 end 
