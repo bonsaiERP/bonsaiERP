@@ -47,6 +47,10 @@ class User < ActiveRecord::Base
     link.rol
   end
 
+  def self.admin_gerency?(val)
+    ROLES.slice(0, 2).include? val
+  end
+
   # Checks the user and the priviledges
   def check_organisation?(organisation_id)
     organisations.map(&:id).include?(organisation_id.to_i)

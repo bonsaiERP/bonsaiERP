@@ -156,4 +156,17 @@ module TransactionsHelper
     ]
   end
 
+  # Shows the new_link only to priviledged users
+  def can_show_new_pay_plan_link?(klass)
+    if klass.draft?
+      true
+    else
+      if User.admin_gerency?(session[:user][:role])
+        true
+      else
+        false
+      end
+    end
+  end
+
 end

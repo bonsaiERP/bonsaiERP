@@ -375,6 +375,7 @@ private
     self.active = active.nil? ? true : active
     self.discount ||= 0
     self.tax_percent = taxes.inject(0) {|sum, t| sum += t.rate }
+    self.currency_exchange_rate ||= 1
     self.gross_total ||= 0
     self.total ||= 0
     self.date ||= Date.today

@@ -21,8 +21,8 @@ module ApplicationHelper
 
   # Presents number to currency
   def ntc(val = nil)
-    val ||= 0
-    number_to_currency(val)
+    #val ||= 0
+    number_to_currency(val.to_f)
   end
 
   def nwd(val)
