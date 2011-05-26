@@ -79,7 +79,12 @@ class ExpensesController < ApplicationController
   # DELETE /buys/1
   # DELETE /buys/1.xml
   def destroy
-    @transaction.destroy
+    if @transaction.approved?
+      redirect_transaction
+    else
+      @transaction.destroy
+      redirect_ajax @transaction
+    end
   end
 
   # PUT /buys/1/approve
