@@ -1,12 +1,19 @@
+# Additional translations at http://github.com/plataformatec/devise/wiki/I18n
+
 en:
   errors:
     messages:
+      expired: "has expired, please request a new one"
       not_found: "not found"
-      already_confirmed: "was already confirmed"
+      already_confirmed: "was already confirmed, please try signing in"
       not_locked: "was not locked"
+      not_saved:
+        one: "1 error prohibited this %{resource} from being saved:"
+        other: "%{count} errors prohibited this %{resource} from being saved:"
 
   devise:
     failure:
+      already_authenticated: 'You are already signed in.'
       unauthenticated: 'You need to sign in or sign up before continuing.'
       unconfirmed: 'You have to confirm your account before continuing.'
       locked: 'Your account is locked.'
@@ -24,22 +31,20 @@ en:
       send_instructions: 'You will receive an email with instructions about how to confirm your account in a few minutes.'
       confirmed: 'Your account was successfully confirmed. You are now signed in.'
     registrations:
-      signed_up: 'You have signed up successfully. If enabled, a confirmation was sent your e-mail.'
+      signed_up: 'Welcome! You have signed up successfully.'
+      inactive_signed_up: 'You have signed up successfully. However, we could not sign you in because your account is %{reason}.'
       updated: 'You updated your account successfully.'
       destroyed: 'Bye! Your account was successfully cancelled. We hope to see you again soon.'
     unlocks:
       send_instructions: 'You will receive an email with instructions about how to unlock your account in a few minutes.'
       unlocked: 'Your account was successfully unlocked. You are now signed in.'
+    omniauth_callbacks:
+      success: 'Successfully authorized from %{kind} account.'
+      failure: 'Could not authorize you from %{kind} because "%{reason}".'
     mailer:
-      confirmation_instructions: 'Confirmation instructions'
-      reset_password_instructions: 'Reset password instructions'
-      unlock_instructions: 'Unlock Instructions'
-    views:
-      sign_in: "Sign in"
-      sign_up: "Sign up"
-      sign_out: "Sign out"
-      confirmation_link: "Didn't receive confirmation instructions?"
-      unlock_link: "Didn't receive unlock instructions?"
-      password_forgot: "Forgot your password?"
-      password_submit: "Send me reset password instructions"
-
+      confirmation_instructions:
+        subject: 'Confirmation instructions'
+      reset_password_instructions:
+        subject: 'Reset password instructions'
+      unlock_instructions:
+        subject: 'Unlock Instructions'
