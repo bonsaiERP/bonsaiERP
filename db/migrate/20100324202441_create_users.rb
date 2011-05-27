@@ -5,12 +5,12 @@ class CreateUsers < ActiveRecord::Migration
   def self.up
     create_table :users do |t|
       # devise
-      t.authenticatable
+      t.database_authenticatable
       t.confirmable
       t.recoverable
       t.rememberable
       t.trackable
-      t.timestamps
+
       # user
       t.string :first_name, :limit => 80
       t.string :last_name, :limit => 80

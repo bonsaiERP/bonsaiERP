@@ -1,7 +1,7 @@
 # Edit this Gemfile to bundle your application's dependencies.
 source 'http://gemcutter.org'
 
-gem 'rails', '~>3.0.3'
+gem 'rails', '~>3.1.0.rc1'
 
 ## Bundle edge rails:
 # gem "rails", :git => "git://github.com/rails/rails.git"
@@ -10,7 +10,14 @@ gem 'rails', '~>3.0.3'
 # Rails has selected sqlite3.
 #gem 'sqlite3-ruby', :require => 'sqlite3'
 #gem 'pg'
+gem 'sass'
+gem 'coffee-script'
+gem 'uglifier'
+
+gem 'jquery-rails'
+
 gem 'mysql2'
+gem 'rake', '0.8.7'
 
 gem 'devise'
 gem 'simple_form', '~>1.3.0'
@@ -44,5 +51,6 @@ group :test do
   gem 'database_cleaner'
   gem 'watchr'
   gem 'launchy'
+  gem 'turn', :require => false
 end  
 
