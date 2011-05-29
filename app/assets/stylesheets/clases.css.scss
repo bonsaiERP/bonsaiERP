@@ -352,3 +352,40 @@ a.sync{
   @include icon;
   background: url(images/delete.png) no-repeat;
 }
+
+.ajax-modal{
+  background-color: #FFF !important;
+  .links{ display: none; }
+  a{
+    color: $link !important;
+    text-decoration: none;
+  }
+  a:hover{
+    text-decoration: underline;
+  }
+}
+
+/*States*/
+@mixin dashlet{
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  padding: 2px 3px;
+  color: $white;
+}
+
+.paid{ 
+  @include dashlet;
+  background-color: $green;
+}
+.draft{ 
+  @include dashlet;
+  background-color: $grey;
+}
+.approved{  
+  @include dashlet;
+  background-color: $dark;
+}
+.due{
+  @include dashlet;
+  background-color: $red; 
+}
