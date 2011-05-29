@@ -53,6 +53,8 @@ module Bonsaierp
 
     config.generators.helper = false
 
+    config.assets.enabled = true
+
     # Hack for spork to work with rails 3
     # http://railstutorial.org/chapters/static-pages#sec:spork
     if Rails.env.test?

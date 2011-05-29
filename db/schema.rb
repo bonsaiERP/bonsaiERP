@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(:version => 20110517214353) do
     t.datetime "updated_at"
     t.integer  "contact_id"
     t.boolean  "conciliation"
-    t.string   "description"
+    t.text     "description"
     t.integer  "transaction_id"
     t.string   "reference"
     t.integer  "creator_id"
@@ -42,7 +42,6 @@ ActiveRecord::Schema.define(:version => 20110517214353) do
   add_index "account_ledgers", ["contact_id"], :name => "index_account_ledgers_on_contact_id"
   add_index "account_ledgers", ["currency_id"], :name => "index_account_ledgers_on_currency_id"
   add_index "account_ledgers", ["date"], :name => "index_account_ledgers_on_date"
-  add_index "account_ledgers", ["description"], :name => "index_account_ledgers_on_description"
   add_index "account_ledgers", ["income"], :name => "index_account_ledgers_on_income"
   add_index "account_ledgers", ["nuller_id"], :name => "index_account_ledgers_on_nuller_id"
   add_index "account_ledgers", ["organisation_id"], :name => "index_account_ledgers_on_organisation_id"
@@ -363,7 +362,6 @@ ActiveRecord::Schema.define(:version => 20110517214353) do
   end
 
   add_index "taggings", ["tag_id"], :name => "index_taggings_on_tag_id"
-  add_index "taggings", ["taggable_id", "taggable_type", "context"], :name => "index_taggings_on_taggable_id_and_taggable_type_and_context"
 
   create_table "tags", :force => true do |t|
     t.string  "name"
@@ -467,9 +465,9 @@ ActiveRecord::Schema.define(:version => 20110517214353) do
   add_index "units", ["organisation_id"], :name => "index_units_on_organisation_id"
 
   create_table "users", :force => true do |t|
-    t.string   "email",                                  :default => "",    :null => false
-    t.string   "encrypted_password",      :limit => 128, :default => "",    :null => false
-    t.string   "password_salt",                          :default => "",    :null => false
+    t.string   "email",                                                     :null => false
+    t.string   "encrypted_password",      :limit => 128,                    :null => false
+    t.string   "password_salt",                                             :null => false
     t.string   "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
