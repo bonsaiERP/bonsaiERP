@@ -1,17 +1,13 @@
 /* Colors */
 $green:#5BBF3B;
-$menu_green:#7FBD42;
-$dark_green: #538447;
 $white: #FFF;
-$white_tan: #F7F7F7;
+$white-tan: #F7F7F7;
 $red: #FF0000;
-$light_red: #FEF1EC;
-$red_hover: #FF5757;
 $black: #000;
 $dark: #484A4C;//#202020;
 $grey: #C6C6C6;
-$light_grey:#F0F0F1;
-$dark_grey: #717171;
+$light-grey: lighten($grey, 10%);
+
 $orange: #FECD0A;
 $light_orange: #ffe374;
 $blue: #6793CE;
@@ -23,6 +19,15 @@ $dark_yellow:#D0D02A;
 $link: #095495;
 /* #547299;*/
 $font_size: 13px;
+
+.dark{ color: lighten(#000, 10%) !important; }
+.dark_grey{ color: darken($grey, 40%) !important;}
+
+@mixin rounded-corners($radius: 5px) {
+  -moz-border-radius: $radius;
+  -webkit-border-radius: $radius;
+  border-radius: $radius;
+}
 
 ._10, .w10{ width: 9% !important;}
 ._15, .w15{ width: 14% !important;}
@@ -141,7 +146,8 @@ div.search{
 }
 
 .moneybox{
-  background-color: $light_grey;
+  @include rounded-corners(3px);
+  background-color: lighten($grey, 12%);
   padding: 8px;
   display:inline-block;
   margin: 5px 1px;
@@ -150,19 +156,17 @@ div.search{
 }
 
 .tooltip{
+  @include rounded-corners(3px);
   border: 1px solid $grey;
   background: $white;
   color: $dark;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
-  border-radius: 3px;
   padding: 4px;
 }
 
 /*especial tabs*/
 ul.tabs{
   list-style: none;
-  background-color: $light_grey;
+  background-color: $light-grey;
   height: 35px;
   padding: 0px 15px;
   margin:0px 0px 20px;
@@ -182,9 +186,7 @@ ul.tabs{
 }
 
 .message{
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  border-radius: 4px;
+  @include rounded-corners(4px);
   border: 2px solid $green;
   color: $dark;
   margin: 4px 0;
@@ -211,7 +213,7 @@ ul.tabs{
   font-weight: bold;
   padding-left: 20px;
   margin: 0px 5px;
-  color: $dark_green;
+  color: darken($green, 10%);
   font-size: 110%;
   display: inline-block;
   min-height: 16px;
@@ -221,7 +223,7 @@ ul.tabs{
 .links{
   font-weight: bold;
   padding-left: 20px;
-  color: $dark_green;
+  color: darken($green, 10%);
   width: 40%;
   float:right;
   text-align: right;
@@ -234,28 +236,27 @@ ul.tabs{
 a.new{
   font-weight: bold;
   padding-left: 22px;
-  color: $dark_green;
+  color: darken($green, 10%);
   display: inline-block;
   background: transparent url(images/add.png) no-repeat scroll 4px 50%;
   font-size: 120%;
+  &:hover{
+    text-decoration: none;
+  }
 }
+
 a.button{
+  @include rounded-corners(3px);
   border: 1px solid $grey;
   padding: 5px 8px 5px 26px;
   margin: 5px;
-  background-color:$light_grey;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
-  border-radius: 3px;
+  background-color:$light-grey;
+  &:hover{
+    background-color: $white;
+    text-decoration: none !important;
+  }
 }
-a.new:hover{ 
-  color: $green;
-  text-decoration: none;
-}
-a.button:hover{
-  background-color: $white;
-  text-decoration: none !important;
-}
+
 a.add{
   @include link;
   background: url(images/add.png) no-repeat 0px 50%;
@@ -273,8 +274,12 @@ a.key{
   @include link;
   background: url(images/key.png) no-repeat 0px 50%;
 }
-a.delete{color: $red;}
-a.delete:hover{ color: $red_hover !important; }
+a.delete{
+  color: $red;
+  &:hover{
+    color: darken($red, 10%) !important;
+  }
+}
 
 a.list{
   @include link;
@@ -340,6 +345,7 @@ a.sync{
   display: inline-block;
   text-indent: -1000em;
 }
+/*
 .show_icon{
   @include icon;
   background: url(images/zoom.png) no-repeat;
@@ -352,6 +358,7 @@ a.sync{
   @include icon;
   background: url(images/delete.png) no-repeat;
 }
+*/
 
 .ajax-modal{
   background-color: #FFF !important;
@@ -366,9 +373,8 @@ a.sync{
 }
 
 /*States*/
-@mixin dashlet{
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
+@mixin dashlet($radius: 3px){
+  @include rounded-corners($radius);
   padding: 2px 3px;
   color: $white;
 }
@@ -379,7 +385,7 @@ a.sync{
 }
 .draft{ 
   @include dashlet;
-  background-color: $grey;
+  background-color: darken($grey, 15%);
 }
 .approved{  
   @include dashlet;
@@ -389,3 +395,51 @@ a.sync{
   @include dashlet;
   background-color: $red; 
 }
+
+
+/***********************************/
+/* MENU CLASS */
+
+ul.menu{
+  position: relative;
+  padding: 0px;
+  margin:0px;
+  z-index: 100;
+  a{
+    margin: 0px;
+    text-decoration: none;
+    &:hover{
+      color: $green;  
+    }
+  }
+  li{
+    list-style: none;
+    margin:0px;
+    padding: 0px;
+    float: left;
+    ul{
+      display: none;
+      margin: 0px;
+      border: 1px solid $grey;
+      background-color: $white;
+      padding: 0px;
+      margin-top: -1px;
+      font-weight: normal;
+      li{
+        float: none !important;
+        a{
+          padding: 6px 20px;
+          display: block;
+          font-size: 110%;
+        }
+      }
+    }
+    &:hover{
+      ul{
+        display: block;
+        position:absolute;
+      }
+    }
+  }
+}
+

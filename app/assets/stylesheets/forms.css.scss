@@ -39,7 +39,7 @@ label{
   font-weight: bold;
   vertical-align: top;
   display: block;
-  color: $dark_grey;
+  color: darken($grey, 45%);
 }
 label.collection_radio, label.collection_check_boxes{
   font-weight:normal;

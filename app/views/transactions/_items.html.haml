@@ -46,7 +46,7 @@
         %td.r.b.dark{:colspan => 4} Total #{transaction.currency_name.pluralize}
         %td#total_value.r.b{'data-val' => transaction.total_currency} #{transaction.currency_symbol} #{ntc transaction.total_currency}
 
-      - unless transaction.state == 'draft'
+      - unless transaction.draft?
         %tr.extra
           %td
           %td.r.b.line.dark{:colspan => 4} #{minus_image} Cobrado #{transaction.currency_name.pluralize}
