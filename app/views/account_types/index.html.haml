@@ -1,0 +1,19 @@
+- content_for :links do
+  .links
+    = link_to "Nuevo account_type", new_account_type_path, :class => 'new'
+
+%h1 account_types
+
+%table.decorated.nwl 
+  %thead
+    %tr
+      %th name
+      %th number
+      %th
+  
+  %tbody
+    - @account_types.each do |account_type|
+      %tr{ :class => cycle(:odd, :even) }
+        %td= account_type.name
+        %td= account_type.number
+        %td.actions= bonsai_links(account_type)

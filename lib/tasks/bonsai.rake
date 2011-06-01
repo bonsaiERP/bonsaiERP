@@ -53,6 +53,12 @@ namespace :bonsai do
 
     puts "Puts contacts for acount_ledgers have been updated"
   end
+
+  desc "Creates from zero a new installation of bonsai"
+  task :create_all => :environment do
+    Rake::Task["db:drop"].execute
+    Rake::Task["db:migrate"].execute
+  end
 end
 
 # example to export the file

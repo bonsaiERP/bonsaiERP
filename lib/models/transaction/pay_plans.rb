@@ -1,7 +1,7 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-module ::Transaction::PayPlans
+module Models::Transaction::PayPlans
 
   MAX_PAY_PLANS_SIZE = 50
   PAY_PLANS_DATE_SEPARATION = 1.month

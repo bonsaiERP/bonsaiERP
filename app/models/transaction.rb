@@ -10,7 +10,7 @@ class Transaction < ActiveRecord::Base
   # Determines if the oprations is made on transaction or pay_plan or payment
   ###############################
   # Methods for pay_plans
-  include ::Transaction::PayPlans
+  include Models::Transaction::PayPlans
   ###############################
  
   attr_reader :trans, :approving

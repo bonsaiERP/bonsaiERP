@@ -1,0 +1,7 @@
+---
+- :name: "store"
+  :account_number: "store"
+- :name: 'client'
+  :account_number: "client"
+- :name: "supplier"
+  :account_number: "supplier"

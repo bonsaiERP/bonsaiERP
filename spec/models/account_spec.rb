@@ -6,15 +6,12 @@ describe Account do
   before :each do
     OrganisationSession.set(:id => 1)
     UserSession.current_user = User.new {|u| u.id = 1 }
+
+    AccountType.create(:name => 'capital') {|a| a.id = 1}
+    AccountType.create(:name => 'products/services') {|a| a.id = 2}
   end
 
-  it 'should create a Bank account' do
-    b = Bank.new(:name => 'Uno', :number => '12121', :amount => 1000,:currency_id => 1 )
-
-    b.save.should == true
-    b.account_ledgers.size.should == 1
-
-    b.total_amount.should == 0
-    b.total_pendent.should == 1000
+  it 'should create an Account' do
+    a = Account.create(:name => 'Store 1')
   end
 end

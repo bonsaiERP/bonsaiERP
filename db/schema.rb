@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110517214353) do
+ActiveRecord::Schema.define(:version => 20110601221736) do
 
   create_table "account_ledgers", :force => true do |t|
     t.integer  "organisation_id"
@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(:version => 20110517214353) do
     t.datetime "updated_at"
     t.integer  "contact_id"
     t.boolean  "conciliation"
-    t.text     "description"
+    t.string   "description"
     t.integer  "transaction_id"
     t.string   "reference"
     t.integer  "creator_id"
@@ -42,6 +42,7 @@ ActiveRecord::Schema.define(:version => 20110517214353) do
   add_index "account_ledgers", ["contact_id"], :name => "index_account_ledgers_on_contact_id"
   add_index "account_ledgers", ["currency_id"], :name => "index_account_ledgers_on_currency_id"
   add_index "account_ledgers", ["date"], :name => "index_account_ledgers_on_date"
+  add_index "account_ledgers", ["description"], :name => "index_account_ledgers_on_description"
   add_index "account_ledgers", ["income"], :name => "index_account_ledgers_on_income"
   add_index "account_ledgers", ["nuller_id"], :name => "index_account_ledgers_on_nuller_id"
   add_index "account_ledgers", ["organisation_id"], :name => "index_account_ledgers_on_organisation_id"
@@ -51,29 +52,61 @@ ActiveRecord::Schema.define(:version => 20110517214353) do
   add_index "account_ledgers", ["reference"], :name => "index_account_ledgers_on_reference"
   add_index "account_ledgers", ["transaction_id"], :name => "index_account_ledgers_on_transaction_id"
 
+  create_table "account_types", :force => true do |t|
+    t.string   "name"
+    t.string   "number"
+    t.string   "account_number"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "organisation_id"
+    t.boolean  "active",          :default => true
+  end
+
+  add_index "account_types", ["account_number"], :name => "index_account_types_on_account_number"
+  add_index "account_types", ["active"], :name => "index_account_types_on_active"
+  add_index "account_types", ["organisation_id"], :name => "index_account_types_on_organisation_id"
+
   create_table "accounts", :force => true do |t|
     t.integer  "organisation_id"
     t.integer  "currency_id"
     t.string   "name"
+    t.string   "type",             :limit => 20
+    t.decimal  "amount",                         :precision => 14, :scale => 2
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "accountable_id"
+    t.string   "accountable_type"
+    t.integer  "account_type_id"
+  end
+
+  add_index "accounts", ["account_type_id"], :name => "index_accounts_on_account_type_id"
+  add_index "accounts", ["accountable_id"], :name => "index_accounts_on_accountable_id"
+  add_index "accounts", ["accountable_type"], :name => "index_accounts_on_accountable_type"
+  add_index "accounts", ["currency_id"], :name => "index_accounts_on_currency_id"
+  add_index "accounts", ["organisation_id"], :name => "index_accounts_on_organisation_id"
+  add_index "accounts", ["type"], :name => "index_accounts_on_type"
+
+  create_table "banks", :force => true do |t|
+    t.integer  "organisation_id"
+    t.integer  "currency_id"
+    t.string   "type",            :limit => 30
+    t.string   "name",            :limit => 100
+    t.string   "number",          :limit => 30
     t.string   "address"
-    t.string   "phone"
-    t.string   "email"
     t.string   "website"
-    t.string   "number",          :limit => 50
-    t.string   "type",            :limit => 20
-    t.decimal  "total_amount",                  :precision => 14, :scale => 2
+    t.string   "phone"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "accounts", ["currency_id"], :name => "index_accounts_on_currency_id"
-  add_index "accounts", ["number"], :name => "index_accounts_on_number"
-  add_index "accounts", ["organisation_id"], :name => "index_accounts_on_organisation_id"
-  add_index "accounts", ["type"], :name => "index_accounts_on_type"
+  add_index "banks", ["currency_id"], :name => "index_banks_on_currency_id"
+  add_index "banks", ["name"], :name => "index_banks_on_name"
+  add_index "banks", ["organisation_id"], :name => "index_banks_on_organisation_id"
+  add_index "banks", ["type"], :name => "index_banks_on_type"
 
   create_table "contacts", :force => true do |t|
     t.string   "matchcode"
-    t.string   "name",              :limit => 100
+    t.string   "first_name",        :limit => 100
     t.string   "organisation_name", :limit => 100
     t.string   "address",           :limit => 250
     t.string   "address_alt",       :limit => 250
@@ -362,6 +395,7 @@ ActiveRecord::Schema.define(:version => 20110517214353) do
   end
 
   add_index "taggings", ["tag_id"], :name => "index_taggings_on_tag_id"
+  add_index "taggings", ["taggable_id", "taggable_type", "context"], :name => "index_taggings_on_taggable_id_and_taggable_type_and_context"
 
   create_table "tags", :force => true do |t|
     t.string  "name"
@@ -465,22 +499,19 @@ ActiveRecord::Schema.define(:version => 20110517214353) do
   add_index "units", ["organisation_id"], :name => "index_units_on_organisation_id"
 
   create_table "users", :force => true do |t|
-    t.string   "email",                                                     :null => false
-    t.string   "encrypted_password",      :limit => 128,                    :null => false
-    t.string   "password_salt",                                             :null => false
+    t.string   "email",                                  :default => "",    :null => false
+    t.string   "encrypted_password",      :limit => 128, :default => "",    :null => false
     t.string   "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string   "reset_password_token"
-    t.string   "remember_token"
+    t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
     t.integer  "sign_in_count",                          :default => 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.datetime "created_at"
-    t.datetime "updated_at"
     t.string   "first_name",              :limit => 80
     t.string   "last_name",               :limit => 80
     t.string   "phone",                   :limit => 20
@@ -488,6 +519,8 @@ ActiveRecord::Schema.define(:version => 20110517214353) do
     t.string   "website",                 :limit => 200
     t.string   "account_type",            :limit => 15
     t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.boolean  "change_default_password",                :default => false
     t.string   "address"
   end

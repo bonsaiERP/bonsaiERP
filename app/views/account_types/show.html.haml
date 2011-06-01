@@ -1,0 +1,20 @@
+- content_for :links do
+  %ul.breadcrumps
+    %li #{link_to account_types, account_types_path}<span>&gt;</span>
+
+  .links
+    = link_to "Nuevo", account_types_path, :class => 'add'
+    = link_to "Ver", @account_type, :class => 'show'
+    = link_to "Borrar", @account_type, :class => 'delete', :confirm => 'Esta seguro de borrar', :method => :delete
+
+%h1 account_type
+%p.links
+  = link_to 'Editar', edit_account_type_path(@account_type), :class => 'edit'
+  = link_to 'Lista', account_types_path, :class => 'list'
+
+.input
+  %label #<Rails::Generators::GeneratedAttribute:0xc55af6c>
+  %span= @account_type.name
+.input
+  %label #<Rails::Generators::GeneratedAttribute:0xc55aea4>
+  %span= @account_type.number

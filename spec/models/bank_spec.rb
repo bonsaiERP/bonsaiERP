@@ -4,7 +4,11 @@ describe Bank do
   before(:each) do
     OrganisationSession.set(:id => 1, :name => 'ecuanime')
 
-    @params = {:currency_id => 1, :total_amount => 10000, :name => 'Banco 1', :number => '12365498'}
+    @params = {:currency_id => 1, :amount => 10000, :name => 'Banco 1', :number => '12365498'}
+
+    YAML.load_file( File.join(Rails.root, "db/defaults/account_types.yml") ).each do |y|
+      AccountType.create()
+    end
   end
 
   it 'should create an instance' do
