@@ -25,7 +25,7 @@ module HelperMethods
   # Creates a user logins and creates and organisation
   def create_organisation(attributes = {})
     if attributes.empty?
-      y = YAML.load_file("#{Rails.root}/config/defaults/organisations.yml")
+      y = YAML.load_file("#{Rails.root}/db/defaults/organisations.yml")
       attributes = y.first
     end
     @user = create_user
@@ -48,7 +48,7 @@ module HelperMethods
   end
 
   def create_currencies
-    YAML.load_file("#{Rails.root}/config/defaults/currencies.yml").each do |c|
+    YAML.load_file("#{Rails.root}/db/defaults/currencies.yml").each do |c|
       Currency.create!( c ) {|cur| cur.id = c["id"] }
     end
   end
@@ -59,19 +59,19 @@ module HelperMethods
   end
 
   def create_countries
-    YAML.load_file("#{Rails.root}/config/defaults/countries.yml").each do |c|
+    YAML.load_file("#{Rails.root}/db/defaults/countries.yml").each do |c|
       OrgCountry.create c
     end
   end
 
   def create_contacts
-    YAML.load_file("#{Rails.root}/config/defaults/contacts.yml").each do |c|
+    YAML.load_file("#{Rails.root}/db/defaults/contacts.yml").each do |c|
       Factory.create :contact, c
     end
   end
 
   #def create_items
-  #  YAML.load_file("#{Rails.root}/config/defaults/items.yml").each do |i|
+  #  YAML.load_file("#{Rails.root}/db/defaults/items.yml").each do |i|
   #    Factory.create :item, i
   #  end
   #end

@@ -2,7 +2,8 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class AccountType < ActiveRecord::Base
-  acts_as_org
+
+  include Models::Organisation::NewOrganisation
   
   attr_protected :account_number
 
@@ -17,4 +18,5 @@ class AccountType < ActiveRecord::Base
 
   # scopes
   scope :active, where(:active => true)
+
 end

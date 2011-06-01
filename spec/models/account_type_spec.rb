@@ -15,6 +15,16 @@ describe AccountType do
 
     a.account_number.should == nil
     a.active.should == true
+    a.organisation_id.should == 1
+  end
+
+  it 'should not assign organisation_id' do
+    @params = @params.merge(:organisation_id => 1)
+
+    a = AccountType.new(@params)
+
+    @params[:organisation_id].should == 1
+    a.organisation_id.should == nil
   end
 
   it 'should not destroy' do

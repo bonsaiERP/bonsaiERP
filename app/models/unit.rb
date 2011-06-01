@@ -3,8 +3,7 @@
 # email: boriscyber@gmail.com
 class Unit < ActiveRecord::Base
 
-  before_create :set_organisation, :unless => 'organisation_id.present?'
-  #acts_as_org
+  include Models::Organisation::NewOrganisation
 
   # callbacks
   before_save    :strip_attributes
@@ -56,8 +55,4 @@ protected
     end
   end
 
-private
-  def set_organisation
-    self.organisation_id = OrganisationSession.organisation_id
-  end
 end

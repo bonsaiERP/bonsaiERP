@@ -9,6 +9,8 @@ class Organisation < ActiveRecord::Base
   before_create :create_all_records
   before_create { links.build(:rol => 'admin') {|l| l.set_user_creator(UserSession.user_id) } }
   #after_create :create_account
+  
+  DATA_PATH = "db/defaults"
 
   attr_accessor :account_info
 
@@ -22,6 +24,7 @@ class Organisation < ActiveRecord::Base
   has_many :links, :dependent => :destroy
   has_many :users, :through => :links
   has_many :units, :dependent => :destroy
+  has_many :account_types, :dependent => :destroy
 
   delegate :code, :name, :symbol, :plural, :to => :currency, :prefix => true
 
@@ -87,6 +90,7 @@ protected
   def create_all_records
     build_taxes
     build_units
+    build_account_types
   end
 
   # Adds the default taxes for each country using a serialized value from the database
@@ -98,8 +102,14 @@ protected
 
   # creates default units the units accordins to the locale
   def build_units
-    YAML.load_file(File.join(Rails.root, "config/defaults/units.#{I18n.locale}.yml")).each do |vals|
+    YAML.load_file(File.join(Rails.root, DATA_PATH, "units.#{I18n.locale}.yml")).each do |vals|
       units.build(vals)
+    end
+  end
+
+  def build_account_types
+    YAML.load_file(File.join(Rails.root, DATA_PATH, "account_types.#{I18n.locale}.yml")).each do |vals|
+      account_types.build(vals) {|at| at.account_number = vals[:account_number] }
     end
   end
 
