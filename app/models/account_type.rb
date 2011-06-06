@@ -5,7 +5,7 @@ class AccountType < ActiveRecord::Base
 
   include Models::Organisation::NewOrganisation
   
-  attr_protected :account_number
+  attr_readonly :account_number
 
   # callbacks
   before_destroy { self.update_attribute(:active, false) ;false }

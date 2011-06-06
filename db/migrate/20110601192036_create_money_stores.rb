@@ -1,6 +1,6 @@
-class CreateBanks < ActiveRecord::Migration
+class CreateMoneyStores < ActiveRecord::Migration
   def change
-    create_table :banks do |t|
+    create_table :money_stores do |t|
       t.references :organisation
       t.references :currency
       t.string :type, :limit => 30
@@ -13,9 +13,9 @@ class CreateBanks < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :banks, :organisation_id
-    add_index :banks, :currency_id
-    add_index :banks, :type
-    add_index :banks, :name
+    add_index :money_stores, :organisation_id
+    add_index :money_stores, :currency_id
+    add_index :money_stores, :type
+    add_index :money_stores, :name
   end
 end

@@ -11,7 +11,7 @@ module Models::Organisation::NewOrganisation
   module InstanceMethods
     def set_organisation_callbacks
       before_create :set_organisation, :unless => 'organisation_id.present?'
-      attr_protected :organisation_id
+      attr_readonly :organisation_id
     end
   end
     

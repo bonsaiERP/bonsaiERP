@@ -1,18 +1,19 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class Bank < ActiveRecord::Base
+class Bank < MoneyStore
 
-  acts_as_org
+  include Models::Account::Base
+  # validations
+  validates_presence_of :name, :number, :currency_id, :address
+  validates_uniqueness_of :number, :scope => [:name, :organisation_id]
 
-  # callbacks
-  before_create :create_account
-
-  # delegations
-  delegate :name, :symbol, :code, :plural, :to => :currency, :prefix => true
+  def to_s
+    "#{name} #{number} (#{currency_symbol})"
+  end
 
 private
-  def create_account
-
+  def set_defaults
+    self.total_amount ||= 0.0
   end
 end

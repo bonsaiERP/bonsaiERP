@@ -24,6 +24,7 @@ feature "Organisations", "In order to create an organisation I must login" do
     o.taxes.map(&:organisation_id).uniq.should == [o.id]
     o.units.map(&:organisation_id).uniq.should == [o.id]
     o.account_types.map(&:organisation_id).uniq.should == [o.id]
+    o.account_types.map(&:account_number).uniq.include?(nil).should == false
 
     o.due_date.should == 30.days.from_now.to_date
     o.links.first.user_id.should == 1

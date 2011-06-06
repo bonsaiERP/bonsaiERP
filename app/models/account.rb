@@ -2,6 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class Account < ActiveRecord::Base
+  #before_create :create_account
 
   acts_as_org
 
@@ -10,8 +11,11 @@ class Account < ActiveRecord::Base
 
   attr_protected :amount
 
+  validates_presence_of :currency_id
+
   # relationships
   belongs_to :account_type
+  has_one :money_account
 
   validates_presence_of :name, :accountable_type, :accountable_id
 

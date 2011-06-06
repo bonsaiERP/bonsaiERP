@@ -2,9 +2,6 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class Client < Contact
-
-  ACCOUNT_NUMBER = "client"
-
   before_destroy :check_client_for_delete
 
 private

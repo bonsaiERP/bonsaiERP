@@ -1,7 +1,13 @@
 ---
-- :name: "store"
+- :name: "almacen"
   :account_number: "store"
-- :name: 'client'
+- :name: "cliente"
   :account_number: "client"
-- :name: "supplier"
+- :name: "proveedor"
   :account_number: "supplier"
+- :name: "servicios"
+  :account_number: "service"
+- :name: "banco"
+  :account_number: "bank"
+- :name: "caja"
+  :account_number: "cash_register"

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110601221736) do
+ActiveRecord::Schema.define(:version => 20110604135506) do
 
   create_table "account_ledgers", :force => true do |t|
     t.integer  "organisation_id"
@@ -76,17 +76,15 @@ ActiveRecord::Schema.define(:version => 20110601221736) do
     t.datetime "updated_at"
     t.integer  "accountable_id"
     t.string   "accountable_type"
-    t.integer  "account_type_id"
   end
 
-  add_index "accounts", ["account_type_id"], :name => "index_accounts_on_account_type_id"
   add_index "accounts", ["accountable_id"], :name => "index_accounts_on_accountable_id"
   add_index "accounts", ["accountable_type"], :name => "index_accounts_on_accountable_type"
   add_index "accounts", ["currency_id"], :name => "index_accounts_on_currency_id"
   add_index "accounts", ["organisation_id"], :name => "index_accounts_on_organisation_id"
   add_index "accounts", ["type"], :name => "index_accounts_on_type"
 
-  create_table "banks", :force => true do |t|
+  create_table "money_stores", :force => true do |t|
     t.integer  "organisation_id"
     t.integer  "currency_id"
     t.string   "type",            :limit => 30
@@ -99,10 +97,10 @@ ActiveRecord::Schema.define(:version => 20110601221736) do
     t.datetime "updated_at"
   end
 
-  add_index "banks", ["currency_id"], :name => "index_banks_on_currency_id"
-  add_index "banks", ["name"], :name => "index_banks_on_name"
-  add_index "banks", ["organisation_id"], :name => "index_banks_on_organisation_id"
-  add_index "banks", ["type"], :name => "index_banks_on_type"
+  add_index "money_stores", ["currency_id"], :name => "index_money_stores_on_currency_id"
+  add_index "money_stores", ["name"], :name => "index_money_stores_on_name"
+  add_index "money_stores", ["organisation_id"], :name => "index_money_stores_on_organisation_id"
+  add_index "money_stores", ["type"], :name => "index_money_stores_on_type"
 
   create_table "contacts", :force => true do |t|
     t.string   "matchcode"
@@ -112,12 +110,10 @@ ActiveRecord::Schema.define(:version => 20110601221736) do
     t.string   "address_alt",       :limit => 250
     t.string   "phone",             :limit => 20
     t.string   "mobile",            :limit => 20
-    t.boolean  "client",                           :default => false
-    t.boolean  "supplier",                         :default => false
     t.string   "email",             :limit => 200
     t.string   "tax_number",        :limit => 30
     t.string   "aditional_info",    :limit => 250
-    t.integer  "organisation_id",                                     :null => false
+    t.integer  "organisation_id",                                    :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "code"
@@ -128,12 +124,10 @@ ActiveRecord::Schema.define(:version => 20110601221736) do
   end
 
   add_index "contacts", ["active"], :name => "index_contacts_on_active"
-  add_index "contacts", ["client"], :name => "index_contacts_on_client"
   add_index "contacts", ["code"], :name => "index_contacts_on_code"
   add_index "contacts", ["last_name"], :name => "index_contacts_on_last_name"
   add_index "contacts", ["matchcode"], :name => "index_contacts_on_matchcode"
   add_index "contacts", ["organisation_id"], :name => "index_contacts_on_organisation_id"
-  add_index "contacts", ["supplier"], :name => "index_contacts_on_supplier"
   add_index "contacts", ["type"], :name => "index_contacts_on_type"
 
   create_table "countries", :force => true do |t|
@@ -501,17 +495,20 @@ ActiveRecord::Schema.define(:version => 20110601221736) do
   create_table "users", :force => true do |t|
     t.string   "email",                                  :default => "",    :null => false
     t.string   "encrypted_password",      :limit => 128, :default => "",    :null => false
+    t.string   "password_salt",                          :default => "",    :null => false
     t.string   "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string   "reset_password_token"
-    t.datetime "reset_password_sent_at"
+    t.string   "remember_token"
     t.datetime "remember_created_at"
     t.integer  "sign_in_count",                          :default => 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "first_name",              :limit => 80
     t.string   "last_name",               :limit => 80
     t.string   "phone",                   :limit => 20
@@ -519,8 +516,6 @@ ActiveRecord::Schema.define(:version => 20110601221736) do
     t.string   "website",                 :limit => 200
     t.string   "account_type",            :limit => 15
     t.string   "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
     t.boolean  "change_default_password",                :default => false
     t.string   "address"
   end
