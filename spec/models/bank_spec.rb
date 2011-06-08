@@ -36,6 +36,7 @@ describe Bank do
     b = Bank.create(@params)
     b.account.initial_amount.should == 100
     b.account.amount.should == 100
+    b.account.account_type.account_number.should == "bank"
   end
 end
 

@@ -12,7 +12,7 @@ module  Models::Account
 
     module InstanceMethods
       def set_account_settings
-        before_save :select_account_type
+        before_save :select_account_type_and_create
 
         has_one :account, :as => :accountable, :autosave => true
         attr_readonly :initial_amount
@@ -21,12 +21,9 @@ module  Models::Account
 
     module ClassMethods
 
-      def create_account_ledger
-      end
       private
-
       # Selects the methods neccessary accordiny the class
-      def select_account_type
+      def select_account_type_and_create
 
         case self.class.to_s
           when "Bank", "Cash" then self.extend Models::Account::MoneyAccount

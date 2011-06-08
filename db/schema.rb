@@ -10,7 +10,26 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110604135506) do
+ActiveRecord::Schema.define(:version => 20110608155038) do
+
+  create_table "account_ledger_details", :force => true do |t|
+    t.integer  "organisation_id"
+    t.integer  "account_id"
+    t.integer  "account_ledger_id"
+    t.integer  "account_ledger_detail_id"
+    t.decimal  "amount",                   :precision => 10, :scale => 0
+    t.decimal  "exchange_rate",            :precision => 14, :scale => 4
+    t.string   "description"
+    t.boolean  "active",                                                  :default => true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "account_ledger_details", ["account_id"], :name => "index_account_ledger_details_on_account_id"
+  add_index "account_ledger_details", ["account_ledger_detail_id"], :name => "index_account_ledger_details_on_account_ledger_detail_id"
+  add_index "account_ledger_details", ["account_ledger_id"], :name => "index_account_ledger_details_on_account_ledger_id"
+  add_index "account_ledger_details", ["active"], :name => "index_account_ledger_details_on_active"
+  add_index "account_ledger_details", ["organisation_id"], :name => "index_account_ledger_details_on_organisation_id"
 
   create_table "account_ledgers", :force => true do |t|
     t.integer  "organisation_id"
@@ -76,6 +95,7 @@ ActiveRecord::Schema.define(:version => 20110604135506) do
     t.datetime "updated_at"
     t.integer  "accountable_id"
     t.string   "accountable_type"
+    t.decimal  "initial_amount",                 :precision => 14, :scale => 2
   end
 
   add_index "accounts", ["accountable_id"], :name => "index_accounts_on_accountable_id"
