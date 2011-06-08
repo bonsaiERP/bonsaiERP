@@ -12,18 +12,27 @@ module  Models::Account
 
     module InstanceMethods
       def set_account_settings
-        before_save :set_account_data
+        before_save :select_account_type
 
         has_one :account, :as => :accountable, :autosave => true
+        attr_readonly :initial_amount
       end
     end
 
     module ClassMethods
+
+      def create_account_ledger
+      end
       private
-      # Method that create an account
-      def set_account_data
-        self.build_account(
-          :currency_id => self.currency_id || OrganisationSession.currency_id)
+
+      # Selects the methods neccessary accordiny the class
+      def select_account_type
+
+        case self.class.to_s
+          when "Bank", "Cash" then self.extend Models::Account::MoneyAccount
+        end
+
+        create_new_account
       end
     end
   end

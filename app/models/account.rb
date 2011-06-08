@@ -12,6 +12,7 @@ class Account < ActiveRecord::Base
   attr_protected :amount
 
   validates_presence_of :currency_id
+  validates_numericality_of :amount
 
   # relationships
   belongs_to :account_type

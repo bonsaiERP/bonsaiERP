@@ -13,6 +13,10 @@ module Models::Organisation::NewOrganisation
       before_create :set_organisation, :unless => 'organisation_id.present?'
       attr_readonly :organisation_id
     end
+
+    def org
+      where(:organisation_id => OrganisationSession.organisation_id)
+    end
   end
     
   module ClassMethods

@@ -4,12 +4,13 @@ describe Bank do
   before(:each) do
     OrganisationSession.set(:id => 1, :name => 'ecuanime', :currency_id => 1)
 
-    @params = {:currency_id => 1, :name => 'Banco 1', :number => '12365498', :address => 'Uno'}
+    @params = {:currency_id => 1, :name => 'Banco 1', :number => '12365498', :address => 'Uno', :amount => 100}
 
     YAML.load_file( File.join(Rails.root, "db/defaults/account_types.#{I18n.locale}.yml") ).each do |y|
-      a = AccountType.new(y)
-      a.organisation_id = 1
-      a.account_number = y[:account_number]
+      a = AccountType.create(y) {|a| 
+        a.organisation_id = 1
+        a.account_number = y[:account_number]
+      }
     end
   end
 
@@ -29,18 +30,12 @@ describe Bank do
 
     b.account.currency_id.should == b.currency_id
   end
-  # NOT unit test
-  #it 'should create a ledger if amount is greater than 0' do
-  #  b = Bank.create!(@params)
-  #  b.account_ledgers.size.should == 1
-  #  b.account_ledgers.first.amount.should == b.total_amount
-  #end
 
-  ## NOT test unit
-  #it 'should not create ledger if amount is 0' do
-  #  params = @params.merge(:total_amount => 0)
-  #  b = Bank.create!(params)
-  #  b.account_ledgers.size.should == 0
-  #end
+  # NOT UNIT Test
+  it 'should create an entrance in case it has amount' do
+    b = Bank.create(@params)
+    b.account.initial_amount.should == 100
+    b.account.amount.should == 100
+  end
 end
 

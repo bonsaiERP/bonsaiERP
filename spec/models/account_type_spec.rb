@@ -13,7 +13,7 @@ describe AccountType do
   it 'should not assing account_number' do
     a = AccountType.create(@params)
 
-    a.account_number.should == nil
+    a.account_number.should == "test"
     a.active.should == true
     a.organisation_id.should == 1
   end
@@ -21,10 +21,15 @@ describe AccountType do
   it 'should not assign organisation_id' do
     @params = @params.merge(:organisation_id => 1)
 
-    a = AccountType.new(@params)
+    a = AccountType.create(@params)
+    
+    a.organisation_id.should == 1
 
-    @params[:organisation_id].should == 1
-    a.organisation_id.should == nil
+    a.organisation_id = 2
+    a.save
+    a.reload
+
+    a.organisation_id.should == 1
   end
 
   it 'should not destroy' do
@@ -36,5 +41,15 @@ describe AccountType do
     a.destroy
     a.destroyed?.should == false
     a.active.should == false
+  end
+
+  it 'should look only account created with the current session' do
+    AccountType.create(@params)
+    OrganisationSession.set :id => 2
+    AccountType.create(@params)
+
+    AccountType.all.size.should == 2
+    OrganisationSession.organisation_id.should == 2
+    AccountType.org.size.should == 1
   end
 end

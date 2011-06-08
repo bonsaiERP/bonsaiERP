@@ -84,24 +84,6 @@ ActiveRecord::Schema.define(:version => 20110604135506) do
   add_index "accounts", ["organisation_id"], :name => "index_accounts_on_organisation_id"
   add_index "accounts", ["type"], :name => "index_accounts_on_type"
 
-  create_table "money_stores", :force => true do |t|
-    t.integer  "organisation_id"
-    t.integer  "currency_id"
-    t.string   "type",            :limit => 30
-    t.string   "name",            :limit => 100
-    t.string   "number",          :limit => 30
-    t.string   "address"
-    t.string   "website"
-    t.string   "phone"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "money_stores", ["currency_id"], :name => "index_money_stores_on_currency_id"
-  add_index "money_stores", ["name"], :name => "index_money_stores_on_name"
-  add_index "money_stores", ["organisation_id"], :name => "index_money_stores_on_organisation_id"
-  add_index "money_stores", ["type"], :name => "index_money_stores_on_type"
-
   create_table "contacts", :force => true do |t|
     t.string   "matchcode"
     t.string   "first_name",        :limit => 100
@@ -234,6 +216,24 @@ ActiveRecord::Schema.define(:version => 20110604135506) do
 
   add_index "links", ["organisation_id"], :name => "index_links_on_organisation_id"
   add_index "links", ["user_id"], :name => "index_links_on_user_id"
+
+  create_table "money_stores", :force => true do |t|
+    t.integer  "organisation_id"
+    t.integer  "currency_id"
+    t.string   "type",            :limit => 30
+    t.string   "name",            :limit => 100
+    t.string   "number",          :limit => 30
+    t.string   "address"
+    t.string   "website"
+    t.string   "phone"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "money_stores", ["currency_id"], :name => "index_money_stores_on_currency_id"
+  add_index "money_stores", ["name"], :name => "index_money_stores_on_name"
+  add_index "money_stores", ["organisation_id"], :name => "index_money_stores_on_organisation_id"
+  add_index "money_stores", ["type"], :name => "index_money_stores_on_type"
 
   create_table "organisations", :force => true do |t|
     t.integer  "country_id"
