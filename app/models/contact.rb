@@ -3,6 +3,7 @@
 # email: boriscyber@gmail.com
 class Contact < ActiveRecord::Base
   acts_as_org
+  include Models::Account::Base
 
   TYPES = ['clients', 'suppliers', 'staff']
 

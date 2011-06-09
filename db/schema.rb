@@ -93,11 +93,13 @@ ActiveRecord::Schema.define(:version => 20110609160014) do
     t.decimal  "amount",                         :precision => 14, :scale => 2
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.decimal  "initial_amount",                 :precision => 14, :scale => 2
     t.integer  "accountable_id"
     t.string   "accountable_type"
-    t.decimal  "initial_amount",                 :precision => 14, :scale => 2
+    t.integer  "account_type_id"
   end
 
+  add_index "accounts", ["account_type_id"], :name => "index_accounts_on_account_type_id"
   add_index "accounts", ["accountable_id"], :name => "index_accounts_on_accountable_id"
   add_index "accounts", ["accountable_type"], :name => "index_accounts_on_accountable_type"
   add_index "accounts", ["currency_id"], :name => "index_accounts_on_currency_id"

@@ -16,9 +16,12 @@ class Account < ActiveRecord::Base
 
   # relationships
   belongs_to :account_type
-  has_one :money_account
+  belongs_to :currency
 
+  # validations
   validates_presence_of :name, :accountable_type, :accountable_id
+
+  delegate :symbol, :name, :to => :currency, :prefix => true
 
 private
   def set_amount

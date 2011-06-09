@@ -9,6 +9,9 @@ class MoneyStore < ActiveRecord::Base
 
   attr_accessor :amount
   
+  # relationships
+  belongs_to :currency
+
   # Common validations
   validates_numericality_of :amount, :greater_than_or_equal_to => 0
   # delegations

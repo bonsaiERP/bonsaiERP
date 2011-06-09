@@ -78,6 +78,6 @@ class BanksController < ApplicationController
 
   protected
     def find_bank
-      @bank = Bank.org.find(params[:id])
+      @bank = Bank.org.includes(:account).find(params[:id])
     end
 end

@@ -17,12 +17,12 @@
 
 .moneybox.fl
   %label Saldo en cuenta
-  %h3= with_currency @bank, :total_amount
+  %h3= with_currency @bank.account, :amount
 
-- if @bank.pendent_account_ledgers.any?
-  .moneybox.fl
-    %label Saldo a conciliar
-    %h3= with_currency @bank, :total_pendent
+/- if @bank.pendent_account_ledgers.any?
+/  .moneybox.fl
+/    %label Saldo a conciliar
+/    %h3= with_currency @bank, :total_pendent
 
 ._40.fr
   <a class="more_info" href="#bank_info">Ver información</a>
@@ -35,16 +35,13 @@
         %label Teléfono
         %span= @bank.phone
       .input._100
-        %label Email
-        %span= @bank.email
-      .input._100
         %label Sitio web
         %span= @bank.website
   .clear
 .clear
 
 %h2 Transacciones
-= render "account_ledgers/list", :account => @bank, :ref_title => 'Ref./Nº Cheque'
+/= render "account_ledgers/list", :account => @bank, :ref_title => 'Ref./Nº Cheque'
 
 :javascript
   $(function() {

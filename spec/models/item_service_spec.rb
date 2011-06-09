@@ -10,14 +10,8 @@ describe ItemService do
     OrganisationSession.set = {:id => 1, :name => 'ecuanime'}
     ItemService.stubs(:create_price => true)
     
-    a = AccountType.new(:name => "service") {|a| 
-      a.id = 10
-      a.account_number = "Service"
-    }
-    fake = Object.new
-    fake.stubs(:scoped_by_account_number).with("Service").returns([a])
-    AccountType.stubs(:org => fake)
-
+    ModStubs.stub_account_type(:id => 10, :account_number => "Service")
+    
     @params = { :name => 'First item', :unit_id => 1, :unitary_cost => 10, :code => 'AU101', :price => 12, :ctype => "service" }
     Unit.stubs(:find => Unit.new {|u| u.id = 1} )
 
@@ -33,5 +27,12 @@ describe ItemService do
     is.account.amount.should == 0 
     is.account.initial_amount.should == 0
     is.account.account_type_id.should == 10
+  end
+
+  it "should not access account if item it's not a service" do
+    is = Item.new_item(@params.merge(:ctype => 'product'))
+    is.save.should == true
+
+    expect { is.account }.to raise_error( NoMethodError )
   end
 end

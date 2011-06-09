@@ -7,6 +7,18 @@ class AccountLedger < ActiveRecord::Base
 
   has_many :account_ledger_details, :dependent => :destroy
   accepts_nested_attributes_for :account_ledger_details
+
+  validate :total_amount_equal
+
+  def create_details
+  end
+
+  private
+  def total_amount_equal
+    sum = 0
+    tot = account_ledger_details.inject {|sum, ald| sum += ald.amount }
+  end
+
   #acts_as_org
 
   #include ActionView::Helpers::NumberHelper

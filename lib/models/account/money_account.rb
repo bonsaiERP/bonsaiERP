@@ -9,7 +9,7 @@ module  Models::Account
       self.build_account(
         :currency_id => self.currency_id,
         :account_type_id => AccountType.org.scoped_by_account_number(self.class.to_s).first.id
-      ) {|a| 
+      ) {|a|
         a.amount = amount
         a.initial_amount = amount 
       }

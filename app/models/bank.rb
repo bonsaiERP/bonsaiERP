@@ -5,7 +5,7 @@ class Bank < MoneyStore
 
   include Models::Account::Base
   # validations
-  validates_presence_of :name, :number, :currency_id, :address
+  validates_presence_of :name, :number, :currency_id
   validates_uniqueness_of :number, :scope => [:name, :organisation_id]
 
   def to_s

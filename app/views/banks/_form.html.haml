@@ -17,10 +17,9 @@
 
     .clear
   = f.input :address, :label => 'Dirección', :as => :text, :input_html => {:rows => 4, :cols => 35}, :required => false
-  = f.input :phone, :label => 'Teléfono', :required => false
-  .clear
-  = f.input :email, :required => false
-  = f.input :website, :label => 'Sitio web'
+  .input
+    = f.input :phone, :label => 'Teléfono', :required => false, :wrapper_html => {:class => "_100"}
+    = f.input :website, :label => 'Sitio web', :wrapper_html => {:class => "_100"}
   .clear
   .actions
     = f.submit 'Salvar'
