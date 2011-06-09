@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110608155038) do
+ActiveRecord::Schema.define(:version => 20110609160014) do
 
   create_table "account_ledger_details", :force => true do |t|
     t.integer  "organisation_id"
@@ -215,11 +215,15 @@ ActiveRecord::Schema.define(:version => 20110608155038) do
     t.integer  "organisation_id",                                                                  :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "type"
+    t.string   "un_name"
+    t.string   "un_symbol",       :limit => 10
   end
 
   add_index "items", ["code"], :name => "index_items_on_code"
   add_index "items", ["ctype"], :name => "index_items_on_ctype"
   add_index "items", ["organisation_id"], :name => "index_items_on_organisation_id"
+  add_index "items", ["type"], :name => "index_items_on_type"
   add_index "items", ["unit_id"], :name => "index_items_on_unit_id"
 
   create_table "links", :force => true do |t|

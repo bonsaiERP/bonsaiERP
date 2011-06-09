@@ -19,4 +19,7 @@ class AccountType < ActiveRecord::Base
   # scopes
   scope :active, where(:active => true)
 
+  def to_s
+    name
+  end
 end

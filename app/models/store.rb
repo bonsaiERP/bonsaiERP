@@ -4,6 +4,8 @@
 class Store < ActiveRecord::Base
   acts_as_org
 
+  include Models::Account::Base
+
   before_destroy :check_store_for_delete
 
   has_many :stocks#, :conditions => {:state => 'active'}

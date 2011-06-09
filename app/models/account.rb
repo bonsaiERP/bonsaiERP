@@ -11,7 +11,7 @@ class Account < ActiveRecord::Base
 
   attr_protected :amount
 
-  validates_presence_of :currency_id
+  validates_presence_of :currency_id, :name
   validates_numericality_of :amount
 
   # relationships
@@ -23,6 +23,7 @@ class Account < ActiveRecord::Base
 private
   def set_amount
     self.amount ||= 0.0
+    self.initial_amount ||= 0.0
   end
 
   ## callbacks

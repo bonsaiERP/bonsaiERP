@@ -31,12 +31,21 @@ describe Bank do
     b.account.currency_id.should == b.currency_id
   end
 
+  it 'should use the bank currency' do
+    @params[:currency_id] = 5
+
+    b = Bank.create(@params)
+    b.account.should_not == blank?
+
+    b.account.currency_id.should == 5
+  end
+
   # NOT UNIT Test
   it 'should create an entrance in case it has amount' do
     b = Bank.create(@params)
     b.account.initial_amount.should == 100
     b.account.amount.should == 100
-    b.account.account_type.account_number.should == "bank"
+    b.account.account_type.account_number.should == "Bank"
   end
 end
 

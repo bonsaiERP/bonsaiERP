@@ -1,7 +1,7 @@
 # Edit this Gemfile to bundle your application's dependencies.
 source 'http://gemcutter.org'
 
-gem 'rails', '~>3.1.0.rc1'
+gem 'rails', '~>3.1.0.rc3'
 
 ## Bundle edge rails:
 # gem "rails", :git => "git://github.com/rails/rails.git"

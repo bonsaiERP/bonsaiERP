@@ -5,7 +5,8 @@ class Item < ActiveRecord::Base
 
   acts_as_org
   #before_save :set_stockable
-  after_save     :create_price
+  before_save    :create_price
+  before_create  :set_type_and_stockable
   before_destroy :check_items_destroy
 
   TYPES = ["item", "expense", "product", "service"]
@@ -22,6 +23,7 @@ class Item < ActiveRecord::Base
   
 
   attr_accessible :name, :unit_id, :code, :description, :price, :discount, :tag_list, :unitary_cost, :ctype, :active
+  attr_readonly :type, :ctype
 
   # Validations
   validates_presence_of :name, :unit_id, :code
@@ -56,6 +58,15 @@ class Item < ActiveRecord::Base
       ["Enseres", "Item de Gasto", "Producto", "Servicio"].zip(TYPES)
     else
       get_scoped_types(sc)
+    end
+  end
+
+  # Instanciates an item based on the ctype
+  def self.new_item(params)
+    if params[:ctype] == "service"
+      ItemService.new(params)
+    else
+      Item.new(params)
     end
   end
 
@@ -117,7 +128,7 @@ private
 
   # Creates a price to check in the history
   def create_price 
-    Price.create_from_item(self)
+    prices.build
   end
 
   # Validations for discount
@@ -182,6 +193,10 @@ private
     end
   end
 
+  def set_type_and_stockable
+    self.stockable = ["item", "product"].include?(self.ctype)
+    self.type = (ctype == "service")? "ItemService" : "Item"
+  end
   #def set_stockable
   #  self.stockable = ( self.ctype != 'Service' )
   #  # Must return true, sometimes assigment is false and returns false so the

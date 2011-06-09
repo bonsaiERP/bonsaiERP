@@ -8,8 +8,9 @@ describe Item do
   before(:each) do
     OrganisationSession.set = {:id => 1, :name => 'ecuanime'}
     Item.stubs(:create_price => true)
-    @params = { :name => 'First item', :unit_id => 1, :unitary_cost => 10, :code => 'AU101' }
-    Unit.stubs(:find).returns(stub(@@stub_model_methods.merge(:id => 1) ) )
+    @params = { :name => 'First item', :unit_id => 1, :unitary_cost => 10, :code => 'AU101', :price => 12, :ctype => "item" }
+    #Unit.stubs(:find).returns(stub(@@stub_model_methods.merge(:id => 1) ) )
+    Unit.stubs(:find => Unit.new {|u| u.id = 1} )
   end
 
   it 'should create an item' do
@@ -18,33 +19,30 @@ describe Item do
 
   it 'should be set organisation_id' do
     item = Item.create(@params)
+    puts item.errors.keys
     item.organisation_id.should == 1
   end
 
-  #it 'should not be valid if ctype is not in Item::TYPES' do
-  #  @params[:ctype] = nil
-  #  item = Item.new(@params)
-  #  item.valid?.should_not == true
-  #  item.ctype = 'Other'
-  #  item.valid?.should_not == true
-  #end
-
-
-  it 'should assing discount a value of 0' do
-    @params[:product] = true
-    @params[:price] = 25.00
-    item = Item.create!(@params)
-    item.discount.to_f.should == 0
-  end
-
-  it 'should assing if the product is stockable' do
-    item = Item.create(@params)
+  it 'should not allow the update of type, ctype' do
+    item = Item.create(@params.merge(:ctype => 'product'))
     item.stockable.should == true
     item.price = 20
-    item.update_attributes(:ctype => 'Service')
-    item.stockable.should == false
+    item.update_attributes(:ctype => 'service')
+    item.reload
+
+    item.ctype.should == 'product'
+    item.stockable.should == true
   end
 
+  it 'should update' do
+    item = Item.create(@params.merge(:ctype => 'product'))
+    
+    item.update_attributes(:name => 'second name', :price => 25.5)
+    item.reload
+
+    item.name.should == "second name"
+    item.price.should == 25.5
+  end
 
   it 'should allow blank value to discount' do
     item = Item.new(@params.merge(:price => 20, :ctype => Item::TYPES[2]) )
@@ -60,19 +58,6 @@ describe Item do
     item.valid?.should == false
   end
 
-  #it 'discount should be between 0 and 100' do
-  #  @params[:ctype] = Item::TYPES[1]
-  #  @params[:price] = 25
-  #  @params[:discount] = -1.to_s
-  #  item = Item.new(@params)
-  #  
-  #  item.valid?.should == false
-  #  item.errors[:discount].include?(I18n.t("activerecord.errors.messages.greater_than_or_equal_to", :count => 0)).should == true
-
-  #  item.discount = 101.to_s
-  #  item.valid?.should == false
-  #  item.errors[:discount].include?(I18n.t("activerecord.errors.messages.less_than_or_equal_to", :count => 100)).should == true
-  #end
 
   it 'should be valid with ranges' do
     #@params[:ctype] = Item::TYPES[2]

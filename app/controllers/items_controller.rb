@@ -27,7 +27,7 @@ class ItemsController < ApplicationController
   # GET /items/new
   # GET /items/new.xml
   def new
-    @item = Item.org.new#(:ctype => params[:ctype])
+    @item = Item.org.new
     respond_with @item
   end
 
@@ -38,7 +38,7 @@ class ItemsController < ApplicationController
   # POST /items
   # POST /items.xml
   def create
-    @item = Item.new(params[:item])
+    @item = Item.new_item(params[:item])
 
     if @item.save
       if request.xhr?
