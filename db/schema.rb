@@ -10,26 +10,32 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110609160014) do
+ActiveRecord::Schema.define(:version => 20110610192800) do
 
   create_table "account_ledger_details", :force => true do |t|
     t.integer  "organisation_id"
     t.integer  "account_id"
     t.integer  "account_ledger_id"
     t.integer  "account_ledger_detail_id"
-    t.decimal  "amount",                   :precision => 10, :scale => 0
-    t.decimal  "exchange_rate",            :precision => 14, :scale => 4
+    t.decimal  "amount",                                 :precision => 10, :scale => 0
+    t.decimal  "exchange_rate",                          :precision => 14, :scale => 4
     t.string   "description"
-    t.boolean  "active",                                                  :default => true
+    t.boolean  "active",                                                                :default => true
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "reference"
+    t.string   "operation",                :limit => 20
+    t.string   "state",                    :limit => 20
   end
 
   add_index "account_ledger_details", ["account_id"], :name => "index_account_ledger_details_on_account_id"
   add_index "account_ledger_details", ["account_ledger_detail_id"], :name => "index_account_ledger_details_on_account_ledger_detail_id"
   add_index "account_ledger_details", ["account_ledger_id"], :name => "index_account_ledger_details_on_account_ledger_id"
   add_index "account_ledger_details", ["active"], :name => "index_account_ledger_details_on_active"
+  add_index "account_ledger_details", ["operation"], :name => "index_account_ledger_details_on_operation"
   add_index "account_ledger_details", ["organisation_id"], :name => "index_account_ledger_details_on_organisation_id"
+  add_index "account_ledger_details", ["reference"], :name => "index_account_ledger_details_on_reference"
+  add_index "account_ledger_details", ["state"], :name => "index_account_ledger_details_on_state"
 
   create_table "account_ledgers", :force => true do |t|
     t.integer  "organisation_id"
