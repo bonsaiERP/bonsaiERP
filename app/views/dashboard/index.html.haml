@@ -23,7 +23,7 @@
 - if current_user.change_default_password?
   %h3= link_to "Le recomendamos crear una nueva contraseña", "/users/password"
 
-- if Account.org.empty?
+- if MoneyStore.org.empty?
   %h3 Por favor le recomendamos crear una #{link_to "cuenta bancaria", new_bank_path } o #{link_to "cuenta de caja", new_cash_register_path}
 
 .clear
@@ -33,38 +33,38 @@
   %h3._50.fl Cuentas por <span class="dark_green">cobrar</span>
   .hint._50.fl En los siguientes #{fdate} días
   .clear
-  %h3.black #{currency_symbol} #{ntc PayPlan.in_to_currency(currency_id, fdate.days.from_now) }
+  /%h3.black #{currency_symbol} #{ntc PayPlan.in_to_currency(currency_id, fdate.days.from_now) }
 
-  = link_to "Ver todas", pay_plans_path(:option => "in")
+  /= link_to "Ver todas", pay_plans_path(:option => "in")
 
 .box
 
   %h3._50.fl Cuentas por <span class="red">pagar</span>
   .hint._50.fl En los siguientes #{fdate} días
   .clear
-  %h3.black #{currency_symbol} #{ntc PayPlan.out_to_currency(currency_id, fdate.days.from_now) }
+  /%h3.black #{currency_symbol} #{ntc PayPlan.out_to_currency(currency_id, fdate.days.from_now) }
   
-  = link_to "Ver todas", pay_plans_path(:option => "out")
+  /= link_to "Ver todas", pay_plans_path(:option => "out")
 
 .clear
 
 .box
   %h3 Cuentas
   - tot = 0
-  - Account.org.includes(:account_ledgers, :currency).each do |ac|
-    %ul.list
-      %li
-        %h4= link_to ac, ac, :class => 'b'
+  /- Account.org.includes(:account_ledgers, :currency).each do |ac|
+  /  %ul.list
+  /    %li
+  /      %h4= link_to ac, ac, :class => 'b'
 
-        - unless ac.currency_id == currency_id
-          - tot += exchange(ac, :total_amount, @currency_rates)
-          .b.fl._50 #{currency_symbol} #{ntc exchange(ac, :total_amount, @currency_rates)}
-        - else
-          - tot += ac.total_amount
+  /      - unless ac.currency_id == currency_id
+  /        - tot += exchange(ac, :total_amount, @currency_rates)
+  /        .b.fl._50 #{currency_symbol} #{ntc exchange(ac, :total_amount, @currency_rates)}
+  /      - else
+  /        - tot += ac.total_amount
 
-        .b.fl._50 #{with_currency ac, :total_amount}
-        .clear
-        = link_pendent_ledgers(ac)
+  /      .b.fl._50 #{with_currency ac, :total_amount}
+  /      .clear
+  /      = link_pendent_ledgers(ac)
 
   %h3.black #{currency_symbol} #{ntc tot}
 

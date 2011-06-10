@@ -25,9 +25,9 @@
       ._70.fl
         .moneybox.fl
           %label Total en cuenta
-          %h3= with_currency bank, :total_amount
+          %h3= with_currency bank.account, :amount
 
-        - if bank.account_ledgers.pendent.any?
+        - if bank.account.account_ledger_details.pendent?
           .moneybox.fl
             %label Saldo a conciliar
             %h3= with_currency bank, :total_pendent

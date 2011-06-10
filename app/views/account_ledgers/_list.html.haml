@@ -14,7 +14,7 @@
 
 %ul.menu
   %li
-    = link_to "Nueva <span class='more'></span>".html_safe, "#", :class => 'new'
+    = link_to "Nuevo <span class='more'></span>".html_safe, "#", :class => 'new'
     
     %ul
       %li= link_to "Nuevo ingreso", new_account_ledger_path(:account_id => account.id, :income => true)
@@ -24,14 +24,14 @@
 
 .clear
 <br/><br/>
-- ac_path = account.is_a?(Bank) ? "/banks" : "/cash_registers"
+- ac_path = account.accountable.is_a?(Bank) ? "/banks" : "/cashs"
 
 
 %ul.tabs
   %li= link_to "Todas", "#{ac_path}/#{account.id}", :class => tabs_filter('all')
-  %li= link_to "Esperando revisión #{size_or_blank(account.account_ledgers.pendent.size)}", "#{ac_path}/#{account.id}?option=false", :class => tabs_filter('false')
-  %li= link_to "Pendientes personal #{size_or_blank(account.account_ledgers.personal_pendant.size)}", "#{ac_path}/#{account.id}?option=personal", :class => tabs_filter('personal')
-  %li= link_to "Aprobadas personal", "#{ac_path}/#{account.id}?option=approved", :class => tabs_filter('approved')
+  %li= link_to "Esperando revisión #{size_or_blank(account.account_ledger_details.pendent.count)}", "#{ac_path}/#{account.id}?option=false", :class => tabs_filter('false')
+  /%li= link_to "Pendientes personal #{size_or_blank(account.account_ledger_details.pendent.count)}", "#{ac_path}/#{account.id}?option=personal", :class => tabs_filter('personal')
+  /%li= link_to "Aprobadas personal", "#{ac_path}/#{account.id}?option=approved", :class => tabs_filter('approved')
   %li= link_to "Anuladas", "#{ac_path}/#{account.id}?option=nil", :class => tabs_filter('nil')
   %li= link_to "Revisadas", "#{ac_path}/#{account.id}?option=true", :class => tabs_filter('true')
 
@@ -41,9 +41,10 @@
 
 = link_to "Buscar", "#search", :class => 'search'
 /"#", :style => 'display:block;float:left;margin:10px'
-- ledgers = account.account_ledgers.get_by_option(params[:option]).order("date DESC").page(@page)
+- ledgers = account.account_ledger_details
+/.get_by_option(params[:option]).order("date DESC").page(@page)
 
-= paginate ledgers
+/= paginate account.account_ledger_details
 
 %table.decorated.nwl.nwf
   %tr

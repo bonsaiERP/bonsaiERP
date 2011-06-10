@@ -15,6 +15,13 @@ class AccountLedgerDetail < ActiveRecord::Base
   belongs_to :parent, :class_name => "AccountLedgerDetail", :foreign_key => :account_ledger_detail_id
 
   validates_presence_of :amount, :reference, :account_id, :operation, :state
+
+  # scopes
+  scope :pendent, org.where(:state => "uncon")
+
+  def self.pendent?
+    self.pendent.count > 0
+  end
   
   private
 
