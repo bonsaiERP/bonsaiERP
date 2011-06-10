@@ -4,7 +4,7 @@ describe AccountLedger do
   before(:each) do
     OrganisationSession.set(:id => 1, :name => 'ecuanime')
     @params = {
-      :date => Date.today, :operation => "in",
+      :date => Date.today, :operation => "out",
       :account_ledger_details_attributes => [
         {:account_id => 1, :amount => 100, :reference => "In"},
         {:account_id => 2, :amount => -100, :reference => "Out"},
@@ -40,7 +40,7 @@ describe AccountLedger do
   it 'should assing the correct operation to details' do
     al = AccountLedger.create(@params)
     
-    al.account_ledger_details.map(&:operation).uniq.should == [ "in" ]
+    al.account_ledger_details.map(&:operation).uniq.should == [ "out" ]
   end
 
   it 'should not allow uncorrect operations' do
@@ -56,5 +56,25 @@ describe AccountLedger do
 
     Account.find(1).amount.should == 100
     Account.find(2).amount.should == 900
+
+    al = AccountLedger.create(@params)
+
+    Account.find(1).amount.should == 200
+    Account.find(2).amount.should == 800
+  end
+
+  it 'should allow negative values' do
+    @params[:operation] = "in"
+    @params[:account_ledger_details_attributes][0][:amount] = -200
+    @params[:account_ledger_details_attributes][1][:amount] = 200
+
+    al = AccountLedger.create(@params)
+
+    al.persisted?.should == true
+
+    Account.find(1).amount.should == -200
+    Account.find(2).amount.should == 1200
+
+    al.account_ledger_details.map(&:operation).uniq.should == ["in"]
   end
 end
