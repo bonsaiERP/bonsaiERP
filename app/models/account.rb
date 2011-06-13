@@ -7,7 +7,10 @@ class Account < ActiveRecord::Base
   # callbacks
   before_create :set_amount
 
-  attr_protected :amount
+  serialize :amount_currency
+
+  attr_readonly  :initial_amount
+  attr_protected :amount, :amount_currency
 
   # relationships
   belongs_to :account_type
@@ -17,6 +20,7 @@ class Account < ActiveRecord::Base
   has_many :account_ledger_details
 
   validates_presence_of :currency_id, :name
+  #validates_associated  :currency
   validates_numericality_of :amount
 
   # validations
@@ -28,6 +32,7 @@ private
   def set_amount
     self.amount ||= 0.0
     self.initial_amount ||= self.amount
+    self.amount_currency = {currency_id => amount.round(2)}
   end
 
 end

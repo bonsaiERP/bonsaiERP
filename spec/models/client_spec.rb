@@ -6,7 +6,7 @@ require 'spec_helper'
 
 describe Client do
   before(:each) do
-    OrganisationSession.set = {:id => 1, :name => 'ecuanime'}
+    OrganisationSession.set = {:id => 1, :name => 'ecuanime', :currency_id => 1}
     @params = { :first_name => 'First name', :last_name => 'Last name',
       :address => "Los Pinos Bloque 80\ndpto.201"}
 
@@ -24,6 +24,7 @@ describe Client do
     c.account.amount.should == 0 
     c.account.initial_amount.should == 0
     c.account.account_type_id.should == 1
+    c.account.amount_currency[1].should == 0
   end
     
 end

@@ -7,7 +7,7 @@ class AccountLedgerDetail < ActiveRecord::Base
   STATES = ["uncon", "con"]
   
   # callbacks
-  before_validation :set_state, :if => :new_record?
+  before_validation :set_values, :if => :new_record?
   before_create :update_account_amount
 
   belongs_to :account
@@ -23,14 +23,25 @@ class AccountLedgerDetail < ActiveRecord::Base
     self.pendent.count > 0
   end
   
+  def amount_currency
+    exchange_rate * amount
+  end
+
   private
 
-  def set_state
+  def set_values
+    self.exchange_rate ||= 1
     self.state ||= "con"
+    self.currency_id ||= account.currency_id
   end
 
   # updates it's account
   def update_account_amount
-    account.update_attribute(:amount, account.amount + amount)
+    account.amount = account.amount + amount if currency_id == account.currency_id
+
+    tot = account.amount_currency[currency_id].to_f + amount
+    account.amount_currency = account.amount_currency.merge(currency_id => tot.round(2) )
+
+    account.save
   end
 end

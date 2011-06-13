@@ -15,12 +15,13 @@ class AccountLedgersController < ApplicationController
   end
 
   def new
-    params[:contact] = "Client"
-    begin
-      @account = Account.org.find(params[:account_id])
-    rescue
-      logger.warn "El usuario #{current_user.id} intento acceder a #{request.path} #{params[:account_id]}"
-    end
+    @account_ledger = AccountLedger.new(:income => params[:income])
+    @account_ledger.account_ledger_details.build(:account_id => params[:account_id])
+    #begin
+    #  @account = Account.org.find(params[:account_id])
+    #rescue
+    #  logger.warn "El usuario #{current_user.id} intento acceder a #{request.path} #{params[:account_id]}"
+    #end
   end
 
   # PUT /account_ledgers/:id/conciliate 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110610192800) do
+ActiveRecord::Schema.define(:version => 20110613203421) do
 
   create_table "account_ledger_details", :force => true do |t|
     t.integer  "organisation_id"
@@ -23,18 +23,20 @@ ActiveRecord::Schema.define(:version => 20110610192800) do
     t.boolean  "active",                                                                :default => true
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "reference"
-    t.string   "operation",                :limit => 20
-    t.string   "state",                    :limit => 20
+    t.string   "reference",                                                                               :null => false
+    t.string   "operation",                :limit => 20,                                                  :null => false
+    t.string   "state",                    :limit => 20,                                                  :null => false
+    t.integer  "currency_id"
   end
 
   add_index "account_ledger_details", ["account_id"], :name => "index_account_ledger_details_on_account_id"
   add_index "account_ledger_details", ["account_ledger_detail_id"], :name => "index_account_ledger_details_on_account_ledger_detail_id"
   add_index "account_ledger_details", ["account_ledger_id"], :name => "index_account_ledger_details_on_account_ledger_id"
   add_index "account_ledger_details", ["active"], :name => "index_account_ledger_details_on_active"
+  add_index "account_ledger_details", ["currency_id"], :name => "index_account_ledger_details_on_currency_id"
   add_index "account_ledger_details", ["operation"], :name => "index_account_ledger_details_on_operation"
   add_index "account_ledger_details", ["organisation_id"], :name => "index_account_ledger_details_on_organisation_id"
-  add_index "account_ledger_details", ["reference"], :name => "index_account_ledger_details_on_reference"
+  add_index "account_ledger_details", ["reference"], :name => "Drop \tindex_account_ledger_details_on_reference"
   add_index "account_ledger_details", ["state"], :name => "index_account_ledger_details_on_state"
 
   create_table "account_ledgers", :force => true do |t|
@@ -96,13 +98,14 @@ ActiveRecord::Schema.define(:version => 20110610192800) do
     t.integer  "currency_id"
     t.string   "name"
     t.string   "type",             :limit => 20
-    t.decimal  "amount",                         :precision => 14, :scale => 2
+    t.decimal  "amount",                          :precision => 14, :scale => 2
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "initial_amount",                 :precision => 14, :scale => 2
+    t.decimal  "initial_amount",                  :precision => 14, :scale => 2
     t.integer  "accountable_id"
     t.string   "accountable_type"
     t.integer  "account_type_id"
+    t.string   "amount_currency",  :limit => 500
   end
 
   add_index "accounts", ["account_type_id"], :name => "index_accounts_on_account_type_id"

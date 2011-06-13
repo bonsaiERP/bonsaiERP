@@ -13,9 +13,7 @@ module  Models::Account
     module InstanceMethods
       def set_account_settings
         before_save :select_account_type_and_create
-
         has_one :account, :as => :accountable, :autosave => true
-        attr_readonly :initial_amount
       end
     end
 

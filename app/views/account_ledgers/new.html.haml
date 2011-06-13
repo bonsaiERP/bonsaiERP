@@ -1,8 +1,8 @@
--content_for :links do
-  %ul.breadcrumps
-    %li #{link_account @account_ledger}<span>&gt;</span>
-    %li #{link_to @account_ledger.account, @account_ledger.account}<span>&gt;</span>
-
+/-content_for :links do
+/  %ul.breadcrumps
+/    %li #{link_parent @account}<span>&gt;</span>
+/    %li #{link_to @account.accountable}<span>&gt;</span>
+/
 %h1 Nuevo #{account_ledger_title @account_ledger}
 
 = render "form"

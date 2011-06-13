@@ -12,6 +12,7 @@ module  Models::Account
       ) {|a|
         a.amount = amount
         a.initial_amount = amount 
+        a.amount_currency = {currency_id => amount}
       }
     end
 

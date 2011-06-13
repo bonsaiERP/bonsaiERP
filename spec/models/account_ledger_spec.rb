@@ -52,15 +52,23 @@ describe AccountLedger do
   end
 
   it 'should update the account value' do
-    al = AccountLedger.create(@params)
+    al = AccountLedger.create!(@params)
+
+    al.account_ledger_details.map(&:state).uniq.should == ["con"]
 
     Account.find(1).amount.should == 100
     Account.find(2).amount.should == 900
 
     al = AccountLedger.create(@params)
 
-    Account.find(1).amount.should == 200
-    Account.find(2).amount.should == 800
+    a1 = Account.find(1)
+    a1.amount.should == 200
+    a1.amount_currency[1].should == 200
+
+    a2 = Account.find(2)
+    a2.amount.should == 800
+    a2.initial_amount.should == 1000
+    a2.amount_currency[1].should == 800
   end
 
   it 'should allow negative values' do
@@ -76,5 +84,55 @@ describe AccountLedger do
     Account.find(2).amount.should == 1200
 
     al.account_ledger_details.map(&:operation).uniq.should == ["in"]
+  end
+
+  it 'should work with other currencies' do
+    @params = {
+      :date => Date.today, :operation => "in",
+      :account_ledger_details_attributes => [
+        {:account_id => 2, :amount => 50, :reference => "In", :description => "Income with exchange rate 0. from account 1"},
+        {:account_id => 1, :amount => -100, :reference => "Out", :exchange_rate => 0.5,},
+      ]
+    }
+    al = AccountLedger.new(@params)
+
+    al.save.should == true
+    al.account_ledger_details[0].description.should == "Income with exchange rate 0. from account 1"
+    
+  end
+
+  it 'should not save if the balance with exchange rate is different' do
+    @params = {
+      :date => Date.today, :operation => "in",
+      :account_ledger_details_attributes => [
+        {:account_id => 2, :amount => 50, :reference => "In", :description => "Income with exchange rate 0. from account 1"},
+        {:account_id => 1, :amount => -100, :reference => "Out", :exchange_rate => 0.51,},
+      ]
+    }
+
+    al = AccountLedger.new(@params)
+    al.save.should == false
+  end
+
+  it 'should store amount for different currencies' do
+    Account.create!(:name => "Bank 2", :account_type_id => 1, :currency_id => 2,
+                   :accountable_id => 1, :accountable_type => "Bank"
+                   ) {|a| a.id = 3; a.amount = 1000}
+
+    AccountLedger.create!(
+      :date => Date.today, :operation => "out",
+      :account_ledger_details_attributes => [
+        {:account_id => 1, :amount => 100, :reference => "In", :currency_id => 2},
+        {:account_id => 3, :amount => -100, :reference => "Out"},
+      ]
+    )
+    
+    a1 = Account.find(1)
+    a1.amount.should == 0
+    a1.amount_currency[1].should == 0
+    a1.amount_currency[2].should == 100.00
+
+    a2 = Account.find(3)
+    a2.amount.should == 900
   end
 end
