@@ -39,9 +39,27 @@ class AccountLedgerDetail < ActiveRecord::Base
   def update_account_amount
     account.amount = account.amount + amount if currency_id == account.currency_id
 
-    tot = account.amount_currency[currency_id].to_f + amount
-    account.amount_currency = account.amount_currency.merge(currency_id => tot.round(2) )
+    
+    #puts "#{acur.errors}"
+    #puts "instanciated or created #{acur.amount} : #{acur.valid?} #{acur.errors.messages}"
 
+    #puts "#{account.save}"
+    #puts "#{account.errors.messages}"
+
+    #puts "#{AccountCurrency.where(:account_id => account.id, :currency_id => currency_id).first.amount}"
+    update_account_currency
     account.save
   end
+
+  # 
+  def update_account_currency
+    acur = account.account_currencies.select {|ac| ac.currency_id == currency_id }
+    if acur.any?
+      acur = acur.first
+      acur.amount = acur.amount.to_f + amount
+    else
+      acur = account.account_currencies.build(:currency_id => currency_id, :amount => amount)
+    end
+  end
+
 end

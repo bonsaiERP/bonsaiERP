@@ -6,6 +6,7 @@ class Account < ActiveRecord::Base
 
   # callbacks
   before_create :set_amount
+  before_create :create_account_currency
 
   serialize :amount_currency
 
@@ -18,6 +19,7 @@ class Account < ActiveRecord::Base
   belongs_to :accountable, :polymorphic => true
 
   has_many :account_ledger_details
+  has_many :account_currencies, :autosave => true
 
   validates_presence_of :currency_id, :name
   #validates_associated  :currency
@@ -28,11 +30,27 @@ class Account < ActiveRecord::Base
 
   delegate :symbol, :name, :to => :currency, :prefix => true
 
+  # returns the class for a currency
+  def cur(cur_id = nil)
+    cur_id ||= currency_id
+    account_currencies.find_by_currency_id(cur_id)
+  end
+
+  # Returns the amount for one currency
+  def amount_currency(cur_id = nil)
+    cur_id ||= currency_id
+    cur(cur_id).amount
+  end
+
 private
   def set_amount
     self.amount ||= 0.0
     self.initial_amount ||= self.amount
-    self.amount_currency = {currency_id => amount.round(2)}
   end
 
+  def create_account_currency
+    account_currencies.build(
+      :currency_id => currency_id, :amount => amount
+    )
+  end
 end

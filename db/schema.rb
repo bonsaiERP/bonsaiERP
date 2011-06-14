@@ -10,7 +10,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110613203421) do
+ActiveRecord::Schema.define(:version => 20110614130942) do
+
+  create_table "account_currencies", :force => true do |t|
+    t.integer  "organisation_id"
+    t.integer  "account_id"
+    t.integer  "currency_id"
+    t.decimal  "amount",          :precision => 14, :scale => 2
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "account_currencies", ["account_id"], :name => "index_account_currencies_on_account_id"
+  add_index "account_currencies", ["currency_id"], :name => "index_account_currencies_on_currency_id"
+  add_index "account_currencies", ["organisation_id"], :name => "index_account_currencies_on_organisation_id"
 
   create_table "account_ledger_details", :force => true do |t|
     t.integer  "organisation_id"
@@ -105,7 +118,6 @@ ActiveRecord::Schema.define(:version => 20110613203421) do
     t.integer  "accountable_id"
     t.string   "accountable_type"
     t.integer  "account_type_id"
-    t.string   "amount_currency",  :limit => 500
   end
 
   add_index "accounts", ["account_type_id"], :name => "index_accounts_on_account_type_id"

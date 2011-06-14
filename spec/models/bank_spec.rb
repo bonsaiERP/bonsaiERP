@@ -48,11 +48,10 @@ describe Bank do
     b.account.account_type.account_number.should == "Bank"
   end
 
-  it 'should store the serialized values' do
-    b = Bank.new(@params)
-
-    b.save.should == true
-    b.account.amount_currency[1].should == 100 
+  it 'should create related account_currency' do
+    b = Bank.create!(@params)
+    
+    b.account.amount_currency(1).should == 100
   end
 end
 

@@ -11,8 +11,8 @@ module  Models::Account
         :account_type_id => AccountType.org.scoped_by_account_number(self.class.to_s).first.id
       ) {|a|
         a.amount = amount
-        a.initial_amount = amount 
-        a.amount_currency = {currency_id => amount}
+        a.initial_amount = amount
+        a.organisation_id = OrganisationSession.organisation_id
       }
     end
 

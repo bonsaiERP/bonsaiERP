@@ -22,7 +22,9 @@ module  Models::Account
       private
       def create_new_account
         self.build_account(:currency_id => OrganisationSession.currency_id,
-                          :account_type_id => AccountType.org.scoped_by_account_number(self.class.to_s).first.id )
+                          :account_type_id => AccountType.org.scoped_by_account_number(self.class.to_s).first.id ) {|a|
+          a.organisation_id = OrganisationSession.organisation_id
+        }
       end
 
       # Selects the methods neccessary accordiny the class

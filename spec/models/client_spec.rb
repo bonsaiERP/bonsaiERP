@@ -18,13 +18,20 @@ describe Client do
   end
 
   it 'should create an account' do
-    c = Client.create(@params)
+    c = Client.create!(@params)
 
     c.account.should_not == blank?
     c.account.amount.should == 0 
     c.account.initial_amount.should == 0
     c.account.account_type_id.should == 1
-    c.account.amount_currency[1].should == 0
+
+    c.account.amount_currency(1).should == 0
+  end
+
+  it 'should create account_currency' do
+    c = Client.create!(@params)
+
+    c.account.amount_currency(1).should == 0
   end
     
 end
