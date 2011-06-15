@@ -59,6 +59,13 @@ describe Bank do
 
     b.account.amount_currency(1).should == 100
     b.account.to_s.should == b.to_s
+
+    o_name = b.to_s
+
+    b.name = "Other bank"
+    b.save.should == true
+    b.to_s.should_not == o_name
+    b.account.to_s.should == b.to_s
   end
 end
 

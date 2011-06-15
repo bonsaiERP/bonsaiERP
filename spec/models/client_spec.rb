@@ -8,6 +8,7 @@ describe Client do
   before(:each) do
     OrganisationSession.set = {:id => 1, :name => 'ecuanime', :currency_id => 1}
     @params = { :first_name => 'First name', :last_name => 'Last name',
+      :matchcode => "Boris Barroso",
       :address => "Los Pinos Bloque 80\ndpto.201"}
 
     ModStubs.stub_account_type(:id => 1, :account_number => "Client")
@@ -29,16 +30,24 @@ describe Client do
   end
 
   it 'should create account_currency' do
-    c = Client.create!(@params)
-
-    c.account.amount_currency(1).should == 0
-  end
-
-  it 'should use the name of the client' do
     c = Client.new(@params)
 
     c.save.should == true
-    c.account.name.should == c.to_s
+    c.account.amount_currency(1).should == 0
+  end
+
+  it 'should set the to_s method for the account' do
+    c = Client.new(@params)
+
+    c.save.should == true
+    c.account.to_s.should == c.to_s
+
+    c.matchcode = "Boris Edgar Barroso Camberos"
+    c.save.should == true
+
+    c.reload
+    c.to_s.should == "Boris Edgar Barroso Camberos"
+    c.account.to_s.should == c.to_s
   end
     
 end

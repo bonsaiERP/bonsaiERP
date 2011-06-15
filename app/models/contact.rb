@@ -7,12 +7,10 @@ class Contact < ActiveRecord::Base
 
   TYPES = ['clients', 'suppliers', 'staff']
 
-  # callbacks
-
   # relations
   has_many :transactions
 
-  validates_presence_of   :first_name, :last_name, :address# :code
+  validates_presence_of   :first_name, :last_name, :address, :matchcode
   #validates_uniqueness_of :code, :scope => :organisation_id
   validates_uniqueness_of :matchcode, :scope => :organisation_id
 
@@ -43,11 +41,6 @@ class Contact < ActiveRecord::Base
 
   def pdf_name
     "#{first_name} #{last_name}"
-  end
-
-private
-  def set_matchcode
-    self.matchcode = "#{code} #{first_name} #{last_name}"
   end
 
 end

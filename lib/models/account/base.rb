@@ -36,7 +36,7 @@ module  Models::Account
           when "ItemService" then self.extend Models::Account::ServiceAccount
         end
 
-        create_new_account
+        create_new_account if new_record?
       end
     end
   end
