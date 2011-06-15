@@ -5,13 +5,17 @@
 
   = f.input :date, :label => 'Fecha'
 
+  - i = 0
   = f.simple_fields_for :account_ledger_details do |det|
-    = det.input :amount, :label => "Cantidad en #{det.object.account.currency_symbol}", :input_html => {:size => 12, :type => 'decimal'}
+    - if i == 0
+      = det.input :amount, :label => "Cantidad en #{det.object.account.currency_symbol}", :input_html => {:size => 12, :type => 'decimal'}
+      - i += 1
+    - else
+      = det.input :account_id, :label => false, :input_html => {:class => 'contact-autocomlete'}
     /.input
     /  .boolean
     /    %label #{ radio_button_tag("contact", "Client", params[:contact] == "Client") } Cliente
     /    %label #{ radio_button_tag "contact" , "Supplier", params[:contact] == "Supplier"} Proveedor
-    = det.association :account, :label => false
 
 
   = f.input :reference, :as => :text, :label => 'Referencia', :input_html => {:rows => 2, :cols => 35}, :hint => 'Nº de cheque, razón, factura, etc.'
@@ -26,9 +30,9 @@
 
 :javascript
   $(function() {
-    $('#account_ledger_contact_id').after('<a class="ajax add"></a>');
-
-
+    //$('#account_ledger_contact_id').after('<a class="ajax add"></a>');
+    $('.contact-autocomlete').contactAutocomplete();
+    /*
     Autocomplete = {
 
       // Init the Autocomplete Object
@@ -114,5 +118,5 @@
     });
 
     Autocomplete.setContactAutocomplete();
-
+    */
   });

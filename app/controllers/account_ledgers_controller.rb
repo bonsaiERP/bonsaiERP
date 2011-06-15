@@ -17,6 +17,7 @@ class AccountLedgersController < ApplicationController
   def new
     @account_ledger = AccountLedger.new(:income => params[:income])
     @account_ledger.account_ledger_details.build(:account_id => params[:account_id])
+    @account_ledger.account_ledger_details.build
     #begin
     #  @account = Account.org.find(params[:account_id])
     #rescue
