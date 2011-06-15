@@ -13,6 +13,7 @@ module  Models::Account
     module InstanceMethods
       def set_account_settings
         before_save :select_account_type_and_create
+        before_save { self.account.name = self.to_s }
         has_one :account, :as => :accountable, :autosave => true
       end
     end

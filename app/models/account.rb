@@ -42,6 +42,10 @@ class Account < ActiveRecord::Base
     cur(cur_id).amount
   end
 
+  def to_s
+    name
+  end
+
 private
   def set_amount
     self.amount ||= 0.0

@@ -33,6 +33,13 @@ describe Client do
 
     c.account.amount_currency(1).should == 0
   end
+
+  it 'should use the name of the client' do
+    c = Client.new(@params)
+
+    c.save.should == true
+    c.account.name.should == c.to_s
+  end
     
 end
 

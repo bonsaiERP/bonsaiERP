@@ -7,10 +7,11 @@
 
   = f.simple_fields_for :account_ledger_details do |det|
     = det.input :amount, :label => "Cantidad en #{det.object.account.currency_symbol}", :input_html => {:size => 12, :type => 'decimal'}
-    .input
-      .boolean
-        %label #{ radio_button_tag("contact", "Client", params[:contact] == "Client") } Cliente
-        %label #{ radio_button_tag "contact" , "Supplier", params[:contact] == "Supplier"} Proveedor
+    /.input
+    /  .boolean
+    /    %label #{ radio_button_tag("contact", "Client", params[:contact] == "Client") } Cliente
+    /    %label #{ radio_button_tag "contact" , "Supplier", params[:contact] == "Supplier"} Proveedor
+    = det.association :account, :label => false
 
 
   = f.input :reference, :as => :text, :label => 'Referencia', :input_html => {:rows => 2, :cols => 35}, :hint => 'Nº de cheque, razón, factura, etc.'

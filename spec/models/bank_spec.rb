@@ -4,6 +4,7 @@ describe Bank do
   before(:each) do
     OrganisationSession.set(:id => 1, :name => 'ecuanime', :currency_id => 1)
 
+    Currency.create(:symbol => 'Bs.', :name => 'Boliviano') {|c| c.id = 1}
     @params = {:currency_id => 1, :name => 'Banco 1', :number => '12365498', :address => 'Uno', :amount => 100}
 
     YAML.load_file( File.join(Rails.root, "db/defaults/account_types.#{I18n.locale}.yml") ).each do |y|
@@ -11,6 +12,7 @@ describe Bank do
         a.organisation_id = 1
         a.account_number = y[:account_number]
       }
+
     end
   end
 
@@ -32,6 +34,7 @@ describe Bank do
   end
 
   it 'should use the bank currency' do
+    Currency.create(:symbol => 'Bs.', :name => 'Boliviano') {|c| c.id = 5}
     @params[:currency_id] = 5
 
     b = Bank.create(@params)
@@ -49,9 +52,13 @@ describe Bank do
   end
 
   it 'should create related account_currency' do
-    b = Bank.create!(@params)
+
+    b = Bank.new(@params)
     
+    b.save.should == true
+
     b.account.amount_currency(1).should == 100
+    b.account.to_s.should == b.to_s
   end
 end
 
