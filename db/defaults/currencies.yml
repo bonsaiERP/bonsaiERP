@@ -1,7 +1,7 @@
 ---
   - id: 1
     name: boliviano
-    symbol: "bs."
+    symbol: "Bs."
     code: BOB
   - id: 2
     name: dolar

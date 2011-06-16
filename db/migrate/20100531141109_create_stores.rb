@@ -4,7 +4,7 @@ class CreateStores < ActiveRecord::Migration
       t.string :name
       t.string :address
       t.string :phone
-      t.boolean :active
+      t.boolean :active, :default => true
       t.string :description
 
       t.integer :organisation_id, :null => false

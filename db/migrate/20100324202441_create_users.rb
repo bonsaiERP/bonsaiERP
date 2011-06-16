@@ -2,7 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class CreateUsers < ActiveRecord::Migration
-  def self.up
+  def change
     create_table :users do |t|
       # devise
       t.database_authenticatable
@@ -20,6 +20,9 @@ class CreateUsers < ActiveRecord::Migration
       t.string :account_type, :limit => 15
       t.string :description, :limit => 255
 
+      t.boolean :change_default_password, :default => false
+      t.string :address
+
       t.timestamps
     end
     add_index :users, :first_name
@@ -27,7 +30,4 @@ class CreateUsers < ActiveRecord::Migration
 
   end
 
-  def self.down
-    drop_table :users
-  end
 end

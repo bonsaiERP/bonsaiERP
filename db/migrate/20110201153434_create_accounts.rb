@@ -3,22 +3,27 @@ class CreateAccounts < ActiveRecord::Migration
     create_table :accounts do |t|
       t.integer :organisation_id
       t.integer :currency_id
-      t.string :name
-      t.string :address
-      t.string :phone
-      t.string :email
-      t.string :website
-      t.string :number, :limit => 50
-      t.string :type, :limit => 20
-      t.decimal :total_amount, :precision => 14, :scale => 2
+      t.integer :account_type_id
+      t.integer :accountable_id
+      t.string  :accountable_type
+  
+      t.string  :name
+      t.string  :type, :limit => 20
+      t.decimal :amount, :precision => 14, :scale => 2
+      t.decimal :initial_amount, :precision => 14, :scale => 2
+
+      t.string  :number
 
       t.timestamps
     end
 
     add_index :accounts, :organisation_id
     add_index :accounts, :currency_id
+    add_index :accounts, :account_type_id
+    add_index :accounts, :accountable_id
+    add_index :accounts, :accountable_type
     add_index :accounts, :type
-    add_index :accounts, :number
+    #add_index :accounts, :number
   end
 
   def self.down

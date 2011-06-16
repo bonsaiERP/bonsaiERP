@@ -13,10 +13,14 @@ class CreateOrganisations < ActiveRecord::Migration
       t.string :website
       t.integer :user_id
 
+      t.date :due_date
+      t.text :preferences
+
       t.timestamps
     end
     add_index :organisations, :country_id
     add_index :organisations, :currency_id
+    add_index :organisations, :due_date
   end
 
   def self.down

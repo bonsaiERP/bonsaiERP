@@ -11,7 +11,8 @@ class Payment < ActiveRecord::Base
 
   def destroy; false; end
 
-  attr_reader :pay_plan, :updated_pay_plan_ids, :account_ledger_created
+  attr_accessor :reference
+  attr_reader :pay_plan, :account_ledger_created
 
   attr_reader :updated_account_ledger
 
@@ -52,8 +53,9 @@ class Payment < ActiveRecord::Base
   delegate :type, :name, :number, :to => :account, :prefix => true
 
   # validations
-  validates_presence_of     :account_id, :transaction_id, :reference, :date
+  validates_presence_of     :account_id, :transaction_id, :date
   validates_numericality_of :amount, :exchange_rate, :greater_than_or_equal_to => 0
+  validates :reference, :length => { :within => 3..150, :allow_blank => false }
 
   validate              :valid_payment_amount
   validate              :valid_amount_or_interests_penalties
@@ -89,7 +91,6 @@ class Payment < ActiveRecord::Base
   # Overide the dault to_json method
   def to_json
     self.attributes.merge(
-      :updated_pay_plan_ids     => @updated_pay_plan_ids,
       :currency_symbol          => currency_symbol,
       :pay_plan                 => @pay_plan,
       :account                  => account.to_s,

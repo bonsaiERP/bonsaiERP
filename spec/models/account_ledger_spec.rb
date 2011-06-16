@@ -141,4 +141,5 @@ describe AccountLedger do
     a2 = Account.find(3)
     a2.amount.should == 900
   end
+
 end

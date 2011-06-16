@@ -92,6 +92,27 @@ module HelperMethods
     click_button 'Crear'
   end
 
+  def create_account_types
+    path = File.join(Rails.root, "db/defaults/account_types.es.yml")
+    Psych.load_file(path).each do |v|
+      AccountType.create!(v)
+    end
+  end
+
+  def create_money_store(size, type = "Bank", currency = 1)
+    klass = type == "Bank" ? Bank : Cash
+
+    data = {:currency_id => currency}
+    size.times do |v|
+      data = data.merge( 
+        :name => "#{klass.to_s} #{v + 1}", 
+        :number => "%04d" % (v + 1)
+      )
+      k = klass.create(data)
+    end
+
+  end
+
   def set_exchange_rate
 
   end

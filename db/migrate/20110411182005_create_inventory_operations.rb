@@ -6,7 +6,7 @@ class CreateInventoryOperations < ActiveRecord::Migration
       t.integer :organisation_id
       t.integer :transaction_id
 
-      t.date :date
+      t.date   :date
       t.string :ref_number
       t.string :operation
       t.string :state
@@ -23,10 +23,10 @@ class CreateInventoryOperations < ActiveRecord::Migration
     add_index :inventory_operations, :store_id
     add_index :inventory_operations, :transaction_id
 
-    add_index :inventory_operations, :operation
-    add_index :inventory_operations, :state
     add_index :inventory_operations, :date
     add_index :inventory_operations, :ref_number
+    add_index :inventory_operations, :operation
+    add_index :inventory_operations, :state
   end
 
   def self.down

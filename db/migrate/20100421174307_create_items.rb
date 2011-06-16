@@ -17,6 +17,10 @@ class CreateItems < ActiveRecord::Migration
 
       t.integer :organisation_id, :null => false
 
+      t.string  :type
+      t.string  :un_name
+      t.string  :un_symbol, :limit => 10
+
       t.timestamps
     end
 
@@ -24,6 +28,7 @@ class CreateItems < ActiveRecord::Migration
     add_index :items, :unit_id
     add_index :items, :code
     add_index :items, :ctype
+    add_index :items, :type
   end
 
   def self.down

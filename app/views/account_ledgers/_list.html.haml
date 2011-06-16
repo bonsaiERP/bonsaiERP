@@ -17,8 +17,8 @@
     = link_to "Nuevo <span class='more'></span>".html_safe, "#", :class => 'new'
     
     %ul
-      %li= link_to "Nuevo ingreso", new_account_ledger_path(:account_id => account.id, :income => true)
-      %li= link_to "Nuevo egreso", new_account_ledger_path(:account_id => account.id, :income => false)
+      %li= link_to "Nuevo ingreso", new_account_ledger_path(:account_id => account.id, :operation => "in")
+      %li= link_to "Nuevo egreso", new_account_ledger_path(:account_id => account.id, :operation => "out")
       %li= link_to "Nueva transferencia", new_transference_account_ledger_path(account.id)
 
 

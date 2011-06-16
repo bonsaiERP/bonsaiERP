@@ -10,7 +10,7 @@ class AccountLedger < ActiveRecord::Base
 
   attr_accessor :operation, :amount
 
-  OPERATIONS = ["in", "out", "trans"]
+  OPERATIONS = %w(in out trans)
 
   has_many :account_ledger_details, :dependent => :destroy
   accepts_nested_attributes_for :account_ledger_details
@@ -19,10 +19,21 @@ class AccountLedger < ActiveRecord::Base
   validate :number_of_details
   validate :total_amount_equal
 
+  # metaprogramming options
+  OPERATIONS.each do |v|
+    class_eval <<-CODE, __FILE__, __LINE__ + 1
+      def #{v}?
+        "#{v}" == operation
+      end
+    CODE
+  end
+
   # Instances a new money account
-  def new_money(ac_id)
-    #ac = Account.org.find(ac_id)
-    self.account_ledger_details.build(:account_id => ac.id)
+  def self.new_money(params)
+    ac = AccountLedger.new(params)
+    ac.extend Models::AccountLedger::Money
+
+    ac
   end
 
   private

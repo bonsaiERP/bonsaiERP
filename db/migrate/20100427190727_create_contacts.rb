@@ -2,27 +2,32 @@ class CreateContacts < ActiveRecord::Migration
   def self.up
     create_table :contacts do |t|
       t.string :matchcode
-      t.string :name, :limit => 100
+      t.string :first_name, :limit => 100
       t.string :organisation_name, :limit => 100
       t.string :address, :limit => 250
       t.string :address_alt, :limit => 250
       t.string :phone, :limit => 20
       t.string :mobile, :limit => 20
-      t.boolean :client, :default => false
-      t.boolean :supplier, :default => false
       t.string :email, :limit => 200
       t.string :tax_number, :limit => 30
       t.string :aditional_info, :limit => 250
 
       t.integer :organisation_id, :null => false
 
+      t.string  :code
+      t.string  :type
+      t.string  :last_name,  :limit => 100
+      t.string  :position
+      t.boolean :active,     :default => true
+
       t.timestamps
     end
 
-    add_index(:contacts, :organisation_id)
-    add_index(:contacts, :matchcode)
-    add_index(:contacts, :client)
-    add_index(:contacts, :supplier)
+    add_index :contacts, :organisation_id
+    add_index :contacts, :matchcode
+    add_index :contacts, :first_name
+    add_index :contacts, :last_name
+    add_index :contacts, :type
   end
 
   def self.down

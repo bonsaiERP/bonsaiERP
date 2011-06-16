@@ -1,5 +1,5 @@
 class CreateLinks < ActiveRecord::Migration
-  def self.up
+  def change
     create_table :links do |t|
       t.integer :organisation_id
       t.integer :user_id
@@ -7,13 +7,12 @@ class CreateLinks < ActiveRecord::Migration
       t.string :settings
       t.boolean :creator
 
+      t.string   :rol, :limit => 50
+      t.boolean  :active, :default => true
+
       t.timestamps
     end
     add_index :links, :user_id
     add_index :links, :organisation_id
-  end
-
-  def self.down
-    drop_table :links
   end
 end

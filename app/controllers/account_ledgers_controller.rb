@@ -3,7 +3,7 @@
 # email: boriscyber@gmail.com
 class AccountLedgersController < ApplicationController
   before_filter :check_authorization!
-  before_filter :set_account_ledger, :only => [:show, :conciliate, :destroy, :new, :personal]
+  #before_filter :set_account_ledger, :only => [:show, :conciliate, :destroy, :new, :personal]
  
   # GET /account_ledger 
   def index
@@ -15,14 +15,7 @@ class AccountLedgersController < ApplicationController
   end
 
   def new
-    @account_ledger = AccountLedger.new(:income => params[:income])
-    @account_ledger.account_ledger_details.build(:account_id => params[:account_id])
-    @account_ledger.account_ledger_details.build
-    #begin
-    #  @account = Account.org.find(params[:account_id])
-    #rescue
-    #  logger.warn "El usuario #{current_user.id} intento acceder a #{request.path} #{params[:account_id]}"
-    #end
+    @account_ledger = AccountLedger.new_money(:operation => params[:operation], :account_id => params[:account_id])
   end
 
   # PUT /account_ledgers/:id/conciliate 

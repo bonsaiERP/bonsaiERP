@@ -1,9 +1,9 @@
 class CreateInventoryOperationDetails < ActiveRecord::Migration
   def self.up
     create_table :inventory_operation_details do |t|
+      t.integer :organisation_id
       t.integer :inventory_operation_id
       t.integer :item_id
-      t.integer :organisation_id
 
       t.decimal :quantity, :precision => 14, :scale => 2
       t.decimal :unitary_cost, :precision => 14, :scale => 2
