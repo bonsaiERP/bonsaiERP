@@ -30,16 +30,20 @@ module AccountsHelper
   end
 
   # Links to the parent
-  def link_parent(klass)
-    case klass.accountable.class.to_s
+  def link_list(klass)
+    case klass.account.accountable.class.to_s
     when "Bank" then link_to "Bancos", banks_path
     when "Cash" then link_to "Cajas", cashes_path
     end
   end
 
+  def link_parent(klass)
+    link_to klass.account, klass.account.accountable
+  end
+
   # Creates for income or outcome title
   def account_ledger_title(klass)
-    if klass.income?
+    if klass.in?
       "<span class='dark_green'>ingreso</span>".html_safe
     else
       "<span class='red'>egreso</span>".html_safe

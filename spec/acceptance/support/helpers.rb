@@ -113,6 +113,20 @@ module HelperMethods
 
   end
 
+  def contact_parameters(options = {})
+    if options[:matchcode].present?
+      vals = options[:matchcode].split(" ")
+      options[:first_name] = vals[0]
+      options[:last_name] = vals[1]
+    end
+
+    {:first_name => "First", :last_name => "Last", :address => 'My address'}.merge(options)
+  end
+
+  def create_client(options)
+    Client.create!(contact_parameters.merge(options))
+  end
+
   def set_exchange_rate
 
   end

@@ -4,8 +4,9 @@ class CreateAccountLedgerDetails < ActiveRecord::Migration
       t.references :organisation
       t.references :account
       t.references :account_ledger
-      t.references :related_id
-      t.decimal    :amount, :presicion => 14, :scale => 2
+      t.references :currency
+      t.references :related
+      t.decimal    :amount, :precision => 14, :scale => 2
       t.decimal    :exchange_rate, :precision => 14, :scale => 4
       t.string     :description
       t.boolean    :active, :default => true
@@ -16,6 +17,7 @@ class CreateAccountLedgerDetails < ActiveRecord::Migration
     add_index :account_ledger_details, :organisation_id
     add_index :account_ledger_details, :account_id
     add_index :account_ledger_details, :account_ledger_id
+    add_index :account_ledger_details, :currency_id
     add_index :account_ledger_details, :related_id
     add_index :account_ledger_details, :active
     add_index :account_ledger_details, :state

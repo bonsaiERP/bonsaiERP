@@ -17,16 +17,24 @@ feature "Test account ledger", "for in outs and transferences" do
     create_currencies
     create_account_types
     create_money_store(1, "Bank")
+    c = create_client(:matchcode => "Lucas Estrella")
+    @cli_ac_id = c.account.id
   end
 
   scenario "It should correctly assing the correct methods for money" do
+
     al = AccountLedger.new_money(:operation => "in", :account_id => 1)
 
-    puts "Initialization"
-    al.account_to.should == nil
+    al.to_id.should == nil
     al.in?.should == true
-    al.currency.to_s.should == "Bs."
-    
+    al.account.currency_symbol.should == "Bs."
+
+    puts "Save account ledger"
+
+    al = AccountLedger.new_money(:operation => "in", :account_id => 1, :to_id => @cli_ac_id, :amount => 100, :reference => "Check 1120012" )
+    al.valid?
+    puts al.errors.messages
+    al.save.should == true
 
   end
 end

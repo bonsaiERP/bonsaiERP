@@ -3,21 +3,24 @@
 # email: boriscyber@gmail.com
 class AccountLedger < ActiveRecord::Base
 
-  # callbacks
-  before_validation :set_operation, :if => :new_record?
-
-  attr_protected :conciliation
-
-  attr_accessor :operation, :amount
+  attr_accessible :account_id, :to_id, :date, :operation, :reference, :currency_id,
+    :amount, :exchanege_rate, :description, :account_ledger_details_attributes
 
   OPERATIONS = %w(in out trans)
+
+  belongs_to :account
+  belongs_to :to, :class_name => "Account"
 
   has_many :account_ledger_details, :dependent => :destroy
   accepts_nested_attributes_for :account_ledger_details
 
   validates_inclusion_of :operation, :in => OPERATIONS
+  validates_numericality_of :amount, :greater_than => 0
+  validates :reference, :length => { :within => 3..150, :allow_blank => false }
   validate :number_of_details
   validate :total_amount_equal
+
+  include Models::AccountLedger::Money
 
   # metaprogramming options
   OPERATIONS.each do |v|
@@ -26,14 +29,6 @@ class AccountLedger < ActiveRecord::Base
         "#{v}" == operation
       end
     CODE
-  end
-
-  # Instances a new money account
-  def self.new_money(params)
-    ac = AccountLedger.new(params)
-    ac.extend Models::AccountLedger::Money
-
-    ac
   end
 
   private
@@ -51,8 +46,4 @@ class AccountLedger < ActiveRecord::Base
     self.errors[:base] << "Debe seleccionar al menos 2 cuentas" if account_ledger_details.size < 1
   end
 
-  # Sets the operation for the details
-  def set_operation
-    account_ledger_details.each {|det| det.operation = operation }
-  end
 end

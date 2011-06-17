@@ -12,9 +12,9 @@ class AccountLedgerDetail < ActiveRecord::Base
 
   belongs_to :account
   belongs_to :account_ledger
-  belongs_to :parent, :class_name => "AccountLedgerDetail", :foreign_key => :account_ledger_detail_id
+  belongs_to :related, :class_name => "AccountLedgerDetail"
 
-  validates_presence_of :amount, :reference, :account_id, :operation, :state
+  validates_presence_of :amount, :account_id, :state
 
   # scopes
   scope :pendent, org.where(:state => "uncon")
