@@ -34,11 +34,27 @@ class AutocompleteApp < BaseApp
     self.response_body = "JeJe"
   end
 
+  def client_account
+    render :json => contact_account_autocomplete('Client', params)
+  end
+
+  def supplier_account
+    render :json => contact_account_autocomplete('Supplier', params)
+  end
+
+  def staff_account
+    render :json => contact_account_autocomplete('Staff', params)
+  end
+
 private
   # Search for contact autocomlete
   def contact_autocomplete(type, options)
     set_organisation_session
-    Contact.org.where("type = :type AND matchcode LIKE :term", :type => type, :term => "%#{params[:term]}%").limit(20).map {|c| {:id => c.id, :label => c.to_s}}
+    Contact.org.where("type = :type AND matchcode LIKE :term", :type => type, :term => "%#{options[:term]}%").limit(20).map {|c| {:id => c.id, :label => c.to_s}}
   end
-  
+
+  def contact_account_autocomplete(type, options)
+    set_organisation_session
+    Account.org.where("original_type = :type AND name LIKE :term", :type => type, :term => "%#{options[:term]}%").limit(20).map {|c| {:id => c.id, :label => c.to_s}}
+  end
 end

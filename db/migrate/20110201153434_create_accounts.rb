@@ -5,7 +5,8 @@ class CreateAccounts < ActiveRecord::Migration
       t.integer :currency_id
       t.integer :account_type_id
       t.integer :accountable_id
-      t.string  :accountable_type
+      t.string  :accountable_type# denormalized field to find accounts by model type
+      t.string  :original_type, :limit => 20
   
       t.string  :name
       t.string  :type, :limit => 20
@@ -22,6 +23,7 @@ class CreateAccounts < ActiveRecord::Migration
     add_index :accounts, :account_type_id
     add_index :accounts, :accountable_id
     add_index :accounts, :accountable_type
+    add_index :accounts, :original_type
     add_index :accounts, :type
     #add_index :accounts, :number
   end

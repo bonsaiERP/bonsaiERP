@@ -18,6 +18,11 @@ describe Client do
     Client.create!(@params)
   end
 
+  it 'should set the original type for account' do
+    c = Client.create!(@params)
+    c.account.original_type.should == "Client"
+  end
+
   it 'should create an account' do
     c = Client.create!(@params)
 

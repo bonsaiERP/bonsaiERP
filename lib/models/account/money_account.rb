@@ -13,6 +13,7 @@ module  Models::Account
         a.amount = amount
         a.initial_amount = amount
         a.organisation_id = OrganisationSession.organisation_id
+        a.original_type = self.class.to_s
       }
     end
 

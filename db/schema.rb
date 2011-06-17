@@ -91,6 +91,7 @@ ActiveRecord::Schema.define(:version => 20110614130942) do
     t.integer  "account_type_id"
     t.integer  "accountable_id"
     t.string   "accountable_type"
+    t.string   "original_type",    :limit => 20
     t.string   "name"
     t.string   "type",             :limit => 20
     t.decimal  "amount",                         :precision => 14, :scale => 2
@@ -105,6 +106,7 @@ ActiveRecord::Schema.define(:version => 20110614130942) do
   add_index "accounts", ["accountable_type"], :name => "index_accounts_on_accountable_type"
   add_index "accounts", ["currency_id"], :name => "index_accounts_on_currency_id"
   add_index "accounts", ["organisation_id"], :name => "index_accounts_on_organisation_id"
+  add_index "accounts", ["original_type"], :name => "index_accounts_on_original_type"
   add_index "accounts", ["type"], :name => "index_accounts_on_type"
 
   create_table "contacts", :force => true do |t|

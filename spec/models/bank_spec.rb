@@ -24,7 +24,13 @@ describe Bank do
   it { should have_valid(:currency_id).when(1) }
 
   it 'should create an instance' do
-    b = Bank.create(@params)
+    Bank.create!(@params)
+  end
+
+  it 'should set original type' do
+    b = Bank.create!(@params)
+
+    b.account.original_type.should == "Bank"
   end
 
   it 'should check it is bank' do

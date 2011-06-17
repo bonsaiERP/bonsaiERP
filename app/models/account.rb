@@ -10,7 +10,7 @@ class Account < ActiveRecord::Base
 
   serialize :amount_currency
 
-  attr_readonly  :initial_amount
+  attr_readonly  :initial_amount, :original_type
   attr_protected :amount, :amount_currency
 
   # relationships

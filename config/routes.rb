@@ -124,5 +124,10 @@ Bonsaierp::Application.routes.draw do
   match "/staff_autocomplete"    => AutocompleteApp.action(:staff)
   match "/item_autocomplete"     => AutocompleteApp.action(:item)
 
+  match "/client_account_autocomplete"   => AutocompleteApp.action(:client_account)
+  match "/supplier_account_autocomplete" => AutocompleteApp.action(:supplier_account)
+  match "/staff_account_autocomplete"    => AutocompleteApp.action(:staff_account)
+  match "/item_account_autocomplete"     => AutocompleteApp.action(:item_account)
+
   root :to => 'home#index'
 end

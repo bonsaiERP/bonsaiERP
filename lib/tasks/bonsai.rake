@@ -54,6 +54,21 @@ namespace :bonsai do
     puts "Puts contacts for acount_ledgers have been updated"
   end
 
+  desc "Creates the account for all contacts that do not have account"
+  task :create_contact_accounts => :environment do
+    Contact.all.each do |c|
+      unless c.account.present?
+        OrganisationSession.set :id => c.organisation_id
+
+        c.build_account(:currency_id => 1, :name => c.to_s) {|co| 
+          co.amount = 0
+          co.original_type = c.class.to_s
+        }
+        c.save!
+      end
+    end
+  end
+
   desc "Creates from zero a new installation of bonsai"
   task :create_all => :environment do
     Rake::Task["db:drop"].execute
