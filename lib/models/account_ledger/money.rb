@@ -17,7 +17,7 @@ module Models::AccountLedger
 
     module InstanceMethods
       def set_money_setting
-        before_create :create_ledger_details, :if => :money?
+        before_validation :create_ledger_details, :if => :money?
 
         validates_presence_of :account_id, :to_id, :if => :money?
         validates_numericality_of :amount, :if => :money?
@@ -39,7 +39,6 @@ module Models::AccountLedger
       private
 
       def create_ledger_details
-        puts "creating details"
         amt = amount_operation
         account_ledger_details.build(:account_id => account_id, :amount => amt, :currency_id => account.currency_id)
         account_ledger_details.build(:account_id => to_id, :amount => -amt, :currency_id => account.currency_id)

@@ -14,6 +14,7 @@ class MoneyStore < ActiveRecord::Base
 
   # Common validations
   validates_numericality_of :amount, :greater_than_or_equal_to => 0
+
   # delegations
   delegate :name, :symbol, :code, :plural, :to => :currency, :prefix => true
 

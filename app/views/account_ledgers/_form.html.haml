@@ -7,7 +7,7 @@
 
   = f.input :amount, :label => "Cantidad en #{f.object.account.currency_symbol}", :input_html => {:size => 12, :type => 'decimal'}
   .clear
-  = f.input :account_to, :label => false, :input_html => {:class => 'contact-autocomlete'}
+  = f.input :to_id, :label => false, :input_html => {:class => 'contact-autocomlete'}
 
   = f.input :reference, :as => :text, :label => 'Referencia', :input_html => {:rows => 2, :cols => 35}, :hint => 'Nº de cheque, razón, factura, etc.'
   .clear
@@ -17,7 +17,7 @@
 :javascript
   $(function() {
     //$('#account_ledger_contact_id').after('<a class="ajax add"></a>');
-    $('.contact-autocomlete').contactAutocomplete();
+    $('.contact-autocomlete').contactAutocomplete(["Supplier", "Client"], {'model': "Contact" });
     /*
     Autocomplete = {
 

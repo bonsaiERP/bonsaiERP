@@ -52,5 +52,6 @@ group :test do
   gem 'watchr'
   gem 'launchy'
   gem 'turn', :require => false
+  gem 'valid_attribute'
 end  
 

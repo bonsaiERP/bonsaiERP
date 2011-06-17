@@ -36,7 +36,7 @@ describe AccountLedger do
   it 'should be valid if the accounts are balanced' do
     a = AccountLedger.create!(@params)
 
-    a.account_ledger_details.inject(0){|sum,v| sum += v.amount }.should == 0
+    a.account_ledger_details.inject(0) {|sum,v| sum += v.amount }.should == 0
   end
 
   it 'should not allow uncorrect operations' do

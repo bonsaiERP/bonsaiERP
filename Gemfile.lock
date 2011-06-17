@@ -186,6 +186,7 @@ GEM
     uglifier (0.5.4)
       execjs (>= 0.3.0)
       multi_json (>= 1.0.2)
+    valid_attribute (1.0.0)
     warden (1.0.4)
       rack (>= 1.0)
     watchr (0.7)
@@ -220,4 +221,5 @@ DEPENDENCIES
   steak (~> 1.1.0)
   turn
   uglifier
+  valid_attribute
   watchr

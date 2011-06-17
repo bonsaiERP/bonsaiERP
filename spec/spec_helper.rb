@@ -1,5 +1,6 @@
 #require 'rubygems'
 require 'spork'
+require 'valid_attribute'
 
 # http://railstutorial.org/chapters/static-pages#sec:spork
 Spork.prefork do

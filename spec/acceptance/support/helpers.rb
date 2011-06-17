@@ -99,18 +99,9 @@ module HelperMethods
     end
   end
 
-  def create_money_store(size, type = "Bank", currency = 1)
-    klass = type == "Bank" ? Bank : Cash
-
-    data = {:currency_id => currency}
-    size.times do |v|
-      data = data.merge( 
-        :name => "#{klass.to_s} #{v + 1}", 
-        :number => "%04d" % (v + 1)
-      )
-      k = klass.create(data)
-    end
-
+  def create_bank(options = {})
+    options = {:currency_id => 1, :name => "Bank", :number => "0001"}.merge(options)
+    Bank.create!(options)
   end
 
   def contact_parameters(options = {})
