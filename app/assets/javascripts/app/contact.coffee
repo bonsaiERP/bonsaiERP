@@ -9,19 +9,25 @@ class ContactAutocomplete
     @cont = $(@elem).parents('.input:first')
     @cont.removeClass 'numeric'
 
+    @.setInitial()
     @.setRoutes()
     @.labels()
     @.addAutocompleteField()
+  # set Initial values
+  setInitial: ->
+    @val  = $(@elem).data('val') || ''
+    @type = $(@elem).data('type') || @models[0]
   # Adds the autocomplete field
   addAutocompleteField: ->
     self = @
 
     @auto_id = (new Date).getTime()
     $(@elem).hide()
-    .after $('<input/>').attr({ 'id': @auto_id, 'type': 'text', 'size': 35 })
+    .before $('<input/>').attr({ 'id': @auto_id, 'type': 'text', 'size': 35 }).val(@val)
       .addClass('autocomplete-input')
+      .after(self.createAddLink())
       .autocomplete(
-        'source': self["route#{self.models[0]}"]
+        'source': self["route#{self.type}"]
         'select': (e, ui)->
           $(self.elem).val(ui.item.id)
           $(this).data('val', ui.item.label)
@@ -30,6 +36,15 @@ class ContactAutocomplete
           $(self.elem).val('')
         else
           $(this).val( $(this).data('val') )
+
+     #@cont.find('.autocomplete-input').after(createAddLink())
+  # creates the new link
+  createAddLink: ->
+    $('<a/>').attr({'href': "/#{@type.toLowerCase()}s/new" }).addClass('add ajax')
+    .data({'title': "Nuevo #{@.getLocalizedLabel(@type).toLowerCase()}", 'url': @.getAddUrl()})
+  # Url for adding new contact
+  getAddUrl: ->
+    "/#{@type.toLowerCase()}s/new"
   # cretes routes based on the model
   setRoutes: ->
     self = @
@@ -50,7 +65,10 @@ class ContactAutocomplete
     sel = "checked='checked'"
 
     for k in @models
-      unless k == @models[0]
+      if k == @type
+        css = ""
+        sel = "checked='checked'"
+      else
         css = "grey"
         sel = ""
 
@@ -80,17 +98,25 @@ class ContactAutocomplete
       self.setSelectedLabel()
   # changes the clases for the selected
   setSelectedLabel: ->
+    self = @
+
     $(@cont).find('label').each (i, el) ->
-      if $(el).find('input').attr("checked")
+      radio = $(el).find('input:radio')
+
+      if radio.attr("checked")
         $(el).removeClass('grey')
+        self.type = radio.val()
       else
         $(el).addClass('grey')
     @.updateAutocomplete()
   # Updates the autocomplete based on the selection
   updateAutocomplete: ->
     self = @
-    route = self["route" + $(@cont).find('input:radio:checked').val()]
+    route = self["route" + @type]
     id = "#" + @auto_id
+
+    $(@cont).find('a.add').attr('href', @.getAddUrl()).
+    data('title': "Nuevo #{@.getLocalizedLabel(@type).toLowerCase()}")
 
     $(id).val('').data('val', '')
     .autocomplete('destroy')
