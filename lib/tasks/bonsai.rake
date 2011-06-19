@@ -74,6 +74,37 @@ namespace :bonsai do
     Rake::Task["db:drop"].execute
     Rake::Task["db:migrate"].execute
   end
+ desc "Creates 500 suppliers"
+  task :create_suppliers => :environment do
+    require 'ffaker'
+    OrganisationSession.set :id => 1, :currency_id => 1
+    n = 1000
+    n.times do |i|
+      nam = Faker::Name.name.split(" ")
+      fnam, lnam = nam[0], nam[1..-1].join(" ")
+      addr = [Faker::Address.street_name, Faker::Address.city ].join(" ")
+      begin
+        Supplier.create!(:first_name => fnam, :last_name => lnam, :address => addr, :matchcode => nam.join(" "))
+      rescue
+        puts nam.join(" ")
+      end
+    end
+    puts "Created supplers"
+  end
+
+  desc "Creates 1000 clients"
+  task :create_clients => :environment do
+    require 'ffaker'
+    OrganisationSession.set :id => 1, :currency_id => 1
+    n = 1000
+    n.times do |i|
+      nam = Faker::Name.name.split(" ")
+      fnam, lnam = nam[0], nam[1..-1].join(" ")
+      addr = [Faker::Address.street_name, Faker::Address.city ].join(" ")
+      Client.create!(:first_name => fnam, :last_name => lnam, :address => addr, :matchcode => nam.join(" "))
+    end
+    puts "Created #{n} clients"
+  end
 end
 
 # example to export the file
