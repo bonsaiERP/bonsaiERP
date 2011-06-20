@@ -6,6 +6,9 @@ class AccountLedger < ActiveRecord::Base
   # callbacks
   before_validation { self.currency_id = account.try(:currency_id) }
 
+  # includes
+  include Models::AccountLedger::Money
+
   attr_accessible :account_id, :to_id, :date, :operation, :reference, :currency_id,
     :amount, :exchanege_rate, :description, :account_ledger_details_attributes
 
@@ -14,6 +17,11 @@ class AccountLedger < ActiveRecord::Base
   # relationships
   belongs_to :account
   belongs_to :to, :class_name => "Account"
+  belongs_to :transaction
+
+  belongs_to :approver, :class_name => "Contact"
+  belongs_to :nuller,   :class_name => "Contact"
+  belongs_to :creator,  :class_name => "Contact"
 
   has_many :account_ledger_details, :dependent => :destroy
   accepts_nested_attributes_for :account_ledger_details
@@ -28,7 +36,8 @@ class AccountLedger < ActiveRecord::Base
   validate  :number_of_details
   validate  :total_amount_equal
 
-  include Models::AccountLedger::Money
+  # scopes
+  scope :pendent, where(:conciliation => false)
 
   # metaprogramming options
   OPERATIONS.each do |v|
@@ -38,6 +47,7 @@ class AccountLedger < ActiveRecord::Base
       end
     CODE
   end
+
 
   private
 

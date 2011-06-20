@@ -1,47 +1,55 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
+require 'active_support/concern'
+
 module Models::AccountLedger
   module Money
 
-    def self.included(base)
-      base.send(:extend, InstanceMethods)
-      base.set_money_setting
+    extend ActiveSupport::Concern
 
-      base.class_eval do
-        def money?
-          false
-        end
-      end
+    included do
+      before_validation :create_ledger_details, :if => :new_money?
+
+      validates_presence_of :account_id, :to_id, :if => :money?
+      validates_numericality_of :amount, :if => :money?
     end
 
-    module InstanceMethods
-      def set_money_setting
-        before_validation :create_ledger_details, :if => :money?
-
-        validates_presence_of :account_id, :to_id, :if => :money?
-        validates_numericality_of :amount, :if => :money?
-      end
+    module ClassMethods
 
       def new_money(params = {})
         ac = AccountLedger.new(params)
         ac.extend Models::AccountLedger::Money::ClassMethods
+        ac.conciliation = false
         
         ac
       end
     end
 
-    module ClassMethods
-      def money?
-        true
+    module InstanceMethods
+      def new_money?
+        new_record? and money?
+      end
+
+      def money?; true; end
+
+      # Makes the conciliation to update accounts
+      def conciliate_account
+        account_ledger_details.each do |ac|
+          ac.state = "con"
+        end
+
+        self.save
       end
 
       private
 
       def create_ledger_details
         amt = amount_operation
-        account_ledger_details.build(:account_id => account_id, :amount => amt, :currency_id => account.currency_id)
-        account_ledger_details.build(:account_id => to_id, :amount => -amt, :currency_id => account.currency_id)
+        if account_id.present? and amount.present? and to_id.present?
+          account_ledger_details.build(:account_id => account_id, :amount => amt, :currency_id => account.currency_id, :state => 'uncon')
+          account_ledger_details.build(:account_id => to_id, :amount => -amt, :currency_id => account.currency_id, :state => 'uncon')
+        end
       end
 
       def amount_operation

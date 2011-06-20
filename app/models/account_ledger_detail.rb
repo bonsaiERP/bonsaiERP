@@ -4,11 +4,19 @@
 class AccountLedgerDetail < ActiveRecord::Base
   acts_as_org
 
-  STATES = ["uncon", "con"]
+  STATES = %w(uncon con)
+
+  STATES.each do |st|
+    class_eval <<-CODE, __FILE__, __LINE__ + 1
+      def #{st}?
+        state == "#{st}"
+      end
+    CODE
+  end
   
   # callbacks
   before_validation :set_values, :if => :new_record?
-  before_create :update_account_amount
+  before_save :update_account_amount, :if => :con?
 
   belongs_to :account
   belongs_to :account_ledger
@@ -38,7 +46,6 @@ class AccountLedgerDetail < ActiveRecord::Base
   # updates it's account
   def update_account_amount
     account.amount = account.amount + amount if currency_id == account.currency_id
-
     
     #puts "#{acur.errors}"
     #puts "instanciated or created #{acur.amount} : #{acur.valid?} #{acur.errors.messages}"
@@ -47,7 +54,7 @@ class AccountLedgerDetail < ActiveRecord::Base
     #puts "#{account.errors.messages}"
 
     #puts "#{AccountCurrency.where(:account_id => account.id, :currency_id => currency_id).first.amount}"
-    update_account_currency
+    update_account_currency if con?
     account.save
   end
 

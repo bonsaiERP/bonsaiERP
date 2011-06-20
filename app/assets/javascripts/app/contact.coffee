@@ -15,27 +15,29 @@ class ContactAutocomplete
     @.addAutocompleteField()
   # set Initial values
   setInitial: ->
-    @val  = $(@elem).data('val') || ''
+    @val  = $(@elem).data('val')  || ''
     @type = $(@elem).data('type') || @models[0]
   # Adds the autocomplete field
   addAutocompleteField: ->
     self = @
 
     @auto_id = (new Date).getTime()
-    $(@elem).hide()
-    .before $('<input/>').attr({ 'id': @auto_id, 'type': 'text', 'size': 35 }).val(@val)
-      .addClass('autocomplete-input')
-      .after(self.createAddLink())
-      .autocomplete(
-        'source': self["route#{self.type}"]
-        'select': (e, ui)->
-          $(self.elem).val(ui.item.id)
-          $(this).data('val', ui.item.label)
-      ).focusout ->
-        if $(this).val() == ""
-          $(self.elem).val('')
-        else
-          $(this).val( $(this).data('val') )
+
+    input = $('<input/>').attr({ 'id': @auto_id, 'type': 'text', 'size': 35 }).val(@val)
+    .addClass('autocomplete-input')
+    .after(self.createAddLink())
+    .autocomplete(
+      'source': self["route#{self.type}"]
+      'select': (e, ui)->
+        $(self.elem).val(ui.item.id)
+        $(this).data('val', ui.item.label)
+    ).focusout ->
+      if $(this).val() == ""
+        $(self.elem).val('')
+      else
+        $(this).val( $(this).data('val') )
+
+    $(@elem).hide().before input
 
      #@cont.find('.autocomplete-input').after(createAddLink())
   # creates the new link
@@ -119,6 +121,7 @@ class ContactAutocomplete
     data('title': "Nuevo #{@.getLocalizedLabel(@type).toLowerCase()}")
 
     $(id).val('').data('val', '')
+    $(@elem).val('')
     .autocomplete('destroy')
     .autocomplete(
       'source': route,

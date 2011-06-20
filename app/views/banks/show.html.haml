@@ -41,7 +41,7 @@
 .clear
 
 %h2 Transacciones
-= render "account_ledgers/list", :account => @bank.account, :ref_title => 'Ref./Nº Cheque'
+= render "account_ledgers/list", :money_store => @bank, :ref_title => 'Ref./Nº Cheque'
 
 :javascript
   $(function() {

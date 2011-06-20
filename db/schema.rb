@@ -60,18 +60,26 @@ ActiveRecord::Schema.define(:version => 20110614130942) do
     t.decimal  "amount",                        :precision => 14, :scale => 2
     t.decimal  "exchange_rate",                 :precision => 14, :scale => 4
     t.string   "description"
+    t.integer  "transaction_id"
+    t.integer  "creator_id"
+    t.integer  "approver_id"
+    t.integer  "nuller_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "account_ledgers", ["account_id"], :name => "index_account_ledgers_on_account_id"
+  add_index "account_ledgers", ["approver_id"], :name => "index_account_ledgers_on_approver_id"
   add_index "account_ledgers", ["conciliation"], :name => "index_account_ledgers_on_conciliation"
+  add_index "account_ledgers", ["creator_id"], :name => "index_account_ledgers_on_creator_id"
   add_index "account_ledgers", ["currency_id"], :name => "index_account_ledgers_on_currency_id"
   add_index "account_ledgers", ["date"], :name => "index_account_ledgers_on_date"
+  add_index "account_ledgers", ["nuller_id"], :name => "index_account_ledgers_on_nuller_id"
   add_index "account_ledgers", ["operation"], :name => "index_account_ledgers_on_operation"
   add_index "account_ledgers", ["organisation_id"], :name => "index_account_ledgers_on_organisation_id"
   add_index "account_ledgers", ["reference"], :name => "index_account_ledgers_on_reference"
   add_index "account_ledgers", ["to_id"], :name => "index_account_ledgers_on_to_id"
+  add_index "account_ledgers", ["transaction_id"], :name => "index_account_ledgers_on_transaction_id"
 
   create_table "account_types", :force => true do |t|
     t.integer  "organisation_id"

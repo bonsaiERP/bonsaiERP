@@ -12,6 +12,8 @@
     margin-right: 4px;
   }
 
+- account = money_store.account
+
 %ul.menu
   %li
     = link_to "Nuevo <span class='more'></span>".html_safe, "#", :class => 'new'
@@ -24,12 +26,11 @@
 
 .clear
 <br/><br/>
-- ac_path = account.accountable.is_a?(Bank) ? "/banks" : "/cashs"
-
+- ac_path = money_store.is_a?(Bank) ? "/banks" : "/cashs"
 
 %ul.tabs
-  %li= link_to "Todas", "#{ac_path}/#{account.id}", :class => tabs_filter('all')
-  %li= link_to "Esperando revisión #{size_or_blank(account.account_ledger_details.pendent.count)}", "#{ac_path}/#{account.id}?option=false", :class => tabs_filter('false')
+  %li= link_to "Todas", money_store, :class => tabs_filter('all')
+  %li= link_to "Esperando revisión #{size_or_blank(account.account_ledgers.pendent.count)}", "#{ac_path}/#{account.id}?option=false", :class => tabs_filter('false')
   /%li= link_to "Pendientes personal #{size_or_blank(account.account_ledger_details.pendent.count)}", "#{ac_path}/#{account.id}?option=personal", :class => tabs_filter('personal')
   /%li= link_to "Aprobadas personal", "#{ac_path}/#{account.id}?option=approved", :class => tabs_filter('approved')
   %li= link_to "Anuladas", "#{ac_path}/#{account.id}?option=nil", :class => tabs_filter('nil')
@@ -41,7 +42,7 @@
 
 = link_to "Buscar", "#search", :class => 'search'
 /"#", :style => 'display:block;float:left;margin:10px'
-- ledgers = account.account_ledger_details
+- ledgers = account.account_ledgers
 /.get_by_option(params[:option]).order("date DESC").page(@page)
 
 /= paginate account.account_ledger_details
@@ -59,13 +60,13 @@
       (A) Anulado por
     %th
   - ledgers.each do |al|
-    %tr{:class => al.income.to_s + '_in', :id => "tr#{al.id}" }
+    %tr{:class => al.in?.to_s + '_in', :id => "tr#{al.id}" }
       %td.d.check
         = link_to lo(al.date), al, :class => "b #{conciliate_css(al)}"
         %br/
         = al.reference
       %td.cur.col= ntc al.amount
-      %td.cont= al.contact if al.contact_id
+      %td.cont= al.to if al.to_id.present?
       %td.desc= link_description al
       %td.rev
         = "(R) #{al.approver}" if al.approver_id.present?

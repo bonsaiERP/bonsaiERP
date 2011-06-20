@@ -123,7 +123,7 @@ $(document).ready(->
   $.createAutocompleteField = $.fn.createAutocompleteField = createAutocompleteField
 
   # Create autocomplete for items
-  $('input.autocomplete').createAutocompleteField()
+  #$('input.autocomplete').createAutocompleteField()
 
   # Sets rails select fields with the correct datthe correct date
   setDateSelect = (el)->

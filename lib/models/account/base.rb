@@ -1,24 +1,23 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
+require 'active_support/concern'
+
 module  Models::Account
   module Base
     
-    def self.included(base)
-      base.send(:extend, InstanceMethods)
-      base.set_account_settings
-      base.send(:include, ClassMethods)
-    end
+    extend ActiveSupport::Concern
 
-    module InstanceMethods
-      def set_account_settings
-        before_save :select_account_type_and_create
-        before_save { self.account.name = self.to_s }
-        has_one :account, :as => :accountable, :autosave => true
-      end
+    included do
+      before_save :select_account_type_and_create
+      before_save { self.account.name = self.to_s }
+      has_one :account, :as => :accountable, :autosave => true
     end
 
     module ClassMethods
+    end
+
+    module InstanceMethods
 
       private
       def create_new_account

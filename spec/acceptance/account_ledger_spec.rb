@@ -43,6 +43,21 @@ feature "Test account ledger", "for in outs and transferences" do
     det1.amount.should == 100
     det1.currency_id.should == 1
     det1.exchange_rate.should == 1
+    det1.account.amount.should == 0
+
+    det2.account_id.should == @cli_ac_id
+    det2.amount.should == -100
+    det2.currency_id.should == 1
+    det2.exchange_rate.should == 1
+    det2.account.amount.should == 0
+    det2.account.cur(1).amount.should == 0
+
+    al.conciliate_account
+
+    det1.account_id.should == @bank_ac_ic
+    det1.amount.should == 100
+    det1.currency_id.should == 1
+    det1.exchange_rate.should == 1
     det1.account.amount.should == 100
     det1.account.cur(1).amount.should == 100
 
@@ -61,10 +76,15 @@ feature "Test account ledger", "for in outs and transferences" do
     al = AccountLedger.new_money(:operation => "in", :account_id => b.account.id, :to_id => @cli_ac_id, :amount => 100, :reference => "Check 1120012" )
     al.save.should == true
 
+
+
     det1 = al.account_ledger_details[0]
     det2 = al.account_ledger_details[1]
 
-    det1.account.cur(2).amount.should == 100
+    det1.account.cur(2).amount.should == 0
+    det2.account.amount.should == 0
+
+    al.conciliate_account
 
     det2.account.cur(1).amount.should == 0
     det2.account.cur(2).amount.should == -100

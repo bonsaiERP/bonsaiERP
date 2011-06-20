@@ -14,8 +14,8 @@ module AccountsHelper
   def link_description(al)
     if al.transaction_id.present?
       link_to al.description, al.transaction
-    elsif al.account_ledger_id.present?
-      link_to al.description, "/account_ledgers/#{al.account_ledger_id}"
+    elsif al.to_id.present?
+      link_to al.description, "/account_ledgers/#{al.to_id}"
     else
       al.description
     end

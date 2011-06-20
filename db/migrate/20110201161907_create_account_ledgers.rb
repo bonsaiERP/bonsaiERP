@@ -15,6 +15,11 @@ class CreateAccountLedgers < ActiveRecord::Migration
 
       t.string  :description
 
+      t.integer :transaction_id
+      t.integer :creator_id
+      t.integer :approver_id
+      t.integer :nuller_id
+
       t.timestamps
     end
 
@@ -26,6 +31,10 @@ class CreateAccountLedgers < ActiveRecord::Migration
     add_index :account_ledgers, :conciliation
     add_index :account_ledgers, :operation
     add_index :account_ledgers, :reference
+    add_index :account_ledgers, :transaction_id
+    add_index :account_ledgers, :approver_id
+    add_index :account_ledgers, :creator_id
+    add_index :account_ledgers, :nuller_id
   end
 
   def self.down

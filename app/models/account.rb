@@ -18,6 +18,7 @@ class Account < ActiveRecord::Base
   belongs_to :currency
   belongs_to :accountable, :polymorphic => true
 
+  has_many :account_ledgers
   has_many :account_ledger_details
   has_many :account_currencies, :autosave => true
 
