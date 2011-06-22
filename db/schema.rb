@@ -64,11 +64,13 @@ ActiveRecord::Schema.define(:version => 20110614130942) do
     t.integer  "creator_id"
     t.integer  "approver_id"
     t.integer  "nuller_id"
+    t.boolean  "active",                                                       :default => true
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "account_ledgers", ["account_id"], :name => "index_account_ledgers_on_account_id"
+  add_index "account_ledgers", ["active"], :name => "index_account_ledgers_on_active"
   add_index "account_ledgers", ["approver_id"], :name => "index_account_ledgers_on_approver_id"
   add_index "account_ledgers", ["conciliation"], :name => "index_account_ledgers_on_conciliation"
   add_index "account_ledgers", ["creator_id"], :name => "index_account_ledgers_on_creator_id"

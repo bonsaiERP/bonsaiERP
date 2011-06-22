@@ -20,12 +20,14 @@ class AccountLedgersController < ApplicationController
 
   # PUT /account_ledgers/:id/conciliate 
   def conciliate
+    @account_ledger = AccountLedger.org.find(params[:id])
+
     if @account_ledger.conciliate_account
       flash[:notice] = "Se ha revisado exitosamente la transacción"
     else
       flash[:error] = @account_ledger.errors[:base].join(", ")
     end
-    redirect_to @account_ledger  
+    redirect_to @account_ledger
   end
 
   # POST /account_ledgers
@@ -34,7 +36,7 @@ class AccountLedgersController < ApplicationController
     @account_ledger = AccountLedger.new_money(params[:account_ledger])
     if @account_ledger.save
       flash[:notice] = "Se ha creado exitosamente la transacción"
-      redirect_to @account_ledger
+      redirect_to @account_ledger.account.accountable
     else
       render :action => 'new'
     end
@@ -65,6 +67,10 @@ class AccountLedgersController < ApplicationController
     else
       render :action => 'new_transference'
     end
+  end
+
+  def show
+    @account_ledger = AccountLedger.org.find(params[:id])
   end
 
   # Account to review

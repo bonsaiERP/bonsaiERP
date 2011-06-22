@@ -12,8 +12,6 @@
     margin-right: 4px;
   }
 
-- account = money_store.account
-
 %ul.menu
   %li
     = link_to "Nuevo <span class='more'></span>".html_safe, "#", :class => 'new'
@@ -26,15 +24,11 @@
 
 .clear
 <br/><br/>
-- ac_path = money_store.is_a?(Bank) ? "/banks" : "/cashs"
-
 %ul.tabs
-  %li= link_to "Todas", money_store, :class => tabs_filter('all')
-  %li= link_to "Esperando revisión #{size_or_blank(account.account_ledgers.pendent.count)}", "#{ac_path}/#{account.id}?option=false", :class => tabs_filter('false')
-  /%li= link_to "Pendientes personal #{size_or_blank(account.account_ledger_details.pendent.count)}", "#{ac_path}/#{account.id}?option=personal", :class => tabs_filter('personal')
-  /%li= link_to "Aprobadas personal", "#{ac_path}/#{account.id}?option=approved", :class => tabs_filter('approved')
-  %li= link_to "Anuladas", "#{ac_path}/#{account.id}?option=nil", :class => tabs_filter('nil')
-  %li= link_to "Revisadas", "#{ac_path}/#{account.id}?option=true", :class => tabs_filter('true')
+  %li= link_to "Todas", account_path(account, :option => 'all'), :class => tabs_filter('all')
+  %li= link_to "Esperando revisión #{size_or_blank(account.account_ledgers.pendent.count)}", account_path(account, :option => 'uncon'), :class => tabs_filter('uncon')
+  %li= link_to "Anuladas", account_path(account, :option => 'nulled'), :class => tabs_filter('nulled')
+  %li= link_to "Revisadas", account_path(account, :option => 'con'), :class => tabs_filter('con')
 
 
 .clear
@@ -42,7 +36,6 @@
 
 = link_to "Buscar", "#search", :class => 'search'
 /"#", :style => 'display:block;float:left;margin:10px'
-- ledgers = account.account_ledgers
 /.get_by_option(params[:option]).order("date DESC").page(@page)
 
 /= paginate account.account_ledger_details
@@ -72,6 +65,6 @@
         = "(R) #{al.approver}" if al.approver_id.present?
         = "<br/><span class='dark_grey'>(A) #{al.nuller}</span>".html_safe if al.nuller_id.present?
       %td.cur
-        - if not(al.conciliation?) and al.active?
+        - if not(al.conciliation?)
           = link_to "borrar", al, :class => 'delete fl', 'data-remote' => true, :title => 'Borrar', 'data-confirm' => account_ledger_destroy_confirm_dialog(al)
 

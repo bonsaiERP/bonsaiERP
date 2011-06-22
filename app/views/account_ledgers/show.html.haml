@@ -9,34 +9,25 @@
 %h1 Transacción del #{lo @account_ledger.date}
 
 .moneybox.fl
-  = in_out @account_ledger.income?, :class => 'b'
+  = in_out @account_ledger.in?, :class => 'b'
   %h3= with_currency @account_ledger
 .clear
 <br/>
 ._15.fl.i= lo @account_ledger.date
 ._30.fl <span class="dark_grey">Ref/Nº de cheque:</span> #{@account_ledger.reference}
 ._20.fl=link_description @account_ledger
-._20.fl= link_to @account_ledger.contact, @account_ledger.contact, :title => 'Contacto' if @account_ledger.contact_id.present?
+._20.fl= link_to @account_ledger.to, @account_ledger.to, :title => 'Contacto' if @account_ledger.to_id.present?
 <br/><br/>
 .clear
 - unless @account_ledger.conciliation?
   .conciliation
     = simple_form_for @account_ledger, :url => conciliate_account_ledger_path(@account_ledger) do |f|
       = f.submit "Revisar transacción"
--else
-  - if @account_ledger.personal?
-    .personal
-      = simple_form_for @account_ledger, :url => personal_account_ledger_path(@account_ledger), :html => {:id => 'comment'} do |f|
-        = f.input :comment, :as => :text, :label => 'Comentario', :input_html => {:rows => 5}
-        .clear
-        = f.submit "Aprobar cuenta de personal"
 
+%p Creado por: <span class="b">#{@account_ledger.creator}</span>
+
+- if @account_ledger.conciliation?
   %p Revisado por: <span class="b">#{@account_ledger.approver}</span>
-- if @account_ledger.is_personal?
-  %p 
-    Aprobado personal por: <span class="b">#{@account_ledger.personal_approver}</span>
-    .dark= @account_ledger.personal_comment.try(:comment)
-
 - unless @account_ledger.active?
   %p Anulado por: <span class="b">#{@account_ledger.nuller}</span>
 
@@ -45,7 +36,7 @@
   $(function() {
     $('.conciliation form').submit(function() {
       var conf_text = "Revisar una transacción es una operación irreversible, esta seguro?";
-      if (#{@account_ledger.account_ledger_id.present?}) {
+      if (#{@account_ledger.to_id.present?}) {
         conf_text = "Revisar esta cuenta tambien revisara la cuenta relacionada con la transferencia. Desea revisar?";
       }
 

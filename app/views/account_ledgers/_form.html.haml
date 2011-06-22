@@ -7,7 +7,7 @@
 
   = f.input :amount, :label => "Cantidad en #{f.object.account.currency_symbol}", :input_html => {:size => 12, :type => 'decimal'}
   .clear
-  = f.input :to_id, :label => false, :as => :autocomplete
+  = f.input :to_id, :label => false, :as => :contact
 
   = f.input :reference, :as => :text, :label => 'Referencia', :input_html => {:rows => 2, :cols => 35}, :hint => 'Nº de cheque, razón, factura, etc.'
   .clear

@@ -5,14 +5,14 @@ module HashExt
   # Transforns for date parameters
   def transform_date_parameters!(*keys)
     keys.each do |key|
-      self[key] = ""
-      self[key] = get_date_val(key)
-      unless self[key].blank?
+      t = get_date_val(key)
+      unless t.blank?
         time = get_time_val(key)
-        self[key] << " #{time}" unless time.blank?
+        t << " #{time}" unless time.blank?
       else
-        self[key] << get_time_val(key)
+        t << get_time_val(key)
       end
+      self[key] = t unless t.blank?
     end
     self
   end

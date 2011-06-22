@@ -22,7 +22,8 @@ class AccountLedgerDetail < ActiveRecord::Base
   belongs_to :account_ledger
   belongs_to :related, :class_name => "AccountLedgerDetail"
 
-  validates_presence_of :amount, :account_id, :state
+  validates_presence_of :account_id, :state
+  validates_numericality_of :amount
 
   # scopes
   scope :pendent, org.where(:state => "uncon")
@@ -37,36 +38,29 @@ class AccountLedgerDetail < ActiveRecord::Base
 
   private
 
-  def set_values
-    self.exchange_rate ||= 1
-    self.state ||= "con"
-    self.currency_id ||= account.currency_id
-  end
-
-  # updates it's account
-  def update_account_amount
-    account.amount = account.amount + amount if currency_id == account.currency_id
-    
-    #puts "#{acur.errors}"
-    #puts "instanciated or created #{acur.amount} : #{acur.valid?} #{acur.errors.messages}"
-
-    #puts "#{account.save}"
-    #puts "#{account.errors.messages}"
-
-    #puts "#{AccountCurrency.where(:account_id => account.id, :currency_id => currency_id).first.amount}"
-    update_account_currency if con?
-    account.save
-  end
-
-  # 
-  def update_account_currency
-    acur = account.account_currencies.select {|ac| ac.currency_id == currency_id }
-    if acur.any?
-      acur = acur.first
-      acur.amount = acur.amount.to_f + amount
-    else
-      acur = account.account_currencies.build(:currency_id => currency_id, :amount => amount)
+    def set_values
+      self.exchange_rate ||= 1
+      self.state ||= "con"
+      self.currency_id ||= account.currency_id
     end
-  end
+
+    # updates it's account
+    def update_account_amount
+      account.amount = account.amount + amount if currency_id == account.currency_id
+      
+      update_account_currency
+      account.save
+    end
+
+    # 
+    def update_account_currency
+      acur = account.account_currencies.select {|ac| ac.currency_id == currency_id }
+      if acur.any?
+        acur = acur.first
+        acur.amount = acur.amount.to_f + amount
+      else
+        acur = account.account_currencies.build(:currency_id => currency_id, :amount => amount)
+      end
+    end
 
 end

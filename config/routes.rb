@@ -12,6 +12,8 @@ Bonsaierp::Application.routes.draw do
     post :create_sale, :on => :collection
   end
 
+  resources :accounts
+
   resources :account_ledgers do
     member do
       put  :conciliate

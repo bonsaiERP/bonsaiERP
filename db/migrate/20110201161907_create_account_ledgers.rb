@@ -19,6 +19,7 @@ class CreateAccountLedgers < ActiveRecord::Migration
       t.integer :creator_id
       t.integer :approver_id
       t.integer :nuller_id
+      t.boolean :active, :default => true
 
       t.timestamps
     end
@@ -35,6 +36,7 @@ class CreateAccountLedgers < ActiveRecord::Migration
     add_index :account_ledgers, :approver_id
     add_index :account_ledgers, :creator_id
     add_index :account_ledgers, :nuller_id
+    add_index :account_ledgers, :active
   end
 
   def self.down

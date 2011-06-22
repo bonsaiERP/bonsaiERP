@@ -12,20 +12,20 @@ module AccountsHelper
 
   # Creates a link to the transaction if exists
   def link_description(al)
-    if al.transaction_id.present?
-      link_to al.description, al.transaction
-    elsif al.to_id.present?
-      link_to al.description, "/account_ledgers/#{al.to_id}"
-    else
-      al.description
+    unless al.description.blank?
+      if al.transaction_id.present?
+        link_to al.description, al.transaction
+      else
+        al.description
+      end
     end
   end
 
   # links to the correct account for account_ledger
   def link_account(al)
-    case al.account_type
-    when"Bank" then link_to "Cuentas bancarias", al.account
-    when"CashRegister" then link_to "Cuentas caja", al.account
+    case al.account.accountable.class.to_s
+    when"Bank" then link_to "Cuentas bancarias", "/banks"
+    when"Cash" then link_to "Cuentas caja", "/cashes"
     end
   end
 
@@ -82,7 +82,7 @@ module AccountsHelper
 
   # Confirmation for acccount_ledger destroy
   def account_ledger_destroy_confirm_dialog(klass)
-    if klass.account_ledger_id.present?
+    if klass.trans?
       "Anular esta transacción tambien anulara la transacción relacionada con la transferencia, eta seguro de anularla?"
     else
       "Esta seguro de anular la transacción?"

@@ -1,0 +1,59 @@
+- bank = @account.accountable
+:css
+  #bank_info{
+    display: none;
+  }
+
+-content_for :links do
+  %ul.breadcrumps
+    %li #{link_to "Cuentas bancarias", banks_path}<span>&gt;</span>
+
+  .links
+    = link_to 'Nueva', new_bank_path, :class => 'add', :title => "Nueva cuenta bancaria"
+    = link_to 'Editar', edit_bank_path(bank), :class => 'edit', :title => "Editar cuenta bancaria"
+
+%h1.mb5 <span class="dark_grey n">Banco:</span> #{bank.name}
+%h3.mt5.dark_grey= "#{bank.number} (en #{bank.currency.name.pluralize})"
+%hr/
+
+.moneybox.fl
+  %label Saldo en cuenta
+  %h3= with_currency @account, :amount
+
+/- if @bank.pendent_account_ledgers.any?
+/  .moneybox.fl
+/    %label Saldo a conciliar
+/    %h3= with_currency @bank, :total_pendent
+
+._40.fr
+  <a class="more_info" href="#bank_info">Ver información</a>
+  #bank_info
+    .input
+      %label Dirección
+      %span= nl2br(bank.address)
+    .input
+      .input._100
+        %label Teléfono
+        %span= bank.phone
+      .input._100
+        %label Sitio web
+        %span= bank.website
+  .clear
+.clear
+
+%h2 Transacciones
+= render "account_ledgers/money", :account => @account, :ledgers => @ledgers, :path => "/banks", :ref_title => 'Ref./Nº Cheque'
+
+:javascript
+  $(function() {
+    $('#show_bank_info').click(function() {
+      if($(this).html() == "Ver información") {
+        $('#bank_info').show("slow")
+        $(this).html("Ocultar información");
+      }else{
+        $('#bank_info').hide("slow")
+        $(this).html("Ver información");
+      }
+    });
+  })
+

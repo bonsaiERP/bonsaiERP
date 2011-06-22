@@ -47,6 +47,10 @@ class Account < ActiveRecord::Base
     name
   end
 
+  def amount_to_conciliate
+    amount + account_ledgers.pendent.sum(:amount)
+  end
+
   private
     def set_amount
       self.amount ||= 0.0

@@ -29,4 +29,11 @@ describe Hash do
     h[:date].should == "2011-12-10"
     h[:fec].should == "2011-12-10 4:5:6"
   end
+
+  it 'should not change if there is no data' do
+    h = {:ini => 1}
+    h.transform_time_and_symbolize!("date")
+
+    h.should == {:ini => 1}
+  end
 end
