@@ -1,0 +1,1 @@
+Hash.send(:include, HashExt)

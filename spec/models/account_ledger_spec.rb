@@ -4,7 +4,7 @@ describe AccountLedger do
   before(:each) do
     OrganisationSession.set(:id => 1, :name => 'ecuanime', :currency_id => 1)
     @params = {
-      :date => Date.today, :operation => "out", :reference => "Income", :amount => 100,
+      :date => Date.today, :operation => "out", :reference => "Income", :amount => 100, :currency_id => 1,
       :account_ledger_details_attributes => [
         {:account_id => 1, :amount => 100 },
         {:account_id => 2, :amount => -100 },
@@ -16,6 +16,8 @@ describe AccountLedger do
     Account.create!(:name => "Bank 1", :account_type_id => 1, :currency_id => 1,
                    :accountable_id => 1, :accountable_type => "Bank"
                    ) {|a| a.id = 2; a.amount = 1000}
+
+    c = Currency.create!(:name => 'Boliviano', :symbol => 'Bs.') {|c| c.id = 1}
   end
 
   it 'should create with at least two details' do
@@ -33,6 +35,12 @@ describe AccountLedger do
     a.errors[:base].to_s.should =~ /error en el balance/
   end
 
+  it 'should assing currency_id' do
+    a = AccountLedger.new(:currency_id => 1)
+    a.valid?
+    a.currency_id.should == 1
+  end
+
   it 'should be valid if the accounts are balanced' do
     a = AccountLedger.create!(@params)
 
@@ -45,6 +53,11 @@ describe AccountLedger do
     
     al.valid?.should == false
     al.errors[:operation].should_not == blank?
+  end
+
+  it 'should return false for money?' do
+    al = AccountLedger.new(@params)
+    al.money?.should == false
   end
 
   it 'should update the account value' do
@@ -92,14 +105,14 @@ describe AccountLedger do
 
   it 'should work with other currencies' do
     @params = {
-      :date => Date.today, :operation => "in", :reference => "Income", :amount => 50,
+      :date => Date.today, :operation => "in", :reference => "Income", :amount => 50, :currency_id => 1,
       :account_ledger_details_attributes => [
         {:account_id => 2, :amount => 50, :description => "Income with exchange rate 0. from account 1"},
         {:account_id => 1, :amount => -100, :exchange_rate => 0.5,},
       ]
     }
-    al = AccountLedger.new(@params)
 
+    al = AccountLedger.new(@params)
     al.save.should == true
     al.account_ledger_details[0].description.should == "Income with exchange rate 0. from account 1"
 
@@ -119,12 +132,14 @@ describe AccountLedger do
   end
 
   it 'should store amount for different currencies' do
+    Currency.create!(:name => 'Dolar', :symbol => '$us' )
+
     Account.create!(:name => "Bank 2", :account_type_id => 1, :currency_id => 2,
                    :accountable_id => 1, :accountable_type => "Bank"
                    ) {|a| a.id = 3; a.amount = 1000}
 
     AccountLedger.create!(
-      :date => Date.today, :operation => "out", :reference => "Outcome", :amount => 50,
+      :date => Date.today, :operation => "out", :reference => "Outcome", :amount => 50, :currency_id => 2,
       :account_ledger_details_attributes => [
         {:account_id => 1, :amount => 50, :currency_id => 2},
         {:account_id => 3, :amount => -100, :exchange_rate => 0.5},
@@ -158,4 +173,8 @@ describe AccountLedger do
     al.errors[:to_id].any?.should == true
   end
 
+  it 'should now allow other attributes for new_money' do
+    expect {AccountLedger.new_money(:operation => "in", :account_id => 2, :to_id => 5, :amount => 100, :reference => "Yeah", :currency_id => 1)}.to raise_error ArgumentError
+
+  end
 end

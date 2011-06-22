@@ -4,13 +4,13 @@
 class AccountLedger < ActiveRecord::Base
 
   # callbacks
-  before_validation { self.currency_id = account.try(:currency_id) }
+  before_validation { self.currency_id = account.try(:currency_id) unless currency_id.present? }
 
   # includes
   include Models::AccountLedger::Money
 
   attr_accessible :account_id, :to_id, :date, :operation, :reference, :currency_id,
-    :amount, :exchanege_rate, :description, :account_ledger_details_attributes
+    :amount, :exchange_rate, :description, :account_ledger_details_attributes
 
   OPERATIONS = %w(in out trans)
 
@@ -51,17 +51,17 @@ class AccountLedger < ActiveRecord::Base
 
   private
 
-  # The sum should be equal
-  def total_amount_equal
-    tot = account_ledger_details.inject(0) {|sum, det| sum += det.amount_currency }
-    unless tot == 0
-      self.errors[:base] << "Existe un error en el balance"
+    # The sum should be equal
+    def total_amount_equal
+      tot = account_ledger_details.inject(0) {|sum, det| sum += det.amount_currency }
+      unless tot == 0
+        self.errors[:base] << "Existe un error en el balance"
+      end
     end
-  end
 
-  # There must be at least 2 account details
-  def number_of_details
-    self.errors[:base] << "Debe seleccionar al menos 2 cuentas" if account_ledger_details.size < 1
-  end
+    # There must be at least 2 account details
+    def number_of_details
+      self.errors[:base] << "Debe seleccionar al menos 2 cuentas" if account_ledger_details.size < 1
+    end
 
 end

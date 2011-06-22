@@ -19,7 +19,8 @@ module Models::AccountLedger
 
       def new_money(params = {})
         ac = AccountLedger.new(params)
-        ac.extend Models::AccountLedger::Money::ClassMethods
+        params.symbolize_keys.assert_valid_keys( :operation, :account_id, :to_id, :amount, :reference )
+        def ac.money?; true; end
         ac.conciliation = false
         
         ac
@@ -31,7 +32,7 @@ module Models::AccountLedger
         new_record? and money?
       end
 
-      def money?; true; end
+      def money?; false; end
 
       # Makes the conciliation to update accounts
       def conciliate_account

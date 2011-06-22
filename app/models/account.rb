@@ -47,15 +47,15 @@ class Account < ActiveRecord::Base
     name
   end
 
-private
-  def set_amount
-    self.amount ||= 0.0
-    self.initial_amount ||= self.amount
-  end
+  private
+    def set_amount
+      self.amount ||= 0.0
+      self.initial_amount ||= self.amount
+    end
 
-  def create_account_currency
-    account_currencies.build(
-      :currency_id => currency_id, :amount => amount
-    )
-  end
+    def create_account_currency
+      account_currencies.build(
+        :currency_id => currency_id, :amount => amount
+      )
+    end
 end

@@ -28,17 +28,6 @@ class AccountLedgersController < ApplicationController
     redirect_to @account_ledger  
   end
 
-  # Approves the account
-  # PUT /account_ledgers/:id/personal
-  def personal
-    if @account_ledger.approve_personal(params[:account_ledger][:comment])
-      flash[:notice] = "Se ha aprobado la transacción de personal"
-    else
-      flash[:error] = @account_ledger.errors[:base].join(", ")
-    end
-    redirect_to @account_ledger
-  end
-
   # POST /account_ledgers
   def create
     @account = Account.org.find(params[:account_ledger][:account_id])
@@ -52,18 +41,10 @@ class AccountLedgersController < ApplicationController
   end
 
   # DELETE /account_ledgers/:id
-  def destroy
-    @account_ledger.destroy_account_ledger
-    redirect_ajax(@account_ledger)
-    #unless request.xhr?
-    #  if @account_ledger.destroyed?
-    #    flash[:notice] = "Se ha anulado correctamente la transacción"
-    #  else
-    #    flash[:error] = "No es posible anular la transacción"
-    #  end
-    #  redirect_to @account_ledger
-    #end
-  end
+  #def destroy
+  #  @account_ledger.destroy_account_ledger
+  #  redirect_ajax(@account_ledger)
+  #end
 
   # GET /account_ledgers/:id/new_transference
   def new_transference
