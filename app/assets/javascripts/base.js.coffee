@@ -168,7 +168,7 @@ $(document).ready(->
         yearRange: '1900:',
         showOn: 'both',
         buttonImageOnly: true,
-        buttonImage: '/stylesheets/images/calendar.gif'
+        buttonImage: '/assets/images/calendar.gif'
         #onSelect: (dateText, inst)->
           #  $.setDateSelect(inst.input)
       )

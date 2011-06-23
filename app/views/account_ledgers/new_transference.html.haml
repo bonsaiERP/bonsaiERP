@@ -49,16 +49,20 @@
     var currencies = #{Currency.to_hash.to_json};
     window.currencies = currencies;
 
-    $('#account_ledger_to_account').live("change keyup", function() {
-      var currency_id = accounts[$(this).val()].currency_id;
-      var label, cur = '';
+    $('#account_ledger_to_id').live("change keyup focusout", function() {
+      try{
+        var currency_id = accounts[$(this).val()].currency_id;
+        var label, cur = '';
 
-      if(currency_id != "" && currency_id != "#{@account_ledger.account.currency_id}") {
-        cur = currencies[currency_id];
-        $('#exchange_rate_cur').html(cur.symbol) );
-        $('#al_exchange_rate').show().mark();
-      }else{
-        cur = currencies["#{@account_ledger.account.currency_id}"];
+        if(currency_id != "" && currency_id != "#{@account_ledger.account.currency_id}") {
+          cur = currencies[currency_id];
+          $('#exchange_rate_cur').html(cur.symbol);
+          $('#al_exchange_rate').show().mark();
+        }else{
+          cur = currencies["#{@account_ledger.account.currency_id}"];
+          $('#al_exchange_rate').hide();
+        }
+      }catch(e) {
         $('#al_exchange_rate').hide();
       }
     });
