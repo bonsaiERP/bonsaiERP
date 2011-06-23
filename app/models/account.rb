@@ -31,6 +31,9 @@ class Account < ActiveRecord::Base
 
   delegate :symbol, :name, :to => :currency, :prefix => true
 
+  # scopes
+  scope :money, where(:accountable_type => "MoneyStore")
+
   # returns the class for a currency
   def cur(cur_id = nil)
     cur_id ||= currency_id
@@ -49,6 +52,12 @@ class Account < ActiveRecord::Base
 
   def amount_to_conciliate
     amount + account_ledgers.pendent.sum(:amount)
+  end
+
+  # Creates a Hash with the id as the base
+  def self.to_hash(*args)
+    l = lambda {|v| args.map {|val| [val, v.send(val)] } }
+    Hash[ Account.org.money.map {|v| [v.id, Hash[l.call(v)] ]  } ]
   end
 
   private

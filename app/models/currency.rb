@@ -15,9 +15,9 @@ class Currency < ActiveRecord::Base
     %Q(#{name.pluralize} #{symbol})
   end
 
-  def self.json
-    hash = Hash.new {|h,v| h[v.id] = {:name => v.name, :symbol => v.symbol, :code => v.code } }
-    Currency.all.each {|c| hash[c] }
-    hash
+  def self.to_hash(*args)
+    args = [:name, :symbol, :code] if args.empty?
+    l = lambda {|v| args.map {|val| [val, v.send(val)] } }
+    Hash[ Currency.all.map {|v| [v.id, Hash[l.call(v)] ]  } ]
   end
 end

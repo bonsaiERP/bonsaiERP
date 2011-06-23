@@ -1,11 +1,11 @@
 -content_for :links do
   %ul.breadcrumps
-    %li #{link_account @account_ledger}<span>&gt;</span>
-    %li #{link_to @account_ledger.account, @account_ledger.account}<span>&gt;</span>
+    %li #{link_list @account_ledger}<span>&gt;</span>
+    %li #{link_parent @account_ledger}<span>&gt;</span>
 
 %h1 Nueva transferencia
 
-= simple_form_for @account_ledger, :url => transference_account_ledger_path(@account.id)  do |f|
+= simple_form_for @account_ledger, :url => transference_account_ledgers_path do |f|
 
   = bonsai_form_error(f)
   
@@ -13,13 +13,11 @@
   
   .input
     %label De cuenta
-    = @account
-  = f.input :to_account, :collection => Account.org.where(["id !=?", @account_ledger.account_id]), :label => 'A cuenta'
+    = @account_ledger.account
+  = f.input :to_id, :collection => Account.org.money.where("id NOT IN(?)", @account_ledger.account_id), :label => 'A cuenta'
   .clear
 
-  = f.input :contact_id, :collection => Staff.org, :label => 'Personal', :input_html => {'data-new_url' => '/staffs/new', 'data-trigger' => 'new_contact', 'data-title' => 'Nuevo trabajador(a)'}
-
-  = f.input :amount, :label => "Cantidad #{@account_ledger.account.currency_plural}", :input_html => {:size => 12, :type => 'decimal', :class => 'r'}, :wrapper_html => {:class => '_30'}
+  = f.input :amount, :label => "Cantidad #{@account_ledger.account.currency_symbol}", :input_html => {:size => 12, :type => 'decimal', :class => 'r'}, :wrapper_html => {:class => '_30'}
 
   = f.input :date, :label => 'Fecha', :wrapper_html => {:class => '_20'}
 
@@ -27,8 +25,8 @@
 
   #al_exchange_rate._50.fl{:style => "display:#{disp}"}
     = f.label :to_exchange_rate, "Tipo de cambio &nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript:' id='cur_rates' class='n'>tipos de cambio</a>".html_safe
-    1 #{@account.currency_name} = 
-    = f.text_field :to_exchange_rate, :size => 6, :class => 'r'
+    1 #{@account_ledger.account.currency_symbol} = 
+    = f.text_field :exchange_rate, :size => 6, :class => 'r'
 
     - cur = @to_account.present? ? @account_to.currency_name.pluralize : ""
     %span#exchange_rate_cur= cur
@@ -47,8 +45,8 @@
 
 :javascript
   $(function() {
-    var accounts = #{Account.json.to_json};
-    var currencies = #{Currency.json.to_json};
+    var accounts = #{Account.to_hash(:name, :currency_id).to_json};
+    var currencies = #{Currency.to_hash.to_json};
     window.currencies = currencies;
 
     $('#account_ledger_to_account').live("change keyup", function() {
@@ -57,7 +55,7 @@
 
       if(currency_id != "" && currency_id != "#{@account_ledger.account.currency_id}") {
         cur = currencies[currency_id];
-        $('#exchange_rate_cur').html(cur.name.pluralize() );
+        $('#exchange_rate_cur').html(cur.symbol) );
         $('#al_exchange_rate').show().mark();
       }else{
         cur = currencies["#{@account_ledger.account.currency_id}"];

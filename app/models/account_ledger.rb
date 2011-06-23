@@ -86,6 +86,19 @@ class AccountLedger < ActiveRecord::Base
     self.save
   end
 
+
+  def show_exchange_rate?
+    if to_id.present?
+      if errors[:to_account].blank? and account.currency_id != to.currency_id
+        true
+      else
+        false
+      end
+    else
+      false
+    end
+  end
+
   # Finds using the filter
   def self.filtered(filter)
     filter ||= 'all'
