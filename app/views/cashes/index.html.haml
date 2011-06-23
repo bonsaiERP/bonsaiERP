@@ -1,37 +1,37 @@
 - content_for :links do
-  .links= link_to "Nueva caja", new_cash_register_path, :class => 'new'
+  .links= link_to "Nueva caja", new_cash_path, :class => 'new'
 
 :css
-  #cash_registers{ padding: 0px; margin: 0px; }
-  #cash_registers li{ 
+  #cashs{ padding: 0px; margin: 0px; }
+  #cashs li{ 
     list-style: none; 
     padding: 4px;
     margin-bottom: 10px;
     border-top: 1px solid #BFBFEF;
     border-bottom: 1px solid #CFEFEF;
   }
-  #cash_registers li h3{ margin: 2px 4px; }
-  #cash_registers li p{padding: 2px 5px; }
+  #cashs li h3{ margin: 2px 4px; }
+  #cashs li p{padding: 2px 5px; }
 
 %h1 Cuentas caja
 
-%ul#cash_registers
-  - @cash_registers.each do |cash_register|
+%ul#cashs
+  - @cashes.each do |cash|
     %li
       ._30.fl
-        %h3= link_to cash_register.name, cash_register
-        %h4.mt5.dark= "#{cash_register.number} (en #{cash_register.currency.name.pluralize})"
+        %h3= link_to cash.name, cash.account
+        %h4.mt5.dark= "#{cash.number} (en #{cash.currency.name.pluralize})"
       ._70.fl
         .moneybox.fl
           %label Total en cuenta
-          %h3= with_currency cash_register, :total_amount
+          %h3= with_currency cash.account, :amount
 
-        - if cash_register.account_ledgers.pendent.any?
+        - if cash.account.account_ledgers.pendent?
           .moneybox.fl
             %label Saldo a conciliar
-            %h3= with_currency cash_register, :total_pendent
+            %h3= "#{cash.account.currency_symbol} #{ntc cash.account.amount_to_conciliate}"
           
-          %p.b.fl= link_to pluralize_conciliation(cash_register), "/cash_registers/#{cash_register.id}?option=false"
+          %p.b.fl= link_to pluralize_conciliation(cash), "/cashs/#{cash.id}?option=false"
 
       .clear
 

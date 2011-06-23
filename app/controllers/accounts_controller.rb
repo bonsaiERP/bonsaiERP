@@ -15,7 +15,8 @@ class AccountsController < ApplicationController
     def get_partial
       case @account.accountable.class.to_s
       when "Client", "Supplier", "Staff" then "contact"
-      when "Cash", "Bank" then "bank"
+      when "Cash" then "cash"
+      when "Bank" then "bank"
       end
     end
 end

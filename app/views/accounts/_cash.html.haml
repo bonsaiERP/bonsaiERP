@@ -1,0 +1,60 @@
+- cash = @account.accountable
+:css
+  #cash_info{
+    display: none;
+  }
+
+-content_for :links do
+  %ul.breadcrumps
+    %li #{link_to "Cuentas bancarias", cashes_path}<span>&gt;</span>
+
+  .links
+    = link_to 'Nueva', new_cash_path, :class => 'add', :title => "Nueva cuenta bancaria"
+    = link_to 'Editar', edit_cash_path(cash), :class => 'edit', :title => "Editar cuenta bancaria"
+
+%h1.mb5 <span class="dark_grey n">Caja:</span> #{cash.name}
+%h3.mt5.dark_grey= "#{cash.number} (en #{cash.currency.name.pluralize})"
+%hr/
+
+.moneybox.fl
+  %label Saldo en cuenta
+  %h3= with_currency @account, :amount
+
+- if @account.account_ledgers.pendent?
+  .moneybox.fl
+    %label Saldo a conciliar
+    %h3= "#{@account.currency_symbol} #{ntc @account.amount_to_conciliate}"
+
+._40.fr
+  <a class="more_info" href="#cash_info">Ver información</a>
+  #cash_info
+    .input
+      %label Dirección
+      %span= nl2br(cash.address)
+    .input
+      .input._100
+        %label Teléfono
+        %span= cash.phone
+      .input._100
+        %label Sitio web
+        %span= cash.website
+  .clear
+.clear
+
+%h2 Transacciones
+= render "account_ledgers/money", :account => @account, :ledgers => @ledgers, :path => "/cashs", :ref_title => 'Ref./Nº Cheque'
+
+:javascript
+  $(function() {
+    $('#show_cash_info').click(function() {
+      if($(this).html() == "Ver información") {
+        $('#cash_info').show("slow")
+        $(this).html("Ocultar información");
+      }else{
+        $('#cash_info').hide("slow")
+        $(this).html("Ver información");
+      }
+    });
+  })
+
+

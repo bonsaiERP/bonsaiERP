@@ -7,7 +7,7 @@ class CashesController < ApplicationController
   # GET /cashs
   # GET /cashs.xml
   def index
-    @cashs = Cash.org.all
+    @cashes = Cash.org.all
 
     respond_to do |format|
       format.html # index.html.erb

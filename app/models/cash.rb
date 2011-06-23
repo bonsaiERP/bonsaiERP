@@ -3,8 +3,8 @@
 # email: boriscyber@gmail.com
 class Cash < MoneyStore
 
-  validates_presence_of :currency_id, :name
-  validates :name, :uniqueness => {:scope => :organisation_id}
+  validates :name, :uniqueness => {:scope => :organisation_id},
+    :length => {:minimum => 3}
 
   def to_s
     "#{name} (#{currency_symbol})"
