@@ -6,6 +6,7 @@ class AccountLedger < ActiveRecord::Base
   acts_as_org
   # callbacks
   before_validation { self.currency_id = account.try(:currency_id) unless currency_id.present? }
+  before_destroy { false }
 
   # includes
   include Models::AccountLedger::Money
@@ -30,7 +31,7 @@ class AccountLedger < ActiveRecord::Base
   belongs_to :creator,  :class_name => "User"
 
   has_many :account_ledger_details, :dependent => :destroy
-  accepts_nested_attributes_for :account_ledger_details
+  accepts_nested_attributes_for :account_ledger_details, :allow_destroy => true
 
   # Validations
   validates_inclusion_of :operation, :in => OPERATIONS
@@ -48,7 +49,7 @@ class AccountLedger < ActiveRecord::Base
     :amount, :exchange_rate, :description, :account_ledger_details_attributes
 
   # scopes
-  scope :pendent, where(:conciliation => false)
+  scope :pendent, where(:conciliation => false, :active => true)
   scope :con,     where(:conciliation => true)
   scope :nulled,  where(:active => false)
 
@@ -71,6 +72,14 @@ class AccountLedger < ActiveRecord::Base
   # Determines if the ledger can be nulled
   def can_destroy?
     not conciliation?
+  end
+
+  def null_account
+    return false if conciliation?
+
+    self.nuller_id = UserSession.user_id
+    self.active    = false
+    self.save
   end
 
   # Finds using the filter

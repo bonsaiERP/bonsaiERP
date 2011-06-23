@@ -43,10 +43,15 @@ class AccountLedgersController < ApplicationController
   end
 
   # DELETE /account_ledgers/:id
-  #def destroy
-  #  @account_ledger.destroy_account_ledger
-  #  redirect_ajax(@account_ledger)
-  #end
+  def destroy
+    if @account_ledger.null_account
+      flash[:notice] = "Se ha anulado la transacción"
+    else
+      flash[:error] = "No se pudo anular la transacción"
+    end
+
+    redirect_to @account_ledger.account
+  end
 
   # GET /account_ledgers/:id/new_transference
   def new_transference

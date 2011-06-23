@@ -32,7 +32,7 @@
             %label Saldo a conciliar
             %h3= "#{bank.account.currency_symbol} #{ntc bank.account.amount_to_conciliate}"
           
-          %p.b.fl= link_to "#{bank.account.account_ledgers.pendent.count} pendiente de revisión", "/accounts/#{bank.id}?option=false"
+          %p.b.fl= link_to "#{bank.account.account_ledgers.pendent.count} pendiente de revisión", account_path(bank.account, :option => 'uncon')
 
       .clear
 

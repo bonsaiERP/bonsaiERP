@@ -1,0 +1,28 @@
+@mixin flash{
+  padding:10px;
+  border:2px solid @dark;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  font-size: 120%;
+  position: relative;
+  margin: 8px 0px;
+}
+#flashNotice{
+  @include flash;
+  border-color: @dark_green;
+  color:@dark_green;
+}
+
+#flashError{
+  @include flash;
+  border-color: @red;
+  color:@red;
+}
+@include flashWarning, @include flashAlert{
+  @include flash;
+  color: @dark;
+  border-color:@dark_yellow;
+  background-color:@light_yellow;
+}
+

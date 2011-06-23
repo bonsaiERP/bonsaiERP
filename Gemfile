@@ -20,7 +20,7 @@ gem 'mysql2'
 gem 'rake'#, '~>0.9.2'
 
 gem 'devise'
-gem 'simple_form', '~>1.3.0'
+gem 'simple_form'
 gem 'less', '~>1.2.21'
 gem 'haml'
 #gem 'acts-as-taggable-on'

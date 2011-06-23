@@ -8,20 +8,17 @@ feature "Test account ledger", "for in outs and transferences" do
     OrganisationSession.set(:id => 1, :name => 'ecuanime', :currency_id => 1)
     UserSession.current_user = User.new {|u| u.id = 1}
 
-    @params = {
-      :date => Date.today, :operation => "out",
-      :account_ledger_details_attributes => [
-        {:account_id => 1, :amount => 100, :reference => "In"},
-        {:account_id => 2, :amount => -100, :reference => "Out"},
-      ]
-    }
-
     create_currencies
     create_account_types
     b = create_bank(:currency_id => 1, :name => "Bank chiquito")
     @bank_ac_ic = b.account.id
     c = create_client(:matchcode => "Lucas Estrella")
     @cli_ac_id = c.account.id
+
+    @params = {
+      :date => Date.today, :operation => "in", :reference => "For more", :amount => 100,
+      :account_id => @bank_ac_ic, :to_id => @cli_ac_id
+    }
   end
 
   scenario "It should correctly assing the correct methods for money" do
@@ -31,9 +28,12 @@ feature "Test account ledger", "for in outs and transferences" do
     al.to_id.should == nil
     al.in?.should == true
     al.account.currency_symbol.should == "Bs."
+    al.active.should == true
 
     al = AccountLedger.new_money(:operation => "in", :account_id => 1, :to_id => @cli_ac_id, :amount => 100, :reference => "Check 1120012" )
     al.save.should == true
+
+    al.active.should == true
 
     al.description.should == "Ingreso por #{al.to}"
     al.creator_id.should == 1
@@ -125,5 +125,29 @@ feature "Test account ledger", "for in outs and transferences" do
 
     det1.account.amount.should == -100
     det2.account.amount.should == 100
+  end
+
+  scenario "Nulling an account" do
+    al = AccountLedger.new_money(@params)
+
+    al.save.should == true
+    al.active.should == true
+
+    ac1 = Account.find(@params[:account_id])
+    ac2 = Account.find(@params[:to_id])
+    #puts al.errors.messages
+    ac1.amount.should == 0
+    ac2.amount.should == 0
+
+    UserSession.current_user = User.new{|u| u.id= 5}
+
+    al.null_account.should == true
+    al.nuller_id.should == 5
+
+    al.active.should == false
+    ac1.reload.amount.should == 0
+    ac2.reload.amount.should == 0
+
+    al.conciliate_account.should == false
   end
 end

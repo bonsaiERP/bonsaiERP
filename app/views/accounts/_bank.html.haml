@@ -20,10 +20,10 @@
   %label Saldo en cuenta
   %h3= with_currency @account, :amount
 
-/- if @bank.pendent_account_ledgers.any?
-/  .moneybox.fl
-/    %label Saldo a conciliar
-/    %h3= with_currency @bank, :total_pendent
+- if @account.account_ledgers.pendent?
+  .moneybox.fl
+    %label Saldo a conciliar
+    %h3= "#{@account.currency_symbol} #{ntc @account.amount_to_conciliate}"
 
 ._40.fr
   <a class="more_info" href="#bank_info">Ver información</a>
