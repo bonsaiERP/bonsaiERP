@@ -1,8 +1,7 @@
 @mixin flash{
+  @include rounded-corners(4px);
+
   padding:10px;
-  border:2px solid @dark;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
   border-radius: 4px;
   font-size: 120%;
   position: relative;
@@ -10,19 +9,44 @@
 }
 #flashNotice{
   @include flash;
-  border-color: @dark_green;
-  color:@dark_green;
+
+  border: 2px solid $dark_green;
+  color: $dark_green;
 }
 
 #flashError{
   @include flash;
-  border-color: @red;
-  color:@red;
+
+  border:2px solid $red;
+  color:$red;
 }
-@include flashWarning, @include flashAlert{
+#flashWarning, #flashAlert{
   @include flash;
-  color: @dark;
-  border-color:@dark_yellow;
-  background-color:@light_yellow;
+
+  color: $dark;
+  border: 2px solid $dark_yellow;
+  background-color: $light_yellow;
 }
 
+.message{
+  @include flash;
+
+  border: 2px solid $green;
+  font-size: 95%;
+  color: $dark;
+  margin: 4px 0;
+  padding: 10px;
+  width: 50%;
+  position: relative;
+}
+
+a.close{
+  text-indent: -1000em;
+  display: block;
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  top: 4px;
+  right: 4px;
+  background: transparent url(images/close2.png) no-repeat;
+}

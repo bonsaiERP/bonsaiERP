@@ -91,6 +91,6 @@ module AccountsHelper
 
   # Conciliation
   def conciliate_css(klass)
-    klass.conciliation == false ? "sync" : ""
+    klass.can_conciliate? ? "sync" : ""
   end
 end

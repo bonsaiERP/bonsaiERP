@@ -407,7 +407,7 @@ $(document).ready(->
   )
 
   # Method to delete when it's in the .links in the top
-  $('#links a.delete').live('click', ->
+  $('a.delete').live 'click', ->
     txt = $(this).data("confirm") || "Esta seguro de borrar"
     unless confirm(txt)
       false
@@ -420,7 +420,6 @@ $(document).ready(->
       .html(html).appendTo('body').submit()
 
       false
-  )
 
   # Mark
   # @param String // jQuery selector
@@ -452,14 +451,13 @@ $(document).ready(->
   )
 
   # Closes the nearest div container
-  $('a.close').live('click', ->
+  $('a.close').live 'click', ->
     self = @
-    $(@).parents('div:first').hide(speed)
+    cont = $(@).parents('div:first').hide(speed)
     unless $(@).parents("div:first").hasClass("search")
-      setTimeout(->
-        self.remove()
-      ,speed)
-  )
+      setTimeout ->
+        cont.remove()
+      ,speed
 
   createSelectOption = (value, label)->
     opt = "<option selected='selected' value='#{value}'>#{label}</option>"
@@ -483,7 +481,7 @@ $(document).ready(->
   # @param String: HTML to insert inside the message div
   # @param Object
   createMessageCont = (text, options)->
-    "<div class='message'><span class='close'></span><p>#{text}</p></div>"
+    "<div class='message'><a class='close' href='javascript:'>Cerrar</a>#{text}</div>"
 
   window.createMessageCont = createMessageCont
 

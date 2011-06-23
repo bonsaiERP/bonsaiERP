@@ -36,7 +36,6 @@ class AccountLedger < ActiveRecord::Base
   # Validations
   validates_inclusion_of :operation, :in => OPERATIONS
   validates_numericality_of :amount, :greater_than => 0, :if => :new_record?
-  validates_numericality_of :amount
 
   validates :reference, :length => { :within => 3..150, :allow_blank => false }
   validates :currency_id, :currency => true
@@ -71,7 +70,12 @@ class AccountLedger < ActiveRecord::Base
 
   # Determines if the ledger can be nulled
   def can_destroy?
-    not conciliation?
+    active? and not(conciliation?)
+  end
+
+  # Determines if the account ledger can conciliate
+  def can_conciliate?
+    not(conciliation?) and active?
   end
 
   def null_account

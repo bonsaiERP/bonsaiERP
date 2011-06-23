@@ -19,7 +19,7 @@
 ._20.fl= link_to @account_ledger.to, @account_ledger.to, :title => 'Contacto' if @account_ledger.to_id.present?
 <br/><br/>
 .clear
-- unless @account_ledger.conciliation?
+- if @account_ledger.can_conciliate?
   .conciliation
     = simple_form_for @account_ledger, :url => conciliate_account_ledger_path(@account_ledger) do |f|
       = f.submit "Revisar transacción"
@@ -28,6 +28,7 @@
 
 - if @account_ledger.conciliation?
   %p Revisado por: <span class="b">#{@account_ledger.approver}</span>
+
 - unless @account_ledger.active?
   %p Anulado por: <span class="b">#{@account_ledger.nuller}</span>
 

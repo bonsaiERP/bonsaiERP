@@ -14,6 +14,7 @@ module Models::AccountLedger
       before_create     :set_amount, :if => :money?
 
       validates_presence_of :account_id, :to_id, :if => :money?
+      validate :valid_money_accounts, :if => :new_money?
     end
 
     module ClassMethods
@@ -51,6 +52,7 @@ module Models::AccountLedger
         self.save
       end
 
+
       private
 
         # Adds the description
@@ -70,19 +72,60 @@ module Models::AccountLedger
           end
         end
 
+        # defines the amount based on the oeration
         def amount_operation
           case operation
-          when "in", "tran" then amount
-          when "out"        then -1 * amount
+          when "in"           then amount
+          when "out", "trans" then -1 * amount
           end
         end
 
+        # set the amounts only for trans, out
         def set_amount
           case operation
             when "out", "trans" then self.amount = -1 * amount
           end
         end
-    end
 
+        # Validates the accounts
+        def valid_money_accounts
+          valid_account_id
+          valid_to_id
+        end
+
+        # Check the account_id
+        def valid_account_id
+          err = false
+
+          if account_id.present?
+            begin
+              ac = Account.org.find(account_id)
+              err = true unless ac.accountable_type == "MoneyStore"
+            rescue
+              err = true
+            end
+
+            self.errors[:account_id] << I18n.t("errors.messages.inclusion") if err
+          end
+        end
+
+        # Check the valid to_id based on the operation
+        def valid_to_id
+          err = false
+          klass = trans? ? "MoneyStore" : "Contact"
+
+          if to_id.present?
+            begin
+              ac = Account.org.find(to_id)
+              err = true unless ac.accountable_type == klass
+            rescue
+              err = true
+            end
+
+            self.errors[:to_id] << I18n.t("errors.messages.inclusion") if err
+          end
+        end
+
+    end
   end
 end

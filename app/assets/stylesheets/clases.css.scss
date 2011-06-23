@@ -3,12 +3,6 @@ $font_size: 13px;
 .dark{ color: lighten(#000, 10%) !important; }
 .dark_grey{ color: darken($grey, 40%) !important;}
 
-@mixin rounded-corners($radius: 5px) {
-  -moz-border-radius: $radius;
-  -webkit-border-radius: $radius;
-  border-radius: $radius;
-}
-
 ._10, .w10{ width: 9% !important;}
 ._15, .w15{ width: 14% !important;}
 ._20, .w20{ width: 19% !important;}
@@ -189,15 +183,6 @@ ul.tabs{
 /**********************/
 /*LINKS*/
 
-@mixin link{
-  font-weight: bold;
-  padding-left: 20px;
-  margin: 0px 5px;
-  color: darken($green, 10%);
-  font-size: 110%;
-  display: inline-block;
-  min-height: 16px;
-}
 @mixin min-height{ min-height: 16px; display: inline-block;}
 
 .links{
@@ -319,12 +304,6 @@ a.sync{
 }
 /*********************************************/
 
-@mixin icon{
-  width:16px;
-  height: 16px;
-  display: inline-block;
-  text-indent: -1000em;
-}
 /*
 .show_icon{
   @include icon;
@@ -353,11 +332,6 @@ a.sync{
 }
 
 /*States*/
-@mixin dashlet($radius: 3px){
-  @include rounded-corners($radius);
-  padding: 2px 3px;
-  color: $white;
-}
 
 .paid{ 
   @include dashlet;

@@ -44,8 +44,10 @@ class AccountLedgersController < ApplicationController
 
   # DELETE /account_ledgers/:id
   def destroy
+    @account_ledger = AccountLedger.org.find(params[:id])
+
     if @account_ledger.null_account
-      flash[:notice] = "Se ha anulado la transacción"
+      flash[:notice] = "Se ha anulado la transacción correctamente"
     else
       flash[:error] = "No se pudo anular la transacción"
     end
