@@ -62,11 +62,10 @@ class AccountLedgersController < ApplicationController
 
   # POST /account_ledgers/:id/transference
   def transference
-    @account = Account.org.find(params[:id])
-    params[:account_id] = @account.id
-    @account_ledger     = @account.account_ledgers.build(params[:account_ledger])
+    params[:account_ledger][:operation] = "trans"
+    @account_ledger = AccountLedger.new_money(params[:account_ledger])
 
-    if @account_ledger.create_transference
+    if @account_ledger.save
       flash[:notice] = "Se ha realizado exitosamente la transferencia entre cuentas, ahora debe conciliarlas para completar la transferencia"
       redirect_to @account_ledger
     else

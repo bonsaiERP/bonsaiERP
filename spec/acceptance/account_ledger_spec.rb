@@ -150,4 +150,8 @@ feature "Test account ledger", "for in outs and transferences" do
 
     al.conciliate_account.should == false
   end
+
+  scenario "Make a transference" do
+
+  end
 end

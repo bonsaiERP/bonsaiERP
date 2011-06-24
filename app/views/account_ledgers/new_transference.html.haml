@@ -17,22 +17,15 @@
   = f.input :to_id, :collection => Account.org.money.where("id NOT IN(?)", @account_ledger.account_id), :label => 'A cuenta'
   .clear
 
-  = f.input :amount, :label => "Cantidad #{@account_ledger.account.currency_symbol}", :input_html => {:size => 12, :type => 'decimal', :class => 'r'}, :wrapper_html => {:class => '_30'}
+  = f.input :amount, :label => "Cantidad #{@account_ledger.account.currency_symbol}",
+    :input_html => {:size => 12, :type => 'decimal', :class => 'r'}, :wrapper_html => {:class => '_30'}
 
   = f.input :date, :label => 'Fecha', :wrapper_html => {:class => '_20'}
 
   - disp = @account_ledger.show_exchange_rate? ? 'block' : 'none'
 
-  #al_exchange_rate._50.fl{:style => "display:#{disp}"}
-    = f.label :to_exchange_rate, "Tipo de cambio &nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript:' id='cur_rates' class='n'>tipos de cambio</a>".html_safe
-    1 #{@account_ledger.account.currency_symbol} = 
-    = f.text_field :exchange_rate, :size => 6, :class => 'r'
-
-    - cur = @to_account.present? ? @account_to.currency_name.pluralize : ""
-    %span#exchange_rate_cur= cur
-    <span class="hint">Puede usar hasta 4 decimales</span>
-    - if f.object.errors[:to_exchange_rate].present?
-      %span.error= f.object.errors[:to_exchange_rate].join(", ")
+  = f.input :exchange_rate, :label => "Tipo de cambio en", 
+    :input_html => {:size => 12}, :hint => 'Puede ingresar hasta 4 decimales', :wrapper_html => {:style => "display:#{disp}", :id => 'al_exchange_rate'}
 
   .clear
    
@@ -45,33 +38,73 @@
 
 :javascript
   $(function() {
-    var accounts = #{Account.to_hash(:name, :currency_id).to_json};
-    var currencies = #{Currency.to_hash.to_json};
-    window.currencies = currencies;
 
-    $('#account_ledger_to_id').live("change keyup focusout", function() {
-      try{
-        var currency_id = accounts[$(this).val()].currency_id;
-        var label, cur = '';
+    function ExchangeRate(input, accounts, currencies) {
+      this.input      = input;
+      this.accounts   = accounts;
+      this.currencies = currencies;
+      this.init();
+    }
 
-        if(currency_id != "" && currency_id != "#{@account_ledger.account.currency_id}") {
-          cur = currencies[currency_id];
-          $('#exchange_rate_cur').html(cur.symbol);
-          $('#al_exchange_rate').show().mark();
+    ExchangeRate.prototype = {
+      // Initialize data
+      init: function() {
+        var $input = $(this.input);
+        this.cont  = $input.parents("div.input:first");
+        this.label = $input.siblings('label');
+
+        $input.after('<span id="total_change"></span>');
+        this.setLabel();
+        this.setEvents();
+      },
+      // Sets the label
+      setLabel: function() {
+        var html = this.label.html();
+        this.label.html(html + " <span id='cur_symbol'></span>&nbsp;&nbsp;<a href='javascript:' class='n' id='cur_rates'>Ver tipos de cambio</a>");
+      },
+      // set the events
+      setEvents: function() {
+        var self = this;
+
+        $('#account_ledger_to_id').live("change keyup focusout", function(e) {
+          self.to_id = $(this).val();
+
+          if(self.to_id) {
+            self.account  = self.accounts[self.to_id];
+            self.currency = self.currencies[self.account.currency_id];
+          }else{
+            self.currency = false;
+          }
+
+          self.showHideRate();
+        });
+
+        $('#account_ledger_exchange_rate, #account_ledger_amount').live('focusout', function() { self.totalExchangeRate() });
+      },
+      // shows or hides the container
+      showHideRate: function() {
+        if(this.currency) {
+          if(this.account.currency_id != this.currency.id) {
+            $('#cur_symbol').html(this.currency.symbol);
+            $('#al_exchange_rate').show().mark();
+          }else{
+            $('#al_exchange_rate').hide();
+          }
         }else{
-          cur = currencies["#{@account_ledger.account.currency_id}"];
           $('#al_exchange_rate').hide();
         }
-      }catch(e) {
-        $('#al_exchange_rate').hide();
+      },
+      // calculates the total exchange rate
+      totalExchangeRate: function() {
+        var tot = $('#account_ledger_amount').val() * 1;
+        var er = $('#account_ledger_exchange_rate').val() * 1;
+        $('#total_change').html(" Total: " +  _b.ntc(tot * er) + " " + this.currency.symbol);
       }
-    });
+    }
 
-    $('body').live('new_contact', function(e, resp) {
-      $('#account_ledger_contact_id').createSelectOption(resp.id, resp.matchcode);
-    });
+    var accounts = #{Account.to_hash(:name, :currency_id).to_json};
+    var currencies = #{Currency.to_hash.to_json};
 
-    $('#cur_rates').click(function() {
-      createDialog({title:"Uno", width: 450, html: $('.rates').html(), modal: false });
-    });
+    new ExchangeRate('#account_ledger_exchange_rate', accounts, currencies);
+
   });
