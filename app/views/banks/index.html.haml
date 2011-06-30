@@ -27,12 +27,12 @@
           %label Total en cuenta
           %h3= with_currency bank.account, :amount
 
-        - if bank.account.account_ledgers.pendent?
+        - if bank.account.account_ledger_details.pendent?
           .moneybox.fl
-            %label Saldo a conciliar
+            %label Saldo a revisar
             %h3= "#{bank.account.currency_symbol} #{ntc bank.account.amount_to_conciliate}"
           
-          %p.b.fl= link_to "#{bank.account.account_ledgers.pendent.count} pendiente de revisión", account_path(bank.account, :option => 'uncon')
+          %p.b.fl= link_to "pendiente de revisión (#{bank.account.account_ledger_details.pendent.count})", account_path(bank.account, :option => 'uncon')
 
       .clear
 

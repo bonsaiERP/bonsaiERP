@@ -69,7 +69,7 @@ module ApplicationHelper
   # @param [Tru, False]
   # @param Hash
   def in_out(val, options = {})
-    css, txt = val ? [ "dark_green", "Ingreso" ] : [ "red", "Egreso" ]
+    css, txt = val > 0 ? [ "dark_green", "Ingreso" ] : [ "red", "Egreso" ]
     options[:class] = options[:class].blank? ? css : options[:class] << " #{css}"
     content_tag(:span, txt, options)
   end

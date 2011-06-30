@@ -123,8 +123,14 @@ feature "Test account ledger", "for in outs and transferences" do
 
     al.conciliate_account.should == true
 
+    ac1 = det1.account
+    ac2 = det2.account
+
     det1.account.amount.should == -100
     det2.account.amount.should == 100
+
+    ac1.reload.amount.should == -100
+    ac2.reload.amount.should == 100
   end
 
   scenario "Nulling an account" do
@@ -144,7 +150,12 @@ feature "Test account ledger", "for in outs and transferences" do
     al.null_account.should == true
     al.nuller_id.should == 5
 
+    al.account_ledger_details[0].state.should == "nulled"
+    al.account_ledger_details[1].state.should == "nulled"
+
     al.active.should == false
+    al.account_ledger_details[0].active.should == false
+    al.account_ledger_details[1].active.should == false
     ac1.reload.amount.should == 0
     ac2.reload.amount.should == 0
 
@@ -152,6 +163,30 @@ feature "Test account ledger", "for in outs and transferences" do
   end
 
   scenario "Make a transference" do
+    c = Cash.create!(:name => 'Cash 1', :currency_id => 2)
+    c_ac_id = c.account.id
+    @params[:operation] = 'trans'
+    @params[:to_id] = c_ac_id
+    @params[:exchange_rate] = 0.5
+
+    al = AccountLedger.new_money(@params)
+
+    al.save.should == true
+    al.active.should == true
+
+    ac1 = al.account
+    ac2 = al.to
+
+    ac1_amt = ac1.amount
+    ac2_amt = ac2.amount
+
+    al.account_ledger_details[0].amount.should == -100
+    al.account_ledger_details[1].amount.should == 50
+
+    al.conciliate_account.should == true
+
+    ac1.reload.amount.should == ac1_amt - 100
+    ac2.reload.amount.should == ac2_amt + 50
 
   end
 end

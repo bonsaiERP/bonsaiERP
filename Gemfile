@@ -34,6 +34,7 @@ gem 'prawn', '~>0.11.1', :git => 'https://github.com/sandal/prawn.git', :branch 
 
 group :development do
   gem "ruby-debug19", :require => 'ruby-debug'# :platforms => :mri_19
+  gem 'pry'
   gem 'rspec-rails', '~>2.6.0'
   gem 'steak', '~>1.1.0'
   gem 'ffaker', '~> 1.8.0'

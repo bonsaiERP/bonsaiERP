@@ -3,6 +3,8 @@
 # email: boriscyber@gmail.com
 class AccountLedger < ActiveRecord::Base
 
+  attr_accessor :ac_id
+
   acts_as_org
   # callbacks
   before_validation { self.currency_id = account.try(:currency_id) unless currency_id.present? }
@@ -10,6 +12,7 @@ class AccountLedger < ActiveRecord::Base
 
   # includes
   include Models::AccountLedger::Money
+  include ActionView::Helpers::NumberHelper
 
   OPERATIONS = %w(in out trans)
   OPERATIONS.each do |op|
@@ -36,12 +39,13 @@ class AccountLedger < ActiveRecord::Base
   # Validations
   validates_inclusion_of :operation, :in => OPERATIONS
   validates_numericality_of :amount, :greater_than => 0, :if => :new_record?
+                                                validates_numericality_of :exchange_rate, :greater_than => 0
 
   validates :reference, :length => { :within => 3..150, :allow_blank => false }
   validates :currency_id, :currency => true
 
   validate  :number_of_details
-  validate  :total_amount_equal
+  #validate  :total_amount_equal
 
   # accessible
   attr_accessible :account_id, :to_id, :date, :operation, :reference, :currency_id,
@@ -83,6 +87,10 @@ class AccountLedger < ActiveRecord::Base
 
     self.nuller_id = UserSession.user_id
     self.active    = false
+    account_ledger_details.each do |det| 
+      det.state = 'nulled'
+      det.active = false
+    end
     self.save
   end
 
@@ -99,15 +107,53 @@ class AccountLedger < ActiveRecord::Base
     end
   end
 
+  # Determines in or out depending the related account
+  def in_out
+    case
+    when ( ac_id == account_id and amount > 0) then "in"
+    when ( ac_id == account_id and amount < 0) then "out"
+    when ( ac_id == to_id and amount > 0)      then "out"
+    when ( ac_id == to_id and amount > 0)      then "in"
+    end
+  end
+
+  # Returns the amount
+  def account_amount
+    if ac_id == account_id
+      amount
+    else
+      -amount * exchange_rate
+    end
+  end
+
+  def related_account
+    if ac_id == account_id
+      to
+    else
+      account
+    end
+  end
+
+  def selected_account
+    if ac_id == account_id
+      account
+    else
+      to
+    end
+  end
+
   # Finds using the filter
-  def self.filtered(filter)
-    filter ||= 'all'
+  # @param Integer
+  # @param String
+  def self.filtered(ac_id, filter = 'all')
+    ret= AccountLedger.where("account_id=:ac_id OR to_id=:ac_id", :ac_id => ac_id).includes(:account, :to)
 
     case filter
-      when "all"    then AccountLedger.scoped
-      when "nulled" then AccountLedger.nulled
-      when "con"    then AccountLedger.con
-      when "uncon"  then AccountLedger.pendent
+      when "nulled" then ret.nulled
+      when "con"    then ret.con
+      when "uncon"  then ret.pendent
+      else "all"
+        ret
     end
   end
 

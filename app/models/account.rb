@@ -50,8 +50,8 @@ class Account < ActiveRecord::Base
     name
   end
 
-  def amount_to_conciliate
-    amount + account_ledgers.pendent.sum(:amount)
+  def amount_to_conciliate()
+    amount + account_ledger_details.sum(:amount)
   end
 
   # Creates a Hash with the id as the base

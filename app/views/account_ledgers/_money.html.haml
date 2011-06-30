@@ -1,5 +1,5 @@
 :css
-  .false_in td.col{ color: #FF0000; }
+  .out td.col{ color: #FF0000; }
   td.r{width: 110px; }
   td.check{width: 170px;}
   td.d{ width: 70px; }
@@ -46,20 +46,21 @@
       Fecha<br/>
       %span.tip{:title => 'Nº de cheque, razón, recibo, etc.'} Referencia
     %th Monto en #{account.currency_symbol}
-    %th Contacto
+    %th Cuenta relacionada
     %th Descripción
     %th 
       (R) Revisado por<br/>
       (A) Anulado por
     %th
   - ledgers.each do |al|
-    %tr{:class => al.in?.to_s + '_in', :id => "tr#{al.id}" }
+    - al.ac_id = account.id
+    %tr{:class => al.in_out, :id => "tr#{al.id}" }
       %td.d.check
-        = link_to lo(al.date), al, :class => "b #{conciliate_css(al)}"
+        = link_to lo(al.date), account_ledger_path(al, :ac_id => account.id), :class => "b #{conciliate_css(al)}"
         %br/
         = al.reference
-      %td.cur.col= ntc al.amount
-      %td.cont= al.to if al.to_id.present?
+      %td.cur.col= ntc al.account_amount
+      %td.cont= link_to al.related_account, al.related_account
       %td.desc= link_description al
       %td.rev
         = "(R) #{al.approver}" if al.approver_id.present?

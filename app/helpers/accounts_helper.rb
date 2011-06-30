@@ -23,7 +23,9 @@ module AccountsHelper
 
   # links to the correct account for account_ledger
   def link_account(al)
-    case al.account.accountable.class.to_s
+    ac = al.ac_id == al.account_id ? :account : :to
+
+    case al.send(ac).accountable.class.to_s
     when"Bank" then link_to "Cuentas bancarias", "/banks"
     when"Cash" then link_to "Cuentas caja", "/cashes"
     end
@@ -93,4 +95,5 @@ module AccountsHelper
   def conciliate_css(klass)
     klass.can_conciliate? ? "sync" : ""
   end
+
 end

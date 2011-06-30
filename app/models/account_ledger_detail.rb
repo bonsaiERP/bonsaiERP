@@ -4,7 +4,7 @@
 class AccountLedgerDetail < ActiveRecord::Base
   acts_as_org
 
-  STATES = %w(uncon con)
+  STATES = %w(uncon con nulled)
 
   STATES.each do |st|
     class_eval <<-CODE, __FILE__, __LINE__ + 1
@@ -26,7 +26,8 @@ class AccountLedgerDetail < ActiveRecord::Base
   validates_numericality_of :amount
 
   # scopes
-  scope :pendent, org.where(:state => "uncon")
+  scope :pendent, where(:state => "uncon")
+
 
   def self.pendent?
     self.pendent.count > 0
@@ -34,6 +35,15 @@ class AccountLedgerDetail < ActiveRecord::Base
   
   def amount_currency
     exchange_rate * amount
+  end
+
+  # Returns the related account depending in which side of the transaction is the account
+  def related_account
+    if account_ledger.account_id == id
+      account_ledger.to
+    else
+      account_ledger.account
+    end
   end
 
   private
@@ -46,7 +56,7 @@ class AccountLedgerDetail < ActiveRecord::Base
 
     # updates it's account
     def update_account_amount
-      account.amount = account.amount + amount if currency_id == account.currency_id
+      account.amount = account.amount + amount# if currency_id == account.currency_id
       
       update_account_currency
       account.save

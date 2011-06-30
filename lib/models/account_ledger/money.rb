@@ -9,6 +9,7 @@ module Models::AccountLedger
     extend ActiveSupport::Concern
 
     included do
+      before_validation :set_exchange_rate, :if => :new_money?
       before_validation :create_ledger_details, :if => :new_money?
       before_create     :add_description, :if => :money?
       before_create     :set_amount, :if => :money?
@@ -21,7 +22,7 @@ module Models::AccountLedger
 
       def new_money(params = {})
         params.transform_date_parameters!("date")
-        params.symbolize_keys.assert_valid_keys( :operation, :account_id, :to_id, :amount, :reference, :date )
+        params.symbolize_keys.assert_valid_keys( :operation, :account_id, :to_id, :amount, :reference, :date, :exchange_rate )
 
         ac = AccountLedger.new(params)
         ac.creator_id = UserSession.user_id
@@ -52,7 +53,6 @@ module Models::AccountLedger
         self.save
       end
 
-
       private
 
         # Adds the description
@@ -60,15 +60,25 @@ module Models::AccountLedger
           case operation
           when "in"    then self.description = "Ingreso por #{to}"
           when "out"  then self.description = "Egreso para #{to}"
-          when "trans" then self.description = "Transferencia a #{to}"
+          when "trans" then self.description = "Transferencia de #{account} a #{to} con tipo de cambio 1 #{account.currency_symbol} = #{number_with_precision exchange_rate} #{to.currency_symbol}"
           end
         end
 
         def create_ledger_details
           amt = amount_operation
+
           if account_id.present? and amount.present? and to_id.present?
             account_ledger_details.build(:account_id => account_id, :amount => amt, :currency_id => account.currency_id, :state => 'uncon')
-            account_ledger_details.build(:account_id => to_id, :amount => -amt, :currency_id => account.currency_id, :state => 'uncon')
+            amt2 = -amt * exchange_rate
+            account_ledger_details.build(:account_id => to_id, :amount => amt2, :currency_id => account.currency_id, :state => 'uncon')
+          end
+        end
+
+        def set_exchange_rate
+          if ['in', 'out'].include?(operation)
+            self.exchange_rate = 1
+          else
+            self.exchange_rate ||= 0
           end
         end
 
