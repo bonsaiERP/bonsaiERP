@@ -2,11 +2,7 @@
   = bonsai_form_error(f)
 
   =f.input :name, :label => 'Nombre de su empresa'
-  .input
-    %label Moneda
-    = @organisation.currency
-  =f.input :currency_id, :as => :hidden
-  /=f.association :currency, :label => 'Moneda base', :hint => 'Todas las transacciones se realizaran en esta moneda.'
+  =f.association :currency, :label => 'Moneda base', :hint => 'Todas las transacciones se realizaran en esta moneda.'
   .clear
     
   =f.association :org_country, :label => 'País'
@@ -20,9 +16,6 @@
   .clear
 
   .input._100.boolean
-    %label{:for => 'organisation_preferences_open_prices'}
-      = check_box_tag "organisation[preferences][open_prices]", "1", @organisation.preferences[:open_prices]
-      Precios abiertos
     .open_prices.inside
       %label Descuento por item
       = text_field_tag "organisation[preferences][item_discount]", @organisation.preferences[:item_discount], :size => 4

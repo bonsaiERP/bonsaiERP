@@ -8,11 +8,13 @@ class Organisation < ActiveRecord::Base
   before_create :set_preferences
   before_create :create_all_records
   before_create { links.build(:rol => 'admin') {|l| l.set_user_creator(UserSession.user_id) } }
+  after_create  :create_base_accounts
   #after_create :create_account
   
   DATA_PATH = "db/defaults"
 
   attr_accessor :account_info
+  attr_protected :base_accounts
 
   serialize :preferences, Hash
   
@@ -42,20 +44,23 @@ class Organisation < ActiveRecord::Base
   end
 
   # Sets default preferences
-  def preferences
-    read_attribute(:preferences) || write_attribute(:preferences, {:open_prices => true, :item_discount => 0, :general_discount => 0})
+  def set_default_preferences
+    #write_attribute(:preferences, {:item_discount => 0, :general_discount => 0}) if read_attribute(:preferences).empty?
+    self.preferences = {:item_discount => 0, :general_discount => 0}
+    self
   end
 
   # Method to save preferences for callback before_create
   def set_preferences
     self.preferences = preferences.symbolize_keys
-    self.preferences.merge(set_preferences_abs(preferences)).merge(transform_preferences_boolean(preferences))
+    self.preferences.merge(set_preferences_abs(preferences))
   end
   private :set_preferences
 
   # Updates the preferences for the organisation
   # @param Hash
   # @return [True, False]
+  
   def update_preferences(options)
     options = options[:preferences].symbolize_keys
     options.merge( set_preferences_abs(options) ).merge(transform_preferences_boolean(options))
@@ -82,6 +87,17 @@ class Organisation < ActiveRecord::Base
     end
 
     options
+  end
+
+  # Creates the default accounts needed to work
+  def create_base_accounts
+    saved = true
+    YAML.load_file(File.join(Rails.root, "db/defaults/accounts.#{I18n.locale}.yml")).each do |data|
+      a = Account.new(data)
+      saved = saved and a.save
+    end
+
+    raise ActiveRecord::Rollback unless saved
   end
 
 protected

@@ -11,8 +11,7 @@
       = f.input :ref_number, :label => 'Nº de referencia', :input_html => {:size => 20}
       = f.input :date, :label => 'Fecha'
 
-    = f.association :contact, :label => contact_label, :collection => contacts,
-      :input_html => {'data-new_url' => "#{cont_path}/new", 'data-title' => "Nuevo #{contact_label}", 'data-trigger' => 'new_contact' }
+    = f.input :contact_id, :as => :contact, :label => false, :input_html => {:id => 'transaction_contact_id'}
     .clear
 
   .clear
@@ -101,6 +100,9 @@
 :javascript
 
   $( function() {
+
+    // Autocomplete
+    $('#transaction_contact_id').contactAutocomplete(#{get_contact_list.to_json});
 
     $('a#add_item').click(function() {
       $('#item_autocomplete').hide().insertAfter('#items_table');

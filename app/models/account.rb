@@ -23,11 +23,10 @@ class Account < ActiveRecord::Base
   has_many :account_currencies, :autosave => true
 
   validates_presence_of :currency_id, :name
-  #validates_associated  :currency
   validates_numericality_of :amount
 
   # validations
-  validates_presence_of :name, :accountable_type, :accountable_id
+  validates_presence_of :name#, :accountable_type, :accountable_id
 
   delegate :symbol, :name, :to => :currency, :prefix => true
 

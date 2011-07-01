@@ -46,10 +46,12 @@ class OrganisationsController < ApplicationController
 
   def new
     @organisation = Organisation.new(:currency_id => 1)
+    @organisation.set_default_preferences
   end
 
   def create
     @organisation = Organisation.new(params[:organisation])
+- :name: 'Fallados'
 
     if @organisation.save
       flash[:notice] = "Se ha creado su empresa correctamente."

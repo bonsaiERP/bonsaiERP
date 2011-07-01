@@ -1,14 +1,14 @@
 ---
   - id: 1
     name: boliviano
-    symbol: "Bs."
+    symbol: 'Bs.'
     code: BOB
   - id: 2
     name: dolar
-    symbol: "$"
+    symbol: '$'
     code: USD
   - id: 3
     name: euro
-    symbol: "€"
+    symbol: '€'
     code: EUR
 
