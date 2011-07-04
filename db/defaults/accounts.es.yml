@@ -1,0 +1,11 @@
+---
+- :name: 'Compras'
+  :account_number: 'Buys'
+- :name: 'Ventas'
+  :account_number: 'Incomes'
+- :name: 'Gastos'
+  :account_number: 'Expenses'
+- :name: 'Fallados'
+  :account_number: 'Failed'
+- :name: 'Incobrables'
+  :account_number: 'Unpayed'

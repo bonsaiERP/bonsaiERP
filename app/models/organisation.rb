@@ -8,8 +8,6 @@ class Organisation < ActiveRecord::Base
   before_create :set_preferences
   before_create :create_all_records
   before_create { links.build(:rol => 'admin') {|l| l.set_user_creator(UserSession.user_id) } }
-  after_create  :create_base_accounts
-  #after_create :create_account
   
   DATA_PATH = "db/defaults"
 
@@ -27,6 +25,7 @@ class Organisation < ActiveRecord::Base
   has_many :users, :through => :links
   has_many :units, :dependent => :destroy
   has_many :account_types, :dependent => :destroy
+  has_many :accounts
 
   delegate :code, :name, :symbol, :plural, :to => :currency, :prefix => true
 
@@ -91,13 +90,13 @@ class Organisation < ActiveRecord::Base
 
   # Creates the default accounts needed to work
   def create_base_accounts
-    saved = true
     YAML.load_file(File.join(Rails.root, "db/defaults/accounts.#{I18n.locale}.yml")).each do |data|
-      a = Account.new(data)
-      saved = saved and a.save
+      ac_type_id = AccountType.find_by_account_number(data[:account_number]).id
+      accounts.build(:account_type_id => ac_type_id, :name => data[:name], :currency_id => currency_id) {|a| a.amount = 0}
     end
+    self.base_accounts = true
 
-    raise ActiveRecord::Rollback unless saved
+    self.save
   end
 
 protected
@@ -128,6 +127,7 @@ protected
       account_types.build(vals) {|at| at.account_number = vals[:account_number] }
     end
   end
+
 
   # Sets the user_id, needed to define the scope of uniquenes_of :name
   def set_user

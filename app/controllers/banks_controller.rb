@@ -18,6 +18,8 @@ class BanksController < ApplicationController
   # GET /banks/1
   # GET /banks/1.xml
   def show
+    @ledgers = @bank.account.get_ledgers.page(@page)
+
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @bank }

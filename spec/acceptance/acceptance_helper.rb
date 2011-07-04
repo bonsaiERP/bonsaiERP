@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + "/../spec_helper"
 require "steak"
 require 'capybara/rails'
 
-RSpec.configuration.include Capybara, :type => :acceptance
+RSpec.configuration.include Capybara::DSL, :type => :acceptance
 Capybara.ignore_hidden_elements = false
 
 # Put your acceptance spec helpers inside /spec/acceptance/support

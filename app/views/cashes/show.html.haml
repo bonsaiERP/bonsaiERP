@@ -23,7 +23,7 @@
   = nl2br(@cash.address)
 .clear
 
-%h2.dark Transacciones
-= render "account_ledgers/list", :money_store => @cash, :ref_title => 'Referencia'
+%h2 Transacciones
+= render "account_ledgers/money", :account => @cash.account, :ledgers => @ledgers, :ref_title => 'Referencia'
 
 .clear

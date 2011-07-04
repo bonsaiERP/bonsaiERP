@@ -1,7 +1,7 @@
 class CreateTransactions < ActiveRecord::Migration
   def self.up
     create_table :transactions do |t|
-      t.integer :contact_id
+      t.integer :account_id
       t.string  :type, :limit => 20
       
       t.decimal :total, :precision => 14, :scale => 2
@@ -25,14 +25,21 @@ class CreateTransactions < ActiveRecord::Migration
       t.decimal :gross_total, :precision => 14, :scale => 2
       t.boolean :cash, :default => true
       t.date    :payment_date
+      t.decimal :balance_inventory, :precision => 14, :scale => 2
+      # Creators approver
       t.integer :creator_id
       t.integer :approver_id
-      t.decimal :balance_inventory, :precision => 14, :scale => 2
+      # Credit details
+      t.boolean :credit, :default => false
+      t.integer :creditor_id
+      t.string  :credit_reference
+      t.string  :credit_description, :limit => 500
+
 
       t.timestamps
     end
 
-    add_index :transactions, :contact_id
+    add_index :transactions, :account_id
     add_index :transactions, :active
     add_index :transactions, :ref_number
     add_index :transactions, :date
@@ -43,6 +50,10 @@ class CreateTransactions < ActiveRecord::Migration
     add_index :transactions, :cash
     add_index :transactions, :payment_date
     add_index :transactions, :project_id
+
+    add_index :transactions, :credit
+    add_index :transactions, :creditor_id
+
   end
 
   def self.down

@@ -18,6 +18,7 @@ class CashesController < ApplicationController
   # GET /cashs/1
   # GET /cashs/1.xml
   def show
+    @ledgers = @bank.account.get_ledgers.page(@page)
 
     respond_to do |format|
       format.html # show.html.erb

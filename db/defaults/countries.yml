@@ -3,12 +3,9 @@
   name: Bolivia
   abbreviation: bo
   taxes:
-    - name: 'Impuesto al Valor Agregado'
-      rate: 13
-      abbreviation: 'IVA'
-    - name: 'Impuesto a las transacciones'
-      rate: 3
-      abbreviation: 'IT'
+    - name: 'IVA + IT'
+      rate: 16
+      abbreviation: 'IVA, IT'
 - id: 2
   name: Estados Unidos
   abbreviation: usa

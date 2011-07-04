@@ -2,7 +2,8 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class Account < ActiveRecord::Base
-  acts_as_org
+
+  include Models::Organisation::NewOrganisation
 
   # callbacks
   before_create :set_amount
@@ -22,12 +23,11 @@ class Account < ActiveRecord::Base
   has_many :account_ledger_details
   has_many :account_currencies, :autosave => true
 
+  # validations
   validates_presence_of :currency_id, :name
   validates_numericality_of :amount
 
-  # validations
-  validates_presence_of :name#, :accountable_type, :accountable_id
-
+  # delegations
   delegate :symbol, :name, :to => :currency, :prefix => true
 
   # scopes
@@ -51,6 +51,12 @@ class Account < ActiveRecord::Base
 
   def amount_to_conciliate()
     amount + account_ledger_details.sum(:amount)
+  end
+
+  # Returns all the related aacount_ledgers
+  def get_ledgers
+    t = "account_ledgers"
+    AccountLedger.where("#{t}.account_id=:ac_id OR #{t}.to_id=:ac_id",:ac_id => id)
   end
 
   # Creates a Hash with the id as the base

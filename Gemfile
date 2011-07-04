@@ -36,7 +36,7 @@ group :development do
   gem "ruby-debug19", :require => 'ruby-debug'# :platforms => :mri_19
   gem 'pry'
   gem 'rspec-rails', '~>2.6.0'
-  gem 'steak', '~>1.1.0'
+  gem 'steak', '~>2.0.0'
   gem 'ffaker', '~> 1.8.0'
 end
 
@@ -45,7 +45,7 @@ end
 group :test do
   gem 'rspec-rails', '~>2.6.0'
   gem 'mocha'
-  gem 'steak', '~>1.1.0'
+  gem 'steak', '~>2.0.0'
   gem 'capybara'
   gem 'database_cleaner'
   gem 'factory_girl_rails'

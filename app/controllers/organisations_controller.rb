@@ -35,31 +35,26 @@ class OrganisationsController < ApplicationController
   end
 
   # GET /organisations/new
-  # GET /organisations/new.xml
-  #def new
-  #  reset_org unless params[:step]
-  #  session[:step] = params[:step] || 1
-  #  session[:max_step] ||= 1
-
-  #  send(:"get_step_#{session[:step]}")
-  #end
-
   def new
     @organisation = Organisation.new(:currency_id => 1)
     @organisation.set_default_preferences
   end
 
+  # POST /organisations
   def create
     @organisation = Organisation.new(params[:organisation])
-- :name: 'Fallados'
 
     if @organisation.save
       flash[:notice] = "Se ha creado su empresa correctamente."
       params[:id] = @organisation.id
 
-      set_organisation_session(@organisation)
-
-      redirect_to "/dashboard"
+      ret = set_organisation_session(@organisation)
+      if ret
+        redirect_to "/dashboard"
+      else
+        flash[:error] = "Por favor ingrese de nuevo existio un error en el sistema"
+        redirect_to "/users/sign_out"
+      end
     else
       render :action => 'new'
     end

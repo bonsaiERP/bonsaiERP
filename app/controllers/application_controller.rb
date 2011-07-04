@@ -83,8 +83,14 @@ protected
 
   # Sets the session for the organisation
   def set_organisation_session(organisation)
+    ret = true
+    # Create base_accounts if needed
+    ret = organisation.create_base_accounts unless organisation.base_accounts?
+
     session[:organisation] = Hash[ OrganisationSession::KEYS.map {|k| [k, organisation.send(k)] } ]
     set_organisation
+
+    ret
   end
 
 private

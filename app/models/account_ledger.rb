@@ -18,7 +18,7 @@ class AccountLedger < ActiveRecord::Base
   OPERATIONS.each do |op|
     class_eval <<-CODE, __FILE__, __LINE__ + 1
       def #{op}
-        "#{op}" == op
+        "#{op}" == operation
       end
     CODE
   end
@@ -59,15 +59,7 @@ class AccountLedger < ActiveRecord::Base
   # delegates
   delegate :currency, :symbol, :to => :currency, :prefix => true 
 
-  # metaprogramming options
-  OPERATIONS.each do |v|
-    class_eval <<-CODE, __FILE__, __LINE__ + 1
-      def #{v}?
-        "#{v}" == operation
-      end
-    CODE
-  end
-
+ 
   def self.pendent?
     pendent.count > 0
   end
@@ -146,7 +138,7 @@ class AccountLedger < ActiveRecord::Base
   # @param Integer
   # @param String
   def self.filtered(ac_id, filter = 'all')
-    ret= AccountLedger.where("account_id=:ac_id OR to_id=:ac_id", :ac_id => ac_id).includes(:account, :to)
+    ret = AccountLedger.where("account_id=:ac_id OR to_id=:ac_id", :ac_id => ac_id).includes(:account, :to)
 
     case filter
       when "nulled" then ret.nulled

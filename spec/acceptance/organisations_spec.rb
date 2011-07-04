@@ -15,8 +15,8 @@ feature "Organisations", "In order to create an organisation I must login" do
 
     o = Organisation.new(:name => 'Violetas', :currency_id => 1, :country_id => 1, 
                          :phone => '7881221', :mobile => '789123434',
-                        :address => 'Mallasa calle 4 Nº 222', 
-                        :preferences => {"open_prices" => "1", "item_discount" => "2", "general_discount" => "0.5" })
+                         :address => 'Mallasa calle 4 Nº 222', 
+                         :preferences => {"item_discount" => "2", "general_discount" => "0.5" })
 
     o.save.should == true
 
@@ -31,8 +31,73 @@ feature "Organisations", "In order to create an organisation I must login" do
     o.links.first.creator.should == true
 
     # Preferences
-    o.preferences.should == {:open_prices => true, :item_discount => 2, :general_discount => 0.5 }
+    o.preferences.should == {:item_discount => 2, :general_discount => 0.5 }
 
   end
 
+  scenario "Create account and then organisation", :driver => :rack_test do
+    visit "/users/sign_in"
+    click_link "Registrate"
+    
+    fill_in "Email", :with => 'admin@example.com'
+    fill_in "Contraseña", :with => 'demo123'
+    fill_in "Confirmación", :with => 'demo123'
+    click_button('Registrate')
+
+    ActionMailer::Base.deliveries.size.should == 1
+    u = User.find_by_email("admin@example.com")
+    u.confirm!
+
+    # Log in
+    visit "/users/sign_in"
+    fill_in "Email", :with => 'admin@example.com'
+    fill_in "Contraseña", :with => 'demo123'
+    click_button('Ingresar')
+
+    page.current_path.should == new_organisation_path
+
+    # Create organisation
+    fill_in 'Nombre de su empresa', :with => 'bonsailabs'
+    select '$ Dolar', :from => 'Moneda base'
+    select 'Bolivia', :from => 'País'
+    fill_in 'Teléfono', :with => '2790123'
+    fill_in 'Dirección', :with => 'Los Pinos B 80, dpto. 201'
+
+    click_button 'Salvar'
+
+    page.current_path.should == '/dashboard'
+
+    org = Organisation.last
+    org.accounts.map(&:organisation_id).uniq.should == [ org.id ]
+  end
+
+
+  scenario "Create Organisation and fail creating accounts", :driver => :rack_test do
+
+    u = User.create(:email => 'fail@example.com', :password => 'demo123', :password_confirmation => 'demo123')
+    u.confirm!
+
+    # Log in
+    visit "/users/sign_in"
+    fill_in "Email", :with => 'fail@example.com'
+    fill_in "Contraseña", :with => 'demo123'
+    click_button('Ingresar')
+
+    page.current_path.should == new_organisation_path
+
+    Organisation.any_instance.stubs(:create_base_accounts => false)
+
+    # Create organisation
+    fill_in 'Nombre de su empresa', :with => 'bonsailabs'
+    select '$ Dolar', :from => 'Moneda base'
+    select 'Bolivia', :from => 'País'
+    fill_in 'Teléfono', :with => '2790123'
+    fill_in 'Dirección', :with => 'Los Pinos B 80, dpto. 201'
+
+    click_button 'Salvar'
+
+    page.current_path.should == '/users/sign_in'
+    page.has_css?("#flashError")
+
+  end
 end

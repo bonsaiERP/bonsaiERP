@@ -447,36 +447,42 @@ ActiveRecord::Schema.define(:version => 20110614130942) do
   add_index "transaction_details", ["transaction_id"], :name => "index_transaction_details_on_transaction_id"
 
   create_table "transactions", :force => true do |t|
-    t.integer  "contact_id"
+    t.integer  "account_id"
     t.string   "type",                   :limit => 20
-    t.decimal  "total",                                :precision => 14, :scale => 2
-    t.decimal  "balance",                              :precision => 14, :scale => 2
-    t.decimal  "tax_percent",                          :precision => 5,  :scale => 2
-    t.boolean  "active",                                                              :default => true
+    t.decimal  "total",                                 :precision => 14, :scale => 2
+    t.decimal  "balance",                               :precision => 14, :scale => 2
+    t.decimal  "tax_percent",                           :precision => 5,  :scale => 2
+    t.boolean  "active",                                                               :default => true
     t.string   "description"
     t.string   "state",                  :limit => 20
     t.date     "date"
     t.string   "ref_number"
     t.string   "bill_number"
     t.integer  "currency_id"
-    t.decimal  "currency_exchange_rate",               :precision => 14, :scale => 4
+    t.decimal  "currency_exchange_rate",                :precision => 14, :scale => 4
     t.integer  "organisation_id"
     t.integer  "project_id"
-    t.decimal  "discount",                             :precision => 5,  :scale => 2
-    t.decimal  "gross_total",                          :precision => 14, :scale => 2
-    t.boolean  "cash",                                                                :default => true
+    t.decimal  "discount",                              :precision => 5,  :scale => 2
+    t.decimal  "gross_total",                           :precision => 14, :scale => 2
+    t.boolean  "cash",                                                                 :default => true
     t.date     "payment_date"
+    t.decimal  "balance_inventory",                     :precision => 14, :scale => 2
     t.integer  "creator_id"
     t.integer  "approver_id"
-    t.decimal  "balance_inventory",                    :precision => 14, :scale => 2
+    t.boolean  "credit",                                                               :default => false
+    t.integer  "creditor_id"
+    t.string   "credit_reference"
+    t.string   "credit_description",     :limit => 500
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "transactions", ["account_id"], :name => "index_transactions_on_account_id"
   add_index "transactions", ["active"], :name => "index_transactions_on_active"
   add_index "transactions", ["balance_inventory"], :name => "index_transactions_on_balance_inventory"
   add_index "transactions", ["cash"], :name => "index_transactions_on_cash"
-  add_index "transactions", ["contact_id"], :name => "index_transactions_on_contact_id"
+  add_index "transactions", ["credit"], :name => "index_transactions_on_credit"
+  add_index "transactions", ["creditor_id"], :name => "index_transactions_on_creditor_id"
   add_index "transactions", ["currency_id"], :name => "index_transactions_on_currency_id"
   add_index "transactions", ["date"], :name => "index_transactions_on_date"
   add_index "transactions", ["organisation_id"], :name => "index_transactions_on_organisation_id"
