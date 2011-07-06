@@ -3,7 +3,7 @@
 # email: boriscyber@gmail.com
 require 'active_support/concern'
 
-module  Models::Account
+module Models::Account
   module Base
     
     extend ActiveSupport::Concern

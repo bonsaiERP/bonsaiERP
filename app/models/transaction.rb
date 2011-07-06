@@ -18,17 +18,13 @@ class Transaction < ActiveRecord::Base
   before_validation :set_defaults, :if => :new_record?
   #after_initialize :set_trans_to_true
 
-  before_create     :set_creator
-  before_save       :set_details_type
-  before_save       :calculate_total_and_set_balance, :if => :trans?
   before_save       :update_payment_date
   before_save       :set_state
-  before_save       :set_balance_inventory, :if => :trans?
 
   after_update      :update_transaction_pay_plans, :if => :trans?
 
   # relationships
-  belongs_to :contact
+  belongs_to :account
   belongs_to :currency
   belongs_to :project
   belongs_to :creator , :class_name => "User"
@@ -387,17 +383,7 @@ private
   end
 
 
-  # Sets the type of the class making the transaction
-  def set_details_type
-    self.transaction_details.each{ |v| v.ctype = self.class.to_s }
-  end
 
-  # Calculates the total value and stores it
-  def calculate_total_and_set_balance
-    self.gross_total = transaction_details.select{|t| !t.marked_for_destruction? }.inject(0) {|sum, det| sum += det.total }
-    self.total = gross_total - total_discount + total_taxes
-    self.balance = total / currency_exchange_rate if total > 0
-  end
 
   # Determines if it is a transaction or other operation
   def trans?
@@ -413,11 +399,5 @@ private
     self.errors.add(:base, "Debe ingresar seleccionar al menos un ítem") unless self.transaction_details.any?
   end
 
-  def set_creator
-    self.creator_id = UserSession.user_id
-  end
 
-  def set_balance_inventory
-    self.balance_inventory = total
-  end
 end

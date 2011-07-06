@@ -13,7 +13,7 @@ class Income < Transaction
 
   #relationships
 
-  attr_accessible  :ref_number,  :date,                          :contact_id,
+  attr_accessible  :ref_number,  :date,                          :account_id,
                    :project_id,  :currency_id,                   :currency_exchange_rate,
                    :discount,    :bill_number,                   :taxis_ids,
                    :description, :transaction_details_attributes
