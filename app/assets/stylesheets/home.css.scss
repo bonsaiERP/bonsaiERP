@@ -11,6 +11,7 @@ h1, h2, h3{ font-family: muli, arial, serif; }
 a{
   color: darken( $blue, 25% );
   img{ border: none; }
+  text-decoration: none;
 }
 ul{
   margin: 4px;
@@ -236,6 +237,7 @@ input[type=text], textarea{
 ._35{ width: 34%; }
 ._65{ width: 64%; }
 ._70{ width: 69%; }
+.b{ font-weight: bold; }
 
 ul.team{
   list-style: none;
@@ -258,3 +260,4 @@ ul.team{
   height: 1px;
   background: darken($green, 10%);
 }
+
