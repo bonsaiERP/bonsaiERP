@@ -4,3 +4,9 @@ es:
       next: "Siguiente &gt;"
       previous: "&lt; Anterior"
       truncate: "..."
+  income:
+    account_ledger_reference: "Venta"
+  buy:
+    account_ledger_reference: "Venta"
+  expense:
+    account_ledger_reference: "Venta"

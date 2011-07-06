@@ -92,7 +92,7 @@ class Organisation < ActiveRecord::Base
   def create_base_accounts
     YAML.load_file(File.join(Rails.root, "db/defaults/accounts.#{I18n.locale}.yml")).each do |data|
       ac_type_id = AccountType.find_by_account_number(data[:account_number]).id
-      accounts.build(:account_type_id => ac_type_id, :name => data[:name], :currency_id => currency_id) {|a| a.amount = 0}
+      accounts.build(:account_type_id => ac_type_id, :name => data[:name], :currency_id => currency_id, :original_type => data[:account_number]) {|a| a.amount = 0}
     end
     self.base_accounts = true
 

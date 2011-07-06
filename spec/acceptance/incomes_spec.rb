@@ -8,12 +8,12 @@ require File.dirname(__FILE__) + '/acceptance_helper'
 def income_params
     d = Date.today
     @income_params = {"active"=>nil, "bill_number"=>"56498797", "account_id"=>1, 
-      "currency_exchange_rate"=>1, "currency_id"=>1, "date"=>d, 
-      "description"=>"Esto es una prueba", "discount"=>3, "project_id"=>1 
+      "exchange_rate"=>1, "currency_id"=>1, "date"=>d, 
+      "description"=>"Esto es una prueba", "discount" => 3, "project_id"=>1 
     }
     details = [
-      { "description"=>"jejeje", "item_id"=>1, "organisation_id"=>1, "price"=>15.5, "quantity"=> 10},
-      { "description"=>"jejeje", "item_id"=>2, "organisation_id"=>1, "price"=>10, "quantity"=> 20}
+      { "description"=>"jejeje", "item_id"=>1, "organisation_id"=>1, "price"=>3, "quantity"=> 10},
+      { "description"=>"jejeje", "item_id"=>2, "organisation_id"=>1, "price"=>5, "quantity"=> 20}
     ]
     @income_params[:transaction_details_attributes] = details
     @income_params
@@ -29,12 +29,12 @@ end
 
 feature "Income", "test features" do
   background do
-    OrganisationSession.set(:id => 1, :name => 'ecuanime', :currency_id => 1)
+    OrganisationSession.set(:id => 1, :name => 'ecuanime', :currency_id => 1, :preferences => {:item_discount => 0, :general_discount => 0})
     UserSession.current_user = User.new(:id => 1, :email => 'admin@example.com') {|u| u.id = 1}
 
-    create_currencies
-    create_account_types
-    #Bank.create!(:number => '123', :currency_id => 1, :name => 'Bank JE') {|a| a.id = 1; a.amount = 0 }
+    create_organisation
+    create_items
+
     @b1 = create_bank(:number => '123', :amount => 0)
     @ac1_id = @b1.account.id
     #CashRegister.create!(:name => 'Cash register Bs.', :amount => 0, :currency_id => 1, :address => 'Uno') {|cr| cr.id = 2}
@@ -43,8 +43,6 @@ feature "Income", "test features" do
     @c1 = create_client(:matchcode => 'Karina Luna')
     @cli1_id = @c1.account.id
 
-    create_currency_rates
-    create_items
   end
 
   scenario "Create a payment with nearest pay_plan" do
@@ -52,10 +50,43 @@ feature "Income", "test features" do
 
     i.cash.should == true
     i.save_trans.should == true
-    #pp = i.create_pay_plan(pay_plan_params(:amount => 100))
+    #pp = i.create_pay_plan(pay_plan_params(:amount => 100)
 
     i.reload
+    i.transaction_details.size.should == 2
     i.cash.should == true
+    tot = ( 3 * 10 + 5 * 20 ) * 0.97
+    i.total.should == tot.round(2)
+    i.balance.should == i.total
+    i.total_currency.should == i.total
+    i.state.should == "draft"
+
+    # check details
+    i.transaction_details[0].balance.should == 10
+    i.transaction_details[0].original_price.should == 3
+    i.transaction_details[1].balance.should == 20
+    i.transaction_details[1].original_price.should == 5
+
+    a1 = Account.find(i.account_id)
+    a1.amount.should == 0
+    a2 = Account.org.find_by_original_type("Income")
+    a2.amount.should == 0
+
+    i.approve!.should == true
+    i.reload
+    i.approver_id.should == 1
+    i.state.should == "approved"
+    i.account_ledger.should_not == nil
+
+    al = i.account_ledger
+    a1.reload
+    a2.reload
+
+    a1.amount.should == i.total_currency
+    a2.amount.should == -i.total_currency
+
+    # check if the account_ledger for is created and the accounts updated
+    #i.account
     #i.pay_plans.unpaid.size.should == 2
     #i.pay_plans.map(&:operation).uniq.should == ["in"]
 
@@ -289,13 +320,13 @@ feature "Income", "test features" do
   #  c =  Currency.first
 
   #  d = Date.today
-  #  i = Income.new(income_params.merge(:date => d, :currency_id => 2, :currency_exchange_rate => 7))
+  #  i = Income.new(income_params.merge(:date => d, :currency_id => 2, :exchange_rate => 7))
 
   #  i.save.should == true
   #  i = Income.find(i.id)
   #  balance = i.balance
 
-  #  i.currency_exchange_rate.should == 7
+  #  i.exchange_rate.should == 7
   #  i.balance.should == (i.total/7).round(2)
   #  
   #  pp = i.create_pay_plan(pay_plan_params(:amount => 20, :payment_date => d, :repeat => true))
@@ -356,7 +387,7 @@ feature "Income", "test features" do
   #  c =  Currency.first
 
   #  d = Date.today
-  #  i = Income.new(income_params.merge(:date => d, :currency_id => 2, :currency_exchange_rate => 7))
+  #  i = Income.new(income_params.merge(:date => d, :currency_id => 2, :exchange_rate => 7))
 
   #  i.save.should == true
   #  i.approve!
@@ -367,7 +398,7 @@ feature "Income", "test features" do
 
   #  i.payment_date.should == d
 
-  #  i.currency_exchange_rate.should == 7
+  #  i.exchange_rate.should == 7
   #  i.balance.should == (i.total/7).round(2)
   #  
   #  pp = i.create_pay_plan(pay_plan_params(:amount => 20, :payment_date => d, :repeat => true))

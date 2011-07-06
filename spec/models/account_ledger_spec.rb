@@ -1,10 +1,11 @@
+# encoding: utf-8
 require 'spec_helper'
 
 describe AccountLedger do
   before(:each) do
     OrganisationSession.set(:id => 1, :name => 'ecuanime', :currency_id => 1)
     @params = {
-      :date => Date.today, :operation => "out", :reference => "Income", :amount => 100, :currency_id => 1,
+      :date => Date.today, :operation => "out", :reference => "Income", :amount => 100, :currency_id => 1, :exchange_rate => 1,
       :account_ledger_details_attributes => [
         {:account_id => 1, :amount => 100 },
         {:account_id => 2, :amount => -100 },
@@ -28,11 +29,15 @@ describe AccountLedger do
 
   it 'should now allow the sum distinct to 0' do
     @params[:account_ledger_details_attributes][1][:amount] = -50
-    a = AccountLedger.new(@params)
+    params = @params
+    params[:account_ledger_details_attributes].pop
+
+    params[:account_ledger_details_attributes].size.should == 1
+
+    a = AccountLedger.new(params)
 
     a.valid?.should == false
-    a.errors[:base].to_s.should_not =~ /al menos 2 cuentas/
-    a.errors[:base].to_s.should =~ /error en el balance/
+    a.errors[:base].to_s.should =~ /al menos 2 cuentas/
   end
 
   it 'should assing currency_id' do
@@ -105,7 +110,7 @@ describe AccountLedger do
 
   it 'should work with other currencies' do
     @params = {
-      :date => Date.today, :operation => "in", :reference => "Income", :amount => 50, :currency_id => 1,
+      :date => Date.today, :operation => "in", :reference => "Income", :amount => 50, :currency_id => 1, :exchange_rate => 0.5,
       :account_ledger_details_attributes => [
         {:account_id => 2, :amount => 50, :description => "Income with exchange rate 0. from account 1"},
         {:account_id => 1, :amount => -100, :exchange_rate => 0.5,},
@@ -138,16 +143,16 @@ describe AccountLedger do
                    :accountable_id => 1, :accountable_type => "Bank"
                    ) {|a| a.id = 3; a.amount = 1000}
 
-    AccountLedger.create!(
-      :date => Date.today, :operation => "out", :reference => "Outcome", :amount => 50, :currency_id => 2,
+    al = AccountLedger.create!(
+      :date => Date.today, :operation => "out", :reference => "Outcome", :amount => 50, :currency_id => 2, :exchange_rate => 0.5,
       :account_ledger_details_attributes => [
         {:account_id => 1, :amount => 50, :currency_id => 2},
         {:account_id => 3, :amount => -100, :exchange_rate => 0.5},
       ]
     )
     
-    a1 = Account.find(1)
-    a1.amount.should == 0
+    a1 = al.account_ledger_details[0].account
+    a1.amount.should == 50
     a1.amount_currency( 1 ).should == 0
     a1.amount_currency( 2 ).should == 50.00
 

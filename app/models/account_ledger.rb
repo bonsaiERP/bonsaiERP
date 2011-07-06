@@ -11,13 +11,15 @@ class AccountLedger < ActiveRecord::Base
   before_destroy { false }
 
   # includes
-  include Models::AccountLedger::Money
   include ActionView::Helpers::NumberHelper
 
-  OPERATIONS = %w(in out trans)
+  # includes related to the model
+  include Models::AccountLedger::Money
+
+  OPERATIONS = %w(in out trans transaction)
   OPERATIONS.each do |op|
     class_eval <<-CODE, __FILE__, __LINE__ + 1
-      def #{op}
+      def #{op}?
         "#{op}" == operation
       end
     CODE
@@ -161,7 +163,7 @@ class AccountLedger < ActiveRecord::Base
 
     # There must be at least 2 account details
     def number_of_details
-      self.errors[:base] << "Debe seleccionar al menos 2 cuentas" if account_ledger_details.size < 1
+      self.errors[:base] << "Debe seleccionar al menos 2 cuentas" if account_ledger_details.size < 2
     end
 
 end

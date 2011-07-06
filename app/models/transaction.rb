@@ -13,6 +13,8 @@ class Transaction < ActiveRecord::Base
   include Models::Transaction::PayPlans
 
   include Models::Transaction::Trans
+  include Models::Transaction::Approve
+
   ###############################
  
   attr_reader :trans, :approving
@@ -31,6 +33,8 @@ class Transaction < ActiveRecord::Base
   belongs_to :project
   belongs_to :creator , :class_name => "User"
   belongs_to :approver, :class_name => "User"
+
+  has_one  :account_ledger, :conditions => "operation = 'transaction'"
 
   has_many :pay_plans          , :dependent => :destroy , :order => "payment_date ASC"
   has_many :payments           , :dependent => :destroy
@@ -96,19 +100,6 @@ class Transaction < ActiveRecord::Base
         "#{type}" == type
       end
     CODE
-  end
-
-  # Aprove a transaction
-  # @param Hash # Hass of prefereces where you can read the user and organisation preferences
-  def approve!
-    unless state == "draft"
-      false
-    else
-      @approving       = true
-      self.state       = "approved"
-      self.approver_id = UserSession.user_id
-      self.save(:validate => false)
-    end
   end
 
   # Tells if the user can approve a transaction based on the preferences
@@ -223,7 +214,7 @@ class Transaction < ActiveRecord::Base
 
   # Presents the total in currency unless the default currency
   def total_currency
-    (self.total/self.currency_exchange_rate).round(DECIMALS)
+    (self.total/self.exchange_rate).round(DECIMALS)
   end
 
   # Sums the total of payments
@@ -301,7 +292,7 @@ class Transaction < ActiveRecord::Base
   end
 
   def real_total
-    total / currency_exchange_rate
+    total / exchange_rate
   end
 
   def set_trans(value)
@@ -373,7 +364,7 @@ private
     self.active = active.nil? ? true : active
     self.discount ||= 0
     self.tax_percent = taxes.inject(0) {|sum, t| sum += t.rate }
-    self.currency_exchange_rate ||= 1
+    self.exchange_rate ||= 1
     self.gross_total ||= 0
     self.total ||= 0
     self.date ||= Date.today

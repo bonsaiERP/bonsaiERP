@@ -16,7 +16,7 @@ class CreateTransactions < ActiveRecord::Migration
       t.string  :bill_number # factura
 
       t.integer :currency_id
-      t.decimal :currency_exchange_rate, :precision => 14, :scale => 4
+      t.decimal :exchange_rate, :precision => 14, :scale => 4
 
       t.integer :organisation_id
 

@@ -36,8 +36,8 @@ feature "Organisations", "In order to create an organisation I must login" do
   end
 
   scenario "Create account and then organisation", :driver => :rack_test do
-    visit "/users/sign_in"
-    click_link "Registrate"
+    visit "/"
+    click_link "register"
     
     fill_in "Email", :with => 'admin@example.com'
     fill_in "Contraseña", :with => 'demo123'
@@ -69,6 +69,11 @@ feature "Organisations", "In order to create an organisation I must login" do
 
     org = Organisation.last
     org.accounts.map(&:organisation_id).uniq.should == [ org.id ]
+    org.accounts.select {|a| a.original_type == "Income" }.size.should == 1
+    org.accounts.select {|a| a.original_type == "Buy" }.size.should == 1
+    org.accounts.select {|a| a.original_type == "Expense" }.size.should == 1
+    org.accounts.select {|a| a.original_type == "Failed" }.size.should == 1
+    org.accounts.select {|a| a.original_type == "Unpayable" }.size.should == 1
   end
 
 

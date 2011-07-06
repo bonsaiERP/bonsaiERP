@@ -24,16 +24,22 @@ module HelperMethods
   
   # Creates a user logins and creates and organisation
   def create_organisation(attributes = {})
-    if attributes.empty?
-      y = YAML.load_file("#{Rails.root}/db/defaults/organisations.yml")
-      attributes = y.first
-    end
-    @user = create_user
+    #if attributes.empty?
+    #  y = YAML.load_file("#{Rails.root}/db/defaults/organisations.yml")
+    #  attributes = y.first
+    #end
+    #@user = create_user
+    attributes = {:name => 'Violetas', :currency_id => 1, :country_id => 1, 
+                         :phone => '7881221', :mobile => '789123434',
+                         :address => 'Mallasa calle 4 Nº 222', 
+                         :preferences => {"item_discount" => "2", "general_discount" => "0.5" }}.merge(attributes)
+
     create_countries
     create_currencies
-    OrganisationSession.set = {:id => 1, :name => 'ecuanime'}
+
     org = Organisation.create!(attributes)
-    #org.currency_ids = [1]
+    raise "Error creating organisation base accounts" unless org.create_base_accounts
+    org
   end
 
   # Create organisaton and items

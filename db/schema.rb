@@ -448,31 +448,31 @@ ActiveRecord::Schema.define(:version => 20110614130942) do
 
   create_table "transactions", :force => true do |t|
     t.integer  "account_id"
-    t.string   "type",                   :limit => 20
-    t.decimal  "total",                                 :precision => 14, :scale => 2
-    t.decimal  "balance",                               :precision => 14, :scale => 2
-    t.decimal  "tax_percent",                           :precision => 5,  :scale => 2
-    t.boolean  "active",                                                               :default => true
+    t.string   "type",               :limit => 20
+    t.decimal  "total",                             :precision => 14, :scale => 2
+    t.decimal  "balance",                           :precision => 14, :scale => 2
+    t.decimal  "tax_percent",                       :precision => 5,  :scale => 2
+    t.boolean  "active",                                                           :default => true
     t.string   "description"
-    t.string   "state",                  :limit => 20
+    t.string   "state",              :limit => 20
     t.date     "date"
     t.string   "ref_number"
     t.string   "bill_number"
     t.integer  "currency_id"
-    t.decimal  "currency_exchange_rate",                :precision => 14, :scale => 4
+    t.decimal  "exchange_rate",                     :precision => 14, :scale => 4
     t.integer  "organisation_id"
     t.integer  "project_id"
-    t.decimal  "discount",                              :precision => 5,  :scale => 2
-    t.decimal  "gross_total",                           :precision => 14, :scale => 2
-    t.boolean  "cash",                                                                 :default => true
+    t.decimal  "discount",                          :precision => 5,  :scale => 2
+    t.decimal  "gross_total",                       :precision => 14, :scale => 2
+    t.boolean  "cash",                                                             :default => true
     t.date     "payment_date"
-    t.decimal  "balance_inventory",                     :precision => 14, :scale => 2
+    t.decimal  "balance_inventory",                 :precision => 14, :scale => 2
     t.integer  "creator_id"
     t.integer  "approver_id"
-    t.boolean  "credit",                                                               :default => false
+    t.boolean  "credit",                                                           :default => false
     t.integer  "creditor_id"
     t.string   "credit_reference"
-    t.string   "credit_description",     :limit => 500
+    t.string   "credit_description", :limit => 500
     t.datetime "created_at"
     t.datetime "updated_at"
   end
