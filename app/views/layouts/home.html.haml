@@ -1,0 +1,31 @@
+!!!
+%html
+  %head
+    %title
+      bonsai - Sistema ERP online - 
+      = yield :title
+    %link{ :href => 'http://fonts.googleapis.com/css?family=Muli', :rel => 'stylesheet', :type => 'text/css'}
+    = stylesheet_link_tag    "homeapp"
+    = javascript_include_tag "home"
+    = csrf_meta_tags
+    :javascript
+      WebFontConfig = {
+        google: { families: [ 'Muli' ] }
+      };
+      (function() {
+        var wf = document.createElement('script');
+        wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+            '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+        wf.type = 'text/javascript';
+        wf.async = 'true';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(wf, s);
+      })();
+
+  %body
+    #wrapper
+      = render "home/header"
+      = yield
+      .clear
+      = render "home/footer"
+      .clear

@@ -1,0 +1,25 @@
+#banner
+  %h2 Contactenos
+  =link_to image_tag("prueba.png"), "/users/sign_up", :id => "register", :class => 'but'
+%h3
+  %p Uitilice el formulario de contactenos para mandar mensajes instantaneos  sobre cualquier tipo de consulta  que nos quiera  realizar a la brevedad  atenderemos su consulta.
+
+._65.fl
+  =form_tag("", :action => "post", :id => "contact") do
+    %p
+      = label_tag "name", "Nombre"
+      = text_field_tag "name", "", :size => 35
+    %p
+      = label_tag "email", "Email"
+      = text_field_tag "email", "", :size => 35
+    %p
+      = label_tag "message", "Mensaje"
+      = text_area_tag "message", "", :cols => 35, :rows => 4
+    %p= submit_tag "Contactar"
+
+#direccion._35.fl
+  %h3 Bonsai Labs
+  %p La Paz - Bolivia. Los Pinos, bloque 80 Nro. 201
+  %p 591-XXXXXX
+  %p contacto@bonsaierp.com
+  %p http://www.bonsaierp.com

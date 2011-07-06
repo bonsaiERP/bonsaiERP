@@ -106,4 +106,8 @@ module ApplicationHelper
       inventory_operations_path
     end
   end
+
+  def selected_menu(page)
+    "selected" if page == params[:page]
+  end
 end

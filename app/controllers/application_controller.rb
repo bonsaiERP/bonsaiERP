@@ -34,15 +34,20 @@ class ApplicationController < ActionController::Base
     "/users/sign_in"
   end
 
-  #def after_sign_in_path_for(resource)
-  #  if current_user.organisations.any?
-  #    destroy_organisation_session!
-  #    set_organisation_session(current_user.organisations.first)
-  #    redirect_to dashboard_url
-  #  end
-  #end
-  
-  def after_logout_path_for(resource)
+  def after_sign_in_path_for(resource)
+    if !current_user
+      "/users/sign_in"
+    elsif current_user.organisations.any?
+      set_organisation_session(current_user.organisations.first)
+      session[:user] = {:rol => current_user.link.rol }
+      "/dashboard"
+    elsif current_user.organisations.empty?
+      new_organisation_path
+    end
+  end
+
+  def after_sign_out_path_for(resource)
+    "/users/sign_in"
   end
 
     # especial redirect for ajax requests

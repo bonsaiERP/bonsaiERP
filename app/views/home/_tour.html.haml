@@ -1,0 +1,51 @@
+#banner
+  %h2 Vea el tour
+  =link_to image_tag("prueba.png"), "/users/sign_up", :id => "register", :class => 'but'
+%ul
+  %li= link_to "Ir a dashboard", "#dashboard"
+  %li= link_to "Ir a finanzas", "#finanzas"
+  %li= link_to "Ir a inventarios", "#inventarios"
+
+#separacion
+  %h2 Dashboard
+#dashboard._60.fl
+
+  = image_tag "tour_dashboard.png" 
+.comentario
+  %h3 Acerca del Dashboard
+  %ul
+    %li Menus rapidos.
+    %li Resumen de cuentas por cobrar.
+    %li Resumen de cuentas por pagar.
+    %li Resumen total de cuentas bancarias y cuentas de caja.
+.clear
+#separacion
+  %h2 Finanzas
+#finanzas._60.fl
+  = image_tag "tour_ventas.png"
+.comentario
+  %h3 Acerca de Finanzas
+  %ul
+    %li Ventas, aspecto importante para una empresa.
+    %li Adicion rapida de una venta.
+    %li Organizacion funcional por: Todos, esperando aprobacion,  esperando cobro, vencidas, con inventario pendiente, cobradas.
+    %li Visualizacion por colores de los estados de las ventas.
+    %li Busqueda instantanea de la informacion.
+.clear
+#separacion
+  %h2 Inventarios
+#inventarios._60.fl
+  = image_tag "tour_cuentas.png"
+.comentario
+  %h3 Acerca del Inventario
+  %ul
+    %li Se tiene el detalle de las cuentas bancarias.
+    %li Adicion rapida de una cuenta bancaria.
+    %li Se visualiza el total de la cuenta.
+    %li Visualizacion por colores de los estados de las ventas.
+    %li Se visualiza el saldo a conciliar.
+    %li Acceso rapido a las revisiones de las transacciones pendientes.
+.clear
+
+
+  =link_to "Regresar al Principio.", "#header"

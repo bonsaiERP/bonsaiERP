@@ -131,5 +131,10 @@ Bonsaierp::Application.routes.draw do
   match "/staff_account_autocomplete"    => AutocompleteApp.action(:staff_account)
   match "/item_account_autocomplete"     => AutocompleteApp.action(:item_account)
 
+  get "/tour" => 'home#index', :page => "tour"
+  get "/prices" => 'home#index', :page => "prices"
+  get "/team" => 'home#index', :page => "team"
+  get "/contact" => 'home#index', :page => "contact"
+
   root :to => 'home#index'
 end
