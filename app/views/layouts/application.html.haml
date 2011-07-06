@@ -3,6 +3,7 @@
 %html{ :xmlns => "http://www.w3.org/1999/xhtml", 'xml:lang' => "en", :lang => "en" }
   %head
     %meta{ 'http-equiv'  => "content-type", :content => "text/html;charset=UTF-8" }
+    %link{:rel => "shortcut icon", :href => "/assets/favicon.ico", :type => "image/x-icon"}
     = csrf_meta_tag
 
     %title Bonsai
@@ -19,6 +20,7 @@
       #wrapper
         #wrap_in
           #logo
+            %a{:href => 'http://bonsaierp.com', :target => '_blank', :title => 'Inicio'}
           #header
             = render 'layouts/usersettings_menu' if user_signed_in?
             - if organisation?

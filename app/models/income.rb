@@ -22,7 +22,7 @@ class Income < Transaction
 
   #validations
   #validates_length_of   :description,          :within => 0..255
-  validates_presence_of :date, :contact_id
+  validates_presence_of :date, :account_id
   validates             :ref_number,           :presence => true , :uniqueness => { :scope => :organisation_id, :allow_blank => false}
   validate              :valid_number_of_items
 

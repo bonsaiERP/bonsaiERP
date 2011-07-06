@@ -261,3 +261,19 @@ ul.team{
   background: darken($green, 10%);
 }
 
+.facebook{
+  height: 32px;
+  padding-left: 35px;
+  background: url(/assets/facebook.png) no-repeat;
+  display: inline-block;
+  padding-top: 9px;
+  margin:0px 5px;
+}
+.twitter{
+  height: 32px;
+  padding-left: 35px;
+  background: url(/assets/twitter.png) no-repeat;
+  display: inline-block;
+  padding-top: 9px;
+  margin:0px 5px;
+}

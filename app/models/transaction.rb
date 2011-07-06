@@ -11,17 +11,19 @@ class Transaction < ActiveRecord::Base
   ###############################
   # Methods for pay_plans
   include Models::Transaction::PayPlans
+
+  include Models::Transaction::Trans
   ###############################
  
   attr_reader :trans, :approving
   # callbacks
   before_validation :set_defaults, :if => :new_record?
+  before_create :set_creator
   #after_initialize :set_trans_to_true
-
-  before_save       :update_payment_date
+  #before_save       :update_payment_date
   before_save       :set_state
 
-  after_update      :update_transaction_pay_plans, :if => :trans?
+  #after_update      :update_transaction_pay_plans, :if => :trans?
 
   # relationships
   belongs_to :account
@@ -397,6 +399,10 @@ private
   # To have at least one item
   def valid_number_of_items
     self.errors.add(:base, "Debe ingresar seleccionar al menos un ítem") unless self.transaction_details.any?
+  end
+
+  def set_creator
+    self.creator_id = UserSession.user_id
   end
 
 

@@ -8,20 +8,23 @@ module Models::Transaction
     extend ActiveSupport::Concern
 
     included do
-      before_create :set_creator
+      before_save :save_trans_details, :if => :trans?
     end
 
     module InstanceMethods
       # Principal method to store when saving a new trans or editing details
       def save_trans
-        set_details_type
-        calculate_total_and_set_balance
-        set_balance_inventory
+        def self.trans?; true; end
+        self.save
       end
 
       private
-        def set_creator
-          self.creator_id = UserSession.user_id
+        def trans?; false; end
+
+        def save_trans_details
+          set_details_type
+          calculate_total_and_set_balance
+          set_balance_inventory
         end
 
         # Sets the type of the class making the transaction
