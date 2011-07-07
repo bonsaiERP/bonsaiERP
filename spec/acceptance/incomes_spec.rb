@@ -79,11 +79,16 @@ feature "Income", "test features" do
     i.account_ledger.should_not == nil
 
     al = i.account_ledger
+    al.operation.should == "transaction"
+    al.reference.should == "Venta #{i.ref_number}"
     a1.reload
     a2.reload
 
     a1.amount.should == i.total_currency
     a2.amount.should == -i.total_currency
+
+    # Create a payment
+    i.new_payment()
 
     # check if the account_ledger for is created and the accounts updated
     #i.account

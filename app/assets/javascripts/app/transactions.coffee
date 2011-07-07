@@ -15,7 +15,7 @@ class Transaction
     'add_item_id'               : '#add_item',
     'default_currency_id'       : 1,
     'one_item_table_warning'    : "Error: Debe existir al menos un ítem",
-    'currency_exchange_rate_id' : ""
+    'currency_exchange_id' : ""
   },
   currency_id   : 1,
   exchange_rate : 1,
@@ -27,7 +27,7 @@ class Transaction
     #self['currency_id'] = 2#conf.currency_id
     @conf              = $.extend(@conf, conf)
     @.currency_id   = $(@conf.currency_id).val() * 1
-    @.exchange_rate = $(@conf.currency_exchange_rate_id).val() * 1
+    @.exchange_rate = $(@conf.currency_exchange_id).val() * 1
 
     @.set_events()
     $("#{@conf.table_id} select:first").trigger('change')
@@ -65,7 +65,7 @@ class Transaction
   set_edit_rate_link_event: ->
     self = @
     $('#edit_rate_link').live("click", ->
-      val = $(self.conf.currency_exchange_rate_id).val() * 1
+      val = $(self.conf.currency_exchange_id).val() * 1
 
       $('<div/>').addClass('ajax-modal')
       .html("<div class=\"boolean\"><label>Tipo de cambio:</label> <input type=\"text\" value=\"#{val.toFixed(4)}\"/>")
@@ -74,7 +74,7 @@ class Transaction
         buttons: {
           'Aceptar': ->
             rate = $(this).find('input').val() * 1
-            $(self.conf.currency_exchange_rate_id).val(rate.toFixed(4))
+            $(self.conf.currency_exchange_id).val(rate.toFixed(4))
             self.exchange_rate = rate
             $('body').trigger('total')
             self.set_exchange_rate_html()
@@ -83,7 +83,7 @@ class Transaction
             $(this).dialog("close")
         }
       )
-       #prompt("Tipo de cambio", $(self.conf.currency_exchange_rate_id).val()) * 1
+       #prompt("Tipo de cambio", $(self.conf.currency_exchange_id).val()) * 1
     )
 
   # Event when changed discount rate
@@ -165,7 +165,7 @@ class Transaction
 
     if @conf.default_currency_id == self.currency_id
       $(@conf.currency_id).siblings("label").find("span").html("")
-      $(@conf.currency_exchange_rate_id).val(1)
+      $(@conf.currency_exchange_id).val(1)
       self.exchange_rate = 1
 
       $('#total_value_currency').html("")
@@ -175,7 +175,7 @@ class Transaction
       change = this.find_currency(self.currency_id)
       self.exchange_rate = self.find_exchange_rate(self.currency_id)
       # set value
-      $(@conf.currency_exchange_rate_id).val(self.exchange_rate)
+      $(@conf.currency_exchange_id).val(self.exchange_rate)
       $(@conf.currency_id).data({'base': base, 'change': self.exchange_rate})
 
       this.set_exchange_rate_html()
@@ -183,14 +183,15 @@ class Transaction
 
    # sets the HTML for the span of exchange rate
   set_exchange_rate_html: ->
-    self          = this
+    self          = @
     $span         = $(@conf.currency_id).siblings("label").find("span")
     currency      = this.find_currency(@conf.default_currency_id)
     change        = this.find_currency(this.currency_id)
-    exchange_rate = $(@conf.currency_exchange_rate_id).val() * 1
-    html          = "1 #{change.name}                                   = <span class = 'b'>#{_b.ntc(exchange_rate, 4)}</span> #{currency.name.pluralize()} "
+    exchange_rate = $(@conf.currency_exchange_id).val() * 1
+    html          = "1 #{change.name} = <span class = 'b'>#{_b.ntc(exchange_rate, 4)}</span> #{currency.name.pluralize()} "
 
     html += "<a id='edit_rate_link' href='javascript:'>editar</a>"
+
     try
       $span.html( html ).mark()
     catch e
@@ -291,7 +292,7 @@ class Income extends Transaction
     self = this
     @conf['currency_id']                 = '#income_currency_id'
     @conf['discount_id']                 = '#income_discount'
-    @conf['currency_exchange_rate_id']   = '#income_currency_exchange_rate'
+    @conf['currency_exchange_id']        = '#income_exchange_rate'
     @conf['edit_rate_link_id']           = '#edit_rate_link'
     @conf['insert_exchange_rate_prompt'] = "Ingrese el tipo de cambio"
     super
@@ -318,7 +319,7 @@ class Buy extends Transaction
     self = this
     @conf['currency_id']                 = '#buy_currency_id'
     @conf['discount_id']                 = '#buy_discount'
-    @conf['currency_exchange_rate_id']   = '#buy_currency_exchange_rate'
+    @conf['currency_exchange_id']        = '#buy_exchange_rate'
     @conf['edit_rate_link_id']           = '#edit_rate_link'
     @conf['insert_exchange_rate_prompt'] = "Ingrese el tipo de cambio"
     super
@@ -333,7 +334,7 @@ class Expense extends Transaction
     self = this
     @conf['currency_id']                 = '#expense_currency_id'
     @conf['discount_id']                 = '#expense_discount'
-    @conf['currency_exchange_rate_id']   = '#expense_currency_exchange_rate'
+    @conf['currency_exchange_id']        = '#expense_exchange_rate'
     @conf['edit_rate_link_id']           = '#edit_rate_link'
     @conf['insert_exchange_rate_prompt'] = "Ingrese el tipo de cambio"
     super

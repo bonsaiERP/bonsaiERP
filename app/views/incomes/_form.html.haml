@@ -19,7 +19,7 @@
 
   = f.association :project,  :label => 'Proyecto', :collection => Project.org
   = f.association :currency, :label => 'Moneda/Tipo de cambio. <span class="n black"></span>'.html_safe, :include_blank => false
-  = f.input :currency_exchange_rate, :as => :hidden
+  = f.input :exchange_rate, :as => :hidden
   .clear
 
   .input

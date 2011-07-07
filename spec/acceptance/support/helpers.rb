@@ -9,7 +9,7 @@ module HelperMethods
     attributes.delete(:password)
     attributes.delete(:password_confirmation)
     user = Factory.create(:user, attributes)
-    User.confirm_by_token(user.confirmation_token)
+    user.confirm!
     UserSession.current_user = user
     user
   end
@@ -73,6 +73,13 @@ module HelperMethods
   def create_contacts
     YAML.load_file("#{Rails.root}/db/defaults/contacts.yml").each do |c|
       Factory.create :contact, c
+    end
+  end
+
+  def create_clients
+    YAML.load_file("#{Rails.root}/spec/factories/contacts.yml").each do |c|
+      matchcode = "#{c[:first_name]} #{c[:last_name]}"
+      Client.create!(c.merge(:matchcode => matchcode) )
     end
   end
 

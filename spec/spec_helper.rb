@@ -1,4 +1,6 @@
 #require 'rubygems'
+require 'bundler/setup'
+Bundler.require(:default, :development)
 require 'spork'
 require 'valid_attribute'
 

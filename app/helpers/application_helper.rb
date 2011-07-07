@@ -62,7 +62,7 @@ module ApplicationHelper
 
   # returns the minus image with a size
   def minus_image(size = 16)
-    raw "<img src=\"/stylesheets/images/minus.png\" width=\"#{size}\" height=\"#{size}\" alt =\"menos\"/>"
+    raw "<img src=\"/assets/images/minus.png\" width=\"#{size}\" height=\"#{size}\" alt =\"menos\"/>"
   end
 
   # Presents income/expense with color

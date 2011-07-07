@@ -52,7 +52,7 @@ class IncomesController < ApplicationController
     @transaction = Income.new(params[:income])
 
     respond_to do |format|
-      if @transaction.save
+      if @transaction.save_trans
         format.html { redirect_to(@transaction, :notice => 'Se ha creado una proforma de venta.') }
         format.xml  { render :xml => @transaction, :status => :created, :location => @transaction }
       else

@@ -23,7 +23,12 @@ class ContactAutocomplete
 
     @auto_id = (new Date).getTime()
 
-    input = $('<input/>').attr({ 'id': @auto_id, 'type': 'text', 'size': 35 }).val(@val)
+    input = $('<input/>').attr(
+      'id': @options.id || @auto_id
+      'type': 'text'
+      'size': 35
+      'name': @options.name || @auto_id
+    ).val(@val)
     .addClass('autocomplete-input')
     .after(self.createAddLink())
     .autocomplete(

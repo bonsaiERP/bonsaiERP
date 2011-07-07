@@ -59,7 +59,7 @@
     .input
       - unless @income.currency_id == currency_id
         .input
-          1 #{@income.currency.name} = <span class="b">#{@income.currency_exchange_rate}</span> #{currency_name.pluralize}
+          1 #{@income.currency.name} = <span class="b">#{@income.exchange_rate}</span> #{currency_name.pluralize}
 
       - if @income.project_id
         .input
