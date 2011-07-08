@@ -25,7 +25,6 @@ module Models::AccountLedger
         params.symbolize_keys.assert_valid_keys( :operation, :account_id, :to_id, :amount, :reference, :date, :exchange_rate )
 
         ac = AccountLedger.new(params)
-        ac.creator_id = UserSession.user_id
         def ac.money?; true; end
         ac.conciliation = false
         
@@ -65,12 +64,19 @@ module Models::AccountLedger
         end
 
         def create_ledger_details
-          amt = amount_operation
-
           if account_id.present? and amount.present? and to_id.present?
-            account_ledger_details.build(:account_id => account_id, :amount => amt, :currency_id => account.currency_id, :state => 'uncon')
+            amt = amount_operation
+
+            account_ledger_details.build(
+              :account_id => account_id, :amount => amt, 
+              :currency_id => account.currency_id, :state => 'uncon'
+            )
+
             amt2 = -amt * exchange_rate
-            account_ledger_details.build(:account_id => to_id, :amount => amt2, :currency_id => account.currency_id, :state => 'uncon')
+            account_ledger_details.build(
+              :account_id => to_id, :amount => amt2, 
+              :currency_id => account.currency_id, :state => 'uncon'
+            )
           end
         end
 

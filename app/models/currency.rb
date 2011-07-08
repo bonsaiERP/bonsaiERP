@@ -16,7 +16,7 @@ class Currency < ActiveRecord::Base
   end
 
   def self.to_hash(*args)
-    args = [:name, :symbol, :code] if args.empty?
+    args = [:id, :name, :symbol, :code] if args.empty?
     l = lambda {|v| args.map {|val| [val, v.send(val)] } }
     Hash[ Currency.all.map {|v| [v.id, Hash[l.call(v)] ]  } ]
   end

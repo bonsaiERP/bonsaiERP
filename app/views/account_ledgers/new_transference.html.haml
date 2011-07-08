@@ -39,10 +39,11 @@
 :javascript
   $(function() {
 
-    function ExchangeRate(input, accounts, currencies) {
-      this.input      = input;
-      this.accounts   = accounts;
-      this.currencies = currencies;
+    function ExchangeRate(input, currency_id, accounts, currencies) {
+      this.input       = input;
+      this.currency_id = currency_id;
+      this.accounts    = accounts;
+      this.currencies  = currencies;
       this.init();
     }
 
@@ -84,7 +85,7 @@
       // shows or hides the container
       showHideRate: function() {
         if(this.currency) {
-          if(this.account.currency_id != this.currency.id) {
+          if(this.account.currency_id != this.currency_id) {
             $('#cur_symbol').html(this.currency.symbol);
             $('#al_exchange_rate').show().mark();
           }else{
@@ -98,13 +99,13 @@
       totalExchangeRate: function() {
         var tot = $('#account_ledger_amount').val() * 1;
         var er = $('#account_ledger_exchange_rate').val() * 1;
-        $('#total_change').html(" Total: " +  _b.ntc(tot * er) + " " + this.currency.symbol);
+        $('#total_change').html(" Total: " + this.currency.symbol + " " +  _b.ntc(tot * er));
       }
     }
 
     var accounts = #{Account.to_hash(:name, :currency_id).to_json};
     var currencies = #{Currency.to_hash.to_json};
 
-    new ExchangeRate('#account_ledger_exchange_rate', accounts, currencies);
+    new ExchangeRate('#account_ledger_exchange_rate', #{@account_ledger.account.currency_id}, accounts, currencies);
 
   });

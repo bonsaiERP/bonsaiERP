@@ -55,16 +55,17 @@ ActiveRecord::Schema.define(:version => 20110614130942) do
     t.integer  "account_id"
     t.integer  "to_id"
     t.date     "date"
-    t.string   "operation",       :limit => 20
-    t.boolean  "conciliation",                                                 :default => true
-    t.decimal  "amount",                        :precision => 14, :scale => 2
-    t.decimal  "exchange_rate",                 :precision => 14, :scale => 4
+    t.string   "operation",           :limit => 20
+    t.boolean  "conciliation",                                                     :default => true
+    t.decimal  "amount",                            :precision => 14, :scale => 2
+    t.decimal  "exchange_rate",                     :precision => 14, :scale => 4
+    t.decimal  "interests_penalties",               :precision => 14, :scale => 2, :default => 0.0
     t.string   "description"
     t.integer  "transaction_id"
     t.integer  "creator_id"
     t.integer  "approver_id"
     t.integer  "nuller_id"
-    t.boolean  "active",                                                       :default => true
+    t.boolean  "active",                                                           :default => true
     t.datetime "created_at"
     t.datetime "updated_at"
   end

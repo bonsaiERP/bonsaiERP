@@ -5,9 +5,6 @@ class Income < Transaction
 
   after_initialize :set_ref_number, :if => :new_record?
   
-  # callbacks
-  #after_save :set_client, :if => :aproving?
-
 
   belongs_to :client
 

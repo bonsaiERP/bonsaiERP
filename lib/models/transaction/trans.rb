@@ -18,8 +18,9 @@ module Models::Transaction
         self.save
       end
 
+      def trans?; false; end
+
       private
-        def trans?; false; end
 
         def save_trans_details
           set_details_type

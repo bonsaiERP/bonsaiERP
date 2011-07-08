@@ -5,6 +5,8 @@
   :account_number: 'Income'
 - :name: 'Gastos'
   :account_number: 'Expense'
+- :name: 'Intereses/Penalidades'
+  :account_number: 'Interest'
 - :name: 'Fallados'
   :account_number: 'Failed'
 - :name: 'Incobrables'

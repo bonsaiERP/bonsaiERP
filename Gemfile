@@ -33,9 +33,8 @@ gem 'prawn', '~>0.11.1', :git => 'https://github.com/sandal/prawn.git', :branch 
 #gem 'escape_utils'
 
 group :development do
-  gem 'ruby-debug',   :platform => :mri_18
   gem 'ruby-debug19', :platform => :mri_19, :require => 'ruby-debug'
-  gem 'perftools.rb', :platform => :mri,    :require => 'perftools'
+  #gem 'perftools.rb', :platform => :mri,    :require => 'perftools'
   gem 'pry'
   gem 'rspec-rails', '~>2.6.0'
   gem 'steak', '~>2.0.0'

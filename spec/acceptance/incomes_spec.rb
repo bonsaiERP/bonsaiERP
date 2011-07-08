@@ -84,11 +84,36 @@ feature "Income", "test features" do
     a1.reload
     a2.reload
 
+    # Check amounts for accounts
     a1.amount.should == i.total_currency
     a2.amount.should == -i.total_currency
 
     # Create a payment
-    i.new_payment()
+    i.payment?.should == false
+    # reload because of trans? is set to true
+    i = Income.find(i.id)
+
+    p = i.new_payment(:account_id => @ac1_id, :amount => 30, :exchange_rate => 1, :reference => 'Cheque 143234')
+    p.class.should == AccountLedger
+    p.payment?.should == true
+    p.operation.should == 'in'
+    p.amount.should == 30
+    p.interests_penalties.should == 0
+
+
+    i.payment?.should == true
+
+    bal = i.balance
+
+    i.save_payment.should == true
+
+    #puts "AMT: #{i.account_ledgers.first.amount}"
+    #puts i.account_ledgers.size
+    i.balance.should == bal - 30
+    #puts p.payment?
+    #puts i.errors.messages
+    #puts p.errors.messages
+    #puts p.account_ledger_details.size
 
     # check if the account_ledger for is created and the accounts updated
     #i.account

@@ -13,6 +13,8 @@ class CreateAccountLedgers < ActiveRecord::Migration
       t.decimal :amount, :precision => 14, :scale => 2
       t.decimal :exchange_rate, :precision => 14, :scale => 4
 
+      t.decimal :interests_penalties, :precision => 14, :scale => 2, :default => 0
+
       t.string  :description
 
       t.integer :transaction_id

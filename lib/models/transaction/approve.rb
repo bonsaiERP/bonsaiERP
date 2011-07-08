@@ -11,6 +11,7 @@ module Models::Transaction
         self.state       = "approved"
         self.approver_id = UserSession.user_id
         create_account_ledger_details
+        #update_transaction_amount
         self.save
       end
     end
@@ -30,6 +31,11 @@ module Models::Transaction
         )
         al.account_ledger_details.build(:account_id => account_id, :amount => total_currency, :state => 'con', :currency_id => currency_id )
         al.account_ledger_details.build(:account_id => al.to_id, :amount => - total_currency, :state => 'con', :currency_id => currency_id )
+      end
+
+      # Updates the balance of an account based on the amount it has
+      def update_transaction_amount
+        account.cur(currency_id).amount
       end
   end
 end

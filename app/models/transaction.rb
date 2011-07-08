@@ -9,23 +9,17 @@ class Transaction < ActiveRecord::Base
   DECIMALS = 2
   # Determines if the oprations is made on transaction or pay_plan or payment
   ###############################
-  # Methods for pay_plans
-  include Models::Transaction::PayPlans
-
   include Models::Transaction::Trans
   include Models::Transaction::Approve
+  include Models::Transaction::PayPlan
+  include Models::Transaction::Payment
 
   ###############################
  
-  attr_reader :trans, :approving
   # callbacks
   before_validation :set_defaults, :if => :new_record?
-  before_create :set_creator
-  #after_initialize :set_trans_to_true
-  #before_save       :update_payment_date
+  before_create     :set_creator
   before_save       :set_state
-
-  #after_update      :update_transaction_pay_plans, :if => :trans?
 
   # relationships
   belongs_to :account
@@ -39,6 +33,7 @@ class Transaction < ActiveRecord::Base
   has_many :pay_plans          , :dependent => :destroy , :order => "payment_date ASC"
   has_many :payments           , :dependent => :destroy
   has_many :transaction_details, :dependent => :destroy
+  has_many :account_ledgers    , :dependent => :destroy, :conditions => "operation != 'transaction'"
 
   has_and_belongs_to_many :taxes, :class_name => 'Tax'
   # nested attributes
@@ -256,47 +251,8 @@ class Transaction < ActiveRecord::Base
     end
   end
 
-  # Prepares a payment with the current notes to pay
-  # @param Hash options
-  def new_payment(options = {})
-    amt = int_pen = 0
-    if pay_plans.unpaid.any?
-      pp = pay_plans.unpaid.first
-      amt, int_pen =  [pp.amount, pp.interests_penalties]
-    else
-      amt = balance
-    end
-
-    options[:amount] = options[:amount] || amt
-    options[:interests_penalties] = options[:interests_penalties] || int_pen
-    payments.build({:transaction_id => id, :currency_id => currency_id}.merge(options))
-  end
-
-
-  # Adds a payment and updates the balance
-  def add_payment(amount)
-    if amount > balance
-      return false
-    else
-      @trans = false
-      self.balance = (balance - amount)
-      self.save
-    end
-  end
-
-  # Substract the amount from the balance
-  def substract_payment(amount)
-    @trans = false
-    self.balance = (balance + amount)
-    self.save
-  end
-
   def real_total
     total / exchange_rate
-  end
-
-  def set_trans(value)
-    @trans = value
   end
 
   # Returs the pay_type for the current instance
@@ -371,18 +327,6 @@ private
     @trans = true
   end
 
-  def set_trans_to_true
-    @trans = true
-  end
-
-
-
-
-  # Determines if it is a transaction or other operation
-  def trans?
-    @trans
-  end
-
   def aproving?
     aproving
   end
@@ -395,6 +339,5 @@ private
   def set_creator
     self.creator_id = UserSession.user_id
   end
-
 
 end

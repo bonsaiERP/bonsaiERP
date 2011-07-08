@@ -8,13 +8,16 @@ class AccountLedger < ActiveRecord::Base
   acts_as_org
   # callbacks
   before_validation { self.currency_id = account.try(:currency_id) unless currency_id.present? }
-  before_destroy { false }
+  before_destroy    { false }
+  before_create     { self.creator_id = UserSession.user_id }
 
   # includes
   include ActionView::Helpers::NumberHelper
 
+
   # includes related to the model
   include Models::AccountLedger::Money
+  include Models::AccountLedger::Transaction
 
   OPERATIONS = %w(in out trans transaction)
   OPERATIONS.each do |op|
@@ -41,7 +44,7 @@ class AccountLedger < ActiveRecord::Base
   # Validations
   validates_inclusion_of :operation, :in => OPERATIONS
   validates_numericality_of :amount, :greater_than => 0, :if => :new_record?
-                                                validates_numericality_of :exchange_rate, :greater_than => 0
+  validates_numericality_of :exchange_rate, :greater_than => 0
 
   validates :reference, :length => { :within => 3..150, :allow_blank => false }
   validates :currency_id, :currency => true

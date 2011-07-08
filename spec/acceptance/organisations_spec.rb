@@ -74,6 +74,7 @@ feature "Organisations", "In order to create an organisation I must login" do
     org.accounts.select {|a| a.original_type == "Expense" }.size.should == 1
     org.accounts.select {|a| a.original_type == "Failed" }.size.should == 1
     org.accounts.select {|a| a.original_type == "Unpayable" }.size.should == 1
+    org.accounts.select {|a| a.original_type == "Interest" }.size.should == 1
   end
 
 
