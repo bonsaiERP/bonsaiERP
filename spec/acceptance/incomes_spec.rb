@@ -90,8 +90,6 @@ feature "Income", "test features" do
 
     # Create a payment
     i.payment?.should == false
-    # reload because of trans? is set to true
-    i = Income.find(i.id)
 
     p = i.new_payment(:account_id => @ac1_id, :amount => 30, :exchange_rate => 1, :reference => 'Cheque 143234')
     p.class.should == AccountLedger
@@ -99,7 +97,6 @@ feature "Income", "test features" do
     p.operation.should == 'in'
     p.amount.should == 30
     p.interests_penalties.should == 0
-
 
     i.payment?.should == true
 

@@ -30,6 +30,7 @@ module Models::Transaction::Payment
     def save_payment
       return false unless payment?
 
+      null_pay_plans unless cash? # anulate all payments if credit
       self.balance = balance - @current_ledger.amount
       self.save
     end
@@ -37,6 +38,10 @@ module Models::Transaction::Payment
     private
       def valid_number_of_legers
         errors[:base] << "Error" if account_ledgers.select {|al| not al.persisted? }.size > 1
+      end
+
+      def null_pay_plans
+
       end
     
   end

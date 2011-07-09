@@ -19,7 +19,7 @@ class Transaction < ActiveRecord::Base
   # callbacks
   before_validation :set_defaults, :if => :new_record?
   before_create     :set_creator
-  before_save       :set_state
+  #before_save       :set_state
 
   # relationships
   belongs_to :account

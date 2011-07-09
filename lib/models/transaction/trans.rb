@@ -8,17 +8,17 @@ module Models::Transaction
     extend ActiveSupport::Concern
 
     included do
-      before_save :save_trans_details, :if => :trans?
+      before_save :save_trans_details, :if => :draft?
     end
 
     module InstanceMethods
       # Principal method to store when saving a new trans or editing details
       def save_trans
-        def self.trans?; true; end
+        self.state ||= "draft"
+        return false unless draft? # return false if state == 'draft'
+
         self.save
       end
-
-      def trans?; false; end
 
       private
 
