@@ -39,18 +39,6 @@ module Models::AccountLedger
 
       def money?; false; end
 
-      # Makes the conciliation to update accounts
-      def conciliate_account
-        return false unless active?
-
-        account_ledger_details.each do |ac|
-          ac.state = "con"
-        end
-        self.conciliation = true
-        self.approver_id = UserSession.user_id
-
-        self.save
-      end
 
       private
 

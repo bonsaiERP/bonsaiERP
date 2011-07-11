@@ -58,7 +58,7 @@ class UsersController < ApplicationController
   end
 
   # Method for the admins that control an organisation
-  # /users/:id/edit_user
+  # GET /users/:id/edit_user
   def edit_user
     @user = current_user.organisation.links.find_by_user_id(params[:id]).user
     @user.rolname = @user.link.rol
@@ -66,7 +66,7 @@ class UsersController < ApplicationController
   end
 
   # Method for the admins that control an organisation
-  # /users/:id/update_user
+  # PUT /users/:id/update_user
   def update_user
     h = params[:user]
     h[:rolname] = '' if params[:user][:rolname] == 'admin'

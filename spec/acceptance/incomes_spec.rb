@@ -46,11 +46,10 @@ feature "Income", "test features" do
   end
 
   scenario "Create a payment with nearest pay_plan" do
-    i = Income.new(income_params.merge(:account_id => @ac1_id))
+    i = Income.new(income_params.merge(:account_id => @cli1_id))
 
     i.cash.should == true
     i.save_trans.should == true
-    #pp = i.create_pay_plan(pay_plan_params(:amount => 100)
 
     i.reload
     i.transaction_details.size.should == 2
@@ -104,9 +103,48 @@ feature "Income", "test features" do
 
     i.save_payment.should == true
 
-    #puts "AMT: #{i.account_ledgers.first.amount}"
-    #puts i.account_ledgers.size
     i.balance.should == bal - 30
+    ac1 = p.account_ledger_details[0].account
+    ac2 = p.account_ledger_details[1].account
+
+    ac1.amount.should == 0
+    ac2.amount.should == i.total
+
+    p.conciliate_account.should == true
+
+    p.account_ledger_details(true).map(&:state).uniq.should == ['con']
+
+    ac1.amount.should == 30
+
+    ac1.reload
+    ac2.reload
+
+    ac1.amount.should == 30
+    ac2.amount.should == i.total - 30
+
+    i.deliver.should == false
+    
+    p = i.new_payment(:account_id => @ac1_id, :amount => i.balance, :reference => 'Cheque 222289', :exchange_rate => 1)
+
+    i.save_payment.should == true
+    i.state.should == 'paid'
+    i.deliver.should == false
+
+    puts "---------------------"
+    p.conciliate_transaction_account.should == true
+    p.reload
+
+    p.conciliation.should == true
+    i.reload
+    i.balance.should == 0
+    i.deliver.should == true
+
+    ac1.reload
+    ac2.reload
+
+    ac1.amount.should == i.total
+    ac2.amount.should == 0
+    
     #puts p.payment?
     #puts i.errors.messages
     #puts p.errors.messages

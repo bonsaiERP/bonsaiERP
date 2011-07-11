@@ -38,7 +38,7 @@ class AccountLedger < ActiveRecord::Base
   belongs_to :nuller,   :class_name => "User"
   belongs_to :creator,  :class_name => "User"
 
-  has_many :account_ledger_details, :dependent => :destroy
+  has_many :account_ledger_details, :dependent => :destroy, :autosave => true
   accepts_nested_attributes_for :account_ledger_details, :allow_destroy => true
 
   # Validations
@@ -91,6 +91,19 @@ class AccountLedger < ActiveRecord::Base
     self.save
   end
 
+  # Makes the conciliation to update accounts
+  def conciliate_account
+    return false unless active?
+
+    account_ledger_details.each do |ac|
+      ac.state = "con"
+    end
+    self.conciliation = true
+
+    self.approver_id = UserSession.user_id
+
+    self.save
+  end
 
   def show_exchange_rate?
     if to_id.present?

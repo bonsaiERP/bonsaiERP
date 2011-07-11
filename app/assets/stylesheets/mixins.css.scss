@@ -26,3 +26,15 @@
   display: inline-block;
   text-indent: -1000em;
 }
+
+@mixin t-shadow($top:1px, $left: 1px, $dif: 0px, $col: $grey){
+  text-shadow: $top $left $dif $col;
+  -moz-text-shadow: $top $left $dif $col;
+  -webkit-text-shadow: $top $left $dif $col;
+}
+
+@mixin b-shadow($top:0px, $left: 0px, $dif: 5px, $col: $grey){
+  box-shadow: $top $left $dif $col;
+  -moz-box-shadow: $top $left $dif $col;
+  -webkit-box-shadow: $top $left $dif $col;
+}

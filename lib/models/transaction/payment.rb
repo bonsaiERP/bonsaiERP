@@ -32,6 +32,8 @@ module Models::Transaction::Payment
 
       null_pay_plans unless cash? # anulate all payments if credit
       self.balance = balance - @current_ledger.amount
+      self.state = 'paid' if balance <= 0
+
       self.save
     end
 

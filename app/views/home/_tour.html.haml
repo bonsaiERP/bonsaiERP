@@ -2,50 +2,62 @@
   %h2 Vea el tour
   =link_to image_tag("prueba.png"), "/users/sign_up", :id => "register", :class => 'but'
 %ul
-  %li.b= link_to "Dashboard", "#dashboard"
-  %li.b= link_to "Finanzas", "#finanzas"
-  %li.b= link_to "Inventarios", "#inventarios"
+  %li.b= link_to "Resumen", "#resume"
+  %li.b= link_to "Compras y Ventas", "#sales"
+  %li.b= link_to "Inventarios", "#inventory"
+  %li.b= link_to "Cuentas Bancarias y Cajas", "#banks"
+  %li.b= link_to "Clientes y Proveedores", "#clients"
 
 #separacion
-  %h2 Dashboard
-#dashboard._60.fl
 
-  = image_tag "tour_dashboard.png" 
-.comentario
-  %h3 Acerca del Dashboard
-  %ul
-    %li Menus rapidos.
-    %li Resumen de cuentas por cobrar.
-    %li Resumen de cuentas por pagar.
-    %li Resumen total de cuentas bancarias y cuentas de caja.
-.clear
-#separacion
-  %h2 Finanzas
-#finanzas._60.fl
-  = image_tag "tour_ventas.png"
-.comentario
-  %h3 Acerca de Finanzas
-  %ul
-    %li Ventas, aspecto importante para una empresa.
-    %li Adicion rapida de una venta.
-    %li Organizacion funcional por: Todos, esperando aprobacion,  esperando cobro, vencidas, con inventario pendiente, cobradas.
-    %li Visualizacion por colores de los estados de las ventas.
-    %li Busqueda instantanea de la informacion.
-.clear
-#separacion
+#resume.tour_part
+  %h2 Resumen
+  = image_tag "tour_dashboard.png", :class => 'img'
+  .comment
+    %p 
+      Esta es la primera pantalla que aparecerá al ingresar a su “oficina virtual”. 
+      En ella podrá ver un resumen de sus pendientes, estado de sus cuentas, etc.
+
+#sales.tour_part
+  %h2 Compras y Ventas
+  = image_tag "tour_ventas.png", :class => 'img'
+  .comment
+    %p bonsai controla sus compras y ventas:
+    %ul
+      %li Registra los productos o servicios que se compran o venden.
+      %li Registra las notas de compra o venta. Para ventas también registra las cotizaciones.
+      %li Registra al proveedor o al cliente.
+      %li Registra quién,  cómo y cuándo realizó la transacción.
+      %li Registra que cuenta bancaria o caja intervino en la transacción.
+
+#inventory.tour_part
   %h2 Inventarios
-#inventarios._60.fl
-  = image_tag "tour_cuentas.png"
-.comentario
-  %h3 Acerca del Inventario
+  .comment
+    %p Puede saber cuánto tiene el momento que usted quiera.
+
+    %p En inventarios usted puede controlar todos sus productos, no sólo los que comercializa, sino también las herramientas y enseres que necesita para operar en su empresa:
+
+    %ul
+      %li Puede crear los almacenes que necesite y registrar en ellos sus productos cuando realiza una compra o una venta.
+      %li Cuando realice una venta se descuenta automáticamente los ítems vendidos. Cuando su material llegue a un mínimo (que usted mismo define) bonsai le alerta que ese material se está acabando y debe reabastecerse.
+      %li Le avisa los productos pendientes de entrega y de recojo.
+
+#banks.tour_part
+  %h2 Cuentas Bancarias y Cajas
+  %p Usted puede controlar los movimientos de sus cuentas bancarias o cajas.
+
   %ul
-    %li Se tiene el detalle de las cuentas bancarias.
-    %li Adicion rapida de una cuenta bancaria.
-    %li Se visualiza el total de la cuenta.
-    %li Visualizacion por colores de los estados de las ventas.
-    %li Se visualiza el saldo a conciliar.
-    %li Acceso rapido a las revisiones de las transacciones pendientes.
+    %li Puede registrar las cuentas bancarias y cajas que necesite.
+    %li Registra los movimientos que se han realizado. bonsai le avisa las transacciones que faltan ser revisadas o conciliadas. 
+
+
+#clients.tour_part
+  %h2 Clientes y Proveedores
+  %p Sepa de un vistazo sus cuentas por pagar y cobrar.
+  %ul
+    %li Registra a sus clientes y proveedores creándoles cuentas independientes.
+    %li Registra las cuentas por pagar y cobrar de clientes y proveedores. Además que bonsai le hará recuerdo cuando vence alguna cuenta por cobrar o pagar.
+    %li Puede almacenar los datos más relevantes de sus clientes y proveedores.
+
 .clear
-
-
-  =link_to "Regresar al Principio.", "#header"
+=link_to "Regresar al Principio.", "#header"

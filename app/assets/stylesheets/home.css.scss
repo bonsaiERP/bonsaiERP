@@ -20,17 +20,6 @@ ul{
   li{ padding: 4px 0px; }
 }
 
-@mixin t-shadow($top:1px, $left: 1px, $dif: 0px, $col: $grey){
-  text-shadow: $top $left $dif $col;
-  -moz-text-shadow: $top $left $dif $col;
-  -webkit-text-shadow: $top $left $dif $col;
-}
-
-@mixin b-shadow($top:0px, $left: 0px, $dif: 5px, $col: $grey){
-  box-shadow: $top $left $dif $col;
-  -moz-box-shadow: $top $left $dif $col;
-  -webkit-box-shadow: $top $left $dif $col;
-}
 /* Estilos*/
 .but{
   display: inline-block;
@@ -60,19 +49,22 @@ ul{
     left: 20px;
   }
   #login{
-    background: transparent url(user2.png) no-repeat 0px 3px;
-    font-style: italic;
+    color: $white;
+    @include rounded-corners(3px);
+    background: lighten($green, 10%) url(user2.png) no-repeat 3px 4px;
+    //font-style: italic;
     position: absolute;
-    top: 8px;
-    right: 20px;
-    padding-left: 20px;
-    color: darken($green, 10%);
-    font-size: 18px;
+    top: 16px;
+    right: 40px;
+    //padding-left: 20px;
+    //color: darken($green, 10%);
+    padding: 3px 3px 3px 22px;
+    font-size: 14px;
     font-weight: bold;
     text-decoration: none;
     font-family: muli, arial, serif;
     &:hover{
-      @include t-shadow(1px, 1px, 2px, $grey);
+      background-color: darken($green, 10%);
     }
   }
   #menu{
@@ -88,9 +80,9 @@ ul{
         display: block;
         margin: 0px 5px;
         font-family: 'Muli', arial, serif;
-        color: darken($grey, 30%);
+        color: lighten($black, 10%);
         text-decoration: none;
-        font-size: 20px;
+        font-size: 22px;
         &:hover{ color: $green; }
         @include t-shadow(1px, 1px, 1px, darken($grey, 20%));
       }
@@ -131,10 +123,10 @@ ul{
 
 #boxes{
   margin-top: 20px;
-  padding: 0px 40px;
+  padding: 0px 10px;
 }
 .box{
-  width: 273px;
+  width: 205px;
   float: left;
   margin: 10px 0px;
   h3{ 
@@ -179,40 +171,23 @@ ul{
   }
 }
 /* CSS de Tour*/
-#dashboard{
+.tour_part{
   h2{ 
+    //@include rounded-corners(4px);
     color: darken($green, 20%);
-  }
-  padding: 10px; 
-}
-#finanzas{
-  h2{ color: darken($green, 20%);}
-  padding: 10px; 
-}
-#inventarios{
-  h2{ color: darken($green, 20%);}
-  padding: 10px;
-}
-.comentario{
-  padding-top: 90px;
-  margin-top: 10px;
-  margin-bottom: 20px;
-  float:right;
-  width: 34%;
-  h3{ color: darken($green, 20%);}
-}
-#separacion{
-  h2{ 
-    color: white;
-    margin: 10px;
+    margin: 10px 0px;
     padding: 10px;
+    //background: #F7F7F7 url(imagenes2.png);
   }
-  margin: 10px;
+  margin-top: 10px;
   width: 100%;
-  height: 40px;
-  border-radius: 5px;
-  background: #F7F7F7 url(imagenes2.png);
-
+  clear: both;
+  .img{ float: left; }
+  .comment{ 
+    float: left;
+    width: 40%;
+    margin-left: 20px;
+  }
 }
 
 /* CSS de Contactnos*/

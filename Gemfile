@@ -10,7 +10,7 @@ gem 'rails', '~>3.1.0.rc4'
 # Rails has selected sqlite3.
 #gem 'sqlite3-ruby', :require => 'sqlite3'
 #gem 'pg'
-gem 'sass'
+gem 'sass-rails', "~> 3.1.0.rc"
 gem 'coffee-script'
 gem 'uglifier'
 

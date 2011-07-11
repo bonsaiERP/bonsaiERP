@@ -26,6 +26,21 @@ module Models::AccountLedger::Transaction
       amount
     end
 
+    def conciliate_transaction_account
+      trans = self.transaction
+      return false unless active?
+
+      account_ledger_details.each do |ac|
+        ac.state = "con"
+      end
+      self.conciliation = true
+
+      self.approver_id = UserSession.user_id
+      trans.deliver = true if trans.balance <= 0
+      
+      trans.save and self.save
+    end
+
     #def new_payment
     #  def self.payment?; true; end # Set to activate callbacks
 
@@ -34,13 +49,16 @@ module Models::AccountLedger::Transaction
 
     private
       def build_transaction_ledger_details
-        if account_id.present? and amount.present? and to_id.present?
+        return false if exchange_rate.blank?
+        if account_id.present? and amount.present? and to_id.present? and account_ledger_details.empty?
+
           amt = amount + interests_penalties
 
           account_ledger_details.build(
             :account_id => account_id, :amount => amount, 
             :currency_id => account.currency_id, :state => 'uncon'
           )
+
           amt2 = -amount * exchange_rate
 
           account_ledger_details.build(
