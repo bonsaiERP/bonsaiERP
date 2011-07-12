@@ -130,7 +130,7 @@ module Models::Transaction::PayPlan
 
   # Sets the amount and the data for last pay_plan
   def new_pay_plan(params = {})
-    self.pay_plans.build(params.merge(:ctype => self.class.to_s, :transaction_id => id))
+    self.pay_plans.build(params.merge(:ctype => self.class.to_s))
   end
 
   def update_transaction_payment_date

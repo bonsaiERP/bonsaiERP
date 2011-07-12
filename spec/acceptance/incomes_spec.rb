@@ -154,6 +154,10 @@ feature "Income", "test features" do
     i.total.should == tot.round(2)
     i.balance.should == i.total
 
+    i.approve!.should == true
+
+    d = Date.today
+    i.new_pay_plan(:payment_date => d, :alert_date => d - 5.days)
   end
 
   #scenario "Pay many pay_plans at the same time" do

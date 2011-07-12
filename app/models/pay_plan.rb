@@ -130,14 +130,14 @@ private
   # checks if income or interests_penalties is filled
   def valid_income_or_interests_penalties_filled
     if amount <= 0 and interests_penalties <= 0
-      errors.add(:amount, "Cantidad o Intereses/Penalidades debe ser mayor a 0")
+      errors.add(:amount, I18n.t("errors.messages.pay_plan.valid_amount_and_interests") )
     end
   end
 
   # checks that payment_date is greater or equal to alert_date
   def valid_payment_date_alert_date
     if alert_date > payment_date
-      errors.add(:alert_date, "La fecha de alerta debe ser inferior o igual a la fecha de #{pay_type}")
+      errors.add(:alert_date, I18n.t("errors.messages.pay_plan.valid_date", :pay_type => pay_type))
     end
   end
 

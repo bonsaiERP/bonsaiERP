@@ -10,3 +10,8 @@ es:
     account_ledger_reference: "Venta"
   expense:
     account_ledger_reference: "Venta"
+  errors:
+    messages:
+      pay_plan:
+        valid_amount_and_interests: "Cantidad o Intereses/Penalidades debe ser mayor a 0"
+        valid_date: "La fecha de alerta debe ser inferior o igual a la fecha de %{pay_type}"
