@@ -33,6 +33,7 @@ class CreateTransactions < ActiveRecord::Migration
       t.boolean :credit, :default => false
       t.integer :creditor_id
       t.string  :credit_reference
+      t.datetime :credit_datetime
       t.string  :credit_description, :limit => 500
 
 

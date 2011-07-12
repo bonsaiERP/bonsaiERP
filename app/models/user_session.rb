@@ -16,4 +16,5 @@ class UserSession
   def self.user_id
     @session.id unless @session.nil? 
   end
+
 end

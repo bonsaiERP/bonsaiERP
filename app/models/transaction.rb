@@ -114,10 +114,6 @@ class Transaction < ActiveRecord::Base
     attributes.merge(:currency_symbol => currency_symbol, :real_state => real_state).to_json
   end
 
-  def credit?
-    pay_plans.any?
-  end
-
   # downcased type
   def typed
     type.downcase

@@ -156,8 +156,25 @@ feature "Income", "test features" do
 
     i.approve!.should == true
 
+    # Create PayPlan
     d = Date.today
-    i.new_pay_plan(:payment_date => d, :alert_date => d - 5.days)
+    pp = i.new_pay_plan(:payment_date => d, :alert_date => d - 5.days, :amount => 30)
+    pp.should == false
+
+    # Approve credit
+    i.approve_credit(:credit_reference => "Ref 23728372", :credit_description => "Yeah").should == true
+    
+    i.credit.should == true
+    i.creditor_id.should == UserSession.user_id
+    i.credit_datetime.should_not == blank?
+
+    puts "------------"
+    pp = i.new_pay_plan(:payment_date => d, :alert_date => d - 5.days, :amount => 30)
+
+    pp.transaction_id.should == i.id
+    pp.currency_id.should == i.currency_id
+
+    i.save_pay_plan.should == true
   end
 
   #scenario "Pay many pay_plans at the same time" do

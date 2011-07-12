@@ -77,6 +77,95 @@ module Models::Transaction::PayPlan
     end
   end
 
+
+  # Sets the amount and the data for last pay_plan
+  def new_pay_plan(params = {})
+    return false unless credit? # Check credit is approved
+    @current_pay_plan = pay_plans.build(params.merge(:ctype => self.class.to_s, :currency_id => currency_id))
+  end
+
+  # Updates one of the pay_plans
+  def update_pay_plan(params = {})
+    @current_pay_plan
+  end
+
+  def save_pay_plan
+    return false unless @current_pay_plan.valid?
+
+    pps = sort_pay_plans
+    create_pattern(pps) if @current_pay_plan.repeat?
+    
+    i = 0
+    bal = balance
+
+    while bal > 0
+      if pps[i].amount > bal
+        pps[i].amount = bal
+        bal = 0
+      else
+        bal -= pps[i].amount
+      end
+      i = i + 1
+    end
+  end
+
+  # Creates a repeating pattern using the @current_pay_plan as base
+  # @param Decimal
+  def create_pattern(pps=nil)
+    pps ||= sort_pay_plans
+    bal = balance
+
+    amt = pps.inject(0) do |sum, pp| 
+      sum += p.amount if pp.payment_date < @current_pay_plan.payment_date
+      sum
+    end
+    
+    bal -= amt
+    # TODO: arrange pay_plans to match te balance
+    if bal < 0
+      balance_amount
+      bal = 0
+    end
+  
+    int_per = calculate_int_percentage(bal)
+    pdate   = @current_pay_plan.payment_date
+
+    while bal > 0
+      # set the amount
+      amt = (bal - @current_pay_plan.amount > 0) ? @current_pay_plan.amount : bal
+      int = bal * int_per
+      pdate += PAY_PLANS_DATE_SEPARATION
+      adate = pdate - 5.days
+
+      pay_plans.build(
+        :payment_date => pdate, 
+        :alert_date => adate, 
+        :interests_penalties  => int,
+        :amount => amt,
+        :email => @current_pay_plan.email
+      )
+    end
+  end
+
+  def calculate_int_percentage(bal)
+    return 0 if bal <= 0
+    @current_pay_plan.amount / bal
+  end
+
+  # Balances the amount
+  def balance_amount
+
+  end
+
+  # sorts all active pay plans
+  def sort_pay_plans
+    active_pay_plans.sort {|a, b| a.payment_date <=> b.payment_date }
+  end
+
+  def active_pay_plans
+    pay_plans.select {|pp| pp.active == true }
+  end
+
   # Saves the list of PayPlans
   def save_pay_plans_list
     @pay_plans_list = sort_pay_plans_list(@pay_plans_list)
@@ -117,7 +206,7 @@ module Models::Transaction::PayPlan
 
     delete_pay_plans(i)
   end
-  
+
   private :save_pay_plans_list
 
   def delete_pay_plans(index)
@@ -126,11 +215,6 @@ module Models::Transaction::PayPlan
 
     ids = pps.map(&:id)
     PayPlan.destroy_all(:id => ids) if ids.any?
-  end
-
-  # Sets the amount and the data for last pay_plan
-  def new_pay_plan(params = {})
-    self.pay_plans.build(params.merge(:ctype => self.class.to_s))
   end
 
   def update_transaction_payment_date
