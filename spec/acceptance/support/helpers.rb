@@ -37,7 +37,11 @@ module HelperMethods
     create_countries
     create_currencies
 
-    org = Organisation.create!(attributes)
+    if attributes[:id]
+      org = Organisation.create!(attributes) {|o| o.id = attributes[:id]}
+    else
+      org = Organisation.create!(attributes)
+    end
     raise "Error creating organisation base accounts" unless org.create_base_accounts
     org
   end
@@ -65,8 +69,8 @@ module HelperMethods
   end
 
   def create_countries
-    YAML.load_file("#{Rails.root}/db/defaults/countries.yml").each do |c|
-      OrgCountry.create c
+    YAML.load_file("#{Rails.root}/db/defaults/countries.yml").each do |data|
+      OrgCountry.create!(data) {|c| c.id = data['id']}
     end
   end
 

@@ -38,7 +38,13 @@ module Models::AccountLedger::Transaction
       self.approver_id = UserSession.user_id
       trans.deliver = true if trans.balance <= 0
       
-      trans.save and self.save
+      res = true
+      self.class.transaction do
+        res = self.save
+        res = res and trans.save
+        raise ActiveRecord::Rollback unless res
+      end
+      res
     end
 
     #def new_payment

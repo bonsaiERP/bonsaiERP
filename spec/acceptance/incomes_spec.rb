@@ -32,7 +32,7 @@ feature "Income", "test features" do
     OrganisationSession.set(:id => 1, :name => 'ecuanime', :currency_id => 1, :preferences => {:item_discount => 0, :general_discount => 0})
     UserSession.current_user = User.new(:id => 1, :email => 'admin@example.com') {|u| u.id = 1}
 
-    create_organisation
+    create_organisation(:id => 1)
     create_items
 
     @b1 = create_bank(:number => '123', :amount => 0)
@@ -130,7 +130,6 @@ feature "Income", "test features" do
     i.state.should == 'paid'
     i.deliver.should == false
 
-    puts "---------------------"
     p.conciliate_transaction_account.should == true
     p.reload
 
@@ -145,72 +144,16 @@ feature "Income", "test features" do
     ac1.amount.should == i.total
     ac2.amount.should == 0
     
-    #puts p.payment?
-    #puts i.errors.messages
-    #puts p.errors.messages
-    #puts p.account_ledger_details.size
+  end
 
-    # check if the account_ledger for is created and the accounts updated
-    #i.account
-    #i.pay_plans.unpaid.size.should == 2
-    #i.pay_plans.map(&:operation).uniq.should == ["in"]
+  scenario "Create a an income with credit" do
+    i = Income.new(income_params.merge(:account_id => @cli1_id))
+    i.save_trans.should == true
 
-    #i.approve!
-    #i.pay_plans.unpaid.each{|pp| puts "#{pp.amount}"} ###
+    tot = ( 3 * 10 + 5 * 20 ) * 0.97
+    i.total.should == tot.round(2)
+    i.balance.should == i.total
 
-    # FIRS Bank payment
-    #p = i.new_payment(:account_id => 1, :reference => '54654654654', :date => Date.today)
-
-    #p.class.should == Payment
-    #p.amount.should == 100.0
-    #p.paid?.should == false
-
-    #p.amount.should == 100
-
-    #p.save.should == true
-    #p.state.should == 'conciliation'
-    #p.paid?.should == false
-
-    #p = Payment.find(p.id)
-    #p.state.should == 'conciliation'
-
-    #al1 = p.account_ledger
-
-    #i = Income.find(i.id)
-    #i.payments.first.state.should_not == 'paid'
-
-
-    #i.balance.should == (i.total - 100)
-    #i.pay_plans.unpaid.size.should == 1
-
-
-    ## SECOND Cash payment
-    #p = i.new_payment(:account_id => 2, :reference => 'NA', :date => Date.today + 2.days)
-    #
-    #p.amount.should == i.balance
-
-    #p.save.should == true
-
-    #p.state.should == 'paid'
-    #al2 = p.account_ledger #AccountLedger.find_by_payment_id(p.id)
-    #al2.class.should == AccountLedger
-    #al2.conciliation.should == true
-
-    #i = Income.find(i.id)
-    #i.balance.should_not == i.total
-
-    #al1.conciliate_account.should == true
-    #al1.conciliation.should == true
-
-
-    #p_id = al1.payment.id
-    #p = Payment.find(p_id)
-    #p.state.should == 'paid'
-
-    #i = Income.find(i.id)
-    #i.balance.should == 0
-
-    #i.pay_plans.unpaid.size.should == 0
   end
 
   #scenario "Pay many pay_plans at the same time" do
