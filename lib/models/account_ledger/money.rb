@@ -39,7 +39,6 @@ module Models::AccountLedger
 
       def money?; false; end
 
-
       private
 
         # Adds the description

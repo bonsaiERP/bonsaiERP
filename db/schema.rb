@@ -64,7 +64,9 @@ ActiveRecord::Schema.define(:version => 20110711205129) do
     t.integer  "transaction_id"
     t.integer  "creator_id"
     t.integer  "approver_id"
+    t.datetime "approver_datetime"
     t.integer  "nuller_id"
+    t.datetime "nuller_datetime"
     t.boolean  "active",                                                           :default => true
     t.datetime "created_at"
     t.datetime "updated_at"

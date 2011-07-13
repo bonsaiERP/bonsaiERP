@@ -111,6 +111,8 @@ feature "Income", "test features" do
     ac2.amount.should == i.total
 
     p.conciliate_account.should == true
+    p.approver_id.should == UserSession.user_id
+    p.approver_datetime.kind_of?(Time).should == true
 
     p.account_ledger_details(true).map(&:state).uniq.should == ['con']
 
@@ -130,7 +132,8 @@ feature "Income", "test features" do
     i.state.should == 'paid'
     i.deliver.should == false
 
-    p.conciliate_transaction_account.should == true
+    # Conciliation
+    p.conciliate_account.should == true
     p.reload
 
     p.conciliation.should == true
@@ -202,7 +205,26 @@ feature "Income", "test features" do
     tot_pps = i.pay_plans.inject(0) {|s,pp| s += pp.amount unless pp.paid?; s }
     tot_pps.should == i.balance
 
-    #puts "----------------"
+    pp = i.pay_plans.last
+    i.new_pay_plan(:payment_date => pp.payment_date, :alert_date => pp.alert_date, :amount => 30, :repeat => "true")
+    i.save_pay_plan.should == true
+
+    i.pay_plans.unpaid.size.should == (i.balance/30).ceil
+    tot_pps = i.pay_plans.inject(0) {|s,pp| s += pp.amount unless pp.paid?; s }
+    tot_pps.should == i.balance
+
+    # Create a payment
+    p = i.new_payment(:account_id => @ac1_id, :exchange_rate => 1, :reference => 'Cheque 143234')
+    # Payment should have the amount of the first unpaid pay_plan
+    p.interests_penalties.should == 0
+    p.amount.should == 30
+
+    i.save_payment.should == true
+    i.reload
+    
+    i.pay_plans.unpaid.size.should == (i.total/30).ceil - 1
+    i.balance.should == i.total - 30
+
   end
 
   #scenario "Pay many pay_plans at the same time" do

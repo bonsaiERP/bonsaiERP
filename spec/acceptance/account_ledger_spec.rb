@@ -64,6 +64,7 @@ feature "Test account ledger", "for in outs and transferences" do
 
     al.conciliation.should == true
     al.approver_id.should == 2
+    al.approver_datetime.kind_of?(Time).should == true
 
     det1.account_id.should == @bank_ac_ic
     det1.amount.should == 100
@@ -149,6 +150,7 @@ feature "Test account ledger", "for in outs and transferences" do
 
     al.null_account.should == true
     al.nuller_id.should == 5
+    al.nuller_datetime.kind_of?(Time).should == true
 
     al.account_ledger_details[0].state.should == "nulled"
     al.account_ledger_details[1].state.should == "nulled"

@@ -82,6 +82,8 @@ class AccountLedger < ActiveRecord::Base
   def null_account
     return false if conciliation?
 
+    self.nuller_datetime = Time.now
+
     self.nuller_id = UserSession.user_id
     self.active    = false
     account_ledger_details.each do |det| 
@@ -95,14 +97,20 @@ class AccountLedger < ActiveRecord::Base
   def conciliate_account
     return false unless active?
 
-    account_ledger_details.each do |ac|
-      ac.state = "con"
+    self.approver_datetime = Time.now
+
+    if transaction_id.present?
+      conciliate_transaction_account
+    else
+      account_ledger_details.each do |ac|
+        ac.state = "con"
+      end
+      self.conciliation = true
+
+      self.approver_id = UserSession.user_id
+
+      self.save
     end
-    self.conciliation = true
-
-    self.approver_id = UserSession.user_id
-
-    self.save
   end
 
   def show_exchange_rate?

@@ -18,9 +18,11 @@ class CreateAccountLedgers < ActiveRecord::Migration
       t.string  :description
 
       t.integer :transaction_id
-      t.integer :creator_id
+      t.integer :creator_id # related with created_at
       t.integer :approver_id
+      t.datetime :approver_datetime # conciliation
       t.integer :nuller_id
+      t.datetime :nuller_datetime # null
       t.boolean :active, :default => true
 
       t.timestamps

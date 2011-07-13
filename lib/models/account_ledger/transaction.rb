@@ -48,7 +48,9 @@ module Models::AccountLedger::Transaction
     end
 
     def set_trans_deliver(trans)
-      trans.deliver = true if trans.balance <= 0# Review only for trans
+      unless trans.account_ledgers.pendent.any?
+        trans.deliver = true if trans.balance <= 0
+      end
     end
 
     #def new_payment
