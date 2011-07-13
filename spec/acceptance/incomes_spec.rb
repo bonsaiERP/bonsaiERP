@@ -163,18 +163,46 @@ feature "Income", "test features" do
 
     # Approve credit
     i.approve_credit(:credit_reference => "Ref 23728372", :credit_description => "Yeah").should == true
+    i.reload
+    i.pay_plans.size.should == 1
+    i.pay_plans.first.amount.should == i.balance
+    i.payment_date.should == i.pay_plans.first.payment_date
     
     i.credit.should == true
     i.creditor_id.should == UserSession.user_id
     i.credit_datetime.should_not == blank?
 
-    puts "------------"
     pp = i.new_pay_plan(:payment_date => d, :alert_date => d - 5.days, :amount => 30)
 
     pp.transaction_id.should == i.id
     pp.currency_id.should == i.currency_id
 
     i.save_pay_plan.should == true
+    i.reload
+    i.pay_plans.size.should == 2
+    i.payment_date.should == i.pay_plans.first.payment_date
+
+    tot_pps = i.pay_plans.inject(0) {|s,pp| s += pp.amount unless pp.paid?; s }
+    tot_pps.should == i.balance
+
+    i.new_pay_plan(:payment_date => d + 1.month, :alert_date => d - 5.days, :amount => 30, :repeat => "1")
+    i.save_pay_plan.should == true
+    i.reload
+
+    i.pay_plans.size.should == (i.balance/30).ceil
+    tot_pps = i.pay_plans.inject(0) {|s,pp| s += pp.amount unless pp.paid?; s }
+    tot_pps.should == i.balance
+
+    # delete many pay_plans
+    pp_ids = i.pay_plans[2..i.pay_plans.size].map(&:id)
+    i.destroy_pay_plans(pp_ids).should == true
+    i.reload
+
+    i.pay_plans.size.should == 3
+    tot_pps = i.pay_plans.inject(0) {|s,pp| s += pp.amount unless pp.paid?; s }
+    tot_pps.should == i.balance
+
+    #puts "----------------"
   end
 
   #scenario "Pay many pay_plans at the same time" do

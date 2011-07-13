@@ -30,8 +30,8 @@ class Transaction < ActiveRecord::Base
 
   has_one  :account_ledger, :conditions => "operation = 'transaction'"
 
-  has_many :pay_plans          , :dependent => :destroy , :order => "payment_date ASC"
-  has_many :payments           , :dependent => :destroy
+  has_many :pay_plans          , :dependent => :destroy , :order => "payment_date ASC", :autosave => true
+  #has_many :payments           , :dependent => :destroy
   has_many :transaction_details, :dependent => :destroy
   has_many :account_ledgers    , :dependent => :destroy, :conditions => "operation != 'transaction'"#, :autosave => true
 

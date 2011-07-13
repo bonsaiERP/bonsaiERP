@@ -37,11 +37,25 @@ module Models::Transaction
         self.creditor_id        = UserSession.user_id
         self.credit_datetime    = Time.now
         self.credit_description = attrs[:credit_description]
+        create_first_pay_plan
+        self.payment_date       = pay_plans.first.payment_date
 
         self.save
       end
 
       private
+        def create_first_pay_plan
+          d = Date.today
+          pay_plans.build(
+            :payment_date => d, 
+            :alert_date => d - 5.days, 
+            :amount => balance,
+            :interests_penalties  => 0,
+            :email => true,
+            :currency_id => currency_id
+          )
+        end
+
         def create_account_ledger_details
           kl = self.class.to_s
 

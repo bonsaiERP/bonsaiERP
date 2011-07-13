@@ -36,7 +36,7 @@ module Models::AccountLedger::Transaction
       self.conciliation = true
 
       self.approver_id = UserSession.user_id
-      trans.deliver = true if trans.balance <= 0
+      set_trans_deliver(trans)
       
       res = true
       self.class.transaction do
@@ -45,6 +45,10 @@ module Models::AccountLedger::Transaction
         raise ActiveRecord::Rollback unless res
       end
       res
+    end
+
+    def set_trans_deliver(trans)
+      trans.deliver = true if trans.balance <= 0# Review only for trans
     end
 
     #def new_payment
