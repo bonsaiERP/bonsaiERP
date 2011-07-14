@@ -32,7 +32,8 @@ module Models::Transaction::Payment
       return false unless payment?
       return false unless valid_ledger?
 
-      null_pay_plans unless cash? # anulate all payments if credit
+      @current_ledger.conciliation = get_conciliation_for_account
+      null_pay_plans if credit? # anulate all payments if credit
 
       self.balance = balance - @current_ledger.amount
       self.state = 'paid' if balance <= 0
@@ -51,23 +52,34 @@ module Models::Transaction::Payment
         ret
       end
 
+      def get_conciliation_for_account
+        #puts "Type #{@current_ledger.account.original_type}"
+        case @current_ledger.account.original_type
+        when "Bank" then false
+        when "Cash" then true
+        when "Client", "Supplier", "Staff" then true
+        end
+      end
+
       def valid_number_of_legers
         errors[:base] << "Error" if account_ledgers.select {|al| not al.persisted? }.size > 1
       end
 
       def null_pay_plans
-        amt = amount
-        int = interests_penalties
+        amt = @current_ledger.amount
+        int = @current_ledger.interests_penalties
+        current_pp = false
 
         sort_pay_plans.each do |pp|
           amt -= pp.amount
+          pp.paid = true
           if amt <= 0
             current_pp = pp
             break 
           end
         end
 
-        create_payment_pay_plan(current_pp, amt) if current_pp
+        create_payment_pay_plan(current_pp, amt) if current_pp and amt < 0
       end
 
       # Creates a pay_plan for the latest

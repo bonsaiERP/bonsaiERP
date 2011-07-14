@@ -79,6 +79,7 @@ class AccountLedger < ActiveRecord::Base
     not(conciliation?) and active?
   end
 
+  # nulls an account_ledger
   def null_account
     return false if conciliation?
 
@@ -90,12 +91,18 @@ class AccountLedger < ActiveRecord::Base
       det.state = 'nulled'
       det.active = false
     end
-    self.save
+  
+    if transaction_id.present?
+      null_transaction_account
+    else
+      self.save
+    end
   end
 
   # Makes the conciliation to update accounts
   def conciliate_account
     return false unless active?
+    return false if conciliation?
 
     self.approver_datetime = Time.now
 

@@ -32,7 +32,7 @@ module Models::Transaction
       def approve_credit(attrs)
         def self.allow_credit?; true; end # Allow validations and callbacks to work with allow_credit?
 
-        self.credit             = true
+        self.cash               = false
         self.credit_reference   = attrs[:credit_reference]
         self.creditor_id        = UserSession.user_id
         self.credit_datetime    = Time.now

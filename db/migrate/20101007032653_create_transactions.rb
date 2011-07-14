@@ -30,7 +30,6 @@ class CreateTransactions < ActiveRecord::Migration
       t.integer :creator_id
       t.integer :approver_id
       # Credit details
-      t.boolean :credit, :default => false
       t.integer :creditor_id
       t.string  :credit_reference
       t.datetime :credit_datetime
@@ -52,7 +51,6 @@ class CreateTransactions < ActiveRecord::Migration
     add_index :transactions, :payment_date
     add_index :transactions, :project_id
 
-    add_index :transactions, :credit
     add_index :transactions, :creditor_id
 
   end

@@ -472,7 +472,6 @@ ActiveRecord::Schema.define(:version => 20110711205129) do
     t.decimal  "balance_inventory",                  :precision => 14, :scale => 2
     t.integer  "creator_id"
     t.integer  "approver_id"
-    t.boolean  "credit",                                                            :default => false
     t.integer  "creditor_id"
     t.string   "credit_reference"
     t.datetime "credit_datetime"
@@ -488,7 +487,6 @@ ActiveRecord::Schema.define(:version => 20110711205129) do
   add_index "transactions", ["active"], :name => "index_transactions_on_active"
   add_index "transactions", ["balance_inventory"], :name => "index_transactions_on_balance_inventory"
   add_index "transactions", ["cash"], :name => "index_transactions_on_cash"
-  add_index "transactions", ["credit"], :name => "index_transactions_on_credit"
   add_index "transactions", ["creditor_id"], :name => "index_transactions_on_creditor_id"
   add_index "transactions", ["currency_id"], :name => "index_transactions_on_currency_id"
   add_index "transactions", ["date"], :name => "index_transactions_on_date"

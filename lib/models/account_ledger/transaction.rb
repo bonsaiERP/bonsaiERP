@@ -27,7 +27,6 @@ module Models::AccountLedger::Transaction
     end
 
     def conciliate_transaction_account
-      trans = self.transaction
       return false unless active?
 
       account_ledger_details.each do |ac|
@@ -36,30 +35,45 @@ module Models::AccountLedger::Transaction
       self.conciliation = true
 
       self.approver_id = UserSession.user_id
-      set_trans_deliver(trans)
+      set_trans_deliver
       
       res = true
       self.class.transaction do
         res = self.save
-        res = res and trans.save
+        res = res and transaction.save
         raise ActiveRecord::Rollback unless res
       end
+
       res
     end
 
-    def set_trans_deliver(trans)
-      unless trans.account_ledgers.pendent.any?
-        trans.deliver = true if trans.balance <= 0
+    def set_trans_deliver
+      if transaction.account_ledgers.pendent.count == 1
+        transaction.deliver = true if transaction.balance <= 0
       end
     end
 
-    #def new_payment
-    #  def self.payment?; true; end # Set to activate callbacks
+    # nulls in case that it's related to a transaction
+    def null_transaction_account
+      ret = true
+      transaction.balance += amount - interests_penalties
 
-    #  "hola"
-    #end
+      self.class.transaction do
+        ret = self.save
+        ret = ret and transaction.save
+        raise ActiveRecord::Rollback unless ret
+      end
+
+      ret
+    end
 
     private
+      # Creates a new pay_plan with the date of the latest nulled
+      # pay_plan
+      def create_transaction_pay_plan
+
+      end
+
       def build_transaction_ledger_details
         return false if exchange_rate.blank?
         if account_id.present? and amount.present? and to_id.present? and account_ledger_details.empty?
