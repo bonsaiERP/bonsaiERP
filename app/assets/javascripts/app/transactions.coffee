@@ -103,7 +103,7 @@ class Transaction
     # Used click instead of click because IE
     $(id).find("input").click( ->
       sum = 0
-      sum += 1 * $(k).siblings("span").data("rate") for k in $(self.conf.taxes_id).find("input:checkbox:checked")
+      sum += 1 * $(k).siblings("label").find("span").data("rate") for k in $(self.conf.taxes_id).find("input:checkbox:checked")
 
       $(self.conf.taxes_percentage_id).html(_b.ntc(sum)).data("val", sum)
       self.calculate_taxes()
@@ -239,8 +239,9 @@ class Transaction
     @.calculate_taxes()
 
   # Calculates the total taxes
-  calculate_taxes: ()->
+  calculate_taxes: ->
     val = ($(@conf.subtotal_id).data("val") + $(@conf.discount_total_id).data("val")) * $(@conf.taxes_percentage_id).data("val")/100 || 0
+    #console.log val, @conf.taxes_total_id, @conf.taxes_percentage_id
     $(@conf.taxes_total_id).html(_b.ntc(val)).data("val", val)
     @.calculate_total()
 

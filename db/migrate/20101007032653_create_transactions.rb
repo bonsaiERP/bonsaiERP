@@ -29,6 +29,8 @@ class CreateTransactions < ActiveRecord::Migration
       # Creators approver
       t.integer :creator_id
       t.integer :approver_id
+      t.datetime :approver_datetime
+      t.string  :approver_reason
       # Credit details
       t.integer :creditor_id
       t.string  :credit_reference

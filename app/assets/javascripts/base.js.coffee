@@ -208,7 +208,7 @@ $(document).ready(->
 
   # Ajax preloader content
   AjaxLoadingHTML = ->
-    "<div class='c'><img src='/images/ajax-loader.gif' alt='Cargando' /><br/>Cargando...</div>"
+    "<div class='c'><img src='/assets/ajax-loader.gif' alt='Cargando' /><br/>Cargando...</div>"
 
   window.AjaxLoadingHTML = AjaxLoadingHTML
 

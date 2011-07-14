@@ -56,7 +56,7 @@
     - for income in @incomes
       %tr{ :class => cycle(:odd, :even) }
         %td= link_to income.ref_number, income, :class => 'b'
-        %td= income.contact
+        %td= income.account
         %td= lo income.payment_date unless income.paid?
         %td.cur= ntc exchange(income, :real_total, @currency_rates)
         %td.cur= ntc exchange(income, :balance, @currency_rates)

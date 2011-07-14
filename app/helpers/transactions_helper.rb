@@ -64,6 +64,18 @@ module TransactionsHelper
     end
   end
 
+  def credit_tab_title(trans)
+    trans.credit? ? "Crédito" : "Aprobar crédito"
+  end
+
+  def get_credit_partial(trans)
+    if trans.income?
+      trans.credit? ? "/pay_plans/pay_plans" : "pay_plans/approve"
+    else
+      "/pay_plans/pay_plans"
+    end
+  end
+
   # Returns the path for contacts
   def cont_path
     if params[:controller] == 'incomes'

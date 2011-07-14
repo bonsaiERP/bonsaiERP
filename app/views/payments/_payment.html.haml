@@ -3,9 +3,9 @@
   %td.account= link_to payment.account, payment.account_ledger
   %td.cur.amount{'data-val' => payment.amount} #{ntc payment.amount}
   %td.cur.interests_penalties{'data-val' => payment.interests_penalties} #{ntc payment.interests_penalties}
-  %td.cur.total_amount{'data-val' => payment.total_amount}= ntc payment.total_amount
+  %td.cur.total_amount{'data-val' => payment.amount}= ntc payment.amount
   %td.actions
-    - unless payment.paid?
-      = link_to "Revisar", payment.account_ledger, :title => 'Revisar con cuenta bancaria', :class => 'conciliate sync fl', :style => 'margin-right: 10px' unless payment.paid?
-      = link_to "borrar", payment, :class => 'delete', :title => 'Borrar', :remote => true, :confirm => delete_confirm(payment)
+    - unless payment.conciliation?
+      = link_to "Revisar", payment.account_ledger, :title => 'Revisar con cuenta bancaria', :class => 'conciliate sync fl', :style => 'margin-right: 10px' unless payment.conciliation?
+      = link_to "borrar", payment, :class => 'delete', :title => 'Anular', :remote => true, :confirm => delete_confirm(payment)
 

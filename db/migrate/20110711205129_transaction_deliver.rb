@@ -2,6 +2,7 @@ class TransactionDeliver < ActiveRecord::Migration
   def up
     change_table :transactions do |t|
       t.boolean :deliver, :default => false
+      t.datetime :deliver_datetime
       t.integer :deliver_approver_id
       t.string :deliver_reason
     end

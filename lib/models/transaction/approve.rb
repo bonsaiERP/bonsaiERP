@@ -61,7 +61,7 @@ module Models::Transaction
 
           al = build_account_ledger(
             :account_id => account_id,
-            :to_id => Account.org.find_by_original_type(kl).id,
+            :to_id => ::Account.org.find_by_original_type(kl).id,
             :currency_id => currency_id,
             :operation => 'transaction',
             :amount => total_currency,

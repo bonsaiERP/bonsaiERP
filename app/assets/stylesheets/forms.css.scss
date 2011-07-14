@@ -43,6 +43,7 @@ label{
 }
 label.collection_radio, label.collection_check_boxes{
   font-weight:normal;
+  display: inline-block;
 }
 .show label{ margin-bottom: 5px; }
 input, select, textarea{

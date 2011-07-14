@@ -9,6 +9,7 @@ class Transaction < ActiveRecord::Base
   DECIMALS = 2
   # Determines if the oprations is made on transaction or pay_plan or payment
   ###############################
+  include Models::Transaction::Calculations
   include Models::Transaction::Trans
   include Models::Transaction::Approve
   include Models::Transaction::PayPlan
@@ -19,6 +20,7 @@ class Transaction < ActiveRecord::Base
   # callbacks
   before_validation :set_defaults, :if => :new_record?
   before_create     :set_creator
+  before_destroy    :null_transaction
   #before_save       :set_state
 
   # relationships
@@ -31,7 +33,6 @@ class Transaction < ActiveRecord::Base
   has_one  :account_ledger, :conditions => "operation = 'transaction'"
 
   has_many :pay_plans          , :dependent => :destroy , :order => "payment_date ASC", :autosave => true
-  #has_many :payments           , :dependent => :destroy
   has_many :transaction_details, :dependent => :destroy
   has_many :account_ledgers    , :dependent => :destroy, :conditions => "operation != 'transaction'"#, :autosave => true
 
@@ -41,6 +42,8 @@ class Transaction < ActiveRecord::Base
 
   # validations
   validates :account_id, :contact_account => true
+
+  default_scope where(:active => true)
 
   # scopes
   scope :draft    , where(:state => 'draft')
@@ -68,7 +71,7 @@ class Transaction < ActiveRecord::Base
 
   # Finds using the state
   def self.find_with_state(state)
-    ret   = self.org.includes(:contact, :pay_plans, :currency).order("date DESC")
+    ret   = self.org.includes(:account, :pay_plans, :currency).order("date DESC")
     ret = ret.send(scoped_state(state)) if scoped_state(state)
     ret
   end
@@ -86,7 +89,7 @@ class Transaction < ActiveRecord::Base
 
   # method used for searching
   def self.search(options)
-    ret = self.org.includes(:contact, :pay_plans, :currency)
+    ret = self.org.includes(:account, :pay_plans, :currency)
     ret = ret.send(scoped_state(options[:option])) if scoped_state(options[:option])
     ret.where("transactions.ref_number LIKE :code OR contacts.matchcode LIKE :code", :code => "%#{options[:search]}%")
   end
@@ -181,64 +184,11 @@ class Transaction < ActiveRecord::Base
     end
   end
 
-  # quantity without discount and taxes
-  def subtotal
-    self.transaction_details.inject(0) {|sum, v| sum += v.total }
-  end
-
-  # Calculates the amount for taxes
-  def total_taxes
-    (gross_total - total_discount ) * tax_percent/100
-  end
-
-  def total_discount
-    gross_total * discount/100
-  end
-
-  def total_payments
-    payments.active.inject(0) {|sum, v| sum += v.amount }
-  end
-
-  def total_payments_with_interests
-    payments.active.inject(0) {|sum, v| sum += v.amount + v.interests_penalties }
-  end
-
   # Presents the currency symbol name if not default currency
   def present_currency
     unless Organisation.find(OrganisationSession.organisation_id).id == self.currency_id
       self.currency.to_s
     end
-  end
-
-  # Presents the total in currency unless the default currency
-  def total_currency
-    (self.total/self.exchange_rate).round(DECIMALS)
-  end
-
-  # Sums the total of payments
-  def payments_total
-    payments.active.sum(:amount)
-  end
-
-  # Sums the total amount of the payments and interests
-  def payments_amount_interests_total
-    payments.active.sum(:amount) + payments.active.sum(:interests_penalties)
-  end
-
-  # Returns the total value of pay plans that haven't been paid'
-  def pay_plans_total
-    pay_plans.unpaid.sum('amount')
-  end
-
-  # Returns the total amount to be paid for unpaid pay_plans
-  def pay_plans_balance
-    balance - pay_plans_total
-  end
-
-  # Updates cash based on the pay_plans
-  def update_pay_plans_cash
-    self.cash = ( pay_plans.size > 0 )
-    self.save
   end
 
   # Sets a default payment date using PayPlan
@@ -252,10 +202,6 @@ class Transaction < ActiveRecord::Base
     else
       self.payment_date = self.date
     end
-  end
-
-  def real_total
-    total / exchange_rate
   end
 
   # Returs the pay_type for the current instance
@@ -341,6 +287,11 @@ private
 
   def set_creator
     self.creator_id = UserSession.user_id
+  end
+
+  def null_transaction
+    update_attribute(:active, false)
+    false
   end
 
 end

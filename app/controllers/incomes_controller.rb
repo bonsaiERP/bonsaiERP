@@ -110,9 +110,13 @@ class IncomesController < ApplicationController
     end
   end
 
-  # Nulls an invoice
-  def null
+  # PUT /incomes/:id/approve_credit
+  def approve_credit
+    @transaction = Income.org.find(params[:id])
+
+    render :json => @transaction
   end
+
 
 private
   #def set_default_currency

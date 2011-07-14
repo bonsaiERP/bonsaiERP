@@ -60,6 +60,7 @@ class AccountLedger < ActiveRecord::Base
   scope :pendent, where(:conciliation => false, :active => true)
   scope :con,     where(:conciliation => true)
   scope :nulled,  where(:active => false)
+  scope :active,  where(:active => true)
 
   # delegates
   delegate :currency, :symbol, :to => :currency, :prefix => true 

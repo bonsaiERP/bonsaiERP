@@ -1,0 +1,11 @@
+%h2 Aprobar plan de créditos
+
+= simple_form_for(transaction, :remote => true, :url => approve_credit_income_path(transaction)) do |f|
+  = f.input :credit_reference, :label => 'Referencia'
+  .clear
+  = f.input :credit_description, :label => 'Desripción', :as => :text,
+    :input_html => {:rows => 5}
+  .clear
+  = f.submit "Aprovar crédito"
+
+.clear

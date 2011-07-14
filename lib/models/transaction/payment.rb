@@ -88,7 +88,7 @@ module Models::Transaction::Payment
           :payment_date => pp.payment_date, 
           :alert_date => pp.alert_date, 
           :amount => amt.abs,
-          :interests_penalties  => int,
+          :interests_penalties  => pp.interests_penalties,
           :email => pp.email,
           :currency_id => currency_id
         )

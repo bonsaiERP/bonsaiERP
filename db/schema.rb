@@ -472,6 +472,8 @@ ActiveRecord::Schema.define(:version => 20110711205129) do
     t.decimal  "balance_inventory",                  :precision => 14, :scale => 2
     t.integer  "creator_id"
     t.integer  "approver_id"
+    t.datetime "approver_datetime"
+    t.string   "approver_reason"
     t.integer  "creditor_id"
     t.string   "credit_reference"
     t.datetime "credit_datetime"
@@ -479,6 +481,7 @@ ActiveRecord::Schema.define(:version => 20110711205129) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "deliver",                                                           :default => false
+    t.datetime "deliver_datetime"
     t.integer  "deliver_approver_id"
     t.string   "deliver_reason"
   end

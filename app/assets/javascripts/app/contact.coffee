@@ -21,7 +21,7 @@ class ContactAutocomplete
   addAutocompleteField: ->
     self = @
 
-    @auto_id = (new Date).getTime()
+    @auto_id = @options.id || (new Date).getTime()
 
     input = $('<input/>').attr(
       'id': @options.id || @auto_id
@@ -126,6 +126,7 @@ class ContactAutocomplete
     data('title': "Nuevo #{@.getLocalizedLabel(@type).toLowerCase()}")
 
     $(id).val('').data('val', '')
+
     $(@elem).val('')
     .autocomplete('destroy')
     .autocomplete(

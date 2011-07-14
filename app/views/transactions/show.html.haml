@@ -6,7 +6,7 @@
     = link_to 'Nueva', "/#{params[:controller]}/new", :class => 'add'
     - if @transaction.draft?
       = link_to 'Editar', "/#{params[:controller]}/#{@transaction.id}/edit", :class => 'edit'
-      = link_to 'Borrar', @transaction, :class => 'delete'
+      = link_to 'Anular', @transaction, :class => 'delete'
 .clear
 
 ._40.fr.r
@@ -18,8 +18,26 @@
 
 %h1.mb5{:style => 'display:inline-block;'} #{transaction_title(@transaction)}  #{@transaction.ref_number}
 %span.b#income_state{:class => @transaction.real_state, :style => 'font-size:1.3em'}= @transaction.show_state
-%h2.n.mt5= link_to @transaction.contact, @transaction.contact, :title => "Historial cliente", :target => '_blank'
+%h2.n.mt5= link_to @transaction.account, @transaction.account
 
+.input
+  .input
+    - if @transaction.project_id
+      %h3.n Proyecto: #{link_to @transaction.project, @transaction.project}
+  .input
+    %h3= lo @transaction.date
+  .clear
+  .input
+    - unless currency_id == @transaction.currency_id
+      %h4.n #{@transaction.currency.name} = <span class="b">#{@transaction.exchange_rate}</span> #{currency_name.pluralize}
+  .input= @transaction.description unless @transaction.description.blank?
+
+.input.r
+  / FORM to approve transaction
+  - if @transaction.can_approve?(session)
+    = simple_form_for @transaction, :url => "/#{params[:controller]}/#{ @transaction.id }/approve", :html => {:id => 'approve_form'} do |f|
+      .submit
+        =f.submit "Aprobar", :class => 'dark_green', :id => 'income_approve_button'
 .clear
 
 .moneybox.fl
@@ -38,41 +56,18 @@
   
 %p.fl{:style => 'padding:4px 10px'}= "Vence el <strong id='due_on'>#{lo @transaction.payment_date}</strong></span>".html_safe unless @transaction.paid? or @transaction.draft?
 
-._50.fr.r
-  / FORM to null income
-  - if @transaction.can_approve?(session)
-    = simple_form_for @transaction, :url => "/#{params[:controller]}/#{ @transaction.id }/approve", :html => {:id => 'approve_form'} do |f|
-      .submit
-        =f.submit "Aprobar", :class => 'dark_green', :id => 'income_approve_button'
-
 .clear
 #tabs
   %ul
     %li <a href="#information" id="tab_info">Información</a>
     - if @transaction.show_payments?
       %li <a href="#payments" id="tab_payments">#{transaction_pay_method}</a>
-    %li <a href="#pay_plans" id="tab_pay_plans">Crédito</a>
+    - unless @transaction.draft?
+      %li <a href="#pay_plans" id="tab_pay_plans">#{credit_tab_title(@transaction)}</a>
     - if @transaction.show_inventory?
-      %li <a href="#inventory" id="tab_inventory">Inventario</a>
+      %li <a href="#inventory" id="tab_inventory">Entregas</a>
 
   #information
-
-    .main{:style => 'font-size:1.2em;'}
-      %span.dark.b.i= lo @transaction.date
-
-    .input
-      - unless @transaction.currency_id == currency_id
-        .input
-          1 #{@transaction.currency.name} = <span class="b">#{@transaction.exchange_rate}</span> #{currency_name.pluralize}
-
-      - if @transaction.project_id
-        .input
-          %span.dark_grey 
-            -if @transaction.project_id
-              Proyecto #{link_to @transaction.project.to_s, @transaction.project, :title => 'Proyecto'}
-    .input= @transaction.description unless @transaction.description.blank?
-
-
     .clear
 
     = render 'transactions/items', :transaction => @transaction
@@ -80,20 +75,23 @@
   #payments
     =render "/payments/payments", :transaction => @transaction if @transaction.show_payments?
     #deleted_payments
-      - if @transaction.payments.deleted.any?
+      - if @transaction.account_ledgers.nulled.any?
         =render "/payments/deleted", :transaction => @transaction
     .clear
 
-  #pay_plans
-    =render "/pay_plans/pay_plans", :transaction => @transaction
+  - unless @transaction.draft?
+    #pay_plans= render get_credit_partial(@transaction), :transaction => @transaction
 
   - if @transaction.show_inventory?
     #inventory
       =render "/transactions/inventory", :transaction => @transaction
 
 #users
-  %div= "<span class='dark'>Creado por:</span> <strong>#{@transaction.creator}</strong>".html_safe    if @transaction.creator_id.present?
-  %div= "<span class='dark'>Aprobado por:</span> <strong>#{@transaction.approver}</strong>".html_safe if @transaction.approver_id.present?
+  - if @transaction.creator_id.present?
+    %div <span class='dark'>Creado por:</span> <strong>#{@transaction.creator}</strong> #{lo @transaction.created_at}
+
+  - if @transaction.approver_id.present?
+    %div <span class='dark'>Aprobado por:</span> <strong>#{@transaction.approver}</strong> #{lo @transaction.approver_datetime}
 
 :javascript
 
@@ -106,10 +104,10 @@
     }*/
 
     var cash = #{@transaction.paid? ? false : not(@transaction.credit?)};
-    if(cash) {
-      $('#tab_payments').trigger('click');
-      $('a#new_payment_link').trigger('click');
-    }
+    //if(cash) {
+    //  $('#tab_payments').trigger('click');
+    //  $('a#new_payment_link').trigger('click');
+    //}
 
     /**
     * Sets the state for Income

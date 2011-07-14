@@ -260,6 +260,22 @@ feature "Income", "test features" do
     p.null_account.should == true
     i.reload
     i.balance.should == bal
+    i.pay_plans.unpaid.size.should ==  (i.total/30).ceil - 1
+    tot_pps = i.pay_plans.inject(0) {|s,pp| s += pp.amount unless pp.paid?; s }
+    tot_pps.should == i.balance
+    #i.pay_plans.unpaid.each {|pp| puts "#{pp.amount} #{pp.payment_date}"}
+
+
+    bal = i.balance
+    size = i.pay_plans.unpaid.count
+    p = i.new_payment(:account_id => @ac1_id, :exchange_rate => 1, :reference => 'Cheque 143234', :amount => 45)
+    
+    i.save_payment.should == true
+    p.conciliate_account.should == true
+    i.reload
+
+    i.pay_plans.unpaid.size.should == size - 1
+    i.balance.should == bal - 45
   end
 
 end

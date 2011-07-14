@@ -16,7 +16,20 @@
       %th
   
   %tbody
-    = render transaction.payments.active.includes(:account_ledger => :account)
+    - transaction.account_ledgers.active.each do |al|
+      %tr.al{ :id => al.id, :class => "p_#{al.state} #{al.active.to_s}"}
+        %td.cur= lo(al.date)
+        %td.account= link_to al.account, al.account_ledger
+        %td.cur.amount{'data-val' => al.amount} #{ntc al.amount}
+        %td.cur.interests_penalties{'data-val' => al.interests_penalties} #{ntc al.interests_penalties}
+        %td.cur.total_amount{'data-val' => al.amount}= ntc al.amount
+        %td.actions
+      - unless account_ledger.conciliation?
+        = link_to "Revisar", al.account_ledger, :title => 'Revisar con cuenta bancaria', :class => 'conciliate sync fl', :style => 'margin-right: 10px' unless al.conciliation?
+        = link_to "borrar", al, :class => 'delete', :title => 'Anular', :remote => true, :confirm => delete_confirm(al)
+
+
+    /= render "/payments/payment", :collection => transaction.account_ledgers.active
 
   %tr.extra.pad_top
     %td
