@@ -57,6 +57,7 @@ module Models::AccountLedger::Transaction
     def null_transaction_account
       ret = true
       transaction.balance += amount - interests_penalties
+      create_transaction_pay_plan if credit?
 
       self.class.transaction do
         ret = self.save
@@ -69,9 +70,18 @@ module Models::AccountLedger::Transaction
 
     private
       # Creates a new pay_plan with the date of the latest nulled
-      # pay_plan
+      # pay_plan when a account_ledger( payment ) is nulled
       def create_transaction_pay_plan
+        pp = transaction.pay_plans.paid.last
 
+        transaction.pay_plans.build(
+          :payment_date => pp.payment_date, 
+          :alert_date => pp.payment_date,
+          :amount => amount - interests_penalties,
+          :interests_penalties  => interests_penalties,
+          :email => pp.email,
+          :currency_id => transaction.currency_id
+        )
       end
 
       def build_transaction_ledger_details
