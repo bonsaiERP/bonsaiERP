@@ -57,7 +57,7 @@ module Models::AccountLedger::Transaction
     def null_transaction_account
       ret = true
       transaction.balance += amount - interests_penalties
-      create_transaction_pay_plan if credit?
+      create_transaction_pay_plan if transaction.credit?
 
       self.class.transaction do
         ret = self.save
