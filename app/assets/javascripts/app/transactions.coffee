@@ -103,7 +103,9 @@ class Transaction
     # Used click instead of click because IE
     $(id).find("input").click( ->
       sum = 0
-      sum += 1 * $(k).siblings("label").find("span").data("rate") for k in $(self.conf.taxes_id).find("input:checkbox:checked")
+      $inputs = $(self.conf.taxes_id).find("input:checked")
+      #sum += 1 * $(k).siblings("label").find("span").data("rate") for k in $inputs
+      sum += 1 * $(k.nextSibling).find("span").data("rate") for k in $inputs
 
       $(self.conf.taxes_percentage_id).html(_b.ntc(sum)).data("val", sum)
       self.calculate_taxes()
