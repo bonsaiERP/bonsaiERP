@@ -14,7 +14,7 @@ class PayPlan < ActiveRecord::Base
   
   # repeat repeats the pay_plan over until it fills the balance of a transaction
   attr_accessor :repeat, :destroy_in_list
-  attr_protected :destroy_in_list, :transaction_id
+  attr_protected :destroy_in_list#, :transaction_id
 
   STATES = ["valid", "delayed", "applied"]
 
@@ -25,7 +25,7 @@ class PayPlan < ActiveRecord::Base
   # delegations
   delegate :currency_id, :pay_plans_balance, :pay_plans_total, :payment_date, :real_state, :paid?, :cash, :ref_number, :draft?, :balance, :state, :type,
     :to => :transaction, :prefix => true
-  delegate :name, :symbol, :to => :currency, :prefix => true
+  delegate :name, :symbol, :to => :currency, :prefix => true, :allow_nil => true
 
   # validations
   validate :valid_income_or_interests_penalties_filled

@@ -276,6 +276,75 @@ feature "Income", "test features" do
 
     i.pay_plans.unpaid.size.should == size - 1
     i.balance.should == bal - 45
+
+
+    p = i.new_payment(:account_id => @ac1_id, :exchange_rate => 1, :reference => 'Cheque 143234', :amount => i.balance)
+    
+    i.save_payment.should == true
+    i.reload
+    i.pay_plans.unpaid.size.should == 0
+    i.balance.should == 0
+    p.conciliate_account.should == true
+
+  end
+
+  scenario "Create credit with interests" do
+    i = Income.new(income_params.merge(:account_id => @cli1_id))
+    i.save_trans.should == true
+
+    i.approve!.should == true
+
+    # Approve credit
+    i.approve_credit(:credit_reference => "Ref 23728372", :credit_description => "Yeah").should == true
+    i.pay_plans.unpaid.size.should == 1
+    i.pay_plans.first.amount.should == i.balance
+
+    d = Date.today
+
+    pp = i.new_pay_plan(:payment_date => d, :alert_date => d - 5.days, :amount => 30, :interests_penalties => i.balance/10, :repeat => "1")
+
+    i.save_pay_plan.should == true
+    i.reload
+
+    i.pay_plans.unpaid.size.should == (i.balance/30).ceil
+    
+    i.pay_plans[0].interests_penalties.should == (i.balance/10).round(2)
+    i.pay_plans[1].interests_penalties.should == ((i.balance - 30)/10).round(2)
+    i.pay_plans[2].interests_penalties.should == ((i.balance - 60)/10).round(2)
+
+    tot_pps = i.pay_plans.inject(0) {|s,pp| s += pp.amount unless pp.paid?; s }
+    tot_pps.should == i.balance
+
+    # edit pay_plan
+    pp = i.pay_plans[1]
+    pp_last = i.pay_plans.last
+    amt = pp_last.amount + pp.amount
+    int = pp_last.interests_penalties + pp.interests_penalties
+    i.edit_pay_plan(pp.id, :payment_date => pp.payment_date, :alert_date => pp.alert_date,
+                    :amount => amt , :interests_penalties => int)
+    i.save_pay_plan.should == true
+    i.reload
+
+    i.pay_plans.unpaid.size.should == (i.balance/30).floor
+    i.pay_plans[1].id.should == pp.id
+    i.pay_plans[1].amount.should == amt
+    
+    # edit second pay_plan and repeat pattern
+    pp = i.pay_plans[1]
+    
+    #puts "Before"
+    #i.pay_plans.each {|pp| puts "#{pp.id} #{pp.amount} #{pp.interests_penalties}" }
+    i.edit_pay_plan(pp.id, :payment_date => pp.payment_date, :alert_date => pp.alert_date,
+                    :amount => 60, :interests_penalties => 50, :repeat => true)
+    i.save_pay_plan.should == true
+    i.reload
+    i.pay_plans.size.should == ( (i.balance - 30)/60 ).ceil + 1
+
+    i.pay_plans[1].interests_penalties.should == 50
+    int_per = 50/( i.balance - i.pay_plans[0].amount )
+    i.pay_plans[2].interests_penalties.should == (int_per * (i.balance - 90) ).round(2)
+    #puts "After"
+    #i.pay_plans.each {|pp| puts "#{pp.id} #{pp.amount} #{pp.interests_penalties}" }
   end
 
 end

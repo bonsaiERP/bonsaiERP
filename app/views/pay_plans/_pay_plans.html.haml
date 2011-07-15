@@ -1,6 +1,6 @@
 %h2 Planificación de crédito
 
-- if can_show_new_pay_plan_link?(transaction)
+- if transaction.balance > 0
   =link_to "Nuevo crédito", 
     new_pay_plan_path(:type => transaction.class.to_s, :id => transaction.id, :pay_type => transaction.pay_type),
     :id => 'new_pay_plan_link', :class => 'new button ajax', 'title' => "Nuevo crédito",

@@ -1,0 +1,6 @@
+<% if @transaction.credit? %>
+  $('#tab_pay_plans').html('Crédito');
+  $('#pay_plans').html("<%= escape_javascript render("pay_plans/pay_plans", :transaction => @transaction) %>");
+<% else %>
+  $('#pay_plans').html("<%= escape_javascript render("pay_plans/approve", :transaction => @transaction) %>");
+<% end %>

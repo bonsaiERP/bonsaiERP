@@ -70,9 +70,9 @@ module TransactionsHelper
 
   def get_credit_partial(trans)
     if trans.income?
-      trans.credit? ? "/pay_plans/pay_plans" : "pay_plans/approve"
+      trans.credit? ? "pay_plans/pay_plans" : "pay_plans/approve"
     else
-      "/pay_plans/pay_plans"
+      "pay_plans/pay_plans"
     end
   end
 
@@ -125,6 +125,13 @@ module TransactionsHelper
       "Contado"
     else
       "Crédito"
+    end
+  end
+
+  def payment_type(trans)
+    case trans.class.to_s
+    when "Income" then "cobro"
+    when "Buy", "Expense" then "pago"
     end
   end
 
@@ -185,6 +192,13 @@ module TransactionsHelper
     case params[:controller]
       when "incomes"          then ["Client", "Supplier", "Staff"]
       when "buys", "expenses" then ["Supplier", "Client", "Staff"]
+    end
+  end
+
+  def payment_title(trans)
+    case trans.class.to_s
+    when "Income" then "Cobro"
+    when "Buy", "Expense" then "Pago"
     end
   end
 end

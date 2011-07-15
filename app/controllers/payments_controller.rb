@@ -31,8 +31,8 @@ class PaymentsController < ApplicationController
   def new
     session[:payment] = {}
     #begin
-    transaction = Transaction.org.find_by_type_and_id( params[:type], params[:id] )
-    session[:payment][:transaction_id] = transaction.id
+    @transaction = Transaction.org.find_by_type_and_id( params[:type], params[:id] )
+    session[:payment][:transaction_id] = @transaction.id
     @payment = transaction.new_payment
   end
 

@@ -27,12 +27,8 @@ class PayPlansController < ApplicationController
   # GET /pay_plans/new
   # GET /pay_plans/new.xml
   def new
-    begin
-      transaction = Transaction.org.find_by_type_and_id( params[:type], params[:id] )
-      @pay_plan = transaction.new_pay_plan
-    rescue
-      redirect_to request.referer
-    end
+    @transaction = Transaction.org.find(params[:id])
+    @pay_plan = @transaction.new_pay_plan
   end
 
   # GET /pay_plans/1/edit
@@ -51,8 +47,8 @@ class PayPlansController < ApplicationController
 
     @pay_plan = @transaction.new_pay_plan(params[:pay_plan])
 
-    if @pay_plan.valid? and @transaction.create_pay_plan(params[:pay_plan])
-        render 'create'
+    if @transaction.save_pay_plan
+      render 'create'
     else
       render :action => "new"
     end
@@ -67,11 +63,10 @@ class PayPlansController < ApplicationController
       render :text => "Existio un error por favor cierre la ventana."
     end
 
-    @pay_plan = @transaction.new_pay_plan(params[:pay_plan])
+    @pay_plan = @transaction.edit_pay_plan(params[:id], params[:pay_plan])
     options = params[:pay_plan].merge(:id => params[:id])
 
-    if @pay_plan.valid? and @transaction.update_pay_plan(options)
-        @transaction = Transaction.find(@transaction.id)
+    if @transaction.save_pay_plan
         render 'create'
     else
       @pay_plan.id = params[:id].to_i
@@ -103,9 +98,7 @@ private
 
   # Checks if the current user has the rights to edit
   def check_pay_plan_authorization
-    debugger
-    s=0
-    unless User.admin_gerency?( session[:user][:role])
+    unless User.admin_gerency?(session[:user][:rol])
       flash[:warning] = "Usted no tiene acceso a esta acción"
 
       redirect_to user_path(current_user, :xhr => true)

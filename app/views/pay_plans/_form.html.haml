@@ -1,9 +1,8 @@
 = simple_form_for @pay_plan do |f|
-  = hidden_field_tag "pay_type", params[:pay_type]
   = f.input :ctype, :as => :hidden
   = f.input :transaction_id, :as => :hidden
   
-  = f.input :payment_date, :label => "Fecha de #{@pay_plan.pay_type}"
+  = f.input :payment_date, :label => "Fecha de #{payment_type(@transaction)}"
   = f.input :alert_date, :label => 'Fecha de alerta'
   .clear
 

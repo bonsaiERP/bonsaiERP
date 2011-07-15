@@ -20,11 +20,11 @@
 %span.b#income_state{:class => @transaction.real_state, :style => 'font-size:1.3em'}= @transaction.show_state
 %h2.n.mt5= link_to @transaction.account, @transaction.account
 
-.input
-  .input
+._50.fl
+  ._50.fl
     - if @transaction.project_id
       %h3.n Proyecto: #{link_to @transaction.project, @transaction.project}
-  .input
+  ._50.fl
     %h3= lo @transaction.date
   .clear
   .input
@@ -88,10 +88,10 @@
 
 #users
   - if @transaction.creator_id.present?
-    %div <span class='dark'>Creado por:</span> <strong>#{@transaction.creator}</strong> #{lo @transaction.created_at}
+    %p <span class='dark'>Creado por:</span> <strong>#{@transaction.creator}</strong> <i>#{lo @transaction.created_at}</i>
 
   - if @transaction.approver_id.present?
-    %div <span class='dark'>Aprobado por:</span> <strong>#{@transaction.approver}</strong> #{lo @transaction.approver_datetime}
+    %p <span class='dark'>Aprobado por:</span> <strong>#{@transaction.approver}</strong> <i>#{lo @transaction.approver_datetime}</i>
 
 :javascript
 
@@ -99,15 +99,7 @@
 
     $('#tabs').tabs();
 
-    /*if(!#{@transaction.paid?} && #{@transaction.cash}) {
-      $('#new_payment_link').trigger('click');
-    }*/
-
     var cash = #{@transaction.paid? ? false : not(@transaction.credit?)};
-    //if(cash) {
-    //  $('#tab_payments').trigger('click');
-    //  $('a#new_payment_link').trigger('click');
-    //}
 
     /**
     * Sets the state for Income

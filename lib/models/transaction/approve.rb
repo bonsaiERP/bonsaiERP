@@ -9,6 +9,7 @@ module Models::Transaction
 
     included do
       validates_length_of :credit_reference, :minimum => 3, :if => :allow_credit?
+      before_save { self.cash = false if allow_credit?; true }
     end
 
     module InstanceMethods
@@ -32,11 +33,11 @@ module Models::Transaction
       def approve_credit(attrs)
         def self.allow_credit?; true; end # Allow validations and callbacks to work with allow_credit?
 
-        self.cash               = false
         self.credit_reference   = attrs[:credit_reference]
+        self.credit_description = attrs[:credit_description]
         self.creditor_id        = UserSession.user_id
         self.credit_datetime    = Time.now
-        self.credit_description = attrs[:credit_description]
+
         create_first_pay_plan
         self.payment_date       = pay_plans.first.payment_date
 

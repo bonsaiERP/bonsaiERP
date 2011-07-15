@@ -113,8 +113,9 @@ class IncomesController < ApplicationController
   # PUT /incomes/:id/approve_credit
   def approve_credit
     @transaction = Income.org.find(params[:id])
+    @transaction.approve_credit params[:income]
 
-    render :json => @transaction
+    render "approve_credit"
   end
 
 

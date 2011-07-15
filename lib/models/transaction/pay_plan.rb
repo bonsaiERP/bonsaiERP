@@ -25,11 +25,14 @@ module Models::Transaction::PayPlan
   # Sets the amount and the data for last pay_plan
   def new_pay_plan(params = {})
     return false unless credit? # Check credit is approved
-    @current_pay_plan = pay_plans.build(params.merge(:ctype => self.class.to_s, :currency_id => currency_id))
+    @current_pay_plan = pay_plans.build(params.merge(:ctype => self.class.to_s, :currency_id => currency_id, :transaction_id => id))
   end
 
   # Updates one of the pay_plans
-  def update_pay_plan(params = {})
+  def edit_pay_plan(pp_id, params = {})
+    @current_pay_plan = pay_plans.select {|pp| pp.id == pp_id.to_i }.first
+    return false if @current_pay_plan.paid?
+    @current_pay_plan.attributes = params
     @current_pay_plan
   end
 
@@ -116,8 +119,8 @@ module Models::Transaction::PayPlan
     end
 
     def calculate_int_percentage(pp, bal)
-      return 0 if bal <= 0 or pp.amount == 0
-      pp.amount / bal
+      return 0 if bal <= 0 or pp.interests_penalties <= 0
+      pp.interests_penalties / bal
     end
 
     # Marks the pay_plans for destruction if payment_date is <= than @current_pay_plan

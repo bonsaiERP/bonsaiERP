@@ -1,3 +1,2 @@
-%h2 #{params[:payment_type].capitalize} #{transaction_title(@payment.transaction)}
-%p.links= link_to 'Lista', payments_path, :class => 'list'
-= render :partial => 'form'
+%h2 #{ payment_title(@transaction) } #{@transaction}
+/= render :partial => 'form'
