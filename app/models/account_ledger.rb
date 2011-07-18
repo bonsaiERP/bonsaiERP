@@ -42,6 +42,7 @@ class AccountLedger < ActiveRecord::Base
   accepts_nested_attributes_for :account_ledger_details, :allow_destroy => true
 
   # Validations
+  validates_presence_of :to_id, :account_id
   validates_inclusion_of :operation, :in => OPERATIONS
   validates_numericality_of :amount, :greater_than => 0, :if => :new_record?
   validates_numericality_of :exchange_rate, :greater_than => 0

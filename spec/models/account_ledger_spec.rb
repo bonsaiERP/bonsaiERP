@@ -2,34 +2,54 @@
 require 'spec_helper'
 
 describe AccountLedger do
-  before(:each) do
-    OrganisationSession.set(:id => 1, :name => 'ecuanime', :currency_id => 1)
-    @params = {
+  let(:params) do
+    {
       :date => Date.today, :operation => "out", :reference => "Income", :amount => 100, :currency_id => 1, :exchange_rate => 1,
+      :account_id => 2, :to_id => 1,
       :account_ledger_details_attributes => [
         {:account_id => 1, :amount => 100 },
         {:account_id => 2, :amount => -100 },
       ]
     }
-    Account.create!(:name => "Juan perez", :account_type_id => 1, :currency_id => 1,
-                   :accountable_id => 1, :accountable_type => "Client"
-                   ) {|a| a.id = 1; a.amount = 0 }
-    Account.create!(:name => "Bank 1", :account_type_id => 1, :currency_id => 1,
-                   :accountable_id => 1, :accountable_type => "Bank"
-                   ) {|a| a.id = 2; a.amount = 1000}
-
-    c = Currency.create!(:name => 'Boliviano', :symbol => 'Bs.') {|c| c.id = 1}
   end
+
+
+  let!(:currency) do
+    Currency.create!(:name => 'Boliviano', :symbol => 'Bs.') {|c| c.id = 1}
+  end
+
+  let!(:client_account) do
+    Account.create!(
+      :name => "Juan perez", :account_type_id => 1, :currency_id => 1,
+      :accountable_id => 1, :accountable_type => "Client"
+    ) {|a| a.id = 1; a.amount = 0 }
+  end
+
+  let!(:bank_account) do
+    Account.create!(
+      :name => "Bank 1", :account_type_id => 1, :currency_id => 1,
+      :accountable_id => 1, :accountable_type => "Bank" 
+    ) {|a| a.id = 2; a.amount = 1000}
+  end
+
+  before(:each) do
+    OrganisationSession.set(:id => 1, :name => 'ecuanime', :currency_id => 1)
+  end
+
+  it { should have_valid(:operation).when( *AccountLedger::OPERATIONS ) }
+  it { should_not have_valid(:operation).when('no') }
+  it { should have_valid(:amount).when(0.25) }
+  it { should_not have_valid(:amount).when(0.0) }
+  it { should have_valid(:exchange_rate).when(0.25) }
+  it { should_not have_valid(:exchange_rate).when(0.0) }
 
   it 'should create with at least two details' do
     a = AccountLedger.new(:date => Date.today)
-    
     a.valid?.should == false
   end
 
   it 'should now allow the sum distinct to 0' do
-    @params[:account_ledger_details_attributes][1][:amount] = -50
-    params = @params
+    params[:account_ledger_details_attributes][1][:amount] = -50
     params[:account_ledger_details_attributes].pop
 
     params[:account_ledger_details_attributes].size.should == 1
@@ -47,26 +67,25 @@ describe AccountLedger do
   end
 
   it 'should be valid if the accounts are balanced' do
-    a = AccountLedger.create!(@params)
-
+    a = AccountLedger.create(params)
     a.account_ledger_details.inject(0) {|sum,v| sum += v.amount }.should == 0
   end
 
   it 'should not allow uncorrect operations' do
-    @params[:operation] = "jojojo"
-    al = AccountLedger.new(@params)
+    params[:operation] = "jojojo"
+    al = AccountLedger.new(params)
     
     al.valid?.should == false
     al.errors[:operation].should_not == blank?
   end
 
   it 'should return false for money?' do
-    al = AccountLedger.new(@params)
+    al = AccountLedger.new(params)
     al.money?.should == false
   end
 
   it 'should update the account value' do
-    al = AccountLedger.new(@params)
+    al = AccountLedger.new(params)
     al.save.should == true
 
     al.account_ledger_details.map(&:state).uniq.should == ["con"]
@@ -79,7 +98,7 @@ describe AccountLedger do
     a2.amount.should == 900
     a2.amount_currency(1).should == 900
 
-    al = AccountLedger.create(@params)
+    al = AccountLedger.create(params)
 
     a1 = Account.find(1)
     a1.amount.should == 200
@@ -92,11 +111,11 @@ describe AccountLedger do
   end
 
   it 'should allow negative values' do
-    @params[:operation] = "in"
-    @params[:account_ledger_details_attributes][0][:amount] = -200
-    @params[:account_ledger_details_attributes][1][:amount] = 200
+    params[:operation] = "in"
+    params[:account_ledger_details_attributes][0][:amount] = -200
+    params[:account_ledger_details_attributes][1][:amount] = 200
 
-    al = AccountLedger.create(@params)
+    al = AccountLedger.create(params)
 
     al.persisted?.should == true
     al.reload
@@ -109,30 +128,32 @@ describe AccountLedger do
   end
 
   it 'should work with other currencies' do
-    @params = {
+    params = {
       :date => Date.today, :operation => "in", :reference => "Income", :amount => 50, :currency_id => 1, :exchange_rate => 0.5,
+      :account_id => 2, :to_id => 1,
       :account_ledger_details_attributes => [
         {:account_id => 2, :amount => 50, :description => "Income with exchange rate 0. from account 1"},
         {:account_id => 1, :amount => -100, :exchange_rate => 0.5,},
       ]
     }
 
-    al = AccountLedger.new(@params)
+    al = AccountLedger.new(params)
     al.save.should == true
     al.account_ledger_details[0].description.should == "Income with exchange rate 0. from account 1"
 
   end
 
   it 'should not save if the balance with exchange rate is different' do
-    @params = {
+    params = {
       :date => Date.today, :operation => "in",
+      :account_id => 2, :to_id => 1,
       :account_ledger_details_attributes => [
         {:account_id => 2, :amount => 50, :description => "Income with exchange rate 0. from account 1"},
         {:account_id => 1, :amount => -100, :exchange_rate => 0.51,},
       ]
     }
 
-    al = AccountLedger.new(@params)
+    al = AccountLedger.new(params)
     al.save.should == false
   end
 
@@ -145,6 +166,7 @@ describe AccountLedger do
 
     al = AccountLedger.create!(
       :date => Date.today, :operation => "out", :reference => "Outcome", :amount => 50, :currency_id => 2, :exchange_rate => 0.5,
+      :account_id => 3, :to_id => 1,
       :account_ledger_details_attributes => [
         {:account_id => 1, :amount => 50, :currency_id => 2},
         {:account_id => 3, :amount => -100, :exchange_rate => 0.5},
@@ -165,8 +187,8 @@ describe AccountLedger do
     al.money?.should == false
 
     al.valid?.should == false
-    al.errors[:account_id].any?.should == false
-    al.errors[:to_id].any?.should == false
+    al.errors[:account_id].any?.should == true
+    al.errors[:to_id].any?.should == true
   end
 
   it 'should initialize with money? = true' do
