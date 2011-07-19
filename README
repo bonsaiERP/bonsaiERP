@@ -3,6 +3,8 @@
 Bonsai is a financiery system that provides a simple solution to the comon needs
 to control an organisation finances. Beatiful, simple
 
+:w !ruby -c # Test synthax of ruby in vim
+
 
 PostgreSQL
 sudo -u postgres psql template1

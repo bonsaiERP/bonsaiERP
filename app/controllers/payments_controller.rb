@@ -3,7 +3,7 @@
 # email: boriscyber@gmail.com
 class PaymentsController < ApplicationController
   before_filter :check_authorization!
-  before_filter :set_payment, :only => [:show, :edit, :update, :destroy, :null_payment]
+  before_filter :set_payment, :only => [:show, :edit, :destroy, :null_payment]
   # GET /payments
   # GET /payments.xml
   def index
@@ -28,10 +28,7 @@ class PaymentsController < ApplicationController
   # GET /payments/new
   # GET /payments/new.xml
   def new
-    session[:payment] = {}
-    #begin
     @transaction = Transaction.org.find( params[:id] )
-    session[:payment][:transaction_id] = @transaction.id
     @payment = @transaction.new_payment
   end
 
@@ -40,19 +37,24 @@ class PaymentsController < ApplicationController
   # POST /payments.xml
   def create
 
-    if params[:payment][:transaction_id].to_i == session[:payment][:transaction_id]
-      @transaction = Transaction.find(params[:payment][:transaction_id])
-      @payment = @transaction.new_payment(params[:payment])
+    @transaction = Transaction.org.find(params[:id])
 
-      if @payment.save
-        render 'create'
-      else
-        render :action => "new"
-      end
+    # When it is the contact account
+    if params[:payment][:account_id] =~ /^\d-\d$/
+    # Other money accounts
     else
-      logger.warn "Hacking attemp! by user #{current_user.id}"
-      flash[:error] = "No es posible realizar la operación"
-      render :text => "Error"
+      #@transaction = Transaction.find(params[:payment][:transaction_id])
+      #@payment = @transaction.new_payment(params[:payment])
+
+      #if @payment.save
+      #  render 'create'
+      #else
+      #  render :action => "new"
+      #end
+    #else
+      #logger.warn "Hacking attemp! by user #{current_user.id}"
+      #flash[:error] = "No es posible realizar la operación"
+      #render :text => "Error"
     end
   end
 

@@ -71,17 +71,6 @@ feature "Income", "test features" do
     i.reload
     i.approver_id.should == 1
     i.state.should == "approved"
-    #i.account_ledger.should_not == nil
-
-    #al = i.account_ledger
-    #al.operation.should == "transaction"
-    #al.reference.should == "Venta #{i.ref_number}"
-    #a1.reload
-    #a2.reload
-
-    # Check amounts for accounts
-    #a1.amount.should == i.total_currency
-    #a2.amount.should == -i.total_currency
 
     # Create a payment
     i.payment?.should == false
