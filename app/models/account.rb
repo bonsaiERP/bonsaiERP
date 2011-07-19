@@ -73,7 +73,7 @@ class Account < ActiveRecord::Base
   # Creates a hash for with the amount for each curency available
   # {currency_id => amount}
   def currencies_to_hash
-    Hash[ account_currencies.map {|ac| [ac.id, ac.amount] } ]
+    Hash[ account_currencies.map {|ac| [ac.currency_id, ac.amount] } ]
   end
 
   private

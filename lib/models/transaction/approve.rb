@@ -57,7 +57,8 @@ module Models::Transaction
           )
         end
 
-        # Not needed anymore
+        # Creates account_ledger for the transaction
+        # NOT needed anymore
         def create_account_ledger_details
           kl = self.class.to_s
 

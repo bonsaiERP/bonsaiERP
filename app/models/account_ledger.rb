@@ -64,7 +64,8 @@ class AccountLedger < ActiveRecord::Base
   scope :active,  where(:active => true)
 
   # delegates
-  delegate :name, :symbol, :code, :to => :currency, :prefix => true 
+  delegate :name, :symbol, :code, :to => :currency, :prefix => true
+  delegate :currency_id, :name, :to => :account, :prefix => true, :allow_nil => true
 
  
   def self.pendent?

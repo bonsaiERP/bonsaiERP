@@ -2,7 +2,6 @@
 - if @accounts.any?
   = simple_form_for(@payment, :remote => true) do |f|
     = bonsai_form_error(f)
-    /= hidden_field_tag "payment_type", params[:payment_type]
 
     = f.input :transaction_id, :as => :hidden
 
@@ -14,19 +13,12 @@
     = f.input :interests_penalties, :input_html => {:size => 12, :type => 'decimal'}, :label => currency_label('Intereses/Penalidades', @payment)
     .clear
 
-      = f.input :reference, :label => 'Referencia/Nº Cheque', :input_html => {:size => 20}
-      - display = @payment.currency_id == currency_id ? 'none' : 'block'
+    = f.input :reference, :label => 'Referencia/Nº Cheque', :input_html => {:rows => 3, :cols => 35}, :as => :text
 
-      .input.exchange_rate{:style => "display: #{display}"}
-        = f.label :exchange_rate, "Tipo de cambio &nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript:' id='cur_rates' class='n'>tipos de cambio</a>".html_safe
-        1 #{@payment.transaction.currency_name} = 
-        = f.text_field :exchange_rate, :size => 6, :class => 'r'
-
-        - cur = @payment.account_id.present? ? @payment.account.currency_name.pluralize : ""
-        %span#exchange_rate_cur= cur
-        <span class="hint">Puede usar hasta 4 decimales</span>
-        - if f.object.errors[:exchange_rate].present?
-          %span.error= f.object.errors[:exchange_rate].join(", ")
+    - disp = @payment.currency_id == currency_id ? 'none' : 'block'
+    = f.input :exchange_rate, :label => "Tipo de cambio de", 
+      :input_html => {:size => 12}, :hint => 'Puede ingresar hasta 4 decimales',
+      :wrapper_html => {:style => "display:#{disp}"}
 
     /= f.input :description, :label => 'Descripción', :as => :text, :input_html => {:rows => 4, :cols => 35}
     .clear
@@ -45,7 +37,8 @@
       var currencies = #{Currency.scoped.to_hash.to_json};
       var contact = #{@transaction.account.self_with_currencies_hash.to_json}
 
-      var payment = new Payment(#{@transaction.currency_id}, accounts, contact);
+      var payment = new ExchangeRate('#account_ledger_exchange_rate', '#account_ledger_account_id', '#'
+      #{@transaction.currency_id}, accounts, currencies, contact);
 
       // Display currency_rates in a new window
       $('#cur_rates').die();

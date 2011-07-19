@@ -24,7 +24,7 @@
 
   - disp = @account_ledger.show_exchange_rate? ? 'block' : 'none'
 
-  = f.input :exchange_rate, :label => "Tipo de cambio en", 
+  = f.input :exchange_rate, :label => "Tipo de cambio de", 
     :input_html => {:size => 12}, :hint => 'Puede ingresar hasta 4 decimales', :wrapper_html => {:style => "display:#{disp}", :id => 'al_exchange_rate'}
 
   .clear
@@ -39,73 +39,10 @@
 :javascript
   $(function() {
 
-    function ExchangeRate(input, currency_id, accounts, currencies) {
-      this.input       = input;
-      this.currency_id = currency_id;
-      this.accounts    = accounts;
-      this.currencies  = currencies;
-      this.init();
-    }
-
-    ExchangeRate.prototype = {
-      // Initialize data
-      init: function() {
-        var $input = $(this.input);
-        this.cont  = $input.parents("div.input:first");
-        this.label = $input.siblings('label');
-
-        $input.after('<span id="total_change"></span>');
-        this.setLabel();
-        this.setEvents();
-      },
-      // Sets the label
-      setLabel: function() {
-        var html = this.label.html();
-        this.label.html(html + " <span id='cur_symbol'></span>&nbsp;&nbsp;<a href='javascript:' class='n' id='cur_rates'>Ver tipos de cambio</a>");
-      },
-      // set the events
-      setEvents: function() {
-        var self = this;
-
-        $('#account_ledger_to_id').live("change keyup focusout", function(e) {
-          self.to_id = $(this).val();
-
-          if(self.to_id) {
-            self.account  = self.accounts[self.to_id];
-            self.currency = self.currencies[self.account.currency_id];
-          }else{
-            self.currency = false;
-          }
-
-          self.showHideRate();
-        });
-
-        $('#account_ledger_exchange_rate, #account_ledger_amount').live('focusout', function() { self.totalExchangeRate() });
-      },
-      // shows or hides the container
-      showHideRate: function() {
-        if(this.currency) {
-          if(this.account.currency_id != this.currency_id) {
-            $('#cur_symbol').html(this.currency.symbol);
-            $('#al_exchange_rate').show().mark();
-          }else{
-            $('#al_exchange_rate').hide();
-          }
-        }else{
-          $('#al_exchange_rate').hide();
-        }
-      },
-      // calculates the total exchange rate
-      totalExchangeRate: function() {
-        var tot = $('#account_ledger_amount').val() * 1;
-        var er = $('#account_ledger_exchange_rate').val() * 1;
-        $('#total_change').html(" Total: " + this.currency.symbol + " " +  _b.ntc(tot * er));
-      }
-    }
-
-    var accounts = #{Account.to_hash(:name, :currency_id).to_json};
+    var accounts = #{Account.org.to_hash(:name, :currency_id).to_json};
     var currencies = #{Currency.to_hash.to_json};
 
-    new ExchangeRate('#account_ledger_exchange_rate', #{@account_ledger.account.currency_id}, accounts, currencies);
+    new ExchangeRate('#account_ledger_exchange_rate', '#account_ledger_to_id', '#account_ledger_amount',
+    #{@account_ledger.account_currency_id}, accounts, currencies);
 
   });
