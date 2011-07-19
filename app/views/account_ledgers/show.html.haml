@@ -22,12 +22,12 @@
 - if @account_ledger.can_conciliate?
   .conciliation
     = simple_form_for @account_ledger, :url => conciliate_account_ledger_path(@account_ledger) do |f|
-      = f.submit "Revisar transacción"
+      = f.submit "Verificar transacción"
 
 %p Creado por: <span class="b">#{@account_ledger.creator}</span>
 
 - if @account_ledger.conciliation?
-  %p Revisado por: <span class="b">#{@account_ledger.approver}</span>
+  %p Verificado por: <span class="b">#{@account_ledger.approver}</span>
 
 - unless @account_ledger.active?
   %p Anulado por: <span class="b">#{@account_ledger.nuller}</span>

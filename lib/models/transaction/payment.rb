@@ -19,7 +19,8 @@ module Models::Transaction::Payment
       return false if draft? # Do not allow payments to draft? transactions
 
       params = set_payment_amount(params)
-      @current_ledger = account_ledgers.build({:operation => 'in', :to_id => account_id
+      @current_ledger = account_ledgers.build({
+        :operation => 'in', :to_id => account_id, :currency_id => currency_id
       }.merge(params))
 
       @current_ledger.set_payment(true)

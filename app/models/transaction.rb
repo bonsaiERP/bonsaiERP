@@ -30,7 +30,7 @@ class Transaction < ActiveRecord::Base
   belongs_to :creator , :class_name => "User"
   belongs_to :approver, :class_name => "User"
 
-  has_one  :account_ledger, :conditions => "operation = 'transaction'"
+  #has_one  :account_ledger, :conditions => "operation = 'transaction'"
 
   has_many :pay_plans          , :dependent => :destroy , :order => "payment_date ASC", :autosave => true
   has_many :transaction_details, :dependent => :destroy

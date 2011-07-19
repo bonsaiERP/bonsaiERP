@@ -61,8 +61,19 @@ class Account < ActiveRecord::Base
 
   # Creates a Hash with the id as the base
   def self.to_hash(*args)
+    args = [:name, :currency_id] if args.empty?
     l = lambda {|v| args.map {|val| [val, v.send(val)] } }
     Hash[ Account.org.money.map {|v| [v.id, Hash[l.call(v)] ]  } ]
+  end
+
+  def self_with_currencies_hash(*args)
+    {:name => name, :id => id, :currencies => currencies_to_hash }
+  end
+
+  # Creates a hash for with the amount for each curency available
+  # {currency_id => amount}
+  def currencies_to_hash
+    Hash[ account_currencies.map {|ac| [ac.id, ac.amount] } ]
   end
 
   private

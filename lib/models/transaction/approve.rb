@@ -23,7 +23,7 @@ module Models::Transaction
         else
           self.state       = "approved"
           self.approver_id = UserSession.user_id
-          create_account_ledger_details
+          #create_account_ledger_details
           #update_transaction_amount
           self.save
         end
@@ -57,6 +57,7 @@ module Models::Transaction
           )
         end
 
+        # Not needed anymore
         def create_account_ledger_details
           kl = self.class.to_s
 

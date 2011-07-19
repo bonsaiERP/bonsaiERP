@@ -1,21 +1,21 @@
-- @accounts = Account.org
+- @accounts = Account.org.money
 - if @accounts.any?
   = simple_form_for(@payment, :remote => true) do |f|
     = bonsai_form_error(f)
-    = hidden_field_tag "payment_type", params[:payment_type]
+    /= hidden_field_tag "payment_type", params[:payment_type]
 
     = f.input :transaction_id, :as => :hidden
 
-    = f.input :date, :label => 'Fecha'
+    /= f.input :date, :label => 'Fecha'
     = f.association :account, :label => 'Cuenta <span class="n black" id="cur"></span>'.html_safe, :collection => @accounts
     .clear
 
-    = f.input :amount, :input_html => {:size => 12, :type => 'decimal', :disabled => @payment.transaction_cash}, :label => currency_label('Cantidad', @payment)
+    = f.input :amount, :input_html => {:size => 12, :type => 'decimal'}, :label => currency_label('Cantidad', @payment)
     = f.input :interests_penalties, :input_html => {:size => 12, :type => 'decimal'}, :label => currency_label('Intereses/Penalidades', @payment)
     .clear
 
       = f.input :reference, :label => 'Referencia/Nº Cheque', :input_html => {:size => 20}
-      - display = @payment.different_currency? ? 'block' : 'none'
+      - display = @payment.currency_id == currency_id ? 'none' : 'block'
 
       .input.exchange_rate{:style => "display: #{display}"}
         = f.label :exchange_rate, "Tipo de cambio &nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript:' id='cur_rates' class='n'>tipos de cambio</a>".html_safe
@@ -41,67 +41,11 @@
   :javascript
     $(function() {
 
-      function Payment(currency_id, accounts, rates) {
-        this.currency_id = currency_id;
-        this.accounts = accounts;
-        this.currencies = currencies;
-        this.setEvents();
-      };
+      var accounts = #{Account.org.money.to_hash.to_json};
+      var currencies = #{Currency.scoped.to_hash.to_json};
+      var contact = #{@transaction.account.self_with_currencies_hash.to_json}
 
-      Payment.prototype = {
-        currency_id: null,
-        accounts: null,
-        currencies: null,
-        setEvents: function() {
-          this.accountIdEvent();
-        },
-        /**
-        * Sets the account_id Event
-        */
-        accountIdEvent: function() {
-          var self = this;
-
-          $('#payment_account_id').die().live('change keyup', function() {
-            var html = '';
-            var rate = 0.0;
-            
-            try{
-              var currency_id = self.accounts[ $(this).val() ].currency_id;
-
-              if( self.currency_id != currency_id ) {
-                var name = self.currencies[currency_id].name.pluralize();
-
-                $('.exchange_rate').show('slow').mark();
-                $('#exchange_rate_cur').html(name);
-              }else{
-                $('.exchange_rate').hide('slow');
-              }
-            }catch(e) {}
-            
-            //$('#payment_exchange_rate').val(rate); 
-            $('#cur').html(html).mark();
-
-          });
-        },
-        /**
-        * @param String
-        */
-        createAmountInterestLabel: function(currency_id) {
-          var cur = "#{currency_complete_plural}";
-          if(this.currencies[currency_id]) {
-            var ra = this.currencies[currency_id];
-            cur = ra.currency_symbol + " " + ra.currency_name.pluralize();
-          }
-
-          $('label[for=payment_amount]').html("Cantidad (" + cur + ")");
-          $('label[for=payment_interests_penalties]').html("Intereses/Penalidades (" + cur + ")");
-        }
-      };
-
-      var accounts = #{Account.json.to_json};
-      var currencies = #{Currency.json.to_json};
-
-      var payment = new Payment(#{@payment.transaction.currency_id}, accounts, currencies);
+      var payment = new Payment(#{@transaction.currency_id}, accounts, contact);
 
       // Display currency_rates in a new window
       $('#cur_rates').die();

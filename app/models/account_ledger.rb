@@ -19,7 +19,7 @@ class AccountLedger < ActiveRecord::Base
   include Models::AccountLedger::Money
   include Models::AccountLedger::Transaction
 
-  OPERATIONS = %w(in out trans transaction)
+  OPERATIONS = %w(in out trans)
   OPERATIONS.each do |op|
     class_eval <<-CODE, __FILE__, __LINE__ + 1
       def #{op}?
@@ -64,7 +64,7 @@ class AccountLedger < ActiveRecord::Base
   scope :active,  where(:active => true)
 
   # delegates
-  delegate :currency, :symbol, :to => :currency, :prefix => true 
+  delegate :name, :symbol, :code, :to => :currency, :prefix => true 
 
  
   def self.pendent?
