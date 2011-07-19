@@ -9,15 +9,17 @@
 %h1.mb5 <span class="dark_grey n">Caja:</span> #{@cash.name}
 %h3.mt5.dark_grey= @cash.currency
 
+%hr/
+
 .moneybox.fl
   %label Saldo en caja
   %h3= with_currency(@cash.account, :amount)
 
-- if @cash.pendent_account_ledgers.any?
-  .moneybox.fl
-    %label Saldo a conciliar
-    %h3= with_currency @cash, :
-
+//- if @cash.pendent_account_ledgers.any?
+//  .moneybox.fl
+//    %label Saldo a conciliar
+//    %h3= with_currency @cash 
+//
 ._40.fr
   %label Dirección
   = nl2br(@cash.address)

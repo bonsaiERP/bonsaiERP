@@ -37,7 +37,8 @@
       var currencies = #{Currency.scoped.to_hash.to_json};
       var contact = #{@transaction.account.self_with_currencies_hash.to_json}
 
-      var payment = new ExchangeRate('#account_ledger_exchange_rate', '#account_ledger_account_id', '#'
+      new ExchangeRate('#account_ledger_exchange_rate', '#account_ledger_account_id', 
+      '#account_ledger_amount,#account_ledger_interests_penalties',
       #{@transaction.currency_id}, accounts, currencies, contact);
 
       // Display currency_rates in a new window

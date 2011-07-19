@@ -27,7 +27,8 @@ $link: #095495;
 .grey{ color: $grey; }
 .dark_grey{ color: $dark_grey; }
 .green{ color: $green; }
-.dark_green{ color: $dark_green; }
+//.dark_green{ color: $dark_green; }
+.dark_green{ color: darken($green, 15%); }
 .black{ color: $black; }
 
 .bg_red{ background-color: $red !important; }

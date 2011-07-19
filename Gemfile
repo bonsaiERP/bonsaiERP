@@ -27,6 +27,7 @@ gem 'haml'
 gem 'kaminari'
 gem 'nokogiri'
 gem 'prawn', '~>0.11.1', :git => 'https://github.com/sandal/prawn.git', :branch => "stable", :submodules => true
+gem 'active_reload'
 #gem 'newrelic_rpm'
 #gem 'countries', :require => 'iso3166'
 #gem 'barista', '~>1.0'
@@ -39,6 +40,8 @@ group :development do
   gem 'rspec-rails', '~>2.6.0'
   gem 'steak', '~>2.0.0'
   gem 'ffaker', '~> 1.8.0'
+  gem 'factory_girl_rails'
+  gem 'jasmine'
 end
 
 
@@ -50,6 +53,7 @@ group :test do
   gem 'capybara'
   gem 'database_cleaner'
   gem 'factory_girl_rails'
+  gem 'jasmine'
   gem 'spork', '~>0.9.0.rc9'
   gem 'database_cleaner'
   gem 'watchr'

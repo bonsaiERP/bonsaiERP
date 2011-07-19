@@ -11,14 +11,14 @@ class CashesController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml => @cashs }
+      format.xml  { render :xml => @cashes }
     end
   end
 
   # GET /cashs/1
   # GET /cashs/1.xml
   def show
-    @ledgers = @bank.account.get_ledgers.page(@page)
+    @ledgers = @cash.account.get_ledgers.page(@page)
 
     respond_to do |format|
       format.html # show.html.erb

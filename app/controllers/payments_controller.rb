@@ -22,7 +22,6 @@ class PaymentsController < ApplicationController
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @payment }
-      format.js { render 'create' }
     end
   end
 

@@ -3,10 +3,11 @@ class ExchangeRate
     @$input = $(@input)
     @$label = @$input.siblings 'label'
     @$hide  = @$input.parents "div:first"
-    @$input.after('<span class="calculate"></span>')
-    @$after = @$input.find('calculate')
+
+    @$after = $('<span/>').insertAfter(@$input)
     @.setEvents()
     @.setLabel()
+    @observe_many = if @amount.match(/,/) then true else false
     @.setContactCurrencies() if @contact
   # Events
   setEvents: ->
@@ -14,11 +15,15 @@ class ExchangeRate
     @.setEventForCalculation()
   setEventForCalculation: ->
     self = @
-    $("#{ @amount }, #{ @input }").live 'focusout', ->
-      amount = $(self.amount).val() * 1
+
+    $("#{ @amount },#{ @input }").live 'focusout', ->
+      amount = 0
+      $(self.amount.split(",")).each (i, el)->
+        amount += $(el).val() * 1
+
       rate   = self.$input.val() * 1
 
-      self.$after.html("#{self.$label.find('.currency_symbol').html()} #{_b.ntc(rate * amount)}")
+      self.$after.html(" #{self.$label.find('.currency_symbol').html()} #{_b.ntc(rate * amount)}")
   # Account event
   accountIdEvent: ->
     self = @
@@ -80,10 +85,10 @@ class ExchangeRate
     html = ''
 
     for currency_id, amount of @contact.currencies
-      if @contact.currencies[currency_id] > 0
-        html += "<option class='b' val='#{@contact.id}-#{currency_id}'>"
+      if @contact.currencies[currency_id] < 0
+        html += "<option class='i' value='#{@contact.id}-#{currency_id}'>"
         cur = @currencies[currency_id * 1]
-        html += "#{cur.symbol} #{amount} #{@contact.name}</option>"
+        html += "(#{cur.symbol} #{Math.abs amount}) #{@contact.name}</option>"
 
     $('#account_ledger_account_id option:first').after(html)
 
