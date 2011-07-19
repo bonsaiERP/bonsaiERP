@@ -7,8 +7,7 @@ describe HomeController do
   end
 
   it 'should assing page in case that params have page' do
-    controller.stubs(:params => {:page => 'team'})
-    get :index#, :params => { :page => 'team' }
+    get :index, :page => 'team'
     assigns(:page).should eq("team")
   end
 end

@@ -13,13 +13,9 @@ describe PaymentsController do
   end
 
   def mock_transaction(stubs = {})
-    @mock_transaction ||= Transaction.tap do |trans|
-      trans.stubs( stubs ) unless stubs.empty?
+    @mock_transaction ||= Transaction.tap do |transaction|
+      transaction.stubs(stubs) unless stubs.empty?
     end
-  end
-
-  def stub_transaction(stubs = {})
-    Transaction.stubs(:org => stub(stubs) )
   end
 
   describe "GET index" do
@@ -28,22 +24,19 @@ describe PaymentsController do
       Payment.stubs(:org => stub(:all => [mock_payment]) )
 
       get :index
+      #puts assigns.keys
       assigns(:payments).should eq([mock_payment])
     end
   end
 
   describe "GET new" do
     it "assigns a new payment as @payment" do
-      #stub_transaction(:find => mock_transaction)
+      stub_auth
       mock_trans = mock_transaction(:new_payment => mock_payment)
-      Transaction.stubs(:org => stub(:find => mock_trans ) )
-      #Transaction.any_instance.stubs(:new_payment => mock_payment)
+      Transaction.stubs(:org => stub(:find => mock_trans) )
 
-      #trans = Transaction.org.find(1)
-      #trans.should == mock_transaction
-      #trans.new_payment.should == mock_payment
-      get :new
-      assigns(:transaction).should == mock_trans
+      get :new, :id => 1
+      assigns(:transaction).should == mock_transaction
       assigns(:payment).should == mock_payment
     end
   end
@@ -56,37 +49,45 @@ describe PaymentsController do
   #  end
   #end
 
-  #describe "POST create" do
+  describe "POST create" do
+    describe "with valid params" do
+      before do
+        stub_auth
+      end 
 
-  #  describe "with valid params" do
-  #    it "assigns a newly created payment as @payment" do
-  #      Payment.stub(:new).with({'these' => 'params'}) { mock_payment(:save => true) }
-  #      post :create, :payment => {'these' => 'params'}
-  #      assigns(:payment).should be(mock_payment)
-  #    end
+      it "when stubed method for action_id 1-1" do
+        mock_trans = mock_transaction(:new_contact_payment => mock_payment)
+        Transaction.stubs(:org => stub(:find => mock_trans) )
 
-  #    it "redirects to the created payment" do
-  #      Payment.stub(:new) { mock_payment(:save => true) }
-  #      post :create, :payment => {}
-  #      response.should redirect_to(payment_url(mock_payment))
-  #    end
-  #  end
+        post :create, :payment => {:acount_id => '1-1' }
+        assigns(:payment).should == mock_payment
+      end
 
-  #  describe "with invalid params" do
-  #    it "assigns a newly created but unsaved payment as @payment" do
-  #      Payment.stub(:new).with({'these' => 'params'}) { mock_payment(:save => false) }
-  #      post :create, :payment => {'these' => 'params'}
-  #      assigns(:payment).should be(mock_payment)
-  #    end
+      it "incorrect stubed method for action_id 1-1 raises exeption" do
+        mock_trans = mock_transaction(:new_contact_payment => mock_payment)
+        Transaction.stubs(:org => stub(:find => mock_trans) )
 
-  #    it "re-renders the 'new' template" do
-  #      Payment.stub(:new) { mock_payment(:save => false) }
-  #      post :create, :payment => {}
-  #      response.should render_template("new")
-  #    end
-  #  end
+        post :create, :payment => {:acount_id => '1' }
+        assigns(:payment).should be(mock_payment)
+      end
 
-  #end
+    end
+
+    #describe "with invalid params" do
+    #  it "assigns a newly created but unsaved payment as @payment" do
+    #    Payment.stub(:new).with({'these' => 'params'}) { mock_payment(:save => false) }
+    #    post :create, :payment => {'these' => 'params'}
+    #    assigns(:payment).should be(mock_payment)
+    #  end
+
+    #  it "re-renders the 'new' template" do
+    #    Payment.stub(:new) { mock_payment(:save => false) }
+    #    post :create, :payment => {}
+    #    response.should render_template("new")
+    #  end
+    #end
+
+  end
 
   #describe "PUT update" do
 

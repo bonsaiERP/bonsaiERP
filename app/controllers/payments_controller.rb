@@ -41,9 +41,11 @@ class PaymentsController < ApplicationController
 
     # When it is the contact account
     if params[:payment][:account_id] =~ /^\d-\d$/
+      ac_id, cur_id = params[:payment][:account_id].split("-")
+      @transaction = Transaction.find(params[:payment][:transaction_id])
+      @payment = @transaction.new_contact_payment(params[:payment])
     # Other money accounts
     else
-      #@transaction = Transaction.find(params[:payment][:transaction_id])
       #@payment = @transaction.new_payment(params[:payment])
 
       #if @payment.save
@@ -56,6 +58,8 @@ class PaymentsController < ApplicationController
       #flash[:error] = "No es posible realizar la operación"
       #render :text => "Error"
     end
+
+    render :action => 'new'
   end
 
   # DELETE /payments/:id
