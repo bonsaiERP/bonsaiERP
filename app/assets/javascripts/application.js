@@ -6,4 +6,10 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require_tree .
+//= require jquery-ui-1.8.12.custom.min.js
+//= require sugar-0.9.min.js
+//= require tooltip.min.js
+//= require base.js.coffee
+//= require app/contact.coffee
+//= require app/exchange_rate.coffee
+//= require app/transaction.coffee

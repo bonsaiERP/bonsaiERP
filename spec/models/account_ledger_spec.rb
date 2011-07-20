@@ -48,17 +48,17 @@ describe AccountLedger do
     a.valid?.should == false
   end
 
-  it 'should now allow the sum distinct to 0' do
-    params[:account_ledger_details_attributes][1][:amount] = -50
-    params[:account_ledger_details_attributes].pop
+  #it 'should now allow the sum distinct to 0' do
+  #  params[:account_ledger_details_attributes][1][:amount] = -50
+  #  params[:account_ledger_details_attributes].pop
 
-    params[:account_ledger_details_attributes].size.should == 1
+  #  params[:account_ledger_details_attributes].size.should == 1
 
-    a = AccountLedger.new(params)
+  #  a = AccountLedger.new(params)
 
-    a.valid?.should == false
-    a.errors[:base].to_s.should =~ /al menos 2 cuentas/
-  end
+  #  a.valid?.should == false
+  #  a.errors[:base].to_s.should =~ /al menos 2 cuentas/
+  #end
 
   it 'should assing currency_id' do
     a = AccountLedger.new(:currency_id => 1)

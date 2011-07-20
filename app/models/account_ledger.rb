@@ -50,7 +50,7 @@ class AccountLedger < ActiveRecord::Base
   validates :reference, :length => { :within => 3..150, :allow_blank => false }
   validates :currency_id, :currency => true
 
-  validate  :number_of_details
+  #validate  :number_of_details
   #validate  :total_amount_equal
 
   # accessible

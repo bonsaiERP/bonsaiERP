@@ -86,11 +86,19 @@ feature "Income", "test features" do
 
     bal = i.balance
 
+    puts "--------"
     i.save_payment.should == true
+    puts i.errors.messages
+    puts p.errors.messages
+
+    puts "--------"
 
     i.balance.should == bal - 30
     ac1 = p.account_ledger_details[0].account
     ac2 = p.account_ledger_details[1].account
+
+    p.account_ledger_details[0].state.should == 'uncon'
+    p.account_ledger_details[1].state.should == 'uncon'
 
     ac1.amount.should == 0
     ac2.amount.should == 0
@@ -332,4 +340,29 @@ feature "Income", "test features" do
     #i.pay_plans.each {|pp| puts "#{pp.id} #{pp.amount} #{pp.interests_penalties}" }
   end
 
+  scenario "Make payment with a contact account" do
+    i = Income.new(income_params.merge(:account_id => client_account.id))
+    i.save_trans.should == true
+
+    tot = ( 3 * 10 + 5 * 20 ) * 0.97
+    i.total.should == tot.round(2)
+    i.balance.should == i.total
+
+    i.approve!.should == true
+
+    p = i.new_payment(:account_id => client_account.id, :exchange_rate => 1, :reference => 'Test for client')
+    p.amount.should == i.balance
+    i.save_payment.should == true
+    p.conciliation.should == true
+    p.reload
+    #puts p.attributes
+    puts p.account_ledger_details.map(&:state)
+
+    i.reload
+
+    #puts p.account.attributes
+
+    p.reload
+    #puts p.account.account_currencies.map(&:amount)
+  end
 end

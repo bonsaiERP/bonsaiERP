@@ -30,8 +30,10 @@ module Models::Transaction::Payment
       @current_ledger
     end
 
-    def new_contact_payment
+    def new_contact_payment(params = {})
       def self.contact_payment?; true; end
+
+      new_payment(params)
     end
 
     def save_payment
@@ -39,7 +41,7 @@ module Models::Transaction::Payment
       return false unless valid_ledger?
 
       @current_ledger.conciliation = get_conciliation_for_account
-      null_pay_plans if credit? # anulate all payments if credit
+      mark_paid_pay_plans if credit? # anulate pay_plans if credit
 
       self.balance = balance - @current_ledger.amount
       self.state = 'paid' if balance <= 0
@@ -50,6 +52,7 @@ module Models::Transaction::Payment
     private
       def valid_ledger?
         ret = @current_ledger.valid?
+        puts "Valid ledger: #{ret} #{@current_ledger.errors.messages}"
         if @current_ledger.amount > balance
           @current_ledger.errors[:amount] = I18n.t("errors.messages.payment.greater_amount")
           ret = false
@@ -59,7 +62,7 @@ module Models::Transaction::Payment
       end
 
       def get_conciliation_for_account
-        #puts "Type #{@current_ledger.account.original_type}"
+        #puts "Type: #{@current_ledger.account.original_type == "Bank"}"
         case @current_ledger.account.original_type
         when "Bank" then false
         when "Cash" then true
@@ -71,7 +74,8 @@ module Models::Transaction::Payment
         errors[:base] << "Error" if account_ledgers.select {|al| not al.persisted? }.size > 1
       end
 
-      def null_pay_plans
+      # marks the credit pay_plans that have been paid
+      def mark_paid_pay_plans
         amt = @current_ledger.amount
         int = @current_ledger.interests_penalties
         current_pp = false

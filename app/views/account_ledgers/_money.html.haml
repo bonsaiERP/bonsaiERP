@@ -56,7 +56,7 @@
     - al.ac_id = account.id
     %tr{:class => al.in_out, :id => "tr#{al.id}" }
       %td.d.check
-        = link_to lo(al.date), account_ledger_path(al, :ac_id => account.id), :class => "b #{conciliate_css(al)}"
+        = link_to lo(al.created_at), account_ledger_path(al, :ac_id => account.id), :class => "b #{conciliate_css(al)}"
         %br/
         = al.reference
       %td.cur.col= ntc al.account_amount
