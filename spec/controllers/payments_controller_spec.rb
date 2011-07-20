@@ -48,6 +48,7 @@ describe PaymentsController do
   #    assigns(:payment).should be(mock_payment)
   #  end
   #end
+  
 
   describe "POST create" do
     describe "with valid params" do
@@ -56,21 +57,38 @@ describe PaymentsController do
       end 
 
       it "when stubed method for action_id 1-1" do
-        mock_trans = mock_transaction(:new_contact_payment => mock_payment)
+        mock_trans = mock_transaction(:new_contact_payment => mock_payment, :save_payment => true, :is_contact? => true)
         Transaction.stubs(:org => stub(:find => mock_trans) )
 
-        post :create, :payment => {:acount_id => '1-1' }
+        post :create, :payment => {:account_id => '1-1' }, :id => 1, :format => 'js'
         assigns(:payment).should == mock_payment
+        assigns[:transaction].is_contact?.should == true
+        expect{ assigns[:transaction].is_account? }.to raise_error(NoMethodError)
+      end
+
+      it "when passed it should be wrong for action_id 1-1" do
+        mock_trans = mock_transaction(:new_contact_payment => mock_payment, :save_payment => true, :is_contact? => true)
+        Transaction.stubs(:org => stub(:find => mock_trans) )
+
+        expect{ post :create, :payment => {:account_id => '1' }, :id => 1, :format => 'js'}.to raise_error
+      end
+
+      it "when passed right data should be right for new_payment" do
+        mock_trans = mock_transaction(:new_payment => mock_payment, :save_payment => true, :is_account? => true)
+        Transaction.stubs(:org => stub(:find => mock_trans) )
+
+        post :create, :payment => {:account_id => '1' }, :id => 1, :format => 'js'
+        assigns(:payment).should == mock_payment
+        assigns[:transaction].is_account?.should == true
+        expect{ assigns[:transaction].is_contact? }.to raise_error(NoMethodError)
       end
 
       it "incorrect stubed method for action_id 1-1 raises exeption" do
-        mock_trans = mock_transaction(:new_contact_payment => mock_payment)
+        mock_trans = mock_transaction(:new_payment => mock_payment, :save_payment => true, :is_account? => true)
         Transaction.stubs(:org => stub(:find => mock_trans) )
 
-        post :create, :payment => {:acount_id => '1' }
-        assigns(:payment).should be(mock_payment)
+        expect{ post :create, :payment => {:account_id => '1-1' }, :id => 1, :format => 'js'}.to raise_error
       end
-
     end
 
     #describe "with invalid params" do

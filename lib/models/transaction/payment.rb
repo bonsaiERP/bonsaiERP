@@ -13,6 +13,7 @@ module Models::Transaction::Payment
 
   module InstanceMethods
     def payment?; false; end
+    def contact_payment?; false; end
 
     # TODO obtain data from pay_plans if credit
     def new_payment(params = {})
@@ -27,6 +28,10 @@ module Models::Transaction::Payment
       
       def self.payment?; true; end # To activate callbacks and validations
       @current_ledger
+    end
+
+    def new_contact_payment
+      def self.contact_payment?; true; end
     end
 
     def save_payment

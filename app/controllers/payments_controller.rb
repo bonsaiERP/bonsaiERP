@@ -36,30 +36,22 @@ class PaymentsController < ApplicationController
   # POST /payments
   # POST /payments.xml
   def create
-
     @transaction = Transaction.org.find(params[:id])
 
     # When it is the contact account
     if params[:payment][:account_id] =~ /^\d-\d$/
       ac_id, cur_id = params[:payment][:account_id].split("-")
-      @transaction = Transaction.find(params[:payment][:transaction_id])
       @payment = @transaction.new_contact_payment(params[:payment])
     # Other money accounts
     else
-      #@payment = @transaction.new_payment(params[:payment])
-
-      #if @payment.save
-      #  render 'create'
-      #else
-      #  render :action => "new"
-      #end
-    #else
-      #logger.warn "Hacking attemp! by user #{current_user.id}"
-      #flash[:error] = "No es posible realizar la operación"
-      #render :text => "Error"
+      @payment = @transaction.new_payment(params[:payment])
     end
 
-    render :action => 'new'
+    if @transaction.save_payment
+      render 'create'
+    else
+      render 'new'
+    end
   end
 
   # DELETE /payments/:id
