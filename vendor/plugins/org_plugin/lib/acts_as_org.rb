@@ -1,8 +1,10 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
+require 'active_support/concern'
 module Acts
   module Org
+    extend ActiveSupport::Concern
 
     def self.included(base)
       base.send(:include, ClassMethods)
@@ -24,8 +26,13 @@ module Acts
 
     module ClassMethods
       def set_organisation_id
-        raise "You have not set OrganisationSession" if OrganisationSession.organisation_id.nil?
-        self.organisation_id = OrganisationSession.organisation_id
+
+        unless OrganisationSession.organisation_id.blank?
+          self.organisation_id = OrganisationSession.organisation_id
+        else
+          self.errors[:base] << I18n.t("organisation_session.errors.organisation_id")
+          false
+        end
       end
     end
   end

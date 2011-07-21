@@ -76,6 +76,10 @@ class Account < ActiveRecord::Base
     Hash[ account_currencies.map {|ac| [ac.currency_id, ac.amount] } ]
   end
 
+  def select_cur(cur_id)
+    account_currencies.select {|ac| ac.currency_id == cur_id }.first
+  end
+
   private
     def set_amount
       self.amount ||= 0.0

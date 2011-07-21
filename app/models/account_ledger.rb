@@ -7,7 +7,7 @@ class AccountLedger < ActiveRecord::Base
 
   acts_as_org
   # callbacks
-  before_validation { self.currency_id = account.try(:currency_id) unless currency_id.present? }
+  before_validation { self.currency_id = account_currency_id unless currency_id.present? }
   before_destroy    { false }
   before_create     { self.creator_id = UserSession.user_id }
 
@@ -65,7 +65,8 @@ class AccountLedger < ActiveRecord::Base
 
   # delegates
   delegate :name, :symbol, :code, :to => :currency, :prefix => true
-  delegate :currency_id, :name, :to => :account, :prefix => true, :allow_nil => true
+  delegate :currency_id, :name, :original_type, :to => :account, :prefix => true, :allow_nil => true
+  delegate :currency_id, :name, :original_type, :to => :to, :prefix => true, :allow_nil => true
 
  
   def self.pendent?

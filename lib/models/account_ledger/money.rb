@@ -71,7 +71,9 @@ module Models::AccountLedger
           if ['in', 'out'].include?(operation)
             self.exchange_rate = 1
           else
-            self.exchange_rate ||= 0
+            if account and to
+              self.exchange_rate = 1 if account_currency_id == to_currency_id
+            end
           end
         end
 

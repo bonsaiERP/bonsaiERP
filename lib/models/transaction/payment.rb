@@ -8,21 +8,32 @@ module Models::Transaction::Payment
   extend ActiveSupport::Concern
 
   included do
+    attr_reader :contact_payment, :current_ledger
     validate :valid_number_of_legers, :if => :payment?
   end
 
   module InstanceMethods
     def payment?; false; end
-    def contact_payment?; false; end
+
+    def contact_payment?
+      @contact_payment === true
+    end
+
+    def set_contact_payment(val = true)
+      @contact_payment = true
+    end
 
     # TODO obtain data from pay_plans if credit
     def new_payment(params = {})
       return false if draft? # Do not allow payments to draft? transactions
 
       params = set_payment_amount(params)
+      # Find the right account
+      to_id = ::Account.org.find_by_original_type(self.class.to_s).id
+
       @current_ledger = account_ledgers.build({
-        :operation => 'in', :to_id => account_id, :currency_id => currency_id
-      }.merge(params))
+        :to_id => to_id, :currency_id => currency_id
+      }.merge(params)) {|al| al.operation = get_account_ledger_operation }
 
       @current_ledger.set_payment(true)
       
@@ -38,7 +49,7 @@ module Models::Transaction::Payment
 
     def save_payment
       return false unless payment?
-      return false unless valid_ledger?
+      return false unless valid_account_ledger? # Don't use valid_ledger?
 
       @current_ledger.conciliation = get_conciliation_for_account
       mark_paid_pay_plans if credit? # anulate pay_plans if credit
@@ -50,23 +61,28 @@ module Models::Transaction::Payment
     end
 
     private
-      def valid_ledger?
-        ret = @current_ledger.valid?
-        puts "Valid ledger: #{ret} #{@current_ledger.errors.messages}"
+      def valid_account_ledger?
+
         if @current_ledger.amount > balance
           @current_ledger.errors[:amount] = I18n.t("errors.messages.payment.greater_amount")
-          ret = false
+          false
+        else
+          true
         end
-
-        ret
       end
 
       def get_conciliation_for_account
-        #puts "Type: #{@current_ledger.account.original_type == "Bank"}"
         case @current_ledger.account.original_type
         when "Bank" then false
         when "Cash" then true
         when "Client", "Supplier", "Staff" then true
+        end
+      end
+
+      def get_account_ledger_operation
+        case self.class.to_s
+        when "Income" then "in"
+        when "Expense", "Buy" then "out"
         end
       end
 

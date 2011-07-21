@@ -75,35 +75,37 @@ feature "Income", "test features" do
     # Create a payment
     i.payment?.should == false
 
-    p = i.new_payment(:account_id => bank_account.id, :amount => 30, :exchange_rate => 1, :reference => 'Cheque 143234')
+    p = i.new_payment(:account_id => bank_account.id, :amount => 30, :exchange_rate => 1, :reference => 'Cheque 143234', :operation => 'out')
     p.class.should == AccountLedger
     p.payment?.should == true
     p.operation.should == 'in'
     p.amount.should == 30
     p.interests_penalties.should == 0
+    p.to_id.should == Account.org.find_by_original_type(i.class.to_s).id
 
     i.payment?.should == true
 
     bal = i.balance
 
-    puts "--------"
     i.save_payment.should == true
-    puts i.errors.messages
-    puts p.errors.messages
-
-    puts "--------"
 
     i.balance.should == bal - 30
     ac1 = p.account_ledger_details[0].account
     ac2 = p.account_ledger_details[1].account
 
+    ac1.original_type.should == "Bank"
+    ac2.original_type.should == "Income"
+
     p.account_ledger_details[0].state.should == 'uncon'
+    p.account_ledger_details[0].organisation_id.should be(p.organisation_id)
     p.account_ledger_details[1].state.should == 'uncon'
+    p.account_ledger_details[1].organisation_id.should be(p.organisation_id)
 
     ac1.amount.should == 0
     ac2.amount.should == 0
 
     p.conciliate_account.should == true
+
     p.approver_id.should == UserSession.user_id
     p.approver_datetime.kind_of?(Time).should == true
 
@@ -126,7 +128,6 @@ feature "Income", "test features" do
     p.conciliation.should == false
     i.state.should == 'paid'
     i.deliver.should == false
-
 
     # Conciliation
     p.conciliate_account.should == true
@@ -352,17 +353,23 @@ feature "Income", "test features" do
 
     p = i.new_payment(:account_id => client_account.id, :exchange_rate => 1, :reference => 'Test for client')
     p.amount.should == i.balance
-    i.save_payment.should == true
-    p.conciliation.should == true
-    p.reload
-    #puts p.attributes
-    puts p.account_ledger_details.map(&:state)
-
+    i.save_payment.should == false
     i.reload
 
-    #puts p.account.attributes
+    p.account.cur(1).amount.should == 0
 
-    p.reload
-    #puts p.account.account_currencies.map(&:amount)
+    # Make a deposit
+    al = AccountLedger.new_money(:operation => "in", :account_id => bank_account.id, :to_id => client_account.id, :amount => i.balance, :reference => "Check 1120012" )
+    al.save.should == true
+    al.conciliate_account.should == true
+
+    i.reload
+    p = i.new_payment(:account_id => client_account.id, :exchange_rate => 1, :reference => 'Test for client')
+
+    client_account.reload.cur(1).amount.should == -i.balance
+
+    i.save_payment.should == true
+
+    p.account.cur(1).amount.should == 0
   end
 end

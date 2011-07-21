@@ -10,6 +10,7 @@ module Models::AccountLedger::Transaction
   included do
     attr_reader :payment
     before_create :build_transaction_ledger_details, :if => :payment?
+    validate :valid_contact_amount, :if => :payment?
   end
 
   module InstanceMethods
@@ -87,34 +88,44 @@ module Models::AccountLedger::Transaction
       def build_transaction_ledger_details
         return false if exchange_rate.blank?
 
-        puts "#{account_id} #{to_id} #{amount}"
         if account_id.present? and amount.present? and to_id.present? and account_ledger_details.empty?
 
           amt = amount + interests_penalties
-          state = conciliation ? 'con' : 'uncon'
+          state = conciliation? ? 'con' : 'uncon'
 
           account_ledger_details.build(
             :account_id => account_id, :amount => amount, 
             :currency_id => account.currency_id, :state => state
-          )
+          ) {|det| det.organisation_id = organisation_id }
 
           amt2 = -amount * exchange_rate
 
           account_ledger_details.build(
             :account_id => to_id, :amount => amt2, 
             :currency_id => account.currency_id, :state => state
-          )
+          ) {|det| det.organisation_id = organisation_id }
 
           if interests_penalties > 0
             Account.org.find_by_original_type('Interest')
+
             account_ledger_details.build(
               :account_id => to_id, :amount => interests_penalties, 
               :currency_id => account.currency_id, :state => state
-            )
+            ) {|det| det.organisation_id = organisation_id }
           end
         else
           false
         end
       end
+
+      def valid_contact_amount
+        if ::Contact::TYPES.include?(account_original_type)
+          if currency_id and exchange_rate > 0
+            ac = account.cur(currency_id)
+            self.errors[:base]  << I18n.t("account_ledger.errors.invalid_amount") if -ac.amount < ( amount *  exchange_rate)
+          end
+        end
+      end
+
   end
 end

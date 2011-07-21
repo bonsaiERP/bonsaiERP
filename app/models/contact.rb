@@ -5,7 +5,7 @@ class Contact < ActiveRecord::Base
   acts_as_org
   include Models::Account::Base
 
-  TYPES = ['clients', 'suppliers', 'staff']
+  TYPES = ['Client', 'Supplier', 'Staff']
 
   # relations
   has_many :transactions
@@ -29,9 +29,9 @@ class Contact < ActiveRecord::Base
   def self.find_with_type(type)
     type = 'all' unless TYPES.include?(type)
     case type
-    when 'clients' then Contact.org.clients
-    when 'suppliers' then Contact.org.suppliers
-    when 'all' then Contact.org
+    when 'Client' then Contact.org.clients
+    when 'Supplier' then Contact.org.suppliers
+    when 'All' then Contact.org
     end
   end
 
