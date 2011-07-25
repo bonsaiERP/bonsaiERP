@@ -29,11 +29,11 @@ module Models::Transaction::Payment
 
       params = set_payment_amount(params)
       # Find the right account
+      params.delete(:to_id)
       to_id = ::Account.org.find_by_original_type(self.class.to_s).id
 
-      @current_ledger = account_ledgers.build({
-        :to_id => to_id, :currency_id => currency_id
-      }.merge(params)) {|al| al.operation = get_account_ledger_operation }
+      merged = { :to_id => to_id, :currency_id => currency_id }.merge(params)
+      @current_ledger = account_ledgers.build(merged) {|al| al.operation = get_account_ledger_operation }
 
       @current_ledger.set_payment(true)
       

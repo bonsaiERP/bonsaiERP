@@ -41,11 +41,11 @@ class PaymentsController < ApplicationController
     # When it is the contact account
     if params[:payment][:account_id] =~ /^\d-\d$/
       ac_id, cur_id = params[:payment][:account_id].split("-")
-      @payment = @transaction.new_contact_payment(params[:payment])
-    # Other money accounts
-    else
-      @payment = @transaction.new_payment(params[:payment])
+      params[:payment][:account_id] = ac_id
+      params[:payment][:currency_id] = cur_id
     end
+
+    @payment = @transaction.new_payment(params[:payment])
 
     if @transaction.save_payment
       render 'create'

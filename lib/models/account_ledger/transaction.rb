@@ -90,19 +90,18 @@ module Models::AccountLedger::Transaction
 
         if account_id.present? and amount.present? and to_id.present? and account_ledger_details.empty?
 
-          amt = amount + interests_penalties
           state = conciliation? ? 'con' : 'uncon'
 
           account_ledger_details.build(
-            :account_id => account_id, :amount => amount, 
-            :currency_id => account.currency_id, :state => state
+            :account_id => account_id, :amount => amount * exchange_rate, 
+            :currency_id => currency_id, :state => state
           ) {|det| det.organisation_id = organisation_id }
 
           amt2 = -amount * exchange_rate
 
           account_ledger_details.build(
             :account_id => to_id, :amount => amt2, 
-            :currency_id => account.currency_id, :state => state
+            :currency_id => currency_id, :state => state
           ) {|det| det.organisation_id = organisation_id }
 
           if interests_penalties > 0
@@ -110,7 +109,7 @@ module Models::AccountLedger::Transaction
 
             account_ledger_details.build(
               :account_id => to_id, :amount => interests_penalties, 
-              :currency_id => account.currency_id, :state => state
+              :currency_id => currency_id, :state => state
             ) {|det| det.organisation_id = organisation_id }
           end
         else

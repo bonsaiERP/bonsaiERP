@@ -36,7 +36,9 @@ class Account < ActiveRecord::Base
   # returns the class for a currency
   def cur(cur_id = nil)
     cur_id ||= currency_id
-    account_currencies.find_by_currency_id(cur_id)
+    ret = account_currencies.find_by_currency_id(cur_id)
+    ret ||= AccountCurrency.new(:amount => 0, :currency_id => id)
+    ret
   end
 
   # Returns the amount for one currency

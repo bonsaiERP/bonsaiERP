@@ -1,4 +1,5 @@
 %tr.pay_plan{:id => pay_plan.id}
+  %td= check_box_tag("pay_plan_ids[]", pay_plan.id)
   %td.payment_date= lo pay_plan.payment_date
   %td= lo pay_plan.alert_date
   %td.r.amount #{pay_plan.currency_symbol} #{ntc pay_plan.amount}
@@ -10,4 +11,3 @@
   %td
     - unless pay_plan.paid?
       = link_to "Editar", edit_pay_plan_path(pay_plan), :class => 'edit ajax', :title => 'Editar crédito'
-      = link_to "Borrar", pay_plan, :class => 'delete', :remote => true, :confirm => 'Esta seguro de borrar el crédito?'
