@@ -27,7 +27,7 @@ hr{ border:0px;
 /*MAIN CONTENT WRAPPERS*/
 #main_wrap{
   width: 100%;
-  background: transparent url(images/back_combined.png) repeat-x 0px -101px;
+  background: transparent url(images/back.png) repeat-x 0px -101px;
   min-height: 500px;
 }
 #wrapper{
@@ -40,14 +40,14 @@ hr{ border:0px;
 }
 #logo{
   position: absolute;
-  height: 90px;
+  height: 100px;
   width: 80px;
-  background:url("images/back_combined.png") no-repeat scroll left top transparent;
+  background:url("images/back.png") no-repeat scroll left top transparent;
   z-index: 1000;
   right: 10px;
   a{
     width: 89px;
-    height: 79px;
+    height: 99px;
     display: block;
     text-indent: -2000em;
   }

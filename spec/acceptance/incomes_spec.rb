@@ -369,7 +369,12 @@ feature "Income", "test features" do
     client_account.reload.cur(1).amount.should == -i.balance
 
     i.save_payment.should == true
+    i.balance.should == 0
 
     p.account.cur(1).amount.should == 0
+  end
+
+  scenario "Make payment with a contact account and with different currency" do
+
   end
 end
