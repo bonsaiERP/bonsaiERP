@@ -8,9 +8,6 @@ describe PaymentsController do
     end
   end
 
-  def stub_auth
-    controller.stubs(:check_authorization! => true)
-  end
 
   def mock_transaction(stubs = {})
     @mock_transaction ||= Transaction.tap do |transaction|
@@ -20,6 +17,7 @@ describe PaymentsController do
 
   describe "GET index" do
     it "assigns all payments as @payments" do
+      log.info "stub auth"
       stub_auth
       Payment.stubs(:org => stub(:all => [mock_payment]) )
 
@@ -106,57 +104,5 @@ describe PaymentsController do
     #end
 
   end
-
-  #describe "PUT update" do
-
-  #  describe "with valid params" do
-  #    it "updates the requested payment" do
-  #      Payment.should_receive(:find).with("37") { mock_payment }
-  #      mock_payment.should_receive(:update_attributes).with({'these' => 'params'})
-  #      put :update, :id => "37", :payment => {'these' => 'params'}
-  #    end
-
-  #    it "assigns the requested payment as @payment" do
-  #      Payment.stub(:find) { mock_payment(:update_attributes => true) }
-  #      put :update, :id => "1"
-  #      assigns(:payment).should be(mock_payment)
-  #    end
-
-  #    it "redirects to the payment" do
-  #      Payment.stub(:find) { mock_payment(:update_attributes => true) }
-  #      put :update, :id => "1"
-  #      response.should redirect_to(payment_url(mock_payment))
-  #    end
-  #  end
-
-  #  describe "with invalid params" do
-  #    it "assigns the payment as @payment" do
-  #      Payment.stub(:find) { mock_payment(:update_attributes => false) }
-  #      put :update, :id => "1"
-  #      assigns(:payment).should be(mock_payment)
-  #    end
-
-  #    it "re-renders the 'edit' template" do
-  #      Payment.stub(:find) { mock_payment(:update_attributes => false) }
-  #      put :update, :id => "1"
-  #      response.should render_template("edit")
-  #    end
-  #  end
-
-  #end
-
-  #describe "DELETE destroy" do
-  #  it "destroys the requested payment" do
-  #    Payment.should_receive(:find).with("37") { mock_payment }
-  #    mock_payment.should_receive(:destroy)
-  #    delete :destroy, :id => "37"
-  #  end
-
-  #  it "redirects to the payments list" do
-  #    Payment.stub(:find) { mock_payment }
-  #    delete :destroy, :id => "1"
-  #    response.should redirect_to(payments_url)
-  #  end
-  #end
 
 end

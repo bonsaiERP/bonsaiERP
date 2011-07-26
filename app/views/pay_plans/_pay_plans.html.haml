@@ -6,11 +6,11 @@
     :id => 'new_pay_plan_link', :class => 'new button ajax', 'title' => "Nuevo crédito",
     'data-trigger' => 'pay_plan', 'data-width' => '700' unless transaction.state == "paid"
 
-= link_to "Borrar", "/pay_plans/#{transaction.id}/destroy", :class => 'destroy red'
+= link_to "Borrar", "/pay_plans/#{transaction.id}", :class => 'destroy red', :id => 'destroy_pay_plans_link'
 %table.decorated#pay_plans_table
   %thead
     %tr
-      %th= check_box_tag "pay_plans", :id => "pay_plans_checkbox"
+      %th= check_box_tag "pay_plans", "1", false, :id => "pay_plans_checkbox"
       %th Fecha
       %th Alertar el
       %th Cantidad
@@ -23,3 +23,8 @@
   = render transaction.pay_plans.unpaid.includes(:transaction, :currency)
 
   = render transaction.pay_plans.paid.includes(:transaction, :currency)
+
+:javascript
+  $(function() {
+    new PayPlans();
+  });

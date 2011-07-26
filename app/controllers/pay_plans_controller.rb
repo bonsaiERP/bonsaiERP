@@ -4,7 +4,7 @@
 class PayPlansController < ApplicationController
   before_filter :check_authorization!
   before_filter :check_pay_plan_authorization, :only => [:new, :create, :edit, :update]
-  before_filter :set_pay_plan, :only => [:edit, :update, :destroy]
+  before_filter :set_pay_plan, :only => [:edit, :update]
   # GET /pay_plans
   # GET /pay_plans.xml
   def index
@@ -78,10 +78,9 @@ class PayPlansController < ApplicationController
   # DELETE /pay_plans/1.xml
   def destroy
     begin
-      @pay_plan = PayPlan.find(params[:id])
-      @transaction = Transaction.org.find(@pay_plan.transaction_id)
+      @transaction = Transaction.org.find(params[:id])
 
-      if @transaction.destroy_pay_plan(@pay_plan.id)
+      if @transaction.destroy_pay_plans(params[:ids])
         render 'destroy'
       else
         render :json => {:success => false}

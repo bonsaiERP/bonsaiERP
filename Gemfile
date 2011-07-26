@@ -60,5 +60,6 @@ group :test do
   gem 'launchy'
   gem 'turn', :require => false
   gem 'valid_attribute'
+  gem 'log4r'
 end  
 

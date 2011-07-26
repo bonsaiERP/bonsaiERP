@@ -97,6 +97,7 @@ GEM
       rake (>= 0.8.1)
     linecache19 (0.5.12)
       ruby_core_source (>= 0.1.4)
+    log4r (1.1.9)
     mail (2.3.0)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
@@ -226,6 +227,7 @@ DEPENDENCIES
   jquery-rails
   kaminari
   launchy
+  log4r
   mocha
   mysql2
   nokogiri

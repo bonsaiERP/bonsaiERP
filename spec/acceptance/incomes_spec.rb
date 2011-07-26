@@ -30,8 +30,10 @@ feature "Income", "test features" do
   end
 
   background do
-    OrganisationSession.set(:id => 1, :name => 'ecuanime', :currency_id => 1, :preferences => {:item_discount => 0, :general_discount => 0})
-    UserSession.current_user = User.new(:id => 1, :email => 'admin@example.com') {|u| u.id = 1}
+    create_organisation_session
+    create_user_session
+    #OrganisationSession.set(:id => 1, :name => 'ecuanime', :currency_id => 1, :preferences => {:item_discount => 0, :general_discount => 0})
+    #UserSession.current_user = User.new(:id => 1, :email => 'admin@example.com') {|u| u.id = 1}
   end
 
   let!(:organisation) { create_organisation(:id => 1) }
@@ -42,12 +44,15 @@ feature "Income", "test features" do
   let(:client_account) { client.account }
 
   scenario "Create a payment with nearest pay_plan" do
+
+    log.info "Creating new income"
     i = Income.new(income_params.merge(:account_id => client_account.id))
 
     i.cash.should == true
     i.save_trans.should == true
 
     i.reload
+    log.info "Checking details, cash and balance for income"
     i.transaction_details.size.should == 2
     i.cash.should == true
     tot = ( 3 * 10 + 5 * 20 ) * 0.97
@@ -56,7 +61,7 @@ feature "Income", "test features" do
     i.total_currency.should == i.total
     i.state.should == "draft"
 
-    # check details
+    log.info "Checking income details"
     i.transaction_details[0].balance.should == 10
     i.transaction_details[0].original_price.should == 3
     i.transaction_details[1].balance.should == 20
@@ -429,5 +434,70 @@ feature "Income", "test features" do
     i.pay_plans.unpaid.size.should == ( (i.total - 30)/30 ).ceil
     i.pay_plans.paid.size.should == 1
     i.pay_plans_total.should == i.total - 30
+  end
+
+  scenario 'client payment' do
+    log.info "Testing"
+
+    #ApplicationController.any_instance.stubs(:check_authorization! => true)
+    Authorization.stubs(:check_authorization! => true)
+
+    #controller.stubs(:check_authorization! => true)
+
+    i = Income.new(income_params.merge(:account_id => client_account.id))
+    #i.save_trans.should == true
+    #i.approve!.should == true
+
+    i = Income.last
+    puts i.attributes
+    tot = ( 3 * 10 + 5 * 20 ) * 0.97
+
+    #i.approve!.should == true
+
+    ## Approve credit
+    #i.approve_credit(:credit_reference => "Ref 23728372", :credit_description => "Yeah").should == true
+
+    #d = Date.today
+    #i.new_pay_plan(:amount => 30, :repeat => true, :payment_date => d, :alert_date => d - 5.days)
+    #i.save_pay_plan.should == true
+    #i.pay_plans.size.should == (i.balance/30).ceil
+
+    ## bank creation and client deposits in another currency
+    #new_bank = create_bank(:currency_id => 2)
+    #new_bank_account = new_bank.account
+    #new_bank_account.amount.should == 0
+    #al = AccountLedger.new_money(:operation => 'in', :account_id => new_bank_account.id, :to_id => client_account.id, :amount => 200, :reference => "Other currency check")
+
+    #client_account.cur(2).amount.should == 0
+
+    #al.save.should == true
+    #al.conciliate_account.should == true
+
+    #new_bank_account.reload
+    #new_bank_account.amount.should == 200
+    #client_account.reload.cur(2).amount.should == -200
+
+    #p = i.new_payment(:account_id => client_account.id, :amount => 30,
+    #             :exchange_rate => 0.5, :currency_id => 2, :reference => 'Last check')
+    #i.save_payment.should == true
+
+    #income_account = Account.org.find_by_original_type("Income")
+
+    #i.balance.should == i.total - 30
+    #
+    #client_account.reload
+
+    #p.conciliation.should == true
+
+    #client_account.reload
+    #income_account.reload
+
+    #client_account.cur(2).amount.should == -200 + 15
+    #income_account.cur(2).amount.should == -15
+
+    #i.reload
+    #i.pay_plans.unpaid.size.should == ( (i.total - 30)/30 ).ceil
+    #i.pay_plans.paid.size.should == 1
+    #i.pay_plans_total.should == i.total - 30
   end
 end

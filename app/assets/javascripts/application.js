@@ -13,3 +13,4 @@
 //= require app/contact.coffee
 //= require app/exchange_rate.coffee
 //= require app/transaction.coffee
+//= require app/pay_plans.coffee

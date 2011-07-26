@@ -1,4 +1,3 @@
-#require 'rubygems'
 require 'bundler/setup'
 Bundler.require(:default, :development)
 require 'spork'
@@ -28,15 +27,21 @@ Spork.prefork do
       DatabaseCleaner.clean_with(:truncation)
     end
 
+    config.before(:all) do
+      log.info self.class.description
+    end
+
     config.before(:each) do
       DatabaseCleaner.start
+      log.info example.description
     end
    
     config.include Devise::TestHelpers, :type => :controller
-
     config.after(:each) do
       DatabaseCleaner.clean
     end
+    
+    config.include AuthMacros
 
     config.use_transactional_fixtures = false
     # Hack
@@ -45,7 +50,27 @@ Spork.prefork do
 
 end
 
+require 'log4r'
+
+module MyLog
+  include Log4r
+
+  @@logger = Logger.new('mylog')
+  @@format = Log4r::PatternFormatter.new(:pattern => "[ %d ] %l\t %m")
+  @@logger.add Log4r::StdoutOutputter.new('console', :formatter => @@format)
+
+  def self.log
+    @@logger
+  end
+end
 Spork.each_run do
+
+  Rspec.configure do |config|
+    def log
+      MyLog.log
+    end
+  end
+
 end
 
 # --- Instructions ---

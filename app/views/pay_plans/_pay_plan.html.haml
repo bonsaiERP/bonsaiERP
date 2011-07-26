@@ -1,5 +1,5 @@
 %tr.pay_plan{:id => pay_plan.id}
-  %td= check_box_tag("pay_plan_ids[]", pay_plan.id)
+  %td= check_box_tag("pay_plan_ids[]", pay_plan.id, false, :class => 'check')
   %td.payment_date= lo pay_plan.payment_date
   %td= lo pay_plan.alert_date
   %td.r.amount #{pay_plan.currency_symbol} #{ntc pay_plan.amount}
