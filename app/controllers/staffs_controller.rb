@@ -31,8 +31,13 @@ class StaffsController < ApplicationController
   # POST /staffs.xml
   def create
     @staff = Staff.new(params[:staff])
+
     if @staff.save
-      redirect_ajax(@staff)
+      if request.xhr?
+        render :json => @staff.attributes.merge( :account => @staff.account.attributes )
+      else
+        redirect_to staff_path(@staff.id)
+      end
     else
       render :action => 'new'
     end

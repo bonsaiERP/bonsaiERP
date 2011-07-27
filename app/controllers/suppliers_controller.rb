@@ -31,8 +31,13 @@ class SuppliersController < ApplicationController
   # POST /suppliers.xml
   def create
     @supplier = Supplier.new(params[:supplier])
+
     if @supplier.save
-      redirect_ajax(@supplier)
+      if request.xhr?
+        render :json => @supplier.attributes.merge( :account => @supplier.account.attributes )
+      else
+        redirect_to supplier_path(@supplier.id)
+      end
     else
       render :action => 'new'
     end

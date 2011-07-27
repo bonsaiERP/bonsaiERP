@@ -12,7 +12,6 @@
       .input
         %label Fecha Hora
         %p= lo Time.now
-      / = f.input :date, :label => 'Fecha'
 
     = f.input :account_id, :as => :contact, :label => false, :input_html => {:id => 'transaction_account_id'}
     .clear
@@ -120,8 +119,8 @@
 
     // Functions for the select boxes
     $('body').live('new_contact', function(e, resp) {
-      $('##{transaction.type.downcase}_account_id').val(resp.id);
-      $('#contact_auto_complete').val(resp.matchcode);
+      $('#transaction_account_id').val(resp.account.id);
+      $('#contact_autocomplete').val(resp.matchcode);
     }).live('new_project', function(e, resp) {
       $('#' + type + '_project_id').createSelectOption(resp.id, resp.name);
     });
