@@ -1,0 +1,48 @@
+%h1.mb5{:style => 'display:inline-block;'} #{transaction_title(@transaction)}  #{@transaction.ref_number}
+%span.b#income_state{:class => @transaction.real_state, :style => 'font-size:1.3em; min-width: 30px'}= @transaction.show_state
+%h2.n.mt5= link_to @transaction.account, @transaction.account
+
+._70.fl
+  .input
+    / Project
+    - if @transaction.project_id
+      %h3.n Proyecto: #{link_to @transaction.project, @transaction.project}
+  .input
+    / Dates
+    %h3
+      = lo @transaction.date
+      - if @transaction.payment_date.present?
+        %span.n , Vence el
+        %span#due_on= lo @transaction.payment_date
+
+._30.r.fr
+  / FORM to approve transaction
+  - if @transaction.can_approve?(session)
+    = simple_form_for @transaction, :url => "/#{params[:controller]}/#{ @transaction.id }/approve", :html => {:id => 'approve_form'} do |f|
+      .submit
+        =f.submit "Aprobar", :class => 'dark_green', :id => 'income_approve_button'
+.clear
+  .input
+    / Currency
+    - unless currency_id == @transaction.currency_id
+      %h4.black 
+        %span.n 1 #{@transaction.currency.name} = 
+        #{ntc @transaction.exchange_rate, :precision => 4}</span> #{currency_name.pluralize}
+  .input= @transaction.description unless @transaction.description.blank?
+.clear
+
+/ Moneyboxes
+.moneybox.fl
+  %label Total
+  %h3#total_currency #{@transaction.currency_symbol} #{ntc @transaction.total_currency}
+
+.moneybox.fl
+  %label Saldo
+  %h3#balance #{@transaction.currency_symbol} #{ntc @transaction.balance}
+
+- if @transaction.show_inventory?
+  .moneybox.fl
+    %label Saldo inventario
+    %h3#inventory_balance #{currency_symbol} #{ntc @transaction.balance_inventory}
+
+

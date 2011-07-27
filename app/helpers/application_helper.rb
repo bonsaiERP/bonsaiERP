@@ -20,9 +20,8 @@ module ApplicationHelper
   end
 
   # Presents number to currency
-  def ntc(val = nil)
-    #val ||= 0
-    number_to_currency(val.to_f)
+  def ntc(val = nil, options = {})
+    number_to_currency(val.to_f, options)
   end
 
   def nwd(val)
@@ -44,8 +43,8 @@ module ApplicationHelper
   end
 
   # Used for localization
-  def lo(val)
-    localize(val) unless val.nil?
+  def lo(val, options = {})
+    localize(val, options) unless val.nil?
   end
 
   # Links for presenting filtered data

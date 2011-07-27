@@ -7,7 +7,7 @@ class AccountsController < ApplicationController
   # GET /accounts/:id
   def show
     @account = Account.org.find(params[:id])
-    @ledgers = AccountLedger.filtered(@account.id, params[:option]).order("account_ledgers.date desc").page(@page)
+    @ledgers = AccountLedger.filtered(@account.id, params[:option]).order("account_ledgers.created_at desc").page(@page)
     @partial = get_partial
   end
 

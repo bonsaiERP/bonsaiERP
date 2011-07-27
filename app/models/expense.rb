@@ -9,7 +9,7 @@ class Expense < Transaction
 
 
   attr_accessible  :ref_number,  :date,                          :contact_id,
-                   :project_id,  :currency_id,                   :currency_exchange_rate,
+                   :project_id,  :currency_id,                   :exchange_rate,
                    :bill_number, :taxis_ids,                     :description,
                    :transaction_details_attributes
 

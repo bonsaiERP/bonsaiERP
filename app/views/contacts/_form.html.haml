@@ -23,7 +23,7 @@
 :javascript
   $(function() {
     $('input.first_name, input.last_name').blur(function() { 
-      var matchcode = $('input.name').val() + ' ' + $('input.last_name').val();
+      var matchcode = $('input.first_name').val() + ' ' + $('input.last_name').val();
       $('input.matchcode').val( matchcode ); 
     });
   });

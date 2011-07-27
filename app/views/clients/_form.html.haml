@@ -20,7 +20,7 @@
 
 :javascript
   $(function() {
-    $('#contact_name').blur(function() {
+    $('#contact_first_name,#contact_last_name').blur(function() {
       if($('#contact_matchcode').val() == '')
         $('#contact_matchcode').val($(this).val());
     });

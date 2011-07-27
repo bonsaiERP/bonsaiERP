@@ -25,9 +25,10 @@ class ContactAutocomplete
 
     input = $('<input/>').attr(
       'id': @options.id || @auto_id
-      'type': 'text'
-      'size': 35
-      'name': @options.name || @auto_id
+      'type'    : 'text'
+      'size'    : 35
+      'name'    : @options.name || @auto_id
+      'required': @elem.attr("required")
     ).val(@val)
     .addClass('autocomplete-input')
     .after(self.createAddLink())
@@ -44,7 +45,6 @@ class ContactAutocomplete
 
     $(@elem).hide().before input
 
-     #@cont.find('.autocomplete-input').after(createAddLink())
   # creates the new link
   createAddLink: ->
     $('<a/>').attr({'href': "/#{@type.toLowerCase()}s/new" }).addClass('add ajax')
@@ -102,7 +102,7 @@ class ContactAutocomplete
     self = @
 
     @cont.find('input:radio').click ->
-      self.setSelectedLabel()
+      self.setSelectedLabel() unless self.type == this.value
   # changes the clases for the selected
   setSelectedLabel: ->
     self = @

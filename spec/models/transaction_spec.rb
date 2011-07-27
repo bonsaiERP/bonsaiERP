@@ -5,16 +5,19 @@ describe Transaction do
     OrganisationSession.set(:id => 1, :name => 'ecuanime')
     OrganisationSession.stubs(:id => 1)
 
-    @params = {"active"=>nil, "bill_number"=>"56498797", "contact_id"=>1, 
-      "currency_exchange_rate"=>1, "currency_id"=>1, "date"=>'2011-01-24', 
+    @params = {"active"=>nil, "bill_number"=>"56498797", "account_id"=>1, 
+      "exchange_rate"=>1, "currency_id"=>1, "date"=>'2011-01-24', 
       "description"=>"Esto es una prueba", "discount"=>3, "project_id"=>1, 
       "ref_number"=>"987654"
     }
     @details = [
-      { "description"=>"jejeje", "item_id"=>2, "organisation_id"=>1, "price"=>15.5, "quantity"=> 10},
-      { "description"=>"jejeje", "item_id"=>2, "organisation_id"=>1, "price"=>10, "quantity"=> 20}
+      { "description"=>"jejeje", "item_id" => 2, "organisation_id"=>1, "price"=>15.5, "quantity"=> 10},
+      { "description"=>"jejeje", "item_id" => 2, "organisation_id"=>1, "price"=>10, "quantity"=> 20}
     ]
     @params[:transaction_details_attributes] = @details
+    # Stubs for account org validation
+    Account.stubs(:org => stub(:where => stub( :any? => true ) ) )
+    Item.stubs(:find => Item.new(:price => 15.5) )
   end
 
   def set_transaction_taxes(*rates)
@@ -31,7 +34,8 @@ describe Transaction do
 
   it 'should have total and balance equal' do
     transaction = Transaction.new(@params)
-    transaction.save
+    transaction.save#.should == true
+    puts transaction.errors.messages
     transaction.total.should == transaction.balance
   end
 

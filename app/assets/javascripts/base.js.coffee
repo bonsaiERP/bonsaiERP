@@ -527,6 +527,9 @@ $(document).ready(->
     }
   })
 
+  $('ul.menu>li>a').click ->
+    false
+
   start()
 
 )

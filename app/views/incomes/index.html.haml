@@ -40,6 +40,7 @@
 %table{ :class => 'decorated nwl' }
   %thead
     %tr
+      %th.tip{:title => 'Estado'} Est.
       %th.tip{ :title => 'Número de referencia' } Nº Ref.
       %th Cliente
       %th Vence el
@@ -47,14 +48,15 @@
       %th Saldo<br/>#{currency_symbol}
       %th.tip{:title => 'Saldo Inventario'} Saldo<br/>Inv. #{currency_symbol}
       %th.tip{:title => 'Moneda'} Mon.
-      %th Estado
-      %th Contado<br/>Crédito
-      %th Fecha
+      %th.tip{:title => "Contado Crédito"} Tipo
+      %th Fecha Hora
       %th
 
   %tbody
     - for income in @incomes
       %tr{ :class => cycle(:odd, :even) }
+        %td 
+          %span{:class => "#{income.real_state} tip", :title => income.show_state}
         %td= link_to income.ref_number, income, :class => 'b'
         %td= income.account
         %td= lo income.payment_date unless income.paid?
@@ -62,9 +64,8 @@
         %td.cur= ntc exchange(income, :balance, @currency_rates)
         %td.cur= ntc income.balance_inventory
         %td <span>#{income.currency_symbol}</span>
-        %td <span class="#{income.real_state}">#{income.show_state}</span>
         %td= cash_credit(income.cash)
-        %td.nw= lo income.date
+        %td.nw= lo income.created_at
         %td.actions
           = bonsai_links(income) if income.draft?
 

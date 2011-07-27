@@ -31,8 +31,13 @@ class ClientsController < ApplicationController
   # POST /clients.xml
   def create
     @client = Client.new(params[:client])
+
     if @client.save
-      redirect_ajax(@client)
+      if request.xhr?
+        render :json => @client.attributes.merge( :account => @client.account.attributes )
+      else
+        redirect_to client_path(@client.id)
+      end
     else
       render :action => 'new'
     end

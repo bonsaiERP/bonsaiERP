@@ -22,7 +22,7 @@ module Models::AccountLedger
 
       def new_money(params = {})
         params.transform_date_parameters!("date")
-        params.symbolize_keys.assert_valid_keys( :operation, :account_id, :to_id, :amount, :reference, :date, :exchange_rate )
+        params.symbolize_keys.assert_valid_keys( :operation, :account_id, :to_id, :amount, :reference, :date, :exchange_rate, :description )
 
         ac = AccountLedger.new(params)
         def ac.money?; true; end

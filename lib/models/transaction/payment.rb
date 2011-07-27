@@ -62,7 +62,6 @@ module Models::Transaction::Payment
 
     private
       def valid_account_ledger?
-
         if @current_ledger.amount > balance
           @current_ledger.errors[:amount] = I18n.t("errors.messages.payment.greater_amount")
           false

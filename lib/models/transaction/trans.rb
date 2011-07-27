@@ -26,6 +26,7 @@ module Models::Transaction
           set_details_type
           calculate_total_and_set_balance
           set_balance_inventory
+          set_total_discount_amount
         end
 
         # Sets the type of the class making the transaction
@@ -43,6 +44,10 @@ module Models::Transaction
 
         def set_balance_inventory
           self.balance_inventory = total
+        end
+
+        def set_total_discount_amount
+
         end
     end
 

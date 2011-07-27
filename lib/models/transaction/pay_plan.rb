@@ -11,6 +11,7 @@ module Models::Transaction::PayPlan
   # @param Array
   def destroy_pay_plans(pp_ids)
     return false unless pp_ids.is_a? Array
+    pp_ids.map!(&:to_i)
 
     unpaid_pay_plans.each do |pp|
       if pp_ids.include?(pp.id)

@@ -9,7 +9,10 @@
   .main.bg_light_grey
     .input
       = f.input :ref_number, :label => 'Nº de referencia', :input_html => {:size => 20}
-      = f.input :date, :label => 'Fecha'
+      .input
+        %label Fecha Hora
+        %p= lo Time.now
+      / = f.input :date, :label => 'Fecha'
 
     = f.input :account_id, :as => :contact, :label => false, :input_html => {:id => 'transaction_account_id'}
     .clear
@@ -24,7 +27,6 @@
   .clear
 
   /.input
-  /  = f.input :discount, :label => 'Descuento (%)', :input_html => {:size => 10, :type => 'decimal'} if transaction.is_a? Income
   = f.input :bill_number, :label => 'Nº de Factura', :input_html => {:size => 20}
   - if transaction.income?
     =f.association :taxes, :as => :check_boxes, :label => 'Impuestos', :wrapper_html => {:id => 'taxes'}, :collection => Tax.org,
@@ -118,7 +120,8 @@
 
     // Functions for the select boxes
     $('body').live('new_contact', function(e, resp) {
-      $('#' + type + '_contact_id').createSelectOption(resp.id, resp.matchcode);
+      $('##{transaction.type.downcase}_account_id').val(resp.id);
+      $('#contact_auto_complete').val(resp.matchcode);
     }).live('new_project', function(e, resp) {
       $('#' + type + '_project_id').createSelectOption(resp.id, resp.name);
     });

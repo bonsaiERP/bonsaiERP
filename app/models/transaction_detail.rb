@@ -46,6 +46,7 @@ private
     self.original_price = item.price
   end
 
+  # Sets the quantity left to deliver or recive for a transaction
   def set_balance
     self.balance = self.quantity
   end

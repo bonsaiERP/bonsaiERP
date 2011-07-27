@@ -122,9 +122,9 @@ module TransactionsHelper
 
   def cash_credit(cash)
     if cash
-      "Contado"
+      image_tag("money.png", :title => "Contado", :class => 'tip')
     else
-      "Crédito"
+      image_tag("credit.png", :title => "Crédito", :class => 'tip')
     end
   end
 

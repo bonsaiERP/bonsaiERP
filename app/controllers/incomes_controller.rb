@@ -32,7 +32,7 @@ class IncomesController < ApplicationController
   # GET /incomes/new.xml
   def new
     @transaction = Income.new
-    #(:date => Date.today, :discount => 0, :currency_exchange_rate => 1, :currency_id => currency_id, 
+    #(:date => Date.today, :discount => 0, :exchange_rate => 1, :currency_id => currency_id, 
     #                          :gross_total => 0, :tax_percent => 0 )
     @transaction.set_defaults_new
     @transaction.transaction_details.build
