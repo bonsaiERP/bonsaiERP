@@ -258,7 +258,7 @@ $(document).ready(->
 
     $div = $(this).parents('.ajax-modal')
     new_record = if $div.data('ajax-type') == 'new' then true else false
-    trigger = $div.data('trigger')
+    trigger = $div.data('trigger') || "ajax-call"
 
     $.ajax(
       'url': $(el).attr('action')
