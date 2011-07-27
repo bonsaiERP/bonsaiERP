@@ -1,6 +1,6 @@
 - @accounts = Account.org.money
 - if @accounts.any?
-  = simple_form_for(@payment, :remote => true) do |f|
+  = simple_form_for(@payment, :url => "/payments") do |f|
     = bonsai_form_error(f)
 
     = f.input :transaction_id, :as => :hidden

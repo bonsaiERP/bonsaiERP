@@ -36,16 +36,16 @@ class PaymentsController < ApplicationController
   # POST /payments
   # POST /payments.xml
   def create
-    @transaction = Transaction.org.find(params[:id])
+    @transaction = Transaction.org.find(params[:account_ledger][:transaction_id])
 
     # When it is the contact account
-    if params[:payment][:account_id] =~ /^\d-\d$/
-      ac_id, cur_id = params[:payment][:account_id].split("-")
-      params[:payment][:account_id] = ac_id
-      params[:payment][:currency_id] = cur_id
+    if params[:account_ledger][:account_id] =~ /^\d-\d$/
+      ac_id, cur_id = params[:account_ledger][:account_id].split("-")
+      params[:account_ledger][:account_id] = ac_id
+      params[:account_ledger][:currency_id] = cur_id
     end
 
-    @payment = @transaction.new_payment(params[:payment])
+    @account_ledger = @transaction.new_payment(params[:account_ledger])
 
     if @transaction.save_payment
       render 'create'

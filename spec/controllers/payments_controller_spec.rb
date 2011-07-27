@@ -52,56 +52,39 @@ describe PaymentsController do
     describe "with valid params" do
       before do
         stub_auth
+        Transaction.stubs(:org => stub(:find => mock_payment(:new_payment => AccountLedger.new, :save_payment => true ) ) )
       end 
 
-      it 'when assigned account_id 1 it should correctly assing' do
-        Transaction.stubs(:org => stub(:find => Transaction.new))
-        Transaction.any_instance.stubs(:save_payment => true, :type => "Income")
-        Account.stubs(:org => stub(:find_by_original_type => stub(:id => 100)) )
-        post :create, :payment => {:account_id => '1'}, :id => 1, :format => 'js'
+      it 'when assigned should render create with account_id = 1' do
 
-        assigns(:transaction).class.should_not == blank?
-        controller.params[:payment][:account_id].should == "1"
-        controller.params[:payment][:currency_id].should == nil
+        xhr :post, :create, :account_ledger => {:transaction_id => 1, :account_id => "1"}
+        response.should render_template('create')
+
+        controller.params[:account_ledger][:account_id].should == "1"
+        controller.params[:account_ledger][:currency_id].should == nil
       end
 
-      it 'when assigned account_id 1-2 it should correctly assing' do
-        Transaction.stubs(:org => stub(:find => Transaction.new))
-        Transaction.any_instance.stubs(:save_payment => true, :type => "Income")
-        Account.stubs(:org => stub(:find_by_original_type => stub(:id => 100)) )
-        post :create, :payment => {:account_id => '1-2'}, :id => 1, :format => 'js'
+      it 'when assigned should render create with account_id = 1' do
 
-        assigns(:transaction).class.should_not == blank?
-        controller.params[:payment][:currency_id].should == "2"
-        controller.params[:payment][:account_id].should == "1"
+        xhr :post, :create, :account_ledger => {:transaction_id => 1, :account_id => "1-2"}
+        response.should render_template('create')
+
+        controller.params[:account_ledger][:account_id].should == "1"
+        controller.params[:account_ledger][:currency_id].should == "2"
       end
-
-      it "when stubed method for action_id 1-2" do
-        mock_trans = mock_transaction(:new_payment => mock_payment, :save_payment => true, :is_contact? => true)
-        Transaction.stubs(:org => stub(:find => mock_trans) )
-
-        post :create, :payment => {:account_id => '1-2' }, :id => 1, :format => 'js'
-        assigns(:payment).should == mock_payment
-        assigns[:transaction].is_contact?.should == true
-        expect{ assigns[:transaction].is_account? }.to raise_error(NoMethodError)
-      end
-
-
     end
 
-    #describe "with invalid params" do
-    #  it "assigns a newly created but unsaved payment as @payment" do
-    #    Payment.stub(:new).with({'these' => 'params'}) { mock_payment(:save => false) }
-    #    post :create, :payment => {'these' => 'params'}
-    #    assigns(:payment).should be(mock_payment)
-    #  end
+    describe "with invalid params" do
+      before do
+        stub_auth
+        Transaction.stubs(:org => stub(:find => mock_payment(:new_payment => AccountLedger.new, :save_payment => false ) ) )
+      end
 
-    #  it "re-renders the 'new' template" do
-    #    Payment.stub(:new) { mock_payment(:save => false) }
-    #    post :create, :payment => {}
-    #    response.should render_template("new")
-    #  end
-    #end
+      it 'when wrong params should render new template' do
+        xhr :post, :create, :account_ledger => {:transaction_id => 1, :account_id => "1"}
+        response.should render_template('new')
+      end
+    end
 
   end
 
