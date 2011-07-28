@@ -530,6 +530,14 @@ $(document).ready(->
   $('ul.menu>li>a').click ->
     false
 
+  # Supress from submiting a form from an input:text
+  checkCR = (evt)->
+    evt  = evt  = (evt) ? evt : ((event) ? event : null)
+    node = evt.target || evt.srcElement
+    if evt.keyCode == 13 and node.type == "text" then false
+
+  document.onkeypress = checkCR
+
   start()
 
 )

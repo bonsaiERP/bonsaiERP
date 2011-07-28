@@ -89,8 +89,10 @@ class Transaction
   # Event when changed discount rate
   set_discount_event: ->
     self = this
-    $(@conf.discount_id).live("change", ->
-      val = $(this).val() * 1
+    $(@conf.discount_id).live("focusout keyup", (event)->
+      return false unless event.keyCode == 13
+      val = ($(this).val() * 1).round(2)
+      $(this).val(val)
       $(self.conf.discount_percentage_id).html(_b.ntc(val)).data("val", val)
       self.calculate_discount()
     )
@@ -104,7 +106,6 @@ class Transaction
     $(id).find("input").click( ->
       sum = 0
       $inputs = $(self.conf.taxes_id).find("input:checked")
-      #sum += 1 * $(k).siblings("label").find("span").data("rate") for k in $inputs
       sum += 1 * $(k.nextSibling).find("span").data("rate") for k in $inputs
 
       $(self.conf.taxes_percentage_id).html(_b.ntc(sum)).data("val", sum)
@@ -121,14 +122,17 @@ class Transaction
 
       if id != ""
         $(this).parents("tr:first").find(price_sel).val( item.price ).trigger("change")
-      #$(self.trigger).trigger("item:change", [this, item])
     )
 
   # triggers the price and qunaitty change
   set_price_quantity_change_event: (grid_sel, price_sel, quantity_sel)->
     self = @
 
-    $(grid_sel).find("#{price_sel}, #{quantity_sel}").live("change", ->
+    $(grid_sel).find("#{price_sel}, #{quantity_sel}").live("focusout keyup", (event)->
+      return false unless event.keyCode == 13
+      target = event.target || event.srcElement
+      val = $(target).val() * 1
+      $(target).val(val.round(2))
       self.calculate_total_row(@, "input.price, input.quantity", "td.total_row")
     )
 

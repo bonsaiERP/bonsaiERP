@@ -16,12 +16,17 @@ class ExchangeRate
   setEventForCalculation: ->
     self = @
 
-    $("#{ @amount },#{ @input }").live 'focusout', ->
+    $("#{ @amount },#{ @input }").live 'focusout keyup', (event)->
+      return false unless event.keyCode == 13
+
       amount = 0
       $(self.amount.split(",")).each (i, el)->
-        amount += $(el).val() * 1
+        number = ($(el).val() * 1).round(2)
+        $(el).val(number)
+        amount += number
 
-      rate   = self.$input.val() * 1
+      rate = (self.$input.val() * 1).round(4)
+      self.$input.val(rate)
 
       self.$after.html(" #{self.$label.find('.currency_symbol').html()} #{_b.ntc(rate * amount)}")
   # Account event
