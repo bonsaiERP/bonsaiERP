@@ -30,10 +30,8 @@ module Models::Transaction::Payment
       params = set_payment_amount(params)
       # Find the right account
       params.delete(:to_id)
-      to_id = ::Account.org.find_by_original_type(self.class.to_s).id
 
-      merged = { :to_id => to_id, :currency_id => currency_id }.merge(params)
-      @current_ledger = account_ledgers.build(merged) {|al| al.operation = get_account_ledger_operation }
+      @current_ledger = account_ledgers.build(params) {|al| al.operation = get_account_ledger_operation }
 
       @current_ledger.set_payment(true)
       
@@ -51,6 +49,7 @@ module Models::Transaction::Payment
       return false unless payment?
       return false unless valid_account_ledger? # Don't use valid_ledger?
 
+      @current_ledger.to_id = ::Account.org.find_by_original_type(self.class.to_s).id
       @current_ledger.conciliation = get_conciliation_for_account
       mark_paid_pay_plans if credit? # anulate pay_plans if credit
 

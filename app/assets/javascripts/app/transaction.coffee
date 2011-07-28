@@ -90,7 +90,8 @@ class Transaction
   set_discount_event: ->
     self = this
     $(@conf.discount_id).live("focusout keyup", (event)->
-      return false unless event.keyCode == 13
+
+      return false if event.type == 'keyup' and event.keyCode != $.ui.keyCode.ENTER
       val = ($(this).val() * 1).round(2)
       $(this).val(val)
       $(self.conf.discount_percentage_id).html(_b.ntc(val)).data("val", val)

@@ -52,12 +52,15 @@ describe PaymentsController do
     describe "with valid params" do
       before do
         stub_auth
-        Transaction.stubs(:org => stub(:find => mock_payment(:new_payment => AccountLedger.new, :save_payment => true ) ) )
+        #Transaction.stubs(:org => stub(:find => mock_payment(:new_payment => AccountLedger.new, :save_payment => true, :draft? => false ) ) )
+        Transaction.stubs(:org => stub(:find => Income.new))
+        Income.any_instance.stubs(:valid? => true, :save_payment => true, :draft? => false)
+        #Account.stubs(:org => stub(:find_by_original_type => stub(:id => 1)))
       end 
 
       it 'when assigned should render create with account_id = 1' do
 
-        xhr :post, :create, :account_ledger => {:transaction_id => 1, :account_id => "1"}
+        xhr :post, :create, :account_ledger => {:transaction_id => 1, :account_id => "1", :reference => "Test"}
         response.should render_template('create')
 
         controller.params[:account_ledger][:account_id].should == "1"
@@ -66,11 +69,11 @@ describe PaymentsController do
 
       it 'when assigned should render create with account_id = 1' do
 
-        xhr :post, :create, :account_ledger => {:transaction_id => 1, :account_id => "1-2"}
+        xhr :post, :create, :account_ledger => {:transaction_id => 1, :account_id => "1-2", :exchange_rate => "0.5", :reference => "Test"}
         response.should render_template('create')
 
-        controller.params[:account_ledger][:account_id].should == "1"
-        controller.params[:account_ledger][:currency_id].should == "2"
+        assigns(:account_ledger).account_id.should == 1
+        assigns(:account_ledger).currency_id.should == 2
       end
     end
 

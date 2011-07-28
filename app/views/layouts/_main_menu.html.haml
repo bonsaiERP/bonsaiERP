@@ -1,7 +1,7 @@
 %ul#main_menu
   - if organisation?
     %li= link_to "Inicio", dashboard_path 
-    %li
+    %li.sub
       %a.more{ :href => "javascript:"} Operaciones
       %ul.more{:style => 'width:350px;'}
         %li.more
@@ -22,7 +22,7 @@
               %li <a href="/projects">Proyectos</a>
               %li <a href="/taxes">Impuestos</a>
           .clear
-    %li
+    %li.sub
       %a.more{ :href => "javascript:"} Inventarios
       %ul.more
         %li.more{:style => 'width:300px'}

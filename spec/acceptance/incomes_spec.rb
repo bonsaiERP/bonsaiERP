@@ -86,13 +86,13 @@ feature "Income", "test features" do
     p.operation.should == 'in'
     p.amount.should == 30
     p.interests_penalties.should == 0
-    p.to_id.should == Account.org.find_by_original_type(i.class.to_s).id
 
     i.payment?.should == true
 
     bal = i.balance
 
     i.save_payment.should == true
+    p.to_id.should == Account.org.find_by_original_type(i.class.to_s).id
 
     i.balance.should == bal - 30
     ac1 = p.account_ledger_details[0].account
@@ -412,6 +412,7 @@ feature "Income", "test features" do
     new_bank_account.amount.should == 200
     client_account.reload.cur(2).amount.should == -200
 
+    log.info("Paying from account with different currency")
     p = i.new_payment(:account_id => client_account.id, :amount => 30,
                  :exchange_rate => 0.5, :currency_id => 2, :reference => 'Last check')
     i.save_payment.should == true
@@ -436,68 +437,68 @@ feature "Income", "test features" do
     i.pay_plans_total.should == i.total - 30
   end
 
-  scenario 'client payment' do
-    log.info "Testing"
+  #scenario 'client payment' do
+  #  log.info "Testing"
 
-    #ApplicationController.any_instance.stubs(:check_authorization! => true)
-    Authorization.stubs(:check_authorization! => true)
+  #  #ApplicationController.any_instance.stubs(:check_authorization! => true)
+  #  Authorization.stubs(:check_authorization! => true)
 
-    #controller.stubs(:check_authorization! => true)
+  #  #controller.stubs(:check_authorization! => true)
 
-    i = Income.new(income_params.merge(:account_id => client_account.id))
-    #i.save_trans.should == true
-    #i.approve!.should == true
+  #  i = Income.new(income_params.merge(:account_id => client_account.id))
+  #  #i.save_trans.should == true
+  #  #i.approve!.should == true
 
-    i = Income.last
-    puts i.attributes
-    tot = ( 3 * 10 + 5 * 20 ) * 0.97
+  #  i = Income.last
+  #  puts i.attributes
+  #  tot = ( 3 * 10 + 5 * 20 ) * 0.97
 
-    #i.approve!.should == true
+  #  #i.approve!.should == true
 
-    ## Approve credit
-    #i.approve_credit(:credit_reference => "Ref 23728372", :credit_description => "Yeah").should == true
+  #  ## Approve credit
+  #  #i.approve_credit(:credit_reference => "Ref 23728372", :credit_description => "Yeah").should == true
 
-    #d = Date.today
-    #i.new_pay_plan(:amount => 30, :repeat => true, :payment_date => d, :alert_date => d - 5.days)
-    #i.save_pay_plan.should == true
-    #i.pay_plans.size.should == (i.balance/30).ceil
+  #  #d = Date.today
+  #  #i.new_pay_plan(:amount => 30, :repeat => true, :payment_date => d, :alert_date => d - 5.days)
+  #  #i.save_pay_plan.should == true
+  #  #i.pay_plans.size.should == (i.balance/30).ceil
 
-    ## bank creation and client deposits in another currency
-    #new_bank = create_bank(:currency_id => 2)
-    #new_bank_account = new_bank.account
-    #new_bank_account.amount.should == 0
-    #al = AccountLedger.new_money(:operation => 'in', :account_id => new_bank_account.id, :to_id => client_account.id, :amount => 200, :reference => "Other currency check")
+  #  ## bank creation and client deposits in another currency
+  #  #new_bank = create_bank(:currency_id => 2)
+  #  #new_bank_account = new_bank.account
+  #  #new_bank_account.amount.should == 0
+  #  #al = AccountLedger.new_money(:operation => 'in', :account_id => new_bank_account.id, :to_id => client_account.id, :amount => 200, :reference => "Other currency check")
 
-    #client_account.cur(2).amount.should == 0
+  #  #client_account.cur(2).amount.should == 0
 
-    #al.save.should == true
-    #al.conciliate_account.should == true
+  #  #al.save.should == true
+  #  #al.conciliate_account.should == true
 
-    #new_bank_account.reload
-    #new_bank_account.amount.should == 200
-    #client_account.reload.cur(2).amount.should == -200
+  #  #new_bank_account.reload
+  #  #new_bank_account.amount.should == 200
+  #  #client_account.reload.cur(2).amount.should == -200
 
-    #p = i.new_payment(:account_id => client_account.id, :amount => 30,
-    #             :exchange_rate => 0.5, :currency_id => 2, :reference => 'Last check')
-    #i.save_payment.should == true
+  #  #p = i.new_payment(:account_id => client_account.id, :amount => 30,
+  #  #             :exchange_rate => 0.5, :currency_id => 2, :reference => 'Last check')
+  #  #i.save_payment.should == true
 
-    #income_account = Account.org.find_by_original_type("Income")
+  #  #income_account = Account.org.find_by_original_type("Income")
 
-    #i.balance.should == i.total - 30
-    #
-    #client_account.reload
+  #  #i.balance.should == i.total - 30
+  #  #
+  #  #client_account.reload
 
-    #p.conciliation.should == true
+  #  #p.conciliation.should == true
 
-    #client_account.reload
-    #income_account.reload
+  #  #client_account.reload
+  #  #income_account.reload
 
-    #client_account.cur(2).amount.should == -200 + 15
-    #income_account.cur(2).amount.should == -15
+  #  #client_account.cur(2).amount.should == -200 + 15
+  #  #income_account.cur(2).amount.should == -15
 
-    #i.reload
-    #i.pay_plans.unpaid.size.should == ( (i.total - 30)/30 ).ceil
-    #i.pay_plans.paid.size.should == 1
-    #i.pay_plans_total.should == i.total - 30
-  end
+  #  #i.reload
+  #  #i.pay_plans.unpaid.size.should == ( (i.total - 30)/30 ).ceil
+  #  #i.pay_plans.paid.size.should == 1
+  #  #i.pay_plans_total.should == i.total - 30
+  #end
 end
