@@ -163,6 +163,14 @@ class AccountLedger < ActiveRecord::Base
     end
   end
 
+  def related_account_link
+    if ac_id == account_id
+      "/account_ledgers/#{id}?ac_id=#{to_id}"
+    else
+      "/account_ledgers/#{id}?ac_id=#{account_id}"
+    end
+  end
+
   def selected_account
     if ac_id == account_id
       account

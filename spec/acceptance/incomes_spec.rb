@@ -93,6 +93,7 @@ feature "Income", "test features" do
 
     i.save_payment.should == true
     p.to_id.should == Account.org.find_by_original_type(i.class.to_s).id
+    p.description.should_not == blank?
 
     i.balance.should == bal - 30
     ac1 = p.account_ledger_details[0].account

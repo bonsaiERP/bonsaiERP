@@ -9,8 +9,8 @@
     = f.association :account, :label => 'Cuenta <span class="n black" id="cur"></span>'.html_safe, :collection => @accounts
     .clear
 
-    = f.input :amount, :input_html => {:size => 12, :type => 'decimal'}, :label => currency_label('Cantidad', @payment)
-    = f.input :interests_penalties, :input_html => {:size => 12, :type => 'decimal'}, :label => currency_label('Intereses/Penalidades', @payment)
+    = f.input :amount, :input_html => {:size => 12, :type => 'decimal'}, :label => currency_label('Cantidad', @transaction)
+    = f.input :interests_penalties, :input_html => {:size => 12, :type => 'decimal'}, :label => currency_label('Intereses/Penalidades', @transaction)
     .clear
 
     = f.input :reference, :label => 'Referencia/Nº Cheque', :input_html => {:rows => 3, :cols => 35}, :as => :text

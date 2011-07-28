@@ -39,12 +39,12 @@ class PaymentsController < ApplicationController
     @transaction = Transaction.org.find(params[:account_ledger][:transaction_id])
 
     # When it is the contact account
-    if params[:account_ledger][:account_id] =~ /^\d-\d$/
+    if params[:account_ledger][:account_id] =~ /^\d+-\d+$/
       ac_id, cur_id = params[:account_ledger][:account_id].split("-")
       params[:account_ledger][:account_id] = ac_id
       params[:account_ledger][:currency_id] = cur_id
     end
-
+    
     @account_ledger = @transaction.new_payment(params[:account_ledger])
 
     if @transaction.save_payment
