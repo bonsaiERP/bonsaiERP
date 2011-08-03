@@ -8,11 +8,11 @@ class AccountsController < ApplicationController
   def show
     @account = Account.org.find(params[:id])
     @ledgers = AccountLedger.filtered(@account.id, params[:option]).order("account_ledgers.created_at desc").page(@page)
-    @partial = get_partial
+    render "/accounts/#{get_view}"
   end
 
   private
-    def get_partial
+    def get_view
       case @account.accountable.class.to_s
       when "Client", "Supplier", "Staff" then "contact"
       when "Cash" then "cash"

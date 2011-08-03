@@ -370,7 +370,8 @@ feature "Income", "test features" do
     al.conciliate_account.should == true
 
     i.reload
-    p = i.new_payment(:account_id => client_account.id, :exchange_rate => 1, :reference => 'Test for client')
+    log.info "Creating payment without exchange_rate"
+    p = i.new_payment(:account_id => client_account.id, :reference => 'Test for client', :exchange_rate => 1)
 
     client_account.reload.cur(1).amount.should == -i.balance
 

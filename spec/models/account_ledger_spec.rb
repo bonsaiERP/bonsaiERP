@@ -204,4 +204,26 @@ describe AccountLedger do
     expect {AccountLedger.new_money(:operation => "in", :account_id => 2, :to_id => 5, :amount => 100, :reference => "Yeah", :currency_id => 1)}.to raise_error ArgumentError
 
   end
+
+  it 'should return the account_id for MoneyStore' do
+    al = AccountLedger.new {|al| 
+      al.id = 1
+      al.account_id = 1
+      al.to_id = 2
+    }
+    al.stubs(:account_accountable_type => "MoneyStore")
+
+    al.payment_link_id.should == 1
+  end
+
+  it 'should return the Contact for Contact' do
+    al = AccountLedger.new {|al| 
+      al.id = 1
+      al.account_id = 1
+      al.to_id = 2
+    }
+    al.stubs(:account_accountable_type => "Contact")
+
+    al.payment_link_id.should == 2
+  end
 end

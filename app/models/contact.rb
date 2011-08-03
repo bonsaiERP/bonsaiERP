@@ -24,6 +24,9 @@ class Contact < ActiveRecord::Base
   scope :clients, where(:client => true)
   scope :suppliers, where(:supplier => true)
 
+  # delegates
+  delegate :id, :name, :to => :account, :prefix => true
+
   # Finds a contact using the type
   # @param String
   def self.find_with_type(type)

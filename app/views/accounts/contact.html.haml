@@ -1,0 +1,22 @@
+- content_for :links do
+  %ul.breadcrumps
+    %li #{link_to "Clientes", contact_account_type_link(@account, :plural)} <span>&gt;</span>
+  .links
+    = link_to 'Nuevo', contact_account_type_link(@account, :new), :class => 'new'
+    = link_to 'Editar', contact_account_type_link(@account, :edit), :class => 'edit'
+    = link_to 'Borrar', contact_account_type_link(@account, :destroy), :class => 'delete'
+
+%h1= @account.name
+
+= render 'contacts/show', :klass => @account.accountable
+
+.clear
+
+#tabs.ui-tabs.ui-widget.ui-widget-content.ui-corner-all
+  %ul.ui-tabs-nav.ui-helper-reset.ui-helper-clearfix.ui-widget-header.ui-corner-all
+    %li.ui-tabs.ui-tabs-nav.ui-tabs-selected.li.ui-state-active= link_to "Transactiones", account_path(@account, :tab => "trans")
+    %li.ui-tabs.ui-tabs-nav= link_to "Ventas", account_path(@account, :tab => "incomes")
+    %li.ui-tabs.ui-tabs-nav= link_to "Compras", account_path(@account, :tab => "buys")
+
+  %p &nbsp;
+  = render show_account_partial(params[:tab]), :ledgers => @ledgers, :account => @account

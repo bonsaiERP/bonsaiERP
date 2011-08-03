@@ -19,7 +19,8 @@
 <br/>
 ._30.fl <span class="dark_grey">Ref/Nº de cheque:</span> #{@account_ledger.reference}
 ._20.fl= @account_ledger.description
-._20.fl= link_to @account_ledger.related_account, @account_ledger.related_account_link, :title => 'Cuenta relacionada' if @account_ledger.to_id.present?
+// Related account
+._20.fl= link_to @account_ledger.related_account, related_account_link(@account_ledger), :title => 'Cuenta relacionada'
 <br/><br/>
 .clear
 - if @account_ledger.can_conciliate?

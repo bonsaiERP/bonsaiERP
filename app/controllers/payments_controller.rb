@@ -3,33 +3,32 @@
 # email: boriscyber@gmail.com
 class PaymentsController < ApplicationController
   before_filter :check_authorization!
-  before_filter :set_payment, :only => [:show, :edit, :destroy, :null_payment]
   # GET /payments
   # GET /payments.xml
-  def index
-    @payments = Payment.org.all
+  #def index
+  #  @payments = Payment.org.all
 
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @payments }
-    end
-  end
+  #  respond_to do |format|
+  #    format.html # index.html.erb
+  #    format.xml  { render :xml => @payments }
+  #  end
+  #end
 
   # GET /payments/1
   # GET /payments/1.xml
-  def show
+  #def show
 
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @payment }
-    end
-  end
+  #  respond_to do |format|
+  #    format.html # show.html.erb
+  #    format.xml  { render :xml => @payment }
+  #  end
+  #end
 
   # GET /payments/new
   # GET /payments/new.xml
   def new
     @transaction = Transaction.org.find( params[:id] )
-    @payment = @transaction.new_payment
+    @account_ledger = @transaction.new_payment
   end
 
 
@@ -44,6 +43,7 @@ class PaymentsController < ApplicationController
       params[:account_ledger][:account_id] = ac_id
       params[:account_ledger][:currency_id] = cur_id
     end
+    params[:account_ledger][:exchange_rate] = 1 if params[:account_ledger][:exchange_rate].blank?
     
     @account_ledger = @transaction.new_payment(params[:account_ledger])
 
@@ -55,12 +55,8 @@ class PaymentsController < ApplicationController
   end
 
   # DELETE /payments/:id
-  def destroy
-    @payment.destroy_payment
-  end
+  #def destroy
+  #  @payment.destroy_payment
+  #end
 
-private
-  def set_payment
-    @payment = Payment.org.find(params[:id])
-  end
 end

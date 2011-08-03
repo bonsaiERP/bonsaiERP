@@ -12,6 +12,7 @@ module Models::Transaction::Payment
   included do
     attr_reader :contact_payment, :current_ledger
     validate :valid_number_of_legers, :if => :payment?
+    before_create :set_account_ledger_exchange_rate, :if => :payment?
   end
 
   module InstanceMethods
@@ -145,5 +146,10 @@ module Models::Transaction::Payment
         params
       end
     
+      def set_account_ledger_exchange_rate
+        if account.currency_id === currency_id
+          @current_ledger.exchange_rate = 1
+        end
+      end
   end
 end

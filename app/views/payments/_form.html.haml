@@ -1,6 +1,6 @@
 - @accounts = Account.org.money
 - if @accounts.any?
-  = simple_form_for(@payment, :url => "/payments") do |f|
+  = simple_form_for(@account_ledger, :url => "/payments") do |f|
     = bonsai_form_error(f)
 
     = f.input :transaction_id, :as => :hidden
@@ -15,7 +15,7 @@
 
     = f.input :reference, :label => 'Referencia/Nº Cheque', :input_html => {:rows => 3, :cols => 35}, :as => :text
 
-    - disp = @payment.currency_id == currency_id ? 'none' : 'block'
+    - disp = @account_ledger.currency_id == currency_id ? 'none' : 'block'
     = f.input :exchange_rate, :label => "Tipo de cambio de", 
       :input_html => {:size => 12}, :hint => 'Puede ingresar hasta 4 decimales',
       :wrapper_html => {:style => "display:#{disp}"}
@@ -56,7 +56,7 @@
 -else
   %h3 
     Debe crear una 
-    =link_to "caja", new_cash_register_path(:currency_id => @payment.currency_id), :target => '_blank'
+    =link_to "caja", new_cash_register_path(:currency_id => @account_ledger.currency_id), :target => '_blank'
     o 
-    =link_to "banco", new_bank_path(:currency_id => @payment.currency_id), :target => '_blank'
-    con moneda #{@payment.currency}
+    =link_to "banco", new_bank_path(:currency_id => @account_ledger.currency_id), :target => '_blank'
+    con moneda #{@account_ledger.currency}

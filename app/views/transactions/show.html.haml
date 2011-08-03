@@ -37,7 +37,7 @@
 
   #payments
 
-    / Reder payments
+    / Render payments
     =render "/payments/payments", :transaction => @transaction if @transaction.show_payments?
     #deleted_payments
       - if @transaction.account_ledgers.nulled.any?

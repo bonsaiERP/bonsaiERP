@@ -10,7 +10,7 @@
 
   - list.each do |klass|
     %tr
-      %td= link_to klass, klass, :class => 'b'
+      %td= link_to klass, klass.account, :class => 'b'
       %td= nl2br klass.address
       %td= klass.phone
       %td= klass.mobile

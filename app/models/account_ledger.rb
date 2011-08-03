@@ -72,6 +72,8 @@ class AccountLedger < ActiveRecord::Base
   # to
   delegate :currency_id, :name, :original_type, :accountable_type, 
     :to => :to, :prefix => true, :allow_nil => true
+  # transaction
+  delegate :type, :to => :transaction, :prefix => true, :allow_nil => true
 
  
   def self.pendent?
@@ -161,18 +163,12 @@ class AccountLedger < ActiveRecord::Base
   end
 
   def related_account
-    if ac_id == account_id
+    if transaction_id.present?
+      transaction
+    elsif ac_id == account_id
       to
     else
       account
-    end
-  end
-
-  def related_account_link
-    if ac_id == account_id
-      "/account_ledgers/#{id}?ac_id=#{to_id}"
-    else
-      "/account_ledgers/#{id}?ac_id=#{account_id}"
     end
   end
 
@@ -196,6 +192,15 @@ class AccountLedger < ActiveRecord::Base
       when "uncon"  then ret.pendent
       else "all"
         ret
+    end
+  end
+
+  # returns the ac_id depending on the type od the account
+  def payment_link_id
+    if account_accountable_type === "MoneyStore"
+      account_id
+    else
+      to_id
     end
   end
 

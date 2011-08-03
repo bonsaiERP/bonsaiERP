@@ -9,12 +9,13 @@ class ClientsController < ApplicationController
   # GET /clients
   # GET /clients.xml
   def index
-    @clients = Client.org.page(@page)
+    @clients = Client.org.includes(:account).page(@page)
   end
 
   # GET /clients/1
   # GET /clients/1.xml
   def show
+    @account = @client.account
   end
 
   # GET /clients/new
@@ -36,7 +37,7 @@ class ClientsController < ApplicationController
       if request.xhr?
         render :json => @client.attributes.merge( :account => @client.account.attributes )
       else
-        redirect_to client_path(@client.id)
+        redirect_to @client.account
       end
     else
       render :action => 'new'
@@ -47,7 +48,7 @@ class ClientsController < ApplicationController
   # PUT /clients/1.xml
   def update
     if @client.update_attributes(params[:client])
-      redirect_ajax(@client)
+      redirect_ajax(@client.account)
     else
       render :action => 'edit'
     end

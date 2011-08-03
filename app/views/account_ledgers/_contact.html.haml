@@ -1,0 +1,44 @@
+%ul.tabs
+  %li= link_to "Todas", account_path(account, :option => 'all', :tab => params[:tab]), :class => tabs_filter('all')
+  %li= link_to "Esperando verificación #{size_or_blank(account.account_ledgers.pendent.count)}", account_path(account, :option => 'uncon', :tab => params[:tab]), :class => tabs_filter('uncon')
+  %li= link_to "Anuladas", account_path(account, :option => 'nulled', :tab => params[:tab]), :class => tabs_filter('nulled')
+  %li= link_to "Verificadas", account_path(account, :option => 'con', :tab => params[:tab]), :class => tabs_filter('con')
+
+
+.clear
+
+
+= link_to "Buscar", "#search", :class => 'search'
+
+= paginate ledgers
+
+%table.decorated.nwl.nwf
+  %tr
+    %th 
+      Fecha<br/>
+      %span.tip{:title => 'Nº de cheque, razón, recibo, etc.'} Referencia
+    %th Monto en #{account.currency_symbol}
+    %th Cuenta relacionada
+    %th Descripción
+    %th 
+      (V) Verificado por<br/>
+      (A) Anulado por
+    %th
+  - ledgers.each do |al|
+    - al.ac_id = account.id
+    %tr{:class => al.in_out, :id => "tr#{al.id}" }
+      %td.d.check
+        = link_to lo(al.created_at), account_ledger_path(al, :ac_id => account.id), :class => "b #{conciliate_css(al)}"
+        %br/
+        = al.reference
+      %td.cur.col= ntc al.account_amount
+      %td.cont= link_to al.related_account, al.related_account
+      %td.desc= link_description al
+      %td.rev
+        = "(V) #{al.approver}" if al.approver_id.present?
+        = "<br/><span class='dark_grey'>(A) #{al.nuller}</span>".html_safe if al.nuller_id.present?
+      %td.cur
+        - if al.can_destroy?
+          = link_to "borrar", al, :class => 'delete fl', :title => 'Borrar', 'data-confirm' => account_ledger_destroy_confirm_dialog(al)
+
+
