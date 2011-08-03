@@ -9,7 +9,7 @@
   %thead
     %tr
       %th Fecha
-      %th{:style => 'width: 300px'} Cuenta
+      %th{:style => 'width: 300px'} Descripción
       %th Cantidad <br/>#{transaction.currency_plural}
       %th.tip{:title => 'Intenreses/Penalidades'} Int./Pena.<br/>#{transaction.currency_plural}
       %th Total fila <br/>#{transaction.currency_plural}
@@ -19,7 +19,7 @@
     - transaction.account_ledgers.includes(:account).active.each do |al|
       %tr.al{ :id => al.id, :class => "#{al.active.to_s}"}
         %td= lo(al.created_at)
-        %td.account= link_to al.account, al
+        %td.account= link_to al.description, account_ledger_path(al, :ac_id => al.to_id)
         %td.cur.amount{'data-val' => al.amount} #{ntc al.amount}
         %td.cur.interests_penalties{'data-val' => al.interests_penalties} #{ntc al.interests_penalties}
         %td.cur.total_amount{'data-val' => al.amount}= ntc al.amount
