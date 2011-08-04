@@ -396,3 +396,15 @@ ul.menu{
   }
 }
 
+
+// List of banks or cashses
+.accounts_list{ padding: 0px; margin: 0px; }
+.accounts_list li{ 
+  list-style: none; 
+  padding: 4px;
+  margin-bottom: 10px;
+  border-top: 1px solid #BFBFEF;
+  border-bottom: 1px solid #CFEFEF;
+}
+.accounts_list li h3{ margin: 2px 4px; }
+.accounts_list li p{padding: 2px 5px; }

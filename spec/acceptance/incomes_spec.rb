@@ -29,6 +29,7 @@ feature "Income", "test features" do
      :email => true }.merge(options)
   end
 
+
   background do
     create_organisation_session
     create_user_session
@@ -362,8 +363,6 @@ feature "Income", "test features" do
     i.save_payment.should == false
     i.reload
 
-    p.account.cur(1).amount.should == 0
-
     # Make a deposit
     al = AccountLedger.new_money(:operation => "in", :account_id => bank_account.id, :to_id => client_account.id, :amount => i.balance, :reference => "Check 1120012" )
     al.save.should == true
@@ -379,6 +378,15 @@ feature "Income", "test features" do
     i.balance.should == 0
 
     p.account.cur(1).amount.should == 0
+
+    i18ntrans = I18n.t("transaction.#{i.class}")
+    txt = I18n.t("account_ledger.payment_description", 
+      :pay_type => i18ntrans[:pay], :trans => i18ntrans[:class], 
+      :ref => "#{i.ref_number}", :account => p.account_name
+    )
+    p.account.cur(1).amount.should == 0
+    p.description.should == txt
+
   end
 
   scenario "Make payment with a contact account and with different currency" do
@@ -420,6 +428,21 @@ feature "Income", "test features" do
     i.save_payment.should == true
 
     income_account = Account.org.find_by_original_type("Income")
+    
+    log.info("Set the correct description for a payment with other currency")
+    c1 = Currency.find(i.currency_id)
+    c2 = Currency.find(p.currency_id)
+
+    i18ntrans = I18n.t("transaction.#{i.class}")
+    txt = I18n.t("account_ledger.payment_description", 
+      :pay_type => i18ntrans[:pay], :trans => i18ntrans[:class], 
+      :ref => "#{i.ref_number}", :account => p.account_name
+    )
+    txt << " " << I18n.t("currency.exchange_rate",
+      :cur1 => "#{c1.symbol} 1" , 
+      :cur2 => "#{ p.currency_symbol } 0,50"
+    )
+    p.description.should == txt
 
     i.balance.should == i.total - 30
     

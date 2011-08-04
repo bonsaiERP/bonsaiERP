@@ -1,21 +1,9 @@
 - content_for :links do
   .links= link_to "Nueva caja", new_cash_path, :class => 'new'
 
-:css
-  #cashs{ padding: 0px; margin: 0px; }
-  #cashs li{ 
-    list-style: none; 
-    padding: 4px;
-    margin-bottom: 10px;
-    border-top: 1px solid #BFBFEF;
-    border-bottom: 1px solid #CFEFEF;
-  }
-  #cashs li h3{ margin: 2px 4px; }
-  #cashs li p{padding: 2px 5px; }
-
 %h1 Cuentas caja
 
-%ul#cashs
+%ul#cashes.accounts_list
   - @cashes.each do |cash|
     %li
       ._30.fl

@@ -35,5 +35,5 @@ es:
       class: "Gasto"
       pay: "pago"
   currency:
-    tipo_cambio:
-      "tipo de cambio de {cur1} a %{cur2}"
+    exchange_rate:
+      "tipo de cambio de %{cur1} = %{cur2}"

@@ -39,7 +39,7 @@ class AccountLedgersController < ApplicationController
     else
       flash[:error] = @account_ledger.errors[:base].join(", ")
     end
-    redirect_to @account_ledger
+    redirect_to account_ledger_path(@account_ledger, :ac_id => @account_ledger.account_id)
   end
 
   # POST /account_ledgers
@@ -48,7 +48,7 @@ class AccountLedgersController < ApplicationController
     @account_ledger = AccountLedger.new_money(params[:account_ledger])
     if @account_ledger.save
       flash[:notice] = "Se ha creado exitosamente la transacción"
-      redirect_to @account_ledger.account.accountable
+      redirect_to account_ledger_path(@account_ledger, :ac_id => @account_ledger.account_id)
     else
       render :action => 'new'
     end

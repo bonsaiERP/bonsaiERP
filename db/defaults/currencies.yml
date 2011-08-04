@@ -5,7 +5,7 @@
     code: BOB
   - id: 2
     name: Dolar
-    symbol: '$'
+    symbol: '$us'
     code: USD
   - id: 3
     name: Euro

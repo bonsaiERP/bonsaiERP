@@ -4,8 +4,8 @@
     %li #{link_to @bank, banks_path} <span>&gt;</span>
 
   .links
-    = link_to "Nuevo", items_path, :class => 'add'
-    = link_to "Ver", @item, :class => 'show'
+    /= link_to "Nuevo banco", items_path, :class => 'add'
+    = link_to "Ver", @bank.account, :class => 'show'
     = link_to "Borrar", items_path, :class => 'delete', :confirm => 'Esta seguro de borrar el ítem', :method => :delete
 
 %h1 Editar banco

@@ -26,8 +26,9 @@
     / Currency
     - unless currency_id == @transaction.currency_id
       %h4.black 
-        %span.n 1 #{@transaction.currency.name} = 
-        #{ntc @transaction.exchange_rate, :precision => 4}</span> #{currency_name.pluralize}
+        %span.n #{@transaction.currency_symbol} 1 = 
+        #{currency_symbol}
+        #{ntc @transaction.exchange_rate, :precision => 4}
   .input= @transaction.description unless @transaction.description.blank?
 .clear
 

@@ -10,20 +10,15 @@ module Models::Transaction::Payment
   include ActionView::Helpers::NumberHelper
 
   included do
-    attr_reader :contact_payment, :current_ledger
+    attr_reader :contact_payment, :current_ledger, :payment
     validate :valid_number_of_legers, :if => :payment?
-    before_create :set_account_ledger_exchange_rate, :if => :payment?
+    before_save :set_account_ledger_extra_data, :if => :payment?
   end
 
   module InstanceMethods
-    def payment?; false; end
 
-    def contact_payment?
-      @contact_payment === true
-    end
-
-    def set_contact_payment(val = true)
-      @contact_payment = true
+    def payment?
+      @payment === true
     end
 
     def new_payment(params = {})
@@ -34,10 +29,8 @@ module Models::Transaction::Payment
       params.delete(:to_id)
 
       @current_ledger = account_ledgers.build(params) {|al| al.operation = get_account_ledger_operation }
-
       @current_ledger.set_payment(true)
-      
-      def self.payment?; true; end # To activate callbacks and validations
+      @payment = true # To activate callbacks and validations
 
       @current_ledger
     end
@@ -48,7 +41,6 @@ module Models::Transaction::Payment
 
       @current_ledger.to_id = ::Account.org.find_by_original_type(self.class.to_s).id
       @current_ledger.conciliation = get_conciliation_for_account
-      @current_ledger.description = get_payment_description
       mark_paid_pay_plans if credit? # anulate pay_plans if credit
 
       self.balance = balance - @current_ledger.amount
@@ -58,24 +50,6 @@ module Models::Transaction::Payment
     end
 
     private
-      def get_payment_description
-        i18ntrans = I18n.t("transaction.#{self.class}")
-
-        #Cobro de Venta V1212, cuenta Karina Luna
-        txt = I18n.t("account_ledger.payment_description", 
-          :pay_type => i18ntrans[:pay], :trans => i18ntrans[:class], 
-          :ref => "#{self.ref_number}", :account => @current_ledger.account_name
-        )
-
-        # Add currency text if necessary
-        #txt << " " << I18nt("currency.tipo_cambio",
-        #  :cur1 => "#{self.currency_symbol} 1" , 
-        #  :cur2 => "#{ @current_ledger.currency_symbol } #{@current_ledger.exchange_rate}"
-        #) unless currency_id == @current_ledger.currency_id
-
-        txt
-      end
-
       def valid_account_ledger?
         if @current_ledger.amount > balance
           @current_ledger.errors[:amount] = I18n.t("errors.messages.payment.greater_amount")
@@ -147,9 +121,32 @@ module Models::Transaction::Payment
       end
     
       def set_account_ledger_exchange_rate
-        if account.currency_id === currency_id
+        if @current_ledger.currency_id === currency_id
           @current_ledger.exchange_rate = 1
         end
+      end
+
+      def set_account_ledger_description
+        i18ntrans = I18n.t("transaction.#{self.class}")
+
+        #Cobro de Venta V1212, cuenta Karina Luna
+        txt = I18n.t("account_ledger.payment_description", 
+          :pay_type => i18ntrans[:pay], :trans => i18ntrans[:class], 
+          :ref => "#{self.ref_number}", :account => @current_ledger.account_name
+        )
+
+        # Add currency text if necessary
+        txt << " " << I18n.t("currency.exchange_rate",
+          :cur1 => "#{currency_symbol} 1" , 
+          :cur2 => "#{ @current_ledger.currency_symbol } #{number_to_currency @current_ledger.exchange_rate}"
+        ) unless currency_id === @current_ledger.currency_id
+
+        @current_ledger.description = txt
+      end
+
+      def set_account_ledger_extra_data
+        set_account_ledger_exchange_rate
+        set_account_ledger_description
       end
   end
 end

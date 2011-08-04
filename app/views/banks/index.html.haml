@@ -1,21 +1,9 @@
 - content_for :links do
   .links= link_to "Nueva cuenta bancaria", new_bank_path, :class => 'new'
 
-:css
-  #banks{ padding: 0px; margin: 0px; }
-  #banks li{ 
-    list-style: none; 
-    padding: 4px;
-    margin-bottom: 10px;
-    border-top: 1px solid #BFBFEF;
-    border-bottom: 1px solid #CFEFEF;
-  }
-  #banks li h3{ margin: 2px 4px; }
-  #banks li p{padding: 2px 5px; }
-
 %h1 Cuentas bancarias
 
-%ul#banks
+%ul#banks.accounts_list
   - @banks.each do |bank|
     - account = bank.account
     %li

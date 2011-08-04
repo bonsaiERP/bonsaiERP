@@ -1,16 +1,16 @@
 // javascript
-$('#payments_table').append("<%= escape_javascript(render('payment', :payment => @payment)) %>");
+$('#payments_table').append("<%= escape_javascript(render('payment', :payment => @account_ledger)) %>");
 $('#payments .message').remove();
 
-<% unless @payment.transaction_cash? %>
+<% unless @account_ledger.transaction_cash? %>
   $('#payments h2').after(createMessageCont('Se ha actualizado el <a id="tab_pay_plan_link" href="#tab_pay_plans">crédito</a>'));
 <% end %>
 $('#tab_pay_plan_link').die().live('click', function() { $('#tab_pay_plans').trigger("click") });
 
 $('#tab_pay_plans').one('click', function() {
   $('#pay_plans').html(AjaxLoadingHTML());
-  $.get('/pay_plans/<%= @payment.transaction_id %>');
+  $.get('/pay_plans/<%= @account_ledger.transaction_id %>');
 });
 
-$('#payments_table #total_payment').html("<%= ntc @payment.transaction.payments_amount_interests_total %>");
-$('body').trigger('transaction', [<%= raw @payment.transaction.to_json %>] );
+$('#payments_table #total_payment').html("<%= ntc @account_ledger.transaction.payments_amount_interests_total %>");
+$('body').trigger('transaction', [<%= raw @account_ledger.transaction.to_json %>] );
