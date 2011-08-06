@@ -35,7 +35,7 @@ class ClientsController < ApplicationController
 
     if @client.save
       if request.xhr?
-        render :json => @client.attributes.merge( :account => @client.account.attributes )
+        render :json => @client.to_json( :include => :account )
       else
         redirect_to @client.account
       end
