@@ -6,11 +6,11 @@
 
 -content_for :links do
   %ul.breadcrumps
-    %li #{link_to "Cuentas bancarias", banks_path}<span>&gt;</span>
+    %li #{link_to "Cuentas caja", banks_path}<span>&gt;</span>
 
   .links
-    /= link_to 'Nueva', new_bank_path, :class => 'add', :title => "Nueva cuenta bancaria"
-    = link_to 'Editar banco', edit_bank_path(bank), :class => 'edit', :title => "Editar cuenta bancaria"
+    /= link_to 'Nueva', new_money_store_path, :class => 'add', :title => "Nueva cuenta bancaria"
+    = link_to 'Editar caja', edit_bank_path(bank), :class => 'edit', :title => "Editar cuenta caja"
 
 %h1.mb5 <span class="dark_grey n">Banco:</span> #{bank.name}
 %h3.mt5.dark_grey= "#{bank.number} (en #{bank.currency.name.pluralize})"
@@ -42,7 +42,7 @@
 .clear
 
 %h2 Transacciones
-= render "account_ledgers/money", :account => @account, :ledgers => @ledgers, :path => "/banks", :ref_title => 'Ref./Nº Cheque'
+= render @partial, @locals
 
 :javascript
   $(function() {
@@ -56,4 +56,5 @@
       }
     });
   })
+
 
