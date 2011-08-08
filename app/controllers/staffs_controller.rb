@@ -34,7 +34,7 @@ class StaffsController < ApplicationController
 
     if @staff.save
       if request.xhr?
-        render :json => @staff.attributes.merge( :account => @staff.account.attributes )
+        render :json => @staff.to_json( :methods => [:account_id, :account_name] )
       else
         redirect_to staff_path(@staff.id)
       end

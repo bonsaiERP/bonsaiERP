@@ -39,7 +39,11 @@ module Models::Transaction::Payment
       return false unless payment?
       return false unless valid_account_ledger? # Don't use valid_ledger? when set @current_ledger otherwise validations are run twice
 
-      @current_ledger.to_id = ::Account.org.find_by_original_type(self.class.to_s).id
+      if @current_ledger.account_id == account_id
+        @current_ledger.to_id = ::Account.org.find_by_original_type(self.class.to_s).id
+      else
+        @current_ledger.to_id = account_id
+      end
       @current_ledger.conciliation = get_conciliation_for_account
       mark_paid_pay_plans if credit? # anulate pay_plans if credit
 

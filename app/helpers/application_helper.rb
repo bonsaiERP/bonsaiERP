@@ -53,10 +53,34 @@ module ApplicationHelper
   # @param String
   # @param Hash
   # @return String
-  def link_tab(text, uri, option, options = {})
+  def link_tab(text, url, option, options = {})
     params[:option] = 'all' if params[:option].nil?
     active = (params[:option] == option) ? "active" : ""
-    link_to text, "#{uri}?option=#{option}", options.merge(:class => active)
+    link_to text, "#{url}?option=#{option}", options.merge(:class => active)
+  end
+
+  def jquery_tabs(text, url)
+    params[:tab]
+  end
+
+  def jqueryui_ul
+    content_tag(:ul, :class => 'ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all') do
+      yield
+    end
+  end
+
+  def jquery_tabs(options = {}, &bl)
+    id = options[:tab_id] || "tab"
+
+    content_tag(:div, :id => id, :class => "ui-tabs ui-widget ui-widget-content ui-corner-all") do
+      yield
+    end
+  end
+
+  def tab(text, url, type)
+    css = "ui-tabs ui-tabs-nav"
+    css << " ui-tabs-selected li ui-state-active ui-corner-top" if type === params[:tab]
+    content_tag(:li, link_to(text, url), :class => css)
   end
 
   # returns the minus image with a size

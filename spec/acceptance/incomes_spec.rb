@@ -49,18 +49,19 @@ feature "Income", "test features" do
     log.info "Creating new income"
     i = Income.new(income_params.merge(:account_id => client_account.id))
 
-    i.cash.should == true
+    i.should be_cash
     i.save_trans.should == true
+    i.should be_draft
 
     i.reload
     log.info "Checking details, cash and balance for income"
     i.transaction_details.size.should == 2
-    i.cash.should == true
+    i.should be_cash
     tot = ( 3 * 10 + 5 * 20 ) * 0.97
     i.total.should == tot.round(2)
     i.balance.should == i.total
     i.total_currency.should == i.total
-    i.state.should == "draft"
+    i.should be_draft
 
     log.info "Checking income details"
     i.transaction_details[0].balance.should == 10
@@ -93,7 +94,7 @@ feature "Income", "test features" do
     bal = i.balance
 
     i.save_payment.should == true
-    p.to_id.should == Account.org.find_by_original_type(i.class.to_s).id
+    p.to_id.should == i.account_id#Account.org.find_by_original_type(i.class.to_s).id
     p.description.should_not == blank?
 
     i.balance.should == bal - 30
@@ -101,7 +102,7 @@ feature "Income", "test features" do
     ac2 = p.account_ledger_details[1].account
 
     ac1.original_type.should == "Bank"
-    ac2.original_type.should == "Income"
+    ac2.original_type.should == "Client"
 
     p.account_ledger_details[0].state.should == 'uncon'
     p.account_ledger_details[0].organisation_id.should be(p.organisation_id)
@@ -111,7 +112,7 @@ feature "Income", "test features" do
     ac1.amount.should == 0
     ac2.amount.should == 0
 
-    p.conciliate_account.should == true
+    p.conciliate_account.should be_true#.should == true
 
     p.approver_id.should == UserSession.user_id
     p.approver_datetime.kind_of?(Time).should == true
@@ -356,7 +357,7 @@ feature "Income", "test features" do
     i.total.should == tot.round(2)
     i.balance.should == i.total
 
-    i.approve!.should == true
+    i.approve!.should be_true
 
     p = i.new_payment(:account_id => client_account.id, :exchange_rate => 1, :reference => 'Test for client')
     p.amount.should == i.balance
@@ -373,10 +374,12 @@ feature "Income", "test features" do
     p = i.new_payment(:account_id => client_account.id, :reference => 'Test for client', :exchange_rate => 1)
 
     client_account.reload.cur(1).amount.should == -i.balance
+    p.amount.should == i.balance
 
-    i.save_payment.should == true
+    i.save_payment.should be_true
     i.balance.should == 0
 
+    p.conciliation.should be_true
     p.account.cur(1).amount.should == 0
 
     i18ntrans = I18n.t("transaction.#{i.class}")

@@ -34,7 +34,7 @@ class SuppliersController < ApplicationController
 
     if @supplier.save
       if request.xhr?
-        render :json => @supplier.attributes.merge( :account => @supplier.account.attributes )
+        render :json => @supplier.to_json( :methods => [:account_id, :account_name] )
       else
         redirect_to supplier_path(@supplier.id)
       end

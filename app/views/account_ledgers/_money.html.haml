@@ -1,16 +1,16 @@
-:css
-  .out td.col{ color: #FF0000; }
-  td.r{width: 110px; }
-  td.check{width: 170px;}
-  td.d{ width: 70px; }
-  td.desc {width: 300px; }
-  td.cont {width: 150px; }
-  td.rev {width: 200px; }
-  a.concile{
-    float:left;
-    display: inline-block;
-    margin-right: 4px;
-  }
+/:css
+/  .out td.col{ color: #FF0000; }
+/  td.r{width: 110px; }
+/  td.check{width: 170px;}
+/  td.d{ width: 70px; }
+/  td.desc {width: 300px; }
+/  td.cont {width: 150px; }
+/  td.rev {width: 200px; }
+/  a.concile{
+/    float:left;
+/    display: inline-block;
+/    margin-right: 4px;
+/  }
 
 %ul.menu
   %li
@@ -35,8 +35,6 @@
 
 
 = link_to "Buscar", "#search", :class => 'search'
-/"#", :style => 'display:block;float:left;margin:10px'
-/.get_by_option(params[:option]).order("date DESC").page(@page)
 
 = paginate ledgers
 
@@ -59,7 +57,7 @@
         = link_to lo(al.created_at), account_ledger_path(al, :ac_id => account.id), :class => "b #{conciliate_css(al)}"
         %br/
         = al.reference
-      %td.cur.col= ntc al.account_amount
+      %td.cur.color= ntc al.account_amount
       %td.cont= link_to al.related_account, al.related_account
       %td.desc= link_description al
       %td.rev

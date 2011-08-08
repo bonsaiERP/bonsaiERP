@@ -5,6 +5,6 @@
   %td.cur.interests_penalties{'data-vaccount_ledger' => account_ledger.interests_penalties} #{ntc account_ledger.interests_penalties}
   %td.cur.totaccount_ledger_amount{'data-vaccount_ledger' => account_ledger.amount}= ntc account_ledger.amount
   %td.actions
-- unless account_ledger.conciliation?
-  = link_to "Revisar", account_ledger.account_ledger, :title => 'Revisar con cuenta bancaria', :class => 'conciliate sync fl', :style => 'margin-right: 10px' unless account_ledger.conciliation?
-  = link_to "borrar", account_ledger, :class => 'delete', :title => 'Anular', :remote => true, :confirm => delete_confirm(account_ledger)
+    - unless account_ledger.conciliation?
+      = link_to "Revisar", account_ledger, :title => 'Revisar con cuenta bancaria', :class => 'conciliate sync fl', :style => 'margin-right: 10px' unless account_ledger.conciliation?
+      = link_to "borrar", account_ledger, :class => 'delete', :title => 'Anular', :remote => true, :confirm => "Esta seguro de eliminar?"

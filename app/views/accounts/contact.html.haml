@@ -12,11 +12,12 @@
 
 .clear
 
-#tabs.ui-tabs.ui-widget.ui-widget-content.ui-corner-all
-  %ul.ui-tabs-nav.ui-helper-reset.ui-helper-clearfix.ui-widget-header.ui-corner-all
-    %li.ui-tabs.ui-tabs-nav.ui-tabs-selected.li.ui-state-active= link_to "Transactiones", account_path(@account, :tab => "trans")
-    %li.ui-tabs.ui-tabs-nav= link_to "Ventas", account_path(@account, :tab => "incomes")
-    %li.ui-tabs.ui-tabs-nav= link_to "Compras", account_path(@account, :tab => "buys")
-
+= jquery_tabs :tab_id => "contact_tab" do
+  =jqueryui_ul do
+    =tab "Transacciones", account_path(@account, :tab => 'transactions'), "transactions"
+    =tab "Ventas", account_path(@account, :tab => 'incomes'),"incomes"
+    =tab "Compras", account_path(@account, :tab => 'buys'),"buys"
+    =tab "Gastos", account_path(@account, :tab => 'expenses'),"expenses"
   %p &nbsp;
-  = render show_account_partial(params[:tab]), :ledgers => @ledgers, :account => @account
+  = render @partial, @locals
+

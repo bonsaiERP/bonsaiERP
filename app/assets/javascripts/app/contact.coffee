@@ -2,12 +2,14 @@
 # To use: $('#elem').contactAutocomplete(["Client", "Supplier"], {'model': 'Contact'})
 class ContactAutocomplete
   constructor: (@elem, @models, @options)->
-    @models ||= ["Client", "Supplier", "Staff"]
+    @models  ||= ["Client", "Supplier", "Staff"]
     @options ||= {}
 
     @model = @options.model || "Account"
-    @cont = $(@elem).parents('.input:first')
+    @cont  = $(@elem).parents('.input:first')
     @cont.removeClass 'numeric'
+
+    @contact_callback = options['callback'] || getContactCallback()
 
     @.setInitial()
     @.setRoutes()
@@ -24,7 +26,7 @@ class ContactAutocomplete
     @auto_id = @options.id || (new Date).getTime()
 
     input = $('<input/>').attr(
-      'id': @options.id || @auto_id
+      'id'      : @auto_id
       'type'    : 'text'
       'size'    : 35
       'name'    : @options.name || @auto_id
@@ -70,7 +72,7 @@ class ContactAutocomplete
           self["route#{k}"] = "/#{mod}_autocomplete"
         when "Account"
           self["route#{k}"] = "/#{mod}_account_autocomplete"
-   # Appends the labels
+  # Appends the labels
   labels: ->
     arr = []
     name = (new Date()).getTime()
@@ -103,12 +105,29 @@ class ContactAutocomplete
       when "Client"   then "Cliente"
       when "Supplier" then "Proveedor"
       when "Staff"    then "Personal"
+  # Callback
+  getContactCallback: ->
+    self = @
+    (resp)->
+      if self.model == "Contact"
+        id   = resp.id
+        name = resp.matchcode
+      else
+        id   = resp.account_id || resp.account.id
+        name = resp.account_name || resp.account.name
+      $(self.elem).val(id)
+
+      $(self.auto_id).val(name)
   # sets the events for the laels
   setEvents: ->
     self = @
 
     @cont.find('input:radio').click ->
       self.setSelectedLabel() unless self.type == this.value
+    # Add new contact
+    callback = @options['callback'] || @.getContactCallback()
+    $('body').live "new_contact_#{@input.id}", (e, resp)->
+      callback(resp)
   # changes the clases for the selected
   setSelectedLabel: ->
     self = @

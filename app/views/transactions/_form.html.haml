@@ -146,11 +146,4 @@
       }, 100);
     });
 
-    // Functions to add new contact and new project
-    $('body').live('new_contact', function(e, resp) {
-      $('#' + type + '_contact_id').createSelectOption(resp.id, resp.matchcode);
-    }).live('new_project', function(e, resp) {
-      $('#' + type + '_project_id').createSelectOption(resp.id, resp.name);
-    });
-
   });
