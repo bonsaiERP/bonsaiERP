@@ -12,10 +12,12 @@
     = f.association :unit, :collection => Unit.org,:label => "Unidad", :input_html => { 'data-new_url' => new_unit_path, 'data-trigger' => 'new_unit', 'data-title' => 'Nueva unidad de medidad' }
   .clear
     = f.input :active, :label => "Activo", :as => :radio
-
-  = f.input :ctype, :label => 'Tipo', :collection => Item.get_types(params[:scope]), :as => :radio
-  /= f.input :discount, :label => 'Descuento en venta (%)', :hint => 'Ej: 10:2.5 20:4'
-  /= f.input :tag_list, :label => 'Etiquetas', :hint => 'Escriba palabras separadas por comas, Ej.: grande, costoso'
+  - if f.object.new_record?
+    = f.input :ctype, :label => 'Tipo', :collection => Item.get_types(params[:scope]), :as => :radio, :hint => 'No se puede modificar despues'
+  - else
+    %label Tipo
+    = f.object.get_type
+  .clear
   = f.input :description, :as => :text, :input_html => {:rows => 5}
   .clear
   

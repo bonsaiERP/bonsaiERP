@@ -4,12 +4,24 @@
 class Item < ActiveRecord::Base
 
   acts_as_org
+
+  include Models::Account::ServiceAccount
+
+  attr_readonly :ctype
+
   #before_save :set_stockable
   before_save    :create_price
   before_create  :set_type_and_stockable
   before_destroy :check_items_destroy
 
   TYPES = ["item", "expense", "product", "service"]
+  TYPES.each do |met|
+    class_eval <<-CODE, __FILE__, __LINE__
+      def #{met}?
+        "#{met}" === ctype
+      end
+    CODE
+  end
 
   #acts_as_taggable
 
@@ -18,8 +30,6 @@ class Item < ActiveRecord::Base
   has_many :prices
   has_many :stocks
   has_many :transaction_details
-
-  # belongs_to :itemable, :polymorphic => true
   
 
   attr_accessible :name, :unit_id, :code, :description, :price, :discount, :tag_list, :unitary_cost, :ctype, :active
@@ -39,6 +49,7 @@ class Item < ActiveRecord::Base
   # scopes
   #default_scope where(:active => true)
   scope :active   , where(:active => true)
+  scope :service  , where(:ctype => 'service')
 
   scope :json     , select("id, name, price")
 
@@ -126,77 +137,78 @@ class Item < ActiveRecord::Base
 
 private
 
-  # Creates a price to check in the history
-  def create_price 
-    prices.build
-  end
-
-  # Validations for discount
-  def validate_discount
-    return true if self.discount.blank?
-    if self.discount =~ /^([+-]?[0-9]+)(\.\d)?$/
-      validate_discount_number
-    else
-      validate_discount_range
+    # Creates a price to check in the history
+    def create_price 
+      prices.build
     end
-  end
 
-  # Validates the discount if it is a number
-  def validate_discount_number
-    disc = self.discount.to_f
-    if disc < 0
-      self.errors.add(:discount, I18n.t("activerecord.errors.messages.greater_than_or_equal_to", :count => 0))
-    elsif disc > 100
-      self.errors.add(:discount, I18n.t("activerecord.errors.messages.less_than_or_equal_to", :count => 100))
-    end
-  end
-
-
-  # validates the discount if it is a range
-  def validate_discount_range
-    if self.discount =~ self.class.reg_discount_range and !self.discount.blank?
-      validate_discount_range_values
-    else
-      self.errors.add(:discount, I18n.t("activerecord.errors.messages.invalid") )
-    end
-  end
-
-  # Validates that all values within a range are possitive and the percentage is less than 0
-  # [number]:[percentage]
-  # A translation for activerecord.errors.messages.invalid_range_percentage must be added
-  def validate_discount_range_values
-    curr_val = curr_per = 0
-    first = true
-    discount_values.each do |val, per|
-      #if per > 100
-      #  self.errors.add(:discount, I18n.t("activerecord.errors.messages.invalid_range_percentage"))
-      #  break
-      #end
-      unless first
-        if val <= curr_val or per <= curr_per
-          self.errors.add(:discount, I18n.t("activerecord.errors.messages.invalid_range_secuence"))
-          break
-        end
+    # Validations for discount
+    def validate_discount
+      return true if self.discount.blank?
+      if self.discount =~ /^([+-]?[0-9]+)(\.\d)?$/
+        validate_discount_number
+      else
+        validate_discount_range
       end
-      first = false
-      curr_val, curr_per = val, per
     end
-  end
 
-  # checks if there are any items on destruction
-  def check_items_destroy
-    if TransactionDetail.org.where(:item_id => id).any?
-      errors.add(:base, "El item es usado en otros registros relacionados")
-      false
-    else
-      true
+    # Validates the discount if it is a number
+    def validate_discount_number
+      disc = self.discount.to_f
+      if disc < 0
+        self.errors.add(:discount, I18n.t("activerecord.errors.messages.greater_than_or_equal_to", :count => 0))
+      elsif disc > 100
+        self.errors.add(:discount, I18n.t("activerecord.errors.messages.less_than_or_equal_to", :count => 100))
+      end
     end
-  end
 
-  def set_type_and_stockable
-    self.stockable = ["item", "product"].include?(self.ctype)
-    self.type = (ctype == "service")? "ItemService" : "Item"
-  end
+
+    # validates the discount if it is a range
+    def validate_discount_range
+      if self.discount =~ self.class.reg_discount_range and !self.discount.blank?
+        validate_discount_range_values
+      else
+        self.errors.add(:discount, I18n.t("activerecord.errors.messages.invalid") )
+      end
+    end
+
+    # Validates that all values within a range are possitive and the percentage is less than 0
+    # [number]:[percentage]
+    # A translation for activerecord.errors.messages.invalid_range_percentage must be added
+    def validate_discount_range_values
+      curr_val = curr_per = 0
+      first = true
+      discount_values.each do |val, per|
+        #if per > 100
+        #  self.errors.add(:discount, I18n.t("activerecord.errors.messages.invalid_range_percentage"))
+        #  break
+        #end
+        unless first
+          if val <= curr_val or per <= curr_per
+            self.errors.add(:discount, I18n.t("activerecord.errors.messages.invalid_range_secuence"))
+            break
+          end
+        end
+        first = false
+        curr_val, curr_per = val, per
+      end
+    end
+
+    # checks if there are any items on destruction
+    def check_items_destroy
+      if TransactionDetail.org.where(:item_id => id).any?
+        errors.add(:base, "El item es usado en otros registros relacionados")
+        false
+      else
+        true
+      end
+    end
+
+    def set_type_and_stockable
+      self.stockable = ["item", "product"].include?(self.ctype)
+      self.type = (ctype == "service")? "ItemService" : "Item"
+    end
+
   #def set_stockable
   #  self.stockable = ( self.ctype != 'Service' )
   #  # Must return true, sometimes assigment is false and returns false so the
