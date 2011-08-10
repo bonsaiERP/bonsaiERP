@@ -91,7 +91,6 @@ module Models::Transaction::PayPlan
         # set the amount
         amt = (bal - @current_pay_plan.amount > 0) ? @current_pay_plan.amount : bal
         int = bal * int_per
-        pdate += PAY_PLANS_DATE_SEPARATION
         adate = pdate - 5.days
 
         pay_plans.build(
@@ -102,6 +101,8 @@ module Models::Transaction::PayPlan
           :email => @current_pay_plan.email,
           :currency_id => currency_id
         )
+
+        pdate += PAY_PLANS_DATE_SEPARATION
         bal -= amt
       end
     end

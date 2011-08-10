@@ -199,6 +199,7 @@ feature "Income", "test features" do
     i.save_pay_plan.should == true
     i.reload
 
+    i.pay_plans.first.payment_date.should == d
     i.pay_plans.size.should == (i.balance/30).ceil
     tot_pps = i.pay_plans.inject(0) {|s,pp| s += pp.amount unless pp.paid?; s }
     tot_pps.should == i.balance
@@ -231,6 +232,8 @@ feature "Income", "test features" do
     
     i.pay_plans.unpaid.size.should == (i.total/30).ceil - 1
     i.balance.should == i.total - 30
+    i.payment_date.should.should == i.pay_plans.unpaid.first.payment_date
+
     p.amount.should == 30
     ac1 = p.account
     ac2 = p.to
@@ -465,68 +468,60 @@ feature "Income", "test features" do
     i.pay_plans_total.should == i.total - 30
   end
 
-  #scenario 'client payment' do
-  #  log.info "Testing"
+  scenario "check different updates and modifications to pay_plans" do
+    i = Income.new(income_params.merge(:account_id => client_account.id))
+    i.save_trans.should == true
 
-  #  #ApplicationController.any_instance.stubs(:check_authorization! => true)
-  #  Authorization.stubs(:check_authorization! => true)
+    tot = ( 3 * 10 + 5 * 20 ) * 0.97
+    i.total.should == tot.round(2)
+    i.balance.should == i.total
 
-  #  #controller.stubs(:check_authorization! => true)
+    i.approve!.should == true
 
-  #  i = Income.new(income_params.merge(:account_id => client_account.id))
-  #  #i.save_trans.should == true
-  #  #i.approve!.should == true
+    # Create PayPlan
+    d = Date.today
 
-  #  i = Income.last
-  #  puts i.attributes
-  #  tot = ( 3 * 10 + 5 * 20 ) * 0.97
+    # Approve credit
+    i.approve_credit(:credit_reference => "Ref 23728372", :credit_description => "Yeah").should == true
+    i.reload
+    i.cash.should be(false)
+    i.pay_plans.size.should == 1
+    i.pay_plans.first.amount.should == i.balance
+    i.payment_date.should == i.pay_plans.first.payment_date
 
-  #  #i.approve!.should == true
+    pp = i.pay_plans.first
+    i.edit_pay_plan(pp.id, :amount => 30, :payment_date => d - 3.days, :alert_date => d - 8.days, :repeat => true)
 
-  #  ## Approve credit
-  #  #i.approve_credit(:credit_reference => "Ref 23728372", :credit_description => "Yeah").should == true
+    i.save_pay_plan.should be(true)
+    i.reload
+    i.pay_plans.first.payment_date.should == d - 3.days
+    i.pay_plans.first.alert_date.should == d - 8.days
 
-  #  #d = Date.today
-  #  #i.new_pay_plan(:amount => 30, :repeat => true, :payment_date => d, :alert_date => d - 5.days)
-  #  #i.save_pay_plan.should == true
-  #  #i.pay_plans.size.should == (i.balance/30).ceil
+    i.pay_plans.size.should be( ( i.balance/30 ).ceil )
 
-  #  ## bank creation and client deposits in another currency
-  #  #new_bank = create_bank(:currency_id => 2)
-  #  #new_bank_account = new_bank.account
-  #  #new_bank_account.amount.should == 0
-  #  #al = AccountLedger.new_money(:operation => 'in', :account_id => new_bank_account.id, :to_id => client_account.id, :amount => 200, :reference => "Other currency check")
+    pp = i.pay_plans[2]
+    options = pp.attributes.merge(:amount => 40)
+    i.edit_pay_plan(pp.id, options)
+    i.save_pay_plan.should be(true)
 
-  #  #client_account.cur(2).amount.should == 0
+    i.reload
 
-  #  #al.save.should == true
-  #  #al.conciliate_account.should == true
+    ppsize = 2 + ( (tot - 60)/40 ).ceil
+    i.pay_plans.size.should be(ppsize)
 
-  #  #new_bank_account.reload
-  #  #new_bank_account.amount.should == 200
-  #  #client_account.reload.cur(2).amount.should == -200
+    p = i.new_payment(:account_id => bank_account.id, :amount => 25, :exchange_rate => 1, :reference => 'Cheque 143234', :operation => 'out')
 
-  #  #p = i.new_payment(:account_id => client_account.id, :amount => 30,
-  #  #             :exchange_rate => 0.5, :currency_id => 2, :reference => 'Last check')
-  #  #i.save_payment.should == true
+    i.save_payment.should be(true)
+    i.reload
 
-  #  #income_account = Account.org.find_by_original_type("Income")
+    i.pay_plans.unpaid.first.payment_date.should == i.pay_plans.first.payment_date
+    i.balance.should == i.total - 25
 
-  #  #i.balance.should == i.total - 30
-  #  #
-  #  #client_account.reload
+    p.null_account.should be(true)
+    i.reload
 
-  #  #p.conciliation.should == true
+    i.balance.should == i.total
+    i.pay_plans.unpaid.inject(0) {|s, pp| s += pp.amount}.should == i.total
+  end
 
-  #  #client_account.reload
-  #  #income_account.reload
-
-  #  #client_account.cur(2).amount.should == -200 + 15
-  #  #income_account.cur(2).amount.should == -15
-
-  #  #i.reload
-  #  #i.pay_plans.unpaid.size.should == ( (i.total - 30)/30 ).ceil
-  #  #i.pay_plans.paid.size.should == 1
-  #  #i.pay_plans_total.should == i.total - 30
-  #end
 end

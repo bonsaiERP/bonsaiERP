@@ -12,7 +12,8 @@ module Models::Transaction::Payment
   included do
     attr_reader :contact_payment, :current_ledger, :payment
     validate :valid_number_of_legers, :if => :payment?
-    before_save :set_account_ledger_extra_data, :if => :payment?
+    before_save :set_account_ledger_description, :if => :payment?
+    before_validation :set_account_ledger_exchange_rate, :if => :payment
   end
 
   module InstanceMethods
@@ -64,7 +65,7 @@ module Models::Transaction::Payment
       end
 
       def get_conciliation_for_account
-        case @current_ledger.account.original_type
+        case @current_ledger.account_original_type
         when "Bank" then false
         when "Cash" then true
         when "Client", "Supplier", "Staff" then true
@@ -88,13 +89,25 @@ module Models::Transaction::Payment
         int = @current_ledger.interests_penalties
         current_pp = false
 
-        sort_pay_plans.each do |pp|
+        pps = sort_pay_plans
+        pps.each do |pp|
           amt -= pp.amount
           pp.paid = true
           if amt <= 0
             current_pp = pp
             break 
           end
+        end
+        # Update payment_date for Transaction
+        if amt === 0
+          begin
+            ind = pps.index(current_pp)
+            self.payment_date = pps[ind + 1].payment_date
+          rescue
+            self.payment_date = current_pp.payment_date
+          end
+        else
+          self.payment_date = current_pp.payment_date
         end
 
         create_payment_pay_plan(current_pp, amt) if current_pp and amt < 0
@@ -125,7 +138,9 @@ module Models::Transaction::Payment
       end
     
       def set_account_ledger_exchange_rate
-        if @current_ledger.currency_id === currency_id
+        ac = @current_ledger.account
+
+        if ac.currency_id === currency_id and not(Contact::TYPES.include?(ac.original_type) )
           @current_ledger.exchange_rate = 1
         end
       end
@@ -148,9 +163,5 @@ module Models::Transaction::Payment
         @current_ledger.description = txt
       end
 
-      def set_account_ledger_extra_data
-        set_account_ledger_exchange_rate
-        set_account_ledger_description
-      end
   end
 end

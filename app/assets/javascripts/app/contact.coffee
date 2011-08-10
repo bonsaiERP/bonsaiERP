@@ -9,8 +9,6 @@ class ContactAutocomplete
     @cont  = $(@elem).parents('.input:first')
     @cont.removeClass 'numeric'
 
-    @contact_callback = options['callback'] || getContactCallback()
-
     @.setInitial()
     @.setRoutes()
     @.labels()
@@ -55,7 +53,7 @@ class ContactAutocomplete
     .data(
       'title'  : "Nuevo #{@.getLocalizedLabel(@type).toLowerCase()}"
       'url'    : @.getAddUrl()
-      'trigger': "new_contact"
+      'trigger': "new_contact_#{@options.id}"
     )
   # Url for adding new contact
   getAddUrl: ->
@@ -95,6 +93,7 @@ class ContactAutocomplete
 
     @cont.prepend( $('<div/>').addClass('autocomplete-labels boolean').html arr.join('') )
 
+    # setEvents
     setTimeout ->
       self.setEvents()
     , 500
@@ -115,9 +114,10 @@ class ContactAutocomplete
       else
         id   = resp.account_id || resp.account.id
         name = resp.account_name || resp.account.name
+
       $(self.elem).val(id)
 
-      $(self.auto_id).val(name)
+      $("#" + self.auto_id).val(name)
   # sets the events for the laels
   setEvents: ->
     self = @
@@ -126,7 +126,7 @@ class ContactAutocomplete
       self.setSelectedLabel() unless self.type == this.value
     # Add new contact
     callback = @options['callback'] || @.getContactCallback()
-    $('body').live "new_contact_#{@input.id}", (e, resp)->
+    $('body').live "new_contact_#{self.auto_id}", (e, resp)->
       callback(resp)
   # changes the clases for the selected
   setSelectedLabel: ->

@@ -20,6 +20,7 @@ module Models::AccountLedger
 
     module ClassMethods
 
+      # Creates a new ledger, but if the account is nor a MoneyStore returns false
       def new_money(params = {})
         params.transform_date_parameters!("date")
         params.symbolize_keys.assert_valid_keys( :operation, :account_id, :to_id, :amount, :reference, :date, :exchange_rate, :description )
@@ -27,6 +28,8 @@ module Models::AccountLedger
         ac = AccountLedger.new(params)
         def ac.money?; true; end
         ac.conciliation = false
+
+        return false unless ac.account_accountable.is_a?(MoneyStore)
         
         ac
       end

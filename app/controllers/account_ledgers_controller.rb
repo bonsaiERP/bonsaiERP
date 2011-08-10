@@ -23,11 +23,14 @@ class AccountLedgersController < ApplicationController
 
   def new
     @account_ledger = AccountLedger.new_money(:operation => params[:operation], :account_id => params[:account_id])
+    
+    redirect_to "/dashboard" unless @account_ledger
   end
 
   # GET /account_ledgers/:id/new_transference
   def new_transference
     @account_ledger = AccountLedger.new_money(:operation => "trans", :account_id => params[:account_id])
+    redirect_to "/dashboard" unless @account_ledger
   end
   #
   # PUT /account_ledgers/:id/conciliate 

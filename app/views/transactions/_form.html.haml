@@ -97,9 +97,7 @@
     = f.submit 'Salvar'
 
 :javascript
-
   $( function() {
-
     // Autocomplete
     $('#transaction_account_id').contactAutocomplete(#{get_contact_list.to_json}, {'id': 'contact_autocomplete'});
 
@@ -118,19 +116,14 @@
     window.transaction = transaction;
 
     // Functions for the select boxes
-    $('body').live('new_contact', function(e, resp) {
-      $('#transaction_account_id').val(resp.account.id);
-      $('#contact_autocomplete').val(resp.matchcode);
-    }).live('new_project', function(e, resp) {
+    $('body').live('new_project', function(e, resp) {
       $('#' + type + '_project_id').createSelectOption(resp.id, resp.name);
     });
-
 
     // New item triger
     $('#items_table a.add').live('click', function() {
       $('#items_table').data('row', $(this).parents('tr:first').get(0).rowIndex );
     });
-
 
     // new_item trigger
     $('body').live('new_item', function(e, resp) {

@@ -192,12 +192,19 @@ describe AccountLedger do
   end
 
   it 'should initialize with money? = true' do
-    al = AccountLedger.new_money({})
-    al.money?.should == true
+    AccountLedger.any_instance.stubs(:account_accountable => Bank.new)
+    al = AccountLedger.new_money({:account_id => 1})
+    al.should be_money
 
-    al.valid?.should == false
-    al.errors[:account_id].any?.should == true
-    al.errors[:to_id].any?.should == true
+    al.should_not be_valid
+    al.errors[:account_id].any?.should be(true)
+    al.errors[:to_id].any?.should be(true)
+  end
+
+  it 'should retunr false in case tha account is not MoneyStore' do
+    AccountLedger.any_instance.stubs(:account_accountable => Client.new)
+    al = AccountLedger.new_money({:account_id => 1})
+    al.should be(false)
   end
 
   it 'should now allow other attributes for new_money' do
@@ -226,4 +233,5 @@ describe AccountLedger do
 
     al.payment_link_id.should == 2
   end
+
 end

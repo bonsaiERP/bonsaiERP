@@ -62,7 +62,6 @@
     %p <span class='dark'>Aprobado por:</span> <strong>#{@transaction.approver}</strong> <i>#{lo @transaction.approver_datetime}</i>
 
 :javascript
-
   $(function () {
 
     $('#tabs').tabs();
@@ -93,33 +92,5 @@
       }
     });
 
-    // Only when in edition
-    if("#{@transaction.state}" == "draft") {
-      // Deleted data
-      $('body').live("del-pay_plan", function(resp) {
-        try{
-          if(resp.transaction_cash == true) {
-            $('#cash_credit_title').html('Crédito');
-          }else if(resp.transaction_cash == false){
-            $('#cash_credit_title').html('Contado');
-          }
-        } catch(e) {}
-      }).live('transaction', function(e, resp) {
-        if(resp.transaction_cash) {
-          $('#cash_credit_title').html("Contado");
-        }else{
-          $('#cash_credit_title').html("Crédito");
-        }
-      });
-    }else {
-      // When it has been approved
-      $('body').live('transaction', function(e, resp) {
-        
-        $('h3#balance').html("#{@transaction.currency_symbol} " + _b.ntc(resp.balance) );
-        $('#due_on').html(_b.dateFormat(resp.payment_date));
-
-        setIncomeState(resp.real_state);
-      });
-    }
   });
 

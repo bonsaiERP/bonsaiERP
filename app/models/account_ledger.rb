@@ -67,7 +67,7 @@ class AccountLedger < ActiveRecord::Base
   # currency
   delegate :name, :symbol, :code, :to => :currency, :prefix => true, :allow_nil => true
   # account
-  delegate :currency_id, :name, :original_type, :accountable_type, :to => :account, 
+  delegate :currency_id, :name, :original_type, :accountable_type, :accountable, :to => :account, 
     :prefix => true, :allow_nil => true
   # to
   delegate :currency_id, :name, :original_type, :accountable_type, 

@@ -1,5 +1,5 @@
 %h1.mb5{:style => 'display:inline-block;'} #{transaction_title(@transaction)}  #{@transaction.ref_number}
-%span.b#income_state{:class => @transaction.real_state, :style => 'font-size:1.3em; min-width: 30px'}= @transaction.show_state
+%span.b#transaction_state{:class => @transaction.real_state, :style => 'font-size:1.3em; min-width: 30px'}= @transaction.show_state
 %h2.n.mt5= link_to @transaction.account, @transaction.account
 
 ._70.fl

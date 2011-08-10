@@ -20,4 +20,28 @@ describe AccountLedgersController do
       response.should render_template('account_ledgers/show_contact')
     end
   end
+
+  describe "GET /accounts_ledgers/new" do
+    it 'should assing correctly' do
+      stub_auth
+      AccountLedger.stubs(:new_money => AccountLedger.new)
+
+      get :new, :account_id => 1, :operation => "in"
+      
+      response.should render_template("account_ledgers/new")
+    end
+
+    it 'should redirect because it is not a money account' do
+      stub_auth
+      AccountLedger.stubs(:new_money => false)
+
+      get :new, :account_id => 1, :operation => "in"
+      
+      response.should redirect_to("/dashboard")
+    end
+  end
+
+  describe "GET /account_ledgers/new_transference" do
+    
+  end
 end
