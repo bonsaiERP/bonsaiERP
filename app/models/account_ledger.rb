@@ -67,10 +67,10 @@ class AccountLedger < ActiveRecord::Base
   # currency
   delegate :name, :symbol, :code, :to => :currency, :prefix => true, :allow_nil => true
   # account
-  delegate :currency_id, :name, :original_type, :accountable_type, :accountable, :to => :account, 
-    :prefix => true, :allow_nil => true
+  delegate :currency_id, :name, :original_type, :accountable_type, :accountable, :amount,
+    :to => :account, :prefix => true, :allow_nil => true
   # to
-  delegate :currency_id, :name, :original_type, :accountable_type, 
+  delegate :currency_id, :name, :original_type, :accountable_type, :amount,
     :to => :to, :prefix => true, :allow_nil => true
   # transaction
   delegate :type, :to => :transaction, :prefix => true, :allow_nil => true
@@ -108,6 +108,11 @@ class AccountLedger < ActiveRecord::Base
     else
       self.save
     end
+  end
+
+  # Creates a hash with the methods
+  def create_hash(*methods)
+    Hash[ methods.map {|m| [m, self.send(m)] } ]
   end
 
   # Makes the conciliation to update accounts

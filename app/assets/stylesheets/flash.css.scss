@@ -10,7 +10,11 @@
 }
 
 .message{
-  @include flash(lighten($black, 10%));
+  @include flash($dark, darken($white, 5%));
+  font-size: 95%;
+  padding: 10px;
+  width: 50%;
+  position: relative;
 }
 
 a.close{

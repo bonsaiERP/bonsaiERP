@@ -12,7 +12,7 @@ $('#tab_pay_plans').one('click', function() {
   $.get('/pay_plans/<%= @account_ledger.transaction_id %>');
 });
 
-$('#payments_table #total_payment').html("<%= ntc @account_ledger.transaction.payments_amount_interests_total %>");
+$('#payments_table #total_payment').html("<%= ntc @transaction.total_payments_with_interests %>");
 
 // transaction
 $('#transaction_state').removeClass("<%= Transaction::STATES.join(" ") %>")

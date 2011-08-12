@@ -1,5 +1,5 @@
 class ExchangeRate
-  constructor: (@input, @observe, @amount, @currency_id, @accounts, @currencies, @contact)->
+  constructor: (@input, @observe, @amount, @currency_id, @accounts, @currencies, @contact, @account_data)->
     @$input = $(@input)
     @$label = @$input.siblings 'label'
     @$hide  = @$input.parents "div:first"
@@ -88,10 +88,14 @@ class ExchangeRate
   # Creates option box and events for the contact
   setContactCurrencies: ->
     html = ''
+    # Selected if any
+    sel = "#{@account_data.account_id}-#{@account_data.currency_id}"
 
     for currency_id, amount of @contact.currencies
       if @contact.currencies[currency_id] < 0
-        html += "<option class='i' value='#{@contact.id}-#{currency_id}'>"
+        val = "#{@contact.id}-#{currency_id}"
+        selected = if sel == val then "selected='selected'" else ""
+        html += "<option class='i' value='#{val}' #{selected}>"
         cur = @currencies[currency_id * 1]
         html += "(#{cur.symbol} #{Math.abs amount}) #{@contact.name}</option>"
 

@@ -7,8 +7,6 @@
   :account_number: 'Supplier'
 - :name: 'Personal'
   :account_number: 'Staff'
-- :name: 'Servicios'
-  :account_number: 'Service'
 - :name: 'Banco'
   :account_number: 'Bank'
 - :name: 'Caja'

@@ -14,7 +14,7 @@ describe AccountLedgersController do
     end
 
     it 'should render contact template' do
-      AccountLedger.any_instance.stubs(:account_accountable_type => 'Contact')
+      AccountLedger.any_instance.stubs(:to_accountable_type => 'Contact')
       stub_auth
       get :show, :id => 1, :ac_id => 10
       response.should render_template('account_ledgers/show_contact')

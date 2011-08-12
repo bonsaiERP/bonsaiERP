@@ -40,7 +40,7 @@ module Models::Transaction::Payment
       return false unless payment?
       return false unless valid_account_ledger? # Don't use valid_ledger? when set @current_ledger otherwise validations are run twice
 
-      if @current_ledger.account_id == account_id
+      if @current_ledger.account_id === account_id
         @current_ledger.to_id = ::Account.org.find_by_original_type(self.class.to_s).id
       else
         @current_ledger.to_id = account_id
@@ -140,7 +140,7 @@ module Models::Transaction::Payment
       def set_account_ledger_exchange_rate
         ac = @current_ledger.account
 
-        if ac.currency_id === currency_id and not(Contact::TYPES.include?(ac.original_type) )
+        if ac and ac.currency_id === currency_id and not(Contact::TYPES.include?(ac.original_type) )
           @current_ledger.exchange_rate = 1
         end
       end
