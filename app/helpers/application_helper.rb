@@ -19,6 +19,30 @@ module ApplicationHelper
     val ? "Si": "No"
   end
 
+  # Creates an otion link
+  # @param String text
+  # @param String url
+  # @param String option
+  def link_option(text, url, option, options = {})
+    options[:class] = "#{ options[:class] } #{( params[:option] === option ? 'active' : '' )}"
+
+    link_to text, create_options_url(url.dup, option), options
+  end
+
+  # Creates the url for the link_option
+  def create_options_url(url, option)
+    opts = params.merge(:option => option)
+    [:controller, :action].each {|v| opts.delete(v) }
+    opts.delete(:id) if url =~ /^.+\/\d+$/
+    first = true
+
+    opts.inject(url) do |s,(k,v)|
+      sym = first ? "?" : "&"
+      first = false
+      s << "#{sym}#{k}=#{v}"
+    end
+  end
+
   # Presents number to currency
   def ntc(val = nil, options = {})
     number_to_currency(val.to_f, options)
@@ -53,10 +77,27 @@ module ApplicationHelper
   # @param String
   # @param Hash
   # @return String
-  def link_tab(text, url, option, options = {})
+  def link_tab(url, option, options = {})
     params[:option] = 'all' if params[:option].nil?
+
     active = (params[:option] == option) ? "active" : ""
-    link_to text, "#{url}?option=#{option}", options.merge(:class => active)
+    url = "#{url}?option=#{option}" << create_options_link
+
+    link_to text, url, options.merge(:class => active)
+  end
+
+  def tab_url(url)
+    url << create_options_link
+  end
+
+  def create_options_link
+    opts = params
+    opts.delete(:controller)
+    opts.delete(:action)
+    opts.inject("") do |s,(k,v)|
+      sym = s.blank? ? "?" : "&"
+      s << "#{sym}#{k}=#{v}"
+    end
   end
 
   def jquery_tabs(text, url)

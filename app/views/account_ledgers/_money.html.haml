@@ -1,17 +1,3 @@
-/:css
-/  .out td.col{ color: #FF0000; }
-/  td.r{width: 110px; }
-/  td.check{width: 170px;}
-/  td.d{ width: 70px; }
-/  td.desc {width: 300px; }
-/  td.cont {width: 150px; }
-/  td.rev {width: 200px; }
-/  a.concile{
-/    float:left;
-/    display: inline-block;
-/    margin-right: 4px;
-/  }
-
 %ul.menu
   %li
     = link_to "Nuevo <span class='more'></span>".html_safe, "#", :class => 'new'
@@ -25,10 +11,10 @@
 .clear
 <br/><br/>
 %ul.tabs
-  %li= link_to "Todas", account_path(account, :option => 'all'), :class => tabs_filter('all')
-  %li= link_to "Esperando verificación #{size_or_blank(account.account_ledgers.pendent.count)}", account_path(account, :option => 'uncon'), :class => tabs_filter('uncon')
-  %li= link_to "Anuladas", account_path(account, :option => 'nulled'), :class => tabs_filter('nulled')
-  %li= link_to "Verificadas", account_path(account, :option => 'con'), :class => tabs_filter('con')
+  %li= link_option "Todas", account_path(account), 'all'
+  %li= link_option "Esperando verificación", account_path(account), 'uncon'
+  %li= link_option "Anuladas", account_path(account), 'nulled'
+  %li= link_option "Verificadas", account_path(account), 'con'
 
 
 .clear

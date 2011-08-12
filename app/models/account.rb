@@ -22,7 +22,10 @@ class Account < ActiveRecord::Base
   has_many :account_ledgers
   has_many :account_ledger_details
   has_many :account_currencies, :autosave => true
-  has_many :incomes, :class_name => "Transaction", :conditions => "transactions.type = 'Income'"
+  # Transaction
+  has_many :incomes,  :class_name => "Transaction", :conditions => "transactions.type = 'Income'"
+  has_many :buys,     :class_name => "Transaction", :conditions => "transactions.type = 'Buy'"
+  has_many :expenses, :class_name => "Transaction", :conditions => "transactions.type = 'Expense'"
 
   # validations
   validates_presence_of :currency_id, :name

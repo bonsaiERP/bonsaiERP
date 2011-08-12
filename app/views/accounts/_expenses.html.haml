@@ -1,0 +1,60 @@
+- url = account_path(account)
+%ul.tabs
+  %li= link_option "Todas", url, 'all'
+  %li= link_option "Esperando aprobación #{size_or_blank(expenses.draft.size)}", url, 'draft'
+  %li= link_option "Esperando pago #{size_or_blank(expenses.approved.size)}", url,'awaiting_payment'
+  %li= link_option "Vencidas #{size_or_blank(expenses.due.size)}", url, 'due'
+  %li= link_option "Pagadas", url, 'paid'
+
+#search_income.search{:style => show_if_search}
+  %a.close{:href => "#"} cerrar
+  %h3 Buscar ventas
+  =form_tag "/expenses", :method => 'get' do
+    =hidden_field_tag "search_div_id", "search_expenses"
+    .input
+      %label Cliente o Nº de referencia
+      =text_field_tag 'search', params[:search], :size => 40
+    .input
+      %label Estado
+      =select_tag "option", options_for_select(list_income_states, params[:option])
+    %div
+    =submit_tag 'Buscar'
+
+= link_to "Buscar", "#search_income", :class => 'search'
+
+= paginate expenses.page(@page)
+
+%table{ :class => 'decorated nwl' }
+  %thead
+    %tr
+      %th.tip{:title => 'Estado'} Est.
+      %th.tip{ :title => 'Número de referencia' } Nº Ref.
+      /%th Cliente
+      %th Vence el
+      %th Total<br/>#{currency_symbol}
+      %th Saldo<br/>#{currency_symbol}
+      %th.tip{:title => 'Saldo Inventario'} Saldo<br/>Inv. #{currency_symbol}
+      %th.tip{:title => 'Moneda'} Mon.
+      %th.tip{:title => "Contado Crédito"} Tipo
+      %th Fecha Hora
+      %th
+
+  %tbody
+    - expenses.page(@page).each do |expense|
+      %tr{ :class => cycle(:odd, :even) }
+        %td 
+          %span{:class => "#{expense.real_state} tip", :title => expense.show_state}
+        %td= link_to expense.ref_number, expense, :class => 'b'
+        /%td= expense.account
+        %td= lo expense.payment_date unless expense.paid?
+        %td.cur= ntc exchange(expense, :real_total, currency_rates)
+        %td.cur= ntc exchange(expense, :balance, currency_rates)
+        %td.cur= ntc expense.balance_inventory
+        %td <span>#{expense.currency_symbol}</span>
+        %td= cash_credit(expense.cash)
+        %td.nw= lo expense.created_at
+        %td.actions
+          = bonsai_links(expense) if expense.draft?
+
+
+

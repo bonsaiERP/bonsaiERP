@@ -1,10 +1,11 @@
+- url = account_path(account)
 %ul.tabs
-  %li= link_incomes "Todas", 'all'
-  %li= link_incomes "Esperando aprobación #{size_or_blank(incomes.draft.size)}", 'draft'
-  %li= link_incomes "Esperando cobro #{size_or_blank(incomes.approved.size)}", 'awaiting_payment'
-  %li= link_incomes "Vencidas #{size_or_blank(incomes.due.size)}", 'due'
-  %li= link_incomes "Con inventario pendiente #{size_or_blank(incomes.inventory.size)}", 'inventory'
-  %li= link_incomes "Cobradas", 'paid'
+  %li= link_option "Todas", url, 'all'
+  %li= link_option "Esperando aprobación #{size_or_blank(incomes.draft.size)}", url, 'draft'
+  %li= link_option "Esperando cobro #{size_or_blank(incomes.approved.size)}", url,'awaiting_payment'
+  %li= link_option "Vencidas #{size_or_blank(incomes.due.size)}", url, 'due'
+  %li= link_option "Con inventario pendiente #{size_or_blank(incomes.inventory.size)}", url, 'inventory'
+  %li= link_option "Cobradas", url, 'paid'
 
 #search_income.search{:style => show_if_search}
   %a.close{:href => "#"} cerrar
