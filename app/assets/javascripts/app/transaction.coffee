@@ -130,7 +130,7 @@ class Transaction
     self = @
 
     $(grid_sel).find("#{price_sel}, #{quantity_sel}").live("focusout keyup", (event)->
-      return false unless event.keyCode == 13
+      return false if event.type == 'keyup' and event.keyCode != $.ui.keyCode.ENTER
       target = event.target || event.srcElement
       val = $(target).val() * 1
       $(target).val(val.round(2))

@@ -2,9 +2,9 @@
   %ul.breadcrumps
     %li #{link_to "Items", items_path} <span>&gt;</span>
   .links
-    = link_to "Nuevo", items_path, :class => 'add'
+    = link_to "Nuevo", new_item_path, :class => 'add'
     = link_to "Ver", @item, :class => 'show'
-    = link_to "Borrar", items_path, :class => 'delete', :confirm => 'Esta seguro de borrar el ítem', :method => :delete
+    = link_to "Borrar", @item, :class => 'delete', :confirm => 'Esta seguro de borrar el ítem', :method => :delete
 
 %h1 Editar ítem
 
