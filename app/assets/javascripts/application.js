@@ -6,7 +6,7 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require jquery-ui-1.8.12.custom.min.js
+//= require jquery-ui-1.8.15.custom.min.js
 //= require sugar-0.9.min.js
 //= require tooltip.min.js
 //= require base.js.coffee
