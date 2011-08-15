@@ -38,7 +38,7 @@ class ItemsController < ApplicationController
   # POST /items
   # POST /items.xml
   def create
-    @item = Item.new_item(params[:item])
+    @item = Item.new(params[:item])
 
     if @item.save
       if request.xhr?

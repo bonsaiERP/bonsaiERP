@@ -48,7 +48,7 @@ class BanksController < ApplicationController
 
     respond_to do |format|
       if @bank.save
-        format.html { redirect_to(@bank, :notice => 'El banco fue creado. Por favor realice la concilición de la primera transacción para actualizar su saldo en cuenta') }
+        format.html { redirect_to(@bank, :notice => 'La cuenta bancaria fue creada.') }
         format.xml  { render :xml => @bank, :status => :created, :location => @bank }
       else
         format.html { render :action => "new" }
@@ -62,7 +62,7 @@ class BanksController < ApplicationController
   def update
     respond_to do |format|
       if @bank.update_attributes(params[:bank])
-        format.html { redirect_to(@bank, :notice => 'Banco actualizado.') }
+        format.html { redirect_to(@bank, :notice => 'Los datos de la cuenta Bancaria fueron actualizado.') }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }

@@ -8,8 +8,10 @@ module  Models::Account
     extend ActiveSupport::Concern
 
     included do
-      before_save :select_account_type_and_create, :if => :new_record?
-      before_save :set_account_name
+      with_options :if => :service? do |serv|
+        serv.before_save :create_new_account, :if => :new_record?
+        serv.before_save :set_account_name
+      end
 
       has_one :account, :as => :accountable, :autosave => true
     end
@@ -20,6 +22,7 @@ module  Models::Account
     module InstanceMethods
 
       private
+
       def create_new_account
         self.build_account(
           :currency_id => OrganisationSession.currency_id,
@@ -31,27 +34,9 @@ module  Models::Account
         }
       end
 
-      # Selects the methods neccessary accordiny the class
-      def select_account_type_and_create
-        if new_record? and service?
-
-          case self.class.to_s
-            when "Bank", "Cash" 
-              self.extend Models::Account::MoneyAccount
-            when "ItemService"
-              if service?
-                self.extend Models::Account::ServiceAccount
-              else
-                can_save = service?
-              end
-          end
-
-          create_new_account
-        end
-      end
-
       def set_account_name
-        account.name = self.to_s if service?
+        puts "is Service #{service?}"
+        account.name = self.to_s
       end
 
     end

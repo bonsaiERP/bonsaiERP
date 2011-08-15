@@ -1,6 +1,5 @@
 = simple_form_for(@item) do |f|
   = bonsai_form_error(f)
-  /= f.input :ctype, :as => :hidden
   = hidden_field_tag "scope", params[:scope] if params[:scope].present?
 
   = f.input :code, :label => 'Código'

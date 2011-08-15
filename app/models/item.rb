@@ -9,6 +9,8 @@ class Item < ActiveRecord::Base
 
   attr_readonly :ctype
 
+  set_inheritance_column :class_type
+
   #before_save :set_stockable
   before_save    :create_price
   before_create  :set_type_and_stockable
