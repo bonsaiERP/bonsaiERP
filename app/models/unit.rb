@@ -17,7 +17,7 @@ class Unit < ActiveRecord::Base
   attr_accessible :name, :symbol, :integer
 
   # validations
-  validates_presence_of :name, :symbol, :organisation_id
+  validates_presence_of :name, :symbol
 
 
   def to_s

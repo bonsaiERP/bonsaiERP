@@ -42,6 +42,14 @@ class Contact < ActiveRecord::Base
     matchcode
   end
 
+  def show_type
+    case type
+    when "Client" then I18n.t("contact.client")
+    when "Supplier" then I18n.t("contact.supplier")
+    when "Staff" then I18n.t("contact.staff")
+    end
+  end
+
   def pdf_name
     "#{first_name} #{last_name}"
   end

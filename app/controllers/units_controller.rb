@@ -36,7 +36,7 @@ class UnitsController < ApplicationController
   # POST /units
   # POST /units.xml
   def create
-    @unit = Unit.create(params[:unit])
+    @unit = Unit.new(params[:unit])
 
     if @unit.save
       redirect_ajax @unit

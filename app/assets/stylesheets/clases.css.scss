@@ -349,6 +349,9 @@ a.sync{
   background-color: $red; 
 }
 
+.dashlet{
+  @include dashlet;
+}
 
 /***********************************/
 /* MENU CLASS */

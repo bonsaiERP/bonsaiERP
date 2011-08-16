@@ -36,7 +36,7 @@ class StaffsController < ApplicationController
       if request.xhr?
         render :json => @staff.to_json( :methods => [:account_id, :account_name] )
       else
-        redirect_to staff_path(@staff.id)
+        redirect_to @staff.account
       end
     else
       render :action => 'new'

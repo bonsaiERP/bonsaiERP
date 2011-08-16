@@ -21,6 +21,14 @@ module AccountsHelper
     end
   end
 
+  def link_contacts(account)
+    case account.original_type
+    when "Client"   then link_to "Clientes", clients_path
+    when "Supplier" then link_to "Proveedores", suppliers_path
+    when "Staff"    then link_to "Personal", staffs_path
+    end
+  end
+
   # links to the correct account for account_ledger
   def link_account(al)
     ac = al.ac_id == al.account_id ? :account : :to

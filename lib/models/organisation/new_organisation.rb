@@ -7,12 +7,11 @@ module Models::Organisation::NewOrganisation
   extend ActiveSupport::Concern
   
   included do
-    before_create :set_organisation, :unless => 'organisation_id.present?'
     attr_readonly :organisation_id
+    before_create :set_organisation, :unless => 'organisation_id.present?'
   end
 
   module InstanceMethods
-
     private
       def set_organisation
         self.organisation_id = OrganisationSession.organisation_id

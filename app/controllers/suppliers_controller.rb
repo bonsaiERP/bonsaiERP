@@ -15,6 +15,7 @@ class SuppliersController < ApplicationController
   # GET /suppliers/1
   # GET /suppliers/1.xml
   def show
+    @account = @supplier.account
   end
 
   # GET /suppliers/new
@@ -36,7 +37,7 @@ class SuppliersController < ApplicationController
       if request.xhr?
         render :json => @supplier.to_json( :methods => [:account_id, :account_name] )
       else
-        redirect_to supplier_path(@supplier.id)
+        redirect_to @supplier.account
       end
     else
       render :action => 'new'

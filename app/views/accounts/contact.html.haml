@@ -3,13 +3,16 @@
 
 - content_for :links do
   %ul.breadcrumps
-    %li #{link_to "Clientes", contact_account_type_link(@account, :plural)} <span>&gt;</span>
+
+    %li #{link_contacts @account} <span>&gt;</span>
   .links
     = link_to 'Nuevo', contact_account_type_link(@account, :new), :class => 'new'
     = link_to 'Editar', contact_account_type_link(@account, :edit), :class => 'edit'
     = link_to 'Borrar', contact_account_type_link(@account, :destroy), :class => 'delete'
 
-%h1= @account.name
+%h1{:style => 'display:inline-block'}= @account.name
+%span.dashlet.b.bg_dark= @account.accountable.show_type
+.clear
 
 = render 'contacts/show', :klass => @account.accountable
 
