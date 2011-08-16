@@ -92,7 +92,7 @@ class User < ActiveRecord::Base
 
   # returns translated roles
   def self.get_roles
-    ["Administración", "Gerencia", "Inventario", "Ventas"].zip(ROLES)
+    ["Genrencia", "Administración", "Inventario", "Ventas"].zip(ROLES)
   end
 
 private

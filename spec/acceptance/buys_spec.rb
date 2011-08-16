@@ -5,56 +5,522 @@ require File.dirname(__FILE__) + '/acceptance_helper'
 
 #expect { t2.save }.to raise_error(ActiveRecord::StaleObjectError)
 
-def income_params
-    d = Date.today
-    @income_params = {"active"=>nil, "bill_number"=>"56498797", "contact_id"=>1, 
-      "currency_exchange_rate"=>1, "currency_id"=>1, "date"=>d, 
-      "description"=>"Esto es una prueba", "discount"=>3, "project_id"=>1 
-    }
-    details = [
-      { "description"=>"jejeje", "item_id"=>1, "organisation_id"=>1, "price"=>15.5, "quantity"=> 10},
-      { "description"=>"jejeje", "item_id"=>2, "organisation_id"=>1, "price"=>10, "quantity"=> 20}
-    ]
-    @income_params[:transaction_details_attributes] = details
-    @income_params
-end
+feature "Buy", "test features" do
 
-def pay_plan_params(options)
-  d = options[:payment_date] || Date.today
-  {:alert_date => (d - 5.days), :payment_date => d,
-   :interests_penalties => 0,
-   :ctype => 'Income', :description => 'Prueba de vida!', 
-   :email => true }.merge(options)
-end
+  let(:buy_params) do
+      d = Date.today
+      @buy_params = {"active"=>nil, "bill_number"=>"56498797", "account_id"=>1, 
+        "exchange_rate"=>1, "currency_id"=>1, "date"=>d, 
+        "description"=>"Esto es una prueba", "discount" => 3, "project_id"=>1 
+      }
+      details = [
+        { "description"=>"jejeje", "item_id"=>1, "organisation_id"=>1, "price"=>3, "quantity"=> 10},
+        { "description"=>"jejeje", "item_id"=>2, "organisation_id"=>1, "price"=>5, "quantity"=> 20}
+      ]
+      @buy_params[:transaction_details_attributes] = details
+      @buy_params
+  end
 
-feature "Income", "test features" do
+  let(:pay_plan_params) do
+    d = options[:payment_date] || Date.today
+    {:alert_date => (d - 5.days), :payment_date => d,
+     :interests_penalties => 0,
+     :ctype => 'Buy', :description => 'Prueba de vida!', 
+     :email => true }.merge(options)
+  end
+
+
   background do
-    OrganisationSession.set(:id => 1, :name => 'ecuanime', :currency_id => 1)
-    UserSession.current_user = User.new(:id => 1, :email => 'admin@example.com') {|u| u.id = 1}
-
-    Bank.create!(:number => '123', :currency_id => 1, :name => 'Bank JE', :amount => 0) {|a| a.id = 1 }
-    CashRegister.create!(:name => 'Cash register Bs.', :amount => 0, :currency_id => 1, :address => 'Uno') {|cr| cr.id = 2}
-    CashRegister.create!(:name => 'Cash register $.', :amount => 0, :currency_id => 2, :address => 'None') {|cr| cr.id = 3}
-
-    Contact.create!(:name => 'karina', :last_name => 'Luna Pizarro', :matchcode => 'Karina Luna', :address => 'Mallasa') {|c| c.id = 1 }
-
-    create_currencies
-    create_currency_rates
-    create_items
+    create_organisation_session
+    create_user_session
   end
 
-  scenario "Make a buy" do
-    b.= Buy.new(b.come_params)
+  let!(:organisation) { create_organisation(:id => 1) }
+  let!(:items) { create_items }
+  let!(:bank) { create_bank(:number => '123', :amount => 0) }
+  let(:bank_account) { bank.account }
+  let!(:supplier) { create_supplier(:matchcode => 'Karina Luna') }
+  let(:supplier_account) { supplier.account }
 
-    b.save.should == true
-    pp = b.create_pay_plan(pay_plan_params(:amount => 100))
+  scenario "Create a payment with nearest pay_plan" do
 
-    b.= Income.fb.d(b.b.)
-    b.pay_plans.unpab..sb.e.should == 2
-    b.pay_plans.map(&:operation).uniq.should == ["out"]
-    b.balance.should == b.pay_plans_total
+    log.info "Creating new buy"
+    b = Buy.new(buy_params.merge(:account_id => supplier_account.id))
 
-    b.approve!
+    b.should be_cash
+    b.save_trans.should be(true)
+    #.should == true
+    b.should be_draft
 
+    b.reload
+    log.info "Checking details, cash and balance for buy"
+    b.transaction_details.size.should == 2
+    b.should be_cash
+    tot = ( 3 * 10 + 5 * 20 )
+    b.total.should == tot.round(2)
+    b.balance.should == b.total
+    b.total_currency.should == b.total
+    b.should be_draft
+
+    log.info "Checking buy details"
+    b.transaction_details[0].balance.should == 10
+    b.transaction_details[0].original_price.should == 3
+    b.transaction_details[1].balance.should == 20
+    b.transaction_details[1].original_price.should == 5
+
+    a1 = Account.find(b.account_id)
+    a1.amount.should == 0
+    a2 = Account.org.find_by_original_type("Buy")
+    a2.amount.should == 0
+
+    b.approve!.should == true
+    b.reload
+    b.approver_id.should == 1
+    b.state.should == "approved"
+
+    # Create a payment
+    b.payment?.should == false
+
+    p = b.new_payment(:account_id => bank_account.id, :amount => 30, :exchange_rate => 1, :reference => 'Cheque 143234')
+    p.class.should == AccountLedger
+    p.payment?.should == true
+    p.operation.should == 'out'
+    p.amount.should == 30
+    p.interests_penalties.should == 0
+
+    b.payment?.should == true
+
+    bal = b.balance
+
+    b.save_payment.should == true
+    p.to_id.should == b.account_id#Account.org.find_by_original_type(b.class.to_s).id
+    p.description.should_not == blank?
+
+    b.balance.should == bal - 30
+    ac1 = p.account_ledger_details[0].account
+    ac2 = p.account_ledger_details[1].account
+
+    ac1.original_type.should == "Bank"
+    ac2.original_type.should == "Supplier"
+
+    p.account_ledger_details[0].state.should == 'uncon'
+    p.account_ledger_details[0].organisation_id.should be(p.organisation_id)
+    p.account_ledger_details[1].state.should == 'uncon'
+    p.account_ledger_details[1].organisation_id.should be(p.organisation_id)
+
+    ac1.amount.should == 0
+    ac2.amount.should == 0
+
+    p.conciliate_account.should be_true#.should == true
+
+    p.approver_id.should == UserSession.user_id
+    p.approver_datetime.kind_of?(Time).should == true
+
+    p.account_ledger_details(true).map(&:state).uniq.should == ['con']
+
+    ac1.amount.should == -30
+
+    ac1.reload
+    ac2.reload
+
+    ac1.amount.should == -30
+    ac2.amount.should == 30
+
+    b.deliver.should == false
+    
+    p = b.new_payment(:account_id => bank_account.id, :amount => b.balance, :reference => 'Cheque 222289', :exchange_rate => 1)
+
+    b.save_payment.should == true
+
+    p.conciliation.should == false
+    b.state.should == 'paid'
+    b.deliver.should == false
+
+    # Conciliation
+    p.conciliate_account.should == true
+    p.reload
+
+    p.conciliation.should == true
+    b.reload
+    b.balance.should == 0
+    p.conciliation.should == true
+    b.deliver.should == true
+
+    ac1.reload
+    ac2.reload
+
+    ac1.amount.should == -b.total
+    ac2.amount.should == b.total
+    
   end
+
+  #scenario "Create a an buy with credit" do
+  #  i = Buy.new(buy_params.merge(:account_id => supplier_account.id))
+  #  i.save_trans.should == true
+
+  #  tot = ( 3 * 10 + 5 * 20 ) * 0.97
+  #  i.total.should == tot.round(2)
+  #  i.balance.should == i.total
+
+  #  i.approve!.should == true
+
+  #  # Create PayPlan
+  #  d = Date.today
+  #  pp = i.new_pay_plan(:payment_date => d, :alert_date => d - 5.days, :amount => 30)
+  #  pp.should == false
+
+  #  # Approve credit
+  #  i.approve_credit(:credit_reference => "Ref 23728372", :credit_description => "Yeah").should == true
+  #  i.reload
+  #  i.cash.should == false
+  #  i.pay_plans.size.should == 1
+  #  i.pay_plans.first.amount.should == i.balance
+  #  i.payment_date.should == i.pay_plans.first.payment_date
+  #  
+  #  i.credit?.should == true
+  #  i.creditor_id.should == UserSession.user_id
+  #  i.credit_datetime.should_not == blank?
+
+  #  pp = i.new_pay_plan(:payment_date => d, :alert_date => d - 5.days, :amount => 30)
+
+  #  pp.transaction_id.should == i.id
+  #  pp.currency_id.should == i.currency_id
+
+  #  i.save_pay_plan.should == true
+  #  i.reload
+  #  i.pay_plans.size.should == 2
+  #  i.payment_date.should == i.pay_plans.first.payment_date
+
+  #  tot_pps = i.pay_plans.inject(0) {|s,pp| s += pp.amount unless pp.paid?; s }
+  #  tot_pps.should == i.balance
+
+  #  i.new_pay_plan(:payment_date => d + 1.month, :alert_date => d - 5.days, :amount => 30, :repeat => "1")
+  #  i.save_pay_plan.should == true
+  #  i.reload
+
+  #  i.pay_plans.first.payment_date.should == d
+  #  i.pay_plans.size.should == (i.balance/30).ceil
+  #  tot_pps = i.pay_plans.inject(0) {|s,pp| s += pp.amount unless pp.paid?; s }
+  #  tot_pps.should == i.balance
+
+  #  # delete many pay_plans
+  #  pp_ids = i.pay_plans[2..i.pay_plans.size].map(&:id)
+  #  i.destroy_pay_plans(pp_ids).should == true
+  #  i.reload
+
+  #  i.pay_plans.size.should == 3
+  #  tot_pps = i.pay_plans.inject(0) {|s,pp| s += pp.amount unless pp.paid?; s }
+  #  tot_pps.should == i.balance
+
+  #  pp = i.pay_plans.last
+  #  i.new_pay_plan(:payment_date => pp.payment_date, :alert_date => pp.alert_date, :amount => 30, :repeat => "true")
+  #  i.save_pay_plan.should == true
+
+  #  i.pay_plans.unpaid.size.should == (i.balance/30).ceil
+  #  tot_pps = i.pay_plans.inject(0) {|s,pp| s += pp.amount unless pp.paid?; s }
+  #  tot_pps.should == i.balance
+
+  #  # Create a payment
+  #  p = i.new_payment(:account_id => bank_account.id, :exchange_rate => 1, :reference => 'Cheque 143234')
+  #  # Payment should have the amount of the first unpaid pay_plan
+  #  p.interests_penalties.should == 0
+  #  p.amount.should == 30
+
+  #  i.save_payment.should == true
+  #  i.reload
+  #  
+  #  i.pay_plans.unpaid.size.should == (i.total/30).ceil - 1
+  #  i.balance.should == i.total - 30
+  #  i.payment_date.should.should == i.pay_plans.unpaid.first.payment_date
+
+  #  p.amount.should == 30
+  #  ac1 = p.account
+  #  ac2 = p.to
+
+  #  ac1_amt = ac1.amount
+  #  ac2_amt = ac2.amount
+
+  #  p.conciliate_account.should == true
+
+  #  ac1.reload
+  #  ac2.reload
+  #  
+  #  ac1.amount.should == ac1_amt + 30
+  #  ac1.cur(1).amount.should == ac1_amt + 30
+  #  ac2.amount.should == ac2_amt - 30
+  #  ac2.cur(1).amount.should == ac2_amt - 30
+
+  #  # Payment that is nulled
+  #  bal = i.balance
+  #  p = i.new_payment(:account_id => bank_account.id, :exchange_rate => 1, :reference => 'Cheque 143234')
+  #  p.interests_penalties.should == 0
+
+  #  i.save_payment.should == true
+  #  i.reload
+  #  i.balance.should == bal - 30
+  #  i.pay_plans.unpaid.size.should == (i.total/30).ceil - 2
+  #  p.conciliation.should == false
+
+  #  p.null_account.should == true
+  #  i.reload
+  #  i.balance.should == bal
+  #  i.pay_plans.unpaid.size.should ==  (i.total/30).ceil - 1
+  #  tot_pps = i.pay_plans.inject(0) {|s,pp| s += pp.amount unless pp.paid?; s }
+  #  tot_pps.should == i.balance
+  #  #i.pay_plans.unpaid.each {|pp| puts "#{pp.amount} #{pp.payment_date}"}
+
+
+  #  bal = i.balance
+  #  size = i.pay_plans.unpaid.count
+  #  p = i.new_payment(:account_id => bank_account.id, :exchange_rate => 1, :reference => 'Cheque 143234', :amount => 45)
+  #  
+  #  i.save_payment.should == true
+  #  p.conciliate_account.should == true
+  #  i.reload
+
+  #  i.pay_plans.unpaid.size.should == size - 1
+  #  i.balance.should == bal - 45
+
+
+  #  p = i.new_payment(:account_id => bank_account.id, :exchange_rate => 1, :reference => 'Cheque 143234', :amount => i.balance)
+  #  
+  #  i.save_payment.should == true
+  #  i.reload
+  #  i.pay_plans.unpaid.size.should == 0
+  #  i.balance.should == 0
+  #  p.conciliate_account.should == true
+
+  #end
+
+  #scenario "Create credit with interests" do
+  #  i = Buy.new(buy_params.merge(:account_id => supplier_account.id))
+  #  i.save_trans.should == true
+
+  #  i.approve!.should == true
+
+  #  # Approve credit
+  #  i.approve_credit(:credit_reference => "Ref 23728372", :credit_description => "Yeah").should == true
+  #  i.pay_plans.unpaid.size.should == 1
+  #  i.pay_plans.first.amount.should == i.balance
+
+  #  d = Date.today
+
+  #  pp = i.new_pay_plan(:payment_date => d, :alert_date => d - 5.days, :amount => 30, :interests_penalties => i.balance/10, :repeat => "1")
+
+  #  i.save_pay_plan.should == true
+  #  i.reload
+
+  #  i.pay_plans.unpaid.size.should == (i.balance/30).ceil
+  #  
+  #  i.pay_plans[0].interests_penalties.should == (i.balance/10).round(2)
+  #  i.pay_plans[1].interests_penalties.should == ((i.balance - 30)/10).round(2)
+  #  i.pay_plans[2].interests_penalties.should == ((i.balance - 60)/10).round(2)
+
+  #  tot_pps = i.pay_plans.inject(0) {|s,pp| s += pp.amount unless pp.paid?; s }
+  #  tot_pps.should == i.balance
+
+  #  # edit pay_plan
+  #  pp = i.pay_plans[1]
+  #  pp_last = i.pay_plans.last
+  #  amt = pp_last.amount + pp.amount
+  #  int = pp_last.interests_penalties + pp.interests_penalties
+  #  i.edit_pay_plan(pp.id, :payment_date => pp.payment_date, :alert_date => pp.alert_date,
+  #                  :amount => amt , :interests_penalties => int)
+  #  i.save_pay_plan.should == true
+  #  i.reload
+
+  #  i.pay_plans.unpaid.size.should == (i.balance/30).floor
+  #  i.pay_plans[1].id.should == pp.id
+  #  i.pay_plans[1].amount.should == amt
+  #  
+  #  # edit second pay_plan and repeat pattern
+  #  pp = i.pay_plans[1]
+  #  
+  #  #puts "Before"
+  #  #i.pay_plans.each {|pp| puts "#{pp.id} #{pp.amount} #{pp.interests_penalties}" }
+  #  i.edit_pay_plan(pp.id, :payment_date => pp.payment_date, :alert_date => pp.alert_date,
+  #                  :amount => 60, :interests_penalties => 50, :repeat => true)
+  #  i.save_pay_plan.should == true
+  #  i.reload
+  #  i.pay_plans.size.should == ( (i.balance - 30)/60 ).ceil + 1
+
+  #  i.pay_plans[1].interests_penalties.should == 50
+  #  int_per = 50/( i.balance - i.pay_plans[0].amount )
+  #  i.pay_plans[2].interests_penalties.should == (int_per * (i.balance - 90) ).round(2)
+  #  #puts "After"
+  #  #i.pay_plans.each {|pp| puts "#{pp.id} #{pp.amount} #{pp.interests_penalties}" }
+  #end
+
+  #scenario "Make payment with a contact account" do
+  #  i = Buy.new(buy_params.merge(:account_id => supplier_account.id))
+  #  i.save_trans.should == true
+
+  #  tot = ( 3 * 10 + 5 * 20 ) * 0.97
+  #  i.total.should == tot.round(2)
+  #  i.balance.should == i.total
+
+  #  i.approve!.should be_true
+
+  #  p = i.new_payment(:account_id => supplier_account.id, :exchange_rate => 1, :reference => 'Test for supplier')
+  #  p.amount.should == i.balance
+  #  i.save_payment.should == false
+  #  i.reload
+
+  #  # Make a deposit
+  #  al = AccountLedger.new_money(:operation => "in", :account_id => bank_account.id, :to_id => supplier_account.id, :amount => i.balance, :reference => "Check 1120012" )
+  #  al.save.should == true
+  #  al.conciliate_account.should == true
+
+  #  i.reload
+  #  log.info "Creating payment without exchange_rate"
+  #  p = i.new_payment(:account_id => supplier_account.id, :reference => 'Test for supplier', :exchange_rate => 1)
+
+  #  supplier_account.reload.cur(1).amount.should == -i.balance
+  #  p.amount.should == i.balance
+
+  #  i.save_payment.should be_true
+  #  i.balance.should == 0
+
+  #  p.conciliation.should be_true
+  #  p.account.cur(1).amount.should == 0
+
+  #  i18ntrans = I18n.t("transaction.#{i.class}")
+  #  txt = I18n.t("account_ledger.payment_description", 
+  #    :pay_type => i18ntrans[:pay], :trans => i18ntrans[:class], 
+  #    :ref => "#{i.ref_number}", :account => p.account_name
+  #  )
+  #  p.account.cur(1).amount.should == 0
+  #  p.description.should == txt
+
+  #end
+
+  #scenario "Make payment with a contact account and with different currency" do
+  #  i = Buy.new(buy_params.merge(:account_id => supplier_account.id))
+  #  i.save_trans.should == true
+
+  #  tot = ( 3 * 10 + 5 * 20 ) * 0.97
+  #  i.total.should == tot.round(2)
+  #  i.balance.should == i.total
+
+  #  i.approve!.should == true
+
+  #  # Approve credit
+  #  i.approve_credit(:credit_reference => "Ref 23728372", :credit_description => "Yeah").should == true
+
+  #  d = Date.today
+  #  i.new_pay_plan(:amount => 30, :repeat => true, :payment_date => d, :alert_date => d - 5.days)
+  #  i.save_pay_plan.should == true
+  #  i.pay_plans.size.should == (i.balance/30).ceil
+
+  #  # bank creation and supplier deposits in another currency
+  #  new_bank = create_bank(:currency_id => 2)
+  #  new_bank_account = new_bank.account
+  #  new_bank_account.amount.should == 0
+  #  al = AccountLedger.new_money(:operation => 'in', :account_id => new_bank_account.id, :to_id => supplier_account.id, :amount => 200, :reference => "Other currency check")
+
+  #  supplier_account.cur(2).amount.should == 0
+
+  #  al.save.should == true
+  #  al.conciliate_account.should == true
+
+  #  new_bank_account.reload
+  #  new_bank_account.amount.should == 200
+  #  supplier_account.reload.cur(2).amount.should == -200
+
+  #  log.info("Paying from account with different currency")
+  #  p = i.new_payment(:account_id => supplier_account.id, :amount => 30,
+  #               :exchange_rate => 0.5, :currency_id => 2, :reference => 'Last check')
+  #  i.save_payment.should == true
+
+  #  buy_account = Account.org.find_by_original_type("Buy")
+  #  
+  #  log.info("Set the correct description for a payment with other currency")
+  #  c1 = Currency.find(i.currency_id)
+  #  c2 = Currency.find(p.currency_id)
+
+  #  i18ntrans = I18n.t("transaction.#{i.class}")
+  #  txt = I18n.t("account_ledger.payment_description", 
+  #    :pay_type => i18ntrans[:pay], :trans => i18ntrans[:class], 
+  #    :ref => "#{i.ref_number}", :account => p.account_name
+  #  )
+  #  txt << " " << I18n.t("currency.exchange_rate",
+  #    :cur1 => "#{c1.symbol} 1" , 
+  #    :cur2 => "#{ p.currency_symbol } 0,50"
+  #  )
+  #  p.description.should == txt
+
+  #  i.balance.should == i.total - 30
+  #  
+  #  supplier_account.reload
+
+  #  p.conciliation.should == true
+
+  #  supplier_account.reload
+  #  buy_account.reload
+
+  #  supplier_account.cur(2).amount.should == -200 + 15
+  #  buy_account.cur(2).amount.should == -15
+
+  #  i.reload
+  #  i.pay_plans.unpaid.size.should == ( (i.total - 30)/30 ).ceil
+  #  i.pay_plans.paid.size.should == 1
+  #  i.pay_plans_total.should == i.total - 30
+  #end
+
+  #scenario "check different updates and modifications to pay_plans" do
+  #  i = Buy.new(buy_params.merge(:account_id => supplier_account.id))
+  #  i.save_trans.should == true
+
+  #  tot = ( 3 * 10 + 5 * 20 ) * 0.97
+  #  i.total.should == tot.round(2)
+  #  i.balance.should == i.total
+
+  #  i.approve!.should == true
+
+  #  # Create PayPlan
+  #  d = Date.today
+
+  #  # Approve credit
+  #  i.approve_credit(:credit_reference => "Ref 23728372", :credit_description => "Yeah").should == true
+  #  i.reload
+  #  i.cash.should be(false)
+  #  i.pay_plans.size.should == 1
+  #  i.pay_plans.first.amount.should == i.balance
+  #  i.payment_date.should == i.pay_plans.first.payment_date
+
+  #  pp = i.pay_plans.first
+  #  i.edit_pay_plan(pp.id, :amount => 30, :payment_date => d - 3.days, :alert_date => d - 8.days, :repeat => true)
+
+  #  i.save_pay_plan.should be(true)
+  #  i.reload
+  #  i.pay_plans.first.payment_date.should == d - 3.days
+  #  i.pay_plans.first.alert_date.should == d - 8.days
+
+  #  i.pay_plans.size.should be( ( i.balance/30 ).ceil )
+
+  #  pp = i.pay_plans[2]
+  #  options = pp.attributes.merge(:amount => 40)
+  #  i.edit_pay_plan(pp.id, options)
+  #  i.save_pay_plan.should be(true)
+
+  #  i.reload
+
+  #  ppsize = 2 + ( (tot - 60)/40 ).ceil
+  #  i.pay_plans.size.should be(ppsize)
+
+  #  p = i.new_payment(:account_id => bank_account.id, :amount => 25, :exchange_rate => 1, :reference => 'Cheque 143234', :operation => 'out')
+
+  #  i.save_payment.should be(true)
+  #  i.reload
+
+  #  i.pay_plans.unpaid.first.payment_date.should == i.pay_plans.first.payment_date
+  #  i.balance.should == i.total - 25
+
+  #  p.null_account.should be(true)
+  #  i.reload
+
+  #  i.balance.should == i.total
+  #  i.pay_plans.unpaid.inject(0) {|s, pp| s += pp.amount}.should == i.total
+  #end
+
 end

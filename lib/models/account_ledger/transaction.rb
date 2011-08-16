@@ -92,12 +92,14 @@ module Models::AccountLedger::Transaction
 
           state = conciliation? ? 'con' : 'uncon'
 
+          amt = get_amount_for_transaction
+
           account_ledger_details.build(
-            :account_id => account_id, :amount => amount * exchange_rate, 
+            :account_id => account_id, :amount => amt * exchange_rate, 
             :currency_id => currency_id, :state => state
           ) {|det| det.organisation_id = organisation_id }
 
-          amt2 = -amount * exchange_rate
+          amt2 = -amt * exchange_rate
 
           account_ledger_details.build(
             :account_id => to_id, :amount => amt2, 
@@ -114,6 +116,13 @@ module Models::AccountLedger::Transaction
           end
         else
           false
+        end
+      end
+
+      def get_amount_for_transaction
+        case transaction.class.to_s
+        when "Income" then amount
+        when "Buy", "Expense" then -amount
         end
       end
 

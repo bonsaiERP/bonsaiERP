@@ -135,6 +135,10 @@ module HelperMethods
     Client.create!(contact_parameters.merge(options))
   end
 
+  def create_supplier(options)
+    Supplier.create!(contact_parameters.merge(options))
+  end
+
   def set_exchange_rate
 
   end

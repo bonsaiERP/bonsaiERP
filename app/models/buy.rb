@@ -8,14 +8,14 @@ class Buy < Transaction
   belongs_to :supplier, :foreign_key => 'contact_id'
 
 
-  attr_accessible  :ref_number,  :date,                          :contact_id,
+  attr_accessible  :ref_number,  :date,                          :account_id,
                    :project_id,  :currency_id,                   :exchange_rate,
                    :bill_number, :taxis_ids,                     :description,
                    :transaction_details_attributes
 
   #validations
   #validates_length_of   :description,          :within => 0..255
-  validates_presence_of :date, :contact_id
+  validates_presence_of :date, :account_id
   validates             :ref_number,           :presence => true , :uniqueness => { :scope => :organisation_id, :allow_blank => false}
   validate              :valid_number_of_items
 
