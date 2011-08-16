@@ -48,7 +48,7 @@ class SuppliersController < ApplicationController
   # PUT /suppliers/1.xml
   def update
     if @supplier.update_attributes(params[:supplier])
-      redirect_ajax(@supplier)
+      redirect_to(@supplier.account)
     else
       render :action => 'edit'
     end

@@ -47,7 +47,7 @@ class StaffsController < ApplicationController
   # PUT /staffs/1.xml
   def update
     if @staff.update_attributes(params[:staff])
-      redirect_ajax(@staff)
+      redirect_ajax(@staff.account)
     else
       render :action => 'edit'
     end

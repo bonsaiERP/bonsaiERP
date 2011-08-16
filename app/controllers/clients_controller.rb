@@ -48,7 +48,7 @@ class ClientsController < ApplicationController
   # PUT /clients/1.xml
   def update
     if @client.update_attributes(params[:client])
-      redirect_ajax(@client.account)
+      redirect_to(@client.account)
     else
       render :action => 'edit'
     end
