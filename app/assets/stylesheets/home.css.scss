@@ -96,7 +96,7 @@ ul{
   }
 }
 #home{
-  background: transparent url(imagenes.png) no-repeat;
+  background: transparent url(imagenes_video.png) no-repeat;
   height: 411px;
   position: relative;
   #register{
@@ -118,6 +118,11 @@ ul{
     top: 130px;
     right: 10px;
     h2{font-weight: normal; font-size: 18px;}
+  }
+  #video{
+    position: absolute;
+    top: 50px;
+    left: 10px;
   }
 }
 
