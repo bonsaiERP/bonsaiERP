@@ -158,6 +158,14 @@ class AccountLedger < ActiveRecord::Base
     end
   end
 
+  def amount_currency
+    begin
+      amount * exchange_rate
+    rescue
+      0
+    end
+  end
+
   # Returns the amount
   def account_amount
     if ac_id == account_id

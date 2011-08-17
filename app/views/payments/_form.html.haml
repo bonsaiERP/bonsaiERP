@@ -5,20 +5,30 @@
 
     = f.input :transaction_id, :as => :hidden
 
-    /= f.input :date, :label => 'Fecha'
     = f.association :account, :label => 'Cuenta <span class="n black" id="cur"></span>'.html_safe, :collection => @accounts
     .clear
 
-    = f.input :amount, :input_html => {:size => 12, :type => 'decimal'}, :label => currency_label('Cantidad', @transaction)
-    = f.input :interests_penalties, :input_html => {:size => 12, :type => 'decimal'}, :label => currency_label('Intereses/Penalidades', @transaction)
+    .input
+      // Amount
+      = f.input :amount, :input_html => {:size => 12, :type => 'decimal', :class => 'amt'}, 
+        :label => "Cantidad <span class='amount currency'></span>".html_safe
+      // Interests
+      = f.input :interests_penalties, :input_html => {:size => 12, :type => 'decimal', :clas => 'amt'}, 
+        :label => "<span class='tip' title='Intereses/Penalidades'>Int./Pen.</span> <span class='interests currency'></span>".html_safe
+    .input
+      - disp = @account_ledger.currency_id == currency_id ? 'none' : 'block'
+      - disp = 'none' if @account_ledger.currency_id.blank?
+      // Exchange rate
+      = f.input :exchange_rate, :label => "Tipo de cambio", 
+        :input_html => {:size => 12, :type => 'decimal', :class => 'amt'}, :hint => 'Puede ingresar hasta 4 decimales',
+        :wrapper_html => {:style => "display:#{disp}", :class => 'exchange_rate'}
+      .input
+        %label Total (#{@transaction.currency_symbol})
+        %span#total_currency.b
     .clear
 
     = f.input :reference, :label => 'Referencia/Nº Cheque', :input_html => {:rows => 3, :cols => 35}, :as => :text
 
-    - disp = @account_ledger.currency_id == currency_id ? 'none' : 'block'
-    = f.input :exchange_rate, :label => "Tipo de cambio de", 
-      :input_html => {:size => 12}, :hint => 'Puede ingresar hasta 4 decimales',
-      :wrapper_html => {:style => "display:#{disp}"}
 
     /= f.input :description, :label => 'Descripción', :as => :text, :input_html => {:rows => 4, :cols => 35}
     .clear
@@ -37,9 +47,8 @@
       var currencies = #{Currency.scoped.to_hash.to_json};
       var contact = #{@transaction.account.self_with_currencies_hash.to_json};
       var account_data = #{@account_ledger.create_hash(:currency_id, :account_id).to_json };
-      new ExchangeRate('#account_ledger_exchange_rate', '#account_ledger_account_id', 
-      '#account_ledger_amount,#account_ledger_interests_penalties',
-      #{@transaction.currency_id}, accounts, currencies, contact, account_data);
+
+      var p = new Payment(accounts, currencies, contact, account_data, #{@transaction.currency_id});
 
       // Display currency_rates in a new window
       $('#cur_rates').die();

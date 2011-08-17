@@ -395,6 +395,31 @@ feature "Income", "test features" do
 
   end
 
+  scenario "Pay with a differen curency" do
+    i = Income.new(income_params.merge(:account_id => client_account.id))
+    i.save_trans.should == true
+  
+    i.approve!.should == true
+
+    new_bank = create_bank(:currency_id => 2)
+    new_bank_account = new_bank.account
+    new_bank_account.amount.should == 0
+
+    p = i.new_payment(:account_id => new_bank_account.id, :amount => 30,
+                 :exchange_rate => 2, :currency_id => 2, :reference => 'Last check')
+
+    i.save_payment.should be(true)
+    i.reload
+    i.account_ledgers.first.amount.should == 30
+    i.balance.should == i.total - 2 * 30
+
+    p.conciliate_account.should == true
+
+    acs = p.account_ledger_details(true)
+    acs[0].account.cur(2).amount.should == 30
+    acs[1].account.cur(2).amount.should == -30
+  end
+
   scenario "Make payment with a contact account and with different currency" do
     i = Income.new(income_params.merge(:account_id => client_account.id))
     i.save_trans.should == true
@@ -430,7 +455,7 @@ feature "Income", "test features" do
 
     log.info("Paying from account with different currency")
     p = i.new_payment(:account_id => client_account.id, :amount => 30,
-                 :exchange_rate => 0.5, :currency_id => 2, :reference => 'Last check')
+                 :exchange_rate => 2, :currency_id => 2, :reference => 'Last check')
     i.save_payment.should == true
 
     income_account = Account.org.find_by_original_type("Income")
@@ -446,11 +471,11 @@ feature "Income", "test features" do
     )
     txt << " " << I18n.t("currency.exchange_rate",
       :cur1 => "#{c1.symbol} 1" , 
-      :cur2 => "#{ p.currency_symbol } 0,50"
+      :cur2 => "#{ p.currency_symbol } 2,00"
     )
     p.description.should == txt
 
-    i.balance.should == i.total - 30
+    i.balance.should == i.total - 30 * 2
     
     client_account.reload
 
@@ -459,8 +484,8 @@ feature "Income", "test features" do
     client_account.reload
     income_account.reload
 
-    client_account.cur(2).amount.should == -200 + 15
-    income_account.cur(2).amount.should == -15
+    client_account.cur(2).amount.should == -200 + 30
+    income_account.cur(2).amount.should == -30
 
     i.reload
     i.pay_plans.unpaid.size.should == ( (i.total - 30)/30 ).ceil

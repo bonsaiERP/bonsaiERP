@@ -62,7 +62,7 @@ class Account < ActiveRecord::Base
   # Returns all the related aacount_ledgers
   def get_ledgers
     t = "account_ledgers"
-    AccountLedger.where("#{t}.account_id=:ac_id OR #{t}.to_id=:ac_id",:ac_id => id)
+    AccountLedger.where("#{t}.account_id=:ac_id OR #{t}.to_id=:ac_id",:ac_id => id).order("created_at DESC")
   end
 
   # Creates a Hash with the id as the base

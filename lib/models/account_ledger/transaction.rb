@@ -95,14 +95,12 @@ module Models::AccountLedger::Transaction
           amt = get_amount_for_transaction
 
           account_ledger_details.build(
-            :account_id => account_id, :amount => amt * exchange_rate, 
+            :account_id => account_id, :amount => amt, 
             :currency_id => currency_id, :state => state
           ) {|det| det.organisation_id = organisation_id }
 
-          amt2 = -amt * exchange_rate
-
           account_ledger_details.build(
-            :account_id => to_id, :amount => amt2, 
+            :account_id => to_id, :amount => -amt, 
             :currency_id => currency_id, :state => state
           ) {|det| det.organisation_id = organisation_id }
 

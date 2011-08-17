@@ -78,7 +78,7 @@ class AccountLedgersController < ApplicationController
 
     if @account_ledger.save
       flash[:notice] = "Se ha realizado exitosamente la transferencia entre cuentas, ahora debe conciliarlas para completar la transferencia"
-      redirect_to @account_ledger
+      redirect_to account_ledger_path(@account_ledger, :ac_id => @account_ledger.account_id)
     else
       render :action => 'new_transference'
     end

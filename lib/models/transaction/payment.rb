@@ -48,7 +48,7 @@ module Models::Transaction::Payment
       @current_ledger.conciliation = get_conciliation_for_account
       mark_paid_pay_plans if credit? # anulate pay_plans if credit
 
-      self.balance = balance - @current_ledger.amount
+      self.balance = balance - @current_ledger.amount_currency
       self.state = 'paid' if balance <= 0
 
       self.save
