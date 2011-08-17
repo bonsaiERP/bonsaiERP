@@ -128,7 +128,7 @@ module Models::AccountLedger::Transaction
         if ::Contact::TYPES.include?(account_original_type)
           if currency_id and exchange_rate > 0
             ac = account.cur(currency_id)
-            self.errors[:base]  << I18n.t("account_ledger.errors.invalid_amount") if -ac.amount < ( amount *  exchange_rate)
+            self.errors[:base]  << I18n.t("account_ledger.errors.invalid_amount") if -ac.amount < amount
           end
         end
       end

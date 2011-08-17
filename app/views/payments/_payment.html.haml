@@ -1,9 +1,9 @@
 %tr.account_ledger{ :id => account_ledger.id, :class => "#{account_ledger.active.to_s}"}
   %td= lo(account_ledger.created_at)
   %td.account= link_to account_ledger.description, account_ledger_path(account_ledger, :ac_id => account_ledger.payment_link_id)
-  %td.cur.amount{'data-vaccount_ledger' => account_ledger.amount} #{ntc account_ledger.amount}
+  %td.cur.amount{'data-vaccount_ledger' => account_ledger.amount_currency} #{ntc account_ledger.amount_currency}
   %td.cur.interests_penalties{'data-vaccount_ledger' => account_ledger.interests_penalties} #{ntc account_ledger.interests_penalties}
-  %td.cur.totaccount_ledger_amount{'data-vaccount_ledger' => account_ledger.amount}= ntc account_ledger.amount
+  %td.cur.totaccount_ledger_amount{'data-vaccount_ledger' => account_ledger.amount_currency}= ntc account_ledger.amount_currency
   %td.actions
     - unless account_ledger.conciliation?
       = link_to "Revisar", account_ledger, :title => 'Revisar con cuenta bancaria', :class => 'conciliate sync fl', :style => 'margin-right: 10px' unless account_ledger.conciliation?

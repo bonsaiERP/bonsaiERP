@@ -24,7 +24,7 @@
         :wrapper_html => {:style => "display:#{disp}", :class => 'exchange_rate'}
       .input
         %label Total (#{@transaction.currency_symbol})
-        %span#total_currency.b
+        %span#payment_total_currency.b
     .clear
 
     = f.input :reference, :label => 'Referencia/Nº Cheque', :input_html => {:rows => 3, :cols => 35}, :as => :text
