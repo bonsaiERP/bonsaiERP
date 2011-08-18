@@ -2,22 +2,16 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class Tax < ActiveRecord::Base
-  # callbacks
-  before_create :set_organisation, :unless => 'organisation_id.present?'
-
-  # before_save :create_or_update_item
-  
-  has_one :item, :as => :itemable
+  include Models::Organisation::NewOrganisation
 
   # relationships
   belongs_to :organisation
   has_and_belongs_to_many :transactions
 
   #validations
-  validates_presence_of :name, :abbreviation, :organisation_id
+  validates_presence_of :name, :abbreviation
   validates_numericality_of :rate, :greater_than_or_equal_to => 0
   validates_numericality_of :rate, :less_than_or_equal_to => 100
-  validates_associated :organisation
 
   attr_accessible :name, :abbreviation, :rate
 

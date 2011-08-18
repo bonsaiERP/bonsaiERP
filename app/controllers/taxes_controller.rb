@@ -38,7 +38,7 @@ class TaxesController < ApplicationController
 
     respond_to do |format|
       if @tax.save
-        format.html { redirect_to(@tax, :notice => 'Tax was successfully created.') }
+        format.html { redirect_to(@tax, :notice => 'El impuesto fue creado.') }
         format.xml  { render :xml => @tax, :status => :created, :location => @tax }
       else
         format.html { render :action => "new" }
@@ -54,7 +54,7 @@ class TaxesController < ApplicationController
 
     respond_to do |format|
       if @tax.update_attributes(params[:tax])
-        format.html { redirect_to(@tax, :notice => 'Tax was successfully updated.') }
+        format.html { redirect_to(@tax, :notice => 'El impuesto fue actualizado.') }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
@@ -65,13 +65,10 @@ class TaxesController < ApplicationController
 
   # DELETE /taxes/1
   # DELETE /taxes/1.xml
-  #def destroy
-  #  @tax = Tax.find(params[:id])
-  #  @tax.destroy
+  def destroy
+    @tax = Tax.org.find(params[:id])
+    @tax.destroy
 
-  #  respond_to do |format|
-  #    format.html { redirect_to(taxes_url) }
-  #    format.xml  { head :ok }
-  #  end
-  #end
+    redirect_ajax @tax
+  end
 end
