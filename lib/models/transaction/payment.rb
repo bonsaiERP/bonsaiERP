@@ -11,9 +11,13 @@ module Models::Transaction::Payment
 
   included do
     attr_reader :contact_payment, :current_ledger, :payment
-    validate :valid_number_of_legers, :if => :payment?
-    before_save :set_account_ledger_description, :if => :payment?
-    before_validation :set_account_ledger_exchange_rate, :if => :payment
+    with_options :if => :payment? do |pay|
+      pay.validate :valid_number_of_legers, :if => :payment?
+      pay.before_save :set_account_ledger_description#, :if => :payment?
+      pay.before_validation :set_account_ledger_exchange_rate#, :if => :payment
+      # Very important
+      #pay.after_save :set_deliver#, :if => :payment
+    end
   end
 
   module InstanceMethods
@@ -41,11 +45,7 @@ module Models::Transaction::Payment
       return false unless payment?
       return false unless valid_account_ledger? # Don't use valid_ledger? when set @current_ledger otherwise validations are run twice
 
-      #if @current_ledger.account_id === account_id
       @current_ledger.to_id = ::Account.org.find_by_original_type(self.class.to_s).id
-      #else
-        #@current_ledger.to_id = 
-      #end
       @current_ledger.conciliation = get_conciliation_for_account
       mark_paid_pay_plans if credit? # anulate pay_plans if credit
 
@@ -57,7 +57,7 @@ module Models::Transaction::Payment
 
     private
       def valid_account_ledger?
-        if @current_ledger.amount > balance
+        if @current_ledger.amount_currency > balance
           @current_ledger.errors[:amount] = I18n.t("errors.messages.payment.greater_amount")
           false
         else
@@ -149,7 +149,6 @@ module Models::Transaction::Payment
       def set_account_ledger_description
         i18ntrans = I18n.t("transaction.#{self.class}")
 
-        #Cobro de Venta V1212, cuenta Karina Luna
         txt = I18n.t("account_ledger.payment_description", 
           :pay_type => i18ntrans[:pay], :trans => i18ntrans[:class], 
           :ref => "#{self.ref_number}", :account => @current_ledger.account_name

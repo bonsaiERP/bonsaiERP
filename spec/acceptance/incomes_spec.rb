@@ -454,12 +454,22 @@ feature "Income", "test features" do
     client_account.cur(2).amount.should == -100
     i.reload
 
-    p = i.new_payment(:account_id => new_bank_account.id, :amount => i.balance, :interests_penalties => 1,
+    #i.deliver.should be(false)
+    bal = i.balance
+    p = i.new_payment(:account_id => client_account.id, :amount => i.balance/2, :interests_penalties => 1,
                  :exchange_rate => 2, :currency_id => 2, :reference => 'Last check')
 
-    #i.save_payment.should be(true)
-    #puts i.errors.messages
-    #puts p.errors.messages
+    i.save_payment.should be(true)
+    i.reload
+
+    i.balance.should == 0
+    i.account_ledgers.map(&:conciliation).uniq.should == [true]
+    #i.deliver.should be(true)
+
+    p.conciliation.should be(true)
+    client_account.reload
+    client_account.cur(2).amount.should == -100 + bal/2 + 1
+
   end
 
   scenario "Make payment with a contact account and with different currency" do
