@@ -94,7 +94,7 @@ feature "Income", "test features" do
     bal = i.balance
 
     i.save_payment.should == true
-    p.to_id.should == i.account_id#Account.org.find_by_original_type(i.class.to_s).id
+    p.to_id.should == Account.org.find_by_original_type(i.class.to_s).id
     p.description.should_not == blank?
 
     i.balance.should == bal - 30
@@ -102,7 +102,7 @@ feature "Income", "test features" do
     ac2 = p.account_ledger_details[1].account
 
     ac1.original_type.should == "Bank"
-    ac2.original_type.should == "Client"
+    ac2.original_type.should == "Income"
 
     p.account_ledger_details[0].state.should == 'uncon'
     p.account_ledger_details[0].organisation_id.should be(p.organisation_id)
@@ -443,6 +443,23 @@ feature "Income", "test features" do
     acs[0].account.cur(2).amount.should == 61
     acs[1].account.cur(2).amount.should == -60
     acs[2].account.cur(2).amount.should == -1
+
+    log.info "Pay with contact account and with interests penalties"
+
+    al = AccountLedger.new_money(:operation => 'in', :account_id => new_bank_account.id, :to_id => client_account.id, :amount => 100, :reference => "Other currency check")
+    al.save.should be(true)
+    al.conciliate_account.should be(true)
+    
+    client_account.reload
+    client_account.cur(2).amount.should == -100
+    i.reload
+
+    p = i.new_payment(:account_id => new_bank_account.id, :amount => i.balance, :interests_penalties => 1,
+                 :exchange_rate => 2, :currency_id => 2, :reference => 'Last check')
+
+    #i.save_payment.should be(true)
+    #puts i.errors.messages
+    #puts p.errors.messages
   end
 
   scenario "Make payment with a contact account and with different currency" do
