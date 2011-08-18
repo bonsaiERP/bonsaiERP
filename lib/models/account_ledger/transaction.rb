@@ -92,23 +92,25 @@ module Models::AccountLedger::Transaction
 
           state = conciliation? ? 'con' : 'uncon'
 
-          amt = get_amount_for_transaction
+          sign = get_amount_sign
+          amt = sign * amount
 
           account_ledger_details.build(
             :account_id => account_id, :amount => amt, 
             :currency_id => currency_id, :state => state
           ) {|det| det.organisation_id = organisation_id }
 
+          amt = sign * ( amount - interests_penalties ) 
           account_ledger_details.build(
             :account_id => to_id, :amount => -amt, 
             :currency_id => currency_id, :state => state
           ) {|det| det.organisation_id = organisation_id }
 
           if interests_penalties > 0
-            Account.org.find_by_original_type('Interest')
+            ac = Account.org.find_by_original_type('Interest')
 
             account_ledger_details.build(
-              :account_id => to_id, :amount => interests_penalties, 
+              :account_id => ac.id, :amount => -(sign * interests_penalties),
               :currency_id => currency_id, :state => state
             ) {|det| det.organisation_id = organisation_id }
           end
@@ -117,10 +119,11 @@ module Models::AccountLedger::Transaction
         end
       end
 
-      def get_amount_for_transaction
+      def get_amount_sign
+        amt = amount - interests_penalties
         case transaction.class.to_s
-        when "Income" then amount
-        when "Buy", "Expense" then -amount
+        when "Income" then 1
+        when "Buy", "Expense" then -1
         end
       end
 

@@ -28,6 +28,7 @@ module Models::Transaction::Payment
       params = set_payment_amount(params)
       # Find the right account
       params.delete(:to_id)
+      params[:amount] = params[:amount].to_f + params[:interests_penalties].to_f
 
       @current_ledger = account_ledgers.build(params) {|al| al.operation = get_account_ledger_operation }
       @current_ledger.set_payment(true)

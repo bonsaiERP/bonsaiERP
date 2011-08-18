@@ -54,7 +54,7 @@ class AccountLedger < ActiveRecord::Base
   #validate  :total_amount_equal
 
   # accessible
-  attr_accessible :account_id, :to_id, :date, :operation, :reference, :currency_id,
+  attr_accessible :account_id, :to_id, :date, :operation, :reference, :currency_id, :interests_penalties,
     :amount, :exchange_rate, :description, :account_ledger_details_attributes
 
   # scopes
@@ -159,6 +159,14 @@ class AccountLedger < ActiveRecord::Base
   end
 
   def amount_currency
+    begin
+      ( amount - interests_penalties ) * exchange_rate
+    rescue
+      0
+    end
+  end
+
+  def amount_interests_currency
     begin
       amount * exchange_rate
     rescue

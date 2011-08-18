@@ -396,7 +396,7 @@ feature "Income", "test features" do
   end
 
   scenario "Pay with a differen curency" do
-    i = Income.new(income_params.merge(:account_id => client_account.id))
+    i = Income.new(income_params.merge(:account_id => client_account.id, :discount => 0))
     i.save_trans.should == true
   
     i.approve!.should == true
@@ -413,11 +413,36 @@ feature "Income", "test features" do
     i.account_ledgers.first.amount.should == 30
     i.balance.should == i.total - 2 * 30
 
-    p.conciliate_account.should == true
+    p.conciliate_account.should be(true)
 
     acs = p.account_ledger_details(true)
     acs[0].account.cur(2).amount.should == 30
     acs[1].account.cur(2).amount.should == -30
+
+    p = i.new_payment(:account_id => new_bank_account.id, :amount => 30, :interests_penalties => 1,
+                 :exchange_rate => 2, :currency_id => 2, :reference => 'Last check')
+
+    p.amount.should == 31
+    p.interests_penalties.should == 1
+    i.save_payment.should be(true)
+    p.conciliate_account.should be(true)
+
+    i.reload
+    i.account_ledgers.first.amount.should == 30
+    i.balance.should == i.total - 2 * 60
+
+    acs = p.account_ledger_details(true)
+    acs.size.should == 3
+    acs[2].account.original_type.should == "Interest"
+
+    acs[0].amount.should == 31
+    acs[1].amount.should == -30
+    acs[2].amount.should == -1
+
+
+    acs[0].account.cur(2).amount.should == 61
+    acs[1].account.cur(2).amount.should == -60
+    acs[2].account.cur(2).amount.should == -1
   end
 
   scenario "Make payment with a contact account and with different currency" do
