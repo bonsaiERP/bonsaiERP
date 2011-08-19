@@ -94,8 +94,10 @@ feature "Income", "test features" do
     bal = i.balance
 
     i.save_payment.should == true
+    p.reload
     p.to_id.should == Account.org.find_by_original_type(i.class.to_s).id
     p.description.should_not == blank?
+    p.amount.should == 30
 
     i.balance.should == bal - 30
     ac1 = p.account_ledger_details[0].account

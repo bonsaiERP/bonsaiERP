@@ -92,8 +92,10 @@ feature "Buy", "test features" do
     bal = b.balance
 
     b.save_payment.should == true
+    p.reload
     p.to_id.should == Account.org.find_by_original_type(b.class.to_s).id
     p.description.should_not == blank?
+    p.amount.should == -30
 
     b.balance.should == bal - 30
     ac1 = p.account_ledger_details[0].account

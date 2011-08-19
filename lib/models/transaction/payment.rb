@@ -13,7 +13,7 @@ module Models::Transaction::Payment
     attr_reader :contact_payment, :current_ledger, :payment
     with_options :if => :payment? do |pay|
       pay.validate :valid_number_of_legers, :if => :payment?
-      pay.before_save :set_account_ledger_description#, :if => :payment?
+      pay.before_save :set_account_ledger_extras#, :if => :payment?
       pay.before_validation :set_account_ledger_exchange_rate#, :if => :payment
       # Very important
       #pay.after_save :set_deliver#, :if => :payment
@@ -144,6 +144,10 @@ module Models::Transaction::Payment
         if ac and ac.currency_id === currency_id and not(Contact::TYPES.include?(ac.original_type) )
           @current_ledger.exchange_rate = 1
         end
+      end
+
+      def set_account_ledger_extras
+        set_account_ledger_description
       end
 
       def set_account_ledger_description

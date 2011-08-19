@@ -6,10 +6,13 @@
   .links
     = link_to "Anular", @account_ledger, :class => 'delete', 'data-confirm' => 'Esta seguro de borrar la transacción' if @account_ledger.can_destroy?
 
-%h1 Transacción del <span class="n">#{lo @account_ledger.created_at}</span>
+%h1{:style => 'display:inline-block'} Transacción del <span class="n">#{lo @account_ledger.created_at}</span>
+- if @account_ledger.nulled?
+  %span.dashlet.b.bg_red= "Anulada" 
 
+.clear
 .moneybox.fl
-  = in_out @account_ledger.account_amount, :class => "b"
+  = in_out_ledger @account_ledger, :class => "b"
   - if Contact::TYPES.include? @account_ledger.account_original_type
     %h3= "#{@account_ledger.currency_symbol} #{ntc @account_ledger.account_amount}"
   - else

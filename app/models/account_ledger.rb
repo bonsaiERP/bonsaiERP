@@ -3,7 +3,7 @@
 # email: boriscyber@gmail.com
 class AccountLedger < ActiveRecord::Base
 
-  attr_accessor :ac_id
+  attr_reader :ac_id
 
   acts_as_org
   # callbacks
@@ -88,6 +88,10 @@ class AccountLedger < ActiveRecord::Base
   # Determines if the account ledger can conciliate
   def can_conciliate?
     not(conciliation?) and active?
+  end
+
+  def nulled?
+    not(active)
   end
 
   # nulls an account_ledger
@@ -223,6 +227,11 @@ class AccountLedger < ActiveRecord::Base
     else
       to_id
     end
+  end
+
+  def ac_id=(val)
+    val = account_id if val === 0 or val.blank?
+    @ac_id = val
   end
 
   private

@@ -141,4 +141,10 @@ module AccountsHelper
     css, title = amount >= 0 ? ["dark_green", "Nos debe"] : ["red", "Se debe"]
     content_tag(tag, ntc(amount), :class => "tip #{css}", :title => title)
   end
-end
+
+  def in_out_ledger(al, options = {})
+    css, txt = al.operation === "in" ? [ "dark_green", "Ingreso" ] : [ "red", "Egreso" ]
+    options[:class] = options[:class].blank? ? css : options[:class] << " #{css}"
+    content_tag(:span, txt, options)
+  end
+ end

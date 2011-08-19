@@ -67,7 +67,7 @@ class AccountLedgersController < ApplicationController
       flash[:error] = "No se pudo anular la transacción"
     end
 
-    redirect_to @account_ledger.account
+    redirect_to @account_ledger
   end
 
   # POST /account_ledgers/:id/transference

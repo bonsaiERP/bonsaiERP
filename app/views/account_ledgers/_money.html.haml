@@ -10,9 +10,10 @@
 
 .clear
 <br/><br/>
+- led = account.account_ledgers.scoped
 %ul.tabs
   %li= link_option "Todas", account_path(account), 'all'
-  %li= link_option "Esperando verificación", account_path(account), 'uncon'
+  %li= link_option "Esperando verificación #{size_or_blank(led.pendent.count)}", account_path(account), 'uncon'
   %li= link_option "Anuladas", account_path(account), 'nulled'
   %li= link_option "Verificadas", account_path(account), 'con'
 
@@ -48,7 +49,7 @@
       %td.desc= link_description al
       %td.rev
         = "(V) #{al.approver}" if al.approver_id.present?
-        = "<br/><span class='dark_grey'>(A) #{al.nuller}</span>".html_safe if al.nuller_id.present?
+        = "<br/><span class='red'>(A) #{al.nuller}</span>".html_safe if al.nuller_id.present?
       %td.cur
         - if al.can_destroy?
           = link_to "borrar", al, :class => 'delete fl', :title => 'Borrar', 'data-confirm' => account_ledger_destroy_confirm_dialog(al)

@@ -9,8 +9,11 @@ module Models::AccountLedger::Transaction
 
   included do
     attr_reader :payment
-    before_create :build_transaction_ledger_details, :if => :payment?
-    validate :valid_contact_amount, :if => :payment?
+    with_options :if => :payment? do |al|
+      al.before_create :build_transaction_ledger_details#, :if => :payment?
+      al.before_create :set_amount
+      al.validate :valid_contact_amount#, :if => :payment?
+    end
   end
 
   module InstanceMethods
@@ -134,6 +137,13 @@ module Models::AccountLedger::Transaction
             ac = account.cur(currency_id)
             self.errors[:base]  << I18n.t("account_ledger.errors.invalid_amount") if -ac.amount < amount_currency
           end
+        end
+      end
+
+      def set_amount
+        case transaction.class.to_s
+        when "Buy", "Expense"
+          self.amount = -amount
         end
       end
 
