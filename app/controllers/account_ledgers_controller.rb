@@ -61,7 +61,7 @@ class AccountLedgersController < ApplicationController
   def destroy
     @account_ledger = AccountLedger.org.find(params[:id])
 
-    if @account_ledger.null_account
+    if @account_ledger.null_transaction
       flash[:notice] = "Se ha anulado la transacción correctamente"
     else
       flash[:error] = "No se pudo anular la transacción"

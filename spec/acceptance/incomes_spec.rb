@@ -262,7 +262,7 @@ feature "Income", "test features" do
     i.pay_plans.unpaid.size.should == (i.total/30).ceil - 2
     p.conciliation.should == false
 
-    p.null_account.should == true
+    p.null_transaction.should == true
     i.reload
     i.balance.should == bal
     i.pay_plans.unpaid.size.should ==  (i.total/30).ceil - 1
@@ -607,11 +607,33 @@ feature "Income", "test features" do
     #i.pay_plans.unpaid.first.payment_date.should == i.pay_plans.first.payment_date
     #i.balance.should == i.total - 25
 
-    #p.null_account.should be(true)
+    #p.null_transaction.should be(true)
     #i.reload
 
     #i.balance.should == i.total
     #i.pay_plans.unpaid.inject(0) {|s, pp| s += pp.amount}.should == i.total
   end
 
+  scenario "Pay and then null transactions" do
+    i = Income.new(income_params.merge(:account_id => client_account.id))
+    i.save_trans.should == true
+
+    tot = ( 3 * 10 + 5 * 20 ) * 0.97
+    i.total.should == tot.round(2)
+    i.balance.should == i.total
+
+    i.approve!.should == true
+
+    p = i.new_payment(:account_id => bank_account.id, :amount => i.balance,
+                 :exchange_rate => 1, :currency_id => 1, :reference => 'Check INV-123')
+    i.save_payment.should == true
+    i.reload
+
+    i.should be_paid
+    p.null_transaction.should be_true
+    i.reload
+
+    i.should_not be_paid
+    i.should be_approved
+  end
 end

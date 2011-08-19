@@ -91,7 +91,7 @@ class AccountLedger < ActiveRecord::Base
   end
 
   # nulls an account_ledger
-  def null_account
+  def null_transaction
     return false if conciliation?
 
     self.nuller_datetime = Time.now

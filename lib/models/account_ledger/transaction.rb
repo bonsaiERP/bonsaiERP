@@ -62,6 +62,7 @@ module Models::AccountLedger::Transaction
 
       self.class.transaction do
         ret = self.save
+        transaction.state = "approved" if transaction.paid?
         ret = ret and transaction.save
         raise ActiveRecord::Rollback unless ret
       end
