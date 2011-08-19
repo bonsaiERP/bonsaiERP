@@ -49,7 +49,6 @@ feature "Buy", "test features" do
 
     b.should be_cash
     b.save_trans.should be(true)
-    #.should == true
     b.should be_draft
 
     b.reload
@@ -93,7 +92,7 @@ feature "Buy", "test features" do
     bal = b.balance
 
     b.save_payment.should == true
-    p.to_id.should == b.account_id#Account.org.find_by_original_type(b.class.to_s).id
+    p.to_id.should == Account.org.find_by_original_type(b.class.to_s).id
     p.description.should_not == blank?
 
     b.balance.should == bal - 30
@@ -101,7 +100,7 @@ feature "Buy", "test features" do
     ac2 = p.account_ledger_details[1].account
 
     ac1.original_type.should == "Bank"
-    ac2.original_type.should == "Supplier"
+    ac2.original_type.should == "Buy"
 
     p.account_ledger_details[0].state.should == 'uncon'
     p.account_ledger_details[0].organisation_id.should be(p.organisation_id)
@@ -111,7 +110,7 @@ feature "Buy", "test features" do
     ac1.amount.should == 0
     ac2.amount.should == 0
 
-    p.conciliate_account.should be_true#.should == true
+    p.conciliate_account.should be_true
 
     p.approver_id.should == UserSession.user_id
     p.approver_datetime.kind_of?(Time).should == true

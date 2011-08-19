@@ -50,7 +50,7 @@ class ExpensesController < ApplicationController
     @transaction = Expense.new(params[:expense])
 
     respond_to do |format|
-      if @transaction.save
+      if @transaction.save_trans
         format.html { redirect_to(@transaction, :notice => 'Se ha creado una nota de gasto.') }
         format.xml  { render :xml => @transaction, :status => :created, :location => @transaction }
       else

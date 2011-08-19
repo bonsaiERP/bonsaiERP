@@ -53,7 +53,7 @@
       %th
 
   %tbody
-    - for income in @incomes
+    -  @incomes.each do |income|
       %tr{ :class => cycle(:odd, :even) }
         %td 
           %span{:class => "#{income.real_state} tip", :title => income.show_state}

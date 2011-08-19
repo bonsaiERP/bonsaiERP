@@ -50,10 +50,10 @@
       %th
 
   %tbody
-    - for expense in @expenses
+    - @expenses.each do |expense|
       %tr{ :class => cycle(:odd, :even) }
         %td= link_to expense.ref_number, expense, :class => 'b'
-        %td= expense.contact
+        %td= expense.account
         %td= lo expense.payment_date unless expense.paid?
         %td.cur= ntc exchange(expense, :real_total, @currency_rates)
         %td.cur= ntc exchange(expense, :balance, @currency_rates)

@@ -48,7 +48,7 @@ class BuysController < ApplicationController
   def create
     @transaction = Buy.new(params[:buy])
     respond_to do |format|
-      if @transaction.save
+      if @transaction.save_trans
         format.html { redirect_to(@transaction, :notice => 'Se ha creado una proforma de compra.') }
         format.xml  { render :xml => @transaction, :status => :created, :location => @transaction }
       else
