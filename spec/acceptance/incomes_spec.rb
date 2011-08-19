@@ -209,7 +209,7 @@ feature "Income", "test features" do
     i.destroy_pay_plans(pp_ids).should == true
     i.reload
 
-    i.pay_plans.size.should == 3
+    i.pay_plans.size.should == 2
     tot_pps = i.pay_plans.inject(0) {|s,pp| s += pp.amount unless pp.paid?; s }
     tot_pps.should == i.balance
 
@@ -586,19 +586,32 @@ feature "Income", "test features" do
     ppsize = 2 + ( (tot - 60)/40 ).ceil
     i.pay_plans.size.should be(ppsize)
 
-    p = i.new_payment(:account_id => bank_account.id, :amount => 25, :exchange_rate => 1, :reference => 'Cheque 143234', :operation => 'out')
-
-    i.save_payment.should be(true)
+    ids = i.pay_plans.map(&:id)
+    ids.shift
+    i.destroy_pay_plans(ids).should be(true)
     i.reload
+    i.pay_plans.sum(:amount).should == i.balance
+    ids = i.pay_plans.map(&:id)
 
-    i.pay_plans.unpaid.first.payment_date.should == i.pay_plans.first.payment_date
-    i.balance.should == i.total - 25
-
-    p.null_account.should be(true)
+    i.destroy_pay_plans(ids).should be(true)
+    i.pay_plans(true).size.should == 1
     i.reload
+    i.pay_plans.sum(:amount).should == i.balance
 
-    i.balance.should == i.total
-    i.pay_plans.unpaid.inject(0) {|s, pp| s += pp.amount}.should == i.total
+    #i.pay_plans(true).size.should == 1
+    #p = i.new_payment(:account_id => bank_account.id, :amount => 25, :exchange_rate => 1, :reference => 'Cheque 143234', :operation => 'out')
+
+    #i.save_payment.should be(true)
+    #i.reload
+
+    #i.pay_plans.unpaid.first.payment_date.should == i.pay_plans.first.payment_date
+    #i.balance.should == i.total - 25
+
+    #p.null_account.should be(true)
+    #i.reload
+
+    #i.balance.should == i.total
+    #i.pay_plans.unpaid.inject(0) {|s, pp| s += pp.amount}.should == i.total
   end
 
 end

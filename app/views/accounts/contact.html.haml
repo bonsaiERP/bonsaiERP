@@ -17,6 +17,12 @@
 = render 'contacts/show', :klass => @account.accountable
 
 .clear
+- @account.account_currencies.includes(:currency).each do |ac|
+  .moneybox.fl
+    %label Total en #{ac.currency_symbol}
+    = present_amount(ac.amount)
+
+.clear
 
 = jquery_tabs :tab_id => "contact_tab" do
   =jqueryui_ul do

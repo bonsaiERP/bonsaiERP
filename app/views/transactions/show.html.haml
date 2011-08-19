@@ -15,7 +15,7 @@
     &nbsp;&nbsp;
   = link_to "Imprimir", invoice_pdf_path(@transaction.id), :class => 'print'
 
-/ Render the head of the transaction
+-# Render the head of the transaction
 = render "transactions/head"
  
 .clear
@@ -32,12 +32,12 @@
   #information
     .clear
 
-    / Render items
+    -# Render items
     = render 'transactions/items', :transaction => @transaction
 
   #payments
 
-    / Render payments
+    -# Render payments
     =render "/payments/payments", :transaction => @transaction if @transaction.show_payments?
     #deleted_payments
       - if @transaction.account_ledgers.nulled.any?
@@ -45,21 +45,24 @@
     .clear
 
   - unless @transaction.draft?
-    / Render for credit approval
+    -# Render for credit approval, "pay_plans/pay_plans", "pay_plans/approve"
     #pay_plans= render get_credit_partial(@transaction), :transaction => @transaction
 
   - if @transaction.show_inventory?
     #inventory
-      / Render inventory
+      -# Render inventory
       =render "/transactions/inventory", :transaction => @transaction
 
-/ User details
+-# User details
 #users
   - if @transaction.creator_id.present?
     %p <span class='dark'>Creado por:</span> <strong>#{@transaction.creator}</strong> <i>#{lo @transaction.created_at}</i>
 
   - if @transaction.approver_id.present?
     %p <span class='dark'>Aprobado por:</span> <strong>#{@transaction.approver}</strong> <i>#{lo @transaction.approver_datetime}</i>
+
+  - if @transaction.creditor_id.present?
+    %p <span class='dark'>Credito aprobado por:</span> <strong>#{@transaction.creditor}</strong> <i>#{lo @transaction.credit_datetime}</i>
 
 :javascript
   $(function () {

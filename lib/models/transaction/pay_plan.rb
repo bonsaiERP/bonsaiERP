@@ -13,14 +13,16 @@ module Models::Transaction::PayPlan
     return false unless pp_ids.is_a? Array
     pp_ids.map!(&:to_i)
 
-    unpaid_pay_plans.each do |pp|
-      if pp_ids.include?(pp.id)
+    pps = unpaid_pay_plans.reverse
+
+    pps.each_with_index do |pp, i|
+      if pp_ids.include?(pp.id) and (i + 1) < pps.size
         pp.mark_for_destruction
         @current_pay_plan = pp
       end
     end
 
-    save_pay_plan
+    save_pay_plan(true)
   end
 
   # Sets the amount and the data for last pay_plan
@@ -37,7 +39,7 @@ module Models::Transaction::PayPlan
     @current_pay_plan
   end
 
-  def save_pay_plan
+  def save_pay_plan(dest = false)
     return false unless @current_pay_plan.valid?
     # Eliminate if there is other pay plan with the same date
     unpaid_pay_plans.each do |pp|
@@ -63,7 +65,7 @@ module Models::Transaction::PayPlan
       end
     end
     
-    complete_pay_plan(pps.last, bal) if bal > 0
+    complete_pay_plan(pps.last, bal, dest) if bal > 0
     self.payment_date = pps.first.payment_date
 
     self.save
@@ -107,17 +109,24 @@ module Models::Transaction::PayPlan
       end
     end
 
-    def complete_pay_plan(pp, bal)
+    # Completes the pay_plans to reach the balance
+    def complete_pay_plan(pp, bal, dest)
       int = calculate_int_percentage(pp, bal + pp.amount)
 
-      pay_plans.build(
-        :payment_date => pp.payment_date + PAY_PLANS_DATE_SEPARATION, 
-        :alert_date => pp.payment_date - 5.days, 
-        :amount => bal,
-        :interests_penalties  => bal * int,
-        :email => @current_pay_plan.email,
-        :currency_id => currency_id
-      )
+      if dest
+        pps = sort_pay_plans.last
+        pp.amount += bal
+        pp.interests_penalties += pp.interests_penalties + bal * int
+      else
+        pay_plans.build(
+          :payment_date => pp.payment_date + PAY_PLANS_DATE_SEPARATION, 
+          :alert_date => pp.payment_date - 5.days, 
+          :amount => bal,
+          :interests_penalties  => bal * int,
+          :email => @current_pay_plan.email,
+          :currency_id => currency_id
+        )
+      end
     end
 
     def calculate_int_percentage(pp, bal)

@@ -1,6 +1,8 @@
 %tr.account_ledger{ :id => account_ledger.id, :class => "#{account_ledger.active.to_s}"}
   %td= lo(account_ledger.created_at)
-  %td.account= link_to account_ledger.description, account_ledger_path(account_ledger, :ac_id => account_ledger.payment_link_id)
+  %td.account
+    %strong= "#{account_ledger.currency_symbol} #{ntc account_ledger.amount}" unless transaction.currency_id === account_ledger.currency_id
+    = link_to account_ledger.description, account_ledger_path(account_ledger, :ac_id => account_ledger.payment_link_id)
   %td.cur.amount{'data-vaccount_ledger' => account_ledger.amount_currency} #{ntc account_ledger.amount_currency}
   %td.cur.interests_penalties{'data-vaccount_ledger' => account_ledger.interests_penalties} #{ntc account_ledger.interests_penalties}
   %td.cur.totaccount_ledger_amount{'data-vaccount_ledger' => account_ledger.amount_currency}= ntc account_ledger.amount_currency

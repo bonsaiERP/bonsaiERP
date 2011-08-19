@@ -23,8 +23,7 @@ module Models::Transaction
         else
           self.state       = "approved"
           self.approver_id = UserSession.user_id
-          #create_account_ledger_details
-          #update_transaction_amount
+          self.approver_datetime = Time.zone.now
           self.save
         end
       end
@@ -36,7 +35,7 @@ module Models::Transaction
         self.credit_reference   = attrs[:credit_reference]
         self.credit_description = attrs[:credit_description]
         self.creditor_id        = UserSession.user_id
-        self.credit_datetime    = Time.now
+        self.credit_datetime    = Time.zone.now
 
         create_first_pay_plan
         self.payment_date       = pay_plans.first.payment_date

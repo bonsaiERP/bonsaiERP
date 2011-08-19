@@ -136,4 +136,9 @@ module AccountsHelper
     else 'account_ledgers/contact'
     end
   end
+
+  def present_amount(amount, tag = "h3")
+    css, title = amount >= 0 ? ["dark_green", "Nos debe"] : ["red", "Se debe"]
+    content_tag(tag, ntc(amount), :class => "tip #{css}", :title => title)
+  end
 end

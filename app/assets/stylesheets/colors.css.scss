@@ -23,12 +23,12 @@ $dark_yellow:#D0D02A;
 $link: #095495;
 
 .red{ color: $red !important; }
-.bg_red{ background-color: $red; }
-.grey{ color: $grey; }
-.dark_grey{ color: $dark_grey; }
-.green{ color: $green; }
+.bg_red{ background-color: $red !important; }
+.grey{ color: $grey !important; }
+.dark_grey{ color: $dark_grey !important; }
+.green{ color: $green !important; }
 //.dark_green{ color: $dark_green; }
-.dark_green{ color: darken($green, 15%); }
+.dark_green{ color: darken($green, 15%) !important; }
 .black{ color: $black; }
 
 .bg_red{ background-color: $red !important; }

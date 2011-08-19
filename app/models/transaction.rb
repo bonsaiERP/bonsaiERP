@@ -29,6 +29,7 @@ class Transaction < ActiveRecord::Base
   belongs_to :project
   belongs_to :creator , :class_name => "User"
   belongs_to :approver, :class_name => "User"
+  belongs_to :creditor, :class_name => "User"
 
   #has_one  :account_ledger, :conditions => "operation = 'transaction'"
 

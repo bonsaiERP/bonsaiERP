@@ -16,8 +16,8 @@
       %th
   
   %tbody
-    - transaction.account_ledgers.includes(:account, :to).active.each do |al|
-      = render "payments/payment", :account_ledger => al
+    - transaction.account_ledgers.includes(:account, :to, :currency).active.each do |al|
+      = render "payments/payment", :account_ledger => al, :transaction => transaction
 
   %tr.extra.pad_top
     %td

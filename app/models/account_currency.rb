@@ -10,4 +10,5 @@ class AccountCurrency < ActiveRecord::Base
 
   validates_presence_of :currency_id, :account_id
   #validates_numericality_of :amount
+  delegate :name, :symbol, :to => :currency, :prefix => true
 end
