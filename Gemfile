@@ -1,7 +1,7 @@
 # Edit this Gemfile to bundle your application's dependencies.
 source 'http://gemcutter.org'
 
-gem 'rails', '~>3.1.0.rc5'
+gem 'rails', '~>3.1.0.rc6'
 
 ## Bundle edge rails:
 # gem "rails", :git => "git://github.com/rails/rails.git"
@@ -26,7 +26,7 @@ gem 'haml'
 #gem 'acts-as-taggable-on'
 gem 'kaminari'
 gem 'nokogiri'
-gem 'prawn', '~>0.11.1', :git => 'https://github.com/sandal/prawn.git', :branch => "stable", :submodules => true
+gem 'prawn', '~>0.12.0', :git => 'https://github.com/sandal/prawn.git', :branch => "stable", :submodules => true
 #gem 'active_reload'
 #gem 'newrelic_rpm'
 #gem 'countries', :require => 'iso3166'
