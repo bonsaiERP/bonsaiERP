@@ -3,18 +3,13 @@
 
 %h1 Almacenes
 
-%table.decorated
-  %tr
-    %th Nombre
-    %th Teléfono
-    %th Dirección
-    %th Activo
-    %th 
-
+%ul#stores.accounts_list
   - @stores.each do |store|
-    %tr
-      %td= link_to store.name, store, :class => 'b' 
-      %td= store.phone 
-      %td= nl2br store.address 
-      %td <span class="#{store.active.to_s }"></span>
-      %td= bonsai_links(store) 
+    %li
+      %h3 
+        %span(class="#{store.active.to_s } tip" title="#{active?(store.active)}")
+        = link_to store.name, store
+      ._33.fl= store.phone 
+      ._33.fl= nl2br store.address 
+      .clear
+        

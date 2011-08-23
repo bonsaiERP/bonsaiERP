@@ -17,7 +17,7 @@
       %ul
         %li= link_to "Nuevo ingreso", new_inventory_operation_path(:store_id => @store.id, :operation => 'in')
         %li= link_to "Nuevo egreso", new_inventory_operation_path(:store_id => @store.id, :operation => 'out')
-        /%li= link_to "Nueva transferencia", ""
+        -#%li= link_to "Nueva transferencia", ""
 
 .input.fr
   <a href="#store_info" class="more_info">Ver información</a>
@@ -35,56 +35,14 @@
 
 .clear
 
-#tabs
-  %ul
-    %li <a href="#items">Inventario de items</a>
-    %li <a href="#stocks">Operaciones realizadas</a>
+= jquery_tabs :tab_id => 'store' do
+  = jqueryui_ul do
+    = tab "Inventario de items", store_path(@store, :tab => "items"), "items"
+    = tab "Operaciones realizadas", store_path(@store, :tab => "operations"), "operations"
 
-  #items
-    %h2 Inventario de items
-
-    - @items = @store.stocks.includes(:item).page(@page)
-    = paginate(@items)
-
-    %table.decorated
-      %tr
-        %th Item
-        %th Cantidad
-        %th Cantidad minima
-        %th
-
-      - @items.each do |st|
-        %tr
-          %td= st.item
-          %td.cur= ntc st.quantity
-          %td
-          -#%td.cur= ntc st.minimun_quantity
-          %td.cur= link_to "mínimo", "#"
-
-  #stocks
-    %h2 Operaciones realizadas
-    - params[:page2] ||= 1
-    - @ops = @store.inventory_operations.includes(:transaction).order("date desc").page(params[:page2])
-
-    = paginate(@ops)
-
-    %table.decorated
-      %tr
-        %th Fecha
-        %th Operación
-        %th Operación financiera
-        %th Total #{currency_symbol}
-
-      - @ops.each do |op|
-        %tr
-          %td= link_to lo(op.date), op, :class => :b
-          %td= op.operation == 'in' ? 'Ingreso' : 'Egreso'
-          %td= link_to op.transaction, op.transaction if op.transaction_id.present?
-          %td.cur= ntc op.total
-
-
+  %p &nbsp;
+  = render @partial, :store => @store
 
 :javascript
   $(function() {
-    $('#tabs').tabs();
   })

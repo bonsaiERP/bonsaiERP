@@ -1,0 +1,16 @@
+= paginate(@operations)
+
+%table.decorated
+  %tr
+    %th Fecha
+    %th Operación
+    %th Operación financiera
+    %th Total #{currency_symbol}
+
+  - @operations.each do |op|
+    %tr
+      %td= link_to lo(op.date), op, :class => :b
+      %td= op.operation == 'in' ? 'Ingreso' : 'Egreso'
+      %td= link_to op.transaction, op.transaction if op.transaction_id.present?
+      %td.cur= ntc op.total
+

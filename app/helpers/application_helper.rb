@@ -19,6 +19,10 @@ module ApplicationHelper
     val ? "Si": "No"
   end
 
+  def active?(val)
+    val ? "Activo" : "Inactivo"
+  end
+
   # Creates an otion link
   # @param String text
   # @param String url

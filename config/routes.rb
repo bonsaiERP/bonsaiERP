@@ -1,5 +1,7 @@
 Bonsaierp::Application.routes.draw do
 
+  resources :stocks
+
   resources :account_types
 
   resources :inventory_operations do

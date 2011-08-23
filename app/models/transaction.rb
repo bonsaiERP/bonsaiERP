@@ -30,6 +30,7 @@ class Transaction < ActiveRecord::Base
   belongs_to :creator , :class_name => "User"
   belongs_to :approver, :class_name => "User"
   belongs_to :creditor, :class_name => "User"
+  belongs_to :nuller,   :class_name => "User"
 
   #has_one  :account_ledger, :conditions => "operation = 'transaction'"
 
@@ -287,8 +288,12 @@ private
   end
 
   def null_transaction
-    self.state = "nulled"
-    update_attribute(:active, false)
+    self.active          = false
+    self.state           = "nulled"
+    self.nuller_id       = UserSession.user_id
+    self.nuller_datetime = Time.zone.now
+    self.save
+
     false
   end
 

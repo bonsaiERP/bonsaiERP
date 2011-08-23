@@ -12,7 +12,7 @@
 
 .clear
 .moneybox.fl
-  = in_out_ledger @account_ledger, :class => "b"
+  = in_out @account_ledger, :class => "b"
   - if Contact::TYPES.include? @account_ledger.account_original_type
     %h3= "#{@account_ledger.currency_symbol} #{ntc @account_ledger.account_amount}"
   - else

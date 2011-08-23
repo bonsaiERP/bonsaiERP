@@ -1,0 +1,27 @@
+%h1= @stock.item
+%h2
+  %span.n.grey Cantidad actual
+  = ntc @old.quantity
+
+= simple_form_for(@stock, :html => {:id => 'stock_form'}) do |f|
+  = f.input :minimum, :label => 'Minimo', :input_html => {:size => 10}, :hint => 'Deje en blanco para que no tenga mínimo', :wrapper_html => {:class => '_100'}
+
+  .clear
+
+  = f.submit "Salvar"
+
+:javascript
+  $(function() {
+    /*
+    $('#stock_form').submit(function() {
+      var val = $('#stock_minimum').val() * 1;
+
+      if(val <= 0) {
+        alert("Debe ingresar una cantidad mayor a 0");
+        return false;
+      }else{
+        return true;
+      }
+    });
+    */
+  });

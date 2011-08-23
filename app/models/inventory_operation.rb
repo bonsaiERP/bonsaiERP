@@ -16,6 +16,7 @@ class InventoryOperation < ActiveRecord::Base
   belongs_to :account
 
   has_many   :inventory_operation_details, :dependent => :destroy
+  has_many :stocks, :autosave => true
 
   accepts_nested_attributes_for :inventory_operation_details
 

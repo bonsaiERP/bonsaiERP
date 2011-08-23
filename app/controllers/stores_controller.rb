@@ -18,6 +18,7 @@ class StoresController < ApplicationController
   # GET /stores/1.xml
   def show
     @store = Store.find(params[:id])
+    @partial = get_partial
 
     respond_to do |format|
       format.html # show.html.erb
@@ -80,4 +81,17 @@ class StoresController < ApplicationController
       format.xml  { head :ok }
     end
   end
+
+  private
+    def get_partial
+      case params[:tab]
+      when "operations"
+        @operations = @store.inventory_operations.includes(:transaction).order("date desc").page(@page)
+        "operations"
+      else
+        @items = @store.stocks.includes(:item).page(@page)
+        params[:tab] = "items"
+        "items"
+      end
+    end
 end

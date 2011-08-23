@@ -1,0 +1,17 @@
+= paginate(@items)
+
+%table.decorated
+  %tr
+    %th Item
+    %th Cantidad
+    %th Cantidad minima
+    %th
+
+  - @items.each do |st|
+    %tr
+      %td= link_to st.item, st.item
+      %td.cur= ntc st.quantity
+      %td
+      -#%td.cur= ntc st.minimun_quantity
+      %td.cur.b= link_to "mínimo", new_stock_path(:item_id => st.item_id, :store_id => @store.id), :class => 'ajax', 'data-title' => 'Definir mínimo', 'data-width' => 450
+
