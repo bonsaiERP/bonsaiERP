@@ -27,6 +27,10 @@ class Contact < ActiveRecord::Base
   # delegates
   delegate :id, :name, :to => :account, :prefix => true
 
+  def self.search(match)
+    includes(:account).where("contacts.matchcode LIKE ?", "%#{match}%")
+  end
+
   # Finds a contact using the type
   # @param String
   def self.find_with_type(type)

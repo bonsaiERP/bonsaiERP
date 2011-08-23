@@ -19,8 +19,10 @@
     =f.input :mobile, :label => 'Móvil', :input_html => {:size => 15}
   .clear
 
-  =f.input :address, :label => 'Dirección', :as => :text, :input_html => {:rows => 5} 
+  =f.input :website, :label => 'Sitio web'
   =f.input :email
+  .clear
+  =f.input :address, :label => 'Dirección', :as => :text, :input_html => {:rows => 5} 
   .clear
   .submit
     = f.submit 'Salvar'

@@ -44,7 +44,7 @@ table.decorated{
   tr.out td.color{ color: $red }
 }
 table.nwl{ 
-  td:last-child{ white-space: nowrap; }
+  td:last-child{ white-space: nowrap; width: 50px; }
 }
 table.nwf{
   td:first-child{ white-space: nowrap; }

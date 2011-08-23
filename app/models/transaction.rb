@@ -4,7 +4,7 @@
 class Transaction < ActiveRecord::Base
   acts_as_org
 
-  STATES   = ["draft"  , "approved" , "paid" , "due", "inventory"]
+  STATES   = ["draft"  , "approved" , "paid" , "due", "inventory", "nulled"]
   TYPES    = ['Income' , 'Expense'  , 'Buy']
   DECIMALS = 2
   # Determines if the oprations is made on transaction or pay_plan or payment
@@ -90,9 +90,9 @@ class Transaction < ActiveRecord::Base
 
   # method used for searching
   def self.search(options)
-    ret = self.org.includes(:account, :pay_plans, :currency)
+    ret = self.org.includes(:account, :currency)
     ret = ret.send(scoped_state(options[:option])) if scoped_state(options[:option])
-    ret.where("transactions.ref_number LIKE :code OR contacts.matchcode LIKE :code", :code => "%#{options[:search]}%")
+    ret.where("transactions.ref_number LIKE :code OR accounts.name LIKE :code", :code => "%#{options[:search]}%")
   end
 
   # Define methods for the types of transactions
@@ -142,9 +142,9 @@ class Transaction < ActiveRecord::Base
   def create_states_hash
     arr = case I18n.locale
     when :es
-      ["Borrador" , "Aprobado" , "Pagado" , "Vencido"]
+      ["Borrador" , "Aprobado" , "Pagado" , "Vencido", "Pendiente", "Anulado"]
     when :en
-      ["Draft"    , "Aproved"  , "Paid"   , "Due"]
+      ["Draft"    , "Aproved"  , "Paid"   , "Due", "Pendent", "Nulled"]
     when :pt
       ["Borracha" , "Aprovado" , "Pagado" , "Vencido"]
     end
@@ -287,6 +287,7 @@ private
   end
 
   def null_transaction
+    self.state = "nulled"
     update_attribute(:active, false)
     false
   end

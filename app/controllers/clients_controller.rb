@@ -9,7 +9,11 @@ class ClientsController < ApplicationController
   # GET /clients
   # GET /clients.xml
   def index
-    @clients = Client.org.includes(:account).page(@page)
+    if params[:search]
+      @clients = Client.org.search(params[:search]).page(@page)
+    else
+      @clients = Client.org.includes(:account).page(@page)
+    end
   end
 
   # GET /clients/1

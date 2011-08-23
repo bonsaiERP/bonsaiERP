@@ -3,8 +3,8 @@
     %li #{link_to "Unidades de medida", units_path} &gt;
   
   .links
-    = link_to 'Nuevo', @unit, :class => 'add'
-    = link_to 'Ver', @unit, :class => 'show'
+    = link_to 'Nuevo', new_unit_path, :class => 'add'
+    = link_to 'Editar', edit_unit_path(@unit), :class => 'show'
     = link_to 'Borrar', @unit, :class => 'delete'
 
 

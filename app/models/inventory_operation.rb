@@ -13,7 +13,7 @@ class InventoryOperation < ActiveRecord::Base
 
   belongs_to :transaction
   belongs_to :store
-  belongs_to :contact
+  belongs_to :account
 
   has_many   :inventory_operation_details, :dependent => :destroy
 
@@ -47,7 +47,7 @@ class InventoryOperation < ActiveRecord::Base
     if transaction_id.blank?
       inventory_operation_details.build
     else
-      self.contact_id = transaction.contact_id
+      self.account_id = transaction.account_id
       transaction.transaction_details.each do |det|
         inventory_operation_details.build(:item_id => det.item_id, :quantity => det.balance)
       end

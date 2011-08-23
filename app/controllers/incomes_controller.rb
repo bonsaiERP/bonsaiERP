@@ -82,10 +82,12 @@ class IncomesController < ApplicationController
   # DELETE /incomes/1.xml
   def destroy
     if @transaction.approved?
+      flash[:warning] = "No es posible anular la nota #{@transaction}."
       redirect_transaction
     else
       @transaction.destroy
-      redirect_ajax @transaction
+      flash[:notice] = "Se ha anulado la nota #{@transaction}"
+      redirect_to @transaction
     end
   end
   

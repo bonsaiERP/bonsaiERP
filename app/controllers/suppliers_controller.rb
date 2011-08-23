@@ -9,7 +9,11 @@ class SuppliersController < ApplicationController
   # GET /suppliers
   # GET /suppliers.xml
   def index
-    @suppliers = Supplier.org.page(@page)
+    if params[:search]
+      @suppliers = Supplier.org.search(params[:search]).page(@page)
+    else
+      @suppliers = Supplier.org.includes(:account).page(@page)
+    end
   end
 
   # GET /suppliers/1

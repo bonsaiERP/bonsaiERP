@@ -1,6 +1,24 @@
 - content_for :links do
+  %ul.breadcrumps
+    %li #{link_to "Proveedores", "/suppliers"} &gt;
+
   .links= link_to "Nuevo proveedor", new_supplier_path, :class => 'new'
+
 
 %h1 Proveedores
 
+#search_supplier.search{:style => show_if_search}
+  %a.close{:href => "#"} cerrar
+  %h3 Buscar proveedores
+  =form_tag "/suppliers", :method => 'get' do
+    =hidden_field_tag "search_div_id", "search_clients"
+    .input
+      %label Cliente
+      =text_field_tag 'search', params[:search], :size => 40
+    %div
+    =submit_tag 'Buscar'
+
+= link_to "Buscar", "#search_supplier", :class => 'search'
+
+= paginate(@suppliers)
 = render 'contacts/list', :list => @suppliers

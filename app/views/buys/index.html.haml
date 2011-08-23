@@ -13,7 +13,7 @@
 
 %ul.tabs
   %li= link_to "Todas"                                                         , buys_path(:option => 'all')
-  %li= link_to "Esperando aprobación #{size_or_blank(@bu.draft.size)}"         , buys_path(:option => 'draft')            , :class => tabs_filter('draft')
+  %li= link_to "Proformas #{size_or_blank(@bu.draft.size)}"         , buys_path(:option => 'draft')            , :class => tabs_filter('draft')
   %li= link_to "Esperando pago #{size_or_blank(@bu.approved.size)}"            , buys_path(:option => 'awaiting_payment') , :class => tabs_filter('awaiting_payment')
   %li= link_to "Vencidas #{size_or_blank(@bu.due.size)}"                       , buys_path(:option => 'due')              , :class => tabs_filter('due')
   %li= link_to "Con inventario pendiente #{size_or_blank(@bu.inventory.size)}" , buys_path(:option => 'inventory')        , :class => tabs_filter('inventory')

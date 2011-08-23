@@ -116,7 +116,11 @@ a.search{
   background: transparent url(images/zoom.png) no-repeat;
 }
 div.search{
+  @include rounded-corners;
   display: none;
+  background-color: darken($white, 5%);
+  padding: 5px;
+  position: relative;
 }
 
 .moneybox{
@@ -347,6 +351,12 @@ a.sync{
 .due{
   @include dashlet;
   background-color: $red; 
+}
+
+
+.nulled{
+  @include dashlet;
+  background-color: $red;
 }
 
 .dashlet{

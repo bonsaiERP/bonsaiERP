@@ -35,6 +35,7 @@ gem 'prawn', '~>0.12.0', :git => 'https://github.com/sandal/prawn.git', :branch 
 
 group :development do
   gem 'ruby-debug19', :platform => :mri_19, :require => 'ruby-debug'
+  gem 'active_reload'
   #gem 'perftools.rb', :platform => :mri,    :require => 'perftools'
   gem 'pry'
   gem 'rspec-rails', '~>2.6.0'

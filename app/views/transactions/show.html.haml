@@ -6,7 +6,7 @@
     = link_to 'Nueva', "/#{params[:controller]}/new", :class => 'add'
     - if @transaction.draft?
       = link_to 'Editar', "/#{params[:controller]}/#{@transaction.id}/edit", :class => 'edit'
-      = link_to 'Anular', @transaction, :class => 'delete'
+      = link_to 'Anular', @transaction, :class => 'delete', :confirm => 'Esta seguro de anular?'
 .clear
 
 ._40.fr.r

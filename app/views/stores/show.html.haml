@@ -57,7 +57,8 @@
         %tr
           %td= st.item
           %td.cur= ntc st.quantity
-          %td.cur= ntc st.minimun_quantity
+          %td
+          -#%td.cur= ntc st.minimun_quantity
           %td.cur= link_to "mínimo", "#"
 
   #stocks

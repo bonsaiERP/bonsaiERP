@@ -2,6 +2,7 @@
 # To use: $('#elem').contactAutocomplete(["Client", "Supplier"], {'model': 'Contact'})
 class ContactAutocomplete
   constructor: (@elem, @models, @options)->
+    console.log "Creado"
     @models  ||= ["Client", "Supplier", "Staff"]
     @options ||= {}
 

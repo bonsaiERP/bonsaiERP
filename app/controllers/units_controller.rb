@@ -58,6 +58,11 @@ class UnitsController < ApplicationController
   def destroy
     @unit = Unit.find(params[:id])
     @unit.destroy
+    if @unit.destroyed?
+      flash[:notice] = "La unidad de medidad fue borrada."
+    else
+      flash[:error] = "No es posible borrar la unidad de medida."
+    end
 
     respond_to do |format|
       format.html { redirect_to(units_url) }
