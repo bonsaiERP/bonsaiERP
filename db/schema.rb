@@ -60,14 +60,14 @@ ActiveRecord::Schema.define(:version => 20110824124311) do
     t.boolean  "conciliation",                                                     :default => true
     t.decimal  "amount",                            :precision => 14, :scale => 2
     t.decimal  "exchange_rate",                     :precision => 14, :scale => 4
-    t.decimal  "interests_penalties",               :precision => 14, :scale => 2, :default => 0.0,  :null => false
+    t.decimal  "interests_penalties",               :precision => 14, :scale => 2, :default => 0.0
     t.string   "description"
     t.integer  "transaction_id"
+    t.integer  "creator_id"
     t.integer  "approver_id"
     t.datetime "approver_datetime"
-    t.integer  "creator_id"
     t.integer  "nuller_id"
-    t.integer  "nuller_datetime"
+    t.datetime "nuller_datetime"
     t.boolean  "active",                                                           :default => true
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -78,6 +78,7 @@ ActiveRecord::Schema.define(:version => 20110824124311) do
   add_index "account_ledgers", ["approver_id"], :name => "index_account_ledgers_on_approver_id"
   add_index "account_ledgers", ["conciliation"], :name => "index_account_ledgers_on_conciliation"
   add_index "account_ledgers", ["created_at"], :name => "index_account_ledgers_on_created_at"
+  add_index "account_ledgers", ["creator_id"], :name => "index_account_ledgers_on_creator_id"
   add_index "account_ledgers", ["currency_id"], :name => "index_account_ledgers_on_currency_id"
   add_index "account_ledgers", ["date"], :name => "index_account_ledgers_on_date"
   add_index "account_ledgers", ["nuller_id"], :name => "index_account_ledgers_on_nuller_id"
@@ -291,7 +292,7 @@ ActiveRecord::Schema.define(:version => 20110824124311) do
     t.integer  "user_id"
     t.date     "due_date"
     t.text     "preferences"
-    t.boolean  "base_accounts",                :default => false, :null => false
+    t.boolean  "base_accounts",                :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -470,11 +471,11 @@ ActiveRecord::Schema.define(:version => 20110824124311) do
     t.decimal  "gross_total",                        :precision => 14, :scale => 2
     t.boolean  "cash",                                                              :default => true
     t.date     "payment_date"
+    t.decimal  "balance_inventory",                  :precision => 14, :scale => 2
     t.integer  "creator_id"
     t.integer  "approver_id"
     t.datetime "approver_datetime"
     t.string   "approver_reason"
-    t.decimal  "balance_inventory",                  :precision => 14, :scale => 2
     t.integer  "creditor_id"
     t.string   "credit_reference"
     t.datetime "credit_datetime"

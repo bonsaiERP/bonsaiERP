@@ -24,7 +24,7 @@ class Transaction < ActiveRecord::Base
   #before_save       :set_state
 
   # relationships
-  belongs_to :account
+  #belongs_to :account
   belongs_to :contact
   belongs_to :currency
   belongs_to :project
@@ -133,6 +133,11 @@ class Transaction < ActiveRecord::Base
         ['Venta', 'Gasto', 'Compra']
     end
     Hash[TYPES.zip(arr)][type]
+  end
+
+  # Finds the related account with currency for a Contact
+  def account
+    contact.accounts.where(:currency_id => currency_id).first
   end
 
   # Presents a localized name for state

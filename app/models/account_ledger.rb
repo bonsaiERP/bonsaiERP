@@ -134,9 +134,6 @@ class AccountLedger < ActiveRecord::Base
     if transaction_id.present?
       conciliate_transaction_account
     else
-      #account_ledger_details.each do |ac|
-      #  ac.state = "con"
-      #end
       self.conciliation = true
       self.approver_id = UserSession.user_id
 

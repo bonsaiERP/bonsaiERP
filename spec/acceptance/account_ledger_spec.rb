@@ -165,18 +165,18 @@ feature "Test account ledger", "for in outs and transferences" do
     al = AccountLedger.new_money(@params)
 
     al.save.should == true
+    al.reload
     al.active.should == true
+    al.currency_id.should == 1
 
-    ac1 = al.account
-    ac2 = al.to
-
-    ac1_amt = ac1.amount
-    ac2_amt = ac2.amount
+    al.account.amount.should == 0
+    al.to.amount.should == 0
 
     al.conciliate_account.should == true
+    al.reload
 
-    ac1.reload.amount.should == ac1_amt - 100
-    ac2.reload.amount.should == ac2_amt + 50
+    al.account.amount.should == -100
+    al.to.amount.should == 50
 
   end
 end

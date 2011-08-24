@@ -10,7 +10,7 @@ module Models::AccountLedger::Transaction
   included do
     attr_reader :payment
     with_options :if => :payment? do |al|
-      al.before_create :build_transaction_ledger_details#, :if => :payment?
+      #al.before_create :build_transaction_ledger_details#, :if => :payment?
       al.before_create :set_amount
       al.validate :valid_contact_amount#, :if => :payment?
     end
