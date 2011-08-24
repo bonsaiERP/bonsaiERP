@@ -19,7 +19,22 @@ class ClientsController < ApplicationController
   # GET /clients/1
   # GET /clients/1.xml
   def show
-    @account = @client.account
+    case params[:tab]
+    when "incomes"
+    when "buys"
+    when "expenses"
+    else
+      params[:tab] = "transactions"
+      params[:option] = "all" unless ["all", "con", "pendent", "nulled"].include?(params[:option])
+      @partial = "account_ledgers"
+      @ledgers = AccountLedger.contact(@client.account_ids)
+      @ledgers = @ledgers.send(params[:option]) unless params[:option] === "all"
+
+      @locals = {
+        :ledgers => @ledgers.page(@page),
+        :pendent => AccountLedger.contact(@client.account_ids).send(:pendent).size
+      }
+    end
   end
 
   # GET /clients/new

@@ -9,13 +9,21 @@ module Models::AccountLedger
     extend ActiveSupport::Concern
 
     included do
-      before_validation :set_exchange_rate, :if => :new_money?
-      before_validation :create_ledger_details, :if => :new_money?
-      before_create     :add_description, :if => :money?
-      before_create     :set_amount, :if => :money?
+      attr_accessor :contact_id
+      with_options :if => :new_money? do |trans|
+        trans.validate :valid_money_accounts
+        # callbacks
+        trans.before_validation :set_exchange_rate
+        trans.before_validation :set_or_create_contact_account, :unless => :trans?
+        trans.before_save :set_ledger_amount
+      end
+      #before_validation :create_ledger_details, :if => :new_money?
+      #before_create     :add_description, :if => :money?
 
-      validates_presence_of :account_id, :to_id, :if => :money?
-      validate :valid_money_accounts, :if => :new_money?
+      with_options :if => :money? do |trans|
+        trans.validates_presence_of :account_id, :contact_id, :if => :money?
+        #trans.before_create :set_or_create_contact_account
+      end
     end
 
     module ClassMethods
@@ -23,7 +31,7 @@ module Models::AccountLedger
       # Creates a new ledger, but if the account is nor a MoneyStore returns false
       def new_money(params = {})
         params.transform_date_parameters!("date")
-        params.symbolize_keys.assert_valid_keys( :operation, :account_id, :to_id, :amount, :reference, :date, :exchange_rate, :description )
+        params.symbolize_keys.assert_valid_keys( :operation, :account_id, :to_id, :amount, :reference, :date, :exchange_rate, :description, :contact_id )
 
         ac = AccountLedger.new(params)
         def ac.money?; true; end
@@ -89,7 +97,7 @@ module Models::AccountLedger
         end
 
         # set the amounts only for trans, out
-        def set_amount
+        def set_ledger_amount
           case operation
             when "out", "trans" then self.amount = -1 * amount
           end
@@ -98,7 +106,32 @@ module Models::AccountLedger
         # Validates the accounts
         def valid_money_accounts
           valid_account_id
-          valid_to_id
+          valid_to_id if trans?
+        end
+
+        # Creates the contact account
+        def set_or_create_contact_account
+          c = Contact.org.find(contact_id)
+          unless c
+            self.errors[:contact_id] << I18n.t("uno")
+            return false
+          end
+
+          ac = c.accounts.where(:currency_id => currency_id).first
+
+          unless ac
+            type_id = AccountType.org.find_by_account_number(c.class.to_s).id
+          
+            ac = c.accounts.build(:name => c.to_s, :currency_id => currency_id) {|aco|
+              aco.amount = 0
+              aco.original_type = c.class.to_s
+              account_type_id = type_id
+            }
+
+            return false unless ac.save
+          end
+
+          self.to_id = ac.id
         end
 
         # Check the account_id
@@ -133,6 +166,7 @@ module Models::AccountLedger
             self.errors[:to_id] << I18n.t("errors.messages.inclusion") if err
           end
         end
+
 
     end
   end

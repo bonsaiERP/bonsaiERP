@@ -8,7 +8,7 @@ class Bank < MoneyStore
   validates :number, :uniqueness => {:scope => [:name, :organisation_id] }, :length => {:within => 3..30}
 
   def to_s
-    "#{name} #{number} (#{currency_symbol})"
+    "#{name} #{number}"
   end
 
 private

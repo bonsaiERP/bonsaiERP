@@ -13,13 +13,13 @@ class Income < Transaction
   attr_accessible  :ref_number,  :date,                          :account_id,
                    :project_id,  :currency_id,                   :exchange_rate,
                    :discount,    :bill_number,                   :taxis_ids,
-                   :description, :transaction_details_attributes
+                   :description, :transaction_details_attributes, :contact_id
 
   
 
   #validations
   #validates_length_of   :description,          :within => 0..255
-  validates_presence_of :date, :account_id
+  #validates_presence_of :date#, :account_id
   validates             :ref_number,           :presence => true , :uniqueness => { :scope => :organisation_id, :allow_blank => false}
   validate              :valid_number_of_items
 

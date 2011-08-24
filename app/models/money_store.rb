@@ -3,7 +3,7 @@
 # email: boriscyber@gmail.com
 class MoneyStore < ActiveRecord::Base
 
-  include Models::Account::Base
+  include Models::Account::Money
   acts_as_org
   # callbacks
   before_validation :set_amount, :if => :new_record?
@@ -12,6 +12,7 @@ class MoneyStore < ActiveRecord::Base
   
   # relationships
   belongs_to :currency
+  has_one :account, :as => :accountable, :autosave => true
 
   # Common validations
   validates_numericality_of :amount, :greater_than_or_equal_to => 0

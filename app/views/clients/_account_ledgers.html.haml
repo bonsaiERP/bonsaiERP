@@ -1,0 +1,46 @@
+%ul.tabs
+  %li= link_option "Todas", client_path(@client), 'all'
+  %li= link_option "Esperando verificación #{size_or_blank(pendent)}", client_path(@client), 'pendent'
+  %li= link_option "Anuladas", client_path(@client), 'nulled'
+  %li= link_option "Verificadas", client_path(@client), 'con'
+
+
+.clear
+
+
+= link_to "Buscar", "#search", :class => 'search'
+
+= paginate ledgers
+
+%table.decorated.nwl.nwf
+  %tr
+    %th 
+      Fecha<br/>
+      %span.tip{:title => 'Nº de cheque, razón, recibo, etc.'} Referencia
+    %th Monto
+    %th Cuenta relacionada
+    %th Descripción
+    %th 
+      (V) Verificado por<br/>
+      (A) Anulado por
+    %th
+  - ledgers.each do |al|
+    -# al.ac_id = account.id
+    %tr{:class => al.in_out, :id => "tr#{al.id}" }
+      %td.d.check
+        = link_to lo(al.created_at), account_ledger_path(al), :class => "b #{conciliate_css(al)}"
+        %br/
+        = al.reference
+      %td.cur.color
+        = al.currency_symbol
+        = ntc al.account_amount
+      %td.cont= link_to al.related_account, al.related_account
+      %td.desc= link_description al
+      %td.rev
+        = "(V) #{al.approver}" if al.approver_id.present?
+        = "<br/><span class='red'>(A) #{al.nuller}</span>".html_safe if al.nuller_id.present?
+      %td.cur
+        - if al.can_destroy?
+          = link_to "borrar", al, :class => 'delete fl', :title => 'Borrar', 'data-confirm' => account_ledger_destroy_confirm_dialog(al)
+
+

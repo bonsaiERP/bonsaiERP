@@ -29,8 +29,8 @@ class AccountLedger < ActiveRecord::Base
   end
 
   # relationships
-  belongs_to :account
-  belongs_to :to, :class_name => "Account"
+  belongs_to :account, :autosave => true
+  belongs_to :to, :class_name => "Account", :autosave => true
   belongs_to :transaction
   belongs_to :currency
 
@@ -42,7 +42,7 @@ class AccountLedger < ActiveRecord::Base
   accepts_nested_attributes_for :account_ledger_details, :allow_destroy => true
 
   # Validations
-  validates_presence_of :to_id, :account_id
+  #validates_presence_of :to_id, :account_id
   validates_inclusion_of :operation, :in => OPERATIONS
   validates_numericality_of :amount, :greater_than => 0, :if => :new_record?
   validates_numericality_of :exchange_rate, :greater_than => 0
@@ -55,7 +55,7 @@ class AccountLedger < ActiveRecord::Base
 
   # accessible
   attr_accessible :account_id, :to_id, :date, :operation, :reference, :currency_id, :interests_penalties,
-    :amount, :exchange_rate, :description, :account_ledger_details_attributes
+    :amount, :exchange_rate, :description, :account_ledger_details_attributes, :contact_id
 
   # scopes
   scope :pendent, where(:conciliation => false, :active => true)
@@ -94,6 +94,12 @@ class AccountLedger < ActiveRecord::Base
     not(active)
   end
 
+  def self.contact(arr)
+    AccountLedger.org
+    .where("account_ledgers.account_id IN (:ids) OR account_ledgers.to_id IN (:ids)", :ids => arr)
+    .order("created_at DESC")
+  end
+
   # nulls an account_ledger
   def null_transaction
     return false if conciliation?
@@ -121,20 +127,20 @@ class AccountLedger < ActiveRecord::Base
 
   # Makes the conciliation to update accounts
   def conciliate_account
-    return false unless active?
-    return false if conciliation?
+    return false if not(active?) or conciliation?
 
-    self.approver_datetime = Time.now
+    self.approver_datetime = Time.zone.now
 
     if transaction_id.present?
       conciliate_transaction_account
     else
-      account_ledger_details.each do |ac|
-        ac.state = "con"
-      end
+      #account_ledger_details.each do |ac|
+      #  ac.state = "con"
+      #end
       self.conciliation = true
-
       self.approver_id = UserSession.user_id
+
+      update_related_accounts
 
       self.save
     end
@@ -247,6 +253,11 @@ class AccountLedger < ActiveRecord::Base
     # There must be at least 2 account details
     def number_of_details
       self.errors[:base] << "Debe seleccionar al menos 2 cuentas" if account_ledger_details.size < 2
+    end
+
+    def update_related_accounts
+      account.amount += amount
+      to.amount += -(amount * exchange_rate)
     end
 
 end

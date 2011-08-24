@@ -25,6 +25,7 @@ class Transaction < ActiveRecord::Base
 
   # relationships
   belongs_to :account
+  belongs_to :contact
   belongs_to :currency
   belongs_to :project
   belongs_to :creator , :class_name => "User"
@@ -43,7 +44,8 @@ class Transaction < ActiveRecord::Base
   accepts_nested_attributes_for :transaction_details, :allow_destroy => true
 
   # validations
-  validates :account_id, :contact_account => true
+  #validates :account_id, :contact_account => true
+  validates :contact_id, :contact  => true
 
   default_scope where(:active => true)
 

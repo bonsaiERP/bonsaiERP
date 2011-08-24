@@ -47,11 +47,11 @@ class AccountLedgersController < ApplicationController
 
   # POST /account_ledgers
   def create
-    @account = Account.org.find(params[:account_ledger][:account_id])
     @account_ledger = AccountLedger.new_money(params[:account_ledger])
+
     if @account_ledger.save
       flash[:notice] = "Se ha creado exitosamente la transacción"
-      redirect_to account_ledger_path(@account_ledger, :ac_id => @account_ledger.account_id)
+      redirect_to @account_ledger
     else
       render :action => 'new'
     end

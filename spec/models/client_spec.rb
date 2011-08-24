@@ -12,6 +12,7 @@ describe Client do
       :address => "Los Pinos Bloque 80\ndpto.201"}
 
     ModStubs.stub_account_type(:id => 1, :account_number => "Client")
+    AccountType.stubs(:org => stub(:find_by_account_number => stub(:id => 2), :account_number => "Client"))
   end
 
   it 'should create a client' do
@@ -20,39 +21,19 @@ describe Client do
 
   it 'should set the original type for account' do
     c = Client.create!(@params)
-    c.account.original_type.should == "Client"
+    c.accounts.size.should == 1
+    c.accounts.first.original_type.should == "Client"
   end
 
-  it 'should create an account' do
+  it 'should assing the correct currency' do
     c = Client.create!(@params)
-
-    c.account.should_not == blank?
-    c.account.amount.should == 0 
-    c.account.initial_amount.should == 0
-    c.account.account_type_id.should == 1
-
-    c.account.amount_currency(1).should == 0
+    c.accounts.first.currency_id.should == 1
   end
 
-  it 'should create account_currency' do
-    c = Client.new(@params)
+  it 'should give the correct currency' do
+    c = Client.create!(@params.merge(:currency_id => 3))
 
-    c.save.should == true
-    c.account.amount_currency(1).should == 0
-  end
-
-  it 'should set the to_s method for the account' do
-    c = Client.new(@params)
-
-    c.save.should == true
-    c.account.to_s.should == c.to_s
-
-    c.matchcode = "Boris Edgar Barroso Camberos"
-    c.save.should == true
-
-    c.reload
-    c.to_s.should == "Boris Edgar Barroso Camberos"
-    c.account.to_s.should == c.to_s
+    c.accounts.first.currency_id.should == 1
   end
     
 end

@@ -15,62 +15,16 @@
 
 .clear
 
-#tabs
+= jquery_tabs :tab_id => "contact_tab" do
+  =jqueryui_ul do
+    =tab "Transacciones", account_path(@account, :tab => 'transactions'), "transactions"
+    =tab "Ventas", account_path(@account, :tab => 'incomes'),"incomes"
+    =tab "Compras", account_path(@account, :tab => 'buys'),"buys"
+    =tab "Gastos", account_path(@account, :tab => 'expenses'),"expenses"
+    
+  = render @partial, @locals
 
-  %ul
-    %li <a href="#incomes" id="tab_info">Ventas</a>
-    %li <a href="#accounts" id="tab_pay_plans">Movimiento de cuentas</a>
-
-  #incomes
-
-    %h2 Ventas
-
-    - incomes = Income.find_with_state(params[:option]).where(:contact_id => @client.id).page(@page)
-
-    %ul.tabs
-      %li= link_to "Todas", client_path(:option => 'all', :anchor => 'incomes'), :class => tabs_filter('all')
-      %li= link_to "Esperando aprobación #{size_or_blank(incomes.draft.size)}", client_path(:option => 'draft', :anchor => 'incomes' ), :class => tabs_filter('draft')
-      %li= link_to "Esperando cobro #{size_or_blank(incomes.approved.size)}", client_path(:option => 'approved', :anchor => 'incomes'), :class => tabs_filter('approved')
-      %li= link_to "Vencidas #{size_or_blank(incomes.due.size)}", client_path(:option => 'due', :anchor => 'incomes'), :class => tabs_filter('due')
-      %li= link_to "Cobradas", client_path(:option => 'paid', :anchor => 'incomes'), :class => tabs_filter('paid')
-
-    = link_to "Buscar", "#search", :class => 'search'
-
-    = paginate incomes
-
-    %table{ :class => 'decorated nwl' }
-      %thead
-        %tr
-          %th{ :title => 'Número de referencia' } Nº Ref.
-          %th Vence el
-          %th Total<br/>#{currency_symbol}
-          %th Saldo<br/>#{currency_symbol}
-          %th{:title => 'Saldo Inventario'} Saldo<br/>Inv. #{currency_symbol}
-          %th{:title => 'Moneda'} Mon.
-          %th Estado
-          %th Contado<br/>Crédito
-          %th Fecha
-          %th
-
-      %tbody
-        - for income in incomes
-          %tr{ :class => cycle(:odd, :even) }
-            %td= link_to income.ref_number, income, :class => 'b'
-            %td= lo income.payment_date unless income.paid?
-            %td.cur= ntc exchange(income, :real_total, @currency_rates)
-            %td.cur= ntc exchange(income, :balance, @currency_rates)
-            %td.cur
-            %td <span>#{income.currency_symbol}</span>
-            %td <span class="#{income.real_state}">#{income.show_state}</span>
-            %td= cash_credit(income.cash)
-            %td.nw= lo income.date
-            %td.actions
-              = bonsai_links(income) if income.draft?
-
-  #accounts
-    %h2 Movimiento de cuentas
 
 :javascript
   $(function() {
-    $('#tabs').tabs();
   });

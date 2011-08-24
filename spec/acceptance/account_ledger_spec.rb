@@ -11,13 +11,13 @@ feature "Test account ledger", "for in outs and transferences" do
     create_currencies
     create_account_types
     b = create_bank(:currency_id => 1, :name => "Bank chiquito")
+    @bank_account = b.account
     @bank_ac_ic = b.account.id
-    c = create_client(:matchcode => "Lucas Estrella")
-    @cli_ac_id = c.account.id
+    @client = create_client(:matchcode => "Lucas Estrella")
 
     @params = {
       :date => Date.today, :operation => "in", :reference => "For more", :amount => 100,
-      :account_id => @bank_ac_ic, :to_id => @cli_ac_id
+      :account_id => @bank_ac_ic, :contact_id => @client.id
     }
   end
 
@@ -25,113 +25,113 @@ feature "Test account ledger", "for in outs and transferences" do
 
     al = AccountLedger.new_money(:operation => "in", :account_id => 1)
 
+    ac = @client.accounts.first
+
     al.to_id.should == nil
     al.in?.should == true
     al.account.currency_symbol.should == "Bs."
     al.active.should == true
 
-    al = AccountLedger.new_money(:operation => "in", :account_id => 1, :to_id => @cli_ac_id, :amount => 100, :reference => "Check 1120012" )
+    al = AccountLedger.new_money(:operation => "in", :account_id => @bank_ac_ic, :contact_id => @client.id, :amount => 100, :reference => "Check 1120012" )
     al.save.should == true
 
     al.active.should == true
 
-    al.description.should == "Ingreso por #{al.to}"
+    #al.description.should == "Ingreso por #{al.to}"
     al.creator_id.should == 1
 
     al.currency_id.should == 1
     al.amount.should == 100
     al.conciliation.should == false
 
-    det1 = al.account_ledger_details[0]
-    det2 = al.account_ledger_details[1]
+    al.account.original_type.should == "Bank"
+    al.to_id.should == ac.id
+    al.to.original_type.should == "Client"
 
-    det1.account_id.should == @bank_ac_ic
-    det1.amount.should == 100
-    det1.currency_id.should == 1
-    det1.exchange_rate.should == 1
-    det1.account.amount.should == 0
+    #det1 = al.account_ledger_details[0]
+    #det2 = al.account_ledger_details[1]
 
-    det2.account_id.should == @cli_ac_id
-    det2.amount.should == -100
-    det2.currency_id.should == 1
-    det2.exchange_rate.should == 1
-    det2.account.amount.should == 0
-    det2.account.cur(1).amount.should == 0
+    #det1.account_id.should == @bank_ac_ic
+    #det1.amount.should == 100
+    #det1.currency_id.should == 1
+    #det1.exchange_rate.should == 1
+    #det1.account.amount.should == 0
+
+    #det2.account_id.should == @cli_ac_id
+    #det2.amount.should == -100
+    #det2.currency_id.should == 1
+    #det2.exchange_rate.should == 1
+    #det2.account.amount.should == 0
+    #det2.account.cur(1).amount.should == 0
 
     UserSession.current_user = User.new{|u| u.id= 2}
 
     al.conciliate_account
 
     al.conciliation.should == true
+    al.reload
+
     al.approver_id.should == 2
     al.approver_datetime.kind_of?(Time).should == true
 
-    det1.account_id.should == @bank_ac_ic
-    det1.amount.should == 100
-    det1.currency_id.should == 1
-    det1.exchange_rate.should == 1
-    det1.account.amount.should == 100
-    det1.account.cur(1).amount.should == 100
+    al.account.amount.should == 100
+    al.to.amount.should == -100
 
-    det2.account_id.should == @cli_ac_id
-    det2.amount.should == -100
-    det2.currency_id.should == 1
-    det2.exchange_rate.should == 1
-    det2.account.amount.should == -100
-    det2.account.cur(1).amount.should == -100
+    #det1.account_id.should == @bank_ac_ic
+    #det1.amount.should == 100
+    #det1.currency_id.should == 1
+    #det1.exchange_rate.should == 1
+    #det1.account.amount.should == 100
+    #det1.account.cur(1).amount.should == 100
+
+    #det2.account_id.should == @cli_ac_id
+    #det2.amount.should == -100
+    #det2.currency_id.should == 1
+    #det2.exchange_rate.should == 1
+    #det2.account.amount.should == -100
+    #det2.account.cur(1).amount.should == -100
   end
 
   scenario "It should create amount between two different currencies" do
     b = create_bank(:currency_id => 2)
     b.account.currency_id.should == 2
 
-    al = AccountLedger.new_money(:operation => "in", :account_id => b.account.id, :to_id => @cli_ac_id, :amount => 100, :reference => "Check 1120012" )
+    al = AccountLedger.new_money(:operation => "in", :account_id => b.account.id, :contact_id => @client.id, :amount => 100, :reference => "Check 1120012" )
     al.save.should == true
 
+    al.reload
+    al.to.original_type.should == "Client"
+    @client.reload
+    @client.accounts.size.should == 2
 
+    al.account.amount.should == 0
+    al.to.amount.should == 0
 
-    det1 = al.account_ledger_details[0]
-    det2 = al.account_ledger_details[1]
+    al.conciliate_account.should be_true
+    al.reload
 
-    det1.account.cur(2).amount.should == 0
-    det2.account.amount.should == 0
-
-    al.conciliate_account
-
-    det2.account.cur(1).amount.should == 0
-    det2.account.cur(2).amount.should == -100
+    al.account.amount.should == 100
+    al.to.amount.should == -100
   end
 
   scenario "It should create an out" do
     al = AccountLedger.new_money(:operation => "out", :account_id => @bank_ac_ic,              
-           :to_id => @cli_ac_id, :amount => 100, :reference => "Check 1120012" )
+           :contact_id => @client.id, :amount => 100, :reference => "Check 1120012" )
     
 
     al.save.should == true
     al.organisation_id.should == 1
-    al.description.should =~ /Egreso para/
     al.amount.should == -100
     al.operation.should == "out"
 
-    det1 = al.account_ledger_details[0]
-    det2 = al.account_ledger_details[1]
-
-    det1.amount.should == -100
-    det1.state.should == "uncon"
-    det1.uncon?.should == true
-    det1.account.amount.should == 0
-    det2.amount.should == 100
+    al.account.amount == 0
+    al.to.amount == 0
 
     al.conciliate_account.should == true
+    al.reload
 
-    ac1 = det1.account
-    ac2 = det2.account
-
-    det1.account.amount.should == -100
-    det2.account.amount.should == 100
-
-    ac1.reload.amount.should == -100
-    ac2.reload.amount.should == 100
+    al.account.amount == -100
+    al.to.amount == -100
   end
 
   scenario "Nulling an account" do
@@ -140,26 +140,17 @@ feature "Test account ledger", "for in outs and transferences" do
     al.save.should == true
     al.active.should == true
 
-    ac1 = Account.find(@params[:account_id])
-    ac2 = Account.find(@params[:to_id])
-    #puts al.errors.messages
-    ac1.amount.should == 0
-    ac2.amount.should == 0
-
     UserSession.current_user = User.new{|u| u.id= 5}
 
-    al.null_account.should == true
+    al.null_transaction.should == true
     al.nuller_id.should == 5
     al.nuller_datetime.kind_of?(Time).should == true
 
-    al.account_ledger_details[0].state.should == "nulled"
-    al.account_ledger_details[1].state.should == "nulled"
-
     al.active.should == false
-    al.account_ledger_details[0].active.should == false
-    al.account_ledger_details[1].active.should == false
-    ac1.reload.amount.should == 0
-    ac2.reload.amount.should == 0
+    al.reload
+
+    al.account.amount.should == 0
+    al.to.amount.should == 0
 
     al.conciliate_account.should == false
   end
@@ -181,9 +172,6 @@ feature "Test account ledger", "for in outs and transferences" do
 
     ac1_amt = ac1.amount
     ac2_amt = ac2.amount
-
-    al.account_ledger_details[0].amount.should == -100
-    al.account_ledger_details[1].amount.should == 50
 
     al.conciliate_account.should == true
 

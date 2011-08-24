@@ -4,13 +4,15 @@
 require 'active_support/concern'
 
 module Models::Account
-  module Base
+  module Contact
     
     extend ActiveSupport::Concern
 
     included do
-      before_create :set_account_name
+      attr_accessor :currency_id
+
       before_create :create_new_account
+      before_save :set_account_name, :unless => :new_record?
     end
 
     module ClassMethods
@@ -18,7 +20,7 @@ module Models::Account
 
     module InstanceMethods
       def account_cur
-        accounts.find_by_currency_id(currency_id)
+        accounts.select{|v| v.currency_id === currency_id}.first
       end
 
       private
@@ -31,6 +33,7 @@ module Models::Account
         ) {|a|
           a.organisation_id = OrganisationSession.organisation_id
           a.original_type = self.class.to_s
+          a.name = self.to_s
         }
       end
 
@@ -41,3 +44,4 @@ module Models::Account
     end
   end
 end
+

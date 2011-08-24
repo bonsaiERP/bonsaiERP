@@ -2,11 +2,10 @@
 # To use: $('#elem').contactAutocomplete(["Client", "Supplier"], {'model': 'Contact'})
 class ContactAutocomplete
   constructor: (@elem, @models, @options)->
-    console.log "Creado"
     @models  ||= ["Client", "Supplier", "Staff"]
     @options ||= {}
 
-    @model = @options.model || "Account"
+    @model = "Contact"#@options.model || "Account"
     @cont  = $(@elem).parents('.input:first')
     @cont.removeClass 'numeric'
 
@@ -14,6 +13,7 @@ class ContactAutocomplete
     @.setRoutes()
     @.labels()
     @.addAutocompleteField()
+
   # set Initial values
   setInitial: ->
     @val  = $(@elem).data('val')  || ''
@@ -156,6 +156,7 @@ class ContactAutocomplete
     $(id).val('').data('val', '')
 
     $(@elem).val('')
+    $("#{id}")
     .autocomplete('destroy')
     .autocomplete(
       'source': route,

@@ -3,12 +3,13 @@
 # email: boriscyber@gmail.com
 class Contact < ActiveRecord::Base
   acts_as_org
-  include Models::Account::Base
+  include Models::Account::Contact
 
   TYPES = ['Client', 'Supplier', 'Staff']
 
   # relations
   has_many :transactions
+  has_many :accounts, :as => :accountable, :autosave => true
 
   validates_presence_of   :first_name, :last_name, :address, :matchcode
   #validates_uniqueness_of :code, :scope => :organisation_id
@@ -28,7 +29,7 @@ class Contact < ActiveRecord::Base
   delegate :id, :name, :to => :account, :prefix => true
 
   def self.search(match)
-    includes(:account).where("contacts.matchcode LIKE ?", "%#{match}%")
+    includes(:accounts).where("contacts.matchcode LIKE ?", "%#{match}%")
   end
 
   # Finds a contact using the type

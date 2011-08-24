@@ -7,7 +7,7 @@ class Account < ActiveRecord::Base
 
   # callbacks
   before_create :set_amount
-  before_create :create_account_currency
+  #before_create :create_account_currency
 
   serialize :amount_currency
 
@@ -21,7 +21,7 @@ class Account < ActiveRecord::Base
 
   has_many :account_ledgers
   has_many :account_ledger_details
-  has_many :account_currencies, :autosave => true
+  #has_many :account_currencies, :autosave => true
   # Transaction
   has_many :incomes,  :class_name => "Transaction", :conditions => "transactions.type = 'Income'"
   has_many :buys,     :class_name => "Transaction", :conditions => "transactions.type = 'Buy'"
@@ -36,6 +36,7 @@ class Account < ActiveRecord::Base
 
   # scopes
   scope :money, where(:accountable_type => "MoneyStore")
+  scope :contact, where(:accountable_type => "Contact")
 
   # returns the class for a currency
   def cur(cur_id = nil)
