@@ -1,7 +1,5 @@
 -content_for :links do
-  %ul.breadcrumps
-    %li #{link_account @account_ledger}<span>&gt;</span>
-    %li #{link_to @account_ledger.selected_account, @account_ledger.selected_account}<span>&gt;</span>
+  = account_ledger_show_links(@account_ledger)
 
   .links
     = link_to "Anular", @account_ledger, :class => 'delete', 'data-confirm' => 'Esta seguro de borrar la transacción' if @account_ledger.can_destroy?
@@ -12,7 +10,7 @@
 
 .clear
 .moneybox.fl
-  = in_out @account_ledger, :class => "b"
+  = in_out @account_ledger.account_amount, :class => "b"
   - if Contact::TYPES.include? @account_ledger.account_original_type
     %h3= "#{@account_ledger.currency_symbol} #{ntc @account_ledger.account_amount}"
   - else

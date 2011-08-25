@@ -38,20 +38,6 @@ class Account < ActiveRecord::Base
   scope :money, where(:accountable_type => "MoneyStore")
   scope :contact, where(:accountable_type => "Contact")
 
-  # returns the class for a currency
-  def cur(cur_id = nil)
-    cur_id ||= currency_id
-    ret = account_currencies.find_by_currency_id(cur_id)
-    ret ||= AccountCurrency.new(:amount => 0, :currency_id => id)
-    ret
-  end
-
-  # Returns the amount for one currency
-  def amount_currency(cur_id = nil)
-    cur_id ||= currency_id
-    cur(cur_id).amount
-  end
-
   def to_s
     name
   end
@@ -71,10 +57,6 @@ class Account < ActiveRecord::Base
     args = [:name, :currency_id] if args.empty?
     l = lambda {|v| args.map {|val| [val, v.send(val)] } }
     Hash[ Account.org.money.map {|v| [v.id, Hash[l.call(v)] ]  } ]
-  end
-
-  def self_with_currencies_hash(*args)
-    {:name => name, :id => id, :currencies => currencies_to_hash }
   end
 
   # Creates a hash for with the amount for each curency available

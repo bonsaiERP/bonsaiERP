@@ -12,7 +12,7 @@ class ClientsController < ApplicationController
     if params[:search]
       @clients = Client.org.search(params[:search]).page(@page)
     else
-      @clients = Client.org.includes(:account).page(@page)
+      @clients = Client.org.page(@page)
     end
   end
 

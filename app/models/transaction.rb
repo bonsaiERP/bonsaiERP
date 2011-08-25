@@ -75,7 +75,7 @@ class Transaction < ActiveRecord::Base
 
   # Finds using the state
   def self.find_with_state(state)
-    ret   = self.org.includes(:account, :pay_plans, :currency).order("date DESC")
+    ret   = self.org.includes(:contact, :currency).order("date DESC")
     ret = ret.send(scoped_state(state)) if scoped_state(state)
     ret
   end
@@ -93,7 +93,7 @@ class Transaction < ActiveRecord::Base
 
   # method used for searching
   def self.search(options)
-    ret = self.org.includes(:account, :currency)
+    ret = self.org.includes(:contact, :currency)
     ret = ret.send(scoped_state(options[:option])) if scoped_state(options[:option])
     ret.where("transactions.ref_number LIKE :code OR accounts.name LIKE :code", :code => "%#{options[:search]}%")
   end

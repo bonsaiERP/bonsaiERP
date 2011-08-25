@@ -1,7 +1,7 @@
 class PayPlans
   constructor: ->
-    @table  = $('#pay_plans_table')
-    @inputs = @table.find('input.check')
+    @$table  = $('#pay_plans_table')
+    @$inputs = @$table.find('input.check')
     @.setEvents()
 
   # Events
@@ -9,15 +9,19 @@ class PayPlans
     self = @
     $('#pay_plans_checkbox').die().live 'click', ->
       if $(this).attr("checked")
-        self.inputs.attr("checked", true)
+        self.$inputs.attr("checked", true)
       else
-        self.inputs.attr("checked", false)
+        self.$inputs.attr("checked", false)
 
     $('#destroy_pay_plans_link').die().live 'click', (e)->
 
       ids = []
-      self.inputs.each (i, el)->
+      self.$inputs.each (i, el)->
         ids.push el.value if $(el).attr("checked")
+
+      if self.$table.find("tr.pay_plan").length < 2
+        alert "No es posible borrar, debe existir mas de un plan de pago"
+        return false
 
       if ids.length > 0
         self.destroyPayPlans(ids, this)

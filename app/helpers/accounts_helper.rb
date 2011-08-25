@@ -147,4 +147,19 @@ module AccountsHelper
     options[:class] = options[:class].blank? ? css : options[:class] << " #{css}"
     content_tag(:span, txt, options)
   end
+
+  def account_ledger_show_links(al)
+    case al.selected_account.original_type
+    when "Client"
+      render "account_ledgers/contact_links", :plural => "Clientes", :path => "/clients"
+    when "Supplier"
+      render "account_ledgers/contact_links", :plural => "Proveedores", :path => "/supliers"
+    when "Staff"
+      render "account_ledgers/contact_links", :plural => "Personal", :paht => "/staffs"
+    when "Bank"
+      render "account_ledgers/money_links", :plural => "Cuentas bancarias", :path => "/banks"
+    when "Cash"
+      render "account_ledgers/money_links", :plural => "Cuenas caja", :path => "/cashes"
+    end
+  end
  end

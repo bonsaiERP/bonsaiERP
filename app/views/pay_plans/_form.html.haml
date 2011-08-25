@@ -15,7 +15,7 @@
   - else
     = f.input :email, :label => 'Enviar email en fecha de alerta', :hint => "Email para <b>#{organisation_name}</b>".html_safe
 
-  =f.input :repeat, :as => :boolean, :label => 'Repetir patrón', :hint => 'Repite hasta completar el saldo'
+  =f.input :repeat, :as => :boolean, :label => 'Repetir patrón', :hint => 'Repite la <b>Cantidad</b> hasta completar el saldo'.html_safe
   /= f.input :description, :as => :text, :input_html => {:rows => 4, :cols => 35 }
   .clear
   .submit

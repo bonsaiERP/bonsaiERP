@@ -45,7 +45,6 @@
 
       var accounts = #{Account.org.money.to_hash.to_json};
       var currencies = #{Currency.scoped.to_hash.to_json};
-      var contact = #{@transaction.account.self_with_currencies_hash.to_json};
       var account_data = #{@account_ledger.create_hash(:currency_id, :account_id).to_json };
 
       var p = new Payment(accounts, currencies, contact, account_data, #{@transaction.currency_id});
