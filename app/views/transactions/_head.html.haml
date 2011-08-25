@@ -41,9 +41,3 @@
   %label Saldo
   %h3#balance #{@transaction.currency_symbol} #{ntc @transaction.balance}
 
-- if @transaction.show_inventory?
-  .moneybox.fl
-    %label Saldo inventario
-    %h3#inventory_balance #{currency_symbol} #{ntc @transaction.balance_inventory}
-
-

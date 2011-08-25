@@ -1,4 +1,4 @@
-- @accounts = Account.org.money
+- @accounts = Account.list_money_contact(@transaction.contact_id)
 - if @accounts.any?
   = simple_form_for(@account_ledger, :url => "/payments") do |f|
     = bonsai_form_error(f)

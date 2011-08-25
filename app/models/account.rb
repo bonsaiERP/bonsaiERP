@@ -32,14 +32,18 @@ class Account < ActiveRecord::Base
   validates_numericality_of :amount
 
   # delegations
-  delegate :symbol, :name, :to => :currency, :prefix => true
+  delegate :symbol, :name, :to => :currency, :prefix => true, :allow_nil => true
 
   # scopes
   scope :money, where(:accountable_type => "MoneyStore")
   scope :contact, where(:accountable_type => "Contact")
 
   def to_s
-    name
+    if accountable_type === "Contact"
+      "#{name} (#{currency_symbol} #{amount.abs})"
+    else
+      "#{name} (#{currency_symbol})"
+    end
   end
 
   def amount_to_conciliate()
@@ -67,6 +71,13 @@ class Account < ActiveRecord::Base
 
   def select_cur(cur_id)
     account_currencies.select {|ac| ac.currency_id == cur_id }.first
+  end
+
+  # Returns money and contact accounts for a Contact
+  def self.list_money_contact(con_id)
+    Account.org.where(
+    "accountable_type = :t1 OR (accountable_id = :id AND accountable_type = :t2 AND amount < 0)", 
+    :t1 => "MoneyStore", :t2 => "Contact", :id => con_id).order("accountable_type")
   end
 
   private
