@@ -4,20 +4,21 @@
 class AccountLedger < ActiveRecord::Base
 
   attr_reader :ac_id
+  attr_accessor :make_conciliation
 
   acts_as_org
   # callbacks
-  before_validation { self.currency_id = account_currency_id unless currency_id.present? }
+  before_validation :set_currency_id
   before_destroy    { false }
   before_create     { self.creator_id = UserSession.user_id }
 
   # includes
   include ActionView::Helpers::NumberHelper
 
-
   # includes related to the model
   include Models::AccountLedger::Money
   include Models::AccountLedger::Transaction
+  include Models::AccountLedger::Conciliation
 
   OPERATIONS = %w(in out trans)
   OPERATIONS.each do |op|
@@ -53,8 +54,9 @@ class AccountLedger < ActiveRecord::Base
   #validate  :number_of_details
   #validate  :total_amount_equal
 
+  #attr_readonly :currency_id, :amount
   # accessible
-  attr_accessible :account_id, :to_id, :date, :operation, :reference, :currency_id, :interests_penalties,
+  attr_accessible :account_id, :to_id, :date, :operation, :reference, :interests_penalties,
     :amount, :exchange_rate, :description, :account_ledger_details_attributes, :contact_id
 
   # scopes
@@ -85,11 +87,6 @@ class AccountLedger < ActiveRecord::Base
     active? and not(conciliation?)
   end
 
-  # Determines if the account ledger can conciliate
-  def can_conciliate?
-    not(conciliation?) and active?
-  end
-
   def nulled?
     not(active)
   end
@@ -108,10 +105,6 @@ class AccountLedger < ActiveRecord::Base
 
     self.nuller_id = UserSession.user_id
     self.active    = false
-    account_ledger_details.each do |det| 
-      det.state = 'nulled'
-      det.active = false
-    end
   
     if transaction_id.present?
       null_transaction_account
@@ -123,24 +116,6 @@ class AccountLedger < ActiveRecord::Base
   # Creates a hash with the methods
   def create_hash(*methods)
     Hash[ methods.map {|m| [m, self.send(m)] } ]
-  end
-
-  # Makes the conciliation to update accounts
-  def conciliate_account
-    return false if not(active?) or conciliation?
-
-    self.approver_datetime = Time.zone.now
-
-    if transaction_id.present?
-      conciliate_transaction_account
-    else
-      self.conciliation = true
-      self.approver_id = UserSession.user_id
-
-      update_related_accounts
-
-      self.save
-    end
   end
 
   def show_exchange_rate?
@@ -252,9 +227,12 @@ class AccountLedger < ActiveRecord::Base
       self.errors[:base] << "Debe seleccionar al menos 2 cuentas" if account_ledger_details.size < 2
     end
 
-    def update_related_accounts
-      account.amount += amount
-      to.amount += -(amount * exchange_rate)
+    def set_currency_id
+      self.currency_id = account_currency_id
+    end
+
+    def make_conciliation?
+      make_conciliation === true
     end
 
 end

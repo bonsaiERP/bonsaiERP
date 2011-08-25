@@ -37,7 +37,7 @@ class Transaction < ActiveRecord::Base
 
   has_many :pay_plans          , :dependent => :destroy , :order => "payment_date ASC", :autosave => true
   has_many :transaction_details, :dependent => :destroy
-  has_many :account_ledgers    , :dependent => :destroy, :conditions => "operation != 'transaction'"#, :autosave => true
+  has_many :account_ledgers    , :dependent => :destroy, :conditions => "operation != 'transaction'", :autosave => false
 
   has_and_belongs_to_many :taxes, :class_name => 'Tax'
   # nested attributes

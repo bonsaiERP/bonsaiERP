@@ -37,7 +37,6 @@ feature "Test account ledger", "for in outs and transferences" do
 
     al.active.should == true
 
-    #al.description.should == "Ingreso por #{al.to}"
     al.creator_id.should == 1
 
     al.currency_id.should == 1
@@ -47,22 +46,6 @@ feature "Test account ledger", "for in outs and transferences" do
     al.account.original_type.should == "Bank"
     al.to_id.should == ac.id
     al.to.original_type.should == "Client"
-
-    #det1 = al.account_ledger_details[0]
-    #det2 = al.account_ledger_details[1]
-
-    #det1.account_id.should == @bank_ac_ic
-    #det1.amount.should == 100
-    #det1.currency_id.should == 1
-    #det1.exchange_rate.should == 1
-    #det1.account.amount.should == 0
-
-    #det2.account_id.should == @cli_ac_id
-    #det2.amount.should == -100
-    #det2.currency_id.should == 1
-    #det2.exchange_rate.should == 1
-    #det2.account.amount.should == 0
-    #det2.account.cur(1).amount.should == 0
 
     UserSession.current_user = User.new{|u| u.id= 2}
 
@@ -77,19 +60,6 @@ feature "Test account ledger", "for in outs and transferences" do
     al.account.amount.should == 100
     al.to.amount.should == -100
 
-    #det1.account_id.should == @bank_ac_ic
-    #det1.amount.should == 100
-    #det1.currency_id.should == 1
-    #det1.exchange_rate.should == 1
-    #det1.account.amount.should == 100
-    #det1.account.cur(1).amount.should == 100
-
-    #det2.account_id.should == @cli_ac_id
-    #det2.amount.should == -100
-    #det2.currency_id.should == 1
-    #det2.exchange_rate.should == 1
-    #det2.account.amount.should == -100
-    #det2.account.cur(1).amount.should == -100
   end
 
   scenario "It should create amount between two different currencies" do

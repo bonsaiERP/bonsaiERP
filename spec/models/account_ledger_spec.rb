@@ -5,11 +5,11 @@ describe AccountLedger do
   let(:params) do
     {
       :date => Date.today, :operation => "out", :reference => "Income", :amount => 100, :currency_id => 1, :exchange_rate => 1,
-      :account_id => 2, :to_id => 1,
-      :account_ledger_details_attributes => [
-        {:account_id => 1, :amount => 100 },
-        {:account_id => 2, :amount => -100 },
-      ]
+      :account_id => 2, :to_id => 1#,
+      #:account_ledger_details_attributes => [
+      #  {:account_id => 1, :amount => 100 },
+      #  {:account_id => 2, :amount => -100 },
+      #]
     }
   end
 
@@ -61,22 +61,9 @@ describe AccountLedger do
   #end
 
   it 'should assing currency_id' do
-    a = AccountLedger.new(:currency_id => 1)
+    a = AccountLedger.new(:account_id => 1)
     a.valid?
     a.currency_id.should == 1
-  end
-
-  it 'should be valid if the accounts are balanced' do
-    a = AccountLedger.create(params)
-    a.account_ledger_details.inject(0) {|sum,v| sum += v.amount }.should == 0
-  end
-
-  it 'should not allow uncorrect operations' do
-    params[:operation] = "jojojo"
-    al = AccountLedger.new(params)
-    
-    al.valid?.should == false
-    al.errors[:operation].should_not == blank?
   end
 
   it 'should return false for money?' do
@@ -86,45 +73,25 @@ describe AccountLedger do
 
   it 'should update the account value' do
     al = AccountLedger.new(params)
-    al.save.should == true
+    al.save.should be_true
 
-    al.account_ledger_details.map(&:state).uniq.should == ["con"]
-
-    a1 = Account.find(1)
-    a1.amount.should == 100
-    a1.amount_currency(a1.currency_id).should == 100
-
-    a2 = Account.find(2)
-    a2.amount.should == 900
-    a2.amount_currency(1).should == 900
-
-    al = AccountLedger.create(params)
-
-    a1 = Account.find(1)
-    a1.amount.should == 200
-    a1.amount_currency( 1 ).should == 200
-
-    a2 = Account.find(2)
-    a2.amount.should == 800
-    a2.initial_amount.should == 1000
-    a2.amount_currency(1).should == 800
+    al.account.amount.should == 1000
+    puts "--------"
+    al.conciliate_account.should be_true
+    al.reload
+    al.account.amount.should == 900
   end
 
   it 'should allow negative values' do
     params[:operation] = "in"
-    params[:account_ledger_details_attributes][0][:amount] = -200
-    params[:account_ledger_details_attributes][1][:amount] = 200
 
     al = AccountLedger.create(params)
 
     al.persisted?.should == true
     al.reload
 
-    al.account_ledger_details.find_by_account_id(1).amount.should == -200
-    al.account_ledger_details.find_by_account_id(2).amount.should == 200
-
-    Account.find(1).amount.should == -200
-    Account.find(2).amount.should == 1200
+    al.account.amount.should == 1200
+    al.to.amount.should == -200
   end
 
   it 'should work with other currencies' do

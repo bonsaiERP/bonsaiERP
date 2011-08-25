@@ -47,6 +47,10 @@ class Contact < ActiveRecord::Base
     matchcode
   end
 
+  def account_cur(currency_id)
+    accounts.find_by_currency_id(currency_id)
+  end
+
   def show_type
     case type
     when "Client" then I18n.t("contact.client")
