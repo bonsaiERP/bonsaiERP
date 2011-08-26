@@ -27,10 +27,10 @@ module ApplicationHelper
   # @param String text
   # @param String url
   # @param String option
-  def link_option(text, url, option, options = {})
+  def link_option(text, option, options = {})
     options[:class] = "#{ options[:class] } #{( params[:option] === option ? 'active' : '' )}"
-
-    link_to text, create_options_url(url.dup, option), options
+    url_hash = params.merge(:option => option)
+    link_to text, url_for(url_hash), options
   end
 
   # Creates the url for the link_option

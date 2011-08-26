@@ -19,6 +19,6 @@
     =submit_tag 'Buscar'
 
 = link_to "Buscar", "#search_supplier", :class => 'search'
-
 = paginate(@suppliers)
+
 = render 'contacts/list', :list => @suppliers

@@ -1,23 +1,10 @@
-- content_for :links do
-  %ul.breadcrumps
-    %li #{link_to "Ventas", incomes_path} &gt;
-
-  .links= link_to "Nueva venta", new_income_path, :class => 'new'
-
-:css
-  .search label{ width: 15em; }
-
-%h1 Ventas
-
-- @in = Income.org
-
 %ul.tabs
-  %li= link_incomes "Todas", 'all'
-  %li= link_incomes "Proformas #{size_or_blank(@in.draft.size)}", 'draft'
-  %li= link_incomes "Esperando cobro #{size_or_blank(@in.approved.size)}", 'awaiting_payment'
-  %li= link_incomes "Vencidas #{size_or_blank(@in.due.size)}", 'due'
-  %li= link_incomes "Con entrega pendiente #{size_or_blank(@in.inventory.size)}", 'inventory'
-  %li= link_incomes "Cobradas", 'paid'
+  %li= link_option "Todas", 'all'
+  %li= link_option "Proformas #{size_or_blank(incomes_count.draft.size)}", 'draft'
+  %li= link_option "Esperando cobro #{size_or_blank(incomes_count.approved.size)}", 'approved'
+  %li= link_option "Vencidas #{size_or_blank(incomes_count.due.size)}", 'due'
+  %li= link_option "Con entrega pendiente #{size_or_blank(incomes_count.inventory.size)}", 'inventory'
+  %li= link_option "Cobradas", 'paid'
 
 #search_income.search{:style => show_if_search}
   %a.close{:href => "#"} cerrar
@@ -35,14 +22,13 @@
 
 = link_to "Buscar", "#search_income", :class => 'search'
 
-= paginate @incomes
+= paginate incomes
 
 %table{ :class => 'decorated nwl' }
   %thead
     %tr
       %th.tip{:title => 'Estado'} Est.
       %th.tip{ :title => 'Número de referencia' } Nº Ref.
-      %th Cliente
       %th Vence el
       %th Total<br/>#{currency_symbol}
       %th Saldo<br/>#{currency_symbol}
@@ -53,12 +39,11 @@
       %th
 
   %tbody
-    -  @incomes.each do |income|
+    -  incomes.each do |income|
       %tr{ :class => cycle(:odd, :even) }
         %td 
           %span{:class => "#{income.real_state} tip", :title => income.show_state}
         %td= link_to income.ref_number, income, :class => 'b'
-        %td= income.contact
         %td= lo income.payment_date unless income.paid?
         %td.cur= ntc exchange(income, :real_total, @currency_rates)
         %td.cur= ntc exchange(income, :balance, @currency_rates)

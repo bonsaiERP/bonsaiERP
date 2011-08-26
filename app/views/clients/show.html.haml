@@ -14,13 +14,20 @@
 - @currency_rates = CurrencyRate.current_hash
 
 .clear
+- @client.accounts.each do |ac|
+  .moneybox.fl
+    %label Cuenta en #{ac.currency_symbol}
+    %h3= ntc ac.amount
+
+
+.clear
 
 = jquery_tabs :tab_id => "contact_tab" do
   =jqueryui_ul do
-    =tab "Transacciones", account_path(@account, :tab => 'transactions'), "transactions"
-    =tab "Ventas", account_path(@account, :tab => 'incomes'),"incomes"
-    =tab "Compras", account_path(@account, :tab => 'buys'),"buys"
-    =tab "Gastos", account_path(@account, :tab => 'expenses'),"expenses"
+    =tab "Transacciones", client_path(@client, :tab => 'transactions'), "transactions"
+    =tab "Ventas", client_path(@client, :tab => 'incomes'),"incomes"
+    =tab "Compras", client_path(@client, :tab => 'buys'),"buys"
+    =tab "Gastos", client_path(@client, :tab => 'expenses'),"expenses"
     
   = render @partial, @locals
 

@@ -9,6 +9,10 @@ class Contact < ActiveRecord::Base
 
   # relations
   has_many :transactions
+  has_many :incomes,  :class_name => "Transaction"
+  has_many :buys,     :class_name => "Transaction"
+  has_many :expenses, :class_name => "Transaction"
+  # Account
   has_many :accounts, :as => :accountable, :autosave => true
 
   validates_presence_of   :first_name, :last_name, :address, :matchcode

@@ -5,6 +5,8 @@ class SuppliersController < ApplicationController
   before_filter :check_authorization!
   before_filter :find_supplier, :only => [:show, :edit, :update, :destroy]
 
+  include Controllers::Contact
+
   #respond_to :html, :xml, :json
   # GET /suppliers
   # GET /suppliers.xml
@@ -12,14 +14,14 @@ class SuppliersController < ApplicationController
     if params[:search]
       @suppliers = Supplier.org.search(params[:search]).page(@page)
     else
-      @suppliers = Supplier.org.includes(:account).page(@page)
+      @suppliers = Supplier.org.page(@page)
     end
   end
 
   # GET /suppliers/1
   # GET /suppliers/1.xml
   def show
-    @account = @supplier.account
+    super @supplier
   end
 
   # GET /suppliers/new

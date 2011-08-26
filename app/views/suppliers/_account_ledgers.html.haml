@@ -1,8 +1,8 @@
 %ul.tabs
-  %li= link_option "Todas", 'all'
-  %li= link_option "Esperando verificación #{size_or_blank(pendent)}", 'pendent'
-  %li= link_option "Anuladas", 'nulled'
-  %li= link_option "Verificadas", 'con'
+  %li= link_option "Todas", client_path(@supplier), 'all'
+  %li= link_option "Esperando verificación #{size_or_blank(pendent)}", client_path(@supplier), 'pendent'
+  %li= link_option "Anuladas", client_path(@supplier), 'nulled'
+  %li= link_option "Verificadas", client_path(@supplier), 'con'
 
 
 .clear
@@ -42,5 +42,6 @@
       %td.cur
         - if al.can_destroy?
           = link_to "borrar", al, :class => 'delete fl', :title => 'Borrar', 'data-confirm' => account_ledger_destroy_confirm_dialog(al)
+
 
 

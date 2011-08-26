@@ -1,75 +1,38 @@
 - content_for :links do
   %ul.breadcrumps
-    %li #{link_to "Proveedores", suppliers_path} <span>&gt;</span>
+    %li #{link_to "Clientes", clients_path} <span>&gt;</span>
   .links
-    = link_to 'Nuevo', new_supplier_path, :class => 'new'
-    = link_to 'Editar', edit_supplier_path(@supplier), :class => 'edit'
-    = link_to 'Borrar', @supplier, :remote => true, :class => 'delete'
+    = link_to 'Nuevo', new_client_path, :class => 'new'
+    = link_to 'Editar', edit_client_path(@supplier), :class => 'edit'
+    = link_to 'Borrar', @supplier, :class => 'delete'
 
 %h1= @supplier.matchcode
 
+.clear
 = render 'contacts/show', :klass => @supplier
 
 - @currency_rates = CurrencyRate.current_hash
 
 .clear
+- @supplier.accounts.each do |ac|
+  .moneybox.fl
+    %label Cuenta en #{ac.currency_symbol}
+    %h3= ntc ac.amount
 
-#tabs
 
-  %ul
-    %li <a href="#buys" id="tab_info">Compras</a>
-    %li <a href="#accounts" id="tab_pay_plans">Movimiento de cuentas</a>
+.clear
 
-  #buys
+= jquery_tabs :tab_id => "contact_tab" do
+  =jqueryui_ul do
+    =tab "Transacciones", client_path(@supplier, :tab => 'transactions'), "transactions"
+    =tab "Compras", client_path(@supplier, :tab => 'buys'),"buys"
+    =tab "Ventas", client_path(@supplier, :tab => 'incomes'),"incomes"
+    =tab "Gastos", client_path(@supplier, :tab => 'expenses'),"expenses"
+    
+  = render @partial, @locals
 
-    %h2 Ventas
-
-    - buys = Buy.find_with_state(params[:option]).where(:contact_id => @supplier.id).page(@page)
-
-    %ul.tabs
-      %li= link_to "Todas", client_path(:option => 'all', :anchor => 'buys'), :class => tabs_filter('all')
-      %li= link_to "Esperando aprobación #{size_or_blank(buys.draft.size)}", client_path(:option => 'draft', :anchor => 'buys' ), :class => tabs_filter('draft')
-      %li= link_to "Esperando cobro #{size_or_blank(buys.approved.size)}", client_path(:option => 'approved', :anchor => 'buys'), :class => tabs_filter('approved')
-      %li= link_to "Vencidas #{size_or_blank(buys.due.size)}", client_path(:option => 'due', :anchor => 'buys'), :class => tabs_filter('due')
-      %li= link_to "Cobradas", client_path(:option => 'paid', :anchor => 'buys'), :class => tabs_filter('paid')
-
-    = link_to "Buscar", "#search", :class => 'search'
-
-    = paginate buys
-
-    %table{ :class => 'decorated nwl' }
-      %thead
-        %tr
-          %th{ :title => 'Número de referencia' } Nº Ref.
-          %th Vence el
-          %th Total<br/>#{currency_symbol}
-          %th Saldo<br/>#{currency_symbol}
-          %th{:title => 'Saldo Inventario'} Saldo<br/>Inv. #{currency_symbol}
-          %th{:title => 'Moneda'} Mon.
-          %th Estado
-          %th Contado<br/>Crédito
-          %th Fecha
-          %th
-
-      %tbody
-        - for buy in buys
-          %tr{ :class => cycle(:odd, :even) }
-            %td= link_to buy.ref_number, buy, :class => 'b'
-            %td= lo buy.payment_date unless buy.paid?
-            %td.cur= ntc exchange(buy, :real_total, @currency_rates)
-            %td.cur= ntc exchange(buy, :balance, @currency_rates)
-            %td.cur
-            %td <span>#{buy.currency_symbol}</span>
-            %td <span class="#{buy.real_state}">#{buy.show_state}</span>
-            %td= cash_credit(buy.cash)
-            %td.nw= lo buy.date
-            %td.actions
-              = bonsai_links(buy) if buy.draft?
-
-  #accounts
-    %h2 Movimiento de cuentas
 
 :javascript
   $(function() {
-    $('#tabs').tabs();
   });
+
