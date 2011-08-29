@@ -12,10 +12,10 @@
 <br/><br/>
 - led = account.account_ledgers.scoped
 %ul.tabs
-  %li= link_option "Todas", account_path(account), 'all'
-  %li= link_option "Esperando verificación #{size_or_blank(led.pendent.count)}", account_path(account), 'uncon'
-  %li= link_option "Anuladas", account_path(account), 'nulled'
-  %li= link_option "Verificadas", account_path(account), 'con'
+  %li= link_option "Todas", 'all'
+  %li= link_option "Esperando verificación #{size_or_blank(led.pendent.count)}", 'uncon'
+  %li= link_option "Anuladas", 'nulled'
+  %li= link_option "Verificadas", 'con'
 
 
 .clear
@@ -44,7 +44,7 @@
         = link_to lo(al.created_at), account_ledger_path(al, :ac_id => account.id), :class => "b #{conciliate_css(al)}"
         %br/
         = al.reference
-      %td.cur.color= ntc al.account_amount
+      %td.cur.color= ntc ledger_amount(al, account)
       %td.cont= link_to al.related_account, al.related_account
       %td.desc= link_description al
       %td.rev

@@ -13,7 +13,7 @@
 
 .moneybox.fl
   %label Saldo en caja
-  %h3= with_currency(@cash.account, :amount)
+  %h3= with_currency(@account, :amount)
 
 //- if @cash.pendent_account_ledgers.any?
 //  .moneybox.fl

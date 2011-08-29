@@ -1,8 +1,3 @@
-:css
-  #bank_info{
-    display: none;
-  }
-
 -content_for :links do
   %ul.breadcrumps
     %li #{link_to "Cuentas bancarias", banks_path}<span>&gt;</span>
@@ -12,17 +7,12 @@
     = link_to 'Editar', edit_bank_path(@bank), :class => 'edit', :title => "Editar cuenta bancaria"
 
 %h1.mb5 <span class="dark_grey n">Banco:</span> #{@bank.name}
-%h3.mt5.dark_grey= "#{@bank.number} (en #{@bank.currency.name.pluralize})"
+%h3.mt5.dark_grey= "#{@bank.number} (en #{@account.currency_name.pluralize})"
 %hr/
 
 .moneybox.fl
   %label Saldo en cuenta
-  %h3= with_currency @bank.account, :amount
-
-/- if @bank.pendent_account_ledgers.any?
-/  .moneybox.fl
-/    %label Saldo a conciliar
-/    %h3= with_currency @bank, :total_pendent
+  %h3= with_currency @account, :amount
 
 ._40.fr
   <a class="more_info" href="#bank_info">Ver información</a>
@@ -41,7 +31,7 @@
 .clear
 
 %h2 Transacciones
-= render "account_ledgers/money", :account => @bank.account, :ledgers => @ledgers,  :ref_title => 'Ref./Nº Cheque'
+= render "account_ledgers/money", :account => @account, :ledgers => @ledgers,  :ref_title => 'Ref./Nº Cheque'
 
 :javascript
   $(function() {

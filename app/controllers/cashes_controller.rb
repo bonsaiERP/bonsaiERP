@@ -4,6 +4,9 @@
 class CashesController < ApplicationController
   before_filter :check_authorization!
   before_filter :set_cash, :only => [:show, :edit, :update, :destroy]
+
+  include Controllers::Money
+
   # GET /cashs
   # GET /cashs.xml
   def index
@@ -18,7 +21,9 @@ class CashesController < ApplicationController
   # GET /cashs/1
   # GET /cashs/1.xml
   def show
-    @ledgers = @cash.account.get_ledgers.page(@page)
+    @account = @cash.account
+    @ledgers = super(@account)
+    @ledgers = @ledgers.page(@page)
 
     respond_to do |format|
       format.html # show.html.erb

@@ -7,7 +7,7 @@
   - @cashes.each do |cash|
     %li
       ._30.fl
-        %h3= link_to cash.name, cash.account
+        %h3= link_to cash, cash
         %h4.mt5.dark= "#{cash.number} (en #{cash.currency.name.pluralize})"
       ._70.fl
         .moneybox.fl

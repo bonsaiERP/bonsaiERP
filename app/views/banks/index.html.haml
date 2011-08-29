@@ -5,10 +5,9 @@
 
 %ul#banks.accounts_list
   - @banks.each do |bank|
-    - account = bank.account
     %li
       ._30.fl
-        %h3= link_to account, account
+        %h3= link_to bank, bank
         %h4.mt5.dark= "#{bank.number} (en #{bank.currency.name.pluralize})"
       ._70.fl
         .moneybox.fl

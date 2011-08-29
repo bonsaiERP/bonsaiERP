@@ -4,6 +4,9 @@
 class BanksController < ApplicationController
   before_filter :check_authorization!
   before_filter :find_bank, :only => [:show, :edit, :update, :destroy]
+
+  include Controllers::Money
+
   # GET /banks
   # GET /banks.xml
   def index
@@ -18,7 +21,9 @@ class BanksController < ApplicationController
   # GET /banks/1
   # GET /banks/1.xml
   def show
-    @ledgers = @bank.account.get_ledgers.order("account_ledgers.created_at desc").page(@page)
+    @account = @bank.account
+    @ledgers = super(@account)
+    @ledgers = @ledgers.page(@page)
 
     respond_to do |format|
       format.html # show.html.erb

@@ -80,6 +80,12 @@ class Account < ActiveRecord::Base
     :t1 => "MoneyStore", :t2 => "Contact", :id => con_id).order("accountable_type")
   end
 
+  # Returns all account_ledgers for an account_id and to_id
+  def self.get_ledgers
+    AccountLedger.org.includes(:account)
+    .where("account_ledgers.account_id = :id OR account_ledgers.to_id = :id", :id => id)
+  end
+
   private
     def set_amount
       self.amount ||= 0.0

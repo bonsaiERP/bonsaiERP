@@ -162,4 +162,12 @@ module AccountsHelper
       render "account_ledgers/money_links", :plural => "Cuenas caja", :path => "/cashes"
     end
   end
+
+  def ledger_amount(ledger, account)
+    if ledger.account_id === account.id
+      ledger.amount
+    else
+      ledger.amount_currency
+    end
+  end
  end
