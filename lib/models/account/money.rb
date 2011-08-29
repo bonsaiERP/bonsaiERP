@@ -15,9 +15,6 @@ module  Models::Account
     end
 
     module InstanceMethods
-      def account_cur
-        accounts.select{|v| v.currency_id === currency_id}.first
-      end
 
       private
       def create_new_account
@@ -33,7 +30,7 @@ module  Models::Account
       end
 
       def set_account_name
-        ac = self.account_cur
+        ac = self.account
         ac.name = self.to_s
       end
     end

@@ -1,6 +1,9 @@
 require 'spec_helper'
 
 describe Bank do
+  let(:valid_params) {
+    {:currency_id => 1, :name => 'Banco 1', :number => '12365498', :address => 'Uno', :amount => 100}
+  }
   before(:each) do
     OrganisationSession.set(:id => 1, :name => 'ecuanime', :currency_id => 1)
 
@@ -56,12 +59,14 @@ describe Bank do
     b.account.currency_id.should == 5
   end
 
-  # NOT UNIT Test
-  it 'should create an entrance in case it has amount' do
-    b = Bank.create(@params)
-    b.account.initial_amount.should == 100
-    b.account.amount.should == 100
-    b.account.account_type.account_number.should == "Bank"
+  it 'should update attributes' do
+    b = Bank.create!(valid_params)
+    b.should be_persisted   
+
+    b.update_attributes(:website => "www.bnb.com.bo", :address => "Very near", :phone => "2798888").should be_true
+
+    b.reload
+    b.website.should == "www.bnb.com.bo"
   end
 
 end

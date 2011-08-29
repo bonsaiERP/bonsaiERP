@@ -8,6 +8,7 @@ class MoneyStore < ActiveRecord::Base
   # callbacks
   before_validation :set_amount, :if => :new_record?
 
+  # Attributes
   attr_accessor :amount
   
   # relationships
@@ -15,11 +16,12 @@ class MoneyStore < ActiveRecord::Base
   has_one :account, :as => :accountable, :autosave => true
 
   # Common validations
-  validates_numericality_of :amount, :greater_than_or_equal_to => 0
+  validates_numericality_of :amount, :greater_than_or_equal_to => 0, :on => :create
   validates :currency_id, :currency => true
 
   # delegations
   delegate :name, :symbol, :code, :plural, :to => :currency, :prefix => true
+  delegate :amount, :to => :account, :prefix => true, :allow_nil => true
 
   # Creates methods to determine if is bank?, cash?
   %w[bank cash].each do |t|

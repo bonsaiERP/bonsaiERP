@@ -6,8 +6,7 @@
     /= link_to 'Nueva', new_bank_path, :class => 'add', :title => "Nueva cuenta bancaria"
     = link_to 'Editar', edit_bank_path(@bank), :class => 'edit', :title => "Editar cuenta bancaria"
 
-%h1.mb5 <span class="dark_grey n">Banco:</span> #{@bank.name}
-%h3.mt5.dark_grey= "#{@bank.number} (en #{@account.currency_name.pluralize})"
+%h1.mb5 <span class="n">#{@bank.name}</span> <small class="tip" title="Número de cuenta">#{@bank.number}</small> <small class="n">(#{@account.currency_name.pluralize})</small>
 %hr/
 
 .moneybox.fl

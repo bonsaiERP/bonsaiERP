@@ -13,7 +13,7 @@
         = bank.currency
       .input
         %label Total en cuenta
-        = "#{bank.currency_symbol} #{ntc(bank.amount)}"
+        = "#{bank.currency_symbol} #{ntc(bank.account_amount)}"
 
     .clear
   = f.input :address, :label => 'Dirección', :as => :text, :input_html => {:rows => 4, :cols => 35}, :required => false

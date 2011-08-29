@@ -7,6 +7,8 @@ class Bank < MoneyStore
   validates_presence_of :name, :currency_id
   validates :number, :uniqueness => {:scope => [:name, :organisation_id] }, :length => {:within => 3..30}
 
+  attr_accessible :name, :number, :address, :phone, :website, :currency_id
+
   def to_s
     "#{name} #{number}"
   end
