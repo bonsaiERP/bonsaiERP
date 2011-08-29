@@ -31,3 +31,4 @@ config/initializers/host.rb
 *.swn
 public/javascripts/jquery.js
 public/javascripts/app.js
+tmp/restart.txt
