@@ -81,8 +81,8 @@ class Account < ActiveRecord::Base
   end
 
   # Returns all account_ledgers for an account_id and to_id
-  def self.get_ledgers
-    AccountLedger.org.includes(:account)
+  def self.get_ledgers(includes = [:account, :to])
+    AccountLedger.org.includes(*includes)
     .where("account_ledgers.account_id = :id OR account_ledgers.to_id = :id", :id => id)
   end
 

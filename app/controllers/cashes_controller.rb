@@ -23,7 +23,7 @@ class CashesController < ApplicationController
   def show
     @account = @cash.account
     @ledgers = super(@account)
-    @ledgers = @ledgers.page(@page)
+    @paged_ledgers = @ledgers.page(@page)
 
     respond_to do |format|
       format.html # show.html.erb

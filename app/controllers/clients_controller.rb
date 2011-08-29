@@ -41,7 +41,7 @@ class ClientsController < ApplicationController
 
     if @client.save
       if request.xhr?
-        render :json => @client.to_json( :methods => [:account_id, :account_name] )
+        render :json => @client# @client.to_json( :methods => [:account_id, :account_name] )
       else
         redirect_to @client.account
       end

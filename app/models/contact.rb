@@ -5,6 +5,8 @@ class Contact < ActiveRecord::Base
   acts_as_org
   include Models::Account::Contact
 
+  before_destroy { false }
+
   TYPES = ['Client', 'Supplier', 'Staff']
 
   # relations
@@ -13,7 +15,7 @@ class Contact < ActiveRecord::Base
   has_many :buys,     :class_name => "Transaction"
   has_many :expenses, :class_name => "Transaction"
   # Account
-  has_many :accounts, :as => :accountable, :autosave => true
+  has_many :accounts, :as => :accountable, :autosave => true, :dependent => :destroy
 
   validates_presence_of   :first_name, :last_name, :address, :matchcode
   #validates_uniqueness_of :code, :scope => :organisation_id

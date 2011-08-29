@@ -41,7 +41,7 @@ class SuppliersController < ApplicationController
 
     if @supplier.save
       if request.xhr?
-        render :json => @supplier.to_json( :methods => [:account_id, :account_name] )
+        render :json => @supplier#.to_json( :methods => [:account_id, :account_name] )
       else
         redirect_to @supplier.account
       end

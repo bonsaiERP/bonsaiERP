@@ -142,12 +142,6 @@ module AccountsHelper
     content_tag(tag, ntc(amount), :class => "tip #{css}", :title => title)
   end
 
-  def in_out_ledger(al, options = {})
-    css, txt = al.operation === "in" ? [ "dark_green", "Ingreso" ] : [ "red", "Egreso" ]
-    options[:class] = options[:class].blank? ? css : options[:class] << " #{css}"
-    content_tag(:span, txt, options)
-  end
-
   def account_ledger_show_links(al)
     case al.selected_account.original_type
     when "Client"
@@ -170,4 +164,39 @@ module AccountsHelper
       ledger.amount_currency
     end
   end
- end
+
+  def link_related_ledger_account(al, money)
+    if al.transaction_id.present?
+      link_to al.transaction, al.transaction
+    else
+      ac = al.account_accountable_id == money.id ? :to : :account
+
+      if al.operation === 'trans'
+        link_to al.send(ac), get_ledger_money_url(al.send(ac))
+      else
+        link_to al.send(ac), get_ledger_contact_url(al.send(ac))
+      end
+    end
+  end
+
+  def get_ledger_money_url(ac)
+    case ac.original_type
+    when "Bank"
+      "/banks/#{ac.accountable_id}"
+    when "Cash"
+      "/cashes/#{ac.accountable_id}"
+    end
+  end
+
+  def get_ledger_contact_url(ac)
+    case ac.original_type
+    when "Client"
+      "/clients/#{ac.accountable_id}"
+    when "Supplier"
+      "/suppliers/#{ac.accountable_id}"
+    when "Staff"
+      "/staffs/#{ac.accountable_id}"
+    end
+  end
+
+end

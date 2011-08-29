@@ -2,7 +2,6 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class Supplier < Contact
-  before_destroy :check_supplier_for_delete
 
 private
   def set_code

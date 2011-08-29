@@ -4,7 +4,7 @@
 class AccountLedger < ActiveRecord::Base
 
   attr_reader :ac_id
-  attr_accessor :make_conciliation
+  attr_accessor :make_conciliation, :contact_id
 
   acts_as_org
   # callbacks
@@ -43,7 +43,8 @@ class AccountLedger < ActiveRecord::Base
   accepts_nested_attributes_for :account_ledger_details, :allow_destroy => true
 
   # Validations
-  #validates_presence_of :to_id, :account_id
+  validates_presence_of :amount, :account_id, :reference
+
   validates_inclusion_of :operation, :in => OPERATIONS
   validates_numericality_of :amount, :greater_than => 0, :if => :new_record?
   validates_numericality_of :exchange_rate, :greater_than => 0
@@ -69,10 +70,10 @@ class AccountLedger < ActiveRecord::Base
   # currency
   delegate :name, :symbol, :code, :to => :currency, :prefix => true, :allow_nil => true
   # account
-  delegate :currency_id, :name, :original_type, :accountable_type, :accountable, :amount,
+  delegate :currency_id, :name, :original_type, :accountable_type, :accountable, :amount, :accountable_id,
     :to => :account, :prefix => true, :allow_nil => true
   # to
-  delegate :currency_id, :name, :original_type, :accountable_type, :amount,
+  delegate :currency_id, :name, :original_type, :accountable_type, :accountable, :amount, :accountable_id,
     :to => :to, :prefix => true, :allow_nil => true
   # transaction
   delegate :type, :to => :transaction, :prefix => true, :allow_nil => true

@@ -7,7 +7,6 @@
 
 .clear
 
-
 = link_to "Buscar", "#search", :class => 'search'
 
 = paginate ledgers
@@ -34,8 +33,8 @@
       %td.cur.color
         = al.currency_symbol
         = ntc al.account_amount
-      %td.cont= link_to al.related_account, al.related_account
-      %td.desc= link_description al
+      %td.cont= link_contact_ledger al, contact.account_ids
+      %td.desc= al.description
       %td.rev
         = "(V) #{al.approver}" if al.approver_id.present?
         = "<br/><span class='red'>(A) #{al.nuller}</span>".html_safe if al.nuller_id.present?

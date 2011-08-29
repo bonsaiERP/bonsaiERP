@@ -34,7 +34,7 @@ class StaffsController < ApplicationController
 
     if @staff.save
       if request.xhr?
-        render :json => @staff.to_json( :methods => [:account_id, :account_name] )
+        render :json => @staff#.to_json( :methods => [:account_id, :account_name] )
       else
         redirect_to @staff.account
       end

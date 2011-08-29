@@ -20,7 +20,8 @@ module Models::AccountLedger::Money
     end
 
     with_options :if => :money? do |trans|
-      trans.validates_presence_of :account_id, :contact_id, :if => :money?
+      trans.validates_presence_of :account_id#, :contact_id, :if => :money?
+      trans.validates_presence_of :contact_id, :unless => :trans?
       #trans.before_create :set_or_create_contact_account
     end
   end
@@ -112,9 +113,10 @@ module Models::AccountLedger::Money
 
     # Creates the contact account
     def set_or_create_contact_account
-      c = Contact.org.find(contact_id)
-      unless c
-        self.errors[:contact_id] << I18n.t("uno")
+      begin
+        c = Contact.org.find(contact_id)
+      rescue
+        self.errors[:contact_id] << I18n.t("account_ledger.errors.invalid_contact")
         return false
       end
 

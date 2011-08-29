@@ -2,7 +2,6 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class Client < Contact
-  before_destroy :check_client_for_delete
 
 private
   def set_code
@@ -12,13 +11,4 @@ private
     end
   end
 
-  # Checks the contact before delete
-  def check_client_for_delete
-    if Transaction.org.where(:contact_id => id).any? or AccountLedger.where(:contact_id => id).any?
-      self.errors[:base] << "No es posible borrar, el cliente esta relacionado"
-      false
-    else
-      true
-    end
-  end
 end

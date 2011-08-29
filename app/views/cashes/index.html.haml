@@ -3,6 +3,9 @@
 
 %h1 Cuentas caja
 
+- if @cashes.empty?
+  %h3= link_to "Crear nueva caja", new_cash_path, :class => 'add'
+
 %ul#cashes.accounts_list
   - @cashes.each do |cash|
     %li
@@ -14,12 +17,12 @@
           %label Total en cuenta
           %h3= with_currency cash.account, :amount
 
-        - if cash.account.account_ledger_details.pendent?
-          .moneybox.fl
+        - if cash.account.get_ledgers.pendent.any?
+          -#.moneybox.fl
             %label Saldo a revisar
             %h3= "#{cash.account.currency_symbol} #{ntc cash.account.amount_to_conciliate}"
           
-          %p.b.fl= link_to "pendiente de revisión (#{cash.account.account_ledger_details.pendent.count})", account_path(cash.account, :option => 'uncon')
+          %p.b.fl= link_to "Pendientes de revisión (#{cash.account.get_ledgers.pendent.count})", cash_path(cash, :option => 'uncon')
 
       .clear
 

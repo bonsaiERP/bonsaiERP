@@ -5,7 +5,7 @@ class ContactAutocomplete
     @models  ||= ["Client", "Supplier", "Staff"]
     @options ||= {}
 
-    @model = "Contact"#@options.model || "Account"
+    @model = "Contact"
     @cont  = $(@elem).parents('.input:first')
     @cont.removeClass 'numeric'
 
@@ -37,7 +37,12 @@ class ContactAutocomplete
       'source': self["route#{self.type}"]
       'select': (e, ui)->
         $(self.elem).val(ui.item.id)
-        $(this).data('val', ui.item.label)
+        $(this).data('val', ui.item.label).val(ui.item.label)
+        false
+      'focus': (e, ui)->
+        $(self.elem).val(ui.item.id)
+        $(this).data('val', ui.item.label).val(ui.item.label)
+        false
     ).focusout ->
       if $(this).val() == ""
         $(self.elem).val('')
@@ -54,7 +59,7 @@ class ContactAutocomplete
     .data(
       'title'  : "Nuevo #{@.getLocalizedLabel(@type).toLowerCase()}"
       'url'    : @.getAddUrl()
-      'trigger': "new_contact_#{@options.id}"
+      'trigger': "new_contact_#{@auto_id}"
     )
   # Url for adding new contact
   getAddUrl: ->
@@ -119,6 +124,7 @@ class ContactAutocomplete
       $(self.elem).val(id)
 
       $("#" + self.auto_id).val(name)
+      false
   # sets the events for the laels
   setEvents: ->
     self = @
@@ -162,7 +168,12 @@ class ContactAutocomplete
       'source': route,
       'select': (e, ui)->
         $(self.elem).val(ui.item.id)
+        $(this).data('val', ui.item.label).val(ui.item.label)
+        false
+      'focus': (e, ui)->
+        $(self.elem).val(ui.item.id)
         $(this).data('val', ui.item.label)
+        false
     )
 
 (($) ->

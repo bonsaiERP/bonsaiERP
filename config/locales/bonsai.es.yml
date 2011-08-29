@@ -24,6 +24,7 @@ es:
     payment_description: "%{pay_type} de %{trans} %{ref}, cuenta %{account}"
     errors:
       invalid_amount: "La cantidad ingresada es mayor que la existente en la cuenta"
+      invalid_contact: "Debe seleccionar un Cliente, Proveedor o Personal"
   transaction:
     Income: 
       class: "Venta"

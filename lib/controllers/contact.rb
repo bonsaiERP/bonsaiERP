@@ -8,13 +8,14 @@ module Controllers::Contact
     else
       params[:tab] = "transactions"
       params[:option] = "all" unless ["all", "con", "pendent", "nulled"].include?(params[:option])
-      @partial = "account_ledgers"
+      @partial = "contacts/account_ledgers"
       @ledgers = AccountLedger.contact(contact.account_ids)
       @ledgers = @ledgers.send(params[:option]) unless params[:option] === "all"
 
       @locals = {
         :ledgers => @ledgers.page(@page),
-        :pendent => AccountLedger.contact(contact.account_ids).send(:pendent).size
+        :pendent => AccountLedger.contact(contact.account_ids).send(:pendent).size,
+        :contact => contact
       }
     end
   end

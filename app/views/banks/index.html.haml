@@ -3,6 +3,9 @@
 
 %h1 Cuentas bancarias
 
+- if @banks.empty?
+  %h3= link_to "Crear nueva cuenta bancaria", new_bank_path, :class => 'add'
+
 %ul#banks.accounts_list
   - @banks.each do |bank|
     %li
@@ -14,12 +17,12 @@
           %label Total en cuenta
           %h3= with_currency bank.account, :amount
 
-        - if bank.account.account_ledger_details.pendent?
-          .moneybox.fl
+        - if bank.account.get_ledgers.pendent.any?
+          -#.moneybox.fl
             %label Saldo a revisar
             %h3= "#{bank.account.currency_symbol} #{ntc bank.account.amount_to_conciliate}"
           
-          %p.b.fl= link_to "pendiente de revisión (#{bank.account.account_ledger_details.pendent.count})", account_path(bank.account, :option => 'uncon')
+          %p.b.fl= link_to "Pendientes de revisión (#{bank.account.get_ledgers.pendent.count})", bank_path(bank, :option => 'uncon')
 
       .clear
 
