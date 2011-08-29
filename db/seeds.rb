@@ -21,5 +21,3 @@ org = Organisation.create!(:name => 'Bonsailabs', :country_id => 1, :currency_id
 
 puts "The organisation #{org.name} has been created"
 
-#b = Bank.create(:currency_id => 1, :name => 'Banco bancon', :number => '1111-7711', :amount => 10000)
-#puts "Bank #{b.name} #{b.number} was created"
