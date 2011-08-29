@@ -5,6 +5,7 @@
     = link_to "Anular", @account_ledger, :class => 'delete', 'data-confirm' => 'Esta seguro de borrar la transacción' if @account_ledger.can_destroy?
 
 %h1{:style => 'display:inline-block'} Transacción del <span class="n">#{lo @account_ledger.created_at}</span>
+.clear
 - if @account_ledger.nulled?
   %span.dashlet.b.bg_red= "Anulada" 
 
@@ -19,9 +20,9 @@
 .clear
 <br/>
 ._30.fl <span class="dark_grey">Ref/Nº de cheque:</span> #{@account_ledger.reference}
-._20.fl= @account_ledger.description
+._35.fl= @account_ledger.description
 // Related account
-._20.fl= link_to @account_ledger.related_account, related_account_link( @account_ledger ), :title => 'Cuenta relacionada' if @account_ledger.to_id.present?
+._30.fl{:style => "margin-left: 10px"}= link_to @account_ledger.related_account, related_account_link( @account_ledger ), :title => 'Cuenta relacionada' if @account_ledger.to_id.present?
 <br/><br/>
 .clear
 - if @account_ledger.can_conciliate?

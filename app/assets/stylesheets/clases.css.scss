@@ -9,6 +9,7 @@ $font_size: 13px;
 ._25, .w25{ width: 24% !important;}
 ._30, .w30{ width: 29% !important;}
 ._33, .w33{ width: 33% !important;}
+._35, .w35{ width: 34% !important;}
 ._40, .w33{ width: 39% !important;}
 ._50, .w33{ width: 49% !important;}
 ._60, .w33{ width: 59% !important;}
@@ -125,11 +126,12 @@ div.search{
 
 .moneybox{
   @include rounded-corners(3px);
-  background-color: lighten($grey, 12%);
+  background-color: lighten($grey, 15%);
   padding: 8px;
   display:inline-block;
-  margin: 5px 1px;
+  margin: 5px;
   width: 130px;
+  border: 2px solid lighten($grey, 5%);
   h3{ margin: 2px 0px; color: $black; }
 }
 

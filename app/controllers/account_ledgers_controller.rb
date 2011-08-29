@@ -13,12 +13,6 @@ class AccountLedgersController < ApplicationController
   def show
     @account_ledger = AccountLedger.org.find(params[:id])
     @account_ledger.ac_id = params[:ac_id].to_i
-
-    #if params[:ac_id].to_i === @account_ledger.to_id # @account_ledger.to_accountable_type == 'Contact'
-    #  render 'show_contact'
-    #else
-    #  render 'show'
-    #end
   end
 
   def new

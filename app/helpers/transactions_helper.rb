@@ -190,8 +190,8 @@ module TransactionsHelper
 
   def get_contact_list
     case params[:controller]
-      when "incomes"          then ["Client", "Supplier", "Staff"]
-      when "buys", "expenses" then ["Supplier", "Client", "Staff"]
+      when "incomes"          then ["Client", "Supplier"]
+      when "buys", "expenses" then ["Supplier", "Client"]
     end
   end
 

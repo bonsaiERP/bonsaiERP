@@ -7,7 +7,7 @@ class Cash < MoneyStore
     :length => {:minimum => 3}
 
   def to_s
-    "#{name} (#{currency_symbol})"
+    name
   end
 
 private
