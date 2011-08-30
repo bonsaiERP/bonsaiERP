@@ -142,6 +142,13 @@ module ApplicationHelper
     content_tag(:span, txt, options)
   end
 
+  def in_out_tag(val)
+    if val > 0
+      content_tag(:span, ntc(val))
+    else
+      content_tag(:span, ntc(val), :class => 'red')
+    end
+  end
 
   # Presents a class with currency
   def with_currency(klass, amount = :amount, options = {})

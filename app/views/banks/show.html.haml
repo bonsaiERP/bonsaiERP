@@ -8,9 +8,8 @@
 %h1.mb5 <span class="n">#{@bank.name}</span> <small class="tip" title="Número de cuenta">#{@bank.number}</small> <small class="n">(#{@account.currency_name.pluralize})</small>
 %hr/
 
-- if @account.get_ledgers.pendent.any?
-  %h3= link_to "<span class='n'>Tiene transacciones</span> Esprando verificación".html_safe, bank_path(@bank, :option => 'uncon'), :class => 'red'
-  .clear
+= red_pendent_account_link(@account, :class => 'red b fs120')
+.clear
 
 .moneybox.fl
   %label Saldo en banco
@@ -18,7 +17,7 @@
 
   
 ._40.fr
-  <a class="more_info" href="#bank_info">Ver información</a>
+  <a class="more_info" href="#bank_info">Ocultar información</a>
   #bank_info
     .input
       %label Dirección
@@ -30,21 +29,9 @@
       .input._100
         %label Sitio web
         %span= @bank.website
-  .clear
 .clear
 
 %h2 Transacciones
 = render "account_ledgers/money", :account => @account, :ledgers => @ledgers, :paged_ledgers => @paged_ledgers, :ref_title => 'Ref./Nº Cheque', :money => @bank
 
-:javascript
-  $(function() {
-    $('#show_bank_info').click(function() {
-      if($(this).html() == "Ver información") {
-        $('#bank_info').show("slow")
-        $(this).html("Ocultar información");
-      }else{
-        $('#bank_info').hide("slow")
-        $(this).html("Ver información");
-      }
-    });
-  })
+.clear

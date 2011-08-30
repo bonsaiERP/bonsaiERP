@@ -199,4 +199,15 @@ module AccountsHelper
     end
   end
 
+  def red_pendent_account_link(account, options = {})
+    count = account.get_ledgers.pendent.count
+
+    if count > 0
+      txt = "Tiene (#{count})"
+      txt << ( count > 1 ? " transaccciones" : " transacción" )
+      txt << " Esperando verificación"
+      link_to txt, url_for(params.merge(:option => 'uncon')), options
+    end
+  end
+
 end

@@ -8,9 +8,9 @@
 %h1.mb5 #{@cash.name} <small>(#{@account.currency_symbol})</small>
 %hr/
 
-- if @account.get_ledgers.pendent.any?
-  %h3= link_to "<span class='n'>Tiene transacciones</span> Esprando verificación".html_safe, bank_path(@bank, :option => 'uncon'), :class => 'red'
-  .clear
+
+= red_pendent_account_link(@account, :class => 'red b fs120')
+.clear
 
 .moneybox.fl
   %label Saldo en caja

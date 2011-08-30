@@ -38,12 +38,12 @@
     %th
   - paged_ledgers.each do |al|
     - al.ac_id = account.id
-    %tr{:class => al.in_out, :id => "tr#{al.id}" }
+    %tr{:id => "tr#{al.id}" }
       %td.d.check
         = link_to lo(al.created_at), account_ledger_path(al, :ac_id => account.id), :class => "b #{conciliate_css(al)}"
         %br/
         = al.reference
-      %td.cur.color= ntc ledger_amount(al, account)
+      %td.cur.color= in_out_tag ledger_amount(al, account)
       %td.cont= link_related_ledger_account al, money
       %td.desc= al.description
       %td.rev

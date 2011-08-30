@@ -435,11 +435,12 @@ $(document).ready(->
 
   # Shows and hides info
   $('a.more_info').live('click', ->
-    if $(this).html() == "Ver información"
-      $(this).html("Ocultar información")
+    if $(this).hasClass("hide-info")
+      #== "Ver información"
+      $(this).html("Ocultar información").removeClass("hide-info")
       $( $(this).attr('href') ).show("slow")
     else
-      $(this).html("Ver información")
+      $(this).html("Ver información").addClass("hide-info")
       $( $(this).attr('href') ).hide("slow")
     false
   )

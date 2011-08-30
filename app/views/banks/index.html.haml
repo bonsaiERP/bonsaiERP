@@ -9,20 +9,15 @@
 %ul#banks.accounts_list
   - @banks.each do |bank|
     %li
-      ._30.fl
+      ._35.fl
         %h3= link_to bank, bank
-        %h4.mt5.dark= "#{bank.number} (en #{bank.currency.name.pluralize})"
-      ._70.fl
+        %h4.mt5.dark= bank.currency.name.pluralize
+      ._65.fl
         .moneybox.fl
           %label Total en cuenta
           %h3= with_currency bank.account, :amount
 
-        - if bank.account.get_ledgers.pendent.any?
-          -#.moneybox.fl
-            %label Saldo a revisar
-            %h3= "#{bank.account.currency_symbol} #{ntc bank.account.amount_to_conciliate}"
-          
-          %p.b.fl= link_to "Pendientes de revisión (#{bank.account.get_ledgers.pendent.count})", bank_path(bank, :option => 'uncon')
+        = red_pendent_account_link(bank.account, :class => 'b fs110')
 
       .clear
 
