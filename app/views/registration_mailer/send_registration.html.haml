@@ -1,0 +1,5 @@
+%h1 Bienvenido a <span style="font-style: italic">bonsai</span>
+
+%p 
+  Bienvenido a <span style="font-weight: bold; font-style: italic;">bonsai</span>, para poder completar su registro 
+  =link_to "haga click es en este vínculo", url_for(:controller => :registrations, :action => :show, :id => @user.id, :token => @user.confirmation_token, :host => @host), :style => 'font-weight:bold'
