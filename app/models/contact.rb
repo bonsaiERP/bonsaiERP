@@ -21,7 +21,7 @@ class Contact < ActiveRecord::Base
   #validates_uniqueness_of :code, :scope => :organisation_id
   validates_uniqueness_of :matchcode, :scope => :organisation_id
 
-  validates_format_of     :email,  :with => User.email_regexp, :allow_blank => true
+  validates_format_of     :email,  :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :allow_blank => true
   validates_format_of     :phone,  :with =>/^\d+[\d\s-]+\d$/,  :allow_blank => true
   validates_format_of     :mobile, :with =>/^\d+[\d\s-]+\d$/,  :allow_blank => true
 
