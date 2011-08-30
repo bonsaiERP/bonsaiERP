@@ -41,12 +41,11 @@ feature "Organisations", "In order to create an organisation I must login" do
     
     fill_in "Email", :with => 'admin@example.com'
     fill_in "Contraseña", :with => 'demo123'
-    fill_in "Confirmación", :with => 'demo123'
     click_button('Registrate')
 
     ActionMailer::Base.deliveries.size.should == 1
     u = User.find_by_email("admin@example.com")
-    u.confirm!
+    u.confirm_token(u.confirmation_token)
 
     # Log in
     visit "/users/sign_in"
@@ -58,7 +57,7 @@ feature "Organisations", "In order to create an organisation I must login" do
 
     # Create organisation
     fill_in 'Nombre de su empresa', :with => 'bonsailabs'
-    select '$ Dolar', :from => 'Moneda base'
+    select 'Dolar', :from => 'Moneda base'
     select 'Bolivia', :from => 'País'
     fill_in 'Teléfono', :with => '2790123'
     fill_in 'Dirección', :with => 'Los Pinos B 80, dpto. 201'
@@ -81,7 +80,7 @@ feature "Organisations", "In order to create an organisation I must login" do
   scenario "Create Organisation and fail creating accounts", :driver => :rack_test do
 
     u = User.create(:email => 'fail@example.com', :password => 'demo123', :password_confirmation => 'demo123')
-    u.confirm!
+    u.confirm_token(u.confirmation_token)
 
     # Log in
     visit "/users/sign_in"
@@ -95,7 +94,7 @@ feature "Organisations", "In order to create an organisation I must login" do
 
     # Create organisation
     fill_in 'Nombre de su empresa', :with => 'bonsailabs'
-    select '$ Dolar', :from => 'Moneda base'
+    select 'Dolar', :from => 'Moneda base'
     select 'Bolivia', :from => 'País'
     fill_in 'Teléfono', :with => '2790123'
     fill_in 'Dirección', :with => 'Los Pinos B 80, dpto. 201'

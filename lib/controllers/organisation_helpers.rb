@@ -1,4 +1,4 @@
-module OrganisationHelpers
+module Controllers::OrganisationHelpers
   def currency_name
     session[:organisation][:currency_name]
   end

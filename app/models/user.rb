@@ -2,6 +2,10 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class User < ActiveRecord::Base
+
+  has_secure_password
+  include Models::User::Authentication
+
   # callbacks
   before_validation :set_rolname, :if => :new_record?#, :unless => :change_default_password?
   after_create      :create_user_link, :if => :change_default_password?
@@ -9,21 +13,25 @@ class User < ActiveRecord::Base
   
   ROLES = ['admin', 'gerency', 'inventory', 'sales']
 
-  # devise
-  devise :database_authenticatable, :registerable, :confirmable,
-         :recoverable, :rememberable, :trackable, :validatable
-
   attr_accessor :temp_password, :rolname, :active_link
 
   # Relationships
   has_many :links
   has_many :organisations, :through => :links
 
-  #attr_protected :account_type
-  attr_accessible :email, :password, :password_confirmation, :first_name, :last_name, :phone, :mobile, :website, :description, :rolname, :address, :rolname
+  # Validations
+  validates_presence_of :email, :password
+  validates :email, :format => {
+    :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, 
+    :message => I18n.t("errors.user.email")
+  }
+  validates :password, :length => {:minimum => 6}
 
   validates_presence_of  :rolname, :if => :new_record?
   validates_inclusion_of :rolname, :in => ROLES, :if => :new_record?
+
+  #attr_protected :account_type
+  attr_accessible :email, :password, :password_confirmation, :first_name, :last_name, :phone, :mobile, :website, :description, :rolname, :address, :rolname
 
   def to_s
     unless first_name.blank? and last_name.blank?

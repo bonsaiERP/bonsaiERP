@@ -4,17 +4,19 @@
 class ApplicationController < ActionController::Base
   layout lambda{ |c| (c.request.xhr? or params[:xhr]) ? false : "application" }
 
+  include Controllers::Authentication
+  helper_method Controllers::Authentication.helpers
+
+  include Controllers::Authorization
+  include Controllers::OrganisationHelpers 
+  helper_method Controllers::OrganisationHelpers.organisation_helper_methods
+
   protect_from_forgery
   before_filter :set_user_session, :if => :user_signed_in?
-  before_filter :set_organisation, :if => :organisation?
   before_filter :set_page
 
-  before_filter :destroy_organisation_session!, :unless => :user_signed_in?
+  #before_filter :destroy_organisation_session!, :unless => :user_signed_in?
 
-  include Authorization
-  include OrganisationHelpers  
-
-  helper_method OrganisationHelpers.organisation_helper_methods
 
 
   # Adds an error with format to display
@@ -29,28 +31,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def after_inactive_sing_up_path_for(resource)
-    flash[:notice] = "Se le ha enviado un email con instruciones a #{resource.email}, para que confirme su registro"
-    "/users/sign_in"
-  end
-
-  def after_sign_in_path_for(resource)
-    if !current_user
-      "/users/sign_in"
-    elsif current_user.organisations.any?
-      set_organisation_session(current_user.organisations.first)
-      session[:user] = {:rol => current_user.link.rol }
-      "/dashboard"
-    elsif current_user.organisations.empty?
-      new_organisation_path
-    end
-  end
-
-  def after_sign_out_path_for(resource)
-    "/users/sign_in"
-  end
-
-    # especial redirect for ajax requests
+  # especial redirect for ajax requests
   def redirect_ajax(klass, options = {})
     url = options[:url] || klass
     if request.xhr?
@@ -87,19 +68,7 @@ protected
     end
   end
 
-  # Sets the session for the organisation
-  def set_organisation_session(organisation)
-    ret = true
-    # Create base_accounts if needed
-    ret = organisation.create_base_accounts unless organisation.base_accounts?
-
-    session[:organisation] = Hash[ OrganisationSession::KEYS.map {|k| [k, organisation.send(k)] } ]
-    set_organisation
-
-    ret
-  end
-
-private
+  private
 
   def set_page
     @page = params[:page] || 1

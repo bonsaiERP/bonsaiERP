@@ -1,8 +1,8 @@
 # encoding:utf-8
 # Used to create sample data
-user = User.create(:email => "demo@example.com", :password => "demo123", :password_confirmation => "demo123", :first_name => "Demo", :last_name => "Super Demo")
+user = User.create(:email => "demo@example.com", :password => "demo123", :first_name => "Demo", :last_name => "Super Demo")
 
-User.confirm_by_token(user.confirmation_token)
+User.confirm_token(user.confirmation_token)
 
 UserSession.current_user = user
 

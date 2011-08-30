@@ -21,7 +21,7 @@ class Organisation < ActiveRecord::Base
   belongs_to :currency
 
   has_many :taxes, :class_name => "Tax", :dependent => :destroy
-  has_many :links, :dependent => :destroy
+  has_many :links, :dependent => :destroy, :autosave => true
   has_many :users, :through => :links
   has_many :units, :dependent => :destroy
   has_many :account_types, :dependent => :destroy

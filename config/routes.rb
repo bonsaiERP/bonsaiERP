@@ -103,7 +103,15 @@ Bonsaierp::Application.routes.draw do
 
   resources :countries
 
-  devise_for :users#, :path_names => { :sign_in => '/login', :sign_out => '/logout' }
+  resources :registrations
+  get "/users/sign_up" => "registrations#new"
+
+  # Sessions
+  resources :sessions
+
+  get "/users/sign_in"  => "sessions#new"
+  get "/users/sign_out" => "sessions#destroy"
+
   resources :users do
     collection do
       get  :add_user

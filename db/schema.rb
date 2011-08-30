@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110824124311) do
+ActiveRecord::Schema.define(:version => 20110830192432) do
 
   create_table "account_currencies", :force => true do |t|
     t.integer  "organisation_id"
@@ -521,19 +521,7 @@ ActiveRecord::Schema.define(:version => 20110824124311) do
   add_index "units", ["organisation_id"], :name => "index_units_on_organisation_id"
 
   create_table "users", :force => true do |t|
-    t.string   "email",                                  :default => "",    :null => false
-    t.string   "encrypted_password",      :limit => 128, :default => "",    :null => false
-    t.string   "confirmation_token"
-    t.datetime "confirmed_at"
-    t.datetime "confirmation_sent_at"
-    t.string   "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                          :default => 0
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip"
-    t.string   "last_sign_in_ip"
+    t.string   "email"
     t.string   "first_name",              :limit => 80
     t.string   "last_name",               :limit => 80
     t.string   "phone",                   :limit => 20
@@ -541,12 +529,23 @@ ActiveRecord::Schema.define(:version => 20110824124311) do
     t.string   "website",                 :limit => 200
     t.string   "account_type",            :limit => 15
     t.string   "description"
+    t.string   "password_digest"
+    t.string   "confirmation_token",      :limit => 20
+    t.datetime "confirmation_sent_at"
+    t.datetime "confirmed_at"
+    t.string   "reset_password_token",    :limit => 20
+    t.datetime "reset_password_sent_at"
+    t.datetime "reseted_password_at"
+    t.integer  "sign_in_count",                          :default => 0
+    t.datetime "last_sign_in_at"
     t.boolean  "change_default_password",                :default => false
     t.string   "address"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "abbreviation",            :limit => 10
   end
 
+  add_index "users", ["email"], :name => "index_users_on_email"
   add_index "users", ["first_name"], :name => "index_users_on_first_name"
   add_index "users", ["last_name"], :name => "index_users_on_last_name"
 

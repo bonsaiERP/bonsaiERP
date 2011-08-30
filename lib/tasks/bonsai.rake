@@ -105,6 +105,24 @@ namespace :bonsai do
     end
     puts "Created #{n} clients"
   end
+
+  desc "Creates the default countries"
+  task :create_countries => :environment do 
+    path = File.join(Rails.root, 'db/defaults/countries.yml')
+    YAML.load_file(path).each do |c|
+      OrgCountry.create!(c){|co| co.id = c['id'] }
+    end
+    puts "Countries have been created"
+  end
+
+  desc "Creates the default currencies"
+  task :create_currencies => :environment do
+    path = File.join(Rails.root, 'db/defaults/currencies.yml')
+    YAML.load_file(path).each do |c|
+      Currency.create!(c) {|cu| cu.id = c['id'] }
+    end
+    puts "Currencies have been created"
+  end
 end
 
 # example to export the file

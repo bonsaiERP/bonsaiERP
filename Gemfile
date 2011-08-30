@@ -19,7 +19,6 @@ gem 'jquery-rails'
 gem 'mysql2'
 gem 'rake'#, '~>0.9.2'
 
-gem 'devise'
 gem 'simple_form'
 #gem 'less', '~>1.2.21'
 gem 'haml'

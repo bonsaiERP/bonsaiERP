@@ -36,7 +36,7 @@ Spork.prefork do
       #log.info example.description
     end
    
-    config.include Devise::TestHelpers, :type => :controller
+    #config.include Devise::TestHelpers, :type => :controller
     config.after(:each) do
       DatabaseCleaner.clean
     end

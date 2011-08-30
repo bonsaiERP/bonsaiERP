@@ -2,7 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 # module to handle all authorization task
-module Authorization
+module Controllers::Authorization
 
   protected
   # general method to check authorization
