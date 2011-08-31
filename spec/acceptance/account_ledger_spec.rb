@@ -56,6 +56,8 @@ feature "Test account ledger", "for in outs and transferences" do
 
     al.approver_id.should == 2
     al.approver_datetime.kind_of?(Time).should == true
+    al.account_balance.should == 100
+    al.to_balance.should == -100
 
     al.account.amount.should == 100
     al.to.amount.should == -100
@@ -148,5 +150,34 @@ feature "Test account ledger", "for in outs and transferences" do
     al.account.amount.should == -100
     al.to.amount.should == 50
 
+  end
+
+  scenario "Make serveral in/outs for one account and check that the balance is right" do
+    al = AccountLedger.new_money(:operation => "in", :account_id => @bank_ac_ic, :contact_id => @client.id, :amount => 100, :reference => "Check 1120012" )
+    al.save.should == true
+
+    al.conciliate_account.should be_true
+    al.reload
+
+    al.account_balance.should == 100
+    al.to_balance.should == -100
+
+    al = AccountLedger.new_money(:operation => "in", :account_id => @bank_ac_ic, :contact_id => @client.id, :amount => 100, :reference => "Check 1120013" )
+    al.save.should == true
+
+    al.conciliate_account.should be_true
+    al.reload
+
+    al.account_balance.should == 200
+    al.to_balance.should == -200
+
+    al = AccountLedger.new_money(:operation => "out", :account_id => @bank_ac_ic, :contact_id => @client.id, :amount => 55.55, :reference => "Check 1120014" )
+    al.save.should == true
+
+    al.conciliate_account.should be_true
+    al.reload
+
+    al.account_balance.should == 200 - 55.55
+    al.to_balance.should == -200 + 55.55
   end
 end

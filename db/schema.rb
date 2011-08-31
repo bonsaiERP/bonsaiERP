@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110830192432) do
+ActiveRecord::Schema.define(:version => 20110831184724) do
 
   create_table "account_currencies", :force => true do |t|
     t.integer  "organisation_id"
@@ -71,6 +71,8 @@ ActiveRecord::Schema.define(:version => 20110830192432) do
     t.boolean  "active",                                                           :default => true
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.decimal  "account_balance",                   :precision => 14, :scale => 2
+    t.decimal  "to_balance",                        :precision => 14, :scale => 2
   end
 
   add_index "account_ledgers", ["account_id"], :name => "index_account_ledgers_on_account_id"

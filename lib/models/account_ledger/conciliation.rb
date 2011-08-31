@@ -25,6 +25,8 @@ module Models::AccountLedger::Conciliation
 
       self.conciliation = true
       update_related_accounts
+      self.account_balance = account.amount
+      self.to_balance      = to.amount
 
       self.save
     end

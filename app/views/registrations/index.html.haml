@@ -1,5 +1,9 @@
+:css
+  h2.reg{ font-weight: normal; }
+
 #banner
   .title
     %h2 Registro
+  
 
-%h1.green= flash[:notice]
+%h2.reg= flash[:notice].html_safe
