@@ -8,7 +8,7 @@ class Link < ActiveRecord::Base
 
   has_many :organisations
 
-  attr_protected :user_id, :creator
+  attr_protected :user_id, :creator, :abbreviation
 
   # rol_id needs to be asgined with the Rol model
   #validates_presence_of :rol_id
@@ -19,13 +19,9 @@ class Link < ActiveRecord::Base
 
   # Sets the current user and other attributes
   def set_user_creator(user_key)
-    # raise NoMethodError, "No method \"current_user\" exists you must login to set it" if current_user.nil?
     self.rol = 'admin'
     write_attribute(:user_id, user_key)
     write_attribute(:creator, true)
-    # Needs to be updated to use the Rol model
-    # self.rol_id = 1
-    # write_attribute(:rol_id, 1)
   end
 
 end

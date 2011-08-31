@@ -25,7 +25,7 @@ class UsersController < ApplicationController
 
   # GET /users/add_user
   def add_user
-    @user = User.new
+    @user = User.new {|u| u.change_default_password = true}
   end
 
   # POST /users/create_user

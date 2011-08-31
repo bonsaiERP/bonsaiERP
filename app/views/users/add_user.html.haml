@@ -18,8 +18,19 @@
   = bonsai_form_error(f)
 
   = f.input :email
-  = f.input :rolname, :collection => User.get_roles.slice(1, 3), :label => 'Rol'
+  = f.input :abbreviation, :label => 'Abreviación', :hint => 'Identificar al usuario'
+  .clear
+  = f.input :first_name, :label => 'Nombres'
+  = f.input :last_name, :label => 'Apellidos'
+  .clear
 
+  = f.input :phone, :label => 'Teléfono'
+  = f.input :mobile, :label => 'Móvil'
+  .clear
+  .clear
+  = f.input :address, :label => 'Dirección', :as => :text, :input_html => {:rows => 4, :cols => 35}
+
+  = f.input :rolname, :collection => User.get_roles.slice(1, 3), :label => 'Rol'
   .clear
   = render 'permissions'
 

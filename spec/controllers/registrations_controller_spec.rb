@@ -39,7 +39,10 @@ describe RegistrationsController do
   describe "GET registrations if logged user" do
     it 'should redirect to dashboard if logged user' do
       session[:user_id] = 1
-      User.stubs(:find => User.new(:email => 'demo@example.com') {|u| u.id = 1})
+      u = User.new(:email => 'demo@example.com') {|u| u.id = 1}
+      u.stubs(:organisations => [Organisation.new], :link => stub(:rol => 'admin'))
+      User.stubs(:find => u )
+      controller.stubs(:set_organisation_session => true)
 
       get 'new'
       response.should redirect_to("/dashboard")

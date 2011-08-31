@@ -7,7 +7,7 @@ class Organisation < ActiveRecord::Base
   before_create :set_due_date
   before_create :set_preferences
   before_create :create_all_records
-  before_create { links.build(:rol => 'admin') {|l| l.set_user_creator(UserSession.user_id) } }
+  before_create :create_link
   
   DATA_PATH = "db/defaults"
 
@@ -21,11 +21,12 @@ class Organisation < ActiveRecord::Base
   belongs_to :currency
 
   has_many :taxes, :class_name => "Tax", :dependent => :destroy
-  has_many :links, :dependent => :destroy, :autosave => true
-  has_many :users, :through => :links
   has_many :units, :dependent => :destroy
   has_many :account_types, :dependent => :destroy
   has_many :accounts
+  # users links
+  has_many :links, :dependent => :destroy, :autosave => true
+  has_many :users, :through => :links
 
   delegate :code, :name, :symbol, :plural, :to => :currency, :prefix => true
 
@@ -137,5 +138,12 @@ protected
   # Sets the expiry date for the organisation until ew payment
   def set_due_date
     self.due_date = 30.days.from_now.to_date
+  end
+
+  def create_link
+    links.build(:rol => 'admin') {|l| 
+      l.set_user_creator(UserSession.user_id)
+      l.abbreviation = "GEREN"
+    }
   end
 end

@@ -12,7 +12,6 @@ feature "Organisations", "In order to create an organisation I must login" do
   end
 
   scenario "Scenario create organisation" do
-
     o = Organisation.new(:name => 'Violetas', :currency_id => 1, :country_id => 1, 
                          :phone => '7881221', :mobile => '789123434',
                          :address => 'Mallasa calle 4 Nº 222', 
@@ -29,6 +28,7 @@ feature "Organisations", "In order to create an organisation I must login" do
     o.due_date.should == 30.days.from_now.to_date
     o.links.first.user_id.should == 1
     o.links.first.creator.should == true
+    o.links.first.abbreviation.should == "GEREN"
 
     # Preferences
     o.preferences.should == {:item_discount => 2, :general_discount => 0.5 }

@@ -7,16 +7,16 @@ class User < ActiveRecord::Base
   include Models::User::Authentication
 
   # callbacks
-  before_validation :set_rolname, :if => :new_record?#, :unless => :change_default_password?
-  after_create      :create_user_link, :if => :change_default_password?
+  before_validation :set_rolname, :if => :new_record?
+  before_create     :create_user_link, :if => :change_default_password?
   before_destroy    :destroy_links
   
   ROLES = ['admin', 'gerency', 'inventory', 'sales']
 
-  attr_accessor :temp_password, :rolname, :active_link
+  attr_accessor :temp_password, :rolname, :active_link, :abbreviation
 
   # Relationships
-  has_many :links
+  has_many :links, :autosave => true, :dependent => :destroy
   has_many :organisations, :through => :links
 
   # Validations
@@ -27,11 +27,18 @@ class User < ActiveRecord::Base
   }
   validates :password, :length => {:minimum => 6}
 
-  validates_presence_of  :rolname, :if => :new_record?
-  validates_inclusion_of :rolname, :in => ROLES, :if => :new_record?
+  with_options :if => :new_record? do |u|
+    validates_presence_of  :rolname
+    validates_inclusion_of :rolname, :in => ROLES
+  end
+
+  with_options :if => :change_default_password? do |u|
+    u.validates_length_of :abbreviation, :minimum => 2
+    u.validates_inclusion_of :rolname, :in => ROLES.slice(1,3)
+  end
 
   #attr_protected :account_type
-  attr_accessible :email, :password, :password_confirmation, :first_name, :last_name, :phone, :mobile, :website, :description, :rolname, :address, :rolname
+  attr_accessible :email, :password, :password_confirmation, :first_name, :last_name, :phone, :mobile, :website, :description, :rolname, :address, :rolname, :abbreviation
 
   def to_s
     unless first_name.blank? and last_name.blank?
@@ -72,22 +79,12 @@ class User < ActiveRecord::Base
     self.save
   end
 
-  # Generates a random password and sets it to the password field
-  def generate_random_password(size = 8)
-    self.password = self.password_confirmation = self.temp_password = SecureRandom.urlsafe_base64(size)
-  end
-
   # Adds a new user for the company
   def add_company_user(params)
+    self.attributes = params
     self.email = params[:email]
 
-    if ROLES.slice(1,3).include?(params[:rolname])
-      self.rolname = params[:rolname]
-    else
-      self.rolname = nil
-    end
-
-    self.generate_random_password
+    set_random_password
     self.change_default_password = true
 
     self.save
@@ -103,10 +100,23 @@ class User < ActiveRecord::Base
     ["Genrencia", "Administración", "Inventario", "Ventas"].zip(ROLES)
   end
 
-private
+  def self.new_user(email, password)
+    User.new(:password => password) {|u| u.email = email }
+  end
+
+  protected
+  # Generates a random password and sets it to the password field
+  def set_random_password(size = 8)
+    self.password = self.temp_password = SecureRandom.urlsafe_base64(size)
+  end
+
+
+  private
   def create_user_link
-    l = links.build(:organisation_id => OrganisationSession.organisation_id, :rol => rolname, :creator => false)
-    raise AcitveRecord::Rollback unless l.save(:validate => false)
+    links.build(:organisation_id => OrganisationSession.organisation_id, 
+                    :rol => rolname, :creator => false) {|link| 
+      link.abbreviation = abbreviation 
+    }
   end
 
   def destroy_links
@@ -118,4 +128,5 @@ private
       self.rolname = 'admin'
     end
   end
+
 end

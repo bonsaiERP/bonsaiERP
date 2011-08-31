@@ -28,6 +28,7 @@ class SessionsController < ApplicationController
     session[:user_id] = nil
     session[:user] = nil
     session[:organisation] = nil
+    session[:current_user] = nil
 
     redirect_to "/users/sign_in", :notice => "Ha salido correctamente"
   end

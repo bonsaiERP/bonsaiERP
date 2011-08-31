@@ -3,7 +3,7 @@ module Controllers::Authentication
   protected
   def current_user
     return false unless session[:user_id]
-    @user ||= User.find(session[:user_id])
+    @current_user ||= User.find(session[:user_id])
   end
 
   def user_signed_in?

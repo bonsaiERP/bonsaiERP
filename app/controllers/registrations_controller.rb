@@ -26,13 +26,15 @@ class RegistrationsController < ApplicationController
 
   def new
     @user = User.new
+
     respond_to do |format|
       format.html
     end
   end
 
   def create
-    @user = User.new(params[:user])
+    email, password = params[:user][:email], params[:user][:password]
+    @user = User.new_user(email, password)
 
     respond_to do |format|
       if @user.save
