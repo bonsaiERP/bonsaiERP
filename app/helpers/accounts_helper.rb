@@ -165,6 +165,14 @@ module AccountsHelper
     end
   end
 
+  def balance_amount(ledger, account)
+    if ledger.account_id === account.id
+      ntc ledger.account_balance unless ledger.account_balance.blank?
+    else
+      ntc ledger.to_balance unless ledger.to_balance.blank?
+    end
+  end
+
   def link_related_ledger_account(al, money)
     if al.transaction_id.present?
       link_to al.transaction, al.transaction

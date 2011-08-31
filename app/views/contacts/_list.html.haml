@@ -1,6 +1,6 @@
 %table{ :class => "decorated nwf nwl" }
   %tr
-    %th Identificación/Nombre
+    %th Identificador/Nombre
     %th Dirección
     %th Teléfono
     %th Móvil
@@ -10,7 +10,10 @@
 
   - list.each do |klass|
     %tr
-      %td= link_to klass, klass, :class => 'b'
+      %td
+        = link_to klass, klass, :class => 'b'
+        %br
+        = klass.complete_name
       %td= nl2br klass.address
       %td= klass.phone
       %td= klass.mobile

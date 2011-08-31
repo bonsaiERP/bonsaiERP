@@ -1,9 +1,9 @@
 - content_for :links do
   %ul.breadcrumps
-    %li #{link_to "Clientes", clients_path} <span>&gt;</span>
+    %li #{link_to "Proveedores", suppliers_path} <span>&gt;</span>
   .links
-    = link_to 'Nuevo', new_client_path, :class => 'new'
-    = link_to 'Editar', edit_client_path(@supplier), :class => 'edit'
+    = link_to 'Nuevo', new_supplier_path, :class => 'new'
+    = link_to 'Editar', edit_supplier_path(@supplier), :class => 'edit'
     = link_to 'Borrar', @supplier, :class => 'delete'
 
 %h1= @supplier.matchcode
@@ -24,10 +24,10 @@
 
 = jquery_tabs :tab_id => "contact_tab" do
   =jqueryui_ul do
-    =tab "Transacciones", client_path(@supplier, :tab => 'transactions'), "transactions"
-    =tab "Compras", client_path(@supplier, :tab => 'buys'),"buys"
-    =tab "Ventas", client_path(@supplier, :tab => 'incomes'),"incomes"
-    =tab "Gastos", client_path(@supplier, :tab => 'expenses'),"expenses"
+    =tab "Transacciones", supplier_path(@supplier, :tab => 'transactions'), "transactions"
+    =tab "Compras", supplier_path(@supplier, :tab => 'buys'),"buys"
+    =tab "Ventas", supplier_path(@supplier, :tab => 'incomes'),"incomes"
+    =tab "Gastos", supplier_path(@supplier, :tab => 'expenses'),"expenses"
     
   = render @partial, @locals
 

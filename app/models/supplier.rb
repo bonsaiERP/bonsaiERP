@@ -3,7 +3,7 @@
 # email: boriscyber@gmail.com
 class Supplier < Contact
 
-private
+  private
   def set_code
     if code.blank?
       codes = Supplier.org.order("code DESC").limit(1)

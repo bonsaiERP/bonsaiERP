@@ -30,11 +30,12 @@
       Fecha<br/>
       %span.tip{:title => 'Nº de cheque, razón, recibo, etc.'} Referencia
     %th Monto en #{account.currency_symbol}
+    %th Saldo en #{account.currency_symbol}
     %th Cuenta relacionada
     %th Descripción
     %th 
-      (V) Verificado por<br/>
-      (A) Anulado por
+      %span.tip{:title => 'Verificado por'} (V) 
+      %span.tip{:title => 'Anulado por'} (A)
     %th
   - paged_ledgers.each do |al|
     - al.ac_id = account.id
@@ -44,6 +45,7 @@
         %br/
         = al.reference
       %td.cur.color= in_out_tag ledger_amount(al, account)
+      %td.cur= balance_amount(al, account)
       %td.cont= link_related_ledger_account al, money
       %td.desc= al.description
       %td.rev

@@ -28,5 +28,4 @@ class Link < ActiveRecord::Base
     # write_attribute(:rol_id, 1)
   end
 
-  
 end

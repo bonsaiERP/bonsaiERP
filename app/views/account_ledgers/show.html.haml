@@ -44,7 +44,7 @@
     $('.conciliation form').submit(function() {
       var conf_text = "Revisar una transacción es una operación irreversible, esta seguro?";
       if (#{@account_ledger.to_id.present?}) {
-        conf_text = "Revisar esta cuenta tambien revisara la cuenta relacionada con la transferencia. Desea revisar?";
+        conf_text = "Verificar esta cuenta tambien verificará la cuenta relacionada con la transacción. Desea verificar?";
       }
 
       if(!confirm(conf_text)) {

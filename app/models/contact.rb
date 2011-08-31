@@ -65,8 +65,10 @@ class Contact < ActiveRecord::Base
     end
   end
 
-  def pdf_name
+  def complete_name
     "#{first_name} #{last_name}"
   end
+
+  alias_method :pdf_name, :complete_name
 
 end

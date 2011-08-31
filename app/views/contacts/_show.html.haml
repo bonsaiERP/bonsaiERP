@@ -3,6 +3,12 @@
   .clear
   #contact_data
     .input
+      %label Nombres
+      = klass.first_name
+    .input
+      %label Apellidos
+      = klass.last_name
+    .input
       %label Empresa
       .b= klass.organisation_name
     .input._25

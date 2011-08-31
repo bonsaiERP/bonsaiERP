@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110831184724) do
+ActiveRecord::Schema.define(:version => 20110831190422) do
 
   create_table "account_currencies", :force => true do |t|
     t.integer  "organisation_id"
@@ -257,6 +257,7 @@ ActiveRecord::Schema.define(:version => 20110831184724) do
     t.boolean  "active",                        :default => true
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "abbreviation",    :limit => 15
   end
 
   add_index "links", ["organisation_id"], :name => "index_links_on_organisation_id"

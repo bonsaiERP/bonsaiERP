@@ -30,10 +30,9 @@ class AccountLedgersController < ApplicationController
   # PUT /account_ledgers/:id/conciliate 
   def conciliate
     @account_ledger = AccountLedger.org.find(params[:id])
-    #@transaction = @account_ledger.transaction if @account_ledger.transaction_id.present?
 
     if @account_ledger.conciliate_account
-      flash[:notice] = "Se ha revisado exitosamente la transacción"
+      flash[:notice] = "Se ha verificado exitosamente la transacción"
     else
       flash[:error] = @account_ledger.errors[:base].join(", ")
     end
