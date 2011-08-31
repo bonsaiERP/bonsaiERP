@@ -13,7 +13,7 @@ class MoneyStore < ActiveRecord::Base
   
   # relationships
   belongs_to :currency
-  has_one :account, :as => :accountable, :autosave => true
+  has_one :account, :as => :accountable, :autosave => true, :dependent => :destroy
 
   # Common validations
   validates_numericality_of :amount, :greater_than_or_equal_to => 0, :on => :create

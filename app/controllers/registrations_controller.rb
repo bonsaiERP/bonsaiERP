@@ -15,7 +15,7 @@ class RegistrationsController < ApplicationController
       redirect_to "/organisations/new"
     else
       if @user
-        flash[:warning] = "Ya existe un usuario registrado con el email."
+        flash[:warning] = "Ya esta registrado."
         redirect_to new_session_path
       else
         flash[:warning] = "Por favor registrese."

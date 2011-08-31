@@ -10,8 +10,10 @@ module Controllers::Authentication
     current_user.present?
   end
 
+  # Checks the current user and redirects to the correct path
   def check_logged_user
     if current_user
+      flash[:notice] = "Ya ha ingreso."
       if current_user.organisations.any?
         set_organisation_session(current_user.organisations.first)
         session[:user] = {:rol => current_user.link.rol }

@@ -69,4 +69,10 @@ describe Bank do
     b.website.should == "www.bnb.com.bo"
   end
 
+  it 'should set the amount for the acount' do
+    puts "----------"
+    b = Bank.create!(valid_params)
+    b.account_amount.should == 100
+  end
+
 end

@@ -1,7 +1,7 @@
 # Edit this Gemfile to bundle your application's dependencies.
 source 'http://gemcutter.org'
 
-gem 'rails', '~>3.1.0.rc8'
+gem 'rails', '~>3.1.0'
 
 ## Bundle edge rails:
 # gem "rails", :git => "git://github.com/rails/rails.git"
@@ -9,33 +9,31 @@ gem 'rails', '~>3.1.0.rc8'
 # ActiveRecord requires a database adapter. By default,
 # Rails has selected sqlite3.
 #gem 'sqlite3-ruby', :require => 'sqlite3'
-#gem 'pg'
-gem 'sass-rails', "~> 3.1.0.rc"
-gem 'coffee-script'
-gem 'uglifier'
+# Gems used only for assets and not required
+# in production environments by default.
+group :assets do
+  gem 'sass-rails', "  ~> 3.1.0"
+  gem 'coffee-rails', "~> 3.1.0"
+  gem 'uglifier'
+end
 
 gem 'jquery-rails'
 
 gem 'mysql2'
-gem 'rake'#, '~>0.9.2'
 
 gem 'simple_form'
-#gem 'less', '~>1.2.21'
 gem 'haml'
-#gem 'acts-as-taggable-on'
 gem 'kaminari'
+
 gem 'nokogiri'
+
 gem 'prawn', '~>0.12.0', :git => 'https://github.com/sandal/prawn.git', :branch => "stable", :submodules => true
-#gem 'active_reload'
 #gem 'newrelic_rpm'
-#gem 'countries', :require => 'iso3166'
-#gem 'barista', '~>1.0'
 #gem 'escape_utils'
 
 group :development do
   gem 'ruby-debug19', :platform => :mri_19, :require => 'ruby-debug'
   gem 'active_reload'
-  #gem 'perftools.rb', :platform => :mri,    :require => 'perftools'
   gem 'pry'
   gem 'rspec-rails', '~>2.6.0'
   gem 'steak', '~>2.0.0'
