@@ -14,6 +14,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   before_filter :set_user_session, :if => :user_signed_in?
   before_filter :set_page
+  before_filter :set_organisation, :if => :organisation?
 
   #before_filter :destroy_organisation_session!, :unless => :user_signed_in?
 

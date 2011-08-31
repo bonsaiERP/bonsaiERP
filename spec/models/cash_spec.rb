@@ -34,8 +34,9 @@ describe Cash do
     @params[:amount] = 200
     c = Cash.create!(@params)
 
-    c.account.amount.should == 200
-    c.account.currency_id.should == 1
+    c.account_amount.should == 200
+    c.account_currency_id.should == 1
+    c.account_name.should == c.to_s
   end
 end
 

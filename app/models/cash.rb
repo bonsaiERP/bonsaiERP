@@ -6,11 +6,13 @@ class Cash < MoneyStore
   validates :name, :uniqueness => {:scope => :organisation_id},
     :length => {:minimum => 3}
 
+  attr_accessible :name, :address, :currency_id, :amount
+
   def to_s
     name
   end
 
-private
+  private
   def set_defaults
     self.total_amount ||= 0.0
   end
