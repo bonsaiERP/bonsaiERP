@@ -12,12 +12,12 @@ feature "Test account ledger", "for in outs and transferences" do
     create_account_types
     b = create_bank(:currency_id => 1, :name => "Bank chiquito")
     @bank_account = b.account
-    @bank_ac_ic = b.account.id
+    @bank_ac_id = b.account.id
     @client = create_client(:matchcode => "Lucas Estrella")
 
     @params = {
       :date => Date.today, :operation => "in", :reference => "For more", :amount => 100,
-      :account_id => @bank_ac_ic, :contact_id => @client.id
+      :account_id => @bank_ac_id, :contact_id => @client.id
     }
   end
 
@@ -32,7 +32,7 @@ feature "Test account ledger", "for in outs and transferences" do
     al.account.currency_symbol.should == "Bs."
     al.active.should == true
 
-    al = AccountLedger.new_money(:operation => "in", :account_id => @bank_ac_ic, :contact_id => @client.id, :amount => 100, :reference => "Check 1120012" )
+    al = AccountLedger.new_money(:operation => "in", :account_id => @bank_ac_id, :contact_id => @client.id, :amount => 100, :reference => "Check 1120012" )
     al.save.should == true
 
     al.active.should == true
@@ -87,7 +87,7 @@ feature "Test account ledger", "for in outs and transferences" do
   end
 
   scenario "It should create an out" do
-    al = AccountLedger.new_money(:operation => "out", :account_id => @bank_ac_ic,              
+    al = AccountLedger.new_money(:operation => "out", :account_id => @bank_ac_id,              
            :contact_id => @client.id, :amount => 100, :reference => "Check 1120012" )
     
 
@@ -153,7 +153,7 @@ feature "Test account ledger", "for in outs and transferences" do
   end
 
   scenario "Make serveral in/outs for one account and check that the balance is right" do
-    al = AccountLedger.new_money(:operation => "in", :account_id => @bank_ac_ic, :contact_id => @client.id, :amount => 100, :reference => "Check 1120012" )
+    al = AccountLedger.new_money(:operation => "in", :account_id => @bank_ac_id, :contact_id => @client.id, :amount => 100, :reference => "Check 1120012" )
     al.save.should == true
 
     al.conciliate_account.should be_true
@@ -162,7 +162,7 @@ feature "Test account ledger", "for in outs and transferences" do
     al.account_balance.should == 100
     al.to_balance.should == -100
 
-    al = AccountLedger.new_money(:operation => "in", :account_id => @bank_ac_ic, :contact_id => @client.id, :amount => 100, :reference => "Check 1120013" )
+    al = AccountLedger.new_money(:operation => "in", :account_id => @bank_ac_id, :contact_id => @client.id, :amount => 100, :reference => "Check 1120013" )
     al.save.should == true
 
     al.conciliate_account.should be_true
@@ -171,7 +171,7 @@ feature "Test account ledger", "for in outs and transferences" do
     al.account_balance.should == 200
     al.to_balance.should == -200
 
-    al = AccountLedger.new_money(:operation => "out", :account_id => @bank_ac_ic, :contact_id => @client.id, :amount => 55.55, :reference => "Check 1120014" )
+    al = AccountLedger.new_money(:operation => "out", :account_id => @bank_ac_id, :contact_id => @client.id, :amount => 55.55, :reference => "Check 1120014" )
     al.save.should == true
 
     al.conciliate_account.should be_true
@@ -185,19 +185,31 @@ feature "Test account ledger", "for in outs and transferences" do
     b.account.currency_id.should == 2
     b.account_amount.should == 1000
 
+    Account.find(@bank_ac_id)
+
+    al = AccountLedger.new_money(:operation => "trans", :account_id => b.account.id, :to_id => 10, :amount => 100, :reference => "Check 1120012", :exchange_rate => 2.00 )
+
+    al.save.should be_false
+    al.errors[:to_id].should_not be_empty
+
+    # Other error
+    al = AccountLedger.new_money(:operation => "trans", :account_id => b.account.id, :to_id => b.account.id, :amount => 100, :reference => "Check 1120012", :exchange_rate => 2.00 )
+
+    al.save.should be_false
+    al.errors[:base].should_not be_empty
+
+
     al = AccountLedger.new_money(:operation => "trans", :account_id => b.account.id, :to_id => @bank_ac_id, :amount => 100, :reference => "Check 1120012", :exchange_rate => 2.00 )
     al.save.should be_true
 
     al.should be_persisted
     al.reload
-puts "---------"
-    al.conciliate_account#.should be_true
-    puts al.errors.messages
+    al.conciliate_account
 
     al.reload
 
     al.account_balance.should == 1000 - 100
-    al.to_balance.should == -200 + 55.55 + 100 * 2
+    al.to_balance.should == 200 - 55.55 + 100 * 2
     
   end
 end

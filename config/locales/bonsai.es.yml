@@ -21,6 +21,11 @@ es:
         greater_amount: "La cantidad que ingreso es mayor que el saldo"
       user:
         email: "El formato de su email es incorrecto"
+      account_ledger:
+        invalid_amount: "La cantidad ingresada es mayor que la existente en la cuenta"
+        invalid_contact: "Debe seleccionar un Cliente, Proveedor o Personal"
+        same_account: "Las cuentas que selecciono son identicas"
+        
   organisation_session:
     errors:
       organisation_id: "No ha seleccionado una organización"

@@ -12,11 +12,11 @@ module Models::AccountLedger::Money
 
     #before_save :before_save_money , :if => :money?
     with_options :if => :new_money? do |trans|
-      trans.validate :valid_money_accounts
       # callbacks
       trans.before_validation :set_exchange_rate
       trans.before_validation :set_or_create_contact_account, :unless => :trans?
       trans.before_save :set_ledger_amount
+      trans.before_save :valid_money_accounts
     end
 
     with_options :if => :money? do |trans|
@@ -107,8 +107,13 @@ module Models::AccountLedger::Money
 
     # Validates the accounts
     def valid_money_accounts
+      if account_id == to_id
+        self.errors[:base] << I18n.t("errors.messages.account_ledger.same_account")
+        return false
+      end
+
       valid_account_id
-      valid_to_id if trans?
+      valid_to_id
     end
 
     # Creates the contact account
@@ -116,7 +121,7 @@ module Models::AccountLedger::Money
       begin
         c = Contact.org.find(contact_id)
       rescue
-        self.errors[:contact_id] << I18n.t("account_ledger.errors.invalid_contact")
+        self.errors[:contact_id] << I18n.t("errors.messages.account_ledger.invalid_contact")
         return false
       end
 
@@ -139,34 +144,35 @@ module Models::AccountLedger::Money
 
     # Check the account_id
     def valid_account_id
-      err = false
-
       if account_id.present?
         begin
           ac = Account.org.find(account_id)
-          err = true unless ac.accountable_type == "MoneyStore"
+          unless ac.accountable_type == "MoneyStore"
+            self.errors[:base] << I18n.t("errors.messages.inclusion")
+            return false
+          end
         rescue
-          err = true
+          self.errors[:account_id] << I18n.t("errors.messages.inclusion")
+          return false
         end
-
-        self.errors[:account_id] << I18n.t("errors.messages.inclusion") if err
       end
     end
 
     # Check the valid to_id based on the operation
     def valid_to_id
-      err = false
       klass = trans? ? "MoneyStore" : "Contact"
 
       if to_id.present?
         begin
           ac = Account.org.find(to_id)
-          err = true unless ac.accountable_type == klass
+          unless ac.accountable_type == klass
+            self.errors[:to_id] << I18n.t("errors.messages.inclusion")
+            return false
+          end
         rescue
-          err = true
+          self.errors[:to_id] << I18n.t("errors.messages.inclusion")
+          return false
         end
-
-        self.errors[:to_id] << I18n.t("errors.messages.inclusion") if err
       end
     end
 
