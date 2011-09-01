@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110831190422) do
+ActiveRecord::Schema.define(:version => 20110901210941) do
 
   create_table "account_currencies", :force => true do |t|
     t.integer  "organisation_id"
@@ -209,10 +209,10 @@ ActiveRecord::Schema.define(:version => 20110831190422) do
     t.decimal  "total",           :precision => 14, :scale => 2
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "account_id"
+    t.integer  "contact_id"
   end
 
-  add_index "inventory_operations", ["account_id"], :name => "index_inventory_operations_on_account_id"
+  add_index "inventory_operations", ["contact_id"], :name => "index_inventory_operations_on_contact_id"
   add_index "inventory_operations", ["date"], :name => "index_inventory_operations_on_date"
   add_index "inventory_operations", ["operation"], :name => "index_inventory_operations_on_operation"
   add_index "inventory_operations", ["organisation_id"], :name => "index_inventory_operations_on_organisation_id"

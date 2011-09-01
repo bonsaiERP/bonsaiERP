@@ -12,21 +12,21 @@
   = f.input :transaction_id, :as => :hidden
 
   .main.bg_light_grey
-    .input
+    ._50.fl
       = f.input :ref_number, :input_html => {:size => 20}, :label => 'Numero de referencia'
-      = f.input :date, :label => 'Fecha'
+      .input
+        %label Fecha
+        = l Time.zone.now
 
     - url, title = @inventory_operation.operation == "in" ? [new_supplier_path, "Nuevo proveedor"] : [new_client_path, "Nuevo cliente"]
 
     - if @inventory_operation.transaction_id.blank?
-      -#= f.association :account, :collection => @inventory_operation.get_contact_list, :label => @inventory_operation.contact_label,
-        :input_html => { 'data-new_url' => url, 'data-title' => title, 'data-trigger' => 'new_contact' }
-      = f.input :account_id, :as => :contact, :label => false
+      = f.input :contact_id, :as => :contact, :label => false, :input_html => {:id => 'contact_id'}
     - else
       .input
-        = f.input :account_id, :as => :hidden
+        = f.input :contact_id, :as => :hidden
         %label Contacto
-        = link_to f.object.account, f.object.account
+        = link_to f.object.contact, f.object.contact, :class => "b"
     .clear
 
   = f.input :description, :as => :text, :input_html => {:rows => 4, :cols => 40}, :label => 'Descripción'
@@ -54,7 +54,7 @@
 :javascript
   $(function() {
     // Autocomplete Account
-    $('#inventory_operation_account_id').contactAutocomplete(["Supplier", "Client", "Staff"]);
+    $('#inventory_operation_account_id').contactAutocomplete(["Supplier", "Client"]);
 
     $('#add_item').live('click', function() {
       var t = (new Date() ).getTime();
