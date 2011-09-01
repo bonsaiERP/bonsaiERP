@@ -6,6 +6,12 @@
 
 %h1 Items
 
+- if Store.org.empty?
+  %h3.red 
+    Le recomendamos crear
+    =link_to "almacenes", stores_path
+
+
 #search_items.search{:style => show_if_search}
   %a.close{:href => "#"} cerrar
   =form_tag "/items", :method => 'get' do

@@ -131,12 +131,19 @@ feature "Income", "test features" do
     p.conciliation.should == true
     i.reload
     i.balance.should == 0
+    i.deliver.should be_false
+
     p.conciliation.should be_true
     p.reload
 
     p.account.amount.should == i.total
     p.to.amount.should == -i.total
-    
+
+    i.deliver = true
+    i.save
+    i.reload
+   
+    i.deliver.should be_true 
   end
 
   scenario "Create a an income with credit" do

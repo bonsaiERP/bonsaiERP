@@ -36,19 +36,23 @@ module Models::AccountLedger::Conciliation
       not(conciliation?) and active?
     end
 
-    #def conciliate_transaction_account
-    #  self.conciliation = true
-    #  update_related_accounts
+    def conciliate_transaction_account
+      res = true
 
-    #  #res = true
-    #  #self.class.transaction do
-    #  #  res = self.save
-    #  #  res = res and transaction.save
-    #  #  raise ActiveRecord::Rollback unless res
-    #  #end
+      self.class.transaction do
+        res = self.save
+        if res and transaction.balance == 0 and transaction.type == "Income" and transaction.account_ledgers.pendent.empty?
+          puts "Setting deliver"
+          transaction.deliver = true
+        end
+        res = res and transaction.save
+        raise ActiveRecord::Rollback unless res
+      end
 
-    #  self.save
-    #end
+      res
+    end
+
+
     def valid_contact_amount
       if ::Contact::TYPES.include?(account_original_type)
         if currency_id and exchange_rate > 0

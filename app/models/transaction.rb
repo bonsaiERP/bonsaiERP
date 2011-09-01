@@ -54,8 +54,10 @@ class Transaction < ActiveRecord::Base
   scope :approved , where(:state => 'approved')
   scope :paid     , where(:state => 'paid')
   scope :due      , where("transactions.state = ? AND transactions.payment_date < ?" , 'approved' , Date.today)
-  scope :inventory, where("balance_inventory > 0 AND state != 'draft'")
+  scope :inventory, where("transactions.deliver = ? AND transactions.balance_inventory > 0", true)
   scope :credit   , where(:cash => false)
+  # Especial used to update
+  scope :for_deliver, paid.where("transactions.deliver = ? AND transactions.balance_inventory > 0", false)
 
   delegate :name, :symbol, :plural, :code, :to => :currency, :prefix => true
 
@@ -150,7 +152,7 @@ class Transaction < ActiveRecord::Base
   def create_states_hash
     arr = case I18n.locale
     when :es
-      ["Borrador" , "Aprobado" , "Pagado" , "Vencido", "Pendiente", "Anulado"]
+      ["Proforma" , "Aprobado" , "Pagado" , "Vencido", "Pendiente", "Anulado"]
     when :en
       ["Draft"    , "Aproved"  , "Paid"   , "Due", "Pendent", "Nulled"]
     when :pt
@@ -256,7 +258,7 @@ class Transaction < ActiveRecord::Base
     set_defaults
   end
 
-private
+  private
 
   def set_state
     if balance.to_f <= 0

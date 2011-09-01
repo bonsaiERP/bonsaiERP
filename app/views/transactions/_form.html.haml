@@ -4,6 +4,7 @@
   }
   input.hide{ display: none; }
 
+
 = simple_form_for(transaction, :html => {:id => 'transaction_form'}) do |f|
   = bonsai_form_error(f)
   .main.bg_light_grey
@@ -53,7 +54,7 @@
     = f.simple_fields_for :transaction_details do |fd|
       %tr.item
         %td.cur
-          = fd.input :item_id, :label => false, :collection => @items, :input_html => {:class => 'item', 'data-new_url' => new_item_path(:scope => transaction.type.downcase), 'data-title' => 'Nuevo producto/servicio', 'data-trigger' => 'new_item'}
+          = fd.input :item_id, :label => false, :collection => @items, :input_html => {:class => 'item'}
         /%td= fd.input :description, :label => false, :input_html => {:size => 20}
 
         %td= fd.input :price, :input_html => { :size => 8, :class => 'price', :type => 'decimal' }, :label => false

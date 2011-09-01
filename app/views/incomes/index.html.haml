@@ -9,6 +9,12 @@
 
 %h1 Ventas
 
+- if Item.org.empty?
+  %h3.red 
+    Necesita
+    = link_to "items", items_path
+    para poder realizar ventas
+
 - @in = Income.org
 
 %ul.tabs
@@ -46,7 +52,6 @@
       %th Vence el
       %th Total<br/>#{currency_symbol}
       %th Saldo<br/>#{currency_symbol}
-      %th.tip{:title => 'Saldo Inventario'} Saldo<br/>Inv. #{currency_symbol}
       %th.tip{:title => 'Moneda'} Mon.
       %th.tip{:title => "Contado Crédito"} Tipo
       %th Fecha Hora
@@ -62,7 +67,6 @@
         %td= lo income.payment_date unless income.paid?
         %td.cur= ntc exchange(income, :real_total, @currency_rates)
         %td.cur= ntc exchange(income, :balance, @currency_rates)
-        %td.cur= ntc income.balance_inventory
         %td <span>#{income.currency_symbol}</span>
         %td= cash_credit(income.cash)
         %td.nw= lo income.created_at
