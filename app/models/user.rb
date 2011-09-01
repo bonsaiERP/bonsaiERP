@@ -20,25 +20,24 @@ class User < ActiveRecord::Base
   has_many :organisations, :through => :links
 
   # Validations
-  validates_presence_of :email, :password
+  validates_presence_of :email
+  validates_length_of :abbreviation, :minimum => 2, :on => :create
   validates :email, :format => {
     :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, 
     :message => I18n.t("errors.user.email")
   }
-  validates :password, :length => {:minimum => 6}
 
   with_options :if => :new_record? do |u|
-    validates_presence_of  :rolname
-    validates_inclusion_of :rolname, :in => ROLES
+    u.validates_inclusion_of :rolname, :in => ROLES
+    u.validates :password, :length => {:minimum => 6}
   end
 
   with_options :if => :change_default_password? do |u|
-    u.validates_length_of :abbreviation, :minimum => 2
     u.validates_inclusion_of :rolname, :in => ROLES.slice(1,3)
   end
 
   #attr_protected :account_type
-  attr_accessible :email, :password, :password_confirmation, :first_name, :last_name, :phone, :mobile, :website, :description, :rolname, :address, :rolname, :abbreviation
+  attr_accessible :email, :password, :password_confirmation, :first_name, :last_name, :phone, :mobile, :website, :description, :rolname, :address#, :rolname, :abbreviation
 
   def to_s
     unless first_name.blank? and last_name.blank?

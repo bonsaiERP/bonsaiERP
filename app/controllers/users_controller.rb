@@ -60,6 +60,7 @@ class UsersController < ApplicationController
   # GET /users/:id/edit_user
   def edit_user
     @user = current_user.organisation.links.find_by_user_id(params[:id]).user
+    check_if_creator(@user)
     @user.rolname = @user.link.rol
     @user.active_link = @user.link.active
   end
@@ -70,8 +71,9 @@ class UsersController < ApplicationController
     h = params[:user]
     h[:rolname] = '' if params[:user][:rolname] == 'admin'
     @user = current_user.organisation.links.find_by_user_id(params[:id]).user
+    check_if_creator(@user)
     
-    if @user.update_user_role(params[:user])
+    if @user.update_attributes(params[:user])
       flash[:notice] = "El usuario #{@user} ha sido actualizado"
       redirect_to "/configuration"
     else
@@ -94,6 +96,14 @@ class UsersController < ApplicationController
       redirect_to "/users/#{@user.id}", :notice => "Su contraseña a sido actualizada."
     else
       render :action => 'password'
+    end
+  end
+
+  private
+  def check_if_creator(user)
+    if user.link.creator?
+      flash[:warning] = "No es posible cambiar para el creador de la empresa, Haga <a href='/users/0/edit'>click aqui</a> si desea cambiar sus datos".html_safe
+      redirect_to "/configuration"
     end
   end
 end
