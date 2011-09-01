@@ -14,7 +14,7 @@
         %label Fecha Hora
         %p= lo Time.now
 
-    = f.input :contact_id, :as => :contact, :label => false, :input_html => {:id => 'transaction_account_id'}
+    = f.input :contact_id, :as => :contact, :label => false, :input_html => {:id => 'transaction_contact_id'}
     .clear
 
   .clear
@@ -96,11 +96,10 @@
 
   .actions
     = f.submit 'Salvar'
-
 :javascript
   $( function() {
     // Autocomplete
-    $('#transaction_account_id').contactAutocomplete(#{get_contact_list.to_json}, {'id': 'contact_autocomplete', 'model': 'Account'});
+    $('#transaction_contact_id').contactAutocomplete(#{get_contact_list.to_json}, {'id': 'contact_autocomplete'});
 
     $('a#add_item').click(function() {
       $('#item_autocomplete').hide().insertAfter('#items_table');

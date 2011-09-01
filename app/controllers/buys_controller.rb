@@ -13,6 +13,7 @@ class BuysController < ApplicationController
     if params[:search].present?
       @buys = Buy.search(params).page(@page)
     else
+      params[:option] ||= "all"
       @buys = Buy.find_with_state(params[:option]).page(@page)
     end
   end

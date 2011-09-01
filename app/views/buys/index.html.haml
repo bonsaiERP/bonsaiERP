@@ -12,12 +12,12 @@
 - @bu = Buy.org
 
 %ul.tabs
-  %li= link_to "Todas"                                                         , buys_path(:option => 'all')
-  %li= link_to "Proformas #{size_or_blank(@bu.draft.size)}"         , buys_path(:option => 'draft')            , :class => tabs_filter('draft')
-  %li= link_to "Esperando pago #{size_or_blank(@bu.approved.size)}"            , buys_path(:option => 'awaiting_payment') , :class => tabs_filter('awaiting_payment')
-  %li= link_to "Vencidas #{size_or_blank(@bu.due.size)}"                       , buys_path(:option => 'due')              , :class => tabs_filter('due')
-  %li= link_to "Con inventario pendiente #{size_or_blank(@bu.inventory.size)}" , buys_path(:option => 'inventory')        , :class => tabs_filter('inventory')
-  %li= link_to "Pagadas"                                                       , buys_path(:option => 'paid')             , :class => tabs_filter('paid')
+  %li= link_option "Todas", "all"
+  %li= link_option "Proformas #{size_or_blank(@bu.draft.size)}", "draft"
+  %li= link_option "Esperando pago #{size_or_blank(@bu.approved.size)}"            , buys_path(:option => 'awaiting_payment') , :class => tabs_filter('awaiting_payment')
+  %li= link_option "Vencidas #{size_or_blank(@bu.due.size)}", "due"
+  %li= link_option "Con inventario pendiente #{size_or_blank(@bu.inventory.size)}" , "inventory"
+  %li= link_option "Pagadas", "paid"
 
 #search_buy.search{:style => show_if_search}
   %a.close{:href => "#"} cerrar
@@ -40,29 +40,28 @@
 %table{ :class => 'decorated nwl' }
   %thead
     %tr
+      %th.tip{:title => 'Estado'} Est.
       %th{ :title => 'Número de referencia' } Nº Ref.
       %th Proveedor
       %th Vence el
       %th Total<br/>#{currency_symbol}
       %th Saldo<br/>#{currency_symbol}
-      %th{:title => 'Saldo Inventario'} Saldo<br/>Inv. #{currency_symbol}
       %th{:title => 'Moneda'} Mon.
-      %th Estado
-      %th Contado<br/>Crédito
+      %th.tip{:title => "Contado Crédito"} Tipo
       %th Fecha
       %th
 
   %tbody
     - @buys.each do |buy|
       %tr{ :class => cycle(:odd, :even) }
+        %td 
+          %span{:class => "#{buy.real_state} tip", :title => buy.show_state}
         %td= link_to buy.ref_number, buy, :class => 'b'
         %td= buy.contact
         %td= lo buy.payment_date unless buy.paid?
         %td.cur= ntc exchange(buy, :real_total, @currency_rates)
         %td.cur= ntc exchange(buy, :balance, @currency_rates)
-        %td.cur= ntc(buy.balance_inventory)
         %td <span>#{buy.currency_symbol}</span>
-        %td <span class="#{buy.real_state}">#{buy.show_state}</span>
         %td= cash_credit(buy.cash)
         %td.nw= lo buy.date
         %td.actions

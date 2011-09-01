@@ -31,6 +31,7 @@ class Transaction
 
     @.set_events()
     $("#{@conf.table_id} select:first").trigger('change')
+    @.calculate_total()
 
   # Sets the events
   set_events: ->

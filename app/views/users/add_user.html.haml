@@ -27,7 +27,6 @@
   = f.input :phone, :label => 'Teléfono'
   = f.input :mobile, :label => 'Móvil'
   .clear
-  .clear
   = f.input :address, :label => 'Dirección', :as => :text, :input_html => {:rows => 4, :cols => 35}
 
   = f.input :rolname, :collection => User.get_roles.slice(1, 3), :label => 'Rol'
