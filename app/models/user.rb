@@ -37,7 +37,7 @@ class User < ActiveRecord::Base
   end
 
   #attr_protected :account_type
-  attr_accessible :email, :password, :password_confirmation, :first_name, :last_name, :phone, :mobile, :website, :description, :rolname, :address#, :rolname, :abbreviation
+  attr_accessible :email, :password, :password_confirmation, :first_name, :last_name, :phone, :mobile, :website, :description, :rolname, :address, :abbreviation
 
   def to_s
     unless first_name.blank? and last_name.blank?

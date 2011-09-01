@@ -179,5 +179,25 @@ feature "Test account ledger", "for in outs and transferences" do
 
     al.account_balance.should == 200 - 55.55
     al.to_balance.should == -200 + 55.55
+
+    # Create a bank with another currency
+    b = create_bank(:currency_id => 2, :amount => 1000)
+    b.account.currency_id.should == 2
+    b.account_amount.should == 1000
+
+    al = AccountLedger.new_money(:operation => "trans", :account_id => b.account.id, :to_id => @bank_ac_id, :amount => 100, :reference => "Check 1120012", :exchange_rate => 2.00 )
+    al.save.should be_true
+
+    al.should be_persisted
+    al.reload
+puts "---------"
+    al.conciliate_account#.should be_true
+    puts al.errors.messages
+
+    al.reload
+
+    al.account_balance.should == 1000 - 100
+    al.to_balance.should == -200 + 55.55 + 100 * 2
+    
   end
 end

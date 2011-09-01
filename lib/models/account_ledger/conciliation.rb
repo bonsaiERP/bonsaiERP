@@ -60,6 +60,7 @@ module Models::AccountLedger::Conciliation
 
     private
     def update_related_accounts
+      puts "AMT: #{amount}"
       account.amount += amount
       to.amount += -(amount * exchange_rate)
     end
