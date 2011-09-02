@@ -5,7 +5,7 @@ class Item < ActiveRecord::Base
 
   acts_as_org
 
-  include Models::Account::ServiceAccount
+  #include Models::Account::ServiceAccount
 
   attr_readonly :ctype
 

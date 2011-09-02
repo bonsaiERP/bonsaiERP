@@ -139,8 +139,5 @@ describe Item do
     !!(" " =~ reg).should == false
   end
 
-  describe "Create an account if service" do
-
-  end
 
 end

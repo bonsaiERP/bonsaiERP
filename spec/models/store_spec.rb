@@ -10,10 +10,8 @@ describe Store do
 
   def create_items(number = 10)
     (1..10).each do |num|
-      puts num
       i = Item.create(:name => "item #{num}", :unit_id => 1,
                   :code => "P-00#{num}", :ctype => 'product') {|i| i.organisation_id = 1}
-      #i.errors.messages
     end
   end
 

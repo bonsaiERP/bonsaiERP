@@ -31,7 +31,7 @@ class Store < ActiveRecord::Base
     st = stocks
     st = st.where(options) if options
 
-    items = options[:item_id].is_a? Array ? options[:item_id] : [options[:item_id]]
+    items = options[:item_id].is_a?(Array) ? options[:item_id] : [options[:item_id]]
 
     Hash[
     items.map do |i_id|
