@@ -96,7 +96,7 @@
   .actions
     = f.submit 'Salvar'
 
-#currency_form{:style => 'display: none'}
+#currency_form{:style => 'display: block'}
   %h3.red Advertencia !. Los precios de los items se actualizaran según el tipo de cambio que seleccione
   
   %label Tipo de cambio
@@ -106,7 +106,7 @@
   %input{:type => 'text', :size => 8, :class => 'r', :id => 'exchange_rate'}
   %span.currecy1.b #{currency_symbol}
   %span.amount
-  %button#exchange_rate_button Cambiar
+  %button#exchange_rate_button.button Cambiar
 
 :javascript
   $( function() {
@@ -120,14 +120,28 @@
     var items = #{ @items.json.to_json };
     var type = "#{transaction.type.downcase}";
 
+    // Creation of all Backbone
+    dialog = createDialog({
+      id: 'currency_dialog', html: $('#currency_form').html(),
+      title: 'Tipo de cambio', autoOpen: false
+      width: 500,  position: 'center',
+      close: function(event, ui) {
+        $(this).hide();
+        return false
+      }
+    });
+
+    rate = new ExchangeRateDialog({el: dialog});
+
     var currencies = #{ Currency.to_hash.to_json };
     var exchange_rates = #{ CurrencyRate.active.select("rate, currency_id").to_json };
 
     var default_currency_id = #{currency_id};
-    //var transaction = new #{transaction.type}(items, "#transaction_form", {'default_currency_id': default_currency_id }, currencies, exchange_rates );
-    //window.transaction = transaction;
-    var transaction = new IncomeModel(currencies, exchange_rates, #{currency_id});
-    console.log(transaction);
+    window.transaction = new Transaction(currencies, exchange_rates, #{currency_id});
+
+    rate.setModel(transaction);
+
+    //exchange_rate_dialog = new ExchangeRateDialog({model => transaction, el: $('#currency_form').html() })
 
 
     // Functions for the select boxes

@@ -1,39 +1,14 @@
-# Class that helps to do all calculations
-# This is encharged for all configuration in the transactions
-class Events
-
-_.extend(Events::, Backbone.Events)
-
-this.Events = Events
-
-
-class Model
-  constructor: ->
-    Backbone.Model.apply(this, arguments)
-
-_.extend(Model::, Backbone.Model.prototype)
-
-this.Model = Model
-
-
-class Collection
-  constructor: ->
-    Backbone.Collection.apply(this, arguments)
-
-_.extend(Collection::, Backbone.Collection.prototype)
-
-this.Collection = Collection
-
-class TransactionModel extends Model
+# Model to control income, buy or expense
+class TransactionModel extends Backbone.Model
   dialog_open_on_change: true
 
   constructor: ( @currencies, @exchange_rates, @default_currency )->
     super({currency_id: @default_currency, exchange_rate: 1})
 
-    @currency_id          = $('#transaction_currency_id')
-    @currency_id_label    = $('label[for=transaction_currency_id]')
-    @exchange_rate        = $('#transaction_exchange_rate')
-    @exchange_button      = $('#exchange_rate_button')
+    @currency_id       = $('#transaction_currency_id')
+    @currency_id_label = $('label[for=transaction_currency_id]')
+    @exchange_rate     = $('#transaction_exchange_rate')
+    @exchange_button   = $('#exchange_rate_button')
 
     @.setEvents()
     @.createExchangeRateDialog()
@@ -42,12 +17,15 @@ class TransactionModel extends Model
   initialize: ->
     self = @
 
+    @.bind "change:currency_id", -> self.dialogOpen()
     @.bind "change:currency_id", ->
       self.setExchangeRateHtml()
 
     @.bind "change:exchange_rate", ->
       self.setExchangeRateHtml()
 
+  dialogOpen: ->
+    $(@exchange_rate_dialog).dialog("open")
   # Events for showing not for interaction
   setEvents: ->
     self = @
@@ -59,8 +37,8 @@ class TransactionModel extends Model
 
       self.set {currency_id: $(this).val() * 1}
 
-      if self.dialog_open_on_change and self.get("currency_id") != self.default_currency
-        $(self.exchange_rate_dialog).dialog("open")
+      #if self.dialog_open_on_change and self.get("currency_id") != self.default_currency
+      #  $(self.exchange_rate_dialog).dialog("open")
 
     # Button
     @exchange_button.live 'click', ->
@@ -82,14 +60,14 @@ class TransactionModel extends Model
       close: (event, ui)->
         $(this).hide()
         false
+      open: (event, ui)->
+        $('#exchange_rate').val(self.get("exchange_rate"))
     )
     $('#currency_form').remove()
 
   # Creates the HTML for the label
   setExchangeRateHtml: ->
     @currency_id_label.find('span.cont').remove()
-
-    console.log @.get("currency_id"), @default_currency
 
     unless @.get('currency_id') == @default_currency
       html = ["<span class='cont n black'>", "Tipo de cambio ", @.getCurrencySymbol(@default_currency), " 1 = ",
@@ -106,6 +84,58 @@ class TransactionModel extends Model
 class IncomeModel extends TransactionModel
 
 window.IncomeModel = IncomeModel
+
+
+
+class Transaction extends Backbone.Model
+  constructor: ( @currencies, @exchange_rates, @default_currency )->
+    super({currency_id: @default_currency, exchange_rate: 1})
+    @.set(
+      currency_symbol: @.getCurrencySymbol(@.get("currency_id"))
+    )
+
+  initialize: ->
+    self = @
+
+    @.bind "change:currency_id", (model, currency)->
+      currency = currency * 1
+      self.set({ currency_symbol: self.currencies[currency] })
+
+  # Gets the currency symbol
+  getCurrencySymbol: (currency)->
+     @currencies[currency].symbol
+
+
+# View for the template
+class ExchangeRateDialog extends Backbone.View
+  initialize:->
+    @model ||= 0
+  events:
+    "click button": "setExchange"
+
+  setExchange: ->
+    @model.set({name: $(@el).find("#exchange_rate").val() * 1 })
+    $(@el).hide()
+  # render
+  render: ->
+    @el.dialog("open")
+
+  open: ->
+    console.log "From backbone", @el.id
+    $(@el).dialog("open")
+  setModel: (model)->
+    @model = model
+    @model.bind("change:name", (model, name)->
+      console.log "New value", name
+    )
+
+$(document).ready(->
+
+  window.rate = rate
+  rate.open()
+  rate.setModel( new Backbone.Model() )
+  false
+)
 
 class Income
 

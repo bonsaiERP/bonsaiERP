@@ -7,7 +7,8 @@ String::pluralize = ->
 # $.browser.msie
 # $.browser.version
 
-
+######################################
+# All events related to jQuery
 $(document).ready(->
   # Fix some issues with MSIE 7
   #if $.browser.msie and $.browser.version < 8
