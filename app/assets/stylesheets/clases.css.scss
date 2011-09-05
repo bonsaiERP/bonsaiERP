@@ -399,3 +399,10 @@ ul.menu{
 }
 .accounts_list li h3{ margin: 2px 4px; }
 .accounts_list li p{padding: 2px 5px; }
+
+/*For autocomplete*/
+.ui-autocomplete a{ color: $black; }
+.ui-autocomplete a.ui-state-hover{ 
+  background-color: #7DBF47 !important; 
+  color: #FFF !important;
+}

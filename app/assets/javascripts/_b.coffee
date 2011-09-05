@@ -62,3 +62,5 @@ toByteSize = (bytes)->
 # Set the global variable
 _b.tobyteSize = toByteSize
 
+_b.notEnter = (event)->
+  ( event.type == "keyup" or event.type == "keypress" ) and event.keyCode != 13

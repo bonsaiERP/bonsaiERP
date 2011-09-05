@@ -126,6 +126,13 @@ class Item < ActiveRecord::Base
     self.org.includes(:unit, :stocks).where("items.name LIKE :search OR items.code LIKE :search", :search => "%#{params[:search]}%")
   end
 
+  def self.simple_search(search, limit = 20)
+    self.org.where("code LIKE :search OR name LIKE :search", :search => "%#{search}%")
+    .limit(limit)[:id, :code, :name, :price].map do |id, code, name, price|
+      {:id => id, :code => code, :name => name, :price => price, :label => "#{code} - #{name}", :value => id}
+    end
+  end
+
   # creates an array with values  [quantity, percentage]
   def discount_values
     return [] if self.discount.blank?

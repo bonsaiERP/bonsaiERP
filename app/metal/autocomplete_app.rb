@@ -30,8 +30,7 @@ class AutocompleteApp < BaseApp
   end
 
   def item
-    debugger
-    self.response_body = "JeJe"
+    render :json => item_autocomplete(params)
   end
 
   def client_account
@@ -51,6 +50,11 @@ private
   def contact_autocomplete(type, options)
     set_organisation_session
     Contact.org.where("type = :type AND matchcode LIKE :term", :type => type, :term => "%#{options[:term]}%").limit(20).map {|c| {:id => c.id, :label => c.to_s}}
+  end
+
+  def item_autocomplete(options)
+    set_organisation_session
+    Item.simple_search(options[:term]).to_json
   end
 
   def contact_account_autocomplete(type, options)

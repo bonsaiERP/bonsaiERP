@@ -24,6 +24,7 @@ gem 'mysql2'
 gem 'simple_form'
 gem 'haml'
 gem 'kaminari'
+gem 'valium'
 
 gem 'nokogiri'
 

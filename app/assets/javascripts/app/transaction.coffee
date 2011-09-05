@@ -3,8 +3,14 @@ class ItemModel extends Backbone.Model
   initialize: ->
     @row      = $(@.get("row"))
     @tot      = @row.find(".total_row")
+    @item_id  = @row.find("input.item_id")
     @price    = @row.find("input.price")
     @quantity = @row.find("input.quantity")
+    @desc     = @row.find("input.desc")
+    @del      = @row.find("a.destroy")
+
+    @desc.data("cid", @.cid)
+    @row.data("cid", @.cid)
 
     @trans  = @.get("trans")
 
@@ -21,28 +27,84 @@ class ItemModel extends Backbone.Model
   setEvents: ->
     self = @
     @price.live 'keyup focusout', (event)->
-      console.log event.keyCode
-      return false if event.type == "keyup" and event.keyCode != $.ui.keyCode.ENTER
+      return false if _b.notEnter(event)
       price = $(this).val() * 1
       self.set({price: price.round(2)})
     @quantity.live 'keyup focusout', (event)->
+      return false if _b.notEnter(event)
+      price = $(this).val() * 1
       quantity = $(this).val() * 1
       self.set({quantity: quantity.round(2)})
 
+  # set values after autocomplete
+  setValues: (ui)->
+    @item_id.val(ui.item.id)
+    @price.val(ui.item.price)
+    @desc.val(ui.item.label)
+    @.set({item_id: ui.item.id, description: ui.item.label, price: ui.item.price * 1})
   # Total
-  total: ->
+  total: (set)->
     total = @.get("quantity") * @.get("price")
-    @tot.html(_b.ntc(total))
+    @tot.html(_b.ntc(total)) unless set
     total
 
 #class ItemView extends Backbone.View
 
 window.ItemModel = ItemModel
+
+rowTemplate = '<tr class="item">
+                        <td>
+                          <input type="text" size="60" class="desc">
+                          <div class="input numeric integer required"><input type="number" step="1" size="35" required="required" name="income[transaction_details_attributes][<%= num %>][item_id]" id="income_transaction_details_attributes_<%= num >_item_id" class="numeric integer required item_id"></div>
+                        </td>
+                        <td><div class="input numeric decimal optional"><input type="decimal" value="<%= num %>" step="any" size="8" name="income[transaction_details_attributes][<%= num %>][price]" id="income_transaction_details_attributes_<%= num %>_price" class="numeric decimal optional price"></div></td>
+                        <td><div class="input numeric decimal optional"><input type="decimal" value="<%= num %>" step="any" size="8" name="income[transaction_details_attributes][<%= num %>][quantity]" id="income_transaction_details_attributes_<%= num %>_quantity" class="numeric decimal optional quantity"></div></td>
+                        <td data-val="<%= num %>.<%= num %>" class="total_row r"><%= num %>,<%= num %><%= num %></td>
+                        <td class="del"><a title="Borrar" class="destroy" href="javascript:">&nbsp;</a></td>
+                      </tr>'
+
 class ItemCollection extends Backbone.Collection
   model: ItemModel
   # Init
+  initialize: ->
+    self = @
+
+    # Convert to autocomplete
+    $('input.desc').live 'focusin', ->
+      return false if $(this).hasClass("ui-autocomplete-input")
+      $('input.desc.ui-autocomplete-input').autocomplete("destroy")
+      $(this).autocomplete(
+        source: "/item_autocomplete"
+        select: (event, ui)->
+          item = self.getByCid($(this).data("cid"))
+          item.setValues(ui)
+          false
+      )
+
+    # Event for adding item
+    $('a#add_item').live 'click', (event)->
+      self.addItem()
+
+    $('tr.item a.destroy').live 'click', (event)->
+      self.removeItem(this)
+
+    @.bind("remove", ->
+      console.log "Deleted row"
+    )
+
+    $('#transaction_discount').live 'keyup focusout', (event)->
+      return false if _b.notEnter(event)
+      val = (this.value * 1).round(2)
+      self.trans.set({discount: val})
+      $(this).val(val)
+
+  # setTransaction
   setTrans: (@trans)->
     self = @
+
+    # Change discount
+    @trans.bind("change:discount", ->
+    )
 
     $('#items_table').find("tr.item").each (i, el)->
       item_id  = $(el).find("input.item").val() * 1
@@ -53,8 +115,38 @@ class ItemCollection extends Backbone.Collection
       item = new ItemModel({item_id: item_id, description: desc, price: price, quantity: quantity, trans: self.trans, row: el})
 
       self.add(item)
-
+  # Adds and item to the collection
   addItem: ->
+    row = @.createNewRow()
+    $('tr.subtotal').before(row)
+    item = new ItemModel({item_id: '', description: '', price: 0, quantity: 0, trans: @.trans, row: row})
+    @.add(item)
+  # Remove item
+  removeItem: (el)->
+    if @.length <= 1
+      alert "Debe existir al menos un ítem"
+      return false
+
+    row = $(el).parents("tr")
+    cid = row.data("cid")
+    @.remove(@.getByCid(cid))
+    row.remove()
+
+  # Creates a new Row
+  createNewRow: ->
+    row = _.template(rowTemplate)
+    row({num: (new Date).getTime() } )
+    console.log row
+    row
+
+  # Calculates the total
+  total: ->
+    @.reduce( (sum, item)->
+      console.log item.total()
+      sum += item.total(true)
+    , 0)
+  discount: ->
+  taxes: ->
 
 # Principal class to control all behabeviour
 class TransactionModel extends Backbone.Model

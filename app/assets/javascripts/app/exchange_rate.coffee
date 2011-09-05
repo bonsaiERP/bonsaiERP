@@ -17,7 +17,7 @@ class ExchangeRate
     self = @
 
     $("#{ @amount },#{ @input }").live 'focusout keyup', (event)->
-      return false if event.type == 'keyup' and event.keyCode != $.ui.keyCode.ENTER
+      return false if _b.notEnter(event)
 
       amount = 0
       $(self.amount.split(",")).each (i, el)->
