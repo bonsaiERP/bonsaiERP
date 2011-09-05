@@ -277,6 +277,7 @@ class Transaction < ActiveRecord::Base
     self.discount ||= 0
     self.tax_percent = taxes.inject(0) {|sum, t| sum += t.rate }
     self.exchange_rate ||= 1
+    self.currency_id ||= OrganisationSession.currency_id
     self.gross_total ||= 0
     self.total ||= 0
     self.date ||= Date.today

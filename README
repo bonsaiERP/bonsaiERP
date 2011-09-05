@@ -85,3 +85,91 @@ Using money_account
 Using contact_account
 | Account | To      |
 | sales   | contact |
+
+
+# Model to control income, buy or expense
+class TransactionModel extends Backbone.Model
+  dialog_open_on_change: true
+
+  constructor: ( @currencies, @exchange_rates, @default_currency )->
+    super({currency_id: @default_currency, exchange_rate: 1})
+
+    @currency_id       = $('#transaction_currency_id')
+    @currency_id_label = $('label[for=transaction_currency_id]')
+    @exchange_rate     = $('#transaction_exchange_rate')
+    @exchange_button   = $('#exchange_rate_button')
+
+    @.setEvents()
+    @.createExchangeRateDialog()
+
+  # Init functions Events more related to change of attributes
+  initialize: ->
+    self = @
+
+    @.bind "change:currency_id", -> self.dialogOpen()
+    @.bind "change:currency_id", ->
+      self.setExchangeRateHtml()
+
+    @.bind "change:exchange_rate", ->
+      self.setExchangeRateHtml()
+
+  dialogOpen: ->
+    $(@exchange_rate_dialog).dialog("open")
+  # Events for showing not for interaction
+  setEvents: ->
+    self = @
+    # Currency
+    @currency_id.live 'change keyup', (event)->
+      # Check the keyup event
+      if event.type == "keyup" and not (event.keyCode == $.ui.keyCode.UP or evet.keyCode == $.ui.keyCode.DOWN)
+        return false
+
+      self.set {currency_id: $(this).val() * 1}
+
+      #if self.dialog_open_on_change and self.get("currency_id") != self.default_currency
+      #  $(self.exchange_rate_dialog).dialog("open")
+
+    # Button
+    @exchange_button.live 'click', ->
+      $(self.exchange_rate_dialog).dialog("close")
+      self.set({exchange_rate: $('#exchange_rate').val() * 1})
+    # Edit link
+    $('#exchange_rate_link').live 'click', ->
+      $(self.exchange_rate_dialog).dialog("open")
+
+  # Creates the exchange rate dialog
+  createExchangeRateDialog: ->
+    self = @
+    @exchange_rate_dialog = createDialog(
+      html: $('#currency_form').html()
+      title: 'Tipo de cambio'
+      autoOpen: false
+      width: 500
+      position: 'center'
+      close: (event, ui)->
+        $(this).hide()
+        false
+      open: (event, ui)->
+        $('#exchange_rate').val(self.get("exchange_rate"))
+    )
+    $('#currency_form').remove()
+
+  # Creates the HTML for the label
+  setExchangeRateHtml: ->
+    @currency_id_label.find('span.cont').remove()
+
+    unless @.get('currency_id') == @default_currency
+      html = ["<span class='cont n black'>", "Tipo de cambio ", @.getCurrencySymbol(@default_currency), " 1 = ",
+      "<strong>", @.getCurrencySymbol(@.get('currency_id'))," ", _b.ntc(@.get('exchange_rate'), 4), "</strong>",
+      "&nbsp;&nbsp;&nbsp;",  "<a href='javascript:' class='b pencil' id='exchange_rate_link'>editar</a>",
+      "</span>"]
+
+      @currency_id_label.append(html.join(""))
+
+   # Gets the currency symbol
+   getCurrencySymbol: (currency)->
+     @currencies[currency].symbol
+
+#class IncomeModel extends TransactionModel
+
+#window.IncomeModel = IncomeModel

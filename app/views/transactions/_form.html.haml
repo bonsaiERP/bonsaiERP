@@ -3,6 +3,7 @@
     margin: 2px 0px;
   }
   input.hide{ display: none; }
+  #items_table input.item{ display: none; }
 
 
 = simple_form_for(transaction, :html => {:id => 'transaction_form'}) do |f|
@@ -44,8 +45,10 @@
     %thead
       %tr
         %th.item Item
-        /%th.description Descripción
-        %th.price Precio <br/>unitario #{currency_symbol}
+        -#%th.description Descripción
+        %th.price 
+          Precio <br/>unitario
+          %span.currency
         %th.quantity Cantidad
         %th.total_row Total fila
         %th
@@ -53,9 +56,11 @@
     - @items = transaction.get_items
 
     = f.simple_fields_for :transaction_details do |fd|
-      %tr.item
-        %td.cur
-          = fd.input :item_id, :label => false, :collection => @items, :input_html => {:class => 'item'}
+      %tr.item{:id => fd.object.id}
+        %td
+          %input.desc{:type => 'text', :size => 40, :value => fd.object.item}
+          = fd.input :item_id, :label => false, :input_html => {:class => 'item'}
+
         %td= fd.input :price, :input_html => { :size => 8, :class => 'price', :type => 'decimal' }, :label => false
         %td= fd.input :quantity, :input_html => { :size => 8, :class => 'quantity', :type => 'decimal' }, :label => false
 
@@ -75,7 +80,7 @@
             :label => "#{minus_image} Descuento general (<span id=\"discount_percentage\" data-val=\"#{transaction.discount}\">#{ntc transaction.discount}</span>%)".html_safe, 
             :input_html => {:size => 4, :type => 'decimal'}, :wrapper_html => {:class => 'boolean _100'}
             
-        /#{minus_image} Descuento (<span id="discount_percentage" data-val="#{transaction.discount}">#{ntc transaction.discount}</span>%)
+        -##{minus_image} Descuento (<span id="discount_percentage" data-val="#{transaction.discount}">#{ntc transaction.discount}</span>%)
       %td#discount_total.r{'data-val' => transaction.total_discount} #{ntc(transaction.total_discount)}
     
     %tr.extra
@@ -96,16 +101,15 @@
   .actions
     = f.submit 'Salvar'
 
-#currency_form{:style => 'display: block'}
+#currency_form{:style => 'display: none'}
   %h3.red Advertencia !. Los precios de los items se actualizaran según el tipo de cambio que seleccione
   
   %label Tipo de cambio
+  %span.currency_symbol.b
   1
-  %span.currecy2.b
   \= 
+  %span.default_symbol.b
   %input{:type => 'text', :size => 8, :class => 'r', :id => 'exchange_rate'}
-  %span.currecy1.b #{currency_symbol}
-  %span.amount
   %button#exchange_rate_button.button Cambiar
 
 :javascript
@@ -117,31 +121,13 @@
       $('#item_autocomplete').hide().insertAfter('#items_table');
     });
   
-    var items = #{ @items.json.to_json };
     var type = "#{transaction.type.downcase}";
-
     // Creation of all Backbone
-    dialog = createDialog({
-      id: 'currency_dialog', html: $('#currency_form').html(),
-      title: 'Tipo de cambio', autoOpen: false
-      width: 500,  position: 'center',
-      close: function(event, ui) {
-        $(this).hide();
-        return false
-      }
-    });
-
-    rate = new ExchangeRateDialog({el: dialog});
 
     var currencies = #{ Currency.to_hash.to_json };
     var exchange_rates = #{ CurrencyRate.active.select("rate, currency_id").to_json };
 
-    var default_currency_id = #{currency_id};
-    window.transaction = new Transaction(currencies, exchange_rates, #{currency_id});
-
-    rate.setModel(transaction);
-
-    //exchange_rate_dialog = new ExchangeRateDialog({model => transaction, el: $('#currency_form').html() })
+    window.transaction = new TransactionGlobal(currencies, exchange_rates, #{currency_id}, #{transaction.currency_id}, #{transaction.exchange_rate});
 
 
     // Functions for the select boxes
@@ -152,20 +138,6 @@
     // New item triger
     $('#items_table a.add').live('click', function() {
       $('#items_table').data('row', $(this).parents('tr:first').get(0).rowIndex );
-    });
-
-    // new_item trigger
-    $('body').live('new_item', function(e, resp) {
-      $('#items_table select').each(function(i, el) {
-        $(el).append([ '<option value="', resp.id ,'">', resp.code, ' - ', resp.name , '</option>' ].join("") );
-      });
-      transaction.items.push(resp);
-      var rowIndex = $('#items_table').data('row');
-
-      // IE7 hack
-      setTimeout(function() { 
-        $('#items_table tr:eq(' + rowIndex + ')').find('select').val(resp.id).trigger('change').mark(); 
-      }, 100);
     });
 
   });

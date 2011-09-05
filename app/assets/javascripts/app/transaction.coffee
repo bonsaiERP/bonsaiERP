@@ -1,182 +1,190 @@
-# Model to control income, buy or expense
-class TransactionModel extends Backbone.Model
-  dialog_open_on_change: true
+# Model to control the items
+class ItemModel extends Backbone.Model
+  initialize: ->
+    @row      = $(@.get("row"))
+    @tot      = @row.find(".total_row")
+    @price    = @row.find("input.price")
+    @quantity = @row.find("input.quantity")
 
-  constructor: ( @currencies, @exchange_rates, @default_currency )->
-    super({currency_id: @default_currency, exchange_rate: 1})
+    @trans  = @.get("trans")
 
-    @currency_id       = $('#transaction_currency_id')
-    @currency_id_label = $('label[for=transaction_currency_id]')
-    @exchange_rate     = $('#transaction_exchange_rate')
-    @exchange_button   = $('#exchange_rate_button')
+    @.unset("row")
+    @.unset("trans")
+    @.total()
+
+    self = @
+    @.bind("change:price", -> self.total())
+    @.bind("change:quantity", -> self.total())
 
     @.setEvents()
-    @.createExchangeRateDialog()
-
-  # Init functions Events more related to change of attributes
-  initialize: ->
-    self = @
-
-    @.bind "change:currency_id", -> self.dialogOpen()
-    @.bind "change:currency_id", ->
-      self.setExchangeRateHtml()
-
-    @.bind "change:exchange_rate", ->
-      self.setExchangeRateHtml()
-
-  dialogOpen: ->
-    $(@exchange_rate_dialog).dialog("open")
-  # Events for showing not for interaction
+  # Set Evetns
   setEvents: ->
     self = @
-    # Currency
-    @currency_id.live 'change keyup', (event)->
-      # Check the keyup event
-      if event.type == "keyup" and not (event.keyCode == $.ui.keyCode.UP or evet.keyCode == $.ui.keyCode.DOWN)
-        return false
+    @price.live 'keyup focusout', (event)->
+      console.log event.keyCode
+      return false if event.type == "keyup" and event.keyCode != $.ui.keyCode.ENTER
+      price = $(this).val() * 1
+      self.set({price: price.round(2)})
+    @quantity.live 'keyup focusout', (event)->
+      quantity = $(this).val() * 1
+      self.set({quantity: quantity.round(2)})
 
-      self.set {currency_id: $(this).val() * 1}
+  # Total
+  total: ->
+    total = @.get("quantity") * @.get("price")
+    @tot.html(_b.ntc(total))
+    total
 
-      #if self.dialog_open_on_change and self.get("currency_id") != self.default_currency
-      #  $(self.exchange_rate_dialog).dialog("open")
+#class ItemView extends Backbone.View
 
-    # Button
-    @exchange_button.live 'click', ->
-      $(self.exchange_rate_dialog).dialog("close")
-      self.set({exchange_rate: $('#exchange_rate').val() * 1})
-    # Edit link
-    $('#exchange_rate_link').live 'click', ->
-      $(self.exchange_rate_dialog).dialog("open")
-
-  # Creates the exchange rate dialog
-  createExchangeRateDialog: ->
+window.ItemModel = ItemModel
+class ItemCollection extends Backbone.Collection
+  model: ItemModel
+  # Init
+  setTrans: (@trans)->
     self = @
-    @exchange_rate_dialog = createDialog(
-      html: $('#currency_form').html()
-      title: 'Tipo de cambio'
-      autoOpen: false
-      width: 500
-      position: 'center'
-      close: (event, ui)->
-        $(this).hide()
-        false
-      open: (event, ui)->
-        $('#exchange_rate').val(self.get("exchange_rate"))
-    )
-    $('#currency_form').remove()
 
-  # Creates the HTML for the label
-  setExchangeRateHtml: ->
-    @currency_id_label.find('span.cont').remove()
+    $('#items_table').find("tr.item").each (i, el)->
+      item_id  = $(el).find("input.item").val() * 1
+      desc     = $(el).find("input.desc").val()
+      price    = $(el).find("input.price").val() * 1
+      quantity = $(el).find("input.quantity").val() * 1
+      # Create
+      item = new ItemModel({item_id: item_id, description: desc, price: price, quantity: quantity, trans: self.trans, row: el})
 
-    unless @.get('currency_id') == @default_currency
-      html = ["<span class='cont n black'>", "Tipo de cambio ", @.getCurrencySymbol(@default_currency), " 1 = ",
-      "<strong>", @.getCurrencySymbol(@.get('currency_id'))," ", _b.ntc(@.get('exchange_rate'), 4), "</strong>",
-      "&nbsp;&nbsp;&nbsp;",  "<a href='javascript:' class='b pencil' id='exchange_rate_link'>editar</a>",
-      "</span>"]
+      self.add(item)
 
-      @currency_id_label.append(html.join(""))
+  addItem: ->
 
-   # Gets the currency symbol
-   getCurrencySymbol: (currency)->
-     @currencies[currency].symbol
-
-class IncomeModel extends TransactionModel
-
-window.IncomeModel = IncomeModel
-
-
-
-class Transaction extends Backbone.Model
-  constructor: ( @currencies, @exchange_rates, @default_currency )->
-    super({currency_id: @default_currency, exchange_rate: 1})
-    @.set(
-      currency_symbol: @.getCurrencySymbol(@.get("currency_id"))
+# Principal class to control all behabeviour
+class TransactionModel extends Backbone.Model
+  constructor: ( @currencies, @exchange_rates, @default_currency, currency_id, exchange_rate )->
+    super(
+      currency_id: currency_id,
+      default_currency: @default_currency,
+      exchange_rate: exchange_rate,
+      default_symbol: @.getCurrencySymbol(@default_currency)
+      currency_symbol: @.getCurrencySymbol(currency_id)
     )
 
+  # Init
   initialize: ->
     self = @
 
     @.bind "change:currency_id", (model, currency)->
-      currency = currency * 1
-      self.set({ currency_symbol: self.currencies[currency] })
+      self.set({ currency_symbol: self.currencies[currency].symbol })
+
+    # Set the views for each row
+    @items = new ItemCollection
+    @items.setTrans(@)
 
   # Gets the currency symbol
   getCurrencySymbol: (currency)->
      @currencies[currency].symbol
 
+window.TransactionModel = TransactionModel
+
 
 # View for the template
 class ExchangeRateDialog extends Backbone.View
   initialize:->
-    @model ||= 0
-  events:
-    "click button": "setExchange"
+    self = @
+    @label = $('label[for=transaction_currency_id]')
 
-  setExchange: ->
-    @model.set({name: $(@el).find("#exchange_rate").val() * 1 })
-    $(@el).hide()
-  # render
-  render: ->
-    @el.dialog("open")
-
-  open: ->
-    console.log "From backbone", @el.id
-    $(@el).dialog("open")
-  setModel: (model)->
-    @model = model
-    @model.bind("change:name", (model, name)->
-      console.log "New value", name
+    @model.bind("change:currency_id", (model, name)->
+      self.openDialog()
+    )
+    @model.bind("change:exchange_rate", (model, name)->
+      self.setLabel()
     )
 
-$(document).ready(->
+    $(@el).find("span.default_symbol").html(@model.get("default_symbol"))
 
-  window.rate = rate
-  rate.open()
-  rate.setModel( new Backbone.Model() )
-  false
-)
+    @.setEvents()
+  # Set events for edit
+  setEvents: ->
+    self = @
+    $('#edit_exchange_rate_link').live('click', (event)->
+      self.openDialog()
+      false
+    )
+  # Events
+  events:
+    "click button": "setExchange"
+  # Label
+  setLabel: ->
+    @label.find("span.rate_details").remove()
+    unless @model.get("curency_id") == @model.get("default_currency")
+      span = $('<span/>').addClass("rate_details n black")
+      html = [@model.get("currency_symbol"), " 1 = ",
+      "<strong>", @model.get("default_symbol"), " ", _b.ntc(@model.get("exchange_rate"), 4), "</strong>",
+      ' <a href="javascript:" id="edit_exchange_rate_link">editar tipo de cambio</a>']
 
-class Income
+      span.html(html.join(""))
+      @label.append(span)
 
-window.Income = Income
-##################
-#class TransactionModel extends Model
-#
-#a = new TransactionModel("prueba")
-#a.bind "change:name", (model, name)->
-#  alert "Nombre para: #{model} es ahora #{name}"
-#
-#window.a = a
+  # Change in exchange rate
+  setExchange: ->
+    @model.set({exchange_rate: $(@el).find("#exchange_rate").val() * 1 })
+    @.closeDialog()
+  # present dialog
+  openDialog: ->
+    $(@el).find("#exchange_rate").val(@model.get("exchange_rate"))
+    $(@el).find("span.currency_symbol").html(@model.get("currency_symbol"))
+    $( @el ).dialog("open")
+  closeDialog: ->
+    $( @el ).dialog("close")
 
-#window.Income = Income
-#
-## Set defaults for this class
-#class Buy extends Transaction
-#  # Construnctor
-#  # params Object conf
-#  constructor: (@items, @trigger = 'body', conf = {}, @currencies, @exchange_rates)->
-#    self = this
-#    @conf['currency_id']                 = '#buy_currency_id'
-#    @conf['discount_id']                 = '#buy_discount'
-#    @conf['currency_exchange_id']        = '#buy_exchange_rate'
-#    @conf['edit_rate_link_id']           = '#edit_rate_link'
-#    @conf['insert_exchange_rate_prompt'] = "Ingrese el tipo de cambio"
-#    super
-#
-#window.Buy = Buy
-#
-## Set defaults for expenses
-#class Expense extends Transaction
-#  # Construnctor
-#  # params Object conf
-#  constructor: (@items, @trigger = 'body', conf = {}, @currencies, @exchange_rates)->
-#    self = this
-#    @conf['currency_id']                 = '#expense_currency_id'
-#    @conf['discount_id']                 = '#expense_discount'
-#    @conf['currency_exchange_id']        = '#expense_exchange_rate'
-#    @conf['edit_rate_link_id']           = '#edit_rate_link'
-#    @conf['insert_exchange_rate_prompt'] = "Ingrese el tipo de cambio"
-#    super
-#
-#window.Expense = Expense
+window.ExchangeRateDialog = ExchangeRateDialog
+
+class Table extends Backbone.View
+  initialize: ->
+    super(arguments)
+    @el = $('#items_table')
+    @.setHeaders()
+
+    self = @
+    # curency_id
+    @model.bind("change:currency_id", ->
+      self.setHeaders()
+    )
+  # Sets the header for the currecy
+  setHeaders: ->
+    $(@el).find("span.currency").html(@model.get("currency_symbol") )
+
+# Global class that controls the events for many classes
+class TransactionGlobal
+  # Constructor
+  constructor: (@currencies, @rates, @default_currency, currency_id, exchange_rate)->
+    @currency_id = $('#transaction_currency_id')
+
+    @transaction = new TransactionModel(@currencies, @rates, @default_currency, currency_id, exchange_rate)
+    @.setEvents()
+    # Dialog
+    @rate_dialog = new ExchangeRateDialog({model: @transaction, el: @.createExchangeRateDialog() })
+    # Table
+    @table = new Table({model: @transaction})
+
+  # Events
+  setEvents: ->
+    self = @
+    @currency_id.live 'change', (event)->
+      currency_id = $(this).val() * 1
+      self.transaction.set({currency_id: currency_id})
+
+  # Creates the exchange rate dialog for the View
+  createExchangeRateDialog: ->
+    createDialog(
+      id: 'currency_dialog',
+      html: $('#currency_form').html(),
+      title: 'Tipo de cambio',
+      autoOpen: false,
+      width: 500,
+      position: 'center',
+      close: (event, ui)->
+        $(this).hide()
+        return false
+    )
+
+
+window.TransactionGlobal = TransactionGlobal
