@@ -32,3 +32,4 @@ config/initializers/host.rb
 public/javascripts/jquery.js
 public/javascripts/app.js
 tmp/restart.txt
+public/assets
