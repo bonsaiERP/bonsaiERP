@@ -1,10 +1,15 @@
 # Model to control the items
 class ItemModel extends Backbone.Model
   initialize: ->
+    @trans    = @.get("trans")
     @row      = $(@.get("row"))
     @tot      = @row.find(".total_row")
     @item_id  = @row.find("input.item_id")
     @price    = @row.find("input.price")
+
+    oprice = (@.get("price") * @.get("rate")).round(2)
+    @.set({original_price: oprice})
+
     @quantity = @row.find("input.quantity")
     @desc     = @row.find("input.desc")
     @del      = @row.find("a.destroy")
@@ -12,25 +17,28 @@ class ItemModel extends Backbone.Model
     @desc.data("cid", @.cid)
     @row.data("cid", @.cid)
 
-    @trans  = @.get("trans")
 
     @.unset("row")
     @.unset("trans")
-    @.total()
+    @.calculateTotal()
 
-    self = @
-    @.bind("change:price", -> self.total())
-    @.bind("change:quantity", -> self.total())
+    # price
+    @.bind "change:price", -> @.calculateTotal()
+    @.bind "change:rate", -> @.setRate()
+    # quantity
+    @.bind "change:quantity", -> @.calculateTotal()
+    # total
+    @.bind "change:total", -> @.setTotal()
 
     @.setEvents()
-  # Set Evetns
+  # Set Evetns for inputs
   setEvents: ->
     self = @
-    @price.live 'keyup focusout', (event)->
+    @price.bind 'keyup focusout', (event)->
       return false if _b.notEnter(event)
       price = $(this).val() * 1
       self.set({price: price.round(2)})
-    @quantity.live 'keyup focusout', (event)->
+    @quantity.bind 'keyup focusout', (event)->
       return false if _b.notEnter(event)
       price = $(this).val() * 1
       quantity = $(this).val() * 1
@@ -38,30 +46,31 @@ class ItemModel extends Backbone.Model
 
   # set values after autocomplete
   setValues: (ui)->
+    rate = @collection.trans.get("exchange_rate")
+    oprice = ui.item.price * 1
+    price = (oprice * 1/rate).round(2)
     @item_id.val(ui.item.id)
-    @price.val(ui.item.price)
+    @price.val(price)
     @desc.val(ui.item.label)
-    @.set({item_id: ui.item.id, description: ui.item.label, price: ui.item.price * 1})
+    @.set({item_id: ui.item.id, description: ui.item.label, price: price, original_price: oprice})
+  # set the exchange rate
+  setRate: ->
+    price = @.get("original_price") * ( 1/@.get("rate") )
+    @price.val(price.round(2))
+    @.set({price: price})
   # Total
-  total: (set)->
+  calculateTotal: ->
     total = @.get("quantity") * @.get("price")
-    @tot.html(_b.ntc(total)) unless set
-    total
+    @.set({total: total})
+  # sets the total
+  setTotal: ->
+    @tot.html(_b.ntc(@.get("total") ) )
+    $('body').trigger("subtotal")
 
 #class ItemView extends Backbone.View
 
 window.ItemModel = ItemModel
 
-rowTemplate = '<tr class="item">
-                        <td>
-                          <input type="text" size="60" class="desc">
-                          <div class="input numeric integer required"><input type="number" step="1" size="35" required="required" name="income[transaction_details_attributes][<%= num %>][item_id]" id="income_transaction_details_attributes_<%= num >_item_id" class="numeric integer required item_id"></div>
-                        </td>
-                        <td><div class="input numeric decimal optional"><input type="decimal" value="<%= num %>" step="any" size="8" name="income[transaction_details_attributes][<%= num %>][price]" id="income_transaction_details_attributes_<%= num %>_price" class="numeric decimal optional price"></div></td>
-                        <td><div class="input numeric decimal optional"><input type="decimal" value="<%= num %>" step="any" size="8" name="income[transaction_details_attributes][<%= num %>][quantity]" id="income_transaction_details_attributes_<%= num %>_quantity" class="numeric decimal optional quantity"></div></td>
-                        <td data-val="<%= num %>.<%= num %>" class="total_row r"><%= num %>,<%= num %><%= num %></td>
-                        <td class="del"><a title="Borrar" class="destroy" href="javascript:">&nbsp;</a></td>
-                      </tr>'
 
 class ItemCollection extends Backbone.Collection
   model: ItemModel
@@ -69,6 +78,19 @@ class ItemCollection extends Backbone.Collection
   initialize: ->
     self = @
 
+    # Set Item events
+    @.setItemEvents()
+
+    # Remove
+    @.bind "remove", -> self.setSubtotal()
+
+    # Tax Event for trans
+    #@trans.bind "taxes:change"
+
+
+  # Item Events
+  setItemEvents: ->
+    self = @
     # Convert to autocomplete
     $('input.desc').live 'focusin', ->
       return false if $(this).hasClass("ui-autocomplete-input")
@@ -81,23 +103,12 @@ class ItemCollection extends Backbone.Collection
           false
       )
 
-    # Event for adding item
-    $('a#add_item').live 'click', (event)->
-      self.addItem()
-
-    $('tr.item a.destroy').live 'click', (event)->
-      self.removeItem(this)
-
-    @.bind("remove", ->
-      console.log "Deleted row"
-    )
-
-    $('#transaction_discount').live 'keyup focusout', (event)->
-      return false if _b.notEnter(event)
-      val = (this.value * 1).round(2)
-      self.trans.set({discount: val})
-      $(this).val(val)
-
+    ##########
+    # Events for items
+    # add
+    $('a#add_item').live 'click', (event)-> self.addItem()
+    # remove
+    $('tr.item a.destroy').live 'click', (event)-> self.removeItem(this)
   # setTransaction
   setTrans: (@trans)->
     self = @
@@ -106,15 +117,18 @@ class ItemCollection extends Backbone.Collection
     @trans.bind("change:discount", ->
     )
 
-    $('#items_table').find("tr.item").each (i, el)->
-      item_id  = $(el).find("input.item").val() * 1
-      desc     = $(el).find("input.desc").val()
-      price    = $(el).find("input.price").val() * 1
-      quantity = $(el).find("input.quantity").val() * 1
+    $('#items_table').find("tr.item").each (i, row)->
+      item_id  = $(row).find("input.item").val() * 1
+      desc     = $(row).find("input.desc").val()
+      price    = $(row).find("input.price").val() * 1
+      quantity = $(row).find("input.quantity").val() * 1
       # Create
-      item = new ItemModel({item_id: item_id, description: desc, price: price, quantity: quantity, trans: self.trans, row: el})
+      item = new ItemModel({item_id: item_id, description: desc, price: price, quantity: quantity, trans: self.trans, row: row, rate: self.trans.get("exchange_rate")})
 
       self.add(item)
+    # trigger subtotal
+    $('body').trigger("subtotal")
+
   # Adds and item to the collection
   addItem: ->
     row = @.createNewRow()
@@ -134,45 +148,126 @@ class ItemCollection extends Backbone.Collection
 
   # Creates a new Row
   createNewRow: ->
-    row = _.template(rowTemplate)
-    row({num: (new Date).getTime() } )
-    console.log row
+    row = $('<tr/>').addClass("item")
+    .html($('tr.item:first').html())
+    row.find("input.desc").removeClass("ui-autocomplete-input")
+    num = (new Date).getTime()
+
+    row.find("input").each (i, el)->
+      if el.name
+        $(el).attr({ name: el.name.replace(/\d+/, num), id: el.id.replace(/\d+/, num)} )
+        $(el).val('')
     row
 
+  # changes the rate to all items
+  changeRate: ->
+    trans = @trans
+    @models.each (model)->
+      model.set({rate: trans.get("exchange_rate")})
   # Calculates the total
-  total: ->
+  subtotal: ->
     @.reduce( (sum, item)->
-      console.log item.total()
-      sum += item.total(true)
+      sum += item.get("total")
     , 0)
-  discount: ->
-  taxes: ->
+  # changes the prices for all items
+
 
 # Principal class to control all behabeviour
 class TransactionModel extends Backbone.Model
-  constructor: ( @currencies, @exchange_rates, @default_currency, currency_id, exchange_rate )->
+  constructor: ( currencies, exchange_rates, default_currency, currency_id, exchange_rate )->
+    @currencies = currencies
+    @exchange_rates = exchange_rates
     super(
       currency_id: currency_id,
-      default_currency: @default_currency,
+      default_currency: default_currency,
       exchange_rate: exchange_rate,
-      default_symbol: @.getCurrencySymbol(@default_currency)
+      default_symbol: @.getCurrencySymbol(default_currency)
       currency_symbol: @.getCurrencySymbol(currency_id)
     )
+
+  # set defaults
+  defaults:
+    discount: 0
+    discount_total: 0
+    taxes: 0
+    taxes_total: 0
 
   # Init
   initialize: ->
     self = @
 
     @.bind "change:currency_id", (model, currency)->
-      self.set({ currency_symbol: self.currencies[currency].symbol })
+      @.set({ currency_symbol: @currencies[currency].symbol })
+      @.setCurrency()
 
     # Set the views for each row
     @items = new ItemCollection
     @items.setTrans(@)
 
+    $('body').live 'subtotal', (event)-> self.setSubtotal()
+
+    # Discount
+    @.discountEvent()
+    @.bind("change:discount", @.setDiscount)
+    # Tax Event
+    @.taxesEvent()
+    @.bind("change:taxes", @.setTaxes)
+    # Exchange rate
+    @.bind("change:exchange_rate", ->
+      $('#transaction_exchange_rate').val(self.get("exchange_rate"))
+      @items.changeRate()
+    )
+
+  # set Currency
+  setCurrency: ->
+    $('.currency').html(@.get("currency_symbol"))
+  # set subtotal
+  setSubtotal: ->
+    subtotal = @items.subtotal()
+    @.set({subtotal: subtotal})
+    $('#subtotal').html(_b.ntc(subtotal) )
+    @.setDiscount()
+
+  # discount Event
+  discountEvent: ->
+    self = @
+    $('#transaction_discount').live 'keyup focusout', (event)->
+      return false if _b.notEnter(event)
+      val = (this.value * 1).round(2)
+      $(this).val(val)
+      self.set({discount: (val/100).round(4)})
+
+  # Sets the discount
+  setDiscount: ->
+    discount = @.get("subtotal") * @.get("discount")
+    @.set({discount_total: discount})
+    $('#discount_total').html("- " + _b.ntc(discount))
+    @.setTaxes()
+  # Taxes event
+  taxesEvent: ->
+    self = @
+    $('#taxes input:checkbox').live 'click', (event)->
+      sum = 0
+      $('#taxes input:checked').each (i, el)->
+        sum += ($("#span#{el.value}.tax").data("rate") * 1)
+
+      self.set({taxes: ( sum/100 ).round(4)})
+  # set Taxes
+  setTaxes: ->
+    taxes = (@.get("subtotal") - @.get("discount_total")) * @.get("taxes")
+    @.set({taxes_total: taxes})
+    $('#taxes_percentage').html( _b.ntc(100 * @.get("taxes") ) )
+    $('#taxes_total').html(_b.ntc(taxes))
+    @.setTotal()
+  # total
+  setTotal: ->
+    total = @.get("subtotal") - @.get("discount_total") + @.get("taxes_total")
+    $('#total_value').html(_b.ntc(total))
+
   # Gets the currency symbol
   getCurrencySymbol: (currency)->
      @currencies[currency].symbol
+
 
 window.TransactionModel = TransactionModel
 
@@ -184,7 +279,11 @@ class ExchangeRateDialog extends Backbone.View
     @label = $('label[for=transaction_currency_id]')
 
     @model.bind("change:currency_id", (model, name)->
-      self.openDialog()
+      unless self.model.get("currency_id") == self.model.get("default_currency")
+        self.openDialog()
+      else
+        self.model.set({exchange_rate: 1})
+        self.setLabel()
     )
     @model.bind("change:exchange_rate", (model, name)->
       self.setLabel()
@@ -217,7 +316,8 @@ class ExchangeRateDialog extends Backbone.View
 
   # Change in exchange rate
   setExchange: ->
-    @model.set({exchange_rate: $(@el).find("#exchange_rate").val() * 1 })
+    rate = ($(@el).find("#exchange_rate").val() * 1).round(4)
+    @model.set({exchange_rate: rate})
     @.closeDialog()
   # present dialog
   openDialog: ->

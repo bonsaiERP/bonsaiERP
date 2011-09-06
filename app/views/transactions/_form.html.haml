@@ -32,7 +32,7 @@
   = f.input :bill_number, :label => 'Nº de Factura o Recibo', :input_html => {:size => 20}
   - if transaction.income?
     =f.association :taxes, :as => :check_boxes, :label => 'Impuestos', :wrapper_html => {:id => 'taxes'}, :collection => Tax.org,
-      :label_method => lambda{|tax| "<span id='span#{tax.id}' data-rate='#{tax.rate}' title ='#{tax.name}'>#{tax.abbreviation} (#{ntc tax.rate}%)</span>".html_safe }
+      :label_method => lambda{|tax| "<span id='span#{tax.id}' class='tax' data-rate='#{tax.rate}' title ='#{tax.name}'>#{tax.abbreviation} (#{ntc tax.rate}%)</span>".html_safe }
 
   .clear
 
@@ -77,8 +77,9 @@
       %td.cur.discount{:colspan => 2} 
         - if transaction.is_a? Income
           = f.input :discount, 
-            :label => "#{minus_image} Descuento general (<span id=\"discount_percentage\" data-val=\"#{transaction.discount}\">#{ntc transaction.discount}</span>%)".html_safe, 
-            :input_html => {:size => 4, :type => 'decimal', :id => 'transaction_discount'}, :wrapper_html => {:class => 'boolean _100'}
+            :label => "#{minus_image} Descuento".html_safe, 
+            :input_html => {:size => 4, :type => 'decimal', :id => 'transaction_discount'}, 
+            :wrapper_html => {:class => 'boolean _100'}
             
         -##{minus_image} Descuento (<span id="discount_percentage" data-val="#{transaction.discount}">#{ntc transaction.discount}</span>%)
       %td#discount_total.r{'data-val' => transaction.total_discount} #{ntc(transaction.total_discount)}
@@ -91,9 +92,11 @@
     %tr.extra
       %td
       %td.r.b.dark{:colspan => 2} Total
-      %td#total_value.b.cur{ 'data-val'=>transaction.total} #{currency_symbol} #{ntc transaction.total}
+      %td.b.cur
+        %span.currency
+        %span#total_value.cur{ 'data-val'=> transaction.total}= ntc transaction.total
 
-    %tr.extra
+    -#%tr.extra
       %td
       %td.r.b.dark#currency_symbol{:colspan => 2}= "Total #{transaction.currency_name.pluralize}" if transaction.currency_id.present?
       %td.cur.b#total_value_currency= "#{transaction.try(:currency_symbol)} #{ntc transaction.total_currency}" if transaction.currency_id.present?
@@ -130,6 +133,8 @@
     $('body').live('new_project', function(e, resp) {
       $('#' + type + '_project_id').createSelectOption(resp.id, resp.name);
     });
+
+    $('#transaction_discount').after("<span class='b'>%</span>")
 
     // New item triger
     $('#items_table a.add').live('click', function() {

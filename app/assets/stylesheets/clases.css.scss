@@ -4,7 +4,7 @@ $font_size: 13px;
 .dark_grey{ color: darken($grey, 40%) !important;}
 
 // Loop to create different width sizes Ex.: ._10{ width: 9% !important; }
-@for $i from 1 to 19 {
+@for $i from 1 to 20 {
   ._#{$i * 5}, .w#{$i * 5}{  width: #{$i * 5 - 1}% !important; }
 }
 ._33, .w33{ width: 33% !important;}

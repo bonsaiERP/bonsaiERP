@@ -36,10 +36,9 @@ module Models::Transaction
 
         # Calculates the total value and stores it
         def calculate_total_and_set_balance
-          #self.gross_total = transaction_details.select{|t| !t.marked_for_destruction? }.inject(0) {|sum, det| sum += det.total }
           self.gross_total = transaction_details.inject(0) {|s,det| s += det.total unless det.marked_for_destruction?; s}
           self.total = gross_total - total_discount + total_taxes
-          self.balance = total / exchange_rate if total > 0
+          self.balance = total if total > 0
         end
 
         def set_balance_inventory
