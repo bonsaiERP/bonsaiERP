@@ -28,7 +28,7 @@ class TransactionDetail < ActiveRecord::Base
 
   # Indicates if in an Income the item price has changed
   def changed_price?
-    if transaction.type == "Income"
+    if transaction.class.to_s == "Income"
       not(price == original_price)
     else
       false
