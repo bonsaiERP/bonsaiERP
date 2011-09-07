@@ -18,6 +18,7 @@
   %li= link_option "Vencidas #{size_or_blank(@bu.due.size)}", "due"
   %li= link_option "Con inventario pendiente #{size_or_blank(@bu.inventory.size)}" , "inventory"
   %li= link_option "Pagadas", "paid"
+  %li= link_option "Anuladas", "nulled"
 
 #search_buy.search{:style => show_if_search}
   %a.close{:href => "#"} cerrar
@@ -46,7 +47,6 @@
       %th Vence el
       %th Total<br/>#{currency_symbol}
       %th Saldo<br/>#{currency_symbol}
-      %th{:title => 'Moneda'} Mon.
       %th.tip{:title => "Contado Crédito"} Tipo
       %th Fecha
       %th
@@ -59,9 +59,8 @@
         %td= link_to buy.ref_number, buy, :class => 'b'
         %td= buy.contact
         %td= lo buy.payment_date unless buy.paid?
-        %td.cur= ntc exchange(buy, :real_total, @currency_rates)
-        %td.cur= ntc exchange(buy, :balance, @currency_rates)
-        %td <span>#{buy.currency_symbol}</span>
+        %td.cur #{buy.currency_symbol} #{ntc buy.total }
+        %td.cur #{buy.currency_symbol} #{ntc buy.balance }
         %td= cash_credit(buy.cash)
         %td.nw= lo buy.date
         %td.actions
