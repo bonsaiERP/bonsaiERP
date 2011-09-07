@@ -5,7 +5,6 @@
 // the compiled file.
 //
 //= require jquery
-//= require jquery_ujs
 //= require jquery-ui-1.8.15.custom.min.js
 //= require underscore-min.js
 //= require backbone.js

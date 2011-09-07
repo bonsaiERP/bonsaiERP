@@ -43,7 +43,11 @@ class ApplicationController < ActionController::Base
         render :json => klass
       end
     else
-      set_redirect_options(klass, options) if request.delete?
+      if request.delete?
+        set_redirect_options(klass, options) 
+        url = "/#{klass.class.to_s.downcase.pluralize}" unless url.is_a?(String)
+      end
+
       redirect_to url
     end
   end

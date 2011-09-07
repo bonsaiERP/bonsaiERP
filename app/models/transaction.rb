@@ -258,6 +258,14 @@ class Transaction < ActiveRecord::Base
     set_defaults
   end
 
+  def null_transaction
+    self.active          = false
+    self.state           = "nulled"
+    self.nuller_id       = UserSession.user_id
+    self.nuller_datetime = Time.zone.now
+    self.save
+  end
+
   private
 
   def set_state
@@ -295,16 +303,6 @@ class Transaction < ActiveRecord::Base
 
   def set_creator
     self.creator_id = UserSession.user_id
-  end
-
-  def null_transaction
-    self.active          = false
-    self.state           = "nulled"
-    self.nuller_id       = UserSession.user_id
-    self.nuller_datetime = Time.zone.now
-    self.save
-
-    false
   end
 
 end

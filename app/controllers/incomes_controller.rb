@@ -89,7 +89,7 @@ class IncomesController < ApplicationController
       flash[:warning] = "No es posible anular la nota #{@transaction}."
       redirect_transaction
     else
-      @transaction.destroy
+      @transaction.null_transaction
       flash[:notice] = "Se ha anulado la nota #{@transaction}"
       redirect_to @transaction
     end
