@@ -334,7 +334,7 @@ a.sync{
 
 .nulled{
   @include dashlet;
-  background-color: $red;
+  background-color: darken($red, 20%);
 }
 
 .dashlet{

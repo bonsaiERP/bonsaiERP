@@ -24,6 +24,7 @@
   %li= link_incomes "Vencidas #{size_or_blank(@in.due.size)}", 'due'
   %li= link_incomes "Con entrega pendiente #{size_or_blank(@in.inventory.size)}", 'inventory'
   %li= link_incomes "Cobradas", "paid"
+  %li= link_incomes "Anuladas", "nulled"
 
 #search_income.search{:style => show_if_search}
   %a.close{:href => "#"} cerrar
@@ -65,13 +66,12 @@
         %td= link_to income.ref_number, income, :class => 'b'
         %td= income.contact
         %td= lo income.payment_date unless income.paid?
-        %td #{income.currency_symbol} #{ntc income.total }
-        %td #{income.currency_symbol} #{ntc income.balance }
+        %td.cur #{income.currency_symbol} #{ntc income.total }
+        %td.cur #{income.currency_symbol} #{ntc income.balance }
         -#%td.cur= ntc exchange(income, :real_total, @currency_rates)
         -#%td.cur= ntc exchange(income, :balance, @currency_rates)
         -#%td <span>#{income.currency_symbol}</span>
         %td= cash_credit(income.cash)
         %td.nw= lo income.created_at
         %td.actions
-          = bonsai_links(income) if income.draft?
-
+          = link_to "editar", edit_income_path(income), :class => 'edit', :title => 'Editar' if income.draft?

@@ -47,7 +47,7 @@ class Transaction < ActiveRecord::Base
   #validates :account_id, :contact_account => true
   validates :contact_id, :contact  => true
 
-  default_scope where(:active => true)
+  #default_scope where(:active => true)
 
   # scopes
   scope :draft    , where(:state => 'draft')
@@ -58,6 +58,7 @@ class Transaction < ActiveRecord::Base
   scope :credit   , where(:cash => false)
   # Especial used to update
   scope :for_deliver, paid.where("transactions.deliver = ? AND transactions.balance_inventory > 0", false)
+  scope :nulled, unscoped.org.where(:state => 'nulled')
 
   delegate :name, :symbol, :plural, :code, :to => :currency, :prefix => true
 
