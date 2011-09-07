@@ -23,7 +23,7 @@
   = f.association :project,  :label => 'Proyecto', :collection => Project.org,
     :input_html => {'data-new_url' => new_project_path, 'data-title' => "Nuevo proyecto", 'data-trigger' => 'new_project' }
 
-  = f.association :currency, :label => 'Moneda/Tipo de cambio. <span class="n black"></span>'.html_safe, :include_blank => false,
+  = f.association :currency, :label => 'Moneda/Tipo de cambio. <span class="rate_details n black"></span>'.html_safe, :include_blank => false,
     :input_html => {:id => 'transaction_currency_id'}
   = f.input :exchange_rate, :as => :hidden, :input_html => {:id => 'transaction_exchange_rate'}
   .clear
@@ -61,7 +61,8 @@
           %input.desc{:type => 'text', :size => 60, :value => fd.object.item}
           = fd.input :item_id, :label => false, :input_html => {:class => 'item_id'}
 
-        %td= fd.input :price, :input_html => { :size => 8, :class => 'price', :type => 'decimal' }, :label => false
+        %td= fd.input :price, :input_html => { :size => 8, :class => 'price', :type => 'decimal', 'data-original_price' => fd.object.original_price },
+          :label => false
         %td= fd.input :quantity, :input_html => { :size => 8, :class => 'quantity', :type => 'decimal' }, :label => false
 
         %td.total_row.r{'data-val' => fd.object.total }= ntc fd.object.total
@@ -79,7 +80,7 @@
           = f.input :discount, 
             :label => "#{minus_image} Descuento".html_safe, 
             :input_html => {:size => 4, :type => 'decimal', :id => 'transaction_discount'}, 
-            :wrapper_html => {:class => 'boolean _100'}
+            :wrapper_html => {:class => 'boolean', :style => 'width: 100%'}
             
         -##{minus_image} Descuento (<span id="discount_percentage" data-val="#{transaction.discount}">#{ntc transaction.discount}</span>%)
       %td#discount_total.r{'data-val' => transaction.total_discount} #{ntc(transaction.total_discount)}

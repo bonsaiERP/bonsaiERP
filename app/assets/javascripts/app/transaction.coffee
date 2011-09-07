@@ -7,7 +7,7 @@ class ItemModel extends Backbone.Model
     @item_id  = @row.find("input.item_id")
     @price    = @row.find("input.price")
 
-    oprice = (@.get("price") * @.get("rate")).round(2)
+    oprice = @price.data("original_price") * 1
     @.set({original_price: oprice})
 
     @quantity = @row.find("input.quantity")
@@ -82,7 +82,7 @@ class ItemCollection extends Backbone.Collection
     @.setItemEvents()
 
     # Remove
-    @.bind "remove", -> self.setSubtotal()
+    @.bind "remove", -> $('body').trigger("subtotal")
 
     # Tax Event for trans
     #@trans.bind "taxes:change"
@@ -143,6 +143,15 @@ class ItemCollection extends Backbone.Collection
 
     row = $(el).parents("tr")
     cid = row.data("cid")
+    input = row.next("input:hidden")
+    # remove
+    if input.length > 0
+      $('<input/>').attr(
+        type: 'hidden',
+        name: input.attr("name").replace(/id/, '_destroy')
+        value: 1
+      ).insertAfter(input)
+
     @.remove(@.getByCid(cid))
     row.remove()
 
@@ -156,7 +165,8 @@ class ItemCollection extends Backbone.Collection
     row.find("input").each (i, el)->
       if el.name
         $(el).attr({ name: el.name.replace(/\d+/, num), id: el.id.replace(/\d+/, num)} )
-        $(el).val('')
+      $(el).val('')
+    row.find(".total_row").html("")
     row
 
   # changes the rate to all items
@@ -174,17 +184,6 @@ class ItemCollection extends Backbone.Collection
 
 # Principal class to control all behabeviour
 class TransactionModel extends Backbone.Model
-  constructor: ( currencies, exchange_rates, default_currency, currency_id, exchange_rate )->
-    @currencies = currencies
-    @exchange_rates = exchange_rates
-    super(
-      currency_id: currency_id,
-      default_currency: default_currency,
-      exchange_rate: exchange_rate,
-      default_symbol: @.getCurrencySymbol(default_currency)
-      currency_symbol: @.getCurrencySymbol(currency_id)
-    )
-
   # set defaults
   defaults:
     discount: 0
@@ -195,6 +194,16 @@ class TransactionModel extends Backbone.Model
   # Init
   initialize: ->
     self = @
+
+    @currencies = @.get("currencies")
+    @exchange_rates = @.get("exchange_rates")
+    @default_currency = @.get("default_currency")
+
+    # Set currency symbols
+    @.set({
+      currency_symbol: @.getCurrencySymbol(@.get("currency_id")),
+      default_symbol: @.getCurrencySymbol(@.get("default_currency"))
+    })
 
     @.bind "change:currency_id", (model, currency)->
       @.set({ currency_symbol: @currencies[currency].symbol })
@@ -304,15 +313,12 @@ class ExchangeRateDialog extends Backbone.View
     "click button": "setExchange"
   # Label
   setLabel: ->
-    @label.find("span.rate_details").remove()
-    unless @model.get("curency_id") == @model.get("default_currency")
-      span = $('<span/>').addClass("rate_details n black")
+    @label.find("span.rate_details").html('')
+    unless @model.get("currency_id") == @model.get("default_currency")
       html = [@model.get("currency_symbol"), " 1 = ",
       "<strong>", @model.get("default_symbol"), " ", _b.ntc(@model.get("exchange_rate"), 4), "</strong>",
       ' <a href="javascript:" id="edit_exchange_rate_link">editar tipo de cambio</a>']
-
-      span.html(html.join(""))
-      @label.append(span)
+      @label.find("span.rate_details").html(html.join(""))
 
   # Change in exchange rate
   setExchange: ->
@@ -350,10 +356,17 @@ class TransactionGlobal
   constructor: (@currencies, @rates, @default_currency, currency_id, exchange_rate)->
     @currency_id = $('#transaction_currency_id')
 
-    @transaction = new TransactionModel(@currencies, @rates, @default_currency, currency_id, exchange_rate)
+    @transaction = new TransactionModel(
+      currencies: @currencies,
+      exchange_rates: @rates,
+      default_currency: @default_currency,
+      currency_id: currency_id,
+      exchange_rate: exchange_rate
+    )
     @.setEvents()
     # Dialog
     @rate_dialog = new ExchangeRateDialog({model: @transaction, el: @.createExchangeRateDialog() })
+    @rate_dialog.setLabel()
     # Table
     @table = new Table({model: @transaction})
 
