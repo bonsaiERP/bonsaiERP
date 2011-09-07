@@ -22,6 +22,15 @@ class Store < ActiveRecord::Base
     name
   end
 
+  def hash_of_items(ids)
+    st = Stock.where(:store_id => id, "stocks.item_id" => ids)[:item_id, :quantity, :minimum]
+    Hash[ids.map do |id|
+      it = st.find {|v| v[0] === id}
+      it = [id, 0, ""] unless it
+      [id, {:quantity => it[1], :minimum => it[2]}]
+    end]
+  end
+
   # Returns a Hash of items with the item_id as key
   def get_hash_of_items(*args)
     options = args.extract_options!

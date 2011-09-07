@@ -36,7 +36,8 @@ describe Store do
     s.should be_persisted
 
 
-    h = s.get_hash_of_items(:item_id => Item.org.map(&:id)[0...5])
+    h = s.hash_of_items(:item_id => Item.org.map(&:id)[0...5])
     h.keys.should have(5).elements
+    puts h
   end
 end

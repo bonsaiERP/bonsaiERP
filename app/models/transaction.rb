@@ -78,7 +78,7 @@ class Transaction < ActiveRecord::Base
 
   # Finds using the state
   def self.find_with_state(state)
-    ret   = self.org.includes(:contact, :currency).order("date DESC")
+    ret   = self.org.includes(:contact, :currency).order("created_at DESC")
     ret = ret.send(scoped_state(state)) if scoped_state(state)
     ret
   end
