@@ -60,6 +60,16 @@ class InventoryOperation < ActiveRecord::Base
     self.store.get_hash_of_items(:item_id => inventory_operation_details.map(&:item_id))
   end
 
+  # Sets the details and creates the ref_number
+  def set_transaction
+    create_details
+    create_ref_number
+  end
+
+  def hash_of_items
+    store.hash_of_items(inventory_operation_details.map(&:item_id))
+  end
+
   # Creates the ref number depending of the options
   def create_ref_number
     if transaction_id.present?
@@ -70,6 +80,18 @@ class InventoryOperation < ActiveRecord::Base
       seq << "%04d" % (store.inventory_operations.size + 1)
       self.ref_number = seq
     end
+  end
+
+  # Returns the item for a transaction
+  def transaction_item(item_id)
+    @details ||= transaction.transaction_details
+    @details.find {|det| det.item_id === item_id }
+  end
+
+  # Returns the delivered quantity for a transaction
+  def delivered_quantity(item_id)
+    item = transaction_item(item_id)
+    item.quantity - item.balance
   end
 
   private

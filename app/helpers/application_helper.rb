@@ -185,4 +185,12 @@ module ApplicationHelper
   def selected_menu(page)
     "selected" if page == params[:page]
   end
+
+  def inventory_operation_operation(io)
+    if io.operation === "in"
+      content_tag(:span, "ingreso", :class => "dark_green")
+    else
+      content_tag(:span, "egreso", :class => "red")
+    end
+  end
 end

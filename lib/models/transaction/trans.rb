@@ -27,6 +27,17 @@ module Models::Transaction
           calculate_total_and_set_balance
           set_balance_inventory
           set_total_discount_amount
+          check_repated_items
+          return false unless errors.empty?
+        end
+
+        def check_repated_items
+          h = Hash.new(0)
+          transaction_details.each do |det|
+            h[det.item_id] += 1
+          end
+
+          self.errors[:base] << I18n.t("errors.messages.transaction.repeated_items") if h.values.find {|v| v > 1 }
         end
 
         # Sets the type of the class making the transaction

@@ -19,7 +19,7 @@ feature "Income", "test features" do
 
   let(:income_params) do
       d = Date.today
-      @income_params = {"active"=>nil, "bill_number"=>"56498797", "contact_id" => client.id, 
+      i_params = {"active"=>nil, "bill_number"=>"56498797", "contact_id" => client.id, 
         "exchange_rate"=>1, "currency_id"=>1, "date"=>d, 
         "description"=>"Esto es una prueba", "discount" => 3, "project_id"=>1 
       }
@@ -27,8 +27,8 @@ feature "Income", "test features" do
         { "description"=>"jejeje", "item_id"=>1, "organisation_id"=>1, "price"=>3, "quantity"=> 10},
         { "description"=>"jejeje", "item_id"=>2, "organisation_id"=>1, "price"=>5, "quantity"=> 20}
       ]
-      @income_params[:transaction_details_attributes] = details
-      @income_params
+      i_params[:transaction_details_attributes] = details
+      i_params
   end
 
   let(:pay_plan_params) do
@@ -39,7 +39,14 @@ feature "Income", "test features" do
      :email => true }.merge(options)
   end
 
-
+  scenario "Should not alow repeated items" do
+    data = income_params.dup
+    data[:transaction_details_attributes] << { "description"=>"jejeje", "item_id"=>1, "organisation_id"=>1, "price"=>3, "quantity"=> 2}
+ 
+    i = Income.new(data)
+    i.save_trans.should be_false
+    i.errors[:base].should == [ I18n.t("errors.messages.transaction.repeated_items") ]
+  end
 
   scenario "Create a payment with nearest pay_plan" do
 
@@ -47,7 +54,7 @@ feature "Income", "test features" do
     i = Income.new(income_params)
 
     i.should be_cash
-    i.save_trans.should == true
+    i.save_trans.should be_true
     i.should be_draft
 
     i.reload

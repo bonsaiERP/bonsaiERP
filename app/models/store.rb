@@ -22,12 +22,14 @@ class Store < ActiveRecord::Base
     name
   end
 
-  def hash_of_items(ids)
-    st = Stock.where(:store_id => id, "stocks.item_id" => ids)[:item_id, :quantity, :minimum]
-    Hash[ids.map do |id|
-      it = st.find {|v| v[0] === id}
-      it = [id, 0, ""] unless it
-      [id, {:quantity => it[1], :minimum => it[2]}]
+  def hash_of_items(item_ids)
+    st = stocks.where("item_id IN (?)", item_ids)[:item_id, :quantity, :minimum]
+
+    Hash[item_ids.map do |i_id|
+      it = st.find {|v| v[0] === i_id }
+      it = [i_id, 0, ""] if it.nil?
+
+      [i_id, {:quantity => it[1], :minimum => it[2]}]
     end]
   end
 

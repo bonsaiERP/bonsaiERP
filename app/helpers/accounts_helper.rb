@@ -217,5 +217,4 @@ module AccountsHelper
       link_to txt, url_for(params.merge(:option => 'uncon')), options
     end
   end
-
 end

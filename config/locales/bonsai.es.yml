@@ -25,6 +25,8 @@ es:
         invalid_amount: "La cantidad ingresada es mayor que la existente en la cuenta"
         invalid_contact: "Debe seleccionar un Cliente, Proveedor o Personal"
         same_account: "Las cuentas que selecciono son identicas"
+      transaction:
+        repeated_items: "Existen items repetidos, por favor revise"
         
   organisation_session:
     errors:

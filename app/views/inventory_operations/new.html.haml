@@ -8,13 +8,8 @@
   /  = link_to "Ver", @inventory_operation, :class => 'show'
   /  = link_to "Borrar", @inventory_operation, :class => 'delete', :confirm => 'Esta seguro de borrar', :method => :delete
 
-- css, txt = @inventory_operation.operation == "in" ? ["dark_green", "ingreso"] : ["red", "egreso"]
 
-
-%h1 Nuevo <span class="#{css}">#{txt}</span> almacen
+%h1 Nuevo #{inventory_operation_operation(@inventory_operation)} de almacen
 %h2= @inventory_operation.store
-
-- if @inventory_operation.transaction_id.present?
-  %h2.n= link_to @inventory_operation.transaction, @inventory_operation.transaction
 
 = render :partial => 'form'

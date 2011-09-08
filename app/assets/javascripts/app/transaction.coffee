@@ -4,6 +4,7 @@ class ItemModel extends Backbone.Model
     @trans    = @.get("trans")
     @row      = $(@.get("row"))
     @tot      = @row.find(".total_row")
+    @desc     = @row.find(".desc")
     @item_id  = @row.find("input.item_id")
     @price    = @row.find("input.price")
 
@@ -29,6 +30,11 @@ class ItemModel extends Backbone.Model
     @.bind "change:quantity", -> @.calculateTotal()
     # total
     @.bind "change:total", -> @.setTotal()
+
+    self = @
+    # Description
+    @desc.blur (event)->
+      $(this).val(self.get("description"))
 
     @.setEvents()
   # Set Evetns for inputs
@@ -99,7 +105,10 @@ class ItemCollection extends Backbone.Collection
         source: "/item_autocomplete"
         select: (event, ui)->
           item = self.getByCid($(this).data("cid"))
-          item.setValues(ui)
+          if self.findItem(ui.item.id)
+            alert "El item que ha seleccionado se encuentra en la lista"
+          else
+            item.setValues(ui)
           false
       )
 
@@ -109,6 +118,11 @@ class ItemCollection extends Backbone.Collection
     $('a#add_item').live 'click', (event)-> self.addItem()
     # remove
     $('tr.item a.destroy').live 'click', (event)-> self.removeItem(this)
+
+  # Find item
+  findItem: (item_id)->
+    @.detect (item)->
+      return item.get("item_id") == item_id
   # setTransaction
   setTrans: (@trans)->
     self = @

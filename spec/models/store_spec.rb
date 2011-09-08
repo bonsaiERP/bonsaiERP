@@ -35,9 +35,11 @@ describe Store do
     s = Store.create!(valid_params)
     s.should be_persisted
 
+    ids = Item.org.map(&:id)[0...5]
+    h = s.hash_of_items(ids)
 
-    h = s.hash_of_items(:item_id => Item.org.map(&:id)[0...5])
     h.keys.should have(5).elements
-    puts h
+    h[ids.first][:quantity].should == 0
+    h[ids.first][:minimum].should == ""
   end
 end

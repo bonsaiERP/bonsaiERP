@@ -60,26 +60,25 @@ class InventoryOperationsController < ApplicationController
     end
   end
 
-  # GET /inventory_operations/new_sale
-  def new_sale
+  # GET /inventory_operations/new_transaction
+  def new_transaction
+    @transaction = Transaction.org.find(params[:transaction_id])
     @inventory_operation = InventoryOperation.new(:store_id => params[:store_id], :operation => params[:operation], 
-                                                  :transaction_id => session[:inventory_operation_transaction_id])
-    @inventory_operation.create_details
-    @inventory_operation.create_ref_number
+                                                  :transaction_id => params[:transaction_id])
+    @inventory_operation.set_transaction
 
-    render :action => 'new'
   end
 
-  # /inventory_operations/create_sale
-  def create_sale
-    h = params[:inventory_operation]
+  # /inventory_operations/create_transaction
+  def create_transaction
+    @transaction = Transaction.org.find(params[:inventory_operation][:transaction_id])
     h.merge(:transaction_id => session[:inventory_operation_transaction_id])
     @inventory_operation = InventoryOperation.new(h)
 
     if @inventory_operation.save
       redirect_to(@inventory_operation, :notice => 'La operación de inventario fue almacenada correctamente.')
     else
-      render :action => "new"
+      render :action => "new_transaction"
     end
   end
 
@@ -115,7 +114,6 @@ class InventoryOperationsController < ApplicationController
   # Selects a store for in out of a transaction
   def select_store
     @transaction = Transaction.org.find(params[:id])
-    session[:inventory_operation_transaction_id] = @transaction.id
   end
 
   # Presents the transactions tha are IN/OUT
