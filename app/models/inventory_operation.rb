@@ -84,7 +84,7 @@ class InventoryOperation < ActiveRecord::Base
 
   # Returns the item for a transaction
   def transaction_item(item_id)
-    @details ||= transaction.transaction_details
+    @details ||= transaction.transaction_details.to_a
     @details.find {|det| det.item_id === item_id }
   end
 
