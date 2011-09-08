@@ -6,7 +6,9 @@
     = link_to 'Editar', edit_client_path(@client), :class => 'edit'
     = link_to 'Borrar', @client, :class => 'delete'
 
-%h1= @client.matchcode
+%h1
+  = @client.matchcode
+  %span.dashlet.fs50.bg_dark Cliente
 
 .clear
 = render 'contacts/show', :klass => @client

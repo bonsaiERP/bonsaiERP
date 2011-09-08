@@ -6,7 +6,10 @@
     = link_to 'Editar', edit_supplier_path(@supplier), :class => 'edit'
     = link_to 'Borrar', @supplier, :class => 'delete'
 
-%h1= @supplier.matchcode
+%h1
+  = @supplier.matchcode
+  %span.dashlet.fs50.bg_dark Proveedor
+
 
 .clear
 = render 'contacts/show', :klass => @supplier

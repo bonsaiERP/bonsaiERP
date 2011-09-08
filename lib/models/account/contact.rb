@@ -38,8 +38,13 @@ module Models::Account
       end
 
       def set_account_name
-        ac = self.account_cur
-        ac.name = self.to_s
+        if matchcode_changed?
+          begin
+            accounts.update_all("name='#{matchcode}'")
+          rescue
+            return false
+          end
+        end
       end
     end
   end
