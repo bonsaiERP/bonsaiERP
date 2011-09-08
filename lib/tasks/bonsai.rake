@@ -123,6 +123,26 @@ namespace :bonsai do
     end
     puts "Currencies have been created"
   end
+
+  desc "Updates all the account_ledgers to have the contact_id"
+  tast :add_contact_to_ledgers => :environment do
+    sql = <<-EOD
+      UPDATE account_ledgers set account_ledgers.contact_id = (
+        SELECT transactions.contact_id FROM transactions WHERE account_ledgers.transaction_id = transactions.id
+      )
+    EOD
+    AccountLedger.connection.execute(sql)
+    sql = <<-EOD
+      UPDATE account_ledgers set account_ledgers.contact_id = (
+        SELECT accounts.accountable_id FROM accounts 
+        WHERE 
+        (accounts.accountable_type='Contact' AND accounts.id = account_ledgers.account_id)
+        OR
+        (accounts.accountable_type='Contact' AND accounts.id = account_ledgers.to_id)
+      )
+    EOD
+    AccountLedger.connection.execute(sql)
+  end
 end
 
 # example to export the file

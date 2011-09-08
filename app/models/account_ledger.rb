@@ -4,7 +4,7 @@
 class AccountLedger < ActiveRecord::Base
 
   attr_reader :ac_id
-  attr_accessor :make_conciliation, :contact_id
+  attr_accessor :make_conciliation
 
   acts_as_org
   # callbacks
@@ -92,9 +92,8 @@ class AccountLedger < ActiveRecord::Base
     not(active)
   end
 
-  def self.contact(arr)
-    AccountLedger.org
-    .where("account_ledgers.account_id IN (:ids) OR account_ledgers.to_id IN (:ids)", :ids => arr)
+  def self.contact(contact_id)
+    AccountLedger.org.where(:contact_id => contact_id)
     .order("created_at DESC")
   end
 

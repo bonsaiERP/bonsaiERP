@@ -68,6 +68,7 @@ module Models::Transaction::Payment
     private
     def set_current_ledger_data
       set_account_ledger_description
+      @current_ledger.contact_id = contact_id
       @current_ledger.to_id = ::Account.org.find_by_original_type(self.class.to_s).id
       @current_ledger.conciliation = false
       @current_ledger.make_conciliation = get_conciliation_for_account

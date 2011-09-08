@@ -8,8 +8,6 @@ module Models::AccountLedger::Money
   extend ActiveSupport::Concern
 
   included do
-    attr_accessor :contact_id
-
     #before_save :before_save_money , :if => :money?
     with_options :if => :new_money? do |trans|
       # callbacks
@@ -20,9 +18,8 @@ module Models::AccountLedger::Money
     end
 
     with_options :if => :money? do |trans|
-      trans.validates_presence_of :account_id#, :contact_id, :if => :money?
+      trans.validates_presence_of :account_id
       trans.validates_presence_of :contact_id, :unless => :trans?
-      #trans.before_create :set_or_create_contact_account
     end
   end
 
