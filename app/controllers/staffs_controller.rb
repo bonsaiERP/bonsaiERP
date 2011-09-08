@@ -9,12 +9,17 @@ class StaffsController < ApplicationController
   # GET /staffs
   # GET /staffs.xml
   def index
-    @staffs = Staff.org.page(@page)
+    if params[:search]
+      @staffs = Staff.org.search(params[:search]).page(@page)
+    else
+      @staffs = Staff.org.page(@page)
+    end
   end
 
   # GET /staffs/1
   # GET /staffs/1.xml
   def show
+    super @staff
   end
 
   # GET /staffs/new
@@ -36,7 +41,7 @@ class StaffsController < ApplicationController
       if request.xhr?
         render :json => @staff#.to_json( :methods => [:account_id, :account_name] )
       else
-        redirect_to @staff.account
+        redirect_to @staff
       end
     else
       render :action => 'new'
@@ -47,7 +52,7 @@ class StaffsController < ApplicationController
   # PUT /staffs/1.xml
   def update
     if @staff.update_attributes(params[:staff])
-      redirect_to(@staff.account)
+      redirect_to @staff
     else
       render :action => 'edit'
     end
