@@ -10,4 +10,4 @@
     %td{:class => pay_plan.email.to_s}
   %td
     - unless pay_plan.paid?
-      = link_to "Editar", edit_pay_plan_path(pay_plan), :class => 'pencil ajax', :title => 'Editar crédito'
+      = link_to "Editar", edit_pay_plan_path(pay_plan, :transaction_id => pay_plan.transaction_id), :class => 'pencil ajax', :title => 'Editar crédito'

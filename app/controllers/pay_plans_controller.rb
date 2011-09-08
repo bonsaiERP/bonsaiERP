@@ -4,7 +4,6 @@
 class PayPlansController < ApplicationController
   before_filter :check_authorization!
   before_filter :check_pay_plan_authorization, :only => [:new, :create, :edit, :update]
-  before_filter :set_pay_plan, :only => [:edit, :update]
   # GET /pay_plans
   # GET /pay_plans.xml
   def index
@@ -33,6 +32,8 @@ class PayPlansController < ApplicationController
 
   # GET /pay_plans/1/edit
   def edit
+    @transaction = Transaction.org.find(params[:transaction_id])
+    @pay_plan = @transaction.pay_plans.find(params[:id])
   end
 
   # POST /pay_plans
