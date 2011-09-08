@@ -98,7 +98,7 @@ class Transaction < ActiveRecord::Base
   def self.search(options)
     ret = self.org.includes(:contact, :currency)
     ret = ret.send(scoped_state(options[:option])) if scoped_state(options[:option])
-    ret.where("transactions.ref_number LIKE :code OR accounts.name LIKE :code", :code => "%#{options[:search]}%")
+    ret.where("transactions.ref_number LIKE :code OR contacts.matchcode LIKE :code", :code => "%#{options[:search]}%")
   end
 
   # Define methods for the types of transactions
