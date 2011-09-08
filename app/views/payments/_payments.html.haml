@@ -1,7 +1,8 @@
 %h2 #{transaction.pay_type.pluralize.titleize} realizados
 
 - css = transaction.paid? ? "hide" : ""
-= link_to "Nuevo #{transaction.pay_type}", new_payment_path(:type => transaction.type.to_s, :id => transaction.id, :payment_type => transaction.pay_type),
+- unless transaction.paid?
+  = link_to "Nuevo #{transaction.pay_type}", new_payment_path(:type => transaction.type.to_s, :id => transaction.id, :payment_type => transaction.pay_type),
   :class => "new ajax button new_payment_link #{css}", :title => "Nuevo #{transaction.pay_type}", :id => 'new_payment_link',
   'data-width' => "800", 'data-trigger' => 'payment'
 

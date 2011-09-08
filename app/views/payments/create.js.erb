@@ -14,6 +14,10 @@ $('#tab_pay_plans').one('click', function() {
 
 $('#payments_table #total_payment').html("<%= ntc @transaction.total_payments_with_interests %>");
 
+// Premove payment button if paid
+<% if @transaction.paid? %>
+  $('#new_payment_link').remove()
+<% end %>
 // transaction
 $('#transaction_state').removeClass("<%= Transaction::STATES.join(" ") %>")
 .addClass("<%= @transaction.real_state %>")
