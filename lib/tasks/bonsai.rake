@@ -125,7 +125,7 @@ namespace :bonsai do
   end
 
   desc "Updates all the account_ledgers to have the contact_id"
-  tast :add_contact_to_ledgers => :environment do
+  task :add_contact_to_ledgers => :environment do
     sql = <<-EOD
       UPDATE account_ledgers set account_ledgers.contact_id = (
         SELECT transactions.contact_id FROM transactions WHERE account_ledgers.transaction_id = transactions.id
