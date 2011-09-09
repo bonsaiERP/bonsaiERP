@@ -13,6 +13,7 @@ module Models::AccountLedger::Money
       # callbacks
       trans.before_validation :set_exchange_rate
       trans.before_validation :set_or_create_contact_account, :unless => :trans?
+      trans.before_create :valid_amount
       trans.before_save :set_ledger_amount
       trans.before_save :valid_money_accounts
     end
@@ -98,7 +99,7 @@ module Models::AccountLedger::Money
     # set the amounts only for trans, out
     def set_ledger_amount
       case operation
-        when "out", "trans" then self.amount = -1 * amount
+        when "out", "trans" then self.amount = -1 * amount.abs
       end
     end
 

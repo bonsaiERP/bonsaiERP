@@ -21,7 +21,7 @@ class MoneyStore < ActiveRecord::Base
 
   # delegations
   delegate :name, :symbol, :code, :plural, :to => :currency, :prefix => true
-  delegate :amount, :currency_id, :name, :to => :account, :prefix => true, :allow_nil => true
+  delegate :id, :amount, :currency_id, :name, :to => :account, :prefix => true, :allow_nil => true
 
   # Creates methods to determine if is bank?, cash?
   %w[bank cash].each do |t|

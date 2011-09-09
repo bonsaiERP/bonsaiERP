@@ -24,9 +24,14 @@ module Models::AccountLedger::Conciliation
       return false if errors.any?
 
       self.conciliation = true
+      # should run before update_related_accounts
+      valid_amount
+
       update_related_accounts
       self.account_balance = account.amount
       self.to_balance      = to.amount
+
+      return false if errors.any?
 
       self.save
     end
