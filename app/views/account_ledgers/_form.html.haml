@@ -6,7 +6,7 @@
   = f.input :account_id, :as => :hidden
 
   = f.input :amount, :label => "Cantidad en #{f.object.account.currency_symbol}", :input_html => {:size => 12, :type => 'decimal'}
-  = f.input :contact_id, :label => false
+  = f.input :contact_id, :as => :contact, :label => false 
   .clear
 
   = f.input :reference, :as => :text, :label => 'Referencia', :input_html => {:rows => 2, :cols => 35}, :hint => 'Nº de cheque, razón, factura, etc.'

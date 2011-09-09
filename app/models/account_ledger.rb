@@ -34,6 +34,7 @@ class AccountLedger < ActiveRecord::Base
   belongs_to :to, :class_name => "Account", :autosave => true
   belongs_to :transaction
   belongs_to :currency
+  belongs_to :contact
 
   belongs_to :approver, :class_name => "User"
   belongs_to :nuller,   :class_name => "User"
