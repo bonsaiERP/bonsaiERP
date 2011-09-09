@@ -19,7 +19,7 @@
 
 %ul.tabs
   %li= link_option "Todas", "all"
-  %li= link_incomes "Proformas #{size_or_blank(@in.draft.size)}", 'draft'
+  %li= link_incomes "Proformas", 'draft'
   %li= link_incomes "Esperando cobro #{size_or_blank(@in.approved.size)}", 'awaiting_payment'
   %li= link_incomes "Vencidas #{size_or_blank(@in.due.size)}", 'due'
   %li= link_incomes "Con entrega pendiente #{size_or_blank(@in.inventory.size)}", 'inventory'
@@ -75,3 +75,4 @@
         %td.nw= lo income.created_at
         %td.actions
           = link_to "editar", edit_income_path(income), :class => 'edit', :title => 'Editar' if income.draft?
+          = link_to "duplicar", new_income_path(:transaction_id => income.id), :class => 'duplicate icon', :title => 'Duplicar'

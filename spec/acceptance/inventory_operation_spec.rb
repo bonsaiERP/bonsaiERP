@@ -25,14 +25,15 @@ feature "Inventory Operation", "Test IN/OUT" do
 
     Store.create!(:name => 'First store', :address => 'An address') {|s| s.id = 1 }
 
-    Supplier.create!(:name => 'karina', :last_name => 'Luna Pizarro', :matchcode => 'Karina Luna (Prov.)', :address => 'Mallasa') {|c| c.id = 1 }
-    Client.create!(:name => 'karina', :last_name => 'Luna Pizarro', :matchcode => 'Karina Luna (Cli.)', :address => 'Mallasa') {|c| c.id = 2 }
-
     create_items
   end
 
+  let!(:organisation) { create_organisation(:id => 1) }
+  let!(:supplier) { create_supplier(:matchcode => 'Proveedor 1')}
+  let!(:client) { create_client(:matchcode => 'Cliente 1')}
+
   scenario 'make an IN' do
-    hash = {:ref_number => 'I-0001', :date => Date.today, :contact_id => 1, :operation => 'in', :store_id => 1,
+    hash = {:ref_number => 'I-0001', :date => Date.today, :contact_id => client.id, :operation => 'in', :store_id => 1,
       :inventory_operation_details_attributes => [
         {:item_id =>1, :quantity => 100},
         {:item_id =>2, :quantity => 200}
@@ -40,7 +41,7 @@ feature "Inventory Operation", "Test IN/OUT" do
     }
     io = InventoryOperation.new(hash)
     io.inventory_operation_details.size.should == 2
-    io.save.should == true
+    io.save.should be_true
 
     io.store.stocks[0].item_id.should == 1
     io.store.stocks[0].quantity.should == 100

@@ -21,12 +21,17 @@ class Buy < Transaction
     "Compra #{ref_number}"
   end
 
+  def get_ref_number
+    refs            = Buy.org.order("ref_number DESC").limit(1)
+    refs.any? ? refs.first.ref_number.next : "C-#{Date.today.year}-0001"
+
+  end
+
 private
   # Initialized  the ref_number
   def set_ref_number
     if ref_number.blank?
-      refs            = Buy.org.order("ref_number DESC").limit(1)
-      self.ref_number = refs.any? ? refs.first.ref_number.next : "C-#{Date.today.year}-0001"
+      self.ref_number = get_ref_number
     end
   end
 end

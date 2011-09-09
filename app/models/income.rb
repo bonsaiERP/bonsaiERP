@@ -25,14 +25,17 @@ class Income < Transaction
     "Venta #{ref_number}"
   end
 
+  def get_ref_number
+    refs            = Income.org.order("ref_number DESC").limit(1)
+    refs.any? ? refs.first.ref_number.next : "V-#{Date.today.year}-0001"
+  end
 
 private
 
   # Initialized  the ref_number
   def set_ref_number
     if ref_number.blank?
-      refs            = Income.org.order("ref_number DESC").limit(1)
-      self.ref_number = refs.any? ? refs.first.ref_number.next : "V-#{Date.today.year}-0001"
+      self.ref_number = get_ref_number
     end
   end
 

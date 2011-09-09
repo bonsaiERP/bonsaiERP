@@ -10,7 +10,7 @@
 %h3.n= link_to @inventory_operation.transaction, @inventory_operation.transaction
 %h3.n= link_to @inventory_operation.contact, @inventory_operation.contact
 
-= simple_form_for(@inventory_operation) do |f|
+= simple_form_for(@inventory_operation, :url => create_transaction_inventory_operations_path) do |f|
   = bonsai_form_error(f)
 
   = f.input :operation, :as => :hidden

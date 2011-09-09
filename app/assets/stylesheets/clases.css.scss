@@ -299,6 +299,15 @@ a.sync{
   padding-left: 16px !important;
 }
 
+a.duplicate{
+  @include min-height;
+  background: transparent url(images/copy.png) no-repeat 0 50%;
+  padding-left: 16px !important;
+}
+
+.icon{
+  text-indent: -1000em;
+}
 /*********************************************/
 
 .ajax-modal{

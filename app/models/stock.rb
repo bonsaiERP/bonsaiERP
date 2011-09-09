@@ -39,9 +39,10 @@ class Stock < ActiveRecord::Base
   end
 
   private
-    def update_last
-      s = Stock.org.find_by_item_id(self.item_id)
-      s.update_attribute(:state => 'inactive')
-    end
+
+  def update_last
+    s = Stock.org.find_by_item_id(self.item_id)
+    s.update_attribute(:state => 'inactive') if s
+  end
 
 end

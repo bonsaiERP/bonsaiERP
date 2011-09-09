@@ -20,7 +20,7 @@ class InventoryOperation < ActiveRecord::Base
 
   accepts_nested_attributes_for :inventory_operation_details
 
-  validates_presence_of :ref_number, :date, :contact_id, :store_id
+  validates_presence_of :ref_number, :contact_id, :store_id
 
   def get_contact_list
     if operation == "in"
@@ -98,7 +98,6 @@ class InventoryOperation < ActiveRecord::Base
 
   # sets the stock for items and set the total amount for the operation
   def set_stock
-    transaction.set_trans(false) if transaction_id.present?
 
     inventory_operation_details.each do |det|
       next if det.quantity == 0

@@ -38,6 +38,7 @@ class Transaction < ActiveRecord::Base
   has_many :pay_plans          , :dependent => :destroy , :order => "payment_date ASC", :autosave => true
   has_many :transaction_details, :dependent => :destroy
   has_many :account_ledgers    , :dependent => :destroy, :conditions => "operation != 'transaction'", :autosave => false
+  has_many :inventory_operations
 
   has_and_belongs_to_many :taxes, :class_name => 'Tax'
   # nested attributes
@@ -108,6 +109,28 @@ class Transaction < ActiveRecord::Base
         "#{type}" == type
       end
     CODE
+  end
+
+  # clones a transaction for new record
+  def clone_transaction
+    if self.is_a?(Income)
+      t = Income.new( attributes )
+    else
+      t = Buy.new( attributes )
+    end
+
+    t.transaction_details_attributes = transaction_details.map do |det|
+      h = det.attributes
+      h["id"] = nil
+      h["transaction_id"] = nil
+      h
+    end
+    t.taxis_ids = self.taxis_ids
+    t.gross_total = gross_total
+    t.tax_percent = tax_percent
+    t.ref_number = t.get_ref_number
+    
+    t
   end
 
   # Tells if the user can approve a transaction based on the preferences

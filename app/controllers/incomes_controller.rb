@@ -37,11 +37,14 @@ class IncomesController < ApplicationController
   # GET /incomes/new
   # GET /incomes/new.xml
   def new
-    @transaction = Income.new
-    #(:date => Date.today, :discount => 0, :exchange_rate => 1, :currency_id => currency_id, 
-    #                          :gross_total => 0, :tax_percent => 0 )
-    @transaction.set_defaults_new
-    @transaction.transaction_details.build
+    if params[:transaction_id].present?
+      t = Income.org.find(params[:transaction_id])
+      @transaction = t.clone_transaction
+    else
+      @transaction = Income.new
+      @transaction.set_defaults_new
+      @transaction.transaction_details.build
+    end
   end
 
   # GET /incomes/1/edit

@@ -39,9 +39,9 @@ class InventoryOperationsController < ApplicationController
   end
 
   # GET /inventory_operations/1/edit
-  def edit
-    @inventory_operation = InventoryOperation.find(params[:id])
-  end
+  #def edit
+  #  @inventory_operation = InventoryOperation.find(params[:id])
+  #end
 
   # TODO: Iprove security
   # POST /inventory_operations
@@ -72,8 +72,8 @@ class InventoryOperationsController < ApplicationController
   # /inventory_operations/create_transaction
   def create_transaction
     @transaction = Transaction.org.find(params[:inventory_operation][:transaction_id])
-    h.merge(:transaction_id => session[:inventory_operation_transaction_id])
-    @inventory_operation = InventoryOperation.new(h)
+    @inventory_operation = @transaction.inventory_operations.build(params[:inventory_operation])
+    @inventory_operation.contact_id = @transaction.contact_id
 
     if @inventory_operation.save
       redirect_to(@inventory_operation, :notice => 'La operación de inventario fue almacenada correctamente.')
