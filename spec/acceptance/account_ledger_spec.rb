@@ -4,35 +4,40 @@
 require File.dirname(__FILE__) + '/acceptance_helper'
 
 feature "Test account ledger", "for in outs and transferences" do
+  
   background do
     OrganisationSession.set(:id => 1, :name => 'ecuanime', :currency_id => 1)
     UserSession.current_user = User.new {|u| u.id = 1}
 
     create_currencies
     create_account_types
-    b = create_bank(:currency_id => 1, :name => "Bank chiquito")
-    @bank_account = b.account
-    @bank_ac_id = b.account.id
-    @client = create_client(:matchcode => "Lucas Estrella")
-
-    @params = {
-      :date => Date.today, :operation => "in", :reference => "For more", :amount => 100,
-      :account_id => @bank_ac_id, :contact_id => @client.id
-    }
   end
+
+  let!(:client) { create_client(:matchcode => "Lucas Estrella")}
+
+
+  let!(:bank) {create_bank(:currency_id => 1, :name => "Bank chiquito")}
+  let(:bank_account) { bank.account }
+  let(:bank_ac_id){ bank.account_id }
+
+  let(:valid_params){ 
+    {
+      :date => Date.today, :operation => "in", :reference => "For more", :amount => 100,
+      :account_id => bank_ac_id, :contact_id => client.id
+    }
+  }
 
   scenario "It should correctly assing the correct methods for money" do
 
     al = AccountLedger.new_money(:operation => "in", :account_id => 1)
 
-    ac = @client.accounts.first
+    ac = client.accounts.first
 
-    al.to_id.should == nil
-    al.in?.should == true
+    al.should be_in
     al.account.currency_symbol.should == "Bs."
     al.active.should == true
 
-    al = AccountLedger.new_money(:operation => "in", :account_id => @bank_ac_id, :contact_id => @client.id, :amount => 100, :reference => "Check 1120012" )
+    al = AccountLedger.new_money(:operation => "in", :account_id => bank_ac_id, :contact_id => client.id, :amount => 100, :reference => "Check 1120012" )
     al.save.should == true
 
     al.active.should == true
@@ -68,13 +73,13 @@ feature "Test account ledger", "for in outs and transferences" do
     b = create_bank(:currency_id => 2)
     b.account.currency_id.should == 2
 
-    al = AccountLedger.new_money(:operation => "in", :account_id => b.account.id, :contact_id => @client.id, :amount => 100, :reference => "Check 1120012" )
+    al = AccountLedger.new_money(:operation => "in", :account_id => b.account.id, :contact_id => client.id, :amount => 100, :reference => "Check 1120012" )
     al.save.should == true
 
     al.reload
     al.to.original_type.should == "Client"
-    @client.reload
-    @client.accounts.size.should == 2
+    client.reload
+    client.accounts.size.should == 2
 
     al.account.amount.should == 0
     al.to.amount.should == 0
@@ -87,8 +92,8 @@ feature "Test account ledger", "for in outs and transferences" do
   end
 
   scenario "It should create an out" do
-    al = AccountLedger.new_money(:operation => "out", :account_id => @bank_ac_id,              
-           :contact_id => @client.id, :amount => 100, :reference => "Check 1120012" )
+    al = AccountLedger.new_money(:operation => "out", :account_id => bank_ac_id,              
+           :contact_id => client.id, :amount => 100, :reference => "Check 1120012" )
     
 
     al.save.should == true
@@ -107,7 +112,7 @@ feature "Test account ledger", "for in outs and transferences" do
   end
 
   scenario "Nulling an account" do
-    al = AccountLedger.new_money(@params)
+    al = AccountLedger.new_money(valid_params)
 
     al.save.should == true
     al.active.should == true
@@ -130,11 +135,11 @@ feature "Test account ledger", "for in outs and transferences" do
   scenario "Make a transference" do
     c = Cash.create!(:name => 'Cash 1', :currency_id => 2)
     c_ac_id = c.account.id
-    @params[:operation] = 'trans'
-    @params[:to_id] = c_ac_id
-    @params[:exchange_rate] = 0.5
+    valid_params[:operation] = 'trans'
+    valid_params[:to_id] = c_ac_id
+    valid_params[:exchange_rate] = 0.5
 
-    al = AccountLedger.new_money(@params)
+    al = AccountLedger.new_money(valid_params)
 
     al.save.should == true
     al.reload
@@ -153,7 +158,7 @@ feature "Test account ledger", "for in outs and transferences" do
   end
 
   scenario "Make serveral in/outs for one account and check that the balance is right" do
-    al = AccountLedger.new_money(:operation => "in", :account_id => @bank_ac_id, :contact_id => @client.id, :amount => 100, :reference => "Check 1120012" )
+    al = AccountLedger.new_money(:operation => "in", :account_id => bank_ac_id, :contact_id => client.id, :amount => 100, :reference => "Check 1120012" )
     al.save.should == true
 
     al.conciliate_account.should be_true
@@ -162,7 +167,7 @@ feature "Test account ledger", "for in outs and transferences" do
     al.account_balance.should == 100
     al.to_balance.should == -100
 
-    al = AccountLedger.new_money(:operation => "in", :account_id => @bank_ac_id, :contact_id => @client.id, :amount => 100, :reference => "Check 1120013" )
+    al = AccountLedger.new_money(:operation => "in", :account_id => bank_ac_id, :contact_id => client.id, :amount => 100, :reference => "Check 1120013" )
     al.save.should == true
 
     al.conciliate_account.should be_true
@@ -171,7 +176,7 @@ feature "Test account ledger", "for in outs and transferences" do
     al.account_balance.should == 200
     al.to_balance.should == -200
 
-    al = AccountLedger.new_money(:operation => "out", :account_id => @bank_ac_id, :contact_id => @client.id, :amount => 55.55, :reference => "Check 1120014" )
+    al = AccountLedger.new_money(:operation => "out", :account_id => bank_ac_id, :contact_id => client.id, :amount => 55.55, :reference => "Check 1120014" )
     al.save.should == true
 
     al.conciliate_account.should be_true
@@ -185,7 +190,7 @@ feature "Test account ledger", "for in outs and transferences" do
     b.account.currency_id.should == 2
     b.account_amount.should == 1000
 
-    Account.find(@bank_ac_id)
+    Account.find(bank_ac_id)
 
     al = AccountLedger.new_money(:operation => "trans", :account_id => b.account.id, :to_id => 10, :amount => 100, :reference => "Check 1120012", :exchange_rate => 2.00 )
 
@@ -199,7 +204,7 @@ feature "Test account ledger", "for in outs and transferences" do
     al.errors[:base].should_not be_empty
 
 
-    al = AccountLedger.new_money(:operation => "trans", :account_id => b.account.id, :to_id => @bank_ac_id, :amount => 100, :reference => "Check 1120012", :exchange_rate => 2.00 )
+    al = AccountLedger.new_money(:operation => "trans", :account_id => b.account.id, :to_id => bank_ac_id, :amount => 100, :reference => "Check 1120012", :exchange_rate => 2.00 )
     al.save.should be_true
 
     al.should be_persisted
@@ -211,5 +216,13 @@ feature "Test account ledger", "for in outs and transferences" do
     al.account_balance.should == 1000 - 100
     al.to_balance.should == 200 - 55.55 + 100 * 2
     
+  end
+
+  scenario "Do not allow outs if the amount is not available" do
+    amt = bank_account.amount + 10
+    al = AccountLedger.new_money(:operation => "out", :account_id => bank_ac_id,              
+           :contact_id => client.id, :amount => amt, :reference => "Check 1120012" )
+
+    al.save.should be_false
   end
 end
