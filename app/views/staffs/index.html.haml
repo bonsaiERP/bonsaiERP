@@ -3,6 +3,18 @@
 
 %h1 Personal
 
+#search_staff.search{:style => show_if_search}
+  %a.close{:href => "#"} cerrar
+  %h3 Buscar personal
+  =form_tag "/staffs", :method => 'get' do
+    =hidden_field_tag "search_div_id", "search_staffs"
+    .input
+      =text_field_tag 'search', params[:search], :size => 40
+    %div
+    =submit_tag 'Buscar'
+
+= link_to "Buscar", "#search_staff", :class => 'search'
+
 = paginate(@staffs)
 
 %table{ :class => "decorated nwf nwl" }

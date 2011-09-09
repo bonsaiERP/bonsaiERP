@@ -35,6 +35,20 @@ describe Client do
 
     c.accounts.first.currency_id.should == 1
   end
+
+  it 'should update all the accounts names' do
+    c = Client.create!(@params.merge(:currency_id => 3))
+    c.should be_persisted
+  
+    c.accounts.build(:currency_id => 2, :name => c.matchcode) {|ac| ac.amount = 0}
+    c.save.should be_true
+
+    c.reload
+    c.matchcode = "Another matchcode"
+    c.save.should be_true
+    c.reload
+    c.accounts.map(&:name).uniq.should == ["Another matchcode"]
+  end
     
 end
 

@@ -40,7 +40,7 @@ module Models::Account
       def set_account_name
         if matchcode_changed?
           begin
-            accounts.update_all("name='#{matchcode}'")
+            accounts.update_all(:name => matchcode )
           rescue
             return false
           end

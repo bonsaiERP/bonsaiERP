@@ -17,7 +17,7 @@ class Contact < ActiveRecord::Base
   # Account
   has_many :accounts, :as => :accountable, :autosave => true, :dependent => :destroy
 
-  validates_presence_of   :first_name, :last_name, :address, :matchcode
+  validates_presence_of   :first_name, :last_name, :matchcode
   #validates_uniqueness_of :code, :scope => :organisation_id
   validates_uniqueness_of :matchcode, :scope => :organisation_id
 

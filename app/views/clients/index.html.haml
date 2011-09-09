@@ -13,12 +13,12 @@
   =form_tag "/clients", :method => 'get' do
     =hidden_field_tag "search_div_id", "search_clients"
     .input
-      %label Cliente
       =text_field_tag 'search', params[:search], :size => 40
     %div
     =submit_tag 'Buscar'
 
-= link_to "Buscar", "#search_income", :class => 'search'
+= link_to "Buscar", "#search_client", :class => 'search'
+
 = paginate(@clients)
 
 = render 'contacts/list', :list => @clients

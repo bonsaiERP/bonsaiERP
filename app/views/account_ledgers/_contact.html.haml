@@ -36,7 +36,7 @@
       %td.desc= link_description al
       %td.rev
         = "(V) #{al.approver}" if al.approver_id.present?
-        = "<br/><span class='dark_grey'>(A) #{al.nuller}</span>".html_safe if al.nuller_id.present?
+        = "(A) #{al.nuller}" if al.nuller_id.present?
       %td.cur
         - if al.can_destroy?
           = link_to "borrar", al, :class => 'delete fl', :title => 'Borrar', 'data-confirm' => account_ledger_destroy_confirm_dialog(al)
