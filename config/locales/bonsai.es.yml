@@ -28,6 +28,12 @@ es:
         amount: "La cantidad ingresada es mayor a la disponible"
       transaction:
         repeated_items: "Existen items repetidos, por favor revise"
+      inventory_operation_detail:
+        stock_quantity: "La cantidad es mayor a la disponible en stock"
+        transaction_quantity: "La cantidad ingresada es mayor a la de la operación"
+      inventory_operation:
+        transaction_items: "Ha seleccionado items que no estan en la operación"
+      repeated_items: "Existen items repetidos, por favor revise"
         
   organisation_session:
     errors:

@@ -3,20 +3,6 @@
 # email: boriscyber@gmail.com
 require File.dirname(__FILE__) + '/acceptance_helper'
 
-def income_params
-    d = Date.today
-    @income_params = {"active"=>nil, "bill_number"=>"56498797", "contact_id"=>1, 
-      "currency_exchange_rate"=>1, "currency_id"=>1, "date"=>d, 
-      "description"=>"Esto es una prueba", "discount"=>3, "project_id"=>1 
-    }
-    details = [
-      { "description"=>"jejeje", "item_id"=>1, "organisation_id"=>1, "price"=>15.5, "quantity"=> 10},
-      { "description"=>"jejeje", "item_id"=>2, "organisation_id"=>1, "price"=>10, "quantity"=> 20}
-    ]
-    @income_params[:transaction_details_attributes] = details
-    @income_params
-end
-
 feature "Inventory Operation", "Test IN/OUT" do
   background do
 
@@ -31,6 +17,19 @@ feature "Inventory Operation", "Test IN/OUT" do
   let!(:organisation) { create_organisation(:id => 1) }
   let!(:supplier) { create_supplier(:matchcode => 'Proveedor 1')}
   let!(:client) { create_client(:matchcode => 'Cliente 1')}
+  let(:income_params) {
+    d = Date.today
+    i_params = {"active"=>nil, "bill_number"=>"56498797", "contact_id" => client.id, 
+      "exchange_rate"=>1, "currency_id"=>1, "date"=>d, 
+      "description"=>"Esto es una prueba", "discount" => 3, "project_id"=>1 
+    }
+    details = [
+      { "description"=>"jejeje", "item_id"=>1, "organisation_id"=>1, "price"=>3, "quantity"=> 10},
+      { "description"=>"jejeje", "item_id"=>2, "organisation_id"=>1, "price"=>5, "quantity"=> 20}
+    ]
+    i_params[:transaction_details_attributes] = details
+    i_params
+  }
 
   scenario 'make an IN' do
     hash = {:ref_number => 'I-0001', :date => Date.today, :contact_id => client.id, :operation => 'in', :store_id => 1,
@@ -41,7 +40,9 @@ feature "Inventory Operation", "Test IN/OUT" do
     }
     io = InventoryOperation.new(hash)
     io.inventory_operation_details.size.should == 2
-    io.save.should be_true
+    io.save_operation.should be_true
+    io.reload
+    io.creator_id.should == UserSession.user_id
 
     io.store.stocks[0].item_id.should == 1
     io.store.stocks[0].quantity.should == 100
@@ -49,7 +50,7 @@ feature "Inventory Operation", "Test IN/OUT" do
     io.store.stocks[1].item_id.should == 2
     io.store.stocks[1].quantity.should == 200
 
-    puts "Add the same items updates the cost and quantity"
+    puts "Add the same items updates the quantity"
 
     hash = {:ref_number => 'I-0002', :date => Date.today, :contact_id => 1, :operation => 'in', :store_id => 1,
       :inventory_operation_details_attributes => [
@@ -58,7 +59,7 @@ feature "Inventory Operation", "Test IN/OUT" do
       ]
     }
     io = InventoryOperation.new(hash)
-    io.save.should == true
+    io.save_operation.should be_true
     io.reload
 
     io.store.stocks[0].item_id.should == 1
@@ -80,7 +81,7 @@ feature "Inventory Operation", "Test IN/OUT" do
     }
     io = InventoryOperation.new(hash)
     io.inventory_operation_details.size.should == 2
-    io.save.should == true
+    io.save_operation.should == true
 
     io.store.stocks[0].item_id.should == 1
     io.store.stocks[0].quantity.should == 100
@@ -98,7 +99,9 @@ feature "Inventory Operation", "Test IN/OUT" do
     }
 
     io = InventoryOperation.new(hash)
-    io.save.should == true
+    io.save_operation.should be_true
+
+    io.reload
 
     io.store.stocks[0].item_id.should == 1
     io.store.stocks[0].quantity.should == 50
@@ -110,23 +113,22 @@ feature "Inventory Operation", "Test IN/OUT" do
 
   scenario "make OUT for Income" do
     i = Income.new(income_params)
-    i.save.should == true
-    i.approve!
+    i.save_trans.should be_true
+    i.approve!.should be_true
 
     i.balance.should == i.balance_inventory
 
     det = i.transaction_details[0]
     det.balance.should == det.quantity
     
-    Bank.create!(:number => '123', :currency_id => 1, :name => 'Bank JE', :amount => 0) {|a| a.id = 1 }
+    bank = Bank.create!(:number => '123', :currency_id => 1, :name => 'Bank JE', :amount => 0)
 
-    p = i.new_payment(:account_id => 1, :reference => "NA", :date => Date.today)
+    p = i.new_payment(:account_id => bank.account_id, :reference => "N/A", :exchange_rate => 1)
     p.amount.should == i.balance
-    p.save.should == true
-
+    i.save_payment.should be_true
 
     # Create inventory for the stock
-    hash = {:ref_number => 'I-0001', :date => Date.today, :contact_id => 1, :store_id => 1,
+    hash = {:ref_number => 'I-0001', :date => Date.today, :contact_id => 1, :store_id => 1, :operation => 'in',
       :inventory_operation_details_attributes => [
         {:item_id =>1, :quantity => 100},
         {:item_id =>2, :quantity => 200}
@@ -134,15 +136,14 @@ feature "Inventory Operation", "Test IN/OUT" do
     }
     
     io = InventoryOperation.new(hash)
-    io.save.should == true
+    io.save_operation.should be_true
     
     puts "Create and OUT for Income"
 
     hash = hash.merge(:transaction_id => i.id)
 
     io = InventoryOperation.new(hash)
-    io.operation.should == 'out'
-    io.save.should == false
+    io.save_transaction.should be_false
 
     io.inventory_operation_details[0].errors.should_not == blank?
     io.inventory_operation_details[1].errors.should_not == blank?
@@ -151,7 +152,7 @@ feature "Inventory Operation", "Test IN/OUT" do
     io.inventory_operation_details[0].quantity = 5
     io.inventory_operation_details[1].quantity = 10
 
-    io.save.should == true
+    io.save_transaction.should be_true
 
     i.reload
     i.balance_inventory.should_not == i.balance
@@ -161,7 +162,7 @@ feature "Inventory Operation", "Test IN/OUT" do
     det1 = dets[0]
     det2 = dets[1]
 
-    i.balance_inventory.should == i.total - (5 * det1.price + 10 * det2.price)
+    #i.balance_inventory.should == i.total - (5 * det1.price + 10 * det2.price)
 
     det1.balance.should == 5
     det2.balance.should == 10

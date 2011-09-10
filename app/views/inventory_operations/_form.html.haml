@@ -19,13 +19,7 @@
 
     - url, title = @inventory_operation.operation == "in" ? [new_supplier_path, "Nuevo proveedor"] : [new_client_path, "Nuevo cliente"]
 
-    - if @inventory_operation.transaction_id.blank?
-      = f.input :contact_id, :as => :contact, :label => false, :input_html => {:id => 'contact_id'}
-    - else
-      .input
-        = f.input :contact_id, :as => :hidden
-        %label Contacto
-        = link_to f.object.contact, f.object.contact, :class => "b"
+    = f.input :contact_id, :as => :contact, :label => false
     .clear
 
   = f.input :description, :as => :text, :input_html => {:rows => 4, :cols => 40}, :label => 'Descripción'
@@ -53,7 +47,7 @@
 :javascript
   $(function() {
     // Autocomplete Account
-    $('#inventory_operation_account_id').contactAutocomplete(["Supplier", "Client"]);
+    $('#inventory_operation_contact_id').contactAutocomplete(["Supplier", "Client"]);
 
     $('#add_item').live('click', function() {
       var t = (new Date() ).getTime();

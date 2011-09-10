@@ -1,4 +1,4 @@
-- f.simple_fields_for :inventory_operation_details do |fd|
+= f.simple_fields_for :inventory_operation_details do |fd|
   %tr.item
     %td.cur
       = fd.input :item_id, :label => false, :collection => @items, :input_html => {:class => 'item', 'data-new_url' => new_item_path(:scope => 'inventory'), 'data-title' => 'Nuevo producto/servicio', 'data-trigger' => 'new_item'}

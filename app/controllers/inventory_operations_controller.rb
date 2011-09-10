@@ -28,7 +28,7 @@ class InventoryOperationsController < ApplicationController
   # GET /inventory_operations/new
   # GET /inventory_operations/new.xml
   def new
-    @inventory_operation = InventoryOperation.new(:store_id => params[:store_id], :operation => params[:operation], :transaction_id => params[:transaction_id])
+    @inventory_operation = InventoryOperation.new(:store_id => params[:store_id], :operation => params[:operation])
     @inventory_operation.create_details
     @inventory_operation.create_ref_number
 

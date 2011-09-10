@@ -4,9 +4,7 @@
 class InventoryOperation < ActiveRecord::Base
   acts_as_org
 
-  after_initialize  :set_operation, :if => :new_record?
-  before_create     :set_stock
-  before_validation :set_transaction_on_details, :if => 'transaction_id.present?'
+  before_create     { self.creator_id = UserSession.user_id }
 
   STATES = ["draft", "approved"]
   OPERATIONS = ["in", "out", "transference"]
@@ -14,6 +12,7 @@ class InventoryOperation < ActiveRecord::Base
   belongs_to :transaction
   belongs_to :store
   belongs_to :contact
+  belongs_to :creator, :class_name => "User"
 
   has_many   :inventory_operation_details, :dependent => :destroy
   has_many :stocks, :autosave => true
@@ -21,6 +20,15 @@ class InventoryOperation < ActiveRecord::Base
   accepts_nested_attributes_for :inventory_operation_details
 
   validates_presence_of :ref_number, :contact_id, :store_id
+  validates_inclusion_of :operation, :in => OPERATIONS
+
+  OPERATIONS.each do |op|
+    class_eval <<-CODE, __FILE__, __LINE__ + 1
+      def #{op}?
+        operation === "#{op}"
+      end
+    CODE
+  end
 
   def get_contact_list
     if operation == "in"
@@ -94,38 +102,162 @@ class InventoryOperation < ActiveRecord::Base
     item.quantity - item.balance
   end
 
-  private
+  # Save for common in and out
+  def save_operation
+    ret = true
 
-  # sets the stock for items and set the total amount for the operation
-  def set_stock
+    self.class.transaction do
 
-    inventory_operation_details.each do |det|
-      next if det.quantity == 0
+      unless in?
+        return false unless check_valid_quantity
+      end
 
-      st = store.stocks.find_by_item_id(det.item_id)
-      q = st.blank? ? 0 : st.quantity
+      avai_stocks = available_stocks(item_ids)
 
-      st.update_attribute(:state, 'inactive') unless st.blank?
-      q = operation == "in" ? q + det.quantity : q - det.quantity
+      inventory_operation_details.each do |det|
+        if det.quantity == 0
+          det.errors[:quantity] = I18n.t("errors.messages.greater_than", :count => 0)
+        end
+        
+        if in?
+          q = avai_stocks[det.item_id] + det.quantity
+        else
+          q = avai_stocks[det.item_id] - det.quantity
+        end
 
-      store.stocks.build(:item_id => det.item_id, :quantity => q, :state => 'active')
-      update_quantity_of_transaction(det) if transaction_id.present?
+        store.stocks.build(:item_id => det.item_id, :quantity => q)
+      end
     end
 
-    if transaction_id.present?
-      return false unless check_and_save_transaction
-    end
+    ret = store.save and ret
+    ret = self.save and ret
+    raise ActiveRecord::Rollback unless ret
 
-    store.save
+    ret
   end
 
-  def check_and_save_transaction
-    if valid_transaction
-      transaction.update_attribute(:balance_inventory, transaction.balance_inventory - inventory_transaction_value)
-    else
+  # Save method for transaction Income/Buy
+  def save_transaction
+    ret = true
+
+    self.class.transaction do
+
+      if transaction.is_a?(Income)
+        self.operation = "out"
+        return false unless check_valid_quantity
+      else
+        self.operation = "in"
+      end
+
+      return false unless valid_transaction_items?
+
+      return false if repeated_items?
+
+      trans_dets = transaction.transaction_details.to_a
+
+      avai_stocks = available_stocks(item_ids)
+
+      inventory_operation_details.each do |det|
+        next if det.quantity == 0
+
+        t_det = trans_dets.find {|d| d.item_id === det.item_id }
+        t_det.balance -= det.quantity
+
+        if transaction.is_a?(Income)
+          q = avai_stocks[det.item_id] - det.quantity
+        else
+          q = avai_stocks[det.item_id] + det.quantity
+        end
+        
+        store.stocks.build(:item_id => det.item_id, :quantity => q)
+      end
+
+      ret = store.save and ret
+      ret = self.save and ret
+      ret = transaction.save and ret
+      raise ActiveRecord::Rollback unless ret
+    end
+
+    ret
+  end
+
+  # Selects all items that have a quantity greater than 0
+  def item_ids
+    inventory_operation_details.select {|v| v.quantity > 0}.map(&:item_id)
+  end
+
+  protected
+
+  # Returns a Hash with the available stocks {item_id => quantity}
+  def available_stocks(item_ids)
+    h = Hash[store.stocks.where(:item_id => item_ids)[:item_id, :quantity]]
+    Hash[item_ids.map do |i_id|
+      q = h[i_id] ? h[i_id] : 0
+      [i_id, q]
+    end]
+  end
+
+  # Checks if the items in the list are valid and not repeated
+  def valid_transaction_items?
+    unless transaction.transaction_details.map(&:item_id).sort == inventory_operation_details.map(&:item_id).sort
+      self.errors[:base] << I18n.t("errors.messages.inventory_operation.transaction_items")
       false
+    else
+      true
     end
   end
+
+  def repeated_items?
+    h = Hash.new(0)
+    inventory_operation_details.each do |det|
+      h[det.item_id] += 1
+    end
+
+
+    if h.values.find {|v| v > 1 }
+      self.errors[:base] << I18n.t("errors.messages.repeated_items")
+      true
+    end
+  end
+
+  # Check the quantity of items whe out
+  def check_valid_quantity
+    det_ids = transaction.transaction_details.map(&:item_id) if transaction_id.present?
+
+    avai_stocks = available_stocks(item_ids)
+
+    trans_dets = transaction.transaction_details.to_a if transaction_id.present?
+
+    valid_det = true
+
+    inventory_operation_details.each do |io_det|
+      if io_det.quantity < 0
+        io_det.errors[:quantity] << I18n.t("errors.messages.greater_than_or_equal_to", :count => 0)
+        valid_det = false
+      elsif io_det.quantity == 0
+        next
+      end
+
+      if avai_stocks[io_det.item_id] < io_det.quantity
+        io_det.errors[:quantity] << I18n.t("errors.messages.inventory_operation_detail.stock_quantity") 
+        valid = false
+      end
+
+      # For operations of in out in a Income
+      if transaction_id.present?
+        t_det = trans_dets.find {|det| det.item_id === io_det.item_id }
+
+        if io_det.quantity > t_det.balance
+          io_det.errors[:quantity] << I18n.t("errors.messages.inventory_operation_detail.transaction_quantity")
+          valid_det = false
+        end
+      end
+    end
+
+    valid_det
+  end
+
+  private
 
   # Calculates the total value for the current operation
   def inventory_transaction_value
@@ -134,45 +266,6 @@ class InventoryOperation < ActiveRecord::Base
       it = transaction_details.find {|td| td.item_id == det.item_id }
       sum += it.price * det.quantity
     end
-  end
-
-  # Checks if there are any errors related to the transaction
-  def valid_transaction
-    ret = true
-    inventory_operation_details.each do |det|
-      unless det.errors.blank?
-        return false
-      end
-    end
-
-    ret
-  end
-
-  # Updates and validtes the quantiry for a transaction
-  def update_quantity_of_transaction(det)
-    it = transaction.transaction_details.find_by_item_id(det.item_id)
-
-    if det.quantity > it.balance
-      det.errors.add(:quantity, "Cantidad mayor a la permitida")
-    elsif det.quantity > 0
-      it.update_attribute(:balance, (it.balance - det.quantity) )
-    end
-  end
-
-  # Sets the operation for
-  def set_operation
-    if transaction_id.present?
-      if transaction.is_a? Income
-        self.operation = "out"
-      else
-        self.operation = "in"
-      end
-    end
-  end
-
-  # Sets the transaction flag for details
-  def set_transaction_on_details
-    inventory_operation_details.each {|det| det.set_transaction = true }
   end
 
 end
