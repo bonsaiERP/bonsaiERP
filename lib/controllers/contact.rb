@@ -4,7 +4,7 @@ module Controllers::Contact
     when "incomes"
       set_incomes contact
     when "buys"
-    when "expenses"
+      set_buys contact
     else
       params[:tab] = "transactions"
       params[:option] = "all" unless ["all", "con", "pendent", "nulled"].include?(params[:option])
@@ -20,6 +20,8 @@ module Controllers::Contact
     end
   end
 
+  protected
+
   def set_incomes(contact)
     @partial = "contacts/incomes"
     params[:option] = "all" unless ["due", "draft", "approved", "paid", "inventory"].include?(params[:option])
@@ -29,5 +31,17 @@ module Controllers::Contact
       :incomes => contact.incomes.send(opt).page(@page),
       :incomes_count => contact.incomes.send(opt)
     }
+  end
+
+  def set_buys(contact)
+    @partial = "contacts/buys"
+    params[:option] = "all" unless ["due", "draft", "approved", "paid", "inventory"].include?(params[:option])
+    opt = params[:option] == "all" ? :scoped : params[:option]
+
+    @locals = {
+      :buys => contact.buys.send(opt).page(@page),
+      :buys_count => contact.buys.send(opt)
+    }
+
   end
 end

@@ -28,9 +28,8 @@
 = jquery_tabs :tab_id => "contact_tab" do
   =jqueryui_ul do
     =tab "Transacciones", supplier_path(@supplier, :tab => 'transactions'), "transactions"
-    =tab "Compras", supplier_path(@supplier, :tab => 'buys'),"buys"
+    =tab "Compras y gastos", supplier_path(@supplier, :tab => 'buys'),"buys"
     =tab "Ventas", supplier_path(@supplier, :tab => 'incomes'),"incomes"
-    =tab "Gastos", supplier_path(@supplier, :tab => 'expenses'),"expenses"
     
   = render @partial, @locals
 

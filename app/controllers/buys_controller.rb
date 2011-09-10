@@ -30,9 +30,14 @@ class BuysController < ApplicationController
   # GET /buys/new
   # GET /buys/new.xml
   def new
-    @transaction = Buy.new
-    @transaction.set_defaults_new
-    @transaction.transaction_details.build
+    if params[:transaction_id].present?
+      t = Buy.org.find(params[:transaction_id])
+      @transaction = t.clone_transaction
+    else
+      @transaction = Buy.new
+      @transaction.set_defaults_new
+      @transaction.transaction_details.build
+    end
   end
 
   # GET /buys/1/edit

@@ -20,7 +20,7 @@
       #wrapper
         #wrap_in
           #logo
-            %a{:href => 'http://bonsaierp.com', :target => '_blank', :title => 'Inicio'}
+            %a{:href => 'http://bonsaierp.com', :title => 'Inicio'}
           #header
             = render 'layouts/usersettings_menu' if user_signed_in?
             - if organisation?

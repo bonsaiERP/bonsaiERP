@@ -64,5 +64,6 @@
         %td= cash_credit(buy.cash)
         %td.nw= lo buy.date
         %td.actions
-          = bonsai_links(buy) if buy.draft?
+          = link_to "editar", edit_buy_path(buy), :class => 'edit', :title => 'Editar' if buy.draft?
+          = link_to "duplicar", new_buy_path(:transaction_id => buy.id), :class => 'duplicate icon', :title => 'Duplicar'
 

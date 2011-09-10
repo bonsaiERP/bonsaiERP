@@ -28,8 +28,7 @@
   =jqueryui_ul do
     =tab "Transacciones", client_path(@client, :tab => 'transactions'), "transactions"
     =tab "Ventas", client_path(@client, :tab => 'incomes'),"incomes"
-    =tab "Compras", client_path(@client, :tab => 'buys'),"buys"
-    =tab "Gastos", client_path(@client, :tab => 'expenses'),"expenses"
+    =tab "Compras y gastos", client_path(@client, :tab => 'buys'), "buys"
     
   = render @partial, @locals
 

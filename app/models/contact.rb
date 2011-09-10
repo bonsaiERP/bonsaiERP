@@ -11,9 +11,8 @@ class Contact < ActiveRecord::Base
 
   # relations
   has_many :transactions
-  has_many :incomes,  :class_name => "Transaction"
-  has_many :buys,     :class_name => "Transaction"
-  has_many :expenses, :class_name => "Transaction"
+  has_many :incomes,  :class_name => "Income"
+  has_many :buys,     :class_name => "Buy"
   # Account
   has_many :accounts, :as => :accountable, :autosave => true, :dependent => :destroy
 
