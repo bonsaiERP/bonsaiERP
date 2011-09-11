@@ -166,23 +166,40 @@ feature "Inventory Operation", "Test IN/OUT" do
 
     det1.balance.should == 5
     det2.balance.should == 10
+
+    io.reload
+    io.transaction.delivered.should be_false
+
+    # Create inventory for the stock
+    h = hash.merge(
+      :transaction_id => i.id,
+      :inventory_operation_details_attributes => [
+        {:item_id =>1, :quantity => 5},
+        {:item_id =>2, :quantity => 10}
+      ]
+    )
+
+    io = InventoryOperation.new(h)
+    io.save_transaction.should be_true
+
+    io.reload
+
+    io.transaction.delivered.should be_true
   end
 
   scenario "Make an OUT for income with some values with 0" do
     i = Income.new(income_params)
-    i.save.should == true
+    i.save_trans.should == true
     i.approve!
-
-    i.balance.should == i.balance_inventory
 
     det = i.transaction_details[0]
     det.balance.should == det.quantity
     
-    Bank.create!(:number => '123', :currency_id => 1, :name => 'Bank JE', :amount => 0) {|a| a.id = 1 }
+    b = Bank.create!(:number => '123', :currency_id => 1, :name => 'Bank JE', :amount => 0) {|a| a.id = 1 }
 
-    p = i.new_payment(:account_id => 1, :reference => "NA", :date => Date.today)
+    p = i.new_payment(:account_id => b.account_id, :reference => "N/A", :exchange_rate => 1)
     p.amount.should == i.balance
-    p.save.should == true
+    i.save_payment.should be_true
 
     # Create inventory
     hash = {:ref_number => 'I-0001', :date => Date.today, :contact_id => 1, :operation => 'in', :store_id => 1,
@@ -193,7 +210,7 @@ feature "Inventory Operation", "Test IN/OUT" do
     }
     
     io = InventoryOperation.new(hash)
-    io.save.should == true
+    io.save_operation.should be_true
 
     io.store.stocks(true).unscoped.size.should == 2
     # Check the stocks
@@ -207,7 +224,7 @@ feature "Inventory Operation", "Test IN/OUT" do
     io.inventory_operation_details[0].quantity = 0
     io.inventory_operation_details[1].quantity = 10
 
-    io.save.should == true
+    io.save_transaction.should be_true
 
     io.store.stocks(true)
     io.store.stocks.find_by_item_id(1).quantity.should == stocks[1]

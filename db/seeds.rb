@@ -1,6 +1,5 @@
 # encoding:utf-8
 # Used to create sample data
-#user = User.create!(:email => "demo@example.com", :password => "demo123", :first_name => "Demo", :last_name => "Super Demo", :abbreviation => "BBC")
 user = User.new_user('demo@example.com', 'demo123')
 user.save!
 

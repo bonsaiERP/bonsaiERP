@@ -56,6 +56,8 @@ feature "Income", "test features" do
     i.should be_cash
     i.save_trans.should be_true
     i.should be_draft
+    i.deliver.should be_false
+    i.delivered.should be_false
 
     i.reload
     log.info "Checking details, cash and balance for income"
