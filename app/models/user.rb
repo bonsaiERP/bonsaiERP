@@ -11,9 +11,10 @@ class User < ActiveRecord::Base
   before_create     :create_user_link, :if => :change_default_password?
   before_destroy    :destroy_links
   
+  ABBREV = "GEREN"
   ROLES = ['admin', 'gerency', 'inventory', 'sales']
 
-  attr_accessor :temp_password, :rolname, :active_link, :abbreviation
+  attr_accessor :temp_password, :rolname, :active_link#, :abbreviation
 
   # Relationships
   has_many :links, :autosave => true, :dependent => :destroy
@@ -100,7 +101,10 @@ class User < ActiveRecord::Base
   end
 
   def self.new_user(email, password)
-    User.new(:password => password) {|u| u.email = email }
+    User.new(:password => password, ) {|u| 
+      u.email = email 
+      u.abbreviation = ABBREV
+    }
   end
 
   protected

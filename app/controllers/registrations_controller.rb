@@ -40,7 +40,7 @@ class RegistrationsController < ApplicationController
       if @user.save
         format.html { redirect_to "/registrations/", :notice => "Se ha registrado exitosamente!. Se le ha enviado un email a <strong>#{@user.email}</strong> con instrucciones para concluir el registro."}
       else
-        foramt.html { render 'new'}
+        format.html { render 'new'}
       end
     end
   end
