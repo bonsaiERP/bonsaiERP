@@ -22,6 +22,7 @@ describe User do
     u = User.create!(valid_params) {|u| u.abbreviation = "NEW"}
     u.confirmation_token.size == 12
     u.confirmation_sent_at.class.to_s == "DateTime"
+    u.salt.should_not be_blank
   end
 
   it 'should conirm the token' do
@@ -55,12 +56,42 @@ describe User do
       u.password.should == "demo123"
       u.abbreviation.should == "GEREN"
 
-      #u.attributes.each do |k,v|
-      #  v.should be_nil unless ["email", "password", "password_digest", "sign_in_count", "change_default_password"].include?(k)
-      #end
-
       u.save.should be_true
       u.abbreviation.should == User::ABBREV
+    end
+
+    it 'should not allow login unconfirmed accounts' do
+      u = User.new_user("demo@example.com", "demo123")
+      u.save.should be_true 
+      
+      u = User.find_by_email("demo@example.com")
+      u.authenticate("demo123").should be_false
+      u.errors[:base].should_not be_blank
+    end
+
+    it 'should authenticate confirmed user' do
+      u = User.new_user("demo@example.com", "demo123")
+      u.save.should be_true 
+      u.confirm_token(u.confirmation_token).should be_true
+
+      u = User.find_by_email("demo@example.com")
+      u.authenticate("demo123").should == u
+      u.authenticate("demo12").should be_false
+    end
+
+    it 'should use the salt for authentication' do
+      u = User.new_user("demo@example.com", "demo123")
+      u.save.should be_true
+      u.confirmed_at.should be_nil
+
+      u.confirm_token(u.confirmation_token).should be_true
+      u.reload
+      u.salt = "jojo"
+      u.save
+      u.reload
+      u.salt.should == "jojo"
+
+      u.authenticate("demo123").should be_false
     end
   end
 

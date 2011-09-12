@@ -21,6 +21,29 @@ module Models::User::Authentication
       end
     end
 
+    # Returns self if the password is correct, otherwise false.
+    def authenticate(unencrypted_password)
+      if confirmed_at.blank?
+        self.errors[:base] << I18n.t("errors.messages.user.confirm")
+        return false
+      end
+
+      if BCrypt::Password.new(password_digest) == (salt + unencrypted_password)
+        self
+      else
+        false
+      end
+    end
+
+    # Encrypts the password into the password_digest attribute.
+    def password=(unencrypted_password, size = 16)
+      @password = unencrypted_password
+      unless unencrypted_password.blank?
+        self.salt = SecureRandom.urlsafe_base64(16)
+        self.password_digest = BCrypt::Password.create(salt + unencrypted_password)
+      end
+    end
+
     private
     def set_token_and_send_email
       self.confirmation_token = SecureRandom.base64(12)

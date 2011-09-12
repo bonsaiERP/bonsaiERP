@@ -1,6 +1,6 @@
 es:
   bonsai:
-    registration: "Registro exitoso en www.bonsaierp.com"
+    registration: "Active su cuenta en www.bonsaierp.com"
   views:
     pagination: 
       next: "Siguiente &gt;"
@@ -21,6 +21,7 @@ es:
         greater_amount: "La cantidad que ingreso es mayor que el saldo"
       user:
         email: "El formato de su email es incorrecto"
+        confirm: "No ha confirmado su cuenta. Revise en su email el mensaje \"Active su cuenta en www.bonsaierp.com\" y siga las instrucciones"
       account_ledger:
         invalid_amount: "La cantidad ingresada es mayor que la existente en la cuenta"
         invalid_contact: "Debe seleccionar un Cliente, Proveedor o Personal"
@@ -57,6 +58,6 @@ es:
     exchange_rate:
       "tipo de cambio de %{cur1} = %{cur2}"
   contact:
-    client: Cliente
-    supplier: Proveedor
-    staff: Personal
+    client: "Cliente"
+    supplier: "Proveedor"
+    staff: "Personal"

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110911162450) do
+ActiveRecord::Schema.define(:version => 20110912150546) do
 
   create_table "account_currencies", :force => true do |t|
     t.integer  "organisation_id"
@@ -553,6 +553,7 @@ ActiveRecord::Schema.define(:version => 20110911162450) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "abbreviation",            :limit => 10
+    t.string   "salt"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email"
