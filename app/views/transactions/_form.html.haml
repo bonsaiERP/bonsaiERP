@@ -82,13 +82,14 @@
             :input_html => {:size => 4, :type => 'decimal', :id => 'transaction_discount'}, 
             :wrapper_html => {:class => 'boolean', :style => 'width: 100%'}
             
-        -##{minus_image} Descuento (<span id="discount_percentage" data-val="#{transaction.discount}">#{ntc transaction.discount}</span>%)
-      %td#discount_total.r{'data-val' => transaction.total_discount} #{ntc(transaction.total_discount)}
+      - if transaction.is_a? Income
+        %td#discount_total.r{'data-val' => transaction.total_discount} #{ntc(transaction.total_discount)}
     
-    %tr.extra
-      %td
-      %td.cur.line{:colspan => 2} Impuestos (<span id="taxes_percentage" data-val="#{transaction.tax_percent}">#{ntc transaction.tax_percent}</span>%)
-      %td#taxes_total.r.line{'data-val' => transaction.total_taxes}= ntc transaction.total_taxes
+    - if transaction.is_a? Income
+      %tr.extra
+        %td
+        %td.cur.line{:colspan => 2} Impuestos (<span id="taxes_percentage" data-val="#{transaction.tax_percent}">#{ntc transaction.tax_percent}</span>%)
+        %td#taxes_total.r.line{'data-val' => transaction.total_taxes}= ntc transaction.total_taxes
     
     %tr.extra
       %td
@@ -96,11 +97,6 @@
       %td.b.cur
         %span.currency
         %span#total_value.cur{ 'data-val'=> transaction.total}= ntc transaction.total
-
-    -#%tr.extra
-      %td
-      %td.r.b.dark#currency_symbol{:colspan => 2}= "Total #{transaction.currency_name.pluralize}" if transaction.currency_id.present?
-      %td.cur.b#total_value_currency= "#{transaction.try(:currency_symbol)} #{ntc transaction.total_currency}" if transaction.currency_id.present?
 
   .actions
     = f.submit 'Salvar'

@@ -241,6 +241,10 @@ class TransactionModel extends Backbone.Model
       @items.changeRate()
     )
 
+    $('#transaction_discount').trigger('focusout')
+    $('#taxes input:checkbox').trigger('click')
+
+
   # set Currency
   setCurrency: ->
     $('.currency').html(@.get("currency_symbol"))

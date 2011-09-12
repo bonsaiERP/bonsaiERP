@@ -125,11 +125,19 @@ class Transaction < ActiveRecord::Base
       h["transaction_id"] = nil
       h
     end
+
     t.taxis_ids = self.taxis_ids
     t.gross_total = gross_total
     t.tax_percent = tax_percent
     t.ref_number = t.get_ref_number
+
+    t = set_clone_buy(t) if t.is_a?(Buy)
     
+    t
+  end
+
+  def set_clone_buy(t)
+    t.discount = 0
     t
   end
 
