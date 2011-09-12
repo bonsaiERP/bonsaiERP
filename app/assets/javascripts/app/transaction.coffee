@@ -128,8 +128,7 @@ class ItemCollection extends Backbone.Collection
     self = @
 
     # Change discount
-    @trans.bind("change:discount", ->
-    )
+    #@trans.bind("change:discount", ->)
 
     $('#items_table').find("tr.item").each (i, row)->
       item_id  = $(row).find("input.item").val() * 1
@@ -219,6 +218,8 @@ class TransactionModel extends Backbone.Model
       default_symbol: @.getCurrencySymbol(@.get("default_currency"))
     })
 
+    $('body').live 'subtotal', (event)-> self.setSubtotal()
+
     @.bind "change:currency_id", (model, currency)->
       @.set({ currency_symbol: @currencies[currency].symbol })
       @.setCurrency()
@@ -227,7 +228,6 @@ class TransactionModel extends Backbone.Model
     @items = new ItemCollection
     @items.setTrans(@)
 
-    $('body').live 'subtotal', (event)-> self.setSubtotal()
 
     # Discount
     @.discountEvent()

@@ -44,6 +44,17 @@ module Models::User::Authentication
       end
     end
 
+    # Resets the password to allow edit the password
+    def reset_password
+      self.reset_password_token = SecureRandom.urlsafe_base64(16)
+      self.reset_password_sent_at = Time.zone.now
+      self.save
+    end
+
+    def verify_reset_password()
+
+    end
+
     private
     def set_token_and_send_email
       self.confirmation_token = SecureRandom.base64(12)

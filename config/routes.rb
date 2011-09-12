@@ -106,6 +106,9 @@ Bonsaierp::Application.routes.draw do
   resources :registrations
   get "/users/sign_up" => "registrations#new"
 
+  # Password
+  resources :reset_passwords
+
   # Sessions
   resources :sessions
 

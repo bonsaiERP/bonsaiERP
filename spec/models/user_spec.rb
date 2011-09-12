@@ -93,6 +93,23 @@ describe User do
 
       u.authenticate("demo123").should be_false
     end
+
+    it 'should allow password reset' do
+      u = User.new_user("demo@example.com", "demo123")
+      u.save.should be_true
+      u.confirmed_at.should be_nil
+      
+      u.confirm_token(u.confirmation_token).should be_true
+
+      u.reset_password_token.should be_blank
+      u.reset_password_sent_at.should be_blank
+
+      u.reset_password.should be_true
+      u.reload
+
+      u.reset_password_token.should_not be_blank
+      u.reset_password_sent_at.should_not be_blank
+    end
   end
 
   describe "User with change_default_password = true" do
