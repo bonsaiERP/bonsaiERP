@@ -17,7 +17,7 @@ class BuysController < ApplicationController
       @buys = Buy.find_with_state(params[:option])
     end
   end
-
+0
   # GET /buys/1
   # GET /buys/1.xml
   def show
@@ -86,8 +86,8 @@ class BuysController < ApplicationController
     if @transaction.approved?
       redirect_transaction
     else
-      @transaction.destroy
-      redirect_ajax @transaction
+      @transaction.null_transaction
+      redirect_to @transaction, :notice => "Se ha anulado #{@transaction}"
     end
   end
 
@@ -105,7 +105,9 @@ class BuysController < ApplicationController
 
     redirect_to buy_path(@transaction, :anchor => anchor)
   end
-private
+
+  private
+
   def set_currency_rates
     @currency_rates = CurrencyRate.current_hash
   end

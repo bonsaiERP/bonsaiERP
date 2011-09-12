@@ -8,7 +8,7 @@ class IncomesController < ApplicationController
   before_filter :check_authorization!
   #before_filter :check_currency_set, :only => [:new, :edit, :create, :update]
   before_filter :set_currency_rates, :only => [:index, :show]
-  before_filter :set_transaction, :only => [:edit, :update, :destroy, :approve]
+  before_filter :set_transaction, :only => [:show, :edit, :update, :destroy, :approve]
 
   before_filter :update_all_deliver
 
@@ -26,8 +26,6 @@ class IncomesController < ApplicationController
   # GET /incomes/1
   # GET /incomes/1.xml
   def show
-    @transaction = Transaction.unscoped.org.find(params[:id])
-
     respond_to do |format|
       format.html { render 'transactions/show' }
       format.json  { render :json => @transaction }

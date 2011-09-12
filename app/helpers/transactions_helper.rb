@@ -98,8 +98,7 @@ module TransactionsHelper
     op ||= params[:controller]
     case op
     when "incomes", "Income"   then "Ventas"
-    when "buys", "Buy"         then "Compras"
-    when "expenses", "Expense" then "Gastos"
+    when "buys", "Buy"         then "Compras y gastos"
     end
   end
 
