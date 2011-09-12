@@ -31,15 +31,15 @@ class OrganisationSession
     end
 
     def currency_name
-      current_organisaton.currency_name
+      current_organisation.currency_name
     end
 
     def currency_plural
-      current_organisaton.currency_plural
+      current_organisation.currency_plural
     end
 
     def currency_symbol
-      current_organisaton.currency_symbol
+      current_organisation.currency_symbol
     end
 
     def current_organisation

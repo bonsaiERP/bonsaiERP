@@ -260,11 +260,6 @@ class Transaction < ActiveRecord::Base
     end
   end
 
-  # Creates the name for the pdf
-  def pdf_name
-    "#{get_type}-#{ref_number}"
-  end
-
   # Creates the pdf title based on the type
   def pdf_title
     t = get_type

@@ -37,7 +37,7 @@ class InvoicePdf < BasePdf
   def create_invoice_title
     bounding_box([300, @h - 250], :width => 270, :height => 120) do
       text "#{@transaction.pdf_title}", :style => :bold, :size => 11
-      text I18n.l(@transaction.date)
+      text I18n.l(@transaction.created_at.to_date)
     end
   end
 

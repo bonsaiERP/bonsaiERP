@@ -10,7 +10,7 @@
   .input
     / Dates
     %h3
-      = lo @transaction.date
+      = lo @transaction.created_at
       - if @transaction.payment_date.present?
         %span.n , Vence el
         %span#due_on= lo @transaction.payment_date

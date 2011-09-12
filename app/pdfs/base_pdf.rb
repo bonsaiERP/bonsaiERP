@@ -26,7 +26,7 @@ class BasePdf < Prawn::Document
     x1, y1, x2, y2 = page.dimensions
     h = page.margins
     #image img_path, :width => 612, :fit => true, :at => [-h[:left], y2 - 105]
-    org = OrganisationSession.current_organisaton
+    org = OrganisationSession.current_organisation
     bounding_box([300, y2 - 150], :width => 150, :height => 120) do
       text org.name, :style => :bold
       text org.address

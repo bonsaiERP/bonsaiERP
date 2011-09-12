@@ -93,7 +93,7 @@ class TransactionsController < ApplicationController
     name = "#{Rails.root}/tmp/pdfs/#{ t.type }_#{t.id}.pdf"
     inv.generate_pdf(name)
 
-    send_file name, :file_name => "#{t.pdf_name}.pdf"
+    send_file name, :filename => "#{t.ref_number}.pdf"
     File.delete(name)
   end
 
