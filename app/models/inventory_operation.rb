@@ -250,7 +250,7 @@ class InventoryOperation < ActiveRecord::Base
 
       if avai_stocks[io_det.item_id] < io_det.quantity
         io_det.errors[:quantity] << I18n.t("errors.messages.inventory_operation_detail.stock_quantity") 
-        valid = false
+        valid_det = false
       end
 
       # For operations of in out in a Income

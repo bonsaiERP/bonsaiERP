@@ -109,6 +109,18 @@ feature "Inventory Operation", "Test IN/OUT" do
     io.store.stocks[1].item_id.should == 2
     io.store.stocks[1].quantity.should == 100
 
+    # Try to make an out with a quantity greater than stock
+    hash = {:ref_number => 'I-0002', :date => Date.today, :contact_id => 1, :operation => 'out', :store_id => 1,
+      :inventory_operation_details_attributes => [
+        {:item_id =>1, :quantity => 51},
+        {:item_id =>2, :quantity => 100}
+      ]
+    }
+
+    io = InventoryOperation.new(hash)
+    io.save_operation.should be_false
+    io.inventory_operation_details[0].errors[:quantity].should_not be_blank
+
   end
 
   scenario "make OUT for Income" do
@@ -162,15 +174,13 @@ feature "Inventory Operation", "Test IN/OUT" do
     det1 = dets[0]
     det2 = dets[1]
 
-    #i.balance_inventory.should == i.total - (5 * det1.price + 10 * det2.price)
-
     det1.balance.should == 5
     det2.balance.should == 10
 
     io.reload
     io.transaction.delivered.should be_false
 
-    # Create inventory for the stock
+    # IO operation for income
     h = hash.merge(
       :transaction_id => i.id,
       :inventory_operation_details_attributes => [
@@ -185,6 +195,19 @@ feature "Inventory Operation", "Test IN/OUT" do
     io.reload
 
     io.transaction.delivered.should be_true
+
+    # It should not allow another out for income
+    h = hash.merge(
+      :transaction_id => i.id,
+      :inventory_operation_details_attributes => [
+        {:item_id =>1, :quantity => 5},
+        {:item_id =>2, :quantity => 0}
+      ]
+    )
+
+    io = InventoryOperation.new(h)
+    io.save_transaction.should be_false
+
   end
 
   scenario "Make an OUT for income with some values with 0" do

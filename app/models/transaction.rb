@@ -277,7 +277,11 @@ class Transaction < ActiveRecord::Base
   end
 
   def show_inventory?
-    not(draft?)
+    if self.is_a? Income
+      deliver?
+    else
+      true
+    end
   end
 
   # method for new

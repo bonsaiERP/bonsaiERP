@@ -12,7 +12,7 @@ class User < ActiveRecord::Base
   before_destroy    :destroy_links
   
   ABBREV = "GEREN"
-  ROLES = ['admin', 'gerency', 'inventory', 'sales']
+  ROLES = ['admin', 'gerency', 'operations']
 
   attr_accessor :temp_password, :rolname, :active_link#, :abbreviation
 
@@ -97,7 +97,7 @@ class User < ActiveRecord::Base
 
   # returns translated roles
   def self.get_roles
-    ["Genrencia", "Administración", "Inventario", "Ventas"].zip(ROLES)
+    ["Genrencia", "Administración", "Operaciones"].zip(ROLES)
   end
 
   def self.new_user(email, password)

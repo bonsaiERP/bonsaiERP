@@ -3,6 +3,7 @@
 # email: boriscyber@gmail.com
 class InventoryOperationsController < ApplicationController
   before_filter :check_authorization!
+
   # GET /inventory_operations
   # GET /inventory_operations.xml
   def index
@@ -63,6 +64,8 @@ class InventoryOperationsController < ApplicationController
   # GET /inventory_operations/new_transaction
   def new_transaction
     @transaction = Transaction.org.find(params[:transaction_id])
+    check_buy_in(@transaction)
+
     @inventory_operation = InventoryOperation.new(:store_id => params[:store_id], :operation => params[:operation], 
                                                   :transaction_id => params[:transaction_id])
     @inventory_operation.set_transaction
@@ -72,6 +75,8 @@ class InventoryOperationsController < ApplicationController
   # /inventory_operations/create_transaction
   def create_transaction
     @transaction = Transaction.org.find(params[:inventory_operation][:transaction_id])
+    check_buy_in(@transaction)
+
     @inventory_operation = @transaction.inventory_operations.build(params[:inventory_operation])
     @inventory_operation.contact_id = @transaction.contact_id
 
@@ -134,5 +139,14 @@ class InventoryOperationsController < ApplicationController
     store_id = params[:store_id] || params[:inventory_operation][:store_id]
 
     @store = Store.org.find(store_id)
+  end
+
+  def check_buy_in(transaction)
+    if transaction.is_a?(Buy)
+      unless User::ROLES.slice(0,2).include? session[:user][:rol]
+        flash[:warning] = "Usted no tiene permitida esta acción"
+        redirect_to current_user
+      end
+    end
   end
 end
