@@ -27,6 +27,14 @@ class Buy < Transaction
 
   end
 
+  # Set some parameters to save a buy
+  def save_trans
+    self.discount = 0
+    self.taxis_ids = []
+
+    super
+  end
+
 private
   # Initialized  the ref_number
   def set_ref_number

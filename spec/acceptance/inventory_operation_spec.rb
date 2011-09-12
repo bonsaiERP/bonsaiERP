@@ -255,4 +255,40 @@ feature "Inventory Operation", "Test IN/OUT" do
 
     io.store.stocks.unscoped.size.should == 3
   end
+
+  scenario "Make IN for a buy and make partial deliveries" do
+    b = Buy.new(income_params)
+    b.save_trans.should == true
+    b.approve!.should be_true
+    b.discount.should == 0
+    b.total_discount.should == 0
+    b.total_taxes.should == 0
+
+    hash = {:date => Date.today, :contact_id => 1, :operation => 'in', :store_id => 1, :transaction_id => b.id }
+    io = InventoryOperation.new(hash)
+    io.set_transaction
+
+    io.inventory_operation_details.should have(2).elements
+    io.ref_number.should_not be_blank
+    # Set to 0
+    io.inventory_operation_details[0].quantity = 0
+
+    io.save_transaction.should be_true
+
+    b.reload
+    b.transaction_details[0].balance.should == b.transaction_details[0].quantity
+    b.transaction_details[1].balance.should == 0
+
+    b.reload
+    b.delivered.should be_false
+
+    io = InventoryOperation.new(hash)
+    io.set_transaction
+    io.inventory_operation_details[0].quantity.should == b.transaction_details[0].balance
+
+    io.save_transaction.should be_true
+
+    b.reload
+    b.delivered.should be_true
+  end
 end

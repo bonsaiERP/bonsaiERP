@@ -280,7 +280,7 @@ class Transaction < ActiveRecord::Base
     if self.is_a? Income
       deliver?
     else
-      true
+      not(draft?)
     end
   end
 

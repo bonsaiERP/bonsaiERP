@@ -118,6 +118,7 @@ class InventoryOperation < ActiveRecord::Base
       inventory_operation_details.each do |det|
         if det.quantity == 0
           det.errors[:quantity] = I18n.t("errors.messages.greater_than", :count => 0)
+          ret = false
         end
         
         if in?
@@ -209,12 +210,16 @@ class InventoryOperation < ActiveRecord::Base
 
   # Checks if the items in the list are valid and not repeated
   def valid_transaction_items?
-    unless transaction.transaction_details.map(&:item_id).sort == inventory_operation_details.map(&:item_id).sort
-      self.errors[:base] << I18n.t("errors.messages.inventory_operation.transaction_items")
-      false
-    else
-      true
+    trans_det_ids = transaction.transaction_details.map(&:item_id)
+
+    inventory_operation_details.each do |det|
+      unless trans_det_ids.include?(det.item_id)
+        self.errors[:base] << I18n.t("errors.messages.inventory_operation.transaction_items")
+        return false
+      end
     end
+
+    true
   end
 
   def repeated_items?
