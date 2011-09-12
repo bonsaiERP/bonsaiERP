@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110910194717) do
+ActiveRecord::Schema.define(:version => 20110911162450) do
 
   create_table "account_currencies", :force => true do |t|
     t.integer  "organisation_id"
@@ -496,6 +496,7 @@ ActiveRecord::Schema.define(:version => 20110910194717) do
     t.integer  "nuller_id"
     t.datetime "nuller_datetime"
     t.integer  "contact_id"
+    t.boolean  "delivered",                                                         :default => false
   end
 
   add_index "transactions", ["account_id"], :name => "index_transactions_on_account_id"
@@ -509,6 +510,7 @@ ActiveRecord::Schema.define(:version => 20110910194717) do
   add_index "transactions", ["date"], :name => "index_transactions_on_date"
   add_index "transactions", ["deliver"], :name => "index_transactions_on_deliver"
   add_index "transactions", ["deliver_approver_id"], :name => "index_transactions_on_deliver_approver_id"
+  add_index "transactions", ["delivered"], :name => "index_transactions_on_delivered"
   add_index "transactions", ["nuller_id"], :name => "index_transactions_on_nuller_id"
   add_index "transactions", ["organisation_id"], :name => "index_transactions_on_organisation_id"
   add_index "transactions", ["payment_date"], :name => "index_transactions_on_payment_date"

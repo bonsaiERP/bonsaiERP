@@ -172,6 +172,8 @@ class InventoryOperation < ActiveRecord::Base
         
         store.stocks.build(:item_id => det.item_id, :quantity => q)
       end
+      
+      set_transaction_delivered
 
       ret = store.save and ret
       ret = self.save and ret
@@ -188,6 +190,13 @@ class InventoryOperation < ActiveRecord::Base
   end
 
   protected
+  
+  # sets the delivered if all the balances are 0
+  def set_transaction_delivered
+    if transaction.transaction_details.map(&:balance).uniq === [0]
+      transaction.delivered = true
+    end
+  end
 
   # Returns a Hash with the available stocks {item_id => quantity}
   def available_stocks(item_ids)

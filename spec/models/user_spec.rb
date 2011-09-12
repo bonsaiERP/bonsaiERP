@@ -7,11 +7,11 @@ describe User do
   end
 
   let(:valid_params)do
-    {:email => 'demo@example.com', :password => 'demo123', :abbreviation => "NEW"}
+    {:email => 'demo@example.com', :password => 'demo123'}
   end
 
   it 'should not create' do
-    expect{ User.create!(valid_params)}.to raise_error
+    expect{ User.create!(params)}.to raise_error
   end
 
   it 'should create' do
@@ -53,10 +53,14 @@ describe User do
 
       u.email.should == "demo@example.com"
       u.password.should == "demo123"
+      u.abbreviation.should == "GEREN"
 
-      u.attributes.each do |k,v|
-        v.should be_nil unless ["email", "password", "password_digest", "sign_in_count", "change_default_password"].include?(k)
-      end
+      #u.attributes.each do |k,v|
+      #  v.should be_nil unless ["email", "password", "password_digest", "sign_in_count", "change_default_password"].include?(k)
+      #end
+
+      u.save.should be_true
+      u.abbreviation.should == User::ABBREV
     end
   end
 
