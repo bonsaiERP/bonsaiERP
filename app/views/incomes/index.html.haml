@@ -15,20 +15,19 @@
     = link_to "items", items_path
     para poder realizar ventas
 
-- @in = Income.org
-
 %ul.tabs
   %li= link_option "Todas", "all"
-  %li= link_incomes "Proformas", 'draft'
-  %li= link_incomes "Esperando cobro #{size_or_blank(@in.approved.size)}", 'awaiting_payment'
-  %li= link_incomes "Vencidas #{size_or_blank(@in.due.size)}", 'due'
-  %li= link_incomes "Con entrega pendiente #{size_or_blank(@in.inventory.size)}", 'inventory'
-  %li= link_incomes "Cobradas", "paid"
-  %li= link_incomes "Anuladas", "nulled"
+  %li= link_option "Proformas", 'draft'
+  %li= link_option "Esperando cobro #{size_or_blank(@incomes.approved.size)}", 'awaiting_payment'
+  %li= link_option "Vencidas #{size_or_blank(@incomes.due.size)}", 'due'
+  %li= link_option "Con entrega pendiente #{size_or_blank(@incomes.inventory.size)}", 'inventory'
+  %li= link_option "Cobradas", "paid"
+  %li= link_option "Anuladas", "nulled"
 
 #search_income.search{:style => show_if_search}
   %a.close{:href => "#"} cerrar
   %h3 Buscar ventas
+  = link_to "Eliminar filtros", incomes_path, :class => 'b'
   =form_tag "/incomes", :method => 'get' do
     =hidden_field_tag "search_div_id", "search_incomes"
     .input
@@ -42,7 +41,7 @@
 
 = link_to "Buscar", "#search_income", :class => 'search'
 
-= paginate @incomes
+= paginate @incomes.page(@page)
 
 %table{ :class => 'decorated nwl' }
   %thead

@@ -11,10 +11,10 @@ class BuysController < ApplicationController
   # GET /buys.xml
   def index
     if params[:search].present?
-      @buys = Buy.search(params).page(@page)
+      @buys = Buy.search(params)
     else
       params[:option] ||= "all"
-      @buys = Buy.find_with_state(params[:option]).page(@page)
+      @buys = Buy.find_with_state(params[:option])
     end
   end
 

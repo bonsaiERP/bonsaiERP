@@ -16,10 +16,10 @@ class IncomesController < ApplicationController
   # GET /incomes.xml
   def index
     if params[:search].present?
-      @incomes = Income.search(params).page(@page)
+      @incomes = Income.search(params)#.page(@page)
     else
       params[:option] ||= "all"
-      @incomes = Income.find_with_state(params[:option]).page(@page)
+      @incomes = Income.find_with_state(params[:option])#.page(@page)
     end
   end
 

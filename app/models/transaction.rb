@@ -55,10 +55,10 @@ class Transaction < ActiveRecord::Base
   scope :approved , where(:state => 'approved')
   scope :paid     , where(:state => 'paid')
   scope :due      , where("transactions.state = ? AND transactions.payment_date < ?" , 'approved' , Date.today)
-  scope :inventory, where("transactions.deliver = ? AND transactions.balance_inventory > 0", true)
+  scope :inventory, where("transactions.deliver = ? AND transactions.delivered = ?", true, false)
   scope :credit   , where(:cash => false)
   # Especial used to update
-  scope :for_deliver, paid.where("transactions.deliver = ? AND transactions.balance_inventory > 0", false)
+  scope :for_deliver, paid.where("transactions.deliver = ? AND transactions.delivered = ?", false, false)
   scope :nulled, where(:state => 'nulled')
 
   delegate :name, :symbol, :plural, :code, :to => :currency, :prefix => true
