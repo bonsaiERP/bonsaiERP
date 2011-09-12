@@ -50,7 +50,7 @@ class InventoryOperationsController < ApplicationController
     @inventory_operation = InventoryOperation.new(params[:inventory_operation])
 
     respond_to do |format|
-      if @inventory_operation.save
+      if @inventory_operation.save_operation
         format.html { redirect_to(@inventory_operation, :notice => 'La operación de inventario fue almacenada correctamente.') }
         format.xml  { render :xml => @inventory_operation, :status => :created, :location => @inventory_operation }
       else
@@ -75,7 +75,7 @@ class InventoryOperationsController < ApplicationController
     @inventory_operation = @transaction.inventory_operations.build(params[:inventory_operation])
     @inventory_operation.contact_id = @transaction.contact_id
 
-    if @inventory_operation.save
+    if @inventory_operation.save_transaction
       redirect_to(@inventory_operation, :notice => 'La operación de inventario fue almacenada correctamente.')
     else
       render :action => "new_transaction"
@@ -128,7 +128,8 @@ class InventoryOperationsController < ApplicationController
     end
   end
 
-private
+  private
+
   def find_store
     store_id = params[:store_id] || params[:inventory_operation][:store_id]
 

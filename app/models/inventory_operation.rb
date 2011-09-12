@@ -72,6 +72,7 @@ class InventoryOperation < ActiveRecord::Base
   def set_transaction
     create_details
     create_ref_number
+    self.operation = transaction.is_a?(Income) ? "out" : "in"
   end
 
   def hash_of_items

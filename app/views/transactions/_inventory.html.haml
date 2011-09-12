@@ -1,7 +1,7 @@
 #inventory
   %h2 Entregas
 
-  = link_to "Registrar entrega", select_store_inventory_operation_path(transaction), :class => "new"
+  = link_to "Registrar entrega", select_store_inventory_operation_path(transaction), :class => "new" unless transaction.delivered?
 
   %table#inventory_table.decorated
     %thead
