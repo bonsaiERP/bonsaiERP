@@ -148,13 +148,13 @@ private
       dest = account_ledger.save
       
       self.active = false
-      dest = dest and self.save
+      dest = ( dest && self.save )
       pp = create_pay_plan(amount, interests_penalties, Date.today, 5.days.ago)
-      dest = dest and pp.persisted?
+      dest = dest && pp.persisted?
       transaction.balance += amount
       transaction.payment_date = pp.payment_date
       transaction.set_trans(false)
-      dest = dest and transaction.save
+      dest = ( dest && transaction.save )
 
       raise ActiveRecord::Rollback unless dest 
     end

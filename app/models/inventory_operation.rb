@@ -131,8 +131,8 @@ class InventoryOperation < ActiveRecord::Base
       end
     end
 
-    ret = store.save and ret
-    ret = self.save and ret
+    ret = ( store.save && ret )
+    ret = ( self.save && ret )
     raise ActiveRecord::Rollback unless ret
 
     ret
@@ -176,9 +176,9 @@ class InventoryOperation < ActiveRecord::Base
       
       set_transaction_delivered
 
-      ret = store.save and ret
-      ret = self.save and ret
-      ret = transaction.save and ret
+      ret = ( store.save && ret )
+      ret = ( self.save && ret )
+      ret = ( transaction.save && ret )
       raise ActiveRecord::Rollback unless ret
     end
 

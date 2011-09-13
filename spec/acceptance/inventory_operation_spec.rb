@@ -41,6 +41,7 @@ feature "Inventory Operation", "Test IN/OUT" do
     io = InventoryOperation.new(hash)
     io.inventory_operation_details.size.should == 2
     io.save_operation.should be_true
+    io.should be_persisted
     io.reload
     io.creator_id.should == UserSession.user_id
 
@@ -60,6 +61,7 @@ feature "Inventory Operation", "Test IN/OUT" do
     }
     io = InventoryOperation.new(hash)
     io.save_operation.should be_true
+    io.should be_persisted
     io.reload
 
     io.store.stocks[0].item_id.should == 1
@@ -81,7 +83,8 @@ feature "Inventory Operation", "Test IN/OUT" do
     }
     io = InventoryOperation.new(hash)
     io.inventory_operation_details.size.should == 2
-    io.save_operation.should == true
+    io.save_operation.should be_true
+    io.should be_persisted
 
     io.store.stocks[0].item_id.should == 1
     io.store.stocks[0].quantity.should == 100
@@ -100,6 +103,7 @@ feature "Inventory Operation", "Test IN/OUT" do
 
     io = InventoryOperation.new(hash)
     io.save_operation.should be_true
+    io.should be_persisted
 
     io.reload
 
@@ -119,6 +123,7 @@ feature "Inventory Operation", "Test IN/OUT" do
 
     io = InventoryOperation.new(hash)
     io.save_operation.should be_false
+    io.should_not be_persisted
     io.inventory_operation_details[0].errors[:quantity].should_not be_blank
 
   end
@@ -156,6 +161,7 @@ feature "Inventory Operation", "Test IN/OUT" do
 
     io = InventoryOperation.new(hash)
     io.save_transaction.should be_false
+    io.should_not be_persisted
 
     io.inventory_operation_details[0].errors.should_not == blank?
     io.inventory_operation_details[1].errors.should_not == blank?
@@ -165,6 +171,7 @@ feature "Inventory Operation", "Test IN/OUT" do
     io.inventory_operation_details[1].quantity = 10
 
     io.save_transaction.should be_true
+    io.should be_persisted
 
     i.reload
     i.balance_inventory.should_not == i.balance
@@ -191,7 +198,7 @@ feature "Inventory Operation", "Test IN/OUT" do
 
     io = InventoryOperation.new(h)
     io.save_transaction.should be_true
-
+    io.should be_persisted
     io.reload
 
     io.transaction.delivered.should be_true
@@ -207,7 +214,7 @@ feature "Inventory Operation", "Test IN/OUT" do
 
     io = InventoryOperation.new(h)
     io.save_transaction.should be_false
-
+    io.should_not be_persisted
   end
 
   scenario "Make an OUT for income with some values with 0" do
@@ -234,6 +241,7 @@ feature "Inventory Operation", "Test IN/OUT" do
     
     io = InventoryOperation.new(hash)
     io.save_operation.should be_true
+    io.should be_persisted
 
     io.store.stocks(true).unscoped.size.should == 2
     # Check the stocks
@@ -248,6 +256,7 @@ feature "Inventory Operation", "Test IN/OUT" do
     io.inventory_operation_details[1].quantity = 10
 
     io.save_transaction.should be_true
+    io.should be_persisted
 
     io.store.stocks(true)
     io.store.stocks.find_by_item_id(1).quantity.should == stocks[1]

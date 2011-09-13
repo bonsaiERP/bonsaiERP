@@ -10,9 +10,7 @@ class InventoryOperationDetail < ActiveRecord::Base
   belongs_to :item
 
   validates_presence_of :item_id, :quantity
-  validates_numericality_of :quantity, :greater_than => 0, :unless => :transaction?
-  validates_numericality_of :quantity, :greater_than_or_equal_to => 0, :if => :transaction?
-  #validate :valid_quantity_for_transaction
+  validates_numericality_of :quantity
 
   # Setter for @transaction
   def set_transaction=(val)

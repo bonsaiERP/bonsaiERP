@@ -11,7 +11,6 @@
         %th Cantidad
         %th Unidad
         %th{:title => 'Saldo cantidad'} Saldo cant.
-        %th Saldo <br/>Valorado #{currency_symbol}
       - transaction.transaction_details.includes(:item => :unit).each do |det|
         %tr
           %td= det.item
@@ -19,5 +18,4 @@
           %td.cur= ntc det.quantity
           %td.cur= det.item.unit
           %td.cur= ntc det.balance
-          %td.cur= ntc det.valued_balance
 
