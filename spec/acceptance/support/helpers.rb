@@ -111,7 +111,7 @@ module HelperMethods
 
   def create_account_types
     path = File.join(Rails.root, "db/defaults/account_types.es.yml")
-    Psych.load_file(path).each do |v|
+    YAML.load_file(path).each do |v|
       AccountType.create!(v)
     end
   end

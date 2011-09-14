@@ -1,13 +1,11 @@
 # Class for payments
 class Payment
   # constructor
-  constructor: (@accounts, @currencies, @contact, @account_data, @currency_id)->
+  constructor: (@accounts, @currencies, @account_data, @currency_id)->
     @$account   = $('#account_ledger_account_id')
     @$amount    = $('#account_ledger_amount')
     @$interests = $('#account_ledger_interests_penalties')
     @$exchange  = $('#account_ledger_exchange_rate')
-
-    @.createContactOptions()
 
     @.setEvents()
   # events
@@ -16,31 +14,18 @@ class Payment
 
     # amount interests_penalties
     $('input.amt').live 'focusout keyup', (event)->
-      return false if event.type == 'keyup' and event.keyCode != $.ui.keyCode.ENTER
+      return false if _b.notEnter(event)
 
       val = this.value * 1
-      $(this).val(val.round(2))
+      if this.id == 'account_ledger_exchange_rate'
+        $(this).val(val.round(4))
+      else
+        $(this).val(val.round(2))
       self.calculateTotal()
 
     # select
     @$account.live 'change keyup', (event)->
       self.setCurrency()
-  # Creates other options for the contact accounts
-  createContactOptions: ->
-    html = ""
-    # Selected if any
-    sel = "#{@account_data.account_id}-#{@account_data.currency_id}"
-
-    for currency_id, amount of @contact.currencies
-      if @contact.currencies[currency_id] < 0
-        val = "#{@contact.id}-#{currency_id}"
-        selected = if sel == val then "selected='selected'" else ""
-        html += "<option class='i' value='#{val}' #{selected}>"
-        cur = @currencies[currency_id * 1]
-        html += "(#{cur.symbol} #{Math.abs amount}) #{@contact.name}</option>"
-
-    @$account.find("option:first").after(html)
-
   # sets currency
   setCurrency: ->
     val = @$account.val()

@@ -217,4 +217,12 @@ module AccountsHelper
       link_to txt, url_for(params.merge(:option => 'uncon')), options
     end
   end
+
+  def contact_amount(ledger, contact)
+    if contact.account_ids.include?(ledger.account_id)
+      - ledger.amount
+    else
+      ledger.amount_currency
+    end
+  end
 end

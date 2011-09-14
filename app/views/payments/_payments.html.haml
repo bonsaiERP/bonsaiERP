@@ -11,9 +11,9 @@
     %tr
       %th Fecha
       %th{:style => 'width: 300px'} Descripción
-      %th Cantidad <br/>#{transaction.currency_plural}
-      %th.tip{:title => 'Intenreses/Penalidades'} Int./Pena.<br/>#{transaction.currency_plural}
-      %th Total fila <br/>#{transaction.currency_plural}
+      %th Cantidad #{transaction.currency_symbol}
+      %th.tip{:title => 'Intenreses/Penalidades'} Int./Pena. #{transaction.currency_symbol}
+      %th.nw Total fila #{transaction.currency_symbol}
       %th
   
   %tbody
@@ -21,7 +21,7 @@
       = render "payments/payment", :account_ledger => al, :transaction => transaction
 
   %tr.extra.pad_top
-    %td
-    %td.r.b{:colspan => 3} Total #{transaction.pay_type.pluralize} + Intereses/Penalidades
+    %td.r.b{:colspan => 4} Total #{transaction.pay_type.pluralize} + Intereses/Penalidades
     %td.r.b#total_payment= ntc transaction.total_payments_with_interests
+    %td
 

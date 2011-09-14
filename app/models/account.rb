@@ -37,6 +37,15 @@ class Account < ActiveRecord::Base
   # scopes
   scope :money, where(:accountable_type => "MoneyStore")
   scope :contact, where(:accountable_type => "Contact")
+  scope :contact_money, lambda {|*account_ids|
+    s = self.scoped
+    s.where( s.table[:accountable_type].eq('Contact')
+      .and(s.table[:accountable_id].in(account_ids))
+      .and(s.table[:amount].lt(0))
+      .or(s.table[:accountable_type].eq('MoneyStore'))
+    ).order("accountable_type")
+  }
+
 
   def to_s
     if accountable_type === "Contact"
@@ -71,13 +80,6 @@ class Account < ActiveRecord::Base
 
   def select_cur(cur_id)
     account_currencies.select {|ac| ac.currency_id == cur_id }.first
-  end
-
-  # Returns money and contact accounts for a Contact
-  def self.list_money_contact(con_id)
-    Account.org.where(
-    "accountable_type = :t1 OR (accountable_id = :id AND accountable_type = :t2 AND amount < 0)", 
-    :t1 => "MoneyStore", :t2 => "Contact", :id => con_id).order("accountable_type")
   end
 
   # Returns all account_ledgers for an account_id and to_id

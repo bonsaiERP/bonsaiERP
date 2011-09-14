@@ -14,8 +14,8 @@ module Models::AccountLedger::Money
       trans.before_validation :set_exchange_rate
       trans.before_validation :set_or_create_contact_account, :unless => :trans?
       trans.before_create :valid_amount
-      trans.before_save :set_ledger_amount
       trans.before_save :valid_money_accounts
+      trans.before_create :set_ledger_amount
     end
 
     with_options :if => :money? do |trans|

@@ -31,8 +31,8 @@
         %br/
         = al.reference
       %td.cur.color
-        = al.currency_symbol
-        = ntc al.account_amount
+        -#= al.currency_symbol
+        = ntc contact_amount(al, contact)
       %td.cont= link_contact_ledger al, contact.account_ids
       %td.desc= al.description
       %td.rev

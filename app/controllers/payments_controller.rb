@@ -29,6 +29,7 @@ class PaymentsController < ApplicationController
   def new
     @transaction = Transaction.org.find( params[:id] )
     @account_ledger = @transaction.new_payment
+    @payment = PaymentPresenter.new(@transaction)
   end
 
 
@@ -50,6 +51,7 @@ class PaymentsController < ApplicationController
     if @transaction.save_payment
       render 'create'
     else
+      @payment = PaymentPresenter.new(@transaction)
       render 'new'
     end
   end

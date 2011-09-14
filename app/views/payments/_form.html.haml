@@ -1,11 +1,10 @@
-- @accounts = Account.list_money_contact(@transaction.contact_id)
-- if @accounts.any?
+- if @payment.accounts.any?
   = simple_form_for(@account_ledger, :url => "/payments") do |f|
     = bonsai_form_error(f)
 
     = f.input :transaction_id, :as => :hidden
 
-    = f.association :account, :label => 'Cuenta <span class="n black" id="cur"></span>'.html_safe, :collection => @accounts
+    = f.association :account, :label => 'Cuenta <span class="n black" id="cur"></span>'.html_safe, :collection => @payment.accounts
     .clear
 
     .input
@@ -30,7 +29,7 @@
     = f.input :reference, :label => 'Referencia/Nº Cheque', :input_html => {:rows => 3, :cols => 35}, :as => :text
 
 
-    /= f.input :description, :label => 'Descripción', :as => :text, :input_html => {:rows => 4, :cols => 35}
+    -#= f.input :description, :label => 'Descripción', :as => :text, :input_html => {:rows => 4, :cols => 35}
     .clear
 
     .actions
@@ -43,11 +42,11 @@
   :javascript
     $(function() {
 
-      var accounts = #{Account.org.money.to_hash.to_json};
+      var accounts = #{@payment.to_hash.to_json};
       var currencies = #{Currency.scoped.to_hash.to_json};
       var account_data = #{@account_ledger.create_hash(:currency_id, :account_id).to_json };
 
-      var p = new Payment(accounts, currencies, contact, account_data, #{@transaction.currency_id});
+      var p = new Payment(accounts, currencies, account_data, #{@transaction.currency_id});
 
       // Display currency_rates in a new window
       $('#cur_rates').die();

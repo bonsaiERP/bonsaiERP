@@ -19,7 +19,7 @@ class SessionsController < ApplicationController
       @user = User.new(:email => params[:user][:email])
       @user.errors[:email] = "No existe el email que ingreso" unless user
       @user.errors[:password] = "La contraseña que ingreso es incorrecta" if user
-      user.errors[:base].each {|err| @user.errors[:base] << err }
+      user.errors[:base].each {|err| @user.errors[:base] << err } if user
 
       render 'new'
     end
