@@ -215,33 +215,33 @@ class AccountLedger < ActiveRecord::Base
 
   private
 
-    # The sum should be equal
-    def total_amount_equal
-      tot = account_ledger_details.inject(0) {|sum, det| sum += det.amount_currency }
-      unless tot == 0
-        self.errors[:base] << "Existe un error en el balance"
-      end
+  # The sum should be equal
+  def total_amount_equal
+    tot = account_ledger_details.inject(0) {|sum, det| sum += det.amount_currency }
+    unless tot == 0
+      self.errors[:base] << "Existe un error en el balance"
     end
+  end
 
-    # There must be at least 2 account details
-    def number_of_details
-      self.errors[:base] << "Debe seleccionar al menos 2 cuentas" if account_ledger_details.size < 2
-    end
+  # There must be at least 2 account details
+  def number_of_details
+    self.errors[:base] << "Debe seleccionar al menos 2 cuentas" if account_ledger_details.size < 2
+  end
 
-    def set_currency_id
-      self.currency_id = account_currency_id
-    end
+  def set_currency_id
+    self.currency_id = account_currency_id
+  end
 
-    def make_conciliation?
-      make_conciliation === true
-    end
+  def make_conciliation?
+    make_conciliation === true
+  end
 
-    def valid_amount
-      if (out? or trans?) and account.amount < amount.abs
-        errors[:base] << I18n.t("errors.messages.account_ledger.amount") 
-        errors[:amount] << I18n.t("errors.messages.account_ledger.amount")
-        return false
-      end
+  def valid_amount
+    if (out? or trans?) and account.amount < amount.abs
+      errors[:base] << I18n.t("errors.messages.account_ledger.amount") 
+      errors[:amount] << I18n.t("errors.messages.account_ledger.amount")
+      return false
     end
+  end
 
 end

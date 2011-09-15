@@ -19,6 +19,7 @@ es:
         valid_date: "La fecha de alerta debe ser inferior o igual a la fecha de %{pay_type}"
       payment:
         greater_amount: "La cantidad que ingreso es mayor que el saldo"
+        account_amount: "La cantidad que ingreso es mayor a la disponible en la cuenta"
       user:
         email: "El formato de su email es incorrecto"
         confirm: "No ha confirmado su cuenta. Revise en su email el mensaje \"Active su cuenta en www.bonsaierp.com\" y siga las instrucciones"

@@ -671,4 +671,183 @@ feature "Income", "test features" do
     client.reload
     client.account_cur(2).amount.should == -200
   end
+
+
+  scenario "Make payment with a contact account and validate contact amount" do
+    i = Income.new(income_params)
+    i.save_trans.should == true
+
+    tot = ( 3 * 10 + 5 * 20 ) * 0.97
+    i.total.should == tot.round(2)
+    i.balance.should == i.total
+
+    i.approve!.should be_true
+
+    # Make a deposit
+    al = AccountLedger.new_money(:operation => "in", :account_id => bank_account.id, :contact_id => client.id, :amount => 50, :reference => "Check 1120012" )
+    al.save.should be_true
+    al.conciliate_account.should be_true
+
+    client.account_cur(1).amount.should == -50
+
+    i.reload
+    log.info "Creating payment without exchange_rate"
+    p = i.new_payment(:account_id => client.account_cur(1).id, :reference => 'Test for client', :exchange_rate => 1)
+
+    p.amount.should == i.balance
+
+    i.save_payment.should be_false
+    p.errors[:amount].should_not be_empty
+  end
+
+  scenario "Pay with a differen curency" do
+    i = Income.new(income_params.merge(:discount => 0))
+    i.save_trans.should == true
+  
+    i.approve!.should == true
+
+    new_bank = create_bank(:currency_id => 2)
+    new_bank_account = new_bank.account
+    new_bank_account.amount.should == 0
+
+    p = i.new_payment(:account_id => new_bank_account.id, :amount => 30,
+                 :exchange_rate => 2, :currency_id => 2, :reference => 'Last check')
+
+    i.save_payment.should be(true)
+    i.reload
+    i.account_ledgers.first.amount.should == 30
+    i.balance.should == i.total - 2 * 30
+    p.reload
+
+    p.account.amount.should == 0
+    p.to.amount.should == 0
+
+    p.conciliate_account.should be(true)
+    p.reload
+
+    p.account.amount.should == 30
+    p.account_original_type.should == "Bank"
+    p.to.amount.should == -2 * 30
+
+    p = i.new_payment(:account_id => new_bank_account.id, :amount => 30, :interests_penalties => 1,
+                 :exchange_rate => 2, :currency_id => 2, :reference => 'Last check')
+
+    p.amount.should == 31
+    p.interests_penalties.should == 1
+    i.save_payment.should be(true)
+    p.conciliate_account.should be(true)
+
+    i.reload
+    i.account_ledgers.first.amount.should == 30
+    i.balance.should == i.total - 2 * 60
+
+    p.reload
+    p.account.amount.should == 61
+    p.to.amount.should == -(30 + 31) * 2
+
+    log.info "Pay with contact account and with interests penalties"
+
+    al = AccountLedger.new_money(:operation => 'in', :account_id => new_bank_account.id, :contact_id => client.id, :amount => 100, :reference => "Other currency check")
+    al.save.should be(true)
+    al.conciliate_account.should be(true)
+    al.reload
+    
+    al.to.amount.should == -100
+    i.reload
+
+    bal = i.balance
+    p = i.new_payment(:account_id => al.to_id, :amount => i.balance/2, :interests_penalties => 1,
+                 :exchange_rate => 2, :currency_id => 2, :reference => 'Last check')
+
+    i.save_payment.should be(true)
+    i.reload
+
+    i.balance.should == 0
+
+    p.conciliate_account.should be(true)
+    p.reload
+
+    p.conciliation.should be(true)
+    p.account.amount.should == -100 + bal/2 + 1
+
+  end
+
+  scenario "Make payment with a contact account and with different currency" do
+    i = Income.new(income_params)
+    i.save_trans.should == true
+
+    tot = ( 3 * 10 + 5 * 20 ) * 0.97
+    i.total.should == tot.round(2)
+    i.balance.should == i.total
+
+    i.approve!.should == true
+
+    # Approve credit
+    i.approve_credit(:credit_reference => "Ref 23728372", :credit_description => "Yeah").should == true
+
+    d = Date.today
+    i.new_pay_plan(:amount => 30, :repeat => true, :payment_date => d, :alert_date => d - 5.days)
+    i.save_pay_plan.should == true
+    i.pay_plans.size.should == (i.balance/30).ceil
+
+    # bank creation and client deposits in another currency
+    new_bank = create_bank(:currency_id => 2)
+    new_bank_account = new_bank.account
+    new_bank_account.amount.should == 0
+
+    client.accounts.should have(1).element
+
+    al = AccountLedger.new_money(:operation => 'in', :account_id => new_bank_account.id, :contact_id => client.id, :amount => 200, :reference => "Other currency check")
+
+    client.reload
+
+    al.save.should == true
+    client.accounts.should have(2).elements
+    al.conciliate_account.should == true
+
+    client.reload
+    client.account_cur(2).amount.should == -200
+
+    new_bank_account.reload
+    new_bank_account.amount.should == 200
+
+    log.info("Paying from account with different currency")
+    p = i.new_payment(:account_id => al.to_id, :amount => 30,
+                 :exchange_rate => 2, :currency_id => 2, :reference => 'Last check')
+    i.save_payment.should == true
+    p.should be_persisted
+
+    income_account = Account.org.find_by_original_type("Income")
+    
+    log.info("Set the correct description for a payment with other currency")
+    c1 = Currency.find(i.currency_id)
+    c2 = Currency.find(p.currency_id)
+
+    i18ntrans = I18n.t("transaction.#{i.class}")
+    txt = I18n.t("account_ledger.payment_description", 
+      :pay_type => i18ntrans[:pay], :trans => i18ntrans[:class], 
+      :ref => "#{i.ref_number}", :account => p.account_name
+    )
+    txt << " " << I18n.t("currency.exchange_rate",
+      :cur1 => "#{c1.symbol} 1" , 
+      :cur2 => "#{ p.currency_symbol } 2,00"
+    )
+
+    p.description.should == txt
+    p.should_not be_conciliation
+
+    i.balance.should == i.total - 30 * 2
+
+    p.conciliate_account.should be_true
+    p.reload
+    client.reload
+
+    client.account_cur(2).amount.should == -200 + 30
+    #income_account.cur(2).amount.should == -30
+
+    i.reload
+    i.pay_plans.unpaid.size.should == ( (i.total - 30)/30 ).ceil
+    i.pay_plans.paid.size.should == 1
+    i.pay_plans_total.should == i.total - 30
+  end
 end

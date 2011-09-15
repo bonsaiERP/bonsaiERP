@@ -12,6 +12,7 @@ module Models::AccountLedger::Transaction
 
     with_options :if => :payment? do |al|
       al.before_create :set_ledger_data
+      al.before_create :valid_trans_amount
     end
   end
 
@@ -78,8 +79,22 @@ module Models::AccountLedger::Transaction
 
     def set_amount
       case transaction.class.to_s
-      when "Buy", "Expense"
+      when "Buy"
         self.amount = -amount
+      end
+    end
+
+    def valid_trans_amount
+      if transaction.is_a?(Income) and account.accountable_type === 'Contact'
+        if amount.abs > -account.amount
+          self.errors[:amount] = I18n.t("errors.messages.payment.account_amount")
+          return false
+        end
+      elsif transaction.is_a?(Buy) and account.accountable_type === 'MoneyStore'
+        if amount.abs > account.amount
+          self.errors[:amount] = I18n.t("errors.messages.payment.account_amount")
+          return false
+        end
       end
     end
 
