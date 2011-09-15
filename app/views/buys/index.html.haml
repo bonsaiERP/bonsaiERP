@@ -12,7 +12,7 @@
 %ul.tabs
   %li= link_option "Todas", "all"
   %li= link_option "Proformas", "draft"
-  %li= link_option "Esperando pago #{size_or_blank(@buys.approved.size)}"            , buys_path(:option => 'awaiting_payment') , :class => tabs_filter('awaiting_payment')
+  %li= link_option "Esperando pago #{size_or_blank(@buys.approved.size)}",  "awaiting_payment"
   %li= link_option "Vencidas #{size_or_blank(@buys.due.size)}", "due"
   %li= link_option "Con inventario pendiente #{size_or_blank(@buys.inventory.size)}" , "inventory"
   %li= link_option "Pagadas", "paid"

@@ -16,6 +16,7 @@ class BuysController < ApplicationController
       params[:option] ||= "all"
       @buys = Buy.find_with_state(params[:option])
     end
+    @count = Buy.org
   end
 0
   # GET /buys/1

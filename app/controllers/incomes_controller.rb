@@ -19,8 +19,9 @@ class IncomesController < ApplicationController
       @incomes = Income.search(params)#.page(@page)
     else
       params[:option] ||= "all"
-      @incomes = Income.find_with_state(params[:option])#.page(@page)
+      @incomes = Income.find_with_state(params[:option])
     end
+    @count = Income.org
   end
 
   # GET /incomes/1
