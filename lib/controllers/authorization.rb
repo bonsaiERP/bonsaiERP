@@ -30,8 +30,10 @@ module Controllers::Authorization
     h = send(:"#{rol}_hash")
     if h[controller].nil?
       true
+    elsif h[controller] === false or h[controller] === true
+      h[controller]
     else
-      if h[controller][action].nil?
+      if h[controller] and h[controller][action].nil?
         true
       else
         h[controller][action]
@@ -51,30 +53,23 @@ module Controllers::Authorization
     )
   end
 
-  def inventory_hash
+  def operations_hash
     gerency_hash.merge(
-      'banks' => {'index' => false, 'show' => false, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false},
-      'cash_registers' => {'index' => false, 'show' => false, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false},
-      'account_ledgers' => {'index' => false, 'show' => false, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false,
-                          'new_transference' => false, 'transference' => false, 'conciliate' => false, 'personal' => false},
-      'inventory_operations' => {'index' => false, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false, 
-                  'select_store' => true, 'new_sale' => true, 'create_sale' => true},
+      'banks' => false, 'cashes' => false,
+      'account_ledgers' => {
+        'index' => false, 'show' => true, 'new' => false, 'new_transference' => false,
+        'conciliate' => false, 'create' => false, 'destroy' => false, 
+        'transference' => false, 'update' => false
+      },
+      'inventory_operations' => {'index' => true, 'show' => true, 'new' => false,
+         'create' => false, 'edit' => false, 'update' => false, 'destroy' => false, 
+         'select_store' => true, 'new_transaction' => true, 'create_transaction' => true},
       'incomes' => {'approve' => false},
-      'buys' => {'approve' => false},
-      'expenses' => {'approve' => false},
+      'buys' => false,
+      'stores' => {'new' => false, 'edit' => false, 'update' => false, 'create' => false, 'destroy' => false},
       'payments' => {'destroy' => false},
       'projects' => {'index' => true, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false, 'show' => true},
     )
   end
 
-  def sales_hash
-    inventory_hash.merge(
-      'incomes' => {'approve' => true},
-      'items' => {'new' => false, 'create' => false, 'edit' => false, 'destroy' => false},
-      'stores' => {'index' => false, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false},
-      'inventory_operations' => {'index' => false, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false, 
-                  'select_store' => false, 'new_sale' => false, 'create_sale' => false},
-      'items' => {'index' => true, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false, 'show' => true},
-    )
-  end
 end

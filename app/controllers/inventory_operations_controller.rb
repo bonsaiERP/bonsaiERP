@@ -64,6 +64,7 @@ class InventoryOperationsController < ApplicationController
   # GET /inventory_operations/new_transaction
   def new_transaction
     @transaction = Transaction.org.find(params[:transaction_id])
+    # Check if the user can access
     check_buy_in(@transaction)
 
     @inventory_operation = InventoryOperation.new(:store_id => params[:store_id], :operation => params[:operation], 
@@ -75,6 +76,7 @@ class InventoryOperationsController < ApplicationController
   # /inventory_operations/create_transaction
   def create_transaction
     @transaction = Transaction.org.find(params[:inventory_operation][:transaction_id])
+    # Check if the user can access
     check_buy_in(@transaction)
 
     @inventory_operation = @transaction.inventory_operations.build(params[:inventory_operation])

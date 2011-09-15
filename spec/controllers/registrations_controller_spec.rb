@@ -12,11 +12,29 @@ describe RegistrationsController do
 
   describe "GET /show" do
     it 'should confirm token' do
-      User.stubs(:find_by_id => stub(:confirm_token => true, :id => 1))
+      User.stubs(:find_by_id => stub(:confirm_token => true, :id => 1,
+            :organisations => stub(:any? => false)
+          ))
+      controller.stubs(:current_user => User.new {|u| u.id = 1})
 
       get 'show', :id => 1, :token => "demo123"
 
       response.should redirect_to "/organisations/new"
+      session[:user_id].should == 1
+    end
+
+    it 'should redirect to /dashboard if it has organisation' do
+      User.stubs(:find_by_id => stub(:confirm_token => true, :id => 1,
+            :organisations => stub(:any? => false)
+          ))
+      u = User.new {|u| u.id = 1 }
+      u.stubs(:organisations => stub(:any? => true, :first => 1), :link => stub(:rol => 'admin') )
+      controller.stubs(:current_user => u, 
+        :set_organisation_session => true )
+
+      get 'show', :id => 1, :token => "demo123"
+
+      response.should redirect_to "/dashboard"
       session[:user_id].should == 1
     end
 

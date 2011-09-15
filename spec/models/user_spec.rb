@@ -98,6 +98,7 @@ describe User do
       u = User.new_user("demo@example.com", "demo123")
       u.save.should be_true
       u.confirmed_at.should be_nil
+      u.should_not be_change_default_password
       
       u.confirm_token(u.confirmation_token).should be_true
 
@@ -138,6 +139,36 @@ describe User do
       user.reload
       user.first_name.should == "New name"
       user.last_name.should == "Other name"
+    end
+  end
+
+  describe "Add a company user" do
+    let(:user_params) {
+      {:email => 'other@example.com', :first_name => 'Other',
+      :last_name => 'User', :abbreviation => 'OUS', :rolname => 'operations'}
+    }
+    let!(:user){ User.create!(valid_params) {|u| u.abbreviation = "NEW" } }
+    before(:each) do
+      OrganisationSession.set :id => 1
+      RegistrationMailer.stubs(:send_registration => stub(:deliver => true))
+    end
+
+    it 'should add organisation user' do
+      user = User.new
+
+      user.add_company_user(user_params).should be_true
+      user.confirmation_token.should_not be_blank
+      user.should be_persisted
+      user.should be_change_default_password
+
+      user.links.should have(1).element
+      link= user.links.first
+      link.rol.should == 'operations'
+      link.organisation_id.should == 1
+
+      user.confirmed_at.should be_blank
+      user.confirm_token(user.confirmation_token)
+      user.confirmed_at.should_not be_blank
     end
   end
 end

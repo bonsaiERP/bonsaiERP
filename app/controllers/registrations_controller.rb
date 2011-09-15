@@ -2,7 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class RegistrationsController < ApplicationController
-  before_filter :check_logged_user
+  before_filter :check_logged_user, :except => [:show]
   layout "home"
 
   def index
@@ -12,7 +12,7 @@ class RegistrationsController < ApplicationController
     @user = User.find_by_id(params[:id])
     if @user and @user.confirm_token(params[:token])
       session[:user_id] = @user.id
-      redirect_to "/organisations/new"
+      check_logged_user
     else
       if @user
         flash[:warning] = "Ya esta registrado."
