@@ -9,9 +9,9 @@ module Controllers::Authorization
   def check_authorization!
     if current_user and session[:user] and session[:user][:rol]
       unless check_user_by_rol(session[:user][:rol], params[:controller], params[:action])
-        flash[:warning] = "Usted no tiene permitida esta acción"
-        xhr = request.xhr? ? true : false
-        redirect_to user_path(current_user, :xhr => xhr)
+        #flash[:warning] = "Usted no tiene permitida esta acción"
+        #xhr = request.xhr? ? true : false
+        redirect_to "/422"
       end
     elsif current_user and current_user.link.nil?
       true

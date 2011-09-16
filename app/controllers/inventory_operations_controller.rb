@@ -103,6 +103,7 @@ class InventoryOperationsController < ApplicationController
     if params[:operation] == "out"
       @transactions = Income.org.inventory.page(@page)
     else
+      redirect_to "/422" unless User::ROLES.slice(0,2).include? session[:user][:rol]
       @transactions = Buy.org.inventory.page(@page)
     end
   end
@@ -119,7 +120,7 @@ class InventoryOperationsController < ApplicationController
     if transaction.is_a?(Buy)
       unless User::ROLES.slice(0,2).include? session[:user][:rol]
         flash[:warning] = "Usted no tiene permitida esta acción"
-        redirect_to current_user
+        redirect_to "/422"
       end
     end
   end

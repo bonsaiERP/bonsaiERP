@@ -3,14 +3,14 @@
 # email: boriscyber@gmail.com
 class IncomesController < ApplicationController
 
-  include Controllers::Transactions
+  #include Controllers::Transactions
 
   before_filter :check_authorization!
   #before_filter :check_currency_set, :only => [:new, :edit, :create, :update]
   before_filter :set_currency_rates, :only => [:index, :show]
   before_filter :set_transaction, :only => [:show, :edit, :update, :destroy, :approve]
 
-  before_filter :update_all_deliver
+  #before_filter :update_all_deliver
 
   # GET /incomes
   # GET /incomes.xml

@@ -132,27 +132,23 @@ feature "Income", "test features" do
 
     p.conciliation.should == false
     i.should be_paid
+    i.reload
+    p.reload
 
     # Conciliation
-    p.conciliate_account.should == true
-    p.reload
-
-    p.conciliation.should == true
-    i.reload
-    i.balance.should == 0
-    i.deliver.should be_false
+    puts "=" * 50
+    puts "ID: #{p.id} :::: #{p.transaction.balance}"
+    p.conciliate_account.should be_true
+    #p.reload
 
     p.conciliation.should be_true
-    p.reload
-
     p.account.amount.should == i.total
     p.to.amount.should == -i.total
 
-    i.deliver = true
-    i.save
     i.reload
-   
-    i.deliver.should be_true 
+    i.balance.should == 0
+    i.should be_deliver
+
   end
 
   scenario "Create a an income with credit" do

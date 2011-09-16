@@ -9,6 +9,7 @@ module Models::AccountLedger::Conciliation
 
   included do
     #after_create :conciliate_account, :if => :make_conciliation?
+    after_update :check_transaction_conciliation, :if => "transaction_id.present?"
   end
 
   module InstanceMethods
@@ -39,6 +40,13 @@ module Models::AccountLedger::Conciliation
     # Determines if the account ledger can conciliate
     def can_conciliate?
       not(conciliation?) and active?
+    end
+
+    # Updates the transaction if needed if all the payments have been done and conciliated
+    def check_transaction_conciliation
+      if transaction.balance === 0 and transaction.account_ledgers.pendent.empty?
+        raise ActiveRecord::Rollback unless transaction.update_attribute(:deliver, true)
+      end
     end
 
     def conciliate_transaction_account

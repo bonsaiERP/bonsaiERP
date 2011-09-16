@@ -43,7 +43,7 @@ class InvoicePdf < BasePdf
 
   def create_exchange_rate
     unless OrganisationSession.currency_id == @transaction.currency_id
-      excrate = "1 #{@transaction.currency_name} = #{number_to_currency @transaction.currency_exchange_rate, :precision => 4} "
+      excrate = "1 #{@transaction.currency_name} = #{number_to_currency @transaction.exchange_rate, :precision => 4} "
       excrate << "#{Currency.find(OrganisationSession.currency_id).plural}"
       text "Tipo de cambio: <b>#{excrate}</b>", :inline_format => true
     end

@@ -7,18 +7,9 @@ require File.dirname(__FILE__) + '/acceptance_helper'
 
 feature "Buy", "test features" do
 
-  let(:buy_params) do
-      d = Date.today
-      @buy_params = {"active"=>nil, "bill_number"=>"56498797", "account_id"=>1, 
-        "exchange_rate"=>1, "currency_id"=>1, "date"=>d, 
-        "description"=>"Esto es una prueba", "discount" => 3, "project_id"=>1 
-      }
-      details = [
-        { "description"=>"jejeje", "item_id"=>1, "organisation_id"=>1, "price"=>3, "quantity"=> 10},
-        { "description"=>"jejeje", "item_id"=>2, "organisation_id"=>1, "price"=>5, "quantity"=> 20}
-      ]
-      @buy_params[:transaction_details_attributes] = details
-      @buy_params
+  background do
+    create_organisation_session
+    create_user_session
   end
 
   let(:pay_plan_params) do
@@ -29,18 +20,25 @@ feature "Buy", "test features" do
      :email => true }.merge(options)
   end
 
-
-  background do
-    create_organisation_session
-    create_user_session
-  end
-
   let!(:organisation) { create_organisation(:id => 1) }
   let!(:items) { create_items }
   let!(:bank) { create_bank(:number => '123', :amount => 0) }
   let(:bank_account) { bank.account }
   let!(:supplier) { create_supplier(:matchcode => 'Karina Luna') }
   let(:supplier_account) { supplier.account }
+  let(:buy_params) do
+      d = Date.today
+      buy_params = {"active"=>nil, "bill_number"=>"56498797", "account_id"=>1, 
+        "exchange_rate"=>1, "currency_id"=>1, "date"=>d, 
+        "description"=>"Esto es una prueba", "discount" => 3, "project_id"=>1 
+      }
+      details = [
+        { "description"=>"jejeje", "item_id"=>1, "organisation_id"=>1, "price"=>3, "quantity"=> 10},
+        { "description"=>"jejeje", "item_id"=>2, "organisation_id"=>1, "price"=>5, "quantity"=> 20}
+      ]
+      buy_params[:transaction_details_attributes] = details
+      buy_params
+  end
 
   scenario "Create a payment with nearest pay_plan" do
 

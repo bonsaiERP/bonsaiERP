@@ -19,7 +19,8 @@ end
 
 gem 'jquery-rails'
 
-gem 'mysql2'
+gem 'mysql2'#, :group => :production
+#gem 'sqlite3-ruby', :group => [:development, :text]
 
 gem 'simple_form'
 gem 'haml'

@@ -208,7 +208,7 @@ ActiveRecord::Schema.define(:version => 20110912150546) do
     t.string   "operation"
     t.string   "state"
     t.string   "description"
-    t.decimal  "total",           :precision => 14, :scale => 2
+    t.decimal  "total"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "contact_id"
