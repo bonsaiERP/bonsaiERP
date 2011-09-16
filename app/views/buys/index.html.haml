@@ -47,7 +47,7 @@
       %th Total
       %th Saldo
       %th.tip{:title => "Contado Crédito"} Tipo
-      %th Fecha
+      %th Fecha Hora
       %th
 
   %tbody
@@ -61,7 +61,7 @@
         %td.cur #{buy.currency_symbol} #{ntc buy.total }
         %td.cur #{buy.currency_symbol} #{ntc buy.balance }
         %td= cash_credit(buy.cash)
-        %td.nw= lo buy.date
+        %td.nw= lo buy.created_at
         %td.actions
           = link_to "editar", edit_buy_path(buy), :class => 'edit', :title => 'Editar' if buy.draft?
           = link_to "duplicar", new_buy_path(:transaction_id => buy.id), :class => 'duplicate icon', :title => 'Duplicar'
