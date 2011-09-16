@@ -13,7 +13,6 @@ module Models::AccountLedger::Transaction
     with_options :if => :payment? do |al|
       al.before_create :set_ledger_data
       al.before_create :valid_trans_amount
-      al.after_update  :check_transaction_conciliation
     end
   end
 

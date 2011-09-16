@@ -55,7 +55,6 @@ module Models::AccountLedger::Conciliation
       self.class.transaction do
         res = self.save
         if res and transaction.balance == 0 and transaction.type == "Income" and transaction.account_ledgers.pendent.empty?
-          puts "Setting deliver"
           transaction.deliver = true
         end
         res = res and transaction.save

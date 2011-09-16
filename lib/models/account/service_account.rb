@@ -35,7 +35,6 @@ module  Models::Account
       end
 
       def set_account_name
-        puts "is Service #{service?}"
         account.name = self.to_s
       end
 
