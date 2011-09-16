@@ -87,10 +87,10 @@ class StoresController < ApplicationController
   def get_partial
     case params[:tab]
     when "operations"
-      @operations = @store.inventory_operations.includes(:creator).order("created_at desc").page(@page)
+      @operations = @store.inventory_operations.includes(:creator).order("created_at DESC").page(@page)
       "operations"
     else
-      @items = @store.stocks.includes(:item).page(@page)
+      @items = @store.stocks.includes(:item).order("(stocks.minimum - stocks.quantity) DESC").page(@page)
       params[:tab] = "items"
       "items"
     end

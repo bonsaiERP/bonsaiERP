@@ -4,7 +4,7 @@
 class Stock < ActiveRecord::Base
   acts_as_org
 
-  before_create :update_last
+  before_create :update_last_and_set_minimum
 
   STATES = ["active", "inactive", "waiting"].freeze
   STATES.each do |met|
@@ -17,8 +17,10 @@ class Stock < ActiveRecord::Base
 
   belongs_to :store
   belongs_to :item
+  belongs_to :user
 
   #validations
+  validates_presence_of :store_id
   validates_numericality_of :minimum, :greater_than => 0, :allow_nil => true
 
   default_scope where(:state => 'active')
@@ -26,23 +28,32 @@ class Stock < ActiveRecord::Base
 
   delegate :name, :price, :code, :to_s, :type, :to => :item, :prefix => true
 
+  # Sets the minimun for an Stock
+  def self.new_minimum(item_id, store_id)
+    Stock.org.find_by_item_id_and_store_id(item_id, store_id)
+  end
   # Creates a new instance with an item
-  def self.new_item(params = {})
-    s = Stock.org.find_by_store_id_and_item_id(params[:store_id], params[:item_id])
-
-    if s
-      params[:minimum] ||= s.minimum
-      Stock.new(:item_id => s.item_id, :quantity => s.quantity, :minimum => params[:minimum])
-    else
+  def save_minimum(minimum)
+    if minimum.to_f < 0
+      self.errors[:minimum] << I18n.t("errors.messages.greater_than", :count => 0)
       false
+    else
+      self.minimum = minimum.to_f
+      self.user_id = UserSession.user_id
+      self.save
     end
   end
 
   private
 
-  def update_last
-    s = Stock.org.find_by_item_id(self.item_id)
-    s.update_attribute(:state, 'inactive') if s
+  def update_last_and_set_minimum
+    s = Stock.org.find_by_item_id_and_store_id(self.item_id, self.store_id)
+    if s
+      self.minimum = s.minimum.to_f
+      s.update_attribute(:state, 'inactive') if s
+    else
+      self.minimum = 0
+    end
   end
 
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110912150546) do
+ActiveRecord::Schema.define(:version => 20110916175327) do
 
   create_table "account_currencies", :force => true do |t|
     t.integer  "organisation_id"
@@ -208,7 +208,7 @@ ActiveRecord::Schema.define(:version => 20110912150546) do
     t.string   "operation"
     t.string   "state"
     t.string   "description"
-    t.decimal  "total"
+    t.decimal  "total",           :precision => 14, :scale => 2
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "contact_id"

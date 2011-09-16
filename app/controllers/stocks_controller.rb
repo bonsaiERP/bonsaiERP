@@ -2,20 +2,20 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class StocksController < ApplicationController
-  def new
-    @stock = Stock.new_item(params)
+  def edit
+    @stock = Stock.new_minimum(params[:item_id], params[:store_id])
     unless @stock
       render :text => 'Error'
     end
   end
 
-  def create
-    @stock = Stock.new_item(params[:stock])
+  def update
+    @stock = Stock.org.find(params[:id])
 
-    if @stock and @stock.save
-      redirect_ajax @stock
+    if @stock.save_minimum(params[:stock][:minimum])
+      render "update"
     else
-      render "new"
+      render "edit"
     end
   end
 
