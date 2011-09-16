@@ -96,7 +96,7 @@ ul{
   }
 }
 #home{
-  background: transparent url(imagenes_video.png) no-repeat;
+  //background: transparent url(imagenes_video.png) no-repeat;
   height: 411px;
   position: relative;
   #register{
@@ -120,10 +120,43 @@ ul{
     h2{font-weight: normal; font-size: 18px;}
   }
   #video{
+    @include b-shadow(5px, 5px, 5px, #000);
     position: absolute;
+    display:block;
+    width: 512px;
+    height: 319px;
     top: 50px;
-    left: 10px;
+    left: 5px;
   }
+}
+
+.ui-dialog{
+  position: absolute;
+  background-color: lighten($black, 10%);
+  z-index: 1000;
+  top: 40px;
+  left: 100px;
+  width: 660px;
+  height: 410px;
+  .ui-dialog-titlebar-close{
+    position: absolute;
+    top: -27px;
+    right: -27px;
+    background: url("/assets/close_exit.png") no-repeat scroll -3px -3px transparent;
+    z-index: 2000;
+    display: block;
+    width: 43px;
+    height: 43px;
+    z-index: 2000;
+  }
+}
+
+#modal{
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  background: #000;
+  opacity: 20%;
 }
 
 #boxes{

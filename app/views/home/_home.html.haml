@@ -7,7 +7,9 @@
   Inicio
 
 #home
-  %iframe#video{ :width => "510", :height => "320", :src => "http://www.youtube.com/embed/iqruf87hMJQ", :frameborder => "0" }
+  %a#video{:href => "javascript:"}
+    %img{ :src => "/assets/video_image.jpg"}
+  -#, :src => "http://www.youtube.com/embed/iqruf87hMJQ", :frameborder => "0" }
   = link_to image_tag("prueba.png"), "/users/sign_up", :id => "register", :class => 'but'
   = link_to image_tag("tour.png"), "/tour", :id => "tour", :class => 'but'
   #title
@@ -26,4 +28,15 @@
     %h3 Un Control Real
     %p <i>bonsai</i> cuenta con varias herramientas que harán del control de su empresa fácil y fluido, donde los procesos son claros y amistosos.
   .clear
-.clear
+  .clear
+
+:javascript
+  $(function() {
+    $('#video').click(function() {
+      var html = '<iframe width="640" height="390" src="http://www.youtube.com/embed/iqruf87hMJQ" frameborder="0" allowfullscreen></iframe>';
+      $('<div/>').html(html).
+      dialog({modal: true});
+    });
+  });
+
+-#%iframe#video{ :width => "510", :height => "320", :src => "http://www.youtube.com/embed/iqruf87hMJQ", :frameborder => "0" }
