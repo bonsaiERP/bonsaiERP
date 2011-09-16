@@ -47,6 +47,7 @@ module Models::Transaction
 
       # Calculates the total value and stores it
       def calculate_total_and_set_balance
+        self.tax_percent = taxes.inject(0) {|s, imp| s += imp.rate }
         self.gross_total = transaction_details.inject(0) {|s,det| s += det.total unless det.marked_for_destruction?; s}
         self.total = gross_total - total_discount + total_taxes
         self.balance = total if total > 0

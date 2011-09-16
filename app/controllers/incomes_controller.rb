@@ -77,7 +77,8 @@ class IncomesController < ApplicationController
     if @transaction.approved?
       redirect_transaction
     else
-      if @transaction.update_attributes(params[:income])
+      @transaction.attributes = params[:income]
+      if @transaction.save_trans
         redirect_to @transaction, :notice => 'La proforma de venta fue actualizada!.'
       else
         @transaction.transaction_details.build unless @transaction.transaction_details.any?

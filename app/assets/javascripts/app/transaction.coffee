@@ -242,7 +242,7 @@ class TransactionModel extends Backbone.Model
     )
 
     $('#transaction_discount').trigger('focusout')
-    $('#taxes input:checkbox').trigger('click')
+    @.calculateTaxes()
 
 
   # set Currency
@@ -274,11 +274,15 @@ class TransactionModel extends Backbone.Model
   taxesEvent: ->
     self = @
     $('#taxes input:checkbox').live 'click', (event)->
-      sum = 0
-      $('#taxes input:checked').each (i, el)->
-        sum += ($("#span#{el.value}.tax").data("rate") * 1)
+      self.calculateTaxes()
+  # Taxes calculation
+  calculateTaxes: ->
+    sum = 0
+    $('#taxes input:checked').each (i, el)->
+      sum += ($("#span#{el.value}.tax").data("rate") * 1)
 
-      self.set({taxes: ( sum/100 ).round(4)})
+    @.set({taxes: ( sum/100 ).round(4)})
+
   # set Taxes
   setTaxes: ->
     taxes = (@.get("subtotal") - @.get("discount_total")) * @.get("taxes")
