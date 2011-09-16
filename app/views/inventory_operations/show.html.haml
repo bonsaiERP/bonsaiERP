@@ -31,7 +31,7 @@
     %th Unidad
     %th Inventario
   
-  - items_hash = @inventory_operation.get_hash_of_items
+  - items_hash = @inventory_operation.hash_of_items
   - @inventory_operation.inventory_operation_details.includes(:item => :unit).each do |det|
     %tr.item
       %td= det.item

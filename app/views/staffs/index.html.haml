@@ -39,4 +39,4 @@
       %td= klass.mobile
       %td= mail_to klass.email
       %td= klass.tax_number
-      %td= bonsai_links(klass)
+      %td= link_to "editar", edit_staff_path(klass), :class => 'edit'

@@ -62,10 +62,10 @@ class StaffsController < ApplicationController
 
   # DELETE /staffs/1
   # DELETE /staffs/1.xml
-  def destroy
-    @staff.destroy
-    redirect_ajax(@staff)
-  end
+  #def destroy
+  #  @staff.destroy
+  #  redirect_ajax(@staff)
+  #end
 
   protected
   def find_staff

@@ -55,7 +55,7 @@ module Controllers::Authorization
 
   def operations_hash
     gerency_hash.merge(
-      'banks' => false, 'cashes' => false,
+      'banks' => false, 'cashes' => false, 'staffs' => false,
       'account_ledgers' => {
         'index' => false, 'show' => true, 'new' => false, 'new_transference' => false,
         'conciliate' => false, 'create' => false, 'destroy' => false, 

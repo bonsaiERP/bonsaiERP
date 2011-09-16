@@ -5,14 +5,12 @@
     %th Referencia
     %th Fecha
     %th Operación
-    %th Operación financiera
-    %th Total #{currency_symbol}
+    %th Realizado por
 
   - @operations.each do |op|
     %tr
       %td= link_to op.ref_number, op, :class => :b
       %td= lo op.created_at
       %td= op.operation == 'in' ? 'Ingreso' : 'Egreso'
-      %td= link_to op.transaction, op.transaction if op.transaction_id.present?
-      %td.cur= ntc op.total
+      %td= op.creator
 
