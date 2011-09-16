@@ -136,8 +136,6 @@ feature "Income", "test features" do
     p.reload
 
     # Conciliation
-    puts "=" * 50
-    puts "ID: #{p.id} :::: #{p.transaction.balance}"
     p.conciliate_account.should be_true
     #p.reload
 
