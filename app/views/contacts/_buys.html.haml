@@ -30,28 +30,26 @@
       %th.tip{:title => 'Estado'} Est.
       %th.tip{ :title => 'Número de referencia' } Nº Ref.
       %th Vence el
-      %th Total<br/>#{currency_symbol}
-      %th Saldo<br/>#{currency_symbol}
-      %th.tip{:title => 'Saldo Inventario'} Saldo<br/>Inv. #{currency_symbol}
-      %th.tip{:title => 'Moneda'} Mon.
+      %th Total
+      %th Saldo
       %th.tip{:title => "Contado Crédito"} Tipo
       %th Fecha Hora
       %th
 
   %tbody
-    -  buys.each do |income|
+    -  buys.each do |buy|
       %tr{ :class => cycle(:odd, :even) }
         %td 
-          %span{:class => "#{income.real_state} tip", :title => income.show_state}
-        %td= link_to income.ref_number, income, :class => 'b'
-        %td= lo income.payment_date unless income.paid?
-        %td.cur= ntc exchange(income, :real_total, @currency_rates)
-        %td.cur= ntc exchange(income, :balance, @currency_rates)
-        %td.cur= ntc income.balance_inventory
-        %td <span>#{income.currency_symbol}</span>
-        %td= cash_credit(income.cash)
-        %td.nw= lo income.created_at
+          %span{:class => "#{buy.real_state} tip", :title => buy.show_state}
+        %td= link_to buy.ref_number, buy, :class => 'b'
+        %td= lo buy.payment_date unless buy.paid?
+        %td.cur #{buy.currency_symbol} #{ntc buy.total }
+        %td.cur #{buy.currency_symbol} #{ntc buy.balance }
+        %td.cur= ntc buy.balance_inventory
+        %td <span>#{buy.currency_symbol}</span>
+        %td= cash_credit(buy.cash)
+        %td.nw= lo buy.created_at
         %td.actions
-          = bonsai_links(income) if income.draft?
+          = bonsai_links(buy) if buy.draft?
 
 

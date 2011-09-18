@@ -7,7 +7,7 @@ class PaymentPresenter
     if @transaction.is_a? Income
       Account.org.contact_money(@transaction.contact_id)
     else
-      Account.org.contact_money(@transaction.contact_id)
+      Account.org.contact_money_buy(@transaction.contact_id)
     end
   end
 

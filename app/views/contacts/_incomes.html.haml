@@ -45,8 +45,8 @@
           %span{:class => "#{income.real_state} tip", :title => income.show_state}
         %td= link_to income.ref_number, income, :class => 'b'
         %td= lo income.payment_date unless income.paid?
-        %td.cur= ntc exchange(income, :real_total, @currency_rates)
-        %td.cur= ntc exchange(income, :balance, @currency_rates)
+        %td.cur #{income.currency_symbol} #{ntc income.total }
+        %td.cur #{income.currency_symbol} #{ntc income.balance }
         %td.cur= ntc income.balance_inventory
         %td <span>#{income.currency_symbol}</span>
         %td= cash_credit(income.cash)
