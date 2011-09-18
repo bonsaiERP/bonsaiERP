@@ -65,11 +65,17 @@ module Models::AccountLedger::Conciliation
     end
 
 
+    # Validates the amount for a contact depending the amount
     def valid_contact_amount
-      if ::Contact::TYPES.include?(account_original_type)
-        if currency_id and exchange_rate > 0
-          if -account.amount < amount_currency
-            self.errors[:amount]  << I18n.t("account_ledger.errors.invalid_amount") if 
+      if currency_id and exchange_rate > 0 and account_id.present?
+        if in?
+          if account.accountable_type === 'Contact' and account.amount.abs < amount
+            self.errors[:amount]  << I18n.t("account_ledger.errors.invalid_amount")
+            self.errors[:base]  << I18n.t("account_ledger.errors.invalid_amount")
+          end
+        elsif out? or trans?
+          if account.amount < amount.abs
+            self.errors[:amount]  << I18n.t("account_ledger.errors.invalid_amount")
             self.errors[:base]  << I18n.t("account_ledger.errors.invalid_amount")
           end
         end

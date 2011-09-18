@@ -17,11 +17,14 @@ class IncomesController < ApplicationController
   def index
     if params[:search].present?
       @incomes = Income.search(params)#.page(@page)
+      p = params.dup
+      p.delete(:option)
+      @count = Income.search(p)
     else
       params[:option] ||= "all"
       @incomes = Income.find_with_state(params[:option])
+      @count = Income.org
     end
-    @count = Income.org
   end
 
   # GET /incomes/1
@@ -124,9 +127,13 @@ class IncomesController < ApplicationController
   # PUT /incomes/:id/approve_credit
   def approve_credit
     @transaction = Income.org.find(params[:id])
-    @transaction.approve_credit params[:income]
+    if @transaction.approve_credit params[:income]
+      flash[:notice] = "Se aprobo correctamente el crédito"
+    else
+      flash[:error] = "Existio un error al aprobar el crédito"
+    end
 
-    render "approve_credit"
+    redirect_to @transaction
   end
 
 

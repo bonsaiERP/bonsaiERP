@@ -12,11 +12,14 @@ class BuysController < ApplicationController
   def index
     if params[:search].present?
       @buys = Buy.search(params)
+      p = params.dup
+      p.delete(:option)
+      @count = Buy.search(p)
     else
       params[:option] ||= "all"
       @buys = Buy.find_with_state(params[:option])
+      @count = Buy.org
     end
-    @count = Buy.org
   end
 0
   # GET /buys/1

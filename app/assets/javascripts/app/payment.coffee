@@ -6,8 +6,10 @@ class Payment
     @$amount    = $('#account_ledger_amount')
     @$interests = $('#account_ledger_interests_penalties')
     @$exchange  = $('#account_ledger_exchange_rate')
+    @$exchange.val(1) if @$exchange.val() * 1 == 0
 
     @.setEvents()
+    @.calculateTotal()
   # events
   setEvents: ->
     self = @
@@ -34,9 +36,6 @@ class Payment
       when val.match /^\d+$/
         val = val * 1
         @.showCurrency(@accounts[val].currency_id)
-      when val.match /^\d+-\d+/
-        arr = val.split("-")
-        @.showCurrency(arr[1] * 1)
       else
         @.showExchange(false)
   # Show currency
@@ -45,6 +44,7 @@ class Payment
     $("span.currency").html("(#{symbol})")
 
     @.showExchange currency_id != @currency_id
+    @$exchange.val(1) if currency_id == @currency_id
 
   # show the exchange
   showExchange: (val)->

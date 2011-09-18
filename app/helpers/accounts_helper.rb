@@ -149,7 +149,7 @@ module AccountsHelper
     when "Supplier"
       render "account_ledgers/contact_links", :plural => "Proveedores", :path => "/supliers"
     when "Staff"
-      render "account_ledgers/contact_links", :plural => "Personal", :paht => "/staffs"
+      render "account_ledgers/contact_links", :plural => "Personal", :path => "/staffs"
     when "Bank"
       render "account_ledgers/money_links", :plural => "Cuentas bancarias", :path => "/banks"
     when "Cash"

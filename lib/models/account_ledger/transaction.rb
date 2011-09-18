@@ -95,6 +95,11 @@ module Models::AccountLedger::Transaction
           self.errors[:amount] = I18n.t("errors.messages.payment.account_amount")
           return false
         end
+      elsif transaction.is_a?(Buy) and account.accountable_type === 'Contact'
+        if amount.abs > account.amount
+          self.errors[:amount] = I18n.t("errors.messages.payment.account_amount")
+          return false
+        end
       end
     end
 

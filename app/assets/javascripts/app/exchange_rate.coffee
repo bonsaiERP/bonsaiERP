@@ -3,6 +3,7 @@ class ExchangeRate
     @$input = $(@input)
     @$label = @$input.siblings 'label'
     @$hide  = @$input.parents "div:first"
+    @$rate  = $('account_ledger_exchange_rate')
 
     @$after = $('<span/>').insertAfter(@$input)
     @.setEvents()
@@ -13,6 +14,7 @@ class ExchangeRate
   setEvents: ->
     @.accountIdEvent()
     @.setEventForCalculation()
+  # Calculation events
   setEventForCalculation: ->
     self = @
 
@@ -43,8 +45,6 @@ class ExchangeRate
       switch
         when $(@).val().match /^\d+$/
           self.presentExchangeForAccount @.value
-        when $(@).val().match /^\d+-\d+/
-          self.presentExchangeForContact @.value
         else
           self.$hide.hide 'slow'
 
@@ -60,12 +60,6 @@ class ExchangeRate
     currency_id = @accounts[val * 1].currency_id
     @.presentHiddenDiv(currency_id)
 
-  #
-  presentExchangeForContact: (val)->
-    account = val.split("-")
-    currency_id = account[1] * 1
-
-    @.presentHiddenDiv(currency_id)
   #
   presentHiddenDiv: (currency_id)->
     if @currency_id == currency_id

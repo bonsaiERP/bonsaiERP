@@ -50,7 +50,7 @@ class Account < ActiveRecord::Base
     s.where( 
       s.table[:accountable_type].eq('Contact')
       .and(s.table[:accountable_id].in(account_ids))
-      .and(s.table[:amount].lt(0) )
+      .and(s.table[:amount].gt(0) )
       .or(s.table[:original_type].eq('Staff').and(s.table[:amount].gt(0)) )
       .or(s.table[:accountable_type].eq('MoneyStore'))
     ).order("accountable_type")

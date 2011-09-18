@@ -12,6 +12,7 @@ class AccountLedgersController < ApplicationController
   # GET /account_ledgers/:id
   def show
     @account_ledger = AccountLedger.org.find(params[:id])
+    @presenter = AccountLedgerPresenter.new(@account_ledger)
     @account_ledger.ac_id = params[:ac_id].to_i
   end
 
