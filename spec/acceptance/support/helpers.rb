@@ -139,6 +139,10 @@ module HelperMethods
     Supplier.create!(contact_parameters.merge(options))
   end
 
+  def create_staff(options)
+    Staff.create!(contact_parameters.merge(options))
+  end
+
   def set_exchange_rate
 
   end

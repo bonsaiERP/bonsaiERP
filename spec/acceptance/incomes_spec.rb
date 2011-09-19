@@ -75,11 +75,11 @@ feature "Income", "test features" do
     i.transaction_details[1].balance.should == 20
     i.transaction_details[1].original_price.should == 5
 
-    a1 = Account.find(i.account.id)
-    a1.accountable.should == client
-    a1.amount.should == 0
-    a2 = Account.org.find_by_original_type("Income")
-    a2.amount.should == 0
+    #a1 = Account.find(i.account.id)
+    #a1.accountable.should == client
+    #a1.amount.should == 0
+    #a2 = Account.org.find_by_original_type("Income")
+    #a2.amount.should == 0
 
     i.approve!.should == true
     i.reload

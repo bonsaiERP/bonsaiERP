@@ -14,8 +14,8 @@ module Models::Transaction::Payment
 
     with_options :if => :payment? do |pay|
       pay.validate :valid_number_of_legers
-      pay.before_save :set_account_ledger_extras#, :if => :payment?
-      pay.before_validation :set_account_ledger_exchange_rate#, :if => :payment
+      #pay.before_save :set_account_ledger_extras#, :if => :payment?
+      #pay.before_validation :set_account_ledger_exchange_rate#, :if => :payment
     end
   end
 
@@ -46,14 +46,15 @@ module Models::Transaction::Payment
     # - Update the account and to
     def save_payment
       return false unless payment?
-      return false unless valid_account_ledger? # Don't use valid_ledger? when set @current_ledger otherwise validations are run twice
+      #return false unless valid_account_ledger? # Don't use valid_ledger? when set @current_ledger otherwise validations are run twice
 
       mark_paid_pay_plans if credit? # anulate pay_plans if credit
 
-      self.balance = balance - @current_ledger.amount_currency
+      self.balance = balance - @current_ledger.amount_currency.abs
       self.state = 'paid' if balance <= 0
 
       set_current_ledger_data
+      set_account_ledger_extras
 
       res = true
       self.class.transaction do
@@ -175,8 +176,12 @@ module Models::Transaction::Payment
     end
 
     def set_account_ledger_staff
-      if @current_ledger.account.original_type === 'Staff'
-        @current_ledger.staff_id = @current_ledger.account.accountable_id
+      begin
+        if @current_ledger.account.original_type === 'Staff'
+          puts "Setting staff #{@current_ledger.account.accountable_id}"
+          @current_ledger.staff_id = @current_ledger.account.accountable_id
+        end
+      rescue
       end
     end
 
