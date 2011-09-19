@@ -21,7 +21,17 @@ class StaffsController < ApplicationController
   # GET /staffs/1
   # GET /staffs/1.xml
   def show
-    super @staff
+    params[:tab] = "transactions"
+    params[:option] = "all" unless ["all", "con", "pendent", "nulled"].include?(params[:option])
+    @partial = "contacts/account_ledgers"
+    @ledgers = AccountLedger.staff(@staff.id)
+    @ledgers = @ledgers.send(params[:option]) unless params[:option] === "all"
+
+    @locals = {
+      :ledgers => @ledgers.page(@page),
+      :pendent => AccountLedger.staff(@staff.id).send(:pendent).size,
+      :contact => @staff
+    }
   end
 
   # GET /staffs/new

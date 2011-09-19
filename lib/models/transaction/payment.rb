@@ -66,6 +66,7 @@ module Models::Transaction::Payment
     end
 
     private
+
     def set_current_ledger_data
       set_account_ledger_description
       @current_ledger.contact_id = contact_id
@@ -170,6 +171,13 @@ module Models::Transaction::Payment
 
     def set_account_ledger_extras
       set_account_ledger_description
+      set_account_ledger_staff
+    end
+
+    def set_account_ledger_staff
+      if @current_ledger.account.original_type === 'Staff'
+        @current_ledger.staff_id = @current_ledger.account.accountable_id
+      end
     end
 
     def set_account_ledger_description

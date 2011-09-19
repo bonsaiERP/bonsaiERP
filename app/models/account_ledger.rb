@@ -66,6 +66,11 @@ class AccountLedger < ActiveRecord::Base
   scope :con,     where(:conciliation => true)
   scope :nulled,  where(:active => false)
   scope :active,  where(:active => true)
+  scope :staff,   lambda{|st_id|
+    s = AccountLedger.scoped
+    where(s.table[:contact_id].eq(st_id).or(s.table[:staff_id].eq(st_id) ) )
+    .order("created_at DESC")
+  }
 
   # delegates
   # currency
