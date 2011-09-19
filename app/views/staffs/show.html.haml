@@ -23,13 +23,6 @@
 
 .clear
 
--#= jquery_tabs :tab_id => "contact_tab" do
-  =jqueryui_ul do
-    =tab "Transacciones", staff_path(@staff, :tab => 'transactions'), "transactions"
-    =tab "Ventas", staff_path(@staff, :tab => 'incomes'),"incomes"
-    =tab "Compras", staff_path(@staff, :tab => 'buys'),"buys"
-    =tab "Gastos", staff_path(@staff, :tab => 'expenses'),"expenses"
-    
 %h2 Transacciones
 = render @partial, @locals
 

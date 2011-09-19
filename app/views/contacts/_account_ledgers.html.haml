@@ -24,8 +24,7 @@
       (A) Anulado por
     %th
   - ledgers.each do |al|
-    -# al.ac_id = account.id
-    %tr{:class => al.in_out, :id => "tr#{al.id}" }
+    %tr{:class => "#{al.in_out} #{al.active}", :id => "tr#{al.id}" }
       %td.d.check
         = link_to lo(al.created_at), account_ledger_path(al), :class => "b #{conciliate_css(al)}"
         %br/
