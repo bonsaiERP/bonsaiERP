@@ -161,7 +161,7 @@ module AccountsHelper
     if ledger.account_id === account.id
       ledger.amount
     else
-      ledger.amount_currency
+      -ledger.amount_currency
     end
   end
 
@@ -207,14 +207,18 @@ module AccountsHelper
     end
   end
 
-  def red_pendent_account_link(account, options = {})
-    count = account.get_ledgers.pendent.count
+  def pendent_money_link(money, options = {})
+    count = money.account.get_ledgers.pendent.count
 
     if count > 0
       txt = "Tiene (#{count})"
       txt << ( count > 1 ? " transaccciones" : " transacción" )
       txt << " Esperando verificación"
-      link_to txt, url_for(params.merge(:option => 'uncon')), options
+      if money.is_a?(Bank)
+        link_to txt, bank_path(money, :option => 'uncon'), options
+      else
+        link_to txt, cash_path(money, :option => 'uncon'), options
+      end
     end
   end
 

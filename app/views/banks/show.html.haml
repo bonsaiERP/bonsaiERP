@@ -8,7 +8,7 @@
 %h1.mb5 <span class="n">#{@bank.name}</span> <small class="tip" title="Número de cuenta">#{@bank.number}</small> <small class="n">(#{@account.currency_name.pluralize})</small>
 %hr/
 
-= red_pendent_account_link(@account, :class => 'red b fs120')
+= pendent_money_link(@bank, :class => 'red b fs120')
 .clear
 
 .moneybox.fl

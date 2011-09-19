@@ -17,7 +17,6 @@
           %label Total en cuenta
           %h3= with_currency cash.account, :amount
 
-        = red_pendent_account_link(cash.account, :class => 'b fs110')
-
+        = pendent_money_link(cash, :class => 'b fs110')          
       .clear
 
