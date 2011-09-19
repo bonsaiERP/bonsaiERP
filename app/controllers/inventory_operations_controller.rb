@@ -104,7 +104,7 @@ class InventoryOperationsController < ApplicationController
       @transactions = Income.org.inventory.page(@page)
     else
       redirect_to "/422" unless User::ROLES.slice(0,2).include? session[:user][:rol]
-      @transactions = Buy.org.inventory.page(@page)
+      @transactions = Buy.org.deliver.page(@page)
     end
   end
 
