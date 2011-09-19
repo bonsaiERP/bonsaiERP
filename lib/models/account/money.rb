@@ -18,15 +18,16 @@ module  Models::Account
 
       private
       def create_new_account
-        self.build_account(
+        ac = self.build_account(
           :currency_id => currency_id,
           :account_type_id => AccountType.org.find_by_account_number(self.class.to_s).id,
         ) {|a|
           a.organisation_id = OrganisationSession.organisation_id
           a.original_type = self.class.to_s
-          a.amount = self.amount
-          a.name = self.to_s
+          a.amount = amount
+          a.name = to_s
         }
+        ledger = ac.account_ledgers.build(:exchange_rate => 1, :currency_id => ac.currency_id, :reference => I18n.t("account_ledger.initial_money"), :operation => "in", :amount => amount) {|al| conciliation = true}
       end
 
       def set_account_name

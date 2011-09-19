@@ -176,7 +176,7 @@ module AccountsHelper
   def link_related_ledger_account(al, money)
     if al.transaction_id.present?
       link_to al.transaction, al.transaction
-    else
+    elsif al.to_id.present?
       ac = al.account_accountable_id == money.id ? :to : :account
 
       if al.operation === 'trans'
