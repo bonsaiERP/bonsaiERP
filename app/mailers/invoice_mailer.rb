@@ -20,7 +20,11 @@ class InvoiceMailer < ActionMailer::Base
     inv = InvoicePdf.new( @transaction )
     name = "#{Rails.root}/tmp/pdfs/#{ Time.now.to_f }_#{@transaction.id}.pdf"
     inv.generate_pdf(name)
-    attachments["nota_de_venta.pdf"] = File.read(name)
+    if @transaction.draft?
+      attachments["proforma_de_venta.pdf"] = File.read(name)
+    else
+      attachments["nota_de_venta.pdf"] = File.read(name)
+    end
     File.delete(name)
   end
 

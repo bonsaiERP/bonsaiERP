@@ -17,7 +17,7 @@ class Buy < Transaction
   validates             :ref_number,           :presence => true , :uniqueness => { :scope => :organisation_id, :allow_blank => false}
   validate              :valid_number_of_items
 
-  scope :deliver, where("transactions.state != ? AND delivered = ?", 'draft', false)
+  scope :deliver, where("transactions.state NOT IN (?) AND delivered = ?", ['draft', 'nulled'], false)
 
   def to_s
     "Compra #{ref_number}"

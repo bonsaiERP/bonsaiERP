@@ -30,6 +30,7 @@ class IncomesController < ApplicationController
   # GET /incomes/1
   # GET /incomes/1.xml
   def show
+    #@presenter = TransactionPresenter.new(@transaction)
     respond_to do |format|
       format.html { render 'transactions/show' }
       format.json  { render :json => @transaction }

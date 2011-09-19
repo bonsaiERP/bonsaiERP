@@ -25,6 +25,7 @@ class BuysController < ApplicationController
   # GET /buys/1
   # GET /buys/1.xml
   def show
+    @presenter = TransactionPresenter.new(@transaction)
     respond_to do |format|
       format.html { render 'transactions/show' }
       format.xml  { render :xml => @transaction }
