@@ -7,8 +7,7 @@ class BasePdf < Prawn::Document
   include ActionView::Helpers::NumberHelper 
 
   def initialize
-    #super :template => File.join(Rails.public_path, 'resources/seema_template.pdf'), :margin => [90, 20, 30] 
-    @marg = 25
+    @marg = 20
     @topmarg = 30
     @bottommarg = 38
     super :margin => [@topmarg.mm, @marg.mm, @bottommarg.mm, @marg.mm]

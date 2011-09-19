@@ -27,7 +27,7 @@
     %tr.extra
       %td
       %td.r{:colspan => 3} #{minus_image} Descuento (<span id="discount_percentage" data-val="#{transaction.total_discount}">#{ntc transaction.discount}</span>%)
-      %td#discount_total.r= ntc transaction.total_discount
+      %td#discount_total.r= ntc -transaction.total_discount
 
     %tr.extra
       %td

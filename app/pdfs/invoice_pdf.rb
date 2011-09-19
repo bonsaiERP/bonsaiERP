@@ -51,8 +51,9 @@ class InvoicePdf < BasePdf
 
   # Creates the table with the data of details
   def create_transaction_details
-    table([["<b>Item</b>", "<b>Precio\nUnitario</b>", '<b>Cantidad</b>', "<b>Total\nFila</b>"]] + create_table_data, :header => true, 
-          :column_widths => [210, 80, 80, 80], :width => 450, :cell_style => {:border_width => 0.3, :inline_format => true} ) do
+    table([["<b>Item</b>", "<b>Precio\nUnitario #{@transaction.currency_symbol}</b>", 
+            '<b>Cantidad</b>', "<b>Total\nFila #{@transaction.currency_symbol}</b>"]] + create_table_data, :header => true, 
+          :column_widths => [280, 70, 70, 80], :width => 500, :cell_style => {:border_width => 0.3, :inline_format => true} ) do
       style(row(0), :background_color => 'efefef')
       style(column(1)) { |c| c.align= :right }
       style(column(2)) { |c| c.align= :right }
@@ -72,14 +73,13 @@ class InvoicePdf < BasePdf
   # Creates te totals for the invoice
   def create_totals
     org = OrganisationSession
-    arr = [["Subtotal:",   "#{org.currency_symbol} #{number_to_currency(@transaction.total)}"]]
-    arr << ["Descuentos: #{number_to_currency(@transaction.discount)}",   "#{org.currency_symbol} #{number_to_currency(@transaction.total_taxes)}"] if @transaction.discount.present? and @transaction.discount > 0
-    arr << ["Impuestos:",   "#{org.currency_symbol} #{number_to_currency(@transaction.total_taxes)}"] if @transaction.tax_percent.present? and @transaction.tax_percent > 0
+    arr = [["Subtotal:",   "#{number_to_currency(@transaction.total)}"]]
+    arr << ["Descuentos (#{number_to_currency(@transaction.discount)} %):", "- #{number_to_currency(@transaction.total_discount)}"] if @transaction.discount.present? and @transaction.discount > 0
+    arr << ["Impuestos (#{@transaction.tax_percent} %):", "#{number_to_currency(@transaction.total_taxes)}"] if @transaction.tax_percent.present? and @transaction.tax_percent > 0
 
-    arr << ["<b>Total #{org.currency_name.pluralize}</b>", "<b>#{org.currency_symbol} #{number_to_currency(@transaction.total)}</b>"]
-    arr << ["<b>Total #{@transaction.currency_name.pluralize}</b>", "<b>#{@transaction.currency_symbol} #{number_to_currency(@transaction.total_currency)}</b>"] unless org.currency_id == @transaction.currency_id
+    arr << ["<b>Total</b>", "<b>#{@transaction.currency_symbol} #{number_to_currency(@transaction.total)}</b>"]
 
-    table(arr, :width => 450, :column_widths => [370, 80], :cell_style => {:border_width => 0, :align => :right, :inline_format => true } )
+    table(arr, :width => 500, :column_widths => [420, 80], :cell_style => {:border_width => 0, :align => :right, :inline_format => true } )
   end
 
 
