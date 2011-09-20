@@ -12,7 +12,7 @@
 
 #resume.tour_part
   %h2 Resumen
-  = image_tag "tour_dashboard.png", :class => 'img'
+  = image_tag "resumen.jpg", :width => "500px", :class => 'img'
   .comment
     %p 
       Esta es la primera pantalla que aparecerá al ingresar a su “oficina virtual”. 
@@ -20,7 +20,7 @@
 
 #sales.tour_part
   %h2 Compras y Ventas
-  = image_tag "tour_ventas.png", :class => 'img'
+  = image_tag "sales_buys.jpg", :width => "500px", :class => 'img'
   .comment
     %p bonsai controla sus compras y ventas:
     %ul
@@ -31,6 +31,7 @@
 
 #inventory.tour_part
   %h2 Inventarios
+  = image_tag "inventarios.jpg", :width => "500px", :class => 'img'
   .comment
     %p Puede saber cuánto tiene el momento que usted quiera.
 
@@ -43,20 +44,24 @@
 
 #banks.tour_part
   %h2 Cuentas Bancarias y Cajas
-  %p Usted puede controlar los movimientos de sus cuentas bancarias o cajas.
+  = image_tag "accounts.jpg", :width => "500px", :class => 'img'
+  .comment
+    %p Usted puede controlar los movimientos de sus cuentas bancarias o cajas.
 
-  %ul
-    %li Puede crear las cuentas bancarias y cajas que necesite.
-    %li Registra los movimientos que se han realizado. bonsai le avisa las transacciones que faltan ser revisadas o conciliadas. 
+    %ul
+      %li Puede crear las cuentas bancarias y cajas que necesite.
+      %li Registra los movimientos que se han realizado. bonsai le avisa las transacciones que faltan ser revisadas o conciliadas. 
 
 
 #clients.tour_part
   %h2 Clientes y Proveedores
-  %p Sepa de un vistazo sus cuentas por pagar y cobrar.
-  %ul
-    %li Registra a sus clientes y proveedores creándoles cuentas independientes.
-    %li Registra las cuentas por pagar y cobrar de clientes y proveedores. Además que bonsai le hará recuerdo cuando vence alguna cuenta por cobrar o pagar.
-    %li Puede almacenar los datos más relevantes de sus clientes y proveedores.
+  = image_tag "clients_suppliers.jpg", :width => "500px", :class => 'img'
+  .comment
+    %p Sepa de un vistazo sus cuentas por pagar y cobrar.
+    %ul
+      %li Registra a sus clientes y proveedores creándoles cuentas independientes.
+      %li Registra las cuentas por pagar y cobrar de clientes y proveedores. Además que bonsai le hará recuerdo cuando vence alguna cuenta por cobrar o pagar.
+      %li Puede almacenar los datos más relevantes de sus clientes y proveedores.
 
 .clear
 =link_to "Regresar al Principio.", "#header"
