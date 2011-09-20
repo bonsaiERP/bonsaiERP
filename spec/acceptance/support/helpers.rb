@@ -51,6 +51,7 @@ module HelperMethods
     create_organisation
   end
 
+  # Creates items with the defined ids
   def create_items
     YAML.load_file("#{Rails.root}/spec/factories/items.yml").each do |it|
       Item.create!(it) {|item| item.id = it["id"] }

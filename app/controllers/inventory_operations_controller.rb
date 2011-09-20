@@ -119,9 +119,18 @@ class InventoryOperationsController < ApplicationController
   def check_buy_in(transaction)
     if transaction.is_a?(Buy)
       unless User::ROLES.slice(0,2).include? session[:user][:rol]
-        flash[:warning] = "Usted no tiene permitida esta acción"
+        #flash[:warning] = "Usted no tiene permitida esta acción"
         redirect_to "/422"
       end
+    elsif not(transaction.draft?)
+      if transaction.delivered?
+        flash[:warning] = "Se ha completado las operaciones en inventarios"
+        redirect_to "/dashboard"
+      elsif not(transaction.deliver?)
+        redirect_to "/422"
+      end
+    else
+      redirect_to "/422"
     end
   end
 end

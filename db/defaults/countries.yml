@@ -2,14 +2,6 @@
 - id: 1
   name: Bolivia
   abbreviation: bo
-  taxes:
-    - name: 'IVA + IT'
-      rate: 16
-      abbreviation: 'IVA, IT'
 - id: 2
   name: Estados Unidos
   abbreviation: usa
-  taxes:
-    - name: 'Test'
-      rate: 5
-      abbreviation: 'test'

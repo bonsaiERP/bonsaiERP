@@ -104,7 +104,7 @@ protected
 
   # Creates all registers needed when an organisation is created
   def create_all_records
-    build_taxes
+    #build_taxes
     build_units
     build_account_types
   end

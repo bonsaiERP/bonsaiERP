@@ -60,6 +60,7 @@ class Item < ActiveRecord::Base
   scope :buy      , where(["ctype IN (?) AND active = ?", ['item', 'product', 'service'], true])
   scope :expense  , where(["ctype IN (?) AND active = ?", ['expense'], true])
   scope :inventory, where(["ctype IN (?)", ["item", "product"] ])
+  scope :service  , where(:ctype => 'service')
 
   def to_s
     "#{code} - #{name}"

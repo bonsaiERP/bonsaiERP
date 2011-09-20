@@ -1,26 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>The page you were looking for doesn't exist (404)</title>
+  <title>La página que busca no existe (404)</title>
+  <meta content='text/html;charset=UTF-8' http-equiv='content-type'>
   <style type="text/css">
-    body { background-color: #fff; color: #666; text-align: center; font-family: arial, sans-serif; }
-    div.dialog {
-      width: 25em;
+    body.error-page { background-color: #fff; color: #333; text-align: center; font-family: arial, sans-serif; }
+    .error-page div.dialog {
+      width: 40em;
       padding: 0 4em;
       margin: 4em auto 0 auto;
       border: 1px solid #ccc;
       border-right-color: #999;
       border-bottom-color: #999;
     }
-    h1 { font-size: 100%; color: #f00; line-height: 1.5em; }
+    .error-page h1 { font-size: 1.2em; color: #651010; line-height: 1.5em; font-weight: normal; }
+    .error-page a{color: #095495; text-decoration: underline;}
+    .error-page a:hover{text-decoration: none;}
   </style>
 </head>
 
-<body>
-  <!-- This file lives in public/404.html -->
+<body class="error-page">
   <div class="dialog">
-    <h1>The page you were looking for doesn't exist.</h1>
-    <p>You may have mistyped the address or the page may have moved.</p>
+    <h1>La página que busca no existe.</h1>
+    <p>Es probable que haya escrito mal la dirección. Haga clíck <a href="http://bonsaierp.com">aquí</a> para ir a la página principal</p>
   </div>
 </body>
 </html>

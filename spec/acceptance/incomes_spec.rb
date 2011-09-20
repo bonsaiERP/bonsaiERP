@@ -13,6 +13,7 @@ feature "Income", "test features" do
 
   let!(:organisation) { create_organisation(:id => 1) }
   let!(:items) { create_items }
+  let(:item_ids) {Item.org.map(&:id)}
   let!(:bank) { create_bank(:number => '123', :amount => 0) }
   let(:bank_account) { bank.account }
   let!(:client) { create_client(:matchcode => 'Karina Luna') }
@@ -23,6 +24,7 @@ feature "Income", "test features" do
         "exchange_rate"=>1, "currency_id"=>1, "date"=>d, 
         "description"=>"Esto es una prueba", "discount" => 3, "project_id"=>1 
       }
+
       details = [
         { "description"=>"jejeje", "item_id"=>1, "organisation_id"=>1, "price"=>3, "quantity"=> 10},
         { "description"=>"jejeje", "item_id"=>2, "organisation_id"=>1, "price"=>5, "quantity"=> 20}

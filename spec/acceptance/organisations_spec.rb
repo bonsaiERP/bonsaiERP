@@ -20,7 +20,7 @@ feature "Organisations", "In order to create an organisation I must login" do
     o.save.should == true
 
     o.reload
-    o.taxes.map(&:organisation_id).uniq.should == [o.id]
+    o.taxes.map(&:organisation_id).uniq.should be_empty
     o.units.map(&:organisation_id).uniq.should == [o.id]
     o.account_types.map(&:organisation_id).uniq.should == [o.id]
     o.account_types.map(&:account_number).uniq.include?(nil).should == false

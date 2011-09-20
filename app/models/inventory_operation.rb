@@ -210,6 +210,7 @@ class InventoryOperation < ActiveRecord::Base
 
   # Checks if the items in the list are valid and not repeated
   def valid_transaction_items?
+    puts ":: t_id: #{transaction}"
     trans_det_ids = transaction.transaction_details.map(&:item_id)
 
     inventory_operation_details.each do |det|

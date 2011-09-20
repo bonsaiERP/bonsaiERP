@@ -12,6 +12,8 @@ class InventoryOperationDetail < ActiveRecord::Base
   validates_presence_of :item_id, :quantity
   validates_numericality_of :quantity
 
+  delegate :service?, :product?, :name, :price, :to => :item, :prefix => true, :allow_nil => true
+
   # Setter for @transaction
   def set_transaction=(val)
     @transaction = val

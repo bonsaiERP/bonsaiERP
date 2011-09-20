@@ -14,6 +14,8 @@ feature "Inventory Operation", "Test IN/OUT" do
     create_items
   end
 
+  let(:item_service) { Item.org.service.first }
+
   let!(:organisation) { create_organisation(:id => 1) }
   let!(:supplier) { create_supplier(:matchcode => 'Proveedor 1')}
   let!(:client) { create_client(:matchcode => 'Cliente 1')}
@@ -24,8 +26,8 @@ feature "Inventory Operation", "Test IN/OUT" do
       "description"=>"Esto es una prueba", "discount" => 3, "project_id"=>1 
     }
     details = [
-      { "description"=>"jejeje", "item_id"=>1, "organisation_id"=>1, "price"=>3, "quantity"=> 10},
-      { "description"=>"jejeje", "item_id"=>2, "organisation_id"=>1, "price"=>5, "quantity"=> 20}
+      { "description"=>"jejeje", "item_id"=> 1, "organisation_id"=>1, "price"=>3, "quantity"=> 10},
+      { "description"=>"jejeje", "item_id"=> 2, "organisation_id"=>1, "price"=>5, "quantity"=> 20}
     ]
     i_params[:transaction_details_attributes] = details
     i_params
@@ -299,5 +301,48 @@ feature "Inventory Operation", "Test IN/OUT" do
 
     b.reload
     b.delivered.should be_true
+  end
+
+  scenario "Make OUT for a service should not change inventory" do
+    i_params = income_params.dup
+    i_params[:transaction_details_attributes] << {"item_id" => 5, :quantity => 5, "price" => 10}
+    i_params["discount"] = 0
+    i = Income.new(i_params)
+
+    i.transaction_details.last.item.should be_service
+    i.save_trans.should == true
+    i.should be_persisted
+    i.should be_persisted
+
+    i.approve!.should be_true
+    i.discount.should == 0
+    i.total_discount.should == 0
+    i.total_taxes.should == 0
+
+    # To allow deliver
+    i.stubs(:deliver => true)
+    i.deliver.should be_true
+
+    hash = {:date => Date.today, :contact_id => 1, :operation => 'out', :store_id => 1, :transaction_id => i.id }
+
+    hash = {:ref_number => 'I-0012', :date => Date.today, :contact_id => 1, :operation => 'in', :store_id => 1,
+      :inventory_operation_details_attributes => [
+        {:item_id => 1, :quantity => 0},
+        {:item_id => 2, :quantity => 0},
+        {:item_id => 5, :quantity => 3}
+      ]
+    }
+
+
+    io = InventoryOperation.new(hash)
+    #puts hash[:inventory_operation_details_attributes].size
+    #puts io.inventory_operation_details.size
+
+    #io.inventory_operation_details.size.should == 1
+    puts "-" * 50
+    puts i
+    io.save_transaction.should be_true
+    io.should be_persisted
+
   end
 end

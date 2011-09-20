@@ -1,26 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>We're sorry, but something went wrong (500)</title>
+  <title>Lo sentimos pero algo fue mal (error-page)</title>
+  <meta content='text/html;charset=UTF-8' http-equiv='content-type'>
   <style type="text/css">
-    body { background-color: #fff; color: #666; text-align: center; font-family: arial, sans-serif; }
-    div.dialog {
-      width: 25em;
+    body.error-page { background-color: #fff; color: #333; text-align: center; font-family: arial, sans-serif; }
+    .error-page div.dialog {
+      width: 40em;
       padding: 0 4em;
       margin: 4em auto 0 auto;
       border: 1px solid #ccc;
       border-right-color: #999;
       border-bottom-color: #999;
     }
-    h1 { font-size: 100%; color: #f00; line-height: 1.5em; }
+    .error-page h1 { font-size: 1.2em; color: #651010; line-height: 1.5em; font-weight: normal; }
+    .error-page a{color: #095495; text-decoration: underline;}
+    .error-page a:hover{text-decoration: none;}
   </style>
 </head>
 
-<body>
-  <!-- This file lives in public/500.html -->
+<body class="error-page">
   <div class="dialog">
-    <h1>We're sorry, but something went wrong.</h1>
-    <p>We've been notified about this issue and we'll take a look at it shortly.</p>
+    <h1>Lo sentimos pero algo fue mal.</h1>
+    <p>Revisaremos el problema lo antes posible, gracias por su comprensión</p>
   </div>
 </body>
 </html>
