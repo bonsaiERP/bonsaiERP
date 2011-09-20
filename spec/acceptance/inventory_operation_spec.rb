@@ -320,12 +320,12 @@ feature "Inventory Operation", "Test IN/OUT" do
     i.total_taxes.should == 0
 
     # To allow deliver
-    i.stubs(:deliver => true)
-    i.deliver.should be_true
+    i.deliver = true
+    i.save.should be_true
 
-    hash = {:date => Date.today, :contact_id => 1, :operation => 'out', :store_id => 1, :transaction_id => i.id }
 
     hash = {:ref_number => 'I-0012', :date => Date.today, :contact_id => 1, :operation => 'in', :store_id => 1,
+      :transaction_id => i.id,
       :inventory_operation_details_attributes => [
         {:item_id => 1, :quantity => 0},
         {:item_id => 2, :quantity => 0},
@@ -333,16 +333,43 @@ feature "Inventory Operation", "Test IN/OUT" do
       ]
     }
 
-
     io = InventoryOperation.new(hash)
-    #puts hash[:inventory_operation_details_attributes].size
-    #puts io.inventory_operation_details.size
 
-    #io.inventory_operation_details.size.should == 1
-    puts "-" * 50
-    puts i
+    io.inventory_operation_details.size.should == 3
     io.save_transaction.should be_true
     io.should be_persisted
 
+    i.reload
+    i.transaction_details.last.balance.should == 2
+
+    hash = {:ref_number => 'I-0012', :date => Date.today, :contact_id => 1, :operation => 'in', :store_id => 1,
+      :transaction_id => i.id,
+      :inventory_operation_details_attributes => [
+        {:item_id => 1, :quantity => 0},
+        {:item_id => 2, :quantity => 0},
+        {:item_id => 5, :quantity => 3}
+      ]
+    }
+
+    # Exeed the quantity in the balance of a transaction item
+    io = InventoryOperation.new(hash)
+    io.save_transaction.should be_false
+    io.inventory_operation_details[2].errors[:quantity].should_not be_blank
+
+    hash = {:ref_number => 'I-0012', :date => Date.today, :contact_id => 1, :operation => 'in', :store_id => 1,
+      :transaction_id => i.id,
+      :inventory_operation_details_attributes => [
+        {:item_id => 1, :quantity => 0},
+        {:item_id => 2, :quantity => 0},
+        {:item_id => 5, :quantity => 2}
+      ]
+    }
+
+    io = InventoryOperation.new(hash)
+    io.save_transaction.should be_true
+    io.should be_persisted
+
+    i.reload
+    i.transaction_details.last.balance.should == 0
   end
 end

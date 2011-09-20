@@ -165,13 +165,15 @@ class InventoryOperation < ActiveRecord::Base
         t_det = trans_dets.find {|d| d.item_id === det.item_id }
         t_det.balance -= det.quantity
 
-        if transaction.is_a?(Income)
-          q = avai_stocks[det.item_id] - det.quantity
-        else
-          q = avai_stocks[det.item_id] + det.quantity
+        unless is_item_service?(det.item_id)
+          if transaction.is_a?(Income)
+            q = avai_stocks[det.item_id] - det.quantity
+          else
+            q = avai_stocks[det.item_id] + det.quantity
+          end
+          
+          store.stocks.build(:item_id => det.item_id, :quantity => q)
         end
-        
-        store.stocks.build(:item_id => det.item_id, :quantity => q)
       end
       
       set_transaction_delivered
@@ -191,6 +193,12 @@ class InventoryOperation < ActiveRecord::Base
   end
 
   protected
+
+  # To determine if an item is service and not to update stock
+  def is_item_service?(i_id)
+    @service_item_ids ||= Item.org.service.where(:id => item_ids)[:id]
+    @service_item_ids.include?(i_id)
+  end
   
   # sets the delivered if all the balances are 0
   def set_transaction_delivered
@@ -210,7 +218,6 @@ class InventoryOperation < ActiveRecord::Base
 
   # Checks if the items in the list are valid and not repeated
   def valid_transaction_items?
-    puts ":: t_id: #{transaction}"
     trans_det_ids = transaction.transaction_details.map(&:item_id)
 
     inventory_operation_details.each do |det|
@@ -254,9 +261,11 @@ class InventoryOperation < ActiveRecord::Base
         next
       end
 
-      if avai_stocks[io_det.item_id] < io_det.quantity
-        io_det.errors[:quantity] << I18n.t("errors.messages.inventory_operation_detail.stock_quantity") 
-        valid_det = false
+      unless is_item_service?(io_det.item_id)
+        if avai_stocks[io_det.item_id] < io_det.quantity
+          io_det.errors[:quantity] << I18n.t("errors.messages.inventory_operation_detail.stock_quantity") 
+          valid_det = false
+        end
       end
 
       # For operations of in out in a Income
