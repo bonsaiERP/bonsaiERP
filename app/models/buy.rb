@@ -5,9 +5,6 @@ class Buy < Transaction
 
   after_initialize :set_ref_number, :if => :new_record?
 
-  belongs_to :supplier, :foreign_key => 'contact_id'
-
-
   attr_accessible  :ref_number,  :date,                          :contact_id,
                    :project_id,  :currency_id,                   :exchange_rate,
                    :bill_number, :taxis_ids,                     :description,

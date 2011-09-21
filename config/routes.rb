@@ -51,6 +51,7 @@ Bonsaierp::Application.routes.draw do
     member do
       put 'approve'
       put 'approve_credit'
+      put 'approve_deliver'
     end
   end
 

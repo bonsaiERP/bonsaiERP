@@ -407,7 +407,6 @@ ActiveRecord::Schema.define(:version => 20110919150401) do
   add_index "stocks", ["quantity"], :name => "index_stocks_on_quantity"
   add_index "stocks", ["state"], :name => "index_stocks_on_state"
   add_index "stocks", ["store_id"], :name => "index_stocks_on_store_id"
-  add_index "stocks", ["updated_at"], :name => "index_stocks_on_updated_at"
   add_index "stocks", ["user_id"], :name => "index_stocks_on_user_id"
 
   create_table "stores", :force => true do |t|

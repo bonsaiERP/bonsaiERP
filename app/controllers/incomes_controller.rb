@@ -30,7 +30,7 @@ class IncomesController < ApplicationController
   # GET /incomes/1
   # GET /incomes/1.xml
   def show
-    #@presenter = TransactionPresenter.new(@transaction)
+    @presenter = TransactionPresenter.new(@transaction)
     respond_to do |format|
       format.html { render 'transactions/show' }
       format.json  { render :json => @transaction }
@@ -137,6 +137,17 @@ class IncomesController < ApplicationController
     redirect_to @transaction
   end
 
+  def approve_deliver
+    @transaction = Income.org.find(params[:id])
+
+    if @transaction.approve_deliver
+      flash[:notice] = "Se aprobo la entrega de material"
+    else
+      flash[:error] = "Existio un error al aprobar la entrega de material"
+    end
+    
+    redirect_to @transaction
+  end
 
 private
   #def set_default_currency

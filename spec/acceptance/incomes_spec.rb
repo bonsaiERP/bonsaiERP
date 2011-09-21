@@ -238,6 +238,12 @@ feature "Income", "test features" do
 
     p.conciliate_account.should == true
 
+    # approve deliver for the income
+    i.approve_deliver.should be_true
+    i.deliver_approver_id.should == UserSession.user_id
+    i.deliver_datetime.class.should == ActiveSupport::TimeWithZone
+    i.should be_deliver
+
     p.reload
     p.should be_conciliation
     

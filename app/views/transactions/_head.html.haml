@@ -21,6 +21,21 @@
     = simple_form_for @transaction, :url => "/#{params[:controller]}/#{ @transaction.id }/approve", :html => {:id => 'approve_form'} do |f|
       .submit
         =f.submit "Aprobar", :class => 'dark_green', :id => 'income_approve_button'
+  - if @presenter.approve_deliver?(session)
+    = simple_form_for @transaction, :url => approve_deliver_income_path(@transaction), :html => {:id => 'approve_deliver_form'} do |f|
+      .submit
+        =f.submit "Aprobar entregas", :class => 'dark_green', :id => 'approve_deliver_button'
+    :javascript
+      $(function() {
+        $('#approve_deliver_form').submit(function() { 
+        if(confirm("Esta seguro de aprobar las entregas?")) {
+          return true;
+        }else{
+          return false;
+        }
+        });
+      })
+
 .clear
   .input
     / Currency
