@@ -119,11 +119,10 @@ class Transaction < ActiveRecord::Base
       t = Buy.new( attributes )
     end
 
-    t.transaction_details_attributes = transaction_details.map do |det|
-      h = det.attributes
-      h["id"] = nil
-      h["transaction_id"] = nil
-      h
+    transaction_details.each do |det|
+      t.transaction_details.build(:item_id => det.item_id, :quantity => det.quantity, :price => det.price) {|d|
+        d.original_price = det.original_price
+      }
     end
 
     t.taxis_ids = self.taxis_ids
