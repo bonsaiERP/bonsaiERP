@@ -2,9 +2,6 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class IncomesController < ApplicationController
-
-  #include Controllers::Transactions
-
   before_filter :check_authorization!
   #before_filter :check_currency_set, :only => [:new, :edit, :create, :update]
   before_filter :set_currency_rates, :only => [:index, :show]

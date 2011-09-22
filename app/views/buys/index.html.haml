@@ -12,9 +12,9 @@
 %ul.tabs
   %li= link_option "Todas", "all"
   %li= link_option "Proformas", "draft"
-  %li= link_option "Esperando pago #{size_or_blank(@buys.approved.size)}",  "awaiting_payment"
-  %li= link_option "Vencidas #{size_or_blank(@buys.due.size)}", "due"
-  %li= link_option "Con inventario pendiente #{size_or_blank(@buys.inventory.size)}" , "inventory"
+  %li= link_option "Esperando pago #{size_or_blank(@count.approved.size)}",  "awaiting_payment"
+  %li= link_option "Vencidas #{size_or_blank(@count.due.size)}", "due"
+  %li= link_option "Con inventario pendiente #{size_or_blank(@count.inventory.size)}" , "inventory"
   %li= link_option "Pagadas", "paid"
   %li= link_option "Anuladas", "nulled"
 
