@@ -20,8 +20,10 @@
 
 :javascript
   $(function() {
-    $('#contact_first_name,#contact_last_name').blur(function() {
-      if($('#contact_matchcode').val() == '')
-        $('#contact_matchcode').val($(this).val());
+    $('input.first_name, input.last_name').live('focusout keydown',(function(event) { 
+      if(event.type === 'focusout' || (event.type === 'keydown' && event.keyCode === 13) ){
+        var matchcode = $('input.first_name').val() + ' ' + $('input.last_name').val();
+        $('input.matchcode').val( matchcode ); 
+      }
     });
   })

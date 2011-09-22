@@ -25,8 +25,10 @@
 
 :javascript
   $(function() {
-    $('input.name, input.last_name').blur(function() { 
-      var matchcode = $('input.name').val() + ' ' + $('input.last_name').val();
-      $('input.matchcode').val( matchcode ); 
+    $('input.first_name, input.last_name').live('focusout keydown', function(event) { 
+      if(event.type === 'focusout' || (event.type === 'keydown' && event.keyCode === 13) ){
+        var matchcode = $('input.first_name').val() + ' ' + $('input.last_name').val();
+        $('input.matchcode').val( matchcode ); 
+      }
     });
   });
