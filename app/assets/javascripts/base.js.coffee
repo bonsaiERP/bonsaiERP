@@ -193,6 +193,8 @@ $(document).ready(->
   # JavaScript response must have "// javascript" at the beginning
   $('div.ajax-modal form').live('submit', ->
     return true if $(this).attr('enctype') == 'multipart/form-data'
+    # Prevent from submiting the form.enter when hiting ENTER
+    return false if $(this).hasClass('enter') and window.keyPress == 13
 
     el = this
     data = $(el).serialize()
@@ -475,13 +477,29 @@ $(document).ready(->
   $('ul.menu>li>a').click ->
     false
 
-  # Supress from submiting a form from an input:text
-  checkCR = (evt)->
-    evt  = evt  = (evt) ? evt : ((event) ? event : null)
-    node = evt.target || evt.srcElement
-    if evt.keyCode == 13 and node.type == "text" then false
+  # Prevent enter submit forms in some forms
+  window.keyPress = false
+  $('form.enter input').live 'keydown', (event)->
+    window.keyPress = event.keyCode || false
+    true
 
-  document.onkeypress = checkCR
+  $('form.enter input:submit').live 'mouseover', ->
+    window.keyPress = false
+    true
+
+  $('form.enter').live 'submit', (event)->
+    if window.keyPress == 13
+      false
+    else
+      true
+
+  # Supress from submiting a form from an input:text
+  #checkCR = (evt)->
+  #  evt  = evt  = (evt) ? evt : ((event) ? event : null)
+  #  node = evt.target || evt.srcElement
+  #  if evt.keyCode == 13 and node.type == "text" then false
+
+  #document.onkeypress = checkCR
 
   start()
 

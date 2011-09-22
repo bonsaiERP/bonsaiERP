@@ -1,6 +1,6 @@
 .b.i= l Time.zone.now
 
-= simple_form_for @account_ledger do |f|
+= simple_form_for @account_ledger, :html => {:class => "enter"} do |f|
   = bonsai_form_error(f)
   = f.input :operation, :as => :hidden
   = f.input :account_id, :as => :hidden

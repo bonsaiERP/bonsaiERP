@@ -5,7 +5,7 @@
 
 %h1 Nueva transferencia
 
-= simple_form_for @account_ledger, :url => transference_account_ledgers_path do |f|
+= simple_form_for @account_ledger, :url => transference_account_ledgers_path, :html => {:class => 'enter'} do |f|
 
   = bonsai_form_error(f)
   
