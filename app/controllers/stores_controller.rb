@@ -73,13 +73,17 @@ class StoresController < ApplicationController
   # DELETE /stores/1
   # DELETE /stores/1.xml
   def destroy
-    @store = Store.find(params[:id])
+    @store = Store.org.find(params[:id])
     @store.destroy
-
-    respond_to do |format|
-      format.html { redirect_to(stores_url) }
-      format.xml  { head :ok }
+  
+    if @store.destroyed?
+      flash[:notice] = "El almacen fue eliminado."
+      redirect_to stores_path
+    else
+      flash[:warning] = "El almacen no puede ser eliminado debido a que tiene datos relacionados."
+      redirect_to @store
     end
+
   end
 
   private
