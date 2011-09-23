@@ -7,7 +7,6 @@
   .clear
 
   = f.input :amount, :label => currency_label('Cantidad', @pay_plan), :input_html => {:size => 12, :type => 'decimal'}
-  = f.input :interests_penalties, :label => currency_label('Intereses/Penalidades', @pay_plan), :input_html => {:size => 12, :type => 'decimal'}
   .clear
 
   - if @pay_plan.transaction.income?

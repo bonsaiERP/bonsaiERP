@@ -39,14 +39,14 @@ module Models::Transaction::Calculations
     payments.active.sum(:amount) + payments.active.sum(:interests_penalties)
   end
 
-  # Returns the total value of pay plans that haven't been paid'
+  # Returns the total value of paid pay_plans
   def pay_plans_total
-    pay_plans.unpaid.sum('amount')
+    pay_plans.paid.sum(:amount)
   end
 
   # Returns the total amount to be paid for unpaid pay_plans
   def pay_plans_balance
-    balance - pay_plans_total
+    pay_plans.unpaid.sum(:amount)
   end
 
   # Updates cash based on the pay_plans

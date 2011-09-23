@@ -74,7 +74,7 @@ module Models::AccountLedger::Transaction
 
     def set_ledger_data
       set_amount
-      valid_contact_amount
+      #valid_contact_amount
     end
 
     def set_amount
@@ -87,17 +87,20 @@ module Models::AccountLedger::Transaction
     def valid_trans_amount
       if transaction.is_a?(Income) and account.accountable_type === 'Contact'
         if amount.abs > -account.amount
-          self.errors[:amount] = I18n.t("errors.messages.payment.account_amount")
+          self.errors[:amount] << I18n.t("errors.messages.account_ledger.amount")
+          self.errors[:base_amount] << I18n.t("errors.messages.account_ledger.amount")
           return false
         end
       elsif transaction.is_a?(Buy) and account.accountable_type === 'MoneyStore'
         if amount.abs > account.amount
-          self.errors[:amount] = I18n.t("errors.messages.payment.account_amount")
+          self.errors[:amount] << I18n.t("errors.messages.account_ledger.amount")
+          self.errors[:base_amount] << I18n.t("errors.messages.account_ledger.amount")
           return false
         end
       elsif transaction.is_a?(Buy) and account.accountable_type === 'Contact'
         if amount.abs > account.amount
-          self.errors[:amount] = I18n.t("errors.messages.payment.account_amount")
+          self.errors[:amount] << I18n.t("errors.messages.account_ledger.amount")
+          self.errors[:base_amount] << I18n.t("errors.messages.account_ledger.amount")
           return false
         end
       end

@@ -30,7 +30,8 @@ module Models::Transaction::Payment
       params = set_payment_amount(params)
       # Find the right account
       params.delete(:to_id)
-      params[:amount] = params[:amount].to_f + params[:interests_penalties].to_f
+      params[:amount] = params[:base_amount].to_f + params[:interests_penalties].to_f
+      #debugger
 
       @current_ledger = account_ledgers.build(params) {|al| al.operation = get_account_ledger_operation }
       @current_ledger.set_payment(true)
@@ -46,7 +47,6 @@ module Models::Transaction::Payment
     # - Update the account and to
     def save_payment
       return false unless payment?
-      #return false unless valid_account_ledger? # Don't use valid_ledger? when set @current_ledger otherwise validations are run twice
 
       mark_paid_pay_plans if credit? # anulate pay_plans if credit
 
@@ -73,28 +73,10 @@ module Models::Transaction::Payment
       @current_ledger.contact_id = contact_id
       @current_ledger.to_id = ::Account.org.find_by_original_type(self.class.to_s).id
       @current_ledger.conciliation = false
-      @current_ledger.make_conciliation = get_conciliation_for_account
 
-      @current_ledger.valid_contact_amount
+      #@current_ledger.valid_contact_amount
       
       @current_ledger.currency_id = @current_ledger.account_currency_id
-    end
-
-    def valid_account_ledger?
-      if @current_ledger.amount_currency > balance
-        @current_ledger.errors[:amount] = I18n.t("errors.messages.payment.greater_amount")
-        false
-      else
-        true
-      end
-    end
-
-    def get_conciliation_for_account
-      case @current_ledger.account_original_type
-      when "Bank" then false
-      when "Cash" then true
-      when "Client", "Supplier", "Staff" then true
-      end
     end
 
     def get_account_ledger_operation
@@ -110,8 +92,7 @@ module Models::Transaction::Payment
 
     # marks the credit pay_plans that have been paid
     def mark_paid_pay_plans
-      amt = @current_ledger.amount
-      int = @current_ledger.interests_penalties
+      amt = @current_ledger.amount_currency
       current_pp = false
 
       pps = sort_pay_plans
@@ -123,6 +104,7 @@ module Models::Transaction::Payment
           break 
         end
       end
+
       # Update payment_date for Transaction
       if amt === 0
         begin
@@ -144,7 +126,6 @@ module Models::Transaction::Payment
         :payment_date => pp.payment_date, 
         :alert_date => pp.alert_date, 
         :amount => amt.abs,
-        :interests_penalties  => pp.interests_penalties,
         :email => pp.email,
         :currency_id => currency_id
       )
@@ -153,10 +134,10 @@ module Models::Transaction::Payment
     def set_payment_amount(params = {})
       if credit?
         pp = pay_plans.unpaid.first
-        params[:amount] ||= pp.amount
-        params[:interests_penalties] ||= pp.interests_penalties
+        params[:base_amount] ||= pp.amount
+        params[:interests_penalties] = 0
       else
-        params[:amount] ||= balance
+        params[:base_amount] ||= balance
       end
       
       params

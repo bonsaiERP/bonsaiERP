@@ -20,8 +20,8 @@ module Models::AccountLedger::Conciliation
       self.approver_id = UserSession.user_id
       self.approver_datetime = Time.zone.now
 
-      # Validate amount
       valid_contact_amount
+
       return false if errors.any?
 
       self.conciliation = true
@@ -70,13 +70,13 @@ module Models::AccountLedger::Conciliation
       if currency_id and exchange_rate > 0 and account_id.present?
         if in?
           if account.accountable_type === 'Contact' and account.amount.abs < amount
-            self.errors[:amount]  << I18n.t("account_ledger.errors.invalid_amount")
-            self.errors[:base]  << I18n.t("account_ledger.errors.invalid_amount")
+            self.errors[:amount]  << I18n.t("errors.messages.account_ledger.amount")
+            self.errors[:base]  << I18n.t("errors.messages.account_ledger.amount")
           end
         elsif out? or trans?
           if account.amount < amount.abs
-            self.errors[:amount]  << I18n.t("account_ledger.errors.invalid_amount")
-            self.errors[:base]  << I18n.t("account_ledger.errors.invalid_amount")
+            self.errors[:amount]  << I18n.t("errors.messages.account_ledger.amount")
+            self.errors[:base]  << I18n.t("errors.messages.account_ledger.amount")
           end
         end
       end

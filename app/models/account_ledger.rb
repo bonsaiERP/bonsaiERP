@@ -4,7 +4,8 @@
 class AccountLedger < ActiveRecord::Base
 
   attr_reader :ac_id
-  attr_accessor :make_conciliation
+  # Base amount is the #  amount = base_amount + interests_penalties
+  attr_accessor :make_conciliation, :base_amount
 
   acts_as_org
   # callbacks
@@ -59,7 +60,7 @@ class AccountLedger < ActiveRecord::Base
   #attr_readonly :currency_id, :amount
   # accessible
   attr_accessible :account_id, :to_id, :date, :operation, :reference, :interests_penalties,
-    :amount, :exchange_rate, :description, :account_ledger_details_attributes, :contact_id
+    :amount, :exchange_rate, :description, :account_ledger_details_attributes, :contact_id, :base_amount
 
   # scopes
   scope :pendent, where(:conciliation => false, :active => true)
@@ -218,6 +219,11 @@ class AccountLedger < ActiveRecord::Base
     @ac_id = val
   end
 
+  # Amount no interests
+  def base_amount
+    (amount - interests_penalties).abs
+  end
+
   private
 
   # The sum should be equal
@@ -239,14 +245,6 @@ class AccountLedger < ActiveRecord::Base
 
   def make_conciliation?
     make_conciliation === true
-  end
-
-  def valid_amount
-    if (out? or trans?) and account.amount < amount.abs
-      errors[:base] << I18n.t("errors.messages.account_ledger.amount") 
-      errors[:amount] << I18n.t("errors.messages.account_ledger.amount")
-      return false
-    end
   end
 
 end

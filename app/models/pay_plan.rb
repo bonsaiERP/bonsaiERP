@@ -23,14 +23,14 @@ class PayPlan < ActiveRecord::Base
   belongs_to :currency
 
   # delegations
-  delegate :currency_id, :pay_plans_balance, :pay_plans_total, :payment_date, :real_state, :paid?, :cash, :ref_number, :draft?, :balance, :state, :type,
+  delegate :currency_id, :payment_date, :real_state, :paid?, :cash, :ref_number, :draft?, :balance, :state, :type,
     :to => :transaction, :prefix => true
   delegate :name, :symbol, :to => :currency, :prefix => true, :allow_nil => true
 
   # validations
-  validate :valid_income_or_interests_penalties_filled
-  #validate :valid_pay_plans_total_amount
+  #validate :valid_income_or_interests_penalties_filled
   validates_presence_of :payment_date, :alert_date
+  validates_numericality_of :amount, :greater_than => 0
   validate :valid_payment_date_alert_date
 
   # scopes
@@ -39,6 +39,9 @@ class PayPlan < ActiveRecord::Base
   scope :date,   lambda {|d| where(["payment_date <= ?", d]) }
   scope :in,     where(:ctype => "Income")
   scope :out,    where(:ctype => ["Buy", "Expense"])
+
+
+  attr_accessible :payment_date, :alert_date, :amount, :email, :repeat
 
   def self.in_to_currency(currency_id, date)
     sum_with_exchange_rate( PayPlan.org.unpaid.in.date(date), currency_id )
@@ -90,8 +93,8 @@ class PayPlan < ActiveRecord::Base
   end
 
   def self.get_currency_ids(date)
-    pps = PayPlan.select("DISTINCT(currency_id) AS currency_id, amount, interests_penalties, payment_date, alert_date, email").org.unpaid.date(date).group("currency_id")
-    pps.map(&:currency_id) 
+    pps = PayPlan.select("DISTINCT(currency_id) AS currency_id, amount, payment_date, alert_date, email").org.unpaid.date(date).group("currency_id")
+    pps.map(&:currency_id)
   end
 
   # Returns the current state of the payment
@@ -126,10 +129,10 @@ class PayPlan < ActiveRecord::Base
     end
   end
 
-private
+  private
   # checks if income or interests_penalties is filled
   def valid_income_or_interests_penalties_filled
-    if amount <= 0 and interests_penalties <= 0
+    if amount <= 0
       errors.add(:amount, I18n.t("errors.messages.pay_plan.valid_amount_and_interests") )
     end
   end
@@ -143,7 +146,6 @@ private
 
   def set_defaults
     self.amount ||= self.transaction_pay_plans_balance
-    self.interests_penalties ||= 0.0
     self.payment_date ||= Date.today
     self.alert_date ||= self.payment_date - 5.days
     self.currency_id ||= transaction_currency_id
@@ -176,19 +178,6 @@ private
   end
 
   #################
-
-  # Checks that all pay_plans amounts sum <= transaction.total
-  #def valid_pay_plans_total_amount
-  #  pivot_amount = transaction_pay_plans_balance
-  #  piv = transaction.pay_plans.pivot
-  #  if piv
-  #    pivot_amount = piv.amount
-  #  end
-
-  #  if amount > pivot_amount
-  #    self.errors.add(:amount, "La cantidad que ingreso supera al total de la Nota de #{transaction.type_translated}")
-  #  end
-  #end
 
   # checks if the pay_plan has been paid
   def check_if_paid

@@ -174,6 +174,14 @@ module Models::AccountLedger::Money
       end
     end
 
+    # Valid amount
+    def valid_amount
+      if (out? or trans?) and account.amount < amount.abs
+        errors[:base] << I18n.t("errors.messages.account_ledger.amount") 
+        errors[:amount] << I18n.t("errors.messages.account_ledger.amount")
+        return false
+      end
+    end
 
   end
 

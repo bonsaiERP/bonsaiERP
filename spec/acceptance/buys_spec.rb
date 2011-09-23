@@ -73,7 +73,7 @@ feature "Buy", "test features" do
     # Create a payment
     b.payment?.should == false
 
-    p = b.new_payment(:account_id => bank_account.id, :amount => 30, :exchange_rate => 1, :reference => 'Cheque 143234')
+    p = b.new_payment(:account_id => bank_account.id, :base_amount => 30, :exchange_rate => 1, :reference => 'Cheque 143234')
     p.class.should == AccountLedger
     p.payment?.should == true
     p.operation.should == 'out'
@@ -83,9 +83,6 @@ feature "Buy", "test features" do
     b.save_payment.should be_false
     #b.payment?.should == false
     p.errors[:amount].should_not be_blank
-    p.errors[:base].should_not be_blank
-    # TODO: Only once there should be the same error 
-    puts p.errors.messages
 
     # Must reload so it sets again to the original values balance
     b.reload
@@ -99,7 +96,7 @@ feature "Buy", "test features" do
     bank_account.amount.should == 500
 
     bal = b.balance
-    p = b.new_payment(:account_id => bank_account.id, :amount => 30, :exchange_rate => 1, :reference => 'Cheque 143234')
+    p = b.new_payment(:account_id => bank_account.id, :base_amount => 30, :exchange_rate => 1, :reference => 'Cheque 143234')
 
     b.save_payment.should be_true
     p.should be_persisted
@@ -124,7 +121,7 @@ feature "Buy", "test features" do
     b.deliver.should == false
     b.reload
     
-    p = b.new_payment(:account_id => bank_account.id, :amount => b.balance, :reference => 'Cheque 222289', :exchange_rate => 1)
+    p = b.new_payment(:account_id => bank_account.id, :base_amount => b.balance, :reference => 'Cheque 222289', :exchange_rate => 1)
 
     b.save_payment.should be_true
     b.reload
@@ -183,12 +180,12 @@ feature "Buy", "test features" do
 
     b.approve!.should be_true
 
-    p = b.new_payment(:account_id => st_account.id, :amount => b.balance, :reference => 'Cheque 222289', :exchange_rate => 1)
+    p = b.new_payment(:account_id => st_account.id, :base_amount => b.balance, :reference => 'Cheque 222289', :exchange_rate => 1)
     p.class.should == AccountLedger
 
     b.save_payment.should be_false
     p.errors[:amount].should_not be_blank
-    p.errors[:base].should_not be_blank
+    p.errors[:base_amount].should_not be_blank
 
 
     al = AccountLedger.new_money(:operation => "out", :account_id => bank_account.id, :contact_id => st.id, :amount => 100, :reference => "Check 1120012" )

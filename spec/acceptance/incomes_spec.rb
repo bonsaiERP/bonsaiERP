@@ -36,7 +36,6 @@ feature "Income", "test features" do
   let(:pay_plan_params) do
     d = options[:payment_date] || Date.today
     {:alert_date => (d - 5.days), :payment_date => d,
-     :interests_penalties => 0,
      :ctype => 'Income', :description => 'Prueba de vida!', 
      :email => true }.merge(options)
   end
@@ -91,7 +90,7 @@ feature "Income", "test features" do
     # Create a payment
     i.payment?.should == false
 
-    p = i.new_payment(:account_id => bank_account.id, :amount => 30, :exchange_rate => 1, :reference => 'Cheque 143234', :operation => 'out')
+    p = i.new_payment(:account_id => bank_account.id, :base_amount => 30, :exchange_rate => 1, :reference => 'Cheque 143234', :operation => 'out')
     p.class.should == AccountLedger
     p.payment?.should == true
     p.operation.should == 'in'
@@ -128,7 +127,7 @@ feature "Income", "test features" do
 
     i.deliver.should == false
     
-    p = i.new_payment(:account_id => bank_account.id, :amount => i.balance, :reference => 'Cheque 222289', :exchange_rate => 1)
+    p = i.new_payment(:account_id => bank_account.id, :base_amount => i.balance, :reference => 'Cheque 222289', :exchange_rate => 1)
 
     i.save_payment.should == true
 
@@ -221,7 +220,7 @@ feature "Income", "test features" do
     p = i.new_payment(:account_id => bank_account.id, :exchange_rate => 1, :reference => 'Cheque 143234')
     # Payment should have the amount of the first unpaid pay_plan
     p.interests_penalties.should == 0
-    p.amount.should == 30
+    p.base_amount.should == 30
 
     i.save_payment.should == true
     p.should be_persisted
@@ -272,7 +271,7 @@ feature "Income", "test features" do
 
     bal = i.balance
     size = i.pay_plans.unpaid.count
-    p = i.new_payment(:account_id => bank_account.id, :exchange_rate => 1, :reference => 'Cheque 143234', :amount => 45)
+    p = i.new_payment(:account_id => bank_account.id, :exchange_rate => 1, :reference => 'Cheque 143234', :base_amount => 45)
     
     i.save_payment.should == true
     p.conciliate_account.should == true
@@ -285,7 +284,7 @@ feature "Income", "test features" do
     p.account.amount.should == 30 + 45
     p.to.amount.should == -(30 + 45)
 
-    p = i.new_payment(:account_id => bank_account.id, :exchange_rate => 1, :reference => 'Cheque 143234', :amount => i.balance)
+    p = i.new_payment(:account_id => bank_account.id, :exchange_rate => 1, :reference => 'Cheque 143234', :base_amount => i.balance)
     
     i.save_payment.should == true
 
@@ -321,10 +320,6 @@ feature "Income", "test features" do
 
     i.pay_plans.unpaid.size.should == (i.balance/30).ceil
     
-    i.pay_plans[0].interests_penalties.should == (i.balance/10).round(2)
-    i.pay_plans[1].interests_penalties.should == ((i.balance - 30)/10).round(2)
-    i.pay_plans[2].interests_penalties.should == ((i.balance - 60)/10).round(2)
-
     tot_pps = i.pay_plans.inject(0) {|s,pp| s += pp.amount unless pp.paid?; s }
     tot_pps.should == i.balance
 
@@ -332,9 +327,7 @@ feature "Income", "test features" do
     pp = i.pay_plans[1]
     pp_last = i.pay_plans.last
     amt = pp_last.amount + pp.amount
-    int = pp_last.interests_penalties + pp.interests_penalties
-    i.edit_pay_plan(pp.id, :payment_date => pp.payment_date, :alert_date => pp.alert_date,
-                    :amount => amt , :interests_penalties => int)
+    i.edit_pay_plan(pp.id, :payment_date => pp.payment_date, :alert_date => pp.alert_date, :amount => amt)
     i.save_pay_plan.should == true
     i.reload
 
@@ -345,16 +338,12 @@ feature "Income", "test features" do
     # edit second pay_plan and repeat pattern
     pp = i.pay_plans[1]
     
-    #i.pay_plans.each {|pp| puts "#{pp.id} #{pp.amount} #{pp.interests_penalties}" }
     i.edit_pay_plan(pp.id, :payment_date => pp.payment_date, :alert_date => pp.alert_date,
-                    :amount => 60, :interests_penalties => 50, :repeat => true)
+                    :amount => 60, :repeat => true)
     i.save_pay_plan.should == true
     i.reload
     i.pay_plans.size.should == ( (i.balance - 30)/60 ).ceil + 1
 
-    i.pay_plans[1].interests_penalties.should == 50
-    int_per = 50/( i.balance - i.pay_plans[0].amount )
-    i.pay_plans[2].interests_penalties.should == (int_per * (i.balance - 90) ).round(2)
   end
 
   scenario "Make payment with a contact account" do
@@ -386,7 +375,6 @@ feature "Income", "test features" do
     p.reload
 
     p.conciliation.should be_false
-    p.send(:make_conciliation?).should be_true
 
     i18ntrans = I18n.t("transaction.#{i.class}")
     txt = I18n.t("account_ledger.payment_description", 
@@ -418,7 +406,7 @@ feature "Income", "test features" do
     new_bank_account = new_bank.account
     new_bank_account.amount.should == 0
 
-    p = i.new_payment(:account_id => new_bank_account.id, :amount => 30,
+    p = i.new_payment(:account_id => new_bank_account.id, :base_amount => 30,
                  :exchange_rate => 2, :currency_id => 2, :reference => 'Last check')
 
     i.save_payment.should be(true)
@@ -437,11 +425,14 @@ feature "Income", "test features" do
     p.account_original_type.should == "Bank"
     p.to.amount.should == -2 * 30
 
-    p = i.new_payment(:account_id => new_bank_account.id, :amount => 30, :interests_penalties => 1,
+    p = i.new_payment(:account_id => new_bank_account.id, :base_amount => 30, :interests_penalties => 1,
                  :exchange_rate => 2, :currency_id => 2, :reference => 'Last check')
 
+
     p.amount.should == 31
+    p.base_amount.should == 30
     p.interests_penalties.should == 1
+
     i.save_payment.should be(true)
     p.conciliate_account.should be(true)
 
@@ -464,7 +455,7 @@ feature "Income", "test features" do
     i.reload
 
     bal = i.balance
-    p = i.new_payment(:account_id => al.to_id, :amount => i.balance/2, :interests_penalties => 1,
+    p = i.new_payment(:account_id => al.to_id, :base_amount => i.balance/2, :interests_penalties => 1,
                  :exchange_rate => 2, :currency_id => 2, :reference => 'Last check')
 
     i.save_payment.should be(true)
@@ -519,11 +510,15 @@ feature "Income", "test features" do
     new_bank_account.reload
     new_bank_account.amount.should == 200
 
-    log.info("Paying from account with different currency")
-    p = i.new_payment(:account_id => al.to_id, :amount => 30,
+    # Pay with other currency
+    p = i.new_payment(:account_id => al.to_id, :base_amount => 30,
                  :exchange_rate => 2, :currency_id => 2, :reference => 'Last check')
-    i.save_payment.should == true
+
+    i.save_payment.should be_true
     p.should be_persisted
+
+    i.reload
+    i.pay_plans.unpaid.sum(:amount).should == i.balance
 
     income_account = Account.org.find_by_original_type("Income")
     
@@ -553,10 +548,28 @@ feature "Income", "test features" do
     client.account_cur(2).amount.should == -200 + 30
     #income_account.cur(2).amount.should == -30
 
+    i.pay_plans.unpaid.size.should == ( (i.balance)/30 ).ceil
+    i.pay_plans.paid.size.should == 2
+    # Remember payment with other currency
+    i.pay_plans_balance.should == i.total - 60
+
+    #i.pay_plans.unpaid
+
+    # Check how the payment date moved after paying
+    p = i.new_payment(:account_id => al.to_id, :base_amount => 20,
+                 :exchange_rate => 2, :currency_id => 2, :reference => 'Last check')
+    
+    # Should move to the last payed date
+    pdate = i.pay_plans.unpaid[1].payment_date
+
+    i.save_payment.should be_true
+    p.should be_persisted
+
     i.reload
-    i.pay_plans.unpaid.size.should == ( (i.total - 30)/30 ).ceil
-    i.pay_plans.paid.size.should == 1
-    i.pay_plans_total.should == i.total - 30
+    # 20 * 2
+    pp = i.pay_plans.unpaid.first
+    pp.amount.should == 20
+    pp.payment_date.should == pdate
   end
 
   scenario "check different updates and modifications to pay_plans" do
@@ -624,7 +637,7 @@ feature "Income", "test features" do
 
     i.approve!.should == true
 
-    p = i.new_payment(:account_id => bank_account.id, :amount => i.balance,
+    p = i.new_payment(:account_id => bank_account.id, :base_amount => i.balance,
                  :exchange_rate => 1, :currency_id => 1, :reference => 'Check INV-123')
     i.save_payment.should == true
     i.reload
@@ -656,7 +669,7 @@ feature "Income", "test features" do
     al.conciliate_account.should == true
     
     bal = i.balance
-    p = i.new_payment(:account_id => al.to_id, :amount => i.balance/2,
+    p = i.new_payment(:account_id => al.to_id, :base_amount => i.balance/2,
                  :exchange_rate => 2, :reference => 'Contact account')
     i.save_payment.should == true
     i.reload
@@ -693,13 +706,34 @@ feature "Income", "test features" do
     client.account_cur(1).amount.should == -50
 
     i.reload
-    log.info "Creating payment without exchange_rate"
     p = i.new_payment(:account_id => client.account_cur(1).id, :reference => 'Test for client', :exchange_rate => 1)
 
-    p.amount.should == i.balance
+    p.base_amount.should == i.balance
 
     i.save_payment.should be_false
     p.errors[:amount].should_not be_empty
+    p.errors[:base_amount].should_not be_empty
+
+    i.reload
+    p = i.new_payment(:account_id => client.account_cur(1).id, :reference => 'Test for client', :exchange_rate => 1, :base_amount => 50)
+    i.save_payment.should be_true
+
+    al = AccountLedger.new_money(:operation => "out", :account_id => bank_account.id, :contact_id => client.id, :amount => 10, :reference => "Critic")
+
+    al.save.should be_true
+    al.conciliate_account.should be_true
+    al.should be_persisted
+    al.currency_id.should == 1
+    al.to_id.should == client.account_cur(1).id
+
+    p.reload
+
+    client.reload
+    client.account_cur(1).amount.should == -40
+
+    p.conciliate_account.should be_false
+    p.errors[:amount].should_not be_blank
+    p.errors[:base].should_not be_blank
   end
 
   scenario "Pay with a differen curency" do
@@ -712,7 +746,7 @@ feature "Income", "test features" do
     new_bank_account = new_bank.account
     new_bank_account.amount.should == 0
 
-    p = i.new_payment(:account_id => new_bank_account.id, :amount => 30,
+    p = i.new_payment(:account_id => new_bank_account.id, :base_amount => 30,
                  :exchange_rate => 2, :currency_id => 2, :reference => 'Last check')
 
     i.save_payment.should be(true)
@@ -731,7 +765,7 @@ feature "Income", "test features" do
     p.account_original_type.should == "Bank"
     p.to.amount.should == -2 * 30
 
-    p = i.new_payment(:account_id => new_bank_account.id, :amount => 30, :interests_penalties => 1,
+    p = i.new_payment(:account_id => new_bank_account.id, :base_amount => 30, :interests_penalties => 1,
                  :exchange_rate => 2, :currency_id => 2, :reference => 'Last check')
 
     p.amount.should == 31
@@ -758,7 +792,7 @@ feature "Income", "test features" do
     i.reload
 
     bal = i.balance
-    p = i.new_payment(:account_id => al.to_id, :amount => i.balance/2, :interests_penalties => 1,
+    p = i.new_payment(:account_id => al.to_id, :base_amount => i.balance/2, :interests_penalties => 1,
                  :exchange_rate => 2, :currency_id => 2, :reference => 'Last check')
 
     i.save_payment.should be(true)
@@ -813,9 +847,10 @@ feature "Income", "test features" do
     new_bank_account.reload
     new_bank_account.amount.should == 200
 
-    log.info("Paying from account with different currency")
-    p = i.new_payment(:account_id => al.to_id, :amount => 30,
+    # Pay with different currency and from a contact account
+    p = i.new_payment(:account_id => al.to_id, :base_amount => 30,
                  :exchange_rate => 2, :currency_id => 2, :reference => 'Last check')
+
     i.save_payment.should == true
     p.should be_persisted
 
@@ -845,11 +880,56 @@ feature "Income", "test features" do
     client.reload
 
     client.account_cur(2).amount.should == -200 + 30
-    #income_account.cur(2).amount.should == -30
 
     i.reload
-    i.pay_plans.unpaid.size.should == ( (i.total - 30)/30 ).ceil
-    i.pay_plans.paid.size.should == 1
-    i.pay_plans_total.should == i.total - 30
+    i.pay_plans.unpaid.size.should == ( (i.total - 60)/30 ).ceil
+    i.pay_plans.paid.size.should == 2
+    i.pay_plans_balance.should == i.total - 60
+
+    i.balance.should == i.pay_plans.unpaid.sum(:amount)
+  end
+
+  scenario "Test creation and payment of interests penalties with different currencies" do
+
+    i_params = income_params.dup
+    i_params[:discount] = 0
+    i_params[:transaction_details_attributes][0][:price] = 100
+    i_params[:transaction_details_attributes][0][:quantity] = 10
+    i_params[:transaction_details_attributes][1][:price] = 100
+    i_params[:transaction_details_attributes][1][:quantity] = 10
+    #(100 * 10 + 100 * 10)
+    i = Income.new(i_params)
+
+    i.should be_cash
+    i.save_trans.should be_true
+    i.should be_draft
+    i.deliver.should be_false
+    i.delivered.should be_false
+    i.total.should == 2000
+    i.pay_plans.should have(0).elements
+
+    i.approve!.should be_true
+    i.approve_credit(:credit_reference => "Ref 123", :credit_description => "Yeah!!").should be_true
+
+    i.reload
+    i.pay_plans.should have(1).element
+    p = i.pay_plans.first
+    p.amount.should == i.balance
+    
+    i.edit_pay_plan(p.id, :amount => 200, :interests_penalties => 200, :repeat => true)
+
+    i.save_pay_plan.should be_true
+    i.reload
+    i.pay_plans.should have(10).elements
+
+    #i.pay_plans[0].interests_penalties.should == 200
+    i.pay_plans.map(&:amount).uniq.should == [200]
+
+    # create bank
+    new_bank = create_bank(:currency_id => 2)
+    new_bank.should be_persisted
+
+    p = i.new_payment
+    p.amount.should == 200
   end
 end

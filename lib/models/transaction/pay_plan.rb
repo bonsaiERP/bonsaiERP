@@ -86,20 +86,17 @@ module Models::Transaction::PayPlan
       destroy_pay_plans_pattern(pps)
 
       bal    -= amt
-      int_per = calculate_int_percentage(@current_pay_plan, bal)
       pdate   = @current_pay_plan.payment_date
 
       while bal > 0
         # set the amount
         amt = (bal - @current_pay_plan.amount > 0) ? @current_pay_plan.amount : bal
-        int = bal * int_per
         adate = pdate - 5.days
 
         pay_plans.build(
           :payment_date => pdate, 
           :alert_date => adate, 
           :amount => amt,
-          :interests_penalties  => int,
           :email => @current_pay_plan.email,
           :currency_id => currency_id
         )
@@ -111,28 +108,24 @@ module Models::Transaction::PayPlan
 
     # Completes the pay_plans to reach the balance
     def complete_pay_plan(pp, bal, dest)
-      int = calculate_int_percentage(pp, bal + pp.amount)
-
       if dest
         pps = sort_pay_plans.last
         pp.amount += bal
-        pp.interests_penalties += pp.interests_penalties + bal * int
       else
         pay_plans.build(
           :payment_date => pp.payment_date + PAY_PLANS_DATE_SEPARATION, 
           :alert_date => pp.payment_date - 5.days, 
           :amount => bal,
-          :interests_penalties  => bal * int,
           :email => @current_pay_plan.email,
           :currency_id => currency_id
         )
       end
     end
 
-    def calculate_int_percentage(pp, bal)
-      return 0 if bal <= 0 or pp.interests_penalties <= 0
-      pp.interests_penalties / bal
-    end
+    #def calculate_int_percentage(pp, bal)
+    #  return 0 if bal <= 0
+    #  pp.interests_penalties / bal
+    #end
 
     # Marks the pay_plans for destruction if payment_date is <= than @current_pay_plan
     def destroy_pay_plans_pattern(pps)

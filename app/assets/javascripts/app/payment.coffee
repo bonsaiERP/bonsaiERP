@@ -3,7 +3,7 @@ class Payment
   # constructor
   constructor: (@accounts, @currencies, @account_data, @currency_id)->
     @$account   = $('#account_ledger_account_id')
-    @$amount    = $('#account_ledger_amount')
+    @$amount    = $('#account_ledger_base_amount')
     @$interests = $('#account_ledger_interests_penalties')
     @$exchange  = $('#account_ledger_exchange_rate')
     @$exchange.val(1) if @$exchange.val() * 1 == 0
@@ -15,6 +15,7 @@ class Payment
     self = @
 
     # amount interests_penalties
+    $('input.amt').die()
     $('input.amt').live 'focusout keyup', (event)->
       return false if _b.notEnter(event)
 
