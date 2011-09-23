@@ -75,6 +75,9 @@ class User < ActiveRecord::Base
   def update_password(params)
     self.password                = params[:password]
     self.password_confirmation   = params[:password_confirmation]
+    unless password === password_confirmation
+      self[:errors] << I18n.t("")
+    end
     self.change_default_password = false
 
     self.save
