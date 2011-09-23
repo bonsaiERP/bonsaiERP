@@ -313,7 +313,7 @@ feature "Income", "test features" do
 
     d = Date.today
 
-    pp = i.new_pay_plan(:payment_date => d, :alert_date => d - 5.days, :amount => 30, :interests_penalties => i.balance/10, :repeat => "1")
+    pp = i.new_pay_plan(:payment_date => d, :alert_date => d - 5.days, :amount => 30, :repeat => "1")
 
     i.save_pay_plan.should == true
     i.reload
@@ -434,6 +434,13 @@ feature "Income", "test features" do
     p.interests_penalties.should == 1
 
     i.save_payment.should be(true)
+
+    p.should be_persisted
+    p.reload
+
+    p.interests_penalties.should == 1
+    p.base_amount.should == 30
+    p.amount.should == 31
     p.conciliate_account.should be(true)
 
     i.reload
