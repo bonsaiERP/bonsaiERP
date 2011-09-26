@@ -3,6 +3,7 @@
 # email: boriscyber@gmail.com
 class InventoryOperationsController < ApplicationController
   before_filter :check_authorization!
+  before_filter :redirect_nomas
   before_filter :check_transaction_permission, :only => [:new_transaction, :create_transaction]
 
   # GET /inventory_operations
@@ -131,5 +132,10 @@ class InventoryOperationsController < ApplicationController
         redirect_to "/422"
     end
 
+  end
+
+  def redirect_nomas
+    flash[:warning] = "Lo sentimos estamos trabajando en soluciones."
+    redirect_to "/dashboard"
   end
 end
