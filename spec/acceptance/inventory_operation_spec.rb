@@ -53,8 +53,6 @@ feature "Inventory Operation", "Test IN/OUT" do
     io.store.stocks[1].item_id.should == 2
     io.store.stocks[1].quantity.should == 200
 
-    puts "Add the same items updates the quantity"
-
     hash = {:ref_number => 'I-0002', :date => Date.today, :contact_id => 1, :operation => 'in', :store_id => 1,
       :inventory_operation_details_attributes => [
         {:item_id =>1, :quantity => 100},
@@ -147,6 +145,8 @@ feature "Inventory Operation", "Test IN/OUT" do
     i.approve!.should be_true
 
     i.balance.should == i.balance_inventory
+    i.deliver = true
+    i.save.should be_true
 
     det = i.transaction_details[0]
     det.balance.should == det.quantity
@@ -161,22 +161,23 @@ feature "Inventory Operation", "Test IN/OUT" do
     io = InventoryOperation.new(hash)
     io.save_transaction.should be_false
     io.should_not be_persisted
+    io.should be_out
 
     io.inventory_operation_details[0].errors.should_not == blank?
     io.inventory_operation_details[1].errors.should_not == blank?
 
-    io.inventory_operation_details[0].quantity = 5
-    io.inventory_operation_details[1].quantity = 10
+    i.transaction_details[0].balance.should == i.transaction_details[0].quantity
+    i.transaction_details[1].balance.should == i.transaction_details[1].quantity
 
-    puts "-"*60
-    io.save_transaction#.should be_true
-    puts "-"*60
-    puts io.errors.messages
-    puts io.inventory_operation_details.map{|v| v.errors.messages }
+    hash[:inventory_operation_details_attributes][0][:quantity] = 5
+    hash[:inventory_operation_details_attributes][1][:quantity] = 10
+    io = InventoryOperation.new(hash)
+
+    io.save_transaction.should be_true
+    io.should be_out
     io.should be_persisted
 
     i.reload
-
     dets = i.transaction_details(true)
 
     det1 = dets[0]
@@ -282,6 +283,8 @@ feature "Inventory Operation", "Test IN/OUT" do
     io.inventory_operation_details[0].quantity = 0
 
     io.save_transaction.should be_true
+    io.should be_persisted
+    io.inventory_operation_details[1].quantity.should == b.transaction_details[1].balance
 
     b.reload
     b.transaction_details[0].balance.should == b.transaction_details[0].quantity
