@@ -14,7 +14,7 @@ class User < ActiveRecord::Base
   ABBREV = "GEREN"
   ROLES = ['admin', 'gerency', 'operations']
 
-  attr_accessor :temp_password, :rolname, :active_link#, :abbreviation
+  attr_accessor :temp_password, :rolname, :active_link, :old_password#, :abbreviation
 
   # Relationships
   has_many :links, :autosave => true, :dependent => :destroy
@@ -38,7 +38,8 @@ class User < ActiveRecord::Base
   end
 
   #attr_protected :account_type
-  attr_accessible :email, :password, :password_confirmation, :first_name, :last_name, :phone, :mobile, :website, :description, :rolname, :address, :abbreviation
+  attr_accessible :email, :password, :password_confirmation, :first_name, :last_name, :phone, :mobile, :website, 
+    :description, :rolname, :address, :abbreviation, :old_password
 
   def to_s
     unless first_name.blank? and last_name.blank?
@@ -74,6 +75,9 @@ class User < ActiveRecord::Base
   def update_password(params)
     self.password                = params[:password]
     self.password_confirmation   = params[:password_confirmation]
+    unless password === password_confirmation
+      self[:errors] << I18n.t("")
+    end
     self.change_default_password = false
 
     self.save

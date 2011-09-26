@@ -92,7 +92,6 @@ class UsersController < ApplicationController
     @user.change_default_password = false
 
     if @user.update_password(params[:user])
-      sign_in(@user, :bypass => true)
       redirect_to "/users/#{@user.id}", :notice => "Su contraseña a sido actualizada."
     else
       render :action => 'password'

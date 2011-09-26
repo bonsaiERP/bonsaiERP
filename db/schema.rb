@@ -398,16 +398,13 @@ ActiveRecord::Schema.define(:version => 20110919150401) do
     t.decimal  "minimum",                       :precision => 14, :scale => 2
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "user_id"
   end
 
   add_index "stocks", ["item_id"], :name => "index_stocks_on_item_id"
   add_index "stocks", ["minimum"], :name => "index_stocks_on_minimum"
   add_index "stocks", ["organisation_id"], :name => "index_stocks_on_organisation_id"
-  add_index "stocks", ["quantity"], :name => "index_stocks_on_quantity"
   add_index "stocks", ["state"], :name => "index_stocks_on_state"
   add_index "stocks", ["store_id"], :name => "index_stocks_on_store_id"
-  add_index "stocks", ["user_id"], :name => "index_stocks_on_user_id"
 
   create_table "stores", :force => true do |t|
     t.string   "name"

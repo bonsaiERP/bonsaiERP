@@ -31,7 +31,6 @@ module Models::Transaction::Payment
       # Find the right account
       params.delete(:to_id)
       params[:amount] = params[:base_amount].to_f + params[:interests_penalties].to_f
-      #debugger
 
       @current_ledger = account_ledgers.build(params) {|al| al.operation = get_account_ledger_operation }
       @current_ledger.set_payment(true)
@@ -135,7 +134,7 @@ module Models::Transaction::Payment
       if credit?
         pp = pay_plans.unpaid.first
         params[:base_amount] ||= pp.amount
-        params[:interests_penalties] = 0
+        params[:interests_penalties] = params[:interests_penalties] || 0
       else
         params[:base_amount] ||= balance
       end
@@ -159,7 +158,6 @@ module Models::Transaction::Payment
     def set_account_ledger_staff
       begin
         if @current_ledger.account.original_type === 'Staff'
-          puts "Setting staff #{@current_ledger.account.accountable_id}"
           @current_ledger.staff_id = @current_ledger.account.accountable_id
         end
       rescue
