@@ -12,8 +12,8 @@ describe SessionsController do
   describe "POST /sessions" do
     it 'should login' do
       obj = Object.new
-      obj.stubs(:authenticate => true, :id => 1, :organisations => [])
-      User.stubs(:find_by_email => obj)
+      obj.stub!(:authenticate => true, :id => 1, :organisations => [])
+      User.stub!(:find_by_email => obj)
 
       post "create", :user => {:email => "demo@example.com"}
 
@@ -22,9 +22,9 @@ describe SessionsController do
 
     it 'should redirect correctly' do
       obj = Object.new
-      obj.stubs(:authenticate => true, :id => 1, :organisations => [Organisation.new], :link => stub(:rol => 'admin'))
-      User.stubs(:find_by_email => obj)
-      controller.stubs(:set_organisation_session => true)
+      obj.stub!(:authenticate => true, :id => 1, :organisations => [Organisation.new], :link => stub(:rol => 'admin'))
+      User.stub!(:find_by_email => obj)
+      controller.stub!(:set_organisation_session => true)
 
       post "create", :user => {:email => "demo@example.com"}
 
@@ -33,8 +33,8 @@ describe SessionsController do
 
     it 'should render the same ' do
       obj = Object.new
-      obj.stubs(:authenticate => false)
-      User.stubs(:find_by_email => obj)
+      obj.stub!(:authenticate => false)
+      User.stub!(:find_by_email => obj)
       
       post "create", :user => {:email => "demo@example.com"}
 

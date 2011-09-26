@@ -1,7 +1,7 @@
 = simple_form_for(@unit) do |f|
-  = f.input :name, :label => 'Nombre', :wrapper_html => {:class => "_40"} , :input_html => {:size => 30}
-  = f.input :symbol, :label => 'Unidad', :wrapper_html => {:class => "_30"} , :input_html => {:size => 12}
-  = f.input :integer, :label => 'Es entero', :wrapper_html => {:class => "_30"} 
+  = f.input :name, :label => 'Nombre', :input_html => {:size => 30}
+  = f.input :symbol, :label => 'Unidad', :input_html => {:size => 12}
+  -#= f.input :integer, :label => 'Es entero', :wrapper_html => {:class => "_30"} 
   .clear
 
   = f.submit "Salvar" 

@@ -20,7 +20,7 @@ Spork.prefork do
   Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
   Rspec.configure do |config|
-    config.mock_with :mocha
+    config.mock_with :rspec
     
     config.before(:suite) do
       DatabaseCleaner.strategy = :transaction

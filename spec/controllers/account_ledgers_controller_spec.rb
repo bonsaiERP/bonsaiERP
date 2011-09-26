@@ -4,7 +4,7 @@ describe AccountLedgersController do
   describe "GET /show/1" do
     before(:each) do
       al = AccountLedger.new {|al| al.id = 1}
-      AccountLedger.stubs(:org => stub(:find => al))
+      AccountLedger.stub!(:org => stub(:find => al))
     end
 
     it 'when setting should use normal tempate' do
@@ -14,7 +14,7 @@ describe AccountLedgersController do
     end
 
     it 'should render contact template' do
-      AccountLedger.any_instance.stubs(:to_accountable_type => 'Contact')
+      AccountLedger.any_instance.stub!(:to_accountable_type => 'Contact')
       stub_auth
       get :show, :id => 1, :ac_id => 10
       response.should render_template('account_ledgers/show_contact')
@@ -24,7 +24,7 @@ describe AccountLedgersController do
   describe "GET /accounts_ledgers/new" do
     it 'should assing correctly' do
       stub_auth
-      AccountLedger.stubs(:new_money => AccountLedger.new)
+      AccountLedger.stub!(:new_money => AccountLedger.new)
 
       get :new, :account_id => 1, :operation => "in"
       
@@ -33,7 +33,7 @@ describe AccountLedgersController do
 
     it 'should redirect because it is not a money account' do
       stub_auth
-      AccountLedger.stubs(:new_money => false)
+      AccountLedger.stub!(:new_money => false)
 
       get :new, :account_id => 1, :operation => "in"
       

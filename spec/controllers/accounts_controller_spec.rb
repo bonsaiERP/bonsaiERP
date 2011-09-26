@@ -7,15 +7,15 @@ describe AccountsController do
 
   describe "GET /accounts/:id" do
     before do
-      Account.stubs(:org => stub(:find => Account.new {|a| a.id = 1}))
+      Account.stub!(:org => stub(:find => Account.new {|a| a.id = 1}))
     end
 
     it 'should select the correct account view' do
-      Account.stubs(:org => stub(:find => Account.new))
+      Account.stub!(:org => stub(:find => Account.new))
 
       views = ["contact", "bank", "cash"]
       [Client.new, Bank.new, Cash.new].each_with_index do |elem, i|
-        Account.any_instance.stubs(:accountable => elem)
+        Account.any_instance.stub!(:accountable => elem)
         get 'show', :id => 1
 
         response.should render_template("/accounts/#{views[i]}")
@@ -23,10 +23,10 @@ describe AccountsController do
     end
 
     it 'should assing the correct partial' do
-      Account.stubs(:org => stub(:find => Account.new))
+      Account.stub!(:org => stub(:find => Account.new))
 
       ["incomes", "buys", "expenses"].each do |tab|
-        Account.any_instance.stubs(:accountable => Client.new, tab.to_sym => [])
+        Account.any_instance.stub!(:accountable => Client.new, tab.to_sym => [])
         get 'show', :id => 1, :tab => tab
 
         assigns(:partial).should == tab
@@ -34,8 +34,8 @@ describe AccountsController do
     end
 
     it 'should assing a correct tab' do
-      Account.stubs(:org => stub(:find => Account.new))
-      Account.any_instance.stubs(:accountable => Client.new, :incomes => [])
+      Account.stub!(:org => stub(:find => Account.new))
+      Account.any_instance.stub!(:accountable => Client.new, :incomes => [])
 
 
       get 'show', :id => 1, :tab => 'incomes'
@@ -46,8 +46,8 @@ describe AccountsController do
     end
 
     it 'should assing a correct tab' do
-      Account.stubs(:org => stub(:find => Account.new))
-      Account.any_instance.stubs(:accountable => Client.new)
+      Account.stub!(:org => stub(:find => Account.new))
+      Account.any_instance.stub!(:accountable => Client.new)
 
       get 'show', :id => 1, :tab => 'transactions'
 

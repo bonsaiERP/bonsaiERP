@@ -3,6 +3,7 @@
 # email: boriscyber@gmail.com
 class InventoryOperationsController < ApplicationController
   before_filter :check_authorization!
+  before_filter :check_transaction_permission, :only => [:new_transaction, :create_transaction]
 
   # GET /inventory_operations
   # GET /inventory_operations.xml
@@ -63,22 +64,14 @@ class InventoryOperationsController < ApplicationController
 
   # GET /inventory_operations/new_transaction
   def new_transaction
-    @transaction = Transaction.org.find(params[:transaction_id])
-    # Check if the user can access
-    check_buy_in(@transaction)
-
     @inventory_operation = InventoryOperation.new(:store_id => params[:store_id], :operation => params[:operation], 
                                                   :transaction_id => params[:transaction_id])
-    @inventory_operation.set_transaction
 
+    @inventory_operation.set_transaction
   end
 
   # /inventory_operations/create_transaction
   def create_transaction
-    @transaction = Transaction.org.find(params[:inventory_operation][:transaction_id])
-    # Check if the user can access
-    check_buy_in(@transaction)
-
     @inventory_operation = @transaction.inventory_operations.build(params[:inventory_operation])
     @inventory_operation.contact_id = @transaction.contact_id
 
@@ -95,7 +88,7 @@ class InventoryOperationsController < ApplicationController
     @transaction = Transaction.org.find(params[:id])
   end
 
-  # Presents the transactions tha are IN/OUT
+  # Presents the transactions that are IN/OUT
   def transactions
     @currency_rates = CurrencyRate.current_hash
     params[:operation] = "in" unless ["in", "out"].include?( params[:operation] )
@@ -116,21 +109,27 @@ class InventoryOperationsController < ApplicationController
     @store = Store.org.find(store_id)
   end
 
-  def check_buy_in(transaction)
-    if transaction.is_a?(Buy)
-      unless User::ROLES.slice(0,2).include? session[:user][:rol]
-        #flash[:warning] = "Usted no tiene permitida esta acción"
+  # Checks the permission for different transactions
+  def check_transaction_permission
+    t_id      = params[:transaction_id] || params[:inventory_operation][:transaction_id]
+    operation = params[:operation] || params[:inventory_operation][:operation]
+
+    # Check correct params
+    redirect_to "/404" unless t_id and InventoryOperation::OPERATIONS.include?(operation)
+
+    # Find transaction and check
+    @transaction = Transaction.org.find(t_id)
+    return redirect_to "/404" unless @transaction
+
+    roles = User::ROLES.slice(0,2)
+
+    case
+      when ( @transaction.is_a?(Buy) and not(roles.include?(session[:user][:rol]) ) )
         redirect_to "/422"
-      end
-    elsif not(transaction.draft?)
-      if transaction.delivered?
-        flash[:warning] = "Se ha completado las operaciones en inventarios"
-        redirect_to "/dashboard"
-      elsif not(transaction.deliver?)
+      when ( @transaction.is_a?(Income) and operation === 'in' and
+          not(roles.include?(session[:user][:rol]) ) )
         redirect_to "/422"
-      end
-    else
-      redirect_to "/422"
     end
+
   end
 end
