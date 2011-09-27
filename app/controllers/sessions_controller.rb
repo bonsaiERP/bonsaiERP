@@ -8,21 +8,32 @@ class SessionsController < ApplicationController
     @user = User.new
   end
 
+  # Resend confirmation token
+  def show
+    begin
+      @user = User.find_by_id(params[:id])
+      @user.resend_confirmation
+    rescue
+      redirect_to "/"
+    end
+  end
+
   def create
     @user = User.find_by_email(params[:user][:email])
 
-    if @user and @user.authenticate(params[:user][:password])
-      session[:user_id] = @user.id
-
-      check_logged_user
-    else
-      user = @user
-      @user = User.new(:email => params[:user][:email])
-      @user.errors[:email] = "No existe el email que ingreso" unless user
-      @user.errors[:password] = "La contraseña que ingreso es incorrecta" if user
-      user.errors[:base].each {|err| @user.errors[:base] << err } if user
-
-      render 'new'
+    case
+      when(@user and @user.confirmated? and @user.authenticate(params[:user][:password]) )
+        session[:user_id] = @user.id
+        check_logged_user
+      when(@user and @user.confirmated?)
+        @user.errors[:password] = "La contraseña que ingreso es incorrecta"
+        render "new"
+      when(@user and not(@user.confirmated?))
+        redirect_to session_path(:id => @user.id)
+      else
+        @user = User.new(:email => params[:user][:email])
+        @user.errors[:email] = "El email que ingreso no existe"
+        render "new"
     end
   end
 

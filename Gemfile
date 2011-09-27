@@ -27,7 +27,8 @@ gem 'haml'
 gem 'kaminari'
 gem 'valium'
 
-gem 'nokogiri'
+#gem 'nokogiri'
+gem 'apotomo'
 
 gem 'prawn', '~>0.12.0', :git => 'https://github.com/sandal/prawn.git', :branch => "stable", :submodules => true
 #gem 'newrelic_rpm'

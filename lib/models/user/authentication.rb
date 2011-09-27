@@ -51,9 +51,14 @@ module Models::User::Authentication
       self.save
     end
 
+    def resend_confirmation
+      RegistrationMailer.send_registration(self).deliver
+    end
+
     def verify_reset_password()
 
     end
+
 
     private
     def set_token_and_send_email
