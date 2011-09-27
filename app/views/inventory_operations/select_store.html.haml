@@ -6,6 +6,7 @@
 
 = form_tag new_transaction_inventory_operations_path, :method => 'get', :id => 'select_store' do
   = hidden_field_tag "transaction_id", @transaction.id
+  = hidden_field_tag "operation", params[:operation]
 
   %label Almacen
   = select_tag "store_id", options_from_collection_for_select(Store.org.active, :id, :name), :include_blank => true, 

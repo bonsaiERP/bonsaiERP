@@ -5,7 +5,7 @@
     = link_to account_ledger.description, account_ledger_path(account_ledger)
   %td.cur.amount{'data-account_ledger' => account_ledger.amount_currency} #{ntc account_ledger.amount_currency}
   %td.cur.interests_penalties{'data-vaccount_ledger' => account_ledger.interests_penalties} #{ntc account_ledger.interests_penalties}
-  %td.cur.totaccount_ledger_amount{'data-vaccount_ledger' => account_ledger.amount_currency}= ntc account_ledger.amount_currency
+  %td.cur.totaccount_ledger_amount{'data-vaccount_ledger' => account_ledger.amount_interests_currency}= ntc account_ledger.amount_interests_currency
   %td.actions= link_to "Verificar", account_ledger_path(account_ledger, :ac_id => account_ledger.payment_link_id),
     :title => 'Verificar con cuenta', :class => 'conciliate sync fl',
     :style => 'margin-right: 10px' unless account_ledger.conciliation?

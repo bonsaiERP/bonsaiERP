@@ -1,7 +1,14 @@
 #inventory
-  %h2 Entregas
+  - if transaction.is_a?(Income)
+    %h2 Entregas
+  -else
+    %h2 Recojos
 
-  = link_to "Registrar entrega", select_store_inventory_operation_path(transaction), :class => "new" unless transaction.delivered?
+  - if transaction.is_a?(Income) and not(transaction.delivered?)
+    = link_to "Registrar entrega", select_store_inventory_operation_path(transaction, :operation => 'out'), :class => "new"
+  -elsif not(transaction.delivered?)
+    = link_to "Registrar recojo", select_store_inventory_operation_path(transaction, :operation => 'in'), :class => "new"
+
 
   %table#inventory_table.decorated
     %thead

@@ -12,7 +12,8 @@
     %h3
       = lo @transaction.created_at
       - if @transaction.payment_date.present?
-        %span.n , Vence el
+        %br
+        %span.n Vence el
         %span#due_on= lo @transaction.payment_date
 
 ._30.r.fr

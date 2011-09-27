@@ -27,7 +27,8 @@
     - unless @transaction.draft?
       %li <a href="#pay_plans" id="tab_pay_plans">#{credit_tab_title(@transaction)}</a>
     - if @transaction.show_inventory?
-      %li <a href="#inventory" id="tab_inventory">Entregas</a>
+      - txt = @transaction.is_a?(Income) ? "Entrega" : "Recojo"
+      %li <a href="#inventory" id="tab_inventory">#{txt}</a>
 
   #information
     .clear

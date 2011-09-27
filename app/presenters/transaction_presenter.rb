@@ -16,6 +16,20 @@ class TransactionPresenter
     end
   end
 
+  def new_inventory_link
+    if @transaction.is_a?(Income) and not(@transaction.delivered?)
+      link_to "Registrar entrega", 
+        url_for(:controller => 'inventory_operation', :action => 'select_store',
+                :id => @transaction.id, :operation => 'out'),
+        :class => 'new'
+    elsif @transaction.is_a?(Buy) and not(@transaction.delivered?)
+      link_to "Registrar entrega", 
+        url_for(:controller => 'inventory_operation', :action => 'select_store',
+                :id => @transaction.id, :operation => 'in'),
+        :class => 'new'
+    end
+  end
+
   def email_link
     #content_tag(:div, "Hola")
     "Hola"

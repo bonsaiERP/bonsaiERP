@@ -21,7 +21,7 @@ module Models::Transaction::Calculations
   end
 
   def total_payments_with_interests
-    account_ledgers.active.inject(0) {|sum, v| sum += v.amount_currency }
+    account_ledgers.active.inject(0) {|sum, v| sum += v.amount_interests_currency }
   end
 
   # Presents the total in currency unless the default currency
@@ -29,14 +29,14 @@ module Models::Transaction::Calculations
     (self.total/self.exchange_rate).round(::Transaction::DECIMALS)
   end
 
-  # Sums the total of payments
+  # Sums the total of payments and interests
   def payments_total
     payments.active.sum(:amount)
   end
 
   # Sums the total amount of the payments and interests
   def payments_amount_interests_total
-    payments.active.sum(:amount) + payments.active.sum(:interests_penalties)
+    payments.active.sum(:amount)
   end
 
   # Returns the total value of paid pay_plans
