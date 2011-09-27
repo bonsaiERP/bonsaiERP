@@ -94,10 +94,10 @@ class InventoryOperationsController < ApplicationController
     params[:operation] = "in" unless ["in", "out"].include?( params[:operation] )
 
     if params[:operation] == "out"
-      @transactions = Income.org.inventory.page(@page)
+      @transactions = Income.org.inventory.order("created_at DESC").page(@page)
     else
       redirect_to "/422" unless User::ROLES.slice(0,2).include? session[:user][:rol]
-      @transactions = Buy.org.deliver.page(@page)
+      @transactions = Buy.org.inventory.order("created_at DESC").page(@page)
     end
   end
 
