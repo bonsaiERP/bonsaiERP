@@ -151,11 +151,10 @@ class InventoryOperation < ActiveRecord::Base
 
       return false if repeated_items?
 
-
       inventory_operation_details.each do |det|
         next if det.quantity == 0
         update_transaction_details_balance(det)
-
+#puts "Updated transaction details balance #{det.item_id}:: #{det.quantity} "
         unless is_item_service?(det.item_id)
           if out?
             q = available_stocks[det.item_id] - det.quantity
@@ -242,7 +241,7 @@ class InventoryOperation < ActiveRecord::Base
 
     inventory_operation_details.each do |io_det|
       next if io_det.quantity == 0
-#puts "Q: #{io_det.quantity}"
+ 
       # quantity greater or equal to 0
       if io_det.quantity < 0
         io_det.errors[:quantity] << I18n.t("errors.messages.greater_than_or_equal_to", :count => 0)
@@ -257,7 +256,9 @@ class InventoryOperation < ActiveRecord::Base
         end
       end
 
-      valid_det = ( valid_transaction_quantity(io_det) and valid_det ) if transaction_id.present?
+      if transaction_id.present?
+        valid_det = false unless valid_transaction_quantity(io_det)
+      end
     end
 
     valid_det
@@ -275,6 +276,7 @@ class InventoryOperation < ActiveRecord::Base
   def valid_transaction_quantity(io_det)
     t_det = trans_item(io_det.item_id)
 
+  #puts "BUY #{transaction.is_a?(Buy)} check transaction quantity #{io_det.item_id} : #{io_det.quantity} || #{t_det.item_id} : #{t_det.balance}"
     # For operations of a transaction
     case true
     when transaction.is_a?(Income)

@@ -297,7 +297,7 @@ feature "Inventory Operation", "Test IN/OUT" do
     io.set_transaction
     io.inventory_operation_details[0].quantity.should == b.transaction_details[0].balance
     # Try to enter greater than the amount
-    io.inventory_operation_details[0].quantity == b.transaction_details[0].balance + 1
+    io.inventory_operation_details[0].quantity = b.transaction_details[0].balance + 1
 
     io.save_transaction.should be_false
   end
@@ -321,7 +321,7 @@ feature "Inventory Operation", "Test IN/OUT" do
     i.deliver = true
     i.save.should be_true
 
-    hash = {:ref_number => 'I-0012', :date => Date.today, :contact_id => 1, :operation => 'out', :store_id => 1,
+    hash = {:ref_number => 'I-001', :date => Date.today, :contact_id => 1, :operation => 'out', :store_id => 1,
       :transaction_id => i.id,
       :inventory_operation_details_attributes => [
         {:item_id => 1, :quantity => 0},
@@ -339,7 +339,7 @@ feature "Inventory Operation", "Test IN/OUT" do
     i.reload
     i.transaction_details.last.balance.should == 2
 
-    hash = {:ref_number => 'I-0012', :date => Date.today, :contact_id => 1, :operation => 'in', :store_id => 1,
+    hash = {:ref_number => 'I-002', :date => Date.today, :contact_id => 1, :operation => 'out', :store_id => 1,
       :transaction_id => i.id,
       :inventory_operation_details_attributes => [
         {:item_id => 1, :quantity => 0},
@@ -349,11 +349,16 @@ feature "Inventory Operation", "Test IN/OUT" do
     }
 
     # Exeed the quantity in the balance of a transaction item
+    hash[:transaction_id].should == i.id
     io = InventoryOperation.new(hash)
+
     io.save_transaction.should be_false
+    io.transaction_id.should == i.id
+    i.reload
+
     io.inventory_operation_details[2].errors[:quantity].should_not be_blank
 
-    hash = {:ref_number => 'I-0012', :date => Date.today, :contact_id => 1, :operation => 'in', :store_id => 1,
+    hash = {:ref_number => 'I-0012', :date => Date.today, :contact_id => 1, :operation => 'out', :store_id => 1,
       :transaction_id => i.id,
       :inventory_operation_details_attributes => [
         {:item_id => 1, :quantity => 0},
