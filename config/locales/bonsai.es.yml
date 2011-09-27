@@ -5,6 +5,8 @@ es:
     pagination: 
       next: "Siguiente &gt;"
       previous: "&lt; Anterior"
+      first: "Inicio"
+      last: "Fin"
       truncate: "..."
   income:
     account_ledger_reference: "Venta"
