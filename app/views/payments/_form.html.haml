@@ -22,8 +22,10 @@
         :input_html => {:size => 12, :type => 'decimal', :class => 'amt'}, :hint => 'Puede ingresar hasta 4 decimales',
         :wrapper_html => {:style => "display:#{disp}", :class => 'exchange_rate'}
       .input
-        %label Total (#{@transaction.currency_symbol})
-        %span#payment_total_currency.b
+        %label
+          Total 
+          %span.currency (#{@transaction.currency_symbol})
+        -#%span#payment_total_currency.b
     .clear
 
     = f.input :reference, :label => 'Referencia/Nº Cheque', :input_html => {:rows => 3, :cols => 35}, :as => :text
