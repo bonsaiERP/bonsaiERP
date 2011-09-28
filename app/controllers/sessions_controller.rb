@@ -10,11 +10,16 @@ class SessionsController < ApplicationController
 
   # Resend confirmation token
   def show
-    begin
-      @user = User.find_by_id(params[:id])
-      @user.resend_confirmation
-    rescue
-      redirect_to "/"
+    @user = User.find_by_id(params[:id])
+
+    case
+      when( @user and not( @user.confirmated? ) )
+        @user.resend_confirmation
+      when( @user and @user.confirmated? )
+        redirect_to :action => 'new'
+      else
+        flash[:notice] = "Por favor registrese gratuitamente si desea usar el sistema."
+        redirect_to new_registration_path
     end
   end
 

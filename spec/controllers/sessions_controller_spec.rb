@@ -12,9 +12,6 @@ describe SessionsController do
 
 
   describe "POST /sessions" do
-    before do
-      
-    end
 
     let(:user_mock){
       user_mock = mock_model(User, :id => 1, :confirmated? => true, :organisations => [])
@@ -78,7 +75,45 @@ describe SessionsController do
       post "create", :user => {:email => "demo@example.com", :password => "demo123"}
 
       response.should redirect_to("/sessions/1")
-      
+    end
+  end
+
+  describe "GET /show" do
+    before do
+      controller.stub!(:current_user => nil)
+    end
+
+    let(:user_mock){
+      user_mock = mock_model(User, :id => 1, :confirmated? => true, :organisations => [])
+      user_mock.stub!(:authenticate).with("demo123")
+      user_mock
+    }
+
+    it 'should redirect if confirmed?' do
+      User.stub!(:find_by_id).with("1").and_return(user_mock)
+
+      get "show", :id => 1
+
+      response.should redirect_to "/sessions/new"
+    end
+
+    it 'should resend confirmation if not confirmed' do
+      user_mock.stub!(:confirmated? => false, :resend_confirmation => true)
+      User.stub!(:find_by_id).with("1").and_return(user_mock)
+
+      get "show", :id => 1
+
+      response.should_not be_redirect
+      assigns(:user).class.should == User
+      response.should render_template("show")
+    end
+
+    it 'should rendirect to registrations if user not found' do
+      User.stub!(:find_by_id).with("1").and_return(nil)
+
+      get "show", :id => 1
+
+      response.should redirect_to(new_registration_path)
     end
   end
 end

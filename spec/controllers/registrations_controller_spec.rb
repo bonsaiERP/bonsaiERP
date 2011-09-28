@@ -12,10 +12,10 @@ describe RegistrationsController do
 
   describe "GET /show" do
     it 'should confirm token' do
-      User.stubs(:find_by_id => stub(:confirm_token => true, :id => 1,
+      User.stub!(:find_by_id => stub(:confirm_token => true, :id => 1,
             :organisations => stub(:any? => false)
           ))
-      controller.stubs(:current_user => User.new {|u| u.id = 1})
+      controller.stub!(:current_user => User.new {|u| u.id = 1})
 
       get 'show', :id => 1, :token => "demo123"
 
@@ -24,12 +24,12 @@ describe RegistrationsController do
     end
 
     it 'should redirect to /dashboard if it has organisation' do
-      User.stubs(:find_by_id => stub(:confirm_token => true, :id => 1,
+      User.stub!(:find_by_id => stub(:confirm_token => true, :id => 1,
             :organisations => stub(:any? => false)
           ))
       u = User.new {|u| u.id = 1 }
-      u.stubs(:organisations => stub(:any? => true, :first => 1), :link => stub(:rol => 'admin') )
-      controller.stubs(:current_user => u, 
+      u.stub!(:organisations => stub(:any? => true, :first => 1), :link => stub(:rol => 'admin') )
+      controller.stub!(:current_user => u, 
         :set_organisation_session => true )
 
       get 'show', :id => 1, :token => "demo123"
@@ -46,8 +46,8 @@ describe RegistrationsController do
     end
 
     it 'should redirect to sessions/new if user registered' do
-      User.any_instance.stubs(:confirm_token => false)
-      User.stubs(:find_by_id => User.new)
+      User.any_instance.stub!(:confirm_token => false)
+      User.stub!(:find_by_id => User.new)
       
       get 'show', :id => 1, :token => '123'
       response.should redirect_to "/sessions/new"
@@ -58,9 +58,9 @@ describe RegistrationsController do
     it 'should redirect to dashboard if logged user' do
       session[:user_id] = 1
       u = User.new(:email => 'demo@example.com') {|u| u.id = 1}
-      u.stubs(:organisations => [Organisation.new], :link => stub(:rol => 'admin'))
-      User.stubs(:find => u )
-      controller.stubs(:set_organisation_session => true)
+      u.stub!(:organisations => [Organisation.new], :link => stub(:rol => 'admin'))
+      User.stub!(:find => u )
+      controller.stub!(:set_organisation_session => true)
 
       get 'new'
       response.should redirect_to("/dashboard")

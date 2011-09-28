@@ -120,6 +120,7 @@ Bonsaierp::Application.routes.draw do
     collection do
       get  :add_user
       get  :password
+      get  :default_password
       post :create_user
     end
 
@@ -127,6 +128,7 @@ Bonsaierp::Application.routes.draw do
       get :edit_user
       put :update_user
       put :update_password
+      put :update_default_password
     end
   end
 

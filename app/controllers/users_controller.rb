@@ -3,6 +3,7 @@
 class UsersController < ApplicationController
   respond_to :html, :xml, :json
   before_filter :check_authorization!
+  before_filter :check_if_default_password, :only => [:password, :update_password]
 
   def new
     @user = User.new
@@ -50,7 +51,7 @@ class UsersController < ApplicationController
     h.delete(:password)
 
     if @user.update_attributes(h)
-      redirect_to current_user
+      redirect_to current_user, :notice => "Se ha actualizado correctamente sus datos."
     else
       render :action => 'edit'
     end
@@ -81,6 +82,23 @@ class UsersController < ApplicationController
     end
   end
 
+  # GET /users/default_password
+  def default_password
+    return redirect_to "/422" unless current_user.change_default_password?
+    @user = current_user
+  end
+
+  # PUT /users/update_default_password
+  def update_default_password
+    return redirect_to "/422" unless current_user.change_default_password?
+
+    if current_user.update_password(params[:user])
+      redirect_to current_user
+    else
+      render "default_password"
+    end
+  end
+
   # /users/password
   def password
   end
@@ -98,7 +116,12 @@ class UsersController < ApplicationController
     end
   end
 
+
   private
+  def check_if_default_password
+    redirect_to default_password_users_path if current_user.change_default_password?
+  end
+
   def check_if_creator(user)
     if user.link.creator?
       flash[:warning] = "No es posible cambiar para el creador de la empresa, Haga <a href='/users/0/edit'>click aqui</a> si desea cambiar sus datos".html_safe

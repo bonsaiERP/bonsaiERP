@@ -25,6 +25,7 @@ es:
         email: "El formato de su email es incorrecto"
         confirm: "No ha confirmado su cuenta. Revise en su email el mensaje \"Active su cuenta en www.bonsaierp.com\" y siga las instrucciones"
         password_confirmation: "La contraseña y la confirmación de contraseña no son iguales"
+        wrong_password: "La contraseña que ingreso es incorrecta"
       account_ledger:
         invalid_contact: "Debe seleccionar un Cliente, Proveedor o Personal"
         same_account: "Las cuentas que selecciono son identicas"

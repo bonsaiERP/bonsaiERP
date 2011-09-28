@@ -33,9 +33,9 @@ class User < ActiveRecord::Base
     u.validates :password, :length => {:minimum => 6}
   end
 
-  with_options :if => :change_default_password? do |u|
-    u.validates_inclusion_of :rolname, :in => ROLES.slice(1,3)
-  end
+  #with_options :if => :change_default_password? do |u|
+  #  u.validates_inclusion_of :rolname, :in => ROLES.slice(1,3)
+  #end
 
   #attr_protected :account_type
   attr_accessible :email, :password, :password_confirmation, :first_name, :last_name, :phone, :mobile, :website, 
@@ -52,6 +52,15 @@ class User < ActiveRecord::Base
   # Returns the link with te organissation one is logged in
   def link
     @link ||= links.find_by_organisation_id(OrganisationSession.organisation_id)
+  end
+
+  # Methods for a defined link
+  [:rol, :active].each do |met|
+    class_eval <<-CODE, __FILE__, __LINE__ + 1
+      def link_#{met}
+        link.#{met}
+      end
+    CODE
   end
 
   # returns the organisation which one is logged in
@@ -72,13 +81,33 @@ class User < ActiveRecord::Base
     organisations.map(&:id).include?(organisation_id.to_i)
   end
 
-  def update_password(params)
-    self.password                = params[:password]
-    self.password_confirmation   = params[:password_confirmation]
-    unless password === password_confirmation
-      self[:errors] << I18n.t("")
+  def update_default_password(params)
+    pwd, pwd_conf = params[:password], params[:password_confirmation]
+
+    unless pwd == pwd_conf
+      self.errors[:password] << I18n.t("errors.messages.user.password_confirmation")
+      return false
     end
     self.change_default_password = false
+    self.password = pwd
+
+    self.save
+  end
+
+  def update_password(params)
+    return false if change_default_password?
+
+    unless authenticate(params[:old_password])
+      self.errors[:old_password] << I18n.t("errors.messages.user.wrong_password")
+      return false
+    end
+
+    unless params[:password] === params[:password_confirmation]
+      self.errors[:password] << I18n.t("errors.messages.user.password_confirmation")
+      return false
+    end
+
+    self.password = params[:password]
 
     self.save
   end
