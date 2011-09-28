@@ -20,7 +20,7 @@
 .pad-reg
   %h1 Iniciar sesión
 
-  = simple_form_for(@user, :url => sessions_path) do |f|
+  = simple_form_for(@user, :url => sessions_path, :method => :post) do |f|
     = bonsai_form_error(f)
     = f.input :email, :label => "Email", :input_html => {:size => 40}
     .clear
