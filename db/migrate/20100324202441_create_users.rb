@@ -19,7 +19,7 @@ class CreateUsers < ActiveRecord::Migration
       t.string   :confirmation_token, :limit => 20
       t.datetime :confirmation_sent_at
       t.datetime :confirmed_at
-      t.string   :reset_password_token, :limit => 20
+      t.string   :reset_password_token
       t.datetime :reset_password_sent_at
       t.datetime :reseted_password_at
       t.integer  :sign_in_count, :default => 0

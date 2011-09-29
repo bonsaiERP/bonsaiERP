@@ -52,6 +52,11 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # Add some helper methods to the controllers
+  def help
+    Helper.instance
+  end
+
 protected
   # Creates the flash messages when an item is deleted
   def set_redirect_options(klass, options)

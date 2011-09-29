@@ -94,23 +94,6 @@ describe User do
       u.authenticate("demo123").should be_false
     end
 
-    it 'should allow password reset' do
-      u = User.new_user("demo@example.com", "demo123")
-      u.save.should be_true
-      u.confirmed_at.should be_nil
-      u.should_not be_change_default_password
-      
-      u.confirm_token(u.confirmation_token).should be_true
-
-      u.reset_password_token.should be_blank
-      u.reset_password_sent_at.should be_blank
-
-      u.reset_password.should be_true
-      u.reload
-
-      u.reset_password_token.should_not be_blank
-      u.reset_password_sent_at.should_not be_blank
-    end
   end
 
   describe "User with change_default_password = true" do
@@ -265,6 +248,64 @@ describe User do
       user.authenticate('demo123').should be_false
       user.authenticate('Demo123').should_not be_false
 
+    end
+  end
+
+  describe "reset password" do
+    let(:pass_params) {
+      {:password => "demo123", :password_confirmation => "demo123",
+      :old_password=> "demo123"}
+    }
+    let(:user_params) {
+      {:email => 'other@example.com', :first_name => 'Other',
+      :last_name => 'User', :abbreviation => 'OUS', :rolname => 'operations'}
+    }
+
+    before(:each) do
+      OrganisationSession.set :id => 1
+      RegistrationMailer.stub!(:send_registration => stub(:deliver => true))
+    end
+
+    let!(:user) {
+      user = User.new
+      user.add_company_user(user_params)
+      user.confirm_token(user.confirmation_token)
+      user.update_default_password(pass_params)
+      user
+    }
+
+    it 'should reset password' do
+      user.reset_password_token.should be_blank
+      user.reset_password_sent_at.should be_blank
+      ResetPasswordMailer.stub!(:send_reset_password => stub(:deliver => true))
+
+      user.reset_password.should be_true
+      user.reset_password_token.should_not be_blank
+      user.reset_password_sent_at.should_not be_blank
+    end
+
+    it 'should allow reset and update password' do
+      ResetPasswordMailer.stub!(:send_reset_password => stub(:deliver => true))
+
+      user.reset_password.should be_true
+      p_params = {:reset_password_token => user.reset_password_token,
+        :password => "newDemo123", :password_confirmation => "newDemo123"
+      }
+      
+      user.can_reset_password?.should be_true
+      user.verify_token_and_update_password(p_params).should be_true
+
+      user.reset_password_token.should be_nil
+      user.authenticate("demo123").should be_false
+      user.authenticate("newDemo123").should be_true
+    end
+
+    it 'should not allow reset password when outdated' do
+      ResetPasswordMailer.stub!(:send_reset_password => stub(:deliver => true))
+
+      user.reset_password.should be_true
+      Time.zone.stub!(:now => Time.zone.now + 2.hours.ago)
+      user.can_reset_password?.should be_false
     end
   end
 end

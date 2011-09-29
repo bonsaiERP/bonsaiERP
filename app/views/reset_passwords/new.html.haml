@@ -1,1 +1,21 @@
+:css
+  #links{ display:none;}
+  input{
+    font-size: 1.5em;
+    padding: 2px 6px;
+  }
+  label{
+    font-size: 1.2em; 
+    display: block; 
+    font-weight: bold; 
+    color: #383838;
+  }
+  .input{
+    width: 100%;
+  }
 %h1 Recuperar contraseña
+
+= simple_form_for(@user, :url => reset_passwords_path) do |f|
+  = f.input :email, :label => "Email"
+  .clear
+  = f.submit "Recuperar contraseña"
