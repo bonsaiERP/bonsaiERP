@@ -22,6 +22,13 @@
     %label Cuenta en #{ac.currency_symbol}
     %h3= ntc ac.amount
 
+.moneybox.fl{:style => "width:190px"}
+  %label Saldo compras #{currency_symbol} (aprox)
+  %h3= @supplier.total_balance_buys
+
+.moneybox.fl{:style => "width:190px"} 
+  %label Saldo ventas #{currency_symbol} (aprox)
+  %h3= @supplier.total_balance_incomes
 
 .clear
 
