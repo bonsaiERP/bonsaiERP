@@ -13,7 +13,7 @@ class UsersController < ApplicationController
   def create
     @user = User.new(params[:user])
     if @user.save
-      flash[:notice] = "Le hemos enviado un email para confirmar a: #{@user.email}"
+      flash[:notice] = "Le hemos enviado un email para confirmar a: #{@user.email}."
     else
       render :action => 'new'
     end
@@ -33,7 +33,7 @@ class UsersController < ApplicationController
   def create_user
     @user = User.new
     if @user.add_company_user(params[:user])
-      flash[:notice] = "El usuario #{@user} ha sido adicionado"
+      flash[:notice] = "El usuario #{@user} ha sido adicionado."
       redirect_to "/configuration"
     else
       render :action => 'add_user'
@@ -75,7 +75,7 @@ class UsersController < ApplicationController
     check_if_creator(@user)
     
     if @user.update_attributes(params[:user])
-      flash[:notice] = "El usuario #{@user} ha sido actualizado"
+      flash[:notice] = "El usuario #{@user} ha sido actualizado."
       redirect_to "/configuration"
     else
       render :action => 'edit_user'
@@ -124,7 +124,7 @@ class UsersController < ApplicationController
 
   def check_if_creator(user)
     if user.link.creator?
-      flash[:warning] = "No es posible cambiar para el creador de la empresa, Haga <a href='/users/0/edit'>click aqui</a> si desea cambiar sus datos".html_safe
+      flash[:warning] = "No es posible cambiar para el creador de la empresa, Haga <a href='/users/0/edit'>click aquí</a> si desea cambiar sus datos.".html_safe
       redirect_to "/configuration"
     end
   end

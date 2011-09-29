@@ -99,7 +99,7 @@ private
   # Checks if the current user has the rights to edit
   def check_pay_plan_authorization
     unless User.admin_gerency?(session[:user][:rol])
-      flash[:warning] = "Usted no tiene acceso a esta acción"
+      flash[:warning] = "Usted no tiene acceso a esta acción."
 
       redirect_to user_path(current_user, :xhr => true)
     end

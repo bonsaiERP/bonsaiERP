@@ -33,9 +33,9 @@ class AccountLedgersController < ApplicationController
     @account_ledger = AccountLedger.org.find(params[:id])
 
     if @account_ledger.conciliate_account
-      flash[:notice] = "Se ha verificado exitosamente la transacción"
+      flash[:notice] = "Se ha verificado exitosamente la transacción."
     else
-      flash[:error] = @account_ledger.errors[:base].join(", ")
+      flash[:error] = @account_ledger.errors[:base].join(", ") + "."
     end
     redirect_to account_ledger_path(@account_ledger, :ac_id => @account_ledger.account_id)
   end
@@ -45,7 +45,7 @@ class AccountLedgersController < ApplicationController
     @account_ledger = AccountLedger.new_money(params[:account_ledger])
 
     if @account_ledger.save
-      flash[:notice] = "Se ha creado exitosamente la transacción"
+      flash[:notice] = "Se ha creado exitosamente la transacción."
       redirect_to @account_ledger
     else
       render :action => 'new'
@@ -57,9 +57,9 @@ class AccountLedgersController < ApplicationController
     @account_ledger = AccountLedger.org.find(params[:id])
 
     if @account_ledger.null_transaction
-      flash[:notice] = "Se ha anulado la transacción correctamente"
+      flash[:notice] = "Se ha anulado la transacción correctamente."
     else
-      flash[:error] = "No se pudo anular la transacción"
+      flash[:error] = "No se pudo anular la transacción."
     end
 
     redirect_to @account_ledger
@@ -72,7 +72,7 @@ class AccountLedgersController < ApplicationController
     @account_ledger.reference = "Transferencia"
 
     if @account_ledger.save
-      flash[:notice] = "Se ha realizado exitosamente la transferencia entre cuentas, ahora debe conciliarlas para completar la transferencia"
+      flash[:notice] = "Se ha realizado exitosamente la transferencia entre cuentas, ahora debe conciliarlas para completar la transferencia."
       redirect_to account_ledger_path(@account_ledger, :ac_id => @account_ledger.account_id)
     else
       render :action => 'new_transference'

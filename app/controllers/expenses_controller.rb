@@ -38,7 +38,7 @@ class ExpensesController < ApplicationController
   # GET /buys/1/edit
   def edit
     if @transaction.state == 'approved'
-      flash[:warning] = "No es posible editar una nota de gasto aprobada"
+      flash[:warning] = "No es posible editar una nota de gasto aprobada."
       redirect_to @transaction
     end
   end
@@ -91,9 +91,9 @@ class ExpensesController < ApplicationController
   # Method to approve an income
   def approve
     if @transaction.approve!
-      flash[:notice] = "El gasto fue aprobado"
+      flash[:notice] = "El gasto fue aprobado."
     else
-      flash[:error] = "Existio un problema con la aprobación"
+      flash[:error] = "Existio un problema con la aprobación."
     end
 
     anchor = ''

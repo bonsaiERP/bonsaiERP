@@ -50,7 +50,7 @@ class IncomesController < ApplicationController
   # GET /incomes/1/edit
   def edit
     if @transaction.state == 'approved'
-      flash[:warning] = "No es posible editar una nota de venta aprobada"
+      flash[:warning] = "No es posible editar una nota de venta aprobada."
       redirect_to @transaction
     end
   end
@@ -96,7 +96,7 @@ class IncomesController < ApplicationController
       redirect_transaction
     else
       @transaction.null_transaction
-      flash[:notice] = "Se ha anulado la nota #{@transaction}"
+      flash[:notice] = "Se ha anulado la nota #{@transaction}."
       redirect_to @transaction
     end
   end
@@ -107,9 +107,9 @@ class IncomesController < ApplicationController
     if @transaction.can_approve?(session)
 
       if @transaction.approve!
-        flash[:notice] = "La nota de venta fue aprobada"
+        flash[:notice] = "La nota de venta fue aprobada."
       else
-        flash[:error] = "Existio un problema con la aprobación"
+        flash[:error] = "Existio un problema con la aprobación."
       end
 
       anchor = ''
@@ -117,7 +117,7 @@ class IncomesController < ApplicationController
 
       redirect_to income_path(@transaction, :anchor => anchor)
     else
-      flash[:error] = "Usted no puede aprobar la venta"
+      flash[:error] = "Usted no puede aprobar la venta."
       redirect_to @transaction
     end
   end
@@ -126,9 +126,9 @@ class IncomesController < ApplicationController
   def approve_credit
     @transaction = Income.org.find(params[:id])
     if @transaction.approve_credit params[:income]
-      flash[:notice] = "Se aprobo correctamente el crédito"
+      flash[:notice] = "Se aprobó correctamente el crédito."
     else
-      flash[:error] = "Existio un error al aprobar el crédito"
+      flash[:error] = "Existio un error al aprobar el crédito."
     end
 
     redirect_to @transaction
@@ -138,9 +138,9 @@ class IncomesController < ApplicationController
     @transaction = Income.org.find(params[:id])
 
     if @transaction.approve_deliver
-      flash[:notice] = "Se aprobo la entrega de material"
+      flash[:notice] = "Se aprobó la entrega de material."
     else
-      flash[:error] = "Existio un error al aprobar la entrega de material"
+      flash[:error] = "Existio un error al aprobar la entrega de material."
     end
     
     redirect_to @transaction
@@ -153,7 +153,7 @@ private
 
   # Redirects in case that someone is trying to edit or destroy an  approved income
   def redirect_income
-    flash[:warning] = "No es posible editar una nota ya aprobada!"
+    flash[:warning] = "No es posible editar una nota ya aprobada!."
     redirect_to incomes_path
   end
 

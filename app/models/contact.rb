@@ -52,6 +52,14 @@ class Contact < ActiveRecord::Base
     matchcode
   end
 
+  def total_balance_incomes
+    incomes.approved[:balance, :exchange_rate].inject(0){|sum, (bal, rate)| sum += bal * rate}
+  end
+
+  def total_balance_buys
+    buys.approved[:balance, :exchange_rate].inject(0){|sum, (bal, rate)| sum += bal * rate}
+  end
+
   def account_cur(currency_id)
     accounts.find_by_currency_id(currency_id)
   end

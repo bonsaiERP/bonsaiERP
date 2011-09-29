@@ -55,7 +55,8 @@ class Account < ActiveRecord::Base
       .or(s.table[:accountable_type].eq('MoneyStore'))
     ).order("accountable_type")
   }
-
+  scope :to_pay, contact.where("amount > 0")
+  scope :to_recieve, contact.where("amount < 0")
 
   def to_s
     if accountable_type === "Contact"

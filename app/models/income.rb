@@ -20,6 +20,8 @@ class Income < Transaction
   validates             :ref_number,           :presence => true , :uniqueness => { :scope => :organisation_id, :allow_blank => false}
   validate              :valid_number_of_items
 
+  scope :sum_total_balance, org.approved.select("SUM(balance * exchange_rate) AS total_bal").first[:total_bal]
+
   def to_s
     "Venta #{ref_number}"
   end

@@ -54,3 +54,14 @@
   color: darken($color, 20%);
   background-color: $bg_color;
 }
+@mixin box($width, $color, $border: 1px, $padding: 5px, $margin: 7px) {
+  @include rounded-corners(4px);
+  @include b-shadow(1px, 1px, 3px, $color);
+  border-width: $border;
+  border-style: solid;
+  border-color: $color;
+  padding: $padding;
+  margin: $margin;
+  float: left;
+  width: $width;
+}

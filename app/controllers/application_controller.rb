@@ -63,16 +63,16 @@ protected
     if klass.destroyed?
       case
       when (options[:notice].blank? and flash[:notice].blank?)
-        flash[:notice] = "Se ha eliminado el registro correctamente"
+        flash[:notice] = "Se ha eliminado el registro correctamente."
       when (options[:notice] and flash[:notice].blank?)
         flash[:notice] = options[:notice]
       end
     else
       if flash[:error].blank? and klass.errors.any?
-        txt = options[:error] ? options[:error] : "No se pudo borrar el registro: #{klass.errors[:base].join(", ")}" 
+        txt = options[:error] ? options[:error] : "No se pudo borrar el registro: #{klass.errors[:base].join(", ")}." 
         flash[:error] = txt
       elsif flash[:error].blank?
-        txt = options[:error] ? options[:error] : "No se pudo borrar el registro"
+        txt = options[:error] ? options[:error] : "No se pudo borrar el registro."
         flash[:error] = txt
       end
     end
@@ -121,4 +121,3 @@ protected
   end
   
 end
-

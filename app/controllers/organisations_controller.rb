@@ -51,7 +51,7 @@ class OrganisationsController < ApplicationController
       if set_organisation_session(@organisation)
         redirect_to "/dashboard"
       else
-        flash[:error] = "Por favor ingrese de nuevo existio un error en el sistema"
+        flash[:error] = "Por favor ingrese de nuevo existio un error en el sistema."
         redirect_to "/users/sign_out"
       end
     else
@@ -107,7 +107,7 @@ class OrganisationsController < ApplicationController
     @organisation = Organisation.find(session[:organisation][:id])
     if @organisation.update_attributes(params[:organisation])
       set_organisation_session @organisation
-      flash[:notice] = "Se ha actualizado correctamente los datos de su empresa"
+      flash[:notice] = "Se ha actualizado correctamente los datos de su empresa."
 
       redirect_to "/configuration#organisation"
     else
@@ -137,7 +137,7 @@ class OrganisationsController < ApplicationController
       set_organisation_session(@organisation)
       redirect_to dashboard_url
     else
-      flash[:error] = "Debe seleccionar una organización válida"
+      flash[:error] = "Debe seleccionar una organización válida."
       redirect_to organisations_path
     end
   end
@@ -152,7 +152,7 @@ class OrganisationsController < ApplicationController
   def update_preferences
     @organisation = Organisation.find(organisation_id)
     if @organisation.update_preferences(params[:organisation])
-      flash[:notice] = "Se ha actualizado correctamente las preferencias de #{@organisation}"
+      flash[:notice] = "Se ha actualizado correctamente las preferencias de #{@organisation}."
       set_organisation_session(@organisation)
 
       redirect_to "/configuration#organisation"

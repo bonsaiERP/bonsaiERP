@@ -100,9 +100,9 @@ class BuysController < ApplicationController
   # Method to approve an income
   def approve
     if @transaction.approve!
-      flash[:notice] = "La compra fue aprobada"
+      flash[:notice] = "La compra fue aprobada."
     else
-      flash[:error] = "Existio un problema con la aprobación"
+      flash[:error] = "Existio un problema con la aprobación."
     end
 
     anchor = ''

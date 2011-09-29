@@ -46,7 +46,7 @@ class ResetPasswordsController < ApplicationController
     @user = User.find_by_id_and_reset_password_token(id, token)
 
     unless @user and @user.can_reset_password?
-      flash[:warning] = "No se puede cambiar de contraseña"
+      flash[:warning] = "No se puede cambiar de contraseña."
       redirect_to new_reset_password_path
     end
   end

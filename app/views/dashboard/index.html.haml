@@ -1,25 +1,6 @@
 :css
   #links{ display: none; }
   p.dash, ol.dash li{font-size: 120%; padding: 7px;}
-  .box{
-    border: 1px solid #CFCFCF;
-    margin: 7px;
-    padding: 5px;
-    float: left;
-    width: 430px;
-    -moz-border-radius: 4px;
-    -webkit-border-radius: 4px;
-    border-radius: 4px;
-    -moz-box-shadow: 1px 1px 2px #AFAFAF;
-    -webkit-box-shadow: 1px 1px 2px #AFAFAF;
-    box-shadow: 1px 1px 2px #AFAFAF;
-  }
-  ul.list{ padding: 2px 0px; border-top: 1px solid #AFAFAF; }
-  ul.list>li{ list-style: none; margin: 8px 2px 5px; padding: 0px; }
-  .box h3, .box h4{ margin: 0px 0px 4px; }
-  .box ul.norm{margin: 0px; padding: 0px; }
-  .box ul.norm li{list-style: none; padding: 4px; }
-
 
 - if current_user.change_default_password?
   %h3= link_to "Le recomendamos crear una nueva contraseña", "" 
@@ -31,45 +12,17 @@
 - fdate = 60
 
 .box
-  %h3._50.fl Cuentas por <span class="dark_green">cobrar</span>
-  .hint._50.fl En los siguientes #{fdate} días
-  .clear
-  /%h3.black #{currency_symbol} #{ntc PayPlan.in_to_currency(currency_id, fdate.days.from_now) }
-
-  /= link_to "Ver todas", pay_plans_path(:option => "in")
-
-.box
-
-  %h3._50.fl Cuentas por <span class="red">pagar</span>
-  .hint._50.fl En los siguientes #{fdate} días
-  .clear
-  /%h3.black #{currency_symbol} #{ntc PayPlan.out_to_currency(currency_id, fdate.days.from_now) }
-  
-  /= link_to "Ver todas", pay_plans_path(:option => "out")
-
-.clear
+  %h3._50.fl.n 
+    Cuentas por <span class="b dark_green">cobrar</span>
+    %ul.list
+      - @presenter.accounts_to_recieve.each do |ac|
+        %li.b= ac
 
 .box
-  %h3 Cuentas
-  - tot = 0
-  /- Account.org.includes(:account_ledgers, :currency).each do |ac|
-  /  %ul.list
-  /    %li
-  /      %h4= link_to ac, ac, :class => 'b'
-
-  /      - unless ac.currency_id == currency_id
-  /        - tot += exchange(ac, :total_amount, @currency_rates)
-  /        .b.fl._50 #{currency_symbol} #{ntc exchange(ac, :total_amount, @currency_rates)}
-  /      - else
-  /        - tot += ac.total_amount
-
-  /      .b.fl._50 #{with_currency ac, :total_amount}
-  /      .clear
-  /      = link_pendent_ledgers(ac)
-
-  %h3.black #{currency_symbol} #{ntc tot}
-
-/.box
-/  %h2 Ultimo movimiento
-
+  %h3._50.fl.n 
+    Cuentas por <span class="b red">pagar</span>
+    %ul.list
+      - @presenter.accounts_to_pay.each do |ac|
+        %li.b= ac
 .clear
+

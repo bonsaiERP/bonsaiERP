@@ -82,6 +82,11 @@ ul.breadcrumps{
     }
   }
 }
+ul.list{
+  padding: 2px 0px;
+  margin: 0px;
+  >li{ list-style: none; margin: 8px 2px 5px; padding: 0px; }
+}
 .pagination{
   font-weight: bold;
   float:left;
@@ -415,3 +420,9 @@ ul.menu{
   background-color: #7DBF47 !important; 
   color: #FFF !important;
 }
+
+.box{
+  @include box(430px, lighten($black, 30%));
+  border-color: darken($white, 30%);
+}
+

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110919150401) do
+ActiveRecord::Schema.define(:version => 20110929210133) do
 
   create_table "account_currencies", :force => true do |t|
     t.integer  "organisation_id"
@@ -125,6 +125,7 @@ ActiveRecord::Schema.define(:version => 20110919150401) do
   add_index "accounts", ["account_type_id"], :name => "index_accounts_on_account_type_id"
   add_index "accounts", ["accountable_id"], :name => "index_accounts_on_accountable_id"
   add_index "accounts", ["accountable_type"], :name => "index_accounts_on_accountable_type"
+  add_index "accounts", ["amount"], :name => "index_accounts_on_amount"
   add_index "accounts", ["currency_id"], :name => "index_accounts_on_currency_id"
   add_index "accounts", ["organisation_id"], :name => "index_accounts_on_organisation_id"
   add_index "accounts", ["original_type"], :name => "index_accounts_on_original_type"
@@ -398,13 +399,17 @@ ActiveRecord::Schema.define(:version => 20110919150401) do
     t.decimal  "minimum",                       :precision => 14, :scale => 2
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "user_id"
   end
 
   add_index "stocks", ["item_id"], :name => "index_stocks_on_item_id"
   add_index "stocks", ["minimum"], :name => "index_stocks_on_minimum"
   add_index "stocks", ["organisation_id"], :name => "index_stocks_on_organisation_id"
+  add_index "stocks", ["quantity"], :name => "index_stocks_on_quantity"
   add_index "stocks", ["state"], :name => "index_stocks_on_state"
   add_index "stocks", ["store_id"], :name => "index_stocks_on_store_id"
+  add_index "stocks", ["updated_at"], :name => "index_stocks_on_updated_at"
+  add_index "stocks", ["user_id"], :name => "index_stocks_on_user_id"
 
   create_table "stores", :force => true do |t|
     t.string   "name"
