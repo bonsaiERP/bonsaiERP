@@ -38,7 +38,6 @@ class ApplicationController < ActionController::Base
     if request.xhr?
       if request.delete?
         render :json => klass.to_json(:methods => [ :destroyed?, :errors ])
-        #.attributes.merge(:destroyed => klass.destroyed?, :errors => klass.errors[:base].join(", "))
       else
         render :json => klass
       end

@@ -28,7 +28,24 @@ module Models::Transaction
         set_balance_inventory
         set_total_discount_amount
         check_repated_items
+        calculate_orinal_total
+
         return false unless errors.empty?
+      end
+
+      def calculate_orinal_total
+        items = Item.org.where(:id => transaction_details.map(&:item_id))[:id, :price]
+        s = transaction_details.inject(0) do |s, det|
+          it = items.find {|i| i[0] === det.item_id }
+          s += it[1]/exchange_rate * det.quantity unless det.marked_for_destruction?
+          s
+        end
+
+        t_taxes = tax_percent/100 * s
+        s += t_taxes
+        self.price_change = (s == total ? false : true)
+
+        self.original_total = s
       end
 
       def check_repated_items

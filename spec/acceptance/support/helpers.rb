@@ -117,6 +117,7 @@ module HelperMethods
     end
   end
 
+
   def create_bank(options = {})
     options = {:currency_id => 1, :name => "Bank", :number => "0001"}.merge(options)
     b = Bank.create!(options)

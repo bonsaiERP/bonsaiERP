@@ -17,6 +17,7 @@ feature "Income", "test features" do
   let!(:bank) { create_bank(:number => '123', :amount => 0) }
   let(:bank_account) { bank.account }
   let!(:client) { create_client(:matchcode => 'Karina Luna') }
+  let!(:tax) { Tax.create(:name => "Tax1", :abbreviation => "ta", :rate => 10)}
 
   let(:income_params) do
       d = Date.today
@@ -938,5 +939,65 @@ feature "Income", "test features" do
 
     p = i.new_payment
     p.amount.should == 200
+  end
+
+  scenario "Check amount change of prices" do
+    items = Item.find(1, 2)
+
+    i_params = income_params.dup
+
+    i1 = items.first
+    i2 = items.last
+
+    # no changes
+    i_params[:discount] = 0
+    i_params[:transaction_details_attributes] = [
+      {:item_id => i1.id, :quantity => 10, :price => i1.price },
+      {:item_id => i2.id, :quantity => 20, :price => i2.price }
+    ]
+    tot = i1.price * 10 + i2.price * 20
+
+    i = Income.new(i_params)
+    i.save_trans.should be_true
+
+    i.should be_persisted
+    i.should be_draft
+    i.total.should == tot
+    i.original_total.should == i1.price * 10 + i2.price * 20
+    i.should_not be_price_change
+
+    # item prices
+    i_params[:transaction_details_attributes] = [
+      {:item_id => i1.id, :quantity => 10, :price => i1.price + 1 },
+      {:item_id => i2.id, :quantity => 20, :price => i2.price }
+    ]
+
+    # Only change of price
+    i = Income.new(i_params)
+    i.save_trans.should be_true
+
+    tot = (i1.price + 1) * 10 + i2.price * 20
+
+    i.should be_persisted
+    i.should be_draft
+    i.total.should == tot
+    i.original_total.should == i1.price * 10 + i2.price * 20
+    i.should be_price_change
+
+    # With discount
+    i_params[:discount] = 3
+    i = Income.new(i_params)
+    i.save_trans.should be_true
+    i.original_total.should == i1.price * 10 + i2.price * 20
+    i.should be_price_change
+
+    # with taxes
+    i_params[:discount] = 3
+    tax = Tax.org.first
+    i_params[:taxis_ids] = [tax.id]
+    i = Income.new(i_params)
+    i.save_trans.should be_true
+    i.original_total.should == ( i1.price * 10 + i2.price * 20 ) * (1 + tax.rate/100)
+    i.should be_price_change
   end
 end
