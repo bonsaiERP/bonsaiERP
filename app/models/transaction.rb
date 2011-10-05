@@ -4,7 +4,7 @@
 class Transaction < ActiveRecord::Base
   acts_as_org
 
-  STATES   = ["draft"  , "approved" , "paid" , "due", "inventory", "nulled"]
+  STATES   = ["draft"  , "approved" , "paid" , "due", "inventory", "nulled", "discount"]
   TYPES    = ['Income' , 'Expense'  , 'Buy']
   DECIMALS = 2
   # Determines if the oprations is made on transaction or pay_plan or payment
@@ -47,8 +47,6 @@ class Transaction < ActiveRecord::Base
   # validations
   #validates :account_id, :contact_account => true
   validates :contact_id, :contact  => true
-
-  #default_scope where(:active => true)
 
   # scopes
   scope :draft    , where(:state => 'draft')

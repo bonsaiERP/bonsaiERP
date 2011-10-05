@@ -964,7 +964,7 @@ feature "Income", "test features" do
     i.should be_draft
     i.total.should == tot
     i.original_total.should == i1.price * 10 + i2.price * 20
-    i.should_not be_price_change
+    i.should_not be_discounted
 
     # item prices
     i_params[:transaction_details_attributes] = [
@@ -982,14 +982,14 @@ feature "Income", "test features" do
     i.should be_draft
     i.total.should == tot
     i.original_total.should == i1.price * 10 + i2.price * 20
-    i.should be_price_change
+    i.should be_discounted
 
     # With discount
     i_params[:discount] = 3
     i = Income.new(i_params)
     i.save_trans.should be_true
     i.original_total.should == i1.price * 10 + i2.price * 20
-    i.should be_price_change
+    i.should be_discounted
 
     # with taxes
     i_params[:discount] = 3
@@ -998,6 +998,6 @@ feature "Income", "test features" do
     i = Income.new(i_params)
     i.save_trans.should be_true
     i.original_total.should == ( i1.price * 10 + i2.price * 20 ) * (1 + tax.rate/100)
-    i.should be_price_change
+    i.should be_discounted
   end
 end

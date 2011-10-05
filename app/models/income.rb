@@ -21,6 +21,7 @@ class Income < Transaction
   validate              :valid_number_of_items
 
   scope :sum_total_balance, org.approved.select("SUM(balance * exchange_rate) AS total_bal").first[:total_bal]
+  scope :discount, where(:discounted => true)
 
   def to_s
     "Venta #{ref_number}"

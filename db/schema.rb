@@ -505,7 +505,7 @@ ActiveRecord::Schema.define(:version => 20111004214811) do
     t.integer  "contact_id"
     t.boolean  "delivered",                                                         :default => false
     t.decimal  "original_total",                     :precision => 14, :scale => 2
-    t.boolean  "price_change",                                                      :default => false
+    t.boolean  "discounted",                                                        :default => false
   end
 
   add_index "transactions", ["account_id"], :name => "index_transactions_on_account_id"
@@ -520,10 +520,10 @@ ActiveRecord::Schema.define(:version => 20111004214811) do
   add_index "transactions", ["deliver"], :name => "index_transactions_on_deliver"
   add_index "transactions", ["deliver_approver_id"], :name => "index_transactions_on_deliver_approver_id"
   add_index "transactions", ["delivered"], :name => "index_transactions_on_delivered"
+  add_index "transactions", ["discounted"], :name => "index_transactions_on_discounted"
   add_index "transactions", ["nuller_id"], :name => "index_transactions_on_nuller_id"
   add_index "transactions", ["organisation_id"], :name => "index_transactions_on_organisation_id"
   add_index "transactions", ["payment_date"], :name => "index_transactions_on_payment_date"
-  add_index "transactions", ["price_change"], :name => "index_transactions_on_price_change"
   add_index "transactions", ["project_id"], :name => "index_transactions_on_project_id"
   add_index "transactions", ["ref_number"], :name => "index_transactions_on_ref_number"
   add_index "transactions", ["state"], :name => "index_transactions_on_state"

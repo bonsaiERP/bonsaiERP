@@ -43,7 +43,7 @@ module Models::Transaction
 
         t_taxes = tax_percent/100 * s
         s += t_taxes
-        self.price_change = (s == total ? false : true)
+        self.discounted = (s == total ? false : true)
 
         self.original_total = s
       end
