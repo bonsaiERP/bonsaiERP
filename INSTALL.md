@@ -102,7 +102,7 @@ Open the file with and editor in this case VIM
 
 And add the following
 
-        #! /bin/sh
+    #! /bin/sh
 
     ### BEGIN INIT INFO
     # Provides:          nginx
