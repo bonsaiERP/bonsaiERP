@@ -130,7 +130,7 @@ class Item < ActiveRecord::Base
   # Modifications for rubinius
   def self.simple_search(search, limit = 20)
     sc = self.org.where("code LIKE :search OR name LIKE :search", :search => "%#{search}%")
-    sc.limit(limit)[:id, :code, :name, :price].map do |id, code, name, price|
+    sc.limit(limit).values_of(:id, :code, :name, :price).map do |id, code, name, price|
       {:id => id, :code => code, :name => name, :price => price, :label => "#{code} - #{name}", :value => id}
     end
   end
