@@ -39,6 +39,14 @@ Install **MySQL**
     
     sudo apt-get install mysql-server libmysqld-dev
 
+## Install node.js
+
+    git clone --depth 1 git://github.com/joyent/node.git
+    cd node
+    ./configure
+    make
+    sudo make install
+
 ## Bonsai installation
 Now you need to download and install bonsai cloning from the repository, this creates the bonsai folder
 

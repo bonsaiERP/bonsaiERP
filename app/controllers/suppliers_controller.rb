@@ -12,9 +12,9 @@ class SuppliersController < ApplicationController
   # GET /suppliers.xml
   def index
     if params[:search]
-      @suppliers = Supplier.org.search(params[:search]).page(@page)
+      @suppliers = Supplier.org.search(params[:search]).order("matchcode ASC").page(@page)
     else
-      @suppliers = Supplier.org.page(@page)
+      @suppliers = Supplier.org.order("matchcode ASC").page(@page)
     end
   end
 

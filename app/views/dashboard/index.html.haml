@@ -15,14 +15,14 @@
   %h3._50.fl.n 
     Cuentas por <span class="b dark_green">cobrar</span>
     %ul.list
-      - @presenter.accounts_to_recieve.each do |ac|
-        %li.b= ac
+      - @presenter.accounts_to_recieve.each do |cur, amt|
+        %li.b #{cur} #{ntc amt}
 
 .box
   %h3._50.fl.n 
     Cuentas por <span class="b red">pagar</span>
     %ul.list
-      - @presenter.accounts_to_pay.each do |ac|
-        %li.b= ac
+      - @presenter.accounts_to_pay.each do |cur, amt|
+        %li.b #{cur} #{ntc amt}
 .clear
 

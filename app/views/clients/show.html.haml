@@ -21,14 +21,15 @@
     %label Cuenta en #{ac.currency_symbol}
     %h3= ntc(-1 * ac.amount)
 
-.moneybox.fl{:style => "width:190px"} 
-  %label Saldo ventas #{currency_symbol} (aprox)
-  %h3= @client.total_balance_incomes
+- @presenter.incomes.each do |cur, amt|
+  .moneybox.fl 
+    %label.dark_green Saldo ventas #{cur}
+    %h3= ntc amt
 
-.moneybox.fl{:style => "width:190px"}
-  %label Saldo compras #{currency_symbol} (aprox)
-  %h3= @client.total_balance_buys
-
+- @presenter.buys.each do |cur, amt|
+  .moneybox.fl 
+    %label.red Saldo compras #{cur}
+    %h3= ntc amt
 
 .clear
 

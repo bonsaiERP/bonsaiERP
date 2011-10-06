@@ -12,9 +12,9 @@ class ClientsController < ApplicationController
   # GET /clients.xml
   def index
     if params[:search]
-      @clients = Client.org.search(params[:search]).page(@page)
+      @clients = Client.org.search(params[:search]).order("matchcode ASC").page(@page)
     else
-      @clients = Client.org.page(@page)
+      @clients = Client.org.order("matchcode ASC").page(@page)
     end
   end
 

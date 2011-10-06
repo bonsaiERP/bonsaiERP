@@ -10,7 +10,7 @@ class DashboardPresenter < ApplicationPresenter
   
     keys.map do |cur_id|
       s = tot_accounts[cur_id].to_f.abs + tot_incomes[cur_id].to_f
-      "#{currencies[cur_id]} #{s}"
+      [currencies[cur_id], s]
     end
   end
 
@@ -21,7 +21,7 @@ class DashboardPresenter < ApplicationPresenter
   
     keys.map do |cur_id|
       s = tot_accounts[cur_id].to_f.abs + tot_incomes[cur_id].to_f
-      "#{currencies[cur_id]} #{s}"
+      [currencies[cur_id], s]
     end
   end
 
@@ -29,7 +29,4 @@ class DashboardPresenter < ApplicationPresenter
     h.link_to "Ver todas", "/todas"
   end
 
-  def currencies
-    @currencies ||= Hash[Currency.scoped[:id, :symbol] ]
-  end
 end
