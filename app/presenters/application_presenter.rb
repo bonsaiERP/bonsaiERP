@@ -7,6 +7,6 @@ class ApplicationPresenter
   end
 
   def currencies
-    @currencies ||= Hash[Currency.scoped[:id, :symbol] ]
+    @currencies ||= Hash[Currency.scoped.values_of(:id, :symbol) ]
   end
 end

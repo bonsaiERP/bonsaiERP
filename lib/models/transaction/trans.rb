@@ -34,7 +34,7 @@ module Models::Transaction
       end
 
       def calculate_orinal_total
-        items = Item.org.where(:id => transaction_details.map(&:item_id))[:id, :price]
+        items = Item.org.where(:id => transaction_details.map(&:item_id)).values_of(:id, :price)
         s = transaction_details.inject(0) do |s, det|
           it = items.find {|i| i[0] === det.item_id }
           s += it[1]/exchange_rate * det.quantity unless det.marked_for_destruction?

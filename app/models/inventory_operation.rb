@@ -186,7 +186,7 @@ class InventoryOperation < ActiveRecord::Base
 
   # To determine if an item is service and not to update stock
   def is_item_service?(i_id)
-    @service_item_ids ||= Item.org.service.where(:id => item_ids)[:id]
+    @service_item_ids ||= Item.org.service.where(:id => item_ids).values_of( :id )
     @service_item_ids.include?(i_id)
   end
   
@@ -199,7 +199,7 @@ class InventoryOperation < ActiveRecord::Base
 
   # Returns a Hash with the available stocks {item_id => quantity}
   def available_stocks
-    @h_s ||= Hash[store.stocks.where(:item_id => item_ids)[:item_id, :quantity]]
+    @h_s ||= Hash[store.stocks.where(:item_id => item_ids).values_of(:item_id, :quantity)]
     @h_stock ||= Hash[item_ids.map do |i_id|
       q = @h_s[i_id] ? @h_s[i_id] : 0
       [i_id, q]
