@@ -999,5 +999,28 @@ feature "Income", "test features" do
     i.save_trans.should be_true
     i.original_total.should == ( i1.price * 10 + i2.price * 20 ) * (1 + tax.rate/100)
     i.should be_discounted
+
+    # with different currency
+    # no changes
+    i_params = income_params.dup
+    i_params[:discount] = 0
+    i_params[:currency_id] = 2
+    i_params[:exchange_rate] = 1.5
+    i_params[:transaction_details_attributes] = [
+      {:item_id => i1.id, :quantity => 10, :price => i1.price/1.5 },
+      {:item_id => i2.id, :quantity => 20, :price => i2.price/1.5 }
+    ]
+
+    i = Income.new(i_params)
+    i.save_trans.should == true
+    i.should be_persisted
+    i.discount.should == 0
+
+    otot = (i1.price/1.5 * 10 + i2.price/1.5 * 20).round(2)
+    i.reload
+    i.total.should == otot
+    i.original_total.should == otot
+    i.total.should == i.original_total
+    i.should_not be_changed
   end
 end

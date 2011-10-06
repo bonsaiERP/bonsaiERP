@@ -11,7 +11,6 @@ git checkout dev
 git pull origin dev
 touch tmp/restart.txt
 
-
 PostgreSQL
 sudo -u postgres psql template1
 

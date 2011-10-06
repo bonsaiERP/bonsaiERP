@@ -9,8 +9,6 @@ module Controllers::Authorization
   def check_authorization!
     if current_user and session[:user] and session[:user][:rol]
       unless check_user_by_rol(session[:user][:rol], params[:controller], params[:action])
-        #flash[:warning] = "Usted no tiene permitida esta acción"
-        #xhr = request.xhr? ? true : false
         redirect_to "/422"
       end
     elsif current_user and current_user.link.nil?
@@ -68,7 +66,7 @@ module Controllers::Authorization
       'buys' => false,
       'stores' => {'new' => false, 'edit' => false, 'update' => false, 'create' => false, 'destroy' => false},
       'payments' => {'destroy' => false},
-      'projects' => {'index' => true, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false, 'show' => true},
+      'projects' => {'index' => true, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false, 'show' => true}
     )
   end
 

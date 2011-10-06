@@ -134,7 +134,7 @@ class User < ActiveRecord::Base
   end
 
   def self.new_user(email, password)
-    User.new(:password => password, ) {|u| 
+    User.new(:password => password ) {|u| 
       u.email = email 
       u.abbreviation = ABBREV
     }
