@@ -1,5 +1,5 @@
 require 'spec_helper'
 
-describe BuyController do
+describe BuysController do
 
 end

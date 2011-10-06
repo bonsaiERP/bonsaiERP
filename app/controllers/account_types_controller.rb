@@ -1,4 +1,6 @@
 class AccountTypesController < ApplicationController
+  before_filter :not_found
+
   # GET /account_types
   # GET /account_types.json
   def index
@@ -79,5 +81,10 @@ class AccountTypesController < ApplicationController
       format.html { redirect_to account_types_url }
       format.json { head :ok }
     end
+  end
+
+  private
+  def not_found
+    render :text => "Not found"
   end
 end
