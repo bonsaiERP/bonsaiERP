@@ -61,7 +61,6 @@ class Payment
     exchange = @$exchange.val() * 1
 
     total = (amount + int) * exchange
-    console.log "Total", total
     $('#payment_total_currency').html(_b.ntc(total))
 
 window.Payment = Payment

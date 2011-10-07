@@ -63,8 +63,6 @@ class Transaction
       self.set_exchange_rate()
 
       $(self.exchange_rate_dialog).dialog("open")
-      console.log self.find_currency(self.conf.default_currency_id)
-      console.log self.find_currency(self.currency_id)
     )
 
   # Set event for the edit change rate link
@@ -267,7 +265,6 @@ class Transaction
   # Calculates the total taxes
   calculate_taxes: ->
     val = ($(@conf.subtotal_id).data("val") + $(@conf.discount_total_id).data("val")) * $(@conf.taxes_percentage_id).data("val")/100 || 0
-    #console.log val, @conf.taxes_total_id, @conf.taxes_percentage_id
     $(@conf.taxes_total_id).html(_b.ntc(val)).data("val", val)
     @.calculate_total()
 

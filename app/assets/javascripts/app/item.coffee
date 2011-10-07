@@ -69,7 +69,6 @@ class DiscountRange
     }).html( html ).insertAfter('#' + self.field_id)
   # Validates that the secuence goes from minor to greater
   validateSecuence: (values)->
-    console.log(values)
     curr_val = curr_per = 0
     first = true
     $(values).each( (i, el)->
