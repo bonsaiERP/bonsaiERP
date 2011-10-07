@@ -26,3 +26,11 @@
         %li.b #{cur} #{ntc amt}
 .clear
 
+.box
+  %h3._50.fl Almacenes con mínimos
+  .clear
+
+  %ul.list
+    - @presenter.minimum_inventory.each do |st_id, store, min|
+      %li= link_to "#{store} (<strong>#{ntc min}</strong>)".html_safe, store_path(st_id, :option => 'minimum', :tab => 'items')
+

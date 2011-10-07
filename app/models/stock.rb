@@ -23,7 +23,9 @@ class Stock < ActiveRecord::Base
   validates_presence_of :store_id
   validates_numericality_of :minimum, :greater_than => 0, :allow_nil => true
 
+  # Scopes
   default_scope where(:state => 'active')
+  scope :minimums, where("stocks.quantity <= stocks.minimum")
   #scope :active, where(:state => 'active')
 
   delegate :name, :price, :code, :to_s, :type, :to => :item, :prefix => true
@@ -32,6 +34,11 @@ class Stock < ActiveRecord::Base
   def self.new_minimum(item_id, store_id)
     Stock.org.find_by_item_id_and_store_id(item_id, store_id)
   end
+
+  def self.minimum_list
+    Stock.org.select("COUNT(item_id) AS items_count, store_id").where("quantity <= minimum").group(:store_id).count
+  end
+
   # Creates a new instance with an item
   def save_minimum(minimum)
     if minimum.to_f < 0

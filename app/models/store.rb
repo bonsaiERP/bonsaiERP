@@ -23,7 +23,7 @@ class Store < ActiveRecord::Base
   end
 
   def hash_of_items(item_ids)
-    st = stocks.where("item_id IN (?)", item_ids)[:item_id, :quantity, :minimum]
+    st = stocks.where(:item_id => item_ids).values_of(:item_id, :quantity, :minimum)
 
     Hash[item_ids.map do |i_id|
       it = st.find {|v| v[0] === i_id }

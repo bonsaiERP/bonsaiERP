@@ -29,4 +29,15 @@ class DashboardPresenter < ApplicationPresenter
     h.link_to "Ver todas", "/todas"
   end
 
+  def minimum_inventory
+    @min_list ||= Stock.minimum_list
+    @stores   ||= Hash[Store.org.where(:id => @min_list.keys).values_of(:id, :name)]
+    @list     ||= @min_list.map {|k, v| [k, @stores[k], v]}
+  end
+
+  def minimum_list
+    @min_list ||= Stock.minimum_list
+  end
+
+
 end

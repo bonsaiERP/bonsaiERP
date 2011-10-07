@@ -94,7 +94,13 @@ class StoresController < ApplicationController
       @operations = @store.inventory_operations.includes(:creator).order("created_at DESC").page(@page)
       "operations"
     else
-      @items = @store.stocks.includes(:item).order("(stocks.minimum - stocks.quantity) DESC").page(@page)
+      params[:option] ||= 'all'
+      case
+      when params[:option] === "minimum"
+        @items = @store.stocks.minimums.page(@page)
+      else
+        @items = @store.stocks.includes(:item).order("(stocks.minimum - stocks.quantity) DESC").page(@page)
+      end
       params[:tab] = "items"
       "items"
     end
