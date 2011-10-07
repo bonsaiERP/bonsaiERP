@@ -111,6 +111,18 @@ class BuysController < ApplicationController
     redirect_to buy_path(@transaction, :anchor => anchor)
   end
 
+  # PUT /incomes/:id/approve_credit
+  def approve_credit
+    @transaction = Buy.org.find(params[:id])
+    if @transaction.approve_credit params[:buy]
+      flash[:notice] = "Se aprobó correctamente el crédito."
+    else
+      flash[:error] = "Existio un error al aprobar el crédito."
+    end
+
+    redirect_to @transaction
+  end
+
   private
 
   def set_currency_rates

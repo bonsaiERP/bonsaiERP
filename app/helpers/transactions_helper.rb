@@ -69,11 +69,7 @@ module TransactionsHelper
   end
 
   def get_credit_partial(trans)
-    if trans.income?
-      trans.credit? ? "pay_plans/pay_plans" : "pay_plans/approve"
-    else
-      "pay_plans/pay_plans"
-    end
+    trans.credit? ? "pay_plans/pay_plans" : "pay_plans/approve"
   end
 
   # Returns the path for contacts
