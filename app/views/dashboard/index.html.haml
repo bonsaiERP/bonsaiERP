@@ -32,5 +32,5 @@
 
   %ul.list
     - @presenter.minimum_inventory.each do |st_id, store, min|
-      %li= link_to "#{store} (<strong>#{ntc min}</strong>)".html_safe, store_path(st_id, :option => 'minimum', :tab => 'items')
+      %li= link_to "#{store} (<strong>#{ntc min} items</strong>)".html_safe, store_path(st_id, :option => 'minimum', :tab => 'items')
 

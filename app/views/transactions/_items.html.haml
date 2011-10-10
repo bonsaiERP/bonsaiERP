@@ -66,3 +66,4 @@
         %td.r.b.dark{:colspan => 3} Saldo
         %td#balance.r.b{'data-val' => transaction.balance} #{transaction.currency_symbol} #{ntc transaction.balance}
 
+  = @presenter.render_discount(self)

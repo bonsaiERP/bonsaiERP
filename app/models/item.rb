@@ -18,7 +18,7 @@ class Item < ActiveRecord::Base
 
   TYPES = ["item", "expense", "product", "service"]
   TYPES.each do |met|
-    class_eval <<-CODE, __FILE__, __LINE__
+    class_eval <<-CODE, __FILE__, __LINE__ + 1
       def #{met}?
         "#{met}" === ctype
       end

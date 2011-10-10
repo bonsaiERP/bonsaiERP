@@ -1,6 +1,4 @@
-class TransactionPresenter
-  include ActionView::Helpers::TagHelper
-  include ActionView::Helpers::UrlHelper 
+class TransactionPresenter < ApplicationPresenter
 
   def initialize(transaction)
     @transaction = transaction
@@ -18,23 +16,26 @@ class TransactionPresenter
 
   def new_inventory_link
     if @transaction.is_a?(Income) and not(@transaction.delivered?)
-      link_to "Registrar entrega", 
+      h.link_to "Registrar entrega", 
         url_for(:controller => 'inventory_operation', :action => 'select_store',
                 :id => @transaction.id, :operation => 'out'),
         :class => 'new'
     elsif @transaction.is_a?(Buy) and not(@transaction.delivered?)
-      link_to "Registrar entrega", 
+      h.link_to "Registrar entrega", 
         url_for(:controller => 'inventory_operation', :action => 'select_store',
                 :id => @transaction.id, :operation => 'in'),
         :class => 'new'
     end
   end
 
-  def email_link
-    #content_tag(:div, "Hola")
-    "Hola"
-    #link_to "Uno", "/si"
-    #link_to("Email", new_invoice_email_path(@transaction), :class => 'email ajax', :title => 'Email', 'data-width' => 450)
+  def email_link(context)
+    if @transaction.income?
+      h.link_to "Email", context.new_invoice_email_path(@transaction), :class => 'email ajax', :title => 'Email', 'data-width' => 450
+    end
+  end
+
+  def render_discount(context)
+    context.render "transactions/discount", :transaction => @transaction if @transaction.discounted?
   end
 
 end

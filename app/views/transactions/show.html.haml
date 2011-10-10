@@ -10,9 +10,8 @@
 .clear
 
 ._40.fr.r
-  - if @transaction.income?
-    = link_to "Email", new_invoice_email_path(@transaction), :class => 'email ajax', :title => 'Email', 'data-width' => 450
-    &nbsp;&nbsp;
+  = @presenter.email_link(self)
+  &nbsp;&nbsp;
   = link_to "Imprimir", invoice_pdf_path(@transaction.id), :class => 'print'
 
 -# Render the head of the transaction
