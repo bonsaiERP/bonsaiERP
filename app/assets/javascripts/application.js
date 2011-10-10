@@ -1,4 +1,4 @@
-//= require jquery-1.6.4.min
+//= require jquery
 //= require jquery-ui-1.8.15.custom.min.js
 //= require underscore-min.js
 //= require backbone.js
