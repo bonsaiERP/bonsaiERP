@@ -7,18 +7,16 @@
   'data-width' => "800", 'data-trigger' => 'payment'
 
 %table.decorated.nwl#payments_table
-  %thead
-    %tr
-      %th Fecha
-      %th{:style => 'width: 300px'} Descripción
-      %th Cantidad #{transaction.currency_symbol}
-      %th.tip{:title => 'Intenreses/Penalidades'} Int./Pena. #{transaction.currency_symbol}
-      %th.nw Total fila #{transaction.currency_symbol}
-      %th
+  %tr.header
+    %th Fecha
+    %th{:style => 'width: 300px'} Descripción
+    %th Cantidad #{transaction.currency_symbol}
+    %th.tip{:title => 'Intenreses/Penalidades'} Int./Pena. #{transaction.currency_symbol}
+    %th.nw Total fila #{transaction.currency_symbol}
+    %th
   
-  %tbody
-    - transaction.account_ledgers.includes(:account, :to, :currency).active.order("created_at DESC").each do |al|
-      = render "payments/payment", :account_ledger => al, :transaction => transaction
+  - transaction.account_ledgers.includes(:account, :to, :currency).active.order("created_at DESC").each do |al|
+    = render "payments/payment", :account_ledger => al, :transaction => transaction
 
   %tr.extra.pad_top
     %td.r.b{:colspan => 4} Total #{transaction.pay_type.pluralize} + Intereses/Penalidades

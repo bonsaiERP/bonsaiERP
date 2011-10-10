@@ -4,7 +4,7 @@ $font_size: 13px;
 .dark_grey{ color: darken($grey, 40%) !important;}
 
 // Loop to create different width sizes Ex.: ._10{ width: 9% !important; }
-@for $i from 1 to 20 {
+@for $i from 1 to 21 {
   ._#{$i * 5}, .w#{$i * 5}{  width: #{$i * 5 - 1}% !important; }
 }
 ._33, .w33{ width: 33% !important;}
@@ -13,7 +13,7 @@ $font_size: 13px;
 .p300 { width: 300px; }
 
 // Loop to create different margins
-@for $i from 1 to 6 {
+@for $i from 1 to 7 {
   .mt#{$i * 5}{ margin-top: #{$i * 5}px !important; }
   .mb#{$i * 5}{ margin-bottom: #{$i * 5}px !important; }
 }
@@ -52,15 +52,8 @@ span.true, span.false{
 .nw{ white-space: nowrap; }
 
 // font sizes
-@for $i from 5 to 15 {
+@for $i from 5 to 16 {
   .fs#{$i * 10}{ font-size: #{$i * 10}% !important; }
-}
-
-._120{
-  font-size: 120%;
-  input, select, textarea{
-    font-size: 120%;
-  }
 }
 
 .marked{ background-color: $light_blue !important; }

@@ -1,5 +1,5 @@
 // javascript
-$('#payments_table tr.account_ledger:first').before("<%= escape_javascript(render('payment', :account_ledger => @account_ledger, :transaction => @transaction)) %>");
+$('#payments_table tr.header').after("<%= escape_javascript(render('payment', :account_ledger => @account_ledger, :transaction => @transaction)) %>");
 $('#payments .message').remove();
 
 <% unless @transaction.cash? %>
