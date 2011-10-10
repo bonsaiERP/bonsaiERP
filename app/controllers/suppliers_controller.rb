@@ -64,7 +64,7 @@ class SuppliersController < ApplicationController
   # DELETE /suppliers/1.xml
   def destroy
     @supplier.destroy
-    respond_ajax(@supplier)
+    redirect_ajax(@supplier)
   end
 
   protected
