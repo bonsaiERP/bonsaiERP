@@ -26,6 +26,7 @@ gem 'simple_form'
 gem 'haml'
 gem 'kaminari'
 gem 'valium'
+gem 'bcrypt-ruby'
 
 #gem 'nokogiri'
 #gem 'apotomo'

@@ -81,6 +81,7 @@ module Models::AccountLedger::Transaction
       case transaction.class.to_s
       when "Buy"
         self.amount = -amount
+        self.interests_penalties = -interests_penalties.abs
       end
     end
 
