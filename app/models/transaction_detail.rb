@@ -29,13 +29,17 @@ class TransactionDetail < ActiveRecord::Base
   # Indicates if in an Income the item price has changed
   def changed_price?
     if transaction.class.to_s == "Income"
-      not(price == original_price)
+      not(price == original_price_currency)
     else
       false
     end
   end
 
-private
+  def original_price_currency
+    ( original_price/transaction.exchange_rate ).round(2)
+  end
+
+  private
   def set_defaults
     self.price ||= 0
     self.quantity ||= 0
