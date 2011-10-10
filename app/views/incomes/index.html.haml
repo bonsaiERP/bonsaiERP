@@ -54,7 +54,7 @@
       %th Vence el
       %th Total
       %th Saldo
-      -#%th.tip{:title => 'Moneda'} Mon.
+      = discount_th
       %th.tip{:title => "Contado Crédito"} Tipo
       %th Fecha Hora
       %th
@@ -69,9 +69,11 @@
         %td= lo income.payment_date unless income.paid?
         %td.cur #{income.currency_symbol} #{ntc income.total }
         %td.cur #{income.currency_symbol} #{ntc income.balance }
-        -#%td.cur= ntc exchange(income, :real_total, @currency_rates)
-        -#%td.cur= ntc exchange(income, :balance, @currency_rates)
-        -#%td <span>#{income.currency_symbol}</span>
+        = discount_cell income
+        -#%td
+          %span.cur #{income.currency_symbol} #{ntc income.discount_amount }
+          %br
+          #{ ntc income.discount_percentage } %
         %td= cash_credit(income.cash)
         %td.nw= lo income.created_at
         %td.actions

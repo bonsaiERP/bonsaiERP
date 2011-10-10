@@ -59,4 +59,12 @@ module Models::Transaction::Calculations
     total / exchange_rate
   end
 
+  def discount_amount
+    total - original_total
+  end
+
+  def discount_percentage
+    ( ( total - original_total ) /  total ).round(2) * 100
+  end
+
 end

@@ -196,4 +196,19 @@ module TransactionsHelper
     when "Buy", "Expense" then "Pago"
     end
   end
+
+  def discount_th
+    content_tag(:th, "Descuento") if params[:option] === 'discount'
+  end
+
+  def discount_cell(trans)
+    if params[:option] === 'discount'
+      html = "<td>"
+      html << "<span class='cur'>#{trans.currency_symbol} #{ntc(trans.discount_amount)}</span>"
+      html << "<br/>"
+      html << "<span class='i dark'>#{trans.discount_percentage} %</span>"
+      html << "</td>"
+      html.html_safe
+    end
+  end
 end

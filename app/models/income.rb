@@ -14,7 +14,6 @@ class Income < Transaction
                    :discount,    :bill_number,                   :taxis_ids,
                    :description, :transaction_details_attributes, :contact_id
 
-  
 
   #validations
   validates             :ref_number,           :presence => true , :uniqueness => { :scope => :organisation_id, :allow_blank => false}
