@@ -23,6 +23,7 @@ module Models::Transaction
       private
 
       def save_trans_details
+        round_details
         set_details_type
         calculate_total_and_set_balance
         set_balance_inventory
@@ -33,11 +34,17 @@ module Models::Transaction
         return false unless errors.empty?
       end
 
+      def round_details
+        transaction_details.each do |tdet|
+          tdet.price = tdet.price.round(2)
+        end
+      end
+
       def calculate_orinal_total
         items = Item.org.where(:id => transaction_details.map(&:item_id)).values_of(:id, :price)
         s = transaction_details.inject(0) do |s, det|
           it = items.find {|i| i[0] === det.item_id }
-          s += it[1]/exchange_rate * det.quantity unless det.marked_for_destruction?
+          s += ( it[1]/exchange_rate ).round(2) * det.quantity unless det.marked_for_destruction?
           s
         end
 

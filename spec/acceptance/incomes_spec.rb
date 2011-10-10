@@ -1016,7 +1016,7 @@ feature "Income", "test features" do
     i.should be_persisted
     i.discount.should == 0
 
-    otot = (i1.price/1.5 * 10 + i2.price/1.5 * 20).round(2)
+    otot = (i1.price/1.5).round(2) * 10 + ( i2.price/1.5 ).round(2) * 20
     i.reload
     i.total.should == otot
     i.original_total.should == otot
