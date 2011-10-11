@@ -2,35 +2,45 @@
   #links{ display: none; }
   p.dash, ol.dash li{font-size: 120%; padding: 7px;}
 
-- if current_user.change_default_password?
-  %h3= link_to "Le recomendamos crear una nueva contraseña", "" 
+- present nil, DashboardPresenter do |presenter|
 
-- if MoneyStore.org.empty?
-  %h3 Por favor le recomendamos crear una #{link_to "cuenta bancaria", new_bank_path } o #{link_to "cuenta de caja", new_cash_path}
+  = presenter.change_password_link
 
-.clear
-- fdate = 60
+  = presenter.create_money_link
 
-.box
-  %h3._50.fl.n 
-    Cuentas por <span class="b dark_green">cobrar</span>
+  .clear
+  
+  .box
+    %h3 Cuentas por <span class="b dark_green">cobrar</span>
     %ul.list
-      - @presenter.accounts_to_recieve.each do |cur, amt|
+      - presenter.accounts_to_recieve.each do |cur, amt|
         %li.b #{cur} #{ntc amt}
 
-.box
-  %h3._50.fl.n 
-    Cuentas por <span class="b red">pagar</span>
+  .box
+    %h3 Cuentas por <span class="b red">pagar</span>
     %ul.list
-      - @presenter.accounts_to_pay.each do |cur, amt|
+      - presenter.accounts_to_pay.each do |cur, amt|
         %li.b #{cur} #{ntc amt}
-.clear
 
-.box
-  %h3._50.fl Almacenes con mínimos
   .clear
 
-  %ul.list
-    - @presenter.minimum_inventory.each do |st_id, store, min|
-      %li= link_to "#{store} (<strong>#{ntc min} items</strong>)".html_safe, store_path(st_id, :option => 'minimum', :tab => 'items')
+  .box
+    %h3 Conciliaciones pendientes
+    %ul.list
+      - presenter.pendent_conciliations.each do |cur, al|
+        %li
+          = link_to al do
+            %strong
+              = cur
+              = al.amount
+            %span.i= lo al.created_at
+    
+
+  .box
+    %h3 Almacenes con mínimos
+    .clear
+
+    %ul.list
+      - presenter.minimum_inventory.each do |st_id, store, min|
+        %li= link_to "#{store} (<strong>#{ntc min} items</strong>)".html_safe, store_path(st_id, :option => 'minimum', :tab => 'items')
 

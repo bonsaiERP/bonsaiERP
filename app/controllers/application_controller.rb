@@ -77,6 +77,7 @@ protected
     end
   end
 
+
   private
 
   def set_page

@@ -1,68 +1,60 @@
-- content_for :links do
-  %ul.breadcrumps
-    %li #{link_to transaction_type, "/#{params[:controller]}"}<span>&gt;</span>
+- present @transaction, TransactionPresenter do |presenter|
+  - content_for :links do
+    %ul.breadcrumps
+      %li #{link_to transaction_type, "/#{params[:controller]}"}<span>&gt;</span>
 
-  .links
-    = link_to 'Nueva', "/#{params[:controller]}/new", :class => 'add'
-    - if @transaction.draft?
-      = link_to 'Editar', "/#{params[:controller]}/#{@transaction.id}/edit", :class => 'edit'
-      = link_to 'Anular', @transaction, :class => 'delete', :confirm => 'Esta seguro de anular?'
-.clear
+    .links
+      = link_to 'Nueva', "/#{params[:controller]}/new", :class => 'add'
+      = presenter.edit_link
+      = presenter.null_link
+  .clear
+  ._40.fr.r
+    = presenter.email_link
+    &nbsp;&nbsp;
+    = link_to "Imprimir", invoice_pdf_path(@transaction.id), :class => 'print'
 
-._40.fr.r
-  = @presenter.email_link(self)
-  &nbsp;&nbsp;
-  = link_to "Imprimir", invoice_pdf_path(@transaction.id), :class => 'print'
+  -# Render the head of the transaction
+  = render "transactions/head", :presenter => presenter
+     
+  .clear
+  #tabs
+    %ul
+      %li <a href="#information" id="tab_info">Información</a>
+      = presenter.li_payments
+      = presenter.li_pay_plans
+      = presenter.li_inventory
 
--# Render the head of the transaction
-= render "transactions/head"
- 
-.clear
-#tabs
-  %ul
-    %li <a href="#information" id="tab_info">Información</a>
-    - if @transaction.show_payments?
-      %li <a href="#payments" id="tab_payments">#{transaction_pay_method}</a>
-    - unless @transaction.draft?
-      %li <a href="#pay_plans" id="tab_pay_plans">#{credit_tab_title(@transaction)}</a>
-    - if @transaction.show_inventory?
-      - txt = @transaction.is_a?(Income) ? "Entrega" : "Recojo"
-      %li <a href="#inventory" id="tab_inventory">#{txt}</a>
+    #information
+      -# Render items
+      = render 'transactions/items', :transaction => @transaction, :presenter => presenter
 
-  #information
-    .clear
+      .clear
+    #payments
 
-    -# Render items
-    = render 'transactions/items', :transaction => @transaction
+      -# Render payments
+      = presenter.render_payments
+      #nulled_payments
+        = presenter.render_nulled_payments
+      .clear
 
-  #payments
+    #pay_plans
+      = presenter.render_pay_plans
+      .clear
 
-    -# Render payments
-    =render "/payments/payments", :transaction => @transaction if @transaction.show_payments?
-    #deleted_payments
-      - if @transaction.account_ledgers.nulled.any?
-        =render "/payments/deleted", :transaction => @transaction
-    .clear
-
-  - unless @transaction.draft?
-    -# Render for credit approval, "pay_plans/pay_plans", "pay_plans/approve"
-    #pay_plans= render get_credit_partial(@transaction), :transaction => @transaction
-
-  - if @transaction.show_inventory?
     #inventory
-      -# Render inventory
-      =render "/transactions/inventory", :transaction => @transaction
+      = presenter.render_inventory
+      .clear
 
--# User details
-#users
-  - if @transaction.creator_id.present?
-    %p <span class='dark'>Creado por:</span> <strong>#{@transaction.creator}</strong> <i>#{lo @transaction.created_at}</i>
+  -# User details
+  #users
+    - if @transaction.creator_id.present?
+      %p <span class='dark'>Creado por:</span> <strong>#{@transaction.creator}</strong> <i>#{lo @transaction.created_at}</i>
 
-  - if @transaction.approver_id.present?
-    %p <span class='dark'>Aprobado por:</span> <strong>#{@transaction.approver}</strong> <i>#{lo @transaction.approver_datetime}</i>
+    - if @transaction.approver_id.present?
+      %p <span class='dark'>Aprobado por:</span> <strong>#{@transaction.approver}</strong> <i>#{lo @transaction.approver_datetime}</i>
 
-  - if @transaction.creditor_id.present?
-    %p <span class='dark'>Credito aprobado por:</span> <strong>#{@transaction.creditor}</strong> <i>#{lo @transaction.credit_datetime}</i>
+    - if @transaction.creditor_id.present?
+      %p <span class='dark'>Credito aprobado por:</span> <strong>#{@transaction.creditor}</strong> <i>#{lo @transaction.credit_datetime}</i>
 
 :javascript
   $(function () {
@@ -88,12 +80,4 @@
         }
       }
     }
-
-    $('#approve_form').live('submit', function() {
-      if(!confirm("Esta seguro de aprobar la #{transaction_title(@transaction)} \"#{@transaction}\"")) {
-        return false;
-      }
-    });
-
   });
-

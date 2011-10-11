@@ -27,7 +27,6 @@ class IncomesController < ApplicationController
   # GET /incomes/1
   # GET /incomes/1.xml
   def show
-    @presenter = TransactionPresenter.new(@transaction)
     respond_to do |format|
       format.html { render 'transactions/show' }
       format.json  { render :json => @transaction }
@@ -104,22 +103,16 @@ class IncomesController < ApplicationController
   # PUT /incomes/1/approve
   # Method to approve an income
   def approve
-    if @transaction.can_approve?(session)
-
-      if @transaction.approve!
-        flash[:notice] = "La nota de venta fue aprobada."
-      else
-        flash[:error] = "Existio un problema con la aprobación."
-      end
-
-      anchor = ''
-      anchor = 'payments' if @transaction.cash?
-
-      redirect_to income_path(@transaction, :anchor => anchor)
+    if @transaction.approve!
+      flash[:notice] = "La nota de venta fue aprobada."
     else
-      flash[:error] = "Usted no puede aprobar la venta."
-      redirect_to @transaction
+      flash[:error] = "Existio un problema con la aprobación."
     end
+
+    anchor = ''
+    anchor = 'payments' if @transaction.cash?
+
+    redirect_to income_path(@transaction, :anchor => anchor)
   end
 
   # PUT /incomes/:id/approve_credit

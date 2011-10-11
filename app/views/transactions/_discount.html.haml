@@ -1,6 +1,3 @@
-%h3
-  %span.n Total descuentos
-  %br
-  %span.black #{transaction.currency_symbol} #{ntc(transaction.discount_amount)}
-  %br
-  %span.i #{transaction.discount_percentage} %
+.moneybox.fl
+  %label Descuentos #{transaction.discount_percentage} %
+  %h3#total_discounts #{transaction.currency_symbol} #{ntc(transaction.discount_amount)}

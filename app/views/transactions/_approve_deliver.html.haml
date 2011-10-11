@@ -1,0 +1,14 @@
+= simple_form_for @transaction, :url => approve_deliver_income_path(@transaction), :html => {:id => 'approve_deliver_form'} do |f|
+  .submit
+    =f.submit "Aprobar entregas", :class => 'dark_green', :id => 'approve_deliver_button'
+:javascript
+  $(function() {
+    $('#approve_deliver_form').submit(function() { 
+    if(confirm("Esta seguro de aprobar las entregas?")) {
+      return true;
+    }else{
+      return false;
+    }
+    });
+  })
+

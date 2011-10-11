@@ -13,23 +13,22 @@
 .clear
 = render 'contacts/show', :klass => @client
 
-- @currency_rates = CurrencyRate.current_hash
-
 .clear
 - @client.accounts.each do |ac|
   .moneybox.fl
     %label Cuenta en #{ac.currency_symbol}
     %h3= ntc(-1 * ac.amount)
 
-- @presenter.incomes.each do |cur, amt|
-  .moneybox.fl 
-    %label.dark_green Saldo ventas #{cur}
-    %h3= ntc amt
+- present @client, ContactPresenter do |presenter|
+  - presenter.incomes.each do |cur, amt|
+    .moneybox.fl 
+      %label.dark_green Saldo ventas #{cur}
+      %h3= ntc amt
 
-- @presenter.buys.each do |cur, amt|
-  .moneybox.fl 
-    %label.red Saldo compras #{cur}
-    %h3= ntc amt
+  - presenter.buys.each do |cur, amt|
+    .moneybox.fl 
+      %label.red Saldo compras #{cur}
+      %h3= ntc amt
 
 .clear
 

@@ -1,54 +1,30 @@
-%h1.mb5{:style => 'display:inline-block;'} #{transaction_title(@transaction)}  #{@transaction.ref_number}
+%h1.mb5{:style => 'display:inline-block;'}= presenter.title
 %span.b#transaction_state{:class => @transaction.real_state, :style => 'font-size:1.3em; min-width: 30px'}= @transaction.show_state
+
 %h2.n.mt5= link_to @transaction.contact, @transaction.contact
 
 ._70.fl
-  .input
-    / Project
-    - if @transaction.project_id
-      %h3.n Proyecto: #{link_to @transaction.project, @transaction.project}
-  .input
-    / Dates
-    %h3
-      = lo @transaction.created_at
-      - if @transaction.payment_date.present?
-        %br
-        %span.n Vence el
-        %span#due_on= lo @transaction.payment_date
+  %div= presenter.project
+  
+  .clear
+
+  %h3._40.fl{:title => "Creado el"}= lo @transaction.created_at
+
+  %h3._60.fl= presenter.payment_date
 
 ._30.r.fr
-  / FORM to approve transaction
-  - if @transaction.can_approve?(session)
-    = simple_form_for @transaction, :url => "/#{params[:controller]}/#{ @transaction.id }/approve", :html => {:id => 'approve_form'} do |f|
-      .submit
-        =f.submit "Aprobar", :class => 'dark_green', :id => 'income_approve_button'
-  - if @presenter.approve_deliver?(session)
-    = simple_form_for @transaction, :url => approve_deliver_income_path(@transaction), :html => {:id => 'approve_deliver_form'} do |f|
-      .submit
-        =f.submit "Aprobar entregas", :class => 'dark_green', :id => 'approve_deliver_button'
-    :javascript
-      $(function() {
-        $('#approve_deliver_form').submit(function() { 
-        if(confirm("Esta seguro de aprobar las entregas?")) {
-          return true;
-        }else{
-          return false;
-        }
-        });
-      })
+  -# FORM to approve transaction /transactions/_approve_form.html.haml
+  = presenter.approve_form
+  -# FORM to approve transaction /transactions/_approve_deliver.html.haml
+  = presenter.approve_deliver_form
+
 
 .clear
-  .input
-    / Currency
-    - unless currency_id == @transaction.currency_id
-      %h4.black 
-        %span.n #{@transaction.currency_symbol} 1 = 
-        #{currency_symbol}
-        #{ntc @transaction.exchange_rate, :precision => 4}
-  .input= @transaction.description unless @transaction.description.blank?
+._50.fl= presenter.currency
+._50.fl= presenter.description
 .clear
 
-/ Moneyboxes
+-# Moneyboxes
 .moneybox.fl
   %label Total
   %h3#total_currency #{@transaction.currency_symbol} #{ntc @transaction.total}
@@ -57,3 +33,4 @@
   %label Saldo
   %h3#balance #{@transaction.currency_symbol} #{ntc @transaction.balance}
 
+= presenter.render_discount

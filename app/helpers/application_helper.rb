@@ -193,4 +193,12 @@ module ApplicationHelper
       content_tag(:span, "egreso", :class => "red")
     end
   end
+
+  # For presenter logic
+  def present(object, klass = nil)
+    klass ||= "#{object.class}Presenter".constantize
+    presenter = klass.new(object, self)
+    yield presenter if block_given?
+    presenter
+  end
 end

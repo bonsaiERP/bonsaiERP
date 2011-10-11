@@ -6,8 +6,6 @@ class DashboardController < ApplicationController
 
   # GET /dashboard
   def index
-    #@currency_rates = CurrencyRate.current_hash
-    @presenter = DashboardPresenter.new
   end
 
   # GET /config

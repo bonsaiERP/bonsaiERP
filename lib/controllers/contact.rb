@@ -18,8 +18,6 @@ module Controllers::Contact
         :contact => contact
       }
     end
-
-    @presenter = ContactPresenter.new(contact)
   end
 
   protected

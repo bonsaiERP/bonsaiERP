@@ -92,7 +92,8 @@ class UsersController < ApplicationController
   def update_default_password
     return redirect_to "/422" unless current_user.change_default_password?
 
-    if current_user.update_password(params[:user])
+    if current_user.update_default_password(params[:user])
+      flash[:notice] = "Se ha actualizado su contraseña."
       redirect_to current_user
     else
       render "default_password"

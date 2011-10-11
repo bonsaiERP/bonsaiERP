@@ -38,10 +38,6 @@
     = simple_form_for @income, :url => approve_income_path(@income) do |f|
       .submit
         =f.submit "Aprobar", :class => 'dark_green', :id => 'income_approve_button'
-  /- elsif not @income.paid?
-  /  = simple_form_for @income, :url => null_income_path(@income) do |f|
-  /    .submit
-  /      =f.submit "Anular", :class => 'red', :id => 'income_null_button'
 
 .clear
 #tabs
