@@ -87,7 +87,7 @@ class TransactionPresenter < BasePresenter
 
   def approve_deliver_form
     if transaction.is_a?(Income)
-      h.render "transaction/approve_deliver" if can_approve_deliver?
+      h.render "transactions/approve_deliver" if can_approve_deliver?
     end
   end
 
