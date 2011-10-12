@@ -1,12 +1,9 @@
 %tr.pay_plan{:id => pay_plan.id}
-  %td= check_box_tag("pay_plan_ids[]", pay_plan.id, false, :class => 'check')
   %td.payment_date= lo pay_plan.payment_date
   %td= lo pay_plan.alert_date
   %td.r.amount #{pay_plan.currency_symbol} #{ntc pay_plan.amount}
   %td= pay_plan.description
   %td.state= pay_plan_state pay_plan.state
-  - if pay_plan.transaction.income?
-    %td{:class => pay_plan.email.to_s}
   %td
     - unless pay_plan.paid?
       = link_to "Editar", edit_pay_plan_path(pay_plan, :transaction_id => pay_plan.transaction_id), :class => 'pencil ajax', :title => 'Editar crédito'

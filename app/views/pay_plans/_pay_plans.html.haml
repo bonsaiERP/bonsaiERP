@@ -8,9 +8,12 @@
       %th Cantidad
       %th Descripción
       %th Estado
-  = render transaction.pay_plans.unpaid.includes(:transaction)
 
-  = render transaction.pay_plans.paid.includes(:transaction)
+  -# Iterate /pay_plans/pay_plan
+  = render transaction.pay_plans.unpaid.includes(:currency)
+
+  -# Iterate /pay_plans/pay_plan
+  = render transaction.pay_plans.paid.includes(:currency)
 
 :javascript
   $(function() {
