@@ -119,7 +119,7 @@ class TransactionPresenter < BasePresenter
   end
 
   def li_inventory
-    if transaction.deliver?
+    if transaction.deliver? or (transaction.is_a?(Buy) and not(transaction.draft?) )
       txt = @transaction.is_a?(Income) ? "Entrega" : "Recojo"
       h.content_tag(:li, "<a href='#inventory' id='tab_inventory'>#{txt}</a>".html_safe)
     end
@@ -160,7 +160,12 @@ class TransactionPresenter < BasePresenter
   end
 
   def render_inventory
-    render "/transactions/inventory", :transaction => transaction if transaction.deliver?
+    case
+    when ( transaction.is_a?(Income) and transaction.deliver? )
+      render "/transactions/inventory", :transaction => transaction
+    when ( transaction.is_a?(Buy) and not(transaction.draft?) )
+      render "/transactions/inventory", :transaction => transaction
+    end
   end
 
   def new_payment_link
