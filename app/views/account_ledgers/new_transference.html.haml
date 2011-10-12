@@ -20,7 +20,9 @@
   = f.input :amount, :label => "Cantidad #{@account_ledger.account.currency_symbol}",
     :input_html => {:size => 12, :type => 'decimal', :class => 'r'}, :wrapper_html => {:class => '_30'}
 
-  = f.input :date, :label => 'Fecha', :wrapper_html => {:class => '_20'}
+  .input
+    %label Feccha
+    = lo Time.zone.now
 
   - disp = @account_ledger.show_exchange_rate? ? 'block' : 'none'
 

@@ -31,22 +31,22 @@ class TransactionPresenter < BasePresenter
   end
 
   def new_inventory_link
-    if @transaction.is_a?(Income) and not(@transaction.delivered?)
+    if transaction.is_a?(Income) and not(transaction.delivered?)
       h.link_to "Registrar entrega", 
         url_for(:controller => 'inventory_operation', :action => 'select_store',
-                :id => @transaction.id, :operation => 'out'),
+                :id => transaction.id, :operation => 'out'),
         :class => 'new'
-    elsif @transaction.is_a?(Buy) and not(@transaction.delivered?)
+    elsif transaction.is_a?(Buy) and not(transaction.delivered?)
       h.link_to "Registrar entrega", 
         url_for(:controller => 'inventory_operation', :action => 'select_store',
-                :id => @transaction.id, :operation => 'in'),
+                :id => transaction.id, :operation => 'in'),
         :class => 'new'
     end
   end
 
   def email_link
     if transaction.income?
-      h.link_to "Email", h.new_invoice_email_path(@transaction), :class => 'email ajax', :title => 'Email', 'data-width' => 450
+      h.link_to "Email", h.new_invoice_email_path(transaction), :class => 'email ajax', :title => 'Email', 'data-width' => 450
     end
   end
 
@@ -120,7 +120,7 @@ class TransactionPresenter < BasePresenter
 
   def li_inventory
     if transaction.deliver? or (transaction.is_a?(Buy) and not(transaction.draft?) )
-      txt = @transaction.is_a?(Income) ? "Entrega" : "Recojo"
+      txt = transaction.is_a?(Income) ? "Entrega" : "Recojo"
       h.content_tag(:li, "<a href='#inventory' id='tab_inventory'>#{txt}</a>".html_safe)
     end
   end
