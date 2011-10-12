@@ -18,8 +18,6 @@ class ApplicationController < ActionController::Base
 
   #before_filter :destroy_organisation_session!, :unless => :user_signed_in?
 
-
-
   # Adds an error with format to display
   # @param ActiveRecord::Base (model)
   def add_flash_error(model)
@@ -78,7 +76,7 @@ protected
   end
 
 
-  private
+private
 
   def set_page
     @page = params[:page] || 1

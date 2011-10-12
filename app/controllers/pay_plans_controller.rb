@@ -4,6 +4,7 @@
 class PayPlansController < ApplicationController
   before_filter :check_authorization!
   before_filter :check_pay_plan_authorization, :only => [:new, :create, :edit, :update]
+
   # GET /pay_plans
   # GET /pay_plans.xml
   def index
@@ -25,10 +26,10 @@ class PayPlansController < ApplicationController
 
   # GET /pay_plans/new
   # GET /pay_plans/new.xml
-  def new
-    @transaction = Transaction.org.find(params[:id])
-    @pay_plan = @transaction.new_pay_plan
-  end
+  #def new
+  #  @transaction = Transaction.org.find(params[:id])
+  #  @pay_plan = @transaction.new_pay_plan
+  #end
 
   # GET /pay_plans/1/edit
   def edit
@@ -38,22 +39,22 @@ class PayPlansController < ApplicationController
 
   # POST /pay_plans
   # POST /pay_plans.xml
-  def create
-    begin
-      @transaction = Transaction.org.find(params[:pay_plan][:transaction_id])
-    rescue
-      render :text => "Existio un error por favor cierre la ventana."
-      return false
-    end
+  #def create
+  #  begin
+  #    @transaction = Transaction.org.find(params[:pay_plan][:transaction_id])
+  #  rescue
+  #    render :text => "Existio un error por favor cierre la ventana."
+  #    return false
+  #  end
 
-    @pay_plan = @transaction.new_pay_plan(params[:pay_plan])
+  #  @pay_plan = @transaction.new_pay_plan(params[:pay_plan])
 
-    if @transaction.save_pay_plan
-      render 'create'
-    else
-      render :action => "new"
-    end
-  end
+  #  if @transaction.save_pay_plan
+  #    render 'create'
+  #  else
+  #    render :action => "new"
+  #  end
+  #end
 
   # PUT /pay_plans/1
   # PUT /pay_plans/1.xml
@@ -77,19 +78,19 @@ class PayPlansController < ApplicationController
 
   # DELETE /pay_plans/1
   # DELETE /pay_plans/1.xml
-  def destroy
-    begin
-      @transaction = Transaction.org.find(params[:id])
+  #def destroy
+  #  begin
+  #    @transaction = Transaction.org.find(params[:id])
 
-      if @transaction.destroy_pay_plans(params[:ids])
-        render 'destroy'
-      else
-        render :json => {:success => false}
-      end
-    rescue
-      render :text => "Existio un error por favor cierre la ventana."
-    end
-  end
+  #    if @transaction.destroy_pay_plans(params[:ids])
+  #      render 'destroy'
+  #    else
+  #      render :json => {:success => false}
+  #    end
+  #  rescue
+  #    render :text => "Existio un error por favor cierre la ventana."
+  #  end
+  #end
 
 private
   def set_pay_plan
@@ -101,7 +102,7 @@ private
     unless User.admin_gerency?(session[:user][:rol])
       flash[:warning] = "Usted no tiene acceso a esta acción."
 
-      redirect_to user_path(current_user, :xhr => true)
+      redirect_to "/422"
     end
   end
 

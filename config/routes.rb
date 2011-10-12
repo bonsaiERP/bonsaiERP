@@ -27,16 +27,12 @@ Bonsaierp::Application.routes.draw do
   # put 'account_ledgers/conciliate/:id' => 'account_ledgers#conciliate', :as => :conciliate
 
   resources :banks
+
   resources :cashes
-  #resources :cash_registers
 
   resources :payments 
 
-  resources :pay_plans do
-    member do
-      post :email
-    end
-  end
+  resources :pay_plans
 
   resources :currency_rates
 

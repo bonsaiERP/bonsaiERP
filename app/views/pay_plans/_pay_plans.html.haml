@@ -1,27 +1,16 @@
 %h2 Planificación de crédito
 
-- if transaction.balance > 0
-  -#=link_to "Nuevo crédito", 
-    new_pay_plan_path(:type => transaction.class.to_s, :id => transaction.id, :pay_type => transaction.pay_type),
-    :id => 'new_pay_plan_link', :class => 'new button ajax', 'title' => "Nuevo crédito",
-    'data-trigger' => 'pay_plan', 'data-width' => '700' unless transaction.state == "paid"
-
-= link_to "Borrar", "/pay_plans/#{transaction.id}", :class => 'destroy red', :id => 'destroy_pay_plans_link'
 %table.decorated#pay_plans_table
   %thead
     %tr
-      %th= check_box_tag "pay_plans", "1", false, :id => "pay_plans_checkbox"
       %th Fecha
       %th Alertar el
       %th Cantidad
       %th Descripción
       %th Estado
-      - if transaction.income?
-        %th.tip{:title => 'Envia un email de alerta automaticamente al cliente'} Email de<br/>alerta
-      %th
-  = render transaction.pay_plans.unpaid.includes(:transaction, :currency)
+  = render transaction.pay_plans.unpaid.includes(:transaction)
 
-  = render transaction.pay_plans.paid.includes(:transaction, :currency)
+  = render transaction.pay_plans.paid.includes(:transaction)
 
 :javascript
   $(function() {

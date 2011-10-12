@@ -188,7 +188,10 @@ private
 
   # Tells if the user can approve a transaction based on the preferences
   def can_approve_deliver?
-    if not(transaction.draft?) and transaction.credit? and User::ROLES.slice(0,2).include?(h.session[:user][:rol])
+    if not(transaction.draft?) and transaction.credit? and
+      User::ROLES.slice(0,2).include?(h.session[:user][:rol]) and
+      not(transaction.deliver?)
+
       true
     else
       false
