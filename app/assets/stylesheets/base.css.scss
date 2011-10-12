@@ -155,3 +155,14 @@ h2, h3, h4, h5{ margin: 8px 0px;}
   color: $red;
 }
 p{ margin: 4px 0px; }
+
+#due_date{
+  color: $white;
+  font-weight: bold;
+  float: right;
+  display: inline-block;
+  margin-right: 100px;
+  padding: 10px 0px;
+  font-size: 110%;
+  .red{ color: darken($red, 10%) !important;}
+}

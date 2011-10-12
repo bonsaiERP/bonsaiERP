@@ -15,6 +15,17 @@ module ApplicationHelper
     session[:organisation][:name]
   end
 
+  # Presents the organisation due date
+  def present_due_date
+    if session[:organisation]
+      if session[:organisation][:due_date] < Date.today
+        "<span class='red'>Vencio el #{lo session[:organisation][:due_date]}</span>".html_safe
+      else
+        "Vence el #{lo session[:organisation][:due_date]}"
+      end
+    end
+  end
+
   def verdad?(val)
     val ? "Si": "No"
   end
