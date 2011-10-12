@@ -28,7 +28,7 @@ module Controllers::Contact
     opt = params[:option] == "all" ? :scoped : params[:option]
 
     @locals = {
-      :incomes => contact.incomes.send(opt).page(@page),
+      :incomes => contact.incomes.send(opt).order("created_at DESC").page(@page),
       :incomes_count => contact.incomes.send(opt)
     }
   end
@@ -39,7 +39,7 @@ module Controllers::Contact
     opt = params[:option] == "all" ? :scoped : params[:option]
 
     @locals = {
-      :buys => contact.buys.send(opt).page(@page),
+      :buys => contact.buys.send(opt).order("created_at DESC").page(@page),
       :buys_count => contact.buys.send(opt)
     }
 
