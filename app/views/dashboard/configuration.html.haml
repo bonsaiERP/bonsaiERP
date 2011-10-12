@@ -20,7 +20,7 @@
         %tr
           %td= link_to link.user, link.user
           %td= link.user.email
-          %td= link.rol
+          %td= User.roles_hash[link.rol]
           %td{:class => link.active.to_s }
           %td
             = link_to "editar", edit_user_user_path(link.user), :class => 'edit', :title => 'Editar usuario'
