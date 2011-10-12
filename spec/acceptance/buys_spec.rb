@@ -267,6 +267,34 @@ feature "Buy", "test features" do
 
     b.balance.should == b.total
     b.should be_approved
+
+    # make credit and null credits
+    b.approve_credit(:credit_reference => "New credit").should be_true
+    b.pay_plans.size.should == 1
+    pp = b.pay_plans.first
+    b.edit_pay_plan(pp.id, :amount => 30, :repeat => true)
+
+    b.save_pay_plan.should be_true
+    b.reload
+    b.pay_plans.size.should == (b.balance/30).ceil
+    b.payment_date.should == pp.payment_date
+
+    p = b.new_payment(:reference => "New reference", :account_id => bank_account.id, :exchange_rate => 1, :currency_id => 1)
+    p.amount.should == 30
+    b.save_payment.should be_true
+
+    b.reload
+    p.reload
+
+    b.balance.should == b.total - 30
+    b.payment_date.should_not == pp.payment_date
+
+    p.null_transaction.should be_true
+    b.reload
+
+    b.balance.should == b.total
+    b.pay_plans_balance.should == b.total
+    b.pay_plans.unpaid.first.payment_date.should == p.payment_date
   end
 
   scenario "Buy in other currency pay with other currency null" do

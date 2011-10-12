@@ -68,7 +68,7 @@ class TransactionPresenter < BasePresenter
 
   def project
     if transaction.project_id.present?
-      h.content_tag(:h3, "Proyecto: #{h.link_to transaction.project, transaction.project}")
+      "Proyecto: #{h.link_to transaction.project, transaction.project}".html_safe
     end
   end
 
@@ -86,7 +86,9 @@ class TransactionPresenter < BasePresenter
   end
 
   def approve_deliver_form
-    h.render "transaction/approve_deliver" if can_approve_deliver?
+    if transaction.is_a?(Income)
+      h.render "transaction/approve_deliver" if can_approve_deliver?
+    end
   end
 
 
@@ -119,12 +121,14 @@ class TransactionPresenter < BasePresenter
   def li_inventory
     if transaction.deliver?
       txt = @transaction.is_a?(Income) ? "Entrega" : "Recojo"
-      h.content_tag(:li, "<a href='#pay_plans' id='inventory'>#{html}</a>".html_safe)
+      h.content_tag(:li, "<a href='#inventory' id='tab_inventory'>#{txt}</a>".html_safe)
     end
   end
 
   def render_discount
-    h.render "transactions/discount", :transaction => transaction if transaction.discounted?
+    if transaction.is_a?(Income)
+      h.render "transactions/discount", :transaction => transaction if transaction.discounted?
+    end
   end
 
   def render_payments
@@ -143,9 +147,10 @@ class TransactionPresenter < BasePresenter
     return "" if transaction.paid?
 
     partial, url = false, ""
+
     case
     when transaction.credit?
-      partial = "/pay_plans/"
+      partial = "/pay_plans/pay_plans"
     when (not(transaction.credit?) and not(transaction.paid?) )
       url = transaction.is_a?(Income) ? approve_credit_income_path(transaction) : approve_credit_buy_path(transaction)
       partial = "/pay_plans/approve"

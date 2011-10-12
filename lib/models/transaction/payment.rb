@@ -95,6 +95,8 @@ module Models::Transaction::Payment
       current_pp = false
 
       pps = sort_pay_plans
+      @current_ledger.payment_date = pps.first.payment_date
+
       pps.each do |pp|
         amt -= pp.amount
         pp.paid = true

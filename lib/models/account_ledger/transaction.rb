@@ -35,13 +35,16 @@ module Models::AccountLedger::Transaction
       ret = true
       transaction.balance += (amount_currency).abs
 
-      create_transaction_pay_plan if transaction.credit?
+      if transaction.credit?
+        create_transaction_pay_plan
+        transaction.payment_date = payment_date
+      end
 
       self.class.transaction do
         ret = self.save
 
         transaction.state = "approved" if transaction.paid?
-        ret = ret and transaction.save
+        ret = ret && transaction.save
 
         raise ActiveRecord::Rollback unless ret
       end
@@ -56,10 +59,10 @@ module Models::AccountLedger::Transaction
       pp = transaction.pay_plans.paid.last
 
       transaction.pay_plans.build(
-        :payment_date => pp.payment_date, 
-        :alert_date => pp.payment_date,
-        :amount => amount - interests_penalties,
-        :interests_penalties  => interests_penalties,
+        :payment_date => payment_date,
+        :alert_date => payment_date - 5.days,
+        :amount => amount_currency.abs,
+        :interests_penalties => interests_penalties,
         :email => pp.email,
         :currency_id => transaction.currency_id
       )

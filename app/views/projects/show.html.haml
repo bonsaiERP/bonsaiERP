@@ -1,7 +1,12 @@
+- content_for :links do
+  %ul.breadcrumps
+    %li #{link_to "Proyectos", projects_path} <span>&gt;</span>
+
+  .links
+    = link_to 'Editar', edit_project_path(@project), :class => 'edit'
+    = link_to 'Borrar', @project, :class => 'delete', 'data-confirm' => 'Esta seguro de borrar el proyecto?'
+
 %h1 Proyecto #{@project.name}
-%p.links
-  = link_to 'Editar', edit_project_path(@project), :class => 'edit'
-  = link_to 'Lista', projects_path, :class => 'list'
 .clear
 
 .input._25
@@ -14,3 +19,5 @@
   %label Fecha de fin
   = lo @project.date_end
 .clear
+  %label Descripción
+  = @project.description

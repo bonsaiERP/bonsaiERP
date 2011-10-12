@@ -4,6 +4,8 @@
 class Project < ActiveRecord::Base
   acts_as_org
 
+  attr_accessible :name, :active, :date_start, :date_end, :description
+
   # associations
   has_many :transactions
 
