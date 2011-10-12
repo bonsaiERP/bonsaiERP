@@ -32,7 +32,7 @@ gem 'bcrypt-ruby'
 #gem 'apotomo'
 #gem 'draper'
 
-gem 'prawn', '~>0.12.0'#, :git => 'https://github.com/sandal/prawn.git', :branch => "stable", :submodules => true
+gem 'prawn', '~>0.12.0'
 #gem 'newrelic_rpm'
 #gem 'escape_utils'
 
