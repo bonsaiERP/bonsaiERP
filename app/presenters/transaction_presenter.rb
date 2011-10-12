@@ -151,7 +151,7 @@ class TransactionPresenter < BasePresenter
     case
     when transaction.credit?
       partial = "/pay_plans/pay_plans"
-    when (not(transaction.credit?) and not(transaction.paid?) )
+    when (not(transaction.credit?) and not(transaction.paid?) and not(transaction.draft?) )
       url = transaction.is_a?(Income) ? approve_credit_income_path(transaction) : approve_credit_buy_path(transaction)
       partial = "/pay_plans/approve"
     end
