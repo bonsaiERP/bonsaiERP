@@ -100,7 +100,7 @@ class AccountLedger < ActiveRecord::Base
   end
 
   def self.contact(contact_id)
-    AccountLedger.org.where(:contact_id => contact_id)
+    AccountLedger.org.where(:contact_id => contact_id).includes(:currency)
     .order("created_at DESC")
   end
 
