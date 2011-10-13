@@ -9,7 +9,7 @@ class TransactionPresenter < BasePresenter
   end
 
   def null_link
-    h.link_to 'Anular', transaction, :class => 'delete', :confirm => 'Esta seguro de anular?'
+      h.link_to 'Anular', transaction, :class => 'delete', :confirm => 'Esta seguro de anular?' if transaction.draft?
   end
 
   def approve_deliver?
