@@ -1,0 +1,18 @@
+= paginate(inventory_operations)
+
+%table.decorated
+  %tr
+    %th Referencia
+    %th Almacen
+    %th Fecha
+    %th Operación
+    %th Realizado por
+
+  - inventory_operations.each do |op|
+    %tr
+      %td= link_to op.ref_number, op, :class => :b
+      %td= op.store
+      %td= lo op.created_at
+      %td= op.operation == 'in' ? 'Ingreso' : 'Egreso'
+      %td= op.creator
+

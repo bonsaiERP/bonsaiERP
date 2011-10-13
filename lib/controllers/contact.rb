@@ -5,6 +5,8 @@ module Controllers::Contact
       set_incomes contact
     when "buys"
       set_buys contact
+    when "inventory"
+      set_inventory contact
     else
       params[:tab] = "transactions"
       params[:option] = "all" unless ["all", "con", "pendent", "nulled"].include?(params[:option])
@@ -42,6 +44,13 @@ module Controllers::Contact
       :buys => contact.buys.send(opt).order("created_at DESC").page(@page),
       :buys_count => contact.buys.send(opt)
     }
+  end
 
+  def set_inventory(contact)
+    @partial = "contacts/inventory_operations"
+    @locals = {
+      :inventory_operations => contact.inventory_operations.includes(:store).order("created_at DESC").page(@page),
+      :inventory_operations_count => contact.inventory_operations.count
+    }
   end
 end

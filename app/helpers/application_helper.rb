@@ -18,10 +18,11 @@ module ApplicationHelper
   # Presents the organisation due date
   def present_due_date
     if session[:organisation]
-      if session[:organisation][:due_date] < Date.today
-        "<span class='red'>Venció el #{lo session[:organisation][:due_date]}</span>".html_safe
+      due_date = session[:organisation][:due_date] || current_user.organisation.due_date
+      if due_date < Date.today
+        "<span class='red'>Venció el #{lo due_date}</span>".html_safe
       else
-        "Vence el #{lo session[:organisation][:due_date]}"
+        "Vence el #{lo due_date}"
       end
     end
   end

@@ -37,7 +37,9 @@
     =tab "Transacciones", client_path(@client, :tab => 'transactions'), "transactions"
     =tab "Ventas", client_path(@client, :tab => 'incomes'),"incomes"
     =tab "Compras y gastos", client_path(@client, :tab => 'buys'), "buys"
+    =tab "Operaciones inventarios", client_path(@client, :tab => 'inventory'), "inventory"
     
+  -# "contacts/inconmes", "contacts/buys", "contacts/inventory_operations"
   = render @partial, @locals
 
 

@@ -13,6 +13,7 @@ class Contact < ActiveRecord::Base
   has_many :transactions
   has_many :incomes,  :class_name => "Income"
   has_many :buys,     :class_name => "Buy"
+  has_many :inventory_operations
   # Account
   has_many :accounts, :as => :accountable, :autosave => true, :dependent => :destroy
 

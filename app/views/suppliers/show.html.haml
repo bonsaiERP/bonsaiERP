@@ -38,6 +38,7 @@
     =tab "Transacciones", supplier_path(@supplier, :tab => 'transactions'), "transactions"
     =tab "Compras y gastos", supplier_path(@supplier, :tab => 'buys'),"buys"
     =tab "Ventas", supplier_path(@supplier, :tab => 'incomes'),"incomes"
+    =tab "Operaciones inventarios", supplier_path(@client, :tab => 'inventory'), "inventory"
     
   = render @partial, @locals
 
