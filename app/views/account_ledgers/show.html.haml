@@ -32,13 +32,14 @@
       = simple_form_for @account_ledger, :url => conciliate_account_ledger_path(@account_ledger) do |f|
         = f.submit "Verificar transacción"
 
-  %p Creado por: <span class="b">#{@account_ledger.creator}</span> <span class="i">#{lo @account_ledger.created_at}</span>
+  #users.mt30
+    %p Creado por: <span class="b">#{@account_ledger.creator}</span> <span class="i">#{lo @account_ledger.created_at}</span>
 
-  - if @account_ledger.conciliation?
-    %p Verificado por: <span class="b">#{@account_ledger.approver}</span> <span class="i">#{lo @account_ledger.approver_datetime}</span>
+    - if @account_ledger.conciliation?
+      %p Verificado por: <span class="b">#{@account_ledger.approver}</span> <span class="i">#{lo @account_ledger.approver_datetime}</span>
 
-  - unless @account_ledger.active?
-    %p Anulado por: <span class="b">#{@account_ledger.nuller}</span> <span class="i">#{lo @account_ledger.nuller_datetime}</span>
+    - unless @account_ledger.active?
+      %p Anulado por: <span class="b">#{@account_ledger.nuller}</span> <span class="i">#{lo @account_ledger.nuller_datetime}</span>
 
 
   :javascript
