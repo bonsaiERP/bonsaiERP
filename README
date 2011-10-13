@@ -180,3 +180,6 @@ class TransactionModel extends Backbone.Model
 #window.IncomeModel = IncomeModel
 c_id = Category.first.id
 @params = {:name_en => "Machine 1234", :name_de => "Machine 1234", :category_id => 1, :ctype => "Old machine", :machine_status_id => 1, :purchase_price => 100, :sales_price => 100 }
+
+git push origin :branchname # Remove branch
+git push origin :refs/tags/tagname #Remove tag
