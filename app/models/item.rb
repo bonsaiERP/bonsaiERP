@@ -151,7 +151,7 @@ class Item < ActiveRecord::Base
   # Creates a price to check in the history
   def create_price 
     self.price ||= 0
-    prices.build(price)
+    #prices.build(price)
   end
 
   # Validations for discount
