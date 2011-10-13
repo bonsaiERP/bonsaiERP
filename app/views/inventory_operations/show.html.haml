@@ -42,3 +42,9 @@
           = ntc items_hash[det.item_id][:quantity]
         - else
           = ntc 0.0
+
+#users.mt30
+  %p 
+    Creado por
+    %strong= @inventory_operation.creator
+    %span.id= lo @inventory_operation.created_at
