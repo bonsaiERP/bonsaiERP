@@ -6,8 +6,9 @@ String::pluralize = ->
     return this + "es"
 # $.browser.msie
 # $.browser.version
-Number::round = ->
-  Math.round()
+Number::round = (dec)->
+  dec = dec || 2
+  Math.round(@ * Math.pow(10, dec) ) / Math.pow(10, dec)
 
 ######################################
 # All events related to jQuery
