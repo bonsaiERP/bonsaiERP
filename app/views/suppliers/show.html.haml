@@ -18,7 +18,7 @@
 - @supplier.accounts.each do |ac|
   .moneybox.fl
     %label Cuenta en #{ac.currency_symbol}
-    %h3= ntc ac.amount
+    %h3= ntc(-1 * c.amount)
 
 - present @supplier, ContactPresenter do |presenter|
   - presenter.incomes.each do |cur, amt|
