@@ -183,3 +183,18 @@ c_id = Category.first.id
 
 git push origin :branchname # Remove branch
 git push origin :refs/tags/tagname #Remove tag
+
+Started POST "/buys" for 200.105.184.245 at 2011-10-13 17:32:46 -0400
+  Processing by BuysController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"xh2EFLe2T8guskfX5oZKsxlUTkuWSckW1Yf2KZE/htE=", "buy"=>{"ref_number"=>"C-2011-0001", "contact_id"=>"47", "project_id"=>"", "currency_id"=>"1", "exchange_rate"=>"1", "bill_number"=>"", "description"=>"", "transaction_details_attributes"=>{"0"=>{"item_id"=>"43", "price"=>"126.20", "quantity"=>"1"}}}, "1318541475729"=>"Supplier", "contact_autocomplete"=>"Cotel", "commit"=>"Salvar"}
+Completed 500 Internal Server Error in 7ms
+
+NoMethodError (undefined method `/' for nil:NilClass):
+  lib/models/transaction/trans.rb:47:in `block in calculate_orinal_total'
+  lib/models/transaction/trans.rb:45:in `calculate_orinal_total'
+  lib/models/transaction/trans.rb:32:in `save_trans_details'
+  lib/models/transaction/trans.rb:20:in `save_trans'
+  app/models/buy.rb:34:in `save_trans'
+  app/controllers/buys_controller.rb:61:in `block in create'
+  app/controllers/buys_controller.rb:60:in `create'
+

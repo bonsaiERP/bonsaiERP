@@ -44,7 +44,7 @@ module Models::Transaction
         items = Item.org.where(:id => transaction_details.map(&:item_id)).values_of(:id, :price)
         s = transaction_details.inject(0) do |s, det|
           it = items.find {|i| i[0] === det.item_id }
-          s += ( it[1]/exchange_rate ).round(2) * det.quantity unless det.marked_for_destruction?
+          s += ( it[1].to_f/exchange_rate ).round(2) * det.quantity unless det.marked_for_destruction?
           s
         end
 

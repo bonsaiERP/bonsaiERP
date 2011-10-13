@@ -1,3 +1,4 @@
+//
 //= require jquery
 //= require jquery-ui-1.8.15.custom.min.js
 //= require underscore-min.js
@@ -11,3 +12,4 @@
 //= require app/transaction.coffee
 //= require app/pay_plans.coffee
 //= require app/payment.coffee
+//
