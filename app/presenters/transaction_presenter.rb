@@ -159,12 +159,48 @@ class TransactionPresenter < BasePresenter
     h.render partial, :transaction => transaction, :presenter => self, :url => url if partial
   end
 
+  def inventory_title
+    if transaction.is_a?(Income)
+      "Entregas"
+    else
+      "Recojos"
+    end
+  end
+
+  def deliver_link
+    if transaction_deliver?
+      if transaction.is_a?(Income)
+        h.link_to "Registrar entrega", select_store_inventory_operation_path(transaction, :operation => 'out'), :class => "new"
+      elsif transaction.is_a?(Buy)
+        h.link_to "Registrar recojo", select_store_inventory_operation_path(transaction, :operation => 'in'), :class => "new"
+      end
+    end
+  end
+
+  def devolution_link
+    if User.admin_gerency?(h.session[:user][:rol]) and transaction_deliver?
+      if transaction.is_a?(Income)
+        h.link_to "Realizar devolución", select_store_inventory_operation_path(transaction, :operation => 'in'), :class => "red b fs120"
+      elsif transaction.is_a?(Buy)
+        h.link_to "Realizar devolución", select_store_inventory_operation_path(transaction, :operation => 'out'), :class => ""
+      end
+    end
+  end
+
+  def transaction_deliver?
+    case
+    when transaction.delivered? then false
+    when (transaction.is_a?(Income) and transaction.deliver?) then true
+    when (transaction.is_a?(Buy) and not(transaction.draft?)) then true
+    end
+  end
+
   def render_inventory
     case
     when ( transaction.is_a?(Income) and transaction.deliver? )
-      render "/transactions/inventory", :transaction => transaction
+      render "/transactions/inventory", :transaction => transaction, :presenter => self
     when ( transaction.is_a?(Buy) and not(transaction.draft?) )
-      render "/transactions/inventory", :transaction => transaction
+      render "/transactions/inventory", :transaction => transaction, :presenter => self
     end
   end
 

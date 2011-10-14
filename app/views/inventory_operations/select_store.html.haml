@@ -1,18 +1,21 @@
 :css
   #links{ display: none; }
 
-%h1 Seleccione el almacen 
-%h2.n= link_to @transaction, @transaction
+- present @inventory_operation do |presenter|
+  - presenter.transaction = @transaction
 
-= form_tag new_transaction_inventory_operations_path, :method => 'get', :id => 'select_store' do
-  = hidden_field_tag "transaction_id", @transaction.id
-  = hidden_field_tag "operation", params[:operation]
+  %h1 Seleccione el almacen para #{presenter.select_store_title}
+  %h2.n= link_to @transaction, @transaction
 
-  %label Almacen
-  = select_tag "store_id", options_from_collection_for_select(Store.org.active, :id, :name), :include_blank => true, 
-    'data-new_url' => new_store_path, 'data-trigger' => 'new_store', 'data-title' => 'Nuevo almacen'
-  .submit
-    =submit_tag "Seleccionar almacen"
+  = form_tag new_transaction_inventory_operations_path, :method => 'get', :id => 'select_store' do
+    = hidden_field_tag "transaction_id", @transaction.id
+    = hidden_field_tag "operation", params[:operation]
+
+    %label Almacen
+    = select_tag "store_id", options_from_collection_for_select(Store.org.active, :id, :name), :include_blank => true, 
+      'data-new_url' => new_store_path, 'data-trigger' => 'new_store', 'data-title' => 'Nuevo almacen'
+    .submit
+      =submit_tag "Seleccionar almacen"
 
 :javascript
   $(document).ready(function() {
