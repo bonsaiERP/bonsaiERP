@@ -182,7 +182,7 @@ class TransactionPresenter < BasePresenter
       if transaction.is_a?(Income)
         h.link_to "Realizar devolución", select_store_inventory_operation_path(transaction, :operation => 'in'), :class => "red b fs120"
       elsif transaction.is_a?(Buy)
-        h.link_to "Realizar devolución", select_store_inventory_operation_path(transaction, :operation => 'out'), :class => ""
+        h.link_to "Realizar devolución", select_store_inventory_operation_path(transaction, :operation => 'out'), :class => "red b fs120"
       end
     end
   end

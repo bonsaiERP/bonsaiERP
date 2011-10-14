@@ -11,9 +11,9 @@ class InventoryOperationPresenter < BasePresenter
       "<span class='dark_green'>Entrega</span>".html_safe
     when (transaction.is_a?(Income) and inventory_operation.in?)
       "<span class='red'>Devolución</span>".html_safe
-    when (transaction.is_a?(Buy) and inventory_operation.out?)
+    when (transaction.is_a?(Buy) and inventory_operation.in?)
       "<span class='dark_green'>Recojo</span>".html_safe
-    when (transaction.is_a?(Income) and inventory_operation.in?)
+    when (transaction.is_a?(Buy) and inventory_operation.out?)
       "<span class='red'>Devolución</span>".html_safe
     end
   end
