@@ -4,46 +4,49 @@
     %li #{link_to @inventory_operation.store, @inventory_operation.store}<span>&gt;</span>
 
 
-%h1 Nuevo #{inventory_operation_operation(@inventory_operation)} de almacen
-%h2= @inventory_operation.store
+- present @inventory_operation do |presenter|
+  - presenter.transaction = @transaction
 
-%h3.n= link_to @inventory_operation.transaction, @inventory_operation.transaction
-%h3.n= link_to @inventory_operation.contact, @inventory_operation.contact
+  %h1= presenter.transaction_title
+  %h2= @inventory_operation.store
 
-= simple_form_for(@inventory_operation, :url => create_transaction_inventory_operations_path) do |f|
-  = bonsai_form_error(f)
+  %h3.n= link_to @inventory_operation.transaction, @inventory_operation.transaction
+  %h3.n= link_to @inventory_operation.contact, @inventory_operation.contact
 
-  = f.input :operation, :as => :hidden
-  = f.input :store_id, :as => :hidden
-  = f.input :transaction_id, :as => :hidden
+  = simple_form_for(@inventory_operation, :url => create_transaction_inventory_operations_path) do |f|
+    = bonsai_form_error(f)
 
-  .main.bg_light_grey
-    ._50.fl
-      = f.input :ref_number, :input_html => {:size => 20}, :label => 'Numero de referencia'
+    = f.input :operation, :as => :hidden
+    = f.input :store_id, :as => :hidden
+    = f.input :transaction_id, :as => :hidden
+
+    .main.bg_light_grey
+      ._50.fl
+        = f.input :ref_number, :input_html => {:size => 20}, :label => 'Numero de referencia'
+        .input
+          %label Fecha
+          = l Time.zone.now
+
       .input
-        %label Fecha
-        = l Time.zone.now
+        %label Contacto
+        = link_to f.object.contact, f.object.contact, :class => "b"
+      .clear
 
-    .input
-      %label Contacto
-      = link_to f.object.contact, f.object.contact, :class => "b"
+    = f.input :description, :as => :text, :input_html => {:rows => 4, :cols => 40}, :label => 'Descripción'
     .clear
 
-  = f.input :description, :as => :text, :input_html => {:rows => 4, :cols => 40}, :label => 'Descripción'
-  .clear
+    %table.decorated#items_table
+      %tr
+        %th Item
+        %th Cantidad
+        %th Entregado
+        %th Inventario
+        %th
 
-  %table.decorated#items_table
-    %tr
-      %th Item
-      %th Cantidad
-      %th Entregado
-      %th Inventario
-      %th
+      = render "form_details_transaction", :f => f, :stocks => @inventory_operation.hash_of_items
 
-    = render "form_details_transaction", :f => f, :stocks => @inventory_operation.hash_of_items
-
-  .clear
-  = f.submit 'Salvar'
+    .clear
+    = f.submit 'Salvar'
 
 :javascript
   $(function() {

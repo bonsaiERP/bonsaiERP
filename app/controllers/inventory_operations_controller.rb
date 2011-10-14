@@ -86,6 +86,7 @@ class InventoryOperationsController < ApplicationController
   # Selects a store for in out of a transaction
   def select_store
     @transaction = Transaction.org.find(params[:id])
+    @inventory_operation = @transaction.inventory_operations.build(:operation => params[:operation])
   end
 
   # Presents the transactions that are IN/OUT
