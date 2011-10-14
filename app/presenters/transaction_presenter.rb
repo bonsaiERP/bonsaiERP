@@ -178,12 +178,19 @@ class TransactionPresenter < BasePresenter
   end
 
   def devolution_link
-    if User.admin_gerency?(h.session[:user][:rol]) and transaction_deliver?
+    if User.admin_gerency?(h.session[:user][:rol]) and transaction_devolution?
       if transaction.is_a?(Income)
         h.link_to "Realizar devolución", select_store_inventory_operation_path(transaction, :operation => 'in'), :class => "red b fs120"
       elsif transaction.is_a?(Buy)
         h.link_to "Realizar devolución", select_store_inventory_operation_path(transaction, :operation => 'out'), :class => "red b fs120"
       end
+    end
+  end
+
+  def transaction_devolution?
+    case
+    when (transaction.is_a?(Income) and transaction.deliver?) then true
+    when (transaction.is_a?(Buy) and not(transaction.draft?)) then true
     end
   end
 

@@ -4,44 +4,44 @@
     %li #{link_to @inventory_operation.store, store_path(@inventory_operation.store, :anchor => 'stocks')}<span>&gt;</span>
 
 
-- css, txt = @inventory_operation.operation == "in" ? ["dark_green", "ingreso"] : ["red", "egreso"]
+- present @inventory_operation do |presenter|
+  - presenter.transaction = @inventory_operation.transaction
+
+  %h1= presenter.title
+
+  %h2= @inventory_operation.store
+  %h2.n= link_to @inventory_operation.contact, @inventory_operation.contact
+
+  - if @inventory_operation.transaction_id.present?
+    %h2.n= link_to @inventory_operation.transaction, @inventory_operation.transaction
 
 
-%h1 Operación <span class="#{css}">#{txt}</span> almacen
+  %h3._25.fl{:style => 'margin: 0px'}= @inventory_operation.ref_number
+  ._25.fl
+    = lo @inventory_operation.created_at
 
-%h2= @inventory_operation.store
-%h2.n= link_to @inventory_operation.contact, @inventory_operation.contact
+  .clear
 
-- if @inventory_operation.transaction_id.present?
-  %h2.n= link_to @inventory_operation.transaction, @inventory_operation.transaction
+  %h2 Items
 
-
-%h3._25.fl{:style => 'margin: 0px'}= @inventory_operation.ref_number
-._25.fl
-  = lo @inventory_operation.created_at
-
-.clear
-
-%h2 Items
-
-%table.decorated#items_table
-  %tr
-    %th Item
-    %th Cantidad
-    %th Unidad
-    %th Inventario
-  
-  - items_hash = @inventory_operation.hash_of_items
-  - @inventory_operation.inventory_operation_details.includes(:item => :unit).each do |det|
-    %tr.item
-      %td= det.item
-      %td.cur= ntc det.quantity
-      %td= det.item.unit
-      %td.cur
-        - if items_hash[det.item_id]
-          = ntc items_hash[det.item_id][:quantity]
-        - else
-          = ntc 0.0
+  %table.decorated#items_table
+    %tr
+      %th Item
+      %th Cantidad
+      %th Unidad
+      %th Inventario
+    
+    - items_hash = @inventory_operation.hash_of_items
+    - @inventory_operation.inventory_operation_details.includes(:item => :unit).each do |det|
+      %tr.item
+        %td= det.item
+        %td.cur= ntc det.quantity
+        %td= det.item.unit
+        %td.cur
+          - if items_hash[det.item_id]
+            = ntc items_hash[det.item_id][:quantity]
+          - else
+            = ntc 0.0
 
 #users.mt30
   %p 
