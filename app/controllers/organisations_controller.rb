@@ -37,7 +37,6 @@ class OrganisationsController < ApplicationController
   # GET /organisations/new
   def new
     @organisation = Organisation.new(:currency_id => 1)
-    @organisation.set_default_preferences
   end
 
   # POST /organisations
