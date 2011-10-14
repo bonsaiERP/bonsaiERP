@@ -54,7 +54,7 @@
       tr = $('#items_table tr.item:first').clone();
       tr.find("input, select").each(function(i, el) {
         var name = $(el).attr("name").replace(/\d+/, t);
-        $(el).attr("name", name);
+        $(el).attr("name", name).val('');
       });
       tr.appendTo("#items_table");
     });

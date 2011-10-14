@@ -25,7 +25,7 @@ class TransactionPresenter < BasePresenter
   def currency
     unless h.currency_id === transaction.currency_id
       content_tag(:h3, :class => 'black') do
-        "#{h.currency_symbol} 1 = #{transaction.currency_symbol} #{ntc transaction.exchange_rate, :precision => 4}"      
+        "#{transaction.currency_symbol} 1 = #{h.currency_symbol} #{ntc transaction.exchange_rate, :precision => 4}"      
       end
     end
   end
