@@ -77,32 +77,32 @@ feature "Organisations", "In order to create an organisation I must login" do
   end
 
 
-  scenario "Create Organisation and fail creating accounts", :driver => :rack_test do
+  #scenario "Create Organisation and fail creating accounts", :driver => :rack_test do
 
-    u = User.create(:email => 'fail@example.com', :password => 'demo123', :password_confirmation => 'demo123')
-    u.confirm_token(u.confirmation_token)
+  #  u = User.create(:email => 'fail@example.com', :password => 'demo123', :password_confirmation => 'demo123')
+  #  u.confirm_token(u.confirmation_token)
 
-    # Log in
-    visit "/users/sign_in"
-    fill_in "Email", :with => 'fail@example.com'
-    fill_in "Contraseña", :with => 'demo123'
-    click_button('Ingresar')
+  #  # Log in
+  #  visit "/users/sign_in"
+  #  fill_in "Email", :with => 'fail@example.com'
+  #  fill_in "Contraseña", :with => 'demo123'
+  #  click_button('Ingresar')
 
-    page.current_path.should == new_organisation_path
+  #  page.current_path.should == new_organisation_path
 
-    Organisation.any_instance.stubs(:create_base_accounts => false)
+  #  #Organisation.any_instance.stubs(:create_base_accounts => false)
 
-    # Create organisation
-    fill_in 'Nombre de su empresa', :with => 'bonsailabs'
-    select 'Dolar', :from => 'Moneda base'
-    select 'Bolivia', :from => 'País'
-    fill_in 'Teléfono', :with => '2790123'
-    fill_in 'Dirección', :with => 'Los Pinos B 80, dpto. 201'
+  #  # Create organisation
+  #  fill_in 'Nombre de su empresa', :with => 'bonsailabs'
+  #  select 'Dolar', :from => 'Moneda base'
+  #  select 'Bolivia', :from => 'País'
+  #  fill_in 'Teléfono', :with => '2790123'
+  #  fill_in 'Dirección', :with => 'Los Pinos B 80, dpto. 201'
 
-    click_button 'Salvar'
+  #  click_button 'Salvar'
 
-    page.current_path.should == '/users/sign_in'
-    page.has_css?("#flashError")
+  #  page.current_path.should == '/users/sign_in'
+  #  page.has_css?("#flashError")
 
-  end
+  #end
 end

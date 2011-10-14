@@ -15,16 +15,6 @@
   =f.input :email
   .clear
 
-  .input._100.boolean
-    .open_prices.inside
-      %label Descuento por item
-      = text_field_tag "organisation[preferences][item_discount]", @organisation.preferences[:item_discount], :size => 4
-      .hint Si el ítem supera el <strong>descuento de <span id="item_discount"></span>%</strong> en una venta, se requerira aprobación de genrencia 
-
-  .input._100.boolean
-    %label{:for => 'organisation_preferences_general_discount' } Descuento general
-    = text_field_tag "organisation[preferences][general_discount]", @organisation.preferences[:general_discount], :size => 4
-    .hint Si se supera el porcentage en Descuento general en una venta, se requerira aprobación de gerencia 
   .clear
     = f.submit "Salvar"
 
@@ -41,7 +31,7 @@
     function testDecimal(val) {
       return /^\d{1,3}(\.\d+)?$/.test(val);
     }
-    
+    /*
     $('#organisation_preferences_open_prices').live('click', function() { showHideOpenPrices() });
 
     $('#organisation_preferences_item_discount').live('focusout', function() {
@@ -58,6 +48,6 @@
         $(this).val(0);
       }
     });
-
+    */
 
   })
