@@ -23,8 +23,10 @@ class AccountLedgersController < ApplicationController
 
   # GET /account_ledgers/:id/new_transference
   def new_transference
-    @account_ledger = AccountLedger.new_money(:operation => "trans", :account_id => params[:account_id])
-    redirect_to "/dashboard" unless @account_ledger
+    @account = Account.org.find_by_id(params[:account_id])
+    return redirect_to "/422" unless @account
+    @account_ledger = AccountLedger.new_money(:operation => "trans", :account_id => @account.id, :currency_id => @account.currency_id)
+    redirect_to "/422" unless @account_ledger
   end
   #
   # PUT /account_ledgers/:id/conciliate 
@@ -66,6 +68,9 @@ class AccountLedgersController < ApplicationController
 
   # POST /account_ledgers/:id/transference
   def transference
+    @account = Account.org.find_by_id(params[:account_ledger][:account_id])
+    return redirect_to "/422" unless @account
+
     params[:account_ledger][:operation] = "trans"
     @account_ledger = AccountLedger.new_money(params[:account_ledger])
     @account_ledger.reference = "Transferencia"

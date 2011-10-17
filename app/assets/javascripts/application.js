@@ -4,6 +4,7 @@
 //= require underscore-min.js
 //= require backbone.js
 //= require sugar-0.9.min.js
+//= require money.min.js
 //= require tooltip.min.js
 //= require base.js.coffee
 //= require _b.coffee

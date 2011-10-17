@@ -3,6 +3,7 @@
 # email: boriscyber@gmail.com
 class CurrenciesController < ApplicationController
   before_filter :check_authorization!
+
   # GET /currencies
   # GET /currencies.xml
   def index

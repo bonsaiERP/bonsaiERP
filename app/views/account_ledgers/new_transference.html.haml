@@ -3,40 +3,36 @@
     %li #{link_list @account_ledger}<span>&gt;</span>
     %li #{link_parent @account_ledger}<span>&gt;</span>
 
-%h1 Nueva transferencia
+%h1 
+  %span.n Transferencia de
+  = @account_ledger.account
 
-= simple_form_for @account_ledger, :url => transference_account_ledgers_path, :html => {:class => 'enter'} do |f|
+.moneybox
+  %label Saldo en cuenta
+  %h3 #{@account_ledger.currency_symbol} #{@account_ledger.account.amount}
 
-  = bonsai_form_error(f)
-  
-  = f.input :account_id, :as => :hidden
-  
-  .input
-    %label De cuenta
-    = @account_ledger.account
-  = f.input :to_id, :collection => Account.org.money.where("id NOT IN(?)", @account_ledger.account_id), :label => 'A cuenta'
-  .clear
+- present @account_ledger do |presenter|
 
-  = f.input :amount, :label => "Cantidad #{@account_ledger.account.currency_symbol}",
-    :input_html => {:size => 12, :type => 'decimal', :class => 'r'}, :wrapper_html => {:class => '_30'}
+  = simple_form_for @account_ledger, :url => transference_account_ledgers_path, :html => {:class => 'enter'} do |f|
 
-  .input
-    %label Feccha
-    = lo Time.zone.now
+    = bonsai_form_error(f)
+    
+    = f.input :account_id, :as => :hidden
+    
+    = f.input :to_id, :collection => Account.org.money.where("id NOT IN(?)", @account_ledger.account_id), :label => 'A cuenta'
 
-  - disp = @account_ledger.show_exchange_rate? ? 'block' : 'none'
+    ._50.fl
+      = f.input :amount, :label => "Cantidad #{@account_ledger.currency_symbol}",
+        :input_html => {:size => 12, :type => 'decimal', :class => 'r'}, :wrapper_html => {:class => '_30'}
 
-  = f.input :exchange_rate, :label => "Tipo de cambio de", 
-    :input_html => {:size => 12, :type => 'decimal'}, :hint => 'Puede ingresar hasta 4 decimales', :wrapper_html => {:style => "display:#{disp}", :id => 'al_exchange_rate'}
+    = f.input :exchange_rate, :label => "Tipo de cambio de <span class='currencies'></span>", 
+      :input_html => {:size => 12, :type => 'decimal'}, 
+      :hint => presenter.exchange_rate_hint, 
+      :wrapper_html => {:style => "display:#{presenter.show_exchange_rate}", :id => 'al_exchange_rate'}
 
-  .clear
-   
-  = f.submit "Transferir"
-
-
-.rates.bg_white{:style => 'display:none'}
-  %h3 Tipos de cambio moneda base "#{currency_name}"
-  = render 'currency_rates/active', :currency_rates => CurrencyRate.active
+    .clear
+     
+    = f.submit "Transferir"
 
 :javascript
   $(function() {

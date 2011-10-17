@@ -1,0 +1,149 @@
+<mockup version="1.0" skin="sketch" measuredW="1198" measuredH="449" mockupW="1138" mockupH="429">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::Title" x="60" y="20" w="-1" h="-1" measuredW="397" measuredH="39" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>28</size>
+        <text>Transferencia%20de%20*Caja%201%20%28Bs.%29*</text>
+      </controlProperties>
+    </control>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::ComboBox" x="73" y="170" w="244" h="-1" measuredW="202" measuredH="23" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Banco%20e%20Credito%20%28%24us%201500%29</text>
+      </controlProperties>
+    </control>
+    <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="73" y="149" w="-1" h="-1" measuredW="60" measuredH="21" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>true</bold>
+        <color>3355443</color>
+        <text>A%20cuenta</text>
+      </controlProperties>
+    </control>
+    <control controlID="3" controlTypeID="__group__" x="73" y="72" w="169" h="62" measuredW="169" measuredH="62" zOrder="3" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="0" w="169" h="62" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="3">
+          <controlProperties>
+            <borderStyle>none</borderStyle>
+            <color>15658734</color>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Label" x="7" y="5" w="-1" h="-1" measuredW="42" measuredH="21" zOrder="1" locked="false" isInGroup="3">
+          <controlProperties>
+            <color>5263440</color>
+            <text>Saldo</text>
+          </controlProperties>
+        </control>
+        <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="7" y="26" w="-1" h="-1" measuredW="117" measuredH="28" zOrder="2" locked="false" isInGroup="3">
+          <controlProperties>
+            <color>0</color>
+            <size>20</size>
+            <text>Bs.%201.163%2C32</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="4" controlTypeID="com.balsamiq.mockups::Label" x="497" y="148" w="-1" h="-1" measuredW="94" measuredH="21" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>true</bold>
+        <color>3355443</color>
+        <text>Cantidad%20%28Bs.%29</text>
+      </controlProperties>
+    </control>
+    <control controlID="5" controlTypeID="com.balsamiq.mockups::Label" x="704" y="148" w="-1" h="-1" measuredW="46" measuredH="21" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>true</bold>
+        <color>3355443</color>
+        <text>Fecha</text>
+      </controlProperties>
+    </control>
+    <control controlID="6" controlTypeID="com.balsamiq.mockups::TextInput" x="497" y="168" w="145" h="-1" measuredW="39" measuredH="26" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <align>right</align>
+        <text>200</text>
+      </controlProperties>
+    </control>
+    <control controlID="7" controlTypeID="com.balsamiq.mockups::Label" x="704" y="170" w="-1" h="-1" measuredW="136" measuredH="21" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>false</bold>
+        <color>0</color>
+        <text>17%20de%20Oct%202011%2010%3A22</text>
+      </controlProperties>
+    </control>
+    <control controlID="8" controlTypeID="com.balsamiq.mockups::Label" x="73" y="217" w="-1" h="-1" measuredW="191" measuredH="21" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>true</bold>
+        <color>3355443</color>
+        <text>Tipo%20de%20cambio%20de%20%28Bs.%20a%20%24us%29</text>
+      </controlProperties>
+    </control>
+    <control controlID="9" controlTypeID="com.balsamiq.mockups::TextInput" x="73" y="244" w="145" h="-1" measuredW="55" measuredH="26" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <align>right</align>
+        <text>0.1496</text>
+      </controlProperties>
+    </control>
+    <control controlID="10" controlTypeID="com.balsamiq.mockups::Label" x="498" y="216" w="-1" h="-1" measuredW="39" measuredH="21" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>true</bold>
+        <color>3355443</color>
+        <text>Total</text>
+      </controlProperties>
+    </control>
+    <control controlID="11" controlTypeID="com.balsamiq.mockups::Label" x="501" y="244" w="-1" h="-1" measuredW="102" measuredH="29" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>true</bold>
+        <color>0</color>
+        <size>20</size>
+        <text>%24us%2029.92</text>
+      </controlProperties>
+    </control>
+    <control controlID="12" controlTypeID="com.balsamiq.mockups::Label" x="73" y="270" w="-1" h="-1" measuredW="264" measuredH="21" zOrder="12" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>false</bold>
+        <color>6710886</color>
+        <italic>true</italic>
+        <text>Tipo%20de%20cambio%20%5B0%2C1447%5D%2C%20Invertido%3A%20%5B6%2C6800%5D</text>
+      </controlProperties>
+    </control>
+    <control controlID="13" controlTypeID="com.balsamiq.mockups::Arrow" x="322" y="285" w="572" h="100" measuredW="150" measuredH="100" zOrder="13" locked="false" isInGroup="-1">
+      <controlProperties>
+        <backgroundAlpha>0.5</backgroundAlpha>
+        <curvature>-1</curvature>
+        <direction>top</direction>
+      </controlProperties>
+    </control>
+    <control controlID="14" controlTypeID="com.balsamiq.mockups::TitleWindow" x="887" y="324" w="311" h="117" measuredW="450" measuredH="400" zOrder="14" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bottomheight>0</bottomheight>
+        <close>false</close>
+        <text>Ingrese%20el%20tipo%20de%20cambio%20invertido</text>
+        <topheight>26</topheight>
+      </controlProperties>
+    </control>
+    <control controlID="15" controlTypeID="com.balsamiq.mockups::TextInput" x="971" y="359" w="141" h="-1" measuredW="57" measuredH="26" zOrder="15" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>6.6800</text>
+      </controlProperties>
+    </control>
+    <control controlID="16" controlTypeID="com.balsamiq.mockups::Button" x="920" y="400" w="-1" h="-1" measuredW="79" measuredH="28" zOrder="16" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Cancelar</text>
+      </controlProperties>
+    </control>
+    <control controlID="17" controlTypeID="com.balsamiq.mockups::Button" x="1063" y="400" w="-1" h="-1" measuredW="74" measuredH="28" zOrder="17" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Aceptar</text>
+      </controlProperties>
+    </control>
+    <control controlID="18" controlTypeID="com.balsamiq.mockups::Arrow" x="197" y="291" w="-1" h="-1" measuredW="150" measuredH="100" zOrder="18" locked="false" isInGroup="-1">
+      <controlProperties>
+        <backgroundAlpha>0.25</backgroundAlpha>
+        <curvature>-1</curvature>
+      </controlProperties>
+    </control>
+    <control controlID="19" controlTypeID="com.balsamiq.mockups::StickyNote" x="347" y="352" w="205" h="97" measuredW="109" measuredH="123" zOrder="19" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Copia%20el%20valor%20de%20tipo%20de%20cambio</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>
