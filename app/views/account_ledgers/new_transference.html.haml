@@ -27,7 +27,7 @@
   - disp = @account_ledger.show_exchange_rate? ? 'block' : 'none'
 
   = f.input :exchange_rate, :label => "Tipo de cambio de", 
-    :input_html => {:size => 12}, :hint => 'Puede ingresar hasta 4 decimales', :wrapper_html => {:style => "display:#{disp}", :id => 'al_exchange_rate'}
+    :input_html => {:size => 12, :type => 'decimal'}, :hint => 'Puede ingresar hasta 4 decimales', :wrapper_html => {:style => "display:#{disp}", :id => 'al_exchange_rate'}
 
   .clear
    
