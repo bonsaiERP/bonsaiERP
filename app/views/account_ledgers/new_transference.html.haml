@@ -9,7 +9,7 @@
 
 .moneybox
   %label Saldo en cuenta
-  %h3 #{@account_ledger.currency_symbol} #{@account_ledger.account.amount}
+  %h3 #{@account_ledger.account.currency_symbol} #{@account_ledger.account.amount}
 
 - present @account_ledger do |presenter|
 
@@ -22,13 +22,19 @@
     = f.input :to_id, :collection => Account.org.money.where("id NOT IN(?)", @account_ledger.account_id), :label => 'A cuenta'
 
     ._50.fl
-      = f.input :amount, :label => "Cantidad #{@account_ledger.currency_symbol}",
-        :input_html => {:size => 12, :type => 'decimal', :class => 'r'}, :wrapper_html => {:class => '_30'}
+      = f.input :amount, :label => "Cantidad en (#{@account_ledger.account.currency_symbol})",
+        :input_html => {:size => 12, :type => 'decimal', :class => 'r'}
+      .input
+        %label Fecha
+        = lo Time.zone.now
 
-    = f.input :exchange_rate, :label => "Tipo de cambio de <span class='currencies'></span>", 
-      :input_html => {:size => 12, :type => 'decimal'}, 
-      :hint => presenter.exchange_rate_hint, 
-      :wrapper_html => {:style => "display:#{presenter.show_exchange_rate}", :id => 'al_exchange_rate'}
+    #al_exchange_rate._50{:style => "display:#{presenter.show_exchange_rate}"}
+      = f.input :exchange_rate, :label => "Tipo de cambio de <span class='currencies'></span>", 
+        :input_html => {:size => 12, :type => 'decimal'}, 
+        :hint => presenter.exchange_rate_hint, :wrapper_html => {:class => '_60'}
+      .input._40
+        %label Total
+        %span#total.fs120
 
     .clear
      
@@ -40,7 +46,24 @@
     var accounts = #{Account.org.to_hash(:name, :currency_id).to_json};
     var currencies = #{Currency.to_hash.to_json};
 
-    new ExchangeRate('#account_ledger_exchange_rate', '#account_ledger_to_id', '#account_ledger_amount',
-    #{@account_ledger.account_currency_id}, accounts, currencies);
+    new ExchangeRate('#account_ledger_exchange_rate', '#account_ledger_to_id', 
+      #{@account_ledger.account_currency_id}, accounts, currencies, {hide: '#al_exchange_rate'});
 
+    $.getJSON(
+        'http://openexchangerates.org/latest.json',
+        function(data) {
+            // Check money.js has finished loading:
+            if ( typeof fx !== "undefined" && fx.rates ) {
+                fx.rates = data.rates;
+                fx.base = data.base;
+            } else {
+                // If not, apply to fxSetup global:
+                var fxSetup = {
+                    rates : data.rates,
+                    base : data.base
+                }
+            }
+        }
+    );
   });
+

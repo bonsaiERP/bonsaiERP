@@ -1,38 +1,35 @@
-class ExchangeRate
-  constructor: (@input, @observe, @amount, @currency_id, @accounts, @currencies, @contact, @account_data)->
-    @$input = $(@input)
-    @$label = @$input.siblings 'label'
-    @$hide  = @$input.parents "div:first"
-    @$rate  = $('account_ledger_exchange_rate')
+class ExchangeRate extends Backbone.Model
+  constructor: (input, observe, @currency_id, @accounts, @currencies, @options)->
+    @$input  = $(input)
+    @observe = observe
+    @$label  = @$input.siblings 'label'
 
-    @$after = $('<span/>').insertAfter(@$input)
+    @$currencies = @$label.find(".currencies")
+    @$hide   = if @options["hide"] then $(@options["hide"]) else @$input.parents "div:first"
+
     @.setEvents()
-    @.setLabel()
-    @observe_many = if @amount.match(/,/) then true else false
-    @.setContactCurrencies() if @contact
+    # Set rate if exists
+    if @$input.val().match(/^\d+$/) or $(@observe).val().match(/^\d+$/)
+      rate = @$input.val() * 1
+      curr = $(@observe).val() * 1
+      @.set({rate: rate, "currency": @currencies[curr]})
+
   # Events
   setEvents: ->
-    @.accountIdEvent()
-    @.setEventForCalculation()
-  # Calculation events
-  setEventForCalculation: ->
-    self = @
+    @.bind "change:rate", -> @.triggerExchange
+    @.bind "change:currency", -> @.triggerExchange
 
-    $("#{ @amount },#{ @input }").live 'focusout keyup', (event)->
-      return false if _b.notEnter(event)
+    @.chageCurencyEvent()
+    @.rateEvents()
+  # trigger for rate and currency
+  triggerExchange: ->
+    @.setSuggestRates()
+    @.setRate()
+    @.setCurrency()
 
-      amount = 0
-      $(self.amount.split(",")).each (i, el)->
-        number = ($(el).val() * 1).round(2)
-        $(el).val(number)
-        amount += number
-
-      rate = (self.$input.val() * 1).round(4)
-      self.$input.val(rate)
-
-      self.$after.html(" #{self.$label.find('.currency_symbol').html()} #{_b.ntc(rate * amount)}")
+    @$input.trigger("exchange_rate", [{rate: @.get("rate"), currency: @.get("currency") }])
   # Account event
-  accountIdEvent: ->
+  chageCurencyEvent: ->
     self = @
 
     $(@observe)
@@ -44,55 +41,46 @@ class ExchangeRate
 
       switch
         when $(@).val().match /^\d+$/
-          self.presentExchangeForAccount @.value
+          val = $(@).val() * 1
+          @.set({currency: @currencies[@accounts[val].currency_id]})
         else
           self.$hide.hide 'slow'
 
-  # present
-  setLabel: ->
-    arr = [@$label.html(),
-      " (#{@currencies[@currency_id].symbol} a <span class='currency_symbol'></span>)&nbsp;&nbsp;",
-      "<a href='javascript:' class='n view_currencies'>Tipos de cambio</a>"
-    ]
-    @$label.html(arr.join("") )
-  #
-  presentExchangeForAccount: (val)->
-    currency_id = @accounts[val * 1].currency_id
-    @.presentHiddenDiv(currency_id)
+  # set the rate
+  setRate: ->
+    @$input.val(@.get("rate"))
+  # Sets the data for currency
+  setCurrency: ->
+    from = @currencies[@currency_id].symbol
+    to   = @currencies[@.get("currency_id")].symbol
+    @$currencies.html("(#{from} a #{to})")
 
-  #
-  presentHiddenDiv: (currency_id)->
-    if @currency_id == currency_id
+    @.presentCurrency()
+  # Presents the hidden div
+  presentCurrency: ->
+    if @currency_id == @.get("currency").id
       @$hide.hide('slow')
-    else
-      cur = @currencies[currency_id]
-      @$label.find('.currency_symbol').html(cur.symbol)
-      @$hide.show('slow').mark()
-
-
-  # @param String
-  createAmountInterestLabel: (currency_id)->
-    cur = "#{currency_complete_plural}"
-    if(@currencies[currency_id])
-      ra = this.currencies[currency_id]
-      cur = ra.currency_symbol + " " + ra.currency_name.pluralize()
-
-    $('label[for=payment_amount]').html("Cantidad (" + cur + ")")
-    $('label[for=payment_interests_penalties]').html("Intereses/Penalidades (" + cur + ")")
-  # Creates option box and events for the contact
-  setContactCurrencies: ->
-    html = ''
-    # Selected if any
-    sel = "#{@account_data.account_id}-#{@account_data.currency_id}"
-
-    for currency_id, amount of @contact.currencies
-      if @contact.currencies[currency_id] < 0
-        val = "#{@contact.id}-#{currency_id}"
-        selected = if sel == val then "selected='selected'" else ""
-        html += "<option class='i' value='#{val}' #{selected}>"
-        cur = @currencies[currency_id * 1]
-        html += "(#{cur.symbol} #{Math.abs amount}) #{@contact.name}</option>"
-
-    $('#account_ledger_account_id option:first').after(html)
+  # Set the rate for a currency
+  setSuggestRates: ->
+    try
+      from = @currencies[@currency_id].code
+      to   = @.get("currency").code
+      rate = fx.convert(1, {from: from, to: to})
+      inv_rate = 1/rate
+      $('#suggested_exchange_rate').html(_b.ntc(rate, 4) ).data('val', rate.round(4))
+      $('#suggested_inverted_rate').html(_b.ntc(inv_rate, 4) ).data('val', inv_rate.round(4))
+    catch e
+  # rateEvents
+  rateEvents: ->
+    self = @
+    $('#suggested_exchange_rate').live 'click', (event)->
+      self.$input.val($(this).data('val')).mark()
+      self.$input.trigger("exchange_rate", [$(this).data('val')])
+    # Inverted
+    $('#suggested_inverted_rate').live 'click', (event)->
+      if res = prompt("Tipo de cambio invertido:", $(this).data('val'))
+        res = 1/(res * 1)
+        self.$input.val(res.round(4)).mark()
+        .trigger("exchange_rate", [$(this).data('val')])
 
 window.ExchangeRate = ExchangeRate

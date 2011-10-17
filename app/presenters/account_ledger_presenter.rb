@@ -13,8 +13,8 @@ class AccountLedgerPresenter < BasePresenter
   end
 
   def exchange_rate_hint
-    if account_ledger.show_exchange_rate?
-      ""
-    end
+    html = "Tipo de cambio: <a href='javascript:' id ='suggested_exchange_rate'></a>"
+    html << ", Invertirdo: <a href='javascript:' id='suggested_inverted_rate'></a>"
+    html.html_safe
   end
 end
