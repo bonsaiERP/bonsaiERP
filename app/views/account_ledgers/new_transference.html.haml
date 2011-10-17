@@ -34,7 +34,7 @@
         :hint => presenter.exchange_rate_hint, :wrapper_html => {:class => '_60'}
       .input._40
         %label Total
-        %span#total.fs120
+        %span#total.fs120.b
 
     .clear
      
@@ -46,8 +46,31 @@
     var accounts = #{Account.org.to_hash(:name, :currency_id).to_json};
     var currencies = #{Currency.to_hash.to_json};
 
-    new ExchangeRate('#account_ledger_exchange_rate', '#account_ledger_to_id', 
+    var er = new ExchangeRate()
+    er.setAll('#account_ledger_exchange_rate', '#account_ledger_to_id', 
       #{@account_ledger.account_currency_id}, accounts, currencies, {hide: '#al_exchange_rate'});
+    //window.er = er;
+    var res = {};
+
+    function calculateTotal() {
+      var val = $('#account_ledger_amount').val() * 1;
+      var rate = res.rate || 0;
+      var total = rate * val;
+      $('#total').html(res.currency.symbol + " " + _b.ntc(total));
+    }
+
+    $('#account_ledger_exchange_rate').live('change:rate', function(event, val) {
+      res = val;
+      calculateTotal();
+    });
+
+    $('#account_ledger_amount').live("keyup focusout", function(event) {
+      if(_b.notEnter(event)) {
+        return false;
+      }else {
+        calculateTotal();
+      }
+    });
 
     $.getJSON(
         'http://openexchangerates.org/latest.json',
