@@ -234,6 +234,8 @@ class TransactionModel extends Backbone.Model
     # Tax Event
     @.taxesEvent()
     @.bind("change:taxes", @.setTaxes)
+    # currency
+    @.currencyEvent()
     # Exchange rate
     @.bind("change:exchange_rate", ->
       $('#transaction_exchange_rate').val(self.get("exchange_rate"))
@@ -263,6 +265,12 @@ class TransactionModel extends Backbone.Model
       $(this).val(val)
       self.set({discount: (val/100).round(4)})
 
+  #exchabge rate Event
+  currencyEvent: ->
+    self = @
+    $('#transaction_currency_id').bind 'change keyup', (event)->
+      self.set({currency_id: $(this).val() * 1})
+      console.log self.get("currency_id")
   # Sets the discount
   setDiscount: ->
     discount = @.get("subtotal") * @.get("discount")
@@ -304,6 +312,7 @@ window.TransactionModel = TransactionModel
 
 # View for the template
 class ExchangeRateDialog extends Backbone.View
+  el: $("#exchange_rate")
   initialize:->
     self = @
     @label = $('label[for=transaction_currency_id]')
@@ -329,6 +338,8 @@ class ExchangeRateDialog extends Backbone.View
       self.openDialog()
       false
     )
+    # button
+    $('#exchange_rate').live "change", -> self.setExchange()
   # Events
   events:
     "click button": "setExchange"
@@ -407,6 +418,7 @@ class TransactionGlobal
       position: 'center',
       close: (event, ui)->
         $(this).hide()
+        $('#exchange_rate').trigger("change")
         return false
 
 window.TransactionGlobal = TransactionGlobal

@@ -104,12 +104,12 @@
   #currency_form.ajax-modal
     %h3.red Advertencia !. Los precios de los items se actualizaran según el tipo de cambio que seleccione
     
-    %label Tipo de cambio de <span class="currencies"></span>
+    %label Tipo de cambio
     %span.currency_symbol.b
     1
     \= 
     %span.default_symbol.b
-    %input{:type => 'text', :size => 8, :class => 'r', :id => 'exchange_rate'}
+    %input{:type => 'text', :size => 8, :class => 'r', :id => 'exchange_rate', :value => transaction.exchange_rate}
     %span.hint
       Tipo de cambio: <a href='javascript:' id ='suggested_exchange_rate'>#{ntc(0, :precision => 4)}</a>
       Invertirdo: <a href='javascript:' id='suggested_inverted_rate'>#{ntc(0, :precision => 4)}</a>
@@ -130,7 +130,7 @@
 
       var er = new ExchangeRate();
       er.setAll('#exchange_rate', '#transaction_currency_id', #{currency_id}, fake_accounts,currencies,
-      {hide: '#fake_hide_div'});
+      {hide: '#fake_hide_div', inverted: true});
 
       // Functions for the select boxes
       $('body').live('new_project', function(e, resp) {
