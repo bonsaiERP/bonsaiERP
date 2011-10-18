@@ -209,7 +209,6 @@ class TransactionModel extends Backbone.Model
     self = @
 
     @currencies = @.get("currencies")
-    @exchange_rates = @.get("exchange_rates")
     @default_currency = @.get("default_currency")
 
     # Set currency symbols
@@ -375,12 +374,11 @@ class Table extends Backbone.View
 # Global class that controls the events for many classes
 class TransactionGlobal
   # Constructor
-  constructor: (@currencies, @rates, @default_currency, currency_id, exchange_rate)->
+  constructor: (@currencies, @default_currency, currency_id, exchange_rate)->
     @currency_id = $('#transaction_currency_id')
 
     @transaction = new TransactionModel(
       currencies: @currencies,
-      exchange_rates: @rates,
       default_currency: @default_currency,
       currency_id: currency_id,
       exchange_rate: exchange_rate
@@ -401,17 +399,14 @@ class TransactionGlobal
 
   # Creates the exchange rate dialog for the View
   createExchangeRateDialog: ->
-    createDialog(
-      id: 'currency_dialog',
-      html: $('#currency_form').html(),
-      title: 'Tipo de cambio',
-      autoOpen: false,
+    $('#currency_form').dialog
+      autoOpen: false
+      title: 'Tipo de cambio'
+      id: 'currency_dialog'
       width: 500,
       position: 'center',
       close: (event, ui)->
         $(this).hide()
         return false
-    )
-
 
 window.TransactionGlobal = TransactionGlobal

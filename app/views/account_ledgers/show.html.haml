@@ -6,19 +6,22 @@
       = presenter.null_link
 
   %h1{:style => 'display:inline-block'} 
-    Transacción del <span class="n">#{lo @account_ledger.created_at}</span>
+    Transacción del <span class="n i">#{lo @account_ledger.created_at}</span>
     - if @account_ledger.nulled?
       %small.dashlet.b.bg_red= "Anulada" 
   .clear
+  %h2= @account_ledger.selected_account
 
   .moneybox.fl
     = in_out @account_ledger.account_amount, :class => "b"
+
     - if Contact::TYPES.include? @account_ledger.account_original_type
       %h3= "#{@account_ledger.currency_symbol} #{ntc @account_ledger.account_amount}"
     - else
       %h3= "#{@account_ledger.selected_account.currency_symbol} #{ntc @account_ledger.account_amount}"
 
   .clear
+  %h3= presenter.exchange_rate
   <br/>
   ._30.fl <span class="dark_grey">Ref/Nº de cheque:</span> #{@account_ledger.reference}
   ._35.fl= @account_ledger.description

@@ -190,6 +190,14 @@ class AccountLedger < ActiveRecord::Base
     end
   end
 
+  def other_account
+    if ac_id == account_id
+      to
+    else
+      account
+    end
+  end
+
   # Finds using the filter
   # @param Integer
   # @param String

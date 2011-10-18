@@ -1,5 +1,8 @@
 # Backbone model
 class ExchangeRate extends Backbone.Model
+  defaults:
+    rate: 1
+
   setAll: (input, observe, @currency_id, @accounts, @currencies, @options)->
     @$input  = $(input)
     @observe = observe
@@ -13,6 +16,8 @@ class ExchangeRate extends Backbone.Model
       rate = @$input.val() * 1
       curr = $(@observe).val() * 1
       @.set({rate: rate, "currency": @currencies[curr]})
+    else
+      @$input.val(@.get("rate"))
 
     @.setEvents()
   # Events

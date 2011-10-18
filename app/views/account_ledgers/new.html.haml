@@ -3,6 +3,10 @@
     %li #{link_list @account_ledger}<span>&gt;</span>
     %li #{link_parent @account_ledger}<span>&gt;</span>
 
-%h1 Nuevo #{account_ledger_title @account_ledger}
+%h1 Nuevo #{account_ledger_title @account_ledger} - #{@account_ledger.account}
+
+.moneybox
+  %label Saldo en cuenta
+  %h3 #{@account_ledger.account.currency_symbol} #{@account_ledger.account.amount}
 
 = render "form"
