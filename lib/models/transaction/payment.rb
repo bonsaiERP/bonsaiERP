@@ -176,8 +176,8 @@ module Models::Transaction::Payment
 
       # Add currency text if necessary
       txt << " " << I18n.t("currency.exchange_rate",
-        :cur1 => "#{currency_symbol} 1" , 
-        :cur2 => "#{ @current_ledger.currency_symbol } #{number_to_currency @current_ledger.exchange_rate}"
+        :cur1 => "#{ @current_ledger.currency_symbol } 1",
+        :cur2 => "#{currency_symbol} #{number_to_currency @current_ledger.exchange_rate}"
       ) unless currency_id === @current_ledger.account_currency_id
 
       @current_ledger.description = txt

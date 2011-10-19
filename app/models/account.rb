@@ -4,6 +4,7 @@
 class Account < ActiveRecord::Base
 
   include Models::Organisation::NewOrganisation
+  include ActionView::Helpers::NumberHelper 
 
   # callbacks
   before_create :set_amount
@@ -62,7 +63,7 @@ class Account < ActiveRecord::Base
     if accountable_type === "Contact"
       "#{name} (#{currency_symbol} #{amount.abs})"
     else
-      "#{name} (#{currency_symbol})"
+      "#{name} (#{currency_symbol} #{number_with_delimiter(amount)})"
     end
   end
 

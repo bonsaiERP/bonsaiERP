@@ -30,7 +30,7 @@ module Models::AccountLedger::Money
     # Creates a new ledger, but if the account is nor a MoneyStore returns false
     def new_money(params = {})
       params.transform_date_parameters!("date")
-      params.symbolize_keys.assert_valid_keys( :operation, :account_id, :to_id, :amount, :reference, :date, :exchange_rate, :description, :contact_id )
+      params.symbolize_keys.assert_valid_keys( :operation, :account_id, :to_id, :amount, :reference, :date, :exchange_rate, :description, :contact_id, :currency_id )
 
       ac = AccountLedger.new(params)
       def ac.money?; true; end

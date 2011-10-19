@@ -3,40 +3,42 @@
     %li #{link_list @account_ledger}<span>&gt;</span>
     %li #{link_parent @account_ledger}<span>&gt;</span>
 
-%h1 Nueva transferencia
+%h1 
+  %span.n Transferencia de
+  = @account_ledger.account
 
-= simple_form_for @account_ledger, :url => transference_account_ledgers_path, :html => {:class => 'enter'} do |f|
+.moneybox
+  %label Saldo en cuenta
+  %h3 #{@account_ledger.account.currency_symbol} #{@account_ledger.account.amount}
 
-  = bonsai_form_error(f)
-  
-  = f.input :account_id, :as => :hidden
-  
-  .input
-    %label De cuenta
-    = @account_ledger.account
-  = f.input :to_id, :collection => Account.org.money.where("id NOT IN(?)", @account_ledger.account_id), :label => 'A cuenta'
-  .clear
+- present @account_ledger do |presenter|
 
-  = f.input :amount, :label => "Cantidad #{@account_ledger.account.currency_symbol}",
-    :input_html => {:size => 12, :type => 'decimal', :class => 'r'}, :wrapper_html => {:class => '_30'}
+  = simple_form_for @account_ledger, :url => transference_account_ledgers_path, :html => {:class => 'enter'} do |f|
 
-  .input
-    %label Feccha
-    = lo Time.zone.now
+    = bonsai_form_error(f)
+    
+    = f.input :account_id, :as => :hidden
+    
+    = f.input :to_id, :collection => Account.org.money.where("id NOT IN(?)", @account_ledger.account_id), :label => 'A cuenta'
 
-  - disp = @account_ledger.show_exchange_rate? ? 'block' : 'none'
+    ._50.fl
+      = f.input :amount, :label => "Cantidad en (#{@account_ledger.account.currency_symbol})",
+        :input_html => {:size => 12, :type => 'decimal', :class => 'r'}
+      .input
+        %label Fecha
+        = lo Time.zone.now
 
-  = f.input :exchange_rate, :label => "Tipo de cambio de", 
-    :input_html => {:size => 12, :type => 'decimal'}, :hint => 'Puede ingresar hasta 4 decimales', :wrapper_html => {:style => "display:#{disp}", :id => 'al_exchange_rate'}
+    #al_exchange_rate._50{:style => "display:#{presenter.show_exchange_rate}"}
+      = f.input :exchange_rate, :label => "Tipo de cambio de <span class='currencies'></span>", 
+        :input_html => {:size => 12, :type => 'decimal'}, 
+        :hint => presenter.exchange_rate_hint, :wrapper_html => {:class => '_60'}
+      .input._40
+        %label Total
+        %span#total.fs120.b
 
-  .clear
-   
-  = f.submit "Transferir"
-
-
-.rates.bg_white{:style => 'display:none'}
-  %h3 Tipos de cambio moneda base "#{currency_name}"
-  = render 'currency_rates/active', :currency_rates => CurrencyRate.active
+    .clear
+     
+    = f.submit "Transferir"
 
 :javascript
   $(function() {
@@ -44,7 +46,31 @@
     var accounts = #{Account.org.to_hash(:name, :currency_id).to_json};
     var currencies = #{Currency.to_hash.to_json};
 
-    new ExchangeRate('#account_ledger_exchange_rate', '#account_ledger_to_id', '#account_ledger_amount',
-    #{@account_ledger.account_currency_id}, accounts, currencies);
+    var er = new ExchangeRate()
+    er.setAll('#account_ledger_exchange_rate', '#account_ledger_to_id', 
+      #{@account_ledger.account_currency_id}, accounts, currencies, {hide: '#al_exchange_rate'});
+    //window.er = er;
+    var res = {};
+
+    function calculateTotal() {
+      var val = $('#account_ledger_amount').val() * 1;
+      var rate = res.rate || 0;
+      var total = rate * val;
+      $('#total').html(res.currency.symbol + " " + _b.ntc(total));
+    }
+
+    $('#account_ledger_exchange_rate').live('change:rate', function(event, val) {
+      res = val;
+      calculateTotal();
+    });
+
+    $('#account_ledger_amount').live("keyup focusout", function(event) {
+      if(_b.notEnter(event)) {
+        return false;
+      }else {
+        calculateTotal();
+      }
+    });
 
   });
+

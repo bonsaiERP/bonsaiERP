@@ -364,7 +364,7 @@ $(document).ready(->
   mark = (selector, velocity, val)->
     self = selector or this
     val = val or 0
-    velocity = velocity or 30
+    velocity = velocity or 50
     $(self).css({'background': 'rgb(255,255,'+val+')'})
     if(val >= 255)
       $(self).attr("style", "")

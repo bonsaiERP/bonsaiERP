@@ -217,7 +217,7 @@ class TransactionPresenter < BasePresenter
       h.link_to("Nuevo #{tit}", 
         h.new_payment_path(:type => transaction.type.to_s, :id => transaction.id),
         :class => "new ajax button new_payment_link", :title => "Nuevo #{tit}",
-        :id => 'new_payment_link',  'data-width' => "800", 'data-trigger' => 'payment')
+        :id => 'new_payment_link',  'data-width' => "900", 'data-trigger' => 'payment')
     end
   end
 
@@ -227,6 +227,11 @@ class TransactionPresenter < BasePresenter
     else
       "Pagos"
     end
+  end
+
+  # Method to fake accounts for exchange rate
+  def fake_accounts
+    Hash[Currency.all.map{|v| [v.id, {:currency_id => v.id}]}]
   end
 
 private

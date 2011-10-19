@@ -5,8 +5,7 @@ class Payment
     @$account   = $('#account_ledger_account_id')
     @$amount    = $('#account_ledger_base_amount')
     @$interests = $('#account_ledger_interests_penalties')
-    @$exchange  = $('#account_ledger_exchange_rate')
-    @$exchange.val(1) if @$exchange.val() * 1 == 0
+    @rate = {}
 
     @.setEvents()
     @.calculateTotal()
@@ -20,15 +19,17 @@ class Payment
       return false if _b.notEnter(event)
 
       val = this.value * 1
-      if this.id == 'account_ledger_exchange_rate'
-        $(this).val(val.round(4))
-      else
-        $(this).val(val.round(2))
+      $(this).val(val.round(2))
       self.calculateTotal()
 
     # select
     @$account.live 'change keyup', (event)->
       self.setCurrency()
+
+    $('#account_ledger_exchange_rate').live 'change:rate', (event, rate)->
+      self.rate = rate
+      self.calculateTotal()
+
   # sets currency
   setCurrency: ->
     val = @$account.val()
@@ -45,22 +46,13 @@ class Payment
     $("span.currency").html("(#{symbol})")
 
     @.showExchange currency_id != @currency_id
-    @$exchange.val(1) if currency_id == @currency_id
-
-  # show the exchange
-  showExchange: (val)->
-    if val
-      $('div.exchange_rate').show(300)
-    else
-      $('div.exchange_rate').hide(300)
 
   # Calculates total
   calculateTotal: ->
     amount   = @$amount.val() * 1
     int      = @$interests.val() * 1
-    exchange = @$exchange.val() * 1
 
-    total = (amount + int) * exchange
+    total = (amount + int) * (@rate.rate || 1)
     $('#payment_total_currency').html(_b.ntc(total))
 
 window.Payment = Payment

@@ -209,7 +209,6 @@ class TransactionModel extends Backbone.Model
     self = @
 
     @currencies = @.get("currencies")
-    @exchange_rates = @.get("exchange_rates")
     @default_currency = @.get("default_currency")
 
     # Set currency symbols
@@ -235,6 +234,8 @@ class TransactionModel extends Backbone.Model
     # Tax Event
     @.taxesEvent()
     @.bind("change:taxes", @.setTaxes)
+    # currency
+    @.currencyEvent()
     # Exchange rate
     @.bind("change:exchange_rate", ->
       $('#transaction_exchange_rate').val(self.get("exchange_rate"))
@@ -264,6 +265,11 @@ class TransactionModel extends Backbone.Model
       $(this).val(val)
       self.set({discount: (val/100).round(4)})
 
+  #exchabge rate Event
+  currencyEvent: ->
+    self = @
+    $('#transaction_currency_id').bind 'change keyup', (event)->
+      self.set({currency_id: $(this).val() * 1})
   # Sets the discount
   setDiscount: ->
     discount = @.get("subtotal") * @.get("discount")
@@ -305,6 +311,7 @@ window.TransactionModel = TransactionModel
 
 # View for the template
 class ExchangeRateDialog extends Backbone.View
+  el: $("#exchange_rate")
   initialize:->
     self = @
     @label = $('label[for=transaction_currency_id]')
@@ -312,6 +319,8 @@ class ExchangeRateDialog extends Backbone.View
     @model.bind("change:currency_id", (model, name)->
       unless self.model.get("currency_id") == self.model.get("default_currency")
         self.openDialog()
+        self.setExchange()
+        self.setLabel()
       else
         self.model.set({exchange_rate: 1})
         self.setLabel()
@@ -320,7 +329,7 @@ class ExchangeRateDialog extends Backbone.View
       self.setLabel()
     )
 
-    $(@el).find("span.default_symbol").html(@model.get("default_symbol"))
+    @el.find("span.default_symbol").html(@model.get("default_symbol"))
 
     @.setEvents()
   # Set events for edit
@@ -330,9 +339,10 @@ class ExchangeRateDialog extends Backbone.View
       self.openDialog()
       false
     )
+
   # Events
   events:
-    "click button": "setExchange"
+    "click button": "closeDialog"
   # Label
   setLabel: ->
     @label.find("span.rate_details").html('')
@@ -346,14 +356,14 @@ class ExchangeRateDialog extends Backbone.View
   setExchange: ->
     rate = ($(@el).find("#exchange_rate").val() * 1).round(4)
     @model.set({exchange_rate: rate})
-    @.closeDialog()
   # present dialog
   openDialog: ->
-    $(@el).find("#exchange_rate").val(@model.get("exchange_rate"))
-    $(@el).find("span.currency_symbol").html(@model.get("currency_symbol"))
-    $( @el ).dialog("open")
+    @el.find("#exchange_rate").val(@model.get("exchange_rate"))
+    @el.find("span.currency_symbol").html(@model.get("currency_symbol"))
+    @el.dialog("open")
   closeDialog: ->
-    $( @el ).dialog("close")
+    @.setExchange()
+    @el.dialog("close")
 
 window.ExchangeRateDialog = ExchangeRateDialog
 
@@ -375,12 +385,11 @@ class Table extends Backbone.View
 # Global class that controls the events for many classes
 class TransactionGlobal
   # Constructor
-  constructor: (@currencies, @rates, @default_currency, currency_id, exchange_rate)->
+  constructor: (@currencies, @default_currency, currency_id, exchange_rate)->
     @currency_id = $('#transaction_currency_id')
 
     @transaction = new TransactionModel(
       currencies: @currencies,
-      exchange_rates: @rates,
       default_currency: @default_currency,
       currency_id: currency_id,
       exchange_rate: exchange_rate
@@ -401,17 +410,16 @@ class TransactionGlobal
 
   # Creates the exchange rate dialog for the View
   createExchangeRateDialog: ->
-    createDialog(
-      id: 'currency_dialog',
-      html: $('#currency_form').html(),
-      title: 'Tipo de cambio',
-      autoOpen: false,
-      width: 500,
-      position: 'center',
+    $('#currency_form').dialog
+      autoOpen: false
+      title: 'Tipo de cambio'
+      id: 'currency_dialog'
+      width: 500
+      position: 'center'
+      modal: true
       close: (event, ui)->
         $(this).hide()
+        $('#exchange_rate').trigger("change")
         return false
-    )
-
 
 window.TransactionGlobal = TransactionGlobal
