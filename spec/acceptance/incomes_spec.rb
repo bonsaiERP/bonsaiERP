@@ -540,8 +540,8 @@ feature "Income", "test features" do
       :ref => "#{i.ref_number}", :account => p.account_name
     )
     txt << " " << I18n.t("currency.exchange_rate",
-      :cur1 => "#{c1.symbol} 1" , 
-      :cur2 => "#{ p.currency_symbol } 2,00"
+      :cur1 => "#{p.currency_symbol} 1" , 
+      :cur2 => "#{c1.symbol} 2,0000"
     )
 
     p.description.should == txt
@@ -874,8 +874,8 @@ feature "Income", "test features" do
       :ref => "#{i.ref_number}", :account => p.account_name
     )
     txt << " " << I18n.t("currency.exchange_rate",
-      :cur1 => "#{c1.symbol} 1" , 
-      :cur2 => "#{ p.currency_symbol } 2,00"
+      :cur1 => "#{ p.currency_symbol } 1" , 
+      :cur2 => "#{c1.symbol} 2,0000"
     )
 
     p.description.should == txt
