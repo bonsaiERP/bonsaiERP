@@ -34,7 +34,7 @@ class Organisation < ActiveRecord::Base
   validates_associated :org_country
   validates_associated :currency
 
-  validates_presence_of :name, :address, :phone, :country_id, :currency_id
+  validates_presence_of :name, :address, :country_id, :currency_id
   validates_uniqueness_of :name, :scope => :user_id
 
   attr_protected :user_id
