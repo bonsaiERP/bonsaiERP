@@ -270,7 +270,6 @@ class TransactionModel extends Backbone.Model
     self = @
     $('#transaction_currency_id').bind 'change keyup', (event)->
       self.set({currency_id: $(this).val() * 1})
-      console.log self.get("currency_id")
   # Sets the discount
   setDiscount: ->
     discount = @.get("subtotal") * @.get("discount")
@@ -320,6 +319,8 @@ class ExchangeRateDialog extends Backbone.View
     @model.bind("change:currency_id", (model, name)->
       unless self.model.get("currency_id") == self.model.get("default_currency")
         self.openDialog()
+        self.setExchange()
+        self.setLabel()
       else
         self.model.set({exchange_rate: 1})
         self.setLabel()
@@ -328,7 +329,7 @@ class ExchangeRateDialog extends Backbone.View
       self.setLabel()
     )
 
-    $(@el).find("span.default_symbol").html(@model.get("default_symbol"))
+    @el.find("span.default_symbol").html(@model.get("default_symbol"))
 
     @.setEvents()
   # Set events for edit
@@ -338,11 +339,10 @@ class ExchangeRateDialog extends Backbone.View
       self.openDialog()
       false
     )
-    # button
-    $('#exchange_rate').live "change", -> self.setExchange()
+
   # Events
   events:
-    "click button": "setExchange"
+    "click button": "closeDialog"
   # Label
   setLabel: ->
     @label.find("span.rate_details").html('')
@@ -356,14 +356,14 @@ class ExchangeRateDialog extends Backbone.View
   setExchange: ->
     rate = ($(@el).find("#exchange_rate").val() * 1).round(4)
     @model.set({exchange_rate: rate})
-    @.closeDialog()
   # present dialog
   openDialog: ->
-    $(@el).find("#exchange_rate").val(@model.get("exchange_rate"))
-    $(@el).find("span.currency_symbol").html(@model.get("currency_symbol"))
-    $( @el ).dialog("open")
+    @el.find("#exchange_rate").val(@model.get("exchange_rate"))
+    @el.find("span.currency_symbol").html(@model.get("currency_symbol"))
+    @el.dialog("open")
   closeDialog: ->
-    $( @el ).dialog("close")
+    @.setExchange()
+    @el.dialog("close")
 
 window.ExchangeRateDialog = ExchangeRateDialog
 
@@ -414,8 +414,9 @@ class TransactionGlobal
       autoOpen: false
       title: 'Tipo de cambio'
       id: 'currency_dialog'
-      width: 500,
-      position: 'center',
+      width: 500
+      position: 'center'
+      modal: true
       close: (event, ui)->
         $(this).hide()
         $('#exchange_rate').trigger("change")
