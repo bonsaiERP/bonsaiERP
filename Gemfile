@@ -36,6 +36,11 @@ gem 'prawn', '~>0.12.0'
 #gem 'newrelic_rpm'
 #gem 'escape_utils'
 
+group :development, :test do
+  gem 'jasmine'
+  gem 'headless'
+end
+
 group :development do
   gem 'ruby-debug19', :platform => :mri_19, :require => 'ruby-debug'
   #gem 'active_reload'
@@ -44,7 +49,6 @@ group :development do
   gem 'steak', '~>2.0.0'
   gem 'ffaker', '~> 1.8.0'
   gem 'factory_girl_rails'
-  gem 'jasmine'
 end
 
 
@@ -56,7 +60,6 @@ group :test do
   gem 'capybara'
   gem 'database_cleaner'
   gem 'factory_girl_rails'
-  gem 'jasmine'
   gem 'spork', '~>0.9.0.rc9'
   gem 'database_cleaner'
   gem 'watchr'
