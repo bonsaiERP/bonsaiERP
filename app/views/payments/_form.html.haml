@@ -47,7 +47,7 @@
       var account_data = #{@account_ledger.create_hash(:currency_id, :account_id).to_json };
 
       var er = new ExchangeRate();
-      er.setAll('#account_ledger_exchange_rate', '#account_ledger_account_id', #{currency_id}, accounts, currencies, {inverted: true});
+      er.setAll('#account_ledger_exchange_rate', '#account_ledger_account_id', #{@transaction.currency_id}, accounts, currencies, {inverted: true});
 
       var p = new Payment(accounts, currencies, account_data, #{@transaction.currency_id});
 
