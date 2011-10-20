@@ -71,44 +71,28 @@ describe AccountLedger do
     al.money?.should == false
   end
 
-  it 'should update the account value' do
-    al = AccountLedger.new(params)
-    al.save.should be_true
+  #it 'should update the account value' do
+  #  al = AccountLedger.new(params)
+  #  al.save.should be_true
 
-    al.account.amount.should == 1000
-    puts "--------"
-    al.conciliate_account.should be_true
-    al.reload
-    al.account.amount.should == 900
-  end
+  #  al.account.amount.should == 1000
+  #  puts "--------"
+  #  al.conciliate_account.should be_true
+  #  al.reload
+  #  al.account.amount.should == 900
+  #end
 
-  it 'should allow negative values' do
-    params[:operation] = "in"
+  #it 'should allow negative values' do
+  #  params[:operation] = "in"
 
-    al = AccountLedger.create(params)
+  #  al = AccountLedger.create(params)
 
-    al.persisted?.should == true
-    al.reload
+  #  al.persisted?.should == true
+  #  al.reload
 
-    al.account.amount.should == 1200
-    al.to.amount.should == -200
-  end
-
-  it 'should work with other currencies' do
-    params = {
-      :date => Date.today, :operation => "in", :reference => "Income", :amount => 50, :currency_id => 1, :exchange_rate => 0.5,
-      :account_id => 2, :to_id => 1,
-      :account_ledger_details_attributes => [
-        {:account_id => 2, :amount => 50, :description => "Income with exchange rate 0. from account 1"},
-        {:account_id => 1, :amount => -100, :exchange_rate => 0.5,},
-      ]
-    }
-
-    al = AccountLedger.new(params)
-    al.save.should == true
-    al.account_ledger_details[0].description.should == "Income with exchange rate 0. from account 1"
-
-  end
+  #  al.account.amount.should == 1200
+  #  al.to.amount.should == -200
+  #end
 
   it 'should not save if the balance with exchange rate is different' do
     params = {
@@ -124,48 +108,38 @@ describe AccountLedger do
     al.save.should == false
   end
 
-  it 'should store amount for different currencies' do
-    Currency.create!(:name => 'Dolar', :symbol => '$us' )
+  it 'should create a code' do
+    al = AccountLedger.create!(params)
+    al.code.should_not be_blank
+    al2 = AccountLedger.create!(params)
+    al2.code.should == al.code + 1
 
-    Account.create!(:name => "Bank 2", :account_type_id => 1, :currency_id => 2,
-                   :accountable_id => 1, :accountable_type => "Bank"
-                   ) {|a| a.id = 3; a.amount = 1000}
+    OrganisationSession.set id: 2
+    al = AccountLedger.create!(params)
+    al.code.should == 1
+  end
 
-    al = AccountLedger.create!(
-      :date => Date.today, :operation => "out", :reference => "Outcome", :amount => 50, :currency_id => 2, :exchange_rate => 0.5,
-      :account_id => 3, :to_id => 1,
-      :account_ledger_details_attributes => [
-        {:account_id => 1, :amount => 50, :currency_id => 2},
-        {:account_id => 3, :amount => -100, :exchange_rate => 0.5},
-      ]
-    )
+  it 'should not allow repeated code' do
+    al = AccountLedger.create!(params)
+    al.code.should_not be_blank
+    al2 = AccountLedger.new(params) {|a| 
+      a.code = al.code
+      a.organisation_id = al.organisation_id
+    }
     
-    a1 = al.account_ledger_details[0].account
-    a1.amount.should == 50
-    a1.amount_currency( 1 ).should == 0
-    a1.amount_currency( 2 ).should == 50.00
-
-    a2 = Account.find(3)
-    a2.amount.should == 900
+    al2.valid?.should be_false
+    al2.errors[:code].should_not be_blank
   end
 
   it 'should initialize with money? = false and set validations false' do
     al = AccountLedger.new
     al.money?.should == false
-
-    al.valid?.should == false
-    al.errors[:account_id].any?.should == true
-    al.errors[:to_id].any?.should == true
   end
 
   it 'should initialize with money? = true' do
-    AccountLedger.any_instance.stubs(:account_accountable => Bank.new)
+    AccountLedger.stub!(:new => mock_model(AccountLedger, account_accountable: stub(is_a?: true), :conciliation= => false))
     al = AccountLedger.new_money({:account_id => 1})
     al.should be_money
-
-    al.should_not be_valid
-    al.errors[:account_id].any?.should be(true)
-    al.errors[:to_id].any?.should be(true)
   end
 
   it 'should retunr false in case tha account is not MoneyStore' do
@@ -175,7 +149,7 @@ describe AccountLedger do
   end
 
   it 'should now allow other attributes for new_money' do
-    expect {AccountLedger.new_money(:operation => "in", :account_id => 2, :to_id => 5, :amount => 100, :reference => "Yeah", :currency_id => 1)}.to raise_error ArgumentError
+    expect {AccountLedger.new_money(:operation => "in", :account_id => 2, :to_id => 5, :amount => 100, :reference => "Yeah", :currency_id => 1, :nuller_id => 1)}.to raise_error ArgumentError
 
   end
 
