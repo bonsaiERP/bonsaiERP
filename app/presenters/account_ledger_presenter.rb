@@ -12,6 +12,10 @@ class AccountLedgerPresenter < BasePresenter
     account_ledger.show_exchange_rate? ? 'block' : 'none'
   end
 
+  def null_state
+    h.content_tag(:span, "Anulada", :class => 'dashlet b bg_red') if account_ledger.nulled?
+  end
+
   def exchange_rate_hint
     html = "Tipo de cambio: <a href='javascript:' id ='suggested_exchange_rate'>#{h.ntc(0, :precision => 4)}</a>"
     html << ", Invertirdo: <a href='javascript:' id='suggested_inverted_rate'>#{h.ntc(0, :precision => 4)}</a>"

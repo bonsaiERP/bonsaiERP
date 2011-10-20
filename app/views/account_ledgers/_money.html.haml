@@ -27,7 +27,7 @@
 %table.decorated.nwl.nwf
   %tr
     %th 
-      Fecha<br/>
+      Código Fecha<br/>
       %span.tip{:title => 'Nº de cheque, razón, recibo, etc.'} Referencia
     %th Monto en #{account.currency_symbol}
     %th Saldo en #{account.currency_symbol}
@@ -41,7 +41,8 @@
     - al.ac_id = account.id
     %tr{:id => "tr#{al.id}", :class => "#{al.active}"}
       %td.d.check
-        = link_to lo(al.created_at), account_ledger_path(al, :ac_id => account.id), :class => "b #{conciliate_css(al)}"
+        = link_to al, account_ledger_path(al, :ac_id => account.id), :class => "#{conciliate_css(al)} b"
+        %span.i= lo al.created_at
         %br/
         = al.reference
       %td.cur.color= ledger_amount(al, account)

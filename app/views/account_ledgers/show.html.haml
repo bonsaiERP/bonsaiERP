@@ -6,9 +6,11 @@
       = presenter.null_link
 
   %h1{:style => 'display:inline-block'} 
-    Transacción del <span class="n i">#{lo @account_ledger.created_at}</span>
-    - if @account_ledger.nulled?
-      %small.dashlet.b.bg_red= "Anulada" 
+    Transacción
+    = @account_ledger
+    %small.n.i= lo @account_ledger.created_at
+
+    %small.fs60= presenter.null_state
   .clear
   %h2= @account_ledger.selected_account
 
