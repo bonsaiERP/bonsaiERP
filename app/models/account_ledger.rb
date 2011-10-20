@@ -11,6 +11,7 @@ class AccountLedger < ActiveRecord::Base
   # callbacks
   before_validation :set_currency_id
   before_destroy    { false }
+  before_create     :set_code
   before_create     { self.creator_id = UserSession.user_id }
 
   # includes
@@ -53,6 +54,7 @@ class AccountLedger < ActiveRecord::Base
 
   validates :reference, :length => { :within => 3..150, :allow_blank => false }
   validates :currency_id, :currency => true
+  validates_uniqueness_of :code, :scope => :organisation_id
 
   #validate  :number_of_details
   #validate  :total_amount_equal
@@ -253,6 +255,10 @@ class AccountLedger < ActiveRecord::Base
 
   def make_conciliation?
     make_conciliation === true
+  end
+
+  def set_code
+    self.code = AccountLedger.org.count + 1
   end
 
 end

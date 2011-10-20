@@ -143,6 +143,15 @@ namespace :bonsai do
     EOD
     AccountLedger.connection.execute(sql)
   end
+
+  desc "Creates a secuential data"
+  task :account_ledger_codes => :environment do
+    Organisation.all.each do |o|
+      AccountLedger.connection.execute("SET @i = 0")
+      AccountLedger.connection.execute("UPDATE account_ledgers SET code=(@i:=@i+1) WHERE organisation_id=#{o.id}")
+      puts "Updated codes for #{o.id} - #{o}"
+    end
+  end
 end
 
 # example to export the file

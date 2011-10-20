@@ -25,7 +25,7 @@ class User < ActiveRecord::Base
   validates_length_of :abbreviation, :minimum => 2, :on => :create
   validates :email, :format => {
     :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, 
-    :message => I18n.t("errors.user.email")
+    :message => I18n.t("errors.messages.user.email")
   }
 
   with_options :if => :new_record? do |u|
