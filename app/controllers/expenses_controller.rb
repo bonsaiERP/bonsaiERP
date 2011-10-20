@@ -4,8 +4,9 @@
 class ExpensesController < ApplicationController
 
   before_filter :check_authorization!
-  before_filter :set_currency_rates, :only => [:index, :show]
-  before_filter :set_transaction, :only => [:show, :edit, :update, :destroy, :approve]
+  before_filter :redirect_to_buys
+  #before_filter :set_currency_rates, :only => [:index, :show]
+  #before_filter :set_transaction, :only => [:show, :edit, :update, :destroy, :approve]
 
   #respond_to :html, :xml, :json
   # GET /buys
@@ -102,6 +103,10 @@ class ExpensesController < ApplicationController
     redirect_to expense_path(@transaction, :anchor => anchor)
   end
 private
+  def redirect_to_buys
+    redirect_to "/buys"
+  end
+
   def set_currency_rates
     @currency_rates = CurrencyRate.current_hash
   end
