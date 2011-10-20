@@ -33,3 +33,4 @@ public/javascripts/jquery.js
 public/javascripts/app.js
 tmp/restart.txt
 .rbx
+spec/javascripts/generated
