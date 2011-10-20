@@ -92,6 +92,10 @@ class AccountLedger < ActiveRecord::Base
     pendent.count > 0
   end
 
+  def to_s
+    "%06d" % code
+  end
+
   # Determines if the ledger can be nulled
   def can_destroy?
     active? and not(conciliation?)

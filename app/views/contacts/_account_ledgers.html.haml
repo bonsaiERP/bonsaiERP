@@ -26,7 +26,8 @@
   - ledgers.each do |al|
     %tr{:class => "#{al.in_out} #{al.active}", :id => "tr#{al.id}" }
       %td.d.check
-        = link_to lo(al.created_at), account_ledger_path(al), :class => "b #{conciliate_css(al)}"
+        = link_to al, account_ledger_path(al), :class => "b #{conciliate_css(al)}"
+        %span.i= lo al.created_at
         %br/
         = al.reference
       %td.cur.color
@@ -36,7 +37,7 @@
       %td.desc= al.description
       %td.rev
         = "(V) #{al.approver}" if al.approver_id.present?
-        = "<br/><span class='red'>(A) #{al.nuller}</span>".html_safe if al.nuller_id.present?
+        = "(A) #{al.nuller}" if al.nuller_id.present?
       %td.cur
         - if al.can_destroy?
           = link_to "borrar", al, :class => 'delete fl', :title => 'Borrar', 'data-confirm' => account_ledger_destroy_confirm_dialog(al)
