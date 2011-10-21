@@ -107,12 +107,15 @@ module AccountsHelper
   # Sets the link for the ledger
   def related_account_link(account_ledger)
     if account_ledger.transaction_id.present?
-      transaction
       #case account_ledger.transaction_type
       #  when "Income" then income_path(account_ledger.transaction_id, :anchor => 'payments')
       #  when "Buy" then buy_path(account_ledger.transaction_id, :anchor => 'payments')
-      #  when "Expense" then expense_path(account_ledger.transaction_id, :anchor => 'payments')
       #end
+      if account_ledger.transaction.is_a?(Income)
+        income_path(account_ledger.transaction_id, :anchor => 'payments')
+      else
+        buy_path(account_ledger.transaction_id, :anchor => 'payments')
+      end
     elsif account_ledger.ac_id == account_ledger.account_id
       "/account_ledgers/#{account_ledger.id}?ac_id=#{account_ledger.to_id}"
     else
