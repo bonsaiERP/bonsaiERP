@@ -213,4 +213,22 @@ module ApplicationHelper
     yield presenter if block_given?
     presenter
   end
+
+  def set_exchange_rates
+    file = File.join(Rails.root, "public/exchange_rates.json")
+    if not(File.exists?(file)) or (File.ctime(file) < Time.now - 4.hours)
+      resp = %x[curl http://openexchangerates.org/latest.php]
+      begin
+        r = ActiveSupport::JSON.decode(resp)
+        f = File.new(file, "w+")
+        f.write(r.to_json)
+        f.close
+        r
+      rescue
+        File.read(file)
+      end
+    else
+      File.read(file)
+    end
+  end
 end

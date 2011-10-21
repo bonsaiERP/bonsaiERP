@@ -7,6 +7,10 @@
     = csrf_meta_tag
 
     %title Bonsai
+    :javascript
+      var exchangeRates = #{set_exchange_rates}
+      window.exchangeRates = exchangeRates;
+
     = stylesheet_link_tag "application"
     = javascript_include_tag "application"
   %body
@@ -37,6 +41,7 @@
 
 :javascript
   $(function() {
+
     if($.browser.msie && $.browser.version < 8) {
       var menu = ["<li class='more' style='width: 200px'>",
             "<ul>",

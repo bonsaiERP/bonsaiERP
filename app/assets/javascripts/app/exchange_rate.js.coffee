@@ -115,19 +115,20 @@ class ExchangeRate extends Backbone.Model
   # gets the rates from a server form money.js
   getRates: ->
     self = @
-    $.getJSON 'http://openexchangerates.org/latest.json', (data) ->
+    # 'http://openexchangerates.org/latest.json'
+    #$.getJSON "/exchange_rates", (data) =>
       # Check money.js has finished loading:
-      if typeof fx != "undefined" and fx.rates
-        fx.rates = data.rates
-        fx.base = data.base
-      else
-        # If not, apply to fxSetup global:
-        fxSetup = {
-          rates : data.rates,
-          base : data.base
-        }
+    if typeof fx != "undefined" and fx.rates
+      fx.rates = exchangeRates.rates
+      fx.base = exchangeRates.base
+    else
+      # If not, apply to fxSetup global:
+      fxSetup = {
+        rates : exchangeRates.rates,
+        base : exchangeRates.base
+      }
 
-      self.setSuggestRates()
+    self.setSuggestRates()
 
 
 window.ExchangeRate = ExchangeRate

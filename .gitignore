@@ -31,6 +31,7 @@ config/initializers/host.rb
 *.swn
 public/javascripts/jquery.js
 public/javascripts/app.js
+public/exchange_rates.json
 tmp/restart.txt
 .rbx
 spec/javascripts/generated

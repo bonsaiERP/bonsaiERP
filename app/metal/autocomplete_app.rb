@@ -45,6 +45,24 @@ class AutocompleteApp < BaseApp
     render :json => contact_account_autocomplete('Staff', params)
   end
 
+  def get_rates
+    file = File.join(Rails.root, "public/exchange_rates.json")
+    if File.ctime(file) < Time.now - 4.hours
+      resp = %x[curl http://openexchangerates.org/latest.json]
+      begin
+        r = ActionSupport::JSON.decode(resp)
+        f = File.new(file, "w+")
+        f.write(r)
+        f.close
+        render :json => r
+      rescue
+        render :json => File.read(file)
+      end
+    else
+      render :json => File.read(file)
+    end
+  end
+
 private
   # Search for contact autocomlete
   def contact_autocomplete(type, options)
