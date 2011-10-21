@@ -35,3 +35,4 @@ public/exchange_rates.json
 tmp/restart.txt
 .rbx
 spec/javascripts/generated
+public/assets/application.js
