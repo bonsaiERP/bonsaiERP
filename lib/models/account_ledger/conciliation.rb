@@ -30,7 +30,7 @@ module Models::AccountLedger::Conciliation
 
       update_related_accounts
       self.account_balance = account.amount
-      self.to_balance      = to.amount if to_id.present?
+      self.to_balance      = to.amount if to_id.present? and transaction_id.blank?
 
       return false if errors.any?
 
