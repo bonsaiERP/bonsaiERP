@@ -86,7 +86,9 @@ module Models::AccountLedger::Conciliation
     private
     def update_related_accounts
       account.amount += amount
-      to.amount += -(self.amount * self.exchange_rate) if to_id.present?
+      if to_id.present? and transaction_id.blank?
+        to.amount += -(self.amount * self.exchange_rate)
+      end
     end
 
   end
