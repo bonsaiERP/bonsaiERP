@@ -29,7 +29,7 @@
   ._35.fl= @account_ledger.description
 
   -# Related account
-  ._30.fl{:style => "margin-left: 10px"}= link_to @account_ledger.related_account, related_account_link( @account_ledger ), :title => 'Cuenta relacionada', :class => 'b' if @account_ledger.to_id.present?
+  ._30.fl{:style => "margin-left: 10px"}= link_to @account_ledger.related_account, related_account_link( @account_ledger ), :title => 'Cuenta relacionada', :class => 'b'
   <br/><br/>
   .clear
   - if @account_ledger.can_conciliate?
