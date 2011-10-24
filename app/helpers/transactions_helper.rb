@@ -198,7 +198,7 @@ module TransactionsHelper
   end
 
   def discount_th
-    content_tag(:th, "Descuento") if params[:option] === 'discount'
+    content_tag(:th, "Desc./Inc.", :title => "Descuento o Incremento", :class => 'tip') if params[:option] === 'discount'
   end
 
   def discount_cell(trans)

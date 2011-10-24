@@ -144,6 +144,17 @@ class User < ActiveRecord::Base
     }
   end
 
+  def update_user_attributes(params)
+    self.attributes = params[:user]
+    lnk = links.select {|v| v.organisation_id = OrganisationSession.organisation_id}.first
+    rol = params[:rolname]
+    rol = ROLES[1,2].last unless ROLES[1,2].include?(rol)
+
+    lnk.rol = rol
+
+    self.save
+  end
+
   protected
   # Generates a random password and sets it to the password field
   def set_random_password(size = 8)

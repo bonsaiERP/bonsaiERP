@@ -23,7 +23,7 @@
   %li= link_option "Vencidas #{size_or_blank(@count.due.size)}", 'due'
   %li= link_option "Con entrega pendiente #{size_or_blank(@count.inventory.size)}", 'inventory'
   %li= link_option "Cobradas", "paid"
-  %li= link_option "Descuentos", "discount"
+  %li= link_option "Desc./Inc.", "discount", :class => 'tip', :title => 'Descuentos o Incrementos'
   %li= link_option "Anuladas", "nulled"
 
 #search_income.search{:style => show_if_search}
