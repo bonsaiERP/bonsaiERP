@@ -17,18 +17,4 @@ class PaymentPresenter
     end]
   end
 
-  def account(ac)
-    case ac.original_type
-    when "Bank"
-      "#{ac} <small class='dashlet bg_green'>Banco</small>".html_safe
-    when "Cash"
-      "#{ac} <small class='dashlet bg_green'>Caja</small>".html_safe
-    when "Client"
-      "#{ac} <small class='dashlet bg_green'>Cliente</small>".html_safe
-    when "Supplier"
-      "#{ac} <small class='dashlet bg_green'>Proveedor</small>".html_safe
-    when "Staff"
-      "#{ac} <small class='dashlet bg_green'>Personal</small>".html_safe
-    end
-  end
 end

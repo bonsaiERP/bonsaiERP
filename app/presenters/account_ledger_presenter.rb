@@ -48,7 +48,7 @@ class AccountLedgerPresenter < BasePresenter
     when "Supplier"
       html << "<span class='dashlet bg_dark'>Proveedor</span>"
     when "Staff"
-      html << "<span class='dashlet bg_dark'>Personal</span>"
+      html << "<span class='dashlet bg_dark2'>Personal</span>"
     end
 
     html.html_safe

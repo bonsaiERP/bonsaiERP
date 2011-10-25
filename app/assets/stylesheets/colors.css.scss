@@ -33,7 +33,11 @@ $link: #095495;
 
 .bg_red{ background-color: $red !important; }
 .bg_green{ background-color: $green !important; }
-.bg_light_grey{ background-color: $light_grey; }
-.bg_white_tan{ background-color: $white_tan; }
+.bg_dark_green{ background-color: darken($green, 15) !important; }
+.bg_grey{ background-color: $grey !important; }
+.bg_dark_grey{ background-color: darken($grey, 15%) !important; }
+.bg_light_grey{ background-color: $light_grey !important; }
+.bg_white_tan{ background-color: $white_tan !important; }
 .bg_white{ background-color: $white !important; }
-.bg_dark{ background-color: $dark; }
+.bg_dark{ background-color: $dark !important; }
+.bg_dark2{ background-color: lighten($dark,20%) !important; }
