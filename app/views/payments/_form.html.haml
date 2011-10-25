@@ -11,10 +11,10 @@
       ._50.fl
         // Amount
         = f.input :base_amount, :input_html => {:size => 12, :type => 'decimal', :class => 'amt r'}, 
-          :label => "Cantidad en (#{@transaction.currency_symbol})"
+          :label => "Cantidad <span class='amount currency'></span>".html_safe
         // Interests
         = f.input :interests_penalties, :input_html => {:size => 12, :type => 'decimal', :class => 'amt'}, 
-          :label => "<span class='tip' title='Intereses/Penalidades'>Int./Pen.</span> en (#{@transaction.currency_symbol})".html_safe
+          :label => "<span class='tip' title='Intereses/Penalidades'>Int./Pen.</span> <span class='interests currency'></span>".html_safe
       ._50.fl
         - disp = 'block'
         - disp = 'none' if @account_ledger.currency_id.blank?
