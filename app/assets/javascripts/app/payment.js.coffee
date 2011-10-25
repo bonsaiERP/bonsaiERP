@@ -48,7 +48,7 @@ class Payment
         @.showExchange(false)
   # Callback for dropdown
   setAccount: (id, val)->
-    $('#account_ledger_account_id').val(id)
+    $('#account_ledger_account_id').val(id).trigger("change")
   # Show currency
   showCurrency: (currency_id)->
     symbol = @currencies[currency_id].symbol
