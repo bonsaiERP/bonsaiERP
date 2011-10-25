@@ -34,4 +34,31 @@ class AccountLedgerPresenter < BasePresenter
       html
     end
   end
+
+  # Presents the account select
+  def account_select(ac)
+    html = "#{ac.name} (<strong>#{ac.currency_symbol} #{h.ntc ac.amount.abs}</strong>) "
+    case ac.original_type
+    when "Bank"
+      html << "<span class='dashlet bg_green'>Banco</span>"
+    when "Cash"
+      html << "<span class='dashlet bg_green'>Caja</span>"
+    when "Client"
+      html << "<span class='dashlet bg_dark'>Cliente</span>"
+    when "Supplier"
+      html << "<span class='dashlet bg_dark'>Proveedor</span>"
+    when "Staff"
+      html << "<span class='dashlet bg_dark'>Personal</span>"
+    end
+
+    html.html_safe
+  end
+
+  def selected_account
+    if account_ledger.account_id.present?
+      account_select(account_ledger.account)
+    else
+      "<span class='grey'>Seleccione una cuenta</span>".html_safe
+    end
+  end
 end

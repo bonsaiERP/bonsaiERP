@@ -6,6 +6,7 @@
 //= require extensions.js.coffee
 //= require money.min.js
 //= require tooltip.min.js
+//= require dropdown.js
 //= require base.js.coffee
 //= require _b.js.coffee
 //= require app/contact.js.coffee

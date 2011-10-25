@@ -1,3 +1,36 @@
+:css
+  #payment_accounts{
+    display: inline-block;
+  }
+  #payment_accounts p{
+    overflow: hidden;
+    width: 410px;
+    padding-right: 30px;
+    border: 1px solid #AFAFAF;
+    background: url("/assets/images/bullet_arrow_down.png") no-repeat scroll 400px 2px transparent;
+    padding: 3px;
+    border-radius: 3px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+    cursor: default;
+  }
+  #payment_accounts ul{
+    position: absolute;
+    background-color: #FFF;
+    display: none;
+    border: 2px solid #CFCFCF;
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+    width: 400px;
+    border-bottom: 8px solid #CFCFCF;
+  }
+  #payment_accounts li{
+    padding: 6px 4px;
+    border-bottom: 1px solid #CFCFCF;
+    cursor: default;
+  }
+  #account_ledger_account_id{ display: none; }
+
 - if @payment.accounts.any?
   - present @account_ledger do |presenter|
     = simple_form_for(@account_ledger, :url => "/payments", :html => {:class => 'enter'}) do |f|
@@ -5,7 +38,15 @@
 
       = f.input :transaction_id, :as => :hidden
 
-      = f.association :account, :label => 'Cuenta <span class="n black" id="cur"></span>'.html_safe, :collection => @payment.accounts
+      %label Cuenta
+      #payment_accounts
+        %div
+          %p= presenter.selected_account
+        %ul
+          - @payment.accounts.each do |account|
+            %li.account{:id => account.id}= presenter.account_select account
+      .clear
+      = f.association :account, :collection => @payment.accounts, :label => false, :wrapper_html => {:style => 'margin: 0px;'}
       .clear
 
       ._50.fl
@@ -39,19 +80,20 @@
       .actions
         = f.submit 'Salvar'
     
-  :javascript
-    $(function() {
+    :javascript
+      $(function() {
 
-      var accounts = #{@payment.to_hash.to_json};
-      var currencies = #{Currency.scoped.to_hash.to_json};
-      var account_data = #{@account_ledger.create_hash(:currency_id, :account_id).to_json };
+        var accounts = #{@payment.to_hash.to_json};
+        var currencies = #{Currency.scoped.to_hash.to_json};
+        var account_data = #{@account_ledger.create_hash(:currency_id, :account_id).to_json };
 
-      var er = new ExchangeRate();
-      er.setAll('#account_ledger_exchange_rate', '#account_ledger_account_id', #{@transaction.currency_id}, accounts, currencies, {inverted: true});
+        var er = new ExchangeRate();
+        er.setAll('#account_ledger_exchange_rate', '#account_ledger_account_id', #{@transaction.currency_id}, accounts, currencies, {inverted: true});
 
-      var p = new Payment(accounts, currencies, account_data, #{@transaction.currency_id});
+        var p = new Payment(accounts, currencies, account_data, #{@transaction.currency_id});
+        $('#payment_accounts').jDropDown({callback: p.setAccount});
 
-    });
+      });
 
 -else
   %h3 

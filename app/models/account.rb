@@ -61,7 +61,7 @@ class Account < ActiveRecord::Base
 
   def to_s
     if accountable_type === "Contact"
-      "#{name} (#{currency_symbol} #{amount.abs})"
+      "#{name} (#{currency_symbol} #{number_with_delimiter(amount.abs)})"
     else
       "#{name} (#{currency_symbol} #{number_with_delimiter(amount)})"
     end

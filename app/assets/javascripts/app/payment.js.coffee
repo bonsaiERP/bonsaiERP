@@ -30,6 +30,12 @@ class Payment
       self.rate = rate
       self.calculateTotal()
 
+    $('#payment_accounts li.account').bind 'mouseover mouseout', (event)->
+      if event.type == 'mouseover'
+        $(this).addClass('marked')
+      else
+        $(this).removeClass('marked')
+
   # sets currency
   setCurrency: ->
     val = @$account.val()
@@ -40,6 +46,9 @@ class Payment
         @.showCurrency(@accounts[val].currency_id)
       else
         @.showExchange(false)
+  # Callback for dropdown
+  setAccount: (id, val)->
+    $('#account_ledger_account_id').val(id)
   # Show currency
   showCurrency: (currency_id)->
     symbol = @currencies[currency_id].symbol
