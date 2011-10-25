@@ -1,30 +1,31 @@
-- content_for :links do
-  .links
-    =link_to "Editar datos", edit_user_path(current_user), :class => 'edit'
-    =link_to "Cambiar contraseña", password_users_path, :class => 'key'
+- present @user do |presenter|
+  - content_for :links do
+    .links
+      = presenter.edit_link
+      = presenter.password_link
 
-%h1= current_user
+  %h1= @user
 
-.input
-  %label Nombres
-  = current_user.first_name
+  .input
+    %label Nombres
+    = @user.first_name
 
-.input
-  %label Apellidos
-  = current_user.last_name
-.clear
+  .input
+    %label Apellidos
+    = @user.last_name
+  .clear
 
-.input
-  %label Teléfono
-  = current_user.phone
-.input
-  %label Móvil
-  = current_user.mobile
-.clear
+  .input
+    %label Teléfono
+    = @user.phone
+  .input
+    %label Móvil
+    = @user.mobile
+  .clear
 
-.input
-  %label Email
-  = mail_to current_user.email unless current_user.email.blank?
-.input
-  %label Dirección
-  = nl2br current_user.address
+  .input
+    %label Email
+    = mail_to @user.email unless @user.email.blank?
+  .input
+    %label Dirección
+    = nl2br @user.address
