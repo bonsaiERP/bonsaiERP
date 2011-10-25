@@ -36,7 +36,7 @@ class TransactionDetail < ActiveRecord::Base
   end
 
   def original_price_currency
-    ( original_price/transaction.exchange_rate ).round(2)
+    ( original_price.to_f/transaction.exchange_rate ).round(2)
   end
 
   private

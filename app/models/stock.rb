@@ -21,7 +21,7 @@ class Stock < ActiveRecord::Base
 
   #validations
   validates_presence_of :store_id
-  validates_numericality_of :minimum, :greater_than => 0, :allow_nil => true
+  validates_numericality_of :minimum, :greater_than_or_equal_to => 0, :allow_nil => true
 
   # Scopes
   default_scope where(:state => 'active')

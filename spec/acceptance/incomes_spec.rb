@@ -104,7 +104,7 @@ feature "Income", "test features" do
 
     i.save_payment.should == true
     p.reload
-    p.to_id.should == Account.org.find_by_original_type(i.class.to_s).id
+    #p.to_id.should == Account.org.find_by_original_type(i.class.to_s).id
     p.description.should_not == blank?
     p.amount.should == 30
 
@@ -112,10 +112,10 @@ feature "Income", "test features" do
     p.persisted?.should be_true
 
     p.account.original_type.should == "Bank"
-    p.to.original_type.should == "Income"
+    #p.to.original_type.should == "Income"
 
     p.account.amount.should == 0
-    p.to.amount.should == 0
+    #p.to.amount.should == 0
 
     p.conciliate_account.should be_true
     p.reload
@@ -124,7 +124,7 @@ feature "Income", "test features" do
     p.approver_datetime.kind_of?(Time).should == true
 
     p.account.amount.should == 30
-    p.to.amount.should == - 30
+    #p.to.amount.should == - 30
 
     i.deliver.should == false
     
@@ -143,7 +143,7 @@ feature "Income", "test features" do
 
     p.conciliation.should be_true
     p.account.amount.should == i.total
-    p.to.amount.should == -i.total
+    #p.to.amount.should == -i.total
 
     i.reload
     i.balance.should == 0
@@ -234,7 +234,7 @@ feature "Income", "test features" do
     p.reload
     p.amount.should == 30
     p.account.amount.should == 0
-    p.to.amount.should == 0
+    #p.to.amount.should == 0
 
     p.conciliate_account.should == true
 
@@ -248,7 +248,7 @@ feature "Income", "test features" do
     p.should be_conciliation
     
     p.account.amount.should == 30
-    p.to.amount.should == -30
+    #p.to.amount.should == -30
 
     # Payment that is nulled
     bal = i.balance
@@ -283,7 +283,7 @@ feature "Income", "test features" do
 
     p.reload
     p.account.amount.should == 30 + 45
-    p.to.amount.should == -(30 + 45)
+    #p.to.amount.should == -(30 + 45)
 
     p = i.new_payment(:account_id => bank_account.id, :exchange_rate => 1, :reference => 'Cheque 143234', :base_amount => i.balance)
     
@@ -297,7 +297,7 @@ feature "Income", "test features" do
     p.reload
 
     p.account.amount.should == i.total
-    p.to.amount.should == -i.total
+    #p.to.amount.should == -i.total
     
   end
 
@@ -417,14 +417,14 @@ feature "Income", "test features" do
     p.reload
 
     p.account.amount.should == 0
-    p.to.amount.should == 0
+    #p.to.amount.should == 0
 
     p.conciliate_account.should be(true)
     p.reload
 
     p.account.amount.should == 30
     p.account_original_type.should == "Bank"
-    p.to.amount.should == -2 * 30
+    #p.to.amount.should == -2 * 30
 
     p = i.new_payment(:account_id => new_bank_account.id, :base_amount => 30, :interests_penalties => 1,
                  :exchange_rate => 2, :currency_id => 2, :reference => 'Last check')
@@ -450,7 +450,7 @@ feature "Income", "test features" do
 
     p.reload
     p.account.amount.should == 61
-    p.to.amount.should == -(30 + 31) * 2
+    #p.to.amount.should == -(30 + 31) * 2
 
     log.info "Pay with contact account and with interests penalties"
 
@@ -764,14 +764,14 @@ feature "Income", "test features" do
     p.reload
 
     p.account.amount.should == 0
-    p.to.amount.should == 0
+    #p.to.amount.should == 0
 
     p.conciliate_account.should be(true)
     p.reload
 
     p.account.amount.should == 30
     p.account_original_type.should == "Bank"
-    p.to.amount.should == -2 * 30
+    #p.to.amount.should == -2 * 30
 
     p = i.new_payment(:account_id => new_bank_account.id, :base_amount => 30, :interests_penalties => 1,
                  :exchange_rate => 2, :currency_id => 2, :reference => 'Last check')
@@ -787,7 +787,7 @@ feature "Income", "test features" do
 
     p.reload
     p.account.amount.should == 61
-    p.to.amount.should == -(30 + 31) * 2
+    #p.to.amount.should == -(30 + 31) * 2
 
     log.info "Pay with contact account and with interests penalties"
 

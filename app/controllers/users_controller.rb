@@ -74,7 +74,7 @@ class UsersController < ApplicationController
     @user = current_user.organisation.links.find_by_user_id(params[:id]).user
     check_if_creator(@user)
     
-    if @user.update_attributes(params[:user])
+    if @user.update_user_attributes(params[:user])
       flash[:notice] = "El usuario #{@user} ha sido actualizado."
       redirect_to "/configuration"
     else

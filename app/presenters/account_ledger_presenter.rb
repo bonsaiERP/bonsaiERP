@@ -25,7 +25,11 @@ class AccountLedgerPresenter < BasePresenter
   def exchange_rate
     unless account_ledger.exchange_rate == 1
       html = "#{account_ledger.account.currency_symbol} 1 = "
-      html << "#{account_ledger.to.currency_symbol} "
+      if account_ledger.transaction_id.present?
+        html << "#{h.currency_symbol} "
+      elsif account_ledger.to_id.present?
+        html << "#{account_ledger.to.currency_symbol} "
+      end
       html << h.ntc(account_ledger.exchange_rate, :precision => 4)
       html
     end

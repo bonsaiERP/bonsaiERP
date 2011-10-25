@@ -127,7 +127,15 @@ class TransactionPresenter < BasePresenter
 
   def render_discount
     if transaction.is_a?(Income)
-      h.render "transactions/discount", :transaction => transaction if transaction.discounted?
+      h.render "transactions/discount", :transaction => transaction, :presenter => self if transaction.discounted?
+    end
+  end
+
+  def discount_label
+    if transaction.discount_amount < 0
+      "Descuento"
+    else
+      "Incremento"
     end
   end
 
