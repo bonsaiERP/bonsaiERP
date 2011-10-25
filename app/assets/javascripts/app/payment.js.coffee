@@ -15,20 +15,16 @@ class Payment
 
     # amount interests_penalties
     $('input.amt').die()
-    $('input.amt').live 'focusout keyup', (event)->
+    $('input.amt').live 'focusout keyup', (event)=>
       return false if _b.notEnter(event)
 
       val = this.value * 1
       $(this).val(val.round(2))
-      self.calculateTotal()
+      @.calculateTotal()
 
-    # select
-    @$account.live 'change keyup', (event)->
-      self.setCurrency()
-
-    $('#account_ledger_exchange_rate').live 'change:rate', (event, rate)->
-      self.rate = rate
-      self.calculateTotal()
+    $('#account_ledger_exchange_rate').live 'change:rate', (event, rate)=>
+      @.rate = rate
+      @.calculateTotal()
 
     $('#payment_accounts li.account').bind 'mouseover mouseout', (event)->
       if event.type == 'mouseover'
@@ -36,16 +32,6 @@ class Payment
       else
         $(this).removeClass('marked')
 
-  # sets currency
-  setCurrency: ->
-    val = @$account.val()
-
-    switch
-      when val.match /^\d+$/
-        val = val * 1
-        @.showCurrency(@accounts[val].currency_id)
-      else
-        @.showExchange(false)
   # Callback for dropdown
   setAccount: (id, val)->
     $('#account_ledger_account_id').val(id).trigger("change")

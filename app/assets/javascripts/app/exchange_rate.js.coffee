@@ -27,9 +27,9 @@ class ExchangeRate extends Backbone.Model
   # Events
   setEvents: ->
     self = @
-    @$input.live 'focusout keyup', (event)->
+    @$input.live 'focusout keyup', (event)=>
       return false if _b.notEnter(event)
-      self.set({rate: $(this).val() * 1})
+      @.set({rate: $(this).val() * 1})
     # Rate
     @.bind "change:rate", ->
       @.triggerExchange()
