@@ -111,15 +111,18 @@ class TransactionPresenter < BasePresenter
   end
 
   def li_pay_plans
-    if transaction.credit?
+    case 
+    when transaction.credit?
       h.content_tag(:li, "<a href='#pay_plans' id='tab_pay_plans'>Ver créditos</a>".html_safe)
-    elsif not(transaction.draft?)
+    when transaction.nulled?
+      ""
+    when !transaction.draft?
       h.content_tag(:li, "<a href='#pay_plans' id='tab_pay_plans'>Aprobar crédito</a>".html_safe)
     end
   end
 
   def li_inventory
-    if transaction.deliver? or (transaction.is_a?(Buy) and not(transaction.draft?) )
+    if transaction.deliver? or (transaction.is_a?(Buy) and not(transaction.draft?) and !transaction.nulled? )
       txt = transaction.is_a?(Income) ? "Entrega" : "Recojo"
       h.content_tag(:li, "<a href='#inventory' id='tab_inventory'>#{txt}</a>".html_safe)
     end
@@ -152,7 +155,7 @@ class TransactionPresenter < BasePresenter
   end
 
   def render_pay_plans
-    return "" if transaction.paid?
+    return "" if transaction.paid? or transaction.nulled?
 
     partial, url = false, ""
 
@@ -212,15 +215,15 @@ class TransactionPresenter < BasePresenter
 
   def render_inventory
     case
-    when ( transaction.is_a?(Income) and transaction.deliver? )
+    when ( transaction.is_a?(Income) and transaction.deliver? and not(transaction.nulled?) )
       render "/transactions/inventory", :transaction => transaction, :presenter => self
-    when ( transaction.is_a?(Buy) and not(transaction.draft?) )
+    when ( transaction.is_a?(Buy) and not(transaction.draft?) and not(transaction.nulled?) )
       render "/transactions/inventory", :transaction => transaction, :presenter => self
     end
   end
 
   def new_payment_link
-    unless transaction.paid?
+    unless transaction.paid? or transaction.nulled?
       tit = pay_method.singularize
       h.link_to("Nuevo #{tit}", 
         h.new_payment_path(:type => transaction.type.to_s, :id => transaction.id),
