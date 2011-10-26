@@ -11,6 +11,7 @@ class ClientsController < ApplicationController
   # GET /clients
   # GET /clients.xml
   def index
+    params[:option] ||= 'all' 
     if params[:search]
       @clients = Client.org.search(params[:search]).order("matchcode ASC").page(@page)
     else

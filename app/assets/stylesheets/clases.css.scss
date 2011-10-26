@@ -234,12 +234,10 @@ a.delete{
 }
 
 a.list{
-  @include link;
   @include min-height;
   background: url(images/table.png) no-repeat 0px 50%;
 }
 a.show{
-  @include link;
   @include min-height;
   background: url(images/zoom.png) no-repeat;
 }
@@ -304,6 +302,11 @@ a.duplicate{
 
 .icon{
   text-indent: -1000em;
+}
+.bicon{
+  width: 16px;
+  height: 16px;
+  display: inline-block;
 }
 /*********************************************/
 
@@ -417,4 +420,9 @@ ul.menu{
   @include box(430px, lighten($black, 30%));
   border-color: darken($white, 30%);
 }
-
+a.link{
+  @include link;
+}
+span.more{
+  background: url(images/bullet_arrow_down.png) no-repeat;
+}

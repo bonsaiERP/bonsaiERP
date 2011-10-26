@@ -74,7 +74,7 @@
         %td#subtotal.r{'data-val' => transaction.subtotal}= ntc(transaction.subtotal)
       
       %tr.extra
-        %td <a href="javascript:" id="add_item" class="add">Adicionar ítem</a>
+        %td <a href="javascript:" id="add_item" class="add link">Adicionar ítem</a>
         %td.cur.discount{:colspan => 2} 
           - if transaction.is_a? Income
             = f.input :discount, 

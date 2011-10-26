@@ -38,6 +38,8 @@ class Account < ActiveRecord::Base
   # scopes
   scope :money, where(:accountable_type => "MoneyStore")
   scope :contact, where(:accountable_type => "Contact")
+  scope :client, where(:original_type => "Client")
+  scope :supplier, where(:original_type => "Supplier")
   scope :contact_money, lambda {|*account_ids|
     s = self.scoped
     s.where( s.table[:accountable_type].eq('Contact')
