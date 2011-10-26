@@ -9,10 +9,10 @@
 %ul#banks.accounts_list
   - @banks.each do |bank|
     %li
-      ._35.fl
+      ._55.fl
         %h3= link_to bank, bank
         %h4.mt5.dark= bank.currency.name.pluralize
-      ._65.fl
+      ._45.fl
         .moneybox.fl
           %label Total en cuenta
           %h3= with_currency bank.account, :amount

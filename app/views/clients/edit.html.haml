@@ -2,6 +2,7 @@
   %ul.breadcrumps
     %li #{link_to "Clientes", clients_path} <span>&gt;</span>
   .links
+    = link_to "Vídeo", "http://www.youtube.com/embed/BZMsfhXi9uw", :class => 'video', 'data-title' => 'Como crear clientes'
     = link_to 'Ver', @client, :class => 'show'
 
 %h1 Editar cliente

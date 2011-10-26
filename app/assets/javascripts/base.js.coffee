@@ -165,6 +165,17 @@ $(document).ready(->
 
   window.createDialog = createDialog
 
+  # Opens a video dialog
+  createVideoDialog = (url, title = "")->
+    html = "<iframe width=\"640\" height=\"360\" src=\"#{url}\" frameborder=\"0\" allowfullscreen></iframe>"
+    createDialog({html: html, width: 680, height: 410, title: title})
+
+  window.createVideoDialog = createVideoDialog
+  $('a.video').live 'click', (event)->
+    createVideoDialog($(this).attr("href"), $(this).data("title"))
+    false
+
+
   # Gets if the request is new, edit, show
   getAjaxType = (el)->
     if $(el).hasClass("new")

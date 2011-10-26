@@ -1,38 +1,3 @@
-:css
-  #payment_accounts{
-    display: inline-block;
-  }
-  #payment_accounts p{
-    overflow: hidden;
-    width: 410px;
-    padding-right: 30px;
-    border: 1px solid #AFAFAF;
-    background: url("/assets/images/bullet_arrow_down.png") no-repeat scroll 400px 2px transparent;
-    padding: 3px;
-    border-radius: 3px;
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
-    cursor: default;
-  }
-  #payment_accounts ul{
-    position: absolute;
-    background-color: #FFF;
-    display: none;
-    border: 2px solid #CFCFCF;
-    list-style: none;
-    margin: 0px;
-    padding: 0px;
-    width: 400px;
-    border-bottom: 8px solid #CFCFCF;
-    max-height: 200px;
-    overflow: auto;
-  }
-  #payment_accounts li{
-    padding: 6px 4px;
-    border-bottom: 1px solid #CFCFCF;
-    cursor: default;
-  }
-  #account_ledger_account_id{ display: none; }
-
 - if @payment.accounts.any?
   - present @account_ledger do |presenter|
     = simple_form_for(@account_ledger, :url => "/payments", :html => {:class => 'enter'}) do |f|
@@ -40,15 +5,16 @@
 
       = f.input :transaction_id, :as => :hidden
 
+      -# Account
       %label Cuenta
-      #payment_accounts
+      #payment_accounts.dropdown
         %div
           %p= presenter.selected_account
         %ul
           - @payment.accounts.each do |account|
             %li.account{:id => account.id}= presenter.account_select account
-      .clear
-      = f.association :account, :collection => @payment.accounts, :label => false, :wrapper_html => {:style => 'margin: 0px;'}
+        = f.association :account, :collection => @payment.accounts, :label => false
+
       .clear
 
       ._50.fl
@@ -79,8 +45,9 @@
       -#= f.input :description, :label => 'Descripción', :as => :text, :input_html => {:rows => 4, :cols => 35}
       .clear
 
-      .actions
-        = f.submit 'Salvar'
+      = f.submit 'Salvar'
+    %br
+    %br
     
     :javascript
       $(function() {

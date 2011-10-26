@@ -2,7 +2,9 @@
   %ul.breadcrumps
     %li #{link_to "Clientes", "/clients"} &gt;
 
-  .links= link_to "Nuevo cliente", new_client_path, :class => 'new'
+  .links
+    = link_to "Vídeo", "http://www.youtube.com/embed/BZMsfhXi9uw", :class => 'video', 'data-title' => 'Como crear clientes'
+    = link_to "Nuevo cliente", new_client_path, :class => 'new'
 
 
 %h1 Clientes

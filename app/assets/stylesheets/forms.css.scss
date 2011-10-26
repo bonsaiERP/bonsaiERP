@@ -99,4 +99,37 @@ span.error{
   display: block;
   color: $red;
 }
-
+.dropdown{
+  display: inline-block;
+  .input{ display: none; }
+  $ddwidth: 400px;
+  p{
+    @include rounded-corners(3px);
+    @include b-shadow(0, 0, 4px);
+    overflow: hidden;
+    width: $ddwidth + 10;
+    padding-right: 30px;
+    border: 1px solid $grey;
+    background: url("images/bullet_arrow_down.png") no-repeat scroll $ddwidth 2px transparent;
+    padding: 3px;
+    cursor: default;
+  }
+  ul{
+    position: absolute;
+    background-color: $white;
+    display: none;
+    border: 2px solid lighten($grey, 10%);
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+    width: $ddwidth;
+    border-bottom: 8px solid lighten($grey, 10%);
+    max-height: 200px;
+    overflow: auto;
+    li{
+      padding: 6px 4px;
+      border-bottom: 1px solid ;
+      cursor: default;
+    }
+  }
+}

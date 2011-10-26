@@ -67,6 +67,9 @@ hr{ border:0px;
   padding: 10px 15px;
   overflow: hidden;
   clear: both;
+  .links a{
+    @include link;
+  }
 }
 
 #cont-in{

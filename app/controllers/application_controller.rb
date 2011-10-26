@@ -2,7 +2,15 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class ApplicationController < ActionController::Base
-  layout lambda{ |c| (c.request.xhr? or params[:xhr]) ? false : "application" }
+  layout lambda{ |c| 
+    if (c.request.xhr? or params[:xhr])
+      false 
+    elsif params[:print].present?
+      "print"
+    else
+     "application" 
+    end
+  }
 
   include Controllers::Authentication
   helper_method Controllers::Authentication.helpers
