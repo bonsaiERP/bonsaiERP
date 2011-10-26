@@ -1,5 +1,5 @@
 class ResetPasswordMailer < ActionMailer::Base
-  default :from => "bonsaierp@gmail.com"
+  default :from => "noresponder@bonsaierp.com"
 
   layout "mail"
 

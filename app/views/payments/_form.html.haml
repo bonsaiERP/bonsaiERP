@@ -1,6 +1,6 @@
 - if @payment.accounts.any?
   - present @account_ledger do |presenter|
-    = simple_form_for(@account_ledger, :url => "/payments", :html => {:class => 'enter'}) do |f|
+    = simple_form_for(@account_ledger, :url => "/payments", :html => {:class => 'enter', :id => 'payment_form'}) do |f|
       = bonsai_form_error(f)
 
       = f.input :transaction_id, :as => :hidden

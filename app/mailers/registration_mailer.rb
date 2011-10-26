@@ -2,7 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class RegistrationMailer < ActionMailer::Base
-  default :from => "bonsaierp@gmail.com"
+  default :from => "noresponder@bonsaierp.com"
 
   layout "mail"
 

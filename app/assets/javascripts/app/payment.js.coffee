@@ -23,9 +23,11 @@ class Payment
       @.calculateTotal()
 
     $('#account_ledger_exchange_rate').live 'change:rate', (event, rate)=>
-      @.rate = rate
+      @rate = rate
       @.calculateTotal()
+      @.setCurrency()
 
+    # li
     $('#payment_accounts li.account').bind 'mouseover mouseout', (event)->
       if event.type == 'mouseover'
         $(this).addClass('marked')
@@ -49,5 +51,8 @@ class Payment
 
     total = (amount + int) * (@rate.rate || 1)
     $('#payment_total_currency').html(_b.ntc(total))
+  # Sets the currency for all items
+  setCurrency: ->
+    $('#payment_form span.currency').html(@rate.currency.symbol)
 
 window.Payment = Payment
