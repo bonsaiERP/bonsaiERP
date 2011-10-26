@@ -53,4 +53,10 @@ class DashboardPresenter < BasePresenter
     @min_list ||= Stock.minimum_list
   end
 
+  def due_date
+    if h.session[:organisation][:due_date] + 5.days < Date.today
+      h.content_tag(:h3, "Estimado cliente su cuenta ha expirado, por favor realice el pago correspondiente contactandose a <span class='black b'>contacto@bonsaierp.com</span> o llame al teléfono <span class='black b'>2-2771564</span>".html_safe, 
+                    :class => 'n', :style => 'background-color:#FFCCFF; padding: 8px; border: 2px solid #FF0000')
+    end
+  end
 end

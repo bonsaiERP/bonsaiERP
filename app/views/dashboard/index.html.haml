@@ -3,7 +3,8 @@
   p.dash, ol.dash li{font-size: 120%; padding: 7px;}
 
 - present nil, DashboardPresenter do |presenter|
-
+  = presenter.due_date
+  
   = presenter.change_password_link
 
   = presenter.create_money_link
