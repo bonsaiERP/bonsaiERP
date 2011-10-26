@@ -5,6 +5,7 @@ class Client < Contact
 
   def self.pendent_incomes
     ids = Account.org.client.select("DISTINCT(accountable_id) AS client_id").where("amount > ?", 0).map(&:client_id)
+    Client.where(:id => ids)
   end
 
   def self.pendent_buys

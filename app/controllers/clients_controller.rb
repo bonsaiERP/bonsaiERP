@@ -15,7 +15,14 @@ class ClientsController < ApplicationController
     if params[:search]
       @clients = Client.org.search(params[:search]).order("matchcode ASC").page(@page)
     else
-      @clients = Client.org.order("matchcode ASC").page(@page)
+      case
+      when params[:option] === 'pendent'
+        @clients = Client.pendent.page(@page)
+      when params[:option] === 'debt'
+        @clients = Client.debt.page(@page)
+      else
+        @clients = Client.org.order("matchcode ASC").page(@page)
+      end
     end
   end
 
