@@ -22,11 +22,11 @@ class User < ActiveRecord::Base
 
   # Validations
   validates_presence_of :email
-  validates_length_of :abbreviation, :minimum => 2, :on => :create
   validates :email, :format => {
     :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, 
     :message => I18n.t("errors.messages.user.email")
-  }
+  }, :uniqueness => true
+
 
   with_options :if => :new_record? do |u|
     u.validates_inclusion_of :rolname, :in => ROLES
