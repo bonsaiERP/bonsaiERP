@@ -3,7 +3,21 @@
 # email: boriscyber@gmail.com
 class Supplier < Contact
 
-  private
+  def self.pendent
+    ac_ids = Account.org.supplier.select("DISTINCT(accountable_id) AS supplier_id").where("amount > ?", 0).map(&:supplier_id)
+    in_ids = Income.org.approved.select("DISTINCT(contact_id) AS supplier_id").map(&:supplier_id)
+    ids = ac_ids + in_ids
+    Supplier.where(:id => ids.uniq)
+  end
+
+  def self.debt
+    ac_ids = Account.org.supplier.select("DISTINCT(accountable_id) AS supplier_id").where("amount < ?", 0).map(&:supplier_id)
+    in_ids = Buy.org.approved.select("DISTINCT(contact_id) AS supplier_id").map(&:supplier_id)
+    ids = ac_ids + in_ids
+    Supplier.where(:id => ids.uniq)
+  end
+
+private
   def set_code
     if code.blank?
       codes = Supplier.org.order("code DESC").limit(1)

@@ -11,10 +11,18 @@ class SuppliersController < ApplicationController
   # GET /suppliers
   # GET /suppliers.xml
   def index
+    params[:option] ||= 'all' 
     if params[:search]
       @suppliers = Supplier.org.search(params[:search]).order("matchcode ASC").page(@page)
     else
-      @suppliers = Supplier.org.order("matchcode ASC").page(@page)
+      case
+      when params[:option] === 'pendent'
+        @suppliers = Supplier.pendent.page(@page)
+      when params[:option] === 'debt'
+        @suppliers = Supplier.debt.page(@page)
+      else
+        @suppliers = Supplier.org.order("matchcode ASC").page(@page)
+      end
     end
   end
 
