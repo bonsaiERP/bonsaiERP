@@ -55,12 +55,13 @@ class ContactAutocomplete
   createAddLink: ->
     $('<a/>').attr
       'href'   : "/#{@type.toLowerCase()}s/new"
-    .addClass('add ajax')
+    .addClass('add ajax bicon')
     .data(
       'title'  : "Nuevo #{@.getLocalizedLabel(@type).toLowerCase()}"
       'url'    : @.getAddUrl()
       'trigger': "new_contact_#{@auto_id}"
     )
+    .attr({title: "Nuevo #{@.getLocalizedLabel(@type).toLowerCase()}"})
   # Url for adding new contact
   getAddUrl: ->
     "/#{@type.toLowerCase()}s/new"

@@ -2,9 +2,9 @@
   = bonsai_form_error(f)
 
   = f.input :first_name, :label => "Nombres", :input_html => { :class => 'first_name', :size => 20 }, :wrapper_html => {:class => "_25"}
-  = f.input :last_name, :label => "Apellidos", :input_html => { :class => 'last_name', :size => 20 }, :wrapper_html => {:class => "_25"}, :hint => "Paterno Materno"
+  = f.input :last_name, :label => "Apellidos", :input_html => { :class => 'last_name', :size => 20 }, :wrapper_html => {:class => "_25"}
 
-  = f.input :matchcode, :label => "Identificador", :hint => "Ej. Juan Perez (CBN L.P.), Juan Perez (SICSA)", :input_html => { :class => 'matchcode' }
+  = f.input :matchcode, :label => "Identificador trabajador", :input_html => { :class => 'matchcode' }
   .clear
   .input  
     = f.input :position, :label => "Cargo", :wrapper_html => {:class => '_70'}, :input_html => {:size => 25}

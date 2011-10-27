@@ -1,13 +1,16 @@
-= simple_form_for(@contact) do |f|
+= simple_form_for(klass) do |f|
   = bonsai_form_error(f)
 
-  = f.input :code, :label => "Código"
-  = f.input :name, :label => "Nombre", :hint => 'Usado para notas de ingreso/egreso'
+  = f.input :matchcode, :label => "Cliente", :input_html => { :class => 'matchcode' }
   .clear
-  = f.input :organisation_name, :label => "Empresa"
-  .input
-    = f.input :phone, :label => "Teléfono"
-    = f.input :mobile, :label => "Móvil"
+
+  ._50.fl
+    = f.input :first_name, :label => "Nombres", :input_html => { :class => 'first_name', :size => 20 }
+    = f.input :last_name, :label => "Apellidos", :input_html => { :class => 'last_name', :size => 20 }
+
+  ._50.fl
+    = f.input :phone, :label => "Teléfono", :input_html => {:size => 12}
+    = f.input :mobile, :label => "Móvil", :input_html => {:size => 12}
   .clear
   = f.input :email, :lanel => "Email"
   = f.input :tax_number, :label => "NIT"
@@ -18,12 +21,3 @@
   %div.actions
     = f.submit "Salvar"
 
-:javascript
-  $(function() {
-    $('input.first_name, input.last_name').live('focusout keydown',(function(event) { 
-      if(event.type === 'focusout' || (event.type === 'keydown' && event.keyCode === 13) ){
-        var matchcode = $('input.first_name').val() + ' ' + $('input.last_name').val();
-        $('input.matchcode').val( matchcode ); 
-      }
-    });
-  })

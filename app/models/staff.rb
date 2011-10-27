@@ -5,7 +5,7 @@ class Staff < Contact
 
   attr_accessible :position
 
-  validates_presence_of :position
+  validates_presence_of :position, :first_name, :last_name
 
 private
   def set_code

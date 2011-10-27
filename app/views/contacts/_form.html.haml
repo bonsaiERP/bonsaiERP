@@ -1,31 +1,25 @@
-= simple_form_for(klass) do |f|
-  = bonsai_form_error(f)
+- present klass, ContactPresenter do |presenter|
+  = simple_form_for(klass) do |f|
+    = bonsai_form_error(f)
+    .main.bg_light_grey
+      = f.input :matchcode, :label => presenter.label, :input_html => { :class => 'matchcode' }
+      .clear
+    .clear
 
-  = f.input :first_name, :label => "Nombres", :input_html => { :class => 'first_name', :size => 20 }, :wrapper_html => {:class => "_25"}
-  = f.input :last_name, :label => "Apellidos", :input_html => { :class => 'last_name', :size => 20 }, :wrapper_html => {:class => "_25"}, :hint => "Paterno Materno"
+    ._50.fl
+      = f.input :first_name, :label => "Nombres", :input_html => { :class => 'first_name', :size => 20 }
+      = f.input :last_name, :label => "Apellidos", :input_html => { :class => 'last_name', :size => 20 }
 
-  = f.input :matchcode, :label => "Identificador", :hint => "Ej. Juan Perez (CBN L.P.), Juan Perez (SICSA)", :input_html => { :class => 'matchcode' }
-  .clear
-  = f.input :organisation_name, :label => "Empresa"
-  .input
-    = f.input :phone, :label => "Teléfono"
-    = f.input :mobile, :label => "Móvil"
-  .clear
-  = f.input :email, :lanel => "Email"
-  = f.input :tax_number, :label => "NIT"
-  .clear
-  = f.input :address, :as => :text, :input_html => {:rows => 4}, :label => "Dirección"
-  = f.input :aditional_info, :as => :text, :input_html => {:rows => 4}, :label => "Información adicional"
-  .clear
-  %div.actions
-    = f.submit "Salvar"
+    ._50.fl
+      = f.input :phone, :label => "Teléfono", :input_html => {:size => 12}
+      = f.input :mobile, :label => "Móvil", :input_html => {:size => 12}
+    .clear
+    = f.input :email, :lanel => "Email"
+    = f.input :tax_number, :label => "NIT"
+    .clear
+    = f.input :address, :as => :text, :input_html => {:rows => 4}, :label => "Dirección"
+    = f.input :aditional_info, :as => :text, :input_html => {:rows => 4}, :label => "Información adicional"
+    .clear
+    %div.actions
+      = f.submit "Salvar"
 
-:javascript
-  $(function() {
-    $('input.first_name, input.last_name').live('focusout keydown', function(event) { 
-      if(event.type === 'focusout' || (event.type === 'keydown' && event.keyCode === 13) ){
-        var matchcode = $('input.first_name').val() + ' ' + $('input.last_name').val();
-        $('input.matchcode').val( matchcode ); 
-      }
-    });
-  });

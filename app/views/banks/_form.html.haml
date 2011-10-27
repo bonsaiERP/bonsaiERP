@@ -5,8 +5,10 @@
     = f.input :number, :label => 'Número de cuenta'
     .clear
     -if bank.new_record?
-      = f.association :currency, :label => 'Moneda'
-      = f.input :amount, :label => 'Total en cuenta', :input_html => {:size => 12, :class => 'r'}, :required => true
+      = f.association :currency, :label => 'Moneda',
+        :hint => "<span class='warning bicon'></span> <span class='red'>No es posible modificar despues</span>".html_safe
+      = f.input :amount, :label => 'Total en cuenta', :input_html => {:size => 12, :class => 'r'}, :required => true,
+        :hint => "<span class='warning bicon'></span> <span class='red'>No es posible modificar despues</span>".html_safe
     -else
       .input
         %label Moneda

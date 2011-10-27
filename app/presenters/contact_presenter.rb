@@ -16,4 +16,15 @@ class ContactPresenter < BasePresenter
     end
   end
 
+  def label
+    case contact.class.to_s
+    when "Client"
+      "Cliente"
+    when "Supplier"
+      "Proveedor"
+    when "Staff"
+      "Personal"
+    end
+  end
+
 end

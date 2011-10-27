@@ -167,14 +167,15 @@ $(document).ready(->
 
   # Opens a video dialog
   createVideoDialog = (url, title = "")->
-    html = "<iframe width=\"640\" height=\"360\" src=\"#{url}\" frameborder=\"0\" allowfullscreen></iframe>"
-    createDialog({html: html, width: 680, height: 410, title: title})
+    #html = "<iframe width=\"640\" height=\"360\" src=\"#{url}\" frameborder=\"0\" allowfullscreen></iframe>"
+    html = "<iframe width=\"853\" height=\"480\" src=\"#{url}\" frameborder=\"0\" allowfullscreen></iframe>"
+    #createDialog({html: html, width: 680, height: 410, title: title})
+    createDialog({html: html, width: 880, height: 530, title: title})
 
   window.createVideoDialog = createVideoDialog
   $('a.video').live 'click', (event)->
     createVideoDialog($(this).attr("href"), $(this).data("title"))
     false
-
 
   # Gets if the request is new, edit, show
   getAjaxType = (el)->
@@ -391,7 +392,7 @@ $(document).ready(->
   $('[data-new_url]').each((i, el)->
     data = $(el).data()
     title = data.title || "Nuevo"
-    $a = $('<a/>').attr({'href': data.new_url, 'class': 'ajax add icon', 'data-trigger': data.trigger })
+    $a = $('<a/>').attr({'href': data.new_url, 'class': 'ajax add bicon', 'data-trigger': data.trigger })
     $a.insertAfter(el)
     setTimeout(->
       $a.attr('title', title)

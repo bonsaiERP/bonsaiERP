@@ -94,7 +94,6 @@ GEM
     method_source (0.6.6)
       ruby_parser (~> 2.0.5)
     mime-types (1.16)
-    mocha (0.9.12)
     multi_json (1.0.3)
     mysql2 (0.3.7)
     nokogiri (1.5.0)
@@ -223,7 +222,6 @@ DEPENDENCIES
   kaminari
   launchy
   log4r
-  mocha
   mysql2
   prawn (~> 0.12.0)
   pry

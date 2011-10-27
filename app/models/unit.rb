@@ -4,6 +4,7 @@
 class Unit < ActiveRecord::Base
 
   include Models::Organisation::NewOrganisation
+  before_validation :set_organisation_id
 
   # callbacks
   before_save    :strip_attributes
@@ -17,6 +18,8 @@ class Unit < ActiveRecord::Base
   attr_accessible :name, :symbol, :integer
 
   # validations
+  validates_uniqueness_of :name, :scope => :organisation_id
+  validates_uniqueness_of :symbol, :scope => :organisation_id
   validates_presence_of :name, :symbol
 
 
@@ -52,6 +55,12 @@ protected
       false
     else
       true
+    end
+  end
+
+  def set_organisation_id
+    if organisation_id.blank? and OrganisationSession.organisation_id.present?
+      self.organisation_id = OrganisationSession.organisation_id
     end
   end
 
