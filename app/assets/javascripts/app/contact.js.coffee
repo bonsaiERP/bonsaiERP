@@ -53,15 +53,17 @@ class ContactAutocomplete
 
   # creates the new link
   createAddLink: ->
+    title = "Nuevo #{@.getLocalizedLabel(@type).toLowerCase()}"
     $('<a/>').attr
       'href'   : "/#{@type.toLowerCase()}s/new"
-    .addClass('add ajax bicon')
+    .addClass('add ajax link')
     .data(
-      'title'  : "Nuevo #{@.getLocalizedLabel(@type).toLowerCase()}"
+      'title'  : title
       'url'    : @.getAddUrl()
       'trigger': "new_contact_#{@auto_id}"
     )
-    .attr({title: "Nuevo #{@.getLocalizedLabel(@type).toLowerCase()}"})
+    .attr({title: title})
+    .text(title)
   # Url for adding new contact
   getAddUrl: ->
     "/#{@type.toLowerCase()}s/new"
@@ -155,10 +157,12 @@ class ContactAutocomplete
     route = self["route" + @type]
     id = "#" + @auto_id
 
+    title = "Nuevo #{@.getLocalizedLabel(@type).toLowerCase()}"
     $(@cont).find('a.add').attr('href', @.getAddUrl()).
     data(
       'title'  : "Nuevo #{@.getLocalizedLabel(@type).toLowerCase()}"
     )
+    .text(title)
 
     $(id).val('').data('val', '')
 

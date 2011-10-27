@@ -4,6 +4,7 @@
 class Item < ActiveRecord::Base
 
   acts_as_org
+  before_save :check_valid_unit_id
 
   #include Models::Account::ServiceAccount
 
@@ -39,7 +40,7 @@ class Item < ActiveRecord::Base
 
   # Validations
   validates_presence_of :name, :unit_id, :code
-  validates_associated :unit
+  #validates_associated :unit
   #validates_numericality_of :unitary_cost, :greater_than_or_equal_to => 0
   validates :ctype, :presence => true, :inclusion => { :in => TYPES }
   validates :code, :uniqueness => { :scope => :organisation_id }
@@ -219,6 +220,13 @@ class Item < ActiveRecord::Base
   def set_type_and_stockable
     self.stockable = ["item", "product"].include?(self.ctype)
     self.type = (ctype == "service")? "ItemService" : "Item"
+  end
+
+  def check_valid_unit_id
+    unless Unit.org.find_by_id(unit_id)
+      self.errors[:unit_id] << I18n.t("errors.messages.invalidkeys")
+      return false
+    end
   end
 
   #def set_stockable

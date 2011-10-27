@@ -27,6 +27,9 @@ input, select, textarea{
   font-size: $font_size;
   padding: 1px 2px;
 }
+select{
+  max-width: 300px;
+}
 .inline label{
   display: inline;
 }

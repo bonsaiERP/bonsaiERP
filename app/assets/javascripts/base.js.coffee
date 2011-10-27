@@ -392,7 +392,10 @@ $(document).ready(->
   $('[data-new_url]').each((i, el)->
     data = $(el).data()
     title = data.title || "Nuevo"
-    $a = $('<a/>').attr({'href': data.new_url, 'class': 'ajax add bicon', 'data-trigger': data.trigger })
+    $a = $('<a/>')
+    .attr({'href': data.new_url, 'class': 'ajax add link', 'data-trigger': data.trigger })
+    .text(title)
+
     $a.insertAfter(el)
     setTimeout(->
       $a.attr('title', title)

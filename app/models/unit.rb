@@ -4,7 +4,7 @@
 class Unit < ActiveRecord::Base
 
   include Models::Organisation::NewOrganisation
-  before_validation :set_organisation_id
+  #before_validation :set_organisation_id
 
   # callbacks
   before_save    :strip_attributes

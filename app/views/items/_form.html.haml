@@ -7,8 +7,8 @@
   .clear
   /= f.input :unitary_cost, :label => 'Costo unitario', :input_html => {:size => 12}
   = f.input :price, :label => "Precio de venta #{currency_symbol}", :input_html => {:size => 12, :type => 'decimal'}
-  .input
-    = f.association :unit, :collection => Unit.org,:label => "Unidad", :input_html => { 'data-new_url' => new_unit_path, 'data-trigger' => 'new_unit', 'data-title' => 'Nueva unidad de medidad' }
+  = f.association :unit, :collection => Unit.org, :label => "Unidad", 
+    :input_html => { 'data-new_url' => new_unit_path, 'data-trigger' => 'new_unit', 'data-title' => 'Nueva unidad' }
   .clear
     = f.input :active, :label => "Activo", :as => :radio
   - if f.object.new_record?

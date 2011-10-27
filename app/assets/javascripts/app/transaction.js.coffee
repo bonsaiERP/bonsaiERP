@@ -18,7 +18,6 @@ class ItemModel extends Backbone.Model
     @desc.data("cid", @.cid)
     @row.data("cid", @.cid)
 
-
     @.unset("row")
     @.unset("trans")
     @.calculateTotal()
@@ -27,7 +26,9 @@ class ItemModel extends Backbone.Model
     @.bind "change:price", -> @.calculateTotal()
     @.bind "change:rate", -> @.setRate()
     # quantity
-    @.bind "change:quantity", -> @.calculateTotal()
+    @.bind "change:quantity", ->
+      self.quantity.val(@.get("quantity"))
+      @.calculateTotal()
     # total
     @.bind "change:total", -> @.setTotal()
 
@@ -51,14 +52,16 @@ class ItemModel extends Backbone.Model
       self.set({quantity: quantity.round(2)})
 
   # set values after autocomplete
-  setValues: (ui)->
+  setValues: (item)->
     rate = @collection.trans.get("exchange_rate")
-    oprice = ui.item.price * 1
+    oprice = item.price * 1
     price = (oprice * 1/rate).round(2)
-    @item_id.val(ui.item.id)
+    @item_id.val(item.id)
     @price.val(price)
-    @desc.val(ui.item.label)
-    @.set({item_id: ui.item.id, description: ui.item.label, price: price, original_price: oprice})
+    desc = item.label || "#{item.code} - #{item.name}"
+    @desc.val(desc)
+    @.set({item_id: item.id, description: desc, price: price, original_price: oprice, quantity: 1})
+
   # set the exchange rate
   setRate: ->
     price = @.get("original_price") * ( 1/@.get("rate") )
@@ -108,14 +111,22 @@ class ItemCollection extends Backbone.Collection
           if self.findItem(ui.item.id)
             alert "El item que ha seleccionado se encuentra en la lista"
           else
-            item.setValues(ui)
+            item.setValues(ui.item)
           false
       )
+
+    # To add new items
+    $('tr.item a.ajax').live 'mouseover', (event)->
+      self.currentRow = $(this).parents("tr.item")
+
+    $('body').live 'add:item', (event, vals)=>
+      item = @.getByCid(@currentRow.data('cid') )
+      item.setValues(vals)
 
     ##########
     # Events for items
     # add
-    $('a#add_item').live 'click', (event)-> self.addItem()
+    $('a#add_item').live 'click', (event)=> @.addItem()
     # remove
     $('tr.item a.destroy').live 'click', (event)-> self.removeItem(this)
 
@@ -128,13 +139,16 @@ class ItemCollection extends Backbone.Collection
     self = @
 
     # Change discount
-    #@trans.bind("change:discount", ->)
 
-    $('#items_table').find("tr.item").each (i, row)->
+    $('#items_table').find("tr.item").each (i, row)=>
       item_id  = $(row).find("input.item").val() * 1
       desc     = $(row).find("input.desc").val()
       price    = $(row).find("input.price").val() * 1
       quantity = $(row).find("input.quantity").val() * 1
+
+      type = @trans.get("type")
+      $(row).find("input.desc")
+      .after("<a href='/items/new?scope=#{type}' data-title='Nuevo ítem' data-trigger='add:item' class='ajax add link'>Nuevo item</a>")
       # Create
       item = new ItemModel({item_id: item_id, description: desc, price: price, quantity: quantity, trans: self.trans, row: row, rate: self.trans.get("exchange_rate")})
 
@@ -179,7 +193,7 @@ class ItemCollection extends Backbone.Collection
       if el.name
         $(el).attr({ name: el.name.replace(/\d+/, num), id: el.id.replace(/\d+/, num)} )
       $(el).val('')
-    row.find(".total_row").html("")
+    row.find(".total_row").html(_b.ntc(0))
     row
 
   # changes the rate to all items
@@ -205,7 +219,7 @@ class TransactionModel extends Backbone.Model
     taxes_total: 0
 
   # Init
-  initialize: ->
+  initialize: (@type)->
     self = @
 
     @currencies = @.get("currencies")
@@ -224,7 +238,7 @@ class TransactionModel extends Backbone.Model
       @.setCurrency()
 
     # Set the views for each row
-    @items = new ItemCollection
+    @items = new ItemCollection()
     @items.setTrans(@)
 
 
@@ -373,11 +387,8 @@ class Table extends Backbone.View
     @el = $('#items_table')
     @.setHeaders()
 
-    self = @
     # curency_id
-    @model.bind("change:currency_id", ->
-      self.setHeaders()
-    )
+    @model.bind "change:currency_id", -> @.setHeaders()
   # Sets the header for the currecy
   setHeaders: ->
     $(@el).find("span.currency").html(@model.get("currency_symbol") )
@@ -385,7 +396,12 @@ class Table extends Backbone.View
 # Global class that controls the events for many classes
 class TransactionGlobal
   # Constructor
-  constructor: (@currencies, @default_currency, currency_id, exchange_rate)->
+  # Currencies
+  # Organisation default currency
+  # Transaction currency_id
+  # Transaction exchange_rate
+  # Transaction type (income, buy)
+  constructor: (@currencies, @default_currency, currency_id, exchange_rate, @type)->
     @currency_id = $('#transaction_currency_id')
 
     @transaction = new TransactionModel(
@@ -393,6 +409,7 @@ class TransactionGlobal
       default_currency: @default_currency,
       currency_id: currency_id,
       exchange_rate: exchange_rate
+      type: @type
     )
     @.setEvents()
     # Dialog
