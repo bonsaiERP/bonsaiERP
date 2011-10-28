@@ -116,7 +116,7 @@ class ItemCollection extends Backbone.Collection
       )
 
     # To add new items
-    $('tr.item a.ajax').live 'mouseover', (event)->
+    $('tr.item a.ajax').live 'mousedown', (event)->
       self.currentRow = $(this).parents("tr.item")
 
     $('body').live 'add:item', (event, vals)=>
