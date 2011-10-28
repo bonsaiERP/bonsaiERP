@@ -16,6 +16,24 @@ class ContactPresenter < BasePresenter
     end
   end
 
+  def moneybox(ac)
+    case 
+    when ac.amount < 0
+      moneybox_tag "Debemos #{ac.currency_symbol}", ac.amount
+    when ac.amount > 0
+      moneybox_tag "Debe #{ac.currency_symbol}", ac.amount
+    end
+  end
+
+  def moneybox_tag(label, amt)
+    content_tag(:div, :class => 'moneybox fl' ) do
+      content_tag(:label, label) + content_tag(:h3, h.ntc(amt.abs) )
+    end
+    #.moneybox.fl
+    #  %label #{ presenter.moneybox_label ac} #{ac.currency_symbol}
+    #  %h3= ntc -ac.amount
+  end
+
   def label
     case contact.class.to_s
     when "Client"

@@ -25,13 +25,13 @@
   .clear
   
   .box
-    %h3 Cuentas por <span class="b dark_green">cobrar</span>
+    %h3 <span class="b dark_green">Nos deben</span>
     %ul.list
       - presenter.accounts_to_recieve.each do |cur, amt|
         %li.b #{cur} #{ntc amt}
 
   .box
-    %h3 Cuentas por <span class="b red">pagar</span>
+    %h3 <span class="b red">Debemos</span>
     %ul.list
       - presenter.accounts_to_pay.each do |cur, amt|
         %li.b #{cur} #{ntc amt}

@@ -3,6 +3,11 @@
 
 %h1 Personal
 
+%ul.tabs
+  %li= link_option "Todos", "all"
+  %li= link_option "Nos deben", "pendent"
+  %li= link_option "Debemos", "debt"
+
 #search_staff.search{:style => show_if_search}
   %a.close{:href => "#"} cerrar
   %h3 Buscar personal

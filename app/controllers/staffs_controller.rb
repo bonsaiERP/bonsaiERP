@@ -11,10 +11,18 @@ class StaffsController < ApplicationController
   # GET /staffs
   # GET /staffs.xml
   def index
+    params[:option] ||= 'all' 
     if params[:search]
-      @staffs = Staff.org.search(params[:search]).page(@page)
+      @staffs = Staff.org.search(params[:search]).order("matchcode ASC").page(@page)
     else
-      @staffs = Staff.org.page(@page)
+      case
+      when params[:option] === 'pendent'
+        @staffs = Staff.pendent.page(@page)
+      when params[:option] === 'debt'
+        @staffs = Staff.debt.page(@page)
+      else
+        @staffs = Staff.org.order("matchcode ASC").page(@page)
+      end
     end
   end
 

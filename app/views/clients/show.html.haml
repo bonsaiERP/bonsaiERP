@@ -1,49 +1,48 @@
-- content_for :links do
-  %ul.breadcrumps
-    %li #{link_to "Clientes", clients_path} <span>&gt;</span>
-  .links
-    = link_to "Vídeo", "http://www.youtube.com/embed/BZMsfhXi9uw", :class => 'video', 'data-title' => 'Como crear clientes'
-    = link_to 'Nuevo', new_client_path, :class => 'new'
-    = link_to 'Editar', edit_client_path(@client), :class => 'edit'
-    = link_to 'Borrar', @client, :class => 'delete'
-
-%h1
-  = @client.matchcode
-  %span.dashlet.fs50.bg_dark Cliente
-
-.clear
-= render 'contacts/show', :klass => @client
-
-.clear
-- @client.accounts.each do |ac|
-  .moneybox.fl
-    %label Cuenta en #{ac.currency_symbol}
-    %h3= ntc -ac.amount
-
 - present @client, ContactPresenter do |presenter|
-  - presenter.incomes.each do |cur, amt|
-    .moneybox.fl 
-      %label.dark_green Saldo ventas #{cur}
-      %h3= ntc amt
+  - content_for :links do
+    %ul.breadcrumps
+      %li #{link_to "Clientes", clients_path} <span>&gt;</span>
+    .links
+      = link_to "Vídeo", "http://www.youtube.com/embed/BZMsfhXi9uw", :class => 'video', 'data-title' => 'Como crear clientes'
+      = link_to 'Nuevo', new_client_path, :class => 'new'
+      = link_to 'Editar', edit_client_path(@client), :class => 'edit'
+      = link_to 'Borrar', @client, :class => 'delete'
 
-  - presenter.buys.each do |cur, amt|
-    .moneybox.fl 
-      %label.red Saldo compras #{cur}
-      %h3= ntc amt
+  %h1
+    = @client.matchcode
+    %span.dashlet.fs50.bg_dark Cliente
 
-.clear
+  .clear
+  = render 'contacts/show', :klass => @client
 
-= jquery_tabs :tab_id => "contact_tab" do
-  =jqueryui_ul do
-    =tab "Transacciones", client_path(@client, :tab => 'transactions'), "transactions"
-    =tab "Ventas", client_path(@client, :tab => 'incomes'),"incomes"
-    =tab "Compras y gastos", client_path(@client, :tab => 'buys'), "buys"
-    =tab "Operaciones inventarios", client_path(@client, :tab => 'inventory'), "inventory"
-    
-  -# "contacts/account_ledgers", "contacts/inconmes", "contacts/buys", "contacts/inventory_operations"
-  = render @partial, @locals
+  .clear
+  - @client.accounts.each do |ac|
+    = presenter.moneybox ac
+
+  - present @client, ContactPresenter do |presenter|
+    - presenter.incomes.each do |cur, amt|
+      .moneybox.fl 
+        %label.dark_green Saldo ventas #{cur}
+        %h3= ntc amt
+
+    - presenter.buys.each do |cur, amt|
+      .moneybox.fl 
+        %label.red Saldo compras #{cur}
+        %h3= ntc amt
+
+  .clear
+
+  = jquery_tabs :tab_id => "contact_tab" do
+    =jqueryui_ul do
+      =tab "Transacciones", client_path(@client, :tab => 'transactions'), "transactions"
+      =tab "Ventas", client_path(@client, :tab => 'incomes'),"incomes"
+      =tab "Compras y gastos", client_path(@client, :tab => 'buys'), "buys"
+      =tab "Operaciones inventarios", client_path(@client, :tab => 'inventory'), "inventory"
+      
+    -# "contacts/account_ledgers", "contacts/inconmes", "contacts/buys", "contacts/inventory_operations"
+    = render @partial, @locals
 
 
-:javascript
-  $(function() {
-  });
+  :javascript
+    $(function() {
+    });
