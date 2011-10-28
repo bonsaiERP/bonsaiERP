@@ -199,7 +199,7 @@ class ItemCollection extends Backbone.Collection
   # changes the rate to all items
   changeRate: ->
     trans = @trans
-    @models.each (model)->
+    @models.map (model)->
       model.set({rate: trans.get("exchange_rate")})
   # Calculates the total
   subtotal: ->
@@ -350,6 +350,7 @@ class ExchangeRateDialog extends Backbone.View
   setEvents: ->
     self = @
     $('#edit_exchange_rate_link').live('click', (event)->
+      $(this).trigger("change")
       self.openDialog()
       false
     )
@@ -363,7 +364,7 @@ class ExchangeRateDialog extends Backbone.View
     unless @model.get("currency_id") == @model.get("default_currency")
       html = [@model.get("currency_symbol"), " 1 = ",
       "<strong>", @model.get("default_symbol"), " ", _b.ntc(@model.get("exchange_rate"), 4), "</strong>",
-      ' <a href="javascript:" id="edit_exchange_rate_link">editar tipo de cambio</a>']
+      ' <a href="javascript:;" class="b" id="edit_exchange_rate_link">editar tipo de cambio</a>']
       @label.find("span.rate_details").html(html.join(""))
 
   # Change in exchange rate
@@ -388,7 +389,7 @@ class Table extends Backbone.View
     @.setHeaders()
 
     # curency_id
-    @model.bind "change:currency_id", -> @.setHeaders()
+    @model.bind "change:currency_id", => @.setHeaders()
   # Sets the header for the currecy
   setHeaders: ->
     $(@el).find("span.currency").html(@model.get("currency_symbol") )
@@ -421,7 +422,7 @@ class TransactionGlobal
   # Events
   setEvents: ->
     self = @
-    @currency_id.live 'change', (event)->
+    @currency_id.live 'change keyup', (event)->
       currency_id = $(this).val() * 1
       self.transaction.set({currency_id: currency_id})
 

@@ -17,7 +17,9 @@ class ExchangeRate extends Backbone.Model
     if @$input.val().match(/^\d+$/) or $(@observe).val().match(/^\d+$/)
       rate = @$input.val() * 1
       curr = $(@observe).val() * 1
+      # Set the currency
       @.set({rate: rate, "currency": @currencies[curr]})
+      @.setSuggestRates()
     else
       @$input.val(@.get("rate"))
 
