@@ -74,7 +74,8 @@ namespace :bonsai do
     Rake::Task["db:drop"].execute
     Rake::Task["db:migrate"].execute
   end
- desc "Creates 500 suppliers"
+  
+  desc "Creates 500 suppliers"
   task :create_suppliers => :environment do
     require 'ffaker'
     OrganisationSession.set :id => 1, :currency_id => 1
@@ -122,6 +123,12 @@ namespace :bonsai do
       Currency.create!(c) {|cu| cu.id = c['id'] }
     end
     puts "Currencies have been created"
+  end
+
+  desc "Creates countries and currencies"
+  task :create_data => :environment do
+    Rake::Task["bonsai:create_currencies"].execute
+    Rake::Task["bonsai:create_countries"].execute
   end
 
   desc "Updates all the account_ledgers to have the contact_id"
