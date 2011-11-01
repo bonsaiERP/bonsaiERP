@@ -3,7 +3,6 @@
   code: "P-101"
   ctype: "product"
   description: ""
-  discount: ""
   id: 1
   integer: false
   name: "Pipocas"
@@ -16,7 +15,6 @@
   code: "P-102"
   ctype: "product"
   description: ""
-  discount: ""
   id: 2
   integer: false
   name: "DVD Mi villano favorito"
@@ -29,7 +27,6 @@
   code: "P-103"
   ctype: "product"
   description: ""
-  discount: 
   id: 3
   integer: false
   name: "DVD Megamente"
@@ -42,7 +39,6 @@
   code: "I-001"
   ctype: "item"
   description: ""
-  discount: 
   id: 4
   integer: false
   name: "Papel sabana tama\xC3\xB1o oficio"

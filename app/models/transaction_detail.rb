@@ -39,7 +39,7 @@ class TransactionDetail < ActiveRecord::Base
     ( original_price.to_f/transaction.exchange_rate ).round(2)
   end
 
-  private
+private
   def set_defaults
     self.price ||= 0
     self.quantity ||= 0

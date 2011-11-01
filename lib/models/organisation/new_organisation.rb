@@ -8,7 +8,7 @@ module Models::Organisation::NewOrganisation
   
   included do
     attr_readonly :organisation_id
-    before_create :set_organisation, :unless => 'organisation_id.present?'
+    before_validation :set_organisation, :unless => 'organisation_id.present?'
   end
 
   module InstanceMethods

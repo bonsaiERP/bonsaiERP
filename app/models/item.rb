@@ -4,16 +4,12 @@
 class Item < ActiveRecord::Base
 
   acts_as_org
-  before_save :check_valid_unit_id
-
-  #include Models::Account::ServiceAccount
 
   attr_readonly :ctype
 
   set_inheritance_column :class_type
 
   #before_save :set_stockable
-  before_save    :create_price
   before_create  :set_type_and_stockable
   before_destroy :check_items_destroy
 
@@ -29,7 +25,7 @@ class Item < ActiveRecord::Base
   #acts_as_taggable
 
   # relationships
-  belongs_to :unit
+  belongs_to :unit#, :class_name => "Contact"
   has_many :prices
   has_many :stocks
   has_many :transaction_details
@@ -41,11 +37,11 @@ class Item < ActiveRecord::Base
   # Validations
   validates_presence_of :name, :unit_id, :code
   #validates_associated :unit
-  #validates_numericality_of :unitary_cost, :greater_than_or_equal_to => 0
   validates :ctype, :presence => true, :inclusion => { :in => TYPES }
   validates :code, :uniqueness => { :scope => :organisation_id }
-  validates :price, :numericality => { :greater_than_or_equal_to => 0, :if => lambda { |i| i.price.present? } }
-  validate :validate_discount
+  validates :price, :numericality => { :greater_than_or_equal_to => 0 }
+  validates :unit_id, :organisation_relation => true
+
 
   delegate :symbol, :name, :to => :unit, :prefix => true
 
@@ -149,11 +145,6 @@ class Item < ActiveRecord::Base
 
   private
 
-  # Creates a price to check in the history
-  def create_price 
-    self.price ||= 0
-    #prices.build(price)
-  end
 
   # Validations for discount
   def validate_discount
@@ -162,48 +153,6 @@ class Item < ActiveRecord::Base
       validate_discount_number
     else
       validate_discount_range
-    end
-  end
-
-  # Validates the discount if it is a number
-  def validate_discount_number
-    disc = self.discount.to_f
-    if disc < 0
-      self.errors.add(:discount, I18n.t("activerecord.errors.messages.greater_than_or_equal_to", :count => 0))
-    elsif disc > 100
-      self.errors.add(:discount, I18n.t("activerecord.errors.messages.less_than_or_equal_to", :count => 100))
-    end
-  end
-
-
-  # validates the discount if it is a range
-  def validate_discount_range
-    if self.discount =~ self.class.reg_discount_range and !self.discount.blank?
-      validate_discount_range_values
-    else
-      self.errors.add(:discount, I18n.t("activerecord.errors.messages.invalid") )
-    end
-  end
-
-  # Validates that all values within a range are possitive and the percentage is less than 0
-  # [number]:[percentage]
-  # A translation for activerecord.errors.messages.invalid_range_percentage must be added
-  def validate_discount_range_values
-    curr_val = curr_per = 0
-    first = true
-    discount_values.each do |val, per|
-      #if per > 100
-      #  self.errors.add(:discount, I18n.t("activerecord.errors.messages.invalid_range_percentage"))
-      #  break
-      #end
-      unless first
-        if val <= curr_val or per <= curr_per
-          self.errors.add(:discount, I18n.t("activerecord.errors.messages.invalid_range_secuence"))
-          break
-        end
-      end
-      first = false
-      curr_val, curr_per = val, per
     end
   end
 
@@ -229,10 +178,4 @@ class Item < ActiveRecord::Base
     end
   end
 
-  #def set_stockable
-  #  self.stockable = ( self.ctype != 'Service' )
-  #  # Must return true, sometimes assigment is false and returns false so the
-  #  # transaction rollsback
-  #  true
-  #end
 end

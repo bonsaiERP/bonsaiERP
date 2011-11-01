@@ -10,7 +10,7 @@ class Account < ActiveRecord::Base
   before_create :set_amount
   #before_create :create_account_currency
 
-  serialize :amount_currency
+  #serialize :amount_currency
 
   attr_readonly  :initial_amount, :original_type
   attr_protected :amount, :amount_currency
@@ -29,8 +29,10 @@ class Account < ActiveRecord::Base
   has_many :expenses, :class_name => "Transaction", :conditions => "transactions.type = 'Expense'"
 
   # validations
-  validates_presence_of :currency_id, :name
+  validates_presence_of :currency, :name
   validates_numericality_of :amount
+  validates_associated :currency
+  #validates :currency_id, :organisation_relation => true
 
   # delegations
   delegate :symbol, :name, :to => :currency, :prefix => true, :allow_nil => true

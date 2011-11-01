@@ -4,7 +4,6 @@
 class Unit < ActiveRecord::Base
 
   include Models::Organisation::NewOrganisation
-  #before_validation :set_organisation_id
 
   # callbacks
   before_save    :strip_attributes
@@ -55,12 +54,6 @@ protected
       false
     else
       true
-    end
-  end
-
-  def set_organisation_id
-    if organisation_id.blank? and OrganisationSession.organisation_id.present?
-      self.organisation_id = OrganisationSession.organisation_id
     end
   end
 
