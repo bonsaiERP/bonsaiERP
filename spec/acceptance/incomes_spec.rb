@@ -970,12 +970,14 @@ feature "Income", "test features" do
 
     i = Income.new(i_params)
     i.save_trans.should be_true
+    #puts i.transaction_details.map(&:original_price)
     i = Income.find(i.id)
 
     i.should be_persisted
     i.should be_draft
     i.total.should == tot
     i.original_total.should == i1.price * 10 + i2.price * 20
+    #puts i.send(:calculate_orinal_total)
     i.should_not be_discounted
 
     # item prices

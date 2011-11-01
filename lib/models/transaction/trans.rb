@@ -17,9 +17,11 @@ module Models::Transaction
     # validations callbacks
     included do
 
-      with_options  :if => :draft_trans? do |trans|
-        trans.before_save :save_trans_details
-        trans.before_save :calculate_orinal_total
+      with_options :if => :draft_trans? do |trans|
+        # validations
+        trans.validate :check_repated_items
+
+        trans.before_save :set_transaction_totals
       end
 
       with_options :if => :approved_trans? do |trans|
@@ -33,7 +35,10 @@ module Models::Transaction
 
       if draft?
         def self.draft_trans?; true; end
-        self.extend(ExtraMethods)
+        details = TransactionDetails.new(self)
+        details.set_details
+
+        #self.extend(ExtraMethods)
       else
         def self.approved_trans?; true; end
       end
@@ -41,33 +46,57 @@ module Models::Transaction
       self.save
     end
 
-    module ExtraMethods
+    class TransactionDetails
+      attr_reader :transaction, :transaction_details
 
-    private
-
-      def save_trans_details
-        round_details
-        set_details_type
-        set_balance_inventory
-        check_repated_items
-
-        calculate_total_and_set_balance
-
-        return false unless errors.empty?
+      def initialize(transaction)
+        @transaction = transaction
+        @transaction_details = @transaction.transaction_details
       end
 
-      def round_details
-        transaction_details.each do |tdet|
-          tdet.price = tdet.price.round(2)
+      def set_details
+        set_details_type
+        round_prices
+        set_original_prices
+      end
+
+      def item_prices
+        @prices ||= Hash[Item.org.where(:id => item_ids).values_of(:id, :price)]
+      end
+
+      def item_ids
+        transaction_details.map(&:item_id)
+      end
+
+    private
+      def round_prices
+        transaction_details.each {|td| td.price = td.price.round(2)}
+      end
+
+      def set_details_type
+        transaction_details.each{ |v| v.ctype = self.class.to_s }
+      end
+
+      def set_original_prices
+        transaction_details.each do |td|
+          td.original_price = item_prices[td.item_id]
         end
       end
 
-      def calculate_orinal_total
-        items = Item.org.where(:id => transaction_details.map(&:item_id)).values_of(:id, :price)
+    end
 
+    module InstanceMethods
+
+    private
+      
+      def set_transaction_totals
+        calculate_total_and_set_balance
+        calculate_orinal_total
+      end
+
+      def calculate_orinal_total
         s = transaction_details.inject(0) do |s, det|
-          it = items.find {|i| i[0] === det.item_id }
-          s += ( it[1].to_f/exchange_rate ).round(2) * det.quantity unless det.marked_for_destruction?
+          s += ( det.original_price.to_f/exchange_rate ).round(2) * det.quantity unless det.marked_for_destruction?
           s
         end
 
@@ -78,20 +107,6 @@ module Models::Transaction
         self.original_total = s
       end
 
-      def check_repated_items
-        h = Hash.new(0)
-        transaction_details.each do |det|
-          h[det.item_id] += 1
-        end
-
-        self.errors[:base] << I18n.t("errors.messages.repeated_items") if h.values.find {|v| v > 1 }
-      end
-
-      # Sets the type of the class making the transaction
-      def set_details_type
-        self.transaction_details.each{ |v| v.ctype = self.class.to_s }
-      end
-
       # Calculates the real total value and stores it
       def calculate_total_and_set_balance
         self.tax_percent = taxes.inject(0) {|s, imp| s += imp.rate }
@@ -100,8 +115,13 @@ module Models::Transaction
         self.balance = total if total > 0
       end
 
-      def set_balance_inventory
-        self.balance_inventory = total
+      def check_repated_items
+        h = Hash.new(0)
+        transaction_details.each do |det|
+          h[det.item_id] += 1
+        end
+
+        self.errors[:base] << I18n.t("errors.messages.repeated_items") if h.values.find {|v| v > 1 }
       end
 
     end
