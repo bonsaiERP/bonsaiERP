@@ -49,7 +49,7 @@ feature "Buy", "test features" do
     b.save_trans.should be(true)
     b.should be_draft
 
-    b.reload
+    b = Buy.find(b.id)
     log.info "Checking details, cash and balance for buy"
     b.transaction_details.size.should == 2
     b.should be_cash
@@ -176,6 +176,7 @@ feature "Buy", "test features" do
 
     b.save_trans.should be_true
     b.balance.should == 130
+    b = Buy.find(b.id)
 
     b.approve!.should be_true
 
@@ -214,6 +215,8 @@ feature "Buy", "test features" do
   scenario "Make payment and then null payment" do
     b = Buy.new(buy_params)
     b.save_trans.should be_true
+    b = Buy.find(b.id)
+
     b.should be_persisted
     b.approve!.should be_true
 
@@ -304,6 +307,8 @@ feature "Buy", "test features" do
 
     b = Buy.new(buy_params)
     b.save_trans.should be_true
+    b = Buy.find(b.id)
+
     b.should be_persisted
     b.approve!.should be_true
 
