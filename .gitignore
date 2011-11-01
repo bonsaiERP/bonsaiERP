@@ -36,3 +36,4 @@ tmp/restart.txt
 .rbx
 spec/javascripts/generated
 public/assets/application.js
+tags
