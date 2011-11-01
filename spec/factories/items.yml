@@ -43,7 +43,7 @@
   integer: false
   name: "Papel sabana tama\xC3\xB1o oficio"
   organisation_id: 1
-  price: 
+  price: 0
   stockable: false
   unit_id: 3
   unitary_cost: 2.0

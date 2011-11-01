@@ -72,21 +72,18 @@ feature "Income", "test features" do
     i.should be_draft
 
     log.info "Checking income details"
+
     i.transaction_details[0].balance.should == 10
     i.transaction_details[0].original_price.should == 3
     i.transaction_details[1].balance.should == 20
     i.transaction_details[1].original_price.should == 5
 
-    #a1 = Account.find(i.account.id)
-    #a1.accountable.should == client
-    #a1.amount.should == 0
-    #a2 = Account.org.find_by_original_type("Income")
-    #a2.amount.should == 0
-
     i.approve!.should == true
-    i.reload
+
+    i = Income.find(i.id)
     i.approver_id.should == 1
     i.should be_approved
+    i.should_not be_draft_trans
 
     # Create a payment
     i.payment?.should == false
@@ -155,11 +152,14 @@ feature "Income", "test features" do
     i = Income.new(income_params)
     i.save_trans.should == true
 
+    # Prevent from having draft_trans? to true
+    i = Income.find(i.id)
     tot = ( 3 * 10 + 5 * 20 ) * 0.97
     i.total.should == tot.round(2)
     i.balance.should == i.total
 
     i.approve!.should == true
+    
 
     # Create PayPlan
     d = Date.today
@@ -304,6 +304,7 @@ feature "Income", "test features" do
   scenario "Create credit with interests" do
     i = Income.new(income_params)
     i.save_trans.should == true
+    i = Income.find(i.id)
 
     i.approve!.should == true
 
@@ -350,6 +351,7 @@ feature "Income", "test features" do
   scenario "Make payment with a contact account" do
     i = Income.new(income_params)
     i.save_trans.should == true
+    i = Income.find(i.id)
 
     tot = ( 3 * 10 + 5 * 20 ) * 0.97
     i.total.should == tot.round(2)
@@ -400,6 +402,7 @@ feature "Income", "test features" do
   scenario "Pay with a differen curency" do
     i = Income.new(income_params.merge(:discount => 0))
     i.save_trans.should == true
+    i = Income.find(i.id)
   
     i.approve!.should == true
 
@@ -482,6 +485,7 @@ feature "Income", "test features" do
   scenario "Make payment with a contact account and with different currency" do
     i = Income.new(income_params)
     i.save_trans.should == true
+    i = Income.find(i.id)
 
     tot = ( 3 * 10 + 5 * 20 ) * 0.97
     i.total.should == tot.round(2)
@@ -583,6 +587,7 @@ feature "Income", "test features" do
   scenario "check different updates and modifications to pay_plans" do
     i = Income.new(income_params)
     i.save_trans.should == true
+    i = Income.find(i.id)
 
     tot = ( 3 * 10 + 5 * 20 ) * 0.97
     i.total.should == tot.round(2)
@@ -638,6 +643,7 @@ feature "Income", "test features" do
   scenario "Pay and then null transactions" do
     i = Income.new(income_params)
     i.save_trans.should == true
+    i = Income.find(i.id)
 
     tot = ( 3 * 10 + 5 * 20 ) * 0.97
     i.total.should == tot.round(2)
@@ -699,6 +705,7 @@ feature "Income", "test features" do
   scenario "Make payment with a contact account and validate contact amount" do
     i = Income.new(income_params)
     i.save_trans.should == true
+    i = Income.find(i.id)
 
     tot = ( 3 * 10 + 5 * 20 ) * 0.97
     i.total.should == tot.round(2)
@@ -747,6 +754,7 @@ feature "Income", "test features" do
   scenario "Pay with a differen curency" do
     i = Income.new(income_params.merge(:discount => 0))
     i.save_trans.should == true
+    i = Income.find(i.id)
   
     i.approve!.should == true
 
@@ -819,6 +827,7 @@ feature "Income", "test features" do
   scenario "Make payment with a contact account and with different currency" do
     i = Income.new(income_params)
     i.save_trans.should == true
+    i = Income.find(i.id)
 
     tot = ( 3 * 10 + 5 * 20 ) * 0.97
     i.total.should == tot.round(2)
@@ -916,6 +925,8 @@ feature "Income", "test features" do
     i.total.should == 2000
     i.pay_plans.should have(0).elements
 
+    i = Income.find(i.id)
+
     i.approve!.should be_true
     i.approve_credit(:credit_reference => "Ref 123", :credit_description => "Yeah!!").should be_true
 
@@ -959,6 +970,7 @@ feature "Income", "test features" do
 
     i = Income.new(i_params)
     i.save_trans.should be_true
+    i = Income.find(i.id)
 
     i.should be_persisted
     i.should be_draft
@@ -975,6 +987,7 @@ feature "Income", "test features" do
     # Only change of price
     i = Income.new(i_params)
     i.save_trans.should be_true
+    i = Income.find(i.id)
 
     tot = (i1.price + 1) * 10 + i2.price * 20
 
@@ -988,6 +1001,8 @@ feature "Income", "test features" do
     i_params[:discount] = 3
     i = Income.new(i_params)
     i.save_trans.should be_true
+    i = Income.find(i.id)
+
     i.original_total.should == i1.price * 10 + i2.price * 20
     i.should be_discounted
 
@@ -1013,10 +1028,13 @@ feature "Income", "test features" do
 
     i = Income.new(i_params)
     i.save_trans.should == true
+
     i.should be_persisted
     i.discount.should == 0
 
     otot = (i1.price/1.5).round(2) * 10 + ( i2.price/1.5 ).round(2) * 20
+    otot = BigDecimal.new(otot.to_s)
+
     i.reload
     i.total.should == otot
     i.original_total.should == otot

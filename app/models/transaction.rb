@@ -21,7 +21,6 @@ class Transaction < ActiveRecord::Base
   before_validation :set_defaults, :if => :new_record?
   before_create     :set_creator
   before_destroy    :null_transaction
-  #before_save       :set_state
 
   # relationships
   #belongs_to :account

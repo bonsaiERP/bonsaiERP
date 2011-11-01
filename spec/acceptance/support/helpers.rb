@@ -31,8 +31,8 @@ module HelperMethods
     #@user = create_user
     attributes = {:name => 'Violetas', :currency_id => 1, :country_id => 1, 
                          :phone => '7881221', :mobile => '789123434',
-                         :address => 'Mallasa calle 4 Nº 222', 
-                         :preferences => {"item_discount" => "2", "general_discount" => "0.5" }}.merge(attributes)
+                         :address => 'Mallasa calle 4 Nº 222' 
+                  }.merge(attributes)
 
     create_countries
     create_currencies
@@ -54,7 +54,12 @@ module HelperMethods
   # Creates items with the defined ids
   def create_items
     YAML.load_file("#{Rails.root}/spec/factories/items.yml").each do |it|
-      Item.create!(it) {|item| item.id = it["id"] }
+      u = Unit.org.first
+    
+      Item.create!(it) {|item| 
+        item.id = it["id"]
+        item.unit_id = u.id
+      }
     end
   end
 

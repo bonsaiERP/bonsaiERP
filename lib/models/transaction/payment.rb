@@ -50,7 +50,7 @@ module Models::Transaction::Payment
       mark_paid_pay_plans if credit? # anulate pay_plans if credit
 
       self.balance = balance - @current_ledger.amount_currency.abs
-      self.state = 'paid' if balance <= 0
+      self.state = 'paid' if balance.round(2) <= 0
 
       set_current_ledger_data
       set_account_ledger_extras

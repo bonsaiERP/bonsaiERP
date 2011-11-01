@@ -1,35 +1,57 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-require 'active_support/concern'
-
 module Models::Transaction
   module Trans
+    
     extend ActiveSupport::Concern
 
-    included do
-      before_save :save_trans_details, :if => :draft?
+    [:draft_trans?, :approved_trans?].each do |met|
+      class_eval <<-CODE, __FILE__, __LINE__ + 1
+        def #{met}
+          false
+        end
+      CODE
     end
 
-    module InstanceMethods
-      # Principal method to store when saving a new trans or editing details
-      def save_trans
-        self.state ||= "draft"
-        return false unless draft? # return false if state == 'draft'
+    # validations callbacks
+    included do
 
-        self.save
+      with_options  :if => :draft_trans? do |trans|
+        trans.before_save :save_trans_details
+        trans.before_save :calculate_orinal_total
       end
 
-      private
+      with_options :if => :approved_trans? do |trans|
+
+      end
+
+    end
+
+    def save_trans
+      self.state ||= "draft"
+
+      if draft?
+        def self.draft_trans?; true; end
+        self.extend(ExtraMethods)
+      else
+        def self.approved_trans?; true; end
+      end
+
+      self.save
+    end
+
+    module ExtraMethods
+
+    private
 
       def save_trans_details
         round_details
         set_details_type
-        calculate_total_and_set_balance
         set_balance_inventory
-        set_total_discount_amount
         check_repated_items
-        calculate_orinal_total
+
+        calculate_total_and_set_balance
 
         return false unless errors.empty?
       end
@@ -42,6 +64,7 @@ module Models::Transaction
 
       def calculate_orinal_total
         items = Item.org.where(:id => transaction_details.map(&:item_id)).values_of(:id, :price)
+
         s = transaction_details.inject(0) do |s, det|
           it = items.find {|i| i[0] === det.item_id }
           s += ( it[1].to_f/exchange_rate ).round(2) * det.quantity unless det.marked_for_destruction?
@@ -69,7 +92,7 @@ module Models::Transaction
         self.transaction_details.each{ |v| v.ctype = self.class.to_s }
       end
 
-      # Calculates the total value and stores it
+      # Calculates the real total value and stores it
       def calculate_total_and_set_balance
         self.tax_percent = taxes.inject(0) {|s, imp| s += imp.rate }
         self.gross_total = transaction_details.inject(0) {|s,det| s += det.total unless det.marked_for_destruction?; s}
@@ -79,10 +102,6 @@ module Models::Transaction
 
       def set_balance_inventory
         self.balance_inventory = total
-      end
-
-      def set_total_discount_amount
-
       end
 
     end
