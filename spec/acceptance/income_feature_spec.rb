@@ -22,24 +22,20 @@ feature "Income" do
     visit "/users/sign_in"
 
     fill_in "Email", :with => 'demo@example.com'
-    page.type "id=user_password", "demo123"
     fill_in "Contraseña", :with => 'demo123'
     click_button("Ingresar")
-
-    click_link "Ventas"
 
     page.current_path.should == '/dashboard'
 
     visit "/incomes"
-    click_link "Nueva ventNueva venta"
+    click_link "Nueva venta"
 
-    selector = '.ui-menu-item a:contains(\"Jack Russell Software\")'
-
+    #selector = '.ui-menu-item a:contains(\"Jack Russell Software\")'
     #fill_in 'Name', :with => 'Jack'
     #sleep(3)
     #page.execute_script " $('#{selector}'). trigger(\"mouseenter\").click();"
     click_link "Nuevo cliente"
-    fill_in "Cliente", :with => 'Juan perez'
+    fill_in "client_matchcode", :with => 'Juan perez'
     sleep(3)
   end
 
