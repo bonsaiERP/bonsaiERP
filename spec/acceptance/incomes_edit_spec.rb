@@ -23,12 +23,12 @@ feature "Income", "test features" do
       d = Date.today
       i_params = {"active"=>nil, "bill_number"=>"56498797", "contact_id" => client.id, 
         "exchange_rate"=>1, "currency_id"=>1, "date"=>d, 
-        "description"=>"Esto es una prueba", "discount" => 3, "project_id"=>1 
+        "description"=>"Esto es una prueba", "discount" => 0, "project_id"=>1 
       }
 
       details = [
-        { "description"=>"jejeje", "item_id"=>1, "organisation_id"=>1, "price"=>3, "quantity"=> 10},
-        { "description"=>"jejeje", "item_id"=>2, "organisation_id"=>1, "price"=>5, "quantity"=> 20}
+        { "description"=>"jejeje", "item_id"=>1, "price"=>3, "quantity"=> 10},
+        { "description"=>"jejeje", "item_id"=>2, "price"=>5, "quantity"=> 20}
       ]
       i_params[:transaction_details_attributes] = details
       i_params
@@ -41,12 +41,49 @@ feature "Income", "test features" do
      :email => true }.merge(options)
   end
 
-  scenario "Should not alow repeated items" do
-    data = income_params.dup
-    data[:transaction_details_attributes] << { "description"=>"jejeje", "item_id"=>1, "organisation_id"=>1, "price"=>3, "quantity"=> 2}
- 
-    i = Income.new(data)
-    i.save_trans.should be_false
-    i.errors[:base].should == [ I18n.t("errors.messages.transaction.repeated_items") ]
+  scenario "Edit a income after an edit" do
+    i = Income.new(income_params)
+    i.save_trans.should be_true
+
+    i.balance.should == 3 * 10 + 5 * 20
+    i.total.should == i.balance
+    i.should be_draft
+
+    # Approve de income
+    i.approve!.should be_true
+    i.should_not be_draft
+    i.should be_approved
+
+    i = Income.find(i.id)
+    p = i.new_payment(:account_id => bank_account.id, :base_amount => i.balance, :exchange_rate => 1, :reference => 'Cheque 143234', :operation => 'out')
+    i.save_payment
+    i.reload
+
+    p.should be_persisted
+    i.balance.should == 0
+    p.conciliate_account.should be_true
+    
+    bank_account.reload
+    bank_account.amount.should == p.amount
+    # Diminish the quantity in edit and the amount should go to the client account
+    i = Income.find(i.id)
+    edit_params = income_params.dup
+    edit_params[:transaction_details_attributes][0][:id] = i.transaction_details[0].id
+
+    edit_params[:transaction_details_attributes][1][:id] = i.transaction_details[1].id
+    edit_params[:transaction_details_attributes][1][:quantity] = 5
+    i.attributes = edit_params
+    i.save_trans#.should be_true
+    puts i.errors.messages
+
+    i.transaction_details[1].quantity.should == 5
+    i.balance.should == 3 * 10 + 5 * 5
+
+    #puts i.account_ledgers.last.reference
+    #puts i.account_ledgers.last.persisted?
+    #puts i.account_ledgers.last.errors.messages
+
+    ac = client.account_cur(i.currency_id)
+    ac.amount.should == i.balance - 5 * 15
   end
 end

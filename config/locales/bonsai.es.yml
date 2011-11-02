@@ -33,6 +33,7 @@ es:
         amount: "La cantidad que ingreso es mayor a la disponible en la cuenta"
       transaction:
         repeated_items: "Existen items repetidos, por favor revise"
+        unconcilied_ledgers: "Existen transacciones pendientes de revisión"
       inventory_operation_detail:
         stock_quantity: "La cantidad es mayor a la disponible en stock"
         transaction_quantity: "La cantidad ingresada es mayor a la de la operación"
@@ -47,9 +48,13 @@ es:
     Income: 
       class: "Venta"
       pay: "cobro"
+    income:
+      refund: "Reversión de fondos por cambios en la %{transaction}"
     Buy: 
       class: "Compra"
       pay: "pago"
+    buy:
+      refund: "Reversión de fondos por cambios en la %{transaction}"
     Expense:
       class: "Gasto"
       pay: "pago"

@@ -18,7 +18,7 @@ class Contact < ActiveRecord::Base
   has_many :accounts, :as => :accountable, :autosave => true, :dependent => :destroy
 
   validates_presence_of    :matchcode
-  #validates_uniqueness_of :code, :scope => :organisation_id
+
   validates_uniqueness_of  :matchcode, :scope => :organisation_id
 
   validates_format_of     :email,  :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :allow_blank => true

@@ -57,6 +57,7 @@ class Transaction < ActiveRecord::Base
   scope :nulled, where(:state => 'nulled')
 
   delegate :name, :symbol, :plural, :code, :to => :currency, :prefix => true
+  delegate :matchcode, :account_cur, :to => :contact, :prefix => true, :allow_nil => true
 
 
   # Define boolean methods for states

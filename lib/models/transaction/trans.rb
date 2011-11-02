@@ -18,10 +18,9 @@ module Models::Transaction
     included do
 
       with_options :if => :draft_trans? do |trans|
-        # validations
+        # Validations
         trans.validate :check_repated_items
-
-        trans.before_save :set_transaction_totals
+        #trans.before_save :set_transaction_totals
       end
 
       with_options :if => :approved_trans? do |trans|
@@ -35,10 +34,21 @@ module Models::Transaction
 
       if draft?
         def self.draft_trans?; true; end
-        details = TransactionDetails.new(self)
-        details.set_details
       else
         def self.approved_trans?; true; end
+      end
+
+      # Set details
+      details = TransactionDetails.new(self)
+      details.set_details
+
+      # Set totals
+      set_transaction_totals
+
+      # Edit transaction if necessary
+      unless draft?
+        edit_trans = Models::Transaction::EditApproved.new(self)
+        edit_trans.update
       end
 
       return false if details.has_errors?
@@ -46,60 +56,6 @@ module Models::Transaction
       self.save
     end
 
-    # Class that saves all details of data
-    class TransactionDetails
-      attr_reader :transaction, :transaction_details, :errors
-
-      def initialize(transaction)
-        @transaction         = transaction
-        @transaction_details = @transaction.transaction_details
-        # Indicates if the details have any errors
-        @errors              = false
-      end
-
-      def set_details
-        transaction_details.each do |td|
-          td.ctype          = self.class.to_s
-          td.price          = td.price.round(2)
-          td.quantity       = td.quantity.round(2)
-          td.original_price = item_prices[td.item_id]
-          # Validations
-          valid_item(td)
-        end
-      end
-
-      def item_prices
-        @prices ||= Hash[Item.org.where(:id => item_ids).values_of(:id, :price)]
-      end
-
-      def item_ids
-        transaction_details.map(&:item_id)
-      end
-
-      def has_errors?
-        @errors
-      end
-
-    private
-      def valid_item(td)
-        @keys ||= item_prices.keys
-        unless @keys.include?(td.item_id)
-          td.errors[:item_id] << I18n.t("errors.messages.invalidkeys")
-          @errors = true
-        end
-      end
-
-      def round_prices
-        transaction_details.each {|td| td.price = td.price.round(2)}
-      end
-
-      def set_original_prices
-        transaction_details.each do |td|
-          td.original_price = item_prices[td.item_id]
-        end
-      end
-
-    end
 
     module InstanceMethods
 

@@ -20,6 +20,10 @@ module Models::Transaction::Calculations
     account_ledgers.active.inject(0) {|sum, v| sum += (v.amount - v.interests_penalties) * v.exchange_rate }
   end
 
+  def total_paid
+    account_ledgers.con.inject(0) {|s,v| s+= v.amount_currency }
+  end
+
   def total_payments_with_interests
     account_ledgers.active.inject(0) {|sum, v| sum += v.amount_interests_currency }
   end

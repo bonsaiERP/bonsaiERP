@@ -211,7 +211,7 @@ PLATFORMS
 DEPENDENCIES
   bcrypt-ruby
   capybara
-  coffee-rails (~> 3.1.0)
+  coffee-rails (~> 3.1.1)
   database_cleaner
   factory_girl_rails
   ffaker (~> 1.8.0)
@@ -225,10 +225,10 @@ DEPENDENCIES
   mysql2
   prawn (~> 0.12.0)
   pry
-  rails (~> 3.1.0)
+  rails (~> 3.1.1)
   rspec-rails (~> 2.7.0)
   ruby-debug19 (~> 0.11.6)
-  sass-rails (~> 3.1.0)
+  sass-rails (~> 3.1.1)
   simple_form
   spork (~> 0.9.0.rc9)
   steak (~> 2.0.0)
