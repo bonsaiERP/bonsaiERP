@@ -35,7 +35,9 @@ feature "Income" do
     #sleep(3)
     #page.execute_script " $('#{selector}'). trigger(\"mouseenter\").click();"
     click_link "Nuevo cliente"
+    sleep(3)
     fill_in "client_matchcode", :with => 'Juan perez'
+    click_button "Salvar"
     sleep(3)
   end
 
