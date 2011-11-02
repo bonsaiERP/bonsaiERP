@@ -1,49 +1,49 @@
-- content_for :links do
-  %ul.breadcrumps
-    %li #{link_to "Proveedores", suppliers_path} <span>&gt;</span>
-  .links
-    = link_to 'Nuevo', new_supplier_path, :class => 'new'
-    = link_to 'Editar', edit_supplier_path(@supplier), :class => 'edit'
-    = link_to 'Borrar', @supplier, :class => 'delete'
-
-%h1
-  = @supplier.matchcode
-  %span.dashlet.fs50.bg_dark Proveedor
-
-
-.clear
-= render 'contacts/show', :klass => @supplier
-
-.clear
-- @supplier.accounts.each do |ac|
-  .moneybox.fl
-    %label Cuenta en #{ac.currency_symbol}
-    %h3= ntc -ac.amount
-
 - present @supplier, ContactPresenter do |presenter|
-  - presenter.incomes.each do |cur, amt|
-    .moneybox.fl 
-      %label.dark_green Saldo ventas #{cur}
-      %h3= ntc amt
+  - content_for :links do
+    %ul.breadcrumps
+      %li #{link_to "Proveedores", suppliers_path} <span>&gt;</span>
+    .links
+      = link_to 'Nuevo', new_supplier_path, :class => 'new'
+      = link_to 'Editar', edit_supplier_path(@supplier), :class => 'edit'
+      = link_to 'Borrar', @supplier, :class => 'delete'
 
-  - presenter.buys.each do |cur, amt|
-    .moneybox.fl 
-      %label.red Saldo compras #{cur}
-      %h3= ntc amt
-
-.clear
-
-= jquery_tabs :tab_id => "contact_tab" do
-  =jqueryui_ul do
-    =tab "Transacciones", supplier_path(@supplier, :tab => 'transactions'), "transactions"
-    =tab "Compras y gastos", supplier_path(@supplier, :tab => 'buys'),"buys"
-    =tab "Ventas", supplier_path(@supplier, :tab => 'incomes'),"incomes"
-    =tab "Operaciones inventarios", supplier_path(@client, :tab => 'inventory'), "inventory"
-    
-  = render @partial, @locals
+  %h1
+    = @supplier.matchcode
+    %span.dashlet.fs50.bg_dark Proveedor
 
 
-:javascript
-  $(function() {
-  });
+  .clear
+  = render 'contacts/show', :klass => @supplier
+
+  .clear
+  - @supplier.accounts.each do |ac|
+    = presenter.moneybox ac
+
+  - present @supplier, ContactPresenter do |presenter|
+    - presenter.incomes.each do |cur, amt|
+      .moneybox.fl 
+        %label.dark_green Saldo ventas #{cur}
+        %h3= ntc amt
+
+    - presenter.buys.each do |cur, amt|
+      .moneybox.fl 
+        %label.red Saldo compras #{cur}
+        %h3= ntc amt
+
+  .clear
+
+  = jquery_tabs :tab_id => "contact_tab" do
+    =jqueryui_ul do
+      =tab "Transacciones", supplier_path(@supplier, :tab => 'transactions'), "transactions"
+      =tab "Compras y gastos", supplier_path(@supplier, :tab => 'buys'),"buys"
+      =tab "Ventas", supplier_path(@supplier, :tab => 'incomes'),"incomes"
+      =tab "Operaciones inventarios", supplier_path(@client, :tab => 'inventory'), "inventory"
+      
+    -# "contacts/account_ledgers", "contacts/inconmes", "contacts/buys", "contacts/inventory_operations"
+    = render @partial, @locals
+
+
+  :javascript
+    $(function() {
+    });
 

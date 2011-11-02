@@ -4,7 +4,7 @@
 class TransactionDetail < ActiveRecord::Base
   acts_as_org
   # callbacks
-  after_initialize :set_defaults
+  #after_initialize :set_defaults
   #before_save      :set_original_price
   before_save      :set_balance, :if => 'transaction.draft?'
   

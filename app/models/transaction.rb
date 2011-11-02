@@ -17,13 +17,12 @@ class Transaction < ActiveRecord::Base
 
   ###############################
  
-  # callbacks
+  # Callbacks
   before_validation :set_defaults, :if => :new_record?
   before_create     :set_creator
   before_destroy    :null_transaction
 
-  # relationships
-  #belongs_to :account
+  # Relationships
   belongs_to :contact
   belongs_to :currency
   belongs_to :project
@@ -32,20 +31,19 @@ class Transaction < ActiveRecord::Base
   belongs_to :creditor, :class_name => "User"
   belongs_to :nuller,   :class_name => "User"
 
-  #has_one  :account_ledger, :conditions => "operation = 'transaction'"
-
-  has_many :pay_plans          , :dependent => :destroy , :order => "payment_date ASC", :autosave => true
-  has_many :transaction_details, :dependent => :destroy
-  has_many :account_ledgers    , :dependent => :destroy, :conditions => "operation != 'transaction'", :autosave => false
+  has_many :pay_plans           , :dependent => :destroy, :order => "payment_date ASC", :autosave => true
+  has_many :account_ledgers     , :dependent => :destroy, :conditions => "operation != 'transaction'", :autosave => false
   has_many :inventory_operations
 
-  has_and_belongs_to_many :taxes, :class_name => 'Tax'
-  # nested attributes
+  # Relation with nested attributes
+  has_many :transaction_details , :dependent => :destroy
   accepts_nested_attributes_for :transaction_details, :allow_destroy => true
 
-  # validations
-  #validates :account_id, :contact_account => true
-  validates :contact_id, :contact  => true
+  has_and_belongs_to_many :taxes, :class_name => 'Tax'
+
+
+  # Validations
+  validates :contact_id, :contact => {:clases => ["Client", "Supplier"]}
 
   # scopes
   scope :draft    , where(:state => 'draft')

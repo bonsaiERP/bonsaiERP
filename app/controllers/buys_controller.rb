@@ -40,7 +40,7 @@ class BuysController < ApplicationController
     else
       @transaction = Buy.new
       @transaction.set_defaults_new
-      @transaction.transaction_details.build
+      @transaction.transaction_details.build(:price => 0, :quantity => 0)
     end
   end
 

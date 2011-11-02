@@ -46,6 +46,7 @@ module Models::Transaction
       self.save
     end
 
+    # Class that saves all details of data
     class TransactionDetails
       attr_reader :transaction, :transaction_details
 

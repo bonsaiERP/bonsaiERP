@@ -32,8 +32,6 @@
       %th Vence el
       %th Total<br/>#{currency_symbol}
       %th Saldo<br/>#{currency_symbol}
-      %th.tip{:title => 'Saldo Inventario'} Saldo<br/>Inv. #{currency_symbol}
-      %th.tip{:title => 'Moneda'} Mon.
       %th.tip{:title => "Contado Crédito"} Tipo
       %th Fecha Hora
       %th
@@ -47,8 +45,6 @@
         %td= lo income.payment_date unless income.paid?
         %td.cur #{income.currency_symbol} #{ntc income.total }
         %td.cur #{income.currency_symbol} #{ntc income.balance }
-        %td.cur= ntc income.balance_inventory
-        %td <span>#{income.currency_symbol}</span>
         %td= cash_credit(income.cash)
         %td.nw= lo income.created_at
         %td.actions
