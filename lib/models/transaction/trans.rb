@@ -37,28 +37,35 @@ module Models::Transaction
         def self.draft_trans?; true; end
         details = TransactionDetails.new(self)
         details.set_details
-
-        #self.extend(ExtraMethods)
       else
         def self.approved_trans?; true; end
       end
+
+      return false if details.has_errors?
 
       self.save
     end
 
     # Class that saves all details of data
     class TransactionDetails
-      attr_reader :transaction, :transaction_details
+      attr_reader :transaction, :transaction_details, :errors
 
       def initialize(transaction)
-        @transaction = transaction
+        @transaction         = transaction
         @transaction_details = @transaction.transaction_details
+        # Indicates if the details have any errors
+        @errors              = false
       end
 
       def set_details
-        set_details_type
-        round_prices
-        set_original_prices
+        transaction_details.each do |td|
+          td.ctype          = self.class.to_s
+          td.price          = td.price.round(2)
+          td.quantity       = td.quantity.round(2)
+          td.original_price = item_prices[td.item_id]
+          # Validations
+          valid_item(td)
+        end
       end
 
       def item_prices
@@ -69,13 +76,21 @@ module Models::Transaction
         transaction_details.map(&:item_id)
       end
 
-    private
-      def round_prices
-        transaction_details.each {|td| td.price = td.price.round(2)}
+      def has_errors?
+        @errors
       end
 
-      def set_details_type
-        transaction_details.each{ |v| v.ctype = self.class.to_s }
+    private
+      def valid_item(td)
+        @keys ||= item_prices.keys
+        unless @keys.include?(td.item_id)
+          td.errors[:item_id] << I18n.t("errors.messages.invalidkeys")
+          @errors = true
+        end
+      end
+
+      def round_prices
+        transaction_details.each {|td| td.price = td.price.round(2)}
       end
 
       def set_original_prices

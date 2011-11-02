@@ -10,11 +10,11 @@ class TransactionDetail < ActiveRecord::Base
   
   attr_protected :original_price
 
-  # relationships
+  # Relationships
   belongs_to :transaction
   belongs_to :item
 
-  # validations
+  # Validations
   validates_presence_of :item_id
   validates_numericality_of :quantity, :greater_than => 0
 

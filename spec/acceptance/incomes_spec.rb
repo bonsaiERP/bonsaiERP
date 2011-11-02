@@ -41,13 +41,22 @@ feature "Income", "test features" do
      :email => true }.merge(options)
   end
 
-  scenario "Should not alow repeated items" do
+  # Not repeated items
+  # Not included items
+  scenario "Should not alow errors" do
     data = income_params.dup
     data[:transaction_details_attributes] << { "description"=>"jejeje", "item_id"=>1, "organisation_id"=>1, "price"=>3, "quantity"=> 2}
  
+    # Repeated items
     i = Income.new(data)
     i.save_trans.should be_false
     i.errors[:base].should == [ I18n.t("errors.messages.transaction.repeated_items") ]
+
+    # not included items
+    data[:transaction_details_attributes] = [{item_id: 1000, price: 3, quantity: 2}]
+    i = Income.new(data)
+    i.save_trans.should be_false
+    i.transaction_details[0].errors[:item_id].should_not be_empty
   end
 
   scenario "Create a payment with nearest pay_plan" do
