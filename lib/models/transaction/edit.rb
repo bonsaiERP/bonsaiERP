@@ -30,12 +30,14 @@ module Models::Transaction
     end
 
     def refund
-      account = transaction.contact_account_cur(transaction.currency_id)
+      @account = transaction.contact_account_cur(transaction.currency_id)
       amount  = old_transaction.total_paid - transaction.balance
       klass   = transaction.class.to_s.downcase
 
-      @current_ledger = account.account_ledgers.build(
-        :account_id => account.id,
+      @account.amount = -amount
+
+      @current_ledger = @account.account_ledgers.build(
+        :account_id => @account.id,
         :amount => amount,
         :exchange_rate => 1,
         :transaction_id => transaction.id,
@@ -43,10 +45,23 @@ module Models::Transaction
         :operation => refund_operation
       ) {|al| 
         al.conciliation = true
-        al.currency_id = account.currency_id
+        al.currency_id = @account.currency_id
       }
 
-      puts @current_ledger.attributes
+      #@current_ledger.save
+      #account.save
+    end
+
+    def save
+      res = true
+      transaction.class.transaction do
+        res = @current_ledger.save if @current_ledger
+        res = @account.save && res if @account
+        res = transaction.save
+        raise ActiveRecord::Rollback unless res
+      end
+
+      res
     end
 
     def refund_operation

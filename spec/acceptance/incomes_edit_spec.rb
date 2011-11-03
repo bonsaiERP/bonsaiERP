@@ -75,6 +75,62 @@ feature "Income", "test features" do
 
     edit_params[:transaction_details_attributes][1][:id] = i.transaction_details[1].id
     edit_params[:transaction_details_attributes][1][:quantity] = 5
+    edit_params[:transaction_details_attributes][1][:price] = 5.5
+    i.attributes = edit_params
+    i.save_trans.should be_true
+    i.reload
+    
+    i.transaction_histories.should_not be_empty
+    hist = i.transaction_histories.first
+    hist.user_id.should == i.modified_by
+
+    i.transaction_details[1].quantity.should == 5
+    i.balance.should == 3 * 10 + 5 * 5.5
+
+    hist.data[:transaction_details][0][:quantity].should == 10
+    hist.data[:transaction_details][1][:quantity].should == 20
+    hist.data[:transaction_details][1][:price].should == 5
+
+    i.transaction_details[1].price.should == 5.5
+  end
+
+
+  scenario "Edit a income, pay and check that the client has the amount" do
+    i = Income.new(income_params)
+    i.save_trans.should be_true
+
+    i.balance.should == 3 * 10 + 5 * 20
+    bal = i.balance
+
+    i.total.should == i.balance
+    i.should be_draft
+    i.transaction_histories.should be_empty
+    i.modified_by.should == UserSession.user_id
+
+    # Approve de income
+    i.approve!.should be_true
+    i.should_not be_draft
+    i.should be_approved
+
+
+    i = Income.find(i.id)
+    p = i.new_payment(:account_id => bank_account.id, :base_amount => i.balance, :exchange_rate => 1, :reference => 'Cheque 143234', :operation => 'out')
+    i.save_payment
+    i.reload
+
+    p.should be_persisted
+    i.balance.should == 0
+    p.conciliate_account.should be_true
+    
+    bank_account.reload
+    bank_account.amount.should == p.amount
+    # Diminish the quantity in edit and the amount should go to the client account
+    i = Income.find(i.id)
+    edit_params = income_params.dup
+    edit_params[:transaction_details_attributes][0][:id] = i.transaction_details[0].id
+
+    edit_params[:transaction_details_attributes][1][:id] = i.transaction_details[1].id
+    edit_params[:transaction_details_attributes][1][:quantity] = 5
     i.attributes = edit_params
     i.save_trans.should be_true
     i.reload
@@ -86,18 +142,7 @@ feature "Income", "test features" do
     i.transaction_details[1].quantity.should == 5
     i.balance.should == 3 * 10 + 5 * 5
 
-    hist.data[:transaction_details][0][:quantity]
-    income_params[:transaction_details_attributes].each_with_index do |det, i|
-      hist.data[:transaction_details][i][:item_id].should == det[:item_id]
-      hist.data[:transaction_details][i][:quantity].should == det[:quantity]
-      hist.data[:transaction_details][i][:price].should == det[:price]
-    end
-
-    #puts i.account_ledgers.last.reference
-    #puts i.account_ledgers.last.persisted?
-    #puts i.account_ledgers.last.errors.messages
-
-    #ac = client.account_cur(i.currency_id)
-    #ac.amount.should == i.balance - 5 * 15
+    ac = client.account_cur(i.currency_id)
+    ac.amount.should == -(bal - i.balance)
   end
 end

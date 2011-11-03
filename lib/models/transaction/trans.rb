@@ -52,7 +52,7 @@ module Models::Transaction
 
       return false if details.has_errors?
 
-      self.save
+      edit_trans.save
     end
 
 
