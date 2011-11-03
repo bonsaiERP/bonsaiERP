@@ -1,6 +1,6 @@
 = simple_form_for(@cash) do |f|
   = bonsai_form_error(f)
-  .main.bg_light_grey
+  .main.bg-light-grey
     ._40.fl
       = f.input :name, :label => 'Nombre de caja'
     -if @cash.new_record?

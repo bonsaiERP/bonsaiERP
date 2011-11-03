@@ -1,7 +1,7 @@
 - present klass, ContactPresenter do |presenter|
   = simple_form_for(klass) do |f|
     = bonsai_form_error(f)
-    .main.bg_light_grey
+    .main.bg-light-grey
       = f.input :matchcode, :label => presenter.label, :input_html => { :class => 'matchcode' }
       .clear
     .clear

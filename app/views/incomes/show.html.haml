@@ -37,7 +37,7 @@
   - if transaction.draft?
     = simple_form_for @income, :url => approve_income_path(@income) do |f|
       .submit
-        =f.submit "Aprobar", :class => 'dark_green', :id => 'income_approve_button'
+        =f.submit "Aprobar", :class => 'dark-green', :id => 'income_approve_button'
 
 .clear
 #tabs
@@ -59,7 +59,7 @@
 
       - if @income.project_id
         .input
-          %span.dark_grey 
+          %span.dark-grey 
             -if @income.project_id
               Proyecto #{link_to @income.project.to_s, @income.project, :title => 'Proyecto'}
     .input= @income.description unless @income.description.blank?

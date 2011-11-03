@@ -10,7 +10,7 @@
 
   %h1
     = @client.matchcode
-    %span.dashlet.fs50.bg_dark Cliente
+    %span.dashlet.fs50.bg-dark Cliente
 
   .clear
   = render 'contacts/show', :klass => @client
@@ -22,7 +22,7 @@
   - present @client, ContactPresenter do |presenter|
     - presenter.incomes.each do |cur, amt|
       .moneybox.fl 
-        %label.dark_green Saldo ventas #{cur}
+        %label.dark-green Saldo ventas #{cur}
         %h3= ntc amt
 
     - presenter.buys.each do |cur, amt|

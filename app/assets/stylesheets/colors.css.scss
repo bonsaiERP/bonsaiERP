@@ -23,21 +23,20 @@ $dark_yellow:#D0D02A;
 $link: #095495;
 
 .red{ color: $red !important; }
-.bg_red{ background-color: $red !important; }
 .grey{ color: $grey !important; }
-.dark_grey{ color: $dark_grey !important; }
+.dark-grey{ color: $dark_grey !important; }
 .green{ color: $green !important; }
-//.dark_green{ color: $dark_green; }
-.dark_green{ color: darken($green, 15%) !important; }
+.dark-green{ color: darken($green, 15%) !important; }
+.dark-red{ color: darken($red, 25%) !important; }
 .black{ color: $black; }
 
-.bg_red{ background-color: $red !important; }
-.bg_green{ background-color: $green !important; }
-.bg_dark_green{ background-color: darken($green, 15) !important; }
-.bg_grey{ background-color: $grey !important; }
-.bg_dark_grey{ background-color: darken($grey, 15%) !important; }
-.bg_light_grey{ background-color: $light_grey !important; }
-.bg_white_tan{ background-color: $white_tan !important; }
-.bg_white{ background-color: $white !important; }
-.bg_dark{ background-color: $dark !important; }
-.bg_dark2{ background-color: lighten($dark,20%) !important; }
+.bg-red{ background-color: $red !important; }
+.bg-green{ background-color: $green !important; }
+.bg-dark-green{ background-color: darken($green, 15%) !important; }
+.bg-grey{ background-color: $grey !important; }
+.bg-dark-grey{ background-color: darken($grey, 15%) !important; }
+.bg-light-grey{ background-color: $light_grey !important; }
+.bg-white-tan{ background-color: $white_tan !important; }
+.bg-white{ background-color: $white !important; }
+.bg-dark{ background-color: $dark !important; }
+.bg-dark2{ background-color: lighten($dark,20%) !important; }

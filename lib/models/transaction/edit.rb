@@ -55,10 +55,10 @@ module Models::Transaction
 
     def create_history
       @history = transaction.transaction_histories.build
-      @history.data = old_transaction.attributes
+      @history.data = old_transaction.attributes.symbolize_keys
       @history.data[:taxis_ids] = old_transaction.taxis_ids
       @history.user_id = old_transaction.modified_by
-      @history.data[:transaction_details] = old_transaction.transaction_details.map(&:attributes)
+      @history.data[:transaction_details] = old_transaction.transaction_details.map {|v| v.attributes.symbolize_keys }
     end
 
   end

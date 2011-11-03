@@ -11,7 +11,7 @@
     = link_to 'Borrar', contact_account_type_link(@account, :destroy), :class => 'delete'
 
 %h1{:style => 'display:inline-block'}= @account.name
-%span.dashlet.b.bg_dark= @account.accountable.show_type
+%span.dashlet.b.bg-dark= @account.accountable.show_type
 .clear
 
 = render 'contacts/show', :klass => @account.accountable

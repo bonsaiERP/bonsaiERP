@@ -9,7 +9,7 @@
 
   %h1
     = @supplier.matchcode
-    %span.dashlet.fs50.bg_dark Proveedor
+    %span.dashlet.fs50.bg-dark Proveedor
 
 
   .clear
@@ -22,7 +22,7 @@
   - present @supplier, ContactPresenter do |presenter|
     - presenter.incomes.each do |cur, amt|
       .moneybox.fl 
-        %label.dark_green Saldo ventas #{cur}
+        %label.dark-green Saldo ventas #{cur}
         %h3= ntc amt
 
     - presenter.buys.each do |cur, amt|

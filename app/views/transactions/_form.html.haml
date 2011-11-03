@@ -8,7 +8,7 @@
 - present transaction, TransactionPresenter do |presenter|
   = simple_form_for(transaction, :html => {:id => 'transaction_form', :class => 'enter'}) do |f|
     = bonsai_form_error(f)
-    .main.bg_light_grey
+    .main.bg-light-grey
       ._50.fl
         = f.input :ref_number, :label => 'Nº de referencia', :input_html => {:size => 20}
         .input
@@ -102,7 +102,7 @@
       = f.submit 'Salvar'
 
   #currency_form.ajax-modal
-    %h3.red Advertencia !. Los precios de los items se actualizaran según el tipo de cambio que seleccione
+    %h3.red Advertencia! El tipo de cambio se aplicará al precio original
     
     %label Tipo de cambio
     %span.currency_symbol.b

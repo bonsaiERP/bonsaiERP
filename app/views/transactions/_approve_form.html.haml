@@ -1,6 +1,6 @@
 = simple_form_for @transaction, :url => "/#{params[:controller]}/#{ @transaction.id }/approve", :html => {:id => 'approve_form'} do |f|
   .submit
-    =f.submit "Aprobar", :class => 'dark_green', :id => 'income_approve_button'
+    =f.submit "Aprobar", :class => 'dark-green', :id => 'income_approve_button'
 :javascript
   $(function() {
     $('#approve_form').submit(function() {
