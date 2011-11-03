@@ -6,7 +6,7 @@ class UserPresenter < BasePresenter
 
   def edit_link
     if h.session[:user][:rol] === "admin"
-      h.link_to "Editar datos", edit_user_path(@user), :class => 'edit'
+      h.link_to "Editar datos", edit_user_user_path(@user), :class => 'edit'
     end
   end
 
