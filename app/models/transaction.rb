@@ -115,9 +115,15 @@ class Transaction < ActiveRecord::Base
       t = Buy.new( attributes )
     end
 
+    item_prices = Models::Transaction::TransactionDetails.new(self).item_prices
+
     transaction_details.each do |det|
-      t.transaction_details.build(:item_id => det.item_id, :quantity => det.quantity, :price => det.price) {|d|
-        d.original_price = det.original_price
+      t.transaction_details.build(
+        :item_id => det.item_id,
+        :quantity => det.quantity, 
+        :price => det.price
+      ) {|d|
+        d.original_price = item_prices[det.item_id]
       }
     end
 

@@ -8,6 +8,10 @@ class TransactionPresenter < BasePresenter
     h.link_to "Editar", "/#{h.params[:controller]}/#{transaction.id}/edit", :class => 'edit' if allow_action?
   end
 
+  def clone_link
+    h.link_to "Duplicar", "/#{h.params[:controller]}/new?transaction_id=#{transaction.id}", :class => 'duplicate' if allow_action?
+  end
+
   def null_link
       h.link_to 'Anular', transaction, :class => 'delete', :confirm => 'Esta seguro de anular?' if transaction.draft?
   end

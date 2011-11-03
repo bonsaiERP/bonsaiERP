@@ -5,6 +5,7 @@
 
     .links
       = link_to 'Nueva', "/#{params[:controller]}/new", :class => 'add'
+      = presenter.clone_link
       = presenter.edit_link
       = presenter.null_link
   .clear

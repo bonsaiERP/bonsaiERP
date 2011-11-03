@@ -52,6 +52,7 @@ class ExchangeRate extends Backbone.Model
   chageCurrencyEvent: ->
     self = @
 
+    # Triggers the suggested:rate Event
     $(@observe)
     .die('change keyup focusout')
     .live 'change keyup focusout', ->
@@ -63,9 +64,14 @@ class ExchangeRate extends Backbone.Model
         when $(@).val().match /^\d+$/
           val = $(@).val() * 1
           self.set({currency: self.currencies[self.accounts[val].currency_id]})
+          from = self.currencies[self.currency_id].code
+          to   = self.get("currency").code
+          rate = fx.convert(1, {from: from, to: to}) || self.get("rate")
         else
           self.$hide.hide 'slow'
+          rate = 1
 
+      self.$input.trigger('suggested:rate', [rate])
   # set the rate
   setRate: ->
     @$input.val(@.get("rate")).mark()

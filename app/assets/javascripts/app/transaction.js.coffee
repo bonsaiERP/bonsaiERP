@@ -253,6 +253,7 @@ class TransactionModel extends Backbone.Model
     # Exchange rate
     @.bind("change:exchange_rate", ->
       $('#transaction_exchange_rate').val(self.get("exchange_rate"))
+      $('#exchange_rate').val(self.get("exchange_rate"))
       @items.changeRate()
     )
 
@@ -282,8 +283,12 @@ class TransactionModel extends Backbone.Model
   #exchabge rate Event
   currencyEvent: ->
     self = @
-    $('#transaction_currency_id').bind 'change keyup', (event)->
-      self.set({currency_id: $(this).val() * 1})
+    $('#exchange_rate').live 'suggested:rate', (event, rate)->
+      rate = 1/rate
+      currency_id = $('#transaction_currency_id').val() * 1
+      self.set({currency_id: currency_id, exchange_rate: rate.round(4)})
+    #$('#transaction_currency_id').bind 'change keyup', (event)->
+    #  self.set({currency_id: $(this).val() * 1})
   # Sets the discount
   setDiscount: ->
     discount = @.get("subtotal") * @.get("discount")
