@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111020162732) do
+ActiveRecord::Schema.define(:version => 20111103164257) do
 
   create_table "account_currencies", :force => true do |t|
     t.integer  "organisation_id"
@@ -468,6 +468,17 @@ ActiveRecord::Schema.define(:version => 20111020162732) do
   add_index "transaction_details", ["organisation_id"], :name => "index_transaction_details_on_organisation_id"
   add_index "transaction_details", ["transaction_id"], :name => "index_transaction_details_on_transaction_id"
 
+  create_table "transaction_histories", :force => true do |t|
+    t.integer  "transaction_id"
+    t.integer  "user_id"
+    t.text     "data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "transaction_histories", ["transaction_id"], :name => "index_transaction_histories_on_transaction_id"
+  add_index "transaction_histories", ["user_id"], :name => "index_transaction_histories_on_user_id"
+
   create_table "transactions", :force => true do |t|
     t.integer  "account_id"
     t.string   "type",                :limit => 20
@@ -509,6 +520,7 @@ ActiveRecord::Schema.define(:version => 20111020162732) do
     t.boolean  "delivered",                                                         :default => false
     t.decimal  "original_total",                     :precision => 14, :scale => 2
     t.boolean  "discounted",                                                        :default => false
+    t.integer  "modified_by"
   end
 
   add_index "transactions", ["account_id"], :name => "index_transactions_on_account_id"
@@ -524,6 +536,7 @@ ActiveRecord::Schema.define(:version => 20111020162732) do
   add_index "transactions", ["deliver_approver_id"], :name => "index_transactions_on_deliver_approver_id"
   add_index "transactions", ["delivered"], :name => "index_transactions_on_delivered"
   add_index "transactions", ["discounted"], :name => "index_transactions_on_discounted"
+  add_index "transactions", ["modified_by"], :name => "index_transactions_on_modified_by"
   add_index "transactions", ["nuller_id"], :name => "index_transactions_on_nuller_id"
   add_index "transactions", ["organisation_id"], :name => "index_transactions_on_organisation_id"
   add_index "transactions", ["payment_date"], :name => "index_transactions_on_payment_date"
@@ -556,7 +569,7 @@ ActiveRecord::Schema.define(:version => 20111020162732) do
     t.string   "confirmation_token",      :limit => 20
     t.datetime "confirmation_sent_at"
     t.datetime "confirmed_at"
-    t.string   "reset_password_token"
+    t.string   "reset_password_token",    :limit => 20
     t.datetime "reset_password_sent_at"
     t.datetime "reseted_password_at"
     t.integer  "sign_in_count",                          :default => 0

@@ -30,6 +30,7 @@ class Transaction < ActiveRecord::Base
   belongs_to :approver, :class_name => "User"
   belongs_to :creditor, :class_name => "User"
   belongs_to :nuller,   :class_name => "User"
+  belongs_to :modifier, :class_name => "User", :foreign_key => :modified_by
 
   has_many :pay_plans           , :dependent => :destroy, :order => "payment_date ASC", :autosave => true
   has_many :account_ledgers     , :dependent => :destroy, :conditions => "operation != 'transaction'", :autosave => false
@@ -38,6 +39,9 @@ class Transaction < ActiveRecord::Base
   # Relation with nested attributes
   has_many :transaction_details , :dependent => :destroy
   accepts_nested_attributes_for :transaction_details, :allow_destroy => true
+
+  # History
+  has_many :transaction_histories, :autosave => true, :dependent => :destroy
 
   has_and_belongs_to_many :taxes, :class_name => 'Tax'
 

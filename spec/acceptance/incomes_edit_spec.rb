@@ -41,40 +41,50 @@ feature "Income", "test features" do
      :email => true }.merge(options)
   end
 
-  scenario "Edit a income after an edit" do
+  scenario "Edit a income and save history" do
     i = Income.new(income_params)
     i.save_trans.should be_true
 
     i.balance.should == 3 * 10 + 5 * 20
     i.total.should == i.balance
     i.should be_draft
+    i.transaction_histories.should be_empty
+    i.modified_by.should == UserSession.user_id
 
     # Approve de income
     i.approve!.should be_true
     i.should_not be_draft
     i.should be_approved
 
-    i = Income.find(i.id)
-    p = i.new_payment(:account_id => bank_account.id, :base_amount => i.balance, :exchange_rate => 1, :reference => 'Cheque 143234', :operation => 'out')
-    i.save_payment
-    i.reload
 
-    p.should be_persisted
-    i.balance.should == 0
-    p.conciliate_account.should be_true
-    
-    bank_account.reload
-    bank_account.amount.should == p.amount
-    # Diminish the quantity in edit and the amount should go to the client account
     i = Income.find(i.id)
+    i_old = i.dup
+    #p = i.new_payment(:account_id => bank_account.id, :base_amount => i.balance, :exchange_rate => 1, :reference => 'Cheque 143234', :operation => 'out')
+    #i.save_payment
+    #i.reload
+
+    #p.should be_persisted
+    #i.balance.should == 0
+    #p.conciliate_account.should be_true
+    #
+    #bank_account.reload
+    #bank_account.amount.should == p.amount
+    ## Diminish the quantity in edit and the amount should go to the client account
+    #i = Income.find(i.id)
     edit_params = income_params.dup
     edit_params[:transaction_details_attributes][0][:id] = i.transaction_details[0].id
 
     edit_params[:transaction_details_attributes][1][:id] = i.transaction_details[1].id
     edit_params[:transaction_details_attributes][1][:quantity] = 5
     i.attributes = edit_params
-    i.save_trans#.should be_true
-    puts i.errors.messages
+    i.save_trans.should be_true
+    i.reload
+    
+    i.transaction_histories.should_not be_empty
+    hist = i.transaction_histories.first
+    hist.user_id.should == i.modified_by
+    #puts i.errors.messages
+    #hist.data[:]
 
     i.transaction_details[1].quantity.should == 5
     i.balance.should == 3 * 10 + 5 * 5
@@ -83,7 +93,7 @@ feature "Income", "test features" do
     #puts i.account_ledgers.last.persisted?
     #puts i.account_ledgers.last.errors.messages
 
-    ac = client.account_cur(i.currency_id)
-    ac.amount.should == i.balance - 5 * 15
+    #ac = client.account_cur(i.currency_id)
+    #ac.amount.should == i.balance - 5 * 15
   end
 end

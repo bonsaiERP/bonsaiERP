@@ -38,6 +38,7 @@ module Models::Transaction
         def self.approved_trans?; true; end
       end
 
+      self.modified_by = UserSession.user_id
       # Set details
       details = TransactionDetails.new(self)
       details.set_details
@@ -46,10 +47,8 @@ module Models::Transaction
       set_transaction_totals
 
       # Edit transaction if necessary
-      unless draft?
-        edit_trans = Models::Transaction::EditApproved.new(self)
-        edit_trans.update
-      end
+      edit_trans = Models::Transaction::Edit.new(self)
+      edit_trans.update
 
       return false if details.has_errors?
 
