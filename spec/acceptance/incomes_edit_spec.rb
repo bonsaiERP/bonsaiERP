@@ -58,7 +58,6 @@ feature "Income", "test features" do
 
 
     i = Income.find(i.id)
-    i_old = i.dup
     #p = i.new_payment(:account_id => bank_account.id, :base_amount => i.balance, :exchange_rate => 1, :reference => 'Cheque 143234', :operation => 'out')
     #i.save_payment
     #i.reload
@@ -83,11 +82,16 @@ feature "Income", "test features" do
     i.transaction_histories.should_not be_empty
     hist = i.transaction_histories.first
     hist.user_id.should == i.modified_by
-    #puts i.errors.messages
-    #hist.data[:]
 
     i.transaction_details[1].quantity.should == 5
     i.balance.should == 3 * 10 + 5 * 5
+
+    hist.data[:transaction_details][0][:quantity]
+    income_params[:transaction_details_attributes].each_with_index do |det, i|
+      hist.data[:transaction_details][i][:item_id].should == det[:item_id]
+      hist.data[:transaction_details][i][:quantity].should == det[:quantity]
+      hist.data[:transaction_details][i][:price].should == det[:price]
+    end
 
     #puts i.account_ledgers.last.reference
     #puts i.account_ledgers.last.persisted?
