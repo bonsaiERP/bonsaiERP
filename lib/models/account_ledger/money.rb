@@ -13,7 +13,7 @@ module Models::AccountLedger::Money
       # callbacks
       trans.before_validation :set_exchange_rate
       trans.before_validation :set_or_create_contact_account, :unless => :trans?
-      trans.before_create :valid_amount
+      trans.before_create :valid_amount?
       trans.before_save :valid_money_accounts
       trans.before_create :set_ledger_amount
     end
@@ -174,14 +174,6 @@ module Models::AccountLedger::Money
       end
     end
 
-    # Valid amount
-    def valid_amount
-      if (out? or trans?) and account.amount < amount.abs
-        errors[:base] << I18n.t("errors.messages.account_ledger.amount") 
-        errors[:amount] << I18n.t("errors.messages.account_ledger.amount")
-        return false
-      end
-    end
 
   end
 

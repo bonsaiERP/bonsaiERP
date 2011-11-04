@@ -55,18 +55,19 @@ feature "Test account ledger", "for in outs and transferences" do
 
     UserSession.current_user = User.new{|u| u.id= 2}
 
-    al.conciliate_account
+    al.conciliate_account.should be_true
 
     al.conciliation.should == true
     al.reload
 
     al.approver_id.should == 2
     al.approver_datetime.kind_of?(Time).should == true
-    al.account_balance.should == 100
-    al.to_balance.should == -100
-
+    
     al.account.amount.should == 100
     al.to.amount.should == -100
+
+    al.account_balance.should == 100
+    al.to_balance.should == -100
 
   end
 
@@ -152,6 +153,8 @@ feature "Test account ledger", "for in outs and transferences" do
 
     c = Cash.create!(:name => 'Cash 1', :currency_id => 2)
     c_ac_id = c.account.id
+    c.account_amount.should == 0
+
     valid_params[:operation] = 'trans'
     valid_params[:to_id] = c_ac_id
     valid_params[:exchange_rate] = 0.5
@@ -166,13 +169,15 @@ feature "Test account ledger", "for in outs and transferences" do
     al.account.amount.should == 100
     al.to.amount.should == 0
 
-    al.conciliate_account#.should == true
+    al.conciliate_account.should == true
 
     al.reload
 
     al.account.amount.should == 0
     al.to.amount.should == 50
 
+    al.account_balance.should == 0
+    al.to_balance.should == 50
   end
 
   scenario "Make serveral in/outs for one account and check that the balance is right" do

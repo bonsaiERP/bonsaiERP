@@ -238,6 +238,17 @@ class AccountLedger < ActiveRecord::Base
     (amount - interests_penalties).abs
   end
 
+  # Valid amount
+  def valid_amount?
+    if (out? or trans?) and account.amount < amount.abs
+      errors[:base] << I18n.t("errors.messages.account_ledger.amount") 
+      errors[:amount] << I18n.t("errors.messages.account_ledger.amount")
+      false
+    else
+      true
+    end
+  end
+
   private
 
   # The sum should be equal

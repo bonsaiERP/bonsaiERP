@@ -117,15 +117,23 @@ feature "Income", "test features" do
     i.save_payment
     i.reload
 
+    i.should_not be_deliver
     i.should be_paid
     p.should be_persisted
     i.balance.should == 0
+    puts "-"*90
+    p.transaction_id.should == i.id
     p.conciliate_account.should be_true
     
     bank_account.reload
     bank_account.amount.should == p.amount
     # Diminish the quantity in edit and the amount should go to the client account
     i = Income.find(i.id)
+
+    i.account_ledgers.pendent.should be_empty
+    i.balance.should == 0
+    i.should be_deliver
+
     edit_params = income_params.dup
     edit_params[:transaction_details_attributes][0][:id] = i.transaction_details[0].id
 
@@ -161,7 +169,56 @@ feature "Income", "test features" do
     i.reload
 
     i.should be_approved
+    i.should_not be_deliver
     i.total.should ==  3 * 10 + 5 * 5.1
     i.balance.should ==  5 * 0.1
+
+    # Change to  paid when changed again with the price
+    i = Income.find(i.id)
+    edit_params = income_params.dup
+    edit_params[:transaction_details_attributes][0][:id] = i.transaction_details[0].id
+
+    edit_params[:transaction_details_attributes][1][:id] = i.transaction_details[1].id
+    edit_params[:transaction_details_attributes][1][:quantity] = 5
+
+    i.attributes = edit_params
+    i.save_trans.should be_true
+    i.reload
+
+    i.should be_paid
+    i.total.should ==  3 * 10 + 5 * 5
+    i.balance.should ==  0
+  end
+
+  scenario "check the number of items" do
+    i = Income.new(income_params)
+    i.save_trans.should be_true
+
+    i.balance.should == 3 * 10 + 5 * 20
+    bal = i.balance
+
+    i.total.should == i.balance
+    i.should be_draft
+    i.transaction_histories.should be_empty
+    i.modified_by.should == UserSession.user_id
+
+    # Approve de income
+    i.approve!.should be_true
+    i.should_not be_draft
+    i.should be_approved
+
+
+    i = Income.find(i.id)
+    p = i.new_payment(:account_id => bank_account.id, :base_amount => i.balance, :exchange_rate => 1, :reference => 'Cheque 143234', :operation => 'out')
+    i.save_payment
+    i.reload
+
+    i.should be_paid
+    p.should be_persisted
+    i.balance.should == 0
+    p.conciliate_account.should be_true
+    
+    p.should be_conciliation
+
   end
 end
