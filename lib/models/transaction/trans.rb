@@ -43,9 +43,6 @@ module Models::Transaction
       details = TransactionDetails.new(self)
       details.set_details
 
-      # Set totals
-      set_transaction_totals
-
       # Edit transaction if necessary
       edit_trans = Models::Transaction::Edit.new(self)
 
@@ -57,34 +54,8 @@ module Models::Transaction
 
     module InstanceMethods
 
-    private
+      private
       
-      def set_transaction_totals
-        calculate_total_and_set_balance
-        calculate_orinal_total
-      end
-
-      def calculate_orinal_total
-        s = transaction_details.inject(0) do |s, det|
-          s += ( det.original_price.to_f/exchange_rate ).round(2) * det.quantity unless det.marked_for_destruction?
-          s
-        end
-
-        t_taxes = tax_percent/100 * s
-        s += t_taxes
-        self.discounted = (s == total ? false : true)
-
-        self.original_total = s
-      end
-
-      # Calculates the real total value and stores it
-      def calculate_total_and_set_balance
-        self.tax_percent = taxes.inject(0) {|s, imp| s += imp.rate }
-        self.gross_total = transaction_details.inject(0) {|s,det| s += det.total unless det.marked_for_destruction?; s}
-        self.total = gross_total - total_discount + total_taxes
-        self.balance = total if total > 0
-      end
-
       def check_repated_items
         h = Hash.new(0)
         transaction_details.each do |det|
