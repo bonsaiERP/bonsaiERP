@@ -20,16 +20,16 @@ module Models::AccountLedger::Conciliation
     end
 
     def conciliate
-      return false unless @account_ledger.valid_amount?
+      return false unless account_ledger.valid_amount?
       return false unless can_conciliate?
 
-      @account_ledger.approver_id = UserSession.user_id
-      @account_ledger.approver_datetime = Time.zone.now
+      account_ledger.approver_id = UserSession.user_id
+      account_ledger.approver_datetime = Time.zone.now
 
       update_related_accounts
-      @account_ledger.conciliation = true
+      account_ledger.conciliation = true
 
-      @account_ledger.save
+      account_ledger.save
     end
 
     protected
@@ -40,11 +40,11 @@ module Models::AccountLedger::Conciliation
     end
 
     def update_related_accounts
-      @account_ledger.account.amount += @account_ledger.amount
-      @account_ledger.to.amount      += -(@account_ledger.amount * @account_ledger.exchange_rate)
+      account_ledger.account.amount += account_ledger.amount
+      account_ledger.to.amount      += -(account_ledger.amount * account_ledger.exchange_rate)
 
-      @account_ledger.account_balance = @account_ledger.account.amount
-      @account_ledger.to_balance      = @account_ledger.to.amount
+      account_ledger.account_balance = account_ledger.account.amount
+      account_ledger.to_balance      = account_ledger.to.amount
     end
 
   end
@@ -63,65 +63,80 @@ module Models::AccountLedger::Conciliation
       return false unless valid_amount?
       return false unless can_conciliate?
 
-      @account_ledger.approver_id = UserSession.user_id
-      @account_ledger.approver_datetime = Time.zone.now
+      account_ledger.approver_id = UserSession.user_id
+      account_ledger.approver_datetime = Time.zone.now
 
       update_related_accounts
-      @account_ledger.conciliation = true
+      account_ledger.conciliation = true
+      
+      set_transaction_deliver unless @transaction.deliver?
+      res = true
 
-      @account_ledger.save
+      account_ledger.class.transaction do
+        res = account_ledger.save
+        res = transaction.save && res if transaction.changed?
+        raise ActiveRecord::Rollback unless res
+      end
+
+      res
     end
 
     protected
+
+    def set_transaction_deliver
+      tot = transaction.account_ledgers.pendent.count
+      return if tot > 1
+
+      al = transaction.account_ledgers.pendent.first
+      if al.id === account_ledger.id and transaction.balance === 0
+        transaction.deliver = true
+      end
+    end
+
+    def update_related_accounts
+      @account_ledger.account.amount += @account_ledger.amount
+      @account_ledger.account_balance = @account_ledger.account.amount
+    end
+
+    # Check valid amount depending the transaction
+    def valid_amount?
+
+      case @account_ledger.account_accountable_type
+        when "MoneyStore"
+          if @account_ledger.out?
+            return false unless @account_ledger.valid_amount?
+          end
+
+          true
+        when "Contact"
+          return false unless valid_contact_amount?
+
+          true
+        else
+          @account_ledger.errors[:account_id] << I18n.t("errors.messages.inclusion")
+          false
+      end
+    end
 
     def update_related_accounts
       @account_ledger.account.amount += @account_ledger.amount
     end
 
-    # Check valid amount depending the transaction
-    def valid_amount?
-      account_type = 
-
-      case @account_ledger.account_accountable_type
-        when "MoneyStore"
-        when "Contact"
-        else
-          @account_ledger.errors[:account_id] << I18n.t("errors.messages.inclusion")
-          false
-      end
-      if @account_ledger.in?
-
-      end
-    ##########################################
-    if (out? or trans?) and account.amount < amount.abs
-      errors[:base] << I18n.t("errors.messages.account_ledger.amount") 
-      errors[:amount] << I18n.t("errors.messages.account_ledger.amount")
-      false
-    else
-      true
-    end
-    end
-
-    def update_related_accounts
-      account.amount += amount
-    end
-
     # Validates the amount for a contact depending the amount
-    def valid_contact_amount
-      if @account_ledger.currency_id and @account_ledger.exchange_rate > 0 and @account_ledger.account_id.present?
-
-        if @account_ledger.in?
-          if account.accountable_type === 'Contact' and account.amount.abs < amount
-            @account_ledger.errors[:amount]  << I18n.t("errors.messages.account_ledger.amount")
-            @account_ledger.errors[:base]  << I18n.t("errors.messages.account_ledger.amount")
-          end
-        elsif @account_ledger.out? or @account_ledger.trans?
-          if @account_ledger.account.amount < @account_ledger.amount.abs
-            @account_ledger.errors[:amount]  << I18n.t("errors.messages.account_ledger.amount")
-            @account_ledger.errors[:base]  << I18n.t("errors.messages.account_ledger.amount")
-          end
-        end
+    def valid_contact_amount?
+      valid = true
+      if @account_ledger.in? and -@account_ledger.account.amount < @account_ledger.amount
+        valid = false
+      elsif @account_ledger.out? and @account_ledger.account.amount < -@account_ledger.amount
+        valid = false
       end
+
+      unless valid
+        @account_ledger.errors[:amount]  << I18n.t("errors.messages.account_ledger.amount")
+        @account_ledger.errors[:base]  << I18n.t("errors.messages.account_ledger.amount")
+      end
+
+      valid
     end
   end
 
