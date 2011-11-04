@@ -48,7 +48,6 @@ module Models::Transaction
 
       # Edit transaction if necessary
       edit_trans = Models::Transaction::Edit.new(self)
-      edit_trans.update
 
       return false if details.has_errors?
 

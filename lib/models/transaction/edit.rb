@@ -34,7 +34,7 @@ module Models::Transaction
       amount  = old_transaction.total_paid - transaction.balance
       klass   = transaction.class.to_s.downcase
 
-      @account.amount = -amount
+      @account.amount = @account.amount - amount
 
       @current_ledger = @account.account_ledgers.build(
         :account_id => @account.id,
@@ -54,6 +54,9 @@ module Models::Transaction
 
     def save
       res = true
+      update
+      return false if transaction.errors.any?
+
       transaction.class.transaction do
         res = @current_ledger.save if @current_ledger
         res = @account.save && res if @account
