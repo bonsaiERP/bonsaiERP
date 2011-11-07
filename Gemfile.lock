@@ -95,10 +95,10 @@ GEM
       ruby_parser (~> 2.0.5)
     mime-types (1.16)
     multi_json (1.0.3)
-    mysql2 (0.3.7)
     nokogiri (1.5.0)
     pdf-reader (0.10.0)
       Ascii85 (~> 1.0.0)
+    pg (0.11.0)
     polyglot (0.3.2)
     prawn (0.12.0)
       pdf-reader (>= 0.9.0)
@@ -222,7 +222,7 @@ DEPENDENCIES
   kaminari
   launchy
   log4r
-  mysql2
+  pg
   prawn (~> 0.12.0)
   pry
   rails (~> 3.1.1)

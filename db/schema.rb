@@ -13,19 +13,6 @@
 
 ActiveRecord::Schema.define(:version => 20111103164257) do
 
-  create_table "account_currencies", :force => true do |t|
-    t.integer  "organisation_id"
-    t.integer  "account_id"
-    t.integer  "currency_id"
-    t.decimal  "amount",          :precision => 14, :scale => 2
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "account_currencies", ["account_id"], :name => "index_account_currencies_on_account_id"
-  add_index "account_currencies", ["currency_id"], :name => "index_account_currencies_on_currency_id"
-  add_index "account_currencies", ["organisation_id"], :name => "index_account_currencies_on_organisation_id"
-
   create_table "account_ledger_details", :force => true do |t|
     t.integer  "organisation_id"
     t.integer  "account_id"
@@ -176,20 +163,6 @@ ActiveRecord::Schema.define(:version => 20111103164257) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  create_table "currency_rates", :force => true do |t|
-    t.integer  "currency_id"
-    t.decimal  "rate",            :precision => 14, :scale => 6
-    t.boolean  "active",                                         :default => false
-    t.integer  "organisation_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "currency_rates", ["active"], :name => "index_currency_rates_on_active"
-  add_index "currency_rates", ["created_at"], :name => "index_currency_rates_on_created_at"
-  add_index "currency_rates", ["currency_id"], :name => "index_currency_rates_on_currency_id"
-  add_index "currency_rates", ["organisation_id"], :name => "index_currency_rates_on_organisation_id"
 
   create_table "inventory_operation_details", :force => true do |t|
     t.integer  "organisation_id"

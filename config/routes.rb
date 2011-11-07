@@ -34,8 +34,6 @@ Bonsaierp::Application.routes.draw do
 
   resources :pay_plans
 
-  resources :currency_rates
-
   resources :projects
 
   resources :transactions

@@ -92,7 +92,6 @@
     var exchange_rates = #{ CurrencyRate.active.select("rate, currency_id").to_json };
 
     var default_currency_id = #{currency_id};
-    var income = new Income(items, "#income_form", {'default_currency_id': default_currency_id }, currencies, exchange_rates );
     window.income = income;
 
     // Functions for the select boxes

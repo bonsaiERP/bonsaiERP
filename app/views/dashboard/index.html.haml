@@ -3,16 +3,14 @@
   p.dash, ol.dash li{font-size: 120%; padding: 7px;}
 
 
-#video
+-#video
   %h3 Videos
   %ul.list
     %li.fl._25
       =link_to "http://www.youtube.com/embed/q_KZPKbQGVA?autoplay=1&rel=0", :class => 'video b', 'data-title' => 'Como crear alamacenes e ítems' do
-        %img(src="http://i2.ytimg.com/vi/q_KZPKbQGVA/default.jpg")
         Como crear alamacenes e ítems
     %li.fl._25
       = link_to "http://www.youtube.com/embed/BZMsfhXi9uw?autoplay=1&rel=0", :class => 'video', 'data-title' => 'Como crear clientes' do
-        %img(src="http://i3.ytimg.com/vi/BZMsfhXi9uw/default.jpg")
         Como crear clientes
 
 - present nil, DashboardPresenter do |presenter|

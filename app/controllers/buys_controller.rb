@@ -3,7 +3,6 @@
 # email: boriscyber@gmail.com
 class BuysController < ApplicationController
   before_filter :check_authorization!
-  before_filter :set_currency_rates, :only => [:index, :show]
   before_filter :set_transaction, :only => [:show, :edit, :update, :destroy, :approve]
 
   #respond_to :html, :xml, :json
@@ -123,10 +122,6 @@ class BuysController < ApplicationController
   end
 
   private
-
-  def set_currency_rates
-    @currency_rates = CurrencyRate.current_hash
-  end
 
   def set_transaction
     @transaction = Buy.org.find(params[:id])
