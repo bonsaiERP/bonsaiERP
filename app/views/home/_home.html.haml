@@ -10,7 +10,7 @@
   %h1.n{:style => 'color:#FFF; font-weight:normal;font-size: 220%'} 
     %i bonsai,
     la forma más fácil de gestionar su empresa
-  %a#video{:href => "javascript:", :title => "Abrir video"}
+  %a#video{:href => "javascript:", :title => ""}
     %img{ :src => "/assets/video_image.jpg", :alt => "Video"}
   -#, :src => "http://www.youtube.com/embed/iqruf87hMJQ", :frameborder => "0" }
   = link_to image_tag("prueba.png"), "/users/sign_up", :id => "register", :class => 'but'
@@ -35,18 +35,18 @@
 
 :javascript
   $(function() {
-    $('#video').click(function() {
-      var html = '<iframe width="640" height="390" src="http://www.youtube.com/embed/iqruf87hMJQ?autoplay=1&rel=0" frameborder="0" allowfullscreen></iframe>';
-      $('<div/>').html(html).
-      dialog({
-        modal: true, 
-        width: 660,
-        height: 410,
-        close: function(event, ui) {
-          $(this).remove();
-        }
-      });
-    });
+    //$('#video').click(function() {
+    //  var html = '<iframe width="640" height="390" src="http://www.youtube.com/embed/iqruf87hMJQ?autoplay=1&rel=0" frameborder="0" allowfullscreen></iframe>';
+    //  $('<div/>').html(html).
+    //  dialog({
+    //    modal: true, 
+    //    width: 660,
+    //    height: 410,
+    //    close: function(event, ui) {
+    //      $(this).remove();
+    //    }
+    //  });
+    //});
   });
 
 -#%iframe#video{ :width => "510", :height => "320", :src => "http://www.youtube.com/embed/iqruf87hMJQ", :frameborder => "0" }
