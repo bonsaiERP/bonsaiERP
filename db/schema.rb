@@ -174,7 +174,7 @@ ActiveRecord::Schema.define(:version => 20111103164257) do
     t.string   "operation"
     t.string   "state"
     t.string   "description"
-    t.decimal  "total",           :precision => 14, :scale => 2
+    t.decimal  "total",          :precision => 14, :scale => 2
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "contact_id"
@@ -192,19 +192,19 @@ ActiveRecord::Schema.define(:version => 20111103164257) do
 
   create_table "items", :force => true do |t|
     t.integer  "unit_id"
-    t.decimal  "unitary_cost",                   :precision => 14, :scale => 2
-    t.decimal  "price",                          :precision => 14, :scale => 2
+    t.decimal  "unitary_cost",                :precision => 14, :scale => 2
+    t.decimal  "price",                       :precision => 14, :scale => 2
     t.string   "name"
     t.string   "description"
-    t.string   "code",            :limit => 100
-    t.boolean  "integer",                                                       :default => false
-    t.boolean  "stockable",                                                     :default => false
-    t.boolean  "active",                                                        :default => true
+    t.string   "code",         :limit => 100
+    t.boolean  "integer",                                                    :default => false
+    t.boolean  "stockable",                                                  :default => false
+    t.boolean  "active",                                                     :default => true
     t.string   "discount"
-    t.string   "ctype",           :limit => 20
+    t.string   "ctype",        :limit => 20
     t.string   "type"
     t.string   "un_name"
-    t.string   "un_symbol",       :limit => 10
+    t.string   "un_symbol",    :limit => 10
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -219,20 +219,20 @@ ActiveRecord::Schema.define(:version => 20111103164257) do
     t.integer  "rol_id"
     t.string   "settings"
     t.boolean  "creator"
-    t.string   "rol",             :limit => 50
-    t.boolean  "active",                        :default => true
+    t.string   "rol",          :limit => 50
+    t.boolean  "active",                     :default => true
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "abbreviation",    :limit => 15
+    t.string   "abbreviation", :limit => 15
   end
 
   add_index "links", ["user_id"], :name => "index_links_on_user_id"
 
   create_table "money_stores", :force => true do |t|
     t.integer  "currency_id"
-    t.string   "type",            :limit => 30
-    t.string   "name",            :limit => 100
-    t.string   "number",          :limit => 30
+    t.string   "type",        :limit => 30
+    t.string   "name",        :limit => 100
+    t.string   "number",      :limit => 30
     t.string   "address"
     t.string   "website"
     t.string   "phone"
@@ -316,8 +316,8 @@ ActiveRecord::Schema.define(:version => 20111103164257) do
 
   create_table "prices", :force => true do |t|
     t.integer  "item_id"
-    t.decimal  "unitary_cost",    :precision => 14, :scale => 2
-    t.decimal  "price",           :precision => 14, :scale => 2
+    t.decimal  "unitary_cost", :precision => 14, :scale => 2
+    t.decimal  "price",        :precision => 14, :scale => 2
     t.string   "discount"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -327,7 +327,7 @@ ActiveRecord::Schema.define(:version => 20111103164257) do
 
   create_table "projects", :force => true do |t|
     t.string   "name"
-    t.boolean  "active",          :default => true
+    t.boolean  "active",      :default => true
     t.date     "date_start"
     t.date     "date_end"
     t.text     "description"
@@ -340,10 +340,10 @@ ActiveRecord::Schema.define(:version => 20111103164257) do
   create_table "stocks", :force => true do |t|
     t.integer  "store_id"
     t.integer  "item_id"
-    t.string   "state",           :limit => 20
-    t.decimal  "unitary_cost",                  :precision => 14, :scale => 2
-    t.decimal  "quantity",                      :precision => 14, :scale => 2
-    t.decimal  "minimum",                       :precision => 14, :scale => 2
+    t.string   "state",        :limit => 20
+    t.decimal  "unitary_cost",               :precision => 14, :scale => 2
+    t.decimal  "quantity",                   :precision => 14, :scale => 2
+    t.decimal  "minimum",                    :precision => 14, :scale => 2
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "user_id"
@@ -361,21 +361,19 @@ ActiveRecord::Schema.define(:version => 20111103164257) do
     t.string   "name"
     t.string   "address"
     t.string   "phone"
-    t.boolean  "active",          :default => true
+    t.boolean  "active",      :default => true
     t.string   "description"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-
   create_table "taxes", :force => true do |t|
     t.string   "name"
-    t.string   "abbreviation",    :limit => 10
-    t.decimal  "rate",                          :precision => 5, :scale => 2
+    t.string   "abbreviation", :limit => 10
+    t.decimal  "rate",                       :precision => 5, :scale => 2
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
 
   create_table "taxes_transactions", :id => false, :force => true do |t|
     t.integer "tax_id"
@@ -390,13 +388,13 @@ ActiveRecord::Schema.define(:version => 20111103164257) do
     t.integer  "transaction_id"
     t.integer  "item_id"
     t.integer  "currency_id"
-    t.decimal  "quantity",                      :precision => 14, :scale => 2
-    t.decimal  "price",                         :precision => 14, :scale => 2
+    t.decimal  "quantity",                     :precision => 14, :scale => 2
+    t.decimal  "price",                        :precision => 14, :scale => 2
     t.string   "description"
-    t.string   "ctype",           :limit => 30
-    t.decimal  "discount",                      :precision => 14, :scale => 2
-    t.decimal  "balance",                       :precision => 14, :scale => 2
-    t.decimal  "original_price",                :precision => 14, :scale => 2
+    t.string   "ctype",          :limit => 30
+    t.decimal  "discount",                     :precision => 14, :scale => 2
+    t.decimal  "balance",                      :precision => 14, :scale => 2
+    t.decimal  "original_price",               :precision => 14, :scale => 2
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -480,14 +478,13 @@ ActiveRecord::Schema.define(:version => 20111103164257) do
   add_index "transactions", ["state"], :name => "index_transactions_on_state"
 
   create_table "units", :force => true do |t|
-    t.string   "name",            :limit => 100
-    t.string   "symbol",          :limit => 20
-    t.boolean  "integer",                        :default => false
-    t.boolean  "visible",                        :default => true
+    t.string   "name",       :limit => 100
+    t.string   "symbol",     :limit => 20
+    t.boolean  "integer",                   :default => false
+    t.boolean  "visible",                   :default => true
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
 
   create_table "users", :force => true do |t|
     t.string   "email"

@@ -1,7 +1,6 @@
 class CreateMoneyStores < ActiveRecord::Migration
   def change
     create_table :money_stores do |t|
-      t.references :organisation
       t.references :currency
       t.string :type, :limit => 30
       t.string :name

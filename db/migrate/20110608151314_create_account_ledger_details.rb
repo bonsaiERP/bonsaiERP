@@ -1,7 +1,6 @@
 class CreateAccountLedgerDetails < ActiveRecord::Migration
   def change
     create_table :account_ledger_details do |t|
-      t.references :organisation
       t.references :account
       t.references :account_ledger
       t.references :currency
