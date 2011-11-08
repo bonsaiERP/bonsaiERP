@@ -3,7 +3,6 @@ class CreateInventoryOperations < ActiveRecord::Migration
     create_table :inventory_operations do |t|
       t.integer :contact_id
       t.integer :store_id
-      t.integer :organisation_id
       t.integer :transaction_id
 
       t.date   :date
@@ -19,7 +18,6 @@ class CreateInventoryOperations < ActiveRecord::Migration
     end
 
     add_index :inventory_operations, :contact_id
-    add_index :inventory_operations, :organisation_id
     add_index :inventory_operations, :store_id
     add_index :inventory_operations, :transaction_id
 

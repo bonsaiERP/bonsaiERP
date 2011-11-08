@@ -7,7 +7,6 @@ class AccountLedger < ActiveRecord::Base
   # Base amount is the #  amount = base_amount + interests_penalties
   attr_accessor :make_conciliation, :base_amount
 
-  acts_as_org
   # callbacks
   before_validation :set_currency_id
   before_destroy    { false }

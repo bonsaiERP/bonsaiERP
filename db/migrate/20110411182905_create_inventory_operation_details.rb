@@ -1,7 +1,6 @@
 class CreateInventoryOperationDetails < ActiveRecord::Migration
   def self.up
     create_table :inventory_operation_details do |t|
-      t.integer :organisation_id
       t.integer :inventory_operation_id
       t.integer :item_id
 
@@ -13,7 +12,6 @@ class CreateInventoryOperationDetails < ActiveRecord::Migration
 
     add_index :inventory_operation_details, :inventory_operation_id
     add_index :inventory_operation_details, :item_id
-    add_index :inventory_operation_details, :organisation_id
 
   end
 

@@ -5,8 +5,6 @@ class Payment < ActiveRecord::Base
   # include helper for account_ledger text
   include ActionView::Helpers::NumberHelper
 
-  acts_as_org
-
   alias original_destroy destroy
 
   def destroy; false; end

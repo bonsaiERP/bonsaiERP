@@ -10,7 +10,7 @@ class StocksController < ApplicationController
   end
 
   def update
-    @stock = Stock.org.find(params[:id])
+    @stock = Stock.find(params[:id])
 
     if @stock.save_minimum(params[:stock][:minimum])
       render "update"

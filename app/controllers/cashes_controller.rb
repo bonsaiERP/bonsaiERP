@@ -10,7 +10,7 @@ class CashesController < ApplicationController
   # GET /cashs
   # GET /cashs.xml
   def index
-    @cashes = Cash.org.all
+    @cashes = Cash.all
 
     respond_to do |format|
       format.html # index.html.erb
@@ -91,6 +91,6 @@ class CashesController < ApplicationController
 
 private
   def set_cash
-    @cash = Cash.org.find(params[:id])
+    @cash = Cash.find(params[:id])
   end
 end

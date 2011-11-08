@@ -11,7 +11,7 @@ class ItemsController < ApplicationController
     if params[:search].present?
       @items = Item.search(params).page(@page)
     else
-      @items = Item.org.includes(:unit, :stocks).page(@page)
+      @items = Item.includes(:unit, :stocks).page(@page)
     end
   end
 
@@ -22,7 +22,7 @@ class ItemsController < ApplicationController
   # GET /items/new
   # GET /items/new.xml
   def new
-    @item = Item.org.new
+    @item = Item.new
   end
 
   # GET /items/1/edit
@@ -61,6 +61,6 @@ class ItemsController < ApplicationController
 
   private
   def set_item
-    @item = Item.org.find(params[:id])
+    @item = Item.find(params[:id])
   end
 end

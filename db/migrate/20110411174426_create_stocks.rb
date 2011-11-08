@@ -2,7 +2,6 @@ class CreateStocks < ActiveRecord::Migration
   def self.up
     create_table :stocks do |t|
       t.integer :store_id
-      t.integer :organisation_id
       t.integer :item_id
       t.string  :state, :limit => 20
       t.decimal :unitary_cost, :precision => 14, :scale => 2
@@ -14,7 +13,6 @@ class CreateStocks < ActiveRecord::Migration
 
     add_index :stocks, :store_id
     add_index :stocks, :item_id
-    add_index :stocks, :organisation_id
     add_index :stocks, :state
     add_index :stocks, :minimum
 

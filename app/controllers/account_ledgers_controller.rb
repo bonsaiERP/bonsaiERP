@@ -6,12 +6,12 @@ class AccountLedgersController < ApplicationController
  
   # GET /account_ledger 
   def index
-    @account_ledgers = AccountLedger.org.where(:account_id => params[:id]).order("date DESC")
+    @account_ledgers = AccountLedger.where(:account_id => params[:id]).order("date DESC")
   end
 
   # GET /account_ledgers/:id
   def show
-    @account_ledger = AccountLedger.org.find(params[:id])
+    @account_ledger = AccountLedger.find(params[:id])
     @account_ledger.ac_id = params[:ac_id].to_i
   end
 
@@ -23,7 +23,7 @@ class AccountLedgersController < ApplicationController
 
   # GET /account_ledgers/:id/new_transference
   def new_transference
-    @account = Account.org.find_by_id(params[:account_id])
+    @account = Account.find_by_id(params[:account_id])
     return redirect_to "/422" unless @account
     @account_ledger = AccountLedger.new_money(:operation => "trans", :account_id => @account.id, :currency_id => @account.currency_id)
     redirect_to "/422" unless @account_ledger
@@ -31,7 +31,7 @@ class AccountLedgersController < ApplicationController
   #
   # PUT /account_ledgers/:id/conciliate 
   def conciliate
-    @account_ledger = AccountLedger.org.find(params[:id])
+    @account_ledger = AccountLedger.find(params[:id])
 
     if @account_ledger.conciliate_account
       flash[:notice] = "Se ha verificado exitosamente la transacción."
@@ -55,7 +55,7 @@ class AccountLedgersController < ApplicationController
 
   # DELETE /account_ledgers/:id
   def destroy
-    @account_ledger = AccountLedger.org.find(params[:id])
+    @account_ledger = AccountLedger.find(params[:id])
 
     if @account_ledger.null_transaction
       flash[:notice] = "Se ha anulado la transacción correctamente."
@@ -68,7 +68,7 @@ class AccountLedgersController < ApplicationController
 
   # POST /account_ledgers/:id/transference
   def transference
-    @account = Account.org.find_by_id(params[:account_ledger][:account_id])
+    @account = Account.find_by_id(params[:account_ledger][:account_id])
     return redirect_to "/422" unless @account
 
     params[:account_ledger][:operation] = "trans"

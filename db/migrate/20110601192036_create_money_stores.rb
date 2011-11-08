@@ -13,7 +13,6 @@ class CreateMoneyStores < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :money_stores, :organisation_id
     add_index :money_stores, :currency_id
     add_index :money_stores, :type
     add_index :money_stores, :name

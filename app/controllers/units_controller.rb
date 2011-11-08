@@ -11,7 +11,7 @@ class UnitsController < ApplicationController
   # GET /units
   # GET /units.xml
   def index
-    @units = Unit.org
+    @units = Unit.scoped
   end
 
   # GET /units/1

@@ -2,7 +2,6 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class TransactionDetail < ActiveRecord::Base
-  acts_as_org
   # callbacks
   #after_initialize :set_defaults
   #before_save      :set_original_price

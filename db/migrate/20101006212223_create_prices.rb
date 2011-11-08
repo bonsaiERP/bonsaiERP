@@ -1,7 +1,6 @@
 class CreatePrices < ActiveRecord::Migration
   def self.up
     create_table :prices do |t|
-      t.integer :organisation_id
       t.integer :item_id
       t.decimal :unitary_cost, :precision => 14, :scale => 2
       t.decimal :price, :precision => 14, :scale => 2
@@ -9,7 +8,6 @@ class CreatePrices < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :prices, :organisation_id
     add_index :prices, :item_id
   end
 

@@ -12,8 +12,6 @@ class CreateContacts < ActiveRecord::Migration
       t.string :tax_number, :limit => 30
       t.string :aditional_info, :limit => 250
 
-      t.integer :organisation_id, :null => false
-
       t.string  :code
       t.string  :type
       t.string  :last_name,  :limit => 100
@@ -23,7 +21,6 @@ class CreateContacts < ActiveRecord::Migration
       t.timestamps
     end
 
-    add_index :contacts, :organisation_id
     add_index :contacts, :matchcode
     add_index :contacts, :first_name
     add_index :contacts, :last_name

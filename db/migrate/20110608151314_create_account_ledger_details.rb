@@ -14,7 +14,6 @@ class CreateAccountLedgerDetails < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :account_ledger_details, :organisation_id
     add_index :account_ledger_details, :account_id
     add_index :account_ledger_details, :account_ledger_id
     add_index :account_ledger_details, :currency_id

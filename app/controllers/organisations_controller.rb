@@ -36,6 +36,7 @@ class OrganisationsController < ApplicationController
 
   # GET /organisations/new
   def new
+    session[:organisation] = nil
     @organisation = Organisation.new(:currency_id => 1)
   end
 
@@ -45,16 +46,10 @@ class OrganisationsController < ApplicationController
 
     if @organisation.save
       flash[:notice] = "Se ha creado su empresa correctamente."
-      params[:id] = @organisation.id
-
-      if set_organisation_session(@organisation)
-        redirect_to "/dashboard"
-      else
-        flash[:error] = "Por favor ingrese de nuevo existio un error en el sistema."
-        redirect_to "/users/sign_out"
-      end
+      job = Qu.enqueue CreateTenant, @organisation.id
+      redirect_to @organisation
     else
-      render :action => 'new'
+      render 'new'
     end
   end
 
@@ -62,42 +57,6 @@ class OrganisationsController < ApplicationController
   def edit
     @organisation = Organisation.find(session[:organisation][:id])
     respond_with(@organisation)
-  end
-
-  # POST /organisations
-  # POST /organisations.xml
-  #def create
-
-  #  if params[:step].present? and params[:step].to_i < 4
-  #    send(:"create_step_#{params[:step]}")
-  #  else
-  #    get_step_1
-  #  end
-  #  
-  #  render :action => 'new'
-  #end
-
-  # POST /organisations/final_step
-  def final_step
-
-    @organisation = Organisation.new(session[:org].attributes)
-    @organisation.account_info = session[:account]
-
-    if @organisation.save
-      flash[:notice] = "Se ha creado su empresa correctamente."
-      params[:id] = @organisation.id
-
-      session[:account] = nil
-      session[:org] = nil
-      
-      set_organisation_session(@organisation)
-
-      redirect_to "/dashboard"
-    else
-      flash[:error] = @organisation.errors[:base].join(", ")
-      redirect_to "/organisations/new?step=3"
-    end
-
   end
 
   # PUT /organisations/1

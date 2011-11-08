@@ -3,8 +3,6 @@
 # email: boriscyber@gmail.com
 class Item < ActiveRecord::Base
 
-  acts_as_org
-
   attr_readonly :ctype
 
   set_inheritance_column :class_type

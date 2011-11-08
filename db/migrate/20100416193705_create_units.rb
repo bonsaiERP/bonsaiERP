@@ -6,12 +6,10 @@ class CreateUnits < ActiveRecord::Migration
       t.boolean :integer, :default => false
       t.boolean :visible, :default => true
 
-      t.integer :organisation_id, :null => false
 
       t.timestamps
     end
 
-    add_index(:units, :organisation_id)
   end
 
   def self.down

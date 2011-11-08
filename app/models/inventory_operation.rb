@@ -2,7 +2,6 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class InventoryOperation < ActiveRecord::Base
-  acts_as_org
 
   before_create     { self.creator_id = UserSession.user_id }
 

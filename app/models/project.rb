@@ -2,7 +2,6 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class Project < ActiveRecord::Base
-  acts_as_org
 
   attr_accessible :name, :active, :date_start, :date_end, :description
 

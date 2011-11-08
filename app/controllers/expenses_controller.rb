@@ -112,6 +112,6 @@ private
   end
 
   def set_transaction
-    @transaction = Expense.org.find(params[:id])
+    @transaction = Expense.find(params[:id])
   end
 end

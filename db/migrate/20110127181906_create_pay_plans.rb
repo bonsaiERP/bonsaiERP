@@ -1,7 +1,6 @@
 class CreatePayPlans < ActiveRecord::Migration
   def self.up
     create_table :pay_plans do |t|
-      t.integer :organisation_id
       t.integer :transaction_id
       t.integer :currency_id # Denormalized
       t.string  :cur # denormalized
@@ -19,7 +18,6 @@ class CreatePayPlans < ActiveRecord::Migration
       t.timestamps
     end
 
-    add_index :pay_plans, :organisation_id
     add_index :pay_plans, :transaction_id
     add_index :pay_plans, :payment_date
     add_index :pay_plans, :ctype

@@ -17,7 +17,7 @@ class BuysController < ApplicationController
     else
       params[:option] ||= "all"
       @buys = Buy.find_with_state(params[:option])
-      @count = Buy.org
+      @count = Buy.scoped
     end
   end
 0
@@ -34,7 +34,7 @@ class BuysController < ApplicationController
   # GET /buys/new.xml
   def new
     if params[:transaction_id].present?
-      t = Buy.org.find(params[:transaction_id])
+      t = Buy.find(params[:transaction_id])
       @transaction = t.clone_transaction
     else
       @transaction = Buy.new
@@ -111,7 +111,7 @@ class BuysController < ApplicationController
 
   # PUT /incomes/:id/approve_credit
   def approve_credit
-    @transaction = Buy.org.find(params[:id])
+    @transaction = Buy.find(params[:id])
     if @transaction.approve_credit params[:buy]
       flash[:notice] = "Se aprobó correctamente el crédito."
     else
@@ -124,6 +124,6 @@ class BuysController < ApplicationController
   private
 
   def set_transaction
-    @transaction = Buy.org.find(params[:id])
+    @transaction = Buy.find(params[:id])
   end
 end

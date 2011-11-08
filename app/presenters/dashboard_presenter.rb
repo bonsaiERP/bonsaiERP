@@ -10,14 +10,14 @@ class DashboardPresenter < BasePresenter
   end
 
   def create_money_link
-    if MoneyStore.org.empty?
+    if MoneyStore.empty?
       content_tag(:h3, "Por favor le recomendamos crear una #{h.link_to "cuenta bancaria", h.new_bank_path } o #{h.link_to "cuenta de caja", h.new_cash_path}".html_safe)
     end
   end
 
   def accounts_to_recieve
-    tot_accounts = Account.org.to_recieve.group(:currency_id).sum(:amount)
-    tot_incomes  = Income.org.approved.group(:currency_id).sum(:balance)
+    tot_accounts = Account.to_recieve.group(:currency_id).sum(:amount)
+    tot_incomes  = Income.approved.group(:currency_id).sum(:balance)
     keys = (tot_accounts.keys + tot_incomes.keys).uniq
   
     keys.map do |cur_id|
@@ -27,8 +27,8 @@ class DashboardPresenter < BasePresenter
   end
 
   def accounts_to_pay
-    tot_accounts = Account.org.to_pay.group(:currency_id).sum(:amount)
-    tot_incomes  = Buy.org.approved.group(:currency_id).sum(:balance)
+    tot_accounts = Account.to_pay.group(:currency_id).sum(:amount)
+    tot_incomes  = Buy.approved.group(:currency_id).sum(:balance)
     keys = (tot_accounts.keys + tot_incomes.keys).uniq
   
     keys.map do |cur_id|
@@ -38,14 +38,14 @@ class DashboardPresenter < BasePresenter
   end
 
   def pendent_conciliations
-    AccountLedger.org.pendent.map do |al|
+    AccountLedger.pendent.map do |al|
       [currencies[al.currency_id], al]
     end
   end
 
   def minimum_inventory
     @min_list ||= Stock.minimum_list
-    @stores   ||= Hash[Store.org.where(:id => @min_list.keys).values_of(:id, :name)]
+    @stores   ||= Hash[Store.where(:id => @min_list.keys).values_of(:id, :name)]
     @list     ||= @min_list.map {|k, v| [k, @stores[k], v]}
   end
 

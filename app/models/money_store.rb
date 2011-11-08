@@ -4,7 +4,6 @@
 class MoneyStore < ActiveRecord::Base
 
   include Models::Account::Money
-  acts_as_org
   # callbacks
   before_validation :set_amount, :if => :new_record?
 

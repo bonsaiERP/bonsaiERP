@@ -3,22 +3,22 @@
 # email: boriscyber@gmail.com
 class Unit < ActiveRecord::Base
 
-  include Models::Organisation::NewOrganisation
+  #include Models::Organisation::NewOrganisation
 
   # callbacks
   before_save    :strip_attributes
   before_destroy :check_items_destroy
 
   # relationships
-  belongs_to :organisation
+  #belongs_to :organisation
 
   has_many :items
 
   attr_accessible :name, :symbol, :integer
 
   # validations
-  validates_uniqueness_of :name, :scope => :organisation_id
-  validates_uniqueness_of :symbol, :scope => :organisation_id
+  validates_uniqueness_of :name#, :scope => :organisation_id
+  validates_uniqueness_of :symbol#, :scope => :organisation_id
   validates_presence_of :name, :symbol
 
 

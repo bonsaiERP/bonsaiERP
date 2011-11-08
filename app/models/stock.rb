@@ -2,7 +2,6 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class Stock < ActiveRecord::Base
-  acts_as_org
 
   before_create :update_last_and_set_minimum
 

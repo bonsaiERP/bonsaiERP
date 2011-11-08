@@ -1,7 +1,6 @@
 class CreateAccountLedgers < ActiveRecord::Migration
   def self.up
     create_table :account_ledgers do |t|
-      t.integer :organisation_id
       t.string  :reference
       t.integer :currency_id
       t.integer :account_id
@@ -28,7 +27,6 @@ class CreateAccountLedgers < ActiveRecord::Migration
       t.timestamps
     end
 
-    add_index :account_ledgers, :organisation_id
     add_index :account_ledgers, :currency_id
     add_index :account_ledgers, :account_id
     add_index :account_ledgers, :to_id

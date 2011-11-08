@@ -13,7 +13,7 @@ class StaffsController < ApplicationController
   def index
     params[:option] ||= 'all' 
     if params[:search]
-      @staffs = Staff.org.search(params[:search]).order("matchcode ASC").page(@page)
+      @staffs = Staff.search(params[:search]).order("matchcode ASC").page(@page)
     else
       case
       when params[:option] === 'pendent'
@@ -21,7 +21,7 @@ class StaffsController < ApplicationController
       when params[:option] === 'debt'
         @staffs = Staff.debt.page(@page)
       else
-        @staffs = Staff.org.order("matchcode ASC").page(@page)
+        @staffs = Staff.order("matchcode ASC").page(@page)
       end
     end
   end
@@ -87,7 +87,7 @@ class StaffsController < ApplicationController
 
   protected
   def find_staff
-    @staff = Staff.org.find(params[:id])
+    @staff = Staff.find(params[:id])
   end
 end
 

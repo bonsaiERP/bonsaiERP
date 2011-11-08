@@ -2,7 +2,6 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class PayPlan < ActiveRecord::Base
-  acts_as_org
   after_initialize :set_defaults
   before_create    :set_operation
   before_save      :set_currency_id

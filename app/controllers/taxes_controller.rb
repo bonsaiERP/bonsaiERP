@@ -8,14 +8,14 @@ class TaxesController < ApplicationController
   # GET /taxes
   # GET /taxes.xml
   def index
-    @taxes = Tax.org.all
+    @taxes = Tax.all
     respond_with @taxes
   end
 
   # GET /taxes/1
   # GET /taxes/1.xml
   def show
-    @tax = Tax.org.find(params[:id])
+    @tax = Tax.find(params[:id])
     respond_with @tax
   end
 
@@ -28,7 +28,7 @@ class TaxesController < ApplicationController
 
   # GET /taxes/1/edit
   def edit
-    @tax = Tax.org.find(params[:id])
+    @tax = Tax.find(params[:id])
   end
 
   # POST /taxes
@@ -66,7 +66,7 @@ class TaxesController < ApplicationController
   # DELETE /taxes/1
   # DELETE /taxes/1.xml
   def destroy
-    @tax = Tax.org.find(params[:id])
+    @tax = Tax.find(params[:id])
     @tax.destroy
 
     redirect_ajax @tax

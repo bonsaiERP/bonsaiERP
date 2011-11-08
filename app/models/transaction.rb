@@ -2,7 +2,6 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class Transaction < ActiveRecord::Base
-  acts_as_org
 
   STATES   = ["draft"  , "approved" , "paid" , "due", "inventory", "nulled", "discount"]
   TYPES    = ['Income' , 'Expense'  , 'Buy']
