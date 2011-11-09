@@ -107,10 +107,11 @@ private
     session[:organisation] and session[:organisation].any?
   end
 
-  # Sets the organisation_id to help to set in the models
+  # Sets the organisation_id to help to set in the models and the search path
   def set_organisation
     raise "You must set the organisation" if session[:organisation].blank?
     OrganisationSession.set session[:organisation]
+    PgTools.set_search_path session[:organisation][:id]
   end
 
   def check_organisation

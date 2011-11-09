@@ -29,14 +29,16 @@ class OrganisationsController < ApplicationController
   # GET /organisations/1
   # GET /organisations/1.xml
   def show
+    session[:organisation] = nil
+    PgTools.restore_default_search_path
     @organisation = Organisation.find(params[:id])
-    set_organisation_session(@organisation)
     respond_with(@organisation)
   end
 
   # GET /organisations/new
   def new
     session[:organisation] = nil
+    PgTools.restore_default_search_path
     @organisation = Organisation.new(:currency_id => 1)
   end
 

@@ -25,10 +25,8 @@ class Organisation < ActiveRecord::Base
   delegate :code, :name, :symbol, :plural, :to => :currency, :prefix => true
 
   # validations
-  validates_associated :org_country
-  validates_associated :currency
 
-  validates_presence_of :name, :address, :country_id, :currency_id
+  validates_presence_of :name, :address, :org_country, :currency
   validates_uniqueness_of :name, :scope => :user_id
 
   attr_protected :user_id
@@ -41,6 +39,7 @@ class Organisation < ActiveRecord::Base
   def create_records
     create_units
     create_account_types
+    create_currencies
   end
 
 protected
@@ -52,15 +51,24 @@ protected
 
   # creates default units the units accordins to the locale
   def create_units
-    units = YAML.load_file(File.join(Rails.root, DATA_PATH, "units.#{I18n.locale}.yml"))
+    units = YAML.load_file(data_path("units.#{I18n.locale}.yml"))
     Unit.create!(units)
   end
 
   def create_account_types
-    account_types = YAML.load_file(File.join(Rails.root, DATA_PATH, "account_types.#{I18n.locale}.yml"))
+    account_types = YAML.load_file(data_path("account_types.#{I18n.locale}.yml"))
     AccountType.create!(account_types)
   end
 
+  def create_currencies
+    YAML.load_file(data_path("currencies.yml")).each do |cur|
+      Currency.create!(cur) {|c| c.id = cur["id"]}
+    end
+  end
+
+  def data_path(path = "")
+    File.join(Rails.root, DATA_PATH, path)
+  end
 
   # Sets the user_id, needed to define the scope of uniquenes_of :name
   def set_user

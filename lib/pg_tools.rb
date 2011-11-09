@@ -12,7 +12,7 @@ module PgTools
   end
 
   def restore_default_search_path
-    set_search_path("$user")
+    set_search_path("'$user'")
   end
 
   def create_schema(name)

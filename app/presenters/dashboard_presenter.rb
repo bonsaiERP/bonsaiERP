@@ -10,7 +10,7 @@ class DashboardPresenter < BasePresenter
   end
 
   def create_money_link
-    if MoneyStore.empty?
+    unless MoneyStore.any?
       content_tag(:h3, "Por favor le recomendamos crear una #{h.link_to "cuenta bancaria", h.new_bank_path } o #{h.link_to "cuenta de caja", h.new_cash_path}".html_safe)
     end
   end
