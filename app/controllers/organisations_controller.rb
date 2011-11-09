@@ -92,10 +92,10 @@ class OrganisationsController < ApplicationController
   def select
     begin
       @organisation = current_user.organisations.find(params[:id])
-      redirect_to 
+      redirect_to "/dashboard"
     rescue
-      flash[:error] = "Usted no puede registrarse"
-      redirect_to "/users/sign_in"
+      flash[:error] = "Error, ingrese de nuevo"
+      redirect_to "/users/sign_out"
     end
   end
 

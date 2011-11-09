@@ -10,9 +10,15 @@ describe Currency do
       cont += 1
       Currency.new(val) {|v| v.id = cont }
     end
-    Currency.stubs(:all => arr)
+    Currency.stub!(:all => arr)
 
-    Currency.to_hash(:symbol, :name).should == {1 => {symbol: "Bs.", name: "boliviano"}, 2 => {symbol: "$", name: "dolar"}, 3 => {symbol: "€", name: "euro"}}
+    Currency.to_hash(:symbol, :name).should == {1 => {:symbol => "Bs.", :name => "Boliviano"}, 2 => {:symbol => "$us", :name => "Dolar"}, 3 => {:symbol => "€", :name => "Euro"}}
+  end
+
+  it 'should create base data' do
+    Currency.count.should == 0
+    Currency.create_base_data
+    Currency.count.should > 0
   end
 end
 

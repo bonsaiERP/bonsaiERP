@@ -36,7 +36,8 @@ class Unit < ActiveRecord::Base
   end
 
   def self.create_base_data
-    units = YAML.load_file(data_path("units.#{I18n.locale}.yml"))
+    path = File.join(Rails.root, "db/defaults", "units.#{I18n.locale}.yml")
+    units = YAML.load_file(path)
     Unit.create!(units)
   end
 #

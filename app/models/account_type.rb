@@ -8,7 +8,7 @@ class AccountType < ActiveRecord::Base
   attr_readonly :account_number
 
   # callbacks
-  before_destroy { self.update_attribute(:active, false) ;false }
+  before_destroy { false }
 
   # relationships
   has_many :accounts
@@ -16,15 +16,13 @@ class AccountType < ActiveRecord::Base
   #validations
   validates_presence_of :name
 
-  # scopes
-  scope :active, where(:active => true)
-
   def to_s
     name
   end
 
   def self.create_base_data
-    account_types = YAML.load_file(data_path("account_types.#{I18n.locale}.yml"))
+    path = File.join(Rails.root, "db/defaults", "account_types.#{I18n.locale}.yml")
+    account_types = YAML.load_file(path)
     AccountType.create!(account_types)
   end
 end

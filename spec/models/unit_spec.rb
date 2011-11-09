@@ -4,7 +4,6 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe Unit do
 
   before(:each) do
-    OrganisationSession.set :id => 1
     @params = {:name => "kilogram", :symbol => "kg", :integer => false}
   end
 
@@ -18,9 +17,13 @@ describe Unit do
     u = Unit.new(@params)
 
     u.should_not be_valid
-    u.organisation_id.should == OrganisationSession.organisation_id
     u.errors[:name].should_not be_blank
     u.errors[:symbol].should_not be_blank
   end
 
+  it 'should create many units' do
+    Unit.count.should == 0
+    Unit.create_base_data
+    Unit.count.should > 0
+  end
 end
