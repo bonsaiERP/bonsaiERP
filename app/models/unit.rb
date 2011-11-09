@@ -10,15 +10,14 @@ class Unit < ActiveRecord::Base
   before_destroy :check_items_destroy
 
   # relationships
-  #belongs_to :organisation
 
   has_many :items
 
   attr_accessible :name, :symbol, :integer
 
   # validations
-  validates_uniqueness_of :name#, :scope => :organisation_id
-  validates_uniqueness_of :symbol#, :scope => :organisation_id
+  validates_uniqueness_of :name
+  validates_uniqueness_of :symbol
   validates_presence_of :name, :symbol
 
 
@@ -33,7 +32,7 @@ class Unit < ActiveRecord::Base
 
   # Retrives all invisible records
   def self.invisible
-    Unit.where(:visible => false, :organisation_id => OrganisationSession.id )
+    Unit.where(:visible => false )
   end
 #
 #  # Retrives all records
@@ -49,7 +48,7 @@ protected
 
   # Returns false if there are
   def check_items_destroy
-    if Item.org.where(:unit_id => id).any?
+    if Item.where(:unit_id => id).any?
       errors.add(:base, "Existen items que usan esta unidad de medidad")
       false
     else

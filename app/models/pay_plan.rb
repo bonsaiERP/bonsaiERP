@@ -43,11 +43,11 @@ class PayPlan < ActiveRecord::Base
   attr_accessible :payment_date, :alert_date, :amount, :email, :repeat
 
   def self.in_to_currency(currency_id, date)
-    sum_with_exchange_rate( PayPlan.org.unpaid.in.date(date), currency_id )
+    sum_with_exchange_rate( PayPlan.unpaid.in.date(date), currency_id )
   end
 
   def self.out_to_currency(currency_id, date)
-    sum_with_exchange_rate( PayPlan.org.unpaid.out.date(date), currency_id )
+    sum_with_exchange_rate( PayPlan.unpaid.out.date(date), currency_id )
   end
 
   # Sums a list of objects with the exchange rate
@@ -67,17 +67,17 @@ class PayPlan < ActiveRecord::Base
   end
 
   def self.get_most_important(currency_id, date, types, offset= 0,limit = 5)
-    return [] if PayPlan.org.empty?
+    return [] if PayPlan.scoped.empty?
 
     sql = "SELECT id, amount, currency_id, payment_date, ctype, transaction_id, "
     sql << create_currency_query(currency_id, date)
-    sql << "FROM pay_plans WHERE organisation_id = ? AND paid = ? "
+    sql << "FROM pay_plans WHERE paid = ? "
     sql << "AND payment_date <= ? \n"
     sql << "AND ctype IN (?) \n"
     sql << "ORDER BY amount_currency DESC\n"
     sql << "LIMIT #{offset}, #{limit}"
 
-    Organisation.find_by_sql([sql, OrganisationSession.organisation_id, false, date.to_date, types])
+    Organisation.find_by_sql([sql, false, date.to_date, types])
   end
 
   # Creates the query for exchanging the rate
@@ -92,7 +92,7 @@ class PayPlan < ActiveRecord::Base
   end
 
   def self.get_currency_ids(date)
-    pps = PayPlan.select("DISTINCT(currency_id) AS currency_id, amount, payment_date, alert_date, email").org.unpaid.date(date).group("currency_id")
+    pps = PayPlan.select("DISTINCT(currency_id) AS currency_id, amount, payment_date, alert_date, email").unpaid.date(date).group("currency_id")
     pps.map(&:currency_id)
   end
 

@@ -215,17 +215,19 @@ ActiveRecord::Schema.define(:version => 20111103164257) do
   add_index "items", ["unit_id"], :name => "index_items_on_unit_id"
 
   create_table "links", :force => true do |t|
+    t.integer  "organisation_id"
     t.integer  "user_id"
     t.integer  "rol_id"
     t.string   "settings"
     t.boolean  "creator"
-    t.string   "rol",          :limit => 50
-    t.boolean  "active",                     :default => true
+    t.string   "rol",             :limit => 50
+    t.boolean  "active",                        :default => true
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "abbreviation", :limit => 15
+    t.string   "abbreviation",    :limit => 15
   end
 
+  add_index "links", ["organisation_id"], :name => "index_links_on_organisation_id"
   add_index "links", ["user_id"], :name => "index_links_on_user_id"
 
   create_table "money_stores", :force => true do |t|

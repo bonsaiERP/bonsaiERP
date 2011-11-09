@@ -18,10 +18,6 @@ class Organisation < ActiveRecord::Base
   belongs_to :org_country, :foreign_key => :country_id
   belongs_to :currency
 
-  has_many :taxes, :class_name => "Tax", :dependent => :destroy
-  has_many :units, :dependent => :destroy
-  has_many :account_types, :dependent => :destroy
-  has_many :accounts
   # users links
   has_many :links, :dependent => :destroy, :autosave => true
   has_many :users, :through => :links

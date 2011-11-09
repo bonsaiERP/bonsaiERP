@@ -31,11 +31,11 @@ class Stock < ActiveRecord::Base
 
   # Sets the minimun for an Stock
   def self.new_minimum(item_id, store_id)
-    Stock.org.find_by_item_id_and_store_id(item_id, store_id)
+    Stock.find_by_item_id_and_store_id(item_id, store_id)
   end
 
   def self.minimum_list
-    Stock.org.select("COUNT(item_id) AS items_count, store_id").where("quantity <= minimum").group(:store_id).count
+    Stock.select("COUNT(item_id) AS items_count, store_id").where("quantity <= minimum").group(:store_id).count
   end
 
   # Creates a new instance with an item
@@ -53,7 +53,7 @@ class Stock < ActiveRecord::Base
   private
 
   def update_last_and_set_minimum
-    s = Stock.org.find_by_item_id_and_store_id(self.item_id, self.store_id)
+    s = Stock.find_by_item_id_and_store_id(self.item_id, self.store_id)
     if s
       self.minimum = s.minimum.to_f
       s.update_attribute(:state, 'inactive') if s

@@ -42,9 +42,9 @@ class Contact < ActiveRecord::Base
   def self.find_with_type(type)
     type = 'all' unless TYPES.include?(type)
     case type
-    when 'Client' then Contact.org.clients
-    when 'Supplier' then Contact.org.suppliers
-    when 'All' then Contact.org
+    when 'Client' then Contact.clients
+    when 'Supplier' then Contact.suppliers
+    when 'All' then Contact.scoped
     end
   end
 

@@ -31,9 +31,9 @@ class InventoryOperation < ActiveRecord::Base
 
   def get_contact_list
     if operation == "in"
-      Supplier.org
+      Supplier.scoped
     else
-      Client.org
+      Client.scoped
     end
   end
 
@@ -185,7 +185,7 @@ class InventoryOperation < ActiveRecord::Base
 
   # To determine if an item is service and not to update stock
   def is_item_service?(i_id)
-    @service_item_ids ||= Item.org.service.where(:id => item_ids).values_of( :id )
+    @service_item_ids ||= Item.service.where(:id => item_ids).values_of( :id )
     @service_item_ids.include?(i_id)
   end
   

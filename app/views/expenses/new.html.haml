@@ -1,8 +1,0 @@
-- content_for :links do
-  %ul.breadcrumps
-    %li #{link_to 'Gastos', expenses_path} <span>&gt;</span>
-
-%h1 Nuevo gasto
-
-= render 'transactions/form', :transaction => @transaction, :contacts => Supplier.org
-

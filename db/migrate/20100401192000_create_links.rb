@@ -1,6 +1,7 @@
 class CreateLinks < ActiveRecord::Migration
   def change
     create_table :links do |t|
+      t.integer :organisation_id
       t.integer :user_id
       t.integer :rol_id
       t.string :settings
@@ -11,6 +12,7 @@ class CreateLinks < ActiveRecord::Migration
 
       t.timestamps
     end
+    add_index :links, :organisation_id
     add_index :links, :user_id
   end
 end

@@ -16,10 +16,10 @@ class Income < Transaction
 
 
   #validations
-  validates             :ref_number,           :presence => true , :uniqueness => { :scope => :organisation_id, :allow_blank => false}
+  validates             :ref_number,           :presence => true , :uniqueness => true
   validate              :valid_number_of_items
 
-  scope :sum_total_balance, org.approved.select("SUM(balance * exchange_rate) AS total_bal").first[:total_bal]
+  scope :sum_total_balance, approved.select("SUM(balance * exchange_rate) AS total_bal").first[:total_bal]
   scope :discount, where(:discounted => true)
 
   def to_s
@@ -27,7 +27,7 @@ class Income < Transaction
   end
 
   def get_ref_number
-    refs            = Income.org.order("ref_number DESC").limit(1)
+    refs            = Income.order("ref_number DESC").limit(1)
     refs.any? ? refs.first.ref_number.next : "V-#{Date.today.year}-0001"
   end
 

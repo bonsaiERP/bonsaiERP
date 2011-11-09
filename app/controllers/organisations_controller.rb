@@ -46,7 +46,7 @@ class OrganisationsController < ApplicationController
 
     if @organisation.save
       flash[:notice] = "Se ha creado su empresa correctamente."
-      job = Qu.enqueue CreateTenant, @organisation.id
+      job = Resque.enqueue CreateTenant, @organisation.id
       redirect_to @organisation
     else
       render 'new'

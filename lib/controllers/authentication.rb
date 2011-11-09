@@ -5,7 +5,7 @@ module Controllers::Authentication
 
   protected
   def current_user
-    return false unless session[:user_id]
+    return false unless session[:user_id].present?
     @current_user ||= User.find(session[:user_id])
   end
 
