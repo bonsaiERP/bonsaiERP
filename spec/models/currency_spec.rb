@@ -19,6 +19,8 @@ describe Currency do
     Currency.count.should == 0
     Currency.create_base_data
     Currency.count.should > 0
+    Currency.first.id.should == 1
+    Currency.first.code.should == "BOB"
   end
 end
 

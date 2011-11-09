@@ -24,6 +24,8 @@ class Currency < ActiveRecord::Base
   def self.create_base_data
     path = File.join(Rails.root, "db/defaults", "currencies.yml")
     currencies = YAML.load_file(path)
-    Currency.create!(currencies)
+    currencies.each do |cur|
+      Currency.create!(cur) {|cu| cu.id = cur["id"]}
+    end
   end
 end

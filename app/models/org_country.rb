@@ -14,4 +14,12 @@ class OrgCountry < ActiveRecord::Base
   def to_s
     name
   end
+
+  def self.create_base_data
+    path = File.join(Rails.root, "db/defaults", "countries.yml")
+    countries = YAML.load_file(path)
+    countries.each do |coun|
+      OrgCountry.create!(coun) {|cu| cu.id = coun["id"]}
+    end
+  end
 end
