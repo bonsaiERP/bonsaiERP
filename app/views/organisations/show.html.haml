@@ -1,4 +1,34 @@
 %h2= @organisation
 
 - unless @organisation.base_accounts?
-  %p Creando datos de la empresa
+  %p Espere por favor, se esta creando la base de datos para su empresa
+
+:javascript
+  $(function() {
+    alert("Init tenant");
+    /*
+    var tenant_id = #{@organisation.id};
+    // Iterate to determine
+    checkTenant = function() {
+      var interval = 0, count = 0;
+      interval = setInterval(function() {
+        console.log("check tenat");
+        var url = ["/organisations", tenant_id, "check_schema"].join("/");
+        $.getJSON(url, function(resp) {
+          if(resp.success) {
+            window.location = ["/organisations", tenant_id, "select"].join("/");
+            clearInterval(interval);
+          }
+        }, 7000);
+
+        if(count > 4) {
+          clearInterval(interval);
+          alert("Exisitio un problema al crear sus datos, salga sel sistema y reingrese");
+        }
+        count++;
+      }
+    }
+
+    checkTenant();
+    */
+  });

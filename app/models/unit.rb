@@ -34,6 +34,11 @@ class Unit < ActiveRecord::Base
   def self.invisible
     Unit.where(:visible => false )
   end
+
+  def self.create_base_data
+    units = YAML.load_file(data_path("units.#{I18n.locale}.yml"))
+    Unit.create!(units)
+  end
 #
 #  # Retrives all records
 #  def self.all_records

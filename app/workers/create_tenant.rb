@@ -17,9 +17,8 @@ class CreateTenant
     org.class.transaction do
       load File.join(Rails.root, "db/schema.rb")
 
-      org.create_records
-      org.base_accounts = true
-      org.save!
+      Unit.create_base_data
+      AccountType.create_base_data
     end
   end
 end

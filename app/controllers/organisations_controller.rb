@@ -3,6 +3,7 @@
 # email: boriscyber@gmail.com
 class OrganisationsController < ApplicationController
   before_filter :check_authorization!
+  before_filter :reset_tenant
   before_filter :destroy_organisation_session!, :except => [ :select, :edit, :update, :edit_preferences, :update_preferences ]
 
   respond_to :html, :xml, :json
@@ -30,7 +31,6 @@ class OrganisationsController < ApplicationController
   # GET /organisations/1.xml
   def show
     session[:organisation] = nil
-    PgTools.restore_default_search_path
     @organisation = Organisation.find(params[:id])
     respond_with(@organisation)
   end
@@ -38,8 +38,13 @@ class OrganisationsController < ApplicationController
   # GET /organisations/new
   def new
     session[:organisation] = nil
-    PgTools.restore_default_search_path
     @organisation = Organisation.new(:currency_id => 1)
+  end
+
+  # GET /organisations/:id/schema
+  def check_schema
+    res = !!PgTools.set_search_path(params[:id])
+    render :json => {:success => res, :id => params[:id]}
   end
 
   # POST /organisations
@@ -53,6 +58,13 @@ class OrganisationsController < ApplicationController
     else
       render 'new'
     end
+  end
+
+  # GET /organisations/:id/create_tenant
+  def create_tenant
+    @organisation = Organisation.find(params[:id])
+    job = Resque.enqueue CreateTenant, @organisation.id
+    render "show"
   end
 
   # GET /organisations/1/edit
@@ -75,50 +87,21 @@ class OrganisationsController < ApplicationController
     end
   end
 
-  # DELETE /organisations/1
-  # DELETE /organisations/1.xml
-  #def destroy
-  #  @organisation = Organisation.find(params[:id])
-  #  @organisation.destroy
-
-  #  respond_with(@organisation)
-  #end
-
   # GET /organisation/1/select
   # sets the organisation session
   def select
     begin
       @organisation = current_user.organisations.find(params[:id])
+      redirect_to 
     rescue
-      @organisation = nil
-    end
-
-    unless @organisation.blank?
-      set_organisation_session(@organisation)
-      redirect_to dashboard_url
-    else
-      flash[:error] = "Debe seleccionar una organización válida."
-      redirect_to organisations_path
+      flash[:error] = "Usted no puede registrarse"
+      redirect_to "/users/sign_in"
     end
   end
 
-  # set preferences
-  # GET /organisations/:id/edit_preferences
-  def edit_preferences
-    @organisation = Organisation.find(organisation_id)
+  private
+
+  def reset_tenant
+    PgTools.restore_default_search_path
   end
-
-  # GET /organisations/:id/update_preferences
-  def update_preferences
-    @organisation = Organisation.find(organisation_id)
-    if @organisation.update_preferences(params[:organisation])
-      flash[:notice] = "Se ha actualizado correctamente las preferencias de #{@organisation}."
-      set_organisation_session(@organisation)
-
-      redirect_to "/configuration#organisation"
-    else
-      render :action => 'edit_preferences'
-    end
-  end
-
 end

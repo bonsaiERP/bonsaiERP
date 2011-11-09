@@ -22,4 +22,9 @@ class AccountType < ActiveRecord::Base
   def to_s
     name
   end
+
+  def self.create_base_data
+    account_types = YAML.load_file(data_path("account_types.#{I18n.locale}.yml"))
+    AccountType.create!(account_types)
+  end
 end

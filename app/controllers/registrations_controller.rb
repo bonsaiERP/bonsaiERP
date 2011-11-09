@@ -25,6 +25,7 @@ class RegistrationsController < ApplicationController
   end
 
   def new
+    PgTools.restore_default_search_path
     @user = User.new
 
     respond_to do |format|

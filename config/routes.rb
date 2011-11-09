@@ -90,8 +90,9 @@ Bonsaierp::Application.routes.draw do
   resources :taxes
 
   resources :organisations do
-    get  :select,     :on => :member
-    post :final_step, :on => :collection
+    get :check_schema,  :on => :member
+    get :create_tenant, :on => :member
+    get :select,        :on => :member
 
     get  :edit_preferences,   :on => :member
     put  :update_preferences, :on => :member

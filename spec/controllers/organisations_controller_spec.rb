@@ -10,22 +10,14 @@ describe OrganisationsController do
     @mock_organisation ||= mock_model(Organisation, stubs).as_null_object
   end
 
-  #describe "GET index" do
-  #  it "assigns all organisations as @organisations" do
-  #    Organisation.stub(:all) { [mock_organisation] }
-  #    get :index
-  #    assigns(:organisations).should eq([mock_organisation])
-  #  end
-  #end
-
-  #describe "GET show" do
-  #  it "assigns the requested organisation as @organisation" do
-  #    PgTools.stub!(restore_default_search_path: true)
-  #    Organisation.stub(:find).with("37") { mock_organisation }
-  #    get :show, :id => "37"
-  #    assigns(:organisation).should be(mock_organisation)
-  #  end
-  #end
+  describe "GET show" do
+    it "assigns the requested organisation as @organisation" do
+      PgTools.stub!(restore_default_search_path: true)
+      Organisation.stub(:find).with("37") { mock_organisation }
+      get :show, :id => "37"
+      assigns(:organisation).should be(mock_organisation)
+    end
+  end
 
   describe "GET new" do
     it "assigns a new organisation as @organisation" do
@@ -132,4 +124,28 @@ describe OrganisationsController do
   #  end
   #end
 
+  describe "GET test_schema" do
+    it 'should return if schema has been created' do
+      PgTools.stub!(:set_search_path => Object.new)
+      get :check_schema, id: "1"
+      response.body.should =~ /#{{:success => true, :id => "1"}.to_json}/
+    end
+
+    it 'should return false schema' do
+      PgTools.stub!(:set_search_path => false)
+      get :check_schema, id: "1"
+      response.body.should =~ /#{{:success => false, :id => "1"}.to_json}/
+    end
+  end
+
+  describe "GET create_tenant" do
+    it 'should enque with resque' do
+      Organisation.stub!(:find).with("2").and_return(mock_model(Organisation, id: 2))
+      Resque.stub!(:enqueue => true)
+
+      get :create_tenant, id: "2"
+      response.should render_template("show")
+    end
+
+  end
 end
