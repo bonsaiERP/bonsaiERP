@@ -3,8 +3,6 @@
 # email: boriscyber@gmail.com
 class Unit < ActiveRecord::Base
 
-  #include Models::Organisation::NewOrganisation
-
   # callbacks
   before_save    :strip_attributes
   before_destroy :check_items_destroy
@@ -16,9 +14,8 @@ class Unit < ActiveRecord::Base
   attr_accessible :name, :symbol, :integer
 
   # validations
-  validates_uniqueness_of :name
-  validates_uniqueness_of :symbol
   validates_presence_of :name, :symbol
+  validates_uniqueness_of :name, :symbol
 
 
   def to_s
@@ -37,8 +34,11 @@ class Unit < ActiveRecord::Base
 
   def self.create_base_data
     path = File.join(Rails.root, "db/defaults", "units.#{I18n.locale}.yml")
-    units = YAML.load_file(path)
-    Unit.create!(units)
+    data = YAML.load_file(path)
+    data.each do |d|
+      unit = Unit.new(d)
+      unit.save!(:validate => false)
+    end
   end
 #
 #  # Retrives all records

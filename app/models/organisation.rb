@@ -42,6 +42,31 @@ class Organisation < ActiveRecord::Base
     create_currencies
   end
 
+  def create_data
+    PgTools.set_search_path self.id, false
+    return if Currency.count > 0
+
+    AccountType.create_base_data
+    Unit.create_base_data
+    Currency.create_base_data
+    OrgCountry.create_base_data
+
+    data = org.attributes
+    data.delete("id")
+    data.delete("user_id")
+
+    orga = Organisation.new(data)
+    orga.id = org.id
+    orga.user_id = org.user_id
+    orga.save!
+
+    User.create!(user.attributes) {|u|
+      u.id = user.id
+      u.password = "demo123"
+      u.confirmed_at = user.confirmed_at
+    }
+  end
+
 protected
 
   # Sets the expiry date for the organisation until ew payment

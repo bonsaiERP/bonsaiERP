@@ -10,8 +10,6 @@ class OrganisationsController < ApplicationController
   # GET /organisations
   # GET /organisations.xml
   def index
-    destroy_organisation_session!
-
     @organisations = current_user.organisations
     if current_user.organisations.any?
       set_organisation_session(current_user.organisations.first)
@@ -53,7 +51,8 @@ class OrganisationsController < ApplicationController
 
     if @organisation.save
       flash[:notice] = "Se ha creado su empresa correctamente."
-      job = Resque.enqueue CreateTenant, @organisation.id
+      job = Resque.enqueue CreateTenant, @organisation.id, session[:user_id]
+
       redirect_to @organisation
     else
       render 'new'
@@ -63,41 +62,36 @@ class OrganisationsController < ApplicationController
   # GET /organisations/:id/create_tenant
   def create_tenant
     @organisation = Organisation.find(params[:id])
-    job = Resque.enqueue CreateTenant, @organisation.id
+    job = Resque.enqueue CreateTenant, @organisation.id, session[:user_id]
     render "show"
   end
 
-  # GET /organisations/1/edit
-  def edit
-    @organisation = Organisation.find(session[:organisation][:id])
-    respond_with(@organisation)
-  end
-
-  # PUT /organisations/1
-  # PUT /organisations/1.xml
-  def update
-    @organisation = Organisation.find(session[:organisation][:id])
-    if @organisation.update_attributes(params[:organisation])
-      set_organisation_session @organisation
-      flash[:notice] = "Se ha actualizado correctamente los datos de su empresa."
-
-      redirect_to "/configuration#organisation"
-    else
-      render :action => 'edit'
-    end
+  # GET /organisations/:id/create_data
+  def create_data
+    debugger
+    s=0
+    #@organisation = CreateTenant.create_base_data(params[:id])
+    #@organisation.create_data
   end
 
   # GET /organisation/1/select
   # sets the organisation session
-  def select
-    begin
-      @organisation = current_user.organisations.find(params[:id])
-      redirect_to "/dashboard"
-    rescue
-      flash[:error] = "Error, ingrese de nuevo"
-      redirect_to "/users/sign_out"
-    end
-  end
+  #def select
+  #  orgs = current_user.organisations.where(:organisation_id => params[:id]).any?
+  #  res = !!PgTools.set_search_path(params[:id])
+  #  
+  #  case
+  #  when(orgs and res)
+  #  end
+  #  begin
+  #    @organisation = current_user.organisations.find(params[:id])
+
+  #    redirect_to "/dashboard"
+  #  rescue
+  #    flash[:error] = "Error, ingrese de nuevo"
+  #    redirect_to "/users/sign_out"
+  #  end
+  #end
 
   private
 

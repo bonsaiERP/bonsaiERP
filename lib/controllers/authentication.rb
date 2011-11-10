@@ -6,7 +6,11 @@ module Controllers::Authentication
   protected
   def current_user
     return false unless session[:user_id].present?
-    @current_user ||= User.find(session[:user_id])
+    begin
+      @current_user ||= User.find(session[:user_id])
+    rescue
+      false
+    end
   end
 
   def user_signed_in?
@@ -21,13 +25,17 @@ module Controllers::Authentication
       flash[:notice] = "Ingresó correctamente"
       orgs = current_user.organisations
       org_id = orgs.first.id if orgs.any?
+      tenant = !!PgTools.set_search_path( org_id )
+      data   = PgTools.created_data?(org_id) if orgs.any?
 
       case
-      when( orgs.any? and check_organisation_tenant(org_id) )
+      when( orgs.any? and tenant and data )
         set_organisation_session(current_user.organisations.first)
         session[:user] = {:rol => current_user.link.rol }
         redirect_to "/dashboard"
-      when( orgs.any? and not(check_organisation_tenant(org_id) ) )
+      when( orgs.any? and tenant and not(data) )
+        redirect_to create_data_organisation_path(org_id)
+      when( orgs.any? and not(tenant) )
         redirect_to create_tenant_organisation_path(org_id)
       else
         redirect_to "/organisations/new"
@@ -35,9 +43,6 @@ module Controllers::Authentication
     end
   end
 
-  def check_organisation_tenant(organisation_id)
-    !!PgTools.set_search_path( organisation_id )
-  end
 
   # Sets the session for the organisation
   def set_organisation_session(organisation)

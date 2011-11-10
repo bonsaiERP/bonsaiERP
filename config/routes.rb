@@ -93,6 +93,7 @@ Bonsaierp::Application.routes.draw do
     get :check_schema,  :on => :member
     get :create_tenant, :on => :member
     get :select,        :on => :member
+    get :create_data,   :on => :member
 
     get  :edit_preferences,   :on => :member
     put  :update_preferences, :on => :member
@@ -132,6 +133,9 @@ Bonsaierp::Application.routes.draw do
     
   match '/dashboard' => 'dashboard#index', :as => :dashboard
   match '/configuration' => 'dashboard#configuration'
+
+  # Resque
+  mount Resque::Server, :at => "/resque"  
 
   # Rails Metal
   match "/client_autocomplete"   => AutocompleteApp.action(:client)

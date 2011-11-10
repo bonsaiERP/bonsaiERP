@@ -27,14 +27,6 @@ describe OrganisationsController do
     end
   end
 
-  #describe "GET edit" do
-  #  it "assigns the requested organisation as @organisation" do
-  #    Organisation.stub(:find).with("37") { mock_organisation }
-  #    get :edit, :id => "37"
-  #    assigns(:organisation).should be(mock_organisation)
-  #  end
-  #end
-
   describe "POST create" do
     before do
       Resque.stub!(enqueue: true)
@@ -72,57 +64,6 @@ describe OrganisationsController do
 
   end
 
-  #describe "PUT update" do
-
-  #  describe "with valid params" do
-  #    it "updates the requested organisation" do
-  #      Organisation.should_receive(:find).with("37") { mock_organisation }
-  #      mock_organisation.should_receive(:update_attributes).with({'these' => 'params'})
-  #      put :update, :id => "37", :organisation => {'these' => 'params'}
-  #    end
-
-  #    it "assigns the requested organisation as @organisation" do
-  #      Organisation.stub(:find) { mock_organisation(:update_attributes => true) }
-  #      put :update, :id => "1"
-  #      assigns(:organisation).should be(mock_organisation)
-  #    end
-
-  #    it "redirects to the organisation" do
-  #      Organisation.stub(:find) { mock_organisation(:update_attributes => true) }
-  #      put :update, :id => "1"
-  #      response.should redirect_to(organisation_url(mock_organisation))
-  #    end
-  #  end
-
-  #  describe "with invalid params" do
-  #    it "assigns the organisation as @organisation" do
-  #      Organisation.stub(:find) { mock_organisation(:update_attributes => false) }
-  #      put :update, :id => "1"
-  #      assigns(:organisation).should be(mock_organisation)
-  #    end
-
-  #    it "re-renders the 'edit' template" do
-  #      Organisation.stub(:find) { mock_organisation(:update_attributes => false) }
-  #      put :update, :id => "1"
-  #      response.should render_template('edit')
-  #    end
-  #  end
-
-  #end
-
-  #describe "DELETE destroy" do
-  #  it "destroys the requested organisation" do
-  #    Organisation.should_receive(:find).with("37") { mock_organisation }
-  #    mock_organisation.should_receive(:destroy)
-  #    delete :destroy, :id => "37"
-  #  end
-
-  #  it "redirects to the organisations list" do
-  #    Organisation.stub(:find) { mock_organisation(:destroy => true) }
-  #    delete :destroy, :id => "1"
-  #    response.should redirect_to(organisations_url)
-  #  end
-  #end
 
   describe "GET test_schema" do
     it 'should return if schema has been created' do
@@ -135,6 +76,12 @@ describe OrganisationsController do
       PgTools.stub!(:set_search_path => false)
       get :check_schema, id: "1"
       response.body.should =~ /#{{:success => false, :id => "1"}.to_json}/
+    end
+  end
+
+  describe "GET select" do
+    it 'should redirect according' do
+      
     end
   end
 

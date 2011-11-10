@@ -75,4 +75,6 @@ Bonsaierp::Application.configure do
   config.assets.digest = true
 
   config.assets.compile = true
+  # Disable query caching until it's fixed for PostgreSQL schemas
+  config.middleware.delete ActiveRecord::QueryCache
 end

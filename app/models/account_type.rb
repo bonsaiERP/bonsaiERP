@@ -22,7 +22,7 @@ class AccountType < ActiveRecord::Base
 
   def self.create_base_data
     path = File.join(Rails.root, "db/defaults", "account_types.#{I18n.locale}.yml")
-    account_types = YAML.load_file(path)
-    AccountType.create!(account_types)
+    data = YAML.load_file(path)
+    AccountType.create!(data)
   end
 end
