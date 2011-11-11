@@ -111,7 +111,7 @@ private
   def set_organisation
     raise "You must set the organisation" if session[:organisation].blank?
     OrganisationSession.set session[:organisation]
-    PgTools.set_search_path session[:organisation][:id]
+    PgTools.add_schema_to_path PgTools.get_schema_name(session[:organisation][:id])
   end
 
   def check_organisation

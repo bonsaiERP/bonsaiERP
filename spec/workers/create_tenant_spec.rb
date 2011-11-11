@@ -27,6 +27,7 @@ describe CreateTenant do
     PgTools.add_schema_to_path schema_name
     Unit.count.should > 0
     Organisation.first.name.should == org.name
+    User.first.email.should == "demo@example.com"
 
     PgTools.reset_search_path
     Unit.count.should == 0

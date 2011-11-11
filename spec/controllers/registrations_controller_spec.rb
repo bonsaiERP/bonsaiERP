@@ -24,15 +24,16 @@ describe RegistrationsController do
     end
 
     it 'should redirect to /dashboard if it has organisation' do
-      User.stub!(:find_by_id => stub(:confirm_token => true, :id => 1,
-            :organisations => stub(:any? => false)
-          ))
-      u = User.new {|u| u.id = 1 }
-      u.stub!(:organisations => stub(:any? => true, :first => 1), :link => stub(:rol => 'admin') )
-      controller.stub!(:current_user => u, 
-        :set_organisation_session => true )
+      user_stubs = stub(:confirm_token => true, :id => 1, 
+                        link: stub(rol: "admin"),
+                        :organisations => [mock_model(Organisation, id: 1)]
+          )
+      User.stub!(find: user_stubs, find_by_id: user_stubs)
+      controller.stub!( :set_organisation_session => true )
 
+      puts "-"*80
       get 'show', :id => 1, :token => "demo123"
+      puts "-"*80
 
       response.should redirect_to "/dashboard"
       session[:user_id].should == 1
@@ -45,13 +46,6 @@ describe RegistrationsController do
       flash[:warning].should_not be_blank
     end
 
-    it 'should redirect to sessions/new if user registered' do
-      User.any_instance.stub!(:confirm_token => false)
-      User.stub!(:find_by_id => User.new)
-      
-      get 'show', :id => 1, :token => '123'
-      response.should redirect_to "/sessions/new"
-    end
   end
 
   describe "GET registrations if logged user" do

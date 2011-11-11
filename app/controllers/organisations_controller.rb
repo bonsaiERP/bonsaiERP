@@ -3,7 +3,7 @@
 # email: boriscyber@gmail.com
 class OrganisationsController < ApplicationController
   before_filter :check_authorization!
-  before_filter :reset_tenant
+  before_filter :reset_search_path
   before_filter :destroy_organisation_session!, :except => [ :select, :edit, :update, :edit_preferences, :update_preferences ]
 
   respond_to :html, :xml, :json
@@ -41,7 +41,7 @@ class OrganisationsController < ApplicationController
 
   # GET /organisations/:id/schema
   def check_schema
-    res = !!PgTools.set_search_path(params[:id])
+    res = PgTools.schema_exists?(PgTools.get_schema_name(params[:id]))
     render :json => {:success => res, :id => params[:id]}
   end
 
@@ -62,17 +62,10 @@ class OrganisationsController < ApplicationController
   # GET /organisations/:id/create_tenant
   def create_tenant
     @organisation = Organisation.find(params[:id])
-    job = Resque.enqueue CreateTenant, @organisation.id, session[:user_id]
+    job = Qu.enqueue CreateTenant, @organisation.id, session[:user_id]
     render "show"
   end
 
-  # GET /organisations/:id/create_data
-  def create_data
-    debugger
-    s=0
-    #@organisation = CreateTenant.create_base_data(params[:id])
-    #@organisation.create_data
-  end
 
   # GET /organisation/1/select
   # sets the organisation session
@@ -95,7 +88,8 @@ class OrganisationsController < ApplicationController
 
   private
 
-  def reset_tenant
-    PgTools.restore_default_search_path
+  private
+  def reset_search_path
+    PgTools.reset_search_path
   end
 end

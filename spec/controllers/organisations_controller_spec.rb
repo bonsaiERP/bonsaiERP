@@ -29,7 +29,7 @@ describe OrganisationsController do
 
   describe "POST create" do
     before do
-      Resque.stub!(enqueue: true)
+      Qu.stub!(enqueue: true)
     end
 
     describe "with valid params" do
@@ -67,32 +67,26 @@ describe OrganisationsController do
 
   describe "GET test_schema" do
     it 'should return if schema has been created' do
-      PgTools.stub!(:set_search_path => Object.new)
+      PgTools.stub!(schema_exists?: true)
       get :check_schema, id: "1"
       response.body.should =~ /#{{:success => true, :id => "1"}.to_json}/
     end
 
     it 'should return false schema' do
-      PgTools.stub!(:set_search_path => false)
+      PgTools.stub!(schema_exists?: false)
       get :check_schema, id: "1"
       response.body.should =~ /#{{:success => false, :id => "1"}.to_json}/
     end
   end
 
-  describe "GET select" do
-    it 'should redirect according' do
-      
-    end
-  end
-
   describe "GET create_tenant" do
-    it 'should enque with resque' do
-      Organisation.stub!(:find).with("2").and_return(mock_model(Organisation, id: 2))
-      Resque.stub!(:enqueue => true)
+    it 'should render show and wait for schema creation' do
+      Qu.stub!(:enque)
+      Organisation.stub!(find: mock_model(Organisation, id: 1))
 
-      get :create_tenant, id: "2"
+      get :create_tenant, id: 1
       response.should render_template("show")
     end
-
   end
+
 end

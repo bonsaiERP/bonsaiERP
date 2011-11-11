@@ -1,7 +1,7 @@
 %h2= @organisation
 
 - unless @organisation.base_accounts?
-  %p
+  %h3.n
     = image_tag("ajax-loader.gif")
     Espere por favor, se esta creando la base de datos para su empresa
 
@@ -30,5 +30,5 @@
       }, 7000);
     }
 
-    //checkTenant();
+    checkTenant();
   });

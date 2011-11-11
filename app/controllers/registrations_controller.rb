@@ -3,6 +3,7 @@
 # email: boriscyber@gmail.com
 class RegistrationsController < ApplicationController
   before_filter :check_logged_user, :except => [:show]
+  before_filter :reset_search_path
   layout "home"
 
   def index
@@ -25,7 +26,6 @@ class RegistrationsController < ApplicationController
   end
 
   def new
-    PgTools.restore_default_search_path
     @user = User.new
 
     respond_to do |format|
@@ -46,4 +46,8 @@ class RegistrationsController < ApplicationController
     end
   end
 
+  private
+  def reset_search_path
+    PgTools.reset_search_path
+  end
 end

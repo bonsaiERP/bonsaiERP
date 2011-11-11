@@ -5,7 +5,6 @@ class SessionsController < ApplicationController
   before_filter :check_logged_user, :except => [:destroy]
 
   def new
-    PgTools.restore_default_search_path
     @user = User.new
   end
 
@@ -48,7 +47,7 @@ class SessionsController < ApplicationController
     session[:user] = nil
     session[:organisation] = nil
     session[:current_user] = nil
-    PgTools.restore_default_search_path
+    PgTools.reset_search_path
 
     redirect_to "/users/sign_in", :notice => "Ha salido correctamente"
   end

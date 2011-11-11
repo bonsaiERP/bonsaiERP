@@ -12,26 +12,26 @@ class CreateTenant
     ActiveRecord::Base.transaction do
       PgTools.create_schema schema_name
       PgTools.load_schema_into_schema schema_name
-      PgTools.add_schema_to_path schema_name
-      Unit.create_base_data
-      AccountType.create_base_data
-      Currency.create_base_data
-      OrgCountry.create_base_data
+      #PgTools.add_schema_to_path schema_name
+      #Unit.create_base_data
+      #AccountType.create_base_data
+      #Currency.create_base_data
+      #OrgCountry.create_base_data
 
-      data = org.attributes
-      data.delete("id")
-      data.delete("user_id")
+      #data = org.attributes
+      #data.delete("id")
+      #data.delete("user_id")
 
-      orga = Organisation.new(data)
-      orga.id = org.id
-      orga.user_id = org.user_id
-      orga.save!
+      #orga = Organisation.new(data)
+      #orga.id = org.id
+      #orga.user_id = org.user_id
+      #orga.save!
 
-      User.create!(user.attributes) {|u|
-        u.id = user.id
-        u.password = "demo123"
-        u.confirmed_at = user.confirmed_at
-      }
+      #User.create!(user.attributes) {|u|
+      #  u.id = user.id
+      #  u.password = "demo123"
+      #  u.confirmed_at = user.confirmed_at
+      #}
     end
   end
 

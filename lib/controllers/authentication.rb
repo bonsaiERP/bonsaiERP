@@ -25,17 +25,14 @@ module Controllers::Authentication
       flash[:notice] = "Ingresó correctamente"
       orgs = current_user.organisations
       org_id = orgs.first.id if orgs.any?
-      tenant = !!PgTools.set_search_path( org_id )
-      data   = PgTools.created_data?(org_id) if orgs.any?
+      schema = PgTools.schema_exists? PgTools.get_schema_name(org_id)
 
       case
-      when( orgs.any? and tenant and data )
+      when( orgs.any? and schema )
         set_organisation_session(current_user.organisations.first)
         session[:user] = {:rol => current_user.link.rol }
         redirect_to "/dashboard"
-      when( orgs.any? and tenant and not(data) )
-        redirect_to create_data_organisation_path(org_id)
-      when( orgs.any? and not(tenant) )
+      when( orgs.any? and not(schema))
         redirect_to create_tenant_organisation_path(org_id)
       else
         redirect_to "/organisations/new"
