@@ -12,9 +12,6 @@ describe Organisation do
   it {should have_valid(:name).when("uno")}
   it {should_not have_valid(:name).when(" ")}
 
-  it {should have_valid(:address).when("Very near")}
-  it {should_not have_valid(:name).when(" ")}
-
   it {should have_valid(:currency_id).when(10)}
   #it {should_not have_valid(:currency_id).when(1)}
 

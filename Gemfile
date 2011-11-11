@@ -27,7 +27,7 @@ gem 'haml'
 gem 'kaminari'
 gem 'valium'
 gem 'bcrypt-ruby'
-#gem 'qu-redis'
+gem 'qu-redis'
 gem 'resque', :require => 'resque/server'
 
 #gem 'nokogiri'

@@ -1,22 +1,20 @@
 class CreateTenant
-  @queue = :create_tenant
+  #@queue = :create_tenant
 
-  def self.perform(organisation_id, user_id)
-    org = Organisation.find(organisation_id)
+  def self.perform(org_id, user_id)
+    schema_name = PgTools.get_schema_name(org_id)
+    return if PgTools.schema_exists?(schema_name)
+
+    PgTools.reset_search_path
+    org  = Organisation.find(org_id)
     user = User.find(user_id)
 
     ActiveRecord::Base.transaction do
-      PgTools.create_schema organisation_id
-      PgTools.set_search_path name, false
-      load File.join(Rails.root, "db/schema.rb")
-    end
-  end
-
-  def self.create_base_data(org, user)
-    ActiveRecord::Base.transaction do
-      PgTools.set_search_path org.id, false
-      AccountType.create_base_data
+      PgTools.create_schema schema_name
+      PgTools.load_schema_into_schema schema_name
+      PgTools.add_schema_to_path schema_name
       Unit.create_base_data
+      AccountType.create_base_data
       Currency.create_base_data
       OrgCountry.create_base_data
 

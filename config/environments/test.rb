@@ -40,5 +40,5 @@ Bonsaierp::Application.configure do
   config.serve_static_assets = true
   config.static_cache_control = "public, max-age=3600"
   # Disable query caching until it's fixed for PostgreSQL schemas
-  config.middleware.delete ActiveRecord::QueryCache
+  #config.middleware.delete ActiveRecord::QueryCache
 end

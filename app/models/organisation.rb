@@ -26,7 +26,7 @@ class Organisation < ActiveRecord::Base
 
   # validations
 
-  validates_presence_of :name, :address, :org_country, :currency
+  validates_presence_of :name, :org_country, :currency
   validates_uniqueness_of :name, :scope => :user_id
 
   attr_protected :user_id
