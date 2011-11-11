@@ -111,7 +111,13 @@ private
   def set_organisation
     raise "You must set the organisation" if session[:organisation].blank?
     OrganisationSession.set session[:organisation]
-    PgTools.add_schema_to_path PgTools.get_schema_name(session[:organisation][:id])
+    begin
+      PgTools.add_schema_to_path PgTools.get_schema_name(session[:organisation][:id])
+    rescue
+      session[:organisation] = nil
+      session[:user_id] = nil
+      redirect_to "/users/sign_out"
+    end
   end
 
   def check_organisation

@@ -16,7 +16,7 @@
       interval = setInterval(function() {
         $.getJSON(url, function(resp) {
           if(resp.success) {
-            window.location = ["/organisations", tenant_id, "select"].join("/");
+            window.location = ["/dashboard"].join("/");
             clearInterval(interval);
           }
         });

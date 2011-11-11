@@ -42,6 +42,10 @@ class OrganisationsController < ApplicationController
   # GET /organisations/:id/schema
   def check_schema
     res = PgTools.schema_exists?(PgTools.get_schema_name(params[:id]))
+    if res
+      org = Organisation.find(params[:id])
+      set_organisation_session(org)
+    end
     render :json => {:success => res, :id => params[:id]}
   end
 

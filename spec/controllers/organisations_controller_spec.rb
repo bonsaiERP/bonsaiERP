@@ -68,6 +68,10 @@ describe OrganisationsController do
   describe "GET test_schema" do
     it 'should return if schema has been created' do
       PgTools.stub!(schema_exists?: true)
+      Organisation.stub!(find: mock_model(Organisation,
+        id: 1, name: "Test", currency_id: 1, currency_name: "Boliviano",
+        currency_symbol: "Bs.", due_date: Time.now
+      ))
       get :check_schema, id: "1"
       response.body.should =~ /#{{:success => true, :id => "1"}.to_json}/
     end

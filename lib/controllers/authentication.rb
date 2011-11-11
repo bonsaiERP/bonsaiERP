@@ -46,7 +46,6 @@ module Controllers::Authentication
     ret = true
 
     session[:organisation] = Hash[ OrganisationSession::KEYS.map {|k| [k, organisation.send(k)] } ]
-    set_organisation
 
     ret
   end

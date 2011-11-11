@@ -97,7 +97,7 @@ protected
 
   # Sets the user_id, needed to define the scope of uniquenes_of :name
   def set_user
-    write_attribute(:user_id, UserSession.current_user.id)
+    write_attribute(:user_id, UserSession.current_user.id) unless user_id.present?
   end
 
   def create_link
