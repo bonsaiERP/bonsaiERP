@@ -18,7 +18,7 @@ class Contact < ActiveRecord::Base
 
   validates_presence_of    :matchcode
 
-  validates_uniqueness_of  :matchcode, :scope => :organisation_id
+  validates_uniqueness_of  :matchcode
 
   validates_format_of     :email,  :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :allow_blank => true
   validates_format_of     :phone,  :with =>/^\d+[\d\s-]+\d$/,  :allow_blank => true
@@ -34,7 +34,7 @@ class Contact < ActiveRecord::Base
   delegate :id, :name, :to => :account, :prefix => true
 
   def self.search(match)
-    includes(:accounts).where("contacts.matchcode LIKE ?", "%#{match}%")
+    includes(:accounts).where("contacts.matchcode ILIKE ?", "%#{match}%")
   end
 
   # Finds a contact using the type

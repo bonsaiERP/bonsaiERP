@@ -53,7 +53,7 @@ class AccountLedger < ActiveRecord::Base
 
   validates :reference, :length => { :within => 3..150, :allow_blank => false }
   validates :currency_id, :currency => true
-  validates_uniqueness_of :code
+  #validates_uniqueness_of :code
 
   #validate  :number_of_details
   #validate  :total_amount_equal
@@ -92,7 +92,7 @@ class AccountLedger < ActiveRecord::Base
   end
 
   def to_s
-    "%06d" % code
+    "%06d" % id
   end
 
   # Determines if the ledger can be nulled

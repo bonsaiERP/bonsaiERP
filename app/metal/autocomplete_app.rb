@@ -66,17 +66,17 @@ class AutocompleteApp < BaseApp
 private
   # Search for contact autocomlete
   def contact_autocomplete(type, options)
-    set_organisation_session
-    Contact.org.where("type = :type AND matchcode LIKE :term", :type => type, :term => "%#{options[:term]}%").limit(20).map {|c| {:id => c.id, :label => c.to_s}}
+    set_search_path
+    Contact.where("type = :type AND matchcode LIKE :term", :type => type, :term => "%#{options[:term]}%").limit(20).map {|c| {:id => c.id, :label => c.to_s}}
   end
 
   def item_autocomplete(options)
-    set_organisation_session
+    set_search_path
     Item.simple_search(options[:term]).to_json
   end
 
   def contact_account_autocomplete(type, options)
-    set_organisation_session
-    Account.org.where("original_type = :type AND name LIKE :term", :type => type, :term => "%#{options[:term]}%").limit(20).map {|c| {:id => c.id, :label => c.to_s}}
+    set_search_path
+    Account.where("original_type = :type AND name LIKE :term", :type => type, :term => "%#{options[:term]}%").limit(20).map {|c| {:id => c.id, :label => c.to_s}}
   end
 end

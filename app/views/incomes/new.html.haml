@@ -3,4 +3,4 @@
     %li #{link_to 'Ventas', incomes_path} <span>&gt;</span>
 %h1 Nueva proforma de venta
 
-= render 'transactions/form', :transaction => @transaction, :contacts => Client.org
+= render 'transactions/form', :transaction => @transaction, :contacts => Client.scoped

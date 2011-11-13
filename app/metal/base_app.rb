@@ -4,8 +4,7 @@
 class BaseApp < ActionController::Metal
 
   protected
-
-  def set_organisation_session
-    OrganisationSession.set session[:organisation]
+  def set_search_path
+    PgTools.set_search_path PgTools.get_schema_name(session[:organisation][:id])
   end
 end

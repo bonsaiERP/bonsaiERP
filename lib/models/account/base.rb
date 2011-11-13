@@ -27,9 +27,8 @@ module Models::Account
 
         self.accounts.build(
           :currency_id => currency_id,
-          :account_type_id => AccountType.org.find_by_account_number(self.class.to_s).id,
+          :account_type_id => AccountType.find_by_account_number(self.class.to_s).id,
         ) {|a|
-          a.organisation_id = OrganisationSession.organisation_id
           a.original_type = self.class.to_s
         }
       end

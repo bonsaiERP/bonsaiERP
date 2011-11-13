@@ -3,7 +3,6 @@
 # email: boriscyber@gmail.com
 class Account < ActiveRecord::Base
 
-  include Models::Organisation::NewOrganisation
   include ActionView::Helpers::NumberHelper 
 
   # callbacks
@@ -21,7 +20,7 @@ class Account < ActiveRecord::Base
   belongs_to :accountable, :polymorphic => true
 
   has_many :account_ledgers
-  has_many :account_ledger_details
+  #has_many :account_ledger_details
   #has_many :account_currencies, :autosave => true
   # Transaction
   has_many :incomes,  :class_name => "Transaction", :conditions => "transactions.type = 'Income'"

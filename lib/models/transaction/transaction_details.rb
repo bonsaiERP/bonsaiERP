@@ -25,7 +25,7 @@ module Models::Transaction
     end
 
     def item_prices
-      @prices ||= Hash[Item.org.where(:id => item_ids).values_of(:id, :price)]
+      @prices ||= Hash[Item.where(:id => item_ids).values_of(:id, :price)]
     end
 
     def item_ids

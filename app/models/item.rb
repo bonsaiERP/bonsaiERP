@@ -113,17 +113,17 @@ class Item < ActiveRecord::Base
 
   # Searches using ctype, and searches the name and code atributes
   def self.index(s_type = TYPES.first, options = {})
-    query = [ ["name", "code"].map {|v| "items.#{v} LIKE ?"}.join(" OR ") ] + Array.new(2, "%#{options[:search]}%")
+    query = [ ["name", "code"].map {|v| "items.#{v} ILIKE ?"}.join(" OR ") ] + Array.new(2, "%#{options[:search]}%")
     where(:ctype => s_type).where(query)
   end
 
   def self.search(params)
-    self.includes(:unit, :stocks).where("items.name LIKE :search OR items.code LIKE :search", :search => "%#{params[:search]}%")
+    self.includes(:unit, :stocks).where("items.name ILIKE :search OR items.code ILIKE :search", :search => "%#{params[:search]}%")
   end
 
   # Modifications for rubinius
   def self.simple_search(search, limit = 20)
-    sc = self.where("code LIKE :search OR name LIKE :search", :search => "%#{search}%")
+    sc = self.where("code ILIKE :search OR name ILIKE :search", :search => "%#{search}%")
     sc.limit(limit).values_of(:id, :code, :name, :price).map do |id, code, name, price|
       {:id => id, :code => code, :name => name, :price => price, :label => "#{code} - #{name}", :value => id}
     end

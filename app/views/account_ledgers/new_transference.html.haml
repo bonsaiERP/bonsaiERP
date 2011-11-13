@@ -19,7 +19,7 @@
     
     = f.input :account_id, :as => :hidden
     
-    = f.input :to_id, :collection => Account.org.money.where("id NOT IN(?)", @account_ledger.account_id), :label => 'A cuenta'
+    = f.input :to_id, :collection => Account.money.where("id NOT IN(?)", @account_ledger.account_id), :label => 'A cuenta'
 
     ._50.fl
       = f.input :amount, :label => "Cantidad en (#{@account_ledger.account.currency_symbol})",
@@ -43,7 +43,7 @@
 :javascript
   $(function() {
 
-    var accounts = #{Account.org.to_hash(:name, :currency_id).to_json};
+    var accounts = #{Account.to_hash(:name, :currency_id).to_json};
     var currencies = #{Currency.to_hash.to_json};
 
     var er = new ExchangeRate()

@@ -2,7 +2,6 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class Tax < ActiveRecord::Base
-  include Models::Organisation::NewOrganisation
 
   # relationships
   has_and_belongs_to_many :transactions
