@@ -92,7 +92,6 @@ class OrganisationsController < ApplicationController
 
   private
 
-  private
   def reset_search_path
     PgTools.reset_search_path
   end

@@ -135,7 +135,7 @@ Bonsaierp::Application.routes.draw do
   match '/configuration' => 'dashboard#configuration'
 
   # Resque
-  mount Resque::Server, :at => "/resque"  
+  #mount Resque::Server, :at => "/resque"  
 
   # Rails Metal
   match "/client_autocomplete"   => AutocompleteApp.action(:client)

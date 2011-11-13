@@ -112,7 +112,7 @@ private
     raise "You must set the organisation" if session[:organisation].blank?
     OrganisationSession.set session[:organisation]
     begin
-      PgTools.add_schema_to_path PgTools.get_schema_name(session[:organisation][:id])
+      PgTools.set_search_path PgTools.get_schema_name(session[:organisation][:id])
     rescue
       session[:organisation] = nil
       session[:user_id] = nil

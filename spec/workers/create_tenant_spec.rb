@@ -24,7 +24,7 @@ describe CreateTenant do
     CreateTenant.perform org.id, user_mock.id
 
     PgTools.schema_exists?(schema_name).should be_true
-    PgTools.add_schema_to_path schema_name
+    PgTools.set_search_path schema_name
     Unit.count.should > 0
     Organisation.first.name.should == org.name
     User.first.email.should == "demo@example.com"

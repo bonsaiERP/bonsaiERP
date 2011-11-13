@@ -12,7 +12,7 @@ class CreateTenant
     ActiveRecord::Base.transaction do
       PgTools.create_schema schema_name
       PgTools.load_schema_into_schema schema_name
-      PgTools.add_schema_to_path schema_name
+      PgTools.set_search_path schema_name
       Unit.create_base_data
       AccountType.create_base_data
       Currency.create_base_data

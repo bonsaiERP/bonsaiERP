@@ -7,7 +7,7 @@ module PgTools
 
   def with_schema(schema_name)
     old_search_path = connection.schema_search_path
-    add_schema_to_path(schema_name)
+    set_search_path(schema_name)
     connection.schema_search_path = schema_name
     result = yield
 
@@ -16,7 +16,7 @@ module PgTools
     result
   end
 
-  def add_schema_to_path(schema_name)
+  def set_search_path(schema_name)
     connection.execute "SET search_path TO #{schema_name}"
   end
 

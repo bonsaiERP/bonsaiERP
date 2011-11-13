@@ -3,6 +3,7 @@
 # email: boriscyber@gmail.com
 class ResetPasswordsController < ApplicationController
   #include ActionView::Helpers::UrlHelper
+  before_filter :reset_search_path
   before_filter :check_if_can_reset_password, :only => [:edit, :update]
 
   def new
@@ -49,5 +50,9 @@ class ResetPasswordsController < ApplicationController
       flash[:warning] = "No se puede cambiar de contraseña."
       redirect_to new_reset_password_path
     end
+  end
+
+  def reset_search_path
+    PgTools.reset_search_path
   end
 end
