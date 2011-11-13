@@ -21,6 +21,7 @@ module Controllers::Authentication
   # if the user has created the organisation and tenant logins
   # if the user has created the organisation and not tenant => cretes tenant
   def check_logged_user
+    PgTools.reset_search_path
     if current_user
       flash[:notice] = "Ingresó correctamente"
       orgs = current_user.organisations
@@ -30,7 +31,8 @@ module Controllers::Authentication
       case
       when( orgs.any? and schema )
         set_organisation_session(current_user.organisations.first)
-        session[:user] = {:rol => current_user.link.rol }
+        link = current_user.links.first
+        session[:user] = {:rol => link.rol }
         redirect_to "/dashboard"
       when( orgs.any? and not(schema))
         redirect_to create_tenant_organisation_path(org_id)

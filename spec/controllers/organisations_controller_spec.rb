@@ -85,7 +85,7 @@ describe OrganisationsController do
 
   describe "GET create_tenant" do
     it 'should render show and wait for schema creation' do
-      Qu.stub!(:enque)
+      Qu.stub!(enqueue: true)
       Organisation.stub!(find: mock_model(Organisation, id: 1))
 
       get :create_tenant, id: 1
