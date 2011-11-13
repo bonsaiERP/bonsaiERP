@@ -41,6 +41,7 @@ group :development, :test do
   gem 'steak', '~> 2.0.0'
   gem 'jasmine'
   gem 'headless'
+  gem 'jasminerice'
 end
 
 group :development do

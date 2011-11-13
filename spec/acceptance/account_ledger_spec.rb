@@ -13,10 +13,8 @@ feature "Test account ledger", "for in outs and transferences" do
     create_account_types
   end
 
-  let!(:client) { create_client(:matchcode => "Lucas Estrella")}
-
-
   let!(:bank) {create_bank(:currency_id => 1, :name => "Bank chiquito")}
+  let!(:client) { create_client(:matchcode => "Lucas Estrella")}
   let(:bank_account) { bank.account }
   let(:bank_ac_id){ bank_account.id }
 
@@ -44,6 +42,7 @@ feature "Test account ledger", "for in outs and transferences" do
     al.active.should == true
 
     al.creator_id.should == 1
+    ac = Account.find_by_name("Lucas Estrella")
 
     al.currency_id.should == 1
     al.amount.should == 100
@@ -109,7 +108,6 @@ feature "Test account ledger", "for in outs and transferences" do
 
     al2.save.should be_true
 
-    al2.organisation_id.should == 1
     al2.amount.should == -100
     al2.operation.should == "out"
 

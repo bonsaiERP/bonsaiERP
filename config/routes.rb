@@ -1,5 +1,9 @@
 Bonsaierp::Application.routes.draw do
 
+  if [:development, :test].include? Rails.env
+    mount Jasminerice::Engine => "/jasmine" 
+  end
+
   resources :stocks
 
   resources :account_types
