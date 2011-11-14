@@ -18,7 +18,7 @@ class AccountLedgerPresenter < BasePresenter
 
   def exchange_rate_hint
     html = "Tipo de cambio: <a href='javascript:' id ='suggested_exchange_rate'>#{h.ntc(0, :precision => 4)}</a>"
-    html << ", Invertirdo: <a href='javascript:' id='suggested_inverted_rate'>#{h.ntc(0, :precision => 4)}</a>"
+    #html << ", Invertirdo: <a href='javascript:' id='suggested_inverted_rate'>#{h.ntc(0, :precision => 4)}</a>"
     html.html_safe
   end
 

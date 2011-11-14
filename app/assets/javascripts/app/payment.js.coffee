@@ -49,6 +49,7 @@ class Payment
     amount   = @$amount.val() * 1
     int      = @$interests.val() * 1
 
+    console.log @rate
     total = (amount + int) * (@rate.rate || 1)
     $('#payment_total_currency').html(_b.ntc(total))
   # Sets the currency for all items

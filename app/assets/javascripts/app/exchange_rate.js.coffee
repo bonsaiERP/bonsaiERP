@@ -5,6 +5,7 @@ class ExchangeRate extends Backbone.Model
 
   setAll: (input, observe, @currency_id, @accounts, @currencies, @options)->
     @.getRates()
+    @inverse = false
     @$input  = $(input)
     @observe = observe
     @$label  = @$input.siblings 'label'
@@ -46,8 +47,10 @@ class ExchangeRate extends Backbone.Model
   # trigger for rate and currency
   triggerExchange: ->
     @.setSuggestRates()
+    rate = @.get("rate")
+    rate = 1/rate if @inverse
 
-    @$input.trigger("change:rate", [{rate: @.get("rate"), currency: @.get("currency") }])
+    @$input.trigger("change:rate", [{rate: rate, currency: @.get("currency"), inverse: @inverse }])
   # Account event
   chageCurrencyEvent: ->
     self = @
@@ -80,10 +83,10 @@ class ExchangeRate extends Backbone.Model
     from = @currencies[@currency_id].symbol
     to   = @.get("currency").symbol
 
-    if @inverted
-      tmp = from
+    if @inverse
+      tmp  = from
       from = to
-      to = tmp
+      to   = tmp
 
     @$currencies.html("(#{from} a #{to})")
 
@@ -99,16 +102,19 @@ class ExchangeRate extends Backbone.Model
     try
       from = @currencies[@currency_id].code
       to   = @.get("currency").code
-      rate = fx.convert(1, {from: from, to: to}) || @.get("rate")
-      inv_rate = 1/rate
-      if @inverted
-        tmp      = rate
-        rate     = inv_rate
-        inv_rate = tmp
 
-      @.set({suggest_rate: rate.round(4), suggest_inv_rate: inv_rate.round(4)})
-      $('#suggested_exchange_rate').html(_b.ntc(rate, 4) )
-      $('#suggested_inverted_rate').html(_b.ntc(inv_rate, 4) )
+      if @currency_id == organisation.currency_id
+        @inverse = true
+        tmp  = from
+        from = to
+        to   = tmp
+      else
+        @inverse = false
+
+      rate = fx.convert(1, {from: from, to: to}) || @.get("rate")
+
+      @.set({suggest_rate: rate.round(4), rate: rate.round(4)})
+      @$input.val(rate.round(4))
     catch e
   # rateEvents
   rateEvents: ->

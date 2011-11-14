@@ -85,7 +85,7 @@ class Account < ActiveRecord::Base
   def self.to_hash(*args)
     args = [:name, :currency_id] if args.empty?
     l = lambda {|v| args.map {|val| [val, v.send(val)] } }
-    Hash[ Account.org.money.map {|v| [v.id, Hash[l.call(v)] ]  } ]
+    Hash[ Account.money.map {|v| [v.id, Hash[l.call(v)] ]  } ]
   end
 
   # Creates a hash for with the amount for each curency available

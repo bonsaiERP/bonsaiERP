@@ -106,6 +106,7 @@ private
   def organisation?
     session[:organisation] and session[:organisation].any?
   end
+  helper_method :organisation?
 
   # Sets the organisation_id to help to set in the models and the search path
   def set_organisation

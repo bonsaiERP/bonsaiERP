@@ -16,6 +16,7 @@ module Models::AccountLedger::Money
       trans.before_create :valid_amount?
       trans.before_save :valid_money_accounts
       trans.before_create :set_ledger_amount
+      trans.before_create :set_inverse
     end
 
     with_options :if => :money? do |trans|
@@ -85,6 +86,12 @@ module Models::AccountLedger::Money
         if account and to
           self.exchange_rate = 1 if account_currency_id == to_currency_id
         end
+      end
+    end
+
+    def set_inverse
+      if account_currency_id == OrganisationSession.currency_id and to_currency_id != account_currency_id
+        self.inverse = true
       end
     end
 

@@ -154,7 +154,8 @@ class AccountLedger < ActiveRecord::Base
 
   def amount_currency
     begin
-      ( amount - interests_penalties ) * exchange_rate
+      er =  inverse? ? 1/exchange_rate : exchange_rate
+      ( amount - interests_penalties ) * er
     rescue
       0
     end
