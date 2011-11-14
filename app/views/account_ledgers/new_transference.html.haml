@@ -64,12 +64,12 @@
       $('#total').html(res.currency.symbol + " " + _b.ntc(total));
     }
 
-    $('#account_ledger_exchange_rate').live('change:rate', function(event, val) {
+    $('#account_ledger_exchange_rate').on('change:rate', function(event, val) {
       res = val;
       calculateTotal();
     });
 
-    $('#account_ledger_amount, #account_ledger_exchange_rate').live("keyup focusout", function(event) {
+    $('input.decimal').on("keyup focusout", function(event) {
       if(_b.notEnter(event)) {
         return false;
       }else {
