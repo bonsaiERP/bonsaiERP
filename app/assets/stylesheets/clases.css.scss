@@ -108,13 +108,14 @@ div.search{
 
 .moneybox{
   @include rounded-corners(3px);
-  background-color: lighten($grey, 15%);
+  background-color: lighten($grey, 17%);
   padding: 8px;
   display:inline-block;
   margin: 5px;
   width: 130px;
-  border: 2px solid lighten($grey, 5%);
+  border: 1px solid lighten($grey, 5%);
   h3{ margin: 2px 0px; color: $black; }
+  label{ font-weight: normal;}
 }
 
 .tooltip{

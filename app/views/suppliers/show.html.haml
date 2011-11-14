@@ -22,12 +22,12 @@
   - present @supplier, ContactPresenter do |presenter|
     - presenter.incomes.each do |cur, amt|
       .moneybox.fl 
-        %label.dark-green Saldo ventas #{cur}
+        %label.dark-green SALDO VENTAS #{cur}
         %h3= ntc amt
 
     - presenter.buys.each do |cur, amt|
       .moneybox.fl 
-        %label.red Saldo compras #{cur}
+        %label.red SALDO COMPRAS #{cur}
         %h3= ntc amt
 
   .clear

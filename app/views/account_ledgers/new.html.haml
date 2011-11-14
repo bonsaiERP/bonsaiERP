@@ -6,7 +6,7 @@
 %h1 Nuevo #{account_ledger_title @account_ledger} - #{@account_ledger.account}
 
 .moneybox
-  %label Saldo en cuenta
+  %label SALDO EN CUENTA
   %h3 #{@account_ledger.account.currency_symbol} #{@account_ledger.account.amount}
 
 = render "form"

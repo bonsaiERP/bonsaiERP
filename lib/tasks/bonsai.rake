@@ -158,6 +158,23 @@ namespace :bonsai do
       puts "Updated codes for #{o.id} - #{o}"
     end
   end
+
+  desc "Migrates all databases"
+  task :migrate => :environment do
+      PgTools.reset_search_path
+      ActiveRecord::Migration.verbose = verbose
+
+      Organisation.all.each do |org|
+        ActiveRecord::Base.transaction do
+          PgTools.reset_search_path
+          schema = PgTools.get_schema_name(org.id)
+          puts "migrating #{schema})"
+          PgTools.set_search_path schema
+          version = ENV["VERSION"] ? ENV["VERSION"].to_i : nil
+          ActiveRecord::Migrator.migrate("db/migrate/", version)
+        end
+      end
+  end
 end
 
 # example to export the file

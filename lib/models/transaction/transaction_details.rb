@@ -15,7 +15,7 @@ module Models::Transaction
 
     def set_details
       transaction_details.each do |td|
-        td.ctype          = self.class.to_s
+        td.ctype          = transaction.class.to_s
         td.price          = td.price.round(2)
         td.quantity       = td.quantity.round(2)
         td.original_price = item_prices[td.item_id]

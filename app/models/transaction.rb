@@ -36,7 +36,7 @@ class Transaction < ActiveRecord::Base
   has_many :inventory_operations
 
   # Relation with nested attributes
-  has_many :transaction_details , :dependent => :destroy
+  has_many :transaction_details , :dependent => :destroy, :order => :id
   accepts_nested_attributes_for :transaction_details, :allow_destroy => true
 
   # History
@@ -46,7 +46,7 @@ class Transaction < ActiveRecord::Base
 
 
   # Validations
-  validates :contact_id, :contact => {:clases => ["Client", "Supplier"]}
+  #validates :contact_id, :contact => {:clases => ["Client", "Supplier"]}
 
   # scopes
   scope :draft    , where(:state => 'draft')

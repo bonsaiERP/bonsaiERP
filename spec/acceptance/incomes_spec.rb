@@ -7,7 +7,8 @@ require File.dirname(__FILE__) + '/acceptance_helper'
 
 feature "Income", "test features" do
   background do
-    create_organisation_session
+    #create_organisation_session
+    OrganisationSession.set(:id => 1, :name => 'ecuanime', :currency_id => 1)
     create_user_session
   end
 
@@ -27,8 +28,8 @@ feature "Income", "test features" do
       }
 
       details = [
-        { "description"=>"jejeje", "item_id"=>1, "organisation_id"=>1, "price"=>3, "quantity"=> 10},
-        { "description"=>"jejeje", "item_id"=>2, "organisation_id"=>1, "price"=>5, "quantity"=> 20}
+        { "description"=>"jejeje", "item_id"=>1, "price"=>3, "quantity"=> 10},
+        { "description"=>"jejeje", "item_id"=>2, "price"=>5, "quantity"=> 20}
       ]
       i_params[:transaction_details_attributes] = details
       i_params
@@ -45,7 +46,7 @@ feature "Income", "test features" do
   # Not included items
   scenario "Should not alow errors" do
     data = income_params.dup
-    data[:transaction_details_attributes] << { "description"=>"jejeje", "item_id"=>1, "organisation_id"=>1, "price"=>3, "quantity"=> 2}
+    data[:transaction_details_attributes] << { "description"=>"jejeje", "item_id"=>1, "price"=>3, "quantity"=> 2}
  
     # Repeated items
     i = Income.new(data)
@@ -84,6 +85,7 @@ feature "Income", "test features" do
 
     i.transaction_details[0].balance.should == 10
     i.transaction_details[0].original_price.should == 3
+    i.transaction_details[0].ctype.should == "Income"
     i.transaction_details[1].balance.should == 20
     i.transaction_details[1].original_price.should == 5
 
@@ -457,7 +459,8 @@ feature "Income", "test features" do
     p.conciliate_account.should be(true)
 
     i.reload
-    i.account_ledgers.first.amount.should == 30
+    i.account_ledgers.first.amount.should == 31
+    i.account_ledgers.first.amount_currency.should == 60
     i.balance.should == i.total - 2 * 60
 
     p.reload

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111103164257) do
+ActiveRecord::Schema.define(:version => 20111114185926) do
 
   create_table "account_ledger_details", :force => true do |t|
     t.integer  "account_id"
@@ -60,19 +60,19 @@ ActiveRecord::Schema.define(:version => 20111103164257) do
     t.integer  "contact_id"
     t.integer  "staff_id"
     t.date     "payment_date"
-    t.integer  "code"
+    t.boolean  "inverse",                                                          :default => false
   end
 
   add_index "account_ledgers", ["account_id"], :name => "index_account_ledgers_on_account_id"
   add_index "account_ledgers", ["active"], :name => "index_account_ledgers_on_active"
   add_index "account_ledgers", ["approver_id"], :name => "index_account_ledgers_on_approver_id"
-  add_index "account_ledgers", ["code"], :name => "index_account_ledgers_on_code"
   add_index "account_ledgers", ["conciliation"], :name => "index_account_ledgers_on_conciliation"
   add_index "account_ledgers", ["contact_id"], :name => "index_account_ledgers_on_contact_id"
   add_index "account_ledgers", ["created_at"], :name => "index_account_ledgers_on_created_at"
   add_index "account_ledgers", ["creator_id"], :name => "index_account_ledgers_on_creator_id"
   add_index "account_ledgers", ["currency_id"], :name => "index_account_ledgers_on_currency_id"
   add_index "account_ledgers", ["date"], :name => "index_account_ledgers_on_date"
+  add_index "account_ledgers", ["inverse"], :name => "index_account_ledgers_on_inverse"
   add_index "account_ledgers", ["nuller_id"], :name => "index_account_ledgers_on_nuller_id"
   add_index "account_ledgers", ["operation"], :name => "index_account_ledgers_on_operation"
   add_index "account_ledgers", ["reference"], :name => "index_account_ledgers_on_reference"
