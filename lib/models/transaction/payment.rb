@@ -57,8 +57,8 @@ module Models::Transaction::Payment
 
       res = true
       self.class.transaction do
-        res = @current_ledger.save
-        res = res and self.save
+        res @current_ledger.save
+        res = self.save && res
         raise ActiveRecord::Rollback unless res
       end
 
@@ -76,6 +76,14 @@ module Models::Transaction::Payment
       #@current_ledger.valid_contact_amount
       
       @current_ledger.currency_id = @current_ledger.account_currency_id
+
+      set_current_ledger_inverse
+    end
+
+    def set_current_ledger_inverse
+      if self.currency_id == OrganisationSession.currency_id and @current_ledger.account_currency_id != OrganisationSession
+
+      end
     end
 
     def get_account_ledger_operation

@@ -24,8 +24,8 @@ class ExchangeRate extends Backbone.Model
     else
       @$input.val(@.get("rate"))
 
-    @.set( suggest_rate: @.get("rate").round(4), suggest_inv_rate: (1/@.get_rate).round(4) )
-
+    @.set( suggest_rate: @.get("rate").round(4) )
+    # Events
     @.setEvents()
   # Events
   setEvents: ->
@@ -33,14 +33,9 @@ class ExchangeRate extends Backbone.Model
     @$input.live 'focusout keyup', (event)=>
       return false if _b.notEnter(event)
       @.set({rate: $(this).val() * 1})
-    # Rate
-    @.bind "change:rate", ->
-      @.triggerExchange()
-      @.setRate()
     # Currency
     @.bind "change:currency", ->
-      @.triggerExchange()
-      @.setCurrency()
+      @.setCurrencyLabel()
 
     @.chageCurrencyEvent()
     @.rateEvents()
@@ -48,8 +43,6 @@ class ExchangeRate extends Backbone.Model
   triggerExchange: ->
     @.setSuggestRates()
     rate = @.get("rate")
-    rate = 1/rate if @inverse
-
     @$input.trigger("change:rate", [{rate: rate, currency: @.get("currency"), inverse: @inverse }])
   # Account event
   chageCurrencyEvent: ->
@@ -57,8 +50,8 @@ class ExchangeRate extends Backbone.Model
 
     # Triggers the suggested:rate Event
     $(@observe)
-    .die('change keyup focusout')
-    .live 'change keyup focusout', ->
+    .off('change keyup focusout')
+    .on 'change keyup focusout', ->
       html = ''
       rate = 0.0
       currency_id = false
@@ -67,9 +60,8 @@ class ExchangeRate extends Backbone.Model
         when $(@).val().match /^\d+$/
           val = $(@).val() * 1
           self.set({currency: self.currencies[self.accounts[val].currency_id]})
-          from = self.currencies[self.currency_id].code
-          to   = self.get("currency").code
-          rate = fx.convert(1, {from: from, to: to}) || self.get("rate")
+          self.setSuggestRates()
+          self.triggerExchange()
         else
           self.$hide.hide 'slow'
           rate = 1
@@ -79,7 +71,7 @@ class ExchangeRate extends Backbone.Model
   setRate: ->
     @$input.val(@.get("rate")).mark()
   # Sets the data for currency
-  setCurrency: ->
+  setCurrencyLabel: ->
     from = @currencies[@currency_id].symbol
     to   = @.get("currency").symbol
 

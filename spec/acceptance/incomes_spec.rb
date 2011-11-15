@@ -544,7 +544,7 @@ feature "Income", "test features" do
     i.reload
     i.pay_plans.unpaid.sum(:amount).should == i.balance
 
-    income_account = Account.org.find_by_original_type("Income")
+    income_account = Account.find_by_original_type("Income")
     
     log.info("Set the correct description for a payment with other currency")
     c1 = Currency.find(i.currency_id)
@@ -802,7 +802,8 @@ feature "Income", "test features" do
     p.conciliate_account.should be(true)
 
     i.reload
-    i.account_ledgers.first.amount.should == 30
+    i.account_ledgers.first.amount.should == 31
+    i.account_ledgers.first.amount_currency.should == 60
     i.balance.should == i.total - 2 * 60
 
     p.reload
@@ -883,7 +884,7 @@ feature "Income", "test features" do
     i.save_payment.should == true
     p.should be_persisted
 
-    income_account = Account.org.find_by_original_type("Income")
+    income_account = Account.find_by_original_type("Income")
     
     log.info("Set the correct description for a payment with other currency")
     c1 = Currency.find(i.currency_id)
@@ -1022,7 +1023,7 @@ feature "Income", "test features" do
 
     # with taxes
     i_params[:discount] = 3
-    tax = Tax.org.first
+    tax = Tax.first
     i_params[:taxis_ids] = [tax.id]
     i = Income.new(i_params)
     i.save_trans.should be_true

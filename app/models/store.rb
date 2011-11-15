@@ -10,9 +10,9 @@ class Store < ActiveRecord::Base
   has_many :stocks, :autosave => true, :conditions => {:state => "active"}
   has_many :inventory_operations
 
-  validates_presence_of :name, :address
+  validates_presence_of :name
   validates_length_of :name, :minimum => 3
-  validates_length_of :address, :minimum => 5
+  validates_length_of :address, :minimum => 5, :allow_blank => true
 
   # scopes
   scope :active, where(:active => true)
