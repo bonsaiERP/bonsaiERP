@@ -57,6 +57,6 @@ class ContactsController < ApplicationController
 
   protected
   def find_contact
-    @contact = Contact.org.find(params[:id])
+    @contact = Contact.find(params[:id])
   end
 end

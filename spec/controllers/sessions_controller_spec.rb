@@ -21,6 +21,8 @@ describe SessionsController do
 
     it 'should login' do
       User.stub!(:find_by_email).with("demo@example.com").and_return(user_mock)
+      PgTools.stub!(set_search_path: false)
+
       controller.stub!(:current_user => user_mock)
 
       post "create", :user => {:email => "demo@example.com", :password => "demo123"}
@@ -28,13 +30,32 @@ describe SessionsController do
       response.should redirect_to "/organisations/new"
     end
 
-    it 'should redirect correctly' do
+    it 'should redirecto to /organisations/:id/create_data' do
       user_mock.stub!(:organisations => [mock_model(Organisation, :id => 1)],
                      :link => stub(:rol => 'admin'))
       
       User.stub!(:find_by_email).with("demo@example.com").and_return(user_mock)
 
+      PgTools.stub!(schema_exists?: false)
+
       controller.stub!(:current_user => user_mock, :set_organisation_session => true)
+      PgTools.stub!(set_search_path: Object.new)
+
+      post "create", :user => {:email => "demo@example.com", :password => "demo123"}
+
+      response.should redirect_to create_tenant_organisation_path(1)
+    end
+
+    it 'should redirect to /dashboard if created tenant' do
+      user_mock.stub!(:organisations => [mock_model(Organisation, :id => 1)],
+                     :links => [mock_model(Link, rol: 'admin')])
+      
+      User.stub!(:find_by_email).with("demo@example.com").and_return(user_mock)
+
+      PgTools.stub!(schema_exists?: true)
+
+      controller.stub!(:current_user => user_mock, :set_organisation_session => true)
+      PgTools.stub!(set_search_path: Object.new)
 
       post "create", :user => {:email => "demo@example.com", :password => "demo123"}
 
@@ -75,6 +96,25 @@ describe SessionsController do
       post "create", :user => {:email => "demo@example.com", :password => "demo123"}
 
       response.should redirect_to("/sessions/1")
+    end
+
+    # Check if tenant hsa been created
+    it 'should redirect to /organisations/:id/create_tenant when not created tenant' do
+      user_mock.stub!(:organisations => [mock_model(Organisation, :id => 1)],
+                     :link => stub(:rol => 'admin'))
+      
+      User.stub!(:find_by_email).with("demo@example.com").and_return(user_mock)
+
+      controller.stub!(:current_user => user_mock, :set_organisation_session => true)
+      PgTools.stub!(set_search_path: false)
+
+      post "create", :user => {:email => "demo@example.com", :password => "demo123"}
+
+      response.should redirect_to create_tenant_organisation_path(1)
+    end
+
+    it 'should redirect to create_data if no data created' do
+      
     end
   end
 

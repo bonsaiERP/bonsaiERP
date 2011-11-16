@@ -22,12 +22,12 @@
 .clear
 
 .moneybox
-  %label Total
+  %label TOTAL
   %h3#total_currency #{@income.currency_symbol} #{ntc @income.total_currency}
 
 - unless transaction.paid?
   .moneybox
-    %label Saldo a cobrar
+    %label SALDO A COBRAR
     %h3#balance #{@income.currency_symbol} #{ntc @income.balance}
   
 = "Vence el <strong id='due_on'>#{lo @income.payment_date}</strong></span>".html_safe unless @income.paid? or @income.draft?

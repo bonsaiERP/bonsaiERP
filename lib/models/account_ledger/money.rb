@@ -16,6 +16,7 @@ module Models::AccountLedger::Money
       trans.before_create :valid_amount?
       trans.before_save :valid_money_accounts
       trans.before_create :set_ledger_amount
+      trans.before_create :set_inverse
     end
 
     with_options :if => :money? do |trans|
@@ -88,6 +89,12 @@ module Models::AccountLedger::Money
       end
     end
 
+    def set_inverse
+      if account_currency_id == OrganisationSession.currency_id and to_currency_id != account_currency_id
+        self.inverse = true
+      end
+    end
+
     # defines the amount based on the oeration
     def amount_operation
       case operation
@@ -117,7 +124,7 @@ module Models::AccountLedger::Money
     # Creates the contact account
     def set_or_create_contact_account
       begin
-        c = Contact.org.find(contact_id)
+        c = Contact.find(contact_id)
       rescue
         self.errors[:contact_id] << I18n.t("errors.messages.account_ledger.invalid_contact")
         return false
@@ -126,7 +133,7 @@ module Models::AccountLedger::Money
       ac = c.account_cur(currency_id)
 
       unless ac
-        type_id = AccountType.org.find_by_account_number(c.class.to_s).id
+        type_id = AccountType.find_by_account_number(c.class.to_s).id
       
         ac = c.accounts.build(:name => c.to_s, :currency_id => currency_id) {|aco|
           aco.amount = 0
@@ -144,7 +151,7 @@ module Models::AccountLedger::Money
     def valid_account_id
       if account_id.present?
         begin
-          ac = Account.org.find(account_id)
+          ac = Account.find(account_id)
           unless ac.accountable_type == "MoneyStore"
             self.errors[:base] << I18n.t("errors.messages.inclusion")
             return false
@@ -162,7 +169,7 @@ module Models::AccountLedger::Money
 
       if to_id.present?
         begin
-          ac = Account.org.find(to_id)
+          ac = Account.find(to_id)
           unless ac.accountable_type == klass
             self.errors[:to_id] << I18n.t("errors.messages.inclusion")
             return false

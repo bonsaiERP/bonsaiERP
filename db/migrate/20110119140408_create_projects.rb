@@ -5,14 +5,12 @@ class CreateProjects < ActiveRecord::Migration
       t.boolean :active, :default => true
       t.date :date_start
       t.date :date_end
-      t.integer :organisation_id, :null => false
 
       t.text :description
 
       t.timestamps
     end
 
-    add_index :projects, :organisation_id
     add_index :projects, :active
   end
 

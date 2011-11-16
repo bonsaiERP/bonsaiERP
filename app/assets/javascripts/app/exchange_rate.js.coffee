@@ -5,6 +5,7 @@ class ExchangeRate extends Backbone.Model
 
   setAll: (input, observe, @currency_id, @accounts, @currencies, @options)->
     @.getRates()
+    @inverse = false
     @$input  = $(input)
     @observe = observe
     @$label  = @$input.siblings 'label'
@@ -23,39 +24,31 @@ class ExchangeRate extends Backbone.Model
     else
       @$input.val(@.get("rate"))
 
-    @.set( suggest_rate: @.get("rate").round(4), suggest_inv_rate: (1/@.get_rate).round(4) )
-
+    @.set( suggest_rate: @.get("rate").round(4) )
+    # Events
     @.setEvents()
   # Events
   setEvents: ->
     self = @
-    @$input.live 'focusout keyup', (event)=>
-      return false if _b.notEnter(event)
-      @.set({rate: $(this).val() * 1})
-    # Rate
-    @.bind "change:rate", ->
-      @.triggerExchange()
-      @.setRate()
     # Currency
     @.bind "change:currency", ->
-      @.triggerExchange()
-      @.setCurrency()
+      @.setCurrencyLabel()
 
     @.chageCurrencyEvent()
     @.rateEvents()
   # trigger for rate and currency
   triggerExchange: ->
     @.setSuggestRates()
-
-    @$input.trigger("change:rate", [{rate: @.get("rate"), currency: @.get("currency") }])
+    rate = @.get("rate")
+    @$input.trigger("change:rate", [{rate: rate, currency: @.get("currency"), inverse: @inverse }])
   # Account event
   chageCurrencyEvent: ->
     self = @
 
     # Triggers the suggested:rate Event
     $(@observe)
-    .die('change keyup focusout')
-    .live 'change keyup focusout', ->
+    .off('change keyup')
+    .on 'change keyup', ->
       html = ''
       rate = 0.0
       currency_id = false
@@ -64,9 +57,8 @@ class ExchangeRate extends Backbone.Model
         when $(@).val().match /^\d+$/
           val = $(@).val() * 1
           self.set({currency: self.currencies[self.accounts[val].currency_id]})
-          from = self.currencies[self.currency_id].code
-          to   = self.get("currency").code
-          rate = fx.convert(1, {from: from, to: to}) || self.get("rate")
+          self.setSuggestRates()
+          self.triggerExchange()
         else
           self.$hide.hide 'slow'
           rate = 1
@@ -76,14 +68,14 @@ class ExchangeRate extends Backbone.Model
   setRate: ->
     @$input.val(@.get("rate")).mark()
   # Sets the data for currency
-  setCurrency: ->
+  setCurrencyLabel: ->
     from = @currencies[@currency_id].symbol
     to   = @.get("currency").symbol
 
-    if @inverted
-      tmp = from
+    if @inverse
+      tmp  = from
       from = to
-      to = tmp
+      to   = tmp
 
     @$currencies.html("(#{from} a #{to})")
 
@@ -99,24 +91,27 @@ class ExchangeRate extends Backbone.Model
     try
       from = @currencies[@currency_id].code
       to   = @.get("currency").code
-      rate = fx.convert(1, {from: from, to: to}) || @.get("rate")
-      inv_rate = 1/rate
-      if @inverted
-        tmp      = rate
-        rate     = inv_rate
-        inv_rate = tmp
 
-      @.set({suggest_rate: rate.round(4), suggest_inv_rate: inv_rate.round(4)})
-      $('#suggested_exchange_rate').html(_b.ntc(rate, 4) )
-      $('#suggested_inverted_rate').html(_b.ntc(inv_rate, 4) )
+      if @currency_id == organisation.currency_id
+        @inverse = true
+        tmp  = from
+        from = to
+        to   = tmp
+      else
+        @inverse = false
+
+      rate = fx.convert(1, {from: from, to: to}) || @.get("rate")
+
+      @.set({suggest_rate: rate.round(4), rate: rate.round(4)})
+      @$input.val(rate.round(4))
     catch e
   # rateEvents
   rateEvents: ->
     self = @
-    $('#suggested_exchange_rate').die().live 'click', (event)->
+    $('#suggested_exchange_rate').die().on 'click', (event)->
       self.set({rate: self.get("suggest_rate")})
     # Inverted
-    $('#suggested_inverted_rate').die().live 'click', (event)->
+    $('#suggested_inverted_rate').die().on 'click', (event)->
       if res = prompt("Tipo de cambio invertido:", self.get("suggest_inv_rate"))
         res = 1/(res * 1)
         self.set({rate: res.round(4)})

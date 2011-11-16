@@ -2,10 +2,8 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class Tax < ActiveRecord::Base
-  include Models::Organisation::NewOrganisation
 
   # relationships
-  belongs_to :organisation
   has_and_belongs_to_many :transactions
 
   #validations
@@ -48,11 +46,7 @@ private
 
   # Finds all invisible records
   def self.invisible
-   where( :organisation_id => OrganisationSession.id, :visible => false )
-  end
-
-  def set_organisation
-    self.organisation_id = OrganisationSession.organisation_id
+   where( :visible => false )
   end
 
 end 

@@ -13,10 +13,8 @@ feature "Test account ledger", "for in outs and transferences" do
     create_account_types
   end
 
-  let!(:client) { create_client(:matchcode => "Lucas Estrella")}
-
-
   let!(:bank) {create_bank(:currency_id => 1, :name => "Bank chiquito")}
+  let!(:client) { create_client(:matchcode => "Lucas Estrella")}
   let(:bank_account) { bank.account }
   let(:bank_ac_id){ bank_account.id }
 
@@ -44,6 +42,7 @@ feature "Test account ledger", "for in outs and transferences" do
     al.active.should == true
 
     al.creator_id.should == 1
+    ac = Account.find_by_name("Lucas Estrella")
 
     al.currency_id.should == 1
     al.amount.should == 100
@@ -108,8 +107,9 @@ feature "Test account ledger", "for in outs and transferences" do
            :contact_id => client.id, :amount => 100, :reference => "Ledger out 123" )
 
     al2.save.should be_true
+    al2.should be_persisted
+    al2.should_not be_inverse
 
-    al2.organisation_id.should == 1
     al2.amount.should == -100
     al2.operation.should == "out"
 
@@ -148,7 +148,11 @@ feature "Test account ledger", "for in outs and transferences" do
 
     al = AccountLedger.new_money(:operation => "in", :account_id => bank_ac_id,              
            :contact_id => client.id, :amount => 100, :reference => "Check 1120012" )
+
     al.save.should be_true
+    al.should be_persisted
+    al.should_not be_inverse
+
     al.conciliate_account
 
     c = Cash.create!(:name => 'Cash 1', :currency_id => 2)
@@ -183,6 +187,8 @@ feature "Test account ledger", "for in outs and transferences" do
   scenario "Make serveral in/outs for one account and check that the balance is right" do
     al = AccountLedger.new_money(:operation => "in", :account_id => bank_ac_id, :contact_id => client.id, :amount => 100, :reference => "Check 1120012" )
     al.save.should == true
+    al.should be_persisted
+    al.should_not be_inverse
 
     al.conciliate_account.should be_true
     al.reload
@@ -249,5 +255,37 @@ feature "Test account ledger", "for in outs and transferences" do
     al.save.should be_false
     al.errors[:base].should_not be_blank
     al.errors[:amount].should_not be_blank
+  end
+
+  scenario "Make a transference between two accounts with different currencies" do
+    b = create_bank(currency_id: 2, amount: 100)
+    b.account.currency_id.should == 2
+    b.account.amount.should == 100
+    b.should be_persisted
+
+    al = AccountLedger.new_money(account_id: b.account_id, to_id: bank_ac_id, exchange_rate: 6.9, amount: 50, 
+                                 operation: "trans", reference: "My transference")
+    al.save.should be_true
+    al.reload
+
+    al.amount.should == -50
+    al.should_not be_inverse
+
+    al.conciliate_account.should be_true
+    al.reload
+    al.account.amount.should == 50
+    al.to.amount.should == 50 * 6.9
+
+    # Make an inverse transference
+    al = AccountLedger.new_money(to_id: b.account_id, account_id: bank_ac_id, exchange_rate: 6.9, amount: 69, 
+                                 operation: "trans", reference: "My transference")
+
+    al.save.should be_true
+    al.should be_persisted
+    al.should be_inverse
+    al.amount.should == -69
+    al.exchange_rate.should == 6.9
+
+    al.amount_currency.round(2).should == -69 * 1/6.9
   end
 end

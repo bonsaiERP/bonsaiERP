@@ -2,7 +2,6 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class PersonalComment < ActiveRecord::Base
-  acts_as_org
 
   belongs_to :account_ledger
 

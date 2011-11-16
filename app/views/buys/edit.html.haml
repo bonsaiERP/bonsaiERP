@@ -6,4 +6,4 @@
 
 %h1 Editar compra/gasto
 
-= render 'transactions/form', :transaction => @transaction, :contacts => Supplier.org
+= render 'transactions/form', :transaction => @transaction, :contacts => Supplier.scoped

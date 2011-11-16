@@ -1,0 +1,34 @@
+%h2= @organisation
+
+- unless @organisation.base_accounts?
+  %h3.n
+    = image_tag("ajax-loader.gif")
+    Espere por favor, se esta creando la base de datos para su empresa
+
+:javascript
+  $(function() {
+    var tenant_id = #{@organisation.id};
+    // Iterate to determine
+    function checkTenant() {
+      var interval = 0, count = 0,
+      url = ["/organisations", tenant_id, "check_schema"].join("/");
+      // Check every 7 seconds if the tenant has been created
+      interval = setInterval(function() {
+        $.getJSON(url, function(resp) {
+          if(resp.success) {
+            window.location = ["/dashboard"].join("/");
+            clearInterval(interval);
+          }
+        });
+
+        if(count > 4) {
+          clearInterval(interval);
+          alert("Exisitio un problema al crear sus datos, debe reingresar para intentar de nuevo la operación");
+          window.location = "/users/sign_out";
+        }
+        count++;
+      }, 7000);
+    }
+
+    checkTenant();
+  });

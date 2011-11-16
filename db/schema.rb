@@ -11,23 +11,9 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111103164257) do
-
-  create_table "account_currencies", :force => true do |t|
-    t.integer  "organisation_id"
-    t.integer  "account_id"
-    t.integer  "currency_id"
-    t.decimal  "amount",          :precision => 14, :scale => 2
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "account_currencies", ["account_id"], :name => "index_account_currencies_on_account_id"
-  add_index "account_currencies", ["currency_id"], :name => "index_account_currencies_on_currency_id"
-  add_index "account_currencies", ["organisation_id"], :name => "index_account_currencies_on_organisation_id"
+ActiveRecord::Schema.define(:version => 20111114185926) do
 
   create_table "account_ledger_details", :force => true do |t|
-    t.integer  "organisation_id"
     t.integer  "account_id"
     t.integer  "account_ledger_id"
     t.integer  "currency_id"
@@ -45,12 +31,10 @@ ActiveRecord::Schema.define(:version => 20111103164257) do
   add_index "account_ledger_details", ["account_ledger_id"], :name => "index_account_ledger_details_on_account_ledger_id"
   add_index "account_ledger_details", ["active"], :name => "index_account_ledger_details_on_active"
   add_index "account_ledger_details", ["currency_id"], :name => "index_account_ledger_details_on_currency_id"
-  add_index "account_ledger_details", ["organisation_id"], :name => "index_account_ledger_details_on_organisation_id"
   add_index "account_ledger_details", ["related_id"], :name => "index_account_ledger_details_on_related_id"
   add_index "account_ledger_details", ["state"], :name => "index_account_ledger_details_on_state"
 
   create_table "account_ledgers", :force => true do |t|
-    t.integer  "organisation_id"
     t.string   "reference"
     t.integer  "currency_id"
     t.integer  "account_id"
@@ -76,29 +60,27 @@ ActiveRecord::Schema.define(:version => 20111103164257) do
     t.integer  "contact_id"
     t.integer  "staff_id"
     t.date     "payment_date"
-    t.integer  "code"
+    t.boolean  "inverse",                                                          :default => false
   end
 
   add_index "account_ledgers", ["account_id"], :name => "index_account_ledgers_on_account_id"
   add_index "account_ledgers", ["active"], :name => "index_account_ledgers_on_active"
   add_index "account_ledgers", ["approver_id"], :name => "index_account_ledgers_on_approver_id"
-  add_index "account_ledgers", ["code"], :name => "index_account_ledgers_on_code"
   add_index "account_ledgers", ["conciliation"], :name => "index_account_ledgers_on_conciliation"
   add_index "account_ledgers", ["contact_id"], :name => "index_account_ledgers_on_contact_id"
   add_index "account_ledgers", ["created_at"], :name => "index_account_ledgers_on_created_at"
   add_index "account_ledgers", ["creator_id"], :name => "index_account_ledgers_on_creator_id"
   add_index "account_ledgers", ["currency_id"], :name => "index_account_ledgers_on_currency_id"
   add_index "account_ledgers", ["date"], :name => "index_account_ledgers_on_date"
+  add_index "account_ledgers", ["inverse"], :name => "index_account_ledgers_on_inverse"
   add_index "account_ledgers", ["nuller_id"], :name => "index_account_ledgers_on_nuller_id"
   add_index "account_ledgers", ["operation"], :name => "index_account_ledgers_on_operation"
-  add_index "account_ledgers", ["organisation_id"], :name => "index_account_ledgers_on_organisation_id"
   add_index "account_ledgers", ["reference"], :name => "index_account_ledgers_on_reference"
   add_index "account_ledgers", ["staff_id"], :name => "index_account_ledgers_on_staff_id"
   add_index "account_ledgers", ["to_id"], :name => "index_account_ledgers_on_to_id"
   add_index "account_ledgers", ["transaction_id"], :name => "index_account_ledgers_on_transaction_id"
 
   create_table "account_types", :force => true do |t|
-    t.integer  "organisation_id"
     t.string   "name"
     t.string   "number"
     t.string   "account_number"
@@ -107,10 +89,8 @@ ActiveRecord::Schema.define(:version => 20111103164257) do
   end
 
   add_index "account_types", ["account_number"], :name => "index_account_types_on_account_number"
-  add_index "account_types", ["organisation_id"], :name => "index_account_types_on_organisation_id"
 
   create_table "accounts", :force => true do |t|
-    t.integer  "organisation_id"
     t.integer  "currency_id"
     t.integer  "account_type_id"
     t.integer  "accountable_id"
@@ -130,7 +110,6 @@ ActiveRecord::Schema.define(:version => 20111103164257) do
   add_index "accounts", ["accountable_type"], :name => "index_accounts_on_accountable_type"
   add_index "accounts", ["amount"], :name => "index_accounts_on_amount"
   add_index "accounts", ["currency_id"], :name => "index_accounts_on_currency_id"
-  add_index "accounts", ["organisation_id"], :name => "index_accounts_on_organisation_id"
   add_index "accounts", ["original_type"], :name => "index_accounts_on_original_type"
   add_index "accounts", ["type"], :name => "index_accounts_on_type"
 
@@ -145,7 +124,6 @@ ActiveRecord::Schema.define(:version => 20111103164257) do
     t.string   "email",             :limit => 200
     t.string   "tax_number",        :limit => 30
     t.string   "aditional_info",    :limit => 250
-    t.integer  "organisation_id",                                    :null => false
     t.string   "code"
     t.string   "type"
     t.string   "last_name",         :limit => 100
@@ -158,7 +136,6 @@ ActiveRecord::Schema.define(:version => 20111103164257) do
   add_index "contacts", ["first_name"], :name => "index_contacts_on_first_name"
   add_index "contacts", ["last_name"], :name => "index_contacts_on_last_name"
   add_index "contacts", ["matchcode"], :name => "index_contacts_on_matchcode"
-  add_index "contacts", ["organisation_id"], :name => "index_contacts_on_organisation_id"
   add_index "contacts", ["type"], :name => "index_contacts_on_type"
 
   create_table "countries", :force => true do |t|
@@ -177,22 +154,7 @@ ActiveRecord::Schema.define(:version => 20111103164257) do
     t.datetime "updated_at"
   end
 
-  create_table "currency_rates", :force => true do |t|
-    t.integer  "currency_id"
-    t.decimal  "rate",            :precision => 14, :scale => 6
-    t.boolean  "active",                                         :default => false
-    t.integer  "organisation_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "currency_rates", ["active"], :name => "index_currency_rates_on_active"
-  add_index "currency_rates", ["created_at"], :name => "index_currency_rates_on_created_at"
-  add_index "currency_rates", ["currency_id"], :name => "index_currency_rates_on_currency_id"
-  add_index "currency_rates", ["organisation_id"], :name => "index_currency_rates_on_organisation_id"
-
   create_table "inventory_operation_details", :force => true do |t|
-    t.integer  "organisation_id"
     t.integer  "inventory_operation_id"
     t.integer  "item_id"
     t.decimal  "quantity",               :precision => 14, :scale => 2
@@ -203,18 +165,16 @@ ActiveRecord::Schema.define(:version => 20111103164257) do
 
   add_index "inventory_operation_details", ["inventory_operation_id"], :name => "index_inventory_operation_details_on_inventory_operation_id"
   add_index "inventory_operation_details", ["item_id"], :name => "index_inventory_operation_details_on_item_id"
-  add_index "inventory_operation_details", ["organisation_id"], :name => "index_inventory_operation_details_on_organisation_id"
 
   create_table "inventory_operations", :force => true do |t|
     t.integer  "store_id"
-    t.integer  "organisation_id"
     t.integer  "transaction_id"
     t.date     "date"
     t.string   "ref_number"
     t.string   "operation"
     t.string   "state"
     t.string   "description"
-    t.decimal  "total",           :precision => 14, :scale => 2
+    t.decimal  "total",          :precision => 14, :scale => 2
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "contact_id"
@@ -225,7 +185,6 @@ ActiveRecord::Schema.define(:version => 20111103164257) do
   add_index "inventory_operations", ["creator_id"], :name => "index_inventory_operations_on_creator_id"
   add_index "inventory_operations", ["date"], :name => "index_inventory_operations_on_date"
   add_index "inventory_operations", ["operation"], :name => "index_inventory_operations_on_operation"
-  add_index "inventory_operations", ["organisation_id"], :name => "index_inventory_operations_on_organisation_id"
   add_index "inventory_operations", ["ref_number"], :name => "index_inventory_operations_on_ref_number"
   add_index "inventory_operations", ["state"], :name => "index_inventory_operations_on_state"
   add_index "inventory_operations", ["store_id"], :name => "index_inventory_operations_on_store_id"
@@ -233,27 +192,25 @@ ActiveRecord::Schema.define(:version => 20111103164257) do
 
   create_table "items", :force => true do |t|
     t.integer  "unit_id"
-    t.decimal  "unitary_cost",                   :precision => 14, :scale => 2
-    t.decimal  "price",                          :precision => 14, :scale => 2
+    t.decimal  "unitary_cost",                :precision => 14, :scale => 2
+    t.decimal  "price",                       :precision => 14, :scale => 2
     t.string   "name"
     t.string   "description"
-    t.string   "code",            :limit => 100
-    t.boolean  "integer",                                                       :default => false
-    t.boolean  "stockable",                                                     :default => false
-    t.boolean  "active",                                                        :default => true
+    t.string   "code",         :limit => 100
+    t.boolean  "integer",                                                    :default => false
+    t.boolean  "stockable",                                                  :default => false
+    t.boolean  "active",                                                     :default => true
     t.string   "discount"
-    t.string   "ctype",           :limit => 20
-    t.integer  "organisation_id",                                                                  :null => false
+    t.string   "ctype",        :limit => 20
     t.string   "type"
     t.string   "un_name"
-    t.string   "un_symbol",       :limit => 10
+    t.string   "un_symbol",    :limit => 10
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "items", ["code"], :name => "index_items_on_code"
   add_index "items", ["ctype"], :name => "index_items_on_ctype"
-  add_index "items", ["organisation_id"], :name => "index_items_on_organisation_id"
   add_index "items", ["type"], :name => "index_items_on_type"
   add_index "items", ["unit_id"], :name => "index_items_on_unit_id"
 
@@ -274,11 +231,10 @@ ActiveRecord::Schema.define(:version => 20111103164257) do
   add_index "links", ["user_id"], :name => "index_links_on_user_id"
 
   create_table "money_stores", :force => true do |t|
-    t.integer  "organisation_id"
     t.integer  "currency_id"
-    t.string   "type",            :limit => 30
-    t.string   "name",            :limit => 100
-    t.string   "number",          :limit => 30
+    t.string   "type",        :limit => 30
+    t.string   "name",        :limit => 100
+    t.string   "number",      :limit => 30
     t.string   "address"
     t.string   "website"
     t.string   "phone"
@@ -288,7 +244,6 @@ ActiveRecord::Schema.define(:version => 20111103164257) do
 
   add_index "money_stores", ["currency_id"], :name => "index_money_stores_on_currency_id"
   add_index "money_stores", ["name"], :name => "index_money_stores_on_name"
-  add_index "money_stores", ["organisation_id"], :name => "index_money_stores_on_organisation_id"
   add_index "money_stores", ["type"], :name => "index_money_stores_on_type"
 
   create_table "organisations", :force => true do |t|
@@ -315,7 +270,6 @@ ActiveRecord::Schema.define(:version => 20111103164257) do
   add_index "organisations", ["due_date"], :name => "index_organisations_on_due_date"
 
   create_table "pay_plans", :force => true do |t|
-    t.integer  "organisation_id"
     t.integer  "transaction_id"
     t.integer  "currency_id"
     t.string   "cur"
@@ -334,14 +288,12 @@ ActiveRecord::Schema.define(:version => 20111103164257) do
 
   add_index "pay_plans", ["ctype"], :name => "index_pay_plans_on_ctype"
   add_index "pay_plans", ["operation"], :name => "index_pay_plans_on_operation"
-  add_index "pay_plans", ["organisation_id"], :name => "index_pay_plans_on_organisation_id"
   add_index "pay_plans", ["paid"], :name => "index_pay_plans_on_paid"
   add_index "pay_plans", ["payment_date"], :name => "index_pay_plans_on_payment_date"
   add_index "pay_plans", ["transaction_id"], :name => "index_pay_plans_on_transaction_id"
 
   create_table "payments", :force => true do |t|
     t.integer  "transaction_id"
-    t.integer  "organisation_id"
     t.string   "ctype"
     t.date     "date"
     t.decimal  "amount",                            :precision => 14, :scale => 2
@@ -362,44 +314,38 @@ ActiveRecord::Schema.define(:version => 20111103164257) do
   add_index "payments", ["contact_id"], :name => "index_payments_on_contact_id"
   add_index "payments", ["ctype"], :name => "index_payments_on_ctype"
   add_index "payments", ["date"], :name => "index_payments_on_date"
-  add_index "payments", ["organisation_id"], :name => "index_payments_on_organisation_id"
   add_index "payments", ["transaction_id"], :name => "index_payments_on_transaction_id"
 
   create_table "prices", :force => true do |t|
-    t.integer  "organisation_id"
     t.integer  "item_id"
-    t.decimal  "unitary_cost",    :precision => 14, :scale => 2
-    t.decimal  "price",           :precision => 14, :scale => 2
+    t.decimal  "unitary_cost", :precision => 14, :scale => 2
+    t.decimal  "price",        :precision => 14, :scale => 2
     t.string   "discount"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "prices", ["item_id"], :name => "index_prices_on_item_id"
-  add_index "prices", ["organisation_id"], :name => "index_prices_on_organisation_id"
 
   create_table "projects", :force => true do |t|
     t.string   "name"
-    t.boolean  "active",          :default => true
+    t.boolean  "active",      :default => true
     t.date     "date_start"
     t.date     "date_end"
-    t.integer  "organisation_id",                   :null => false
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "projects", ["active"], :name => "index_projects_on_active"
-  add_index "projects", ["organisation_id"], :name => "index_projects_on_organisation_id"
 
   create_table "stocks", :force => true do |t|
     t.integer  "store_id"
-    t.integer  "organisation_id"
     t.integer  "item_id"
-    t.string   "state",           :limit => 20
-    t.decimal  "unitary_cost",                  :precision => 14, :scale => 2
-    t.decimal  "quantity",                      :precision => 14, :scale => 2
-    t.decimal  "minimum",                       :precision => 14, :scale => 2
+    t.string   "state",        :limit => 20
+    t.decimal  "unitary_cost",               :precision => 14, :scale => 2
+    t.decimal  "quantity",                   :precision => 14, :scale => 2
+    t.decimal  "minimum",                    :precision => 14, :scale => 2
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "user_id"
@@ -407,7 +353,6 @@ ActiveRecord::Schema.define(:version => 20111103164257) do
 
   add_index "stocks", ["item_id"], :name => "index_stocks_on_item_id"
   add_index "stocks", ["minimum"], :name => "index_stocks_on_minimum"
-  add_index "stocks", ["organisation_id"], :name => "index_stocks_on_organisation_id"
   add_index "stocks", ["quantity"], :name => "index_stocks_on_quantity"
   add_index "stocks", ["state"], :name => "index_stocks_on_state"
   add_index "stocks", ["store_id"], :name => "index_stocks_on_store_id"
@@ -418,25 +363,19 @@ ActiveRecord::Schema.define(:version => 20111103164257) do
     t.string   "name"
     t.string   "address"
     t.string   "phone"
-    t.boolean  "active",          :default => true
+    t.boolean  "active",      :default => true
     t.string   "description"
-    t.integer  "organisation_id",                   :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  add_index "stores", ["organisation_id"], :name => "index_stores_on_organisation_id"
 
   create_table "taxes", :force => true do |t|
     t.string   "name"
-    t.string   "abbreviation",    :limit => 10
-    t.decimal  "rate",                          :precision => 5, :scale => 2
-    t.integer  "organisation_id",                                             :null => false
+    t.string   "abbreviation", :limit => 10
+    t.decimal  "rate",                       :precision => 5, :scale => 2
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  add_index "taxes", ["organisation_id"], :name => "index_taxes_on_organisation_id"
 
   create_table "taxes_transactions", :id => false, :force => true do |t|
     t.integer "tax_id"
@@ -451,21 +390,19 @@ ActiveRecord::Schema.define(:version => 20111103164257) do
     t.integer  "transaction_id"
     t.integer  "item_id"
     t.integer  "currency_id"
-    t.decimal  "quantity",                      :precision => 14, :scale => 2
-    t.decimal  "price",                         :precision => 14, :scale => 2
+    t.decimal  "quantity",                     :precision => 14, :scale => 2
+    t.decimal  "price",                        :precision => 14, :scale => 2
     t.string   "description"
-    t.string   "ctype",           :limit => 30
-    t.decimal  "discount",                      :precision => 14, :scale => 2
-    t.decimal  "balance",                       :precision => 14, :scale => 2
-    t.integer  "organisation_id"
-    t.decimal  "original_price",                :precision => 14, :scale => 2
+    t.string   "ctype",          :limit => 30
+    t.decimal  "discount",                     :precision => 14, :scale => 2
+    t.decimal  "balance",                      :precision => 14, :scale => 2
+    t.decimal  "original_price",               :precision => 14, :scale => 2
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "transaction_details", ["ctype"], :name => "index_transaction_details_on_ctype"
   add_index "transaction_details", ["item_id"], :name => "index_transaction_details_on_item_id"
-  add_index "transaction_details", ["organisation_id"], :name => "index_transaction_details_on_organisation_id"
   add_index "transaction_details", ["transaction_id"], :name => "index_transaction_details_on_transaction_id"
 
   create_table "transaction_histories", :force => true do |t|
@@ -493,7 +430,6 @@ ActiveRecord::Schema.define(:version => 20111103164257) do
     t.string   "bill_number"
     t.integer  "currency_id"
     t.decimal  "exchange_rate",                      :precision => 14, :scale => 4
-    t.integer  "organisation_id"
     t.integer  "project_id"
     t.decimal  "discount",                           :precision => 5,  :scale => 2
     t.decimal  "gross_total",                        :precision => 14, :scale => 2
@@ -538,23 +474,19 @@ ActiveRecord::Schema.define(:version => 20111103164257) do
   add_index "transactions", ["discounted"], :name => "index_transactions_on_discounted"
   add_index "transactions", ["modified_by"], :name => "index_transactions_on_modified_by"
   add_index "transactions", ["nuller_id"], :name => "index_transactions_on_nuller_id"
-  add_index "transactions", ["organisation_id"], :name => "index_transactions_on_organisation_id"
   add_index "transactions", ["payment_date"], :name => "index_transactions_on_payment_date"
   add_index "transactions", ["project_id"], :name => "index_transactions_on_project_id"
   add_index "transactions", ["ref_number"], :name => "index_transactions_on_ref_number"
   add_index "transactions", ["state"], :name => "index_transactions_on_state"
 
   create_table "units", :force => true do |t|
-    t.string   "name",            :limit => 100
-    t.string   "symbol",          :limit => 20
-    t.boolean  "integer",                        :default => false
-    t.boolean  "visible",                        :default => true
-    t.integer  "organisation_id",                                   :null => false
+    t.string   "name",       :limit => 100
+    t.string   "symbol",     :limit => 20
+    t.boolean  "integer",                   :default => false
+    t.boolean  "visible",                   :default => true
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  add_index "units", ["organisation_id"], :name => "index_units_on_organisation_id"
 
   create_table "users", :force => true do |t|
     t.string   "email"

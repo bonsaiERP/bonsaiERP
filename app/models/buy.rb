@@ -11,7 +11,7 @@ class Buy < Transaction
                    :transaction_details_attributes
 
   #validations
-  validates             :ref_number,           :presence => true , :uniqueness => { :scope => :organisation_id, :allow_blank => false}
+  validates             :ref_number,           :presence => true , :uniqueness => true
   validate              :valid_number_of_items
 
   scope :inventory, where("transactions.state NOT IN (?) AND delivered = ?", ['draft', 'nulled'], false)
@@ -21,7 +21,7 @@ class Buy < Transaction
   end
 
   def get_ref_number
-    refs            = Buy.org.order("ref_number DESC").limit(1)
+    refs            = Buy.order("ref_number DESC").limit(1)
     refs.any? ? refs.first.ref_number.next : "C-#{Date.today.year}-0001"
 
   end

@@ -72,9 +72,9 @@ module AccountsHelper
 
   def account_ledger_contact_collection(klass)
     if klass.income?
-      Client.org
+      Client.scoped
     else
-      Supplier.org
+      Supplier.scoped
     end
   end
 

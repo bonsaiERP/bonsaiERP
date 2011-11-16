@@ -6,7 +6,6 @@
   id: 1
   integer: false
   name: "Pipocas"
-  organisation_id: 1
   price: 3.0
   stockable: false
   unit_id: 1
@@ -18,7 +17,6 @@
   id: 2
   integer: false
   name: "DVD Mi villano favorito"
-  organisation_id: 1
   price: 5.0
   stockable: false
   unit_id: 3
@@ -30,7 +28,6 @@
   id: 3
   integer: false
   name: "DVD Megamente"
-  organisation_id: 1
   price: 5.0
   stockable: false
   unit_id: 3
@@ -42,7 +39,6 @@
   id: 4
   integer: false
   name: "Papel sabana tama\xC3\xB1o oficio"
-  organisation_id: 1
   price: 0
   stockable: false
   unit_id: 3
@@ -55,7 +51,6 @@
   id: 5
   integer: false
   name: "Papel sabana tama\xC3\xB1o oficio"
-  organisation_id: 1
   price: 10
   stockable: false
   unit_id: 3

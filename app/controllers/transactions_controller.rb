@@ -87,7 +87,7 @@ class TransactionsController < ApplicationController
 
   # GET /transactions/:id/pdf
   def pdf
-    t = Transaction.org.find(params[:id])
+    t = Transaction.find(params[:id])
     inv = InvoicePdf.new(t)
  
     name = "#{Rails.root}/tmp/pdfs/#{ t.type }_#{t.id}.pdf"
@@ -99,13 +99,13 @@ class TransactionsController < ApplicationController
 
   # GET /transactions/new_email/:id
   def new_email
-    @transaction = Transaction.org.find(params[:id])
+    @transaction = Transaction.find(params[:id])
   end
 
   # POST /transactions/email/:id
   # Sends the invoice email
   def email
-    @transaction = Transaction.org.find(params[:id])
+    @transaction = Transaction.find(params[:id])
     InvoiceMailer.send_invoice(@transaction, params).deliver
   end
 end

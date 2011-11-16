@@ -11,13 +11,13 @@
       = f.input :ref_number, :label => 'Nº de referencia', :input_html => {:size => 20}
       = f.input :date, :label => 'Fecha'
 
-    = f.association :contact, :label => 'Cliente', :collection => Client.org,
+    = f.association :contact, :label => 'Cliente', :collection => Client.scoped,
       :input_html => {'data-new_url' => new_client_path, 'data-title' => 'Nuevo cliente', 'data-trigger' => 'new_client' }
     .clear
 
   .clear
 
-  = f.association :project,  :label => 'Proyecto', :collection => Project.org
+  = f.association :project,  :label => 'Proyecto'
   = f.association :currency, :label => 'Moneda/Tipo de cambio. <span class="n black"></span>'.html_safe, :include_blank => false
   = f.input :exchange_rate, :as => :hidden
   .clear
@@ -25,7 +25,7 @@
   .input
     = f.input :discount, :label => 'Descuento (%)', :input_html => {:size => 10, :type => 'decimal'}
     = f.input :bill_number, :label => 'Nº de Factura', :input_html => {:size => 20}
-  =f.association :taxes, :as => :check_boxes, :label => 'Impuestos', :wrapper_html => {:id => 'taxes'}, :collection => Tax.org,
+  =f.association :taxes, :as => :check_boxes, :label => 'Impuestos', :wrapper_html => {:id => 'taxes'},
     :label_method => lambda{|tax| "<span data-rate='#{tax.rate}' title =\"#{tax.name}\">#{tax.abbreviation} (#{ntc tax.rate}%)</span>".html_safe }
 
   .clear
@@ -47,7 +47,7 @@
 
     = f.simple_fields_for :transaction_details do |fd|
       %tr.item
-        %td.cur= fd.input :item_id, :label => false, :collection => Item.org.income.order(:name), :input_html => {:class => 'item fl', 'data-new_url' => new_item_path, 'data-title' => 'Nuevo producto/servicio', 'data-trigger' => 'new_client'}
+        %td.cur= fd.input :item_id, :label => false, :collection => Item.income.order(:name), :input_html => {:class => 'item fl', 'data-new_url' => new_item_path, 'data-title' => 'Nuevo producto/servicio', 'data-trigger' => 'new_client'}
         %td= fd.input :description, :label => false
 
         %td= fd.input :price, :input_html => { :size => 8, :class => 'price', :type => 'decimal' }, :label => false
@@ -92,7 +92,6 @@
     var exchange_rates = #{ CurrencyRate.active.select("rate, currency_id").to_json };
 
     var default_currency_id = #{currency_id};
-    var income = new Income(items, "#income_form", {'default_currency_id': default_currency_id }, currencies, exchange_rates );
     window.income = income;
 
     // Functions for the select boxes

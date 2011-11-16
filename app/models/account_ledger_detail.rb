@@ -2,7 +2,6 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class AccountLedgerDetail < ActiveRecord::Base
-  acts_as_org
 
   STATES = %w(uncon con nulled)
 

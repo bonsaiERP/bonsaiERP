@@ -3,8 +3,6 @@
 # email: boriscyber@gmail.com
 class IncomesController < ApplicationController
   before_filter :check_authorization!
-  #before_filter :check_currency_set, :only => [:new, :edit, :create, :update]
-  before_filter :set_currency_rates, :only => [:index, :show]
   before_filter :set_transaction, :only => [:show, :edit, :update, :destroy, :approve]
 
   #before_filter :update_all_deliver
@@ -20,7 +18,7 @@ class IncomesController < ApplicationController
     else
       params[:option] ||= "all"
       @incomes = Income.find_with_state(params[:option])
-      @count = Income.org
+      @count = Income.scoped
     end
   end
 
@@ -37,7 +35,7 @@ class IncomesController < ApplicationController
   # GET /incomes/new.xml
   def new
     if params[:transaction_id].present?
-      t = Income.org.find(params[:transaction_id])
+      t = Income.find(params[:transaction_id])
       @transaction = t.clone_transaction
     else
       @transaction = Income.new
@@ -117,7 +115,7 @@ class IncomesController < ApplicationController
 
   # PUT /incomes/:id/approve_credit
   def approve_credit
-    @transaction = Income.org.find(params[:id])
+    @transaction = Income.find(params[:id])
     if @transaction.approve_credit params[:income]
       flash[:notice] = "Se aprobó correctamente el crédito."
     else
@@ -128,7 +126,7 @@ class IncomesController < ApplicationController
   end
 
   def approve_deliver
-    @transaction = Income.org.find(params[:id])
+    @transaction = Income.find(params[:id])
 
     if @transaction.approve_deliver
       flash[:notice] = "Se aprobó la entrega de material."
@@ -151,10 +149,7 @@ private
   end
 
   def set_transaction
-    @transaction = Income.org.find(params[:id])
+    @transaction = Income.find(params[:id])
   end
 
-  def set_currency_rates
-    @currency_rates = CurrencyRate.current_hash
-  end
 end

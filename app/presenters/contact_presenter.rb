@@ -19,9 +19,9 @@ class ContactPresenter < BasePresenter
   def moneybox(ac)
     case 
     when ac.amount < 0
-      moneybox_tag "Debemos #{ac.currency_symbol}", ac.amount
+      moneybox_tag "DEBEMOS #{ac.currency_symbol}", ac.amount
     when ac.amount > 0
-      moneybox_tag "Debe #{ac.currency_symbol}", ac.amount
+      moneybox_tag "DEBE #{ac.currency_symbol}", ac.amount
     end
   end
 

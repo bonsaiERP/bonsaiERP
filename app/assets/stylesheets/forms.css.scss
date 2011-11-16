@@ -136,3 +136,9 @@ span.error{
     }
   }
 }
+.field_with_errors{
+  input, textarea, select{
+    background-color: lighten($red, 30%);
+    #border-color: $red;
+  }
+}

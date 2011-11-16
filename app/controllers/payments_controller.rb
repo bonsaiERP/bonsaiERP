@@ -6,7 +6,7 @@ class PaymentsController < ApplicationController
   # GET /payments
   # GET /payments.xml
   #def index
-  #  @payments = Payment.org.all
+  #  @payments = Payment.all
 
   #  respond_to do |format|
   #    format.html # index.html.erb
@@ -27,7 +27,7 @@ class PaymentsController < ApplicationController
   # GET /payments/new
   # GET /payments/new.xml
   def new
-    @transaction = Transaction.org.find( params[:id] )
+    @transaction = Transaction.find( params[:id] )
     @account_ledger = @transaction.new_payment
     @payment = PaymentPresenter.new(@transaction)
   end
@@ -36,7 +36,7 @@ class PaymentsController < ApplicationController
   # POST /payments
   # POST /payments.xml
   def create
-    @transaction = Transaction.org.find(params[:account_ledger][:transaction_id])
+    @transaction = Transaction.find(params[:account_ledger][:transaction_id])
     params[:account_ledger][:exchange_rate] = 1 if params[:account_ledger][:exchange_rate].blank?
     
     @account_ledger = @transaction.new_payment(params[:account_ledger])

@@ -10,7 +10,7 @@ class BanksController < ApplicationController
   # GET /banks
   # GET /banks.xml
   def index
-    @banks = Bank.org.all
+    @banks = Bank.all
 
     respond_to do |format|
       format.html # index.html.erb
@@ -85,6 +85,6 @@ class BanksController < ApplicationController
 
   protected
     def find_bank
-      @bank = Bank.org.includes(:account).find(params[:id])
+      @bank = Bank.includes(:account).find(params[:id])
     end
 end

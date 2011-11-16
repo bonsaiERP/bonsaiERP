@@ -27,11 +27,11 @@
 
 -# Moneyboxes
 .moneybox.fl
-  %label Total
+  %label TOTAL
   %h3#total_currency #{@transaction.currency_symbol} #{ntc @transaction.total}
 
 .moneybox.fl
-  %label Saldo
+  %label SALDO
   %h3#balance #{@transaction.currency_symbol} #{ntc @transaction.balance}
 
 = presenter.render_discount

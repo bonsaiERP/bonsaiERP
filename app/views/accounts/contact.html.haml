@@ -19,7 +19,7 @@
 .clear
 - @account.account_currencies.includes(:currency).each do |ac|
   .moneybox.fl
-    %label Total en #{ac.currency_symbol}
+    %label TOTAL EN #{ac.currency_symbol}
     = present_amount(ac.amount)
 
 .clear

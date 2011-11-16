@@ -1,13 +1,15 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-Factory.define :country do |c|
+Factory.define :org_country do |c|
+  c.id 1
   c.name 'Boliva'
   c.abbreviation 'bo'
   c.taxes []
 end
 
 Factory.define :currency do |c|
+  c.id 1
   c.name 'boliviano'
   c.symbol 'Bs.'
   c.code 'BOB'

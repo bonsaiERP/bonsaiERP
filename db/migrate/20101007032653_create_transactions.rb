@@ -18,8 +18,6 @@ class CreateTransactions < ActiveRecord::Migration
       t.integer :currency_id
       t.decimal :exchange_rate, :precision => 14, :scale => 4
 
-      t.integer :organisation_id
-
       t.integer :project_id
       t.decimal :discount, :precision => 5,  :scale => 2
       t.decimal :gross_total, :precision => 14, :scale => 2
@@ -45,7 +43,6 @@ class CreateTransactions < ActiveRecord::Migration
     add_index :transactions, :active
     add_index :transactions, :ref_number
     add_index :transactions, :date
-    add_index :transactions, :organisation_id
     add_index :transactions, :currency_id
     add_index :transactions, :state
     add_index :transactions, :balance_inventory

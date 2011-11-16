@@ -13,7 +13,7 @@ class ClientsController < ApplicationController
   def index
     params[:option] ||= 'all' 
     if params[:search]
-      @clients = Client.org.search(params[:search]).order("matchcode ASC").page(@page)
+      @clients = Client.search(params[:search]).order("matchcode ASC").page(@page)
     else
       case
       when params[:option] === 'pendent'
@@ -21,7 +21,7 @@ class ClientsController < ApplicationController
       when params[:option] === 'debt'
         @clients = Client.debt.page(@page)
       else
-        @clients = Client.org.order("matchcode ASC").page(@page)
+        @clients = Client.order("matchcode ASC").page(@page)
       end
     end
   end
@@ -77,6 +77,6 @@ class ClientsController < ApplicationController
 
   protected
   def find_client
-    @client = Client.org.find(params[:id])
+    @client = Client.find(params[:id])
   end
 end

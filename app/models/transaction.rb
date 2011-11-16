@@ -2,7 +2,6 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class Transaction < ActiveRecord::Base
-  acts_as_org
 
   STATES   = ["draft"  , "approved" , "paid" , "due", "inventory", "nulled", "discount"]
   TYPES    = ['Income' , 'Expense'  , 'Buy']
@@ -37,7 +36,7 @@ class Transaction < ActiveRecord::Base
   has_many :inventory_operations
 
   # Relation with nested attributes
-  has_many :transaction_details , :dependent => :destroy
+  has_many :transaction_details , :dependent => :destroy, :order => :id
   accepts_nested_attributes_for :transaction_details, :allow_destroy => true
 
   # History
@@ -47,7 +46,7 @@ class Transaction < ActiveRecord::Base
 
 
   # Validations
-  validates :contact_id, :contact => {:clases => ["Client", "Supplier"]}
+  #validates :contact_id, :contact => {:clases => ["Client", "Supplier"]}
 
   # scopes
   scope :draft    , where(:state => 'draft')
@@ -79,7 +78,7 @@ class Transaction < ActiveRecord::Base
 
   # Finds using the state
   def self.find_with_state(state)
-    ret   = self.org.includes(:contact, :currency).order("created_at DESC")
+    ret   = self.includes(:contact, :currency).order("created_at DESC")
     ret = ret.send(scoped_state(state)) if scoped_state(state)
     ret
   end
@@ -97,9 +96,9 @@ class Transaction < ActiveRecord::Base
 
   # method used for searching
   def self.search(options)
-    ret = self.org.includes(:contact, :currency)
+    ret = self.includes(:contact, :currency)
     ret = ret.send(scoped_state(options[:option])) if scoped_state(options[:option])
-    ret.where("transactions.ref_number LIKE :code OR contacts.matchcode LIKE :code", :code => "%#{options[:search]}%")
+    ret.where("transactions.ref_number ILIKE :code OR contacts.matchcode ILIKE :code", :code => "%#{options[:search]}%")
   end
 
   # Define methods for the types of transactions
@@ -249,9 +248,9 @@ class Transaction < ActiveRecord::Base
   # returns the items dependig of what type is the transction
   def get_items
     case type
-    when "Income"  then Item.org.income
-    when "Buy"     then Item.org.buy
-    when "Expense" then Item.org.expense
+    when "Income"  then Item.income
+    when "Buy"     then Item.buy
+    when "Expense" then Item.expense
     end
   end
 

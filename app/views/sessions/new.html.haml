@@ -38,7 +38,10 @@
     .clear
     = f.input :password, :label => 'Contraseña', :input_html => {:size => 40}
     .clear
-    = link_to "Olvido su contraseña?", new_reset_password_path, :class => 'fs120'
+    .fs120
+      = link_to "Olvido su contraseña?", new_reset_password_path
+      %strong o
+      = link_to "Registrarse aquí!", new_registration_path
     .clear
     = f.submit "Ingresar"
 

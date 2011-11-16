@@ -5,8 +5,12 @@ module Controllers::Authentication
 
   protected
   def current_user
-    return false unless session[:user_id]
-    @current_user ||= User.find(session[:user_id])
+    return false unless session[:user_id].present?
+    begin
+      @current_user ||= User.find(session[:user_id])
+    rescue
+      false
+    end
   end
 
   def user_signed_in?
@@ -14,39 +18,36 @@ module Controllers::Authentication
   end
 
   # Checks the current user and redirects to the correct path
+  # if the user has created the organisation and tenant logins
+  # if the user has created the organisation and not tenant => cretes tenant
   def check_logged_user
+    PgTools.reset_search_path
     if current_user
       flash[:notice] = "Ingresó correctamente"
-      if current_user.organisations.any?
+      orgs = current_user.organisations
+      org_id = orgs.first.id if orgs.any?
+      schema = PgTools.schema_exists? PgTools.get_schema_name(org_id)
+
+      case
+      when( orgs.any? and schema )
         set_organisation_session(current_user.organisations.first)
-        session[:user] = {:rol => current_user.link.rol }
+        link = current_user.links.first
+        session[:user] = {:rol => link.rol }
         redirect_to "/dashboard"
+      when( orgs.any? and not(schema))
+        redirect_to create_tenant_organisation_path(org_id)
       else
         redirect_to "/organisations/new"
       end
     end
   end
 
-  # Sets the session for the organisation
-  def set_organisation_session(organisation)
-    ret = true
-    # Create base_accounts if needed
-    ret = organisation.create_base_accounts unless organisation.base_accounts?
-
-    session[:organisation] = Hash[ OrganisationSession::KEYS.map {|k| [k, organisation.send(k)] } ]
-    set_organisation
-
-    ret
-  end
 
   # Sets the session for the organisation
   def set_organisation_session(organisation)
     ret = true
-    # Create base_accounts if needed
-    ret = organisation.create_base_accounts unless organisation.base_accounts?
 
     session[:organisation] = Hash[ OrganisationSession::KEYS.map {|k| [k, organisation.send(k)] } ]
-    set_organisation
 
     ret
   end

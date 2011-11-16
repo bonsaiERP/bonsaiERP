@@ -8,7 +8,7 @@ module Controllers::Authorization
   # general method to check authorization
   def check_authorization!
     if current_user and session[:user] and session[:user][:rol]
-      if session[:organisation]
+      if session[:organisation].present?
         if not(request.path === "/dashboard") and session[:organisation][:due_date] + 5.days < Date.today
           flash[:warning] = "Su cuenta ha expirado, por favor realice el pago correspondiente."
           return redirect_to("/dashboard",)

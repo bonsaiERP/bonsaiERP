@@ -7,12 +7,9 @@ class CreateStores < ActiveRecord::Migration
       t.boolean :active, :default => true
       t.string :description
 
-      t.integer :organisation_id, :null => false
-
       t.timestamps
     end
 
-    add_index(:stores, :organisation_id)
   end
 
   def self.down

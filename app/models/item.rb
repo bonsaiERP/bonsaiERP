@@ -3,8 +3,6 @@
 # email: boriscyber@gmail.com
 class Item < ActiveRecord::Base
 
-  acts_as_org
-
   attr_readonly :ctype
 
   set_inheritance_column :class_type
@@ -38,9 +36,8 @@ class Item < ActiveRecord::Base
   validates_presence_of :name, :unit_id, :code
   #validates_associated :unit
   validates :ctype, :presence => true, :inclusion => { :in => TYPES }
-  validates :code, :uniqueness => { :scope => :organisation_id }
+  validates :code, :uniqueness => true
   validates :price, :numericality => { :greater_than_or_equal_to => 0 }
-  validates :unit_id, :organisation_relation => true
 
 
   delegate :symbol, :name, :to => :unit, :prefix => true
@@ -116,17 +113,17 @@ class Item < ActiveRecord::Base
 
   # Searches using ctype, and searches the name and code atributes
   def self.index(s_type = TYPES.first, options = {})
-    query = [ ["name", "code"].map {|v| "items.#{v} LIKE ?"}.join(" OR ") ] + Array.new(2, "%#{options[:search]}%")
+    query = [ ["name", "code"].map {|v| "items.#{v} ILIKE ?"}.join(" OR ") ] + Array.new(2, "%#{options[:search]}%")
     where(:ctype => s_type).where(query)
   end
 
   def self.search(params)
-    self.org.includes(:unit, :stocks).where("items.name LIKE :search OR items.code LIKE :search", :search => "%#{params[:search]}%")
+    self.includes(:unit, :stocks).where("items.name ILIKE :search OR items.code ILIKE :search", :search => "%#{params[:search]}%")
   end
 
   # Modifications for rubinius
   def self.simple_search(search, limit = 20)
-    sc = self.org.where("code LIKE :search OR name LIKE :search", :search => "%#{search}%")
+    sc = self.where("code ILIKE :search OR name ILIKE :search", :search => "%#{search}%")
     sc.limit(limit).values_of(:id, :code, :name, :price).map do |id, code, name, price|
       {:id => id, :code => code, :name => name, :price => price, :label => "#{code} - #{name}", :value => id}
     end
@@ -158,7 +155,7 @@ class Item < ActiveRecord::Base
 
   # checks if there are any items on destruction
   def check_items_destroy
-    if TransactionDetail.org.where(:item_id => id).any? or InventoryOperationDetail.org.where(:item_id => id).any?
+    if TransactionDetail.where(:item_id => id).any? or InventoryOperationDetail.where(:item_id => id).any?
       errors.add(:base, "El item es usado en otros registros relacionados")
       false
     else
@@ -172,7 +169,7 @@ class Item < ActiveRecord::Base
   end
 
   def check_valid_unit_id
-    unless Unit.org.find_by_id(unit_id)
+    unless Unit.find_by_id(unit_id)
       self.errors[:unit_id] << I18n.t("errors.messages.invalidkeys")
       return false
     end

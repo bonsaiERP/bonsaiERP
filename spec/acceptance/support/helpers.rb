@@ -24,25 +24,24 @@ module HelperMethods
   
   # Creates a user logins and creates and organisation
   def create_organisation(attributes = {})
-    #if attributes.empty?
-    #  y = YAML.load_file("#{Rails.root}/db/defaults/organisations.yml")
-    #  attributes = y.first
-    #end
-    #@user = create_user
     attributes = {:name => 'Violetas', :currency_id => 1, :country_id => 1, 
                          :phone => '7881221', :mobile => '789123434',
                          :address => 'Mallasa calle 4 Nº 222' 
                   }.merge(attributes)
 
-    create_countries
-    create_currencies
-
-    if attributes[:id]
-      org = Organisation.create!(attributes) {|o| o.id = attributes[:id]}
-    else
-      org = Organisation.create!(attributes)
+    org = nil
+    ActiveRecord::Base.transaction do
+      OrgCountry.create_base_data
+      Currency.create_base_data
+      if attributes[:id]
+        org = Organisation.create!(attributes) {|o| o.id = attributes[:id]}
+      else
+        org = Organisation.create!(attributes)
+      end
+      Unit.create_base_data
+      AccountType.create_base_data
     end
-    raise "Error creating organisation base accounts" unless org.create_base_accounts
+
     org
   end
 
@@ -54,7 +53,7 @@ module HelperMethods
   # Creates items with the defined ids
   def create_items
     YAML.load_file("#{Rails.root}/spec/factories/items.yml").each do |it|
-      u = Unit.org.first
+      u = Unit.first
     
       Item.create!(it) {|item| 
         item.id = it["id"]

@@ -3,7 +3,6 @@
 # email: boriscyber@gmail.com
 class Account < ActiveRecord::Base
 
-  include Models::Organisation::NewOrganisation
   include ActionView::Helpers::NumberHelper 
 
   # callbacks
@@ -21,7 +20,7 @@ class Account < ActiveRecord::Base
   belongs_to :accountable, :polymorphic => true
 
   has_many :account_ledgers
-  has_many :account_ledger_details
+  #has_many :account_ledger_details
   #has_many :account_currencies, :autosave => true
   # Transaction
   has_many :incomes,  :class_name => "Transaction", :conditions => "transactions.type = 'Income'"
@@ -86,7 +85,7 @@ class Account < ActiveRecord::Base
   def self.to_hash(*args)
     args = [:name, :currency_id] if args.empty?
     l = lambda {|v| args.map {|val| [val, v.send(val)] } }
-    Hash[ Account.org.money.map {|v| [v.id, Hash[l.call(v)] ]  } ]
+    Hash[ Account.money.map {|v| [v.id, Hash[l.call(v)] ]  } ]
   end
 
   # Creates a hash for with the amount for each curency available
@@ -101,7 +100,7 @@ class Account < ActiveRecord::Base
 
   # Returns all account_ledgers for an account_id and to_id
   def self.get_ledgers(includes = [:account, :to])
-    AccountLedger.org.includes(*includes)
+    AccountLedger.includes(*includes)
     .where("account_ledgers.account_id = :id OR account_ledgers.to_id = :id", :id => id)
   end
 

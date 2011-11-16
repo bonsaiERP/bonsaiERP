@@ -7,7 +7,8 @@ require File.dirname(__FILE__) + '/acceptance_helper'
 
 feature "Income", "test features" do
   background do
-    create_organisation_session
+    #create_organisation_session
+    OrganisationSession.set(:id => 1, :name => 'ecuanime', :currency_id => 1)
     create_user_session
   end
 

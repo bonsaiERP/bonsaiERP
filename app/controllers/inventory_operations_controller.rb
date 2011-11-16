@@ -8,7 +8,7 @@ class InventoryOperationsController < ApplicationController
   # GET /inventory_operations
   # GET /inventory_operations.xml
   def index
-    @inventory_operations = InventoryOperation.org.page(@page)
+    @inventory_operations = InventoryOperation.page(@page)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -19,7 +19,7 @@ class InventoryOperationsController < ApplicationController
   # GET /inventory_operations/1
   # GET /inventory_operations/1.xml
   def show
-    @inventory_operation = InventoryOperation.org.find(params[:id])
+    @inventory_operation = InventoryOperation.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -85,7 +85,7 @@ class InventoryOperationsController < ApplicationController
 
   # Selects a store for in out of a transaction
   def select_store
-    @transaction = Transaction.org.find(params[:id])
+    @transaction = Transaction.find(params[:id])
     @inventory_operation = @transaction.inventory_operations.build(:operation => params[:operation])
   end
 
@@ -95,10 +95,10 @@ class InventoryOperationsController < ApplicationController
     params[:operation] = "in" unless ["in", "out"].include?( params[:operation] )
 
     if params[:operation] == "out"
-      @transactions = Income.org.inventory.order("created_at DESC").page(@page)
+      @transactions = Income.inventory.order("created_at DESC").page(@page)
     else
       redirect_to "/422" unless User::ROLES.slice(0,2).include? session[:user][:rol]
-      @transactions = Buy.org.inventory.order("created_at DESC").page(@page)
+      @transactions = Buy.inventory.order("created_at DESC").page(@page)
     end
   end
 
@@ -107,7 +107,7 @@ class InventoryOperationsController < ApplicationController
   def find_store
     store_id = params[:store_id] || params[:inventory_operation][:store_id]
 
-    @store = Store.org.find(store_id)
+    @store = Store.find(store_id)
   end
 
   # Checks the permission for different transactions
@@ -119,7 +119,7 @@ class InventoryOperationsController < ApplicationController
     redirect_to "/404" unless t_id and InventoryOperation::OPERATIONS.include?(operation)
 
     # Find transaction and check
-    @transaction = Transaction.org.find(t_id)
+    @transaction = Transaction.find(t_id)
     return redirect_to "/404" unless @transaction
 
     roles = User::ROLES.slice(0,2)

@@ -12,15 +12,12 @@ class CreateTransactionDetails < ActiveRecord::Migration
       t.decimal :discount, :precision => 14, :scale => 2
       t.decimal :balance, :precision => 14, :scale => 2
 
-      t.integer :organisation_id
-
       t.decimal  :original_price, :precision => 14, :scale => 2
       t.timestamps
     end
 
     add_index :transaction_details, :transaction_id
     add_index :transaction_details, :item_id
-    add_index :transaction_details, :organisation_id
     add_index :transaction_details, :ctype
   end
 

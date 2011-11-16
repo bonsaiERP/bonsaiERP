@@ -49,7 +49,6 @@ module Models::Transaction::Payment
 
       mark_paid_pay_plans if credit? # anulate pay_plans if credit
 
-      self.balance = balance - @current_ledger.amount_currency.abs
       self.state = 'paid' if balance.round(2) <= 0
 
       set_current_ledger_data
@@ -58,7 +57,8 @@ module Models::Transaction::Payment
       res = true
       self.class.transaction do
         res = @current_ledger.save
-        res = res and self.save
+        self.balance = balance - @current_ledger.amount_currency.abs
+        res = res && self.save
         raise ActiveRecord::Rollback unless res
       end
 
@@ -70,12 +70,20 @@ module Models::Transaction::Payment
     def set_current_ledger_data
       set_account_ledger_description
       @current_ledger.contact_id = contact_id
-      #@current_ledger.to_id = ::Account.org.find_by_original_type(self.class.to_s).id
+      #@current_ledger.to_id = ::Account.find_by_original_type(self.class.to_s).id
       @current_ledger.conciliation = false
 
       #@current_ledger.valid_contact_amount
       
       @current_ledger.currency_id = @current_ledger.account_currency_id
+
+      set_current_ledger_inverse
+    end
+
+    def set_current_ledger_inverse
+      if self.currency_id != OrganisationSession.currency_id and @current_ledger.account_currency_id == OrganisationSession.currency_id
+        @current_ledger.inverse = true
+      end
     end
 
     def get_account_ledger_operation

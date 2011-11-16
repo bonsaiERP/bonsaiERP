@@ -20,4 +20,12 @@ class Currency < ActiveRecord::Base
     l = lambda {|v| args.map {|val| [val, v.send(val)] } }
     Hash[ Currency.all.map {|v| [v.id, Hash[l.call(v)] ]  } ]
   end
+
+  def self.create_base_data
+    path = File.join(Rails.root, "db/defaults", "currencies.yml")
+    currencies = YAML.load_file(path)
+    currencies.each do |cur|
+      Currency.create!(cur) {|cu| cu.id = cur["id"]}
+    end
+  end
 end

@@ -12,12 +12,11 @@
 .clear
 = render 'contacts/show', :klass => @staff
 
-- @currency_rates = CurrencyRate.current_hash
 
 .clear
 - @staff.accounts.each do |ac|
   .moneybox.fl
-    %label Cuenta en #{ac.currency_symbol}
+    %label CUENTA EN #{ac.currency_symbol}
     %h3= ntc -ac.amount
 
 

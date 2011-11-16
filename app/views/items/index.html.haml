@@ -6,7 +6,7 @@
 
 %h1 Items
 
-- if Store.org.empty?
+- if Store.scoped.empty?
   %h3.red 
     Le recomendamos crear
     =link_to "almacenes", stores_path

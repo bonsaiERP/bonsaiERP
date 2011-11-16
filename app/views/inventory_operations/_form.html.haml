@@ -33,7 +33,7 @@
       %th
 
     - if @inventory_operation.transaction_id.blank?
-      - @items = Item.inventory.org
+      - @items = Item.inventory
       = render "form_details", :f => f
     - else
       = render "form_details_transaction", :f => f, :stocks => @inventory_operation.hash_of_items

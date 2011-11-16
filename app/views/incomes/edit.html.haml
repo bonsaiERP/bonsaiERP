@@ -6,4 +6,4 @@
 
 %h1 Editar proforma de venta
 
-= render 'transactions/form', :transaction => @transaction, :contacts => Client.org
+= render 'transactions/form', :transaction => @transaction, :contacts => Client.scoped

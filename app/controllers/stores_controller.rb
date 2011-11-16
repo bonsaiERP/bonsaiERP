@@ -6,7 +6,7 @@ class StoresController < ApplicationController
   # GET /stores
   # GET /stores.xml
   def index
-    @stores = Store.org
+    @stores = Store.scoped
 
     respond_to do |format|
       format.html # index.html.erb
@@ -73,7 +73,7 @@ class StoresController < ApplicationController
   # DELETE /stores/1
   # DELETE /stores/1.xml
   def destroy
-    @store = Store.org.find(params[:id])
+    @store = Store.find(params[:id])
     @store.destroy
   
     if @store.destroyed?

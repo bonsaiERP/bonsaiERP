@@ -1,7 +1,6 @@
 class CreateAccountLedgerDetails < ActiveRecord::Migration
   def change
     create_table :account_ledger_details do |t|
-      t.references :organisation
       t.references :account
       t.references :account_ledger
       t.references :currency
@@ -14,7 +13,6 @@ class CreateAccountLedgerDetails < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :account_ledger_details, :organisation_id
     add_index :account_ledger_details, :account_id
     add_index :account_ledger_details, :account_ledger_id
     add_index :account_ledger_details, :currency_id

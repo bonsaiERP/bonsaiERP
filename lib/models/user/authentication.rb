@@ -11,7 +11,7 @@ module Models::User::Authentication
     end
 
     def confirm_token(token)
-      return false if confirmated?
+      return true if confirmated?
 
       if confirmation_token === token
         self.confirmed_at = Time.zone.now

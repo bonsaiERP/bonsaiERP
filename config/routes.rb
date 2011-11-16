@@ -1,5 +1,9 @@
 Bonsaierp::Application.routes.draw do
 
+  if [:development, :test].include? Rails.env
+    mount Jasminerice::Engine => "/jasmine" 
+  end
+
   resources :stocks
 
   resources :account_types
@@ -33,8 +37,6 @@ Bonsaierp::Application.routes.draw do
   resources :payments 
 
   resources :pay_plans
-
-  resources :currency_rates
 
   resources :projects
 
@@ -92,8 +94,10 @@ Bonsaierp::Application.routes.draw do
   resources :taxes
 
   resources :organisations do
-    get  :select,     :on => :member
-    post :final_step, :on => :collection
+    get :check_schema,  :on => :member
+    get :create_tenant, :on => :member
+    get :select,        :on => :member
+    get :create_data,   :on => :member
 
     get  :edit_preferences,   :on => :member
     put  :update_preferences, :on => :member
@@ -133,6 +137,9 @@ Bonsaierp::Application.routes.draw do
     
   match '/dashboard' => 'dashboard#index', :as => :dashboard
   match '/configuration' => 'dashboard#configuration'
+
+  # Resque
+  #mount Resque::Server, :at => "/resque"  
 
   # Rails Metal
   match "/client_autocomplete"   => AutocompleteApp.action(:client)

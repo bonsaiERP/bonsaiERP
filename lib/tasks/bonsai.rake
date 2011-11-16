@@ -45,9 +45,9 @@ namespace :bonsai do
   desc "Updates account_ledgers so all have the contact"
   task :update_account_ledgers_contact_id => :environment do
     Organisation.all.each do |o|
-      c = Contact.where(:organisation_id => o.id).first
+      c = Contact.first
       if c
-        AccountLedger.where(:organisation_id => o.id, :contact_id => nil).update_all([ "contact_id=?", c.id ])
+        AccountLedger.where(:contact_id => nil).update_all([ "contact_id=?", c.id ])
       end
     end
 
@@ -58,7 +58,6 @@ namespace :bonsai do
   task :create_contact_accounts => :environment do
     Contact.all.each do |c|
       unless c.account.present?
-        OrganisationSession.set :id => c.organisation_id
 
         c.build_account(:currency_id => 1, :name => c.to_s) {|co| 
           co.amount = 0
@@ -155,9 +154,26 @@ namespace :bonsai do
   task :account_ledger_codes => :environment do
     Organisation.all.each do |o|
       AccountLedger.connection.execute("SET @i = 0")
-      AccountLedger.connection.execute("UPDATE account_ledgers SET code=(@i:=@i+1) WHERE organisation_id=#{o.id}")
+      AccountLedger.connection.execute("UPDATE account_ledgers SET code=(@i:=@i+1)")
       puts "Updated codes for #{o.id} - #{o}"
     end
+  end
+
+  desc "Migrates all databases"
+  task :migrate => :environment do
+      PgTools.reset_search_path
+      ActiveRecord::Migration.verbose = verbose
+
+      Organisation.all.each do |org|
+        ActiveRecord::Base.transaction do
+          PgTools.reset_search_path
+          schema = PgTools.get_schema_name(org.id)
+          puts "migrating #{schema})"
+          PgTools.set_search_path schema
+          version = ENV["VERSION"] ? ENV["VERSION"].to_i : nil
+          ActiveRecord::Migrator.migrate("db/migrate/", version)
+        end
+      end
   end
 end
 

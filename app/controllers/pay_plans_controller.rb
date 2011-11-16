@@ -9,7 +9,7 @@ class PayPlansController < ApplicationController
   # GET /pay_plans.xml
   def index
     method = params[:option] == "out" ? :out : :in
-    @pay_plans = PayPlan.org.unpaid.send(method).includes([:currency, :transaction => :contact]).page(@page)
+    @pay_plans = PayPlan.unpaid.send(method).includes([:currency, :transaction => :contact]).page(@page)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -21,7 +21,7 @@ class PayPlansController < ApplicationController
   # GET /pay_plans/1.xml
   def show
     params[:ajax_call] = true
-    @transaction = Transaction.org.find(params[:id])
+    @transaction = Transaction.find(params[:id])
   end
 
   # GET /pay_plans/new
@@ -33,7 +33,7 @@ class PayPlansController < ApplicationController
 
   # GET /pay_plans/1/edit
   def edit
-    @transaction = Transaction.org.find(params[:transaction_id])
+    @transaction = Transaction.find(params[:transaction_id])
     @pay_plan = @transaction.pay_plans.find(params[:id])
   end
 
@@ -60,7 +60,7 @@ class PayPlansController < ApplicationController
   # PUT /pay_plans/1.xml
   def update
     begin
-      @transaction = Transaction.org.find(params[:pay_plan][:transaction_id])
+      @transaction = Transaction.find(params[:pay_plan][:transaction_id])
     rescue
       render :text => "Existio un error por favor cierre la ventana."
     end
@@ -94,7 +94,7 @@ class PayPlansController < ApplicationController
 
 private
   def set_pay_plan
-    @pay_plan = PayPlan.org.find(params[:id])
+    @pay_plan = PayPlan.find(params[:id])
   end
 
   # Checks if the current user has the rights to edit

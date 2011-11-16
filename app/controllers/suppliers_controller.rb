@@ -13,7 +13,7 @@ class SuppliersController < ApplicationController
   def index
     params[:option] ||= 'all' 
     if params[:search]
-      @suppliers = Supplier.org.search(params[:search]).order("matchcode ASC").page(@page)
+      @suppliers = Supplier.search(params[:search]).order("matchcode ASC").page(@page)
     else
       case
       when params[:option] === 'pendent'
@@ -21,7 +21,7 @@ class SuppliersController < ApplicationController
       when params[:option] === 'debt'
         @suppliers = Supplier.debt.page(@page)
       else
-        @suppliers = Supplier.org.order("matchcode ASC").page(@page)
+        @suppliers = Supplier.order("matchcode ASC").page(@page)
       end
     end
   end
@@ -77,7 +77,7 @@ class SuppliersController < ApplicationController
 
   protected
   def find_supplier
-    @supplier = Supplier.org.find(params[:id])
+    @supplier = Supplier.find(params[:id])
   end
 end
 

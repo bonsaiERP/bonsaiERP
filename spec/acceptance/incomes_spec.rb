@@ -7,7 +7,8 @@ require File.dirname(__FILE__) + '/acceptance_helper'
 
 feature "Income", "test features" do
   background do
-    create_organisation_session
+    #create_organisation_session
+    OrganisationSession.set(:id => 1, :name => 'ecuanime', :currency_id => 1)
     create_user_session
   end
 
@@ -27,8 +28,8 @@ feature "Income", "test features" do
       }
 
       details = [
-        { "description"=>"jejeje", "item_id"=>1, "organisation_id"=>1, "price"=>3, "quantity"=> 10},
-        { "description"=>"jejeje", "item_id"=>2, "organisation_id"=>1, "price"=>5, "quantity"=> 20}
+        { "description"=>"jejeje", "item_id"=>1, "price"=>3, "quantity"=> 10},
+        { "description"=>"jejeje", "item_id"=>2, "price"=>5, "quantity"=> 20}
       ]
       i_params[:transaction_details_attributes] = details
       i_params
@@ -45,7 +46,7 @@ feature "Income", "test features" do
   # Not included items
   scenario "Should not alow errors" do
     data = income_params.dup
-    data[:transaction_details_attributes] << { "description"=>"jejeje", "item_id"=>1, "organisation_id"=>1, "price"=>3, "quantity"=> 2}
+    data[:transaction_details_attributes] << { "description"=>"jejeje", "item_id"=>1, "price"=>3, "quantity"=> 2}
  
     # Repeated items
     i = Income.new(data)
@@ -84,6 +85,7 @@ feature "Income", "test features" do
 
     i.transaction_details[0].balance.should == 10
     i.transaction_details[0].original_price.should == 3
+    i.transaction_details[0].ctype.should == "Income"
     i.transaction_details[1].balance.should == 20
     i.transaction_details[1].original_price.should == 5
 
@@ -113,6 +115,8 @@ feature "Income", "test features" do
     #p.to_id.should == Account.org.find_by_original_type(i.class.to_s).id
     p.description.should_not == blank?
     p.amount.should == 30
+    p.should be_persisted
+    p.should_not be_inverse
 
     i.balance.should == bal - 30
     p.persisted?.should be_true
@@ -457,7 +461,8 @@ feature "Income", "test features" do
     p.conciliate_account.should be(true)
 
     i.reload
-    i.account_ledgers.first.amount.should == 30
+    i.account_ledgers.first.amount.should == 31
+    i.account_ledgers.first.amount_currency.should == 60
     i.balance.should == i.total - 2 * 60
 
     p.reload
@@ -541,7 +546,7 @@ feature "Income", "test features" do
     i.reload
     i.pay_plans.unpaid.sum(:amount).should == i.balance
 
-    income_account = Account.org.find_by_original_type("Income")
+    income_account = Account.find_by_original_type("Income")
     
     log.info("Set the correct description for a payment with other currency")
     c1 = Currency.find(i.currency_id)
@@ -735,6 +740,7 @@ feature "Income", "test features" do
     p.base_amount.should == i.balance
 
     i.save_payment.should be_false
+
     p.errors[:amount].should_not be_empty
     p.errors[:base_amount].should_not be_empty
 
@@ -799,7 +805,8 @@ feature "Income", "test features" do
     p.conciliate_account.should be(true)
 
     i.reload
-    i.account_ledgers.first.amount.should == 30
+    i.account_ledgers.first.amount.should == 31
+    i.account_ledgers.first.amount_currency.should == 60
     i.balance.should == i.total - 2 * 60
 
     p.reload
@@ -880,7 +887,7 @@ feature "Income", "test features" do
     i.save_payment.should == true
     p.should be_persisted
 
-    income_account = Account.org.find_by_original_type("Income")
+    income_account = Account.find_by_original_type("Income")
     
     log.info("Set the correct description for a payment with other currency")
     c1 = Currency.find(i.currency_id)
@@ -1019,7 +1026,7 @@ feature "Income", "test features" do
 
     # with taxes
     i_params[:discount] = 3
-    tax = Tax.org.first
+    tax = Tax.first
     i_params[:taxis_ids] = [tax.id]
     i = Income.new(i_params)
     i.save_trans.should be_true
@@ -1051,5 +1058,27 @@ feature "Income", "test features" do
     i.original_total.should == otot
     i.total.should == i.original_total
     i.should_not be_changed
+  end
+
+  scenario "Make a income in other currency and pay with organisation currency" do
+    data = income_params.dup.merge(exchange_rate: 2, currency_id: 2, discount: 0)
+    data[:transaction_details_attributes][0][:price] = 1.5
+    data[:transaction_details_attributes][1][:price] = 2.5
+
+    i = Income.new(data)
+    i.save_trans.should be_true
+    i.should be_persisted
+    i.total.should == (1.5 * 10 + 2.5 * 20)
+
+    i.approve!.should be_true
+
+    p = i.new_payment(:account_id => bank_account.id, :base_amount => 30, :exchange_rate => 2, :reference => 'Cheque 143234', :operation => 'in')
+    i.save_payment.should == true
+    p.should be_persisted
+    p.should be_inverse
+    p.amount.should == 30
+    p.amount_currency.should == 15
+
+    i.balance.should == i.total - 15
   end
 end

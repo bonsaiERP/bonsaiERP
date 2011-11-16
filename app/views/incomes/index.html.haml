@@ -9,7 +9,7 @@
 
 %h1 Ventas
 
-- if Item.org.empty?
+- if Item.scoped.empty?
   %h3.red 
     Necesita
     = link_to "items", items_path

@@ -2,7 +2,6 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class Contact < ActiveRecord::Base
-  acts_as_org
   include Models::Account::Contact
 
   before_destroy { false }
@@ -19,7 +18,7 @@ class Contact < ActiveRecord::Base
 
   validates_presence_of    :matchcode
 
-  validates_uniqueness_of  :matchcode, :scope => :organisation_id
+  validates_uniqueness_of  :matchcode
 
   validates_format_of     :email,  :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :allow_blank => true
   validates_format_of     :phone,  :with =>/^\d+[\d\s-]+\d$/,  :allow_blank => true
@@ -35,7 +34,7 @@ class Contact < ActiveRecord::Base
   delegate :id, :name, :to => :account, :prefix => true
 
   def self.search(match)
-    includes(:accounts).where("contacts.matchcode LIKE ?", "%#{match}%")
+    includes(:accounts).where("contacts.matchcode ILIKE ?", "%#{match}%")
   end
 
   # Finds a contact using the type
@@ -43,9 +42,9 @@ class Contact < ActiveRecord::Base
   def self.find_with_type(type)
     type = 'all' unless TYPES.include?(type)
     case type
-    when 'Client' then Contact.org.clients
-    when 'Supplier' then Contact.org.suppliers
-    when 'All' then Contact.org
+    when 'Client' then Contact.clients
+    when 'Supplier' then Contact.suppliers
+    when 'All' then Contact.scoped
     end
   end
 

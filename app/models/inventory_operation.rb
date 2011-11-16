@@ -2,7 +2,6 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class InventoryOperation < ActiveRecord::Base
-  acts_as_org
 
   before_create     { self.creator_id = UserSession.user_id }
 
@@ -32,9 +31,9 @@ class InventoryOperation < ActiveRecord::Base
 
   def get_contact_list
     if operation == "in"
-      Supplier.org
+      Supplier.scoped
     else
-      Client.org
+      Client.scoped
     end
   end
 
@@ -186,7 +185,7 @@ class InventoryOperation < ActiveRecord::Base
 
   # To determine if an item is service and not to update stock
   def is_item_service?(i_id)
-    @service_item_ids ||= Item.org.service.where(:id => item_ids).values_of( :id )
+    @service_item_ids ||= Item.service.where(:id => item_ids).values_of( :id )
     @service_item_ids.include?(i_id)
   end
   

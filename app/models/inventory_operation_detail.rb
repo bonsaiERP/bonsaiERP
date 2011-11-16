@@ -2,7 +2,6 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class InventoryOperationDetail < ActiveRecord::Base
-  acts_as_org
 
   attr_reader :transaction
 

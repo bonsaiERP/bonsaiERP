@@ -106,11 +106,19 @@ private
   def organisation?
     session[:organisation] and session[:organisation].any?
   end
+  helper_method :organisation?
 
-  # Sets the organisation_id to help to set in the models
+  # Sets the organisation_id to help to set in the models and the search path
   def set_organisation
     raise "You must set the organisation" if session[:organisation].blank?
     OrganisationSession.set session[:organisation]
+    begin
+      PgTools.set_search_path PgTools.get_schema_name(session[:organisation][:id])
+    rescue
+      session[:organisation] = nil
+      session[:user_id] = nil
+      redirect_to "/users/sign_out"
+    end
   end
 
   def check_organisation

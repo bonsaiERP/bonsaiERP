@@ -3,12 +3,12 @@
 # email: boriscyber@gmail.com
 class AccountType < ActiveRecord::Base
 
-  include Models::Organisation::NewOrganisation
+  #include Models::Organisation::NewOrganisation
   
   attr_readonly :account_number
 
   # callbacks
-  before_destroy { self.update_attribute(:active, false) ;false }
+  before_destroy { false }
 
   # relationships
   has_many :accounts
@@ -16,10 +16,13 @@ class AccountType < ActiveRecord::Base
   #validations
   validates_presence_of :name
 
-  # scopes
-  scope :active, where(:active => true)
-
   def to_s
     name
+  end
+
+  def self.create_base_data
+    path = File.join(Rails.root, "db/defaults", "account_types.#{I18n.locale}.yml")
+    data = YAML.load_file(path)
+    AccountType.create!(data)
   end
 end

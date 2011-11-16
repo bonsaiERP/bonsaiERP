@@ -43,7 +43,7 @@ describe ResetPasswordsController do
     it 'should redirect if oudated or not found' do
       User.stub!(:find_by_id_and_reset_password_token => mock_model(User, :can_reset_password? => false))
       get :edit, :id => 1, :reset_password_token => "uw7yrsfhu"
-      response.should redirect_to("new")
+      response.should redirect_to new_reset_password_path
       flash[:warning].should_not be_blank
     end
   end
@@ -59,6 +59,32 @@ describe ResetPasswordsController do
       put :update, :id => 1, :user => {:reset_password_token => "8yse5uhifs", :password => 'demo123', :password_confirmation => 'demo123'}
 
       response.should be_redirect
+    end
+
+    it 'should redirect to organisations/:id/create_tenant' do
+      user_mock = mock_model(User,:organisations => [mock_model(Organisation, :id => 1)], :link => stub(:rol => "admin"), :id => 1,
+                    :verify_token_and_update_password => true, :can_reset_password? => true,
+        organisations: [mock_model(Organisation, id: 1)]
+      )
+      controller.stub!(:current_user => user_mock, :set_organisation_session => true)
+      User.stub!(:find_by_id_and_reset_password_token => user_mock)
+      
+      put :update, :id => 1, :user => {:reset_password_token => "8yse5uhifs", :password => 'demo123', :password_confirmation => 'demo123'}
+
+      response.should redirect_to create_tenant_organisation_path(1)
+    end
+
+    it 'should redirect to organisations/new' do
+      user_mock = mock_model(User,:organisations => [mock_model(Organisation, :id => 1)], :link => stub(:rol => "admin"), :id => 1,
+                    :verify_token_and_update_password => true, :can_reset_password? => true,
+        organisations: []
+      )
+      controller.stub!(:current_user => user_mock, :set_organisation_session => true)
+      User.stub!(:find_by_id_and_reset_password_token => user_mock)
+      
+      put :update, :id => 1, :user => {:reset_password_token => "8yse5uhifs", :password => 'demo123', :password_confirmation => 'demo123'}
+
+      response.should redirect_to new_organisation_path
     end
   end
 end

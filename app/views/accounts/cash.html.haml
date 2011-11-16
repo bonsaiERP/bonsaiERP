@@ -17,12 +17,12 @@
 %hr/
 
 .moneybox.fl
-  %label Saldo en cuenta
+  %label SALDO EN CUENTA
   %h3= with_currency @account, :amount
 
 - if @account.account_ledgers.pendent?
   .moneybox.fl
-    %label Saldo a conciliar
+    %label SALDO A CONCILIAR
     %h3= "#{@account.currency_symbol} #{ntc @account.amount_to_conciliate}"
 
 ._40.fr

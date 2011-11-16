@@ -17,16 +17,16 @@ class Payment
     $('input.amt').die()
     $('input.amt').live 'focusout keyup', (event)=>
       return false if _b.notEnter(event)
-
-      val = this.value * 1
-      $(this).val(val.round(2))
       @.calculateTotal()
 
-    $('#account_ledger_exchange_rate').live 'change:rate', (event, rate)=>
+    $('#account_ledger_exchange_rate').on 'change:rate', (event, rate)=>
       @rate = rate
-      @.calculateTotal()
       @.setCurrency()
+      $('#account_ledger_exchange_rate').val(rate.rate.round(4)).trigger('focusout')
 
+    #$('#account_ledger_exchange_rate').live 'keyup focusout', (event)=>
+    #  return false if _b.notEnter(event)
+    #  @.calculateTotal()
     # li
     $('#payment_accounts li.account').bind 'mouseover mouseout', (event)->
       if event.type == 'mouseover'
@@ -49,7 +49,13 @@ class Payment
     amount   = @$amount.val() * 1
     int      = @$interests.val() * 1
 
-    total = (amount + int) * (@rate.rate || 1)
+    rate = $('#account_ledger_exchange_rate').val() * 1
+    try
+      if @currency_id != organisation.currency_id and  organisation.currency_id == @rate.currency.id
+        rate = 1/rate
+    catch e
+
+    total = (amount + int) * (rate || 1)
     $('#payment_total_currency').html(_b.ntc(total))
   # Sets the currency for all items
   setCurrency: ->

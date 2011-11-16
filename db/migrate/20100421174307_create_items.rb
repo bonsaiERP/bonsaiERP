@@ -15,8 +15,6 @@ class CreateItems < ActiveRecord::Migration
       t.string :ctype, :limit => 20
       #t.boolean :visible, :default => true
 
-      t.integer :organisation_id, :null => false
-
       t.string  :type
       t.string  :un_name
       t.string  :un_symbol, :limit => 10
@@ -24,7 +22,6 @@ class CreateItems < ActiveRecord::Migration
       t.timestamps
     end
 
-    add_index :items, :organisation_id
     add_index :items, :unit_id
     add_index :items, :code
     add_index :items, :ctype

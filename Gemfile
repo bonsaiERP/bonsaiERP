@@ -18,7 +18,8 @@ end
 
 gem 'jquery-rails'
 
-gem 'mysql2'#, :group => :production
+gem 'pg'
+#gem 'mysql2'#, :group => :production
 #gem 'sqlite3-ruby', :group => [:development, :text]
 
 gem 'simple_form'
@@ -26,6 +27,8 @@ gem 'haml'
 gem 'kaminari'
 gem 'valium'
 gem 'bcrypt-ruby'
+gem 'qu-redis'
+#gem 'resque', :require => 'resque/server'
 
 #gem 'nokogiri'
 
@@ -38,6 +41,7 @@ group :development, :test do
   gem 'steak', '~> 2.0.0'
   gem 'jasmine'
   gem 'headless'
+  gem 'jasminerice'
 end
 
 group :development do

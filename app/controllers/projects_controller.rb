@@ -7,7 +7,7 @@ class ProjectsController < ApplicationController
   # GET /projects
   # GET /projects.xml
   def index
-    @projects = Project.org.page(@page)
+    @projects = Project.page(@page)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -70,6 +70,6 @@ class ProjectsController < ApplicationController
 
 private
   def set_project
-    @project = Project.org.find(params[:id])
+    @project = Project.find(params[:id])
   end
 end

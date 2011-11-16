@@ -7,11 +7,10 @@ class AccountLedger < ActiveRecord::Base
   # Base amount is the #  amount = base_amount + interests_penalties
   attr_accessor :make_conciliation, :base_amount
 
-  acts_as_org
   # callbacks
   before_validation :set_currency_id
   before_destroy    { false }
-  before_create     :set_code
+  #before_create     :set_code
   before_create     { self.creator_id = UserSession.user_id }
 
   # includes
@@ -54,7 +53,7 @@ class AccountLedger < ActiveRecord::Base
 
   validates :reference, :length => { :within => 3..150, :allow_blank => false }
   validates :currency_id, :currency => true
-  validates_uniqueness_of :code, :scope => :organisation_id
+  #validates_uniqueness_of :code
 
   #validate  :number_of_details
   #validate  :total_amount_equal
@@ -93,7 +92,7 @@ class AccountLedger < ActiveRecord::Base
   end
 
   def to_s
-    "%06d" % code
+    "%06d" % id
   end
 
   # Determines if the ledger can be nulled
@@ -106,7 +105,7 @@ class AccountLedger < ActiveRecord::Base
   end
 
   def self.contact(contact_id)
-    AccountLedger.org.where(:contact_id => contact_id).includes(:currency)
+    AccountLedger.where(:contact_id => contact_id).includes(:currency)
     .order("created_at DESC")
   end
 
@@ -155,7 +154,8 @@ class AccountLedger < ActiveRecord::Base
 
   def amount_currency
     begin
-      ( amount - interests_penalties ) * exchange_rate
+      er =  inverse? ? 1/exchange_rate : exchange_rate
+      ( amount - interests_penalties ) * er
     rescue
       0
     end
@@ -163,7 +163,8 @@ class AccountLedger < ActiveRecord::Base
 
   def amount_interests_currency
     begin
-      amount * exchange_rate
+      r = inverse? ? 1/exchange_rate : exchange_rate
+      amount * r
     rescue
       0
     end
@@ -273,7 +274,7 @@ class AccountLedger < ActiveRecord::Base
   end
 
   def set_code
-    self.code = AccountLedger.org.count + 1
+    self.code = AccountLedger.count + 1
   end
 
 end
