@@ -102,7 +102,7 @@
       = f.submit 'Salvar'
 
   #currency_form.ajax-modal
-    %h3.red Advertencia! El tipo de cambio se aplicará al precio original
+    %h4.red Advertencia! Verifique los precios de los items, serán modificados
     
     %label Tipo de cambio
     %span.currency_symbol.b
@@ -110,9 +110,6 @@
     \= 
     %span.default_symbol.b
     %input{:type => 'text', :size => 8, :class => 'r', :id => 'exchange_rate', :value => transaction.exchange_rate}
-    %span.hint
-      Tipo de cambio: <a href='javascript:' id ='suggested_exchange_rate'>#{ntc(0, :precision => 4)}</a>
-      Invertirdo: <a href='javascript:' id='suggested_inverted_rate'>#{ntc(0, :precision => 4)}</a>
     %button#exchange_rate_button.button Cambiar
 
   :javascript
@@ -126,11 +123,11 @@
       var currencies = #{ Currency.to_hash.to_json };
       var fake_accounts = #{presenter.fake_accounts.to_json};
 
-      window.transaction = new TransactionGlobal(currencies, #{currency_id}, #{transaction.currency_id}, #{transaction.exchange_rate}, type);
-
       var er = new ExchangeRate();
       er.setAll('#exchange_rate', '#transaction_currency_id', #{currency_id}, fake_accounts,currencies,
       {hide: '#fake_hide_div', inverted: true});
+
+      window.transaction = new TransactionGlobal(currencies, #{currency_id}, #{transaction.currency_id}, #{transaction.exchange_rate}, type);
 
       // Functions for the select boxes
       $('body').live('new_project', function(e, resp) {

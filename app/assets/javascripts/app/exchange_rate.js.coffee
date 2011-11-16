@@ -30,7 +30,7 @@ class ExchangeRate extends Backbone.Model
   # Events
   setEvents: ->
     self = @
-    @$input.live 'focusout keyup', (event)=>
+    @$input.on 'focusout keyup', (event)=>
       return false if _b.notEnter(event)
       @.set({rate: $(this).val() * 1})
     # Currency
@@ -50,8 +50,8 @@ class ExchangeRate extends Backbone.Model
 
     # Triggers the suggested:rate Event
     $(@observe)
-    .off('change keyup focusout')
-    .on 'change keyup focusout', ->
+    .off('change keyup')
+    .on 'change keyup', ->
       html = ''
       rate = 0.0
       currency_id = false
@@ -111,10 +111,10 @@ class ExchangeRate extends Backbone.Model
   # rateEvents
   rateEvents: ->
     self = @
-    $('#suggested_exchange_rate').die().live 'click', (event)->
+    $('#suggested_exchange_rate').die().on 'click', (event)->
       self.set({rate: self.get("suggest_rate")})
     # Inverted
-    $('#suggested_inverted_rate').die().live 'click', (event)->
+    $('#suggested_inverted_rate').die().on 'click', (event)->
       if res = prompt("Tipo de cambio invertido:", self.get("suggest_inv_rate"))
         res = 1/(res * 1)
         self.set({rate: res.round(4)})

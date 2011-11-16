@@ -119,14 +119,14 @@ class ItemCollection extends Backbone.Collection
     $('tr.item a.ajax').live 'mousedown', (event)->
       self.currentRow = $(this).parents("tr.item")
 
-    $('body').live 'add:item', (event, vals)=>
-      item = @.getByCid(@currentRow.data('cid') )
+    $('body').live 'add:item', (event, vals)->
+      item = self.getByCid(self.currentRow.data('cid') )
       item.setValues(vals)
 
     ##########
     # Events for items
     # add
-    $('a#add_item').live 'click', (event)=> @.addItem()
+    $('a#add_item').on 'click', (event)=> @.addItem()
     # remove
     $('tr.item a.destroy').live 'click', (event)-> self.removeItem(this)
 
@@ -160,7 +160,15 @@ class ItemCollection extends Backbone.Collection
   addItem: ->
     row = @.createNewRow()
     $('tr.subtotal').before(row)
-    item = new ItemModel({item_id: '', description: '', price: 0, quantity: 0, trans: @.trans, row: row})
+    item = new ItemModel(
+      item_id: ''
+      description: ''
+      price: 0,
+      quantity: 0
+      trans: @.trans
+      row: row
+    )
+    item.set({ original_price: 0 }, {silent: true})
     @.add(item)
   # Remove item
   removeItem: (el)->
@@ -231,7 +239,7 @@ class TransactionModel extends Backbone.Model
       default_symbol: @.getCurrencySymbol(@.get("default_currency"))
     })
 
-    $('body').live 'subtotal', (event)-> self.setSubtotal()
+    $('body').on 'subtotal', (event)-> self.setSubtotal()
 
     @.bind "change:currency_id", (model, currency)->
       @.set({ currency_symbol: @currencies[currency].symbol })
@@ -274,7 +282,7 @@ class TransactionModel extends Backbone.Model
   # discount Event
   discountEvent: ->
     self = @
-    $('#transaction_discount').live 'keyup focusout', (event)->
+    $('#transaction_discount').on 'keyup focusout', (event)->
       return false if _b.notEnter(event)
       val = (this.value * 1).round(2)
       $(this).val(val)
@@ -283,12 +291,13 @@ class TransactionModel extends Backbone.Model
   #exchabge rate Event
   currencyEvent: ->
     self = @
-    $('#exchange_rate').live 'suggested:rate', (event, rate)->
-      rate = 1/rate
-      currency_id = $('#transaction_currency_id').val() * 1
-      self.set({currency_id: currency_id, exchange_rate: rate.round(4)})
+    $('#exchange_rate').on 'change:rate', (event, rate)=>
+      @.set(currency_id: rate.currency.id, exchange_rate: rate.rate)
+    #$('#exchange_rate').live 'suggested:rate', (event, rate)->
+    #  rate = 1/rate
+    #  currency_id = $('#transaction_currency_id').val() * 1
+    #  self.set({currency_id: currency_id, exchange_rate: rate.round(4)})
     #$('#transaction_currency_id').bind 'change keyup', (event)->
-    #  self.set({currency_id: $(this).val() * 1})
   # Sets the discount
   setDiscount: ->
     discount = @.get("subtotal") * @.get("discount")
@@ -298,7 +307,7 @@ class TransactionModel extends Backbone.Model
   # Taxes event
   taxesEvent: ->
     self = @
-    $('#taxes input:checkbox').live 'click', (event)->
+    $('#taxes input:checkbox').on 'click', (event)->
       self.calculateTaxes()
   # Taxes calculation
   calculateTaxes: ->
@@ -350,13 +359,9 @@ class ExchangeRateDialog extends Backbone.View
 
     @el.find("span.default_symbol").html(@model.get("default_symbol"))
 
-    @.setEvents()
-  # Set events for edit
-  setEvents: ->
-    self = @
-    $('#edit_exchange_rate_link').live('click', (event)->
-      $(this).trigger("change")
-      self.openDialog()
+    # Edit link Event
+    $('#edit_exchange_rate_link').live('click', (event)=>
+      @.openDialog()
       false
     )
 
@@ -371,6 +376,8 @@ class ExchangeRateDialog extends Backbone.View
       "<strong>", @model.get("default_symbol"), " ", _b.ntc(@model.get("exchange_rate"), 4), "</strong>",
       ' <a href="javascript:;" class="b" id="edit_exchange_rate_link">editar tipo de cambio</a>']
       @label.find("span.rate_details").html(html.join(""))
+
+
 
   # Change in exchange rate
   setExchange: ->
@@ -427,9 +434,9 @@ class TransactionGlobal
   # Events
   setEvents: ->
     self = @
-    @currency_id.live 'change keyup', (event)->
-      currency_id = $(this).val() * 1
-      self.transaction.set({currency_id: currency_id})
+    #@currency_id.live 'change keyup', (event)->
+    #  currency_id = $(this).val() * 1
+    #  self.transaction.set({currency_id: currency_id})
 
   # Creates the exchange rate dialog for the View
   createExchangeRateDialog: ->

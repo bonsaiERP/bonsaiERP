@@ -738,6 +738,7 @@ feature "Income", "test features" do
     p.base_amount.should == i.balance
 
     i.save_payment.should be_false
+
     p.errors[:amount].should_not be_empty
     p.errors[:base_amount].should_not be_empty
 

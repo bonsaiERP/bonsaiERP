@@ -57,8 +57,8 @@ module Models::Transaction::Payment
 
       res = true
       self.class.transaction do
-        res @current_ledger.save
-        res = self.save && res
+        res = @current_ledger.save
+        res = res && self.save
         raise ActiveRecord::Rollback unless res
       end
 

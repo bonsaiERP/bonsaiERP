@@ -155,7 +155,7 @@ class Item < ActiveRecord::Base
 
   # checks if there are any items on destruction
   def check_items_destroy
-    if TransactionDetail.where(:item_id => id).any? or InventoryOperationDetail.org.where(:item_id => id).any?
+    if TransactionDetail.where(:item_id => id).any? or InventoryOperationDetail.where(:item_id => id).any?
       errors.add(:base, "El item es usado en otros registros relacionados")
       false
     else
