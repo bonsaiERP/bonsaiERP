@@ -1078,5 +1078,7 @@ feature "Income", "test features" do
     p.should be_inverse
     p.amount.should == 30
     p.amount_currency.should == 15
+
+    i.balance.should == i.total - 15
   end
 end
