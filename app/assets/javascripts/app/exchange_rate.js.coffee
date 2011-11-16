@@ -30,9 +30,6 @@ class ExchangeRate extends Backbone.Model
   # Events
   setEvents: ->
     self = @
-    @$input.on 'focusout keyup', (event)=>
-      return false if _b.notEnter(event)
-      @.set({rate: $(this).val() * 1})
     # Currency
     @.bind "change:currency", ->
       @.setCurrencyLabel()

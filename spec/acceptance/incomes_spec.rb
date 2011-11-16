@@ -115,6 +115,8 @@ feature "Income", "test features" do
     #p.to_id.should == Account.org.find_by_original_type(i.class.to_s).id
     p.description.should_not == blank?
     p.amount.should == 30
+    p.should be_persisted
+    p.should_not be_inverse
 
     i.balance.should == bal - 30
     p.persisted?.should be_true
@@ -1056,5 +1058,25 @@ feature "Income", "test features" do
     i.original_total.should == otot
     i.total.should == i.original_total
     i.should_not be_changed
+  end
+
+  scenario "Make a income in other currency and pay with organisation currency" do
+    data = income_params.dup.merge(exchange_rate: 2, currency_id: 2, discount: 0)
+    data[:transaction_details_attributes][0][:price] = 1.5
+    data[:transaction_details_attributes][1][:price] = 2.5
+
+    i = Income.new(data)
+    i.save_trans.should be_true
+    i.should be_persisted
+    i.total.should == (1.5 * 10 + 2.5 * 20)
+
+    i.approve!.should be_true
+
+    p = i.new_payment(:account_id => bank_account.id, :base_amount => 30, :exchange_rate => 2, :reference => 'Cheque 143234', :operation => 'in')
+    i.save_payment.should == true
+    p.should be_persisted
+    p.should be_inverse
+    p.amount.should == 30
+    p.amount_currency.should == 15
   end
 end

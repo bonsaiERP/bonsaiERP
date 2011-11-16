@@ -81,8 +81,8 @@ module Models::Transaction::Payment
     end
 
     def set_current_ledger_inverse
-      if self.currency_id == OrganisationSession.currency_id and @current_ledger.account_currency_id != OrganisationSession
-
+      if self.currency_id != OrganisationSession.currency_id and @current_ledger.account_currency_id == OrganisationSession.currency_id
+        @current_ledger.inverse = true
       end
     end
 
