@@ -26,13 +26,13 @@ Install first ruby 1.8.7 needed for 1.9.2
 
 Install Ruby 1.9
 
-    rvm install ruby-1.9.9
+    rvm install ruby-1.9.3
 
 Create a gemset and set it as default
 
     rvm ruby-1.9.3
     rvm gemset create rails3.1
-    rvm ruby-1.9.32@rails3.1 --default
+    rvm ruby-1.9.3@rails3.1 --default
 
 ## Database installation
 Install **PostgreSQL 9**
