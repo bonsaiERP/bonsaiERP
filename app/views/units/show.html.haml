@@ -8,6 +8,4 @@
     = link_to 'Borrar', @unit, :class => 'delete'
 
 
-%h1
-  = @unit.to_s 
-  <span class="grey n">Entero:</span> <span class="#{@unit.integer.to_s}"></span>
+%h1= @unit.to_s 

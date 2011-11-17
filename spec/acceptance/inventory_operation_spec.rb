@@ -10,24 +10,27 @@ feature "Inventory Operation", "Test IN/OUT" do
     UserSession.current_user = User.new(:id => 1, :email => 'admin@example.com') {|u| u.id = 1}
 
     Store.create!(:name => 'First store', :address => 'An address') {|s| s.id = 1 }
-
-    create_items
   end
 
   let(:item_service) { Item.org.service.first }
 
   let!(:organisation) { create_organisation(:id => 1) }
+  let!(:items) { create_items }
   let!(:supplier) { create_supplier(:matchcode => 'Proveedor 1')}
   let!(:client) { create_client(:matchcode => 'Cliente 1')}
+  let!(:bank) { create_bank(:number => '123', :amount => 0) }
+  let(:bank_account) { bank.account }
+  let!(:client) { create_client(:matchcode => 'Karina Luna') }
+  let!(:tax) { Tax.create(:name => "Tax1", :abbreviation => "ta", :rate => 10)}
   let(:income_params) {
     d = Date.today
     i_params = {"active"=>nil, "bill_number"=>"56498797", "contact_id" => client.id, 
       "exchange_rate"=>1, "currency_id"=>1, "date"=>d, 
-      "description"=>"Esto es una prueba", "discount" => 3, "project_id"=>1 
+      "description"=>"Esto es una prueba", "discount" => 0, "project_id"=>1 
     }
     details = [
-      { "description"=>"jejeje", "item_id"=> 1, "organisation_id"=>1, "price"=>3, "quantity"=> 10},
-      { "description"=>"jejeje", "item_id"=> 2, "organisation_id"=>1, "price"=>5, "quantity"=> 20}
+      { "description"=>"jejeje", "item_id"=> 1, "price"=>3, "quantity"=> 10},
+      { "description"=>"jejeje", "item_id"=> 2, "price"=>5, "quantity"=> 20}
     ]
     i_params[:transaction_details_attributes] = details
     i_params
@@ -144,7 +147,7 @@ feature "Inventory Operation", "Test IN/OUT" do
     i.save_trans.should be_true
     i.approve!.should be_true
 
-    i.balance.should == i.balance_inventory
+    i.balance.should == (3 * 10 + 5 * 20)
     i.deliver = true
     i.save.should be_true
 

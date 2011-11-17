@@ -1,7 +1,7 @@
 = f.simple_fields_for :inventory_operation_details do |fd|
   %tr.item
     %td.cur
-      = fd.input :item_id, :label => false, :collection => @items, :input_html => {:class => 'item', 'data-new_url' => new_item_path(:scope => 'inventory'), 'data-title' => 'Nuevo producto/servicio', 'data-trigger' => 'new_item'}
+      = fd.input :item_id, :label => false, :collection => @items, :input_html => {:class => 'item', 'data-new_url' => new_item_path(:scope => 'inventory'), 'data-title' => 'Nuevo ítem', 'data-trigger' => 'new_item'}
     %td= fd.input :quantity, :label => false, :input_html => { :size => 8, :class => 'quantity', :type => 'decimal' }
 
     %td.cur.inventory

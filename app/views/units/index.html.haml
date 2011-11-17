@@ -7,12 +7,10 @@
   %tr
     %th Nombre
     %th Unidad
-    %th Entero
     %th 
 
   - @units.each do |unit|
     %tr
       %td= link_to unit.name, unit, :class => 'b'
       %td= unit.symbol
-      %td.c <span class="#{ unit.integer}"></span>
       %td=  raw bonsai_links(unit)
