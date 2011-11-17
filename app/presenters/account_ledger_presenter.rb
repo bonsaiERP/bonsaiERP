@@ -24,7 +24,13 @@ class AccountLedgerPresenter < BasePresenter
 
   def exchange_rate
     unless account_ledger.exchange_rate == 1
-      html = "#{account_ledger.account.currency_symbol} 1 = "
+      case
+      when( account_ledger.transaction_id.present? and account_ledger.inverse?)
+        html = "#{account_ledger.transaction.currency_symbol} 1 = "
+      when( account_ledger.transaction_id.present? and !account_ledger.inverse?)
+        html = "#{account_ledger.account.currency_symbol} 1 = "
+      else
+      end
       if account_ledger.transaction_id.present?
         html << "#{h.currency_symbol} "
       elsif account_ledger.to_id.present?

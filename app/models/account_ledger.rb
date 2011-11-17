@@ -84,7 +84,7 @@ class AccountLedger < ActiveRecord::Base
   delegate :currency_id, :name, :original_type, :accountable_type, :accountable, :amount, :accountable_id,
     :to => :to, :prefix => true, :allow_nil => true
   # transaction
-  delegate :type, :to => :transaction, :prefix => true, :allow_nil => true
+  delegate :type, :currency_id, :to => :transaction, :prefix => true, :allow_nil => true
 
  
   def self.pendent?

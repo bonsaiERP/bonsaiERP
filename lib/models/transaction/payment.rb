@@ -68,6 +68,8 @@ module Models::Transaction::Payment
     private
 
     def set_current_ledger_data
+      set_current_ledger_inverse
+
       set_account_ledger_description
       @current_ledger.contact_id = contact_id
       #@current_ledger.to_id = ::Account.find_by_original_type(self.class.to_s).id
@@ -77,7 +79,6 @@ module Models::Transaction::Payment
       
       @current_ledger.currency_id = @current_ledger.account_currency_id
 
-      set_current_ledger_inverse
     end
 
     def set_current_ledger_inverse
@@ -183,10 +184,15 @@ module Models::Transaction::Payment
       )
 
       # Add currency text if necessary
-      txt << " " << I18n.t("currency.exchange_rate",
-        :cur1 => "#{ @current_ledger.currency_symbol } 1",
-        :cur2 => "#{currency_symbol} #{number_to_currency @current_ledger.exchange_rate, :precision => 4}"
-      ) unless currency_id === @current_ledger.account_currency_id
+      unless currency_id === @current_ledger.account_currency_id
+        arr = [@current_ledger.currency_symbol, currency_symbol]
+        cur1, cur2 = @current_ledger.inverse? ? arr.reverse : arr
+
+        txt << " " << I18n.t("currency.exchange_rate",
+          :cur1 => "#{ cur1 } 1",
+          :cur2 => "#{ cur2 } #{number_to_currency @current_ledger.exchange_rate, :precision => 4}"
+        )
+      end
 
       @current_ledger.description = txt
     end

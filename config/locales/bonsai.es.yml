@@ -60,7 +60,7 @@ es:
       pay: "pago"
   currency:
     exchange_rate:
-      "tipo de cambio de %{cur1} = %{cur2}"
+      "tipo de cambio de ( %{cur1} = %{cur2} )"
   contact:
     client: "Cliente"
     supplier: "Proveedor"
