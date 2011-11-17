@@ -19,6 +19,22 @@ feature "Income", "test features" do
   let(:bank_account) { bank.account }
   let!(:client) { create_client(:matchcode => 'Karina Luna') }
   let!(:tax) { Tax.create(:name => "Tax1", :abbreviation => "ta", :rate => 10)}
+  let!(:store) { 
+    Store.create!(:name => 'First store', :address => 'An address') {|s| s.id = 1 }
+  }
+
+  background do
+    hash = {:ref_number => 'I-0001', :date => Date.today, :contact_id => client.id, :operation => 'in', :store_id => 1,
+      :inventory_operation_details_attributes => [
+        {:item_id =>1, :quantity => 100},
+        {:item_id =>2, :quantity => 100},
+        {:item_id =>3, :quantity => 100},
+        {:item_id =>4, :quantity => 100}
+      ]
+    }
+    io = InventoryOperation.new(hash)
+    io.save_operation.should be_true
+  end
 
   let(:income_params) do
       d = Date.today
@@ -58,17 +74,7 @@ feature "Income", "test features" do
     i.should be_approved
 
     i = Income.find(i.id)
-    #p = i.new_payment(:account_id => bank_account.id, :base_amount => i.balance, :exchange_rate => 1, :reference => 'Cheque 143234', :operation => 'out')
-    #i.save_payment
-    #i.reload
-
-    #p.should be_persisted
-    #i.balance.should == 0
-    #p.conciliate_account.should be_true
-    #
-    #bank_account.reload
-    #bank_account.amount.should == p.amount
-    ## Diminish the quantity in edit and the amount should go to the client account
+    # Diminish the quantity in edit and the amount should go to the client account
     #i = Income.find(i.id)
     edit_params = income_params.dup
     edit_params[:transaction_details_attributes][0][:id] = i.transaction_details[0].id
@@ -225,9 +231,29 @@ feature "Income", "test features" do
     i.should be_paid
     p.should be_persisted
     i.balance.should == 0
+    # Needed
+    p = AccountLedger.find(p.id)
     p.conciliate_account.should be_true
     
     p.should be_conciliation
 
+    i.reload
+    i.should be_deliver
+
+    # IO operation for income
+    h = {
+      transaction_id: i.id, operation: 'out', store_id: 1
+    }
+
+    io = InventoryOperation.new(h)
+    io.set_transaction
+    io.inventory_operation_details[0].quantity = 5
+    io.save_transaction.should be_true
+    io.should be_persisted
+    io.reload
+
+    i.transaction_details(true)
+    i.transaction_details[0].balance.should == 5
+    i.transaction_details[1].balance.should == 0
   end
 end

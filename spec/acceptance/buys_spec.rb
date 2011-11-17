@@ -33,8 +33,8 @@ feature "Buy", "test features" do
         "description"=>"Esto es una prueba", "discount" => 3, "project_id"=>1 
       }
       details = [
-        { "description"=>"jejeje", "item_id"=>1, "organisation_id"=>1, "price"=>3, "quantity"=> 10},
-        { "description"=>"jejeje", "item_id"=>2, "organisation_id"=>1, "price"=>5, "quantity"=> 20}
+        { "description"=>"jejeje", "item_id"=>1, "price"=>3, "quantity"=> 10},
+        { "description"=>"jejeje", "item_id"=>2, "price"=>5, "quantity"=> 20}
       ]
       buy_params[:transaction_details_attributes] = details
       buy_params
