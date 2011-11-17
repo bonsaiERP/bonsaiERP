@@ -6,6 +6,7 @@ class TransactionHistory < ActiveRecord::Base
 
   # Relationships
   belongs_to :transaction
+  belongs_to :user
 
   serialize :data
 end

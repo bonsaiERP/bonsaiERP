@@ -33,11 +33,11 @@ module Models::Transaction
     end
 
     def create_history
-      @history = transaction.transaction_histories.build
-      @history.data = old_transaction.attributes.symbolize_keys
-      @history.data[:taxis_ids] = old_transaction.taxis_ids
-      @history.user_id = old_transaction.modified_by
-      @history.data[:transaction_details] = old_transaction.transaction_details.map {|v| v.attributes.symbolize_keys }
+      history = transaction.transaction_histories.build
+      history.data = old_transaction.attributes.symbolize_keys
+      history.data[:taxis_ids] = old_transaction.taxis_ids
+      history.user_id = old_transaction.modified_by
+      history.data[:transaction_details] = old_transaction.transaction_details.map {|v| v.attributes.symbolize_keys }
     end
 
     # Updates the state of a transaction based on the balance
@@ -45,8 +45,10 @@ module Models::Transaction
       case 
       when transaction.balance > 0
         transaction.state = 'approved'
+        transaction.deliver = false
       when transaction.balance === 0
         transaction.state = 'paid'
+        transaction.deliver = true if transaction.account_ledgers.pendent.empty?
       end
     end
 

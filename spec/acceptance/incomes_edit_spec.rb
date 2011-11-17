@@ -107,24 +107,30 @@ feature "Income", "test features" do
     i.transaction_histories.should be_empty
     i.modified_by.should == UserSession.user_id
 
-    # Approve de income
+    # Approve income
     i.approve!.should be_true
     i.should_not be_draft
     i.should be_approved
 
 
     i = Income.find(i.id)
-    p = i.new_payment(:account_id => bank_account.id, :base_amount => i.balance, :exchange_rate => 1, :reference => 'Cheque 143234', :operation => 'out')
-    i.save_payment
+    p = i.new_payment(:account_id => bank_account.id, :base_amount => i.balance, :exchange_rate => 1, :reference => 'Cheque 143234', :operation => 'in')
+    i.save_payment.should be_true
+    p.should be_persisted
+    p.should_not be_conciliation
     i.reload
 
     i.should_not be_deliver
     i.should be_paid
     p.should be_persisted
     i.balance.should == 0
-    puts "-"*90
     p.transaction_id.should == i.id
+
+    p = AccountLedger.find(p.id)
     p.conciliate_account.should be_true
+
+    p.reload
+    p.should be_conciliation
     
     bank_account.reload
     bank_account.amount.should == p.amount
@@ -134,6 +140,7 @@ feature "Income", "test features" do
     i.account_ledgers.pendent.should be_empty
     i.balance.should == 0
     i.should be_deliver
+    i.should be_paid
 
     edit_params = income_params.dup
     edit_params[:transaction_details_attributes][0][:id] = i.transaction_details[0].id
@@ -189,6 +196,7 @@ feature "Income", "test features" do
     i.should be_paid
     i.total.should ==  3 * 10 + 5 * 5
     i.balance.should ==  0
+    i.should be_deliver
   end
 
   scenario "check the number of items" do

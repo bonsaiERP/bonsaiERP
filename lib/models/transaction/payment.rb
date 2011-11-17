@@ -49,7 +49,6 @@ module Models::Transaction::Payment
 
       mark_paid_pay_plans if credit? # anulate pay_plans if credit
 
-      self.state = 'paid' if balance.round(2) <= 0
 
       set_current_ledger_data
       set_account_ledger_extras
@@ -58,6 +57,8 @@ module Models::Transaction::Payment
       self.class.transaction do
         res = @current_ledger.save
         self.balance = balance - @current_ledger.amount_currency.abs
+        self.state = 'paid' if balance.round(2) <= 0
+
         res = res && self.save
         raise ActiveRecord::Rollback unless res
       end
