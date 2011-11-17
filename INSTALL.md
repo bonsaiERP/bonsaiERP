@@ -26,18 +26,23 @@ Install first ruby 1.8.7 needed for 1.9.2
 
 Install Ruby 1.9
 
-    rvm install ruby-1.9.2
+    rvm install ruby-1.9.9
 
 Create a gemset and set it as default
 
-    rvm ruby-1.9.2
+    rvm ruby-1.9.3
     rvm gemset create rails3.1
-    rvm ruby-1.9.2@rails3.1 --default
+    rvm ruby-1.9.32@rails3.1 --default
 
 ## Database installation
-Install **MySQL**
-    
-    sudo apt-get install mysql-server libmysqld-dev
+Install **PostgreSQL 9**
+    sudo apt-get update
+    sudo apt-get upgrade
+    sudo apt-get install python-software-properties
+    sudo add-apt-repository ppa:pitti/postgresql
+    sudo apt-get update
+    sudo apt-get upgrade
+    sudo apt-get install postgresql-9.0 libpq-dev
 
 ## Install node.js
 
@@ -60,35 +65,36 @@ Create the file **config/database.yml** in bonsai directory add this:
 
     
     development:
-      adapter: mysql2
-      encoding: utf8
+      adapter: postgresql
+      encoding: unicode
       database: bonsai_dev
       username: USER
-      password: PASSWORD
+      password: PASS
       host: localhost
       pool: 5
 
     test:
-      adapter: mysql2
+      adapter: postgresql
       encoding: utf8
       database: bonsai_test
       username: USER
-      password: PASSWORD
+      password: PASS
       host: localhost
       pool: 5
 
     production:
-      adapter: mysql2
+      adapter: postgresql
       encoding: utf8
       database: bonsai_dev
       username: USER
-      password: PASSWORD
+      password: PASS
       host: localhost
       pool: 5
 
-Run the database setup with 
+Run the database setup with
 
-    rake db:setup
+    rake db:setup RAILS_ENV=production
+    rake bonsai:create_data RAILS_ENV=production
 
 Once installed we have to install passenger
 
