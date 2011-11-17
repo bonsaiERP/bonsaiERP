@@ -1,4 +1,4 @@
-# Bonsai installation with passenger on Linux (Ubuntu-Mint)
+# Bonsai installation with passenger on Ubuntu, Linux-Mint
 
 ## Instaling Ruby (RVM)
 Install the following
@@ -36,6 +36,7 @@ Create a gemset and set it as default
 
 ## Database installation
 Install **PostgreSQL 9**
+
     sudo apt-get update
     sudo apt-get upgrade
     sudo apt-get install python-software-properties
