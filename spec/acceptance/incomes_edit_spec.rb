@@ -255,5 +255,9 @@ feature "Income", "test features" do
     i.transaction_details(true)
     i.transaction_details[0].balance.should == 5
     i.transaction_details[1].balance.should == 0
+
+    i = Income.find(i.id)
+    i.transaction_details[0].quantity = 6
+    i.save_trans.should be_false
   end
 end

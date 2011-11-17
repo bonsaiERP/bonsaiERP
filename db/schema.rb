@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111114185926) do
+ActiveRecord::Schema.define(:version => 20111117201201) do
 
   create_table "account_ledger_details", :force => true do |t|
     t.integer  "account_id"
@@ -399,6 +399,7 @@ ActiveRecord::Schema.define(:version => 20111114185926) do
     t.decimal  "original_price",               :precision => 14, :scale => 2
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.decimal  "delivered",                    :precision => 14, :scale => 2, :default => 0.0
   end
 
   add_index "transaction_details", ["ctype"], :name => "index_transaction_details_on_ctype"

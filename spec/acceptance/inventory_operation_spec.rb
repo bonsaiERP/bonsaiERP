@@ -187,7 +187,9 @@ feature "Inventory Operation", "Test IN/OUT" do
     det2 = dets[1]
 
     det1.balance.should == 5
+    det1.delivered.should == det1.quantity - det1.balance
     det2.balance.should == 10
+    det2.delivered.should == det2.quantity - det2.balance
 
     io.reload
     io.transaction.delivered.should be_false
