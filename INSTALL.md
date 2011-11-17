@@ -76,7 +76,7 @@ Create the file **config/database.yml** in bonsai directory add this:
 
     test:
       adapter: postgresql
-      encoding: utf8
+      encoding: unicode
       database: bonsai_test
       username: USER
       password: PASS
@@ -85,8 +85,8 @@ Create the file **config/database.yml** in bonsai directory add this:
 
     production:
       adapter: postgresql
-      encoding: utf8
-      database: bonsai_dev
+      encoding: unicode
+      database: bonsai_prod
       username: USER
       password: PASS
       host: localhost
