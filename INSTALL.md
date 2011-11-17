@@ -45,7 +45,8 @@ Install **MySQL**
     cd node
     ./configure
     make
-    sudo make install
+    sudo make install # If this don't work just add a link from out/Release/node
+                      # to /usr/local/bin
 
 ## Bonsai installation
 Now you need to download and install bonsai cloning from the repository, this creates the bonsai folder
