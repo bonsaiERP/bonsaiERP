@@ -256,8 +256,27 @@ feature "Income", "test features" do
     i.transaction_details[0].balance.should == 5
     i.transaction_details[1].balance.should == 0
 
+    # Should not allow change of quantity lesser than delivered
     i = Income.find(i.id)
-    i.transaction_details[0].quantity = 6
+    i.transaction_details[0].quantity = 4
+   
     i.save_trans.should be_false
+    i.transaction_details[0].errors[:quantity].should_not be_empty
+
+    det1 = i.transaction_details[0]
+    det2 = i.transaction_details[1]
+
+    # Do not allow change of item id If item has any number of delivered
+    i = Income.find(i.id)
+    i.transaction_details[0].item_id = 3
+    i.transaction_details[0].quantity = 6
+
+    i.transaction_details[0].quantity.should == 6
+    i.transaction_details[0].item_id.should == 3
+
+    i.save_trans.should be_false
+    i.transaction_details[0].errors[:item_id].should_not be_empty
+
+    # Should not allow destroy for items that have been delivered
   end
 end

@@ -210,6 +210,12 @@ feature "Inventory Operation", "Test IN/OUT" do
 
     io.transaction.delivered.should be_true
 
+    i.transaction_details(true)
+    i.transaction_details[0].balance.should == 0
+    i.transaction_details[0].delivered.should == 10
+    i.transaction_details[1].balance.should == 0
+    i.transaction_details[1].delivered.should == 20
+
     # It should not allow another out for income
     h = hash.merge(
       :transaction_id => i.id, :operation => 'out',
