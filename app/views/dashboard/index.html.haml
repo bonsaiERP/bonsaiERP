@@ -21,7 +21,31 @@
   = presenter.create_money_link
 
   .clear
+
+  %ul.isotope-widgets.isotope-container.isotope
+    %li.isotope-item
+      %a.button-orange.ui-corner-all 
+        %strong 10
+        %span Ventas pendientes
+    %li.isotope-item
+      %a.button-gray.ui-corner-all
+        %strong 1
+        %span Items cerca del limite
+    %li.isotope-item
+      %a.button-green.ui-corner-all
+        %strong 23
+        %span Ventas realizadas
+    %li.isotope-item
+      %a.button-red.ui-corner-all
+        %strong 1000 Bs
+        %span En deudas
+    %li.isotope-item
+      %a.button-green.ui-corner-all
+        %strong 400 Bs
+        %span En Caja
   
+  .clear
+
   .box
     %h3 <span class="b dark-green">Nos deben</span>
     %ul.list

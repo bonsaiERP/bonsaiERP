@@ -4,7 +4,7 @@ html{ font-size: $font_size;}
 body{
   /*font-family: Tahoma, sans-serif;*/
   font-family: Segoe UI, Arial, sans-serif;
-  background-color: #F3F3F3;
+  /* background-color: #F3F3F3; */
   margin: 0px;
   padding: 0px;
 }
@@ -27,7 +27,7 @@ hr{ border:0px;
 /*MAIN CONTENT WRAPPERS*/
 #main_wrap{
   width: 100%;
-  /* background: transparent url(images/back.png) repeat-x 0px -101px; */
+  background: transparent url(images/back_2.png) repeat-x 0px -101px;
   min-height: 500px;
 }
 #wrapper{
