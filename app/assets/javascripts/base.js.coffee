@@ -196,6 +196,7 @@ $(document).ready(->
   # JavaScript response must have "// javascript" at the beginning
   $('div.ajax-modal form').live('submit', ->
     return true if $(this).attr('enctype') == 'multipart/form-data'
+    return true if $(this).hasClass("no-ajax")
     # Prevent from submiting the form.enter when hiting ENTER
     return false if $(this).hasClass('enter') and window.keyPress == 13
 

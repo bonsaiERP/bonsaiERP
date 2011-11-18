@@ -185,9 +185,9 @@ class TransactionPresenter < BasePresenter
   def deliver_link
     if transaction_deliver?
       if transaction.is_a?(Income)
-        h.link_to "Registrar entrega", select_store_inventory_operation_path(transaction, :operation => 'out'), :class => "new"
+        h.link_to "Registrar entrega", select_store_inventory_operation_path(transaction, :operation => 'out'), :class => "new ajax"
       elsif transaction.is_a?(Buy)
-        h.link_to "Registrar recojo", select_store_inventory_operation_path(transaction, :operation => 'in'), :class => "new"
+        h.link_to "Registrar recojo", select_store_inventory_operation_path(transaction, :operation => 'in'), :class => "new ajax"
       end
     end
   end
