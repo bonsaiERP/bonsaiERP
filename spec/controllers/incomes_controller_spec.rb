@@ -6,12 +6,13 @@ describe IncomesController do
     mock_model(Income, stubs)
   end
 
-  describe "GET show /incomes/:id" do
+  before do
+    controller.stub!(check_authorization!: true)
+  end
+
+  describe "check allow_transaction_action?" do
     it 'should allow edit to admin user' do
       session[:user] = {rol:"admin"}
-      #Income.stub!(find: income_mock(draft?: false))
-    
-      #get :show, id: 1
       controller.allow_transaction_action?(income_mock).should be_true
     end
 
@@ -37,4 +38,47 @@ describe IncomesController do
     end
   end
 
+  describe "GET /incomes/:id/edit" do
+
+    it 'should allow the user to edit' do
+      Income.stub!(find: income_mock)
+      session[:user] = {rol:"admin"}
+      
+      get :show, id: 1
+      
+      response.should_not be_redirect
+    end
+
+    it 'should NOT allow the user to edit' do
+      Income.stub!(find: income_mock)
+      session[:user] = {rol:"operations"}
+      
+      get :show, id: 1
+      
+      response.should redirect_to("/incomes/1")
+    end
+  end
+
+  describe "PUT /incomes/:id" do
+
+    it 'should allow the user to edit' do
+      Income.stub!(find: income_mock(save_trans: false, 
+            :attributes= => true, transaction_details: stub(build: true, any?: true)))
+      session[:user] = {rol:"admin"}
+      
+      put :update, id: 1
+      
+      response.should_not be_redirect
+      response.should render_template("edit")
+    end
+
+    it 'should NOT allow the user to edit' do
+      Income.stub!(find: income_mock)
+      session[:user] = {rol:"operations"}
+      
+      put :update, id: 1
+      
+      response.should redirect_to("/incomes/1")
+    end
+  end
 end
