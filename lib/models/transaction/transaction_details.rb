@@ -43,12 +43,20 @@ module Models::Transaction
     def valid_item(td, index)
       @keys ||= item_prices.keys
 
-      # Check change of item
+      # Check change of item_id
       unless transaction.draft?
         o_td = old_details[index]
         if o_td.present? and td.delivered > 0 and td.item_id != o_td.item_id
           td.item_id = old_details[index].item_id
           td.errors[:item_id] << I18n.t("errors.messages.transaction_details.change_item")
+        end
+      end
+
+      # Check if marked for destruction
+      unless transaction.draft?
+        if td.marked_for_destruction? and td.delivered > 0
+          td.reload
+          td.errors[:item_id] << I18n.t("errors.messages.transaction_details.destroy")
         end
       end
 

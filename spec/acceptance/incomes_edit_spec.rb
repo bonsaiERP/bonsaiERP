@@ -268,15 +268,37 @@ feature "Income", "test features" do
 
     # Do not allow change of item id If item has any number of delivered
     i = Income.find(i.id)
-    i.transaction_details[0].item_id = 3
-    i.transaction_details[0].quantity = 6
+    i.attributes = {
+      transaction_details_attributes: [
+        {id: det1.id, item_id: 3, quantity: 6, price: det1.price},
+        {id: det2.id, item_id: det2.item_id, quantity: det2.quantity, price: det2.price}
+      ]
+    }
+    #i.transaction_details[0].item_id = 3
+    #i.transaction_details[0].quantity = 6
 
     i.transaction_details[0].quantity.should == 6
     i.transaction_details[0].item_id.should == 3
 
     i.save_trans.should be_false
     i.transaction_details[0].errors[:item_id].should_not be_empty
+    i.transaction_details[0].item_id.should == 1
 
+    # Do not allow deleting delivered items
+    i = Income.find(i.id)
+    i.attributes = {
+      transaction_details_attributes: [
+        {id: det1.id, item_id: det1.item_id, quantity: det1.quantity, price: det1.price},
+        {id: det2.id, item_id: det2.item_id, quantity: det2.quantity, price: det2.price, _destroy: "1"}
+      ]
+    }
+
+    i.transaction_details[1].should be_marked_for_destruction
+
+    puts "-"*90
+    i.save_trans.should be_false
+    i.transaction_details[1].errors[:item_id].should_not be_empty
+    i.transaction_details[1].should_not be_marked_for_destruction
     # Should not allow destroy for items that have been delivered
   end
 end
