@@ -1,4 +1,5 @@
 module Controllers::Transactions
+
   protected
   def update_all_deliver
     if Transaction.for_deliver.any?
@@ -8,4 +9,5 @@ module Controllers::Transactions
       end
     end
   end
+
 end

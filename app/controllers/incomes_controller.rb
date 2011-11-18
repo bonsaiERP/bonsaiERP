@@ -1,8 +1,9 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class IncomesController < ApplicationController
-  before_filter :check_authorization!
+class IncomesController < TransactionsController #ApplicationController
+
+  #before_filter :check_authorization!
   before_filter :set_transaction, :only => [:show, :edit, :update, :destroy, :approve]
 
   #before_filter :update_all_deliver
@@ -138,9 +139,7 @@ class IncomesController < ApplicationController
   end
 
 private
-  #def set_default_currency
-  #  @currency = Organisation.find(currency_id).currency
-  #end
+
 
   # Redirects in case that someone is trying to edit or destroy an  approved income
   def redirect_income

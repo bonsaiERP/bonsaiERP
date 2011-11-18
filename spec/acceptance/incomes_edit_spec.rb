@@ -284,7 +284,7 @@ feature "Income", "test features" do
     i.transaction_details[0].errors[:item_id].should_not be_empty
     i.transaction_details[0].item_id.should == 1
 
-    # Do not allow deleting delivered items
+    # Should not allow destroy for items that have been delivered
     i = Income.find(i.id)
     i.attributes = {
       transaction_details_attributes: [
@@ -295,10 +295,8 @@ feature "Income", "test features" do
 
     i.transaction_details[1].should be_marked_for_destruction
 
-    puts "-"*90
     i.save_trans.should be_false
     i.transaction_details[1].errors[:item_id].should_not be_empty
     i.transaction_details[1].should_not be_marked_for_destruction
-    # Should not allow destroy for items that have been delivered
   end
 end
