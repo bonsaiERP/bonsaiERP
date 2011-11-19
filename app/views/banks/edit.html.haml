@@ -1,7 +1,7 @@
 - content_for :links do
   %ul.breadcrumps
-    %li #{link_to 'Cuentas bancarias', banks_path} <span>&gt;</span>
-    %li #{link_to @bank, banks_path} <span>&gt;</span>
+    %li #{link_to 'Cuentas bancarias', banks_path} 
+    %li #{link_to @bank, banks_path} 
 
   .links
     /= link_to "Nuevo banco", items_path, :class => 'add'

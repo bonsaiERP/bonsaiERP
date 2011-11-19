@@ -1,7 +1,7 @@
 - present @supplier, ContactPresenter do |presenter|
   - content_for :links do
     %ul.breadcrumps
-      %li #{link_to "Proveedores", suppliers_path} <span>&gt;</span>
+      %li #{link_to "Proveedores", suppliers_path} 
     .links
       = link_to 'Nuevo', new_supplier_path, :class => 'new'
       = link_to 'Editar', edit_supplier_path(@supplier), :class => 'edit'

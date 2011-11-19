@@ -1,7 +1,7 @@
 - present @transaction, TransactionPresenter do |presenter|
   - content_for :links do
     %ul.breadcrumps
-      %li #{link_to transaction_type, "/#{params[:controller]}"}<span>&gt;</span>
+      %li #{link_to transaction_type, "/#{params[:controller]}"}
 
     .links
       = link_to 'Nueva', "/#{params[:controller]}/new", :class => 'add'

@@ -1,7 +1,7 @@
 - content_for :links do
   %ul.breadcrumps
-    %li #{link_to "Almacenes", stores_path}<span>&gt;</span>
-    %li #{link_to @inventory_operation.store, @inventory_operation.store}<span>&gt;</span>
+    %li #{link_to "Almacenes", stores_path}
+    %li #{link_to @inventory_operation.store, @inventory_operation.store}
 
 
 - present @inventory_operation do |presenter|
