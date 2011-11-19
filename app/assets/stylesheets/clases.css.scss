@@ -67,10 +67,12 @@ ul.breadcrumps{
   width: 50%;
   li{
     display: inline;
+    a {
+        background: transparent url(images/breadcrumb-arrow.png) no-repeat right 49%;
+        padding-right: 14px;
+    }
     span{ 
-      font-size: 70%;
       position:relative;
-      top: -1px;
       padding: 0px 5px;
     }
   }

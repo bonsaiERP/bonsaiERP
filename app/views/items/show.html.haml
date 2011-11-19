@@ -1,6 +1,8 @@
 - content_for :links do
   %ul.breadcrumps
-    %li #{ link_to "Items", "/items" }
+    %li #{ link_to "Items", items_path }
+    %li
+      %span #{@item}
 
   .links
     = link_to "Nuevo", new_item_path, :class => 'add'

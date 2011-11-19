@@ -1,6 +1,9 @@
 - content_for :links do
   %ul.breadcrumps
     %li #{ link_to "Almacenes", stores_path }
+    %li #{ link_to @store, @store }
+    %li
+      %span Editar
 
   .links
     = link_to "Nuevo", new_store_path, :class => 'add'
