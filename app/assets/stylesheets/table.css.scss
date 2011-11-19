@@ -1,13 +1,15 @@
 table.decorated{
+  border: 1px solid $grey;
   border-collapse: collapse;
   width: 100%;
+  box-shadow: 0 1px 2px #ccc;
   th{
     padding: 4px 8px;
     text-align: left;
     color: $dark;
-    background: transparent url(images/th.png) repeat-x 0% 50%;
+    background: transparent url(images/silver.png) repeat-x 0 0;
     height: 32px;
-    border-right: 1px solid #EFCFCF;
+    border-right: 1px solid $grey;
   }
   tr{
     border-bottom: 1px solid $grey;

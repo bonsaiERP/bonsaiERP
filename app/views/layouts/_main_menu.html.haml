@@ -2,36 +2,38 @@
   - if organisation?
     %li= link_to "Resumen", dashboard_path 
     %li.sub
-      %a.more{ :href => "javascript:"} Operaciones
-      %ul.more{:style => 'width:350px;'}
+      %a.more{ :href => "javascript:"} Comercial
+      %ul.more
         %li.more
-          .fl._50
-            %ul
-              %li <a href="/incomes">Ventas</a>
-              %li <a href="/buys">Compras y gastos</a>
-              %hr/
-              %li <a href="/clients">Clientes</a>
-              %li <a href="/suppliers">Proveedores</a>
-              %li <a href="/staffs">Personal</a>
-          .fl._50
-            %ul
-              %li <a href="/banks">Cuentas bancarias</a>
-              %li <a href="/cashes">Cuentas caja</a>
-              %hr/
-              %li <a href="/projects">Proyectos</a>
-              %li <a href="/taxes">Impuestos</a>
-          .clear
+          %ul
+            %li <a href="/incomes">Ventas</a>
+            %li <a href="/buys">Compras y gastos</a>
+            %li <a href="/projects">Iniciativas</a>
+            .clear.separator
+            %li <a href="/clients">Clientes</a>
+            %li <a href="/suppliers">Proveedores</a>
+            %li <a href="/staffs">Otros contactos</a>
+    %li.sub
+      %a.more{ :href => 'javascript:'} Contabilidad
+      %ul.more
+        %li.more
+          %ul
+            %li <a href="/banks">Cuentas bancarias</a>
+            %li <a href="/cashes">Cuentas caja</a>
+            %hr/
+            %li <a href="/taxes">Impuestos</a>
+
     %li.sub
       %a.more{ :href => "javascript:"} Inventarios
       %ul.more
-        %li.more{:style => 'width:300px'}
+        %li.more{:style => 'width: 200px;'}
           %ul
             %li <a href="/stores">Almacenes</a>
             %li <a href="/items">Items</a>
             %li <a href="/units">Unidades de medida</a>
-            %hr/
+            .clear.separator
             %li <a href="/inventory_operations/transactions?operation=out">Inventario pendientes de egreso</a>
-            %li <a href="/inventory_operations/transactions?operation=in">Invenario pendientes ingreso</a>
+            %li <a href="/inventory_operations/transactions?operation=in">Inventario pendientes ingreso</a>
 
           .clear
 

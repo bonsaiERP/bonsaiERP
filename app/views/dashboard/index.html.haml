@@ -24,59 +24,36 @@
 
   %ul.isotope-widgets.isotope-container.isotope
     %li.isotope-item
-      %a.button-orange.ui-corner-all 
-        %strong 10
-        %span Ventas pendientes
+      =link_to incomes_path(:option=>'awaiting_payment'), :class => 'button-blue ui-corner-all' do
+        - presenter.accounts_to_recieve.each do |cur, amt|
+          %strong #{cur} #{ntc amt}
+        %span Nos deben
     %li.isotope-item
-      %a.button-gray.ui-corner-all
-        %strong 1
-        %span Items cerca del limite
+      =link_to buys_path(:option=>'awaiting_payment'), :class => 'button-red ui-corner-all' do
+        - presenter.accounts_to_pay.each do |cur, amt|
+          %strong #{cur} #{ntc amt}
+        %span Debemos
     %li.isotope-item
-      %a.button-green.ui-corner-all
-        %strong 23
-        %span Ventas realizadas
+      =link_to 'banks', :class => 'button-green ui-corner-all' do
+        %strong ??? Bs.
+        %span Dinero en Banco
     %li.isotope-item
-      %a.button-red.ui-corner-all
-        %strong 1000 Bs
-        %span En deudas
-    %li.isotope-item
-      %a.button-green.ui-corner-all
-        %strong 400 Bs
-        %span En Caja
-  
-  .clear
-
-  .box
-    %h3 <span class="b dark-green">Nos deben</span>
-    %ul.list
-      - presenter.accounts_to_recieve.each do |cur, amt|
-        %li.b #{cur} #{ntc amt}
-
-  .box
-    %h3 <span class="b red">Debemos</span>
-    %ul.list
-      - presenter.accounts_to_pay.each do |cur, amt|
-        %li.b #{cur} #{ntc amt}
-
-  .clear
-
-  .box
-    %h3 Verificaciones pendientes
-    %ul.list
-      - presenter.pendent_conciliations.each do |cur, al|
-        %li
-          = link_to al do
-            %strong
-              = cur
-              = al.amount
-            %span.i= lo al.created_at
-    
-
-  .box
-    %h3 Almacenes con mínimos
-    .clear
-
-    %ul.list
-      - presenter.minimum_inventory.each do |st_id, store, min|
-        %li= link_to "#{store} (<strong>#{ntc min} items</strong>)".html_safe, store_path(st_id, :option => 'minimum', :tab => 'items')
+      =link_to 'cashes', :class => 'button-green ui-corner-all' do
+        %strong ??? Bs.
+        %span Dinero en Caja
+    - presenter.pendent_conciliations.each do |cur, al|
+      %li.isotope-item
+        = link_to al, :class => "button-gray ui-corner-all" do
+          %strong
+            = cur
+            = al.amount
+          %span
+            Verificación pendiente
+            -#= lo al.created_at            
+    - presenter.minimum_inventory.each do |st_id, store, min|
+      %li.isotope-item
+        = link_to store_path(st_id, :option => 'minimum', :tab => 'items'), :class => 'button-red ui-corner-all' do
+          %strong #{ntc min} items
+          %span
+            = store
 

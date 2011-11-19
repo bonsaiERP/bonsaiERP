@@ -12,6 +12,9 @@
     =link_to "almacenes", stores_path
 
 
+= link_to "Buscar", "#search_items", :class => 'search'
+
+.clear
 #search_items.search{:style => show_if_search}
   %a.close{:href => "#"} cerrar
   =form_tag "/items", :method => 'get' do
@@ -21,9 +24,8 @@
     =text_field_tag 'search', params[:search], :size => 40
     =submit_tag 'Buscar'
 
-.clear
 
-= link_to "Buscar", "#search_items", :class => 'search'
+.clear
 = paginate @items
 
 

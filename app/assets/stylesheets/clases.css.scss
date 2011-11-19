@@ -58,11 +58,11 @@ span.true, span.false{
 
 .marked{ background-color: $light_blue !important; }
 
-/* Breadcrumps*/
+/* Breadcrumbs*/
 ul.breadcrumps{
   list-style: none;
   padding: 0px;
-  margin: 0px;
+  margin: 4px 0 0 16px;
   float:left;
   width: 50%;
   li{
@@ -93,8 +93,8 @@ ul.list{
 }
 a.search{
   font-weight: bold;
-  float:left;
-  margin: 10px !important;
+  float:right;
+  margin-top: 4px !important;
   padding: 0px 0px 0px 20px;
   background: transparent url(images/zoom.png) no-repeat;
 }
@@ -102,8 +102,12 @@ div.search{
   @include rounded-corners;
   display: none;
   background-color: darken($white, 5%);
-  padding: 5px;
+  padding: 5px 15px;
+  margin-bottom: 12px;
   position: relative;
+  border: 1px solid #fff;
+  -webkit-box-shadow: 0 1px 3px #ccc; //TODO
+  box-shadow: 0 1px 3px #ccc; //TODO
 }
 
 .moneybox{
@@ -129,21 +133,25 @@ div.search{
 /*especial tabs*/
 ul.tabs{
   list-style: none;
-  background-color: $light-grey;
-  height: 35px;
+  height: 24px;
   padding: 0px 15px;
-  margin:0px 0px 20px;
   border-bottom: 1px solid $grey;
   li{
     display: inline;
     a{
       display:block;
       float:left;
-      padding: 12px;
+      height: 24px;
+      line-height: 24px;
+      padding: 0 10px;
+      background: transparent url(images/silver.png) repeat-x 0 0;
     }
     a.active{
+      height: 25px;
+      line-height: 24px;
       font-weight: bold;
-      color: $dark;
+      color: #fff;
+      background: $blue;
     }
   }
 }

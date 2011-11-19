@@ -1,14 +1,13 @@
 ul.isotope-widgets {
   display: block;
   list-style: none;
-  margin: -5px;
   padding: 0;
 }
 ul.isotope-widgets li {
   display: block;
   float: left;
-  width: 204px;
-  margin: 5px;
+  width: 220px;
+  margin: 4px;
   position: relative;
 }
 ul.isotope-widgets li a {
@@ -51,7 +50,7 @@ ul.isotope-widgets li a strong, ul.isotope-widgets li a span {
 }
 ul.isotope-widgets li a strong {
   border-bottom: 1px solid #999;
-  font-size: 36px;
+  font-size: 30px;
   font-weight: bold;
   line-height: 100%;
   padding-bottom: 10px;
@@ -75,6 +74,15 @@ ul.isotope-widgets > li a {
   display: block;
   padding: 10px;
   text-decoration: none;
+}
+
+.menuhover-gray {
+  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.9);
+  -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.9);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.9);
+  -webkit-border-radius: 2px;
+  -mox-border-radius: 2px;
+  border-radius: 2px;
 }
 
 /* Buttons */

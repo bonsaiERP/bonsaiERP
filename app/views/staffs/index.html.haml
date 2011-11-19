@@ -3,6 +3,8 @@
 
 %h1 Personal
 
+= link_to "Buscar", "#search_staff", :class => 'search'
+
 %ul.tabs
   %li= link_option "Todos", "all"
   %li= link_option "Nos deben", "pendent"
@@ -17,8 +19,6 @@
       =text_field_tag 'search', params[:search], :size => 40
     %div
     =submit_tag 'Buscar'
-
-= link_to "Buscar", "#search_staff", :class => 'search'
 
 = paginate(@staffs)
 

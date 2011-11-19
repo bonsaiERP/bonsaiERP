@@ -36,11 +36,12 @@
             = render 'layouts/usersettings_menu' if user_signed_in?
             - if organisation?
               %h1= session[:organisation][:name]
-          #menu
+            .clear
             = render 'layouts/main_menu'
+          #menu
+            #links= yield :links
 
           #cont
-            #links= yield :links
             #cont-in
               = render "layouts/flash"
               = yield
