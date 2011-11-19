@@ -34,6 +34,10 @@ es:
       transaction:
         repeated_items: "Existen items repetidos, por favor revise"
         unconcilied_ledgers: "Existen transacciones pendientes de revisión"
+      transaction_details:
+        delivered_quantity: "La cantidad es menor a la cantidad entregada"
+        change_item: "No es posible cambiar de item, se volvio al original"
+        destroy: "No se puede borrar el item"
       inventory_operation_detail:
         stock_quantity: "La cantidad es mayor a la disponible en stock"
         transaction_quantity: "La cantidad ingresada es mayor a la de la operación"

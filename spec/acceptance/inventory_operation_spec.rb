@@ -187,7 +187,9 @@ feature "Inventory Operation", "Test IN/OUT" do
     det2 = dets[1]
 
     det1.balance.should == 5
+    det1.delivered.should == det1.quantity - det1.balance
     det2.balance.should == 10
+    det2.delivered.should == det2.quantity - det2.balance
 
     io.reload
     io.transaction.delivered.should be_false
@@ -207,6 +209,12 @@ feature "Inventory Operation", "Test IN/OUT" do
     io.reload
 
     io.transaction.delivered.should be_true
+
+    i.transaction_details(true)
+    i.transaction_details[0].balance.should == 0
+    i.transaction_details[0].delivered.should == 10
+    i.transaction_details[1].balance.should == 0
+    i.transaction_details[1].delivered.should == 20
 
     # It should not allow another out for income
     h = hash.merge(

@@ -13,7 +13,7 @@ class TransactionPresenter < BasePresenter
   end
 
   def null_link
-      h.link_to 'Anular', transaction, :class => 'delete', :confirm => 'Esta seguro de anular?' if transaction.draft?
+      h.link_to 'Anular', transaction, :class => 'delete red', :confirm => 'Esta seguro de anular?' if transaction.draft? # allow_action?
   end
 
   def approve_deliver?
@@ -185,9 +185,9 @@ class TransactionPresenter < BasePresenter
   def deliver_link
     if transaction_deliver?
       if transaction.is_a?(Income)
-        h.link_to "Registrar entrega", select_store_inventory_operation_path(transaction, :operation => 'out'), :class => "new"
+        h.link_to "Registrar entrega", select_store_inventory_operation_path(transaction, :operation => 'out'), :class => "new ajax"
       elsif transaction.is_a?(Buy)
-        h.link_to "Registrar recojo", select_store_inventory_operation_path(transaction, :operation => 'in'), :class => "new"
+        h.link_to "Registrar recojo", select_store_inventory_operation_path(transaction, :operation => 'in'), :class => "new ajax"
       end
     end
   end
@@ -251,7 +251,16 @@ class TransactionPresenter < BasePresenter
 
 private
   def allow_action?
-    transaction.draft? or h.session[:user][:rol] != "operations"
+    allow_transaction_action?(transaction)
+    #case
+    #when transaction.draft?
+    #  true
+    #when(h.session[:user][:rol] === "operations" and !transaction.draft?)
+    #  false
+    #when(h.session[:user][:rol] != "operations" and !transaction.draft?)
+    #  true
+    #end
+    #transaction.draft? or h.session[:user][:rol] != "operations"
   end
 
   # Tells if the user can approve a transaction based on the preferences

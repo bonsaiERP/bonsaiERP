@@ -1,8 +1,9 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class IncomesController < ApplicationController
-  before_filter :check_authorization!
+class IncomesController < TransactionsController #ApplicationController
+
+  #before_filter :check_authorization!
   before_filter :set_transaction, :only => [:show, :edit, :update, :destroy, :approve]
 
   #before_filter :update_all_deliver
@@ -46,10 +47,6 @@ class IncomesController < ApplicationController
 
   # GET /incomes/1/edit
   def edit
-    if @transaction.state == 'approved'
-      flash[:warning] = "No es posible editar una nota de venta aprobada."
-      redirect_to @transaction
-    end
   end
 
   # POST /incomes
@@ -72,16 +69,12 @@ class IncomesController < ApplicationController
   # PUT /incomes/1
   # PUT /incomes/1.xml
   def update
-    if @transaction.approved?
-      redirect_transaction
+    @transaction.attributes = params[:income]
+    if @transaction.save_trans
+      redirect_to @transaction, :notice => 'La proforma de venta fue actualizada!.'
     else
-      @transaction.attributes = params[:income]
-      if @transaction.save_trans
-        redirect_to @transaction, :notice => 'La proforma de venta fue actualizada!.'
-      else
-        @transaction.transaction_details.build unless @transaction.transaction_details.any?
-        render :action => "edit"
-      end
+      @transaction.transaction_details.build unless @transaction.transaction_details.any?
+      render :action => "edit"
     end
   end
 
@@ -137,10 +130,8 @@ class IncomesController < ApplicationController
     redirect_to @transaction
   end
 
-private
-  #def set_default_currency
-  #  @currency = Organisation.find(currency_id).currency
-  #end
+  private
+
 
   # Redirects in case that someone is trying to edit or destroy an  approved income
   def redirect_income
@@ -149,7 +140,13 @@ private
   end
 
   def set_transaction
+    logger.info("Juuu")
     @transaction = Income.find(params[:id])
+
+    unless allow_transaction_action?(@transaction)
+      flash[:warning] = "No es posible editar una nota de venta aprobada."
+      return redirect_to @transaction
+    end
   end
 
 end

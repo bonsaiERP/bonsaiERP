@@ -7,7 +7,7 @@
   %h1 Seleccione el almacen para #{presenter.select_store_title}
   %h2.n= link_to @transaction, @transaction
 
-  = form_tag new_transaction_inventory_operations_path, :method => 'get', :id => 'select_store' do
+  = form_tag new_transaction_inventory_operations_path, :method => 'get', :id => 'select_store', :class => 'no-ajax' do
     = hidden_field_tag "transaction_id", @transaction.id
     = hidden_field_tag "operation", params[:operation]
 

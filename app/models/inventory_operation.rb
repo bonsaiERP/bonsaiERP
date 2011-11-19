@@ -312,6 +312,9 @@ class InventoryOperation < ActiveRecord::Base
       when( transaction.is_a?(Buy) and out? )
         t_det.balance += det.quantity
     end
+
+    # Updates the quantity delivered
+    t_det.delivered = t_det.quantity - t_det.balance
   end
 
   # Calculates the total value for the current operation

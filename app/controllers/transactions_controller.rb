@@ -108,4 +108,21 @@ class TransactionsController < ApplicationController
     @transaction = Transaction.find(params[:id])
     InvoiceMailer.send_invoice(@transaction, params).deliver
   end
+
+  # Allows actions
+  def allow_transaction_action?(transaction)
+    return false unless User::ROLES.include?(session[:user][:rol])
+
+    case
+    when transaction.draft?
+      true
+    when(session[:user][:rol] === "operations" and !transaction.draft?)
+      false
+    when(session[:user][:rol] != "operations" and !transaction.draft?)
+      true
+    end
+  end
+
+  helper_method :allow_transaction_action?
+
 end
