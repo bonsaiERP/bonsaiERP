@@ -90,6 +90,28 @@ describe IncomesController do
       response.should render_template("edit")
     end
 
+    it 'should set the edit_trans template' do
+      Income.stub!(find: income_mock(save_trans: false, draft?: true,
+            :attributes= => true, transaction_details: stub(build: true, any?: true)))
+      session[:user] = {rol:"admin"}
+      
+      put :update, id: 1
+      
+      response.should_not be_redirect
+      response.should render_template("edit")
+    end
+
+    it 'should set the edit_trans template' do
+      Income.stub!(find: income_mock(save_trans: false, draft?: false,
+            :attributes= => true, transaction_details: stub(build: true, any?: true)))
+      session[:user] = {rol:"admin"}
+      
+      put :update, id: 1
+      
+      response.should_not be_redirect
+      response.should render_template("edit_trans")
+    end
+
     it 'should NOT allow the user to edit' do
       Income.stub!(find: income_mock)
       session[:user] = {rol:"operations"}

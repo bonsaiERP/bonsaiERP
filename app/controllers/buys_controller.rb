@@ -45,10 +45,7 @@ class BuysController < TransactionsController
 
   # GET /buys/1/edit
   def edit
-    #if @transaction.state == 'approved'
-    #  flash[:warning] = "No es posible editar una nota de compra aprobada"
-    #  redirect_to @transaction
-    #end
+    render get_template(@transaction)
   end
 
 
@@ -71,15 +68,12 @@ class BuysController < TransactionsController
   # PUT /buys/1
   # PUT /buys/1.xml
   def update
-    if @transaction.approved?
-      redirect_transaction
+    @transaction.attributes = params[:buy]
+    if @transaction.save_trans
+      redirect_to @transaction, :notice => 'La proforma de compra fue actualizada!.'
     else
-      if @transaction.update_attributes(params[:buy])
-        redirect_to @transaction, :notice => 'La proforma de compra fue actualizada!.'
-      else
-        @transaction.transaction_details.build unless @transaction.transaction_details.any?
-        render :action => "edit"
-      end
+      @transaction.transaction_details.build unless @transaction.transaction_details.any?
+      render get_template(@transaction)
     end
   end
 
