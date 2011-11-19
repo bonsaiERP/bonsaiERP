@@ -32,7 +32,7 @@ ul#main_menu{
     ul.more{ display: block; position: absolute; }
   }
   li.sub{
-    background: url("images/back_sep.png") no-repeat scroll left 0 transparent !important;
+    background: url("images/back_sep.png") no-repeat scroll left 50% transparent !important;
     // border-left: 1px solid lighten($green, 25%);
     margin-right: 15px;
   }
@@ -43,7 +43,7 @@ ul#main_menu{
     display: none;
     position: absolute;
     padding: 0px;
-    margin: 0px;
+    margin-left: 12px;
     padding: 2px;
     z-index: 200;
     background-color: rgba(255,255,255,0.5);/*$menu_green;*/
