@@ -44,7 +44,7 @@ describe IncomesController do
       Income.stub!(find: income_mock)
       session[:user] = {rol:"admin"}
       
-      get :show, id: 1
+      get :edit, id: 1
       
       response.should_not be_redirect
     end
@@ -53,9 +53,27 @@ describe IncomesController do
       Income.stub!(find: income_mock)
       session[:user] = {rol:"operations"}
       
-      get :show, id: 1
+      get :edit, id: 1
       
       response.should redirect_to("/incomes/1")
+    end
+
+    it 'should render_template edit when draft?' do
+      Income.stub!(find: income_mock(draft?: true))
+      session[:user] = {rol:"admin"}
+      
+      get :edit, id: 1
+      
+      response.should render_template("edit")
+    end
+
+    it 'should render_template edit_trans when not draft?' do
+      Income.stub!(find: income_mock)
+      session[:user] = {rol:"admin"}
+      
+      get :edit, id: 1
+      
+      response.should render_template("edit_trans")
     end
   end
 

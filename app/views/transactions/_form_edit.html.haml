@@ -1,0 +1,136 @@
+:css
+  #items_table .input{
+    margin: 2px 0px;
+  }
+  input.hide{ display: none; }
+  #items_table input.item_id{ display: none; }
+
+- present transaction, TransactionPresenter do |presenter|
+  = simple_form_for(transaction, :html => {:id => 'transaction_form', :class => 'enter'}) do |f|
+    = bonsai_form_error(f)
+
+    .clear
+
+    = f.association :project,  :label => 'Proyecto',
+      :input_html => {'data-new_url' => new_project_path, 'data-title' => "Nuevo proyecto", 'data-trigger' => 'new_project' }
+
+    = f.association :currency, :label => 'Moneda/Tipo de cambio. <span class="rate_details n black"></span>'.html_safe, :include_blank => false,
+      :input_html => {:id => 'transaction_currency_id'}
+    = f.input :exchange_rate, :as => :hidden, :input_html => {:id => 'transaction_exchange_rate'}
+    .clear
+
+    /.input
+    = f.input :bill_number, :label => 'Nº de Factura o Recibo', :input_html => {:size => 20}
+    - if transaction.income?
+      =f.association :taxes, :as => :check_boxes, :label => 'Impuestos', :wrapper_html => {:id => 'taxes'},
+        :label_method => lambda{|tax| "<span id='span#{tax.id}' class='tax' data-rate='#{tax.rate}' title ='#{tax.name}'>#{tax.abbreviation} (#{ntc tax.rate}%)</span>".html_safe }
+
+    .clear
+
+    = f.input :description, :label => 'Descripción', :as => :text, :input_html => {:rows => 3, :cols => 40}
+    .clear
+
+    %h2.dark#items_header Items
+
+    %table#items_table.decorated
+      %thead
+        %tr
+          %th.item Item
+          -#%th.description Descripción
+          %th.price 
+            Precio <br/>unitario
+            %span.currency
+          %th.quantity Cantidad
+          %th.total_row Total fila
+          %th
+
+      - @items = transaction.get_items
+
+      = f.simple_fields_for :transaction_details do |fd|
+        %tr.item{:id => fd.object.id}
+          %td
+            %input.desc{:type => 'text', :size => 50, :value => fd.object.item}
+            = fd.input :item_id, :label => false, :input_html => {:class => 'item_id'}
+
+          %td= fd.input :price, :input_html => { :size => 8, :class => 'price', :type => 'decimal', 'data-original_price' => fd.object.original_price },
+            :label => false
+          %td= fd.input :quantity, :input_html => { :size => 8, :class => 'quantity', :type => 'decimal' }, :label => false
+
+          %td.total_row.r{'data-val' => fd.object.total }= ntc fd.object.total
+          %td.del <a href="javascript:" class="destroy" title="Borrar">&nbsp;</a>
+      
+      %tr.extra.pad_top.subtotal
+        %td
+        %td.cur{:colspan => 2} Subtotal
+        %td#subtotal.r{'data-val' => transaction.subtotal}= ntc(transaction.subtotal)
+      
+      %tr.extra
+        %td <a href="javascript:" id="add_item" class="add link">Adicionar ítem</a>
+        %td.cur.discount{:colspan => 2} 
+          - if transaction.is_a? Income
+            = f.input :discount, 
+              :label => "#{minus_image} Descuento".html_safe, 
+              :input_html => {:size => 4, :type => 'decimal', :id => 'transaction_discount'}, 
+              :wrapper_html => {:class => 'boolean', :style => 'width: 100%'}
+              
+        - if transaction.is_a? Income
+          %td#discount_total.r{'data-val' => transaction.total_discount} #{ntc(transaction.total_discount)}
+      
+      - if transaction.is_a? Income
+        %tr.extra
+          %td
+          %td.cur.line{:colspan => 2} Impuestos (<span id="taxes_percentage" data-val="#{transaction.tax_percent}">#{ntc transaction.tax_percent}</span>%)
+          %td#taxes_total.r.line{'data-val' => transaction.total_taxes}= ntc transaction.total_taxes
+      
+      %tr.extra
+        %td
+        %td.r.b.dark{:colspan => 2} Total
+        %td.b.cur
+          %span.currency
+          %span#total_value.cur{ 'data-val'=> transaction.total}= ntc transaction.total
+
+    .actions
+      = f.submit 'Salvar'
+
+  #currency_form.ajax-modal{ :style => 'display:none;'}
+    %h4.red Advertencia! Verifique los precios de los items, serán modificados
+    
+    %label Tipo de cambio
+    %span.currency_symbol.b
+    1
+    \= 
+    %span.default_symbol.b
+    %input{:type => 'text', :size => 8, :class => 'r', :id => 'exchange_rate', :value => transaction.exchange_rate}
+    %button#exchange_rate_button.button Cambiar
+
+  :javascript
+    $( function() {
+      // Autocomplete
+      $('#transaction_contact_id').contactAutocomplete(#{get_contact_list.to_json}, {'id': 'contact_autocomplete'});
+    
+      var type = "#{transaction.type.downcase}";
+      // Creation of all Backbone
+
+      var currencies = #{ Currency.to_hash.to_json };
+      var fake_accounts = #{presenter.fake_accounts.to_json};
+
+      var er = new ExchangeRate();
+      er.setAll('#exchange_rate', '#transaction_currency_id', #{currency_id}, fake_accounts,currencies,
+      {hide: '#fake_hide_div', inverted: true});
+
+      window.transaction = new TransactionGlobal(currencies, #{currency_id}, #{transaction.currency_id}, #{transaction.exchange_rate}, type);
+
+      // Functions for the select boxes
+      $('body').live('new_project', function(e, resp) {
+        $('#' + type + '_project_id').createSelectOption(resp.id, resp.name);
+      });
+
+      $('#transaction_discount').after("<span class='b'>%</span>")
+
+      // New item triger
+      $('#items_table a.add').live('click', function() {
+        $('#items_table').data('row', $(this).parents('tr:first').get(0).rowIndex );
+      });
+
+    });
+

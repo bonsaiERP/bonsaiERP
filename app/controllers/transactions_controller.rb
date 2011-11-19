@@ -128,10 +128,10 @@ class TransactionsController < ApplicationController
   protected
 
   def get_template(transaction)
-    if !transaction.draf? and ["edit", "update"].include?(params[:action])
-      @partial = "edit_form"
+    if !transaction.draft? and ["edit", "update"].include?(params[:action])
+      "edit_trans"
     else
-      @partial = "form"
+      "edit"
     end
   end
 end
