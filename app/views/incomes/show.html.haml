@@ -1,6 +1,8 @@
 - content_for :links do
   %ul.breadcrumps
     %li #{link_to "Ventas", incomes_path}
+    %li
+      %span #{@income}
 
   .links
     = link_to 'Nueva', "/#{params[:controller]}/new", :class => 'add'

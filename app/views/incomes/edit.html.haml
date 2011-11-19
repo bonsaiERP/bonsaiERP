@@ -1,6 +1,10 @@
 - content_for :links do
   %ul.breadcrumps
     %li #{link_to 'Ventas', incomes_path} 
+    %li #{link_to @transaction, @transaction} 
+    %li
+      %span Editar
+
   .links
     = link_to 'Ver', @transaction, :class => 'show'
 

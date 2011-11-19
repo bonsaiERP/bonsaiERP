@@ -1,6 +1,9 @@
 - content_for :links do
   %ul.breadcrumps
     %li #{link_to 'Ventas', incomes_path} 
+    %li
+      %span Nueva proforma de venta
+
 %h1 Nueva proforma de venta
 
 = render 'transactions/form', :transaction => @transaction, :contacts => Client.scoped

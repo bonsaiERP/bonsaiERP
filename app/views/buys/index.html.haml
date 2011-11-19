@@ -1,6 +1,7 @@
 - content_for :links do
   %ul.breadcrumps
-    %li #{link_to "Compras y gastos", buys_path}
+    %li
+      %span Compras y gastos
 
   .links= link_to "Nueva compra/gasto", new_buy_path, :class => 'new'
 

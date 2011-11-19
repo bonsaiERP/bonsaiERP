@@ -2,6 +2,8 @@
   - content_for :links do
     %ul.breadcrumps
       %li #{link_to transaction_type, "/#{params[:controller]}"}
+      %li
+        %span #{@transaction}
 
     .links
       = link_to 'Nueva', "/#{params[:controller]}/new", :class => 'add'
