@@ -15,6 +15,7 @@ module Models::Transaction
       res = true
       update
       return false if transaction.errors.any?
+      return false if changed_contact_or_ref_number?
 
       transaction.class.transaction do
         res = @current_ledger.save if @current_ledger
@@ -27,6 +28,17 @@ module Models::Transaction
     end
 
     private
+
+    def changed_contact_or_ref_number?
+      if not(transaction.draft?) 
+        unless transaction.contact_id === old_transaction.contact_id and transaction.ref_number === old_transaction.ref_number
+          #puts "Trans: #{transaction} :COntac: #{transaction.contact_id_changed?}; REF #{transaction.ref_number_changed?}"
+          transaction.reload
+          transaction.errors[:base] << I18n.t("errors.messages.transaction.changes")
+          true
+        end
+      end
+    end
 
     def refund_operation
       transaction.is_a?(Income) ? "in" : "out"
@@ -79,6 +91,7 @@ module Models::Transaction
 
     def refund
       @account = transaction.contact_account_cur(transaction.currency_id)
+
       amount  = old_transaction.total_paid - transaction.balance
       klass   = transaction.class.to_s.downcase
 

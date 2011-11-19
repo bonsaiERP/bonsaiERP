@@ -48,6 +48,13 @@
       = presenter.render_inventory
       .clear
 
+  %ul
+    - @transaction.transaction_histories.each do |t|
+      %li
+        =link_to history_income_path(@transaction.id), :class => 'ajax' do
+          = t.user
+          %span.i= lo t.created_at
+
   -# User details
   #users.mt30
     - if @transaction.creator_id.present?

@@ -125,4 +125,13 @@ class TransactionsController < ApplicationController
 
   helper_method :allow_transaction_action?
 
+  protected
+
+  def get_template(transaction)
+    if !transaction.draf? and ["edit", "update"].include?(params[:action])
+      @partial = "edit_form"
+    else
+      @partial = "form"
+    end
+  end
 end

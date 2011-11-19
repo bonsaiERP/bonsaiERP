@@ -34,6 +34,7 @@ es:
       transaction:
         repeated_items: "Existen items repetidos, por favor revise"
         unconcilied_ledgers: "Existen transacciones pendientes de revisión"
+        changes: "No es posible cambiar el número de referencia o el contacto"
       transaction_details:
         delivered_quantity: "La cantidad es menor a la cantidad entregada"
         change_item: "No es posible cambiar de item, se volvio al original"
