@@ -16,12 +16,10 @@
   = bonsai_form_error(f)
 
   %fieldset
-    = f.input :email, :label => "Correo Electrónico", :input_html => {:size => 40}
-    = f.input :password, :label => 'Contraseña', :input_html => {:size => 40}
+    = f.input :email,    :label => "Correo Electrónico", :input_html => {:size => 40}
+    = f.input :password, :label => 'Contraseña',         :input_html => {:size => 40}
   
   = link_to "¿Olvido su contraseña?", new_reset_password_path
-  -#%strong o
-  -#= link_to "Registrarse aquí!", new_registration_path
   .clear.form_actions
     = f.submit "Ingresar", :class => "submit"
 
