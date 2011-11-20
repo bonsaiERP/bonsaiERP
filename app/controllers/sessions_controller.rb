@@ -30,14 +30,11 @@ class SessionsController < ApplicationController
       when(@user and @user.confirmated? and @user.authenticate(params[:user][:password]) )
         session[:user_id] = @user.id
         check_logged_user
-      when(@user and @user.confirmated?)
-        @user.errors[:password] = "La contraseña que ingreso es incorrecta"
-        render "new"
       when(@user and not(@user.confirmated?))
         redirect_to session_path(:id => @user.id)
       else
         @user = User.new(:email => params[:user][:email])
-        @user.errors[:email] = "El email que ingreso no existe"
+        flash[:notice] = "El email o contraseña son incorrectos"
         render "new"
     end
   end
