@@ -35,7 +35,7 @@ class SessionsController < ApplicationController
         redirect_to session_path(:id => @user.id)
       else
         @user = User.new(:email => params[:user][:email])
-        flash[:notice] = "El Email o contraseña son incorrectos"
+        flash[:notice] = "Su correo electrónico o contraseña son incorrectos"
         render "new"
     end
   end
