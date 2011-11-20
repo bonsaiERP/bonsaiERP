@@ -38,4 +38,7 @@ SimpleForm.setup do |config|
 
   # Default size for text inputs
   config.default_input_size = 35
+
+  config.form_class = "simple_form ui-form"
+
 end

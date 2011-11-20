@@ -6,7 +6,7 @@
   #items_table input.item_id{ display: none; }
 
 - present transaction, TransactionPresenter do |presenter|
-  = simple_form_for(transaction, :html => {:id => 'transaction_form', :class => 'enter'}) do |f|
+  = simple_form_for(transaction, :html => {:id => 'transaction_form', :class => 'enter ui-form'}) do |f|
     = bonsai_form_error(f)
     .main.bg-light-grey
       ._50.fl

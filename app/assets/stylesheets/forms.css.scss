@@ -146,3 +146,8 @@ span.error{
     border-color: lighten($red, 25%) !important;
   }
 }
+
+form.simple_form div.main {
+    padding: 0 1em;
+    border-radius: 3px;
+}
