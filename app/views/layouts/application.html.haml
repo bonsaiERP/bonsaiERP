@@ -43,11 +43,26 @@
             #links= yield :links
 
           #cont
-            #cont-in
+            #cont-in.clear
               = render "layouts/flash"
               = yield
             .clear
-          #foot
+      #footer
+        #footer_inner
+          %p
+            ©2011 &middot; BonsaiERP "El software para la gestión de empresas"
+          %p
+            %a Blog
+            &middot;
+            %a Twitter
+            &middot;
+            %a Cambios Recientes
+            &middot;
+            %a Estado del Servicio
+            &middot;
+            %a Terminos del Servicio
+            &middot;
+            %a Políticas de Privacidad
 
 :javascript
   $(function() {

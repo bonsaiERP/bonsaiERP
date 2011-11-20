@@ -54,9 +54,7 @@ hr{ border:0px;
 }
 
 #cont{
-  margin: auto;
-  padding-bottom: 50px;
-
+    padding-bottom: 1em;
   //TODO: compass
   -moz-border-radius: 0px 0px 6px 6px;
   -webkit-border-radius: 0px 0px 6px 6px;
@@ -81,8 +79,9 @@ hr{ border:0px;
   }
 }
 
-#cont-in{
-  padding: 10px 15px 90px;
+#cont-in {
+  margin: 0;
+  padding: 0 1em 1em;
 }
 
 
@@ -157,8 +156,17 @@ hr{ border:0px;
   height: 32px;
 }
 
-#foot{
-  height: 32px;
+#footer {
+    color: #333;
+    width: 1000px;
+    margin: 0 auto;
+    margin-top: 2em;
+    border-top: 1px solid #ccc;
+
+    #footer_inner {
+        border-top: 1px solid #fff;
+        padding: 1em 4px 2em;
+    }
 }
 
 #cont-in h1{
