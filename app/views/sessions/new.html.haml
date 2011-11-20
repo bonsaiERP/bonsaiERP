@@ -8,18 +8,30 @@
     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
+  $(document).ready(function() {
+    // TODO: Move to cofeescript
+    $('#dialog_wrapper').fadeTo(0,0.0).delay(500).fadeTo(1000, 1); 
+  });
 
+#dialog
+  %h1 Iniciar sesión
 
-%h1 Iniciar sesión
+  = simple_form_for(@user, :url => sessions_path, :method => :post) do |f|
+    = bonsai_form_error(f)
 
-= simple_form_for(@user, :url => sessions_path, :method => :post) do |f|
-  = bonsai_form_error(f)
-
-  %fieldset
-    = f.input :email,    :label => "Correo Electrónico", :input_html => {:size => 40}
-    = f.input :password, :label => 'Contraseña',         :input_html => {:size => 40}
+    %fieldset
+      = f.input :email,    :label => "Correo Electrónico", :input_html => {:size => 40}
+      = f.input :password, :label => 'Contraseña',         :input_html => {:size => 40}
   
-  = link_to "¿Olvido su contraseña?", new_reset_password_path
-  .clear.form_actions
-    = f.submit "Ingresar", :class => "submit"
+    = link_to "¿Olvido su contraseña?", new_reset_password_path
+    .clear.form_actions
+      -# = link_to new_registration_path, :class=>'signup' do
+        %span Registrarse
+      %span.signup{:title => "Muy pronto"}
+        Registrarse
+      = f.submit "Ingresar", :class => "submit"
 
+%p.legal
+  ©2011 Todos los derechos reservados.
+  %a{:href=>'#!/legal'}
+    Más información

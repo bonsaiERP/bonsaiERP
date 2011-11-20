@@ -7,14 +7,25 @@
 @import "flash.css.scss";
 @import "fancy_forms.css.scss";
 
+body {
+    margin: 120px auto;
+}
+
 #dialog_wrapper {
+  margin: 0 auto;
+  width: 604px; 
+  .legal {
+    color: #333;
+    font-size: 0.9em;
+    margin: 1em 0;
+  }
+  #dialog {
     width: 600px;
-    margin: 0 auto;
-    margin-top: 90px;
     padding: 0;
     background: #fff url('./images/back_new.png') repeat-x 0 -82px;
     border: 1px solid transparent;
     border-radius: 4px;
+    position: static;
 
     box-shadow: 0 2px 4px rgba(0,0,0,0.5);
     -webkit-box-shadow: 0 2px 4px rgba(0,0,0,0.5);
@@ -32,8 +43,21 @@
             background-color: #fff;
             padding:0;
         }
-        input.submit {
+        span.signup {
             @extend .button-gray;
+            @extend .isotope-item;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-right: .5em;
+            padding: 4px 16px;
+            color: #444;
+        }
+
+        input.submit {
+            @extend .button-green;
+            color: #fff;
             border-radius: 4px;
         }
         .form_actions {
@@ -46,5 +70,5 @@
         right: 4px;
         width: 360px;
     }
+  }
 }
-
