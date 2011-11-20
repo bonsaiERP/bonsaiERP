@@ -4,7 +4,7 @@
 class RegistrationsController < ApplicationController
   before_filter :check_logged_user, :except => [:show]
   before_filter :reset_search_path
-  layout "home"
+  layout "dialog"
 
   def index
   end

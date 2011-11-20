@@ -1,33 +1,10 @@
-:css
-  .pad-reg{
-    padding: 20px;
-  }
-  #links{ display: none; }
-  input{
-    font-size: 1.5em;
-    padding: 2px 6px;
-  }
-  label{
-    font-size: 1.2em; 
-    display: block; 
-    font-weight: bold; 
-    color: #383838;
-  }
-  p.accept{ color: #383838; }
-  .input{
-    width: 100%;
-    padding: 5px 0px;
-  }
-  form{ padding: 40px 10px; }
+#dialog
+  %h1 Registro
 
-#banner
-  .title
-    %h2 Registro
-
-= simple_form_for(@user, :url => registrations_path) do |f|
-  = f.input :email, :label => "Email", :input_html => {:size => 40}
-  .clear
-  = f.input :password, :label => 'Contraseña', :input_html => {:size => 40}
-  -#%p.accept Al hacer click en <strong>Registrarme</strong> usted acepta los <a href="#">Terminos de servicio</a>
-  .clear
-  = f.submit "Registrate", :class => 'b'
+  = simple_form_for(@user, :url => registrations_path) do |f|
+    %fieldset
+      = f.input :email, :label => "Correo Electrónico", :input_html => {:size => 40}
+      = f.input :password, :label => 'Contraseña', :input_html => {:size => 40}
+      -#%p.accept Al hacer click en <strong>Registrarme</strong> usted acepta los <a href="#">Terminos de servicio</a>
+      .clear.form_actions
+        = f.submit "Registrarse", :class => 'submit'
