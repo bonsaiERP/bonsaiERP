@@ -1,0 +1,48 @@
+@import "colors.css.scss";
+@import "mixins.css.scss";
+@import "jquery-ui-1.8.10.custom.css.scss";
+@import "base.css.scss";
+@import "forms.css.scss";
+@import "dashboard.css.scss";
+@import "flash.css.scss";
+@import "fancy_forms.css.scss";
+
+body {
+    background-color: #ddddcc;
+}
+
+#dialog_wrapper {
+    width: 600px;
+    margin: 0 auto;
+    margin-top: 90px;
+    padding: 0;
+    background: #fff url('./images/back.png') repeat-x 0 -82px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+
+    box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+
+    h1 {
+        margin-left: 12px;
+        margin-top: 2px;
+        margin-bottom: 2px;
+    }
+
+    form {
+        margin: 0 1em;
+        fieldset {
+            border: none;
+            background-color: #fff;
+            padding:0;
+        }
+        input.submit {
+            @extend .button-gray;
+            border-radius: 4px;
+        }
+        .form_actions {
+            text-align: right;
+        }
+    }
+}
+
