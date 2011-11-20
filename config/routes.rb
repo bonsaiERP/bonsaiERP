@@ -50,6 +50,7 @@ Bonsaierp::Application.routes.draw do
       put 'approve'
       put 'approve_credit'
       put 'approve_deliver'
+      get :history
     end
   end
 

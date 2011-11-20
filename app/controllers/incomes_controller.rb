@@ -47,6 +47,7 @@ class IncomesController < TransactionsController #ApplicationController
 
   # GET /incomes/1/edit
   def edit
+    render get_template(@transaction)
   end
 
   # POST /incomes
@@ -74,7 +75,7 @@ class IncomesController < TransactionsController #ApplicationController
       redirect_to @transaction, :notice => 'La proforma de venta fue actualizada!.'
     else
       @transaction.transaction_details.build unless @transaction.transaction_details.any?
-      render :action => "edit"
+      render get_template(@transaction)
     end
   end
 
@@ -140,7 +141,6 @@ class IncomesController < TransactionsController #ApplicationController
   end
 
   def set_transaction
-    logger.info("Juuu")
     @transaction = Income.find(params[:id])
 
     unless allow_transaction_action?(@transaction)

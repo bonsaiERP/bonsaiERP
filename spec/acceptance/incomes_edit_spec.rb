@@ -98,6 +98,22 @@ feature "Income", "test features" do
     hist.data[:transaction_details][1][:price].should == 5
 
     i.transaction_details[1].price.should == 5.5
+
+    # Check changes on income in contact_id and ref_number
+    contact_id, ref_number = i.contact_id, i.ref_number
+    i.should_not be_draft
+    i = Income.find(i.id)
+    i.attributes = {ref_number: "NEW CHANGED"}
+    i.ref_number.should == "NEW CHANGED"
+    i.save_trans.should be_false
+    i.ref_number.should == ref_number
+
+    i = Income.find(i.id)
+    i.attributes = {contact_id: 100}
+    i.contact_id.should == 100
+    i.save_trans.should be_false
+    i.contact_id.should == contact_id
+    
   end
 
 
