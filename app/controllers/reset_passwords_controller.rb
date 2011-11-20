@@ -5,6 +5,7 @@ class ResetPasswordsController < ApplicationController
   #include ActionView::Helpers::UrlHelper
   before_filter :reset_search_path
   before_filter :check_if_can_reset_password, :only => [:edit, :update]
+  layout 'dialog'
 
   def new
     @user = User.new

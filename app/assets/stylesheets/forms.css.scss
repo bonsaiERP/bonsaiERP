@@ -17,6 +17,9 @@ label{
   vertical-align: top;
   display: block;
   color: darken($grey, 45%);
+  abbr {
+    border: none;
+  }
 }
 label.collection_radio, label.collection_check_boxes{
   font-weight:normal;
@@ -136,9 +139,10 @@ span.error{
     }
   }
 }
-.field_with_errors{
-  input, textarea, select{
-    background-color: lighten($red, 30%);
-    #border-color: $red;
+
+.field_with_errors {
+  input, textarea, select {
+    background-color: lighten($red, 40%);
+    border-color: lighten($red, 25%) !important;
   }
 }
