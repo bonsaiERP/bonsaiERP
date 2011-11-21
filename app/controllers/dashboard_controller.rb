@@ -10,7 +10,8 @@ class DashboardController < ApplicationController
 
   # GET /config
   def configuration
-    @links = Organisation.find( OrganisationSession.organisation_id).links.includes(:user)
+    #@links = Organisation.find( OrganisationSession.organisation_id).links.includes(:user)
+    @users = User.all
   end
 
 end

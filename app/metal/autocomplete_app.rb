@@ -67,7 +67,7 @@ private
   # Search for contact autocomlete
   def contact_autocomplete(type, options)
     set_search_path
-    Contact.where("type = :type AND matchcode LIKE :term", :type => type, :term => "%#{options[:term]}%").limit(20).map {|c| {:id => c.id, :label => c.to_s}}
+    Contact.where("type = :type AND matchcode ILIKE :term", :type => type, :term => "%#{options[:term]}%").limit(20).map {|c| {:id => c.id, :label => c.to_s}}
   end
 
   def item_autocomplete(options)

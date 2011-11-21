@@ -34,7 +34,14 @@ class SessionsController < ApplicationController
       when(@user and not(@user.confirmated?))
         redirect_to session_path(:id => @user.id)
       else
+        u = @user.present? ? true : false
         @user = User.new(:email => params[:user][:email])
+        # Present error for password
+        if u
+          @user.errors[:password] = "Contraseña inválida"
+        else
+          @user.errors[:email] = "El email que ingreso no existe"
+        end
         flash[:notice] = "Su correo electrónico o contraseña son incorrectos"
         render "new"
     end

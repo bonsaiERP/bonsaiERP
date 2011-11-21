@@ -13,6 +13,8 @@ class CreateTenant
       PgTools.create_schema schema_name
       PgTools.load_schema_into_schema schema_name
       PgTools.set_search_path schema_name
+      # Wait a second before creating data
+      sleep 1
       Unit.create_base_data
       AccountType.create_base_data
       Currency.create_base_data
@@ -26,6 +28,8 @@ class CreateTenant
         u.id = user.id
         u.password = "demo123"
         u.confirmed_at = user.confirmed_at
+        u.rol = "admin"
+        u.active = true
       }
       
       orga = Organisation.new(data)

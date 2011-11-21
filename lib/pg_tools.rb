@@ -5,6 +5,11 @@ module PgTools
     "schema#{id}"
   end
 
+  def public_schema?
+    res = connection.execute("SHOW search_path")
+    res.getvalue(0,0) === "public"
+  end
+
   def with_schema(schema_name)
     old_search_path = connection.schema_search_path
     set_search_path(schema_name)

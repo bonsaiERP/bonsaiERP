@@ -31,9 +31,16 @@ module Controllers::Authentication
       case
       when( orgs.any? and schema )
         set_organisation_session(current_user.organisations.first)
-        link = current_user.links.first
-        session[:user] = {:rol => link.rol }
-        redirect_to "/dashboard"
+        PgTools.set_search_path PgTools.get_schema_name(org_id)
+        user = User.find(session[:user_id])
+        # Check if user is active
+        if user.active?
+          session[:user] = {:rol => user.rol }
+          redirect_to "/dashboard"
+        else
+          flash[:warning] = "Usted ya no tiene permitido el acceso"
+          redirect_to "/users/sign_out"
+        end
       when( orgs.any? and not(schema))
         redirect_to create_tenant_organisation_path(org_id)
       else

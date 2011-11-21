@@ -28,6 +28,8 @@ describe CreateTenant do
     Unit.count.should > 0
     Organisation.first.name.should == org.name
     User.first.email.should == "demo@example.com"
+    User.first.rol.should == "admin"
+    User.first.should be_active
 
     PgTools.reset_search_path
     Unit.count.should == 0

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111117201201) do
+ActiveRecord::Schema.define(:version => 20111121204629) do
 
   create_table "account_ledger_details", :force => true do |t|
     t.integer  "account_id"
@@ -513,6 +513,8 @@ ActiveRecord::Schema.define(:version => 20111117201201) do
     t.datetime "updated_at"
     t.string   "abbreviation",            :limit => 10
     t.string   "salt"
+    t.string   "rol"
+    t.boolean  "active"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email"

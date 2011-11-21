@@ -55,22 +55,22 @@ class User < ActiveRecord::Base
   end
 
   # Methods for a defined link
-  [:rol, :active].each do |met|
-    class_eval <<-CODE, __FILE__, __LINE__ + 1
-      def link_#{met}
-        link.#{met}
-      end
-    CODE
-  end
+  #[:rol, :active].each do |met|
+  #  class_eval <<-CODE, __FILE__, __LINE__ + 1
+  #    def link_#{met}
+  #      link.#{met}
+  #    end
+  #  CODE
+  #end
 
   # returns the organisation which one is logged in
   def organisation
     Organisation.find(OrganisationSession.organisation_id)
   end
 
-  def rol
-    link.rol
-  end
+  #def rol
+  #  link.rol
+  #end
 
   def self.admin_gerency?(val)
     ROLES.slice(0, 2).include? val
