@@ -2,7 +2,7 @@ class AddUsersRol < ActiveRecord::Migration
   def up
     change_table :users do |t|
       t.string :rol
-      t.boolean :active
+      t.boolean :active, :default => true
     end
   end
 
