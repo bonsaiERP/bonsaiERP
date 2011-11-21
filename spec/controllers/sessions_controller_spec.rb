@@ -48,9 +48,11 @@ describe SessionsController do
 
     it 'should redirect to /dashboard if created tenant' do
       user_mock.stub!(:organisations => [mock_model(Organisation, :id => 1)],
-                     :links => [mock_model(Link, rol: 'admin')])
+                      active: true, active?: true,
+                     :links => [mock_model(Link, rol: 'admin')], rol: "admin", active: true)
       
       User.stub!(:find_by_email).with("demo@example.com").and_return(user_mock)
+      User.stub!(find: user_mock)
 
       PgTools.stub!(schema_exists?: true)
 
@@ -60,6 +62,24 @@ describe SessionsController do
       post "create", :user => {:email => "demo@example.com", :password => "demo123"}
 
       response.should redirect_to "/dashboard"
+    end
+
+    it 'should redirect to sign_out if user not active' do
+      user_mock.stub!(:organisations => [mock_model(Organisation, :id => 1)],
+                      active: false, active?: false,
+                     :links => [mock_model(Link, rol: 'admin')], rol: "admin", active: true)
+      
+      User.stub!(:find_by_email).with("demo@example.com").and_return(user_mock)
+      User.stub!(find: user_mock)
+
+      PgTools.stub!(schema_exists?: true)
+
+      controller.stub!(:current_user => user_mock, :set_organisation_session => true)
+      PgTools.stub!(set_search_path: Object.new)
+
+      post "create", :user => {:email => "demo@example.com", :password => "demo123"}
+
+      response.should redirect_to "/users/sign_out"
     end
 
     it 'should render the new template when incorrect password' do

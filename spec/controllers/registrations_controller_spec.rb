@@ -24,12 +24,13 @@ describe RegistrationsController do
     end
 
     it 'should redirect to /dashboard if it has organisation' do
-      user_stubs = stub(:confirm_token => true, :id => 1, 
+      user_stubs = stub(:confirm_token => true, :id => 1, rol: "admin", 
+                        active: true, active?: true,
                         links: [mock_model(Link, rol: "admin")],
                         :organisations => [mock_model(Organisation, id: 1)]
           )
       User.stub!(find: user_stubs, find_by_id: user_stubs)
-      PgTools.stub!(schema_exists?: true)
+      PgTools.stub!(schema_exists?: true, set_search_path: true)
       controller.stub!( :set_organisation_session => true )
 
       get 'show', :id => 1, :token => "demo123"
@@ -49,14 +50,15 @@ describe RegistrationsController do
 
   describe "GET registrations if logged user" do
     it 'should redirect to dashboard if logged user' do
-      user_stubs = stub(:confirm_token => true, :id => 1, 
+      user_stubs = stub(:confirm_token => true, :id => 1, rol: "admin", 
+                        active: true, active?: true,
                         links: [mock_model(Link, rol: "admin")],
                         :organisations => [mock_model(Organisation, id: 1)]
           )
       session[:user_id] = 1
       User.stub!(find: user_stubs)
       controller.stub!(:set_organisation_session => true)
-      PgTools.stub!(schema_exists?: true)
+      PgTools.stub!(schema_exists?: true, set_search_path: true)
 
       get 'new'
       response.should redirect_to("/dashboard")

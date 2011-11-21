@@ -18,14 +18,14 @@
         %th Rol
         %th Activo
         %th
-      - @links.each do |link|
+      - @users.each do |user|
         %tr
-          %td= link_to link.user, link.user
-          %td= link.user.email
-          %td= User.roles_hash[link.rol]
-          %td{:class => link.active.to_s }
+          %td= link_to user, user
+          %td= user.email
+          -#%td= User.roles_hash[link.rol]
+          %td{:class => '' }
           %td
-            = link_to "editar", edit_user_user_path(link.user), :class => 'edit', :title => 'Editar usuario'
+            = link_to "editar", edit_user_user_path(user), :class => 'edit', :title => 'Editar usuario'
 
   #organisation
     = link_to "Editar datos empresa", "/organisations/#{session[:organisation][:id]}/edit", :class => 'edit link'
