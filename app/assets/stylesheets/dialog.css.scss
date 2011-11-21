@@ -5,7 +5,7 @@
 @import "forms.css.scss";
 @import "dashboard.css.scss";
 @import "flash.css.scss";
-@import "fancy_forms.css.scss";
+//@import "fancy_forms.css.scss";
 
 body {
     margin: 120px auto;
@@ -43,6 +43,12 @@ body {
             border: none;
             background-color: #fff;
             padding:0;
+            div.input {
+                width: 100%;
+                input {
+                    width: 99%; 
+                }
+            }
         }
         span.signup {
             @extend .button-gray;
