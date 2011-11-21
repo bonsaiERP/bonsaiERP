@@ -30,6 +30,6 @@
     =tab "Ventas", account_path(@account, :tab => 'incomes'),"incomes"
     =tab "Compras", account_path(@account, :tab => 'buys'),"buys"
     =tab "Gastos", account_path(@account, :tab => 'expenses'),"expenses"
-  %p &nbsp;
-  = render @partial, @locals
+  = tab_panel do
+    = render @partial, @locals
 
