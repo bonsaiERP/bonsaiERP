@@ -135,9 +135,15 @@ module ApplicationHelper
   end
 
   def tab(text, url, type)
-    css = "ui-tabs ui-tabs-nav"
-    css << " ui-tabs-selected li ui-state-active ui-corner-top" if type === params[:tab]
+    css = "ui-state-default ui-corner-top"
+    css << " ui-tabs-selected ui-state-active" if type === params[:tab]
     content_tag(:li, link_to(text, url), :class => css)
+  end
+
+  def tab_panel
+    content_tag(:div, :class => "ui-tabs-panel ui-widget-content ui-corner-bottom") do
+      yield
+    end
   end
 
   # returns the minus image with a size
