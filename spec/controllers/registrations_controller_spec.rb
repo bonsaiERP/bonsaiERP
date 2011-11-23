@@ -56,7 +56,7 @@ describe RegistrationsController do
                         :organisations => [mock_model(Organisation, id: 1)]
           )
       session[:user_id] = 1
-      User.stub!(find: user_stubs)
+      User.stub!(find: user_stubs, find_by_id: user_stubs)
       controller.stub!(:set_organisation_session => true)
       PgTools.stub!(schema_exists?: true, set_search_path: true)
 
