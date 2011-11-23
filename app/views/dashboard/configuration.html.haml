@@ -22,8 +22,8 @@
         %tr
           %td= link_to user, user
           %td= user.email
-          -#%td= User.roles_hash[link.rol]
-          %td{:class => '' }
+          %td= User.roles_hash[user.rol]
+          %td{:class => user.active }
           %td
             = link_to "editar", edit_user_user_path(user), :class => 'edit', :title => 'Editar usuario'
 

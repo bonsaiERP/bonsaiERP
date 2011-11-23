@@ -1,3 +1,4 @@
+# encoding: utf-8
 namespace :bonsai do
   # Adds all modifications to the locales to be translated
   desc 'Updates all locales with the english version'
@@ -161,19 +162,65 @@ namespace :bonsai do
 
   desc "Migrates all databases"
   task :migrate => :environment do
-      PgTools.reset_search_path
-      ActiveRecord::Migration.verbose = verbose
+    PgTools.reset_search_path
+    ActiveRecord::Migration.verbose = verbose
 
-      Organisation.all.each do |org|
-        ActiveRecord::Base.transaction do
-          PgTools.reset_search_path
-          schema = PgTools.get_schema_name(org.id)
-          puts "migrating #{schema})"
-          PgTools.set_search_path schema
-          version = ENV["VERSION"] ? ENV["VERSION"].to_i : nil
-          ActiveRecord::Migrator.migrate("db/migrate/", version)
-        end
+    Organisation.all.each do |org|
+      ActiveRecord::Base.transaction do
+        PgTools.reset_search_path
+        schema = PgTools.get_schema_name(org.id)
+        puts "migrating #{schema})"
+        PgTools.set_search_path schema
+        version = ENV["VERSION"] ? ENV["VERSION"].to_i : nil
+        ActiveRecord::Migrator.migrate("db/migrate/", version)
       end
+    end
+  end
+
+  task :migrate_schemas => :environment do
+    PgTools.reset_search_path
+    ActiveRecord::Migration.verbose = verbose
+
+    PgTools.all_schemas.each do |schema|
+      ActiveRecord::Base.transaction do
+        PgTools.reset_search_path
+        puts "migrating #{schema})"
+        PgTools.set_search_path schema
+        version = ENV["VERSION"] ? ENV["VERSION"].to_i : nil
+        ActiveRecord::Migrator.migrate("db/migrate/", version)
+      end
+    end
+  end
+
+  desc "Creates the base accounts for bonsai"
+  task :create_accounts => :environment do
+    ClientAccount.create!(
+     :name => "Inicial", :users => 1,  :agencies => 1,
+     :branding => false, :disk_space => 10, :backup => "none",
+     :stored_backups => 0, :api => false, :report => false,
+     :third_party_apps => true, :free_days => 0, :email => false
+    )
+
+    ClientAccount.create!(
+     :name => "Escencial", :users => 2,  :agencies => 1,
+     :branding => false, :disk_space => 100,  :backup => "week",
+     :stored_backups => 1, :api => true,  :report => true,
+     :third_party_apps => true, :free_days => 0, :email => false
+    )
+
+    ClientAccount.create!(
+     :name => "Básico", :users => 5,  :agencies => 3,
+     :branding => true, :disk_space => 200, :backup => "day",
+     :stored_backups => 1, :api => true, :report => true,
+     :third_party_apps => true, :free_days => 0, :email => true
+    )
+
+    ClientAccount.create!(
+     :name => "Intermedio", :users => 10,  :agencies => 3,
+     :branding => true, :disk_space => 400, :backup => "day",
+     :stored_backups => 7, :api => true, :report => true,
+     :third_party_apps => true, :free_days => 0, :email => true
+    )
   end
 end
 

@@ -38,8 +38,8 @@ class RegistrationsController < ApplicationController
     @user = User.new_user(email, password)
 
     respond_to do |format|
-      if @user.save
-        format.html { redirect_to "/registrations/", :notice => "Se ha registrado exitosamente!. Se le ha enviado un email a <strong>#{@user.email}</strong> con instrucciones para concluir el registro."}
+      if @user.save_user
+        format.html { redirect_to "/registrations/", :notice => "Se ha registrado exitosamente!. Se le ha enviado un email a <strong>#{@user.email}</strong> con instrucciones para concluir el registro.".html_safe}
       else
         format.html { render 'new'}
       end
