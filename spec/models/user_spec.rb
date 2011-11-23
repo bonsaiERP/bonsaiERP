@@ -110,6 +110,8 @@ describe User do
       PgTools.reset_search_path
       PgTools.set_search_path "schema1"
       ActiveRecord::Base.connection.execute("TRUNCATE users")
+      Organisation.stub!(find: mock_model(Organisation, id: 1, client_account_id: 2))
+      ClientAccount.stub(find: mock_model(ClientAccount, users: 2))
     end
 
     it 'should add organisation user' do
@@ -193,12 +195,14 @@ describe User do
     before(:each) do
       OrganisationSession.set :id => 1
       RegistrationMailer.stub!(:send_registration => stub(:deliver => true))
+      Organisation.stub!(find: mock_model(Organisation, id: 1, client_account_id: 2))
+      ClientAccount.stub(find: mock_model(ClientAccount, users: 2))
     end
 
     let!(:user) {
       user = User.new_user("admin@example.com", "demo123")
       user.save_user.should be_true
-      user.add_company_user(user_params)
+      user.add_company_user(user_params).should be_true
       user = user.created_user
       user.confirm_token(user.confirmation_token)
       user.update_default_password(pass_params)
@@ -246,6 +250,8 @@ describe User do
       OrganisationSession.set :id => 1
       RegistrationMailer.stub!(:send_registration => stub(:deliver => true))
       ResetPasswordMailer.stub!(send_reset_password: stub(deliver: true))
+      Organisation.stub!(find: mock_model(Organisation, id: 1, client_account_id: 2))
+      ClientAccount.stub(find: mock_model(ClientAccount, users: 2))
     end
 
     let!(:user) {

@@ -105,6 +105,17 @@ class User < ActiveRecord::Base
 
   # Adds a new user for the company
   def add_company_user(params)
+    PgTools.set_search_path PgTools.get_schema_name(OrganisationSession.organisation_id)
+    users = User.count
+    PgTools.reset_search_path
+    org = Organisation.find(OrganisationSession.organisation_id)
+    acc = ClientAccount.find(org.client_account_id)
+    
+    if users >= acc.users
+      self.errors[:base] = I18n.t("errors.messages.user.user_limit")
+      return false
+    end
+
     self.attributes = params
     self.email = params[:email]
 
