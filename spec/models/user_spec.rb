@@ -49,6 +49,7 @@ describe User do
     u.confirm_token(u.confirmation_token).should be_true
   end
 
+  ########################################
   describe "new_user" do
 
     it 'should not allow login unconfirmed accounts' do
@@ -86,13 +87,17 @@ describe User do
     end
 
   end
+  ########################################
 
+  ########################################
   describe "New user with change_default_password = false" do
     subject { User.new }
 
     it {should_not be_change_default_password}
   end
+  ########################################
 
+  ########################################
   describe "Add a company user" do
     let(:user_params) {
       {:email => 'other@example.com', :first_name => 'Other',
@@ -180,8 +185,20 @@ describe User do
       p_params = pass_params.dup.merge(:old_password => user.temp_password)
       user.update_password(p_params).should be_false
     end
-  end
 
+    it 'should not allow to add more users' do
+      User.stub!(count: 2)
+
+      user = User.new
+
+      user.add_company_user(user_params).should be_false
+      user.errors[:base].should_not be_empty
+      user.errors[:base].should be_include(I18n.t("errors.messages.user.user_limit") )
+    end
+  end
+  ########################################
+
+  ########################################
   describe "Update password" do
     let(:pass_params) {
       {:password => "demo123", :password_confirmation => "demo123",
@@ -236,6 +253,7 @@ describe User do
     end
   end
 
+  ########################################
   describe "reset password" do
     let(:pass_params) {
       {:password => "demo123", :password_confirmation => "demo123",
@@ -301,4 +319,5 @@ describe User do
       user.can_reset_password?.should be_false
     end
   end
+  ########################################
 end
