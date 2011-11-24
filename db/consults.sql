@@ -1,10 +1,13 @@
+-- Users in organisation MySQL
 SELECT links.user_id, users.email, CONCAT(users.first_name, users.last_name) AS user_name
-, organisations.name AS organisation
+, organisations.name AS organisation, organisations.id AS organisation_id
 FROM links
 JOIN organisations ON ( organisations.id = links.organisation_id ) 
 JOIN users ON (users.id = links.user_id)
-ORDER BY links.organisation_id;
+ORDER BY links.organisation_id
+LIMIT 0, 100;
 
+-- Ussage MySQL
 SELECT organisations.id, organisations.name, SUM(org_trans) AS org_trans,
 SUM(org_ledgers) AS org_ledgers, SUM(org_items) AS org_items, SUM(org_contacts) AS org_contacts
 FROM organisations
@@ -26,3 +29,4 @@ JOIN (
   FROM contacts GROUP BY contacts.organisation_id
 ) AS tmp ON (tmp.organisation_id = organisations.id)
 GROUP BY tmp.organisation_id
+LIMIT 0, 100;
