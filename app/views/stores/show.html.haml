@@ -41,9 +41,8 @@
   = jqueryui_ul do
     = tab "Inventario de items", store_path(@store, :tab => "items"), "items"
     = tab "Operaciones realizadas", store_path(@store, :tab => "operations"), "operations"
-
-  %p &nbsp;
-  = render @partial, :store => @store
+  = tab_panel do
+    = render @partial, :store => @store
 
 :javascript
   $(function() {

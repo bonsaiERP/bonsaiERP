@@ -40,8 +40,8 @@
       =tab "Operaciones inventarios", client_path(@client, :tab => 'inventory'), "inventory"
       
     -# "contacts/account_ledgers", "contacts/inconmes", "contacts/buys", "contacts/inventory_operations"
-    = render @partial, @locals
-
+    = tab_panel do
+      = render @partial, @locals
 
   :javascript
     $(function() {
