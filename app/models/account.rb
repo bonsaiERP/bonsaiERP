@@ -38,6 +38,8 @@ class Account < ActiveRecord::Base
 
   # scopes
   scope :money, where(:accountable_type => "MoneyStore")
+  scope :bank, where(:original_type => "Bank")
+  scope :cash, where(:original_type => "Cash")
   scope :contact, where(:accountable_type => "Contact")
   scope :client, where(:original_type => "Client")
   scope :supplier, where(:original_type => "Supplier")

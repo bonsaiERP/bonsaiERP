@@ -23,29 +23,37 @@
   .clear
 
   %ul.isotope-widgets.isotope-container.isotope
-    %li.isotope-item
-      =link_to incomes_path(:option=>'awaiting_payment'), :class => 'button-blue ui-corner-all' do
-        - presenter.accounts_to_recieve.each do |cur, amt|
-          %strong #{cur} #{ntc amt}
-          -# TODO: Return 0 if nil
-        %span Nos deben
+    - if presenter.accounts_to_recieve.any?
+      %li.isotope-item
+        =link_to incomes_path(:option=>'awaiting_payment'), :class => 'button-blue ui-corner-all' do
+          - presenter.accounts_to_recieve.each do |cur, amt|
+            %strong #{cur} #{ntc amt}
+          %span Nos deben
 
-    %li.isotope-item
-      =link_to buys_path(:option=>'awaiting_payment'), :class => 'button-red ui-corner-all' do
-        - presenter.accounts_to_pay.each do |cur, amt|
-          %strong #{cur} #{ntc amt}
-          -# TODO: Return 0 if nil
-        %span Debemos
+    - presenter.accounts_to_pay.each do |cur, amt|
+      %li.isotope-item
+        =link_to buys_path(:option=>'awaiting_payment'), :class => 'button-red ui-corner-all' do
+          %strong 
+            =cur 
+            =ntc amt
+          %span.b Debemos #{cur}
 
-    %li.isotope-item
-      =link_to 'banks', :class => 'button-green ui-corner-all' do
-        %strong ??? Bs.
-        %span Dinero en Banco
+    
+    - presenter.total_money(:bank).each do |cur, amt|
+      %li.isotope-item
+        =link_to '/banks', :class => 'button-green ui-corner-all' do
+          %strong
+            = cur
+            = ntc amt
+          %span.b Bancos #{cur}
 
-    %li.isotope-item
-      =link_to 'cashes', :class => 'button-green ui-corner-all' do
-        %strong ??? Bs.
-        %span Dinero en Caja
+    - presenter.total_money(:cash).each do |cur, amt|
+      %li.isotope-item
+        =link_to '/cashes', :class => 'button-green ui-corner-all' do
+          %strong
+            = cur
+            = ntc amt
+          %span.b Cajas #{cur}
 
     - presenter.pendent_conciliations.each do |cur, al|
       %li.isotope-item
