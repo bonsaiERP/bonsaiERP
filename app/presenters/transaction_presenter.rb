@@ -249,7 +249,10 @@ class TransactionPresenter < BasePresenter
     Hash[Currency.all.map{|v| [v.id, {:currency_id => v.id}]}]
   end
 
-private
+  ################################################################
+  # PRIVATE
+  private
+
   def allow_action?
     allow_transaction_action?(transaction)
     #case

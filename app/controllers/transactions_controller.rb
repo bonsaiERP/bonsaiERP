@@ -112,6 +112,9 @@ class TransactionsController < ApplicationController
   # Allows actions
   def allow_transaction_action?(transaction)
     return false unless User::ROLES.include?(session[:user][:rol])
+    return false if transaction.paid?
+
+    trans = transaction.class
 
     case
     when transaction.draft?

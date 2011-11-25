@@ -194,33 +194,41 @@ namespace :bonsai do
 
   desc "Creates the base accounts for bonsai"
   task :create_accounts => :environment do
+    name = "Inicial"
     ClientAccount.create!(
-     :name => "Inicial", :users => 1,  :agencies => 1,
+     :name => name, :users => 1,  :agencies => 1,
      :branding => false, :disk_space => 10, :backup => "none",
      :stored_backups => 0, :api => false, :report => false,
      :third_party_apps => true, :free_days => 0, :email => false
-    )
+    ) unless ClientAccount.find_by_name(name)
+    puts "Created account #{name}"
 
+    name = "Esencial"
     ClientAccount.create!(
-     :name => "Escencial", :users => 2,  :agencies => 1,
+     :name => name, :users => 2,  :agencies => 1,
      :branding => false, :disk_space => 100,  :backup => "week",
      :stored_backups => 1, :api => true,  :report => true,
      :third_party_apps => true, :free_days => 0, :email => false
-    )
+    ) unless ClientAccount.find_by_name(name)
+    puts "Created account #{name}"
 
+    name = "Básico"
     ClientAccount.create!(
-     :name => "Básico", :users => 5,  :agencies => 3,
+     :name => name, :users => 5,  :agencies => 3,
      :branding => true, :disk_space => 200, :backup => "day",
      :stored_backups => 1, :api => true, :report => true,
      :third_party_apps => true, :free_days => 0, :email => true
-    )
+    ) unless ClientAccount.find_by_name(name)
+    puts "Created account #{name}"
 
+    name = "Intermedio"
     ClientAccount.create!(
-     :name => "Intermedio", :users => 10,  :agencies => 3,
+     :name => name, :users => 10,  :agencies => 3,
      :branding => true, :disk_space => 400, :backup => "day",
      :stored_backups => 7, :api => true, :report => true,
      :third_party_apps => true, :free_days => 0, :email => true
-    )
+    ) unless ClientAccount.find_by_name(name)
+    puts "Created account #{name}"
   end
 end
 

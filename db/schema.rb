@@ -280,7 +280,7 @@ ActiveRecord::Schema.define(:version => 20111123171035) do
     t.boolean  "base_accounts",                    :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "client_account_id"
+    t.integer  "client_account_id",                :default => 1
   end
 
   add_index "organisations", ["client_account_id"], :name => "index_organisations_on_client_account_id"
@@ -533,7 +533,7 @@ ActiveRecord::Schema.define(:version => 20111123171035) do
     t.string   "abbreviation",            :limit => 10
     t.string   "salt"
     t.string   "rol"
-    t.boolean  "active"
+    t.boolean  "active",                                 :default => true
   end
 
   add_index "users", ["email"], :name => "index_users_on_email"
