@@ -17,7 +17,6 @@ tmp/
 log/*.log
 .bundle
 config/database.yml
-public/assets/
 public/javascripts/plugins.js
 public/javascripts/scripts.js
 doc/wireframes/images/*.*
