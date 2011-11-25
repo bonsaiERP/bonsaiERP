@@ -186,3 +186,7 @@ git push origin :branchname # Remove branch
 git push origin :refs/tags/tagname #Remove tag
 
 /home/bonsai/.rvm/wrappers/ruby-1.9.3-p0@rails3.1/rake
+
+rake qu:work
+CTR+Z
+disown
