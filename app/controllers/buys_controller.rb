@@ -119,5 +119,13 @@ class BuysController < TransactionsController
 
   def set_transaction
     @transaction = Buy.find(params[:id])
+    check_edit if ["edit", "update"].include?(params[:action])
+  end
+
+  def check_edit
+    unless allow_transaction_action?(@transaction)
+      flash[:warning] = "No es posible editar la nota de compra."
+      return redirect_to @transaction
+    end
   end
 end

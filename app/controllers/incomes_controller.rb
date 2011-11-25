@@ -142,14 +142,14 @@ class IncomesController < TransactionsController #ApplicationController
 
   def set_transaction
     @transaction = Income.find(params[:id])
-    check_transaction_operation if ["edit", "update"].include?(params[:action])
+    check_edit if ["edit", "update"].include?(params[:action])
   end
 
   # Checks for transactions to edit
-  def check_transaction_operation
+  def check_edit
     unless allow_transaction_action?(@transaction)
       flash[:warning] = "No es posible editar la nota de venta."
-      return redirect_to transactions_path
+      return redirect_to @transaction
     end
   end
 
