@@ -15,6 +15,15 @@ class DashboardPresenter < BasePresenter
     end
   end
 
+  # Return the total of bank or 
+  def total_money(type)
+    return false unless [:bank, :cash].include?(type)
+
+    Account.send(type).group(:currency_id).sum(:amount).map do |cur_id, amt|
+      [currencies[cur_id], amt]
+    end
+  end
+
   def accounts_to_recieve
     tot_accounts = Account.to_recieve.group(:currency_id).sum(:amount)
     tot_incomes  = Income.approved.group(:currency_id).sum(:balance)
@@ -24,6 +33,10 @@ class DashboardPresenter < BasePresenter
       s = tot_accounts[cur_id].to_f.abs + tot_incomes[cur_id].to_f
       [currencies[cur_id], s]
     end
+  end
+
+  def currencies
+    @currencies ||= Hash[Currency.scoped.values_of(:id, :symbol)]
   end
 
   def accounts_to_pay
