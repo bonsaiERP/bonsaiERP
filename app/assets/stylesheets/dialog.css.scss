@@ -44,9 +44,9 @@ body {
             background-color: #fff;
             padding:0;
             div.input {
-                width: 100%;
+                width: 99%;
                 input {
-                    width: 99%; 
+                    width: 99% !important; 
                 }
             }
         }

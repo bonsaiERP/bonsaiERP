@@ -38,7 +38,6 @@
             =ntc amt
           %span.b Debemos #{cur}
 
-    
     - presenter.total_money(:bank).each do |cur, amt|
       %li.isotope-item
         =link_to '/banks', :class => 'button-green ui-corner-all' do
@@ -70,5 +69,5 @@
         = link_to store_path(st_id, :option => 'minimum', :tab => 'items'), :class => 'button-red ui-corner-all' do
           %strong #{min} items
           %span
-            = store
+            Para reabastecerse en "#{store}"
 

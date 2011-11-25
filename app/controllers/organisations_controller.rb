@@ -5,8 +5,9 @@ class OrganisationsController < ApplicationController
   before_filter :check_authorization!
   before_filter :reset_search_path
   before_filter :destroy_organisation_session!, :except => [ :select, :edit, :update, :edit_preferences, :update_preferences ]
-
+  layout "dialog", :only => [:new]
   respond_to :html, :xml, :json
+
   # GET /organisations
   # GET /organisations.xml
   def index
