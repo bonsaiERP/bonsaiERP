@@ -2,7 +2,7 @@ module Models::User::Authentication
   extend ActiveSupport::Concern
 
   included do 
-    after_create :set_token_and_send_email
+    after_create :set_token_and_send_email, :if => :send_email?
   end
 
   module InstanceMethods
@@ -47,6 +47,7 @@ module Models::User::Authentication
     # Resets the password to allow edit the password
     def reset_password
       ret = true
+
       self.reset_password_token   = SecureRandom.urlsafe_base64(16)
       self.reset_password_sent_at = Time.zone.now
       self.class.transaction do

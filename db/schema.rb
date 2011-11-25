@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111121204629) do
+ActiveRecord::Schema.define(:version => 20111123171035) do
 
   create_table "account_ledger_details", :force => true do |t|
     t.integer  "account_id"
@@ -112,6 +112,23 @@ ActiveRecord::Schema.define(:version => 20111121204629) do
   add_index "accounts", ["currency_id"], :name => "index_accounts_on_currency_id"
   add_index "accounts", ["original_type"], :name => "index_accounts_on_original_type"
   add_index "accounts", ["type"], :name => "index_accounts_on_type"
+
+  create_table "client_accounts", :force => true do |t|
+    t.string   "name"
+    t.integer  "users"
+    t.integer  "agencies"
+    t.boolean  "branding"
+    t.integer  "disk_space"
+    t.string   "backup"
+    t.integer  "stored_backups"
+    t.boolean  "api"
+    t.boolean  "report"
+    t.boolean  "third_party_apps"
+    t.integer  "free_days"
+    t.boolean  "email"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "contacts", :force => true do |t|
     t.string   "matchcode"
@@ -249,22 +266,24 @@ ActiveRecord::Schema.define(:version => 20111121204629) do
   create_table "organisations", :force => true do |t|
     t.integer  "country_id"
     t.integer  "currency_id"
-    t.string   "name",          :limit => 100
+    t.string   "name",              :limit => 100
     t.string   "address"
     t.string   "address_alt"
-    t.string   "phone",         :limit => 20
-    t.string   "phone_alt",     :limit => 20
-    t.string   "mobile",        :limit => 20
+    t.string   "phone",             :limit => 20
+    t.string   "phone_alt",         :limit => 20
+    t.string   "mobile",            :limit => 20
     t.string   "email"
     t.string   "website"
     t.integer  "user_id"
     t.date     "due_date"
     t.text     "preferences"
-    t.boolean  "base_accounts",                :default => false
+    t.boolean  "base_accounts",                    :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "client_account_id"
   end
 
+  add_index "organisations", ["client_account_id"], :name => "index_organisations_on_client_account_id"
   add_index "organisations", ["country_id"], :name => "index_organisations_on_country_id"
   add_index "organisations", ["currency_id"], :name => "index_organisations_on_currency_id"
   add_index "organisations", ["due_date"], :name => "index_organisations_on_due_date"

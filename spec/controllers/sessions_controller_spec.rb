@@ -52,7 +52,7 @@ describe SessionsController do
                      :links => [mock_model(Link, rol: 'admin')], rol: "admin", active: true)
       
       User.stub!(:find_by_email).with("demo@example.com").and_return(user_mock)
-      User.stub!(find: user_mock)
+      User.stub!(find: user_mock, find_by_id: user_mock)
 
       PgTools.stub!(schema_exists?: true)
 
@@ -70,7 +70,7 @@ describe SessionsController do
                      :links => [mock_model(Link, rol: 'admin')], rol: "admin", active: true)
       
       User.stub!(:find_by_email).with("demo@example.com").and_return(user_mock)
-      User.stub!(find: user_mock)
+      User.stub!(find: user_mock, find_by_id: user_mock)
 
       PgTools.stub!(schema_exists?: true)
 

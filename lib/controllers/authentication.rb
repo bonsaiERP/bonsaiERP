@@ -32,7 +32,8 @@ module Controllers::Authentication
       when( orgs.any? and schema )
         set_organisation_session(current_user.organisations.first)
         PgTools.set_search_path PgTools.get_schema_name(org_id)
-        user = User.find(session[:user_id])
+        rnd = rand()
+        user = User.where("#{rnd} = #{rnd}").find_by_id(session[:user_id])
         # Check if user is active
         if user.active?
           session[:user] = {:rol => user.rol }

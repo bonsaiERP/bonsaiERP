@@ -4,7 +4,7 @@
 class Organisation < ActiveRecord::Base
   # callbacks
   before_validation :set_user, :if => :new_record?
-  before_create :set_due_date
+  #before_create :set_due_date
   before_create :create_link
   
   DATA_PATH = "db/defaults"
@@ -17,6 +17,8 @@ class Organisation < ActiveRecord::Base
   # relationships
   belongs_to :org_country, :foreign_key => :country_id
   belongs_to :currency
+  # To control to which account it belongs
+  belongs_to :client_account
 
   # users links
   has_many :links, :dependent => :destroy, :autosave => true

@@ -52,6 +52,8 @@ class OrganisationsController < ApplicationController
   # POST /organisations
   def create
     @organisation = Organisation.new(params[:organisation])
+    @organisation.client_account_id = ClientAccount.find_by_name("Inicial").id
+    @organisation.due_date = Date.today
 
     if @organisation.save
       flash[:notice] = "Se ha creado su empresa correctamente."

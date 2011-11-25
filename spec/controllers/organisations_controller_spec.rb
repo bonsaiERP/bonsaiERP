@@ -30,6 +30,7 @@ describe OrganisationsController do
   describe "POST create" do
     before do
       Qu.stub!(enqueue: true)
+      ClientAccount.stub!(find_by_name: stub(id: 1))
     end
 
     describe "with valid params" do

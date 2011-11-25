@@ -14,20 +14,18 @@ describe User do
     expect{ User.create!(params)}.to raise_error
   end
 
-  it 'should create' do
-    User.create!(valid_params) {|u| u.abbreviation = "NEW"}
-  end
-
   it 'should assign a token' do
-    u = User.create!(valid_params) {|u| u.abbreviation = "NEW"}
-    u.confirmation_token.size == 12
+    u = User.new_user("user@mail.com", "demo123")
+    u.save_user.should be_true
+
+    u.confirmation_token.should_not be_blank
     u.confirmation_sent_at.class.to_s == "DateTime"
     u.salt.should_not be_blank
   end
 
-  it 'should conirm the token' do
-    u = User.create!(valid_params) {|u| u.abbreviation = "NEW"}
-    u.confirmated?.should be_false
+  it 'should confirm the token' do
+    u = User.new_user("user@mail.com", "demo123")
+    u.save_user.should be_true
     
     u.confirm_token(u.confirmation_token).should == true
     u.confirmated?.should be_true
@@ -35,34 +33,28 @@ describe User do
 
 
   it 'should conirm the token' do
-    u = User.create!(valid_params) {|u| u.abbreviation = "NEW"}
+    u = User.new_user("user@mail.com", "demo123")
+    u.save_user.should be_true
+    
     u.links.should have(0).elements
   end
 
   it 'should return false if confirmed' do
-    u = User.create!(valid_params) {|u| u.abbreviation = "NEW"}
+    u = User.new_user("user@mail.com", "demo123")
+    u.save_user.should be_true
+    
     u.confirmated?.should be_false
     
     u.confirm_token(u.confirmation_token).should be_true
-    u.confirm_token(u.confirmation_token).should be_false
+    u.confirm_token(u.confirmation_token).should be_true
   end
 
+  ########################################
   describe "new_user" do
-    it 'should create and instance with email, password' do
-      u = User.new_user("demo@example.com", "demo123")
-      u.class.should == User
-
-      u.email.should == "demo@example.com"
-      u.password.should == "demo123"
-      u.abbreviation.should == "GEREN"
-
-      u.save.should be_true
-      u.abbreviation.should == User::ABBREV
-    end
 
     it 'should not allow login unconfirmed accounts' do
       u = User.new_user("demo@example.com", "demo123")
-      u.save.should be_true 
+      u.save_user.should be_true 
       
       u = User.find_by_email("demo@example.com")
       u.authenticate("demo123").should be_false
@@ -71,7 +63,7 @@ describe User do
 
     it 'should authenticate confirmed user' do
       u = User.new_user("demo@example.com", "demo123")
-      u.save.should be_true 
+      u.save_user.should be_true 
       u.confirm_token(u.confirmation_token).should be_true
 
       u = User.find_by_email("demo@example.com")
@@ -81,7 +73,7 @@ describe User do
 
     it 'should use the salt for authentication' do
       u = User.new_user("demo@example.com", "demo123")
-      u.save.should be_true
+      u.save_user.should be_true
       u.confirmed_at.should be_nil
 
       u.confirm_token(u.confirmation_token).should be_true
@@ -95,40 +87,21 @@ describe User do
     end
 
   end
+  ########################################
 
-  describe "User with change_default_password = true" do
-    subject { User.new{|u| u.change_default_password = true } }
-
-    # abbrevation
-    it{ should have_valid(:abbreviation).when("UN") }
-    it{ should_not have_valid(:abbreviation).when("A") }
-    # rolname
-    #it { should have_valid(:rolname).when("gerency")}
-    #it { should_not have_valid(:rolname).when("admin") }
-    #it { should_not have_valid(:rolname).when("pato") }
-  end
-
+  ########################################
   describe "New user with change_default_password = false" do
     subject { User.new }
 
     it {should_not be_change_default_password}
   end
+  ########################################
 
-  describe "Update user" do
-    let!(:user){ User.create!(valid_params) {|u| u.abbreviation = "NEW" } }
-
-    it 'should update params' do
-      user.update_attributes(:first_name => "New name", :last_name => "Other name").should be_true
-      user.reload
-      user.first_name.should == "New name"
-      user.last_name.should == "Other name"
-    end
-  end
-
+  ########################################
   describe "Add a company user" do
     let(:user_params) {
       {:email => 'other@example.com', :first_name => 'Other',
-      :last_name => 'User', :abbreviation => 'OUS', :rolname => 'operations'}
+      :last_name => 'User', :rolname => 'operations'}
     }
 
     let(:pass_params) {
@@ -139,20 +112,26 @@ describe User do
     before(:each) do
       OrganisationSession.set :id => 1
       RegistrationMailer.stub!(:send_registration => stub(:deliver => true))
+      PgTools.reset_search_path
+      PgTools.set_search_path "schema1"
+      ActiveRecord::Base.connection.execute("TRUNCATE users")
+      Organisation.stub!(find: mock_model(Organisation, id: 1, client_account_id: 2))
+      ClientAccount.stub(find: mock_model(ClientAccount, users: 2))
     end
 
     it 'should add organisation user' do
       user = User.new
-      user.add_company_user(user_params).should be_true
+      user.add_company_user(user_params)#.should be_true
 
+      PgTools.reset_search_path
+      user = User.first
       user.should be_persisted
       user.confirmation_token.should_not be_blank
       user.should be_change_default_password
 
       user.links.should have(1).element
-      link = user.links.first
-      link.rol.should == 'operations'
-      link.organisation_id.should == 1
+      user.rol.should == 'operations'
+      user.links.first.organisation_id.should == 1
 
       user.confirmed_at.should be_blank
       user.confirm_token(user.confirmation_token)
@@ -162,9 +141,14 @@ describe User do
     it 'should update the default password' do
       user = User.new
 
-      user.add_company_user(user_params).should be_true
+      p = user_params.merge(rolname: "gerency")
+      p[:rolname].should == "gerency"
+      user.add_company_user(p).should be_true
+
+      user = user.created_user
       user.should be_persisted
       user.should be_change_default_password
+      user.rol.should == "gerency"
 
       user.confirm_token(user.confirmation_token).should be_true
 
@@ -176,6 +160,7 @@ describe User do
       user = User.new
 
       user.add_company_user(user_params).should be_true
+      user = user.created_user
       user.should be_persisted
       user.should be_change_default_password
 
@@ -191,6 +176,7 @@ describe User do
       user = User.new
 
       user.add_company_user(user_params).should be_true
+      user = user.created_user
       user.should be_persisted
       user.should be_change_default_password
 
@@ -199,8 +185,20 @@ describe User do
       p_params = pass_params.dup.merge(:old_password => user.temp_password)
       user.update_password(p_params).should be_false
     end
-  end
 
+    it 'should not allow to add more users' do
+      User.stub!(count: 2)
+
+      user = User.new
+
+      user.add_company_user(user_params).should be_false
+      user.errors[:base].should_not be_empty
+      user.errors[:base].should be_include(I18n.t("errors.messages.user.user_limit") )
+    end
+  end
+  ########################################
+
+  ########################################
   describe "Update password" do
     let(:pass_params) {
       {:password => "demo123", :password_confirmation => "demo123",
@@ -214,11 +212,15 @@ describe User do
     before(:each) do
       OrganisationSession.set :id => 1
       RegistrationMailer.stub!(:send_registration => stub(:deliver => true))
+      Organisation.stub!(find: mock_model(Organisation, id: 1, client_account_id: 2))
+      ClientAccount.stub(find: mock_model(ClientAccount, users: 2))
     end
 
     let!(:user) {
-      user = User.new
-      user.add_company_user(user_params)
+      user = User.new_user("admin@example.com", "demo123")
+      user.save_user.should be_true
+      user.add_company_user(user_params).should be_true
+      user = user.created_user
       user.confirm_token(user.confirmation_token)
       user.update_default_password(pass_params)
       user
@@ -251,6 +253,7 @@ describe User do
     end
   end
 
+  ########################################
   describe "reset password" do
     let(:pass_params) {
       {:password => "demo123", :password_confirmation => "demo123",
@@ -258,23 +261,29 @@ describe User do
     }
     let(:user_params) {
       {:email => 'other@example.com', :first_name => 'Other',
-      :last_name => 'User', :abbreviation => 'OUS', :rolname => 'operations'}
+      :last_name => 'User', :rolname => 'operations'}
     }
 
     before(:each) do
       OrganisationSession.set :id => 1
       RegistrationMailer.stub!(:send_registration => stub(:deliver => true))
+      ResetPasswordMailer.stub!(send_reset_password: stub(deliver: true))
+      Organisation.stub!(find: mock_model(Organisation, id: 1, client_account_id: 2))
+      ClientAccount.stub(find: mock_model(ClientAccount, users: 2))
     end
 
     let!(:user) {
       user = User.new
       user.add_company_user(user_params)
+      user = user.created_user
       user.confirm_token(user.confirmation_token)
       user.update_default_password(pass_params)
+      user.confirm_token(user.confirmation_token)
       user
     }
 
     it 'should reset password' do
+      user.rol.should == "operations"
       user.reset_password_token.should be_blank
       user.reset_password_sent_at.should be_blank
       ResetPasswordMailer.stub!(:send_reset_password => stub(:deliver => true))
@@ -286,6 +295,8 @@ describe User do
 
     it 'should allow reset and update password' do
       ResetPasswordMailer.stub!(:send_reset_password => stub(:deliver => true))
+
+      PgTools.reset_search_path
 
       user.reset_password.should be_true
       p_params = {:reset_password_token => user.reset_password_token,
@@ -308,4 +319,5 @@ describe User do
       user.can_reset_password?.should be_false
     end
   end
+  ########################################
 end
