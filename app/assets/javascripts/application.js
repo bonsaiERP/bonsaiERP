@@ -1,5 +1,4 @@
 //
-//= require_self
 //= require jquery
 //= require jquery-ui
 //= require underscore-min.js

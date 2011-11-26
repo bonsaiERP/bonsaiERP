@@ -20,7 +20,7 @@
 
     .clear
 
-    = f.association :project,  :label => 'Proyecto',
+    = f.association :project,  :label => 'Iniciativa',
       :input_html => {'data-new_url' => new_project_path, 'data-title' => "Nueva iniciativa", 'data-trigger' => 'new_project' }
 
     = f.association :currency, :label => 'Moneda/Tipo de cambio. <span class="rate_details n black"></span>'.html_safe, :include_blank => false,
