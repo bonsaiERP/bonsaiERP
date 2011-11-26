@@ -46,7 +46,7 @@ class Transaction < ActiveRecord::Base
 
 
   # Validations
-  #validates :contact_id, :contact => {:clases => ["Client", "Supplier"]}
+  validates :contact_id, :contact => {:clases => ["Client", "Supplier"]}
 
   # scopes
   scope :draft    , where(:state => 'draft')
