@@ -340,6 +340,7 @@ window.TransactionModel = TransactionModel
 # View for the template
 class ExchangeRateDialog extends Backbone.View
   el: $("#exchange_rate")
+  # initialize
   initialize:->
     self = @
     @label = $('label[for=transaction_currency_id]')
@@ -376,9 +377,6 @@ class ExchangeRateDialog extends Backbone.View
       "<strong>", @model.get("default_symbol"), " ", _b.ntc(@model.get("exchange_rate"), 4), "</strong>",
       ' <a href="javascript:;" class="b" id="edit_exchange_rate_link">editar tipo de cambio</a>']
       @label.find("span.rate_details").html(html.join(""))
-
-
-
   # Change in exchange rate
   setExchange: ->
     rate = ($(@el).find("#exchange_rate").val() * 1).round(4)
@@ -389,6 +387,10 @@ class ExchangeRateDialog extends Backbone.View
     @el.find("span.currency_symbol").html(@model.get("currency_symbol"))
     @el.dialog("open")
   closeDialog: ->
+    unless $("#exchange_rate").val().match(/^\d+(\.\d+)?$/)
+      alert("Debe ingresar un número seperado por (.) para los decimales")
+      return false
+
     @.setExchange()
     @el.dialog("close")
 
