@@ -24,7 +24,7 @@
       %tr{ :class => cycle(:odd, :even) }
         %td 
           %span{:class => "#{transaction.real_state} tip", :title => transaction.show_state}
-            %td.tip{:title => 'Seleccionar almacen'}= link_to transaction.ref_number, select_store_inventory_operation_path(transaction, :operation => params[:operation]), :class => 'b'
+            %td.tip{:title => 'Seleccionar almacen'}= link_to transaction.ref_number, select_store_inventory_operation_path(transaction, :operation => params[:operation]), :class => 'b ajax'
         %td= transaction.contact
         %td= lo transaction.payment_date unless transaction.paid?
         %td.cur #{transaction.currency_symbol} #{ntc transaction.total }

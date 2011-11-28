@@ -91,7 +91,6 @@ class InventoryOperationsController < ApplicationController
 
   # Presents the transactions that are IN/OUT
   def transactions
-    @currency_rates = CurrencyRate.current_hash
     params[:operation] = "in" unless ["in", "out"].include?( params[:operation] )
 
     if params[:operation] == "out"
