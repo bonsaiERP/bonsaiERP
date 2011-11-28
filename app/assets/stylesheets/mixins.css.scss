@@ -76,5 +76,5 @@
     background-image:     -ms-linear-gradient(top, $color1, $color2);
     background-image:      -o-linear-gradient(top, $color1, $color2);
     background-image:         linear-gradient(top, $color1, $color2);
-          -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='"$color1"', endColorstr='"$color2"')";
+          -ms-filter: 'progid:DXImageTransform.Microsoft.gradient(startColorstr='$color1', endColorstr='$color2')';
 }
