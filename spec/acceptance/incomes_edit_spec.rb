@@ -100,7 +100,7 @@ feature "Income", "test features" do
     i.transaction_details[1].price.should == 5.5
 
     # Check changes on income in contact_id and ref_number
-    contact_id, ref_number = i.contact_id, i.ref_number
+    contact_id, ref_number, currency_id, exchange_rate = i.contact_id, i.ref_number, i.currency_id, i.exchange_rate
     i.should_not be_draft
     i = Income.find(i.id)
     i.attributes = {ref_number: "NEW CHANGED"}
@@ -113,7 +113,14 @@ feature "Income", "test features" do
     i.contact_id.should == 100
     i.save_trans.should be_false
     i.contact_id.should == contact_id
-    
+
+    # Check change of exchange_rate and currency
+    i = Income.find(i.id)
+    i.attributes = {currency_id: 100, exchange_rate: 2}
+    i.contact_id.should == 1
+    i.save_trans.should be_false
+    i.currency_id.should == currency_id
+    i.exchange_rate.should == exchange_rate
   end
 
 

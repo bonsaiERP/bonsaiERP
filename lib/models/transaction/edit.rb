@@ -15,7 +15,7 @@ module Models::Transaction
       res = true
       update
       return false if transaction.errors.any?
-      return false if changed_contact_or_ref_number?
+      return false if changed_unallowed_changes?
 
       transaction.class.transaction do
         res = @current_ledger.save if @current_ledger
@@ -29,14 +29,17 @@ module Models::Transaction
 
     private
 
-    def changed_contact_or_ref_number?
-      if not(transaction.draft?) 
-        unless transaction.contact_id === old_transaction.contact_id and transaction.ref_number === old_transaction.ref_number
-          #puts "Trans: #{transaction} :COntac: #{transaction.contact_id_changed?}; REF #{transaction.ref_number_changed?}"
-          transaction.reload
-          transaction.errors[:base] << I18n.t("errors.messages.transaction.changes")
-          true
+    def changed_unallowed_changes?
+      if not(transaction.draft?)
+        [:contact_id, :ref_number, :currency_id, :exchange_rate].each do |met|
+          unless transaction.send(met) === old_transaction.send(met)
+            transaction.reload
+            transaction.errors[:base] << I18n.t("errors.messages.transaction.changes")
+            return true
+          end
         end
+
+        false
       end
     end
 
