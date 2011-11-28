@@ -322,4 +322,26 @@ feature "Income", "test features" do
     i.transaction_details[1].errors[:item_id].should_not be_empty
     i.transaction_details[1].should_not be_marked_for_destruction
   end
+
+  scenario "Should not allow greater values" do
+    i = Income.new(income_params)
+    i.save_trans.should be_true
+
+    bal = i.balance
+    i.approve!.should be_true
+    p = i.new_payment(reference: "Idfdf", base_amount: bal -1, account_id: bank_account.id, exchange_rate: 1)
+    i.save_payment.should be_true
+    i.balance.should == 1
+
+    i = Income.find(i.id)
+    p = i.new_payment(reference: "Idfdf", base_amount: 1.20, account_id: bank_account.id, exchange_rate: 1)
+    i.save_payment.should be_false
+    p.errors[:base_amount].should_not be_blank
+
+    # New payment and check balance
+    i = Income.find(i.id)
+    p = i.new_payment(reference: "Idfdf", base_amount: 1.10, account_id: bank_account.id, exchange_rate: 1)
+    i.save_payment.should be_true
+    i.balance.should == 0
+  end
 end

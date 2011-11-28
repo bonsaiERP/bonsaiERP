@@ -9,7 +9,7 @@ class TransactionPresenter < BasePresenter
   end
 
   def clone_link
-    h.link_to "Duplicar", "/#{h.params[:controller]}/new?transaction_id=#{transaction.id}", :class => 'duplicate' if allow_action?
+    h.link_to "Duplicar", "/#{h.params[:controller]}/new?transaction_id=#{transaction.id}", :class => 'duplicate'
   end
 
   def null_link

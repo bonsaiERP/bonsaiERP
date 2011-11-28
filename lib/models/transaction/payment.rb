@@ -14,8 +14,6 @@ module Models::Transaction::Payment
 
     with_options :if => :payment? do |pay|
       pay.validate :valid_number_of_legers
-      #pay.before_save :set_account_ledger_extras#, :if => :payment?
-      #pay.before_validation :set_account_ledger_exchange_rate#, :if => :payment
     end
   end
 
@@ -47,6 +45,7 @@ module Models::Transaction::Payment
     def save_payment
       return false unless payment?
 
+      return false unless valid_ledger_amount?
       mark_paid_pay_plans if credit? # anulate pay_plans if credit
 
 
@@ -57,6 +56,7 @@ module Models::Transaction::Payment
       self.class.transaction do
         res = @current_ledger.save
         self.balance = balance - @current_ledger.amount_currency.abs
+        self.balance = 0 if self.balance < 0
         self.state = 'paid' if balance.round(2) <= 0
 
         res = res && self.save
@@ -67,6 +67,18 @@ module Models::Transaction::Payment
     end
 
     private
+
+    # Checks the amount of a ledger but with the transaction
+    def valid_ledger_amount?
+      val = ( balance - @current_ledger.amount_currency )
+
+      if val < -0.1
+        @current_ledger.errors[:base_amount] << I18n.t("errors.messages.payment.greater_amount")
+        return false
+      end
+
+      true
+    end
 
     def set_current_ledger_data
       set_current_ledger_inverse

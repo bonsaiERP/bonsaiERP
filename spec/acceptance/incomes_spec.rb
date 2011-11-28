@@ -1080,5 +1080,6 @@ feature "Income", "test features" do
     p.amount_currency.should == 15
 
     i.balance.should == i.total - 15
+
   end
 end
