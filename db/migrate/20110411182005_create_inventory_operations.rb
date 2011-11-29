@@ -7,7 +7,7 @@ class CreateInventoryOperations < ActiveRecord::Migration
 
       t.date   :date
       t.string :ref_number
-      t.string :operation
+      t.string :operation, :limit => 10
       t.string :state
       
       t.string :description

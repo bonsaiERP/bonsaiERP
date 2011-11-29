@@ -8,7 +8,7 @@ class Buy < Transaction
   attr_accessible  :ref_number,  :date,                          :contact_id,
                    :project_id,  :currency_id,                   :exchange_rate,
                    :bill_number, :taxis_ids,                     :description,
-                   :transaction_details_attributes
+                   :transaction_details_attributes,              :fact
 
   #validations
   validates             :ref_number,           :presence => true , :uniqueness => true

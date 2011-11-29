@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111123171035) do
+ActiveRecord::Schema.define(:version => 20111129155318) do
 
   create_table "account_ledger_details", :force => true do |t|
     t.integer  "account_id"
@@ -174,24 +174,32 @@ ActiveRecord::Schema.define(:version => 20111123171035) do
   create_table "inventory_operation_details", :force => true do |t|
     t.integer  "inventory_operation_id"
     t.integer  "item_id"
-    t.decimal  "quantity",               :precision => 14, :scale => 2
-    t.decimal  "unitary_cost",           :precision => 14, :scale => 2
+    t.decimal  "quantity",                             :precision => 14, :scale => 2
+    t.decimal  "unitary_cost",                         :precision => 14, :scale => 2
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "store_id"
+    t.integer  "contact_id"
+    t.integer  "transaction_id"
+    t.string   "operation",              :limit => 10
   end
 
+  add_index "inventory_operation_details", ["contact_id"], :name => "index_inventory_operation_details_on_contact_id"
   add_index "inventory_operation_details", ["inventory_operation_id"], :name => "index_inventory_operation_details_on_inventory_operation_id"
   add_index "inventory_operation_details", ["item_id"], :name => "index_inventory_operation_details_on_item_id"
+  add_index "inventory_operation_details", ["operation"], :name => "index_inventory_operation_details_on_operation"
+  add_index "inventory_operation_details", ["store_id"], :name => "index_inventory_operation_details_on_store_id"
+  add_index "inventory_operation_details", ["transaction_id"], :name => "index_inventory_operation_details_on_transaction_id"
 
   create_table "inventory_operations", :force => true do |t|
     t.integer  "store_id"
     t.integer  "transaction_id"
     t.date     "date"
     t.string   "ref_number"
-    t.string   "operation"
+    t.string   "operation",      :limit => 10
     t.string   "state"
     t.string   "description"
-    t.decimal  "total",          :precision => 14, :scale => 2
+    t.decimal  "total",                        :precision => 14, :scale => 2
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "contact_id"
@@ -477,6 +485,7 @@ ActiveRecord::Schema.define(:version => 20111123171035) do
     t.decimal  "original_total",                     :precision => 14, :scale => 2
     t.boolean  "discounted",                                                        :default => false
     t.integer  "modified_by"
+    t.boolean  "fact",                                                              :default => true
   end
 
   add_index "transactions", ["account_id"], :name => "index_transactions_on_account_id"
@@ -492,6 +501,7 @@ ActiveRecord::Schema.define(:version => 20111123171035) do
   add_index "transactions", ["deliver_approver_id"], :name => "index_transactions_on_deliver_approver_id"
   add_index "transactions", ["delivered"], :name => "index_transactions_on_delivered"
   add_index "transactions", ["discounted"], :name => "index_transactions_on_discounted"
+  add_index "transactions", ["fact"], :name => "index_transactions_on_fact"
   add_index "transactions", ["modified_by"], :name => "index_transactions_on_modified_by"
   add_index "transactions", ["nuller_id"], :name => "index_transactions_on_nuller_id"
   add_index "transactions", ["payment_date"], :name => "index_transactions_on_payment_date"

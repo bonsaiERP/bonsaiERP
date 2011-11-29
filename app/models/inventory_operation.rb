@@ -6,7 +6,7 @@ class InventoryOperation < ActiveRecord::Base
   before_create     { self.creator_id = UserSession.user_id }
 
   STATES = ["draft", "approved"]
-  OPERATIONS = ["in", "out", "transference"]
+  OPERATIONS = ["in", "out", "trans"]
 
   belongs_to :transaction
   belongs_to :store

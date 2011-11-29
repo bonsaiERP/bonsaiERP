@@ -180,6 +180,9 @@ feature "Inventory Operation", "Test IN/OUT" do
     io.should be_out
     io.should be_persisted
 
+    iodet1 = io.inventory_operation_details[0]
+    iodet2 = io.inventory_operation_details[1]
+
     i.reload
     dets = i.transaction_details(true)
 
@@ -188,8 +191,19 @@ feature "Inventory Operation", "Test IN/OUT" do
 
     det1.balance.should == 5
     det1.delivered.should == det1.quantity - det1.balance
+
+    iodet1.transaction_id.should == io.transaction_id
+    iodet1.operation.should == io.operation
+    iodet1.store_id.should == io.store_id
+    iodet1.contact_id.should == io.contact_id
+
     det2.balance.should == 10
     det2.delivered.should == det2.quantity - det2.balance
+
+    iodet2.transaction_id.should == io.transaction_id
+    iodet2.operation.should == io.operation
+    iodet2.store_id.should == io.store_id
+    iodet2.contact_id.should == io.contact_id
 
     io.reload
     io.transaction.delivered.should be_false

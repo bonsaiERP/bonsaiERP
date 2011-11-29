@@ -230,6 +230,18 @@ namespace :bonsai do
     ) unless ClientAccount.find_by_name(name)
     puts "Created account #{name}"
   end
+
+  desc "Updates all created inventory_operation_details denormalized_data"
+  task :udpate_inventory_operation_details_denormalized => :environment do
+    Organisation.all.each do |org|
+      PgTools.set_search_path PgTools.get_schema_name org.id
+      InventoryOperation.all.each do |io|
+        InventoryOperationDetails.all.update(["transaction_id = ? AND operaton = ? AND contact_id = ? AND store_id = ? ",
+
+        ])
+      end
+    end
+  end
 end
 
 # example to export the file

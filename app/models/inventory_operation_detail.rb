@@ -5,6 +5,8 @@ class InventoryOperationDetail < ActiveRecord::Base
 
   attr_reader :transaction
 
+  before_create :set_denormalized_data
+
   belongs_to :inventory_operation
   belongs_to :item
 
@@ -22,8 +24,13 @@ class InventoryOperationDetail < ActiveRecord::Base
     @transaction || false
   end
 
-private
+  private
 
+  def set_denormalized_data
+    [:store_id, :contact_id, :transaction_id, :operation].each do |met|
+      self.send(:"#{met}=", inventory_operation.send(met))
+    end
+  end
 
   # Validtes the quantiry for a transaction
   def valid_quantity_for_transaction

@@ -24,8 +24,16 @@
         = transaction.exchange_rate
     .clear
 
-    /.input
-    = f.input :bill_number, :label => 'Nº de Factura o Recibo', :input_html => {:size => 20}
+    ._50.fl
+      .input
+        %label
+          = f.radio_button :fact, true, :class => 'fact'
+          Factura
+        %label
+          = f.radio_button :fact, false, :class => 'fact'
+          Recibo
+      = f.input :bill_number, :label => 'Nº de <span id="fact_label"></span>'.html_safe, :input_html => {:size => 20}
+
     - if transaction.income?
       =f.association :taxes, :as => :check_boxes, :label => 'Impuestos', :wrapper_html => {:id => 'taxes'},
         :label_method => lambda{|tax| "<span id='span#{tax.id}' class='tax' data-rate='#{tax.rate}' title ='#{tax.name}'>#{tax.abbreviation} (#{ntc tax.rate}%)</span>".html_safe }
@@ -55,6 +63,24 @@
       // Autocomplete
       $('#transaction_contact_id').contactAutocomplete(#{get_contact_list.to_json}, {'id': 'contact_autocomplete'});
     
+      // Detect what is selected
+      function checkFact() {
+        var val = "", sel = $('input.fact:checked');
+        if(sel.length == 0) {
+          $('input.fact:first').attr("checked", true);
+          val = "Factura";
+        }else if(sel.length > 0) {
+          val = sel.val() == "true" ? "Factura" : "Recibo"
+        }
+
+        $('#fact_label').html(val);
+      }
+
+      // Check if factura or recibo
+      checkFact();
+
+      $('input.fact').click(function() { checkFact() });
+      
       var type = "#{transaction.type.downcase}";
       // Creation of all Backbone
 

@@ -13,6 +13,7 @@ class Income < Transaction
                    :project_id,  :currency_id,                   :exchange_rate,
                    :discount,    :bill_number,                   :taxis_ids,
                    :description, :transaction_details_attributes, :contact_id
+                   :fact
 
 
   #validations
