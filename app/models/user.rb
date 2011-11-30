@@ -78,10 +78,13 @@ class User < ActiveRecord::Base
       self.errors[:password] << I18n.t("errors.messages.user.password_confirmation")
       return false
     end
-    self.change_default_password = false
-    self.password = pwd
 
-    self.save
+    PgTools.reset_search_path
+    u = User.find_by_id(UserSession.user_id)
+    u.change_default_password = false
+    u.password = pwd
+
+    u.save
   end
 
   def update_password(params)

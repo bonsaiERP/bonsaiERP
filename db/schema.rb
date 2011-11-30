@@ -196,10 +196,10 @@ ActiveRecord::Schema.define(:version => 20111129155318) do
     t.integer  "transaction_id"
     t.date     "date"
     t.string   "ref_number"
-    t.string   "operation",      :limit => 10
+    t.string   "operation"
     t.string   "state"
     t.string   "description"
-    t.decimal  "total",                        :precision => 14, :scale => 2
+    t.decimal  "total",          :precision => 14, :scale => 2
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "contact_id"
@@ -485,7 +485,7 @@ ActiveRecord::Schema.define(:version => 20111129155318) do
     t.decimal  "original_total",                     :precision => 14, :scale => 2
     t.boolean  "discounted",                                                        :default => false
     t.integer  "modified_by"
-    t.boolean  "fact",                                                              :default => true
+    t.boolean  "fact"
   end
 
   add_index "transactions", ["account_id"], :name => "index_transactions_on_account_id"

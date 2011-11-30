@@ -109,6 +109,12 @@ describe User do
       :old_password=> "demo123"}
     }
 
+    let!(:user) {
+      u = User.new_user("demo@example.com", "Demo123")
+      u.save_user.should be_true
+      u
+    }
+
     before(:each) do
       OrganisationSession.set :id => 1
       RegistrationMailer.stub!(:send_registration => stub(:deliver => true))
@@ -121,15 +127,15 @@ describe User do
 
     it 'should add organisation user' do
       user = User.new
-      user.add_company_user(user_params)#.should be_true
+      user.add_company_user(user_params).should be_true
 
-      PgTools.reset_search_path
-      user = User.first
+      #PgTools.reset_search_path
+      user = user.created_user
       user.should be_persisted
       user.confirmation_token.should_not be_blank
       user.should be_change_default_password
 
-      user.links.should have(1).element
+      #user.links.should have(1).element
       user.rol.should == 'operations'
       user.links.first.organisation_id.should == 1
 
@@ -146,6 +152,8 @@ describe User do
       user.add_company_user(p).should be_true
 
       user = user.created_user
+      UserSession.current_user = user
+
       user.should be_persisted
       user.should be_change_default_password
       user.rol.should == "gerency"
@@ -153,7 +161,10 @@ describe User do
       user.confirm_token(user.confirmation_token).should be_true
 
       user.update_default_password(pass_params).should be_true
+      user = User.find_by_id(UserSession.user_id)
       user.should_not be_change_default_password
+      user = User.find(user.id)
+      user.authenticate(pass_params[:password]).should_not be_false
     end
 
     it 'should not update default password if doesn\'t match' do
