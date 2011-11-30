@@ -135,6 +135,8 @@ class IncomesController < TransactionsController #ApplicationController
     @history = TransactionHistory.find(params[:id])
     @trans = @history.transaction
     @transaction = @history.get_transaction("Income")
+    
+    render "transactions/history"
   end
 
   private

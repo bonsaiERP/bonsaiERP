@@ -85,6 +85,9 @@ feature "Income", "test features" do
     i.attributes = edit_params
     i.save_trans.should be_true
     i.reload
+
+    i.transaction_details[1].quantity.should == 5
+    i.transaction_details[1].balance.should == 5
     
     i.transaction_histories.should_not be_empty
     hist = i.transaction_histories.first

@@ -65,9 +65,10 @@
   %ul.fl.w50
     - if @transaction.transaction_histories.any?
       %h3 Historial
-    - @transaction.transaction_histories.each do |t|
+    - @transaction.transaction_histories.order("created_at DESC").each do |t|
       %li
-        =link_to history_income_path(t.id), :title => "#{@transaction} en fecha #{lo t.created_at}", :class => 'ajax', 'data-width' => 950 do
+        =link_to history_income_path(t.id), :title => "#{@transaction} en fecha #{lo t.created_at}", :class => 'ajax',
+          'data-width' => 950, 'data-class' => 'history' do
           = t.user
           %span.i= lo t.created_at
 
