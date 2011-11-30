@@ -322,10 +322,10 @@ a.duplicate{
 /*********************************************/
 
 .ajax-modal{
-  background-color: #FFF !important;
+  background-color: #FFF;
   .links{ display: none; }
   a{
-    color: $link !important;
+    color: $link;
     text-decoration: none;
   }
   a:hover{

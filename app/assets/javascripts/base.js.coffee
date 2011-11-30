@@ -156,8 +156,9 @@ $(document).ready(->
     html = params['html'] || AjaxLoadingHTML()
     div_id = params.id
     div = document.createElement('div')
+    css = "ajax-modal " + params['class'] || ""
     $(div).attr( { 'id': params['id'], 'title': params['title'] } ).data(data)
-    .addClass('ajax-modal').css( { 'z-index': 10000 } ).html(html)
+    .addClass(css).css( { 'z-index': 10000 } ).html(html)
     delete(params['id'])
     delete(params['title'])
     $(div).dialog( params )
