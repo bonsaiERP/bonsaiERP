@@ -50,15 +50,9 @@
       = presenter.render_inventory
       .clear
 
-  %ul
-    - @transaction.transaction_histories.each do |t|
-      %li
-        =link_to history_income_path(@transaction.id), :class => 'ajax' do
-          = t.user
-          %span.i= lo t.created_at
-
   -# User details
-  #users.mt30
+  #users.mt30.fl.w45
+    %p <span class='dark'>Último cambio por:</span> <strong>#{@transaction.modifier}</strong> <i>#{lo @transaction.updated_at}</i>
     - if @transaction.creator_id.present?
       %p <span class='dark'>Creado por:</span> <strong>#{@transaction.creator}</strong> <i>#{lo @transaction.created_at}</i>
 
@@ -67,6 +61,15 @@
 
     - if @transaction.creditor_id.present?
       %p <span class='dark'>Credito aprobado por:</span> <strong>#{@transaction.creditor}</strong> <i>#{lo @transaction.credit_datetime}</i>
+
+  %ul.fl.w50
+    - if @transaction.transaction_histories.any?
+      %h3 Historial
+    - @transaction.transaction_histories.each do |t|
+      %li
+        =link_to history_income_path(t.id), :title => "#{@transaction} en fecha #{lo t.created_at}", :class => 'ajax', 'data-width' => 950 do
+          = t.user
+          %span.i= lo t.created_at
 
 :javascript
   $(function () {

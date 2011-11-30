@@ -47,17 +47,18 @@ Bonsaierp::Application.routes.draw do
   ############################
   resources :incomes do
     member do
-      put 'approve'
-      put 'approve_credit'
-      put 'approve_deliver'
+      put :approve
+      put :approve_credit
+      put :approve_deliver
       get :history
     end
   end
 
   resources :buys do
     member do
-      put 'approve'
-      put 'approve_credit'
+      put :approve
+      put :approve_credit
+      get :history
     end
   end
 

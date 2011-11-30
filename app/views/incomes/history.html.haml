@@ -1,0 +1,84 @@
+:css
+  form{ display: none; }
+%h2 
+  = @trans
+  %i= lo @history.created_at
+
+%h3.n 
+  Usuario:
+  %strong= @history.user
+
+
+- present @transaction, TransactionPresenter do |presenter|
+  -# Render the head of the transaction
+  = render "transactions/head", :presenter => presenter
+
+  .clear
+
+  -# Itemse
+  #items
+    %h2 Items
+
+    %table#items_table.decorated
+      %thead
+        %tr
+          %th Item
+          %th Precio <br/>unitario #{@transaction.currency_symbol}
+          %th Cantidad
+          %th Unidad
+          -#%th Disponible Inventario<br/>Total
+          %th Total fila #{@transaction.currency_symbol}
+
+        - @transaction.transaction_details.each do |det|
+
+          %tr
+            %td= link_to det.item, det.item, :class => 'ajax', 'data-title' => det.item
+            %td.cur= price_change det
+            %td.cur= ntc det.quantity
+            %td.cur= det.item.unit
+            -#%td.cur= ntc det.item.total_stock
+            %td.total_row.cur= ntc det.total
+
+      %tr.extra.pad_top
+        %td
+        %td.r{:colspan => 3} Subtotal
+        %td#subtotal.r= ntc @transaction.gross_total
+
+      %tr.extra
+        %td
+        %td.r{:colspan => 3} #{minus_image} Descuento (<span id="discount_percentage" >#{ntc @transaction.discount}</span>%)
+        %td#discount_total.r= ntc -@transaction.total_discount
+
+      %tr.extra
+        %td
+        %td.r.line{:colspan => 3} Impuestos #{list_taxes @transaction} (<span id="taxes_percentage" >#{ntc @transaction.tax_percent}</span>%)
+        %td#taxes_total.r.line= ntc @transaction.total_taxes
+
+      %tr.extra
+        %td
+          %td.r.b.dark{:colspan => 3} Total
+        %td#total_value.r.b #{@transaction.currency_symbol} #{ntc @transaction.total}
+
+
+      - if not @transaction.currency_id == currency_id
+
+        - unless @transaction.draft?
+          %tr.extra
+            %td
+            %td.r.b.line.dark{:colspan => 3} #{minus_image} Cobrado #{transaction.currency_name.pluralize}
+            %td#total_payments.r.b.line #{@transaction.currency_symbol} #{ntc( @transaction.total_payments)}
+          %tr.extra
+            %td
+            %td.r.b.dark{:colspan => 3} Saldo #{@transaction.currency_name.pluralize}
+            %td#balance.r.b #{@transaction.currency_symbol} #{ntc @transaction.balance}
+
+      - elsif not @transaction.state == 'draft'
+        %tr.extra
+          %td
+          %td.r.b.line.dark{:colspan => 3} #{minus_image} Cobrado
+          %td#total_payments.r.b.line{'data-val' => transaction.total_payments} #{transaction.currency_symbol} #{ntc( transaction.total_payments)}
+        %tr.extra
+          %td
+          %td.r.b.dark{:colspan => 3} Saldo
+          %td#balance.r.b{'data-val' => transaction.balance} #{transaction.currency_symbol} #{ntc transaction.balance}
+
