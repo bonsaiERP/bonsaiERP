@@ -26,6 +26,13 @@ class TransactionPresenter < BasePresenter
     end
   end
 
+  def fact
+    if transaction.bill_number.present?
+      txt = transaction.fact? ? "Factura: " : "Recibo:"
+      "<span class='n'>#{txt}</span> #{transaction.bill_number}".html_safe
+    end
+  end
+
   def currency
     unless h.currency_id === transaction.currency_id
       content_tag(:h3, :class => 'black') do
