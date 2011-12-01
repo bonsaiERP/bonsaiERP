@@ -38,6 +38,24 @@
     %label= st.store
     %h3= st.quantity
 
+.clear
+
+%h3 Kardex de movimientos del ítem
+
+%table.decorated
+  %tr
+    %th Almacen
+    %th Movimiento
+    %th Cantidad
+
+  - @item.inventory_operation_details.each do |det|
+    %tr
+      %td= Store.get_names_hash[det.store_id]
+      - op = det.operation == "in" ? "Ingreso" : "Egreso"
+      - css = det.operation == "in" ? "dark-green" : "red"
+      %td.b{:class => css}= op
+      %td.r= ntc det.quantity
+
 /= javascript_include_tag 'app/item'
 :javascript
   $(function() {

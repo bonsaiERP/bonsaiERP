@@ -236,11 +236,12 @@ namespace :bonsai do
     Organisation.all.each do |org|
       PgTools.set_search_path PgTools.get_schema_name org.id
       InventoryOperation.all.each do |io|
-        InventoryOperationDetails.all.update(["transaction_id = ? AND operaton = ? AND contact_id = ? AND store_id = ? ",
-
+        io.inventory_operation_details.update_all(["transaction_id = ?, operation = ?, contact_id = ?, store_id = ? ",
+          io.transaction_id, io.operation, io.contact_id, io.store_id
         ])
       end
     end
+    puts "Updated inventory_operation_details"
   end
 end
 

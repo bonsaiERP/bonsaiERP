@@ -50,6 +50,10 @@ class Store < ActiveRecord::Base
     #Hash[ st.includes(:item).map {|st| [st.item_id , h.call(st) ] } ]
   end
 
+  def self.get_names_hash
+    @names_hash ||= Hash[Store.scoped.values_of(:id, :name)]
+  end
+
   private
 
   def check_store_for_delete

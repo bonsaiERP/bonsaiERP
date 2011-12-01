@@ -27,6 +27,7 @@ class Item < ActiveRecord::Base
   has_many :prices
   has_many :stocks
   has_many :transaction_details
+  has_many :inventory_operation_details
   
 
   attr_accessible :name, :unit_id, :code, :description, :price, :discount, :tag_list, :unitary_cost, :ctype, :active

@@ -53,15 +53,16 @@
             = ntc amt
           %span.b Cajas #{cur}
 
-    - presenter.pendent_conciliations.each do |cur, al|
-      %li.isotope-item
-        = link_to al, :class => "button-gray ui-corner-all" do
-          %strong
+  .clear
+  .box
+    %h3 Verificaciones pendientes
+    %ul.list
+      - presenter.pendent_conciliations.each do |cur, al|
+        %li
+          = link_to al, :class => "button-gray ui-corner-all" do
+            Verificar
             = cur
             = al.amount
-          %span
-            Verificación pendiente
-            -#= lo al.created_at            
 
     - presenter.minimum_inventory.each do |st_id, store, min|
       %li.isotope-item
