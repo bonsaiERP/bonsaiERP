@@ -18,7 +18,7 @@ class InventoryOperation < ActiveRecord::Base
 
   accepts_nested_attributes_for :inventory_operation_details
 
-  validates_presence_of :ref_number, :store_id
+  validates_presence_of :ref_number, :store_id, :contact_id
   validates_inclusion_of :operation, :in => OPERATIONS
 
   OPERATIONS.each do |op|
