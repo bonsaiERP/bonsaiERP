@@ -346,5 +346,30 @@ feature "Income", "test features" do
     p = i.new_payment(reference: "Idfdf", base_amount: 1.10, account_id: bank_account.id, exchange_rate: 1)
     i.save_payment.should be_true
     i.balance.should == 0
+
+  end
+
+  scenario "Should not allow greater values with other currency" do
+    i = Income.new(income_params.merge(currency_id: 2, exchange_rate: 2))
+    i.save_trans.should be_true
+
+    bal = i.balance
+    i.approve!.should be_true
+
+    i = Income.find(i.id)
+    p = i.new_payment(reference: "Idfdf", base_amount: bal * 2 + 1, account_id: bank_account.id, exchange_rate: 2)
+    i.save_payment.should be_false
+    p.should be_inverse
+
+    i = Income.find(i.id)
+    p = i.new_payment(reference: "Idfdf", base_amount: bal * 2, account_id: bank_account.id, exchange_rate: 2)
+
+    i.save_payment.should be_true
+
+    p = AccountLedger.find(p.id)
+    p.should be_persisted
+    p.should be_inverse
+
+    i.balance.should == 0
   end
 end

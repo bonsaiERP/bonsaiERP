@@ -45,11 +45,10 @@ module Models::Transaction::Payment
     def save_payment
       return false unless payment?
 
+      set_current_ledger_data
       return false unless valid_ledger_amount?
       mark_paid_pay_plans if credit? # anulate pay_plans if credit
 
-
-      set_current_ledger_data
       set_account_ledger_extras
 
       res = true

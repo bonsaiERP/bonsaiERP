@@ -21,6 +21,8 @@ class ExchangeRate extends Backbone.Model
       # Set the currency
       @.set({rate: rate, "currency": @currencies[curr]})
       @.setSuggestRates()
+      @.triggerExchange()
+      @.presentCurrency()
     else
       @$input.val(@.get("rate"))
 

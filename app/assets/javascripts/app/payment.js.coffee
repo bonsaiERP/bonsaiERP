@@ -24,10 +24,6 @@ class Payment
       @.setCurrency()
       $('#account_ledger_exchange_rate').val(rate.rate.round(4)).trigger('focusout')
 
-    #$('#account_ledger_exchange_rate').live 'keyup focusout', (event)=>
-    #  return false if _b.notEnter(event)
-    #  @.calculateTotal()
-    # li
     $('#payment_accounts li.account').bind 'mouseover mouseout', (event)->
       if event.type == 'mouseover'
         $(this).addClass('marked')
@@ -39,6 +35,7 @@ class Payment
     $('#account_ledger_account_id').val(id).trigger("change")
   # Show currency
   showCurrency: (currency_id)->
+    console.log "Show"
     symbol = @currencies[currency_id].symbol
     $("span.currency").html("(#{symbol})")
 

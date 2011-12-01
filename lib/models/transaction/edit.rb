@@ -60,7 +60,7 @@ module Models::Transaction
       case 
       when transaction.balance > 0
         transaction.state = 'approved'
-        transaction.deliver = false if transaction.deliver.blank?
+        transaction.deliver = false #if transaction.deliver.blank?
       when transaction.balance === 0
         transaction.state = 'paid'
         transaction.deliver = true if transaction.account_ledgers.pendent.empty?
