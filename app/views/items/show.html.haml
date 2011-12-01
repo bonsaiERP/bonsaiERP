@@ -39,22 +39,26 @@
     %h3= st.quantity
 
 .clear
+- unless request.xhr?
+  %h3 Kardex de movimientos del ítem
+  
+  - @details = @item.inventory_operation_details.page(@page)
 
-%h3 Kardex de movimientos del ítem
+  = paginate @details
 
-%table.decorated
-  %tr
-    %th Almacen
-    %th Movimiento
-    %th Cantidad
-
-  - @item.inventory_operation_details.each do |det|
+  %table.decorated
     %tr
-      %td= Store.get_names_hash[det.store_id]
-      - op = det.operation == "in" ? "Ingreso" : "Egreso"
-      - css = det.operation == "in" ? "dark-green" : "red"
-      %td.b{:class => css}= op
-      %td.r= ntc det.quantity
+      %th Almacen
+      %th Movimiento
+      %th Cantidad
+
+    - @details.each do |det|
+      %tr
+        %td= Store.get_names_hash[det.store_id]
+        - op = det.operation == "in" ? "Ingreso" : "Egreso"
+        - css = det.operation == "in" ? "dark-green" : "red"
+        %td.b{:class => css}= op
+        %td.r= ntc det.quantity
 
 /= javascript_include_tag 'app/item'
 :javascript
