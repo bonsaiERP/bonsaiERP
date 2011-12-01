@@ -20,8 +20,8 @@
     %th Cuenta relacionada
     %th Descripción
     %th 
-      (V) Verificado por<br/>
-      (A) Anulado por
+      %span.tip{:title => "Verificado por"} (V)
+      %span.tip{:title => "Anulado por"} (A)
     %th
   - ledgers.each do |al|
     %tr{:class => "#{al.in_out} #{al.active}", :id => "tr#{al.id}" }
@@ -30,9 +30,9 @@
         %span.i= lo al.created_at
         %br/
         = al.reference
-      %td.cur.color
+      %td.cur
         = al.currency_symbol
-        = ntc contact_amount(al, contact)
+        = ntc al.amount
       %td.cont= link_contact_ledger al, contact.account_ids
       %td.desc= al.description
       %td.rev

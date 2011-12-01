@@ -13,7 +13,7 @@ class AccountLedgerPresenter < BasePresenter
   end
 
   def null_state
-    h.content_tag(:span, "Anulada", :class => 'dashlet b bg_red') if account_ledger.nulled?
+    h.content_tag(:span, "Anulada", :class => 'dashlet b bg-red') if account_ledger.nulled?
   end
 
   def exchange_rate_hint

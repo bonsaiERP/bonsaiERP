@@ -10,7 +10,13 @@ module ContactsHelper
 
   def link_contact_ledger(al, account_ids)
     if al.transaction_id.present?
-      link_to al.transaction, al.transaction
+      if al.transaction.is_a?(Income)
+        url = income_path(al.transaction_id, :anchor => 'payments')
+      else
+        url = buy_path(al.transaction_id, :anchor => 'payments')
+      end
+
+      link_to al.transaction, url
     else
       if account_ids.include?(al.account_id)
         link_to al.to, get_account_contact_url(al.to)
