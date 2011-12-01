@@ -20,10 +20,10 @@ class UsersController < ApplicationController
   end
 
   def show
-    @links = Link.where(:organisation_id => OrganisationSession.organisation_id, :user_id => params[:id])
-    redirect_to "/422" if @links.empty?
-
+    #@links = Link.where(:organisation_id => OrganisationSession.organisation_id, :user_id => params[:id])
     @user = User.find(params[:id])
+    redirect_to "/422" unless @user
+
     respond_with(@user)
   end
 
@@ -45,11 +45,14 @@ class UsersController < ApplicationController
 
   # GET /users/:id/edit
   def edit
+    PgTools.reset_search_path
+    @user = User.find_by_id(current_user.id)
   end
 
   # PUT /users/:id/update_user
   def update
-    @user = current_user
+    PgTools.reset_search_path
+    @user = User.find_by_id(current_user.id)
     h = params[:user]
     h.delete(:password)
 
@@ -63,25 +66,27 @@ class UsersController < ApplicationController
   # Method for the admins that control an organisation
   # GET /users/:id/edit_user
   def edit_user
-    @user = current_user.organisation.links.find_by_user_id(params[:id]).user
-    check_if_creator(@user)
-    @user.rolname = @user.link.rol
-    @user.active_link = @user.link.active
+    check_if_creator(current_user)
+    @user = User.find_by_id(params[:id])
+
+    if @user.rol == "admin"
+      return redirect_to edit_user_path(current_user.id)
+    end
+
+    @user.rolname = @user.rol
   end
 
   # Method for the admins that control an organisation
   # PUT /users/:id/update_user
   def update_user
-    h = params[:user]
-    h[:rolname] = '' if params[:user][:rolname] == 'admin'
-    @user = current_user.organisation.links.find_by_user_id(params[:id]).user
-    check_if_creator(@user)
+    check_if_creator(current_user)
+    @user = User.find_by_id(params[:id])
     
     if @user.update_user_attributes(params[:user])
       flash[:notice] = "El usuario #{@user} ha sido actualizado."
       redirect_to "/configuration"
     else
-      render :action => 'edit_user'
+      render "edit_user"
     end
   end
 
@@ -109,6 +114,7 @@ class UsersController < ApplicationController
 
   # PUT /users/:id/update_password
   def update_password
+    PgTools.reset_search_path
     @user = current_user
     p = params[:user]
     @user.change_default_password = false
@@ -127,9 +133,9 @@ class UsersController < ApplicationController
   end
 
   def check_if_creator(user)
-    if user.link.creator?
+    unless user.rol == "admin"
       flash[:warning] = "No es posible cambiar para el creador de la empresa, Haga <a href='/users/0/edit'>click aquí</a> si desea cambiar sus datos.".html_safe
-      redirect_to "/configuration"
+      return redirect_to "/configuration"
     end
   end
 end

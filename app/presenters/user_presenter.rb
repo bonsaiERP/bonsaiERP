@@ -5,8 +5,8 @@ class UserPresenter < BasePresenter
   presents :user
 
   def edit_link
-    if h.session[:user][:rol] === "admin"
-      h.link_to "Editar datos", edit_user_user_path(@user), :class => 'edit'
+    if h.session[:user][:rol] === "admin" and h.current_user.id == user.id
+      h.link_to "Editar datos", edit_user_path(@user), :class => 'edit'
     end
   end
 

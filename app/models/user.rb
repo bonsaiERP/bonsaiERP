@@ -173,12 +173,11 @@ class User < ActiveRecord::Base
   end
 
   def update_user_attributes(params)
-    self.attributes = params[:user]
-    lnk = links.select {|v| v.organisation_id = OrganisationSession.organisation_id}.first
     rol = params[:rolname]
+    params.delete(:email)
     rol = ROLES[1,2].last unless ROLES[1,2].include?(rol)
-
-    lnk.rol = rol
+    self.attributes = params
+    self.rol = rol
 
     self.save
   end

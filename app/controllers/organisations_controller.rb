@@ -5,7 +5,10 @@ class OrganisationsController < ApplicationController
   before_filter :check_authorization!
   before_filter :reset_search_path
   before_filter :destroy_organisation_session!, :except => [ :select, :edit, :update, :edit_preferences, :update_preferences ]
+  
   layout "dialog", :only => [:new]
+  layout "application", :only => [:edit, :update]
+
   respond_to :html, :xml, :json
 
   # GET /organisations
@@ -73,6 +76,23 @@ class OrganisationsController < ApplicationController
     render "show"
   end
 
+  # GET /organisations/:id/edit
+  def edit
+    @organisation = Organisation.find(session[:organisation][:id])
+  end
+
+  # PUT /operations/:id
+  def update
+    p = params[:organisation]
+    p.delete(:currency_id)
+    @organisation = Organisation.find(params[:id])
+
+    if @organisation.update_attributes(p)
+      redirect_to "/configuration#organisation", :notice => "Se actualizo los datos correctamente."
+    else
+      render "edit"
+    end
+  end
 
   # GET /organisation/1/select
   # sets the organisation session

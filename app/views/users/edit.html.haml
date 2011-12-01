@@ -2,9 +2,9 @@
   %ul.breadcrumps
     %li #{link_to current_user, current_user}
 
-%h1 Editar #{current_user}
+%h1 Editar #{@user}
 
-= simple_form_for(current_user) do |f|
+= simple_form_for(@user) do |f|
   = f.input :first_name, :label => 'Nombres'
   = f.input :last_name, :label => 'Apellidos'
   .clear
