@@ -20,9 +20,11 @@ class ExchangeRate extends Backbone.Model
       curr = $(@observe).val() * 1
       # Set the currency
       @.set({rate: rate, "currency": @currencies[curr]})
-      @.setSuggestRates()
-      @.triggerExchange()
+
+      #@.setSuggestRates()
+      @.setCurrencyLabel()
       @.presentCurrency()
+      @.triggerExchange(false)
     else
       @$input.val(@.get("rate"))
 
@@ -39,8 +41,8 @@ class ExchangeRate extends Backbone.Model
     @.chageCurrencyEvent()
     @.rateEvents()
   # trigger for rate and currency
-  triggerExchange: ->
-    @.setSuggestRates()
+  triggerExchange: (showSug = true)->
+    @.setSuggestRates() if showSug
     rate = @.get("rate")
     @$input.trigger("change:rate", [{rate: rate, currency: @.get("currency"), inverse: @inverse }])
   # Account event
@@ -132,8 +134,6 @@ class ExchangeRate extends Backbone.Model
         rates : exchangeRates.rates,
         base : exchangeRates.base
       }
-
     self.setSuggestRates()
-
 
 window.ExchangeRate = ExchangeRate

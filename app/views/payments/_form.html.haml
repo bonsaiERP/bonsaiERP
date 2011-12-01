@@ -55,12 +55,13 @@
         var currencies = #{Currency.scoped.to_hash.to_json};
         var account_data = #{@account_ledger.create_hash(:currency_id, :account_id).to_json };
 
-        var er = new ExchangeRate();
-        er.setAll('#account_ledger_exchange_rate', '#account_ledger_account_id', #{@transaction.currency_id}, accounts, currencies, {inverted: true});
-
         var p = new Payment(accounts, currencies, account_data, #{@transaction.currency_id});
         $('#payment_accounts').jDropDown({callback: p.setAccount});
 
+        var er = new ExchangeRate();
+        er.setAll('#account_ledger_exchange_rate', '#account_ledger_account_id', #{@transaction.currency_id}, accounts, currencies, {inverted: true});
+
+        p.start();
       });
 
 -else

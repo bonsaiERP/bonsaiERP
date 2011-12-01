@@ -5,9 +5,11 @@ class Payment
     @$account   = $('#account_ledger_account_id')
     @$amount    = $('#account_ledger_base_amount')
     @$interests = $('#account_ledger_interests_penalties')
+
     @rate = {}
 
     @.setEvents()
+  start:->
     @.calculateTotal()
   # events
   setEvents: ->
@@ -35,7 +37,6 @@ class Payment
     $('#account_ledger_account_id').val(id).trigger("change")
   # Show currency
   showCurrency: (currency_id)->
-    console.log "Show"
     symbol = @currencies[currency_id].symbol
     $("span.currency").html("(#{symbol})")
 

@@ -29,8 +29,12 @@ class AccountLedgerPresenter < BasePresenter
         html = "#{account_ledger.transaction.currency_symbol} 1 = "
       when( account_ledger.transaction_id.present? and !account_ledger.inverse?)
         html = "#{account_ledger.account.currency_symbol} 1 = "
+      when( account_ledger.currency_id != OrganisationSession.currency_id or account_ledger.inverse?)
+        html = "#{account_ledger.account.currency_symbol} 1 = "
       else
+        html = "#{account_ledger.account.currency_symbol} 1 = "
       end
+
       if account_ledger.transaction_id.present?
         html << "#{h.currency_symbol} "
       elsif account_ledger.to_id.present?
