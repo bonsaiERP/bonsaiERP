@@ -1,14 +1,5 @@
-@import "colors.css.scss";
-@import "mixins.css.scss";
-@import "aristo.css.scss";
-@import "base.css.scss";
-@import "forms.css.scss";
-@import "dashboard.css.scss";
-@import "flash.css.scss";
-
-body {
+body.dialog {
     margin: 120px auto;
-
 }
 
 #dialog_wrapper {
