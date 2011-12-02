@@ -44,7 +44,7 @@
     - if transaction.is_a? Income
       %td#discount_total.r{'data-val' => transaction.total_discount} #{ntc(transaction.total_discount)}
   
-  - if transaction.is_a? Income
+  -# if transaction.is_a? Income
     %tr.extra
       %td
       %td.cur.line{:colspan => 2} Impuestos (<span id="taxes_percentage" data-val="#{transaction.tax_percent}">#{ntc transaction.tax_percent}</span>%)

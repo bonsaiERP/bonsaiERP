@@ -262,15 +262,6 @@ class TransactionPresenter < BasePresenter
 
   def allow_action?
     allow_transaction_action?(transaction)
-    #case
-    #when transaction.draft?
-    #  true
-    #when(h.session[:user][:rol] === "operations" and !transaction.draft?)
-    #  false
-    #when(h.session[:user][:rol] != "operations" and !transaction.draft?)
-    #  true
-    #end
-    #transaction.draft? or h.session[:user][:rol] != "operations"
   end
 
   # Tells if the user can approve a transaction based on the preferences

@@ -2,6 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class TaxesController < ApplicationController
+  before_filter :redirect_422
   before_filter :check_authorization!
   respond_to :html, :xml, :json, :js
 
@@ -70,5 +71,10 @@ class TaxesController < ApplicationController
     @tax.destroy
 
     redirect_ajax @tax
+  end
+
+  private
+  def redirect_422
+    return redirect_to "/422"
   end
 end
