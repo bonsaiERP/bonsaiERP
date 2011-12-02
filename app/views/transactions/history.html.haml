@@ -86,7 +86,7 @@
         - unless @transaction.draft?
           %tr.extra
             %td
-            %td.r.b.line.dark{:colspan => 3} #{minus_image} Cobrado #{transaction.currency_name.pluralize}
+            %td.r.b.line.dark{:colspan => 3} #{minus_image} Cobrado #{@transaction.currency_symbol}
             %td#total_payments.r.b.line #{@transaction.currency_symbol} #{ntc( @transaction.total_payments)}
           %tr.extra
             %td

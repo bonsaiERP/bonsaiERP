@@ -35,16 +35,6 @@ Bonsaierp::Application.configure do
   #  :enable_starttls_auto => true
   #}
 
-  #config.action_mailer.smtp_settings = {
-  #  :address => "smtp.gmail.com",
-  #  :port => "587",
-  #  :domain => "gmail.com",
-  #  :user_name => "bonsaierp",
-  #  :password => "Demo1234",
-  #  :authentication => "plain",
-  #  :enable_starttls_auto => true
-  #}
-
   #ºconfig.action_mailer.delivery_method = :sendmail
   #ºconfig.action_mailer.sendmail_settings = {:arguments => '-i'}
 
@@ -53,11 +43,13 @@ Bonsaierp::Application.configure do
 
   # Only use best-standards-support built into browsers
   config.action_dispatch.best_standards_support = :builtin
+
   # Do not compress assets
   config.assets.compress = false
-
+  
   # compile assets
   #config.assets.compile = true
+
   # Expands the lines which load the assets
   config.assets.debug = true
 

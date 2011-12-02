@@ -1,4 +1,5 @@
-//
+// ...
+//= require_self
 //= require jquery
 //= require jquery-ui
 //= require underscore-min.js
@@ -14,4 +15,3 @@
 //= require app/transaction.js.coffee
 //= require app/pay_plans.js.coffee
 //= require app/payment.js.coffee
-//

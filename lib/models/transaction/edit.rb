@@ -93,8 +93,7 @@ module Models::Transaction
     end
 
     def refund
-      @account = transaction.contact_account_cur(transaction.currency_id)
-
+      @account = transaction.contact_account_cur(transaction.currency_id) || build_contact_account
       amount  = old_transaction.total_paid - transaction.balance
       klass   = transaction.class.to_s.downcase
 
@@ -112,6 +111,19 @@ module Models::Transaction
         al.currency_id = @account.currency_id
       }
 
+    end
+
+    # Builds the account in case it doesn't exists
+    def build_contact_account
+      cont = transaction.contact
+      cont.accounts.create!(
+        :currency_id => transaction.currency_id,
+        :account_type_id => AccountType.find_by_account_number(cont.class.to_s).id
+      ) {|a|
+        a.original_type = cont.class.to_s
+        a.name = cont.to_s
+        a.amount = 0
+      }
     end
 
     def calculate_orinal_total
