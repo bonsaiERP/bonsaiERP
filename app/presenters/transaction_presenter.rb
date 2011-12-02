@@ -166,7 +166,7 @@ class TransactionPresenter < BasePresenter
   end
 
   def render_pay_plans
-    return "" if transaction.paid? or transaction.nulled?
+    #return "" if transaction.paid? or transaction.nulled?
 
     partial, url = false, ""
 

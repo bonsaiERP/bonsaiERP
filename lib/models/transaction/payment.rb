@@ -46,7 +46,11 @@ module Models::Transaction::Payment
       return false unless payment?
 
       set_current_ledger_data
-      return false unless valid_ledger_amount?
+
+      if @current_ledger.account.is_a?(Contact)
+        return false unless valid_ledger_amount?
+      end
+
       mark_paid_pay_plans if credit? # anulate pay_plans if credit
 
       set_account_ledger_extras
