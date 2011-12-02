@@ -90,7 +90,7 @@ module Models::AccountLedger::Transaction
 
     def valid_trans_amount
       if transaction.is_a?(Income) and account.accountable_type === 'Contact'
-        if amount_currency.abs > -account.amount
+        if amount_currency.round(2).abs > -account.amount
           self.errors[:amount] << I18n.t("errors.messages.account_ledger.amount")
           self.errors[:base_amount] << I18n.t("errors.messages.account_ledger.amount")
           return false

@@ -361,6 +361,32 @@ feature "Income", "test features" do
 
   end
 
+  scenario "Pay with client account" do
+    i = Income.new(income_params)
+    i.save_trans.should == true
+    i = Income.find(i.id)
+
+    tot = ( 3 * 10 + 5 * 20 ) * 0.97
+    i.total.should == tot.round(2)
+    i.balance.should == i.total
+
+    i.approve!.should be_true
+
+    # Deposit some money
+    al = AccountLedger.new_money(:operation => "in", :account_id => bank_account.id, :contact_id => client.id, :amount => i.balance - 1, :reference => "Check 1120012" )
+    al.save.should == true
+    al.conciliate_account.should == true
+
+    client.account_cur(1).amount.should == -(i.balance - 1)
+
+    i.reload
+    p = i.new_payment(:account_id => client.account_cur(1).id, :reference => 'Test for client', :exchange_rate => 1)
+    p.amount.should == i.balance
+    i.save_payment.should be_false
+    p.errors[:base_amount].should_not be_blank
+
+  end
+
   scenario "Make payment with a contact account" do
     i = Income.new(income_params)
     i.save_trans.should == true
@@ -379,8 +405,8 @@ feature "Income", "test features" do
 
     client.account_cur(1).amount.should == -i.balance
 
+    #
     i.reload
-    log.info "Creating payment without exchange_rate"
     p = i.new_payment(:account_id => client.account_cur(1).id, :reference => 'Test for client', :exchange_rate => 1)
 
     p.amount.should == i.balance

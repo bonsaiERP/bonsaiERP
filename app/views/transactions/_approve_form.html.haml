@@ -4,7 +4,7 @@
 :javascript
   $(function() {
     $('#approve_form').submit(function() {
-        if(confirm("Esta seguro de aprobar la proforma?")) {
+        if(confirm("Esta seguro de aprobar la proforma (no podrá editar en un futuro)?")) {
           return true;
         }else{
           return false;

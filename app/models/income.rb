@@ -5,7 +5,7 @@ class Income < Transaction
 
   after_initialize :set_ref_number, :if => :new_record?
   
-  belongs_to :deliver_approver, :class_name => "Contact"
+  belongs_to :deliver_approver, :class_name => "User"
 
   #relationships
 

@@ -10,8 +10,9 @@ class DashboardController < ApplicationController
 
   # GET /config
   def configuration
-    #@links = Organisation.find( OrganisationSession.organisation_id).links.includes(:user)
-    @users = User.order(:id)
+    @users = User.order(:id).all
+    PgTools.reset_search_path
+    @org = Organisation.find(OrganisationSession.organisation_id)
   end
 
 end

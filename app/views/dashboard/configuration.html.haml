@@ -30,7 +30,6 @@
   #organisation
     = link_to "Editar datos empresa", "/organisations/#{session[:organisation][:id]}/edit", :class => 'edit link'
 
-    - @org = Organisation.find(OrganisationSession.organisation_id)
     
     %h3 Datos #{@org}
 

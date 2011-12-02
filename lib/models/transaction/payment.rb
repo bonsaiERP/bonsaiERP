@@ -51,6 +51,8 @@ module Models::Transaction::Payment
 
       set_account_ledger_extras
 
+      return false unless valid_contact_amount?
+      #return false#
       res = true
       self.class.transaction do
         res = @current_ledger.save
@@ -66,6 +68,16 @@ module Models::Transaction::Payment
     end
 
     private
+
+  def valid_contact_amount?
+    @current_ledger.valid_contact_amount
+    if @current_ledger.errors.any?
+      @current_ledger.errors[:base_amount] = @current_ledger.errors[:base]
+      false
+    else
+      true
+    end
+  end
 
     # Checks the amount of a ledger but with the transaction
     def valid_ledger_amount?

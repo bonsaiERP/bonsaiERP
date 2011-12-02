@@ -63,6 +63,10 @@
     - if @transaction.creditor_id.present?
       %p <span class='dark'>Credito aprobado por:</span> <strong>#{@transaction.creditor}</strong> <i>#{lo @transaction.credit_datetime}</i>
 
+    - if @transaction.deliver_approver_id.present?
+      %p <span class='dark'>Aprobación de entrega:</span> <strong>#{@transaction.deliver_approver}</strong> <i>#{lo @transaction.deliver_datetime}</i>
+
+
   %ul.fl.w50
     - if @transaction.transaction_histories.any?
       %h3 Historial
