@@ -1,24 +1,40 @@
-#inventory
-  %h2= presenter.inventory_title
+%h2 Cantidades y saldos
 
-  %p
-    = presenter.deliver_link
-    &nbsp;&nbsp;&nbsp;&nbsp;
-    = presenter.devolution_link
+%p
+  = presenter.deliver_link
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  -#= presenter.devolution_link
 
-  %table#inventory_table.decorated
-    %thead
+%table#inventory_table.decorated
+  %thead
+    %tr
+      %th Item
+      %th Precio #{currency_symbol}
+      %th Cantidad
+      %th Unidad
+      %th{:title => 'Saldo cantidad'} Saldo cant.
+    - transaction.transaction_details.includes(:item => :unit).each do |det|
       %tr
-        %th Item
-        %th Precio #{currency_symbol}
-        %th Cantidad
-        %th Unidad
-        %th{:title => 'Saldo cantidad'} Saldo cant.
-      - transaction.transaction_details.includes(:item => :unit).each do |det|
-        %tr
-          %td= det.item
-          %td.cur= ntc det.price
-          %td.cur= ntc det.quantity
-          %td.cur= det.item.unit
-          %td.cur= ntc det.balance
+        %td= det.item
+        %td.cur= ntc det.price
+        %td.cur= ntc det.quantity
+        %td.cur= det.item.unit
+        %td.cur= ntc det.balance
 
+<br/><br/>
+- if transaction.inventory_operations.any?
+  %h3= presenter.inventory_title
+
+  %table.decorated
+    %tr
+      %th Referencia
+      %th Fecha
+      %th Operación
+      %th Realizado por
+
+    - transaction.inventory_operations.order("created_at DESC").each do |op|
+      %tr
+        %td= link_to op.ref_number, op, :class => 'b ajax', 'data-width' => 850, 'data-title' => "Operación de inventario #{op.ref_number}"
+        %td= lo op.created_at
+        %td= op.operation == 'in' ? 'Ingreso' : 'Egreso'
+        %td= op.creator

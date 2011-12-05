@@ -42,6 +42,7 @@
     = tab "Inventario de items", store_path(@store, :tab => "items"), "items"
     = tab "Operaciones realizadas", store_path(@store, :tab => "operations"), "operations"
   = tab_panel do
+    -# stores/operations
     = render @partial, :store => @store
 
 :javascript

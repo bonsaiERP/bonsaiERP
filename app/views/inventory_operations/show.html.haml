@@ -16,10 +16,10 @@
     %h2.n= link_to @inventory_operation.transaction, @inventory_operation.transaction
 
 
-  %h3._25.fl{:style => 'margin: 0px'}= @inventory_operation.ref_number
-  ._25.fl
-    = lo @inventory_operation.created_at
+  %h3.n.i._25.fl{:style => 'margin: 0px'}= lo @inventory_operation.created_at
 
+  .clear
+  %p= @inventory_operation.description
   .clear
 
   %h2 Items
