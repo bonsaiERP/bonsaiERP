@@ -40,25 +40,27 @@
 
 .clear
 - unless request.xhr?
-  %h3 Kardex de movimientos del ítem
+  %h3 Kardex de Compras y Ventas de del ítem
   
-  - @details = @item.inventory_operation_details.page(@page)
+  - @details = @item.kardex.order("transactions.created_at DESC").page(@page)
 
   = paginate @details
 
   %table.decorated
     %tr
-      %th Almacen
-      %th Movimiento
+      %th Compra/Venta
+      %th Fecha
+      %th Precio
       %th Cantidad
+      %th Total fila
 
     - @details.each do |det|
       %tr
-        %td= Store.get_names_hash[det.store_id]
-        - op = det.operation == "in" ? "Ingreso" : "Egreso"
-        - css = det.operation == "in" ? "dark-green" : "red"
-        %td.b{:class => css}= op
+        %td= det.transaction
+        %td= lo det.transaction_created_at
+        %td.r= ntc det.price
         %td.r= ntc det.quantity
+        %td.r= ntc det.subtotal
 
 /= javascript_include_tag 'app/item'
 :javascript

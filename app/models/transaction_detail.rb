@@ -17,6 +17,9 @@ class TransactionDetail < ActiveRecord::Base
   validates_presence_of :item_id
   validates_numericality_of :quantity, :greater_than => 0
 
+  # Delegations
+  delegate :created_at, :to => :transaction, :prefix => true
+
   def total
     price * quantity
   end
@@ -38,7 +41,11 @@ class TransactionDetail < ActiveRecord::Base
     ( original_price.to_f/transaction.exchange_rate ).round(2)
   end
 
-private
+  def subtotal
+    price * quantity
+  end
+
+  private
   def set_defaults
     self.price ||= 0
     self.quantity ||= 0

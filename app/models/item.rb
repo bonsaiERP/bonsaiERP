@@ -141,6 +141,12 @@ class Item < ActiveRecord::Base
     stocks.inject(0) {|sum,st| sum += st.quantity }
   end
 
+  # Returns the details for item kardex
+  def kardex
+    self.transaction_details.includes(:transaction).where("transactions.state != 'draft'")
+  end
+
+
   private
 
 
