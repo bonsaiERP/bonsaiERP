@@ -46,10 +46,8 @@ module Models::Transaction::Payment
       return false unless payment?
 
       set_current_ledger_data
-
-      if @current_ledger.account.is_a?(Contact)
-        return false unless valid_ledger_amount?
-      end
+      
+      return false unless valid_ledger_amount?
 
       mark_paid_pay_plans if credit? # anulate pay_plans if credit
 
@@ -85,7 +83,7 @@ module Models::Transaction::Payment
 
     # Checks the amount of a ledger but with the transaction
     def valid_ledger_amount?
-      val = ( balance - @current_ledger.amount_currency )
+      val = ( balance - @current_ledger.amount_currency.abs )
 
       if val < -0.1
         @current_ledger.errors[:base_amount] << I18n.t("errors.messages.payment.greater_amount")
