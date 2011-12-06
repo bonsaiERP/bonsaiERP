@@ -12,7 +12,7 @@ $('#tab_pay_plans').one('click', function() {
   $.get('/pay_plans/<%= @account_ledger.transaction_id %>');
 });
 
-$('#payments_table #total_payment').html("<%= ntc @transaction.total_payments_with_interests %>");
+$('#payments_table #total_payment').html("<%= ntc @transaction.total_payments_with_interests.abs %>");
 
 // Premove payment button if paid
 <% if @transaction.paid? %>

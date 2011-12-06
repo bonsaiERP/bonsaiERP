@@ -76,7 +76,7 @@ module Models::Transaction::Payment
   def valid_contact_amount?
     @current_ledger.valid_contact_amount
     if @current_ledger.errors.any?
-      @current_ledger.errors[:base_amount] = @current_ledger.errors[:base]
+      @current_ledger.errors[:base_amount] = @current_ledger.errors[:base].join(", ")
       false
     else
       true

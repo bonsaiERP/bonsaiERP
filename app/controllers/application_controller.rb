@@ -24,6 +24,12 @@ class ApplicationController < ActionController::Base
   before_filter :set_page
   before_filter :set_organisation, :if => :organisation?
 
+
+  #Put this in applictation_controller.rb
+  #before_filter :log_ram # or use after_filter
+  #def log_ram
+  #  logger.warn 'RAM USAGE: ' + `pmap #{Process.pid} | tail -1`[10,40].strip
+  #end
   #before_filter :destroy_organisation_session!, :unless => :user_signed_in?
 
   # Adds an error with format to display

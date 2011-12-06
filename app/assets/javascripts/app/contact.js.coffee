@@ -112,7 +112,7 @@ class ContactAutocomplete
     switch label
       when "Client"   then "Cliente"
       when "Supplier" then "Proveedor"
-      when "Staff"    then "Personal"
+      when "Staff"    then "Otros"
   # Callback
   getContactCallback: ->
     self = @

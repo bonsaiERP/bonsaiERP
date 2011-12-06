@@ -16,6 +16,6 @@
 
   %tr.extra.pad_top
     %td.r.b{:colspan => 4} Total #{transaction.pay_type.pluralize} + Intereses/Penalidades
-    %td.r.b#total_payment= ntc transaction.total_payments_with_interests
+    %td.r.b#total_payment= ntc transaction.total_payments_with_interests.abs
     %td
 
