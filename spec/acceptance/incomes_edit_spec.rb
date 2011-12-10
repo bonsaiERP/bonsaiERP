@@ -180,55 +180,59 @@ feature "Income", "test features" do
     edit_params[:transaction_details_attributes][1][:id] = i.transaction_details[1].id
     edit_params[:transaction_details_attributes][1][:quantity] = 5
     i.attributes = edit_params
-    i.save_trans.should be_true
-    i.reload
-    
-    i.should be_paid
-    i.balance.should == 0
-    i.transaction_histories.should_not be_empty
-    hist = i.transaction_histories.first
-    hist.user_id.should == i.modified_by
+    i.save_trans.should be_false
+    i.errors[:base].should_not be_empty
 
-    i.transaction_details[1].quantity.should == 5
-    i.total.should == 3 * 10 + 5 * 5
-    i.balance.should == 0
+    puts i.errors.messages
 
-    ac = client.account_cur(i.currency_id)
-    ac.amount.should == -(bal - i.balance)
+    #i.reload
+    #
+    #i.should be_paid
+    #i.balance.should == 0
+    #i.transaction_histories.should_not be_empty
+    #hist = i.transaction_histories.first
+    #hist.user_id.should == i.modified_by
 
-    # Edit and change the amount so the state changes
-    i = Income.find(i.id)
-    edit_params = income_params.dup
-    edit_params[:transaction_details_attributes][0][:id] = i.transaction_details[0].id
+    #i.transaction_details[1].quantity.should == 5
+    #i.total.should == 3 * 10 + 5 * 5
+    #i.balance.should == 0
 
-    edit_params[:transaction_details_attributes][1][:id] = i.transaction_details[1].id
-    edit_params[:transaction_details_attributes][1][:quantity] = 5.1
+    #ac = client.account_cur(i.currency_id)
+    ##ac.amount.should == -(bal - i.balance)
 
-    i.attributes = edit_params
-    i.save_trans.should be_true
-    i.reload
+    ## Edit and change the amount so the state changes
+    #i = Income.find(i.id)
+    #edit_params = income_params.dup
+    #edit_params[:transaction_details_attributes][0][:id] = i.transaction_details[0].id
 
-    i.should be_approved
-    i.should_not be_deliver
-    i.total.should ==  3 * 10 + 5 * 5.1
-    i.balance.should ==  5 * 0.1
+    #edit_params[:transaction_details_attributes][1][:id] = i.transaction_details[1].id
+    #edit_params[:transaction_details_attributes][1][:quantity] = 5.1
 
-    # Change to  paid when changed again with the price
-    i = Income.find(i.id)
-    edit_params = income_params.dup
-    edit_params[:transaction_details_attributes][0][:id] = i.transaction_details[0].id
+    #i.attributes = edit_params
+    #i.save_trans.should be_true
+    #i.reload
 
-    edit_params[:transaction_details_attributes][1][:id] = i.transaction_details[1].id
-    edit_params[:transaction_details_attributes][1][:quantity] = 5
+    #i.should be_approved
+    #i.should_not be_deliver
+    #i.total.should ==  3 * 10 + 5 * 5.1
+    #i.balance.should ==  5 * 0.1
 
-    i.attributes = edit_params
-    i.save_trans.should be_true
-    i.reload
+    ## Change to  paid when changed again with the price
+    #i = Income.find(i.id)
+    #edit_params = income_params.dup
+    #edit_params[:transaction_details_attributes][0][:id] = i.transaction_details[0].id
 
-    i.should be_paid
-    i.total.should ==  3 * 10 + 5 * 5
-    i.balance.should ==  0
-    i.should be_deliver
+    #edit_params[:transaction_details_attributes][1][:id] = i.transaction_details[1].id
+    #edit_params[:transaction_details_attributes][1][:quantity] = 5
+
+    #i.attributes = edit_params
+    #i.save_trans.should be_true
+    #i.reload
+
+    #i.should be_paid
+    #i.total.should ==  3 * 10 + 5 * 5
+    #i.balance.should ==  0
+    #i.should be_deliver
   end
 
   scenario "check the number of items" do

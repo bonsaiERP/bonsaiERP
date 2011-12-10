@@ -201,10 +201,11 @@ class TransactionPresenter < BasePresenter
 
   def devolution_link
     if User.admin_gerency?(h.session[:user][:rol]) and transaction_devolution?
+      txt = "Seleccione almacen para Devolución"
       if transaction.is_a?(Income)
-        h.link_to "Realizar devolución", select_store_inventory_operation_path(transaction, :operation => 'in'), :class => "red b fs120"
+        h.link_to "Realizar devolución", select_store_inventory_operation_path(transaction, :operation => 'in'), :class => "red b fs120 ajax", 'data-title' => txt
       elsif transaction.is_a?(Buy)
-        h.link_to "Realizar devolución", select_store_inventory_operation_path(transaction, :operation => 'out'), :class => "red b fs120"
+        h.link_to "Realizar devolución", select_store_inventory_operation_path(transaction, :operation => 'out'), :class => "red b fs120 ajax", 'data-title' => txt
       end
     end
   end
@@ -254,6 +255,14 @@ class TransactionPresenter < BasePresenter
   # Method to fake accounts for exchange rate
   def fake_accounts
     Hash[Currency.all.map{|v| [v.id, {:currency_id => v.id}]}]
+  end
+
+  def paid
+    if transaction.is_a?(Income)
+      "Cobrado"
+    else
+      "Pagado"
+    end
   end
 
   ################################################################

@@ -84,7 +84,9 @@ module Models::Transaction
         end
 
         if old_transaction.total_paid > transaction.balance
-          refund
+          pay_type = I18n.t("transaction.#{transaction.class}.paid")
+          transaction.errors[:base] << I18n.t("errors.messages.transaction.paid_amount", :pay_type => pay_type)
+          return false
         end
 
         update_state
@@ -111,19 +113,6 @@ module Models::Transaction
         al.currency_id = @account.currency_id
       }
 
-    end
-
-    # Builds the account in case it doesn't exists
-    def build_contact_account
-      cont = transaction.contact
-      cont.accounts.create!(
-        :currency_id => transaction.currency_id,
-        :account_type_id => AccountType.find_by_account_number(cont.class.to_s).id
-      ) {|a|
-        a.original_type = cont.class.to_s
-        a.name = cont.to_s
-        a.amount = 0
-      }
     end
 
     def calculate_orinal_total

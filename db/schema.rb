@@ -485,7 +485,7 @@ ActiveRecord::Schema.define(:version => 20111129155318) do
     t.decimal  "original_total",                     :precision => 14, :scale => 2
     t.boolean  "discounted",                                                        :default => false
     t.integer  "modified_by"
-    t.boolean  "fact"
+    t.boolean  "fact",                                                              :default => true
   end
 
   add_index "transactions", ["account_id"], :name => "index_transactions_on_account_id"
@@ -543,7 +543,7 @@ ActiveRecord::Schema.define(:version => 20111129155318) do
     t.string   "abbreviation",            :limit => 10
     t.string   "salt"
     t.string   "rol"
-    t.boolean  "active",                                 :default => true
+    t.boolean  "active"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email"

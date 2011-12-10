@@ -36,6 +36,7 @@ es:
         repeated_items: "Existen items repetidos, por favor revise"
         unconcilied_ledgers: "Existen transacciones pendientes de revisión"
         changes: "No es posible cambiar el número de referencia o el contacto"
+        paid_amount: "El total es menor a la cantidad %{pay_type}, le recomendamos realizar una devolución"
       transaction_details:
         delivered_quantity: "La cantidad es menor a la cantidad entregada"
         change_item: "No es posible cambiar de item, se volvio al original"
@@ -54,11 +55,13 @@ es:
     Income: 
       class: "Venta"
       pay: "cobro"
+      paid: "cobrada"
     income:
       refund: "Reversión de fondos por cambios en la %{transaction}"
     Buy: 
       class: "Compra"
       pay: "pago"
+      paid: "pagada"
     buy:
       refund: "Reversión de fondos por cambios en la %{transaction}"
     Expense:
