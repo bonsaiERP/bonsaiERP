@@ -29,7 +29,7 @@ class TransactionPresenter < BasePresenter
   def fact
     if transaction.bill_number.present?
       txt = transaction.fact? ? "Factura: " : "Recibo:"
-      "<span class='n'>#{txt}</span> #{transaction.bill_number}".html_safe
+      "<span class='n'>Nº #{txt}</span> #{transaction.bill_number}".html_safe
     end
   end
 
@@ -79,7 +79,7 @@ class TransactionPresenter < BasePresenter
 
   def project
     if transaction.project_id.present?
-      "Proyecto: #{h.link_to transaction.project, transaction.project}".html_safe
+      "Iniciativa: #{h.link_to transaction.project, transaction.project}".html_safe
     end
   end
 
