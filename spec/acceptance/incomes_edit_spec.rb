@@ -169,6 +169,8 @@ feature "Income", "test features" do
     # Diminish the quantity in edit and the amount should go to the client account
     i = Income.find(i.id)
 
+    old_tot = i.total
+
     i.account_ledgers.pendent.should be_empty
     i.balance.should == 0
     i.should be_deliver
@@ -183,7 +185,9 @@ feature "Income", "test features" do
     i.save_trans.should be_false
     i.errors[:base].should_not be_empty
 
-    puts i.errors.messages
+    # Make a devolution for the payment
+
+    #puts i.errors.messages
 
     #i.reload
     #

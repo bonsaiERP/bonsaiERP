@@ -133,10 +133,14 @@ class TransactionPresenter < BasePresenter
   end
 
   def li_inventory
-    if transaction.deliver? or (transaction.is_a?(Buy) and not(transaction.draft?) and !transaction.nulled? )
+    if income_present_inventory? or (transaction.is_a?(Buy) and not(transaction.draft?) and !transaction.nulled? )
       txt = transaction.is_a?(Income) ? "Entrega" : "Recojo"
       h.content_tag(:li, "<a href='#inventory' id='tab_inventory'>#{txt}</a>".html_safe)
     end
+  end
+
+  def income_present_inventory?
+    transaction.deliver? or transaction.inventory_operations.any?
   end
 
   def render_discount
@@ -231,6 +235,8 @@ class TransactionPresenter < BasePresenter
       render "/transactions/inventory", :transaction => transaction, :presenter => self
     when ( transaction.is_a?(Buy) and not(transaction.draft?) and not(transaction.nulled?) )
       render "/transactions/inventory", :transaction => transaction, :presenter => self
+    when transaction.inventory_operations.any?
+      render "/transactions/inventory", :transaction => transaction, :presenter => self
     end
   end
 
@@ -241,6 +247,13 @@ class TransactionPresenter < BasePresenter
         h.new_payment_path(:type => transaction.type.to_s, :id => transaction.id),
         :class => "new ajax button new_payment_link", :title => "Nuevo #{tit}",
         :id => 'new_payment_link',  'data-width' => "900", 'data-trigger' => 'payment')
+    end
+  end
+
+  # Link for devolution of money
+  def new_devolution_link
+    if transaction.balance != transaction.total
+      h.link_to "Devolución", new_devolution_account_ledgers_path(:transaction_id => transaction.id), :class => 'ajax', 'data-title' => 'Devolución'
     end
   end
 

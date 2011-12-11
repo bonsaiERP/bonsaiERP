@@ -24,6 +24,20 @@ class DashboardPresenter < BasePresenter
     end
   end
 
+  def money(type = :bank)
+    Account.send(type).order(:name).values_of(:accountable_id, :currency_id, :name, :amount).map do |id, cur, name, amt|
+      {:id => id, :currency => currencies[cur], :name => name, :amount => amt}
+    end
+  end
+
+  def banks
+    money(:bank)
+  end
+
+  def cashes
+    money(:cash)
+  end
+
   def accounts_to_recieve
     tot_accounts = Account.to_recieve.group(:currency_id).sum(:amount)
     tot_incomes  = Income.approved.group(:currency_id).sum(:balance)

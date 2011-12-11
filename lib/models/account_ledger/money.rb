@@ -44,7 +44,7 @@ module Models::AccountLedger::Money
   end
 
   ############################
-  module InstanceMethods
+  #module InstanceMethods
     def new_money?
       new_record? and money?
     end
@@ -182,6 +182,6 @@ module Models::AccountLedger::Money
     end
 
 
-  end
+  #end
 
 end

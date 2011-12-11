@@ -79,7 +79,7 @@ ul.breadcrumps{
 }
 ul.list{
   padding: 2px 0px;
-  margin: 0px;
+  margin: 4px 0 0 16px;
   >li{ list-style: none; margin: 8px 2px 5px; padding: 0px; }
 }
 .pagination{
@@ -428,8 +428,16 @@ ul.menu{
 }
 
 .box{
-  @include box(430px, lighten($black, 30%));
+  //@include box(430px, lighten($black, 30%));
+  width: 45%;
+  margin-right: 20px;
+  float: left;
   border-color: darken($white, 30%);
+  .title {
+    padding: 0.5em;
+    margin: 4px 0px;
+    background-color: $light_grey;
+  }
 }
 a.link{
   @include link;

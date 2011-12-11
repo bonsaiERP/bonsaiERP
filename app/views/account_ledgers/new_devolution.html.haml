@@ -1,0 +1,18 @@
+%h2.red Devolución
+
+
+= simple_form_for(@account_ledger, :url => devolution_account_ledgers_path, :html => {:class => 'enter', :id => 'devolution_form'}) do |f|
+  = bonsai_form_error(f)
+
+  = f.input :transaction_id, :as => :hidden
+
+  -# Account
+  .input
+    %label Cuenta
+    = link_to @transaction.contact, @transaction.contact, :class => 'b'
+  
+  =f.input :amount, :label => "Cantida en #{@transaction.currency_symbol}", :input_html => {:type => 'decimal'}
+
+  .clear
+  
+  = f.submit "Salvar"

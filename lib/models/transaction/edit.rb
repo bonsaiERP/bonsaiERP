@@ -83,7 +83,7 @@ module Models::Transaction
           return false
         end
 
-        if old_transaction.total_paid > transaction.balance
+        if old_transaction.total_paid > transaction.total
           pay_type = I18n.t("transaction.#{transaction.class}.paid")
           transaction.errors[:base] << I18n.t("errors.messages.transaction.paid_amount", :pay_type => pay_type)
           return false

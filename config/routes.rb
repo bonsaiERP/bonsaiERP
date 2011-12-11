@@ -21,6 +21,10 @@ Bonsaierp::Application.routes.draw do
   resources :accounts
 
   resources :account_ledgers do
+    collection do
+      get  :new_devolution
+      post :devolution
+    end
     get  :new_transference, :on => :collection
     post :transference,     :on => :collection
     member do
