@@ -95,9 +95,12 @@ ul.list{
 }
 a.search{
   font-weight: bold;
-  float:right;
-  margin-top: 4px !important;
+  float:left;
+  margin: 10px;
+  display: inline-block;
+  //margin-top: 4px !important;
   padding: 0px 0px 0px 20px;
+
   background: transparent url(images/zoom.png) no-repeat;
 }
 div.search{
@@ -136,8 +139,11 @@ div.search{
 ul.tabs{
   list-style: none;
   height: 24px;
-  padding: 0px 15px;
+  padding: 5px;
   border-bottom: 1px solid $grey;
+  background-color: $light-grey;
+  clear: both;
+
   li{
     display: inline;
     a{
@@ -146,14 +152,14 @@ ul.tabs{
       height: 24px;
       line-height: 24px;
       padding: 0 10px;
-      background: transparent url(images/silver.png) repeat-x 0 0;
+      color: darken($dark-grey, 5%);
+      //background: transparent url(images/silver.png) repeat-x 0 0;
     }
     a.active{
       height: 25px;
       line-height: 24px;
       font-weight: bold;
-      color: #fff;
-      background: $blue;
+      color: $dark;
     }
   }
 }

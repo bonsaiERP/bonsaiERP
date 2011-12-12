@@ -16,7 +16,6 @@
     = link_to "items", items_path
     para poder realizar ventas
 
-= link_to "Buscar", "#search_income", :class => 'search'
  
 %ul.tabs
   %li= link_option "Todas", "all"
@@ -44,6 +43,7 @@
     =submit_tag 'Buscar'
 
 
+= link_to "Buscar", "#search_income", :class => 'search'
 = paginate @incomes.page(@page)
 
 %table{ :class => 'decorated nwl' }

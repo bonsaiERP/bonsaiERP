@@ -10,7 +10,6 @@
 
 %h1 Compras y gastos
 
-= link_to "Buscar", "#search_buy", :class => 'search'
 
 %ul.tabs
   %li= link_option "Todas", "all"
@@ -36,6 +35,7 @@
     %div
     =submit_tag 'Buscar'
 
+= link_to "Buscar", "#search_buy", :class => 'search'
 = paginate @buys.page(@page)
 
 %table{ :class => 'decorated nwl' }
