@@ -438,6 +438,11 @@ ul.menu{
     margin: 4px 0px;
     background-color: $light_grey;
   }
+  .high{
+    color: lighten($dark, 5%);
+    font-size: 120%;
+    font-weight: bold;
+  }
 }
 a.link{
   @include link;

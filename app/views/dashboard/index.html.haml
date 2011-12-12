@@ -25,13 +25,13 @@
     %h3.title.dark-green Nos deben 
     %ul.list
       - presenter.accounts_to_recieve.each do |cur, amt|
-        %li.b.fs120 #{cur} #{ntc amt}
+        %li.high #{cur} #{ntc amt}
   
   .box
     %h3.title.red Debemos 
     %ul.list
       - presenter.accounts_to_pay.each do |cur, amt|
-        %li.b.fs120 #{cur} #{ntc amt}
+        %li.high #{cur} #{ntc amt}
 
 
   .clear
@@ -42,7 +42,7 @@
       - presenter.banks.each do |bank|
         %li
           =link_to bank_path(bank[:id]) do
-            %strong.fs120
+            %span.high
               = bank[:currency]
               = ntc bank[:amount]
             = bank[:name]
@@ -53,7 +53,7 @@
       - presenter.cashes.each do |cash|
         %li
           =link_to cash_path(cash[:id]) do
-            %strong.fs120
+            %span.high
               = cash[:currency]
               = ntc cash[:amount]
             = cash[:name]
@@ -64,10 +64,11 @@
     %ul.list
       - presenter.pendent_conciliations.each do |cur, al|
         %li
-          = link_to al, :class => "button-gray ui-corner-all" do
+          = link_to al do
+            %span.high
+              = cur
+              = al.amount
             Verificar
-            = cur
-            = al.amount
 
   .box
     %h3.title Inventarios con mínimos
@@ -75,6 +76,6 @@
       - presenter.minimum_inventory.each do |st_id, store, min|
         %li
           = link_to store_path(st_id, :option => 'minimum', :tab => 'items') do
-            %strong #{min} items
-            %span.fs120= store
+            %span.high #{min} ítems
+            %span= store
 
