@@ -51,27 +51,31 @@ ul{
   #login{
     color: $white;
     @include rounded-corners(3px);
-    background: lighten($green, 10%) url(user2.png) no-repeat 3px 4px;
-    //font-style: italic;
+    background-color: lighten($green, 10%);
     position: absolute;
     top: 16px;
     right: 40px;
     //padding-left: 20px;
     //color: darken($green, 10%);
-    padding: 3px 3px 3px 22px;
+    //background: lighten($green, 10%) url(user2.png) no-repeat 3px 4px;
+    //font-style: italic;
+    padding: 3px 7px;// 3px 3px 22px;
     font-size: 14px;
     font-weight: bold;
     text-decoration: none;
     font-family: muli, arial, serif;
+    text-shadow: 1px 1px 2px #7F7F7F;
+    box-shadow: 2px 2px 5px darken($green, 20%);
     &:hover{
       background-color: darken($green, 10%);
     }
+
   }
   #menu{
     list-style: none;
     position: absolute;
     top: 5px;
-    left: 200px;
+    left: 170px;
 
     li{
       display: inline;
@@ -115,7 +119,7 @@ ul{
     padding: 0px;
     color: $white;
     font-family: 'Muli', arial, serif;
-    top: 130px;
+    top: 50px;
     right: 10px;
     h2{font-weight: normal; font-size: 18px;}
   }

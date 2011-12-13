@@ -1,18 +1,60 @@
-%h2.red Devolución
+%h2.red Devolución #{@transaction}
 
+- present @account_ledger do |presenter|
+  #accounts.moneybox{'data-val' => @transaction.total_paid}
+    %label= @transaction.is_a?(Income) ? "COBRADO" : "PAGADO"
+    %h3
+      = @transaction.currency_symbol
+      = ntc @transaction.total_paid
 
-= simple_form_for(@account_ledger, :url => devolution_account_ledgers_path, :html => {:class => 'enter', :id => 'devolution_form'}) do |f|
-  = bonsai_form_error(f)
+  = simple_form_for(@account_ledger, :url => devolution_account_ledgers_path, :html => {:class => 'enter', :id => 'devolution_form'}) do |f|
+    = bonsai_form_error(f)
 
-  = f.input :transaction_id, :as => :hidden
+    = f.input :transaction_id, :as => :hidden
 
-  -# Account
-  .input
+    -# Account
     %label Cuenta
-    = link_to @transaction.contact, @transaction.contact, :class => 'b'
-  
-  =f.input :amount, :label => "Cantida en #{@transaction.currency_symbol}", :input_html => {:type => 'decimal'}
+    #devolution_accounts.dropdown.fl
+      %div
+        %p= presenter.selected_account
+      %ul
+        - @accounts.each do |account|
+          %li.account{:id => account.id}= presenter.account_select account
+      = f.association :account, :collection => @accounts, :label => false
 
-  .clear
-  
-  = f.submit "Salvar"
+    .clear
+    =f.input :amount, :label => "Cantida en #{@transaction.currency_symbol}", :input_html => {:type => 'decimal', :size => 12}
+
+    .clear
+    
+    = f.submit "Salvar"
+
+
+  :javascript
+    $(function() {
+      function setAccount(val) {
+        $('#account_ledger_account_id').val(val);
+      }
+
+      $('#devolution_accounts').find("div").unbind("click");
+      $('#devolution_accounts').jDropDown({callback: setAccount}).initjDropDown();
+      function validate() {
+        var val = $('#account_ledger_amount').val() * 1;
+        var ac_id = $('#account_ledger_account_id').val() * 1;
+
+        if(val > $('#accounts').data('val')) {
+          alert("La cantidad que ingreso es mayor a la permitida");
+          return false;
+        }else if(val <= 0) {
+          alert("Debe ingresar una cantidad");
+          return false;
+        }else if(ac_id <= 0){
+          alert("Debe seleccionar una cuenta");
+          return false;
+        }else{
+          return true;
+        }
+      }
+      $('#devolution_form').submit(validate);
+    });
+

@@ -67,15 +67,15 @@
       %p <span class='dark'>Aprobación de entrega:</span> <strong>#{@transaction.deliver_approver}</strong> <i>#{lo @transaction.deliver_datetime}</i>
 
 
-  %ul.fl.w50
+  %ul.list.fl.w50
     - if @transaction.transaction_histories.any?
       %h3 Historial
     - @transaction.transaction_histories.order("created_at DESC").each do |t|
       %li
         =link_to history_income_path(t.id), :title => "#{@transaction} en fecha #{lo t.created_at}", :class => 'ajax',
           'data-width' => 950, 'data-class' => 'history' do
-          = t.user
           %span.i= lo t.created_at
+          %strong= t.user
 
 :javascript
   $(function () {

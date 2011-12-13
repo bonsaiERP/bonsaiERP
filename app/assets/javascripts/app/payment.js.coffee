@@ -26,12 +26,6 @@ class Payment
       @.setCurrency()
       $('#account_ledger_exchange_rate').val(rate.rate.round(4)).trigger('focusout')
 
-    $('#payment_accounts li.account').bind 'mouseover mouseout', (event)->
-      if event.type == 'mouseover'
-        $(this).addClass('marked')
-      else
-        $(this).removeClass('marked')
-
   # Callback for dropdown
   setAccount: (id, val)->
     $('#account_ledger_account_id').val(id).trigger("change")

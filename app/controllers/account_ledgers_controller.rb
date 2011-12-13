@@ -88,11 +88,12 @@ class AccountLedgersController < ApplicationController
     @devolution = Models::AccountLedger::Devolution.new(params)
     @account_ledger = @devolution.account_ledger
     @transaction = @devolution.transaction
+    @accounts = @devolution.accounts
   end
 
   # POST account_ledgers/devolution
   def devolution
-    @devolution = Models::AccountLedger::Devolution.new(params)
+    @devolution = Models::AccountLedger::Devolution.new(params[:account_ledger])
     
     if @devolution.save
       

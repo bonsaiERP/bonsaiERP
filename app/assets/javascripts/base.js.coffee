@@ -23,6 +23,16 @@ $(document).ready(->
   }
   $.datepicker.setDefaults($.datepicker.regional['es'])
 
+
+  # Effect fro dropdown
+  initjDropDown = ->
+    $(this).find('li').bind 'mouseover mouseout', (event)->
+      if event.type == 'mouseover'
+        $(this).addClass('marked')
+      else
+        $(this).removeClass('marked')
+  $.initjDropDown = $.fn.initjDropDown = initjDropDown
+
   # Fix some issues with MSIE 7
   #if $.browser.msie and $.browser.version < 8
   #  $('#main_menu li.more').live("mouseover", ->
@@ -55,7 +65,7 @@ $(document).ready(->
     self = @
     val = $(@).data('value') || ""
     id = new Date().getTime()
-    required= $(@).attr('required')
+    required = $(@).attr('required')
 
     $input = $('<input/>').attr({'size': $(this).attr('size'), 'type':'text', 'id': id, 'required': required})
 
