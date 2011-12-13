@@ -185,6 +185,29 @@ feature "Income", "test features" do
     i.save_trans.should be_false
     i.errors[:base].should_not be_empty
 
+
+    # Make a devolution
+    total_paid = i.total_paid
+    bal = i.balance
+    ac = i.contact.account_cur(i.currency_id)
+    ac.amount.should == 0
+
+    devolution = Models::AccountLedger::Devolution.new(:transaction_id => i.id, :amount => total_paid - 20, :reference => "Devolución check 2324343", :account_id => ac.id)
+
+    devolution.save.should be_true
+
+    i.reload
+    i.balance.should == bal + (total_paid - 20)
+    i.should be_approved
+    al = devolution.account_ledger
+
+    al.should be_persisted
+    al.operation.should  == "out"
+
+    al.conciliation#.should be_true
+    puts al.errors.messages
+    ac.reload
+    ac.amount.should == -(total_paid - 20)
     # Make a devolution for the payment
 
     #puts i.errors.messages

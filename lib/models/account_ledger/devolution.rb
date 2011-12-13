@@ -10,9 +10,11 @@ module Models::AccountLedger
     def initialize(params)
       @transaction = ::Transaction.find(params[:transaction_id])
 
-      @account_ledger = ::AccountLedger.new
+      @account_ledger = ::AccountLedger.new(params)
       account_ledger.transaction_id = transaction.id
       account_ledger.currency_id    = transaction.currency_id
+      account_ledger.exchange_rate  = 1
+      @account_ledger.devolution    = true
       @contact_account = find_or_create_contact_account
     end
 
@@ -20,9 +22,15 @@ module Models::AccountLedger
       res = true
 
       ::AccountLedger.transaction do
-        @account_ledger.save
-        @transaction.save
+        set_ledger_data
+        res = account_ledger.save
+
+        set_transaction_data
+        res = res && transaction.save
+        raise ActiveRecord::Rollback unless res
       end
+
+      res
     end
 
     # Returns all the accounts for a devolution
@@ -31,6 +39,21 @@ module Models::AccountLedger
     end
 
     private
+    # Sets all the parameters of the transaction
+    def set_transaction_data
+      transaction.balance += account_ledger.amount.abs
+      transaction.state = 'approved' if transaction.paid?
+    end
+
+    # Sets the details for ledger
+    def set_ledger_data
+      if transaction.is_a?(Income)
+        account_ledger.operation = 'out'
+        #account_ledger.amount = -account_ledger.amount
+      else
+        account_ledger.operation = 'in'
+      end
+    end
 
     def find_or_create_contact_account
       contact = transaction.contact

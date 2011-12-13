@@ -3,6 +3,11 @@
 # email: boriscyber@gmail.com
 class AccountLedger < ActiveRecord::Base
 
+  # Constants
+  OPERATIONS = %w(in out trans)
+  BEHAVIORS = [:devolution, :payment, :transference, :inout]
+
+  attr_reader *BEHAVIORS
   attr_reader :ac_id
   # Base amount is the #  amount = base_amount + interests_penalties
   attr_accessor :make_conciliation, :base_amount
@@ -21,16 +26,7 @@ class AccountLedger < ActiveRecord::Base
   include Models::AccountLedger::Transaction
   include Models::AccountLedger::Conciliation
 
-  OPERATIONS = %w(in out trans)
-  OPERATIONS.each do |op|
-    class_eval <<-CODE, __FILE__, __LINE__ + 1
-      def #{op}?
-        "#{op}" == operation
-      end
-    CODE
-  end
-
-  # relationships
+  # Relationships
   belongs_to :account, :autosave => true
   belongs_to :to, :class_name => "Account", :autosave => true
   belongs_to :transaction
@@ -44,6 +40,18 @@ class AccountLedger < ActiveRecord::Base
   has_many :account_ledger_details, :dependent => :destroy, :autosave => true
   accepts_nested_attributes_for :account_ledger_details, :allow_destroy => true
 
+  BEHAVIORS.each do |met|
+    class_eval <<-CODE, __FILE__, __LINE__ + 1
+      def #{met}?; !!#{met}; end
+    CODE
+  end
+
+  OPERATIONS.each do |op|
+    class_eval <<-CODE, __FILE__, __LINE__ + 1
+      def #{op}?; "#{op}" == operation; end
+    CODE
+  end
+
   # Validations
   validates_presence_of :amount, :account_id, :reference
 
@@ -55,6 +63,9 @@ class AccountLedger < ActiveRecord::Base
   validates :currency_id, :currency => true
   #validates_uniqueness_of :code
 
+  with_options :if => :devolution? do |opt|
+    opt.before_create :set_amount
+  end
   #validate  :number_of_details
   #validate  :total_amount_equal
 
