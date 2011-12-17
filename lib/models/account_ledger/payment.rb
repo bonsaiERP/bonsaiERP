@@ -3,7 +3,7 @@
 # email: boriscyber@gmail.com
 require 'active_support/concern'
 
-module Models::AccountLedger::Transaction
+module Models::AccountLedger::Payment
   
   extend ActiveSupport::Concern
 

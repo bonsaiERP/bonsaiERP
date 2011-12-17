@@ -15,7 +15,6 @@ class AccountLedger < ActiveRecord::Base
   # callbacks
   before_validation :set_currency_id
   before_destroy    { false }
-  #before_create     :set_code
   before_create     { self.creator_id = UserSession.user_id }
 
   # includes
@@ -23,7 +22,7 @@ class AccountLedger < ActiveRecord::Base
 
   # includes related to the model
   include Models::AccountLedger::Money
-  include Models::AccountLedger::Transaction
+  include Models::AccountLedger::Payment
   include Models::AccountLedger::Conciliation
 
   # Relationships
@@ -61,15 +60,10 @@ class AccountLedger < ActiveRecord::Base
 
   validates :reference, :length => { :within => 3..150, :allow_blank => false }
   validates :currency_id, :currency => true
-  #validates_uniqueness_of :code
 
-  with_options :if => :devolution? do |opt|
-    opt.before_create :set_amount
-  end
   #validate  :number_of_details
   #validate  :total_amount_equal
 
-  #attr_readonly :currency_id, :amount
   # accessible
   attr_accessible :account_id, :to_id, :date, :operation, :reference, :interests_penalties,
     :amount, :exchange_rate, :description, :account_ledger_details_attributes, :contact_id, :base_amount

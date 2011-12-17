@@ -189,25 +189,31 @@ feature "Income", "test features" do
     # Make a devolution
     total_paid = i.total_paid
     bal = i.balance
-    ac = i.contact.account_cur(i.currency_id)
-    ac.amount.should == 0
+    #ac = i.contact.account_cur(i.currency_id)
+    #ac.amount.should == 0
+    #puts "Actual Bal: #{bal}, Paid:#{total_paid}"
 
-    devolution = i.new_devolution(:transaction_id => i.id, :amount => total_paid - 20, :reference => "Devolución check 2324343", :account_id => ac.id)
+    devolution = i.new_devolution(transaction_id: i.id, base_amount: total_paid - 20, reference: "Devolución check 2324343", 
+                                  account_id: bank_account.id, exchange_rate: 1)
 
+    devolution.operation.should == "out"
     i.save_devolution.should be_true
+    devolution.amount.should == -(total_paid - 20)
 
     i.reload
     i.balance.should == bal + (total_paid - 20)
     i.should be_approved
-    al = devolution.account_ledger
+    al = devolution
 
     al.should be_persisted
     al.operation.should  == "out"
 
-    al.conciliation#.should be_true
-    puts al.errors.messages
-    ac.reload
-    ac.amount.should == -(total_paid - 20)
+    bank_account.reload
+    cur_b_amount = bank_account.amount
+
+    al.conciliate_account.should be_true
+    bank_account.reload
+    bank_account.amount.should == cur_b_amount -(total_paid - 20)
     # Make a devolution for the payment
 
     #puts i.errors.messages

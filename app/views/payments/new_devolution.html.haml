@@ -2,7 +2,8 @@
   Nueva devolución
   %strong= @transaction
 
-  - present @account_ledger do |presenter|
+- present @account_ledger do |presenter|
+  = simple_form_for(@account_ledger, :url => devolution_payments_path, :html => {:class => 'enter', :id => 'payment_form'}) do |f|
     = bonsai_form_error(f)
 
     = f.input :transaction_id, :as => :hidden
@@ -47,19 +48,19 @@
   %br
   %br
 
-  :javascript
-    $(function() {
+:javascript
+  $(function() {
 
-      var accounts = #{@payment.to_hash.to_json};
-      var currencies = #{Currency.scoped.to_hash.to_json};
-      var account_data = #{@account_ledger.create_hash(:currency_id, :account_id).to_json };
+    var accounts = #{@payment.to_hash.to_json};
+    var currencies = #{Currency.scoped.to_hash.to_json};
+    var account_data = #{@account_ledger.create_hash(:currency_id, :account_id).to_json };
 
-      var p = new Payment(accounts, currencies, account_data, #{@transaction.currency_id});
-      $('#payment_accounts').find("div").unbind("click");
-      $('#payment_accounts').jDropDown({callback: p.setAccount}).initjDropDown();
+    var p = new Payment(accounts, currencies, account_data, #{@transaction.currency_id});
+    $('#payment_accounts').find("div").unbind("click");
+    $('#payment_accounts').jDropDown({callback: p.setAccount}).initjDropDown();
 
-      var er = new ExchangeRate();
-      er.setAll('#account_ledger_exchange_rate', '#account_ledger_account_id', #{@transaction.currency_id}, accounts, currencies, {inverted: true});
+    var er = new ExchangeRate();
+    er.setAll('#account_ledger_exchange_rate', '#account_ledger_account_id', #{@transaction.currency_id}, accounts, currencies, {inverted: true});
 
-      p.start();
-    });
+    p.start();
+  });
