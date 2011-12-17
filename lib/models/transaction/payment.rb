@@ -37,6 +37,21 @@ module Models::Transaction::Payment
       @current_ledger
     end
 
+    def new_devolution(params = {})
+      return false if draft? or paid? # Do not allow payments for draft? or paid? transactions
+
+      # Find the right account
+      params.delete(:to_id)
+      params[:amount] = params[:base_amount].to_f + params[:interests_penalties].to_f
+
+      @current_ledger = account_ledgers.build(params) {|al| al.operation = get_account_ledger_operation }
+      @current_ledger.set_payment(true)
+      @payment = true # To activate callbacks and validations
+
+      @current_ledger
+
+    end
+
     # ledger should
     # - Set to_id
     # - Set currency_id

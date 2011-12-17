@@ -38,7 +38,12 @@ Bonsaierp::Application.routes.draw do
 
   resources :cashes
 
-  resources :payments 
+  resources :payments do
+    collection do
+      get  :new_devolution
+      post :devolution
+    end
+  end
 
   resources :pay_plans
 

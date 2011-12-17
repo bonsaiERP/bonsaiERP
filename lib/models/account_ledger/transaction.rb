@@ -81,8 +81,7 @@ module Models::AccountLedger::Transaction
     end
 
     def set_amount
-      case transaction.class.to_s
-      when "Buy"
+      if operation == 'out'
         self.amount = -amount
         self.interests_penalties = -interests_penalties.abs
       end

@@ -7,7 +7,7 @@
 - present @inventory_operation do |presenter|
   - presenter.transaction = @transaction
 
-  %h1= presenter.transaction_title
+  %h1= presenter.title#transaction_title
   %h2= @inventory_operation.store
 
   %h3.n= link_to @inventory_operation.transaction, @inventory_operation.transaction

@@ -192,9 +192,9 @@ feature "Income", "test features" do
     ac = i.contact.account_cur(i.currency_id)
     ac.amount.should == 0
 
-    devolution = Models::AccountLedger::Devolution.new(:transaction_id => i.id, :amount => total_paid - 20, :reference => "Devolución check 2324343", :account_id => ac.id)
+    devolution = i.new_devolution(:transaction_id => i.id, :amount => total_paid - 20, :reference => "Devolución check 2324343", :account_id => ac.id)
 
-    devolution.save.should be_true
+    i.save_devolution.should be_true
 
     i.reload
     i.balance.should == bal + (total_paid - 20)

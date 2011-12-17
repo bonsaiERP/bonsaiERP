@@ -64,7 +64,6 @@ class InventoryOperationsController < ApplicationController
 
   # GET /inventory_operations/new_transaction
   def new_transaction
-    params[:operation] = @transaction.is_a?(Income) ? "out" : "in" #########
     @inventory_operation = InventoryOperation.new(:store_id => params[:store_id], :operation => params[:operation], 
                                                   :transaction_id => params[:transaction_id])
 
@@ -73,8 +72,6 @@ class InventoryOperationsController < ApplicationController
 
   # /inventory_operations/create_transaction
   def create_transaction
-    params[:inventory_operation][:operation] = @transaction.is_a?(Income) ? "out" : "in" ########
-
     @inventory_operation = @transaction.inventory_operations.build(params[:inventory_operation])
     @inventory_operation.contact_id = @transaction.contact_id
 

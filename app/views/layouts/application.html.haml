@@ -31,12 +31,10 @@
     #main_wrap
       #wrapper
         #wrap_in
-          -#logo
-            %a{:href => '/', :title => 'Inicio'}
           #header
             = render 'layouts/usersettings_menu' if user_signed_in?
             - if organisation?
-              %h1= session[:organisation][:name]
+              %h1{:title => "ID: #{session[:organisation][:id]}, Exp:  #{lo session[:organisation][:due_date] }"}= session[:organisation][:name]
             .clear
             = render 'layouts/main_menu'
           #menu
@@ -67,24 +65,4 @@
 :javascript
   $(function() {
 
-    if($.browser.msie && $.browser.version < 8) {
-      var menu = ["<li class='more' style='width: 200px'>",
-            "<ul>",
-              '<li><a href="/incomes">Ventas</a></li>',
-              '<li><a href="/buys">Compras y Gastos</a></li>',
-              '<li><hr></li>',
-              '<li><a href="/clients">Clientes</a></li>',
-              '<li><a href="/suppliers">Proveedores</a></li>',
-              '<li><a href="/staffs">Personal</a></li>',
-              '<li><hr></li>',
-              '<li><a href="/banks">Cuentas bancarias</a></li>',
-              '<li><a href="/cashes">Cuentas caja</a></li>',
-              '<li><hr></li>',
-              '<li><a href="/projects">Proyectos</a></li>',
-              '<li><a href="/taxes">Impuestos</a></li>',
-            '</ul>',
-          "<div class='clear'></div>",
-        '</li>'];
-      $('#main_menu ul.more:first').html(menu.join(''));
-    }
   })

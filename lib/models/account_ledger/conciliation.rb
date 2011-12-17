@@ -190,7 +190,6 @@ module Models::AccountLedger::Conciliation
 
       self.class.transaction do
         res = self.save
-        puts "#{res} :: #{transaction.balance} == 0 :: #{transaction.type} == 'Income' :: #{transaction.account_ledgers.empty?}"
         if res and transaction.balance == 0 and transaction.type == "Income" and transaction.account_ledgers.pendent.empty?
           transaction.deliver = true
         end

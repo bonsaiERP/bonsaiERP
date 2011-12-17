@@ -49,6 +49,25 @@ class PaymentsController < ApplicationController
     end
   end
 
+  def new_devolution
+    @transaction = Transaction.find( params[:transaction_id] )
+    @account_ledger = @transaction.new_devolution
+    @payment = PaymentPresenter.new(@transaction)
+  end
+
+  def devolution
+    @transaction = Transaction.find(params[:account_ledger][:transaction_id])
+    params[:account_ledger][:exchange_rate] = 1 if params[:account_ledger][:exchange_rate].blank?
+    
+    @account_ledger = @transaction.new_devolution(params[:account_ledger])
+
+    if @transaction.save_payment
+      render 'create'
+    else
+      @payment = PaymentPresenter.new(@transaction)
+      render 'new'
+    end
+  end
   # DELETE /payments/:id
   #def destroy
   #  @payment.destroy_payment

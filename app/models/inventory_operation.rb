@@ -55,10 +55,20 @@ class InventoryOperation < ActiveRecord::Base
     if transaction_id.blank?
       inventory_operation_details.build
     else
+      met = method_for_transaction_details
       self.contact_id = transaction.contact_id
       transaction.transaction_details.each do |det|
-        inventory_operation_details.build(:item_id => det.item_id, :quantity => det.balance)
+        inventory_operation_details.build(:item_id => det.item_id, :quantity => det.send(met))
       end
+    end
+  end
+
+  def method_for_transaction_details
+    case
+    when(transaction.is_a?(Income) and out?) then :balance
+    when(transaction.is_a?(Buy) and in?) then :balance
+    when(transaction.is_a?(Income) and in?) then :delivered
+    when(transaction.is_a?(Income) and out?) then :delivered
     end
   end
 

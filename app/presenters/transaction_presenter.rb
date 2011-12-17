@@ -253,7 +253,7 @@ class TransactionPresenter < BasePresenter
   # Link for devolution of money
   def new_devolution_link
     if transaction.balance != transaction.total
-      h.link_to "Devolución", new_devolution_account_ledgers_path(:transaction_id => transaction.id), :class => 'ajax fs120 red b', 'data-title' => 'Devolución'
+      h.link_to "Devolución", new_devolution_payments_path(:transaction_id => transaction.id), :class => 'ajax fs120 red b', 'data-title' => 'Devolución'
     end
   end
 

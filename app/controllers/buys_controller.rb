@@ -115,6 +115,14 @@ class BuysController < TransactionsController
     redirect_to @transaction
   end
 
+  def history
+    @history = TransactionHistory.find(params[:id])
+    @trans = @history.transaction
+    @transaction = @history.get_transaction("Income")
+    
+    render "transactions/history"
+  end
+
   private
 
   def set_transaction

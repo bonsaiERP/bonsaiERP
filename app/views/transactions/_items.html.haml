@@ -30,7 +30,7 @@
       %td.r{:colspan => 3} #{minus_image} Descuento (<span id="discount_percentage" data-val="#{transaction.total_discount}">#{ntc transaction.discount}</span>%)
       %td#discount_total.r= ntc -transaction.total_discount
 
-    %tr.extra
+    -#%tr.extra
       %td
       %td.r.line{:colspan => 3} Impuestos #{list_taxes transaction} (<span id="taxes_percentage" data-val="#{transaction.total_taxes}">#{ntc transaction.tax_percent}</span>%)
       %td#taxes_total.r.line= ntc transaction.total_taxes
@@ -40,26 +40,4 @@
         %td.r.b.dark{:colspan => 3} Total
       %td#total_value.r.b{'data-val' => transaction.total} #{transaction.currency_symbol} #{ntc transaction.total}
 
-
-    - if not transaction.currency_id == currency_id
-
-      - unless transaction.draft?
-        %tr.extra
-          %td
-          %td.r.b.line.dark{:colspan => 3} #{minus_image} Cobrado #{transaction.currency_name.pluralize}
-          %td#total_payments.r.b.line{'data-val' => transaction.total_payments} #{transaction.currency_symbol} #{ntc( transaction.total_payments)}
-        %tr.extra
-          %td
-          %td.r.b.dark{:colspan => 3} Saldo #{transaction.currency_name.pluralize}
-          %td#balance.r.b{'data-val' => transaction.balance} #{transaction.currency_symbol} #{ntc transaction.balance}
-
-    - elsif not transaction.state == 'draft'
-      %tr.extra
-        %td
-          %td.r.b.line.dark{:colspan => 3} #{minus_image} #{presenter.paid}
-        %td#total_payments.r.b.line{'data-val' => transaction.total_payments} #{transaction.currency_symbol} #{ntc( transaction.total_payments.abs)}
-      %tr.extra
-        %td
-        %td.r.b.dark{:colspan => 3} Saldo
-        %td#balance.r.b{'data-val' => transaction.balance} #{transaction.currency_symbol} #{ntc transaction.balance}
 
