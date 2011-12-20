@@ -12,11 +12,7 @@ class PaymentPresenter
   end
 
   def devolution_accounts
-    if @transaction.is_a? Income
-      Account.contact_money(@transaction.contact_id)
-    else
-      Account.contact_money_buy(@transaction.contact_id)
-    end
+    [Account.contact_account(@transaction.contact_id, @transaction.currency_id)] + Account.money.all
   end
 
   def to_hash

@@ -61,11 +61,11 @@ class PaymentsController < ApplicationController
     
     @account_ledger = @transaction.new_devolution(params[:account_ledger])
 
-    if @transaction.save_payment
+    if @transaction.save_devolution
       render 'create'
     else
       @payment = PaymentPresenter.new(@transaction)
-      render 'new'
+      render 'new_devolution'
     end
   end
   # DELETE /payments/:id

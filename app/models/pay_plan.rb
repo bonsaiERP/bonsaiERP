@@ -144,7 +144,7 @@ class PayPlan < ActiveRecord::Base
   end
 
   def set_defaults
-    self.amount ||= self.transaction_pay_plans_balance
+    self.amount ||= 0#self.transaction_pay_plans_balance
     self.payment_date ||= Date.today
     self.alert_date ||= self.payment_date - 5.days
     self.currency_id ||= transaction_currency_id

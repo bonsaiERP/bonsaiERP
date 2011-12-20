@@ -106,6 +106,10 @@ class Account < ActiveRecord::Base
     .where("account_ledgers.account_id = :id OR account_ledgers.to_id = :id", :id => id)
   end
 
+  def self.contact_account(c_id, cur_id)
+    Account.where(:accountable_id => c_id, :accountable_type => "Contact", :currency_id => cur_id).first || nil
+  end
+
   private
     def set_amount
       self.amount ||= 0.0

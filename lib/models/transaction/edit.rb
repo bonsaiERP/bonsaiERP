@@ -21,6 +21,7 @@ module Models::Transaction
         res = @current_ledger.save if @current_ledger
         res = @account.save && res if @account
         res = transaction.save
+        res = res && update_pay_plans if transaction.credit?
         raise ActiveRecord::Rollback unless res
       end
 
@@ -90,8 +91,18 @@ module Models::Transaction
         end
 
         update_state
+        update_pay_plans if transaction.credit?
       end
 
+    end
+
+    def update_pay_plans
+      return true if transaction.total.round(2) == old_transaction.total
+
+      amt = transaction.total - old_transaction.total
+      pp_id = transaction.pay_plans.last.id
+      transaction.edit_pay_plan(pp_id)
+      transaction.save_pay_plan
     end
 
     def refund

@@ -10,7 +10,7 @@ module Models::Transaction::Payment
   include ActionView::Helpers::NumberHelper
 
   included do
-    attr_reader :contact_payment, :current_ledger, :payment
+    attr_reader :contact_payment, :current_ledger, :payment, :contact_account
 
     with_options :if => :payment? do |pay|
       pay.validate :valid_number_of_legers
@@ -46,6 +46,7 @@ module Models::Transaction::Payment
     @current_ledger = account_ledgers.build(params) {|al| al.operation = get_account_ledger_operation(true) }
     @current_ledger.set_payment(true)
     @payment = true # To activate callbacks and validations
+    contact.get_contact_account(currency_id)
 
     @current_ledger
   end

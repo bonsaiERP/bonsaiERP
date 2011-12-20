@@ -39,7 +39,7 @@ class Payment
   # Calculates total
   calculateTotal: ->
     amount   = @$amount.val() * 1
-    int      = @$interests.val() * 1
+    int      = @$interests.val() * 1 || 0
 
     rate = $('#account_ledger_exchange_rate').val() * 1
     try
