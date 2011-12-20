@@ -11,6 +11,14 @@ class PaymentPresenter
     end
   end
 
+  def devolution_accounts
+    if @transaction.is_a? Income
+      Account.contact_money(@transaction.contact_id)
+    else
+      Account.contact_money_buy(@transaction.contact_id)
+    end
+  end
+
   def to_hash
     Hash[accounts.values_of(:id, :name , :currency_id).map do |a, b, c|
       [a, {:name => b, :currency_id => c}]

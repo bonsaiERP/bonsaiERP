@@ -84,23 +84,23 @@ class AccountLedgersController < ApplicationController
   end
 
   # GET account_ledgers/new_devolution
-  def new_devolution
-    @devolution = Models::AccountLedger::Devolution.new(params)
-    @account_ledger = @devolution.account_ledger
-    @transaction = @devolution.transaction
-    @accounts = @devolution.accounts
-  end
+  #def new_devolution
+  #  @devolution = Models::AccountLedger::Devolution.new(params)
+  #  @account_ledger = @devolution.account_ledger
+  #  @transaction = @devolution.transaction
+  #  @accounts = @devolution.accounts
+  #end
 
-  # POST account_ledgers/devolution
-  def devolution
-    @devolution = Models::AccountLedger::Devolution.new(params[:account_ledger])
-    
-    if @devolution.save
-      
-    else
-      @account_ledger = @devolution.account_ledger
-      @transaction = @devolution.transaction
-      render :action => :new_devolution
-    end
-  end
+  ## POST account_ledgers/devolution
+  #def devolution
+  #  @devolution = Models::AccountLedger::Devolution.new(params[:account_ledger])
+  #  
+  #  if @devolution.save
+  #    
+  #  else
+  #    @account_ledger = @devolution.account_ledger
+  #    @transaction = @devolution.transaction
+  #    render :action => :new_devolution
+  #  end
+  #end
 end
