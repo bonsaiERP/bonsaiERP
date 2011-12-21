@@ -52,6 +52,7 @@ es:
   account_ledger:
     payment_description: "%{pay_type} de %{trans} %{ref}, cuenta %{account}"
     initial_money: "Saldo inicial"
+    devolution_description: "Devolución %{trans}, cuenta %{account}"
   transaction:
     Income: 
       class: "Venta"

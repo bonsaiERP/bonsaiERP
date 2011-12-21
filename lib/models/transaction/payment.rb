@@ -246,10 +246,21 @@ module Models::Transaction::Payment
   def set_account_ledger_description
     i18ntrans = I18n.t("transaction.#{self.class}")
 
-    txt = I18n.t("account_ledger.payment_description", 
-      :pay_type => i18ntrans[:pay], :trans => i18ntrans[:class], 
-      :ref => "#{self.ref_number}", :account => @current_ledger.account_name
-    )
+    case
+    when(@current_ledger.in? and self.is_a?(Income))
+      txt = I18n.t("account_ledger.payment_description", 
+        :pay_type => i18ntrans[:pay], :trans => i18ntrans[:class], 
+        :ref => "#{self.ref_number}", :account => @current_ledger.account_name
+      )
+    when(@current_ledger.out? and self.is_a?(Buy))
+      txt = I18n.t("account_ledger.payment_description", 
+        :pay_type => i18ntrans[:pay], :trans => i18ntrans[:class], 
+        :ref => "#{self.ref_number}", :account => @current_ledger.account_name
+      )
+    else
+      txt = I18n.t("account_ledger.devolution_description",
+                  :trans => self.to_s, :account => @current_ledger.account_name)
+    end
 
     # Add currency text if necessary
     unless currency_id === @current_ledger.account_currency_id

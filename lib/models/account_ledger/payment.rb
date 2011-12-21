@@ -32,6 +32,14 @@ module Models::AccountLedger::Payment
 
     # nulls in case that it's related to a transaction
     def null_transaction_account
+      if is_payment?
+        null_payment_account
+      else
+        null_devolution_account
+      end
+    end
+
+    def null_payment_account
       ret = true
       transaction.balance += (amount_currency).abs
 
@@ -52,7 +60,38 @@ module Models::AccountLedger::Payment
       ret
     end
 
+    def null_devolution_account
+      ret = true
+
+      transaction.balance += (amount_currency).abs
+
+      if transaction.credit?
+        create_transaction_pay_plan
+        transaction.payment_date = payment_date
+      end
+
+      self.class.transaction do
+        ret = self.save
+
+        transaction.state = "approved"# if transaction.paid?
+        ret = ret && transaction.save
+
+        raise ActiveRecord::Rollback unless ret
+      end
+
+      ret
+    end
+
     private
+
+    def is_payment?
+      if (transaction.is_a?(Income) and in?) or (transaction.is_a?(Buy) and out?)
+        true
+      else
+        false
+      end
+    end
+
     # Creates a new pay_plan with the date of the latest nulled
     # pay_plan when a account_ledger( payment ) is nulled
     def create_transaction_pay_plan
