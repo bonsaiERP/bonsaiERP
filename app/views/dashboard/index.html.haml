@@ -62,12 +62,13 @@
   .box
     %h3.title Verificaciones pendientes
     %ul.list
-      - presenter.pendent_conciliations.each do |cur, al|
+      - presenter.pendent_conciliations.each do |cur, al, ac|
         %li
           = link_to al do
             %span.high
               = cur
               = al.amount
+            %strong= ac
             Verificar
 
   .box

@@ -3,6 +3,7 @@
 # email: boriscyber@gmail.com
 class RegistrationsController < ApplicationController
   before_filter :check_logged_user, :except => [:show]
+  before_filter :check_token, :only => [:new, :create]
   before_filter :reset_search_path
   layout "dialog"
 
@@ -49,5 +50,11 @@ class RegistrationsController < ApplicationController
   private
   def reset_search_path
     PgTools.reset_search_path
+  end
+
+  def check_token
+    unless params[:registration_token] == "HBJasduf8736454yfsuhdf"
+      return redirect_to root_path
+    end
   end
 end

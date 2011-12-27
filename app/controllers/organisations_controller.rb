@@ -6,8 +6,7 @@ class OrganisationsController < ApplicationController
   before_filter :reset_search_path
   before_filter :destroy_organisation_session!, :except => [ :select, :edit, :update, :edit_preferences, :update_preferences ]
   
-  layout "dialog", :only => [:new]
-  layout "application", :only => [:edit, :update]
+  #layout "application", :only => [:edit, :update]
 
   respond_to :html, :xml, :json
 
