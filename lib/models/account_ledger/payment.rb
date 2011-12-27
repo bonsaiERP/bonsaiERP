@@ -127,13 +127,13 @@ module Models::AccountLedger::Payment
     end
 
     def valid_trans_amount
-      if transaction.is_a?(Income) and account.accountable_type === 'Contact'
+      if transaction.is_a?(Income) and in? and account.accountable_type === 'Contact'
         if amount_currency.round(2).abs > -account.amount
           self.errors[:amount] << I18n.t("errors.messages.account_ledger.amount")
           self.errors[:base_amount] << I18n.t("errors.messages.account_ledger.amount")
           return false
         end
-      elsif transaction.is_a?(Buy) and account.accountable_type === 'MoneyStore'
+      elsif transaction.is_a?(Buy) and out? and account.accountable_type === 'MoneyStore'
         if amount.abs > account.amount
           self.errors[:amount] << I18n.t("errors.messages.account_ledger.amount")
           self.errors[:base_amount] << I18n.t("errors.messages.account_ledger.amount")
