@@ -65,8 +65,8 @@ class DashboardPresenter < BasePresenter
   end
 
   def pendent_conciliations
-    AccountLedger.pendent.map do |al|
-      [currencies[al.currency_id], al]
+    AccountLedger.pendent.includes(:account).map do |al|
+      [currencies[al.currency_id], al, al.account.to_s]
     end
   end
 
