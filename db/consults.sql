@@ -30,3 +30,7 @@ JOIN (
 ) AS tmp ON (tmp.organisation_id = organisations.id)
 GROUP BY tmp.organisation_id
 LIMIT 0, 100;
+
+-- PostgreSQL
+SELECT u.email, o.name FROM users u LEFT JOIN links l ON (u.id = l.user_id)
+LEFT JOIN organisations o ON (o.id = l.organisation_id);
