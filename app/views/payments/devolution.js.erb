@@ -1,0 +1,2 @@
+// javascript
+$('#devolutions').html("<%= escape_javascript(render("/payments/devolutions", :transaction => @transaction, :presenter => @presenter) ) %>").mark();

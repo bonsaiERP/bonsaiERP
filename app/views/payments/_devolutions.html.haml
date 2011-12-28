@@ -1,0 +1,13 @@
+%h3 Devoluciones
+
+%table.decorated#devolutions_table
+  %thead
+    %tr
+      %th Código Fecha
+      %th{:style => 'width: 300px'} Descripción
+      %th Cantidad #{transaction.currency_symbol}
+      %th.nw Total fila #{transaction.currency_symbol}
+      %th
+  %tbody
+    - presenter.devolutions.order("created_at DESC").each do |al|
+      = render "payments/payment", :account_ledger => al, :transaction => transaction, :hide_int => true

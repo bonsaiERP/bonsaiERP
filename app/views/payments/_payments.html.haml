@@ -12,7 +12,7 @@
     %th.nw Total fila #{transaction.currency_symbol}
     %th
   
-  - transaction.account_ledgers.includes(:account, :to, :currency).active.order("created_at DESC").each do |al|
+  - presenter.payments.order("created_at DESC").each do |al|
     = render "payments/payment", :account_ledger => al, :transaction => transaction
 
   %tr.extra.pad_top

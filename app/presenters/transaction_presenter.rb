@@ -163,6 +163,12 @@ class TransactionPresenter < BasePresenter
     end
   end
 
+  def render_devolutions
+    if devolutions.any?
+      h.render "/payments/devolutions", :transaction => transaction, :presenter => self
+    end
+  end
+
   def render_nulled_payments
     if transaction.account_ledgers.nulled.any?
       h.render "/payments/deleted", :transaction => transaction, :presenter => self
@@ -253,7 +259,7 @@ class TransactionPresenter < BasePresenter
   # Link for devolution of money
   def new_devolution_link
     if transaction.balance != transaction.total
-      h.link_to "Devolución", new_devolution_payments_path(:transaction_id => transaction.id), :class => 'ajax fs120 red b', 'data-title' => 'Devolución'
+      h.link_to "Nueva devolución", new_devolution_payments_path(:transaction_id => transaction.id), :class => 'ajax button red b', 'data-title' => 'Devolución'
     end
   end
 
@@ -275,6 +281,24 @@ class TransactionPresenter < BasePresenter
       "Cobrado"
     else
       "Pagado"
+    end
+  end
+
+  # List of payments
+  def payments
+    if transaction.is_a?(Income)
+      transaction.account_ledgers.includes(:account, :to, :currency).active.where("amount > 0")
+    else
+      transaction.account_ledgers.includes(:account, :to, :currency).active.where("amount < 0")
+    end
+  end
+
+  # List of devolutions
+  def devolutions
+    if transaction.is_a?(Income)
+      transaction.account_ledgers.includes(:account, :to, :currency).active.where("amount < 0")
+    else
+      transaction.account_ledgers.includes(:account, :to, :currency).active.where("amount > 0")
     end
   end
 

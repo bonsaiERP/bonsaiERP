@@ -203,23 +203,12 @@ ul.tabs{
   }
 }
 
-a.new{
-  font-weight: bold;
-  padding-left: 22px;
-  color: darken($green, 10%);
-  display: inline-block;
-  background: transparent url(images/add.png) no-repeat scroll 4px 50%;
-  font-size: 110%;
-  &:hover{
-    text-decoration: none;
-  }
-}
-
 a.button{
   @include rounded-corners(3px);
   border: 1px solid $grey;
-  padding: 5px 8px 5px 26px;
+  padding: 5px 8px;
   margin: 5px;
+  font-size: 110%;
   background-color:$light-grey;
   &:hover{
     background-color: $white;
@@ -227,6 +216,18 @@ a.button{
   }
 }
 
+a.new{
+  font-weight: bold;
+  padding-left: 22px !important;
+  color: darken($green, 10%);
+  display: inline-block;
+  background-image: url("images/add.png");
+  background-position: 4px 50%;
+  background-repeat: no-repeat;
+  &:hover{
+    text-decoration: none;
+  }
+}
 
 a.add{
   background: url(images/add.png) no-repeat 0px 50%;
