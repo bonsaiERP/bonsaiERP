@@ -65,7 +65,7 @@ Bonsaierp::Application.configure do
   config.assets.digest = true
 
   config.assets.compile = true
-  #config.assets.precompile = %w( homeapp.css home.js application.css application.js)
+  #config.assets.precompile = %w( homeapp.css )
   # Disable query caching until it's fixed for PostgreSQL schemas
   #config.middleware.delete ActiveRecord::QueryCache
 
