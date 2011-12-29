@@ -96,6 +96,7 @@ module Models::Transaction::Payment
       self.balance += @current_ledger.amount_currency.abs
       self.state = 'approved'
 
+      create_payment_pay_plan(pay_plans.last, @current_ledger.amount_currency.abs) if credit?
       res = res && self.save
       raise ActiveRecord::Rollback unless res
     end

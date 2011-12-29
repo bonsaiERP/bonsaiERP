@@ -126,11 +126,18 @@ module Models::AccountLedger::Conciliation
     # Validates the amount for a contact depending the amount
     def valid_contact_amount?
       valid = true
-      if @account_ledger.in? and -@account_ledger.account.amount < @account_ledger.amount
-        valid = false
-      elsif @account_ledger.out? and @account_ledger.account.amount < -@account_ledger.amount
-        valid = false
+      if @account_ledger.transaction.is_a?(Income)
+        if @account_ledger.in? and -@account_ledger.account.amount < @account_ledger.amount
+          valid = false
+        end
       end
+
+      if @account_ledger.transaction.is_a?(Buy)
+        if @account_ledger.out? and @account_ledger.account.amount < -@account_ledger.amount
+          valid = false
+        end
+      end
+
 
       unless valid
         @account_ledger.errors[:amount]  << I18n.t("errors.messages.account_ledger.amount")

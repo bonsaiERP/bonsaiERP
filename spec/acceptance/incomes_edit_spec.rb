@@ -193,7 +193,7 @@ feature "Income", "test features" do
     #ac.amount.should == 0
     #puts "Actual Bal: #{bal}, Paid:#{total_paid}"
 
-    devolution = i.new_devolution(transaction_id: i.id, base_amount: total_paid - 20, reference: "Devolución check 2324343", 
+    devolution = i.new_devolution( base_amount: total_paid - 20, reference: "Devolución check 2324343", 
                                   account_id: bank_account.id, exchange_rate: 1)
 
     devolution.operation.should == "out"
@@ -266,6 +266,55 @@ feature "Income", "test features" do
     #i.total.should ==  3 * 10 + 5 * 5
     #i.balance.should ==  0
     #i.should be_deliver
+  end
+
+  scenario "make devolution from a Income with credit" do
+    i = Income.new(income_params)
+    i.save_trans.should be_true
+
+    i.balance.should == 3 * 10 + 5 * 20
+    bal = i.balance
+
+    i.modified_by.should == UserSession.user_id
+
+    # Approve income
+    i.approve!.should be_true
+    i.should_not be_draft
+
+    i.approve_credit(credit_reference: "Credit 001", credit_description: "OK").should be_true
+    i.pay_plans.count.should == 1
+
+    pp = i.pay_plans.first
+    pp.should be_persisted
+    i.edit_pay_plan(pp.id, payment_date: Date.today + 10.days, amount: 20, repeat: "1")
+    i.save_pay_plan.should be_true
+
+    pp_size = (i.total/20).ceil
+    i.pay_plans(true).count.should == pp_size
+    i.pay_plans.unpaid.count.should == pp_size
+
+    p = i.new_payment(reference: "First payment, almost all", base_amount: i.total, exchange_rate: 1, account_id: bank_account.id)
+    i.save_payment.should be_true
+    i.balance.should == 0
+
+    i.pay_plans(true).unpaid.count.should == 0
+    p.conciliate_account.should be_true
+
+    dev_amt, ac = 20, client.account_cur(i.currency_id)
+    dev = i.new_devolution(base_amount: dev_amt, account_id: ac.id, reference: "First devlution", exchange_rate: 1)
+    i.save_devolution#.should be_true
+
+    tot_ac = ac.amount
+
+    i.reload
+    i.pay_plans(true).unpaid.count.should == 1
+    i.pay_plans_balance.should == 20
+
+    dev.should be_persisted
+
+    dev.conciliate_account.should be_true
+    ac.reload
+    ac.amount.should == -(tot_ac + dev_amt)
   end
 
   scenario "check the number of items" do

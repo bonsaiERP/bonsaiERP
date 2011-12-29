@@ -9,6 +9,7 @@ class Payment
     @rate = {}
 
     @.setEvents()
+  # Just to calculate total
   start:->
     @.calculateTotal()
   # events

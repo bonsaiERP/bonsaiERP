@@ -58,11 +58,13 @@ class PaymentsController < ApplicationController
   def devolution
     @transaction = Transaction.find(params[:account_ledger][:transaction_id])
     params[:account_ledger][:exchange_rate] = 1 if params[:account_ledger][:exchange_rate].blank?
-    
     @account_ledger = @transaction.new_devolution(params[:account_ledger])
 
     if @transaction.save_devolution
-      render 'create'
+      @presenter = TransactionPresenter.new(@transaction, view_context)
+      @transaction = @transaction
+
+      render 'devolution'
     else
       @payment = PaymentPresenter.new(@transaction)
       render 'new_devolution'

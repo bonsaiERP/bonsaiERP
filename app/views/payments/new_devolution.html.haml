@@ -16,7 +16,7 @@
       %ul
         - @payment.devolution_accounts.each do |account|
           %li.account{:id => account.id}= presenter.account_select account
-      = f.association :account, :collection => @payment.accounts, :label => false
+      = f.association :account, :collection => @payment.devolution_accounts, :label => false
 
     .clear
 
