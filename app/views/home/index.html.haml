@@ -1,1 +1,52 @@
-= render @page
+:css
+  body{
+    background: #F7F7F7 url(/assets/fondo.png) repeat-x 0px -30px !important;
+  }
+
+- content_for :title do
+  Inicio
+
+#home
+  %h1.n{:style => 'color:#FFF; font-weight:normal;font-size: 220%'} 
+    %i bonsai,
+    la forma más fácil de gestionar su empresa
+  %a#video{:href => "javascript:", :title => ""}
+    %img{ :src => "/assets/video_image.jpg", :alt => "Video"}
+  -#, :src => "http://www.youtube.com/embed/iqruf87hMJQ", :frameborder => "0" }
+  -#= link_to image_tag("prueba.png"), "/users/sign_up", :id => "register", :class => 'but'
+  -#= link_to image_tag("tour.png"), "/tour", :id => "tour", :class => 'but'
+  #title
+    %h2 <i>bonsai</i> es un sistema web fácil de usar que le proporciona control sobre sus compras, ventas e inventarios todo relacionado con sus cuentas, clientes y proveedores.
+#boxes
+  .box
+    %h3 Fácil de Usar.
+    %p Es un sistema intuitivo y eficaz, donde no requiere ser un contador para utilizarlo. Es tan fácil de usar como una cuenta de correo electrónico. Al no ser un sistema contable, usted no se complica.
+  .box
+    %h3 Accesibilidad.
+    %p <i>bonsai</i> se encuentra “siempre listo” en la web. Puede acceder a él cuando lo desee desde cualquier lugar donde tenga acceso a Internet.
+  .box
+    %h3 Confiabilidad.
+    %p Como <i>bonsai</i> se encuentra en el Internet no es susceptible a contraer virus. No tiene que preocuparse por sus datos, pues bonsai los guarda automáticamente por usted (Back Ups constantes).
+  .box
+    %h3 Un Control Real
+    %p <i>bonsai</i> cuenta con varias herramientas que harán del control de su empresa fácil y fluido, donde los procesos son claros y amistosos.
+  .clear
+  .clear
+
+:javascript
+  $(function() {
+    //$('#video').click(function() {
+    //  var html = '<iframe width="640" height="390" src="http://www.youtube.com/embed/iqruf87hMJQ?autoplay=1&rel=0" frameborder="0" allowfullscreen></iframe>';
+    //  $('<div/>').html(html).
+    //  dialog({
+    //    modal: true, 
+    //    width: 660,
+    //    height: 410,
+    //    close: function(event, ui) {
+    //      $(this).remove();
+    //    }
+    //  });
+    //});
+  });
+
+-#%iframe#video{ :width => "510", :height => "320", :src => "http://www.youtube.com/embed/iqruf87hMJQ", :frameborder => "0" }

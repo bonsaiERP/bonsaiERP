@@ -9,9 +9,10 @@ body{
 
 h1, h2, h3{ font-family: muli, arial, serif; }
 a{
-  color: darken( $blue, 25% );
+  color: darken( $green, 20% );
   img{ border: none; }
   text-decoration: none;
+  &:hover{ text-decoration: underline; }
 }
 ul{
   margin: 4px;
@@ -28,6 +29,8 @@ ul{
 }
 .light-grey{ background-color: lighten($grey, 20%);}
 .pad-10{ padding: 10px; }
+.pad-20{ padding: 20px; }
+.no-list{ list-style: none;}
 
 /**************************************************************/
 
@@ -84,14 +87,14 @@ ul{
         display: block;
         margin: 0px 5px;
         font-family: 'Muli', arial, serif;
-        color: lighten($black, 10%);
+        color: darken($green, 15%);
         text-decoration: none;
         font-size: 22px;
         &:hover{ color: $green; }
         @include t-shadow(1px, 1px, 1px, darken($grey, 20%));
       }
       a.selected{ 
-        color: darken($green, 10%);
+        color: $green;
         text-shadow: 2px 2px 2px darken($grey, 20%);
         -moz-text-shadow: 2px 2px 2px darken($grey, 20%);
         -webkit-text-shadow: 2px 2px 2px darken($grey, 20%);
@@ -132,6 +135,8 @@ ul{
     top: 50px;
     left: 5px;
   }
+}
+#banner{
 }
 
 .ui-dialog{
@@ -199,10 +204,17 @@ ul{
 }  
 
 #banner{
+  background: #46af26; /* Old browsers */
+  background: -moz-linear-gradient(left, #46af26 0%, #5daf1a 17%, #396b17 36%, #46af26 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, right top, color-stop(0%,#46af26), color-stop(17%,#5daf1a), color-stop(36%,#396b17), color-stop(100%,#46af26)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(left, #46af26 0%,#5daf1a 17%,#396b17 36%,#46af26 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(left, #46af26 0%,#5daf1a 17%,#396b17 36%,#46af26 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(left, #46af26 0%,#5daf1a 17%,#396b17 36%,#46af26 100%); /* IE10+ */
+  background: linear-gradient(left, #46af26 0%,#5daf1a 17%,#396b17 36%,#46af26 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#46af26', endColorstr='#46af26',GradientType=1 ); /* IE6-9 */
   position: relative;
   margin: 0px;
   padding: 0px; 
-  background: #F7F7F7 url(imagenes2.png);
   height: 99px;
 
   h2{ 

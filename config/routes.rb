@@ -164,10 +164,10 @@ Bonsaierp::Application.routes.draw do
   match "/item_account_autocomplete"     => AutocompleteApp.action(:item_account)
   match "/exchange_rates" => AutocompleteApp.action(:get_rates)
 
-  get "/tour" => 'home#index', :page => "tour"
-  get "/prices" => 'home#index', :page => "prices"
-  get "/team" => 'home#index', :page => "team"
-  get "/contact" => 'home#index', :page => "contact"
+  get "/tour"    => 'home#tour'    , :page => "tour"
+  get "/prices"  => 'home#prices'  , :page => 'prices'
+  get "/team"    => 'home#team'    , :page => 'team'
+  get "/contact" => 'home#contact' , :page => 'contact'
 
   root :to => 'home#index'
 end
