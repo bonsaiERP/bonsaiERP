@@ -53,6 +53,11 @@ class PaymentsController < ApplicationController
     @transaction = Transaction.find( params[:transaction_id] )
     @account_ledger = @transaction.new_devolution
     @payment = PaymentPresenter.new(@transaction)
+    if @transaction.account_ledgers.pendent.any?
+      render :text => "<h2 class='red'>#{I18n.t("errors.messages.payment.devolution_pendent_ledgers")}</h2>".html_safe
+    else
+      render "new_devolution"
+    end
   end
 
   def devolution

@@ -23,6 +23,7 @@ es:
       payment:
         greater_amount: "La cantidad que ingreso es mayor que el saldo"
         devolution_amount: "La cantidad que ingreso es mayor que el monto verificado"
+        devolution_pendent_ledgers: "Existen cobros/pagos o devoluciones pendientes de verificación"
       user:
         email: "El formato de su email es incorrecto"
         confirm: "No ha confirmado su cuenta. Revise en su email el mensaje \"Active su cuenta en www.bonsaierp.com\" y siga las instrucciones"

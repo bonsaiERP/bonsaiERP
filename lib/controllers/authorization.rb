@@ -73,7 +73,7 @@ module Controllers::Authorization
       'incomes' => {'approve' => false},
       'buys' => false,
       'stores' => {'new' => false, 'edit' => false, 'update' => false, 'create' => false, 'destroy' => false},
-      'payments' => {'destroy' => false},
+      'payments' => {'destroy' => false, 'new_devolution' => false, 'devolution' => false},
       'projects' => {'index' => true, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false, 'show' => true}
     )
   end

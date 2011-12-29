@@ -85,6 +85,7 @@ module Models::Transaction::Payment
 
   def save_devolution
     return false unless payment?
+    return false unless valid_verified_ledgers?
 
     set_current_ledger_data
 
@@ -124,10 +125,19 @@ module Models::Transaction::Payment
     end
   end
 
+  def valid_verified_ledgers?
+    if account_ledgers.pendent.any?
+      @current_ledger.errors[:base] << I18n.t("errors.messages.payment.devolution_pendent_ledgers")
+      return false
+    end
+    
+    true
+  end
+
   # Checks the amount of a ledger but with the transaction
   def valid_ledger_amount?
     val = ( balance - @current_ledger.amount_currency.abs )
-
+  
     if val < -0.1
       @current_ledger.errors[:base_amount] << I18n.t("errors.messages.payment.greater_amount")
       return false
