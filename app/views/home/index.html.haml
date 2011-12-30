@@ -22,8 +22,9 @@
     %h3 Fácil de Usar.
     %p Es un sistema intuitivo y eficaz, donde no requiere ser un contador para utilizarlo. Es tan fácil de usar como una cuenta de correo electrónico. Al no ser un sistema contable, usted no se complica.
   .box
-    %h3 Accesibilidad.
-    %p <i>bonsai</i> se encuentra “siempre listo” en la web. Puede acceder a él cuando lo desee desde cualquier lugar donde tenga acceso a Internet.
+    %h3 Actualizaciones.
+    %p Al ser <i>bonsai</i> un sistema web este es actualizado continuamente con nuevas características o mejoras de seguridad y lo bueno es que usted no tendrá que pagar un extra por las actualizaciones.
+    -#se encuentra “siempre listo” en la web. Puede acceder a él cuando lo desee desde cualquier lugar donde tenga acceso a Internet.
   .box
     %h3 Confiabilidad.
     %p Como <i>bonsai</i> se encuentra en el Internet no es susceptible a contraer virus. No tiene que preocuparse por sus datos, pues bonsai los guarda automáticamente por usted (Back Ups constantes).
@@ -33,20 +34,20 @@
   .clear
   .clear
 
-:javascript
+-#:javascript
   $(function() {
-    //$('#video').click(function() {
-    //  var html = '<iframe width="640" height="390" src="http://www.youtube.com/embed/iqruf87hMJQ?autoplay=1&rel=0" frameborder="0" allowfullscreen></iframe>';
-    //  $('<div/>').html(html).
-    //  dialog({
-    //    modal: true, 
-    //    width: 660,
-    //    height: 410,
-    //    close: function(event, ui) {
-    //      $(this).remove();
-    //    }
-    //  });
-    //});
+    $('#video').click(function() {
+      var html = '<iframe width="640" height="390" src="http://www.youtube.com/embed/iqruf87hMJQ?autoplay=1&rel=0" frameborder="0" allowfullscreen></iframe>';
+      $('<div/>').html(html).
+      dialog({
+        modal: true, 
+        width: 660,
+        height: 410,
+        close: function(event, ui) {
+          $(this).remove();
+        }
+      });
+    });
   });
 
 -#%iframe#video{ :width => "510", :height => "320", :src => "http://www.youtube.com/embed/iqruf87hMJQ", :frameborder => "0" }
