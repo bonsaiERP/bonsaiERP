@@ -286,11 +286,38 @@ class TransactionPresenter < BasePresenter
 
   # List of payments
   def payments
-    if transaction.is_a?(Income)
-      transaction.account_ledgers.includes(:account, :to, :currency).active.where("amount > 0")
-    else
-      transaction.account_ledgers.includes(:account, :to, :currency).active.where("amount < 0")
+    transaction.account_ledgers.includes(:account, :to).active
+  end
+
+  # Presents the exchange rate of a ledger if exists
+  def payment_exchange_rate(ledger)
+    unless transaction.currency_id === ledger.currency_id
+      "<strong>#{ledger.currency_symbol} #{ntc ledger.amount}</strong>".html_safe
     end
+  end
+
+  def payment_amount_currency(ledger)
+    amt = ledger.amount_currency.abs
+
+    if is_devolution?(ledger)
+      "<span class='red'>#{ntc -amt}</span>".html_safe
+    else
+      ntc amt
+    end
+  end
+
+  def payment_total_row(ledger)
+    amt = ledger.amount_interests_currency.abs
+
+    if is_devolution?(ledger)
+      "<span class='red'>#{ntc -amt}</span>".html_safe
+    else
+      ntc amt
+    end
+  end
+
+  def is_devolution?(ledger)
+    ( transaction.is_a?(Income) and ledger.out? ) or ( transaction.is_a?(Buy) and ledger.in? )
   end
 
   # List of devolutions

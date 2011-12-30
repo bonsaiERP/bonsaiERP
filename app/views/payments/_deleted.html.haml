@@ -8,10 +8,10 @@
     %tr
       %th Fecha
       %th{:style => 'width: 300px'} Descripción
-      %th Cantidad <br/>#{transaction.currency_plural}
+      %th Cantidad #{transaction.currency_symbol}
       %th.tip{:title => 'Intenreses/Penalidades'} Int./Pena.<br/>#{transaction.currency_plural}
       %th Total fila <br/>#{transaction.currency_plural}
   
   %tbody
     - transaction.account_ledgers.nulled.includes(:account, :to).each do |al|
-      = render "payments/payment", :account_ledger => al, :transaction => transaction
+      = render "payments/payment", :account_ledger => al, :transaction => transaction, :presenter => presenter

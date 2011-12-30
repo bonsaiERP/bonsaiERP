@@ -42,6 +42,7 @@ class PaymentsController < ApplicationController
     @account_ledger = @transaction.new_payment(params[:account_ledger])
 
     if @transaction.save_payment
+      @presenter = TransactionPresenter.new(@transaction, view_context)
       render 'create'
     else
       @payment = PaymentPresenter.new(@transaction)
@@ -69,7 +70,7 @@ class PaymentsController < ApplicationController
       @presenter = TransactionPresenter.new(@transaction, view_context)
       @transaction = @transaction
 
-      render 'devolution'
+      render 'create'
     else
       @payment = PaymentPresenter.new(@transaction)
       render 'new_devolution'
