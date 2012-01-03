@@ -18,7 +18,7 @@ module Controllers::Authorization
       unless check_user_by_rol(session[:user][:rol], params[:controller], params[:action])
         redirect_to "/422"
       end
-    elsif current_user and current_user.link.nil?
+    elsif current_user #and current_user.link.nil?
       true
     else
       redirect_to "/users/sign_in"
