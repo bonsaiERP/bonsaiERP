@@ -108,7 +108,7 @@ module Models::Transaction::Payment
   private
 
   def valid_devolution_amount?
-    if @current_ledger.amount_currency > total_paid.round(2)
+    if @current_ledger.amount_currency.abs > total_paid.abs.round(2)
       @current_ledger.errors[:base_amount] << I18n.t("errors.messages.payment.devolution_amount")
       return false
     end
