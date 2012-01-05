@@ -159,7 +159,7 @@ class User < ActiveRecord::Base
 
   # returns translated roles
   def self.get_roles
-    ["Genrencia", "Administración", "Operaciones"].zip(ROLES)
+    ["Gerencia", "Administración", "Operaciones"].zip(ROLES)
   end
 
   def self.roles_hash
