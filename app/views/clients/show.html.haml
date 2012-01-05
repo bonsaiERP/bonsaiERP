@@ -19,16 +19,15 @@
   - @client.accounts.each do |ac|
     = presenter.moneybox ac
 
-  - present @client, ContactPresenter do |presenter|
-    - presenter.incomes.each do |cur, amt|
-      .moneybox.fl 
-        %label.dark-green SALDO VENTAS #{cur}
-        %h3= ntc amt
+  - presenter.incomes.each do |cur, amt|
+    .moneybox.fl 
+      %label.dark-green SALDO VENTAS #{cur}
+      %h3= ntc amt
 
-    - presenter.buys.each do |cur, amt|
-      .moneybox.fl 
-        %label.red SALDO COMPRAS #{cur}
-        %h3= ntc amt
+  - presenter.buys.each do |cur, amt|
+    .moneybox.fl 
+      %label.red SALDO COMPRAS #{cur}
+      %h3= ntc amt
 
   .clear
 

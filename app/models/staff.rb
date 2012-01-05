@@ -9,12 +9,12 @@ class Staff < Contact
 
   def self.pendent
     ac_ids = Account.staff.select("DISTINCT(accountable_id) AS staff_id").where("amount > ?", 0).map(&:staff_id)
-    Client.where(:id => ac_ids)
+    Staff.where(:id => ac_ids.uniq)
   end
 
   def self.debt
     ac_ids = Account.staff.select("DISTINCT(accountable_id) AS staff_id").where("amount < ?", 0).map(&:staff_id)
-    Client.where(:id => ac_ids)
+    Staff.where(:id => ac_ids.uniq)
   end
 
 private

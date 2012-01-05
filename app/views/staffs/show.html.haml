@@ -5,27 +5,22 @@
     = link_to 'Nuevo', new_staff_path, :class => 'new'
     = link_to 'Editar', edit_staff_path(@staff), :class => 'edit'
 
-%h1
-  = @staff.matchcode
-  %span.fs50.dashlet.bg-dark Otros
+- present @staff, ContactPresenter do |presenter|
+  %h1
+    = @staff.matchcode
+    %span.fs50.dashlet.bg-dark Otros
 
-.clear
-= render 'contacts/show', :klass => @staff
-
-
-.clear
-- @staff.accounts.each do |ac|
-  .moneybox.fl
-    %label CUENTA EN #{ac.currency_symbol}
-    %h3= ntc -ac.amount
+  .clear
+  = render 'contacts/show', :klass => @staff
 
 
-.clear
+  .clear
+  - @staff.accounts.each do |ac|
+    =presenter.moneybox ac
 
-%h2 Transacciones
-= render @partial, @locals
 
+  .clear
 
-:javascript
-  $(function() {
-  });
+  %h2 Transacciones
+  = render @partial, @locals
+
