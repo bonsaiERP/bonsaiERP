@@ -399,4 +399,31 @@ feature "Inventory Operation", "Test IN/OUT" do
     i.reload
     i.transaction_details.last.balance.should == 0
   end
+
+  scenario "Make a transference between two stores" do
+    store2 = Store.create!(:name => 'Second store', :address => 'An address') {|s| s.id = 2 }
+
+    hash = {:ref_number => 'I-0001', :date => Date.today, :contact_id => client.id, :operation => 'in', :store_id => 1,
+      :inventory_operation_details_attributes => [
+        {:item_id =>1, :quantity => 100},
+        {:item_id =>2, :quantity => 200}
+      ]
+    }
+    io = InventoryOperation.new(hash)
+    io.inventory_operation_details.size.should == 2
+    io.save_operation.should be_true
+    io.should be_persisted
+    io.reload
+    io.creator_id.should == UserSession.user_id
+
+    io.store.stocks[0].item_id.should == 1
+    io.store.stocks[0].quantity.should == 100
+
+    store = Store.find(1)
+
+    trans = Models::InventoryOperation::Transference.new(store)
+    trans.store_out.id.should == 1
+    trans.inventory_operation_out.operation.should == "transout"
+
+  end
 end
