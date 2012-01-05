@@ -163,7 +163,7 @@ class User < ActiveRecord::Base
   end
 
   def self.roles_hash
-    Hash[ROLES.zip(["Genrencia", "Administración", "Operaciones"])]
+    Hash[ROLES.zip(["Gerencia", "Administración", "Operaciones"])]
   end
 
   def self.new_user(email, password)
