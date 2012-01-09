@@ -418,12 +418,41 @@ feature "Inventory Operation", "Test IN/OUT" do
 
     io.store.stocks[0].item_id.should == 1
     io.store.stocks[0].quantity.should == 100
+    io.store.stocks[1].item_id.should == 2
+    io.store.stocks[1].quantity.should == 200
 
     store = Store.find(1)
 
-    trans = Models::InventoryOperation::Transference.new(store)
-    trans.store_out.id.should == 1
+    trans = Models::InventoryOperation::Transference.new(:store_id => store.id)
     trans.inventory_operation_out.operation.should == "transout"
+  
+    trans.make_transference.should be_false
 
+    # Check all the errors it produces
+    io = trans.inventory_operation_out
+    io.errors[:base].should_not be_blank
+    io.errors[:store_to_id].should_not be_blank
+
+    # Valid params
+    new_params = {
+      store_id: 1, description: "A description", store_to_id: 2,
+      inventory_operation_details_attributes: {
+        item_id: 1, quantity: 101,
+        item_id: 2, quantity: 100
+      }
+    }
+
+    trans = Models::InventoryOperation::Transference.new(new_params)
+    trans.make_transference.should == false
+    io = trans.inventory_operation_out
+    
+    puts io.class
+    puts io.inventory_operation_details.size
+    io.inventory_operation_details[0].errors[:quantity].should_not be_blank
+
+
+    io.inventory_operation_details_attributes[0].quantity = 50
+
+    trans.make_transference.should be_true
   end
 end

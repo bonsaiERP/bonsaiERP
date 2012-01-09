@@ -12,6 +12,10 @@ class InventoryOperation < ActiveRecord::Base
   belongs_to :store
   belongs_to :contact
   belongs_to :creator, :class_name => "User"
+  belongs_to :transout, :class_name => "InventoryOperation"
+  belongs_to :store_to, :class_name => "Store"
+  
+  has_one    :transference,  :class_name => 'InventoryOperation'
 
   has_many   :inventory_operation_details, :dependent => :destroy
   has_many :stocks, :autosave => true

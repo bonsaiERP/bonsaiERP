@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111129155318) do
+ActiveRecord::Schema.define(:version => 20120109190911) do
 
   create_table "account_ledger_details", :force => true do |t|
     t.integer  "account_id"
@@ -199,11 +199,13 @@ ActiveRecord::Schema.define(:version => 20111129155318) do
     t.string   "operation"
     t.string   "state"
     t.string   "description"
-    t.decimal  "total",          :precision => 14, :scale => 2
+    t.decimal  "total",           :precision => 14, :scale => 2
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "contact_id"
     t.integer  "creator_id"
+    t.integer  "transference_id"
+    t.integer  "store_to_id"
   end
 
   add_index "inventory_operations", ["contact_id"], :name => "index_inventory_operations_on_contact_id"
@@ -214,6 +216,7 @@ ActiveRecord::Schema.define(:version => 20111129155318) do
   add_index "inventory_operations", ["state"], :name => "index_inventory_operations_on_state"
   add_index "inventory_operations", ["store_id"], :name => "index_inventory_operations_on_store_id"
   add_index "inventory_operations", ["transaction_id"], :name => "index_inventory_operations_on_transaction_id"
+  add_index "inventory_operations", ["transference_id"], :name => "index_inventory_operations_on_transference_id"
 
   create_table "items", :force => true do |t|
     t.integer  "unit_id"
@@ -543,7 +546,7 @@ ActiveRecord::Schema.define(:version => 20111129155318) do
     t.string   "abbreviation",            :limit => 10
     t.string   "salt"
     t.string   "rol"
-    t.boolean  "active"
+    t.boolean  "active",                                 :default => true
   end
 
   add_index "users", ["email"], :name => "index_users_on_email"
