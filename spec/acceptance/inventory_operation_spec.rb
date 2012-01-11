@@ -423,7 +423,7 @@ feature "Inventory Operation", "Test IN/OUT" do
 
     store = Store.find(1)
 
-    trans = Models::InventoryOperation::Transference.new(:store_id => store.id)
+    trans = Models::InventoryOperation::Transference.new(:store_id => store.id, description: "A new description")
     trans.inventory_operation_out.operation.should == "transout"
   
     trans.make_transference.should be_false
@@ -435,24 +435,39 @@ feature "Inventory Operation", "Test IN/OUT" do
 
     # Valid params
     new_params = {
-      store_id: 1, description: "A description", store_to_id: 2,
-      inventory_operation_details_attributes: {
-        item_id: 1, quantity: 101,
-        item_id: 2, quantity: 100
-      }
+      store_id: 1, description: "A description",
+      store_to_id: 2, contact_id: 1,
+      inventory_operation_details_attributes: [
+        { item_id: 1, quantity: 101 },
+        { item_id: 2, quantity: 100 }
+      ]
     }
 
     trans = Models::InventoryOperation::Transference.new(new_params)
-    trans.make_transference.should == false
-    io = trans.inventory_operation_out
     
-    puts io.class
-    puts io.inventory_operation_details.size
+    #Stock.where(item_id: [1,2], store_id: store.id).each {|v| puts "#{v.id} : #{v.quantity}"}
+    #puts "-"*80
+    trans.make_transference.should == false
+    
+    Stock.where(item_id: 1, store_id: 1).first.quantity.should == 100
+    Stock.where(item_id: 2, store_id: 1).first.quantity.should == 200
+
+    io = trans.inventory_operation_out
+    #io.inventory_operation_details.each{|v| puts "ItemID #{v.item_id}: #{v.errors.messages}" }
+
     io.inventory_operation_details[0].errors[:quantity].should_not be_blank
 
-
-    io.inventory_operation_details_attributes[0].quantity = 50
+    new_params[:inventory_operation_details_attributes][0][:quantity] = 40
+    trans = Models::InventoryOperation::Transference.new(new_params)
 
     trans.make_transference.should be_true
+    trans.inventory_operation_out.should be_persisted
+    trans.inventory_operation_in.should be_persisted
+
+    Stock.where(item_id: 1, store_id: 1).first.quantity.should == 60
+    Stock.where(item_id: 2, store_id: 1).first.quantity.should == 100
+
+    Stock.where(item_id: 1, store_id: 2).first.quantity.should == 40
+    Stock.where(item_id: 2, store_id: 2).first.quantity.should == 100
   end
 end

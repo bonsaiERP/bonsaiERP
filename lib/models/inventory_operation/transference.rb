@@ -9,6 +9,7 @@ module Models::InventoryOperation
     def initialize(params)
       @inventory_operation_out = InventoryOperation.new(params)
       @inventory_operation_out.operation = 'transout'
+      @inventory_operation_out.create_ref_number unless params[:ref_number].present?
     end
 
     # Saves the transference
@@ -22,12 +23,57 @@ module Models::InventoryOperation
 
       # Save
       InventoryOperation.transaction do
+        create_inventory_operation_in
+        
         ret = @inventory_operation_out.save
-        ret = @inventory_operation_in && ret
+        @inventory_operation_in.transference_id = @inventory_operation_out.id
+        ret = @inventory_operation_in.save && ret
+
+        update_stocks if ret
+
+        @inventory_operation_out.transference_id = @inventory_operation_in.id
+        ret = @inventory_operation_out.save && ret
+
         raise ActiveRecord::Rollback unless ret
       end
 
       ret
+    end
+
+    def create_inventory_operation_in
+      params = {
+        :ref_number => @inventory_operation_out.ref_number,
+        :contact_id => @inventory_operation_out.contact_id,
+        :store_id => @inventory_operation_out.store_to_id,
+        :store_to_id => @inventory_operation_out.store.id
+      }
+      @inventory_operation_in = InventoryOperation.new(params)
+      @inventory_operation_in.operation = "transin"
+
+      @inventory_operation_out.inventory_operation_details.each do |det|
+        @inventory_operation_in.inventory_operation_details.build(:item_id => det.item_id, :quantity => det.quantity)
+      end
+
+      @inventory_operation_in.change_transout_ref_number
+    end
+
+    def update_stocks
+      item_ids = @inventory_operation_out.inventory_operation_details.map(&:item_id)
+      stocks_from = Hash[Stock.where(:store_id => @inventory_operation_out.store_id, :item_id => item_ids.uniq).values_of(:id, :quantity)]
+      stocks_to = Hash[Stock.where(:store_id => @inventory_operation_out.store_to_id, :item_id => item_ids.uniq).values_of(:id, :quantity)]
+
+      store_id    = @inventory_operation_out.store_id
+      store_to_id = @inventory_operation_out.store_to_id
+
+      @inventory_operation_out.inventory_operation_details.each do |det|
+        qty = stocks_from[det.item_id] - det.quantity
+
+        s = Stock.create!(:store_id => store_id, :quantity => qty)
+        puts "Created store_id: #{store_id}, qty: #{s.quantity}"
+        qty = stocks_to[det.item_id].present? ? stocks_to[det.item_id] + det.quantity : det.quantity
+        Stock.create!(:store_id => store_to_id, :quantity => qty)
+        puts "Created store_id: #{store_to_id}, qty: #{qty}"
+      end
     end
 
     # Checks that both stores from - to exists
@@ -70,7 +116,7 @@ module Models::InventoryOperation
       end
 
       tot = Stock.where(:store_id => @inventory_operation_out.store_id, :item_id => item_ids.uniq).count
-      unless tot == item_ids.uniq
+      unless tot == item_ids.uniq.count
         @inventory_operation_out.errors[:base] = I18n.t("errors.messages.inventory_operation.invalid_item")
         @valid_items = false
       end
@@ -81,11 +127,15 @@ module Models::InventoryOperation
         item_ids = @inventory_operation_out.inventory_operation_details.map(&:item_id)
         stocks ||= Hash[Stock.where(:store_id => @inventory_operation_out.store_id, :item_id => item_ids.uniq).values_of(:id, :quantity)]
 
+        err = false
         @inventory_operation_out.inventory_operation_details.each do |det|
           if det.quantity > stocks[det.item_id]
-            det.errors[:quantity] = I18n.t("errors.messages.inventory_operation_detail.stock_quantity")
+            err = true
+            det.errors[:quantity] << I18n.t("errors.messages.inventory_operation_detail.stock_quantity")
           end
         end
+
+        @inventory_operation_out.errors[:base] << I18n.t("errors.messages.inventory_operation.stock_quantity") if err
       end
     end
   end

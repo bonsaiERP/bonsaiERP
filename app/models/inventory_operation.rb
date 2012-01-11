@@ -97,10 +97,19 @@ class InventoryOperation < ActiveRecord::Base
       seq = InventoryOperation.where(:transaction_id => transaction_id).size + 1
       self.ref_number = "#{transaction.ref_number}-#{"%02d" % seq}"
     else
-      seq = operation == "in" ? "ING-" : "EGR-"
+      case operation
+      when "in" then seq = "ING-"
+      when "out" then seq = "EGR-"
+      when "transout" then seq = "TRANS-EGR-"
+      end
+      #seq = operation == "in" ? "ING-" : "EGR-"
       seq << "%04d" % (store.inventory_operations.size + 1)
       self.ref_number = seq
     end
+  end
+
+  def change_transout_ref_number
+    self.ref_number = self.ref_number.gsub("TRANS-EGR", "TRANS-IN")
   end
 
   # Returns the item for a transaction
