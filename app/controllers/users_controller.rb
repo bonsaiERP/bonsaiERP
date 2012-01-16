@@ -39,6 +39,7 @@ class UsersController < ApplicationController
       flash[:notice] = "El usuario #{@user} ha sido adicionado."
       redirect_to "/configuration"
     else
+      @user = @user.created_user || @user
       render :action => 'add_user'
     end
   end
