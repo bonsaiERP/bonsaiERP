@@ -1,0 +1,99 @@
+- content_for :links do
+  %ul.breadcrumps
+    %li #{link_to "Almacenes", stores_path}
+    %li #{link_to @inventory_operation.store, @inventory_operation.store}
+
+  .links
+
+%h1 Nueva Transferencia
+%h2= @transference.inventory_operation_out.store
+
+= simple_form_for(@transference.inventory_operation_out) do |f|
+  = bonsai_form_error(f)
+
+  = f.input :operation, :as => :hidden
+  = f.input :store_id, :as => :hidden
+
+  .main.bg-light-grey
+    ._50.fl
+      = f.input :ref_number, :input_html => {:size => 20}, :label => 'Numero de referencia'
+      .input
+        %label Fecha
+        = l Time.zone.now
+
+    = f.input :contact_id, :as => :contact, :label => false
+    .clear
+
+  = f.input :description, :as => :text, :input_html => {:rows => 4, :cols => 40}, :label => 'Descripción'
+  .clear
+
+  %table.decorated#items_table
+    %tr
+      %th Item
+      %th Cantidad
+      %th Inventario
+      %th
+
+
+  - if @inventory_operation.transaction_id.blank?
+    %p
+      <a href="javascript:" id="add_item" class="add link">Adicionar ítem</a>
+  .actions
+    = f.submit 'Salvar'
+
+:javascript
+  $(function() {
+    // Autocomplete Account
+    $('#inventory_operation_contact_id').contactAutocomplete(["Supplier", "Client"]);
+
+    $('#add_item').live('click', function() {
+      var t = (new Date() ).getTime();
+      tr = $('#items_table tr.item:first').clone();
+      tr.find("input, select").each(function(i, el) {
+        var name = $(el).attr("name").replace(/\d+/, t);
+        $(el).attr("name", name).val('');
+      });
+      tr.appendTo("#items_table");
+    });
+
+    // Delete an item from an inventory
+    $('#items_table a.destroy').live('click', function() {
+      if( $('tr.item').length <= 1 ) {
+        alert("Debe existir al menos un ítem");
+        return false;
+      }else{
+        $(this).parents('tr:first').remove();
+      }
+    });
+
+    // New contact
+    $('body').live('new_contact', function(e, resp) {
+      $('#inventory_operation_contact_id').createSelectOption(resp.id, resp.matchcode);
+    });
+
+
+    // new_item trigger
+    $('body').live('new_item', function(e, resp) {
+      $('#items_table select').each(function(i, el) {
+        $(el).append([ '<option value="', resp.id ,'">', resp.code, ' - ', resp.name , '</option>' ].join("") );
+      });
+      var tr = $('#items_table').data('row');
+      tr.find('select').val(resp.id).mark().trigger('change');
+    });
+
+    // Remember the row for the clicked new item
+    $('#items_table a.add').live('click', function() {
+      $('#items_table').data('row', $(this).parents('tr:first') );
+    });
+
+    // Present the list of stocks for the store
+    var stocks = #{@inventory_operation.transaction_id.present? ? {} : @inventory_operation.store.get_hash_of_items.to_json  };
+
+    $('#items_table select').live('change keyup', function() {
+      var val = 1 * $(this).val();
+      val = stocks[val] || {'quantity': 0};
+      $(this).parents('td').siblings('td.inventory').html(  _b.ntc( val.quantity ) );
+    });
+ 
+  });
+

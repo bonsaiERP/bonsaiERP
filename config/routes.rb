@@ -13,9 +13,15 @@ Bonsaierp::Application.routes.draw do
       get :select_store
     end
 
-    get :transactions, :on => :collection
-    get :new_transaction, :on => :collection
-    post :create_transaction, :on => :collection
+    collection do
+      # Transactions (Buy, Income)
+      get :transactions
+      get :new_transaction
+      post :create_transaction
+      # Transference
+      get  :new_transference
+      post :create_transference
+    end
   end
 
   resources :accounts

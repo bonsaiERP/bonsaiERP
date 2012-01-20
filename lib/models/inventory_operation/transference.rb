@@ -7,7 +7,7 @@ module Models::InventoryOperation
     attr_reader :inventory_operation_out, :inventory_operation_in
     # Recives two store models to make the transference, one is the sender and the othre the reciever
     def initialize(params)
-      @inventory_operation_out = InventoryOperation.new(params)
+      @inventory_operation_out = ::InventoryOperation.new(params)
       @inventory_operation_out.operation = 'transout'
       @inventory_operation_out.create_ref_number unless params[:ref_number].present?
     end
@@ -47,7 +47,7 @@ module Models::InventoryOperation
         :store_id => @inventory_operation_out.store_to_id,
         :store_to_id => @inventory_operation_out.store.id
       }
-      @inventory_operation_in = InventoryOperation.new(params)
+      @inventory_operation_in = ::InventoryOperation.new(params)
       @inventory_operation_in.operation = "transin"
 
       @inventory_operation_out.inventory_operation_details.each do |det|
@@ -67,12 +67,10 @@ module Models::InventoryOperation
 
       @inventory_operation_out.inventory_operation_details.each do |det|
         qty = stocks_from[det.item_id] - det.quantity
+        Stock.create!(:store_id => store_id, :quantity => qty, :item_id => det.item_id)
 
-        s = Stock.create!(:store_id => store_id, :quantity => qty)
-        puts "Created store_id: #{store_id}, qty: #{s.quantity}"
         qty = stocks_to[det.item_id].present? ? stocks_to[det.item_id] + det.quantity : det.quantity
-        Stock.create!(:store_id => store_to_id, :quantity => qty)
-        puts "Created store_id: #{store_to_id}, qty: #{qty}"
+        Stock.create!(:store_id => store_to_id, :quantity => qty, :item_id => det.item_id)
       end
     end
 

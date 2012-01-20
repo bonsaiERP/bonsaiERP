@@ -3,7 +3,6 @@
 # email: boriscyber@gmail.com
 module Controllers::Authentication
 
-  protected
   def current_user
     return false unless session[:user_id].present?
     begin
@@ -13,6 +12,7 @@ module Controllers::Authentication
     end
   end
 
+  protected
   def user_signed_in?
     current_user.present?
   end

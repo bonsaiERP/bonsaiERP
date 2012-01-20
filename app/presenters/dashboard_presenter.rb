@@ -5,7 +5,7 @@ class DashboardPresenter < BasePresenter
 
   def change_password_link
     if current_user.change_default_password?
-      h.content_tag(:h3, h.link_to("Le recomendamos cambiar su contraseña", h.default_password_users_path ) )
+      h.content_tag(:h3, h.link_to("Advertencia! debe cambiar su contraseña", h.default_password_users_path, :class => 'red' ) )
     end
   end
 

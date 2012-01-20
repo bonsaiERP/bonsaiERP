@@ -464,7 +464,9 @@ feature "Inventory Operation", "Test IN/OUT" do
     trans.inventory_operation_out.should be_persisted
     trans.inventory_operation_in.should be_persisted
 
-    Stock.where(item_id: 1, store_id: 1).first.quantity.should == 60
+    s = Stock.where(item_id: 1, store_id: 1).last
+    puts "Stock id:#{s.id}"
+    s.quantity.should == 60
     Stock.where(item_id: 2, store_id: 1).first.quantity.should == 100
 
     Stock.where(item_id: 1, store_id: 2).first.quantity.should == 40
