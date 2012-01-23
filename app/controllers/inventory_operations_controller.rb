@@ -98,10 +98,25 @@ class InventoryOperationsController < ApplicationController
 
     @transference = Models::InventoryOperation::Transference.new(store_id: params[:store_id])
     @inventory_operation = @transference.inventory_operation_out
+    @inventory_operation.inventory_operation_details.build
   end
 
   def create_transference
+    # Check valid store
+    unless Store.exists?(params[:store_id])
+      redirect_to stores_path
+      return 
+    end
 
+    @transference = Models::InventoryOperation::Transference.new(store_id: params[:inventory_operation][:store_id])
+    @inventory_operation = @transference.inventory_operation_out
+
+    if @transference.make_transference
+      redirect_to @transference.inventory_operation_out
+    else
+      @inventory_operation = @transference.inventory_operation_out
+      render "new_transference"
+    end
   end
 
   # Presents the transactions that are IN/OUT

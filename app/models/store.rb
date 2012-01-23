@@ -16,6 +16,7 @@ class Store < ActiveRecord::Base
 
   # scopes
   scope :active, where(:active => true)
+  scope :without, lambda{|st_id| where("stores.id NOT IN(?)", st_id)}
 
   def to_s
     name

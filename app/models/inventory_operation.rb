@@ -22,7 +22,7 @@ class InventoryOperation < ActiveRecord::Base
 
   accepts_nested_attributes_for :inventory_operation_details
 
-  validates_presence_of :ref_number, :store_id, :contact_id
+  validates_presence_of :ref_number, :store_id
   validates_inclusion_of :operation, :in => OPERATIONS
 
   OPERATIONS.each do |op|
@@ -31,6 +31,10 @@ class InventoryOperation < ActiveRecord::Base
         operation === "#{op}"
       end
     CODE
+  end
+
+  with_options :if => :transout? do |inv|
+    inv.validates_presence_of :store_to
   end
 
   def get_contact_list

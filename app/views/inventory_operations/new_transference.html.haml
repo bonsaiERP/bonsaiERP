@@ -6,9 +6,9 @@
   .links
 
 %h1 Nueva Transferencia
-%h2= @transference.inventory_operation_out.store
+%h2= @inventory_operation.store
 
-= simple_form_for(@transference.inventory_operation_out) do |f|
+= simple_form_for(@inventory_operation) do |f|
   = bonsai_form_error(f)
 
   = f.input :operation, :as => :hidden
@@ -21,9 +21,10 @@
         %label Fecha
         = l Time.zone.now
 
-    = f.input :contact_id, :as => :contact, :label => false
+    =f.input :store_to_id, :collection => Store.without(@inventory_operation.store_id), :label => "Transferir a almacen"
     .clear
 
+  = f.input :contact_id, :as => :contact, :label => false
   = f.input :description, :as => :text, :input_html => {:rows => 4, :cols => 40}, :label => 'Descripción'
   .clear
 
@@ -34,6 +35,16 @@
       %th Inventario
       %th
 
+    = f.simple_fields_for :inventory_operation_details do |det|
+      %tr.item
+        %td
+          %input.item{:type => 'text', :value => det.object.item, :size => 70}
+          = det.input :item_id, :as => :hidden, :input_html => {:class => 'item_id'}
+        %td
+          = det.input :quantity, :label => false, :input_html => { :type => 'decimal', :size => 8}
+        %td.quantity.r
+        %td
+          %a.destroy{:href => "javascript:"} borrar
 
   - if @inventory_operation.transaction_id.blank?
     %p
@@ -46,14 +57,43 @@
     // Autocomplete Account
     $('#inventory_operation_contact_id').contactAutocomplete(["Supplier", "Client"]);
 
-    $('#add_item').live('click', function() {
-      var t = (new Date() ).getTime();
-      tr = $('#items_table tr.item:first').clone();
-      tr.find("input, select").each(function(i, el) {
-        var name = $(el).attr("name").replace(/\d+/, t);
-        $(el).attr("name", name).val('');
+    var item_ids = [];
+
+    // Autocomplete item
+    $('input.item').live("focusin", function() {
+      $('input.item').autocomplete("destroy");
+      var tr = $(this).parents("tr");
+      var qt = tr.find("td.quantity");
+      var item_id = tr.find("input.item_id");
+
+      $(this).autocomplete({
+        source: "/items_stock?store_id=" + #{@inventory_operation.store_id},
+        select: function(event, ui) {
+          if(_.include(item_ids, ui.item.id)) {
+            alert("El item que selecciono es repetido");
+            return false;
+          }
+          item_ids.push(ui.item.id);
+          item_id.val(ui.item.id);
+          qt.html(_b.ntc(ui.item.quantity) );
+        }
       });
-      tr.appendTo("#items_table");
+    });
+
+    // Add item
+    $('#add_item').live('click', function() {
+      var tr = $('tr.item:first').clone();
+      tr.find("input").each(function(i, el) {
+        var t = (new Date).getTime();
+        var name;
+        $(el).val("");
+
+        if(name = $(el).attr("name")) {
+          $(el).attr("name", name.replace(/[0-9]+/, t));
+        }
+      });
+
+      tr.insertAfter("tr.item:last");
     });
 
     // Delete an item from an inventory
@@ -62,6 +102,10 @@
         alert("Debe existir al menos un ítem");
         return false;
       }else{
+        var item_id = $(this).find("item_id").val() * 1;
+        if(item_id > 0) {
+          item_ids = _.reject(item_ids, function(num) { return num === item_id});
+        }
         $(this).parents('tr:first').remove();
       }
     });
@@ -71,29 +115,11 @@
       $('#inventory_operation_contact_id').createSelectOption(resp.id, resp.matchcode);
     });
 
-
-    // new_item trigger
-    $('body').live('new_item', function(e, resp) {
-      $('#items_table select').each(function(i, el) {
-        $(el).append([ '<option value="', resp.id ,'">', resp.code, ' - ', resp.name , '</option>' ].join("") );
-      });
-      var tr = $('#items_table').data('row');
-      tr.find('select').val(resp.id).mark().trigger('change');
-    });
-
     // Remember the row for the clicked new item
     $('#items_table a.add').live('click', function() {
       $('#items_table').data('row', $(this).parents('tr:first') );
     });
 
-    // Present the list of stocks for the store
-    var stocks = #{@inventory_operation.transaction_id.present? ? {} : @inventory_operation.store.get_hash_of_items.to_json  };
-
-    $('#items_table select').live('change keyup', function() {
-      var val = 1 * $(this).val();
-      val = stocks[val] || {'quantity': 0};
-      $(this).parents('td').siblings('td.inventory').html(  _b.ntc( val.quantity ) );
-    });
  
   });
 

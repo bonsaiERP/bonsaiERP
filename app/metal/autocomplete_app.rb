@@ -33,6 +33,14 @@ class AutocompleteApp < BaseApp
     render :json => item_autocomplete(params)
   end
 
+  def items_stock
+    items = Item.with_stock(params[:store_id], params[:term]).limit(20).map do |v|
+      {:id => v.id, :label => v.to_s, :code => v.code, :name => v.name, :quantity => v.quantity}
+    end
+
+    render :json => items
+  end
+
   def client_account
     render :json => contact_account_autocomplete('Client', params)
   end

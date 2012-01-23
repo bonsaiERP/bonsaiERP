@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120109190911) do
+ActiveRecord::Schema.define(:version => 20120123221029) do
 
   create_table "account_ledger_details", :force => true do |t|
     t.integer  "account_id"
@@ -196,10 +196,10 @@ ActiveRecord::Schema.define(:version => 20120109190911) do
     t.integer  "transaction_id"
     t.date     "date"
     t.string   "ref_number"
-    t.string   "operation"
+    t.string   "operation",       :limit => 10
     t.string   "state"
     t.string   "description"
-    t.decimal  "total",           :precision => 14, :scale => 2
+    t.decimal  "total",                         :precision => 14, :scale => 2
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "contact_id"
@@ -489,6 +489,7 @@ ActiveRecord::Schema.define(:version => 20120109190911) do
     t.boolean  "discounted",                                                        :default => false
     t.integer  "modified_by"
     t.boolean  "fact",                                                              :default => true
+    t.boolean  "devolution",                                                        :default => false
   end
 
   add_index "transactions", ["account_id"], :name => "index_transactions_on_account_id"
@@ -503,6 +504,7 @@ ActiveRecord::Schema.define(:version => 20120109190911) do
   add_index "transactions", ["deliver"], :name => "index_transactions_on_deliver"
   add_index "transactions", ["deliver_approver_id"], :name => "index_transactions_on_deliver_approver_id"
   add_index "transactions", ["delivered"], :name => "index_transactions_on_delivered"
+  add_index "transactions", ["devolution"], :name => "index_transactions_on_devolution"
   add_index "transactions", ["discounted"], :name => "index_transactions_on_discounted"
   add_index "transactions", ["fact"], :name => "index_transactions_on_fact"
   add_index "transactions", ["modified_by"], :name => "index_transactions_on_modified_by"

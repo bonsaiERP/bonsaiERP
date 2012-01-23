@@ -130,6 +130,12 @@ class Item < ActiveRecord::Base
     end
   end
 
+  def self.with_stock(store_id, search)
+    Item.joins(:stocks).select("items.id, items.name, items.code, stocks.quantity").
+    where("items.code ILIKE :search OR items.name ILIKE :search", :search => "%#{search}%").
+    where("stocks.store_id = ? AND stocks.quantity > 0 AND stocks.state = 'active'", store_id)
+  end
+
   # creates an array with values  [quantity, percentage]
   def discount_values
     return [] if self.discount.blank?

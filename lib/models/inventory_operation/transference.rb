@@ -59,8 +59,8 @@ module Models::InventoryOperation
 
     def update_stocks
       item_ids = @inventory_operation_out.inventory_operation_details.map(&:item_id)
-      stocks_from = Hash[Stock.where(:store_id => @inventory_operation_out.store_id, :item_id => item_ids.uniq).values_of(:id, :quantity)]
-      stocks_to = Hash[Stock.where(:store_id => @inventory_operation_out.store_to_id, :item_id => item_ids.uniq).values_of(:id, :quantity)]
+      stocks_from = Hash[Stock.where(:store_id => @inventory_operation_out.store_id, :item_id => item_ids.uniq).values_of(:item_id, :quantity)]
+      stocks_to = Hash[Stock.where(:store_id => @inventory_operation_out.store_to_id, :item_id => item_ids.uniq).values_of(:item_id, :quantity)]
 
       store_id    = @inventory_operation_out.store_id
       store_to_id = @inventory_operation_out.store_to_id
@@ -123,7 +123,7 @@ module Models::InventoryOperation
     def check_stock
       if @valid_items
         item_ids = @inventory_operation_out.inventory_operation_details.map(&:item_id)
-        stocks ||= Hash[Stock.where(:store_id => @inventory_operation_out.store_id, :item_id => item_ids.uniq).values_of(:id, :quantity)]
+        stocks ||= Hash[Stock.where(:store_id => @inventory_operation_out.store_id, :item_id => item_ids.uniq).values_of(:item_id, :quantity)]
 
         err = false
         @inventory_operation_out.inventory_operation_details.each do |det|

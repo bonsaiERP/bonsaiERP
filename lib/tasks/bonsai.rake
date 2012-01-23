@@ -74,7 +74,7 @@ namespace :bonsai do
     Rake::Task["db:drop"].execute
     Rake::Task["db:migrate"].execute
   end
-  
+
   desc "Creates 500 suppliers"
   task :create_suppliers => :environment do
     require 'ffaker'
@@ -179,6 +179,26 @@ namespace :bonsai do
     end
   end
 
+  desc "Rollbacks any migration"
+  task :rollback => :environment do
+    PgTools.reset_search_path
+    ActiveRecord::Migration.verbose = verbose
+
+    Organisation.all.each do |org|
+      ActiveRecord::Base.transaction do
+        PgTools.reset_search_path
+        schema = PgTools.get_schema_name(org.id)
+        if PgTools.schema_exists?(schema)
+          puts "rollback #{schema})"
+          PgTools.set_search_path schema
+          ActiveRecord::Migrator.rollback
+        end
+      end
+    end
+
+  end
+
+  
   task :migrate_schemas => :environment do
     PgTools.reset_search_path
     ActiveRecord::Migration.verbose = verbose
