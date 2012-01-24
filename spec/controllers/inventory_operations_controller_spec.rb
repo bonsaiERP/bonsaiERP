@@ -143,4 +143,22 @@ describe InventoryOperationsController do
       response.should be_redirect
     end
   end
+
+  describe "POST create_transference" do
+    before do
+      controller.stub!(:check_authorization! => true)
+    end
+
+    it 'should create a transference' do
+      Models::InventoryOperation::Transference.stub!(
+        new: stub(
+          make_transference: true, inventory_operation_out: mock_model(InventoryOperation, id: 1)
+        ) 
+      )
+post :create_transference, inventory_operation: {}
+
+      response.should be_redirect
+      response.should redirect_to(inventory_operation_path(1))
+    end
+  end
 end

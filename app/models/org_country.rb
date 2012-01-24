@@ -3,7 +3,7 @@
 # email: boriscyber@gmail.com
 class OrgCountry < ActiveRecord::Base
 
-  set_table_name "countries"
+  self.table_name = "countries"
 
   has_many :organisations
 

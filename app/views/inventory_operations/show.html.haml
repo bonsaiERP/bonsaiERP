@@ -10,7 +10,9 @@
   %h1= presenter.title
 
   %h2= @inventory_operation.store
-  %h2.n= link_to @inventory_operation.contact, @inventory_operation.contact
+  %h2.n= presenter.link_related
+  -#to @inventory_operation.contact, @inventory_operation.contact
+  -#%h2.n= link_to @inventory_operation.contact, @inventory_operation.contact
 
   - if @inventory_operation.transaction_id.present?
     %h2.n= link_to @inventory_operation.transaction, @inventory_operation.transaction

@@ -14,16 +14,20 @@ class InventoryOperation < ActiveRecord::Base
   belongs_to :creator, :class_name => "User"
   belongs_to :transout, :class_name => "InventoryOperation"
   belongs_to :store_to, :class_name => "Store"
-  
-  has_one    :transference,  :class_name => 'InventoryOperation'
+
+  has_one    :transference, :class_name => 'InventoryOperation', :foreign_key => "transference_id"
+
 
   has_many   :inventory_operation_details, :dependent => :destroy
   has_many :stocks, :autosave => true
 
   accepts_nested_attributes_for :inventory_operation_details
 
+  # Validations
   validates_presence_of :ref_number, :store_id
   validates_inclusion_of :operation, :in => OPERATIONS
+  
+  validates_presence_of :store_to, :if => :is_transference?
 
   OPERATIONS.each do |op|
     class_eval <<-CODE, __FILE__, __LINE__ + 1
@@ -43,6 +47,10 @@ class InventoryOperation < ActiveRecord::Base
     else
       Client.scoped
     end
+  end
+
+  def is_transference?
+    ["transin", "transout"].include?(operation)
   end
 
   def contact_label
@@ -158,6 +166,7 @@ class InventoryOperation < ActiveRecord::Base
 
     ret = ( store.save && ret )
     ret = ( self.save && ret )
+    debugger
     raise ActiveRecord::Rollback unless ret
 
     ret
@@ -197,6 +206,7 @@ class InventoryOperation < ActiveRecord::Base
       ret = ( store.save && ret )
       ret = ( self.save && ret )
       ret = ( transaction.save && ret )
+
       raise ActiveRecord::Rollback unless ret
     end
 

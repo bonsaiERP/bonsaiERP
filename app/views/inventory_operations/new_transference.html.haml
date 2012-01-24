@@ -8,7 +8,7 @@
 %h1 Nueva Transferencia
 %h2= @inventory_operation.store
 
-= simple_form_for(@inventory_operation) do |f|
+= simple_form_for(@inventory_operation, :url => create_transference_inventory_operations_path) do |f|
   = bonsai_form_error(f)
 
   = f.input :operation, :as => :hidden

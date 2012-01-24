@@ -52,20 +52,17 @@ module Models::Transaction
     end
 
 
-    module InstanceMethods
-
-      private
-      
-      def check_repated_items
-        h = Hash.new(0)
-        transaction_details.each do |det|
-          h[det.item_id] += 1
-        end
-
-        self.errors[:base] << I18n.t("errors.messages.repeated_items") if h.values.find {|v| v > 1 }
+    private
+    
+    def check_repated_items
+      h = Hash.new(0)
+      transaction_details.each do |det|
+        h[det.item_id] += 1
       end
 
+      self.errors[:base] << I18n.t("errors.messages.repeated_items") if h.values.find {|v| v > 1 }
     end
 
   end
+
 end

@@ -20,19 +20,18 @@ module Models::InventoryOperation
       check_items
 
       return false if @inventory_operation_out.errors.any?
-
       # Save
       InventoryOperation.transaction do
         create_inventory_operation_in
         
         ret = @inventory_operation_out.save
+
         @inventory_operation_in.transference_id = @inventory_operation_out.id
-        ret = @inventory_operation_in.save && ret
+        ret = ret && @inventory_operation_in.save
 
         update_stocks if ret
-
         @inventory_operation_out.transference_id = @inventory_operation_in.id
-        ret = @inventory_operation_out.save && ret
+        ret = ret && @inventory_operation_out.save
 
         raise ActiveRecord::Rollback unless ret
       end
