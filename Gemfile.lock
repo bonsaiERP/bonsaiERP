@@ -225,7 +225,7 @@ DEPENDENCIES
   kaminari (~> 0.13.0)
   launchy
   log4r
-  pg
+  pg (~> 0.12.2)
   prawn (~> 0.12.0)
   pry (~> 0.9.7.4)
   pry-rails

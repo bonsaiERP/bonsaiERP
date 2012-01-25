@@ -1,0 +1,40 @@
+.moneybox
+  %label
+  %h3
+
+= simple_form_for(@account_balance) do |f|
+  = bonsai_form_error(f)
+  = f.input :contact_id, :as => :hidden
+  = f.input :amount, :label => "Cantidad", :input_html => {:size => 12, :type => 'decimal'}
+  = f.input :currency_id, :label => "Moneda", :collection => Currency.all
+
+  .actions
+    = f.submit 'Salvar'
+
+:javascript
+  $(function() {
+    var $box = $('.moneybox')
+        $label = $box.find("label"),
+        $amount = $box.find("h3");
+
+    function setAmount() {
+      var amt = $('#account_balance_amount').val() * 1;
+      if(amt > 0) {
+        $label.removeClass("red").addClass("red").html("Debemos");
+      }else{
+        $label.removeClass("green").addClass("green").html("Nos debe");
+      }
+      var sel = $('#account_balance_currency_id').val();
+      var cur = "";
+      if(sel){
+        cur = $('#account_balance_currency_id option[value=' + sel +']').html().split(" ");
+        cur = cur[0];
+      }
+      
+      //.split(" ")[0];
+      $amount.html(cur + " " + _b.ntc(amt));
+    }
+
+    $('#account_balance_currency_id').change(setAmount);
+    $('#account_balance_amount').keyup(setAmount);
+  });

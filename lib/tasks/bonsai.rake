@@ -191,7 +191,7 @@ namespace :bonsai do
         if PgTools.schema_exists?(schema)
           puts "rollback #{schema})"
           PgTools.set_search_path schema
-          ActiveRecord::Migrator.rollback
+          ActiveRecord::Migrator.rollback "db/migrate/"
         end
       end
     end

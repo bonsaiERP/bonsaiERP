@@ -18,7 +18,7 @@ end
 
 gem 'jquery-rails'
 
-gem 'pg'
+gem 'pg', "~> 0.12.2"
 #gem 'mysql2'#, :group => :production
 #gem 'sqlite3-ruby', :group => [:development, :text]
 

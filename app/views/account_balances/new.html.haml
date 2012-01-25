@@ -1,0 +1,7 @@
+- content_for :links do
+  %ul.breadcrumps
+    -#%li #{link_to account_balances, account_balances_path}<span>&gt;</span>
+
+%h1 Balancear cuenta de #{ @contact }
+
+= render :partial => 'form'

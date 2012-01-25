@@ -13,7 +13,15 @@ class User < ActiveRecord::Base
   before_destroy    :destroy_links
   
   ABBREV = "GEREN"
-  ROLES = ['admin', 'gerency', 'operations']
+  ROLES = ['admin', 'gerency', 'operations'].freeze
+
+  ROLES.each do |v|
+    class_eval <<-CODE, __FILE__, __LINE__ + 1
+      def is_#{v}?
+        rol == "#{v}"
+      end
+    CODE
+  end
 
   attr_accessor :temp_password, :rolname, :active_link, :old_password, :send_email#, :abbreviation
   attr_reader :created_user
