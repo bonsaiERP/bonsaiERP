@@ -24,8 +24,10 @@
 
   - presenter.incomes.each do |cur, amt|
     .moneybox.fl 
-      %label.dark-green SALDO VENTAS #{cur}
-      %h3= ntc amt
+      %label.dark-green SALDO VENTAS
+      %h3 
+        =cur
+        =ntc amt
 
   - presenter.buys.each do |cur, amt|
     .moneybox.fl 

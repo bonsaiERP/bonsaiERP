@@ -11,7 +11,23 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120123221029) do
+ActiveRecord::Schema.define(:version => 20120125210732) do
+
+  create_table "account_balances", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "contact_id"
+    t.integer  "account_id"
+    t.integer  "currency_id"
+    t.decimal  "amount",      :precision => 14, :scale => 4
+    t.decimal  "old_amount",  :precision => 14, :scale => 2
+    t.datetime "created_at",                                 :null => false
+    t.datetime "updated_at",                                 :null => false
+  end
+
+  add_index "account_balances", ["account_id"], :name => "index_account_balances_on_account_id"
+  add_index "account_balances", ["contact_id"], :name => "index_account_balances_on_contact_id"
+  add_index "account_balances", ["currency_id"], :name => "index_account_balances_on_currency_id"
+  add_index "account_balances", ["user_id"], :name => "index_account_balances_on_user_id"
 
   create_table "account_ledger_details", :force => true do |t|
     t.integer  "account_id"
@@ -196,10 +212,10 @@ ActiveRecord::Schema.define(:version => 20120123221029) do
     t.integer  "transaction_id"
     t.date     "date"
     t.string   "ref_number"
-    t.string   "operation",       :limit => 10
+    t.string   "operation"
     t.string   "state"
     t.string   "description"
-    t.decimal  "total",                         :precision => 14, :scale => 2
+    t.decimal  "total",           :precision => 14, :scale => 2
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "contact_id"

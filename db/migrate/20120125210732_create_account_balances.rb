@@ -1,6 +1,7 @@
 class CreateAccountBalances < ActiveRecord::Migration
   def change
     create_table :account_balances do |t|
+      t.integer :user_id
       t.integer :contact_id
       t.integer :account_id
       t.integer :currency_id
@@ -10,6 +11,7 @@ class CreateAccountBalances < ActiveRecord::Migration
       t.timestamps
     end
 
+    add_index :account_balances, :user_id
     add_index :account_balances, :contact_id
     add_index :account_balances, :account_id
     add_index :account_balances, :currency_id

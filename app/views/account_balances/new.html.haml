@@ -1,7 +1,12 @@
-- content_for :links do
-  %ul.breadcrumps
-    -#%li #{link_to account_balances, account_balances_path}<span>&gt;</span>
+- present @account_balance do |presenter|
+  - content_for :links do
+    %ul.breadcrumps
+      %li= link_to presenter.link_contact_title(@contact), @contact.class.to_s
+      %li= link_to @contact, @contact
+      %li Balancear cuenta
 
-%h1 Balancear cuenta de #{ @contact }
+  %h1 Balancear cuenta
+  %h1.n= link_to @contact, @contact
 
-= render :partial => 'form'
+  = render 'account_balances/form', :presenter => presenter, :contact => @contact
+

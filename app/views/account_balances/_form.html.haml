@@ -1,38 +1,68 @@
-.moneybox
-  %label
-  %h3
+%div{:style => 'height: 120px'}
+  .w20.fl
+    %label Monto actual
+    #current_balance.moneybox
+      %label
+      %h3
+  .w20.fl
+    %label Monto actualizado
+    #edit_balance.moneybox
+      %label
+      %h3
 
 = simple_form_for(@account_balance) do |f|
   = bonsai_form_error(f)
   = f.input :contact_id, :as => :hidden
-  = f.input :amount, :label => "Cantidad", :input_html => {:size => 12, :type => 'decimal'}
+  = f.input :amount, :label => "Cantidad", :input_html => {:size => 12, :type => 'decimal'},
+    :hint => "Ingrese una cantidad positiva o negativa"
   = f.input :currency_id, :label => "Moneda", :collection => Currency.all
 
-  .actions
-    = f.submit 'Salvar'
+  .clear
+  = f.submit 'Salvar'
 
 :javascript
   $(function() {
-    var $box = $('.moneybox')
+    var accounts = #{presenter.accounts_to_hash(contact).to_json};
+
+    var $box = $('#edit_balance')
         $label = $box.find("label"),
-        $amount = $box.find("h3");
+        $amount = $box.find("h3"),
+        $edit = $('#current_balance'),
+        $editLabel = $edit.find("label"),
+        $editAmount = $edit.find("h3");
 
     function setAmount() {
       var amt = $('#account_balance_amount').val() * 1;
+
       if(amt > 0) {
-        $label.removeClass("red").addClass("red").html("Debemos");
+        $label.removeClass("red").addClass("dark-green").html("DEBE");
       }else{
-        $label.removeClass("green").addClass("green").html("Nos debe");
+        $label.removeClass("dark-green").addClass("red").html("DEBEMOS");
       }
+
       var sel = $('#account_balance_currency_id').val();
       var cur = "";
+
       if(sel){
         cur = $('#account_balance_currency_id option[value=' + sel +']').html().split(" ");
         cur = cur[0];
+
+        // Actual
+        if(accounts[sel]) {
+          var amtAct = accounts[sel];
+          if(amtAct > 0) {
+            $editLabel.removeClass("red").addClass("dark-green").html("DEBE");
+          }else{
+            $editLabel.removeClass("dark-green").addClass("red").html("DEBEMOS");
+          }
+          $editAmount.html(cur +  " " + _b.ntc( Math.abs(accounts[sel]) ) );
+        }else{
+          $editLabel.html("");
+          $editAmount.html("");
+        }
       }
-      
-      //.split(" ")[0];
-      $amount.html(cur + " " + _b.ntc(amt));
+
+      $amount.html(cur + " " + _b.ntc( Math.abs( amt ) ) );
     }
 
     $('#account_balance_currency_id').change(setAmount);
