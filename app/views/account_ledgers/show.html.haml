@@ -13,6 +13,10 @@
     %small.fs60= presenter.null_state
   .clear
   %h2= @account_ledger.selected_account
+  - if @account_ledger.project_id.present?
+    %h3
+      %span.grey.n Proyecto:
+      = @account_ledger.project 
 
   .moneybox.fl
     = in_out @account_ledger.account_amount, :class => "b"

@@ -51,7 +51,8 @@ module Models::Transaction
         :amount => balance,
         :interests_penalties  => 0,
         :email => true,
-        :currency_id => currency_id
+        :currency_id => currency_id,
+        :project_id => project_id
       )
     end
 

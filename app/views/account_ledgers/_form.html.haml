@@ -10,6 +10,8 @@
   .clear
 
   = f.input :reference, :as => :text, :label => 'Referencia', :input_html => {:rows => 2, :cols => 35}, :hint => 'Nº de cheque, razón, factura, etc.'
+  = f.association :project, :label => 'Proyecto'
+  .clear
   = f.input :description, :as => :text, :label => 'Descripción', :input_html => {:rows => 3, :cols => 35}
   .clear
 

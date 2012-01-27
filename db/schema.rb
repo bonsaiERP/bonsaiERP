@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120125210732) do
+ActiveRecord::Schema.define(:version => 20120127123204) do
 
   create_table "account_balances", :force => true do |t|
     t.integer  "user_id"
@@ -77,6 +77,7 @@ ActiveRecord::Schema.define(:version => 20120125210732) do
     t.integer  "staff_id"
     t.date     "payment_date"
     t.boolean  "inverse",                                                          :default => false
+    t.integer  "project_id"
   end
 
   add_index "account_ledgers", ["account_id"], :name => "index_account_ledgers_on_account_id"
@@ -91,6 +92,7 @@ ActiveRecord::Schema.define(:version => 20120125210732) do
   add_index "account_ledgers", ["inverse"], :name => "index_account_ledgers_on_inverse"
   add_index "account_ledgers", ["nuller_id"], :name => "index_account_ledgers_on_nuller_id"
   add_index "account_ledgers", ["operation"], :name => "index_account_ledgers_on_operation"
+  add_index "account_ledgers", ["project_id"], :name => "index_account_ledgers_on_project_id"
   add_index "account_ledgers", ["reference"], :name => "index_account_ledgers_on_reference"
   add_index "account_ledgers", ["staff_id"], :name => "index_account_ledgers_on_staff_id"
   add_index "account_ledgers", ["to_id"], :name => "index_account_ledgers_on_to_id"
@@ -212,22 +214,24 @@ ActiveRecord::Schema.define(:version => 20120125210732) do
     t.integer  "transaction_id"
     t.date     "date"
     t.string   "ref_number"
-    t.string   "operation"
+    t.string   "operation",       :limit => 10
     t.string   "state"
     t.string   "description"
-    t.decimal  "total",           :precision => 14, :scale => 2
+    t.decimal  "total",                         :precision => 14, :scale => 2
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "contact_id"
     t.integer  "creator_id"
     t.integer  "transference_id"
     t.integer  "store_to_id"
+    t.integer  "project_id"
   end
 
   add_index "inventory_operations", ["contact_id"], :name => "index_inventory_operations_on_contact_id"
   add_index "inventory_operations", ["creator_id"], :name => "index_inventory_operations_on_creator_id"
   add_index "inventory_operations", ["date"], :name => "index_inventory_operations_on_date"
   add_index "inventory_operations", ["operation"], :name => "index_inventory_operations_on_operation"
+  add_index "inventory_operations", ["project_id"], :name => "index_inventory_operations_on_project_id"
   add_index "inventory_operations", ["ref_number"], :name => "index_inventory_operations_on_ref_number"
   add_index "inventory_operations", ["state"], :name => "index_inventory_operations_on_state"
   add_index "inventory_operations", ["store_id"], :name => "index_inventory_operations_on_store_id"
@@ -330,12 +334,14 @@ ActiveRecord::Schema.define(:version => 20120125210732) do
     t.string   "operation",           :limit => 20
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "project_id"
   end
 
   add_index "pay_plans", ["ctype"], :name => "index_pay_plans_on_ctype"
   add_index "pay_plans", ["operation"], :name => "index_pay_plans_on_operation"
   add_index "pay_plans", ["paid"], :name => "index_pay_plans_on_paid"
   add_index "pay_plans", ["payment_date"], :name => "index_pay_plans_on_payment_date"
+  add_index "pay_plans", ["project_id"], :name => "index_pay_plans_on_project_id"
   add_index "pay_plans", ["transaction_id"], :name => "index_pay_plans_on_transaction_id"
 
   create_table "payments", :force => true do |t|

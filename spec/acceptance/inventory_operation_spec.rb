@@ -143,9 +143,11 @@ feature "Inventory Operation", "Test IN/OUT" do
     io.save_operation.should be_true
     
     # Income
-    i = Income.new(income_params)
+    pro = Project.create!(name: "Test project")
+    i = Income.new(income_params.merge(project_id: pro.id))
     i.save_trans.should be_true
     i.approve!.should be_true
+    i.project_id.should == pro.id
 
     i.balance.should == (3 * 10 + 5 * 20)
     i.deliver = true
@@ -179,6 +181,7 @@ feature "Inventory Operation", "Test IN/OUT" do
     io.save_transaction.should be_true
     io.should be_out
     io.should be_persisted
+    io.project_id.should == pro.id
 
     iodet1 = io.inventory_operation_details[0]
     iodet2 = io.inventory_operation_details[1]

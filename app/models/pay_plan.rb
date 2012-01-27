@@ -20,6 +20,7 @@ class PayPlan < ActiveRecord::Base
   # relationships
   belongs_to :transaction
   belongs_to :currency
+  belongs_to :project
 
   # delegations
   delegate :currency_id, :payment_date, :real_state, :paid?, :cash, :ref_number, :draft?, :balance, :state, :type,
@@ -40,7 +41,7 @@ class PayPlan < ActiveRecord::Base
   scope :out,    where(:ctype => ["Buy", "Expense"])
 
 
-  attr_accessible :payment_date, :alert_date, :amount, :email, :repeat
+  attr_accessible :payment_date, :alert_date, :amount, :email, :repeat, :project_id
 
   def self.in_to_currency(currency_id, date)
     sum_with_exchange_rate( PayPlan.unpaid.in.date(date), currency_id )

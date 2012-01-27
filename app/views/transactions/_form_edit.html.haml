@@ -12,7 +12,7 @@
     .clear
 
     = f.association :project,  :label => 'Proyecto',
-      :input_html => {'data-new_url' => new_project_path, 'data-title' => "Nueva iniciativa", 'data-trigger' => 'new_project' }
+      :input_html => {'data-new_url' => new_project_path, 'data-title' => "Nuevo proyecto", 'data-trigger' => 'new_project' }
 
     - unless transaction.currency_id == currency_id
       %label Tipo de cambio

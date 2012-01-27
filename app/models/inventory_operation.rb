@@ -166,7 +166,7 @@ class InventoryOperation < ActiveRecord::Base
 
     ret = ( store.save && ret )
     ret = ( self.save && ret )
-    debugger
+
     raise ActiveRecord::Rollback unless ret
 
     ret
