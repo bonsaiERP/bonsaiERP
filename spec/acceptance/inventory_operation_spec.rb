@@ -181,7 +181,7 @@ feature "Inventory Operation", "Test IN/OUT" do
     io.save_transaction.should be_true
     io.should be_out
     io.should be_persisted
-    io.project_id.should == pro.id
+    #io.project_id.should == pro.id
 
     iodet1 = io.inventory_operation_details[0]
     iodet2 = io.inventory_operation_details[1]
