@@ -17,6 +17,7 @@ group :assets do
 end
 
 gem 'jquery-rails'
+#gem 'compass', "~> 0.12.alpha.4"
 
 gem 'pg', "~> 0.12.2"
 #gem 'mysql2'#, :group => :production
