@@ -7,6 +7,7 @@ class Project < ActiveRecord::Base
 
   # associations
   has_many :transactions
+  has_many :account_ledgers
 
   # validations
   validates_presence_of :name

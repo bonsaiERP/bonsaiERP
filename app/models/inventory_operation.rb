@@ -6,20 +6,28 @@ class InventoryOperation < ActiveRecord::Base
   before_create     { self.creator_id = UserSession.user_id }
 
   STATES = ["draft", "approved"]
-  OPERATIONS = ["in", "out", "trans"]
+  OPERATIONS = ["in", "out", "transin", "transout"]
 
   belongs_to :transaction
   belongs_to :store
   belongs_to :contact
   belongs_to :creator, :class_name => "User"
+  belongs_to :transout, :class_name => "InventoryOperation"
+  belongs_to :store_to, :class_name => "Store"
+
+  has_one    :transference, :class_name => 'InventoryOperation', :foreign_key => "transference_id"
+
 
   has_many   :inventory_operation_details, :dependent => :destroy
   has_many :stocks, :autosave => true
 
   accepts_nested_attributes_for :inventory_operation_details
 
-  validates_presence_of :ref_number, :store_id, :contact_id
+  # Validations
+  validates_presence_of :ref_number, :store_id
   validates_inclusion_of :operation, :in => OPERATIONS
+  
+  validates_presence_of :store_to, :if => :is_transference?
 
   OPERATIONS.each do |op|
     class_eval <<-CODE, __FILE__, __LINE__ + 1
@@ -29,12 +37,20 @@ class InventoryOperation < ActiveRecord::Base
     CODE
   end
 
+  with_options :if => :transout? do |inv|
+    inv.validates_presence_of :store_to
+  end
+
   def get_contact_list
     if operation == "in"
       Supplier.scoped
     else
       Client.scoped
     end
+  end
+
+  def is_transference?
+    ["transin", "transout"].include?(operation)
   end
 
   def contact_label
@@ -93,10 +109,19 @@ class InventoryOperation < ActiveRecord::Base
       seq = InventoryOperation.where(:transaction_id => transaction_id).size + 1
       self.ref_number = "#{transaction.ref_number}-#{"%02d" % seq}"
     else
-      seq = operation == "in" ? "ING-" : "EGR-"
+      case operation
+      when "in" then seq = "ING-"
+      when "out" then seq = "EGR-"
+      when "transout" then seq = "TRANS-EGR-"
+      end
+      #seq = operation == "in" ? "ING-" : "EGR-"
       seq << "%04d" % (store.inventory_operations.size + 1)
       self.ref_number = seq
     end
+  end
+
+  def change_transout_ref_number
+    self.ref_number = self.ref_number.gsub("TRANS-EGR", "TRANS-IN")
   end
 
   # Returns the item for a transaction
@@ -141,6 +166,7 @@ class InventoryOperation < ActiveRecord::Base
 
     ret = ( store.save && ret )
     ret = ( self.save && ret )
+
     raise ActiveRecord::Rollback unless ret
 
     ret
@@ -180,6 +206,7 @@ class InventoryOperation < ActiveRecord::Base
       ret = ( store.save && ret )
       ret = ( self.save && ret )
       ret = ( transaction.save && ret )
+
       raise ActiveRecord::Rollback unless ret
     end
 

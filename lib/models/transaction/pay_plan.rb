@@ -28,7 +28,8 @@ module Models::Transaction::PayPlan
   # Sets the amount and the data for last pay_plan
   def new_pay_plan(params = {})
     return false unless credit? # Check credit is approved
-    @current_pay_plan = pay_plans.build(params.merge(:ctype => self.class.to_s, :currency_id => currency_id, :transaction_id => id))
+    @current_pay_plan = pay_plans.build(params.merge(:ctype => self.class.to_s, :currency_id => currency_id, 
+                                                     :transaction_id => id, :project_id => project_id))
   end
 
   # Updates one of the pay_plans
@@ -98,7 +99,8 @@ module Models::Transaction::PayPlan
           :alert_date => adate, 
           :amount => amt,
           :email => @current_pay_plan.email,
-          :currency_id => currency_id
+          :currency_id => currency_id,
+          :project_id => project_id
         )
 
         pdate += PAY_PLANS_DATE_SEPARATION
@@ -117,7 +119,8 @@ module Models::Transaction::PayPlan
           :alert_date => pp.payment_date - 5.days, 
           :amount => bal,
           :email => @current_pay_plan.email,
-          :currency_id => currency_id
+          :currency_id => currency_id,
+          :project_id => project_id
         )
       end
     end

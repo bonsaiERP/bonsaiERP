@@ -11,7 +11,23 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111129155318) do
+ActiveRecord::Schema.define(:version => 20120127123204) do
+
+  create_table "account_balances", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "contact_id"
+    t.integer  "account_id"
+    t.integer  "currency_id"
+    t.decimal  "amount",      :precision => 14, :scale => 4
+    t.decimal  "old_amount",  :precision => 14, :scale => 2
+    t.datetime "created_at",                                 :null => false
+    t.datetime "updated_at",                                 :null => false
+  end
+
+  add_index "account_balances", ["account_id"], :name => "index_account_balances_on_account_id"
+  add_index "account_balances", ["contact_id"], :name => "index_account_balances_on_contact_id"
+  add_index "account_balances", ["currency_id"], :name => "index_account_balances_on_currency_id"
+  add_index "account_balances", ["user_id"], :name => "index_account_balances_on_user_id"
 
   create_table "account_ledger_details", :force => true do |t|
     t.integer  "account_id"
@@ -61,6 +77,7 @@ ActiveRecord::Schema.define(:version => 20111129155318) do
     t.integer  "staff_id"
     t.date     "payment_date"
     t.boolean  "inverse",                                                          :default => false
+    t.integer  "project_id"
   end
 
   add_index "account_ledgers", ["account_id"], :name => "index_account_ledgers_on_account_id"
@@ -75,6 +92,7 @@ ActiveRecord::Schema.define(:version => 20111129155318) do
   add_index "account_ledgers", ["inverse"], :name => "index_account_ledgers_on_inverse"
   add_index "account_ledgers", ["nuller_id"], :name => "index_account_ledgers_on_nuller_id"
   add_index "account_ledgers", ["operation"], :name => "index_account_ledgers_on_operation"
+  add_index "account_ledgers", ["project_id"], :name => "index_account_ledgers_on_project_id"
   add_index "account_ledgers", ["reference"], :name => "index_account_ledgers_on_reference"
   add_index "account_ledgers", ["staff_id"], :name => "index_account_ledgers_on_staff_id"
   add_index "account_ledgers", ["to_id"], :name => "index_account_ledgers_on_to_id"
@@ -196,24 +214,29 @@ ActiveRecord::Schema.define(:version => 20111129155318) do
     t.integer  "transaction_id"
     t.date     "date"
     t.string   "ref_number"
-    t.string   "operation"
+    t.string   "operation",       :limit => 10
     t.string   "state"
     t.string   "description"
-    t.decimal  "total",          :precision => 14, :scale => 2
+    t.decimal  "total",                         :precision => 14, :scale => 2
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "contact_id"
     t.integer  "creator_id"
+    t.integer  "transference_id"
+    t.integer  "store_to_id"
+    t.integer  "project_id"
   end
 
   add_index "inventory_operations", ["contact_id"], :name => "index_inventory_operations_on_contact_id"
   add_index "inventory_operations", ["creator_id"], :name => "index_inventory_operations_on_creator_id"
   add_index "inventory_operations", ["date"], :name => "index_inventory_operations_on_date"
   add_index "inventory_operations", ["operation"], :name => "index_inventory_operations_on_operation"
+  add_index "inventory_operations", ["project_id"], :name => "index_inventory_operations_on_project_id"
   add_index "inventory_operations", ["ref_number"], :name => "index_inventory_operations_on_ref_number"
   add_index "inventory_operations", ["state"], :name => "index_inventory_operations_on_state"
   add_index "inventory_operations", ["store_id"], :name => "index_inventory_operations_on_store_id"
   add_index "inventory_operations", ["transaction_id"], :name => "index_inventory_operations_on_transaction_id"
+  add_index "inventory_operations", ["transference_id"], :name => "index_inventory_operations_on_transference_id"
 
   create_table "items", :force => true do |t|
     t.integer  "unit_id"
@@ -311,12 +334,14 @@ ActiveRecord::Schema.define(:version => 20111129155318) do
     t.string   "operation",           :limit => 20
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "project_id"
   end
 
   add_index "pay_plans", ["ctype"], :name => "index_pay_plans_on_ctype"
   add_index "pay_plans", ["operation"], :name => "index_pay_plans_on_operation"
   add_index "pay_plans", ["paid"], :name => "index_pay_plans_on_paid"
   add_index "pay_plans", ["payment_date"], :name => "index_pay_plans_on_payment_date"
+  add_index "pay_plans", ["project_id"], :name => "index_pay_plans_on_project_id"
   add_index "pay_plans", ["transaction_id"], :name => "index_pay_plans_on_transaction_id"
 
   create_table "payments", :force => true do |t|
@@ -486,6 +511,7 @@ ActiveRecord::Schema.define(:version => 20111129155318) do
     t.boolean  "discounted",                                                        :default => false
     t.integer  "modified_by"
     t.boolean  "fact",                                                              :default => true
+    t.boolean  "devolution",                                                        :default => false
   end
 
   add_index "transactions", ["account_id"], :name => "index_transactions_on_account_id"
@@ -500,6 +526,7 @@ ActiveRecord::Schema.define(:version => 20111129155318) do
   add_index "transactions", ["deliver"], :name => "index_transactions_on_deliver"
   add_index "transactions", ["deliver_approver_id"], :name => "index_transactions_on_deliver_approver_id"
   add_index "transactions", ["delivered"], :name => "index_transactions_on_delivered"
+  add_index "transactions", ["devolution"], :name => "index_transactions_on_devolution"
   add_index "transactions", ["discounted"], :name => "index_transactions_on_discounted"
   add_index "transactions", ["fact"], :name => "index_transactions_on_fact"
   add_index "transactions", ["modified_by"], :name => "index_transactions_on_modified_by"
@@ -543,7 +570,7 @@ ActiveRecord::Schema.define(:version => 20111129155318) do
     t.string   "abbreviation",            :limit => 10
     t.string   "salt"
     t.string   "rol"
-    t.boolean  "active"
+    t.boolean  "active",                                 :default => true
   end
 
   add_index "users", ["email"], :name => "index_users_on_email"

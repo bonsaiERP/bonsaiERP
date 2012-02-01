@@ -62,14 +62,17 @@ feature "Income", "test features" do
 
   scenario "Create a payment with nearest pay_plan" do
 
+    pro = Project.create(name: "Test project")
     log.info "Creating new income"
-    i = Income.new(income_params)
+    i = Income.new(income_params.merge(:project_id => pro.id))
 
     i.should be_cash
     i.save_trans.should be_true
     i.should be_draft
     i.deliver.should be_false
     i.delivered.should be_false
+
+    i.project_id.should == pro.id
 
     i.reload
     log.info "Checking details, cash and balance for income"
@@ -117,6 +120,7 @@ feature "Income", "test features" do
     p.amount.should == 30
     p.should be_persisted
     p.should_not be_inverse
+    p.project_id.should == pro.id
 
     i.balance.should == bal - 30
     p.persisted?.should be_true
@@ -162,7 +166,9 @@ feature "Income", "test features" do
   end
 
   scenario "Create a an income with credit" do
-    i = Income.new(income_params)
+    pro = Project.create(name: "Test project")
+
+    i = Income.new(income_params.merge(project_id: pro.id))
     i.save_trans.should == true
 
     # Prevent from having draft_trans? to true
@@ -172,6 +178,7 @@ feature "Income", "test features" do
     i.balance.should == i.total
 
     i.approve!.should == true
+    i.project_id.should == pro.id
     
 
     # Create PayPlan
@@ -184,6 +191,9 @@ feature "Income", "test features" do
     i.reload
     i.cash.should == false
     i.pay_plans.should have(1).element #size.should == 1
+
+    i.pay_plans.first.project_id.should == pro.id
+
     i.pay_plans.first.amount.should == i.balance
     i.payment_date.should == i.pay_plans.first.payment_date
     
@@ -212,6 +222,10 @@ feature "Income", "test features" do
     i.pay_plans.size.should == (i.balance/30).ceil
     tot_pps = i.pay_plans.inject(0) {|s,pp| s += pp.amount unless pp.paid?; s }
     tot_pps.should == i.balance
+
+    i.pay_plans.each do |pp|
+      pp.project_id.should == pro.id
+    end
 
     # delete many pay_plans
     pp_ids = i.pay_plans[2..i.pay_plans.size].map(&:id)

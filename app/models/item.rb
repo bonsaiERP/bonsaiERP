@@ -5,7 +5,7 @@ class Item < ActiveRecord::Base
 
   attr_readonly :ctype
 
-  set_inheritance_column :class_type
+  self.inheritance_column = :class_type
 
   #before_save :set_stockable
   before_create  :set_type_and_stockable
@@ -128,6 +128,12 @@ class Item < ActiveRecord::Base
     sc.limit(limit).values_of(:id, :code, :name, :price).map do |id, code, name, price|
       {:id => id, :code => code, :name => name, :price => price, :label => "#{code} - #{name}", :value => id}
     end
+  end
+
+  def self.with_stock(store_id, search)
+    Item.joins(:stocks).select("items.id, items.name, items.code, stocks.quantity").
+    where("items.code ILIKE :search OR items.name ILIKE :search", :search => "%#{search}%").
+    where("stocks.store_id = ? AND stocks.quantity > 0 AND stocks.state = 'active'", store_id)
   end
 
   # creates an array with values  [quantity, percentage]

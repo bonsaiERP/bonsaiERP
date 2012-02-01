@@ -46,8 +46,13 @@ es:
       inventory_operation_detail:
         stock_quantity: "La cantidad es mayor a la disponible en stock"
         transaction_quantity: "La cantidad ingresada es mayor a la de la operación"
+        repeated_item: "El ítem esta repetido"
       inventory_operation:
         transaction_items: "Ha seleccionado items que no estan en la operación"
+        invalid_item: "Ha seleccionado items inexistentes"
+        invalid_store: "El almacen que selecciono es incorrecto"
+        empty_items: "No existe items para realizar la operación"
+        stock_quantity: "Existen items que exceden la cantidad máxima"
       repeated_items: "Existen items repetidos, por favor revise"
         
   account_ledger:

@@ -143,9 +143,11 @@ feature "Inventory Operation", "Test IN/OUT" do
     io.save_operation.should be_true
     
     # Income
-    i = Income.new(income_params)
+    pro = Project.create!(name: "Test project")
+    i = Income.new(income_params.merge(project_id: pro.id))
     i.save_trans.should be_true
     i.approve!.should be_true
+    i.project_id.should == pro.id
 
     i.balance.should == (3 * 10 + 5 * 20)
     i.deliver = true
@@ -179,6 +181,7 @@ feature "Inventory Operation", "Test IN/OUT" do
     io.save_transaction.should be_true
     io.should be_out
     io.should be_persisted
+    #io.project_id.should == pro.id
 
     iodet1 = io.inventory_operation_details[0]
     iodet2 = io.inventory_operation_details[1]
@@ -398,5 +401,88 @@ feature "Inventory Operation", "Test IN/OUT" do
 
     i.reload
     i.transaction_details.last.balance.should == 0
+  end
+
+  scenario "Make a transference between two stores" do
+    store2 = Store.create!(:name => 'Second store', :address => 'An address') {|s| s.id = 2 }
+
+    hash = {:ref_number => 'I-0001', :date => Date.today, :contact_id => client.id, :operation => 'in', :store_id => 1,
+      :inventory_operation_details_attributes => [
+        {:item_id =>1, :quantity => 100},
+        {:item_id =>2, :quantity => 200}
+      ]
+    }
+    io = InventoryOperation.new(hash)
+    io.inventory_operation_details.size.should == 2
+    io.save_operation.should be_true
+    io.should be_persisted
+    io.reload
+    io.creator_id.should == UserSession.user_id
+
+    io.store.stocks[0].item_id.should == 1
+    io.store.stocks[0].quantity.should == 100
+    io.store.stocks[1].item_id.should == 2
+    io.store.stocks[1].quantity.should == 200
+
+    store = Store.find(1)
+
+    trans = Models::InventoryOperation::Transference.new(:store_id => store.id, description: "A new description")
+    trans.inventory_operation_out.operation.should == "transout"
+  
+    trans.make_transference.should be_false
+
+    # Check all the errors it produces
+    io = trans.inventory_operation_out
+    io.errors[:base].should_not be_blank
+    io.errors[:store_to_id].should_not be_blank
+
+    # Valid params
+    new_params = {
+      store_id: 1, description: "A description",
+      store_to_id: 2, contact_id: 1,
+      inventory_operation_details_attributes: [
+        { item_id: 1, quantity: 101 },
+        { item_id: 2, quantity: 100 }
+      ]
+    }
+
+    trans = Models::InventoryOperation::Transference.new(new_params)
+    
+    #Stock.where(item_id: [1,2], store_id: store.id).each {|v| puts "#{v.id} : #{v.quantity}"}
+    #puts "-"*80
+    trans.make_transference.should == false
+    
+    Stock.where(item_id: 1, store_id: 1).first.quantity.should == 100
+    Stock.where(item_id: 2, store_id: 1).first.quantity.should == 200
+
+    io = trans.inventory_operation_out
+    #io.inventory_operation_details.each{|v| puts "ItemID #{v.item_id}: #{v.errors.messages}" }
+
+    io.inventory_operation_details[0].errors[:quantity].should_not be_blank
+
+    new_params[:inventory_operation_details_attributes][0][:quantity] = 40
+    trans = Models::InventoryOperation::Transference.new(new_params)
+
+    trans.make_transference.should be_true
+    trans.inventory_operation_out.should be_persisted
+    trans.inventory_operation_in.should be_persisted
+
+    s = Stock.where(item_id: 1, store_id: 1).last
+    s.quantity.should == 60
+    Stock.where(item_id: 2, store_id: 1).first.quantity.should == 100
+
+    Stock.where(item_id: 1, store_id: 2).first.quantity.should == 40
+    Stock.where(item_id: 2, store_id: 2).first.quantity.should == 100
+
+    io_out = trans.inventory_operation_out
+    io_in  = trans.inventory_operation_in
+
+    io_out.should be_persisted
+    io_in.should be_persisted
+
+    trans.inventory_operation_out.store_to_id.should == 2
+
+    io_out.transference_id.should == io_in.id
+    io_in.transference_id.should == io_out.id
   end
 end

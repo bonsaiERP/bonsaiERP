@@ -12,6 +12,9 @@
     = @client.matchcode
     %span.dashlet.fs50.bg-dark Cliente
 
+  -if current_user.is_admin?
+    = link_to "Balancear cuenta", new_account_balance_path(:contact_id => @client.id), :class => "new button"
+
   .clear
   = render 'contacts/show', :klass => @client
 
@@ -21,8 +24,10 @@
 
   - presenter.incomes.each do |cur, amt|
     .moneybox.fl 
-      %label.dark-green SALDO VENTAS #{cur}
-      %h3= ntc amt
+      %label.dark-green SALDO VENTAS
+      %h3 
+        =cur
+        =ntc amt
 
   - presenter.buys.each do |cur, amt|
     .moneybox.fl 

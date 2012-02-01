@@ -10,6 +10,9 @@
     = @staff.matchcode
     %span.fs50.dashlet.bg-dark Otros
 
+  -if current_user.is_admin?
+    = link_to "Balancear cuenta", new_account_balance_path(:contact_id => @staff.id), :class => "new button"
+
   .clear
   = render 'contacts/show', :klass => @staff
 

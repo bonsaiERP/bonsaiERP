@@ -89,6 +89,36 @@ class InventoryOperationsController < ApplicationController
     @inventory_operation = @transaction.inventory_operations.build(:operation => params[:operation])
   end
 
+  def new_transference
+    # Check valid store
+    unless Store.exists?(params[:store_id])
+      redirect_to stores_path
+      return 
+    end
+
+    @transference = Models::InventoryOperation::Transference.new(store_id: params[:store_id])
+    @inventory_operation = @transference.inventory_operation_out
+    @inventory_operation.inventory_operation_details.build
+  end
+
+  def create_transference
+    # Check valid store
+    #unless Store.exists?(params[:inventory_operations][:store_id])
+    #  redirect_to stores_path
+    #  return 
+    #end
+
+    @transference = Models::InventoryOperation::Transference.new(params[:inventory_operation])
+    @inventory_operation = @transference.inventory_operation_out
+
+    if @transference.make_transference
+      redirect_to @transference.inventory_operation_out
+    else
+      @inventory_operation = @transference.inventory_operation_out
+      render "new_transference"
+    end
+  end
+
   # Presents the transactions that are IN/OUT
   def transactions
     params[:operation] = "in" unless ["in", "out"].include?( params[:operation] )
@@ -124,10 +154,10 @@ class InventoryOperationsController < ApplicationController
     roles = User::ROLES.slice(0,2)
 
     case
-      when ( @transaction.is_a?(Buy) and not(roles.include?(session[:user][:rol]) ) )
+      when ( @transaction.is_a?(Buy) && !(roles.include?(session[:user][:rol]) ) )
         redirect_to "/422"
-      when ( @transaction.is_a?(Income) and operation === 'in' and
-          not(roles.include?(session[:user][:rol]) ) )
+      when ( @transaction.is_a?(Income) && operation === 'in' &&
+          !(roles.include?(session[:user][:rol]) ) )
         redirect_to "/422"
     end
 

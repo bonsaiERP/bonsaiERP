@@ -1,10 +1,10 @@
 - content_for :links do
   %ul.breadcrumps
-    %li #{link_to "Iniciativas", projects_path} 
+    %li #{link_to "Proyectos", projects_path} 
 
   .links
     = link_to 'Editar', edit_project_path(@project), :class => 'edit'
-    = link_to 'Borrar', @project, :class => 'delete', 'data-confirm' => 'Esta seguro de borrar la iniciativa?'
+    = link_to 'Borrar', @project, :class => 'delete', 'data-confirm' => 'Esta seguro de borrar el proyecto?'
 
 %h1 Proyecto #{@project.name}
 .clear

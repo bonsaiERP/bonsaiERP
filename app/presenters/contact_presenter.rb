@@ -19,15 +19,15 @@ class ContactPresenter < BasePresenter
   def moneybox(ac)
     case 
     when ac.amount < 0
-      moneybox_tag "DEBEMOS #{ac.currency_symbol}", ac.amount
+      moneybox_tag "<span class='red'>DEBEMOS</span>".html_safe, "#{ac.currency_symbol} #{ntc ac.amount.abs }"
     when ac.amount > 0
-      moneybox_tag "DEBE #{ac.currency_symbol}", ac.amount
+      moneybox_tag "<span class='dark-green'>DEBE</span>".html_safe, "#{ac.currency_symbol} #{ntc ac.amount.abs}"
     end
   end
 
   def moneybox_tag(label, amt)
     content_tag(:div, :class => 'moneybox fl' ) do
-      content_tag(:label, label) + content_tag(:h3, h.ntc(amt.abs) )
+      content_tag(:label, label) + content_tag(:h3, amt )
     end
     #.moneybox.fl
     #  %label #{ presenter.moneybox_label ac} #{ac.currency_symbol}

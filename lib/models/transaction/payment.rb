@@ -31,6 +31,7 @@ module Models::Transaction::Payment
 
     @current_ledger = account_ledgers.build(params) {|al| al.operation = get_account_ledger_operation }
     @current_ledger.set_payment(true)
+    @current_ledger.project_id = self.project_id
     @payment = true # To activate callbacks and validations
 
     @current_ledger
@@ -45,6 +46,7 @@ module Models::Transaction::Payment
 
     @current_ledger = account_ledgers.build(params) {|al| al.operation = get_account_ledger_operation(true) }
     @current_ledger.set_payment(true)
+    @current_ledger.project_id = self.project_id
     @payment = true # To activate callbacks and validations
     contact.get_contact_account(currency_id)
 

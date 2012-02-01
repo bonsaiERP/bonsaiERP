@@ -31,6 +31,7 @@ class AccountLedger < ActiveRecord::Base
   belongs_to :transaction
   belongs_to :currency
   belongs_to :contact
+  belongs_to :project
 
   belongs_to :approver, :class_name => "User"
   belongs_to :nuller,   :class_name => "User"
@@ -65,7 +66,7 @@ class AccountLedger < ActiveRecord::Base
   #validate  :total_amount_equal
 
   # accessible
-  attr_accessible :account_id, :to_id, :date, :operation, :reference, :interests_penalties,
+  attr_accessible :account_id, :to_id, :date, :operation, :reference, :interests_penalties, :project_id,
     :amount, :exchange_rate, :description, :account_ledger_details_attributes, :contact_id, :base_amount
 
   # scopes

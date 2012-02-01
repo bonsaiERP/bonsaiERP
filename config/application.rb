@@ -60,6 +60,7 @@ module Bonsaierp
     end
 
     config.generators.helper = false
+    config.generators.stylesheet_engine = :sass
 
     config.assets.enabled = true
     config.assets.version = "1.0"

@@ -269,10 +269,13 @@ feature "Income", "test features" do
   end
 
   scenario "make devolution from a Income with credit" do
-    i = Income.new(income_params)
+    pro = Project.create!(name: "Test project")
+
+    i = Income.new(income_params.merge(project_id: pro.id))
     i.save_trans.should be_true
 
     i.balance.should == 3 * 10 + 5 * 20
+    i.project_id.should == pro.id
     bal = i.balance
 
     i.modified_by.should == UserSession.user_id
@@ -303,6 +306,9 @@ feature "Income", "test features" do
     dev_amt, ac = 20, client.account_cur(i.currency_id)
     dev = i.new_devolution(base_amount: dev_amt, account_id: ac.id, reference: "First devlution", exchange_rate: 1)
     i.save_devolution#.should be_true
+    
+    dev.should be_persisted
+    dev.project_id.should == pro.id
 
     tot_ac = ac.amount
 

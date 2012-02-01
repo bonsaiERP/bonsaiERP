@@ -38,5 +38,16 @@ class InventoryOperationPresenter < BasePresenter
       "<span class='red'>Egreso</span> a almacen #{inventory_operation.store}".html_safe
     end
   end
+
+  def link_related
+    if inventory_operation.transference_id.present?
+      trans = inventory_operation.transference
+      txt = trans.operation == "transout" ? "a" : "desde"
+      h.link_to "Transferencia #{txt} #{trans.store_to}", trans, :title => "Transferencia a #{trans}"
+    elsif inventory_operation.contact_id.present?
+      cont = inventory_operation.contact
+      h.link_to cont, cont, :title => "Contacto"
+    end
+  end
 end
 

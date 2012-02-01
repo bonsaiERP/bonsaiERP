@@ -9,7 +9,7 @@ describe InventoryOperationsController do
     before(:each) do
       controller.stub!(:check_authorization! => true)
       mod = mock_model(Income, :id => 1, :contact_id => 1)
-      Transaction.stub!(:org => stub(:find => mod))
+      Transaction.stub!(find: mod)
       InventoryOperation.stub!(:new => mock_model(InventoryOperation, :set_transaction => true) )
     end
 
@@ -32,7 +32,7 @@ describe InventoryOperationsController do
     before(:each) do
       controller.stub!(:check_authorization! => true)
       mod = mock_model(Buy, :id => 1, :contact_id => 1)
-      Transaction.stub!(:org => stub(:find => mod))
+      Transaction.stub!(:find => mod)
       InventoryOperation.stub!(:new => mock_model(InventoryOperation, :set_transaction => true) )
     end
 
@@ -76,7 +76,7 @@ describe InventoryOperationsController do
 
     it 'should redirect to user if Buy in' do
       mod = mock_model(Buy, :id => 1, :contact_id => 1)
-      Transaction.stub!(:org => stub(:find => mod))
+      Transaction.stub!(:find => mod)
       session[:user] = {:rol => 'operations'}
 
       post :create_transaction, :inventory_operation => {:transaction_id => 1, :operation => 'in'}
@@ -85,7 +85,7 @@ describe InventoryOperationsController do
 
     it 'should redirect to user if Buy out' do
       mod = mock_model(Buy, :id => 1, :contact_id => 1)
-      Transaction.stub!(:org => stub(:find => mod))
+      Transaction.stub!(:find => mod)
       session[:user] = {:rol => 'operations'}
       
       p_params = post_params.dup
@@ -97,7 +97,7 @@ describe InventoryOperationsController do
 
     it 'should redirect to user if Income in' do
       mod = mock_model(Buy, :id => 1, :contact_id => 1)
-      Transaction.stub!(:org => stub(:find => mod))
+      Transaction.stub!(:find => mod)
       session[:user] = {:rol => 'operations'}
 
       post :create_transaction, :inventory_operation => {:transaction_id => 1, :operation => 'in'}
@@ -111,7 +111,7 @@ describe InventoryOperationsController do
                                               :id => 1, :contact_id= => true)
                         )
                       )
-      Transaction.stub!(:org => stub(:find => mod))
+      Transaction.stub!(:find => mod)
       session[:user] = {:rol => 'operations'}
 
       post :create_transaction, :inventory_operation => {:transaction_id => 1, :operation => 'out'}
@@ -119,4 +119,46 @@ describe InventoryOperationsController do
     end
   end
 
+  describe "GET new_transference" do
+    before do
+      controller.stub!(:check_authorization! => true)
+    end
+
+    it 'should create an instance' do
+      Store.stub!(:exists?).with("1").and_return(true)
+      InventoryOperation.any_instance.stub(:create_ref_number).and_return("00")
+      
+      get :new_transference, store_id: 1
+
+      response.should_not be_redirect
+      assigns(:transference).class.should == ::Models::InventoryOperation::Transference
+
+    end
+
+    it 'should not allow if Sore not found' do
+      Store.stub!(:exists?).with("1").and_return(false)
+
+      get :new_transference, store_id: 1
+
+      response.should be_redirect
+    end
+  end
+
+  describe "POST create_transference" do
+    before do
+      controller.stub!(:check_authorization! => true)
+    end
+
+    it 'should create a transference' do
+      Models::InventoryOperation::Transference.stub!(
+        new: stub(
+          make_transference: true, inventory_operation_out: mock_model(InventoryOperation, id: 1)
+        ) 
+      )
+post :create_transference, inventory_operation: {}
+
+      response.should be_redirect
+      response.should redirect_to(inventory_operation_path(1))
+    end
+  end
 end

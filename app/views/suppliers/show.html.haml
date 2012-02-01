@@ -11,6 +11,8 @@
     = @supplier.matchcode
     %span.dashlet.fs50.bg-dark Proveedor
 
+  -if current_user.is_admin?
+    = link_to "Balancear cuenta", new_account_balance_path(:contact_id => @supplier.id), :class => "new button"
 
   .clear
   = render 'contacts/show', :klass => @supplier

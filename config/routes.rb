@@ -1,5 +1,7 @@
 Bonsaierp::Application.routes.draw do
 
+  resources :account_balances
+
   if [:development, :test].include? Rails.env
     mount Jasminerice::Engine => "/jasmine" 
   end
@@ -13,9 +15,15 @@ Bonsaierp::Application.routes.draw do
       get :select_store
     end
 
-    get :transactions, :on => :collection
-    get :new_transaction, :on => :collection
-    post :create_transaction, :on => :collection
+    collection do
+      # Transactions (Buy, Income)
+      get :transactions
+      get :new_transaction
+      post :create_transaction
+      # Transference
+      get  :new_transference
+      post :create_transference
+    end
   end
 
   resources :accounts
@@ -163,6 +171,7 @@ Bonsaierp::Application.routes.draw do
   match "/staff_account_autocomplete"    => AutocompleteApp.action(:staff_account)
   match "/item_account_autocomplete"     => AutocompleteApp.action(:item_account)
   match "/exchange_rates" => AutocompleteApp.action(:get_rates)
+  match "/items_stock" => AutocompleteApp.action(:items_stock)
 
   get "/tour"    => 'home#tour'    , :page => "tour"
   get "/prices"  => 'home#prices'  , :page => 'prices'
