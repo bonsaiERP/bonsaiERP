@@ -1,0 +1,468 @@
+@import "compass"
+@import "colors"
+
+$font_size: 13px
+
+.dark
+  color: lighten(#000, 10%) !important
+.dark_grey
+  color: darken($grey, 40%) !important
+
+// Loop to create different width sizes Ex.: ._10{ width: 9% !important }
+@for $i from 1 to 21
+  ._#{$i * 5}, .w#{$i * 5}
+    width: #{$i * 5 - 1}% !important
+
+._33, .w33
+  width: 33% !important
+.p100 
+  width: 100px
+.p200
+  width: 200px
+.p300
+  width: 300px
+
+// Loop to create different margins
+@for $i from 1 to 7
+  .mt#{$i * 5} 
+    margin-top: #{$i * 5}px !important
+  .mb#{$i * 5}
+    margin-bottom: #{$i * 5}px !important
+
+.fl
+  float: left
+.fr
+  float: right
+.clear
+  clear:both
+
+.true
+  background: transparent url(images/tick.png) no-repeat center 50%
+.false
+  background: transparent url(images/cross.png) no-repeat center 50%
+
+tr.true
+  background: transparent
+tr.false
+  background: transparent
+
+span.true, span.false
+  width: 16px
+  height: 16px
+  display: inline-block
+
+.hide
+  display: none
+}
+
+/*Font styles*/
+.b
+  font-weight: bold
+.n
+  font-weight: normal
+.i
+  font-style: italic
+
+.l
+  text-align: left
+.c
+  text-align: center
+.r
+  text-align: right
+.nw
+  white-space: nowrap
+
+// font sizes
+@for $i from 5 to 16 
+  .fs#{$i * 10}
+    font-size: #{$i * 10}% !important
+
+
+.marked
+  background-color: $light_blue !important
+
+/* Breadcrumbs*/
+ul.breadcrumps
+  list-style: none
+  padding: 0px
+  margin: 4px 0 0 16px
+  float:left
+  width: 50%
+  li
+    display: inline
+    a 
+      background: transparent url(images/breadcrumb-arrow.png) no-repeat right 49%
+      padding-right: 14px
+
+    span
+      position:relative
+      padding: 0px 5px
+
+
+ul.list
+  padding: 2px 0px
+  margin: 4px 0 0 16px
+  >li
+    list-style: none 
+    margin: 8px 2px 5px 
+    padding: 0px
+
+/*IE7*/
+.prev, .page, .next{
+  font-weight: bold
+  display: inline-block
+  margin: 0px 3px
+}
+a.search
+  font-weight: bold
+  float:left
+  margin: 10px
+  display: inline-block
+  //margin-top: 4px !important
+  padding: 0px 0px 0px 20px
+
+  background: transparent url(images/zoom.png) no-repeat
+
+div.search
+  +border-radius
+  display: none
+  background-color: darken($white, 5%)
+  padding: 5px 15px
+  margin-bottom: 12px
+  position: relative
+  border: 1px solid #fff
+  -webkit-box-shadow: 0 1px 3px #ccc //TODO
+  box-shadow: 0 1px 3px #ccc //TODO
+
+
+.moneybox
+  +border-radius(3px)
+  background-color: lighten($grey, 17%)
+  padding: 8px
+  display:inline-block
+  margin: 5px
+  width: 130px
+  border: 1px solid lighten($grey, 5%)
+  h3{ margin: 2px 0px color: $black }
+  label{ font-weight: normal}
+
+
+.tooltip
+  +border-radius(3px)
+  border: 1px solid $grey
+  background: $white
+  color: $dark
+  padding: 4px
+
+
+/*especial tabs*/
+ul.tabs
+  list-style: none
+  height: 24px
+  padding: 5px
+  border-bottom: 1px solid $grey
+  background-color: $light-grey
+  clear: both
+
+  li
+    display: inline
+    a
+      display:block
+      float:left
+      height: 24px
+      line-height: 24px
+      padding: 0 10px
+      color: darken($dark-grey, 5%)
+      //background: transparent url(images/silver.png) repeat-x 0 0
+    a.active
+      height: 25px
+      line-height: 24px
+      font-weight: bold
+      color: $dark
+
+.message
+  +border-radius(4px)
+  border: 2px solid $green
+  color: $dark
+  margin: 4px 0
+  padding: 10px
+  width: 50%
+  position: relative
+  span.close
+    background-position: -96px -128px
+    background-image: url("images/ui-icons_469bdd_256x240.png")
+    height: 16px
+    width: 16px
+    display:block
+    position: absolute
+    top: 2px
+    right: 2px
+    cursor: pointer
+
+/**********************/
+/*LINKS*/
+
+@mixin min-height
+  min-height: 16px
+  display: inline-block
+
+.links
+  font-weight: bold
+  padding-left: 20px
+  color: darken($green, 10%)
+  width: 40%
+  float:right
+  text-align: right
+  a:hover 
+    text-decoration: none
+    color: $green
+
+
+
+a.button
+  @include border-radius(3px)
+  border: 1px solid $grey
+  padding: 5px 8px
+  margin: 5px
+  font-size: 110%
+  background-color:$light-grey
+  &:hover
+    background-color: $white
+    text-decoration: none !important
+  
+
+a.new
+  font-weight: bold
+  padding-left: 22px !important
+  color: darken($green, 10%)
+  display: inline-block
+  background-image: url("images/add.png")
+  background-position: 4px 50%
+  background-repeat: no-repeat
+  &:hover
+    text-decoration: none
+  
+
+a.add
+  background: url(images/add.png) no-repeat 0px 50%
+
+a.edit
+  background: url(images/pencil.png) no-repeat 0px 50%
+
+
+a.destroy, a.delete
+  background: url(images/trash.png) no-repeat 0px 50%
+
+a.key
+  background: url(images/key.png) no-repeat 0px 50%
+
+a.video
+  background: url(images/television.png) no-repeat 0px 50%
+
+a.delete
+  color: $red
+  &:hover
+    color: darken($red, 10%) !important
+
+
+a.list
+  +min-height
+  background: url(images/table.png) no-repeat 0px 50%
+
+a.show
+  +min-height
+  background: url(images/zoom.png) no-repeat
+
+a.cog
+  +min-height
+  background: transparent url(images/cog.png) no-repeat 0 50%
+  padding-left: 20px !important
+
+a.user
+  +min-height
+  background: transparent url(images/user.png) no-repeat 0 50%
+  padding-left: 20px !important
+
+a.logout
+  +min-height
+  background: transparent url(images/logout.png) no-repeat 0 50%
+  padding-left: 20px !important
+
+a.email
+  +min-height
+  background: transparent url(images/email.png) no-repeat 0 50%
+  padding-left: 20px !important
+
+a.print
+  +min-height
+  background: transparent url(images/printer.png) no-repeat 0 50%
+  padding-left: 20px !important
+
+a.money
+  +min-height
+  background: transparent url(images/money.png) no-repeat 0 50%
+  padding-left: 20px !important
+
+a.calendar
+  +min-height
+  background: transparent url(images/calendar.gif) no-repeat 0 50%
+  padding-left: 20px !important
+
+a.trash
+  +min-height
+  background: transparent url(images/trash.png) no-repeat 0 50%
+  padding-left: 20px !important
+  min-height: 20px
+
+a.pencil
+  +min-height
+  background: transparent url(images/pencil.png) no-repeat 0 50%
+  padding-left: 20px !important
+
+
+a.sync
+  +min-height
+  background: transparent url(images/arrow_refresh_small.png) no-repeat 0 50%
+  padding-left: 16px !important
+
+
+a.duplicate
+  +min-height
+  background: transparent url(images/copy.png) no-repeat 0 50%
+
+
+.icon
+  text-indent: -1000em
+
+.bicon
+  width: 16px
+  height: 16px
+  display: inline-block
+
+/*********************************************/
+
+.ajax-modal
+  background-color: #FFF
+  .links
+    display: none
+  a
+    color: $link
+    text-decoration: none
+    &:hover
+      text-decoration: underline
+
+
+
+/*States*/
+.paid 
+  @include dashlet
+  background-color: $green
+
+.draft 
+  @include dashlet
+  background-color: darken($grey, 15%)
+
+.approved
+  @include dashlet
+  background-color: $dark
+
+.due
+  @include dashlet
+  background-color: $red 
+
+.nulled
+  @include dashlet
+  background-color: darken($red, 20%)
+
+.dashlet
+  @include dashlet
+
+/***********************************/
+/* MENU CLASS */
+
+ul.menu
+  position: relative
+  padding: 0px
+  margin:0px
+  z-index: 100
+  a
+    margin: 0px
+    text-decoration: none
+    &:hover
+      color: $green  
+  li
+    list-style: none
+    margin:0px
+    padding: 0px
+    float: left
+    ul
+      display: none
+      margin: 0px
+      border: 1px solid $grey
+      background-color: $white
+      padding: 0px
+      margin-top: -1px
+      font-weight: normal
+      li
+        float: none !important
+        a
+          padding: 6px 20px
+          display: block
+          font-size: 110%
+    &:hover
+      ul
+        display: block
+        position:absolute
+
+
+// List of banks or cashses
+.accounts_list
+  padding: 0px 
+  margin: 0px
+
+.accounts_list li 
+  list-style: none 
+  padding: 4px
+  margin-bottom: 10px
+  border-top: 1px solid #BFBFEF
+  border-bottom: 1px solid #CFEFEF
+
+.accounts_list li h3
+  margin: 2px 4px
+
+.accounts_list li p
+  padding: 2px 5px
+
+/*For autocomplete*/
+.ui-autocomplete a
+  color: $black
+.ui-autocomplete a.ui-state-hover 
+  background-color: #7DBF47 !important 
+  color: #FFF !important
+
+.box
+  //@include box(430px, lighten($black, 30%))
+  width: 45%
+  margin-right: 20px
+  float: left
+  border-color: darken($white, 30%)
+  .title
+    padding: 0.5em
+    margin: 4px 0px
+    background-color: $light_grey
+  .high
+    color: lighten($dark, 5%)
+    font-size: 120%
+    font-weight: bold
+
+a.link
+  +link
+}
+span.more
+  background: url(images/bullet_arrow_down.png) no-repeat
+
+span.warning
+  background: url(images/warning.png) no-repeat
+
+.ib 
+  display: inline-block

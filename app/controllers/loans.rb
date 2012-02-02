@@ -1,11 +1,8 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class IncomesController < TransactionsController #ApplicationController
-
+class LoansController < TransactionsController #ApplicationController
   before_filter :check_authorization!
-  before_filter :set_transaction, :only => [:show, :edit, :update, :destroy, :approve]
-
   #before_filter :update_all_deliver
 
   # GET /incomes
@@ -162,3 +159,4 @@ class IncomesController < TransactionsController #ApplicationController
   end
 
 end
+

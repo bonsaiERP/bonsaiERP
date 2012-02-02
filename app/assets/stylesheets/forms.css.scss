@@ -1,3 +1,4 @@
+@import "colors";
 $font_size: 13px;
 /*************************************/
 /*FORM STYLES*/
@@ -110,8 +111,8 @@ span.error{
   .input{ display: none; }
   $ddwidth: 400px;
   p{
-    @include rounded-corners(3px);
-    @include b-shadow(0, 0, 4px);
+    //@include rounded-corners(3px);
+    //@include b-shadow(0, 0, 4px);
     overflow: hidden;
     width: $ddwidth + 10;
     padding-right: 30px;

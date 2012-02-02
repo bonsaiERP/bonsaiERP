@@ -1,7 +1,7 @@
 # Edit this Gemfile to bundle your application's dependencies.
 source :rubygems
 
-gem 'rails', '3.2.0'
+gem 'rails', "3.2.1"
 
 ## Bundle edge rails:
 # gem "rails", :git => "git://github.com/rails/rails.git"
@@ -11,13 +11,15 @@ gem 'rails', '3.2.0'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sass-rails',   "~> 3.2.3"
-  gem 'coffee-rails', "~> 3.2.1"
+  gem 'sass-rails',   "~> 3.2.4"
+  gem 'coffee-rails', "~> 3.2.2"
   gem 'uglifier',     ">= 1.0.3"
 end
 
-gem 'jquery-rails'
-#gem 'compass', "~> 0.12.alpha.4"
+gem 'jquery-rails', "~> 2.0.0"
+#gem 'compass-rails', "~> 1.0.0.rc.1"
+gem 'compass', "~> 0.12.rc.0"
+#gem 'bootstrap-sass', "~> 1.4.4"
 
 gem 'pg', "~> 0.12.2"
 #gem 'mysql2'#, :group => :production
@@ -47,7 +49,6 @@ end
 
 group :development do
   gem 'ruby-debug19', '~> 0.11.6', :platform => :mri_19, :require => 'ruby-debug'
-  #gem 'active_reload'
   gem 'pry',                "~> 0.9.7.4"
   gem 'ffaker',             "~> 1.12.1"
   gem 'pry-rails'

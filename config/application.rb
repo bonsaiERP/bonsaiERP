@@ -65,12 +65,5 @@ module Bonsaierp
     config.assets.enabled = true
     config.assets.version = "1.0"
 
-    # Hack for spork to work with rails 3
-    # http://railstutorial.org/chapters/static-pages#sec:spork
-    #if Rails.env.test?
-    #  initializer :after => :initialize_dependency_mechanism do
-    #    ActiveSupport::Dependencies.mechanism = :load
-    #  end
-    #end
   end
 end

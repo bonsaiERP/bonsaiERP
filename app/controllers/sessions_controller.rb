@@ -3,7 +3,6 @@
 # email: boriscyber@gmail.com
 class SessionsController < ApplicationController
   before_filter :check_logged_user, :except => [:destroy]
-  layout "dialog"
 
   def new
     @user = User.new

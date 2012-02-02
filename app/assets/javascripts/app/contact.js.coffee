@@ -94,7 +94,7 @@ class ContactAutocomplete
         css = "grey"
         sel = ""
 
-      html = "<label class='#{css}'>"
+      html = "<label class='#{css} radio inline'>"
       html += "<input type='radio' class='contact-autocomplete' #{sel} value='#{k}' name='#{name}' />"
       html += "#{@.getLocalizedLabel(k)}</label>"
 

@@ -1,14 +1,5 @@
-@mixin rounded-corners($radius: 4px) {
-          border-radius: $radius;  
-     -moz-border-radius: $radius;  
-  -webkit-border-radius: $radius; 
-
-  /* useful if you don't want a bg color from leaking outside the border: */        
-  -moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box; 
-}
-
 @mixin dashlet($radius: 3px, $width: 16px, $height: 16px){
-  @include rounded-corners($radius);
+  @include border-radius($radius);
   padding: 2px 3px;
   color: $white;
   min-width: $width;
@@ -33,32 +24,8 @@
   text-indent: -1000em;
 }
 
-@mixin t-shadow($top:1px, $left: 1px, $dif: 0px, $col: $grey){
-          text-shadow: $top $left $dif $col;
-     -moz-text-shadow: $top $left $dif $col;
-  -webkit-text-shadow: $top $left $dif $col;
-}
-
-@mixin b-shadow($top:0px, $left: 0px, $dif: 5px, $col: $grey){
-          box-shadow: $top $left $dif $col;
-     -moz-box-shadow: $top $left $dif $col;
-  -webkit-box-shadow: $top $left $dif $col;
-}
-
-@mixin flash($color, $bg_color: lighten($color, 45%)){
-  @include rounded-corners(4px);
-  border: 2px solid darken($color, 20%);
-  padding:10px;
-  border-radius: 4px;
-  font-size: 120%;
-  position: relative;
-  margin: 8px 0px;
-  color: darken($color, 20%);
-  background-color: $bg_color;
-}
-
 @mixin box($width, $color, $border: 1px, $padding: 5px, $margin: 7px) {
-  @include rounded-corners(4px);
+  @include border-radius(4px);
   @include b-shadow(1px, 1px, 3px, $color);
   border-width: $border;
   border-style: solid;

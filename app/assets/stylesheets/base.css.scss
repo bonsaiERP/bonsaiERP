@@ -1,3 +1,4 @@
+@import "colors";
 $font_size: 12px;
 
 html{ font-size: $font_size;}
@@ -9,15 +10,14 @@ body{
 }
 
 a{
-  color: $link;
   text-decoration: none;
   &:hover{
     text-decoration: underline;
   }
 }
 hr{ border:0px;
-  background-color: $grey;
-  color: $grey;
+  background-color: gray;
+  color: gray;
   height: 1px;
 }
 
@@ -70,7 +70,6 @@ hr{ border:0px;
   clear: both;
   margin-top: 8px;
   .links a{
-    @include link;
     font-size: 12px;
     padding: 4px 10px 2px 20px;
     color: #555;
@@ -93,7 +92,7 @@ hr{ border:0px;
   h1{
     width: 900px;
     float: left;
-    color: $white;
+    color: white;
     margin: 7px 0px 0 14px;
     overflow: hidden;
     height: 45px;
@@ -185,7 +184,7 @@ h2, h3, h4, h5{ margin: 8px 0px;}
 p{ margin: 4px 0px; }
 
 #due_date{
-  color: $white;
+  color: white;
   font-weight: bold;
   float: right;
   display: inline-block;

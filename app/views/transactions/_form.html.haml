@@ -30,10 +30,10 @@
 
     ._50.fl
       .input
-        %label
+        %label.radio.inline
           = f.radio_button :fact, true, :class => 'fact'
           Factura
-        %label
+        %label.radio.inline
           = f.radio_button :fact, false, :class => 'fact'
           Recibo
       = f.input :bill_number, :label => 'Nº de <span id="fact_label"></span>'.html_safe, :input_html => {:size => 20}

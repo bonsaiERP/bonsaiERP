@@ -1,3 +1,17 @@
+@import "compass/css3";
+
+@mixin flash($color, $bg_color: lighten($color, 45%)){
+  @include border-radius(4px);
+  border: 2px solid darken($color, 20%);
+  padding:10px;
+  border-radius: 4px;
+  font-size: 120%;
+  position: relative;
+  margin: 8px 0px;
+  color: darken($color, 20%);
+  background-color: $bg_color;
+}
+
 #flashNotice{
   @include flash($green);
 }
