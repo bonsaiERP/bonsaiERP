@@ -1,7 +1,7 @@
 # Edit this Gemfile to bundle your application's dependencies.
 source :rubygems
 
-gem 'rails', '3.2.0'
+gem 'rails', '3.2.1'
 
 ## Bundle edge rails:
 # gem "rails", :git => "git://github.com/rails/rails.git"
@@ -11,8 +11,8 @@ gem 'rails', '3.2.0'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sass-rails',   "~> 3.2.3"
-  gem 'coffee-rails', "~> 3.2.1"
+  gem 'sass-rails',   "~> 3.2.4"
+  gem 'coffee-rails', "~> 3.2.2"
   gem 'uglifier',     ">= 1.0.3"
 end
 
@@ -34,8 +34,8 @@ gem 'qu-redis',    "~> 0.1.4"
 #gem 'nokogiri'
 
 gem 'prawn', '~>0.12.0'
+gem 'exception_notification', "~> 2.5.2"
 #gem 'newrelic_rpm'
-#gem 'escape_utils'
 
 group :development, :test do
   gem 'rspec-rails', '~> 2.8.0'

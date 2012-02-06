@@ -14,6 +14,7 @@ class InventoryOperation < ActiveRecord::Base
   belongs_to :creator, :class_name => "User"
   belongs_to :transout, :class_name => "InventoryOperation"
   belongs_to :store_to, :class_name => "Store"
+  belongs_to :project
 
   has_one    :transference, :class_name => 'InventoryOperation', :foreign_key => "transference_id"
 
@@ -176,6 +177,7 @@ class InventoryOperation < ActiveRecord::Base
   def save_transaction
     return false unless transaction
     ret = true
+    self.project_id = transaction.project_id
 
     self.class.transaction do
       return false if transaction.draft? or ( transaction.is_a?(Income) and not(transaction.deliver?) )
