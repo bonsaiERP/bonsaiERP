@@ -36,8 +36,8 @@ gem 'qu-redis',    "~> 0.1.4"
 #gem 'nokogiri'
 
 gem 'prawn', '~>0.12.0'
+gem 'exception_notification', "~> 2.5.2"
 #gem 'newrelic_rpm'
-#gem 'escape_utils'
 
 group :development, :test do
   gem 'rspec-rails', '~> 2.8.0'

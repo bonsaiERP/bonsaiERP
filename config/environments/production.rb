@@ -75,4 +75,10 @@ Bonsaierp::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
+
+  # Notifications
+  config.middleware.use ExceptionNotifier,
+  :email_prefix => "[Seema] ",
+  :sender_address => %{"notifier" <notifier@bonsaierp.com>},
+  :exception_recipients => %w{boriscyber@gmail.com}
 end

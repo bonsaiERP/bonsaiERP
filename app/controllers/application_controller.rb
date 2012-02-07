@@ -15,6 +15,8 @@ class ApplicationController < ActionController::Base
   include Controllers::Authentication
   helper_method Controllers::Authentication.helpers
 
+  rescue_from Exception, :with => :render_error
+
   include Controllers::Authorization
   include Controllers::OrganisationHelpers 
   helper_method Controllers::OrganisationHelpers.organisation_helper_methods
@@ -23,6 +25,16 @@ class ApplicationController < ActionController::Base
   before_filter :set_user_session, :if => :user_signed_in?
   before_filter :set_page
   before_filter :set_organisation, :if => :organisation?
+
+  def render_error(exception) 
+    if notifier = Rails.application.config.middleware.detect { |x| x.klass == ExceptionNotifier } 
+      env['exception_notifier.options'] = notifier.args.first || {} 
+      logger.error exception.inspect 
+      logger.error exception.backtrace.join("\n") 
+      ExceptionNotifier::Notifier.exception_notification(env, exception).deliver 
+      env['exception_notifier.delivered'] = true 
+    end
+  end
 
 
   #Put this in applictation_controller.rb

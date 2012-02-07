@@ -12,10 +12,14 @@
   %h2= @inventory_operation.store
   %h2.n= presenter.link_related
   -#to @inventory_operation.contact, @inventory_operation.contact
-  -#%h2.n= link_to @inventory_operation.contact, @inventory_operation.contact
 
   - if @inventory_operation.transaction_id.present?
     %h2.n= link_to @inventory_operation.transaction, @inventory_operation.transaction
+
+  - if @inventory_operation.project_id.present?
+    %h3.n
+      %span.gray Proyecto:
+      = link_to @inventory_operation.project, @inventory_operation.project
 
 
   %h3.n.i._25.fl{:style => 'margin: 0px'}= lo @inventory_operation.created_at

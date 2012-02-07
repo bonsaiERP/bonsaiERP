@@ -25,6 +25,9 @@
     .clear
 
   = f.input :contact_id, :as => :contact, :label => false
+  = f.association :project, :label => "Proyecto",
+    :input_html => {'data-new_url' => new_project_path, 'data-title' => "Nuevo proyecto", 'data-trigger' => 'new_project' }
+  .clear
   = f.input :description, :as => :text, :input_html => {:rows => 4, :cols => 40}, :label => 'Descripción'
   .clear
 
@@ -118,6 +121,11 @@
     // Remember the row for the clicked new item
     $('#items_table a.add').live('click', function() {
       $('#items_table').data('row', $(this).parents('tr:first') );
+    });
+
+    // Project add new
+    $('body').live('new_project', function(e, resp) {
+      $('#inventory_operation_project_id').createSelectOption(resp.id, resp.name);
     });
 
  
