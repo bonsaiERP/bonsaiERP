@@ -1,3 +1,5 @@
+@import "compass";
+
 @mixin dashlet($radius: 3px, $width: 16px, $height: 16px){
   @include border-radius($radius);
   padding: 2px 3px;

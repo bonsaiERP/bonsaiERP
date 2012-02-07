@@ -17,9 +17,9 @@ group :assets do
 end
 
 gem 'jquery-rails', "~> 2.0.0"
-#gem 'compass-rails', "~> 1.0.0.rc.1"
-gem 'compass', "~> 0.12.rc.0"
-#gem 'bootstrap-sass', "~> 1.4.4"
+gem 'compass-rails', "~> 1.0.0.rc.2"
+gem 'bootstrap-sass', "~> 2.0.0"
+gem 'ramon', "~> 0.3.3"
 
 gem 'pg', "~> 0.12.2"
 #gem 'mysql2'#, :group => :production
@@ -36,7 +36,7 @@ gem 'qu-redis',    "~> 0.1.4"
 #gem 'nokogiri'
 
 gem 'prawn', '~>0.12.0'
-gem 'exception_notification', "~> 2.5.2"
+#gem 'exception_notification', "~> 2.5.2"
 #gem 'newrelic_rpm'
 
 group :development, :test do

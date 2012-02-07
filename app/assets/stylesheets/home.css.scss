@@ -1,3 +1,5 @@
+@import "colorshome";
+
 body{
   text-align: center;
   padding: 0px;
@@ -27,7 +29,7 @@ ul{
 }
 .clear{ clear: both; 
 }
-.light-grey{ background-color: lighten($grey, 20%);}
+.light-gray{ background-color: lighten($gray, 20%);}
 .pad-10{ padding: 10px; }
 .pad-20{ padding: 20px; }
 .no-list{ list-style: none;}
@@ -38,7 +40,6 @@ ul{
   width: 900px;
   text-align: left;
   margin: 0px auto 60px auto;
-  /*@include b-shadow(0px, 0px, 10px, darken($grey, 30%));*/
   border-radius: 4px 4px 8px 8px;
 }
 
@@ -53,7 +54,7 @@ ul{
   }
   #login{
     color: $white;
-    @include rounded-corners(3px);
+    @include border-radius(3px);
     background-color: lighten($green, 10%);
     position: absolute;
     top: 16px;
@@ -91,13 +92,13 @@ ul{
         text-decoration: none;
         font-size: 22px;
         &:hover{ color: $green; }
-        @include t-shadow(1px, 1px, 1px, darken($grey, 20%));
+        @include single-text-shadow( darken($gray, 20%), 1px, 1px);
       }
       a.selected{ 
         color: $green;
-        text-shadow: 2px 2px 2px darken($grey, 20%);
-        -moz-text-shadow: 2px 2px 2px darken($grey, 20%);
-        -webkit-text-shadow: 2px 2px 2px darken($grey, 20%);
+        text-shadow: 2px 2px 2px darken($gray, 20%);
+        -moz-text-shadow: 2px 2px 2px darken($gray, 20%);
+        -webkit-text-shadow: 2px 2px 2px darken($gray, 20%);
       }
     }
   }
@@ -127,7 +128,7 @@ ul{
     h2{font-weight: normal; font-size: 18px;}
   }
   #video{
-    @include b-shadow(5px, 5px, 5px, #000);
+    @include single-box-shadow(#000, 5px, 5px, 5px);
     position: absolute;
     display:block;
     width: 512px;
@@ -223,7 +224,7 @@ ul{
     color:darken(white, 0%);
     font-weight: normal; 
     font-size: 30px;
-    @include t-shadow(0px, 2px, 0px, black);
+    @include text-shadow(black, 0px, 2px, 0px);
     padding: 20px 30px;
   }
   #register{
@@ -235,7 +236,6 @@ ul{
 /* CSS de Tour*/
 .tour_part{
   h2{ 
-    //@include rounded-corners(4px);
     color: darken($green, 20%);
     margin: 10px 0px;
     padding: 10px;
@@ -263,7 +263,7 @@ ul{
   }
 }
 input[type=text], textarea{
-  border: 2px solid darken($grey, 10%);
+  border: 2px solid darken($gray, 10%);
   padding-left: 3px;  
   padding-top: 6px;
   font-weight: normal;

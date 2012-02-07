@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
   include Controllers::Authentication
   helper_method Controllers::Authentication.helpers
 
-  rescue_from Exception, :with => :render_error
+  #rescue_from Exception, :with => :render_error
 
   include Controllers::Authorization
   include Controllers::OrganisationHelpers 
