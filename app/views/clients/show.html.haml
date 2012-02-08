@@ -10,10 +10,12 @@
 
   %h1
     = @client.matchcode
-    %span.dashlet.fs50.bg-dark Cliente
+    %small.dashlet.bg-dark Cliente
 
   -if current_user.is_admin?
-    = link_to "Balancear cuenta", new_account_balance_path(:contact_id => @client.id), :class => "new button"
+    = link_to new_account_balance_path(:contact_id => @client.id), :class => "btn btn-success" do
+      %i.icon-adjust.icon-white
+      Balancear cuenta
 
   .clear
   = render 'contacts/show', :klass => @client

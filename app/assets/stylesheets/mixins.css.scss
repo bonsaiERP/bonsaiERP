@@ -4,9 +4,8 @@
   @include border-radius($radius);
   padding: 2px 3px;
   color: $white;
-  min-width: $width;
-  min-height: $height;
-  display: inline-block;
+  min-width: 16px;
+  min-height: 16px;
 }
 
 @mixin link{

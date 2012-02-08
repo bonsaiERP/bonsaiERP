@@ -1,34 +1,34 @@
-._70
-  <a href="#contact_data" class="more_info">Ocultar información</a>
-  .clear
-  #contact_data
-    .input
+<a href="#contact_data" class="more_info">Ocultar información</a>
+.clear
+#contact_data
+  .row
+    .span3
       %label Nombres
       = klass.first_name
-    .input
+    .span3
       %label Apellidos
       = klass.last_name
-    .input
+    .span3
       %label Empresa
       .b= klass.organisation_name
-    .input._25
+  .row
+    .span3
       %label Teléfono
       = klass.phone
-    .input._25
+    .span3
       %label Móvil
       = klass.mobile
-    .clear
-    .input
+    .span3
       %label Email
       = mail_to klass.email, klass.email unless klass.email.blank?
-    .input
+  .row
+    .span3
       %label NIT
       = klass.tax_number
-    .clear
-    .input
+    .span3
       %label Dirección
       = nl2br(klass.address)
-    .input
+    .span3
       %label Información adicional
       = nl2br(klass.aditional_info)
 

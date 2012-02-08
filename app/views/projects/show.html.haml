@@ -6,7 +6,11 @@
     = link_to 'Editar', edit_project_path(@project), :class => 'edit'
     = link_to 'Borrar', @project, :class => 'delete', 'data-confirm' => 'Esta seguro de borrar el proyecto?'
 
-%h1 Proyecto #{@project.name}
+.page-header
+  %h1 
+    %span.gray.n Proyecto:
+    = @project.name
+
 .clear
 
 .input._25
