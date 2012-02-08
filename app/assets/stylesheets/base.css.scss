@@ -9,12 +9,6 @@ body{
   padding: 0px;
 }
 
-a{
-  text-decoration: none;
-  &:hover{
-    text-decoration: underline;
-  }
-}
 hr{ border:0px;
   background-color: gray;
   color: gray;
@@ -178,6 +172,8 @@ h2{ font-size: 1.7em; color: $dark;}
 h3{ font-size: 1.3em; color: $dark;}
 h4{ font-size: 1.1em; color: $dark;}
 h2, h3, h4, h5{ margin: 8px 0px;}
+small{ font-size: 50% !important }
+
 .error{
   color: $red;
 }

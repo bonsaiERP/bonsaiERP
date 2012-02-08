@@ -17,6 +17,7 @@ SimpleForm.setup do |config|
 
   # You can wrap all inputs in a pre-defined tag. By default is nil.
   config.wrapper_tag = :div
+  config.wrapper_class = "control-group"
 
   # How the label text should be generated altogether with the required text.
   # config.label_text = lambda { |label, required| "#{required} #{label}" }
@@ -25,7 +26,7 @@ SimpleForm.setup do |config|
   config.collection_label_methods = [ :to_s, :to_a, :name, :title, :to_label ]
 
   # Series of attemps to detect a default value method for collection
-  config.collection_value_methods = [ :id, :to_s ]
+  config.collection_value_methods = [ :id ]
 
   # Collection of methods to detect if a file type was given.
   # config.file_methods = [ :file?, :public_filename ]

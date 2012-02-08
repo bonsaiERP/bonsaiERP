@@ -1,3 +1,4 @@
+@import "bootstrap";
 /* Colors */
 $green:#5BBF3B;
 $menu-green:#7FBD42;
@@ -9,22 +10,22 @@ $light_red: #FEF1EC;
 $red_hover: #FF5757;
 $black: #000;
 $dark: #484A4C;
-$grey: #C6C6C6;
-$light_grey:#F0F0F1;
-$dark_grey: #717171;
+$gray: #C6C6C6;
+$light-gray:#F0F0F1;
+$dark-gray: #717171;
 $orange: #FECD0A;
-$light_orange: #ffe374;
+$light-orange: #ffe374;
 $blue: #6793CE;
-$light_blue: #D0DEF1;
-$yellow:#FFFF00;
-$light_yellow:#FFFFC5;
-$dark_yellow:#D0D02A;
+$light-blue: #D0DEF1;
+$yellow: #FFFF00;
+$light-yellow:#FFFFC5;
+$dark-yellow:#D0D02A;
 
-$link: #095495;
+$linkColor: darken(#0088CC, 5%);
 
 .red{ color: $red !important; }
-.grey{ color: $grey !important; }
-.dark-grey{ color: $dark_grey !important; }
+.gray{ color: gray !important; }
+.dark-gray{ color: gray24 !important; }
 .green{ color: $green !important; }
 .dark-green{ color: darken($green, 15%) !important; }
 .dark-red{ color: darken($red, 30%) !important; }
@@ -34,9 +35,9 @@ $link: #095495;
 .bg-red{ background-color: $red !important; }
 .bg-green{ background-color: $green !important; }
 .bg-dark-green{ background-color: darken($green, 15%) !important; }
-.bg-grey{ background-color: $grey !important; }
-.bg-dark-grey{ background-color: darken($grey, 15%) !important; }
-.bg-light-grey{ background-color: $light_grey !important; }
+.bg-gray{ background-color: $gray !important; }
+.bg-dark-gray{ background-color: darken($gray, 15%) !important; }
+.bg-light-gray{ background-color: $light_gray !important; }
 .bg-white-tan{ background-color: $white_tan !important; }
 .bg-white{ background-color: $white !important; }
 .bg-dark{ background-color: $dark !important; }

@@ -62,7 +62,6 @@ ul#main_menu{
     }
 
     a{ 
-      color: $link; 
       display: block; 
       padding: 2px 0px; 
     }
@@ -97,7 +96,7 @@ ul#main_menu{
         }
     }
 
-    li.tit{ font-weight: bold; border-top: 1px inset $grey; margin-top: 3px; }
+    li.tit{ font-weight: bold; border-top: 1px inset $gray; margin-top: 3px; }
     li.tit, li.b{ color: $dark !important; }
   }
 }

@@ -1,12 +1,11 @@
-@import "compass"
-@import "colors"
+@import compass
+@import colors
+@import mixins
 
 $font_size: 13px
 
 .dark
   color: lighten(#000, 10%) !important
-.dark_grey
-  color: darken($grey, 40%) !important
 
 // Loop to create different width sizes Ex.: ._10{ width: 9% !important }
 @for $i from 1 to 21
@@ -108,7 +107,7 @@ ul.list
     padding: 0px
 
 /*IE7*/
-.prev, .page, .next{
+.prev, .page, .next
   font-weight: bold
   display: inline-block
   margin: 0px 3px
@@ -137,21 +136,22 @@ div.search
 
 .moneybox
   +border-radius(3px)
-  background-color: lighten($grey, 17%)
+  background-color: lighten($gray, 17%)
   padding: 8px
   display: inline-block
   margin: 5px
   width: 130px
-  border: 1px solid lighten($grey, 5%)
+  border: 1px solid lighten($gray, 5%)
   h3
-    margin: 2px 0px color: $black
+    margin: 2px 0px 
+    color: $black
   label
     font-weight: normal
 
 
 .tooltip
   +border-radius(3px)
-  border: 1px solid $grey
+  border: 1px solid $gray
   background: $white
   color: $dark
   padding: 4px
@@ -162,19 +162,19 @@ ul.tabs
   list-style: none
   height: 24px
   padding: 5px
-  border-bottom: 1px solid $grey
-  background-color: $light-grey
+  border-bottom: 1px solid $gray
+  background-color: $light-gray
   clear: both
 
   li
     display: inline
     a
-      display:block
-      float:left
+      display: block
+      float: left
       height: 24px
       line-height: 24px
       padding: 0 10px
-      color: darken($dark-grey, 5%)
+      color: darken($dark-gray, 5%)
       //background: transparent url(images/silver.png) repeat-x 0 0
     a.active
       height: 25px
@@ -195,7 +195,7 @@ ul.tabs
     background-image: url("images/ui-icons_469bdd_256x240.png")
     height: 16px
     width: 16px
-    display:block
+    display: block
     position: absolute
     top: 2px
     right: 2px
@@ -213,7 +213,7 @@ ul.tabs
   padding-left: 20px
   color: darken($green, 10%)
   width: 40%
-  float:right
+  float: right
   text-align: right
   a:hover 
     text-decoration: none
@@ -223,11 +223,11 @@ ul.tabs
 
 a.button
   @include border-radius(3px)
-  border: 1px solid $grey
+  border: 1px solid $gray
   padding: 5px 8px
   margin: 5px
   font-size: 110%
-  background-color:$light-grey
+  background-color: $light-gray
   &:hover
     background-color: $white
     text-decoration: none !important
@@ -348,7 +348,6 @@ a.duplicate
   .links
     display: none
   a
-    color: $link
     text-decoration: none
     &:hover
       text-decoration: underline
@@ -360,9 +359,10 @@ a.duplicate
   @include dashlet
   background-color: $green
 
+
 .draft 
   @include dashlet
-  background-color: darken($grey, 15%)
+  background-color: darken($gray, 15%)
 
 .approved
   @include dashlet
@@ -385,7 +385,7 @@ a.duplicate
 ul.menu
   position: relative
   padding: 0px
-  margin:0px
+  margin: 0px
   z-index: 100
   a
     margin: 0px
@@ -394,13 +394,13 @@ ul.menu
       color: $green  
   li
     list-style: none
-    margin:0px
+    margin: 0px
     padding: 0px
     float: left
     ul
       display: none
       margin: 0px
-      border: 1px solid $grey
+      border: 1px solid $gray
       background-color: $white
       padding: 0px
       margin-top: -1px
@@ -414,7 +414,7 @@ ul.menu
     &:hover
       ul
         display: block
-        position:absolute
+        position: absolute
 
 
 // List of banks or cashses
@@ -451,7 +451,7 @@ ul.menu
   .title
     padding: 0.5em
     margin: 4px 0px
-    background-color: $light_grey
+    background-color: $light-gray
   .high
     color: lighten($dark, 5%)
     font-size: 120%
@@ -459,7 +459,7 @@ ul.menu
 
 a.link
   +link
-}
+
 span.more
   background: url(images/bullet_arrow_down.png) no-repeat
 

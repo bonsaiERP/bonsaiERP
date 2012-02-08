@@ -39,8 +39,6 @@
       = f.input :bill_number, :label => 'Nº de <span id="fact_label"></span>'.html_safe, :input_html => {:size => 20}
 
     - if transaction.income?
-      -#=f.association :taxes, :as => :check_boxes, :label => 'Impuestos', :wrapper_html => {:id => 'taxes'},
-        :label_method => lambda{|tax| "<span id='span#{tax.id}' class='tax' data-rate='#{tax.rate}' title ='#{tax.name}'>#{tax.abbreviation} (#{ntc tax.rate}%)</span>".html_safe }
 
     .clear
 

@@ -1,11 +1,24 @@
-%ul.menu
-  %li
-    = link_to "Nuevo <span class='bicon more'></span>".html_safe, "#", :class => 'new'
-    
-    %ul
-      %li= link_to "Nuevo ingreso", new_account_ledger_path(:account_id => account.id, :operation => "in")
-      %li= link_to "Nuevo egreso", new_account_ledger_path(:account_id => account.id, :operation => "out")
-      %li= link_to "Nueva transferencia", new_transference_account_ledgers_path(:account_id => account.id, :operation => "trans")
+
+.btn-group
+  %a.btn.btn-primary{'data-toggle' => 'dropdown'} Nueva operación
+  %a.btn.btn-primary.dropdown-toggle{'data-toggle' => 'dropdown'}
+    %span.caret
+
+  %ul.dropdown-menu
+    %li
+      = link_to new_account_ledger_path(:account_id => account.id, :operation => "in") do
+        %i.icon-plus-sign
+        Nuevo ingreso
+
+    %li
+      = link_to new_account_ledger_path(:account_id => account.id, :operation => "out") do
+        %i.icon-minus-sign
+        Nuevo egreso
+
+    %li
+      = link_to new_transference_account_ledgers_path(:account_id => account.id, :operation => "trans") do
+        %i.icon-arrow-right
+        Nueva transferencia
 
 
 .clear

@@ -27,13 +27,10 @@
 
     %tr.extra
       %td
-      %td.r{:colspan => 3} #{minus_image} Descuento (<span id="discount_percentage" data-val="#{transaction.total_discount}">#{ntc transaction.discount}</span>%)
+      %td.r{:colspan => 3}
+        %i.icon-minus-sign
+        Descuento (<span id="discount_percentage" data-val="#{transaction.total_discount}">#{ntc transaction.discount}</span>%)
       %td#discount_total.r= ntc -transaction.total_discount
-
-    -#%tr.extra
-      %td
-      %td.r.line{:colspan => 3} Impuestos #{list_taxes transaction} (<span id="taxes_percentage" data-val="#{transaction.total_taxes}">#{ntc transaction.tax_percent}</span>%)
-      %td#taxes_total.r.line= ntc transaction.total_taxes
 
     %tr.extra
       %td

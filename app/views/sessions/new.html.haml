@@ -1,18 +1,25 @@
-#dialog
-  %h1 Iniciar sesión
+:css
+  #wrapper{ width: 600px; }
+  #main_wrap{ background: none !important; }
+  #cont{
+    background: none;
+    border-radius: 6px;
+  }
+
+.form-horizontal.well
+  %h1.c Iniciar sesión
 
   = simple_form_for(@user, :url => sessions_path, :method => :post) do |f|
     = bonsai_form_error(f)
 
     %fieldset
       = f.input :email,    :label => "Correo Electrónico", :input_html => {:size => 40}
-      = f.input :password, :label => 'Contraseña',         :input_html => {:size => 40}
-  
-    = link_to "¿Olvido su contraseña?", new_reset_password_path
-    .clear.form_actions
-      -#= link_to "<span>Inicio</span>".html_safe, "/", :class=>'signup'
-      -#%span.signup{:title => "Muy pronto"}
-        Registrarse
-      = f.submit "Ingresar", :class => "submit"
-  
+      .clear
+        = f.input :password, :label => 'Contraseña', :input_html => {:size => 40}
+
+    %p.c
+      = link_to "¿Olvido su contraseña?", new_reset_password_path
+      .clear
+      %center
+        = f.submit "Ingresar", :class => "btn btn-success big b"
 

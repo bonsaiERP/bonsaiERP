@@ -22,17 +22,17 @@
   .clear
   #tabs
     %ul
-      %li <a href="#information" id="tab_info">Información</a>
+      %li <a href="#information" id="tab_info" >Información</a>
       = presenter.li_payments
       = presenter.li_pay_plans
       = presenter.li_inventory
 
-    #information
+    #information.tab-pane
       -# Render items
       = render 'transactions/items', :transaction => @transaction, :presenter => presenter
 
       .clear
-    #payments
+    #payments.tab-pane
 
       -# Render payments "payments/payments"
       = presenter.render_payments
@@ -44,12 +44,12 @@
         = presenter.render_nulled_payments
       .clear
 
-    #pay_plans
+    #pay_plans.tab-pane
       -# /pay_plans/pay_plans || /pay_plans/approve
       = presenter.render_pay_plans
       .clear
 
-    #inventory
+    #inventory.tab-pane
       -# /transactions/inventory
       = presenter.render_inventory
       .clear

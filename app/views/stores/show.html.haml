@@ -13,13 +13,27 @@
 
 
 - if @store.active?
-  %ul.menu
-    %li 
-      <a href="#" class="new">Nueva operación <span class="more"></span></a>
-      %ul
-        %li= link_to "Nuevo ingreso", new_inventory_operation_path(:store_id => @store.id, :operation => 'in')
-        %li= link_to "Nuevo egreso", new_inventory_operation_path(:store_id => @store.id, :operation => 'out')
-        %li= link_to "Nueva transferencia", new_transference_inventory_operations_path(:store_id => @store.id)
+  .btn-group
+    %a.btn.btn-primary{'data-toggle' => 'dropdown'} Nueva operación
+    %a.btn.btn-primary.dropdown-toggle{'data-toggle' => 'dropdown'}
+      %span.caret
+
+    %ul.dropdown-menu
+      %li
+        = link_to new_inventory_operation_path(:store_id => @store.id, :operation => 'in') do
+          %i.icon-plus-sign
+          Nuevo ingreso
+
+      %li
+        = link_to new_inventory_operation_path(:store_id => @store.id, :operation => 'out') do
+          %i.icon-minus-sign
+          Nuevo egreso
+
+      %li
+        = link_to new_transference_account_ledgers_path(:store_id => @store.id, :operation => "trans") do
+          %i.icon-arrow-right
+          Nueva transferencia
+.clear
 
 .input.fr
   <a href="#store_info" class="more_info">Ver información</a>

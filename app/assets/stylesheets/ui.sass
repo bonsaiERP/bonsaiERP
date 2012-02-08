@@ -1,0 +1,74 @@
+@import compass
+
+$header-color: lighten(gray, 20%)
+.ui-widget-header
+  +border-top-radius(4px)
+  background: darken(gray, 10%)
+  +linear-gradient(lighten(gray, 10%), darken(gray, 10%) )
+  padding: 0 0 2px 0
+
+.ui-helper-clearfix:before, .ui-helper-clearfix:after
+  content: ""
+  display: table
+
+.ui-helper-clearfix:after
+  clear: both
+
+.ui-helper-clearfix
+  zoom: 1
+
+.ui-state-default
+  background: lighten(gray, 40%)
+  +linear-gradient(lighten(gray, 45%), lighten(gray, 35%) )
+  a
+    color: gray
+
+.ui-state-hover
+  background: lighten(gray, 30%)
+
+.ui-state-active
+  background: white
+  a
+    color: darken(gray, 40%)
+
+.ui-tabs
+  +border-top-radius(4px)
+  position: relative
+  padding: .3em
+  zoom: 1
+  background: $header-color
+
+  ul.ui-tabs-nav
+    margin: 0
+    padding: .2em .4em 0
+    boder-width: 0 0 1px 0
+    display: block
+
+    li
+      +border-top-radius(4px)
+      list-style: none
+      float: left
+      position: relative
+      top: 1px
+      margin: 1px .2em 0 0
+      padding: 0
+      white-space: nowrap
+      
+      a
+        float: left
+        padding: .5em 1em
+        text-decoration: none
+        font-weight: bold
+          
+    li.ui-tabs-selected
+      font-weight: bold
+      border-bottom: none
+
+  .ui-tabs-panel
+    display: block
+    border-width: 0
+    padding: 1em 1.4em
+    background: white
+
+  .ui-tabs-hide
+    display: none !important

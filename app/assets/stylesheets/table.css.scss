@@ -1,19 +1,19 @@
 @import "colors";
 table.decorated{
-  border: 1px solid $grey;
+  border: 1px solid $gray;
   border-collapse: collapse;
   width: 100%;
   box-shadow: 0 1px 2px #ccc;
   th{
     padding: 0 8px;
     text-align: left;
-    color: $dark-grey;
+    color: $dark-gray;
     background: transparent url(images/silver.png) repeat-x 0 0;
     height: 22px;
-    border-right: 1px solid $grey;
+    border-right: 1px solid $gray;
   }
   tr{
-    border-bottom: 1px solid $grey;
+    border-bottom: 1px solid $gray;
   }
   td{
     padding: 7px 8px;
@@ -29,7 +29,7 @@ table.decorated{
       padding: 0px 2px;
     }
   }
-  td.line{ border-bottom: 1px solid $grey; }
+  td.line{ border-bottom: 1px solid $gray; }
   tr.extra{
     border-bottom: none !important;
     h3{ margin: 1px 0px; }
@@ -38,7 +38,7 @@ table.decorated{
   tr.pad_top{
     td{ padding-top: 15px; }
   }
-  tr.false{ color: $dark_grey; }
+  tr.false{ color: $dark_gray; }
   /* for Currency*/
   td.cur{
     text-align: right;

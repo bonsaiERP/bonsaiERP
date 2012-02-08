@@ -202,7 +202,9 @@ class TransactionPresenter < BasePresenter
   def deliver_link
     if transaction_deliver?
       if transaction.is_a?(Income)
-        h.link_to "Registrar entrega", select_store_inventory_operation_path(transaction, :operation => 'out'), :class => "new ajax", 'data-title' => "Seleccionar almacen"
+        h.link_to "<i class='icon-plus-sign icon-white'></i> Registrar entrega".html_safe, 
+          select_store_inventory_operation_path(transaction, :operation => 'out'), 
+          :class => "ajax btn btn-success", 'data-title' => "Seleccionar almacen"
       elsif transaction.is_a?(Buy)
         h.link_to "Registrar recojo", select_store_inventory_operation_path(transaction, :operation => 'in'), :class => "new ajax", 'data-title' => "Seleccionar almacen"
       end
@@ -213,9 +215,12 @@ class TransactionPresenter < BasePresenter
     if User.admin_gerency?(h.session[:user][:rol]) and transaction_devolution?
       txt = "Seleccione almacen para Devolución"
       if transaction.is_a?(Income)
-        h.link_to "Realizar devolución", select_store_inventory_operation_path(transaction, :operation => 'in'), :class => "red b fs120 ajax", 'data-title' => txt
+        h.link_to "<i class='icon-minus-sign icon-white'></i> Realizar devolución".html_safe, 
+          select_store_inventory_operation_path(transaction, :operation => 'in'), 
+          :class => "ajax btn btn-danger", 'data-title' => txt
       elsif transaction.is_a?(Buy)
-        h.link_to "Realizar devolución", select_store_inventory_operation_path(transaction, :operation => 'out'), :class => "red b fs120 ajax", 'data-title' => txt
+        h.link_to "<i class='icon-minus-sign icon-white'></i> Realizar devolución", select_store_inventory_operation_path(transaction, :operation => 'out'), 
+          :class => "ajax btn btn-danger", 'data-title' => txt
       end
     end
   end
@@ -249,9 +254,10 @@ class TransactionPresenter < BasePresenter
   def new_payment_link
     unless transaction.paid? or transaction.nulled?
       tit = pay_method.singularize
-      h.link_to("Nuevo #{tit}", 
+
+      h.link_to("<i class='icon-plus-sign icon-white'></i> Nuevo #{tit}".html_safe,
         h.new_payment_path(:type => transaction.type.to_s, :id => transaction.id),
-        :class => "new ajax button new_payment_link", :title => "Nuevo #{tit}",
+        :class => "ajax btn btn-success btn-white new_payment_link", :title => "Nuevo #{tit}",
         :id => 'new_payment_link',  'data-width' => "900", 'data-trigger' => 'payment')
     end
   end
@@ -259,7 +265,7 @@ class TransactionPresenter < BasePresenter
   # Link for devolution of money
   def new_devolution_link
     if transaction.balance != transaction.total
-      h.link_to "Nueva devolución", new_devolution_payments_path(:transaction_id => transaction.id), :class => 'ajax button red b', 'data-title' => 'Devolución'
+      h.link_to "<i class='icon-minus-sign icon-white'></i> Nueva devolución".html_safe, new_devolution_payments_path(:transaction_id => transaction.id), :class => 'ajax btn btn-danger', 'data-title' => 'Devolución'
     end
   end
 

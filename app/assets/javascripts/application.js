@@ -14,3 +14,4 @@
 //= require app/transaction.js.coffee
 //= require app/pay_plans.js.coffee
 //= require app/payment.js.coffee
+//= require bootstrap-dropdown
