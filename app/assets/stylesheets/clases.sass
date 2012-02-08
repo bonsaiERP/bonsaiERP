@@ -80,23 +80,6 @@ span.true, span.false
 .marked
   background-color: $light_blue !important
 
-/* Breadcrumbs*/
-ul.breadcrumps
-  list-style: none
-  padding: 0px
-  margin: 4px 0 0 16px
-  float: left
-  width: 50%
-  li
-    display: inline
-    a 
-      background: transparent url(images/breadcrumb-arrow.png) no-repeat right 49%
-      padding-right: 14px
-
-    span
-      position: relative
-      padding: 0px 5px
-
 
 ul.list
   padding: 2px 0px
@@ -137,24 +120,21 @@ div.search
 .moneybox
   +border-radius(3px)
   background-color: lighten($gray, 17%)
-  padding: 8px
+  padding: 1px 8px
   display: inline-block
   margin: 5px
-  width: 130px
+  min-width: 140px
+  white-space: nowrap
   border: 1px solid lighten($gray, 5%)
   h3
-    margin: 2px 0px 
+    margin: 0px 
     color: $black
-  label
     font-weight: normal
-
-
-.tooltip
-  +border-radius(3px)
-  border: 1px solid $gray
-  background: $white
-  color: $dark
-  padding: 4px
+    font-size: 1.3em
+  label
+    +single-text-shadow(white, 0px, 1px, 0px)
+    font-weight: normal
+    margin: 0px
 
 
 /*especial tabs*/
@@ -165,6 +145,7 @@ ul.tabs
   border-bottom: 1px solid $gray
   background-color: $light-gray
   clear: both
+  margin: 8px 0px
 
   li
     display: inline
@@ -207,17 +188,6 @@ ul.tabs
 @mixin min-height
   min-height: 16px
   display: inline-block
-
-.links
-  font-weight: bold
-  padding-left: 20px
-  color: darken($green, 10%)
-  width: 40%
-  float: right
-  text-align: right
-  a:hover 
-    text-decoration: none
-    color: $green
 
 
 
@@ -444,8 +414,7 @@ ul.menu
 
 .box
   //@include box(430px, lighten($black, 30%))
-  width: 45%
-  margin-right: 20px
+  //width: 45%
   float: left
   border-color: darken($white, 30%)
   .title

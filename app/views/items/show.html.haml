@@ -8,31 +8,30 @@
     = link_to "Nuevo", new_item_path, :class => 'add'
     = link_to "Editar", edit_item_path(@item) , :class => 'edit'
     = link_to "Borrar", @item , :class => 'delete', :confirm => "Esta seguro de borra el ítem", :method => :delete
-%h1= @item
 
-.show
-  .input
+.page-header
+  %h1= @item
+
+.row
+  .span3
     %label Precio de venta
     .b= ntc @item.price
-  .input._25
+  .span3
     %label Unidad
     = @item.unit
-  .input._25
+  .span3
     %label Activo
     %span.icon{:class => @item.active.to_s}
-  .clear
-  .input
+  .span3
     %label Tipo
     = @item.get_type
-  /.input#item_discount
-  /%label Descuento
-  /%span= @item.discount
-  .input
+.row
+  .span6
     %label Descripción
     = @item.description
-  .clear
 
-%h3 Inventario
+.page-header
+  %h3 Inventario
 - @item.stocks.includes(:store).each do |st|
   .moneybox.fl
     %label= st.store
@@ -40,7 +39,8 @@
 
 .clear
 - unless request.xhr?
-  %h3 Kardex de Compras y Ventas de del ítem
+  .page-header
+    %h3 Kardex de Compras y Ventas de del ítem
   
   - @details = @item.kardex.order("transactions.created_at DESC").page(@page)
 

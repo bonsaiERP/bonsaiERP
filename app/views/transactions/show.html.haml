@@ -10,6 +10,7 @@
       = presenter.clone_link
       = presenter.edit_link
       = presenter.null_link
+
   .clear
   ._40.fr.r
     = presenter.email_link
@@ -54,31 +55,49 @@
       = presenter.render_inventory
       .clear
 
-  -# User details
-  #users.mt30.fl.w45
-    %p <span class='dark'>Último cambio por:</span> <strong>#{@transaction.modifier}</strong> <i>#{lo @transaction.updated_at}</i>
-    - if @transaction.creator_id.present?
-      %p <span class='dark'>Creado por:</span> <strong>#{@transaction.creator}</strong> <i>#{lo @transaction.created_at}</i>
+  .row
+    -# User details
+    .span6
+      %h3.gray Modificaciones
+      %table#users
+        %tr
+          %td.gray.r Último cambio por:
+          %td.b= @transaction.modifier
+          %td.i= lo @transaction.updated_at
+        - if @transaction.creator_id.present?
+          %tr
+            %td.gray.r Creado por:
+            %td.b= @transaction.creator
+            %td.i= lo @transaction.created_at
 
-    - if @transaction.approver_id.present?
-      %p <span class='dark'>Aprobado por:</span> <strong>#{@transaction.approver}</strong> <i>#{lo @transaction.approver_datetime}</i>
+        - if @transaction.approver_id.present?
+          %tr
+            %td.gray.r Aprobado por:
+            %td.b= @transaction.approver
+            %td.i= @transaction.approver_datetime
 
-    - if @transaction.creditor_id.present?
-      %p <span class='dark'>Credito aprobado por:</span> <strong>#{@transaction.creditor}</strong> <i>#{lo @transaction.credit_datetime}</i>
+        - if @transaction.creditor_id.present?
+          %tr
+            %td.r.gray Credito aprobado por:
+            %td.b= @transaction.creditor
+            %td.i= lo @transaction.credit_datetime
 
-    - if @transaction.deliver_approver_id.present?
-      %p <span class='dark'>Aprobación de entrega:</span> <strong>#{@transaction.deliver_approver}</strong> <i>#{lo @transaction.deliver_datetime}</i>
+        - if @transaction.deliver_approver_id.present?
+          %tr
+            %td.gray.r Aprobación de entrega:
+            %td.b= @transaction.deliver_approver
+            %td.i= lo @transaction.deliver_datetime
 
-
-  %ul.list.fl.w50
-    - if @transaction.transaction_histories.any?
-      %h3 Historial
-    - @transaction.transaction_histories.order("created_at DESC").each do |t|
-      %li
-        =link_to history_income_path(t.id), :title => "#{@transaction} en fecha #{lo t.created_at}", :class => 'ajax',
-          'data-width' => 950, 'data-class' => 'history' do
-          %span.i= lo t.created_at
-          %strong= t.user
+    .span6
+      - if @transaction.transaction_histories.any?
+        %h3.gray Historial
+        %ul
+        - @transaction.transaction_histories.order("created_at DESC").each do |t|
+          %li
+            =link_to history_income_path(t.id), :title => "#{@transaction} en fecha #{lo t.created_at}", :class => 'ajax',
+              'data-width' => 950, 'data-class' => 'history' do
+              %span.i= lo t.created_at
+              %strong= t.user
 
 :javascript
   $(function () {

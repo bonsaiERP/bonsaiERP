@@ -153,23 +153,7 @@ $(document).ready(->
   ##################################################
 
   # Presents a tooltip
-  $('[tooltip]').live('mouseover mouseout', (e)->
-    div = '#tooltip'
-    if($(this).hasClass('error') )
-      div = '#tooltip-error'
-
-    if(e.type == 'mouseover')
-      pos = $(this).position()
-
-      $(div).css(
-        'top': pos.top + 'px'
-        'left': (e.clientX + 20) + 'px'
-      ).html( $(this).attr('tooltip') )
-      $(div).show()
-    else
-      $(div).hide()
-
-  )
+  $('[title]').tooltip()
 
   # Ajax preloader content
   AjaxLoadingHTML = ->

@@ -28,23 +28,27 @@
       %div{ :id => "debug-error", :style => "display:none; width: 640px; height: 480px; overflow: auto; z-index: 10000; background:#FFF;color:#000" }
         %iframe{ :id => "cont-iframe", :width => "100%", :height => "100%"}
 
-    #main_wrap
-      #wrapper
-        #wrap_in
-          #header
-            = render 'layouts/usersettings_menu' if user_signed_in?
-            - if organisation?
-              %h1{:title => "ID: #{session[:organisation][:id]}, Exp:  #{lo session[:organisation][:due_date] }"}= session[:organisation][:name]
-            .clear
-            = render 'layouts/main_menu'
-          #menu
-            #links= yield :links
+    .navbar
+      .navbar-inner
+        .container-fluid
+          - if organisation?
+            %h1.span8{:title => "ID: #{session[:organisation][:id]}, Exp:  #{lo session[:organisation][:due_date] }"}= session[:organisation][:name]
+          = render 'layouts/usersettings_menu' if user_signed_in?
+          .clear
 
-          #cont
-            #cont-in.clear
-              = render "layouts/flash"
-              = yield
-            .clear
+          .nav-collapse
+            = render 'layouts/main_menu'
+
+    #wrapper
+      #menu
+        .container
+          .main-links= yield :links
+
+      #cont
+        .container
+          = render "layouts/flash"
+          = yield
+          .clear
       #footer
         #footer_inner
           %p

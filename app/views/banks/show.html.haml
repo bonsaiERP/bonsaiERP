@@ -7,10 +7,13 @@
   .links
     = link_to 'Editar', edit_bank_path(@bank), :class => 'edit', :title => "Editar cuenta bancaria"
 
-%h1.mb5 <span class="n">#{@bank.name}</span> <small class="tip" title="Número de cuenta">#{@bank.number}</small> <small class="n">(#{@account.currency_name.pluralize})</small>
-%hr/
+.page-header
+  %h1.n
+    %span=@bank.name 
+    %small( title="Número de cuenta")= @bank.number
+    %small= @account.currency_name.pluralize
 
-= pendent_money_link(@bank, :class => 'red b fs120')
+= pendent_money_link(@bank, :class => 'red fs110')
 .clear
 
 .moneybox.fl
@@ -33,7 +36,9 @@
         %span= @bank.website
 .clear
 
-%h2 Transacciones
+.page-header
+  %h2 Transacciones
+
 = render "account_ledgers/money", :account => @account, :ledgers => @ledgers, :paged_ledgers => @paged_ledgers, :ref_title => 'Ref./Nº Cheque', :money => @bank
 
 .clear

@@ -5,7 +5,6 @@
 //= require backbone.js
 //= require extensions.js.coffee
 //= require money.min.js
-//= require tooltip.min.js
 //= require dropdown.js
 //= require base.js.coffee
 //= require _b.js.coffee
@@ -15,3 +14,4 @@
 //= require app/pay_plans.js.coffee
 //= require app/payment.js.coffee
 //= require bootstrap-dropdown
+//= require bootstrap-tooltip

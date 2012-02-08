@@ -1,6 +1,9 @@
+$navbarBackground: #448618;
+$navbarBackgroundHighlight: lighten(#448618, 20%);
 @import "bootstrap";
+@import "bootstrap-responsive";
 /* Colors */
-$green:#5BBF3B;
+$green: #46a546;
 $menu-green:#7FBD42;
 $dark-green: darken($green, 20%);
 $white: #FFF;
@@ -21,7 +24,7 @@ $yellow: #FFFF00;
 $light-yellow:#FFFFC5;
 $dark-yellow:#D0D02A;
 
-$linkColor: darken(#0088CC, 5%);
+//$linkColor: darken(#0088CC, 5%);
 
 .red{ color: $red !important; }
 .gray{ color: gray !important; }

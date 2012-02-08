@@ -17,7 +17,7 @@ label{
   font-weight: bold;
   vertical-align: top;
   display: block;
-  color: darken($grey, 45%);
+  color: darken($gray, 45%);
   abbr {
     border: none;
   }
@@ -59,7 +59,7 @@ option.new{
 
 .hint{
   display: block;
-  color: $dark_grey;
+  color: $dark_gray;
   font-style: italic;
 }
 
@@ -116,7 +116,7 @@ span.error{
     overflow: hidden;
     width: $ddwidth + 10;
     padding-right: 30px;
-    border: 1px solid $grey;
+    border: 1px solid $gray;
     background: url("images/bullet_arrow_down.png") no-repeat scroll $ddwidth 2px transparent;
     padding: 3px;
     cursor: default;
@@ -125,12 +125,12 @@ span.error{
     position: absolute;
     background-color: $white;
     display: none;
-    border: 2px solid lighten($grey, 10%);
+    border: 2px solid lighten($gray, 10%);
     list-style: none;
     margin: 0px;
     padding: 0px;
     width: $ddwidth;
-    border-bottom: 8px solid lighten($grey, 10%);
+    border-bottom: 8px solid lighten($gray, 10%);
     max-height: 200px;
     overflow: auto;
     li{

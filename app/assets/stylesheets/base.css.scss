@@ -1,4 +1,6 @@
 @import "colors";
+@import "compass";
+
 $font_size: 12px;
 
 html{ font-size: $font_size;}
@@ -18,20 +20,10 @@ hr{ border:0px;
 
 /*********************************************************/
 /*MAIN CONTENT WRAPPERS*/
-#main_wrap{
-  width: 100%;
-  background: transparent url("images/back_new.png") repeat-x 0 0;
+#wrapper{
   min-height: 500px;
 }
-#wrapper{
-  margin: auto;
-  //width: 968px;
-  width: 1000px
-}
 
-#wrap_in{
-  position: relative;
-}
 #logo{
   position: absolute;
   height: 100px;
@@ -50,27 +42,11 @@ hr{ border:0px;
 #cont{
   padding-bottom: 1em;
   padding-top: 1em;
-  //TODO: compass
-  -moz-border-radius: 0px 0px 6px 6px;
-  -webkit-border-radius: 0px 0px 6px 6px;
-  border-radius: 0px 0px 6px 6px;
+  @include border-bottom-radius(6px);
   box-shadow: 0 2px 3px rgba(0,0,0,0.3);
-
   background-color: #fff;
   border-top: 1px solid #bbb;
-}
-
-#links{
-  clear: both;
-  margin-top: 8px;
-  .links a{
-    font-size: 12px;
-    padding: 4px 10px 2px 20px;
-    color: #555;
-    &:hover {
-        color: #000;
-    }
-  }
+  padding: 30px;
 }
 
 #cont-in {
@@ -79,12 +55,17 @@ hr{ border:0px;
 }
 
 
-#header{
-  height: 80px;
+.navbar{
+  margin: 0px !important;
   position: relative;
   clear: both;
+
+  ul.nav > li > a {
+    color: darken(white, 7%);
+    font-weight: bold;
+  }
+
   h1{
-    width: 900px;
     float: left;
     color: white;
     margin: 7px 0px 0 14px;
@@ -95,21 +76,16 @@ hr{ border:0px;
     text-shadow: 1px 1px 1px #000;
   }
   ul#usersettings{
-    position: absolute;
-    top: 0;
-    right: 0;
-	padding: 0px 5px;
-	height: 29px;
-    margin-top: 0;
-    background: transparent url("images/silver.png") repeat-x fixed 0 -8px;
-    border: 1px solid #fff;
-    border-width: 0 1px 1px 1px;
+    @include border-radius;
+    padding: 0px 5px;
+    height: 29px;
+    margin-top: 20px;
+    display: inline-block;
+    float: right;
+    background: rgba(0,0,0, 0.55);
 
-    -moz-border-radius: 0 0 4px 4px;
-    -webkit-border-radius: 0 0 4px 4px;
-    border-radius: 0 0 4px 4px;
     font-size: 0.9em;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.8);
+
     li{
       list-style: none;
       margin: 0px;
@@ -118,8 +94,8 @@ hr{ border:0px;
       a{
         vertical-align: middle;
         display: block;
-        padding: 7px 10px 7px 20px;
-        color: #333;
+        padding: 7px 10px;
+        color: white;
         text-decoration: none;
       }
       a.limit{
@@ -131,25 +107,65 @@ hr{ border:0px;
         text-decoration: underline;
       }
 	  }
-      
-
-    li.left{
-      background: url("images/set_left.png");
-      width: 7px;
-      height: 29px;
-    }
-    li.right{
-      background: url("images/set_right.png");
-      width: 7px;
-      height: 29px;
-    }
   }
-
 }
+
+// Menu for links
+
 #menu{
   height: 32px;
+  background: lighten(gray, 45%);
+  vertical-align: middle;
+  box-shadow: 0 2px 3px rgba(0,0,0,0.3);
+  border-bottom: none;
 }
 
+.main-links{
+  clear: both;
+  .links a{
+    font-size: 12px;
+    padding: 4px 10px 2px 20px;
+    &:hover {
+        color: #000;
+    }
+  }
+}
+
+/* Breadcrumbs*/
+ul.breadcrumps{
+  list-style: none;
+  padding: 0px;
+  margin: 6px 0 0 16px;
+  float: left;
+  width: 50%;
+  li{
+    display: inline;
+    a{
+      background: transparent url(images/breadcrumb-arrow.png) no-repeat right 49%;
+      padding-right: 14px;
+    }
+
+    span{
+      position: relative;
+      padding: 0px 5px;
+    }
+  }
+}
+
+.links{
+  font-weight: bold;
+  padding-left: 20px;
+  color: darken($green, 10%);
+  width: 40%;
+  margin-top: 6px;
+  float: right;
+  text-align: right;
+  a:hover{
+    text-decoration: none;
+    color: $green;
+  }
+}
+/***************************************/
 #footer {
     color: #333;
     width: 1000px;
@@ -163,16 +179,11 @@ hr{ border:0px;
     }
 }
 
-#cont-in h1{
-  margin: 4px 0px 20px;
-  color: $dark;
-}
 h1{ font-size: 2.2em; color: $dark;}
 h2{ font-size: 1.7em; color: $dark;}
 h3{ font-size: 1.3em; color: $dark;}
 h4{ font-size: 1.1em; color: $dark;}
 h2, h3, h4, h5{ margin: 8px 0px;}
-small{ font-size: 50% !important }
 
 .error{
   color: $red;
