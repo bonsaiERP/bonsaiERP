@@ -10,9 +10,10 @@
 
     -# Account
     %label Cuenta
-    #payment_accounts.dropdown.fl
+    #payment_accounts.fl
       %div
-        %p= presenter.selected_account
+        %p
+          = presenter.selected_account
       %ul
         - @payment.devolution_accounts.each do |account|
           %li.account{:id => account.id}= presenter.account_select account

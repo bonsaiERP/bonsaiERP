@@ -70,16 +70,16 @@ hr{ border:0px;
     color: white;
     margin: 7px 0px 0 14px;
     overflow: hidden;
-    height: 45px;
+    height: 35px;
   	vertical-align: top;
     //max-width: 400px;
     text-shadow: 1px 1px 1px #000;
   }
   ul#usersettings{
     @include border-radius;
-    padding: 0px 5px;
+    padding: 0px;
     height: 29px;
-    margin-top: 20px;
+    margin-top: 5px;
     display: inline-block;
     float: right;
     background: rgba(0,0,0, 0.55);

@@ -162,23 +162,40 @@ $(document).ready(->
   window.AjaxLoadingHTML = AjaxLoadingHTML
 
   # Creates the dialog container
+  #createDialog = (params)->
+  #  data = params
+  #  params = $.extend({
+  #    'id': new Date().getTime(), 'title': '', 'width': 800, 'modal': true, 'resizable' : false, 'position': 'top',
+  #    'close': (e, ui)->
+  #      $('#' + div_id ).parents("[role=dialog]").detach()
+  #  }, params)
+  #  html = params['html'] || AjaxLoadingHTML()
+  #  div_id = params.id
+  #  div = document.createElement('div')
+  #  css = "ajax-modal " + params['class'] || ""
+  #  $(div).attr( { 'id': params['id'], 'title': params['title'] } ).data(data)
+  #  .addClass(css).css( { 'z-index': 10000 } ).html(html)
+  #  delete(params['id'])
+  #  delete(params['title'])
+  #  $(div).dialog( params )
+  #  div
+
   createDialog = (params)->
-    data = params
-    params = $.extend({
-      'id': new Date().getTime(), 'title': '', 'width': 800, 'modal': true, 'resizable' : false, 'position': 'top',
-      'close': (e, ui)->
-        $('#' + div_id ).parents("[role=dialog]").detach()
-    }, params)
+    data = _.extend({title: " ", width: 650}, params)
     html = params['html'] || AjaxLoadingHTML()
-    div_id = params.id
-    div = document.createElement('div')
-    css = "ajax-modal " + params['class'] || ""
-    $(div).attr( { 'id': params['id'], 'title': params['title'] } ).data(data)
-    .addClass(css).css( { 'z-index': 10000 } ).html(html)
-    delete(params['id'])
-    delete(params['title'])
-    $(div).dialog( params )
-    div
+    $modal = $('#modal-template').modal(
+      backdrop: true
+      keyboard: true
+    ).css(
+      width: "#{data.width}px"
+      'margin-left': ->
+        return -($(this).width() / 2)
+    )
+
+    $modal.find(".modal-header h4").html(data.title)
+    $modal.find('.modal-body').html(html)
+
+    $modal
 
   window.createDialog = createDialog
 
@@ -259,10 +276,11 @@ $(document).ready(->
   # Presents an AJAX form
   $('a.ajax').live("click", (e)->
     data = $.extend({'title': $(this).attr('title'), 'ajax-type': getAjaxType(this) }, $(this).data() )
-    div = createDialog( data )
-    $(div).load( $(this).attr("href"), (e)->
+    $div = createDialog( data )
+
+    $div.find('.modal-body').load( $(this).attr("href"), (e, resp)->
       #$(div).find('a.new[href*=/], a.edit[href*=/], a.list[href*=/]').hide()
-      $(div).transformDateSelect()
+      $div.transformDateSelect()
     )
     e.stopPropagation()
     false

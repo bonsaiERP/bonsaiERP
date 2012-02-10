@@ -15,3 +15,4 @@
 //= require app/payment.js.coffee
 //= require bootstrap-dropdown
 //= require bootstrap-tooltip
+//= require bootstrap-modal

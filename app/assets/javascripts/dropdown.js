@@ -22,7 +22,7 @@
 		this.li_list = this.ul.find("li");
 		this.div = $(this).find("div");
 		this.par = $(this).find("p");
-		
+
 		//init
     //this.par.html(this.ul.find("li:eq(" + options.selected + ")").html());
 		
