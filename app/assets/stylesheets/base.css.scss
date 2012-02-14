@@ -49,11 +49,11 @@ hr{ border:0px;
   padding: 30px;
 }
 
-#cont-in {
-  margin: 0;
-  padding: 0 1em 1em;
+// header
+#header .navbar-inner{
+  #background: #5BAE29 !important;
+  @include linear-gradient(darken(#5BAE29, 10%), #5BAE29);
 }
-
 
 .navbar{
   margin: 0px !important;

@@ -114,88 +114,30 @@ $(document).ready(->
     $(el).html(options)
 
 
-  # Transforms a dateselect field in rails to jQueryUI
-  transformDateSelect = ->
-    $(this).find('.date, .datetime').each((i, el)->
-      # hide fields
-      input = document.createElement('input')
-      $(input).attr({ 'class': 'date-transform', 'type': 'text', 'size': 10 })
-      year = $(el).find('select[name*=1i]').hide().val()
-      month = (1 * $(el).find('select[name*=2i]').hide().val()) - 1
-      day = $(el).find('select[name*=3i]').hide().after( input ).val()
-      minute = $(el).find('select[name*=5i]')
-
-      if minute.length > 0 then transformMinuteSelect(minute)
-
-      # Solo despues de haber adicionado al DOM hay que 
-      # usar datepicker si se define el boton
-      $(input).datepicker(
-        yearRange: '1900:',
-        showOn: 'both',
-        buttonImageOnly: true,
-        buttonImage: '/assets/images/calendar.gif'
-        #onSelect: (dateText, inst)->
-          #  $.setDateSelect(inst.input)
-      )
-      $(input).change((e)->
-        $.setDateSelect(this)
-        $(this).trigger("change:datetime", this)
-      )
-
-      if year != '' and month != '' and day != ''
-        $(input).datepicker("setDate", new Date(year, month, day))
-      $('.ui-datepicker').not('.ui-datepicker-inline').hide()
-    )
-
-  $.transformDateSelect = $.fn.transformDateSelect = transformDateSelect
-
 
   ##################################################
 
   # Presents a tooltip
   $('[title]').tooltip()
 
-  # Ajax preloader content
-  AjaxLoadingHTML = ->
-    "<div class='c'><img src='/assets/ajax-loader.gif' alt='Cargando' /><br/>Cargando...</div>"
-
-  window.AjaxLoadingHTML = AjaxLoadingHTML
-
   # Creates the dialog container
-  #createDialog = (params)->
-  #  data = params
-  #  params = $.extend({
-  #    'id': new Date().getTime(), 'title': '', 'width': 800, 'modal': true, 'resizable' : false, 'position': 'top',
-  #    'close': (e, ui)->
-  #      $('#' + div_id ).parents("[role=dialog]").detach()
-  #  }, params)
-  #  html = params['html'] || AjaxLoadingHTML()
-  #  div_id = params.id
-  #  div = document.createElement('div')
-  #  css = "ajax-modal " + params['class'] || ""
-  #  $(div).attr( { 'id': params['id'], 'title': params['title'] } ).data(data)
-  #  .addClass(css).css( { 'z-index': 10000 } ).html(html)
-  #  delete(params['id'])
-  #  delete(params['title'])
-  #  $(div).dialog( params )
-  #  div
-
   createDialog = (params)->
-    data = _.extend({title: " ", width: 650}, params)
+    data = params
+    params = $.extend({
+      'id': new Date().getTime(), 'title': '', 'width': 800, 'modal': true, 'resizable' : false, 'position': 'top',
+      'close': (e, ui)->
+        $('#' + div_id ).parents("[role=dialog]").detach()
+    }, params)
     html = params['html'] || AjaxLoadingHTML()
-    $modal = $('#modal-template').modal(
-      backdrop: true
-      keyboard: true
-    ).css(
-      width: "#{data.width}px"
-      'margin-left': ->
-        return -($(this).width() / 2)
-    )
-
-    $modal.find(".modal-header h4").html(data.title)
-    $modal.find('.modal-body').html(html)
-
-    $modal
+    div_id = params.id
+    div = document.createElement('div')
+    css = "ajax-modal " + params['class'] || ""
+    $(div).attr( { 'id': params['id'], 'title': params['title'] } ).data(data)
+    .addClass(css).css( { 'z-index': 10000 } ).html(html)
+    delete(params['id'])
+    delete(params['title'])
+    $(div).dialog( params )
+    div
 
   window.createDialog = createDialog
 

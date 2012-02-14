@@ -18,7 +18,7 @@ end
 
 gem 'jquery-rails', "~> 2.0.0"
 gem 'compass-rails', "~> 1.0.0.rc.2"
-gem 'bootstrap-sass', "~> 2.0.0"
+#gem 'bootstrap-sass', "~> 2.0.0"
 gem 'ramon', "~> 0.3.3"
 
 gem 'pg', "~> 0.12.2"

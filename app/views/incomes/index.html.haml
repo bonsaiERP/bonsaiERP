@@ -64,7 +64,7 @@
     -  @incomes.each do |income|
       %tr{ :class => cycle(:odd, :even) }
         %td 
-          %span{:class => "#{income.real_state} tip", :title => income.show_state}
+          %span{:class => "#{income.real_state} tip", :title => income.show_state} &nbsp;&nbsp;&nbsp;
         %td= link_to income.ref_number, income, :class => 'b'
         %td= income.contact
         %td= lo income.payment_date unless income.paid?

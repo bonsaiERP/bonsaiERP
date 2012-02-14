@@ -237,4 +237,12 @@ module ApplicationHelper
       File.read(file)
     end
   end
+
+  def flash_css(fla)
+    case fla
+    when :error   then "alert-error"
+    when :warning then "alert-alert"
+    when :notice  then "alert-success"
+    end
+  end
 end

@@ -20,3 +20,7 @@ end
 watch("lib/pay_plans_module.rb") do
   run_spec %{spec/models/transaction_spec.rb}
 end
+
+watch("app/assets/twitter-bootstrap/*.less") do
+  `lessc app/assets/twitter-bootstrap/bootstrap.less > app/assets/stylesheets/twitter-bootstrap.css.scss`
+end

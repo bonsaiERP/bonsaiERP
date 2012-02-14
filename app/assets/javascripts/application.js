@@ -6,6 +6,7 @@
 //= require extensions.js.coffee
 //= require money.min.js
 //= require dropdown.js
+//= require forms.js.coffee
 //= require base.js.coffee
 //= require _b.js.coffee
 //= require app/contact.js.coffee
@@ -13,6 +14,6 @@
 //= require app/transaction.js.coffee
 //= require app/pay_plans.js.coffee
 //= require app/payment.js.coffee
-//= require bootstrap-dropdown
-//= require bootstrap-tooltip
-//= require bootstrap-modal
+//= require twitter-bootstrap/bootstrap-dropdown
+//= require twitter-bootstrap/bootstrap-tooltip
+//= require twitter-bootstrap/bootstrap-modal
