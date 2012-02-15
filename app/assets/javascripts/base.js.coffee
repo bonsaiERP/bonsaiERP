@@ -119,10 +119,13 @@ $(document).ready(->
   $('a.ajax').live("click", (event)->
     title = $(this).attr("title") || $(this).data("original-title")
     data = $.extend({'title': title, 'ajax-type': getAjaxType(this) }, $(this).data() )
-    $div = createDialog( data )
+    div = createDialog( data )
 
-    $div.load( $(this).attr("href") )
-    event.stopInmediatePropagation()
+    $( div ).load( $(this).attr("href"), (resp)->
+      div.transformDateSelect()
+    )
+
+    event.stopPropagation()
     false
   )
 
