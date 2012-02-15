@@ -6,7 +6,8 @@ class ContactAutocomplete
     @options ||= {}
 
     @model = "Contact"
-    @cont  = $(@elem).parents('.input:first')
+    @cont  = $(@elem).parents('div:first')
+
     @cont.removeClass 'numeric'
 
     @.setInitial()

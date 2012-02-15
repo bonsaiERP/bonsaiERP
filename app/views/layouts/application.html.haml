@@ -53,9 +53,11 @@
           = yield
           .clear
       #footer
-        #footer_inner
+        .container
           %p
-            ©2011-2012 &middot; BonsaiERP "El software para la gestión de empresas"
+            ©2011-2012 &middot; 
+            =link_to "BonsaiERP", root_path
+            El software para la gestión de empresas
           -#%p
             %a Blog
             &middot;

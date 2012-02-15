@@ -120,6 +120,7 @@ $header-color: lighten(gray, 20%)
 
   .ui-datepicker-prev-hover, .ui-datepicker-next-hover
     background: none
+    opacity: 0.7
 
   .ui-datepicker-title 
     margin: 0 2.3em
@@ -218,6 +219,38 @@ $header-color: lighten(gray, 20%)
 //.ui-datepicker-rtl .ui-datepicker-group { float:right; }
 //.ui-datepicker-rtl .ui-datepicker-group-last .ui-datepicker-header { border-right-width:0; border-left-width:1px; }
 //.ui-datepicker-rtl .ui-datepicker-group-middle .ui-datepicker-header { border-right-width:0; border-left-width:1px; }
+
+
+// dialog
+.ui-dialog
+  +border-radius
+  border: 1px solid lighten(gray, 10%)
+
+
+  .ui-dialog-titlebar
+    +linear-gradient(#5BAE29, lighten(#5BAE29, 10%) )
+    padding: 0.7em 1em
+    color: white
+    position: relative
+
+    .ui-dialog-title
+      font-weight: bold
+      font-size: 1.1em
+
+    .ui-dialog-titlebar-close
+      text-indent: -9999em
+      position: absolute
+      top: 0.7em
+      right: 0.4em
+      width: 16px
+      height: 16px
+      background: url(/assets/glyphicons-halflings-white.png) -312px 0
+      display: block
+      &:hover
+        opacity: 0.7
+
+  .ui-dialog-content
+    padding: 10px
 
 //jDropDown
 .jDropDown

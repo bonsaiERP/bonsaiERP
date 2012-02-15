@@ -1,0 +1,183 @@
+@import colors
+@import compass
+
+$font_size: 12px
+
+html 
+  font-size: $font_size
+
+body
+  //font-family: Segoe UI, Helvetica, "Helvetica Neue", Arial, sans-serif
+  background: transparent url(/assets/images/bg/01.png)
+  margin: 0px
+  padding: 0px
+
+
+hr 
+  border: 0px
+  background-color: gray
+  color: gray
+  height: 1px
+
+
+
+/*********************************************************/
+/*MAIN CONTENT WRAPPERS*/
+#wrapper
+  min-height: 500px
+
+
+#logo
+  position: absolute
+  height: 100px
+  width: 80px
+  background:url("images/back.png") no-repeat scroll left top transparent
+  z-index: 1000
+  right: 10px
+
+  a
+    width: 89px
+    height: 99px
+    display: block
+    text-indent: -2000em
+
+
+#cont
+  padding-bottom: 1em
+  padding-top: 1em
+  @include border-bottom-radius(6px)
+  box-shadow: 0 2px 3px rgba(0,0,0,0.3)
+  background-color: #fff
+  border-top: 1px solid #bbb
+  padding: 30px
+
+
+// header
+#header .navbar-inner
+  #background: #5BAE29 !important
+  @include linear-gradient(darken(#5BAE29, 10%), #5BAE29)
+
+.navbar
+  margin: 0px !important
+  position: relative
+  clear: both
+
+  ul.nav > li > a
+    color: darken(white, 7%)
+    font-weight: bold
+
+  h1
+    float: left
+    color: white
+    margin: 7px 0px 0 14px
+    overflow: hidden
+    height: 35px
+    vertical-align: top
+    text-shadow: 1px 1px 1px #000
+
+  ul#usersettings
+    +border-radius
+    padding: 0px
+    height: 29px
+    margin-top: 5px
+    display: inline-block
+    float: right
+    background: rgba(0,0,0, 0.55)
+
+    font-size: 0.9em
+
+    li
+      list-style: none
+      margin: 0px
+      padding: 0px
+      float: left
+      a
+        vertical-align: middle
+        display: block
+        padding: 7px 10px
+        color: white
+        text-decoration: none
+      
+      a.limit
+        height: 10px
+        overflow: hidden
+        max-width: 250px
+        &:hover
+          text-decoration: underline
+
+// Menu for links
+
+#menu
+  height: 32px
+  background: lighten(gray, 45%)
+  vertical-align: middle
+  box-shadow: 0 2px 3px rgba(0,0,0,0.3)
+  border-bottom: none
+
+.main-links
+  clear: both
+  .links a
+    font-size: 12px
+    padding: 4px 10px 2px 20px
+    &:hover 
+      color: #000
+    
+/* Breadcrumbs*/
+ul.breadcrumps
+  list-style: none
+  padding: 0px
+  margin: 6px 0 0 16px
+  float: left
+  width: 50%
+  li
+    display: inline
+    a
+      background: transparent url(images/breadcrumb-arrow.png) no-repeat right 49%
+      padding-right: 14px
+
+    span
+      position: relative
+      padding: 0px 5px
+
+.links
+  font-weight: bold
+  padding-left: 20px
+  color: darken($green, 10%)
+  width: 40%
+  margin-top: 6px
+  float: right
+  text-align: right
+  a:hover
+    text-decoration: none
+    color: $green
+
+.error
+  color: $red
+
+p
+  margin: 4px 0px
+
+#due_date
+  color: white
+  font-weight: bold
+  float: right
+  display: inline-block
+  margin-right: 100px
+  padding: 10px 0px
+  font-size: 110%
+  .red
+    color: darken($red, 10%) !important
+
+
+.history
+  background-color: #ECE8C3 !important
+  a
+    color: #443910 !important
+  th
+    background: #CDC28F !important
+
+
+// footer
+#footer
+  text-align: center
+

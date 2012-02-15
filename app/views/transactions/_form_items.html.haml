@@ -51,5 +51,6 @@
       %span.currency
       %span#total_value.cur{ 'data-val'=> transaction.total}= ntc transaction.total
 
-.actions
-  = f.submit 'Salvar'
+.clear
+%br
+= f.submit 'Salvar', :class => 'btn btn-success b btn-large'

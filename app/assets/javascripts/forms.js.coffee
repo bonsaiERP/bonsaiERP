@@ -1,10 +1,38 @@
 $(->
+  # Sets rails select fields with the correct datthe correct date
+  setDateSelect = (el)->
+    el = el || this
+    date = parseDate( $(el).val() )
+    $(el).siblings('select[name*=1i]').val(date[0]).trigger("change")
+    $(el).siblings('select[name*=2i]').val(date[1]).trigger("change")
+    $(el).siblings('select[name*=3i]').val(date[2]).trigger("change")
+
+  $.setDateSelect = $.fn.setDateSelect = setDateSelect
+
+  # Transforms the hour to just select 00, 15, 30, 
+  transformMinuteSelect = (el, step = 5)->
+    $el = $(el)
+    val = $el.val()
+    steps = parseInt(60/5) - 1
+    options = []
+    for k in [0..steps]
+      if el == val then sel = 'selected="selected"' else sel =""
+      options.push('<option value="' + (5 * k) + '" ' + sel + '>' + (5 * k) + '</option>')
+    options = options.join("")
+
+    $(el).html(options)
+
   # Transforms a dateselect field in rails to jQueryUI
   transformDateSelect = ->
     $(this).find('.date, .datetime').each((i, el)->
       # hide fields
       input = document.createElement('input')
-      $(input).attr({ 'class': 'date-transform', 'type': 'text', 'size': 10 })
+      $(input).attr(
+        class: 'date-transform'
+        type: 'text'
+        size: 10
+      )
+
       year = $(el).find('select[name*=1i]').hide().val()
       month = (1 * $(el).find('select[name*=2i]').hide().val()) - 1
       day = $(el).find('select[name*=3i]').hide().after( input ).val()
@@ -18,9 +46,7 @@ $(->
         yearRange: '1900:',
         showOn: 'both',
         buttonImageOnly: true,
-        buttonImage: '/assets/images/calendar.gif'
-        #onSelect: (dateText, inst)->
-          #  $.setDateSelect(inst.input)
+        buttonImage: '/assets/calendar-black.png'
       )
       $(input).change((e)->
         $.setDateSelect(this)
@@ -40,4 +66,83 @@ $(->
 
   window.AjaxLoadingHTML = AjaxLoadingHTML
 
+  # Creates an autocomplete field
+  # @param Object
+  createAutocompleteField = (options)->
+    options = $.extend({}, options)
+    self = @
+    val = $(@).data('value') || ""
+    id = new Date().getTime()
+    required = $(@).attr('required')
+
+    $input = $('<input/>').attr({'size': $(this).attr('size'), 'type':'text', 'id': id, 'required': required})
+
+    .css({'text-align':'left'}).addClass('autocomplete_view')
+    .val(val)
+    $(@).hide().before($input)
+
+    $("##{id}").live('focusout', ->
+      if $(@).val() == ""
+        $(self).val('').data('value', '')
+      else
+        $(@).val($(self).data('value'))
+    ).autocomplete({
+      source: options.source || $(@).data('url'),
+      select: (e, ui)->
+        $(@).siblings('input').data('value', ui.item.label).val(ui.item.id)
+    })
+
+
+  $.createAutocompleteField = $.fn.createAutocompleteField = createAutocompleteField
+
+
+  # Must be before any ajax click event to work with HTMLUnit
+  # Makes that a dialog opened window makes an AJAX request and returns a JSON response
+  # if response is JSON then trigger event stored in dialog else present the HTML
+  # There are three types of response JSON, JavaScript and HTML
+  # JavaScript response must have "// javascript" at the beginning
+  $('div.ajax-modal form').live('submit', ->
+    return true if $(this).attr('enctype') == 'multipart/form-data'
+    return true if $(this).hasClass("no-ajax")
+    # Prevent from submiting the form.enter when hiting ENTER
+    return false if $(this).hasClass('enter') and window.keyPress == 13
+
+    el = this
+    data = $(el).serialize()
+    $(this).find('input, select, textarea').attr('disabled', true)
+
+    $div = $(this).parents('.ajax-modal')
+    new_record = if $div.data('ajax-type') == 'new' then true else false
+    trigger = $div.data('trigger') || "ajax-call"
+
+    $.ajax(
+      'url': $(el).attr('action')
+      'cache': false
+      'context':el
+      'data':data
+      'type': (data['_method'] || $(this).attr('method') )
+      'success': (resp, status, xhr)->
+
+        if typeof resp == "object"
+          data['new_record'] = new_record
+          p = $(el).parents('div.ajax-modal')
+          $(p).html('').dialog('destroy')
+          $('body').trigger(trigger, [resp])
+        else if resp.match(/^\/\/\s?javascript/)
+          p = $(el).parents('div.ajax-modal')
+          $(p).html('').dialog('destroy')
+        else
+          div = $(el).parents('div.ajax-modal:first')
+          div.html(resp)
+          setTimeout(->
+            $(div).transformDateSelect()
+          ,200)
+      'error': (resp)->
+        alert('Existe errores, por favor intente de nuevo.')
+    )
+
+    false
+
+  )
+  # End submit ajax form
 )

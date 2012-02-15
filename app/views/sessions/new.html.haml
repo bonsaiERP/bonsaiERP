@@ -1,21 +1,22 @@
 :css
-  #wrapper{ width: 600px; }
+  #header{ display: none; }
+  #menu{ display: none; }
   #main_wrap{ background: none !important; }
   #cont{
     background: none;
-    border-radius: 6px;
+    border-radius: none;
   }
 
-.form-horizontal.well
+.form-horizontal.well.span6.offset3(style="margin-top: 100px")
   %h1.c Iniciar sesión
 
   = simple_form_for(@user, :url => sessions_path, :method => :post) do |f|
     = bonsai_form_error(f)
 
     %fieldset
-      = f.input :email,    :label => "Correo Electrónico", :input_html => {:size => 40}
+      = f.input :email,    :label => "Correo Electrónico", :input_html => {:size => 30}
       .clear
-        = f.input :password, :label => 'Contraseña', :input_html => {:size => 40}
+        = f.input :password, :label => 'Contraseña', :input_html => {:size => 30}
 
     %p.c
       = link_to "¿Olvido su contraseña?", new_reset_password_path
