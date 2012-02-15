@@ -5,16 +5,18 @@
   = f.input :operation, :as => :hidden
   = f.input :account_id, :as => :hidden
 
-  = f.input :amount, :label => "Cantidad en #{f.object.account.currency_symbol}", :input_html => {:size => 12, :type => 'decimal'}
-  = f.input :contact_id, :as => :contact, :label => false 
-  .clear
+  .row
+    .span6
+      = f.input :amount, :label => "Cantidad en #{f.object.account.currency_symbol}", :input_html => {:size => 12, :type => 'decimal'}
+    .span6
+      = f.input :contact_id, :as => :contact, :label => false 
 
-  = f.input :reference, :as => :text, :label => 'Referencia', :input_html => {:rows => 2, :cols => 35}, :hint => 'Nº de cheque, razón, factura, etc.'
-  = f.association :project, :label => 'Proyecto'
-  .clear
+  .row
+    .span6
+      = f.input :reference, :as => :text, :label => 'Referencia', :input_html => {:rows => 2, :cols => 35}, :hint => 'Nº de cheque, razón, factura, etc.'
+    .span6
+      = f.association :project, :label => 'Proyecto'
   = f.input :description, :as => :text, :label => 'Descripción', :input_html => {:rows => 3, :cols => 35}
-  .clear
-
 
   = f.submit "Salvar", :class => 'btn btn-success b'
 

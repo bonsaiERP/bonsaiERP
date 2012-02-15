@@ -1,6 +1,79 @@
+@import colors
+@import compass
+
 input, select, textarea
   margin-left: 10px
 
 label
   font-weight: bold
   color: gray
+  abbr 
+    border: none
+
+label.collection_radio, label.collection_check_boxes
+  font-weight:normal
+  display: inline-block
+
+.show label
+  margin-bottom: 5px
+
+select
+  max-width: 300px
+
+.inline label
+  display: inline
+
+.optional label.collection_radio
+  display: inline-table
+
+option.new
+  color: $dark
+  font-weight: bold
+
+.boolean
+  vertical-align: middle
+  label
+    display: inline-block
+
+  input:checkbox
+    float: left
+
+.numeric input
+  text-align: right
+
+.hint
+  display: block
+  color: gray
+  font-style: italic
+
+.errorExplanation
+  color: $red
+  background-color: $light_red
+  border: 2px solid $red
+  padding: 5px 15px
+  +border-radius(4px)
+  ul
+    list-style: none
+    padding: 0px 10px
+  
+  h2 
+    font-weight:normal
+    font-size: 1.2em
+    margin: 4px 0px
+
+span.error
+  display: block
+  color: $red
+
+.field_with_errors 
+  input, textarea, select 
+    background-color: lighten($red, 40%)
+    border-color: lighten($red, 25%) !important
+
+form.simple_form div.main 
+  padding: 0 1em
+  +border-radius(3px)
+
+
+a
+  text-decoration: none
