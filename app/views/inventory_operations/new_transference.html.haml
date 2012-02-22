@@ -5,8 +5,10 @@
 
   .links
 
-%h1 Nueva Transferencia
-%h2= @inventory_operation.store
+.page-header
+  %h1.n
+    %span.gray Nueva Transferencia
+    =link_to @inventory_operation.store, @inventory_operation.store
 
 = simple_form_for(@inventory_operation, :url => create_transference_inventory_operations_path) do |f|
   = bonsai_form_error(f)
@@ -14,22 +16,25 @@
   = f.input :operation, :as => :hidden
   = f.input :store_id, :as => :hidden
 
-  .main.bg-light-grey
-    ._50.fl
+  .row
+    .span3
       = f.input :ref_number, :input_html => {:size => 20}, :label => 'Numero de referencia'
-      .input
-        %label Fecha
-        = l Time.zone.now
+    .span3
+      %label Fecha
+      = l Time.zone.now
 
-    =f.input :store_to_id, :collection => Store.without(@inventory_operation.store_id), :label => "Transferir a almacen"
-    .clear
+    .span6
+      =f.input :store_to_id, :collection => Store.without(@inventory_operation.store_id), :label => "Transferir a almacen"
 
-  = f.input :contact_id, :as => :contact, :label => false
-  = f.association :project, :label => "Proyecto",
-    :input_html => {'data-new_url' => new_project_path, 'data-title' => "Nuevo proyecto", 'data-trigger' => 'new_project' }
-  .clear
-  = f.input :description, :as => :text, :input_html => {:rows => 4, :cols => 40}, :label => 'Descripción'
-  .clear
+  .row
+    .span6
+      = f.input :contact_id, :as => :contact, :label => false
+    .span6
+      = f.association :project, :label => "Proyecto",
+        :input_html => {'data-new_url' => new_project_path, 'data-title' => "Nuevo proyecto", 'data-trigger' => 'new_project' }
+  .row
+    .span6
+      = f.input :description, :as => :text, :input_html => {:rows => 4, :cols => 40}, :label => 'Descripción'
 
   %table.decorated#items_table
     %tr
@@ -52,8 +57,9 @@
   - if @inventory_operation.transaction_id.blank?
     %p
       <a href="javascript:" id="add_item" class="add link">Adicionar ítem</a>
-  .actions
-    = f.submit 'Salvar', :class => 'btn btn-success b'
+  %br
+  .clear
+  = f.submit 'Salvar', :class => 'btn btn-success b'
 
 :javascript
   $(function() {

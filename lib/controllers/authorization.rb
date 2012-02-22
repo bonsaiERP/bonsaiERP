@@ -33,6 +33,7 @@ module Controllers::Authorization
 
   def check_authorization(rol, controller, action)
     h = send(:"#{rol}_hash")
+
     if h[controller].nil?
       true
     elsif h[controller] === false or h[controller] === true

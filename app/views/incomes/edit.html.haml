@@ -8,6 +8,7 @@
   .links
     = link_to 'Ver', @transaction, :class => 'show'
 
-%h1 Editar proforma de venta
+.page-header
+  %h1 Editar proforma de venta
 
 = render 'transactions/form', :transaction => @transaction, :contacts => Client.scoped

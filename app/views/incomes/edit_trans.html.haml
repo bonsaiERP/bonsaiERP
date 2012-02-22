@@ -4,10 +4,11 @@
   .links
     = link_to 'Ver', @transaction, :class => 'show'
 
-%h1 
-  Editar 
-  = @transaction
-  %small.fs60{:class => @transaction.real_state}= @transaction.show_state
+.page-header
+  %h1 
+    Editar 
+    = @transaction
+    %small.fs60{:class => @transaction.real_state}= @transaction.show_state
 
 %h2= @transaction.ref_number
 %h2.n= link_to @transaction.contact, @transaction.contact

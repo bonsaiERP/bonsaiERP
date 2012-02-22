@@ -4,6 +4,7 @@
     %li
       %span Nueva proforma de venta
 
-%h1 Nueva proforma de venta
+.page-header
+  %h1 Nueva proforma de venta
 
 = render 'transactions/form', :transaction => @transaction, :contacts => Client.scoped

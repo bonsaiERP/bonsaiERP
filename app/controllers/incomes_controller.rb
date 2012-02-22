@@ -39,7 +39,7 @@ class IncomesController < TransactionsController #ApplicationController
       t = Income.find(params[:transaction_id])
       @transaction = t.clone_transaction
     else
-      @transaction = Income.new
+      @transaction = Income.new(created_at: Time.zone.now)
       @transaction.set_defaults_new
       @transaction.transaction_details.build(:price => 0, :quantity => 0)
     end

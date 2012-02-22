@@ -2,23 +2,30 @@
   = bonsai_form_error(f)
   = hidden_field_tag "scope", params[:scope] if params[:scope].present?
 
-  = f.input :code, :label => 'Código'
-  = f.input :name, :label => 'Nombre'
-  .clear
-  /= f.input :unitary_cost, :label => 'Costo unitario', :input_html => {:size => 12}
-  = f.input :price, :label => "Precio de venta #{currency_symbol}", :input_html => {:size => 12, :type => 'decimal'}
-  = f.association :unit, :label => "Unidad", 
-    :input_html => { 'data-new_url' => new_unit_path, 'data-trigger' => 'new_unit', 'data-title' => 'Nueva unidad' }
-  .clear
-    = f.input :active, :label => "Activo", :as => :radio
-  - if f.object.new_record?
-    = f.input :ctype, :label => 'Tipo', :collection => Item.get_types(params[:scope]), :as => :radio,
-        :hint => "<span class='warning bicon'></span> <span class='dark-yellow'>No es posible modificar después</span>".html_safe
-  - else
-    %label Tipo
-    = f.object.get_type
-  .clear
-  = f.input :description, :as => :text, :input_html => {:rows => 5}
+  .row
+    .span6
+      = f.input :code, :label => 'Código'
+    .span6
+      = f.input :name, :label => 'Nombre'
+  .row
+    .span6
+      = f.input :price, :label => "Precio de venta #{currency_symbol}", :input_html => {:size => 12, :type => 'decimal'}
+    .span6
+      = f.association :unit, :label => "Unidad", 
+        :input_html => { 'data-new_url' => new_unit_path, 'data-trigger' => 'new_unit', 'data-title' => 'Nueva unidad' }
+  .row
+    .span6.inline-group
+      = f.input :active, :label => "Activo", :as => :radio
+    .span6.inline-group
+      - if f.object.new_record?
+        = f.input :ctype, :label => 'Tipo', :collection => Item.get_types(params[:scope]), :as => :radio,
+            :hint => "<span class='warning bicon'></span> <span class='dark-yellow'>No es posible modificar después</span>".html_safe
+      - else
+        %label Tipo
+        = f.object.get_type
+  .row
+    .span6
+      = f.input :description, :as => :text, :input_html => {:rows => 5}
   .clear
   
   = f.submit "Salvar", :class => 'btn btn-success b'

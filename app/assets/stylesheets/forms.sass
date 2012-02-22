@@ -45,6 +45,7 @@ option.new
   display: block
   color: gray
   font-style: italic
+  clear: both
 
 .errorExplanation
   color: $red
@@ -74,6 +75,20 @@ form.simple_form div.main
   padding: 0 1em
   +border-radius(3px)
 
+input.radio
+  
+.inline-group
+  .radio
+    padding: 0px
+  input.radio
+    margin: 0 3px
+    float: left
+  .collection_radio
+    margin: 0 3px
+    float: left
+
+select.datetime
+  width: 3.5em
 
 a
   text-decoration: none

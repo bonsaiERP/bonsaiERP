@@ -9,39 +9,38 @@
   = simple_form_for(transaction, :html => {:id => 'transaction_form', :class => 'enter'}) do |f|
     = bonsai_form_error(f)
 
-    .clear
+    .row
+      .span6
+        = f.association :project,  :label => 'Proyecto',
+          :input_html => {'data-new_url' => new_project_path, 'data-title' => "Nuevo proyecto", 'data-trigger' => 'new_project' }
 
-    = f.association :project,  :label => 'Proyecto',
-      :input_html => {'data-new_url' => new_project_path, 'data-title' => "Nuevo proyecto", 'data-trigger' => 'new_project' }
-
-    - unless transaction.currency_id == currency_id
-      %label Tipo de cambio
-      %strong
-        1
-        = transaction.currency_symbol
-        \=
-        = currency_symbol
-        = transaction.exchange_rate
-    .clear
-
-    ._50.fl
-      .input
-        %label
+      .span6
+        - unless transaction.currency_id == currency_id
+          %label Tipo de cambio
+          %strong
+            1
+            = transaction.currency_symbol
+            \=
+            = currency_symbol
+            = transaction.exchange_rate
+      .span3
+        %label.radio.inline
           = f.radio_button :fact, true, :class => 'fact'
           Factura
-        %label
+        %label.radio.inline
           = f.radio_button :fact, false, :class => 'fact'
           Recibo
-      = f.input :bill_number, :label => 'Nº de <span id="fact_label"></span>'.html_safe, :input_html => {:size => 20}
+      .span3
+        = f.input :bill_number, :label => 'Nº de <span id="fact_label"></span>'.html_safe, :input_html => {:size => 20}
 
-    - if transaction.income?
-      =f.association :taxes, :as => :check_boxes, :label => 'Impuestos', :wrapper_html => {:id => 'taxes'},
+    %hr.light
+    .row
+
+      .span6
+        = f.input :description, :label => 'Descripción', :as => :text, :input_html => {:rows => 3, :cols => 40}
+
+      -#=f.association :taxes, :as => :check_boxes, :label => 'Impuestos', :wrapper_html => {:id => 'taxes'},
         :label_method => lambda{|tax| "<span id='span#{tax.id}' class='tax' data-rate='#{tax.rate}' title ='#{tax.name}'>#{tax.abbreviation} (#{ntc tax.rate}%)</span>".html_safe }
-
-    .clear
-
-    = f.input :description, :label => 'Descripción', :as => :text, :input_html => {:rows => 3, :cols => 40}
-    .clear
 
     -# Render items
     =render "transactions/form_items", :f => f, :transaction => transaction

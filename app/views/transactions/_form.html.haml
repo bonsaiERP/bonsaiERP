@@ -8,41 +8,40 @@
 - present transaction, TransactionPresenter do |presenter|
   = simple_form_for(transaction, :html => {:id => 'transaction_form', :class => 'enter ui-form'}) do |f|
     = bonsai_form_error(f)
-    .main.bg-light-grey
-      ._50.fl
+    .row
+      .span3
         = f.input :ref_number, :label => 'Nº de referencia', :input_html => {:size => 20}
-        .input
-          %label Fecha Hora
-          %p= lo Time.now
+      .span3
+        %label Fecha hora
+        = Time.zone.now
+        -#= f.input :created_at, :label => "Fecha hora"
 
-      = f.input :contact_id, :as => :contact, :label => false, :input_html => {:id => 'transaction_contact_id'}
-      .clear
+      .span6
+        = f.input :contact_id, :as => :contact, :label => false, :input_html => {:id => 'transaction_contact_id'}
 
-    .clear
+    %hr.light
+    .row
+      .span6
+        = f.association :project,  :label => 'Proyecto',
+          :input_html => {'data-new_url' => new_project_path, 'data-title' => "Nuevo proyecto", 'data-trigger' => 'new_project' }
+      .span6
+        = f.association :currency, :label => 'Moneda/Tipo de cambio. <span class="rate_details n black"></span>'.html_safe, :include_blank => false,
+          :input_html => {:id => 'transaction_currency_id'}
+        = f.input :exchange_rate, :as => :hidden, :input_html => {:id => 'transaction_exchange_rate'}
 
-    = f.association :project,  :label => 'Proyecto',
-      :input_html => {'data-new_url' => new_project_path, 'data-title' => "Nuevo proyecto", 'data-trigger' => 'new_project' }
-
-    = f.association :currency, :label => 'Moneda/Tipo de cambio. <span class="rate_details n black"></span>'.html_safe, :include_blank => false,
-      :input_html => {:id => 'transaction_currency_id'}
-    = f.input :exchange_rate, :as => :hidden, :input_html => {:id => 'transaction_exchange_rate'}
-    .clear
-
-    ._50.fl
-      .input
+    %hr.light
+    .row
+      .span3
         %label.radio.inline
           = f.radio_button :fact, true, :class => 'fact'
           Factura
         %label.radio.inline
           = f.radio_button :fact, false, :class => 'fact'
           Recibo
-      = f.input :bill_number, :label => 'Nº de <span id="fact_label"></span>'.html_safe, :input_html => {:size => 20}
-
-
-    .clear
-
-    = f.input :description, :label => 'Descripción', :as => :text, :input_html => {:rows => 3, :cols => 40}
-    .clear
+      .span3
+        = f.input :bill_number, :label => 'Nº de <span id="fact_label"></span>'.html_safe, :input_html => {:size => 20}
+      .span6
+        = f.input :description, :label => 'Descripción', :as => :text, :input_html => {:rows => 3, :cols => 40}
   
     -# Render items
     =render "transactions/form_items", :f => f, :transaction => transaction
