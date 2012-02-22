@@ -39,7 +39,7 @@
   - if @account_ledger.can_conciliate?
     .conciliation
       = simple_form_for @account_ledger, :url => conciliate_account_ledger_path(@account_ledger) do |f|
-        = f.submit "Verificar transacción"
+        = f.submit "Verificar transacción", :class => 'btn btn-success b'
 
   #users.mt30
     %p Creado por: <span class="b">#{@account_ledger.creator}</span> <span class="i">#{lo @account_ledger.created_at}</span>

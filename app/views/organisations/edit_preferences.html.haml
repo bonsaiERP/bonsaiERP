@@ -23,7 +23,7 @@
     = text_field_tag "organisation[preferences][general_discount]", @organisation.preferences[:general_discount], :size => 4
     .hint Si se supera el porcentage en Descuento general en una venta, se requerira aprobación de gerencia 
   .clear
-    = f.submit "Salvar"
+    = f.submit "Salvar", :class => 'btn btn-success b'
 
 :javascript
   $(function() {

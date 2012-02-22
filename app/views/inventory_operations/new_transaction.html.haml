@@ -46,7 +46,7 @@
       = render "form_details_transaction", :f => f, :stocks => @inventory_operation.hash_of_items
 
     .clear
-    = f.submit 'Salvar'
+    = f.submit 'Salvar', :class => 'btn btn-success b'
 
 :javascript
   $(function() {

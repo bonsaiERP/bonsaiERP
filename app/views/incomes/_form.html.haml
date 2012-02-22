@@ -81,7 +81,7 @@
         %td.r.b.dark#currency_symbol{:colspan => 2} Total #{@income.currency_name.pluralize}
       %td.cur.b#total_value_currency #{@income.currency_symbol} #{ntc @income.total_currency}
   .actions
-    = f.submit 'Salvar'
+    = f.submit 'Salvar', :class => 'btn btn-success b'
 
 
 = javascript_include_tag "app/transactions"

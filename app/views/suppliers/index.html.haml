@@ -23,7 +23,7 @@
     .input
       =text_field_tag 'search', params[:search], :size => 40
     %div
-    =submit_tag 'Buscar'
+    =submit_tag 'Buscar', :class => 'btn btn-success'
 
 = paginate(@suppliers)
 

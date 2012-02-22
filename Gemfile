@@ -48,6 +48,7 @@ group :development, :test do
 end
 
 group :development do
+  #gem 'linecache19' #, :git => "git://github.com/mark-moseley/linecache.git"
   gem 'ruby-debug19', '~> 0.11.6', :platform => :mri_19, :require => 'ruby-debug'
   gem 'pry',                "~> 0.9.7.4"
   gem 'ffaker',             "~> 1.12.1"

@@ -18,7 +18,7 @@
       %label Estado
       =select_tag "option", options_for_select(list_income_states, params[:option])
     %div
-    =submit_tag 'Buscar'
+    =submit_tag 'Buscar, :class => 'btn btn-success'
 
 = link_to "Buscar", "#search_income", :class => 'search'
 
