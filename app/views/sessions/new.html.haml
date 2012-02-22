@@ -5,6 +5,7 @@
   #cont{
     background: none;
     border-radius: none;
+    box-shadow: none;
   }
 
 .form-horizontal.well.span6.offset3(style="margin-top: 100px")
@@ -14,7 +15,7 @@
     = bonsai_form_error(f)
 
     %fieldset
-      = f.input :email,    :label => "Correo Electrónico", :input_html => {:size => 30}
+      = f.input :email,    :label => "Email", :input_html => {:size => 30}
       .clear
         = f.input :password, :label => 'Contraseña', :input_html => {:size => 30}
 

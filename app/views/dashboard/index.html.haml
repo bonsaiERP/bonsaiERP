@@ -1,3 +1,6 @@
+:css
+  .title i{ vertical-align: middle; }
+
 - content_for :links do
   %ul.breadcrumps
     %li
@@ -22,13 +25,17 @@
 
   .row
     .box.span6
-      %h3.title.dark-green Nos deben 
+      %h3.title
+        %i.icon-plus-sign
+        Nos deben
       %ul.list
         - presenter.accounts_to_recieve.each do |cur, amt|
           %li.high #{cur} #{ntc amt}
     
     .box.span6
-      %h3.title.red Debemos 
+      %h3.title
+        %i.icon-minus-sign
+        Debemos
       %ul.list
         - presenter.accounts_to_pay.each do |cur, amt|
           %li.high #{cur} #{ntc amt}
