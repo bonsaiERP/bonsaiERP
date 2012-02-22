@@ -23,27 +23,31 @@ class InventoryOperationPresenter < BasePresenter
   end
 
   def title
+    store = h.link_to inventory_operation.store, store_path(inventory_operation.store_id, :tab => 'operations'), :class => 'n'
+
     case
-    when( inventory_operation.transaction_id.present? and transaction.is_a?(Income) and inventory_operation.out? )
-      "<span class='dark_green'>Entrega</span> #{transaction}".html_safe
-    when( inventory_operation.transaction_id.present? and transaction.is_a?(Income) and inventory_operation.in? )
-      "<span class='red'>Devolución</span> #{transaction}".html_safe
-    when( inventory_operation.transaction_id.present? and transaction.is_a?(Buy) and inventory_operation.in? )
-      "<span class='dark_green'>Recojo</span> #{transaction}".html_safe
-    when( inventory_operation.transaction_id.present? and transaction.is_a?(Income) and inventory_operation.out? )
-      "<span class='red'>Devolución</span> #{transaction}".html_safe
+    when( inventory_operation.transaction_id.present? && transaction.is_a?(Income) && inventory_operation.out? )
+      "<span class='gray n'>Entrega</span> #{store} - #{transaction}".html_safe
+    when( inventory_operation.transaction_id.present? && transaction.is_a?(Income) && inventory_operation.in? )
+      "<span class='gray n'>Devolución</span> #{store} - #{transaction}".html_safe
+    when( inventory_operation.transaction_id.present? && transaction.is_a?(Buy) && inventory_operation.in? )
+      "<span class='gray n'>Recojo</span> #{transaction}".html_safe
+    when( inventory_operation.transaction_id.present? && transaction.is_a?(Income) && inventory_operation.out? )
+      "<span class='gray n'>Devolución</span> #{store} - #{transaction}".html_safe
     when inventory_operation.in?
-      "<span class='dark_green'>Ingreso</span> a almacen #{inventory_operation.store}".html_safe
+      "<span class='gray n'>Ingreso</span> #{store}".html_safe
     when inventory_operation.out?
-      "<span class='red'>Egreso</span> a almacen #{inventory_operation.store}".html_safe
+      "<span class='gray n'>Egreso</span>  #{store}".html_safe
+    when inventory_operation.transout? || inventory_operation.transin?
+      "<span class='gray n'>Transferencia</span> #{store} - #{inventory_operation.ref_number}".html_safe
     end
   end
 
   def link_related
     if inventory_operation.transference_id.present?
       trans = inventory_operation.transference
-      txt = trans.operation == "transout" ? "a" : "desde"
-      h.link_to "Transferencia #{txt} #{trans.store_to}", trans, :title => "Transferencia a #{trans}"
+      txt = inventory_operation.operation == "transout" ? "a" : "desde"
+      h.link_to "Transferencia #{txt} #{inventory_operation.store_to}", trans, :title => "Transferencia a #{inventory_operation.store_to}"
     elsif inventory_operation.contact_id.present?
       cont = inventory_operation.contact
       h.link_to cont, cont, :title => "Contacto"

@@ -2,7 +2,10 @@
   %ul.breadcrumps
     %li #{link_to "Configuración", "/configuration#organisation"}
 
-%h1 Editar #{organisation_name}
+.page-header
+  %h1 
+    %small Editar 
+    #{organisation_name}
 
 = simple_form_for(@organisation) do |f|
   = bonsai_form_error(f)

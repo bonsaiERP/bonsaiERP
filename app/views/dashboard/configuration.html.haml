@@ -9,7 +9,10 @@
       
 
   #users
-    %p=link_to "Adicionar usuario", "/users/add_user", :class => 'new'
+    %p
+      =link_to "/users/add_user", :class => 'btn btn-success' do
+        %i.icon-plus-sign.icon-white
+        Adicionar usuario
 
     %table.decorated
       %tr
@@ -28,7 +31,10 @@
             = link_to "editar", edit_user_user_path(user), :class => 'edit', :title => 'Editar usuario'
 
   #organisation
-    = link_to "Editar datos empresa", "/organisations/#{session[:organisation][:id]}/edit", :class => 'edit link'
+    %p
+      = link_to "/organisations/#{session[:organisation][:id]}/edit", :class => 'btn btn-primary' do
+        %i.icon-pencil.icon-white
+        Editar datos empresa
 
     
     %h3 Datos #{@org}
