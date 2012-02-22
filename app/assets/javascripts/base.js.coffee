@@ -84,8 +84,9 @@ $(document).ready(->
     .addClass(css).css( { 'z-index': 10000 } ).html(html)
     delete(params['id'])
     delete(params['title'])
-    console.log params
+
     $(div).dialog( params )
+
     div
 
   window.createDialog = createDialog
