@@ -15,7 +15,10 @@ a{
   color: darken( $green, 20% );
   img{ border: none; }
   text-decoration: none;
-  &:hover{ text-decoration: underline; }
+  &:hover{ 
+    text-decoration: underline;
+    color: darken($green, 25%);
+  }
 }
 ul{
   margin: 4px;
@@ -126,7 +129,11 @@ ul{
     font-family: 'Muli', arial, serif;
     top: 50px;
     right: 10px;
-    h2{font-weight: normal; font-size: 18px;}
+    h2{
+      font-weight: normal; 
+      font-size: 18px;
+      color: white;
+    }
   }
   #video{
     @include single-box-shadow(#000, 5px, 5px, 5px);
@@ -323,3 +330,4 @@ ul.team{
   padding-top: 9px;
   margin:0px 5px;
 }
+

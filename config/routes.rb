@@ -1,5 +1,7 @@
 Bonsaierp::Application.routes.draw do
 
+  resources :loans
+
   resources :account_balances
 
   if [:development, :test].include? Rails.env
