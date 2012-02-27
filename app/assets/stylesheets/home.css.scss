@@ -41,10 +41,10 @@ ul{
 /**************************************************************/
 
 #wrapper{
-  width: 900px;
+  //width: 900px;
   text-align: left;
-  margin: 0px auto 60px auto;
-  border-radius: 4px 4px 8px 8px;
+  margin: 0px auto 60px;
+  //border-radius: 4px 4px 8px 8px;
 }
 
 
@@ -83,7 +83,7 @@ ul{
     list-style: none;
     position: absolute;
     top: 5px;
-    left: 170px;
+    left: 260px;
 
     li{
       display: inline;
@@ -123,12 +123,12 @@ ul{
   }
   #title{
     position: absolute;
-    width: 350px;
+    width: 380px;
     padding: 0px;
     color: $white;
     font-family: 'Muli', arial, serif;
     top: 50px;
-    right: 10px;
+    right: 25px;
     h2{
       font-weight: normal; 
       font-size: 18px;
@@ -186,19 +186,19 @@ ul{
 }
 
 #boxes{
-  margin-top: 20px;
-  padding: 0px 10px;
+  margin: 20px 0 40px;
+  clear: both;
 }
 .box{
-  width: 205px;
+  //width: 205px;
   float: left;
-  margin: 10px 0px;
+  //margin: 10px 0px;
   h3{ 
-    margin: 5px 10px;
-    color: darken($green, 20%);
+    //margin: 5px 10px;
+    color: $dark-green;
   }
   p{
-    margin: 5px 10px;
+    margin: 5px 0;
     height: 64px;
   }
   img{ margin: 4px 10px;}
@@ -331,3 +331,32 @@ ul.team{
   margin:0px 5px;
 }
 
+// Pirces
+#prices{
+  .price{
+    @include border-top-radius(4px);
+    @include border-bottom-radius(8px);
+    border: 1px solid lighten(gray, 20%);
+
+    h3.title{
+      @include border-top-radius(3px);
+      background-color: $dark-green;
+      color: white;
+      padding: 4px;
+      margin: 0 0 10px;
+      text-align: center;
+      .n{
+        font-size: 1.2em;
+      }
+    }
+
+    ul{
+      margin: 10px 10px 10px 20px;
+      li{
+        margin: 0 15px 0 0;
+      }
+    }
+  }
+}
+
+.n{ font-weight: normal; }

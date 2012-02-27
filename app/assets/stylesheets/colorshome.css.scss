@@ -2,6 +2,7 @@ $white: #FFF;
 $black: #000;
 $gray: #BEBEBE;
 $green: #7FBE42;
+$dark-green: darken($green, 20%);
 $back: #F7F7F7;
 $blue: #5B7CE0;
 $dark: #484A4C;
@@ -10,3 +11,4 @@ $red: #FF0000;
 $light_red: #FEF1EC;
 
 .green{ color: $green; }
+.dark-green{ color: $dark-green;}
