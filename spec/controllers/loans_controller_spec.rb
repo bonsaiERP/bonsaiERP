@@ -38,4 +38,47 @@ describe LoansController do
     end
 
   end
+
+  describe "create"do
+    describe "save:true" do
+      before(:each) do
+        Loanin.any_instance.stub(save: true, id: 1)
+      end
+
+      it 'should create a new loan' do
+        post :create, loanin: {operation: "in", currency_id: 1}
+
+        assigns(:loan).is_a?(Loanin).should be_true
+        assigns(:loan).currency_id.should == 1
+      end
+
+      it 'should redirect to the show view' do
+        post :create, loanin: {operation: "in", currency_id: 1}
+
+        response.should redirect_to(loans_path(1))
+        flash[:notice].should_not be_blank
+      end
+    end
+
+    describe "save:false" do
+      before(:each) do
+        Loanin.any_instance.stub(save: false)
+      end
+
+      it 'should render new action' do
+        post :create, loanin: {operation: "in", currency_id: 1}
+        
+        response.should_not be_redirect
+        response.should render_template("new")
+      end
+
+      it 'should assing the correct loan' do
+        post :create, loanout: {operation: "out", currency_id: 1}
+        
+        assigns(:loan).is_a?(Loanout).should be_true
+        assigns(:loan).currency_id.should == 1
+      end
+    end
+
+  end
 end

@@ -42,16 +42,14 @@ class LoansController < TransactionsController #ApplicationController
   # POST /incomes
   # POST /incomes.xml
   def create
-    set_loan(operation: params[:loan])
+    data = params[:loanin] || params[:loanout]
+    @loan = set_loan(data)
 
     respond_to do |format|
-      if @transaction.save_trans
-        format.html { redirect_to(@transaction, :notice => 'Se ha creado una proforma de venta.') }
-        format.xml  { render :xml => @transaction, :status => :created, :location => @transaction }
+      if @loan.save
+        format.html { redirect_to(loans_path(@loan.id), :notice => 'Se ha creado un prestamo a ser aprobado.') }
       else
-        @transaction.transaction_details.build unless @transaction.transaction_details.any?
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @transaction.errors, :status => :unprocessable_entity }
+        format.html { render "new" }
       end
     end
   end
