@@ -8,16 +8,16 @@ class LoansController < TransactionsController #ApplicationController
   # GET /incomes
   # GET /incomes.xml
   def index
-    if params[:search].present?
-      @incomes = Income.search(params)#.page(@page)
-      p = params.dup
-      p.delete(:option)
-      @count = Income.search(p)
-    else
-      params[:option] ||= "all"
-      @incomes = Income.find_with_state(params[:option])
-      @count = Income.scoped
-    end
+    #if params[:search].present?
+    #  @incomes = Income.search(params)#.page(@page)
+    #  p = params.dup
+    #  p.delete(:option)
+    #  @count = Income.search(p)
+    #else
+    #  params[:option] ||= "all"
+    #  @incomes = Income.find_with_state(params[:option])
+    #  @count = Income.scoped
+    #end
   end
 
   # GET /incomes/1
@@ -32,25 +32,17 @@ class LoansController < TransactionsController #ApplicationController
   # GET /incomes/new
   # GET /incomes/new.xml
   def new
-    if params[:transaction_id].present?
-      t = Income.find(params[:transaction_id])
-      @transaction = t.clone_transaction
-    else
-      @transaction = Income.new
-      @transaction.set_defaults_new
-      @transaction.transaction_details.build(:price => 0, :quantity => 0)
-    end
+    set_loan(operation: params[:operation])
   end
 
   # GET /incomes/1/edit
   def edit
-    render get_template(@transaction)
   end
 
   # POST /incomes
   # POST /incomes.xml
   def create
-    @transaction = Income.new(params[:income])
+    set_loan(operation: params[:loan])
 
     respond_to do |format|
       if @transaction.save_trans
@@ -137,26 +129,18 @@ class LoansController < TransactionsController #ApplicationController
   end
 
   private
+  def set_loan(data)
+    data[:currency_id] = OrganisationSession.currency_id if data[:currency_id].blank?
 
-
-  # Redirects in case that someone is trying to edit or destroy an  approved income
-  def redirect_income
-    flash[:warning] = "No es posible editar una nota ya aprobada!."
-    redirect_to incomes_path
-  end
-
-  def set_transaction
-    @transaction = Income.find(params[:id])
-    check_edit if ["edit", "update"].include?(params[:action])
-  end
-
-  # Checks for transactions to edit
-  def check_edit
-    unless allow_transaction_action?(@transaction)
-      flash[:warning] = "No es posible editar la nota de venta."
-      return redirect_to @transaction
+    case
+    when data[:operation] == "in"
+      @loan = Loanin.new(data)
+    when data[:operation] == "out"
+      @loan = Loanout.new(data)
+    else
+      flash[:error] = "Faltan parametros"
+      redirect_to loans_path
     end
   end
-
 end
 

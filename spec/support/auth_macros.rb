@@ -8,6 +8,6 @@ module AuthMacros
   end
 
   def stub_auth
-    controller.stubs(:check_authorization! => true)
+    controller.stub!(:check_authorization! => true)
   end
 end
