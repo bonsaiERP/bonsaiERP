@@ -28,19 +28,21 @@
   %li= link_option "Desc./Inc.", "discount", :class => 'tip', :title => 'Descuentos o Incrementos'
   %li= link_option "Anuladas", "nulled"
 
-#search_income.search{:style => show_if_search}
-  %a.close{:href => "#"} cerrar
+#search_income.well( style="#{show_if_search}" )
+  %a.close{:href => "javascript:"} x
   %h3 Buscar ventas
   = link_to "Eliminar filtros", incomes_path, :class => 'b'
+
   =form_tag "/incomes", :method => 'get' do
     =hidden_field_tag "search_div_id", "search_incomes"
-    .input
-      %label Cliente o Nº de referencia
-      =text_field_tag 'search', params[:search], :size => 40
-    .input
-      %label Estado
-      =select_tag "option", options_for_select(list_income_states, params[:option])
-    %div
+    .row-fluid
+      .span6
+        %label Cliente o Nº de referencia
+        =text_field_tag 'search', params[:search], :size => 40
+      .span6
+        %label Estado
+        =select_tag "option", options_for_select(list_income_states, params[:option])
+
     =submit_tag 'Buscar', :class => 'btn btn-success'
 
 

@@ -8,7 +8,7 @@ class ExchangeRate extends Backbone.Model
     @inverse = false
     @$input  = $(input)
     @observe = observe
-    @$label  = @$input.siblings 'label'
+    @$label  = @$input.parents(".control-group:first").find 'label'
     @inverted = @options["inverted"] || false
 
     @$currencies = @$label.find(".currencies")

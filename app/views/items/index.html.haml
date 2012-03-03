@@ -16,8 +16,8 @@
 = link_to "Buscar", "#search_items", :class => 'search'
 
 .clear
-#search_items.search{:style => show_if_search}
-  %a.close{:href => "#"} cerrar
+#search_items.well{:style => show_if_search}
+  %a.close(href="javascript:") x
   =form_tag "/items", :method => 'get' do
     =hidden_field_tag "search_div_id", "search_items"
     =hidden_field_tag 'ctype', params[:ctype]

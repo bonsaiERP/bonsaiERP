@@ -1,7 +1,7 @@
 # Edit this Gemfile to bundle your application's dependencies.
 source :rubygems
 
-gem 'rails', "3.2.1"
+gem 'rails', ">= 3.2.2"
 
 ## Bundle edge rails:
 # gem "rails", :git => "git://github.com/rails/rails.git"
@@ -13,11 +13,11 @@ gem 'rails', "3.2.1"
 group :assets do
   gem 'sass-rails',   "~> 3.2.4"
   gem 'coffee-rails', "~> 3.2.2"
-  gem 'uglifier',     ">= 1.0.3"
+  gem 'uglifier',     ">= 1.2.3"
 end
 
 gem 'jquery-rails', "~> 2.0.0"
-gem 'compass-rails', "~> 1.0.0.rc.2"
+gem 'compass-rails', "~> 1.0.0.rc.3"
 #gem 'bootstrap-sass', "~> 2.0.0"
 gem 'ramon', "~> 0.3.3"
 
@@ -25,7 +25,7 @@ gem 'pg', "~> 0.12.2"
 #gem 'mysql2'#, :group => :production
 #gem 'sqlite3-ruby', :group => [:development, :text]
 
-gem 'simple_form'
+gem 'simple_form', "~> 2.0.1"
 gem 'haml',        "~> 3.1.4"
 gem 'kaminari',    "~> 0.13.0"
 gem 'valium',      "~> 0.5.0"

@@ -1,42 +1,17 @@
 @import colors
 @import compass
 
-input, select, textarea
-  margin-left: 10px
-
 label
   font-weight: bold
   color: gray
   abbr 
     border: none
 
-label.collection_radio, label.collection_check_boxes
-  font-weight:normal
-  display: inline-block
-
 .show label
   margin-bottom: 5px
 
 select
   max-width: 300px
-
-.inline label
-  display: inline
-
-.optional label.collection_radio
-  display: inline-table
-
-option.new
-  color: $dark
-  font-weight: bold
-
-.boolean
-  vertical-align: middle
-  label
-    display: inline-block
-
-  input:checkbox
-    float: left
 
 .numeric input
   text-align: right
@@ -74,18 +49,6 @@ span.error
 form.simple_form div.main 
   padding: 0 1em
   +border-radius(3px)
-
-input.radio
-  
-.inline-group
-  .radio
-    padding: 0px
-  input.radio
-    margin: 0 3px
-    float: left
-  .collection_radio
-    margin: 0 3px
-    float: left
 
 select.datetime
   width: 3.5em

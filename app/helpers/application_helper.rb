@@ -186,7 +186,11 @@ module ApplicationHelper
   end
 
   def show_if_search
-    "display:block" if params[:search] or params[:search_div_id]
+    if params[:search] || params[:search_div_id]
+      "display:block" 
+    else
+      "display:none"
+    end
   end
 
   # Gets the path for inventory_operations depending if it's related to a sale

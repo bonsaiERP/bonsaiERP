@@ -8,10 +8,10 @@
     box-shadow: none;
   }
 
-.form-horizontal.well.span6.offset3(style="margin-top: 100px")
+.well.span6.offset3(style="margin-top: 100px")
   %h1.c Iniciar sesión
 
-  = simple_form_for(@user, :url => sessions_path, :method => :post) do |f|
+  = simple_form_for(@user, :url => sessions_path, :method => :post, :html => {:class => "form-horizontal"}) do |f|
     = bonsai_form_error(f)
 
     %fieldset

@@ -272,9 +272,11 @@ $(document).ready(->
   $('[data-new_url]').each((i, el)->
     data = $(el).data()
     title = data.title || "Nuevo"
+
     $a = $('<a/>')
-    .attr({'href': data.new_url, 'class': 'ajax link add', 'data-trigger': data.trigger })
-    .text(title)
+    .attr({'href': data.new_url, 'class': 'ajax btn btn-primary btn-mini', 'data-trigger': data.trigger })
+    .css("margin-left", "5px")
+    .html("<i class='icon-plus-sign icon-white'></i> #{title}")
 
     $a.insertAfter(el)
     setTimeout(->

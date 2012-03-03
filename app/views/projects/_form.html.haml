@@ -1,12 +1,16 @@
 = simple_form_for(@project) do |f|
   = bonsai_form_error(f)
-  = f.input :name, :label => 'Nombre',  :wrapper_html => {:class => 'span4'}
-  = f.input :active, :label => 'Activo', :wrapper_html => {:class => 'span1'}, :label_html => {:class => 'inline checkbox'}
-
-  = f.input :date_start, :label => 'Fecha de inicio', :include_blank => true, :wrapper_html => {:class => 'span2'}
-  = f.input :date_end, :label => 'Fecha de finalización', :include_blank => true, :wrapper_html => {:class => 'span2'}
-  .clear
-  = f.input :description, :label => "Descripción", :input_html => {:cols => 45, :rows => 5}
+  .row-fluid
+    .span4
+      = f.input :name, :label => 'Nombre'
+    .span2
+      = f.input :active, :label => 'Activo', :as => :radio, :item_wrapper_class => 'inline'
+    .span3
+      = f.input :date_start, :label => 'Fecha de inicio', :include_blank => true
+    .span3
+      = f.input :date_end, :label => 'Fecha de finalización', :include_blank => true
+  .row-fluid
+    .span6
+      = f.input :description, :label => "Descripción", :input_html => {:cols => 45, :rows => 5}
   
-  .clear
   = f.submit 'Salvar', :class => 'btn btn-success b'

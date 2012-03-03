@@ -148,7 +148,7 @@ class ItemCollection extends Backbone.Collection
 
       type = @trans.get("type")
       $(row).find("input.desc")
-      .after("<a href='/items/new?scope=#{type}' data-title='Nuevo ítem' data-trigger='add:item' class='ajax add link'>Nuevo item</a>")
+      .after("<a href='/items/new?scope=#{type}' data-title='Nuevo ítem' data-trigger='add:item' class='ajax btn btn-primary btn-mini' style='margin-left: 5px'><i class='icon-plus-sign icon-white'></i> Nuevo item</a>")
       # Create
       item = new ItemModel({item_id: item_id, description: desc, price: price, quantity: quantity, trans: self.trans, row: row, rate: self.trans.get("exchange_rate")})
 

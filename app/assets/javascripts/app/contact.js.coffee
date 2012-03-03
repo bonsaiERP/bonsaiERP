@@ -57,14 +57,15 @@ class ContactAutocomplete
     title = "Nuevo #{@.getLocalizedLabel(@type).toLowerCase()}"
     $('<a/>').attr
       'href'   : "/#{@type.toLowerCase()}s/new"
-    .addClass('add ajax link')
+    .addClass('ajax btn btn-mini btn-primary')
     .data(
       'title'  : title
       'url'    : @.getAddUrl()
       'trigger': "new_contact_#{@auto_id}"
     )
     .attr({title: title})
-    .text(title)
+    .html("<i class='icon-plus-sign icon-white'></i> #{title}")
+    .css("margin-left", "5px")
   # Url for adding new contact
   getAddUrl: ->
     "/#{@type.toLowerCase()}s/new"

@@ -19,26 +19,30 @@
     
     = f.input :account_id, :as => :hidden
     
-    = f.input :to_id, :collection => Account.money.where("id NOT IN(?)", @account_ledger.account_id), :label => 'A cuenta'
+    .row-fluid
+      .span5
+        = f.input :to_id, :collection => Account.money.where("id NOT IN(?)", @account_ledger.account_id), :label => 'A cuenta'
 
-    ._50.fl
-      = f.input :amount, :label => "Cantidad en (#{@account_ledger.account.currency_symbol})",
-        :input_html => {:size => 12, :type => 'decimal', :class => 'r'}
-      .input
+      .span4
+        = f.input :amount, :label => "Cantidad en (#{@account_ledger.account.currency_symbol})",
+          :input_html => {:size => 12, :type => 'decimal', :class => 'r'}
+      .span2
         %label Fecha
         = lo Time.zone.now
 
-    #al_exchange_rate._50{:style => "display:#{presenter.show_exchange_rate}"}
-      = f.input :exchange_rate, :label => "Tipo de cambio de <span class='currencies'></span>", 
-        :input_html => {:size => 12, :type => 'decimal'}, 
-        :wrapper_html => {:class => '_60'}
-      .input._40
+    #al_exchange_rate.row-fluid{:style => "display:#{presenter.show_exchange_rate}"}
+      .span5
+        = f.input :exchange_rate, :label => "Tipo de cambio de <span class='currencies'></span>", 
+          :input_html => {:size => 12, :type => 'decimal'}, 
+          :wrapper_html => {:class => '_60'}
+      .span3
         %label Total
         %span#total.fs120.b
 
-    .clear
-    =f.association :project, :label => 'Proyecto'
-    .clear 
+    .row-fluid
+      .span6
+        =f.association :project, :label => 'Proyecto', :input_html => {'data-new_url' => new_project_path, 'data-trigger' => 'new_project', 'data-title' => "Nuevo proyecto"}
+
     = f.submit "Transferir", :class => 'btn btn-success b'
 
 :javascript
