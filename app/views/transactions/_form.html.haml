@@ -23,7 +23,7 @@
     .row
       .span6
         = f.association :project,  :label => 'Proyecto',
-          :input_html => {'data-new_url' => new_project_path, 'data-title' => "Nuevo proyecto", 'data-trigger' => 'new_project' }
+          :input_html => {'data-new_url' => new_project_path, 'data-title' => "Nuevo proyecto", 'data-trigger' => 'new_project', 'data-width' => "900" }
       .span6
         = f.association :currency, :label => 'Moneda/Tipo de cambio. <span class="rate_details n black"></span>'.html_safe, :include_blank => false,
           :input_html => {:id => 'transaction_currency_id'}

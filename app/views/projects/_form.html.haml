@@ -2,7 +2,7 @@
   = bonsai_form_error(f)
   .row-fluid
     .span4
-      = f.input :name, :label => 'Nombre'
+      = f.input :name, :label => 'Nombre', :input_html=> {:size => 32}
     .span2
       = f.input :active, :label => 'Activo', :as => :radio, :item_wrapper_class => 'inline'
     .span3

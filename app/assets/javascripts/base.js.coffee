@@ -123,7 +123,7 @@ $(document).ready(->
     div = createDialog( data )
 
     $( div ).load( $(this).attr("href"), (resp)->
-      div.transformDateSelect()
+      $(div).transformDateSelect()
     )
 
     event.stopPropagation()
@@ -270,11 +270,11 @@ $(document).ready(->
 
   # Adds a new link to any select with a data-new-url
   $('[data-new_url]').each((i, el)->
-    data = $(el).data()
+    data = $.extend({width: 800}, $(el).data() )
     title = data.title || "Nuevo"
 
     $a = $('<a/>')
-    .attr({'href': data.new_url, 'class': 'ajax btn btn-primary btn-mini', 'data-trigger': data.trigger })
+    .attr({'href': data.new_url, 'class': 'ajax btn btn-primary btn-mini', 'data-trigger': data.trigger, 'data-width': data.width })
     .css("margin-left", "5px")
     .html("<i class='icon-plus-sign icon-white'></i> #{title}")
 

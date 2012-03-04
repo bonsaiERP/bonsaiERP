@@ -24,6 +24,7 @@ $dark-yellow:#D0D02A;
 
 .red{ color: $red !important; }
 .gray{ color: gray !important; }
+.light-gray{ color: lighten(gray, 20%) !important; }
 .dark-gray{ color: gray24 !important; }
 .green{ color: $green !important; }
 .dark-green{ color: darken($green, 15%) !important; }

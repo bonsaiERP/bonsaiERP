@@ -93,7 +93,7 @@ class ContactAutocomplete
         css = ""
         sel = "checked='checked'"
       else
-        css = "grey"
+        css = "gray"
         sel = ""
 
       html = "<label class='#{css} radio inline'>"
@@ -148,10 +148,10 @@ class ContactAutocomplete
       radio = $(el).find('input:radio')
 
       if radio.attr("checked")
-        $(el).removeClass('grey')
+        $(el).removeClass('light-gray')
         self.type = radio.val()
       else
-        $(el).addClass('grey')
+        $(el).addClass('light-gray')
     @.updateAutocomplete()
   # Updates the autocomplete based on the selection
   updateAutocomplete: ->
@@ -160,11 +160,11 @@ class ContactAutocomplete
     id = "#" + @auto_id
 
     title = "Nuevo #{@.getLocalizedLabel(@type).toLowerCase()}"
-    $(@cont).find('a.add').attr('href', @.getAddUrl()).
+    $(@cont).find('a.ajax').attr('href', @.getAddUrl()).
     data(
       'title'  : "Nuevo #{@.getLocalizedLabel(@type).toLowerCase()}"
     )
-    .text(title)
+    .html("<i class='icon-plus-sign icon-white'></i> #{title}")
 
     $(id).val('').data('val', '')
 
