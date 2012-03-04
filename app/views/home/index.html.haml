@@ -8,7 +8,7 @@
 
 #home
   %h1.n{:style => 'color:#FFF; font-weight:normal;font-size: 220%'} 
-    %i bonsai,
+    %i bonsaiERP
     la forma más fácil de gestionar su empresa
   %a#video{:href => "javascript:", :title => ""}
     %img{ :src => "/assets/video_image.jpg", :alt => "Video"}
@@ -16,26 +16,26 @@
   -#= link_to image_tag("prueba.png"), "/users/sign_up", :id => "register", :class => 'but'
   -#= link_to image_tag("tour.png"), "/tour", :id => "tour", :class => 'but'
   #title
-    %h2 <i>bonsai</i> es un sistema web fácil de usar que le proporciona control sobre sus compras, ventas e inventarios todo relacionado con sus cuentas, clientes y proveedores.
+    %h2 <i>bonsaiERP</i> es un sistema web fácil de usar que le proporciona control sobre sus compras, ventas e inventarios todo relacionado con sus cuentas, clientes y proveedores.
 
-#boxes
-
-  .row
-    .box.span3
+#boxes.row-fluid
+  .span3
+    .box
       %h3 Fácil de Usar.
       %p Es un sistema intuitivo y eficaz, donde no requiere ser un contador para utilizarlo. Es tan fácil de usar como una cuenta de correo electrónico. Al no ser un sistema contable, usted no se complica.
-    .box.span3
+  .span3
+    .box
       %h3 Actualizaciones.
       %p Al ser <i>bonsai</i> un sistema web este es actualizado continuamente con nuevas características o mejoras de seguridad y lo bueno es que usted no tendrá que pagar un extra por las actualizaciones.
-      -#se encuentra “siempre listo” en la web. Puede acceder a él cuando lo desee desde cualquier lugar donde tenga acceso a Internet.
-    .box.span3
+    -#se encuentra “siempre listo” en la web. Puede acceder a él cuando lo desee desde cualquier lugar donde tenga acceso a Internet.
+  .span3
+    .box
       %h3 Confiabilidad.
       %p Como <i>bonsai</i> se encuentra en el Internet no es susceptible a contraer virus. No tiene que preocuparse por sus datos, pues bonsai los guarda automáticamente por usted (Back Ups constantes).
-    .box.span3
+  .span3
+    .box
       %h3 Un Control Real
       %p <i>bonsai</i> cuenta con varias herramientas que harán del control de su empresa fácil y fluido, donde los procesos son claros y amistosos.
-
-.clear
 
 :javascript
   $(function() {
@@ -53,4 +53,3 @@
     });
   });
 
--#%iframe#video{ :width => "510", :height => "320", :src => "http://www.youtube.com/embed/iqruf87hMJQ", :frameborder => "0" }

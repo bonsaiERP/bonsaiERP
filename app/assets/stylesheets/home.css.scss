@@ -50,7 +50,7 @@ ul{
 
 #header{
   position: relative;
-  height: 60px;
+  height: 70px;
   #logo{
     position: absolute;
     top: 10px;
@@ -109,6 +109,9 @@ ul{
 }
 #home{
   //background: transparent url(imagenes_video.png) no-repeat;
+  h1.n{
+    margin: 5px 0;
+  }
   height: 411px;
   position: relative;
   #register{
@@ -186,20 +189,19 @@ ul{
 }
 
 #boxes{
-  margin: 20px 0 40px;
+  margin: 20px 0 0;
   clear: both;
 }
 .box{
-  //width: 205px;
-  float: left;
-  //margin: 10px 0px;
+  @include border-radius(6px);
+  padding: 10px 15px;
+  height: 170px;
+  background-color: lighten(gray, 45%);
   h3{ 
-    //margin: 5px 10px;
     color: $dark-green;
   }
   p{
     margin: 5px 0;
-    height: 64px;
   }
   img{ margin: 4px 10px;}
 }
@@ -207,10 +209,11 @@ ul{
   padding: 15px;
 }
 #footer{
-  text-align: center;
-  padding: 15px;
-  margin: 20px 0px;
-}  
+  //text-align: center;
+  margin: 50px 0;
+  padding: 25px 0;
+  clear: both;
+}
 
 #banner{
   background: #46af26; /* Old browsers */
@@ -345,8 +348,13 @@ ul.team{
       padding: 4px;
       margin: 0 0 10px;
       text-align: center;
+      font-size: 1.5em;
       .n{
-        font-size: 1.2em;
+        font-size: 1.15em;
+      }
+      small{
+        font-size: 0.7em !important;
+        color: lighten(gray, 35%) !important;
       }
     }
 
@@ -360,3 +368,8 @@ ul.team{
 }
 
 .n{ font-weight: normal; }
+
+label{
+  font-weight: bold !important;
+  color: gray;
+}

@@ -1,9 +1,22 @@
-#media
+-#media
   %a.twitter.b{:href => 'http://twitter.com/#!/bonsaierp'} Siguenos en Twitter.
   -#%a.facebook.b{:href => 'http://www.facebook.com/pages/bonsai/154910684599695?ref=ts&sk=wall'} Hazte fan en Facebook.
   
 
-#footer
-  <i>bonsai</i> 
-  =link_to "sistema ERP en línea", root_path
-  \. Copyright ©2011-2012 bonsaierp.com, Inc. Todos los derechos reservados.
+#footer.row-fluid
+  .span6
+    %i bonsaiERP
+    El software para la gestión de empresas
+    =link_to "sistema ERP en línea", root_path
+    \. Copyright ©2011-2012 bonsaierp.com, Inc.
+    %br
+    Todos los derechos reservados.
+  .span4
+    %label(style="margin-bottom: 0px") Escribanos a:
+    %h3.n= mail_to "contacto@bonsaierp.com"
+  .span2
+    = link_to "http://twitter.com/#!/bonsaierp" do
+      = image_tag "twitter.png", :title => "Twitter", :alt => "Twitter"
+    &nbsp;
+    = link_to "http://www.facebook.com/pages/BonsaiERP/337187402983197" do
+      = image_tag "facebook.png", :title => "Facebook", :alt => "Facebook"
