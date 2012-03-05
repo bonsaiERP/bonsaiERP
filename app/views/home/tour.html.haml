@@ -1,5 +1,17 @@
 :css
   .carousel, .carousel-inner{ height: 519px; }
+  .carousel-inner .item {
+    width: 940px;
+    float: left;
+    margin: 0px;
+  }
+
+  .carousel-control{
+    background: rgba(0, 0, 0, 0.3);
+  }
+  .carousel-control:hover{
+    background: rgba(0, 0, 0, 0.7);
+  }
 
 #banner
   %h2 Producto
@@ -18,19 +30,32 @@
           Esta es la primera pantalla que aparecerá al ingresar. 
           Podrá ver un resumen de bancos, cajas, cuanto le deben, cuanto se debe, inventarios con mínimos, etc.
 
-    .item
+    .item.active
       = image_tag "ventas.png", :size => "940x514" 
       .carousel-caption
         %h4 Compras y Ventas
         %p 
-          Controla sus compras y ventas permitiendole controlar la venta de productos o servicios, seleccionar cliente o proveedor, realizar ventas o compras a créditdo y saber quien y cuando se realiza una operación 
+          Controla sus compras y ventas permitiendole controlar la venta de productos o servicios, seleccionar cliente o proveedor, realizar ventas o compras a créditdo y saber quien y cuando se realizo una operación 
 
-    .item
+    .item.active
+      = image_tag "inventory.png", :size => "940x514" 
+      .carousel-caption
+        %h4 Inventario
+        %p 
+          Almacenes ilimitados con control de las operaciones y kardex de ítems además de poder definir los inventarios mínimos para un determinado ítem.
+
+    .item.active
       = image_tag "banks.png", :size => "940x514" 
       .carousel-caption
-        %h4 Bancos y Cajas
+        %h4 Cuentas Bancos y Cajas
         %p 
-          Controla sus compras y ventas permitiendole controlar la venta de productos o servicios, seleccionar cliente o proveedor, realizar ventas o compras a créditdo y saber quien y cuando se realiza una operación.
+        Registre los movimientos que se han realizado. Revisión de transacciones que faltan ser revisadas o conciliadas. Multiples monedas.
+    .item.active
+      = image_tag "clients.png", :size => "940x514" 
+      .carousel-caption
+        %h4 Clientes y Proveedores
+        %p 
+          Sepa toda la inforación relacionada a un cliente o proveedor, cuentas por pagar, cuentas por cobrar, ventas o compras realizadas al mismo.
 
   // Carousel nav
   %a.carousel-control.left( href="#tour" data-slide="prev") &lsaquo;
@@ -38,5 +63,56 @@
 
 :javascript
   $(function() {
-    $('#tour').carousel({interval: 30000});
-  })
+    var size = $('.item').length,
+        offset = 0,
+        width = 940;
+
+    var last = size * width - width;
+
+    var $inner = $('.carousel-inner');
+
+    // Moves the carousel
+    function move(to) {
+      if(offset == 0 && to == "left") {
+        return false
+      }
+
+      if(offset == -last && to == "right") {
+        return false;
+      }
+
+      if( to == "left") {
+        offset = offset + width;
+      }else{
+        offset = offset - width;
+      }
+
+      $inner.animate({ "marginLeft": offset + "px" }, 600);
+
+      showHideMove();
+    }
+
+    function showHideMove(){
+      if(offset == -last) {
+        $('.carousel .right').hide();
+      }else{
+        $('.carousel .right').show();
+      }
+
+      if(offset == 0) {
+        $('.carousel .left').hide();
+      }else {
+        $('.carousel .left').show();
+      }
+    }
+
+    showHideMove();
+
+    $('.carousel .left').click(function() { move("left") });
+    $('.carousel .right').click(function() { move("right") });
+
+    $('.item:last').addClass("end");
+    $('.item:first').addClass("start");
+    $('.carousel').css({overflow:"hidden"});
+    $('.carousel-inner').css({width: (size * 940) + "px"});
+  });
