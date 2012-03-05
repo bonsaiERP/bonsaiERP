@@ -118,11 +118,7 @@ ul{
     top: 50px;
     right: 140px;
   }
-  //#tour{
-  //  position: absolute;
-  //  top: 50px;
-  //  right: 5px;
-  //}
+
   #title{
     position: absolute;
     width: 380px;
@@ -146,8 +142,22 @@ ul{
     top: 50px;
     left: 5px;
   }
+
+  #demo-link{
+    @include box-shadow();
+    position: absolute;
+    top: 270px;
+    right: 130px;
+  }
 }
 #banner{
+  position: relative;
+  #demo-link{
+    @include box-shadow();
+    position: absolute;
+    top: 30px;
+    right: 10px;
+  }
 }
 
 .ui-dialog{
