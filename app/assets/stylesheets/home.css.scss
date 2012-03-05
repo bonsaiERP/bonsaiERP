@@ -5,7 +5,6 @@ body{
   text-align: center;
   padding: 0px;
   margin: 0px;
-  font-family: Segoe UI,Arial,sans-serif;
   font-size: 13px;
   background: $back url(fondo2.png) repeat-x 0px -30px;
 }
@@ -119,11 +118,11 @@ ul{
     top: 50px;
     right: 140px;
   }
-  #tour{
-    position: absolute;
-    top: 50px;
-    right: 5px;
-  }
+  //#tour{
+  //  position: absolute;
+  //  top: 50px;
+  //  right: 5px;
+  //}
   #title{
     position: absolute;
     width: 380px;
@@ -244,24 +243,6 @@ ul{
     right: 30px; 
   }
 }
-/* CSS de Tour*/
-.tour_part{
-  h2{ 
-    color: darken($green, 20%);
-    margin: 10px 0px;
-    padding: 10px;
-    //background: #F7F7F7 url(imagenes2.png);
-  }
-  margin-top: 10px;
-  width: 100%;
-  clear: both;
-  .img{ float: left; }
-  .comment{ 
-    float: left;
-    width: 40%;
-    margin-left: 20px;
-  }
-}
 
 /* CSS de Contactnos*/
 #contact{
@@ -315,23 +296,6 @@ ul.team{
 #media{
   margin-top: 40px;
   clear: both;
-}
-
-.facebook{
-  height: 32px;
-  padding-left: 35px;
-  background: url(/assets/facebook.png) no-repeat;
-  display: inline-block;
-  padding-top: 9px;
-  margin:0px 5px;
-}
-.twitter{
-  height: 32px;
-  padding-left: 35px;
-  background: url(/assets/twitter.png) no-repeat;
-  display: inline-block;
-  padding-top: 9px;
-  margin:0px 5px;
 }
 
 // Pirces

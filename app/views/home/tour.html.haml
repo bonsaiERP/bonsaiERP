@@ -1,67 +1,42 @@
+:css
+  .carousel, .carousel-inner{ height: 519px; }
+
 #banner
   %h2 Producto
   -#=link_to image_tag("prueba.png"), "/users/sign_up", :id => "register", :class => 'but'
 
-%ul.pad-20.no-list
-  %li.b= link_to "Resumen", "#resume"
-  %li.b= link_to "Compras y Ventas", "#sales"
-  %li.b= link_to "Inventarios", "#inventory"
-  %li.b= link_to "Cuentas Bancarias y Cajas", "#banks"
-  %li.b= link_to "Clientes y Proveedores", "#clients"
+%br
+%br 
 
-#separacion
+#tour.carousel.slide
+  .carousel-inner
+    .item.active
+      = image_tag "dashboard.png", :size => "940x514"
+      .carousel-caption
+        %h4 Resumen
+        %p 
+          Esta es la primera pantalla que aparecerá al ingresar. 
+          Podrá ver un resumen de bancos, cajas, cuanto le deben, cuanto se debe, inventarios con mínimos, etc.
 
-#resume.tour_part
-  %h2 Resumen
-  = image_tag "dashboard.jpg", :width => "500px", :class => 'img'
-  .comment
-    %p 
-      Esta es la primera pantalla que aparecerá al ingresar. 
-      Podrá ver un resumen de bancos, cajas, cuanto le deben, cuanto se debe, inventarios con mínimos, etc.
+    .item
+      = image_tag "ventas.png", :size => "940x514" 
+      .carousel-caption
+        %h4 Compras y Ventas
+        %p 
+          Controla sus compras y ventas permitiendole controlar la venta de productos o servicios, seleccionar cliente o proveedor, realizar ventas o compras a créditdo y saber quien y cuando se realiza una operación 
 
-#sales.tour_part
-  %h2 Compras y Ventas
-  = image_tag "sales_buys.jpg", :width => "500px", :class => 'img'
-  .comment
-    %p bonsai controla sus compras y ventas:
-    %ul
-      %li Registra los productos o servicios que se compran o venden generando las notas de compra, venta y contización.
-      %li Registra al proveedor o al cliente.
-      %li Registra quién,  cómo y cuándo realizó la transacción.
-      %li Registra que cuenta bancaria o caja intervino en dicha operación.
+    .item
+      = image_tag "banks.png", :size => "940x514" 
+      .carousel-caption
+        %h4 Bancos y Cajas
+        %p 
+          Controla sus compras y ventas permitiendole controlar la venta de productos o servicios, seleccionar cliente o proveedor, realizar ventas o compras a créditdo y saber quien y cuando se realiza una operación.
 
-#inventory.tour_part
-  %h2 Inventarios
-  = image_tag "inventarios.jpg", :width => "500px", :class => 'img'
-  .comment
-    %p Puede saber cuánto tiene el momento que usted quiera.
+  // Carousel nav
+  %a.carousel-control.left( href="#tour" data-slide="prev") &lsaquo;
+  %a.carousel-control.right( href="#tour" data-slide="next") &rsaquo;
 
-    %p En inventarios usted puede controlar todos sus productos, no sólo los que comercializa, sino también las herramientas y enseres que necesita para operar en su empresa:
-
-    %ul
-      %li Puede crear los almacenes que necesite y registrar en ellos sus productos cuando realiza una compra o una venta.
-      %li Cuando realice una venta se descuenta automáticamente los ítems vendidos. Cuando su material llegue a un mínimo (que usted mismo define) bonsai le alerta que ese material se está acabando y debe reabastecerse.
-      %li Le avisa los productos pendientes de entrega y de recojo.
-
-#banks.tour_part
-  %h2 Cuentas Bancarias y Cajas
-  = image_tag "accounts.jpg", :width => "500px", :class => 'img'
-  .comment
-    %p Usted puede controlar los movimientos de sus cuentas bancarias o cajas.
-
-    %ul
-      %li Puede crear las cuentas bancarias y cajas que necesite.
-      %li Registra los movimientos que se han realizado. bonsai le avisa las transacciones que faltan ser revisadas o conciliadas. 
-
-
-#clients.tour_part
-  %h2 Clientes y Proveedores
-  = image_tag "clients_suppliers.jpg", :width => "500px", :class => 'img'
-  .comment
-    %p Sepa de un vistazo cuanto le deben  cuanto debe.
-    %ul
-      %li Registra a sus clientes y proveedores creándoles cuentas independientes.
-      %li Registra los cobros o pagos de clientes y proveedores. Además que bonsai le hará recuerdo cuando vence algún cobro o pago.
-      %li Puede almacenar los datos más relevantes de sus clientes y proveedores.
-
-.clear
+:javascript
+  $(function() {
+    $('#tour').carousel({interval: 30000});
+  })
