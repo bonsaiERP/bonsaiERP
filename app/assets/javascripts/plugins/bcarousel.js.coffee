@@ -1,4 +1,6 @@
 # Carousel based on twitter-bootstrap
+# @creator: Boris Barroso
+# @email: boriscyber@gmail.com
 class Bcarousel
   constructor: (@container, @width)->
     @$container = $(@container)
