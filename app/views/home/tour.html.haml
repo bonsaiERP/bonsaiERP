@@ -7,7 +7,7 @@
   }
 
   .carousel-control{
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.4);
   }
   .carousel-control:hover{
     background: rgba(0, 0, 0, 0.7);
@@ -21,7 +21,7 @@
 %br
 %br 
 
-#tour.carousel.slide
+#tour.carousel
   .carousel-inner
     .item.active
       = image_tag "dashboard.png", :size => "940x514"
@@ -43,7 +43,7 @@
       .carousel-caption
         %h4 Inventario
         %p 
-          Almacenes ilimitados con control de las operaciones y kardex de ítems además de poder definir los inventarios mínimos para un determinado ítem.
+          Almacenes ilimitados con control de las operaciones y kardex de ítems además de poder definir los inventarios mínimos para un determinado ítem. Transferencias entre almacenes.
 
     .item.active
       = image_tag "banks.png", :size => "940x514" 
@@ -59,61 +59,10 @@
           Sepa toda la inforación relacionada a un cliente o proveedor, cuentas por pagar, cuentas por cobrar, ventas o compras realizadas al mismo.
 
   // Carousel nav
-  %a.carousel-control.left( href="#tour" data-slide="prev") &lsaquo;
-  %a.carousel-control.right( href="#tour" data-slide="next") &rsaquo;
+  %a.carousel-control.left( href="javascript:" data-slide="prev") &lsaquo;
+  %a.carousel-control.right( href="javascript:" data-slide="next") &rsaquo;
 
 :javascript
   $(function() {
-    var size = $('.item').length,
-        offset = 0,
-        width = 940;
-
-    var last = size * width - width;
-
-    var $inner = $('.carousel-inner');
-
-    // Moves the carousel
-    function move(to) {
-      if(offset == 0 && to == "left") {
-        return false
-      }
-
-      if(offset == -last && to == "right") {
-        return false;
-      }
-
-      if( to == "left") {
-        offset = offset + width;
-      }else{
-        offset = offset - width;
-      }
-
-      $inner.animate({ "marginLeft": offset + "px" }, 600);
-
-      showHideMove();
-    }
-
-    function showHideMove(){
-      if(offset == -last) {
-        $('.carousel .right').hide();
-      }else{
-        $('.carousel .right').show();
-      }
-
-      if(offset == 0) {
-        $('.carousel .left').hide();
-      }else {
-        $('.carousel .left').show();
-      }
-    }
-
-    showHideMove();
-
-    $('.carousel .left').click(function() { move("left") });
-    $('.carousel .right').click(function() { move("right") });
-
-    $('.item:last').addClass("end");
-    $('.item:first').addClass("start");
-    $('.carousel').css({overflow:"hidden"});
-    $('.carousel-inner').css({width: (size * 940) + "px"});
-  });
+    $('#tour').bcarousel(940);
+  })
