@@ -49,7 +49,7 @@ feature "Test loanin" do
     li.account_ledgers.should be_empty
     li.pay_plans.should be_empty
 
-    account.amount.reload.should == amt
+    account.reload.amount.should == amt
 
     li.approve_loan.should be_true
     li.account_ledgers.should_not be_empty
@@ -57,7 +57,9 @@ feature "Test loanin" do
     al.amount.should == li.balance
     al.should be_persisted
     al.reference.should =~ /Ingreso/
-    li.pay_plans.first.amount.should == li.balance
+    pp = li.pay_plans.first
+    pp.amount.should == li.balance
+    p.should be_persisted
 
     account.reload.amount.should == amt + li.balance
   end
