@@ -8,18 +8,21 @@ module Models::Loan::Approve
       self.pay_plans.build(due_date: Date.today, amount: self.total)
       al = self.account_ledgers.build(amount: balance, 
                           account_id: account_id,
-                          reference: "First",
+                          reference: create_reference,
                           operation: ledger_operation,
                           exchange_rate: 1,
                           currency_id: currency_id
                       )
+      al.conciliation = false
       ret = self.save
-      puts "Con: #{al.can_conciliate?}"
-      puts "#{al.active?} :: #{al.conciliation?}"
       ret = al.conciliate_account && ret
       raise ActiveRecord::Rollback unless ret
     end
 
     ret
+  end
+
+  def create_reference
+    "#{reference_title} por prestamo #{ref_number}"
   end
 end

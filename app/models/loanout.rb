@@ -9,4 +9,8 @@ class Loanout < Loan
   def ledger_operation
     "out"
   end
+
+  def reference_title
+    "Egreso"
+  end
 end

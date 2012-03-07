@@ -11,4 +11,7 @@ class Loanin < Loan
     "in"
   end
 
+  def reference_title
+    "Ingreso"
+  end
 end

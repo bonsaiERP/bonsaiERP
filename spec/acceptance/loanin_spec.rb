@@ -42,6 +42,7 @@ feature "Test loanin" do
 
   scenario "It should save and create firs pay_plan after approve" do
     li = Loanin.create!(valid_attributes) {|l| l.action = "edit" }
+    amt = account.amount
 
     li.should be_persisted
     li.should be_is_in_edit
@@ -50,7 +51,12 @@ feature "Test loanin" do
 
     li.approve_loan.should be_true
     li.account_ledgers.should_not be_empty
-    li.account_ledgers.first.amount.should == li.balance
+    al = li.account_ledgers.first
+    al.amount.should == li.balance
+    al.should be_persisted
+    al.reference.should =~ /Ingreso/
     li.pay_plans.first.amount.should == li.balance
+
+    account.reload.amount.should == amt + li.balance
   end
 end
