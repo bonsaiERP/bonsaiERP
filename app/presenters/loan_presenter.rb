@@ -19,4 +19,8 @@ class LoanPresenter < BasePresenter
       h.loans_path
     end
   end
+
+  def account_currencies
+    Hash[Account.money.values_of(:id, :currency_id)]
+  end
 end

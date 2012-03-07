@@ -23,6 +23,7 @@ module Models::Loan::Base
   def set_create_data
     self.creator_id = UserSession.user_id
     self.state = "draft"
+    self.balance = 0
   end
 
   def set_common_save_data

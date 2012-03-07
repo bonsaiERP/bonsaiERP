@@ -26,7 +26,7 @@ class Loan < ActiveRecord::Base
   belongs_to :contact
   belongs_to :currency
   belongs_to :project
-  belongs_to :account
+  belongs_to :account, :conditions => {:accountable_type => "MoneyStore"}
 
   has_many :pay_plans, :foreign_key => "transaction_id"
   has_many :payments, :foreign_key => "transaction_id"
@@ -52,4 +52,6 @@ class Loan < ActiveRecord::Base
   # Accessible attributes
   attr_accessible :ref_number, :contact_id, :total, :project_id, :account_id
 
+  # Delegates
+  delegate :symbol, :name, :to => :currency, :prefix => true, :allow_nil => true
 end

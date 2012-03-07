@@ -6,6 +6,10 @@ class Loanin < Loan
     "in"
   end
 
+  def to_s
+    "Prestamo recibido #{ref_number}"
+  end
+
   protected
   def ledger_operation
     "in"

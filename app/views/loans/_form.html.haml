@@ -1,4 +1,5 @@
 = simple_form_for @loan, :url => presenter.loan_url do |f|
+  =f.input :operation, :as => :hidden
   .row
     .span3
       = f.input :ref_number, :label => 'Nº de referencia', :input_html => {:size => 20}
@@ -10,7 +11,7 @@
       = f.input :contact_id, :as => :contact, :label => false, :input_html => {:id => 'transaction_contact_id'}
   .row
     .span6
-      = f.association :account, :label => "Cuenta", :input_html => {:id => 'currency_id'}
+      = f.association :account, :label => "Cuenta", :input_html => {:id => 'account_id'}
     .span6
       = f.input :total, :label => "Cantidad <span class='currency'></span>", :input_html => { :type => "decimal" }
 
@@ -21,16 +22,18 @@
     $('#transaction_contact_id').contactAutocomplete(["Client", "Supplier"], {'id': 'contact_autocomplete'});
 
     var currencies = #{Currency.to_hash.to_json}
+    var accounts = #{presenter.account_currencies.to_json}
+
     function setSymbol() {
-      var val = $('#currency_id').val();
+      var val = $('#account_id').val();
 
       if(val) {
-        $('.currency').html(currencies[val].symbol);
+        $('.currency').html(currencies[accounts[val]].symbol);
       }
     }
     setSymbol();
 
-    $('#currency_id').live('change', function() { setSymbol() });
+    $('#account_id').live('change', function() { setSymbol() });
 
 
   });

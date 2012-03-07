@@ -99,7 +99,7 @@ class Account < ActiveRecord::Base
     Hash[ Account.money.map {|v| [v.id, Hash[l.call(v)] ]  } ]
   end
 
-  # Creates a hash for with the amount for each curency available
+  # Creates a hash for with the amount for each currency available
   # {currency_id => amount}
   def currencies_to_hash
     Hash[ account_currencies.map {|ac| [ac.currency_id, ac.amount] } ]

@@ -23,16 +23,14 @@ class LoansController < TransactionsController #ApplicationController
   # GET /incomes/1
   # GET /incomes/1.xml
   def show
-    respond_to do |format|
-      format.html { render 'transactions/show' }
-      format.json  { render :json => @transaction }
-    end
+    @loan = Loan.find(params[:id])
   end
 
   # GET /incomes/new
   # GET /incomes/new.xml
   def new
-    set_loan(operation: params[:operation])
+    @loan = set_loan(operation: params[:operation])
+    @loan.action = "edit"
   end
 
   # GET /incomes/1/edit
@@ -44,10 +42,11 @@ class LoansController < TransactionsController #ApplicationController
   def create
     data = params[:loanin] || params[:loanout]
     @loan = set_loan(data)
+    @loan.action = "edit"
 
     respond_to do |format|
       if @loan.save
-        format.html { redirect_to(loans_path(@loan.id), :notice => 'Se ha creado un prestamo a ser aprobado.') }
+        format.html { redirect_to(loan_path(@loan.id), :notice => 'Se ha creado un prestamo a ser aprobado.') }
       else
         format.html { render "new" }
       end
@@ -92,30 +91,6 @@ class LoansController < TransactionsController #ApplicationController
     anchor = 'payments' if @transaction.cash?
 
     redirect_to income_path(@transaction, :anchor => anchor)
-  end
-
-  # PUT /incomes/:id/approve_credit
-  def approve_credit
-    @transaction = Income.find(params[:id])
-    if @transaction.approve_credit params[:income]
-      flash[:notice] = "Se aprobó correctamente el crédito."
-    else
-      flash[:error] = "Existio un error al aprobar el crédito."
-    end
-
-    redirect_to @transaction
-  end
-
-  def approve_deliver
-    @transaction = Income.find(params[:id])
-
-    if @transaction.approve_deliver
-      flash[:notice] = "Se aprobó la entrega de material."
-    else
-      flash[:error] = "Existio un error al aprobar la entrega de material."
-    end
-    
-    redirect_to @transaction
   end
 
   def history

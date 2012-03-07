@@ -56,7 +56,8 @@ module Controllers::Authorization
     admin_hash.merge(
       'users' => {'add_user'=> false, 'create_user' => false, 'edit_user' => false, 'update_user' => false, 'edit' => false, 'update' => false},
       'taxes' => {'index' => false, 'show' => false, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false},
-      'organisations' => false
+      'organisations' => false,
+      'loans' => {'new' => false, 'create' => false}
     )
   end
 
