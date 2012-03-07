@@ -49,6 +49,8 @@ feature "Test loanin" do
     li.account_ledgers.should be_empty
     li.pay_plans.should be_empty
 
+    account.amount.reload.should == amt
+
     li.approve_loan.should be_true
     li.account_ledgers.should_not be_empty
     al = li.account_ledgers.first
