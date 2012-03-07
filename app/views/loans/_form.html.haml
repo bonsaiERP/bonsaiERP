@@ -10,7 +10,7 @@
       = f.input :contact_id, :as => :contact, :label => false, :input_html => {:id => 'transaction_contact_id'}
   .row
     .span6
-      = f.association :currency, :label => "Moneda", :input_html => {:id => 'currency_id'}
+      = f.association :account, :label => "Cuenta", :input_html => {:id => 'currency_id'}
     .span6
       = f.input :total, :label => "Cantidad <span class='currency'></span>", :input_html => { :type => "decimal" }
 

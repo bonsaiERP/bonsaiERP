@@ -5,4 +5,8 @@ class Loanout < Loan
   def operation
     "out"
   end
+
+  def ledger_operation
+    "out"
+  end
 end

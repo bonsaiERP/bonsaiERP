@@ -54,6 +54,8 @@ es:
         empty_items: "No existe items para realizar la operación"
         stock_quantity: "Existen items que exceden la cantidad máxima"
       repeated_items: "Existen items repetidos, por favor revise"
+      loan:
+        ilegal_account: "Debe ingresar una cuenta correcta"
         
   account_ledger:
     payment_description: "%{pay_type} de %{trans} %{ref}, cuenta %{account}"

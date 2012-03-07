@@ -74,6 +74,14 @@ class Account < ActiveRecord::Base
     end
   end
 
+  def is_money?
+    accountable_type === "MoneyStore"
+  end
+
+  def is_contact?
+    accountable_type === "Contact"
+  end
+
   def amount_to_conciliate()
     amount + account_ledger_details.sum(:amount)
   end

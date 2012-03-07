@@ -5,4 +5,10 @@ class Loanin < Loan
   def operation
     "in"
   end
+
+  protected
+  def ledger_operation
+    "in"
+  end
+
 end

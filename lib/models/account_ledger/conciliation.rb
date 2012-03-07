@@ -163,7 +163,7 @@ module Models::AccountLedger::Conciliation
 
   # Determines if the account ledger can conciliate
   def can_conciliate?
-    not(conciliation?) and active?
+    not(conciliation?) && active?
   end
 
   # Updates the transaction if needed if all the payments have been done and conciliated
