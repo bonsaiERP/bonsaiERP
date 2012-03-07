@@ -11,4 +11,12 @@ class LoanPresenter < BasePresenter
       "Dar prestamo"
     end
   end
+
+  def loan_url
+    if loan.persisted?
+      h.edit_loan_path(loan.id)
+    else
+      h.loans_path
+    end
+  end
 end

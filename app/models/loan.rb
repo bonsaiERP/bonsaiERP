@@ -6,7 +6,7 @@ class Loan < ActiveRecord::Base
 
   self.table_name = "transactions"
 
-  STATES   = ["draft"  , "approved" , "paid" , "due", "inventory", "nulled", "discount"]
+  STATES   = ["draft"  , "approved" , "paid" , "due", "inventory", "nulled"]
   TYPES    = ['Loanin'  , 'Loanout']
   DECIMALS = 2
   ###############################
