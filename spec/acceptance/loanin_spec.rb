@@ -59,7 +59,7 @@ feature "Test loanin" do
     al.reference.should =~ /Ingreso/
     pp = li.pay_plans.first
     pp.amount.should == li.balance
-    p.should be_persisted
+    pp.should be_persisted
 
     account.reload.amount.should == amt + li.balance
   end
