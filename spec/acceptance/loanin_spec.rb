@@ -8,6 +8,7 @@ feature "Test loanin" do
     create_currencies
     create_account_types
     UserSession.current_user = mock_model(User, id: 10)
+    OrganisationSession.stub!(currency_id: 1)
   end
 
   let!(:client) { Factory.create(:client) }
@@ -43,6 +44,7 @@ feature "Test loanin" do
   scenario "It should save and create firs pay_plan after approve" do
     li = Loanin.create!(valid_attributes) {|l| l.action = "edit" }
     amt = account.amount
+    client.account_cur(1).amount.should == 0
 
     li.should be_persisted
     li.should be_is_in_edit
@@ -62,5 +64,6 @@ feature "Test loanin" do
     pp.should be_persisted
 
     account.reload.amount.should == amt + li.balance
+    client.account_cur(1).amount.should == -li.balance
   end
 end

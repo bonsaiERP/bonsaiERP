@@ -208,6 +208,7 @@ module Models::AccountLedger::Conciliation
 
 
   private
+
   def update_related_accounts
     account.amount += amount
     if to_id.present? and transaction_id.blank?

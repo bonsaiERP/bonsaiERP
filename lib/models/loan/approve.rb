@@ -13,9 +13,9 @@ module Models::Loan::Approve
                           exchange_rate: 1,
                           currency_id: currency_id
                       )
-      al.conciliation = false
+      al.conciliation = true
       ret = self.save
-      ret = al.conciliate_account && ret
+      ret = ret && update_related_accounts
       raise ActiveRecord::Rollback unless ret
     end
 
@@ -24,5 +24,16 @@ module Models::Loan::Approve
 
   def create_reference
     "#{reference_title} por prestamo #{ref_number}"
+  end
+
+  def update_related_accounts
+    if self.is_a?(Loanin)
+      self.account.amount += balance
+      contact_ac = self.contact.account_cur(currency_id)
+      contact_ac.amount += -balance
+    else
+    end
+      
+    self.account.save && contact_ac.save
   end
 end
