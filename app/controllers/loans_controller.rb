@@ -8,6 +8,7 @@ class LoansController < TransactionsController #ApplicationController
   # GET /incomes
   # GET /incomes.xml
   def index
+    @loans = Loan.get_loans
     #if params[:search].present?
     #  @incomes = Income.search(params)#.page(@page)
     #  p = params.dup
@@ -29,19 +30,20 @@ class LoansController < TransactionsController #ApplicationController
   # GET /incomes/new
   # GET /incomes/new.xml
   def new
-    @loan = set_loan(operation: params[:operation])
-    @loan.action = "edit"
+    set_loan(operation: params[:operation])
   end
 
   # GET /incomes/1/edit
   def edit
+    @loan = Loan.get_loan(params[:id])
+    check_loan(@loan)
   end
 
   # POST /incomes
   # POST /incomes.xml
   def create
     data = params[:loanin] || params[:loanout]
-    @loan = set_loan(data)
+    set_loan(data)
     @loan.action = "edit"
 
     respond_to do |format|
@@ -56,12 +58,15 @@ class LoansController < TransactionsController #ApplicationController
   # PUT /incomes/1
   # PUT /incomes/1.xml
   def update
-    @transaction.attributes = params[:income]
-    if @transaction.save_trans
-      redirect_to @transaction, :notice => 'La proforma de venta fue actualizada!.'
+    @loan = Loan.get_loan(params[:id])
+    check_loan(@loan)
+    data = params[:loanin] || params[:loanout]
+    @loan.action = "edit"
+
+    if @loan.update_attributes(data)
+      redirect_to loan_path(@loan.id)
     else
-      @transaction.transaction_details.build unless @transaction.transaction_details.any?
-      render get_template(@transaction)
+      render "edit"
     end
   end
 
@@ -108,11 +113,26 @@ class LoansController < TransactionsController #ApplicationController
     case
     when data[:operation] == "in"
       @loan = Loanin.new(data)
+      @loan.action = "edit"
     when data[:operation] == "out"
       @loan = Loanout.new(data)
+      @loan.action = "edit"
     else
       flash[:error] = "Faltan parametros"
+      return redirect_to loans_path
+    end
+  end
+
+  def check_loan(loan)
+    unless loan.respond_to?(:is_loan?)
+      flash[:error] = "Ha seleccionado un registro incorrecto"
       redirect_to loans_path
+      return
+    end
+
+    unless loan.draft?
+      flash[:warning] = "El registro no se puede editar"
+      return redirect_to loan_path(loan.id)
     end
   end
 end

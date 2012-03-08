@@ -49,9 +49,23 @@ class Loan < ActiveRecord::Base
     CODE
   end
 
-  # Accessible attributes
-  attr_accessible :ref_number, :contact_id, :total, :project_id, :account_id
 
   # Delegates
   delegate :symbol, :name, :to => :currency, :prefix => true, :allow_nil => true
+
+  def is_loan?
+    [Loanin, Loanout].include?(self.class)
+  end
+
+  # Class Methods
+  class << self
+    def get_loans
+      Loan.where(type: ["Loan", "Loanin", "Loanout"])
+    end
+
+    def get_loan(_id)
+      Loan.where(type: ["Loan", "Loanin", "Loanout"], id: _id).first
+    end
+  end
+
 end

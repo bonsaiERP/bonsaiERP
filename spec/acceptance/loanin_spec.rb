@@ -69,4 +69,8 @@ feature "Test loanin" do
     account.reload.amount.should == amt + li.balance
     client.account_cur(1).amount.should == -li.balance
   end
+
+  scenario "It should receive payments" do
+
+  end
 end

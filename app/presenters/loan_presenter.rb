@@ -12,9 +12,17 @@ class LoanPresenter < BasePresenter
     end
   end
 
+  def edit_title
+    if loan.is_a?(Loanin)
+      "Editar prestamo recibido"
+    else
+      "Editar prestamo otorgado"
+    end
+  end
+
   def loan_url
     if loan.persisted?
-      h.edit_loan_path(loan.id)
+      h.loan_path(loan.id)
     else
       h.loans_path
     end

@@ -8,8 +8,11 @@ module Models::Loan::Base
       opt.before_create :set_create_data
       opt.before_save :set_common_save_data
 
+      # Accessible attributes
+      attr_accessible :ref_number, :contact_id, :total, :project_id, :account_id, :date
+
       # validations
-      opt.validates_presence_of :ref_number, :contact, :contact_id, :account_id, :total, :account_id
+      opt.validates_presence_of :ref_number, :contact, :contact_id, :account_id, :total, :account_id, :date
       opt.validates_presence_of :project, :if => "project_id.present?"
       opt.validates :contact_id, :contact => {:clases => ["Client", "Supplier"]}
       opt.validate  :account_is_money

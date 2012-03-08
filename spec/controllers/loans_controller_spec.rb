@@ -31,12 +31,6 @@ describe LoansController do
       flash[:error].should_not be_blank
     end
 
-    it 'should assing the default currency' do
-      get :new, operation: "in"
-      
-      assigns(:loan).currency_id.should == 2
-    end
-
   end
 
   describe "create"do
@@ -49,13 +43,12 @@ describe LoansController do
         post :create, loanin: {operation: "in", currency_id: 1}
 
         assigns(:loan).is_a?(Loanin).should be_true
-        assigns(:loan).currency_id.should == 1
       end
 
       it 'should redirect to the show view' do
-        post :create, loanin: {operation: "in", currency_id: 1}
+        post :create, loanin: {operation: "in"}
 
-        response.should redirect_to(loans_path(1))
+        response.should redirect_to(loan_path(1))
         flash[:notice].should_not be_blank
       end
     end
@@ -73,12 +66,67 @@ describe LoansController do
       end
 
       it 'should assing the correct loan' do
-        post :create, loanout: {operation: "out", currency_id: 1}
+        Loanout.any_instance.stub(save: true, id: 1)
+        post :create, loanout: {operation: "out", account_id: 1}
         
         assigns(:loan).is_a?(Loanout).should be_true
-        assigns(:loan).currency_id.should == 1
       end
     end
 
+  end
+
+  describe "edit" do
+  
+    it 'should redirect if the loan is not draft' do
+      loan = Loanin.new {|v| 
+        v.id = 10
+        v.state = "approved"
+      }
+      Loan.stub!(get_loan: loan)
+
+      get :edit, id: 10
+
+      response.should redirect_to(loan_path(10))
+    end
+
+    it 'should redirect if is not loan' do
+      Loan.stub!(get_loan: Transaction.new)
+
+      get :edit, id: 10
+
+      response.should redirect_to(loans_path)
+    end
+
+    it 'should render' do
+      loan = Loanin.new {|v| 
+        v.id = 10
+        v.state = "draft"
+      }
+      Loan.stub!(get_loan: loan)
+
+      get :edit, id: 10
+
+      response.should render_template('edit')
+    end
+  end
+
+  describe "update" do
+    it 'should redirect if is not a loan' do
+      Loan.get_loan(get_loan: Transaction.new)
+
+      put :update, id:1, loanin: {}
+
+      response.should redirect_to(loans_path)
+      flash[:warning].should_not be_blank
+    end
+
+    it 'should redirect if is not draft' do
+      Loan.stub!(get_loan: mock_model(is_loan?: true, draft: false, id: 10))
+
+      put :update, id: 10, loanin: {}
+
+      response.should redirect_to(loans_pat(10))
+      flash[:warning].should_not be_blank
+    end
   end
 end

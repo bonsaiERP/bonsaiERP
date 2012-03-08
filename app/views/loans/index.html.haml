@@ -20,3 +20,20 @@
       = link_to new_loan_path(:operation => 'in') do
         %i.icon-arrow-left
         Recibir prestamo
+
+%table.decorated
+  %tr
+    %th Referencia
+    %th Feha
+    %th Cantidad
+    %th Saldo
+    %th
+  - @loans.each do |loan|
+    %tr
+      %td= link_to loan, loan_path(loan.id)
+      %td=l loan.created_at
+      %td= ntc loan.total
+      %td= ntc loan.balance
+      %td
+        = link_to "editar", edit_loan_path(loan.id), :class => 'edit'
+

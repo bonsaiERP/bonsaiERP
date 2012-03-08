@@ -3,10 +3,14 @@
     = @loan
     %small= @loan.state
 
-%h2= link_to @loan.contact, @loan.contact
+
+%h2.n= link_to @loan.contact, @loan.contact
+%h3.n=l @loan.date
+
 .moneybox.fl
   %label TOTAL
   %h3#total_currency #{@loan.currency_symbol} #{ntc @loan.total}
+
 
 .moneybox.fl
   %label SALDO
