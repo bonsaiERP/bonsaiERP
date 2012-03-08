@@ -214,10 +214,10 @@ ActiveRecord::Schema.define(:version => 20120127123204) do
     t.integer  "transaction_id"
     t.date     "date"
     t.string   "ref_number"
-    t.string   "operation",       :limit => 10
+    t.string   "operation"
     t.string   "state"
     t.string   "description"
-    t.decimal  "total",                         :precision => 14, :scale => 2
+    t.decimal  "total",           :precision => 14, :scale => 2
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "contact_id"
@@ -277,6 +277,32 @@ ActiveRecord::Schema.define(:version => 20120127123204) do
 
   add_index "links", ["organisation_id"], :name => "index_links_on_organisation_id"
   add_index "links", ["user_id"], :name => "index_links_on_user_id"
+
+  create_table "loans", :force => true do |t|
+    t.integer "account_id"
+    t.integer "contact_id"
+    t.integer "currency_id"
+    t.integer "project_id"
+    t.integer "creator_id"
+    t.integer "modifier_id"
+    t.integer "nuller_id"
+    t.date    "date"
+    t.boolean "active",                                                   :default => true
+    t.decimal "total",                     :precision => 14, :scale => 2, :default => 0.0
+    t.decimal "balance",                   :precision => 14, :scale => 2, :default => 0.0
+    t.string  "ref_number"
+    t.string  "state",       :limit => 20
+    t.string  "type",        :limit => 20
+    t.string  "description"
+  end
+
+  add_index "loans", ["account_id"], :name => "index_loans_on_account_id"
+  add_index "loans", ["active"], :name => "index_loans_on_active"
+  add_index "loans", ["contact_id"], :name => "index_loans_on_contact_id"
+  add_index "loans", ["currency_id"], :name => "index_loans_on_currency_id"
+  add_index "loans", ["project_id"], :name => "index_loans_on_project_id"
+  add_index "loans", ["state"], :name => "index_loans_on_state"
+  add_index "loans", ["type"], :name => "index_loans_on_type"
 
   create_table "money_stores", :force => true do |t|
     t.integer  "currency_id"

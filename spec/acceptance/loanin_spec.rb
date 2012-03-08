@@ -32,7 +32,7 @@ feature "Test loanin" do
     li.ref_number.should == "123"
     li.contact_id.should == client.id
     li.total.should == 1000
-    li.balance.should == 1000
+    li.balance.should == 0
     li.creator_id.should == 10
     li.modified_by.should == 10
     li.currency_id.should == account.currency_id
