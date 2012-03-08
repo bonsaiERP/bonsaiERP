@@ -5,15 +5,20 @@ module Models::Loan::Approve
   def approve_loan
     ret = true
     self.class.transaction do
+      self.balance = total
       self.pay_plans.build(due_date: Date.today, amount: self.total)
-      al = self.account_ledgers.build(amount: balance, 
-                          account_id: account_id,
-                          reference: create_reference,
-                          operation: ledger_operation,
-                          exchange_rate: 1,
-                          currency_id: currency_id
-                      )
+
+      al = self.account_ledgers.build(
+        amount: balance,
+        account_id: account_id,
+        reference: create_reference,
+        operation: ledger_operation,
+        exchange_rate: 1,
+        currency_id: currency_id
+      )
       al.conciliation = true
+      al.status = "loan_first"
+
       ret = self.save
       ret = ret && update_related_accounts
       raise ActiveRecord::Rollback unless ret

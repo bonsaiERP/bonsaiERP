@@ -108,6 +108,7 @@ feature "Income", "test features" do
     p.operation.should == 'in'
     p.amount.should == 30
     p.interests_penalties.should == 0
+    p.transaction_type.should == "Income"
 
     i.payment?.should == true
 

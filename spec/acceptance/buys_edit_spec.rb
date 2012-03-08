@@ -112,7 +112,6 @@ feature "Buy edit", "test features" do
 
     b.total.should < paid_amt
     to_pay = paid_amt - b.total
-    puts to_pay
     supplier.account_cur(1)
     #puts supplier.account_cur(1).amount
     #i.reload
@@ -166,43 +165,44 @@ feature "Buy edit", "test features" do
   end
 
   scenario "check the number of items" do
-    i = Income.new(income_params)
-    i.save_trans.should be_true
+    b = Buy.new(buy_params)
+    b.save_trans.should be_true
 
-    i.balance.should == 3 * 10 + 5 * 20
-    bal = i.balance
+    b.balance.should == 3 * 10 + 5 * 20
+    bal = b.balance
 
-    i.total.should == i.balance
-    i.should be_draft
-    i.transaction_histories.should be_empty
-    i.modified_by.should == UserSession.user_id
+    b.total.should == b.balance
+    b.should be_draft
+    b.transaction_histories.should be_empty
+    b.modified_by.should == UserSession.user_id
 
-    # Approve de income
-    i.approve!.should be_true
-    i.should_not be_draft
-    i.should be_approved
+    # Approve de buy
+    b.approve!.should be_true
+    b.should_not be_draft
+    b.should be_approved
 
 
-    i = Income.find(i.id)
-    p = i.new_payment(:account_id => bank_account.id, :base_amount => i.balance, :exchange_rate => 1, :reference => 'Cheque 143234', :operation => 'out')
-    i.save_payment
-    i.reload
+    b = Buy.find(b.id)
+    p = b.new_payment(:account_id => bank_account.id, :base_amount => b.balance, :exchange_rate => 1, :reference => 'Cheque 143234', :operation => 'out')
+    b.save_payment
+    b.current_ledger.should be_persisted
+    b.current_ledger.transaction_type.should == "Buy"
+    b.reload
 
-    i.should be_paid
+    b.should be_paid
     p.should be_persisted
-    i.balance.should == 0
+    b.balance.should == 0
     # Needed
     p = AccountLedger.find(p.id)
     p.conciliate_account.should be_true
     
     p.should be_conciliation
 
-    i.reload
-    i.should be_deliver
+    b.reload
 
-    # IO operation for income
+    # IO operation for buy
     h = {
-      transaction_id: i.id, operation: 'out', store_id: 1
+      transaction_id: b.id, operation: 'in', store_id: 1
     }
 
     io = InventoryOperation.new(h)
@@ -212,23 +212,23 @@ feature "Buy edit", "test features" do
     io.should be_persisted
     io.reload
 
-    i.transaction_details(true)
-    i.transaction_details[0].balance.should == 5
-    i.transaction_details[1].balance.should == 0
+    b.transaction_details(true)
+    b.transaction_details[0].balance.should == 5
+    b.transaction_details[1].balance.should == 0
 
     # Should not allow change of quantity lesser than delivered
-    i = Income.find(i.id)
-    i.transaction_details[0].quantity = 4
+    b = Buy.find(b.id)
+    b.transaction_details[0].quantity = 4
    
-    i.save_trans.should be_false
-    i.transaction_details[0].errors[:quantity].should_not be_empty
+    b.save_trans.should be_false
+    b.transaction_details[0].errors[:quantity].should_not be_empty
 
-    det1 = i.transaction_details[0]
-    det2 = i.transaction_details[1]
+    det1 = b.transaction_details[0]
+    det2 = b.transaction_details[1]
 
     # Do not allow change of item id If item has any number of delivered
-    i = Income.find(i.id)
-    i.attributes = {
+    b = Buy.find(b.id)
+    b.attributes = {
       transaction_details_attributes: [
         {id: det1.id, item_id: 3, quantity: 6, price: det1.price},
         {id: det2.id, item_id: det2.item_id, quantity: det2.quantity, price: det2.price}
@@ -237,74 +237,87 @@ feature "Buy edit", "test features" do
     #i.transaction_details[0].item_id = 3
     #i.transaction_details[0].quantity = 6
 
-    i.transaction_details[0].quantity.should == 6
-    i.transaction_details[0].item_id.should == 3
+    b.transaction_details[0].quantity.should == 6
+    b.transaction_details[0].item_id.should == 3
 
-    i.save_trans.should be_false
-    i.transaction_details[0].errors[:item_id].should_not be_empty
-    i.transaction_details[0].item_id.should == 1
+    b.save_trans.should be_false
+    b.transaction_details[0].errors[:item_id].should_not be_empty
+    b.transaction_details[0].item_id.should == 1
 
     # Should not allow destroy for items that have been delivered
-    i = Income.find(i.id)
-    i.attributes = {
+    b = Buy.find(b.id)
+    b.attributes = {
       transaction_details_attributes: [
         {id: det1.id, item_id: det1.item_id, quantity: det1.quantity, price: det1.price},
         {id: det2.id, item_id: det2.item_id, quantity: det2.quantity, price: det2.price, _destroy: "1"}
       ]
     }
 
-    i.transaction_details[1].should be_marked_for_destruction
+    b.transaction_details[1].should be_marked_for_destruction
 
-    i.save_trans.should be_false
-    i.transaction_details[1].errors[:item_id].should_not be_empty
-    i.transaction_details[1].should_not be_marked_for_destruction
+    b.save_trans.should be_false
+    b.transaction_details[1].errors[:item_id].should_not be_empty
+    b.transaction_details[1].should_not be_marked_for_destruction
   end
 
-  scenario "Should not allow greater values" do
-    i = Income.new(income_params)
-    i.save_trans.should be_true
+  scenario "Make a devolution" do
+    pro = Project.create!(name: "Test project")
+    b = Buy.new(buy_params.merge(project_id: pro.id))
+    b.save_trans.should be_true
 
-    bal = i.balance
-    i.approve!.should be_true
-    p = i.new_payment(reference: "Idfdf", base_amount: bal -1, account_id: bank_account.id, exchange_rate: 1)
-    i.save_payment.should be_true
-    i.balance.should == 1
+    b.balance.should == 3 * 10 + 5 * 20
+    b.project_id.should == pro.id
+    bal = b.balance
 
-    i = Income.find(i.id)
-    p = i.new_payment(reference: "Idfdf", base_amount: 1.20, account_id: bank_account.id, exchange_rate: 1)
-    i.save_payment.should be_false
-    p.errors[:base_amount].should_not be_blank
+    b.modified_by.should == UserSession.user_id
 
-    # New payment and check balance
-    i = Income.find(i.id)
-    p = i.new_payment(reference: "Idfdf", base_amount: 1.10, account_id: bank_account.id, exchange_rate: 1)
-    i.save_payment.should be_true
-    i.balance.should == 0
+    # Approve income
+    b.approve!.should be_true
+    b.should_not be_draft
+
+    b.approve_credit(credit_reference: "Credit 001", credit_description: "OK").should be_true
+    b.pay_plans.count.should == 1
+
+    pp = b.pay_plans.first
+    pp.should be_persisted
+    b.edit_pay_plan(pp.id, payment_date: Date.today + 10.days, amount: 20, repeat: "1")
+    b.save_pay_plan.should be_true
+
+    pp_size = (b.total/20).ceil
+    b.pay_plans(true).count.should == pp_size
+    b.pay_plans.unpaid.count.should == pp_size
+
+    p = b.new_payment(reference: "First payment, almost all", base_amount: b.total, exchange_rate: 1, account_id: bank_account.id)
+    b.save_payment.should be_true
+    b.balance.should == 0
+
+    b.pay_plans(true).unpaid.count.should == 0
+    p.conciliate_account.should be_true
+
+    b.should_not be_devolution
+
+    dev_amt, ac = 20, supplier.account_cur(b.currency_id)
+    dev = b.new_devolution(base_amount: dev_amt, account_id: ac.id, reference: "First devolution", exchange_rate: 1)
+    b.save_devolution.should be_true
+
+    b.should be_devolution
+    
+    dev.should be_persisted
+    dev.project_id.should == pro.id
+
+    tot_ac = ac.amount
+
+    b.reload
+    b.pay_plans(true).unpaid.count.should == 1
+    b.pay_plans_balance.should == 20
+
+    dev.should be_persisted
+
+    dev.conciliate_account.should be_true
+    ac.reload
+    ac.amount.should == -(tot_ac + dev_amt)
 
   end
 
-  scenario "Should not allow greater values with other currency" do
-    i = Income.new(income_params.merge(currency_id: 2, exchange_rate: 2))
-    i.save_trans.should be_true
-
-    bal = i.balance
-    i.approve!.should be_true
-
-    i = Income.find(i.id)
-    p = i.new_payment(reference: "Idfdf", base_amount: bal * 2 + 1, account_id: bank_account.id, exchange_rate: 2)
-    i.save_payment.should be_false
-    p.should be_inverse
-
-    i = Income.find(i.id)
-    p = i.new_payment(reference: "Idfdf", base_amount: bal * 2, account_id: bank_account.id, exchange_rate: 2)
-
-    i.save_payment.should be_true
-
-    p = AccountLedger.find(p.id)
-    p.should be_persisted
-    p.should be_inverse
-
-    i.balance.should == 0
-  end
 end
 

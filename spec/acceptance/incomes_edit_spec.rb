@@ -199,6 +199,7 @@ feature "Income", "test features" do
     devolution.operation.should == "out"
     i.save_devolution.should be_true
     devolution.amount.should == -(total_paid - 20)
+    devolution.transaction_type == "Income"
 
     i.reload
     i.balance.should == bal + (total_paid - 20)
@@ -214,58 +215,7 @@ feature "Income", "test features" do
     al.conciliate_account.should be_true
     bank_account.reload
     bank_account.amount.should == cur_b_amount -(total_paid - 20)
-    # Make a devolution for the payment
 
-    #puts i.errors.messages
-
-    #i.reload
-    #
-    #i.should be_paid
-    #i.balance.should == 0
-    #i.transaction_histories.should_not be_empty
-    #hist = i.transaction_histories.first
-    #hist.user_id.should == i.modified_by
-
-    #i.transaction_details[1].quantity.should == 5
-    #i.total.should == 3 * 10 + 5 * 5
-    #i.balance.should == 0
-
-    #ac = client.account_cur(i.currency_id)
-    ##ac.amount.should == -(bal - i.balance)
-
-    ## Edit and change the amount so the state changes
-    #i = Income.find(i.id)
-    #edit_params = income_params.dup
-    #edit_params[:transaction_details_attributes][0][:id] = i.transaction_details[0].id
-
-    #edit_params[:transaction_details_attributes][1][:id] = i.transaction_details[1].id
-    #edit_params[:transaction_details_attributes][1][:quantity] = 5.1
-
-    #i.attributes = edit_params
-    #i.save_trans.should be_true
-    #i.reload
-
-    #i.should be_approved
-    #i.should_not be_deliver
-    #i.total.should ==  3 * 10 + 5 * 5.1
-    #i.balance.should ==  5 * 0.1
-
-    ## Change to  paid when changed again with the price
-    #i = Income.find(i.id)
-    #edit_params = income_params.dup
-    #edit_params[:transaction_details_attributes][0][:id] = i.transaction_details[0].id
-
-    #edit_params[:transaction_details_attributes][1][:id] = i.transaction_details[1].id
-    #edit_params[:transaction_details_attributes][1][:quantity] = 5
-
-    #i.attributes = edit_params
-    #i.save_trans.should be_true
-    #i.reload
-
-    #i.should be_paid
-    #i.total.should ==  3 * 10 + 5 * 5
-    #i.balance.should ==  0
-    #i.should be_deliver
   end
 
   scenario "make devolution from a Income with credit" do
@@ -305,7 +255,8 @@ feature "Income", "test features" do
 
     dev_amt, ac = 20, client.account_cur(i.currency_id)
     dev = i.new_devolution(base_amount: dev_amt, account_id: ac.id, reference: "First devlution", exchange_rate: 1)
-    i.save_devolution#.should be_true
+    i.save_devolution.should be_true
+    i.should be_devolution
     
     dev.should be_persisted
     dev.project_id.should == pro.id
@@ -416,6 +367,34 @@ feature "Income", "test features" do
     i.save_trans.should be_false
     i.transaction_details[1].errors[:item_id].should_not be_empty
     i.transaction_details[1].should_not be_marked_for_destruction
+
+    i.reload
+    # Make devolution of Items
+    h = {
+      transaction_id: i.id, operation: 'in', store_id: 1
+    }
+
+    i.should_not be_devolution
+    it1_old = i.transaction_details[0]
+    stock_old = Stock.where(store_id: 1, item_id: it1_old.item_id).first
+
+    io = InventoryOperation.new(h)
+    io.set_transaction
+    io.inventory_operation_details[0].quantity = 2
+    io.inventory_operation_details[0].item_id.should == it1_old.item_id
+    io.save_transaction.should be_true
+    io.should be_persisted
+
+    i.reload
+    it1 = i.transaction_details[0]
+    it1.item_id.should == it1_old.item_id
+    it1.balance.should == it1_old.balance + 2
+
+    stock = Stock.where(store_id: 1, item_id: it1_old.item_id).first
+    stock.quantity.should == stock_old.quantity + 2
+
+    i.reload
+    i.should be_devolution
   end
 
   scenario "Should not allow greater values" do

@@ -99,6 +99,7 @@ feature "Buy", "test features" do
 
     b.save_payment.should be_true
     p.should be_persisted
+    p.transaction_type.should == "Buy"
 
     #p.to_id.should == Account.org.find_by_original_type(b.class.to_s).id
     p.description.should_not == blank?

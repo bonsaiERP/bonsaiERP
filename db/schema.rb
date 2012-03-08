@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120127123204) do
+ActiveRecord::Schema.define(:version => 20120308030345) do
 
   create_table "account_balances", :force => true do |t|
     t.integer  "user_id"
@@ -78,6 +78,8 @@ ActiveRecord::Schema.define(:version => 20120127123204) do
     t.date     "payment_date"
     t.boolean  "inverse",                                                          :default => false
     t.integer  "project_id"
+    t.string   "transaction_type",    :limit => 30
+    t.string   "status",                                                           :default => "none"
   end
 
   add_index "account_ledgers", ["account_id"], :name => "index_account_ledgers_on_account_id"
@@ -95,8 +97,10 @@ ActiveRecord::Schema.define(:version => 20120127123204) do
   add_index "account_ledgers", ["project_id"], :name => "index_account_ledgers_on_project_id"
   add_index "account_ledgers", ["reference"], :name => "index_account_ledgers_on_reference"
   add_index "account_ledgers", ["staff_id"], :name => "index_account_ledgers_on_staff_id"
+  add_index "account_ledgers", ["status"], :name => "index_account_ledgers_on_status"
   add_index "account_ledgers", ["to_id"], :name => "index_account_ledgers_on_to_id"
   add_index "account_ledgers", ["transaction_id"], :name => "index_account_ledgers_on_transaction_id"
+  add_index "account_ledgers", ["transaction_type"], :name => "index_account_ledgers_on_transaction_type"
 
   create_table "account_types", :force => true do |t|
     t.string   "name"

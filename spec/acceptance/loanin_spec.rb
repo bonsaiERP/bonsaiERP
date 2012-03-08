@@ -50,15 +50,18 @@ feature "Test loanin" do
     li.should be_is_in_edit
     li.account_ledgers.should be_empty
     li.pay_plans.should be_empty
+    li.balance.should == 0
 
     account.reload.amount.should == amt
 
     li.approve_loan.should be_true
+    li.balance.should == li.total
     li.account_ledgers.should_not be_empty
     al = li.account_ledgers.first
     al.amount.should == li.balance
     al.should be_persisted
     al.reference.should =~ /Ingreso/
+    al.transaction_type.should == "Loanin"
     pp = li.pay_plans.first
     pp.amount.should == li.balance
     pp.should be_persisted

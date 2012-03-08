@@ -73,6 +73,7 @@ class InventoryOperation < ActiveRecord::Base
       inventory_operation_details.build
     else
       met = method_for_transaction_details
+
       self.contact_id = transaction.contact_id
       transaction.transaction_details.each do |det|
         inventory_operation_details.build(:item_id => det.item_id, :quantity => det.send(met))
@@ -82,10 +83,10 @@ class InventoryOperation < ActiveRecord::Base
 
   def method_for_transaction_details
     case
-    when(transaction.is_a?(Income) and out?) then :balance
-    when(transaction.is_a?(Buy) and in?) then :balance
-    when(transaction.is_a?(Income) and in?) then :delivered
-    when(transaction.is_a?(Income) and out?) then :delivered
+    when(transaction.is_a?(Income) && out?) then :balance
+    when(transaction.is_a?(Buy)    && in?)  then :balance
+    when(transaction.is_a?(Income) && in?)  then :delivered
+    when(transaction.is_a?(Income) && out?) then :delivered
     end
   end
 
@@ -204,6 +205,8 @@ class InventoryOperation < ActiveRecord::Base
       end
       
       set_transaction_delivered
+      
+      set_transaction_devolution
 
       ret = ( store.save && ret )
       ret = ( self.save && ret )
@@ -232,6 +235,15 @@ class InventoryOperation < ActiveRecord::Base
   def set_transaction_delivered
     if transaction.transaction_details.map(&:balance).uniq === [0]
       transaction.delivered = true
+    end
+  end
+
+  def set_transaction_devolution
+    case
+    when( transaction.is_a?(Income) && in?)
+      transaction.devolution = true
+    when( transaction.is_a?(Buy) && out?)
+      transaction.devolution = true
     end
   end
 
