@@ -2,7 +2,7 @@
   .row
     %h1.span8
       = presenter.title
-      %small.fs60#transaction_state{:class => @transaction.real_state}= @transaction.show_state
+      %small.pill#transaction_state{:class => @transaction.real_state}= @transaction.show_state
 
 .clear
 %h2.n.mt5= link_to @transaction.contact, @transaction.contact

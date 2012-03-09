@@ -6,7 +6,7 @@ class Loan < ActiveRecord::Base
 
   self.table_name = "transactions"
 
-  STATES   = ["draft"  , "approved" , "paid" , "due", "inventory", "nulled"]
+  STATES   = ["draft"  , "approved" , "paid" , "due", "nulled"]
   TYPES    = ['Loanin'  , 'Loanout']
 
   ACTIONS  = ["edit", "approve"]
@@ -55,6 +55,14 @@ class Loan < ActiveRecord::Base
 
   def is_loan?
     [Loanin, Loanout].include?(self.class)
+  end
+
+  def view_state
+    states_hash[state]
+  end
+
+  def states_hash
+    Hash[STATES.zip ["Proforma" , "Aprobado" , "Pagado" , "Vencido", "Anulado"]]
   end
 
   # Class Methods

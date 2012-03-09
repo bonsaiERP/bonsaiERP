@@ -1,0 +1,58 @@
+@import "colors"
+@import "compass"
+
+table
+  border-top: 1px solid rgb(198, 198, 198)
+  width: 100%
+  th
+    background: #EFEFEF
+    +linear-gradient(rgb(250,250,250), rgb(240, 240,240) )
+  
+  tr
+    border-bottom: 1px solid $gray
+  
+  td
+    padding: 7px 8px
+    a.edit, a.delete, a.destroy, a.duplicate
+      width: 16px
+      height: 16px
+      display: inline-block
+      float: left
+      text-indent: -1000em
+      overflow: hidden
+      font-size: 0px
+      margin: 0px
+      padding: 0px 2px
+    
+  td.line 
+    border-bottom: 1px solid $gray
+  tr.extra
+    border-bottom: none !important
+    h3
+      margin: 1px 0px
+    td
+      padding: 6px
+  
+  tr.pad_top
+    td 
+      padding-top: 15px 
+  
+  tr.false
+    color: $dark_gray
+  /* for Currency*/
+  td.cur
+    text-align: right
+    white-space: nowrap
+
+  tr.out td.color
+    color: $red
+
+table.nwl
+  td:last-child
+    white-space: nowrap
+    min-width: 50px
+
+table.nwf
+  td:first-child
+    white-space: nowrap
+

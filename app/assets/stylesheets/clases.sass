@@ -326,28 +326,24 @@ a.duplicate
 
 /*States*/
 .paid 
-  @include dashlet
   background-color: $green
-
+  color: white
 
 .draft 
-  @include dashlet
   background-color: darken($gray, 15%)
+  color: white
 
 .approved
-  @include dashlet
   background-color: $dark
+  color: white
 
 .due
-  @include dashlet
-  background-color: $red 
+  background-color: $red
+  color: white
 
 .nulled
-  @include dashlet
   background-color: darken($red, 20%)
-
-.dashlet
-  @include dashlet
+  color: white
 
 /***********************************/
 /* MENU CLASS */
@@ -449,3 +445,7 @@ span.warning
 
 hr.light
   background: #EEE
+
+.pill
+  +border-radius
+  padding: 2px

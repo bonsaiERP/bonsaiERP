@@ -1,4 +1,15 @@
 $(->
+  # Parses the date with a predefined format
+  # @param String date
+  # @param String type : Type to return
+  parseDate = (date, tipo)->
+    date = $.datepicker.parseDate($.datepicker._defaults.dateFormat, date )
+    d = [ date.getFullYear(), date.getMonth() + 1, date.getDate() ]
+    if 'string' == tipo
+      d.join("-")
+    else
+      d
+
   # Sets rails select fields with the correct datthe correct date
   setDateSelect = (el)->
     el = el || this
@@ -40,8 +51,7 @@ $(->
 
       if minute.length > 0 then transformMinuteSelect(minute)
 
-      # Solo despues de haber adicionado al DOM hay que 
-      # usar datepicker si se define el boton
+      # Only after added to DOM one must set button
       $(input).datepicker(
         yearRange: '1900:',
         showOn: 'both',

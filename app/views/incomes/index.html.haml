@@ -49,7 +49,7 @@
 = link_to "Buscar", "#search_income", :class => 'search'
 = paginate @incomes.page(@page)
 
-%table{ :class => 'decorated nwl' }
+%table.nwl.table.table-striped
   %thead
     %tr
       %th.tip{:title => 'Estado'} Est.
@@ -58,28 +58,28 @@
       %th Vence el
       %th Total
       %th Saldo
+
       = discount_th
+
       %th.tip{:title => "Contado Crédito"} Tipo
-      %th Fecha Hora
+      %th Fecha
       %th
 
   %tbody
     -  @incomes.each do |income|
       %tr{ :class => cycle(:odd, :even) }
         %td 
-          %span.bicon{:class => "#{income.real_state}", :title => income.show_state}
+          %span.bicon.pill{:class => "#{income.real_state}", :title => income.show_state}
         %td= link_to income.ref_number, income, :class => 'b'
         %td= income.contact
         %td= lo income.payment_date unless income.paid?
-        %td.cur #{income.currency_symbol} #{ntc income.total }
-        %td.cur #{income.currency_symbol} #{ntc income.balance }
+        %td #{income.currency_symbol} #{ntc income.total }
+        %td #{income.currency_symbol} #{ntc income.balance }
+
         = discount_cell income
-        -#%td
-          %span.cur #{income.currency_symbol} #{ntc income.discount_amount }
-          %br
-          #{ ntc income.discount_percentage } %
+
         %td= cash_credit(income.cash)
-        %td.nw= lo income.created_at
+        %td.nw= lo income.date
         %td.actions
           = link_to "editar", edit_income_path(income), :class => 'edit', :title => 'Editar' if income.draft?
           = link_to "duplicar", new_income_path(:transaction_id => income.id), :class => 'duplicate icon', :title => 'Duplicar'

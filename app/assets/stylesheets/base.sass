@@ -50,12 +50,13 @@ hr
   background-color: #fff
   border-top: 1px solid #bbb
   padding: 30px
-
+  min-height: 400px
 
 // header
 #header .navbar-inner
+  +border-radius(0px)
+  +linear-gradient(darken(#5BAE29, 10%), #5BAE29)
   #background: #5BAE29 !important
-  @include linear-gradient(darken(#5BAE29, 10%), #5BAE29)
 
 .navbar
   margin: 0px !important

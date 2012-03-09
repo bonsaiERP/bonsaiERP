@@ -1,6 +1,6 @@
 %h2.dark#items_header Items
 
-%table#items_table.decorated
+%table#items_table.table
   %thead
     %tr
       %th.item Item
@@ -30,7 +30,8 @@
   %tr.extra.pad_top.subtotal
     %td
     %td.cur{:colspan => 2} Subtotal
-    %td#subtotal.r{'data-val' => transaction.subtotal}= ntc(transaction.subtotal)
+    %td#subtotal.cur{'data-val' => transaction.subtotal}= ntc(transaction.subtotal)
+    %td
   
   %tr.extra
     %td 
@@ -38,7 +39,7 @@
         %i.icon-plus-sign.icon-white
         Adicionar ítem
 
-    %td.cur.discount{:colspan => 2} 
+    %td.cur.discount.form-horizontal{:colspan => 2}
       - if transaction.is_a? Income
         = f.input :discount, 
           :label => "<i class='icon-minus-sign'></i> Descuento".html_safe, 
@@ -46,8 +47,10 @@
           :wrapper_html => {:class => 'boolean', :style => 'width: 100%'}
           
     - if transaction.is_a? Income
-      %td#discount_total.r{'data-val' => transaction.total_discount} #{ntc(transaction.total_discount)}
-  
+      %td#discount_total.cur{'data-val' => transaction.total_discount} #{ntc(transaction.total_discount)}
+    -else
+      %td
+
   %tr.extra
     %td
     %td.r.b.dark{:colspan => 2} Total
