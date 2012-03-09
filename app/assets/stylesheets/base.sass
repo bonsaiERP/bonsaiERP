@@ -8,7 +8,7 @@ html
 
 body
   //font-family: Segoe UI, Helvetica, "Helvetica Neue", Arial, sans-serif
-  background: transparent url(/assets/images/bg/01.png)
+  background: transparent url(/assets/back-black.png)
   margin: 0px
   padding: 0px
 
@@ -171,8 +171,24 @@ p
   th
     background: #CDC28F !important
 
+#login
+  +border-radius
+  background: rgba(255,255,255, 0.1)
+
+  .inset
+    background: white
+    margin: 20px
+    padding: 10px
+    +border-radius
+    h2
+      margin: 10px 0 20px
+    input.txt
+      font-size: 1.3em
+      height: 25px
 
 // footer
 #footer
   text-align: center
+  color: darken(white, 10%)
+  padding: 40px 0
 

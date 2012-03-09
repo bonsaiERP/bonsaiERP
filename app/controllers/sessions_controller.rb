@@ -41,7 +41,6 @@ class SessionsController < ApplicationController
         else
           @user.errors[:email] = "El email que ingreso no existe"
         end
-        flash[:notice] = "Su correo electrónico o contraseña son incorrectos"
         render "new"
     end
   end

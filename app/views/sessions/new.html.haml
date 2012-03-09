@@ -8,20 +8,20 @@
     box-shadow: none;
   }
 
-.well.span6.offset3(style="margin-top: 100px")
-  %h1.c Iniciar sesión
+.row(style="margin-top: 100px")
+  #login.span6.offset3
+    .inset
+      %h2.c Iniciar sesión
 
-  = simple_form_for(@user, :url => sessions_path, :method => :post, :html => {:class => "form-horizontal"}) do |f|
-    = bonsai_form_error(f)
+      = simple_form_for(@user, :url => sessions_path, :method => :post, :html => {:class => "form-horizontal"}) do |f|
 
-    %fieldset
-      = f.input :email,    :label => "Email", :input_html => {:size => 30}
-      .clear
-        = f.input :password, :label => 'Contraseña', :input_html => {:size => 30}
+        = f.input :email,    :label => "Email", :input_html => {:size => 30, :class => 'txt'}
+        = f.input :password, :label => 'Contraseña', :input_html => {:size => 30, :class => 'txt'}
 
-    %p.c
-      = link_to "¿Olvido su contraseña?", new_reset_password_path
-      .clear
-      %center
-        = f.submit "Ingresar", :class => "btn btn-success big b"
+        %p.c
+          = f.submit "Ingresar", :class => "btn btn-success big b"
+          %br
+          %br
+          = link_to "¿Olvido su contraseña?", new_reset_password_path
+          -#, :class => 'btn btn-primary'
 

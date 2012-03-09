@@ -135,8 +135,8 @@ Bonsaierp::Application.routes.draw do
   # Sessions
   resources :sessions
 
-  get "/users/sign_in"  => "sessions#new"
-  get "/users/sign_out" => "sessions#destroy"
+  get "/users/sign_in"  => "sessions#new", :as => :login
+  get "/users/sign_out" => "sessions#destroy", :as => :logout
 
   resources :users do
     collection do

@@ -1,8 +1,23 @@
-#dialog
-  %h1 Recuperar contraseña
+:css
+  #header{ display: none; }
+  #menu{ display: none; }
+  #main_wrap{ background: none !important; }
+  #cont{
+    background: none;
+    border-radius: none;
+    box-shadow: none;
+  }
 
-  = simple_form_for(@user, :url => reset_passwords_path) do |f|
-    %fieldset
-      = f.input :email, :label => "Email"
-    .clear.form_actions
-      = f.submit "Recuperar contraseña", :class => 'btn btn-success b'
+.row(style="margin-top: 100px")
+  #login.span6.offset3
+    .inset
+      %h2.c Recuperar contraseña
+
+      = simple_form_for(@user, :url => reset_passwords_path, :method => 'post', :html => {class: "form-horizontal"}) do |f|
+
+        = f.input :email, :label => "Email", :input_html => {:class =>'txt'}
+        %center
+          = f.submit "Recuperar contraseña", :class => 'btn btn-success b'
+          %br
+          %br
+          = link_to "Ingresar al sistema", login_path
