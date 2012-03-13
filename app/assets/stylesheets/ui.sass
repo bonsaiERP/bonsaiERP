@@ -4,7 +4,7 @@ $header-color: lighten(gray, 20%)
 .ui-widget-header
   +border-top-radius(4px)
   background: darken(gray, 10%)
-  +linear-gradient(lighten(gray, 20%), lighten(gray, 40%) )
+  +background-image(linear-gradient(lighten(gray, 20%), lighten(gray, 40%) ) )
   padding: 0 0 1px 0
 
 .ui-helper-clearfix:before, .ui-helper-clearfix:after
@@ -88,7 +88,7 @@ $header-color: lighten(gray, 20%)
     position: relative
     padding: .2em 0
     font-weight: bold
-    +linear-gradient(darken(#5BAE29, 10%), #5BAE29)
+    +background-image(linear-gradient(darken(#5BAE29, 10%), #5BAE29) )
 
   .ui-datepicker-prev, .ui-datepicker-next 
     position: absolute
@@ -229,7 +229,7 @@ $header-color: lighten(gray, 20%)
 
 
   .ui-dialog-titlebar
-    +linear-gradient(#5BAE29, lighten(#5BAE29, 10%) )
+    +background-image(linear-gradient(#5BAE29, lighten(#5BAE29, 10%) ) )
     padding: 0.7em 1em
     color: white
     position: relative
