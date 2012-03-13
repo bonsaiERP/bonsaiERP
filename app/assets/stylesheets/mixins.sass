@@ -1,0 +1,29 @@
+@import compass
+
+@mixin link
+  font-weight: bold
+  padding-left: 20px
+  margin: 0px 5px
+  color: darken($green, 10%)
+  font-size: 110%
+  display: inline-block
+  min-height: 16px
+
+@mixin icon
+  width:16px
+  height: 16px
+  display: inline-block
+  text-indent: -1000em
+
+
+@mixin box($width, $color, $border: 1px, $padding: 5px, $margin: 7px)  
+  +border-radius(4px)
+  +box-shadow(1px, 1px, 3px, $color)
+  border-width: $border
+  border-style: solid
+  border-color: $color
+  padding: $padding
+  margin: $margin
+  float: left
+  width: $width
+
