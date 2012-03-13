@@ -55,7 +55,7 @@
     %tr{:id => "tr#{al.id}", :class => "#{al.active}"}
       %td.d.check
         = link_to al, account_ledger_path(al, :ac_id => account.id), :class => "#{conciliate_css(al)} b"
-        %span.i= lo al.created_at
+        %span.i= lo al.date
         %br/
         = al.reference
       %td.cur.color= ledger_amount(al, account)
@@ -67,5 +67,5 @@
         = "(A) #{al.nuller}" if al.nuller_id.present?
       %td.cur
         - if al.can_destroy?
-          = link_to "borrar", al, :class => 'delete fl', :title => 'Borrar', 'data-confirm' => account_ledger_destroy_confirm_dialog(al)
+          = link_to "Anular", al, :class => 'delete fl', :title => 'Anular', 'data-confirm' => account_ledger_destroy_confirm_dialog(al)
 

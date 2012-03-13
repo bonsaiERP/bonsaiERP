@@ -47,16 +47,6 @@ $(document).ready(->
   # Date format
   $.datepicker._defaults.dateFormat = 'dd M yy'
 
-  # Parses the date with a predefined format
-  # @param String date
-  # @param String type : Type to return
-  parseDate = (date, tipo)->
-    date = $.datepicker.parseDate($.datepicker._defaults.dateFormat, date )
-    d = [ date.getFullYear(), date.getMonth() + 1, date.getDate() ]
-    if 'string' == tipo
-      d.join("-")
-    else
-      d
 
   # Create autocomplete for items
   #$('input.autocomplete').createAutocompleteField()
@@ -325,14 +315,14 @@ $(document).ready(->
   )
 
   # Shows and hides info
-  $('a.more_info').live('click', ->
-    if $(this).hasClass("hide-info")
-      #== "Ver información"
-      $(this).html("Ocultar información").removeClass("hide-info")
-      $( $(this).attr('href') ).show("slow")
+  $('a.more').live('click', ->
+    cont = $( $(this).attr('href') )
+    if cont.hasClass("hide")
+      $(this).html("Ocultar información")
+      cont.show("slow").removeClass("hide")
     else
-      $(this).html("Ver información").addClass("hide-info")
-      $( $(this).attr('href') ).hide("slow")
+      $(this).html("Ver información")
+      cont.hide("slow").addClass("hide")
     false
   )
 

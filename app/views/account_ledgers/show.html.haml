@@ -5,18 +5,20 @@
     .links
       = presenter.null_link
 
-  %h1{:style => 'display:inline-block'} 
-    Transacción
-    = @account_ledger
-    %small.n.i= lo @account_ledger.created_at
+  .page-header
+    %h1{:style => 'display:inline-block'} 
+      %span.gray.n Transacción
+      = @account_ledger
+      %span.n= @account_ledger.selected_account
 
-    %small.fs60= presenter.null_state
-  .clear
-  %h2= @account_ledger.selected_account
+      %small.fs60= presenter.null_state
+
   - if @account_ledger.project_id.present?
     %h3
       %span.grey.n Proyecto:
       = @account_ledger.project 
+
+  %h3.i.gray= lo @account_ledger.date
 
   .moneybox.fl
     = in_out @account_ledger.account_amount, :class => "b"

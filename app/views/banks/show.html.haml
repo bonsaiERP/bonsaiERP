@@ -11,7 +11,9 @@
   %h1.n
     %span=@bank.name 
     %small( title="Número de cuenta")= @bank.number
-    %small= @account.currency_name.pluralize
+    %small
+      \-
+      = @account.currency_name.pluralize
 
 = pendent_money_link(@bank, :class => 'red fs110')
 .clear

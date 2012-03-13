@@ -24,7 +24,7 @@
 
 = paginate buys
 
-%table{ :class => 'decorated nwl' }
+%table.table.table-striped
   %thead
     %tr
       %th.tip{:title => 'Estado'} Est.
@@ -33,20 +33,20 @@
       %th Total
       %th Saldo
       %th.tip{:title => "Contado Crédito"} Tipo
-      %th Fecha Hora
+      %th Fecha
       %th
 
   %tbody
     -  buys.each do |buy|
-      %tr{ :class => cycle(:odd, :even) }
+      %tr
         %td 
-          %span.bicon{:class => "#{buy.real_state}", :title => buy.show_state}
+          %span.bicon.pill{:class => "#{buy.real_state}", :title => buy.show_state}
         %td= link_to buy.ref_number, buy, :class => 'b'
         %td= lo buy.payment_date unless buy.paid?
         %td.cur #{buy.currency_symbol} #{ntc buy.total }
         %td.cur #{buy.currency_symbol} #{ntc buy.balance }
         %td= cash_credit(buy.cash)
-        %td.nw= lo buy.created_at
+        %td.nw= lo buy.date
         %td.actions
           = bonsai_links(buy) if buy.draft?
 

@@ -19,9 +19,9 @@ class ContactPresenter < BasePresenter
   def moneybox(ac)
     case 
     when ac.amount < 0
-      moneybox_tag "<span class='red'>DEBEMOS</span>".html_safe, "#{ac.currency_symbol} #{ntc ac.amount.abs }"
+      moneybox_tag "DEBEMOS", "#{ac.currency_symbol} #{ntc ac.amount.abs }"
     when ac.amount > 0
-      moneybox_tag "<span class='dark-green'>DEBE</span>".html_safe, "#{ac.currency_symbol} #{ntc ac.amount.abs}"
+      moneybox_tag "DEBE", "#{ac.currency_symbol} #{ntc ac.amount.abs}"
     end
   end
 

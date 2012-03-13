@@ -8,17 +8,18 @@
       = link_to 'Editar', edit_client_path(@client), :class => 'edit'
       = link_to 'Borrar', @client, :class => 'delete'
 
-  %h1
-    = @client.matchcode
-    %small.dashlet.bg-dark Cliente
+  .page-header
+    %h1
+      = @client.matchcode
+      %small.pill.bg-dark.white Cliente
 
   -if current_user.is_admin?
     = link_to new_account_balance_path(:contact_id => @client.id), :class => "btn btn-success" do
       %i.icon-adjust.icon-white
       Balancear cuenta
 
-  .clear
-  = render 'contacts/show', :klass => @client
+  .span6.offset6
+    = render 'contacts/show', :klass => @client
 
   .clear
   - @client.accounts.each do |ac|

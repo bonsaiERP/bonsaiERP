@@ -7,15 +7,18 @@
       = link_to 'Editar', edit_supplier_path(@supplier), :class => 'edit'
       = link_to 'Borrar', @supplier, :class => 'delete'
 
-  %h1
-    = @supplier.matchcode
-    %span.dashlet.fs50.bg-dark Proveedor
+  .page-header
+    %h1
+      = @supplier.matchcode
+      %small.pill.bg-dark.white Proveedor
 
   -if current_user.is_admin?
-    = link_to "Balancear cuenta", new_account_balance_path(:contact_id => @supplier.id), :class => "new button"
+    = link_to new_account_balance_path(:contact_id => @supplier.id), :class => "btn btn-success" do
+      %i.icon-adjust.icon-white
+      Balancear cuenta
 
-  .clear
-  = render 'contacts/show', :klass => @supplier
+  .span6.offset6
+    = render 'contacts/show', :klass => @supplier
 
   .clear
   - @supplier.accounts.each do |ac|

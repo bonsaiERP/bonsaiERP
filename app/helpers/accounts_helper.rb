@@ -54,9 +54,9 @@ module AccountsHelper
   # Creates for income or outcome title
   def account_ledger_title(klass)
     if klass.in?
-      "<span class='dark_green'>ingreso</span>".html_safe
+      "ingreso"
     else
-      "<span class='red'>egreso</span>".html_safe
+      "egreso"
     end
   end
 

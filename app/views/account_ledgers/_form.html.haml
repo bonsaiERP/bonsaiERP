@@ -1,4 +1,3 @@
-.b.i= l Time.zone.now
 
 = simple_form_for @account_ledger, :html => {:class => "enter"} do |f|
   = bonsai_form_error(f)
@@ -6,8 +5,10 @@
   = f.input :account_id, :as => :hidden
 
   .row
-    .span6
+    .span3
       = f.input :amount, :label => "Cantidad en #{f.object.account.currency_symbol}", :input_html => {:size => 12, :type => 'decimal'}
+    .span3
+      = f.input :date, :label => "Fecha"
     .span6
       = f.input :contact_id, :as => :contact, :label => false 
 
@@ -15,7 +16,8 @@
     .span6
       = f.input :reference, :as => :text, :label => 'Referencia', :input_html => {:rows => 2, :cols => 35}, :hint => 'Nº de cheque, razón, factura, etc.'
     .span6
-      = f.association :project, :label => 'Proyecto'
+      = f.association :project, :label => 'Proyecto',
+        input_html: {'data-new_url' => new_project_path, 'data-trigger' => 'new_project', 'data-title' => "Nuevo proyecto"}
   = f.input :description, :as => :text, :label => 'Descripción', :input_html => {:rows => 3, :cols => 35}
 
   = f.submit "Salvar", :class => 'btn btn-success b'
@@ -23,4 +25,9 @@
 :javascript
   $(function() {
     $('#account_ledger_contact_id').contactAutocomplete();
+
+    $('body').live('new_project', function(event, resp) {
+      var label = resp.name;
+      $('#account_ledger_project_id').createSelectOption(resp.id, label);
+    });
   });

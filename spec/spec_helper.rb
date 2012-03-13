@@ -73,6 +73,8 @@ Spork.each_run do
     end
   end
 
+  FactoryGirl.reload
+
 end
 
 # --- Instructions ---
