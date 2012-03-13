@@ -16,12 +16,12 @@ group :assets do
   gem 'uglifier',     ">= 1.2.3"
 end
 
-gem 'jquery-rails', "~> 2.0.0"
+gem 'jquery-rails', "~> 2.0.1"
 gem 'compass-rails', "~> 1.0.0"
 #gem 'bootstrap-sass', "~> 2.0.0"
-gem 'ramon', "~> 0.3.3"
+gem 'ramon', "~> 0.4.0"
 
-gem 'pg', "~> 0.12.2"
+gem 'pg', "~> 0.13.2"
 #gem 'mysql2'#, :group => :production
 #gem 'sqlite3-ruby', :group => [:development, :text]
 
@@ -35,12 +35,12 @@ gem 'qu-redis',    "~> 0.1.4"
 
 #gem 'nokogiri'
 
-gem 'prawn', '~>0.12.0'
+gem 'prawn', '~> 1.0.0.rc1'
 #gem 'exception_notification', "~> 2.5.2"
 #gem 'newrelic_rpm'
 
 group :development, :test do
-  gem 'rspec-rails', '~> 2.8.0'
+  gem 'rspec-rails', '~> 2.8.1'
   gem 'steak', '~> 2.0.0'
   #gem 'jasmine'
   #gem 'headless'
@@ -50,9 +50,9 @@ end
 group :development do
   #gem 'linecache19' #, :git => "git://github.com/mark-moseley/linecache.git"
   gem 'ruby-debug19', '~> 0.11.6', :platform => :mri_19, :require => 'ruby-debug'
-  gem 'pry',                "~> 0.9.7.4"
-  gem 'ffaker',             "~> 1.12.1"
-  gem 'pry-rails'
+  #gem 'pry',                "~> 0.9.8.4"
+  gem 'ffaker',             "~> 1.13.0"
+  gem 'pry-rails', "~> 0.1.6"
 end
 
 
@@ -60,7 +60,7 @@ end
 group :test do
   gem 'capybara',           "~> 1.1.2"
   gem 'database_cleaner',   "~> 0.7.1"
-  gem 'factory_girl_rails', "~> 1.6.0"
+  gem 'factory_girl_rails', "~> 1.7.0"
   gem 'spork',              "~> 0.9.0"
   gem 'valid_attribute',    "~> 1.2.0"
   gem 'watchr'
