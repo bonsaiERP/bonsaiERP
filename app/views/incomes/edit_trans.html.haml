@@ -8,9 +8,8 @@
   %h1 
     Editar 
     = @transaction
-    %small.fs60{:class => @transaction.real_state}= @transaction.show_state
+    %small.pill{:class => @transaction.real_state}= @transaction.show_state
 
-%h2= @transaction.ref_number
 %h2.n= link_to @transaction.contact, @transaction.contact
 
 = render 'transactions/form_edit', :transaction => @transaction, :contacts => Client.scoped

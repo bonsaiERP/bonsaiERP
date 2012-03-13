@@ -13,9 +13,12 @@
 = simple_form_for(@account_balance) do |f|
   = bonsai_form_error(f)
   = f.input :contact_id, :as => :hidden
-  = f.input :amount, :label => "Cantidad", :input_html => {:size => 12, :type => 'decimal'},
+  .row
+    .span3
+      = f.input :amount, :label => "Cantidad", :input_html => {:size => 12, :type => 'decimal'},
     :hint => "Ingrese una cantidad positiva o negativa"
-  = f.input :currency_id, :label => "Moneda", :collection => Currency.all
+    .span3
+      = f.input :currency_id, :label => "Moneda", :collection => Currency.all
 
   .clear
   = f.submit 'Salvar', :class => 'btn btn-success b'

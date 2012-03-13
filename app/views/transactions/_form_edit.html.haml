@@ -10,11 +10,13 @@
     = bonsai_form_error(f)
 
     .row
-      .span6
+      .span3
+        = f.input :date, :label => "Fecha"
+      .span4
         = f.association :project,  :label => 'Proyecto',
           :input_html => {'data-new_url' => new_project_path, 'data-title' => "Nuevo proyecto", 'data-trigger' => 'new_project' }
 
-      .span6
+      .span4
         - unless transaction.currency_id == currency_id
           %label Tipo de cambio
           %strong
@@ -23,6 +25,7 @@
             \=
             = currency_symbol
             = transaction.exchange_rate
+    .row
       .span3
         %label.radio.inline
           = f.radio_button :fact, true, :class => 'fact'

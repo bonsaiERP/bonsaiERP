@@ -86,7 +86,7 @@ class LoansController < TransactionsController #ApplicationController
   # PUT /incomes/1/approve
   # Method to approve an income
   def approve
-    if @transaction.approve!
+    if @loan.approve!
       flash[:notice] = "La nota de venta fue aprobada."
     else
       flash[:error] = "Existio un problema con la aprobación."

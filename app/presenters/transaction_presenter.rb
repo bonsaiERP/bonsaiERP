@@ -29,15 +29,13 @@ class TransactionPresenter < BasePresenter
   def fact
     if transaction.bill_number.present?
       txt = transaction.fact? ? "Factura: " : "Recibo:"
-      "<span class='n'>Nº #{txt}</span> #{transaction.bill_number}".html_safe
+      "<span class='n gray'>Nº #{txt}</span> #{transaction.bill_number}".html_safe
     end
   end
 
   def currency
     unless h.currency_id === transaction.currency_id
-      content_tag(:h3, :class => 'dark-green') do
-        "#{transaction.currency_symbol} 1 = #{h.currency_symbol} #{ntc transaction.exchange_rate, :precision => 4}"      
-      end
+      "#{transaction.currency_symbol} 1 = #{h.currency_symbol} #{ntc transaction.exchange_rate, :precision => 4}"      
     end
   end
 
@@ -79,13 +77,13 @@ class TransactionPresenter < BasePresenter
 
   def project
     if transaction.project_id.present?
-      "Iniciativa: #{h.link_to transaction.project, transaction.project}".html_safe
+      "<span class='gray'>Proyecto:</span> #{h.link_to transaction.project, transaction.project}".html_safe
     end
   end
 
   def payment_date
     if transaction.payment_date.present?
-      html = "<span class='n'> Vence el</span>"
+      html = "<span class='n gray'> Vence el</span>"
       html << "<span id='due_on'> #{ h.lo transaction.payment_date }</span>"
 
       html.html_safe
@@ -93,7 +91,10 @@ class TransactionPresenter < BasePresenter
   end
 
   def approve_form
-    h.render "transactions/approve_form" if transaction.draft?
+    if transaction.draft?
+      title = transaction.is_a?(Income) ? "Venta" : "Compra"
+      h.render "transactions/approve_form", title: title
+    end
   end
 
   def approve_deliver_form

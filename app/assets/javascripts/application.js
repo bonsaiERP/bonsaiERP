@@ -1,6 +1,6 @@
 //= require_self
 //= require jquery
-//= require jquery-ui
+//= require jquery-ui-1.8.17.custom.min
 //= require underscore-min.js
 //= require backbone.js
 //= require extensions.js.coffee

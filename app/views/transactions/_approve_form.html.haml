@@ -1,10 +1,10 @@
 = simple_form_for @transaction, :url => "/#{params[:controller]}/#{ @transaction.id }/approve", :html => {:id => 'approve_form'} do |f|
   .submit
-    =f.submit "Aprobar", :class => 'btn btn-primary', :id => 'income_approve_button'
+    =f.submit "Aprobar #{title}", :class => 'btn btn-success b fr', :id => 'income_approve_button'
 :javascript
   $(function() {
     $('#approve_form').submit(function() {
-        if(confirm("Esta seguro de aprobar la proforma (no podrá editar en un futuro)?")) {
+        if(confirm("Esta seguro de aprobar la proforma?")) {
           return true;
         }else{
           return false;

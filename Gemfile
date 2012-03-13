@@ -17,7 +17,7 @@ group :assets do
 end
 
 gem 'jquery-rails', "~> 2.0.0"
-gem 'compass-rails', "~> 1.0.0.rc.3"
+gem 'compass-rails', "~> 1.0.0"
 #gem 'bootstrap-sass', "~> 2.0.0"
 gem 'ramon', "~> 0.3.3"
 

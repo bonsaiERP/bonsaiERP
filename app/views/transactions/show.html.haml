@@ -74,7 +74,7 @@
           %tr
             %td.gray.r Aprobado por:
             %td.b= @transaction.approver
-            %td.i= @transaction.approver_datetime
+            %td.i=lo @transaction.approver_datetime
 
         - if @transaction.creditor_id.present?
           %tr

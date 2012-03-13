@@ -27,6 +27,8 @@ class TransactionHistory < ActiveRecord::Base
     end
     
     trans.taxis_ids = data[:taxis_ids]
+    trans.payment_date = data[:payment_date]
+    trans.original_total = data[:original_total]
       
     trans
   end

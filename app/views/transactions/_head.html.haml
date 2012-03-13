@@ -4,31 +4,37 @@
       = presenter.title
       %small.pill#transaction_state{:class => @transaction.real_state}= @transaction.show_state
 
-.clear
-%h2.n.mt5= link_to @transaction.contact, @transaction.contact
 
-._70.fl
-  %h3= presenter.project
-  
-  %h3= presenter.fact
-  .clear
+.row-fluid
+  .span4
+    %h2.n.mt5= link_to @transaction.contact, @transaction.contact
+  .span4
+    %h3.n= presenter.project
+  .span4
+    = presenter.approve_form
+%br
+.row
+  .span2
+    %h4= presenter.fact
+  .span2
+    %h4
+      %span.n.gray Fecha:
+      = lo @transaction.date
+  .span2
+    %h4= presenter.payment_date
 
-  %h3._40.fl{:title => "Creado el"}= lo @transaction.created_at
+  .span6
+    -# FORM to approve transaction /transactions/_approve_form.html.haml
+    -# FORM to approve transaction /transactions/_approve_deliver.html.haml
+    = presenter.approve_deliver_form
 
-  %h3._60.fl= presenter.payment_date
+%br
+.row
+  .span2
+    %h3(title="Tipo de cambio")= presenter.currency
+  .span6= presenter.description
 
-._30.r.fr
-  -# FORM to approve transaction /transactions/_approve_form.html.haml
-  = presenter.approve_form
-  -# FORM to approve transaction /transactions/_approve_deliver.html.haml
-  = presenter.approve_deliver_form
-
-
-.clear
-._50.fl= presenter.currency
-._50.fl= presenter.description
-.clear
-
+%br
 -# Moneyboxes
 .moneybox.fl
   %label TOTAL
