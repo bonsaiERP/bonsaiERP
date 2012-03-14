@@ -2,16 +2,16 @@
   = f.input :ctype, :as => :hidden
   = f.input :transaction_id, :as => :hidden
   
-  = f.input :payment_date, :label => "Fecha de #{payment_type(@transaction)}"
-  = f.input :alert_date, :label => 'Fecha de alerta'
-  .clear
-
-  = f.input :amount, :label => currency_label('Cantidad', @pay_plan), :input_html => {:size => 12, :type => 'decimal'}
-  .clear
-
-  =f.input :repeat, :as => :boolean, :label => 'Repetir patrón', :hint => 'Repite la <b>Cantidad</b> hasta completar el saldo'.html_safe
-  /= f.input :description, :as => :text, :input_html => {:rows => 4, :cols => 35 }
-  .clear
+  .row-fluid
+    .span6
+      = f.input :payment_date, :label => "Fecha de #{payment_type(@transaction)}"
+    .span6
+      = f.input :alert_date, :label => 'Fecha de alerta'
+  .row-fluid
+    .span6
+      = f.input :amount, :label => currency_label('Cantidad', @pay_plan), :input_html => {:size => 12, :type => 'decimal'}
+    .span6.form-horizontal
+      =f.input :repeat, :as => :boolean, :label => 'Repetir patrón', :label_html => {title: 'Repite la <b>Cantidad</b> por mes hasta completar el saldo'.html_safe }
   .submit
     = f.submit "Salvar", :class => 'btn btn-success b'
 :javascript

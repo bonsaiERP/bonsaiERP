@@ -93,8 +93,9 @@ class ContactAutocomplete
         css = ""
         sel = "checked='checked'"
       else
-        css = "gray"
+        css = "light-gray"
         sel = ""
+
 
       html = "<label class='#{css} radio inline'>"
       html += "<input type='radio' class='contact-autocomplete' #{sel} value='#{k}' name='#{name}' />"

@@ -2,5 +2,7 @@
   %ul.breadcrumps
     %li #{link_to 'Cuentas bancarias', banks_path} 
 
-%h1 Nueva cuenta bancaria
+.page-header
+  %h1 Nueva cuenta bancaria
+
 = render 'form', :bank => @bank

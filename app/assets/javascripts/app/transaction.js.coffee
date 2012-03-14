@@ -339,7 +339,7 @@ window.TransactionModel = TransactionModel
 
 # View for the template
 class ExchangeRateDialog extends Backbone.View
-  el: $("#exchange_rate")
+  el: "#exchange_rate"
   # initialize
   initialize:->
     self = @
@@ -358,7 +358,7 @@ class ExchangeRateDialog extends Backbone.View
       self.setLabel()
     )
 
-    @el.find("span.default_symbol").html(@model.get("default_symbol"))
+    @$el.find("span.default_symbol").html(@model.get("default_symbol"))
 
     # Edit link Event
     $('#edit_exchange_rate_link').live('click', (event)=>
@@ -383,16 +383,16 @@ class ExchangeRateDialog extends Backbone.View
     @model.set({exchange_rate: rate})
   # present dialog
   openDialog: ->
-    @el.find("#exchange_rate").val(@model.get("exchange_rate"))
-    @el.find("span.currency_symbol").html(@model.get("currency_symbol"))
-    @el.dialog("open")
+    @$el.find("#exchange_rate").val(@model.get("exchange_rate"))
+    @$el.find("span.currency_symbol").html(@model.get("currency_symbol"))
+    @$el.dialog("open")
   closeDialog: ->
     unless $("#exchange_rate").val().match(/^\d+(\.\d+)?$/)
       alert("Debe ingresar un número seperado por (.) para los decimales")
       return false
 
     @.setExchange()
-    @el.dialog("close")
+    @$el.dialog("close")
 
 window.ExchangeRateDialog = ExchangeRateDialog
 

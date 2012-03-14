@@ -114,6 +114,7 @@ $(document).ready(->
 
     $( div ).load( $(this).attr("href"), (resp)->
       $(div).transformDateSelect()
+      $(div).find("[title]").tooltip()
     )
 
     event.stopPropagation()

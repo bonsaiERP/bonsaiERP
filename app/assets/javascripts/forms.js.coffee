@@ -146,6 +146,7 @@ $(->
           div.html(resp)
           setTimeout(->
             $(div).transformDateSelect()
+            $(div).find("[title]").tooltip()
           ,200)
       'error': (resp)->
         alert('Existe errores, por favor intente de nuevo.')
@@ -154,5 +155,14 @@ $(->
     false
 
   )
+
+  # Trigger for tooltips on required fields
+  $('.over-field').live('focusin focusout', (event)->
+    if event.type == 'focusin'
+      $(this).parents('.control-group').trigger("mouseover")
+    else
+      $(this).parents('.control-group').trigger("mouseout")
+  )
+
   # End submit ajax form
 )

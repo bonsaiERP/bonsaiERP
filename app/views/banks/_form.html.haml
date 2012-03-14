@@ -1,19 +1,25 @@
-= simple_form_for(bank) do |f|
+:css
+  #bank-form { max-width: 700px; }
+
+= simple_form_for(bank, :html => {id: 'bank-form' }) do |f|
   = bonsai_form_error(f)
-  .row
+  .row-fluid
     .span6
       = f.input :name, :label => 'Banco'
     .span6
       = f.input :number, :label => 'Número de cuenta'
 
-  .row
+  .row-fluid
     -if bank.new_record?
-      .span6
+      .span3
         = f.association :currency, :label => 'Moneda',
-          :hint => "<span class='warning bicon'></span> <span class='dark-yellow'>No es posible modificar después</span>".html_safe
-      .span6
+          :wrapper_html => {title:"<span class='icon-warning-sign icon-white'></span> No es posible modificar después".html_safe},
+          :input_html => {class: "over-field"}
+      .span3 &nbsp;
+      .span3
         = f.input :amount, :label => 'Total en cuenta', :input_html => {:size => 12, :class => 'r'}, :required => true,
-          :hint => "<span class='warning bicon'></span> <span class='dark-yellow'>No es posible modificar después</span>".html_safe
+          :wrapper_html => {title:"<span class='icon-warning-sign icon-white'></span> No es posible modificar después".html_safe},
+          :input_html => {class: "over-field"}
     -else
       .span6
         %label Moneda
@@ -22,7 +28,7 @@
         %label Total en cuenta
         = "#{bank.currency_symbol} #{ntc(bank.account_amount)}"
 
-  .row
+  .row-fluid
     .span6
       = f.input :address, :label => 'Dirección', :as => :text, :input_html => {:rows => 4, :cols => 35}, :required => false
     .span6
