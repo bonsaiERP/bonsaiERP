@@ -8,7 +8,7 @@ module Models::Loan::Approve
       self.balance = total
       self.pay_plans.build(due_date: Date.today, amount: self.total)
 
-      al = self.account_ledgers.build(
+      al = self.build_account_ledger(
         amount: balance,
         account_id: account_id,
         reference: create_reference,

@@ -73,77 +73,77 @@ module Models::Transaction::PayPlan
   end
 
   private
-    # Creates a repeating pattern using the @current_pay_plan as base
-    def create_pattern
-      pps = sort_pay_plans
-      bal = balance
+  # Creates a repeating pattern using the @current_pay_plan as base
+  def create_pattern
+    pps = sort_pay_plans
+    bal = balance
 
-      amt = pps.inject(0) do |sum, pp|
-        sum += pp.amount if pp.payment_date < @current_pay_plan.payment_date
-        sum
-      end
-
-      # Marks which pay_plans to destroy
-      destroy_pay_plans_pattern(pps)
-
-      bal    -= amt
-      pdate   = @current_pay_plan.payment_date
-
-      while bal > 0
-        # set the amount
-        amt = (bal - @current_pay_plan.amount > 0) ? @current_pay_plan.amount : bal
-        adate = pdate - 5.days
-
-        pay_plans.build(
-          :payment_date => pdate, 
-          :alert_date => adate, 
-          :amount => amt,
-          :email => @current_pay_plan.email,
-          :currency_id => currency_id,
-          :project_id => project_id
-        )
-
-        pdate += PAY_PLANS_DATE_SEPARATION
-        bal -= amt
-      end
+    amt = pps.inject(0) do |sum, pp|
+      sum += pp.amount if pp.payment_date < @current_pay_plan.payment_date
+      sum
     end
 
-    # Completes the pay_plans to reach the balance
-    def complete_pay_plan(pp, bal, dest)
-      if dest
-        pps = sort_pay_plans.last
-        pp.amount += bal
-      else
-        pay_plans.build(
-          :payment_date => pp.payment_date + PAY_PLANS_DATE_SEPARATION, 
-          :alert_date => pp.payment_date - 5.days, 
-          :amount => bal,
-          :email => @current_pay_plan.email,
-          :currency_id => currency_id,
-          :project_id => project_id
-        )
-      end
-    end
+    # Marks which pay_plans to destroy
+    destroy_pay_plans_pattern(pps)
 
-    #def calculate_int_percentage(pp, bal)
-    #  return 0 if bal <= 0
-    #  pp.interests_penalties / bal
-    #end
+    bal    -= amt
+    pdate   = @current_pay_plan.payment_date
 
-    # Marks the pay_plans for destruction if payment_date is <= than @current_pay_plan
-    def destroy_pay_plans_pattern(pps)
-      pps.each do |pp|
-        pp.mark_for_destruction if @current_pay_plan.payment_date <= pp.payment_date 
-      end
-    end
+    while bal > 0
+      # set the amount
+      amt = (bal - @current_pay_plan.amount > 0) ? @current_pay_plan.amount : bal
+      adate = pdate - 5.days
 
-    # sorts all active pay plans
-    def sort_pay_plans
-      unpaid_pay_plans.sort {|a, b| a.payment_date <=> b.payment_date }
-    end
+      pay_plans.build(
+        :payment_date => pdate, 
+        :alert_date => adate, 
+        :amount => amt,
+        :email => @current_pay_plan.email,
+        :currency_id => currency_id,
+        :project_id => project_id
+      )
 
-    def unpaid_pay_plans
-      pay_plans.select {|pp| pp.paid == false and not(pp.marked_for_destruction?) }
+      pdate += PAY_PLANS_DATE_SEPARATION
+      bal -= amt
     end
+  end
+
+  # Completes the pay_plans to reach the balance
+  def complete_pay_plan(pp, bal, dest)
+    if dest
+      pps = sort_pay_plans.last
+      pp.amount += bal
+    else
+      pay_plans.build(
+        :payment_date => pp.payment_date + PAY_PLANS_DATE_SEPARATION, 
+        :alert_date => pp.payment_date - 5.days, 
+        :amount => bal,
+        :email => @current_pay_plan.email,
+        :currency_id => currency_id,
+        :project_id => project_id
+      )
+    end
+  end
+
+  #def calculate_int_percentage(pp, bal)
+  #  return 0 if bal <= 0
+  #  pp.interests_penalties / bal
+  #end
+
+  # Marks the pay_plans for destruction if payment_date is <= than @current_pay_plan
+  def destroy_pay_plans_pattern(pps)
+    pps.each do |pp|
+      pp.mark_for_destruction if @current_pay_plan.payment_date <= pp.payment_date 
+    end
+  end
+
+  # sorts all active pay plans
+  def sort_pay_plans
+    unpaid_pay_plans.sort {|a, b| a.payment_date <=> b.payment_date }
+  end
+
+  def unpaid_pay_plans
+    pay_plans.select {|pp| pp.paid == false and not(pp.marked_for_destruction?) }
+  end
 
 end

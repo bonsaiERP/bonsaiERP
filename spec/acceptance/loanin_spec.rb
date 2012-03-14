@@ -20,7 +20,8 @@ feature "Test loanin" do
       ref_number: "123", 
       contact_id: client.id, 
       total: 1000, 
-      account_id: account.id
+      account_id: account.id,
+      date: Date.today
     }  
   }
 
@@ -56,8 +57,8 @@ feature "Test loanin" do
 
     li.approve_loan.should be_true
     li.balance.should == li.total
-    li.account_ledgers.should_not be_empty
-    al = li.account_ledgers.first
+    li.account_ledger.should_not be_blank
+    al = li.account_ledger
     al.amount.should == li.balance
     al.should be_persisted
     al.reference.should =~ /Ingreso/
@@ -70,7 +71,31 @@ feature "Test loanin" do
     client.account_cur(1).amount.should == -li.balance
   end
 
-  scenario "It should receive payments" do
+  scenario "It should create pay_plans and receive payments" do
     li = Loanin.create!(valid_attributes) {|l| l.action = "edit" }
+
+    li.pay_plans.count.should == 0
+
+    li.approve_loan.should be_true
+
+    li.reload
+    li.balance.should == li.total
+    li.pay_plans.count.should == 1
+    pp = li.pay_plans.first
+
+    li.edit_pay_plan(pp.id, amount: 100, repeat: "1")
+
+    li.save_pay_plan.should be_true
+    
+    li.reload
+    
+    li.pay_plans.first.amount.should == 100
+    li.balance.should == li.total
+    tot_pps = li.pay_plans.inject(0) {|s,pp| s += pp.amount unless pp.paid?; s }
+    
+    tot_pps.should == li.balance
+    li.pay_plans.count.should == 10
+
+    #li.new_payment
   end
 end

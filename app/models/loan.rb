@@ -18,7 +18,7 @@ class Loan < ActiveRecord::Base
   include Models::Transaction::Calculations
   #include Models::Transaction::Trans
   include Models::Transaction::PayPlan
-  include Models::Transaction::Payment
+  include Models::Loan::Payment
 
   ###############################
   
@@ -28,9 +28,10 @@ class Loan < ActiveRecord::Base
   belongs_to :project
   belongs_to :account, :conditions => {:accountable_type => "MoneyStore"}
 
-  has_many :pay_plans, :foreign_key => "transaction_id"
-  has_many :payments, :foreign_key => "transaction_id"
-  has_many :account_ledgers, :foreign_key => "transaction_id"
+  has_one  :account_ledger,  foreign_key: "transaction_id", conditions: {status: "loan_first"}, autosave: true
+  has_many :account_ledgers, foreign_key: "transaction_id", conditions: {status: "none"}, dependent: :destroy, :autosave => false
+  has_many :pay_plans, :foreign_key => "transaction_id", :dependent => :destroy, :order => "payment_date ASC", :autosave => true
+  #has_many :payments, :foreign_key => "transaction_id"
 
   # Define boolean methods for states
   STATES.each do |state|
