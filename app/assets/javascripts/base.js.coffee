@@ -55,9 +55,6 @@ $(document).ready(->
 
   ##################################################
 
-  # Presents a tooltip
-  $('[title]').tooltip()
-
   # Creates the dialog container
   createDialog = (params)->
     data = params
@@ -113,8 +110,7 @@ $(document).ready(->
     div = createDialog( data )
 
     $( div ).load( $(this).attr("href"), (resp)->
-      $(div).transformDateSelect()
-      $(div).find("[title]").tooltip()
+      $(div).setTransformations()
     )
 
     event.stopPropagation()
@@ -291,7 +287,7 @@ $(document).ready(->
   $.createSelectOption = $.fn.createSelectOption = createSelectOption
 
   start = ->
-    $('body').transformDateSelect()
+    $('body').setTransformations()
 
   createErrorLog = (data)->
     unless $('#error-log').length > 0
@@ -343,15 +339,15 @@ $(document).ready(->
         #$('#cargando').hide(1000)
     })
 
-  $('.tip').tooltip({
-    offset: [-3, 10],
-    events: {
-      def    : "mouseover,mouseout",
-      input  : "focus,blur",
-      widget : "focus mouseover,blur mouseout",
-      tooltip: ""
-    }
-  })
+  #$('.tip').tooltip({
+  #  offset: [-3, 10],
+  #  events: {
+  #    def    : "mouseover,mouseout",
+  #    input  : "focus,blur",
+  #    widget : "focus mouseover,blur mouseout",
+  #    tooltip: ""
+  #  }
+  #})
 
   $('ul.menu>li>a').click ->
     false

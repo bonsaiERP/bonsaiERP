@@ -145,8 +145,7 @@ $(->
           div = $(el).parents('div.ajax-modal:first')
           div.html(resp)
           setTimeout(->
-            $(div).transformDateSelect()
-            $(div).find("[title]").tooltip()
+            $(div).setTransformations()
           ,200)
       'error': (resp)->
         alert('Existe errores, por favor intente de nuevo.')
@@ -157,12 +156,23 @@ $(->
   )
 
   # Trigger for tooltips on required fields
-  $('.over-field').live('focusin focusout', (event)->
-    if event.type == 'focusin'
-      $(this).parents('.control-group').trigger("mouseover")
-    else
-      $(this).parents('.control-group').trigger("mouseout")
-  )
+  setTooltips = ->
+    $(this).find('[title]').tooltip()
+
+    $(this).find('.over-field').live('focusin focusout', (event)->
+      if event.type == 'focusin'
+        $(this).parents('.control-group').trigger("mouseover")
+      else
+        $(this).parents('.control-group').trigger("mouseout")
+    )
+
+  $.fn.setTooltips = $.setTooltips = setTooltips
+
+  setTransformations = ->
+    $(this).transformDateSelect()
+    $(this).setTooltips()
+
+  $.fn.setTransformations = $.setTransformations = setTransformations
 
   # End submit ajax form
 )
