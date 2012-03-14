@@ -1,4 +1,7 @@
-= simple_form_for(@project) do |f|
+:css
+  #project-form{ max-width: 900px; }
+
+= simple_form_for(@project, html: {id: 'project-form'}) do |f|
   = bonsai_form_error(f)
   .row-fluid
     .span4

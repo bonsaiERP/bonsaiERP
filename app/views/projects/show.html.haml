@@ -15,7 +15,7 @@
 
 .input._25
   %label Activo
-  %span.icon{:class => @project.active }
+  %span.icon{:class => @project.active.to_s }
 .input._25
   %label Fecha de inicio
   = lo @project.date_start

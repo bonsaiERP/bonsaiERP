@@ -9,7 +9,7 @@
 
 =paginate (@projects)
 
-%table{ :class => 'decorated nwl' }
+%table.table.table-striped
   %thead
     %tr
       %th Nombre
@@ -22,7 +22,7 @@
     - for project in @projects
       %tr{ :class => cycle(:odd, :even) }
         %td= link_to(project.name, project, :class => 'b')
-        %td{:class => project.active }
+        %td{:class => project.active.to_s }
         %td= lo(project.date_start)
         %td= lo(project.date_end)
         %td.actions= bonsai_links(project)

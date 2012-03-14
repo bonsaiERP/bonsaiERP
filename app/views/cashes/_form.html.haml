@@ -1,7 +1,10 @@
-= simple_form_for(@cash) do |f|
+:css
+  #cash-form{ max-width: 850px; }
+
+= simple_form_for(@cash, html: {id: 'cash-form'}) do |f|
   = bonsai_form_error(f)
-  .row
-    .span6
+  .row-fluid
+    .span5
       = f.input :name, :label => 'Nombre de caja'
 
     -if @cash.new_record?
@@ -19,7 +22,7 @@
         %label Total en cuenta
         #{@cash.account.currency_symbol} #{ntc @cash.account.amount}
 
-  .row
+  .row-fluid
     .span6
       = f.input :address, :label => 'Dirección', :as => :text, :input_html => {:rows => 4, :cols => 35}
 
