@@ -26,3 +26,9 @@ Factory.define :cash do |f|
   f.currency_id 1
   f.amount 100
 end
+
+Factory.define :project do |p|
+  p.name "Project 1"
+  p.date_start Date.today
+  p.date_end Date.today + 30.days
+end

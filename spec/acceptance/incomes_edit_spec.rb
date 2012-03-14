@@ -22,6 +22,7 @@ feature "Income", "test features" do
   let!(:store) { 
     Store.create!(:name => 'First store', :address => 'An address') {|s| s.id = 1 }
   }
+  let!(:project) { Factory.create :project }
 
   background do
     hash = {:ref_number => 'I-0001', :date => Date.today, :contact_id => client.id, :operation => 'in', :store_id => 1,
@@ -40,7 +41,7 @@ feature "Income", "test features" do
       d = Date.today
       i_params = {"active"=>nil, "bill_number"=>"56498797", "contact_id" => client.id, 
         "exchange_rate"=>1, "currency_id"=>1, "date"=>d, 
-        "description"=>"Esto es una prueba", "discount" => 0, "project_id"=>1 
+        "description"=>"Esto es una prueba", "discount" => 0, "project_id"=> project.id
       }
 
       details = [

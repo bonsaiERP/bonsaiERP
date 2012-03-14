@@ -19,7 +19,7 @@ end
 gem 'jquery-rails', "~> 2.0.1"
 gem 'compass-rails', "~> 1.0.0"
 #gem 'bootstrap-sass', "~> 2.0.0"
-gem 'ramon', "~> 0.4.0"
+#gem 'ramon', "~> 0.4.0"
 
 gem 'pg', "~> 0.13.2"
 #gem 'mysql2'#, :group => :production

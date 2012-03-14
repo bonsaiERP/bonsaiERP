@@ -9,6 +9,7 @@ class Income < Transaction
 
   #relationships
 
+  # Accessible attributes
   attr_accessible  :ref_number,  :date,                          :account_id,
                    :project_id,  :currency_id,                   :exchange_rate,
                    :discount,    :bill_number,                   :taxis_ids,
@@ -20,6 +21,7 @@ class Income < Transaction
   validates             :ref_number,           :presence => true , :uniqueness => true
   validate              :valid_number_of_items
 
+  # Scopes
   scope :sum_total_balance, approved.select("SUM(balance * exchange_rate) AS total_bal").first[:total_bal]
   scope :discount, where(:discounted => true)
 

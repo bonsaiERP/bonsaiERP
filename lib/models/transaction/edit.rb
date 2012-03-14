@@ -127,18 +127,19 @@ module Models::Transaction
     end
 
     def calculate_orinal_total
-      s = transaction.transaction_details.inject(0) do |s, det|
+      sum = transaction.transaction_details.inject(0) do |s, det|
         unless det.marked_for_destruction?
           s += ( det.original_price.to_f/transaction.exchange_rate ).round(2) * det.quantity
         end
         s
       end
 
-      t_taxes = transaction.tax_percent/100 * s
-      s += t_taxes
-      transaction.discounted = (s == transaction.total ? false : true)
+      t_taxes = transaction.tax_percent/100 * sum
+      sum += t_taxes
+      sum = sum.round(2)
+      transaction.discounted = (sum.to_s == transaction.total.round(2).to_s ? false : true)
 
-      transaction.original_total = s
+      transaction.original_total = sum
     end
 
     # Calculates the real total value and stores it

@@ -31,6 +31,7 @@ module Models::Transaction
 
     def save_trans
       self.state ||= "draft"
+      set_defaults
 
       if draft?
         def self.draft_trans?; true; end

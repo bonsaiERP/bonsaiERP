@@ -71,6 +71,6 @@ feature "Test loanin" do
   end
 
   scenario "It should receive payments" do
-
+    li = Loanin.create!(valid_attributes) {|l| l.action = "edit" }
   end
 end

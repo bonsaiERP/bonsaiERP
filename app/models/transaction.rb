@@ -47,6 +47,9 @@ class Transaction < ActiveRecord::Base
 
   # Validations
   validates :contact_id, :contact => {:clases => ["Client", "Supplier"]}
+  validates_presence_of :date, :currency, :currency_id
+  validates_presence_of :project, :project_id, :if => "project_id.present?"
+
 
   # scopes
   scope :draft    , where(:state => 'draft')
@@ -313,7 +316,7 @@ class Transaction < ActiveRecord::Base
     self.currency_id ||= OrganisationSession.currency_id
     self.gross_total ||= 0
     self.total ||= 0
-    self.date ||= Date.today
+    #self.date ||= Date.today
     @trans = true
   end
 
