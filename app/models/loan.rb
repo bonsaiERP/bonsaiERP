@@ -9,7 +9,7 @@ class Loan < ActiveRecord::Base
   STATES   = ["draft"  , "approved" , "paid" , "due", "nulled"]
   TYPES    = ['Loanin'  , 'Loanout']
 
-  ACTIONS  = ["edit", "approve"]
+  ACTIONS  = ["edit", "approve", "payment"]
   DECIMALS = 2
 
   ###############################
@@ -36,7 +36,7 @@ class Loan < ActiveRecord::Base
   # Define boolean methods for states
   STATES.each do |state|
     class_eval <<-CODE, __FILE__, __LINE__ + 1
-      def #{state}?
+      def is_#{state}?
         "#{state}" == state ? true : false
       end
     CODE

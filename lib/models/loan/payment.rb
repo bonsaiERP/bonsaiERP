@@ -11,18 +11,15 @@ module Models::Loan::Payment
   included do
     attr_reader :contact_payment, :current_ledger, :payment, :contact_account
 
-    with_options :if => :payment? do |pay|
+    with_options :if => :is_in_payment? do |pay|
       pay.validate :valid_number_of_legers
     end
   end
 
-  def payment?
-    @payment === true
-  end
-
   def new_payment(params = {})
-    return false if draft? or paid? # Do not allow payments for draft? or paid? transactions
+    return false if is_draft? || is_paid? # Do not allow payments for is_draft? or is_paid? loans
 
+    self.action = "payment"
     params = set_payment_amount(params)
     # Find the right account
     params.delete(:to_id)
@@ -42,13 +39,13 @@ module Models::Loan::Payment
   # - Set exchange_rate if the account and to have the same currency
   # - Update the account and to
   def save_payment
-    return false unless payment?
+    return false unless is_in_payment?
 
     set_current_ledger_data
     
     return false unless valid_ledger_amount?
 
-    mark_paid_pay_plans if credit? # anulate pay_plans if credit
+    mark_paid_pay_plans
 
     set_account_ledger_extras
 
@@ -92,16 +89,13 @@ module Models::Loan::Payment
 
   private
 
-  def valid_devolution_amount?
-    if @current_ledger.amount_currency.abs > total_paid.abs.round(2)
-      @current_ledger.errors[:base_amount] << I18n.t("errors.messages.payment.devolution_amount")
-      return false
-    end
-    true
-  end
-
   def valid_contact_amount?
+    if self.is_a(Loain)
+
+    else
+    end
     @current_ledger.valid_contact_amount
+
     if @current_ledger.errors.any?
       @current_ledger.errors[:base_amount] = @current_ledger.errors[:base].join(", ")
       false
@@ -147,15 +141,11 @@ module Models::Loan::Payment
     end
   end
 
-  def get_account_ledger_operation(devolution = false)
-    ret = ""
-    case self.class.to_s
-    when "Income"         then ret = "in"
-    when "Expense", "Buy" then ret = "out"
+  def get_account_ledger_operation
+    case 
+    when self.is_a?(Loanin)  then "out"
+    when self.is_a?(Loanout) then "in"
     end
-
-    ret = ret == "in" ? "out" : "in" if devolution
-    ret
   end
 
   def valid_number_of_legers
@@ -206,13 +196,9 @@ module Models::Loan::Payment
   end
 
   def set_payment_amount(params = {})
-    if credit?
-      pp = pay_plans.unpaid.first
-      params[:base_amount] ||= pp.amount
-      params[:interests_penalties] = params[:interests_penalties] || 0
-    else
-      params[:base_amount] ||= balance
-    end
+    pp = pay_plans.unpaid.first
+    params[:base_amount] ||= pp.amount
+    params[:interests_penalties] = params[:interests_penalties] || 0
     
     params
   end

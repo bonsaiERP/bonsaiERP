@@ -37,7 +37,7 @@ feature "Test loanin" do
     li.creator_id.should == 10
     li.modified_by.should == 10
     li.currency_id.should == account.currency_id
-    li.should be_draft
+    li.should be_is_draft
     li.should be_is_in_edit
     li.should be_persisted
   end
@@ -56,6 +56,7 @@ feature "Test loanin" do
     account.reload.amount.should == amt
 
     li.approve_loan.should be_true
+    li.should be_is_approved
     li.balance.should == li.total
     li.account_ledger.should_not be_blank
     al = li.account_ledger
@@ -72,6 +73,9 @@ feature "Test loanin" do
   end
 
   scenario "It should create pay_plans and receive payments" do
+    cash = Factory.create :cash, amount: 500
+    cash_account = cash.account
+
     li = Loanin.create!(valid_attributes) {|l| l.action = "edit" }
 
     li.pay_plans.count.should == 0
@@ -96,6 +100,10 @@ feature "Test loanin" do
     tot_pps.should == li.balance
     li.pay_plans.count.should == 10
 
-    #li.new_payment
+    p = li.new_payment(account_id: cash_account.id)
+    p.amount.should == 100
+    
+    li.save_payment.should be_true
+    li.balance.should == li.total - 100
   end
 end

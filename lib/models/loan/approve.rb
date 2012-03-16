@@ -7,6 +7,7 @@ module Models::Loan::Approve
     self.class.transaction do
       self.balance = total
       self.pay_plans.build(due_date: Date.today, amount: self.total)
+      self.state = "approved"
 
       al = self.build_account_ledger(
         amount: balance,
