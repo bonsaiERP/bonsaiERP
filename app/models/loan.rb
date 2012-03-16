@@ -18,7 +18,6 @@ class Loan < ActiveRecord::Base
   include Models::Transaction::Calculations
   #include Models::Transaction::Trans
   include Models::Transaction::PayPlan
-  include Models::Loan::Payment
 
   ###############################
   
