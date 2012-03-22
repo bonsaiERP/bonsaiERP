@@ -1,8 +1,8 @@
 - content_for :links do
-  %ul.breadcrumps
+  %ul.breadcrumps.span6
     %li #{link_to "Proyectos", projects_path} 
 
-  .links
+  .links.span6
     = link_to 'Editar', edit_project_path(@project), :class => 'edit'
     = link_to 'Borrar', @project, :class => 'delete', 'data-confirm' => 'Esta seguro de borrar el proyecto?'
 

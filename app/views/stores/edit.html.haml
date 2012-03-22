@@ -1,11 +1,11 @@
 - content_for :links do
-  %ul.breadcrumps
+  %ul.breadcrumps.span6
     %li #{ link_to "Almacenes", stores_path }
     %li #{ link_to @store, @store }
     %li
       %span Editar
 
-  .links
+  .links.span6
     = link_to "Nuevo", new_store_path, :class => 'add'
     = link_to "Editar", edit_store_path(@store) , :class => 'edit'
     = link_to "Borrar", @store , :class => 'delete', :confirm => "Esta seguro de borrar el almacen", :method => :delete

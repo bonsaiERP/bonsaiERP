@@ -1,11 +1,11 @@
 - content_for :links do
-  %ul.breadcrumps
+  %ul.breadcrumps.span6
     %li #{link_to 'Cuentas bancarias', banks_path} 
     %li #{link_to @bank, @bank} 
     %li
       %span Editar
 
-  .links
+  .links.span6
     /= link_to "Nuevo banco", items_path, :class => 'add'
     = link_to "Ver", @bank.account, :class => 'show'
     = link_to "Borrar", items_path, :class => 'delete', :confirm => 'Esta seguro de borrar el ítem', :method => :delete

@@ -12,7 +12,7 @@ class ExchangeRate extends Backbone.Model
     @inverted = @options["inverted"] || false
 
     @$currencies = @$label.find(".currencies")
-    @$hide   = if @options["hide"] then $(@options["hide"]) else @$input.parents "div:first"
+    @$hide   = if @options["hide"] then $(@options["hide"]) else @$input.parents ".control-group:first"
 
     # Set rate if exists
     if @$input.val().match(/^\d+$/) or $(@observe).val().match(/^\d+$/)
@@ -90,6 +90,7 @@ class ExchangeRate extends Backbone.Model
       @$hide.hide('slow')
      else
        @$hide.show('slow')
+       @$hide.show()
   # Set the rate for a currency
   setSuggestRates: ->
     try

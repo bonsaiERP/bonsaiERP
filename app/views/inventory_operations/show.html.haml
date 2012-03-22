@@ -1,5 +1,5 @@
 - content_for :links do
-  %ul.breadcrumps
+  %ul.breadcrumps.span6
     %li #{link_to "Almacenes", stores_path}
     %li #{link_to @inventory_operation.store, store_path(@inventory_operation.store, :tab => 'operations')}
 

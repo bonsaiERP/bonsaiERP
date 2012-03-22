@@ -50,15 +50,15 @@ class AccountLedgerPresenter < BasePresenter
     html = "#{ac.name} (<strong>#{ac.currency_symbol} #{h.ntc ac.amount.abs}</strong>) "
     case ac.original_type
     when "Bank"
-      html << "<span class='dashlet bg-green'>Banco</span>"
-    when "Cash"                        
-      html << "<span class='dashlet bg-green'>Caja</span>"
-    when "Client"                      
-      html << "<span class='dashlet bg-dark'>Cliente</span>"
-    when "Supplier"                    
-      html << "<span class='dashlet bg-dark'>Proveedor</span>"
-    when "Staff"                       
-      html << "<span class='dashlet bg-dark2'>Otros</span>"
+      html << "<span class='pill bg-green white'>Banco</span>"
+    when "Cash"    
+      html << "<span class='pill bg-green white'>Caja</span>"
+    when "Client"
+      html << "<span class='pill bg-dark white'>Cliente</span>"
+    when "Supplier"
+      html << "<span class='pill bg-dark white'>Proveedor</span>"
+    when "Staff" 
+      html << "<span class='pill bg-dark2 white'>Otros</span>"
     end
 
     html.html_safe

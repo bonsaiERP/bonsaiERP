@@ -1,9 +1,9 @@
 - content_for :links do
-  %ul.breadcrumps
+  %ul.breadcrumps.span6  
     %li #{link_to "Almacenes", stores_path}
     %li #{link_to @inventory_operation.store, @inventory_operation.store}
 
-  .links
+  .links.span6 
   -#  = link_to "Nuevo", inventory_operations_path, :class => 'add'
   -#  = link_to "Ver", @inventory_operation, :class => 'show'
   -#  = link_to "Borrar", @inventory_operation, :class => 'delete', :confirm => 'Esta seguro de borrar', :method => :delete

@@ -2,10 +2,10 @@
   ul.menu{ display: none; }
 
 - content_for :links do
-  %ul.breadcrumps
+  %ul.breadcrumps.span6
 
     %li #{link_contacts @account} 
-  .links
+  .links.span6
     = link_to 'Nuevo', contact_account_type_link(@account, :new), :class => 'new'
     = link_to 'Editar', contact_account_type_link(@account, :edit), :class => 'edit'
     = link_to 'Borrar', contact_account_type_link(@account, :destroy), :class => 'delete'

@@ -75,6 +75,7 @@ hr
     height: 35px
     vertical-align: top
     text-shadow: 1px 1px 1px #000
+    width: 100%
 
   ul#usersettings
     +border-radius
@@ -104,7 +105,7 @@ hr
 // Menu for links
 
 #menu
-  height: 32px
+  //height: 32px
   background: lighten(gray, 45%)
   vertical-align: middle
   box-shadow: 0 2px 3px rgba(0,0,0,0.3)
@@ -122,9 +123,10 @@ hr
 ul.breadcrumps
   list-style: none
   padding: 0px
-  margin: 6px 0 0 16px
-  float: left
-  width: 50%
+  margin: 0px
+  line-height: 3em
+  //0 16px
+  //width: 50%
   li
     display: inline
     a
@@ -137,11 +139,11 @@ ul.breadcrumps
 
 .links
   font-weight: bold
-  padding-left: 20px
+  line-height: 3em
+  //padding-left: 20px
   color: darken($green, 10%)
-  width: 40%
-  margin-top: 6px
-  float: right
+  //width: 40%
+  //margin-top: 6px
   text-align: right
   a:hover
     text-decoration: none

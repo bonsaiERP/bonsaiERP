@@ -163,9 +163,9 @@ module AccountsHelper
 
   def ledger_amount(ledger, account)
     if ledger.account_id === account.id
-      ledger.amount
+      ntc ledger.amount
     else
-      -ledger.amount_currency
+      ntc -ledger.amount_currency
     end
   end
 

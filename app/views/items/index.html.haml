@@ -1,9 +1,9 @@
 - content_for :links do
-  %ul.breadcrumps
+  %ul.breadcrumps.span6
     %li
       %span Items
 
-  .links= link_to "Nuevo ítem", new_item_path, :class => 'new'
+  .links.span6= link_to "Nuevo ítem", new_item_path, :class => 'new'
 
 %h1 Items
 

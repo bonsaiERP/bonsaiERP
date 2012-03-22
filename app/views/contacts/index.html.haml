@@ -1,5 +1,6 @@
 - content_for :links do
-  .links= link_to "Nuevo #{contact_type(params[:option], false)}", new_contact_path, :class => 'new'
+  .span6 &nbsp;
+  .links.span6= link_to "Nuevo #{contact_type(params[:option], false)}", new_contact_path, :class => 'new'
 
 %h1= contact_type params[:option]
 

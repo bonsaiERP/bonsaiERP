@@ -1,5 +1,5 @@
 - content_for :links do
-  %ul.breadcrumps
+  %ul.breadcrumps.span6
     %li #{link_to "Configuración", "/configuration"} 
 
 
@@ -11,7 +11,8 @@
     width: 300px;
   }
 
-%h1 Adicionar usuario
+.page-header
+  %h1 Adicionar usuario
 
 
 = simple_form_for @user, :url => "/users/create_user" do |f|

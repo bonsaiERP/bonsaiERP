@@ -1,9 +1,9 @@
 - content_for :links do
-  %ul.breadcrumps
+  %ul.breadcrumps.span6
     %li
       %span Compras y gastos
 
-  .links= link_to "Nueva compra/gasto", new_buy_path, :class => 'new'
+  .links.span6= link_to "Nueva compra/gasto", new_buy_path, :class => 'new'
 
 :css
   .search label{ width: 15em; }

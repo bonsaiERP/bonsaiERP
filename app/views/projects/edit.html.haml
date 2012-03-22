@@ -1,8 +1,8 @@
 - content_for :links do
-  %ul.breadcrumps
+  %ul.breadcrumps.span6
     %li #{link_to "Proyectos", projects_path} 
 
-  .links
+  .links.span6
     = link_to 'Ver', @project, :class => 'show'
 
 %h1 Editar proyecto

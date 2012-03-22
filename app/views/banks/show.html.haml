@@ -1,10 +1,10 @@
 -content_for :links do
-  %ul.breadcrumps
+  %ul.breadcrumps.span6
     %li #{link_to "Cuentas bancarias", banks_path}
     %li
       %span #{@bank}
 
-  .links
+  .links.span6
     = link_to 'Editar', edit_bank_path(@bank), :class => 'edit', :title => "Editar cuenta bancaria"
 
 .page-header

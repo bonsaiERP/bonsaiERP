@@ -1,10 +1,10 @@
 - content_for :links do
-  %ul.breadcrumps
+  %ul.breadcrumps.span6
     %li #{link_to "Ventas", incomes_path}
     %li
       %span #{@income}
 
-  .links
+  .links.span6
     = link_to 'Nueva', "/#{params[:controller]}/new", :class => 'add'
     - if transaction.draft?
       = link_to 'Editar', "/#{params[:controller]}/#{transaction.id}/edit", :class => 'edit'

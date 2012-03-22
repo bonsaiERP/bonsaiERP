@@ -1,8 +1,8 @@
 - content_for :links do
-  %ul.breadcrumps
+  %ul.breadcrumps.span6
     %li #{link_to "Clientes", "/clients"}
 
-  .links
+  .links.span6
     = link_to "Vídeo", "http://www.youtube.com/embed/BZMsfhXi9uw", :class => 'video', 'data-title' => 'Como crear clientes'
     = link_to "Nuevo cliente", new_client_path, :class => 'new'
 

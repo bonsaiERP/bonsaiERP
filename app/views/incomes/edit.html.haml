@@ -1,11 +1,11 @@
 - content_for :links do
-  %ul.breadcrumps
+  %ul.breadcrumps.span6
     %li #{link_to 'Ventas', incomes_path} 
     %li #{link_to @transaction, @transaction} 
     %li
       %span Editar
 
-  .links
+  .links.span6
     = link_to 'Ver', @transaction, :class => 'show'
 
 .page-header

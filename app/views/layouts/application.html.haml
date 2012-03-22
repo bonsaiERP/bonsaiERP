@@ -44,13 +44,13 @@
               = render 'layouts/usersettings_menu' if user_signed_in?
           .clear
 
-          .nav-collapse
+          .nav-collapse.in(style="height: auto;")
             = render 'layouts/main_menu'
 
     #wrapper
       #menu
         .container
-          .main-links= yield :links
+          .main-links.row-fluid= yield :links
 
       #cont
         .container
@@ -63,10 +63,12 @@
             ©2011-2012 &middot; 
             =link_to "BonsaiERP", root_path
             El software para la gestión de empresas
+            %br
+            %a(href="http://twitter.com/#!/bonsaierp" target="_blank") Twitter
+            &middot;
+            %a(href="http://www.facebook.com/pages/BonsaiERP/337187402983197" target="_blank") Facebook
           -#%p
             %a Blog
-            &middot;
-            %a Twitter
             &middot;
             %a Cambios Recientes
             &middot;

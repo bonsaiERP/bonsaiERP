@@ -1,8 +1,8 @@
 - content_for :links do
-  %ul.breadcrumps
+  %ul.breadcrumps.span6
     %li #{link_to "Unidades de medida", units_path}
   
-  .links
+  .links.span6
     = link_to 'Nuevo', @unit, :class => 'add'
     = link_to 'Ver', @unit, :class => 'show'
     = link_to 'Borrar', @unit, :class => 'delete'

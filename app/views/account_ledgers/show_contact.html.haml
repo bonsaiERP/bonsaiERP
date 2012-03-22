@@ -1,8 +1,8 @@
 -content_for :links do
-  %ul.breadcrumps
+  %ul.breadcrumps.span6
     %li #{link_to @account_ledger.account, @account_ledger.account}
 
-  .links
+  .links.span6
     = link_to "Anular", @account_ledger, :class => 'delete', 'data-confirm' => 'Esta seguro de borrar la transacción' if @account_ledger.can_destroy?
 
 %h1 Transacción del <span class="n">#{lo @account_ledger.created_at}</span>

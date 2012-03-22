@@ -5,10 +5,10 @@
   }
 
 -content_for :links do
-  %ul.breadcrumps
+  %ul.breadcrumps.span6
     %li #{link_to "Cuentas caja", cashes_path}
 
-  .links
+  .links.span6
     /= link_to 'Nueva', new_money_store_path, :class => 'add', :title => "Nueva cuenta bancaria"
     = link_to 'Editar caja', edit_cash_path(cash), :class => 'edit', :title => "Editar cuenta caja"
 

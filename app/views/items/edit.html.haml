@@ -1,11 +1,11 @@
 - content_for :links do
-  %ul.breadcrumps
+  %ul.breadcrumps.span6
     %li #{link_to "Items", items_path} 
     %li #{link_to @item, @item}
     %li
       %span Editar
 
-  .links
+  .links.span6
     = link_to "Nuevo", new_item_path, :class => 'add'
     = link_to "Ver", @item, :class => 'show'
     = link_to "Borrar", @item, :class => 'delete', :confirm => 'Esta seguro de borrar el ítem', :method => :delete
