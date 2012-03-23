@@ -7,7 +7,8 @@ Install the following
 
 And install rvm
 
-    bash < <(curl -s https://rvm.beginrescueend.com/install/rvm)
+    bash -s stable < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer)
+    source /home/bonsai/.rvm/scripts/rvm
 
 Add the following to the ~/.bashrc
     
@@ -34,6 +35,13 @@ Create a gemset and set it as default
     rvm gemset create rails3.1
     rvm ruby-1.9.3@rails3.1 --default
 
+## Locales if needed
+
+    sudo apt-get install language-pack-en-base
+    sudo locale-gen en_US.UTF-8
+    sudo locale-gen es_BO.UTF-8
+    sudo dpkg-reconfigure locales
+
 ## Database installation
 Install **PostgreSQL 9**
 
@@ -43,16 +51,14 @@ Install **PostgreSQL 9**
     sudo add-apt-repository ppa:pitti/postgresql
     sudo apt-get update
     sudo apt-get upgrade
-    sudo apt-get install postgresql-9.0 libpq-dev
+    sudo apt-get install postgresql-9.1 libpq-dev
 
-## Install node.js
+## Install node.js for Ubuntu
 
-    git clone --depth 1 git://github.com/joyent/node.git
-    cd node
-    ./configure
-    make
-    sudo make install # If this don't work just add a link from out/Release/node
-                      # to /usr/local/bin
+    sudo apt-get install python-software-properties
+    sudo add-apt-repository ppa:chris-lea/node.js
+    sudo apt-get update
+    sudo apt-get install nodejs
 
 ## Bonsai installation
 Now you need to download and install bonsai cloning from the repository, this creates the bonsai folder
