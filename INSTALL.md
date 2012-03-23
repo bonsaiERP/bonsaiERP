@@ -53,6 +53,14 @@ Install **PostgreSQL 9**
     sudo apt-get upgrade
     sudo apt-get install postgresql-9.1 libpq-dev
 
+sudo -u postgres createuser --superuser $USER
+sudo -u postgres psql postgres
+
+postgres=# \passsword <user>
+
+/etc/postgresql/8.4/main/postgresql.conf:
+listen_addresses = 'localhost'
+
 ## Install node.js for Ubuntu
 
     sudo apt-get install python-software-properties

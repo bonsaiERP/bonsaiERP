@@ -180,5 +180,5 @@ Bonsaierp::Application.routes.draw do
   get "/team"    => 'home#team'    , :page => 'team'
   get "/contact" => 'home#contact' , :page => 'contact'
 
-  root :to => 'session#index'
+  root :to => 'sessions#new'
 end
