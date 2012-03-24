@@ -38,7 +38,7 @@
 = link_to "Buscar", "#search_buy", :class => 'search'
 = paginate @buys.page(@page)
 
-%table{ :class => 'decorated nwl' }
+%table.nwl.table.table-striped
   %thead
     %tr
       %th.tip{:title => 'Estado'} Est.
@@ -55,7 +55,7 @@
     - @buys.each do |buy|
       %tr{ :class => cycle(:odd, :even) }
         %td 
-          %span.bicon{:class => "#{buy.real_state}", :title => buy.show_state}
+          %span.bicon.pill{:class => "#{buy.real_state}", :title => buy.show_state}
         %td= link_to buy.ref_number, buy, :class => 'b'
         %td= buy.contact
         %td= lo buy.payment_date unless buy.paid?
