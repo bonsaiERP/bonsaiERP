@@ -205,9 +205,9 @@ class TransactionPresenter < BasePresenter
       if transaction.is_a?(Income)
         h.link_to "<i class='icon-plus-sign icon-white'></i> Registrar entrega".html_safe, 
           select_store_inventory_operation_path(transaction, :operation => 'out'), 
-          :class => "ajax btn btn-success", 'data-title' => "Seleccionar almacen"
+            :class => "ajax btn btn-success", 'data-title' => "Seleccionar almacen"
       elsif transaction.is_a?(Buy)
-        h.link_to "Registrar recojo", select_store_inventory_operation_path(transaction, :operation => 'in'), :class => "new ajax", 'data-title' => "Seleccionar almacen"
+        h.link_to "<i class='icon-plus-sign icon-white'></i> Registrar recojo".html_safe, select_store_inventory_operation_path(transaction, :operation => 'in'), :class => "btn btn-success ajax", 'data-title' => "Seleccionar almacen"
       end
     end
   end
@@ -220,7 +220,7 @@ class TransactionPresenter < BasePresenter
           select_store_inventory_operation_path(transaction, :operation => 'in'), 
           :class => "ajax btn btn-danger", 'data-title' => txt
       elsif transaction.is_a?(Buy)
-        h.link_to "<i class='icon-minus-sign icon-white'></i> Realizar devolución", select_store_inventory_operation_path(transaction, :operation => 'out'), 
+        h.link_to "<i class='icon-minus-sign icon-white'></i> Realizar devolución".html_safe, select_store_inventory_operation_path(transaction, :operation => 'out'), 
           :class => "ajax btn btn-danger", 'data-title' => txt
       end
     end
