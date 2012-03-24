@@ -22,19 +22,19 @@
 
     %tr.extra.pad_top
       %td
-      %td.r{:colspan => 3} Subtotal
-      %td#subtotal.r= ntc transaction.gross_total
+      %td.cur{:colspan => 3} Subtotal
+      %td#subtotal.cur= ntc transaction.gross_total
 
     %tr.extra
       %td
-      %td.r{:colspan => 3}
+      %td.cur{:colspan => 3}
         %i.icon-minus-sign
         Descuento (<span id="discount_percentage" data-val="#{transaction.total_discount}">#{ntc transaction.discount}</span>%)
-      %td#discount_total.r= ntc -transaction.total_discount
+      %td#discount_total.cur= ntc -transaction.total_discount
 
     %tr.extra
       %td
-        %td.r.b.dark{:colspan => 3} Total
-      %td#total_value.r.b{'data-val' => transaction.total} #{transaction.currency_symbol} #{ntc transaction.total}
+        %td.cur.b.dark{:colspan => 3} Total
+      %td#total_value.cur.b{'data-val' => transaction.total} #{transaction.currency_symbol} #{ntc transaction.total}
 
 

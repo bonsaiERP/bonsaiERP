@@ -47,20 +47,20 @@ span.true, span.false
 
 /*Font styles*/
 .b
-  font-weight: bold
+  font-weight: bold !important
 .n
-  font-weight: normal
+  font-weight: normal !important
 .i
-  font-style: italic
+  font-style: italic !important
 
 .l
-  text-align: left
+  text-align: left !important
 .c
-  text-align: center
+  text-align: center !important
 .r
-  text-align: right
+  text-align: right !important
 .nw
-  white-space: nowrap
+  white-space: nowrap !important
 
 // font sizes
 @for $i from 5 to 16 
@@ -444,4 +444,5 @@ hr.light
 
 .pill
   +border-radius
-  padding: 2px
+    padding: 2px
+
