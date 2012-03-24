@@ -43,7 +43,7 @@ Create a gemset and set it as default
     sudo dpkg-reconfigure locales
 
 ## Database installation
-Install **PostgreSQL 9**
+Install **PostgreSQL 9.1**
 
     sudo apt-get update
     sudo apt-get upgrade
@@ -53,13 +53,20 @@ Install **PostgreSQL 9**
     sudo apt-get upgrade
     sudo apt-get install postgresql-9.1 libpq-dev
 
-sudo -u postgres createuser --superuser $USER
-sudo -u postgres psql postgres
+### Create a user for the database
+    
+    sudo -u postgres createuser --superuser $USER
+    sudo -u postgres psql postgres
 
-postgres=# \passsword <user>
+### Inside postgreSQL
+    
+    postgres=# \passsword <user>
 
-/etc/postgresql/8.4/main/postgresql.conf:
-listen_addresses = 'localhost'
+Edit `/etc/postgresql/9.1/main/postgresql.conf` and check that you have:
+
+    listen_addresses = 'localhost'
+
+Restart the database `sudo /etc/init.d/postgresql restart`
 
 ## Install node.js for Ubuntu
 
@@ -73,11 +80,11 @@ Now you need to download and install bonsai cloning from the repository, this cr
 
     git clone [bonsaiRepo]
 
-Go to the bonsai folder **cd bonsai** and then run. (*by default the branch used is master you can go to any branch with -git checkout origin/dev -b dev*)
+Go to the bonsai folder `cd bonsai` and then run. (*by default the branch used is master you can go to any branch with* `git checkout origin/dev -b dev`)
 
     bundle
 
-Create the file **config/database.yml** in bonsai directory add this:
+Create the file `config/database.yml` in bonsai directory add this:
 
     
     development:
