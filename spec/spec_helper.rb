@@ -31,10 +31,10 @@ Spork.prefork do
     config.before(:each) do
       DatabaseCleaner.start
       # Create schema and database
-      unless PgTools.schema_exists?("schema1")
-        PgTools.create_schema("schema1")
-        Rake::Task["bonsai:migrate_schemas"].execute
-      end
+      #unless PgTools.schema_exists?("schema1")
+      #  PgTools.create_schema("schema1")
+      #  #Rake::Task["bonsai:migrate_schemas"].execute
+      #end
       #log.info example.description
     end
    

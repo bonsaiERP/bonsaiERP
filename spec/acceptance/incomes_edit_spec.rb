@@ -74,6 +74,22 @@ feature "Income", "test features" do
     i.should_not be_draft
     i.should be_approved
 
+    # Should not allow repeated items
+    edit_params = income_params[:transaction_details_attributes].dup
+    edit_params[2] = {item_id: 1, price: 3, quantity: 2}
+    edit_params[0][:id] = i.transaction_details[0].id
+    edit_params[1][:id] = i.transaction_details[1].id
+
+    edit_params.size.should == 3
+
+    i.attributes = {transaction_details_attributes: edit_params}
+
+    i.transaction_details.size.should == 3
+
+    i.save_trans.should be_false
+    i.errors.should_not be_blank
+    #########
+
     i = Income.find(i.id)
     # Diminish the quantity in edit and the amount should go to the client account
     #i = Income.find(i.id)
@@ -86,6 +102,7 @@ feature "Income", "test features" do
     i.attributes = edit_params
     i.save_trans.should be_true
     i.reload
+
 
     i.transaction_details[1].quantity.should == 5
     i.transaction_details[1].balance.should == 5
@@ -125,6 +142,7 @@ feature "Income", "test features" do
     i.save_trans.should be_false
     i.currency_id.should == currency_id
     i.exchange_rate.should == exchange_rate
+
   end
 
 
