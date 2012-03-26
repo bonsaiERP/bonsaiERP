@@ -75,6 +75,7 @@ module Models::Transaction
       transaction.original_total = calculate_orinal_total
       #create replica
       return unless transaction.persisted?
+      check_repeated_items
 
       create_history
 
