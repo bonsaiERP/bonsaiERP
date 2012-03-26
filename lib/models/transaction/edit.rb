@@ -75,7 +75,6 @@ module Models::Transaction
       transaction.original_total = calculate_orinal_total
       #create replica
       return unless transaction.persisted?
-      check_repeated_items
 
       create_history
 
@@ -163,7 +162,9 @@ module Models::Transaction
     def check_repeated_items
       h = Hash.new(0)
       transaction.transaction_details.each do |det|
-        h[det.item_id] += 1
+        unless det.marked_for_destruction?
+          h[det.item_id] += 1
+        end
       end
 
       transaction.errors[:base] << I18n.t("errors.messages.repeated_items") if h.values.find {|v| v > 1 }

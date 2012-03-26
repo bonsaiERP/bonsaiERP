@@ -59,20 +59,9 @@ feature "Income", "test features" do
      :email => true }.merge(options)
   end
 
-  scenario "Edit a income and save history" do
+  scenario "Nor allow repeated items" do
     i = Income.new(income_params)
     i.save_trans.should be_true
-
-    i.balance.should == 3 * 10 + 5 * 20
-    i.total.should == i.balance
-    i.should be_draft
-    i.transaction_histories.should be_empty
-    i.modified_by.should == UserSession.user_id
-
-    # Approve de income
-    i.approve!.should be_true
-    i.should_not be_draft
-    i.should be_approved
 
     # Should not allow repeated items
     edit_params = income_params[:transaction_details_attributes].dup
@@ -89,6 +78,30 @@ feature "Income", "test features" do
     i.save_trans.should be_false
     i.errors.should_not be_blank
     #########
+
+    # Allow when item marked for destruction
+    edit_params[0][:_destroy] = "1"
+
+    i.attributes = {transaction_details_attributes: edit_params}
+    i.save_trans
+    #.should be_true
+  end
+
+  scenario "Edit a income and save history" do
+    i = Income.new(income_params)
+    i.save_trans.should be_true
+
+    i.balance.should == 3 * 10 + 5 * 20
+    i.total.should == i.balance
+    i.should be_draft
+    i.transaction_histories.should be_empty
+    i.modified_by.should == UserSession.user_id
+
+    # Approve de income
+    i.approve!.should be_true
+    i.should_not be_draft
+    i.should be_approved
+
 
     i = Income.find(i.id)
     # Diminish the quantity in edit and the amount should go to the client account
@@ -138,7 +151,7 @@ feature "Income", "test features" do
     # Check change of exchange_rate and currency
     i = Income.find(i.id)
     i.attributes = {currency_id: 100, exchange_rate: 2}
-    i.contact_id.should == 1
+    i.contact_id.should == contact_id
     i.save_trans.should be_false
     i.currency_id.should == currency_id
     i.exchange_rate.should == exchange_rate
