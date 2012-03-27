@@ -8,7 +8,7 @@
 - present transaction, TransactionPresenter do |presenter|
   = simple_form_for(transaction, :html => {:id => 'transaction_form', :class => 'enter ui-form'}) do |f|
     = bonsai_form_error(f)
-    .row
+    .row-fluid
       .span3
         = f.input :ref_number, :label => 'Nº de referencia', :input_html => {:size => 20}
       .span3
@@ -18,7 +18,7 @@
         = f.input :contact_id, :as => :contact, :label => false, :input_html => {:id => 'transaction_contact_id'}
 
     %hr.light
-    .row
+    .row-fluid
       .span6
         = f.association :project,  :label => 'Proyecto',
           :input_html => {'data-new_url' => new_project_path, 'data-title' => "Nuevo proyecto", 'data-trigger' => 'new_project', 'data-width' => "900" }
@@ -28,7 +28,7 @@
         = f.input :exchange_rate, :as => :hidden, :input_html => {:id => 'transaction_exchange_rate'}
 
     %hr.light
-    .row
+    .row-fluid
       .span3
         %label.radio.inline
           = f.radio_button :fact, true, :class => 'fact'

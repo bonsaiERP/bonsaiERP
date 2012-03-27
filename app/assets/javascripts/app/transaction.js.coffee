@@ -93,9 +93,31 @@ class ItemCollection extends Backbone.Collection
     # Remove
     @.bind "remove", -> $('body').trigger("subtotal")
 
+    #@.setItems()
     # Tax Event for trans
     #@trans.bind "taxes:change"
 
+  # Fills all the models
+  setItems: ->
+    $('tr.item').each((i, elem)=>
+      if elem.id
+        h = {id: elem.id}
+
+      $elem = $(elem)
+
+      h = _.extend(h, {
+        item_id: $elem.find('input.item_id').val()
+        description: $elem.find('input.desc').val()
+        price: $elem.find('input.price').val()
+        quantity: $elem.find('input.quantity').val()
+        trans: @.trans
+        row: elem
+      })
+
+      item = new ItemModel(h)
+      item.set({original_price: $elem.data('original_price')}, {silent: true})
+      @.add(item)
+    )
 
   # Item Events
   setItemEvents: ->
@@ -108,6 +130,7 @@ class ItemCollection extends Backbone.Collection
         source: "/item_autocomplete"
         select: (event, ui)->
           item = self.getByCid($(this).data("cid"))
+
           if self.findItem(ui.item.id)
             alert "El item que ha seleccionado se encuentra en la lista"
           else
@@ -141,7 +164,7 @@ class ItemCollection extends Backbone.Collection
     # Change discount
 
     $('#items_table').find("tr.item").each (i, row)=>
-      item_id  = $(row).find("input.item").val() * 1
+      item_id  = $(row).find("input.item_id").val() * 1
       desc     = $(row).find("input.desc").val()
       price    = $(row).find("input.price").val() * 1
       quantity = $(row).find("input.quantity").val() * 1
@@ -207,8 +230,9 @@ class ItemCollection extends Backbone.Collection
   # changes the rate to all items
   changeRate: ->
     trans = @trans
-    @models.map (model)->
+    _.map(@models, (model)->
       model.set({rate: trans.get("exchange_rate")})
+    )
   # Calculates the total
   subtotal: ->
     @.reduce( (sum, item)->
@@ -267,7 +291,6 @@ class TransactionModel extends Backbone.Model
 
     $('#transaction_discount').trigger('focusout')
     @.calculateTaxes()
-
 
   # set Currency
   setCurrency: ->
