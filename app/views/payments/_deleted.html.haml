@@ -6,11 +6,12 @@
 %table.table.table-striped.nwl#deleted_payments_table
   %thead
     %tr
-      %th Fecha
+      %th Código Fecha
       %th{:style => 'width: 300px'} Descripción
       %th Cantidad #{transaction.currency_symbol}
-      %th.tip{:title => 'Intenreses/Penalidades'} Int./Pena.<br/>#{transaction.currency_plural}
-      %th Total fila <br/>#{transaction.currency_plural}
+      %th{:title => 'Intenreses/Penalidades'} Int./Pena.#{transaction.currency_symbol}
+      %th.nw Total fila #{transaction.currency_symbol}
+      %th
   
   %tbody
     - transaction.account_ledgers.nulled.includes(:account, :to).each do |al|

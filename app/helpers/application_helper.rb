@@ -227,7 +227,7 @@ module ApplicationHelper
   def set_exchange_rates
     file = File.join(Rails.root, "public/exchange_rates.json")
     if not(File.exists?(file)) or (File.ctime(file) < Time.now - 4.hours)
-      resp = %x[curl http://openexchangerates.org/latest.php]
+      resp = %x[curl https://raw.github.com/currencybot/open-exchange-rates/master/latest.json]
       begin
         r = ActiveSupport::JSON.decode(resp)
         f = File.new(file, "w+")

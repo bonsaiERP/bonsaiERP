@@ -23,6 +23,7 @@
           name: "#{session[:organisation][:name]}"
         }
         window.organisation = organisation;
+
   %body
 
     - if Rails.env == 'development'
@@ -49,11 +50,11 @@
 
     #wrapper
       #menu
-        .container
+        .container-fluid
           .main-links.row-fluid= yield :links
 
       #cont
-        .container
+        .container-fluid
           = render "layouts/flash"
           = yield
           .clear

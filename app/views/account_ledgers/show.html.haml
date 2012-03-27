@@ -11,7 +11,7 @@
       = @account_ledger
       %span.n= @account_ledger.selected_account
 
-      %small.fs60= presenter.null_state
+      %small= presenter.null_state
 
   - if @account_ledger.project_id.present?
     %h3
