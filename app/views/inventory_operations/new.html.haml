@@ -10,6 +10,6 @@
 
 
 %h1 Nuevo #{inventory_operation_operation(@inventory_operation)} de almacen
-%h2= @inventory_operation.store
+%h2.n= link_to @inventory_operation.store, @inventory_operation.store
 
 = render :partial => 'form'
