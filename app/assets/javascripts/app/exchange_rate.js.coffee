@@ -73,8 +73,11 @@ class ExchangeRate extends Backbone.Model
     @$input.val(@.get("rate")).mark()
   # Sets the data for currency
   setCurrencyLabel: ->
-    from = @currencies[@currency_id].symbol
-    to   = @.get("currency").symbol
+    try
+      from = @currencies[@currency_id].symbol
+      to   = @.get("currency").symbol
+    catch e
+      return false
 
     if @inverse
       tmp  = from
@@ -86,11 +89,14 @@ class ExchangeRate extends Backbone.Model
     @.presentCurrency()
   # Presents the hidden div
   presentCurrency: ->
-    if @currency_id == @.get("currency").id
-      @$hide.hide('slow')
-     else
-       @$hide.show('slow')
-       @$hide.show()
+    try
+      if @currency_id == @.get("currency").id
+        @$hide.hide('slow')
+       else
+         @$hide.show('slow')
+         @$hide.show()
+    catch e
+      false
   # Set the rate for a currency
   setSuggestRates: ->
     try

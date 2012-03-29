@@ -1,10 +1,12 @@
+:css
+  #account_ledger-form{ max-width: 850px; }
 
-= simple_form_for @account_ledger, :html => {:class => "enter"} do |f|
+= simple_form_for @account_ledger, :html => {class: 'enter', id: 'account_ledger-form'} do |f|
   = bonsai_form_error(f)
   = f.input :operation, :as => :hidden
   = f.input :account_id, :as => :hidden
 
-  .row
+  .row-fluid
     .span3
       = f.input :amount, :label => "Cantidad en #{f.object.account.currency_symbol}", :input_html => {:size => 12, :type => 'decimal'}
     .span3
@@ -12,7 +14,7 @@
     .span6
       = f.input :contact_id, :as => :contact, :label => false 
 
-  .row
+  .row-fluid
     .span6
       = f.input :reference, :as => :text, :label => 'Referencia', :input_html => {:rows => 2, :cols => 35}, :hint => 'Nº de cheque, razón, factura, etc.'
     .span6

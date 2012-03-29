@@ -23,7 +23,7 @@
       = link_to @inventory_operation.project, @inventory_operation.project
 
 
-  %h4.i._25.fl{:style => 'margin: 0px'}= lo @inventory_operation.created_at
+  %h4.i._25.fl{:style => 'margin: 0px', title: "Fecha"}= lo @inventory_operation.date
 
   .clear
   %p= @inventory_operation.description
@@ -31,7 +31,7 @@
 
   %h2 Items
 
-  %table.decorated#items_table
+  %table.table.table-striped#items_table
     %tr
       %th Item
       %th Cantidad

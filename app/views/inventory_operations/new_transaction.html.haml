@@ -20,22 +20,22 @@
     = f.input :store_id, :as => :hidden
     = f.input :transaction_id, :as => :hidden
 
-    .main.bg-light-grey
-      ._50.fl
+    .row-fluid
+      .span3
         = f.input :ref_number, :input_html => {:size => 20}, :label => 'Numero de referencia'
-        .input
-          %label Fecha
-          = l Time.zone.now
+      .span3
+        = f.input :date, label: "Fecha"
 
-      .input
+      .span6
         %label Contacto
         = link_to f.object.contact, f.object.contact, :class => "b"
       .clear
 
-    = f.input :description, :as => :text, :input_html => {:rows => 4, :cols => 40}, :label => 'Descripción'
-    .clear
+    .row-fluid
+      .span12
+        = f.input :description, :as => :text, :input_html => {:rows => 4, :cols => 40}, :label => 'Descripción'
 
-    %table.decorated#items_table
+    %table.table.table-striped#items_table
       %tr
         %th Item
         %th Cantidad

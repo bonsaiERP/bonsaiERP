@@ -5,40 +5,45 @@
 
       = f.input :transaction_id, :as => :hidden
 
-      -# Account
-      %label Cuenta
-      #payment_accounts.fl
-        %div
-          %p= presenter.selected_account
-        %ul
-          - @payment.accounts.each do |account|
-            %li.account{:id => account.id}= presenter.account_select account
-        = f.association :account, :collection => @payment.accounts, :label => false
+      .row-fluid
+        .span6
+          -# Account
+          %label Cuenta
+          #payment_accounts.fl
+            %div
+              %p= presenter.selected_account
+            %ul
+              - @payment.accounts.each do |account|
+                %li.account{:id => account.id}= presenter.account_select account
 
-      .clear
+            = f.association :account, :collection => @payment.accounts, :label => false
 
-      ._50.fl
-        -# Amount
-        = f.input :base_amount, :input_html => {:size => 12, :type => 'decimal', :class => 'amt r'}, 
-          :label => "Cantidad <span class='amount currency'></span>".html_safe
-        -# Interests
-        = f.input :interests_penalties, :input_html => {:size => 12, :type => 'decimal', :class => 'amt'}, 
-          :label => "<span class='tip' title='Intereses/Penalidades'>Int./Pen.</span> <span class='interests currency'></span>".html_safe
-      ._50.fl
-        - disp = 'block'
-        - disp = 'none' if @account_ledger.currency_id.blank?
-        -# Exchange rate
-        = f.input :exchange_rate, :label => "Tipo de cambio <span class='currencies'></span>".html_safe, 
-          :input_html => {:size => 12, :type => 'decimal', :class => 'amt'},
-          :wrapper_html => {:style => "display:#{disp}", :class => 'exchange_rate _60'}
-        .input.fs120._40
-          %label
-            Total 
-            %span (#{@transaction.currency_symbol})
-          %span#payment_total_currency.b.fs110
-      .clear
+        .span6
+          =f.input :date, label: "Fecha"
 
-      = f.input :reference, :label => 'Referencia/Nº Cheque', :input_html => {:rows => 3, :cols => 35}, :as => :text
+      .row-fluid
+        .span6
+          -# Amount
+          = f.input :base_amount, :input_html => {:size => 12, :type => 'decimal', :class => 'amt r'}, 
+            :label => "Cantidad <span class='amount currency'></span>".html_safe
+          -# Interests
+          = f.input :interests_penalties, :input_html => {:size => 12, :type => 'decimal', :class => 'amt'}, 
+            :label => "<span class='tip' title='Intereses/Penalidades'>Int./Pen.</span> <span class='interests currency'></span>".html_safe
+        .span6
+          - disp = 'block'
+          - disp = 'none' if @account_ledger.currency_id.blank?
+          -# Exchange rate
+          = f.input :exchange_rate, :label => "Tipo de cambio <span class='currencies'></span>".html_safe, 
+            :input_html => {:size => 12, :type => 'decimal', :class => 'amt'},
+            :wrapper_html => {:style => "display:#{disp}", :class => 'exchange_rate _60'}
+          .input.fs120._40
+            %label
+              Total 
+              %span (#{@transaction.currency_symbol})
+            %span#payment_total_currency.b.fs110
+
+      .row-fluid
+        .span12= f.input :reference, :label => 'Referencia/Nº Cheque', :input_html => {:rows => 3, :cols => 35}, :as => :text
 
 
       -#= f.input :description, :label => 'Descripción', :as => :text, :input_html => {:rows => 4, :cols => 35}
@@ -58,6 +63,7 @@
         var p = new Payment(accounts, currencies, account_data, #{@transaction.currency_id});
         $('#payment_accounts').find("div").unbind("click");
         $('#payment_accounts').jDropDown({callback: p.setAccount}).initjDropDown();
+        console.log("jDropDown set");
 
         var er = new ExchangeRate();
         er.setAll('#account_ledger_exchange_rate', '#account_ledger_account_id', #{@transaction.currency_id}, accounts, currencies, {inverted: true});

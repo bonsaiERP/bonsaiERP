@@ -8,7 +8,7 @@
 - present @staff, ContactPresenter do |presenter|
   %h1
     = @staff.matchcode
-    %span.fs50.dashlet.bg-dark Otros
+    %small.pill.white.bg-dark Otros contactos
 
   -if current_user.is_admin?
     = link_to "Balancear cuenta", new_account_balance_path(:contact_id => @staff.id), :class => "new button"

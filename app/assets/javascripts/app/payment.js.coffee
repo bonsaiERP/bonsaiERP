@@ -52,6 +52,9 @@ class Payment
     $('#payment_total_currency').html(_b.ntc(total))
   # Sets the currency for all items
   setCurrency: ->
-    $('#payment_form span.currency').html(@rate.currency.symbol)
+    try
+      $('#payment_form span.currency').html(@rate.currency.symbol)
+    catch e
+      false
 
 window.Payment = Payment

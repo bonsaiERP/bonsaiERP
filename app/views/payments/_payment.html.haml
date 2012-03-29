@@ -1,7 +1,7 @@
 %tr.account_ledger{ :id => account_ledger.id, :class => "#{account_ledger.active.to_s}"}
   %td
     =link_to account_ledger, account_ledger_path(account_ledger), :class => 'b'
-    %span.i= lo(account_ledger.created_at)
+    %span.i= lo(account_ledger.date)
 
   %td.account
     = presenter.payment_exchange_rate(account_ledger)
