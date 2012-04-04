@@ -50,8 +50,23 @@ class InventoryOperationPresenter < BasePresenter
       h.link_to "Transferencia #{txt} #{inventory_operation.store_to}", trans, :title => "Transferencia a #{inventory_operation.store_to}"
     elsif inventory_operation.contact_id.present?
       cont = inventory_operation.contact
-      h.link_to cont, cont, :title => "Contacto"
+      h.link_to cont, cont, :title => contact_tooltip
+    end
+  end
+
+  def transaction_tooltip
+    if inventory_operation.transaction.is_a?(Income)
+      "Venta"
+    else
+      "Compra"
+    end
+  end
+
+  def contact_tooltip
+    if inventory_operation.contact.is_a?(Client)
+      "Cliente"
+    else
+      "Proveedor"
     end
   end
 end
-

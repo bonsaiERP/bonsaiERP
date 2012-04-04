@@ -16,7 +16,7 @@
   = f.input :operation, :as => :hidden
   = f.input :store_id, :as => :hidden
 
-  .row
+  .row-fluid
     .span3
       = f.input :ref_number, :input_html => {:size => 20}, :label => 'Numero de referencia'
     .span3
@@ -26,17 +26,17 @@
     .span6
       =f.input :store_to_id, :collection => Store.without(@inventory_operation.store_id), :label => "Transferir a almacen"
 
-  .row
+  .row-fluid
     .span6
       = f.input :contact_id, :as => :contact, :label => false
     .span6
       = f.association :project, :label => "Proyecto",
         :input_html => {'data-new_url' => new_project_path, 'data-title' => "Nuevo proyecto", 'data-trigger' => 'new_project' }
-  .row
+  .row-fluid
     .span6
       = f.input :description, :as => :text, :input_html => {:rows => 4, :cols => 40}, :label => 'Descripción'
 
-  %table.decorated#items_table
+  %table#items_table.table.table-striped
     %tr
       %th Item
       %th Cantidad
@@ -46,17 +46,17 @@
     = f.simple_fields_for :inventory_operation_details do |det|
       %tr.item
         %td
-          %input.item{:type => 'text', :value => det.object.item, :size => 70}
+          %input.item(type='text' value="#{det.object.item}" size="70" placeholder="Escriba para buscar ítem")
           = det.input :item_id, :as => :hidden, :input_html => {:class => 'item_id'}
         %td
           = det.input :quantity, :label => false, :input_html => { :type => 'decimal', :size => 8}
         %td.quantity.r
         %td
-          %a.destroy{:href => "javascript:"} borrar
+          %a.destroy(href="javascript:" title="Borrar") borrar
 
   - if @inventory_operation.transaction_id.blank?
     %p
-      <a href="javascript:" id="add_item" class="add link">Adicionar ítem</a>
+      <a href="javascript:" id="add_item" class="btn btn-primary"><i class="icon-plus-sign icon-white"></i> Adicionar ítem</a>
   %br
   .clear
   = f.submit 'Salvar', :class => 'btn btn-success b'
@@ -102,6 +102,10 @@
         }
       });
 
+      link = tr.find("a.destroy");
+      link.attr('title', link.data('original-title')).removeAttr('data-original-title');
+      link.tooltip();
+
       tr.insertAfter("tr.item:last");
     });
 
@@ -116,6 +120,7 @@
           item_ids = _.reject(item_ids, function(num) { return num === item_id});
         }
         $(this).parents('tr:first').remove();
+        $('.tooltip').remove();
       }
     });
 

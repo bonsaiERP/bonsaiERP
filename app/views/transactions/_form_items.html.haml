@@ -17,7 +17,7 @@
   = f.simple_fields_for :transaction_details do |fd|
     %tr.item{:id => fd.object.id}
       %td
-        %input.desc{:type => 'text', :size => 50, :value => fd.object.item}
+        %input.desc{:type => 'text', :size => 50, :value => fd.object.item, :placeholder => "Escriba para buscar el ítem"}
         = fd.input :item_id, :label => false, :input_html => {:class => 'item_id'}
 
       %td= fd.input :price, :input_html => { :size => 8, :class => 'price', :type => 'decimal', 'data-original_price' => fd.object.original_price },

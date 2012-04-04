@@ -212,11 +212,16 @@ class ItemCollection extends Backbone.Collection
 
     @.remove(@.getByCid(cid))
     row.remove()
+    $('.tooltip').remove()
 
   # Creates a new Row
   createNewRow: ->
     row = $('<tr/>').addClass("item")
     .html($('tr.item:first').html())
+    link = row.find("a.destroy")
+    link.attr('title', link.data('original-title'))
+    link.removeAttr("data-original-title").tooltip()
+
     row.find("input.desc").removeClass("ui-autocomplete-input")
     num = (new Date).getTime()
 
