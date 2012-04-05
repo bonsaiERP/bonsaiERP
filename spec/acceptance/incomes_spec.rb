@@ -19,7 +19,7 @@ feature "Income", "test features" do
   let(:bank_account) { bank.account }
   let!(:client) { create_client(:matchcode => 'Karina Luna') }
   let!(:tax) { Tax.create(:name => "Tax1", :abbreviation => "ta", :rate => 10)}
-  let!(:project) { Factory.create :project }
+  let!(:project) { create :project }
 
   let(:income_params) do
       d = Date.today

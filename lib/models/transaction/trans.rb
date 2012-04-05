@@ -46,7 +46,10 @@ module Models::Transaction
       # Edit transaction if necessary
       edit_trans = Models::Transaction::Edit.new(self)
 
-      return false if details.has_errors?
+      if details.has_errors?
+        self.errors[:"transaction_details.item_id"] << "error"
+        return false 
+      end
 
       edit_trans.save
     end

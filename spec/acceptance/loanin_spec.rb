@@ -11,8 +11,8 @@ feature "Test loanin" do
     OrganisationSession.stub!(currency_id: 1)
   end
 
-  let!(:client) { Factory.create(:client) }
-  let!(:bank) { Factory.create(:bank) }
+  let!(:client) { create(:client) }
+  let!(:bank) { create(:bank) }
   let!(:account) { bank.account }
 
   let(:valid_attributes) {
@@ -73,7 +73,7 @@ feature "Test loanin" do
   end
 
   scenario "It should create pay_plans and receive payments" do
-    cash = Factory.create :cash, amount: 500
+    cash = create :cash, amount: 500
     cash_account = cash.account
 
     li = Loanin.create!(valid_attributes) {|l| l.action = "edit" }

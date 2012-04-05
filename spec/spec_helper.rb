@@ -46,6 +46,9 @@ Spork.prefork do
     config.include AuthMacros
 
     config.use_transactional_fixtures = false
+
+    # Include factory methods in Rspec
+    config.include FactoryGirl::Syntax::Methods
     # Hack
     ActiveSupport::Dependencies.clear
   end

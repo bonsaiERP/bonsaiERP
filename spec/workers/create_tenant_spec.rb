@@ -11,8 +11,8 @@ describe CreateTenant do
 
   before do
     User.stub!(find: user_mock)
-    Factory(:currency)
-    Factory(:org_country)
+    create(:currency)
+    create(:org_country)
     UserSession.current_user = user_mock
   end
   it 'should create a new schema and migrate' do

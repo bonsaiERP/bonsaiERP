@@ -22,7 +22,7 @@ feature "Income", "test features" do
   let!(:store) { 
     Store.create!(:name => 'First store', :address => 'An address') {|s| s.id = 1 }
   }
-  let!(:project) { Factory.create :project }
+  let!(:project) { create :project }
 
   background do
     hash = {:ref_number => 'I-0001', :date => Date.today, :contact_id => client.id, :operation => 'in', :store_id => 1,

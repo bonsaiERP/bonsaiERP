@@ -13,12 +13,12 @@ feature "Buy", "test features" do
   end
 
   let(:pay_plan_params) do
-    d = options[:payment_date] || Date.today
     {:alert_date => (d - 5.days), :payment_date => d,
      :interests_penalties => 0,
      :ctype => 'Buy', :description => 'Prueba de vida!', 
-     :email => true }.merge(options)
+     :email => true, :payment_date => Date.today }
   end
+
 
   let!(:organisation) { create_organisation(:id => 1) }
   let!(:items) { create_items }
@@ -26,11 +26,12 @@ feature "Buy", "test features" do
   let(:bank_account) { bank.account }
   let!(:supplier) { create_supplier(:matchcode => 'Manuel Morales') }
   let!(:client) { create_client(:matchcode => "Karina Luna")}
+  let!(:project) { create :project}
   let(:buy_params) do
       d = Date.today
       buy_params = {"active"=>nil, "bill_number"=>"56498797", "contact_id"=> supplier.id, 
         "exchange_rate"=>1, "currency_id"=>1, "date"=> d, 
-        "description"=>"Esto es una prueba", "discount" => 3, "project_id"=>1 
+        "description"=>"Esto es una prueba", "discount" => 3, "project_id"=> project.id
       }
       details = [
         { "description"=>"jejeje", "item_id"=>1, "price"=>3, "quantity"=> 10},
@@ -42,7 +43,6 @@ feature "Buy", "test features" do
 
   scenario "Create a buy" do
 
-    log.info "Creating new buy"
     b = Buy.new(buy_params)
 
     b.should be_cash
@@ -50,7 +50,6 @@ feature "Buy", "test features" do
     b.should be_draft
 
     b = Buy.find(b.id)
-    log.info "Checking details, cash and balance for buy"
     b.transaction_details.size.should == 2
     b.should be_cash
     tot = ( 3 * 10 + 5 * 20 )

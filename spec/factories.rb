@@ -1,34 +1,61 @@
 # encoding: utf-8
-Factory.define :client do |f|
-  f.matchcode "Juan Perez"
-  f.first_name "Juan"
-  f.last_name "Perez"
-  f.organisation_name "Perez"
-end
+FactoryGirl.define do
+  factory :org_country do
+    id 1
+    name 'Boliva'
+    abbreviation 'bo'
+  end
 
-Factory.define :supplier do |f|
-  f.matchcode "Juan León"
-  f.first_name "Juan"
-  f.last_name "León"
-  f.organisation_name "León"
-end
+  factory :currency do
+    id 1
+    name 'boliviano'
+    symbol 'Bs.'
+    code 'BOB'
+  end
 
-Factory.define :bank do |f|
-  f.name "Bank"
-  f.number "123"
-  f.currency_id 1
-  f.amount 100
-end
+  factory :user do
+    first_name "Boris" 
+    last_name "Barroso"
+    email "boris@example.com"
+    phone "2755620"
+    mobile "70681101"
+    website "http://boliviaonrails.com"
+    password "demo123"
+    password_confirmation "demo123"
+    description "Una descripción"
+  end
 
-Factory.define :cash do |f|
-  f.name "Cash"
-  f.number "123"
-  f.currency_id 1
-  f.amount 100
-end
+  factory :client do
+    matchcode "Juan Perez"
+    first_name "Juan"
+    last_name "Perez"
+    organisation_name "Perez"
+  end
 
-Factory.define :project do |p|
-  p.name "Project 1"
-  p.date_start Date.today
-  p.date_end Date.today + 30.days
+  factory :supplier do
+    matchcode "Juan León"
+    first_name "Juan"
+    last_name "León"
+    organisation_name "León"
+  end
+
+  factory :bank do
+    name "Bank"
+    number "123"
+    currency_id 1
+    amount 100
+  end
+
+  factory :cash do
+    name "Cash"
+    number "123"
+    currency_id 1
+    amount 100
+  end
+
+  factory :project do
+    name "Project 1"
+    date_start Date.today
+    date_end Date.today + 30.days
+  end
 end

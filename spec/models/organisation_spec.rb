@@ -5,8 +5,8 @@ require 'spec_helper'
 describe Organisation do
   before do
     UserSession.current_user = User.new {|u| u.id = 1}
-    Factory(:currency, id: 10)
-    Factory(:org_country)
+    create(:currency, id: 10)
+    create(:org_country)
   end
 
   it {should have_valid(:name).when("uno")}
