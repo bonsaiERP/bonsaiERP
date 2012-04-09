@@ -235,6 +235,8 @@ class InventoryOperation < ActiveRecord::Base
   def set_transaction_delivered
     if transaction.transaction_details.map(&:balance).uniq === [0]
       transaction.delivered = true
+    else
+      transaction.delivered = false
     end
   end
 

@@ -306,6 +306,56 @@ feature "Income", "test features" do
     ac.amount.should == -(tot_ac + dev_amt)
   end
 
+  scenario "Check the delivered state of a income" do
+    i = Income.new(income_params)
+    i.save_trans.should be_true
+
+    i.approve!.should be_true
+
+    i = Income.find(i.id)
+    p = i.new_payment(:account_id => bank_account.id, :base_amount => i.balance, :exchange_rate => 1, :reference => 'Cheque 143234', :operation => 'in')
+    i.save_payment
+    p = AccountLedger.find(p.id)
+    p.conciliate_account.should be_true
+
+    i = Income.find(i.id)
+
+    i.balance.should == 0
+    i.should be_paid
+    i.should be_deliver
+
+    # IO operation for income
+    h = {
+      transaction_id: i.id, operation: 'out', store_id: 1
+    }
+
+    io = InventoryOperation.new(h)
+    io.set_transaction
+    io.inventory_operation_details[0].quantity.should == i.transaction_details[0].quantity
+    io.inventory_operation_details[1].quantity.should == i.transaction_details[1].quantity
+
+    io.save_transaction.should be_true
+    io.should be_persisted
+
+    i.reload
+    i.should be_delivered
+    i.transaction_details.map(&:balance).uniq.should == [0]
+
+    # IO operation for income
+    h = {
+      transaction_id: i.id, operation: 'in', store_id: 1
+    }
+
+    io = InventoryOperation.new(h)
+    io.set_transaction
+    io.inventory_operation_details[0].quantity = 1
+    io.save_transaction.should be_true
+
+    i = Income.find(i.id)
+    i.transaction_details[0].balance.should == 1
+    i.should_not be_delivered
+  end
+
   scenario "check the number of items" do
     i = Income.new(income_params)
     i.save_trans.should be_true
@@ -353,7 +403,8 @@ feature "Income", "test features" do
     io.should be_persisted
     io.reload
 
-    i.transaction_details(true)
+    i.reload
+    #i.transaction_details(true)
     i.transaction_details[0].balance.should == 5
     i.transaction_details[1].balance.should == 0
 
