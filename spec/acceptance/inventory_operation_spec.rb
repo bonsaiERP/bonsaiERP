@@ -22,11 +22,13 @@ feature "Inventory Operation", "Test IN/OUT" do
   let(:bank_account) { bank.account }
   let!(:client) { create_client(:matchcode => 'Karina Luna') }
   let!(:tax) { Tax.create(:name => "Tax1", :abbreviation => "ta", :rate => 10)}
+  let!(:project) { create :project }
+
   let(:income_params) {
     d = Date.today
     i_params = {"active"=>nil, "bill_number"=>"56498797", "contact_id" => client.id, 
       "exchange_rate"=>1, "currency_id"=>1, "date"=>d, 
-      "description"=>"Esto es una prueba", "discount" => 0, "project_id"=>1 
+      "description"=>"Esto es una prueba", "discount" => 0, "project_id"=> project.id 
     }
     details = [
       { "description"=>"jejeje", "item_id"=> 1, "price"=>3, "quantity"=> 10},
