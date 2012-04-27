@@ -1,12 +1,13 @@
 :css
   #links{ display: none; }
 
-%h1 Inventario pendiente de #{params[:operation] == "in" ? "ingreso" : "egreso"} 
+.page-header
+  %h1 Inventario pendiente de #{params[:operation] == "in" ? "ingreso" : "egreso"} 
 
 
 = paginate(@transactions)
 
-%table{ :class => 'decorated nwl' }
+%table.table.table-striped
   %thead
     %tr
       %th.tip{:title => 'Estado'} Est.
@@ -24,7 +25,9 @@
       %tr{ :class => cycle(:odd, :even) }
         %td 
           %span{:class => "#{transaction.real_state} tip", :title => transaction.show_state}
-            %td.tip{:title => 'Seleccionar almacen'}= link_to transaction.ref_number, select_store_inventory_operation_path(transaction, :operation => params[:operation]), :class => 'b ajax'
+            %td
+              = link_to transaction.ref_number, select_store_inventory_operation_path(transaction, :operation => params[:operation]), :class => 'b ajax',
+                title: 'Seleccionar almacen', 'data-title' => 'Seleccionar almacen'
         %td= transaction.contact
         %td= lo transaction.payment_date unless transaction.paid?
         %td.cur #{transaction.currency_symbol} #{ntc transaction.total }
