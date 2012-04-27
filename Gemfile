@@ -32,8 +32,6 @@ gem 'bcrypt-ruby', '~> 3.0.1'
 gem 'qu-redis',    '~> 0.1.4'
 #gem 'resque', :require => 'resque/server'
 
-#gem 'nokogiri'
-
 gem 'prawn', '~> 1.0.0.rc1'
 #gem 'exception_notification', "~> 2.5.2"
 #gem 'newrelic_rpm'
@@ -62,7 +60,6 @@ group :test do
   gem 'valid_attribute',    '~> 1.2.0'
   gem 'watchr',             '~> 0.7'
   gem 'launchy',            '~> 2.1.0'
-  gem 'turn',               '~> 0.9.4', :require => false
   gem 'log4r'
 end  
 

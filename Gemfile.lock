@@ -30,7 +30,6 @@ GEM
       i18n (~> 0.6)
       multi_json (~> 1.0)
     addressable (2.2.7)
-    ansi (1.4.2)
     arel (3.0.2)
     bcrypt-ruby (3.0.1)
     builder (3.0.0)
@@ -194,8 +193,6 @@ GEM
       polyglot
       polyglot (>= 0.3.1)
     ttfunk (1.0.3)
-    turn (0.9.4)
-      ansi
     tzinfo (0.3.32)
     uglifier (1.2.4)
       execjs (>= 0.3.0)
@@ -234,7 +231,6 @@ DEPENDENCIES
   simple_form (~> 2.0.1)
   spork (~> 0.9.0)
   steak (~> 2.0.0)
-  turn (~> 0.9.4)
   uglifier (>= 1.2.4)
   valid_attribute (~> 1.2.0)
   valium (~> 0.5.0)
