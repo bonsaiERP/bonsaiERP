@@ -12,19 +12,25 @@
 .page-header
   %h1= @item
 
-.row
-  .span3
-    %label Precio de venta
-    .b= ntc @item.price
-  .span3
-    %label Unidad
-    = @item.unit
-  .span3
+.row-fuid
+  .span2
     %label Activo
     %span.icon{:class => @item.active.to_s}
-  .span3
-    %label Tipo
-    = @item.get_type
+  .span2
+    %label Inventario
+    %span.icon{:class => @item.stockable.to_s}
+  .span2
+    %label En venta
+    %span.icon{:class => @item.for_sale.to_s}
+  - if @item.for_sale?
+    .span2
+      %label Precio de venta
+      .b
+        = currency_symbol
+        = ntc @item.price
+  .span2
+    %label Unidad
+    = @item.unit
 .row
   .span6
     %label Descripción

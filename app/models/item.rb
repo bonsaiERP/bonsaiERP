@@ -35,9 +35,8 @@ class Item < ActiveRecord::Base
   ##########################################
   # Validations
   validates_presence_of :name, :unit, :unit_id, :code
-  #validates :ctype, :presence => true, :inclusion => { :in => TYPES }
   validates :code, :uniqueness => true
-  validates :price, :numericality => { :greater_than_or_equal_to => 0 }
+  validates :price, :numericality => { :greater_than_or_equal_to => 0 }, if: :for_sale?
 
 
   ##########################################

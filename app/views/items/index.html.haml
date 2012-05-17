@@ -32,24 +32,25 @@
 
 %table{ :class=> "decorated" }
   %tr
-    %th Código
-    %th.300 Nombre
+    %th Código - Nombre
+    %th Activo
+    %th En venta
     %th Precio<br/>de Venta
-    %th Tipo
     %th Unidad
     %th Inventario<br/>Total
-    %th Activo
     %th
 
   - @items.each do |item|
     %tr
-      %td= link_to item.code, item, :class => 'b'
-      %td= item.name
-      %td.r= ntc( item.price )
-      %td= item.get_type
-      %td= item.unit.name 
-      %td.r= ntc item.total_stock
-      %td.c <span class="#{item.active}"></span>
+      %td= link_to item, item, :class => 'b'
+      %td
+        %span(class="#{item.active?}")
+      %td
+        %span(class="#{item.for_sale?}")
+      %td.r= "#{currency_symbol} #{ntc( item.price )}" if item.for_sale?
+      %td= item.unit_name
+      %td.r
+        = ntc item.total_stock if item.stockable?
       %td= bonsai_links(item)
 
 :javascript

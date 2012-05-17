@@ -13,15 +13,24 @@ describe Item do
 
   describe "Validatios" do
 
-    it { should have_valid(:price).when(0) }
-    it { should_not have_valid(:price).when('a', 'b', nil) }
-
     it { should have_valid(:unit_id).when(1) }
     it { should_not have_valid(:unit_id).when(nil) }
 
     it 'should not have valid unit_id' do
       i = Item.new(valid_params.merge(unit_id: unit.id + 1))
       
+      i.should_not be_valid
+    end
+
+    it 'should be valid if not for sale' do
+      i = Item.new(valid_params.merge(for_sale: false, price: ''))
+
+      i.should be_valid
+      
+      i.for_sale = true
+      i.should_not be_valid
+
+      i.price = 'a'
       i.should_not be_valid
     end
   end

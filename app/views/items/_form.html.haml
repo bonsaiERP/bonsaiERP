@@ -11,25 +11,18 @@
     .span6
       = f.input :name, :label => 'Nombre'
   .row-fluid
-    .span6
-      = f.input :for_sale, label: 'En venta?', wrapper_html: {title: 'Se vende este ítem?'}
-    .span6
+    .span3
+      = f.input :active, :label => "Activo", :as => :radio, :item_wrapper_class => 'inline', label_html: {title: 'El ítem aparecera en los formularios de venta o compra'}
+    .span3
+      = f.input :stockable, label: 'Inventario', as: :radio, item_wrapper_class: 'inline', label_html: {title: 'Se puede almacenar este ítem en almacenes?'}
+    #for_sale.span3
+      = f.input :for_sale, label: 'En venta?', label_html: {title: 'Se vende este ítem?'}, as: :radio, item_wrapper_class: 'inline'
+    #price.hide.span3
       = f.input :price, :label => "Precio de venta #{currency_symbol}", :input_html => {:size => 12, :type => 'decimal'}
+  .row-fluid
     .span6
       = f.association :unit, :label => "Unidad", 
         :input_html => { 'data-new_url' => new_unit_path, 'data-trigger' => 'new_unit', 'data-title' => 'Nueva unidad' }
-  .row-fluid
-    .span6.inline-group
-      = f.input :active, :label => "Activo", :as => :radio, :item_wrapper_class => 'inline'
-    .span6.inline-group
-      - if f.object.new_record?
-        = f.input :ctype, :label => 'Tipo', :collection => Item.get_types(params[:scope]), :as => :radio,
-            :item_wrapper_class => 'inline',
-            :hint => "<span class='warning bicon'></span> <span class='dark-yellow'>No es posible modificar después</span>".html_safe
-      - else
-        %label Tipo
-        = f.object.get_type
-  .row-fluid
     .span6
       = f.input :description, :as => :text, :input_html => {:rows => 4}
   
@@ -41,4 +34,15 @@
       var label = resp.name + " (" + resp.symbol + ")";
       $('#item_unit_id').createSelectOption(resp.id, label);
     });
+
+    function showHidePrice() {
+      if($('#item_for_sale_true').attr('checked') ){
+        $('#price').show('slow');
+      }else{
+        $('#price').hide('slow');
+      }
+    }
+
+    $('#for_sale input').live('click', function() { showHidePrice() });
+    showHidePrice();
   });
