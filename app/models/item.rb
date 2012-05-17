@@ -3,12 +3,10 @@
 # email: boriscyber@gmail.com
 class Item < ActiveRecord::Base
 
-  attr_readonly :ctype
-
   self.inheritance_column = :class_type
 
-  #before_save :set_stockable
-  before_create  :set_type_and_stockable
+  ##########################################
+  # Callbacks
   before_destroy :check_items_destroy
 
   TYPES = ["item", "expense", "product", "service"]
@@ -20,34 +18,35 @@ class Item < ActiveRecord::Base
     CODE
   end
 
-  #acts_as_taggable
-
-  # relationships
-  belongs_to :unit#, :class_name => "Contact"
+  ##########################################
+  # Relationships
+  belongs_to :unit
   has_many :prices
   has_many :stocks
   has_many :transaction_details
   has_many :inventory_operation_details
   
 
-  attr_accessible :name, :unit_id, :code, :description, :price, :discount, :tag_list, :unitary_cost, :ctype, :active
+  ##########################################
+  # Attributes
   attr_readonly :type, :ctype
+  attr_accessible :name, :unit_id, :code, :description, :price, :discount, :active, :stockable, :for_sale
 
+  ##########################################
   # Validations
-  validates_presence_of :name, :unit_id, :code
-  #validates_associated :unit
-  validates :ctype, :presence => true, :inclusion => { :in => TYPES }
+  validates_presence_of :name, :unit, :unit_id, :code
+  #validates :ctype, :presence => true, :inclusion => { :in => TYPES }
   validates :code, :uniqueness => true
   validates :price, :numericality => { :greater_than_or_equal_to => 0 }
 
 
+  ##########################################
+  # Delegates
   delegate :symbol, :name, :to => :unit, :prefix => true
 
-  # scopes
-  #default_scope where(:active => true)
+  ##########################################
+  # Scopes
   scope :active   , where(:active => true)
-  scope :service  , where(:ctype => 'service')
-
   scope :json     , select("id, name, price")
 
   # Related scopes
@@ -57,6 +56,8 @@ class Item < ActiveRecord::Base
   scope :inventory, where(["ctype IN (?)", ["item", "product"] ])
   scope :service  , where(:ctype => 'service')
 
+  ##########################################
+  # Methods
   def to_s
     "#{code} - #{name}"
   end
@@ -174,11 +175,6 @@ class Item < ActiveRecord::Base
     else
       true
     end
-  end
-
-  def set_type_and_stockable
-    self.stockable = ["item", "product"].include?(self.ctype)
-    self.type = (ctype == "service")? "ItemService" : "Item"
   end
 
   def check_valid_unit_id

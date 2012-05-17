@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120308030345) do
+ActiveRecord::Schema.define(:version => 20120517130511) do
 
   create_table "account_balances", :force => true do |t|
     t.integer  "user_id"
@@ -259,10 +259,13 @@ ActiveRecord::Schema.define(:version => 20120308030345) do
     t.string   "un_symbol",    :limit => 10
     t.datetime "created_at",                                                                    :null => false
     t.datetime "updated_at",                                                                    :null => false
+    t.boolean  "for_sale",                                                   :default => false
   end
 
   add_index "items", ["code"], :name => "index_items_on_code"
   add_index "items", ["ctype"], :name => "index_items_on_ctype"
+  add_index "items", ["for_sale"], :name => "index_items_on_for_sale"
+  add_index "items", ["stockable"], :name => "index_items_on_stockable"
   add_index "items", ["type"], :name => "index_items_on_type"
   add_index "items", ["unit_id"], :name => "index_items_on_unit_id"
 

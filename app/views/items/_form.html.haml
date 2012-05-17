@@ -12,6 +12,8 @@
       = f.input :name, :label => 'Nombre'
   .row-fluid
     .span6
+      = f.input :for_sale, label: 'En venta?', wrapper_html: {title: 'Se vende este ítem?'}
+    .span6
       = f.input :price, :label => "Precio de venta #{currency_symbol}", :input_html => {:size => 12, :type => 'decimal'}
     .span6
       = f.association :unit, :label => "Unidad", 

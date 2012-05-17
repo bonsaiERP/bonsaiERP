@@ -1,5 +1,11 @@
 # encoding: utf-8
 FactoryGirl.define do
+  factory :unit do
+    name 'Kilogramo'
+    symbol 'Kg.'
+    visible true
+  end
+
   factory :org_country do
     id 1
     name 'Boliva'

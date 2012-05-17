@@ -6,27 +6,24 @@ require 'spec_helper'
 
 describe Item do
 
+  let(:unit){ create :unit }
   let(:valid_params) {
-    { :name => 'First item', :unit_id => 1, :code => 'AU101', :price => 12, :ctype => "product" }
+    { :name => 'First item', :unit_id => unit.id, :code => 'AU101', :price => 12, :ctype => "product", for_sale: true }
   }
 
-  before(:each) do
-    OrganisationSession.set = {:id => 1, :name => 'ecuanime'}
-  end
-
   describe "Validatios" do
-    before(:each) do
-      Unit.stub!(:org => stub(:find_by_id => mock_model(Unit)) )
-    end
 
     it { should have_valid(:price).when(0) }
     it { should_not have_valid(:price).when('a', 'b', nil) }
 
-    it { should have_valid(:ctype).when(*Item::TYPES) }
-    it { should_not have_valid(:ctype).when('other', 'items') }
-
     it { should have_valid(:unit_id).when(1) }
     it { should_not have_valid(:unit_id).when(nil) }
+
+    it 'should not have valid unit_id' do
+      i = Item.new(valid_params.merge(unit_id: unit.id + 1))
+      
+      i.should_not be_valid
+    end
   end
 
   describe "Tests" do
@@ -38,12 +35,6 @@ describe Item do
 
     it 'should create an item' do
       i = Item.create!(valid_params)
-    end
-
-    it 'should not allow other unit_id' do
-      i = Item.new( valid_params.dup.merge(:unit_id => 2) )
-
-      expect{ i.valid?}.to raise_error
     end
 
     it 'should be a unique code' do

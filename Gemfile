@@ -24,8 +24,8 @@ gem 'compass-rails', '~> 1.0.1'
 gem 'pg', '~> 0.13.2'
 #gem 'sqlite3-ruby', :group => [:development, :text]
 
-gem 'simple_form', '~> 2.0.1'
-gem 'haml',        '~> 3.1.4'
+gem 'simple_form', '~> 2.0.2'
+gem 'haml',        '~> 3.1.6'
 gem 'kaminari',    '~> 0.13.0'
 gem 'valium',      '~> 0.5.0'
 gem 'bcrypt-ruby', '~> 3.0.1'
@@ -37,7 +37,7 @@ gem 'prawn', '~> 1.0.0.rc1'
 #gem 'newrelic_rpm'
 
 group :development, :test do
-  gem 'rspec-rails', '~> 2.9.0'
+  gem 'rspec-rails', '~> 2.10.1'
   gem 'steak', '~> 2.0.0'
   #gem 'jasmine'
   #gem 'headless'
@@ -45,7 +45,7 @@ group :development, :test do
 end
 
 group :development do
-  gem 'debugger', '~> 1.1.1', :require => 'debugger'
+  gem 'debugger', '~> 1.1.3', :require => 'debugger'
   gem 'ffaker',    '~> 1.14.0'
   gem 'pry-rails', '~> 0.1.6'
 end
@@ -55,8 +55,8 @@ end
 group :test do
   gem 'capybara',           '~> 1.1.2'
   gem 'database_cleaner',   '~> 0.7.1'
-  gem 'factory_girl_rails', '~> 3.1.0'
-  gem 'spork',              '~> 0.9.0'
+  gem 'factory_girl_rails', '~> 3.3.0'
+  gem 'spork',              '~> 0.9.1'
   gem 'valid_attribute',    '~> 1.2.0'
   gem 'watchr',             '~> 0.7'
   gem 'launchy',            '~> 2.1.0'
