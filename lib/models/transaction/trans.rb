@@ -18,7 +18,7 @@ module Models::Transaction
     included do
       with_options :if => :draft_trans? do |trans|
         # Validations
-        trans.validate :check_repeated_items
+        #trans.validate :check_repeated_items
         #trans.before_save :set_transaction_totals
       end
 
@@ -52,18 +52,6 @@ module Models::Transaction
       end
 
       edit_trans.save
-    end
-
-
-    private
-    
-    def check_repeated_items
-      h = Hash.new(0)
-      transaction_details.each do |det|
-        h[det.item_id] += 1
-      end
-
-      self.errors[:base] << I18n.t("errors.messages.repeated_items") if h.values.find {|v| v > 1 }
     end
 
   end

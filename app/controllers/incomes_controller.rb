@@ -40,8 +40,7 @@ class IncomesController < TransactionsController #ApplicationController
       @transaction = t.clone_transaction
     else
       @transaction = Income.new(date: Date.today)
-      @transaction.set_defaults_new
-      @transaction.transaction_details.build(:price => 0, :quantity => 0)
+      @transaction.set_defaults_with_details
     end
   end
 

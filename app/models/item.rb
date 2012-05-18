@@ -10,13 +10,6 @@ class Item < ActiveRecord::Base
   before_destroy :check_items_destroy
 
   TYPES = ["item", "expense", "product", "service"]
-  TYPES.each do |met|
-    class_eval <<-CODE, __FILE__, __LINE__ + 1
-      def #{met}?
-        "#{met}" === ctype
-      end
-    CODE
-  end
 
   ##########################################
   # Relationships
@@ -49,14 +42,22 @@ class Item < ActiveRecord::Base
   scope :json     , select("id, name, price")
 
   # Related scopes
-  scope :income   , where(["ctype IN (?) AND active = ?", ['service', 'product'], true])
-  scope :buy      , where(["ctype IN (?) AND active = ?", ['item', 'product', 'service'], true])
-  scope :expense  , where(["ctype IN (?) AND active = ?", ['expense'], true])
-  scope :inventory, where(["ctype IN (?)", ["item", "product"] ])
+  scope :income   , where(active: true, for_sale: true)
+  #scope :buy      , where(["ctype IN (?) AND active = ?", ['item', 'product', 'service'], true])
+  #scope :expense  , where(["ctype IN (?) AND active = ?", ['expense'], true])
+  scope :inventory, where(stockable: true)
   scope :service  , where(:ctype => 'service')
 
   ##########################################
   # Methods
+  TYPES.each do |met|
+    class_eval <<-CODE, __FILE__, __LINE__ + 1
+      def #{met}?
+        "#{met}" === ctype
+      end
+    CODE
+  end
+
   def to_s
     "#{code} - #{name}"
   end
@@ -131,7 +132,7 @@ class Item < ActiveRecord::Base
   end
 
   def self.with_stock(store_id, search)
-    Item.joins(:stocks).select("items.id, items.name, items.code, stocks.quantity").
+    Item.joins(:stocks).select("items.id, items.name, items.code, stocks.quantity").active.inventory.
     where("items.code ILIKE :search OR items.name ILIKE :search", :search => "%#{search}%").
     where("stocks.store_id = ? AND stocks.quantity > 0 AND stocks.state = 'active'", store_id)
   end

@@ -35,9 +35,6 @@ class Transaction < ActiveRecord::Base
   has_many :account_ledgers     , :dependent => :destroy, :conditions => "operation != 'transaction'", :autosave => false
   has_many :inventory_operations
 
-  # Relation with nested attributes
-  has_many :transaction_details , :dependent => :destroy, :order => :id
-  accepts_nested_attributes_for :transaction_details, :allow_destroy => true
 
   # History
   has_many :transaction_histories, :autosave => true, :dependent => :destroy
@@ -284,6 +281,7 @@ class Transaction < ActiveRecord::Base
   # method for new
   def set_defaults_new
     set_defaults
+    set_ref_number
   end
 
   def null_transaction
@@ -324,10 +322,6 @@ class Transaction < ActiveRecord::Base
     aproving
   end
 
-  # To have at least one item
-  def valid_number_of_items
-    self.errors.add(:base, "Debe ingresar seleccionar al menos un ítem") unless self.transaction_details.any?
-  end
 
   def set_creator
     self.creator_id = UserSession.user_id

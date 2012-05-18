@@ -3,8 +3,11 @@
 # email: boriscyber@gmail.com
 class Income < Transaction
 
-  after_initialize :set_ref_number, :if => :new_record?
-  
+  ########################################
+  # Includes
+  include Transaction::TransactionDetails
+  ########################################
+
   belongs_to :deliver_approver, :class_name => "User"
 
   #relationships
@@ -19,7 +22,6 @@ class Income < Transaction
 
   #validations
   validates             :ref_number,           :presence => true , :uniqueness => true
-  validate              :valid_number_of_items
 
   # Scopes
   scope :sum_total_balance, approved.select("SUM(balance * exchange_rate) AS total_bal").first[:total_bal]
@@ -46,6 +48,10 @@ class Income < Transaction
   end
 
   private
+  def set_defaults_with_details
+    set_defaults
+    transaction_details.build(price: 0, quantity: 0)
+  end
 
   # Initialized  the ref_number
   def set_ref_number
