@@ -9,12 +9,16 @@
   = simple_form_for(transaction, :html => {:id => 'transaction_form', :class => 'enter ui-form'}) do |f|
     = bonsai_form_error(f)
 
+    .fs110= f.input :ref_number, :label => 'Nº de referencia', :input_html => {:size => 20}
+    
     %input#transaction-type(type='hidden' value="#{transaction.type}")
+
     .row-fluid
       .span3
-        = f.input :ref_number, :label => 'Nº de referencia', :input_html => {:size => 20}
-      .span3
         = f.input :date, :label => "Fecha"
+      .span3
+        - if transaction.is_a?(Income)
+          = f.input :state, collection: presenter.state_collection, label: 'Tipo', as: :radio, item_wrapper_class: 'inline'
 
       .span6
         = f.input :contact_id, :as => :contact, :label => false, :input_html => {:id => 'transaction_contact_id'}

@@ -304,6 +304,7 @@ class TransactionModel extends Backbone.Model
   # set Currency
   setCurrency: ->
     $('.currency').html(@.get("currency_symbol"))
+
   # set subtotal
   setSubtotal: ->
     subtotal = @items.subtotal()
@@ -325,11 +326,7 @@ class TransactionModel extends Backbone.Model
     self = @
     $('#exchange_rate').on 'change:rate', (event, rate)=>
       @.set(currency_id: rate.currency.id, exchange_rate: rate.rate)
-    #$('#exchange_rate').live 'suggested:rate', (event, rate)->
-    #  rate = 1/rate
-    #  currency_id = $('#transaction_currency_id').val() * 1
-    #  self.set({currency_id: currency_id, exchange_rate: rate.round(4)})
-    #$('#transaction_currency_id').bind 'change keyup', (event)->
+
   # Sets the discount
   setDiscount: ->
     discount = @.get("subtotal") * @.get("discount")
@@ -359,7 +356,7 @@ class TransactionModel extends Backbone.Model
   # total
   setTotal: ->
     total = @.get("subtotal") - @.get("discount_total") + @.get("taxes_total")
-    $('#total_value').html(_b.ntc(total))
+    $('#total').val(total.toFixed(2))
 
   # Gets the currency symbol
   getCurrencySymbol: (currency)->

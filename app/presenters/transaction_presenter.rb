@@ -336,6 +336,10 @@ class TransactionPresenter < BasePresenter
     end
   end
 
+  def state_collection
+    { 'Proforma' => 'draft', 'Nota de Venta' => 'approved' }
+  end
+
   ################################################################
   # PRIVATE
   private

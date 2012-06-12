@@ -21,7 +21,7 @@ module Transaction::TransactionDetails
     self.errors[:base] << I18n.t('errors.messages.transaction.number_of_items') if transaction_details.empty?
   end
 
-  def check_repeated_items
+  def valid_repeated_items
     h = Hash.new(0)
     transaction_details.each do |det|
       h[det.item_id] += 1

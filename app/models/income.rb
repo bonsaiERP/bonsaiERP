@@ -6,6 +6,7 @@ class Income < Transaction
   ########################################
   # Includes
   include Transaction::TransactionDetails
+  include Transaction::Invoice
   ########################################
 
   belongs_to :deliver_approver, :class_name => "User"

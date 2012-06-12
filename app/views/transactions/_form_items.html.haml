@@ -39,24 +39,18 @@
         %i.icon-plus-sign.icon-white
         Adicionar ítem
 
-    %td.cur.discount.form-horizontal{:colspan => 2}
-      - if transaction.is_a? Income
-        = f.input :discount, 
-          :label => "<i class='icon-minus-sign'></i> Descuento".html_safe, 
-          :input_html => {:size => 4, :type => 'decimal', :id => 'transaction_discount'}, 
-          :wrapper_html => {:class => 'boolean', :style => 'width: 100%'}
-          
-    - if transaction.is_a? Income
-      %td#discount_total.cur{'data-val' => transaction.total_discount} #{ntc(transaction.total_discount)}
-    -else
-      %td
-
   %tr.extra
     %td
-    %td.r.b.dark{:colspan => 2} Total
-    %td.b.cur
-      %span.currency
-      %span#total_value.cur{ 'data-val'=> transaction.total}= ntc transaction.total
+    %td.r.b.dark(colspan='2') Total
+    %td.b(colspan='2')= f.input :total, label: false, input_html: { type: 'decimal', size: 12, id: 'total', class: 'b' }
+  - if transaction.is_a?(Income)
+    %tr
+      %td.cur.b.gray(colspan='3') 
+        Descuento<br/>
+      %td.discount.cur
+        %span.discount
+        %br
+        %span.discount-per
 
 .clear
 %br

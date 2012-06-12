@@ -9,7 +9,7 @@ class Transaction < ActiveRecord::Base
   TYPES    = ['Income'  , 'Buys']
   ###############################
   include Models::Transaction::Calculations
-  include Models::Transaction::Trans
+  #include Models::Transaction::Trans
   include Models::Transaction::Approve
   include Models::Transaction::PayPlan
   include Models::Transaction::Payment
@@ -17,8 +17,8 @@ class Transaction < ActiveRecord::Base
   ###############################
  
   # Callbacks
-  before_validation :set_defaults, :if => :new_record?
-  before_create     :set_creator
+  #before_validation :set_defaults, :if => :new_record?
+  #before_create     :set_creator
   before_destroy    :null_transaction
 
   # Relationships
@@ -66,7 +66,7 @@ class Transaction < ActiveRecord::Base
   # Define boolean methods for states
   STATES.each do |state|
     class_eval <<-CODE, __FILE__, __LINE__ + 1
-      def #{state}?
+      def is_#{state}?
         "#{state}" == state ? true : false
       end
     CODE
