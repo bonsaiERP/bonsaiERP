@@ -3,14 +3,19 @@
 # email: boriscyber@gmail.com
 class Buy < Transaction
 
-  after_initialize :set_ref_number, :if => :new_record?
+  ########################################
+  # Includes
+  include Transaction::TransactionDetails
+  ########################################
+
 
   attr_accessible  :ref_number,  :date,                          :contact_id,
                    :project_id,  :currency_id,                   :exchange_rate,
                    :bill_number, :taxis_ids,                     :description,
                    :transaction_details_attributes,              :fact
 
-  #validations
+  ########################################
+  # Validations
   validates             :ref_number,           :presence => true , :uniqueness => true
   validate              :valid_number_of_items
 

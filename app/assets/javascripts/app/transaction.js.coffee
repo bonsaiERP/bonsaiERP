@@ -126,8 +126,12 @@ class ItemCollection extends Backbone.Collection
     $('input.desc').live 'focusin', ->
       return false if $(this).hasClass("ui-autocomplete-input")
       $('input.desc.ui-autocomplete-input').autocomplete("destroy")
+
+      type = $('#transaction-type').val()
+      url = ['/item_autocomplete', '?', 'type=', type].join('')
+
       $(this).autocomplete(
-        source: "/item_autocomplete"
+        source: url
         select: (event, ui)->
           item = self.getByCid($(this).data("cid"))
 

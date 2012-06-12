@@ -12,7 +12,7 @@
       %th.total_row Total fila
       %th
 
-  - @items = transaction.get_items
+  -# @items = transaction.get_items
 
   = f.simple_fields_for :transaction_details do |fd|
     %tr.item{:id => fd.object.id}

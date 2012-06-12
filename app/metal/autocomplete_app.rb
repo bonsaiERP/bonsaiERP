@@ -71,7 +71,7 @@ class AutocompleteApp < BaseApp
     end
   end
 
-private
+  private
   # Search for contact autocomlete
   def contact_autocomplete(type, options)
     set_search_path
@@ -80,7 +80,11 @@ private
 
   def item_autocomplete(options)
     set_search_path
-    Item.simple_search(options[:term]).to_json
+    if 'Income' == options[:type]
+      Item.for_sale.simple_search(options[:term]).to_json
+    else
+      Item.simple_search(options[:term]).to_json
+    end
   end
 
   def contact_account_autocomplete(type, options)
