@@ -7,7 +7,7 @@ module Transaction::TransactionDetails
   included do
     ########################################
     # Relationships
-    has_many :transaction_details , dependent: :destroy, order: :id, inverse_of: :transaction
+    has_many :transaction_details , dependent: :destroy, order: :id, foreign_key: :transaction_id, inverse_of: :transaction
     accepts_nested_attributes_for :transaction_details, allow_destroy: true
     ########################################
     # Validations

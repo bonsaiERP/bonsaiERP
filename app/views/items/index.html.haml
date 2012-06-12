@@ -34,7 +34,8 @@
   %tr
     %th Código - Nombre
     %th Activo
-    %th En venta
+    %th(title='Inventario') Inv.
+    %th Venta
     %th Precio<br/>de Venta
     %th Unidad
     %th Inventario<br/>Total
@@ -45,6 +46,8 @@
       %td= link_to item, item, :class => 'b'
       %td
         %span(class="#{item.active?}")
+      %td
+        %span(class="#{item.stockable?}")
       %td
         %span(class="#{item.for_sale?}")
       %td.r= "#{currency_symbol} #{ntc( item.price )}" if item.for_sale?

@@ -1,5 +1,6 @@
 - unless session[:flash].blank?
   - session[:flash].each do |k, v|
+    - session[:flash].delete( k )
     %div.alert{:class => flash_css(k), :id => "flash#{ k.to_s.capitalize}"}
       <a class="close" >x</a>
       = v

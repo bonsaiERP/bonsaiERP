@@ -47,12 +47,13 @@ class Income < Transaction
     self.save
   end
 
-  private
   def set_defaults_with_details
     set_defaults
     transaction_details.build(price: 0, quantity: 0)
   end
 
+
+  private
   # Initialized  the ref_number
   def set_ref_number
     if ref_number.blank?

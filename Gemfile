@@ -1,7 +1,7 @@
 # Edit this Gemfile to bundle your application's dependencies.
 source :rubygems
 
-gem 'rails', '>= 3.2.3'
+gem 'rails', '>= 3.2.5'
 
 ## Bundle edge rails:
 # gem "rails", :git => "git://github.com/rails/rails.git"
@@ -17,7 +17,7 @@ group :assets do
 end
 
 gem 'jquery-rails',  '~> 2.0.1'
-gem 'compass-rails', '~> 1.0.1'
+gem 'compass-rails', '~> 1.0.2'
 #gem 'bootstrap-sass', "~> 2.0.0"
 #gem 'ramon', "~> 0.4.0"
 
@@ -55,8 +55,8 @@ end
 group :test do
   gem 'capybara',           '~> 1.1.2'
   gem 'database_cleaner',   '~> 0.7.1'
-  gem 'factory_girl_rails', '~> 3.3.0'
-  gem 'spork',              '~> 0.9.1'
+  gem 'factory_girl_rails', '~> 3.4.0'
+  gem 'spork',              '~> 0.9.2'
   gem 'valid_attribute',    '~> 1.2.0'
   gem 'watchr',             '~> 0.7'
   gem 'launchy',            '~> 2.1.0'
