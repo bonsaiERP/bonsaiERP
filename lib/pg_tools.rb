@@ -83,10 +83,30 @@ module PgTools
     end
   end
 
+  def execute(sql)
+    connection.execute sql
+  end
+
+  # require 'benchmark'
+  # resp = Benchmark.measure { code }
+  def create_database(schema)
+    create_schema schema
+    reset_search_path
+    set = conn_settings
+
+    sql = `pg_dump -U #{set[:username]} #{set[:database]} -n public -s`
+    sql["search_path = public"] = "search_path = #{schema}"
+
+    connection.execute sql
+  end
+
+  def conn_settings
+    ActiveRecord::Base.connection_config
+  end
 
   protected
 
-  def connection
-    ActiveRecord::Base.connection
-  end
+    def connection
+      ActiveRecord::Base.connection
+    end
 end
