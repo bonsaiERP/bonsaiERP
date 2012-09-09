@@ -1,15 +1,7 @@
-# Edit this Gemfile to bundle your application's dependencies.
 source :rubygems
 
 gem 'rails', '>= 3.2.8'
 
-## Bundle edge rails:
-# gem "rails", :git => "git://github.com/rails/rails.git"
-
-# ActiveRecord requires a database adapter. By default,
-# Rails has selected sqlite3.
-# Gems used only for assets and not required
-# in production environments by default.
 group :assets do
   gem 'sass-rails',   '~> 3.2.5'
   gem 'coffee-rails', '~> 3.2.2'
