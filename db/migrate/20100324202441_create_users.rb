@@ -3,7 +3,7 @@
 # email: boriscyber@gmail.com
 class CreateUsers < ActiveRecord::Migration
   def change
-    create_table :users do |t|
+    create_table "common.users" do |t|
       # user
       t.string :email
       t.string :first_name, :limit => 80
@@ -30,9 +30,9 @@ class CreateUsers < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :users, :email
-    add_index :users, :first_name
-    add_index :users, :last_name
+    add_index "common.users", :email
+    add_index "common.users", :first_name
+    add_index "common.users", :last_name
 
   end
 

@@ -3,6 +3,8 @@
 # email: boriscyber@gmail.com
 class Currency < ActiveRecord::Base
 
+  self.table_name = "common.currencies"
+
   has_many :organisations
 
   validates_presence_of :name, :symbol
@@ -18,6 +20,7 @@ class Currency < ActiveRecord::Base
   def self.to_hash(*args)
     args = [:id, :name, :symbol, :code] if args.empty?
     l = lambda {|v| args.map {|val| [val, v.send(val)] } }
+
     Hash[ Currency.all.map {|v| [v.id, Hash[l.call(v)] ]  } ]
   end
 

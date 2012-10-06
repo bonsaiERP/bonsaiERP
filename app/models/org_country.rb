@@ -3,11 +3,11 @@
 # email: boriscyber@gmail.com
 class OrgCountry < ActiveRecord::Base
 
-  self.table_name = "countries"
+  self.table_name = "common.countries"
 
   has_many :organisations
 
-  validates_presence_of :name, :abbreviation
+  validates_presence_of :name, :abbreviation, :code
 
   serialize :taxes
 

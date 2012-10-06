@@ -1,6 +1,6 @@
 class CreateOrganisations < ActiveRecord::Migration
-  def self.up
-    create_table :organisations do |t|
+  def change
+    create_table "common.organisations" do |t|
       t.integer :country_id
       t.integer :currency_id
       t.string :name, :limit => 100
@@ -19,12 +19,9 @@ class CreateOrganisations < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :organisations, :country_id
-    add_index :organisations, :currency_id
-    add_index :organisations, :due_date
-  end
 
-  def self.down
-    drop_table :organisations
+    add_index "common.organisations", :country_id
+    add_index "common.organisations", :currency_id
+    add_index "common.organisations", :due_date
   end
 end

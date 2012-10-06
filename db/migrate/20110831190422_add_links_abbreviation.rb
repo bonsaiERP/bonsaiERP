@@ -1,6 +1,6 @@
 class AddLinksAbbreviation < ActiveRecord::Migration
   def up
-    change_table :links do |t|
+    change_table "common.links" do |t|
       t.string :abbreviation, :limit => 15
     end
   end

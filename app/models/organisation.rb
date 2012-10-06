@@ -2,7 +2,11 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class Organisation < ActiveRecord::Base
-  # callbacks
+
+  self.table_name = "common.organisations"
+
+  ########################################
+  # Callbacks
   before_validation :set_user, :if => :new_record?
   #before_create :set_due_date
   before_create :create_link

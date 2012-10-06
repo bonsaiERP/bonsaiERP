@@ -3,8 +3,8 @@
 # email: boriscyber@gmail.com
 class User < ActiveRecord::Base
 
-  has_secure_password
-  
+  self.table_name = 'common.users'
+
   include Models::User::Authentication
 
   # callbacks

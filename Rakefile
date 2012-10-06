@@ -3,5 +3,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-require 'qu/tasks'
 Bonsaierp::Application.load_tasks
