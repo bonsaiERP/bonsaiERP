@@ -58,7 +58,7 @@ es:
       repeated_item: "El ítem seleccionado esta repetido"
       loan:
         ilegal_account: "Debe ingresar una cuenta correcta"
-        
+
   account_ledger:
     payment_description: "%{pay_type} de %{trans} %{ref}, cuenta %{account}"
     initial_money: "Saldo inicial"
@@ -86,3 +86,7 @@ es:
     client: "Cliente"
     supplier: "Proveedor"
     staff: "Personal"
+  organisation:
+    errors:
+      tenant:
+        list: "Debe seleccionar otro valor"

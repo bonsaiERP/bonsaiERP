@@ -55,8 +55,30 @@ module PgTools
     end
   end
 
+  def execute(sql)
+    connection.execute sql
+  end
+
+  # Clone public to the especified schema
+  def clone_public_schema_to(schema)
+    sql = get_public_schema
+    sql["search_path = public"] = "search_path = #{schema}"
+
+    connection.execute sql
+  end
+
+  def get_public_schema
+    file = Rails.root.join('db', 'dump_public_schema.sh')
+    create_bash_file(file, create_bash_dump_public_schema)
+    sql = %x[/bin/bash #{file}]
+    raise 'Error generating public schema' unless $?.success?
+    File.delete(file)
+
+    sql
+  end
   def load_schema_into_schema(schema_name)
     ActiveRecord::Base.logger.info "Enter schema #{schema_name}."
+
     with_schema(schema_name) do
       file = "#{Rails.root}/db/schema.rb"
       if File.exists?(file)
@@ -67,6 +89,32 @@ module PgTools
       end
     end
   end
+
+  def create_bash_dump_public_schema
+<<-BASH
+# /bin/bash
+PGPASSWORD=#{PgTools.password}
+export PGPASSWORD
+
+pg_dump --host=localhost --username=#{PgTools.username} --schema-only --schema=public #{PgTools.database}
+
+PGPASSWORD=""
+export PGPASSWORD
+BASH
+  end
+
+  [:username, :database, :host, :password].each do |meth|
+    instance_eval <<-CODE, __FILE__, __LINE__ + 1
+def #{meth}
+connection_config[:#{meth}]
+end
+CODE
+  end
+
+  def connection_config
+    @connection_config ||= ActiveRecord::Base.connection_config
+  end
+  alias_method :conn_settings, :connection_config
 
   def schema_exists?(schema_name)
     all_schemas.include?(schema_name)
@@ -99,10 +147,6 @@ module PgTools
     sql["search_path = public"] = "search_path = #{schema}"
 
     connection.execute sql
-  end
-
-  def conn_settings
-    ActiveRecord::Base.connection_config
   end
 
   protected

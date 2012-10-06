@@ -9,13 +9,24 @@ describe Organisation do
     create(:org_country)
   end
 
-  it {should have_valid(:name).when("uno")}
-  it {should_not have_valid(:name).when(" ")}
+  context "Validations" do
+    it {should have_valid(:name).when("uno")}
+    it {should_not have_valid(:name).when(" ")}
 
-  it {should have_valid(:currency_id).when(10)}
-  #it {should_not have_valid(:currency_id).when(1)}
+    it {should have_valid(:currency_id).when(10)}
+    #it {should_not have_valid(:currency_id).when(1)}
+    it { should_not have_valid('tenant').when('common') }
+    it { should_not have_valid('tenant').when('public') }
+  end
 
-  let(:valid_params) { {name:"Test", country_id:1, currency_id:10, address: "Very near" } }
+
+  let(:valid_params) { 
+    {
+      name:"Test", country_id:1, 
+      currency_id:10, tenant: 'another',
+      address: "Very near" 
+    }
+  }
 
   it 'should create an instance' do
     org = Organisation.create!(valid_params)

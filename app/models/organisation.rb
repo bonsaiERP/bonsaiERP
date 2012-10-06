@@ -9,7 +9,7 @@ class Organisation < ActiveRecord::Base
   # Callbacks
   before_validation :set_user, :if => :new_record?
   before_create :create_link
-  
+
   DATA_PATH = "db/defaults"
 
   ########################################
@@ -18,7 +18,7 @@ class Organisation < ActiveRecord::Base
   attr_protected :base_accounts
 
   serialize :preferences, Hash
-  
+
   ########################################
   # Relationships
   belongs_to :org_country, :foreign_key => :country_id
@@ -30,10 +30,12 @@ class Organisation < ActiveRecord::Base
 
   delegate :code, :name, :symbol, :plural, :to => :currency, :prefix => true
 
-  # validations
-
-  validates_presence_of :name, :org_country, :currency
+  ########################################
+  # Validations
+  validates_presence_of   :name, :org_country, :currency, :tenant
   validates_uniqueness_of :name, :scope => :user_id
+  validates :tenant, uniqueness: true, format: { with: /\A[a-z0-9]+\z/ }
+  validate :valid_tenant_not_in_list
 
   attr_protected :user_id
 
@@ -111,5 +113,12 @@ class Organisation < ActiveRecord::Base
         l.set_user_creator(UserSession.user_id)
         l.abbreviation = "GEREN"
       }
+    end
+
+  private
+    def valid_tenant_not_in_list
+      if ['public', 'common', 'demo'].include?(tenant)
+        self.errors[:tenant] << I18n.t('organisation.errors.tenant.list')
+      end
     end
 end

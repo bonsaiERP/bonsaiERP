@@ -9,6 +9,7 @@ FactoryGirl.define do
   factory :org_country do
     id 1
     name 'Boliva'
+    code 'BO'
     abbreviation 'bo'
   end
 

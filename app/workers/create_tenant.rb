@@ -1,3 +1,4 @@
+# encoding: utf-8
 class CreateTenant
   #@queue = :create_tenant
 
@@ -13,30 +14,10 @@ class CreateTenant
       PgTools.create_schema schema_name
       PgTools.load_schema_into_schema schema_name
       PgTools.set_search_path schema_name
+
       # Wait a second before creating data
-      sleep 1
       Unit.create_base_data
       AccountType.create_base_data
-      Currency.create_base_data
-      OrgCountry.create_base_data
-
-      data = org.attributes
-      data.delete("id")
-      data.delete("user_id")
-
-      User.create!(user.attributes) {|u|
-        u.id = user.id
-        u.password = "demo123"
-        u.confirmed_at = user.confirmed_at
-        u.rol = "admin"
-        u.active = true
-      }
-      
-      orga = Organisation.new(data)
-      orga.id = org.id
-      orga.user_id = org.user_id
-      orga.save!
-
     end
   end
 

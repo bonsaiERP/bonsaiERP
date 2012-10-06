@@ -17,11 +17,14 @@ class CreateOrganisations < ActiveRecord::Migration
       t.text :preferences
       t.boolean :base_accounts, :default => false
 
+      t.string :tenant
+
       t.timestamps
     end
 
     add_index "common.organisations", :country_id
     add_index "common.organisations", :currency_id
     add_index "common.organisations", :due_date
+    add_index "common.organisations", :tenant, unique: true
   end
 end
