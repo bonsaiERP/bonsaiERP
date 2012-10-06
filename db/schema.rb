@@ -135,23 +135,6 @@ ActiveRecord::Schema.define(:version => 20120517130511) do
   add_index "accounts", ["original_type"], :name => "index_accounts_on_original_type"
   add_index "accounts", ["type"], :name => "index_accounts_on_type"
 
-  create_table "client_accounts", :force => true do |t|
-    t.string   "name"
-    t.integer  "users"
-    t.integer  "agencies"
-    t.boolean  "branding"
-    t.integer  "disk_space"
-    t.string   "backup"
-    t.integer  "stored_backups"
-    t.boolean  "api"
-    t.boolean  "report"
-    t.boolean  "third_party_apps"
-    t.integer  "free_days"
-    t.boolean  "email"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
-  end
-
   create_table "contacts", :force => true do |t|
     t.string   "matchcode"
     t.string   "first_name",        :limit => 100

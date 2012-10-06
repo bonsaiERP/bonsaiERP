@@ -8,21 +8,21 @@ class Organisation < ActiveRecord::Base
   ########################################
   # Callbacks
   before_validation :set_user, :if => :new_record?
-  #before_create :set_due_date
   before_create :create_link
   
   DATA_PATH = "db/defaults"
 
+  ########################################
+  # Attributes
   attr_accessor :account_info
   attr_protected :base_accounts
 
   serialize :preferences, Hash
   
-  # relationships
+  ########################################
+  # Relationships
   belongs_to :org_country, :foreign_key => :country_id
   belongs_to :currency
-  # To control to which account it belongs
-  belongs_to :client_account
 
   # users links
   has_many :links, :dependent => :destroy, :autosave => true
@@ -73,43 +73,43 @@ class Organisation < ActiveRecord::Base
     }
   end
 
-protected
+  protected
 
-  # Sets the expiry date for the organisation until ew payment
-  def set_due_date
-    self.due_date = 30.days.from_now.to_date
-  end
-
-  # creates default units the units accordins to the locale
-  def create_units
-    units = YAML.load_file(data_path("units.#{I18n.locale}.yml"))
-    Unit.create!(units)
-  end
-
-  def create_account_types
-    account_types = YAML.load_file(data_path("account_types.#{I18n.locale}.yml"))
-    AccountType.create!(account_types)
-  end
-
-  def create_currencies
-    YAML.load_file(data_path("currencies.yml")).each do |cur|
-      Currency.create!(cur) {|c| c.id = cur["id"]}
+    # Sets the expiry date for the organisation until ew payment
+    def set_due_date
+      self.due_date = 30.days.from_now.to_date
     end
-  end
 
-  def data_path(path = "")
-    File.join(Rails.root, DATA_PATH, path)
-  end
+    # creates default units the units accordins to the locale
+    def create_units
+      units = YAML.load_file(data_path("units.#{I18n.locale}.yml"))
+      Unit.create!(units)
+    end
 
-  # Sets the user_id, needed to define the scope of uniquenes_of :name
-  def set_user
-    write_attribute(:user_id, UserSession.current_user.id) unless user_id.present?
-  end
+    def create_account_types
+      account_types = YAML.load_file(data_path("account_types.#{I18n.locale}.yml"))
+      AccountType.create!(account_types)
+    end
 
-  def create_link
-    links.build(:rol => 'admin') {|l| 
-      l.set_user_creator(UserSession.user_id)
-      l.abbreviation = "GEREN"
-    }
-  end
+    def create_currencies
+      YAML.load_file(data_path("currencies.yml")).each do |cur|
+        Currency.create!(cur) {|c| c.id = cur["id"]}
+      end
+    end
+
+    def data_path(path = "")
+      File.join(Rails.root, DATA_PATH, path)
+    end
+
+    # Sets the user_id, needed to define the scope of uniquenes_of :name
+    def set_user
+      write_attribute(:user_id, UserSession.current_user.id) unless user_id.present?
+    end
+
+    def create_link
+      links.build(:rol => 'admin') {|l| 
+        l.set_user_creator(UserSession.user_id)
+        l.abbreviation = "GEREN"
+      }
+    end
 end
