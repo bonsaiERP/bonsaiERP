@@ -39,8 +39,15 @@ Create a gemset and set it as default
 
     sudo apt-get install language-pack-en-base
     sudo locale-gen en_US.UTF-8
-    sudo locale-gen es_BO.UTF-8
     sudo dpkg-reconfigure locales
+
+### In case that this can't be set
+
+Go to /etc/environment and add this
+
+    LANG="en_US.UTF-8"
+    LANGUAGE="en_US.UTF-8"
+    LC_ALL="en_US.UTF-8"
 
 ## Database installation
 Install **PostgreSQL 9.1**
@@ -51,7 +58,7 @@ Install **PostgreSQL 9.1**
     sudo add-apt-repository ppa:pitti/postgresql
     sudo apt-get update
     sudo apt-get upgrade
-    sudo apt-get install postgresql-9.1 libpq-dev
+    sudo apt-get install postgresql-9.2 libpq-dev postgresql-contrib-9.2
 
 ### Create a user for the database
     
