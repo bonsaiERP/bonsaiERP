@@ -80,12 +80,12 @@ module Models::User::Authentication
 
   private
 
-  def set_token_and_send_email
-    if PgTools.public_schema?
-      self.confirmation_token = SecureRandom.base64(12)
-      RegistrationMailer.send_registration(self).deliver
+    def set_token_and_send_email
+      if PgTools.public_schema?
+        self.confirmation_token = SecureRandom.base64(12)
+        RegistrationMailer.send_registration(self).deliver
+      end
+      self.save
     end
-    self.save
-  end
 
 end

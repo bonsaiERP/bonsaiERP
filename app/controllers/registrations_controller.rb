@@ -27,7 +27,7 @@ class RegistrationsController < ApplicationController
   end
 
   def new
-    @user = User.new
+    @organisation = Organisation.new
 
     respond_to do |format|
       format.html

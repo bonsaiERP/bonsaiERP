@@ -19,16 +19,17 @@ class Organisation < ActiveRecord::Base
 
   serialize :preferences, Hash
 
+  attr_protected :user_id
+
   ########################################
   # Relationships
   belongs_to :org_country, :foreign_key => :country_id
   belongs_to :currency
 
-  # users links
-  has_many :links, :dependent => :destroy, :autosave => true
-  has_many :users, :through => :links
-
-  delegate :code, :name, :symbol, :plural, :to => :currency, :prefix => true
+  has_many :users, inverse_of: :accounts, dependent: :destroy
+  has_one  :master_account, class_name: 'User', foreign_key: :organisation_id,
+           conditions: { master_account: true }
+  accepts_nested_attributes_for :master_account
 
   ########################################
   # Validations
@@ -37,8 +38,12 @@ class Organisation < ActiveRecord::Base
   validates :tenant, uniqueness: true, format: { with: /\A[a-z0-9]+\z/ }
   validate :valid_tenant_not_in_list
 
-  attr_protected :user_id
 
+  # Delegations
+  delegate :code, :name, :symbol, :plural, :to => :currency, :prefix => true
+
+  ########################################
+  # Methods
   def to_s
     name
   end

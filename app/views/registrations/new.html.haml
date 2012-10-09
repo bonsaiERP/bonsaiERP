@@ -1,7 +1,7 @@
 #dialog
   %h1 Registro
 
-  = simple_form_for(@user, :url => registrations_path) do |f|
+  = simple_form_for(@organisation, :url => registrations_path) do |f|
     = hidden_field_tag :registration_token, params[:registration_token]
     %fieldset
       = f.input :email, :label => "Correo Electrónico", :input_html => {:size => 40}

@@ -5,31 +5,22 @@ class User < ActiveRecord::Base
 
   self.table_name = 'common.users'
 
-  include Models::User::Authentication
-
-  # callbacks
-  #before_validation :set_rolname, :if => :new_record?
-  before_create     :create_user_link, :if => :change_default_password?
-  before_destroy    :destroy_links
-  
   ABBREV = "GEREN"
   ROLES = ['admin', 'gerency', 'operations'].freeze
 
-  ROLES.each do |v|
-    class_eval <<-CODE, __FILE__, __LINE__ + 1
-      def is_#{v}?
-        rol == "#{v}"
-      end
-    CODE
-  end
 
-  attr_accessor :temp_password, :rolname, :active_link, :old_password, :send_email#, :abbreviation
-  attr_reader :created_user
+  include Models::User::Authentication
 
+  ########################################
+  # Callbacks
+  before_create     :create_user_link, :if => :change_default_password?
+  before_destroy    :destroy_links
+
+  ########################################
   # Relationships
-  has_many :links, :autosave => true, :dependent => :destroy
-  has_many :organisations, :through => :links
+  belongs_to :organisation, inverse_of: :users
 
+  ########################################
   # Validations
   validates_presence_of :email
   validates :email, :format => {
@@ -44,9 +35,27 @@ class User < ActiveRecord::Base
     u.validates :password, :length => {:minimum => 6}
   end
 
-  #attr_protected :account_type
+  ########################################
+  # Attributes
+  attr_accessor :temp_password, :rolname, :active_link, :old_password, :send_email
+  attr_reader :created_user
+
   attr_accessible :email, :password, :password_confirmation, :first_name, :last_name, :phone, :mobile, :website, 
     :description, :rolname, :address, :abbreviation, :old_password
+
+  # Delegations
+  ########################################
+  delegate :name, :currency_id, :address, :tenant, to: :organisation, allow_nil: true
+
+  ########################################
+  # Methods
+  ROLES.each do |v|
+    class_eval <<-CODE, __FILE__, __LINE__ + 1
+      def is_#{v}?
+        rol == "#{v}"
+      end
+    CODE
+  end
 
   def to_s
     unless first_name.blank? and last_name.blank?
@@ -207,16 +216,16 @@ class User < ActiveRecord::Base
 
   private
 
-  def create_user_link
-    links.build(:organisation_id => OrganisationSession.organisation_id, 
-                    :rol => rolname, :creator => false) {|link| 
-      link.abbreviation = abbreviation 
-    }
-  end
+    def create_user_link
+      links.build(:organisation_id => OrganisationSession.organisation_id, 
+                      :rol => rolname, :creator => false) {|link| 
+        link.abbreviation = abbreviation 
+      }
+    end
 
-  def destroy_links
-    links.destroy_all
-  end
+    def destroy_links
+      links.destroy_all
+    end
 
   #def set_rolname
   #  unless change_default_password?

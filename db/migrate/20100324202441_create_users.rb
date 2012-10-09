@@ -14,6 +14,9 @@ class CreateUsers < ActiveRecord::Migration
       t.string :account_type, :limit => 15
       t.string :description, :limit => 255
 
+      t.integer :organisation_id
+      t.boolean :master_account, default: false
+
       # Control users
       t.string   :password_digest
       t.string   :confirmation_token, :limit => 20
@@ -33,6 +36,8 @@ class CreateUsers < ActiveRecord::Migration
     add_index "common.users", :email
     add_index "common.users", :first_name
     add_index "common.users", :last_name
+    add_index "common.users", :organisation_id
+    add_index "common.users", :master_account
 
   end
 

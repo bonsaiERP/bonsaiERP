@@ -13,8 +13,8 @@ class CreateOrganisations < ActiveRecord::Migration
       t.string  :website
       t.integer :user_id
 
-      t.date :due_date
-      t.text :preferences
+      t.date    :due_date
+      t.text    :preferences
       t.boolean :base_accounts, :default => false
 
       t.string :tenant
