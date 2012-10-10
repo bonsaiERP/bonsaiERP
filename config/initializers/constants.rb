@@ -1,0 +1,2 @@
+PASSWORD_LENGTH=7
+DOMAIN='bonsaierp.com'

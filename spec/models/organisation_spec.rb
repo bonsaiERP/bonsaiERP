@@ -64,5 +64,18 @@ describe Organisation do
       org.master_link.user.should be_persisted
       org.master_link.user.email.should eq(org_params[:email])
     end
+
+    it "should present errors if no email or password" do
+      org = Organisation.new(org_params.merge(email: '', password: '') )
+
+      org.create_organisation.should be_false
+      org.errors[:email].should be_include I18n.t("activerecord.errors.messages.blank")
+      org.errors[:password].should be_include I18n.t("activerecord.errors.messages.too_short", count: PASSWORD_LENGTH)
+
+      org = Organisation.new(org_params.merge(email: 'na@mail', password: 'demo1234') )
+
+      org.create_organisation.should be_false
+      org.errors[:email].should be_include I18n.t("errors.messages.user.email")
+    end
   end
 end

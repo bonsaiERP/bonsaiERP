@@ -57,15 +57,21 @@ class Organisation < ActiveRecord::Base
     user.email = email
     user.password = password
 
-    set_user_errors(user) unless user.valid?
+    unless user.valid?
+      set_user_errors(user)
+      return false
+    end
 
     self.save
   end
 
   private
     def set_user_errors(user)
-      self.errors[:email] = user.errors[:email] if user.errors[:email].present?
-      self.errors[:password] = user.errors[:password] if user.errors[:password].present?
+      [:email, :password].each do |meth|
+        user.errors[meth].each do |err|
+          self.errors[meth] << err
+        end
+      end
     end
 
     # Sets the expiry date for the organisation until ew payment

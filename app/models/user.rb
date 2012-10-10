@@ -24,15 +24,11 @@ class User < ActiveRecord::Base
 
   ########################################
   # Validations
-  validates_presence_of :email
-  validates :email, :format => {
-    :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, 
-    :message => I18n.t("errors.messages.user.email")
-  }, :uniqueness => {:if => :email_changed?}
+  validates_email_format_of :email, message: I18n.t("errors.messages.user.email")
+  validates :email, presence: true, :uniqueness => {:if => :email_changed?}
 
   with_options :if => :new_record? do |u|
-    #u.validates_inclusion_of :rolname, :in => ROLES
-    u.validates :password, :length => {:minimum => 6}
+    u.validates :password, :length => {:minimum => PASSWORD_LENGTH }
   end
 
   ########################################
