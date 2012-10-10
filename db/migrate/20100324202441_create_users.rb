@@ -15,7 +15,8 @@ class CreateUsers < ActiveRecord::Migration
       t.string :description, :limit => 255
 
       # Control users
-      t.string   :password_digest
+      t.string   :encrypted_password
+      t.string   :password_salt
       t.string   :confirmation_token, :limit => 20
       t.datetime :confirmation_sent_at
       t.datetime :confirmed_at

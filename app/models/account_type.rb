@@ -3,8 +3,6 @@
 # email: boriscyber@gmail.com
 class AccountType < ActiveRecord::Base
 
-  #include Models::Organisation::NewOrganisation
-  
   attr_readonly :account_number
 
   # callbacks

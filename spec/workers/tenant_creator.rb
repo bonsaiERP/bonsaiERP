@@ -27,6 +27,8 @@ describe TenantCreator do
 
       PgTools.change_schema tenant.tenant
       Account.count.should eq(0)
+      AccountType.count.should > 0
+      Unit.count.should > 0
     end
 
     after(:each) do

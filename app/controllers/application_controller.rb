@@ -22,9 +22,13 @@ class ApplicationController < ActionController::Base
   helper_method Controllers::OrganisationHelpers.organisation_helper_methods
 
   protect_from_forgery
+
+  ########################################
+  # Callbacks
   before_filter :set_user_session, :if => :user_signed_in?
   before_filter :set_page
-  before_filter :set_organisation, :if => :organisation?
+  #before_filter :set_organisation, :if => :organisation?
+  before_filter :set_tenan, unless: :tenant_creation_path?
 
   def render_error(exception) 
     if notifier = Rails.application.config.middleware.detect { |x| x.klass == ExceptionNotifier } 
@@ -151,5 +155,20 @@ private
       redirect_to new_currency_rate_path
     end
   end
-  
+
+  def current_organisation
+    Organisation.find_by_tenant()
+  end
+ 
+  private
+    def set_tenant
+      tenant = request.subdomain
+      tenant = session[:tenant] if session[:tenant] && Rails.env.development?
+
+      PgTools.change_tenant tenant
+    end
+
+    def tenant_creation_path?
+      ['organisations', 'registrations', 'sessions'].include?(params[:controller])
+    end
 end

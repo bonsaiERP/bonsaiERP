@@ -50,7 +50,6 @@ class SessionsController < ApplicationController
     session[:user] = nil
     session[:organisation] = nil
     session[:current_user] = nil
-    PgTools.reset_search_path
 
     redirect_to "/users/sign_in", :notice => "Ha salido correctamente"
   end

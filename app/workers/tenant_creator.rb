@@ -20,6 +20,10 @@ class TenantCreator
     ActiveRecord::Base.transaction do
       create_schema tenant
       clone_public_schema_to tenant
+      change_schema tenant
+
+      Unit.create_base_data
+      AccountType.create_base_data
     end
 
     true

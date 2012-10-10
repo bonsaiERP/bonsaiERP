@@ -2,10 +2,8 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class RegistrationsController < ApplicationController
-  before_filter :check_logged_user, :except => [:show]
-  before_filter :check_token, :only => [:new, :create]
-  before_filter :reset_search_path
-  layout "dialog"
+  #before_filter :check_logged_user, :except => [:show]
+  #before_filter :check_token#, :only => [:new, :create]
 
   def index
   end
@@ -35,11 +33,10 @@ class RegistrationsController < ApplicationController
   end
 
   def create
-    email, password = params[:user][:email], params[:user][:password]
-    @user = User.new_user(email, password)
+    @organisation = Organisation.new(slice_params(params[:organisation]) )
 
     respond_to do |format|
-      if @user.save_user
+      if @organisation.create_organisation
         format.html { redirect_to "/registrations/", :notice => "Se ha registrado exitosamente!. Se le ha enviado un email a <strong>#{@user.email}</strong> con instrucciones para concluir el registro.".html_safe}
       else
         format.html { render 'new'}
@@ -48,13 +45,13 @@ class RegistrationsController < ApplicationController
   end
 
   private
-  def reset_search_path
-    PgTools.reset_search_path
-  end
-
-  def check_token
-    unless params[:registration_token] == "HBJasduf8736454yfsuhdf"
-      return redirect_to root_path
+    def slice_params(data)
+      data.slice(:name, :tenant, :email, :password)
     end
-  end
+
+    def check_token
+      unless params[:registration_token] == "HBJasduf8736454yfsuhdf"
+        redirect_to root_path && return
+      end
+    end
 end

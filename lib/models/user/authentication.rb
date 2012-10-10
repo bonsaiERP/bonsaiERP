@@ -1,10 +1,12 @@
 module Models::User::Authentication
   extend ActiveSupport::Concern
 
+  attr_accessor :password, :password_confirmation
+
   included do 
     after_create :set_token_and_send_email, :if => :send_email?
   end
-
+  
   def confirmated?
     confirmed_at.present?
   end
@@ -34,13 +36,12 @@ module Models::User::Authentication
     end
   end
 
-  # Encrypts the password into the password_digest attribute.
-  def password=(unencrypted_password, size = 16)
-    @password = unencrypted_password
-    unless unencrypted_password.blank?
-      self.salt = SecureRandom.urlsafe_base64(16)
-      self.password_digest = BCrypt::Password.create(salt + unencrypted_password)
-    end
+  def password=(unencrypted_password)
+    instance_variable_set(:@password, unencrypted_password)
+
+    self.password_salt = ::BCrypt::Engine.generate_salt
+    peppered_password = [unencrypted_password, pepper].join
+    self.encrypted_password = ::BCrypt::Engine.hash_secret(peppered_password, password_salt, stretches)
   end
 
   # Resets the password to allow edit the password
@@ -80,6 +81,10 @@ module Models::User::Authentication
 
   private
 
+    def pepper
+      'OLIxRc5aGujs5D/9S8LslEM+DMsY0GdgL8Eg9ldTlXY='
+    end
+
     def set_token_and_send_email
       if PgTools.public_schema?
         self.confirmation_token = SecureRandom.base64(12)
@@ -88,4 +93,5 @@ module Models::User::Authentication
       self.save
     end
 
+    def stretches; 10; end
 end

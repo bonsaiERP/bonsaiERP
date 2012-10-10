@@ -1,11 +1,27 @@
-#dialog
-  %h1 Registro
+:css
+  #header{ display: none; }
+  #menu{ display: none; }
+  #main_wrap{ background: none !important; }
+  #cont{
+    background: none;
+    border-radius: none;
+    box-shadow: none;
+  }
 
-  = simple_form_for(@organisation, :url => registrations_path) do |f|
-    = hidden_field_tag :registration_token, params[:registration_token]
-    %fieldset
-      = f.input :email, :label => "Correo Electrónico", :input_html => {:size => 40}
-      = f.input :password, :label => 'Contraseña', :input_html => {:size => 40}
-      -#%p.accept Al hacer click en <strong>Registrarme</strong> usted acepta los <a href="#">Terminos de servicio</a>
-      .clear.form_actions
+.row(style="margin-top:100px")
+  #login.span6.offset.3
+    .inset
+      %h1 Registro
+
+      = simple_form_for(@organisation, :url => registrations_path) do |f|
+        = f.input :name, label: 'Empresa'
+        = f.input :tenant, label: 'Subdominio'
+        = f.input :email, :label => "Correo Electrónico", :input_html => {:size => 40}
+        = f.input :password, :label => 'Contraseña', :input_html => {:size => 40}
         = f.submit "Registrarse", :class => 'btn btn-success b'
+
+:javascript
+  (function($) {
+    $('#organisation')
+  }
+  )(jQuery)

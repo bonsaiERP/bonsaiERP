@@ -43,4 +43,17 @@ describe Organisation do
     org.master_link.user.should be_present
   end
 
+  context 'create_organisation' do
+    let(:org_params) {
+      {name: 'Firts org', tenant: 'firstorg', 
+       email: 'new@mail.com', password: 'secret123'}
+    }
+    it "creates a new organisation" do
+      org = Organisation.new(org_params)
+
+      org.create_organisation.should be_true
+      binding.pry
+      org
+    end
+  end
 end

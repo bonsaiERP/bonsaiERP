@@ -5,16 +5,11 @@ class Organisation < ActiveRecord::Base
 
   self.table_name = "common.organisations"
 
-  ########################################
-  # Callbacks
-  before_validation :set_user, :if => :new_record?
-  before_create :create_link
-
   DATA_PATH = "db/defaults"
 
   ########################################
   # Attributes
-  attr_accessor :account_info
+  attr_accessor :account_info, :email, :password
   attr_protected :base_accounts
 
   serialize :preferences, Hash
@@ -55,71 +50,29 @@ class Organisation < ActiveRecord::Base
     self.master_link.creator = true
   end
 
-  # Creates all registers needed when an organisation is created
-  def create_records
-    create_units
-    create_account_types
+  def create_organisation
+    self.build_master_account
+    user = master_link.user
+
+    user.email = email
+    user.password = password
+
+    set_user_errors(user) unless user.valid?
+
+    self.save
   end
 
-  def create_data
-    PgTools.set_search_path self.id, false
-    return if Currency.count > 0
-
-    AccountType.create_base_data
-    Unit.create_base_data
-    Currency.create_base_data
-    OrgCountry.create_base_data
-
-    data = org.attributes
-    data.delete("id")
-    data.delete("user_id")
-
-    orga = Organisation.new(data)
-    orga.id = org.id
-    orga.user_id = org.user_id
-    orga.save!
-
-    User.create!(user.attributes) {|u|
-      u.id = user.id
-      u.password = "demo123"
-      u.confirmed_at = user.confirmed_at
-    }
-  end
-
-  protected
+  private
+    def set_user_errors(user)
+      self.errors[:email] = user.errors[:email] if user.errors[:email].present?
+      self.errors[:password] = user.errors[:password] if user.errors[:password].present?
+    end
 
     # Sets the expiry date for the organisation until ew payment
     def set_due_date
       self.due_date = 30.days.from_now.to_date
     end
 
-    # creates default units the units accordins to the locale
-    def create_units
-      units = YAML.load_file(data_path("units.#{I18n.locale}.yml"))
-      Unit.create!(units)
-    end
-
-    def create_account_types
-      account_types = YAML.load_file(data_path("account_types.#{I18n.locale}.yml"))
-      AccountType.create!(account_types)
-    end
-
-    def data_path(path = "")
-      File.join(Rails.root, DATA_PATH, path)
-    end
-
-    # Sets the user_id, needed to define the scope of uniquenes_of :name
-    def set_user
-      write_attribute(:user_id, UserSession.current_user.id) unless user_id.present?
-    end
-
-    def create_link
-      links.build(:rol => 'admin') {|l| 
-        l.set_user_creator(UserSession.user_id)
-      }
-    end
-
-  private
     def valid_tenant_not_in_list
       if ['public', 'common', 'demo'].include?(tenant)
         self.errors[:tenant] << I18n.t('organisation.errors.tenant.list')

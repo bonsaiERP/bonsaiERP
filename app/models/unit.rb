@@ -35,10 +35,7 @@ class Unit < ActiveRecord::Base
   def self.create_base_data
     path = File.join(Rails.root, "db/defaults", "units.#{I18n.locale}.yml")
     data = YAML.load_file(path)
-    data.each do |d|
-      unit = Unit.new(d)
-      unit.save!(:validate => false)
-    end
+    Unit.create!(data)
   end
 #
 #  # Retrives all records
