@@ -124,7 +124,6 @@ class Organisation < ActiveRecord::Base
     def create_link
       links.build(:rol => 'admin') {|l| 
         l.set_user_creator(UserSession.user_id)
-        l.abbreviation = "GEREN"
       }
     end
 
