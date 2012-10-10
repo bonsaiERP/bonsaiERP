@@ -51,16 +51,14 @@ class Organisation < ActiveRecord::Base
   end
 
   def build_master_account
-    self.build_master_link
+    self.build_master_link.build_user
     self.master_link.creator = true
-    self.master_link.build_user
   end
 
   # Creates all registers needed when an organisation is created
   def create_records
     create_units
     create_account_types
-    create_currencies
   end
 
   def create_data
@@ -104,12 +102,6 @@ class Organisation < ActiveRecord::Base
     def create_account_types
       account_types = YAML.load_file(data_path("account_types.#{I18n.locale}.yml"))
       AccountType.create!(account_types)
-    end
-
-    def create_currencies
-      YAML.load_file(data_path("currencies.yml")).each do |cur|
-        Currency.create!(cur) {|c| c.id = cur["id"]}
-      end
     end
 
     def data_path(path = "")

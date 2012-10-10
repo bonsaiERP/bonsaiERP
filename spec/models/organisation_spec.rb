@@ -43,24 +43,4 @@ describe Organisation do
     org.master_link.user.should be_present
   end
 
-  describe "Create records" do
-    let!(:org) { Organisation.create!(valid_params)}
-
-    it 'should create units' do
-      org.create_records
-      Unit.should be_any
-    end
-
-    it 'should create all currencies' do
-      org.create_records
-      AccountType.should be_any
-    end
-
-    it 'should create all currencies' do
-      org.create_records
-      Currency.should be_any
-      Currency.count.should > 2
-    end
-  end
-
 end

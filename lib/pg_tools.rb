@@ -22,9 +22,10 @@ module PgTools
     result
   end
 
-  def set_search_path(schema_name)
+  def change_schema(schema_name)
     connection.execute "SET search_path TO #{schema_name}"
   end
+  alias :change_tenant :change_schema
 
   def reset_search_path
     connection.execute "SET search_path TO public"
@@ -76,6 +77,7 @@ module PgTools
 
     sql
   end
+
   def load_schema_into_schema(schema_name)
     ActiveRecord::Base.logger.info "Enter schema #{schema_name}."
 
@@ -88,6 +90,14 @@ module PgTools
         raise "#{file} desn't exist yet. It's possible that you just ran a migration!"
       end
     end
+  end
+
+  def create_bash_file(file, script)
+    File.delete(file) if File.exists?(file)
+    f = File.new(file, 'w+')
+    f.write(script)
+    f.chmod(0554)
+    f.close
   end
 
   def create_bash_dump_public_schema
@@ -104,11 +114,11 @@ BASH
   end
 
   [:username, :database, :host, :password].each do |meth|
-    instance_eval <<-CODE, __FILE__, __LINE__ + 1
-def #{meth}
-connection_config[:#{meth}]
-end
-CODE
+    class_eval <<-CODE, __FILE__, __LINE__ + 1
+      def #{meth}
+        connection_config[:#{meth}]
+      end
+    CODE
   end
 
   def connection_config
