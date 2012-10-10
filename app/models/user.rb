@@ -5,6 +5,8 @@ class User < ActiveRecord::Base
 
   self.table_name = 'common.users'
 
+  include Models::User::Authentication
+
   ABBREV = "GEREN"
   ROLES = ['admin', 'gerency', 'operations'].freeze
 
@@ -18,7 +20,7 @@ class User < ActiveRecord::Base
 
   ########################################
   # Relationships
-  belongs_to :organisation, inverse_of: :users
+  has_many :organisations, through: :links
 
   ########################################
   # Validations

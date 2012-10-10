@@ -26,17 +26,19 @@ class Organisation < ActiveRecord::Base
   belongs_to :org_country, :foreign_key => :country_id
   belongs_to :currency
 
-  has_many :users, inverse_of: :accounts, dependent: :destroy
-  has_one  :master_account, class_name: 'User', foreign_key: :organisation_id,
-           conditions: { master_account: true }
-  accepts_nested_attributes_for :master_account
+  has_many :links, :dependent => :destroy, :autosave => true
+  has_one  :master_link, class_name: 'Link', foreign_key: :organisation_id,
+           conditions: { master_account: true, rol: 'admin' }
+
+  has_many :users, through: :links, dependent: :destroy
+  accepts_nested_attributes_for :users
 
   ########################################
   # Validations
   validates_presence_of   :name, :org_country, :currency, :tenant
   validates_uniqueness_of :name, :scope => :user_id
   validates :tenant, uniqueness: true, format: { with: /\A[a-z0-9]+\z/ }
-  validate :valid_tenant_not_in_list
+  validate  :valid_tenant_not_in_list
 
 
   # Delegations
@@ -46,6 +48,12 @@ class Organisation < ActiveRecord::Base
   # Methods
   def to_s
     name
+  end
+
+  def build_master_account
+    self.build_master_link
+    self.master_link.creator = true
+    self.master_link.build_user
   end
 
   # Creates all registers needed when an organisation is created

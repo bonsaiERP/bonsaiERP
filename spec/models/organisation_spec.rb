@@ -28,8 +28,19 @@ describe Organisation do
     }
   }
 
-  it 'should create an instance' do
+  it "create an instance" do
     org = Organisation.create!(valid_params)
+  end
+
+  it "build master_account user" do
+    org = Organisation.new
+    org.build_master_account
+
+    org.master_link.should be_master_account
+    org.master_link.should be_creator
+    org.master_link.rol.should eq('admin')
+
+    org.master_link.user.should be_present
   end
 
   describe "Create records" do
