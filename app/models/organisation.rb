@@ -22,7 +22,7 @@ class Organisation < ActiveRecord::Base
   belongs_to :currency
 
   has_many :links, :dependent => :destroy, :autosave => true
-  has_one  :master_link, class_name: 'Link', foreign_key: :organisation_id,
+  has_one  :master_link, class_name: 'Link', foreign_key: :organisation_id, autosave: true,
            conditions: { master_account: true, rol: 'admin' }
 
   has_many :users, through: :links, dependent: :destroy

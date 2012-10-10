@@ -133,7 +133,7 @@ module Models::AccountLedger::Money
 
     unless ac
       type_id = AccountType.find_by_account_number(c.class.to_s).id
-    
+
       ac = c.accounts.build(:name => c.to_s, :currency_id => currency_id) {|aco|
         aco.amount = 0
         aco.original_type = c.class.to_s

@@ -46,14 +46,23 @@ describe Organisation do
   context 'create_organisation' do
     let(:org_params) {
       {name: 'Firts org', tenant: 'firstorg', 
+       country_id: country.id, currency_id: currency.id,
        email: 'new@mail.com', password: 'secret123'}
     }
+    let(:country) { OrgCountry.first }
+    let(:currency) { Currency.first }
+
     it "creates a new organisation" do
       org = Organisation.new(org_params)
 
       org.create_organisation.should be_true
-      binding.pry
-      org
+
+      org.master_link.should be_persisted
+      org.master_link.rol.should eq('admin')
+      org.master_link.should be_master_account
+
+      org.master_link.user.should be_persisted
+      org.master_link.user.email.should eq(org_params[:email])
     end
   end
 end

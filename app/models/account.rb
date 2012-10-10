@@ -3,7 +3,7 @@
 # email: boriscyber@gmail.com
 class Account < ActiveRecord::Base
 
-  include ActionView::Helpers::NumberHelper 
+  include ActionView::Helpers::NumberHelper
 
   # callbacks
   before_create :set_amount

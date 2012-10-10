@@ -29,8 +29,6 @@ class User < ActiveRecord::Base
     :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, 
     :message => I18n.t("errors.messages.user.email")
   }, :uniqueness => {:if => :email_changed?}
-  validates_inclusion_of :rol, :in => ROLES
-  validates_inclusion_of :rolname, :in => ROLES, :if => "rol.blank?"
 
   with_options :if => :new_record? do |u|
     #u.validates_inclusion_of :rolname, :in => ROLES
