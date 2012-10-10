@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
   #before_validation :set_rolname, :if => :new_record?
   before_create     :create_user_link, :if => :change_default_password?
   before_destroy    :destroy_links
-  
+
   ABBREV = "GEREN"
   ROLES = ['admin', 'gerency', 'operations'].freeze
 

@@ -26,7 +26,11 @@ class Organisation < ActiveRecord::Base
 
   # users links
   has_many :links, :dependent => :destroy, :autosave => true
+  has_one  :master_link, class_name: 'Link', foreign_key: :organisation_id,
+           conditions: { master_account: true }
+
   has_many :users, :through => :links
+  accepts_nested_attributes_for :users
 
   delegate :code, :name, :symbol, :plural, :to => :currency, :prefix => true
 
