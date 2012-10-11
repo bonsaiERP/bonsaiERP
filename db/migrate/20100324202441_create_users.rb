@@ -17,7 +17,7 @@ class CreateUsers < ActiveRecord::Migration
       # Control users
       t.string   :encrypted_password
       t.string   :password_salt
-      t.string   :confirmation_token, :limit => 20
+      t.string   :confirmation_token, :limit => 60
       t.datetime :confirmation_sent_at
       t.datetime :confirmed_at
       t.string   :reset_password_token
@@ -34,6 +34,7 @@ class CreateUsers < ActiveRecord::Migration
     add_index "common.users", :email
     add_index "common.users", :first_name
     add_index "common.users", :last_name
+    add_index "common.users", :confirmation_token, unique: true
 
   end
 

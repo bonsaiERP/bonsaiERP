@@ -1,4 +1,4 @@
-class AddUsersRol < ActiveRecord::Migration
+class AddUsersActive < ActiveRecord::Migration
   def up
     change_table "common.users" do |t|
       t.boolean :active, :default => true

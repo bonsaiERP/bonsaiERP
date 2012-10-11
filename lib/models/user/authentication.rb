@@ -4,22 +4,18 @@ module Models::User::Authentication
   attr_accessor :password, :password_confirmation
 
   included do 
-    after_create :set_token
+    before_create :set_confirmation_token
   end
 
-  def confirmated?
+  def confirmed_registration?
     confirmed_at.present?
   end
 
-  def confirm_token(token)
-    return true if confirmated?
+  def confirm_registration
+    return true if confirmed_registration?
 
-    if confirmation_token === token
-      self.confirmed_at = Time.zone.now
-      self.save(:validate => false)
-    else
-      false
-    end
+    self.confirmed_at = Time.zone.now
+    self.save(validate: false)
   end
 
   # Returns self if the password is correct, otherwise false.
@@ -85,9 +81,8 @@ module Models::User::Authentication
       'OLIxRc5aGujs5D/9S8LslEM+DMsY0GdgL8Eg9ldTlXY='
     end
 
-    def set_token
-      self.confirmation_token = SecureRandom.base64(12)
-      self.save
+    def set_confirmation_token
+      self.confirmation_token = SecureRandom.urlsafe_base64(32)
     end
 
     def stretches; 10; end

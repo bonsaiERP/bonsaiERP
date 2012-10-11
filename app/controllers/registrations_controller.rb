@@ -9,10 +9,10 @@ class RegistrationsController < ApplicationController
   end
 
   def show
-    @user = User.find_by_id(params[:id])
-    if @user and @user.confirm_token(params[:token])
+    @user = User.find_by_confirmation_token(params[:id])
+    if @user && @user.confirm_registration
       session[:user_id] = @user.id
-      check_logged_user
+      render text: 'Registrado'
     else
       if @user
         flash[:warning] = "Ya esta registrado."
@@ -37,8 +37,9 @@ class RegistrationsController < ApplicationController
 
     respond_to do |format|
       if @organisation.create_organisation
-        RegistrationMailer.send_registration(@organisation.master_account).deliver
-        format.html { redirect_to "/registrations/", :notice => "Se ha registrado exitosamente!. Se le ha enviado un email a <strong>#{@user.email}</strong> con instrucciones para concluir el registro.".html_safe}
+        @user = @organisation.master_account
+        RegistrationMailer.send_registration(@user).deliver
+        format.html { redirect_to registrations_path, notice: "Se ha registrado exitosamente!." }
       else
         format.html { render 'new'}
       end

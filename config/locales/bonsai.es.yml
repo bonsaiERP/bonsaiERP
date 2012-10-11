@@ -1,6 +1,6 @@
 es:
   bonsai:
-    registration: "Active su cuenta en www.bonsaierp.com"
+    registration: "Complete su registro en %{domain}"
     reset_password: "Recuperación de contraseña de www.bonsaierp.con"
   views:
     pagination: 
