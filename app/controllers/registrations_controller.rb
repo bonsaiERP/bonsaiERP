@@ -16,7 +16,9 @@ class RegistrationsController < ApplicationController
       return
     end
 
-    if @user = @organisation.users.find && @user.confirm_registration
+    @user = @organisation.users.find_by_confirmation_token(params[:id])
+    if @user && @user.confirm_registration
+      #QC.enqueue "Organisation.test_job", "La fecha hora es: #{Time.now}"
       session[:user_id] = @user.id
       render text: 'Registrado'
     else
