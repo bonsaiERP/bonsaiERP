@@ -20,6 +20,7 @@ class User < ActiveRecord::Base
 
   ########################################
   # Relationships
+  has_many :links
   has_many :organisations, through: :links
 
   ########################################

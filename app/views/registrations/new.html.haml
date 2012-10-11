@@ -15,13 +15,19 @@
 
       = simple_form_for(@organisation, :url => registrations_path) do |f|
         = f.input :name, label: 'Empresa'
-        = f.input :tenant, label: 'Subdominio'
+        = f.input :tenant, label: 'Subdominio', title: 'No es posible modificar despues', hint: '&nbsp;'
         = f.input :email, :label => "Correo Electrónico", :input_html => {:size => 40}
         = f.input :password, :label => 'Contraseña', :input_html => {:size => 40}
         = f.submit "Registrarse", :class => 'btn btn-success b'
 
 :javascript
   (function($) {
-    $('#organisation')
+    function setTenant(val) {
+      val = val.toLowerCase().replace(/[^a-z0-9]/g, '');
+      $('#organisation_tenant').val(val);
+      $('#organisation_tenant').siblings('.help-block').html("Su dominio se vera <strong>" + val + ".bonsaierp.com</strong>");
+    }
+
+    $('#organisation_name').blur(function() { setTenant(this.value); });
   }
   )(jQuery)

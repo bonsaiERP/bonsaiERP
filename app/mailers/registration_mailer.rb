@@ -9,7 +9,6 @@ class RegistrationMailer < ActionMailer::Base
   # Sends the registration email to the contact
   def send_registration(user)
     @user = user
-    @host = ActionMailer::Base.default_url_options[:host]
     mail(:to => @user.email, :subject => I18n.t("bonsai.registration"))
   end
 end

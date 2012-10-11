@@ -45,9 +45,7 @@ describe Organisation do
 
   context 'create_organisation' do
     let(:org_params) {
-      {name: 'Firts org', tenant: 'firstorg', 
-       country_id: country.id, currency_id: currency.id,
-       email: 'new@mail.com', password: 'secret123'}
+      {name: 'Firts org', tenant: 'firstorg', email: 'new@mail.com', password: 'secret123'}
     }
     let(:country) { OrgCountry.first }
     let(:currency) { Currency.first }
@@ -63,6 +61,9 @@ describe Organisation do
 
       org.master_link.user.should be_persisted
       org.master_link.user.email.should eq(org_params[:email])
+
+      org.master_account.should be_is_a(User)
+      org.master_account.should be_persisted
     end
 
     it "should present errors if no email or password" do

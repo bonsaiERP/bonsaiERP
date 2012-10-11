@@ -4,9 +4,9 @@ module Models::User::Authentication
   attr_accessor :password, :password_confirmation
 
   included do 
-    after_create :set_token_and_send_email, :if => :send_email?
+    after_create :set_token
   end
-  
+
   def confirmated?
     confirmed_at.present?
   end
@@ -85,11 +85,8 @@ module Models::User::Authentication
       'OLIxRc5aGujs5D/9S8LslEM+DMsY0GdgL8Eg9ldTlXY='
     end
 
-    def set_token_and_send_email
-      if PgTools.public_schema?
-        self.confirmation_token = SecureRandom.base64(12)
-        RegistrationMailer.send_registration(self).deliver
-      end
+    def set_token
+      self.confirmation_token = SecureRandom.base64(12)
       self.save
     end
 

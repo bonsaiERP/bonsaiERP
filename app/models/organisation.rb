@@ -10,7 +10,6 @@ class Organisation < ActiveRecord::Base
   ########################################
   # Attributes
   attr_accessor :account_info, :email, :password
-  attr_protected :base_accounts
 
   serialize :preferences, Hash
 
@@ -24,17 +23,21 @@ class Organisation < ActiveRecord::Base
   has_many :links, :dependent => :destroy, :autosave => true
   has_one  :master_link, class_name: 'Link', foreign_key: :organisation_id, autosave: true,
            conditions: { master_account: true, rol: 'admin' }
+  has_one  :master_account, through: :master_link, source: :user
 
   has_many :users, through: :links, dependent: :destroy
   accepts_nested_attributes_for :users
 
   ########################################
   # Validations
-  validates_presence_of   :name, :org_country, :currency, :tenant
+  validates_presence_of   :name, :tenant
   validates_uniqueness_of :name, :scope => :user_id
   validates :tenant, uniqueness: true, format: { with: /\A[a-z0-9]+\z/ }
   validate  :valid_tenant_not_in_list
 
+  with_options if: :persisted? do |val|
+    val.validates_presence_of :org_country, :currency
+  end
 
   # Delegations
   delegate :code, :name, :symbol, :plural, :to => :currency, :prefix => true
