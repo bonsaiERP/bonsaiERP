@@ -7,8 +7,8 @@ class RegistrationMailer < ActionMailer::Base
   layout "mail"
 
   # Sends the registration email to the contact
-  def send_registration(user)
-    @user = user
+  def send_registration(user, tenant)
+    @user, @tenant = user, tenant
     @port = Rails.env.production? ? 80 : 3000
 
     mail(:to => @user.email, :subject => I18n.t("bonsai.registration", domain: DOMAIN) )

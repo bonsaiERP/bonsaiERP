@@ -68,6 +68,12 @@ class Organisation < ActiveRecord::Base
     self.save
   end
 
+  def self.test_job(a = nil)
+    f = File.new Rails.root.join('test_job.txt'), 'w+'
+    f.write "This job was generated in #{Time.now} with a = #{a}"
+    f.close
+  end
+
   private
     def set_user_errors(user)
       [:email, :password].each do |meth|

@@ -3,4 +3,4 @@
 %p 
   Bienvenido a <span style="font-weight: bold; font-style: italic;">#{APP_NAME}</span>, para poder completar su registro 
 
-  =link_to "haga click es en este vínculo", url_for(controller: 'registrations', action: 'show', id: @user.confirmation_token, host: DOMAIN), style: 'font-weight:bold'
+  =link_to "haga click es en este vínculo", url_for(controller: 'registrations', action: 'show', id: @user.confirmation_token, tenant: @tenant, host: DOMAIN), style: 'font-weight:bold'

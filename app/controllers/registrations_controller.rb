@@ -9,17 +9,21 @@ class RegistrationsController < ApplicationController
   end
 
   def show
-    @user = User.find_by_confirmation_token(params[:id])
-    if @user && @user.confirm_registration
+    @organisation = Organisation.find_by_tenant(params[:tenant])
+
+    unless @organisation
+      redirect_to new_registration_path, alert: 'La empresa no existe.'
+      return
+    end
+
+    if @user = @organisation.users.find && @user.confirm_registration
       session[:user_id] = @user.id
       render text: 'Registrado'
     else
       if @user
-        flash[:warning] = "Ya esta registrado."
-        redirect_to new_session_path
+        redirect_to new_session_path, alert: "Ya esta registrado."
       else
-        flash[:warning] = "Por favor registrese."
-        redirect_to new_registration_path
+        redirect_to new_registration_path, alert: "Por favor registrese."
       end
     end
   end
@@ -35,14 +39,12 @@ class RegistrationsController < ApplicationController
   def create
     @organisation = Organisation.new(slice_params(params[:organisation]) )
 
-    respond_to do |format|
-      if @organisation.create_organisation
-        @user = @organisation.master_account
-        RegistrationMailer.send_registration(@user).deliver
-        format.html { redirect_to registrations_path, notice: "Se ha registrado exitosamente!." }
-      else
-        format.html { render 'new'}
-      end
+    if @organisation.create_organisation
+      @user = @organisation.master_account
+      RegistrationMailer.send_registration(@user, @organisation.tenant).deliver
+      redirect_to registrations_path, notice: "Se ha registrado exitosamente!."
+    else
+      render 'new'
     end
   end
 

@@ -24,9 +24,8 @@ gem 'valium'      , '~> 0.5.0'
 gem 'bcrypt-ruby' , '~> 3.0.1' , require: 'bcrypt'
 gem 'roadie'      , '~> 2.3.2' # Styles for email
 
-gem 'validates_email_format_of'
-#gem 'qu-redis',    '~> 0.2.0'
-#gem 'resque', :require => 'resque/server'
+gem 'validates_email_format_of', '~> 1.5.3'
+gem 'queue_classic', '~> 2.0.1' # Background processing for PostgreSQL
 
 gem 'prawn', '~> 1.0.0.rc1'
 #gem 'exception_notification', "~> 2.5.2"
