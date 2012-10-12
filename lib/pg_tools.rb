@@ -69,11 +69,8 @@ module PgTools
   end
 
   def get_public_schema
-    file = Rails.root.join('db', 'dump_public_schema.sh')
-    create_bash_file(file, create_bash_dump_public_schema)
-    sql = %x[/bin/bash #{file}]
+    sql = %x[#{create_bash_dump_public_schema}]
     raise 'Error generating public schema' unless $?.success?
-    File.delete(file)
 
     sql
   end
@@ -90,14 +87,6 @@ module PgTools
         raise "#{file} desn't exist yet. It's possible that you just ran a migration!"
       end
     end
-  end
-
-  def create_bash_file(file, script)
-    File.delete(file) if File.exists?(file)
-    f = File.new(file, 'w+')
-    f.write(script)
-    f.chmod(0554)
-    f.close
   end
 
   def create_bash_dump_public_schema
