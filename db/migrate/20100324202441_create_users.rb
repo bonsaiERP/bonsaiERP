@@ -26,6 +26,8 @@ class CreateUsers < ActiveRecord::Migration
       t.integer  :sign_in_count, :default => 0
       t.datetime :last_sign_in_at
 
+      t.string   :abbreviation, :limit => 10
+
       t.boolean :change_default_password, :default => false
       t.string :address
 

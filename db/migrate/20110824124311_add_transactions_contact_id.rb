@@ -7,5 +7,8 @@ class AddTransactionsContactId < ActiveRecord::Migration
   end
 
   def down
+    change_table :transactions do |t|
+      t.remove :contact_id
+    end
   end
 end

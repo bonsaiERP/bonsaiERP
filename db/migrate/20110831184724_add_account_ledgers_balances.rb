@@ -7,5 +7,9 @@ class AddAccountLedgersBalances < ActiveRecord::Migration
   end
 
   def down
+    change_table :account_ledgers do |t|
+      t.remove :account_balance
+      t.remove :to_balance
+    end
   end
 end

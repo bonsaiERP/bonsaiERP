@@ -1,9 +1,9 @@
 class CreateTransactions < ActiveRecord::Migration
-  def self.up
+  def change
     create_table :transactions do |t|
       t.integer :account_id
       t.string  :type, :limit => 20
-      
+
       t.decimal :total, :precision => 14, :scale => 2
       t.decimal :balance, :precision => 14, :scale => 2 # Saldo
       t.decimal :tax_percent, :precision => 5, :scale => 2
@@ -35,6 +35,8 @@ class CreateTransactions < ActiveRecord::Migration
       t.datetime :credit_datetime
       t.string  :credit_description, :limit => 500
 
+      t.boolean :has_error, default: false
+      t.string  :error_messages
 
       t.timestamps
     end
@@ -51,10 +53,7 @@ class CreateTransactions < ActiveRecord::Migration
     add_index :transactions, :project_id
 
     add_index :transactions, :creditor_id
+    add_index :transactions, :has_error
 
-  end
-
-  def self.down
-    drop_table :transactions
   end
 end

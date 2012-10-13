@@ -1,5 +1,5 @@
 class CreateTransactionDetails < ActiveRecord::Migration
-  def self.up
+  def change
     create_table :transaction_details do |t|
       t.integer :transaction_id
       t.integer :item_id
@@ -19,9 +19,5 @@ class CreateTransactionDetails < ActiveRecord::Migration
     add_index :transaction_details, :transaction_id
     add_index :transaction_details, :item_id
     add_index :transaction_details, :ctype
-  end
-
-  def self.down
-    drop_table :transaction_details
   end
 end

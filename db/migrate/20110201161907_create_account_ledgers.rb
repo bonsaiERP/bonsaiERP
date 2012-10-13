@@ -1,5 +1,5 @@
 class CreateAccountLedgers < ActiveRecord::Migration
-  def self.up
+  def change
     create_table :account_ledgers do |t|
       t.string  :reference
       t.integer :currency_id
@@ -24,6 +24,9 @@ class CreateAccountLedgers < ActiveRecord::Migration
       t.datetime :nuller_datetime # null
       t.boolean :active, :default => true
 
+      t.boolean :has_error, default: false
+      t.string  :error_messages
+
       t.timestamps
     end
 
@@ -39,9 +42,6 @@ class CreateAccountLedgers < ActiveRecord::Migration
     add_index :account_ledgers, :creator_id
     add_index :account_ledgers, :nuller_id
     add_index :account_ledgers, :active
-  end
-
-  def self.down
-    drop_table :account_ledgers
+    add_index :account_ledgers, :has_error
   end
 end

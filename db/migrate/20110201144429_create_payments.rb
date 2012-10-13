@@ -1,5 +1,5 @@
 class CreatePayments < ActiveRecord::Migration
-  def self.up
+  def change
     create_table :payments do |t|
       t.integer :transaction_id
       t.string  :ctype
@@ -25,9 +25,5 @@ class CreatePayments < ActiveRecord::Migration
     add_index :payments, :contact_id
     add_index :payments, :ctype
     add_index :payments, :date
-  end
-
-  def self.down
-    drop_table :payments
   end
 end

@@ -8,5 +8,9 @@ class TransactionsAddNuller < ActiveRecord::Migration
   end
 
   def down
+    change_table :transactions do |t|
+      t.remove :nuller_id
+      t.remove :nuller_datetime
+    end
   end
 end

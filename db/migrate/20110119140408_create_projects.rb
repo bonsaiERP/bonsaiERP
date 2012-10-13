@@ -1,5 +1,5 @@
 class CreateProjects < ActiveRecord::Migration
-  def self.up
+  def change
     create_table :projects do |t|
       t.string :name
       t.boolean :active, :default => true
@@ -12,9 +12,5 @@ class CreateProjects < ActiveRecord::Migration
     end
 
     add_index :projects, :active
-  end
-
-  def self.down
-    drop_table :projects
   end
 end

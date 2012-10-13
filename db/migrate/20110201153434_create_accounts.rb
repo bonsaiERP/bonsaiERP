@@ -1,12 +1,12 @@
 class CreateAccounts < ActiveRecord::Migration
-  def self.up
+  def change
     create_table :accounts do |t|
       t.integer :currency_id
       t.integer :account_type_id
       t.integer :accountable_id
       t.string  :accountable_type# denormalized field to find accounts by model type
       t.string  :original_type, :limit => 20
-  
+
       t.string  :name
       t.string  :type, :limit => 20
       t.decimal :amount, :precision => 14, :scale => 2
@@ -24,9 +24,5 @@ class CreateAccounts < ActiveRecord::Migration
     add_index :accounts, :original_type
     add_index :accounts, :type
     #add_index :accounts, :number
-  end
-
-  def self.down
-    drop_table :accounts
   end
 end

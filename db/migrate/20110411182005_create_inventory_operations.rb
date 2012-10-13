@@ -1,5 +1,5 @@
 class CreateInventoryOperations < ActiveRecord::Migration
-  def self.up
+  def change
     create_table :inventory_operations do |t|
       t.integer :contact_id
       t.integer :store_id
@@ -9,10 +9,13 @@ class CreateInventoryOperations < ActiveRecord::Migration
       t.string :ref_number
       t.string :operation, :limit => 10
       t.string :state
-      
+
       t.string :description
 
       t.decimal :total, :precision => 14, :scale => 2
+
+      t.boolean :has_error, default: false
+      t.string  :error_messages
 
       t.timestamps
     end
@@ -25,9 +28,6 @@ class CreateInventoryOperations < ActiveRecord::Migration
     add_index :inventory_operations, :ref_number
     add_index :inventory_operations, :operation
     add_index :inventory_operations, :state
-  end
-
-  def self.down
-    drop_table :inventory_operations
+    add_index :inventory_operations, :has_error
   end
 end

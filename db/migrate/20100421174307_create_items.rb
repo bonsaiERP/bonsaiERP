@@ -1,5 +1,5 @@
 class CreateItems < ActiveRecord::Migration
-  def self.up
+  def change
     create_table :items do |t|
       t.integer :unit_id
 
@@ -26,9 +26,5 @@ class CreateItems < ActiveRecord::Migration
     add_index :items, :code
     add_index :items, :ctype
     add_index :items, :type
-  end
-
-  def self.down
-    drop_table :items
   end
 end

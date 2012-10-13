@@ -1,5 +1,5 @@
 class CreatePayPlans < ActiveRecord::Migration
-  def self.up
+  def change
     create_table :pay_plans do |t|
       t.integer :transaction_id
       t.integer :currency_id # Denormalized
@@ -23,9 +23,5 @@ class CreatePayPlans < ActiveRecord::Migration
     add_index :pay_plans, :ctype
     add_index :pay_plans, :paid
     add_index :pay_plans, :operation
-  end
-
-  def self.down
-    drop_table :pay_plans
   end
 end

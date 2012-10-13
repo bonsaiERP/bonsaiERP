@@ -1,5 +1,5 @@
 class CreatePrices < ActiveRecord::Migration
-  def self.up
+  def change
     create_table :prices do |t|
       t.integer :item_id
       t.decimal :unitary_cost, :precision => 14, :scale => 2
@@ -9,10 +9,6 @@ class CreatePrices < ActiveRecord::Migration
       t.timestamps
     end
     add_index :prices, :item_id
-  end
-
-  def self.down
-    drop_table :prices
   end
 
   # Creates a price using the item as base

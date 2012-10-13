@@ -69,6 +69,8 @@ ActiveRecord::Schema.define(:version => 20121011155712) do
     t.integer  "nuller_id"
     t.datetime "nuller_datetime"
     t.boolean  "active",                                                           :default => true
+    t.boolean  "has_error",                                                        :default => false
+    t.string   "error_messages"
     t.datetime "created_at",                                                                           :null => false
     t.datetime "updated_at",                                                                           :null => false
     t.decimal  "account_balance",                   :precision => 14, :scale => 2
@@ -91,6 +93,7 @@ ActiveRecord::Schema.define(:version => 20121011155712) do
   add_index "account_ledgers", ["creator_id"], :name => "index_account_ledgers_on_creator_id"
   add_index "account_ledgers", ["currency_id"], :name => "index_account_ledgers_on_currency_id"
   add_index "account_ledgers", ["date"], :name => "index_account_ledgers_on_date"
+  add_index "account_ledgers", ["has_error"], :name => "index_account_ledgers_on_has_error"
   add_index "account_ledgers", ["inverse"], :name => "index_account_ledgers_on_inverse"
   add_index "account_ledgers", ["nuller_id"], :name => "index_account_ledgers_on_nuller_id"
   add_index "account_ledgers", ["operation"], :name => "index_account_ledgers_on_operation"
@@ -189,8 +192,10 @@ ActiveRecord::Schema.define(:version => 20121011155712) do
     t.string   "state"
     t.string   "description"
     t.decimal  "total",                         :precision => 14, :scale => 2
-    t.datetime "created_at",                                                   :null => false
-    t.datetime "updated_at",                                                   :null => false
+    t.boolean  "has_error",                                                    :default => false
+    t.string   "error_messages"
+    t.datetime "created_at",                                                                      :null => false
+    t.datetime "updated_at",                                                                      :null => false
     t.integer  "contact_id"
     t.integer  "creator_id"
     t.integer  "transference_id"
@@ -201,6 +206,7 @@ ActiveRecord::Schema.define(:version => 20121011155712) do
   add_index "inventory_operations", ["contact_id"], :name => "index_inventory_operations_on_contact_id"
   add_index "inventory_operations", ["creator_id"], :name => "index_inventory_operations_on_creator_id"
   add_index "inventory_operations", ["date"], :name => "index_inventory_operations_on_date"
+  add_index "inventory_operations", ["has_error"], :name => "index_inventory_operations_on_has_error"
   add_index "inventory_operations", ["operation"], :name => "index_inventory_operations_on_operation"
   add_index "inventory_operations", ["project_id"], :name => "index_inventory_operations_on_project_id"
   add_index "inventory_operations", ["ref_number"], :name => "index_inventory_operations_on_ref_number"
@@ -430,6 +436,8 @@ ActiveRecord::Schema.define(:version => 20121011155712) do
     t.string   "credit_reference"
     t.datetime "credit_datetime"
     t.string   "credit_description",  :limit => 500
+    t.boolean  "has_error",                                                         :default => false
+    t.string   "error_messages"
     t.datetime "created_at",                                                                           :null => false
     t.datetime "updated_at",                                                                           :null => false
     t.boolean  "deliver",                                                           :default => false
@@ -462,6 +470,7 @@ ActiveRecord::Schema.define(:version => 20121011155712) do
   add_index "transactions", ["devolution"], :name => "index_transactions_on_devolution"
   add_index "transactions", ["discounted"], :name => "index_transactions_on_discounted"
   add_index "transactions", ["fact"], :name => "index_transactions_on_fact"
+  add_index "transactions", ["has_error"], :name => "index_transactions_on_has_error"
   add_index "transactions", ["modified_by"], :name => "index_transactions_on_modified_by"
   add_index "transactions", ["nuller_id"], :name => "index_transactions_on_nuller_id"
   add_index "transactions", ["payment_date"], :name => "index_transactions_on_payment_date"

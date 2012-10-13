@@ -1,5 +1,5 @@
 class CreateContacts < ActiveRecord::Migration
-  def self.up
+  def change
     create_table :contacts do |t|
       t.string :matchcode
       t.string :first_name, :limit => 100
@@ -25,9 +25,5 @@ class CreateContacts < ActiveRecord::Migration
     add_index :contacts, :first_name
     add_index :contacts, :last_name
     add_index :contacts, :type
-  end
-
-  def self.down
-    drop_table :contacts
   end
 end

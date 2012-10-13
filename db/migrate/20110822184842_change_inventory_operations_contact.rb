@@ -8,5 +8,10 @@ class ChangeInventoryOperationsContact < ActiveRecord::Migration
   end
 
   def down
+    change_table :inventory_operations do |t|
+      t.integer :contact_id
+      t.remove  :account_id
+    end
+    add_index :inventory_operations, :contact_id
   end
 end

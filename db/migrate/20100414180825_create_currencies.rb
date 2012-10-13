@@ -2,7 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class CreateCurrencies < ActiveRecord::Migration
-  def self.up
+  def change
     create_table "common.currencies" do |t|
       t.string :name, :limit => 100
       t.string :symbol, :limit => 20
@@ -10,9 +10,5 @@ class CreateCurrencies < ActiveRecord::Migration
 
       t.timestamps
     end
-  end
-
-  def self.down
-    drop_table :currencies
   end
 end

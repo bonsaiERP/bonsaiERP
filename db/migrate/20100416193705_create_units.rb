@@ -1,5 +1,5 @@
 class CreateUnits < ActiveRecord::Migration
-  def self.up
+  def change
     create_table :units do |t|
       t.string :name, :limit => 100
       t.string :symbol, :limit => 20
@@ -10,9 +10,5 @@ class CreateUnits < ActiveRecord::Migration
       t.timestamps
     end
 
-  end
-
-  def self.down
-    drop_table :units
   end
 end
