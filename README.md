@@ -7,3 +7,4 @@
 - Bank accounts
 - Inventory
 
+ The software is been improved as we move
