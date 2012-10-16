@@ -27,7 +27,7 @@ class ApplicationController < ActionController::Base
   # Callbacks
   before_filter :set_user_session, :if => :user_signed_in?
   before_filter :set_page
-  before_filter :set_tenan, unless: :tenant_creation_path?
+  before_filter :set_tenant, unless: :tenant_creation_path?
 
   def render_error(exception) 
     if notifier = Rails.application.config.middleware.detect { |x| x.klass == ExceptionNotifier } 

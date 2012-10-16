@@ -14,11 +14,14 @@ class OrganisationsController < ApplicationController
     @organisation = current_organisation
     @organisation.attributes = params[:organisation]
 
-    if @organisation.save
-      flash[:notice] = "Se ha creado su empresa correctamente."
-      job = QU.enqueue CreateTenant, @organisation.id, session[:user_id]
+    tenant = TenantCreator.new(request.subdomain) # Should be background process
 
-      redirect_to @organisation
+    if @organisation.save && tenant.create_tenant
+      session[:organisation] = {id: current_organisation.id}
+      flash[:notice] = "Se ha creado su empresa correctamente."
+      #job = QU.enqueue CreateTenant, @organisation.id, session[:user_id]
+
+      redirect_to dashboard_path
     else
       render 'new'
     end
@@ -27,8 +30,8 @@ class OrganisationsController < ApplicationController
   private
 
     def check_tenant_creation
-      if !current_organisation || !session[:tenan_creation]
-        redirect_to new_registration_path, error: "Ha ingresado incorrectamente a un recurso."
+      if !current_organisation || !session[:tenant_creation]
+        redirect_to new_registration_path, alert: "Debe confirmar su registro o registrarse."
         return
       end
     end

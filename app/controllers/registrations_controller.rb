@@ -2,33 +2,21 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class RegistrationsController < ApplicationController
-  #before_filter :check_logged_user, :except => [:show]
-  #before_filter :check_token#, :only => [:new, :create]
   before_filter :check_tenant
 
-  def index
-  end
-
   def show
-    @organisation = Organisation.find_by_tenant(request.subdomain)
+    @organisation = current_organisation
 
     unless @organisation
-      redirect_to new_registration_path, alert: 'La empresa no existe.'
+      redirect_to new_registration_path, alert: 'La empresa no existe, registrese por favor.'
       return
     end
 
     @user = @organisation.users.find_by_confirmation_token(params[:id])
     if @user && @user.confirm_registration
-      #QC.enqueue "Organisation.test_job", "La fecha hora es: #{Time.now}"
       reset_session
       session[:user_id], session[:tenant_creation] = @user.id, true
       redirect_to new_organisation_path, notice: 'Ya esta registrado, ahora ingrese los datos de su empresa.'
-    else
-      if @user
-        redirect_to new_session_path, alert: "Ya esta registrado."
-      else
-        redirect_to new_registration_path(subdomain: 'test'), alert: "Por favor registrese."
-      end
     end
   end
 
@@ -54,8 +42,9 @@ class RegistrationsController < ApplicationController
 
   private
     def check_tenant
-      if PgTools.schema_exists?(reques.tenant)
-        redirect_to new_session_url(host: UrlTools.domain)
+      if PgTools.schema_exists?(request.subdomain)
+        redirect_to new_session_url(host: UrlTools.domain), alert: "Por favor ingrese."
+        return
       end
     end
 end

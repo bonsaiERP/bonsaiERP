@@ -16,6 +16,7 @@ class CreateOrganisations < ActiveRecord::Migration
       t.date    :due_date
       t.text    :preferences
       t.boolean :base_accounts, :default => false
+      t.string  :time_zone, limit: 100
 
       t.string :tenant
 

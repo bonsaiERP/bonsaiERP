@@ -16,9 +16,9 @@
       = link_to "http://www.youtube.com/embed/BZMsfhXi9uw?autoplay=1&rel=0", :class => 'video', 'data-title' => 'Como crear clientes' do
         Como crear clientes
 
-- present nil, DashboardPresenter do |presenter|
-  = presenter.due_date
-  
+- present DashboardPresenter, DashboardPresenter do |presenter|
+  -#= presenter.due_date
+
   = presenter.change_password_link
 
   = presenter.create_money_link
@@ -31,7 +31,7 @@
       %ul.list
         - presenter.accounts_to_recieve.each do |cur, amt|
           %li.high #{cur} #{ntc amt}
-    
+
     .box.span6
       %h3.title
         %i.icon-minus-sign

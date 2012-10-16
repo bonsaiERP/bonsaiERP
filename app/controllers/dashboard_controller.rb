@@ -11,8 +11,7 @@ class DashboardController < ApplicationController
   # GET /config
   def configuration
     @users = User.order(:id).all
-    PgTools.reset_search_path
-    @org = Organisation.find(OrganisationSession.organisation_id)
+    @org   = current_organisation
   end
 
 end
