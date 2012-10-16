@@ -38,8 +38,7 @@ class OrganisationsController < ApplicationController
 
   # GET /organisations/new
   def new
-    session[:organisation] = nil
-    @organisation = Organisation.new(:currency_id => 1)
+    @organisation = Organisation.find_by_tenant(session[:tenant])
   end
 
   # GET /organisations/:id/schema

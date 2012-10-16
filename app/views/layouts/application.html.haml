@@ -55,7 +55,7 @@
 
       #cont
         .container-fluid
-          = render "layouts/flash"
+          = render "layouts/flash", flash: flash
           = yield
           .clear
       #footer

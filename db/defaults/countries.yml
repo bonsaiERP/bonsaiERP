@@ -1,7 +1,10 @@
 --- 
-- id: 1
-  name: Bolivia
+- name: Bolivia
   abbreviation: bo
-- id: 2
-  name: Estados Unidos
+  code: BO
+- name: Estados Unidos
   abbreviation: usa
+  code: US
+- name: Chile
+  abbreviation: cl
+  code: CL

@@ -1,20 +1,22 @@
 = simple_form_for(@organisation) do |f|
   = bonsai_form_error(f)
 
-  %fieldset
-    =f.input :name, :label => 'Nombre de su empresa'
-    =f.association :currency, :label => 'Moneda base', :hint => 'Todas las transacciones se realizaran en esta moneda.'
-    
-    =f.association :org_country, :label => 'País'
-    .input
-      =f.input :phone, :label => 'Teléfono', :input_html => {:size => 15}
-      =f.input :mobile, :label => 'Móvil', :input_html => {:size => 15}
+  .row-fluid
+    .span6=f.input :name, :label => 'Nombre de su empresa'
+    .span6=f.association :currency, :label => 'Moneda base', :hint => 'Todas las transacciones se realizaran en esta moneda.'
+  
+  .row-fluid
+    .span6=f.association :org_country, :label => 'País'
+  
+    .span3=f.input :phone, :label => 'Teléfono', :input_html => {:size => 15}
+    .span3=f.input :mobile, :label => 'Móvil', :input_html => {:size => 15}
 
-    =f.input :address, :label => 'Dirección', :as => :text, :input_html => {:rows => 5} 
-    =f.input :email
+  .row-fluid
+    .span6=f.input :address, :label => 'Dirección', :as => :text, :input_html => {:rows => 5} 
+    .span6=f.input :email
 
-    .clear.form_actions
-      = f.submit "Crear", :class => 'btn btn-success b'
+  .clear.form_actions
+    = f.submit "Crear", :class => 'btn btn-success b'
 
 :javascript
   $(function() {

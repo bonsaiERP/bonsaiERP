@@ -27,7 +27,6 @@ class ApplicationController < ActionController::Base
   # Callbacks
   before_filter :set_user_session, :if => :user_signed_in?
   before_filter :set_page
-  #before_filter :set_organisation, :if => :organisation?
   before_filter :set_tenan, unless: :tenant_creation_path?
 
   def render_error(exception) 

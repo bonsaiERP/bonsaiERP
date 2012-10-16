@@ -1,14 +1,13 @@
 ---
-  - id: 1
-    name: Boliviano
+  - name: Boliviano
     symbol: 'Bs.'
     code: BOB
-  - id: 2
-    name: Dolar
+  - name: Dolar
     symbol: '$us'
     code: USD
-  - id: 3
-    name: Euro
+  - name: Euro
     symbol: '€'
     code: EUR
-
+  - name: Peso Chileno
+    symbol: $
+    code: CLP

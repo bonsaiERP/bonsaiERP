@@ -19,8 +19,10 @@ class RegistrationsController < ApplicationController
     @user = @organisation.users.find_by_confirmation_token(params[:id])
     if @user && @user.confirm_registration
       #QC.enqueue "Organisation.test_job", "La fecha hora es: #{Time.now}"
+      reset_session
       session[:user_id] = @user.id
-      render text: 'Registrado'
+      session[:tenant] = @organisation.tenant
+      redirect_to new_organisation_path, notice: 'Ya esta registrado, ahora ingrese los datos de su empresa.'
     else
       if @user
         redirect_to new_session_path, alert: "Ya esta registrado."
@@ -30,8 +32,8 @@ class RegistrationsController < ApplicationController
     end
   end
 
-  def new
-    @organisation = Organisation.new
+  def edit
+    @organisation = Organisation.find_by_tenant(session[:tenant])
 
     respond_to do |format|
       format.html

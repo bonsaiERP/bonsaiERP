@@ -29,7 +29,7 @@
   %body.dialog
 
     #dialog_wrapper  
-      = render "layouts/flash"
+      = render "layouts/flash", flash: flash
       = yield
 
       %p.legal
