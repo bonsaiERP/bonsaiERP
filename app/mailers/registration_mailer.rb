@@ -2,14 +2,14 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class RegistrationMailer < ActionMailer::Base
-  default :from => "noresponder@#{DOMAIN}"
+  default :from => "register@#{DOMAIN}"
 
   layout "mail"
 
   # Sends the registration email to the contact
   def send_registration(user, tenant)
     @user, @tenant = user, tenant
-    @port = Rails.env.production? ? 80 : 3000
+    #@port = Rails.env.production? ? 80 : 3000
 
     mail(:to => @user.email, :subject => I18n.t("bonsai.registration", domain: DOMAIN) )
   end

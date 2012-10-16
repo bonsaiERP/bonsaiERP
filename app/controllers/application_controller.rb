@@ -156,9 +156,10 @@ private
   end
 
   def current_organisation
-    Organisation.find_by_tenant()
+    @organisation ||= Organisation.find_by_tenant(request.subdomain)
   end
- 
+  helper_method :current_organisation
+
   private
     def set_tenant
       tenant = request.subdomain

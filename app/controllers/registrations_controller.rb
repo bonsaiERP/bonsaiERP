@@ -4,12 +4,13 @@
 class RegistrationsController < ApplicationController
   #before_filter :check_logged_user, :except => [:show]
   #before_filter :check_token#, :only => [:new, :create]
+  before_filter :check_tenant
 
   def index
   end
 
   def show
-    @organisation = Organisation.find_by_tenant(params[:tenant])
+    @organisation = Organisation.find_by_tenant(request.subdomain)
 
     unless @organisation
       redirect_to new_registration_path, alert: 'La empresa no existe.'
@@ -20,14 +21,13 @@ class RegistrationsController < ApplicationController
     if @user && @user.confirm_registration
       #QC.enqueue "Organisation.test_job", "La fecha hora es: #{Time.now}"
       reset_session
-      session[:user_id] = @user.id
-      session[:tenant] = @organisation.tenant
+      session[:user_id], session[:tenant_creation] = @user.id, true
       redirect_to new_organisation_path, notice: 'Ya esta registrado, ahora ingrese los datos de su empresa.'
     else
       if @user
         redirect_to new_session_path, alert: "Ya esta registrado."
       else
-        redirect_to new_registration_path, alert: "Por favor registrese."
+        redirect_to new_registration_path(subdomain: 'test'), alert: "Por favor registrese."
       end
     end
   end
@@ -53,13 +53,9 @@ class RegistrationsController < ApplicationController
   end
 
   private
-    def slice_params(data)
-      data.slice(:name, :tenant, :email, :password)
-    end
-
-    def check_token
-      unless params[:registration_token] == "HBJasduf8736454yfsuhdf"
-        redirect_to root_path && return
+    def check_tenant
+      if PgTools.schema_exists?(reques.tenant)
+        redirect_to new_session_url(host: UrlTools.domain)
       end
     end
 end

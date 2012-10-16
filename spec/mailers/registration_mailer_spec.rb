@@ -8,16 +8,22 @@ describe RegistrationMailer do
     }
   }
 
+  let(:tenant) { 'tenant' }
+
   it 'should send and email to the user' do
-    RegistrationMailer.send_registration(user).deliver
+    email = RegistrationMailer.send_registration(user, tenant)
 
-    ActionMailer::Base.deliveries.should_not be_empty
 
-    mail = ActionMailer::Base.deliveries.first
-    mail.subject.should == I18n.t("bonsai.registration")
-    mail.to.should == [user.email]
+    email.subject.should eq(I18n.t("bonsai.registration", domain: DOMAIN))
+ 
+    email.to.should == [user.email]
+    email.from.should eq(["register@#{DOMAIN}"])
 
-    mail.encoded.should =~ /Bienvenido a/
-    mail.encoded.should =~ /\/registrations\/#{user.id}/
+
+    link = "http://#{tenant}.#{DOMAIN}/registrations/#{user.confirmation_token}"
+    email.body.should have_selector("a[href='#{link}']")
+
+    #ActionMailer::Base.deliveries.should_not be_empty
+    #email = ActionMailer::Base.deliveries.first
   end
 end
