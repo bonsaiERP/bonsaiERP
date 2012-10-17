@@ -10,7 +10,7 @@ class Organisation < ActiveRecord::Base
   ########################################
   # Attributes
   attr_accessor :account_info, :email, :password
-
+  attr_readonly :tenant
   serialize :preferences, Hash
 
   attr_protected :user_id

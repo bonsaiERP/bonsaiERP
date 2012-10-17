@@ -2,6 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class DashboardController < ApplicationController
+  before_filter :check_auth_token, only: [ 'index' ]
   before_filter :check_authorization!
 
   # GET /dashboard
@@ -14,4 +15,18 @@ class DashboardController < ApplicationController
     @org   = current_organisation
   end
 
+  private
+    def check_auth_token
+      if params[:auth_token].present?
+        user = current_organisation.users.find_by_auth_token(params[:auth_token])
+        if user
+          session[:user_id] =  user.id
+          session[:user_rol] = user.links.first.rol # TODO improve session rol
+          user.reset_auth_token
+        else
+          redirect_to new_session_url(), error: 'Error al ingresar.'
+          return
+        end
+      end
+    end
 end

@@ -171,6 +171,14 @@ class User < ActiveRecord::Base
     self.link.update_attributes(:rol => params[:rolname], :active => params[:active_link])
   end
 
+  def set_auth_token
+    self.update_attribute(:auth_token, SecureRandom.urlsafe_base64(32))
+  end
+
+  def reset_auth_token
+    self.update_attribute(:auth_token, '')
+  end
+
   # returns translated roles
   def self.get_roles
     ["Gerencia", "Administración", "Operaciones"].zip(ROLES)

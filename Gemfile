@@ -8,7 +8,7 @@ group :assets do
   gem 'uglifier',     '>= 1.3.0'
 end
 
-gem 'turbo-sprockets-rails3', '~> 0.1.13' # Speed assets:precompile
+gem 'turbo-sprockets-rails3', '~> 0.1.16' # Speed assets:precompile
 
 gem 'jquery-rails',  '~> 2.1.1'
 
@@ -17,7 +17,7 @@ gem 'compass-rails', '~> 1.0.3'
 
 gem 'pg', '~> 0.14.1'
 
-gem 'simple_form' , '~> 2.0.3'
+gem 'simple_form' , '~> 2.0.4'
 gem 'haml'        , '~> 3.1.7'
 gem 'kaminari'    , '~> 0.14.0'
 gem 'valium'      , '~> 0.5.0'
@@ -33,7 +33,7 @@ gem 'prawn', '~> 1.0.0.rc1'
 
 group :development, :test do
   gem 'puma'        , '~> 1.6.3' # Web server
-  gem 'rspec-rails' , '~> 2.11.0'
+  gem 'rspec-rails' , '~> 2.11.4'
   gem 'steak'       , '~> 2.0.0'
   gem 'ffaker'      , '~> 1.15.0'
   gem 'pry-rails'   , '~> 0.2.2'
@@ -43,7 +43,7 @@ end
 # Test
 group :test do
   gem 'capybara',           '~> 1.1.2'
-  gem 'database_cleaner',   '~> 0.8.0'
+  gem 'database_cleaner',   '~> 0.9.1'
   gem 'factory_girl_rails', '~> 4.1.0'
   gem 'spork',              '~> 0.9.2'
   gem 'valid_attribute',    '~> 1.3.1'

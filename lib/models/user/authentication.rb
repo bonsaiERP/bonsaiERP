@@ -32,6 +32,11 @@ module Models::User::Authentication
     end
   end
 
+  def valid_password?(unencrypted_password)
+    peppered_password = [unencrypted_password, pepper].join
+    ::BCrypt::Engine.hash_secret(peppered_password, password_salt, stretches) === self.encrypted_password
+  end
+
   def password=(unencrypted_password)
     instance_variable_set(:@password, unencrypted_password)
 

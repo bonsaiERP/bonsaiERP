@@ -3,7 +3,8 @@
 # email: boriscyber@gmail.com
 # Used to access the authenticated user in the models
 class UserSession
-  attr_accessor :session
+  mattr_accessor :session, :dev_domain
+
   # Stores using de application_controller the current_user for devise
   def self.current_user=(session)
     @session = session

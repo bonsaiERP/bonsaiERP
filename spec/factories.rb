@@ -32,6 +32,11 @@ FactoryGirl.define do
     description "Una descripción"
   end
 
+  factory :organisation do
+    name 'bonsaiERP'
+    tenant 'bonsai'
+  end
+
   factory :client do
     matchcode "Juan Perez"
     first_name "Juan"

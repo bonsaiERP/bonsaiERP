@@ -4,11 +4,15 @@
 class RegistrationsController < ApplicationController
   before_filter :check_tenant
 
+  def new
+    @organisation = Organisation.new
+  end
+
   def show
     @organisation = current_organisation
 
     unless @organisation
-      redirect_to new_registration_path, alert: 'La empresa no existe, registrese por favor.'
+      redirect_to new_registration_url(host: UrlTools.domain), alert: 'La empresa no existe, registrese por favor.'
       return
     end
 
@@ -20,21 +24,13 @@ class RegistrationsController < ApplicationController
     end
   end
 
-  def edit
-    @organisation = Organisation.find_by_tenant(session[:tenant])
-
-    respond_to do |format|
-      format.html
-    end
-  end
-
   def create
     @organisation = Organisation.new(slice_params(params[:organisation]) )
 
     if @organisation.create_organisation
       @user = @organisation.master_account
       RegistrationMailer.send_registration(@user, @organisation.tenant).deliver
-      redirect_to registrations_path, notice: "Se ha registrado exitosamente!."
+      redirect_to registrations_path, notice: "Le hemos enviado un email a #{@user.email} con instrucciones para completar su registro."
     else
       render 'new'
     end
@@ -42,7 +38,7 @@ class RegistrationsController < ApplicationController
 
   private
     def check_tenant
-      if PgTools.schema_exists?(request.subdomain)
+      if request.subdomain.present? && PgTools.schema_exists?(request.subdomain)
         redirect_to new_session_url(host: UrlTools.domain), alert: "Por favor ingrese."
         return
       end

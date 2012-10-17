@@ -3,8 +3,8 @@ module UrlTools
 
   def domain
     if Rails.env.development?
-      unless session[:dev_domain]
-        'hvh.me'
+      unless UserSession.dev_domain.present?
+        'lvh.me'
       else
         'localhost'
       end
