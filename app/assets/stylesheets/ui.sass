@@ -1,4 +1,6 @@
 @import compass
+@import "bicon/*.png"
+@include all-bicon-sprites
 
 $header-color: lighten(gray, 20%)
 .ui-widget-header
@@ -311,4 +313,21 @@ $header-color: lighten(gray, 20%)
       padding: 6px 4px
       border-bottom: 1px solid 
       cursor: default
-    
+
+@import plugins/buttons
+@import colors
+
+.links
+  .new, .edit, .delete, .destroy
+    +button(lighten(gray, 40%))
+    color: $dark
+    font-weight: normal
+    font-size: 12px
+  .destroy, .delete
+    color: darken(red, 10%)
+
+.bicon
+  display: inline-block
+  vertical-align: middle
+  width: 16px
+  height: 16px

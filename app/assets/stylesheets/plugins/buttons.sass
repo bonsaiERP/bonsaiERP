@@ -1,0 +1,62 @@
+@mixin rounded($border)
+  -webkit-border-radius: $border
+  -moz-border-radius: $border
+  border-radius: $border
+
+@mixin shadow
+  -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2)
+  -moz-box-shadow: 0 1px 2px rgba(0,0,0,.2)
+  box-shadow: 0 1px 2px rgba(0,0,0,.2)
+
+@mixin gradient($top, $bottom)
+  background-color: $bottom
+  background: -webkit-gradient(linear, left top, left bottom, from($top), to($bottom))
+  background: -moz-linear-gradient(top, $top,  $bottom)
+  filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#{$top}', endColorstr='#{$bottom}')
+
+@mixin button($background)
+  line-height: 17px
+  display: inline-block
+  padding: 4px 10px
+  outline: none
+  cursor: pointer
+  text-align: center
+  text-decoration: none
+  @include rounded(4px)
+  // this determines Mozilla to show the padding
+  border: solid 1px #ccc
+  @include shadow
+  text-shadow: 0 1px 1px rgba(0,0,0,.3)
+  &:hover
+    text-decoration: none
+  &:active
+    position: relative
+    top: 1px
+
+  border: solid 1px darken($background, 3%)
+  @include gradient(lighten($background, 13%), $background)
+  color: mix(#fff, $background, 90%)
+  &:hover
+    @include gradient(lighten($background, 10%), darken($background, 5%))
+  &:active
+    @include gradient($background, lighten($background, 10%))
+    color: mix(#fff, $background, 70%)
+
+//@mixin color($background)
+  border: solid 1px darken($background, 3%)
+  @include gradient(lighten($background, 13%), $background)
+  color= mix(#fff, $background, 90%)
+  &:hover
+    @include gradient(lighten($background, 10%), darken($background, 5%))
+  &:active
+    @include gradient($background, lighten($background, 10%))
+    color= mix(#fff, $background, 70%)
+
+// Mozilla: don't show border around the button's text on click
+button,
+input[type="reset"],
+input[type="button"],
+input[type="submit"],
+input[type="file"] > input[type="button"]
+  &::-moz-focus-inner
+    border: none

@@ -5,16 +5,16 @@
       %span #{@store}
 
   .links.span6
-    = link_to new_store_path, :class => 'btn btn-primary' do
-      %i.icon-plus-sign.icon-white
+    = link_to new_store_path, class: 'new' do
+      %i.bicon-add.bicon
       Nuevo
 
-    = link_to edit_store_path(@store.id), :class => 'btn btn-primary' do
-      %i.icon-pencil.icon-white
+    = link_to edit_store_path(@store.id), :class => 'edit' do
+      %i.bicon-pencil.bicon
       Editar
 
-    = link_to store_path(@store.id), class: 'btn btn-danger', confirm: "Esta seguro de borrar el almacen", method: :delete do
-      %i.icon-trash.icon-white
+    = link_to store_path(@store.id), class: 'delete', confirm: "Esta seguro de borrar el almacen", method: :delete do
+      %i.bicon.bicon-trash
       Borrar
       
 .page-header
