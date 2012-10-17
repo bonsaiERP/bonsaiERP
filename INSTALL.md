@@ -225,3 +225,9 @@ Make it a service
 Start there server
 
     sudo /etc/init.d/nginx start
+
+sudo update-rc.d nginx defaults
+sudo update-rc.d nginx remove
+sudo update-rc.d nginx start|stop
+sudo update-rc.d nginx disable|enable
+

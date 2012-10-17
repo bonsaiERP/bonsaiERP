@@ -37,6 +37,10 @@ class RegistrationsController < ApplicationController
   end
 
   private
+    def slice_params(data)
+      data.slice(:name, :tenant, :email, :password)
+    end
+
     def check_tenant
       if request.subdomain.present? && PgTools.schema_exists?(request.subdomain)
         redirect_to new_session_url(host: UrlTools.domain), alert: "Por favor ingrese."
