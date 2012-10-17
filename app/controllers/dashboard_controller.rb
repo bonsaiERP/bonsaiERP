@@ -24,7 +24,7 @@ class DashboardController < ApplicationController
           session[:user_rol] = user.links.first.rol # TODO improve session rol
           user.reset_auth_token
         else
-          redirect_to new_session_url(), error: 'Error al ingresar.'
+          redirect_to new_session_url(host: UrlTools.domain), error: 'Error al ingresar.'
           return
         end
       end

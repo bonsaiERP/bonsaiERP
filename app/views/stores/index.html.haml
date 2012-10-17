@@ -3,7 +3,10 @@
     %li
       %span Almacenes
 
-  .links.span6= link_to 'Nuevo almacen', new_store_path, :class => 'new'
+  .links.span6
+    = link_to new_store_path, class: 'btn btn-primary' do
+      %i.icon-plus-sign.icon-white
+      Nuevo almacen
 
 .page-header
   %h1 Almacenes

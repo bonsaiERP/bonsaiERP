@@ -55,14 +55,16 @@ hr
 // header
 #header .navbar-inner
   +border-radius(0px)
-  +background-image(linear-gradient(darken(#5BAE29, 10%), #5BAE29))
+  //+background-image(linear-gradient(darken(#5BAE29, 10%), #5BAE29))
+  //height: 100px
+  //background: url('/assets/green-gradient-bg.png')
 
 .navbar
   margin: 0px !important
   position: relative
   clear: both
 
-  ul.nav > li > a
+  //ul.nav > li > a
     color: darken(white, 7%)
     font-weight: bold
 
@@ -112,12 +114,11 @@ hr
   padding: 0px 30px
 
 .main-links
-  clear: both
-  .links a
+  .links .btn
     font-size: 12px
-    padding: 4px 10px 2px 20px
-    &:hover 
-      color: #000
+    line-height: 14px
+    padding: 3px 8px
+
     
 /* Breadcrumbs*/
 ul.breadcrumps
@@ -138,16 +139,10 @@ ul.breadcrumps
       padding: 0px 5px
 
 .links
-  font-weight: bold
   line-height: 3em
-  //padding-left: 20px
-  color: darken($green, 10%)
-  //width: 40%
-  //margin-top: 6px
   text-align: right
-  a:hover
-    text-decoration: none
-    color: $green
+  .btn
+    margin: 0px 2px
 
 .error
   color: $red

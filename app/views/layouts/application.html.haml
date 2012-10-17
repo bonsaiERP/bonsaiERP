@@ -41,9 +41,8 @@
             .span7
               - if organisation?
                 %h1{:title => "ID: #{session[:organisation][:id]}, Exp:  #{lo session[:organisation][:due_date] }"}= session[:organisation][:name]
-            .span5
+            .span5.pull-right
               = render 'layouts/usersettings_menu' if user_signed_in?
-          .clear
 
           .nav-collapse.in(style="height: auto;")
             = render 'layouts/main_menu'

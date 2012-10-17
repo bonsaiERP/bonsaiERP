@@ -30,8 +30,6 @@ class SessionsController < ApplicationController
     if @user
       case
       when( @user.confirmed_registration? && @user.valid_password?(params[:user][:password]) )
-        session[:user_id] = @user.id
-        session[:user_rol] = @user.links.first.rol # TODO improve session rol
         UserSession.current_user = @user
         check_logged_user(@user)
       when( !@user.confirmed_registration? )
@@ -68,7 +66,7 @@ class SessionsController < ApplicationController
         case
         when user.active?
           user.set_auth_token
-          redirect_to dashboard_url(host: UrlTools.domain, subdomain: org.tenant)
+          redirect_to dashboard_url(host: UrlTools.domain, subdomain: org.tenant, auth_token: user.auth_token)
           return
         when !user.active?
           redirect_to new_session_path, error: 'Su usuario esta desactivado, contactese con su administrador de su empresa.'
