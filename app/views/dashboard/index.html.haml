@@ -25,16 +25,14 @@
 
   .row-fluid
     .box.span6
-      %h3.title
-        %i.icon-plus-sign
+      %h3
         Nos deben
       %ul.list
         - presenter.accounts_to_recieve.each do |cur, amt|
           %li.high #{cur} #{ntc amt}
 
     .box.span6
-      %h3.title
-        %i.icon-minus-sign
+      %h3
         Debemos
       %ul.list
         - presenter.accounts_to_pay.each do |cur, amt|
@@ -43,7 +41,7 @@
 
   .row-fluid
     .box.span6
-      %h3.title Bancos
+      %h3 Bancos
       %ul.list
         - presenter.banks.each do |bank|
           %li
@@ -54,7 +52,7 @@
               = bank[:name]
 
     .box.span6
-      %h3.title Cajas
+      %h3 Cajas
       %ul.list
         - presenter.cashes.each do |cash|
           %li
@@ -66,7 +64,7 @@
 
   .row-fluid
     .box.span6
-      %h3.title Verificaciones pendientes
+      %h3 Verificaciones pendientes
       %ul.list
         - presenter.pendent_conciliations.each do |cur, al, ac|
           %li
