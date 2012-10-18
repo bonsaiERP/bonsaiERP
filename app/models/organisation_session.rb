@@ -26,24 +26,9 @@ class OrganisationSession
 
     # Returns the currencies of the current organisation
     def currencies
-      o = Organisation.find(@organisation_id)
-      [o.currency]+ o.currencies
+      o = current_organisation
+      [o.currency] + o.currencies
     end
 
-    def currency_name
-      current_organisation.currency_name
-    end
-
-    def currency_plural
-      current_organisation.currency_plural
-    end
-
-    def currency_symbol
-      current_organisation.currency_symbol
-    end
-
-    def current_organisation
-      @org ||= Organisation.find(organisation_id)
-    end
   end
 end

@@ -12,13 +12,13 @@
       = f.input :name, :label => 'Nombre'
   .row-fluid
     .span3
-      = f.input :active, :label => "Activo", :as => :radio, :item_wrapper_class => 'inline', label_html: {title: 'El ítem aparecera en los formularios de venta o compra'}
+      = f.input :active, :label => "Activo <i class='bicon-info' title='Se usara para ingresos o egresos'></i>".html_safe, :as => :radio, :item_wrapper_class => 'inline'
     .span3
-      = f.input :stockable, label: 'Inventario', as: :radio, item_wrapper_class: 'inline', label_html: {title: 'Se puede almacenar este ítem en almacenes?'}
+      = f.input :stockable, label: 'Inventario <i title="Se almacena el ítem en almacenes?" class="bicon-info"></i>'.html_safe, as: :radio, item_wrapper_class: 'inline'
     #for_sale.span3
-      = f.input :for_sale, label: 'En venta?', label_html: {title: 'Se vende este ítem?'}, as: :radio, item_wrapper_class: 'inline'
+      = f.input :for_sale, label: 'Para vender', as: :radio, item_wrapper_class: 'inline'
     #price.hide.span3
-      = f.input :price, :label => "Precio de venta #{currency_symbol}", :input_html => {:size => 12, :type => 'decimal'}
+      = f.input :price, :label => "Precio de venta #{currency_code_label}".html_safe, :input_html => {:size => 12, :type => 'decimal'}
   .row-fluid
     .span6
       = f.association :unit, :label => "Unidad", 

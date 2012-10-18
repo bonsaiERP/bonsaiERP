@@ -5,8 +5,6 @@ class UnitsController < ApplicationController
   respond_to :html, :json, :xml
 
   before_filter :check_authorization!
-  before_filter :check_organisation
-
 
   # GET /units
   # GET /units.xml

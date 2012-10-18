@@ -11,6 +11,12 @@ describe Item do
     { :name => 'First item', :unit_id => unit.id, :code => 'AU101', :price => 12, :ctype => "product", for_sale: true }
   }
 
+  it "creates an instance with default values" do
+    item = Item.new
+    item.should be_for_sale
+    item.price.should == 0
+  end
+
   describe "Validatios" do
 
     it { should have_valid(:unit_id).when(1) }

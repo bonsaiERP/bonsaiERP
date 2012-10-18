@@ -1,7 +1,7 @@
 class AddItemsForSale < ActiveRecord::Migration
   def up
     change_table :items do |t|
-      t.boolean :for_sale, default: false
+      t.boolean :for_sale, default: true
     end
 
     add_index :items, :for_sale

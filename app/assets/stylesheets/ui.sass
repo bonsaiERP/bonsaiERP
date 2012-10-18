@@ -318,7 +318,7 @@ $header-color: lighten(gray, 20%)
 @import colors
 
 .links
-  .new, .edit, .delete, .destroy
+  .new, .add, .edit, .show, .delete, .destroy
     +button(lighten(gray, 40%))
     color: $dark
     font-weight: normal
@@ -326,7 +326,7 @@ $header-color: lighten(gray, 20%)
   .destroy, .delete
     color: darken(red, 10%)
 
-.bicon
+[class^="bicon-"], [class~=" bicon-"]
   display: inline-block
   vertical-align: middle
   width: 16px

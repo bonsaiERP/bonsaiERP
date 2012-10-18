@@ -1,11 +1,11 @@
 //= require_self
 //= require jquery
-//= require jquery-ui-1.8.18.custom.min
-//= require underscore.js
-//= require backbone.js
+//= require libraries/jquery-ui-1.9.0.custom
+//= require libraries/lodash.js
+//= require libraries/backbone.js
 //= require extensions.js.coffee
-//= require money.min.js
-//= require dropdown.js
+//= require plugins/money.min.js
+//= require plugins/dropdown.js
 //= require forms.js.coffee
 //= require base.js.coffee
 //= require _b.js.coffee

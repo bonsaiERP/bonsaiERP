@@ -3,8 +3,8 @@ class CreateItems < ActiveRecord::Migration
     create_table :items do |t|
       t.integer :unit_id
 
-      t.decimal :unitary_cost, :precision => 14, :scale => 2
-      t.decimal :price, :precision => 14, :scale => 2
+      t.decimal :unitary_cost, precision: 14, scale: 2
+      t.decimal :price, precision: 14, scale: 2, default: 0
       t.string :name
       t.string :description
       t.string :code, :limit => 100

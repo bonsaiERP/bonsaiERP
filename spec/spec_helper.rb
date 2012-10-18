@@ -1,6 +1,6 @@
 require 'bundler/setup'
 Bundler.require(:default, :development)
-require 'spork'
+#require 'spork'
 require 'valid_attribute'
 
 # http://railstutorial.org/chapters/static-pages#sec:spork
@@ -68,17 +68,17 @@ module MyLog
     @@logger
   end
 end
-Spork.each_run do
-
-  Rspec.configure do |config|
-    def log
-      MyLog.log
-    end
-  end
-
-  FactoryGirl.reload
-
-end
+#Spork.each_run do
+#
+#  Rspec.configure do |config|
+#    def log
+#      MyLog.log
+#    end
+#  end
+#
+#  FactoryGirl.reload
+#
+#end
 
 # --- Instructions ---
 # - Sort through your spec_helper file. Place as much environment loading 

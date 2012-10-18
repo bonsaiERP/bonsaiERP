@@ -232,7 +232,7 @@ ActiveRecord::Schema.define(:version => 20121017094703) do
     t.string   "un_symbol",    :limit => 10
     t.datetime "created_at",                                                                    :null => false
     t.datetime "updated_at",                                                                    :null => false
-    t.boolean  "for_sale",                                                   :default => false
+    t.boolean  "for_sale",                                                   :default => true
   end
 
   add_index "items", ["code"], :name => "index_items_on_code"

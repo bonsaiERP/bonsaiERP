@@ -108,7 +108,6 @@ $(document).ready(->
     title = $(this).attr("title") || $(this).data("original-title")
     data = $.extend({'title': title, 'ajax-type': getAjaxType(this) }, $(this).data() )
     div = createDialog( data )
-
     $( div ).load( $(this).attr("href"), (resp)->
       $(div).setTransformations()
     )
@@ -261,14 +260,14 @@ $(document).ready(->
     title = data.title || "Nuevo"
 
     $a = $('<a/>')
-    .attr({'href': data.new_url, 'class': 'ajax btn btn-primary btn-mini', 'data-trigger': data.trigger, 'data-width': data.width })
+    .attr({'href': data.new_url, 'class': 'bicon-add ajax', 'title': title })
+    .data({'data-trigger': data.trigger, 'data-width': data.width})
     .css("margin-left", "5px")
-    .html("<i class='icon-plus-sign icon-white'></i> #{title}")
 
     $a.insertAfter(el)
-    setTimeout(->
-      $a.attr('title', title)
-    , 100)
+    #setTimeout(->
+    #  $a.tooltip({title: 'data-title'})#attr('title', title)
+    #, 100)
   )
 
   # Closes the nearest div container
@@ -288,6 +287,7 @@ $(document).ready(->
 
   start = ->
     $('body').setTransformations()
+    $('body').tooltip({ selector: '[title]'})
 
   createErrorLog = (data)->
     unless $('#error-log').length > 0

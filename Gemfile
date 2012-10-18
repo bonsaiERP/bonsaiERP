@@ -34,7 +34,7 @@ gem 'prawn', '~> 1.0.0.rc1'
 group :development, :test do
   gem 'puma'        , '~> 1.6.3' # Web server
   gem 'rspec-rails' , '~> 2.11.4'
-  gem 'steak'       , '~> 2.0.0'
+  #gem 'steak'       , '~> 2.0.0'
   gem 'ffaker'      , '~> 1.15.0'
   gem 'pry-rails'   , '~> 0.2.2'
   gem 'pry-nav'     , '~> 0.2.2'
