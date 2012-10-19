@@ -2,10 +2,15 @@
 require 'spec_helper'
 
 describe QuickIncome do
+  let(:currency) { create(:currency) }
+  let(:contact) { create(:contact) }
+  let(:account) { create(:cash, amount: 0, currency_id: currency.id) }
+
   let(:valid_attributes) {
     {
       date: Date.today, ref_number: 'I-0001', fact: true,
-      bill_number: '63743'
+      bill_number: '63743', amount: '200.5', currency_id: currency.id,
+      contact_id: contact.id, account_id: account.id
     }
   }
 
@@ -27,7 +32,11 @@ describe QuickIncome do
 
   context "Creation" do
     it "creates a valid income" do
-      
+      qi = QuickIncome.new(valid_attributes)
+      qi.create.should be_true
+
+      qi.income.should be_persisted
+      qi.account_ledger.should be_persisted
     end
   end
 end

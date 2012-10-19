@@ -53,14 +53,14 @@ class AccountLedger < ActiveRecord::Base
   end
 
   # Validations
-  validates_presence_of :amount, :account_id, :reference
+  validates_presence_of :amount, :account_id, :reference, :currency, :currency_id
 
   validates_inclusion_of :operation, :in => OPERATIONS
   validates_numericality_of :amount, :greater_than => 0, :if => :new_record?
   validates_numericality_of :exchange_rate, :greater_than => 0
 
   validates :reference, :length => { :within => 3..150, :allow_blank => false }
-  validates :currency_id, :currency => true
+  #validates :currency_id, :currency => true
 
   #validate  :number_of_details
   #validate  :total_amount_equal

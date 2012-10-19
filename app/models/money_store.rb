@@ -3,7 +3,7 @@
 # email: boriscyber@gmail.com
 class MoneyStore < ActiveRecord::Base
 
-  include Models::Account::Money
+  #include Models::Account::Money
   # callbacks
   before_validation :set_amount, :if => :new_record?
 

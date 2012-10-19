@@ -38,6 +38,13 @@ FactoryGirl.define do
     association :currency 
   end
 
+  factory :contact do
+    matchcode "Juan Perez"
+    first_name "Juan"
+    last_name "Perez"
+    organisation_name "Perez"
+  end
+
   factory :client do
     matchcode "Juan Perez"
     first_name "Juan"

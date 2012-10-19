@@ -14,6 +14,7 @@ class QuickIncome
   attribute :account_id  , Integer
   attribute :contact_id  , Integer
   attribute :date        , Date
+  attribute :amount      , Decimal
   attribute :bill_number , String
   attribute :fact        , Boolean
 
@@ -27,24 +28,33 @@ class QuickIncome
   def create
     ActiveRecord::Base.transaction do
       create_income
-      
+
       create_account_ledger
     end
-    
+
     income.persisted? && account_ledger.persisted?
   end
 
   private
     def create_income
       @income = Income.create!(income_attributes) do |inc|
+        inc.total = inc.gross_total = inc.original_total = amount
+        inc.balance = 0
       end
     end
 
     def income_attributes
-      {ref_number: ref_number, date: date, currency_id: currency_id, 
-       bill_number: bill_number, fact: fact }
+      {ref_number: ref_number, date: date, currency_id: currency_id,
+       bill_number: bill_number, fact: fact, contact_id: contact_id }
     end
 
     def create_account_ledger
+      @account_ledger = AccountLedger.create!(
+        amount: amount, account_id: account_id,
+        reference: "#{income.ref_number}", operation: 'in',
+        exchange_rate: 1, transaction_id: income.id
+      ) do |al|
+        al.currency_id = currency_id
+      end
     end
 end

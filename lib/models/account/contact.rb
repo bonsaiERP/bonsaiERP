@@ -5,7 +5,7 @@ require 'active_support/concern'
 
 module Models::Account
   module Contact
-    
+
     extend ActiveSupport::Concern
 
     included do
@@ -37,8 +37,8 @@ module Models::Account
       currency_id ||= OrganisationSession.currency_id
 
       self.accounts.build(
-        :currency_id => currency_id,
-        :account_type_id => AccountType.find_by_account_number(self.class.to_s).id
+        :currency_id => currency_id#,
+        #:account_type_id => AccountType.find_by_account_number(self.class.to_s).id
       ) {|a|
         a.original_type = self.class.to_s
         a.name = self.to_s

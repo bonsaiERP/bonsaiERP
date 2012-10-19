@@ -44,8 +44,8 @@ class Transaction < ActiveRecord::Base
 
   ########################################
   # Validations
-  validates :contact_id, :contact => {:clases => ["Client", "Supplier"]}
-  validates_presence_of :date, :currency, :currency_id
+  #validates :contact_id, :contact => {:clases => ["Client", "Supplier"]}
+  validates_presence_of :date, :currency, :currency_id, :contact_id, :contact
   validates_presence_of :project, :project_id, :if => "project_id.present?"
 
 
