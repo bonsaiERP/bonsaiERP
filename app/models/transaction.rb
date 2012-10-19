@@ -7,20 +7,20 @@ class Transaction < ActiveRecord::Base
   DECIMALS = 2
   # Determines if the oprations is made on transaction or pay_plan or payment
   TYPES    = ['Income'  , 'Buys']
-  ###############################
-  include Models::Transaction::Calculations
-  #include Models::Transaction::Trans
-  include Models::Transaction::Approve
-  include Models::Transaction::PayPlan
-  include Models::Transaction::Payment
+  ########################################
+  #include Models::Transaction::Calculations
+  ##include Models::Transaction::Trans
+  #include Models::Transaction::Approve
+  #include Models::Transaction::PayPlan
+  #include Models::Transaction::Payment
 
-  ###############################
- 
+  ########################################
   # Callbacks
   #before_validation :set_defaults, :if => :new_record?
   #before_create     :set_creator
   before_destroy    :null_transaction
 
+  ########################################
   # Relationships
   belongs_to :contact
   belongs_to :currency
@@ -42,13 +42,15 @@ class Transaction < ActiveRecord::Base
   has_and_belongs_to_many :taxes, :class_name => 'Tax'
 
 
+  ########################################
   # Validations
   validates :contact_id, :contact => {:clases => ["Client", "Supplier"]}
   validates_presence_of :date, :currency, :currency_id
   validates_presence_of :project, :project_id, :if => "project_id.present?"
 
 
-  # scopes
+  ########################################
+  # Scopes
   scope :draft    , where(:state => 'draft')
   scope :approved , where(:state => 'approved')
   scope :paid     , where(:state => 'paid')
@@ -59,9 +61,13 @@ class Transaction < ActiveRecord::Base
   scope :for_deliver, paid.where("transactions.deliver = ? AND transactions.delivered = ?", false, false)
   scope :nulled, where(:state => 'nulled')
 
+  ########################################
+  # Delegates
   delegate :name, :symbol, :plural, :code, :to => :currency, :prefix => true
   delegate :matchcode, :account_cur, :to => :contact, :prefix => true, :allow_nil => true
 
+  ########################################
+  # Methods
 
   # Define boolean methods for states
   STATES.each do |state|

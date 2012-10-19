@@ -155,22 +155,8 @@ $(->
 
   )
 
-  # Trigger for tooltips on required fields
-  setTooltips = ->
-    $(this).find('[title]').tooltip()
-
-    $(this).find('.over-field').live('focusin focusout', (event)->
-      if event.type == 'focusin'
-        $(this).parents('.control-group').trigger("mouseover")
-      else
-        $(this).parents('.control-group').trigger("mouseout")
-    )
-
-  $.fn.setTooltips = $.setTooltips = setTooltips
-
   setTransformations = ->
     $(this).transformDateSelect()
-    $(this).setTooltips()
 
   $.fn.setTransformations = $.setTransformations = setTransformations
 

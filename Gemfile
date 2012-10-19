@@ -15,7 +15,8 @@ gem 'jquery-rails',  '~> 2.1.1'
 gem 'compass-rails', '~> 1.0.3'
 #gem 'bootstrap-sass', "~> 2.0.0"
 
-gem 'pg', '~> 0.14.1'
+gem 'pg'     , '~> 0.14.1'
+gem 'virtus' , '~> 0.5.2' # Model generation in simple way
 
 gem 'simple_form' , '~> 2.0.4'
 gem 'haml'        , '~> 3.1.7'

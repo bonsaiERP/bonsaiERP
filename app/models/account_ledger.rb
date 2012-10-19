@@ -13,17 +13,17 @@ class AccountLedger < ActiveRecord::Base
   attr_accessor :make_conciliation, :base_amount
 
   # callbacks
-  before_validation :set_currency_id
-  before_destroy    { false }
-  before_create     { self.creator_id = UserSession.user_id }
+  #before_validation :set_currency_id
+  #before_destroy    { false }
+  #before_create     { self.creator_id = UserSession.user_id }
 
   # includes
   include ActionView::Helpers::NumberHelper
 
   # includes related to the model
-  include Models::AccountLedger::Money
-  include Models::AccountLedger::Payment
-  include Models::AccountLedger::Conciliation
+  #include Models::AccountLedger::Money
+  #include Models::AccountLedger::Payment
+  #include Models::AccountLedger::Conciliation
 
   # Relationships
   belongs_to :account, :autosave => true

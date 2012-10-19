@@ -5,13 +5,11 @@ class Income < Transaction
 
   ########################################
   # Includes
-  include Transaction::TransactionDetails
-  include Transaction::Invoice
+  #include Transaction::TransactionDetails
+  #include Transaction::Invoice
   ########################################
 
   belongs_to :deliver_approver, :class_name => "User"
-
-  #relationships
 
   # Accessible attributes
   attr_accessible  :ref_number,  :date,                          :account_id,
@@ -32,7 +30,7 @@ class Income < Transaction
     "Venta #{ref_number}"
   end
 
-  def get_ref_number
+  def self.get_ref_number
     refs            = Income.order("ref_number DESC").limit(1)
     refs.any? ? refs.first.ref_number.next : "V-#{Date.today.year}-0001"
   end
@@ -55,14 +53,14 @@ class Income < Transaction
 
 
   private
-  # Initialized  the ref_number
-  def set_ref_number
-    if ref_number.blank?
-      self.ref_number = get_ref_number
+    # Initialized  the ref_number
+    def set_ref_number
+      if ref_number.blank?
+        self.ref_number = get_ref_number
+      end
     end
-  end
 
-  def set_client
-    contact.update_attribute(:client, true)
-  end
+    def set_client
+      contact.update_attribute(:client, true)
+    end
 end

@@ -5,18 +5,6 @@ class AutocompleteApp < BaseApp
   include ActionController::Rendering
   include ActionController::Renderers::All
 
-  #def client
-  #  self.response_body =  Client.all.map {|c| {:label => c.to_s, :id => c.id} }.to_json
-  #end
-
-  # Define autocomplee methods for contact
-  #%w(client supplier staff).each do |method|
-  #  class_eval <<-CODE, __FILE__, __LINE__ + 1
-  #    def #{method}
-  #      self.reponse_body = contact_autocomplete(#{method}.titularize, params)
-  #    end
-  #  CODE
-  #end
   def supplier
     render :json => contact_autocomplete('Supplier', params)
   end
@@ -72,23 +60,23 @@ class AutocompleteApp < BaseApp
   end
 
   private
-  # Search for contact autocomlete
-  def contact_autocomplete(type, options)
-    set_search_path
-    Contact.where("type = :type AND matchcode ILIKE :term", :type => type, :term => "%#{options[:term]}%").limit(20).map {|c| {:id => c.id, :label => c.to_s}}
-  end
-
-  def item_autocomplete(options)
-    set_search_path
-    if 'Income' == options[:type]
-      Item.for_sale.simple_search(options[:term]).to_json
-    else
-      Item.simple_search(options[:term]).to_json
+    # Search for contact autocomlete
+    def contact_autocomplete(type, options)
+      set_search_path
+      Contact.where("type = :type AND matchcode ILIKE :term", :type => type, :term => "%#{options[:term]}%").limit(20).map {|c| {:id => c.id, :label => c.to_s}}
     end
-  end
 
-  def contact_account_autocomplete(type, options)
-    set_search_path
-    Account.where("original_type = :type AND name LIKE :term", :type => type, :term => "%#{options[:term]}%").limit(20).map {|c| {:id => c.id, :label => c.to_s}}
-  end
+    def item_autocomplete(options)
+      set_search_path
+      if 'Income' == options[:type]
+        Item.for_sale.simple_search(options[:term]).to_json
+      else
+        Item.simple_search(options[:term]).to_json
+      end
+    end
+
+    def contact_account_autocomplete(type, options)
+      set_search_path
+      Account.where("original_type = :type AND name LIKE :term", :type => type, :term => "%#{options[:term]}%").limit(20).map {|c| {:id => c.id, :label => c.to_s}}
+    end
 end

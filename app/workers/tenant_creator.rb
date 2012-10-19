@@ -5,13 +5,14 @@ class TenantCreator
 
   ########################################
   # Attributes
-  attr_reader :tenant
+  attr_reader :tenant, :organisation
 
   ########################################
   # Methods
-  def initialize(tenant)
-    @tenant = tenant.gsub(/[^a-z0-9]/, '')
-    raise ArgumentError, 'Please set a correct tenant parameter' unless @tenant.present?
+  def initialize(organisation)
+    @organisation = organisation
+    raise ArgumentError, 'Please select an organisation' unless @organisation.is_a?(Organisation)
+    @tenant = organisation.tenant
   end
 
   def create_tenant
@@ -24,6 +25,8 @@ class TenantCreator
 
       Unit.create_base_data
       AccountType.create_base_data
+      Store.create!(name: 'Almacen inicial')
+      Cash.create!(name: 'Caja inicial', currency_id: organisation.currency_id)
     end
 
     true

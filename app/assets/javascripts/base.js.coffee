@@ -265,9 +265,6 @@ $(document).ready(->
     .css("margin-left", "5px")
 
     $a.insertAfter(el)
-    #setTimeout(->
-    #  $a.tooltip({title: 'data-title'})#attr('title', title)
-    #, 100)
   )
 
   # Closes the nearest div container
@@ -287,7 +284,7 @@ $(document).ready(->
 
   start = ->
     $('body').setTransformations()
-    $('body').tooltip({ selector: '[title]'})
+    $('[title]').tooltip()#{ selector: '[title]'})
 
   createErrorLog = (data)->
     unless $('#error-log').length > 0
@@ -338,16 +335,6 @@ $(document).ready(->
       success : (event)->
         #$('#cargando').hide(1000)
     })
-
-  #$('.tip').tooltip({
-  #  offset: [-3, 10],
-  #  events: {
-  #    def    : "mouseover,mouseout",
-  #    input  : "focus,blur",
-  #    widget : "focus mouseover,blur mouseout",
-  #    tooltip: ""
-  #  }
-  #})
 
   $('ul.menu>li>a').click ->
     false
