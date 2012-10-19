@@ -15,10 +15,13 @@ class QuickIncome
   attribute :contact_id  , Integer
   attribute :date        , Date
   attribute :bill_number , String
+  attribute :fact        , Boolean
 
-  def initialize
-    self.ref_number = Income.get_ref_number
-    self.currency_id = 1
+  def initialize(attributes = {})
+    super attributes
+    self.ref_number = ref_number || Income.get_ref_number
+    self.fact = [true, false].include?(fact) ? fact : true
+    self.date = date || Date.today
   end
 
   def create
@@ -38,6 +41,10 @@ class QuickIncome
     end
 
     def income_attributes
-      {ref_number: ref }
+      {ref_number: ref_number, date: date, currency_id: currency_id, 
+       bill_number: bill_number, fact: fact }
+    end
+
+    def create_account_ledger
     end
 end

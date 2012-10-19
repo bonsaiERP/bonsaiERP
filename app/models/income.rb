@@ -32,7 +32,7 @@ class Income < Transaction
 
   def self.get_ref_number
     refs            = Income.order("ref_number DESC").limit(1)
-    refs.any? ? refs.first.ref_number.next : "V-#{Date.today.year}-0001"
+    refs.any? ? refs.first.ref_number.next : "I-#{Date.today.year}-0001"
   end
 
   # Approves deliver in case that the sale is credit
