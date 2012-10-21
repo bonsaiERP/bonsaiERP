@@ -7,10 +7,10 @@ class Currency < ActiveRecord::Base
 
   has_many :organisations
 
-  validates_presence_of :name, :symbol
+  validates_presence_of :name, :code
 
   def to_s
-    %Q(#{symbol} #{name})
+    %Q(#{code} #{name})
   end
 
   def plural

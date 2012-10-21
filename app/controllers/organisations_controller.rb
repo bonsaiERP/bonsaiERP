@@ -14,7 +14,7 @@ class OrganisationsController < ApplicationController
     @organisation = current_organisation
     @organisation.attributes = params[:organisation]
 
-    tenant = TenantCreator.new(request.subdomain) # Should be background process
+    tenant = TenantCreator.new(@organisation) # Should be background process
 
     if @organisation.save && tenant.create_tenant
       session[:organisation] = {id: current_organisation.id}

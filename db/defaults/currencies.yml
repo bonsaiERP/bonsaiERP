@@ -1,13 +1,330 @@
 ---
-  - name: Boliviano
-    symbol: 'Bs.'
-    code: BOB
-  - name: Dolar
-    symbol: '$us'
-    code: USD
-  - name: Euro
-    symbol: '€'
-    code: EUR
-  - name: Peso Chileno
-    symbol: $
-    code: CLP
+- :name: Dirham
+  :code: AED
+- :name: Afgani
+  :code: AFN
+- :name: Lek
+  :code: ALL
+- :name: Dram
+  :code: AMD
+- :name: Florín De Las Antillas Neerlandesas
+  :code: ANG
+- :name: Kwanza
+  :code: AOA
+- :name: Kwanza
+  :code: AOA
+- :name: Peso Argentino
+  :code: ARS
+- :name: Dólar Australiano
+  :code: AUD
+- :name: Florín De Aruba
+  :code: AWG
+- :name: Manat Azerí
+  :code: AZM
+- :name: Marco Bosnio Convertible
+  :code: BAM
+- :name: Dólar De Barbados
+  :code: BBD
+- :name: Taka
+  :code: BDT
+- :name: Lev
+  :code: BGN
+- :name: Dinar Bahriní
+  :code: BHD
+- :name: Franco De Burundi
+  :code: BIF
+- :name: Dólar De Bermudas
+  :code: BMD
+- :name: Dólar De Brunéi
+  :code: BND
+- :name: Boliviano
+  :code: BOB
+  :symbol: Bs.
+- :name: Real
+  :code: BRL
+- :name: Dólar De Las Bahamas
+  :code: BSD
+- :name: Ngultrum
+  :code: BTN
+- :name: Pula
+  :code: BWP
+- :name: Rublo Bielorruso
+  :code: BYR
+- :name: Dólar De Belice
+  :code: BZD
+- :name: Dólar Canadiense
+  :code: CAD
+- :name: Franco Congoleño
+  :code: CDF
+- :name: Franco Suizo
+  :code: CHF
+- :name: Peso Chileno
+  :code: CLP
+- :name: Yuan Renminbi13
+  :code: CNY
+- :name: Peso Colombiano
+  :code: COP
+- :name: Colón Costarricense
+  :code: CRC
+- :name: Peso Cubano
+  :code: CUP
+- :name: Escudo De Cabo Verde
+  :code: CVE
+- :name: Libra Chipriota
+  :code: CYP
+- :name: Corona Checa
+  :code: CZK
+- :name: Franco De Yibuti
+  :code: DJF
+- :name: Corona Danesa
+  :code: DKK
+- :name: Peso Dominicano
+  :code: DOP
+- :name: Dinar Argelino
+  :code: DZD
+- :name: Corona Estonia
+  :code: EEK
+- :name: Libra Egipcia
+  :code: EGP
+- :name: Nakfa
+  :code: ERN
+- :name: Birr
+  :code: ETB
+- :name: Euro
+  :code: EUR
+  :symbol: €
+- :name: Dólar De Fiyi
+  :code: FJD
+- :name: Libra De Las Islas Malvinas
+  :code: FKP
+- :name: Libra Esterlina
+  :code: GBP
+- :name: Lari
+  :code: GEL
+- :name: Cedi
+  :code: GHC
+- :name: Libra De Gibraltar
+  :code: GIP
+- :name: Dalasi
+  :code: GMD
+- :name: Franco Guineo
+  :code: GNF
+- :name: Quetzal
+  :code: GTQ
+- :name: Dólar De Guyana
+  :code: GYD
+- :name: Dólar De Hong Kong
+  :code: HKD
+- :name: Lempira
+  :code: HNL
+- :name: Kuna
+  :code: HRK
+- :name: Gourde29
+  :code: HTG
+- :name: Forint
+  :code: HUF
+- :name: Rupia Indonesia
+  :code: IDR
+- :name: Nuevo Sheqel48
+  :code: ILS
+- :name: Rupia India
+  :code: INR
+- :name: Dinar Iraquí
+  :code: IQD
+- :name: Rial Iraní
+  :code: IRR
+- :name: Corona Islandesa
+  :code: ISK
+- :name: Dólar De Jamaica
+  :code: JMD
+- :name: Dinar Jordano
+  :code: JOD
+- :name: Yen
+  :code: JPY
+- :name: Chelín Keniano
+  :code: KES
+- :name: Som
+  :code: KGS
+- :name: Riel
+  :code: KHR
+- :name: Franco Comorano
+  :code: KMF
+- :name: Won Norcoreano
+  :code: KPW
+- :name: Won Surcoreano
+  :code: KRW
+- :name: Dinar Kuwaití
+  :code: KWD
+- :name: Dólar De Las Islas Caimán
+  :code: KYD
+- :name: Tenge
+  :code: KZT
+- :name: Kip
+  :code: LAK
+- :name: Libra Libanesa
+  :code: LBP
+- :name: Rupia De Sri Lanka
+  :code: LKR
+- :name: Dólar Liberiano
+  :code: LRD
+- :name: Loti53
+  :code: LSL
+- :name: Litas58
+  :code: LTL
+- :name: Lats55
+  :code: LVL
+- :name: Dinar Libio
+  :code: LYD
+- :name: Dirham Marroquí
+  :code: MAD
+- :name: Leu Moldavo66
+  :code: MDL
+- :name: Franco Malgache
+  :code: MGF
+- :name: Denar
+  :code: MKD
+- :name: Kyat
+  :code: MMK
+- :name: Tugrik
+  :code: MNT
+- :name: Pataca
+  :code: MOP
+- :name: Ouguiya
+  :code: MRO
+- :name: Lira Maltesa
+  :code: MTL
+- :name: Rupia Mauriciana
+  :code: MUR
+- :name: Rupia De Maldivas; Rufiyaa62
+  :code: MVR
+- :name: Kwacha De Malaui
+  :code: MWK
+- :name: Peso Mexicano
+  :code: MXN
+- :name: Ringgit
+  :code: MYR
+- :name: Metical
+  :code: MZM
+- :name: Dólar Namibio
+  :code: NAD
+- :name: Naira
+  :code: NGN
+- :name: Córdoba
+  :code: NIO
+- :name: Corona Noruega
+  :code: NOK
+- :name: Rupia Nepalesa
+  :code: NPR
+- :name: Dólar Neozelandés
+  :code: NZD
+- :name: Rial Omaní
+  :code: OMR
+- :name: Dólar De Ee.Uu.,  Balboa
+  :code: PAB
+- :name: Nuevo Sol
+  :code: PEN
+- :name: Kina
+  :code: PGK
+- :name: Peso Filipino
+  :code: PHP
+- :name: Rupia Paquistaní
+  :code: PKR
+- :name: Zloty
+  :code: PLN
+- :name: Guaraní
+  :code: PYG
+- :name: Riyal De Qatar; Rial De Qatar78
+  :code: QAR
+- :name: Leu Rumano82
+  :code: ROL
+- :name: Rublo
+  :code: RUB
+- :name: Franco Ruandés
+  :code: RWF
+- :name: Rial Saudí; Riyal Saudí5
+  :code: SAR
+- :name: Dólar De Islas Salomón
+  :code: SBD
+- :name: Rupia De Las Seychelles
+  :code: SCR
+- :name: Dinar Sudanés
+  :code: SDD
+- :name: Corona Sueca
+  :code: SEK
+- :name: Dólar Singapurense
+  :code: SGD
+- :name: Libra De Santa Helena
+  :code: SHP
+- :name: Tolar
+  :code: SIT
+- :name: Corona Eslovaca
+  :code: SKK
+- :name: Leone
+  :code: SLL
+- :name: Chelín Somalí
+  :code: SOS
+- :name: Florín Surinamés
+  :code: SRG
+- :name: Dobra
+  :code: STD
+- :name: Colón De El Salvador
+  :code: SVC
+- :name: Libra Siria
+  :code: SYP
+- :name: Lilangeni92
+  :code: SZL
+- :name: Baht
+  :code: THB
+- :name: Somoni
+  :code: TJS
+- :name: Manat Turcomano
+  :code: TMM
+- :name: Dinar Tunecino
+  :code: TND
+- :name: Pa'anga
+  :code: TOP
+- :name: Lira Turca
+  :code: TRL
+- :name: Dólar De Trinidad Y Tobago
+  :code: TTD
+- :name: Nuevo Dólar De Taiwán
+  :code: TWD
+- :name: Chelín Tanzano
+  :code: TZS
+- :name: Jrivnia
+  :code: UAH
+- :name: Chelín Ugandés
+  :code: UGX
+- :name: Dólar Americano, Estados unidos.
+  :code: USD
+  :symbol: $us
+- :name: Peso Uruguayo
+  :code: UYU
+- :name: Sum
+  :code: UZS
+- :name: Bolívar
+  :code: VEB
+- :name: Dong
+  :code: VND
+- :name: Vatu102
+  :code: VUV
+- :name: Tala
+  :code: WST
+- :name: Franco Cfa
+  :code: XAF
+- :name: Dólar Del Caribe Oriental
+  :code: XCD
+- :name: Franco Cfa
+  :code: XOF
+- :name: Franco Cfp
+  :code: XPF
+- :name: Rial Yemení
+  :code: YER
+- :name: Dinar
+  :code: YUM
+- :name: Rand Sudafricano
+  :code: ZAR
+- :name: Kwacha Zambiano
+  :code: ZMK
+- :name: Dólar De Zimbabue
+  :code: ZWD
