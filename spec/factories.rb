@@ -69,7 +69,7 @@ FactoryGirl.define do
   factory :cash do
     name "Cash"
     number "123"
-    currency_id 1
+    #currency_id 1
     amount 100
   end
 

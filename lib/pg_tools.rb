@@ -32,7 +32,7 @@ module PgTools
     ActiveRecord::Base.connection.reset!
   end
 
-  def current_search_path
+  def current_schema
     connection.select_value "SHOW search_path"
   end
 

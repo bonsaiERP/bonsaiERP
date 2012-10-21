@@ -3,19 +3,27 @@
 # email: boriscyber@gmail.com
 class AccountLedger < ActiveRecord::Base
 
+  ########################################
   # Constants
   OPERATIONS = %w(in out trans)
   BEHAVIORS = [:devolution, :payment, :transference, :inout]
 
+  ########################################
+  # Attributes
   attr_reader *BEHAVIORS
   attr_reader :ac_id
   # Base amount is the #  amount = base_amount + interests_penalties
   attr_accessor :make_conciliation, :base_amount
+  # accessible
+  attr_accessible :account_id, :to_id, :date, :operation, :reference, :interests_penalties, :project_id,
+    :amount, :exchange_rate, :description, :account_ledger_details_attributes, :contact_id, :base_amount
+
 
   # callbacks
   #before_validation :set_currency_id
   #before_destroy    { false }
   #before_create     { self.creator_id = UserSession.user_id }
+  after_save :update_account_amount, if: :make_conciliation
 
   # includes
   include ActionView::Helpers::NumberHelper
@@ -25,6 +33,7 @@ class AccountLedger < ActiveRecord::Base
   #include Models::AccountLedger::Payment
   #include Models::AccountLedger::Conciliation
 
+  ########################################
   # Relationships
   belongs_to :account, :autosave => true
   belongs_to :to, :class_name => "Account", :autosave => true
@@ -40,18 +49,7 @@ class AccountLedger < ActiveRecord::Base
   has_many :account_ledger_details, :dependent => :destroy, :autosave => true
   accepts_nested_attributes_for :account_ledger_details, :allow_destroy => true
 
-  BEHAVIORS.each do |met|
-    class_eval <<-CODE, __FILE__, __LINE__ + 1
-      def #{met}?; !!#{met}; end
-    CODE
-  end
-
-  OPERATIONS.each do |op|
-    class_eval <<-CODE, __FILE__, __LINE__ + 1
-      def #{op}?; "#{op}" == operation; end
-    CODE
-  end
-
+  ########################################
   # Validations
   validates_presence_of :amount, :account_id, :reference, :currency, :currency_id
 
@@ -65,10 +63,7 @@ class AccountLedger < ActiveRecord::Base
   #validate  :number_of_details
   #validate  :total_amount_equal
 
-  # accessible
-  attr_accessible :account_id, :to_id, :date, :operation, :reference, :interests_penalties, :project_id,
-    :amount, :exchange_rate, :description, :account_ledger_details_attributes, :contact_id, :base_amount
-
+  ########################################
   # scopes
   scope :pendent, where(:conciliation => false, :active => true)
   scope :con,     where(:conciliation => true)
@@ -80,17 +75,31 @@ class AccountLedger < ActiveRecord::Base
     .order("created_at DESC")
   }
 
+  ########################################
   # delegates
-  # currency
   delegate :name, :symbol, :code, :to => :currency, :prefix => true, :allow_nil => true
-  # account
+
   delegate :currency_id, :name, :original_type, :accountable_type, :accountable, :amount, :accountable_id,
     :to => :account, :prefix => true, :allow_nil => true
-  # to
+
   delegate :currency_id, :name, :original_type, :accountable_type, :accountable, :amount, :accountable_id,
     :to => :to, :prefix => true, :allow_nil => true
-  # transaction
+
   delegate :type, :currency_id, :to => :transaction, :prefix => true, :allow_nil => true
+
+  ########################################
+  # Methods
+  BEHAVIORS.each do |met|
+    class_eval <<-CODE, __FILE__, __LINE__ + 1
+      def #{met}?; !!#{met}; end
+    CODE
+  end
+
+  OPERATIONS.each do |op|
+    class_eval <<-CODE, __FILE__, __LINE__ + 1
+      def #{op}?; "#{op}" == operation; end
+    CODE
+  end
 
  
   def self.pendent?
@@ -258,29 +267,33 @@ class AccountLedger < ActiveRecord::Base
 
   private
 
-  # The sum should be equal
-  def total_amount_equal
-    tot = account_ledger_details.inject(0) {|sum, det| sum += det.amount_currency }
-    unless tot == 0
-      self.errors[:base] << "Existe un error en el balance"
+    # The sum should be equal
+    def total_amount_equal
+      tot = account_ledger_details.inject(0) {|sum, det| sum += det.amount_currency }
+      unless tot == 0
+        self.errors[:base] << "Existe un error en el balance"
+      end
     end
-  end
 
-  # There must be at least 2 account details
-  def number_of_details
-    self.errors[:base] << "Debe seleccionar al menos 2 cuentas" if account_ledger_details.size < 2
-  end
+    # There must be at least 2 account details
+    def number_of_details
+      self.errors[:base] << "Debe seleccionar al menos 2 cuentas" if account_ledger_details.size < 2
+    end
 
-  def set_currency_id
-    self.currency_id = account_currency_id
-  end
+    def set_currency_id
+      self.currency_id = account_currency_id
+    end
 
-  def make_conciliation?
-    make_conciliation === true
-  end
+    def make_conciliation?
+      make_conciliation === true
+    end
 
-  def set_code
-    self.code = AccountLedger.count + 1
-  end
+    def set_code
+      self.code = AccountLedger.count + 1
+    end
 
+    def update_account_amount
+      account.amount += amount
+      account.save!
+    end
 end

@@ -4,7 +4,10 @@
 class MoneyStore < ActiveRecord::Base
 
   #include Models::Account::Money
-  # callbacks
+  ########################################
+  # Callbacks
+  before_create :create_new_account
+  after_save    :set_account_name, if: :name_changed?
   before_validation :set_amount, :if => :new_record?
 
   # Attributes
@@ -23,16 +26,33 @@ class MoneyStore < ActiveRecord::Base
   delegate :id, :amount, :currency_id, :name, :to => :account, :prefix => true, :allow_nil => true
 
   # Creates methods to determine if is bank?, cash?
-  %w[bank cash].each do |t|
+  %w[bank cash].each do |met|
     class_eval <<-CODE, __FILE__, __LINE__ +1
-      def #{t}?
-        self.class.to_s.downcase == "#{t}"
+      def #{met}?
+        self.class.to_s.downcase == "#{met}"
       end
     CODE
   end
 
-private
-  def set_amount
-    self.amount ||= 0
-  end
+  private
+    def set_amount
+      self.amount ||= 0
+    end
+
+    # No need to save because of autosave
+    def set_account_name
+      self.account.name = self.to_s
+    end
+
+    def create_new_account
+      ac = self.build_account(
+        :currency_id => currency_id,
+      ) do |a|
+        a.original_type = self.class.to_s
+        a.amount = amount
+        a.name = to_s
+      end
+
+      ledger = ac.account_ledgers.build(:exchange_rate => 1, :currency_id => ac.currency_id, :reference => I18n.t("account_ledger.initial_money"), :operation => "in", :amount => amount) {|al| conciliation = true}
+    end
 end

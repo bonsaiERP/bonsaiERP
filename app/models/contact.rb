@@ -2,7 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class Contact < ActiveRecord::Base
-  include Models::Account::Contact
+  #include Models::Account::Contact
 
   before_destroy { false }
 

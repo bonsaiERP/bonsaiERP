@@ -29,7 +29,7 @@ class Account < ActiveRecord::Base
   has_many :expenses, :class_name => "Transaction", :conditions => "transactions.type = 'Expense'"
 
   # validations
-  validates_presence_of :currency, :name
+  validates_presence_of :currency, :currency_id, :name
   validates_numericality_of :amount
   validates_associated :currency
   #validates :currency_id, :organisation_relation => true
