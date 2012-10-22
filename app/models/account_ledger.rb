@@ -9,6 +9,12 @@ class AccountLedger < ActiveRecord::Base
   BEHAVIORS = [:devolution, :payment, :transference, :inout]
 
   ########################################
+  # Callbacks
+  before_create :set_creator
+  before_save   :set_approver, if: :conciliation?
+  before_save   :update_account_amount, if: :conciliation?
+
+  ########################################
   # Attributes
   attr_reader *BEHAVIORS
   attr_reader :ac_id
@@ -23,7 +29,6 @@ class AccountLedger < ActiveRecord::Base
   #before_validation :set_currency_id
   #before_destroy    { false }
   #before_create     { self.creator_id = UserSession.user_id }
-  after_save :update_account_amount, if: :make_conciliation
 
   # includes
   include ActionView::Helpers::NumberHelper
@@ -54,7 +59,7 @@ class AccountLedger < ActiveRecord::Base
   validates_presence_of :amount, :account_id, :reference, :currency, :currency_id
 
   validates_inclusion_of :operation, :in => OPERATIONS
-  validates_numericality_of :amount, :greater_than => 0, :if => :new_record?
+  #validates_numericality_of :amount, :greater_than => 0, :if => :new_record?
   validates_numericality_of :exchange_rate, :greater_than => 0
 
   validates :reference, :length => { :within => 3..150, :allow_blank => false }
@@ -290,6 +295,14 @@ class AccountLedger < ActiveRecord::Base
 
     def set_code
       self.code = AccountLedger.count + 1
+    end
+
+    def set_creator
+      self.creator_id = UserSession.user_id
+    end
+
+    def set_approver
+      self.approver_id = UserSession.user_id
     end
 
     def update_account_amount

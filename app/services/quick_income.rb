@@ -3,10 +3,6 @@
 class QuickIncome
   include Virtus
 
-  extend ActiveModel::Naming
-  include ActiveModel::Conversion
-  include ActiveModel::Validations
-
   attr_reader :income, :account_ledger
 
   attribute :ref_number  , String
@@ -56,7 +52,7 @@ class QuickIncome
       ) do |al|
         al.currency_id = currency_id
         al.transaction_id = income.id
-        al.make_conciliation = true
+        al.conciliation = true
       end
     end
 end

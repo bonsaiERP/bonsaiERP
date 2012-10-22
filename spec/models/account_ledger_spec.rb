@@ -5,11 +5,7 @@ describe AccountLedger do
   let(:params) do
     {
       :date => Date.today, :operation => "out", :reference => "Income", :amount => 100, :currency_id => 1, :exchange_rate => 1,
-      :account_id => 2, :to_id => 1#,
-      #:account_ledger_details_attributes => [
-      #  {:account_id => 1, :amount => 100 },
-      #  {:account_id => 2, :amount => -100 },
-      #]
+      :account_id => 2, :to_id => 1
     }
   end
 

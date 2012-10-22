@@ -1,12 +1,12 @@
 class CreateAccountLedgers < ActiveRecord::Migration
   def change
     create_table :account_ledgers do |t|
-      t.string  :reference
-      t.integer :currency_id
-      t.integer :account_id
-      t.integer :to_id
-      t.date    :date
-      t.string  :operation, :limit => 20
+      t.string   :reference
+      t.integer  :currency_id
+      t.integer  :account_id
+      t.integer  :to_id
+      t.datetime :date
+      t.string   :operation, :limit => 20
 
       t.boolean :conciliation, :default => true
       t.decimal :amount, :precision => 14, :scale => 2

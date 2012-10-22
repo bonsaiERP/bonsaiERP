@@ -2,6 +2,10 @@
 require 'spec_helper'
 
 describe QuickIncome do
+  before(:each) do
+    UserSession.current_user = User.new {|u| u.id = 21 }
+  end
+
   let!(:currency) { create(:currency) }
   let!(:contact) { create(:contact) }
   let!(:cash) { create(:cash, amount: 0, currency_id: currency.id) }
@@ -58,7 +62,11 @@ describe QuickIncome do
 
         account_ledger.amount.should == valid_attributes[:amount].to_f
         account_ledger.transaction_id.should eq(income.id)
-        account_ledger.should be_make_conciliation
+        account_ledger.should be_conciliation
+
+        account_ledger.account.amount.should eq(income.total)
+        account_ledger.creator_id.should eq(21)
+        account_ledger.approver_id.should eq(21)
       end
     end
   end
