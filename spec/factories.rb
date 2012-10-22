@@ -7,14 +7,12 @@ FactoryGirl.define do
   end
 
   factory :org_country do
-    id 1
     name 'Boliva'
     code 'BO'
     abbreviation 'bo'
   end
 
   factory :currency do
-    id 1
     name 'boliviano'
     symbol 'Bs.'
     code 'BOB'

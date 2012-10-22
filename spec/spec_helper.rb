@@ -68,17 +68,18 @@ module MyLog
     @@logger
   end
 end
-#Spork.each_run do
-#
-#  Rspec.configure do |config|
-#    def log
-#      MyLog.log
-#    end
-#  end
-#
-#  FactoryGirl.reload
-#
-#end
+
+Spork.each_run do
+
+  Rspec.configure do |config|
+    def log
+      MyLog.log
+    end
+  end
+
+  FactoryGirl.reload
+
+end
 
 # --- Instructions ---
 # - Sort through your spec_helper file. Place as much environment loading 
