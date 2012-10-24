@@ -60,7 +60,7 @@ ActiveRecord::Schema.define(:version => 20121017094703) do
     t.boolean  "conciliation",                                                     :default => true
     t.decimal  "amount",                            :precision => 14, :scale => 2
     t.decimal  "exchange_rate",                     :precision => 14, :scale => 4
-    t.decimal  "interests_penalties",               :precision => 14, :scale => 2, :default => 0.0
+    #t.decimal  "interests_penalties",               :precision => 14, :scale => 2, :default => 0.0
     t.string   "description"
     t.integer  "transaction_id"
     t.integer  "creator_id"

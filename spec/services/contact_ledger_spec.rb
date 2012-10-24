@@ -10,10 +10,18 @@ describe ContactLedger do
   let(:valid_attributes) {
     {
       date: Date.today, ref_number: 'I-0001', fact: true,
-      bill_number: '63743', amount: '200.5', currency_id: currency.id,
+      bill_number: '63743', amount: '200.5',
       contact_id: contact.id, account_id: account.id
     }
   }
+
+  it "test account ledger" do
+    cl = ContactLedger.new(valid_attributes)
+    cl.account_ledger.amount.should eq(valid_attributes[:amount].to_f)
+    cl.account_ledger.exchange_rate.should eq(1)
+
+    cl.account_ledger.currency_id.should eq(account.currency_id)
+  end
 
   context "Validations" do
     subject { ContactLedger.new valid_attributes }

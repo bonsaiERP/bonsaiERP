@@ -1,38 +1,47 @@
 # encoding: utf-8
 class ContactLedger
-  include Virtus
+  #include Virtus
 
-  extend ActiveModel::Naming
-  include ActiveModel::Conversion
-  include ActiveModel::Validations
-  include ActiveModel::Validations::Callbacks
+  #extend ActiveModel::Naming
+  #include ActiveModel::Conversion
+  #include ActiveModel::Validations
+  #include ActiveModel::Validations::Callbacks
 
-  attribute :account_id    , Integer
-  attribute :currency_id   , Integer
-  attribute :contact_id    , Integer
-  attribute :amount        , Decimal
-  attribute :reference     , String
-  attribute :amount        , Decimal
-  attribute :operation     , String
-  attribute :exchange_rate , Decimal
+  #attribute :account_id    , Integer
+  #attribute :currency_id   , Integer
+  #attribute :contact_id    , Integer
+  #attribute :amount        , Decimal
+  #attribute :reference     , String
+  #attribute :amount        , Decimal
+  #attribute :operation     , String
+  #attribute :exchange_rate , Decimal
 
   ########################################
   # Validations
-  validates_presence_of :contact_id, :contact, :currency_id, :currency, :account_id, :account
-  validates :amount, numericality: { greater_than: 0 }
-  validate  :valid_currency_and_account
+  #validates_presence_of :contact_id, :contact, :currency_id, :currency, :account_id, :account
+  #validates :amount, numericality: { greater_than: 0 }
+  #validate  :valid_currency_and_account
 
   # Callbacks
-  after_validation :set_associations_errors
+  #after_validation :set_associations_errors
 
   attr_reader :account_ledger
 
+  def initialize(attributes)
+    @account_ledger = AccountLedger.new(attributes) do |al|
+      al.amount = al.amount.abs
+      al.exchange_rate = 1
+      al.currency_id = al.account_currency_id
+    end
+  end
+
   def create_in
-    @account_ledger = AccountLedger.new(attributes)
+    account_ledger.operation = 'in'
   end
 
   def create_out
-
+    account_ledger.operation = 'in'
+    account_ledger.amount = -al.amount
   end
 
   def persisted
