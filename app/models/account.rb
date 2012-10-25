@@ -31,7 +31,6 @@ class Account < ActiveRecord::Base
   # validations
   validates_presence_of :currency, :currency_id, :name
   validates_numericality_of :amount
-  validates_associated :currency
   #validates :currency_id, :organisation_relation => true
 
   # delegations
@@ -119,15 +118,15 @@ class Account < ActiveRecord::Base
     Account.where(:accountable_id => c_id, :accountable_type => "Contact", :currency_id => cur_id).first || nil
   end
 
-  private
-    def set_amount
-      self.amount ||= 0.0
-      self.initial_amount ||= self.amount
-    end
+private
+  def set_amount
+    self.amount ||= 0.0
+    self.initial_amount ||= self.amount
+  end
 
-    def create_account_currency
-      account_currencies.build(
-        :currency_id => currency_id, :amount => amount
-      )
-    end
+  def create_account_currency
+    account_currencies.build(
+      :currency_id => currency_id, :amount => amount
+    )
+  end
 end

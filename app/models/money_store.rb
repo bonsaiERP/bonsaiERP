@@ -15,7 +15,7 @@ class MoneyStore < ActiveRecord::Base
   
   # relationships
   belongs_to :currency
-  has_one :account, :as => :accountable, :autosave => true, :dependent => :destroy
+  has_one :account, :as => :accountable, :autosave => true, :dependent => :destroy, inverse_of: :accountable
 
   # Common validations
   validates_numericality_of :amount, :greater_than_or_equal_to => 0, :on => :create
@@ -34,25 +34,23 @@ class MoneyStore < ActiveRecord::Base
     CODE
   end
 
-  private
-    def set_amount
-      self.amount ||= 0
-    end
+private
+  def set_amount
+    self.amount ||= 0
+  end
 
-    # No need to save because of autosave
-    def set_account_name
-      self.account.name = self.to_s
-    end
+  # No need to save because of autosave
+  def set_account_name
+    self.account.name = self.to_s
+  end
 
-    def create_new_account
-      ac = self.build_account(
-        :currency_id => currency_id,
-      ) do |a|
-        a.original_type = self.class.to_s
-        a.amount = amount
-        a.name = to_s
-      end
-
-      ledger = ac.account_ledgers.build(:exchange_rate => 1, :currency_id => ac.currency_id, :reference => I18n.t("account_ledger.initial_money"), :operation => "in", :amount => amount) {|al| conciliation = true}
+  def create_new_account
+    ac = self.build_account(
+      :currency_id => currency_id,
+    ) do |a|
+      a.original_type = self.class.to_s
+      a.amount = amount
+      a.name = to_s
     end
+  end
 end

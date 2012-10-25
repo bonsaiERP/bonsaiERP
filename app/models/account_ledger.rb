@@ -5,14 +5,28 @@ class AccountLedger < ActiveRecord::Base
 
   ########################################
   # Constants
-  OPERATIONS = %w(in out trans)
-  BEHAVIORS = [:devolution, :payment, :transference, :inout]
+  # cin  = Advance in that will add the amount to the Contact account
+  # cout = Advance out that will add the amount to the Contact account
+  # pin  = Payment in
+  # pout = Paymen out
+  # iin  = Interests in
+  # iout = Interestsout
+  # din  = Devolution in
+  # dout = Devolution out
+  OPERATIONS = %w(trans cin cout pin pout iin iout din dout).freeze
+  BEHAVIORS = [:devolution, :payment, :transference, :inout].freeze
 
   ########################################
   # Callbacks
+  before_validation :set_currency
+
   before_create :set_creator
   before_save   :set_approver, if: :conciliation?
-  before_save   :update_account_amount, if: :conciliation?
+
+  with_options if: :conciliation do |upd|
+    upd.before_save :update_account_amount
+    upd.before_save :update_to_amount, if: "to_id.present?"
+  end
 
   ########################################
   # Attributes
@@ -56,17 +70,12 @@ class AccountLedger < ActiveRecord::Base
 
   ########################################
   # Validations
-  validates_presence_of :amount, :account_id, :reference, :currency, :currency_id
+  validates_presence_of :amount, :account_id, :account, :reference, :currency, :currency_id
 
   validates_inclusion_of :operation, :in => OPERATIONS
-  #validates_numericality_of :amount, :greater_than => 0, :if => :new_record?
   validates_numericality_of :exchange_rate, :greater_than => 0
 
   validates :reference, :length => { :within => 3..150, :allow_blank => false }
-  #validates :currency_id, :currency => true
-
-  #validate  :number_of_details
-  #validate  :total_amount_equal
 
   ########################################
   # scopes
@@ -96,13 +105,13 @@ class AccountLedger < ActiveRecord::Base
   # Methods
   BEHAVIORS.each do |met|
     class_eval <<-CODE, __FILE__, __LINE__ + 1
-      def #{met}?; !!#{met}; end
+      def is_#{met}?; !!#{met}; end
     CODE
   end
 
   OPERATIONS.each do |op|
     class_eval <<-CODE, __FILE__, __LINE__ + 1
-      def #{op}?; "#{op}" == operation; end
+      def is_#{op}?; "#{op}" == operation; end
     CODE
   end
 
@@ -162,16 +171,6 @@ class AccountLedger < ActiveRecord::Base
     end
   end
 
-  # Determines in or out depending the related account
-  def in_out
-    case
-    when ( ac_id == account_id and amount > 0) then "in"
-    when ( ac_id == account_id and amount < 0) then "out"
-    when ( ac_id == to_id and amount > 0)      then "out"
-    when ( ac_id == to_id and amount > 0)      then "in"
-    end
-  end
-
   def amount_currency
     begin
       er =  inverse? ? 1/exchange_rate : exchange_rate
@@ -191,13 +190,13 @@ class AccountLedger < ActiveRecord::Base
   end
 
   # Returns the amount
-  def account_amount
-    if ac_id == account_id
-      amount
-    else
-      -amount * exchange_rate
-    end
-  end
+  #def account_amount
+  #  if ac_id == account_id
+  #    amount
+  #  else
+  #    -amount * exchange_rate
+  #  end
+  #end
 
   def related_account
     if transaction_id.present?
@@ -270,43 +269,37 @@ class AccountLedger < ActiveRecord::Base
     end
   end
 
-  private
+private
+  def set_currency
+    self.currency_id = account_currency_id
+  end
 
-    # The sum should be equal
-    def total_amount_equal
-      tot = account_ledger_details.inject(0) {|sum, det| sum += det.amount_currency }
-      unless tot == 0
-        self.errors[:base] << "Existe un error en el balance"
-      end
-    end
+  def make_conciliation?
+    make_conciliation === true
+  end
 
-    # There must be at least 2 account details
-    def number_of_details
-      self.errors[:base] << "Debe seleccionar al menos 2 cuentas" if account_ledger_details.size < 2
-    end
+  def set_code
+    self.code = AccountLedger.count + 1
+  end
 
-    def set_currency_id
-      self.currency_id = account_currency_id
-    end
+  def set_creator
+    self.creator_id = UserSession.user_id
+  end
 
-    def make_conciliation?
-      make_conciliation === true
-    end
+  def set_approver
+    self.approver_id = UserSession.user_id
+  end
 
-    def set_code
-      self.code = AccountLedger.count + 1
-    end
+  def update_account_amount
+    account.amount += amount
+    self.account_balance = account.amount
+    account.save!
+  end
 
-    def set_creator
-      self.creator_id = UserSession.user_id
-    end
-
-    def set_approver
-      self.approver_id = UserSession.user_id
-    end
-
-    def update_account_amount
-      account.amount += amount
-      account.save!
-    end
+  # Updates the amount of the account to
+  def update_to_amount
+    to.amount -= amount
+    self.to_balance = to.amount
+    account.save!
+  end
 end

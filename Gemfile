@@ -31,6 +31,7 @@ gem 'queue_classic', '~> 2.0.1' # Background processing for PostgreSQL
 gem 'prawn', '~> 1.0.0.rc1'
 #gem 'exception_notification', "~> 2.5.2"
 #gem 'newrelic_rpm'
+gem 'letter_opener', '1.0.0'
 
 group :development, :test do
   gem 'puma'            , '~> 1.6.3' # Web server

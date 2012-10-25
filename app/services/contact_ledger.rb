@@ -1,77 +1,67 @@
 # encoding: utf-8
 class ContactLedger
-  #include Virtus
 
-  #extend ActiveModel::Naming
-  #include ActiveModel::Conversion
-  #include ActiveModel::Validations
-  #include ActiveModel::Validations::Callbacks
-
-  #attribute :account_id    , Integer
-  #attribute :currency_id   , Integer
-  #attribute :contact_id    , Integer
-  #attribute :amount        , Decimal
-  #attribute :reference     , String
-  #attribute :amount        , Decimal
-  #attribute :operation     , String
-  #attribute :exchange_rate , Decimal
-
-  ########################################
-  # Validations
-  #validates_presence_of :contact_id, :contact, :currency_id, :currency, :account_id, :account
-  #validates :amount, numericality: { greater_than: 0 }
-  #validate  :valid_currency_and_account
-
-  # Callbacks
-  #after_validation :set_associations_errors
-
-  attr_reader :account_ledger
+  attr_reader :account_ledger, :errors
 
   def initialize(attributes)
+    @errors = ActiveModel::Errors.new(self)
+
     @account_ledger = AccountLedger.new(attributes) do |al|
-      al.amount = al.amount.abs
+      al.amount = al.amount.to_f.abs
       al.exchange_rate = 1
-      al.currency_id = al.account_currency_id
     end
+  rescue => e
+    errors[:base] << 'There are missing attributes'
   end
 
   def create_in
-    account_ledger.operation = 'in'
+    account_ledger.operation = 'cin'
+
+    ActiveRecord::Base.transaction do
+      set_or_create_account_to
+
+      account_ledger.save!
+    end
+  rescue => e
+    binding.pry
+    false
   end
 
   def create_out
-    account_ledger.operation = 'in'
-    account_ledger.amount = -al.amount
+    accoun_ledger.operation = 'cout'
+    account_ledger.amount = -account_ledger.amount
+    account_ledger.save
   end
 
   def persisted
     false
   end
 
-  private
-    def contact
-      @contact ||= Contact.find_by_id(contact_id)
+private
+  def set_or_create_account_to
+    unless to = account_ledger.contact.account_cur(currency_id).present?
+      to = contact.set_account_currency(currency_id)
+
+      to.save!
     end
 
-    def account
-      @account ||= Account.find_by_id(account_id)
-    end
+    account_ledger.to_id = to.id
+  end
 
-    def currency
-      @currency ||= Currency.find_by_id(currency_id)
-    end
+  def create_account_to
 
-    def valid_currency_and_account
-      unless account.currency_id == currency_id
-        self.errors[:currency_id] << 'La moneda no coincide con la cuenta'
-      end
-    end
+    a
+  end
 
-    def set_associations_errors
-      [:contact, :currency, :account].each do |met|
-        if self.errors[met].any?
-          self.errors[met].each {|v| self.errors[:"#{met}_id"] << v }
-        end
-      end
-    end
+  def currency_id
+    @currency_id ||= account.currency_id
+  end
+
+  def contact
+    account_ledger.contact
+  end
+
+  def account
+    @account ||= account_ledger.account
+  end
 end
