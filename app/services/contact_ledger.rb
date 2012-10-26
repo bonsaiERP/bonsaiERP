@@ -1,4 +1,6 @@
 # encoding: utf-8
+# Creates the in and out for a contact,creating a account to pay in case 
+# it's an in and account to receive in case is an out
 class ContactLedger
 
   attr_reader :account_ledger, :errors
@@ -14,8 +16,9 @@ class ContactLedger
     errors[:base] << 'There are missing attributes'
   end
 
-  def create_in
-    account_ledger.operation = 'cin'
+  def create_in(concil = true)
+    account_ledger.operation    = 'cin'
+    account_ledger.conciliation = concil
 
     ActiveRecord::Base.transaction do
       set_or_create_account_to
@@ -26,9 +29,10 @@ class ContactLedger
     false
   end
 
-  def create_out
-    account_ledger.operation = 'cout'
-    account_ledger.amount = -account_ledger.amount
+  def create_out(concil = true)
+    account_ledger.operation    = 'cout'
+    account_ledger.conciliation = concil
+    account_ledger.amount       = -account_ledger.amount
 
     ActiveRecord::Base.transaction do
       set_or_create_account_to

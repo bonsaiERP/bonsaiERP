@@ -23,9 +23,9 @@ class AccountLedger < ActiveRecord::Base
   before_create :set_creator
   before_save   :set_approver, if: :conciliation?
 
-  with_options if: :conciliation do |upd|
+  with_options if: :conciliation? do |upd|
     upd.before_save :update_account_amount
-    upd.before_save :update_to_amount, if: "to_id.present?"
+    upd.before_save :update_to_amount
   end
 
   ########################################
@@ -38,11 +38,6 @@ class AccountLedger < ActiveRecord::Base
   attr_accessible :account_id, :to_id, :date, :operation, :reference, :interests_penalties, :project_id,
     :amount, :exchange_rate, :description, :account_ledger_details_attributes, :contact_id, :base_amount
 
-
-  # callbacks
-  #before_validation :set_currency_id
-  #before_destroy    { false }
-  #before_create     { self.creator_id = UserSession.user_id }
 
   # includes
   include ActionView::Helpers::NumberHelper
@@ -64,9 +59,6 @@ class AccountLedger < ActiveRecord::Base
   belongs_to :approver, :class_name => "User"
   belongs_to :nuller,   :class_name => "User"
   belongs_to :creator,  :class_name => "User"
-
-  has_many :account_ledger_details, :dependent => :destroy, :autosave => true
-  accepts_nested_attributes_for :account_ledger_details, :allow_destroy => true
 
   ########################################
   # Validations
@@ -115,6 +107,11 @@ class AccountLedger < ActiveRecord::Base
     CODE
   end
 
+  def conciliate_account
+    self.conciliation = true
+
+    self.save!
+  end
  
   def self.pendent?
     pendent.count > 0
@@ -299,6 +296,8 @@ private
 
   # Updates the amount of the account to
   def update_to_amount
+    return unless to_id.present?
+
     to.amount -= amount
     self.to_balance = to.amount
 
