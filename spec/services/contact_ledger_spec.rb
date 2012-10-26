@@ -37,13 +37,38 @@ describe ContactLedger do
 
       al.amount.should eq(amount)
       al.currency_id.should eq(account.currency_id)
-      #puts al.attributes
 
       al.account_amount.should eq(initial_amount + amount)
       al.account_balance.should eq(al.account_amount)
 
       al.to_amount.should eq(-amount)
       al.to_balance.should eq(-amount)
+
+      al.contact.account_cur(currency.id).should be_persisted
+    end
+  end
+
+  context "Create out" do
+    let(:initial_amount) { account.amount }
+
+    it "creates an out" do
+      cl = ContactLedger.new valid_attributes
+
+      cl.create_out.should be_true
+
+      al = cl.account_ledger
+      al.should be_persisted
+      al.should be_is_cout
+      al.contact_id.should eq(contact.id)
+
+      al.amount.should eq(-amount)
+      al.currency_id.should eq(account.currency_id)
+
+      al.account_amount.should eq(-(initial_amount + amount))
+      al.account_balance.should eq(-(initial_amount + amount))
+
+      al.to_amount.should eq(amount)
+      al.to_balance.should eq(amount)
     end
   end
 

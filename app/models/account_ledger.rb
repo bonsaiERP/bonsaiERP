@@ -293,6 +293,7 @@ private
   def update_account_amount
     account.amount += amount
     self.account_balance = account.amount
+
     account.save!
   end
 
@@ -300,6 +301,7 @@ private
   def update_to_amount
     to.amount -= amount
     self.to_balance = to.amount
+
     account.save!
   end
 end

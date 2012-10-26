@@ -23,14 +23,20 @@ class ContactLedger
       account_ledger.save!
     end
   rescue => e
-    binding.pry
     false
   end
 
   def create_out
-    accoun_ledger.operation = 'cout'
+    account_ledger.operation = 'cout'
     account_ledger.amount = -account_ledger.amount
-    account_ledger.save
+
+    ActiveRecord::Base.transaction do
+      set_or_create_account_to
+
+      account_ledger.save!
+    end
+  rescue => e
+    false
   end
 
   def persisted
