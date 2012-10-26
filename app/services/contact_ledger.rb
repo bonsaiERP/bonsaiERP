@@ -54,11 +54,6 @@ private
     account_ledger.to_id = to.id
   end
 
-  def create_account_to
-
-    a
-  end
-
   def currency_id
     @currency_id ||= account.currency_id
   end
