@@ -2,6 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class Item < ActiveRecord::Base
+  include ActiveModel::ForbiddenAttributesProtection
 
   self.inheritance_column = :class_type
 
@@ -23,7 +24,6 @@ class Item < ActiveRecord::Base
   ##########################################
   # Attributes
   attr_readonly :type, :ctype
-  attr_accessible :name, :unit_id, :code, :description, :price, :discount, :active, :stockable, :for_sale
 
   ##########################################
   # Validations

@@ -52,7 +52,7 @@ class IncomesController < TransactionsController #ApplicationController
   # POST /incomes
   # POST /incomes.xml
   def create
-    @transaction = Income.new(params[:income])
+    @transaction = Income.new(income_params)
 
     respond_to do |format|
       if @transaction.save_trans
@@ -138,8 +138,7 @@ class IncomesController < TransactionsController #ApplicationController
     render "transactions/history"
   end
 
-  private
-
+private
 
   # Redirects in case that someone is trying to edit or destroy an  approved income
   def redirect_income
@@ -160,4 +159,9 @@ class IncomesController < TransactionsController #ApplicationController
     end
   end
 
+  def income_params
+    params.require(:income).permit(:ref_number, :date, :contact_id, :project_id,  :currency_id, 
+                                   :exchange_rate, :discount, :bill_number, :description, :fact,
+                                   :transaction_details_attributes)
+  end
 end

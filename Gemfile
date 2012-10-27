@@ -17,6 +17,7 @@ gem 'compass-rails', '~> 1.0.3'
 
 gem 'pg'     , '~> 0.14.1'
 gem 'virtus' , '~> 0.5.2' # Model generation in simple way
+gem 'strong_parameters' # Force in controllers to sanitize parameters
 
 gem 'simple_form' , '~> 2.0.4'
 gem 'haml'        , '~> 3.1.7'
@@ -31,7 +32,6 @@ gem 'queue_classic', '~> 2.0.1' # Background processing for PostgreSQL
 gem 'prawn', '~> 1.0.0.rc1'
 #gem 'exception_notification', "~> 2.5.2"
 #gem 'newrelic_rpm'
-gem 'letter_opener', '1.0.0'
 
 group :development, :test do
   gem 'puma'            , '~> 1.6.3' # Web server

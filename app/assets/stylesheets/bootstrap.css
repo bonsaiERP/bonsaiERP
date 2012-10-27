@@ -755,6 +755,7 @@ input[type="url"],
 input[type="search"],
 input[type="tel"],
 input[type="color"],
+input[type="decimal"],
 .uneditable-input {
   display: inline-block;
   height: 20px;
@@ -790,6 +791,7 @@ input[type="url"],
 input[type="search"],
 input[type="tel"],
 input[type="color"],
+input[type="decimal"],
 .uneditable-input {
   background-color: #ffffff;
   border: 1px solid #cccccc;
@@ -816,6 +818,7 @@ input[type="url"]:focus,
 input[type="search"]:focus,
 input[type="tel"]:focus,
 input[type="color"]:focus,
+input[type="decimal"]:focus,
 .uneditable-input:focus {
   border-color: rgba(82, 168, 236, 0.8);
   outline: 0;
@@ -2313,7 +2316,7 @@ table [class*=span],
 .open {
   *z-index: 1000;
 }
-.open  > .dropdown-menu {
+.open > .dropdown-menu {
   display: block;
 }
 .pull-right > .dropdown-menu {

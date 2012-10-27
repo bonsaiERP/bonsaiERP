@@ -64,6 +64,7 @@ module Bonsaierp
 
     config.assets.enabled = true
     config.assets.version = "1.0"
-
+    # Using strong parameters
+    config.active_record.whitelist_attributes = false
   end
 end

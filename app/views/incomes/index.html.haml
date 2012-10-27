@@ -4,20 +4,23 @@
       %span Ingresos
 
   .links.span6
-    = link_to new_income_path, :class => 'new' do
-      %i.bicon-add
-      Nuevo ingreso
-
-    = link_to new_income_path, :class => 'new' do
-      %i.bicon-add
-      Ingreso rápido
 
 
 :css
   .search label{ width: 15em; }
 
-.page-header
-  %h1 Ingresos
+.row-fluid.top
+  .span6
+    %h1 Ingresos
+
+  .span6.links
+    = link_to new_income_path, :class => 'new but' do
+      %i.bicon-add
+      Nuevo ingreso
+
+    %a.new.but(href="javascript:;")
+      %i.bicon-add
+      Ingreso rápido
 
 %ul.tabs
   %li= link_option "Todos", "all"

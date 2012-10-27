@@ -1,7 +1,7 @@
 class CreateTransactions < ActiveRecord::Migration
   def change
     create_table :transactions do |t|
-      t.integer :account_id
+      t.integer :contact_id
       t.string  :type, :limit => 20
 
       t.decimal :total, :precision => 14, :scale => 2
@@ -41,7 +41,7 @@ class CreateTransactions < ActiveRecord::Migration
       t.timestamps
     end
 
-    add_index :transactions, :account_id
+    add_index :transactions, :contact_id
     add_index :transactions, :active
     add_index :transactions, :ref_number
     add_index :transactions, :date

@@ -320,9 +320,11 @@ $header-color: lighten(gray, 20%)
 .links
   .new, .add, .edit, .show, .delete, .destroy
     +button(lighten(gray, 40%))
+    +text-shadow(0px 1px 1px white)
     color: $dark
-    font-weight: normal
-    font-size: 12px
+    font-weight: bold
+    font-size: 14px
+    padding: 6px 15px
   .destroy, .delete
     color: darken(red, 10%)
 

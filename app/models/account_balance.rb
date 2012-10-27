@@ -14,8 +14,6 @@ class AccountBalance < ActiveRecord::Base
   validates_presence_of :contact
   validates_presence_of :currency_id
 
-  attr_accessible :amount, :currency_id, :contact_id
-
   private
   def update_contact_account
     self.user_id = UserSession.user_id

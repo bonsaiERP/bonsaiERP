@@ -13,7 +13,7 @@ class AccountLedger < ActiveRecord::Base
   # iout = Interestsout
   # din  = Devolution in
   # dout = Devolution out
-  OPERATIONS = %w(trans cin cout pin pout iin iout din dout).freeze
+  OPERATIONS = %w(trans cin cout pin pout iin iout din dout null).freeze
   BEHAVIORS = [:devolution, :payment, :transference, :inout].freeze
 
   ########################################
@@ -34,9 +34,6 @@ class AccountLedger < ActiveRecord::Base
   attr_reader :ac_id
   # Base amount is the #  amount = base_amount + interests_penalties
   attr_accessor :make_conciliation, :base_amount
-  # accessible
-  attr_accessible :account_id, :to_id, :date, :operation, :reference, :interests_penalties, :project_id,
-    :amount, :exchange_rate, :description, :account_ledger_details_attributes, :contact_id, :base_amount
 
 
   # includes
@@ -108,9 +105,15 @@ class AccountLedger < ActiveRecord::Base
   end
 
   def conciliate_account
-    self.conciliation = true
+    if is_null?
+      self.errors[:base] << I18n.t('errors.messages.account_ledger.null_conciliation')
+      
+      false
+    else
+      self.conciliation = true
 
-    self.save!
+      self.save!
+    end
   end
  
   def self.pendent?

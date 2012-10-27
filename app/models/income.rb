@@ -2,6 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class Income < Transaction
+  include ActiveModel::ForbiddenAttributesProtection
 
   ########################################
   # Includes
@@ -47,7 +48,7 @@ class Income < Transaction
   end
 
   def set_defaults_with_details
-    set_defaults
+    #set_defaults
     transaction_details.build(price: 0, quantity: 0)
   end
 

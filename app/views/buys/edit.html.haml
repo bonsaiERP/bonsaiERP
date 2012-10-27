@@ -1,9 +1,0 @@
-- content_for :links do
-  %ul.breadcrumps.span6
-    %li #{link_to 'Compras y gastos', buys_path} 
-  .links.span6
-    = link_to 'Ver', @transaction, :class => 'show'
-
-%h1 Editar compra/gasto
-
-= render 'transactions/form', :transaction => @transaction, :contacts => Supplier.scoped

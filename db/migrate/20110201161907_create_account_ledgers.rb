@@ -5,6 +5,7 @@ class CreateAccountLedgers < ActiveRecord::Migration
       t.integer  :currency_id
       t.integer  :account_id
       t.integer  :to_id
+      t.integer  :contact_id
       t.datetime :date
       t.string   :operation, :limit => 20
 
@@ -31,6 +32,7 @@ class CreateAccountLedgers < ActiveRecord::Migration
     add_index :account_ledgers, :currency_id
     add_index :account_ledgers, :account_id
     add_index :account_ledgers, :to_id
+    add_index :account_ledgers, :contact_id
     add_index :account_ledgers, :date
     add_index :account_ledgers, :conciliation
     add_index :account_ledgers, :operation
@@ -41,5 +43,6 @@ class CreateAccountLedgers < ActiveRecord::Migration
     add_index :account_ledgers, :nuller_id
     add_index :account_ledgers, :active
     add_index :account_ledgers, :has_error
+    add_index :account_ledgers, :created_at
   end
 end

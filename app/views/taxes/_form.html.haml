@@ -1,7 +1,0 @@
-= simple_form_for(@tax) do |f|
-  = f.input :name, :label => 'Nombre'
-  .input
-    = f.input :abbreviation, :label => 'Abreviación'
-    = f.input :rate, :label => 'Cantidad', :input_html => {:size => 10, :type => 'decimal'}
-  .clear
-  = f.submit "Salvar", :class => 'btn btn-success b'

@@ -32,7 +32,7 @@ class ItemsController < ApplicationController
   # POST /items
   # POST /items.xml
   def create
-    @item = Item.new(params[:item])
+    @item = Item.new(item_params)
 
     if @item.save
       redirect_to @item, notice: 'Se ha creado el ítem correctamente.'
@@ -43,7 +43,7 @@ class ItemsController < ApplicationController
 
   # PUT /items/1
   def update
-    if @item.update_attributes(params[:item])
+    if @item.update_attributes(item_params)
       flash[:notice] = "Se actualizo correctamente el ítem."
       redirect_ajax @item
     else
@@ -59,8 +59,13 @@ class ItemsController < ApplicationController
     redirect_ajax @item
   end
 
-  private
+private
   def set_item
     @item = Item.find(params[:id])
+  end
+
+  def item_params
+    params.require(:item).permit(:code, :name, :active, :stockable,
+                                 :for_sale, :price, :unit_id, :description)
   end
 end

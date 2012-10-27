@@ -1,18 +1,21 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class Contact < ActiveRecord::Base
+class BaseContact < ActiveRecord::Base
   #include Models::Account::Contact
+  self.table_name = 'contacts'
 
   ########################################
   # Callbacks
   before_destroy { false }
 
+  TYPES = ['Client', 'Supplier', 'Staff']
+
   ########################################
   # Relationships
   has_many :transactions
   has_many :incomes,  :class_name => "Income"
-  has_many :expenses,  :class_name => "Expense"
+  has_many :buys,     :class_name => "Buy"
   has_many :inventory_operations
   # Account
   has_many :accounts, :as => :accountable, :autosave => true, :dependent => :destroy
@@ -95,3 +98,4 @@ class Contact < ActiveRecord::Base
     end
   end
 end
+

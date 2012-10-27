@@ -8,7 +8,7 @@ class Transaction < ActiveRecord::Base
   # Determines if the oprations is made on transaction or pay_plan or payment
   TYPES    = ['Income'  , 'Buys']
   ########################################
-  #include Models::Transaction::Calculations
+  include Models::Transaction::Calculations
   ##include Models::Transaction::Trans
   #include Models::Transaction::Approve
   #include Models::Transaction::PayPlan
@@ -31,9 +31,12 @@ class Transaction < ActiveRecord::Base
   belongs_to :nuller,   :class_name => "User"
   belongs_to :modifier, :class_name => "User", :foreign_key => :modified_by
 
-  has_many :pay_plans           , :dependent => :destroy, :order => "payment_date ASC", :autosave => true
-  has_many :account_ledgers     , :dependent => :destroy, :conditions => "operation != 'transaction'", :autosave => false
+  #has_many :pay_plans           , :dependent => :destroy, :order => "payment_date ASC", :autosave => true
+  #has_many :account_ledgers     , :dependent => :destroy, :conditions => "operation != 'transaction'", :autosave => false
   has_many :inventory_operations
+
+  has_many :transaction_details, dependent: :destroy
+  accepts_nested_attributes_for :transaction_details
 
 
   # History
