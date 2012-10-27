@@ -16,7 +16,7 @@
     .span3
       = f.input :stockable, label: 'Inventario <i title="Se almacena el ítem en almacenes?" class="bicon-info"></i>'.html_safe, as: :radio, item_wrapper_class: 'inline'
     #for_sale.span3
-      = f.input :for_sale, label: 'Para vender', as: :radio, item_wrapper_class: 'inline'
+      = f.input :for_sale, label: 'Se vende', as: :radio, item_wrapper_class: 'inline'
     #price.hide.span3
       = f.input :price, :label => "Precio de venta #{currency_code_label}".html_safe, :input_html => {:size => 12, :type => 'decimal'}
   .row-fluid
