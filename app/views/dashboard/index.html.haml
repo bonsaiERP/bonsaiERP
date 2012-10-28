@@ -1,6 +1,3 @@
-:css
-  .title i{ vertical-align: middle; }
-
 - content_for :links do
   %ul.breadcrumps.span6
     %li
@@ -16,7 +13,7 @@
       = link_to "http://www.youtube.com/embed/BZMsfhXi9uw?autoplay=1&rel=0", :class => 'video', 'data-title' => 'Como crear clientes' do
         Como crear clientes
 
-- present DashboardPresenter, DashboardPresenter do |presenter|
+-# present DashboardPresenter, DashboardPresenter do |presenter|
   -#= presenter.due_date
 
   = presenter.change_password_link

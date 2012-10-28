@@ -4,20 +4,17 @@
       %span Ingresos
 
 
-:css
-  .search label{ width: 15em; }
-
 .row-fluid.top
   .span6
     %h1 Ingresos
 
   .span6.links
     = link_to new_income_path, :class => 'new but' do
-      %i.bicon-add
+      %i.icon-plus-sign
       Nuevo ingreso
 
     %a.new.but(href="javascript:;")
-      %i.bicon-add
+      %i.icon-plus-sign
       Ingreso rápido
 
 %ul.tabs

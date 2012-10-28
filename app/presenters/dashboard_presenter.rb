@@ -55,7 +55,7 @@ class DashboardPresenter < BasePresenter
 
   def accounts_to_pay
     tot_accounts = Account.to_pay.group(:currency_id).sum(:amount)
-    tot_incomes  = Buy.approved.group(:currency_id).sum(:balance)
+    tot_incomes  = Expense.approved.group(:currency_id).sum(:balance)
     keys = (tot_accounts.keys + tot_incomes.keys).uniq
 
     keys.map do |cur_id|
