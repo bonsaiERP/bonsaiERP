@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe QuickIncome do
+describe QuickTransaction do
   before(:each) do
     UserSession.current_user = User.new {|u| u.id = 21 }
   end
@@ -20,7 +20,7 @@ describe QuickIncome do
   }
 
   it "initializes with defaults" do
-    qi = QuickIncome.new
+    qi = QuickTransaction.new
     qi.ref_number.should eq("I-#{Date.today.year}-0001")
     qi.fact.should be_true
     qi.date.should eq(Date.today)
@@ -29,7 +29,7 @@ describe QuickIncome do
 
   it "initializes with other attributes" do
     date = 1.day.from_now.to_date
-    qi = QuickIncome.new(ref_number: 'JE-0001', fact: false, date: date)
+    qi = QuickTransaction.new(ref_number: 'JE-0001', fact: false, date: date)
     qi.ref_number.should eq('JE-0001')
     qi.fact.should be_false
     qi.date.should eq(date)
@@ -37,17 +37,25 @@ describe QuickIncome do
 
   context "Creation" do
     it "creates a valid income" do
-      qi = QuickIncome.new(valid_attributes)
-      qi.create.should be_true
+      qi = QuickTransaction.new(valid_attributes)
+      qi.create_in.should be_true
 
       qi.income.should be_persisted
       qi.account_ledger.should be_persisted
     end
 
+    it "does not saave because of invalid account" do
+      qi = QuickTransaction.new(valid_attributes.merge(account_id: 1000))
+      qi.create_in.should be_false
+
+      qi.account_ledger.errors[:account].should_not be_blank
+      qi.account_ledger.errors[:currency].should_not be_blank
+    end
+
     context "Create QuickOffer and check values" do
       subject do
-        qi = QuickIncome.new(valid_attributes)
-        qi.create
+        qi = QuickTransaction.new(valid_attributes)
+        qi.create_in
         qi
       end
 
@@ -67,6 +75,7 @@ describe QuickIncome do
         account_ledger.account.amount.should eq(income.total)
         account_ledger.creator_id.should eq(21)
         account_ledger.approver_id.should eq(21)
+        account_ledger.contact_id.should eq(contact.id)
       end
     end
   end

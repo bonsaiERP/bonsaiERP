@@ -1,6 +1,6 @@
 # encoding: utf-8
 # Generates a quick income with all data
-class QuickIncome
+class QuickTransaction
   include Virtus
 
   attr_reader :income, :account_ledger
@@ -21,22 +21,36 @@ class QuickIncome
     self.date = date || Date.today
   end
 
-  def create
+  def create_in
     ActiveRecord::Base.transaction do
       create_income
 
       create_account_ledger
     end
+  rescue Exception => e
 
-    income.persisted? && account_ledger.persisted?
+    false
+  end
+
+  def create_out
+    ActiveRecord::Base.transaction do
+      create_expense(-1)
+
+      create_account_ledger
+    end
+  rescue Exception => e
+
+    false
   end
 
   private
     def create_income
-      @income = Income.create!(income_attributes) do |inc|
+      @income = Income.new(income_attributes) do |inc|
         inc.total = inc.gross_total = inc.original_total = amount
         inc.balance = 0
       end
+
+      @income.save!
     end
 
     def income_attributes
@@ -44,9 +58,10 @@ class QuickIncome
        bill_number: bill_number, fact: fact, contact_id: contact_id }
     end
 
-    def create_account_ledger
-      @account_ledger = AccountLedger.create(
-        amount: amount, account_id: account_id,
+    def create_account_ledger(amount_sign = 1)
+      amt = amount * amount_sign
+      @account_ledger = AccountLedger.new(
+        amount: amt, account_id: account_id,
         reference: "#{income.ref_number}", operation: 'pin',
         exchange_rate: 1, contact_id: contact_id
       ) do |al|
@@ -54,5 +69,7 @@ class QuickIncome
         al.transaction_id = income.id
         al.conciliation = true
       end
+
+      @account_ledger.save!
     end
 end

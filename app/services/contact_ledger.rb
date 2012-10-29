@@ -12,7 +12,7 @@ class ContactLedger
       al.amount = al.amount.to_f.abs
       al.exchange_rate = 1
     end
-  rescue => e
+  rescue Exception => e
     errors[:base] << 'There are missing attributes'
   end
 
@@ -25,7 +25,7 @@ class ContactLedger
 
       account_ledger.save!
     end
-  rescue => e
+  rescue Exception => e
     false
   end
 
@@ -39,7 +39,7 @@ class ContactLedger
 
       account_ledger.save!
     end
-  rescue => e
+  rescue Exception => e
     false
   end
 
