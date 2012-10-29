@@ -47,7 +47,7 @@ class QuickIncome
     def create_account_ledger
       @account_ledger = AccountLedger.create(
         amount: amount, account_id: account_id,
-        reference: "#{income.ref_number}", operation: 'in',
+        reference: "#{income.ref_number}", operation: 'pin',
         exchange_rate: 1, contact_id: contact_id
       ) do |al|
         al.currency_id = currency_id

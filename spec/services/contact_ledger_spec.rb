@@ -8,21 +8,21 @@ describe ContactLedger do
 
   let!(:currency) { create(:currency) }
   let!(:contact) { create(:contact) }
-  let!(:cash) { create(:cash, amount: 0, currency_id: currency.id) }
+  let!(:cash) { create(:cash, amount: 100, currency_id: currency.id) }
   let(:account) { cash.account }
   let(:amount) { 200.5 }
 
   let(:valid_attributes) {
     {
-      date: Date.today, ref_number: 'I-0001',
-      bill_number: '63743', amount: amount.to_s, 
-      reference: 'My buddy payed me', contact_id: contact.id, 
-      account_id: account.id
+      date: Date.today, reference: 'Contact 0001',
+      amount: amount.to_s, reference: 'My buddy payed me', 
+      contact_id: contact.id, account_id: account.id
     }
   }
 
   it "test account ledger" do
     cl = ContactLedger.new(valid_attributes)
+
     cl.account_ledger.amount.should eq(valid_attributes[:amount].to_f)
     cl.account_ledger.exchange_rate.should eq(1)
   end
@@ -76,6 +76,17 @@ describe ContactLedger do
       al.contact.account_cur(currency.id).should be_persisted
       al.creator_id.should eq(UserSession.user_id)
       al.approver_id.should be_nil
+
+      # Conciliation
+      UserSession.current_user = build(:user, id: 14)
+      al.conciliate_account.should be_true
+      al.approver_id.should eq(14)
+
+      al.account_amount.should eq(initial_amount + amount)
+      al.account_balance.should eq(initial_amount + amount)
+
+      al.to_amount.should eq(-amount)
+      al.to_balance.should eq(-amount)
     end
   end
 
@@ -95,8 +106,8 @@ describe ContactLedger do
       al.amount.should eq(-amount)
       al.currency_id.should eq(account.currency_id)
 
-      al.account_amount.should eq(-(initial_amount + amount))
-      al.account_balance.should eq(-(initial_amount + amount))
+      al.account_amount.should eq(initial_amount - amount)
+      al.account_balance.should eq(initial_amount - amount)
 
       al.to_amount.should eq(amount)
       al.to_balance.should eq(amount)
@@ -122,13 +133,14 @@ describe ContactLedger do
       al.to_balance.should be_nil
       al.creator_id.should eq(UserSession.user_id)
       al.approver_id.should be_nil
+
       # Conciliation
       UserSession.current_user = build(:user, id: 12)
       al.conciliate_account.should be_true
       al.approver_id.should eq(12)
 
-      al.account_amount.should eq(-(initial_amount + amount))
-      al.account_balance.should eq(-(initial_amount + amount))
+      al.account_amount.should eq(initial_amount - amount)
+      al.account_balance.should eq(initial_amount - amount)
 
       al.to_amount.should eq(amount)
       al.to_balance.should eq(amount)

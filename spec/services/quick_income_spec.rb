@@ -58,7 +58,7 @@ describe QuickIncome do
       it "account_ledger attribtes are set" do
         account_ledger.contact_id.should eq(contact.id)
         account_ledger.should be_persisted
-        account_ledger.should be_in
+        account_ledger.should be_is_pin
 
         account_ledger.amount.should == valid_attributes[:amount].to_f
         account_ledger.transaction_id.should eq(income.id)
