@@ -1,12 +1,19 @@
 # encoding: utf-8
 class BaseService
   include Virtus
+  extend ActiveModel::Naming
+  include ActiveModel::Conversion
+  include ActiveModel::Validations
 
   attr_reader :errors
 
   def initialize(attributes = {})
     super attributes
     @errors = ActiveModel::Errors.new(self)
+  end
+
+  def persisted?
+    false
   end
 
 private

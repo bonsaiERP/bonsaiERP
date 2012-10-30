@@ -9,11 +9,11 @@
   %h3= link_to "Crear nueva caja", new_cash_path, :class => 'add'
 
 %ul#cashes.accounts_list
-  - @cashes.each do |cash|
+  -# @cashes.each do |cash|
     %li
       ._55.fl
         %h3= link_to cash, cash
-        %h4.mt5.dark= cash.currency.name.pluralize
+        %h4.mt5.dark= cash.currency_name.pluralize
       ._45.fl
         .moneybox.fl
           %label TOTAL EN CUENTA

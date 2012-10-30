@@ -1,0 +1,3 @@
+= simple_form_for QuickTransaction.new, url:'' do |f|
+  = f.input :ref_number, label: "Número de referencia"
+  = f.input :account_id, collection: Account.all

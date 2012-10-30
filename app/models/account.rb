@@ -34,7 +34,7 @@ class Account < ActiveRecord::Base
   #validates :currency_id, :organisation_relation => true
 
   # delegations
-  delegate :symbol, :name, :to => :currency, :prefix => true, :allow_nil => true
+  delegate :symbol, :name, :code, :to => :currency, :prefix => true, :allow_nil => true
 
   # scopes
   scope :money, where(:accountable_type => "MoneyStore")
@@ -67,9 +67,9 @@ class Account < ActiveRecord::Base
 
   def to_s
     if accountable_type === "Contact"
-      "#{name} (#{currency_symbol} #{number_with_delimiter(amount.abs)})"
+      "#{name} (#{number_with_delimiter(amount.abs)} #{currency_code})"
     else
-      "#{name} (#{currency_symbol} #{number_with_delimiter(amount)})"
+      "#{name} (#{number_with_delimiter(amount)}  #{currency_code})"
     end
   end
 

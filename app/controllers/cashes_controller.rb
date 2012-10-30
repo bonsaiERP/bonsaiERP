@@ -49,7 +49,7 @@ class CashesController < ApplicationController
   # POST /cashs
   # POST /cashs.xml
   def create
-    @cash = Cash.new(params[:cash])
+    @cash = Cash.new(cash_params)
 
     respond_to do |format|
       if @cash.save
@@ -68,7 +68,7 @@ class CashesController < ApplicationController
     params[:cash].delete(:currency_id)
 
     respond_to do |format|
-      if @cash.update_attributes(params[:cash])
+      if @cash.update_attributes(cash_params)
         format.html { redirect_to(@cash, :notice => 'La caja fue actualizada.') }
         format.xml  { head :ok }
       else
@@ -92,5 +92,9 @@ class CashesController < ApplicationController
 private
   def set_cash
     @cash = Cash.find(params[:id])
+  end
+
+  def cash_params
+    params.require(:cash).permit(:name, :currency_id, :amount, :description)
   end
 end

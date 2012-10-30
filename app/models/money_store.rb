@@ -10,10 +10,12 @@ class MoneyStore < ActiveRecord::Base
   after_save    :set_account_name, if: :name_changed?
   before_validation :set_amount, :if => :new_record?
 
+  ########################################
   # Attributes
   attr_accessor :amount
   
-  # relationships
+  ########################################
+  # Relationships
   belongs_to :currency
   has_one :account, :as => :accountable, :autosave => true, :dependent => :destroy, inverse_of: :accountable
 
@@ -28,7 +30,7 @@ class MoneyStore < ActiveRecord::Base
   # Creates methods to determine if is bank?, cash?
   %w[bank cash].each do |met|
     class_eval <<-CODE, __FILE__, __LINE__ +1
-      def #{met}?
+      def is_#{met}?
         self.class.to_s.downcase == "#{met}"
       end
     CODE

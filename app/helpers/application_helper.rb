@@ -171,7 +171,7 @@ module ApplicationHelper
   # Presents a class with currency
   def with_currency(klass, amount = :amount, options = {})
     options = {:precision => 2}.merge(options)
-    "#{ klass.currency_symbol } #{number_to_currency klass.send(amount), options}"
+    "#{number_to_currency klass.send(amount), options} <span class='labelz' title='#{klass.currency_name}'>#{klass.currency_code}</span>".html_safe
   end
 
   alias :wcur :with_currency
