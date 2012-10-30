@@ -19,7 +19,7 @@
     - url, title = @inventory_operation.operation == "in" ? [new_supplier_path, "Nuevo proveedor"] : [new_client_path, "Nuevo cliente"]
 
     .span6
-      = f.input :contact_id, :as => :contact, :label => false
+      = f.input :contact, as: :autocomplete, label: false, 'data-source' => '/contacts/'
   .row-fluid
     .span6
       = f.association :project, :label => "Proyecto",

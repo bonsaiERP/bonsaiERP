@@ -9,7 +9,12 @@ class ContactsController < ApplicationController
   # GET /contacts
   # GET /contacts.xml
   def index
-    @contacts = Contact.find_with_type(params[:option]).page(@page)
+    @contacts = Contact.where().page(@page)
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @contacts }
+    end
   end
 
   # GET /contacts/1
@@ -55,7 +60,7 @@ class ContactsController < ApplicationController
     respond_ajax(@contact)
   end
 
-  protected
+private
   def find_contact
     @contact = Contact.find(params[:id])
   end

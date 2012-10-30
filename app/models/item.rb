@@ -2,7 +2,6 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class Item < ActiveRecord::Base
-  include ActiveModel::ForbiddenAttributesProtection
 
   self.inheritance_column = :class_type
 

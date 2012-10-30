@@ -4,7 +4,7 @@
 class IncomesController < TransactionsController #ApplicationController
 
   before_filter :check_authorization!
-  before_filter :set_transaction, :only => [:show, :edit, :update, :destroy, :approve]
+  #before_filter :set_transaction, :only => [:show, :edit, :update, :destroy, :approve]
 
   #before_filter :update_all_deliver
 
