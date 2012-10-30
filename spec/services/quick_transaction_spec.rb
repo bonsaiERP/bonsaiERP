@@ -15,7 +15,7 @@ describe QuickTransaction do
   let(:valid_attributes) {
     {
       date: Date.today, ref_number: 'I-0001', fact: true,
-      bill_number: '63743', amount: '200.5', currency_id: currency.id,
+      bill_number: '63743', amount: '200.5',
       contact_id: contact.id, account_id: account.id
     }
   }
@@ -52,8 +52,15 @@ describe QuickTransaction do
       qi = QuickTransaction.new(valid_attributes.merge(account_id: 1000))
       qi.create_in.should be_false
 
-      qi.account_ledger.errors[:account].should_not be_blank
-      qi.account_ledger.errors[:currency].should_not be_blank
+      qi.income.errors[:currency].should_not be_blank
+      qi.income.errors[:currency_id].should_not be_blank
+    end
+
+    it "should present errors if the contact is wrong" do
+      qi = QuickTransaction.new(valid_attributes.merge(contact_id: 1000))
+      qi.create_in.should be_false
+
+      qi.income.errors[:contact].should_not be_blank
     end
 
     subject do
