@@ -3,7 +3,6 @@
 # email: boriscyber@gmail.com
 class DashboardController < ApplicationController
   before_filter :check_auth_token, only: [ 'index' ]
-  before_filter :check_authorization!
 
   # GET /dashboard
   def index

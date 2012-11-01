@@ -2,7 +2,6 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class LoansController < TransactionsController #ApplicationController
-  before_filter :check_authorization!
   before_filter { redirect_to dashboard_path; return }
 
   # GET /incomes

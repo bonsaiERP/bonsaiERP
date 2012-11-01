@@ -2,7 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class SessionsController < ApplicationController
-  #before_filter :check_logged_user, :except => [:destroy]
+  skip_before_filter :set_tenant, :check_authorization!
 
   def new
     @user = User.new

@@ -3,6 +3,7 @@
 # email: boriscyber@gmail.com
 class RegistrationsController < ApplicationController
   before_filter :check_tenant
+  skip_before_filter :set_tenant, :check_authorization!
 
   def new
     @organisation = Organisation.new

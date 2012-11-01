@@ -3,6 +3,7 @@
 # email: boriscyber@gmail.com
 class OrganisationsController < ApplicationController
   before_filter :check_tenant_creation
+  skip_before_filter :set_tenant
 
   # GET /organisations/new
   def new

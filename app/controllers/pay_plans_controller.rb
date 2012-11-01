@@ -2,7 +2,6 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class PayPlansController < ApplicationController
-  before_filter :check_authorization!
   before_filter :check_pay_plan_authorization, :only => [:new, :create, :edit, :update]
 
   # GET /pay_plans

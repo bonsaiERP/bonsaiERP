@@ -2,7 +2,6 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class AccountLedgersController < ApplicationController
-  before_filter :check_authorization!
  
   # GET /account_ledger 
   def index

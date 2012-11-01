@@ -3,7 +3,7 @@
 class QuickTransaction < BaseService
   include Virtus
 
-  attr_reader :income, :expense, :account_ledger,:transaction
+  attr_reader :income, :expense, :account_ledger,:transaction, :contact
 
   attribute :ref_number  , String
   #attribute :currency_id , Integer

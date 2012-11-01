@@ -2,7 +2,6 @@
 # email: boriscyber@gmail.com
 class UsersController < ApplicationController
   respond_to :html, :xml, :json
-  before_filter :check_authorization!
   before_filter :check_if_default_password, :only => [:password, :update_password]
 
   def new

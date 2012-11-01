@@ -2,7 +2,6 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class PaymentsController < ApplicationController
-  before_filter :check_authorization!
   # GET /payments
   # GET /payments.xml
   #def index

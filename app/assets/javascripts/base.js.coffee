@@ -284,7 +284,7 @@ $(document).ready(->
 
   start = ->
     $('body').setTransformations()
-    $('[title]').tooltip()#{ selector: '[title]'})
+    $('body').tooltip(selector: '[rel=tooltip]')
 
   createErrorLog = (data)->
     unless $('#error-log').length > 0

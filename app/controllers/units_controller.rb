@@ -4,8 +4,6 @@
 class UnitsController < ApplicationController
   respond_to :html, :json, :xml
 
-  before_filter :check_authorization!
-
   # GET /units
   # GET /units.xml
   def index

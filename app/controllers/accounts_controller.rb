@@ -2,7 +2,6 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class AccountsController < ApplicationController
-  before_filter :check_authorization!
 
   # GET /accounts/:id
   def show

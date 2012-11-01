@@ -2,8 +2,6 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class ItemsController < ApplicationController
-
-  before_filter :check_authorization!
   before_filter :set_item, :only => [:show, :edit, :update, :destroy]
 
   # GET /items

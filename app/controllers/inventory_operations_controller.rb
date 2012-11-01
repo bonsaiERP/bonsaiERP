@@ -2,7 +2,6 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class InventoryOperationsController < ApplicationController
-  before_filter :check_authorization!
   before_filter :check_transaction_permission, :only => [:new_transaction, :create_transaction]
 
   # GET /inventory_operations

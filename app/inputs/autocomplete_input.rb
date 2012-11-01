@@ -1,6 +1,3 @@
-# encoding: utf-8
-# author: Boris Barroso
-# email: boriscyber@gmail.com
 class AutocompleteInput < SimpleForm::Inputs::Base
   include ActionView::Helpers::FormTagHelper
   enable :placeholder
@@ -17,10 +14,12 @@ class AutocompleteInput < SimpleForm::Inputs::Base
       relation = attribute_name.to_s.gsub(/\A(.+)(_id)\z/,'\1')
     end
 
+    input_html_options['data-source'] ||= options['data-source']
+
     raise 'input_html_options data-source required' unless input_html_options['data-source'].present?
 
     value = object.send(relation)
-    input_html_options[:placeholder] = input_html_options[:placeholder] || 'Start typing to autocomplete'
+    input_html_options[:placeholder] = input_html_options[:placeholder] || I18n.t('bonsai.autocomplete_placeholder')
     input_html_options[:size] ||= SimpleForm.default_input_size
 
     out = @builder.hidden_field hid_name

@@ -2,7 +2,6 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class StoresController < ApplicationController
-  before_filter :check_authorization!
   # GET /stores
   # GET /stores.xml
   def index

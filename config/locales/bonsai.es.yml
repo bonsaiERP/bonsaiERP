@@ -2,6 +2,7 @@ es:
   bonsai:
     registration: "Complete su registro en %{domain}"
     reset_password: "Recuperación de contraseña de www.bonsaierp.con"
+    autocomplete_placeholder: "Comieze a escribir para autocompletar"
   views:
     pagination: 
       next: "Siguiente &gt;"

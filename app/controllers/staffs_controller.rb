@@ -2,7 +2,6 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class StaffsController < ApplicationController
-  before_filter :check_authorization!
   before_filter :find_staff, :only => [:show, :edit, :update, :destroy]
 
   include Controllers::Contact

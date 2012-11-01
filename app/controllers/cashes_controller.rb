@@ -2,7 +2,6 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class CashesController < ApplicationController
-  before_filter :check_authorization!
   before_filter :set_cash, :only => [:show, :edit, :update, :destroy]
 
   include Controllers::Money

@@ -1,3 +1,12 @@
 = simple_form_for QuickTransaction.new, url:'' do |f|
-  = f.input :ref_number, label: "Número de referencia"
-  = f.input :account_id, collection: Account.all
+  .row-fluid
+    .span6= f.input :ref_number, label: "Número de referencia"
+    .span6= f.input :account_id, collection: Account.all, label: 'Cuenta'
+
+  .row-fluid
+    .span6=f.input :contact_id, as: :autocomplete, label: "Contacto", 'data-source' => '/'
+    .span6=f.input :date, label: 'Fecha', as: :date
+
+  .row-fluid
+    .span4=f.input :amount, label: 'Cantidad'
+    .span4=f.input :bill_number, label: 'No. de documento', label_html: {title: 'Factura o Recibo', rel: 'tooltip'}
