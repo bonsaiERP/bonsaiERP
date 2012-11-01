@@ -16,8 +16,6 @@ class Transaction < ActiveRecord::Base
 
   ########################################
   # Callbacks
-  #before_validation :set_defaults, :if => :new_record?
-  #before_create     :set_creator
   before_destroy    :null_transaction
 
   ########################################
@@ -31,26 +29,18 @@ class Transaction < ActiveRecord::Base
   belongs_to :nuller,   :class_name => "User"
   belongs_to :modifier, :class_name => "User", :foreign_key => :modified_by
 
-  #has_many :pay_plans           , :dependent => :destroy, :order => "payment_date ASC", :autosave => true
-  #has_many :account_ledgers     , :dependent => :destroy, :conditions => "operation != 'transaction'", :autosave => false
   has_many :inventory_operations
 
   has_many :transaction_details, dependent: :destroy
   accepts_nested_attributes_for :transaction_details
 
-
   # History
   has_many :transaction_histories, :autosave => true, :dependent => :destroy
 
-  has_and_belongs_to_many :taxes, :class_name => 'Tax'
-
-
   ########################################
   # Validations
-  #validates :contact_id, :contact => {:clases => ["Client", "Supplier"]}
   validates_presence_of :date, :currency, :currency_id, :contact_id, :contact
   validates_presence_of :project, :project_id, :if => "project_id.present?"
-
 
   ########################################
   # Scopes
@@ -59,7 +49,6 @@ class Transaction < ActiveRecord::Base
   scope :paid     , where(:state => 'paid')
   scope :due      , where("transactions.state = ? AND transactions.payment_date < ?" , 'approved' , Date.today)
   scope :inventory, where("transactions.deliver = ? AND transactions.delivered = ?", true, false)
-  scope :credit   , where(:cash => false)
   # Especial used to update
   scope :for_deliver, paid.where("transactions.deliver = ? AND transactions.delivered = ?", false, false)
   scope :nulled, where(:state => 'nulled')
@@ -139,7 +128,6 @@ class Transaction < ActiveRecord::Base
       }
     end
 
-    t.taxis_ids = self.taxis_ids
     t.gross_total = gross_total
     t.tax_percent = tax_percent
     t.ref_number = t.get_ref_number
@@ -152,10 +140,6 @@ class Transaction < ActiveRecord::Base
   def set_clone_buy(t)
     t.discount = 0
     t
-  end
-
-  def credit?
-    not(cash)
   end
 
   # downcased type
@@ -174,7 +158,7 @@ class Transaction < ActiveRecord::Base
 
   # Finds the related account with currency for a Contact
   def account
-    contact.accounts.where(:currency_id => currency_id).first
+    contact.account_cur(currency_id)
   end
 
   # Presents a localized name for state
@@ -195,6 +179,7 @@ class Transaction < ActiveRecord::Base
     end
     Hash[STATES.zip(arr)]
   end
+
   # Returns the real state based on state and checked payment_date
   def real_state
     if state == "approved" and !payment_date.blank? and payment_date < Date.today
@@ -204,29 +189,7 @@ class Transaction < ActiveRecord::Base
     end
   end
 
-  def show_pay_plans?
-    if state == "draft"
-      true
-    elsif state != "draft" and !cash
-      true
-    end
-  end
-
-  def show_payments?
-    state != 'draft'
-  end
-
-  def show_pay_plans?
-    if draft?
-      true
-    elsif cash?
-      false
-    else
-      true
-    end
-  end
-
-  # Presents the currency symbol name if not default currency
+  # Presents the currency code name if not default currency
   def present_currency
     unless Organisation.find(OrganisationSession.organisation_id).id == self.currency_id
       self.currency.to_s
@@ -258,8 +221,7 @@ class Transaction < ActiveRecord::Base
   def get_items
     case type
     when "Income"  then Item.income
-    when "Buy"     then Item.buy
-    when "Expense" then Item.expense
+    when "Expense" then Item.active
     end
   end
 

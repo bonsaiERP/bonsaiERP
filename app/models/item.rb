@@ -9,8 +9,6 @@ class Item < ActiveRecord::Base
   # Callbacks
   before_destroy :check_items_destroy
 
-  TYPES = ["item", "expense", "product", "service"]
-
   ##########################################
   # Relationships
   belongs_to :unit
@@ -19,10 +17,6 @@ class Item < ActiveRecord::Base
   has_many :transaction_details
   has_many :inventory_operation_details
   
-
-  ##########################################
-  # Attributes
-  attr_readonly :type, :ctype
 
   ##########################################
   # Validations
@@ -37,16 +31,13 @@ class Item < ActiveRecord::Base
 
   ##########################################
   # Scopes
-  scope :active   , where(:active => true)
+  scope :active   , where(active: true)
   scope :json     , select("id, name, price")
 
   # Related scopes
   scope :income   , where(active: true, for_sale: true)
-  #scope :buy      , where(["ctype IN (?) AND active = ?", ['item', 'product', 'service'], true])
-  #scope :expense  , where(["ctype IN (?) AND active = ?", ['expense'], true])
   scope :inventory, where(stockable: true)
   scope :for_sale, where(for_sale: true)
-  scope :service  , where(:ctype => 'service')
 
   ##########################################
   # Methods
@@ -60,24 +51,6 @@ class Item < ActiveRecord::Base
 
   def to_s
     "#{code} - #{name}"
-  end
-
-  # Method to get the localized types
-  def self.get_types(sc = nil)
-    if sc.blank?
-      ["Enseres", "Item de Gasto", "Producto", "Servicio"].zip(TYPES)
-    else
-      get_scoped_types(sc)
-    end
-  end
-
-  # Instanciates an item based on the ctype
-  def self.new_item(params)
-    if params[:ctype] == "service"
-      ItemService.new(params)
-    else
-      Item.new(params)
-    end
   end
 
   # gets the item scope
