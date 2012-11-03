@@ -55,5 +55,6 @@ Bonsaierp::Application.configure do
 
   # Disable query caching until it's fixed for PostgreSQL schemas
   #config.middleware.delete ActiveRecord::QueryCache
+  config.session_store :encrypted_cookie_store, key: '_bonsaierp_session', domain: :all
 end
 

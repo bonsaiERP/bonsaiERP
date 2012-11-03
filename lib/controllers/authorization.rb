@@ -4,7 +4,7 @@
 # module to handle all authorization task
 module Controllers::Authorization
 
-  protected
+protected
   # general method to check authorization
   def check_authorization!
     if current_user && session[:user_rol]

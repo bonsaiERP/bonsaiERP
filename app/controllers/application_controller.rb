@@ -84,11 +84,6 @@ class ApplicationController < ActionController::Base
   end
   helper_method :current_organisation
 
-  def current_tenant
-    tenant = request.subdomain
-    tenant = session[:tenant] if Rails.env.development? && session[:tenant].present?
-  end
-  helper_method :current_tenant
 protected
   # Creates the flash messages when an item is deleted
   def set_redirect_options(klass, options)
@@ -113,6 +108,10 @@ protected
 private
   def set_page
     @page = params[:page] || 1
+  end
+
+  def current_tenant
+    request.subdomain
   end
 
   def destroy_organisation_session!
@@ -142,5 +141,9 @@ private
 
   def set_tenant
     PgTools.change_tenant current_tenant
+  end
+
+  def login_verification
+    @valid_verification ||= Controllers::LoginVerification.new(self)
   end
 end

@@ -28,11 +28,12 @@ class SessionsController < ApplicationController
     @user = User.find_by_email(params[:user][:email])
 
     if @user
+      conf, pass = @user.confirmed_registration?, @user.valid_password?(params[:user][:password])
       case
-      when( @user.confirmed_registration? && @user.valid_password?(params[:user][:password]) )
+      when(conf && pass)
         UserSession.current_user = @user
         check_logged_user(@user)
-      when( !@user.confirmed_registration? )
+      when !conf
         @user.resend_confirmation
         redirect_to registrations_path, notice: "Le hemos reenviado un email a #{@user.email} con instrucciones para completar su registro."
       end
@@ -42,11 +43,13 @@ class SessionsController < ApplicationController
       @user.errors[:email] << err
       render'new', error: err
     end
+
   end
 
   def destroy
     reset_session
-    redirect_to new_session_url(host: UrlTools.domain), :notice => "Ha salido correctamente."
+    binding.pry
+    redirect_to new_session_url(host: request.host), :notice => "Ha salido correctamente."
   end
 
 
@@ -66,7 +69,7 @@ private
       case
       when user.active?
         user.set_auth_token
-        redirect_to dashboard_url(host: UrlTools.domain, subdomain: org.tenant, auth_token: user.auth_token)
+        redirect_to dashboard_url(host: request.domain, subdomain: org.tenant, auth_token: user.auth_token)
         return
       when !user.active?
         redirect_to new_session_path, error: 'Su usuario esta desactivado, contactese con su administrador de su empresa.'
@@ -78,16 +81,4 @@ private
     end
   end
 
-end
-
-class LoggedUser
-  attr_reader :controller
-
-  def initialize(cont)
-    @controller = cont
-  end
-
-  def check_logged_user
-
-  end
 end

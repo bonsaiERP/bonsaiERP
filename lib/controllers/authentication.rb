@@ -12,12 +12,10 @@ module Controllers::Authentication
     end
   end
 
-  protected
+protected
   def user_signed_in?
     current_user.present?
   end
-
-
 
   # Sets the session for the organisation
   def set_organisation_session(organisation)
