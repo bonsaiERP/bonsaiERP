@@ -3,10 +3,9 @@
 class QuickTransaction < BaseService
   include Virtus
 
-  attr_reader :income, :expense, :account_ledger,:transaction, :contact
+  attr_reader :transaction, :account_ledger, :contact
 
   attribute :ref_number  , String
-  #attribute :currency_id , Integer
   attribute :account_id  , Integer
   attribute :contact_id  , Integer
   attribute :date        , Date
@@ -17,34 +16,18 @@ class QuickTransaction < BaseService
   def initialize(attributes = {})
     super attributes
 
-    self.ref_number = ref_number || Income.get_ref_number
+    self.ref_number = ref_number || get_ref_number
     self.fact = [true, false].include?(fact) ? fact : true
     self.date = date || Date.today
     self.amount = amount.to_f.abs
   end
 
-  def create_in
+  def create
     res = true
     ActiveRecord::Base.transaction do
-      res = create_income
+      res = create_transaction
 
-      res = create_income_ledger && res
-
-      unless res
-        set_errors(:income, :account_ledger)
-        raise ActiveRecord::Rollback
-      end
-    end
-
-    res
-  end
-
-  def create_out
-    res = true
-    ActiveRecord::Base.transaction do
-      res = create_expense
- 
-      res = create_expense_ledger && res
+      res = create_ledger && res
 
       unless res
         set_errors(:income, :account_ledger)
@@ -56,50 +39,30 @@ class QuickTransaction < BaseService
   end
 
 private
-  def create_income
-    @income = @transaction = Income.new(income_attributes) do |inc|
-      inc.total = inc.gross_total = inc.original_total = amount
-      inc.balance = amount
-    end
-
-    @income.save
+  def get_ref_number
   end
 
-  def create_expense
-    @expense = @transaction = Expense.new(income_attributes) do |inc|
-      inc.total = inc.gross_total = inc.original_total = amount
-      inc.balance = amount
-    end
-
-    @expense.save
+  def create_transaction
   end
 
-  def income_attributes
+  def ledger_amount
+  end
+
+  def ledger_operation
+  end
+
+  def transaction_attributes
     {ref_number: ref_number, date: date, currency_id: currency_id,
      bill_number: bill_number, fact: fact, contact_id: contact_id }
   end
 
-  def create_income_ledger
+  def create_ledger
     @account_ledger = AccountLedger.new(
-      amount: amount, account_id: account_id,
-      reference: "#{transaction.ref_number}", operation: 'pin',
+      amount: ledger_amount, account_id: account_id,
+      reference: "#{transaction.ref_number}", operation: ledger_operation,
       exchange_rate: 1, contact_id: contact_id
     ) do |al|
-      al.transaction_id = income.id
-      al.conciliation = true
-    end
-
-    @account_ledger.save
-  end
-
-  def create_expense_ledger
-    @account_ledger = AccountLedger.new(
-      amount: -amount, account_id: account_id,
-      reference: "#{transaction.ref_number}", operation: 'pout',
-      exchange_rate: 1, contact_id: contact_id
-    ) do |al|
-      al.currency_id = currency_id
-      al.transaction_id = expense.id
+      al.transaction_id = transaction.id
       al.conciliation = true
     end
 

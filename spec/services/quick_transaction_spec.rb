@@ -22,7 +22,6 @@ describe QuickTransaction do
 
   it "initializes with defaults" do
     qi = QuickTransaction.new
-    qi.ref_number.should eq("I-#{Date.today.year}-0001")
     qi.fact.should be_true
     qi.date.should eq(Date.today)
   end
@@ -33,103 +32,6 @@ describe QuickTransaction do
     qi.ref_number.should eq('JE-0001')
     qi.fact.should be_false
     qi.date.should eq(date)
-  end
-
-  context "Create income and check values" do
-    let(:account_ledger) { subject.account_ledger }
-    let(:expense) { subject.expense }
-    let(:amount) { qe.amount }
-
-    it "creates a valid income" do
-      qi = QuickTransaction.new(valid_attributes)
-      qi.create_in.should be_true
-
-      qi.income.should be_persisted
-      qi.account_ledger.should be_persisted
-    end
-
-    it "does not save because of invalid account" do
-      qi = QuickTransaction.new(valid_attributes.merge(account_id: 1000))
-      qi.create_in.should be_false
-
-      qi.income.errors[:currency].should_not be_blank
-      qi.income.errors[:currency_id].should_not be_blank
-    end
-
-    it "should present errors if the contact is wrong" do
-      qi = QuickTransaction.new(valid_attributes.merge(contact_id: 1000))
-      qi.create_in.should be_false
-
-      qi.income.errors[:contact].should_not be_blank
-    end
-
-    subject do
-      qi = QuickTransaction.new(valid_attributes)
-      qi.create_in
-      qi
-    end
-
-
-    let(:account_ledger) { subject.account_ledger }
-    let(:income) { subject.income }
-
-    it "account_ledger attribtes are set" do
-      account_ledger.contact_id.should eq(contact.id)
-      account_ledger.should be_persisted
-      account_ledger.should be_is_pin
-
-      account_ledger.amount.should == valid_attributes[:amount].to_f
-      account_ledger.transaction_id.should eq(income.id)
-      account_ledger.should be_conciliation
-
-      account_ledger.account_amount.should eq(initial_amount + income.total)
-      account_ledger.creator_id.should eq(21)
-      account_ledger.approver_id.should eq(21)
-      account_ledger.contact_id.should eq(contact.id)
-    end
-  end
-
-  context "Create expense" do
-
-    it "creates a valid expense" do
-      qi = QuickTransaction.new(valid_attributes)
-      qi.create_out.should be_true
-
-      qi.expense.should be_persisted
-      qi.account_ledger.should be_persisted
-    end
-
-    subject do
-      qe = QuickTransaction.new(valid_attributes)
-      qe.create_out
-      qe
-    end
-
-
-    let(:account_ledger) { subject.account_ledger }
-    let(:expense) { subject.expense }
-    let(:amount) { subject.amount }
-
-    it "checks the expense" do
-      expense.balance.should eq(amount)
-      expense.total.should eq(amount)
-      expense
-    end
-
-    it "account_ledger attribtes are set for out" do
-      account_ledger.contact_id.should eq(contact.id)
-      account_ledger.should be_persisted
-      account_ledger.should be_is_pout
-
-      account_ledger.amount.should == -amount
-      account_ledger.transaction_id.should eq(expense.id)
-      account_ledger.should be_conciliation
-
-      account_ledger.account_amount.should eq(initial_amount - expense.total)
-      account_ledger.creator_id.should eq(21)
-      account_ledger.approver_id.should eq(21)
-      account_ledger.contact_id.should eq(contact.id)
-    end
   end
 
 end
