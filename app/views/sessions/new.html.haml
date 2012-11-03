@@ -10,13 +10,13 @@
 
 .row(style="margin-top: 100px")
   #login.span6.offset3
-    .inset
+    .inset.center
       %h2.c Iniciar sesión
 
-      = simple_form_for(@user, :url => sessions_path, :method => :post, :html => {:class => "form-horizontal"}) do |f|
+      = simple_form_for(@user, :url => sessions_path, :method => :post) do |f|
 
-        = f.input :email,    :label => "Email", :input_html => {:size => 30, :class => 'txt'}
-        = f.input :password, :label => 'Contraseña', :input_html => {:size => 30, :class => 'txt'}
+        = f.input :email,    label: false, input_html: {:size => 30, :class => 'txt', placeholder: 'Email'}
+        = f.input :password, label: false, input_html: {:size => 30, :class => 'txt', placeholder: 'Contraseña'}
 
         %p.c
           = f.submit "Ingresar", :class => "btn btn-success big b"

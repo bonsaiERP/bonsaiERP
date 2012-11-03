@@ -50,38 +50,44 @@ class SessionsController < ApplicationController
   end
 
 
-  private
-    # Checks the current user and redirects to the correct path
-    # if the user has created the organisation and tenant logins
-    # if the user has created the organisation and not tenant => cretes tenant
-    def check_logged_user(user = nil)
-      user = user || current_user
-      org = user.organisations.first
-      unless org
-        redirect_to new_registration_url(host: UrlTools.domain) , error: 'No esta' # TODO
+private
+  # Checks the current user and redirects to the correct path
+  # if the user has created the organisation and tenant logins
+  # if the user has created the organisation and not tenant => cretes tenant
+  def check_logged_user(user = nil)
+    user = user || current_user
+    org = user.organisations.first
+    unless org
+      redirect_to new_registration_url(host: UrlTools.domain) , error: 'No esta' # TODO
+      return
+    end
+
+    if PgTools.schema_exists?(org.tenant)
+      case
+      when user.active?
+        user.set_auth_token
+        redirect_to dashboard_url(host: UrlTools.domain, subdomain: org.tenant, auth_token: user.auth_token)
+        return
+      when !user.active?
+        redirect_to new_session_path, error: 'Su usuario esta desactivado, contactese con su administrador de su empresa.'
         return
       end
 
-      if PgTools.schema_exists?(org.tenant)
-        case
-        when user.active?
-          user.set_auth_token
-          redirect_to dashboard_url(host: UrlTools.domain, subdomain: org.tenant, auth_token: user.auth_token)
-          return
-        when !user.active?
-          redirect_to new_session_path, error: 'Su usuario esta desactivado, contactese con su administrador de su empresa.'
-          return
-        end
-
-      else
-        redirect_to new_organisation_url(host: , subdomain: org.tenant), alert: 'Por favor complete su registro.'
-      end
+    else
+      redirect_to new_organisation_url(host: 'host', subdomain: org.tenant, alert: 'Por favor complete su registro.' )
     end
+  end
 
 end
 
 class LoggedUser
+  attr_reader :controller
+
   def initialize(cont)
     @controller = cont
+  end
+
+  def check_logged_user
+
   end
 end

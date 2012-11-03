@@ -8,11 +8,11 @@ group :assets do
   gem 'uglifier',     '>= 1.3.0'
 end
 
-gem 'turbo-sprockets-rails3', '~> 0.1.16' # Speed assets:precompile
+gem 'turbo-sprockets-rails3', '~> 0.1.16' # Speed assets:precompile # Needs rails 3.2.9 or  superior for 0.3.2 version
 
-gem 'jquery-rails',  '~> 2.1.1'
-
-gem 'compass-rails', '~> 1.0.3'
+gem 'jquery-rails'  , '~> 2.1.1'
+gem 'compass-rails' , '~> 1.0.3'
+gem 'coffee-filter' , '~> 0.1.1'
 #gem 'bootstrap-sass', "~> 2.0.0"
 
 gem 'pg'     , '~> 0.14.1'
