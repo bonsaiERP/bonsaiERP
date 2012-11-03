@@ -14,7 +14,6 @@ class ApplicationController < ActionController::Base
 
   include Controllers::Authentication
   helper_method Controllers::Authentication.helpers
-
   #rescue_from Exception, :with => :render_error
 
   include Controllers::Authorization
@@ -26,8 +25,7 @@ class ApplicationController < ActionController::Base
   ########################################
   # Callbacks
   before_filter :set_user_session, :if => :user_signed_in?
-  before_filter :set_page, :set_tenant
-  before_filter :check_authorization!
+  before_filter :set_page, :set_tenant, :check_authorization!
 
   def render_error(exception) 
     if notifier = Rails.application.config.middleware.detect { |x| x.klass == ExceptionNotifier } 
@@ -39,13 +37,11 @@ class ApplicationController < ActionController::Base
     end
   end
 
-
   #Put this in applictation_controller.rb
   #before_filter :log_ram # or use after_filter
   #def log_ram
   #  logger.warn 'RAM USAGE: ' + `pmap #{Process.pid} | tail -1`[10,40].strip
   #end
-  #before_filter :destroy_organisation_session!, :unless => :user_signed_in?
 
   # Adds an error with format to display
   # @param ActiveRecord::Base (model)
@@ -83,6 +79,16 @@ class ApplicationController < ActionController::Base
     Helper.instance
   end
 
+  def current_organisation
+    @organisation ||= Organisation.find_by_tenant(current_tenant)
+  end
+  helper_method :current_organisation
+
+  def current_tenant
+    tenant = request.subdomain
+    tenant = session[:tenant] if Rails.env.development? && session[:tenant].present?
+  end
+  helper_method :current_tenant
 protected
   # Creates the flash messages when an item is deleted
   def set_redirect_options(klass, options)
@@ -104,13 +110,10 @@ protected
     end
   end
 
-
 private
-
   def set_page
     @page = params[:page] || 1
   end
-
 
   def destroy_organisation_session!
     session[:organisation] = {}
@@ -123,24 +126,10 @@ private
   end
 
    # Checks if is set the organisation session
-  # @return [True, False]
   def organisation?
     session[:organisation] and session[:organisation].any?
   end
   helper_method :organisation?
-
-  # Sets the organisation_id to help to set in the models and the search path
-  def set_organisation
-    raise "You must set the organisation" if session[:organisation].blank?
-    OrganisationSession.set session[:organisation]
-    begin
-      PgTools.set_search_path PgTools.get_schema_name(session[:organisation][:id])
-    rescue
-      session[:organisation] = nil
-      session[:user_id] = nil
-      redirect_to "/users/sign_out"
-    end
-  end
 
   # Checks if the currency has been set
   def check_currency_set
@@ -151,17 +140,7 @@ private
     end
   end
 
-  def current_organisation
-    @organisation ||= Organisation.find_by_tenant(request.subdomain)
+  def set_tenant
+    PgTools.change_tenant current_tenant
   end
-  helper_method :current_organisation
-
-  private
-    def set_tenant
-      tenant = request.subdomain
-      tenant = session[:tenant] if session[:tenant] && Rails.env.development?
-
-      PgTools.change_tenant tenant
-    end
-
 end
