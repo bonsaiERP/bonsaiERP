@@ -34,7 +34,7 @@ class SessionsController < ApplicationController
         check_logged_user(@user)
       when( !@user.confirmed_registration? )
         @user.resend_confirmation
-        redirect_to 
+        redirect_to registrations_path, notice: "Le hemos reenviado un email a #{@user.email} con instrucciones para completar su registro."
       end
     else
       err = 'El email que ingreso no existe.'
@@ -74,8 +74,14 @@ class SessionsController < ApplicationController
         end
 
       else
-        redirect_to new_organisation_url(host: PgTools.domain, subdomain: org.tenant), alert: 'Por favor complete su registro.'
+        redirect_to new_organisation_url(host: , subdomain: org.tenant), alert: 'Por favor complete su registro.'
       end
     end
 
+end
+
+class LoggedUser
+  def initialize(cont)
+    @controller = cont
+  end
 end

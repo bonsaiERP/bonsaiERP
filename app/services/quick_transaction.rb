@@ -39,17 +39,13 @@ class QuickTransaction < BaseService
   end
 
 private
-  def get_ref_number
-  end
+  def get_ref_number; end
 
-  def create_transaction
-  end
+  def create_transaction; end
 
-  def ledger_amount
-  end
+  def ledger_amount; end
 
-  def ledger_operation
-  end
+  def ledger_operation; end
 
   def transaction_attributes
     {ref_number: ref_number, date: date, currency_id: currency_id,
@@ -57,7 +53,13 @@ private
   end
 
   def create_ledger
-    @account_ledger = AccountLedger.new(
+    @account_ledger = initialize_ledger
+
+    @account_ledger.save
+  end
+
+  def initialize_ledger
+    AccountLedger.new(
       amount: ledger_amount, account_id: account_id,
       reference: "#{transaction.ref_number}", operation: ledger_operation,
       exchange_rate: 1, contact_id: contact_id
@@ -65,8 +67,6 @@ private
       al.transaction_id = transaction.id
       al.conciliation = true
     end
-
-    @account_ledger.save
   end
 
   def account
