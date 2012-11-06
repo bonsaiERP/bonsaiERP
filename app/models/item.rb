@@ -39,16 +39,6 @@ class Item < ActiveRecord::Base
   scope :inventory, where(stockable: true)
   scope :for_sale, where(for_sale: true)
 
-  ##########################################
-  # Methods
-  TYPES.each do |met|
-    class_eval <<-CODE, __FILE__, __LINE__ + 1
-      def #{met}?
-        "#{met}" === ctype
-      end
-    CODE
-  end
-
   def to_s
     "#{code} - #{name}"
   end

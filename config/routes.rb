@@ -83,7 +83,9 @@ Bonsaierp::Application.routes.draw do
 
   resources :stores
 
-  resources :contacts
+  resources :contacts do
+    get :search, on: :collection
+  end
 
   resources :clients
 

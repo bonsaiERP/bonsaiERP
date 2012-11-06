@@ -4,25 +4,26 @@
 class ClientsController < ApplicationController
   before_filter :find_client, :only => [:show, :edit, :update, :destroy]
 
-  include Controllers::Contact
+  #include Controllers::Contact
 
   #respond_to :html, :xml, :json
   # GET /clients
   # GET /clients.xml
   def index
-    params[:option] ||= 'all' 
-    if params[:search]
-      @clients = Client.search(params[:search]).order("matchcode ASC").page(@page)
-    else
-      case
-      when params[:option] === 'pendent'
-        @clients = Client.pendent.page(@page)
-      when params[:option] === 'debt'
-        @clients = Client.debt.page(@page)
-      else
-        @clients = Client.order("matchcode ASC").page(@page)
-      end
-    end
+    #params[:option] ||= 'all' 
+    #if params[:search]
+    #  @clients = Client.search(params[:search]).order("matchcode ASC").page(@page)
+    #else
+    #  case
+    #  when params[:option] === 'pendent'
+    #    @clients = Client.pendent.page(@page)
+    #  when params[:option] === 'debt'
+    #    @clients = Client.debt.page(@page)
+    #  else
+    #    @clients = Client.order("matchcode ASC").page(@page)
+    #  end
+    #end
+    @clients = Contact.page(@page)
   end
 
   # GET /clients/1

@@ -1,8 +1,8 @@
-$(->
+(($) ->
   # Parses the date with a predefined format
   # @param String date
   # @param String type : Type to return
-  parseDate = (date, tipo)->
+  parseDate = (date, tipo) ->
     date = $.datepicker.parseDate($.datepicker._defaults.dateFormat, date )
     d = [ date.getFullYear(), date.getMonth() + 1, date.getDate() ]
     if 'string' == tipo
@@ -154,11 +154,36 @@ $(->
     false
 
   )
+  
+  # Activates autocomplete for all autocomplete inputs
+  createAutocomplete = ->
+    $this = $(this)
+    $this.find('.control-group.autocomplete').each( (i, el) ->
+      $(el).data('value', $(el).val())
+      $(el).autocomplete({
+        'source': $(el).data('source') || $(el).data('url'),
+        'select': (e, ui) ->
+          $(el).data('value', ui.item.value)
+          input = $(el).prev('input')
+          input.val(ui.item.id)
+          $(el).trigger('autocomplete-done', [ui.item])
 
-  setTransformations = ->
-    $(this).transformDateSelect()
+      }).blur(->
+        value = $(this).val()
+        if value.trim() == ""
+          $(this).prev('input').val('')
+          $(this).data('value', '')
+        else
+          $(this).val($(this).data('value'))
+      )
+    )
 
-  $.fn.setTransformations = $.setTransformations = setTransformations
+  $.fn.createAutocomplete = $.createAutocomplete = createAutocomplete
 
-  # End submit ajax form
-)
+  createSelectOption = (value, label)->
+    opt = "<option selected='selected' value='#{value}'>#{label}</option>"
+    $(this).append(opt).val(value).mark()
+
+  $.fn.createSelectOption = $.createSelectOption = createSelectOption
+
+)(jQuery)

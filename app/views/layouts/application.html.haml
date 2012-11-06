@@ -14,7 +14,6 @@
       window.exchangeRates = exchangeRates;
 
     = stylesheet_link_tag "application"
-    = javascript_include_tag "application"
     - if organisation?
       :javascript
         var organisation = { 
@@ -85,3 +84,5 @@
           %a.close(data-dismiss="modal")
         .modal-body
         .modal-footer
+
+    = javascript_include_tag "application"

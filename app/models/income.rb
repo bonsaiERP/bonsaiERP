@@ -53,15 +53,15 @@ class Income < Transaction
   end
 
 
-  private
-    # Initialized  the ref_number
-    def set_ref_number
-      if ref_number.blank?
-        self.ref_number = get_ref_number
-      end
+private
+  # Initialized  the ref_number
+  def set_ref_number
+    if ref_number.blank?
+      self.ref_number = get_ref_number
     end
+  end
 
-    def set_client
-      contact.update_attribute(:client, true)
-    end
+  def set_client
+    contact.update_attribute(:client, true)
+  end
 end

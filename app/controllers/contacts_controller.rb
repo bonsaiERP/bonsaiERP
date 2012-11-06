@@ -16,6 +16,11 @@ class ContactsController < ApplicationController
     end
   end
 
+  # GET /contacts/search?q
+  def search
+    render json: Contact.search(params[:q]).limit(20)
+  end
+
   # GET /contacts/1
   # GET /contacts/1.xml
   def show

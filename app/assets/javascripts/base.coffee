@@ -1,6 +1,6 @@
 ######################################
 # All events related to jQuery
-$(document).ready(->
+( ($) ->
   # Regional settings for jquery-ui datepicker
   $.datepicker.regional['es'] = {
     closeText: 'Cerrar',
@@ -33,12 +33,6 @@ $(document).ready(->
         $(this).removeClass('marked')
   $.initjDropDown = $.fn.initjDropDown = initjDropDown
 
-  # Fix some issues with MSIE 7
-  #if $.browser.msie and $.browser.version < 8
-  #  $('#main_menu li.more').live("mouseover", ->
-  #    $(this).show()
-  #  )
-
   # Speed in milliseconds
   speed = 300
   # csfr
@@ -46,11 +40,6 @@ $(document).ready(->
   window.csrf_token = csrf_token
   # Date format
   $.datepicker._defaults.dateFormat = 'dd M yy'
-
-
-  # Create autocomplete for items
-  #$('input.autocomplete').createAutocompleteField()
-
 
 
   ##################################################
@@ -102,7 +91,6 @@ $(document).ready(->
   window.getAjaxType = getAjaxType
 
 
-
   # Presents an AJAX form
   $('a.ajax').live("click", (event)->
     title = $(this).attr("title") || $(this).data("original-title")
@@ -121,61 +109,6 @@ $(document).ready(->
     search = $(this).attr("href")
     $(search).show(speed)
   )
-
-
-  # Creation of Iframe to make submits like AJAX requests with files
-  setIframePostEvents = (iframe, created)->
-    iframe.onload = ->
-      html = $(iframe).contents().find('body').html()
-      if $(html).find('form').length <= 0 and created
-        $('#posts ul:first').prepend(html)
-        mark('#posts ul li:first')
-        posts = parseInt($('#posts ul:first>li').length)
-        postsSize = parseInt($('#posts').attr("data-posts_size") )
-        if(posts > postsSize)
-          $('#posts ul:first>li:last').remove()
-        $('#create_post_dialog').dialog('close')
-      else
-        created = true
-        $('#create_post_dialog').html(html)
-  # End setIframeForPost
-
-  # Creates an Iframe to submit
-  $('a.post').live('click', ->
-    if $('iframe#post_iframe').length <= 0
-      iframe = $('<iframe />').attr({ 'id': 'post_iframe', 'name': 'post_iframe', 'style': 'display:none;' })[0]
-      $('body').append(iframe)
-      setIframePostEvents(iframe, false)
-      div = createDialog({'id':'create_post_dialog', 'title': 'Crear comentario'})
-    else
-      div = $('#create_post_dialog').dialog("open").html("")
-
-    $(div).load( $(this).attr("href") )
-
-    false
-  )
-
-
-  # Function that handles the return of an AJAX request and process if add or replace
-  # @param String template: HTML template
-  # @param Object data: JSON data
-  # @param String macro: jQuery function for insert, ["insertBefore", "insertAfter", "appendTo"]
-  # @param String node: Indicates the node type ['tr', 'li']
-  updateTemplateRow = (template, data, macro)->
-    if $.inArray(macro, ["insertBefore", "insertAfter", "appendTo"]) < 0
-      macro = "insertAfter"
-
-    if(data['new_record'])
-      $node = $.tmpl(template, data)[macro](this)
-    else
-      $node = $(this).find("##{data.id}")
-      tmp = $.tmpl(template, data).insertBefore($node)
-      $node.detach()
-      $node = tmp
-    $node.mark()
-    $('body').trigger("update:template", [$node, data])
-
-  $.updateTemplateRow = $.fn.updateTemplateRow = updateTemplateRow
 
 
   # Delete an Item from a list, deletes a tr or li
@@ -239,7 +172,7 @@ $(document).ready(->
   # Mark
   # @param String // jQuery selector
   # @param Integer velocity
-  mark = (selector, velocity, val)->
+  mark = (selector, velocity, val) ->
     self = selector or this
     val = val or 0
     velocity = velocity or 50
@@ -276,16 +209,6 @@ $(document).ready(->
         cont.remove()
       ,speed
 
-  createSelectOption = (value, label)->
-    opt = "<option selected='selected' value='#{value}'>#{label}</option>"
-    $(this).append(opt).val(value).mark()
-
-  $.createSelectOption = $.fn.createSelectOption = createSelectOption
-
-  start = ->
-    $('body').setTransformations()
-    $('body').tooltip(selector: '[rel=tooltip]')
-
   createErrorLog = (data)->
     unless $('#error-log').length > 0
       $('<div id="error-log" style="background: #FFF"></div>')
@@ -308,18 +231,6 @@ $(document).ready(->
     $(this).parents(".message:first").hide("slow").delay(500).remove()
   )
 
-  # Shows and hides info
-  $('a.more').live('click', ->
-    cont = $( $(this).attr('href') )
-    if cont.hasClass("hide")
-      $(this).html("Ocultar información")
-      cont.show("slow").removeClass("hide")
-    else
-      $(this).html("Ver información")
-      cont.hide("slow").addClass("hide")
-    false
-  )
-
   # AJAX setup
   $.ajaxSetup ({
     #dataType : "html",
@@ -335,9 +246,6 @@ $(document).ready(->
       success : (event)->
         #$('#cargando').hide(1000)
     })
-
-  $('ul.menu>li>a').click ->
-    false
 
   # Prevent enter submit forms in some forms
   window.keyPress = false
@@ -356,13 +264,15 @@ $(document).ready(->
       true
 
   # Supress from submiting a form from an input:text
-  #checkCR = (evt)->
-  #  evt  = evt  = (evt) ? evt : ((event) ? event : null)
-  #  node = evt.target || evt.srcElement
-  #  if evt.keyCode == 13 and node.type == "text" then false
+  checkCR = (evt)->
+    evt  = evt  = (evt) ? evt : ((event) ? event : null)
+    node = evt.target || evt.srcElement
+    if evt.keyCode == 13 and node.type == "text" then false
 
-  #document.onkeypress = checkCR
+  document.onkeypress = checkCR
 
-  start()
+  $('body').transformDateSelect()
+  $('body').createAutocomplete()
+  $('body').tooltip( selector: '[rel=tooltip]' )
 
-)
+)(jQuery)
