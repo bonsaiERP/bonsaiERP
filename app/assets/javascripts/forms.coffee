@@ -21,7 +21,7 @@
   $.setDateSelect = $.fn.setDateSelect = setDateSelect
 
   # Transforms the hour to just select 00, 15, 30, 
-  transformMinuteSelect = (el, step = 5)->
+  transformMinuteSelect = (el, step = 5) ->
     $el = $(el)
     val = $el.val()
     steps = parseInt(60/5) - 1
@@ -58,7 +58,7 @@
         buttonImageOnly: true,
         buttonImage: '/assets/calendar-black.png'
       )
-      $(input).change((e)->
+      $(input).change( (e) ->
         $.setDateSelect(this)
         $(this).trigger("change:datetime", this)
       )
@@ -76,42 +76,13 @@
 
   window.AjaxLoadingHTML = AjaxLoadingHTML
 
-  # Creates an autocomplete field
-  # @param Object
-  createAutocompleteField = (options)->
-    options = $.extend({}, options)
-    self = @
-    val = $(@).data('value') || ""
-    id = new Date().getTime()
-    required = $(@).attr('required')
-
-    $input = $('<input/>').attr({'size': $(this).attr('size'), 'type':'text', 'id': id, 'required': required})
-
-    .css({'text-align':'left'}).addClass('autocomplete_view')
-    .val(val)
-    $(@).hide().before($input)
-
-    $("##{id}").live('focusout', ->
-      if $(@).val() == ""
-        $(self).val('').data('value', '')
-      else
-        $(@).val($(self).data('value'))
-    ).autocomplete({
-      source: options.source || $(@).data('url'),
-      select: (e, ui)->
-        $(@).siblings('input').data('value', ui.item.label).val(ui.item.id)
-    })
-
-
-  $.createAutocompleteField = $.fn.createAutocompleteField = createAutocompleteField
-
 
   # Must be before any ajax click event to work with HTMLUnit
   # Makes that a dialog opened window makes an AJAX request and returns a JSON response
   # if response is JSON then trigger event stored in dialog else present the HTML
   # There are three types of response JSON, JavaScript and HTML
   # JavaScript response must have "// javascript" at the beginning
-  $('div.ajax-modal form').live('submit', ->
+  $('div.ajax-modal').on( 'form', 'submit', ->
     return true if $(this).attr('enctype') == 'multipart/form-data'
     return true if $(this).hasClass("no-ajax")
     # Prevent from submiting the form.enter when hiting ENTER
@@ -125,31 +96,29 @@
     new_record = if $div.data('ajax-type') == 'new' then true else false
     trigger = $div.data('trigger') || "ajax-call"
 
-    $.ajax(
+    $.ajax
       'url': $(el).attr('action')
       'cache': false
       'context':el
       'data':data
       'type': (data['_method'] || $(this).attr('method') )
-      'success': (resp, status, xhr)->
-
-        if typeof resp == "object"
-          data['new_record'] = new_record
-          p = $(el).parents('div.ajax-modal')
-          $(p).html('').dialog('destroy')
-          $('body').trigger(trigger, [resp])
-        else if resp.match(/^\/\/\s?javascript/)
-          p = $(el).parents('div.ajax-modal')
-          $(p).html('').dialog('destroy')
-        else
-          div = $(el).parents('div.ajax-modal:first')
-          div.html(resp)
-          setTimeout(->
-            $(div).setTransformations()
-          ,200)
-      'error': (resp)->
+    .done (resp) ->
+      if typeof resp == "object"
+        data['new_record'] = new_record
+        p = $(el).parents('div.ajax-modal')
+        $(p).html('').dialog('destroy')
+        $('body').trigger(trigger, [resp])
+      else if resp.match(/^\/\/\s?javascript/)
+        p = $(el).parents('div.ajax-modal')
+        $(p).html('').dialog('destroy')
+      else
+        div = $(el).parents('div.ajax-modal:first')
+        div.html(resp)
+        setTimeout(->
+          $(div).setTransformations()
+        ,200)
+    .failure (resp) ->
         alert('Existe errores, por favor intente de nuevo.')
-    )
 
     false
 
@@ -157,21 +126,23 @@
   
   # Activates autocomplete for all autocomplete inputs
   createAutocomplete = ->
-    $this = $(this)
-    $this.find('.control-group.autocomplete').each( (i, el) ->
-      $(el).data('value', $(el).val())
-      $(el).autocomplete({
-        'source': $(el).data('source') || $(el).data('url'),
+    $(this).find('.control-group.autocomplete').each( (i, el) ->
+      $this = $(el)
+      $hidden = $this.find('[type=hidden]')
+      $input = $this.find('[type=text]')
+      $input.data('value', $hidden.val())
+
+      $input.autocomplete({
+        'source': $input.data('source'),
         'select': (e, ui) ->
-          $(el).data('value', ui.item.value)
-          input = $(el).prev('input')
-          input.val(ui.item.id)
-          $(el).trigger('autocomplete-done', [ui.item])
+          $input.data('value', ui.item.value)
+          $hidden.val(ui.item.id)
+          $input.trigger('autocomplete-done', [ui.item])
 
       }).blur(->
         value = $(this).val()
         if value.trim() == ""
-          $(this).prev('input').val('')
+          $hidden.val('')
           $(this).data('value', '')
         else
           $(this).val($(this).data('value'))
@@ -180,7 +151,8 @@
 
   $.fn.createAutocomplete = $.createAutocomplete = createAutocomplete
 
-  createSelectOption = (value, label)->
+
+  createSelectOption = (value, label) ->
     opt = "<option selected='selected' value='#{value}'>#{label}</option>"
     $(this).append(opt).val(value).mark()
 

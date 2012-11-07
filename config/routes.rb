@@ -65,6 +65,7 @@ Bonsaierp::Application.routes.draw do
       put :approve_deliver
       get :history
     end
+    post :quick_income, on: :collection
   end
 
   resources :expenses do

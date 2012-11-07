@@ -52,13 +52,24 @@ class IncomesController < TransactionsController #ApplicationController
     respond_to do |format|
       if @transaction.save_trans
         format.html { redirect_to(@transaction, :notice => 'Se ha creado una proforma de venta.') }
-        format.xml  { render :xml => @transaction, :status => :created, :location => @transaction }
       else
         @transaction.transaction_details.build unless @transaction.transaction_details.any?
         format.html { render :action => "new" }
-        format.xml  { render :xml => @transaction.errors, :status => :unprocessable_entity }
       end
     end
+  end
+
+  # POST /incomes/quick_income
+  def quick_income
+    @quick_income = QuickIncome.new(quick_income_params)
+
+    if @quick_income.create
+      flash[:notice] = "El ingreso fue creado."
+    else
+      flash[:error] = "Existio errores al crear el ingreso."
+    end
+
+    redirect_to incomes_path
   end
 
   # PUT /incomes/1
@@ -121,7 +132,7 @@ class IncomesController < TransactionsController #ApplicationController
     else
       flash[:error] = "Existio un error al aprobar la entrega de material."
     end
-    
+
     redirect_to @transaction
   end
 
@@ -129,7 +140,7 @@ class IncomesController < TransactionsController #ApplicationController
     @history = TransactionHistory.find(params[:id])
     @trans = @history.transaction
     @transaction = @history.get_transaction("Income")
-    
+
     render "transactions/history"
   end
 
@@ -158,5 +169,12 @@ private
     params.require(:income).permit(:ref_number, :date, :contact_id, :project_id,  :currency_id, 
                                    :exchange_rate, :discount, :bill_number, :description, :fact,
                                    :transaction_details_attributes)
+  end
+
+private
+  def quick_income_params
+    params.require(:quick_income).permit(:date, :ref_number, :fact,
+                                        :bill_number, :amount,
+                                        :contact_id, :account_id, )
   end
 end

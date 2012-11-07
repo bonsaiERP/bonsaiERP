@@ -16,9 +16,11 @@ class ContactsController < ApplicationController
     end
   end
 
-  # GET /contacts/search?q
+  # GET /contacts/search?term=:term
   def search
-    render json: Contact.search(params[:q]).limit(20)
+    # TODO: Use serializers to remove ugly JSON methods
+    data = Contact.search(params[:term]).limit(20).map {|v| {label: v.matchcode, id: v.id} }
+    render json: data
   end
 
   # GET /contacts/1

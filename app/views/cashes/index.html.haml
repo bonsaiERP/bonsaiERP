@@ -8,7 +8,11 @@
 - if @cashes.empty?
   %h3= link_to "Crear nueva caja", new_cash_path, :class => 'add'
 
-%ul#cashes.accounts_list
+%ul#cashes.unstyled
+  - @cashes.each do |cash|
+    %li
+      %h3=link_to cash, cash
+
   -# @cashes.each do |cash|
     %li
       ._55.fl

@@ -265,6 +265,10 @@ namespace :bonsai do
     end
     puts "Updated inventory_operation_details"
   end
+
+  desc ''
+  task dump: :environment do
+  end
 end
 
 # example to export the file
