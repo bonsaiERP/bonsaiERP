@@ -67,6 +67,8 @@ describe QuickIncome do
       account_ledger.contact_id.should eq(contact.id)
       account_ledger.should be_persisted
       account_ledger.should be_is_pin
+      account_ledger.date.to_date.should eq(valid_attributes[:date])
+      account_ledger.reference == "Corbro ingreso #{income.ref_number}"
 
       account_ledger.amount.should == valid_attributes[:amount].to_f
       account_ledger.transaction_id.should eq(income.id)

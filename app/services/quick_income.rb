@@ -18,6 +18,10 @@ private
     amount
   end
 
+  def ledger_reference
+    "Cobro ingreso #{income.ref_number}"
+  end
+
   def ledger_operation
     'pin'
   end

@@ -18,6 +18,10 @@ private
     -amount
   end
 
+  def ledger_reference
+    "Pago egreso #{expense.ref_number}"
+  end
+
   def ledger_operation
     'pout'
   end

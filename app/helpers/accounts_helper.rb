@@ -107,10 +107,6 @@ module AccountsHelper
   # Sets the link for the ledger
   def related_account_link(account_ledger)
     if account_ledger.transaction_id.present?
-      #case account_ledger.transaction_type
-      #  when "Income" then income_path(account_ledger.transaction_id, :anchor => 'payments')
-      #  when "Buy" then buy_path(account_ledger.transaction_id, :anchor => 'payments')
-      #end
       if account_ledger.transaction.is_a?(Income)
         income_path(account_ledger.transaction_id, :anchor => 'payments')
       else
@@ -174,20 +170,6 @@ module AccountsHelper
       ntc ledger.account_balance unless ledger.account_balance.blank?
     else
       ntc ledger.to_balance unless ledger.to_balance.blank?
-    end
-  end
-
-  def link_related_ledger_account(al, money)
-    if al.transaction_id.present?
-      link_to al.transaction, al.transaction
-    elsif al.to_id.present?
-      ac = al.account_accountable_id == money.id ? :to : :account
-
-      if al.operation === 'trans'
-        link_to al.send(ac), get_ledger_money_url(al.send(ac))
-      else
-        link_to al.send(ac), get_ledger_contact_url(al.send(ac))
-      end
     end
   end
 

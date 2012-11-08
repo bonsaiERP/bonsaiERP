@@ -1,4 +1,3 @@
-
 .btn-group
   %a.btn.btn-primary{'data-toggle' => 'dropdown'} Nueva operación
   %a.btn.btn-primary.dropdown-toggle{'data-toggle' => 'dropdown'}
@@ -40,11 +39,11 @@
 %table.table.table-striped.nwl.nwf
   %tr
     %th 
-      Código Fecha<br/>
+      Cód. Fecha<br/>
       %span.tip{:title => 'Nº de cheque, razón, recibo, etc.'} Referencia
     %th Monto en #{account.currency_symbol}
     %th Saldo en #{account.currency_symbol}
-    %th Cuenta relacionada
+    %th Cuentas relacionadas
     %th Descripción
     %th 
       %span.tip{:title => 'Verificado por'} (V) 
@@ -54,13 +53,19 @@
     - al.ac_id = account.id
     %tr{:id => "tr#{al.id}", :class => "#{al.active}"}
       %td.d.check
-        = link_to al, account_ledger_path(al, :ac_id => account.id), :class => "#{conciliate_css(al)} b"
-        %span.i= lo al.date
+        -#= link_to al, account_ledger_path(al, :ac_id => account.id), :class => "#{conciliate_css(al)} b"
+        =link_to al, al, class: "b"
+        = al_operation al
+        %i= lo al.date
         %br/
-        = al.reference
+        =al.reference
+        %br/
       %td.cur.color= ledger_amount(al, account)
       %td.cur= balance_amount(al, account)
-      %td.cont= link_related_ledger_account al, money
+      %td.cont
+        = link_related_ledger_account al, money
+        %br/
+        = link_to al.contact, al.contact, title: 'Contacto', rel: 'tooltip' if al.contact.present? 
       %td.desc= al.description
       %td.rev
         = "(V) #{al.approver}" if al.approver_id.present?

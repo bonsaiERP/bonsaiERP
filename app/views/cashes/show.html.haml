@@ -8,29 +8,21 @@
   %h1.n
     = @cash.name
     %small= @account.currency_code
+    = pendent_money_link(@cash)
 
-= pendent_money_link(@cash, :class => 'red fs110')
-.clear
+.row-fluid
+  .span6
+    .moneybox.fl
+      %label SALDO EN CAJA
+      %h3= with_currency(@account, :amount)
 
-.moneybox.fl
-  %label SALDO EN CAJA
-  %h3= with_currency(@account, :amount)
-
-._40.fr
-  %label Dirección
-  = nl2br(@cash.address)
-.clear
+  .span6
+    %label Dirección
+    = nl2br(@cash.address)
 
 .page-header
-  %h2 Transacciones
+  %h3 Transacciones
 
-  %ul
-    - @account.account_ledgers.each do |al|
-      %li
-        =al
-        =al.amount
-        =al.attributes
-
--#= render "account_ledgers/money", :account => @account, :ledgers => @ledgers, :paged_ledgers => @paged_ledgers, :ref_title => 'Referencia', :money => @cash
+= render "account_ledgers/money", :account => @account, :ledgers => @ledgers, :paged_ledgers => @paged_ledgers, :ref_title => 'Referencia', :money => @cash
 
 .clear

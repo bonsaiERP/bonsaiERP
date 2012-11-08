@@ -28,7 +28,7 @@ class Income < Transaction
   scope :discount, where(:discounted => true)
 
   def to_s
-    "Venta #{ref_number}"
+    "Ingreso #{ref_number}"
   end
 
   def self.get_ref_number

@@ -61,12 +61,15 @@ private
   def initialize_ledger
     AccountLedger.new(
       amount: ledger_amount, account_id: account_id,
-      reference: "#{transaction.ref_number}", operation: ledger_operation,
-      exchange_rate: 1, contact_id: contact_id
+      reference: ledger_reference, operation: ledger_operation,
+      exchange_rate: 1, contact_id: contact_id, date: date
     ) do |al|
       al.transaction_id = transaction.id
       al.conciliation = true
     end
+  end
+
+  def ledger_reference
   end
 
   def account
