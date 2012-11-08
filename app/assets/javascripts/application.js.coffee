@@ -1,5 +1,5 @@
 #= require jquery
-#= require libraries/jquery-ui-1.9.0.custom
+#= require libraries/jquery-ui-1.9
 #= require libraries/lodash.js
 #= require libraries/backbone.js
 #= require plugins/money.min.js

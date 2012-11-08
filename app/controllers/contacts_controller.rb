@@ -8,7 +8,7 @@ class ContactsController < ApplicationController
   # GET /contacts
   # GET /contacts.xml
   def index
-    @contacts = Contact.where().page(@page)
+    @contacts = Contact.page(@page)
 
     respond_to do |format|
       format.html
@@ -41,7 +41,7 @@ class ContactsController < ApplicationController
   # POST /contacts
   # POST /contacts.xml
   def create
-    @contact = Contact.new(params[:contact])
+    @contact = Contact.new(contact_params)
     if @contact.save
       redirect_ajax(@contact)
     else
@@ -69,5 +69,9 @@ class ContactsController < ApplicationController
 private
   def find_contact
     @contact = Contact.find(params[:id])
+  end
+
+  def contact_params
+    params.require(:contact).permit(:matchcode, :first_name, :last_name)
   end
 end

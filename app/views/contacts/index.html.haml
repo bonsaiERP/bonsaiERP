@@ -2,16 +2,17 @@
   .span6 &nbsp;
   .links.span6= link_to "Nuevo #{contact_type(params[:option], false)}", new_contact_path, :class => 'new'
 
-%h1= contact_type params[:option]
+.page-header
+  %h1 Contactos
 
 = paginate(@contacts)
 
-%ul.tabs
+-#%ul.tabs
   %li= link_tab "Todos", contacts_path, "all"
   %li= link_tab "Clientes", "/contacts", "clients"
   %li= link_tab "Proveedores", "/contacts", "suppliers"
 
-%table{ :class => "decorated nwf nwl" }
+%table.table.table-striped
   %tr
     %th Nombre
     %th Dirección
@@ -23,10 +24,9 @@
 
   - @contacts.each do |contact|
     %tr
-      %td= link_to contact.name, contact
+      %td= link_to contact, contact
       %td= nl2br contact.address
       %td= contact.phone
       %td= contact.mobile
       %td= mail_to contact.email
-      %td= contact.tax_number
       %td= bonsai_links(contact)

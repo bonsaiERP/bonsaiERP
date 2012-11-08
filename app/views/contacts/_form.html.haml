@@ -1,42 +1,40 @@
-:css
-  #contact-form{ max-width: 800px;}
+= simple_form_for(@contact) do |f|
+  = bonsai_form_error(f)
+  .row-fluid
+    .span6
+      = f.input :matchcode, :label => 'Identificado', :input_html => { :class => 'matchcode' }
+    .span3
+      = f.input :first_name, :label => "Nombres", :input_html => { :class => 'first_name', :size => 20 }
+    .span3
+      = f.input :last_name, :label => "Apellidos", :input_html => { :class => 'last_name', :size => 20 }
 
-- present klass, ContactPresenter do |presenter|
-  = simple_form_for(klass, :html => {:id => 'contact-form'}) do |f|
-    = bonsai_form_error(f)
-    .row-fluid
-      .span6
-        = f.input :matchcode, :label => presenter.label, :input_html => { :class => 'matchcode' }
-      .span3
-        = f.input :first_name, :label => "Nombres", :input_html => { :class => 'first_name', :size => 20 }
-      .span3
-        = f.input :last_name, :label => "Apellidos", :input_html => { :class => 'last_name', :size => 20 }
+  .row-fluid
+    .span2
+      = f.input :phone, :label => "Teléfono", :input_html => {:size => 12}
+    .span2
+      = f.input :mobile, :label => "Móvil", :input_html => {:size => 12}
+    .span2
+      = f.input :tax_number, :label => "NIT", :input_html => {:size => 12}
+    .span4
+      = f.input :email, :lanel => "Email"
+  .row-fluid
+    .span6
+      = f.input :address, :as => :text, :input_html => {:rows => 3}, :label => "Dirección"
+    .span6
+      = f.input :aditional_info, :as => :text, :input_html => {:rows => 3}, :label => "Información adicional"
+  .actions
+    = f.submit "Salvar", :class => 'btn btn-success b'
 
-    .row-fluid
-      .span2
-        = f.input :phone, :label => "Teléfono", :input_html => {:size => 12}
-      .span2
-        = f.input :mobile, :label => "Móvil", :input_html => {:size => 12}
-      .span2
-        = f.input :tax_number, :label => "NIT", :input_html => {:size => 12}
-      .span4
-        = f.input :email, :lanel => "Email"
-    .row-fluid
-      .span6
-        = f.input :address, :as => :text, :input_html => {:rows => 3}, :label => "Dirección"
-      .span6
-        = f.input :aditional_info, :as => :text, :input_html => {:rows => 3}, :label => "Información adicional"
-    .actions
-      = f.submit "Salvar", :class => 'btn btn-success b'
+- content_for :scripts do
+  :coffeescript
+    ( ($) ->
+      $('.matchcode').live('focusout', (event) ->
+        arr = this.value.trim().split(" ")
+        if $('.first_name').val() == ""
+          $('.first_name').val(arr[0])
+        arr.shift()
 
-:javascript
-  $('.matchcode').live('focusout', function(event) {
-    var arr = this.value.trim().split(" ");
-    if($('.first_name').val() == "") {
-      $('.first_name').val(arr[0]);
-    }
-    arr.shift();
-    if($('.last_name').val() == "") {
-      $('.last_name').val( arr.join(" "));
-    }
-  });
+        if($('.last_name').val() == "")
+          $('.last_name').val( arr.join(" "))
+      )
+    )(jQuery)
