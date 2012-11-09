@@ -3,7 +3,7 @@ module Models::User::Authentication
 
   attr_accessor :password, :password_confirmation
 
-  included do 
+  included do
     before_create :set_confirmation_token
   end
 

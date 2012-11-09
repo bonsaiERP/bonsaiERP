@@ -50,7 +50,7 @@ Go to /etc/environment and add this
     LC_ALL="en_US.UTF-8"
 
 ## Database installation
-Install **PostgreSQL 9.1**
+Install **PostgreSQL 9.2**
 
     sudo apt-get update
     sudo apt-get upgrade
@@ -69,7 +69,7 @@ Install **PostgreSQL 9.1**
     
     postgres=# \passsword <user>
 
-Edit `/etc/postgresql/9.1/main/postgresql.conf` and check that you have:
+Edit `/etc/postgresql/9.2/main/postgresql.conf` and check that you have:
 
     listen_addresses = 'localhost'
 

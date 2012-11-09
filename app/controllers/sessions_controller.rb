@@ -26,7 +26,7 @@ class SessionsController < ApplicationController
   def create
     reset_session
     @user = User.find_by_email(params[:user][:email])
-
+binding.pry
     if @user
       conf, pass = @user.confirmed_registration?, @user.valid_password?(params[:user][:password])
       case

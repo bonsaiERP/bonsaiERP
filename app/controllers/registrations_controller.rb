@@ -26,7 +26,7 @@ class RegistrationsController < ApplicationController
   end
 
   def create
-    @organisation = Organisation.new(slice_params(params[:organisation]) )
+    @organisation = Organisation.new(organisation_params)
 
     if @organisation.create_organisation
       @user = @organisation.master_account
@@ -37,15 +37,19 @@ class RegistrationsController < ApplicationController
     end
   end
 
-  private
-    def slice_params(data)
-      data.slice(:name, :tenant, :email, :password)
-    end
+private
+  def organisation_params
+    params.require(:organisation).permit(:name, :tenant, :email, :password)
+  end
 
-    def check_tenant
-      if request.subdomain.present? && PgTools.schema_exists?(request.subdomain)
-        redirect_to new_session_url(host: UrlTools.domain), alert: "Por favor ingrese."
-        return
-      end
+  def slice_params(data)
+    data.slice(:name, :tenant, :email, :password)
+  end
+
+  def check_tenant
+    if request.subdomain.present? && PgTools.schema_exists?(request.subdomain)
+      redirect_to new_session_url(host: UrlTools.domain), alert: "Por favor ingrese."
+      return
     end
+  end
 end
