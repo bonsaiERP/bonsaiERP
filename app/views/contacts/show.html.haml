@@ -1,35 +1,35 @@
-.input
-  %label Nombre
-  = @contact.name
-.input
-  %label Código de indentificación
-  = @contact.matchcode
-.clear
-.input
-  %label Empresa
-  = @contact.organisation_name
-.input._25
-  %label Teléfono
-  = @contact.phone
-.input._25
-  %label Móvil
-  = @contact.mobile
-.clear
-.input
-  %label Email
-  = @contact.email
-.input
-  %label NIT
-  = @contact.tax_number
-.clear
-.input
-  %label Dirección
-  = nl2br(@contact.address)
-.input
-  %label Dirección alternativa
-  = nl2br(@contact.address_alt)
-.clear
-.input
-  %label Información adicional
-  = nl2br(@contact.aditional_info)
+.page-header
+  %h1= @contact
 
+.row-fluid
+  .span6
+    %label Identificado
+    = @contact.matchcode
+  .span3
+    %label Nombres
+    = @contact.first_name
+  .span3
+    %label Apellidos
+    = @contact.last_name
+
+.row-fluid
+  .span2
+    %label Teléfono
+    = @contact.last_name
+  .span2
+    %label Móbil
+    = @contact.mobile
+  .span2
+    %label NIT
+    = @contact.tax_number
+  .span4
+    %label Email
+    = @contact.email
+
+.row-fluid
+  .span6
+    %label Dirección
+    = @contact.address
+  .span6
+    %label Información adicional
+    = @contact.aditional_info

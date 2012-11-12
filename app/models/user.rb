@@ -62,6 +62,15 @@ class User < ActiveRecord::Base
     end
   end
 
+  def master_account_for?(org_id)
+    link = links.find {|v| v.organisation_id == org_id }
+    if link
+      link.master_account?
+    else
+      false
+    end
+  end
+
   # Returns the link with te organissation one is logged in
   def link
     @link ||= links.find_by_organisation_id(OrganisationSession.organisation_id)
@@ -231,11 +240,5 @@ class User < ActiveRecord::Base
     def destroy_links
       links.destroy_all
     end
-
-  #def set_rolname
-  #  unless change_default_password?
-  #    self.rolname = 'admin'
-  #  end
-  #end
 
 end

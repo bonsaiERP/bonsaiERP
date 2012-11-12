@@ -11,12 +11,12 @@ protected
       # TODO check due_date
 
       unless check_user_by_rol(session[:user_rol], params[:controller], params[:action])
-        redirect_to "/422"
+        redirect_to "/422" and return
       end
-    elsif current_user #and current_user.link.nil?
+    elsif current_user
       true
     else
-      redirect_to "/users/sign_in"
+      redirect_to "/users/sign_in" and return
     end
   end
 
@@ -51,7 +51,6 @@ protected
     admin_hash.merge(
       'users' => {'add_user'=> false, 'create_user' => false, 'edit_user' => false, 'update_user' => false, 'edit' => false, 'update' => false},
       'taxes' => {'index' => false, 'show' => false, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false},
-      'organisations' => false,
       'loans' => {'new' => false, 'create' => false}
     )
   end

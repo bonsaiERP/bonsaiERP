@@ -13,7 +13,7 @@ class OrganisationsController < ApplicationController
   # POST /organisations
   def update
     @organisation = current_organisation
-    @organisation.attributes = params[:organisation]
+    @organisation.attributes = organisation_params
 
     tenant = TenantCreator.new(@organisation) # Should be background process
 
@@ -28,12 +28,22 @@ class OrganisationsController < ApplicationController
     end
   end
 
-  private
+private
 
-    def check_tenant_creation
-      if !current_organisation || !session[:tenant_creation]
-        redirect_to new_registration_path, alert: "Debe confirmar su registro o registrarse."
-        return
-      end
+  def check_tenant_creation
+    if PgTools.schema_exists? current_organisation.tenant
+      redirect_to  dashboard_url(host: request.domain, subdomain: org.tenant, auth_token: user.auth_token) and return
     end
+
+    if !current_organisation
+      redirect_to new_registration_path, alert: "Debe confirmar su registro o registrarse."
+      return
+    end
+  end
+
+  def organisation_params
+    params.require(:organisation).permit(:name, :currency_id, :country_id,
+                                        :time_zone,:phone, :mobile, :email,
+                                        :address)
+  end
 end

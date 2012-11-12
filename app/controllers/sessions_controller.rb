@@ -24,9 +24,8 @@ class SessionsController < ApplicationController
   end
 
   def create
-    reset_session
     @user = User.find_by_email(params[:user][:email])
-binding.pry
+
     if @user
       conf, pass = @user.confirmed_registration?, @user.valid_password?(params[:user][:password])
       case
@@ -60,6 +59,7 @@ private
   def check_logged_user(user = nil)
     user = user || current_user
     org = user.organisations.first
+
     unless org
       redirect_to new_registration_url(host: UrlTools.domain) , error: 'No esta' # TODO
       return
@@ -69,15 +69,16 @@ private
       case
       when user.active?
         user.set_auth_token
-        redirect_to dashboard_url(host: request.domain, subdomain: org.tenant, auth_token: user.auth_token)
-        return
+        redirect_to dashboard_url(host: request.domain, subdomain: org.tenant, auth_token: user.auth_token) and return
       when !user.active?
-        redirect_to new_session_path, error: 'Su usuario esta desactivado, contactese con su administrador de su empresa.'
-        return
+        redirect_to new_session_path, error: 'Su usuario esta desactivado, contactese con su administrador de su empresa.' and return
       end
 
+    elsif user.master_account_for?(org.id)
+      session[:user_id] = user.id
+      redirect_to new_organisation_url(host: request.domain, subdomain: org.tenant, alert: 'Por favor complete su registro.' ) and return
     else
-      redirect_to new_organisation_url(host: 'host', subdomain: org.tenant, alert: 'Por favor complete su registro.' )
+      redirect_to new_session_path and return
     end
   end
 
