@@ -13,6 +13,8 @@
       var exchangeRates = #{set_exchange_rates}
       window.exchangeRates = exchangeRates;
 
+    = javascript_include_tag "application"
+
     = stylesheet_link_tag "application"
     - if organisation?
       :javascript
@@ -84,7 +86,3 @@
           %a.close(data-dismiss="modal")
         .modal-body
         .modal-footer
-
-
-    = javascript_include_tag "application"
-    = yield :scripts

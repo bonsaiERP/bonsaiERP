@@ -20,13 +20,12 @@
         = f.input :password, :label => 'Contraseña', :input_html => {:size => 40}
         = f.submit "Registrarse", :class => 'btn btn-success b'
 
-- content_for :scripts do
-  :coffeescript
-    (($) ->
-      setTenant = (val) ->
-        val = val.toLowerCase().replace(/[^a-z0-9]/g, '')
-        $('#organisation_tenant').val(val)
-        $('#organisation_tenant').siblings('.help-block').html("Su dominio se vera <strong>" + val + ".bonsaierp.com</strong><br/><span class='warning bicon'></span> <span class='dark-yellow'>No es posible modificar después</span>")
+:coffeescript
+  (($) ->
+    setTenant = (val) ->
+      val = val.toLowerCase().replace(/[^a-z0-9]/g, '')
+      $('#organisation_tenant').val(val)
+      $('#organisation_tenant').siblings('.help-block').html("Su dominio se vera <strong>" + val + ".bonsaierp.com</strong><br/><span class='warning bicon'></span> <span class='dark-yellow'>No es posible modificar después</span>")
 
-      $('#organisation_name').blur(-> setTenant(this.value) )
-    )(jQuery)
+    $('#organisation_name').blur(-> setTenant(this.value) )
+  )(jQuery)
