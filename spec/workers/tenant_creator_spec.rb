@@ -31,7 +31,10 @@ describe TenantCreator do
       Account.count.should eq(1)
       AccountType.count.should > 0
       Unit.count.should > 0
-binding.pry
+
+      res = PgTools.execute "SELECT * FROM #{t.tenant}.schema_migrations"
+      res.count.should > 0
+
       s = Store.first
       s.name.should eq('Almacen inicial')
 

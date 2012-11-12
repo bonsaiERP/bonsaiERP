@@ -11,6 +11,10 @@ class Expense < Transaction
   # Callbacks
   before_create :set_supplier
 
+  def to_s
+    "Egreso #{ref_number}"
+  end
+
 private
   def set_supplier
     if contact.present? && !contact.supplier?

@@ -47,7 +47,6 @@ module PgTools
     res = execute "SELECT version FROM public.schema_migrations"
 
     values = res.to_a.map {|v| "('#{v['version']}')"}.join(",")
-binding.pry
     execute "INSERT INTO #{schema}.schema_migrations (version) VALUES #{values}"
   end
 
@@ -72,10 +71,8 @@ binding.pry
   def clone_public_schema_to(schema)
     sql = get_public_schema
     sql["search_path = public"] = "search_path = #{schema}"
-    set_password_path
-    %x[psql --host=#{PgTools.host} --username#{PgTools.username} #{PgTools.database} < sql]
-    unset_password_path
-    #connection.execute sql
+
+    connection.execute sql
   end
 
   def set_password_path
@@ -113,7 +110,7 @@ binding.pry
 PGPASSWORD=#{PgTools.password}
 export PGPASSWORD
 
-pg_dump --host=#{host} --username=#{PgTools.username} --schema=public #{PgTools.database}
+pg_dump --host=#{host} --username=#{PgTools.username} --schema=public --schema-only #{PgTools.database}
 
 PGPASSWORD=""
 export PGPASSWORD
