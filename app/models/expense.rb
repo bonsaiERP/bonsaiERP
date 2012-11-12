@@ -6,4 +6,15 @@ class Expense < Transaction
     ref = Expense.order("ref_number DESC").first
     ref.present? ? ref.ref_number.next : "E-0001"
   end
+
+  ########################################
+  # Callbacks
+  before_create :set_supplier
+
+private
+  def set_supplier
+    if contact.present? && !contact.supplier?
+      contact.update_attribute(:supplier, true)
+    end
+  end
 end

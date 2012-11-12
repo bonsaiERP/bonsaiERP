@@ -2,7 +2,6 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class Income < Transaction
-  include ActiveModel::ForbiddenAttributesProtection
 
   ########################################
   # Includes
@@ -10,19 +9,27 @@ class Income < Transaction
   #include Transaction::Invoice
   ########################################
 
+  ########################################
+  # Callbacks
+  before_create :set_client
+
+  ########################################
+  # Relationships
   belongs_to :deliver_approver, :class_name => "User"
 
   # Accessible attributes
-  attr_accessible  :ref_number,  :date,                          :account_id,
-                   :project_id,  :currency_id,                   :exchange_rate,
-                   :discount,    :bill_number,                   :taxis_ids,
-                   :description, :transaction_details_attributes, :contact_id,
-                   :fact,        :created_at
+  #attr_accessible  :ref_number,  :date,                          :account_id,
+                   #:project_id,  :currency_id,                   :exchange_rate,
+                   #:discount,    :bill_number,                   :taxis_ids,
+                   #:description, :transaction_details_attributes, :contact_id,
+                   #:fact,        :created_at
 
 
-  #validations
+  ########################################
+  # Validations
   validates             :ref_number,           :presence => true , :uniqueness => true
 
+  ########################################
   # Scopes
   scope :sum_total_balance, approved.select("SUM(balance * exchange_rate) AS total_bal").first[:total_bal]
   scope :discount, where(:discounted => true)
@@ -62,6 +69,8 @@ private
   end
 
   def set_client
-    contact.update_attribute(:client, true)
+    if contact.present? && !contact.client?
+      contact.update_attribute(:client, true)
+    end
   end
 end

@@ -31,11 +31,15 @@ describe QuickIncome do
     let(:amount) { qe.amount }
 
     it "creates a valid income" do
+      contact.should_not be_client
+
       qi = QuickIncome.new(valid_attributes)
       qi.create.should be_true
 
       qi.income.should be_persisted
       qi.account_ledger.should be_persisted
+      contact.reload
+      contact.should be_client
     end
 
     it "does not save because of invalid account" do

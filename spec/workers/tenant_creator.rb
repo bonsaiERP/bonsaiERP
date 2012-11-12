@@ -31,7 +31,7 @@ describe TenantCreator do
       Account.count.should eq(1)
       AccountType.count.should > 0
       Unit.count.should > 0
-
+binding.pry
       s = Store.first
       s.name.should eq('Almacen inicial')
 

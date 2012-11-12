@@ -43,6 +43,14 @@ module PgTools
     connection.execute "CREATE SCHEMA #{schema_name}"
   end
 
+  def copy_migrations_to(schema)
+    res = execute "SELECT version FROM public.schema_migrations"
+
+    values = res.to_a.map {|v| "('#{v['version']}')"}.join(",")
+binding.pry
+    execute "INSERT INTO #{schema}.schema_migrations (version) VALUES #{values}"
+  end
+
   def drop_schema(schema_name)
     raise "#{schema_name} does not exists" unless schema_exists?(schema_name)
 
@@ -64,8 +72,18 @@ module PgTools
   def clone_public_schema_to(schema)
     sql = get_public_schema
     sql["search_path = public"] = "search_path = #{schema}"
+    set_password_path
+    %x[psql --host=#{PgTools.host} --username#{PgTools.username} #{PgTools.database} < sql]
+    unset_password_path
+    #connection.execute sql
+  end
 
-    connection.execute sql
+  def set_password_path
+    %x[export PGPASSWORD=#{PgTools.password}]
+  end
+
+  def unset_password_path
+    %x[export PGPASSWORD=""]
   end
 
   def get_public_schema
@@ -95,7 +113,7 @@ module PgTools
 PGPASSWORD=#{PgTools.password}
 export PGPASSWORD
 
-pg_dump --host=localhost --username=#{PgTools.username} --schema-only --schema=public #{PgTools.database}
+pg_dump --host=#{host} --username=#{PgTools.username} --schema=public #{PgTools.database}
 
 PGPASSWORD=""
 export PGPASSWORD

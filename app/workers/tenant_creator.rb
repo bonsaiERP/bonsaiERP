@@ -23,6 +23,8 @@ class TenantCreator
       clone_public_schema_to tenant
       change_schema tenant
 
+      copy_migrations_to tenant
+
       Unit.create_base_data
       AccountType.create_base_data
       Store.create!(name: 'Almacen inicial')

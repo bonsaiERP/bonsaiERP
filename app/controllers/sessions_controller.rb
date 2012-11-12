@@ -47,7 +47,7 @@ class SessionsController < ApplicationController
 
   def destroy
     reset_session
-    binding.pry
+
     redirect_to new_session_url(host: request.host), :notice => "Ha salido correctamente."
   end
 

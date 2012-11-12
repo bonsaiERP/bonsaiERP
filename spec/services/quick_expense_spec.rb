@@ -25,11 +25,14 @@ describe QuickExpense do
   context "Create expense" do
 
     it "creates a valid expense" do
+      contact.should_not be_supplier
       qi = QuickExpense.new(valid_attributes)
       qi.create.should be_true
 
       qi.expense.should be_persisted
       qi.account_ledger.should be_persisted
+      contact.reload
+      contact.should be_supplier
     end
 
     subject do

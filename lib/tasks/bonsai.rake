@@ -167,11 +167,9 @@ namespace :bonsai do
 
     Organisation.all.each do |org|
       ActiveRecord::Base.transaction do
-        PgTools.reset_search_path
-        schema = PgTools.get_schema_name(org.id)
-        if PgTools.schema_exists?(schema)
-          puts "migrating #{schema})"
-          PgTools.set_search_path schema
+        if PgTools.schema_exists?(org.tenant)
+          puts "migrating #{org.tenant})"
+          PgTools.change_schema org.tenant
           version = ENV["VERSION"] ? ENV["VERSION"].to_i : nil
           ActiveRecord::Migrator.migrate("db/migrate/", version)
         end

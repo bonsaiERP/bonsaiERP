@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121017094703) do
+ActiveRecord::Schema.define(:version => 20121112152012) do
 
   create_table "account_balances", :force => true do |t|
     t.integer  "user_id"
@@ -130,13 +130,17 @@ ActiveRecord::Schema.define(:version => 20121017094703) do
     t.string   "last_name",         :limit => 100
     t.string   "position"
     t.boolean  "active",                           :default => true
-    t.datetime "created_at",                                         :null => false
-    t.datetime "updated_at",                                         :null => false
+    t.datetime "created_at",                                          :null => false
+    t.datetime "updated_at",                                          :null => false
+    t.boolean  "client",                           :default => false
+    t.boolean  "supplier",                         :default => false
   end
 
+  add_index "contacts", ["client"], :name => "index_contacts_on_client"
   add_index "contacts", ["first_name"], :name => "index_contacts_on_first_name"
   add_index "contacts", ["last_name"], :name => "index_contacts_on_last_name"
   add_index "contacts", ["matchcode"], :name => "index_contacts_on_matchcode"
+  add_index "contacts", ["supplier"], :name => "index_contacts_on_supplier"
   add_index "contacts", ["type"], :name => "index_contacts_on_type"
 
   create_table "inventory_operation_details", :force => true do |t|
