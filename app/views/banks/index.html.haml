@@ -6,15 +6,18 @@
   %h1 Cuentas bancarias
 
 - if @banks.empty?
-  %h3= link_to "Crear nueva cuenta bancaria", new_bank_path, :class => 'add'
+  %h3 No tiene cuentas bancarias le recomendamos crear una
+  = link_to new_bank_path, class: 'btn b' do
+    %i.bicon-add
+    Crear cuenta bancaria
 
 %ul#banks.accounts_list
   - @banks.each do |bank|
-    %li
-      ._55.fl
+    %li.row-fluid
+      .span7
         %h3= link_to bank, bank
         %h4.mt5.dark= bank.currency.name.pluralize
-      ._45.fl
+      .span5
         .moneybox.fl
           %label TOTAL EN CUENTA
           %h3= with_currency bank.account, :amount

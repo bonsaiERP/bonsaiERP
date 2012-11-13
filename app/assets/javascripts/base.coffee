@@ -23,7 +23,6 @@
   }
   $.datepicker.setDefaults($.datepicker.regional['es'])
 
-
   # Effect fro dropdown
   initjDropDown = ->
     $(this).find('li').bind 'mouseover mouseout', (event)->
@@ -271,8 +270,11 @@
 
   document.onkeypress = checkCR
 
-  $('body').transformDateSelect()
-  $('body').createAutocomplete()
-  $('body').tooltip( selector: '[rel=tooltip]' )
+  # Wrapped inside this working
+  $(document).ready ->
+    $('body').tooltip( selector: '[rel=tooltip]' )
+    $('body').transformDateSelect()
+    $('body').createAutocomplete()
 
+  true
 )(jQuery)

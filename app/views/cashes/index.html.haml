@@ -8,21 +8,17 @@
 - if @cashes.empty?
   %h3= link_to "Crear nueva caja", new_cash_path, :class => 'add'
 
-%ul#cashes.unstyled
+%ul#cashes.accounts_list
   - @cashes.each do |cash|
-    %li
-      %h3=link_to cash, cash
-
-  -# @cashes.each do |cash|
-    %li
-      ._55.fl
+    %li.row-fluid
+      .span7
         %h3= link_to cash, cash
         %h4.mt5.dark= cash.currency_name.pluralize
-      ._45.fl
+      .span5
         .moneybox.fl
           %label TOTAL EN CUENTA
           %h3= with_currency cash.account, :amount
 
-        = pendent_money_link(cash, :class => 'b fs110')          
+        = pendent_money_link(cash, :class => 'b fs110')
       .clear
 

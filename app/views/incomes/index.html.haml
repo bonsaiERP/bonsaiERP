@@ -9,13 +9,13 @@
     %h1 Ingresos
 
   .span6.links
-    = link_to new_income_path, :class => 'new but' do
-      %i.icon-plus-sign
-      Nuevo ingreso
-
-    %a.new.but(href="javascript:;")
-      %i.icon-plus-sign
+    %a#quick-income-link.new.but(href="javascript:;")
+      %i.bicon-add
       Ingreso rápido
+
+    = link_to new_income_path, :class => 'new but' do
+      %i.bicon-add
+      Nuevo ingreso
 
 .row-fluid
   = render 'incomes/quick_income'
@@ -55,7 +55,7 @@
   %thead
     %tr
       %th( title='Estado' rel='tooltip' ) Est.
-      %th.tip{ :title => 'Número de referencia' } Nº Ref.
+      %th(title='Número de referencia' rel="tooltip") Nº Ref.
       %th Cliente
       %th Vence el
       %th Total
@@ -63,7 +63,6 @@
 
       = discount_th
 
-      %th.tip{:title => "Contado Crédito"} Tipo
       %th Fecha
       %th
 
@@ -80,7 +79,6 @@
 
         = discount_cell income
 
-        %td= cash_credit(income.cash)
         %td.nw= lo income.date
         %td.actions
           = link_to "editar", edit_income_path(income), :class => 'edit', :title => 'Editar' if income.is_draft?

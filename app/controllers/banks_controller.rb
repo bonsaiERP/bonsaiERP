@@ -7,7 +7,6 @@ class BanksController < ApplicationController
   include Controllers::Money
 
   # GET /banks
-  # GET /banks.xml
   def index
     @banks = Bank.all
 
@@ -31,7 +30,6 @@ class BanksController < ApplicationController
   end
 
   # GET /banks/new
-  # GET /banks/new.xml
   def new
     @bank = Bank.new(:currency_id => params[:currency_id])
 
@@ -46,9 +44,8 @@ class BanksController < ApplicationController
   end
 
   # POST /banks
-  # POST /banks.xml
   def create
-    @bank = Bank.new(params[:bank])
+    @bank = Bank.new(create_bank_params)
 
     respond_to do |format|
       if @bank.save
@@ -82,8 +79,16 @@ class BanksController < ApplicationController
   #  respond_ajax @bank
   #end
 
-  protected
-    def find_bank
-      @bank = Bank.includes(:account).find(params[:id])
-    end
+private
+  def find_bank
+    @bank = Bank.includes(:account).find(params[:id])
+  end
+
+  def update_bank_params
+    params.require(:bank).permit(:name, :number, :address, :phone, :website)
+  end
+
+  def create_bank_params
+    params.require(:bank).permit(:name, :number, :address, :phone, :website, :currency_id, :amount)
+  end
 end

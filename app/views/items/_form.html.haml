@@ -12,9 +12,9 @@
       = f.input :name, :label => 'Nombre'
   .row-fluid
     .span3
-      = f.input :active, :label => "Activo <i class='bicon-info' title='Se usara para ingresos o egresos'></i>".html_safe, :as => :radio, :item_wrapper_class => 'inline'
+      = f.input :active, :label => "Activo <i class='bicon-info' rel='tooltip' title='Activo para usarlo en ingresos o egresos'></i>".html_safe, :as => :radio, :item_wrapper_class => 'inline'
     .span3
-      = f.input :stockable, label: 'Inventario <i title="Se almacena el ítem en almacenes?" class="bicon-info"></i>'.html_safe, as: :radio, item_wrapper_class: 'inline'
+      = f.input :stockable, label: 'Inventario <i title="Se almacena el ítem?" rel="tooltip" class="bicon-info"></i>'.html_safe, as: :radio, item_wrapper_class: 'inline'
     #for_sale.span3
       = f.input :for_sale, label: 'Se vende', as: :radio, item_wrapper_class: 'inline'
     #price.hide.span3

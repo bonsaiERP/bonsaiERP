@@ -252,7 +252,7 @@ module ApplicationHelper
   end
 
   def currency_code_label
-    "<span class='label label-inverse' title='#{currency_name}'>#{currency_code}</span>"
+    "<span class='label label-inverse' title='#{currency_name}' rel='tooltip'>#{currency_code}</span>"
   end
   alias :cur_clabel :currency_code_label
 
