@@ -2,7 +2,6 @@
   = simple_form_for(transaction, :html => {:id => 'transaction_form', :class => 'enter ui-form'}) do |f|
     = bonsai_form_error(f)
 
-    
     %input#transaction-type(type='hidden' value="#{transaction.type}")
 
     .row-fluid
@@ -15,9 +14,9 @@
 
     %hr.light
     .row-fluid
-      .span4
+      .span4.currency-input
         = f.association :currency, :label => 'Moneda/Tipo de cambio. <span class="rate_details n black"></span>'.html_safe, :include_blank => false,
-          :input_html => {:id => 'transaction_currency_id'}
+          :input_html => {:id => 'transaction_currency_id', data: {value: 'currency.currency_id'} }
         = f.input :exchange_rate, :as => :hidden, :input_html => {:id => 'transaction_exchange_rate'}
       .span4
         = f.association :project,  :label => 'Proyecto',
@@ -37,7 +36,7 @@
   -# Currency Form
   #currency_form.ajax-modal{ :style => 'display:none;'}
     %h4.red Advertencia! Verifique los precios de los items, serán modificados
-    
+
     %label Tipo de cambio
     %span.currency_symbol.b
     1
@@ -46,53 +45,15 @@
     %input{:type => 'text', :size => 8, :class => 'r', :id => 'exchange_rate', :value => transaction.exchange_rate}
     %button#exchange_rate_button.button Cambiar
 
-  :javascript
-    $( function() {
-      // Autocomplete
-      $('#transaction_contact_id').contactAutocomplete(#{get_contact_list.to_json}, {'id': 'contact_autocomplete'});
 
-      // Detect what is selected
-      function checkFact() {
-        var val = "", sel = $('input.fact:checked');
-        if(sel.length == 0) {
-          $('input.fact:first').attr("checked", true);
-          val = "Factura";
-        }else if(sel.length > 0) {
-          val = sel.val() == "true" ? "Factura" : "Recibo"
-        }
+-#= render 'transactions/item'
+:coffeescript
+  (($) ->
+    fx.rates = exchangeRates.rates
+    currency = new App.TransactionCurrency()
+    rivets.bind($('.currency-input'), {currency: currency})
 
-        $('#fact_label').html(val);
-      }
+    income = new App.Income(currency)
+    income.setList()
 
-      // Check if factura or recibo
-      checkFact();
-
-      $('input.fact').click(function() { checkFact() });
-      
-    
-      var type = "#{transaction.type.downcase}";
-      // Creation of all Backbone
-
-      var currencies = #{ Currency.to_hash.to_json };
-      var fake_accounts = #{presenter.fake_accounts.to_json};
-
-      var er = new ExchangeRate();
-      er.setAll('#exchange_rate', '#transaction_currency_id', #{currency_id}, fake_accounts,currencies,
-      {hide: '#fake_hide_div', inverted: true});
-
-      window.transaction = new TransactionGlobal(currencies, #{currency_id}, #{transaction.currency_id}, #{transaction.exchange_rate}, type);
-
-      // Functions for the select boxes
-      $('body').live('new_project', function(e, resp) {
-        $('#' + type + '_project_id').createSelectOption(resp.id, resp.name);
-      });
-
-      $('#transaction_discount').after("<span class='b'>%</span>")
-
-      // New item triger
-      $('#items_table a.add').live('click', function() {
-        $('#items_table').data('row', $(this).parents('tr:first').get(0).rowIndex );
-      });
-
-    });
-
+  )(jQuery)

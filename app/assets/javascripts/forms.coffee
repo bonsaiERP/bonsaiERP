@@ -124,6 +124,7 @@
 
   )
   
+  ##########################################
   # Activates autocomplete for all autocomplete inputs
   createAutocomplete = ->
     $(this).find('.control-group.autocomplete').each( (i, el) ->
@@ -149,8 +150,10 @@
       )
     )
 
-   ##########################################
-   # Datepicker for simple_form
+  $.fn.createAutocomplete = $.createAutocomplete = createAutocomplete
+
+  ##########################################
+  # Datepicker for simple_form
   setDatepicker = ->
     $(this).find('.control-group.datepicker:not(.hasDatepicker)').each (i, el) ->
       $this = $(el)
@@ -175,8 +178,6 @@
 
   $.setDatepicker = $.fn.setDatepicker = setDatepicker
   ##########################################
-
-  $.fn.createAutocomplete = $.createAutocomplete = createAutocomplete
 
 
   createSelectOption = (value, label) ->

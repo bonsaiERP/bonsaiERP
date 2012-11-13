@@ -126,7 +126,7 @@ private
 
    # Checks if is set the organisation session
   def organisation?
-    session[:organisation] and session[:organisation].any?
+    current_organisation.present?
   end
   helper_method :organisation?
 

@@ -2,6 +2,7 @@
 #= require libraries/jquery-ui-1.9
 #= require libraries/lodash.js
 #= require libraries/backbone.js
+#= require libraries/rivets.js
 #= require plugins/money.min.js
 #= require plugins/dropdown.js
 #= require plugins/_b.coffee

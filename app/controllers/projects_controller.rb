@@ -41,19 +41,19 @@ class ProjectsController < ApplicationController
   # POST /projects
   # POST /projects.xml
   def create
-    @project = Project.new(params[:project])
+    @project = Project.new(project_params)
 
     if @project.save
-      redirect_ajax(@project, :notice => 'El project fue creado.')
+      redirect_ajax(@project, notice: 'El project fue creado.')
     else
-      render :action => "new"
+      render "new"
     end
   end
 
   # PUT /projects/1
   # PUT /projects/1.xml
   def update
-    if @project.update_attributes(params[:project])
+    if @project.update_attributes(project_params)
       redirect_to(@project, :notice => 'El project fue actualizado.')
     else
       render :action => "edit"
@@ -70,5 +70,10 @@ class ProjectsController < ApplicationController
 private
   def set_project
     @project = Project.find(params[:id])
+  end
+
+  def project_params
+    params.require(:project).permit(:name, :active, :date_start,
+                                   :date_end, :description)
   end
 end

@@ -94,7 +94,9 @@ Bonsaierp::Application.routes.draw do
 
   resources :staffs
 
-  resources :items
+  resources :items do
+    get :search, on: :collection
+  end
 
   resources :units
 

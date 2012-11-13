@@ -19,9 +19,10 @@
     - if organisation?
       :javascript
         var organisation = { 
-          currency_id: #{session[:organisation][:currency_id]},
-          due_date: new Date("#{session[:organisation][:due_date]}"),
-          name: "#{session[:organisation][:name]}"
+          currency_id: #{current_organisation.currency_id},
+          currency_code: "#{currency_code}",
+          //due_date: new Date(""),
+          name: "#{current_organisation.name}"
         }
         window.organisation = organisation;
 
@@ -40,7 +41,7 @@
             %span.icon-bar
           .row
             .span7
-              - if organisation?
+              -# if organisation?
                 %h1{:title => "ID: #{session[:organisation][:id]}, Exp:  #{lo session[:organisation][:due_date] }"}= session[:organisation][:name]
             .span5.pull-right
               = render 'layouts/usersettings_menu' if user_signed_in?

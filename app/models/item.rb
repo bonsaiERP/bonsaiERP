@@ -43,6 +43,10 @@ class Item < ActiveRecord::Base
     "#{code} - #{name}"
   end
 
+  def label
+    to_s
+  end
+
   # gets the item scope
   def self.get_scoped_types(sc)
     case sc
@@ -82,8 +86,8 @@ class Item < ActiveRecord::Base
     where(:ctype => s_type).where(query)
   end
 
-  def self.search(params)
-    self.includes(:unit, :stocks).where("items.name ILIKE :search OR items.code ILIKE :search", :search => "%#{params[:search]}%")
+  def self.search(search)
+    self.includes(:unit, :stocks).where("items.name ILIKE :s OR items.code ILIKE :s", s: "%#{search}%")
   end
 
   # Modifications for rubinius
