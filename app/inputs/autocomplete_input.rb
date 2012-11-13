@@ -7,7 +7,7 @@ class AutocompleteInput < SimpleForm::Inputs::Base
     value_field = input_options[:value_field] || :to_s
 
     if object.respond_to? :reflections
-      hid_name = object.reflections[attribute_name].options[:foreign_key]
+      hid_name = object.reflections[attribute_name].options[:foreign_key] || :"#{attribute_name}_id"
       relation = attribute_name
     else
       hid_name = attribute_name

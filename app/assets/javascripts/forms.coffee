@@ -149,6 +149,33 @@
       )
     )
 
+   ##########################################
+   # Datepicker for simple_form
+  setDatepicker = ->
+    $(this).find('.control-group.datepicker:not(.hasDatepicker)').each (i, el) ->
+      $this = $(el)
+      $this.addClass 'hasDatepicker'
+      $hidden = $this.find '[type=hidden]'
+      $picker = $this.find '[type=text]'
+   
+      if $hidden.val()
+        date = $.datepicker.parseDate('yy-mm-dd', $hidden.val())
+        date = $.datepicker.formatDate($.datepicker._defaults.dateFormat, date)
+        $picker.val(date)
+      else
+        value = ''
+       
+      $picker.datepicker
+        yearRange: '1900:'
+        showOn: 'both'
+        buttonImageOnly: true
+        buttonImage: '/assets/bicon/date.png'
+        altFormat: 'yy-mm-dd'
+        altField: $hidden.get(0)
+
+  $.setDatepicker = $.fn.setDatepicker = setDatepicker
+  ##########################################
+
   $.fn.createAutocomplete = $.createAutocomplete = createAutocomplete
 
 

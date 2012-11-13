@@ -187,17 +187,20 @@
   $.mark = $.fn.mark = mark
 
   # Adds a new link to any select with a data-new-url
-  $('[data-new_url]').each((i, el)->
-    data = $.extend({width: 800}, $(el).data() )
-    title = data.title || "Nuevo"
+  dataNewUrl = ->
+    $(this).find('[data-new_url]').each((i, el) ->
+      data = $.extend({width: 800}, $(el).data() )
+      title = data.title || "Nuevo"
 
-    $a = $('<a/>')
-    .attr({'href': data.new_url, 'class': 'bicon-add ajax', 'title': title })
-    .data({'data-trigger': data.trigger, 'data-width': data.width})
-    .css("margin-left", "5px")
+      $a = $('<a/>')
+      .attr({'href': data.new_url, 'class': 'bicon-add ajax', 'title': title, rel: 'tooltip' })
+      .data({'data-trigger': data.trigger, 'data-width': data.width})
+      .css("margin-left", "5px")
 
-    $a.insertAfter(el)
-  )
+      $a.insertAfter(el)
+    )
+
+  $.fn.dataNewUrl = dataNewUrl
 
   # Closes the nearest div container
   $('a.close').live 'click', ->
@@ -270,11 +273,19 @@
 
   document.onkeypress = checkCR
 
+  # For the modal forms and dialogs
+  setTransformations = ->
+    $(this).setDatepicker()
+    $(this).createAutocomplete()
+
+  $.fn.setTransformations = setTransformations
+
   # Wrapped inside this working
   $(document).ready ->
     $('body').tooltip( selector: '[rel=tooltip]' )
-    $('body').transformDateSelect()
+    $('body').setDatepicker()
     $('body').createAutocomplete()
+    $('body').dataNewUrl()
 
   true
 )(jQuery)

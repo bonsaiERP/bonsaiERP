@@ -7,7 +7,7 @@ class IncomesController < TransactionsController #ApplicationController
   # GET /incomes.xml
   def index
     if params[:search].present?
-      @incomes = Income.search(params)#.page(@page)
+      @incomes = Income.search(params)
       p = params.dup
       p.delete(:option)
       @count = Income.search(p)
@@ -16,6 +16,8 @@ class IncomesController < TransactionsController #ApplicationController
       @incomes = Income.find_with_state(params[:option])
       @count = Income.scoped
     end
+
+    @incomes = @incomes.order('transactions.date DESC, transactions.id DESC').page(@page)
   end
 
   # GET /incomes/1
