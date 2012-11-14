@@ -33,6 +33,8 @@
     -# Render items
     =render "transactions/form_items", :f => f, :transaction => transaction
 
+    = f.submit 'Salvar', :class => 'btn btn-success b btn-large'
+
   -# Currency Form
   #currency_form.ajax-modal{ :style => 'display:none;'}
     %h4.red Advertencia! Verifique los precios de los items, serán modificados

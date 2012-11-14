@@ -3,25 +3,34 @@ class Item extends Backbone.Model
   defaults:
     item_id: 0
     price: 0
+    original_price: 0
     quantity: 1
     subtotal: 0
     rate: 1
   #
   initialize: ->
-    @on('change:price change:quantity change:rate', @setSubtotal)
-    @on('change:item', @setPrice)
+    @on('change:rate', @setPrice)
+    @on('change:price change:quantity', @setSubtotal )
     @setSubtotal()
   #
   setSubtotal: ->
-    sub = ( 1 * @get('quantity') * 1 * @get('price')  ) / (1 * @get('rate') )
+    console.log 'sub', @get('price')
+    sub = 1 * @get('quantity') * 1 * @get('price')
     @set('subtotal', sub)
+  #
+  setPrice: ->
+    console.log 'Before set price'
+    price = ( @get('original_price') * @get('rate') ).toFixed(_b.currency.precision) * 1
+    @set(price: price )
   #
   setAutocompleteEvent: (el) ->
     $(el).on 'autocomplete-done', 'input.autocomplete', (event, item) =>
       q = @get('quantity') * 1
       q = 1 unless q <= 0
 
-      @set(price: item.price, quantity: q, item_id: item.id)
+      price = ( item.price * @get('rate') ).toFixed(_b.currency.precision) * 1
+
+      @set(original_price: item.price, price: price, quantity: q, item_id: item.id)
 
 class Income extends Backbone.Collection
   model: Item
@@ -39,17 +48,20 @@ class Income extends Backbone.Collection
       self.setCurrency(this)
   #
   calculateSubtotal: ->
-    sub = @reduce((sum, p)->
-      sum + p.get('subtotal')
+    sub = @reduce((sum, p) ->
+      if p.attributes.item_id?
+        sum + p.get('subtotal')
+      else
+        sum + 0
     , 0)
 
-    $(@subtotalPath).html(sub)
+    $(@subtotalPath).html(_b.ntc(sub) )
 
     @calculateTotal(sub)
   #
   calculateTotal: (sub)->
     tot = sub
-    $(@totalPath).val(tot)
+    $(@totalPath).val(tot.toFixed(_b.currency.precision))
   #
   setList: ->
     @$table.find('tr.item').each (i, el) =>
@@ -74,6 +86,7 @@ class Income extends Backbone.Collection
   setCurrency: (cur) ->
     @each (el) ->
       if el.attributes.item_id?
+        console.log cur.get('rate')
         el.set('rate', cur.get('rate'))
 
 
@@ -90,6 +103,7 @@ class TransactionCurrency extends Backbone.Model
     @set(currency_id: $('#transaction_currency_id').val(), baseCode: organisation.currency_code)
 
     @on('change:currency_id', @setCurrency )
+    @setCurrency()
   #
   setCurrency: ->
     el = _.find( $('#transaction_currency_id').get(0).options, (el) =>
@@ -97,7 +111,7 @@ class TransactionCurrency extends Backbone.Model
     )
 
     code = $(el).text().split(' ')[0]
-    rate = fx.convert(1, {from: code, to: @.get('baseCode')})
+    rate = fx.convert(1, {from: @get('baseCode'), to: code })
     @set(code: code, rate: rate)
 
     @setCurrencyLabel()

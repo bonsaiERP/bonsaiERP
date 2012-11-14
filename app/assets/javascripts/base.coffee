@@ -300,5 +300,8 @@
         obj.set(keypath, value)
   )
 
+  rivets.formatters.number = (value) ->
+    _b.ntc(value)
+
   true
 )(jQuery)

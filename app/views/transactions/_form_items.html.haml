@@ -6,7 +6,7 @@
       %th.item Item
       %th.price
         Precio unitario
-        = currency_code_label
+        %span.currency
       %th.quantity Cantidad
       %th.total_row 
         Total fila
@@ -28,32 +28,39 @@
         label: false
 
       %td.total_row.r
-        %span(data-text='item.subtotal')= ntc fd.object.total
+        %span(data-text='item.subtotal | number')= ntc fd.object.total
       %td.del <a href="javascript:" class="destroy" title="Borrar">&nbsp;</a>
 
   %tr.extra.pad_top.subtotal
-    %td
-    %td.cur{:colspan => 2} Subtotal
-    %td#subtotal.cur{'data-val' => transaction.subtotal}= ntc(transaction.subtotal)
-    %td
-
-  %tr.extra
     %td 
       %a(href="javascript:" id="add_item" class="btn btn-primary")
         %i.icon-plus-sign.icon-white
         Adicionar ítem
+    %td.r(colspan="2") 
+      Subtotal
+      %span.currency
+    %td.r
+      %span#subtotal=ntc(transaction.subtotal)
+    %td
 
   %tr.extra
     %td
-    %td.r.b.dark(colspan='2') Total
-    %td.b(colspan='2')= f.input :total, label: false, input_html: { type: 'decimal', size: 12, id: 'total', class: 'b' }
+    %td.r.b.dark(colspan='2') 
+      Total
+      %span.currency
+    %td.b.r
+      = f.input :total, label: false, input_html: { type: 'decimal', size: 12, id: 'total', class: 'b' }
+    %td
+
   - if transaction.is_a?(Income)
     %tr
       %td.cur.b.gray(colspan='3') 
-        Descuento<br/>
+        Descuento
+        %span.currency
+        \-
+        %span.label.label-inverse %
       %td.discount.cur
-        %span.discount
-        %br
-        %span.discount-per
+        %span#discount
+        \-
+        %span#discount-per
 
-= f.submit 'Salvar', :class => 'btn btn-success b btn-large'
