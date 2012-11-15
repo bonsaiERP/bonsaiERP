@@ -31,6 +31,10 @@ class Item extends Backbone.Model
       price = ( item.price * @get('rate') ).toFixed(_b.currency.precision) * 1
 
       @set(original_price: item.price, price: price, quantity: q, item_id: item.id)
+  #
+  delete: (event) =>
+    src = event.currentTarget || event.srcElement
+    @collection.deleteItem(this, src)
 
 class Income extends Backbone.Collection
   model: Item
@@ -76,7 +80,10 @@ class Income extends Backbone.Collection
   addItem: ->
     num = (new Date).getTime()
 
-    $tr = $(@getItemHtml(num)).insertAfter('tr.item:last')
+    if $('tr.item:last').length > 0
+      $tr = $(@getItemHtml(num)).insertAfter('tr.item:last')
+    else
+      $tr = $(@getItemHtml(num)).insertAfter('thead')
 
     $tr.createAutocomplete()
     @add(item = new Item(rate: @currency.get('rate') ) )
@@ -87,10 +94,9 @@ class Income extends Backbone.Collection
     itemTemplate.replace(/\$num/g, num)
   #
   deleteItem: (item, src)->
-    unless @models.length <= 2
-      $(src).parents('tr.product').remove()
-      @remove(prod)
-      @calculateSubtotal()
+    $(src).parents('tr.item').remove()
+    @remove(item)
+    @calculateSubtotal()
   # Sets the items currency
   setCurrency: (cur) ->
     @each (el) ->
@@ -145,5 +151,5 @@ itemTemplate = """<tr class="item">
     <td class="total_row r">
       <span data-text="item.subtotal | number"></span>
     </td>
-    <td class="del"><a href="javascript:" class="destroy" title="Borrar">&nbsp;</a></td>
+    <td class="del"><a href="javascript:;" class="bicon-trash" title="Borrar" rel="tooltip" data-on-click="item:delete"></a></td>
 </tr>"""

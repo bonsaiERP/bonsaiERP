@@ -29,7 +29,8 @@
 
       %td.total_row.r
         %span(data-text='item.subtotal | number')= ntc fd.object.total
-      %td.del <a href="javascript:" class="destroy" title="Borrar">&nbsp;</a>
+      %td.del 
+        %a(href="javascript:;" data-on-click="item:delete" class="bicon-trash" title="Borrar" rel="tooltip")
 
   %tr.extra.pad_top.subtotal
     %td 
