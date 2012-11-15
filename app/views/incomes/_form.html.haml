@@ -13,13 +13,15 @@
         = f.input :contact, as: :autocomplete, label: 'Contacto', input_html: { 'data-source' => '/contacts' }
 
     %hr.light
-    .row-fluid
-      .span4.currency-input
+    .row-fluid.currency-input
+      .span4
         = f.association :currency, :label => 'Moneda', :include_blank => false,
           :input_html => {:id => 'transaction_currency_id', data: {value: 'currency.currency_id'} }
 
-        = f.input :exchange_rate, label: 'Tipo de cambio',
-          input_html: {id: 'transaction_exchange_rate', type: 'decimal', size: 6}
+        = f.input :exchange_rate, label: "Tipo de cambio de <span class='currency'></span> a #{currency_code_label}".html_safe,
+          input_html: {id: 'transaction_exchange_rate', type: 'decimal', size: 6, data: {value: 'currency.rate'}},
+          wrapper_class: 'exchange-rate control-group'
+          
       .span4
         = f.association :project,  :label => 'Proyecto',
           :input_html => {'data-new_url' => new_project_path, 'data-title' => "Nuevo proyecto", 'data-trigger' => 'new_project', 'data-width' => "900" }

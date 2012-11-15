@@ -20,7 +20,7 @@ class Item extends Backbone.Model
   #
   setPrice: ->
     console.log 'Before set price'
-    price = ( @get('original_price') * @get('rate') ).toFixed(_b.currency.precision) * 1
+    price = ( @get('original_price') * (1/@get('rate') ) ).toFixed(_b.currency.precision) * 1
     @set(price: price )
   #
   setAutocompleteEvent: (el) ->
@@ -28,7 +28,7 @@ class Item extends Backbone.Model
       q = @get('quantity') * 1
       q = 1 unless q <= 0
 
-      price = ( item.price * @get('rate') ).toFixed(_b.currency.precision) * 1
+      price = ( item.price * (1/@get('rate') ) ).toFixed(_b.currency.precision) * 1
 
       @set(original_price: item.price, price: price, quantity: q, item_id: item.id)
   #
@@ -49,7 +49,7 @@ class Income extends Backbone.Collection
     # Events
     @on 'change', @calculateSubtotal
     self = this
-    @currency.on 'change:currency_id', ->
+    @currency.on 'change:rate', ->
       self.setCurrency(this)
 
     @$addLink = $('#add-item-link')
@@ -118,6 +118,7 @@ class TransactionCurrency extends Backbone.Model
     @set(currency_id: $('#transaction_currency_id').val(), baseCode: organisation.currency_code)
 
     @on('change:currency_id', @setCurrency )
+    @on('change:code', @showHideExchange )
     @setCurrency()
   #
   setCurrency: ->
@@ -126,7 +127,7 @@ class TransactionCurrency extends Backbone.Model
     )
 
     code = $(el).text().split(' ')[0]
-    rate = fx.convert(1, {from: @get('baseCode'), to: code })
+    rate = fx.convert(1, {from: code, to: @get('baseCode') }).toFixed(4) * 1
     @set(code: code, rate: rate)
 
     @setCurrencyLabel()
@@ -134,7 +135,16 @@ class TransactionCurrency extends Backbone.Model
   setCurrencyLabel: ->
     html = "1 #{@get('code')} = "
     label = "<span class='label label-inverse'>#{@get('code')}</span>"
+
     $('.currency').html(label)
+  #
+  showHideExchange: ->
+    console.log @get('baseCode'), @get('code')
+    if @get('baseCode') == @get('code')
+      $('.exchange-rate').hide('medium')
+    else
+      $('.exchange-rate').show('medium')
+
 
 window.App.TransactionCurrency = TransactionCurrency
 
