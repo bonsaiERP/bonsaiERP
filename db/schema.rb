@@ -384,10 +384,10 @@ ActiveRecord::Schema.define(:version => 20121112152012) do
     t.string   "ref_number"
     t.string   "bill_number"
     t.integer  "currency_id"
-    t.decimal  "exchange_rate",                      :precision => 14, :scale => 4
+    t.decimal  "exchange_rate",                      :precision => 14, :scale => 4, :default => 1.0
     t.integer  "project_id"
-    t.decimal  "discount",                           :precision => 5,  :scale => 2
-    t.decimal  "gross_total",                        :precision => 14, :scale => 2
+    t.decimal  "discount",                           :precision => 5,  :scale => 2, :default => 0.0
+    t.decimal  "gross_total",                        :precision => 14, :scale => 2, :default => 0.0
     t.boolean  "cash",                                                              :default => true
     t.date     "payment_date"
     t.decimal  "balance_inventory",                  :precision => 14, :scale => 2

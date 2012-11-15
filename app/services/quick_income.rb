@@ -8,7 +8,7 @@ private
   def create_transaction
     @transaction = Income.new(transaction_attributes) do |inc|
       inc.total = inc.gross_total = inc.original_total = amount
-      inc.balance = amount
+      inc.balance = 0
     end
 
     @transaction.save

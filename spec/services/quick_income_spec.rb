@@ -22,6 +22,7 @@ describe QuickIncome do
 
   it "Initializes with a correct number" do
     qi = QuickIncome.new
+
     qi.ref_number.should eq("I-0001")
   end
 
@@ -66,6 +67,15 @@ describe QuickIncome do
 
     let(:account_ledger) { subject.account_ledger }
     let(:income) { subject.income }
+
+    it "sets correctly income attributes" do
+      amount = valid_attributes[:amount].to_f
+
+      income.balance.should eq(0)
+      income.total.should eq(amount)
+      income.gross_total.should eq(amount)
+      income.original_total.should eq(amount)
+    end
 
     it "account_ledger attribtes are set" do
       account_ledger.contact_id.should eq(contact.id)

@@ -15,9 +15,11 @@
     %hr.light
     .row-fluid
       .span4.currency-input
-        = f.association :currency, :label => 'Moneda/Tipo de cambio. <span class="rate_details n black"></span>'.html_safe, :include_blank => false,
+        = f.association :currency, :label => 'Moneda', :include_blank => false,
           :input_html => {:id => 'transaction_currency_id', data: {value: 'currency.currency_id'} }
-        = f.input :exchange_rate, :as => :hidden, :input_html => {:id => 'transaction_exchange_rate'}
+
+        = f.input :exchange_rate, label: 'Tipo de cambio',
+          input_html: {id: 'transaction_exchange_rate', type: 'decimal', size: 6}
       .span4
         = f.association :project,  :label => 'Proyecto',
           :input_html => {'data-new_url' => new_project_path, 'data-title' => "Nuevo proyecto", 'data-trigger' => 'new_project', 'data-width' => "900" }

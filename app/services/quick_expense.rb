@@ -8,7 +8,7 @@ private
   def create_transaction
     @transaction = Expense.new(transaction_attributes) do |exp|
       exp.total = exp.gross_total = exp.original_total = amount
-      exp.balance = amount
+      exp.balance = 0
     end
 
     @transaction.save

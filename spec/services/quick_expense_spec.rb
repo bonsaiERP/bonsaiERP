@@ -47,8 +47,10 @@ describe QuickExpense do
     let(:amount) { subject.amount }
 
     it "checks the expense" do
-      expense.balance.should eq(amount)
+      expense.balance.should eq(0)
       expense.total.should eq(amount)
+      expense.gross_total.should eq(amount)
+      expense.original_total.should eq(amount)
       expense
     end
 
