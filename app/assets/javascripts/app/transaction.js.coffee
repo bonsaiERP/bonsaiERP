@@ -37,15 +37,19 @@ class Income extends Backbone.Collection
   total: 0
   totalPath: '#total'
   subtotalPath: '#subtotal'
+  @itemTemplate: $('#item-template').html()
   #
-  initialize: (currency)->
+  initialize: (@currency)->
     @$table = $('#items-table')
 
     # Events
     @on 'change', @calculateSubtotal
     self = this
-    currency.on 'change:currency_id', ->
+    @currency.on 'change:currency_id', ->
       self.setCurrency(this)
+
+    @$addLink = $('#add-item-link')
+    @$addLink.live 'click', => @addItem()
   #
   calculateSubtotal: ->
     sub = @reduce((sum, p) ->
@@ -69,13 +73,18 @@ class Income extends Backbone.Collection
       rivets.bind(el, {item: item})
       item.setAutocompleteEvent(el)
   #
-  addItem: =>
-    $loc = @$table.find('tr.item:last')
-    $loc.after($('#item-template').html())
-    tr = $loc.get(0)
+  addItem: ->
+    num = (new Date).getTime()
 
-    @add(p = new Item())
-    rivets.bind(tr, {product: p})
+    $tr = $(@getItemHtml(num)).insertAfter('tr.item:last')
+
+    $tr.createAutocomplete()
+    @add(item = new Item(rate: @currency.get('rate') ) )
+    rivets.bind($tr, {item: item})
+    item.setAutocompleteEvent($tr)
+  #
+  getItemHtml: (num) ->
+    itemTemplate.replace(/\$num/g, num)
   #
   deleteItem: (item, src)->
     unless @models.length <= 2
@@ -115,10 +124,26 @@ class TransactionCurrency extends Backbone.Model
     @set(code: code, rate: rate)
 
     @setCurrencyLabel()
-
+  #
   setCurrencyLabel: ->
     html = "1 #{@get('code')} = "
     label = "<span class='label label-inverse'>#{@get('code')}</span>"
     $('.currency').html(label)
 
 window.App.TransactionCurrency = TransactionCurrency
+
+itemTemplate = """<tr class="item">
+    <td>
+      <div class="control-group autocomplete optional"><div class="controls"><input id="income_transaction_details_attributes_$num_item_id" name="income[transaction_details_attributes][$num][item_id]" type="hidden"><input class="autocomplete optional item_id ui-autocomplete-input" data-source="/items/search.json" id="item_autocomplete" name="item_autocomplete" placeholder="Escriba para buscar el ítem" size="35" type="text" autocomplete="off"><span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span></div></div>
+    </td>
+    <td>
+      <div class="control-group decimal optional"><div class="controls"><input class="numeric decimal optional" data-original-price="null" data-value="item.price" id="income_transaction_details_attributes_$num_price" name="income[transaction_details_attributes][$num][price]" size="8" step="any" type="decimal" value=""></div></div>
+    </td>
+    <td>
+      <div class="control-group decimal optional"><div class="controls"><input class="numeric decimal optional" data-value="item.quantity" id="income_transaction_details_attributes_$num_quantity" name="income[transaction_details_attributes][$num][quantity]" size="8" step="any" type="decimal" value=""></div></div>
+    </td>
+    <td class="total_row r">
+      <span data-text="item.subtotal | number"></span>
+    </td>
+    <td class="del"><a href="javascript:" class="destroy" title="Borrar">&nbsp;</a></td>
+</tr>"""

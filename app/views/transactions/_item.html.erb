@@ -1,17 +1,17 @@
 <div id='item-template'>
-  <tr class="item">
+<tr class="item">
     <td>
-      <div class="control-group autocomplete optional"><div class="controls"><input type="hidden" name="income[transaction_details_attributes][0][item_id]" id="income_transaction_details_attributes_0_item_id"><input type="text" size="35" placeholder="Escriba para buscar el ítem" name="item_autocomplete" id="item_autocomplete" data-source="/items/search.json" class="autocomplete optional item_id ui-autocomplete-input" autocomplete="off"><span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span></div></div>
+      <div class="control-group autocomplete optional"><div class="controls"><input id="income_transaction_details_attributes_$num_item_id" name="income[transaction_details_attributes][$num][item_id]" type="hidden"><input class="autocomplete optional item_id ui-autocomplete-input" data-source="/items/search.json" id="item_autocomplete" name="item_autocomplete" placeholder="Escriba para buscar el ítem" size="35" type="text" autocomplete="off"><span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span></div></div>
     </td>
     <td>
-      <div class="control-group decimal optional"><div class="controls"><input type="decimal" value="0" step="any" size="8" name="income[transaction_details_attributes][0][price]" id="income_transaction_details_attributes_0_price" data-value="item.price" data-original-price="null" class="numeric decimal optional"></div></div>
+      <div class="control-group decimal optional"><div class="controls"><input class="numeric decimal optional" data-original-price="null" data-value="item.price" id="income_transaction_details_attributes_$num_price" name="income[transaction_details_attributes][$num][price]" size="8" step="any" type="decimal" value=""></div></div>
     </td>
     <td>
-      <div class="control-group decimal optional"><div class="controls"><input type="decimal" value="0" step="any" size="8" name="income[transaction_details_attributes][0][quantity]" id="income_transaction_details_attributes_0_quantity" data-value="item.quantity" class="numeric decimal optional"></div></div>
+      <div class="control-group decimal optional"><div class="controls"><input class="numeric decimal optional" data-value="item.quantity" id="income_transaction_details_attributes_$num_quantity" name="income[transaction_details_attributes][$num][quantity]" size="8" step="any" type="decimal" value=""></div></div>
     </td>
     <td class="total_row r">
-      <span data-text="item.subtotal">30</span>
+      <span data-text="item.subtotal | number"></span>
     </td>
-    <td class="del"><a title="Borrar" class="destroy" href="javascript:">&nbsp;</a></td>
-  </tr>
+    <td class="del"><a href="javascript:" class="destroy" title="Borrar">&nbsp;</a></td>
+</tr>
 </div>

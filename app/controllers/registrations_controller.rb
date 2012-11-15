@@ -28,6 +28,7 @@ class RegistrationsController < ApplicationController
   def create
     @organisation = Organisation.new(organisation_params)
 
+    # TODO refactor create_organisation, really nasty
     if @organisation.create_organisation
       @user = @organisation.master_account
       RegistrationMailer.send_registration(@user, @organisation.tenant).deliver
@@ -40,10 +41,6 @@ class RegistrationsController < ApplicationController
 private
   def organisation_params
     params.require(:organisation).permit(:name, :tenant, :email, :password)
-  end
-
-  def slice_params(data)
-    data.slice(:name, :tenant, :email, :password)
   end
 
   def check_tenant

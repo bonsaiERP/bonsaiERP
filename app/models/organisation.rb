@@ -74,23 +74,23 @@ class Organisation < ActiveRecord::Base
     f.close
   end
 
-  private
-    def set_user_errors(user)
-      [:email, :password].each do |meth|
-        user.errors[meth].each do |err|
-          self.errors[meth] << err
-        end
+private
+  def set_user_errors(user)
+    [:email, :password].each do |meth|
+      user.errors[meth].each do |err|
+        self.errors[meth] << err
       end
     end
+  end
 
-    # Sets the expiry date for the organisation until ew payment
-    def set_due_date
-      self.due_date = 30.days.from_now.to_date
-    end
+  # Sets the expiry date for the organisation until ew payment
+  def set_due_date
+    self.due_date = 30.days.from_now.to_date
+  end
 
-    def valid_tenant_not_in_list
-      if ['public', 'common', 'demo'].include?(tenant)
-        self.errors[:tenant] << I18n.t('organisation.errors.tenant.list')
-      end
+  def valid_tenant_not_in_list
+    if ['public', 'common', 'demo'].include?(tenant)
+      self.errors[:tenant] << I18n.t('organisation.errors.tenant.list')
     end
+  end
 end

@@ -25,18 +25,18 @@ gem 'haml'        , '~> 3.1.7'
 gem 'kaminari'    , '~> 0.14.0'
 gem 'valium'      , '~> 0.5.0'
 gem 'bcrypt-ruby' , '~> 3.0.1' , require: 'bcrypt'
-gem 'roadie'      , '~> 2.3.2' # Styles for email
+gem 'roadie'      , '~> 2.3.4' # Styles for email
 
 gem 'validates_email_format_of', '~> 1.5.3'
-gem 'queue_classic', '~> 2.0.1' # Background processing for PostgreSQL
+gem 'queue_classic', '~> 2.0.3' # Background processing for PostgreSQL
 
 gem 'prawn', '~> 1.0.0.rc1'
 #gem 'exception_notification', "~> 2.5.2"
-#gem 'newrelic_rpm'
+gem 'newrelic_rpm', group: 'production'
 
 group :development, :test do
   gem 'puma'            , '~> 1.6.3' # Web server
-  gem 'rspec-rails'     , '~> 2.11.4'
+  gem 'rspec-rails'     , '~> 2.12.0'
   #gem 'steak'          , '~> 2.0.0'
   gem 'ffaker'          , '~> 1.15.0'
   gem 'pry-rails'       , '~> 0.2.2'
@@ -46,7 +46,7 @@ end
 
 # Test
 group :test do
-  gem 'capybara',           '~> 1.1.2'
+  gem 'capybara',           '~> 2.0.0'
   gem 'database_cleaner',   '~> 0.9.1'
   gem 'factory_girl_rails', '~> 4.1.0'
   gem 'spork',              '~> 0.9.2'

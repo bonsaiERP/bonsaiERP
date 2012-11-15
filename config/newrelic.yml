@@ -1,9 +1,9 @@
 #
 # This file configures the New Relic Agent.  New Relic monitors
-# Rails and Java applications with deep visibility and low overhead.  For more
-# information, visit www.newrelic.com.
+# Ruby, Java, .NET, PHP, and Python applications with deep visibility and low overhead.
+# For more information, visit www.newrelic.com.
 #
-# Generated May 12, 2011
+# Generated November 15, 2012
 #
 # This configuration file is custom generated for ecuanime
 
@@ -16,7 +16,7 @@ common: &default_settings
   # New Relic service.
   license_key: 'a22c34ab2c6f6661e5a68cfb6638767b65bf881d'
   
-  # Agent Enabled (Rails Only)
+  # Agent Enabled (Ruby/Rails Only)
   # Use this setting to force the agent to run or not run.
   # Default is 'auto' which means the agent will install and run only
   # if a valid dispatcher such as Mongrel is running.  This prevents
@@ -30,7 +30,7 @@ common: &default_settings
   # up in New Relic.  New Relic will then auto-map instances of your application
   # into a New Relic "application" on your home dashboard page. If you want
   # to map this instance into multiple apps, like "AJAX Requests" and
-  # "All UI" then specify a semicolon separated list of up to three
+  # "All UI" then specify a semicolon-separated list of up to three
   # distinct names.  If you comment this out, it defaults to the 
   # capitalized RAILS_ENV (i.e., Production, Staging, etc)
   app_name: My Application
@@ -69,18 +69,6 @@ common: &default_settings
   # use a non-blocking lookup, so in a worst case, if you have DNS
   # problems, your app may block indefinitely.
   # verify_certificate: true
-  
-  # Set your application's Apdex threshold value with the 'apdex_t'
-  # setting, in seconds. The apdex_t value determines the buckets used
-  # to compute your overall Apdex score. 
-  # Requests that take less than apdex_t seconds to process will be
-  # classified as Satisfying transactions; more than apdex_t seconds
-  # as Tolerating transactions; and more than four times the apdex_t
-  # value as Frustrating transactions. 
-  # For more about the Apdex standard, see
-  # http://support.newrelic.com/faqs/general/apdex
-
-  apdex_t: 0.5
 
   # Proxy settings for connecting to the New Relic server.
   #
@@ -92,7 +80,6 @@ common: &default_settings
   # proxy_user:
   # proxy_pass:
 
-  
   # Tells transaction tracer and error collector (when enabled)
   # whether or not to capture HTTP params.  When true, frameworks can
   # exclude HTTP parameters from being captured.
@@ -102,7 +89,6 @@ common: &default_settings
   #     ex: ignored_params: credit_card, ssn, password 
   capture_params: false
 
-
   # Transaction tracer captures deep information about slow
   # transactions and sends this to the New Relic service once a
   # minute. Included in the transaction is the exact call sequence of
@@ -110,8 +96,8 @@ common: &default_settings
   transaction_tracer:
   
     # Transaction tracer is enabled by default. Set this to false to
-    # turn it off. This feature is only available at the Silver and
-    # above product levels.
+    # turn it off. This feature is only available at the Professional
+    # product level.
     enabled: true
     
     # Threshold in seconds for when to collect a transaction
@@ -125,13 +111,13 @@ common: &default_settings
     # When transaction tracer is on, SQL statements can optionally be
     # recorded. The recorder has three modes, "off" which sends no
     # SQL, "raw" which sends the SQL statement in its original form,
-    # and "obfuscated", which strips out numeric and string literals
+    # and "obfuscated", which strips out numeric and string literals.
     record_sql: obfuscated
     
     # Threshold in seconds for when to collect stack trace for a SQL
     # call. In other words, when SQL statements exceed this threshold,
     # then capture and send to New Relic the current stack trace. This is
-    # helpful for pinpointing where long SQL calls originate from
+    # helpful for pinpointing where long SQL calls originate from.
     stack_trace_threshold: 0.500
 
     # Determines whether the agent will capture query plans for slow
@@ -148,8 +134,8 @@ common: &default_settings
   error_collector:
     
     # Error collector is enabled by default. Set this to false to turn
-    # it off. This feature is only available at the Silver and above
-    # product levels
+    # it off. This feature is only available at the Professional
+    # product level.
     enabled: true
     
     # Rails Only - tells error collector whether or not to capture a 
@@ -158,12 +144,11 @@ common: &default_settings
     capture_source: true    
     
     # To stop specific errors from reporting to New Relic, set this property
-    # to comma separated values.  Default is to ignore routing errors
+    # to comma-separated values.  Default is to ignore routing errors,
     # which are how 404's get triggered.
-    #
     ignore_errors: ActionController::RoutingError
 
-  # (Advanced) Uncomment this to ensure the cpu and memory samplers
+  # (Advanced) Uncomment this to ensure the CPU and memory samplers
   # won't run.  Useful when you are using the agent to monitor an
   # external resource
   # disable_samplers: true
@@ -182,10 +167,10 @@ common: &default_settings
 
 # Application Environments
 # ------------------------------------------
-# Environment specific settings are in this section.
-# For Rails applications, RAILS_ENV is used to determine the environment
+# Environment-specific settings are in this section.
+# For Rails applications, RAILS_ENV is used to determine the environment.
 # For Java applications, pass -Dnewrelic.environment <environment> to set
-# the environment
+# the environment.
 
 # NOTE if your application has other named environments, you should
 # provide newrelic configuration settings for these environments here.
@@ -195,12 +180,12 @@ development:
   # Turn off communication to New Relic service in development mode (also
   # 'enabled').
   # NOTE: for initial evaluation purposes, you may want to temporarily 
-  # turn the agent on in development mode.
+  # turn agent communication on in development mode.
   monitor_mode: false
 
   # Rails Only - when running in Developer Mode, the New Relic Agent will 
   # present performance information on the last 100 transactions you have
-  # executed since starting the mongrel.
+  # executed since starting the app server.
   # NOTE: There is substantial overhead when running in developer mode.
   # Do not use for production or load testing.  
   developer_mode: true
@@ -214,9 +199,9 @@ test:
   # unit, functional or integration tests or the like.
   monitor_mode: false
 
-# Turn on the agent in production for 24x7 monitoring.  NewRelic
+# Turn on the agent in production for 24x7 monitoring.  New Relic
 # testing shows an average performance impact of < 5 ms per
-# transaction, you you can leave this on all the time without
+# transaction, so you can leave this on all the time without
 # incurring any user-visible performance degradation.
 production:
   <<: *default_settings
