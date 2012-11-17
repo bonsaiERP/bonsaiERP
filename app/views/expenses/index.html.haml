@@ -9,16 +9,16 @@
     %h1 Egresos
 
   .span6.links
-    %a#quick-income-link.new.but(href="javascript:;")
+    %a#quick-expense-link.new.but(href="javascript:;")
       %i.bicon-add
-      Ingreso rápido
+      Egreso rápido
 
-    = link_to new_income_path, :class => 'new but' do
+    = link_to new_expense_path, :class => 'new but' do
       %i.bicon-add
       Nuevo ingreso
 
 .row-fluid
-  = render 'incomes/quick_income'
+  = render 'expenses/quick_expense'
 
 %ul.tabs
   %li= link_option "Todos", "all"
@@ -30,26 +30,26 @@
   %li= link_option "Desc./Inc.", "discount", title: 'Descuentos o Incrementos', rel: 'tooltip'
   %li= link_option "Anulados", "nulled"
 
-#search_income.well( style="#{show_if_search}" )
+#search_expense.well( style="#{show_if_search}" )
   %a.close{:href => "javascript:"} x
   %h3 Buscar ventas
-  = link_to "Eliminar filtros", incomes_path, :class => 'b'
+  = link_to "Eliminar filtros", expenses_path, :class => 'b'
 
-  =form_tag "/incomes", :method => 'get' do
-    =hidden_field_tag "search_div_id", "search_incomes"
+  =form_tag "/expenses", :method => 'get' do
+    =hidden_field_tag "search_div_id", "search_expenses"
     .row-fluid
       .span6
         %label Cliente o Nº de referencia
         =text_field_tag 'search', params[:search], :size => 40
       .span6
         %label Estado
-        =select_tag "option", options_for_select(list_income_states, params[:option])
+        =select_tag "option", options_for_select(list_expense_states, params[:option])
 
     =submit_tag 'Buscar', :class => 'btn btn-success'
 
 
-= link_to "Buscar", "#search_income", :class => 'search'
-= paginate @incomes.page(@page)
+= link_to "Buscar", "#search_expense", :class => 'search'
+= paginate @expenses.page(@page)
 
 %table.nwl.table.table-striped
   %thead
@@ -69,19 +69,19 @@
       %th
 
   %tbody
-    -  @incomes.each do |income|
+    -  @expenses.each do |expense|
       %tr{ :class => cycle(:odd, :even) }
         %td 
-          %span.bicon.pill{:class => "#{income.real_state}", :title => income.show_state}
-        %td= link_to income.ref_number, income, :class => 'b'
-        %td= income.contact
-        %td= lo income.payment_date unless income.is_paid?
-        %td #{income.currency_symbol} #{ntc income.total }
-        %td #{income.currency_symbol} #{ntc income.balance }
+          %span.bicon.pill{:class => "#{expense.real_state}", :title => expense.show_state}
+        %td= link_to expense.ref_number, expense, :class => 'b'
+        %td= expense.contact
+        %td= lo expense.payment_date unless expense.is_paid?
+        %td #{expense.currency_symbol} #{ntc expense.total }
+        %td #{expense.currency_symbol} #{ntc expense.balance }
 
-        = discount_cell income
+        = discount_cell expense
 
-        %td.nw= lo income.date
+        %td.nw= lo expense.date
         %td.actions
-          = link_to "editar", edit_income_path(income), :class => 'edit', :title => 'Editar' if income.is_draft?
-          = link_to "duplicar", new_income_path(:transaction_id => income.id), :class => 'duplicate icon', :title => 'Duplicar'
+          = link_to "editar", edit_expense_path(expense), :class => 'edit', :title => 'Editar' if expense.is_draft?
+          = link_to "duplicar", new_expense_path(:transaction_id => expense.id), :class => 'duplicate icon', :title => 'Duplicar'
