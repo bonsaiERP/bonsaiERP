@@ -1,27 +1,25 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class IncomesController < TransactionsController #ApplicationController
+class ExpensesController < TransactionsController #ApplicationController
 
-  # GET /incomes
-  # GET /incomes.xml
+  # GET /expenses
   def index
     if params[:search].present?
-      @incomes = Income.search(params)
+      @expenses = Expense.search(params)
       p = params.dup
       p.delete(:option)
-      @count = Income.search(p)
+      @count = Expense.search(p)
     else
       params[:option] ||= "all"
-      @incomes = Income.find_with_state(params[:option])
-      @count = Income.scoped
+      @expenses = Expense.find_with_state(params[:option])
+      @count = Expense.scoped
     end
 
-    @incomes = @incomes.order('transactions.date DESC, transactions.id DESC').page(@page)
+    @expenses = @expenses.order('transactions.date DESC, transactions.id DESC').page(@page)
   end
 
-  # GET /incomes/1
-  # GET /incomes/1.xml
+  # GET /expenses/1
   def show
     respond_to do |format|
       format.html { render 'transactions/show' }
@@ -29,27 +27,25 @@ class IncomesController < TransactionsController #ApplicationController
     end
   end
 
-  # GET /incomes/new
-  # GET /incomes/new.xml
+  # GET /expenses/new
   def new
     if params[:transaction_id].present?
-      t = Income.find(params[:transaction_id])
+      t = Expense.find(params[:transaction_id])
       @transaction = t.clone_transaction
     else
-      @transaction = Income.new(date: Date.today, currency_id: currency_id)
+      @transaction = Expense.new(date: Date.today, currency_id: currency_id)
       @transaction.set_defaults_with_details
     end
   end
 
-  # GET /incomes/1/edit
+  # GET /expenses/1/edit
   def edit
     render get_template(@transaction)
   end
 
-  # POST /incomes
-  # POST /incomes.xml
+  # POST /expenses
   def create
-    @transaction = Income.new(income_params)
+    @transaction = Expense.new(income_params)
 
     respond_to do |format|
       if @transaction.save_trans
@@ -61,9 +57,9 @@ class IncomesController < TransactionsController #ApplicationController
     end
   end
 
-  # POST /incomes/quick_income
+  # POST /expenses/quick_income
   def quick_income
-    @quick_income = QuickIncome.new(quick_income_params)
+    @quick_income = QuickExpense.new(quick_income_params)
 
     if @quick_income.create
       flash[:notice] = "El ingreso fue creado."
@@ -71,11 +67,10 @@ class IncomesController < TransactionsController #ApplicationController
       flash[:error] = "Existio errores al crear el ingreso."
     end
 
-    redirect_to incomes_path
+    redirect_to expenses_path
   end
 
-  # PUT /incomes/1
-  # PUT /incomes/1.xml
+  # PUT /expenses/1
   def update
     @transaction.attributes = params[:income]
     if @transaction.save_trans
@@ -86,8 +81,7 @@ class IncomesController < TransactionsController #ApplicationController
     end
   end
 
-  # DELETE /incomes/1
-  # DELETE /incomes/1.xml
+  # DELETE /expenses/1
   def destroy
     if @transaction.approved?
       flash[:warning] = "No es posible anular la nota #{@transaction}."
@@ -99,7 +93,7 @@ class IncomesController < TransactionsController #ApplicationController
     end
   end
   
-  # PUT /incomes/1/approve
+  # PUT /expenses/1/approve
   # Method to approve an income
   def approve
     if @transaction.approve!
@@ -114,9 +108,9 @@ class IncomesController < TransactionsController #ApplicationController
     redirect_to income_path(@transaction, :anchor => anchor)
   end
 
-  # PUT /incomes/:id/approve_credit
+  # PUT /expenses/:id/approve_credit
   def approve_credit
-    @transaction = Income.find(params[:id])
+    @transaction = Expense.find(params[:id])
     if @transaction.approve_credit params[:income]
       flash[:notice] = "Se aprobó correctamente el crédito."
     else
@@ -127,7 +121,7 @@ class IncomesController < TransactionsController #ApplicationController
   end
 
   def approve_deliver
-    @transaction = Income.find(params[:id])
+    @transaction = Expense.find(params[:id])
 
     if @transaction.approve_deliver
       flash[:notice] = "Se aprobó la entrega de material."
@@ -141,7 +135,7 @@ class IncomesController < TransactionsController #ApplicationController
   def history
     @history = TransactionHistory.find(params[:id])
     @trans = @history.transaction
-    @transaction = @history.get_transaction("Income")
+    @transaction = @history.get_transaction("Expense")
 
     render "transactions/history"
   end
@@ -151,11 +145,11 @@ private
   # Redirects in case that someone is trying to edit or destroy an  approved income
   def redirect_income
     flash[:warning] = "No es posible editar una nota ya aprobada!."
-    redirect_to incomes_path
+    redirect_to expenses_path
   end
 
   def set_transaction
-    @transaction = Income.find(params[:id])
+    @transaction = Expense.find(params[:id])
     check_edit if ["edit", "update"].include?(params[:action])
   end
 
@@ -177,14 +171,6 @@ private
   def quick_income_params
     params.require(:quick_income).permit(:date, :ref_number, :fact,
                                         :bill_number, :amount,
-                                        :contact_id, :account_id)
-  end
-
-  def income_params
-    params.require(:income).permit(:ref_number, :date, :contact_id, :currency_id, :project_id,
-                                   :fact, :bill_number, :description, :total,
-                                   transaction_attributes: [
-                                    :item_id, :price, :quantity, 
-                                  ])
+                                        :contact_id, :account_id, )
   end
 end

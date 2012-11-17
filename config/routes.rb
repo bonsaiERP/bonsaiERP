@@ -61,8 +61,6 @@ Bonsaierp::Application.routes.draw do
   resources :incomes do
     member do
       put :approve
-      put :approve_credit
-      put :approve_deliver
       get :history
     end
     post :quick_income, on: :collection
@@ -71,9 +69,9 @@ Bonsaierp::Application.routes.draw do
   resources :expenses do
     member do
       put :approve
-      put :approve_credit
       get :history
     end
+    post :quick_expense, on: :collection
   end
 
   get  "/transactions/pdf/:id"       => "transactions#pdf", :as => :invoice_pdf
