@@ -7,7 +7,7 @@
     .row-fluid
       .span4
         =f.input :contact_id, as: :autocomplete, label: "Contacto",
-          'data-source' => '/contacts/search', input_html: { 'data-new_url' => new_contact_path, 'data-title' => 'Nuevo contacto'}
+          'data-source' => '/contacts/search', input_html: { data: {new_url: new_contact_path, title: 'Nuevo contacto', trigger: 'new-contact'}}
       .span4=f.input :date, as: :datepicker, label: 'Fecha'
 
     .row-fluid
@@ -26,4 +26,8 @@
     $('#quick-income-hide-link').live 'click', ->
       $('.quick-income-form').hide('medium')
       $('#quick-income-link').show('medium')
+
+    $('div.ajax-modal form').live('new-contact', (event, resp) ->
+      console.log "New contact", resp
+    )
   )(jQuery)

@@ -1,4 +1,5 @@
 #= require jquery
+#= require jquery_ujs
 #= require libraries/jquery-ui-1.9
 #= require libraries/lodash.js
 #= require libraries/backbone.js

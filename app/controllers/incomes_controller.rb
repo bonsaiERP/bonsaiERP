@@ -114,30 +114,6 @@ class IncomesController < TransactionsController #ApplicationController
     redirect_to income_path(@transaction, :anchor => anchor)
   end
 
-  # PUT /incomes/:id/approve_credit
-  def approve_credit
-    @transaction = Income.find(params[:id])
-    if @transaction.approve_credit params[:income]
-      flash[:notice] = "Se aprobó correctamente el crédito."
-    else
-      flash[:error] = "Existio un error al aprobar el crédito."
-    end
-
-    redirect_to @transaction
-  end
-
-  def approve_deliver
-    @transaction = Income.find(params[:id])
-
-    if @transaction.approve_deliver
-      flash[:notice] = "Se aprobó la entrega de material."
-    else
-      flash[:error] = "Existio un error al aprobar la entrega de material."
-    end
-
-    redirect_to @transaction
-  end
-
   def history
     @history = TransactionHistory.find(params[:id])
     @trans = @history.transaction

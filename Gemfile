@@ -1,6 +1,6 @@
 source :rubygems
 
-gem 'rails', '>= 3.2.8'
+gem 'rails', '~> 3.2.9'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.5'
@@ -8,7 +8,7 @@ group :assets do
   gem 'uglifier',     '>= 1.3.0'
 end
 
-gem 'turbo-sprockets-rails3', '~> 0.1.16' # Speed assets:precompile # Needs rails 3.2.9 or  superior for 0.3.2 version
+gem 'turbo-sprockets-rails3', '~> 0.3.2' # Speed assets:precompile # Needs rails 3.2.9 or  superior for 0.3.2 version
 
 gem 'jquery-rails'  , '~> 2.1.1'
 gem 'compass-rails' , '~> 1.0.3'

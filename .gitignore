@@ -37,3 +37,4 @@ tmp/restart.txt
 spec/javascripts/generated
 tags
 public/assets
+.rails_footnotes

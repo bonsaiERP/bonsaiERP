@@ -29,17 +29,38 @@ ActiveRecord::Schema.define(:version => 20121112152012) do
   add_index "account_balances", ["currency_id"], :name => "index_account_balances_on_currency_id"
   add_index "account_balances", ["user_id"], :name => "index_account_balances_on_user_id"
 
+  create_table "account_ledger_details", :force => true do |t|
+    t.integer  "account_id"
+    t.integer  "account_ledger_id"
+    t.integer  "currency_id"
+    t.integer  "related_id"
+    t.decimal  "amount",                          :precision => 14, :scale => 2
+    t.decimal  "exchange_rate",                   :precision => 14, :scale => 4
+    t.string   "description"
+    t.boolean  "active",                                                         :default => true
+    t.string   "state",             :limit => 20
+    t.datetime "created_at",                                                                       :null => false
+    t.datetime "updated_at",                                                                       :null => false
+  end
+
+  add_index "account_ledger_details", ["account_id"], :name => "index_account_ledger_details_on_account_id"
+  add_index "account_ledger_details", ["account_ledger_id"], :name => "index_account_ledger_details_on_account_ledger_id"
+  add_index "account_ledger_details", ["active"], :name => "index_account_ledger_details_on_active"
+  add_index "account_ledger_details", ["currency_id"], :name => "index_account_ledger_details_on_currency_id"
+  add_index "account_ledger_details", ["related_id"], :name => "index_account_ledger_details_on_related_id"
+  add_index "account_ledger_details", ["state"], :name => "index_account_ledger_details_on_state"
+
   create_table "account_ledgers", :force => true do |t|
     t.string   "reference"
     t.integer  "currency_id"
     t.integer  "account_id"
     t.integer  "to_id"
-    t.integer  "contact_id"
-    t.datetime "date"
-    t.string   "operation",         :limit => 20
-    t.boolean  "conciliation",                                                   :default => true
-    t.decimal  "amount",                          :precision => 14, :scale => 2
-    t.decimal  "exchange_rate",                   :precision => 14, :scale => 4
+    t.date     "date"
+    t.string   "operation",           :limit => 20
+    t.boolean  "conciliation",                                                     :default => true
+    t.decimal  "amount",                            :precision => 14, :scale => 2
+    t.decimal  "exchange_rate",                     :precision => 14, :scale => 4
+    t.decimal  "interests_penalties",               :precision => 14, :scale => 2, :default => 0.0
     t.string   "description"
     t.integer  "transaction_id"
     t.integer  "creator_id"
@@ -47,18 +68,20 @@ ActiveRecord::Schema.define(:version => 20121112152012) do
     t.datetime "approver_datetime"
     t.integer  "nuller_id"
     t.datetime "nuller_datetime"
-    t.boolean  "active",                                                         :default => true
-    t.boolean  "has_error",                                                      :default => false
+    t.boolean  "active",                                                           :default => true
+    t.boolean  "has_error",                                                        :default => false
     t.string   "error_messages"
-    t.datetime "created_at",                                                                         :null => false
-    t.datetime "updated_at",                                                                         :null => false
-    t.decimal  "account_balance",                 :precision => 14, :scale => 2
-    t.decimal  "to_balance",                      :precision => 14, :scale => 2
+    t.datetime "created_at",                                                                           :null => false
+    t.datetime "updated_at",                                                                           :null => false
+    t.decimal  "account_balance",                   :precision => 14, :scale => 2
+    t.decimal  "to_balance",                        :precision => 14, :scale => 2
+    t.integer  "contact_id"
+    t.integer  "staff_id"
     t.date     "payment_date"
-    t.boolean  "inverse",                                                        :default => false
+    t.boolean  "inverse",                                                          :default => false
     t.integer  "project_id"
-    t.string   "transaction_type",  :limit => 30
-    t.string   "status",                                                         :default => "none"
+    t.string   "transaction_type",    :limit => 30
+    t.string   "status",                                                           :default => "none"
   end
 
   add_index "account_ledgers", ["account_id"], :name => "index_account_ledgers_on_account_id"
@@ -76,6 +99,7 @@ ActiveRecord::Schema.define(:version => 20121112152012) do
   add_index "account_ledgers", ["operation"], :name => "index_account_ledgers_on_operation"
   add_index "account_ledgers", ["project_id"], :name => "index_account_ledgers_on_project_id"
   add_index "account_ledgers", ["reference"], :name => "index_account_ledgers_on_reference"
+  add_index "account_ledgers", ["staff_id"], :name => "index_account_ledgers_on_staff_id"
   add_index "account_ledgers", ["status"], :name => "index_account_ledgers_on_status"
   add_index "account_ledgers", ["to_id"], :name => "index_account_ledgers_on_to_id"
   add_index "account_ledgers", ["transaction_id"], :name => "index_account_ledgers_on_transaction_id"
@@ -164,7 +188,6 @@ ActiveRecord::Schema.define(:version => 20121112152012) do
   add_index "inventory_operation_details", ["transaction_id"], :name => "index_inventory_operation_details_on_transaction_id"
 
   create_table "inventory_operations", :force => true do |t|
-    t.integer  "contact_id"
     t.integer  "store_id"
     t.integer  "transaction_id"
     t.date     "date"
@@ -177,6 +200,7 @@ ActiveRecord::Schema.define(:version => 20121112152012) do
     t.string   "error_messages"
     t.datetime "created_at",                                                                      :null => false
     t.datetime "updated_at",                                                                      :null => false
+    t.integer  "contact_id"
     t.integer  "creator_id"
     t.integer  "transference_id"
     t.integer  "store_to_id"
@@ -198,7 +222,7 @@ ActiveRecord::Schema.define(:version => 20121112152012) do
   create_table "items", :force => true do |t|
     t.integer  "unit_id"
     t.decimal  "unitary_cost",                :precision => 14, :scale => 2
-    t.decimal  "price",                       :precision => 14, :scale => 2, :default => 0.0
+    t.decimal  "price",                       :precision => 14, :scale => 2
     t.string   "name"
     t.string   "description"
     t.string   "code",         :limit => 100
@@ -340,6 +364,23 @@ ActiveRecord::Schema.define(:version => 20121112152012) do
     t.datetime "updated_at",                    :null => false
   end
 
+  create_table "taxes", :force => true do |t|
+    t.string   "name"
+    t.string   "abbreviation", :limit => 10
+    t.decimal  "rate",                       :precision => 5, :scale => 2
+    t.datetime "created_at",                                               :null => false
+    t.datetime "updated_at",                                               :null => false
+  end
+
+  create_table "taxes_transactions", :id => false, :force => true do |t|
+    t.integer "tax_id"
+    t.integer "transaction_id"
+  end
+
+  add_index "taxes_transactions", ["tax_id", "transaction_id"], :name => "index_taxes_transactions_on_tax_id_and_transaction_id"
+  add_index "taxes_transactions", ["tax_id"], :name => "index_taxes_transactions_on_tax_id"
+  add_index "taxes_transactions", ["transaction_id"], :name => "index_taxes_transactions_on_transaction_id"
+
   create_table "transaction_details", :force => true do |t|
     t.integer  "transaction_id"
     t.integer  "item_id"
@@ -372,7 +413,7 @@ ActiveRecord::Schema.define(:version => 20121112152012) do
   add_index "transaction_histories", ["user_id"], :name => "index_transaction_histories_on_user_id"
 
   create_table "transactions", :force => true do |t|
-    t.integer  "contact_id"
+    t.integer  "account_id"
     t.string   "type",                :limit => 20
     t.decimal  "total",                              :precision => 14, :scale => 2
     t.decimal  "balance",                            :precision => 14, :scale => 2
@@ -384,10 +425,10 @@ ActiveRecord::Schema.define(:version => 20121112152012) do
     t.string   "ref_number"
     t.string   "bill_number"
     t.integer  "currency_id"
-    t.decimal  "exchange_rate",                      :precision => 14, :scale => 4, :default => 1.0
+    t.decimal  "exchange_rate",                      :precision => 14, :scale => 4
     t.integer  "project_id"
-    t.decimal  "discount",                           :precision => 5,  :scale => 2, :default => 0.0
-    t.decimal  "gross_total",                        :precision => 14, :scale => 2, :default => 0.0
+    t.decimal  "discount",                           :precision => 5,  :scale => 2
+    t.decimal  "gross_total",                        :precision => 14, :scale => 2
     t.boolean  "cash",                                                              :default => true
     t.date     "payment_date"
     t.decimal  "balance_inventory",                  :precision => 14, :scale => 2
@@ -409,6 +450,7 @@ ActiveRecord::Schema.define(:version => 20121112152012) do
     t.string   "deliver_reason"
     t.integer  "nuller_id"
     t.datetime "nuller_datetime"
+    t.integer  "contact_id"
     t.boolean  "delivered",                                                         :default => false
     t.decimal  "original_total",                     :precision => 14, :scale => 2
     t.boolean  "discounted",                                                        :default => false
@@ -417,6 +459,7 @@ ActiveRecord::Schema.define(:version => 20121112152012) do
     t.boolean  "devolution",                                                        :default => false
   end
 
+  add_index "transactions", ["account_id"], :name => "index_transactions_on_account_id"
   add_index "transactions", ["active"], :name => "index_transactions_on_active"
   add_index "transactions", ["balance_inventory"], :name => "index_transactions_on_balance_inventory"
   add_index "transactions", ["cash"], :name => "index_transactions_on_cash"

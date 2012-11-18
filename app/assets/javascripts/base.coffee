@@ -97,6 +97,7 @@
     div = createDialog( data )
     $( div ).load( $(this).attr("href"), (resp)->
       $(div).setTransformations()
+      $(div).find('form').attr('data-remote', true)
     )
 
     event.stopPropagation()
@@ -188,13 +189,13 @@
 
   # Adds a new link to any select with a data-new-url
   dataNewUrl = ->
-    $(this).find('[data-new_url]').each((i, el) ->
+    $(this).find('[data-new-url]').each((i, el) ->
       data = $.extend({width: 800}, $(el).data() )
       title = data.title || "Nuevo"
 
       $a = $('<a/>')
-      .attr({'href': data.new_url, 'class': 'bicon-add ajax', 'title': title, rel: 'tooltip' })
-      .data({'data-trigger': data.trigger, 'data-width': data.width})
+      .attr({'href': data.newUrl, 'class': 'bicon-add ajax', 'title': title, rel: 'tooltip' })
+      .data({'trigger': data.trigger, 'width': data.width})
       .css("margin-left", "5px")
 
       $a.insertAfter(el)

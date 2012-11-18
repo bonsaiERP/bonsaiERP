@@ -45,7 +45,7 @@ class ContactsController < ApplicationController
     if @contact.save
       redirect_ajax(@contact)
     else
-      render :action => 'new'
+      render 'new'
     end
   end
 

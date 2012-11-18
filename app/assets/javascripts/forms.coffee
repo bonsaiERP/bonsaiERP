@@ -77,53 +77,71 @@
   window.AjaxLoadingHTML = AjaxLoadingHTML
 
 
+  $('div.ajax-modal form').live('ajax:success', (event, resp) ->
+    switch true
+      when _.isString(resp)
+        $parent = $(this).parents('div.ajax-modal')
+        $parent.html(resp)
+        $parent.find('form').attr('data-remote', true)
+      when _.isObject(resp)
+        $parent = $(this).parents('div.ajax-modal')
+        if trigger = $parent.data('trigger')
+          $(this).trigger trigger, [resp]
+
+        $parent.dialog('destroy')
+      else
+        console.log resp
+
+  )
+
   # Must be before any ajax click event to work with HTMLUnit
   # Makes that a dialog opened window makes an AJAX request and returns a JSON response
   # if response is JSON then trigger event stored in dialog else present the HTML
   # There are three types of response JSON, JavaScript and HTML
   # JavaScript response must have "// javascript" at the beginning
-  $('div.ajax-modal').on( 'form', 'submit', ->
-    return true if $(this).attr('enctype') == 'multipart/form-data'
-    return true if $(this).hasClass("no-ajax")
-    # Prevent from submiting the form.enter when hiting ENTER
-    return false if $(this).hasClass('enter') and window.keyPress == 13
+  #$('div.ajax-modal form').live( 'submit', ->
+    #return true if $(this).attr('enctype') == 'multipart/form-data'
+    #return true if $(this).hasClass("no-ajax")
 
-    el = this
-    data = $(el).serialize()
-    $(this).find('input, select, textarea').attr('disabled', true)
+    ## Prevent from submiting the form.enter when hiting ENTER
+    #return false if $(this).hasClass('enter') and window.keyPress == 13
 
-    $div = $(this).parents('.ajax-modal')
-    new_record = if $div.data('ajax-type') == 'new' then true else false
-    trigger = $div.data('trigger') || "ajax-call"
+    #el = this
+    #data = $(el).serializeArray()
+    #$(this).find('input, select, textarea').attr('disabled', true)
 
-    $.ajax
-      'url': $(el).attr('action')
-      'cache': false
-      'context':el
-      'data':data
-      'type': (data['_method'] || $(this).attr('method') )
-    .done (resp) ->
-      if typeof resp == "object"
-        data['new_record'] = new_record
-        p = $(el).parents('div.ajax-modal')
-        $(p).html('').dialog('destroy')
-        $('body').trigger(trigger, [resp])
-      else if resp.match(/^\/\/\s?javascript/)
-        p = $(el).parents('div.ajax-modal')
-        $(p).html('').dialog('destroy')
-      else
-        div = $(el).parents('div.ajax-modal:first')
-        div.html(resp)
-        setTimeout(->
-          $(div).setTransformations()
-        ,200)
-    .failure (resp) ->
-        alert('Existe errores, por favor intente de nuevo.')
+    #$div = $(this).parents('.ajax-modal')
+    #new_record = if $div.data('ajax-type') == 'new' then true else false
+    #trigger = $div.data('trigger') || "ajax-call"
 
-    false
+    #$.ajax
+      #'url': $(el).attr('action')
+      #'cache': false
+      #'context':el
+      #'data':data
+      #'type': (data['_method'] || $(this).attr('method') )
+    #.done (resp) ->
+      #if typeof resp == "object"
+        #data['new_record'] = new_record
+        #p = $(el).parents('div.ajax-modal')
+        #$(p).html('').dialog('destroy')
+        #$('body').trigger(trigger, [resp])
+      #else if resp.match(/^\/\/\s?javascript/)
+        #p = $(el).parents('div.ajax-modal')
+        #$(p).html('').dialog('destroy')
+      #else
+        #div = $(el).parents('div.ajax-modal:first')
+        #div.html(resp)
+        #setTimeout(->
+          #$(div).setTransformations()
+        #,200)
+    #.failure (resp) ->
+        #alert('Existe errores, por favor intente de nuevo.')
 
-  )
-  
+    #false
+
+  #)
+
   ##########################################
   # Activates autocomplete for all autocomplete inputs
   createAutocomplete = ->
