@@ -45,7 +45,7 @@ class ExpensesController < TransactionsController #ApplicationController
 
   # POST /expenses
   def create
-    @transaction = Expense.new(income_params)
+    @transaction = Expense.new(expense_params)
 
     respond_to do |format|
       if @transaction.save_trans
@@ -57,11 +57,11 @@ class ExpensesController < TransactionsController #ApplicationController
     end
   end
 
-  # POST /expenses/quick_income
-  def quick_income
-    @quick_income = QuickExpense.new(quick_income_params)
+  # POST /expenses/quick_expense
+  def quick_expense
+    @quick_expense = QuickExpense.new(quick_expense_params)
 
-    if @quick_income.create
+    if @quick_expense.create
       flash[:notice] = "El ingreso fue creado."
     else
       flash[:error] = "Existio errores al crear el ingreso."
@@ -72,7 +72,7 @@ class ExpensesController < TransactionsController #ApplicationController
 
   # PUT /expenses/1
   def update
-    @transaction.attributes = params[:income]
+    @transaction.attributes = params[:expense]
     if @transaction.save_trans
       redirect_to @transaction, :notice => 'La proforma de venta fue actualizada!.'
     else
@@ -94,7 +94,7 @@ class ExpensesController < TransactionsController #ApplicationController
   end
   
   # PUT /expenses/1/approve
-  # Method to approve an income
+  # Method to approve an expense
   def approve
     if @transaction.approve!
       flash[:notice] = "La nota de venta fue aprobada."
@@ -105,13 +105,13 @@ class ExpensesController < TransactionsController #ApplicationController
     anchor = ''
     anchor = 'payments' if @transaction.cash?
 
-    redirect_to income_path(@transaction, :anchor => anchor)
+    redirect_to expense_path(@transaction, :anchor => anchor)
   end
 
   # PUT /expenses/:id/approve_credit
   def approve_credit
     @transaction = Expense.find(params[:id])
-    if @transaction.approve_credit params[:income]
+    if @transaction.approve_credit params[:expense]
       flash[:notice] = "Se aprobó correctamente el crédito."
     else
       flash[:error] = "Existio un error al aprobar el crédito."
@@ -142,8 +142,8 @@ class ExpensesController < TransactionsController #ApplicationController
 
 private
 
-  # Redirects in case that someone is trying to edit or destroy an  approved income
-  def redirect_income
+  # Redirects in case that someone is trying to edit or destroy an  approved expense
+  def redirect_expense
     flash[:warning] = "No es posible editar una nota ya aprobada!."
     redirect_to expenses_path
   end
@@ -161,15 +161,15 @@ private
     end
   end
 
-  def income_params
-    params.require(:income).permit(:ref_number, :date, :contact_id, :project_id,  :currency_id, 
+  def expense_params
+    params.require(:expense).permit(:ref_number, :date, :contact_id, :project_id,  :currency_id, 
                                    :exchange_rate, :discount, :bill_number, :description, :fact,
                                    :transaction_details_attributes)
   end
 
 private
-  def quick_income_params
-    params.require(:quick_income).permit(:date, :ref_number, :fact,
+  def quick_expense_params
+    params.require(:quick_expense).permit(:date, :ref_number, :fact,
                                         :bill_number, :amount,
                                         :contact_id, :account_id, )
   end
