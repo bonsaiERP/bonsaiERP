@@ -72,7 +72,8 @@
     -  @incomes.each do |income|
       %tr{ :class => cycle(:odd, :even) }
         %td 
-          %span.bicon.pill{:class => "#{income.real_state}", :title => income.show_state}
+          = state_tag(income)
+          -#%span.bicon.pill{:class => "#{income.real_state}", :title => income.show_state}
         %td= link_to income.ref_number, income, :class => 'b'
         %td= income.contact
         %td= lo income.payment_date unless income.is_paid?

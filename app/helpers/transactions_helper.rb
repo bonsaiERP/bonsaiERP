@@ -107,6 +107,17 @@ module TransactionsHelper
     end
   end
 
+  def state_tag(trans)
+    case trans.state
+    when "draft" then span_label('borrador')
+    when "paid" then span_label('pagado', 'label label-success')
+    end
+  end
+
+  def span_label(txt, css_class = "label")
+    content_tag(:span, txt, class: css_class).html_safe
+  end
+
   def note_title(income)
     if income.state == "draft"
       "Proforma"
