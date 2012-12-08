@@ -76,6 +76,9 @@ describe QuickIncome do
       income.gross_total.should eq(amount)
       income.original_total.should eq(amount)
       income.should be_is_paid
+
+      income.creator_id.should eq(21)
+      income.approver_id.should eq(21)
     end
 
     it "account_ledger attribtes are set" do

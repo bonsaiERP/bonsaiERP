@@ -52,6 +52,9 @@ describe QuickExpense do
       expense.gross_total.should eq(amount)
       expense.original_total.should eq(amount)
       expense.should be_is_paid
+
+      expense.creator_id.should eq(21)
+      expense.approver_id.should eq(21)
     end
 
     it "account_ledger attribtes are set for out" do

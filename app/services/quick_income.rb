@@ -11,6 +11,8 @@ private
       inc.balance = 0
     end
 
+    set_transaction_users
+
     @transaction.save
   end
 
