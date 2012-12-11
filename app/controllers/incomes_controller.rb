@@ -143,24 +143,16 @@ private
     end
   end
 
-  def income_params
-    params.require(:income).permit(:ref_number, :date, :contact_id, :project_id,  :currency_id, 
-                                   :exchange_rate, :discount, :bill_number, :description, :fact,
-                                   :transaction_details_attributes)
-  end
-
 private
   def quick_income_params
-    params.require(:quick_income).permit(:date, :ref_number, :fact,
-                                        :bill_number, :amount,
-                                        :contact_id, :account_id)
+    params.require(:quick_income).permit(*transaction_params.quick_income)
   end
 
   def income_params
-    params.require(:income).permit(:ref_number, :date, :contact_id, :currency_id, :project_id,
-                                   :fact, :bill_number, :description, :total,
-                                   transaction_attributes: [
-                                    :item_id, :price, :quantity, 
-                                  ])
+    params.require(:income).permit(transaction_params.income)
+  end
+
+  def transaction_params
+    @transaction_params ||= TransactionParams.new
   end
 end

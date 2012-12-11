@@ -14,7 +14,12 @@ class AutocompleteInput < SimpleForm::Inputs::Base
       relation = attribute_name.to_s.gsub(/\A(.+)(_id)\z/,'\1')
     end
 
-    input_html_options['data-source'] ||= options['data-source']
+    case
+    when options['data-source'].present?
+      input_html_options['data-source'] = options.delete('data-source')
+    when input_html_options[:data].present? && input_html_options[:data][:source].present?
+      input_html_options['data-source'] = input_html_options[:data].delete(:source)
+    end
 
     raise 'input_html_options data-source required' unless input_html_options['data-source'].present?
 
