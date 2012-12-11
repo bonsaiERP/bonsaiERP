@@ -55,9 +55,21 @@ hr
 // header
 #header .navbar-inner
   +border-radius(0px)
-  //+background-image(linear-gradient(darken(#5BAE29, 10%), #5BAE29))
-  //height: 100px
-  //background: url('/assets/green-gradient-bg.png')
+  background-color: $menu-green
+  +background-image(linear-gradient($menu-green, darken($menu-green,  10%)) )
+
+  h1, h2, h3
+    color: white
+
+  ul.nav>li>a
+    +single-text-shadow
+    color: white
+
+  ul.nav
+    li.open>a
+      background: darken($menu-green, 20%)
+    //border-left: 1px solid darken($menu-green, 20%)
+    //1px solid darken($menu-green, 20%)
 
 .navbar
   margin: 0px !important
@@ -78,6 +90,9 @@ hr
     text-shadow: 1px 1px 1px #000
     width: 100%
 
+  h1, h2, h3
+    margin: 4px 0px
+
   ul#usersettings
     +border-radius
     padding: 0px
@@ -87,7 +102,8 @@ hr
     float: right
     background: rgba(0,0,0, 0.55)
 
-    font-size: 0.9em
+    font-size: 90%
+    font-weight: bold
 
     li
       list-style: none

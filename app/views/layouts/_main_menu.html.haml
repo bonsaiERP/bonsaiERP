@@ -1,5 +1,7 @@
-%ul.nav
-  - if current_organisation
+- if current_organisation
+  %h3= current_organisation
+
+  %ul.nav
     %li= link_to "Resumen", dashboard_path 
     %li.dropdown
       %a.dropdown-toggle( data-toggle="dropdown" href="#") 

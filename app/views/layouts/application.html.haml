@@ -41,13 +41,13 @@
             %span.icon-bar
           .row
             .span7
+              .nav-collapse.in(style="height: auto;")
+                = render 'layouts/main_menu'
               -# if organisation?
                 %h1{:title => "ID: #{session[:organisation][:id]}, Exp:  #{lo session[:organisation][:due_date] }"}= session[:organisation][:name]
             .span5.pull-right
               = render 'layouts/usersettings_menu' if user_signed_in?
 
-          .nav-collapse.in(style="height: auto;")
-            = render 'layouts/main_menu'
 
     #wrapper
       #menu
