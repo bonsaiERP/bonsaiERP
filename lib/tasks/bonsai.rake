@@ -196,7 +196,6 @@ namespace :bonsai do
 
   end
 
-  
   task :migrate_schemas => :environment do
     PgTools.reset_search_path
     ActiveRecord::Migration.verbose = verbose

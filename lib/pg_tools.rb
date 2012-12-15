@@ -23,7 +23,8 @@ module PgTools
   end
 
   def change_schema(schema_name)
-    connection.execute "SET search_path TO #{schema_name}"
+    #connection.execute "SET search_path TO #{schema_name}"
+    connection.schema_search_path = [schema_name, 'public'].join(', ')
   end
   alias :change_tenant :change_schema
 
@@ -163,9 +164,18 @@ BASH
     connection.execute sql
   end
 
-  protected
+  def scope_schema(schema_name)
+    original_search_path = connection.schema_search_path
+    connection.schema_search_path = "#{schema_name}, public"
 
-    def connection
-      ActiveRecord::Base.connection
-    end
+    yield
+  ensure
+    connection.schema_search_path = original_search_path
+  end
+
+protected
+
+  def connection
+    ActiveRecord::Base.connection
+  end
 end
