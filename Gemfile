@@ -1,58 +1,62 @@
 source :rubygems
 
-gem 'rails', '~> 3.2.9'
+gem 'rails', '3.2.9'
 
 group :assets do
-  gem 'sass-rails',   '~> 3.2.5'
-  gem 'coffee-rails', '~> 3.2.2'
-  gem 'uglifier',     '>= 1.3.0'
+  gem 'sass-rails'
+  gem 'coffee-rails'
+  gem 'uglifier'
 end
 
-gem 'turbo-sprockets-rails3', '~> 0.3.2' # Speed assets:precompile # Needs rails 3.2.9 or  superior for 0.3.2 version
+gem 'turbo-sprockets-rails3'# Speed assets:precompile
 
-gem 'jquery-rails'  , '~> 2.1.1'
-gem 'compass-rails' , '~> 1.0.3'
-gem 'coffee-filter' , '~> 0.1.1'
+#assets javascript gems
+gem 'jquery-rails'
+gem 'compass-rails'
+gem 'coffee-filter'
 #gem 'bootstrap-sass', "~> 2.0.0"
 
-gem 'pg'                     , '~> 0.14.1'
-gem 'virtus'                 , '~> 0.5.2' # Model generation in simple way
-gem 'encrypted-cookie-store' , '~> 1.0' # Encrypt cookies in the session
-gem 'strong_parameters'                 # Force in controllers to sanitize parameters
+gem 'pg'
+gem 'virtus'# Model generation in simple way
+gem 'encrypted-cookie-store'# Encrypt cookies in the session
+gem 'strong_parameters'# Force in controllers to sanitize parameters
 
-gem 'simple_form' , '~> 2.0.4'
-gem 'haml'        , '~> 3.1.7'
-gem 'kaminari'    , '~> 0.14.0'
-gem 'valium'      , '~> 0.5.0'
-gem 'bcrypt-ruby' , '~> 3.0.1' , require: 'bcrypt'
-gem 'roadie'      , '~> 2.3.4' # Styles for email
+gem 'simple_form'
+gem 'haml'
+gem 'kaminari'
+gem 'valium'
+gem 'bcrypt-ruby', require: 'bcrypt'
+gem 'roadie'# Styles for email
 
 gem 'validates_email_format_of', '~> 1.5.3'
 gem 'queue_classic', '~> 2.0.3' # Background processing for PostgreSQL
 
 gem 'prawn', '~> 1.0.0.rc1'
 #gem 'exception_notification', "~> 2.5.2"
-gem 'newrelic_rpm', group: 'production'
+
+group :production do
+  gem 'newrelic_rpm'
+end
 
 group :development, :test do
-  gem 'puma'            , '~> 1.6.3' # Web server
-  gem 'rspec-rails'     , '~> 2.12.0'
-  #gem 'steak'          , '~> 2.0.0'
-  gem 'ffaker'          , '~> 1.15.0'
-  gem 'pry-rails'       , '~> 0.2.2'
-  gem 'pry-nav'         , '~> 0.2.2'
-  gem 'rails-footnotes' , '~> 3.7.8'
+  gem 'puma'# Web server
+  gem 'rspec-rails'
+  gem 'ffaker'
+  gem 'pry-rails'
+  gem 'pry-nav'
+  gem 'rails-footnotes'
+  gem 'konacha'
 end
 
 # Test
 group :test do
-  gem 'capybara',           '~> 2.0.0'
-  gem 'database_cleaner',   '~> 0.9.1'
-  gem 'factory_girl_rails', '~> 4.1.0'
-  gem 'spork',              '~> 0.9.2'
-  gem 'valid_attribute',    '~> 1.3.1'
-  gem 'watchr',             '~> 0.7'
-  gem 'launchy',            '~> 2.1.0'
+  gem 'capybara'
+  gem 'database_cleaner'
+  gem 'factory_girl_rails'
+  gem 'spork'
+  gem 'valid_attribute'
+  gem 'watchr'
+  gem 'launchy'
   gem 'log4r'
 end
 
