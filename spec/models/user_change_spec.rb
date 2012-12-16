@@ -1,5 +1,7 @@
 require 'spec_helper'
 
 describe UserChange do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it {should have_valid(:user_id).when(1) }
+  it {should have_valid(:name).when('name') }
+  it {should_not have_valid(:name).when(' ') }
 end
