@@ -1,6 +1,9 @@
 describe QuickExpense do
+  let(:user) { build :user, id: 21 }
+
   before(:each) do
     UserSession.current_user = User.new {|u| u.id = 21 }
+    UserChange.any_instance.stub(save: true, user: user)
   end
 
   let!(:currency) { create(:currency) }
@@ -53,8 +56,9 @@ describe QuickExpense do
       expense.original_total.should eq(amount)
       expense.should be_is_paid
 
-      expense.creator_id.should eq(21)
-      expense.approver_id.should eq(21)
+      expense.user_changes.should have(2).items
+      expense.user_changes.map(&:name).sort.should eq(['approver', 'creator'])
+      expense.user_changes.map(&:user_id).should eq([21, 21])
     end
 
     it "account_ledger attribtes are set for out" do

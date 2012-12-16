@@ -8,6 +8,6 @@ class AddUserChangesUserId < ActiveRecord::Migration
   end
 
   def down
-    remove_column :user_id
+    remove_column :user_changes, :user_id
   end
 end

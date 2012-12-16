@@ -2,8 +2,11 @@
 require 'spec_helper'
 
 describe QuickIncome do
+  let(:user) { build :user, id: 21 }
+
   before(:each) do
     UserSession.current_user = User.new {|u| u.id = 21 }
+    UserChange.any_instance.stub(save: true, user: user)
   end
 
   let!(:currency) { create(:currency) }
@@ -64,7 +67,6 @@ describe QuickIncome do
       qi
     end
 
-
     let(:account_ledger) { subject.account_ledger }
     let(:income) { subject.income }
 
@@ -77,8 +79,9 @@ describe QuickIncome do
       income.original_total.should eq(amount)
       income.should be_is_paid
 
-      income.creator_id.should eq(21)
-      income.approver_id.should eq(21)
+      income.user_changes.should have(2).items
+      income.user_changes.map(&:name).sort.should eq(['approver', 'creator'])
+      income.user_changes.map(&:user_id).should eq([21, 21])
     end
 
     it "account_ledger attribtes are set" do
@@ -93,6 +96,7 @@ describe QuickIncome do
       account_ledger.should be_conciliation
 
       account_ledger.account_amount.should eq(initial_amount + income.total)
+
       account_ledger.creator_id.should eq(21)
       account_ledger.approver_id.should eq(21)
       account_ledger.contact_id.should eq(contact.id)

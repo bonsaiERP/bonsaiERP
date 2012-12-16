@@ -48,8 +48,9 @@ private
   def ledger_operation; end
 
   def set_transaction_users
-    transaction.creator_id = UserSession.user_id
-    transaction.approver_id = UserSession.user_id
+    u_id = UserSession.user_id
+    transaction.user_changes.build(user_id: u_id, name: 'creator')
+    transaction.user_changes.build(user_id: u_id, name: 'approver')
   end
 
   def transaction_attributes
