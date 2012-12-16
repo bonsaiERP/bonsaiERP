@@ -9,8 +9,7 @@ protected
   def check_authorization!
     if current_user && session[:user_rol]
       # TODO check due_date
-
-      unless check_user_by_rol(session[:user_rol], params[:controller], params[:action])
+      unless check_user_by_rol(session[:user_rol], controller_name, action_name)
         redirect_to "/422" and return
       end
     elsif current_user

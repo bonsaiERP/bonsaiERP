@@ -23,11 +23,11 @@ class Transaction < ActiveRecord::Base
   belongs_to :contact
   belongs_to :currency
   belongs_to :project
-  belongs_to :creator , :class_name => "User"
-  belongs_to :approver, :class_name => "User"
-  belongs_to :creditor, :class_name => "User"
-  belongs_to :nuller,   :class_name => "User"
-  belongs_to :modifier, :class_name => "User", :foreign_key => :modified_by
+  #belongs_to :creator , :class_name => "User"
+  #belongs_to :approver, :class_name => "User"
+  #belongs_to :creditor, :class_name => "User"
+  #belongs_to :nuller,   :class_name => "User"
+  #belongs_to :modifier, :class_name => "User", :foreign_key => :modified_by
 
   has_many :inventory_operations
 
@@ -36,6 +36,8 @@ class Transaction < ActiveRecord::Base
 
   # History
   has_many :transaction_histories, :autosave => true, :dependent => :destroy
+
+  has_many :user_changes, as: :user_changeable, autosave: true
 
   ########################################
   # Validations
