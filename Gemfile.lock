@@ -33,6 +33,9 @@ GEM
     arel (3.0.2)
     backports (2.6.5)
     bcrypt-ruby (3.0.1)
+    bugsnag (1.2.7)
+      httparty (>= 0.5, < 1.0)
+      multi_json (~> 1.0)
     builder (3.0.4)
     capybara (2.0.1)
       mime-types (>= 1.16)
@@ -87,6 +90,9 @@ GEM
     haml (3.1.7)
     hashery (2.1.0)
     hike (1.2.1)
+    httparty (0.9.0)
+      multi_json (~> 1.0)
+      multi_xml
     i18n (0.6.1)
     journey (1.0.4)
     jquery-rails (2.1.4)
@@ -115,6 +121,7 @@ GEM
     method_source (0.8.1)
     mime-types (1.19)
     multi_json (1.4.0)
+    multi_xml (0.5.1)
     newrelic_rpm (3.5.3.25)
     nokogiri (1.5.5)
     pdf-reader (1.2.0)
@@ -236,6 +243,7 @@ PLATFORMS
 
 DEPENDENCIES
   bcrypt-ruby
+  bugsnag
   capybara
   coffee-filter
   coffee-rails

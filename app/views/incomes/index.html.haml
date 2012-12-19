@@ -55,12 +55,12 @@
   %thead
     %tr
       %th
-        %span( title='Estado' rel='tooltip' ) Est.
+        %span(title='Estado' rel='tooltip') Est.
       %th
         %span(title='Número de referencia' rel="tooltip") Nº Ref.
       %th
         Cliente
-      %th 
+      %th
         Fecha / Vence el
       %th Total
       %th Saldo
@@ -72,7 +72,7 @@
   %tbody
     -  @incomes.each do |income|
       %tr{ :class => cycle(:odd, :even) }
-        %td 
+        %td
           = state_tag(income)
         %td
           = link_to income.ref_number, income, :class => 'b'
@@ -83,7 +83,7 @@
           = lo income.payment_date unless income.is_paid?
         %td
           #{income.currency_symbol} #{ntc income.total }
-        %td 
+        %td
           #{income.currency_symbol} #{ntc income.balance }
 
         = discount_cell income

@@ -55,6 +55,8 @@ describe QuickExpense do
       expense.gross_total.should eq(amount)
       expense.original_total.should eq(amount)
       expense.should be_is_paid
+      expense.date.should_not be_blank
+      expense.payment_date.should eq(expense.date)
 
       expense.user_changes.should have(2).items
       expense.user_changes.map(&:name).sort.should eq(['approver', 'creator'])

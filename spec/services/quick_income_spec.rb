@@ -78,6 +78,8 @@ describe QuickIncome do
       income.gross_total.should eq(amount)
       income.original_total.should eq(amount)
       income.should be_is_paid
+      income.date.should_not be_blank
+      income.payment_date.should eq(income.date)
 
       income.user_changes.should have(2).items
       income.user_changes.map(&:name).sort.should eq(['approver', 'creator'])

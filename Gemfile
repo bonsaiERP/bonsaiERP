@@ -36,6 +36,7 @@ gem 'prawn', '~> 1.0.0.rc1'
 
 group :production do
   gem 'newrelic_rpm'
+  gem  'bugsnag'# Report of errors
 end
 
 group :development, :test do

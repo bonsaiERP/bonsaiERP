@@ -56,7 +56,7 @@ private
   def transaction_attributes
     {ref_number: ref_number, date: date, currency_id: currency_id,
      bill_number: bill_number, fact: fact, contact_id: contact_id,
-     state: 'paid'
+     state: 'paid', payment_date: date
     }
   end
 

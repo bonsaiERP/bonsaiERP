@@ -47,17 +47,14 @@ class IncomesController < TransactionsController #ApplicationController
   end
 
   # POST /incomes
-  # POST /incomes.xml
   def create
-    @transaction = Income.new(income_params)
+    di = DefaultIncome.new(Income.new(income_params))
 
-    respond_to do |format|
-      if @transaction.save_trans
-        format.html { redirect_to(@transaction, :notice => 'Se ha creado una proforma de venta.') }
-      else
-        @transaction.transaction_details.build unless @transaction.transaction_details.any?
-        format.html { render :action => "new" }
-      end
+    if di.create
+      redirect_to di.income, notice: 'Se ha creado una proforma de venta.'
+    else
+      @income = di.income
+      render 'new'
     end
   end
 
@@ -75,14 +72,14 @@ class IncomesController < TransactionsController #ApplicationController
   end
 
   # PUT /incomes/1
-  # PUT /incomes/1.xml
   def update
-    @transaction.attributes = params[:income]
-    if @transaction.save_trans
-      redirect_to @transaction, :notice => 'La proforma de venta fue actualizada!.'
+    di = DefaultIncome.find(Income.find(params[:id]))
+
+    if di.update(income_params)
+      redirect_to di.income, notice: 'La proforma de venta fue actualizada!.'
     else
-      @transaction.transaction_details.build unless @transaction.transaction_details.any?
-      render get_template(@transaction)
+      @income = di.income
+      render get_template(@income)
     end
   end
 

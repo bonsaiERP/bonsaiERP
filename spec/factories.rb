@@ -76,4 +76,17 @@ FactoryGirl.define do
     date_start Date.today
     date_end Date.today + 30.days
   end
+
+  factory :transaction do
+    ref_number "T0001"
+  end
+
+  factory :income do
+    ref_number "I0001"
+    date { Date.today }
+    contact
+    currency
+    bill_number "I-0001"
+    description "New income description"
+  end
 end

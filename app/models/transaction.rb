@@ -23,11 +23,6 @@ class Transaction < ActiveRecord::Base
   belongs_to :contact
   belongs_to :currency
   belongs_to :project
-  #belongs_to :creator , :class_name => "User"
-  #belongs_to :approver, :class_name => "User"
-  #belongs_to :creditor, :class_name => "User"
-  #belongs_to :nuller,   :class_name => "User"
-  #belongs_to :modifier, :class_name => "User", :foreign_key => :modified_by
 
   has_many :inventory_operations
 
@@ -139,16 +134,6 @@ class Transaction < ActiveRecord::Base
     t
   end
 
-  def set_clone_buy(t)
-    t.discount = 0
-    t
-  end
-
-  # downcased type
-  def typed
-    type.downcase
-  end
-
   # Transalates the type for any language
   def type_translated
     arr = case I18n.locale
@@ -161,25 +146,6 @@ class Transaction < ActiveRecord::Base
   # Finds the related account with currency for a Contact
   def account
     contact.account_cur(currency_id)
-  end
-
-  # Presents a localized name for state
-  def show_state
-    @hash ||= create_states_hash
-    @hash[real_state]
-  end
-
-  # Creates a states hash based on the locale
-  def create_states_hash
-    arr = case I18n.locale
-    when :es
-      ["Proforma" , "Aprobado" , "Pagado" , "Vencido", "Pendiente", "Anulado"]
-    when :en
-      ["Draft"    , "Aproved"  , "Paid"   , "Due", "Pendent", "Nulled"]
-    when :pt
-      ["Borracha" , "Aprovado" , "Pagado" , "Vencido"]
-    end
-    Hash[STATES.zip(arr)]
   end
 
   # Returns the real state based on state and checked payment_date
@@ -195,19 +161,6 @@ class Transaction < ActiveRecord::Base
   def present_currency
     unless Organisation.find(OrganisationSession.organisation_id).id == self.currency_id
       self.currency.to_s
-    end
-  end
-
-  # Sets a default payment date using PayPlan
-  def update_payment_date
-    # Do not user PayPlan.unpaid.where(:transaction_id => id).limit(1) 
-    # because it can't find a created pay_pland in the middle of a transaction
-    pp = pay_plans.unpaid.where(:transaction_id => id).limit(1)
-
-    if pp.any?
-      self.payment_date = pp.first.payment_date
-    else
-      self.payment_date = self.date
     end
   end
 
