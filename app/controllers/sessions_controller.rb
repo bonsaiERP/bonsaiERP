@@ -35,6 +35,9 @@ class SessionsController < ApplicationController
       when !conf
         @user.resend_confirmation
         redirect_to registrations_path, notice: "Le hemos reenviado un email a #{@user.email} con instrucciones para completar su registro."
+      else
+        flash.now[:error] = 'El email o la contraseñas son incorrectos.'
+        render 'new'
       end
     else
       err = 'El email que ingreso no existe.'
