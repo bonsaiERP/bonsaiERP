@@ -11,23 +11,19 @@ class OrganisationSession
     # Stores using de application_controller the current_user for devise
     # @param [Hash] details from the organisation
     def set(organisation)
-      raise "The OrganisationSession couln't be set' the param must be a hash" unless organisation.is_a? Hash
-      @organisation_id = organisation[:id]
-      @name = organisation[:name]
-      @currency_id = organisation[:currency_id]
+      raise "The OrganisationSession couln't be set' expected Organisation" unless organisation.is_a? Organisation
+      @organisation = organisation
     end
     alias set= set
 
-    # Initialize variables
-    def destroy
-      @organisation_id = @org_name = @currency_id = nil
+    def organisation_id
+      @organisation.id
     end
 
-
-    # Returns the currencies of the current organisation
-    def currencies
-      o = current_organisation
-      [o.currency] + o.currencies
+    [:currency_id, :name, :email].each do |meth|
+      define_method meth do
+        @organisation.send(meth)
+      end
     end
 
   end

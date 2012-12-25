@@ -16,7 +16,7 @@ class TransactionParams
 
   def default
     [:ref_number, :date, :contact_id, :currency_id, :exchange_rate, :project_id, :bill_number, :description, 
-      :total, transaction_details: [
+      :total, transaction_details_attributes: [
         :item_id, :price, :quantity
       ]
     ]

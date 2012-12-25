@@ -5,8 +5,8 @@ class CreateTransactionDetails < ActiveRecord::Migration
       t.integer :item_id
       t.integer :currency_id
 
-      t.decimal :quantity, :precision => 14, :scale => 2
-      t.decimal :price, :precision => 14, :scale => 2
+      t.decimal :quantity, :precision => 14, :scale => 2, default: 0
+      t.decimal :price, :precision => 14, :scale => 2, default: 0
       t.string :description
       t.string :ctype, :limit => 30
       t.decimal :discount, :precision => 14, :scale => 2

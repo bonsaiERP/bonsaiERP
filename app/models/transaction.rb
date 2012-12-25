@@ -189,9 +189,11 @@ class Transaction < ActiveRecord::Base
   end
 
   # method for new
-  def set_defaults_new
-    set_defaults
-    set_ref_number
+  def self.defaults
+    {
+      cash: true, active: true, discount: 0, exchange_rate: 1, date: Date.today,
+      currency_id: OrganisationSession.currency_id, total: 0,
+    }
   end
 
 private
@@ -204,20 +206,6 @@ private
     elsif state.blank?
       self.state = "draft"
     end
-  end
-
-  # set default values for discount and taxes
-  def set_defaults
-    self.cash = cash.nil? ? true : cash
-    self.active = active.nil? ? true : active
-    self.discount ||= 0
-    self.tax_percent = taxes.inject(0) {|sum, t| sum += t.rate }
-    self.exchange_rate ||= 1
-    self.currency_id ||= OrganisationSession.currency_id
-    self.gross_total ||= 0
-    self.total ||= 0
-    #self.date ||= Date.today
-    @trans = true
   end
 
   def aproving?

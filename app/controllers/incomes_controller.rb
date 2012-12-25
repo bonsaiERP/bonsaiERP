@@ -32,12 +32,12 @@ class IncomesController < TransactionsController #ApplicationController
   # GET /incomes/new
   # GET /incomes/new.xml
   def new
-    if params[:transaction_id].present?
+    if params[:income_id].present?
       t = Income.find(params[:transaction_id])
-      @transaction = t.clone_transaction
+      @income = t.clone_transaction
     else
-      @transaction = Income.new(date: Date.today, currency_id: currency_id)
-      @transaction.set_defaults_with_details
+      @income = Income.new(Income.defaults)
+      @income.transaction_details.build
     end
   end
 
@@ -146,7 +146,7 @@ private
   end
 
   def income_params
-    params.require(:income).permit(transaction_params.income)
+    params.require(:income).permit(*transaction_params.income)
   end
 
   def transaction_params

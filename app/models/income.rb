@@ -38,11 +38,6 @@ class Income < Transaction
     "Ingreso #{ref_number}"
   end
 
-  def self.get_ref_number
-    ref = Income.order("ref_number DESC").first
-    ref.present? ? ref.ref_number.next : "I-0001"
-  end
-
   # Approves deliver in case that the sale is credit
   def approve_deliver
     return false if draft?
@@ -54,11 +49,14 @@ class Income < Transaction
     self.save
   end
 
-  def set_defaults_with_details
-    #set_defaults
-    transaction_details.build(price: 0, quantity: 0)
+  def self.defaults
+    super.merge(ref_number: Income.get_ref_number)
   end
 
+  def self.get_ref_number
+    ref = Income.order("ref_number DESC").first
+    ref.present? ? ref.ref_number.next : "I-0001"
+  end
 
 private
   def set_client
@@ -66,4 +64,5 @@ private
       contact.update_attribute(:client, true)
     end
   end
+
 end

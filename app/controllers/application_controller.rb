@@ -26,6 +26,7 @@ class ApplicationController < ActionController::Base
   # Callbacks
   before_filter :set_user_session, :if => :user_signed_in?
   before_filter :set_page, :set_tenant, :check_authorization!
+  before_filter :set_organisation_session
 
   def render_error(exception) 
     if notifier = Rails.application.config.middleware.detect { |x| x.klass == ExceptionNotifier } 
@@ -141,6 +142,12 @@ private
 
   def set_tenant
     PgTools.change_tenant current_tenant
+  end
+
+  def set_organisation_session
+    if current_organisation
+      OrganisationSession.set(current_organisation)
+    end
   end
 
   def login_verification

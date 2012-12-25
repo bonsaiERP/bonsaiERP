@@ -28,7 +28,7 @@ class Item extends Backbone.Model
       q = @get('quantity') * 1
       q = 1 unless q <= 0
 
-      price = ( item.price * (1/@get('rate') ) ).toFixed(_b.currency.precision) * 1
+      price = _b.roundVal( item.price * (1/@get('rate')), _b.numPresicion )
 
       @set(original_price: item.price, price: price, quantity: q, item_id: item.id)
   #
