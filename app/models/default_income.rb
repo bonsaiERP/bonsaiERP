@@ -2,7 +2,7 @@
 class DefaultIncome < DefaultTransaction
   attr_reader :income
 
-  delegate :state, to: :income
+  delegate :state, to: :income, prefix: true
 
   def initialize(trans)
     super
@@ -13,14 +13,10 @@ class DefaultIncome < DefaultTransaction
     transaction
   end
 
-  def create(params)
-    res = true
+  def create
     set_income_data
 
-    ActiveRecord::Base.transaction do
-    end
-
-    res
+    income.save
   end
 
   def update
@@ -28,6 +24,7 @@ class DefaultIncome < DefaultTransaction
 
 private
   def set_income_data
+    set_transaction_data
     income.state = 'draft' if income_state.blank?
   end
 end

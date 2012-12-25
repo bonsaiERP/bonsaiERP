@@ -180,14 +180,6 @@ class Transaction < ActiveRecord::Base
     end
   end
 
-  def get_type
-    @t ||= case type
-    when "Income"  then "venta"
-    when "Expense" then "gasto"
-    when "Buy"     then "compra"
-    end
-  end
-
   # Creates the pdf title based on the type
   def pdf_title
     t = get_type
@@ -196,29 +188,13 @@ class Transaction < ActiveRecord::Base
     "#{n} de #{t} #{ref_number}"
   end
 
-  def show_inventory?
-    if self.is_a? Income
-      deliver?
-    else
-      not(draft?)
-    end
-  end
-
   # method for new
   def set_defaults_new
     set_defaults
     set_ref_number
   end
 
-  def null_transaction
-    self.active          = false
-    self.state           = "nulled"
-    self.nuller_id       = UserSession.user_id
-    self.nuller_datetime = Time.zone.now
-    self.save
-  end
-
-  private
+private
 
   def set_state
     if balance.to_f <= 0
