@@ -2,13 +2,8 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class TransactionDetail < ActiveRecord::Base
-  # callbacks
-  #after_initialize :set_defaults
-  #before_save      :set_original_price
-  before_save      :set_balance, :if => 'transaction.draft?'
-  
-  attr_protected :original_price
 
+  ########################################
   # Relationships
   belongs_to :transaction
   belongs_to :item

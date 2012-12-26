@@ -4,26 +4,12 @@
 class Income < Transaction
 
   ########################################
-  # Includes
-  #include Transaction::TransactionDetails
-  #include Transaction::Invoice
-  ########################################
-
-  ########################################
   # Callbacks
   before_create :set_client
 
   ########################################
   # Relationships
   belongs_to :deliver_approver, :class_name => "User"
-
-  # Accessible attributes
-  #attr_accessible  :ref_number,  :date,                          :account_id,
-                   #:project_id,  :currency_id,                   :exchange_rate,
-                   #:discount,    :bill_number,                   :taxis_ids,
-                   #:description, :transaction_details_attributes, :contact_id,
-                   #:fact,        :created_at
-
 
   ########################################
   # Validations
@@ -36,17 +22,6 @@ class Income < Transaction
 
   def to_s
     "Ingreso #{ref_number}"
-  end
-
-  # Approves deliver in case that the sale is credit
-  def approve_deliver
-    return false if draft?
-    return false unless credit?
-    
-    self.deliver = true
-    self.deliver_approver_id = UserSession.user_id
-    self.deliver_datetime    = Time.zone.now
-    self.save
   end
 
   def self.defaults

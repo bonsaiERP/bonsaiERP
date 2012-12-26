@@ -7,12 +7,6 @@ class Transaction < ActiveRecord::Base
   DECIMALS = 2
   # Determines if the oprations is made on transaction or pay_plan or payment
   TYPES    = ['Income'  , 'Buys']
-  ########################################
-  include Models::Transaction::Calculations
-  ##include Models::Transaction::Trans
-  #include Models::Transaction::Approve
-  #include Models::Transaction::PayPlan
-  #include Models::Transaction::Payment
 
   ########################################
   # Callbacks
@@ -184,7 +178,7 @@ class Transaction < ActiveRecord::Base
   def pdf_title
     t = get_type
 
-    n = draft? ? "Proforma" : "Nota"
+    n = is_draft? ? "Proforma" : "Nota"
     "#{n} de #{t} #{ref_number}"
   end
 
