@@ -25,16 +25,6 @@
 
     %tr.extra
       %td{:colspan => 2}
-      %td.r{:colspan => 2} #{minus_image} Descuento (<span id="discount_percentage" data-val="#{income.total_discount}">#{ntc income.discount}</span>%)
-      %td#discount_total.r= ntc income.total_discount
-
-    %tr.extra
-      %td{:colspan => 2}
-      %td.r.line{:colspan => 2} Impuestos #{list_taxes income} (<span id="taxes_percentage" data-val="#{income.total_taxes}">#{ntc income.tax_percent}</span>%)
-      %td#taxes_total.r.line= ntc income.total_taxes
-
-    %tr.extra
-      %td{:colspan => 2}
         %td.r.b.dark{:colspan => 2} Total
       %td#total_value.r.b{'data-val' => income.total} #{currency_symbol} #{ntc income.total}
 

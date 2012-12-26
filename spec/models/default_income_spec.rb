@@ -65,7 +65,9 @@ describe DefaultIncome do
       i.gross_total.should > i.total
 
       i.transaction_details[0].original_price.should == 10.5
+      i.transaction_details[0].balance.should == 10.0
       i.transaction_details[1].original_price.should == 20.0
+      i.transaction_details[1].balance.should == 20.0
     end
   end
 end

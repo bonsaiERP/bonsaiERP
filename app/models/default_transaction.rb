@@ -18,6 +18,10 @@ private
   def update_payment_date
   end
 
+  def set_details_balance
+    transaction_details.each {|det| det.balance = det.quantity }
+  end
+
   def set_transaction_data
     set_details_original_prices
     transaction.gross_total = original_transaction_total

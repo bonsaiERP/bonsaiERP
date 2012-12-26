@@ -25,6 +25,7 @@ class DefaultIncome < DefaultTransaction
 private
   def set_income_data
     set_transaction_data
+    set_details_balance
     income.state = 'draft' if income_state.blank?
   end
 end

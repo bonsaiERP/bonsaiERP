@@ -23,9 +23,11 @@ class IncomesController < TransactionsController #ApplicationController
   # GET /incomes/1
   # GET /incomes/1.xml
   def show
+    @income = Income.find(params[:id])
+
     respond_to do |format|
-      format.html { render 'transactions/show' }
-      format.json  { render :json => @transaction }
+      format.html
+      format.json  { render :json => @income }
     end
   end
 

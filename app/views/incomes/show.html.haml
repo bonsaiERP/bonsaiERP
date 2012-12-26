@@ -1,136 +1,27 @@
 - content_for :links do
   %ul.breadcrumps.span6
-    %li #{link_to "Ventas", incomes_path}
+    %li #{link_to "Ingresos", incomes_path}
     %li
       %span #{@income}
 
   .links.span6
-    = link_to 'Nueva', "/#{params[:controller]}/new", :class => 'add'
-    - if transaction.draft?
-      = link_to 'Editar', "/#{params[:controller]}/#{transaction.id}/edit", :class => 'edit'
-      = link_to 'Borrar', transaction, :class => 'delete'
-.clear
+    = link_to 'Nueva', new_income_path
+    = link_to 'Editar', edit_income_path(@income)
+    = link_to 'Borrar', @income, method: 'delete'
 
-._40.fr.r
-  = link_to "Email","", :class => 'email'
-  &nbsp;&nbsp;
-  = link_to "Imprimir","", :class => 'print'
-
-
-%h1.mb5{:style => 'display:inline-block;'} #{note_title(@income)} de venta #{@income.ref_number}
-%span.b#income_state{:class => @income.real_state, :style => 'font-size:1.3em'}= @income.show_state
-%h2.n.mt5= link_to @income.contact, "#", :title => "Historial cliente"
-
-.clear
-
-.moneybox
-  %label TOTAL
-  %h3#total_currency #{@income.currency_symbol} #{ntc @income.total_currency}
-
-- unless transaction.paid?
-  .moneybox
-    %label SALDO A COBRAR
-    %h3#balance #{@income.currency_symbol} #{ntc @income.balance}
-  
-= "Vence el <strong id='due_on'>#{lo @income.payment_date}</strong></span>".html_safe unless @income.paid? or @income.draft?
-
-._50.fr.r
-  / FORM to null income
-  - if transaction.draft?
-    = simple_form_for @income, :url => approve_income_path(@income) do |f|
-      .submit
-        =f.submit "Aprobar", :class => 'btn btn-success b', :id => 'income_approve_button'
-
-.clear
 #tabs
   %ul
-    %li <a href="#information" id="tab_info">Información</a>
-    - unless @income.draft?
-      %li <a href="#payments" id="tab_payments">Cobros</a>
-    %li <a href="#pay_plans" id="tab_pay_plans">Crédito</a>
+    %li
+      %a(href="#information" id="tab_info") Información
+    %li
+      %a(href="#payments") Cobros
+    %li
+      %a(href="#inventory") Entregas inventario
 
   #information
+    = render "incomes/items", income: @income
 
-    .main{:style => 'font-size:1.2em;'}
-      %span.dark.b.i= lo @income.date
-
-    .input
-      - unless @income.currency_id == currency_id
-        .input
-          1 #{@income.currency.name} = <span class="b">#{@income.exchange_rate}</span> #{currency_name.pluralize}
-
-      - if @income.project_id
-        .input
-          %span.dark-grey 
-            -if @income.project_id
-              Proyecto #{link_to @income.project.to_s, @income.project, :title => 'Proyecto'}
-    .input= @income.description unless @income.description.blank?
-
-
-    .clear
-
-    = render 'items', :income => @income
-
-  #payments
-    =render "/payments/payments", :transaction => @income if @income.show_payments?
-    .clear
-
-  #pay_plans
-    =render "/pay_plans/pay_plans", :transaction => @income if @income.show_pay_plans?
-
-:javascript
-  $(function () {
-    $('#tabs').tabs();
-
-    if(!#{@income.paid?} && #{@income.cash}) {
-      $('#new_payment_link').trigger('click');
-    }
-
-    /**
-    * Sets the state for Income
-    * @param String state
-    */
-    function setIncomeState(state) {
-      if(state == 'paid') {
-        $('#payment_anchor').html('Ver cobros');
-        $('#pay_plan_anchor').html('Ver crédito');
-        $('#income_state').html('Pagado').attr('class', '').addClass('b paid');
-      }else{
-        if(state == 'due') {
-          $('#income_state').attr("class", '').addClass("b " + state).html("Vencido");
-        }else{
-          $('#income_state').attr("class", '').addClass("b " + state).html("Aprobado");
-        }
-      }
-    }
-
-
-    // Only when in edition
-    if("#{@income.state}" == "draft") {
-      // Deleted data
-      $('body').live("del-pay_plan", function(resp) {
-        try{
-          if(resp.transaction_cash == true) {
-            $('#cash_credit_title').html('Crédito');
-          }else if(resp.transaction_cash == false){
-            $('#cash_credit_title').html('Contado');
-          }
-        } catch(e) {}
-      }).live('transaction', function(e, resp) {
-        if(resp.transaction_cash) {
-          $('#cash_credit_title').html("Contado");
-        }else{
-          $('#cash_credit_title').html("Crédito");
-        }
-      });
-    }else {
-      // When it has been approved
-      $('body').live('transaction', function(e, resp) {
-        
-        $('h3#balance').html("#{@income.currency_symbol} " + _b.ntc(resp.balance) );
-        $('#due_on').html(_b.dateFormat(resp.payment_date));
-
-        setIncomeState(resp.real_state);
-      });
-    }
-  });
+:coffeescript
+  $( ->
+    $('#tabs').tabs()
+  )
