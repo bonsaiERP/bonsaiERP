@@ -3,7 +3,6 @@
 # email: boriscyber@gmail.com
 class MoneyStore < ActiveRecord::Base
 
-  #include Models::Account::Money
   ########################################
   # Callbacks
   before_create :create_new_account
@@ -13,7 +12,7 @@ class MoneyStore < ActiveRecord::Base
   ########################################
   # Attributes
   attr_accessor :amount
-  
+
   ########################################
   # Relationships
   belongs_to :currency
@@ -21,7 +20,7 @@ class MoneyStore < ActiveRecord::Base
 
   # Common validations
   validates_numericality_of :amount, :greater_than_or_equal_to => 0, :on => :create
-  validates :currency_id, :currency => true
+  validates_presence_of :currency, :currency_id
 
   # delegations
   delegate :name, :symbol, :code, :plural, :to => :currency, :prefix => true

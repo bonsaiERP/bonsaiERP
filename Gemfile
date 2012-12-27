@@ -55,6 +55,7 @@ group :test do
   gem 'database_cleaner'
   gem 'factory_girl_rails'
   gem 'spork'
+  gem 'shoulda-matchers'
   gem 'valid_attribute'
   gem 'watchr'
   gem 'launchy'
