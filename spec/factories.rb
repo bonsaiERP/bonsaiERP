@@ -77,8 +77,19 @@ FactoryGirl.define do
     date_end { Date.today + 30.days }
   end
 
+  factory :account do
+    name "First account"
+    amount 0
+    association :currency, factory: :currency, strategy: :build
+  end
+
   factory :transaction do
     ref_number "T0001"
+    date { Date.today }
+    contact
+    association :currency, factory: :currency, strategy: :build
+    bill_number "I-0001"
+    description "New income description"
   end
 
   factory :income do
@@ -89,4 +100,5 @@ FactoryGirl.define do
     bill_number "I-0001"
     description "New income description"
   end
+
 end

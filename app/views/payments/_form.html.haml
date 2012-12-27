@@ -1,4 +1,4 @@
-= simple_form_for Payment.new do |f|
+= simple_form_for Payment.new(date: Date.today) do |f|
   = bonsai_form_error(f)
 
   = f.hidden_field :transaction_id
@@ -19,4 +19,4 @@
     .span6
       = f.input :reference
     .span6
-      = f.input :interest, label: 'Intereses o penalidades'
+      = f.input :interest, label: 'Int. Pen.', hint: 'Intereses, penalidates, etc.'
