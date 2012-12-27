@@ -10,13 +10,15 @@
       = f.input :date, as: :datepicker, label: 'Fecha'
 
   .row-fluid
-    #payment-currency.span6
+    #payment-currency.span4
       %span BOB
-    .span6
+    .span4
+      = f.input :verification, label: 'Verificar', as: :radio, item_wrapper_class: 'inline'
+    .span4
       = f.input :amount, label: 'Cantidad', input_html: {type: 'decimal'}
 
   .row-fluid
     .span6
-      = f.input :reference
+      = f.input :reference, label: 'Referecia'
     .span6
       = f.input :interest, label: 'Int. Pen.', hint: 'Intereses, penalidates, etc.'

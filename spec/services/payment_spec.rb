@@ -2,18 +2,15 @@
 require 'spec_helper'
 
 describe Payment do
-  it { should validate_presence_of(:transaction_id) }
-  it { should validate_presence_of(:account_id) }
-
-  it { should have_valid(:amount).when(1) }
   it { should_not have_valid(:amount).when(-1) }
   it { should have_valid(:interest).when(1) }
   it { should_not have_valid(:interest).when(-1) }
 
   let(:valid_attributes) {
     {
-      transaction_id: 10, account_id: 2, exchange_rate: 0,
-      amount: 50, interest: 0, reference: 'El primer pago'
+      transaction_id: 10, account_id: 2, exchange_rate: 1,
+      amount: 50, interest: 0, reference: 'El primer pago',
+      verification: false
     }
   }
 
@@ -21,6 +18,11 @@ describe Payment do
   let(:account_id) { valid_attributes[:account_id] }
 
   subject { Payment.new(valid_attributes) }
+
+  it "initializes verification false" do
+    p = Payment.new
+    p.verification.should be_false
+  end
 
   context "Invalid" do
     subject { Payment.new }
@@ -41,12 +43,12 @@ describe Payment do
 
       subject.should_not be_valid
 
-      subject.errors[:base].should_not be_blank
+      subject.errors[:base].should eq([I18n.t('errors.messages.payment.invalid_amount_or_interest')])
     end
   end
 
-  context "Valid" do
-    let(:transaction) { build :transaction, id: transaction_id }
+  context "Valid and invalid" do
+    let(:transaction) { build :transaction, id: transaction_id, balance: 100 }
     let(:account) { build :account, id: account_id }
 
     before(:each) do
@@ -55,8 +57,14 @@ describe Payment do
     end
 
     it "Valid when" do
-      p = Payment.new(transaction_id: transaction_id, account_id: account_id)
+      p = Payment.new(valid_attributes)
+      p.should be_valid
+    end
+
+    it "is not valid if amount is greater than transaction_balance" do
+      p = Payment.new(valid_attributes.merge(amount: 200) )
       p.should_not be_valid
+      p.errors_on(:amount).should eq([I18n.t('errors.messages.payment.greater_amount_than_balance')])
     end
   end
 
