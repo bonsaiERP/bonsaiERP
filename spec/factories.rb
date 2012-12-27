@@ -67,14 +67,14 @@ FactoryGirl.define do
   factory :cash do
     name "Cash"
     number "123"
-    #currency_id 1
+    association :currency, factory: :currency, strategy: :build
     amount 100
   end
 
   factory :project do
     name "Project 1"
-    date_start Date.today
-    date_end Date.today + 30.days
+    date_start { Date.today }
+    date_end { Date.today + 30.days }
   end
 
   factory :transaction do
