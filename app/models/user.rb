@@ -7,9 +7,7 @@ class User < ActiveRecord::Base
 
   include Models::User::Authentication
 
-  ABBREV = "GEREN"
   ROLES = ['admin', 'gerency', 'operations'].freeze
-
 
   include Models::User::Authentication
 
@@ -113,7 +111,6 @@ class User < ActiveRecord::Base
   def update_password(params)
     return false if change_default_password?
 
-    PgTools.reset_search_path
     unless authenticate(params[:old_password])
       self.errors[:old_password] << I18n.t("errors.messages.user.wrong_password")
       return false
@@ -150,27 +147,13 @@ class User < ActiveRecord::Base
     
     res = true
     
-    User.transaction do
-      PgTools.set_search_path "public"
-      u = User.new_user(params[:email], params[:password])
-      u.password = self.temp_password
-      u.rol = params[:rolname]
-      u.change_default_password = true
-      u.send_email = true
-      res = u.save
-      @created_user = u
-
-      PgTools.reset_search_path
-      PgTools.set_search_path PgTools.get_schema_name OrganisationSession.organisation_id
-      u2 = User.new(params) {|us| us.id = u.id}
-      u2.password = self.temp_password
-      u2.rol = params[:rolname]
-      u2.send_email = false
-      u2.change_default_password = true
-      u2.active = true
-      res = res && u2.save
-      raise ActiveRecord::Rollback unless res
-    end
+    u = User.new_user(params[:email], params[:password])
+    u.password = self.temp_password
+    u.rol = params[:rolname]
+    u.change_default_password = true
+    u.send_email = true
+    res = u.save
+    @created_user = u
 
     res
   end
@@ -228,17 +211,17 @@ class User < ActiveRecord::Base
   end
 
 
-  private
+private
 
-    def create_user_link
-      links.build(:organisation_id => OrganisationSession.organisation_id, 
-                      :rol => rolname, :creator => false) {|link| 
-        link.abbreviation = abbreviation 
-      }
-    end
+  def create_user_link
+    links.build(:organisation_id => OrganisationSession.organisation_id, 
+                    :rol => rolname, :creator => false) {|link| 
+      link.abbreviation = abbreviation 
+    }
+  end
 
-    def destroy_links
-      links.destroy_all
-    end
+  def destroy_links
+    links.destroy_all
+  end
 
 end

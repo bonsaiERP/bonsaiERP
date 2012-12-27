@@ -284,6 +284,13 @@ es:
       full_messages:
         format: "%{attribute} %{message}"
 
+  simple_form:
+    "yes": "Si"
+    "no": "No"
+    required:
+      text: "requerido"
+      mark: "*"
+
   bonsai:
     registration: "Complete su registro en %{domain}"
     reset_password: "Recuperación de contraseña de www.bonsaierp.con"

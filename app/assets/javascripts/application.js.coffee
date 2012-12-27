@@ -14,5 +14,6 @@
 #= require twitter-bootstrap/bootstrap-dropdown
 #= require twitter-bootstrap/bootstrap-tooltip
 #= require twitter-bootstrap/bootstrap-modal
+#= require twitter-bootstrap/bootstrap-popover
 #= require forms
 #= require base

@@ -14,7 +14,6 @@ class AccountLedger < ActiveRecord::Base
   # din  = Devolution in
   # dout = Devolution out
   OPERATIONS = %w(trans cin cout pin pout iin iout din dout null).freeze
-  BEHAVIORS = [:devolution, :payment, :transference, :inout].freeze
 
   ########################################
   # Callbacks
@@ -28,21 +27,8 @@ class AccountLedger < ActiveRecord::Base
     upd.before_save :update_to_amount
   end
 
-  ########################################
-  # Attributes
-  attr_reader *BEHAVIORS
-  attr_reader :ac_id
-  # Base amount is the #  amount = base_amount + interests_penalties
-  attr_accessor :make_conciliation, :base_amount
-
-
-  # includes
+  # Includes
   include ActionView::Helpers::NumberHelper
-
-  # includes related to the model
-  #include Models::AccountLedger::Money
-  #include Models::AccountLedger::Payment
-  #include Models::AccountLedger::Conciliation
 
   ########################################
   # Relationships
@@ -90,36 +76,12 @@ class AccountLedger < ActiveRecord::Base
 
   delegate :type, :currency_id, :to => :transaction, :prefix => true, :allow_nil => true
 
-  ########################################
-  # Methods
-  BEHAVIORS.each do |met|
-    class_eval <<-CODE, __FILE__, __LINE__ + 1
-      def is_#{met}?; !!#{met}; end
-    CODE
-  end
-
   OPERATIONS.each do |op|
     class_eval <<-CODE, __FILE__, __LINE__ + 1
       def is_#{op}?; "#{op}" == operation; end
     CODE
   end
-
-  def conciliate_account
-    if is_null?
-      self.errors[:base] << I18n.t('errors.messages.account_ledger.null_conciliation')
-      
-      false
-    else
-      self.conciliation = true
-
-      self.save!
-    end
-  end
  
-  def self.pendent?
-    pendent.count > 0
-  end
-
   def to_s
     "%06d" % id
   end
@@ -133,70 +95,17 @@ class AccountLedger < ActiveRecord::Base
     not(active)
   end
 
-  def self.contact(contact_id)
-    AccountLedger.where(:contact_id => contact_id).includes(:currency)
-    .order("created_at DESC")
-  end
-
-  # nulls an account_ledger
-  def null_transaction
-    return false if conciliation?
-
-    self.nuller_datetime = Time.now
-
-    self.nuller_id = UserSession.user_id
-    self.active    = false
-  
-    if transaction_id.present?
-      null_transaction_account
-    else
-      self.save
-    end
-  end
-
-  # Creates a hash with the methods
-  def create_hash(*methods)
-    Hash[ methods.map {|m| [m, self.send(m)] } ]
-  end
-
-  def show_exchange_rate?
-    if to_id.present?
-      if errors[:to_account].blank? and account.currency_id != to.currency_id
-        true
-      else
-        false
-      end
-    else
-      false
-    end
-  end
-
   def amount_currency
     begin
-      er =  inverse? ? 1/exchange_rate : exchange_rate
-      ( amount - interests_penalties ) * er
+      amount * exchange_rate_currency
     rescue
       0
     end
   end
 
-  def amount_interests_currency
-    begin
-      r = inverse? ? 1/exchange_rate : exchange_rate
-      amount * r
-    rescue
-      0
-    end
+  def exchange_rate_currency
+    inverse? ? 1/exchange_rate : exchange_rate
   end
-
-  # Returns the amount
-  #def account_amount
-  #  if ac_id == account_id
-  #    amount
-  #  else
-  #    -amount * exchange_rate
-  #  end
-  #end
 
   def related_account
     if transaction_id.present?
@@ -224,21 +133,6 @@ class AccountLedger < ActiveRecord::Base
     end
   end
 
-  # Finds using the filter
-  # @param Integer
-  # @param String
-  def self.filtered(ac_id, filter = 'all')
-    ret = AccountLedger.where("account_id=:ac_id OR to_id=:ac_id", :ac_id => ac_id).includes(:account, :to)
-
-    case filter
-      when "nulled" then ret.nulled
-      when "con"    then ret.con
-      when "uncon"  then ret.pendent
-      else "all"
-        ret
-    end
-  end
-
   # returns the ac_id depending on the type od the account
   def payment_link_id
     if account_accountable_type === "MoneyStore"
@@ -253,33 +147,9 @@ class AccountLedger < ActiveRecord::Base
     @ac_id = val
   end
 
-  # Amount no interests
-  def base_amount
-    (amount - interests_penalties).abs
-  end
-
-  # Valid amount
-  def valid_amount?
-    if (out? or trans?) and account.amount < amount.abs
-      errors[:base] << I18n.t("errors.messages.account_ledger.amount") 
-      errors[:amount] << I18n.t("errors.messages.account_ledger.amount")
-      false
-    else
-      true
-    end
-  end
-
 private
   def set_currency
     self.currency_id = account_currency_id
-  end
-
-  def make_conciliation?
-    make_conciliation === true
-  end
-
-  def set_code
-    self.code = AccountLedger.count + 1
   end
 
   def set_creator
@@ -288,22 +158,5 @@ private
 
   def set_approver
     self.approver_id = UserSession.user_id
-  end
-
-  def update_account_amount
-    account.amount += amount
-    self.account_balance = account.amount
-
-    account.save!
-  end
-
-  # Updates the amount of the account to
-  def update_to_amount
-    return unless to_id.present?
-
-    to.amount -= amount
-    self.to_balance = to.amount
-
-    account.save!
   end
 end
