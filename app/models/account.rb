@@ -12,7 +12,6 @@ class Account < ActiveRecord::Base
   attr_protected :amount, :amount_currency
 
   # Relationships
-  #belongs_to :account_type
   belongs_to :currency
   belongs_to :accountable, :polymorphic => true
 

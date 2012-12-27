@@ -20,6 +20,9 @@
 
   #information
     = render "incomes/items", income: @income
+  #payments
+    %h2 Cobros
+    = render "payments/form"
 
 :coffeescript
   $( ->

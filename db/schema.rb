@@ -251,30 +251,6 @@ ActiveRecord::Schema.define(:version => 20121216212142) do
   add_index "pay_plans", ["project_id"], :name => "index_pay_plans_on_project_id"
   add_index "pay_plans", ["transaction_id"], :name => "index_pay_plans_on_transaction_id"
 
-  create_table "payments", :force => true do |t|
-    t.integer  "transaction_id"
-    t.string   "ctype"
-    t.date     "date"
-    t.decimal  "amount",                            :precision => 14, :scale => 2
-    t.decimal  "interests_penalties",               :precision => 14, :scale => 2
-    t.string   "description"
-    t.integer  "account_id"
-    t.integer  "account_ledger_id"
-    t.integer  "contact_id"
-    t.boolean  "active",                                                           :default => true
-    t.string   "state",               :limit => 20
-    t.decimal  "exchange_rate",                     :precision => 14, :scale => 4
-    t.datetime "created_at",                                                                         :null => false
-    t.datetime "updated_at",                                                                         :null => false
-  end
-
-  add_index "payments", ["account_id"], :name => "index_payments_on_account_id"
-  add_index "payments", ["account_ledger_id"], :name => "index_payments_on_account_ledger_id"
-  add_index "payments", ["contact_id"], :name => "index_payments_on_contact_id"
-  add_index "payments", ["ctype"], :name => "index_payments_on_ctype"
-  add_index "payments", ["date"], :name => "index_payments_on_date"
-  add_index "payments", ["transaction_id"], :name => "index_payments_on_transaction_id"
-
   create_table "prices", :force => true do |t|
     t.integer  "item_id"
     t.decimal  "unitary_cost", :precision => 14, :scale => 2
