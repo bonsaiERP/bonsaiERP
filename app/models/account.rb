@@ -7,33 +7,27 @@ class Account < ActiveRecord::Base
 
   # callbacks
   before_create :set_amount
-  #before_create :create_account_currency
-
-  #serialize :amount_currency
 
   attr_readonly  :initial_amount, :original_type
   attr_protected :amount, :amount_currency
 
-  # relationships
-  belongs_to :account_type
+  # Relationships
+  #belongs_to :account_type
   belongs_to :currency
   belongs_to :accountable, :polymorphic => true
 
   has_many :account_ledgers
   has_many :account_balances
-  #has_many :account_ledger_details
-  #has_many :account_currencies, :autosave => true
+
   # Transaction
   has_many :incomes,  :class_name => "Transaction", :conditions => "transactions.type = 'Income'"
-  has_many :buys,     :class_name => "Transaction", :conditions => "transactions.type = 'Buy'"
   has_many :expenses, :class_name => "Transaction", :conditions => "transactions.type = 'Expense'"
 
   # validations
   validates_presence_of :currency, :currency_id, :name
   validates_numericality_of :amount
-  #validates :currency_id, :organisation_relation => true
 
-  # delegations
+  # Delegations
   delegate :symbol, :name, :code, :to => :currency, :prefix => true, :allow_nil => true
 
   # scopes

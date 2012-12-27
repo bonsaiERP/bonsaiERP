@@ -29,7 +29,6 @@ describe TenantCreator do
 
       PgTools.change_schema t.tenant
       Account.count.should eq(1)
-      AccountType.count.should > 0
       Unit.count.should > 0
 
       res = PgTools.execute "SELECT * FROM #{t.tenant}.schema_migrations"

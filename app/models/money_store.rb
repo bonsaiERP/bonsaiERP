@@ -36,6 +36,7 @@ class MoneyStore < ActiveRecord::Base
   end
 
 private
+  # Sets the accessor method when creating a new MoneyStore
   def set_amount
     self.amount ||= 0
   end

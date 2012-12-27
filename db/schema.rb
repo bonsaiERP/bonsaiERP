@@ -81,19 +81,8 @@ ActiveRecord::Schema.define(:version => 20121216212142) do
   add_index "account_ledgers", ["transaction_id"], :name => "index_account_ledgers_on_transaction_id"
   add_index "account_ledgers", ["transaction_type"], :name => "index_account_ledgers_on_transaction_type"
 
-  create_table "account_types", :force => true do |t|
-    t.string   "name"
-    t.string   "number"
-    t.string   "account_number"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
-  end
-
-  add_index "account_types", ["account_number"], :name => "index_account_types_on_account_number"
-
   create_table "accounts", :force => true do |t|
     t.integer  "currency_id"
-    t.integer  "account_type_id"
     t.integer  "accountable_id"
     t.string   "accountable_type"
     t.string   "original_type",    :limit => 20
@@ -106,7 +95,6 @@ ActiveRecord::Schema.define(:version => 20121216212142) do
     t.datetime "updated_at",                                                    :null => false
   end
 
-  add_index "accounts", ["account_type_id"], :name => "index_accounts_on_account_type_id"
   add_index "accounts", ["accountable_id"], :name => "index_accounts_on_accountable_id"
   add_index "accounts", ["accountable_type"], :name => "index_accounts_on_accountable_type"
   add_index "accounts", ["amount"], :name => "index_accounts_on_amount"

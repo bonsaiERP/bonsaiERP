@@ -33,7 +33,7 @@ FactoryGirl.define do
   factory :organisation do
     name 'bonsaiERP'
     tenant 'bonsai'
-    association :currency 
+    association :currency, factory: :currency, strategy: :build
   end
 
   factory :contact do

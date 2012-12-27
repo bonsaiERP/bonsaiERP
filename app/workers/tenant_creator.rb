@@ -26,7 +26,6 @@ class TenantCreator
       copy_migrations_to tenant
 
       Unit.create_base_data
-      AccountType.create_base_data
       Store.create!(name: 'Almacen inicial')
       Cash.create!(name: 'Caja inicial', currency_id: organisation.currency_id)
     end

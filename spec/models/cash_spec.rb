@@ -1,8 +1,10 @@
 require 'spec_helper'
 
 describe Cash do
+  let(:currency) { create :currency }
+  let(:valid_params) { {:currency_id => currency.id, :name => 'Caja 1', :number => '12365498', :address => 'Uno'} }
   before(:each) do
-    OrganisationSession.set(:id => 1, :name => 'ecuanime')
+    OrganisationSession.set(build(:organisation, currency: currency))
 
     Currency.create!(:symbol => 'Bs.', :name => 'Boliviano') {|c| c.id = 1}
     @params = {:currency_id => 1, :name => 'Caja 1', :number => '12365498', :address => 'Uno'}
@@ -14,6 +16,7 @@ describe Cash do
       }
     end
   end
+
 
   it { should_not have_valid(:name).when('No') }
 
