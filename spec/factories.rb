@@ -19,7 +19,7 @@ FactoryGirl.define do
   end
 
   factory :user do
-    first_name "Boris" 
+    first_name "Boris"
     last_name "Barroso"
     email "boris@example.com"
     phone "2755620"
@@ -86,19 +86,24 @@ FactoryGirl.define do
   factory :transaction do
     ref_number "T0001"
     date { Date.today }
-    contact
+    association :contact, factory: :contact, strategy: :build
     association :currency, factory: :currency, strategy: :build
-    bill_number "I-0001"
-    description "New income description"
+    bill_number "B-0001"
+    description "New transaction description"
+    state 'draft'
+    factory :income do
+      ref_number "I0001"
+      description "New income description"
+    end
   end
 
-  factory :income do
-    ref_number "I0001"
-    date { Date.today }
-    contact
-    currency
-    bill_number "I-0001"
-    description "New income description"
-  end
+  #factory :income do
+  #  ref_number "I0001"
+  #  date { Date.today }
+  #  association :contact, factory: :contact, strategy: :build
+  #  association :currency, factory: :currency, strategy: :build
+  #  bill_number "I-0001"
+  #  description "New income description"
+  #end
 
 end

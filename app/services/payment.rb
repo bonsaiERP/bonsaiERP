@@ -2,14 +2,16 @@
 class Payment < BaseService
 
   # Attributes
-  attribute :transaction_id, Integer 
+  attribute :transaction_id, Integer
   attribute :account_id, Integer
-  attribute :date, Date 
+  attribute :date, Date
   attribute :amount, Decimal
   attribute :exchange_rate, Decimal
   attribute :reference, String
   attribute :interest, Decimal
   attribute :verification, Boolean
+
+  attr_reader :ledger, :interest
 
   # Validations
   validates_presence_of :transaction, :transaction_id, :account, :account_id, :reference
@@ -20,6 +22,7 @@ class Payment < BaseService
 
   # Delegations
   delegate :total, :balance, to: :transaction, prefix: true, allow_nil: true
+  #delegate to: :account, prefix: true, allow_nil: true
 
   def initialize(attrs = {})
     super
@@ -40,13 +43,17 @@ class Payment < BaseService
 
   def transaction
     @transaction ||= begin
-      Transaction.find(transaction_id)
+      trans_class.find(transaction_id)
     rescue
       nil
     end
   end
 
 private
+  def trans_class
+    Transaction
+  end
+
   def valid_amount_or_interest
     if amount.to_f <= 0 && interest.to_f <= 0
       self.errors[:base] = I18n.t('errors.messages.payment.invalid_amount_or_interest')
