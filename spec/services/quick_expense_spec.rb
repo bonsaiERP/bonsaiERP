@@ -66,7 +66,7 @@ describe QuickExpense do
     it "account_ledger attribtes are set for out" do
       account_ledger.contact_id.should eq(contact.id)
       account_ledger.should be_persisted
-      account_ledger.should be_is_pout
+      account_ledger.should be_is_payout
       account_ledger.date.to_date.should eq(valid_attributes[:date])
       account_ledger.reference == "Pago egreso #{expense.ref_number}"
 

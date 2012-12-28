@@ -25,7 +25,7 @@ private
   end
 
   def ledger_operation
-    'pout'
+    'payout'
   end
 
   def get_ref_number

@@ -5,15 +5,15 @@ class AccountLedger < ActiveRecord::Base
 
   ########################################
   # Constants
-  # cin  = Advance in that will add the amount to the Contact account
-  # cout = Advance out that will add the amount to the Contact account
-  # pin  = Payment in
-  # pout = Paymen out
-  # iin  = Interests in
-  # iout = Interestsout
-  # din  = Devolution in
-  # dout = Devolution out
-  OPERATIONS = %w(trans cin cout pin pout iin iout din dout null).freeze
+  # contin  = Advance in that will add the amount to the Contact account
+  # contout = Advance out that will add the amount to the Contact account
+  # payin  = Payment in
+  # payout = Paymen out
+  # intin  = Interests in
+  # intout = Interestsout
+  # devin  = Devolution in
+  # devout = Devolution out
+  OPERATIONS = %w(transin transout contin contout payin payout intin intout devin devout).freeze
 
   ########################################
   # Callbacks
@@ -82,6 +82,18 @@ class AccountLedger < ActiveRecord::Base
     CODE
   end
  
+  def conciliate_account
+    if !active?
+      self.errors[:base] << I18n.t('errors.messages.account_ledger.null_conciliation')
+      
+      false
+    else
+      self.conciliation = true
+
+      self.save!
+    end
+  end
+
   def to_s
     "%06d" % id
   end
@@ -158,5 +170,22 @@ private
 
   def set_approver
     self.approver_id = UserSession.user_id
+  end
+
+  def update_account_amount
+    account.amount += amount
+    self.account_balance = account.amount
+
+    account.save!
+  end
+
+  # Updates the amount of the account to
+  def update_to_amount
+    return unless to_id.present?
+
+    to.amount -= amount
+    self.to_balance = to.amount
+
+    account.save!
   end
 end

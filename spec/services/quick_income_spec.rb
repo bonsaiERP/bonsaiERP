@@ -89,7 +89,7 @@ describe QuickIncome do
     it "account_ledger attribtes are set" do
       account_ledger.contact_id.should eq(contact.id)
       account_ledger.should be_persisted
-      account_ledger.should be_is_pin
+      account_ledger.should be_is_payin
       account_ledger.date.to_date.should eq(valid_attributes[:date])
       account_ledger.reference == "Corbro ingreso #{income.ref_number}"
 

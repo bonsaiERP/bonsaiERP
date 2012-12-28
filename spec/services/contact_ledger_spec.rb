@@ -33,10 +33,9 @@ describe ContactLedger do
       cl = ContactLedger.new valid_attributes
 
       cl.create_in.should be_true
-      #puts cl.account_ledger.errors.messages
       al = cl.account_ledger
       al.should be_persisted
-      al.should be_is_cin
+      al.should be_is_contin
       al.contact_id.should eq(contact.id)
 
       al.amount.should eq(amount)
@@ -61,7 +60,7 @@ describe ContactLedger do
       #puts cl.account_ledger.errors.messages
       al = cl.account_ledger
       al.should be_persisted
-      al.should be_is_cin
+      al.should be_is_contin
       al.contact_id.should eq(contact.id)
 
       al.amount.should eq(amount)
@@ -100,7 +99,7 @@ describe ContactLedger do
 
       al = cl.account_ledger
       al.should be_persisted
-      al.should be_is_cout
+      al.should be_is_contout
       al.contact_id.should eq(contact.id)
 
       al.amount.should eq(-amount)
@@ -120,7 +119,7 @@ describe ContactLedger do
 
       al = cl.account_ledger
       al.should be_persisted
-      al.should be_is_cout
+      al.should be_is_contout
       al.contact_id.should eq(contact.id)
 
       al.amount.should eq(-amount)

@@ -25,7 +25,7 @@ private
   end
 
   def ledger_operation
-    'pin'
+    'payin'
   end
 
   def get_ref_number

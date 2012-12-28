@@ -1,5 +1,5 @@
 # encoding: utf-8
-# Creates the in and out for a contact,creating a account to pay in case 
+# Creates the in and out for a contact,creating a account to pay in case
 # it's an in and account to receive in case is an out
 class ContactLedger
 
@@ -17,7 +17,7 @@ class ContactLedger
   end
 
   def create_in(concil = true)
-    account_ledger.operation    = 'cin'
+    account_ledger.operation    = 'contin'
     account_ledger.conciliation = concil
 
     ActiveRecord::Base.transaction do
@@ -30,7 +30,7 @@ class ContactLedger
   end
 
   def create_out(concil = true)
-    account_ledger.operation    = 'cout'
+    account_ledger.operation    = 'contout'
     account_ledger.conciliation = concil
     account_ledger.amount       = -account_ledger.amount
 
