@@ -8,7 +8,6 @@ class PaymentIncome < Payment
       res = income.save
       res = create_ledger && res
       res = create_interest && res
-      res = ledger.save && res
 
       unless res
         # TODO set_errors
