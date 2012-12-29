@@ -18,12 +18,12 @@ class BaseService
 
 private
   def set_errors(*models)
-    models.each do |mod|
-      next unless self.send(mod).present?
-
-      self.send(mod).errors.each do |k, v|
+    models.compact.each do |mod|
+      mod.errors.each do |k, v|
         if self.respond_to?(k)
           self.errors[k] << v
+        else
+          self.errors[:base] << v
         end
       end
     end

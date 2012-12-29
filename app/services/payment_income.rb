@@ -10,7 +10,7 @@ class PaymentIncome < Payment
       res = create_interest && res
 
       unless res
-        # TODO set_errors
+        set_errors(income, ledger, int_ledger)
         raise ActiveRecord::Rollback
       end
     end

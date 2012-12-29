@@ -91,16 +91,18 @@ describe PaymentIncome do
 
   context "Errors" do
     before(:each) do
-      income.stub(save: false)
+      income.stub(save: false, errors: {balance: 'No balance'})
       Income.stub(:find).with(transaction_id).and_return(income)
       Account.stub(:find).with(account_id).and_return(account)
-      AccountLedger.any_instance.stub(save: true)
+      AccountLedger.any_instance.stub(save: false, errors: {amount: 'Not real'})
     end
 
     it "does not save" do
       p = PaymentIncome.new(valid_attributes)
 
       p.pay.should be_false
+      p.errors[:amount].should eq(['Not real'])
+      p.errors[:base].should eq(['No balance'])
     end
   end
 end
