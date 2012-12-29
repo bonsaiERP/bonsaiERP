@@ -74,5 +74,18 @@ describe PaymentIncome do
       p.int_ledger.should be_is_a(AccountLedger)
       p.int_ledger.amount.should == 10.0
     end
+
+    it "only creates int_ledger" do
+      income.should be_is_draft
+      p = PaymentIncome.new(valid_attributes.merge(interest: 10, amount: 0))
+
+      p.pay.should be_true
+
+      # ledger
+      p.ledger.should be_nil
+      # int_ledger
+      p.int_ledger.should be_is_a(AccountLedger)
+      p.int_ledger.amount.should == 10.0
+    end
   end
 end
