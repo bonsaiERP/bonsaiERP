@@ -88,4 +88,19 @@ describe PaymentIncome do
       p.int_ledger.amount.should == 10.0
     end
   end
+
+  context "Errors" do
+    before(:each) do
+      income.stub(save: false)
+      Income.stub(:find).with(transaction_id).and_return(income)
+      Account.stub(:find).with(account_id).and_return(account)
+      AccountLedger.any_instance.stub(save: true)
+    end
+
+    it "does not save" do
+      p = PaymentIncome.new(valid_attributes)
+
+      p.pay.should be_false
+    end
+  end
 end
