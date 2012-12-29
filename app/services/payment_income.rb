@@ -57,13 +57,13 @@ private
 
   def create_interest
     if interest.to_f > 0
-      @interest = AccountLedger.new(
+      @int_ledger = AccountLedger.new(
         transaction_id: transaction_id, operation: 'intin',
-        amount: amount, conciliation: false, account_id: account_id,
+        amount: interest, conciliation: false, account_id: account_id,
         contact_id: income.contact_id
       )
 
-      @interest.save
+      @int_ledger.save
     else
       true
     end

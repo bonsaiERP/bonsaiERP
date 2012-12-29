@@ -84,26 +84,32 @@ FactoryGirl.define do
   end
 
   factory :transaction do
-    ref_number "T0001"
+    ref_number "T-0001"
     date { Date.today }
     association :contact, factory: :contact, strategy: :build
     association :currency, factory: :currency, strategy: :build
     bill_number "B-0001"
     description "New transaction description"
     state 'draft'
-    factory :income do
-      ref_number "I0001"
-      description "New income description"
-    end
   end
 
-  #factory :income do
-  #  ref_number "I0001"
-  #  date { Date.today }
-  #  association :contact, factory: :contact, strategy: :build
-  #  association :currency, factory: :currency, strategy: :build
-  #  bill_number "I-0001"
-  #  description "New income description"
-  #end
+  factory :income do
+    ref_number "I-0001"
+    date { Date.today }
+    association :contact, factory: :contact, strategy: :build
+    association :currency, factory: :currency, strategy: :build
+    bill_number "I-0001"
+    description "New income description"
+    state "draft"
+  end
 
+  factory :expense do
+    ref_number "E-0001"
+    date { Date.today }
+    association :contact, factory: :contact, strategy: :build
+    association :currency, factory: :currency, strategy: :build
+    bill_number "P-0001"
+    description "New expense description"
+    state "draft"
+  end
 end

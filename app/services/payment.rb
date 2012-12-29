@@ -11,7 +11,7 @@ class Payment < BaseService
   attribute :interest, Decimal
   attribute :verification, Boolean
 
-  attr_reader :ledger, :interest
+  attr_reader :ledger, :int_ledger
 
   # Validations
   validates_presence_of :transaction, :transaction_id, :account, :account_id, :reference
