@@ -21,10 +21,10 @@ class Transaction < ActiveRecord::Base
   has_many :inventory_operations
 
   has_many :transaction_details, dependent: :destroy
-  accepts_nested_attributes_for :transaction_details
+  accepts_nested_attributes_for :transaction_details, allow_destroy: true
 
   # History
-  has_many :transaction_histories, :autosave => true, :dependent => :destroy
+  has_many :transaction_histories, autosave: true, dependent: :destroy
 
   has_many :user_changes, as: :user_changeable, autosave: true
 
@@ -35,9 +35,9 @@ class Transaction < ActiveRecord::Base
 
   ########################################
   # Scopes
-  scope :draft    , where(:state => 'draft')
-  scope :approved , where(:state => 'approved')
-  scope :paid     , where(:state => 'paid')
+  scope :draft    , where(state: 'draft')
+  scope :approved , where(state: 'approved')
+  scope :paid     , where(state: 'paid')
   scope :due      , where("transactions.state = ? AND transactions.payment_date < ?" , 'approved' , Date.today)
   scope :inventory, where("transactions.deliver = ? AND transactions.delivered = ?", true, false)
   # Especial used to update
@@ -46,8 +46,8 @@ class Transaction < ActiveRecord::Base
 
   ########################################
   # Delegates
-  delegate :name, :symbol, :plural, :code, :to => :currency, :prefix => true
-  delegate :matchcode, :account_cur, :to => :contact, :prefix => true, :allow_nil => true
+  delegate :name, :symbol, :plural, :code, to: :currency, prefix: true
+  delegate :matchcode, :account_cur, to: :contact, prefix: true, allow_nil: true
 
   ########################################
   # Methods
@@ -83,13 +83,6 @@ class Transaction < ActiveRecord::Base
     end
   end
 
-  # method used for searching
-  def self.search(options)
-    ret = self.includes(:contact, :currency)
-    ret = ret.send(scoped_state(options[:option])) if scoped_state(options[:option])
-    ret.where("transactions.ref_number ILIKE :code OR contacts.matchcode ILIKE :code", :code => "%#{options[:search]}%")
-  end
-
   # Define methods for the types of transactions
   TYPES.each do |type|
     class_eval <<-CODE, __FILE__, __LINE__ + 1
@@ -111,9 +104,9 @@ class Transaction < ActiveRecord::Base
 
     transaction_details.each do |det|
       t.transaction_details.build(
-        :item_id => det.item_id,
-        :quantity => det.quantity, 
-        :price => det.price
+        item_id: det.item_id,
+        quantity: det.quantity, 
+        price: det.price
       ) {|d|
         d.original_price = item_prices[det.item_id]
       }
@@ -126,15 +119,6 @@ class Transaction < ActiveRecord::Base
     t = set_clone_buy(t) if t.is_a?(Buy)
     
     t
-  end
-
-  # Transalates the type for any language
-  def type_translated
-    arr = case I18n.locale
-      when :es
-        ['Venta', 'Gasto', 'Compra']
-    end
-    Hash[TYPES.zip(arr)][type]
   end
 
   # Finds the related account with currency for a Contact
@@ -151,43 +135,8 @@ class Transaction < ActiveRecord::Base
     end
   end
 
-  # Presents the currency code name if not default currency
-  def present_currency
-    unless Organisation.find(OrganisationSession.organisation_id).id == self.currency_id
-      self.currency.to_s
-    end
-  end
-
-  # Returs the pay_type for the current instance
-  def pay_type
-    case type
-    when "Income" then "cobro"
-    when "Buy", "Expense" then "pago"
-    end
-  end
-
-  # returns the items dependig of what type is the transction
-  def get_items
-    case type
-    when "Income"  then Item.income
-    when "Expense" then Item.active
-    end
-  end
-
-  # Creates the pdf title based on the type
-  def pdf_title
-    t = get_type
-
-    n = is_draft? ? "Proforma" : "Nota"
-    "#{n} de #{t} #{ref_number}"
-  end
-
-  # method for new
-  def self.defaults
-    {
-      cash: true, active: true, discount: 0, exchange_rate: 1, date: Date.today,
-      currency_id: OrganisationSession.currency_id, total: 0,
-    }
+  def subtotal
+    self.transaction_details.inject(0) {|sum, v| sum += v.total }
   end
 
 private
@@ -205,7 +154,6 @@ private
   def aproving?
     aproving
   end
-
 
   def set_creator
     self.creator_id = UserSession.user_id

@@ -5,7 +5,7 @@ class Item extends Backbone.Model
     price: 0
     original_price: 0
     quantity: 1
-    subtotal: 0
+    subtotal: 0.0
     rate: 1
   #
   initialize: ->
@@ -14,13 +14,11 @@ class Item extends Backbone.Model
     @setSubtotal()
   #
   setSubtotal: ->
-    console.log 'sub', @get('price')
     sub = 1 * @get('quantity') * 1 * @get('price')
     @set('subtotal', sub)
   #
   setPrice: ->
-    console.log 'Before set price'
-    price = ( @get('original_price') * (1/@get('rate') ) ).toFixed(_b.currency.precision) * 1
+    price = ( @get('original_price') * (1/@get('rate') ) ).toFixed(_b.numPrecision) * 1
     @set(price: price )
   #
   setAutocompleteEvent: (el) ->
@@ -69,13 +67,22 @@ class Income extends Backbone.Collection
   #
   calculateTotal: (sub)->
     tot = sub
-    $(@totalPath).val(tot.toFixed(_b.currency.precision))
+    $(@totalPath).val(tot.toFixed(_b.numPrecision))
   #
   setList: ->
     @$table.find('tr.item').each (i, el) =>
-      @add(item = new Item )
+      @add(item = new Item( @itemValues(el) ) )
       rivets.bind(el, {item: item})
       item.setAutocompleteEvent(el)
+  #
+  itemValues: (el) ->
+    $price = $(el).find('.item-price')
+    price = $price.val() * 1
+    quantity = $(el).find('.item-quantity').val() * 1
+    { 
+      price: price, original_price: $price.data('original_price'),
+      quantity: quantity, subtotal: price * quantity
+    }
   #
   addItem: ->
     num = (new Date).getTime()
@@ -94,14 +101,20 @@ class Income extends Backbone.Collection
     itemTemplate.replace(/\$num/g, num)
   #
   deleteItem: (item, src)->
-    $(src).parents('tr.item').remove()
+    $row = $(src).parents('tr.item')
+    if $row.attr('id')
+      $input = $row.next('input')
+      html = ['<input type="hidden" name="', $input.attr('name').replace(/\[id\]/, '[_destroy]')
+        ,'" value="1" />'].join('')
+      $(html).insertAfter($input)
+    
+    $row.remove()
     @remove(item)
     @calculateSubtotal()
   # Sets the items currency
   setCurrency: (cur) ->
     @each (el) ->
       if el.attributes.item_id?
-        console.log cur.get('rate')
         el.set('rate', cur.get('rate'))
 
 
@@ -139,7 +152,6 @@ class TransactionCurrency extends Backbone.Model
     $('.currency').html(label)
   #
   showHideExchange: ->
-    console.log @get('baseCode'), @get('code')
     if @get('baseCode') == @get('code')
       $('.exchange-rate').hide('medium')
     else

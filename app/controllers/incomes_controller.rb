@@ -1,10 +1,9 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class IncomesController < TransactionsController #ApplicationController
+class IncomesController < ApplicationController
 
   # GET /incomes
-  # GET /incomes.xml
   def index
     if params[:search].present?
       @incomes = Income.search(params)
@@ -32,20 +31,19 @@ class IncomesController < TransactionsController #ApplicationController
   end
 
   # GET /incomes/new
-  # GET /incomes/new.xml
   def new
-    if params[:income_id].present?
-      t = Income.find(params[:transaction_id])
-      @income = t.clone_transaction
-    else
-      @income = Income.new(Income.defaults)
-      @income.transaction_details.build
-    end
+    #if params[:income_id].present?
+    #  t = Income.find(params[:transaction_id])
+    #  @income = t.clone_transaction
+    #else
+    @income = Income.new(ref_number: Income.get_ref_number, date: Date.today, currency_id: currency_id)
+    @income.transaction_details.build
+    #end
   end
 
   # GET /incomes/1/edit
   def edit
-    render get_template(@transaction)
+    @income = Income.find(params[:id])
   end
 
   # POST /incomes
@@ -75,18 +73,17 @@ class IncomesController < TransactionsController #ApplicationController
 
   # PUT /incomes/1
   def update
-    di = DefaultIncome.find(Income.find(params[:id]))
+    di = DefaultIncome.new(Income.find(params[:id]))
 
     if di.update(income_params)
       redirect_to di.income, notice: 'La proforma de venta fue actualizada!.'
     else
       @income = di.income
-      render get_template(@income)
+      render 'edit'
     end
   end
 
   # DELETE /incomes/1
-  # DELETE /incomes/1.xml
   def destroy
     if @transaction.approved?
       flash[:warning] = "No es posible anular la nota #{@transaction}."
@@ -97,7 +94,7 @@ class IncomesController < TransactionsController #ApplicationController
       redirect_to @transaction
     end
   end
-  
+
   # PUT /incomes/1/approve
   # Method to approve an income
   def approve
@@ -142,9 +139,8 @@ private
     end
   end
 
-private
   def quick_income_params
-    params.require(:quick_income).permit(*transaction_params.quick_income)
+   params.require(:quick_income).permit(*transaction_params.quick_income)
   end
 
   def income_params

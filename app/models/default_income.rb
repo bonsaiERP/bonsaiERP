@@ -19,7 +19,10 @@ class DefaultIncome < DefaultTransaction
     income.save
   end
 
-  def update
+  def update(params)
+    income.attributes = params
+
+    income.save
   end
 
 private

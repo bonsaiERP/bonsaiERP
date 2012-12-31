@@ -290,6 +290,7 @@
     fx.rates = exchangeRates.rates
 
   rivets.configure(
+    #preloadData: false
     adapter:
       subscribe: (obj, keypath, callback) ->
         obj.on('change:' + keypath, callback)

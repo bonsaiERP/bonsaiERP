@@ -7,7 +7,20 @@ describe IncomesController do
   end
 
   before do
-    controller.stub!(check_authorization!: true)
+    controller.stub!(check_authorization!: true, set_tenant: true, currency_id: 1)
+  end
+
+  describe "GET /item/new" do
+    it "initializes" do
+      get :new
+
+      assigns(:income).date.should be_a(Date)
+      assigns(:income).ref_number.should_not be_blank
+      assigns(:income).currency_id.should eq(1)
+      assigns(:income).transaction_details.should_not be_empty
+
+      response.should render_template('new')
+    end
   end
 
   describe "POST /item" do

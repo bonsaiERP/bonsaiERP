@@ -14,21 +14,21 @@
       %th
 
   = f.simple_fields_for :transaction_details do |fd|
-    %tr.item{:id => fd.object.id}
+    %tr.item{id: fd.object.id}
       %td
         = fd.input :item, as: :autocomplete, :label => false, 'data-source' => search_items_path(format: 'json'),
         input_html: {class: 'item_id', placeholder: 'Escriba para buscar el ítem'}
 
       %td
-        = fd.input :price, input_html: { size: 8, type: 'decimal', data: {'original-price'=> fd.object.original_price, 'value' => 'item.price'}  },
+        = fd.input :price, input_html: { size: 8, type: 'decimal', class: 'item-price', data: {'original-price'=> fd.object.original_price, 'value' => 'item.price'}  },
         label: false
 
       %td
-        = fd.input :quantity, input_html: { size: 8, type: :decimal, data: { 'value' => 'item.quantity' } },
+        = fd.input :quantity, input_html: { size: 8, type: :decimal, class: 'item-quantity', data: { 'value' => 'item.quantity' } },
         label: false
 
       %td.total_row.r
-        %span(data-text='item.subtotal | number')= ntc fd.object.total
+        %span.subtotal(data-text='item.subtotal | number')= ntc fd.object.total
       %td.del 
         %a(href="javascript:;" data-on-click="item:delete" class="bicon-trash" title="Borrar" rel="tooltip")
 

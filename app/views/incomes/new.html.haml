@@ -1,10 +1,10 @@
 - content_for :links do
   %ul.breadcrumps.span6
-    %li #{link_to 'Ventas', incomes_path} 
+    %li #{link_to 'Ingresos', incomes_path} 
     %li
       %span Nueva proforma de venta
 
 .page-header
-  %h1 Nueva proforma de venta
+  %h1 Nueva Ingreso
 
-= render 'incomes/form', :transaction => @income, :contacts => Client.scoped
+= render 'incomes/form', transaction: @income, contacts: Client.scoped

@@ -24,10 +24,6 @@ class Income < Transaction
     "Ingreso #{ref_number}"
   end
 
-  def self.defaults
-    super.merge(ref_number: Income.get_ref_number)
-  end
-
   def self.get_ref_number
     ref = Income.order("ref_number DESC").first
     ref.present? ? ref.ref_number.next : "I-0001"
