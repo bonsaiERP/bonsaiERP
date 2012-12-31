@@ -54,6 +54,14 @@ private
     Transaction
   end
 
+  def build_ledger(extra = {})
+      AccountLedger.new({
+        transaction_id: transaction_id, operation: '',
+        amount: 0, conciliation: verification, account_id: account_id,
+        contact_id: transaction.contact_id
+      }.merge(extra))
+  end
+
   def valid_amount_or_interest
     if amount.to_f <= 0 && interest.to_f <= 0
       self.errors[:base] = I18n.t('errors.messages.payment.invalid_amount_or_interest')

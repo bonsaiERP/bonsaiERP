@@ -70,9 +70,11 @@ describe PaymentIncome do
       # ledger
       p.ledger.should be_is_a(AccountLedger)
       p.ledger.amount.should == valid_attributes[:amount]
+      p.ledger.should be_is_payin
       # int_ledger
       p.int_ledger.should be_is_a(AccountLedger)
       p.int_ledger.amount.should == 10.0
+      p.int_ledger.should be_is_intin
     end
 
     it "only creates int_ledger" do
@@ -86,6 +88,7 @@ describe PaymentIncome do
       # int_ledger
       p.int_ledger.should be_is_a(AccountLedger)
       p.int_ledger.amount.should == 10.0
+      p.int_ledger.should be_is_intin
     end
   end
 

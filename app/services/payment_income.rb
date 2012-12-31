@@ -42,12 +42,7 @@ private
 
   def create_ledger
     if amount.to_f > 0
-      @ledger = AccountLedger.new(
-        transaction_id: transaction_id, operation: 'payin',
-        amount: amount, conciliation: verification, account_id: account_id,
-        contact_id: income.contact_id
-      )
-
+      @ledger = build_ledger(amount: amount, operation: 'payin')
       @ledger.save
     else
       true
@@ -56,12 +51,7 @@ private
 
   def create_interest
     if interest.to_f > 0
-      @int_ledger = AccountLedger.new(
-        transaction_id: transaction_id, operation: 'intin',
-        amount: interest, conciliation: false, account_id: account_id,
-        contact_id: income.contact_id
-      )
-
+      @int_ledger = build_ledger(amount: interest, operation: 'intin')
       @int_ledger.save
     else
       true

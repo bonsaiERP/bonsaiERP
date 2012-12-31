@@ -111,11 +111,11 @@ $header-color: lighten(gray, 20%)
   .ui-datepicker-prev
     left: 2px
     span
-      background: url(/assets/glyphicons-halflings-white.png)  -432px -72px no-repeat
+      background: url(/assets/glyphicons-halflings-white.png) -432px -72px no-repeat
   .ui-datepicker-next
     right: 2px
     span
-      background: url(/assets/glyphicons-halflings-white.png)  -456px -72px no-repeat
+      background: url(/assets/glyphicons-halflings-white.png) -456px -72px no-repeat
 
   .ui-datepicker-prev span, .ui-datepicker-next span
     display: block
@@ -174,10 +174,6 @@ $header-color: lighten(gray, 20%)
       width: 20px
       display: block
 
-    a.ui-state-hover
-      background-color: lighten(#484A4C, 30%) !important
-      color: white !important
-      text-decoration: none
     a.ui-state-highlight
       background-color: #484A4C !important
       color: #FFF !important
@@ -185,6 +181,10 @@ $header-color: lighten(gray, 20%)
       background-color: $menu-green !important
       color: #FFF !important
       font-weight: bold !important
+    a.ui-state-hover
+      background-color: lighten(#484A4C, 30%) !important
+      color: white !important
+      text-decoration: none
     //span, .ui-datepicker td a { display: block; padding: .2em; text-align: right; text-decoration: none; }
   .ui-datepicker-buttonpane
     background-image: none
