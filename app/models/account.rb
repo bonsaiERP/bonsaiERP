@@ -30,7 +30,7 @@ class Account < ActiveRecord::Base
   delegate :symbol, :name, :code, :to => :currency, :prefix => true, :allow_nil => true
 
   # scopes
-  scope :money, where(:accountable_type => "MoneyStore")
+  scope :money, includes(:currency).where(:accountable_type => "MoneyStore")
   scope :bank, where(:original_type => "Bank")
   scope :cash, where(:original_type => "Cash")
   scope :contact, where(:accountable_type => "Contact")

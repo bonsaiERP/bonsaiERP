@@ -1,8 +1,0 @@
-// javascript
-$('#pay_plans').html("<%= escape_javascript( render('pay_plans', :transaction => @transaction) ) %>").mark();
-// transaction
-$('#transaction_state').removeClass("<%= Transaction::STATES.join(" ") %>")
-.addClass("<%= @transaction.real_state %>")
-.html("<%= @transaction.show_state %>");
-
-$('#due_on').html("<%= lo @transaction.payment_date %>");

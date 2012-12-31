@@ -1,9 +1,0 @@
-%tr.pay_plan{:id => pay_plan.id}
-  %td.payment_date= lo pay_plan.payment_date
-  %td= lo pay_plan.alert_date
-  %td.r.amount #{pay_plan.currency_symbol} #{ntc pay_plan.amount}
-  %td= pay_plan.description
-  %td.state= pay_plan_state pay_plan.state
-  %td
-    - unless pay_plan.paid?
-      = link_to "Editar", edit_pay_plan_path(pay_plan, :transaction_id => pay_plan.transaction_id), :class => 'pencil ajax', :title => 'Editar crédito'
