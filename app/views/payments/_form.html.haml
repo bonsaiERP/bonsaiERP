@@ -1,5 +1,6 @@
-= simple_form_for Payment.new(date: Date.today) do |f|
+= simple_form_for payment do |f|
   = bonsai_form_error(f)
+  = hidden_field_tag :klass, payment.class
 
   = f.hidden_field :transaction_id
 

@@ -22,7 +22,7 @@
     = render "incomes/items", income: @income
   #payments
     %h2 Cobros
-    = render "payments/form"
+    = render "payments/form", payment: PaymentIncome.new(date: Date.today, transaction_id: @income.id)
 
 :coffeescript
   $( ->

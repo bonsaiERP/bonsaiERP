@@ -1,74 +1,26 @@
 require 'spec_helper'
 
 describe PaymentsController do
-
-  def mock_payment(stubs={})
-    @mock_payment ||= Payment.tap do |payment|
-      payment.stub!(stubs) unless stubs.empty?
-    end
+  before do
+    controller.stub!(check_authorization!: true, set_tenant: true, currency_id: 1)
   end
 
+  context "POST /payments" do
+    let(:income) { build :income, id: 1 }
+    it "initializes according to the class passed with params[:klass]" do
+      PaymentIncome.any_instance.stub(pay: true, transaction: income)
 
-  def mock_transaction(stubs = {})
-    @mock_transaction ||= Transaction.tap do |transaction|
-      transaction.stub!(stubs) unless stubs.empty?
-    end
-  end
+      post :create, klass: 'PaymentIncome', payment_income: {date: Date.today.to_s, transaction_id: 1}
 
-  describe "GET /new" do
-    it "assigns a new payment as @account_ledger" do
-      stub_auth
-      mock_trans = mock_transaction(:new_payment => mock_payment)
-      Transaction.stub!(:org => stub(:find => mock_trans) )
+      assigns(:payment).should be_a(PaymentIncome)
 
-      get :new, :id => 1
-      assigns(:transaction).should == mock_transaction
-      assigns(:account_ledger).should == mock_payment
+      response.should redirect_to('/incomes/1')
     end
 
+    it "redirects to incomes_path" do
+      post :create, klass: 'Je'
+
+      response.should redirect_to '/incomes'
+    end
   end
-
-
-  #describe "POST /create" do
-  #  describe "with valid params" do
-  #    before do
-  #      stub_auth
-  #      Transaction.stub!(:org => stub(:find => Income.new))
-  #      Income.any_instance.stub!(:valid? => true, :save_payment => true, :draft? => false)
-  #    end 
-
-  #    it 'when assigned should render create with account_id = 1' do
-
-  #      xhr :post, :create, :account_ledger => {:transaction_id => 1, :account_id => "1", :reference => "Test"}
-  #      response.should render_template('create')
-
-  #      controller.params[:account_ledger][:account_id].should == "1"
-  #      controller.params[:account_ledger][:currency_id].should == nil
-  #      controller.params[:account_ledger][:exchange_rate].should == 1
-  #    end
-
-  #    it 'when assigned should render create with account_id = 1' do
-
-  #      xhr :post, :create, :account_ledger => {:transaction_id => 1, :account_id => "1-2", :exchange_rate => "0.5", :reference => "Test"}
-  #      response.should render_template('create')
-
-  #      assigns(:account_ledger).account_id.should == 1
-  #      assigns(:account_ledger).currency_id.should == 2
-  #    end
-  #  end
-
-  #  describe "with invalid params" do
-  #    before do
-  #      stub_auth
-  #      Transaction.stub!(:org => stub(:find => mock_payment(:new_payment => AccountLedger.new, :save_payment => false ) ) )
-  #    end
-
-  #    it 'when wrong params should render new template' do
-  #      xhr :post, :create, :account_ledger => {:transaction_id => 1, :account_id => "1"}
-  #      response.should render_template('new')
-  #    end
-  #  end
-
-  #end
-
 end

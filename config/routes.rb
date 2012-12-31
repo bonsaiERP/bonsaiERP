@@ -42,14 +42,7 @@ Bonsaierp::Application.routes.draw do
 
   resources :cashes
 
-  resources :payments do
-    collection do
-      get  :new_devolution
-      post :devolution
-    end
-  end
-
-  resources :pay_plans
+  resources :payments, only: [:new, :create]
 
   resources :projects
 
