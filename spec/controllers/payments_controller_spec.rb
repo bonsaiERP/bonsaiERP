@@ -6,9 +6,8 @@ describe PaymentsController do
   end
 
   context "POST /payments" do
-    let(:income) { build :income, id: 1 }
     it "initializes according to the class passed with params[:klass]" do
-      PaymentIncome.any_instance.stub(pay: true, transaction: income)
+      PaymentIncome.any_instance.stub(pay: true, transaction: build(:income, id: 1) )
 
       post :create, klass: 'PaymentIncome', payment_income: {date: Date.today.to_s, transaction_id: 1}
 

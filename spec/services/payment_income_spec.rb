@@ -33,6 +33,14 @@ describe PaymentIncome do
       AccountLedger.any_instance.stub(save: true)
     end
 
+    it "does not trigger" do
+      p = PaymentIncome.new(valid_attributes.merge(reference: ''))
+
+      p.pay.should  be_false
+      p.income.errors.messages.should be_blank
+      p.ledger.should be_nil
+    end
+
     it "Payments" do
       income.should be_is_draft
       p = PaymentIncome.new(valid_attributes)
@@ -46,9 +54,11 @@ describe PaymentIncome do
 
       # Ledger
       p.ledger.amount.should == 50.0
+      p.ledger.exchange_rate == 1
       p.ledger.should be_is_payin
       p.ledger.transaction_id.should eq(income.id)
       p.ledger.should be_conciliation
+      p.ledger.reference.should eq(valid_attributes[:reference])
 
       p.int_ledger.should be_nil
 

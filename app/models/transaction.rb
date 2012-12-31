@@ -20,6 +20,8 @@ class Transaction < ActiveRecord::Base
 
   has_many :inventory_operations
 
+  has_many :account_ledgers
+
   has_many :transaction_details, dependent: :destroy
   accepts_nested_attributes_for :transaction_details, allow_destroy: true
 

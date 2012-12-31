@@ -2,6 +2,8 @@
 class PaymentIncome < Payment
   # Creates the payment object
   def pay
+    return false unless self.valid?
+
     res = true
     ActiveRecord::Base.transaction do
       update_income

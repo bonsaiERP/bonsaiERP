@@ -21,7 +21,11 @@ describe Payment do
 
   it "initializes verification false" do
     p = Payment.new
+
     p.verification.should be_false
+    p.amount.should == 0
+    p.interest.should == 0
+    p.exchange_rate == 1
   end
 
   context "Invalid" do
@@ -30,8 +34,7 @@ describe Payment do
     it "checks valid presence" do
       subject.should_not be_valid
 
-      [:transaction, :transaction_id, :account, :account_id, :amount,
-      :exchange_rate, :interest].each do |met|
+      [:transaction, :transaction_id, :account, :account_id].each do |met|
         subject.errors[met].should_not be_blank
       end
     end

@@ -9,6 +9,15 @@
     = link_to 'Editar', edit_income_path(@income)
     = link_to 'Borrar', @income, method: 'delete'
 
+.row
+  .span2.well
+    %h2 Total
+    %h3= ntc @income.total
+
+  .span2.well
+    %h2 Saldo
+    %h3= ntc @income.balance
+
 #tabs
   %ul
     %li

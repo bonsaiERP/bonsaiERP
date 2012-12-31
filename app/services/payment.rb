@@ -5,11 +5,11 @@ class Payment < BaseService
   attribute :transaction_id, Integer
   attribute :account_id, Integer
   attribute :date, Date
-  attribute :amount, Decimal
-  attribute :exchange_rate, Decimal
+  attribute :amount, Decimal, default: 0
+  attribute :exchange_rate, Decimal, default: 1
   attribute :reference, String
-  attribute :interest, Decimal
-  attribute :verification, Boolean
+  attribute :interest, Decimal, default: 0
+  attribute :verification, Boolean, default: false
 
   attr_reader :ledger, :int_ledger
 
@@ -56,9 +56,9 @@ private
 
   def build_ledger(extra = {})
       AccountLedger.new({
-        transaction_id: transaction_id, operation: '',
+        transaction_id: transaction_id, operation: '', exchange_rate: exchange_rate,
         amount: 0, conciliation: verification, account_id: account_id,
-        contact_id: transaction.contact_id
+        contact_id: transaction.contact_id, reference: reference
       }.merge(extra))
   end
 

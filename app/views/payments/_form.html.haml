@@ -1,4 +1,4 @@
-= simple_form_for payment do |f|
+= simple_form_for payment, url: payments_path do |f|
   = bonsai_form_error(f)
   = hidden_field_tag :klass, payment.class
 
@@ -6,7 +6,7 @@
 
   .row-fluid
     .span6
-      = f.input :account_id, label: 'Cuenta'
+      = f.input :account_id, label: 'Cuenta', collection: Account.money
     .span3
       = f.input :date, as: :datepicker, label: 'Fecha'
     .span3
@@ -26,6 +26,9 @@
       = f.input :reference, label: 'Referecia'
     .span6
       = f.input :interest, label: 'Int. Pen.', hint: 'Intereses, penalidates, etc.'
+
+  .form-actions
+    = f.submit "Salvar"
 
 :css
   .popover-title{ display: none }

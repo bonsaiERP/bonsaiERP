@@ -35,7 +35,7 @@
           %td.r.b.dark{:colspan => 2} Total #{income.currency_name.pluralize}
         %td#total_value.r.b{'data-val' => income.total_currency} #{income.currency_symbol} #{ntc income.total_currency}
 
-      - unless income.state == 'draft'
+      -# unless income.state == 'draft'
         %tr.extra
           %td{:colspan => 2}
           %td.r.b.line.dark{:colspan => 2} #{minus_image} Cobrado #{income.currency_name.pluralize}
@@ -45,7 +45,7 @@
             %td.r.b.dark{:colspan => 2} Saldo #{income.currency_name.pluralize}
           %td#balance.r.b{'data-val' => income.balance} #{income.currency_symbol} #{ntc income.balance}
 
-    - elsif not income.state == 'draft'
+    -# elsif not income.state == 'draft'
       %tr.extra
         %td{:colspan => 2}
         %td.r.b.line.dark{:colspan => 2} #{minus_image} Cobrado
