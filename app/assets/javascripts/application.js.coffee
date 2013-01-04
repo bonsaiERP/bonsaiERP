@@ -16,4 +16,5 @@
 #= require bootstrap/bootstrap-modal
 #= require bootstrap/bootstrap-popover
 #= require plugins/forms
+#= require plugins/forms_extra
 #= require base

@@ -10,7 +10,7 @@
       .span4
         = f.input :date, label: "Fecha", as: :datepicker
       .span4
-        = f.input :contact, as: :autocomplete, label: 'Contacto', input_html: { data: {source: '/contacts/search', new_url: new_contact_path, title: 'Nuevo contacto', trigger: 'new-contact'} }
+        = f.input :contact, as: :autocomplete, label: 'Contacto', input_html: { data: {source: '/contacts/search', new_url: new_contact_path, title: 'Nuevo contacto', trigger: 'new-contact', placeholder: 'Escriba para buscar contactos'} }
 
     %hr.light
     .row-fluid.currency-input

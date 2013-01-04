@@ -7,7 +7,7 @@
     .row-fluid
       .span4
         =f.input :contact_id, as: :select2, label: "Contacto",
-          'data-source' => '/contacts/search', input_html: { data: {new_url: new_contact_path, title: 'Nuevo contacto', trigger: 'new-contact'}, class: 'contact_id'}
+          'data-source' => '/contacts/search', input_html: { data: {new_url: new_contact_path, title: 'Nuevo contacto', trigger: 'new-contact'}, class: 'contact_id', placeholder: 'Escriba para buscar contactos'}
       .span4=f.input :date, as: :datepicker, label: 'Fecha'
 
     .row-fluid

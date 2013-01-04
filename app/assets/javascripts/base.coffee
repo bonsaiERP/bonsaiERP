@@ -291,10 +291,7 @@
     $('body').tooltip( selector: '[rel=tooltip]' )
     $('body').setDatepicker()
     $('body').createAutocomplete()
-    $('.select2-autocomplete').each( (i, el) ->
-      console.log el
-      select2Autocomplete(el)
-    )
+    $('.select2-autocomplete').select2Autocomplete()
     $('body').dataNewUrl()
     fx.rates = exchangeRates.rates
 
