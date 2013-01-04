@@ -4,9 +4,8 @@
 class ContactsController < ApplicationController
   before_filter :find_contact, :only => [:show, :edit, :update, :destroy]
 
-  #respond_to :html, :xml, :json
+  #respond_to :html, :json
   # GET /contacts
-  # GET /contacts.xml
   def index
     @contacts = Contact.page(@page)
 
@@ -18,14 +17,17 @@ class ContactsController < ApplicationController
 
   # GET /contacts/search?term=:term
   def search
-    # TODO: Use serializers to remove ugly JSON methods
-    data = Contact.search(params[:term]).limit(20).map {|v| {label: v.matchcode, id: v.id} }
-    render json: data
+    s = params[:term] || params[:q]
+    render json: Contact.search(s).limit(20).order('matchcode')
   end
 
   # GET /contacts/1
   # GET /contacts/1.xml
   def show
+    respond_to do |format|
+      format.html
+      format.json { render json: @contact }
+    end
   end
 
   # GET /contacts/new

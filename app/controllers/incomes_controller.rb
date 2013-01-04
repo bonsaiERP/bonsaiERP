@@ -32,13 +32,8 @@ class IncomesController < ApplicationController
 
   # GET /incomes/new
   def new
-    #if params[:income_id].present?
-    #  t = Income.find(params[:transaction_id])
-    #  @income = t.clone_transaction
-    #else
     @income = Income.new(ref_number: Income.get_ref_number, date: Date.today, currency_id: currency_id)
-    @income.transaction_details.build
-    #end
+    @income.transaction_details.build(quantity: 1.0)
   end
 
   # GET /incomes/1/edit

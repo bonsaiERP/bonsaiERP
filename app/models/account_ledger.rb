@@ -47,10 +47,10 @@ class AccountLedger < ActiveRecord::Base
   # Validations
   validates_presence_of :amount, :account_id, :account, :reference, :currency, :currency_id
 
-  validates_inclusion_of :operation, :in => OPERATIONS
-  validates_numericality_of :exchange_rate, :greater_than => 0
+  validates_inclusion_of :operation, in: OPERATIONS
+  validates_numericality_of :exchange_rate, greater_than: 0
 
-  validates :reference, :length => { :within => 3..150, :allow_blank => false }
+  validates :reference, length: { within: 3..150, allow_blank: false }
 
   ########################################
   # scopes
@@ -58,7 +58,7 @@ class AccountLedger < ActiveRecord::Base
   scope :con,     where(:conciliation => true)
   scope :nulled,  where(:active => false)
   scope :active,  where(:active => true)
-  scope :staff,   lambda{|st_id|
+  scope :staff,   ->(st_id) {
     s = AccountLedger.scoped
     where(s.table[:contact_id].eq(st_id).or(s.table[:staff_id].eq(st_id) ) )
     .order("created_at DESC")
@@ -66,15 +66,15 @@ class AccountLedger < ActiveRecord::Base
 
   ########################################
   # delegates
-  delegate :name, :symbol, :code, :to => :currency, :prefix => true, :allow_nil => true
+  delegate :name, :symbol, :code, to: :currency, prefix: true, allow_nil: true
 
   delegate :currency_id, :name, :original_type, :accountable_type, :accountable, :amount, :accountable_id,
-    :to => :account, :prefix => true, :allow_nil => true
+    to: :account, prefix: true, allow_nil: true
 
   delegate :currency_id, :name, :original_type, :accountable_type, :accountable, :amount, :accountable_id,
-    :to => :to, :prefix => true, :allow_nil => true
+    to: :to, prefix: true, allow_nil: true
 
-  delegate :type, :currency_id, :to => :transaction, :prefix => true, :allow_nil => true
+  delegate :type, :currency_id, to: :transaction, prefix: true, allow_nil: true
 
   OPERATIONS.each do |op|
     class_eval <<-CODE, __FILE__, __LINE__ + 1
@@ -83,14 +83,14 @@ class AccountLedger < ActiveRecord::Base
   end
  
   def conciliate_account
-    if !active?
-      self.errors[:base] << I18n.t('errors.messages.account_ledger.null_conciliation')
-      
-      false
-    else
+    if active?
       self.conciliation = true
 
       self.save!
+    else
+      self.errors[:base] << I18n.t('errors.messages.account_ledger.null_conciliation')
+
+      false
     end
   end
 

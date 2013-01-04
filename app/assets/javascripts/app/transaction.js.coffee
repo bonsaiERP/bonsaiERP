@@ -2,11 +2,11 @@
 class Item extends Backbone.Model
   defaults:
     item_id: 0
-    price: 0
-    original_price: 0
-    quantity: 1
+    price: 0.0
+    original_price: 0.0
+    quantity: 1.0
     subtotal: 0.0
-    rate: 1
+    rate: 1.0
   #
   initialize: ->
     @on('change:rate', @setPrice)
@@ -18,7 +18,7 @@ class Item extends Backbone.Model
     @set('subtotal', sub)
   #
   setPrice: ->
-    price = ( @get('original_price') * (1/@get('rate') ) ).toFixed(_b.numPrecision) * 1
+    price = _b.roundVal( @get('original_price') * (1.0 / @get('rate') ), bonsai.presicion )
     @set(price: price )
   #
   setAutocompleteEvent: (el) ->
@@ -71,18 +71,9 @@ class Income extends Backbone.Collection
   #
   setList: ->
     @$table.find('tr.item').each (i, el) =>
-      @add(item = new Item( @itemValues(el) ) )
+      @add(item = new Item( $(el).data('item') ) )
       rivets.bind(el, {item: item})
       item.setAutocompleteEvent(el)
-  #
-  itemValues: (el) ->
-    $price = $(el).find('.item-price')
-    price = $price.val() * 1
-    quantity = $(el).find('.item-quantity').val() * 1
-    { 
-      price: price, original_price: $price.data('original_price'),
-      quantity: quantity, subtotal: price * quantity
-    }
   #
   addItem: ->
     num = (new Date).getTime()
@@ -107,7 +98,7 @@ class Income extends Backbone.Collection
       html = ['<input type="hidden" name="', $input.attr('name').replace(/\[id\]/, '[_destroy]')
         ,'" value="1" />'].join('')
       $(html).insertAfter($input)
-    
+
     $row.remove()
     @remove(item)
     @calculateSubtotal()
@@ -142,7 +133,6 @@ class TransactionCurrency extends Backbone.Model
     code = $(el).text().split(' ')[0]
     rate = fx.convert(1, {from: code, to: @get('baseCode') }).toFixed(4) * 1
     @set(code: code, rate: rate)
-
     @setCurrencyLabel()
   #
   setCurrencyLabel: ->
@@ -160,7 +150,7 @@ class TransactionCurrency extends Backbone.Model
 
 window.App.TransactionCurrency = TransactionCurrency
 
-itemTemplate = """<tr class="item">
+itemTemplate = """<tr class="item" data-item="{"original_price":"0.0","price":"0.0","quantity":"1.0","subtotal":"0.0"}">
     <td>
       <div class="control-group autocomplete optional"><div class="controls"><input id="income_transaction_details_attributes_$num_item_id" name="income[transaction_details_attributes][$num][item_id]" type="hidden"><input class="autocomplete optional item_id ui-autocomplete-input" data-source="/items/search.json" id="item_autocomplete" name="item_autocomplete" placeholder="Escriba para buscar el ítem" size="35" type="text" autocomplete="off"><span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span></div></div>
     </td>

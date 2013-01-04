@@ -40,7 +40,16 @@ class TransactionDetail < ActiveRecord::Base
     price * quantity
   end
 
-  private
+  def data_hash
+    {
+      original_price: original_price, 
+      price: price, 
+      quantity: quantity, 
+      subtotal: subtotal
+    }
+  end
+
+private
   def set_defaults
     self.price ||= 0
     self.quantity ||= 0

@@ -6,8 +6,8 @@
 
     .row-fluid
       .span4
-        =f.input :contact_id, as: :autocomplete, label: "Contacto",
-          'data-source' => '/contacts/search', input_html: { data: {new_url: new_contact_path, title: 'Nuevo contacto', trigger: 'new-contact'}}
+        =f.input :contact_id, as: :select2, label: "Contacto",
+          'data-source' => '/contacts/search', input_html: { data: {new_url: new_contact_path, title: 'Nuevo contacto', trigger: 'new-contact'}, class: 'contact_id'}
       .span4=f.input :date, as: :datepicker, label: 'Fecha'
 
     .row-fluid
@@ -27,9 +27,9 @@
       $('.quick-income-form').hide('medium')
       $('#quick-income-link').show('medium')
 
-    $('div.ajax-modal form').live('new-contact', (event, resp) ->
-      console.log "New contact", resp
+    $('.contact-form').live('new-contact', (event, resp) ->
+      $('.contact_id').val(resp.matchcode).data('value', resp.matchcode)
+      .prev().val(resp.id)
     )
 
-    $('#quick_income_account_id').select2()
   )(jQuery)

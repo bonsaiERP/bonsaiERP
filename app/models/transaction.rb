@@ -3,10 +3,11 @@
 # email: boriscyber@gmail.com
 class Transaction < ActiveRecord::Base
 
-  STATES   = ["draft", "approved", "paid", "due", "inventory", "nulled", "discount"]
+  STATES   = %w(draft approved paid due inventory nulled discount)
+
   DECIMALS = 2
   # Determines if the oprations is made on transaction or pay_plan or payment
-  TYPES    = ['Income'  , 'Buys']
+  TYPES    = %w(Income Buys)
 
   ########################################
   # Callbacks

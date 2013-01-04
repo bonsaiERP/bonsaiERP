@@ -14,7 +14,7 @@
       %th
 
   = f.simple_fields_for :transaction_details do |fd|
-    %tr.item{id: fd.object.id}
+    %tr.item{id: fd.object.id, data: {item: fd.object.data_hash.to_json }}
       %td
         = fd.input :item, as: :autocomplete, :label => false, 'data-source' => search_items_path(format: 'json'),
         input_html: {class: 'item_id', placeholder: 'Escriba para buscar el ítem'}

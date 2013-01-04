@@ -10,7 +10,7 @@
       .span4
         = f.input :date, label: "Fecha", as: :datepicker
       .span4
-        = f.input :contact, as: :autocomplete, label: 'Contacto', input_html: { data: {source: '/contacts/search'} }
+        = f.input :contact, as: :autocomplete, label: 'Contacto', input_html: { data: {source: '/contacts/search', new_url: new_contact_path, title: 'Nuevo contacto', trigger: 'new-contact'} }
 
     %hr.light
     .row-fluid.currency-input
@@ -24,7 +24,7 @@
           
       .span4
         = f.association :project,  label: 'Proyecto',
-          input_html: { data: {new_url: new_project_path, title: 'Nuevo proyecto', trigger: 'new_project', width: 900} }
+          input_html: { data: {new_url: new_project_path, title: 'Nuevo proyecto', trigger: 'new_project', width: 900}, class: 'contact_id' }
       .span4
         = f.input :bill_number, label: 'Nº de Documento'.html_safe, input_html: {size: 20}, hint: 'Nº de factura or recibo'
 
@@ -43,6 +43,11 @@
 -#= render 'transactions/item'
 :coffeescript
   (($) ->
+    $('.contact-form').live('new-contact', (event, resp) ->
+      $('.contact_id').val(resp.matchcode).data('value', resp.matchcode)
+      .prev().val(resp.matchcode)
+    )
+
     fx.rates = exchangeRates.rates
     currency = new App.TransactionCurrency()
     rivets.bind($('.currency-input'), {currency: currency})

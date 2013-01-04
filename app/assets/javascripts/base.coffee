@@ -1,5 +1,10 @@
 ######################################
 # All events related to jQuery
+@bonsai =
+  presicion: 2
+  separator: ','
+  delimiter: '.'
+
 ( ($) ->
   # Regional settings for jquery-ui datepicker
   $.datepicker.regional['es'] = {
@@ -286,6 +291,10 @@
     $('body').tooltip( selector: '[rel=tooltip]' )
     $('body').setDatepicker()
     $('body').createAutocomplete()
+    $('.select2-autocomplete').each( (i, el) ->
+      console.log el
+      select2Autocomplete(el)
+    )
     $('body').dataNewUrl()
     fx.rates = exchangeRates.rates
 
