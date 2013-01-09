@@ -9,3 +9,4 @@
 
  The software is been improved as we move
 
+ctags -R `bundle show rails`/../*

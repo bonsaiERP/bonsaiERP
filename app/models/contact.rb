@@ -30,7 +30,7 @@ class Contact < ActiveRecord::Base
   ########################################
   # Attributes
   attr_accessible :first_name, :last_name, :code, :organisation_name, :address, :addres_alt, :phone, :mobile, :email, :tax_number, :aditional_info, :matchcode
-  
+
   ########################################
   # Scopes
   scope :clients, where(:client => true)

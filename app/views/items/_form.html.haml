@@ -10,19 +10,24 @@
       = f.input :code, :label => 'Código'
     .span6
       = f.input :name, :label => 'Nombre'
+  %hr
+
   .row-fluid
     .span3
-      = f.input :active, :label => "Activo <i class='bicon-info' rel='tooltip' title='Activo para usarlo en ingresos o egresos'></i>".html_safe, :as => :radio, :item_wrapper_class => 'inline'
+      = f.input :active, label: "Activo <i class='icon-info-sign' rel='tooltip' title='Se puede usar en nuevos Ingresos o Egresos'></i>".html_safe, as: :radio, item_wrapper_class: 'inline'
     .span3
-      = f.input :stockable, label: 'Inventario <i title="Se almacena el ítem?" rel="tooltip" class="bicon-info"></i>'.html_safe, as: :radio, item_wrapper_class: 'inline'
+      = f.input :stockable, label: 'Inventario <i title="Se almacena el ítem?" rel="tooltip" class="icon-info-sign"></i>'.html_safe, as: :radio, item_wrapper_class: 'inline'
     #for_sale.span3
       = f.input :for_sale, label: 'Se vende', as: :radio, item_wrapper_class: 'inline'
     #price.hide.span3
-      = f.input :price, :label => "Precio de venta #{currency_code_label}".html_safe, :input_html => {:size => 12, :type => 'decimal'}
+      = f.input :price, :label => "Precio de venta #{currency_code_label}".html_safe, input_html: {size: 12, type: 'decimal'}
+
+  %hr
+
   .row-fluid
     .span6
       = f.association :unit, :label => "Unidad", 
-        :input_html => { 'data-new_url' => new_unit_path, 'data-trigger' => 'new_unit', 'data-title' => 'Nueva unidad' }
+        input_html: { data: {new_url: new_unit_path, trigger: 'new-unit', title: 'Nueva unidad'} }
     .span6
       = f.input :description, :as => :text, :input_html => {:rows => 4}
   

@@ -1,12 +1,12 @@
 source :rubygems
 
-gem 'rails', '3.2.9'
+gem 'rails', '3.2.11'
 
 group :assets do
-  gem 'sass-rails'
-  gem 'coffee-rails'
-  gem 'uglifier'
-  gem 'scripts', git: 'git@github.com:boriscy/scripts.git'
+  gem 'sass-rails'   , '~> 3.2.5'
+  gem 'coffee-rails' , '~> 3.2.2'
+  gem 'uglifier'     , '~> 1.3.0'
+  gem 'scripts'      , git: 'git://github.com/boriscy/scripts.git'
 end
 
 gem 'turbo-sprockets-rails3'# Speed assets:precompile
@@ -15,30 +15,30 @@ gem 'turbo-sprockets-rails3'# Speed assets:precompile
 gem 'jquery-rails'
 gem 'compass-rails'
 gem 'coffee-filter'
-#gem 'bootstrap-sass', "~> 2.0.0"
+#gem 'bootstrap-sass'
 
 gem 'pg'
-gem 'virtus'# Model generation in simple way
-gem 'encrypted-cookie-store'# Encrypt cookies in the session
-gem 'strong_parameters'# Force in controllers to sanitize parameters
+gem 'virtus' # Model generation in simple way
+gem 'encrypted-cookie-store' # Encrypt cookies in the session
+gem 'strong_parameters' # Force in controllers to sanitize parameters
 
 gem 'simple_form'
 gem 'haml'
 gem 'kaminari'
 gem 'valium'
 gem 'bcrypt-ruby', require: 'bcrypt'
-gem 'roadie'# Styles for email
+gem 'roadie' # Styles for email
 gem 'active_model_serializers' # Encode strings with JSON
 
 gem 'validates_email_format_of', '~> 1.5.3'
-gem 'queue_classic', '~> 2.0.3' # Background processing for PostgreSQL
+gem 'queue_classic' # Background processing for PostgreSQL
 
 gem 'prawn', '~> 1.0.0.rc1'
-#gem 'exception_notification', "~> 2.5.2"
+#gem 'exception_notification'
 
 group :production do
   gem 'newrelic_rpm'
-  gem  'bugsnag'# Report of errors
+  gem 'bugsnag' # Report of errors
 end
 
 group :development, :test do
@@ -63,4 +63,3 @@ group :test do
   gem 'launchy'
   gem 'log4r'
 end
-

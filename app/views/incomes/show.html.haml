@@ -11,12 +11,16 @@
 
 .row
   .span2.well
-    %h2 Total
-    %h3= ntc @income.total
+    %h3 Total
+    %h4
+      = @income.currency_code
+      = ntc @income.total
 
   .span2.well
-    %h2 Saldo
-    %h3= ntc @income.balance
+    %h3 Saldo
+    %h4
+      = @income.currency_code
+      = ntc @income.balance
 
 #tabs
   %ul
@@ -31,7 +35,10 @@
     = render "incomes/items", income: @income
   #payments
     %h2 Cobros
+    
     = render "payments/form", payment: PaymentIncome.new(date: Date.today, transaction_id: @income.id)
+
+    = render "payments/payments", transaction: @income
 
 :coffeescript
   $( ->

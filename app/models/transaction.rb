@@ -7,7 +7,7 @@ class Transaction < ActiveRecord::Base
 
   DECIMALS = 2
   # Determines if the oprations is made on transaction or pay_plan or payment
-  TYPES    = %w(Income Buys)
+  TYPES    = %w(Income Expense)
 
   ########################################
   # Callbacks

@@ -9,11 +9,6 @@ class RemoveTransactionUsers < ActiveRecord::Migration
       t.remove :credit_reference
       t.remove :credit_datetime
       t.remove :credit_description
-      t.remove :deliver_approver_id
-      t.remove :deliver_datetime
-      t.remove :deliver_reason
-      t.remove :nuller_id
-      t.remove :nuller_datetime
     end
   end
 

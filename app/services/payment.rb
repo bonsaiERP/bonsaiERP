@@ -14,7 +14,7 @@ class Payment < BaseService
   attr_reader :ledger, :int_ledger
 
   # Validations
-  validates_presence_of :transaction, :transaction_id, :account, :account_id, :reference
+  validates_presence_of :transaction, :transaction_id, :account, :account_id, :reference, :date
   validates_numericality_of :amount, :interest, greater_than_or_equal_to: 0
   validates_numericality_of :exchange_rate, greater_than: 0
   validate :valid_amount_or_interest

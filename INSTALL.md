@@ -1,5 +1,8 @@
 # Bonsai installation with passenger on Ubuntu, Linux-Mint
 
+    sudo apt-get update
+    sudo apt-get upgrade
+
 ## Instaling Ruby (RVM)
 Install the following
 

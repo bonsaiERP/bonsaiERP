@@ -3,7 +3,7 @@ ENV["DATABASE_URL"] = "postgres://#{PgTools.username}:#{PgTools.password}@#{PgTo
 require 'queue_classic'
 
 module QC
-  TABLE_NAME='common.queue_classic_jobs'
+  TABLE_NAME = 'common.queue_classic_jobs'
 
   module Setup
     extend self

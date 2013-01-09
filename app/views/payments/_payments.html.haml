@@ -1,25 +1,16 @@
-%h2= presenter.payments_title
-
-%p
-  = presenter.new_payment_link
-  = presenter.new_devolution_link
-
-%br
-
-%table.table.table-striped.nwl#payments_table
+%table.table.table-striped#payments_table
   %tr.header
     %th Código Fecha
-    %th{:style => 'width: 300px'} Descripción
+    %th.span4 Descripción
     %th Cantidad #{transaction.currency_symbol}
-    %th{:title => 'Intenreses/Penalidades'} Int./Pena. #{transaction.currency_symbol}
     %th.nw Total fila #{transaction.currency_symbol}
     %th
   
-  - presenter.payments.order("created_at DESC").each do |al|
-    = render "payments/payment", :account_ledger => al, :transaction => transaction, :presenter => presenter
+  - transaction.account_ledgers.order("created_at DESC").each do |al|
+    = render "payments/payment", account_ledger: al, transaction: transaction
 
   %tr.extra.pad_top
-    %td.cur.b{:colspan => 4} Total #{transaction.pay_type.pluralize} + Intereses/Penalidades
-    %td.cur.b#total_payment= ntc transaction.total_payments_with_interests.abs
+    %td.cur.b(colspan='4') Total
+    %td.cur.b#total_payment= ntc transaction.total
     %td
 

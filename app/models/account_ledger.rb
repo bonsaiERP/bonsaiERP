@@ -45,7 +45,7 @@ class AccountLedger < ActiveRecord::Base
 
   ########################################
   # Validations
-  validates_presence_of :amount, :account_id, :account, :reference, :currency, :currency_id
+  validates_presence_of :amount, :account_id, :account, :reference, :currency, :currency_id, :date
 
   validates_inclusion_of :operation, in: OPERATIONS
   validates_numericality_of :exchange_rate, greater_than: 0

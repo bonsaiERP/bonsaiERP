@@ -45,13 +45,16 @@
   # Date format
   $.datepicker._defaults.dateFormat = 'dd M yy'
 
-
   ##################################################
 
+  # Ajax preloader content
+  AjaxLoadingHTML = ->
+    "<h4 class='c'><i class='icon-spinner icon-spin icon-large'></i> Cargando...</h4>"
+
   # Creates the dialog container
-  createDialog = (params)->
+  createDialog = (params) ->
     data = params
-    params = $.extend({
+    params = _.extend({
       'id': new Date().getTime(), 'title': '', 'width': 800, 'modal': true, 'resizable' : false, 'position': 'top',
       'close': (e, ui)->
         $('#' + div_id ).parents("[role=dialog]").detach()
@@ -199,8 +202,8 @@
       title = data.title || "Nuevo"
 
       $a = $('<a/>')
-      .attr({'href': data.newUrl, 'class': 'bicon-add ajax', 'title': title, rel: 'tooltip' })
-      .data({'trigger': data.trigger, 'width': data.width})
+      .attr({href: data.newUrl, class: 'icon-plus-sign icon-large ajax', title: title, rel: 'tooltip' })
+      .data({trigger: data.trigger, width: data.width})
       .css("margin-left", "5px")
 
       $a.insertAfter(el)

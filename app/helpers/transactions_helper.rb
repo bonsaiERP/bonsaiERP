@@ -110,6 +110,7 @@ module TransactionsHelper
   def state_tag(trans)
     case trans.state
     when "draft" then span_label('borrador')
+    when "approved" then span_label('aprovado', 'label label-info')
     when "paid" then span_label('pagado', 'label label-success')
     end
   end

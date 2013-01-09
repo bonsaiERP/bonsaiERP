@@ -226,31 +226,6 @@ ActiveRecord::Schema.define(:version => 20121216212142) do
   add_index "money_stores", ["name"], :name => "index_money_stores_on_name"
   add_index "money_stores", ["type"], :name => "index_money_stores_on_type"
 
-  create_table "pay_plans", :force => true do |t|
-    t.integer  "transaction_id"
-    t.integer  "currency_id"
-    t.string   "cur"
-    t.decimal  "amount",                            :precision => 14, :scale => 2
-    t.decimal  "interests_penalties",               :precision => 14, :scale => 2
-    t.date     "payment_date"
-    t.date     "alert_date"
-    t.boolean  "email",                                                            :default => true
-    t.string   "ctype",               :limit => 20
-    t.string   "description"
-    t.boolean  "paid",                                                             :default => false
-    t.string   "operation",           :limit => 20
-    t.datetime "created_at",                                                                          :null => false
-    t.datetime "updated_at",                                                                          :null => false
-    t.integer  "project_id"
-  end
-
-  add_index "pay_plans", ["ctype"], :name => "index_pay_plans_on_ctype"
-  add_index "pay_plans", ["operation"], :name => "index_pay_plans_on_operation"
-  add_index "pay_plans", ["paid"], :name => "index_pay_plans_on_paid"
-  add_index "pay_plans", ["payment_date"], :name => "index_pay_plans_on_payment_date"
-  add_index "pay_plans", ["project_id"], :name => "index_pay_plans_on_project_id"
-  add_index "pay_plans", ["transaction_id"], :name => "index_pay_plans_on_transaction_id"
-
   create_table "prices", :force => true do |t|
     t.integer  "item_id"
     t.decimal  "unitary_cost", :precision => 14, :scale => 2
@@ -359,7 +334,6 @@ ActiveRecord::Schema.define(:version => 20121216212142) do
     t.string   "error_messages"
     t.datetime "created_at",                                                                        :null => false
     t.datetime "updated_at",                                                                        :null => false
-    t.boolean  "deliver",                                                        :default => false
     t.boolean  "delivered",                                                      :default => false
     t.decimal  "original_total",                  :precision => 14, :scale => 2
     t.boolean  "discounted",                                                     :default => false
@@ -375,7 +349,6 @@ ActiveRecord::Schema.define(:version => 20121216212142) do
   add_index "transactions", ["created_at"], :name => "index_transactions_on_created_at"
   add_index "transactions", ["currency_id"], :name => "index_transactions_on_currency_id"
   add_index "transactions", ["date"], :name => "index_transactions_on_date"
-  add_index "transactions", ["deliver"], :name => "index_transactions_on_deliver"
   add_index "transactions", ["delivered"], :name => "index_transactions_on_delivered"
   add_index "transactions", ["devolution"], :name => "index_transactions_on_devolution"
   add_index "transactions", ["discounted"], :name => "index_transactions_on_discounted"

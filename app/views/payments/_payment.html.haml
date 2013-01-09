@@ -1,18 +1,22 @@
 %tr.account_ledger{ :id => account_ledger.id, :class => "#{account_ledger.active.to_s}"}
   %td
-    =link_to account_ledger, account_ledger_path(account_ledger), :class => 'b'
-    %span.i= lo(account_ledger.date)
+    =link_to account_ledger_path(account_ledger.id), :class => 'b' do
+      = account_ledger
+      = lo account_ledger.date
 
   %td.account
-    = presenter.payment_exchange_rate(account_ledger)
+    -#= presenter.payment_exchange_rate(account_ledger)
     = account_ledger.description
 
-  %td.cur.amount= presenter.payment_amount_currency account_ledger
+  %td.cur.amount
+    -#= presenter.
+    = account_ledger
 
-  %td.cur.interests_penalties= ntc account_ledger.interests_penalties
+  %td.cur.totaccount_ledger_amount
+    -#= presenter
+    -#= payment_total_row(account_ledger)
 
-  %td.cur.totaccount_ledger_amount= presenter.payment_total_row(account_ledger)
-
-  %td.actions= link_to "Verificar", account_ledger_path(account_ledger, :ac_id => account_ledger.payment_link_id),
-    :title => 'Verificar con cuenta', :class => 'conciliate sync fl',
-    :style => 'margin-right: 10px' unless account_ledger.conciliation?
+  %td.actions
+    = link_to account_ledger do
+      %i.icon-thumbs-up.black
+      Verificar

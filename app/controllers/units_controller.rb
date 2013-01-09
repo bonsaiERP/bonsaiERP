@@ -32,7 +32,7 @@ class UnitsController < ApplicationController
   # POST /units
   # POST /units.xml
   def create
-    @unit = Unit.new(params[:unit])
+    @unit = Unit.new(unit_params)
 
     if @unit.save
       redirect_ajax @unit
@@ -45,7 +45,8 @@ class UnitsController < ApplicationController
   # PUT /units/1.xml
   def update
     @unit = Unit.find(params[:id])
-    @unit.update_attributes(params[:unit])
+    @unit.update_attributes(unit_params)
+
     respond_with @unit
   end
 
@@ -64,5 +65,10 @@ class UnitsController < ApplicationController
       format.html { redirect_to(units_url) }
       format.xml  { head :ok }
     end
+  end
+
+private
+  def unit_params
+    params.require(:unit).permit(:name, :symbol)
   end
 end
