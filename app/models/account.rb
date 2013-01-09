@@ -12,7 +12,6 @@ class Account < ActiveRecord::Base
   attr_protected :amount, :amount_currency
 
   # Relationships
-  belongs_to :currency
   belongs_to :accountable, :polymorphic => true
 
   has_many :account_ledgers
@@ -23,14 +22,12 @@ class Account < ActiveRecord::Base
   has_many :expenses, :class_name => "Transaction", :conditions => "transactions.type = 'Expense'"
 
   # validations
-  validates_presence_of :currency, :currency_id, :name
+  validates_presence_of :currency, :name
   validates_numericality_of :amount
 
-  # Delegations
-  delegate :symbol, :name, :code, :to => :currency, :prefix => true, :allow_nil => true
 
   # scopes
-  scope :money, includes(:currency).where(:accountable_type => "MoneyStore")
+  scope :money, where(:accountable_type => "MoneyStore")
   scope :bank, where(:original_type => "Bank")
   scope :cash, where(:original_type => "Cash")
   scope :contact, where(:accountable_type => "Contact")
@@ -119,7 +116,7 @@ private
 
   def create_account_currency
     account_currencies.build(
-      :currency_id => currency_id, :amount => amount
+      currency: currency, amount: amount
     )
   end
 end

@@ -16,7 +16,6 @@ class Transaction < ActiveRecord::Base
   ########################################
   # Relationships
   belongs_to :contact
-  belongs_to :currency
   belongs_to :project
 
   has_many :inventory_operations
@@ -33,7 +32,7 @@ class Transaction < ActiveRecord::Base
 
   ########################################
   # Validations
-  validates_presence_of :date, :currency, :currency_id, :contact_id, :contact
+  validates_presence_of :date, :currency, :contact_id, :contact
   validates_presence_of :project, :project_id, :if => "project_id.present?"
 
   ########################################
@@ -70,7 +69,7 @@ class Transaction < ActiveRecord::Base
 
   # Finds using the state
   def self.find_with_state(state)
-    ret   = self.includes(:contact, :currency)
+    ret   = self.includes(:contact)
     ret = ret.send(scoped_state(state)) if scoped_state(state)
     ret
   end

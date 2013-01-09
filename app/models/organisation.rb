@@ -18,7 +18,6 @@ class Organisation < ActiveRecord::Base
   ########################################
   # Relationships
   belongs_to :org_country, :foreign_key => :country_id
-  belongs_to :currency
 
   has_many :links, :dependent => :destroy, :autosave => true
   has_one  :master_link, class_name: 'Link', foreign_key: :organisation_id, autosave: true,
@@ -38,9 +37,6 @@ class Organisation < ActiveRecord::Base
   with_options if: :persisted? do |val|
     val.validates_presence_of :org_country, :currency
   end
-
-  # Delegations
-  delegate :code, :name, :symbol, :plural, :to => :currency, :prefix => true
 
   ########################################
   # Methods

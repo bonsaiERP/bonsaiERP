@@ -15,16 +15,14 @@ class MoneyStore < ActiveRecord::Base
 
   ########################################
   # Relationships
-  belongs_to :currency
   has_one :account, :as => :accountable, :autosave => true, :dependent => :destroy, inverse_of: :accountable
 
   # Common validations
   validates_numericality_of :amount, :greater_than_or_equal_to => 0, :on => :create
-  validates_presence_of :currency, :currency_id
+  validates_presence_of :currency
 
   # delegations
-  delegate :name, :symbol, :code, :plural, :to => :currency, :prefix => true
-  delegate :id, :amount, :currency_id, :name, :to => :account, :prefix => true, :allow_nil => true
+  delegate :id, :amount, :name, :to => :account, :prefix => true, :allow_nil => true
 
   # Creates methods to determine if is bank?, cash?
   %w[bank cash].each do |met|
@@ -48,7 +46,7 @@ private
 
   def create_new_account
     ac = self.build_account(
-      :currency_id => currency_id,
+      currency: currency,
     ) do |a|
       a.original_type = self.class.to_s
       a.amount = amount

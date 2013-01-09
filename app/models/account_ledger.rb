@@ -35,7 +35,7 @@ class AccountLedger < ActiveRecord::Base
   belongs_to :account, :autosave => true
   belongs_to :to, :class_name => "Account", :autosave => true
   belongs_to :transaction
-  belongs_to :currency
+  #belongs_to :currency
   belongs_to :contact
   belongs_to :project
 
@@ -45,7 +45,7 @@ class AccountLedger < ActiveRecord::Base
 
   ########################################
   # Validations
-  validates_presence_of :amount, :account_id, :account, :reference, :currency, :currency_id, :date
+  validates_presence_of :amount, :account_id, :account, :reference, :currency, date
 
   validates_inclusion_of :operation, in: OPERATIONS
   validates_numericality_of :exchange_rate, greater_than: 0
@@ -66,15 +66,13 @@ class AccountLedger < ActiveRecord::Base
 
   ########################################
   # delegates
-  delegate :name, :symbol, :code, to: :currency, prefix: true, allow_nil: true
-
-  delegate :currency_id, :name, :original_type, :accountable_type, :accountable, :amount, :accountable_id,
+  delegate :name, :original_type, :accountable_type, :accountable, :amount, :accountable_id,
     to: :account, prefix: true, allow_nil: true
 
-  delegate :currency_id, :name, :original_type, :accountable_type, :accountable, :amount, :accountable_id,
+  delegate :name, :original_type, :accountable_type, :accountable, :amount, :accountable_id,
     to: :to, prefix: true, allow_nil: true
 
-  delegate :type, :currency_id, to: :transaction, prefix: true, allow_nil: true
+  delegate :type, to: :transaction, prefix: true, allow_nil: true
 
   OPERATIONS.each do |op|
     class_eval <<-CODE, __FILE__, __LINE__ + 1

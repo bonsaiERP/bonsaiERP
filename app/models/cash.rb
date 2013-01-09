@@ -5,9 +5,6 @@ class Cash < MoneyStore
 
   validates :name, :uniqueness => true, :length => {:minimum => 3}
 
-  attr_accessible :name, :address, :currency_id, :amount
-
-
   def to_s
     name
   end

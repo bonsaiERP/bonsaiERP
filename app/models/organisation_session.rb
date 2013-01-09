@@ -4,10 +4,10 @@
 # Used to access the organisation_id in the models
 class OrganisationSession
 
-  KEYS = [:id, :name, :currency_id, :currency_name, :currency_symbol, :due_date]
+  KEYS = [:id, :name, :currency, :currency_name, :currency_symbol, :due_date]
 
   class << self
-    attr_reader :organisation_id, :name, :currency_id
+    attr_reader :organisation_id, :name, :currency
     # Stores using de application_controller the current_user for devise
     # @param [Hash] details from the organisation
     def set(organisation)
@@ -20,7 +20,7 @@ class OrganisationSession
       @organisation.id
     end
 
-    [:currency_id, :name, :email].each do |meth|
+    [:name, :email].each do |meth|
       define_method meth do
         @organisation.send(meth)
       end
