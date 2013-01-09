@@ -9,7 +9,6 @@ class Account < ActiveRecord::Base
   before_create :set_amount
 
   attr_readonly  :initial_amount, :original_type
-  attr_protected :amount, :amount_currency
 
   # Relationships
   belongs_to :accountable, :polymorphic => true

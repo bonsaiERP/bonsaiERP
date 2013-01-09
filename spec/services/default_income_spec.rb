@@ -12,7 +12,7 @@ describe DefaultIncome do
   let(:income) { build :income, transaction_details_attributes: details }
   let(:valid_params) { {
       ref_number: "I0001", date: Date.today, contact_id: 1, total: total,
-      currency_id: 1, bill_number: "I-0001", description: "New income description",
+      currency: 'BOB', bill_number: "I-0001", description: "New income description",
       transaction_details_attributes: details
     }
   }
@@ -26,7 +26,7 @@ describe DefaultIncome do
 
     it "sets all parameters" do
       income.should be_is_a(Income)
-      income.ref_number.should eq("I0001")
+      income.ref_number.should eq("I-0001")
       income.transaction_details.should have(2).items
 
       income.transaction_details[0].item_id.should eq(details[0][:item_id])

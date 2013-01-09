@@ -49,8 +49,8 @@ class ContactLedger
 
 private
   def set_or_create_account_to
-    unless to = account_ledger.contact.account_cur(currency_id).present?
-      to = contact.set_account_currency(currency_id)
+    unless to = account_ledger.contact.account_cur(currency).present?
+      to = contact.set_account_currency(currency)
 
       to.save!
     end
@@ -58,8 +58,8 @@ private
     account_ledger.to_id = to.id
   end
 
-  def currency_id
-    @currency_id ||= account.currency_id
+  def currency
+    @currency ||= account.currency
   end
 
   def contact

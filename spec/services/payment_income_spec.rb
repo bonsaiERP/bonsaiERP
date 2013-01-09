@@ -15,12 +15,11 @@ describe PaymentIncome do
   let(:account_id) { valid_attributes[:account_id] }
 
   let(:account_id) { valid_attributes[:account_id] }
-  let(:currency) { build :currency, id: 10 }
   let(:contact) { build :contact, id: 11 }
-  let(:income) { build :income, id: transaction_id, balance: balance, currency: currency, contact: contact }
+  let(:income) { build :income, id: transaction_id, balance: balance, currency: 'BOB', contact: contact }
   let(:account) { build :account, id: account_id, amount: 100 }
 
-  it "income" do
+  it "valid income" do
     income.should be_valid
   end
 

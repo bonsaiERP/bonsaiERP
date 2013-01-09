@@ -70,8 +70,8 @@ class Contact < ActiveRecord::Base
     buys.approved[:balance, :exchange_rate].inject(0){|sum, (bal, rate)| sum += bal * rate}
   end
 
-  def account_cur(currency_id)
-    accounts.find_by_currency_id(currency_id)
+  def account_cur(cur)
+    accounts.where(currency: cur).first
   end
 
   def show_type
@@ -89,9 +89,7 @@ class Contact < ActiveRecord::Base
   alias_method :pdf_name, :complete_name
 
   # Creates an instance of an account with the defined currency
-  def set_account_currency(cur_id)
-    self.accounts.build( name: self.to_s, currency_id: cur_id) do |ac|
-      ac.amount = 0
-    end
+  def set_account_currency(cur)
+    self.accounts.build( name: self.to_s, currency: cur, amount: 0)
   end
 end

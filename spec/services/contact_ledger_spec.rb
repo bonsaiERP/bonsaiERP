@@ -6,9 +6,9 @@ describe ContactLedger do
     UserSession.current_user = build(:user, id: 10)
   end
 
-  let!(:currency) { create(:currency) }
   let!(:contact) { create(:contact) }
-  let!(:cash) { create(:cash, amount: 100, currency_id: currency.id) }
+  let(:currency) { 'BOB' }
+  let!(:cash) { create(:cash, amount: 100, currency: currency) }
   let(:account) { cash.account }
   let(:amount) { 200.5 }
 
@@ -39,7 +39,7 @@ describe ContactLedger do
       al.contact_id.should eq(contact.id)
 
       al.amount.should eq(amount)
-      al.currency_id.should eq(account.currency_id)
+      al.currency.should eq(account.currency)
 
       al.account_amount.should eq(initial_amount + amount)
       al.account_balance.should eq(al.account_amount)
@@ -47,7 +47,7 @@ describe ContactLedger do
       al.to_amount.should eq(-amount)
       al.to_balance.should eq(-amount)
 
-      al.contact.account_cur(currency.id).should be_persisted
+      al.contact.account_cur(currency).should be_persisted
       al.creator_id.should eq(UserSession.user_id)
       al.approver_id.should eq(UserSession.user_id)
     end
@@ -64,7 +64,7 @@ describe ContactLedger do
       al.contact_id.should eq(contact.id)
 
       al.amount.should eq(amount)
-      al.currency_id.should eq(account.currency_id)
+      al.currency.should eq(account.currency)
 
       al.account_amount.should eq(initial_amount)
       al.account_balance.should be_nil
@@ -72,7 +72,7 @@ describe ContactLedger do
       al.to_amount.should eq(0)
       al.to_balance.should be_nil
 
-      al.contact.account_cur(currency.id).should be_persisted
+      al.contact.account_cur(currency).should be_persisted
       al.creator_id.should eq(UserSession.user_id)
       al.approver_id.should be_nil
 
@@ -103,7 +103,7 @@ describe ContactLedger do
       al.contact_id.should eq(contact.id)
 
       al.amount.should eq(-amount)
-      al.currency_id.should eq(account.currency_id)
+      al.currency.should eq(account.currency)
 
       al.account_amount.should eq(initial_amount - amount)
       al.account_balance.should eq(initial_amount - amount)
@@ -123,7 +123,7 @@ describe ContactLedger do
       al.contact_id.should eq(contact.id)
 
       al.amount.should eq(-amount)
-      al.currency_id.should eq(account.currency_id)
+      al.currency.should eq(account.currency)
 
       al.account_amount.should eq(initial_amount)
       al.account_balance.should be_nil
