@@ -2,6 +2,8 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class Expense < Transaction
+  validates :ref_number, :presence => true , :uniqueness => true
+
   def self.get_ref_number
     ref = Expense.order("ref_number DESC").first
     ref.present? ? ref.ref_number.next : "E-0001"
@@ -17,8 +19,6 @@ class Expense < Transaction
 
 private
   def set_supplier
-    if contact.present? && !contact.supplier?
-      contact.update_attribute(:supplier, true)
-    end
+   contact.update_attribute(:supplier, true) if contact.present? && !contact.supplier?
   end
 end

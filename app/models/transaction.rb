@@ -33,7 +33,7 @@ class Transaction < ActiveRecord::Base
   ########################################
   # Validations
   validates_presence_of :date, :currency, :contact_id, :contact
-  validates_inclusion_of :currency, in: CURRENCIES.keys
+  validates_inclusion_of :currency, in: CURRENCY_KEYS
   validates_presence_of :project, :project_id, :if => "project_id.present?"
 
   ########################################

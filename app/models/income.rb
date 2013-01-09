@@ -31,9 +31,6 @@ class Income < Transaction
 
 private
   def set_client
-    if contact.present? && !contact.client?
-      contact.update_attribute(:client, true)
-    end
+    contact.update_attribute(:client, true) if contact.present? && !contact.client?
   end
-
 end

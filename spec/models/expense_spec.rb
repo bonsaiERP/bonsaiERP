@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Income do
+describe Expense do
   let(:organisation) { build :organisation, id: 1 }
   let(:contact) { build :contact, id: 10 }
 
@@ -18,17 +18,17 @@ describe Income do
   }
 
   it 'check callback' do
-    contact.should_receive(:update_attribute).with(:client, true)
-    i = Income.new(valid_attributes)
+    contact.should_receive(:update_attribute).with(:supplier, true)
+    e = Expense.new(valid_attributes)
 
-    i.save.should be_true
+    e.save.should be_true
   end
 
-  it "does not update contact to client" do
-    contact.client = true
-    contact.should_not_receive(:update_attribute).with(:client, true)
-    i = Income.new(valid_attributes)
+  it "does not update contact to supplier" do
+    contact.supplier = true
+    contact.should_not_receive(:update_attribute).with(:supplier, true)
+    e = Expense.new(valid_attributes)
 
-    i.save.should be_true
+    e.save.should be_true
   end
 end
