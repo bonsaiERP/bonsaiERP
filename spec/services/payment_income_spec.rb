@@ -6,7 +6,7 @@ describe PaymentIncome do
     {
       transaction_id: 10, account_id: 2, exchange_rate: 1,
       amount: 50, interest: 0, reference: 'El primer pago',
-      verification: 'true'
+      verification: 'true', date: Date.today
     }
   }
   let(:balance) { 100.0 }

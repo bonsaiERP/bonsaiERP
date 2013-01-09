@@ -19,6 +19,7 @@ class Payment < BaseService
   validates_numericality_of :exchange_rate, greater_than: 0
   validate :valid_amount_or_interest
   validate :valid_transaction_balance
+  validate :valid_date
 
   # Delegations
   delegate :total, :balance, to: :transaction, prefix: true, allow_nil: true
@@ -72,5 +73,9 @@ private
     if amount.to_f > transaction_balance.to_f
       self.errors[:amount] << 'Ingreso una cantidad mayor que el balance'
     end
+  end
+
+  def valid_date
+    self.errors[:date] << 'Ingrese una fecha valida' unless date.is_a?(Date)
   end
 end

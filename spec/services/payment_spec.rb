@@ -10,12 +10,18 @@ describe Payment do
     {
       transaction_id: 10, account_id: 2, exchange_rate: 1,
       amount: 50, interest: 0, reference: 'El primer pago',
-      verification: false
+      verification: false, date: Date.today
     }
   }
 
   let(:transaction_id) { valid_attributes[:transaction_id] }
   let(:account_id) { valid_attributes[:account_id] }
+
+  it { should have_valid(:date).when('2012-12-12') }
+  it { should_not have_valid(:date).when('anything') }
+  it { should_not have_valid(:date).when('') }
+  it { should_not have_valid(:date).when('2012-13-13') }
+
 
   subject { Payment.new(valid_attributes) }
 
