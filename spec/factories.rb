@@ -12,12 +12,6 @@ FactoryGirl.define do
     abbreviation 'bo'
   end
 
-  factory :currency do
-    name 'boliviano'
-    symbol 'Bs.'
-    code 'BOB'
-  end
-
   factory :user do
     first_name "Boris"
     last_name "Barroso"
@@ -33,7 +27,7 @@ FactoryGirl.define do
   factory :organisation do
     name 'bonsaiERP'
     tenant 'bonsai'
-    association :currency, factory: :currency, strategy: :build
+    currency 'BOB'
   end
 
   factory :contact do
@@ -60,14 +54,14 @@ FactoryGirl.define do
   factory :bank do
     name "Bank"
     number "123"
-    currency_id 1
+    currency 'BOB'
     amount 100
   end
 
   factory :cash do
     name "Cash"
     number "123"
-    association :currency, factory: :currency, strategy: :build
+    currency 'BOB'
     amount 100
   end
 
@@ -80,14 +74,14 @@ FactoryGirl.define do
   factory :account do
     name "First account"
     amount 0
-    association :currency, factory: :currency, strategy: :build
+    currency 'BOB'
   end
 
   factory :transaction do
     ref_number "T-0001"
     date { Date.today }
     association :contact, factory: :contact, strategy: :build
-    association :currency, factory: :currency, strategy: :build
+    currency 'BOB'
     bill_number "B-0001"
     description "New transaction description"
     state 'draft'
@@ -97,7 +91,7 @@ FactoryGirl.define do
     ref_number "I-0001"
     date { Date.today }
     association :contact, factory: :contact, strategy: :build
-    association :currency, factory: :currency, strategy: :build
+    currency 'BOB'
     bill_number "I-0001"
     description "New income description"
     state "draft"
@@ -107,7 +101,7 @@ FactoryGirl.define do
     ref_number "E-0001"
     date { Date.today }
     association :contact, factory: :contact, strategy: :build
-    association :currency, factory: :currency, strategy: :build
+    currency 'BOB'
     bill_number "P-0001"
     description "New expense description"
     state "draft"

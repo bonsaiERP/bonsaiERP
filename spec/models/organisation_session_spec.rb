@@ -2,19 +2,17 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe OrganisationSession do
+  let(:organisation) { build :organisation, id: 100 }
   before(:each) do
+    OrganisationSession.set organisation
   end
+  subject{ OrganisationSession }
 
   it 'should allow to be set ussing a Hash' do
-    OrganisationSession.set( { :name => 'test', :id => @@spec_uuid } )
-    OrganisationSession.id.should == @@spec_uuid
-    OrganisationSession.name.should == 'test'
-  end
+    subject.organisation_id.should eq(100)
 
-  it 'should allow to be set=' do
-    OrganisationSession.set =  { :name => 'test', :id => @@spec_uuid }
-    OrganisationSession.id.should == @@spec_uuid
-    OrganisationSession.name.should == 'test'
+    [:name, :tenant, :currency].each do |meth|
+      subject.send(meth).should eq(organisation.send(meth))
+    end
   end
-
 end
