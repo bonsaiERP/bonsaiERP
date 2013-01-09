@@ -2,8 +2,7 @@ require 'spec_helper'
 
 describe TenantCreator do
   let(:tenant) { 'bonsaierp' }
-  let!(:currency) { create(:currency) }
-  let(:organisation) { build(:organisation, id: 1, tenant: tenant, currency: currency) }
+  let(:organisation) { build(:organisation, id: 1, tenant: tenant) }
 
   context "Initialize" do
     it {  TenantCreator.new(organisation) }

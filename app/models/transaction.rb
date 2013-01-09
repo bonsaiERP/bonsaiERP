@@ -33,6 +33,7 @@ class Transaction < ActiveRecord::Base
   ########################################
   # Validations
   validates_presence_of :date, :currency, :contact_id, :contact
+  validates_inclusion_of :currency, in: CURRENCIES.keys
   validates_presence_of :project, :project_id, :if => "project_id.present?"
 
   ########################################
@@ -48,8 +49,7 @@ class Transaction < ActiveRecord::Base
 
   ########################################
   # Delegates
-  delegate :name, :symbol, :plural, :code, to: :currency, prefix: true
-  delegate :matchcode, :account_cur, to: :contact, prefix: true, allow_nil: true
+  delegate :matchcode, to: :contact, prefix: true, allow_nil: true
 
   ########################################
   # Methods
@@ -121,11 +121,6 @@ class Transaction < ActiveRecord::Base
     t = set_clone_buy(t) if t.is_a?(Buy)
     
     t
-  end
-
-  # Finds the related account with currency for a Contact
-  def account
-    contact.account_cur(currency_id)
   end
 
   # Returns the real state based on state and checked payment_date
