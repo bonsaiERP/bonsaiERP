@@ -29,7 +29,7 @@ class ItemsController < ApplicationController
   # GET /items/new
   # GET /items/new.xml
   def new
-    @item = Item.new
+    @item = Item.new(stockable: true)
   end
 
   # GET /items/1/edit

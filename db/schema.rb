@@ -175,7 +175,7 @@ ActiveRecord::Schema.define(:version => 20130109191526) do
     t.string   "description"
     t.string   "code",         :limit => 100
     t.boolean  "integer",                                                    :default => false
-    t.boolean  "stockable",                                                  :default => false
+    t.boolean  "stockable",                                                  :default => true
     t.boolean  "active",                                                     :default => true
     t.string   "discount"
     t.string   "ctype",        :limit => 20

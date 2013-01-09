@@ -18,13 +18,12 @@
     = stylesheet_link_tag "application"
     - if organisation?
       :javascript
-        var organisation = { 
-          currency_id: #{current_organisation.currency_id},
-          currency_code: "#{currency_code}",
-          //due_date: new Date(""),
+        this.organisation = { 
+          currency: "#{current_organisation.currency}",
           name: "#{current_organisation.name}"
         }
-        window.organisation = organisation;
+      :javascript
+        this.currencies = #{CURRENCIES.to_json}
 
   %body
 

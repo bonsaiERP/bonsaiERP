@@ -7,28 +7,12 @@ module Controllers::OrganisationHelpers
     "#{currency_symbol} #{currency_plural}"
   end
 
-  def currency_id
-    current_organisation.currency_id
+  def currency
+    current_organisation.currency
   end
 
   def organisation_name
     current_organisation.name
-  end
-
-  def currency_name
-    current_organisation.currency_name
-  end
-
-  def currency_plural
-    current_organisation.currency_plural
-  end
-
-  def currency_symbol
-    current_organisation.currency_symbol
-  end
-
-  def currency_code
-    current_organisation.currency_code
   end
 
   def organisation_id

@@ -15,10 +15,9 @@
     %hr.light
     .row-fluid.currency-input
       .span4
-        = f.association :currency, label: 'Moneda', include_blank: false,
-          input_html: {id: 'transaction_currency_id', data: { value: 'currency.currency_id' } }
-
-        = f.input :exchange_rate, label: "Tipo de cambio de <span class='currency'></span> a #{currency_code_label}".html_safe,
+        = f.input :currency, collection: currency_options, label: 'Moneda', include_blank: false,
+          input_html: {id: 'transaction_currency', data: { value: 'currency.currency' } }
+        = f.input :exchange_rate, label: "Tipo de cambio de <span class='currency'></span> a #{currency_label}".html_safe,
           input_html: {id: 'transaction_exchange_rate', type: 'decimal', size: 6, data: {value: 'currency.rate'}},
           wrapper_class: 'exchange-rate control-group'
           

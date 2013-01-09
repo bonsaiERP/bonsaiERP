@@ -18,6 +18,7 @@
 #= require bootstrap/bootstrap-modal
 #= require bootstrap/bootstrap-popover
 
+#= require app/currency.coffee
 #= require app/exchange_rate.js.coffee
 #= require app/transaction.js.coffee
 #= require app/pay_plans.js.coffee

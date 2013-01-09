@@ -251,20 +251,15 @@ module ApplicationHelper
     end
   end
 
-  def currency_code_label
-    "<span class='label label-inverse' title='#{currency_name}' rel='tooltip'>#{currency_code}</span>".html_safe
-  end
-  alias :cur_clabel :currency_code_label
-
   def true_false(val)
     if val
-      'bicon-tick'
+      'icon-ok'
     else
-      'bicon-cross'
+      'icon-remove'
     end
   end
 
-  def show_amount(amount, cur_id=currency_id)
-    "#{ ntc(amount) } #{cur_clabel}"
+  def show_amount(amount, cur=currency)
+    "#{ ntc(amount) } #{currency_label(cur)}"
   end
 end

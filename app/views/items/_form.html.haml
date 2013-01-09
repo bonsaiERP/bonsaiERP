@@ -20,7 +20,7 @@
     #for_sale.span3
       = f.input :for_sale, label: 'Se vende', as: :radio, item_wrapper_class: 'inline'
     #price.hide.span3
-      = f.input :price, :label => "Precio de venta #{currency_code_label}".html_safe, input_html: {size: 12, type: 'decimal'}
+      = f.input :price, :label => "Precio de venta #{currency_label}".html_safe, input_html: {size: 12, type: 'decimal'}
 
   %hr
 

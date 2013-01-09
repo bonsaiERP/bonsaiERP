@@ -9,7 +9,7 @@ class CreateItems < ActiveRecord::Migration
       t.string :description
       t.string :code, :limit => 100
       t.boolean :integer, :default => false # denormalized data
-      t.boolean :stockable, :default => false
+      t.boolean :stockable, :default => true
       t.boolean :active, :default => true
       t.string :discount #, :precision => 5, :scale => 2, :default => 0
       t.string :ctype, :limit => 20

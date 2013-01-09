@@ -35,13 +35,6 @@ module TransactionsHelper
     end
   end
 
-  # Adds the currency to the label
-  # @param String
-  # @param Object [Transaction, Payment, PayPlan, ..]
-  def currency_label(text_label, klass)
-    "#{text_label} <span>(#{klass.currency_symbol})</span>"
-  end
-
   def list_taxes(klass)
     klass.taxes.map(&:abbreviation).join(" + ")
   end

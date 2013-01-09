@@ -17,7 +17,6 @@ class ApplicationController < ActionController::Base
   #rescue_from Exception, :with => :render_error
 
   include Controllers::Authorization
-  include Controllers::OrganisationHelpers 
   helper_method Controllers::OrganisationHelpers.organisation_helper_methods
 
   protect_from_forgery
@@ -105,6 +104,11 @@ protected
       end
     end
   end
+
+  def currency
+    current_organisation.currency
+  end
+  helper_method :currency
 
 private
   def set_page

@@ -3,7 +3,7 @@
 
   .row-fluid
     .span4=f.input :name, :label => 'Nombre de su empresa'
-    .span4=f.association :currency, :label => 'Moneda base', :hint => 'Todas las transacciones se realizaran en esta moneda.'
+    .span4=f.input :currency, label: 'Moneda base', collection: currency_options_filtered, hint: 'Todas las transacciones se realizaran en esta moneda.'
     .span4=f.association :org_country, :label => 'País'
   
   .row-fluid

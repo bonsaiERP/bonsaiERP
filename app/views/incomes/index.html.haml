@@ -20,7 +20,7 @@
 .row-fluid
   = render 'incomes/quick_income'
 
-%ul.tabs
+-#%ul.tabs
   %li= link_option "Todos", "all"
   %li= link_option "Proformas", 'draft'
   %li= link_option "Esperando cobro #{size_or_blank(@count.approved.size)}", 'awaiting_payment'

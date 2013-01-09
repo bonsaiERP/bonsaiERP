@@ -114,35 +114,32 @@ window.App.Income = Income
 
 class TransactionCurrency extends Backbone.Model
   defaults:
-    currency_id: 0
-    code: ''
-    baseCode: ''
+    currency: ''
+    baseCurrency: ''
     rate: 1
   initialize: ->
-    @set(currency_id: $('#transaction_currency_id').val(), baseCode: organisation.currency_code)
+    @set(currency: $('#transaction_currency').val(), baseCurrency: organisation.currency)
 
-    @on('change:currency_id', @setCurrency )
-    @on('change:code', @showHideExchange )
+    @on('change:currency', =>
+      @setCurrency()
+      @showHideExchange()
+    )
+    @showHideExchange()
     @setCurrency()
   #
   setCurrency: ->
-    el = _.find( $('#transaction_currency_id').get(0).options, (el) =>
-      el.value == @get('currency_id')
-    )
-
-    code = $(el).text().split(' ')[0]
-    rate = fx.convert(1, {from: code, to: @get('baseCode') }).toFixed(4) * 1
-    @set(code: code, rate: rate)
+    rate = fx.convert(1, {from: @get('currency'), to: @get('baseCurrency') }).toFixed(4) * 1
+    @set(rate: rate)
     @setCurrencyLabel()
   #
   setCurrencyLabel: ->
-    html = "1 #{@get('code')} = "
-    label = "<span class='label label-inverse'>#{@get('code')}</span>"
+    html = "1 #{@get('currency')} = "
+    label = Currency.label(@get('currency'))
 
     $('.currency').html(label)
   #
   showHideExchange: ->
-    if @get('baseCode') == @get('code')
+    if @get('baseCurrency') == @get('currency')
       $('.exchange-rate').hide('medium')
     else
       $('.exchange-rate').show('medium')

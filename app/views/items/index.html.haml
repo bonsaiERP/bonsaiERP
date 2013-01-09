@@ -41,7 +41,9 @@
     %th Activo
     %th(title='Inventario') Inv.
     %th Se vende
-    %th Precio<br/>de Venta
+    %th 
+      Precio de<br/>Venta
+      = currency_label
     %th Unidad
     %th Inventario<br/>Total
     %th
@@ -55,7 +57,7 @@
         %span(class="#{true_false item.stockable?}")
       %td
         %span(class="#{true_false item.for_sale?}")
-      %td.r!= show_amount( item.price  ) if item.for_sale?
+      %td.r= ntc item.price if item.for_sale?
       %td= item.unit_name
       %td.r
         = ntc item.total_stock if item.stockable?
