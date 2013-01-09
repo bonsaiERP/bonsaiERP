@@ -1,5 +1,21 @@
 # encoding: utf-8
 class QuickIncome < QuickTransaction
+  def create
+    res = true
+    ActiveRecord::Base.transaction do
+      res = create_transaction
+
+      res = create_ledger && res
+
+      unless res
+        set_errors(income, account_ledger)
+        raise ActiveRecord::Rollback
+      end
+    end
+
+    res
+  end
+
   def income
     transaction
   end

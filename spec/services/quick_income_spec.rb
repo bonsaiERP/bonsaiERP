@@ -9,9 +9,8 @@ describe QuickIncome do
     UserChange.any_instance.stub(save: true, user: user)
   end
 
-  let!(:currency) { create(:currency) }
   let!(:contact) { create(:contact) }
-  let!(:cash) { create(:cash, amount: 100, currency_id: currency.id) }
+  let!(:cash) { create(:cash, amount: 100, currency: 'BOB') }
   let(:account) { cash.account }
   let(:initial_amount) { account.amount }
 
@@ -51,7 +50,7 @@ describe QuickIncome do
       qi.create.should be_false
 
       qi.income.errors[:currency].should_not be_blank
-      qi.income.errors[:currency_id].should_not be_blank
+      qi.income.errors[:currency].should_not be_blank
     end
 
     it "should present errors if the contact is wrong" do

@@ -23,19 +23,19 @@ class QuickTransaction < BaseService
   end
 
   def create
-    res = true
-    ActiveRecord::Base.transaction do
-      res = create_transaction
+    #res = true
+    #ActiveRecord::Base.transaction do
+    #  res = create_transaction
 
-      res = create_ledger && res
+    #  res = create_ledger && res
 
-      unless res
-        set_errors(:income, :account_ledger)
-        raise ActiveRecord::Rollback
-      end
-    end
+    #  unless res
+    #    set_errors(transaction, account_ledger)
+    #    raise ActiveRecord::Rollback
+    #  end
+    #end
 
-    res
+    #res
   end
 
 private
@@ -54,7 +54,7 @@ private
   end
 
   def transaction_attributes
-    {ref_number: ref_number, date: date, currency_id: currency_id,
+    {ref_number: ref_number, date: date, currency: currency,
      bill_number: bill_number, fact: fact, contact_id: contact_id,
      state: 'paid', payment_date: date
     }
@@ -70,11 +70,9 @@ private
     AccountLedger.new(
       amount: ledger_amount, account_id: account_id,
       reference: ledger_reference, operation: ledger_operation,
-      exchange_rate: 1, contact_id: contact_id, date: date
-    ) do |al|
-      al.transaction_id = transaction.id
-      al.conciliation = true
-    end
+      exchange_rate: 1, contact_id: contact_id, date: date,
+      transaction_id: transaction.id, conciliation: true
+    )
   end
 
   def ledger_reference
@@ -84,9 +82,9 @@ private
     @account ||= Account.find_by_id(account_id)
   end
 
-  def currency_id
+  def currency
     if account.present?
-      account.currency_id
+      account.currency
     else
       nil
     end

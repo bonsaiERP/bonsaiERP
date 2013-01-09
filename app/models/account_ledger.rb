@@ -45,7 +45,7 @@ class AccountLedger < ActiveRecord::Base
 
   ########################################
   # Validations
-  validates_presence_of :amount, :account_id, :account, :reference, :currency, date
+  validates_presence_of :amount, :account_id, :account, :reference, :currency, :date
 
   validates_inclusion_of :operation, in: OPERATIONS
   validates_numericality_of :exchange_rate, greater_than: 0
@@ -66,8 +66,7 @@ class AccountLedger < ActiveRecord::Base
 
   ########################################
   # delegates
-  delegate :name, :original_type, :accountable_type, :accountable, :amount, :accountable_id,
-    to: :account, prefix: true, allow_nil: true
+  delegate :name, :original_type, :accountable_type, :accountable, :amount, :accountable_id, :currency, to: :account, prefix: true, allow_nil: true
 
   delegate :name, :original_type, :accountable_type, :accountable, :amount, :accountable_id,
     to: :to, prefix: true, allow_nil: true
@@ -159,7 +158,7 @@ class AccountLedger < ActiveRecord::Base
 
 private
   def set_currency
-    self.currency_id = account_currency_id
+    self.currency = account_currency
   end
 
   def set_creator

@@ -6,9 +6,8 @@ describe QuickTransaction do
     UserSession.current_user = User.new {|u| u.id = 21 }
   end
 
-  let!(:currency) { create(:currency) }
   let!(:contact) { create(:contact) }
-  let!(:cash) { create(:cash, amount: 100, currency_id: currency.id) }
+  let!(:cash) { create(:cash, amount: 100, currency: 'BOB') }
   let(:account) { cash.account }
   let(:initial_amount) { account.amount }
 

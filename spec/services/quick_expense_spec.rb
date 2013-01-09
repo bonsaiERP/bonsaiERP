@@ -6,9 +6,8 @@ describe QuickExpense do
     UserChange.any_instance.stub(save: true, user: user)
   end
 
-  let!(:currency) { create(:currency) }
   let!(:contact) { create(:contact) }
-  let!(:cash) { create(:cash, amount: 100, currency_id: currency.id) }
+  let!(:cash) { create(:cash, amount: 100, currency: 'BOB') }
   let(:account) { cash.account }
   let(:initial_amount) { account.amount }
 
@@ -29,11 +28,11 @@ describe QuickExpense do
 
     it "creates a valid expense" do
       contact.should_not be_supplier
-      qi = QuickExpense.new(valid_attributes)
-      qi.create.should be_true
+      qe = QuickExpense.new(valid_attributes)
+      qe.create.should be_true
 
-      qi.expense.should be_persisted
-      qi.account_ledger.should be_persisted
+      qe.expense.should be_persisted
+      qe.account_ledger.should be_persisted
       contact.reload
       contact.should be_supplier
     end
