@@ -10,27 +10,25 @@
       = f.input :code, :label => 'Código'
     .span6
       = f.input :name, :label => 'Nombre'
-  %hr
 
   .row-fluid
-    .span3
-      = f.input :active, label: "Activo <i class='icon-info-sign' rel='tooltip' title='Se puede usar en nuevos Ingresos o Egresos'></i>".html_safe, as: :radio, item_wrapper_class: 'inline'
-    .span3
-      = f.input :stockable, label: 'Inventario <i title="Se almacena el ítem?" rel="tooltip" class="icon-info-sign"></i>'.html_safe, as: :radio, item_wrapper_class: 'inline'
-    #for_sale.span3
-      = f.input :for_sale, label: 'Se vende', as: :radio, item_wrapper_class: 'inline'
-    #price.hide.span3
+    .span6
+      = f.association :unit, :label => "Unidad",
+        input_html: { class: 'span10', data: {new_url: new_unit_path, trigger: 'new-unit', title: 'Nueva unidad'} }
+      .form-horizontal
+        = f.input :active, label: "Activo <i class='icon-info-sign' rel='tooltip' title='Se puede usar en nuevos Ingresos o Egresos'></i>".html_safe
+        = f.input :stockable, label: 'Inventario <i title="Se almacena el ítem?" rel="tooltip" class="icon-info-sign"></i>'.html_safe
+    .span6.form-horizontal.well.well-small
+      %h4 Venta
+      = f.input :for_sale, label: 'Se vende'
       = f.input :price, :label => "Precio de venta #{currency_label}".html_safe, input_html: {size: 12, type: 'decimal'}
 
-  %hr
+    .span4
 
   .row-fluid
     .span6
-      = f.association :unit, :label => "Unidad", 
-        input_html: { data: {new_url: new_unit_path, trigger: 'new-unit', title: 'Nueva unidad'} }
-    .span6
       = f.input :description, :as => :text, :input_html => {:rows => 4}
-  
+
   = f.submit "Salvar", :class => 'btn btn-success b'
 
 :javascript
@@ -41,13 +39,13 @@
     });
 
     function showHidePrice() {
-      if($('#item_for_sale_true').attr('checked') ){
-        $('#price').show('slow');
+      if($('#item_for_sale').attr('checked') ){
+        $('#item_price').attr('disabled', false);
       }else{
-        $('#price').hide('slow');
+        $('#item_price').attr('disabled', true);
       }
     }
 
-    $('#for_sale input').live('click', function() { showHidePrice() });
+    $('#item_for_sale').live('click', showHidePrice );
     showHidePrice();
   });

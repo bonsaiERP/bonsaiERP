@@ -122,9 +122,9 @@ class TransactionCurrency extends Backbone.Model
 
     @on('change:currency', =>
       @setCurrency()
-      @showHideExchange()
+      @activateExchange()
     )
-    @showHideExchange()
+    @activateExchange()
     @setCurrency()
   #
   setCurrency: ->
@@ -138,18 +138,24 @@ class TransactionCurrency extends Backbone.Model
 
     $('.currency').html(label)
   #
-  showHideExchange: ->
+  activateExchange: ->
     if @get('baseCurrency') == @get('currency')
-      $('.exchange-rate').hide('medium')
+      $('#transaction_exchange_rate').attr('disabled', true)
     else
-      $('.exchange-rate').show('medium')
+      $('#transaction_exchange_rate').attr('disabled', false)
 
 
 window.App.TransactionCurrency = TransactionCurrency
 
 itemTemplate = """<tr class="item" data-item="{"original_price":"0.0","price":"0.0","quantity":"1.0","subtotal":"0.0"}">
     <td>
-      <div class="control-group autocomplete optional"><div class="controls"><input id="income_transaction_details_attributes_$num_item_id" name="income[transaction_details_attributes][$num][item_id]" type="hidden"><input class="autocomplete optional item_id ui-autocomplete-input" data-source="/items/search.json" id="item_autocomplete" name="item_autocomplete" placeholder="Escriba para buscar el ítem" size="35" type="text" autocomplete="off"><span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span></div></div>
+      <div class="control-group autocomplete optional">
+        <div class="controls">
+          <input id="income_transaction_details_attributes_$num_item_id" name="income[transaction_details_attributes][$num][item_id]" type="hidden"/>
+          <input class="autocomplete optional item_id ui-autocomplete-input span12" data-source="/items/search.json" id="item_autocomplete" name="item_autocomplete" placeholder="Escriba para buscar el ítem" size="35" type="text" autocomplete="off"/>
+          <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+        </div>
+      </div>
     </td>
     <td>
       <div class="control-group decimal optional"><div class="controls"><input class="numeric decimal optional" data-original-price="null" data-value="item.price" id="income_transaction_details_attributes_$num_price" name="income[transaction_details_attributes][$num][price]" size="8" step="any" type="decimal" value=""></div></div>
