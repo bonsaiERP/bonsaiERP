@@ -208,10 +208,14 @@
       title = data.title || "Nuevo"
 
       $a = $('<a/>')
-        .html('<i class="icon-plus-sign icon-large"></i>')
+      css = {'margin-left': '5px'}
+      #css['margin-top'] = '-9px' unless $a.prev().hasClass('select2-autocomplete')
+
+      $a
+      .html('<i class="icon-plus-sign icon-large"></i>')
       .attr({href: data.newUrl, class: 'ajax btn btn-small', title: title, rel: 'tooltip' })
       .data({trigger: data.trigger, width: data.width})
-      .css({'margin-left': '5px'})
+      .css(css)
 
       $a.insertAfter(el)
     )

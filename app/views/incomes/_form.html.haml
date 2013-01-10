@@ -50,6 +50,8 @@
       $('.contact_id').val(resp.matchcode).data('value', resp.matchcode)
       .prev().val(resp.matchcode)
     )
+    
+    $('#transaction_currency').select2()
 
     fx.rates = exchangeRates.rates
     currency = new App.TransactionCurrency()
