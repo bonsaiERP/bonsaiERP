@@ -205,7 +205,7 @@
         .html('<i class="icon-plus-sign icon-large"></i>')
       .attr({href: data.newUrl, class: 'ajax btn btn-small', title: title, rel: 'tooltip' })
       .data({trigger: data.trigger, width: data.width})
-      .css({'margin-left': '5px', 'margin-top': '-7px'})
+      .css({'margin-left': '5px', 'margin-top': '-9px'})
 
       $a.insertAfter(el)
     )
