@@ -17,6 +17,10 @@ describe DefaultIncome do
     }
   }
 
+  before(:each) do
+    OrganisationSession.set build :organisation, id: 1
+  end
+
   it "does not allow a class that is not an income" do
     expect { DefaultIncome.new(Expense.new) }.to raise_error
   end

@@ -74,8 +74,9 @@
 
   window.createDialog = createDialog
 
+
   # Opens a video dialog
-  createVideoDialog = (url, title = "")->
+  createVideoDialog = (url, title = "") ->
     #html = "<iframe width=\"640\" height=\"360\" src=\"#{url}\" frameborder=\"0\" allowfullscreen></iframe>"
     html = "<iframe width=\"853\" height=\"480\" src=\"#{url}\" frameborder=\"0\" allowfullscreen></iframe>"
     #createDialog({html: html, width: 680, height: 410, title: title})
@@ -85,6 +86,7 @@
   $('a.video').live 'click', (event)->
     createVideoDialog($(this).attr("href"), $(this).data("title"))
     false
+
 
   # Gets if the request is new, edit, show
   getAjaxType = (el)->
@@ -99,7 +101,7 @@
 
 
   # Presents an AJAX form
-  $('a.ajax').live("click", (event)->
+  $('a.ajax').live("click", (event) ->
     title = $(this).attr("title") || $(this).data("original-title")
     data = $.extend({'title': title, 'ajax-type': getAjaxType(this) }, $(this).data() )
     div = createDialog( data )
@@ -111,6 +113,7 @@
     event.stopPropagation()
     false
   )
+
 
   # To present the search
   $('a.search').live("click", ->
@@ -160,6 +163,7 @@
     false
   )
 
+
   # Method to delete when it's in the .links in the top
   $('a.delete').live 'click', ->
     return false if $(this).attr("data-remote")
@@ -176,6 +180,7 @@
       .html(html).appendTo('body').submit()
 
       false
+
 
   # Mark
   # @param String // jQuery selector
@@ -195,6 +200,7 @@
 
   $.mark = $.fn.mark = mark
 
+
   # Adds a new link to any select with a data-new-url
   dataNewUrl = ->
     $(this).find('[data-new-url]').each((i, el) ->
@@ -205,12 +211,13 @@
         .html('<i class="icon-plus-sign icon-large"></i>')
       .attr({href: data.newUrl, class: 'ajax btn btn-small', title: title, rel: 'tooltip' })
       .data({trigger: data.trigger, width: data.width})
-      .css({'margin-left': '5px', 'margin-top': '-9px'})
+      .css({'margin-left': '5px'})
 
       $a.insertAfter(el)
     )
 
   $.fn.dataNewUrl = dataNewUrl
+
 
   # Closes the nearest div container
   $('a.close').live 'click', ->

@@ -1,0 +1,7 @@
+.navbar.navbar-fixed-top.navbar-inverse
+  .navbar-inner
+    .nav-collapse.collapse.cont
+      = render 'layouts/main_menu'
+      .pull-right
+        = render 'layouts/usersettings_menu' if user_signed_in?
+

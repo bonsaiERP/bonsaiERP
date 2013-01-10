@@ -31,24 +31,17 @@
       %div{ :id => "debug-error", :style => "display:none; width: 640px; height: 480px; overflow: auto; z-index: 10000; background:#FFF;color:#000" }
         %iframe{ :id => "cont-iframe", :width => "100%", :height => "100%"}
 
-    #header.navbar
-      .navbar-inner
-        .container-fluid
-          -#%a.btn.btn-navbar(data-toggle="collapse" data-target=".nav-collapse")
-            %span.icon-bar
-            %span.icon-bar
-            %span.icon-bar
-          .row
-            .span7
-              .nav-collapse.in(style="height: auto;")
-                = render 'layouts/main_menu'
-              -# if organisation?
-                %h1{:title => "ID: #{session[:organisation][:id]}, Exp:  #{lo session[:organisation][:due_date] }"}= session[:organisation][:name]
-            .span5.pull-right
-              = render 'layouts/usersettings_menu' if user_signed_in?
+    -# Header
+    - if current_user
+      = render 'layouts/menus'
+
+      .row-fluid.organisation
+        .cont
+          .span12
+            %h3= current_organisation.name if current_organisation
 
 
-    #wrapper
+    #wrapper.cont
       #menu
         .container-fluid
           .main-links.row-fluid= yield :links
@@ -59,30 +52,22 @@
           = yield
           .clear
       #footer
-        .container
-          %p
-            ©2011-2012 &middot; 
-            =link_to "BonsaiERP", "http://bonsaierp.com"
-            El software para la gestión de empresas
-            %br
-            %a(href="http://twitter.com/#!/bonsaierp" target="_blank") Twitter
-            &middot;
-            %a(href="http://www.facebook.com/pages/BonsaiERP/337187402983197" target="_blank") Facebook
-          -#%p
-            %a Blog
-            &middot;
-            %a Cambios Recientes
-            &middot;
-            %a Estado del Servicio
-            &middot;
-            %a Terminos del Servicio
-            &middot;
-            %a Políticas de Privacidad
+        %p
+          ©2011-2013 &middot; 
+          =link_to "BonsaiERP", "http://bonsaierp.com"
+          El software para la gestión de empresas
+          <br/><br/>
 
-    #modal-template(style="display:none")
-      .modal
-        .modal-header
-          %h4
-          %a.close(data-dismiss="modal")
-        .modal-body
-        .modal-footer
+          %a(href="http://twitter.com/#!/bonsaierp" target="_blank") Twitter
+          &middot;
+          %a(href="http://www.facebook.com/pages/BonsaiERP/337187402983197" target="_blank") Facebook
+        -#%p
+          %a Blog
+          &middot;
+          %a Cambios Recientes
+          &middot;
+          %a Estado del Servicio
+          &middot;
+          %a Terminos del Servicio
+          &middot;
+          %a Políticas de Privacidad

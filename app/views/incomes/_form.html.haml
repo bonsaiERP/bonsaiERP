@@ -10,7 +10,7 @@
       .span3
         = f.input :date, label: "Fecha", as: :datepicker
       .span6
-        = f.input :contact, as: :autocomplete, label: 'Contacto', input_html: {class: 'span10', data: {source: '/contacts/search', new_url: new_contact_path, title: 'Nuevo contacto', trigger: 'new-contact', placeholder: 'Escriba para buscar contactos'} }
+        = f.input :contact, as: :select2, label: 'Contacto', input_html: {class: 'span10', data: {source: '/contacts/search', new_url: new_contact_path, title: 'Nuevo contacto', trigger: 'new-contact', placeholder: 'Escriba para buscar contactos'} }
 
     %hr.light
     .row-fluid.currency-input
@@ -26,7 +26,8 @@
     .row-fluid
       .span6
         = f.association :project,  label: 'Proyecto',
-          input_html: { data: {new_url: new_project_path, title: 'Nuevo proyecto', trigger: 'new_project', width: 900}, class: 'contact_id' }
+          input_html: { class: 'contact_id span11', data: {new_url: new_project_path, title: 'Nuevo proyecto', trigger: 'new_project', width: 900 } }
+  
       .span6
         = f.input :bill_number, label: 'Nº de Documento'.html_safe, input_html: {size: 20}, hint: 'Nº de factura or recibo'
 

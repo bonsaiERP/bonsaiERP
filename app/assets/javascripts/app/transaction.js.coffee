@@ -153,7 +153,7 @@ itemTemplate = """<tr class="item" data-item="{"original_price":"0.0","price":"0
         <div class="controls">
           <input id="income_transaction_details_attributes_$num_item_id" name="income[transaction_details_attributes][$num][item_id]" type="hidden"/>
           <input class="autocomplete optional item_id ui-autocomplete-input span11" data-source="/items/search.json" id="item_autocomplete" name="item_autocomplete" placeholder="Escriba para buscar el ítem" size="35" type="text" autocomplete="off"/>
-          <a href="/items/new" class="ajax btn btn-small" rel="tooltip" style="margin-left: 5px; margin-top: -9px;" data-original-title="Nuevo"><i class="icon-plus-sign icon-large"></i></a>
+          <a href="/items/new" class="ajax btn btn-small" rel="tooltip" style="margin-left: 5px;" title="Nuevo ítem"><i class="icon-plus-sign icon-large"></i></a>
           <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
         </div>
       </div>

@@ -1,6 +1,4 @@
 - if current_organisation
-  %h3= current_organisation
-
   %ul.nav
     %li= link_to "Resumen", dashboard_path 
     %li.dropdown
@@ -34,6 +32,3 @@
         %li.divider
         %li <a href="/inventory_operations/transactions?operation=out">Inventario pendientes de egreso</a>
         %li <a href="/inventory_operations/transactions?operation=in">Inventario pendientes ingreso</a>
-
--# Move the due date to a notification icon
--#due_date= present_due_date

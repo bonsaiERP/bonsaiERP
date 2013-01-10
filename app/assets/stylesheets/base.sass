@@ -7,26 +7,27 @@ html
 
 body
   //font-family: Segoe UI, Helvetica, "Helvetica Neue", Arial, sans-serif
-  background: transparent url(/assets/back-black.png)
+  background: transparent url(/assets/back-gray-light.png)
   margin: 0px
   padding: 0px
   font-size: $font_size
 
 
-hr 
-  border: 0px
-  background-color: gray
-  color: gray
-  height: 1px
-
-
-
 /*********************************************************/
 /*MAIN CONTENT WRAPPERS*/
-#wrapper
-  min-height: 500px
+.cont
   max-width: 1000px
   margin: 0px auto
+
+#wrapper
+  min-height: 500px
+
+.organisation
+  background-color: darken(yellowGreen, 3%)
+  +background-image(linear-gradient(lighten($green,  5%), yellowGreen) )
+  margin-top: 40px
+  +text-shadow(1px 1px 0 darken($green, 15%))
+  color: #F7F7F7
 
 
 #logo
@@ -54,75 +55,33 @@ hr
   padding: 30px
   min-height: 400px
 
-// header
-#header .navbar-inner
-  +border-radius(0px)
-  background-color: $menu-green
-  +background-image(linear-gradient($menu-green, darken($menu-green,  10%)) )
+ul#usersettings
+  +border-radius
+  padding: 0px
+  height: 29px
+  margin-top: 5px
+  display: inline-block
+  float: right
+  background: rgba(0,0,0, 0.55)
 
-  h1, h2, h3
-    color: white
+  font-size: 90%
+  font-weight: bold
 
-  ul.nav>li>a
-    +single-text-shadow
-    color: white
-
-  ul.nav
-    li.open>a
-      background: darken($menu-green, 20%)
-    //border-left: 1px solid darken($menu-green, 20%)
-    //1px solid darken($menu-green, 20%)
-
-.navbar
-  margin: 0px !important
-  position: relative
-  clear: both
-
-  //ul.nav > li > a
-    color: darken(white, 7%)
-    font-weight: bold
-
-  h1
-    float: left
-    color: white
-    margin: 7px 0px 0 14px
-    overflow: hidden
-    height: 35px
-    vertical-align: top
-    text-shadow: 1px 1px 1px #000
-    width: 100%
-
-  h1, h2, h3
-    margin: 4px 0px
-
-  ul#usersettings
-    +border-radius
+  li
+    list-style: none
+    margin: 0px
     padding: 0px
-    height: 29px
-    margin-top: 5px
-    display: inline-block
-    float: right
-    background: rgba(0,0,0, 0.55)
-
-    font-size: 90%
-    font-weight: bold
-
-    li
-      list-style: none
-      margin: 0px
-      padding: 0px
-      float: left
-      a
-        vertical-align: middle
-        display: block
-        padding: 7px 10px
-        color: white
-        text-decoration: none
-        &:hover
-          text-decoration: underline
+    float: left
+    a
+      vertical-align: middle
+      display: block
+      padding: 7px 10px
+      color: white
+      text-decoration: none
+      &:hover
+        text-decoration: underline
 
 // Menu for links
-
 #menu
   //height: 32px
   background: lighten(gray, 45%)
@@ -137,15 +96,12 @@ hr
     line-height: 14px
     padding: 3px 8px
 
-    
 /* Breadcrumbs*/
 ul.breadcrumps
   list-style: none
   padding: 0px
   margin: 0px
   line-height: 3em
-  //0 16px
-  //width: 50%
   li
     display: inline
     a
@@ -193,7 +149,7 @@ p
 
 #login
   +border-radius
-  background: rgba(255,255,255, 0.1)
+  background: rgba(33, 33, 33, 0.3)
 
   .inset
     background: white
@@ -208,8 +164,9 @@ p
 
 // footer
 #footer
+  +text-shadow(1px 1px 0px $white)
   text-align: center
-  color: darken(white, 10%)
+  color: $grayDarker
   padding: 40px 0
 
 // Pagination
