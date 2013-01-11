@@ -11,18 +11,19 @@ class Account < ActiveRecord::Base
   attr_readonly  :initial_amount, :original_type
 
   # Relationships
-  belongs_to :accountable, :polymorphic => true
+  belongs_to :accountable, polymorphic: true
 
   has_many :account_ledgers
   has_many :account_balances
 
   # Transaction
-  has_many :incomes,  :class_name => "Transaction", :conditions => "transactions.type = 'Income'"
-  has_many :expenses, :class_name => "Transaction", :conditions => "transactions.type = 'Expense'"
+  #has_many :incomes,  :class_name => "Transaction", :conditions => "transactions.type = 'Income'"
+  #has_many :expenses, :class_name => "Transaction", :conditions => "transactions.type = 'Expense'"
 
   # validations
   validates_presence_of :currency, :name
   validates_numericality_of :amount
+  validates_inclusion_of :currency, in: CURRENCIES.keys
 
 
   # scopes
@@ -87,12 +88,6 @@ class Account < ActiveRecord::Base
     Hash[ Account.money.map {|v| [v.id, Hash[l.call(v)] ]  } ]
   end
 
-  # Creates a hash for with the amount for each currency available
-  # {currency_id => amount}
-  def currencies_to_hash
-    Hash[ account_currencies.map {|ac| [ac.currency_id, ac.amount] } ]
-  end
-
   def select_cur(cur_id)
     account_currencies.select {|ac| ac.currency_id == cur_id }.first
   end
@@ -111,11 +106,5 @@ private
   def set_amount
     self.amount ||= 0.0
     self.initial_amount ||= self.amount
-  end
-
-  def create_account_currency
-    account_currencies.build(
-      currency: currency, amount: amount
-    )
   end
 end

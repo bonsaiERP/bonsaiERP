@@ -6,7 +6,7 @@ class Cash < MoneyStore
   validates :name, :uniqueness => true, :length => {:minimum => 3}
 
   def to_s
-    name
+    "#{name} #{currency}"
   end
 
   private

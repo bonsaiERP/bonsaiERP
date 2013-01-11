@@ -2,7 +2,7 @@
   .span6 &nbsp;
   .links.span6= link_to "Nueva caja", new_cash_path, :class => 'new'
 
-.page-header
+%header
   %h1 Cuentas caja
 
 - if @cashes.empty?
@@ -12,13 +12,15 @@
   - @cashes.each do |cash|
     %li.row-fluid
       .span7
-        %h3= link_to cash, cash
-        %h4.mt5.dark= cash.currency_name.pluralize
-      .span5
-        .moneybox.fl
+        %h3
+          = link_to cash, cash
+          = currency_label cash.currency
+      .span3.pull-right
+        .well.well-small
           %label TOTAL EN CUENTA
-          %h3= with_currency cash.account, :amount
-
-        = pendent_money_link(cash, :class => 'b fs110')
+          %h3
+            = ntc cash.amount
+            = currency_label cash.currency
+        -#= pendent_money_link(cash, :class => 'b fs110')
       .clear
 

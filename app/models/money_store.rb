@@ -5,9 +5,9 @@ class MoneyStore < ActiveRecord::Base
 
   ########################################
   # Callbacks
-  before_create :create_new_account
+  before_create :build_new_account
   after_save    :set_account_name, if: :name_changed?
-  before_validation :set_amount, :if => :new_record?
+  before_validation :set_amount, if: :new_record?
 
   ########################################
   # Attributes
@@ -15,18 +15,19 @@ class MoneyStore < ActiveRecord::Base
 
   ########################################
   # Relationships
-  has_one :account, :as => :accountable, :autosave => true, :dependent => :destroy, inverse_of: :accountable
+  has_one :account, as: :accountable, autosave: true, dependent: :destroy, inverse_of: :accountable
 
   # Common validations
-  validates_numericality_of :amount, :greater_than_or_equal_to => 0, :on => :create
+  validates_numericality_of :amount
   validates_presence_of :currency
+  validates_inclusion_of :currency, in: CURRENCIES.keys
 
   # delegations
-  delegate :id, :amount, :name, :to => :account, :prefix => true, :allow_nil => true
+  delegate :id, :amount, :name, to: :account, prefix: true, allow_nil: true
 
   # Creates methods to determine if is bank?, cash?
-  %w[bank cash].each do |met|
-    class_eval <<-CODE, __FILE__, __LINE__ +1
+  %w(bank cash).each do |met|
+    class_eval <<-CODE, __FILE__, __LINE__ + 1
       def is_#{met}?
         self.class.to_s.downcase == "#{met}"
       end
@@ -41,16 +42,15 @@ private
 
   # No need to save because of autosave
   def set_account_name
-    self.account.name = self.to_s
+    account.name = name
   end
 
-  def create_new_account
-    ac = self.build_account(
+  def build_new_account
+    self.build_account(
       currency: currency,
-    ) do |a|
-      a.original_type = self.class.to_s
-      a.amount = amount
-      a.name = to_s
-    end
+      original_type: self.class.to_s,
+      amount: amount,
+      name: name
+    )
   end
 end

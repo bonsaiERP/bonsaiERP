@@ -7,14 +7,16 @@
 .page-header
   %h1.n
     = @cash.name
-    %small= @account.currency_code
-    = pendent_money_link(@cash)
+    %small= @account.currency
+    -#= pendent_money_link(@cash)
 
 .row-fluid
   .span6
-    .moneybox.fl
+    .well.well-small
       %label SALDO EN CAJA
-      %h3= with_currency(@account, :amount)
+      %h3
+        = ntc @account.amount
+        = currency_label @account.currency
 
   .span6
     %label Dirección

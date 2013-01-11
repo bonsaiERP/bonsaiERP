@@ -310,6 +310,14 @@
     $('body').dataNewUrl()
     fx.rates = exchangeRates.rates
 
+
+    # Scroll visivility
+    $(window).scroll ->
+      if $(document).scrollTop() > 10
+        $('#head').css 'opacity', 0.9
+      else
+        $('#head').css 'opacity', 1
+
   rivets.configure(
     #preloadData: false
     adapter:

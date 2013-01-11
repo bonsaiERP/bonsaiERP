@@ -41,8 +41,12 @@
     %th 
       Cód. Fecha<br/>
       %span.tip{:title => 'Nº de cheque, razón, recibo, etc.'} Referencia
-    %th Monto en #{account.currency_symbol}
-    %th Saldo en #{account.currency_symbol}
+    %th 
+      Monto en
+      = currency_label account.currency
+    %th
+      Saldo en
+      = currency_label account.currency
     %th Cuentas relacionadas
     %th Descripción
     %th 

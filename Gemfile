@@ -49,6 +49,7 @@ group :development, :test do
   gem 'pry-nav'
   gem 'rails-footnotes'
   gem 'konacha'
+  #gem 'quiet_assets' # Quiets assets log in development
 end
 
 # Test
