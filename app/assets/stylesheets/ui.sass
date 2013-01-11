@@ -331,22 +331,6 @@ $header-color: lighten(gray, 20%)
 @import plugins/buttons
 @import colors
 
-.links
-  +border-radius(4px)
-  background-color: #fcfcfc
-  padding: 4px 10px
-  border: 1px solid #efefef
-  //+box-shadow(1px 1px 4px #cfcfcf inset)
-  .new, .add, .edit, .show, .delete, .destroy
-    +button(lighten(gray, 40%))
-    +text-shadow(0px 1px 1px white)
-    color: $dark
-    font-weight: bold
-    font-size: 14px
-    padding: 6px 15px
-  .destroy, .delete
-    color: darken(red, 10%)
-
 [class^="bicon-"], [class~=" bicon-"]
   display: inline-block
   vertical-align: middle

@@ -388,3 +388,8 @@ es:
   email:
     invoice_title: "Nota de venta "
     invoice_body: "Estimado cliente le hacemos llegar el adjunto de la venta"  
+  
+  common:
+    edit: 'Editar'
+    delete: 'Borrar'
+    show: 'Ver'

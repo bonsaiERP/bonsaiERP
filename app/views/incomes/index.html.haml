@@ -3,19 +3,34 @@
     %li
       %span Ingresos
 
+%header
+  .row-fluid
+    .span6
+      %h1 Ingresos
+    .span6.links
+      %a#quick-income-link.btn.btn-primary(href="javascript:;")
+        %i.icon-plus-sign
+        Ingreso rápido
 
-.row-fluid.top
-  .span6
-    %h1 Ingresos
+      = link_to new_income_path, class: 'btn btn-primary' do
+        %i.icon-plus-sign
+        Nuevo ingreso
 
-  .span6.links
-    %a#quick-income-link.new.but(href="javascript:;")
-      %i.bicon-add
-      Ingreso rápido
+.alert.alert-success
+  Prueba del alert
+.alert.alert-warning
+  Prueba del alert
+.alert.alert-info
+  Prueba del alert
 
-    = link_to new_income_path, :class => 'new but' do
-      %i.bicon-add
-      Nuevo ingreso
+%span.label.label-info
+  Info
+%span.label.label-warning
+  Warning
+%span.label.label-success
+  Success
+%span.label
+  Normal
 
 .row-fluid
   = render 'incomes/quick_income'
@@ -30,7 +45,7 @@
   %li= link_option "Desc./Inc.", "discount", title: 'Descuentos o Incrementos', rel: 'tooltip'
   %li= link_option "Anulados", "nulled"
 
-#search_income.well( style="#{show_if_search}" )
+-#search_income.well( style="#{show_if_search}" )
   %a.close{:href => "javascript:"} x
   %h3 Buscar ventas
   = link_to "Eliminar filtros", incomes_path, :class => 'b'
@@ -48,10 +63,36 @@
     =submit_tag 'Buscar', :class => 'btn btn-success'
 
 
-= link_to "Buscar", "#search_income", :class => 'search'
+-#= link_to "Buscar", "#search_income", :class => 'search'
 = paginate @incomes.page(@page)
 
-%table.nwl.table.table-striped
+%ul.unstyled.listing
+  - @incomes.each do |income|
+    %li.row-fluid
+      .span4
+        %h4
+          = link_to income, income
+        = state_tag income
+        %i= l income.date
+      .span3
+        %h5(title='Contacto' rel='tooltip')= income.contact
+      .span4
+        .span2
+          .muted Total
+        .span4
+          = currency_label income.currency
+          = ntc income.total
+
+        .span2
+          .muted Saldo
+        .span4
+          = currency_label income.currency
+          = ntc income.balance
+      .span1
+        = link_to icon_edit, edit_income_path(income)
+
+
+%table.nwl.table.table-striped.hide
   %thead
     %tr
       %th
@@ -82,9 +123,11 @@
           = lo income.date
           = lo income.payment_date unless income.is_paid?
         %td
-          #{income.currency_symbol} #{ntc income.total }
+          = currency_label income.currency
+          = ntc income.total
         %td
-          #{income.currency_symbol} #{ntc income.balance }
+          = currency_label income.currency
+          = ntc income.balance
 
         = discount_cell income
 

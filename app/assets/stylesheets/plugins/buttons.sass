@@ -1,12 +1,4 @@
-@mixin rounded($border)
-  -webkit-border-radius: $border
-  -moz-border-radius: $border
-  border-radius: $border
-
-@mixin shadow
-  -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2)
-  -moz-box-shadow: 0 1px 2px rgba(0,0,0,.2)
-  box-shadow: 0 1px 2px rgba(0,0,0,.2)
+@import compass
 
 @mixin gradient($top, $bottom)
   background-color: $bottom
@@ -22,19 +14,22 @@
   cursor: pointer
   text-align: center
   text-decoration: none
-  @include rounded(4px)
   // this determines Mozilla to show the padding
-  border: solid 1px #ccc
-  @include shadow
-  text-shadow: 0 1px 1px rgba(0,0,0,.3)
+  //border: solid 2px darken($background, 3%)
+  border-top: 2px solid 1px darken($background, 10%)
+
+  +border-radius(4px)
+  +box-shadow(0 1px 2px rgba(0,0,0,.2))
+  +text-shadow(0 1px 1px rgba(0,0,0,.3))
+  background-color: $background // Older IE
+  +background-image( linear-gradient(lighten($background, 13%), $background) )
+
   &:hover
     text-decoration: none
   &:active
     position: relative
     top: 1px
 
-  border: solid 1px darken($background, 3%)
-  @include gradient(lighten($background, 13%), $background)
   color: mix(#fff, $background, 90%)
   &:hover
     @include gradient(lighten($background, 15%), darken($background, 10%))
@@ -42,6 +37,11 @@
     @include gradient($background, lighten($background, 10%))
     color: mix(#fff, $background, 70%)
 
+.button-green
+  +button(darken(yellowGreen, 5%))
+  color: white
+  &:hover
+    color: white
 //@mixin color($background)
   border: solid 1px darken($background, 3%)
   @include gradient(lighten($background, 13%), $background)

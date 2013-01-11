@@ -304,9 +304,13 @@ a.duplicate
 /*********************************************/
 
 .ajax-modal
+  margin-top: 100px
   background-color: #FFF
-  .links
-    display: none
+  header
+    h1
+      font-size: 2em
+    .links
+      display: none
   a
     text-decoration: none
     &:hover
@@ -485,3 +489,14 @@ hr.light
       input.txt
         font-size: 1.3em
         height: 25px
+
+// List
+ul.listing
+  margin: 40px 0px
+  li
+    padding: 4px 0px 10px
+    border-bottom: 1px solid $grayLighter
+    h3, h4, h5
+      margin: 0px
+      font-weight: normal
+      display: inline-block

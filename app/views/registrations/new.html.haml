@@ -17,19 +17,28 @@
 
       .pad
         = simple_form_for(@organisation, :url => registrations_path) do |f|
-          = f.input :name, label: 'Empresa'
+          = f.input :name, label: 'Empresa', input_html: {class: 'span12'}
           = f.input :tenant, label: 'Subdominio',
-            hint: "<i class='icon-warning-sign' title='El subdominio no se podra modificar en un futuro' rel='tooltip'></i> No es posible modificar después</span>".html_safe
-          = f.input :email, :label => "Correo Electrónico", :input_html => {:size => 40}
-          = f.input :password, :label => 'Contraseña', :input_html => {:size => 40}
-          = f.submit "Registrarse", :class => 'btn btn-success b'
+            hint: "<i class='icon-warning-sign' title='El subdominio no se podra modificar en un futuro' rel='tooltip'></i> No es posible modificar después</span>".html_safe,
+            input_html: {class: 'span12'}
+          = f.input :email, :label => "Correo Electrónico", input_html: {class: 'span12'}
+          = f.input :password, :label => 'Contraseña', input_html: {class: 'span12'}
+          .center
+            = f.submit "Registrarse", :class => 'btn btn-success btn-large'
 
 :coffeescript
   (($) ->
     setTenant = (val) ->
-      val = val.toLowerCase().replace(/[^a-z0-9]/g, '')
-      $('#organisation_tenant').val(val)
-      $('#organisation_tenant').siblings('.help-block').html("Su dominio se vera <strong>" + val + ".bonsaierp.com</strong><br/><i class='icon-warning-sign' title='El subdominio no se podra modificar en un futuro' rel='tooltip'></i> No es posible modificar después</span>")
+      tenant = $('#organisation_tenant').val()
+      if tenant == ''
+        val = val.toLowerCase().replace(/[^a-z0-9]/g, '')
+        $('#organisation_tenant').val(val)
+        tenant = val
+
+      if tenant != ''
+        $('#organisation_tenant').siblings('.help-block').html("Su dominio se vera <strong>" + tenant + ".bonsaierp.com</strong><br/><i class='icon-warning-sign' title='El subdominio no se podra modificar en un futuro' rel='tooltip'></i> No es posible modificar después</span>")
 
     $('#organisation_name').blur(-> setTenant(this.value) )
+    $('#organisation_tenant').on('change keyup', -> setTenant('') )
+    setTenant('')
   )(jQuery)
