@@ -1,27 +1,26 @@
 :css
   #header{ display: none; }
   #menu{ display: none; }
-  #main_wrap{ background: none !important; }
   #cont{
     background: none;
-    border-radius: none;
     box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
   }
 
-.row-fluid(style="margin-top: 100px")
-  #login.span6.offset3
+.row-fluid
+  .lonely.span6.offset3
     .inset.center
-      %h2.c Iniciar sesión
+      %header
+        %h2.c Iniciar sesión
+      .pad
+        = simple_form_for(@user, :url => sessions_path, :method => :post) do |f|
 
-      = simple_form_for(@user, :url => sessions_path, :method => :post) do |f|
+          = f.input :email,    label: false, input_html: {:size => 30, :class => 'txt', placeholder: 'Email'}
+          = f.input :password, label: false, input_html: {:size => 30, :class => 'txt', placeholder: 'Contraseña'}
 
-        = f.input :email,    label: false, input_html: {:size => 30, :class => 'txt', placeholder: 'Email'}
-        = f.input :password, label: false, input_html: {:size => 30, :class => 'txt', placeholder: 'Contraseña'}
-
-        %p.c
-          = f.submit "Ingresar", :class => "btn btn-success big b"
-          %br
-          %br
-          = link_to "¿Olvido su contraseña?", new_reset_password_path
-          -#, :class => 'btn btn-primary'
-
+          %p.c
+            = f.submit "Ingresar", :class => "btn btn-success btn-large"
+            %br
+            %br
+            = link_to "¿Olvido su contraseña?", new_reset_password_path

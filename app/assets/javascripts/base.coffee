@@ -310,6 +310,7 @@
     $('body').dataNewUrl()
     fx.rates = exchangeRates.rates
 
+    $('ul.nav>li').on('mouseover', '>a', -> $(this).trigger('click'))
 
     # Scroll visivility
     $(window).scroll ->

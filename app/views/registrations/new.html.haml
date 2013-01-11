@@ -4,28 +4,32 @@
   #main_wrap{ background: none !important; }
   #cont{
     background: none;
-    border-radius: none;
     box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
   }
 
-.row-fluid(style="margin-top:100px")
-  #login.span6.offset3
+.row-fluid
+  .lonely.span6.offset3
     .inset
-      %h1 Registro
+      %header
+        %h2 Registro
 
-      = simple_form_for(@organisation, :url => registrations_path) do |f|
-        = f.input :name, label: 'Empresa'
-        = f.input :tenant, label: 'Subdominio', title: 'No es posible modificar despues', hint: "<span class='warning bicon'></span> <span class='dark-yellow'>No es posible modificar después</span>".html_safe
-        = f.input :email, :label => "Correo Electrónico", :input_html => {:size => 40}
-        = f.input :password, :label => 'Contraseña', :input_html => {:size => 40}
-        = f.submit "Registrarse", :class => 'btn btn-success b'
+      .pad
+        = simple_form_for(@organisation, :url => registrations_path) do |f|
+          = f.input :name, label: 'Empresa'
+          = f.input :tenant, label: 'Subdominio',
+            hint: "<i class='icon-warning-sign' title='El subdominio no se podra modificar en un futuro' rel='tooltip'></i> No es posible modificar después</span>".html_safe
+          = f.input :email, :label => "Correo Electrónico", :input_html => {:size => 40}
+          = f.input :password, :label => 'Contraseña', :input_html => {:size => 40}
+          = f.submit "Registrarse", :class => 'btn btn-success b'
 
 :coffeescript
   (($) ->
     setTenant = (val) ->
       val = val.toLowerCase().replace(/[^a-z0-9]/g, '')
       $('#organisation_tenant').val(val)
-      $('#organisation_tenant').siblings('.help-block').html("Su dominio se vera <strong>" + val + ".bonsaierp.com</strong><br/><span class='warning bicon'></span> <span class='dark-yellow'>No es posible modificar después</span>")
+      $('#organisation_tenant').siblings('.help-block').html("Su dominio se vera <strong>" + val + ".bonsaierp.com</strong><br/><i class='icon-warning-sign' title='El subdominio no se podra modificar en un futuro' rel='tooltip'></i> No es posible modificar después</span>")
 
     $('#organisation_name').blur(-> setTenant(this.value) )
   )(jQuery)
