@@ -36,7 +36,7 @@
 
 = paginate paged_ledgers
 
-%table.table.table-striped.nwl.nwf
+%table.table.table-striped.nwl.nwf(style='border-bottom:none')
   %tr
     %th 
       Cód. Fecha<br/>
@@ -55,7 +55,7 @@
     %th
   - paged_ledgers.each do |al|
     - al.ac_id = account.id
-    %tr{:id => "tr#{al.id}", :class => "#{al.active}"}
+    %tr(id="tr#{al.id}" class="#{al.active}")
       %td.d.check
         -#= link_to al, account_ledger_path(al, :ac_id => account.id), :class => "#{conciliate_css(al)} b"
         =link_to al, al, class: "b"
@@ -77,4 +77,3 @@
       %td.cur
         - if al.can_destroy?
           = link_to "Anular", al, :class => 'delete fl', :title => 'Anular', 'data-confirm' => account_ledger_destroy_confirm_dialog(al)
-

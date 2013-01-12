@@ -118,7 +118,7 @@ div.search
   white-space: nowrap
   border: 1px solid lighten($gray, 5%)
   h3
-    margin: 0px 
+    margin: 0px
     color: $black
     font-weight: normal
     font-size: 1.3em
@@ -133,8 +133,8 @@ ul.tabs
   list-style: none
   height: 24px
   padding: 5px
-  border-bottom: 1px solid $gray
-  background-color: $light-gray
+  background-color: $grayLighter
+  border-bottom: 1px solid darken($grayLighter, 10%)
   clear: both
   margin: 8px 0px
 
@@ -181,120 +181,6 @@ ul.tabs
   display: inline-block
 
 
-
-.table.table-striped  
-  +border-radius(3px)
-  border: 1px solid $gray
-  padding: 5px 8px
-  margin: 5px
-  font-size: 110%
-  &:hover
-    background-color: $white
-    text-decoration: none !important
-  
-
-//a. butnew
-  font-weight: bold
-  padding-left: 22px !important
-  color: darken($green, 10%)
-  display: inline-block
-  background-image: url("images/add.png")
-  background-position: 4px 50%
-  background-repeat: no-repeat
-  &:hover
-    text-decoration: none
-  
-
-a.add
-  background: url(images/add.png) no-repeat 0px 50%
-
-a.edit
-  background: url(images/pencil.png) no-repeat 0px 50%
-
-
-a.destroy, a.delete
-  background: url(images/trash.png) no-repeat 0px 50%
-
-a.key
-  background: url(images/key.png) no-repeat 0px 50%
-
-a.video
-  background: url(images/television.png) no-repeat 0px 50%
-
-a.delete
-  color: $red
-  &:hover
-    color: darken($red, 10%) !important
-
-
-a.list
-  +min-height
-  background: url(images/table.png) no-repeat 0px 50%
-
-a.show
-  +min-height
-  background: url(images/zoom.png) no-repeat 0px 50%
-
-a.cog
-  +min-height
-  background: transparent url(images/cog.png) no-repeat 0 50%
-  padding-left: 20px !important
-
-a.user
-  +min-height
-  background: transparent url(images/user.png) no-repeat 0 50%
-  padding-left: 20px !important
-
-a.logout
-  +min-height
-  background: transparent url(images/logout.png) no-repeat 0 50%
-  padding-left: 20px !important
-
-a.email
-  +min-height
-  background: transparent url(images/email.png) no-repeat 0 50%
-  padding-left: 20px !important
-
-a.print
-  +min-height
-  background: transparent url(images/printer.png) no-repeat 0 50%
-  padding-left: 20px !important
-
-a.money
-  +min-height
-  background: transparent url(images/money.png) no-repeat 0 50%
-  padding-left: 20px !important
-
-a.calendar
-  +min-height
-  background: transparent url(images/calendar.gif) no-repeat 0 50%
-  padding-left: 20px !important
-
-a.trash
-  +min-height
-  background: transparent url(images/trash.png) no-repeat 0 50%
-  padding-left: 20px !important
-  min-height: 20px
-
-a.pencil
-  +min-height
-  background: transparent url(images/pencil.png) no-repeat 0 50%
-  padding-left: 20px !important
-
-
-a.sync
-  +min-height
-  background: transparent url(images/arrow_refresh_small.png) no-repeat 0 50%
-  padding-left: 16px !important
-
-
-a.duplicate
-  +min-height
-  background: transparent url(images/copy.png) no-repeat 0 50%
-
-
-.icon
-  text-indent: -1000em
 
 .bicon
   width: 16px
@@ -398,8 +284,8 @@ ul.menu
 /*For autocomplete*/
 .ui-autocomplete a
   color: $black
-.ui-autocomplete a.ui-state-hover 
-  background-color: #7DBF47 !important 
+.ui-autocomplete a.ui-state-hover
+  background-color: $green !important
   color: #FFF !important
 
 .box
