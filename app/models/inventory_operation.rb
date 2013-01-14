@@ -3,7 +3,7 @@
 # email: boriscyber@gmail.com
 class InventoryOperation < ActiveRecord::Base
 
-  before_create     { self.creator_id = UserSession.user_id }
+  before_create     { self.creator_id = UserSession.id }
 
   STATES = ["draft", "approved"]
   OPERATIONS = ["in", "out", "transin", "transout"]

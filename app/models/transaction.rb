@@ -153,7 +153,7 @@ private
   end
 
   def set_creator
-    self.creator_id = UserSession.user_id
+    self.creator_id = UserSession.id
   end
 
 end

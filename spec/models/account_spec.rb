@@ -19,7 +19,6 @@ describe Account do
     a = Account.create!(valid_params)
 
     a.should be_persisted
-    a.initial_amount.should == 100
   end
 
 end

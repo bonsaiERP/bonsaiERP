@@ -101,7 +101,7 @@ class User < ActiveRecord::Base
     end
 
     PgTools.reset_search_path
-    u = User.find_by_id(UserSession.user_id)
+    u = User.find_by_id(UserSession.id)
     u.change_default_password = false
     u.password = pwd
 

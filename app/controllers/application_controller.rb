@@ -126,7 +126,7 @@ private
 
   # Uses the helper methods from devise to made them available in the models
   def set_user_session
-    UserSession.current_user = current_user
+    UserSession.user = current_user
   end
 
    # Checks if is set the organisation session

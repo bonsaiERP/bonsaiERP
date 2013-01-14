@@ -162,11 +162,11 @@ private
   end
 
   def set_creator
-    self.creator_id = UserSession.user_id
+    self.creator_id = UserSession.id
   end
 
   def set_approver
-    self.approver_id = UserSession.user_id
+    self.approver_id = UserSession.id
   end
 
   def update_account_amount

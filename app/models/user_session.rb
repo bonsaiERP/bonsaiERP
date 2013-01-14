@@ -3,19 +3,22 @@
 # email: boriscyber@gmail.com
 # Used to access the authenticated user in the models
 class UserSession
-  mattr_accessor :session, :dev_domain
+  class << self
+    attr_reader :user
+    delegate :id, :email, to: :user
+    # Stores using de application_controller the current_user for devise
+    def user=(usr)
+      raise 'You must pass a User class' unless usr.is_a?(User)
+      @user = usr
+    end
 
-  # Stores using de application_controller the current_user for devise
-  def self.current_user=(session)
-    @session = session
-  end
+    def user_id
+      user.id
+    end
 
-  def self.current_user
-    @session
-  end
-
-  def self.user_id
-    @session.id unless @session.nil? 
+    def destroy
+      @user = nil
+    end
   end
 
 end

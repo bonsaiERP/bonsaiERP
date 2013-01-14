@@ -45,7 +45,7 @@ class Stock < ActiveRecord::Base
       false
     else
       self.minimum = minimum.to_f
-      self.user_id = UserSession.user_id
+      self.user_id = UserSession.id
       self.save
     end
   end

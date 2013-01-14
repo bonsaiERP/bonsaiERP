@@ -1,11 +1,10 @@
+# encoding: utf-8
 require 'spec_helper'
 
 describe OrgCountry do
-  it 'should create many countries' do
-    OrgCountry.count.should == 0
-    OrgCountry.create_base_data
-    OrgCountry.count.should > 0
-    OrgCountry.first.id.should == 1
-    OrgCountry.first.name.should == "Bolivia"
-  end
+  it { should have_valid(:name).when('Bolivia', 'Perú', 'Chile') }
+  it { should_not have_valid(:name).when('', nil) }
+  it { should have_valid(:code).when('BO', 'US') }
+  it { should_not have_valid(:code).when(nil, '') }
+
 end
