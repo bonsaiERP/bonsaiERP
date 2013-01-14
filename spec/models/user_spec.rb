@@ -15,75 +15,53 @@ describe User do
   end
 
   it 'should assign a token' do
-    u = User.new_user("user@mail.com", "demo123")
+    u = User.new(email: "user@mail.com", password: "demo123")
     u.save_user.should be_true
 
     u.confirmation_token.should_not be_blank
     u.confirmation_sent_at.class.to_s == "DateTime"
-    u.salt.should_not be_blank
+    u.password_salt.should_not be_blank
   end
 
-  it 'should confirm the token' do
-    u = User.new_user("user@mail.com", "demo123")
+  it 'confirm registration' do
+    u = User.new(email: "user@mail.com", password: "demo123")
     u.save_user.should be_true
+    u.confirmed_at.should be_blank
     
-    u.confirm_token(u.confirmation_token).should == true
-    u.confirmated?.should be_true
+    u.confirm_registration.should be_true
+    u.should be_confirmed_registration
+    u.confirmed_at.should_not be_blank
   end
 
 
-  it 'should conirm the token' do
-    u = User.new_user("user@mail.com", "demo123")
+  it 'does not confirm registration on creation' do
+    u = User.new(email: "user@mail.com", password: "demo123", password_confirmation: "demo123")
     u.save_user.should be_true
     
-    u.links.should have(0).elements
-  end
-
-  it 'should return false if confirmed' do
-    u = User.new_user("user@mail.com", "demo123")
-    u.save_user.should be_true
-    
-    u.confirmated?.should be_false
-    
-    u.confirm_token(u.confirmation_token).should be_true
-    u.confirm_token(u.confirmation_token).should be_true
+    u.should_not be_confirmed_registration
   end
 
   ########################################
   describe "new_user" do
-
-    it 'should not allow login unconfirmed accounts' do
-      u = User.new_user("demo@example.com", "demo123")
+    it 'authenticates user' do
+      u = User.new(email: "user@mail.com", password: "demo123", password_confirmation: "demo123")
       u.save_user.should be_true 
       
-      u = User.find_by_email("demo@example.com")
-      u.authenticate("demo123").should be_false
-      u.errors[:base].should_not be_blank
-    end
-
-    it 'should authenticate confirmed user' do
-      u = User.new_user("demo@example.com", "demo123")
-      u.save_user.should be_true 
-      u.confirm_token(u.confirmation_token).should be_true
-
-      u = User.find_by_email("demo@example.com")
-      u.authenticate("demo123").should == u
-      u.authenticate("demo12").should be_false
+      u = User.find_by_email("user@mail.com")
+      u.valid_password?('demo123')
     end
 
     it 'should use the salt for authentication' do
-      u = User.new_user("demo@example.com", "demo123")
+      u = User.new(email: "user@mail.com", password: "demo123", password_confirmation: "demo123")
       u.save_user.should be_true
       u.confirmed_at.should be_nil
 
-      u.confirm_token(u.confirmation_token).should be_true
+      u = User.where(confirmation_token: u.confirmation_token).first
+      u.confirm_registration.should be_true
       u.reload
-      u.salt = "jojo"
-      u.save
-      u.reload
-      u.salt.should == "jojo"
-
-      u.authenticate("demo123").should be_false
+      u.password_salt = "jojo"
+      u.save.should be_true
+      expect { u.valid_password?('demo123') }.to raise_error BCrypt::Errors::InvalidSalt
     end
 
   end
@@ -116,7 +94,7 @@ describe User do
     }
 
     before(:each) do
-      OrganisationSession.set :id => 1
+      OrganisationSession.organisation build :organisation, id: 1
       RegistrationMailer.stub!(:send_registration => stub(:deliver => true))
       PgTools.reset_search_path
       PgTools.set_search_path "schema1"

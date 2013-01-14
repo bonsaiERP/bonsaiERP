@@ -31,6 +31,8 @@ class CreateUsers < ActiveRecord::Migration
       t.boolean :active, default: true
       t.string :auth_token
 
+      t.string :rol, limit: 50
+
       t.timestamps
     end
     add_index "common.users", :email, unique: true

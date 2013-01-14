@@ -9,11 +9,9 @@ class User < ActiveRecord::Base
 
   ROLES = ['admin', 'gerency', 'operations'].freeze
 
-  include Models::User::Authentication
-
   ########################################
   # Callbacks
-  before_create     :create_user_link, :if => :change_default_password?
+  before_create     :create_user_link, if: :change_default_password?
   before_destroy    :destroy_links
 
   ########################################
@@ -27,7 +25,7 @@ class User < ActiveRecord::Base
   validates :email, presence: true, :uniqueness => {:if => :email_changed?}
 
   with_options :if => :new_record? do |u|
-    u.validates :password, :length => {:minimum => PASSWORD_LENGTH }
+    u.validates :password, :length => {:minimum => PASSWORD_LENGTH }, confirmation: true
   end
 
   ########################################
@@ -35,12 +33,10 @@ class User < ActiveRecord::Base
   attr_accessor :temp_password, :rolname, :active_link, :old_password, :send_email
   attr_reader :created_user
 
-  attr_accessible :email, :password, :password_confirmation, :first_name, :last_name, :phone, :mobile, :website, 
-    :description, :rolname, :address, :abbreviation, :old_password
 
   # Delegations
   ########################################
-  delegate :name, :currency_id, :address, :tenant, to: :organisation, allow_nil: true
+  delegate :name, :currency, :address, :tenant, to: :organisation, prefix: true, allow_nil: true
 
   ########################################
   # Methods
@@ -178,12 +174,6 @@ class User < ActiveRecord::Base
 
   def self.roles_hash
     Hash[ROLES.zip(["Gerencia", "Administración", "Operaciones"])]
-  end
-
-  def self.new_user(email, password)
-    User.new(:password => password ) {|u| 
-      u.email = email 
-    }
   end
 
   def update_user_attributes(params)

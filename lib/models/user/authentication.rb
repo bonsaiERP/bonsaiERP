@@ -7,10 +7,6 @@ module Models::User::Authentication
     before_create :set_confirmation_token
   end
 
-  def confirmed_and_valid_password?(pass)
-    confirmed_registration? && valid_password?(pass)
-  end
-
   def confirmed_registration?
     confirmed_at.present?
   end

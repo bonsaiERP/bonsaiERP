@@ -30,7 +30,7 @@ class SessionsController < ApplicationController
       conf, pass = @user.confirmed_registration?, @user.valid_password?(params[:user][:password])
       case
       when(conf && pass)
-        UserSession.current_user = @user
+        UserSession.user = @user
         check_logged_user(@user)
       when !conf
         @user.resend_confirmation
