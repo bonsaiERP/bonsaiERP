@@ -4,26 +4,34 @@ require 'spec_helper'
 
 describe Organisation do
   before do
-    UserSession.current_user = User.new {|u| u.id = 1}
-    create(:currency, id: 10)
+    UserSession.user = build :user, id: 1
     create(:org_country)
   end
 
   context "Validations" do
     it {should have_valid(:name).when("uno")}
-    it {should_not have_valid(:name).when(" ")}
+    it {should_not have_valid(:name).when(" ", nil)}
 
-    it {should have_valid(:currency_id).when(10)}
-    #it {should_not have_valid(:currency_id).when(1)}
     it { should_not have_valid('tenant').when('common') }
     it { should_not have_valid('tenant').when('public') }
+
+    context 'Persisted organisation' do
+      subject(:organisation) { 
+        org = build :organisation, id: 10 
+        org.stub(persisted?: true)
+        org
+      }
+
+      it {should have_valid(:currency).when('BOB', 'USD')}
+      it {should_not have_valid(:currency).when('', 'USDS')}
+    end
   end
 
 
   let(:valid_params) { 
     {
       name:"Test", country_id:1, 
-      currency_id:10, tenant: 'another',
+      currency: 'BOB', tenant: 'another',
       address: "Very near" 
     }
   }
@@ -48,7 +56,6 @@ describe Organisation do
       {name: 'Firts org', tenant: 'firstorg', email: 'new@mail.com', password: 'secret123'}
     }
     let(:country) { OrgCountry.first }
-    let(:currency) { Currency.first }
 
     it "creates a new organisation" do
       org = Organisation.new(org_params)

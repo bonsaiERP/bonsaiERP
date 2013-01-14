@@ -71,7 +71,7 @@ class User < ActiveRecord::Base
 
   # Returns the link with te organissation one is logged in
   def link
-    @link ||= links.find_by_organisation_id(OrganisationSession.organisation_id)
+    @link ||= links.find_by_organisation_id(OrganisationSession.id)
   end
 
   def send_email?
@@ -80,7 +80,7 @@ class User < ActiveRecord::Base
 
   # returns the organisation which one is logged in
   def organisation
-    Organisation.find(OrganisationSession.organisation_id)
+    Organisation.find(OrganisationSession.id)
   end
 
   def self.admin_gerency?(val)
@@ -128,10 +128,10 @@ class User < ActiveRecord::Base
 
   # Adds a new user for the company
   def add_company_user(params)
-    PgTools.set_search_path PgTools.get_schema_name(OrganisationSession.organisation_id)
+    PgTools.set_search_path PgTools.get_schema_name(OrganisationSession.id)
     total_users = User.count
     PgTools.reset_search_path
-    org = Organisation.find(OrganisationSession.organisation_id)
+    org = Organisation.find(OrganisationSession.id)
     acc = ClientAccount.find(org.client_account_id)
     
     if total_users >= acc.users
@@ -214,7 +214,7 @@ class User < ActiveRecord::Base
 private
 
   def create_user_link
-    links.build(:organisation_id => OrganisationSession.organisation_id, 
+    links.build(:organisation_id => OrganisationSession.id, 
                     :rol => rolname, :creator => false) {|link| 
       link.abbreviation = abbreviation 
     }

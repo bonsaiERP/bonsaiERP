@@ -19,7 +19,6 @@ class UsersController < ApplicationController
   end
 
   def show
-    #@links = Link.where(:organisation_id => OrganisationSession.organisation_id, :user_id => params[:id])
     @user = User.find(params[:id])
     redirect_to "/422" unless @user
 

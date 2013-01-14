@@ -36,6 +36,7 @@ class Organisation < ActiveRecord::Base
 
   with_options if: :persisted? do |val|
     val.validates_presence_of :org_country, :currency
+    val.validates_inclusion_of :currency, in: CURRENCIES.keys
   end
 
   ########################################

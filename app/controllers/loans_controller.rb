@@ -106,21 +106,6 @@ class LoansController < TransactionsController #ApplicationController
   end
 
   private
-  def set_loan(data)
-    data[:currency_id] = OrganisationSession.currency_id if data[:currency_id].blank?
-
-    case
-    when data[:operation] == "in"
-      @loan = Loanin.new(data)
-      @loan.action = "edit"
-    when data[:operation] == "out"
-      @loan = Loanout.new(data)
-      @loan.action = "edit"
-    else
-      flash[:error] = "Faltan parametros"
-      return redirect_to loans_path
-    end
-  end
 
   def check_loan(loan)
     unless loan.respond_to?(:is_loan?)

@@ -150,7 +150,7 @@ private
 
   def set_organisation_session
     if current_organisation
-      OrganisationSession.set(current_organisation)
+      OrganisationSession.organisation = current_organisation
     end
   end
 
