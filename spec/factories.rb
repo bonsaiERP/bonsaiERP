@@ -85,6 +85,8 @@ FactoryGirl.define do
     bill_number "B-0001"
     description "New transaction description"
     state 'draft'
+    total 100
+    balance 100
   end
 
   factory :income do
@@ -95,6 +97,8 @@ FactoryGirl.define do
     bill_number "I-0001"
     description "New income description"
     state "draft"
+    total 100
+    balance 100
   end
 
   factory :expense do

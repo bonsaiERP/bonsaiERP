@@ -102,6 +102,12 @@ describe PaymentIncome do
   end
 
   context "Errors" do
+    it "does not save if invalid PaymentIncome" do
+      Income.any_instance.should_not_receive(:save)
+      p = PaymentIncome.new(valid_attributes.merge(reference: ''))
+      p.pay.should be_false
+    end
+
     before(:each) do
       income.stub(save: false, errors: {balance: 'No balance'})
       Income.stub(:find).with(transaction_id).and_return(income)
@@ -109,11 +115,13 @@ describe PaymentIncome do
       AccountLedger.any_instance.stub(save: false, errors: {amount: 'Not real'})
     end
 
-    it "does not save" do
+    it "sets errors from other clases" do
       p = PaymentIncome.new(valid_attributes)
 
       p.pay.should be_false
+      # There is no method PaymentIncome#balance
       p.errors[:amount].should eq(['Not real'])
+      # There is a method PaymentIncome#amount
       p.errors[:base].should eq(['No balance'])
     end
   end

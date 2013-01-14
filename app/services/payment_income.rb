@@ -2,12 +2,11 @@
 class PaymentIncome < Payment
   # Creates the payment object
   def pay
-    return false unless self.valid?
+    return false unless valid?
 
     res = true
     ActiveRecord::Base.transaction do
-      update_income
-      res = income.save
+      res = save_income
       res = create_ledger && res
       res = create_interest && res
 
@@ -29,12 +28,17 @@ private
     Income
   end
 
-  def update_income
-    income.balance -= amount
-    set_state
+  def save_income
+    update_income
+    income.save
   end
 
-  def set_state
+  def update_income
+    income.balance -= amount
+    income.set_state_by_balance!
+  end
+
+  def set_income_state
     if income.balance <= 0
       income.state = 'paid'
     else

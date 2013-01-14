@@ -29,6 +29,16 @@ class Income < Transaction
     ref.present? ? ref.ref_number.next : "I-0001"
   end
 
+  def set_state_by_balance!
+    if balance == 0
+      self.state = 'paid'
+    elsif balance < total
+      self.state = 'approved'
+    else
+      self.state = 'draft'
+    end
+  end
+
 private
   def set_client
     contact.update_attribute(:client, true) if contact.present? && !contact.client?

@@ -31,4 +31,23 @@ describe Income do
 
     i.save.should be_true
   end
+
+  it "sets its state based on the balance" do
+    i = Income.new(total: 10, balance: 10)
+    i.set_state_by_balance!
+
+    i.state.should eq('draft')
+
+
+    i = Income.new(total: 10, balance: 5)
+    i.set_state_by_balance!
+
+    i.state.should eq('approved')
+
+
+    i = Income.new(total: 10, balance: 0)
+    i.set_state_by_balance!
+
+    i.state.should eq('paid')
+  end
 end
