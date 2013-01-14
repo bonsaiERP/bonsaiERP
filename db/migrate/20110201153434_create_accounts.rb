@@ -1,25 +1,33 @@
 class CreateAccounts < ActiveRecord::Migration
   def change
     create_table :accounts do |t|
-      t.integer :currency_id
-      t.integer :accountable_id
-      t.string  :accountable_type# denormalized field to find accounts by model type
-      t.string  :original_type, :limit => 20
-
       t.string  :name
-      t.string  :type, :limit => 20
-      t.decimal :amount, :precision => 14, :scale => 2
-      t.decimal :initial_amount, :precision => 14, :scale => 2
+      t.string  :currency, limit: 10
+      t.decimal :exchange_rate, precision: 14, scale: 4, default: 1.0
+      t.decimal :amount, precision: 14, scale: 2, default: 0.0
 
-      t.string  :number
+      t.string  :type, limit: 30
+
+      t.integer :contact_id
+      t.integer :project_id
+      t.boolean :active, default: true
+      t.string  :description, limit: 500
+      t.date    :date
+      t.string  :state, limit: 30
+      t.boolean :has_error, default: false
+      t.string  :error_messages, limit: 400
 
       t.timestamps
     end
 
-    add_index :accounts, :currency_id
-    add_index :accounts, :accountable_id
-    add_index :accounts, :accountable_type
-    add_index :accounts, :original_type
+    add_index :accounts, :amount
+    add_index :accounts, :currency
     add_index :accounts, :type
+    add_index :accounts, :contact_id
+    add_index :accounts, :project_id
+    add_index :accounts, :active
+    add_index :accounts, :date
+    add_index :accounts, :state
+    add_index :accounts, :has_error
   end
 end

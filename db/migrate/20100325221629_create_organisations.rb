@@ -14,10 +14,10 @@ class CreateOrganisations < ActiveRecord::Migration
 
       t.date    :due_date
       t.text    :preferences
-      t.boolean :base_accounts, :default => false
       t.string  :time_zone, limit: 100
 
-      t.string :tenant
+      t.string :tenant, limit: 50
+      t.string :currency, limit: 10
 
       t.timestamps
     end
@@ -25,5 +25,6 @@ class CreateOrganisations < ActiveRecord::Migration
     add_index "common.organisations", :country_id
     add_index "common.organisations", :due_date
     add_index "common.organisations", :tenant, unique: true
+    add_index "common.organisations", :currency
   end
 end

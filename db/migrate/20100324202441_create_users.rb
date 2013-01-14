@@ -5,13 +5,12 @@ class CreateUsers < ActiveRecord::Migration
   def change
     create_table "common.users" do |t|
       # user
-      t.string :email
+      t.string :email, null: false
       t.string :first_name, :limit => 80
       t.string :last_name, :limit => 80
       t.string :phone, :limit => 20
       t.string :mobile, :limit => 20
       t.string :website, :limit => 200
-      t.string :account_type, :limit => 15
       t.string :description, :limit => 255
 
       # Control users
@@ -26,17 +25,19 @@ class CreateUsers < ActiveRecord::Migration
       t.integer  :sign_in_count, :default => 0
       t.datetime :last_sign_in_at
 
-      t.string   :abbreviation, :limit => 10
-
       t.boolean :change_default_password, :default => false
       t.string :address
 
+      t.boolean :active, default: true
+      t.string :auth_token
+
       t.timestamps
     end
-    add_index "common.users", :email
+    add_index "common.users", :email, unique: true
     add_index "common.users", :first_name
     add_index "common.users", :last_name
     add_index "common.users", :confirmation_token, unique: true
+    add_index "common.users", :auth_token, unique: true
 
   end
 

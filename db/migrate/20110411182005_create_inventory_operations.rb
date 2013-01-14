@@ -3,7 +3,7 @@ class CreateInventoryOperations < ActiveRecord::Migration
     create_table :inventory_operations do |t|
       t.integer :contact_id
       t.integer :store_id
-      t.integer :transaction_id
+      t.integer :account_id
 
       t.date   :date
       t.string :ref_number
@@ -12,7 +12,12 @@ class CreateInventoryOperations < ActiveRecord::Migration
 
       t.string :description
 
-      t.decimal :total, :precision => 14, :scale => 2
+      t.decimal :total, :precision => 14, :scale => 2, default: 0
+
+      t.integer  :creator_id
+      t.integer  :transference_id
+      t.integer  :store_to_id
+      t.integer  :project_id
 
       t.boolean :has_error, default: false
       t.string  :error_messages
@@ -22,7 +27,8 @@ class CreateInventoryOperations < ActiveRecord::Migration
 
     add_index :inventory_operations, :contact_id
     add_index :inventory_operations, :store_id
-    add_index :inventory_operations, :transaction_id
+    add_index :inventory_operations, :account_id
+    add_index :inventory_operations, :project_id
 
     add_index :inventory_operations, :date
     add_index :inventory_operations, :ref_number

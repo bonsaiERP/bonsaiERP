@@ -3,9 +3,9 @@ class CreateContacts < ActiveRecord::Migration
     create_table :contacts do |t|
       t.string :matchcode
       t.string :first_name, :limit => 100
+      t.string :last_name,  :limit => 100
       t.string :organisation_name, :limit => 100
       t.string :address, :limit => 250
-      t.string :address_alt, :limit => 250
       t.string :phone, :limit => 20
       t.string :mobile, :limit => 20
       t.string :email, :limit => 200
@@ -14,9 +14,14 @@ class CreateContacts < ActiveRecord::Migration
 
       t.string  :code
       t.string  :type
-      t.string  :last_name,  :limit => 100
       t.string  :position
       t.boolean :active,     :default => true
+
+      t.boolean :client, default: false
+      t.boolean :supplier, default: false
+
+      # Money Owned, Incomes, Expense, etc, all realted accounts
+      t.string :money_status
 
       t.timestamps
     end
@@ -24,6 +29,7 @@ class CreateContacts < ActiveRecord::Migration
     add_index :contacts, :matchcode
     add_index :contacts, :first_name
     add_index :contacts, :last_name
-    add_index :contacts, :type
+    add_index :contacts, :client
+    add_index :contacts, :supplier
   end
 end

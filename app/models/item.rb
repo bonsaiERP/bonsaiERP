@@ -3,7 +3,7 @@
 # email: boriscyber@gmail.com
 class Item < ActiveRecord::Base
 
-  self.inheritance_column = :class_type
+  #self.inheritance_column = :class_type
 
   ##########################################
   # Callbacks
@@ -17,6 +17,7 @@ class Item < ActiveRecord::Base
   has_many :transaction_details
   has_many :inventory_operation_details
   
+  serialize :money_status, Hash
 
   ##########################################
   # Validations
@@ -45,25 +46,6 @@ class Item < ActiveRecord::Base
 
   def label
     to_s
-  end
-
-  # gets the item scope
-  def self.get_scoped_types(sc)
-    case sc
-    when "income"
-      ["Producto", "Servicio"].zip(['product', 'service'])
-    when "buy"
-      ["Item", "Producto", "Servicio"].zip( ["item", "product", "service"] )
-    when "expense"
-      ["Item de gasto"].zip(["expense"])
-    when "inventory"
-      ["Item", "Producto"].zip( ["item", "product"] )
-    end
-  end
-
-  # gets the localized type for the item
-  def get_type
-    self.class.get_types.find {|v| v.last == self.ctype }.first
   end
 
   # validation for Services or products
