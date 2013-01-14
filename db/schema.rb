@@ -17,9 +17,9 @@ ActiveRecord::Schema.define(:version => 20130114164401) do
     t.string   "reference"
     t.string   "currency"
     t.integer  "account_id"
-    t.decimal  "balance_account",                  :precision => 14, :scale => 2, :default => 0.0
+    t.decimal  "account_balance",                  :precision => 14, :scale => 2, :default => 0.0
     t.integer  "account_to_id"
-    t.decimal  "balance_account_to",               :precision => 14, :scale => 2, :default => 0.0
+    t.decimal  "account_to_balance",               :precision => 14, :scale => 2, :default => 0.0
     t.datetime "date"
     t.string   "operation",          :limit => 20
     t.boolean  "conciliation",                                                    :default => true

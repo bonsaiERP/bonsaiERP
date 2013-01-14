@@ -194,15 +194,13 @@ class User < ActiveRecord::Base
     self.save
   end
 
-  protected
+protected
   # Generates a random password and sets it to the password field
   def set_random_password(size = 8)
     self.password = self.temp_password = SecureRandom.urlsafe_base64(size)
   end
 
-
 private
-
   def create_user_link
     links.build(:organisation_id => OrganisationSession.id, 
                     :rol => rolname, :creator => false) {|link| 

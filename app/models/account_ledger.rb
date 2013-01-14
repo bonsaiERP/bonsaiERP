@@ -22,19 +22,13 @@ class AccountLedger < ActiveRecord::Base
   before_create :set_creator
   before_save   :set_approver, if: :conciliation?
 
-  with_options if: :conciliation? do |upd|
-    upd.before_save :update_account_amount
-    upd.before_save :update_to_amount
-  end
-
   # Includes
   include ActionView::Helpers::NumberHelper
 
   ########################################
   # Relationships
-  belongs_to :account, :autosave => true
-  belongs_to :to, :class_name => "Account", :autosave => true
-  belongs_to :transaction
+  belongs_to :account
+  belongs_to :account_to, class_name: "Account"
   #belongs_to :currency
   belongs_to :contact
   belongs_to :project
@@ -45,7 +39,8 @@ class AccountLedger < ActiveRecord::Base
 
   ########################################
   # Validations
-  validates_presence_of :amount, :account_id, :account, :reference, :currency, :date
+  validates_presence_of :amount, :account_id, :account, :account_to_id, :account_to, :reference, :currency, :date
+  validate :different_accounts
 
   validates_inclusion_of :operation, in: OPERATIONS
   validates_numericality_of :exchange_rate, greater_than: 0
@@ -169,20 +164,22 @@ private
     self.approver_id = UserSession.id
   end
 
-  def update_account_amount
-    account.amount += amount
-    self.account_balance = account.amount
+  #def update_account_amount
+  #  account.amount += amount
+  #  self.account_balance = account.amount
 
-    account.save!
-  end
+  #  account.save!
+  #end
 
-  # Updates the amount of the account to
-  def update_to_amount
-    return unless to_id.present?
+  ## Updates the amount of the account to
+  #def update_account_to_amount
+  #  to.amount -= amount
+  #  self.account_to_balance = to.amount
 
-    to.amount -= amount
-    self.to_balance = to.amount
+  #  account.save!
+  #end
 
-    account.save!
+  def different_accounts
+    self.errors[:account_to_id] << I18n.t('errors.messages.account_ledger.same_account') if account_id == account_to_id
   end
 end

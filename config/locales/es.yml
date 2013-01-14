@@ -310,6 +310,22 @@ es:
     account_ledger_reference: "Gasto"
   errors:
     messages:
+      account_ledger:
+        invalid_contact: "Debe seleccionar un Cliente, Proveedor o Personal"
+        same_account: "Las cuentas que selecciono son identicas"
+        amount: "La cantidad que ingreso es mayor a la disponible en la cuenta"
+        null_conciliation: "No se puede conciliar una operación anulada"
+        same_account: 'La cuenta destino debe ser distinta'
+      inventory_operation_detail:
+        stock_quantity: "La cantidad es mayor a la disponible en stock"
+        transaction_quantity: "La cantidad ingresada es mayor a la de la operación"
+        repeated_item: "El ítem esta repetido"
+      inventory_operation:
+        transaction_items: "Ha seleccionado items que no estan en la operación"
+        invalid_item: "Ha seleccionado items inexistentes"
+        invalid_store: "El almacen que selecciono es incorrecto"
+        empty_items: "No existe items para realizar la operación"
+        stock_quantity: "Existen items que exceden la cantidad máxima"
       payment:
         greater_amount: "La cantidad que ingreso es mayor que el saldo"
         greater_amount_than_balance: "Ingreso una cantidad mayor que el balance"
@@ -322,11 +338,6 @@ es:
         password_confirmation: "La contraseña y la confirmación de contraseña no son iguales"
         wrong_password: "La contraseña que ingreso es incorrecta"
         user_limit: "Su empresa ha llegado a su limite en el número de usuarios"
-      account_ledger:
-        invalid_contact: "Debe seleccionar un Cliente, Proveedor o Personal"
-        same_account: "Las cuentas que selecciono son identicas"
-        amount: "La cantidad que ingreso es mayor a la disponible en la cuenta"
-        null_conciliation: "No se puede conciliar una operación anulada"
       transaction:
         repeated_items: "Existen items repetidos, por favor revise"
         unconcilied_ledgers: "Existen transacciones pendientes de revisión"
@@ -337,16 +348,6 @@ es:
         delivered_quantity: "La cantidad es menor a la cantidad entregada"
         change_item: "No es posible cambiar de item, se volvio al original"
         destroy: "No se puede borrar el item"
-      inventory_operation_detail:
-        stock_quantity: "La cantidad es mayor a la disponible en stock"
-        transaction_quantity: "La cantidad ingresada es mayor a la de la operación"
-        repeated_item: "El ítem esta repetido"
-      inventory_operation:
-        transaction_items: "Ha seleccionado items que no estan en la operación"
-        invalid_item: "Ha seleccionado items inexistentes"
-        invalid_store: "El almacen que selecciono es incorrecto"
-        empty_items: "No existe items para realizar la operación"
-        stock_quantity: "Existen items que exceden la cantidad máxima"
       repeated_items: "Existen items repetidos, por favor revise"
       repeated_item: "El ítem seleccionado esta repetido"
       loan:
