@@ -2,20 +2,15 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class Contact < ActiveRecord::Base
-  #include Models::Account::Contact
-
-  ########################################
-  # Callbacks
-  before_destroy { false }
 
   ########################################
   # Relationships
   has_many :transactions
-  has_many :incomes,  :class_name => "Income"
-  has_many :expenses,  :class_name => "Expense"
+  has_many :incomes, foreign_key: :account_id
+  has_many :expenses, foreign_key: :account_id
   has_many :inventory_operations
   # Account
-  has_many :accounts, :as => :accountable, :autosave => true, :dependent => :destroy
+  has_many :contact_accounts, foreign_key: :account_id
 
   ########################################
   # Validations
@@ -23,9 +18,9 @@ class Contact < ActiveRecord::Base
 
   validates_uniqueness_of  :matchcode
 
-  validates_format_of     :email,  :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :allow_blank => true
-  validates_format_of     :phone,  :with =>/^\d+[\d\s-]+\d$/,  :allow_blank => true
-  validates_format_of     :mobile, :with =>/^\d+[\d\s-]+\d$/,  :allow_blank => true
+  validates_email_format_of :email, allow_nil: true
+  validates_format_of       :phone,  with: /d+[\d\s-]+\d$/,  allow_blank: true
+  validates_format_of       :mobile, with: /d+[\d\s-]+\d$/,  allow_blank: true
 
   ########################################
   # Attributes
@@ -33,12 +28,12 @@ class Contact < ActiveRecord::Base
 
   ########################################
   # Scopes
-  scope :clients, where(:client => true)
-  scope :suppliers, where(:supplier => true)
+  scope :clients, where(client: true)
+  scope :suppliers, where(supplier: true)
 
   ########################################
   # Delegates
-  delegate :id, :name, :to => :account, :prefix => true
+  delegate :id, :name, to: :account, prefix: true
 
   ########################################
   # Methods
