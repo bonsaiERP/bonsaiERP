@@ -94,6 +94,7 @@ ActiveRecord::Schema.define(:version => 20130115020409) do
     t.string   "type"
     t.string   "position"
     t.boolean  "active",                           :default => true
+    t.boolean  "staff",                            :default => false
     t.boolean  "client",                           :default => false
     t.boolean  "supplier",                         :default => false
     t.string   "money_status"
@@ -101,10 +102,12 @@ ActiveRecord::Schema.define(:version => 20130115020409) do
     t.datetime "updated_at",                                          :null => false
   end
 
+  add_index "contacts", ["active"], :name => "index_contacts_on_active"
   add_index "contacts", ["client"], :name => "index_contacts_on_client"
   add_index "contacts", ["first_name"], :name => "index_contacts_on_first_name"
   add_index "contacts", ["last_name"], :name => "index_contacts_on_last_name"
   add_index "contacts", ["matchcode"], :name => "index_contacts_on_matchcode"
+  add_index "contacts", ["staff"], :name => "index_contacts_on_staff"
   add_index "contacts", ["supplier"], :name => "index_contacts_on_supplier"
 
   create_table "inventory_operation_details", :force => true do |t|

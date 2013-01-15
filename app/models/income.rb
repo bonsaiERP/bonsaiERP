@@ -1,7 +1,7 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class Income < Transaction
+class Income < Account
 
   ########################################
   # Callbacks
@@ -9,7 +9,8 @@ class Income < Transaction
 
   ########################################
   # Relationships
-  belongs_to :deliver_approver, :class_name => "User"
+  belongs_to :contact
+  belongs_to :deliver_approver, class_name: "User"
 
   ########################################
   # Validations

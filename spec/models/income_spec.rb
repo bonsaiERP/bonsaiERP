@@ -10,10 +10,10 @@ describe Income do
   end
 
   let(:valid_attributes) {
-    {"active"=>nil, "bill_number"=>"56498797", "contact" => contact,
-      "exchange_rate"=>1, "currency" => 'BOB', "date"=>'2011-01-24', 
-      "description"=>"Esto es una prueba", "discount"=>3, 
-      "ref_number"=>"987654"
+    {active: nil, bill_number: "56498797", contact: contact,
+      exchange_rate: 1, currency: 'BOB', date: '2011-01-24',
+      description: "Esto es una prueba", discount: 3, 
+      ref_numbe: 987654"
     }
   }
 

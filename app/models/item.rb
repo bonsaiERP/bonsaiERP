@@ -3,8 +3,6 @@
 # email: boriscyber@gmail.com
 class Item < ActiveRecord::Base
 
-  #self.inheritance_column = :class_type
-
   ##########################################
   # Callbacks
   before_destroy :check_items_destroy
@@ -12,19 +10,15 @@ class Item < ActiveRecord::Base
   ##########################################
   # Relationships
   belongs_to :unit
-  has_many :prices
-  has_many :stocks
-  has_many :transaction_details
-  has_many :inventory_operation_details
+  has_many   :stocks
+  has_many   :transaction_details
+  has_many   :inventory_operation_details
   
-  serialize :money_status, Hash
-
   ##########################################
   # Validations
   validates_presence_of :name, :unit, :unit_id, :code
   validates :code, uniqueness: true
   validates :price, numericality: { greater_than_or_equal_to: 0 }, if: :for_sale?
-
 
   ##########################################
   # Delegates
@@ -34,17 +28,11 @@ class Item < ActiveRecord::Base
   # Scopes
   scope :active   , where(active: true)
   scope :json     , select("id, name, price")
-
-  # Related scopes
   scope :income   , where(active: true, for_sale: true)
   scope :inventory, where(stockable: true)
 
   def to_s
     "#{code} - #{name}"
-  end
-
-  def label
-    to_s
   end
 
   # Searches using ctype, and searches the name and code atributes
@@ -71,15 +59,9 @@ class Item < ActiveRecord::Base
     where("stocks.store_id = ? AND stocks.quantity > 0 AND stocks.state = 'active'", store_id)
   end
 
-  # creates an array with values  [quantity, percentage]
-  def discount_values
-    return [] if self.discount.blank?
-    self.discount.squish.split(" ").map { |v| v.split(":").map(&:to_f) }
-  end
-
   # Sums the stocks of a item
   def total_stock
-    stocks.inject(0) {|sum,st| sum += st.quantity }
+    stocks.reduce(0) {|sum, st| sum += st.quantity }
   end
 
   # Returns the details for item kardex
@@ -97,5 +79,4 @@ private
       true
     end
   end
-
 end

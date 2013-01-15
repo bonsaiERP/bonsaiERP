@@ -5,39 +5,29 @@ class Contact < ActiveRecord::Base
 
   ########################################
   # Relationships
-  has_many :transactions
-  has_many :incomes, foreign_key: :account_id
-  has_many :expenses, foreign_key: :account_id
+  has_many :contact_accounts, foreign_key: :contact_id, conditions: {type: 'ContactAccount'}
+
+  has_many :incomes,  foreign_key: :contact_id, conditions: {type: 'Income'}
+  has_many :expenses, foreign_key: :contact_id, conditions: {type: 'Expense'}
+
   has_many :inventory_operations
-  # Account
-  has_many :contact_accounts, foreign_key: :account_id
 
   ########################################
   # Validations
-  validates_presence_of    :matchcode
-
-  validates_uniqueness_of  :matchcode
-
+  validates :matchcode, presence: true, uniqueness: { scope: :type }
   validates_email_format_of :email, allow_nil: true
-  validates_format_of       :phone,  with: /d+[\d\s-]+\d$/,  allow_blank: true
-  validates_format_of       :mobile, with: /d+[\d\s-]+\d$/,  allow_blank: true
-
-  ########################################
-  # Attributes
-  attr_accessible :first_name, :last_name, :code, :organisation_name, :address, :addres_alt, :phone, :mobile, :email, :tax_number, :aditional_info, :matchcode
+  validates_format_of       :phone,  with: /\A\d+([-\s]\d+)*\z/,  allow_blank: true
+  validates_format_of       :mobile, with: /\A\d+([-\s]\d+)*\z/,  allow_blank: true
 
   ########################################
   # Scopes
   scope :clients, where(client: true)
   scope :suppliers, where(supplier: true)
 
-  ########################################
-  # Delegates
-  delegate :id, :name, to: :account, prefix: true
+  default_scope where(staff: false)
 
   ########################################
   # Methods
-
   def self.search(match)
     includes(:accounts).where("contacts.matchcode ILIKE ?", "%#{match}%")
   end
@@ -57,30 +47,13 @@ class Contact < ActiveRecord::Base
     matchcode
   end
 
-  def total_balance_incomes
-    incomes.approved[:balance, :exchange_rate].inject(0){|sum, (bal, rate)| sum += bal * rate}
-  end
-
-  def total_balance_buys
-    buys.approved[:balance, :exchange_rate].inject(0){|sum, (bal, rate)| sum += bal * rate}
-  end
-
   def account_cur(cur)
     accounts.where(currency: cur).first
-  end
-
-  def show_type
-    case type
-    when "Client" then I18n.t("contact.client")
-    when "Supplier" then I18n.t("contact.supplier")
-    when "Staff" then I18n.t("contact.staff")
-    end
   end
 
   def complete_name
     "#{first_name} #{last_name}"
   end
-
   alias_method :pdf_name, :complete_name
 
   # Creates an instance of an account with the defined currency

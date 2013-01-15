@@ -80,5 +80,4 @@ describe Item do
       subject.destroy.should be_false
     end
   end
-
 end

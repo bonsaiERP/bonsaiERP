@@ -9,12 +9,23 @@ describe Cash do
     OrganisationSession.organisation = build(:organisation, currency: 'BOB')
   end
 
+  context 'Created related and check relationships, validations' do
+    subject { Cash.new_cash }
 
-  it { should_not have_valid(:name).when('No', 'E', '', nil) }
-  it { should have_valid(:name).when('Especial', 'Caja 2') }
+    it { should have_one(:money_store) }
 
-  it 'should create an instance' do
-    c = Cash.new(valid_attributes)
+    it { should_not have_valid(:name).when('No', 'E', '', nil) }
+    it { should have_valid(:name).when('Especial', 'Caja 2') }
+  end
+
+  it "returns to_s method" do
+    c = Cash.new name: 'Cash 1', currency: 'USD'
+
+    c.to_s.should  eq(c.name)
+  end
+
+  it 'create an instance' do
+    c = Cash.new_cash(valid_attributes)
     c.save.should be_true
 
     valid_attributes.each do |k, v|
@@ -22,9 +33,9 @@ describe Cash do
     end
   end
 
-  it 'should allow updates' do
+  it 'allow updates' do
     # Does not allow the use of create or create! methods
-    c = Cash.new(valid_attributes.merge(amount: 200))
+    c = Cash.new_cash(valid_attributes.merge(amount: 200))
     c.save.should be_true
 
     c.should be_persisted

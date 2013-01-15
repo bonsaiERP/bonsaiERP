@@ -4,40 +4,44 @@
 require 'spec_helper'
 
 describe Contact do
-  before(:each) do
-    @params = { 
-      :first_name => 'Boris', :last_name => "Barroso", :organisation_name => 'bonsailabs',
-      :email => 'boris@bonsailabs.com', :matchcode => 'Boris Barroso',
-      :address => "Los Pinos Bloque 80\nDpto. 202", :phone => '2745620', 
-      :mobile => '70681101', :tax_number => '3376951' }
-
-    OrganisationSession.set = { name: "ecuanime", id: 1, curency_id: 1 }
-    #Organisation.stubs(:find).returns( stub(@@stub_model_methods.merge({:id => 1})) )
-
-    AccountType.stub!(find_by_account_number: stub(id: 1))
+  let(:valid_attributes) do
+    { 
+      matchcode: 'Boris Barroso',  first_name: 'Boris', last_name: "Barroso",
+      organisation_name: 'bonsailabs', email: 'boris@bonsailabs.com',
+      address: "Los Pinos Bloque 80\nDpto. 202", phone: '2745620', 
+      mobile: '70681101', tax_number: '3376951' 
+    }
   end
 
-  #it { should validates_presence_of :ctype }
+  it { should have_many(:contact_accounts) }
+  it { should have_many(:incomes) }
+  it { should have_many(:expenses) }
 
-  it 'should create a valid' do
-    Client.create!(@params)
+  context 'Validations' do
+    it {should validate_uniqueness_of(:matchcode) }
+    it {should validate_presence_of(:matchcode) }
+
+    it { should have_valid(:email).when('test@mail.com', 'my@example.com.bo') }
+    it { should_not have_valid(:email).when('test@mail.com.1', 'my@example.com.bo.', 'hi') }
+
+    it { should have_valid(:phone).when('121212', '2323-232-98', '43 2323 32') }
+    it { should_not have_valid(:phone).when('121212-', '2323-232 ', '43 2323a 32') }
   end
 
-  it 'should create a new account when defined for a a currency' do
-    c = Client.create!(@params)
-    c.accounts.count.should  eq(1)
+  it "returns the correct methods for to_s and compleet_name" do
+    c = Contact.new(valid_attributes.merge(matchcode: 'Boris B.'))
 
-    Currency.create!( symbol: "$us", name:"dolar") {|cur| cur.id = 2}
-
-    ac = c.get_contact_account(2)
-    ac.class.should == Account
-    ac.should be_persisted
-    ac.currency_id.should == 2
-    ac.amount.should == 0
-
-    c.accounts(true).count.should eq(2)
+    c.to_s.should eq('Boris B.')
+    c.complete_name.should eq('Boris Barroso')
+    c.pdf_name.should eq(c.complete_name)
   end
 
+  it "creates a new instance with staff false" do
+    c = Contact.new
+    c.should_not be_staff
+  end
+
+  it 'create a valid' do
+    Client.create!(valid_attributes)
+  end
 end
-
-

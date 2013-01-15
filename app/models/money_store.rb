@@ -6,5 +6,4 @@ class MoneyStore < ActiveRecord::Base
   ########################################
   # Relationships
   belongs_to :account
-
 end

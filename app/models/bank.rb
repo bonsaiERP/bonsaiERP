@@ -11,15 +11,14 @@ class Bank < Account
   delegate *getters_setters_array(*MONEY_METHODS), to: :money_store
 
   # validations
-  validates_presence_of :name, :currency, :number
+  validates_presence_of :number
   validates :number, length: {within: 3..30}
 
-  def initialize(attrs={})
-    h = attrs.slice(*MONEY_METHODS)
-    MONEY_METHODS.each {|k| attrs.delete(k) }
-    super
-    build_money_store h
-    self
+  def self.new_bank(attrs={})
+    self.new do |c|
+      c.build_money_store
+      c.attributes = attrs
+    end
   end
 
   def to_s

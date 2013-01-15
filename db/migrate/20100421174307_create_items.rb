@@ -4,9 +4,9 @@ class CreateItems < ActiveRecord::Migration
       t.integer :unit_id
 
       t.decimal :price, precision: 14, scale: 2, default: 0.0
-      t.string :name
-      t.string :description
-      t.string :code, :limit => 100
+      t.string  :name
+      t.string  :description
+      t.string  :code, :limit => 100
       t.boolean :for_sale, :default => true
       t.boolean :stockable, :default => true
       t.boolean :active, :default => true

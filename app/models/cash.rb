@@ -11,19 +11,18 @@ class Cash < Account
   delegate *getters_setters_array(*MONEY_METHODS), to: :money_store
 
   # Validations
-  validates :name, uniqueness: true, length: {:minimum => 3}
+  validates :name, length: {:minimum => 3}
 
-  def initialize(attrs={})
-    h = {}
-    MONEY_METHODS.each {|k| h[k] = attrs.delete(k) }
-    super
-    build_money_store h
-
-    self
+  # Initializes with an instance of MoneyStore
+  def self.new_cash(attrs={})
+    self.new do |c|
+      c.build_money_store
+      c.attributes = attrs
+    end
   end
 
   def to_s
-    "#{name} #{currency}"
+    name
   end
 
 end

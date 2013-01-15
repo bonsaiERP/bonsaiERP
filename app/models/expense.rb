@@ -1,7 +1,7 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class Expense < Transaction
+class Expense < Account
   validates :ref_number, :presence => true , :uniqueness => true
 
   def self.get_ref_number

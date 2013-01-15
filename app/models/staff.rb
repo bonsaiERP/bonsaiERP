@@ -3,27 +3,7 @@
 # email: boriscyber@gmail.com
 class Staff < Contact
 
-  attr_accessible :position
+  default_scope where(staff: true)
 
   validates_presence_of :position, :first_name, :last_name
-
-  def self.pendent
-    ac_ids = Account.staff.select("DISTINCT(accountable_id) AS staff_id").where("amount > ?", 0).map(&:staff_id)
-    Staff.where(:id => ac_ids.uniq)
-  end
-
-  def self.debt
-    ac_ids = Account.staff.select("DISTINCT(accountable_id) AS staff_id").where("amount < ?", 0).map(&:staff_id)
-    Staff.where(:id => ac_ids.uniq)
-  end
-
-private
-  def set_code
-    if code.blank?
-      codes = Staff.order("code DESC").limit(1)
-      self.code = codes.any? ? codes.first.code.next : "PER-0001"
-    end
-  end
-
 end
-
