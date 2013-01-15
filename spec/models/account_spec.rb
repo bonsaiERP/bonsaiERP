@@ -8,17 +8,19 @@ describe Account do
   it { should_not have_valid(:amount).when(nil, '') }
 
   before :each do
-    UserSession.current_user = build :user, id: 1
+    UserSession.user = build :user, id: 1
   end
 
   let(:valid_params) do
-    {name: 'account1', currency: 'BOB', amount: 100}
+    {name: 'account1', currency: 'BOB', amount: 100, state: 'new'}
   end
 
   it 'should be created' do
     a = Account.create!(valid_params)
+  end
 
-    a.should be_persisted
+  it "creates getters and setters" do
+    Account.getters_setters_array(:amt, :new, :hi).should == [:amt, :new,:hi, :amt=, :new=, :hi=]
   end
 
 end

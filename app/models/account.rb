@@ -6,15 +6,8 @@ class Account < ActiveRecord::Base
   include ActionView::Helpers::NumberHelper
 
   ########################################
-  # Callbacks
-  before_create :set_amount
-
-  ########################################
   # Relationships
-  belongs_to :accountable, polymorphic: true
-
   has_many :account_ledgers
-  has_many :account_balances
 
   ########################################
   # Validations
@@ -55,8 +48,10 @@ class Account < ActiveRecord::Base
     account_currencies.select {|ac| ac.currency_id == cur_id }.first
   end
 
-private
-  def set_amount
-    self.amount ||= 0.0
+  # TODO move this and other methods to a new class
+  # Creates an array with the getters and setters for delegation
+  def self.getters_setters_array(*attrs)
+    attrs + attrs.map {|k| :"#{k}=" }
   end
+
 end

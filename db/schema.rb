@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130114164401) do
+ActiveRecord::Schema.define(:version => 20130115020409) do
 
   create_table "account_ledgers", :force => true do |t|
     t.string   "reference"
@@ -167,6 +167,17 @@ ActiveRecord::Schema.define(:version => 20130114164401) do
   add_index "items", ["for_sale"], :name => "index_items_on_for_sale"
   add_index "items", ["stockable"], :name => "index_items_on_stockable"
   add_index "items", ["unit_id"], :name => "index_items_on_unit_id"
+
+  create_table "money_stores", :force => true do |t|
+    t.integer "account_id"
+    t.string  "number",     :limit => 100
+    t.string  "email"
+    t.string  "address",    :limit => 300
+    t.string  "phone",      :limit => 50
+    t.string  "website"
+  end
+
+  add_index "money_stores", ["account_id"], :name => "index_money_stores_on_account_id"
 
   create_table "projects", :force => true do |t|
     t.string   "name"

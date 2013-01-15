@@ -31,7 +31,7 @@ class BanksController < ApplicationController
 
   # GET /banks/new
   def new
-    @bank = Bank.new(:currency_id => params[:currency_id])
+    @bank = Bank.new(currency: params[:currency])
 
     respond_to do |format|
       format.html # new.html.erb
@@ -89,6 +89,6 @@ private
   end
 
   def create_bank_params
-    params.require(:bank).permit(:name, :number, :address, :phone, :website, :currency_id, :amount)
+    params.require(:bank).permit(:name, :number, :address, :phone, :website, :currency, :amount)
   end
 end

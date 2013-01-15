@@ -12,7 +12,7 @@
   .row-fluid
     -if bank.new_record?
       .span6
-        = f.association :currency, :label => 'Moneda',
+        = f.input :currency, :label => 'Moneda',
           :hint => "<span class='text-warning b'><i class='bicon-warning'></i> No es posible modificar después</span>".html_safe
       .span6
         = f.input :amount, :label => 'Total en cuenta', :input_html => {:size => 12, :class => 'r'}, :required => true
