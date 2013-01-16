@@ -21,12 +21,13 @@ describe QuickIncome do
     }
   }
 
+
   context "Create income and check values" do
     before(:each) do
       Income.any_instance.stub(save: true)
       AccountLedger.any_instance.stub(save: true)
 
-      Account.stub(find_by_id: account)
+      Account.stub(find: account)
     end
 
     it "creates a valid income" do

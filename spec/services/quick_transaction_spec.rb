@@ -10,6 +10,25 @@ describe QuickTransaction do
     }
   }
 
+  context 'Validations' do
+    it "shoulda validations" do
+      [:ref_number, :account_to_id, :contact_id, :date].each do |meth|
+        should_not have_valid(meth).when(nil, '')
+      end
+    end
+
+    it { should have_valid(:amount).when(0.1, 2, 100.23) }
+    it { should_not have_valid(:amount).when(0, nil, -1) }
+
+    it "has validations for account and contact" do
+      QuickTransaction.validators_on(:contact).should_not be_blank
+      QuickTransaction.validators_on(:contact).first.should be_a(ActiveModel::Validations::PresenceValidator)
+
+      QuickTransaction.validators_on(:account_to).should_not be_blank
+      QuickTransaction.validators_on(:account_to).first.should be_a(ActiveModel::Validations::PresenceValidator)
+    end
+  end
+
   it "initializes with defaults" do
     qi = QuickTransaction.new(valid_attributes.merge(date: nil))
     qi.date.should eq(Date.today)
