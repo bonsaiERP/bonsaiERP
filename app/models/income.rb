@@ -10,24 +10,66 @@ class Income < Account
   ########################################
   # Relationships
   belongs_to :contact
-  belongs_to :deliver_approver, class_name: "User"
+
+  has_one :transaction, foreign_key: :account_id, autosave:true
+  has_many :transaction_details, foreign_key: :account_id, dependent: :destroy
+  accepts_nested_attributes_for :transaction_details, allow_destroy: true
 
   ########################################
   # Validations
-  validates             :ref_number,           :presence => true , :uniqueness => true
+  validates :name, :presence => true, :uniqueness => true
+  validates_presence_of :date
 
   ########################################
   # Scopes
-  scope :sum_total_balance, approved.select("SUM(balance * exchange_rate) AS total_bal").first[:total_bal]
   scope :discount, where(:discounted => true)
 
+  ########################################
+  # Delegations
+  TRANSACTION_METHODS = [
+    :balance, :bill_number, :discount, :gross_total, :original_total,
+    :balance_inventory, :payment_date, :creator_id, :approver_id, :nuller_id,
+    :null_reason, :approver_datetime, :delivered, :discount, :devolution
+  ].freeze
+  delegate *getters_setters_array(*TRANSACTION_METHODS), to: :transaction
+
+  STATES   = %w(draft approved paid due inventory nulled discount)
+  # Define boolean methods for states
+  STATES.each do |state|
+    class_eval <<-CODE, __FILE__, __LINE__ + 1
+      def is_#{state}?
+        "#{state}" == state ? true : false
+      end
+    CODE
+  end
+
+
+  def self.new_income(attrs={})
+    self.new do |c|
+      c.build_transaction
+      c.attributes = attrs
+    end
+  end
+
+  ########################################
+  # Aliases, alias and alias_method not working
+  [[:ref_number, :name], [:total, :amount]].each do |meth|
+    define_method meth.first do
+      self.send(meth.last)
+    end
+
+    define_method :"#{meth.first}=" do |val|
+      self.send(:"#{meth.last}=", val)
+    end
+  end
+
   def to_s
-    "Ingreso #{ref_number}"
+    ref_number
   end
 
   def self.get_ref_number
-    ref = Income.order("ref_number DESC").first
-    ref.present? ? ref.ref_number.next : "I-0001"
+    ref = Income.order("name DESC").limit(1).pluck(:name).first
+    ref.present? ? ref.next : "I-0001"
   end
 
   def set_state_by_balance!
@@ -38,6 +80,10 @@ class Income < Account
     else
       self.state = 'draft'
     end
+  end
+
+  def subtotal
+    self.transaction_details.inject(0) {|sum, v| sum += v.total }
   end
 
 private

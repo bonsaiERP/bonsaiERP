@@ -53,7 +53,6 @@ FactoryGirl.define do
 
   factory :bank do
     name "Bank"
-    number "123"
     currency 'BOB'
     amount 100
   end

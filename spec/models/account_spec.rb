@@ -7,6 +7,8 @@ describe Account do
   it { should have_valid(:amount).when(10, 0.0, -10.0) }
   it { should_not have_valid(:amount).when(nil, '') }
 
+  it { should validate_uniqueness_of(:name) }
+
   before :each do
     UserSession.user = build :user, id: 1
   end

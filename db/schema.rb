@@ -254,7 +254,6 @@ ActiveRecord::Schema.define(:version => 20130115020409) do
     t.integer  "account_id"
     t.decimal  "balance",                          :precision => 14, :scale => 2, :default => 0.0
     t.string   "bill_number"
-    t.integer  "project_id"
     t.decimal  "discount",                         :precision => 5,  :scale => 2, :default => 0.0
     t.decimal  "gross_total",                      :precision => 14, :scale => 2, :default => 0.0
     t.decimal  "original_total",                   :precision => 14, :scale => 2, :default => 0.0
@@ -269,17 +268,15 @@ ActiveRecord::Schema.define(:version => 20130115020409) do
     t.boolean  "delivered",                                                       :default => false
     t.boolean  "discounted",                                                      :default => false
     t.boolean  "devolution",                                                      :default => false
-    t.boolean  "has_error",                                                       :default => false
-    t.string   "error_messages"
     t.datetime "created_at",                                                                         :null => false
     t.datetime "updated_at",                                                                         :null => false
   end
 
+  add_index "transactions", ["account_id"], :name => "index_transactions_on_account_id"
   add_index "transactions", ["bill_number"], :name => "index_transactions_on_bill_number"
   add_index "transactions", ["delivered"], :name => "index_transactions_on_delivered"
   add_index "transactions", ["devolution"], :name => "index_transactions_on_devolution"
   add_index "transactions", ["discounted"], :name => "index_transactions_on_discounted"
-  add_index "transactions", ["has_error"], :name => "index_transactions_on_has_error"
   add_index "transactions", ["payment_date"], :name => "index_transactions_on_payment_date"
 
   create_table "units", :force => true do |t|

@@ -14,6 +14,7 @@ class Account < ActiveRecord::Base
   validates_presence_of :currency, :name
   validates_numericality_of :amount
   validates_inclusion_of :currency, in: CURRENCIES.keys
+  validates_uniqueness_of :name
 
   ########################################
   # Scopes

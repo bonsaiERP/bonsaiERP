@@ -5,5 +5,6 @@ class MoneyStore < ActiveRecord::Base
 
   ########################################
   # Relationships
-  belongs_to :account
+  belongs_to :bank, foreign_key: :account_id, conditions: {type: 'Bank'}
+  belongs_to :cash, foreign_key: :account_id, conditions: {type: 'Cash'}
 end

@@ -20,6 +20,7 @@ class CreateAccounts < ActiveRecord::Migration
       t.timestamps
     end
 
+    add_index :accounts, :name, unique: true
     add_index :accounts, :amount
     add_index :accounts, :currency
     add_index :accounts, :type

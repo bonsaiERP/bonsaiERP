@@ -9,8 +9,6 @@ class CreateTransactions < ActiveRecord::Migration
       # Use Account#name for ref_number create alias
       t.string  :bill_number # factura
 
-      t.integer :project_id
-
       t.decimal :discount, :precision => 5,  :scale => 2, default: 0.0
       t.decimal :gross_total, :precision => 14, :scale => 2, default: 0.0
       t.decimal :original_total, :precision => 14, :scale => 2, default: 0.0
@@ -23,20 +21,16 @@ class CreateTransactions < ActiveRecord::Migration
       t.integer  :nuller_id
       t.string   :null_reason, limit: 400
       t.datetime :approver_datetime
-      t.string  :approver_reason
 
       t.boolean :delivered, default: false
       t.boolean :discounted, default: false
       t.boolean :devolution, default: false
 
-      t.boolean :has_error, default: false
-      t.string  :error_messages
-
       t.timestamps
     end
 
+    add_index :transactions, :account_id
     add_index :transactions, :payment_date
-    add_index :transactions, :has_error
     add_index :transactions, :delivered
     add_index :transactions, :discounted
     add_index :transactions, :devolution
