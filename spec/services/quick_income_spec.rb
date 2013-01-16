@@ -6,7 +6,6 @@ describe QuickIncome do
 
   before(:each) do
     UserSession.user = build :user, id: 21
-    #UserChange.any_instance.stub(save: true, user: user)
   end
 
   let(:contact) { build :contact, id: 1 }
@@ -21,20 +20,32 @@ describe QuickIncome do
     }
   }
 
+  it "should present errors if the contact is wrong" do
+    qi = QuickIncome.new(valid_attributes.merge(contact_id: 1000, account_to_id: 1200))
+    qi.create.should be_false
+
+    qi.errors_on(:contact).should_not be_blank
+    qi.errors_on(:account_to).should_not be_blank
+  end
 
   context "Create income and check values" do
     before(:each) do
       Income.any_instance.stub(save: true)
       AccountLedger.any_instance.stub(save: true)
 
-      Account.stub(find: account)
+      Account.stub(find_by_id: account)
+      Contact.stub(find_by_id: contact)
     end
 
     it "creates a valid income" do
+      Income.any_instance.stub(id: 11)
+
       qi = QuickIncome.new(valid_attributes)
       qi.create.should be_true
 
+      # income
       income = qi.income
+      income.ref_number.should eq("I-0001")
       income.total.should == 200.5
       income.balance.should == 0.0
       income.gross_total.should == 200.5
@@ -43,64 +54,27 @@ describe QuickIncome do
 
       income.creator_id.should eq(21)
       income.approver_id.should eq(21)
-    end
 
-    it "does not save because of invalid account" do
-      qi = QuickIncome.new(valid_attributes.merge(account_id: 1000))
-      qi.create.should be_false
+      # account_ledger
+      ledger = qi.account_ledger
+      ledger.account_id.should eq(11)
+      ledger.account_to_id.should eq(account.id)
+      ledger.currency.should eq("BOB")
 
-      qi.income.errors[:currency].should_not be_blank
-      qi.income.errors[:currency].should_not be_blank
-    end
+      ledger.amount.should == 200.5
+      ledger.exchange_rate.should == 1
+      ledger.should_not be_inverse
 
-    it "should present errors if the contact is wrong" do
-      qi = QuickIncome.new(valid_attributes.merge(contact_id: 1000))
-      qi.create.should be_false
+      ledger.creator_id.should eq(21)
+      ledger.approver_id.should eq(21)
 
-      qi.income.errors[:contact].should_not be_blank
-    end
+      ledger.reference.should eq("Ingreso rápido #{income.ref_number}")
+      ledger.should be_is_payin
+      ledger.should be_conciliation
+      ledger.date.should be_a(Time)
 
-    subject do
-      qi = QuickIncome.new(valid_attributes)
-      qi.create
-      qi
-    end
-
-    let(:account_ledger) { subject.account_ledger }
-    let(:income) { subject.income }
-
-    it "sets correctly income attributes" do
-      amount = valid_attributes[:amount].to_f
-
-      income.balance.should eq(0)
-      income.total.should eq(amount)
-      income.gross_total.should eq(amount)
-      income.original_total.should eq(amount)
-      income.should be_is_paid
-      income.date.should_not be_blank
-      income.payment_date.should eq(income.date)
-
-      income.user_changes.should have(2).items
-      income.user_changes.map(&:name).sort.should eq(['approver', 'creator'])
-      income.user_changes.map(&:user_id).should eq([21, 21])
-    end
-
-    it "account_ledger attribtes are set" do
-      account_ledger.contact_id.should eq(contact.id)
-      account_ledger.should be_persisted
-      account_ledger.should be_is_payin
-      account_ledger.date.to_date.should eq(valid_attributes[:date])
-      account_ledger.reference == "Corbro ingreso #{income.ref_number}"
-
-      account_ledger.amount.should == valid_attributes[:amount].to_f
-      account_ledger.transaction_id.should eq(income.id)
-      account_ledger.should be_conciliation
-
-      account_ledger.account_amount.should eq(initial_amount + income.total)
-
-      account_ledger.creator_id.should eq(21)
-      account_ledger.approver_id.should eq(21)
-      account_ledger.contact_id.should eq(contact.id)
+      ledger.creator_id.should eq(21)
+      ledger.approver_id.should eq(21)
     end
   end
 end

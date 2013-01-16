@@ -3,6 +3,7 @@ class QuickIncome < QuickTransaction
   attr_reader :income
 
   def create
+    return false unless valid?
     res = true
     ActiveRecord::Base.transaction do
       res = create_income
@@ -29,7 +30,8 @@ private
   end
 
   def create_ledger
-    @account_ledger = build_ledger(account_id: income.id)
+    @account_ledger = build_ledger(account_id: income.id, operation: 'payin',
+                                   reference: "Ingreso rápido #{income.ref_number}")
 
     @account_ledger.save
   end

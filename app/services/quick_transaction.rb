@@ -14,6 +14,8 @@ class QuickTransaction < BaseService
   validates_presence_of :ref_number, :account_to, :account_to_id, :contact, :contact_id, :date
   validates_numericality_of :amount, greater_than: 0
 
+  delegate :currency, to: :account_to, allow_nil: true
+
   def initialize(attributes = {})
     super
 
@@ -36,7 +38,9 @@ private
       exchange_rate: 1, date: date,
     }.merge(attrs)) {|al| 
       al.conciliation = true
-      al.currency = account_to.currency
+      al.currency = currency
+      al.creator_id = UserSession.id
+      al.approver_id = UserSession.id
     }
   end
 
@@ -47,13 +51,5 @@ private
 
   def contact
     @contact ||= Contact.find_by_id(contact_id)
-  end
-
-  def currency
-    if account_to.present?
-      account_to.currency
-    else
-      nil
-    end
   end
 end
