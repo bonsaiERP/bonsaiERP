@@ -5,44 +5,43 @@ describe QuickIncome do
   let(:user) { build :user, id: 21 }
 
   before(:each) do
-    UserSession.current_user = User.new {|u| u.id = 21 }
-    UserChange.any_instance.stub(save: true, user: user)
+    UserSession.user = build :user, id: 21
+    #UserChange.any_instance.stub(save: true, user: user)
   end
 
-  let!(:contact) { create(:contact) }
-  let!(:cash) { create(:cash, amount: 100, currency: 'BOB') }
-  let(:account) { cash.account }
+  let(:contact) { build :contact, id: 1 }
+  let(:account) { build :cash, amount: 100, currency: 'BOB', id: 1 }
   let(:initial_amount) { account.amount }
 
   let(:valid_attributes) {
     {
-      date: Date.today, ref_number: 'I-0001', fact: true,
+      date: Date.today, ref_number: 'I-0001',
       bill_number: '63743', amount: '200.5',
-      contact_id: contact.id, account_id: account.id
+      contact_id: contact.id, account_to_id: account.id
     }
   }
 
-  it "Initializes with a correct number" do
-    qi = QuickIncome.new
-
-    qi.ref_number.should eq("I-0001")
-  end
-
   context "Create income and check values" do
-    let(:account_ledger) { subject.account_ledger }
-    let(:expense) { subject.expense }
-    let(:amount) { qe.amount }
+    before(:each) do
+      Income.any_instance.stub(save: true)
+      AccountLedger.any_instance.stub(save: true)
+
+      Account.stub(find_by_id: account)
+    end
 
     it "creates a valid income" do
-      contact.should_not be_client
-
       qi = QuickIncome.new(valid_attributes)
       qi.create.should be_true
 
-      qi.income.should be_persisted
-      qi.account_ledger.should be_persisted
-      contact.reload
-      contact.should be_client
+      income = qi.income
+      income.total.should == 200.5
+      income.balance.should == 0.0
+      income.gross_total.should == 200.5
+      income.total.should == 200.5
+      income.original_total.should == 200.5
+
+      income.creator_id.should eq(21)
+      income.approver_id.should eq(21)
     end
 
     it "does not save because of invalid account" do

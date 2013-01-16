@@ -98,4 +98,22 @@ describe Income do
 
     i.subtotal.should == 17.0
   end
+
+  it "checks the methods approver, nuller, creator" do
+    t = Time.now
+    d = Date.today
+    attrs = {
+      balance: 10, bill_number: '123', discount: 2.0,
+      gross_total: 10, original_total: 10, balance_inventory: 10,
+      payment_date: d, creator_id: 1, approver_id: 2,
+      nuller_id: 3, null_reason: 'Null', approver_datetime: t,
+      delivered: true, discount: 1.0, devolution: true
+    }
+
+    i = Income.new_income(attrs)
+
+    attrs.each do |k, v|
+      i.send(k).should eq(v)
+    end
+  end
 end

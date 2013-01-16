@@ -1,9 +1,11 @@
 # encoding: utf-8
 class QuickIncome < QuickTransaction
+  attr_reader :income
+
   def create
     res = true
     ActiveRecord::Base.transaction do
-      res = create_transaction
+      res = create_income
 
       res = create_ledger && res
 
@@ -16,20 +18,20 @@ class QuickIncome < QuickTransaction
     res
   end
 
-  def income
-    transaction
+private
+  def create_income
+    @income = Income.new_income(transaction_attributes.merge(
+      total: amount, gross_total: amount, original_total: amount, balance: 0,
+      creator_id: UserSession.id, approver_id: UserSession.id
+    ))
+
+    @income.save
   end
 
-private
-  def create_transaction
-    @transaction = Income.new(transaction_attributes) do |inc|
-      inc.total = inc.gross_total = inc.original_total = amount
-      inc.balance = 0
-    end
+  def create_ledger
+    @account_ledger = build_ledger(account_id: income.id)
 
-    set_transaction_users
-
-    @transaction.save
+    @account_ledger.save
   end
 
   def ledger_amount

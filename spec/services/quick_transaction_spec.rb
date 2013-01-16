@@ -2,34 +2,24 @@
 require 'spec_helper'
 
 describe QuickTransaction do
-  before(:each) do
-    UserSession.user = build :user, id: 21
-  end
-
-  let!(:contact) { create(:contact) }
-  let!(:cash) { create(:cash, amount: 100, currency: 'BOB') }
-  let(:account) { cash.account }
-  let(:initial_amount) { account.amount }
-
   let(:valid_attributes) {
     {
-      date: Date.today, ref_number: 'I-0001', fact: true,
+      date: Date.today, ref_number: 'I-0001',
       bill_number: '63743', amount: '200.5',
-      contact_id: contact.id, account_id: account.id
+      contact_id: 1, account_to_id: 1
     }
   }
 
   it "initializes with defaults" do
-    qi = QuickTransaction.new
-    qi.fact.should be_true
+    qi = QuickTransaction.new(valid_attributes.merge(date: nil))
     qi.date.should eq(Date.today)
+    qi.amount.should == 200.5
   end
 
   it "initializes with other attributes" do
     date = 1.day.from_now.to_date
-    qi = QuickTransaction.new(ref_number: 'JE-0001', fact: false, date: date)
+    qi = QuickTransaction.new(ref_number: 'JE-0001', date: date)
     qi.ref_number.should eq('JE-0001')
-    qi.fact.should be_false
     qi.date.should eq(date)
   end
 
