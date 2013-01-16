@@ -13,7 +13,7 @@ describe Income do
     {active: nil, bill_number: "56498797", contact: contact,
       exchange_rate: 1, currency: 'BOB', date: '2011-01-24',
       description: "Esto es una prueba", discount: 3,
-      ref_number: "987654"
+      ref_number: "987654", state: 'draft'
     }
   }
 
@@ -24,6 +24,10 @@ describe Income do
     it { should belong_to(:contact) }
     it { should have_one(:transaction) }
     it { should have_many(:transaction_details) }
+
+    it { should validate_presence_of(:date) }
+    it { should have_valid(:state).when(*Income::STATES) }
+    it { should_not have_valid(:state).when(nil, 'ja', 1) }
   end
 
   context 'callbacks' do
@@ -35,13 +39,18 @@ describe Income do
       i.save.should be_true
     end
 
-
     it "does not update contact to client" do
       contact.client = true
       contact.should_not_receive(:update_attribute).with(:client, true)
       i = Income.new_income(valid_attributes)
 
       i.save.should be_true
+    end
+  end
+
+  it "checks the states methods" do
+    Income::STATES.each do |state|
+      Income.new(state: state).should send(:"be_is_#{state}")
     end
   end
 
@@ -72,10 +81,21 @@ describe Income do
 
     i.state.should eq('approved')
 
-
     i = Income.new_income(total: 10, balance: 0)
     i.set_state_by_balance!
 
     i.state.should eq('paid')
+  end
+
+  it "returns the subtotal from  details" do
+    i = Income.new_income(valid_attributes.merge(
+      {transaction_details_attributes: [
+        {item_id: 1, price: 10, quantity: 1},
+        {item_id: 2, price: 3.5, quantity: 2}
+      ]
+    }
+    ))
+
+    i.subtotal.should == 17.0
   end
 end

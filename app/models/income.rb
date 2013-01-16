@@ -15,14 +15,15 @@ class Income < Account
   has_many :transaction_details, foreign_key: :account_id, dependent: :destroy
   accepts_nested_attributes_for :transaction_details, allow_destroy: true
 
+  STATES = %w(draft approved paid)
   ########################################
   # Validations
-  validates :name, :presence => true, :uniqueness => true
   validates_presence_of :date
+  validates :state, presence: true, inclusion: {in: STATES}
 
   ########################################
   # Scopes
-  scope :discount, where(:discounted => true)
+  scope :discount, where(discounted: true)
 
   ########################################
   # Delegations
@@ -33,7 +34,6 @@ class Income < Account
   ].freeze
   delegate *getters_setters_array(*TRANSACTION_METHODS), to: :transaction
 
-  STATES   = %w(draft approved paid due inventory nulled discount)
   # Define boolean methods for states
   STATES.each do |state|
     class_eval <<-CODE, __FILE__, __LINE__ + 1
@@ -42,7 +42,6 @@ class Income < Account
       end
     CODE
   end
-
 
   def self.new_income(attrs={})
     self.new do |c|

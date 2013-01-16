@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe QuickTransaction do
   before(:each) do
-    UserSession.current_user = User.new {|u| u.id = 21 }
+    UserSession.user = build :user, id: 21
   end
 
   let!(:contact) { create(:contact) }

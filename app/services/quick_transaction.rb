@@ -5,13 +5,13 @@ class QuickTransaction < BaseService
 
   attr_reader :transaction, :account_ledger, :contact
 
-  attribute :ref_number  , String
-  attribute :account_id  , Integer
-  attribute :contact_id  , Integer
-  attribute :date        , Date
-  attribute :amount      , Decimal
-  attribute :bill_number , String
-  attribute :fact        , Boolean
+  attribute :ref_number    , String
+  attribute :account_to_id , Integer
+  attribute :contact_id    , Integer
+  attribute :date          , Date
+  attribute :amount        , Decimal
+  attribute :bill_number   , String
+  attribute :fact          , Boolean
 
   def initialize(attributes = {})
     super attributes
