@@ -75,6 +75,7 @@ ActiveRecord::Schema.define(:version => 20130115020409) do
   add_index "accounts", ["currency"], :name => "index_accounts_on_currency"
   add_index "accounts", ["date"], :name => "index_accounts_on_date"
   add_index "accounts", ["has_error"], :name => "index_accounts_on_has_error"
+  add_index "accounts", ["name"], :name => "index_accounts_on_name", :unique => true
   add_index "accounts", ["project_id"], :name => "index_accounts_on_project_id"
   add_index "accounts", ["state"], :name => "index_accounts_on_state"
   add_index "accounts", ["type"], :name => "index_accounts_on_type"
@@ -264,7 +265,6 @@ ActiveRecord::Schema.define(:version => 20130115020409) do
     t.integer  "nuller_id"
     t.string   "null_reason",       :limit => 400
     t.datetime "approver_datetime"
-    t.string   "approver_reason"
     t.boolean  "delivered",                                                       :default => false
     t.boolean  "discounted",                                                      :default => false
     t.boolean  "devolution",                                                      :default => false
