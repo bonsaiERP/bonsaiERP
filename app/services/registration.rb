@@ -19,8 +19,8 @@ class Registration < BaseService
   def register
     return false unless valid?
 
+    res = true
     ActiveRecord::Base.transaction do
-      res = true
       res = create_organisation
       res = create_user && res
 
@@ -33,6 +33,9 @@ class Registration < BaseService
 private
   def create_user
     @user = User.new(email: email, password: password)
+    @user.links.build(organisation_id: organisation.id, 
+                      rol: 'admin', active: true, master_account: true)
+    @user.save
   end
 
   def create_organisation

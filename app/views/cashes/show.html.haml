@@ -7,7 +7,7 @@
 .page-header
   %h1.n
     = @cash.name
-    %small= @account.currency
+    %small= @cash.currency
     -#= pendent_money_link(@cash)
 
 .row-fluid
@@ -15,8 +15,8 @@
     .well.well-small
       %label SALDO EN CAJA
       %h3
-        = ntc @account.amount
-        = currency_label @account.currency
+        = ntc @cash.amount
+        = currency_label @cash.currency
 
   .span6
     %label Dirección
@@ -25,6 +25,6 @@
 .page-header
   %h3 Transacciones
 
-= render "account_ledgers/money", :account => @account, :ledgers => @ledgers, :paged_ledgers => @paged_ledgers, :ref_title => 'Referencia', :money => @cash
+= render "account_ledgers/money", account: @cash
 
 .clear

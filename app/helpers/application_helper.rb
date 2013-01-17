@@ -262,4 +262,8 @@ module ApplicationHelper
   def show_amount(amount, cur=currency)
     "#{ ntc(amount) } #{currency_label(cur)}"
   end
+
+  def render_if(val, &block)
+    content_tag(:span) { block.call } if val.present?
+  end
 end

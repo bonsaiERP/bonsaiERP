@@ -2,15 +2,15 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 module AccountLedgersHelper
-  def al_operation(al)
+  def al_operation(operation)
     html = ""
-    case al.operation
+    case operation
     when 'cin' then html = "<span></span>"
     when 'cout' then html = ""
-    when 'pin' then html = "<span class='label'>cobro</span>"
-    when 'pout' then html = ""
-    when 'din' then html = ""
-    when 'dout' then html = ""
+    when 'payin' then html = "<span class='label'>cobro</span>"
+    when 'payout' then html = ""
+    when 'devin' then html = ""
+    when 'devout' then html = ""
     when 'null' then html = ""
     end
 

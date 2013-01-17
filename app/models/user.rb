@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
 
   include Models::User::Authentication
 
-  ROLES = ['admin', 'gerency', 'operations'].freeze
+  ROLES = %w(admin gerency operations).freeze
 
   ########################################
   # Callbacks
@@ -16,7 +16,7 @@ class User < ActiveRecord::Base
 
   ########################################
   # Relationships
-  has_many :links
+  has_many :links, inverse_of: :user, autosave: true, dependent: :destroy
   has_many :organisations, through: :links
 
   ########################################

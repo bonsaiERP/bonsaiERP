@@ -2,7 +2,7 @@
   = simple_form_for QuickIncome.new(ref_number: Income.get_ref_number), url: quick_income_incomes_path do |f|
     .row-fluid
       .span6= f.input :ref_number, label: "Número de referencia"
-      .span6= f.input :account_id, collection: Account.all, label: 'Cuenta'
+      .span6= f.input :account_to_id, collection: AccountQuery.bank_cash, label: 'Cuenta'
 
     .row-fluid
       .span6

@@ -1,14 +1,14 @@
 %ul#usersettings
-  - if session[:organisation].present? and organisation_id.present?
+  - if current_organisation
     %li
       %a{ :href => "/configuration"}
         %i.icon-cog.icon-white
         Configuración
-  %li
+  %li#current_user
     %a.limit{ :href => "#{ user_path(current_user) }" }
       %i.icon-user.icon-white
       = current_user
-  %li
+  %li#logout
     %a{ :href =>"/users/sign_out"}
       %i.icon-off.icon-white
       Salir

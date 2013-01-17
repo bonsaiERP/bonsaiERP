@@ -29,7 +29,7 @@ class Contact < ActiveRecord::Base
   ########################################
   # Methods
   def self.search(match)
-    includes(:accounts).where("contacts.matchcode ILIKE ?", "%#{match}%")
+    includes(:contact_accounts).where{matchcode =~ "%#{match}%"}
   end
 
   # Finds a contact using the type

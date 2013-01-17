@@ -20,8 +20,7 @@ class Organisation < ActiveRecord::Base
   belongs_to :org_country, :foreign_key => :country_id
 
   has_many :links, :dependent => :destroy, :autosave => true
-  has_one  :master_link, class_name: 'Link', foreign_key: :organisation_id, autosave: true,
-           conditions: { master_account: true, rol: 'admin' }
+  has_one  :master_link, class_name: 'Link', foreign_key: :organisation_id, conditions: { master_account: true, rol: 'admin' }
   has_one  :master_account, through: :master_link, source: :user
 
   has_many :users, through: :links, dependent: :destroy

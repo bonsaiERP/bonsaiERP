@@ -27,7 +27,8 @@ class TenantCreator
 
       Unit.create_base_data
       Store.create!(name: 'Almacen inicial')
-      Cash.create!(name: 'Caja inicial', currency: organisation.currency)
+      cash = Cash.new_cash(name: 'Caja inicial', currency: organisation.currency)
+      cash.save!
     end
 
     true

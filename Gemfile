@@ -21,6 +21,7 @@ gem 'pg'
 gem 'virtus' # Model generation in simple way
 gem 'encrypted-cookie-store' # Encrypt cookies in the session
 gem 'strong_parameters' # Force in controllers to sanitize parameters
+gem 'squeel' # Better SQL queries
 
 gem 'simple_form'
 gem 'haml'

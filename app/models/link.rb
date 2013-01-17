@@ -5,24 +5,10 @@ class Link < ActiveRecord::Base
 
   self.table_name = "common.links"
 
-  belongs_to :organisation
-  belongs_to :user
+  belongs_to :organisation, inverse_of: :links
+  belongs_to :user, inverse_of: :links
 
   has_many :organisations
 
-  attr_protected :user_id, :creator, :abbreviation
-
-  # rol_id needs to be asgined with the Rol model
-  #validates_presence_of :rol_id
-  validates_associated :user
-  validates_associated :organisation
-
-
-  # Sets the current user and other attributes
-  def set_user_creator(user_key)
-    self.rol = 'admin'
-    write_attribute(:user_id, user_key)
-    write_attribute(:creator, true)
-  end
-
+  validates_presence_of :rol, :organisation, :organisation_id, :user
 end

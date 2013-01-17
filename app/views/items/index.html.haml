@@ -61,7 +61,9 @@
       %td= item.unit_name
       %td.r
         = ntc item.total_stock if item.stockable?
-      %td= bonsai_links(item)
+      %td
+        = link_to icon_edit, edit_item_path(item), class: 'dark'
+        = link_to icon_delete, item, class: 'dark', method: 'delete', confirm: 'Esta seguro de eliminar el ítem?'
 
 :javascript
   $(function() { $('#search_items').show() });

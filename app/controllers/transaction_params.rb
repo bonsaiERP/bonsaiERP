@@ -3,7 +3,7 @@ class TransactionParams
   attr_reader :params
 
   def quick
-    [:date, :ref_number, :fact, :bill_number, :amount, :contact_id, :account_id]
+    [:date, :ref_number, :fact, :bill_number, :amount, :contact_id, :account_id, :account_to_id]
   end
 
   def quick_income

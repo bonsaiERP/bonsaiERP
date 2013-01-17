@@ -7,7 +7,6 @@ class CashesController < ApplicationController
   include Controllers::Money
 
   # GET /cashs
-  # GET /cashs.xml
   def index
     @cashes = Cash.all
 
@@ -18,12 +17,7 @@ class CashesController < ApplicationController
   end
 
   # GET /cashs/1
-  # GET /cashs/1.xml
   def show
-    @account = @cash.account
-    @ledgers = super(@account)
-    @paged_ledgers = @ledgers.page(@page)
-
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @cash }
@@ -31,7 +25,6 @@ class CashesController < ApplicationController
   end
 
   # GET /cashs/new
-  # GET /cashs/new.xml
   def new
     @cash = Cash.new(:currency_id => params[:currency_id])
 
@@ -46,7 +39,6 @@ class CashesController < ApplicationController
   end
 
   # POST /cashs
-  # POST /cashs.xml
   def create
     @cash = Cash.new(cash_params)
 
@@ -62,7 +54,6 @@ class CashesController < ApplicationController
   end
 
   # PUT /cashs/1
-  # PUT /cashs/1.xml
   def update
     params[:cash].delete(:currency_id)
 
@@ -78,7 +69,6 @@ class CashesController < ApplicationController
   end
 
   # DELETE /cashs/1
-  # DELETE /cashs/1.xml
   def destroy
     @cash.destroy
 

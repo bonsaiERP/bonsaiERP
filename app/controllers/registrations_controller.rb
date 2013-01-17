@@ -6,7 +6,7 @@ class RegistrationsController < ApplicationController
   skip_before_filter :set_tenant, :check_authorization!
 
   def new
-    @organisation = Organisation.new
+    @registration = Registration.new
   end
 
   def show
@@ -26,21 +26,19 @@ class RegistrationsController < ApplicationController
   end
 
   def create
-    @organisation = Organisation.new(organisation_params)
+    @registration = Registration.new(registration_params)
 
-    # TODO refactor create_organisation, really nasty
-    if @organisation.create_organisation
-      @user = @organisation.master_account
-      RegistrationMailer.send_registration(@user, @organisation.tenant).deliver
-      redirect_to registrations_path, notice: "Le hemos enviado un email a #{@user.email} con instrucciones para completar su registro."
+    if @registration.register
+      RegistrationMailer.send_registration(@registration).deliver
+      redirect_to registrations_path, notice: "Le hemos enviado un email a #{@registration.email} con instrucciones para completar su registro."
     else
       render 'new'
     end
   end
 
 private
-  def organisation_params
-    params.require(:organisation).permit(:name, :tenant, :email, :password)
+  def registration_params
+    params.require(:registration).permit(:name, :tenant, :email, :password, :password_confirmation)
   end
 
   def check_tenant

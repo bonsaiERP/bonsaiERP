@@ -38,6 +38,7 @@ describe TenantCreator do
 
       c = Cash.first
       c.name.should eq('Caja inicial')
+      c.address.should be_blank
     end
 
     after(:each) do
