@@ -31,10 +31,10 @@ describe QuickIncome do
   context "Create income and check values" do
     before(:each) do
       Income.any_instance.stub(save: true)
-      AccountLedger.any_instance.stub(save: true)
 
       Account.stub(find_by_id: account)
       Contact.stub(find_by_id: contact)
+      ConciliateAccount.any_instance.stub(conciliate: true)
     end
 
     it "creates a valid income" do
@@ -53,7 +53,8 @@ describe QuickIncome do
       income.original_total.should == 200.5
 
       income.creator_id.should eq(21)
-      income.approver_id.should eq(21)
+      # approver should be set by ConciliateAccount
+      #income.approver_id.should eq(21)
 
       # account_ledger
       ledger = qi.account_ledger

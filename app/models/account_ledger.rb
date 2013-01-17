@@ -56,8 +56,8 @@ class AccountLedger < ActiveRecord::Base
 
   ########################################
   # delegates
-  delegate :name, :amount, :currency, to: :account, prefix: true, allow_nil: true
-  delegate :name, :amount, :currency, to: :account_to, prefix: true, allow_nil: true
+  delegate :name, :amount, :currency, to: :account, prefix: true
+  delegate :name, :amount, :currency, to: :account_to, prefix: true
 
   OPERATIONS.each do |op|
     class_eval <<-CODE, __FILE__, __LINE__ + 1
@@ -75,15 +75,11 @@ class AccountLedger < ActiveRecord::Base
   end
 
   def amount_currency
-    begin
-      amount * exchange_rate_currency
-    rescue
-      0
+    if inverse
+      amount / exchange_rate
+    else
+      amount * exchange_rate
     end
-  end
-
-  def exchange_rate_currency
-    inverse? ? 1/exchange_rate : exchange_rate
   end
 
 private
@@ -98,21 +94,6 @@ private
   def set_approver
     self.approver_id = UserSession.id
   end
-
-  #def update_account_amount
-  #  account.amount += amount
-  #  self.account_balance = account.amount
-
-  #  account.save!
-  #end
-
-  ## Updates the amount of the account to
-  #def update_account_to_amount
-  #  to.amount -= amount
-  #  self.account_to_balance = to.amount
-
-  #  account.save!
-  #end
 
   def different_accounts
     self.errors[:account_to_id] << I18n.t('errors.messages.account_ledger.same_account') if account_id == account_to_id

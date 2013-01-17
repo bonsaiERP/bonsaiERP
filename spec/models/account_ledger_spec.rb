@@ -51,27 +51,20 @@ describe AccountLedger do
     before(:each) do
       UserSession.user = build :user, id: 10
     end
+  end
 
-    #it "assigns the creator when creating" do
-    #  al = AccountLedger.new(valid_attributes.merge(conciliation: false, amount: 100.0))
-    #  al.account = account
-    #  al.account_to = account2
-    #  al.save.should be_true
+  context 'exchange_rate' do
+    subject{ AccountLedger.new(amount: 100, currency:'BOB', exchange_rate:2 ) }
 
-    #  al.should be_persisted
-    #  al.creator_id.should eq(10)
-    #  al.approver_id.should be_nil
-    #  account.amount.should == 0.0
+    it "calculates when not inverse" do
+      subject.inverse = false
+      subject.amount_currency.should == 200.0
+    end
 
-    #  # Check approver
-    #  Account.any_instance.stub(save: true)
-    #  UserSession.stub(user_id: 20)
-    #  al.conciliation = true
-    #  al.save.should be_true
-    #  al.approver_id.should eq(20)
-
-    #  account.amount.should == 100.0
-    #end
+    it "calculates when inverse" do
+      subject.inverse = true
+      subject.amount_currency.should == 50.0
+    end
   end
 
 end

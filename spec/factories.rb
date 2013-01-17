@@ -92,11 +92,9 @@ FactoryGirl.define do
     date { Date.today }
     association :contact, factory: :contact, strategy: :build
     currency 'BOB'
-    bill_number "I-0001"
     description "New income description"
     state "draft"
     total 100
-    balance 100
   end
 
   factory :expense do
@@ -107,5 +105,16 @@ FactoryGirl.define do
     bill_number "P-0001"
     description "New expense description"
     state "draft"
+  end
+
+  factory :account_ledger do
+    date Date.today
+    operation "payin"
+    reference "Income"
+    amount 100
+    exchange_rate 1
+    inverse false
+    account_id 1
+    account_to_id 2
   end
 end

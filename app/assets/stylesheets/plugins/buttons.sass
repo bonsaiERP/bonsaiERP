@@ -60,3 +60,41 @@ input[type="submit"],
 input[type="file"] > input[type="button"]
   &::-moz-focus-inner
     border: none
+
+.push-button
+  display: inline-block
+  color: #fff
+  cursor: pointer
+
+  //width: 120px
+  padding: 0px 25px
+  height: 45px
+
+  //position: absolute
+  //top: 50%
+  //left: 50%
+  margin: 5px 10px
+  //margin-top: -(@height/2)
+  //margin-left: -(@width/2)
+
+  line-height: 45px
+  //@height
+  text-align: center
+
+  +border-radius(5px)
+  +box-shadow(rgba(255, 255, 255, 0.2) 0 1px 0 0 inset, rgba(0, 0, 0, .5) 1px 1px 10px 0, rgba(0, 0, 0, .4) -1px -1px 0 0 inset)
+  background: -webkit-linear-gradient(top, #37352e, #2e2d26)
+  background: -moz-linear-gradient(top, #37352e, #2e2d26)
+  +text-shadow(0 1px rgba(0,0,0,0.5) )
+
+  transition: all 10ms
+  &:hover
+    color: #EFEFEF
+    text-decoration: none
+
+.push-button:active
+  background: linear-gradient(top, #2c2a23, #323028)
+  +box-shadow(0 -1px 0 0 rgba(255, 255, 255, .2) inset, 0 1px 10px 0 rgba(0, 0, 0, .4) inset)
+  color: #686662
+  opacity: .9
+  +text-shadow(0 -1px rgba(0,0,0,.5))
