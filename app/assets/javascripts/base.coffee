@@ -82,11 +82,6 @@
     #createDialog({html: html, width: 680, height: 410, title: title})
     createDialog({html: html, width: 880, height: 530, title: title})
 
-  window.createVideoDialog = createVideoDialog
-  $('a.video').live 'click', (event)->
-    createVideoDialog($(this).attr("href"), $(this).data("title"))
-    false
-
 
   # Gets if the request is new, edit, show
   getAjaxType = (el)->
@@ -101,7 +96,7 @@
 
 
   # Presents an AJAX form
-  $('a.ajax').live("click", (event) ->
+  $(document).on('click', 'a.ajax', (event) ->
     title = $(this).attr("title") || $(this).data("original-title")
     data = $.extend({'title': title, 'ajax-type': getAjaxType(this) }, $(this).data() )
     div = createDialog( data )
@@ -115,16 +110,9 @@
   )
 
 
-  # To present the search
-  $('a.search').live("click", ->
-    search = $(this).attr("href")
-    $(search).show(speed)
-  )
-
-
   # Delete an Item from a list, deletes a tr or li
   # Very important with default fallback for trigger
-  $('a.delete[data-remote=true]').live("click", (e)->
+  $(document).on('click', 'a.delete[data-remote=true]', (e)->
     self = this
     $(self).parents("tr:first, li:first").addClass('marked')
     trigger = $(self).data('trigger') || 'ajax:delete'
@@ -165,7 +153,7 @@
 
 
   # Method to delete when it's in the .links in the top
-  $('a.delete').live 'click', ->
+  $(document).on('click', 'a.delete', (event) ->
     return false if $(this).attr("data-remote")
 
     txt = $(this).data("confirm") || "Esta seguro de borrar"
@@ -180,7 +168,7 @@
       .html(html).appendTo('body').submit()
 
       false
-
+  )
 
   # Mark
   # @param String // jQuery selector
@@ -199,7 +187,6 @@
     , velocity)
 
   $.mark = $.fn.mark = mark
-
 
   # Adds a new link to any select with a data-new-url
   dataNewUrl = ->
@@ -224,21 +211,21 @@
 
 
   # Closes the nearest div container
-  $('a.close').live 'click', ->
-    self = @
-    cont = $(@).parents('div:first').hide(speed)
-    unless $(@).parents("div:first").hasClass("search")
+  $(document).on('click', 'a.close', ->
+    self = this
+    cont = $(this).parents('div:first').hide(speed)
+    unless $(this).parents("div:first").hasClass("search")
       setTimeout ->
         cont.remove()
       ,speed
+  )
 
-  createErrorLog = (data)->
+  createErrorLog = (data) ->
     unless $('#error-log').length > 0
       $('<div id="error-log" style="background: #FFF"></div>')
       #.html("<iframe id='error-iframe' width='100%' height='100%'><body></body></iframe>")
       .dialog({title: 'Error', width: 900, height: 500})
 
-    #$('#error-iframe').contents().find('body').html(data)
     $('#error-log').html(data).dialog("open")
 
   # Creates a message window with the text passed
@@ -248,11 +235,6 @@
     "<div class='message'><a class='close' href='javascript:'>Cerrar</a>#{text}</div>"
 
   window.createMessageCont = createMessageCont
-
-  # Hide message
-  $('.message .close').live("click", ->
-    $(this).parents(".message:first").hide("slow").delay(500).remove()
-  )
 
   # AJAX setup
   $.ajaxSetup ({
@@ -272,19 +254,22 @@
 
   # Prevent enter submit forms in some forms
   window.keyPress = false
-  $('form.enter input').live 'keydown', (event)->
+  $(document).on( 'keydown', 'form.enter input', (event) ->
     window.keyPress = event.keyCode || false
     true
+  )
 
-  $('form.enter input:submit').live 'mouseover', ->
+  $(document).on('mouseover', 'form.enter input:submit', (event) ->
     window.keyPress = false
     true
+  )
 
-  $('form.enter').live 'submit', (event)->
-    if window.keyPress == 13
-      false
-    else
-      true
+  #$(document).on( 'submit', 'form.enter', (event)->
+  #  if window.keyPress == 13
+  #    false
+  #  else
+  #    true
+  #)
 
   # Supress from submiting a form from an input:text
   checkCR = (evt)->
@@ -309,8 +294,6 @@
     $('.select2-autocomplete').select2Autocomplete()
     $('body').dataNewUrl()
     fx.rates = exchangeRates.rates
-
-    #$('ul.nav>li').on('mouseover', '>a', -> $(this).trigger('click'))
 
     # Scroll visivility
     $(window).scroll ->

@@ -34,7 +34,7 @@ class Item extends Backbone.Model
     src = event.currentTarget || event.srcElement
     @collection.deleteItem(this, src)
 
-class Income extends Backbone.Collection
+class Transaction extends Backbone.Collection
   model: Item
   total: 0
   totalPath: '#total'
@@ -108,9 +108,12 @@ class Income extends Backbone.Collection
       if el.attributes.item_id?
         el.set('rate', cur.get('rate'))
 
+class Income extends Transaction
 
-window.App = {}
-window.App.Income = Income
+class Expense extends Transaction
+@App = {}
+@App.Income = Income
+@App.Expense = Expense
 
 class TransactionCurrency extends Backbone.Model
   defaults:

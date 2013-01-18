@@ -1,0 +1,33 @@
+.row-fluid
+  .span3
+    = f.input :ref_number, label: 'Nº de referencia', input_html: { class: 'span8'}
+  .span3
+    = f.input :date, label: "Fecha", as: :datepicker
+  .span6
+    = f.input :contact, as: :select2, label: 'Contacto', input_html: {class: 'span10', data: {source: '/contacts/search', new_url: new_contact_path, title: 'Nuevo contacto', trigger: 'new-contact', placeholder: 'Escriba para buscar contactos'} }
+
+%hr.light
+.row-fluid.currency-input
+  .span6
+    = f.input :currency, collection: currency_options, label: 'Moneda', include_blank: false,
+      input_html: {id: 'transaction_currency', data: { value: 'currency.currency' } }
+  .span6
+    = f.input :exchange_rate, label: "Tipo de cambio de <span class='currency'></span> a #{currency_label}".html_safe,
+      input_html: {id: 'transaction_exchange_rate', type: 'decimal', size: 8, data: {value: 'currency.rate'}}
+
+%hr.light
+
+.row-fluid
+  .span6
+    = f.association :project,  label: 'Proyecto',
+      input_html: { class: 'contact_id span11', data: {new_url: new_project_path, title: 'Nuevo proyecto', trigger: 'new_project', width: 900 } }
+
+  .span6
+    = f.input :bill_number, label: 'Nº de Documento'.html_safe, input_html: {size: 20}, hint: 'Nº de factura or recibo'
+
+
+.row-fluid
+  .span6
+    = f.input :description, label: 'Descripción', as: 'text', input_html: {rows: 3, class: 'span10'}
+
+

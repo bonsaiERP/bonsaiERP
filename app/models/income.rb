@@ -10,10 +10,11 @@ class Income < Account
   ########################################
   # Relationships
   belongs_to :contact
+  belongs_to :project
 
   has_one :transaction, foreign_key: :account_id, autosave:true
-  has_many :transaction_details, foreign_key: :account_id, dependent: :destroy
-  accepts_nested_attributes_for :transaction_details, allow_destroy: true
+  has_many :income_details, foreign_key: :account_id, dependent: :destroy
+  accepts_nested_attributes_for :income_details, allow_destroy: true
 
   STATES = %w(draft approved paid)
   ########################################
@@ -44,9 +45,9 @@ class Income < Account
   end
 
   def self.new_income(attrs={})
-    self.new do |c|
-      c.build_transaction
-      c.attributes = attrs
+    self.new do |i|
+      i.build_transaction
+      i.attributes = attrs
     end
   end
 
@@ -82,7 +83,7 @@ class Income < Account
   end
 
   def subtotal
-    self.transaction_details.inject(0) {|sum, v| sum += v.total }
+    self.income_details.inject(0) {|sum, v| sum += v.total }
   end
 
 private

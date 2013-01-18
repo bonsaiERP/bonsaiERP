@@ -70,7 +70,7 @@
 
   $.transformDateSelect = $.fn.transformDateSelect = transformDateSelect
 
-  $('div.ajax-modal form').live('ajax:success', (event, resp) ->
+  $(document).on('ajax:success', 'div.ajax-modal form', (event, resp) ->
     switch true
       when _.isString(resp)
         $parent = $(this).parents('div.ajax-modal')

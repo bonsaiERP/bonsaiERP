@@ -22,7 +22,6 @@
 #= require app/currency.coffee
 #= require app/exchange_rate.js.coffee
 #= require app/transaction.js.coffee
-#= require app/pay_plans.js.coffee
 #= require app/payment.js.coffee
 
 #= require forms

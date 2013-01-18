@@ -5,15 +5,14 @@ class TransactionDetail < ActiveRecord::Base
 
   ########################################
   # Relationships
-  belongs_to :transaction
   belongs_to :item
 
   # Validations
-  validates_presence_of :item_id
-  validates_numericality_of :quantity, :greater_than => 0
+  validates_presence_of :item_id, :item, :account_id
+  validates_numericality_of :quantity, greater_than: 0
 
   # Delegations
-  delegate :created_at, :to => :transaction, :prefix => true
+  delegate :created_at, to: :transaction, prefix: true
 
   def total
     price * quantity

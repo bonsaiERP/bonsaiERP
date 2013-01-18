@@ -22,8 +22,9 @@ describe Income do
 
     # Relationships
     it { should belong_to(:contact) }
+    it { should belong_to(:project) }
     it { should have_one(:transaction) }
-    it { should have_many(:transaction_details) }
+    it { should have_many(:income_details) }
 
     it { should validate_presence_of(:date) }
     it { should have_valid(:state).when(*Income::STATES) }
@@ -89,7 +90,7 @@ describe Income do
 
   it "returns the subtotal from  details" do
     i = Income.new_income(valid_attributes.merge(
-      {transaction_details_attributes: [
+      {income_details_attributes: [
         {item_id: 1, price: 10, quantity: 1},
         {item_id: 2, price: 3.5, quantity: 2}
       ]

@@ -139,8 +139,9 @@ class ContactAutocomplete
       self.setSelectedLabel() unless self.type == this.value
     # Add new contact
     callback = @options['callback'] || @.getContactCallback()
-    $('body').live "new_contact_#{self.auto_id}", (e, resp)->
+    $(document).on("new_contact_#{self.auto_id}", 'body', (e, resp)->
       callback(resp)
+    )
   # changes the clases for the selected
   setSelectedLabel: ->
     self = @

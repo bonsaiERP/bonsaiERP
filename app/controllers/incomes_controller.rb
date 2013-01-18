@@ -21,7 +21,7 @@ class IncomesController < ApplicationController
 
   # GET /incomes/new
   def new
-    @income = Income.new(ref_number: Income.get_ref_number, date: Date.today, currency: currency)
+    @income = Income.new_income(ref_number: Income.get_ref_number, date: Date.today, currency: currency)
     @income.transaction_details.build(quantity: 1.0)
   end
 

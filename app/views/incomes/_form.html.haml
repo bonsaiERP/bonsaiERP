@@ -1,49 +1,18 @@
-- present transaction, TransactionPresenter do |presenter|
-  = simple_form_for(transaction, html: {id: 'transaction_form', class: 'enter ui-form'}) do |f|
-    = bonsai_form_error(f)
+= simple_form_for(income, html: {id: 'transaction_form', class: 'enter ui-form'}) do |f|
+  = bonsai_form_error(f)
 
-    %input#transaction-type(type='hidden' value="#{transaction.type}")
+  -########################################
+  -# Render common form elements
+  = render 'transactions/shared_form', f: f
 
-    .row-fluid
-      .span3
-        = f.input :ref_number, label: 'Nº de referencia', input_html: { class: 'span8'}
-      .span3
-        = f.input :date, label: "Fecha", as: :datepicker
-      .span6
-        = f.input :contact, as: :select2, label: 'Contacto', input_html: {class: 'span10', data: {source: '/contacts/search', new_url: new_contact_path, title: 'Nuevo contacto', trigger: 'new-contact', placeholder: 'Escriba para buscar contactos'} }
+  -########################################
+  -# Render items
+  .row-fluid
+    =render "transactions/form_items", f: f, transaction: income
 
-    %hr.light
-    .row-fluid.currency-input
-      .span6
-        = f.input :currency, collection: currency_options, label: 'Moneda', include_blank: false,
-          input_html: {id: 'transaction_currency', data: { value: 'currency.currency' } }
-      .span6
-        = f.input :exchange_rate, label: "Tipo de cambio de <span class='currency'></span> a #{currency_label}".html_safe,
-          input_html: {id: 'transaction_exchange_rate', type: 'decimal', size: 8, data: {value: 'currency.rate'}}
-
-    %hr.light
-
-    .row-fluid
-      .span6
-        = f.association :project,  label: 'Proyecto',
-          input_html: { class: 'contact_id span11', data: {new_url: new_project_path, title: 'Nuevo proyecto', trigger: 'new_project', width: 900 } }
-  
-      .span6
-        = f.input :bill_number, label: 'Nº de Documento'.html_safe, input_html: {size: 20}, hint: 'Nº de factura or recibo'
+  = f.submit 'Salvar', class: 'btn btn-success b btn-large'
 
 
-    .row-fluid
-      .span6
-        = f.input :description, label: 'Descripción', as: 'text', input_html: {rows: 3, class: 'span10'}
-  
-    -# Render items
-    .row-fluid
-      =render "transactions/form_items", f: f, transaction: transaction
-
-    = f.submit 'Salvar', class: 'btn btn-success b btn-large'
-
-
--#= render 'transactions/item'
 :coffeescript
   (($) ->
     $('.contact-form').live('new-contact', (event, resp) ->
