@@ -19,8 +19,12 @@
         = simple_form_for @registration do |f|
           = f.input :name, label: 'Empresa', input_html: {class: 'span12'}
           = f.input :tenant, label: 'Subdominio',
-            hint: "<i class='icon-warning-sign' title='El subdominio no se podra modificar en un futuro' rel='tooltip'></i> No es posible modificar después</span>".html_safe,
-            input_html: {class: 'span12'}
+            hint: "<i class='icon-warning-sign' ></i> No es posible modificar en un futuro</span>".html_safe,
+            input_html: {class: 'span12'} do
+            .input-prepend.input-append
+              %span.add-on bonsaierp.
+              = f.text_field :tenant, size: 28
+              %span.add-on .com
           = f.input :email, :label => "Correo Electrónico", input_html: {class: 'span12'}
           = f.input :password, :label => 'Contraseña', input_html: {class: 'span12'}
           = f.input :password_confirmation, :label => 'Confirmat contraseña', input_html: {class: 'span12'}
@@ -28,18 +32,10 @@
             = f.submit "Registrarse", :class => 'btn btn-success btn-large'
 
 :coffeescript
-  (($) ->
-    setTenant = (val) ->
-      tenant = $('#registration_tenant').val()
-      if tenant == ''
-        val = val.toLowerCase().replace(/[^a-z0-9]/g, '')
-        $('#registration_tenant').val(val)
-        tenant = val
-
-      if tenant != ''
-        $('#registration_tenant').siblings('.help-block').html("Su dominio se vera <strong>" + tenant + ".bonsaierp.com</strong><br/><i class='icon-warning-sign' title='El subdominio no se podra modificar en un futuro' rel='tooltip'></i> No es posible modificar después</span>")
-
-    $('#registration_name').blur(-> setTenant(this.value) )
-    $('#registration_tenant').on('change keyup', -> setTenant('') )
-    setTenant('')
-  )(jQuery)
+  $( ->
+    $(document).on('keyup', '#registration_name', ->
+      # TODO: Improve the copyname
+      name = $(this).val().toLowerCase().replace(/[^a-z]/g, '')
+      $('#registration_tenant').val(name)
+    )
+   )
