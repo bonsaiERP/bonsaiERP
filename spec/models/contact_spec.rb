@@ -42,6 +42,6 @@ describe Contact do
   end
 
   it 'create a valid' do
-    Client.create!(valid_attributes)
+    Contact.create!(valid_attributes)
   end
 end
