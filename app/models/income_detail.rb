@@ -6,4 +6,12 @@ class IncomeDetail < TransactionDetail
 
   # Validations
   validates_presence_of :income
+  validate :valid_income_item
+
+  delegate :for_sale?, to: :item, prefix: true, allow_nil: true
+
+private
+  def valid_income_item
+    self.errors[:item_id] << 'Debe seleccionar un ítem correcto' unless item_for_sale?
+  end
 end

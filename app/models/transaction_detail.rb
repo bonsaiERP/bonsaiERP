@@ -5,7 +5,7 @@ class TransactionDetail < ActiveRecord::Base
 
   ########################################
   # Relationships
-  belongs_to :item
+  belongs_to :item, inverse_of: :transaction_details
 
   # Validations
   validates_presence_of :item_id, :item, :account_id
@@ -22,7 +22,6 @@ class TransactionDetail < ActiveRecord::Base
     price * balance
   end
 
-  # Indicates if in an Income the item price has changed
   def changed_price?
     if transaction.class.to_s == "Income"
       not(price == original_price_currency)

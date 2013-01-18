@@ -117,4 +117,13 @@ FactoryGirl.define do
     account_id 1
     account_to_id 2
   end
+
+  factory :item do
+    name 'The first item'
+    code 'P000-1'
+    active true
+    stockable true
+    for_sale true
+    price 10
+  end
 end
