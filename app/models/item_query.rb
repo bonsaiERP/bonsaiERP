@@ -1,9 +1,13 @@
 class ItemQuery
-  class << self
-    def income
-    end
+  def initialize
+    @relation = Item
+  end
 
-    def expense
-    end
+  def search(s)
+    @relation.where{(name.like "%#{s}%") | (code.like "%#{s}%")}
+  end
+
+  def income_search(s)
+    search(s).income
   end
 end

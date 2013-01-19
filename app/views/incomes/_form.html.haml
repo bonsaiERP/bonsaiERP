@@ -8,7 +8,7 @@
   -########################################
   -# Render items
   .row-fluid
-    =render "transactions/form_items", f: f, transaction: income
+    =render "transactions/form_items", f: f, transaction: income, details: :income_details
 
   = f.submit 'Salvar', class: 'btn btn-success b btn-large'
 
@@ -19,7 +19,7 @@
       $('.contact_id').val(resp.matchcode).data('value', resp.matchcode)
       .prev().val(resp.matchcode)
     )
-    
+
     $('#transaction_currency').select2()
 
     fx.rates = exchangeRates.rates

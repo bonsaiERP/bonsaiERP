@@ -15,10 +15,10 @@ class ItemsController < ApplicationController
 
   # GET /items/search?term=:term
   def search
-    @items = Item.income.search(params[:term]).limit(20)
+    @items = ItemQuery.new.income_search(params[:term]).limit(20)
 
     respond_to do |format|
-      format.json { render json: @items.to_json(methods: :label) }
+      format.json { render json: @items }
     end
   end
 

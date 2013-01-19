@@ -13,7 +13,7 @@
         %span.currency
       %th
 
-  = f.simple_fields_for :transaction_details do |fd|
+  = f.simple_fields_for details do |fd|
     %tr.item{id: fd.object.id, data: {item: fd.object.data_hash.to_json }}
       %td.span6.nw
         = fd.input :item, as: :autocomplete, :label => false, 'data-source' => search_items_path(format: 'json'),
