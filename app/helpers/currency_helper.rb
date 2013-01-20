@@ -1,3 +1,5 @@
+# Methods for currency
+# currency method is defined in application controller, and is the currency the organisation uses
 module CurrencyHelper
   def _currency
     Currency.new
@@ -11,25 +13,21 @@ module CurrencyHelper
     _currency.options_filtered
   end
 
-  def currency_name
-    CURRENCIES[currency].fetch(:name)
+  def currency_name(cur=currency)
+    CURRENCIES[cur].fetch(:name)
   end
 
   def currency_plural
   end
 
-  def currency_symbol
-    CURRENCIES[currency].fetch(:symbol)
+  def currency_symbol(cur=currency)
+    CURRENCIES[cur].fetch(:symbol)
   end
 
-
-  def currency_label(curr = currency)
-    "<span class='label label-inverse' title='#{CURRENCIES[curr].fetch(:name)}' rel='tooltip'>#{curr}</span>".html_safe
+  def currency_label(cur=currency)
+    "<span class='label label-inverse' title='#{CURRENCIES[cur].fetch(:name)}' rel='tooltip'>#{cur}</span>".html_safe
   end
 
-  def currency_code
-    currency
-  end
 
   # defined in ApplicationController
   #def currency

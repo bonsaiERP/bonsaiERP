@@ -10,7 +10,7 @@
         %th Cantidad
         %th Total fila
         %th
-      - income.transaction_details.each do |det|
+      - income.income_details.each do |det|
         %tr
           %td= det.item
           %td= det.description
@@ -26,10 +26,12 @@
     %tr.extra
       %td{:colspan => 2}
         %td.r.b.dark{:colspan => 2} Total
-      %td#total_value.r.b{'data-val' => income.total} #{currency_symbol} #{ntc income.total}
+      %td#total_value.r.b{'data-val' => income.total}
+        = ntc income.total
+        = currency_label income.currency
 
 
-    - if not income.currency_id == currency_id
+    -# if not income.currency_id == currency_id
       %tr.extra
         %td{:colspan => 2}
           %td.r.b.dark{:colspan => 2} Total #{income.currency_name.pluralize}

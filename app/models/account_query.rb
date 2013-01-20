@@ -1,7 +1,9 @@
 class AccountQuery
-  class << self
-    def bank_cash
-      Account.where(type: ['Cash', Bank], active: true)
-    end
+  def initialize
+    @rel = Account
+  end
+
+  def bank_cash
+    Account.where(type: ['Cash', 'Bank'], active: true)
   end
 end

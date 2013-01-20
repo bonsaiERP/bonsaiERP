@@ -25,10 +25,20 @@ describe Income do
     it { should belong_to(:project) }
     it { should have_one(:transaction) }
     it { should have_many(:income_details) }
-
+    # Validations
     it { should validate_presence_of(:date) }
     it { should have_valid(:state).when(*Income::STATES) }
     it { should_not have_valid(:state).when(nil, 'ja', 1) }
+
+    # Intialize
+    it "Initial values" do
+      should be_is_draft
+      subject.total.should == 0.0
+      subject.balance.should == 0.0
+      subject.discount.should == 0.0
+      subject.original_total.should == 0.0
+      subject.balance_inventory.should == 0.0
+    end
   end
 
   context 'callbacks' do

@@ -1,5 +1,13 @@
 # encoding: utf-8
 class PaymentIncome < Payment
+
+  # Validations
+  validates_presence_of :income
+  validate :valid_income_balance
+
+  # Delegations
+  delegate :total, :balance, to: :income, prefix: true, allow_nil: true
+
   # Creates the payment object
   def pay
     return false unless valid?
@@ -20,14 +28,10 @@ class PaymentIncome < Payment
   end
 
   def income
-    transaction
+    Income.find_by_id(account_id)
   end
 
 private
-  def trans_class
-    Income
-  end
-
   def save_income
     update_income
     income.save
@@ -36,14 +40,6 @@ private
   def update_income
     income.balance -= amount
     income.set_state_by_balance!
-  end
-
-  def set_income_state
-    if income.balance <= 0
-      income.state = 'paid'
-    else
-      income.state = 'approved'
-    end
   end
 
   def create_ledger
@@ -61,6 +57,12 @@ private
       @int_ledger.save
     else
       true
+    end
+  end
+
+  def valid_income_balance
+    if amount.to_f > income_balance.to_f
+      self.errors[:amount] << 'Ingreso una cantidad mayor que el balance'
     end
   end
 

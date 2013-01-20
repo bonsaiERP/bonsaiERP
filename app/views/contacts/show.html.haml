@@ -1,4 +1,15 @@
-.page-header
+- content_for :links do
+  %ul.breadcrumps.span6
+    %li #{link_to "Contactos", contacts_path}
+    %li
+      %span #{@contact}
+
+  .links.span6
+    = link_to 'Nuevo', new_contact_path
+    = link_to 'Editar', edit_contact_path(@contact)
+    = link_to 'Borrar', @contact, method: 'delete'
+
+%header
   %h1= @contact
 
 .row-fluid

@@ -48,6 +48,7 @@ class Income < Account
     self.new do |i|
       i.build_transaction
       i.attributes = attrs
+      i.state ||= 'draft'
     end
   end
 

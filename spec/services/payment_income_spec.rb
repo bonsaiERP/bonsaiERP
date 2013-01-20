@@ -4,38 +4,64 @@ require 'spec_helper'
 describe PaymentIncome do
   let(:valid_attributes) {
     {
-      transaction_id: 10, account_id: 2, exchange_rate: 1,
+      account_id: 10, account_to_id: 2, exchange_rate: 1,
       amount: 50, interest: 0, reference: 'El primer pago',
       verification: 'true', date: Date.today
     }
   }
   let(:balance) { 100.0 }
 
-  let(:transaction_id) { valid_attributes[:transaction_id] }
-  let(:account_id) { valid_attributes[:account_id] }
+  let(:account_id) { valid_attributes.fetch(:account_id) }
+  let(:account_to_id) { valid_attributes.fetch(:account_to_id) }
 
-  let(:account_id) { valid_attributes[:account_id] }
   let(:contact) { build :contact, id: 11 }
-  let(:income) { build :income, id: transaction_id, balance: balance, currency: 'BOB', contact: contact }
-  let(:account) { build :account, id: account_id, amount: 100 }
+  let(:income) do
+    Income.new_income(
+      total: balance, balance: balance, currency: 'BOB', contact_id: contact.id
+    ) {|i| 
+      i.id = account_id
+      i.contact = contact
+    }
+  end
+  let(:account_to) { build :account, id: account_to_id, amount: 100 }
 
-  it "valid income" do
-    income.should be_valid
+  context 'Validations' do
+    it "validates presence of income" do
+      pay_in = PaymentIncome.new(valid_attributes)
+      pay_in.should_not be_valid
+      pay_in.errors_on(:income).should_not be_empty
+
+      Income.stub(find_by_id: income)
+      Account.stub(find_by_id: account_to)
+      pay_in.should be_valid
+    end
+
+    it "does not allow amount greater than balance" do
+      pay_in = PaymentIncome.new(valid_attributes.merge(amount: 101))
+
+      Income.stub(find_by_id: income)
+      Account.stub(find_by_id: account_to)
+
+      pay_in.should_not be_valid
+      pay_in.errors_on(:amount).should_not be_empty
+
+      pay_in.amount = 100
+      pay_in.should be_valid
+    end
   end
 
   context "create payment" do
     before(:each) do
       income.stub(save: true)
-      #Income.should_receive(:find).at_least(:once).with(transaction_id).and_return(income)
-      Income.stub(:find).with(transaction_id).and_return(income)
-      Account.stub(:find).with(account_id).and_return(account)
+      Income.stub(:find_by_id).with(account_id).and_return(income)
+      Account.stub(:find_by_id).with(account_to_id).and_return(account_to)
       AccountLedger.any_instance.stub(save: true)
     end
 
     it "does not trigger" do
       p = PaymentIncome.new(valid_attributes.merge(reference: ''))
 
-      p.pay.should  be_false
+      p.pay.should be_false
       p.income.errors.messages.should be_blank
       p.ledger.should be_nil
     end

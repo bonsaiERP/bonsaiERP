@@ -8,14 +8,14 @@ describe Payment do
 
   let(:valid_attributes) {
     {
-      transaction_id: 10, account_id: 2, exchange_rate: 1,
+      account_id: 10, account_to_id: 2, exchange_rate: 1,
       amount: 50, interest: 0, reference: 'El primer pago',
       verification: false, date: Date.today
     }
   }
 
-  let(:transaction_id) { valid_attributes[:transaction_id] }
-  let(:account_id) { valid_attributes[:account_id] }
+  let(:account_id) { valid_attributes.fetch(:account_id) }
+  let(:account_to_id) { valid_attributes.fetch(:account_to_id) }
 
   it { should have_valid(:date).when('2012-12-12') }
   it { should_not have_valid(:date).when('anything') }
@@ -40,7 +40,7 @@ describe Payment do
     it "checks valid presence" do
       subject.should_not be_valid
 
-      [:transaction, :transaction_id, :account, :account_id].each do |met|
+      [:account_id, :account_to, :account_to_id].each do |met|
         subject.errors[met].should_not be_blank
       end
     end
@@ -57,24 +57,18 @@ describe Payment do
   end
 
   context "Valid and invalid" do
-    let(:transaction) { build :transaction, id: transaction_id, balance: 100 }
-    let(:account) { build :account, id: account_id }
+    let(:account_to) { build :account, id: account_to_id, currency: 'BOB' }
 
     before(:each) do
-      Transaction.stub!(:find).with(transaction_id).and_return(transaction)
-      Account.stub!(:find).with(account_id).and_return(account)
+      Account.stub!(:find_by_id).with(account_to_id).and_return(account_to)
     end
 
     it "Valid when" do
       p = Payment.new(valid_attributes)
+      p.valid?
       p.should be_valid
     end
 
-    it "is not valid if amount is greater than transaction_balance" do
-      p = Payment.new(valid_attributes.merge(amount: 200) )
-      p.should_not be_valid
-      p.errors_on(:amount).should eq([I18n.t('errors.messages.payment.greater_amount_than_balance')])
-    end
   end
 
 end

@@ -54,7 +54,7 @@ class ContactsController < ApplicationController
   # PUT /contacts/1
   # PUT /contacts/1.xml
   def update
-    if @contact.update_attributes(params[:contact])
+    if @contact.update_attributes(contact_params)
       redirect_ajax(@contact)
     else
       render :action => 'edit'
@@ -74,6 +74,6 @@ private
   end
 
   def contact_params
-    params.require(:contact).permit(:matchcode, :first_name, :last_name)
+    params.require(:contact).permit(:matchcode, :first_name, :last_name, :email, :phone, :mobile, :tax_number, :address)
   end
 end

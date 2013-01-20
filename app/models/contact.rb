@@ -26,6 +26,9 @@ class Contact < ActiveRecord::Base
 
   default_scope where(staff: false)
 
+  # Serialization
+  serialize :money_status
+
   ########################################
   # Methods
   def self.search(match)

@@ -5,22 +5,22 @@
       %span #{@income}
 
   .links.span6
-    = link_to 'Nueva', new_income_path
+    = link_to 'Nuevo', new_income_path
     = link_to 'Editar', edit_income_path(@income)
     = link_to 'Borrar', @income, method: 'delete'
 
 .row
-  .span2.well
+  .span2.well.well-small
     %h3 Total
     %h4
-      = @income.currency_code
       = ntc @income.total
+      = @income.currency
 
-  .span2.well
+  .span2.well.well-small
     %h3 Saldo
     %h4
-      = @income.currency_code
       = ntc @income.balance
+      = @income.currency
 
 #tabs
   %ul
@@ -35,7 +35,7 @@
     = render "incomes/items", income: @income
   #payments
     %h2 Cobros
-    
+
     = render "payments/form", payment: PaymentIncome.new(date: Date.today, transaction_id: @income.id)
 
     = render "payments/payments", transaction: @income
