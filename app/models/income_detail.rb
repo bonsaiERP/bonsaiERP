@@ -5,7 +5,6 @@ class IncomeDetail < TransactionDetail
   belongs_to :income, foreign_key: :account_id, conditions: {type: 'Income'}, inverse_of: :income_details
 
   # Validations
-  validates_presence_of :income
   validate :valid_income_item
 
   delegate :for_sale?, to: :item, prefix: true, allow_nil: true

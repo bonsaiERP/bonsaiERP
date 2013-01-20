@@ -11,11 +11,15 @@ class TransactionParams
   end
 
   def income
-    default
+    default + [:income_details_attributes]
+  end
+
+  def expense
+    default + [:expense_details_attributes]
   end
 
   def default
-    [:ref_number, :date, :contact_id, :currency_id, :exchange_rate, :project_id, :bill_number, :description, 
+    [:ref_number, :date, :contact_id, :currency, :exchange_rate, :project_id, :bill_number, :description, 
       :total, transaction_details_attributes: [
         :id, :item_id, :price, :quantity, :_destroy
       ]

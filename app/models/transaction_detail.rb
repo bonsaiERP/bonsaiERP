@@ -8,7 +8,7 @@ class TransactionDetail < ActiveRecord::Base
   belongs_to :item, inverse_of: :transaction_details
 
   # Validations
-  validates_presence_of :item_id, :item, :account_id
+  validates_presence_of :item_id, :item
   validates_numericality_of :quantity, greater_than: 0
 
   # Delegations
