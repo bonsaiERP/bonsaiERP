@@ -21,7 +21,7 @@ describe Contact do
     it {should validate_uniqueness_of(:matchcode) }
     it {should validate_presence_of(:matchcode) }
 
-    it { should have_valid(:email).when('test@mail.com', 'my@example.com.bo') }
+    it { should have_valid(:email).when('test@mail.com', 'my@example.com.bo', '') }
     it { should_not have_valid(:email).when('test@mail.com.1', 'my@example.com.bo.', 'hi') }
 
     it { should have_valid(:phone).when('121212', '2323-232-98', '43 2323 32') }

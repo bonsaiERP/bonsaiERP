@@ -12,7 +12,7 @@ describe Income do
   let(:valid_attributes) {
     {active: nil, bill_number: "56498797", contact: contact,
       exchange_rate: 1, currency: 'BOB', date: '2011-01-24',
-      description: "Esto es una prueba", discount: 3,
+      description: "Esto es una prueba",
       ref_number: "987654", state: 'draft'
     }
   }
@@ -25,6 +25,7 @@ describe Income do
     it { should belong_to(:project) }
     it { should have_one(:transaction) }
     it { should have_many(:income_details) }
+    it { should have_many(:payments) }
     # Validations
     it { should validate_presence_of(:date) }
     it { should have_valid(:state).when(*Income::STATES) }
@@ -33,9 +34,11 @@ describe Income do
     # Intialize
     it "Initial values" do
       should be_is_draft
+      should_not be_discounted
+      should_not be_delivered
+      should_not be_devolution
       subject.total.should == 0.0
       subject.balance.should == 0.0
-      subject.discount.should == 0.0
       subject.original_total.should == 0.0
       subject.balance_inventory.should == 0.0
     end
@@ -114,11 +117,11 @@ describe Income do
     t = Time.now
     d = Date.today
     attrs = {
-      balance: 10, bill_number: '123', discount: 2.0,
+      balance: 10, bill_number: '123',
       gross_total: 10, original_total: 10, balance_inventory: 10,
       payment_date: d, creator_id: 1, approver_id: 2,
       nuller_id: 3, null_reason: 'Null', approver_datetime: t,
-      delivered: true, discount: 1.0, devolution: true
+      delivered: true, devolution: true
     }
 
     i = Income.new_income(attrs)

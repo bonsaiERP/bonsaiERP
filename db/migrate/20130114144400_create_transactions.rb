@@ -9,7 +9,6 @@ class CreateTransactions < ActiveRecord::Migration
       # Use Account#name for ref_number create alias
       t.string  :bill_number # factura
 
-      t.decimal :discount, :precision => 5,  :scale => 2, default: 0.0
       t.decimal :gross_total, :precision => 14, :scale => 2, default: 0.0
       t.decimal :original_total, :precision => 14, :scale => 2, default: 0.0
       t.decimal :balance_inventory, :precision => 14, :scale => 2, default: 0.0

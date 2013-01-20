@@ -16,6 +16,8 @@ class Income < Account
   has_many :income_details, foreign_key: :account_id, dependent: :destroy
   accepts_nested_attributes_for :income_details, allow_destroy: true
 
+  has_many :payments, class_name: 'AccountLedger', foreign_key: :account_id, conditions: {operation: 'payin'}
+
   STATES = %w(draft approved paid)
   ########################################
   # Validations
@@ -29,11 +31,13 @@ class Income < Account
   ########################################
   # Delegations
   TRANSACTION_METHODS = [
-    :balance, :bill_number, :discount, :gross_total, :original_total,
-    :balance_inventory, :payment_date, :creator_id, :approver_id, :nuller_id,
-    :null_reason, :approver_datetime, :delivered, :discount, :devolution
+    :balance, :bill_number, :gross_total, :original_total, :balance_inventory, 
+    :payment_date, :creator_id, :approver_id, :nuller_id,
+    :null_reason, :approver_datetime, 
+    :delivered, :discounted, :devolution
   ].freeze
   delegate *getters_setters_array(*TRANSACTION_METHODS), to: :transaction
+  delegate :discounted?, :delivered?, :devolution?, to: :transaction
 
   # Define boolean methods for states
   STATES.each do |state|
@@ -85,6 +89,14 @@ class Income < Account
 
   def subtotal
     self.income_details.inject(0) {|sum, v| sum += v.total }
+  end
+
+  def discount
+    gross_total - total
+  end
+
+  def discount_percent
+    discount/gross_total
   end
 
 private

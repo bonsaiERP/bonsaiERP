@@ -1,1 +1,5 @@
-= simple_form_for income.income_payment do |f|
+= simple_form_for income.income_payment, url: income_payment_path(income.id) do |f|
+  = bonsai_form_error(f)
+  = f.hidden_field :account_id
+  = render 'payments/default_form', f: f
+

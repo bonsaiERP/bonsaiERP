@@ -4,6 +4,10 @@ class AccountQuery
   end
 
   def bank_cash
-    Account.where(type: ['Cash', 'Bank'], active: true)
+    @rel.where(type: ['Cash', 'Bank'], active: true)
+  end
+
+  def payment(model)
+    bank_cash
   end
 end

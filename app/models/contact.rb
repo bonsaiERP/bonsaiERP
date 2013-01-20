@@ -15,7 +15,7 @@ class Contact < ActiveRecord::Base
   ########################################
   # Validations
   validates :matchcode, presence: true, uniqueness: { scope: :type }
-  validates_email_format_of :email, allow_nil: true
+  validates_email_format_of :email, allow_blank: true
   validates_format_of       :phone,  with: /\A\d+([-\s]\d+)*\z/,  allow_blank: true
   validates_format_of       :mobile, with: /\A\d+([-\s]\d+)*\z/,  allow_blank: true
 

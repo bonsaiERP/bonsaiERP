@@ -32,7 +32,7 @@ class IncomesController < ApplicationController
 
   # POST /incomes
   def create
-    di = DefaultIncome.new(Income.new(income_params))
+    di = DefaultIncome.new(Income.new_income(income_params))
 
     if di.create
       redirect_to di.income, notice: 'Se ha creado una proforma de venta.'

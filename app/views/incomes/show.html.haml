@@ -9,6 +9,12 @@
     = link_to 'Editar', edit_income_path(@income)
     = link_to 'Borrar', @income, method: 'delete'
 
+%header
+  %h1.n
+    %span.muted Ingreso
+    = @income
+    %small= link_to @income.contact, @income.contact
+
 .row
   .span2.well.well-small
     %h3 Total
@@ -36,7 +42,33 @@
   #payments
     %h2 Cobros
 
-    = render "income/payment_form", income: @income
+    = render 'incomes/payment_form', income: @income if @income.balance?
+
+    .row-fluid
+      .span4.offset8
+        %span.label.label-inverse Creado por
+        %span.label.label-success Aprobado por
+        %span.label Anulado por
+
+    %ul.unstyled.listing
+      - @income.payments.each do |payment|
+        %li.row-fluid
+          .span4
+            %h4
+              = payment.conciliated.html_safe
+
+              = link_to payment, payment
+              %small=l payment.date.to_date
+
+          .span4
+            %span.muted Monto
+            = ntc payment.amount
+            = currency_label payment.currency
+
+          .span3
+            = payment.creator_label.html_safe
+            = payment.approver_label.html_safe
+            = payment.nuller_label.html_safe
 
 :coffeescript
   $( ->
