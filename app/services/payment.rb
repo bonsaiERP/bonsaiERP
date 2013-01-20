@@ -38,9 +38,9 @@ private
 
   def build_ledger(extra = {})
       AccountLedger.new({
-        transaction_id: transaction_id, operation: '', exchange_rate: exchange_rate,
-        amount: 0, conciliation: verification, account_id: account_id,
-        contact_id: transaction.contact_id, reference: reference
+        account_id: account_id, operation: '', exchange_rate: exchange_rate,
+        amount: 0, conciliation: verification, account_to_id: account_to_id,
+        reference: reference
       }.merge(extra))
   end
 

@@ -2,9 +2,6 @@
 require 'spec_helper'
 
 describe Payment do
-  it { should_not have_valid(:amount).when(-1) }
-  it { should have_valid(:interest).when(1) }
-  it { should_not have_valid(:interest).when(-1) }
 
   let(:valid_attributes) {
     {
@@ -17,11 +14,38 @@ describe Payment do
   let(:account_id) { valid_attributes.fetch(:account_id) }
   let(:account_to_id) { valid_attributes.fetch(:account_to_id) }
 
-  it { should have_valid(:date).when('2012-12-12') }
-  it { should_not have_valid(:date).when('anything') }
-  it { should_not have_valid(:date).when('') }
-  it { should_not have_valid(:date).when('2012-13-13') }
+  context 'Validations' do
+    it { should validate_presence_of(:account_id) }
+    it { should validate_presence_of(:account_to_id) }
+    it { should validate_presence_of(:reference) }
+    it { should validate_presence_of(:date) }
 
+    it { should have_valid(:date).when('2012-12-12') }
+    it { should_not have_valid(:date).when('anything') }
+    it { should_not have_valid(:date).when('') }
+    it { should_not have_valid(:date).when('2012-13-13') }
+
+    it { should_not have_valid(:amount).when(-1) }
+    it { should have_valid(:interest).when(1) }
+    it { should_not have_valid(:interest).when(-1) }
+
+    context "account_to" do
+      let(:account_to) { build :account, id: account_to_id, currency: 'BOB' }
+
+      it "Not valid" do
+        p = Payment.new(valid_attributes)
+        p.should_not be_valid
+        p.errors_on(:account_to).should_not be_empty
+      end
+
+      it "Valid" do
+        Account.stub!(:find_by_id).with(account_to_id).and_return(account_to)
+        p = Payment.new(valid_attributes)
+        p.should be_valid
+      end
+    end
+
+  end
 
   subject { Payment.new(valid_attributes) }
 
@@ -54,21 +78,6 @@ describe Payment do
 
       subject.errors[:base].should eq([I18n.t('errors.messages.payment.invalid_amount_or_interest')])
     end
-  end
-
-  context "Valid and invalid" do
-    let(:account_to) { build :account, id: account_to_id, currency: 'BOB' }
-
-    before(:each) do
-      Account.stub!(:find_by_id).with(account_to_id).and_return(account_to)
-    end
-
-    it "Valid when" do
-      p = Payment.new(valid_attributes)
-      p.valid?
-      p.should be_valid
-    end
-
   end
 
 end

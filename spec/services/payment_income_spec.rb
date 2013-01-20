@@ -58,14 +58,6 @@ describe PaymentIncome do
       AccountLedger.any_instance.stub(save: true)
     end
 
-    it "does not trigger" do
-      p = PaymentIncome.new(valid_attributes.merge(reference: ''))
-
-      p.pay.should be_false
-      p.income.errors.messages.should be_blank
-      p.ledger.should be_nil
-    end
-
     it "Payments" do
       income.should be_is_draft
       p = PaymentIncome.new(valid_attributes)
@@ -81,14 +73,13 @@ describe PaymentIncome do
       p.ledger.amount.should == 50.0
       p.ledger.exchange_rate == 1
       p.ledger.should be_is_payin
-      p.ledger.transaction_id.should eq(income.id)
+      p.ledger.account_id.should eq(income.id)
       p.ledger.should be_conciliation
       p.ledger.reference.should eq(valid_attributes[:reference])
 
       p.int_ledger.should be_nil
 
       # New payment to complete
-      Income.stub(:find).with(transaction_id).and_return(p.income)
       p = PaymentIncome.new(valid_attributes.merge(amount: p.income.balance))
       p.pay.should be_true
 
@@ -106,10 +97,13 @@ describe PaymentIncome do
       p.ledger.should be_is_a(AccountLedger)
       p.ledger.amount.should == valid_attributes[:amount]
       p.ledger.should be_is_payin
+      p.ledger.account_id.should eq(income.id)
+
       # int_ledger
       p.int_ledger.should be_is_a(AccountLedger)
       p.int_ledger.amount.should == 10.0
       p.int_ledger.should be_is_intin
+      p.int_ledger.account_id.should eq(income.id)
     end
 
     it "only creates int_ledger" do
@@ -136,8 +130,8 @@ describe PaymentIncome do
 
     before(:each) do
       income.stub(save: false, errors: {balance: 'No balance'})
-      Income.stub(:find).with(transaction_id).and_return(income)
-      Account.stub(:find).with(account_id).and_return(account)
+      Income.stub(:find_by_id).with(account_id).and_return(income)
+      Account.stub(:find_by_id).with(account_to_id).and_return(account_to)
       AccountLedger.any_instance.stub(save: false, errors: {amount: 'Not real'})
     end
 
