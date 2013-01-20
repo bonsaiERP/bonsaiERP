@@ -42,7 +42,12 @@ Bonsaierp::Application.routes.draw do
 
   resources :cashes
 
-  resources :payments, only: [:new, :create]
+  resources :payments, only: [] do
+    member do
+      post :income
+      post :expense
+    end
+  end
 
   resources :projects
 

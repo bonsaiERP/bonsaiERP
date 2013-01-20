@@ -1,5 +1,5 @@
 # encoding: utf-8
-class PaymentIncome < Payment
+class IncomePayment < Payment
 
   # Validations
   validates_presence_of :income

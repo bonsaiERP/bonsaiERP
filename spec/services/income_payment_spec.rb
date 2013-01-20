@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe PaymentIncome do
+describe IncomePayment do
   let(:valid_attributes) {
     {
       account_id: 10, account_to_id: 2, exchange_rate: 1,
@@ -27,7 +27,7 @@ describe PaymentIncome do
 
   context 'Validations' do
     it "validates presence of income" do
-      pay_in = PaymentIncome.new(valid_attributes)
+      pay_in = IncomePayment.new(valid_attributes)
       pay_in.should_not be_valid
       pay_in.errors_on(:income).should_not be_empty
 
@@ -37,7 +37,7 @@ describe PaymentIncome do
     end
 
     it "does not allow amount greater than balance" do
-      pay_in = PaymentIncome.new(valid_attributes.merge(amount: 101))
+      pay_in = IncomePayment.new(valid_attributes.merge(amount: 101))
 
       Income.stub(find_by_id: income)
       Account.stub(find_by_id: account_to)
@@ -60,7 +60,7 @@ describe PaymentIncome do
 
     it "Payments" do
       income.should be_is_draft
-      p = PaymentIncome.new(valid_attributes)
+      p = IncomePayment.new(valid_attributes)
 
       p.pay.should  be_true
 
@@ -80,7 +80,7 @@ describe PaymentIncome do
       p.int_ledger.should be_nil
 
       # New payment to complete
-      p = PaymentIncome.new(valid_attributes.merge(amount: p.income.balance))
+      p = IncomePayment.new(valid_attributes.merge(amount: p.income.balance))
       p.pay.should be_true
 
       p.income.balance.should == 0
@@ -89,7 +89,7 @@ describe PaymentIncome do
 
     it "create ledger and int_ledger" do
       income.should be_is_draft
-      p = PaymentIncome.new(valid_attributes.merge(interest: 10))
+      p = IncomePayment.new(valid_attributes.merge(interest: 10))
 
       p.pay.should be_true
 
@@ -108,7 +108,7 @@ describe PaymentIncome do
 
     it "only creates int_ledger" do
       income.should be_is_draft
-      p = PaymentIncome.new(valid_attributes.merge(interest: 10, amount: 0))
+      p = IncomePayment.new(valid_attributes.merge(interest: 10, amount: 0))
 
       p.pay.should be_true
 
@@ -122,9 +122,9 @@ describe PaymentIncome do
   end
 
   context "Errors" do
-    it "does not save if invalid PaymentIncome" do
+    it "does not save if invalid IncomePayment" do
       Income.any_instance.should_not_receive(:save)
-      p = PaymentIncome.new(valid_attributes.merge(reference: ''))
+      p = IncomePayment.new(valid_attributes.merge(reference: ''))
       p.pay.should be_false
     end
 
@@ -136,12 +136,12 @@ describe PaymentIncome do
     end
 
     it "sets errors from other clases" do
-      p = PaymentIncome.new(valid_attributes)
+      p = IncomePayment.new(valid_attributes)
 
       p.pay.should be_false
-      # There is no method PaymentIncome#balance
+      # There is no method IncomePayment#balance
       p.errors[:amount].should eq(['Not real'])
-      # There is a method PaymentIncome#amount
+      # There is a method IncomePayment#amount
       p.errors[:base].should eq(['No balance'])
     end
   end

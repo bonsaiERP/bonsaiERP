@@ -30,6 +30,7 @@ gem 'valium'
 gem 'bcrypt-ruby', require: 'bcrypt'
 gem 'roadie' # Styles for email
 gem 'active_model_serializers' # Encode strings with JSON
+gem 'resubject' # Cool presenter
 
 gem 'validates_email_format_of', '~> 1.5.3'
 gem 'queue_classic' # Background processing for PostgreSQL

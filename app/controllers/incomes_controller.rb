@@ -11,11 +11,11 @@ class IncomesController < ApplicationController
   # GET /incomes/1
   # GET /incomes/1.xml
   def show
-    @income = Income.find(params[:id])
+    @income = present Income.find(params[:id])
 
     respond_to do |format|
       format.html
-      format.json  { render :json => @income }
+      format.json  { render json: @income }
     end
   end
 

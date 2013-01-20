@@ -36,9 +36,7 @@
   #payments
     %h2 Cobros
 
-    = render "payments/form", payment: PaymentIncome.new(date: Date.today, transaction_id: @income.id)
-
-    = render "payments/payments", transaction: @income
+    = render "income/payment_form", income: @income
 
 :coffeescript
   $( ->

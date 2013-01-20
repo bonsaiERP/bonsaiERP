@@ -192,6 +192,8 @@ GEM
     rake (10.0.3)
     rdoc (3.12)
       json (~> 1.4)
+    resubject (0.2.0)
+      activesupport (>= 3.2)
     roadie (2.3.4)
       actionmailer (> 3.0.0, < 3.3.0)
       css_parser
@@ -296,6 +298,7 @@ DEPENDENCIES
   queue_classic
   rails (= 3.2.11)
   rails-footnotes
+  resubject
   roadie
   rspec-rails
   sass-rails (~> 3.2.5)
