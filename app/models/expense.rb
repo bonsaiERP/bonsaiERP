@@ -28,11 +28,12 @@ class Expense < Account
   ########################################
   # Delegations
   TRANSACTION_METHODS = [
-    :balance, :bill_number, :discount, :gross_total, :original_total,
+    :balance, :bill_number, :gross_total, :original_total,
     :balance_inventory, :payment_date, :creator_id, :approver_id, :nuller_id,
-    :null_reason, :approver_datetime, :delivered, :discount, :devolution
+    :null_reason, :approver_datetime, :delivered, :devolution
   ].freeze
   delegate *getters_setters_array(*TRANSACTION_METHODS), to: :transaction
+  delegate :discounted?, :delivered?, :devolution?, to: :transaction
 
   # Define boolean methods for states
   STATES.each do |state|
@@ -47,6 +48,7 @@ class Expense < Account
     self.new do |e|
       e.build_transaction
       e.attributes = attrs
+      e.state ||= 'draft'
     end
   end
 

@@ -12,7 +12,7 @@ describe Expense do
   let(:valid_attributes) {
     {active: nil, bill_number: "56498797", contact: contact,
       exchange_rate: 1, currency: 'BOB', date: '2011-01-24',
-      description: "Esto es una prueba", discount: 3,
+      description: "Esto es una prueba",  
       ref_number: "987654", state: 'draft'
     }
   }
@@ -29,6 +29,10 @@ describe Expense do
     it { should validate_presence_of(:date) }
     it { should have_valid(:state).when(*Expense::STATES) }
     it { should_not have_valid(:state).when(nil, 'ja', 1) }
+
+    it "initializes" do
+      subject.state.should eq('draft')
+    end
   end
 
   context 'callbacks' do
@@ -71,25 +75,25 @@ describe Expense do
   end
 
   it "sets its state based on the balance" do
-    i = Expense.new_expense(total: 10, balance: 10)
-    i.set_state_by_balance!
+    e = Expense.new_expense(total: 10, balance: 10)
+    e.set_state_by_balance!
 
-    i.state.should eq('draft')
+    e.state.should eq('draft')
 
 
-    i = Expense.new_expense(total: 10, balance: 5)
-    i.set_state_by_balance!
+    e = Expense.new_expense(total: 10, balance: 5)
+    e.set_state_by_balance!
 
-    i.state.should eq('approved')
+    e.state.should eq('approved')
 
-    i = Expense.new_expense(total: 10, balance: 0)
-    i.set_state_by_balance!
+    e = Expense.new_expense(total: 10, balance: 0)
+    e.set_state_by_balance!
 
-    i.state.should eq('paid')
+    e.state.should eq('paid')
   end
 
   it "returns the subtotal from  details" do
-    i = Expense.new_expense(valid_attributes.merge(
+    e = Expense.new_expense(valid_attributes.merge(
       {expense_details_attributes: [
         {item_id: 1, price: 10, quantity: 1},
         {item_id: 2, price: 3.5, quantity: 2}
@@ -97,18 +101,18 @@ describe Expense do
     }
     ))
 
-    i.subtotal.should == 17.0
+    e.subtotal.should == 17.0
   end
 
   it "checks the methods approver, nuller, creator" do
     t = Time.now
     d = Date.today
     attrs = {
-      balance: 10, bill_number: '123', discount: 2.0,
+      balance: 10, bill_number: '123',
       gross_total: 10, original_total: 10, balance_inventory: 10,
       payment_date: d, creator_id: 1, approver_id: 2,
       nuller_id: 3, null_reason: 'Null', approver_datetime: t,
-      delivered: true, discount: 1.0, devolution: true
+      delivered: true, devolution: true
     }
 
     e = Expense.new_expense(attrs)
