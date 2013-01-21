@@ -55,7 +55,7 @@ describe IncomePayment do
       income.stub(save: true)
       Income.stub(:find_by_id).with(account_id).and_return(income)
       Account.stub(:find_by_id).with(account_to_id).and_return(account_to)
-      AccountLedger.any_instance.stub(save: true)
+      AccountLedger.any_instance.stub(save_ledger: true)
     end
 
     it "Payments" do
@@ -63,6 +63,7 @@ describe IncomePayment do
       p = IncomePayment.new(valid_attributes)
 
       p.pay.should  be_true
+      p.verification.should be_true
 
       # Income
       p.income.should be_is_a(Income)
@@ -74,7 +75,7 @@ describe IncomePayment do
       p.ledger.exchange_rate == 1
       p.ledger.should be_is_payin
       p.ledger.account_id.should eq(income.id)
-      p.ledger.should be_conciliation
+      p.ledger.should_not be_conciliation
       p.ledger.reference.should eq(valid_attributes.fetch(:reference))
       p.ledger.date.should eq(valid_attributes.fetch(:date).to_time)
 
@@ -92,9 +93,12 @@ describe IncomePayment do
       income.should be_is_draft
       p = IncomePayment.new(valid_attributes.merge(interest: 10))
 
+      p.verification.should be_true
+
       p.pay.should be_true
 
       # ledger
+      p.ledger.should_not be_conciliation
       p.ledger.should be_is_a(AccountLedger)
       p.ledger.amount.should == valid_attributes[:amount]
       p.ledger.should be_is_payin
@@ -107,6 +111,16 @@ describe IncomePayment do
       p.int_ledger.account_id.should eq(income.id)
       p.int_ledger.reference.should eq(valid_attributes.fetch(:reference))
       p.int_ledger.date.should eq(valid_attributes.fetch(:date).to_time)
+    end
+
+    it "creates ledger  and conciliates ledger" do
+      income.should be_is_draft
+      p = IncomePayment.new(valid_attributes.merge(verification: false))
+
+      p.pay.should be_true
+      # ledger
+      p.ledger.should be_is_a(AccountLedger)
+      p.ledger.should be_conciliation
     end
 
     it "only creates int_ledger" do
@@ -135,7 +149,7 @@ describe IncomePayment do
       income.stub(save: false, errors: {balance: 'No balance'})
       Income.stub(:find_by_id).with(account_id).and_return(income)
       Account.stub(:find_by_id).with(account_to_id).and_return(account_to)
-      AccountLedger.any_instance.stub(save: false, errors: {amount: 'Not real'})
+      AccountLedger.any_instance.stub(save_ledger: false, errors: {amount: 'Not real'})
     end
 
     it "sets errors from other clases" do

@@ -12,6 +12,7 @@ class ConciliateAccount
   end
 
   def conciliate
+    account_ledger.conciliation = true
     case account.class.to_s
     when 'Income', 'Expense'
       update_account_to

@@ -3,36 +3,9 @@
   %a.btn.btn-primary.dropdown-toggle{'data-toggle' => 'dropdown'}
     %span.caret
 
-  -#%ul.dropdown-menu
-    %li
-      = link_to new_account_ledger_path(:account_id => account.id, :operation => "in") do
-        %i.icon-plus-sign
-        Nuevo ingreso
-
-    %li
-      = link_to new_account_ledger_path(:account_id => account.id, :operation => "out") do
-        %i.icon-minus-sign
-        Nuevo egreso
-
-    %li
-      = link_to new_transference_account_ledgers_path(:account_id => account.id, :operation => "trans") do
-        %i.icon-arrow-right
-        Nueva transferencia
-
-
 .clear
 <br/>
--#%ul.tabs
-  %li= link_option "Todas", 'all'
-  %li= link_option "Esperando verificación #{size_or_blank(ledgers.pendent.count)}", 'uncon'
-  %li= link_option "Anuladas", 'nulled'
-  %li= link_option "Verificadas", 'con'
 
-
-.clear
-
-
-= link_to "Buscar", "#search", :class => 'search'
 
 .row-fluid
   .span4.offset8
@@ -43,32 +16,29 @@
     %span.label
       Anulado por
 
-
 -#= paginate account_ledgers
 %ul.unstyled.listing
   -# TODO: Move the query to another object, improve finding the contact
   - AccountLedger.includes({account: :contact}, :account_to, :approver, :creator).all.each do |al|
+    - al = present al
     %li.row-fluid
       .span5
-        .row
-          %h4
-            = link_to al, al
-            = al_operation al.operation
-            = al.account.contact
-        .row
+        %h4
+          = al.conciliated.html_safe
+          = link_to al, al
+          = al_operation al.operation
+          = al.account.contact
+        .clear-both
+        %h5
+          %span.muted De:
           = link_to al.account, al.account
+          %span.muted A:
           = link_to al.account_to, al.account_to
-      .span4
+      .span4.r
         %span.muted Monto
         = ntc al.amount
         = currency_label al.currency
       .span3
-        = render_if al.creator do
-          %span.label.label-inverse(title="#{al.creator}" rel='tooltip')
-            U-#{al.creator_id}
-        = render_if al.approver do
-          %span.label.label-success(title="#{al.approver}" rel='tooltip')
-            U-#{ al.approver_id }
-        = render_if al.nuller do
-          %span.label(title="#{al.nuller}" rel='tooltip')
-            U-#{al.nuller_id}
+        = al.creator_label.html_safe
+        = al.approver_label.html_safe
+        = al.nuller_label.html_safe

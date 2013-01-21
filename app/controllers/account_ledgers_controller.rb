@@ -10,8 +10,7 @@ class AccountLedgersController < ApplicationController
 
   # GET /account_ledgers/:id
   def show
-    @account_ledger = AccountLedger.find(params[:id])
-    @account_ledger.ac_id = params[:ac_id].to_i
+    @account_ledger = present AccountLedger.find(params[:id])
   end
 
   def new
@@ -19,25 +18,19 @@ class AccountLedgersController < ApplicationController
     
     redirect_to "/dashboard" unless @account_ledger
   end
-
-  # GET /account_ledgers/:id/new_transference
-  def new_transference
-    @account = Account.find_by_id(params[:account_id])
-    return redirect_to "/422" unless @account
-    @account_ledger = AccountLedger.new_money(:operation => "trans", :account_id => @account.id, :currency_id => @account.currency_id)
-    redirect_to "/422" unless @account_ledger
-  end
   #
   # PUT /account_ledgers/:id/conciliate 
   def conciliate
-    @account_ledger = AccountLedger.find(params[:id])
+    ledger = AccountLedger.find(params[:id])
+    con = ConciliateAccount.new(ledger)
 
-    if @account_ledger.conciliate_account
+    if con.conciliate
       flash[:notice] = "Se ha verificado exitosamente la transacción."
     else
-      flash[:error] = @account_ledger.errors[:base].join(", ") + "."
+      flash[:error] = "Exisitio un error al conciliar la transacción."
     end
-    redirect_to account_ledger_path(@account_ledger, :ac_id => @account_ledger.account_id)
+
+    redirect_to account_ledger_path(ledger)
   end
 
   # POST /account_ledgers

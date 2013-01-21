@@ -22,9 +22,7 @@
     %label Dirección
     = nl2br(@cash.address)
 
-.page-header
-  %h3 Transacciones
+%h3 Transacciones
 
 = render "account_ledgers/money", account: @cash
 
-.clear

@@ -27,26 +27,26 @@ describe ExpensePayment do
 
   context 'Validations' do
     it "validates presence of expense" do
-      pay_in = ExpensePayment.new(valid_attributes)
-      pay_in.should_not be_valid
-      pay_in.errors_on(:expense).should_not be_empty
+      pay_out = ExpensePayment.new(valid_attributes)
+      pay_out.should_not be_valid
+      pay_out.errors_on(:expense).should_not be_empty
 
       Expense.stub(find_by_id: expense)
       Account.stub(find_by_id: account_to)
-      pay_in.should be_valid
+      pay_out.should be_valid
     end
 
     it "does not allow amount greater than balance" do
-      pay_in = ExpensePayment.new(valid_attributes.merge(amount: 101))
+      pay_out = ExpensePayment.new(valid_attributes.merge(amount: 101))
 
       Expense.stub(find_by_id: expense)
       Account.stub(find_by_id: account_to)
 
-      pay_in.should_not be_valid
-      pay_in.errors_on(:amount).should_not be_empty
+      pay_out.should_not be_valid
+      pay_out.errors_on(:amount).should_not be_empty
 
-      pay_in.amount = 100
-      pay_in.should be_valid
+      pay_out.amount = 100
+      pay_out.should be_valid
     end
   end
 
@@ -55,10 +55,10 @@ describe ExpensePayment do
       expense.stub(save: true)
       Expense.stub(:find_by_id).with(account_id).and_return(expense)
       Account.stub(:find_by_id).with(account_to_id).and_return(account_to)
-      AccountLedger.any_instance.stub(save: true)
+      AccountLedger.any_instance.stub(save_ledger: true)
     end
 
-    it "Payments" do
+    it "makes the payment" do
       expense.should be_is_draft
       p = ExpensePayment.new(valid_attributes)
 
@@ -70,11 +70,11 @@ describe ExpensePayment do
       p.expense.should be_is_approved
 
       # Ledger
+      p.ledger.should_not be_conciliation
       p.ledger.amount.should == 50.0
       p.ledger.exchange_rate == 1
-      p.ledger.should be_is_payin
+      p.ledger.should be_is_payout
       p.ledger.account_id.should eq(expense.id)
-      p.ledger.should be_conciliation
       p.ledger.reference.should eq(valid_attributes.fetch(:reference))
       p.ledger.date.should eq(valid_attributes.fetch(:date).to_time)
 
@@ -88,6 +88,16 @@ describe ExpensePayment do
       p.expense.should be_is_paid
     end
 
+    it "conciliates with payment" do
+      expense.should be_is_draft
+      p = ExpensePayment.new(valid_attributes.merge(verification: false))
+
+      p.verification.should be_false
+      p.pay.should  be_true
+
+      p.ledger.should be_conciliation
+    end
+
     it "create ledger and int_ledger" do
       expense.should be_is_draft
       p = ExpensePayment.new(valid_attributes.merge(interest: 10))
@@ -97,13 +107,13 @@ describe ExpensePayment do
       # ledger
       p.ledger.should be_is_a(AccountLedger)
       p.ledger.amount.should == valid_attributes[:amount]
-      p.ledger.should be_is_payin
+      p.ledger.should be_is_payout
       p.ledger.account_id.should eq(expense.id)
 
       # int_ledger
       p.int_ledger.should be_is_a(AccountLedger)
       p.int_ledger.amount.should == 10.0
-      p.int_ledger.should be_is_intin
+      p.int_ledger.should be_is_intout
       p.int_ledger.account_id.should eq(expense.id)
       p.int_ledger.reference.should eq(valid_attributes.fetch(:reference))
       p.int_ledger.date.should eq(valid_attributes.fetch(:date).to_time)
@@ -120,7 +130,7 @@ describe ExpensePayment do
       # int_ledger
       p.int_ledger.should be_is_a(AccountLedger)
       p.int_ledger.amount.should == 10.0
-      p.int_ledger.should be_is_intin
+      p.int_ledger.should be_is_intout
     end
   end
 

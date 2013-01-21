@@ -1,79 +1,36 @@
-- present @account_ledger do |presenter|
-  -content_for :links do
-    = account_ledger_show_links(@account_ledger)
+-#content_for :links do
+  = account_ledger_show_links(@account_ledger)
 
-    .links.span6
-      = presenter.null_link
+  .links.span6
+    -#= presenter.null_link
 
-  .page-header
-    %h1{:style => 'display:inline-block'} 
-      %span.gray.n Transacción
-      = @account_ledger
-      %span.n= @account_ledger.selected_account
+%header
+  %h1
+    = @account_ledger.conciliated.html_safe
+    = @account_ledger
+    = @account_ledger.operation_label.html_safe
 
-      %small= presenter.null_state
+= form_for @account_ledger, url: conciliate_account_ledger_path(@account_ledger) do |f|
+  = f.submit "Conciliar", class: 'btn btn-success'
 
-  - if @account_ledger.project_id.present?
-    %h3
-      %span.grey.n Proyecto:
-      = @account_ledger.project 
-
-  %h3.i.gray= lo @account_ledger.date
-
-  .moneybox.fl
-    = in_out @account_ledger.account_amount, :class => "b"
-
-    - if Contact::TYPES.include? @account_ledger.account_original_type
-      %h3= "#{@account_ledger.currency_symbol} #{ntc @account_ledger.account_amount}"
-    - else
-      %h3= "#{@account_ledger.selected_account.currency_symbol} #{ntc @account_ledger.account_amount}"
-
-  .clear
-  %h3= presenter.exchange_rate
-  <br/>
-  ._30.fl <span class="dark-grey">Ref/Nº de cheque:</span> #{@account_ledger.reference}
-  ._35.fl= @account_ledger.description
-
-  -# Related account
-  ._30.fl{:style => "margin-left: 10px"}= link_to @account_ledger.related_account, related_account_link( @account_ledger ), :title => 'Cuenta relacionada', :class => 'b'
-  <br/><br/>
-  .clear
-  - if @account_ledger.can_conciliate?
-    .conciliation
-      = simple_form_for @account_ledger, :url => conciliate_account_ledger_path(@account_ledger) do |f|
-        = f.submit "Verificar transacción", :class => 'btn btn-success b'
-
-  #users.mt30
-    %p Creado por: <span class="b">#{@account_ledger.creator}</span> <span class="i">#{lo @account_ledger.created_at}</span>
-
-    - if @account_ledger.conciliation?
-      %p Verificado por: <span class="b">#{@account_ledger.approver}</span> <span class="i">#{lo @account_ledger.approver_datetime}</span>
-
-    - unless @account_ledger.active?
-      %p Anulado por: <span class="b">#{@account_ledger.nuller}</span> <span class="i">#{lo @account_ledger.nuller_datetime}</span>
+= render_if @account_ledger.project do
+  %h3
+    %span.grey.n Proyecto:
+    = @account_ledger.project
 
 
-  :javascript
-    $(function() {
-      $('.conciliation form').submit(function() {
-        var conf_text = "Revisar una transacción es una operación irreversible, esta seguro?";
-        if (#{@account_ledger.to_id.present?}) {
-          conf_text = "Verificar esta cuenta tambien verificará la cuenta relacionada con la transacción. Desea verificar?";
-        }
+%h4.n= lo @account_ledger.date.to_date
 
-        if(!confirm(conf_text)) {
-          return false;
-        }
+.well.well-small.span3
+  = ntc @account_ledger.amount
+  = currency_label @account_ledger.currency
 
-      });
-
-      if($('#comment').length > 0) {
-        $('#comment').submit(function() {
-          if( $('#account_ledger_comment').val().replace(/^\s+|\s+$/g, '').length < 5 ) {
-            alert("Error: Debe ingresar un comentario");
-            return false;
-          }
-        });
-      }
-
-    });
+%h3.n
+  %span.muted De:
+  = link_to @account_ledger.account, @account_ledger.account
+  = ntc @account_ledger.account_amount
+  = currency_label @account_ledger.account_currency
+  %span.muted A:
+  = link_to @account_ledger.account_to, @account_ledger.account_to
+  = ntc @account_ledger.account_to_amount
+  = currency_label @account_ledger.account_to_currency
