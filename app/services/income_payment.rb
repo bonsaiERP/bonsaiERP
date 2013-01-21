@@ -28,7 +28,7 @@ class IncomePayment < Payment
   end
 
   def income
-    Income.find_by_id(account_id)
+    @income ||= Income.find_by_id(account_id)
   end
 
 private
@@ -45,7 +45,7 @@ private
   def create_ledger
     if amount.to_f > 0
       @ledger = build_ledger(amount: amount, operation: 'payin', account_id: income.id)
-      @ledger.save
+      @ledger.save_ledger
     else
       true
     end
@@ -54,7 +54,7 @@ private
   def create_interest
     if interest.to_f > 0
       @int_ledger = build_ledger(amount: interest, operation: 'intin', account_id: income.id)
-      @int_ledger.save
+      @int_ledger.save_ledger
     else
       true
     end

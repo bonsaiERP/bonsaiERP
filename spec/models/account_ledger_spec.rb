@@ -45,6 +45,32 @@ describe AccountLedger do
     a.currency.should eq('BOB')
   end
 
+  context "save_ledger" do
+    it "Creates a new instance of Conciliation" do
+      ledger = build :account_ledger
+      ledger.should be_conciliation
+
+      # Check ConciliateAccount#conciliate
+      ConciliateAccount.method_defined?(:conciliate).should be_true
+      #stub
+      ConciliateAccount.any_instance.should_receive(:conciliate).and_return( true)
+      ledger.should_not_receive(:save)
+
+
+      ledger.save_ledger.should be_true
+    end
+
+    it "Saves directly" do
+      ledger = build :account_ledger
+
+      ledger.conciliation = false
+
+      ledger.should_receive(:save).and_return(:false)
+
+      ledger.save_ledger.should be_true
+    end
+  end
+
   context 'Creator Approver' do
     let(:account) { build :account, id: 11, amount: 0.0 }
 

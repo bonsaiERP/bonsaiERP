@@ -28,7 +28,7 @@ class ExpensePayment < Payment
   end
 
   def expense
-    Expense.find_by_id(account_id)
+    @expense ||= Expense.find_by_id(account_id)
   end
 
 private

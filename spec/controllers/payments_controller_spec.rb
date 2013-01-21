@@ -7,8 +7,8 @@ describe PaymentsController do
 
   context "POST /payments/:id/income" do
     it "checks all stub methods" do
-      raise "IncomePayment#pay method doesn't exists" unless IncomePayment.new.respond_to?(:pay)
-      raise "IncomePayment#income method doesn't exists" unless IncomePayment.new.respond_to?(:income)
+      raise "IncomePayment#pay method doesn't exists" unless IncomePayment.method_defined?(:pay)
+      raise "IncomePayment#income method doesn't exists" unless IncomePayment.method_defined?(:income)
     end
 
     it "creates an IncomePayment and redirects to Income" do
@@ -44,8 +44,8 @@ describe PaymentsController do
 
   context "POST /payments/:id/expense" do
     it "checks all stub methods" do
-      raise "ExpensePayment#pay method doesn't exists" unless ExpensePayment.new.respond_to?(:pay)
-      raise "ExpensePayment#expense method doesn't exists" unless ExpensePayment.new.respond_to?(:expense)
+      raise "ExpensePayment#pay method doesn't exists" unless ExpensePayment.method_defined?(:pay)
+      raise "ExpensePayment#expense method doesn't exists" unless ExpensePayment.method_defined?(:expense)
     end
 
     it "creates an ExpensePayment and redirects to Expense" do

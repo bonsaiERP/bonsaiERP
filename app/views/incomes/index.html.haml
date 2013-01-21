@@ -19,35 +19,6 @@
 .row-fluid
   = render 'incomes/quick_income'
 
--#%ul.tabs
-  %li= link_option "Todos", "all"
-  %li= link_option "Proformas", 'draft'
-  %li= link_option "Esperando cobro #{size_or_blank(@count.approved.size)}", 'awaiting_payment'
-  %li= link_option "Vencidos #{size_or_blank(@count.due.size)}", 'due'
-  %li= link_option "Con entrega pendiente #{size_or_blank(@count.inventory.size)}", 'inventory'
-  %li= link_option "Cobrados", "paid"
-  %li= link_option "Desc./Inc.", "discount", title: 'Descuentos o Incrementos', rel: 'tooltip'
-  %li= link_option "Anulados", "nulled"
-
--#search_income.well( style="#{show_if_search}" )
-  %a.close{:href => "javascript:"} x
-  %h3 Buscar ventas
-  = link_to "Eliminar filtros", incomes_path, :class => 'b'
-
-  =form_tag "/incomes", :method => 'get' do
-    =hidden_field_tag "search_div_id", "search_incomes"
-    .row-fluid
-      .span6
-        %label Cliente o Nº de referencia
-        =text_field_tag 'search', params[:search], :size => 40
-      .span6
-        %label Estado
-        =select_tag "option", options_for_select(list_income_states, params[:option])
-
-    =submit_tag 'Buscar', :class => 'btn btn-success'
-
-
--#= link_to "Buscar", "#search_income", :class => 'search'
 = paginate @incomes.page(@page)
 
 %ul.unstyled.listing
@@ -56,7 +27,7 @@
       .span4
         %h4
           = link_to income, income
-        = state_tag income
+        = income_state_tag income
         %i= l income.date
       .span3
         %h5(title='Contacto' rel='tooltip')= income.contact
@@ -74,48 +45,3 @@
           = ntc income.balance
       .span1
         = link_to icon_edit, edit_income_path(income)
-
-<br><br>
-
--#%table.nwl.table.table-striped
-  %thead
-    %tr
-      %th
-        %span(title='Estado' rel='tooltip') Est.
-      %th
-        %span(title='Número de referencia' rel="tooltip") Nº Ref.
-      %th
-        Cliente
-      %th
-        Fecha / Vence el
-      %th Total
-      %th Saldo
-
-      = discount_th
-
-      %th
-
-  %tbody
-    -  @incomes.each do |income|
-      %tr{ :class => cycle(:odd, :even) }
-        %td
-          = state_tag(income)
-        %td
-          = link_to income.ref_number, income, :class => 'b'
-        %td
-          = income.contact
-        %td.i
-          = lo income.date
-          = lo income.payment_date unless income.is_paid?
-        %td
-          = currency_label income.currency
-          = ntc income.total
-        %td
-          = currency_label income.currency
-          = ntc income.balance
-
-        = discount_cell income
-
-        %td.actions
-          = link_to "editar", edit_income_path(income), :class => 'edit', :title => 'Editar' if income.is_draft?
-          = link_to "duplicar", new_income_path(:transaction_id => income.id), :class => 'duplicate icon', :title => 'Duplicar'

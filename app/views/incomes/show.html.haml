@@ -11,8 +11,8 @@
 
 %header
   %h1.n
-    %span.muted Ingreso
     = @income
+    = income_state_tag @income
     %small= link_to @income.contact, @income.contact
 
 .row

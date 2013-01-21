@@ -82,6 +82,14 @@ class AccountLedger < ActiveRecord::Base
     end
   end
 
+  def save_ledger
+    if conciliation?
+      ConciliateAccount.new(self).conciliate
+    else
+      self.save
+    end
+  end
+
 private
   def set_currency
     self.currency = account_currency
