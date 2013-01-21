@@ -1,17 +1,27 @@
 - if current_organisation
   %ul.nav
-    %li= link_to "Resumen", dashboard_path 
+    %li
+      = link_to "Resumen", dashboard_path
+
     %li.dropdown
-      %a.dropdown-toggle( data-toggle="dropdown" href="#") 
-        Comercial
+      %a.dropdown-toggle(data-toggle="dropdown" href="#")
+        Ingresos/Egresos
         %i.icon-caret-down
+
       %ul.dropdown-menu
-        %li <a href="/incomes">Ingresos</a>
-        %li <a href="/expenses">Egresos</a>
+        %li
+          = link_to "Ingresos", incomes_path
+        %li
+          = link_to "Nuevo ingreso", new_income_path
         %li.divider
-        %li <a href="/contacts">Contactos</a>
-        %li.divider
-        %li <a href="/projects">Proyectos</a>
+        %li
+          = link_to "Egresos", expenses_path
+        %li
+          = link_to "Nuevo egreso", new_expense_path
+
+    %li
+      = link_to "Contactos", contacts_path
+
     %li.dropdown
       %a.dropdown-toggle( data-toggle="dropdown" href="#")
         Cuentas
@@ -32,3 +42,7 @@
         %li.divider
         %li <a href="/inventory_operations/transactions?operation=out">Inventario pendientes de egreso</a>
         %li <a href="/inventory_operations/transactions?operation=in">Inventario pendientes ingreso</a>
+
+
+    %li
+      = link_to "Proyectos", projects_path

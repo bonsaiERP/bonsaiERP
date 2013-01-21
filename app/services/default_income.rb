@@ -49,7 +49,7 @@ private
 
   def original_income_total
     income_details.inject(0) do |sum, det|
-      sum += det.quantity * det.original_price
+      sum += det.quantity.to_f * det.original_price.to_f
     end
   end
 

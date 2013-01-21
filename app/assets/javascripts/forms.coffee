@@ -187,6 +187,10 @@
       formatSelection: (res) ->
         "#{res.to_s}"
     )
+    if $this.data('value') != ''
+      $a = $this.select2('container').find('>a')
+      $a.removeClass('select2-default')
+      .find('>span').text($this.data('value'))
 
   $.fn.select2Autocomplete = select2Autocomplete
 )(jQuery)

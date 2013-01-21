@@ -75,7 +75,8 @@ describe IncomePayment do
       p.ledger.should be_is_payin
       p.ledger.account_id.should eq(income.id)
       p.ledger.should be_conciliation
-      p.ledger.reference.should eq(valid_attributes[:reference])
+      p.ledger.reference.should eq(valid_attributes.fetch(:reference))
+      p.ledger.date.should eq(valid_attributes.fetch(:date).to_time)
 
       p.int_ledger.should be_nil
 
@@ -104,6 +105,8 @@ describe IncomePayment do
       p.int_ledger.amount.should == 10.0
       p.int_ledger.should be_is_intin
       p.int_ledger.account_id.should eq(income.id)
+      p.int_ledger.reference.should eq(valid_attributes.fetch(:reference))
+      p.int_ledger.date.should eq(valid_attributes.fetch(:date).to_time)
     end
 
     it "only creates int_ledger" do
