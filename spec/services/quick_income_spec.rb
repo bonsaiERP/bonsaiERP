@@ -57,6 +57,7 @@ describe QuickIncome do
 
       income.creator_id.should eq(21)
       income.approver_id.should eq(21)
+      income.approver_datetime.should be_is_a(Time)
 
       # account_ledger
       ledger = qi.account_ledger

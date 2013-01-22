@@ -26,6 +26,7 @@ private
       total: amount, gross_total: amount, original_total: amount, balance: 0,
       creator_id: UserSession.id, approver_id: UserSession.id
     ))
+    @income.set_state_by_balance!
 
     @income.save
   end

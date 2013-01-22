@@ -13,13 +13,14 @@ class IncomePresenter < Resubject::Presenter
     to_model.balance > 0
   end
 
-  def payment_date
+  def payment_date_tag
     d = ""
     unless is_paid?
-      d = l to_model.payment_date
-      d = "<span class='text-error' title='Fecha de cobro atrasada' rel='tooltip'>#{d}<span>" if today > to_model.payment_date
+      d = "<span class='muted'>Vence el</span> "
+      d << l(to_model.payment_date)
+      d << "<span class='text-error' title='Fecha de cobro atrasada' rel='tooltip'>#{d}<span>" if today > to_model.payment_date
     end
-    d
+    d.html_safe
   end
 
   include UsersModulePresenter

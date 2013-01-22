@@ -32,18 +32,19 @@
       .span4
         %h4
           = link_to income, income
-        = income_state_tag income
-        %i= l income.date
+        = l income.date
         .clear-both
+        = income_state_tag income
+        %h5
+          %small Contacto
+          = income.contact
+      .span3
+        .clear-both
+        = income.payment_date_tag
 
         = income.creator_label
         = income.approver_label
         = income.nuller_label
-      .span3
-        %h5(title='Contacto' rel='tooltip')
-          = income.contact
-        .clear-both
-        = income.payment_date.html_safe
       .span4
         .span2
           .muted Total

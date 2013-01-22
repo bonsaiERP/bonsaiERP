@@ -55,6 +55,7 @@ describe QuickExpense do
 
       expense.creator_id.should eq(21)
       expense.approver_id.should eq(21)
+      expense.approver_datetime.should be_is_a(Time)
 
       # account_ledger
       ledger = qe.account_ledger

@@ -2,7 +2,6 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class IncomesController < ApplicationController
-  before_filter :set_income, only: [:edit, :update, :destroy, :approve]
 
   # GET /incomes
   def index
@@ -25,6 +24,7 @@ class IncomesController < ApplicationController
 
   # GET /incomes/1/edit
   def edit
+    @income = Income.find(params[:id])
   end
 
   # POST /incomes
@@ -54,6 +54,7 @@ class IncomesController < ApplicationController
 
   # PUT /incomes/1
   def update
+    @income = Income.find(params[:id])
     di = DefaultIncome.new(Income.find(params[:id]))
 
     if di.update(income_params)
@@ -110,9 +111,5 @@ private
 
   def transaction_params
     @transaction_params ||= TransactionParams.new
-  end
-
-  def set_income
-    @income = present Income.find(params[:id])
   end
 end
