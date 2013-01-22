@@ -23,17 +23,19 @@ private
   def create_income
     @income = Income.new_income(transaction_attributes.merge(
       total: amount, gross_total: amount, original_total: amount, balance: 0,
-      creator_id: UserSession.id
+      creator_id: UserSession.id, approver_id: UserSession.id
     ))
 
     @income.save
   end
 
   def create_ledger
-    @account_ledger = build_ledger(account_id: income.id, operation: 'payin',
-                                   reference: "Ingreso rápido #{income.ref_number}")
+    @account_ledger = build_ledger(
+      account_id: income.id, operation: 'payin', amount:amount,
+      reference: "Ingreso rápido #{income.ref_number}"
+    )
 
-    ConciliateAccount.new(@account_ledger).conciliate
+    @account_ledger.save_ledger
   end
 
   def ledger_amount

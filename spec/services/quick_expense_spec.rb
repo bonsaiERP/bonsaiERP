@@ -1,82 +1,120 @@
+# encoding: utf-8
 describe QuickExpense do
   let(:user) { build :user, id: 21 }
 
   before(:each) do
-    UserSession.current_user = User.new {|u| u.id = 21 }
-    UserChange.any_instance.stub(save: true, user: user)
+    UserSession.user = User.new {|u| u.id = 21 }
   end
 
-  let!(:contact) { create(:contact) }
-  let!(:cash) { create(:cash, amount: 100, currency: 'BOB') }
-  let(:account) { cash.account }
+  let(:contact) { build :contact, id: 1 }
+  let(:account_to) { build :cash, amount: 100, currency: 'BOB', id: 1 }
   let(:initial_amount) { account.amount }
 
   let(:valid_attributes) {
     {
-      date: Date.today, ref_number: 'E-0001', fact: true,
+      date: Date.today, ref_number: 'E-0001',
       bill_number: '63743', amount: '200.5',
-      contact_id: contact.id, account_id: account.id
+      contact_id: contact.id, account_to_id: account_to.id
     }
   }
 
-  it "Initializes with a correct number" do
-    qe = QuickExpense.new
-    qe.ref_number.should eq("E-0001")
+  it "should present errors if the contact is wrong" do
+    qe = QuickExpense.new(valid_attributes.merge(contact_id: 1000, account_to_id: 1200))
+    qe.create.should be_false
+
+    qe.errors_on(:contact).should_not be_blank
+    qe.errors_on(:account_to).should_not be_blank
   end
 
-  context "Create expense" do
+  context "Create expense and check values" do
+    before(:each) do
+      Expense.any_instance.stub(save: true, id: 11)
+
+      Account.stub(find_by_id: account_to)
+      Contact.stub(find_by_id: contact)
+      # save_ledger conciliates if conciliation = true
+      AccountLedger.any_instance.stub(save_ledger: true)
+    end
 
     it "creates a valid expense" do
-      contact.should_not be_supplier
       qe = QuickExpense.new(valid_attributes)
       qe.create.should be_true
 
-      qe.expense.should be_persisted
-      qe.account_ledger.should be_persisted
-      contact.reload
-      contact.should be_supplier
+      # expense
+      expense = qe.expense
+      expense.should be_is_a(Expense)
+      expense.ref_number.should eq("E-0001")
+      expense.currency.should eq('BOB')
+      expense.total.should == 200.5
+      expense.balance.should == 0.0
+      expense.gross_total.should == 200.5
+      expense.total.should == 200.5
+      expense.original_total.should == 200.5
+
+      expense.creator_id.should eq(21)
+      expense.approver_id.should eq(21)
+
+      # account_ledger
+      ledger = qe.account_ledger
+      ledger.account_id.should eq(11)
+      ledger.account_to_id.should eq(account_to.id)
+      ledger.currency.should eq("BOB")
+
+      ledger.amount.should == -200.5
+      ledger.exchange_rate.should == 1
+      ledger.should_not be_inverse
+
+      ledger.creator_id.should eq(21)
+      ledger.approver_id.should eq(21)
+
+      ledger.reference.should eq("Egreso rápido #{expense.ref_number}")
+      ledger.should be_is_payout
+      
+      ledger.should be_conciliation
+      ledger.date.should be_a(Time)
+
+      ledger.creator_id.should eq(21)
+      ledger.approver_id.should eq(21)
     end
 
-    subject do
-      qe = QuickExpense.new(valid_attributes)
-      qe.create
-      qe
+    it "No conciliation required when account_to is Cash" do
+      qe = QuickExpense.new(valid_attributes.merge(verification: true))
+      qe.create.should be_true
+
+      qe.send(:account_to).should be_is_a(Cash)
+      #AccountLedger conciliated
+      qe.account_ledger.should be_conciliation
     end
 
+    it "Can accept different values for conciliation when Bank account" do
+      Account.stub(find_by_id: build(:bank, id: 3))
 
-    let(:account_ledger) { subject.account_ledger }
-    let(:expense) { subject.expense }
-    let(:amount) { subject.amount }
+      qe = QuickExpense.new(valid_attributes.merge(account_to_id: 3, verification: true))
+      qe.create.should be_true
 
-    it "checks the expense" do
-      expense.balance.should eq(0)
-      expense.total.should eq(amount)
-      expense.gross_total.should eq(amount)
-      expense.original_total.should eq(amount)
-      expense.should be_is_paid
-      expense.date.should_not be_blank
-      expense.payment_date.should eq(expense.date)
+      ledger = qe.account_ledger
 
-      expense.user_changes.should have(2).items
-      expense.user_changes.map(&:name).sort.should eq(['approver', 'creator'])
-      expense.user_changes.map(&:user_id).should eq([21, 21])
+      ledger.should_not be_conciliation
+
+      # Other case
+      qe = QuickExpense.new(valid_attributes.merge(account_to_id: 3, verification: false))
+      qe.create.should be_true
+
+      ledger = qe.account_ledger
+
+      ledger.should be_conciliation
     end
 
-    it "account_ledger attribtes are set for out" do
-      account_ledger.contact_id.should eq(contact.id)
-      account_ledger.should be_persisted
-      account_ledger.should be_is_payout
-      account_ledger.date.to_date.should eq(valid_attributes[:date])
-      account_ledger.reference == "Pago egreso #{expense.ref_number}"
+    it "Assigns the currency of the account" do
+      Account.stub(find_by_id: build(:bank, id: 3, currency: 'USD'))
+      
+      qe = QuickExpense.new(valid_attributes.merge(account_to_id: 3) )
 
-      account_ledger.amount.should == -amount
-      account_ledger.transaction_id.should eq(expense.id)
-      account_ledger.should be_conciliation
+      qe.create.should be_true
 
-      account_ledger.account_amount.should eq(initial_amount - expense.total)
-      account_ledger.creator_id.should eq(21)
-      account_ledger.approver_id.should eq(21)
-      account_ledger.contact_id.should eq(contact.id)
+      qe.expense.currency.should eq('USD')
     end
+
   end
+
 end

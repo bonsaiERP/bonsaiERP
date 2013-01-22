@@ -1,9 +1,12 @@
 # encoding: utf-8
 class QuickExpense < QuickTransaction
+  attr_reader :expense
+
   def create
+    return false unless valid?
     res = true
     ActiveRecord::Base.transaction do
-      res = create_transaction
+      res = create_expense
 
       res = create_ledger && res
 
@@ -16,20 +19,23 @@ class QuickExpense < QuickTransaction
     res
   end
 
-  def expense
-    transaction
+private
+  def create_expense
+    @expense = Expense.new_expense(transaction_attributes.merge(
+      total: amount, gross_total: amount, original_total: amount, balance: 0,
+      creator_id: UserSession.id, approver_id: UserSession.id
+    ))
+
+    @expense.save
   end
 
-private
-  def create_transaction
-    @transaction = Expense.new(transaction_attributes) do |exp|
-      exp.total = exp.gross_total = exp.original_total = amount
-      exp.balance = 0
-    end
+  def create_ledger
+    @account_ledger = build_ledger(
+      account_id: expense.id, operation: 'payout', amount: -amount,
+      reference: "Egreso rápido #{expense.ref_number}"
+    )
 
-    set_transaction_users
-
-    @transaction.save
+    @account_ledger.save_ledger
   end
 
   def ledger_amount

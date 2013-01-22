@@ -1,6 +1,7 @@
 .row-fluid
   .span3
-    = f.input :ref_number, label: 'Nº de referencia', input_html: { class: 'span8'}
+    = f.input :ref_number, label: 'Nº de referencia' do
+      = f.text_field :ref_number, class: 'span8', disabled: true
   .span3
     = f.input :date, label: "Fecha", as: :datepicker
   .span6

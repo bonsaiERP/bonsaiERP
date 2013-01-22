@@ -70,7 +70,7 @@ class Expense < Account
 
   def self.get_ref_number
     ref = Expense.order("name DESC").limit(1).pluck(:name).first
-    ref.present? ? ref.next : "I-0001"
+    ref.present? ? ref.next : "E-0001"
   end
 
   def set_state_by_balance!

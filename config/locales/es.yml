@@ -251,6 +251,8 @@ es:
         devolution_amount: "La cantidad que ingreso es mayor que el monto verificado"
         devolution_pendent_ledgers: "Existen cobros/pagos o devoluciones pendientes de verificación"
         invalid_amount_or_interest: "La cantidad o el interes debe ser mayor que 0"
+      quick_income:
+        valid_account_to: "Debe seleccionar una cuenta Banco o Caja"
       user:
         email: "El formato de su email es incorrecto"
         confirm: "No ha confirmado su cuenta. Revise en su email el mensaje \"Active su cuenta en www.bonsaierp.com\" y siga las instrucciones"

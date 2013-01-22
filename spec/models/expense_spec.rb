@@ -67,7 +67,7 @@ describe Expense do
 
   it "gets the latest ref_number" do
     ref_num = Expense.get_ref_number
-    ref_num.should eq('I-0001')
+    ref_num.should eq('E-0001')
 
     Expense.stub_chain(:order, :limit, :pluck).and_return(['I-0001'])
 

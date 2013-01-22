@@ -27,6 +27,22 @@ describe QuickTransaction do
       QuickTransaction.validators_on(:account_to).should_not be_blank
       QuickTransaction.validators_on(:account_to).first.should be_a(ActiveModel::Validations::PresenceValidator)
     end
+
+    context "Account to" do
+      it "Valid" do
+        Account.stub(find_by_id: build(:cash, id: 1))
+        q = QuickTransaction.new(account_to_id: 1)
+        q.valid?
+
+        q.errors_on(:account_to_id).should be_empty
+      end
+
+      it "Not valid" do
+        q = QuickTransaction.new
+        q.valid?
+        q.errors_on(:account_to_id).should_not be_empty
+      end
+    end
   end
 
   it "initializes with defaults" do
