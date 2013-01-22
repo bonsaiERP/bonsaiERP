@@ -38,7 +38,7 @@ class Income < Account
     :delivered, :discounted, :devolution
   ].freeze
   delegate *getters_setters_array(*TRANSACTION_METHODS), to: :transaction
-  delegate :discounted?, :delivered?, :devolution?, to: :transaction
+  delegate :discounted?, :delivered?, :devolution?, :approve!, to: :transaction
 
   # Define boolean methods for states
   STATES.each do |state|
@@ -79,10 +79,11 @@ class Income < Account
   end
 
   def set_state_by_balance!
-    if balance == 0
+    if balance <= 0
+      approve! unless is_approved?
       self.state = 'paid'
     elsif balance < total
-      self.state = 'approved'
+      approve! unless is_approved?
     else
       self.state = 'draft'
     end
@@ -98,6 +99,12 @@ class Income < Account
 
   def discount_percent
     discount/gross_total
+  end
+
+  def approve!
+    self.state = 'approved'
+    self.approver_id = UserSession.id
+    self.approver_datetime = Time.zone.now
   end
 
 private

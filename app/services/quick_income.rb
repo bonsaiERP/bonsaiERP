@@ -22,6 +22,7 @@ class QuickIncome < QuickTransaction
 private
   def create_income
     @income = Income.new_income(transaction_attributes.merge(
+      ref_number: Income.get_ref_number,
       total: amount, gross_total: amount, original_total: amount, balance: 0,
       creator_id: UserSession.id, approver_id: UserSession.id
     ))

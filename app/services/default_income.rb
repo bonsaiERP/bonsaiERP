@@ -15,6 +15,13 @@ class DefaultIncome < DefaultTransaction
     income.save
   end
 
+  def create_and_approve
+    set_income_data
+    income.approve
+
+    income.save
+  end
+
   def update(params)
     income.attributes = params
 
@@ -24,6 +31,7 @@ class DefaultIncome < DefaultTransaction
 private
   def set_income_data
     set_new_details
+    income.ref_number = Income.get_ref_number
     income.gross_total = original_income_total
     income.balance = income.total
     income.state = 'draft' if state.blank?

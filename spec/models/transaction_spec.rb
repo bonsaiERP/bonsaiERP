@@ -7,4 +7,5 @@ describe Transaction do
   it { should belong_to(:creator) }
   it { should belong_to(:approver) }
   it { should belong_to(:nuller) }
+
 end

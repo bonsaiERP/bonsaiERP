@@ -24,6 +24,7 @@ class DefaultExpense < DefaultTransaction
 private
   def set_expense_data
     set_new_details
+    expense.ref_number = Expense.get_ref_number
     expense.gross_total = original_expense_total
     expense.balance = expense.total
     expense.state = 'draft' if state.blank?

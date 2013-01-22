@@ -12,7 +12,7 @@ describe DefaultExpense do
 
   let(:expense) do
     Expense.new_expense(
-      ref_number: "I-0001", date: Date.today ,currency: 'BOB',
+      date: Date.today ,currency: 'BOB',
       description: "New expense description", state: "draft", total: 490,
       expense_details_attributes: details
     )
@@ -37,7 +37,7 @@ describe DefaultExpense do
 
     it "sets all parameters" do
       expense.should be_is_a(Expense)
-      expense.ref_number.should eq("I-0001")
+      expense.ref_number.should be_blank
       expense.expense_details.should have(2).items
 
       expense.expense_details[0].item_id.should eq(details[0][:item_id])
@@ -70,6 +70,7 @@ describe DefaultExpense do
       e.should be_is_a(Expense)
       e.should be_is_draft
       e.should be_active
+      e.ref_number.should eq('E-0001')
 
       e.creator_id.should eq(UserSession.id)
 

@@ -4,15 +4,15 @@ require 'spec_helper'
 describe QuickTransaction do
   let(:valid_attributes) {
     {
-      date: Date.today, ref_number: 'I-0001',
+      date: Date.today,
       bill_number: '63743', amount: '200.5',
       contact_id: 1, account_to_id: 1
     }
   }
 
   context 'Validations' do
-    it "shoulda validations" do
-      [:ref_number, :account_to_id, :contact_id, :date].each do |meth|
+    it "validations" do
+      [:account_to_id, :contact_id, :date].each do |meth|
         should_not have_valid(meth).when(nil, '')
       end
     end

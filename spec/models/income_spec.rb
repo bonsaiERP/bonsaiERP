@@ -83,22 +83,39 @@ describe Income do
     Income.get_ref_number.should eq('I-0002')
   end
 
-  it "sets its state based on the balance" do
-    i = Income.new_income(total: 10, balance: 10)
-    i.set_state_by_balance!
+  context "set_state_by_balance!" do
+    it "sets the correct state" do
+      UserSession.user = build :user, id: 12
+      i = Income.new_income(total: 10, balance: 10)
 
-    i.state.should eq('draft')
+      i.set_state_by_balance!
 
+      i.state.should eq('draft')
 
-    i = Income.new_income(total: 10, balance: 5)
-    i.set_state_by_balance!
+      # Change approve
+      i.balance = 5
 
-    i.state.should eq('approved')
+      i.set_state_by_balance!
 
-    i = Income.new_income(total: 10, balance: 0)
-    i.set_state_by_balance!
+      i.should be_is_approved
 
-    i.state.should eq('paid')
+      # Change to paid
+      i.balance = 0
+      i.should_not_receive(:approve!)
+      i.set_state_by_balance!
+
+      i.should be_is_paid
+    end
+
+    it "does not call approve! method" do
+      i = Income.new_income(total: 10, balance: 5)
+      i.state = 'approved'
+
+      i.should be_is_approved
+      i.should_not_receive(:approve!)
+
+      i.set_state_by_balance!
+    end
   end
 
   it "returns the subtotal from  details" do
@@ -128,6 +145,26 @@ describe Income do
 
     attrs.each do |k, v|
       i.send(k).should eq(v)
+    end
+  end
+
+  context "approve!" do
+    before(:each) do
+      UserSession.user = build :user, id: 11
+    end
+
+    subject { Income.new_income }
+
+    it "Changes" do
+      i = subject
+      i.should be_is_draft
+      i.approver_id.should be_blank
+      i.approver_datetime.should be_blank
+      i.approve!
+
+      i.should be_is_approved
+      i.approver_id.should eq(11)
+      i.approver_datetime.should be_is_a(Time)
     end
   end
 end

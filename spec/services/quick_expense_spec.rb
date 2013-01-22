@@ -12,7 +12,7 @@ describe QuickExpense do
 
   let(:valid_attributes) {
     {
-      date: Date.today, ref_number: 'E-0001',
+      date: Date.today,
       bill_number: '63743', amount: '200.5',
       contact_id: contact.id, account_to_id: account_to.id
     }

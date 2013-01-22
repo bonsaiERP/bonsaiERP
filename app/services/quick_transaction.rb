@@ -12,7 +12,7 @@ class QuickTransaction < BaseService
   attribute :bill_number   , String
   attribute :verification  , Boolean, default: false
 
-  validates_presence_of :ref_number, :account_to, :account_to_id, :contact, :contact_id, :date
+  validates_presence_of :account_to, :account_to_id, :contact, :contact_id, :date
   validates_numericality_of :amount, greater_than: 0
   validate :valid_account_to
 

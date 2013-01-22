@@ -2,6 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class IncomesController < ApplicationController
+  before_filter :set_income, only: [:edit, :update, :destroy, :approve]
 
   # GET /incomes
   def index
@@ -14,11 +15,6 @@ class IncomesController < ApplicationController
   # GET /incomes/1.xml
   def show
     @income = present Income.find(params[:id])
-
-    respond_to do |format|
-      format.html
-      format.json  { render json: @income }
-    end
   end
 
   # GET /incomes/new
@@ -29,7 +25,6 @@ class IncomesController < ApplicationController
 
   # GET /incomes/1/edit
   def edit
-    @income = Income.find(params[:id])
   end
 
   # POST /incomes
@@ -84,7 +79,7 @@ class IncomesController < ApplicationController
   # PUT /incomes/1/approve
   # Method to approve an income
   def approve
-    if @transaction.approve!
+    if @income.approve!
       flash[:notice] = "La nota de venta fue aprobada."
     else
       flash[:error] = "Existio un problema con la aprobación."
@@ -105,26 +100,6 @@ class IncomesController < ApplicationController
   end
 
 private
-
-  # Redirects in case that someone is trying to edit or destroy an  approved income
-  def redirect_income
-    flash[:warning] = "No es posible editar una nota ya aprobada!."
-    redirect_to incomes_path
-  end
-
-  def set_transaction
-    @transaction = Income.find(params[:id])
-    check_edit if ["edit", "update"].include?(params[:action])
-  end
-
-  # Checks for transactions to edit
-  def check_edit
-    unless allow_transaction_action?(@transaction)
-      flash[:warning] = "No es posible editar la nota de venta."
-      return redirect_to @transaction
-    end
-  end
-
   def quick_income_params
    params.require(:quick_income).permit(*transaction_params.quick_income)
   end
@@ -135,5 +110,9 @@ private
 
   def transaction_params
     @transaction_params ||= TransactionParams.new
+  end
+
+  def set_income
+    @income = present Income.find(params[:id])
   end
 end
