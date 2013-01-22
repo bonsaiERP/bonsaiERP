@@ -13,10 +13,16 @@
     = link_to 'Borrar', @income, method: 'delete'
 
 %header
-  %h1.n
-    = @income
-    = income_state_tag @income
-    %small= link_to @income.contact, @income.contact
+  .row-fluid
+    .span6
+      %h1.n
+        = @income
+        = income_state_tag @income
+        %small= link_to @income.contact, @income.contact
+    .span6
+      - if @income.is_draft?
+        = form_for @income, url: approve_income_path(@income) do |f|
+          = f.submit 'Aprobar Ingreso', class: 'b btn btn-success'
 
 .row
   .span2.well.well-small

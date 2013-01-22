@@ -79,16 +79,16 @@ class IncomesController < ApplicationController
   # PUT /incomes/1/approve
   # Method to approve an income
   def approve
-    if @income.approve!
-      flash[:notice] = "La nota de venta fue aprobada."
+    redirect_to(@income, alert: 'El Ingreso ya esta aprovado') and return unless @income.is_draft?
+
+    @income.approve!
+    if @income.save
+      flash[:notice] = "El Ingreso fue aprobado."
     else
       flash[:error] = "Existio un problema con la aprobación."
     end
 
-    anchor = ''
-    anchor = 'payments' if @transaction.cash?
-
-    redirect_to income_path(@transaction, :anchor => anchor)
+    redirect_to income_path(@income)
   end
 
   def history
