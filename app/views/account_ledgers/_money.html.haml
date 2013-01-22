@@ -6,15 +6,9 @@
 .clear
 <br/>
 
-
-.row-fluid
+.row-fluid.dismiss
   .span4.offset8
-    %span.label.label-inverse
-      Creado por
-    %span.label.label-success
-      Aprobado por
-    %span.label
-      Anulado por
+    = render 'users/user_changes_labels'
 
 -#= paginate account_ledgers
 %ul.unstyled.listing

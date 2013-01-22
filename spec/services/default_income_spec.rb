@@ -25,7 +25,7 @@ describe DefaultIncome do
   }
 
   before(:each) do
-    OrganisationSession.organisation = build :organisation, id: 1
+    UserSession.user = build :user, id: 10
   end
 
   it "does not allow a class that is not an income" do
@@ -70,6 +70,8 @@ describe DefaultIncome do
       i.should be_is_a(Income)
       i.should be_is_draft
       i.should be_active
+
+      i.creator_id.should eq(UserSession.id)
 
       # Number values
       i.exchange_rate.should == 1

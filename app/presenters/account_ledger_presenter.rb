@@ -10,21 +10,7 @@ class AccountLedgerPresenter < Resubject::Presenter
     end
   end
 
-  def creator_label
-    return "<span class='label label-inverse' rel='tooltip' title='#{creator}'>U-#{creator.id}</span>" if creator.present?
-    ""
-  end
-
-  def approver_label
-    return "<span class='label label-success' rel='tooltip' title='#{approver}'>U-#{approver.id}</span>" if approver.present?
-    ""
-  end
-
-  def nuller_label
-    return "<span class='label' rel='tooltip' title='#{nuller}'>U-#{nuller.id}}</span>" if nuller.present?
-    ""
-  end
-
+  include UsersModulePresenter
 
   def initials(name)
     name.split(' ').map(&:first).join('')

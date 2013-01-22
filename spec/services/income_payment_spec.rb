@@ -25,6 +25,10 @@ describe IncomePayment do
   end
   let(:account_to) { build :account, id: account_to_id, amount: 100 }
 
+  before(:each) do
+    UserSession.user = build :user, id: 10
+  end
+
   context 'Validations' do
     it "validates presence of income" do
       pay_in = IncomePayment.new(valid_attributes)
@@ -60,6 +64,8 @@ describe IncomePayment do
 
     it "Payments" do
       income.should be_is_draft
+      income.approver_id.should be_nil
+
       p = IncomePayment.new(valid_attributes)
 
       p.pay.should  be_true
@@ -69,6 +75,7 @@ describe IncomePayment do
       p.income.should be_is_a(Income)
       p.income.balance.should == balance - valid_attributes[:amount]
       p.income.should be_is_approved
+      p.income.approver_id.should eq(UserSession.id)
 
       # Ledger
       p.ledger.amount.should == 50.0

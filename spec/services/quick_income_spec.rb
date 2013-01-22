@@ -52,6 +52,8 @@ describe QuickIncome do
       income.gross_total.should == 200.5
       income.total.should == 200.5
       income.original_total.should == 200.5
+      income.date.should eq(valid_attributes.fetch(:date) )
+      income.payment_date.should eq(income.date)
 
       income.creator_id.should eq(21)
       income.approver_id.should eq(21)

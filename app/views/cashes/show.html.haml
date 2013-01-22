@@ -1,6 +1,11 @@
 - content_for :links do
-  %ul.breadcrumps.span6
-    %li #{link_to "Cuentas caja", cashes_path}
+  %ul.breadcrumbs.span6
+    %li
+      =link_to "Cuentas caja", cashes_path
+    %li
+      %i.icon-caret-right
+    %li
+      Caja
   .links.span6
     = link_to 'Editar', edit_cash_path(@cash), :class => 'edit'
 

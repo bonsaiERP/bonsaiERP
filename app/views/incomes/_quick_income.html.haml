@@ -16,8 +16,9 @@
       .span6=f.input :amount, label: 'Cantidad'
       .span6=f.input :bill_number, label: 'No. de documento', label_html: {title: 'Factura o Recibo', rel: 'tooltip'}
 
-    = f.submit 'Salvar', class: 'btn btn-success b'
-    %a#quick-income-hide-link.btn Cancelar
+    .form-actions
+      = f.submit 'Salvar', class: 'btn btn-success b'
+      %a#quick-income-hide-link.btn Cancelar
 
 :coffeescript
   (($) ->

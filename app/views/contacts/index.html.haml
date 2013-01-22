@@ -1,4 +1,7 @@
 - content_for :links do
+  %ul.breadcrumbs.span6
+    %li
+      %span Contactos
   .span6 &nbsp;
   .links.span6= link_to "Nuevo #{contact_type(params[:option], false)}", new_contact_path, :class => 'new'
 

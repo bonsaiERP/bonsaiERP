@@ -32,7 +32,8 @@ class Income < Account
   # Delegations
   TRANSACTION_METHODS = [
     :balance, :bill_number, :gross_total, :original_total, :balance_inventory, 
-    :payment_date, :creator_id, :approver_id, :nuller_id,
+    :payment_date, :creator_id, :creator, :approver_id, 
+    :approver, :nuller_id, :nuller,
     :null_reason, :approver_datetime, 
     :delivered, :discounted, :devolution
   ].freeze

@@ -283,7 +283,7 @@ es:
       # You can provide other formats here if you like!
       default: "%d %b %Y"
       short: "%d de %b"
-      long: "%d de %B de %Y"
+      long: "%d de %B %Y"
 
     day_names: [Domingo, Lunes, Martes, Miércoles, Jueves, Viernes, Sábado]
     abbr_day_names: [Dom, Lun, Mar, Mie, Jue, Vie, Sab]
@@ -299,8 +299,8 @@ es:
 
   time:
     formats:
-      default: "%d de %b %Y %H:%M"
-      short: "%d de %b %H:%M"
+      default: "%d %b %Y %H:%M"
+      short: "%d %b %H:%M"
       long: "%d de %B de %Y %H:%M"
     am: "am"
     pm: "pm"

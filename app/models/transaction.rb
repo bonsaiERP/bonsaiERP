@@ -6,4 +6,8 @@ class Transaction < ActiveRecord::Base
   # Relationships
   belongs_to :income, foreign_key: :account_id, conditions: {type: 'Income'}
   belongs_to :expense, foreign_key: :account_id, conditions: {type: 'Expense'}
+  # Users
+  belongs_to :creator, class_name: 'User'
+  belongs_to :approver, class_name: 'User'
+  belongs_to :nuller, class_name: 'User'
 end

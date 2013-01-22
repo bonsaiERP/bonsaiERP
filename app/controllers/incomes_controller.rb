@@ -5,7 +5,9 @@ class IncomesController < ApplicationController
 
   # GET /incomes
   def index
-    @incomes = Income.page(@page)
+    @incomes = IncomeQuery.new.search(
+      search: params[:search]
+    ).page(@page)
   end
 
   # GET /incomes/1

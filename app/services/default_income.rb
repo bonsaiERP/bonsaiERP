@@ -28,6 +28,7 @@ private
     income.balance = income.total
     income.state = 'draft' if state.blank?
     income.discounted = true if discount > 0
+    income.creator_id = UserSession.id
   end
 
   def set_new_details

@@ -28,17 +28,19 @@ class ExpensePayment < Payment
   end
 
   def expense
-    @expense ||= Expense.find_by_id(account_id)
+    @transaction = @expense ||= Expense.find_by_id(account_id)
   end
 
 private
   def save_expense
     update_expense
+
     expense.save
   end
 
   def update_expense
     expense.balance -= amount
+    set_approver # Must run before set_state_by_balance
     expense.set_state_by_balance!
   end
 
@@ -67,4 +69,3 @@ private
   end
 
 end
-

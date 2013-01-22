@@ -18,6 +18,7 @@ class CreateTransactions < ActiveRecord::Migration
       t.integer  :creator_id
       t.integer  :approver_id
       t.integer  :nuller_id
+      t.datetime :nuller_datetime
       t.string   :null_reason, limit: 400
       t.datetime :approver_datetime
 

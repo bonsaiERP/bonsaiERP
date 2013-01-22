@@ -28,17 +28,19 @@ class IncomePayment < Payment
   end
 
   def income
-    @income ||= Income.find_by_id(account_id)
+    @transaction = @income ||= Income.find_by_id(account_id)
   end
 
 private
   def save_income
     update_income
+
     income.save
   end
 
   def update_income
     income.balance -= amount
+    set_approver # Must run before set_state_by_balance
     income.set_state_by_balance!
   end
 

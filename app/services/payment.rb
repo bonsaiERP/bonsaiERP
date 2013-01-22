@@ -1,5 +1,6 @@
 # encoding: utf-8
 class Payment < BaseService
+  attr_reader :ledger, :int_ledger, :transaction
 
   # Attributes
   attribute :account_id, Integer
@@ -10,8 +11,6 @@ class Payment < BaseService
   attribute :reference, String
   attribute :interest, Decimal, default: 0
   attribute :verification, Boolean, default: false
-
-  attr_reader :ledger, :int_ledger
 
   # Validations
   validates_presence_of :account_id, :account_to, :account_to_id, :reference, :date
@@ -32,10 +31,6 @@ class Payment < BaseService
   end
 
 private
-  def trans_class
-    Transaction
-  end
-
   def build_ledger(extra = {})
       AccountLedger.new({
         account_id: account_id, operation: '', exchange_rate: exchange_rate,
@@ -52,5 +47,12 @@ private
 
   def valid_date
     self.errors[:date] << 'Ingrese una fecha valida' unless date.is_a?(Date)
+  end
+
+  def set_approver
+    unless transaction.is_approved?
+      transaction.approver_id = UserSession.id
+      transaction.approver_datetime = Time.zone.now
+    end
   end
 end

@@ -25,6 +25,10 @@ describe ExpensePayment do
   end
   let(:account_to) { build :account, id: account_to_id, amount: 100 }
 
+  before(:each) do
+    UserSession.user = build :user, id: 12
+  end
+
   context 'Validations' do
     it "validates presence of expense" do
       pay_out = ExpensePayment.new(valid_attributes)
@@ -60,6 +64,8 @@ describe ExpensePayment do
 
     it "makes the payment" do
       expense.should be_is_draft
+      expense.approver_id.should be_nil
+
       p = ExpensePayment.new(valid_attributes)
 
       p.pay.should  be_true
@@ -68,6 +74,7 @@ describe ExpensePayment do
       p.expense.should be_is_a(Expense)
       p.expense.balance.should == balance - valid_attributes[:amount]
       p.expense.should be_is_approved
+      p.expense.approver_id.should eq(UserSession.id)
 
       # Ledger
       p.ledger.should_not be_conciliation
