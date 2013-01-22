@@ -17,7 +17,7 @@ class DefaultIncome < DefaultTransaction
 
   def create_and_approve
     set_income_data
-    income.approve
+    income.approve!
 
     income.save
   end

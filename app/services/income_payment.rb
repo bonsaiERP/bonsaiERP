@@ -40,8 +40,7 @@ private
 
   def update_income
     income.balance -= amount
-    set_approver # Must run before set_state_by_balance
-    income.set_state_by_balance!
+    income.set_state_by_balance! # Sets state and the user
   end
 
   def create_ledger

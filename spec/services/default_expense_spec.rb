@@ -73,6 +73,7 @@ describe DefaultExpense do
       e.ref_number.should eq('E-0001')
 
       e.creator_id.should eq(UserSession.id)
+      e.payment_date.should be_blank
 
       # Number values
       e.exchange_rate.should == 1
@@ -89,6 +90,25 @@ describe DefaultExpense do
       e.expense_details[0].balance.should == 10.0
       e.expense_details[1].original_price.should == 20.0
       e.expense_details[1].balance.should == 20.0
+    end
+
+    it "creates and sets the approve" do
+      s = stub
+      s.should_receive(:values_of).with(:id, :price).and_return([[1, 10.5], [2, 20.0]])
+      
+      Item.should_receive(:where).with(id: item_ids).and_return(s)
+
+      # Create
+      subject.create_and_approve.should be_true
+
+      # Expense
+      e = subject.expense
+      e.should be_is_a(Expense)
+      e.should be_is_approved
+      e.should be_active
+      e.approver_id.should eq(UserSession.id)
+      e.approver_datetime.should be_is_a(Time)
+      e.payment_date.should be_is_a(Date)
     end
 
     it "checks there is no error" do

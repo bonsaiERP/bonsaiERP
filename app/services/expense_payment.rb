@@ -40,7 +40,6 @@ private
 
   def update_expense
     expense.balance -= amount
-    set_approver # Must run before set_state_by_balance
     expense.set_state_by_balance!
   end
 

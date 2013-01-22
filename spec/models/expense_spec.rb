@@ -74,22 +74,39 @@ describe Expense do
     Expense.get_ref_number.should eq('I-0002')
   end
 
-  it "sets its state based on the balance" do
-    e = Expense.new_expense(total: 10, balance: 10)
-    e.set_state_by_balance!
+  context "set_state_by_balance!" do
+    it "sets the correct state" do
+      UserSession.user = build :user, id: 12
+      e = Expense.new_expense(total: 10, balance: 10)
 
-    e.state.should eq('draft')
+      e.set_state_by_balance!
 
+      e.state.should eq('draft')
 
-    e = Expense.new_expense(total: 10, balance: 5)
-    e.set_state_by_balance!
+      # Change approve
+      e.balance = 5
 
-    e.state.should eq('approved')
+      e.set_state_by_balance!
 
-    e = Expense.new_expense(total: 10, balance: 0)
-    e.set_state_by_balance!
+      e.should be_is_approved
 
-    e.state.should eq('paid')
+      # Change to paid
+      e.balance = 0
+      e.should_not_receive(:approve!)
+      e.set_state_by_balance!
+
+      e.should be_is_paid
+    end
+
+    it "does not call approve! method" do
+      e = Income.new_income(total: 10, balance: 5)
+      e.state = 'approved'
+
+      e.should be_is_approved
+      e.should_not_receive(:approve!)
+
+      e.set_state_by_balance!
+    end
   end
 
   it "returns the subtotal from  details" do

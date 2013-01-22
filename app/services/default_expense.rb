@@ -15,6 +15,13 @@ class DefaultExpense < DefaultTransaction
     expense.save
   end
 
+  def create_and_approve
+    set_expense_data
+    expense.approve!
+
+    expense.save
+  end
+
   def update(params)
     expense.attributes = params
 

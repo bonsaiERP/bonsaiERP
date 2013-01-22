@@ -74,10 +74,11 @@ class Expense < Account
   end
 
   def set_state_by_balance!
-    if balance == 0
+    if balance <= 0
+      approve! unless is_approved?
       self.state = 'paid'
     elsif balance < total
-      self.state = 'approved'
+      approve! unless is_approved?
     else
       self.state = 'draft'
     end
@@ -93,6 +94,13 @@ class Expense < Account
 
   def discount_percent
     discount/gross_total
+  end
+
+  def approve!
+    self.state = 'approved'
+    self.approver_id = UserSession.id
+    self.approver_datetime = Time.zone.now
+    self.payment_date = Date.today
   end
 
 private

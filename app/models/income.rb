@@ -105,6 +105,7 @@ class Income < Account
     self.state = 'approved'
     self.approver_id = UserSession.id
     self.approver_datetime = Time.zone.now
+    self.payment_date = Date.today
   end
 
 private
