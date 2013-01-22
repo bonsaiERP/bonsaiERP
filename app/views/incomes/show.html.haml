@@ -19,6 +19,12 @@
         = @income
         = income_state_tag @income
         %small= link_to @income.contact, @income.contact
+
+      = render_if @income.payment_date do
+        %h4.n
+          %span.muted Fecha de pago
+          = @income.payment_date
+
     .span6
       - if @income.is_draft?
         = form_for @income, url: approve_income_path(@income) do |f|
@@ -65,9 +71,12 @@
           .span4
             %h4
               = payment.conciliated.html_safe
-
               = link_to payment, payment
               %small=l payment.date.to_date
+            .clear-both
+            %h5
+              %span.muted A:
+              = link_to payment.account_to, payment.account_to
 
           .span4
             %span.muted Monto

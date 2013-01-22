@@ -33,6 +33,7 @@ describe ConciliateAccount do
         al.account_to_amount.should == 10 + 100
 
         al.approver_id.should eq(1)
+        al.approver_datetime.should be_is_a(Time)
       end
 
       it "updates both accounts for  Bank and Cash" do

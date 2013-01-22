@@ -1,8 +1,10 @@
 - content_for :links do
-  %ul.breadcrumps.span6
+  %ul.breadcrumbs.span6
     %li #{link_to "Contactos", contacts_path}
     %li
-      %span #{@contact}
+      %i.icon-caret-right
+    %li
+      = @contact
 
   .links.span6
     = link_to 'Nuevo', new_contact_path

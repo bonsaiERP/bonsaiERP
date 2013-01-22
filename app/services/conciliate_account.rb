@@ -24,6 +24,7 @@ private
   def update_account_to
     account_to.amount += amount_currency
     account_ledger.approver_id = UserSession.id
+    account_ledger.approver_datetime = Time.zone.now
 
     account_to.save && account_ledger.save
   end

@@ -1,9 +1,0 @@
-- content_for :links do
-  %ul.breadcrumps.span6
-    %li #{link_to "Clientes", clients_path} 
-  .links.span6
-    = link_to "Vídeo", "http://www.youtube.com/embed/BZMsfhXi9uw", :class => 'video', 'data-title' => 'Como crear clientes'
-
-%h1 Nuevo cliente
-= render 'contacts/form', :klass => @client
-
