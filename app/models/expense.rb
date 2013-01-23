@@ -18,7 +18,7 @@ class Expense < Account
   STATES = %w(draft approved paid)
   ########################################
   # Validations
-  validates_presence_of :date
+  validates_presence_of :date, :contact, :contact_id
   validates :state, presence: true, inclusion: {in: STATES}
 
   ########################################
@@ -75,10 +75,10 @@ class Expense < Account
 
   def set_state_by_balance!
     if balance <= 0
-      approve! unless is_approved?
+      approve!
       self.state = 'paid'
     elsif balance < total
-      approve! unless is_approved?
+      approve!
     else
       self.state = 'draft'
     end
@@ -97,10 +97,12 @@ class Expense < Account
   end
 
   def approve!
-    self.state = 'approved'
-    self.approver_id = UserSession.id
-    self.approver_datetime = Time.zone.now
-    self.payment_date = Date.today
+    unless is_approved?
+      self.state = 'approved'
+      self.approver_id = UserSession.id
+      self.approver_datetime = Time.zone.now
+      self.payment_date = Date.today
+    end
   end
 
 private

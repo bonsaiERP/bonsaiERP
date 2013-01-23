@@ -11,15 +11,12 @@ class DefaultExpense < DefaultTransaction
 
   def create
     set_expense_data
-
+    yield if given_block?
     expense.save
   end
 
   def create_and_approve
-    set_expense_data
-    expense.approve!
-
-    expense.save
+    create { expense.approve! }
   end
 
   def update(params)

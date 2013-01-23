@@ -27,6 +27,8 @@ describe Expense do
     it { should have_many(:expense_details) }
 
     it { should validate_presence_of(:date) }
+    it { should validate_presence_of(:contact) }
+    it { should validate_presence_of(:contact_id) }
     it { should have_valid(:state).when(*Expense::STATES) }
     it { should_not have_valid(:state).when(nil, 'ja', 1) }
 
@@ -92,20 +94,30 @@ describe Expense do
 
       # Change to paid
       e.balance = 0
-      e.should_not_receive(:approve!)
       e.set_state_by_balance!
 
       e.should be_is_paid
     end
 
     it "does not call approve! method" do
-      e = Income.new_income(total: 10, balance: 5)
-      e.state = 'approved'
+      e = Expense.new_expense(total: 10, balance: 5)
+      e.approve!
 
       e.should be_is_approved
-      e.should_not_receive(:approve!)
+      e.approver_id.should eq(UserSession.id)
+      e.approver_datetime.should be_is_a(Time)
 
-      e.set_state_by_balance!
+      # Approved state
+      e = Expense.new_expense(total: 10, balance: 5)
+      e.approver_id.should be_nil
+
+      e.state = 'approved'
+      e.should be_is_approved
+
+      e.approve!
+
+      e.approver_id.should be_nil
+      e.approver_datetime.should be_nil
     end
   end
 

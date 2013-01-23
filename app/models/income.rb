@@ -14,14 +14,15 @@ class Income < Account
 
   has_one :transaction, foreign_key: :account_id, autosave:true
   has_many :income_details, foreign_key: :account_id, dependent: :destroy
-  accepts_nested_attributes_for :income_details, allow_destroy: true
+  accepts_nested_attributes_for :income_details, allow_destroy: true,
+    reject_if: proc {|at| at.fetch(:item_id).blank? }
 
   has_many :payments, class_name: 'AccountLedger', foreign_key: :account_id, conditions: {operation: 'payin'}
 
   STATES = %w(draft approved paid)
   ########################################
   # Validations
-  validates_presence_of :date
+  validates_presence_of :date, :contact, :contact_id
   validates :state, presence: true, inclusion: {in: STATES}
 
   ########################################
@@ -80,10 +81,10 @@ class Income < Account
 
   def set_state_by_balance!
     if balance <= 0
-      approve! unless is_approved?
+      approve!
       self.state = 'paid'
     elsif balance < total
-      approve! unless is_approved?
+      approve!
     else
       self.state = 'draft'
     end
@@ -102,10 +103,12 @@ class Income < Account
   end
 
   def approve!
-    self.state = 'approved'
-    self.approver_id = UserSession.id
-    self.approver_datetime = Time.zone.now
-    self.payment_date = Date.today
+    unless is_approved?
+      self.state = 'approved'
+      self.approver_id = UserSession.id
+      self.approver_datetime = Time.zone.now
+      self.payment_date = Date.today
+    end
   end
 
 private

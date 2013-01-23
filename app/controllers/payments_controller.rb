@@ -54,14 +54,14 @@ private
   def check_income
     unless Income.exists? params[:id]
       flash[:error] = 'No se puede realizar el cobro, el ingreso no existe.'
-      redirect_to dashboard_path and return
+      redirect_to :back and return
     end
   end
 
   def check_expense
     unless Expense.exists? params[:id]
       flash[:error] = 'No se puede realizar el pago, el egreso no existe.'
-      redirect_to dashboard_path and return
+      redirect_to :back and return
     end
   end
 end

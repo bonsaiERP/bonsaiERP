@@ -1,17 +1,16 @@
 %h2.dark#items_header Items
 
 %table#items-table.table
-  %thead
-    %tr
-      %th.item Item
-      %th.price
-        Precio unitario
-        %span.currency
-      %th.quantity Cantidad
-      %th.total_row 
-        Total fila
-        %span.currency
-      %th
+  %tr.head
+    %th.item Item
+    %th.price
+      Precio unitario
+      %span.currency
+    %th.quantity Cantidad
+    %th.total_row 
+      Total fila
+      %span.currency
+    %th
 
   = f.simple_fields_for details do |fd|
     %tr.item{id: fd.object.id, data: {item: fd.object.data_hash.to_json }}

@@ -28,6 +28,8 @@ describe Income do
     it { should have_many(:payments) }
     # Validations
     it { should validate_presence_of(:date) }
+    it { should validate_presence_of(:contact) }
+    it { should validate_presence_of(:contact_id) }
     it { should have_valid(:state).when(*Income::STATES) }
     it { should_not have_valid(:state).when(nil, 'ja', 1) }
 
@@ -101,7 +103,6 @@ describe Income do
 
       # Change to paid
       i.balance = 0
-      i.should_not_receive(:approve!)
       i.set_state_by_balance!
 
       i.should be_is_paid
@@ -109,12 +110,23 @@ describe Income do
 
     it "does not call approve! method" do
       i = Income.new_income(total: 10, balance: 5)
-      i.state = 'approved'
+      i.approve!
 
       i.should be_is_approved
-      i.should_not_receive(:approve!)
+      i.approver_id.should eq(UserSession.id)
+      i.approver_datetime.should be_is_a(Time)
 
-      i.set_state_by_balance!
+      # Approved state
+      i = Income.new_income(total: 10, balance: 5)
+      i.approver_id.should be_nil
+
+      i.state = 'approved'
+      i.should be_is_approved
+
+      i.approve!
+
+      i.approver_id.should be_nil
+      i.approver_datetime.should be_nil
     end
   end
 
@@ -167,4 +179,5 @@ describe Income do
       i.approver_datetime.should be_is_a(Time)
     end
   end
+
 end

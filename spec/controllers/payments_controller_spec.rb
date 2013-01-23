@@ -34,10 +34,11 @@ describe PaymentsController do
     end
 
     it "redirects to dashboard when Income does not exists" do
+      request.env['HTTP_REFERER'] = '/back'
       post :income, id: 1, income_payment: {account_id: 2}
 
       flash[:error].should eq('No se puede realizar el cobro, el ingreso no existe.')
-      response.should redirect_to dashboard_path
+      response.should redirect_to '/back'
     end
   end
 
@@ -63,6 +64,7 @@ describe PaymentsController do
       Expense.stub(exists?: true) # for before_filter
       ExpensePayment.any_instance.stub(expense: build(:expense, id: 2), pay: false)
       
+
       post :expense, id: 1, expense_payment: {account_id: 2}
 
       flash[:error].should be_present
@@ -71,10 +73,12 @@ describe PaymentsController do
     end
 
     it "redirects to dashboard when Expense does not exists" do
+      request.env['HTTP_REFERER'] = '/back'
+
       post :expense, id: 1, expense_payment: {account_id: 2}
 
       flash[:error].should eq('No se puede realizar el pago, el egreso no existe.')
-      response.should redirect_to dashboard_path
+      response.should redirect_to '/back'
     end
   end
 end

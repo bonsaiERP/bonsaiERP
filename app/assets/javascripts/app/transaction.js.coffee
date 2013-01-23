@@ -81,7 +81,7 @@ class Transaction extends Backbone.Collection
     if $('tr.item:last').length > 0
       $tr = $(@getItemHtml(num)).insertAfter('tr.item:last')
     else
-      $tr = $(@getItemHtml(num)).insertAfter('thead')
+      $tr = $(@getItemHtml(num)).insertAfter('tr.head')
 
     $tr.createAutocomplete()
     @add(item = new Item(rate: @currency.get('rate') ) )

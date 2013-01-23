@@ -94,11 +94,11 @@ describe DefaultIncome do
     end
 
     it "creates and approves" do
-      s = stub
-      s.should_receive(:values_of).with(:id, :price).and_return([[1, 10.5], [2, 20.0]])
-      
-      Item.should_receive(:where).with(id: item_ids).and_return(s)
-
+      subject.should_receive(:set_income_data).and_return(true)
+      # Check, bu not unit test
+      subject.income.payment_date.should be_nil
+      subject.income.approver_id.should be_nil
+      subject.income.approver_datetime.should be_nil
       # Create
       subject.create_and_approve.should be_true
 
@@ -107,59 +107,42 @@ describe DefaultIncome do
       i.should be_is_a(Income)
       i.should be_is_approved
       i.should be_active
-      i.ref_number.should eq('I-0001')
-      i.date.should be_is_a(Date)
       i.payment_date.should eq(i.date)
-
-      i.creator_id.should eq(UserSession.id)
       i.approver_id.should eq(UserSession.id)
       i.approver_datetime.should be_is_a(Time)
-
-      # Number values
-      i.exchange_rate.should == 1
-      i.total.should == total
-
-      i.gross_total.should == (10 * 10.5 + 20 * 20.0)
-      i.balance.should == total
-      i.gross_total.should > i.total
-
-      i.discount == i.gross_total - total
-      i.should be_discounted
-
-      i.income_details[0].original_price.should == 10.5
-      i.income_details[0].balance.should == 10.0
-      i.income_details[1].original_price.should == 20.0
-      i.income_details[1].balance.should == 20.0
     end
-    it "checks there is no error" do
-      s = stub
-      s.should_receive(:values_of).with(:id, :price).and_return([[1, 10.0], [2, 20.0]])
-      Item.should_receive(:where).with(id: item_ids).and_return(s)
-      
-      subject.income.total = details_total
 
+  end
+
+  context "Update" do
+    before(:each) do
+      Income.any_instance.stub(save: true)
+      IncomeDetail.any_instance.stub(save: true)
+    end
+
+    subject {
+      DefaultIncome.new(income) 
+    }
+
+    it "checks there is no error" do
+      i = subject.income
+      i.total = details_total
+      i.balance = 0
+      i.stub(amount_was: i.total)
+
+      i.should be_is_draft
+
+      attributes = valid_params.merge(total: 200)
       # Create
-      subject.create.should be_true
+      subject.update(attributes).should be_true
 
       # Income
       i = subject.income
-
-      # Number values
-      i.exchange_rate.should == 1
-      i.total.should == details_total
-
-      i.gross_total.should == details_total
-      i.balance.should == details_total
-      i.gross_total.should == (10 * 10 + 20 * 20)
-
-      i.discount == 0
-      i.should_not be_discounted
-
-      i.income_details[0].original_price.should == 10.0
-      i.income_details[0].balance.should == 10.0
-      i.income_details[1].original_price.should == 20.0
-      i.income_details[1].balance.should == 20.0
-      #
+      
+      i.should be_is_paid
+      i.should be_has_error
+      i.error_messages[:balance].should_not be_blank
     end
+
   end
 end

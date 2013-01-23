@@ -192,7 +192,12 @@ es:
       #   user:
       #     login: "Handle"
       # will translate User attribute "login" as "Handle"
-  
+  # Errors that are stored in the model but are allowed
+  allowed_errors:
+    transaction:
+      negative_balance: "El balance es negativo debido a una actualización, le recomendamos realizar una devolución"
+      negative_item_balance: "Existe un item con balance negativo"
+      negative_items_balance: "Existen items con balance negativo"
   # Active Model
   errors:
     # The default format to use in full error messages.
@@ -265,6 +270,7 @@ es:
         changes: "No es posible cambiar el número de referencia o el contacto"
         paid_amount: "El total es menor a la cantidad %{pay_type}, le recomendamos realizar una devolución"
         number_of_items: "Debe ingresar seleccionar al menos un ítem"
+        number_of_items: "Debe ingresar seleccionar al menos un ítemon"
       transaction_details:
         delivered_quantity: "La cantidad es menor a la cantidad entregada"
         change_item: "No es posible cambiar de item, se volvio al original"
