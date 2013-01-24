@@ -3,7 +3,8 @@
 # email: boriscyber@gmail.com
 class TransactionHistory < ActiveRecord::Base
 
-  #attr_reader :hash, :klass
+  # hash is a reserved word
+  #attr_reader :hash, :klass, #
   serialize :data, Hash
 
   # Relationships

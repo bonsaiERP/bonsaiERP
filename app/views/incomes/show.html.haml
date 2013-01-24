@@ -13,6 +13,15 @@
     = link_to 'Borrar', @income, method: 'delete'
 
 %header
+  - if @income.has_error
+    .allowed-errors
+      %h3 Existen errores que debe corregir!
+      %ul
+        - @income.error_messages.each do |k, arr|
+          - arr.each do |v|
+            %li
+              %h5.n= I18n.t("allowed_errors.#{v}")
+
   .row-fluid
     .span6
       %h1.n
