@@ -2,6 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class IncomesController < ApplicationController
+  before_filter :set_income, only: [:approve]
 
   # GET /incomes
   def index
@@ -67,7 +68,7 @@ class IncomesController < ApplicationController
 
   # DELETE /incomes/1
   def destroy
-    if @transaction.approved?
+    if @income.approved?
       flash[:warning] = "No es posible anular la nota #{@transaction}."
       redirect_transaction
     else
@@ -111,5 +112,9 @@ private
 
   def transaction_params
     @transaction_params ||= TransactionParams.new
+  end
+
+  def set_income
+    @income = Income.find_by_id(params[:id])
   end
 end

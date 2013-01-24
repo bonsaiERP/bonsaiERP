@@ -12,7 +12,7 @@ class Income < Account
   belongs_to :contact
   belongs_to :project
 
-  has_one :transaction, foreign_key: :account_id
+  has_one :transaction, foreign_key: :account_id, autosave: true
 
   has_many :income_details, foreign_key: :account_id, dependent: :destroy
   accepts_nested_attributes_for :income_details, allow_destroy: true,

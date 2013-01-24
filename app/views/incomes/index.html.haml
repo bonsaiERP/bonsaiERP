@@ -32,16 +32,16 @@
       .span4
         %h4
           = link_to income, income
-        = l income.date
+        = income.has_error_label
+        %h5
+          %i.icon-user(title="Contacto" rel='tooltip')
+          = income.contact
         .clear-both
         = income_state_tag income
-        %h5
-          %small Contacto
-          = income.contact
+        %i= l income.date
       .span3
-        .clear-both
         = income.payment_date_tag
-
+        .clear-both
         = income.creator_label
         = income.approver_label
         = income.nuller_label

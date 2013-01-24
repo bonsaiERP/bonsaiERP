@@ -13,12 +13,18 @@ class IncomePresenter < Resubject::Presenter
     to_model.balance > 0
   end
 
+  def has_error_label
+    "<span class='label label-important' rel='tooltip' title='Corrija los errores'>ERROR</span>".html_safe if to_model.has_error?
+  end
+
   def payment_date_tag
     d = ""
     unless is_paid?
-      d = "<span class='muted'>Vence el</span> "
+      css = ( today > to_model.payment_date ) ? "text-error" : ""
+      d = "<span class='muted'>Vence el:</span>"
+      d << "<span class='i #{css}'><i class='icon-time'></i> "
       d << l(to_model.payment_date)
-      d << "<span class='text-error' title='Fecha de cobro atrasada' rel='tooltip'>#{d}<span>" if today > to_model.payment_date
+      d << "</span>"
     end
     d.html_safe
   end
