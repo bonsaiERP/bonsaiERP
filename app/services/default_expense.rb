@@ -11,7 +11,7 @@ class DefaultExpense < DefaultTransaction
 
   def create
     set_expense_data
-    yield if given_block?
+    yield if block_given?
     expense.save
   end
 

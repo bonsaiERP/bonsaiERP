@@ -70,7 +70,7 @@ describe DefaultExpense do
       e.should be_is_a(Expense)
       e.should be_is_draft
       e.should be_active
-      e.ref_number.should eq('E-0001')
+      e.ref_number.should =~ /E-\d{2}-\d{4}/
 
       e.creator_id.should eq(UserSession.id)
       e.payment_date.should be_blank

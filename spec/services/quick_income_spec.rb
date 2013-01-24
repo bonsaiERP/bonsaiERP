@@ -46,7 +46,7 @@ describe QuickIncome do
       income = qi.income
       income.should be_is_a(Income)
       income.currency.should eq('BOB')
-      income.ref_number.should eq("I-0001")
+      income.ref_number.should =~ /I-\d{2}-\d{4}/
       income.total.should == 200.5
       income.balance.should == 0.0
       income.gross_total.should == 200.5

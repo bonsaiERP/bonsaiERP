@@ -26,6 +26,7 @@ describe Income do
     it { should have_one(:transaction) }
     it { should have_many(:income_details) }
     it { should have_many(:payments) }
+    it { should have_many(:transaction_histories) }
     # Validations
     it { should validate_presence_of(:date) }
     it { should validate_presence_of(:contact) }
@@ -77,12 +78,16 @@ describe Income do
   end
 
   it "gets the latest ref_number" do
+    y = Date.today.year.to_s[2..4]
     ref_num = Income.get_ref_number
-    ref_num.should eq('I-0001')
+    ref_num.should eq("I-#{y}-0001")
 
-    Income.stub_chain(:order, :limit, :pluck).and_return(['I-0001'])
+    Income.stub_chain(:order, :limit, pluck: ["I-#{y}-0001"])
 
-    Income.get_ref_number.should eq('I-0002')
+    Income.get_ref_number.should eq("I-#{y}-0002")
+
+    Date.stub_chain(:today, year: 2099)
+    Income.get_ref_number.should eq("I-99-0001")
   end
 
   context "set_state_by_balance!" do

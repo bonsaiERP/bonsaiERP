@@ -68,12 +68,16 @@ describe Expense do
   end
 
   it "gets the latest ref_number" do
+    y = Date.today.year.to_s[2..4]
     ref_num = Expense.get_ref_number
-    ref_num.should eq('E-0001')
+    ref_num.should eq("E-#{y}-0001")
 
-    Expense.stub_chain(:order, :limit, :pluck).and_return(['I-0001'])
+    Expense.stub_chain(:order, :limit, pluck: ["E-#{y}-0001"])
 
-    Expense.get_ref_number.should eq('I-0002')
+    Expense.get_ref_number.should eq("E-#{y}-0002")
+
+    Date.stub_chain(:today, year: 2099)
+    Expense.get_ref_number.should eq("E-99-0001")
   end
 
   context "set_state_by_balance!" do

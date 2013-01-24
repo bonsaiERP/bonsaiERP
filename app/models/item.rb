@@ -11,7 +11,8 @@ class Item < ActiveRecord::Base
   # Relationships
   belongs_to :unit
   has_many   :stocks
-  has_many   :transaction_details
+  has_many   :income_details
+  has_many   :expense_details
   has_many   :inventory_operation_details
   
   ##########################################

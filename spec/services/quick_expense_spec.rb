@@ -43,7 +43,7 @@ describe QuickExpense do
       # expense
       expense = qe.expense
       expense.should be_is_a(Expense)
-      expense.ref_number.should eq("E-0001")
+      expense.ref_number.should =~ /E-\d{2}-\d{4}/
       expense.currency.should eq('BOB')
       expense.total.should == 200.5
       expense.balance.should == 0.0

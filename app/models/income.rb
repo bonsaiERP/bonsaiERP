@@ -13,11 +13,13 @@ class Income < Account
   belongs_to :project
 
   has_one :transaction, foreign_key: :account_id, autosave:true
+
   has_many :income_details, foreign_key: :account_id, dependent: :destroy
   accepts_nested_attributes_for :income_details, allow_destroy: true,
-    reject_if: proc {|at| at.fetch(:item_id).blank? }
+    reject_if: proc {|det| det.fetch(:item_id).blank? }
 
   has_many :payments, class_name: 'AccountLedger', foreign_key: :account_id, conditions: {operation: 'payin'}
+  has_many :transaction_histories, foreign_key: :account_id
 
   STATES = %w(draft approved paid)
   ########################################
@@ -40,6 +42,7 @@ class Income < Account
   ].freeze
   delegate *getters_setters_array(*TRANSACTION_METHODS), to: :transaction
   delegate :discounted?, :delivered?, :devolution?, :approve!, to: :transaction
+  delegate :attributes, to: :transaction, prefix: true
 
   # Define boolean methods for states
   STATES.each do |state|
@@ -76,7 +79,18 @@ class Income < Account
 
   def self.get_ref_number
     ref = Income.order("name DESC").limit(1).pluck(:name).first
-    ref.present? ? ref.next : "I-0001"
+    year= Date.today.year.to_s[2..4]
+
+    if ref.present?
+      _, y, num = ref.split('-')
+      if y == year
+        "I-#{y}-#{num.next}"
+      else
+        "I-#{year}-0001"
+      end
+    else
+      "I-#{year}-0001"
+    end
   end
 
   def set_state_by_balance!
@@ -91,7 +105,7 @@ class Income < Account
   end
 
   def subtotal
-    self.income_details.inject(0) {|sum, v| sum += v.total }
+    self.income_details.inject(0) {|sum, det| sum += det.total }
   end
 
   def discount

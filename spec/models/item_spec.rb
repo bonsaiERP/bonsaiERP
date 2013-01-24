@@ -5,6 +5,11 @@
 require 'spec_helper'
 
 describe Item do
+  it { should belong_to(:unit) }
+  it { should have_many(:stocks) }
+  it { should have_many(:income_details) }
+  it { should have_many(:expense_details) }
+  it { should have_many(:inventory_operation_details) }
 
   let(:unit){ create :unit }
   let(:valid_attributes) do

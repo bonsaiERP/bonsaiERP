@@ -70,7 +70,7 @@ describe DefaultIncome do
       i.should be_is_a(Income)
       i.should be_is_draft
       i.should be_active
-      i.ref_number.should eq('I-0001')
+      i.ref_number.should =~ /I-\d{2}-\d{4}/
       i.date.should be_is_a(Date)
       #i.payment_date.should eq(i.date)
 

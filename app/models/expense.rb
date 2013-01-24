@@ -12,8 +12,10 @@ class Expense < Account
   belongs_to :project
 
   has_one :transaction, foreign_key: :account_id, autosave:true
+
   has_many :expense_details, foreign_key: :account_id, dependent: :destroy
-  accepts_nested_attributes_for :expense_details, allow_destroy: true
+  accepts_nested_attributes_for :expense_details, allow_destroy: true,
+    reject_if: proc {|det| det.fetch(:item_id).blank? }
 
   STATES = %w(draft approved paid)
   ########################################
@@ -34,6 +36,7 @@ class Expense < Account
   ].freeze
   delegate *getters_setters_array(*TRANSACTION_METHODS), to: :transaction
   delegate :discounted?, :delivered?, :devolution?, to: :transaction
+  delegate :attributes, to: :transaction, prefix: true
 
   # Define boolean methods for states
   STATES.each do |state|
@@ -70,7 +73,18 @@ class Expense < Account
 
   def self.get_ref_number
     ref = Expense.order("name DESC").limit(1).pluck(:name).first
-    ref.present? ? ref.next : "E-0001"
+    year= Date.today.year.to_s[2..4]
+
+    if ref.present?
+      _, y, num = ref.split('-')
+      if y == year
+        "E-#{y}-#{num.next}"
+      else
+        "E-#{year}-0001"
+      end
+    else
+      "E-#{year}-0001"
+    end
   end
 
   def set_state_by_balance!
@@ -85,7 +99,7 @@ class Expense < Account
   end
 
   def subtotal
-    self.expense_details.inject(0) {|sum, v| sum += v.total }
+    self.expense_details.inject(0) {|sum, det| sum += det.total }
   end
 
   def discount
