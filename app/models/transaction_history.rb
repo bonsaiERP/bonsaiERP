@@ -11,17 +11,12 @@ class TransactionHistory < ActiveRecord::Base
 
   serialize :data
 
-  def self.create_history(trans)
-    trans_hist = new(account_id: trans.id)
-    trans_hist.data = trans_hist.get_transaction_data(trans)
-    trans_hist.save!
-    trans_hist
-  end
-
-  def get_transaction_data(trans)
+  def create_history(trans)
+    self.account_id = trans.id
     @klass = trans
     @hash = {}
-    transaction_data
+    self.data = transaction_data
+    self.save
   end
 private
   def transaction_data

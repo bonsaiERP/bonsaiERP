@@ -111,6 +111,12 @@ describe Income do
       i.set_state_by_balance!
 
       i.should be_is_paid
+
+      # Change balance
+      i.balance = 1
+      i.set_state_by_balance!
+
+      i.should be_is_approved
     end
 
     it "does not call approve! method" do

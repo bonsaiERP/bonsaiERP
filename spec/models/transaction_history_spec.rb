@@ -35,7 +35,8 @@ describe TransactionHistory do
     it "creates the first History" do
       income.should be_persisted
 
-      th = TransactionHistory.create_history(income)
+      th = TransactionHistory.new
+      th.create_history(income).should be_true
       th.should be_persisted
 
       income.total = 290

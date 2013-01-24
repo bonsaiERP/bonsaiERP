@@ -21,11 +21,19 @@ class DefaultIncome < DefaultTransaction
   end
 
   def update(params)
-    income.attributes = params
-    update_income_data
-    yield if block_given?
+    res = true
+    ActiveRecord::Base.transaction do
+      res = TransactionHistory.new.create_history(income)
+      income.attributes = params
+      update_income_data
+      yield if block_given?
 
-    income.save
+      res = income.save && res
+
+      raise ActiveRecord::Rollback unless res
+    end
+
+    res
   end
 
 private

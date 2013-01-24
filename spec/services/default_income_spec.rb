@@ -125,6 +125,8 @@ describe DefaultIncome do
     }
 
     it "checks there is no error" do
+      TransactionHistory.any_instance.should_receive(:create_history).and_return(true)
+
       i = subject.income
       i.total = details_total
       i.balance = 0

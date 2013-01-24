@@ -98,6 +98,7 @@ class Income < Account
       approve!
       self.state = 'paid'
     elsif balance < total
+      self.state = 'approved'
       approve!
     else
       self.state = 'draft'
