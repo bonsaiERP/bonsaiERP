@@ -14,6 +14,19 @@ class TransactionDetail < ActiveRecord::Base
   def total
     quantity * price
   end
+  alias_method :subtotal, :total
 
-private
+  def changed_price?
+    !(price === original_price)
+  end
+
+  def data_hash
+    {
+      original_price: original_price, 
+      price: price, 
+      quantity: quantity, 
+      subtotal: subtotal
+    }
+  end
+
 end

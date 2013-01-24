@@ -13,7 +13,7 @@ class IncomesController < ApplicationController
   # GET /incomes/1
   # GET /incomes/1.xml
   def show
-    @income = present Income.find(params[:id])
+    @income = present Income.where(id:params[:id]).includes(payments: [:account_to], income_details: [:item]).first
   end
 
   # GET /incomes/new

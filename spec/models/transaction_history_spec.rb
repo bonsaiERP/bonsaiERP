@@ -34,6 +34,7 @@ describe TransactionHistory do
 
     it "creates the first History" do
       income.should be_persisted
+      UserSession.user = build :user, id: 12
 
       th = TransactionHistory.new
       th.create_history(income).should be_true
@@ -41,6 +42,7 @@ describe TransactionHistory do
 
       income.total = 290
 
+      #puts th.data
       th.data.should be_is_a(Hash)
       th.data.should_not be_blank
       th.data.fetch(:amount).should eq(300)

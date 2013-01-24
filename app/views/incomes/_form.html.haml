@@ -10,7 +10,8 @@
   .row-fluid
     =render "transactions/form_items", f: f, transaction: income, details: :income_details
 
-  = f.submit 'Salvar', class: 'btn btn-success b btn-large'
+  = f.submit 'Salvar', class: 'btn b btn-large', name: 'commit_save'
+  = f.submit 'Aprovar', class: 'btn btn-success b btn-large', name: 'commit_approve'
 
 
 :coffeescript

@@ -42,7 +42,7 @@ module TransactionsHelper
   # Indicates if there was a price change only for Income
   def price_change(klass)
     if klass.changed_price?
-      "<span class='dark_grey tip' title='Precio original: #{ntc klass.original_price_currency}' >#{ntc klass.price}</span>".html_safe
+      "<span class='dark-grey rel='tooltip' title='Precio original: #{ntc klass.original_price}' >#{ntc klass.price}</span>".html_safe
     else
       ntc klass.price
     end
