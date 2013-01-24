@@ -3,8 +3,7 @@
 # email: boriscyber@gmail.com
 class TransactionHistory < ActiveRecord::Base
 
-  attr_reader :hash, :klass
-
+  #attr_reader :hash, :klass
   serialize :data, Hash
 
   # Relationships
@@ -26,30 +25,20 @@ class TransactionHistory < ActiveRecord::Base
     self.save
   end
 
-  def set_history(trans)
-    self.account_id = trans.id
-    self.user_id = UserSession.id
-    @klass = trans
-    @hash = {}
-    self.data = get_transaction_data
-
-    self
-  end
-
 private
   def get_transaction_data
-    @hash = klass.attributes.slice!("error_messages")
-    h = klass.transaction_attributes.slice!("id", "created_at", "updated_at")
+    @hash = @klass.attributes.symbolize_keys.slice!("error_messages")
+    h = @klass.transaction_attributes.symbolize_keys.slice!("id", "created_at", "updated_at")
     @hash.merge!(h)
     transaction_details
     @hash
   end
 
   def transaction_details
-    det = klass.is_a?(Income) ? :income_details : :expense_details
+    det = @klass.is_a?(Income) ? :income_details : :expense_details
     @hash[det] = []
-    klass.send(det).each do |d|
-      @hash[det] << d.attributes.slice!("created_at", "updated_at")
+    @klass.send(det).each do |d|
+      @hash[det] << d.attributes.symbolize_keys.slice!("created_at", "updated_at")
     end
   end
 end

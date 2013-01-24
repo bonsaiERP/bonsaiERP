@@ -22,12 +22,17 @@ class DefaultIncome < DefaultTransaction
 
   # TODO: Check why it can't be enclosed in ActiveRecord::Base.transaction
   def update(params)
-      th = TransactionHistory.new.set_history(income)
+    res = true
+    ActiveRecord::Base.transaction do
+      res = TransactionHistory.new.create_history(income)
       income.attributes = params
       update_income_data
       yield if block_given?
 
-      income.save && th.save
+      raise ActiveRecord::Rollback unless income.save && res
+    end
+
+    res
   end
 
 private
