@@ -63,9 +63,24 @@
   #information
     = render "incomes/items", income: @income
   #payments
-    %h2 Cobros
 
-    = render 'incomes/payment_form', income: @income if @income.balance?
+    %a.btn.btn-primary(id='payment-link' href='javascript:;')
+      %i.icon-plus-sign
+      Cobrar
+
+    %a.btn.btn-primary(id='devolution-link' href='javascript:;')
+      %i.icon-minus-sign
+      Devolver
+
+    #payment-form(style='display: none')
+      %h3 Cobrar ingreso
+      = render 'incomes/payment_form', income: @income if @income.is_approved?
+
+    #devolution-form(style='display: none')
+      %h3 Devolución
+      = render 'incomes/devolution_form', income: @income unless @income.is_draft?
+
+    %h2 Cobros y devoluciones
 
     .row-fluid
       .span4.offset8
@@ -74,29 +89,23 @@
         %span.label Anulado por
 
     %ul.unstyled.listing
-      - @income.payments.each do |payment|
-        %li.row-fluid
-          .span4
-            %h4
-              = payment.conciliated.html_safe
-              = link_to payment, payment
-              %small=l payment.date.to_date
-            .clear-both
-            %h5
-              %span.muted A:
-              = link_to payment.account_to, payment.account_to
+      = render partial: 'account_ledgers/income', collection: @income.payments,as: :ledger
 
-          .span4
-            %span.muted Monto
-            = ntc payment.amount
-            = currency_label payment.currency
+    %h2 Intereses
 
-          .span3
-            = payment.creator_label.html_safe
-            = payment.approver_label.html_safe
-            = payment.nuller_label.html_safe
+    %ul.unstyled.listing
+      = render partial: 'account_ledgers/income', collection: @income.interests,as: :ledger
 
 :coffeescript
   $( ->
     $('#tabs').tabs()
+    $('#payment-link').click( -> 
+      $('#payment-form').show('slow')
+      $(this).hide('slow')
+    )
+
+    $('#devolution-link').click( -> 
+      $('#devolution-form').show('slow')
+      $(this).hide('slow')
+    )
   )

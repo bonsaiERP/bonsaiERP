@@ -1,0 +1,18 @@
+.row-fluid
+  .span6
+    = f.input :account_to_id, label: 'Cuenta', collection: AccountQuery.new.payment(f.object)
+  .span3
+    = f.input :date, as: :datepicker, label: 'Fecha'
+  .span3
+    = f.input :verification, as: :boolean, label: 'Verificar',  label: 'Verificar <i class="icon-info-sign" rel="tooltip" title="Verificar a futuro. Ej.: Cheque"></i>'.html_safe
+
+
+.row-fluid
+  .span6
+    = f.input :amount, label: 'Cantidad <span class="currency"></span>',
+      as: :decimal, input_html: {size: 10, type: 'decimal'}
+  .span6
+    = f.input :reference, label: 'Referecia', as: :text, input_html: {rows: 3}
+
+.form-actions
+  = f.submit "Devolver", class: 'btn btn-success'

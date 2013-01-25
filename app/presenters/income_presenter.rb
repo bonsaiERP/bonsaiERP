@@ -5,8 +5,16 @@ class IncomePresenter < Resubject::Presenter
     IncomePayment.new(account_id: id, date: Date.today, amount: 0)
   end
 
+  def income_devolution
+    IncomeDevolution.new(account_id: id, date: Date.today, amount: 0)
+  end
+
   def payments
     present to_model.payments, AccountLedgerPresenter
+  end
+
+  def interests
+    present to_model.interests, AccountLedgerPresenter
   end
 
   def balance?

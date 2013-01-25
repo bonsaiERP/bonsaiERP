@@ -42,6 +42,13 @@ Bonsaierp::Application.routes.draw do
 
   resources :cashes
 
+  resources :devolutions, only: [] do
+    member do
+      post :income
+      post :expense
+    end
+  end
+
   resources :payments, only: [] do
     member do
       post :income

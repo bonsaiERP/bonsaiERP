@@ -26,6 +26,7 @@ describe Income do
     it { should have_one(:transaction) }
     it { should have_many(:income_details) }
     it { should have_many(:payments) }
+    it { should have_many(:interests) }
     it { should have_many(:transaction_histories) }
     # Validations
     it { should validate_presence_of(:date) }

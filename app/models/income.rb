@@ -19,6 +19,8 @@ class Income < Account
     reject_if: proc {|det| det.fetch(:item_id).blank? }
 
   has_many :payments, class_name: 'AccountLedger', foreign_key: :account_id, conditions: {operation: 'payin'}
+  has_many :interests, class_name: 'AccountLedger', foreign_key: :account_id, conditions: {operation: 'intin'}
+
   has_many :transaction_histories, foreign_key: :account_id
 
   STATES = %w(draft approved paid)

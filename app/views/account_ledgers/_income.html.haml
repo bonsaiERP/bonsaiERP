@@ -1,0 +1,20 @@
+%li.row-fluid
+  .span4
+    %h4
+      = ledger.conciliated.html_safe
+      = link_to ledger, ledger
+      %small=l ledger.date.to_date
+    .clear-both
+    %h5
+      %span.muted A:
+      = link_to ledger.account_to, ledger.account_to
+
+  .span4
+    %span.muted Monto
+    = ntc ledger.amount
+    = currency_label ledger.currency
+
+  .span3
+    = ledger.creator_label.html_safe
+    = ledger.approver_label.html_safe
+    = ledger.nuller_label.html_safe
