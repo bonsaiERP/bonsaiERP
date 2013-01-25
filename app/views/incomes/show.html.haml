@@ -22,18 +22,22 @@
             %li
               %h5.n= I18n.t("allowed_errors.#{v}")
 
+  %h1
+    = @income
+    = @income.state_tag
+
+    %small
+      = link_to @income.contact do
+        %i.icon-user
+        =@income.contact
+
+  = render_if @income.payment_date do
+    %h4.n
+      = @income.payment_date_tag
+
 
   .row-fluid
-    .span6
-      %h1.n
-        = @income.state_tag
-        %small= link_to @income.contact, @income.contact
-
-      = render_if @income.payment_date do
-        %h4.n
-          = @income.payment_date_tag
-
-    .span6
+    .span6.offset6
       - if @income.is_draft?
         = form_for @income, url: approve_income_path(@income) do |f|
           = f.submit 'Aprobar Ingreso', class: 'b btn btn-success'

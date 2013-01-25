@@ -6,31 +6,39 @@
 
 %header
   %h1
-    = @account_ledger.conciliated.html_safe
-    = @account_ledger
-    = @account_ledger.operation_label.html_safe
+    = @ledger.conciliation_tag
+    = @ledger
+    = @ledger.operation_label.html_safe
+    %small.dark
+      = render_if @ledger.account_contact do
+        = link_to @ledger.account_contact_tag, @ledger.account_contact
 
-= form_for @account_ledger, url: conciliate_account_ledger_path(@account_ledger) do |f|
-  = f.submit "Conciliar", class: 'btn btn-success'
+- unless @ledger.conciliation?
+  = form_for @ledger, url: conciliate_account_ledger_path(@ledger) do |f|
+    = f.submit "Conciliar", class: 'btn btn-success'
 
-= render_if @account_ledger.project do
+= render_if @ledger.project do
   %h3
     %span.grey.n Proyecto:
-    = @account_ledger.project
+    = @ledger.project
 
 
-%h4.n= lo @account_ledger.date.to_date
+%h4.n= lo @ledger.date.to_date
 
-.well.well-small.span3
-  = ntc @account_ledger.amount
-  = currency_label @account_ledger.currency
+%h3
+  = ntc @ledger.amount
+  = currency_label @ledger.currency
+  %small
+    %i.icon-file-alt 
+    Refencia:
+  %small.dark= @ledger.reference
 
-%h3.n
+%h4.n
   %span.muted De:
-  = link_to @account_ledger.account, @account_ledger.account
-  = ntc @account_ledger.account_amount
-  = currency_label @account_ledger.account_currency
+  = link_to @ledger.account, @ledger.account
+  = ntc @ledger.account_amount
+  = currency_label @ledger.account_currency
   %span.muted A:
-  = link_to @account_ledger.account_to, @account_ledger.account_to
-  = ntc @account_ledger.account_to_amount
-  = currency_label @account_ledger.account_to_currency
+  = link_to @ledger.account_to, @ledger.account_to
+  = ntc @ledger.account_to_amount
+  = currency_label @ledger.account_to_currency

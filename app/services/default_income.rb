@@ -9,6 +9,7 @@ class DefaultIncome < DefaultTransaction
     @transaction = @income = inc
   end
 
+  # Creates and can call other methods passed in the block
   def create
     set_income_data
     yield if block_given?
@@ -16,11 +17,12 @@ class DefaultIncome < DefaultTransaction
     income.save
   end
 
+  # Creates  and approves an Income
   def create_and_approve
     create { income.approve! }
   end
 
-  def update(params)
+  def update(params = {})
     commit_or_rollback do
       res = TransactionHistory.new.create_history(income)
       income.attributes = params
@@ -44,8 +46,8 @@ class DefaultIncome < DefaultTransaction
     commit_or_rollback { income.save && res }
   end
 private
-
-  # total is the alias for amount
+  # Updates the data for an imcome
+  # total is the alias for amount due that Income < Account
   def update_income_data
     income.balance = income.balance - (income.amount_was - income.amount)
     income.set_state_by_balance!
@@ -63,6 +65,7 @@ private
     income.creator_id = UserSession.id
   end
 
+  # Set details for a new Income
   def set_new_details
     income_details.each do |det|
       det.original_price = item_prices[det.item_id]

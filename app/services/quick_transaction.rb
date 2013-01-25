@@ -2,7 +2,7 @@
 # Generates a quick income with all data
 class QuickTransaction < BaseService
 
-  attr_reader :account_ledger
+  attr_reader :account_ledger, :transaction
 
   attribute :ref_number    , String
   attribute :account_to_id , Integer
@@ -31,9 +31,10 @@ private
   end
 
   def transaction_attributes
-    {ref_number: ref_number, date: date, currency: currency,
-     bill_number: bill_number, contact_id: contact_id,
-     state: 'paid', payment_date: date
+    {
+      ref_number: ref_number, date: date, currency: currency,
+      bill_number: bill_number, contact_id: contact_id,
+      payment_date: date
     }
   end
 

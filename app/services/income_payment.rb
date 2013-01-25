@@ -8,23 +8,19 @@ class IncomePayment < Payment
   # Delegations
   delegate :total, :balance, to: :income, prefix: true, allow_nil: true
 
-  # Creates the payment object
+  # Makes the payment modifiying the Income and creatinig AccountLedger
+  # instances for payment and interest
   def pay
     return false unless valid?
 
-    res = true
-    ActiveRecord::Base.transaction do
+    commit_or_rollback do
       res = save_income
       res = create_ledger && res
       res = create_interest && res
+      set_errors(income, ledger, int_ledger) unless res
 
-      unless res
-        set_errors(income, ledger, int_ledger)
-        raise ActiveRecord::Rollback
-      end
+      res
     end
-
-    res
   end
 
   def income
@@ -46,9 +42,9 @@ private
   def create_ledger
     if amount.to_f > 0
       @ledger = build_ledger(
-        amount: amount, operation: 'payin', account_id: income.id,
-        conciliation: conciliation?
-      )
+                  amount: amount, operation: 'payin', account_id: income.id,
+                  conciliation: conciliation?
+                )
       @ledger.save_ledger
     else
       true
@@ -58,9 +54,9 @@ private
   def create_interest
     if interest.to_f > 0
       @int_ledger = build_ledger(
-        amount: interest, operation: 'intin', account_id: income.id,
-        conciliation: conciliation?
-      )
+                      amount: interest, operation: 'intin', 
+                      account_id: income.id, conciliation: conciliation?
+                    )
       @int_ledger.save_ledger
     else
       true
@@ -71,16 +67,12 @@ private
   def conciliation?
     return true if conciliate?
 
-    if account_to.is_a?(Bank)
-      conciliate?
-    else
-      true
-    end
+    account_to.is_a?(Bank) ? conciliate? : true
   end
 
   def valid_income_balance
     if amount.to_f > income_balance.to_f
-      self.errors[:amount] << I18n.t('errors.messages.payment.income_balance') #'Ingreso una cantidad mayor que el balance'
+      self.errors.add :amount, I18n.t('errors.messages.payment.income_balance')
     end
   end
 

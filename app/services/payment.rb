@@ -19,6 +19,7 @@ class Payment < BaseService
   validate :valid_amount_or_interest
   validate :valid_date
 
+  # Initializes and sets verification to false if it's not set correctly
   def initialize(attrs = {})
     super
     self.verification = false unless [true, false].include?(verification)
@@ -29,27 +30,29 @@ class Payment < BaseService
   end
 
 private
-  def build_ledger(extra = {})
-      AccountLedger.new({
-        account_id: account_id, operation: '', exchange_rate: exchange_rate,
-        amount: 0, account_to_id: account_to_id,
-        reference: reference, date: date
-      }.merge(extra))
+  # Builds and AccountLedger instance with some default data
+  def build_ledger(attrs = {})
+    AccountLedger.new({
+      account_id: account_id, operation: '', exchange_rate: exchange_rate,
+      amount: 0, account_to_id: account_to_id,
+      reference: reference, date: date
+    }.merge(attrs))
   end
 
   def valid_amount_or_interest
     if amount.to_f <= 0 && interest.to_f <= 0
-      self.errors[:base] = I18n.t('errors.messages.payment.invalid_amount_or_interest')
+      self.errors.add :base, I18n.t('errors.messages.payment.invalid_amount_or_interest')
     end
   end
 
-  # Inverse of verification?
+  # Inverse of verification?, no need to negate when working making more
+  # readable code
   def conciliate?
     !verification?
   end
 
   def valid_date
-    self.errors[:date] << 'Ingrese una fecha valida' unless date.is_a?(Date)
+    self.errors.add(:date, I18n.t('errors.messages.payment.date') ) unless date.is_a?(Date)
   end
 
   def set_approver

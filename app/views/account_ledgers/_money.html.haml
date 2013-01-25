@@ -12,18 +12,22 @@
 
 -#= paginate account_ledgers
 %ul.unstyled.listing
-  -# TODO: Move the query to another object, improve finding the contact
-  - AccountLedger.includes({account: :contact}, :account_to, :approver, :creator).all.each do |al|
+  - ledgers=  AccountLedgerQuery.new.money(account.id).page(@page)
+
+  = paginate ledgers
+
+  - ledgers.each do |al|
     - al = present al
     %li.row-fluid
       .span5
         %h4
-          = al.conciliated.html_safe
+          = al.conciliation_tag
           = link_to al, al
-          = al_operation al.operation
-          = al.account.contact
+          = al.operation_tag
+          = al.account_contact_tag
         .clear-both
         %h5
+          %i= l al.date.to_date
           %span.muted De:
           = link_to al.account, al.account
           %span.muted A:

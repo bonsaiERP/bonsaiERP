@@ -4,28 +4,26 @@ class QuickExpense < QuickTransaction
 
   def create
     return false unless valid?
-    res = true
-    ActiveRecord::Base.transaction do
-      res = create_expense
 
+    commit_or_rollback do
+      res = create_expense
       res = create_ledger && res
 
-      unless res
-        set_errors(expense, account_ledger)
-        raise ActiveRecord::Rollback
-      end
-    end
+      set_errors(expense, account_ledger) unless res
 
-    res
+      res
+    end
   end
 
 private
   def create_expense
-    @expense = Expense.new_expense(transaction_attributes.merge(
+    attrs = transaction_attributes.merge(
       ref_number: Expense.get_ref_number,
       total: amount, gross_total: amount, original_total: amount, balance: 0,
       creator_id: UserSession.id, approver_id: UserSession.id
-    ))
+    )
+    @transaction = @expense = Expense.new_expense(attrs)
+
     @expense.set_state_by_balance!
 
     @expense.save
@@ -33,8 +31,8 @@ private
 
   def create_ledger
     @account_ledger = build_ledger(
-      account_id: expense.id, operation: 'payout', amount: -amount,
-      reference: "Egreso rápido #{expense.ref_number}"
+                        account_id: expense.id, operation: 'payout', amount: -amount,
+                        reference: "Egreso rápido #{expense.ref_number}"
     )
 
     @account_ledger.save_ledger

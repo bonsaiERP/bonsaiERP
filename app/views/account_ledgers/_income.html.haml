@@ -1,9 +1,9 @@
 %li.row-fluid
   .span4
     %h4
-      = ledger.conciliated.html_safe
+      = ledger.conciliation_tag
       = link_to ledger, ledger
-      %small=l ledger.date.to_date
+      %small.i.dark=l ledger.date.to_date
     .clear-both
     %h5
       %span.muted A:

@@ -10,7 +10,7 @@ class AccountLedgersController < ApplicationController
 
   # GET /account_ledgers/:id
   def show
-    @account_ledger = present AccountLedger.find(params[:id])
+    @ledger = present AccountLedger.find(params[:id])
   end
 
   def new

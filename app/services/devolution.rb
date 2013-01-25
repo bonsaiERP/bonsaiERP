@@ -1,6 +1,7 @@
 # encoding: utf-8
+# Base class used to make devolutions for Income and Expense models
 class Devolution < BaseService
-  attr_reader :ledger, :int_ledger, :transaction
+  attr_reader :ledger, :transaction
 
   # Attributes
   attribute :account_id, Integer
@@ -17,8 +18,8 @@ class Devolution < BaseService
   validates_numericality_of :exchange_rate, greater_than: 0
   validate :valid_date
 
-  #delegate to: :account, prefix: true, allow_nil: true
-
+  # Sets all values but will set verification to false if is not
+  # correctly set
   def initialize(attrs = {})
     super
     self.verification = false unless [true, false].include?(verification)
@@ -27,13 +28,15 @@ class Devolution < BaseService
   def account_to
     @account = Account.find_by_id(account_to_id)
   end
+
 private
-  def build_ledger(extra = {})
+  # Builds an instance of AccountLedger with basic data for  devolution
+  def build_ledger(attrs = {})
       AccountLedger.new({
-        account_id: account_id, exchange_rate: exchange_rate,
-        amount: 0, conciliation: !verification, account_to_id: account_to_id,
-        reference: reference, date: date
-      }.merge(extra))
+                         account_id: account_id, exchange_rate: exchange_rate,
+                         amount: 0, account_to_id: account_to_id,
+                         reference: reference, date: date
+      }.merge(attrs))
   end
 
   def conciliate?
@@ -41,7 +44,7 @@ private
   end
 
   def valid_date
-    self.errors[:date] << 'Ingrese una fecha valida' unless date.is_a?(Date)
+    self.errors.add(:date, I18n.t('errors.messages.payment.date')) unless date.is_a?(Date)
   end
 
   def set_approver
