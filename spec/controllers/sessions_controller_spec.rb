@@ -3,7 +3,7 @@ require 'spec_helper'
 describe SessionsController do
   describe "GET /sessions" do
     it 'should render the correct template' do
-      User.stub!(:new => mock_model(User))
+      User.stub(:new => mock_model(User))
       get 'new'
 
       assigns(:user).class.to_s.should == "User"
@@ -18,6 +18,9 @@ describe SessionsController do
       user_mock.stub!(:authenticate).with("demo123")
       user_mock
     }
+    let(:user) do
+      build :user, id: 1
+    end
 
     it 'should login' do
       User.stub!(:find_by_email).with("demo@example.com").and_return(user_mock)

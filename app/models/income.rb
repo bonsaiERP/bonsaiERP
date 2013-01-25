@@ -98,11 +98,12 @@ class Income < Account
       approve!
       self.state = 'paid'
     elsif balance < total
-      self.state = 'approved'
+      self.state = 'approved' if self.is_paid?
       approve!
     else
       self.state = 'draft'
     end
+  #binding.pry
   end
 
   def subtotal
@@ -118,7 +119,7 @@ class Income < Account
   end
 
   def approve!
-    unless is_approved?
+    if is_draft?
       self.state = 'approved'
       self.approver_id = UserSession.id
       self.approver_datetime = Time.zone.now

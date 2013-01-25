@@ -17,9 +17,19 @@ class IncomePresenter < Resubject::Presenter
     "<span class='label label-important' rel='tooltip' title='Corrija los errores'>ERROR</span>".html_safe if to_model.has_error?
   end
 
+  def state_tag
+    html = case state
+    when "draft" then span_label('borrador')
+    when "approved" then span_label('aprovado', 'label-info')
+    when "paid" then span_label('pagado', 'label-success')
+    end
+
+    html.html_safe
+  end
+
   def payment_date_tag
     d = ""
-    unless is_paid?
+    if is_approved?
       css = ( today > to_model.payment_date ) ? "text-error" : ""
       d = "<span class='muted'>Vence el:</span>"
       d << "<span class='i #{css}'><i class='icon-time'></i> "
@@ -34,5 +44,9 @@ class IncomePresenter < Resubject::Presenter
 private
   def today
     @today ||= Date.today
+  end
+
+  def span_label(txt, css="")
+    "<span class='label #{css}'>#{txt}</span>"
   end
 end

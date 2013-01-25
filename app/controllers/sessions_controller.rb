@@ -68,6 +68,10 @@ private
       return
     end
 
+    # TODO: Try to use this to encrypt data
+    # encryptor = ActiveSupport::MessageEncryptor.new(Bonsaierp::Application.config.secret_token)
+    # encryptor.encrypt value
+    # encryptor.decrypt value
     if PgTools.schema_exists?(org.tenant)
       case
       when user.active?

@@ -91,34 +91,63 @@ describe Income do
   end
 
   context "set_state_by_balance!" do
-    it "sets the correct state" do
+    before(:each) do
       UserSession.user = build :user, id: 12
+    end
+
+    it "a draft income" do
       i = Income.new_income(total: 10, balance: 10)
 
       i.set_state_by_balance!
 
-      i.state.should eq('draft')
+      i.should be_is_draft
+      i.approver_id.should be_nil
+    end
 
-      # Change approve
-      i.balance = 5
+    it "a paid income" do
+      i = Income.new_income(total: 10, balance: -0)
 
-      i.set_state_by_balance!
-
-      i.should be_is_approved
-
-      # Change to paid
-      i.balance = 0
       i.set_state_by_balance!
 
       i.should be_is_paid
+      i.approver_id.should eq(UserSession.id)
+      i.approver_datetime.should be_is_a(Time)
+      i.payment_date.should be_is_a(Date)
+    end
 
-      # Change balance
+    it "a negative balance" do
+      i = Income.new_income(total: 10, balance: -0.01)
+
+      i.set_state_by_balance!
+
+      i.should be_is_paid
+      i.approver_id.should eq(UserSession.id)
+    end
+
+    # Changes to the income, it was paid but can change because of
+    # changes in total or made a devolution that changed balance
+    it "a paid income changes to approved" do
+      i = Income.new_income(total: 10, balance: 0)
+
+      i.set_state_by_balance!
+
+      i.should be_is_paid
+      i.approver_id.should eq(UserSession.id)
+      old_id = UserSession.id
+
+      UserSession.stub(id: 2333)
+
+      # Might had an update or a devolution done
       i.balance = 1
+
       i.set_state_by_balance!
 
       i.should be_is_approved
+      i.approver_id.should eq(old_id)
+      i.approver_id.should_not eq(UserSession.id)
     end
 
+    # A approved income changes to paid
     it "does not call approve! method" do
       i = Income.new_income(total: 10, balance: 5)
       i.approve!
@@ -127,17 +156,13 @@ describe Income do
       i.approver_id.should eq(UserSession.id)
       i.approver_datetime.should be_is_a(Time)
 
-      # Approved state
-      i = Income.new_income(total: 10, balance: 5)
-      i.approver_id.should be_nil
+      UserSession.stub(id: 2333)
+      i.balance = 0
 
-      i.state = 'approved'
-      i.should be_is_approved
+      i.set_state_by_balance!
 
-      i.approve!
-
-      i.approver_id.should be_nil
-      i.approver_datetime.should be_nil
+      i.should be_is_paid
+      i.approver_id.should_not eq(UserSession.id)
     end
   end
 
@@ -188,6 +213,16 @@ describe Income do
       i.should be_is_approved
       i.approver_id.should eq(11)
       i.approver_datetime.should be_is_a(Time)
+    end
+
+    it "only set the approve when it's draft" do
+      i = subject
+      i.state = 'paid'
+      i.should be_is_paid
+      i.approve!
+
+      i.should be_is_paid
+      i.approver_id.should be_nil
     end
   end
 

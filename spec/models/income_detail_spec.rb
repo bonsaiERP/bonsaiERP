@@ -28,5 +28,17 @@ describe IncomeDetail do
       id.should_not be_valid
       id.errors_on(:item_id).should_not be_empty
     end
+
+    it "whe income_detail.item_id doesn't change but item.for_sale = false" do
+      id = IncomeDetail.new(item_id: item.id, price: 10, quantity: 1,  account_id: 1)
+      id.stub(item: item, income: ( build :income ))
+      
+      id.save.should be_true
+
+      id.item.for_sale = false
+      id.item.should_not be_for_sale
+
+      id.should be_valid
+    end
   end
 end
