@@ -53,7 +53,7 @@ class IncomesController < ApplicationController
     redirect_to incomes_path
   end
 
-  # PUT /incomes/1
+  # PUT /incomes/:id
   def update
     @income = Income.find(params[:id])
     di = DefaultIncome.new(Income.find(params[:id]))
@@ -66,7 +66,7 @@ class IncomesController < ApplicationController
     end
   end
 
-  # DELETE /incomes/1
+  # DELETE /incomes/:id
   def destroy
     if @income.approved?
       flash[:warning] = "No es posible anular la nota #{@transaction}."
@@ -78,7 +78,7 @@ class IncomesController < ApplicationController
     end
   end
 
-  # PUT /incomes/1/approve
+  # PUT /incomes/:id/approve
   # Method to approve an income
   def approve
     redirect_to(@income, alert: 'El Ingreso ya esta aprovado') and return unless @income.is_draft?
@@ -93,12 +93,16 @@ class IncomesController < ApplicationController
     redirect_to income_path(@income)
   end
 
-  def history
-    @history = TransactionHistory.find(params[:id])
-    @trans = @history.transaction
-    @transaction = @history.get_transaction("Income")
+  # PUT incomes/:id/update_payment_date
+  def update_payment_date
+    @income = Income.find(params[:id])
+    @income.payment_date = params[:payment_date]
 
-    render "transactions/history"
+    if @income.save
+      render json: {success: true}
+    else
+      render json: {success: false}
+    end
   end
 
 private

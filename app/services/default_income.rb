@@ -20,22 +20,22 @@ class DefaultIncome < DefaultTransaction
     create { income.approve! }
   end
 
-  # TODO: Check why it can't be enclosed in ActiveRecord::Base.transaction
   def update(params)
-    res = true
-    ActiveRecord::Base.transaction do
-      res = TransactionHistory.new.create_history(income)
+    commit_or_rollback do
       income.attributes = params
       update_income_data
       yield if block_given?
-
-      raise ActiveRecord::Rollback unless income.save && res
     end
-
-    res
   end
 
+  def update_payment_date(pdate)
+    res = TransactionHistory.new.create_history(income)
+    income.payment_date = pdate
+
+    commit_or_rollback { income.save && res }
+  end
 private
+
   # total is the alias for amount
   def update_income_data
     income.balance = income.balance - (income.amount_was - income.amount)

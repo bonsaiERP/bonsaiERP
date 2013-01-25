@@ -30,4 +30,15 @@ private
       end
     end
   end
+
+  # Returns true if calls
+  def commit_or_rollback(&b)
+    res = true
+    ActiveRecord::Base.transaction do
+      res = b.call
+      raise ActiveRecord::Rollback unless res
+    end
+
+    res
+  end
 end

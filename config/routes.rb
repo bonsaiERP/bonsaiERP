@@ -60,6 +60,7 @@ Bonsaierp::Application.routes.draw do
     member do
       put :approve
       get :history
+      put :payment_date
     end
     post :quick_income, on: :collection
   end

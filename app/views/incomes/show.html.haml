@@ -25,14 +25,12 @@
   .row-fluid
     .span6
       %h1.n
-        = @income
-        = income_state_tag @income
+        = @income.state_tag
         %small= link_to @income.contact, @income.contact
 
       = render_if @income.payment_date do
         %h4.n
-          %span.muted Fecha de pago
-          = @income.payment_date
+          = @income.payment_date_tag
 
     .span6
       - if @income.is_draft?

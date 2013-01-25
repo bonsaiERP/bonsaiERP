@@ -31,7 +31,7 @@ class IncomePresenter < Resubject::Presenter
     d = ""
     if is_approved?
       css = ( today > to_model.payment_date ) ? "text-error" : ""
-      d = "<span class='muted'>Vence el:</span>"
+      d = "<span class='muted'>Vence el:</span> "
       d << "<span class='i #{css}'><i class='icon-time'></i> "
       d << l(to_model.payment_date)
       d << "</span>"
