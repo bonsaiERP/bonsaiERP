@@ -45,7 +45,10 @@ private
 
   def create_ledger
     if amount.to_f > 0
-      @ledger = build_ledger(amount: amount, operation: 'payin', account_id: income.id)
+      @ledger = build_ledger(
+        amount: amount, operation: 'payin', account_id: income.id,
+        conciliation: conciliation?
+      )
       @ledger.save_ledger
     else
       true
@@ -54,8 +57,22 @@ private
 
   def create_interest
     if interest.to_f > 0
-      @int_ledger = build_ledger(amount: interest, operation: 'intin', account_id: income.id)
+      @int_ledger = build_ledger(
+        amount: interest, operation: 'intin', account_id: income.id,
+        conciliation: conciliation?
+      )
       @int_ledger.save_ledger
+    else
+      true
+    end
+  end
+
+  # Indicates conciliation based on the type of account
+  def conciliation?
+    return true if conciliate?
+
+    if account_to.is_a?(Bank)
+      conciliate?
     else
       true
     end

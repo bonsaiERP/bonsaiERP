@@ -29,6 +29,7 @@ describe Payment do
     it { should have_valid(:interest).when(1) }
     it { should_not have_valid(:interest).when(-1) }
 
+
     context "account_to" do
       let(:account_to) { build :account, id: account_to_id, currency: 'BOB' }
 
@@ -56,6 +57,23 @@ describe Payment do
     p.amount.should == 0
     p.interest.should == 0
     p.exchange_rate == 1
+  end
+
+  it "initalizes verfication" do
+    p = Payment.new(verification: "jajaja")
+    p.verification.should be_false
+
+    p = Payment.new(verification: "11")
+    p.verification.should be_false
+
+    p = Payment.new(verification: "01")
+    p.verification.should be_false
+
+    p = Payment.new(verification: "1")
+    p.verification.should be_true
+
+    p = Payment.new(verification: "true")
+    p.verification.should_not be_false
   end
 
   context "Invalid" do

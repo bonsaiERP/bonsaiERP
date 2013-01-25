@@ -82,7 +82,8 @@ describe IncomePayment do
       p.ledger.exchange_rate == 1
       p.ledger.should be_is_payin
       p.ledger.account_id.should eq(income.id)
-      p.ledger.should_not be_conciliation
+      # Only bank accounts are allowed to conciliate
+      p.ledger.should be_conciliation 
       p.ledger.reference.should eq(valid_attributes.fetch(:reference))
       p.ledger.date.should eq(valid_attributes.fetch(:date).to_time)
 
@@ -105,7 +106,7 @@ describe IncomePayment do
       p.pay.should be_true
 
       # ledger
-      p.ledger.should_not be_conciliation
+      p.ledger.should be_conciliation
       p.ledger.should be_is_a(AccountLedger)
       p.ledger.amount.should == valid_attributes[:amount]
       p.ledger.should be_is_payin
@@ -130,6 +131,55 @@ describe IncomePayment do
       p.ledger.should be_conciliation
     end
 
+    context "Verification only for bank accounts" do
+      it "verificates because it is a bank" do
+        bank = build :bank, id: 100
+        Account.stub(:find_by_id).with(bank.id).and_return(bank)
+        bank.id.should_not eq(account_to_id)
+
+        Account.find_by_id(account_to_id).should eq(account_to)
+
+        p = IncomePayment.new(valid_attributes.merge(account_to_id: 100, verification: true, interest: 10))
+
+        p.pay.should be_true
+        p.should be_verification
+
+        p.ledger.should_not be_conciliation
+        p.int_ledger.should_not be_conciliation
+
+        # When inverse
+        p = IncomePayment.new(valid_attributes.merge(account_to_id: 100, verification: false, interest: 10))
+
+        p.pay.should be_true
+
+        p.ledger.should be_conciliation
+        p.int_ledger.should be_conciliation
+      end
+
+      it "does not change when its't bank account" do
+        cash = build :cash, id: 200
+        Account.stub(:find_by_id).with(cash.id).and_return(cash)
+        cash.id.should_not eq(account_to_id)
+
+        Account.find_by_id(account_to_id).should eq(account_to)
+
+        p = IncomePayment.new(valid_attributes.merge(account_to_id: 200, verification: true, interest: 10))
+
+        p.pay.should be_true
+        
+        p.ledger.should be_conciliation
+        p.int_ledger.should be_conciliation
+
+        #inverse
+        p = IncomePayment.new(valid_attributes.merge(account_to_id: 200, verification: false, interest: 10))
+
+        p.pay.should be_true
+
+        p.ledger.should be_conciliation
+        p.int_ledger.should be_conciliation
+      end
+    end
+
     it "only creates int_ledger" do
       income.should be_is_draft
       p = IncomePayment.new(valid_attributes.merge(interest: 10, amount: 0))
@@ -143,6 +193,10 @@ describe IncomePayment do
       p.int_ledger.amount.should == 10.0
       p.int_ledger.should be_is_intin
     end
+  end
+
+  context "Only bank accounts allow future conciliation" do
+
   end
 
   context "Errors" do

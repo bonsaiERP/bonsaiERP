@@ -6,7 +6,7 @@ describe Devolution do
   let(:valid_attributes) {
     {
       account_id: 10, account_to_id: 2, exchange_rate: 1,
-      amount: 50, interest: 0, reference: 'El primer pago',
+      amount: 50, reference: 'El primer pago',
       verification: false, date: Date.today
     }
   }

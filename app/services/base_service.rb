@@ -5,6 +5,8 @@ class BaseService
   include ActiveModel::Conversion
   include ActiveModel::Validations
 
+  VALID_BOOLEAN = [true, 1, false, 0, "true", "1", "false", "0"]
+
   attr_reader :errors
 
   def initialize(attributes = {})

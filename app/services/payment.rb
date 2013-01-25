@@ -21,7 +21,7 @@ class Payment < BaseService
 
   def initialize(attrs = {})
     super
-    self.verification = false if verification.nil?
+    self.verification = false unless VALID_BOOLEAN.include?(verification)
   end
 
   def account_to
@@ -32,7 +32,7 @@ private
   def build_ledger(extra = {})
       AccountLedger.new({
         account_id: account_id, operation: '', exchange_rate: exchange_rate,
-        amount: 0, conciliation: !verification, account_to_id: account_to_id,
+        amount: 0, account_to_id: account_to_id,
         reference: reference, date: date
       }.merge(extra))
   end
@@ -41,6 +41,11 @@ private
     if amount.to_f <= 0 && interest.to_f <= 0
       self.errors[:base] = I18n.t('errors.messages.payment.invalid_amount_or_interest')
     end
+  end
+
+  # Inverse of verification?
+  def conciliate?
+    !verification?
   end
 
   def valid_date
