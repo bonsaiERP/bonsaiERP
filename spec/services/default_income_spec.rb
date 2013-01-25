@@ -124,7 +124,7 @@ describe DefaultIncome do
       DefaultIncome.new(income) 
     }
 
-    it "checks there is no error" do
+    it "Updates with errors on income" do
       TransactionHistory.any_instance.should_receive(:create_history).and_return(true)
 
       i = subject.income
@@ -144,6 +144,17 @@ describe DefaultIncome do
       i.should be_is_paid
       i.should be_has_error
       i.error_messages[:balance].should_not be_blank
+    end
+
+    it "update_and_approve" do
+      TransactionHistory.any_instance.stub(create_history: true)
+
+
+      subject.update({}).should be_true
+      subject.income.should be_is_draft
+
+      subject.update_and_approve({})
+      subject.income.should be_is_approved
     end
 
   end

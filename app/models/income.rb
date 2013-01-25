@@ -98,10 +98,10 @@ class Income < Account
       approve!
       self.state = 'paid'
     elsif balance < total
-      self.state = 'approved' if self.is_paid?
       approve!
+      self.state = 'approved' if self.is_paid?
     else
-      self.state = 'draft'
+      self.state = 'draft' if state.blank?
     end
   #binding.pry
   end

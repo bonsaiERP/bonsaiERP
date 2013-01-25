@@ -22,10 +22,19 @@ class DefaultIncome < DefaultTransaction
 
   def update(params)
     commit_or_rollback do
+      res = TransactionHistory.new.create_history(income)
       income.attributes = params
-      update_income_data
+
       yield if block_given?
+
+      update_income_data
+
+      income.save && res
     end
+  end
+
+  def update_and_approve(params)
+    update(params) { income.approve! }
   end
 
   def update_payment_date(pdate)

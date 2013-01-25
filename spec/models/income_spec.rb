@@ -164,6 +164,23 @@ describe Income do
       i.should be_is_paid
       i.approver_id.should_not eq(UserSession.id)
     end
+
+    it "does not set state if it has state" do
+      i = Income.new_income(balance: 10, total:10)
+      i.state = 'approved'
+
+      i.should be_is_approved
+
+      i.set_state_by_balance!
+
+      i.should be_is_approved
+      i.approver_id.should be_nil
+
+      i.state = nil
+      i.set_state_by_balance!
+
+      i.should be_is_draft
+    end
   end
 
   it "returns the subtotal from  details" do
