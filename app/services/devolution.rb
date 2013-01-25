@@ -21,7 +21,7 @@ class Devolution < BaseService
 
   def initialize(attrs = {})
     super
-    self.verification = false if verification.nil?
+    self.verification = false unless [true, false].include?(verification)
   end
 
   def account_to
@@ -34,6 +34,10 @@ private
         amount: 0, conciliation: !verification, account_to_id: account_to_id,
         reference: reference, date: date
       }.merge(extra))
+  end
+
+  def conciliate?
+    !verification?
   end
 
   def valid_date

@@ -80,7 +80,7 @@ private
 
   def valid_income_balance
     if amount.to_f > income_balance.to_f
-      self.errors[:amount] << 'Ingreso una cantidad mayor que el balance'
+      self.errors[:amount] << I18n.t('errors.messages.payment.income_balance') #'Ingreso una cantidad mayor que el balance'
     end
   end
 

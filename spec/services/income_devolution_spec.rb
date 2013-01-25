@@ -5,11 +5,12 @@ describe IncomeDevolution do
   let(:valid_attributes) {
     {
       account_id: 10, account_to_id: 2, exchange_rate: 1,
-      amount: 50, interest: 0, reference: 'El primer pago',
+      amount: 50, reference: 'Primera devolucion',
       verification: 'true', date: Date.today
     }
   }
   let(:balance) { 100.0 }
+  let(:total) { balance + 100 }
 
   let(:account_id) { valid_attributes.fetch(:account_id) }
   let(:account_to_id) { valid_attributes.fetch(:account_to_id) }
@@ -17,7 +18,7 @@ describe IncomeDevolution do
   let(:contact) { build :contact, id: 11 }
   let(:income) do
     Income.new_income(
-      total: balance, balance: balance, currency: 'BOB', contact_id: contact.id
+      total: total, balance: balance, currency: 'BOB', contact_id: contact.id
     ) {|i| 
       i.id = account_id
       i.contact = contact
@@ -31,26 +32,27 @@ describe IncomeDevolution do
 
   context 'Validations' do
     it "validates presence of income" do
-      pay_in = IncomePayment.new(valid_attributes)
-      pay_in.should_not be_valid
-      pay_in.errors_on(:income).should_not be_empty
+      in_dev = IncomeDevolution.new(valid_attributes)
+      in_dev.should_not be_valid
+      in_dev.errors_on(:income).should_not be_empty
 
       Income.stub(find_by_id: income)
-      Account.stub(find_by_id: account_to)
-      pay_in.should be_valid
+      in_dev.should_not be_valid
+      
+      in_dev.errors_on(:income).should be_blank
     end
 
-    it "does not allow amount greater than balance" do
-      pay_in = IncomePayment.new(valid_attributes.merge(amount: 101))
+    it "does not allow amount greater than total" do
+      in_dev = IncomeDevolution.new(valid_attributes.merge(amount: 101))
 
       Income.stub(find_by_id: income)
       Account.stub(find_by_id: account_to)
 
-      pay_in.should_not be_valid
-      pay_in.errors_on(:amount).should_not be_empty
+      in_dev.should_not be_valid
+      in_dev.errors_on(:amount).should_not be_empty
 
-      pay_in.amount = 100
-      pay_in.should be_valid
+      in_dev.amount = 100
+      in_dev.should be_valid
     end
   end
 
@@ -66,90 +68,79 @@ describe IncomeDevolution do
       income.should be_is_draft
       income.approver_id.should be_nil
 
-      p = IncomePayment.new(valid_attributes)
+      dev = IncomeDevolution.new(valid_attributes)
+      ### Payment
+      dev.pay_back.should  be_true
 
-      p.pay.should  be_true
-      p.verification.should be_true
+      dev.should be_verification
 
       # Income
-      p.income.should be_is_a(Income)
-      p.income.balance.should == balance - valid_attributes[:amount]
-      p.income.should be_is_approved
-      p.income.approver_id.should eq(UserSession.id)
+      dev.income.should be_is_a(Income)
+      dev.income.balance.should == balance + valid_attributes[:amount]
 
       # Ledger
-      p.ledger.amount.should == 50.0
-      p.ledger.exchange_rate == 1
-      p.ledger.should be_is_payin
-      p.ledger.account_id.should eq(income.id)
-      p.ledger.should_not be_conciliation
-      p.ledger.reference.should eq(valid_attributes.fetch(:reference))
-      p.ledger.date.should eq(valid_attributes.fetch(:date).to_time)
-
-      p.int_ledger.should be_nil
-
-      # New payment to complete
-      p = IncomePayment.new(valid_attributes.merge(amount: p.income.balance))
-      p.pay.should be_true
-
-      p.income.balance.should == 0
-      p.income.should be_is_paid
+      dev.ledger.amount.should == -50.0
+      dev.ledger.exchange_rate == 1
+      dev.ledger.should be_is_devin
+      dev.ledger.account_id.should eq(income.id)
+      # Only bank accounts are allowed to conciliate
+      dev.ledger.should be_conciliation 
+      dev.ledger.reference.should eq(valid_attributes.fetch(:reference))
+      dev.ledger.date.should eq(valid_attributes.fetch(:date).to_time)
     end
 
-    it "create ledger and int_ledger" do
-      income.should be_is_draft
-      p = IncomePayment.new(valid_attributes.merge(interest: 10))
+    ### Verification only bank accounts
+    context "Verification only for bank accounts" do
+      it "verificates because it is a bank" do
+        bank = build :bank, id: 100
+        Account.stub(:find_by_id).with(bank.id).and_return(bank)
+        bank.id.should_not eq(account_to_id)
 
-      p.verification.should be_true
+        dev = IncomeDevolution.new(valid_attributes.merge(account_to_id: 100, verification: true))
 
-      p.pay.should be_true
+        dev.pay_back.should be_true
+        dev.should be_verification
+        dev.account_to.should eq(bank)
+        # Should not conciliate
+        dev.ledger.should_not be_conciliation
 
-      # ledger
-      p.ledger.should_not be_conciliation
-      p.ledger.should be_is_a(AccountLedger)
-      p.ledger.amount.should == valid_attributes[:amount]
-      p.ledger.should be_is_payin
-      p.ledger.account_id.should eq(income.id)
+        # When inverse
+        dev = IncomeDevolution.new(valid_attributes.merge(account_to_id: 100, verification: false, interest: 10))
 
-      # int_ledger
-      p.int_ledger.should be_is_a(AccountLedger)
-      p.int_ledger.amount.should == 10.0
-      p.int_ledger.should be_is_intin
-      p.int_ledger.account_id.should eq(income.id)
-      p.int_ledger.reference.should eq(valid_attributes.fetch(:reference))
-      p.int_ledger.date.should eq(valid_attributes.fetch(:date).to_time)
-    end
+        dev.pay_back.should be_true
+        dev.account_to.should eq(bank)
+        # Should conciliate
+        dev.ledger.should be_conciliation
+      end
 
-    it "creates ledger  and conciliates ledger" do
-      income.should be_is_draft
-      p = IncomePayment.new(valid_attributes.merge(verification: false))
+      it "does not change when its't bank account" do
+        cash = build :cash, id: 200
+        Account.stub(:find_by_id).with(cash.id).and_return(cash)
+        cash.id.should_not eq(account_to_id)
 
-      p.pay.should be_true
-      # ledger
-      p.ledger.should be_is_a(AccountLedger)
-      p.ledger.should be_conciliation
-    end
+        Account.find_by_id(account_to_id).should eq(account_to)
 
-    it "only creates int_ledger" do
-      income.should be_is_draft
-      p = IncomePayment.new(valid_attributes.merge(interest: 10, amount: 0))
+        dev = IncomeDevolution.new(valid_attributes.merge(account_to_id: 200, verification: true))
 
-      p.pay.should be_true
+        dev.pay_back.should be_true
 
-      # ledger
-      p.ledger.should be_nil
-      # int_ledger
-      p.int_ledger.should be_is_a(AccountLedger)
-      p.int_ledger.amount.should == 10.0
-      p.int_ledger.should be_is_intin
+        dev.ledger.should be_conciliation
+
+        #inverse
+        dev = IncomeDevolution.new(valid_attributes.merge(account_to_id: 200, verification: false))
+
+        dev.pay_back.should be_true
+
+        dev.ledger.should be_conciliation
+      end
     end
   end
 
   context "Errors" do
-    it "does not save if invalid IncomePayment" do
+    it "does not save if invalid IncomeDevolution" do
       Income.any_instance.should_not_receive(:save)
-      p = IncomePayment.new(valid_attributes.merge(reference: ''))
-      p.pay.should be_false
+      p = IncomeDevolution.new(valid_attributes.merge(reference: ''))
+      p.pay_back.should be_false
     end
 
     before(:each) do
@@ -160,13 +151,13 @@ describe IncomeDevolution do
     end
 
     it "sets errors from other clases" do
-      p = IncomePayment.new(valid_attributes)
+      dev = IncomeDevolution.new(valid_attributes)
 
-      p.pay.should be_false
-      # There is no method IncomePayment#balance
-      p.errors[:amount].should eq(['Not real'])
-      # There is a method IncomePayment#amount
-      p.errors[:base].should eq(['No balance'])
+      dev.pay_back.should be_false
+      # There is no method IncomeDevolution#balance
+      dev.errors[:amount].should eq(['Not real'])
+      # There is a method IncomeDevolution#amount
+      dev.errors[:base].should eq(['No balance'])
     end
   end
 end

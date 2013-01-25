@@ -238,6 +238,8 @@ es:
         amount: "La cantidad que ingreso es mayor a la disponible en la cuenta"
         null_conciliation: "No se puede conciliar una operación anulada"
         same_account: 'La cuenta destino debe ser distinta'
+      devolution:
+        income_total: "La cantidad y el balance suman un valor mayor al total"
       income_detail:
         item_not_for_sale: "Debe seleccionar un ítem que se vende"
       inventory_operation_detail:
@@ -250,13 +252,8 @@ es:
         invalid_store: "El almacen que selecciono es incorrecto"
         empty_items: "No existe items para realizar la operación"
         stock_quantity: "Existen items que exceden la cantidad máxima"
-      loan:
-        ilegal_account: "Debe ingresar una cuenta correcta"
       payment:
-        greater_amount: "La cantidad que ingreso es mayor que el saldo"
-        greater_amount_than_balance: "Ingreso una cantidad mayor que el balance"
-        devolution_amount: "La cantidad que ingreso es mayor que el monto verificado"
-        devolution_pendent_ledgers: "Existen cobros/pagos o devoluciones pendientes de verificación"
+        income_balance: "La cantidad que ingreso es mayor que el saldo"
         invalid_amount_or_interest: "La cantidad o el interes debe ser mayor que 0"
       quick_income:
         valid_account_to: "Debe seleccionar una cuenta Banco o Caja"

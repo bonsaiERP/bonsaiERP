@@ -3,7 +3,7 @@ class IncomeDevolution < Devolution
 
   # Validations
   validates_presence_of :income
-  validate :valid_income_balance
+  validate :valid_income_total
 
   # Delegations
   delegate :total, :balance, to: :income, prefix: true, allow_nil: true
@@ -16,7 +16,6 @@ class IncomeDevolution < Devolution
     ActiveRecord::Base.transaction do
       res = save_income
       res = create_ledger && res
-      res = create_interest && res
 
       unless res
         set_errors(income, ledger, int_ledger)
@@ -39,31 +38,36 @@ private
   end
 
   def update_income
-    income.balance -= amount
+    income.balance += amount
     income.set_state_by_balance! # Sets state and the user
   end
 
   def create_ledger
     if amount.to_f > 0
-      @ledger = build_ledger(amount: amount, operation: 'payin', account_id: income.id)
+      @ledger = build_ledger(
+        amount: -amount, operation: 'devin', account_id: income.id,
+        conciliation: conciliation?
+      )
       @ledger.save_ledger
     else
       true
     end
   end
 
-  def create_interest
-    if interest.to_f > 0
-      @int_ledger = build_ledger(amount: interest, operation: 'intin', account_id: income.id)
-      @int_ledger.save_ledger
+  # Indicates conciliation based on the type of account
+  def conciliation?
+    return true if conciliate?
+
+    if account_to.is_a?(Bank)
+      conciliate?
     else
       true
     end
   end
 
-  def valid_income_balance
-    if amount.to_f > income_balance.to_f
-      self.errors[:amount] << 'Ingreso una cantidad mayor que el balance'
+  def valid_income_total
+    if ( amount.to_f + income_balance.to_f ) > income_total.to_f
+      self.errors[:amount] << I18n.t('errors.messages.devolution.income_total')
     end
   end
 

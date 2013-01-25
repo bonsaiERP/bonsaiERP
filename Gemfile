@@ -61,7 +61,7 @@ group :test do
   gem 'capybara'
   gem 'database_cleaner'
   gem 'factory_girl_rails'
-  gem 'spork'
+  gem 'spork', '0.9.2' # Newer version gives error with squeel
   gem 'shoulda-matchers'
   gem 'valid_attribute'
   gem 'watchr'

@@ -21,7 +21,7 @@ class Payment < BaseService
 
   def initialize(attrs = {})
     super
-    self.verification = false unless VALID_BOOLEAN.include?(verification)
+    self.verification = false unless [true, false].include?(verification)
   end
 
   def account_to

@@ -121,29 +121,19 @@ describe IncomePayment do
       p.int_ledger.date.should eq(valid_attributes.fetch(:date).to_time)
     end
 
-    it "creates ledger  and conciliates ledger" do
-      income.should be_is_draft
-      p = IncomePayment.new(valid_attributes.merge(verification: false))
-
-      p.pay.should be_true
-      # ledger
-      p.ledger.should be_is_a(AccountLedger)
-      p.ledger.should be_conciliation
-    end
-
+    ### Verification only Bank accounts
     context "Verification only for bank accounts" do
       it "verificates because it is a bank" do
         bank = build :bank, id: 100
         Account.stub(:find_by_id).with(bank.id).and_return(bank)
         bank.id.should_not eq(account_to_id)
 
-        Account.find_by_id(account_to_id).should eq(account_to)
-
         p = IncomePayment.new(valid_attributes.merge(account_to_id: 100, verification: true, interest: 10))
 
         p.pay.should be_true
         p.should be_verification
-
+        p.account_to_id.should eq(100)
+        # Should not conciliate
         p.ledger.should_not be_conciliation
         p.int_ledger.should_not be_conciliation
 
@@ -151,7 +141,7 @@ describe IncomePayment do
         p = IncomePayment.new(valid_attributes.merge(account_to_id: 100, verification: false, interest: 10))
 
         p.pay.should be_true
-
+        # Should conciliate
         p.ledger.should be_conciliation
         p.int_ledger.should be_conciliation
       end
@@ -193,10 +183,6 @@ describe IncomePayment do
       p.int_ledger.amount.should == 10.0
       p.int_ledger.should be_is_intin
     end
-  end
-
-  context "Only bank accounts allow future conciliation" do
-
   end
 
   context "Errors" do
