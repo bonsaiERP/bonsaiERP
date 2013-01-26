@@ -195,7 +195,7 @@ es:
   # Errors that are stored in the model but are allowed
   allowed_errors:
     transaction:
-      negative_balance: "El balance es negativo debido a una actualización, le recomendamos realizar una devolución"
+      negative_balance: "<a href='javascript:;' id='income-negative-balance-link'>Solucionemos el balance</a> negativo, le recomendamos realizar una devolución"
       negative_item_balance: "Existe un item con balance negativo"
       negative_items_balance: "Existen items con balance negativo"
   # Active Model

@@ -24,5 +24,7 @@
 #= require app/transaction.js.coffee
 #= require app/payment.js.coffee
 
+#= require plugins/jquery.joyride
+
 #= require forms
 #= require base

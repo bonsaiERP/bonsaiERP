@@ -20,7 +20,7 @@
         - @income.error_messages.each do |k, arr|
           - arr.each do |v|
             %li
-              %h5.n= I18n.t("allowed_errors.#{v}")
+              %h5.n.devolution-error= I18n.t("allowed_errors.#{v}").html_safe
 
   %h1
     = @income
@@ -55,12 +55,14 @@
       = ntc @income.balance
       = @income.currency
 
+= render 'incomes/tour/devolution'
+
 #tabs
   %ul
     %li
       %a(href="#information" id="tab_info") Información
-    %li
-      %a(href="#payments") Cobros
+    %li.payment-li
+      %a.payments-tab(href="#payments") Cobros
     %li
       %a(href="#inventory") Entregas inventario
 
@@ -112,4 +114,5 @@
       $('#devolution-form').show('slow')
       $(this).hide('slow')
     )
+
   )
