@@ -43,6 +43,12 @@ group :production do
   gem 'bugsnag' # Report of errors
 end
 
+group :development do
+  gem 'better_errors'
+  gem 'binding_of_caller'
+  gem 'meta_request'
+end
+
 group :development, :test do
   gem 'puma'# Web server
   gem 'rspec-rails'
@@ -50,7 +56,7 @@ group :development, :test do
   gem 'pry-remote' # Work binding.pry_remote with Foreman, just call pry-remote in the terminal
   gem 'pry-rails'
   gem 'pry-nav'
-  gem 'rails-footnotes'
+  #gem 'rails-footnotes'
   gem 'konacha'
   gem 'foreman'
   #gem 'quiet_assets' # Quiets assets log in development
@@ -66,5 +72,5 @@ group :test do
   gem 'valid_attribute'
   gem 'watchr'
   gem 'launchy'
-  gem 'log4r'
+  #gem 'log4r'
 end

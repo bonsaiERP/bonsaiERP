@@ -1,6 +1,3 @@
-:css
-  #bank-form { max-width: 700px; }
-
 = simple_form_for(bank, :html => {id: 'bank-form' }) do |f|
   = bonsai_form_error(f)
   .row-fluid
@@ -10,13 +7,9 @@
       = f.input :number, :label => 'Número de cuenta'
 
   .row-fluid
-    -if bank.new_record?
-      .span6
-        = f.input :currency, :label => 'Moneda',
-          :hint => "<span class='text-warning b'><i class='bicon-warning'></i> No es posible modificar después</span>".html_safe
-      .span6
-        = f.input :amount, :label => 'Total en cuenta', :input_html => {:size => 12, :class => 'r'}, :required => true
-    -else
+    .span6
+      = f.input :amount, :label => 'Total en cuenta', :input_html => {:size => 12, :class => 'r'}, :required => true
+  -else
       .span6
         %label Moneda
         = bank.currency

@@ -1,46 +1,34 @@
 -content_for :links do
-  %ul.breadcrumps.span6
-    %li #{link_to "Cuentas bancarias", banks_path}
+  %ul.breadcrumbs.span6
+    %li #{link_to "Cuentas banco", banks_path}
+    %li
+      %i.icon-caret-right
     %li
       %span #{@bank}
 
   .links.span6
     = link_to 'Editar', edit_bank_path(@bank), :class => 'edit', :title => "Editar cuenta bancaria"
 
-.page-header
+%header
   %h1.n
-    %span=@bank.name 
-    %small( title="Número de cuenta")= @bank.number
-    %small
-      \-
-      = @account.currency_name.pluralize
+    %span
+      = @bank.name 
+      = @bank.number
+    = @bank.currency
 
-= pendent_money_link(@bank, :class => 'red fs110')
-.clear
 
-.moneybox.fl
-  %label SALDO EN BANCO
-  %h3= with_currency @account, :amount
+.row-fluid
+  .span6
+    .well.well-small
+      %label SALDO EN BANCO
+      %h3
+        = ntc @bank.amount
+        = currency_label @bank.currency
 
-  
-._40.fr
-  <a class="more_info" href="#bank_info">Ocultar información</a>
-  #bank_info
-    .input
-      %label Dirección
-      %span= nl2br(@bank.address)
-    .input
-      .input._100
-        %label Teléfono
-        %span= @bank.phone
-      .input._100
-        %label Sitio web
-        %span= @bank.website
-.clear
+  .span6
+    %label Dirección
+    = nl2br(@bank.address)
 
-.page-header
-  %h2 Transacciones
+%h3 Transacciones
 
-= render "account_ledgers/money", :account => @account, :ledgers => @ledgers, :paged_ledgers => @paged_ledgers, :ref_title => 'Ref./Nº Cheque', :money => @bank
-
-.clear
+= render "account_ledgers/money", account: @bank

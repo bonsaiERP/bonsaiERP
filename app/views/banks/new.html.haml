@@ -2,7 +2,31 @@
   %ul.breadcrumps.span6
     %li #{link_to 'Cuentas bancarias', banks_path} 
 
-.page-header
+%header
   %h1 Nueva cuenta bancaria
 
-= render 'form', :bank => @bank
+= simple_form_for(@bank, html: {id: 'bank-form' }) do |f|
+  = bonsai_form_error(f)
+  .row-fluid
+    .span6
+      = f.input :name, label: 'Banco'
+    .span6
+      = f.input :number, label: 'Número de cuenta'
+
+  .row-fluid
+    .span6
+      = f.input :currency, label: 'Moneda', collection: currency_options, input_html: {placeholder: 'Escriba para poder buscar'}
+
+    .span6
+      = f.input :amount, label: 'Total en cuenta', input_html: {size: 12, class: 'r', type: 'decimal'}, required: true
+  .row-fluid
+    .span6
+      = f.input :address, :label => 'Dirección', :as => :text, :input_html => {:rows => 4, :cols => 35}, :required => false
+    .span6
+      = f.input :phone, :label => 'Teléfono', :required => false, :wrapper_html => {:class => "_100"}
+      = f.input :website, :label => 'Sitio web', :wrapper_html => {:class => "_100"}
+  .form-actions
+    = f.submit 'Salvar', class: 'btn btn-success b'
+
+:javascript
+  $(function() { $('#bank_currency').select2() })

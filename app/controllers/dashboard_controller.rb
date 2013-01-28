@@ -27,7 +27,7 @@ private
       if user
         session[:user_id] =  user.id
         session[:user_rol] = user.links.first.rol # TODO improve session rol
-        #user.reset_auth_token # NO need if the 
+        #user.reset_auth_token # No need if the token is encrypted
       else
         redirect_to new_session_url(host: UrlTools.domain), error: 'Error al ingresar.'
         return

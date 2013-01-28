@@ -2,41 +2,22 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class BanksController < ApplicationController
-  before_filter :find_bank, :only => [:show, :edit, :update, :destroy]
+  before_filter :find_bank, only: [:show, :edit, :update, :destroy]
 
   include Controllers::Money
 
   # GET /banks
   def index
     @banks = Bank.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @banks }
-    end
   end
 
   # GET /banks/1
-  # GET /banks/1.xml
   def show
-    @account = @bank.account
-    @ledgers = super(@account)
-    @paged_ledgers = @ledgers.page(@page)
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @bank }
-    end
   end
 
   # GET /banks/new
   def new
-    @bank = Bank.new(currency: params[:currency])
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @bank }
-    end
+    @bank = Bank.new_bank(currency: params[:currency])
   end
 
   # GET /banks/1/edit
@@ -45,30 +26,21 @@ class BanksController < ApplicationController
 
   # POST /banks
   def create
-    @bank = Bank.new(create_bank_params)
+    @bank = Bank.new_bank(create_bank_params)
 
-    respond_to do |format|
-      if @bank.save
-        format.html { redirect_to(@bank, :notice => 'La cuenta bancaria fue creada.') }
-        format.xml  { render :xml => @bank, :status => :created, :location => @bank }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @bank.errors, :status => :unprocessable_entity }
-      end
+    if @bank.save
+      redirect_to @bank, notice: 'La cuenta de banco fue creada.'
+    else
+      render "new"
     end
   end
 
   # PUT /banks/1
-  # PUT /banks/1.xml
   def update
-    respond_to do |format|
-      if @bank.update_attributes(params[:bank])
-        format.html { redirect_to(@bank, :notice => 'Los datos de la cuenta Bancaria fueron actualizado.') }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @bank.errors, :status => :unprocessable_entity }
-      end
+    if @bank.update_attributes(update_bank_params)
+      redirect_to @bank, notice: 'Se actualizo  correctamente la cuenta de banco.'
+    else
+      render action: 'edit'
     end
   end
 
@@ -81,7 +53,7 @@ class BanksController < ApplicationController
 
 private
   def find_bank
-    @bank = Bank.includes(:account).find(params[:id])
+    @bank = Bank.find(params[:id])
   end
 
   def update_bank_params
