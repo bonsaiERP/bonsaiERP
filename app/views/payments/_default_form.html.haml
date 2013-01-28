@@ -1,6 +1,6 @@
 .row-fluid
   .span6
-    = f.input :account_to_id, label: 'Cuenta', collection: AccountQuery.new.payment(f.object)
+    = f.input :account_to_id, label: 'Cuenta', collection: account_to_options
   .span3
     = f.input :date, as: :datepicker, label: 'Fecha'
   .span3

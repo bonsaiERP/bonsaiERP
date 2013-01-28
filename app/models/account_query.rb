@@ -4,12 +4,25 @@ class AccountQuery
   end
 
   def bank_cash
-    @rel.where(type: ['Cash', 'Bank'], active: true)
+    @rel.active.where(type: ['Cash', 'Bank'])
   end
 
   def payment(model)
-    model.contact_id
-    Account.where{(type.in ['Cash', 'Bank']) | (type: 'Expense')}
+    #Account.where{(type.in ['Cash', 'Bank']) | (type: 'Expense')}
     bank_cash
+  end
+
+  def income_payment_options(income)
+    arr = bank_cash.map {|v| 
+      create_hash(v, :id, :type, :currency, :amount, :name, :to_s) 
+    }
+
+    arr + ExpenseQuery.new.exchange(income.contact_id).map {|v| 
+      create_hash(v, :id, :type, :currency, :balance, :name, :to_s)
+    }
+  end
+
+  def create_hash(v, *args)
+    Hash[ args.map {|k| [k, v.send(k)] } ]
   end
 end

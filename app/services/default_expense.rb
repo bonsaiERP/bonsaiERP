@@ -4,14 +4,15 @@ class DefaultExpense < DefaultTransaction
 
   delegate :state, :expense_details, :discount, to: :expense
 
-  def initialize(inc)
-    raise 'Must be a Expense class' unless inc.is_a?(Expense)
-    @transaction = @expense = inc
+  def initialize(exp)
+    raise 'Must be a Expense class' unless exp.is_a?(Expense)
+    @transaction = @expense = exp
   end
 
   def create
     set_expense_data
     yield if block_given?
+
     expense.save
   end
 

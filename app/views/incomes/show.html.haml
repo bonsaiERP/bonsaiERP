@@ -84,7 +84,7 @@
 
     #devolution-form(style='display: none')
       %h3 Devolución
-      = render 'incomes/devolution_form', income: @income unless @income.is_draft?
+      -#= render 'incomes/devolution_form', income: @income unless @income.is_draft?
 
     %h2 Cobros y devoluciones
 

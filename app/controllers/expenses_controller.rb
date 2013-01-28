@@ -29,13 +29,8 @@ class ExpensesController < ApplicationController
 
   # GET /expenses/new
   def new
-    if params[:transaction_id].present?
-      t = Expense.find(params[:transaction_id])
-      @transaction = t.clone_transaction
-    else
-      @transaction = Expense.new(date: Date.today, currency_id: currency_id)
-      @transaction.set_defaults_with_details
-    end
+    @expense = Expense.new_expense(ref_number: Expense.get_ref_number, date: Date.today, currency: currency)
+    @expense.expense_details.build(quantity: 1.0)
   end
 
   # GET /expenses/1/edit
@@ -45,15 +40,13 @@ class ExpensesController < ApplicationController
 
   # POST /expenses
   def create
-    @transaction = Expense.new(expense_params)
-
-    respond_to do |format|
-      if @transaction.save_trans
-        format.html { redirect_to(@transaction, :notice => 'Se ha creado una proforma de venta.') }
-      else
-        @transaction.transaction_details.build unless @transaction.transaction_details.any?
-        format.html { render :action => "new" }
-      end
+    de = DefaultExpense.new(Expense.new_expense(expense_params))
+    method = params[:commit_approve].present? ? :create_and_approve : :create
+    if de.send(method)
+      redirect_to de.expense, notice: 'Se ha creado un Egreso.'
+    else
+      @expense = de.expense
+      render 'new'
     end
   end
 
@@ -161,16 +154,16 @@ private
     end
   end
 
-  def expense_params
-    params.require(:expense).permit(:ref_number, :date, :contact_id, :project_id,  :currency_id, 
-                                   :exchange_rate, :discount, :bill_number, :description, :fact,
-                                   :transaction_details_attributes)
-  end
-
 private
   def quick_expense_params
-    params.require(:quick_expense).permit(:date, :ref_number, :fact,
-                                        :bill_number, :amount,
-                                        :contact_id, :account_id, )
+   params.require(:quick_expense).permit(*transaction_params.quick_income)
+  end
+
+  def expense_params
+    params.require(:expense).permit(*transaction_params.income)
+  end
+
+  def transaction_params
+    @transaction_params ||= TransactionParams.new
   end
 end

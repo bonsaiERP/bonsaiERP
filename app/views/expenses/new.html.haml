@@ -7,4 +7,4 @@
 .page-header
   %h1 Nueva proforma de venta
 
-= render 'incomes/form', :transaction => @transaction, :contacts => Client.scoped
+= render 'expenses/form', expense: @expense, contacts: Contact.scoped
