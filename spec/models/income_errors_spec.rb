@@ -39,4 +39,16 @@ describe IncomeErrors do
       subject.error_messages[:income_details].should eq(['transaction.negative_items_balance'])
     end
   end
+
+  it "should set no errors if errors fixed" do
+    subject.total = 10
+    subject.balance = 0
+    subject.has_error = true
+    subject.error_messages = {a: 'A new message'}
+
+    IncomeErrors.new(subject).set_errors
+    
+    subject.should_not be_has_error
+    subject.error_messages.should eq({})
+  end
 end

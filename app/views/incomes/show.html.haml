@@ -42,18 +42,18 @@
         = form_for @income, url: approve_income_path(@income) do |f|
           = f.submit 'Aprobar Ingreso', class: 'b btn btn-success'
 
-.row
-  .span2.well.well-small
-    %h3 Total
+.row-fluid
+  .moneybox
+    %label TOTAL
     %h4
       = ntc @income.total
-      = @income.currency
+      = currency_label @income.currency
 
-  .span2.well.well-small
-    %h3 Saldo
+  .moneybox
+    %label SALDO
     %h4
       = ntc @income.balance
-      = @income.currency
+      = currency_label @income.currency
 
 = render 'incomes/tour/devolution'
 

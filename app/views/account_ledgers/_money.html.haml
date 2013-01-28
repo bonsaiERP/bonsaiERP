@@ -6,10 +6,6 @@
 .clear
 <br/>
 
-.row-fluid.dismiss
-  .span4.offset8
-    = render 'users/user_changes_labels'
-
 -#= paginate account_ledgers
 %ul.unstyled.listing
   - ledgers=  AccountLedgerQuery.new.money(account.id).page(@page)

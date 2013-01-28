@@ -56,7 +56,7 @@ describe IncomeDevolution do
     end
   end
 
-  context "create payment" do
+  context "create devolution" do
     before(:each) do
       income.stub(save: true)
       Income.stub(:find_by_id).with(account_id).and_return(income)
@@ -64,9 +64,10 @@ describe IncomeDevolution do
       AccountLedger.any_instance.stub(save_ledger: true)
     end
 
-    it "Payments" do
-      income.should be_is_draft
-      income.approver_id.should be_nil
+    it "Devolution" do
+      income.state = 'paid'
+      income.approver_id = 1
+      income.has_error = true
 
       dev = IncomeDevolution.new(valid_attributes)
       ### Payment
@@ -77,6 +78,7 @@ describe IncomeDevolution do
       # Income
       dev.income.should be_is_a(Income)
       dev.income.balance.should == balance + valid_attributes[:amount]
+      dev.income.should_not be_has_error
 
       # Ledger
       dev.ledger.amount.should == -50.0

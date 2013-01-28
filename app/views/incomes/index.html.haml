@@ -22,9 +22,6 @@
 
 = paginate @incomes.page(@page)
 
-.row-fluid.dismiss
-  .span4
-    =render 'users/user_changes_labels'
 %ul.unstyled.listing
   - @incomes.each do |income|
     - income = present income

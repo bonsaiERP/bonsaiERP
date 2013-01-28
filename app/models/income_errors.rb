@@ -3,6 +3,7 @@ class IncomeErrors < Struct.new(:income)
   delegate :balance, :total, :income_details, to: :income
 
   def set_errors
+    income.has_error = false
     @errors = {}
     balance_errors
     income_details_errors

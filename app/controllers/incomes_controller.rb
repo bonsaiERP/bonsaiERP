@@ -31,8 +31,9 @@ class IncomesController < ApplicationController
   # POST /incomes
   def create
     di = DefaultIncome.new(Income.new_income(income_params))
+    method = params[:commit_approve].present? ? :create_and_approve : :create
 
-    if di.create
+    if di.send(method)
       redirect_to di.income, notice: 'Se ha creado una proforma de venta.'
     else
       @income = di.income

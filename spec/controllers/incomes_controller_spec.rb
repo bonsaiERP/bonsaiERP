@@ -1,30 +1,39 @@
 require 'spec_helper'
 
 describe IncomesController do
-  def income_mock(stubs={})
-    stubs = {id: 1, draft?: false}.merge(stubs)
-    mock_model(Income, stubs)
-  end
-
   before do
-    controller.stub!(check_authorization!: true, set_tenant: true, currency_id: 1)
+    stub_auth
+    controller.stub(currency: 'BOB')
   end
 
   describe "GET /item/new" do
     it "initializes" do
       get :new
 
-      assigns(:income).date.should be_a(Date)
-      assigns(:income).ref_number.should_not be_blank
-      assigns(:income).currency_id.should eq(1)
-      assigns(:income).transaction_details.should_not be_empty
-
       response.should render_template('new')
+      assigns(:income).currency.should eq('BOB')
     end
   end
 
   describe "POST /item" do
+    let(:income) do
+      inc = build(:income, id: 1)
+      inc.stub(persisted?: true)
+      inc
+    end
 
+    before(:each) do
+      DefaultIncome.any_instance.stub(income: income)
+    end
+
+    it "creates_and_approves" do
+      raise "Invalid DefaultIncome#create method doesn't exist" unless DefaultIncome.method_defined?(:create_and_approve)
+      DefaultIncome.any_instance.should_receive(:create).and_return(true)
+
+      post :create, income: {currency: 'BOB'}, commit_approve: 'Com Save'
+
+      response.should redirect_to(income_path(1))
+    end
   end
 
   #describe "check allow_transaction_action?" do

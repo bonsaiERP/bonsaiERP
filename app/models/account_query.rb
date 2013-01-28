@@ -1,6 +1,6 @@
 class AccountQuery
-  def initialize
-    @rel = Account
+  def initialize(rel = Account)
+    @rel = rel
   end
 
   def bank_cash
@@ -8,6 +8,8 @@ class AccountQuery
   end
 
   def payment(model)
+    model.contact_id
+    Account.where{(type.in ['Cash', 'Bank']) | (type: 'Expense')}
     bank_cash
   end
 end

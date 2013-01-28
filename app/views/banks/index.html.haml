@@ -1,14 +1,14 @@
 - content_for :links do
   .span6 &nbsp;
-  .links.span6= link_to "Nueva cuenta bancaria", new_bank_path, :class => 'new'
+  .links.span6= link_to "Nuevo cuenta bancaria", new_bank_path
 
-.page-header
+%header
   %h1 Cuentas bancarias
 
 - if @banks.empty?
   %h3 No tiene cuentas bancarias le recomendamos crear una
-  = link_to new_bank_path, class: 'btn b' do
-    %i.bicon-add
+  = link_to new_bank_path, class: 'btn btn-primary' do
+    %i.icon-plus-sign
     Crear cuenta bancaria
 
 %ul#banks.accounts_list
@@ -16,13 +16,12 @@
     %li.row-fluid
       .span7
         %h3= link_to bank, bank
-        %h4.mt5.dark= bank.currency.name.pluralize
-      .span5
-        .moneybox.fl
+        = currency_label bank.currency
+      .span3
+        .moneybox
           %label TOTAL EN CUENTA
-          %h3= with_currency bank.account, :amount
+          %h3
+            = ntc bank.amount
+            = currency_label bank.currency
 
-        = pendent_money_link(bank, :class => 'fs110')
-
-      .clear
-
+        -#= pendent_money_link(bank, :class => 'fs110')

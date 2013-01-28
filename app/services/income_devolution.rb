@@ -32,6 +32,8 @@ class IncomeDevolution < Devolution
 private
   def save_income
     update_income
+    err = IncomeErrors.new(income)
+    err.set_errors
 
     income.save
   end

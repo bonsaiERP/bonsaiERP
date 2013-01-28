@@ -4,8 +4,6 @@
 class BanksController < ApplicationController
   before_filter :find_bank, only: [:show, :edit, :update, :destroy]
 
-  include Controllers::Money
-
   # GET /banks
   def index
     @banks = Bank.all

@@ -16,11 +16,9 @@
           = link_to cash, cash
           = currency_label cash.currency
       .span3.pull-right
-        .well.well-small
+        .moneybox
           %label TOTAL EN CUENTA
           %h3
             = ntc cash.amount
             = currency_label cash.currency
         -#= pendent_money_link(cash, :class => 'b fs110')
-      .clear
-

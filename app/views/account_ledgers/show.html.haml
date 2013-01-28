@@ -1,14 +1,8 @@
--#content_for :links do
-  = account_ledger_show_links(@account_ledger)
-
-  .links.span6
-    -#= presenter.null_link
-
 %header
   %h1
     = @ledger.conciliation_tag
     = @ledger
-    = @ledger.operation_label.html_safe
+    = @ledger.operation_label
     %small.dark
       = render_if @ledger.account_contact do
         = link_to @ledger.account_contact_tag, @ledger.account_contact
