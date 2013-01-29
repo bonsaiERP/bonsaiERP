@@ -81,10 +81,10 @@ class TransactionPresenter < BasePresenter
     end
   end
 
-  def payment_date
-    if transaction.payment_date.present?
+  def due_date_tag
+    if transaction.due_date.present?
       html = "<span class='n gray'> Vence el</span>"
-      html << "<span id='due_on'> #{ h.lo transaction.payment_date }</span>"
+      html << "<span id='due_on'> #{ h.lo transaction.due_date }</span>"
 
       html.html_safe
     end

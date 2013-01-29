@@ -258,7 +258,7 @@ ActiveRecord::Schema.define(:version => 20130115020409) do
     t.decimal  "gross_total",                      :precision => 14, :scale => 2, :default => 0.0
     t.decimal  "original_total",                   :precision => 14, :scale => 2, :default => 0.0
     t.decimal  "balance_inventory",                :precision => 14, :scale => 2, :default => 0.0
-    t.date     "payment_date"
+    t.date     "due_date"
     t.integer  "creator_id"
     t.integer  "approver_id"
     t.integer  "nuller_id"
@@ -276,7 +276,7 @@ ActiveRecord::Schema.define(:version => 20130115020409) do
   add_index "transactions", ["delivered"], :name => "index_transactions_on_delivered"
   add_index "transactions", ["devolution"], :name => "index_transactions_on_devolution"
   add_index "transactions", ["discounted"], :name => "index_transactions_on_discounted"
-  add_index "transactions", ["payment_date"], :name => "index_transactions_on_payment_date"
+  add_index "transactions", ["due_date"], :name => "index_transactions_on_due_date"
 
   create_table "units", :force => true do |t|
     t.string   "name",       :limit => 100

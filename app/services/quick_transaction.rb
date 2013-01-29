@@ -34,7 +34,7 @@ private
     {
       ref_number: ref_number, date: date, currency: currency,
       bill_number: bill_number, contact_id: contact_id,
-      payment_date: date
+      due_date: date
     }
   end
 

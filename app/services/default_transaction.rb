@@ -9,7 +9,7 @@ private
 
   def approve_transaction
     transaction.state = 'approved'
-    transaction.payment_date = transaction.date
+    transaction.due_date = transaction.date
     transaction.approver_id = UserSession.id
     transaction.approver_datetime = Time.zone.now
   end

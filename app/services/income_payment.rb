@@ -4,6 +4,8 @@ class IncomePayment < Payment
   # Validations
   validates_presence_of :income
   validate :valid_income_balance
+  validate :valid_expense_balance, if: :account_to_is_expense?
+  validate :valid_expense_state, if: :account_to_is_expense?
 
   # Delegations
   delegate :total, :balance, to: :income, prefix: true, allow_nil: true
@@ -15,6 +17,7 @@ class IncomePayment < Payment
 
     commit_or_rollback do
       res = save_income
+      res = save_expense if account_to.is_a?(Expense)
       res = create_ledger && res
       res = create_interest && res
       set_errors(income, ledger, int_ledger) unless res
@@ -32,6 +35,13 @@ private
     update_income
 
     income.save
+  end
+
+  # Updates the expense and sets it's state
+  def save_expense
+    account_to.balance -= (amount + interest)
+
+    account_to.save
   end
 
   def update_income
@@ -76,4 +86,27 @@ private
     end
   end
 
+  def account_to_is_expense?
+    account_to.is_a?(Expense)
+  end
+
+  # Only when you pay with a expense
+  def valid_expense_balance
+    if  account_to.balance < (amount + interest)
+      self.errors.add :amount, I18n.t('errors.messages.payment.expense_balance')
+    end
+  end
+
+  def valid_expense_state
+    self.errors.add(:account_to_id, I18n.t('errors.messages.payment.invalid_expense_state')) unless account_to.is_approved?
+  end
+
+  def inverse?
+    account.currency != OrganisationSession.currency && account_to.currency != account.currency
+  end
+
+  # Returns the total using exchange_rate
+  def total_exchange
+
+  end
 end

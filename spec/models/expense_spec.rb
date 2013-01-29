@@ -143,7 +143,7 @@ describe Expense do
     attrs = {
       balance: 10, bill_number: '123',
       gross_total: 10, original_total: 10, balance_inventory: 10,
-      payment_date: d, creator_id: 1, approver_id: 2,
+      due_date: d, creator_id: 1, approver_id: 2,
       nuller_id: 3, null_reason: 'Null', approver_datetime: t,
       delivered: true, devolution: true
     }
@@ -153,5 +153,15 @@ describe Expense do
     attrs.each do |k, v|
       e.send(k).should eq(v)
     end
+  end
+
+  it "can receive a block to set certain arguments" do
+    ex = Expense.new_expense(id: 10, total: 10, balance: 10)
+
+    ex.id.should be_nil
+
+    ex = Expense.new_expense(total: 10, balance: 10) {|e| e.id = 10}
+
+    ex.id.should eq(10)
   end
 end

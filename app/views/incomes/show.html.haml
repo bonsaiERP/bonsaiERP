@@ -31,9 +31,9 @@
         %i.icon-user
         =@income.contact
 
-  = render_if @income.payment_date do
+  = render_if @income.due_date do
     %h4.n
-      = @income.payment_date_tag
+      = @income.due_date_tag
 
 
   .row-fluid

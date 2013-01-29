@@ -84,7 +84,7 @@ AccountLedger
   to_balance: decimal
   contact_id: integer
   staff_id: integer
-  payment_date: date
+  due_date: date
   inverse: boolean
   project_id: integer
   transaction_type: string
@@ -181,7 +181,7 @@ Transaction
   discount: decimal
   gross_total: decimal
   cash: boolean
-  payment_date: date
+  due_date: date
   balance_inventory: decimal
   creator_id: integer
   approver_id: integer
@@ -240,7 +240,7 @@ Buy
   discount: decimal
   gross_total: decimal
   cash: boolean
-  payment_date: date
+  due_date: date
   balance_inventory: decimal
   creator_id: integer
   approver_id: integer
@@ -300,7 +300,7 @@ Income
   discount: decimal
   gross_total: decimal
   cash: boolean
-  payment_date: date
+  due_date: date
   balance_inventory: decimal
   creator_id: integer
   approver_id: integer
@@ -571,7 +571,7 @@ Loan
   discount: decimal
   gross_total: decimal
   cash: boolean
-  payment_date: date
+  due_date: date
   balance_inventory: decimal
   creator_id: integer
   approver_id: integer
@@ -624,7 +624,7 @@ Loanin
   discount: decimal
   gross_total: decimal
   cash: boolean
-  payment_date: date
+  due_date: date
   balance_inventory: decimal
   creator_id: integer
   approver_id: integer
@@ -677,7 +677,7 @@ Loanout
   discount: decimal
   gross_total: decimal
   cash: boolean
-  payment_date: date
+  due_date: date
   balance_inventory: decimal
   creator_id: integer
   approver_id: integer
@@ -753,7 +753,7 @@ PayPlan
   cur: string
   amount: decimal
   interests_penalties: decimal
-  payment_date: date
+  due_date: date
   alert_date: date
   email: boolean
   ctype: string

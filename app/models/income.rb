@@ -37,7 +37,7 @@ class Income < Account
   # Delegations
   TRANSACTION_METHODS = [
     :balance, :bill_number, :gross_total, :original_total, :balance_inventory, 
-    :payment_date, :creator_id, :creator, :approver_id, 
+    :due_date, :creator_id, :creator, :approver_id, 
     :approver, :nuller_id, :nuller,
     :null_reason, :approver_datetime, 
     :delivered, :discounted, :devolution
@@ -60,6 +60,7 @@ class Income < Account
       i.build_transaction
       i.attributes = attrs
       i.state ||= 'draft'
+      yield i if block_given?
     end
   end
 
@@ -125,7 +126,7 @@ class Income < Account
       self.state = 'approved'
       self.approver_id = UserSession.id
       self.approver_datetime = Time.zone.now
-      self.payment_date = Date.today
+      self.due_date = Date.today
     end
   end
 

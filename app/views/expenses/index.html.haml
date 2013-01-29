@@ -75,7 +75,7 @@
           %span.bicon.pill{:class => "#{expense.real_state}", :title => expense.show_state}
         %td= link_to expense.ref_number, expense, :class => 'b'
         %td= expense.contact
-        %td= lo expense.payment_date unless expense.is_paid?
+        %td= lo expense.due_date unless expense.is_paid?
         %td #{expense.currency_symbol} #{ntc expense.total }
         %td #{expense.currency_symbol} #{ntc expense.balance }
 

@@ -94,10 +94,10 @@ class IncomesController < ApplicationController
     redirect_to income_path(@income)
   end
 
-  # PUT incomes/:id/update_payment_date
-  def update_payment_date
+  # PUT incomes/:id/update_due_date
+  def update_due_date
     @income = Income.find(params[:id])
-    @income.payment_date = params[:payment_date]
+    @income.due_date = params[:payment_date]
 
     if @income.save
       render json: {success: true}

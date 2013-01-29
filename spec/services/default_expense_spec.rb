@@ -73,7 +73,7 @@ describe DefaultExpense do
       e.ref_number.should =~ /E-\d{2}-\d{4}/
 
       e.creator_id.should eq(UserSession.id)
-      e.payment_date.should be_blank
+      e.due_date.should be_blank
 
       # Number values
       e.exchange_rate.should == 1
@@ -108,7 +108,7 @@ describe DefaultExpense do
       e.should be_active
       e.approver_id.should eq(UserSession.id)
       e.approver_datetime.should be_is_a(Time)
-      e.payment_date.should be_is_a(Date)
+      e.due_date.should be_is_a(Date)
     end
 
     it "checks there is no error" do

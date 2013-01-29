@@ -19,7 +19,7 @@ class TransactionParams
   end
 
   def default
-    [:date, :contact_id, :currency, :exchange_rate, :project_id, :bill_number, :description, :payment_date,
+    [:date, :contact_id, :currency, :exchange_rate, :project_id, :bill_number, :description, :due_date,
       :total, transaction_details_attributes: [
         :id, :item_id, :price, :quantity, :_destroy
       ]

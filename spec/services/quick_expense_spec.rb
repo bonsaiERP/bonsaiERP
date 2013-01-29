@@ -51,7 +51,7 @@ describe QuickExpense do
       expense.total.should == 200.5
       expense.original_total.should == 200.5
       expense.date.should eq(valid_attributes.fetch(:date) )
-      expense.payment_date.should eq(expense.date)
+      expense.due_date.should eq(expense.date)
 
       expense.creator_id.should eq(21)
       expense.approver_id.should eq(21)

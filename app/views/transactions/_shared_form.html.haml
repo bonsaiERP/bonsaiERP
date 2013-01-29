@@ -26,7 +26,7 @@
   .span3
     = f.input :bill_number, label: 'Nº de Documento'.html_safe, input_html: {size: 20}, hint: 'Nº de factura or recibo'
   .span3
-    =f.input :payment_date, as: :datepicker, label: 'Vence el' if f.object.is_approved?
+    =f.input :due_date, as: :datepicker, label: 'Vence el' if f.object.is_approved?
 
 
 .row-fluid

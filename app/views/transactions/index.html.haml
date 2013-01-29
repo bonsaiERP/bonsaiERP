@@ -37,6 +37,6 @@
         %td <span>#{income.currency_symbol}</span>
         %td <span class="#{income.real_state}">#{income.show_state}</span>
         %td= cash_credit(income.cash)
-        %td= lo income.payment_date unless income.paid?
+        %td= lo income.due_date unless income.paid?
         %td.actions
           = bonsai_links(income) if income.draft?

@@ -13,7 +13,7 @@ class CreateTransactions < ActiveRecord::Migration
       t.decimal :original_total, :precision => 14, :scale => 2, default: 0.0
       t.decimal :balance_inventory, :precision => 14, :scale => 2, default: 0.0
 
-      t.date    :payment_date
+      t.date    :due_date
       # Creators approver
       t.integer  :creator_id
       t.integer  :approver_id
@@ -30,7 +30,7 @@ class CreateTransactions < ActiveRecord::Migration
     end
 
     add_index :transactions, :account_id
-    add_index :transactions, :payment_date
+    add_index :transactions, :due_date
     add_index :transactions, :delivered
     add_index :transactions, :discounted
     add_index :transactions, :devolution

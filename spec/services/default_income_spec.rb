@@ -72,7 +72,7 @@ describe DefaultIncome do
       i.should be_active
       i.ref_number.should =~ /I-\d{2}-\d{4}/
       i.date.should be_is_a(Date)
-      #i.payment_date.should eq(i.date)
+      #i.due_date.should eq(i.date)
 
       i.creator_id.should eq(UserSession.id)
 
@@ -96,7 +96,7 @@ describe DefaultIncome do
     it "creates and approves" do
       subject.should_receive(:set_income_data).and_return(true)
       # Check, bu not unit test
-      subject.income.payment_date.should be_nil
+      subject.income.due_date.should be_nil
       subject.income.approver_id.should be_nil
       subject.income.approver_datetime.should be_nil
       # Create
@@ -107,7 +107,7 @@ describe DefaultIncome do
       i.should be_is_a(Income)
       i.should be_is_approved
       i.should be_active
-      i.payment_date.should eq(i.date)
+      i.due_date.should eq(i.date)
       i.approver_id.should eq(UserSession.id)
       i.approver_datetime.should be_is_a(Time)
     end

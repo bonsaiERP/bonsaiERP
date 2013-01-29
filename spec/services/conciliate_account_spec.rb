@@ -55,6 +55,31 @@ describe ConciliateAccount do
 
         al.approver_id.should eq(1)
       end
+
+      it "Only updates only the ledger when service payment" do
+        income = build :income, id: 10, total: 100, currency: 'BOB'
+        expense = build :expense, id: 2, amount: 50, total: 10
+
+        al = AccountLedger.new(operation: 'payin', id: 10, amount: 100, conciliation: false)
+        # stubs
+        al.should_receive(:save).and_return(true)
+
+        al.account = income
+        al.account_to = expense
+        al.should_not be_conciliation
+        al.approver_id.should be_nil
+        al.approver_datetime.should be_nil
+
+        ConciliateAccount.new(al).conciliate.should be_true
+
+        al.should be_conciliation
+        # Account don't change
+        al.account.amount.should == 100
+        al.account_to_amount.should == 50
+
+        al.approver_id.should eq(1)
+        al.approver_datetime.should be_is_a(Time)
+      end
     end
   end
 end

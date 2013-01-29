@@ -46,7 +46,7 @@
           %span{:class => "#{expense.real_state} tip", :title => expense.show_state}
         %td= link_to expense.ref_number, expense, :class => 'b'
         /%td= expense.account
-        %td= lo expense.payment_date unless expense.paid?
+        %td= lo expense.due_date unless expense.paid?
         %td.cur= ntc exchange(expense, :real_total, currency_rates)
         %td.cur= ntc exchange(expense, :balance, currency_rates)
         %td.cur= ntc expense.balance_inventory

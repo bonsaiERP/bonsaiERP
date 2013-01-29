@@ -113,7 +113,7 @@ describe Income do
       i.should be_is_paid
       i.approver_id.should eq(UserSession.id)
       i.approver_datetime.should be_is_a(Time)
-      i.payment_date.should be_is_a(Date)
+      i.due_date.should be_is_a(Date)
     end
 
     it "a negative balance" do
@@ -202,7 +202,7 @@ describe Income do
     attrs = {
       balance: 10, bill_number: '123',
       gross_total: 10, original_total: 10, balance_inventory: 10,
-      payment_date: d, creator_id: 1, approver_id: 2,
+      due_date: d, creator_id: 1, approver_id: 2,
       nuller_id: 3, null_reason: 'Null', approver_datetime: t,
       delivered: true, devolution: true
     }
@@ -244,4 +244,13 @@ describe Income do
     end
   end
 
+  it "can receive a block to set certain arguments" do
+    inc = Income.new_income(id: 10, total: 10, balance: 10)
+
+    inc.id.should be_nil
+
+    inc = Income.new_income(total: 10, balance: 10) {|e| e.id = 10}
+
+    inc.id.should eq(10)
+  end
 end

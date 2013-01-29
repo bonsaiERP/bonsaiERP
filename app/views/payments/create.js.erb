@@ -25,6 +25,6 @@ $('#transaction_state').removeClass("<%= Transaction::STATES.join(" ") %>")
 
 $('#balance').html("<%= @transaction.currency_symbol %> <%= ntc @transaction.balance %>")
 
-$('#due_on').html("<%= lo @transaction.payment_date %>");
+$('#due_on').html("<%= lo @transaction.due_date %>");
 
 $('body').trigger("ajax:url");

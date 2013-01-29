@@ -238,7 +238,7 @@ CREATE TABLE account_ledgers (
     to_balance numeric(14,2),
     contact_id integer,
     staff_id integer,
-    payment_date date,
+    due_date date,
     inverse boolean DEFAULT false,
     project_id integer,
     transaction_type character varying(30),
@@ -559,7 +559,7 @@ CREATE TABLE pay_plans (
     cur character varying(255),
     amount numeric(14,2),
     interests_penalties numeric(14,2),
-    payment_date date,
+    due_date date,
     alert_date date,
     email boolean DEFAULT true,
     ctype character varying(20),
@@ -923,7 +923,7 @@ CREATE TABLE transactions (
     discount numeric(5,2),
     gross_total numeric(14,2),
     cash boolean DEFAULT true,
-    payment_date date,
+    due_date date,
     balance_inventory numeric(14,2),
     creator_id integer,
     approver_id integer,
@@ -1339,7 +1339,7 @@ CREATE TABLE account_ledgers (
     to_balance numeric(14,2),
     contact_id integer,
     staff_id integer,
-    payment_date date,
+    due_date date,
     inverse boolean DEFAULT false,
     project_id integer,
     transaction_type character varying(30),
@@ -1660,7 +1660,7 @@ CREATE TABLE pay_plans (
     cur character varying(255),
     amount numeric(14,2),
     interests_penalties numeric(14,2),
-    payment_date date,
+    due_date date,
     alert_date date,
     email boolean DEFAULT true,
     ctype character varying(20),
@@ -2024,7 +2024,7 @@ CREATE TABLE transactions (
     discount numeric(5,2),
     gross_total numeric(14,2),
     cash boolean DEFAULT true,
-    payment_date date,
+    due_date date,
     balance_inventory numeric(14,2),
     creator_id integer,
     approver_id integer,
@@ -3339,10 +3339,10 @@ CREATE INDEX index_pay_plans_on_paid ON pay_plans USING btree (paid);
 
 
 --
--- Name: index_pay_plans_on_payment_date; Type: INDEX; Schema: bonsai; Owner: -; Tablespace: 
+-- Name: index_pay_plans_on_due_date; Type: INDEX; Schema: bonsai; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_pay_plans_on_payment_date ON pay_plans USING btree (payment_date);
+CREATE INDEX index_pay_plans_on_due_date ON pay_plans USING btree (due_date);
 
 
 --
@@ -3647,10 +3647,10 @@ CREATE INDEX index_transactions_on_nuller_id ON transactions USING btree (nuller
 
 
 --
--- Name: index_transactions_on_payment_date; Type: INDEX; Schema: bonsai; Owner: -; Tablespace: 
+-- Name: index_transactions_on_due_date; Type: INDEX; Schema: bonsai; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_transactions_on_payment_date ON transactions USING btree (payment_date);
+CREATE INDEX index_transactions_on_due_date ON transactions USING btree (due_date);
 
 
 --
@@ -4274,10 +4274,10 @@ CREATE INDEX index_pay_plans_on_paid ON pay_plans USING btree (paid);
 
 
 --
--- Name: index_pay_plans_on_payment_date; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_pay_plans_on_due_date; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_pay_plans_on_payment_date ON pay_plans USING btree (payment_date);
+CREATE INDEX index_pay_plans_on_due_date ON pay_plans USING btree (due_date);
 
 
 --
@@ -4582,10 +4582,10 @@ CREATE INDEX index_transactions_on_nuller_id ON transactions USING btree (nuller
 
 
 --
--- Name: index_transactions_on_payment_date; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_transactions_on_due_date; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_transactions_on_payment_date ON transactions USING btree (payment_date);
+CREATE INDEX index_transactions_on_due_date ON transactions USING btree (due_date);
 
 
 --

@@ -31,7 +31,7 @@ class Expense < Account
   # Delegations
   TRANSACTION_METHODS = [
     :balance, :bill_number, :gross_total, :original_total,
-    :balance_inventory, :payment_date, :creator_id, :approver_id, :nuller_id,
+    :balance_inventory, :due_date, :creator_id, :approver_id, :nuller_id,
     :null_reason, :approver_datetime, :delivered, :discounted, :devolution
   ].freeze
   delegate *getters_setters_array(*TRANSACTION_METHODS), to: :transaction
@@ -52,6 +52,7 @@ class Expense < Account
       e.build_transaction
       e.attributes = attrs
       e.state ||= 'draft'
+      yield e if block_given?
     end
   end
 
@@ -115,7 +116,7 @@ class Expense < Account
       self.state = 'approved'
       self.approver_id = UserSession.id
       self.approver_datetime = Time.zone.now
-      self.payment_date = Date.today
+      self.due_date = Date.today
     end
   end
 

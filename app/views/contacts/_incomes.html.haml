@@ -42,7 +42,7 @@
         %td 
           %span.bicon.pill{:class => "#{income.real_state}", :title => income.show_state}
         %td= link_to income.ref_number, income, :class => 'b'
-        %td= lo income.payment_date unless income.paid?
+        %td= lo income.due_date unless income.paid?
         %td.cur #{income.currency_symbol} #{ntc income.total }
         %td.cur #{income.currency_symbol} #{ntc income.balance }
         %td= cash_credit(income.cash)

@@ -39,9 +39,9 @@ class DefaultIncome < DefaultTransaction
     update(params) { income.approve! }
   end
 
-  def update_payment_date(pdate)
+  def update_due_date(ddate)
     res = TransactionHistory.new.create_history(income)
-    income.payment_date = pdate
+    income.due_date = ddate
 
     commit_or_rollback { income.save && res }
   end

@@ -156,7 +156,7 @@ describe IncomePayment do
         p = IncomePayment.new(valid_attributes.merge(account_to_id: 200, verification: true, interest: 10))
 
         p.pay.should be_true
-        
+
         p.ledger.should be_conciliation
         p.int_ledger.should be_conciliation
 
@@ -182,6 +182,83 @@ describe IncomePayment do
       p.int_ledger.should be_is_a(AccountLedger)
       p.int_ledger.amount.should == 10.0
       p.int_ledger.should be_is_intin
+    end
+  end
+
+  context "Pay with expense" do
+    let(:expense) { Expense.new_expense(total: 200, balance: 100, state: 'approved') {|e| e.id = 14} }
+
+    let(:expense_payment_attributes) {
+      {
+        account_id: income.id, account_to_id: expense.id, amount: 50,
+        exchange_rate: 1, interest: 10, verification: 'true', 
+        date: Date.today, reference: 'Pay with expense'
+      }
+    }
+
+    before do
+      Account.stub(:find_by_id).with(income.id).and_return(income)
+      Account.stub(:find_by_id).with(expense.id).and_return(expense)
+      AccountLedger.any_instance.stub(save_ledger: true)
+    end
+
+    it "is not valid when amount is greater than expense balance" do
+      expense.balance = 20
+      ip = IncomePayment.new(expense_payment_attributes)
+
+      ip.should_not be_valid
+
+      ip.errors_on(:amount).should eq([I18n.t('errors.messages.payment.expense_balance')])
+
+      expense.balance = 100
+
+      ip.should be_valid
+    end
+
+    it "updates the related Expense account" do
+      income.stub(save: true)
+      expense.stub(save: true)
+      expense.balance = 100
+
+      bal = income.balance
+
+      ip = IncomePayment.new(expense_payment_attributes)
+
+      bal = income.balance
+      # Pay
+      ip.pay.should be_true
+      # Income
+      ip.income.balance.should == bal - ip.amount
+      # Expense
+      ip.account_to.balance.should == 100 - (ip.amount + ip.interest)
+    end
+
+    it "should set the state of the expense when done" do
+      expense.state = 'draft'
+
+      ip = IncomePayment.new(expense_payment_attributes)
+
+      ip.should_not be_valid
+
+      ip.errors_on(:account_to_id).should eq([I18n.t('errors.messages.payment.invalid_expense_state')])
+    end
+
+    it "sets the state for the expense" do
+      income.stub(save: true)
+      expense.stub(save: true)
+      income.balance = income.total = 100
+      expense.balance = expense.total = 100
+
+      income.should be_draft
+      income.balance.should eq(100)
+
+      ip = IncomePayment.new(expense_payment_attributes.merge(amount: 90, interest: 10))
+
+      ip.pay.should be_true
+      # Income
+      puts ip.income.balance
+      # Expense
+      puts ip.account_to.balance
     end
   end
 

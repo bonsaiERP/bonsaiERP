@@ -32,7 +32,7 @@
     %label SALDO A COBRAR
     %h3#balance #{@income.currency_symbol} #{ntc @income.balance}
   
-= "Vence el <strong id='due_on'>#{lo @income.payment_date}</strong></span>".html_safe unless @income.paid? or @income.draft?
+= "Vence el <strong id='due_on'>#{lo @income.due_date}</strong></span>".html_safe unless @income.paid? or @income.draft?
 
 ._50.fr.r
   / FORM to null income
@@ -128,7 +128,7 @@
       $('body').live('transaction', function(e, resp) {
         
         $('h3#balance').html("#{@income.currency_symbol} " + _b.ntc(resp.balance) );
-        $('#due_on').html(_b.dateFormat(resp.payment_date));
+        $('#due_on').html(_b.dateFormat(resp.due_date));
 
         setIncomeState(resp.real_state);
       });

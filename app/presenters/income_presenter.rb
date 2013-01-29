@@ -35,13 +35,13 @@ class IncomePresenter < Resubject::Presenter
     html.html_safe
   end
 
-  def payment_date_tag
+  def due_date_tag
     d = ""
     if is_approved?
-      css = ( today > to_model.payment_date ) ? "text-error" : ""
+      css = ( today > to_model.due_date ) ? "text-error" : ""
       d = "<span class='muted'>Vence el:</span> "
       d << "<span class='i #{css}'><i class='icon-time'></i> "
-      d << l(to_model.payment_date)
+      d << l(to_model.due_date)
       d << "</span>"
     end
     d.html_safe
