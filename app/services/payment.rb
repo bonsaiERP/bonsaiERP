@@ -18,6 +18,9 @@ class Payment < BaseService
   validates_numericality_of :exchange_rate, greater_than: 0
   validate :valid_amount_or_interest
   validate :valid_date
+  validate :valid_accounts_currency
+
+  delegate :currency, to: :current_organisation
 
   # Initializes and sets verification to false if it's not set correctly
   def initialize(attrs = {})
@@ -26,7 +29,7 @@ class Payment < BaseService
   end
 
   def account_to
-    @account = Account.find_by_id(account_to_id)
+    @account = Account.active.find_by_id(account_to_id)
   end
 
 private
@@ -60,5 +63,21 @@ private
       transaction.approver_id = UserSession.id
       transaction.approver_datetime = Time.zone.now
     end
+  end
+
+  def valid_accounts_currency
+    unless currency_exchange.valid?
+      self.errors.add(:base, I18n.t('errors.messages.payment.valid_accounts_currency', currency: currency))
+    end
+  end
+
+  def currency_exchange
+    @currency_exchange ||= CurrencyExchange.new(
+      account: transaction, account_to: account_to, exchange_rate: exchange_rate
+    )
+  end
+
+  def current_organisation
+    OrganisationSession
   end
 end

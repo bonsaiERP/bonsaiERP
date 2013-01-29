@@ -15,6 +15,18 @@ describe CurrencyExchange do
     ex = CurrencyExchange.new(account: account_usd, account_to: account_eur, exchange_rate: 1.412)
 
     ex.should_not be_valid
+
+    # Both accounts are EUR
+    ex = CurrencyExchange.new(account: account_eur, account_to: account_eur, exchange_rate: 1.333)
+
+    ex.should be_valid
+    ex.exchange.should eq(1)
+  end
+
+  it "sets to 1 when both accounts are the same currency" do
+    ex = CurrencyExchange.new(account: account_eur, account_to: account_eur, exchange_rate: 1.333)
+
+    ex.exchange_rate.should eq(1)
   end
 
   it "initializes with a account_ledger" do

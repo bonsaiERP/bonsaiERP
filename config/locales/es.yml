@@ -258,6 +258,7 @@ es:
         invalid_amount_or_interest: "La cantidad o el interes debe ser mayor que 0"
         invalid_expense_state: "El Egreso que selecciono no esta aprovado"
         date: "Ingrese una fecha válida"
+        valid_accounts_currency: "Alguna de las cuentas debe ser en %{currency}"
       quick_income:
         valid_account_to: "Debe seleccionar una cuenta Banco o Caja"
       user:

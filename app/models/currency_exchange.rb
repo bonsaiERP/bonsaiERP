@@ -2,17 +2,20 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 # Makes the exchange and can check validation for conversion in
-# account_ledgers
+# account_ledgers, the accounts passed should be valid
 class CurrencyExchange
 
   attr_accessor :account, :account_to, :exchange_rate
 
   delegate :currency, to: :current_organisation
+  delegate :currency, to: :account, prefix: true, allow_nil: true
+  delegate :currency, to: :account_to, prefix: true, allow_nil: true
 
   def initialize(attrs = {})
     attrs.each do |k, v|
       self.send(:"#{k}=", v)
     end
+    self.exchange_rate = 1 if same_currency?
   end
 
   def inverse?
@@ -20,7 +23,7 @@ class CurrencyExchange
   end
 
   def valid?
-    account.currency === currency || account_to.currency === currency
+    (account_currency === currency || account_to_currency === currency || same_currency?)
   end
 
   def exchange(val = 1)
@@ -32,10 +35,13 @@ class CurrencyExchange
 
     ret.round(4)
   end
-
 private
   def current_organisation
     OrganisationSession
+  end
+
+  def same_currency?
+    account_currency === account_to_currency
   end
 end
 
