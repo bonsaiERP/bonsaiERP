@@ -2,6 +2,10 @@
 require 'spec_helper'
 
 describe IncomePayment do
+  before do
+    OrganisationSession.organisation = build :organisation, currency: 'BOB'
+  end
+
   let(:valid_attributes) {
     {
       account_id: 10, account_to_id: 2, exchange_rate: 1,
@@ -219,6 +223,7 @@ describe IncomePayment do
       income.stub(save: true)
       expense.stub(save: true)
       expense.balance = 100
+      expense.currency = 'BOB'
 
       bal = income.balance
 
@@ -249,16 +254,111 @@ describe IncomePayment do
       income.balance = income.total = 100
       expense.balance = expense.total = 100
 
-      income.should be_draft
+      income.should be_is_draft
       income.balance.should eq(100)
+
+      expense.should be_is_approved
 
       ip = IncomePayment.new(expense_payment_attributes.merge(amount: 90, interest: 10))
 
       ip.pay.should be_true
       # Income
-      puts ip.income.balance
+      ip.income.balance.should == 10
       # Expense
-      puts ip.account_to.balance
+      ip.account_to.balance.should == 0
+      ip.account_to.should be_is_paid
+    end
+
+    # Exchange rate
+    it "sets balance based on the currency of expense" do
+      income.stub(save: true)
+      expense.stub(save: true)
+      income.balance = income.total = 100
+      expense.balance = expense.total = 100
+      expense.currency = 'USD'
+
+      income.should be_is_draft
+      income.balance.should eq(100)
+
+      expense.should be_is_approved
+
+      ip = IncomePayment.new(expense_payment_attributes.merge(amount: 10, interest: 1, exchange_rate: 7.0))
+
+      ip.pay.should be_true
+      # Income
+      ip.income.balance.should == 100 - 7.0 * 10
+      # Expense
+      ip.account_to.balance.should == 100 - 11
+
+      ########################################
+      # Inverse
+      income.balance = income.total = 100
+      expense.balance = expense.total = 100
+      income.currency = 'USD'
+      expense.currency = 'BOB'
+
+      ip = IncomePayment.new(expense_payment_attributes.merge(amount: 10, interest: 1, exchange_rate: 7.0))
+
+      ip.pay.should be_true
+      # Income
+      ip.income.balance.round(4).should == (100 - 1.0/7 * 10).round(4)
+      # Expense
+      ip.account_to.balance.should == 100 - 11
+    end
+  end
+
+  context "Pay with different currencies" do
+    before do
+      income.stub(save: true)
+      Income.stub(:find_by_id).with(income.id).and_return(income)
+      AccountLedger.any_instance.stub(save_ledger:  true)
+    end
+
+    it "uses the exchange_rate for other curerncy" do
+      ac_usd = build(:cash, currency: 'USD', id: 101)
+      Account.stub_chain(:active, :find_by_id).with(101).and_return(ac_usd)
+      income.balance = 100
+
+      ip = IncomePayment.new(valid_attributes.merge(account_to_id: 101, exchange_rate: 7.001, amount: 10, interest: 1))
+
+      ip.pay.should be_true
+
+      ip.amount.should == 10
+      # income
+      ip.income.currency.should eq('BOB')
+      ip.income.balance.should == (100 - 7.001 * 10).round(4)
+      # ledger
+      ip.ledger.should_not be_inverse
+      ip.amount.should == 10
+      ip.ledger.currency.should eq('USD')
+      # int_ledger
+      ip.int_ledger.should_not be_inverse
+      ip.int_ledger.amount.should == 1
+      ip.int_ledger.currency.should eq('USD')
+    end
+
+    it "does the inverse when income in USD" do
+      income.currency = 'USD'
+      ac_usd = build(:cash, currency: 'BOB', id: 103)
+      Account.stub_chain(:active, :find_by_id).with(101).and_return(ac_usd)
+      income.balance = 100
+
+      ip = IncomePayment.new(valid_attributes.merge(account_to_id: 101, exchange_rate: 7.001, amount: 200, interest: 1))
+
+      ip.pay.should be_true
+
+      ip.amount.should == 200
+      # income
+      ip.income.currency.should eq('USD')
+      ip.income.balance.should == (100 - 1/7.001 * 200).round(4)
+      # ledger
+      ip.ledger.should be_inverse
+      ip.amount.should == 200
+      ip.ledger.currency.should eq('BOB')
+      # int_ledger
+      ip.int_ledger.should be_inverse
+      ip.int_ledger.amount.should == 1
+      ip.int_ledger.currency.should eq('BOB')
     end
   end
 

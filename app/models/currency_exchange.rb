@@ -19,7 +19,7 @@ class CurrencyExchange
   end
 
   def inverse?
-    account_to.currency != currency
+    account_currency != currency && account_currency != account_to_currency
   end
 
   def valid?

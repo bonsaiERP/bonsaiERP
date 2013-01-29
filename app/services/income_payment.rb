@@ -29,6 +29,7 @@ class IncomePayment < Payment
   def income
     @transaction = @income ||= Income.find_by_id(account_id)
   end
+  alias_method :transaction, :income
 
 private
   def save_income
@@ -39,13 +40,14 @@ private
 
   # Updates the expense and sets it's state
   def save_expense
-    account_to.balance -= (amount + interest)
+    account_to.balance -= amount + interest
+    account_to.set_state_by_balance!
 
     account_to.save
   end
 
   def update_income
-    income.balance -= amount
+    income.balance -= amount_exchange
     income.set_state_by_balance! # Sets state and the user
   end
 
@@ -64,7 +66,7 @@ private
   def create_interest
     if interest.to_f > 0
       @int_ledger = build_ledger(
-                      amount: interest, operation: 'intin', 
+                      amount: interest, operation: 'intin',
                       account_id: income.id, conciliation: conciliation?
                     )
       @int_ledger.save_ledger
@@ -81,7 +83,7 @@ private
   end
 
   def valid_income_balance
-    if amount.to_f > income_balance.to_f
+    if amount_exchange.to_f > income_balance.to_f
       self.errors.add :amount, I18n.t('errors.messages.payment.income_balance')
     end
   end
@@ -101,12 +103,4 @@ private
     self.errors.add(:account_to_id, I18n.t('errors.messages.payment.invalid_expense_state')) unless account_to.is_approved?
   end
 
-  def inverse?
-    account.currency != OrganisationSession.currency && account_to.currency != account.currency
-  end
-
-  # Returns the total using exchange_rate
-  def total_exchange
-
-  end
 end

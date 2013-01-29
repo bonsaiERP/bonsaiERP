@@ -20,7 +20,7 @@ class Payment < BaseService
   validate :valid_date
   validate :valid_accounts_currency
 
-  delegate :currency, to: :current_organisation
+  delegate :currency, :inverse?, to: :currency_exchange
 
   # Initializes and sets verification to false if it's not set correctly
   def initialize(attrs = {})
@@ -36,9 +36,9 @@ private
   # Builds and AccountLedger instance with some default data
   def build_ledger(attrs = {})
     AccountLedger.new({
-      account_id: account_id, operation: '', exchange_rate: exchange_rate,
-      amount: 0, account_to_id: account_to_id,
-      reference: reference, date: date
+      account_id: account_id, exchange_rate: real_exchange_rate,
+      account_to_id: account_to_id, inverse: inverse?,
+      reference: reference, date: date, currency: account_to.currency
     }.merge(attrs))
   end
 
@@ -75,6 +75,22 @@ private
     @currency_exchange ||= CurrencyExchange.new(
       account: transaction, account_to: account_to, exchange_rate: exchange_rate
     )
+  end
+
+  def total_exchange
+    currency_exchange.exchange(amount + interest)
+  end
+
+  def amount_exchange
+    currency_exchange.exchange(amount)
+  end
+
+  def interest_exchange
+    currency_exchange.exchange(interest)
+  end
+
+  def real_exchange_rate
+    currency_exchange.exchange_rate
   end
 
   def current_organisation
