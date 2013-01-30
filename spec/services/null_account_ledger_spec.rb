@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe NullAccount do
+describe NullAccountLedger do
 
   before do
       UserSession.user = build :user, id: 11
@@ -10,9 +10,9 @@ describe NullAccount do
 
 
   it "only allow account ledgers" do
-    expect { NullAccount.new(Object.new) }.to raise_error
+    expect { NullAccountLedger.new(Object.new) }.to raise_error
 
-    NullAccount.new(build :account_ledger)
+    NullAccountLedger.new(build :account_ledger)
   end
 
   it "only nulls active and not conciliated accounts_ledgers" do
@@ -21,20 +21,20 @@ describe NullAccount do
     ledger.stub(save: true)
 
     # Conciliated
-    na = NullAccount.new(ledger)
+    na = NullAccountLedger.new(ledger)
     na.should_not be_valid
     
     # Nulled inactive
     ledger.active = false
     ledger.conciliation = false
 
-    na = NullAccount.new(ledger)
+    na = NullAccountLedger.new(ledger)
     na.should_not be_valid
 
     # Nulled inactive
     ledger.active = true
     ledger.conciliation = false
-    na = NullAccount.new(ledger)
+    na = NullAccountLedger.new(ledger)
 
     na.should be_valid
   end
@@ -57,7 +57,7 @@ describe NullAccount do
       al.account = cash_bob
       al.account_to = bank_bob
 
-      na = NullAccount.new(al)
+      na = NullAccountLedger.new(al)
 
       na.null.should be_true
 
@@ -70,7 +70,7 @@ describe NullAccount do
       al.account = cash_usd
       al.account_to = bank_bob
 
-      na = NullAccount.new(al)
+      na = NullAccountLedger.new(al)
 
       na.null.should be_true
 
@@ -83,7 +83,7 @@ describe NullAccount do
       al.account = bank_usd
       al.account_to = bank_bob
 
-      na = NullAccount.new(al)
+      na = NullAccountLedger.new(al)
 
       na.null.should be_true
 
@@ -102,7 +102,7 @@ describe NullAccount do
       al.account = income
       al.account_to = bank_bob
 
-      na = NullAccount.new(al)
+      na = NullAccountLedger.new(al)
 
       na.null.should be_true
 
@@ -122,7 +122,7 @@ describe NullAccount do
 
       income.balance.should == 0
 
-      na = NullAccount.new(al)
+      na = NullAccountLedger.new(al)
 
       na.null.should be_true
 
@@ -140,7 +140,7 @@ describe NullAccount do
 
       income.balance.should == 0
 
-      na = NullAccount.new(al)
+      na = NullAccountLedger.new(al)
 
       na.null.should be_true
 
