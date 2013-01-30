@@ -3,12 +3,15 @@
 # email: boriscyber@gmail.com
 class Bank < Account
 
+  # module
+  extend SettersGetters
+
   # Relationships
   has_one :money_store, foreign_key: :account_id, autosave: true
 
   # Delegations
   MONEY_METHODS = [:number, :email, :address, :phone, :website].freeze
-  delegate *getters_setters_array(*MONEY_METHODS), to: :money_store
+  delegate *create_accessors(*MONEY_METHODS), to: :money_store
   delegate :id, to: :money_store, prefix: true
 
   # validations

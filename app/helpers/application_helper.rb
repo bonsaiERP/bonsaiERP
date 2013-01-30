@@ -15,22 +15,6 @@ module ApplicationHelper
     session[:organisation][:name]
   end
 
-  # Presents the organisation due date
-  def present_due_date
-    if session[:organisation].present?
-      due_date = session[:organisation][:due_date]
-      if due_date < Date.today
-        "<span class='red'>Venció el #{lo due_date}</span>".html_safe
-      else
-        "Vence el #{lo due_date}"
-      end
-    end
-  end
-
-  def verdad?(val)
-    val ? "Si": "No"
-  end
-
   def active?(val)
     val ? "Activo" : "Inactivo"
   end
@@ -45,28 +29,9 @@ module ApplicationHelper
     link_to text, url_for(url_hash), options
   end
 
-  # Creates the url for the link_option
-  def create_options_url(url, option)
-    opts = params.merge(:option => option)
-    [:controller, :action].each {|v| opts.delete(v) }
-    opts.delete(:id) if url =~ /^.+\/\d+$/
-    first = true
-
-    opts.inject(url) do |s,(k,v)|
-      sym = first ? "?" : "&"
-      first = false
-      s << "#{sym}#{k}=#{v}"
-    end
-  end
-
   # Presents number to currency
   def ntc(val = nil, options = {})
     number_to_currency(val.to_f, options)
-  end
-
-  def nwd(val)
-    val ||= 0
-    number_with_delimiter(val)
   end
 
   # Format addres to present on the
@@ -77,35 +42,10 @@ module ApplicationHelper
     end
   end
 
-  # Changes the <br/> for a \n
-  def br2nl(val)
-    val.to_s.gsub!("<br/>", "\n") unless val.blank?
-  end
-
   # Used for localization
   def lo(val, options = {})
     localize(val, options) unless val.nil?
   end
-
-  # Links for presenting filtered data
-  # @param String
-  # @param String
-  # @param String
-  # @param Hash
-  # @return String
-  def link_tab(url, option, options = {})
-    params[:option] = 'all' if params[:option].nil?
-
-    active = (params[:option] == option) ? "active" : ""
-    url = "#{url}?option=#{option}" << create_options_link
-
-    link_to text, url, options.merge(:class => active)
-  end
-
-  def tab_url(url)
-    url << create_options_link
-  end
-
   def create_options_link
     opts = params
     opts.delete(:controller)
@@ -146,28 +86,6 @@ module ApplicationHelper
     end
   end
 
-  # returns the minus image with a size
-  def minus_image(size = 16)
-    raw "<img src=\"/assets/images/minus.png\" width=\"#{size}\" height=\"#{size}\" alt =\"menos\"/>"
-  end
-
-  # Presents income/expense with color
-  # @param [Tru, False]
-  # @param Hash
-  def in_out(val, options = {})
-    css, txt = val > 0 ? [ "dark-green", "INGRESO" ] : [ "red", "EGRESO" ]
-    options[:class] = options[:class].blank? ? css : options[:class] << " #{css}"
-    content_tag(:span, txt, options)
-  end
-
-  def in_out_tag(val)
-    if val > 0
-      content_tag(:span, ntc(val))
-    else
-      content_tag(:span, ntc(val), :class => 'red')
-    end
-  end
-
   # Presents a class with currency
   def with_currency(klass, amount = :amount, options = {})
     options = {:precision => 2}.merge(options)
@@ -176,31 +94,12 @@ module ApplicationHelper
 
   alias :wcur :with_currency
   
-  def organisation_creation_title(local)
-    case local
-    when :organisation then "Datos organización"
-    when :bank         then "Datos cuenta bancaria"
-    when :cash_regiser then "Datos cuenta caja"
-    when :view         then "Revisar datos"
-    end
-  end
 
   def show_if_search
     if params[:search] || params[:search_div_id]
       "display:block" 
     else
       "display:none"
-    end
-  end
-
-  # Gets the path for inventory_operations depending if it's related to a sale
-  # @param InventoryOperation
-  # @return String : path
-  def get_inventory_operation_path(klass)
-    if klass.transaction_id.present? and klass.transaction.type == "Income"
-      create_sale_inventory_operations_path
-    else
-      inventory_operations_path
     end
   end
 
@@ -257,10 +156,6 @@ module ApplicationHelper
     else
       'icon-remove'
     end
-  end
-
-  def show_amount(amount, cur=currency)
-    "#{ ntc(amount) } #{currency_label(cur)}"
   end
 
   def render_if(val, &block)

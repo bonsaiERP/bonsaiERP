@@ -80,16 +80,28 @@ describe AccountLedger do
   end
 
   context 'exchange_rate' do
-    subject{ AccountLedger.new(amount: 100, currency:'BOB', exchange_rate:2 ) }
+    before do
+      OrganisationSession.organisation = build :organisation, currency: 'BOB'
+    end
+
+    let(:ac_bob) { build :cash, currency: 'BOB' }
+    let(:ac_usd) { build :cash, currency: 'USD' }
+
+    subject{ AccountLedger.new(amount: 100, currency:'BOB') }
 
     it "calculates when not inverse" do
-      subject.inverse = false
-      subject.amount_currency.should == 200.0
+      subject.exchange_rate = 7.0
+      subject.stub(account: ac_bob, account_to: ac_usd)
+
+      #subject.inverse = false
+      subject.amount_currency.should == 100.0 * 7.0
     end
 
     it "calculates when inverse" do
-      subject.inverse = true
-      subject.amount_currency.should == 50.0
+      subject.exchange_rate = 7.0
+      subject.stub(account_to: ac_bob, account: ac_usd)
+
+      subject.amount_currency.should == (1/7.0 * 100).round(4)
     end
   end
 

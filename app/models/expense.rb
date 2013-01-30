@@ -2,6 +2,10 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class Expense < Account
+
+  # module for setters and getters
+  extend SettersGetters
+
   ########################################
   # Callbacks
   before_create :set_supplier
@@ -29,12 +33,7 @@ class Expense < Account
 
   ########################################
   # Delegations
-  TRANSACTION_METHODS = [
-    :balance, :bill_number, :gross_total, :original_total,
-    :balance_inventory, :due_date, :creator_id, :approver_id, :nuller_id,
-    :null_reason, :approver_datetime, :delivered, :discounted, :devolution
-  ].freeze
-  delegate *getters_setters_array(*TRANSACTION_METHODS), to: :transaction
+  delegate *create_accessors(*Transaction.transaction_columns), to: :transaction
   delegate :discounted?, :delivered?, :devolution?, to: :transaction
   delegate :attributes, to: :transaction, prefix: true
 

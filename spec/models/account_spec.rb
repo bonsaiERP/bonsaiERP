@@ -21,8 +21,4 @@ describe Account do
     a = Account.create!(valid_params)
   end
 
-  it "creates getters and setters" do
-    Account.getters_setters_array(:amt, :new, :hi).should == [:amt, :new,:hi, :amt=, :new=, :hi=]
-  end
-
 end

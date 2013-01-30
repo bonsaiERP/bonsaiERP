@@ -35,10 +35,4 @@ class Account < ActiveRecord::Base
     account_currencies.select {|ac| ac.currency_id == cur_id }.first
   end
 
-  # TODO move this and other methods to a new class
-  # Creates an array with the getters and setters for delegation
-  def self.getters_setters_array(*attrs)
-    attrs + attrs.map {|k| :"#{k}=" }
-  end
-
 end

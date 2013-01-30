@@ -9,7 +9,9 @@
 
 - unless @ledger.conciliation?
   = form_for @ledger, url: conciliate_account_ledger_path(@ledger) do |f|
-    = f.submit "Conciliar", class: 'btn btn-success'
+    %button#conciliate-button.btn.btn-success.b()
+      %i.icon-ok
+      Verificar transacción
 
 = render_if @ledger.project do
   %h3
@@ -28,11 +30,24 @@
   %small.dark= @ledger.reference
 
 %h4.n
-  %span.muted De:
-  = link_to @ledger.account, @ledger.account
-  = ntc @ledger.account_amount
-  = currency_label @ledger.account_currency
-  %span.muted A:
-  = link_to @ledger.account_to, @ledger.account_to
-  = ntc @ledger.account_to_amount
-  = currency_label @ledger.account_to_currency
+  %span.account
+    %span.muted De:
+    = link_to @ledger.account, @ledger.account, class: 'account_name'
+    = ntc @ledger.account_amount
+    = currency_label @ledger.account_currency
+  %span.account-to
+    %span.muted A:
+    = link_to @ledger.account_to, @ledger.account_to, class: 'account_to_name'
+    = ntc @ledger.account_to_amount
+    = currency_label @ledger.account_to_currency
+
+:coffeescript
+  $(->
+    to_name = $('.account_to_name').text()
+    $('#conciliate-button').popover(
+      trigger: 'hover'
+      title: 'Verificación'
+      html: true
+      content: 'Actualiza el balance de la cuenta asociada <br/><strong>' + to_name + '</strong>'
+    )
+  )

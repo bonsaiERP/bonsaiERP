@@ -19,12 +19,14 @@ class AccountLedgerPresenter < Resubject::Presenter
   end
 
   def operation_label
-    case to_model.operation
-    when 'payin', 'intin'
-      "<span class='label label-success' >#{operation}</span>"
-    when 'payout', 'intout'
-      "<span class='label label-error' >#{operation}</span>"
-    end
+    html = case to_model.operation
+           when 'payin', 'intin'
+             "<span class='label label-success' >#{operation}</span>"
+           when 'payout', 'intout'
+             "<span class='label label-error' >#{operation}</span>"
+           end
+
+    html.html_safe
   end
 
   def account_contact_tag

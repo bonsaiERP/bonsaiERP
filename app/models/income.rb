@@ -3,6 +3,8 @@
 # email: boriscyber@gmail.com
 class Income < Account
 
+  # module for setters and getters
+  extend SettersGetters
   ########################################
   # Callbacks
   before_create :set_client
@@ -35,14 +37,7 @@ class Income < Account
 
   ########################################
   # Delegations
-  TRANSACTION_METHODS = [
-    :balance, :bill_number, :gross_total, :original_total, :balance_inventory, 
-    :due_date, :creator_id, :creator, :approver_id, 
-    :approver, :nuller_id, :nuller,
-    :null_reason, :approver_datetime, 
-    :delivered, :discounted, :devolution
-  ].freeze
-  delegate *getters_setters_array(*TRANSACTION_METHODS), to: :transaction
+  delegate *create_accessors(*Transaction.transaction_columns), to: :transaction
   delegate :discounted?, :delivered?, :devolution?, :approve!, to: :transaction
   delegate :attributes, to: :transaction, prefix: true
 

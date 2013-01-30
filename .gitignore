@@ -38,3 +38,4 @@ spec/javascripts/generated
 tags
 public/assets
 .rails_footnotes
+rails_best_practices.html

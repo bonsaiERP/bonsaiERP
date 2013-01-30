@@ -1,7 +1,7 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class ConciliateAccount
+class NullAccount
   attr_reader :account_ledger
 
   delegate :account, :account_to, :amount, :amount_currency, to: :account_ledger
@@ -11,10 +11,8 @@ class ConciliateAccount
     @account_ledger = ledger
   end
 
-  def conciliate
-    return false unless account_ledger.active?
-
-    account_ledger.conciliation = true
+  def null
+    account_ledger.active = false
     update_account_ledger_approver
 
     return account_ledger.save if is_service_payment?
@@ -25,16 +23,6 @@ class ConciliateAccount
     else
       update_both_accounts
     end
-  end
-
-  def conciliate!
-    res = true
-    ActiveRecord::Base.transaction do
-      res = conciliate
-      raise ActiveRecord::Rollback unless res
-    end
-
-    res
   end
 
 private
@@ -60,3 +48,4 @@ private
     account_ledger.approver_datetime = Time.zone.now
   end
 end
+

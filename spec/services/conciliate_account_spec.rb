@@ -11,6 +11,26 @@ describe ConciliateAccount do
       UserSession.user = build :user, id: 1
     end
 
+    it "does not conciliate null AccountLedger" do
+      ledger = build :account_ledger, active: false
+      con = ConciliateAccount.new(ledger)
+
+      con.conciliate.should be_false
+    end
+
+    it "conciliate!" do
+      AccountLedger.any_instance.stub(save: true)
+      Account.any_instance.stub(save: true)
+
+      ac1 = build :cash, id: 1
+      ac2 = build :income, id: 2
+
+      ledger = AccountLedger.new(amount: 100, currency: 'BOB')
+      ledger.stub(account: ac1, account_to: ac2)
+
+      ConciliateAccount.new(ledger)
+    end
+
     context 'Income' do
       it "update only the account_to for Income" do
         income = build :income, id: 10, total: 300, currency: 'BOB'

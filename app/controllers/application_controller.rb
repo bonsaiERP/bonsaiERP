@@ -14,7 +14,6 @@ class ApplicationController < ActionController::Base
 
   include Controllers::Authentication
   helper_method Controllers::Authentication.helpers
-  #rescue_from Exception, :with => :render_error
 
   include Controllers::Authorization
   helper_method Controllers::OrganisationHelpers.organisation_helper_methods
@@ -26,34 +25,6 @@ class ApplicationController < ActionController::Base
   before_filter :set_user_session, :if => :user_signed_in?
   before_filter :set_page, :set_tenant, :check_authorization!
   before_filter :set_organisation_session
-
-  def render_error(exception) 
-    if notifier = Rails.application.config.middleware.detect { |x| x.klass == ExceptionNotifier } 
-      env['exception_notifier.options'] = notifier.args.first || {} 
-      logger.error exception.inspect 
-      logger.error exception.backtrace.join("\n") 
-      ExceptionNotifier::Notifier.exception_notification(env, exception).deliver 
-      env['exception_notifier.delivered'] = true 
-    end
-  end
-
-  #Put this in applictation_controller.rb
-  #before_filter :log_ram # or use after_filter
-  #def log_ram
-  #  logger.warn 'RAM USAGE: ' + `pmap #{Process.pid} | tail -1`[10,40].strip
-  #end
-
-  # Adds an error with format to display
-  # @param ActiveRecord::Base (model)
-  def add_flash_error(model)
-    flash[:error] = I18n.t("flash.error") if flash[:error].nil?
-      
-    unless model.errors.base.empty?
-      flash[:error] << "<ul>"
-      model.errors[:base].map{|e| flash[:error] << %Q(<li>#{e}</li>) }
-      flash[:error] << "<ul>"
-    end
-  end
 
   # especial redirect for ajax requests
   def redirect_ajax(klass, options = {})
@@ -119,11 +90,6 @@ private
     request.subdomain
   end
 
-  def destroy_organisation_session!
-    session[:organisation] = {}
-    OrganisationSession.destroy
-  end
-
   # Uses the helper methods from devise to made them available in the models
   def set_user_session
     UserSession.user = current_user
@@ -135,15 +101,6 @@ private
   end
   helper_method :organisation?
 
-  # Checks if the currency has been set
-  def check_currency_set
-    org = current_organisation
-    unless CurrencyRate.current?(org)
-      flash[:warning] = "Debe actualizar los tipos de cambio."
-      redirect_to new_currency_rate_path
-    end
-  end
-
   def set_tenant
     PgTools.change_tenant current_tenant
   end
@@ -152,9 +109,5 @@ private
     if current_organisation
       OrganisationSession.organisation = current_organisation
     end
-  end
-
-  def login_verification
-    @valid_verification ||= Controllers::LoginVerification.new(self)
   end
 end

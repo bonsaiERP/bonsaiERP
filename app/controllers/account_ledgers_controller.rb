@@ -24,7 +24,7 @@ class AccountLedgersController < ApplicationController
     ledger = AccountLedger.find(params[:id])
     con = ConciliateAccount.new(ledger)
 
-    if con.conciliate
+    if con.conciliate!
       flash[:notice] = "Se ha verificado exitosamente la transacción."
     else
       flash[:error] = "Exisitio un error al conciliar la transacción."
@@ -74,25 +74,4 @@ class AccountLedgersController < ApplicationController
       render :action => 'new_transference'
     end
   end
-
-  # GET account_ledgers/new_devolution
-  #def new_devolution
-  #  @devolution = Models::AccountLedger::Devolution.new(params)
-  #  @account_ledger = @devolution.account_ledger
-  #  @transaction = @devolution.transaction
-  #  @accounts = @devolution.accounts
-  #end
-
-  ## POST account_ledgers/devolution
-  #def devolution
-  #  @devolution = Models::AccountLedger::Devolution.new(params[:account_ledger])
-  #  
-  #  if @devolution.save
-  #    
-  #  else
-  #    @account_ledger = @devolution.account_ledger
-  #    @transaction = @devolution.transaction
-  #    render :action => :new_devolution
-  #  end
-  #end
 end

@@ -47,6 +47,7 @@ group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'meta_request'
+  gem 'rails_best_practices'
 end
 
 group :development, :test do
@@ -57,7 +58,7 @@ group :development, :test do
   gem 'pry-rails'
   gem 'pry-nav'
   #gem 'rails-footnotes'
-  gem 'konacha'
+  #gem 'konacha'
   gem 'foreman'
   #gem 'quiet_assets' # Quiets assets log in development
 end
