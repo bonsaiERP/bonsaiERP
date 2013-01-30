@@ -5,7 +5,6 @@ class Expense < Account
 
   # module for setters and getters
   extend SettersGetters
-
   ########################################
   # Callbacks
   before_create :set_supplier
@@ -20,6 +19,11 @@ class Expense < Account
   has_many :expense_details, foreign_key: :account_id, dependent: :destroy
   accepts_nested_attributes_for :expense_details, allow_destroy: true,
     reject_if: proc {|det| det.fetch(:item_id).blank? }
+
+  has_many :payments, class_name: 'AccountLedger', foreign_key: :account_id, conditions: {operation: 'payout'}
+  has_many :interests, class_name: 'AccountLedger', foreign_key: :account_id, conditions: {operation: 'intout'}
+
+  has_many :transaction_histories, foreign_key: :account_id
 
   STATES = %w(draft approved paid)
   ########################################
@@ -93,8 +97,9 @@ class Expense < Account
       self.state = 'paid'
     elsif balance < total
       approve!
+      self.state = 'approved' if self.is_paid?
     else
-      self.state = 'draft'
+      self.state = 'draft' if state.blank?
     end
   end
 
@@ -111,7 +116,7 @@ class Expense < Account
   end
 
   def approve!
-    unless is_approved?
+    if is_draft?
       self.state = 'approved'
       self.approver_id = UserSession.id
       self.approver_datetime = Time.zone.now

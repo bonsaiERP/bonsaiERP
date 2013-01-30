@@ -39,12 +39,12 @@ class DefaultExpense < DefaultTransaction
 
 private
   # Updates the data for an expense
-  # total is the alias for amount due that Income < Account
+  # total is the alias for amount due that Expense < Account
   def update_expense_data
-    income.balance = income.balance - (expense.amount_was - expense.amount)
+    expense.balance = expense.balance - (expense.amount_was - expense.amount)
     expense.set_state_by_balance!
     update_details
-    ExpenseErrors.new(income).set_errors
+    ExpenseErrors.new(expense).set_errors
   end
 
   def set_expense_data
@@ -64,8 +64,14 @@ private
     end
   end
 
-  def set_details_balance
-    expense_details.each {|det| det.balance = det.quantity }
+  def update_details
+    expense_details.each do |det|
+      det.balance = get_detail_balance(det)
+    end
+  end
+
+  def get_detail_balance(det)
+    det.balance - (det.quantity_was - det.quantity)
   end
 
   def set_details_original_prices

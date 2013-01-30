@@ -96,4 +96,12 @@ private
   def current_organisation
     OrganisationSession
   end
+
+  # Indicates conciliation based on the type of account
+  def conciliation?
+    return true if conciliate?
+
+    account_to.is_a?(Bank) ? conciliate? : true
+  end
+
 end

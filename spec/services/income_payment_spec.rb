@@ -4,6 +4,7 @@ require 'spec_helper'
 describe IncomePayment do
   before do
     OrganisationSession.organisation = build :organisation, currency: 'BOB'
+    UserSession.user = build :user, id: 10
   end
 
   let(:valid_attributes) {
@@ -28,10 +29,6 @@ describe IncomePayment do
     }
   end
   let(:account_to) { build :account, id: account_to_id, amount: 100 }
-
-  before(:each) do
-    UserSession.user = build :user, id: 10
-  end
 
   context 'Validations' do
     it "validates presence of income" do
@@ -112,7 +109,7 @@ describe IncomePayment do
       # ledger
       p.ledger.should be_conciliation
       p.ledger.should be_is_a(AccountLedger)
-      p.ledger.amount.should == valid_attributes[:amount]
+      p.ledger.amount.should == valid_attributes.fetch(:amount)
       p.ledger.should be_is_payin
       p.ledger.account_id.should eq(income.id)
 
@@ -141,7 +138,7 @@ describe IncomePayment do
         p.ledger.should_not be_conciliation
         p.int_ledger.should_not be_conciliation
 
-        # When inverse
+        # When verification=false
         p = IncomePayment.new(valid_attributes.merge(account_to_id: 100, verification: false, interest: 10))
 
         p.pay.should be_true
@@ -150,7 +147,7 @@ describe IncomePayment do
         p.int_ledger.should be_conciliation
       end
 
-      it "does not change when its't bank account" do
+      it "doesn't change unles it's bank account" do
         cash = build :cash, id: 200
         Account.stub(:find_by_id).with(cash.id).and_return(cash)
         cash.id.should_not eq(account_to_id)
@@ -190,9 +187,9 @@ describe IncomePayment do
   end
 
   context "Pay with expense" do
-    let(:expense) { Expense.new_expense(total: 200, balance: 100, state: 'approved') {|e| e.id = 14} }
+    let(:expense) { Expense.new_expense(total: 200, balance: 100, state: 'approved', currency: 'BOB') {|e| e.id = 14} }
 
-    let(:expense_payment_attributes) {
+    let(:payment_with_expense_attributes) {
       {
         account_id: income.id, account_to_id: expense.id, amount: 50,
         exchange_rate: 1, interest: 10, verification: 'true', 
@@ -208,7 +205,7 @@ describe IncomePayment do
 
     it "is not valid when amount is greater than expense balance" do
       expense.balance = 20
-      ip = IncomePayment.new(expense_payment_attributes)
+      ip = IncomePayment.new(payment_with_expense_attributes)
 
       ip.should_not be_valid
 
@@ -227,7 +224,7 @@ describe IncomePayment do
 
       bal = income.balance
 
-      ip = IncomePayment.new(expense_payment_attributes)
+      ip = IncomePayment.new(payment_with_expense_attributes)
 
       bal = income.balance
       # Pay
@@ -241,7 +238,7 @@ describe IncomePayment do
     it "should set the state of the expense when done" do
       expense.state = 'draft'
 
-      ip = IncomePayment.new(expense_payment_attributes)
+      ip = IncomePayment.new(payment_with_expense_attributes)
 
       ip.should_not be_valid
 
@@ -259,7 +256,7 @@ describe IncomePayment do
 
       expense.should be_is_approved
 
-      ip = IncomePayment.new(expense_payment_attributes.merge(amount: 90, interest: 10))
+      ip = IncomePayment.new(payment_with_expense_attributes.merge(amount: 90, interest: 10))
 
       ip.pay.should be_true
       # Income
@@ -282,7 +279,7 @@ describe IncomePayment do
 
       expense.should be_is_approved
 
-      ip = IncomePayment.new(expense_payment_attributes.merge(amount: 10, interest: 1, exchange_rate: 7.0))
+      ip = IncomePayment.new(payment_with_expense_attributes.merge(amount: 10, interest: 1, exchange_rate: 7.0))
 
       ip.pay.should be_true
       # Income
@@ -297,7 +294,7 @@ describe IncomePayment do
       income.currency = 'USD'
       expense.currency = 'BOB'
 
-      ip = IncomePayment.new(expense_payment_attributes.merge(amount: 10, interest: 1, exchange_rate: 7.0))
+      ip = IncomePayment.new(payment_with_expense_attributes.merge(amount: 10, interest: 1, exchange_rate: 7.0))
 
       ip.pay.should be_true
       # Income
@@ -337,13 +334,13 @@ describe IncomePayment do
       ip.int_ledger.currency.should eq('USD')
     end
 
-    it "does the inverse when income in USD" do
+    it "Inverse when income in USD" do
       income.currency = 'USD'
-      ac_usd = build(:cash, currency: 'BOB', id: 103)
-      Account.stub_chain(:active, :find_by_id).with(101).and_return(ac_usd)
+      ac_bob = build(:cash, currency: 'BOB', id: 103)
+      Account.stub_chain(:active, :find_by_id).with(103).and_return(ac_bob)
       income.balance = 100
 
-      ip = IncomePayment.new(valid_attributes.merge(account_to_id: 101, exchange_rate: 7.001, amount: 200, interest: 1))
+      ip = IncomePayment.new(valid_attributes.merge(account_to_id: 103, exchange_rate: 7.001, amount: 200, interest: 1))
 
       ip.pay.should be_true
 

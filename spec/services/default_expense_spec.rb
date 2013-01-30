@@ -18,48 +18,55 @@ describe DefaultExpense do
     )
   end
   let(:valid_params) { {
-      ref_number: "I0001", date: Date.today, contact_id: 1, total: total,
-      currency: 'BOB', bill_number: "I-0001", description: "New expense description",
+      date: Date.today, contact_id: 1, total: total,
+      currency: 'BOB', bill_number: "E-0001", description: "New expense description",
       expense_details_attributes: details
     }
   }
 
-  before(:each) do
+  before do
     UserSession.user = build :user, id: 10
   end
 
+  it "checks the default data" do
+    # Check, bu not unit test
+    expense.due_date.should be_nil
+    expense.approver_id.should be_nil
+    expense.approver_datetime.should be_nil
+  end
+
   it "does not allow a class that is not an expense" do
-    expect { DefaultExpense.new(Income.new) }.to raise_error
+    expect { DefaultExpense.new(Cash.new) }.to raise_error
   end
 
   context "Initialization" do
     subject { DefaultExpense.new(expense) }
 
     it "sets all parameters" do
-      expense.should be_is_a(Expense)
-      expense.ref_number.should be_blank
-      expense.expense_details.should have(2).items
+      subject.expense.should be_is_a(Expense)
+      subject.expense.ref_number.should be_blank
+      subject.expense.expense_details.should have(2).items
 
-      expense.expense_details[0].item_id.should eq(details[0][:item_id])
-      expense.expense_details[0].description.should eq(details[0][:description])
-      expense.expense_details[1].item_id.should eq(details[1][:item_id])
+      subject.expense.expense_details[0].item_id.should eq(details[0][:item_id])
+      subject.expense.expense_details[0].description.should eq(details[0][:description])
+      subject.expense.expense_details[1].item_id.should eq(details[1][:item_id])
     end
   end
 
   context "Create a expense with default data" do
-    before(:each) do
+    before do
       Expense.any_instance.stub(save: true)
       ExpenseDetail.any_instance.stub(save: true)
     end
 
     subject {
-      DefaultExpense.new(expense) 
+      DefaultExpense.new(expense)
     }
 
     it "creates and sets the default states" do
       s = stub
       s.should_receive(:values_of).with(:id, :price).and_return([[1, 10.5], [2, 20.0]])
-      
+
       Item.should_receive(:where).with(id: item_ids).and_return(s)
 
       # Create
@@ -71,9 +78,9 @@ describe DefaultExpense do
       e.should be_is_draft
       e.should be_active
       e.ref_number.should =~ /E-\d{2}-\d{4}/
+      e.date.should be_is_a(Date)
 
       e.creator_id.should eq(UserSession.id)
-      e.due_date.should be_blank
 
       # Number values
       e.exchange_rate.should == 1
@@ -93,11 +100,7 @@ describe DefaultExpense do
     end
 
     it "creates and sets the approve" do
-      s = stub
-      s.should_receive(:values_of).with(:id, :price).and_return([[1, 10.5], [2, 20.0]])
-      
-      Item.should_receive(:where).with(id: item_ids).and_return(s)
-
+      subject.should_receive(:set_expense_data).and_return(true)
       # Create
       subject.create_and_approve.should be_true
 
@@ -106,41 +109,55 @@ describe DefaultExpense do
       e.should be_is_a(Expense)
       e.should be_is_approved
       e.should be_active
+      e.due_date.should eq(e.date)
       e.approver_id.should eq(UserSession.id)
       e.approver_datetime.should be_is_a(Time)
-      e.due_date.should be_is_a(Date)
     end
 
-    it "checks there is no error" do
-      s = stub
-      s.should_receive(:values_of).with(:id, :price).and_return([[1, 10.0], [2, 20.0]])
-      Item.should_receive(:where).with(id: item_ids).and_return(s)
-      
-      subject.expense.total = details_total
+  end
 
+  context "Update" do
+    before(:each) do
+      Expense.any_instance.stub(save: true)
+      ExpenseDetail.any_instance.stub(save: true)
+    end
+
+    subject {
+      DefaultExpense.new(expense)
+    }
+
+    it "Updates with errors on expense" do
+      TransactionHistory.any_instance.should_receive(:create_history).and_return(true)
+
+      e = subject.expense
+      e.total = details_total
+      e.balance = 0
+      e.stub(amount_was: e.total)
+
+      e.should be_is_draft
+
+      attributes = valid_params.merge(total: 200)
       # Create
-      subject.create.should be_true
+      subject.update(attributes).should be_true
 
       # Expense
-      i = subject.expense
+      e = subject.expense
 
-      # Number values
-      i.exchange_rate.should == 1
-      i.total.should == details_total
-
-      i.gross_total.should == details_total
-      i.balance.should == details_total
-      i.gross_total.should == (10 * 10 + 20 * 20)
-
-      i.discount == 0
-      i.should_not be_discounted
-
-      i.expense_details[0].original_price.should == 10.0
-      i.expense_details[0].balance.should == 10.0
-      i.expense_details[1].original_price.should == 20.0
-      i.expense_details[1].balance.should == 20.0
-      #
+      e.should be_is_paid
+      e.should be_has_error
+      e.error_messages[:balance].should_not be_blank
     end
-  end
-end
 
+    it "update_and_approve" do
+      TransactionHistory.any_instance.stub(create_history: true)
+
+      subject.update({}).should be_true
+      subject.expense.should be_is_draft
+
+      subject.update_and_approve({})
+      subject.expense.should be_is_approved
+    end
+
+  end
+
+end

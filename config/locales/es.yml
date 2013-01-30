@@ -253,10 +253,12 @@ es:
         empty_items: "No existe items para realizar la operación"
         stock_quantity: "Existen items que exceden la cantidad máxima"
       payment:
-        income_balance: "La cantidad es mayor que el saldo"
+        balance: "La cantidad es mayor que el saldo"
         expense_balance: "La cantidad es mayor que el saldo del Egreso seleccionado"
+        income_balance: "La cantidad es mayor que el saldo del Ingreso seleccionado"
         invalid_amount_or_interest: "La cantidad o el interes debe ser mayor que 0"
         invalid_expense_state: "El Egreso que selecciono no esta aprovado"
+        invalid_income_state: "El Ingreso que selecciono no esta aprovado"
         date: "Ingrese una fecha válida"
         valid_accounts_currency: "Alguna de las cuentas debe ser en %{currency}"
       quick_income:

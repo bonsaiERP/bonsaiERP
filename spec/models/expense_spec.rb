@@ -25,7 +25,10 @@ describe Expense do
     it { should belong_to(:project) }
     it { should have_one(:transaction) }
     it { should have_many(:expense_details) }
-
+    it { should have_many(:payments) }
+    it { should have_many(:interests) }
+    it { should have_many(:transaction_histories) }
+    # Validations
     it { should validate_presence_of(:date) }
     it { should validate_presence_of(:contact) }
     it { should validate_presence_of(:contact_id) }
@@ -33,7 +36,14 @@ describe Expense do
     it { should_not have_valid(:state).when(nil, 'ja', 1) }
 
     it "initializes" do
-      subject.state.should eq('draft')
+      should be_is_draft
+      should_not be_discounted
+      should_not be_delivered
+      should_not be_devolution
+      subject.total.should == 0.0
+      subject.balance.should == 0.0
+      subject.original_total.should == 0.0
+      subject.balance_inventory.should == 0.0
     end
   end
 
@@ -46,12 +56,12 @@ describe Expense do
       i.save.should be_true
     end
 
-    it "does not update contact to client" do
-      contact.client = true
-      contact.should_not_receive(:update_attribute).with(:client, true)
-      i = Expense.new_expense(valid_attributes)
+    it "does not update contact to supplier" do
+      contact.supplier = true
+      contact.should_not_receive(:update_attribute).with(:supplier, true)
+      e = Expense.new_expense(valid_attributes)
 
-      i.save.should be_true
+      e.save.should be_true
     end
   end
 
@@ -62,9 +72,9 @@ describe Expense do
   end
 
   it "sets the to_s method to :name, :ref_number" do
-    i = Expense.new(ref_number: 'I-0012')
-    i.ref_number.should eq('I-0012')
-    i.ref_number.should eq(i.to_s)
+    e = Expense.new(ref_number: 'I-0012')
+    e.ref_number.should eq('I-0012')
+    e.ref_number.should eq(e.to_s)
   end
 
   it "gets the latest ref_number" do
@@ -81,28 +91,63 @@ describe Expense do
   end
 
   context "set_state_by_balance!" do
-    it "sets the correct state" do
+    before(:each) do
       UserSession.user = build :user, id: 12
+    end
+
+    it "a draft expense" do
       e = Expense.new_expense(total: 10, balance: 10)
 
       e.set_state_by_balance!
 
-      e.state.should eq('draft')
+      e.should be_is_draft
+      e.approver_id.should be_nil
+    end
 
-      # Change approve
-      e.balance = 5
+    it "a paid expense" do
+      e = Expense.new_expense(total: 10, balance: -0)
+
+      e.set_state_by_balance!
+
+      e.should be_is_paid
+      e.approver_id.should eq(UserSession.id)
+      e.approver_datetime.should be_is_a(Time)
+      e.due_date.should be_is_a(Date)
+    end
+
+    it "a negative balance" do
+      e = Expense.new_expense(total: 10, balance: -0.01)
+
+      e.set_state_by_balance!
+
+      e.should be_is_paid
+      e.approver_id.should eq(UserSession.id)
+    end
+
+    # Changes to the expense, it was paid but can change because of
+    # changes in total or made a devolution that changed balance
+    it "a paid expense changes to approved" do
+      e = Expense.new_expense(total: 10, balance: 0)
+
+      e.set_state_by_balance!
+
+      e.should be_is_paid
+      e.approver_id.should eq(UserSession.id)
+      old_id = UserSession.id
+
+      UserSession.stub(id: 2333)
+
+      # Might had an update or a devolution done
+      e.balance = 1
 
       e.set_state_by_balance!
 
       e.should be_is_approved
-
-      # Change to paid
-      e.balance = 0
-      e.set_state_by_balance!
-
-      e.should be_is_paid
+      e.approver_id.should eq(old_id)
+      e.approver_id.should_not eq(UserSession.id)
     end
 
+    # A approved expense changes to paid
     it "does not call approve! method" do
       e = Expense.new_expense(total: 10, balance: 5)
       e.approve!
@@ -111,17 +156,30 @@ describe Expense do
       e.approver_id.should eq(UserSession.id)
       e.approver_datetime.should be_is_a(Time)
 
-      # Approved state
-      e = Expense.new_expense(total: 10, balance: 5)
-      e.approver_id.should be_nil
+      UserSession.stub(id: 2333)
+      e.balance = 0
 
+      e.set_state_by_balance!
+
+      e.should be_is_paid
+      e.approver_id.should_not eq(UserSession.id)
+    end
+
+    it "does not set state if it has state" do
+      e = Expense.new_expense(balance: 10, total:10)
       e.state = 'approved'
+
       e.should be_is_approved
 
-      e.approve!
+      e.set_state_by_balance!
 
+      e.should be_is_approved
       e.approver_id.should be_nil
-      e.approver_datetime.should be_nil
+
+      e.state = nil
+      e.set_state_by_balance!
+
+      e.should be_is_draft
     end
   end
 
@@ -152,6 +210,36 @@ describe Expense do
 
     attrs.each do |k, v|
       e.send(k).should eq(v)
+    end
+  end
+
+  context "approve!" do
+    before do
+      UserSession.user = build :user, id: 11
+    end
+
+    subject { Income.new_income }
+
+    it "Changes" do
+      e = subject
+      e.should be_is_draft
+      e.approver_id.should be_blank
+      e.approver_datetime.should be_blank
+      e.approve!
+
+      e.should be_is_approved
+      e.approver_id.should eq(11)
+      e.approver_datetime.should be_is_a(Time)
+    end
+
+    it "only set the approve when it's draft" do
+      e = subject
+      e.state = 'paid'
+      e.should be_is_paid
+      e.approve!
+
+      e.should be_is_paid
+      e.approver_id.should be_nil
     end
   end
 

@@ -215,7 +215,7 @@ describe Income do
   end
 
   context "approve!" do
-    before(:each) do
+    before do
       UserSession.user = build :user, id: 11
     end
 

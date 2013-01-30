@@ -24,8 +24,15 @@ describe DefaultIncome do
     }
   }
 
-  before(:each) do
+  before do
     UserSession.user = build :user, id: 10
+  end
+
+  it "checks the default data" do
+    # Check, bu not unit test
+    income.due_date.should be_nil
+    income.approver_id.should be_nil
+    income.approver_datetime.should be_nil
   end
 
   it "does not allow a class that is not an income" do
@@ -36,30 +43,30 @@ describe DefaultIncome do
     subject { DefaultIncome.new(income) }
 
     it "sets all parameters" do
-      income.should be_is_a(Income)
-      income.ref_number.should be_blank
-      income.income_details.should have(2).items
+      subject.income.should be_is_a(Income)
+      subject.income.ref_number.should be_blank
+      subject.income.income_details.should have(2).items
 
-      income.income_details[0].item_id.should eq(details[0][:item_id])
-      income.income_details[0].description.should eq(details[0][:description])
-      income.income_details[1].item_id.should eq(details[1][:item_id])
+      subject.income.income_details[0].item_id.should eq(details[0][:item_id])
+      subject.income.income_details[0].description.should eq(details[0][:description])
+      subject.income.income_details[1].item_id.should eq(details[1][:item_id])
     end
   end
 
   context "Create a income with default data" do
-    before(:each) do
+    before do
       Income.any_instance.stub(save: true)
       IncomeDetail.any_instance.stub(save: true)
     end
 
     subject {
-      DefaultIncome.new(income) 
+      DefaultIncome.new(income)
     }
 
     it "creates and sets the default states" do
       s = stub
       s.should_receive(:values_of).with(:id, :price).and_return([[1, 10.5], [2, 20.0]])
-      
+
       Item.should_receive(:where).with(id: item_ids).and_return(s)
 
       # Create
@@ -72,7 +79,6 @@ describe DefaultIncome do
       i.should be_active
       i.ref_number.should =~ /I-\d{2}-\d{4}/
       i.date.should be_is_a(Date)
-      #i.due_date.should eq(i.date)
 
       i.creator_id.should eq(UserSession.id)
 
@@ -95,10 +101,6 @@ describe DefaultIncome do
 
     it "creates and approves" do
       subject.should_receive(:set_income_data).and_return(true)
-      # Check, bu not unit test
-      subject.income.due_date.should be_nil
-      subject.income.approver_id.should be_nil
-      subject.income.approver_datetime.should be_nil
       # Create
       subject.create_and_approve.should be_true
 
@@ -121,7 +123,7 @@ describe DefaultIncome do
     end
 
     subject {
-      DefaultIncome.new(income) 
+      DefaultIncome.new(income)
     }
 
     it "Updates with errors on income" do
@@ -140,7 +142,7 @@ describe DefaultIncome do
 
       # Income
       i = subject.income
-      
+
       i.should be_is_paid
       i.should be_has_error
       i.error_messages[:balance].should_not be_blank
@@ -148,7 +150,6 @@ describe DefaultIncome do
 
     it "update_and_approve" do
       TransactionHistory.any_instance.stub(create_history: true)
-
 
       subject.update({}).should be_true
       subject.income.should be_is_draft
@@ -158,4 +159,5 @@ describe DefaultIncome do
     end
 
   end
+
 end
