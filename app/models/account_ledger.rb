@@ -76,11 +76,6 @@ class AccountLedger < ActiveRecord::Base
 
   def amount_currency
     currency_exchange.exchange(amount)
-    #if inverse
-      #amount / exchange_rate
-    #else
-      #amount * exchange_rate
-    #end
   end
 
   def save_ledger

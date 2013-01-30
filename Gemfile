@@ -55,6 +55,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'ffaker'
   gem 'pry-remote' # Work binding.pry_remote with Foreman, just call pry-remote in the terminal
+  gem 'pry', '0.9.11.3'# 0.9.11.4 gives error
   gem 'pry-rails'
   gem 'pry-nav'
   #gem 'rails-footnotes'

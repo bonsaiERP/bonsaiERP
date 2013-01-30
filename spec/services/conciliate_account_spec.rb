@@ -18,23 +18,50 @@ describe ConciliateAccount do
       con.conciliate.should be_false
     end
 
-    it "conciliate!" do
-      AccountLedger.any_instance.stub(save: true)
-      Account.any_instance.stub(save: true)
+    context "conciliate!" do
+      let(:ac1) { build :cash, id: 1 }
+      let(:ac2) { build :income, id: 2 }
+      let(:ledger) {
+        led = AccountLedger.new(amount: 100, currency: 'BOB')
+        led.stub(account: ac1, account_to: ac2)
+        led
+      }
 
-      ac1 = build :cash, id: 1
-      ac2 = build :income, id: 2
+      before do
+        AccountLedger.any_instance.stub(save: true)
+        Account.any_instance.stub(save: true)
+      end
 
-      ledger = AccountLedger.new(amount: 100, currency: 'BOB')
-      ledger.stub(account: ac1, account_to: ac2)
+      it "conciliate!" do
+        con = ConciliateAccount.new(ledger)
 
-      ConciliateAccount.new(ledger)
+        # Transaction
+        ActiveRecord::Base.should_receive(:transaction)
+
+        con.conciliate!
+      end
+
+      it "conciliate no transaction" do
+        con = ConciliateAccount.new(ledger)
+
+        # Transaction
+        ActiveRecord::Base.should_not_receive(:transaction)
+
+        con.conciliate
+      end
     end
 
     context 'Income' do
+      before do
+        OrganisationSession.organisation = build :organisation, currency: 'BOB'
+      end
+
+      #let(:ac_bob) { build :cash, currency: 'BOB' }
+      #let(:ac_usd) { build :cash, currency: 'USD' }
+
       it "update only the account_to for Income" do
         income = build :income, id: 10, total: 300, currency: 'BOB'
-        cash = build :cash, id: 2, amount: 10
+        cash = build :cash, id: 2, amount: 10, currency: 'BOB'
 
         al = AccountLedger.new(operation: 'payin', id: 10, amount: 100, conciliation: false)
         # stubs
@@ -57,21 +84,21 @@ describe ConciliateAccount do
       end
 
       it "updates both accounts for  Bank and Cash" do
-        cash = build :cash, amount: 2000, currency: 'USD'
-        bank = build :bank, amount: 100, currency: 'BOB'
+        ac_usd = build :cash, amount: 2000, currency: 'USD'
+        ac_bob = build :bank, amount: 100, currency: 'BOB'
 
-        al = AccountLedger.new(currency: 'USD', amount: 200, exchange_rate: 7, inverse: false)
-        al.account = cash
-        al.account_to = bank
+        al = AccountLedger.new(currency: ac_usd.currency, amount: 200, exchange_rate: 7, inverse: true)
+        al.account = ac_usd
+        al.account_to = ac_bob
         # stubs
-        cash.should_receive(:save).and_return(true)
-        bank.should_receive(:save).and_return(true)
+        ac_usd.should_receive(:save).and_return(true)
+        ac_bob.should_receive(:save).and_return(true)
         al.should_receive(:save).and_return(true)
 
         ConciliateAccount.new(al).conciliate.should be_true
 
         al.account_amount.should == 1800.0
-        al.account_to_amount.should == 100 + 200 * 7
+        al.account_to_amount.should == (100 + 200 * 1/7.0).round(4)
 
         al.approver_id.should eq(1)
       end

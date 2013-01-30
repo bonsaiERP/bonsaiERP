@@ -12,40 +12,54 @@ class NullAccount
   end
 
   def null
-    account_ledger.active = false
-    update_account_ledger_approver
+    return false unless valid?
 
-    return account_ledger.save if is_service_payment?
+    account_ledger.active = false
+    set_account_ledger_nuller
+
+    res = true
 
     case account.class.to_s
-    when 'Income', 'Expense'
-      update_account_to
+    when 'Income','Expense'
+      res = update_account_balance
     else
-      update_both_accounts
+      res = update_account
     end
+
+    res && account_ledger.save
+  end
+
+  def null!
+    res = true
+    ActiveRecord::Base.transaction do
+      res = null
+
+      raise ActiveRecord::Rollback unless res
+    end
+
+    res
+  end
+
+  def valid?
+    account_ledger.active? && !account_ledger.conciliation?
   end
 
 private
-  def is_service_payment?
-    [Income, Expense].include?(account_to.class)
+  def update_account_balance
+    account.balance += amount_currency
+    account.set_state_by_balance!
+
+    account.save
   end
 
-  def update_account_to
-    account_to.amount += amount_currency
+  def update_account
+    account.amount += amount_currency
 
-    account_to.save && account_ledger.save
+    account.save
   end
 
-  def update_both_accounts
-    account.amount -= amount
-    account_to.amount += amount_currency
-
-    account.save && account_to.save && account_ledger.save
-  end
-
-  def update_account_ledger_approver
-    account_ledger.approver_id = UserSession.id
-    account_ledger.approver_datetime = Time.zone.now
+  def set_account_ledger_nuller
+    account_ledger.nuller_id = UserSession.id
+    account_ledger.nuller_datetime = Time.zone.now
   end
 end
-
