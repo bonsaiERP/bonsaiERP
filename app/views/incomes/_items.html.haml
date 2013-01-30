@@ -5,27 +5,24 @@
     %thead
       %tr
         %th Item
-        %th Descripción
         %th Precio unitario
         %th Cantidad
         %th Total fila
-        %th
       - income.income_details.each do |det|
         %tr
-          %td= det.item
-          %td= det.description
-          %td.cur= price_change det
-          %td.cur= det.quantity
-          %td.total_row.cur= ntc det.total
+          %td.span6= det.item
+          %td.span2.cur= ntc det.price
+          %td.span2.cur= det.quantity
+          %td.span2.total_row.cur= ntc det.total
 
     %tr.extra.pad_top
       %td{:colspan => 2}
-      %td.r{:colspan => 2} Subtotal
+      %td.r Subtotal
       %td#subtotal.r= ntc income.gross_total
 
     %tr.extra
       %td{:colspan => 2}
-        %td.r.b.dark{:colspan => 2} Total
+      %td.r.b.dark Total
       %td#total_value.r.b{'data-val' => income.total}
         = ntc income.total
         = currency_label income.currency

@@ -18,14 +18,17 @@
     %span.grey.n Proyecto:
     = @ledger.project
 
+%h4.n.i= lo @ledger.date.to_date
 
-%h4.n= lo @ledger.date.to_date
+.moneybox
+  %label CANTIDAD
+  %h4
+    = ntc @ledger.amount
+    = currency_label @ledger.currency
 
-%h3
-  = ntc @ledger.amount
-  = currency_label @ledger.currency
-  %small
-    %i.icon-file-alt 
+%span.reference
+  %span.muted 
+    %i.icon-file-alt
     Refencia:
   %small.dark= @ledger.reference
 

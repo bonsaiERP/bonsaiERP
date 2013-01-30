@@ -49,7 +49,7 @@ private
   # Updates the data for an imcome
   # total is the alias for amount due that Income < Account
   def update_income_data
-    income.balance = income.balance - (income.amount_was - income.amount)
+    income.balance -= (income.amount_was - income.amount)
     income.set_state_by_balance!
     update_details
     IncomeErrors.new(income).set_errors

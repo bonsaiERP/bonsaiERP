@@ -21,12 +21,32 @@ class DefaultExpense < DefaultTransaction
   end
 
   def update(params)
-    expense.attributes = params
+    commit_or_rollback do
+      res = TransactionHistory.new.create_history(expense)
+      expense.attributes = params
 
-    expense.save
+      yield if block_given?
+
+      update_expense_data
+
+      expense.save && res
+    end
+  end
+
+  def update_and_approve(params)
+    update(params) { expense.approve! }
   end
 
 private
+  # Updates the data for an expense
+  # total is the alias for amount due that Income < Account
+  def update_expense_data
+    income.balance = income.balance - (expense.amount_was - expense.amount)
+    expense.set_state_by_balance!
+    update_details
+    ExpenseErrors.new(income).set_errors
+  end
+
   def set_expense_data
     set_new_details
     expense.ref_number = Expense.get_ref_number
