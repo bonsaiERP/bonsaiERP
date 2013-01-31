@@ -41,7 +41,7 @@ class Transaction extends Backbone.Collection
   subtotalPath: '#subtotal'
   @itemTemplate: $('#item-template').html()
   #
-  initialize: (@currency)->
+  initialize: (@currency) ->
     @$table = $('#items-table')
 
     # Events

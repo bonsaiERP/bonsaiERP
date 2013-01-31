@@ -38,7 +38,7 @@ class Income < Account
   ########################################
   # Delegations
   delegate *create_accessors(*Transaction.transaction_columns), to: :transaction
-  delegate :discounted?, :delivered?, :devolution?, :approve!, to: :transaction
+  delegate :discounted?, :delivered?, :devolution?, :total_was, :approve!, to: :transaction
   delegate :attributes, to: :transaction, prefix: true
 
   # Define boolean methods for states
@@ -61,7 +61,7 @@ class Income < Account
 
   ########################################
   # Aliases, alias and alias_method not working
-  [[:ref_number, :name], [:total, :amount]].each do |meth|
+  [[:ref_number, :name], [:balance, :amount]].each do |meth|
     define_method meth.first do
       self.send(meth.last)
     end

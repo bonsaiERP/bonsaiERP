@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe Payment do
 
-  let(:transaction){ build :income, currency: 'BOB', id: 1 }
+  let(:transaction){ Income.new_income(currency: 'BOB') {|i| i.id = 1 } }
   let(:account_to){ build :account, currency: 'USD', id: 2 }
 
   let(:valid_attributes) {
@@ -20,7 +20,7 @@ describe Payment do
     p
   end
 
-  before do
+  before(:each) do
     OrganisationSession.organisation = build :organisation, currency: 'BOB'
   end
 
@@ -50,7 +50,7 @@ describe Payment do
     end
 
     context "account_to" do
-      before do
+      before(:each) do
         Account.stub_chain(:active, :find_by_id).with(1).and_return(transaction)
       end
 

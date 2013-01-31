@@ -253,7 +253,7 @@ ActiveRecord::Schema.define(:version => 20130115020409) do
 
   create_table "transactions", :force => true do |t|
     t.integer  "account_id"
-    t.decimal  "balance",                          :precision => 14, :scale => 2, :default => 0.0
+    t.decimal  "total",                            :precision => 14, :scale => 2, :default => 0.0
     t.string   "bill_number"
     t.decimal  "gross_total",                      :precision => 14, :scale => 2, :default => 0.0
     t.decimal  "original_total",                   :precision => 14, :scale => 2, :default => 0.0
@@ -262,6 +262,7 @@ ActiveRecord::Schema.define(:version => 20130115020409) do
     t.integer  "creator_id"
     t.integer  "approver_id"
     t.integer  "nuller_id"
+    t.datetime "nuller_datetime"
     t.string   "null_reason",       :limit => 400
     t.datetime "approver_datetime"
     t.boolean  "delivered",                                                       :default => false

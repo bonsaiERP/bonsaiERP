@@ -3,8 +3,8 @@ require 'spec_helper'
 
 describe NullAccountLedger do
 
-  before do
-      UserSession.user = build :user, id: 11
+  before(:each) do
+    UserSession.user = build :user, id: 11
     OrganisationSession.organisation = build :organisation, currency: 'BOB'
   end
 
@@ -39,7 +39,7 @@ describe NullAccountLedger do
     na.should be_valid
   end
 
-  before do
+  before(:each) do
     UserSession.user = build :user, id: 1
     Account.any_instance.stub(save: true)
     AccountLedger.any_instance.stub(save: true)
@@ -94,13 +94,17 @@ describe NullAccountLedger do
 
   describe 'Null Income/Expense' do
 
-    let(:income) { Income.new_income(total: 100, balance: 0, state: 'paid', currency: 'BOB') }
+    let(:income) { build :income, balance: 0, state: 'paid', currency: 'BOB' }
+    before(:each) { income.stub(save: true) }
+
     it "nulls a income same currency" do
+
       income.should be_is_paid
 
       al = AccountLedger.new(amount: 10.0, currency: 'BOB', conciliation: false)
       al.account = income
       al.account_to = bank_bob
+
 
       na = NullAccountLedger.new(al)
 

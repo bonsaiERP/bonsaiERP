@@ -20,14 +20,14 @@ describe ConciliateAccount do
 
     context "conciliate!" do
       let(:ac1) { build :cash, id: 1 }
-      let(:ac2) { build :income, id: 2 }
+      let(:ac2) { Income.new_income {|i| i.id = 2} }
       let(:ledger) {
         led = AccountLedger.new(amount: 100, currency: 'BOB')
         led.stub(account: ac1, account_to: ac2)
         led
       }
 
-      before do
+      before(:each) do
         AccountLedger.any_instance.stub(save: true)
         Account.any_instance.stub(save: true)
       end
@@ -52,15 +52,12 @@ describe ConciliateAccount do
     end
 
     context 'Income' do
-      before do
+      before(:each) do
         OrganisationSession.organisation = build :organisation, currency: 'BOB'
       end
 
-      #let(:ac_bob) { build :cash, currency: 'BOB' }
-      #let(:ac_usd) { build :cash, currency: 'USD' }
-
       it "update only the account_to for Income" do
-        income = build :income, id: 10, total: 300, currency: 'BOB'
+        income = build :income, id: 10, amount: 300, currency: 'BOB'
         cash = build :cash, id: 2, amount: 10, currency: 'BOB'
 
         al = AccountLedger.new(operation: 'payin', id: 10, amount: 100, conciliation: false)
@@ -76,7 +73,6 @@ describe ConciliateAccount do
         ConciliateAccount.new(al).conciliate.should be_true
 
         al.should be_conciliation
-        al.account.amount.should == 300
         al.account_to_amount.should == 10 + 100
 
         al.approver_id.should eq(1)
@@ -104,8 +100,8 @@ describe ConciliateAccount do
       end
 
       it "Only updates only the ledger when service payment" do
-        income = build :income, id: 10, total: 100, currency: 'BOB'
-        expense = build :expense, id: 2, amount: 50, total: 10
+        income =  build :income, id: 1, currency: 'BOB', balance: 100
+        expense = build :expense,  id: 2, balance: 50, currency: 'BOB'
 
         al = AccountLedger.new(operation: 'payin', id: 10, amount: 100, conciliation: false)
         # stubs
@@ -121,7 +117,6 @@ describe ConciliateAccount do
 
         al.should be_conciliation
         # Account don't change
-        al.account.amount.should == 100
         al.account_to_amount.should == 50
 
         al.approver_id.should eq(1)

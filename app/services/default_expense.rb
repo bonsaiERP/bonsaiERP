@@ -41,7 +41,7 @@ private
   # Updates the data for an expense
   # total is the alias for amount due that Expense < Account
   def update_expense_data
-    expense.balance = expense.balance - (expense.amount_was - expense.amount)
+    expense.balance = expense.balance - (expense.total_was - expense.total)
     expense.set_state_by_balance!
     update_details
     ExpenseErrors.new(expense).set_errors

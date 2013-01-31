@@ -24,7 +24,7 @@ describe DefaultIncome do
     }
   }
 
-  before do
+  before(:each) do
     UserSession.user = build :user, id: 10
   end
 
@@ -54,7 +54,7 @@ describe DefaultIncome do
   end
 
   context "Create a income with default data" do
-    before do
+    before(:each) do
       Income.any_instance.stub(save: true)
       IncomeDetail.any_instance.stub(save: true)
     end
@@ -132,9 +132,10 @@ describe DefaultIncome do
       i = subject.income
       i.total = details_total
       i.balance = 0
-      i.stub(amount_was: i.total)
+      i.stub(total_was: i.total)
 
       i.should be_is_draft
+      i.total.should > 200
 
       attributes = valid_params.merge(total: 200)
       # Create

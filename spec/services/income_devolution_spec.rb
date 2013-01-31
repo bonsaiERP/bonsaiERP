@@ -2,6 +2,7 @@
 require 'spec_helper'
 
 describe IncomeDevolution do
+
   let(:valid_attributes) {
     {
       account_id: 10, account_to_id: 2, exchange_rate: 1,

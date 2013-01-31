@@ -45,11 +45,12 @@ describe TransactionHistory do
       #puts th.data
       th.data.should be_is_a(Hash)
       th.data.should_not be_blank
-      th.data.fetch(:amount).should eq(300)
-      th.data.fetch(:amount).should_not eq(income.total)
+      th.data.fetch(:total).should eq(300)
       th.data.fetch(:name).should eq(income.name)
 
-      th.data.keys.should include(:name, :amount, :balance, :original_total, :approver_id)
+      [:id, :amount, :name, :amount, :total, :original_total, :approver_id].each do |k|
+        th.data.keys.should be_include(k)
+      end
 
       th.data[:income_details].should have(2).items
       th.data[:income_details].each do |det|

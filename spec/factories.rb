@@ -76,15 +76,7 @@ FactoryGirl.define do
   end
 
   factory :transaction do
-    ref_number "T-0001"
-    date { Date.today }
-    association :contact, factory: :contact, strategy: :build
-    currency 'BOB'
-    bill_number "B-0001"
-    description "New transaction description"
-    state 'draft'
     total 100
-    balance 100
   end
 
   factory :income do
@@ -94,7 +86,8 @@ FactoryGirl.define do
     currency 'BOB'
     description "New income description"
     state "draft"
-    total 100
+    balance 100
+    association :transaction, factory: :transaction, strategy: :build
   end
 
   factory :expense do
@@ -104,7 +97,8 @@ FactoryGirl.define do
     currency 'BOB'
     description "New expense description"
     state "draft"
-    total 100
+    balance 100
+    association :transaction, factory: :transaction, strategy: :build
   end
 
   factory :account_ledger do

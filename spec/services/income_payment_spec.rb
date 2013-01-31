@@ -2,7 +2,8 @@
 require 'spec_helper'
 
 describe IncomePayment do
-  before do
+
+  before(:each) do
     OrganisationSession.organisation = build :organisation, currency: 'BOB'
     UserSession.user = build :user, id: 10
   end
@@ -197,7 +198,7 @@ describe IncomePayment do
       }
     }
 
-    before do
+    before(:each) do
       Account.stub(:find_by_id).with(income.id).and_return(income)
       Account.stub(:find_by_id).with(expense.id).and_return(expense)
       AccountLedger.any_instance.stub(save_ledger: true)
@@ -305,7 +306,7 @@ describe IncomePayment do
   end
 
   context "Pay with different currencies" do
-    before do
+    before(:each) do
       income.stub(save: true)
       Income.stub(:find_by_id).with(income.id).and_return(income)
       AccountLedger.any_instance.stub(save_ledger:  true)

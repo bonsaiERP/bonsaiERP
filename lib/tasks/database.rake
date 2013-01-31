@@ -19,7 +19,8 @@ end
 
 namespace :bonsai do
   namespace :views do
-    task incomes_view: environment do
+    desc 'Creates a view for incomes related with transactions'
+    task incomes_view: :environment do
       begin
         Organisation.all.map(&:tenant).each do |tenant|
           puts "Running #{task_name} for tenant: #{tenant}"

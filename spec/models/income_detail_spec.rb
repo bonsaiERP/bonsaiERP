@@ -5,6 +5,7 @@ describe IncomeDetail do
   it { should belong_to(:item) }
 
   it { should validate_presence_of(:item) }
+  let(:income) { Income.new_income }
 
   context 'Validate correct income_item' do
     let(:item) { 
@@ -13,7 +14,7 @@ describe IncomeDetail do
 
     it "Item For sale" do
       id = IncomeDetail.new(item_id: item.id, price: 10, quantity: 1, account_id: 1)
-      id.stub(item: item, income: build(:income))
+      id.stub(item: item, income: income)
 
       id.should be_valid
       id.errors_on(:item_id).should be_empty
@@ -23,7 +24,7 @@ describe IncomeDetail do
     it "Not for sale" do
       item.for_sale = false
       id = IncomeDetail.new(item_id: item.id, price: 10, quantity: 1,  account_id: 1)
-      id.stub(item: item, income: build(:income))
+      id.stub(item: item, income: income)
 
       id.should_not be_valid
       id.errors_on(:item_id).should_not be_empty
@@ -31,7 +32,7 @@ describe IncomeDetail do
 
     it "whe income_detail.item_id doesn't change but item.for_sale = false" do
       id = IncomeDetail.new(item_id: item.id, price: 10, quantity: 1,  account_id: 1)
-      id.stub(item: item, income: ( build :income ))
+      id.stub(item: item, income: income)
       
       id.save.should be_true
 

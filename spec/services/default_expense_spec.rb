@@ -24,7 +24,7 @@ describe DefaultExpense do
     }
   }
 
-  before do
+  before(:each) do
     UserSession.user = build :user, id: 10
   end
 
@@ -54,7 +54,7 @@ describe DefaultExpense do
   end
 
   context "Create a expense with default data" do
-    before do
+    before(:each) do
       Expense.any_instance.stub(save: true)
       ExpenseDetail.any_instance.stub(save: true)
     end
@@ -132,9 +132,10 @@ describe DefaultExpense do
       e = subject.expense
       e.total = details_total
       e.balance = 0
-      e.stub(amount_was: e.total)
+      e.stub(total_was: e.total)
 
       e.should be_is_draft
+      e.total.should > 200
 
       attributes = valid_params.merge(total: 200)
       # Create

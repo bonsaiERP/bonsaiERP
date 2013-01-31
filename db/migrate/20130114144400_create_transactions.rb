@@ -4,7 +4,7 @@ class CreateTransactions < ActiveRecord::Migration
       t.integer :account_id
 
       # Use Account#amount for total, create alias
-      t.decimal :balance, :precision => 14, :scale => 2, default: 0.0 # Saldo
+      t.decimal :total, :precision => 14, :scale => 2, default: 0.0 # Saldo
 
       # Use Account#name for ref_number create alias
       t.string  :bill_number # factura
