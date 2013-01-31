@@ -1,0 +1,39 @@
+= simple_form_for expense.expense_payment, url: expense_payment_path(expense.id) do |f|
+  = bonsai_form_error(f)
+  = f.hidden_field :account_id
+
+  .row-fluid
+    .span6
+      = f.input :account_to_id, label: 'Cuenta', input_html: {class: 'span10'}
+    .span3
+      = f.input :date, as: :datepicker, label: 'Fecha'
+    .span3
+      = f.input :verification, as: :boolean, label: 'Verificar',  label: 'Verificar <i class="icon-info-sign" rel="tooltip" title="Verificar a futuro. Ej.: Cheque"></i>'.html_safe
+
+
+  .row-fluid
+    .span3
+      = f.input :amount, label: 'Cantidad <span class="currency"></span>',
+        as: :decimal, input_html: {size: 10, type: 'decimal'}
+    .span3
+      = f.input :interest, label: '<span title="Intereses o penalidades" rel="tooltip">Int. Pen.<span> <span class="currency"></span>',
+        hint: 'Intereses, penalidates, etc.', as: :decimal,
+        input_html: {size: 10, type: 'decimal'}
+    .span6
+      = f.input :reference, label: 'Referecia', as: :text, input_html: {rows: 3}
+
+  .form-actions
+    = f.submit "Salvar", class: 'btn btn-success'
+
+:javascript
+  var accounts_to = #{AccountQuery.new.expense_payment_options(expense).to_json}
+
+:coffeescript
+  $(->
+
+    $('#expense_payment_account_to_id').select2(
+      data: accounts_to
+      formatResult: Payment.paymentOptions
+      formatSelection: Payment.paymentOptions
+    )
+  )

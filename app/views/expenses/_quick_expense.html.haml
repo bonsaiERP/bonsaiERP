@@ -1,30 +1,35 @@
 .quick-expense-form.hide
   = simple_form_for QuickExpense.new(ref_number: Expense.get_ref_number), url: quick_expense_expenses_path do |f|
     .row-fluid
-      .span4= f.input :ref_number, label: "Número de referencia"
-      .span4= f.input :account_id, collection: Account.all, label: 'Cuenta'
+      .span6
+        = f.input :ref_number, label: "Número de referencia" do
+          = f.text_field :ref_number, disabled: true
+      .span6= f.input :account_to_id, collection: AccountQuery.new.bank_cash, label: 'Cuenta'
 
     .row-fluid
-      .span4
-        =f.input :contact_id, as: :autocomplete, label: "Contacto",
-          'data-source' => '/contacts/search', input_html: { 'data-new_url' => new_contact_path, 'data-title' => 'Nuevo contacto'}
-      .span4=f.input :date, as: :datepicker, label: 'Fecha'
+      .span6
+        =f.input :contact_id, as: :select2, label: "Contacto",
+          'data-source' => '/contacts/search', input_html: { data: {new_url: new_contact_path, title: 'Nuevo contacto', trigger: 'new-contact'}, class: 'contact_id', placeholder: 'Escriba para buscar contactos'}
+      .span6=f.input :date, as: :datepicker, label: 'Fecha'
 
     .row-fluid
-      .span4=f.input :amount, label: 'Cantidad'
-      .span4=f.input :bill_number, label: 'No. de documento', label_html: {title: 'Factura o Recibo', rel: 'tooltip'}
+      .span6=f.input :amount, label: 'Cantidad'
+      .span6=f.input :bill_number, label: 'No. de documento', label_html: {title: 'Factura o Recibo', rel: 'tooltip'}
 
-    = f.submit 'Salvar'
-    %a#quick-expense-hide-link.btn Cancelar
+    .form-actions
+      = f.submit 'Salvar', class: 'btn btn-success b'
+      %a#quick-expense-hide-link.btn Cancelar
 
 :coffeescript
-  (($) ->
-    $('#quick-expense-link').live 'click', ->
+  $(->
+    $('#quick-expense-link').click( ->
       $('.quick-expense-form').show('medium')
       $(this).hide('medium')
+    )
 
-    $('#quick-expense-hide-link').live 'click', ->
+    $('#quick-expense-hide-link').click( ->
       $('.quick-expense-form').hide('medium')
       $('#quick-expense-link').show('medium')
-  )(jQuery)
+    )
+  )
 

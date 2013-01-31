@@ -38,7 +38,8 @@ class Expense < Account
   ########################################
   # Delegations
   delegate *create_accessors(*Transaction.transaction_columns), to: :transaction
-  delegate :discounted?, :delivered?, :devolution?, :total_was, to: :transaction
+  delegate :discounted?, :delivered?, :devolution?, :total_was, 
+    :creator, :approver, :nuller, to: :transaction
   delegate :attributes, to: :transaction, prefix: true
 
   # Define boolean methods for states

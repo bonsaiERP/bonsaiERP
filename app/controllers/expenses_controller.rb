@@ -5,26 +5,14 @@ class ExpensesController < ApplicationController
 
   # GET /expenses
   def index
-    if params[:search].present?
-      @expenses = Expense.search(params)
-      p = params.dup
-      p.delete(:option)
-      @count = Expense.search(p)
-    else
-      params[:option] ||= "all"
-      @expenses = Expense.find_with_state(params[:option])
-      @count = Expense.scoped
-    end
-
-    @expenses = @expenses.order('transactions.date DESC, transactions.id DESC').page(@page)
+    @expenses = ExpenseQuery.new.search(
+      search: params[:search]
+    ).page(@page)
   end
 
   # GET /expenses/1
   def show
-    respond_to do |format|
-      format.html { render 'transactions/show' }
-      format.json  { render :json => @transaction }
-    end
+    @expense = present ExpenseQuery.new(Expense.where(id: params[:id])).inc.first
   end
 
   # GET /expenses/new
@@ -35,13 +23,14 @@ class ExpensesController < ApplicationController
 
   # GET /expenses/1/edit
   def edit
-    render get_template(@transaction)
+    @expense = Expense.find(params[:id])
   end
 
   # POST /expenses
   def create
     de = DefaultExpense.new(Expense.new_expense(expense_params))
     method = params[:commit_approve].present? ? :create_and_approve : :create
+
     if de.send(method)
       redirect_to de.expense, notice: 'Se ha creado un Egreso.'
     else
@@ -63,14 +52,16 @@ class ExpensesController < ApplicationController
     redirect_to expenses_path
   end
 
-  # PUT /expenses/1
+  # PUT /incomes/:id
   def update
-    @transaction.attributes = params[:expense]
-    if @transaction.save_trans
-      redirect_to @transaction, :notice => 'La proforma de venta fue actualizada!.'
+    @expense = Expense.find(params[:id])
+    de = DefaultExpense.new(Expense.find(params[:id]))
+
+    if de.update(expense_params)
+      redirect_to de.expense, notice: 'El egreso fue actualizado!.'
     else
-      @transaction.transaction_details.build unless @transaction.transaction_details.any?
-      render get_template(@transaction)
+      @income = de.expense
+      render 'edit'
     end
   end
 
@@ -101,30 +92,6 @@ class ExpensesController < ApplicationController
     redirect_to expense_path(@transaction, :anchor => anchor)
   end
 
-  # PUT /expenses/:id/approve_credit
-  def approve_credit
-    @transaction = Expense.find(params[:id])
-    if @transaction.approve_credit params[:expense]
-      flash[:notice] = "Se aprobó correctamente el crédito."
-    else
-      flash[:error] = "Existio un error al aprobar el crédito."
-    end
-
-    redirect_to @transaction
-  end
-
-  def approve_deliver
-    @transaction = Expense.find(params[:id])
-
-    if @transaction.approve_deliver
-      flash[:notice] = "Se aprobó la entrega de material."
-    else
-      flash[:error] = "Existio un error al aprobar la entrega de material."
-    end
-
-    redirect_to @transaction
-  end
-
   def history
     @history = TransactionHistory.find(params[:id])
     @trans = @history.transaction
@@ -134,33 +101,12 @@ class ExpensesController < ApplicationController
   end
 
 private
-
-  # Redirects in case that someone is trying to edit or destroy an  approved expense
-  def redirect_expense
-    flash[:warning] = "No es posible editar una nota ya aprobada!."
-    redirect_to expenses_path
-  end
-
-  def set_transaction
-    @transaction = Expense.find(params[:id])
-    check_edit if ["edit", "update"].include?(params[:action])
-  end
-
-  # Checks for transactions to edit
-  def check_edit
-    unless allow_transaction_action?(@transaction)
-      flash[:warning] = "No es posible editar la nota de venta."
-      return redirect_to @transaction
-    end
-  end
-
-private
   def quick_expense_params
    params.require(:quick_expense).permit(*transaction_params.quick_income)
   end
 
   def expense_params
-    params.require(:expense).permit(*transaction_params.income)
+    params.require(:expense).permit(*transaction_params.expense)
   end
 
   def transaction_params

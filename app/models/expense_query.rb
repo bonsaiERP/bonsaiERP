@@ -3,9 +3,16 @@ class ExpenseQuery
     @rel = rel
   end
 
-  # Used for exchange of services
-  def exchange(contact_id)
-    @rel.joins{transaction}.where(contact_id: contact_id)
-    .where{(transaction.balance.gt 0) & (active.eq true) & (state.eq 'approved')}
+  def inc
+    @rel.includes(payments: [:account_to], expense_details: [:item])
+  end
+
+  def search(params={})
+    @rel = @rel.where{} if params[:search].present?
+    @rel.includes(:contact, transaction: [:creator, :approver])
+  end
+
+  def pay(contact_id)
+    Income.active.where{(state.eq 'approved') & (amount.gt 0)}.where(contact_id: contact_id)
   end
 end

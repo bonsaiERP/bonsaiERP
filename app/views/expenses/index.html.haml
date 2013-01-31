@@ -1,87 +1,58 @@
 - content_for :links do
-  %ul.breadcrumps.span6
+  %ul.breadcrumbs.span6
     %li
       %span Egresos
 
 
-.row-fluid.top
-  .span6
-    %h1 Egresos
+%header
+  .row-fluid
+    .span6
+      %h1 Egresos
+    .span6.links
+      %a#quick-expense-link.btn.btn-primary(href="javascript:;")
+        %i.icon-plus-sign
+        Egreso rápido
 
-  .span6.links
-    %a#quick-expense-link.new.but(href="javascript:;")
-      %i.bicon-add
-      Egreso rápido
-
-    = link_to new_expense_path, :class => 'new but' do
-      %i.bicon-add
-      Nuevo ingreso
+      = link_to new_expense_path, class: 'btn btn-primary' do
+        %i.icon-plus-sign
+        Nuevo Egreso
 
 .row-fluid
   = render 'expenses/quick_expense'
 
-%ul.tabs
-  %li= link_option "Todos", "all"
-  %li= link_option "Proformas", 'draft'
-  %li= link_option "Esperando cobro #{size_or_blank(@count.approved.size)}", 'awaiting_payment'
-  %li= link_option "Vencidos #{size_or_blank(@count.due.size)}", 'due'
-  %li= link_option "Con entrega pendiente #{size_or_blank(@count.inventory.size)}", 'inventory'
-  %li= link_option "Cobrados", "paid"
-  %li= link_option "Desc./Inc.", "discount", title: 'Descuentos o Incrementos', rel: 'tooltip'
-  %li= link_option "Anulados", "nulled"
-
-#search_expense.well( style="#{show_if_search}" )
-  %a.close{:href => "javascript:"} x
-  %h3 Buscar ventas
-  = link_to "Eliminar filtros", expenses_path, :class => 'b'
-
-  =form_tag "/expenses", :method => 'get' do
-    =hidden_field_tag "search_div_id", "search_expenses"
-    .row-fluid
-      .span6
-        %label Cliente o Nº de referencia
-        =text_field_tag 'search', params[:search], :size => 40
-      .span6
-        %label Estado
-        =select_tag "option", options_for_select(list_expense_states, params[:option])
-
-    =submit_tag 'Buscar', :class => 'btn btn-success'
-
-
-= link_to "Buscar", "#search_expense", :class => 'search'
 = paginate @expenses.page(@page)
 
-%table.nwl.table.table-striped
-  %thead
-    %tr
-      %th
-        %span( title='Estado' rel='tooltip' ) Est.
-      %th
-        %span(title='Número de referencia' rel="tooltip") Nº Ref.
-      %th Cliente
-      %th Vence el
-      %th Total
-      %th Saldo
+%ul.unstyled.listing
+  - @expenses.each do |expense|
+    - expense = present expense
+    %li.row-fluid
+      .span4
+        %h4
+          = link_to expense, expense
+        = expense.has_error_label
+        %h5
+          %i.icon-user(title="Contacto" rel='tooltip')
+          = expense.contact
+        .clear-both
+        = expense.state_tag
+        %i= l expense.date
+      .span3
+        = expense.due_date_tag
+        .clear-both
+        = expense.creator_label
+        = expense.approver_label
+        = expense.nuller_label
+      .span4
+        .span2
+          .muted Total
+        .span4
+          = currency_label expense.currency
+          = ntc expense.total
 
-      = discount_th
-
-      %th Fecha
-      %th
-
-  %tbody
-    -  @expenses.each do |expense|
-      %tr{ :class => cycle(:odd, :even) }
-        %td 
-          %span.bicon.pill{:class => "#{expense.real_state}", :title => expense.show_state}
-        %td= link_to expense.ref_number, expense, :class => 'b'
-        %td= expense.contact
-        %td= lo expense.due_date unless expense.is_paid?
-        %td #{expense.currency_symbol} #{ntc expense.total }
-        %td #{expense.currency_symbol} #{ntc expense.balance }
-
-        = discount_cell expense
-
-        %td.nw= lo expense.date
-        %td.actions
-          = link_to "editar", edit_expense_path(expense), :class => 'edit', :title => 'Editar' if expense.is_draft?
-          = link_to "duplicar", new_expense_path(:transaction_id => expense.id), :class => 'duplicate icon', :title => 'Duplicar'
+        .span2
+          .muted Saldo
+        .span4
+          = currency_label expense.currency
+          = ntc expense.balance
+      .span1
+        = link_to icon_edit, edit_expense_path(expense), class: 'dark'

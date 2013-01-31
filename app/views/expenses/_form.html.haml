@@ -16,7 +16,7 @@
 
 :coffeescript
   (($) ->
-    $('.contact-form').live('new-contact', (event, resp) ->
+    $('body').on('new-contact', '.contact-form', (event, resp) ->
       $('.contact_id').val(resp.matchcode).data('value', resp.matchcode)
       .prev().val(resp.matchcode)
     )

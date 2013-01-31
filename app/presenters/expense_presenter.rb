@@ -1,12 +1,12 @@
 class ExpensePresenter < Resubject::Presenter
   currency :balance, precision: 2
 
-  def income_payment
-    IncomePayment.new(account_id: id, date: Date.today, amount: 0)
+  def expense_payment
+    ExpensePayment.new(account_id: id, date: Date.today, amount: 0)
   end
 
-  def income_devolution
-    IncomeDevolution.new(account_id: id, date: Date.today, amount: 0)
+  def expense_devolution
+    ExpenseDevolution.new(account_id: id, date: Date.today, amount: 0)
   end
 
   def payments

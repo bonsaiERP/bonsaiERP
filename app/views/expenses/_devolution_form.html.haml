@@ -1,0 +1,5 @@
+= simple_form_for income.income_devolution, url: income_devolution_path(income.id) do |f|
+  = bonsai_form_error(f)
+  = f.hidden_field :account_id
+
+  = render 'devolutions/form', f: f

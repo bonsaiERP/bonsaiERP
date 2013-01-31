@@ -79,7 +79,7 @@ describe ExpensePayment do
       p.expense.approver_id.should eq(UserSession.id)
 
       # Ledger
-      p.ledger.amount.should == 50.0
+      p.ledger.amount.should == -50.0
       p.ledger.exchange_rate == 1
       p.ledger.should be_is_payout
       p.ledger.account_id.should eq(expense.id)
@@ -108,13 +108,13 @@ describe ExpensePayment do
 
       # ledger
       p.ledger.should be_is_a(AccountLedger)
-      p.ledger.amount.should == valid_attributes.fetch(:amount)
+      p.ledger.amount.should == -valid_attributes.fetch(:amount)
       p.ledger.should be_is_payout
       p.ledger.account_id.should eq(expense.id)
 
       # int_ledger
       p.int_ledger.should be_is_a(AccountLedger)
-      p.int_ledger.amount.should == 10.0
+      p.int_ledger.amount.should == -10.0
       p.int_ledger.should be_is_intout
       p.int_ledger.account_id.should eq(expense.id)
       p.int_ledger.reference.should eq(valid_attributes.fetch(:reference))
@@ -180,7 +180,7 @@ describe ExpensePayment do
       p.ledger.should be_nil
       # int_ledger
       p.int_ledger.should be_is_a(AccountLedger)
-      p.int_ledger.amount.should == 10.0
+      p.int_ledger.amount.should == -10.0
       p.int_ledger.should be_is_intout
     end
   end
@@ -330,7 +330,7 @@ describe ExpensePayment do
       ep.ledger.currency.should eq('USD')
       # int_ledger
       ep.int_ledger.should_not be_inverse
-      ep.int_ledger.amount.should == 1
+      ep.int_ledger.amount.should == -1
       ep.int_ledger.currency.should eq('USD')
     end
 
@@ -354,7 +354,7 @@ describe ExpensePayment do
       ep.ledger.currency.should eq('BOB')
       # int_ledger
       ep.int_ledger.should be_inverse
-      ep.int_ledger.amount.should == 1
+      ep.int_ledger.amount.should == -1
       ep.int_ledger.currency.should eq('BOB')
     end
   end

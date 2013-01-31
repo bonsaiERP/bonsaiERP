@@ -51,7 +51,7 @@ class Transaction extends Backbone.Collection
       self.setCurrency(this)
 
     @$addLink = $('#add-item-link')
-    @$addLink.live 'click', => @addItem()
+    @$addLink.click => @addItem()
   #
   calculateSubtotal: ->
     sub = @reduce((sum, p) ->
@@ -159,7 +159,7 @@ itemTemplate = """<tr class="item" data-item="{"original_price":"0.0","price":"0
     <td class='span6 nw'>
       <div class="control-group autocomplete optional">
         <div class="controls">
-          <input id="income_$klass_details_attributes_$num_item_id" name="income[$klass_details_attributes][$num][item_id]" type="hidden"/>
+          <input id="$klass_$klass_details_attributes_$num_item_id" name="$klass[$klass_details_attributes][$num][item_id]" type="hidden"/>
           <input class="autocomplete optional item_id ui-autocomplete-input span11" data-source="/items/search.json" id="item_autocomplete" name="item_autocomplete" placeholder="Escriba para buscar el ítem" size="35" type="text" autocomplete="off"/>
           <a href="/items/new" class="ajax btn btn-small" rel="tooltip" style="margin-left: 5px;" title="Nuevo ítem"><i class="icon-plus-sign icon-large"></i></a>
           <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
@@ -167,10 +167,10 @@ itemTemplate = """<tr class="item" data-item="{"original_price":"0.0","price":"0
       </div>
     </td>
     <td>
-      <div class="control-group decimal optional"><div class="controls"><input class="numeric decimal optional" data-original-price="null" data-value="item.price" id="income_$klass_details_attributes_$num_price" name="income[$klass_details_attributes][$num][price]" size="8" step="any" type="decimal" value=""></div></div>
+      <div class="control-group decimal optional"><div class="controls"><input class="numeric decimal optional" data-original-price="null" data-value="item.price" id="$klass_$klass_details_attributes_$num_price" name="$klass[$klass_details_attributes][$num][price]" size="8" step="any" type="decimal" value=""></div></div>
     </td>
     <td>
-      <div class="control-group decimal optional"><div class="controls"><input class="numeric decimal optional" data-value="item.quantity" id="income_$klass_details_attributes_$num_quantity" name="income[$klass_details_attributes][$num][quantity]" size="8" step="any" type="decimal" value=""></div></div>
+      <div class="control-group decimal optional"><div class="controls"><input class="numeric decimal optional" data-value="item.quantity" id="$klass_$klass_details_attributes_$num_quantity" name="$klass[$klass_details_attributes][$num][quantity]" size="8" step="any" type="decimal" value=""></div></div>
     </td>
     <td class="total_row r">
       <span data-text="item.subtotal | number"></span>

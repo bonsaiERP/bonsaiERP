@@ -17,7 +17,17 @@ class AccountQuery
       create_hash(v, :id, :type, :currency, :amount, :name, :to_s) 
     }
 
-    arr + ExpenseQuery.new.exchange(income.contact_id).map {|v| 
+    arr + ExpenseQuery.new.pay(income.contact_id).map {|v| 
+      create_hash(v, :id, :type, :currency, :balance, :name, :to_s)
+    }
+  end
+
+  def expense_payment_options(expense)
+    arr = bank_cash.map {|v| 
+      create_hash(v, :id, :type, :currency, :amount, :name, :to_s) 
+    }
+
+    arr + ExpenseQuery.new.pay(expense.contact_id).map {|v| 
       create_hash(v, :id, :type, :currency, :balance, :name, :to_s)
     }
   end

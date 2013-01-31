@@ -55,7 +55,7 @@ private
   def create_ledger
     if amount.to_f > 0
       @ledger = build_ledger(
-                  amount: amount, operation: 'payout', account_id: expense.id,
+                  amount: -amount, operation: 'payout', account_id: expense.id,
                   conciliation: conciliation?
                 )
       @ledger.save_ledger
@@ -67,7 +67,7 @@ private
   def create_interest
     if interest.to_f > 0
       @int_ledger = build_ledger(
-                      amount: interest, operation: 'intout',
+                      amount: -interest, operation: 'intout',
                       account_id: expense.id, conciliation: conciliation?
                     )
       @int_ledger.save_ledger

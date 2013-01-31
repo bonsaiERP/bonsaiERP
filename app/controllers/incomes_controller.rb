@@ -14,7 +14,7 @@ class IncomesController < ApplicationController
   # GET /incomes/1
   # GET /incomes/1.xml
   def show
-    @income = present Income.where(id:params[:id]).includes(payments: [:account_to], income_details: [:item]).first
+    @income = present IncomeQuery.new(Income.where(id: params[:id])).inc.first
   end
 
   # GET /incomes/new
@@ -60,7 +60,7 @@ class IncomesController < ApplicationController
     di = DefaultIncome.new(Income.find(params[:id]))
 
     if di.update(income_params)
-      redirect_to di.income, notice: 'La proforma de venta fue actualizada!.'
+      redirect_to di.income, notice: 'El Ingreso fue actualizado!.'
     else
       @income = di.income
       render 'edit'
