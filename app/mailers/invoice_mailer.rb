@@ -4,7 +4,7 @@
 class InvoiceMailer < ActionMailer::Base
   default :from => "noresponder@bonsaierp.com"
 
-  layout "mail"
+  layout "email"
 
   # Sends the invoice docment to the contact
   def send_invoice(transaction, options)

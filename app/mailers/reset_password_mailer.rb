@@ -1,7 +1,7 @@
 class ResetPasswordMailer < ActionMailer::Base
   default :from => "noresponder@bonsaierp.com"
 
-  layout "mail"
+  layout "email"
 
   # Sends the registration email to the contact
   def send_reset_password(user)

@@ -1,10 +1,8 @@
 Bonsaierp::Application.routes.draw do
 
-  resources :account_balances
+  resources :tests
 
   resources :stocks
-
-  resources :account_types
 
   resources :inventory_operations do
     member do
