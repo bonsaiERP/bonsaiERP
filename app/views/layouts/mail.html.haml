@@ -4,41 +4,14 @@
   %head
     %meta{ 'http-equiv'  => "content-type", :content => "text/html;charset=UTF-8" }
   %body
-    %table{:border => "0", :cellpadding => "0", :cellspacing => "0", :width => "100%"}
-      %tbody
-        %tr
-          %td
-            %table{:align => "center", :border => "0", :cellpadding => "0", :cellspacing => "0", :width => "608"}
-              %tbody
-                %tr
-                  %td{:width => "604"}
-                    %font{:face => "arial"}
-                      %a{:href => "#", :target => "_blank"}
-                        = image_tag("http://bonsaierp.com/assets/mail/01.png", :width => "604", :height => "136", :border => "0")
-                %tr
-                  %td{:background => "http://bonsaierp.com/assets/mail/02.png", :height => "374"}
-                    %table{:align => "center", :border => "0", :cellpadding => "8", :cellspacing => "0", :width => "75%"}
-                      %tbody
-                        %tr
-                          %td{:height => "200", :valign => "top"}
-                            %p
-                              =yield
-                        %tr
-                          %td{:height => "24"}
-                            Atentamente,
-                            %em
-                              Bonsaierp.com
-                %tr
-                  %td
-                    = image_tag("http://bonsaierp.com/assets/mail/03.png", :width => "604", :height => "147", :border => "0")
-                %tr
-                  %td
-                    %center
-                      %p{:align => "-moz-center"}
-                        %font{:size=>"2", :face=>"Arial, Helvetica, sans-serif"}
-                          = link_to("Facebook", "https://www.facebook.com/pages/BonsaiErp/129482700496176")  
-                          &middot;
-                          = link_to("Twitter",  "https://twitter/#!/bonsaierp")
-                          &middot;
-                          = link_to("Google+",  "https://plus.google.com/u/0/101417709320619286223") 
+    
+    =yield
+
+    %p(style='align:center')
+      %font{:size=>"2", :face=>"Arial, Helvetica, sans-serif"}
+        = link_to("Facebook", "https://www.facebook.com/pages/BonsaiErp/129482700496176")  
+        &middot;
+        = link_to("Twitter",  "https://twitter/#!/bonsaierp")
+        &middot;
+        = link_to("Google+",  "https://plus.google.com/u/0/101417709320619286223") 
 

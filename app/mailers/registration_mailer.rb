@@ -2,7 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class RegistrationMailer < ActionMailer::Base
-  default :from => "register@#{DOMAIN}"
+  default from: %Q("#{APP_NAME}" <register@#{DOMAIN}>)
 
   layout "mail"
 
@@ -11,6 +11,6 @@ class RegistrationMailer < ActionMailer::Base
     @user = reg.user
     @tenant = reg.tenant
 
-    mail(:to => reg.email, :subject => I18n.t("bonsai.registration", domain: DOMAIN) )
+    mail(to: reg.email, subject: I18n.t("bonsai.registration", domain: DOMAIN) )
   end
 end

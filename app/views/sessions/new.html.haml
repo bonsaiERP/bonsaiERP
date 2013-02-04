@@ -14,7 +14,7 @@
       %header
         %h2.c Iniciar sesión
       .pad
-        = simple_form_for(@user, :url => sessions_path, :method => :post) do |f|
+        = simple_form_for @session do |f|
 
           = f.input :email,    label: false, input_html: {:size => 30, :class => 'txt', placeholder: 'Email'}
           = f.input :password, label: false, input_html: {:size => 30, :class => 'txt', placeholder: 'Contraseña'}
