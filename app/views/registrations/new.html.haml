@@ -22,9 +22,8 @@
             hint: "<i class='icon-warning-sign' ></i> No es posible modificar en un futuro</span>".html_safe,
             input_html: {class: 'span12'} do
             .input-prepend.input-append
-              %span.add-on bonsaierp.
               = f.text_field :tenant, size: 28
-              %span.add-on .com
+              %span.add-on .bonsaierp.com
           = f.input :email, :label => "Correo Electrónico", input_html: {class: 'span12'}
           = f.input :password, :label => 'Contraseña', input_html: {class: 'span12'}
           = f.input :password_confirmation, :label => 'Confirmat contraseña', input_html: {class: 'span12'}
