@@ -43,5 +43,6 @@ describe Registration do
     link.organisation_id.should eq(1)
     link.rol.should eq('admin')
     link.should be_master_account
+    link.tenant.should eq('bonsai')
   end
 end

@@ -19,21 +19,20 @@ class Registration < BaseService
   def register
     return false unless valid?
 
-    res = true
-    ActiveRecord::Base.transaction do
+    commit_or_rollback do
       res = create_organisation
       res = create_user && res
-
-      raise ActiveRecord::Rollback unless res
     end
+  end
 
-    res
+  def resend_registration_email
+
   end
 
 private
   def create_user
     @user = User.new(email: email, password: password)
-    @user.links.build(organisation_id: organisation.id, 
+    @user.links.build(organisation_id: organisation.id, tenant: organisation.tenant,
                       rol: 'admin', active: true, master_account: true)
     @user.save
   end

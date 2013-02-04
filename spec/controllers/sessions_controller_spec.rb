@@ -13,22 +13,19 @@ describe SessionsController do
 
   describe "POST /sessions" do
 
-    let(:user_mock){
-      user_mock = mock_model(User, :id => 1, :confirmated? => true, :organisations => [])
-      user_mock.stub!(:authenticate).with("demo123")
-      user_mock
+    let(:user){
+      u = build :user, id: 1
+      u.stub(confirmated?: true, organisations: [], valid_password?: true)
+      u
     }
-    let(:user) do
-      build :user, id: 1
-    end
 
     it 'should login' do
-      User.stub!(:find_by_email).with("demo@example.com").and_return(user_mock)
+      User.stub!(:find_by_email).with("demo@example.com").and_return(user)
       PgTools.stub!(set_search_path: false)
 
       controller.stub!(:current_user => user_mock)
 
-      post "create", :user => {:email => "demo@example.com", :password => "demo123"}
+      post "create", user: {email: "demo@example.com", password: "demo123"}
 
       response.should redirect_to "/organisations/new"
     end

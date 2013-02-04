@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130115020409) do
+ActiveRecord::Schema.define(:version => 20130204171801) do
 
   create_table "account_ledgers", :force => true do |t|
     t.string   "reference"
@@ -253,8 +253,9 @@ ActiveRecord::Schema.define(:version => 20130115020409) do
 
   create_table "transactions", :force => true do |t|
     t.integer  "account_id"
-    t.decimal  "total",                            :precision => 14, :scale => 2, :default => 0.0
+    t.decimal  "balance",                          :precision => 14, :scale => 2, :default => 0.0
     t.string   "bill_number"
+    t.decimal  "discount",                         :precision => 5,  :scale => 2, :default => 0.0
     t.decimal  "gross_total",                      :precision => 14, :scale => 2, :default => 0.0
     t.decimal  "original_total",                   :precision => 14, :scale => 2, :default => 0.0
     t.decimal  "balance_inventory",                :precision => 14, :scale => 2, :default => 0.0
@@ -262,7 +263,6 @@ ActiveRecord::Schema.define(:version => 20130115020409) do
     t.integer  "creator_id"
     t.integer  "approver_id"
     t.integer  "nuller_id"
-    t.datetime "nuller_datetime"
     t.string   "null_reason",       :limit => 400
     t.datetime "approver_datetime"
     t.boolean  "delivered",                                                       :default => false
@@ -277,7 +277,7 @@ ActiveRecord::Schema.define(:version => 20130115020409) do
   add_index "transactions", ["delivered"], :name => "index_transactions_on_delivered"
   add_index "transactions", ["devolution"], :name => "index_transactions_on_devolution"
   add_index "transactions", ["discounted"], :name => "index_transactions_on_discounted"
-  add_index "transactions", ["due_date"], :name => "index_transactions_on_due_date"
+  add_index "transactions", ["due_date"], :name => "index_transactions_on_payment_date"
 
   create_table "units", :force => true do |t|
     t.string   "name",       :limit => 100

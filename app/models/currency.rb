@@ -3,7 +3,7 @@
 # email: boriscyber@gmail.com
 class Currency
 
-  FILTER_CURRENCIES = %w(BOB USD EUR)
+  FILTER_CURRENCIES = %w(BOB CLP USD EUR)
 
   def list
     CURRENCIES
