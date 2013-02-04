@@ -2,7 +2,6 @@
   %ul.breadcrumbs.span6
     %li
       %span Contactos
-  .span6 &nbsp;
   .links.span6= link_to "Nuevo #{contact_type(params[:option], false)}", new_contact_path, :class => 'new'
 
 %header
@@ -47,12 +46,12 @@
 
       .span3
         .span6.r
-          %i.icon-plus.green(title="Debe #{currency}" rel='tooltip')
-          = ntc(100000)
-          %small.muted(style='border-bottom: 1px dotted gray') EX
+          -#%i.icon-plus.green(title="Debe #{currency}" rel='tooltip')
+          -#= ntc(100000)
+          -#%small.muted(style='border-bottom: 1px dotted gray') EX
         .span6.r
-          %i.icon-minus.red(title="Debemos #{currency}" rel='tooltip')
-          = ntc 500
+          -#%i.icon-minus.red(title="Debemos #{currency}" rel='tooltip')
+          -#= ntc 500
 
       .span1
         =link_to icon_edit, edit_contact_path(contact), class: 'dark'
