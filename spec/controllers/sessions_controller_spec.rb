@@ -56,5 +56,14 @@ describe SessionsController do
 
       response.should render_template('sessions/inactive_user')
     end
+
+    it "wrong email or password" do
+      Session.any_instance.stub(authenticate: false)
+      
+      post "create", session: {email: "demo@example.com", password: "demo123"}
+
+      response.should render_template('new')
+      flash.now[:error].should eq('El email o la contraseña que ingreso no existen.')
+    end
   end
 end

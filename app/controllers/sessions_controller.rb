@@ -20,7 +20,8 @@ class SessionsController < ApplicationController
     when 'inactive_user'
       render file: 'sessions/inactive_user'
     else
-      render'new', error: 'El email que ingreso no existe.'
+      flash.now[:error] = 'El email o la contraseña que ingreso no existen.'
+      render'new'
     end
   end
 
