@@ -1,0 +1,21 @@
+!!!XML
+!!!
+%html{xmlns: "http://www.w3.org/1999/xhtml", 'xml:lang' => "es", lang: "es" }
+  %head
+    %meta{ 'http-equiv'  => "content-type", :content => "text/html;charset=UTF-8" }
+  = stylesheet_link_tag 'email'
+  %body.cont
+    #header
+      = image_tag "http://bonsaierp.com/assets/logo.png"
+
+    .cont
+      =yield
+
+    %p(style='text-align:center')
+      %font{:size=>"2", :face=>"Arial, Helvetica, sans-serif"}
+        = link_to("Facebook", "https://www.facebook.com/pages/BonsaiErp/129482700496176")  
+        &middot;
+        = link_to("Twitter",  "https://twitter/#!/bonsaierp")
+        &middot;
+        = link_to("Google+",  "https://plus.google.com/u/0/101417709320619286223") 
+

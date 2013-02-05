@@ -1,0 +1,16 @@
+%h1 H1 title
+%h2 H2 title
+%h3 H3 title
+%h4 H4 title
+
+%p
+  This is a content with a
+  %a(href="#") link
+
+%ul
+  %li List 1
+  %li List 2
+
+- @user = User.new(confirmation_token: '123')
+- @tenant = 'tests'
+= render file: 'registration_mailer/send_registration'

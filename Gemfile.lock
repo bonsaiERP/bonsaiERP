@@ -1,9 +1,9 @@
 GIT
-  remote: git://github.com/boriscy/scripts.git
-  revision: b5affb3c74ce6734642e2534c900f48db605568c
+  remote: git://github.com/boriscy/assets.git
+  revision: b551525b952e0acc007bd44942463c4a591da768
   specs:
-    scripts (1.0.3)
-      rails (~> 3.2.9)
+    assets (1.0.4)
+      rails (~> 3.2.11)
 
 GEM
   remote: http://rubygems.org/
@@ -288,6 +288,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_model_serializers
+  assets!
   bcrypt-ruby
   better_errors
   binding_of_caller
@@ -321,7 +322,6 @@ DEPENDENCIES
   roadie
   rspec-rails
   sass-rails (~> 3.2.5)
-  scripts!
   shoulda-matchers
   simple_form
   spork (= 0.9.2)
