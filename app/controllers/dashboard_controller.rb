@@ -2,17 +2,11 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class DashboardController < ApplicationController
-  skip_before_filter :check_authorization!, only: ['index']
-  before_filter :check_auth_token, only: [ 'index' ]
+  skip_before_filter :check_authorization!
+  before_filter :check_auth_token
 
   # GET /dashboard
   def index
-  end
-
-  # GET /config
-  def configuration
-    @users = User.order(:id).all
-    @org   = current_organisation
   end
 
 private

@@ -401,7 +401,9 @@ es:
 
   email:
     invoice_title: "Nota de venta "
-    invoice_body: "Estimado cliente le hacemos llegar el adjunto de la venta"  
+    invoice_body: "Estimado cliente le hacemos llegar el adjunto de la venta"
+    registration:
+      new_user: "Bienvenido a %{app_name}, usted ha sido adicionado como usuario en :company" 
   
   common:
     edit: 'Editar'

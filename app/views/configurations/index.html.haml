@@ -1,5 +1,3 @@
-:css
-  #links{display: none; }
 %h1 Configuración
 
 #tabs
@@ -10,7 +8,7 @@
 
   #users
     %p
-      =link_to "/users/add_user", :class => 'btn btn-success' do
+      =link_to new_admin_user_path, class: 'btn btn-primary' do
         %i.icon-plus-sign.icon-white
         Adicionar usuario
 
@@ -32,7 +30,7 @@
 
   #organisation
     %p
-      = link_to "/organisations/#{session[:organisation][:id]}/edit", :class => 'btn btn-primary' do
+      = link_to current_organisation, :class => 'btn btn-primary' do
         %i.icon-pencil.icon-white
         Editar datos empresa
 

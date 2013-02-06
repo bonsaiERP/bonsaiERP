@@ -1,5 +1,9 @@
 Bonsaierp::Application.routes.draw do
 
+  resources :admin_users
+
+  resources :configurations, only: ['index']
+
   resources :tests
 
   resources :stocks
@@ -10,7 +14,7 @@ Bonsaierp::Application.routes.draw do
     end
 
     collection do
-      # Transactions (Buy, Income)
+      # Transactions (Income, Expense)
       get :transactions
       get :new_transaction
       post :create_transaction
@@ -114,7 +118,7 @@ Bonsaierp::Application.routes.draw do
   #resources :countries
 
   resources :registrations
-  get "/users/sign_up" => "registrations#new"
+  get "/sign_up" => "registrations#new"
 
   # Password
   resources :reset_passwords
@@ -122,40 +126,25 @@ Bonsaierp::Application.routes.draw do
   # Sessions
   resources :sessions
 
-  get "/users/sign_in"  => "sessions#new", :as => :login
-  get "/users/sign_out" => "sessions#destroy", :as => :logout
+  get "/sign_in"  => "sessions#new", as: :login
+  get "/sign_out" => "sessions#destroy", as: :logout
 
-  resources :users do
-    collection do
-      get  :add_user
-      get  :password
-      get  :default_password
-      post :create_user
-    end
+  resources :users
 
-    member do
-      get :edit_user
-      put :update_user
-      put :update_password
-      put :update_default_password
-    end
-  end
-
-  match '/dashboard' => 'dashboard#index', :as => :dashboard
-  match '/configuration' => 'dashboard#configuration'
+  get '/dashboard' => 'dashboard#index', :as => :dashboard
 
   # Rails Metal
-  match "/client_autocomplete"   => AutocompleteApp.action(:client)
-  match "/supplier_autocomplete" => AutocompleteApp.action(:supplier)
-  match "/staff_autocomplete"    => AutocompleteApp.action(:staff)
-  match "/item_autocomplete"     => AutocompleteApp.action(:item)
+  get "/client_autocomplete"   => AutocompleteApp.action(:client)
+  get "/supplier_autocomplete" => AutocompleteApp.action(:supplier)
+  get "/staff_autocomplete"    => AutocompleteApp.action(:staff)
+  get "/item_autocomplete"     => AutocompleteApp.action(:item)
 
-  match "/client_account_autocomplete"   => AutocompleteApp.action(:client_account)
-  match "/supplier_account_autocomplete" => AutocompleteApp.action(:supplier_account)
-  match "/staff_account_autocomplete"    => AutocompleteApp.action(:staff_account)
-  match "/item_account_autocomplete"     => AutocompleteApp.action(:item_account)
-  match "/exchange_rates" => AutocompleteApp.action(:get_rates)
-  match "/items_stock" => AutocompleteApp.action(:items_stock)
+  get "/client_account_autocomplete"   => AutocompleteApp.action(:client_account)
+  get "/supplier_account_autocomplete" => AutocompleteApp.action(:supplier_account)
+  get "/staff_account_autocomplete"    => AutocompleteApp.action(:staff_account)
+  get "/item_account_autocomplete"     => AutocompleteApp.action(:item_account)
+  get "/exchange_rates" => AutocompleteApp.action(:get_rates)
+  get "/items_stock" => AutocompleteApp.action(:items_stock)
 
   root :to => 'sessions#new'
 end

@@ -22,10 +22,10 @@ class User < ActiveRecord::Base
   ########################################
   # Validations
   validates_email_format_of :email, message: I18n.t("errors.messages.user.email")
-  validates :email, presence: true, :uniqueness => {:if => :email_changed?}
+  validates :email, presence: true, uniqueness: {if: :email_changed?}
 
   with_options :if => :new_record? do |u|
-    u.validates :password, :length => {:minimum => PASSWORD_LENGTH }, confirmation: true
+    u.validates :password, length: {minimum: PASSWORD_LENGTH }, confirmation: true
   end
 
   ########################################
@@ -124,17 +124,6 @@ class User < ActiveRecord::Base
 
   # Adds a new user for the company
   def add_company_user(params)
-    PgTools.set_search_path PgTools.get_schema_name(OrganisationSession.id)
-    total_users = User.count
-    PgTools.reset_search_path
-    org = Organisation.find(OrganisationSession.id)
-    acc = ClientAccount.find(org.client_account_id)
-    
-    if total_users >= acc.users
-      self.errors[:base] = I18n.t("errors.messages.user.user_limit")
-      return false
-    end
-
     self.attributes = params
     self.email = params[:email]
 
@@ -169,7 +158,7 @@ class User < ActiveRecord::Base
 
   # returns translated roles
   def self.get_roles
-    ["Gerencia", "Administración", "Operaciones"].zip(ROLES)
+    ["Admin", "Privilegiado", "Operaciones"].zip(ROLES)
   end
 
   def self.roles_hash
@@ -195,11 +184,6 @@ class User < ActiveRecord::Base
   end
 
 private
-  # Generates a random password and sets it to the password field
-  def set_random_password(size = 8)
-    self.password = self.temp_password = SecureRandom.urlsafe_base64(size)
-  end
-
   def create_user_link
     links.build(:organisation_id => OrganisationSession.id, 
                     :rol => rolname, :creator => false) {|link| 

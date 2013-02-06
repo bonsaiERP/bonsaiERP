@@ -32,7 +32,7 @@ class UsersController < ApplicationController
 
   # POST /users/create_user
   def create_user
-    @user = User.new
+    @user = User.new_company
     if @user.add_company_user(params[:user])
       flash[:notice] = "El usuario #{@user} ha sido adicionado."
       redirect_to "/configuration"

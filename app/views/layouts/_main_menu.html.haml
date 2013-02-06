@@ -1,5 +1,5 @@
 - if current_organisation
-  %ul.nav
+  %ul#main-nav.nav
     %li
       = link_to "Resumen", dashboard_path
 
@@ -45,4 +45,4 @@
 
 
     %li
-      = link_to "Proyectos", projects_path
+      = link_to "Proyectos", projects_path, id: 'last-nav'

@@ -19,7 +19,7 @@
         = simple_form_for @registration do |f|
           = f.input :name, label: 'Empresa', input_html: {class: 'span12'}
           = f.input :tenant, label: 'Subdominio',
-            hint: "<i class='icon-warning-sign' ></i> No es posible modificar en un futuro</span>".html_safe,
+            hint: "<i class='icon-warning-sign' ></i> No es posible modificar en un futuro".html_safe,
             input_html: {class: 'span12'} do
             .input-prepend.input-append
               = f.text_field :tenant, size: 28

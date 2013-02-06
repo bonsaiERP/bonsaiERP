@@ -13,4 +13,12 @@ class RegistrationMailer < ActionMailer::Base
 
     mail(to: reg.email, subject: I18n.t("bonsai.registration", domain: DOMAIN) )
   end
+
+  def user_registration(reg)
+    @user = reg.user
+    @tenant = OrganisationSession.tenant
+    @name = OrganisationSession.name
+
+    mail(to: @user.email, subject: I18n.t("email.registration.new_user", app_name: APP_NAME, company: @name) )
+  end
 end

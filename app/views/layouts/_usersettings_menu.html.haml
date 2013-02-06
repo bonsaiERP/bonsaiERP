@@ -1,14 +1,16 @@
 %ul#usersettings
   - if current_organisation
-    %li
-      %a(href="/configuration" title='Configuración' rel='tooltip' data-placement='bottom')
-        %i.icon-cog.icon-white
+    %li#conf
+      = link_to configurations_path, title: 'Configuración', rel: 'tooltip', data: {placement: 'bottom'} do
+        %i.icon-cog
         Conf.
-  %li#current_user
-    %a.limit{:href => "#{ user_path(current_user) }" }
-      %i.icon-user.icon-white
-      = current_user
-  %li#logout
-    %a{ :href =>"/users/sign_out"}
-      %i.icon-off.icon-white
-      Salir
+
+    %li#current_user
+      = link_to current_user do
+        %i.icon-user
+        = current_user
+
+    %li#logout
+      = link_to logout_path do
+        %i.icon-off
+        Salir
