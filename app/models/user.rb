@@ -10,13 +10,10 @@ class User < ActiveRecord::Base
   ROLES = %w(admin gerency operations).freeze
 
   ########################################
-  # Callbacks
-  before_create     :create_user_link, if: :change_default_password?
-  before_destroy    :destroy_links
-
-  ########################################
   # Relationships
   has_many :links, inverse_of: :user, autosave: true, dependent: :destroy
+  has_many :active_links, inverse_of: :user, autosave: true, dependent: :destroy,
+           class_name: 'Link', conditions: {active: true}
   has_many :organisations, through: :links
 
   ########################################
@@ -27,12 +24,6 @@ class User < ActiveRecord::Base
   with_options :if => :new_record? do |u|
     u.validates :password, length: {minimum: PASSWORD_LENGTH }, confirmation: true
   end
-
-  ########################################
-  # Attributes
-  attr_accessor :temp_password, :rolname, :active_link, :old_password, :send_email
-  attr_reader :created_user
-
 
   # Delegations
   ########################################
@@ -74,13 +65,9 @@ class User < ActiveRecord::Base
     !!send_email
   end
 
-  # returns the organisation which one is logged in
+  # returns the organisation if the OrganisationSession is set
   def organisation
     Organisation.find(OrganisationSession.id)
-  end
-
-  def self.admin_gerency?(val)
-    ROLES.slice(0, 2).include? val
   end
 
   # Checks the user and the priviledges
@@ -173,26 +160,6 @@ class User < ActiveRecord::Base
     self.rol = rol
 
     self.save
-  end
-
-  # Only used when creating a new user
-  def save_user
-    self.confirmation_token = SecureRandom.base64(12)
-    self.rol = User::ROLES.first
-    self.send_email = true
-    self.save
-  end
-
-private
-  def create_user_link
-    links.build(:organisation_id => OrganisationSession.id, 
-                    :rol => rolname, :creator => false) {|link| 
-      link.abbreviation = abbreviation 
-    }
-  end
-
-  def destroy_links
-    links.destroy_all
   end
 
 end

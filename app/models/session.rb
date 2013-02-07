@@ -28,15 +28,19 @@ class Session < BaseService
   end
 
 private
+  # Checks if the user confirmed the registration if not it resends the
+  # confirmation email and returns a string 'resend_registration_email'
   def check_or_resend_registration_email
     unless user.confirmed_registration?
       RegistrationMailer.send_registration(self).deliver
+
       'resend_registration_email'
     else
       true
     end
   end
 
+  # Check in the links if the user is active
   def check_active_user
     unless user.links.first.active?
       'inactive_user'

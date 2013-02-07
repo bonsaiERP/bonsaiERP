@@ -45,8 +45,39 @@ describe RegistrationsController do
   end
 
   describe "POST /create" do
-    it "creates and send email" do
-      post :create, tenant: tenant
+    it "creates" do
+      Registration.any_instance.stub(register: true)
+      RegistrationMailer.should_receive(:send_registration).and_return(stub(deliver: true))
+
+      post :create, registration: {tenant: tenant,email: 'test@mail.com'}
+
+      response.should redirect_to(registrations_path)
+      flash[:notice].should eq("Le hemos enviado un email a test@mail.com con instrucciones para completar su registro.")
+    end
+  end
+
+  describe "redirections" do
+    before(:each) do
+      request.stub(subdomain: 'asubdomain')
+    end
+
+    it "redirects to login" do
+      PgTools.stub(schema_exists?: true)
+
+      {get: :new, post: :create}.each do |m, action|
+        send(m, action)
+
+        response.should redirect_to new_session_url(host: UrlTools.domain)
+        flash[:alert].should eq('Por favor ingrese.')
+      end
+    end
+
+
+    it "redirects to registration without domain" do
+      get :new
+
+      response.should redirect_to new_registration_url(host: UrlTools.domain)
+      response.redirect_url.should_not match(/asubdomain/)
     end
   end
 

@@ -25,10 +25,6 @@ class Registration < BaseService
     end
   end
 
-  def resend_registration_email
-
-  end
-
 private
   def create_user
     @user = User.new(email: email, password: password)
