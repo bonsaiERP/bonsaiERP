@@ -20,7 +20,9 @@ describe AdminUser do
       User.any_instance.stub(save: true)
 
       ad = AdminUser.new(User.new(valid_attributes))
+      # Check email is send
       RegistrationMailer.should_receive(:user_registration).with(ad).and_return(stub(deliver: true))
+
       ad.add_user.should be_true
 
       ad.user.password.should_not be_blank

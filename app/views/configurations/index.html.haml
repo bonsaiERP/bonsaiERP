@@ -21,12 +21,17 @@
         %th
       - @users.each do |user|
         %tr
-          %td= link_to user, user
-          %td= user.email
-          %td= User.roles_hash[user.rol]
-          %td{:class => user.active }
           %td
-            = link_to "editar", edit_user_user_path(user), :class => 'edit', :title => 'Editar usuario'
+            -#= link_to user, user
+            = user
+          %td
+            = user.email
+          %td
+            = User.roles_hash[user.rol]
+          %td
+            %i.b(class="icon-#{user.active}")
+          %td
+            -#= link_to icon_edit, edit_admin_user_path(user), title: 'Editar usuario', rel: 'tooltip', class: 'dark'
 
   #organisation
     %p

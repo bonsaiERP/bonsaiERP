@@ -28,7 +28,7 @@
   .row-fluid
     .span6= f.input :address, :label => 'Dirección', :as => :text, :input_html => {:rows => 4, :cols => 35}
   
-    .span6= f.input :rolname, :collection => User.get_roles.slice(1, 3), :label => 'Rol'
+    .span6= f.input :rol, :collection => User.get_roles.slice(1, 3), :label => 'Rol'
 
   = render 'users/permissions'
 
@@ -36,19 +36,15 @@
     = f.submit "Adicionar usuario", class: 'btn btn-success b'
 
 
-:javascript
-  $(function() {
+:coffeescript
+  $(->
+    markRolColumn = ->
+      $('#roles td').removeClass('marked')
+      try
+        ind = $('th.' + $('#user_rol').val() ).data('index')
+        $('#roles td:nth-child(' + ind + ')').addClass('marked')
+      catch e
 
-    function markRolColumn() {
-      $('#roles td').removeClass('marked');
- 
-      if($('#user_rolname').val() != "") {
-        var ind = $('th.' + $('#user_rolname').val() ).data('index');
-        $('#roles td:nth-child(' + ind + ')').addClass('marked');
-      }
-    }
-
-    $('#user_rolname').on('change keyup', function () { markRolColumn(); });
-
-    markRolColumn();
-  })
+    $('body').on('change keyup', '#user_rol', markRolColumn)
+    markRolColumn()
+  )

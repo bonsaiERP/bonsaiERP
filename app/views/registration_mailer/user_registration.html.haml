@@ -4,4 +4,4 @@
   Bienvenido a <span style="font-weight: bold; font-style: italic;">#{APP_NAME}</span>, ha recibido este email por que a sido adicionado para formar parte del equipo de #{@name}, por favor complete su registro
 
 
-  =link_to "haciendo click es en este vínculo", url_for(controller: 'registrations', action: 'show', id: @user.confirmation_token, host: UrlTools.domain, subdomain: @tenant, protocol: UrlTools.protocol), style: 'font-weight:bold'
+  =link_to "haciendo click es en este vínculo", url_for(controller: 'registrations', action: 'new_user', id: @user.confirmation_token, host: UrlTools.domain, subdomain: @tenant, protocol: UrlTools.protocol), style: 'font-weight:bold'

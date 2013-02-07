@@ -2,29 +2,49 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class RegistrationsController < ApplicationController
-  before_filter :check_tenant
   skip_before_filter :set_tenant, :check_authorization!
 
+  # GET /registrations/new
   def new
     @registration = Registration.new
   end
 
+  # GET /registrations/:id
   def show
-    @organisation = current_organisation
+    check_registration_tenant
+    reset_session
+    @user = current_organisation.users.find_by_confirmation_token(params[:id])
 
-    unless @organisation
-      redirect_to new_registration_url(host: UrlTools.domain), alert: 'La empresa no existe, registrese por favor.'
-      return
-    end
-
-    @user = @organisation.users.find_by_confirmation_token(params[:id])
     if @user && @user.confirm_registration
-      reset_session
-      session[:user_id], session[:tenant_creation] = @user.id, true
+      session[:user_id] = @user.id
       redirect_to new_organisation_path, notice: 'Ya esta registrado, ahora ingrese los datos de su empresa.'
+    elsif @user
+      # TODO: Create a view
+      render text: 'Error'
+    else
+      redirect_to "http://#{DOMAIN}?error_conf_token"
     end
   end
 
+  # GET /registrations/new_user
+  def new_user
+    check_new_user
+    reset_session
+    @user = current_organisation.users.find_by_confirmation_token(params[:id])
+
+    if @user && @user.confirm_registration
+      session[:user_id] = @user.id
+      flash[:notice] = 'Ha confirmado su registro correctamente.'
+      redirect_to dashboard_path and return
+    elsif @user
+      # TODO: Create a view
+      render text: 'Error' and return
+    else
+      redirect_to "http://#{DOMAIN}?error_conf_token" and return
+    end
+  end
+
+  # POST /registrations
   def create
     @registration = Registration.new(registration_params)
 
@@ -41,11 +61,17 @@ private
     params.require(:registration).permit(:name, :tenant, :email, :password, :password_confirmation)
   end
 
-  def check_tenant
+  def check_registration_tenant
     if request.subdomain.present? && PgTools.schema_exists?(request.subdomain)
       redirect_to new_session_url(host: UrlTools.domain), alert: "Por favor ingrese."
       return
-    elsif request.subdomain.present?
+    elsif request.subdomain.blank?
+      redirect_to new_registration_url(host: UrlTools.domain) and return
+    end
+  end
+
+  def check_new_user
+    unless PgTools.schema_exists?(request.subdomain)
       redirect_to new_registration_url(host: UrlTools.domain) and return
     end
   end

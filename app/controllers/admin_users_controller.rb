@@ -4,12 +4,12 @@ class AdminUsersController < ApplicationController
   end
 
   def create
-    user_admin = AdminUser.new(User.new(user_params))
+    admin_user = AdminUser.new(User.new(user_params))
 
-    if user_admin.add_user
+    if admin_user.add_user
       redirect_to configurations_path,  notice: "El usuario ha sido adicionado."
     else
-      @user = user_admin.user
+      @user = admin_user.user
       render 'new'
     end
   end

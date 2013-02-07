@@ -13,11 +13,17 @@ describe RegistrationsController do
   end
 
   describe "GET /show" do
+    let(:current_organisation) { build(:organisation, id: 1) }
+
+    before(:each) do
+      controller.stub(current_organisation: current_organisation)
+    end
+
     it 'confirm token' do
-      org = build(:organisation, id: 1)
-      org.stub_chain(:users, find_by_confirmation_token: user = build(:user, id: 1))
+      current_organisation.stub_chain(:users, find_by_confirmation_token: user = build(:user, id: 1))
       user.stub(save: true)
-      controller.stub!(current_organisation: org)
+
+      request.stub(subdomain: tenant)
 
       get 'show', :id => 1, :token => "demo123"
 
@@ -25,21 +31,11 @@ describe RegistrationsController do
       session[:user_id].should == 1
     end
 
-    it 'redirect to sign_in if tenant created' do
-      request.stub!(subdomain: tenant)
-      PgTools.stub!(schema_exists?: true)
-
-      get 'show', :id => 1, :token => "demo123"
-
-      response.should redirect_to new_session_url(host: UrlTools.domain)
-      flash[:alert].should_not be_blank
-    end
-
     it 'redirect to registration if wrong token' do
-      get 'show', :id => 1, :token => '123'
+      request.stub(subdomain: tenant)
+      get 'show', id: 1, token: 'token123'
 
-      response.should redirect_to new_registration_url(host: UrlTools.domain)
-      flash[:alert].should_not be_blank
+      response.should redirect_to "http://#{DOMAIN}?error_conf_token"
     end
 
   end
@@ -61,23 +57,46 @@ describe RegistrationsController do
       request.stub(subdomain: 'asubdomain')
     end
 
-    it "redirects to login" do
-      PgTools.stub(schema_exists?: true)
+    #it "redirects to login" do
+      #PgTools.stub(schema_exists?: true)
 
-      {get: :new, post: :create}.each do |m, action|
-        send(m, action)
+      #{get: :show, get: :new_user}.each do |m, action|
+        #send(m, action, {id: 1})
 
-        response.should redirect_to new_session_url(host: UrlTools.domain)
-        flash[:alert].should eq('Por favor ingrese.')
-      end
+        #response.should redirect_to new_session_url(host: UrlTools.domain)
+        #flash[:alert].should eq('Por favor ingrese.')
+      #end
+    #end
+
+    #it "redirects to registration without domain" do
+      #PgTools.stub(schema_exists?: false)
+      #request.stub(subdomain: '')
+
+      #{get: :show, get: :new_user}.each do |m, action|
+        #send(m, action, {id: 1})
+
+        #response.should redirect_to new_registration_url(host: UrlTools.domain)
+      #end
+    #end
+  end
+
+  describe "get /new_user" do
+    let(:current_organisation) { build(:organisation, id: 1) }
+
+    before(:each) do
+      controller.stub(current_organisation: current_organisation)
     end
 
+    it "confirm new user" do
+      session[:user_id].should be_blank
+      current_organisation.stub_chain(:users, find_by_confirmation_token: user = build(:user, id: 1))
+      user.stub(save: true)
+      PgTools.stub(schema_exists?: true)
+      
+      get :new_user, id: 'token123'
 
-    it "redirects to registration without domain" do
-      get :new
-
-      response.should redirect_to new_registration_url(host: UrlTools.domain)
-      response.redirect_url.should_not match(/asubdomain/)
+      response.should redirect_to dashboard_path
+      flash[:notice].should eq('Ha confirmado su registro correctamente.')
     end
   end
 

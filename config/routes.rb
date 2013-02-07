@@ -1,6 +1,6 @@
 Bonsaierp::Application.routes.draw do
 
-  resources :admin_users
+  resources :admin_users, except: [:index, :destroy]
 
   resources :configurations, only: ['index']
 
@@ -106,18 +106,21 @@ Bonsaierp::Application.routes.draw do
   #resources :currencies
 
   resources :organisations do
-    get :check_schema,  :on => :member
-    get :create_tenant, :on => :member
-    get :select,        :on => :member
-    get :create_data,   :on => :member
+    get :check_schema,  on: :member
+    get :create_tenant, on: :member
+    get :select,        on: :member
+    get :create_data,   on: :member
 
-    get  :edit_preferences,   :on => :member
-    put  :update_preferences, :on => :member
+    get  :edit_preferences,   on: :member
+    put  :update_preferences, on: :member
   end
 
   #resources :countries
 
-  resources :registrations
+  resources :registrations do
+    get :new_user, on: :member
+  end
+
   get "/sign_up" => "registrations#new"
 
   # Password
@@ -134,17 +137,17 @@ Bonsaierp::Application.routes.draw do
   get '/dashboard' => 'dashboard#index', :as => :dashboard
 
   # Rails Metal
-  get "/client_autocomplete"   => AutocompleteApp.action(:client)
-  get "/supplier_autocomplete" => AutocompleteApp.action(:supplier)
-  get "/staff_autocomplete"    => AutocompleteApp.action(:staff)
-  get "/item_autocomplete"     => AutocompleteApp.action(:item)
+  #get "/client_autocomplete"   => AutocompleteApp.action(:client)
+  #get "/supplier_autocomplete" => AutocompleteApp.action(:supplier)
+  #get "/staff_autocomplete"    => AutocompleteApp.action(:staff)
+  #get "/item_autocomplete"     => AutocompleteApp.action(:item)
 
-  get "/client_account_autocomplete"   => AutocompleteApp.action(:client_account)
-  get "/supplier_account_autocomplete" => AutocompleteApp.action(:supplier_account)
-  get "/staff_account_autocomplete"    => AutocompleteApp.action(:staff_account)
-  get "/item_account_autocomplete"     => AutocompleteApp.action(:item_account)
-  get "/exchange_rates" => AutocompleteApp.action(:get_rates)
-  get "/items_stock" => AutocompleteApp.action(:items_stock)
+  #get "/client_account_autocomplete"   => AutocompleteApp.action(:client_account)
+  #get "/supplier_account_autocomplete" => AutocompleteApp.action(:supplier_account)
+  #get "/staff_account_autocomplete"    => AutocompleteApp.action(:staff_account)
+  #get "/item_account_autocomplete"     => AutocompleteApp.action(:item_account)
+  #get "/exchange_rates" => AutocompleteApp.action(:get_rates)
+  #get "/items_stock" => AutocompleteApp.action(:items_stock)
 
   root :to => 'sessions#new'
 end
