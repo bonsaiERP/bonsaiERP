@@ -10,7 +10,7 @@ describe AdminUser do
   let(:valid_attributes) {
     {
       email: 'new_user@mail.com', first_name: 'New', last_name: 'User',
-      rol: 'gerency'
+      rol: 'group'
     }
   }
 
@@ -20,16 +20,17 @@ describe AdminUser do
       User.any_instance.stub(save: true)
 
       ad = AdminUser.new(User.new(valid_attributes))
+      RegistrationMailer.should_receive(:user_registration).with(ad).and_return(stub(deliver: true))
       ad.add_user.should be_true
 
       ad.user.password.should_not be_blank
       ad.user.should be_change_default_password
-      ad.user.rol.should eq('gerency')
+      ad.user.rol.should eq('group')
       ad.user.should be_active
 
       lnk = ad.user.links.first
       lnk.organisation_id.should eq(15)
-      lnk.rol.should eq('gerency')
+      lnk.rol.should eq('group')
       lnk.should be_active
     end
 
@@ -40,7 +41,7 @@ describe AdminUser do
       ad = AdminUser.new(User.new(valid_attributes.merge(rol: 'admin')))
       ad.add_user.should be_true
       
-      ad.user.links.first.rol.should eq('operations')
+      ad.user.links.first.rol.should eq('other')
     end
   end
 end

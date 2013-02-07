@@ -12,11 +12,11 @@ describe RegistrationMailer do
   end
   let(:tenant) { registration.tenant }
 
-  it 'should send and email to the user' do
+  it '#send_registration' do
     email = RegistrationMailer.send_registration(registration)
 
 
-    email.subject.should eq(I18n.t("bonsai.registration", domain: DOMAIN))
+    email.subject.should eq(I18n.t("email.registration.send", app_name: APP_NAME))
  
     email.to.should == [user.email]
     email.from.should eq(["register@#{DOMAIN}"])
@@ -24,5 +24,23 @@ describe RegistrationMailer do
 
     link = "http://#{tenant}.#{DOMAIN}/registrations/#{user.confirmation_token}"
     email.body.should have_selector("a[href='#{link}']")
+  end
+
+  it "#user_registration" do
+    OrganisationSession.organisation =  build :organisation, name: 'Club Vegetariano', tenant: 'clubv'
+
+    email = RegistrationMailer.user_registration(registration)
+
+
+    email.subject.should eq(I18n.t("email.registration.user", app_name: APP_NAME, company: 'Club Vegetariano'))
+ 
+    email.to.should == [user.email]
+    email.from.should eq(["register@#{DOMAIN}"])
+
+
+    link = "http://clubv.#{DOMAIN}/registrations/#{user.confirmation_token}"
+    email.body.should have_selector("a[href='#{link}']")
+
+    email.body.should have_text("a sido adicionado para formar parte del equipo de Club Vegetariano")
   end
 end

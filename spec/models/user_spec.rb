@@ -48,6 +48,24 @@ describe User do
     end
   end
 
+  it "#to_s" do
+    u = User.new(email: "test@mail.com")
+
+    u.to_s.should eq("test@mail.com")
+
+    u = User.new(email: "test@mail.com", first_name: "Violeta", last_name: "Barroso")
+    
+    u.to_s.should eq('Violeta Barroso')
+
+    u = User.new(email: "test@mail.com", first_name: "Amaru")
+    
+    u.to_s.should eq('Amaru')
+
+    u = User.new(email: "test@mail.com", last_name: "Estrella")
+    
+    u.to_s.should eq('Estrella')
+  end
+
   context "Tenant" do
     before(:each) do
       OrganisationSession.organisation = build :organisation, id: 100

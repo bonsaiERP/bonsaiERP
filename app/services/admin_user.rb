@@ -9,36 +9,21 @@ class AdminUser
     @user = usr
   end
 
-  # Adds a new user for the company
-  def add_company_user(params)
-    self.attributes = params
-    self.email = params[:email]
-
-    set_random_password
-    self.change_default_password = true
-    
-    res = true
-    
-    u = User.new_user(params[:email], params[:password])
-    u.password = self.temp_password
-    u.rol = params[:rolname]
-    u.change_default_password = true
-    u.send_email = true
-    res = u.save
-    @created_user = u
-
-    res
-  end
-
   def add_user
     user.links.build(organisation_id: OrganisationSession.id, rol: get_user_rol)
     set_user
 
-    user.save
+    if user.save
+      RegistrationMailer.user_registration(self).deliver
+    else
+      false
+    end
   end
+
 private
   def set_user
     user.password = random_password
+    user.set_confirmation_token
     user.change_default_password = true
   end
 

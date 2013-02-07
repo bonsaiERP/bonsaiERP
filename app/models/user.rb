@@ -29,7 +29,7 @@ class User < ActiveRecord::Base
   ########################################
   delegate :name, :currency, :address, :tenant, to: :organisation, prefix: true, allow_nil: true
   delegate :active, :rol, :rol=, to: :link, prefix: true
-  delegate :master_account, to: :link
+  delegate :master_account?, to: :link
 
   ########################################
   # Methods
@@ -42,39 +42,16 @@ class User < ActiveRecord::Base
   end
 
   def to_s
-    unless first_name.blank? and last_name.blank?
-      %Q(#{first_name} #{last_name})
+    if first_name.present? || last_name.present?
+      %Q(#{first_name} #{last_name}).strip
     else
       %Q(#{email})
-    end
-  end
-
-  def master_account_for?(org_id)
-    link = links.find {|v| v.organisation_id == org_id }
-    if link
-      link.master_account?
-    else
-      false
     end
   end
 
   # Returns the link with the organissation one is logged in
   def link
     @link ||= active_links.find_by_organisation_id(OrganisationSession.id)
-  end
-
-  def send_email?
-    !!send_email
-  end
-
-  # returns the organisation if the OrganisationSession is set
-  def organisation
-    Organisation.find(OrganisationSession.id)
-  end
-
-  # Checks the user and the priviledges
-  def check_organisation?(organisation_id)
-    organisations.map(&:id).include?(organisation_id.to_i)
   end
 
   # Updates the priviledges of a user
