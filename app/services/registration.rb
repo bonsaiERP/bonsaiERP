@@ -28,6 +28,7 @@ class Registration < BaseService
 private
   def create_user
     @user = User.new(email: email, password: password)
+    @user.set_confirmation_token
     @user.links.build(organisation_id: organisation.id, tenant: organisation.tenant,
                       rol: 'admin', active: true, master_account: true)
     @user.save

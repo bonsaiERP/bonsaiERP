@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
 
   include Models::User::Authentication
 
-  ROLES = %w(admin gerency operations).freeze
+  ROLES = %w(admin group other).freeze
 
   ########################################
   # Relationships
@@ -28,13 +28,15 @@ class User < ActiveRecord::Base
   # Delegations
   ########################################
   delegate :name, :currency, :address, :tenant, to: :organisation, prefix: true, allow_nil: true
+  delegate :active, :rol, :rol=, to: :link, prefix: true
+  delegate :master_account, to: :link
 
   ########################################
   # Methods
   ROLES.each do |v|
     class_eval <<-CODE, __FILE__, __LINE__ + 1
       def is_#{v}?
-        rol == "#{v}"
+        link_rol == "#{v}"
       end
     CODE
   end
@@ -56,9 +58,9 @@ class User < ActiveRecord::Base
     end
   end
 
-  # Returns the link with te organissation one is logged in
+  # Returns the link with the organissation one is logged in
   def link
-    @link ||= links.find_by_organisation_id(OrganisationSession.id)
+    @link ||= active_links.find_by_organisation_id(OrganisationSession.id)
   end
 
   def send_email?
@@ -75,64 +77,9 @@ class User < ActiveRecord::Base
     organisations.map(&:id).include?(organisation_id.to_i)
   end
 
-  def update_default_password(params)
-    pwd, pwd_conf = params[:password], params[:password_confirmation]
-
-    unless pwd == pwd_conf
-      self.errors[:password] << I18n.t("errors.messages.user.password_confirmation")
-      return false
-    end
-
-    PgTools.reset_search_path
-    u = User.find_by_id(UserSession.id)
-    u.change_default_password = false
-    u.password = pwd
-
-    u.save
-  end
-
-  def update_password(params)
-    return false if change_default_password?
-
-    unless authenticate(params[:old_password])
-      self.errors[:old_password] << I18n.t("errors.messages.user.wrong_password")
-      return false
-    end
-
-    unless params[:password] === params[:password_confirmation]
-      self.errors[:password] << I18n.t("errors.messages.user.password_confirmation")
-      return false
-    end
-
-    self.password = params[:password]
-
-    self.save
-  end
-
-  # Adds a new user for the company
-  def add_company_user(params)
-    self.attributes = params
-    self.email = params[:email]
-
-    set_random_password
-    self.change_default_password = true
-    
-    res = true
-    
-    u = User.new_user(params[:email], params[:password])
-    u.password = self.temp_password
-    u.rol = params[:rolname]
-    u.change_default_password = true
-    u.send_email = true
-    res = u.save
-    @created_user = u
-
-    res
-  end
-
   # Updates the priviledges of a user
   def update_user_role(params)
-    self.link.update_attributes(:rol => params[:rolname], :active => params[:active_link])
+    self.link.update_attributes(rol: params[:rolname], active: params[:active_link])
   end
 
   def set_auth_token
@@ -143,6 +90,10 @@ class User < ActiveRecord::Base
     self.update_attribute(:auth_token, '')
   end
 
+  def set_confirmation_token
+    self.confirmation_token = SecureRandom.urlsafe_base64(32)
+  end
+
   # returns translated roles
   def self.get_roles
     ["Admin", "Privilegiado", "Operaciones"].zip(ROLES)
@@ -151,15 +102,4 @@ class User < ActiveRecord::Base
   def self.roles_hash
     Hash[ROLES.zip(["Gerencia", "Administración", "Operaciones"])]
   end
-
-  def update_user_attributes(params)
-    rol = params[:rolname]
-    params.delete(:email)
-    rol = ROLES[1,2].last unless ROLES[1,2].include?(rol)
-    self.attributes = params
-    self.rol = rol
-
-    self.save
-  end
-
 end
