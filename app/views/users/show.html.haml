@@ -1,33 +1,36 @@
-- present @user do |presenter|
-  - content_for :links do
-    .span6 &nbsp;
-    .links.span6
-      = presenter.edit_link
-      = presenter.password_link
+- content_for :links do
+  .span6 &nbsp;
 
-  .page-header
-    %h1= @user
+%h1= current_user
 
-  .input
-    %label Nombres
-    = @user.first_name
 
-  .input
-    %label Apellidos
-    = @user.last_name
-  .clear
+= link_to edit_user_path(current_user), class: 'btn btn-primary' do
+  %i.icon-user
+  Actualizar datos
 
-  .input
-    %label Teléfono
-    = @user.phone
-  .input
-    %label Móvil
-    = @user.mobile
-  .clear
+= link_to edit_user_password_path(current_user), class: 'btn btn-primary' do
+  %i.icon-key
+  Cambiar contraseña
 
-  .input
-    %label Email
-    = mail_to @user.email unless @user.email.blank?
-  .input
-    %label Dirección
-    = nl2br @user.address
+.input
+  %label Nombres
+  = current_user.first_name
+
+.input
+  %label Apellidos
+  = current_user.last_name
+
+.input
+  %label Teléfono
+  = current_user.phone
+.input
+  %label Móvil
+  = current_user.mobile
+.clear
+
+.input
+  %label Email
+  = mail_to current_user.email unless current_user.email.blank?
+.input
+  %label Dirección
+  = nl2br current_user.address

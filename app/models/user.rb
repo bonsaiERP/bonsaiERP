@@ -2,12 +2,14 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class User < ActiveRecord::Base
-
   self.table_name = 'common.users'
 
+  # Includes
   include Models::User::Authentication
 
   ROLES = %w(admin group other).freeze
+
+  attr_accessor :old_password
 
   ########################################
   # Relationships
@@ -21,8 +23,9 @@ class User < ActiveRecord::Base
   validates_email_format_of :email, message: I18n.t("errors.messages.user.email")
   validates :email, presence: true, uniqueness: {if: :email_changed?}
 
-  with_options :if => :new_record? do |u|
-    u.validates :password, length: {minimum: PASSWORD_LENGTH }, confirmation: true
+  with_options if: :change_password? do |u|
+    u.validates :password, length: {within: PASSWORD_LENGTH..100 }, confirmation: true
+    u.validate :valid_password_confirmation
   end
 
   # Delegations
@@ -67,6 +70,16 @@ class User < ActiveRecord::Base
     self.update_attribute(:auth_token, '')
   end
 
+  # Especial method to detect if the update is when the
+  # change_default_password? is true
+  # @param attrs [Hash]
+  def update_password(attrs = {})
+    return false unless check_old_password?(attrs)
+    assign_password_attributes(attrs)
+
+    self.save
+  end
+
   def set_confirmation_token
     self.confirmation_token = SecureRandom.urlsafe_base64(32)
   end
@@ -79,4 +92,32 @@ class User < ActiveRecord::Base
   def self.roles_hash
     Hash[ROLES.zip(["Gerencia", "Administración", "Operaciones"])]
   end
+
+private
+  def change_password?
+    new_record? || password.present?
+  end
+
+  def valid_password_confirmation
+    self.errors.add(:password, I18n.t('errors.messages.confirmation')) unless password === password_confirmation
+  end
+
+  def assign_password_attributes(attrs)
+    [:old_password, :password, :password_confirmation].each do |attr|
+      self.send :"#{attr}=", attrs[attr]
+    end
+  end
+
+  def check_old_password?(attrs)
+    return true if change_default_password?
+
+    return true if valid_password?(attrs[:old_password])
+
+    assign_password_attributes(attrs)
+    valid?
+    self.errors.add(:old_password, I18n.t('errors.messages.invalid'))
+
+    false
+  end
+
 end

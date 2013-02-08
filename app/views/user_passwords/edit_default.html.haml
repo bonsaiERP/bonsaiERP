@@ -1,0 +1,15 @@
+%h1 Cambiar contraseña
+
+%h4.n.text-success
+  Excelente cambia tu contraseña
+
+= simple_form_for current_user, url: user_password_path(current_user) do |f|
+  =f.input :password, label: 'Nueva contraseña'
+  =f.input :password_confirmation, label: 'Confirmar nueva contraseña'
+  .form-actions
+    =f.submit 'Cambiar contraseña', class: 'btn btn-success'
+
+:javascript
+  $(function() {
+    $('#change-default-password').hide()
+  })

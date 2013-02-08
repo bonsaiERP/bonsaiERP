@@ -12,7 +12,7 @@ class Registration < BaseService
   validates :tenant, presence: true, length: {within: 2..50}, format: {with: /\A[a-z0-9]+\z/}
   validate :valid_unique_tenant
 
-  validates :password, presence: true, confirmation: true, length: {within: 8..100}
+  validates :password, presence: true, confirmation: true, length: {within: PASSWORD_LENGTH..100}
   validates_presence_of :password_confirmation
   validates_email_format_of :email
 

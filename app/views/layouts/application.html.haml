@@ -46,6 +46,9 @@
       #cont
         .container-fluid
           = render "layouts/flash", flash: flash
+          
+          = render "users/change_default_password" if current_user.change_default_password?
+
           = yield
           .clear
       #footer

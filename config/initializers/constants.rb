@@ -1,3 +1,3 @@
-PASSWORD_LENGTH=7
-DOMAIN='bonsaierp.com'
-APP_NAME='bonsaiERP'
+PASSWORD_LENGTH = 8
+DOMAIN = 'bonsaierp.com'
+APP_NAME = 'bonsaiERP'

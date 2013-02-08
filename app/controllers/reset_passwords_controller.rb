@@ -39,8 +39,7 @@ class ResetPasswordsController < ApplicationController
     end
   end
 
-  private
-
+private
   def check_if_can_reset_password
     id = params[:id] || params[:user][:id]
     token = params[:reset_password_token] || params[:user][:reset_password_token]

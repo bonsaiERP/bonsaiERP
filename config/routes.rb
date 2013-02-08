@@ -88,6 +88,8 @@ Bonsaierp::Application.routes.draw do
 
   resources :organisations, only: ['new', 'update']
 
+  resources :user_passwords, only: ['edit', 'update']
+
   resources :users, only: ['show', 'edit', 'update']
 
   get '/dashboard' => 'dashboard#index', :as => :dashboard

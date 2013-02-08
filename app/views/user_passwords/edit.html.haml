@@ -1,0 +1,8 @@
+%h1 Cambiar contraseña
+
+= simple_form_for current_user, url: user_password_path(current_user) do |f|
+  =f.input :old_password, label: 'Antigua contraseña'
+  =f.input :password, label: 'Nueva contraseña'
+  =f.input :password_confirmation, label: 'Confirmar nueva contraseña'
+  .form-actions
+    =f.submit 'Cambiar contraseña', class: 'btn btn-success'

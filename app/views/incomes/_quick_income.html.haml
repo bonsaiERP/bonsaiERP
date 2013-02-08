@@ -22,15 +22,15 @@
 
 :coffeescript
   (($) ->
-    $('#quick-income-link').live 'click', ->
+    $('#quick-income-link').bind 'click', ->
       $('.quick-income-form').show('medium')
       $(this).hide('medium')
 
-    $('#quick-income-hide-link').live 'click', ->
+    $('#quick-income-hide-link').bind 'click', ->
       $('.quick-income-form').hide('medium')
       $('#quick-income-link').show('medium')
 
-    $('.contact-form').live('new-contact', (event, resp) ->
+    $('.contact-form').on('new-contact', (event, resp) ->
       $('.contact_id').val(resp.matchcode).data('value', resp.matchcode)
       .prev().val(resp.id)
     )

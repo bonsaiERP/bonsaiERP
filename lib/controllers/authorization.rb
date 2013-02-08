@@ -10,8 +10,10 @@ private
     check_current_user!
     # TODO check due_date
     unless authorized_user?
-      flash[:alert] = "Usted no tiene permiso para visitar esta página" 
-      redirect_to :back and return
+      flash[:alert] = "Usted ha sido redireccionado por que no tiene los privilegios."
+      redir = request.referer.present? ? :back : dashboard_path
+
+      redirect_to redir and return
     end
   end
 
@@ -63,7 +65,9 @@ private
       staffs: true,
       items: true,
       units: true,
-      users: true
+      users: true,
+      user_passwords: true,
+      dashboard: true
     }
   end
 
@@ -87,7 +91,9 @@ private
       staffs: false,
       items: true,
       units: true,
-      users: true
+      users: true,
+      user_passwords: true,
+      dashboard: true
     }
   end
 
@@ -111,7 +117,9 @@ private
       staffs: false,
       items: true,
       units: true,
-      users: true
+      users: true,
+      user_passwords: true,
+      dashboard: true
     }
   end
 
