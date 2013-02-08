@@ -8,6 +8,11 @@ describe UserPasswordsController do
     controller.stub(current_user: user)
   end
 
+  it "checks stubed methods" do
+    [:update_password].each do |m|
+      User.should be_method_defined(m)
+    end
+  end
 
   describe "GET /user_passwords/:id/edit" do
     it "change_default_password" do
@@ -30,7 +35,7 @@ describe UserPasswordsController do
   describe "PUT /user_passwords/:id" do
     # A user that has it's own password
     it "updates" do
-      user.stub(save: true, change_default_password?: false)
+      user.stub(update_password: true, change_default_password?: false)
 
       put :update, user: {password: '1234', password_confirmation: '1234'}
 

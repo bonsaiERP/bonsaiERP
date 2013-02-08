@@ -75,6 +75,7 @@ class User < ActiveRecord::Base
   # @param attrs [Hash]
   def update_password(attrs = {})
     return false unless check_old_password?(attrs)
+    self.change_default_password = false
     assign_password_attributes(attrs)
 
     self.save

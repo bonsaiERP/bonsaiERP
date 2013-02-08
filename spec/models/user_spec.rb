@@ -138,5 +138,17 @@ describe User do
       u = User.find(u.id)
       u.should be_valid_password('Demo1234')
     end
+
+    it "should change change_default_password" do
+      u = User.create!(email: 'test@mail.com', password: 'demo1234', password_confirmation: 'demo1234', change_default_password: true)
+
+      u.should be_change_default_password
+
+      u = User.find(u.id)
+
+      u.update_password(password: 'Demo1234', password_confirmation: 'Demo1234').should be_true
+
+      u.should_not be_change_default_password
+    end
   end
 end
