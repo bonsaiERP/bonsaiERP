@@ -1,4 +1,8 @@
 class AdminUsersController < ApplicationController
+  def show
+    @user = get_user
+  end
+
   def new
     @user = User.new
   end
@@ -20,7 +24,17 @@ class AdminUsersController < ApplicationController
   def update
   end
 
+  # Deactivate user in a organisation
+  # DELETE /admin_users/:id
+  def destroy
+    @user = get_user
+  end
+
 private
+  def get_user
+    current_organisation.users.find(params[:id])
+  end
+
   def user_params
     params.require(:user).permit(:email, :first_name, :last_name, :phone,:mobile, :address, :rol)
   end

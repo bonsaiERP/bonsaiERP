@@ -4,71 +4,115 @@
 # module to handle all authorization task
 module Controllers::Authorization
 
-protected
+private
   # general method to check authorization
   def check_authorization!
-    if current_user
-      # TODO check due_date
-      unless check_user_by_rol(current_user.link_rol, controller_name, action_name)
-        redirect_to "/422" and return
-      end
-    else
-      redirect_to "/users/sign_in" and return
+    check_current_user!
+    # TODO check due_date
+    unless authorized_user?
+      flash[:alert] = "Usted no tiene permiso para visitar esta página" 
+      redirect_to :back and return
     end
   end
 
-  # returns true or false depending
-  def check_user_by_rol(rol, controller, action)
-    return false unless User::ROLES.include?(rol)
-    check_authorization(rol, controller, action)
+  def check_current_user!
+    unless current_user.present?
+      flash[:alert] = "Por favor ingrese."
+      redirect_to new_session_url(subdomain: false) and return
+    end
   end
 
-  def check_authorization(rol, controller, action)
+  # Checks the white list for controllers
+  def authorized_user?
+    rol = current_user.link_rol
     h = send(:"#{rol}_hash")
 
-    if h[controller].nil?
-      true
-    elsif h[controller] === false or h[controller] === true
-      h[controller]
+    if h[controller_sym].is_a?(Hash)
+      h[controller_sym][action_sym]
     else
-      if h[controller] and h[controller][action].nil?
-        true
-      else
-        h[controller][action]
-      end
+      !!h[controller_sym]
     end
+  end
+
+  def controller_sym
+    controller_name.to_sym
+  end
+
+  def action_sym
+    action_name.to_sym
   end
 
   #Hashes of priviledges
   def admin_hash
-    {}
+    {
+      admin_users: true,
+      configurations: true,
+      tests: true,
+      stocks: true,
+      inventory_operations: true,
+      account_ledgers: true,
+      banks: true,
+      cashes: true,
+      devolution: true,
+      payments: true,
+      projects: true,
+      incomes: true,
+      expenses: true,
+      stores: true,
+      contacts: true,
+      staffs: true,
+      items: true,
+      units: true,
+      users: true
+    }
   end
 
   def group_hash
-    admin_hash.merge(
-      'users' => {'add_user'=> false, 'create_user' => false, 'edit_user' => false, 'update_user' => false, 'edit' => false, 'update' => false},
-      'taxes' => {'index' => false, 'show' => false, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false},
-      'loans' => {'new' => false, 'create' => false}
-    )
+    {
+      admin_users: {show: true},
+      configurations: {index: true},
+      tests: false,
+      stocks: true,
+      inventory_operations: true,
+      account_ledgers: true,
+      banks: true,
+      cashes: true,
+      devolution: true,
+      payments: true,
+      projects: true,
+      incomes: true,
+      expenses: true,
+      stores: true,
+      contacts: true,
+      staffs: false,
+      items: true,
+      units: true,
+      users: true
+    }
   end
 
   def other_hash
-    group_hash.merge(
-      'banks' => false, 'cashes' => false, 'staffs' => false,
-      'account_ledgers' => {
-        'index' => false, 'show' => true, 'new' => false, 'new_transference' => false,
-        'conciliate' => false, 'create' => false, 'destroy' => false, 
-        'transference' => false, 'update' => false
-      },
-      'inventory_operations' => {'index' => true, 'show' => true, 'new' => false,
-         'create' => false, 'edit' => false, 'update' => false, 'destroy' => false, 
-         'select_store' => true, 'new_transaction' => true, 'create_transaction' => true},
-      'incomes' => {'approve' => false},
-      'buys' => false,
-      'stores' => {'new' => false, 'edit' => false, 'update' => false, 'create' => false, 'destroy' => false},
-      'payments' => {'destroy' => false, 'new_devolution' => false, 'devolution' => false},
-      'projects' => {'index' => true, 'new' => false, 'create' => false, 'edit' => false, 'update' => false, 'destroy' => false, 'show' => true}
-    )
+    {
+      admin_users: false,
+      configurations: false,
+      tests: false,
+      stocks: true,
+      inventory_operations: false,
+      account_ledgers: {show: true},
+      banks: false,
+      cashes: false,
+      devolution: false,
+      payments: true,
+      projects: false,
+      incomes: true,
+      expenses: true,
+      stores: false,
+      contacts: true,
+      staffs: false,
+      items: true,
+      units: true,
+      users: true
+    }
   end
 
 end

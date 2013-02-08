@@ -24,17 +24,10 @@ Bonsaierp::Application.routes.draw do
     end
   end
 
-  resources :accounts
-
   resources :account_ledgers do
-    get  :new_transference, :on => :collection
-    post :transference,     :on => :collection
-    member do
-      put  :conciliate
-      put  :personal
-    end
+    post :transference, on: :collection
+    put :conciliate, on: :member
   end
-  # put 'account_ledgers/conciliate/:id' => 'account_ledgers#conciliate', :as => :conciliate
 
   resources :banks
 
@@ -55,8 +48,6 @@ Bonsaierp::Application.routes.draw do
   end
 
   resources :projects
-
-  resources :transactions
 
   ############################
   # IN/OUT
@@ -79,62 +70,42 @@ Bonsaierp::Application.routes.draw do
     post :quick_expense, on: :collection
   end
 
-  get  "/transactions/pdf/:id"       => "transactions#pdf", :as => :invoice_pdf
-  get  "/transactions/new_email/:id" => "transactions#new_email", :as => :new_invoice_email
-  post "/transactions/email/:id"     => "transactions#email"
+  #get  "/transactions/pdf/:id"       => "transactions#pdf", :as => :invoice_pdf
+  #get  "/transactions/new_email/:id" => "transactions#new_email", :as => :new_invoice_email
+  #post "/transactions/email/:id"     => "transactions#email"
 
   ###########################3
 
   resources :stores
 
-  resources :contacts do
-    get :search, on: :collection
-  end
-
-  resources :clients
-
-  resources :suppliers
+  resources :contacts
 
   resources :staffs
 
-  resources :items do
-    get :search, on: :collection
-  end
+  resources :items
 
   resources :units
 
-  #resources :currencies
+  resources :organisations, only: ['new', 'update']
 
-  resources :organisations do
-    get :check_schema,  on: :member
-    get :create_tenant, on: :member
-    get :select,        on: :member
-    get :create_data,   on: :member
-
-    get  :edit_preferences,   on: :member
-    put  :update_preferences, on: :member
-  end
-
-  #resources :countries
-
-  resources :registrations do
-    get :new_user, on: :member
-  end
-
-  get "/sign_up" => "registrations#new"
-
-  # Password
-  resources :reset_passwords
-
-  # Sessions
-  resources :sessions
-
-  get "/sign_in"  => "sessions#new", as: :login
-  get "/sign_out" => "sessions#destroy", as: :logout
-
-  resources :users
+  resources :users, only: ['show', 'edit', 'update']
 
   get '/dashboard' => 'dashboard#index', :as => :dashboard
+
+  # No auth
+  resources :registrations do
+    get :new_user, on: :member # Checks the confirmation_token of users added by admin
+  end
+  get "/sign_up" => "registrations#new"
+
+  # No auth
+  # Password
+  resources :reset_passwords
+  # No auth
+  # Sessions
+  resources :sessions, only: ['new', 'create', 'destroy']
+  get "/sign_in"  => "sessions#new", as: :login
+  get "/sign_out" => "sessions#destroy", as: :logout
 
   # Rails Metal
   #get "/client_autocomplete"   => AutocompleteApp.action(:client)

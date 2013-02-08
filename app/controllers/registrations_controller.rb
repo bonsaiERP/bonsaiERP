@@ -26,6 +26,7 @@ class RegistrationsController < ApplicationController
     end
   end
 
+  # Checks the confirmation_token of users added by admin
   # GET /registrations/new_user
   def new_user
     check_new_user
