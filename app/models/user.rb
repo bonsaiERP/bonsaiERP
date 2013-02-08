@@ -28,6 +28,9 @@ class User < ActiveRecord::Base
     u.validate :valid_password_confirmation
   end
 
+  # Scopes
+  scope :active, where(active: true)
+
   # Delegations
   ########################################
   delegate :name, :currency, :address, :tenant, to: :organisation, prefix: true, allow_nil: true
@@ -70,17 +73,6 @@ class User < ActiveRecord::Base
     self.update_attribute(:auth_token, '')
   end
 
-  # Especial method to detect if the update is when the
-  # change_default_password? is true
-  # @param attrs [Hash]
-  def update_password(attrs = {})
-    return false unless check_old_password?(attrs)
-    self.change_default_password = false
-    assign_password_attributes(attrs)
-
-    self.save
-  end
-
   def set_confirmation_token
     self.confirmation_token = SecureRandom.urlsafe_base64(32)
   end
@@ -102,23 +94,4 @@ private
   def valid_password_confirmation
     self.errors.add(:password, I18n.t('errors.messages.confirmation')) unless password === password_confirmation
   end
-
-  def assign_password_attributes(attrs)
-    [:old_password, :password, :password_confirmation].each do |attr|
-      self.send :"#{attr}=", attrs[attr]
-    end
-  end
-
-  def check_old_password?(attrs)
-    return true if change_default_password?
-
-    return true if valid_password?(attrs[:old_password])
-
-    assign_password_attributes(attrs)
-    valid?
-    self.errors.add(:old_password, I18n.t('errors.messages.invalid'))
-
-    false
-  end
-
 end

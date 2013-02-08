@@ -2,7 +2,6 @@
 # by Francisco Fernando García Nieto (ffgarcianieto@gmail.com)
 # contributors:
 #  - Tsutomu Kuroda - http://github.com/kuroda (t-kuroda@oiax.jp)
-
 es:
   # Action View
   number:
@@ -154,44 +153,6 @@ es:
       update: 'Actualizar %{model}'
       submit: 'Guardar %{model}'
 
-  # Attributes names common to most models
-  #attributes:
-    #created_at: "Created at"
-    #updated_at: "Updated at"
-
-  # Active Record models configuration
-  activerecord:
-    errors:
-      messages:
-        taken: "ya está en uso"
-        record_invalid: "La validación falló: %{errors}"
-        # Append your own errors here or at the model/attributes scope.
-      # You can define own errors for models or model attributes.
-      # The values :model, :attribute and :value are always available for interpolation.
-      #
-      # For example,
-      #   models:
-      #     user:
-      #       blank: "This is a custom blank message for %{model}: %{attribute}"
-      #       attributes:
-      #         login:
-      #           blank: "This is a custom blank message for User login"
-      # Will define custom blank validation message for User model and 
-      # custom blank validation message for login attribute of User model.
-      #models:
-
-    # Translate model names. Used in Model.human_name().
-    #models:
-      # For example,
-      #   user: "Dude"
-      # will translate User model name to "Dude"
-
-    # Translate model attribute names. Used in Model.human_attribute_name(attribute).
-    #attributes:
-      # For example,
-      #   user:
-      #     login: "Handle"
-      # will translate User attribute "login" as "Handle"
   # Errors that are stored in the model but are allowed
   allowed_errors:
     transaction:
@@ -325,23 +286,6 @@ es:
     select:
       prompt: "Por favor seleccione"
 
-  # For Rails 2
-  activerecord:
-    errors:
-      template:
-        header:
-          one:   "No se pudo guardar este/a %{model} porque se encontró 1 error"
-          other: "No se pudo guardar este/a %{model} porque se encontraron %{count} errores"
-        body: "Se encontraron problemas con los siguientes campos:"
-
-      messages:
-        taken: "ya está en uso"
-        record_invalid: "La validación falló: %{errors}"
-        <<: *errors_messages
-
-      full_messages:
-        format: "%{attribute} %{message}"
-
   simple_form:
     "yes": "Si"
     "no": "No"
@@ -349,10 +293,24 @@ es:
       text: "requerido"
       mark: "*"
 
+  common:
+    edit: 'Editar'
+    delete: 'Borrar'
+    show: 'Ver'
+
+  email:
+    invoice_title: "Nota de venta "
+    invoice_body: "Estimado cliente le hacemos llegar el adjunto de la venta"
+    registration:
+      send: "Complete su registro en %{app_name}"
+      user: "Bienvenido a %{app_name}, usted ha sido adicionado como usuario en %{company}" 
+    reset_password:
+      subject: "Recuperar contraseña de %{app_name}"
+  
   bonsai:
     registration: "Complete su registro en %{domain}"
-    reset_password: "Recuperación de contraseña de www.bonsaierp.con"
     autocomplete_placeholder: "Comieze a escribir para autocompletar"
+
   views:
     pagination: 
       next: "Siguiente &gt;"
@@ -399,14 +357,3 @@ es:
       tenant:
         list: "Debe seleccionar otro valor"
 
-  email:
-    invoice_title: "Nota de venta "
-    invoice_body: "Estimado cliente le hacemos llegar el adjunto de la venta"
-    registration:
-      send: "Complete su registro en %{app_name}"
-      user: "Bienvenido a %{app_name}, usted ha sido adicionado como usuario en %{company}" 
-  
-  common:
-    edit: 'Editar'
-    delete: 'Borrar'
-    show: 'Ver'

@@ -14,7 +14,7 @@ describe ResetPasswordMailer do
     ActionMailer::Base.deliveries.should_not be_empty
 
     mail = ActionMailer::Base.deliveries.first
-    mail.subject.should == I18n.t("bonsai.reset_password")
+    mail.subject.should == I18n.t("email.reset_password.subject", app_name: APP_NAME)
     mail.to.should == [user.email]
 
     #mail.encoded.should =~ /Recuperación de contraseña/
