@@ -25,6 +25,15 @@ describe User do
     u.errors_on(:password).should eq([I18n.t('errors.messages.confirmation')])
   end
 
+  it "valid password when change" do
+    u = User.create!(email: 'test@mail.com', password: 'Demo12234', password_confirmation: 'Demo12234')
+    
+    u = User.find(u.id)
+    u.update_attributes(password: 'Demo12234', password_confirmation: 'Demo1223').should be_false
+
+    u.errors_on(:password).should eq([I18n.t('errors.messages.confirmation')])
+  end
+
   it '#set_confirmation_token' do
     u = User.new
     u.confirmation_token.should be_nil

@@ -9,8 +9,6 @@ class User < ActiveRecord::Base
 
   ROLES = %w(admin group other).freeze
 
-  attr_accessor :old_password
-
   ########################################
   # Relationships
   has_many :links, inverse_of: :user, autosave: true, dependent: :destroy
@@ -24,7 +22,8 @@ class User < ActiveRecord::Base
   validates :email, presence: true, uniqueness: {if: :email_changed?}
 
   with_options if: :change_password? do |u|
-    u.validates :password, length: {within: PASSWORD_LENGTH..100 }, confirmation: true
+    u.validates :password, length: {within: PASSWORD_LENGTH..100 }
+    # vaidaates_confirmation_of gives error on tests
     u.validate :valid_password_confirmation
   end
 

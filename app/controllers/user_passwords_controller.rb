@@ -1,11 +1,14 @@
 # encoding: utf-8
 class UserPasswordsController < ApplicationController
   def edit
+    @user_password = UserPassword.new
     render get_template
   end
 
   def update
-    if current_user.update_password(password_params)
+    @user_password = UserPassword.new(password_params)
+
+    if @user_password.update_password
       redirect_to current_user, notice: "Su contraseña ha sido actualizada."
     else
       render get_template
