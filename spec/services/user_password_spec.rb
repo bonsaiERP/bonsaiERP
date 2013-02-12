@@ -2,6 +2,17 @@ require 'spec_helper'
 
 describe UserPassword do
   let(:user) { build :user, id: 10 }
+  before(:each) do
+    UserSession.user = user
+  end
+
+  it "sets errors" do
+    user.stub(valid_password?: true)
+    up = UserPassword.new(password: 'demo123', password_confirmation: 'demo123', old_password: 'demo123')
+
+    up.update_password.should be_false
+    up.errors[:password].should_not be_blank
+  end
 
   context "update_password" do
     it "valid old_password" do

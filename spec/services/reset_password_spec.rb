@@ -17,4 +17,6 @@ describe ResetPassword do
     user.reset_password_token.should be_present
     user.reset_password_sent_at.should be_present
   end
+
+  it "updates password"
 end

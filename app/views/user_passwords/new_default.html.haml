@@ -3,7 +3,7 @@
 %h4.n.text-success
   Excelente cambia tu contraseña
 
-= simple_form_for current_user, url: user_password_path(current_user) do |f|
+= simple_form_for @user_password, url: create_default_user_passwords_path do |f|
   =f.input :password, label: 'Nueva contraseña'
   =f.input :password_confirmation, label: 'Confirmar nueva contraseña'
   .form-actions

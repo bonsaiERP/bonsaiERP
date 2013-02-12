@@ -23,6 +23,13 @@ describe UserPasswordsController do
       response.should render_template('new')
       assigns(:user_password).should be_is_a(UserPassword)
     end
+
+    it "redirects" do
+      user.change_default_password = true
+      get :new
+
+      response.should redirect_to(new_default_user_passwords_path)
+    end
   end
 
   describe "POST /user_passwords" do
@@ -49,7 +56,7 @@ describe UserPasswordsController do
       user.change_default_password = true
       get :new_default
 
-      response.should_not be_a_redirect
+      response.should render_template('new_default')
     end
 
     it "redirects if change default password" do
@@ -65,6 +72,7 @@ describe UserPasswordsController do
     it "updates" do
       user.change_default_password = true
       UserPassword.any_instance.stub(update_default_password: true)
+
       post :create_default, user_password: {password: '1234', password_confirmation: '1234'}
 
       response.should redirect_to(user_path(10))

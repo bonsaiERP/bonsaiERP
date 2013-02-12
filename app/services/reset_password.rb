@@ -15,6 +15,10 @@ class ResetPassword < BaseService
     end
   end
 
+  def update_reset_password
+    self.change_default_password = true
+  end
+
 private
   def valid_email_present?
     user.present?

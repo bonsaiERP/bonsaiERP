@@ -23,6 +23,7 @@ class AdminUser
 private
   def set_user
     user.password = random_password
+    user.password_confirmation = user.password
     user.set_confirmation_token
     user.change_default_password = true
   end

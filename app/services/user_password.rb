@@ -4,39 +4,50 @@ class UserPassword < BaseService
   attribute :password_confirmation, String
   attribute :old_password, String
 
-  attr_reader :user
-
   delegate :change_default_password?, to: :user
 
   # Method to update password even with change_default_password = true
   def update_password
-    user.attributes = password_attributes
-
     return false unless valid_old_password?
-    user.save
+
+    save_or_set_errors
   end
 
   def update_default_password
-    user.attributes = password_attributes
     user.change_default_password = false
 
-    user.save
+    save_or_set_errors
   end
 
   def update_reset_password
-    user.attributes = password_attributes
     user.change_default_password = false
 
-    user.save
+    save_or_set_errors
   end
 
   # Setter
-  def user=(usr)
+  def user=(usr = UserSession.user)
     raise 'You must assign a user=' unless usr.is_a?(User)
     @user = usr
   end
 
+  def user
+    @user ||= UserSession.user
+  end
+
 private
+  def save_or_set_errors
+    user.attributes = password_attributes
+
+    unless user.save
+      set_errors(user)
+
+      false
+    else
+      true
+    end
+  end
+
   def password_attributes
     {password: password, password_confirmation: password_confirmation}
   end

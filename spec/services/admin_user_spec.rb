@@ -26,6 +26,7 @@ describe AdminUser do
       ad.add_user.should be_true
 
       ad.user.password.should_not be_blank
+      ad.user.password_confirmation.should eq ad.user.password
       ad.user.should be_change_default_password
       ad.user.rol.should eq('group')
       ad.user.should be_active
@@ -45,5 +46,9 @@ describe AdminUser do
       
       ad.user.links.first.rol.should eq('other')
     end
+  end
+
+  context "update" do
+    it "updates"
   end
 end

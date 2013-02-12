@@ -91,7 +91,7 @@ Bonsaierp::Application.routes.draw do
   resources :user_passwords, only: ['new', 'create'] do
     collection do
       get :new_default
-      put :create_default
+      post :create_default
     end
   end
 

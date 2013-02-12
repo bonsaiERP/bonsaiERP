@@ -87,7 +87,7 @@ class User < ActiveRecord::Base
 
 private
   def change_password?
-    new_record? || password.present?
+    new_record? || !password.nil?
   end
 
   def valid_password_confirmation

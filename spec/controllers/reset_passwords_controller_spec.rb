@@ -11,11 +11,11 @@ describe ResetPasswordsController do
 
       response.should be_success
       response.should render_template('new')
+      response.assings(:reset_password).should be_is_a(ResetPassword)
     end
   end
 
   describe 'GET /reset_passwords/:id/show' do
-
   end
 
   describe 'POST /reset_passwords' do
