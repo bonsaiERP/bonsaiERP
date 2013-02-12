@@ -88,7 +88,12 @@ Bonsaierp::Application.routes.draw do
 
   resources :organisations, only: ['new', 'update']
 
-  resources :user_passwords, only: ['edit', 'update']
+  resources :user_passwords, only: ['new', 'create'] do
+    collection do
+      get :new_default
+      put :create_default
+    end
+  end
 
   resources :users, only: ['show', 'edit', 'update']
 
