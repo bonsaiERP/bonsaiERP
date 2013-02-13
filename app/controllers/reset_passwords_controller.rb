@@ -53,7 +53,7 @@ private
   end
 
   def reset_search_path
-    redirect_to reset_password_url(subdomain: false) and return if request.subdomain.present?
+    redirect_to new_reset_password_url(subdomain: false) and return if request.subdomain.present?
   end
 
   def find_user_or_redirect!

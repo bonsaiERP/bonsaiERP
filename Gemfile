@@ -10,10 +10,11 @@ group :assets do
 
   gem 'turbo-sprockets-rails3'# Speed assets:precompile
 
-  gem 'jquery-rails'
-  gem 'compass-rails'
-
 end
+
+gem 'jquery-rails'
+gem 'compass-rails'
+
 
 gem 'pg' # Postgresql adapter
 gem 'virtus' # Model generation in simple way
