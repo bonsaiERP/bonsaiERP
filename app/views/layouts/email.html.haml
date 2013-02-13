@@ -3,12 +3,12 @@
 %html{xmlns: "http://www.w3.org/1999/xhtml", 'xml:lang' => "es", lang: "es" }
   %head
     %meta{ 'http-equiv'  => "content-type", :content => "text/html;charset=UTF-8" }
-  = stylesheet_link_tag 'email'
-  %body.cont
-    #header
+  -#= stylesheet_link_tag 'email'
+  %body.cont(style='font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;max-width:650px;color:#222222;padding:10px')
+    #header(style="background-color:#eeeeee;padding:10px 20px")
       = image_tag "http://bonsaierp.com/assets/logo.png"
 
-    .cont
+    .cont(style="padding:10px")
       =yield
 
     %p(style='text-align:center')
