@@ -18,5 +18,21 @@ describe ResetPassword do
     user.reset_password_sent_at.should be_present
   end
 
-  it "updates password"
+  it "returns error when invalid email" do
+    rp = ResetPassword.new(email: 'jajaj')
+
+    rp.reset_password.should be_false
+    rp.errors[:email].should eq([I18n.t('errors.messages.user.email_not_found')])
+
+  end
+
+  it "updates password" do
+    user.should_receive(:save).and_return(true)
+    user.change_default_password = false
+
+    rp = ResetPassword.new
+    rp.reset_password(user).should be_true
+
+    user.should be_change_default_password
+  end
 end

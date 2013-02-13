@@ -7,24 +7,29 @@ class ResetPasswordsController < ApplicationController
   before_filter :reset_search_path
 
   def show
+    @reset_password = ResetPassword.new
   end
 
   def new
     @reset_password = ResetPassword.new
+    if @reset_password.update_password
+      redirect_to  
+    end
   end
 
   def create
-    @reset_password = ResetPassword.new(reset_attributes)
+    @reset_password = ResetPassword.new(password_attributes)
 
     if @reset_password.reset_password
       render 'create'
     else
+      flash.now[:error] = 'El email que ingreso no existe.'
       render 'new'
     end
   end
 
 private
-  def reset_attributes
+  def password_attributes
     params.require(:reset_password).permit(:email)
   end
 

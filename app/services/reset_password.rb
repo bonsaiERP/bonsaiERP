@@ -2,26 +2,26 @@
 class ResetPassword < BaseService
   attribute :email, String
 
-  validate :valid_email_present
+  validate :valid_email_present?
 
-  def reset_password
-    user.reset_password_token = SecureRandom.urlsafe_base64(32)
-    user.reset_password_sent_at = Time.zone.now
+  def update_reset_password(usr)
+    raise 'You must pass a User objtec' unless user.is_a?(User)
+    @user = usr
+    confirm_user_registration
+    user.change_default_password = true
 
-    if user.save
-      ResetPasswordMailer.send_reset_password(user).deliver
-    else
-      false
-    end
-  end
-
-  def update_reset_password
-    self.change_default_password = true
+    user.save
   end
 
 private
+  def confirm_user_registration
+    user.confirmed_at = Time.zone.now unless user.confirmed_registration?
+  end
+
   def valid_email_present?
-    user.present?
+    unless user.present?
+      self.errors.add(:email, I18n.t('errors.messages.user.email_not_found'))
+    end
   end
 
   def user

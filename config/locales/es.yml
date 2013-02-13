@@ -230,6 +230,7 @@ es:
         password_confirmation: "La contraseña y la confirmación de contraseña no son iguales"
         wrong_password: "La contraseña que ingreso es incorrecta"
         user_limit: "Su empresa ha llegado a su limite en el número de usuarios"
+        email_not_found: "El email que ingreso no existe"
       transaction:
         repeated_items: "Existen items repetidos, por favor revise"
         unconcilied_ledgers: "Existen transacciones pendientes de revisión"

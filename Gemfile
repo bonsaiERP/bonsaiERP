@@ -1,35 +1,33 @@
 source :rubygems
 
-gem 'rails', '3.2.11'
+gem 'rails', '3.2.12'
 
 group :assets do
   gem 'sass-rails'   , '~> 3.2.5'
   gem 'coffee-rails' , '~> 3.2.2'
   gem 'uglifier'     , '~> 1.3.0'
   gem 'assets'      , git: 'git://github.com/boriscy/assets.git'
+
+  gem 'turbo-sprockets-rails3'# Speed assets:precompile
+
+  gem 'jquery-rails'
+  gem 'compass-rails'
+
 end
 
-gem 'turbo-sprockets-rails3'# Speed assets:precompile
-
-#assets javascript gems
-gem 'jquery-rails'
-gem 'compass-rails'
-gem 'coffee-filter'
-#gem 'bootstrap-sass'
-
-gem 'pg'
+gem 'pg' # Postgresql adapter
 gem 'virtus' # Model generation in simple way
 gem 'encrypted-cookie-store' # Encrypt cookies in the session
 gem 'strong_parameters' # Force in controllers to sanitize parameters
 gem 'squeel' # Better SQL queries
 
 gem 'simple_form'
-gem 'haml'
-gem 'kaminari'
-gem 'valium'
+gem 'haml', '~> 4.0.0'
+gem 'kaminari' # Pagination
+gem 'valium' # Better than pluck method
 gem 'bcrypt-ruby', require: 'bcrypt'
 gem 'roadie' # Styles for email
-gem 'active_model_serializers' # Encode strings with JSON
+gem 'active_model_serializers' # ActiveRecord Classes to encode in JSON
 gem 'resubject' # Cool presenter
 
 gem 'validates_email_format_of', '~> 1.5.3'

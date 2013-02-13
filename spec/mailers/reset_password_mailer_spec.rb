@@ -3,7 +3,7 @@ require "spec_helper"
 describe ResetPasswordMailer do
   let(:user) {
     User.new(:email => "demo@example.com") {|u|
-      u.confirmation_token = SecureRandom.base64(12)
+      u.reset_password_token = SecureRandom.base64(12)
       u.id = 1
     }
   }

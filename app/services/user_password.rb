@@ -19,8 +19,11 @@ class UserPassword < BaseService
     save_or_set_errors
   end
 
-  def update_reset_password
+  def update_reset_password(usr)
+    raise 'You must assign a user=' unless usr.is_a?(User)
+    @user = usr
     user.change_default_password = false
+    user.confirmed_at = Time.zone.now
 
     save_or_set_errors
   end

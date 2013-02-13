@@ -56,12 +56,13 @@ describe UserPassword do
       user.should_receive(:save).and_return(true)
       user.change_default_password = false
       user.should_not be_change_default_password
+      user.confirmed_at.should be_nil
 
       up = UserPassword.new(password: 'Demo1234', password_confirmation: 'Demo1234')
-      up.user = user
 
-      up.update_reset_password.should be_true
+      up.update_reset_password(user).should be_true
       up.should_not be_change_default_password
+      up.user.confirmed_at.should_not be_blank
     end
   end
 
