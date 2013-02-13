@@ -7,13 +7,11 @@ group :assets do
   gem 'coffee-rails' , '~> 3.2.2'
   gem 'uglifier'     , '~> 1.3.0'
   gem 'jquery-rails'
-  gem 'compass-rails'
   gem 'assets'      , git: 'git://github.com/boriscy/assets.git'
   gem 'turbo-sprockets-rails3'# Speed assets:precompile
 end
 
-
-
+gem 'compass-rails' # Extend css clases
 gem 'pg' # Postgresql adapter
 gem 'virtus' # Model generation in simple way
 gem 'encrypted-cookie-store' # Encrypt cookies in the session

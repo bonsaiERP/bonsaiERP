@@ -1,3 +1,4 @@
+# encoding: utf-8
 Bonsaierp::Application.routes.draw do
 
   resources :admin_users, except: [:index, :destroy]
@@ -114,18 +115,5 @@ Bonsaierp::Application.routes.draw do
   get "/sign_in"  => "sessions#new", as: :login
   get "/sign_out" => "sessions#destroy", as: :logout
 
-  # Rails Metal
-  #get "/client_autocomplete"   => AutocompleteApp.action(:client)
-  #get "/supplier_autocomplete" => AutocompleteApp.action(:supplier)
-  #get "/staff_autocomplete"    => AutocompleteApp.action(:staff)
-  #get "/item_autocomplete"     => AutocompleteApp.action(:item)
-
-  #get "/client_account_autocomplete"   => AutocompleteApp.action(:client_account)
-  #get "/supplier_account_autocomplete" => AutocompleteApp.action(:supplier_account)
-  #get "/staff_account_autocomplete"    => AutocompleteApp.action(:staff_account)
-  #get "/item_account_autocomplete"     => AutocompleteApp.action(:item_account)
-  #get "/exchange_rates" => AutocompleteApp.action(:get_rates)
-  #get "/items_stock" => AutocompleteApp.action(:items_stock)
-
-  root :to => 'sessions#new'
+  root to: 'sessions#new'
 end
