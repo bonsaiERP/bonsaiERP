@@ -6,14 +6,13 @@ group :assets do
   gem 'sass-rails'   , '~> 3.2.5'
   gem 'coffee-rails' , '~> 3.2.2'
   gem 'uglifier'     , '~> 1.3.0'
-  gem 'assets'      , git: 'git://github.com/boriscy/assets.git'
 
   gem 'turbo-sprockets-rails3'# Speed assets:precompile
-
 end
 
 gem 'jquery-rails'
 gem 'compass-rails'
+gem 'assets'      , git: 'git://github.com/boriscy/assets.git'
 
 
 gem 'pg' # Postgresql adapter
