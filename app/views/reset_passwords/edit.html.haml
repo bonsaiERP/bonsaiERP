@@ -1,7 +1,8 @@
 #dialog
   %h1 Cambio de contraseña
 
-  = simple_form_for @user, :url => reset_password_path(@user) do |f|
+  = simple_form_for @user_password, reset_password_path(params[:id]) do |f|
+    = hidden_field_tag :id, params[:id]
     %fieldset
       = f.input :reset_password_token, :as => :hidden
       = f.input :password, :label => 'Contraseña', :wrapper_html => {:class => '_90'}

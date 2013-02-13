@@ -24,6 +24,7 @@ class UserPassword < BaseService
     @user = usr
     user.change_default_password = false
     user.confirmed_at = Time.zone.now
+    user.set_auth_token
 
     save_or_set_errors
   end
