@@ -4,7 +4,7 @@ require 'spec_helper'
 describe AdminUser do
   before(:each) do
     UserSession.user = build :user, id: 10
-    OrganisationSession.organisation = build :organisation, id: 15
+    OrganisationSession.organisation = build :organisation, id: 15, tenant: 'bonsai'
   end
 
   let(:valid_attributes) {
@@ -35,6 +35,7 @@ describe AdminUser do
       lnk.organisation_id.should eq(15)
       lnk.rol.should eq('group')
       lnk.should be_active
+      lnk.tenant.should eq('bonsai')
     end
 
     it "doesn't permit admin as param" do

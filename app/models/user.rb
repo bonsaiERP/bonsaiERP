@@ -12,6 +12,7 @@ class User < ActiveRecord::Base
   ########################################
   # Relationships
   has_many :links, inverse_of: :user, autosave: true, dependent: :destroy
+  has_many :active_links, inverse_of: :user, autosave: true, conditions: {active: true}
   has_many :active_links, inverse_of: :user, autosave: true, dependent: :destroy,
            class_name: 'Link', conditions: {active: true}
   has_many :organisations, through: :links

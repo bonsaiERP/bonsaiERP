@@ -4,9 +4,10 @@ require 'spec_helper'
 describe ResetPassword do
   let(:user) { build :user, id: 2 }
 
-  it "update" do
+  it "send ResetPasswordMailer" do
     User.stub_chain(:active, where: [user] )
-    user.stub(save: true)
+    user.stub(save: true, active_links: [build(:link, active: true, tenant: 'bonsai')])
+    PgTools.stub(schema_exists?: true)
     user.reset_password_token.should_not be_present
     user.reset_password_sent_at.should_not be_present
 
@@ -16,6 +17,32 @@ describe ResetPassword do
     
     user.reset_password_token.should be_present
     user.reset_password_sent_at.should be_present
+  end
+
+  it "sends RegistrationMailer" do
+    User.stub_chain(:active, where: [user] )
+    user.stub(save: true, active_links: [build(:link, active: true, master_account: true)])
+    PgTools.stub(schema_exists?: false)
+
+    #
+    user.reset_password_token.should_not be_present
+    user.reset_password_sent_at.should_not be_present
+
+    RegistrationMailer.should_receive(:send_registration).and_return(stub(deliver: true))
+
+    rp = ResetPassword.new(email: 'test@mail.com')
+    rp.reset_password.should be_true
+    
+    user.reset_password_token.should be_present
+    user.reset_password_sent_at.should be_present
+  end
+
+  it "returns false" do
+    User.stub_chain(:active, where: [user] )
+    user.stub(save: true, active_links: [build(:link, active: true, master_account: false)])
+    
+    rp = ResetPassword.new(email: 'test@mail.com')
+    rp.reset_password.should be_false
   end
 
   it "returns error when invalid email" do

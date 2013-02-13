@@ -10,7 +10,7 @@ class AdminUser
   end
 
   def add_user
-    user.links.build(organisation_id: OrganisationSession.id, rol: get_user_rol)
+    user.links.build(organisation_id: OrganisationSession.id, rol: get_user_rol, tenant: OrganisationSession.tenant)
     set_user
 
     if user.save

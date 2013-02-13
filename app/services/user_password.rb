@@ -4,6 +4,8 @@ class UserPassword < BaseService
   attribute :password_confirmation, String
   attribute :old_password, String
 
+  attr_reader :tenant
+
   delegate :change_default_password?, to: :user
 
   # Method to update password even with change_default_password = true
@@ -24,7 +26,8 @@ class UserPassword < BaseService
     @user = usr
     user.change_default_password = false
     user.confirmed_at = Time.zone.now
-    user.set_auth_token
+    user.reset_password_token = SecureRandom.urlsafe_base64(32)
+    user.auth_token = SecureRandom.urlsafe_base64(32)
 
     save_or_set_errors
   end

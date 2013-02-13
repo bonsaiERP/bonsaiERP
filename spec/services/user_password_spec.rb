@@ -19,6 +19,7 @@ describe UserPassword do
       user.should_receive(:save).and_return(true)
 
       user.stub(:valid_password?).with('demo1234').and_return(true)
+      user.reset_password_token.should be_blank
 
       up = UserPassword.new(password: 'Demo1234', password_confirmation: 'Demo1234', old_password: 'demo1234')
       up.user = user
@@ -53,6 +54,7 @@ describe UserPassword do
 
   context 'update_reset_password' do
     it "does" do
+      user.reset_password_token = ''
       user.should_receive(:save).and_return(true)
       user.change_default_password = false
       user.should_not be_change_default_password
@@ -63,6 +65,7 @@ describe UserPassword do
       up.update_reset_password(user).should be_true
       up.should_not be_change_default_password
       up.user.confirmed_at.should_not be_blank
+      up.user.reset_password_token.should_not be_blank
     end
   end
 

@@ -1,3 +1,4 @@
+# encoding: utf-8
 require "spec_helper"
 
 describe ResetPasswordMailer do
@@ -20,6 +21,7 @@ describe ResetPasswordMailer do
     domain = UrlTools.domain
     prot = UrlTools.protocol
     url = "#{prot}://#{domain}/reset_passwords/#{user.reset_password_token}/edit"
+    mail.body.should have_selector('h1', text: "Recuperación de contraseña en #{APP_NAME}")
     mail.body.should have_selector("a[href='#{url}']")
   end
 end

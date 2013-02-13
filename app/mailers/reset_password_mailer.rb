@@ -1,3 +1,4 @@
+# encoding: utf-8
 class ResetPasswordMailer < ActionMailer::Base
   default :from => "noresponder@bonsaierp.com"
 

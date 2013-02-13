@@ -120,4 +120,9 @@ FactoryGirl.define do
     for_sale true
     price 10
   end
+
+  factory :link do
+    rol User::ROLES[1]
+    master_account true
+  end
 end

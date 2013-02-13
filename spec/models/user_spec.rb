@@ -5,6 +5,7 @@ describe User do
   it { should have_many(:links) }
   it { should have_many(:active_links) }
   it { should have_many(:links) }
+  it { should have_many(:active_links) }
 
   before(:each) do
   end
