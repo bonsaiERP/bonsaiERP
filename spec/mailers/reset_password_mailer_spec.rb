@@ -17,8 +17,9 @@ describe ResetPasswordMailer do
     mail.subject.should == I18n.t("email.reset_password.subject", app_name: APP_NAME)
     mail.to.should == [user.email]
 
-    #mail.encoded.should =~ /Recuperación de contraseña/
-    mail.encoded.should =~ /\/reset_passwords\/#{user.id}\/edit/
-
+    domain = UrlTools.domain
+    prot = UrlTools.protocol
+    url = "#{prot}://#{domain}/reset_passwords/#{user.reset_password_token}/edit"
+    mail.body.should have_selector("a[href='#{url}']")
   end
 end

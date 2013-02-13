@@ -107,7 +107,7 @@ Bonsaierp::Application.routes.draw do
 
   # No auth
   # Password
-  resources :reset_passwords, only: ['show', 'new', 'create']
+  resources :reset_passwords, only: ['new', 'create', 'edit', 'update']
   # No auth
   # Sessions
   resources :sessions, only: ['new', 'create', 'destroy']

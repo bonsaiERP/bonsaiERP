@@ -4,13 +4,17 @@ class ResetPassword < BaseService
 
   validate :valid_email_present?
 
-  def update_reset_password(usr)
-    raise 'You must pass a User objtec' unless user.is_a?(User)
-    @user = usr
-    confirm_user_registration
-    user.change_default_password = true
+  def reset_password
+    return false unless valid?
 
-    user.save
+    user.reset_password_token = SecureRandom.urlsafe_base64(32)
+    user.reset_password_sent_at = Time.zone.now
+
+    if user.save
+      ResetPasswordMailer.send_reset_password(user).deliver
+    else
+      false
+    end
   end
 
 private

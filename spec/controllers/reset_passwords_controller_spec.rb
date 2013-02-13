@@ -40,7 +40,7 @@ describe ResetPasswordsController do
     end
   end
 
-  describe 'GET /reset_passwords/:id/show' do
+  describe 'GET /reset_passwords/:id/edit' do
   end
 
 end

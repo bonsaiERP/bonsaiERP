@@ -38,7 +38,8 @@ describe RegistrationMailer do
     email.from.should eq(["register@#{DOMAIN}"])
 
 
-    link = "http://clubv.#{DOMAIN}/registrations/#{user.confirmation_token}/new_user"
+    prot = UrlTools.protocol
+    link = "#{prot}://clubv.#{DOMAIN}/registrations/#{user.confirmation_token}/new_user"
     email.body.should have_selector("a[href='#{link}']")
 
     email.body.should have_text("a sido adicionado para formar parte del equipo de Club Vegetariano")

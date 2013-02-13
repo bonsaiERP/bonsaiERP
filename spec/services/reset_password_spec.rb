@@ -26,13 +26,4 @@ describe ResetPassword do
 
   end
 
-  it "updates password" do
-    user.should_receive(:save).and_return(true)
-    user.change_default_password = false
-
-    rp = ResetPassword.new
-    rp.reset_password(user).should be_true
-
-    user.should be_change_default_password
-  end
 end
