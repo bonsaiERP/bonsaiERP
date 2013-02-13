@@ -2,7 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class InvoiceMailer < ActionMailer::Base
-  default :from => "noresponder@bonsaierp.com"
+  default from: "#{APP_NAME} <noresponder@bonsaierp.com>"
 
   layout "email"
 
