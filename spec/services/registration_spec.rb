@@ -39,6 +39,9 @@ describe Registration do
     r.user.email.should eq('boris@bonsaierp.com')
     r.user.encrypted_password.should_not be_blank
     r.user.confirmation_token.should_not be_blank
+    r.user.password.should_not be_blank
+    r.user.password_confirmation.should eq(r.user.password)
+
 
     link = r.user.links.first
     link.organisation_id.should eq(1)

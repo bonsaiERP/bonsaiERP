@@ -2,8 +2,8 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class OrganisationsController < ApplicationController
-  before_filter :check_tenant_creation
-  skip_before_filter :set_tenant
+  before_filter :check_tenant_creation, :check_user_master_account
+  skip_before_filter :set_tenant, :check_authorization!
 
   # GET /organisations/new
   def new
@@ -45,5 +45,11 @@ private
     params.require(:organisation).permit(:name, :currency, :country_id,
                                         :time_zone,:phone, :mobile, :email,
                                         :address)
+  end
+
+  def check_user_master_account
+    unless current_user.master_account?
+      redirect_to sessions_url(subdomain: false) and return
+    end
   end
 end
