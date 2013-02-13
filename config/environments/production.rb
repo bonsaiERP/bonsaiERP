@@ -60,16 +60,15 @@ Bonsaierp::Application.configure do
   config.assets.compress = true
 
   # Specify the default JavaScript compressor
-  config.assets.js_compressor  = :uglifier
-  config.assets.css_compresor= :scss
+  #config.assets.js_compressor  = :uglifier
+  #config.assets.css_compresor= :scss
   
   # Don't fallback to assets pipeline if a precompiled asset is missed
-  #config.assets.compile = false
+  config.assets.compile = false
 
   # Generate digests for assets URLs
   config.assets.digest = true
 
-  config.assets.compile = true
   config.assets.precompile += %w(email.css)
   # Disable query caching until it's fixed for PostgreSQL schemas
   #config.middleware.delete ActiveRecord::QueryCache
@@ -80,6 +79,9 @@ Bonsaierp::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
+
+  # Prepend all log lines with the following tags
+  config.log_tags = [:subdomain]
 
   ## Notifications
   #config.middleware.use ExceptionNotifier,
