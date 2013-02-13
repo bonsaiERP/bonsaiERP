@@ -34,8 +34,9 @@ class ResetPasswordsController < ApplicationController
     @user_password = UserPassword.new(password_params)
 
     if @user_password.update_reset_password(@user)
+      tenant = @user.active_links.first.tenant
       flash[:notice] = 'Ha actualizado su contrasenña e ingresado al sistema.'
-      redirect_to dashboard_url(host: UrlTools.domain, auth_token: @user_password.user.auth_token) and return
+      redirect_to dashboard_url(host: UrlTools.domain, auth_token: @user_password.user.auth_token, subdomain: tenant) and return
     else
       @user = @user_password.user
       render 'edit'

@@ -66,11 +66,11 @@ describe ResetPasswordsController do
 
     it "redirects to dashboard" do
       UserPassword.any_instance.should_receive(:update_reset_password).with(user).and_return(true)
-      user.stub(auth_token: 'auth_token_123')
+      user.stub(auth_token: 'auth_token_123', active_links: [build(:link, tenant: 'bonsai')])
 
       put :update, id: 'token123', user_password: {password: ''}
 
-      response.should redirect_to(dashboard_url(host: UrlTools.domain, auth_token: 'auth_token_123'))
+      response.should redirect_to(dashboard_url(host: UrlTools.domain, auth_token: 'auth_token_123', subdomain: 'bonsai'))
     end
 
     it 'renders edit' do
