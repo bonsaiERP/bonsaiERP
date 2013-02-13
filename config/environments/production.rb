@@ -70,7 +70,7 @@ Bonsaierp::Application.configure do
   config.assets.digest = true
 
   config.assets.compile = true
-  config.assets.precompile = %w(email.sass)
+  config.assets.precompile += %w(email.css)
   # Disable query caching until it's fixed for PostgreSQL schemas
   #config.middleware.delete ActiveRecord::QueryCache
 
