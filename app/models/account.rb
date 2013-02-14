@@ -21,9 +21,9 @@ class Account < ActiveRecord::Base
 
   ########################################
   # Scopes
-  scope :to_pay, where("amount < 0")
-  scope :to_recieve, where("amount > 0")
-  scope :active, where(active: true)
+  scope :to_pay, -> { where("amount < 0") }
+  scope :to_recieve, -> { where("amount > 0") }
+  scope :active, -> { where(active: true) }
 
   ########################################
   # Methods

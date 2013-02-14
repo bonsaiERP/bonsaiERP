@@ -33,7 +33,7 @@ class Expense < Account
 
   ########################################
   # Scopes
-  scope :discount, where(discounted: true)
+  scope :discount, -> { joins(:transaction).where(transaction: {discounted: true}) }
 
   ########################################
   # Delegations

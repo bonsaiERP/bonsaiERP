@@ -14,7 +14,7 @@ class Item < ActiveRecord::Base
   has_many   :income_details
   has_many   :expense_details
   has_many   :inventory_operation_details
-  
+
   ##########################################
   # Validations
   validates_presence_of :name, :unit, :unit_id, :code
@@ -27,10 +27,9 @@ class Item < ActiveRecord::Base
 
   ##########################################
   # Scopes
-  scope :active   , where(active: true)
-  scope :json     , select("id, name, price")
-  scope :income   , where(active: true, for_sale: true)
-  scope :inventory, where(stockable: true)
+  scope :active   , -> { where(active: true) }
+  scope :income   , -> { where(active: true, for_sale: true) }
+  scope :inventory, -> { where(stockable: true) }
 
   def to_s
     "#{code} - #{name}"

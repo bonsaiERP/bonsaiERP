@@ -37,5 +37,6 @@ tmp/restart.txt
 spec/javascripts/generated
 tags
 public/assets
+public/as
 .rails_footnotes
 rails_best_practices_output.html

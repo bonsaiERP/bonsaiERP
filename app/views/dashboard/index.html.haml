@@ -3,110 +3,14 @@
     %li
       %span Resumen
 
+  .span4
+    %ul.breadcrumbs.r
+      %a#general-aspects-link.dark(href="javascript:;")
+        %i.icon-question-sign
+          Ayuda
+
 = render file: "dashboard/tour/general"
 
-%h1 Resumen
+%h1.title Resumen
 
-%a.push-button
-  This is a test
-
-
-.alert.alert-success
-  Prueba del alert
-.alert.alert-warning
-  Prueba del alert
-.alert.alert-info
-  Prueba del alert
-
-%span.label.label-info
-  Info
-%span.label.label-warning
-  Warning
-%span.label.label-success
-  Success
-%span.label
-  Normal
-
-.row-fluid.dismiss
-  .span4
-    = render 'users/user_changes_labels'
-
-
--#video
-  %h3 Videos
-  %ul.list
-    %li.fl._25h1 
-      =link_to "http://www.youtube.com/embed/q_KZPKbQGVA?autoplay=1&rel=0", :class => 'video b', 'data-title' => 'Como crear alamacenes e ítems' do
-        Como crear alamacenes e ítems
-    %li.fl._25
-      = link_to "http://www.youtube.com/embed/BZMsfhXi9uw?autoplay=1&rel=0", :class => 'video', 'data-title' => 'Como crear clientes' do
-        Como crear clientes
-
--# present DashboardPresenter, DashboardPresenter do |presenter|
-  -#= presenter.due_date
-
-  = presenter.change_password_link
-
-  = presenter.create_money_link
-
-  .row-fluid
-    .box.span6
-      %h3
-        Nos deben
-      %ul.list
-        - presenter.accounts_to_recieve.each do |cur, amt|
-          %li.high #{cur} #{ntc amt}
-
-    .box.span6
-      %h3
-        Debemos
-      %ul.list
-        - presenter.accounts_to_pay.each do |cur, amt|
-          %li.high #{cur} #{ntc amt}
-
-
-  .row-fluid
-    .box.span6
-      %h3 Bancos
-      %ul.list
-        - presenter.banks.each do |bank|
-          %li
-            =link_to bank_path(bank[:id]) do
-              %span.high
-                = bank[:currency]
-                = ntc bank[:amount]
-              = bank[:name]
-
-    .box.span6
-      %h3 Cajas
-      %ul.list
-        - presenter.cashes.each do |cash|
-          %li
-            =link_to cash_path(cash[:id]) do
-              %span.high
-                = cash[:currency]
-                = ntc cash[:amount]
-              = cash[:name]
-
-  .row-fluid
-    .box.span6
-      %h3 Verificaciones pendientes
-      %ul.list
-        - presenter.pendent_conciliations.each do |cur, al, ac|
-          %li
-            = link_to al do
-              %span.high
-                = cur
-                = al.amount
-              %strong= ac
-              Verificar
-
-    .box.span6
-      %h3.title Inventarios con mínimos
-      %ul.list
-        - presenter.minimum_inventory.each do |st_id, store, min|
-          %li
-            = link_to store_path(st_id, :option => 'minimum', :tab => 'items') do
-              %span.high #{min} ítems
-              %span= store
-
+= render file: 'dashboard/general_aspects'

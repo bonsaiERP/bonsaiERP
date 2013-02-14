@@ -1,0 +1,49 @@
+#general-aspects(style="display:nones")
+  - t = Time.zone.now
+  .row-fluid
+    .span12
+      %h2#general-aspects-title.n Aspectos generales
+  .row-fluid
+    .span4
+      .well.well-small
+        %h4.n Cambios por usuarios
+        = render 'users/user_changes_labels'
+        %p.muted
+          Muestra los tipos de cambio que un usuario
+          realizo en algún registro del sistema, 
+          %strong mueva sobre los íconos
+
+          %span.label.label-inverse(title='#{current_user} #{l t}' rel='tooltip')
+            %i.icon-user
+            =current_user.id
+          %span.label.label-success(title='#{current_user} #{l t}' rel='tooltip')
+            %i.icon-user
+            =current_user.id
+          %span.label(title='#{current_user} #{l t}' rel='tooltip')
+            %i.icon-user
+            =current_user.id
+
+    .span4
+      .well.well-small
+        %h4.n Moneda
+        %p.muted
+          Se muestra las monedas de la siguiente forma, mueva el mouse sobre el código de cada moneda
+        %p
+          = ntc 125.25
+          = currency_label(currency)
+          &nbsp;
+          = ntc 150
+          = currency_label('USD')
+          &nbsp;
+          = ntc 200
+          = currency_label('EUR')
+
+    .span4
+      .well.well-small
+        %h4.error.n
+          Errores
+        %p.muted
+          Cuando exista errores en algún registro se mostrara con color rojo
+          el error o presentara el mesaje
+          %span.label.label-important ERROR
+

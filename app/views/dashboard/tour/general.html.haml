@@ -1,20 +1,32 @@
-%ol#general-tour.hidden
-  %li(data-id="#last-nav" data-text="Siguiente" data-options="outerHeight:0")
+%ol#start-tour.hidden
+  %li(data-id="main-menu-first" data-text="Siguiente" data-options="")
     %h4
-      Como comenzar en #{APP_NAME}
-    %p Comecemos con seleccionar la pestaña de Cobros
-  %li(data-id="devolution-link" data-text="Siguiente")
-    %p Hagamos click para abrir el formulario
-  %li(data-id="income_devolution_account_to_id" data-text="Siguiente" data-options="tipLocation:top")
-    %p Seleccione la cuenta, si la cuenta es de banco podra seleccionar la opcion de verificacion
-  %li(data-id="income_devolution_verification" data-text="Siguiente")
-    %p Indique si desea realizar una verificacion futura, por ejemplo cuando le pagan con cheque
-  %li(data-id="income_devolution_reference" data-text="Siguiente")
-    %p Llene con una referencia que le hara recuerdo, por ejempo Num. de recibo o de cheque
-  %li(data-class="submit-devolution" data-text="Fin")
-    %p Salve la devolución
+      Menú
+    %p
+      El menú se encuentra en la parte de arriba y los items que tengan
+      el ícon
+      %span.icon-caret-down.icon-large
+      son menús desplegables
+  %li(data-id="general-aspects-link" data-text="Fin" data-options="tipLocation:bottom")
+    %h4
+      Ayuda
+    %p
+      La ayuda que le mostrara paso a paso 
+      como realizar una operación
 
+%ol#general-aspects-tour.hidden
+  %li(data-id="general-aspects-title" data-text="Fin" data-options="tipLocation:top")
+    %h4
+      Aspectos generales
+    %p
+      Lea con cuidado los aspectos generales estos le ayudaran a 
+      entender mejor el sistema
 :javascript
-  $(function(){
-    $('#general-tour').joyride();
+  $(function() {
+    $('#start-tour').joyride();
+
+    $('#general-aspects-link').click(function() {
+      $('.joyride-tip-guide').remove();
+      $('#general-aspects-tour').joyride();
+    });
   })
