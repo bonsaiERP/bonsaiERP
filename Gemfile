@@ -7,6 +7,7 @@ group :assets do
   gem 'coffee-rails' , '~> 3.2.2'
   gem 'uglifier'     , '~> 1.3.0'
   gem 'jquery-rails'
+  gem 'teabag' # Testing for javascript
   gem 'assets'      , git: 'git://github.com/boriscy/assets.git'
   gem 'turbo-sprockets-rails3'# Speed assets:precompile
 end
