@@ -24,7 +24,7 @@
 
   .form-actions
     = f.submit "Salvar", class: 'btn btn-success b'
-    %a#cancel-pay-link.btn(hre='javascript:;') Cancelar
+    %a#cancel-payment-link.btn(hre='javascript:;') Cancelar
 
 :javascript
   var accounts_to = #{AccountQuery.new.income_payment_options(income).to_json}

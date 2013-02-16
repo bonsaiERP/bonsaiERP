@@ -54,10 +54,10 @@ class ExpensesController < ApplicationController
 
   # PUT /incomes/:id
   def update
-    @expense = Expense.find(params[:id])
     de = DefaultExpense.new(Expense.find(params[:id]))
+    method = params[:commit_approve].present? ? :update_and_approve : :update
 
-    if de.update(expense_params)
+    if de.send(method, expense_params)
       redirect_to de.expense, notice: 'El egreso fue actualizado!.'
     else
       @income = de.expense

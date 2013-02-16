@@ -74,7 +74,7 @@
       %i.icon-plus-sign
       Pagar
 
-    %a.btn.btn-primary(id='devolution-link' href='javascript:;')
+    -#%a.btn.btn-primary(id='devolution-link' href='javascript:;')
       %i.icon-minus-sign
       Devolver
 
@@ -83,7 +83,7 @@
       = render 'expenses/payment_form', expense: @expense if @expense.is_approved?
 
     #devolution-form(style='display: none')
-      %h3 Devolución
+      -#%h3 Devolución
       -#= render 'expenses/devolution_form', expense: @expense unless @expense.is_draft?
 
     %h2 Pagos y devoluciones
@@ -100,14 +100,23 @@
 :coffeescript
   $( ->
     $('#tabs').tabs()
+    # Show hide
     $('#payment-link').click( -> 
       $('#payment-form').show('slow')
       $(this).hide('slow')
     )
+    $('#cancel-payment-link').click( -> 
+      $('#payment-form').hide('slow')
+      $('#payment-link').show('slow')
+    )
 
+    # Devolution show hide
     $('#devolution-link').click( -> 
       $('#devolution-form').show('slow')
       $(this).hide('slow')
     )
-
+    $('#cancel-devolution-link').click( -> 
+      $('#devolution-form').hide('slow')
+      $('#devolution-link').show('slow')
+    )
   )

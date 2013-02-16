@@ -23,7 +23,8 @@
       = f.input :reference, label: 'Referecia', as: :text, input_html: {rows: 3}
 
   .form-actions
-    = f.submit "Salvar", class: 'btn btn-success'
+    = f.submit "Salvar", class: 'btn btn-success b'
+    %a#cancel-payment-link.btn(hre='javascript:;') Cancelar
 
 :javascript
   var accounts_to = #{AccountQuery.new.expense_payment_options(expense).to_json}
