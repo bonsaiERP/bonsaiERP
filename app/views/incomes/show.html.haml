@@ -84,29 +84,38 @@
 
     #devolution-form(style='display: none')
       %h3 Devolución
-      -#= render 'incomes/devolution_form', income: @income unless @income.is_draft?
+      = render 'incomes/devolution_form', income: @income unless @income.is_draft?
 
     %h2 Cobros y devoluciones
 
     %ul.unstyled.listing
-      = render partial: 'account_ledgers/income', collection: @income.payments,as: :ledger
+      = render partial: 'account_ledgers/income', collection: @income.payments_devolutions,as: :ledger
 
     %h2 Intereses
 
     %ul.unstyled.listing
       = render partial: 'account_ledgers/income', collection: @income.interests,as: :ledger
 
-:coffeescript
+:coffee
   $( ->
     $('#tabs').tabs()
+    # Payment show hide
     $('#payment-link').click( -> 
       $('#payment-form').show('slow')
       $(this).hide('slow')
     )
+    $('#cancel-pay-link').click( ->
+      $('#payment-form').hide('slow')
+      $('#payment-link').show('slow')
+    )
 
+    # Devolution show hide
     $('#devolution-link').click( -> 
       $('#devolution-form').show('slow')
       $(this).hide('slow')
     )
-
+    $('#cancel-devolution-link').click( -> 
+      $('#devolution-form').hide('slow')
+      $('#devolution-link').show('slow')
+    )
   )

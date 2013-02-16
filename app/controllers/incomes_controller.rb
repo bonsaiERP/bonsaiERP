@@ -8,7 +8,7 @@ class IncomesController < ApplicationController
   def index
     @incomes = IncomeQuery.new.search(
       search: params[:search]
-    ).page(@page)
+    ).order('date desc').page(@page)
   end
 
   # GET /incomes/1
@@ -56,10 +56,10 @@ class IncomesController < ApplicationController
 
   # PUT /incomes/:id
   def update
-    @income = Income.find(params[:id])
     di = DefaultIncome.new(Income.find(params[:id]))
+    method = params[:commit_approve].present? ? :update_and_approve : :update
 
-    if di.update(income_params)
+    if di.send(method, income_params)
       redirect_to di.income, notice: 'El Ingreso fue actualizado!.'
     else
       @income = di.income

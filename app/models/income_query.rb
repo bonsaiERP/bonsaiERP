@@ -8,7 +8,7 @@ class IncomeQuery
   end
 
   def search(params={})
-    @rel = @rel.where{} if params[:search].present?
+    #@rel = @rel.where{} if params[:search].present?
     @rel.includes(:contact, transaction: [:creator, :approver])
   end
 

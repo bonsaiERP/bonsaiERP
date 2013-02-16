@@ -3,7 +3,6 @@
   = hidden_field_tag :klass, payment.class
 
   = f.hidden_field :account_id
-
   .row-fluid
     .span6
       = f.input :account_to_id, label: 'Cuenta', collection: AccountQuery.new.payment(f.ob)

@@ -17,7 +17,7 @@ class AccountQuery
       create_hash(v, :id, :type, :currency, :amount, :name, :to_s) 
     }
 
-    arr + ExpenseQuery.new.pay(income.contact_id).map {|v| 
+    arr + ExpenseQuery.new.to_pay(income.contact_id).map {|v| 
       create_hash(v, :id, :type, :currency, :balance, :name, :to_s)
     }
   end

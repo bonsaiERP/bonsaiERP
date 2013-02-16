@@ -23,14 +23,14 @@
       = f.input :reference, label: 'Referecia', as: :text, input_html: {rows: 3}
 
   .form-actions
-    = f.submit "Salvar", class: 'btn btn-success'
+    = f.submit "Salvar", class: 'btn btn-success b'
+    %a#cancel-pay-link.btn(hre='javascript:;') Cancelar
 
 :javascript
   var accounts_to = #{AccountQuery.new.income_payment_options(income).to_json}
 
-:coffeescript
+:coffee
   $(->
-
     $('#income_payment_account_to_id').select2(
       data: accounts_to
       formatResult: Payment.paymentOptions

@@ -12,7 +12,7 @@ class ExpenseQuery
     @rel.includes(:contact, transaction: [:creator, :approver])
   end
 
-  def pay(contact_id)
-    Income.active.where{(state.eq 'approved') & (amount.gt 0)}.where(contact_id: contact_id)
+  def to_pay(contact_id)
+    @rel.active.where{(state.eq 'approved') & (amount.gt 0)}.where(contact_id: contact_id)
   end
 end

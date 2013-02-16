@@ -15,7 +15,7 @@ describe IncomesController do
     end
   end
 
-  describe "POST /item" do
+  describe "POST /incomes" do
     let(:income) do
       inc = build(:income, id: 1)
       inc.stub(persisted?: true)
@@ -33,6 +33,34 @@ describe IncomesController do
       post :create, income: {currency: 'BOB'}, commit_approve: 'Com Save'
 
       response.should redirect_to(income_path(1))
+    end
+  end
+
+  describe "PUT /incomes/:id" do
+    let(:income) do
+      inc = build(:income, id: 1)
+      inc.stub(persisted?: true)
+      inc
+    end
+
+    it "updates" do
+      Income.stub(find: income)
+      DefaultIncome.any_instance.should_receive(:update).and_return(true)
+
+      put :update,  id: 1, income: {currency: 'BOB'}
+
+      response.should redirect_to(income_path(1))
+      flash[:notice].should eq('El Ingreso fue actualizado!.')
+    end
+
+    it "updates_and_approves" do
+      Income.stub(find: income)
+      DefaultIncome.any_instance.should_receive(:update_and_approve).and_return(true)
+
+      put :update,  id: 1, commit_approve: 'Save', income: {currency: 'BOB'}
+
+      response.should redirect_to(income_path(1))
+      flash[:notice].should eq('El Ingreso fue actualizado!.')
     end
   end
 

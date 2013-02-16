@@ -7,7 +7,7 @@ class ExpensesController < ApplicationController
   def index
     @expenses = ExpenseQuery.new.search(
       search: params[:search]
-    ).page(@page)
+    ).order('date desc').page(@page)
   end
 
   # GET /expenses/1
