@@ -12,8 +12,8 @@ describe Organisation do
     it {should have_valid(:name).when("uno")}
     it {should_not have_valid(:name).when(" ", nil)}
 
-    it { should_not have_valid('tenant').when('common') }
-    it { should_not have_valid('tenant').when('public') }
+    it { should_not have_valid('tenant').when('common', 'public', 'www', 'demo') }
+    it { should have_valid('tenant').when('bonsai', 'other') }
 
     context 'Persisted organisation' do
       subject(:organisation) { 
@@ -60,30 +60,8 @@ describe Organisation do
     it "creates a new organisation" do
       org = Organisation.new(org_params)
 
-      org.create_organisation.should be_true
-
-      org.master_link.should be_persisted
-      org.master_link.rol.should eq('admin')
-      org.master_link.should be_master_account
-
-      org.master_link.user.should be_persisted
-      org.master_link.user.email.should eq(org_params[:email])
-
-      org.master_account.should be_is_a(User)
-      org.master_account.should be_persisted
+      org.save.should be_true
     end
 
-    it "should present errors if no email or password" do
-      org = Organisation.new(org_params.merge(email: '', password: '') )
-
-      org.create_organisation.should be_false
-      org.errors[:email].should be_include I18n.t("activerecord.errors.messages.blank")
-      org.errors[:password].should be_include I18n.t("activerecord.errors.messages.too_short", count: PASSWORD_LENGTH)
-
-      org = Organisation.new(org_params.merge(email: 'na@mail', password: 'demo1234') )
-
-      org.create_organisation.should be_false
-      org.errors[:email].should be_include I18n.t("errors.messages.user.email")
-    end
   end
 end

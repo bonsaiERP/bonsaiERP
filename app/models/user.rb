@@ -20,7 +20,7 @@ class User < ActiveRecord::Base
   ########################################
   # Validations
   validates_email_format_of :email, message: I18n.t("errors.messages.user.email")
-  validates :email, presence: true, uniqueness: {if: :email_changed?}
+  validates :email, presence: true, uniqueness: {if: :email_changed?, message: I18n.t('errors.messages.email_taken')}
 
   with_options if: :change_password? do |u|
     u.validates :password, length: {within: PASSWORD_LENGTH..100 }

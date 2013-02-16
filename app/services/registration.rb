@@ -22,6 +22,9 @@ class Registration < BaseService
     commit_or_rollback do
       res = create_organisation
       res = create_user && res
+
+      set_errors(organisation, user) unless res
+      res
     end
   end
 

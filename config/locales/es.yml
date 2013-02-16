@@ -193,6 +193,7 @@ es:
       odd: "debe ser impar"
       even: "debe ser par"
       invalidkeys: "Solo debe ingresar datos permitidos" # New one to check if the keys that are assigned are valid
+      email_taken: "El email que ingreso ya existe, seleccione otro email"
       account_ledger:
         invalid_contact: "Debe seleccionar un Cliente, Proveedor o Personal"
         same_account: "Las cuentas que selecciono son identicas"

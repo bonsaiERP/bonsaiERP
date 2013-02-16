@@ -85,7 +85,7 @@ private
   end
 
   def valid_tenant_not_in_list
-    if ['public', 'common', 'demo'].include?(tenant)
+    if ['www', 'public', 'common', 'demo'].include?(tenant)
       self.errors[:tenant] << I18n.t('organisation.errors.tenant.list')
     end
   end
