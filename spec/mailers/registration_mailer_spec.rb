@@ -21,6 +21,9 @@ describe RegistrationMailer do
     email.to.should == [user.email]
     email.from.should eq(["register@#{DOMAIN}"])
 
+    header  = email.header.to_s
+    header.should =~ /From: #{APP_NAME} <register@#{DOMAIN}>/
+    header.should =~ /To: #{user} <demo@example.com>/
 
     link = "http://#{tenant}.#{DOMAIN}/registrations/#{user.confirmation_token}"
     email.body.should have_selector("a[href='#{link}']")

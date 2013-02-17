@@ -11,7 +11,7 @@ class RegistrationMailer < ActionMailer::Base
     @user = reg.user
     @tenant = reg.tenant
 
-    mail(to: reg.email, subject: I18n.t("email.registration.send", app_name: APP_NAME) )
+    mail(to: "#{@user} <#{reg.email}>", subject: I18n.t("email.registration.send", app_name: APP_NAME) )
   end
 
   def user_registration(reg)
@@ -19,6 +19,6 @@ class RegistrationMailer < ActionMailer::Base
     @tenant = OrganisationSession.tenant
     @name = OrganisationSession.name
 
-    mail(to: @user.email, subject: I18n.t("email.registration.user", app_name: APP_NAME, company: @name) )
+    mail(to: "#{@user} <#{@user.email}>", subject: I18n.t("email.registration.user", app_name: APP_NAME, company: @name) )
   end
 end
