@@ -16,7 +16,7 @@ describe RegistrationMailer do
     email = RegistrationMailer.send_registration(registration)
 
 
-    email.subject.should eq(I18n.t("email.registration.send", app_name: APP_NAME))
+    email.subject.should eq(I18n.t("email.registration.send", email: registration.email, app_name: APP_NAME))
  
     email.to.should == [user.email]
     email.from.should eq(["register@#{DOMAIN}"])

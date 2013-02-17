@@ -304,7 +304,7 @@ es:
     invoice_title: "Nota de venta "
     invoice_body: "Estimado cliente le hacemos llegar el adjunto de la venta"
     registration:
-      send: "Complete su registro en %{app_name}"
+      send: "Completa tu registro %{email} en %{app_name}"
       user: "Bienvenido a %{app_name}, usted ha sido adicionado como usuario en %{company}" 
     reset_password:
       subject: "Recuperar contraseña de %{app_name}"
