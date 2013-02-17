@@ -70,6 +70,16 @@ class Organisation < ActiveRecord::Base
     f.close
   end
 
+  # Especial method that deletes the schema, users and all related stuff
+  def delete_all
+    ActiveRecord::Base.transaction do
+      PgTools.drop_schema(tenant)
+      users.destroy_all
+      links.destroy_all
+      self.destroy
+    end
+  end
+
 private
   def set_user_errors(user)
     [:email, :password].each do |meth|
