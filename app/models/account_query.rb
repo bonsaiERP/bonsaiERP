@@ -7,18 +7,18 @@ class AccountQuery
     @rel.active.where(type: ['Cash', 'Bank'])
   end
 
+  def bank_cash_options
+    bank_cash.map {|v| create_hash(v, *default_options) }
+  end
+
   def payment(model)
     #Account.where{(type.in ['Cash', 'Bank']) | (type: 'Expense')}
     bank_cash
   end
 
   def income_payment_options(income)
-    arr = bank_cash.map {|v| 
-      create_hash(v, :id, :type, :currency, :amount, :name, :to_s) 
-    }
-
-    arr + ExpenseQuery.new.to_pay(income.contact_id).map {|v| 
-      create_hash(v, :id, :type, :currency, :balance, :name, :to_s)
+    bank_cash_options + ExpenseQuery.new.to_pay(income.contact_id).map {|v| 
+      create_hash(v, *default_options)
     }
   end
 
@@ -34,5 +34,9 @@ class AccountQuery
 
   def create_hash(v, *args)
     Hash[ args.map {|k| [k, v.send(k)] } ]
+  end
+
+  def default_options
+    [:id, :type, :currency, :amount, :name, :to_s]
   end
 end

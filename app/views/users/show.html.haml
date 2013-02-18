@@ -3,34 +3,36 @@
 
 %h1= current_user
 
+.row-fluid
+  .span12
+    = link_to edit_user_path(current_user), class: 'btn btn-primary' do
+      %i.icon-user
+      Editar datos perfil
 
-= link_to edit_user_path(current_user), class: 'btn btn-primary' do
-  %i.icon-user
-  Actualizar datos
+    = link_to new_user_password_path, class: 'btn btn-primary' do
+      %i.icon-key
+      Cambiar contraseña
 
-= link_to new_user_password_path, class: 'btn btn-primary' do
-  %i.icon-key
-  Cambiar contraseña
+<br/><br/>
+.row-fluid
+  .span3
+    %span.muted Nombres:
+    = current_user.first_name
+  .span3
+    %span.muted Apellidos:
+    = current_user.last_name
 
-.input
-  %label Nombres
-  = current_user.first_name
+  .span3
+    %i.icon-phone.muted(title="Teléfono" rel="tooltip")
+    = current_user.phone
+  .span3
+    %i.icon-mobile-phone.muted(title="Movil" rel="tooltip")
+    = current_user.mobile
 
-.input
-  %label Apellidos
-  = current_user.last_name
-
-.input
-  %label Teléfono
-  = current_user.phone
-.input
-  %label Móvil
-  = current_user.mobile
-.clear
-
-.input
-  %label Email
-  = mail_to current_user.email unless current_user.email.blank?
-.input
-  %label Dirección
-  = nl2br current_user.address
+.row-fluid
+  .span6
+    %i.icon-envelope.muted(title="E-mail" rel="tooltip")
+    = mail_to current_user.email unless current_user.email.blank?
+  .span6
+    %i.icon-building.muted(title="Dirección" rel="tooltip")
+    = nl2br current_user.address

@@ -34,7 +34,7 @@ class Income < Account
 
   ########################################
   # Scopes
-  scope :discount, -> { joins(:transaction).where(transaction: {discounted: true}) }
+  scope :discount, lambda { joins(:transaction).where(transaction: {discounted: true}) }
 
   ########################################
   # Delegations

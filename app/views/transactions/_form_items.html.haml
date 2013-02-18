@@ -20,8 +20,9 @@
           data: {new_url: '/items/new', title: 'Nuevo ítem'}}
 
       %td
-        = fd.input :price, input_html: { size: 8, type: 'decimal', class: 'item-price', data: {'original-price'=> fd.object.original_price, 'value' => 'item.price'}  },
-        label: false
+        = fd.input :price, input_html: { size: 8, type: 'decimal', class: 'item-price', 
+          data: {'original-price'=> fd.object.original_price, 'value' => 'item.price'}  },
+          label: false
 
       %td
         = fd.input :quantity, input_html: { size: 8, type: :decimal, class: 'item-quantity', data: { 'value' => 'item.quantity' } },

@@ -7,7 +7,7 @@ class ContactsController < ApplicationController
   #respond_to :html, :json
   # GET /contacts
   def index
-    @contacts = Contact.page(@page)
+    @contacts = Contact.order('matchcode asc').page(@page)
 
     respond_to do |format|
       format.html

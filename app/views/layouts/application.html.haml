@@ -14,17 +14,16 @@
     = javascript_include_tag "application"
 
     :javascript
-      var exchangeRates = #{set_exchange_rates}
-      window.exchangeRates = exchangeRates;
+      this.exchangeRates = #{set_exchange_rates};
+      this.currencies = #{CURRENCIES.to_json};
 
     - if organisation?
       :javascript
+        this.currency = "#{currency}";
         this.organisation = { 
           currency: "#{current_organisation.currency}",
           name: "#{current_organisation.name}"
         }
-      :javascript
-        this.currencies = #{CURRENCIES.to_json}
 
   %body
 

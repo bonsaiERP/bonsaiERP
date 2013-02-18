@@ -19,6 +19,7 @@
 #= require bootstrap/bootstrap-popover
 #= require bootstrap/bootstrap-collapse
 
+#= require namespace
 #= require app/currency.coffee
 #= require app/exchange_rate.js.coffee
 #= require app/transaction.js.coffee

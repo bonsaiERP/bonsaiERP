@@ -1,5 +1,5 @@
-= simple_form_for income.income_payment, url: income_payment_path(income.id) do |f|
-  = bonsai_form_error(f)
+-# FIXTURE
+= simple_form_for IncomePayment.new, url: '' do |f|
   = f.hidden_field :account_id
 
   .row-fluid
@@ -7,7 +7,8 @@
       = f.input :account_to_id, label: 'Cuenta', input_html: {class: 'span10', data:{value: 'payment.account_to_id'}}
     .span6
       = f.input :exchange_rate, label: 'Tipo de cambio',
-        input_html: {disabled: true, type: 'decimal', size: 10, data: {value: 'exchange_rate'}}
+        input_html: {disabled: true, type: 'decimal', size: 10, 
+        data: {value: 'payment.exchange_rate', disabled: 'payment:otherCurrency'}}
 
   .row-fluid
     .span3
@@ -27,26 +28,8 @@
 
   .row-fluid
     .span6
-      = f.input :reference, label: 'Referecia', as: :text, input_html: {rows: 3, data: {value: 'reference'}}
+      = f.input :reference, label: 'Referecia', as: :text, input_html: {rows: 3, data: {value: 'payment.reference'}}
 
   .form-actions
     = f.submit "Salvar", class: 'btn btn-success b'
     %a#cancel-payment-link.btn(hre='javascript:;') Cancelar
-
-:javascript
-  var accounts_to = #{AccountQuery.new.income_payment_options(income).to_json}
-
-:coffee
-  $(->
-    $('#income_payment_account_to_id').select2(
-      data: accounts_to
-      formatResult: App.Payment.paymentOptions
-      formatSelection: App.Payment.paymentOptions
-    ).on('change', ->
-      $this = $(this)
-      $this.trigger('change:account_to', [$this.select2('data')])
-    )
-
-    p = new App.Payment
-    p.bindChange('#income_payment_account_to_id')
-  )

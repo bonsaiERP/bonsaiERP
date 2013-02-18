@@ -144,4 +144,4 @@ class ExchangeRate extends Backbone.Model
       @.setSuggestRates()
     )
 
-window.ExchangeRate = ExchangeRate
+App.ExchangeRate = ExchangeRate

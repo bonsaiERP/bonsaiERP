@@ -2,17 +2,22 @@
   %ul.breadcrumps.span6
     %li #{link_to current_user, current_user}
 
-%h1 Editar #{@user}
+%h1 Editar datos perfil
 
-= simple_form_for(@user) do |f|
-  = f.input :first_name, :label => 'Nombres'
-  = f.input :last_name, :label => 'Apellidos'
-  .clear
+= simple_form_for(current_user) do |f|
+  .row-fluid
+    .span6
+      = f.input :first_name, :label => 'Nombres'
+    .span6
+      = f.input :last_name, :label => 'Apellidos'
+  .row-fluid
+    .span6
+      = f.input :phone, :label => 'Teléfono'
+    .span6
+      = f.input :mobile, :label => 'Móvil'
+  .row-fluid
+    .span6
+      = f.input :address, :label => 'Dirección', :as => :text, :input_html => {:rows => 4, :cols => 35}
 
-  = f.input :phone, :label => 'Teléfono'
-  = f.input :mobile, :label => 'Móvil'
-  .clear
-  = f.input :address, :label => 'Dirección', :as => :text, :input_html => {:rows => 4, :cols => 35}
-
-  .clear
-  = f.submit "Actualizar", :class => 'btn btn-success b'
+  .form-actions
+    = f.submit "Actualizar datos", class: 'btn btn-success b'

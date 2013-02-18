@@ -1,7 +1,6 @@
 # encoding: utf-8 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class UsersController < ApplicationController
-  before_filter :check_if_default_password, :only => [:password, :update_password]
 
   # GET /users/:id
   def show
@@ -22,6 +21,6 @@ class UsersController < ApplicationController
 
 private
   def user_params
-
+    params.require(:user).permit(:first_name, :last_name, :address, :phone, :mobile)
   end
 end
