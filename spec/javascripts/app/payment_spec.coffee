@@ -30,9 +30,9 @@ describe "Payment instance", ->
     $('body').append($(fixture.el).html())
     p = new App.Payment
     @fix = fixture.el
-    
+
     setTimeout( ->
-      rivets.bind($('form'), {payment: p})
+      rivets.bind($('#income-payment-form'), {payment: p})
       p.set('amount', 10)
       expect(true).toBe(false)
     , 200)

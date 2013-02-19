@@ -1,17 +1,26 @@
 # Class for payments
 class Payment extends Backbone.Model
+  initialize: ->
+    @on 'change:baseCurrency', (m, v) ->
+      @set('inverse', currency != @get('baseCurrency') )
   defaults:
     amount: 0.0
     interest: 0.0
     exchange_rate: 1.0
-
-  # Check if the organisation currency is the same
-  otherCurrency: ->
-    @get('currency') != currency
-
+    inverse: false
+    sameCurrency: true
+  convert: (cur) ->
+    if @get('inverse')
+      fx.convert(1, from: @get('baseCurrency'), to: cur)
+    else
+      fx.convert(1, from: cur, to: @get('baseCurrency'))
+  isInverse: (cur) ->
+    cur != @get('baseCurrency')
+  # Method for select2
   bindChange: (sel) ->
     $(sel).on('change:account_to', (e, data) =>
-      @set('currency', data.currency)
+      other = @get('baseCurrency') == data.currency
+      @set({currency: data.currency, exchange_rate: @convert(data.currency), sameCurrency: other})
     )
 
 Payment.paymentOptions = (val) ->

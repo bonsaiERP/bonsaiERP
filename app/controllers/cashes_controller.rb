@@ -26,7 +26,7 @@ class CashesController < ApplicationController
 
   # GET /cashs/new
   def new
-    @cash = Cash.new(:currency_id => params[:currency_id])
+    @cash = Cash.new_cash
 
     respond_to do |format|
       format.html # new.html.erb
@@ -40,7 +40,7 @@ class CashesController < ApplicationController
 
   # POST /cashs
   def create
-    @cash = Cash.new(cash_params)
+    @cash = Cash.new_cash(cash_params)
 
     respond_to do |format|
       if @cash.save
@@ -84,6 +84,6 @@ private
   end
 
   def cash_params
-    params.require(:cash).permit(:name, :currency_id, :amount, :description)
+    params.require(:cash).permit(:name, :currency, :amount, :description)
   end
 end

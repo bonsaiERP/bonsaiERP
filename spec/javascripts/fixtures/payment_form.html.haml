@@ -1,5 +1,5 @@
 -# FIXTURE
-= simple_form_for IncomePayment.new, url: '' do |f|
+= simple_form_for IncomePayment.new, url: '', html: {id: 'income-payment-form' } do |f|
   = f.hidden_field :account_id
 
   .row-fluid
@@ -8,7 +8,7 @@
     .span6
       = f.input :exchange_rate, label: 'Tipo de cambio',
         input_html: {disabled: true, type: 'decimal', size: 10, 
-        data: {value: 'payment.exchange_rate', disabled: 'payment:otherCurrency'}}
+        data: {value: 'payment.exchange_rate', disabled: 'payment.otherCurrency'}}
 
   .row-fluid
     .span3

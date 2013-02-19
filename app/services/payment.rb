@@ -36,7 +36,7 @@ private
   # Builds and AccountLedger instance with some default data
   def build_ledger(attrs = {})
     AccountLedger.new({
-      account_id: account_id, exchange_rate: real_exchange_rate,
+      account_id: account_id, exchange_rate: conv_exchange_rate,
       account_to_id: account_to_id, inverse: inverse?,
       reference: reference, date: date, currency: account_to.currency
     }.merge(attrs))
@@ -89,7 +89,8 @@ private
     currency_exchange.exchange(interest)
   end
 
-  def real_exchange_rate
+  # Exchange rate used using inverse
+  def conv_exchange_rate
     currency_exchange.exchange_rate
   end
 

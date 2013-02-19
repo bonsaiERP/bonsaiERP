@@ -1,6 +1,3 @@
-:css
-  #cash-form{ max-width: 850px; }
-
 = simple_form_for(@cash, html: {id: 'cash-form'}) do |f|
   = bonsai_form_error(f)
   .row-fluid
@@ -9,7 +6,7 @@
 
     .span6
       -if @cash.new_record?
-        = f.input :currency, :label => 'Moneda',
+        = f.input :currency, :label => 'Moneda', collection: currency_options,
           :hint => "<span class='warning bicon'></span> <span class='dark-yellow'>No es posible modificar después</span>".html_safe
       - else
         %label Moneda

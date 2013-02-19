@@ -17,6 +17,7 @@ class AccountLedger < ActiveRecord::Base
 
   ########################################
   # Callbacks
+  # TODO: review callback
   before_validation :set_currency
 
   before_create :set_creator
@@ -94,7 +95,7 @@ private
   end
 
   def set_currency
-    self.currency = account_currency
+    self.currency = account_to_currency
   end
 
   def set_creator

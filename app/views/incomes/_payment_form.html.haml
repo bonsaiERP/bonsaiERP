@@ -1,4 +1,4 @@
-= simple_form_for income.income_payment, url: income_payment_path(income.id) do |f|
+= simple_form_for income.income_payment, url: income_payment_path(income.id), html: {id: 'income-payment-form'} do |f|
   = bonsai_form_error(f)
   = f.hidden_field :account_id
 
@@ -7,12 +7,12 @@
       = f.input :account_to_id, label: 'Cuenta', input_html: {class: 'span10', data:{value: 'payment.account_to_id'}}
     .span6
       = f.input :exchange_rate, label: 'Tipo de cambio',
-        input_html: {disabled: true, type: 'decimal', size: 10, data: {value: 'exchange_rate'}}
+        input_html: {disabled: true, type: 'decimal', size: 10, data: {value: 'payment.exchange_rate', disabled: 'payment.sameCurrency'} }
 
   .row-fluid
     .span3
       = f.input :amount, label: 'Cantidad <span class="currency"></span>',
-        input_html: {type: 'decimal', size: 10, data: {value: 'payment.amount'}}
+        input_html: {type: 'decimal', size: 10, data: {value: 'payment.amount'} }
     .span3
       = f.input :interest,
         label: '<span title="Intereses o penalidades" rel="tooltip">Int. Pen.<span> <span class="currency"></span>',
@@ -27,15 +27,15 @@
 
   .row-fluid
     .span6
-      = f.input :reference, label: 'Referecia', as: :text, input_html: {rows: 3, data: {value: 'reference'}}
+      = f.input :reference, label: 'Referecia', as: :text, input_html: {rows: 3, data: {value: 'reference'} }
 
   .form-actions
     = f.submit "Salvar", class: 'btn btn-success b'
     %a#cancel-payment-link.btn(hre='javascript:;') Cancelar
 
 :javascript
-  var accounts_to = #{AccountQuery.new.income_payment_options(income).to_json}
-
+  var accounts_to = #{AccountQuery.new.income_payment_options(income).to_json};
+  var baseCurrency = "#{income.currency}";
 :coffee
   $(->
     $('#income_payment_account_to_id').select2(
@@ -48,5 +48,9 @@
     )
 
     p = new App.Payment
+    p.set(baseCurrency: baseCurrency)
     p.bindChange('#income_payment_account_to_id')
+    rivets.bind( $('form#income-payment-form'), payment: p )
+
+    window.p = p
   )
