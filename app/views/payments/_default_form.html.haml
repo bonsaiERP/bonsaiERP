@@ -1,23 +1,31 @@
 .row-fluid
   .span6
-    = f.input :account_to_id, label: 'Cuenta', collection: account_to_options
-  .span3
-    = f.input :date, as: :datepicker, label: 'Fecha'
-  .span3
-    = f.input :verification, as: :boolean, label: 'Verificar',  label: 'Verificar <i class="icon-info-sign" rel="tooltip" title="Verificar a futuro. Ej.: Cheque"></i>'.html_safe
-
+    = f.input :account_to_id, label: 'Cuenta', input_html: {class: 'span10', data:{value: 'payment.account_to_id'}}
+  .span6
+    = f.input :exchange_rate, label: 'Tipo de cambio',
+      input_html: {disabled: true, type: 'decimal', size: 10, data: {value: 'payment.exchange_rate', disabled: 'payment.sameCurrency'} }
 
 .row-fluid
   .span3
     = f.input :amount, label: 'Cantidad <span class="currency"></span>',
-      as: :decimal, input_html: {size: 10, type: 'decimal'}
+      input_html: {type: 'decimal', size: 10, data: {value: 'payment.amount'} }
   .span3
-    = f.input :interest, label: '<span title="Intereses o penalidades" rel="tooltip">Int. Pen.<span> <span class="currency"></span>',
-      hint: 'Intereses, penalidates, etc.', as: :decimal,
-      input_html: {size: 10, type: 'decimal'}
+    = f.input :interest,
+      label: '<span title="Intereses o penalidades" rel="tooltip">Int. Pen.<span> <span class="currency"></span>',
+      hint: 'Intereses, penalidates, etc.',
+      input_html: {size: 10, type: 'decimal', data: {value: 'payment.interest'}}
+  .span3
+    = f.input :date, as: :datepicker, label: 'Fecha'
+  .span3
+    = f.input :verification, as: :boolean, label: 'Verificar',
+      input_html: {data: {value: 'payment.verification', disabled: 'payment.allowVerify'} },
+      label: 'Verificar <i class="icon-info-sign" rel="tooltip" title="Verificar a futuro. Ej.: Cheque"></i>'.html_safe
+
+
+.row-fluid
   .span6
-    = f.input :reference, label: 'Referecia', as: :text, input_html: {rows: 3}
+    = f.input :reference, label: 'Referecia', as: :text, input_html: {rows: 3, data: {value: 'reference'} }
 
 .form-actions
-  = f.submit "Salvar", class: 'btn btn-success'
-
+  = f.submit "Salvar", class: 'btn btn-success b'
+  %a#cancel-payment-link.btn(hre='javascript:;') Cancelar

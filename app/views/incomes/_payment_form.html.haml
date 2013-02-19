@@ -2,36 +2,7 @@
   = bonsai_form_error(f)
   = f.hidden_field :account_id
 
-  .row-fluid
-    .span6
-      = f.input :account_to_id, label: 'Cuenta', input_html: {class: 'span10', data:{value: 'payment.account_to_id'}}
-    .span6
-      = f.input :exchange_rate, label: 'Tipo de cambio',
-        input_html: {disabled: true, type: 'decimal', size: 10, data: {value: 'payment.exchange_rate', disabled: 'payment.sameCurrency'} }
-
-  .row-fluid
-    .span3
-      = f.input :amount, label: 'Cantidad <span class="currency"></span>',
-        input_html: {type: 'decimal', size: 10, data: {value: 'payment.amount'} }
-    .span3
-      = f.input :interest,
-        label: '<span title="Intereses o penalidades" rel="tooltip">Int. Pen.<span> <span class="currency"></span>',
-        hint: 'Intereses, penalidates, etc.',
-        input_html: {size: 10, type: 'decimal', data: {value: 'payment.interest'}}
-    .span3
-      = f.input :date, as: :datepicker, label: 'Fecha'
-    .span3
-      = f.input :verification, as: :boolean, label: 'Verificar',
-        label: 'Verificar <i class="icon-info-sign" rel="tooltip" title="Verificar a futuro. Ej.: Cheque"></i>'.html_safe
-
-
-  .row-fluid
-    .span6
-      = f.input :reference, label: 'Referecia', as: :text, input_html: {rows: 3, data: {value: 'reference'} }
-
-  .form-actions
-    = f.submit "Salvar", class: 'btn btn-success b'
-    %a#cancel-payment-link.btn(hre='javascript:;') Cancelar
+  = render 'payments/default_form', f: f
 
 :javascript
   var accounts_to = #{AccountQuery.new.income_payment_options(income).to_json};
@@ -50,7 +21,5 @@
     p = new App.Payment
     p.set(baseCurrency: baseCurrency)
     p.bindChange('#income_payment_account_to_id')
-    rivets.bind( $('form#income-payment-form'), payment: p )
-
-    window.p = p
+    rivets.bind( $('#income-payment-form'), payment: p )
   )

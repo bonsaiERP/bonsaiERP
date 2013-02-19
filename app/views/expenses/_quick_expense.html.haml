@@ -4,7 +4,7 @@
       .span6
         = f.input :ref_number, label: "Número de referencia" do
           = f.text_field :ref_number, disabled: true
-      .span6= f.input :account_to_id, collection: AccountQuery.new.bank_cash, label: 'Cuenta'
+      .span6= f.input :account_to_id, label: 'Cuenta', input_html: {class: 'span10'}
 
     .row-fluid
       .span6
@@ -20,6 +20,9 @@
       = f.submit 'Salvar', class: 'btn btn-success b'
       %a#quick-expense-hide-link.btn Cancelar
 
+:javascript
+  var accounts_to = #{AccountQuery.new.bank_cash_options.to_json}
+
 :coffeescript
   $(->
     $('#quick-expense-link').click( ->
@@ -30,6 +33,13 @@
     $('#quick-expense-hide-link').click( ->
       $('.quick-expense-form').hide('medium')
       $('#quick-expense-link').show('medium')
+    )
+
+    # account_to_id
+    $('#quick_expense_account_to_id').select2(
+      data: accounts_to
+      formatResult: App.Payment.paymentOptions
+      formatSelection: App.Payment.paymentOptions
     )
   )
 
