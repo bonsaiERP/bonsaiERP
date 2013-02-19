@@ -1,22 +1,20 @@
 - content_for :links do
-  .span6 &nbsp;
-  .links.span6= link_to "Nuevo cuenta bancaria", new_bank_path
+  %ul.breadcrumbs.span6
+    %li Cuentas bancarias
 
-%header
-  %h1 Cuentas bancarias
-
-- if @banks.empty?
-  %h3 No tiene cuentas bancarias le recomendamos crear una
-  = link_to new_bank_path, class: 'btn btn-primary' do
-    %i.icon-plus-sign
-    Crear cuenta bancaria
+.row-fluid
+  .span6
+    %h1 Cuentas bancarias
+  .span6.r
+    = link_to new_bank_path, class: 'btn' do
+      %i.icon-plus-sign
+      Nuevo cuenta bancaria
 
 %ul#banks.accounts_list
   - @banks.each do |bank|
     %li.row-fluid
       .span7
         %h3= link_to bank, bank
-        = currency_label bank.currency
       .span3
         .moneybox
           %label TOTAL EN CUENTA

@@ -6,13 +6,13 @@
     %li
       %span #{@item}
 
-  .links.span6
-    = link_to "Nuevo", new_item_path, :class => 'add'
-    = link_to "Editar", edit_item_path(@item) , :class => 'edit'
-    = link_to "Borrar", @item , :class => 'delete', :confirm => "Esta seguro de borra el ítem", :method => :delete
-
-.page-header
-  %h1= @item
+.row-fluid
+  .span8
+    %h1.n= @item
+  .span4.r
+    = link_to icon_new_text, new_item_path, class: 'btn'
+    = link_to icon_edit_text, edit_item_path(@item), class: 'btn'
+    = link_to icon_delete_text, @item, class: 'btn', confirm: "Esta seguro de borra el ítem", method: :delete
 
 .row-fuid
   .span2

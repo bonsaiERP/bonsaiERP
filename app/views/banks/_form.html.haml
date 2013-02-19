@@ -7,15 +7,19 @@
       = f.input :number, :label => 'Número de cuenta'
 
   .row-fluid
-    .span6
-      = f.input :amount, :label => 'Total en cuenta', :input_html => {:size => 12, :class => 'r'}, :required => true
-  -else
+    - if bank.new_record?
+      .span6
+        = f.input :amount, :label => 'Total en cuenta', :input_html => {:size => 12, :class => 'r'}, :required => true
+      .span6
+        = f.input :currency, label: 'Moneda', collection: currency_options
+    -else
       .span6
         %label Moneda
         = bank.currency
       .span6
         %label Total en cuenta
-        = "#{bank.currency_symbol} #{ntc(bank.account_amount)}"
+        = ntc(bank.amount)
+        = currency_label bank.currency
 
   .row-fluid
     .span6

@@ -6,16 +6,16 @@
     %li
       %span #{@bank}
 
-  .links.span6
-    = link_to 'Editar', edit_bank_path(@bank), :class => 'edit', :title => "Editar cuenta bancaria"
 
-%header
-  %h1.n
-    %span
-      = @bank.name 
-      = @bank.number
-    = @bank.currency
-
+.row-fluid
+  .span10
+    %h1.n
+      %span
+        = @bank.name 
+        = @bank.number
+      = @bank.currency
+  .span2.r
+    = link_to icon_edit_text, edit_bank_path(@bank), class: 'btn'
 
 .row-fluid
   .span6

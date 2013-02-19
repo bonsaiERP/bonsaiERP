@@ -1,15 +1,18 @@
 - content_for :links do
-  %ul.breadcrumps.span6
-    %li #{link_to 'Cuentas bancarias', banks_path} 
+  %ul.breadcrumbs.span6
+    %li #{link_to 'Cuentas bancarias', banks_path}
+    %li
+      %i.icon-caret-right
     %li #{link_to @bank, @bank} 
     %li
-      %span Editar
+      %i.icon-caret-right
+    %li
+      Editar
 
-  .links.span6
-    /= link_to "Nuevo banco", items_path, :class => 'add'
-    = link_to "Ver", @bank.account, :class => 'show'
-    = link_to "Borrar", items_path, :class => 'delete', :confirm => 'Esta seguro de borrar el ítem', :method => :delete
+.row-fluid
+  .span6
+    %h1 Editar cuenta bancaria
+  .span6.r
+    = link_to icon_show_text, @bank, class: 'btn'
 
-%h1 Editar banco
-
-= render 'form', :bank => @bank
+= render 'banks/form', bank: @bank

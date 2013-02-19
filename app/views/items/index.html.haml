@@ -1,5 +1,5 @@
 - content_for :links do
-  %ul.breadcrumps.span6
+  %ul.breadcrumbs.span6
     %li
       %span Items
 
@@ -7,9 +7,9 @@
 .row-fluid
   .span6
     %h1 Items
-  .span6.links
-    = link_to new_item_path, :class => 'new' do
-      %i.bicon-add
+  .span6.r
+    = link_to new_item_path, class: 'btn' do
+      %i.icon-plus-sign
       Nuevo ítem
 
 - if Store.scoped.empty?
