@@ -318,5 +318,11 @@
   rivets.formatters.number = (value) ->
     _b.ntc(value)
 
+  rivets.formatters.currencyLabel = (val) ->
+    if val?
+      ['<span class="label label-inverse" title=',
+        '"', currencies[val]['name'], '"', ' rel="tooltip">',
+        val, '</span>'].join('')
+
   true
 )(jQuery)

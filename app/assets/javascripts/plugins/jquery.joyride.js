@@ -406,15 +406,15 @@
             } else if (methods.right()) {
 
               settings.$next_tip.css({
-                top: settings.$target.offset().top,
-                left: (settings.$target.outerWidth() + settings.$target.offset().left)});
+                top: settings.$target.offset().top - 30,
+                left: (settings.$target.outerWidth() + settings.$target.offset().left) + 15});
 
               methods.nub_position($nub, settings.tipSettings.nubPosition, 'left');
 
             } else if (methods.left()) {
 
               settings.$next_tip.css({
-                top: settings.$target.offset().top,
+                top: settings.$target.offset().top - 30,
                 left: (settings.$target.offset().left - settings.$next_tip.outerWidth() - nub_height)});
 
               methods.nub_position($nub, settings.tipSettings.nubPosition, 'right');

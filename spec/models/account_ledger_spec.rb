@@ -36,7 +36,7 @@ describe AccountLedger do
     end
   end
 
-  it 'assings currency based on the account' do
+  it 'assings currency based on the account_to' do
     a = AccountLedger.new(valid_attributes)
     a.currency.should be_nil
     a.stub(account: account, account_to: account2)

@@ -1,12 +1,17 @@
 - content_for :links do
-  .span6 &nbsp;
-  .links.span6= link_to "Nueva caja", new_cash_path, :class => 'new'
+  %ul.breadcrumbs
+    %li
+      Cuentas efectivo
 
-%header
-  %h1 Cuentas caja
 
-- if @cashes.empty?
-  %h3= link_to "Crear nueva caja", new_cash_path, :class => 'add'
+.row-fluid
+  .span6
+    %h1 Cuentas efectivo
+  .span6.r
+    = link_to new_cash_path, class: 'btn btn-primary' do
+      %i.icon-plus-sign
+      Nueva cuenta efectivo
+
 
 %ul#cashes.accounts_list
   - @cashes.each do |cash|

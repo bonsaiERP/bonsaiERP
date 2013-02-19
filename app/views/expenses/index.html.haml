@@ -9,11 +9,11 @@
     .span6
       %h1 Egresos
     .span6.links
-      %a#quick-expense-link.btn.btn-primary(href="javascript:;")
-        %i.icon-plus-sign
+      %a#quick-expense-link.btn(href="javascript:;")
+        %i.icon-bolt
         Egreso rápido
 
-      = link_to new_expense_path, class: 'btn btn-primary' do
+      = link_to new_expense_path, class: 'btn' do
         %i.icon-plus-sign
         Nuevo Egreso
 

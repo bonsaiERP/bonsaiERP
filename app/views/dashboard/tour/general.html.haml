@@ -1,5 +1,5 @@
 %ol#start-tour.hidden
-  %li(data-id="main-menu-first" data-text="Siguiente" data-options="")
+  %li(data-id="main-menu-first" data-text="Siguiente" data-options="tipLocation:bottom")
     %h4
       Menú
     %p
@@ -7,11 +7,11 @@
       el ícon
       %span.icon-caret-down.icon-large
       son menús desplegables
-  %li(data-id="general-aspects-link" data-text="Fin" data-options="tipLocation:bottom")
+  %li(data-id="general-aspects-link" data-text="Fin" data-options="tipLocation:left")
     %h4
       Ayuda
     %p
-      La ayuda que le mostrara paso a paso 
+      La ayuda que le mostrara paso a paso
       como realizar una operación
 
 %ol#general-aspects-tour.hidden
@@ -19,8 +19,9 @@
     %h4
       Aspectos generales
     %p
-      Lea con cuidado los aspectos generales estos le ayudaran a 
+      Lea con cuidado los aspectos generales estos le ayudaran a
       entender mejor el sistema
+
 :javascript
   $(function() {
     $('#start-tour').joyride();

@@ -5,21 +5,9 @@
   = render 'payments/default_form', f: f
 
 :javascript
-  var accounts_to = #{AccountQuery.new.income_payment_options(income).to_json};
-  var baseCurrency = "#{income.currency}";
-:coffee
-  $(->
-    $('#income_payment_account_to_id').select2(
-      data: accounts_to
-      formatResult: App.Payment.paymentOptions
-      formatSelection: App.Payment.paymentOptions
-    ).on('change', ->
-      $this = $(this)
-      $this.trigger('change:account_to', [$this.select2('data')])
-    )
-
-    p = new App.Payment
-    p.set(baseCurrency: baseCurrency)
-    p.bindChange('#income_payment_account_to_id')
-    rivets.bind( $('#income-payment-form'), payment: p )
-  )
+  $(function() {
+    var p = new App.IncomePayment({
+      accountsTo: #{AccountQuery.new.income_payment_options(income).to_json}, 
+      baseCurrency: "#{income.currency}"
+    });
+  })

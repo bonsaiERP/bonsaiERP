@@ -1,27 +1,13 @@
-= simple_form_for expense.expense_payment, url: expense_payment_path(expense.id, html: {id: 'expense-payment-form'}) do |f|
+= simple_form_for expense.expense_payment, url: expense_payment_path(expense.id), html: {id: 'expense-payment-form'} do |f|
   = bonsai_form_error(f)
   = f.hidden_field :account_id
 
   = render 'payments/default_form', f: f
 
 :javascript
-  var accounts_to = #{AccountQuery.new.expense_payment_options(expense).to_json}
-  var baseCurrency = "#{expense.currency}";
-
-:coffeescript
-  $(->
-
-    $('#expense_payment_account_to_id').select2(
-      data: accounts_to
-      formatResult: App.Payment.paymentOptions
-      formatSelection: App.Payment.paymentOptions
-    ).on('change', ->
-      $this = $(this)
-      $this.trigger('change:account_to', [$this.select2('data')])
-    )
-
-    p = new App.Payment
-    p.set(baseCurrency: baseCurrency)
-    p.bindChange('#expense_payment_account_to_id')
-    rivets.bind( $('#expense-payment-form'), payment: p )
-  )
+  $(function() {
+    var p = new App.ExpensePayment({
+      accountsTo: #{AccountQuery.new.expense_payment_options(expense).to_json}, 
+      baseCurrency: "#{expense.currency}"
+    });
+  })

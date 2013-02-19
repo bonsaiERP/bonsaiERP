@@ -1,33 +1,89 @@
 # Class for payments
 class Payment extends Backbone.Model
-  initialize: ->
-    @on 'change:baseCurrency', (m, v) ->
-      @set('inverse', currency != @get('baseCurrency') )
+  accountToSel: ''
+  formSel: ''
+  verificationSel: ''
   defaults:
     amount: 0.0
     interest: 0.0
     exchange_rate: 1.0
     inverse: false
+    type: ''
+    accountsTo: []
     sameCurrency: true
+    totalCurrency: "0,00"
+  #
+  initialize: ->
+    @on 'change:baseCurrency', (m, v) ->
+      @set('inverse', currency != @get('baseCurrency') )
+    # select2 method to bind change
+    @setAccountToSelect2()
+    # set rivets
+    rivets.bind($(@formSel), {payment: this})
+
+    @on 'change:exchange_rate change:amount', @setTotalCurrency
+  #
   convert: (cur) ->
-    if @get('inverse')
+    val = if @get('inverse')
       fx.convert(1, from: @get('baseCurrency'), to: cur)
     else
       fx.convert(1, from: cur, to: @get('baseCurrency'))
+
+    val.toFixed(4) * 1
+  #
   isInverse: (cur) ->
     cur != @get('baseCurrency')
-  # Method for select2
-  bindChange: (sel) ->
-    $(sel).on('change:account_to', (e, data) =>
-      other = @get('baseCurrency') == data.currency
-      @set({currency: data.currency, exchange_rate: @convert(data.currency), sameCurrency: other})
+  # Method to set account_to related with select2 change event
+  setAccountTo: (data) ->
+    other = @get('baseCurrency') == data.currency
+    @set(
+      currency: data.currency
+      exchange_rate: @convert(data.currency)
+      type: data.type
+      sameCurrency: other # Used for enable disable exchange_rate
     )
+    @setCurrencyLabel()
+  #
+  setCurrencyLabel: ->
+    name = currencies[@get('currency')].name
+    $('span.currency').html ['<span class="label label-inverse" rel="tooltip" title="', name,'">', @get('currency'),'</span>' ].join('')
+  #
+  setTotalCurrency: ->
+    total = @convert(@get('currency')) * @get('amount')
+    @set('totalCurrency', _b.ntc(total) )
+
+  #
+  setAccountToSelect2: ->
+    self = this
+    # Set select2 and data
+    $(@accountToSel).select2(
+      data: @get('accountsTo')
+      formatResult: App.Payment.paymentOptions
+      formatSelection: App.Payment.paymentOptions
+    ).on('change', (event) ->
+      self.setAccountTo($(this).select2('data') )
+    )
+  #
+  isBank: ->
+    @get('type') == 'Bank'
+
+# Class for Income
+class IncomePayment extends Payment
+  accountToSel: '#income_payment_account_to_id'
+  formSel: '#income-payment-form'
+  verificationSel: '#income_payment_verification'
+
+# Class for Expemse
+class ExpensePayment extends Payment
+  accountToSel: '#expense_payment_account_to_id'
+  formSel: '#expense-payment-form'
+  verificationSel: '#expense_payment_verification'
 
 Payment.paymentOptions = (val) ->
   amt = ''
   switch val.type
     when 'Cash'
-      txt = 'Caja'
+      txt = 'Efectivo'
     when 'Bank'
       txt = 'Banco'
     when 'Expense'
@@ -43,3 +99,5 @@ Payment.paymentOptions = (val) ->
    val.currency, '</span>'].join('')
 
 App.Payment = Payment
+App.IncomePayment = IncomePayment
+App.ExpensePayment = ExpensePayment
