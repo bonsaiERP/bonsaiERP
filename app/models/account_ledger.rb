@@ -81,7 +81,7 @@ class AccountLedger < ActiveRecord::Base
 
   def save_ledger
     if conciliation?
-      ConciliateAccount.new(self).conciliate
+      ConciliateAccount.new(self).conciliate!
     else
       self.save
     end

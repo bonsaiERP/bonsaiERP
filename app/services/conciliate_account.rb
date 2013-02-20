@@ -43,7 +43,7 @@ private
   end
 
   def update_account_to
-    account_to.amount += amount_currency
+    account_to.amount += amount
 
     account_to.save && account_ledger.save
   end
