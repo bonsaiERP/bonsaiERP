@@ -15,4 +15,28 @@
   .span6.r
     = link_to icon_show_text, @bank, class: 'btn'
 
-= render 'banks/form', bank: @bank
+= simple_form_for(@bank, html: {id: 'bank-form' }) do |f|
+  = bonsai_form_error(f)
+  .row-fluid
+    .span6
+      = f.input :name, :label => 'Banco'
+    .span6
+      = f.input :number, :label => 'Número de cuenta'
+
+  .row-fluid
+    .span6
+      %label Moneda
+      = currency_label @bank.currency
+    .span6
+      %label Total en cuenta
+      = ntc(@bank.amount)
+      = currency_label @bank.currency
+
+  .row-fluid
+    .span6
+      = f.input :address, :label => 'Dirección', :as => :text, :input_html => {:rows => 4, :cols => 35}, :required => false
+    .span6
+      = f.input :phone, :label => 'Teléfono', :required => false, :wrapper_html => {:class => "_100"}
+      = f.input :website, :label => 'Sitio web', :wrapper_html => {:class => "_100"}
+  .form-actions
+    = f.submit 'Salvar', class: 'btn btn-success b'

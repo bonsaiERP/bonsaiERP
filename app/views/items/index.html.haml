@@ -12,16 +12,15 @@
       %i.icon-plus-sign
       Nuevo ítem
 
-- if Store.scoped.empty?
+-# if Store.scoped.empty?
   %h3.red 
     Le recomendamos crear
     =link_to "almacenes", stores_path
 
 
-= link_to "Buscar", "#search_items", :class => 'search'
+-#= link_to "Buscar", "#search_items", :class => 'search'
 
-.clear
-#search_items.well{:style => show_if_search}
+-##search_items.well{:style => show_if_search}
   %a.close(href="javascript:") x
   =form_tag "/items", :method => 'get' do
     =hidden_field_tag "search_div_id", "search_items"
@@ -31,9 +30,7 @@
     =submit_tag 'Buscar', :class => 'btn btn-success'
 
 
-.clear
 = paginate @items
-
 
 %table.table.table-striped
   %tr

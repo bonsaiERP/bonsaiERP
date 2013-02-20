@@ -1,21 +1,25 @@
 %li.row-fluid
   .span4
-    %h4
+    %h5
       = ledger.conciliation_tag
       = ledger.operation_tag
       = link_to ledger, ledger
-      %small.i.dark=l ledger.date.to_date
     .clear-both
     %h5
+      =l ledger.date.to_date
       %span.muted A:
       = link_to ledger.account_to, ledger.account_to
 
-  .span4
-    %span.muted Cantidad
-    = ntc ledger.amount
-    = currency_label ledger.currency
+  .span5
+    .span7
+      %i.icon-file.muted(rel='tooltip' title="referencia")
+      = nl2br ledger.reference
+    .sapn5
+      %span.muted Cantidad
+      = ntc ledger.amount
+      = currency_label ledger.currency
 
-  .span3
+  .span2
     = ledger.creator_label.html_safe
     = ledger.approver_label.html_safe
     = ledger.nuller_label.html_safe

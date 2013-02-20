@@ -11,8 +11,10 @@
     %li
       %span Editar
 
-  .links.span6
+.row-fluid
+  .span6
+    %h1 Editar egreso
+  .span6.r
+    = link_to icon_show_text, @expense, class: 'btn'
 
-%h1 Editar Egreso
-
-= render 'expenses/form', :expense => @expense, contacts: Contact.scoped
+= render 'expenses/form', expense: @expense, contacts: Contact.scoped

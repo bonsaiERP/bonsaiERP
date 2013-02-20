@@ -11,19 +11,24 @@
           = al.conciliation_tag
           = link_to al, al
           = al.operation_tag
-          = al.account_contact_tag
-        .clear-both
-        %h5
-          %i= l al.date.to_date
-          %span.muted De:
-          = link_to al.account, al.account
-          %span.muted A:
-          = link_to al.account_to, al.account_to
-      .span4.r
-        %span.muted Monto
-        = ntc al.amount
-        = currency_label al.currency
-      .span3
+        %h5= link_to al.account_contact_tag, al.account_contact
+        %p
+          %h5
+            %i= l al.date.to_date
+            &nbsp;
+            %span.muted De:
+            = link_to al.account, al.account
+            %span.muted A:
+            = link_to al.account_to, al.account_to
+      .span5
+        .span7
+          %i.icon-file.muted(rel='tooltip' title="referencia")
+          = nl2br al.reference
+        .span5.r
+          %span.muted Cantidad
+          = ntc al.amount
+          = currency_label al.currency
+      .span2
         = al.creator_label.html_safe
         = al.approver_label.html_safe
         = al.nuller_label.html_safe

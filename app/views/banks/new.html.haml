@@ -15,7 +15,8 @@
 
   .row-fluid
     .span6
-      = f.input :currency, label: 'Moneda', collection: currency_options, input_html: {placeholder: 'Escriba para poder buscar'}
+      = f.input :currency, label: 'Moneda', collection: currency_options, input_html: {placeholder: 'Escriba para poder buscar'},
+        hint: "<span class='icon-warning-sign'></span> No es posible modificar después".html_safe
 
     .span6
       = f.input :amount, label: 'Total en cuenta', input_html: {size: 12, class: 'r', type: 'decimal'}, required: true

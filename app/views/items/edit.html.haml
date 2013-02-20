@@ -1,16 +1,18 @@
 - content_for :links do
-  %ul.breadcrumps.span6
-    %li #{link_to "Items", items_path} 
-    %li #{link_to @item, @item}
+  %ul.breadcrumbs.span6
     %li
-      %span Editar
+      = link_to "Items", items_path
+    %li
+      %i.icon-caret-right
+    %li
+      = link_to @item, @item
 
-  .links.span6
-    = link_to "Nuevo", new_item_path, :class => 'add'
-    = link_to "Ver", @item, :class => 'show'
-    = link_to "Borrar", @item, :class => 'delete', :confirm => 'Esta seguro de borrar el ítem', :method => :delete
 
-%h1 Editar ítem
+.row-fluid
+  .span6
+    %h1 Editar ítem
+  .span6.r
+    = link_to icon_new_text, new_item_path, class: 'btn'
+    = link_to icon_show_text, @item, class: 'btn'
 
 = render 'form'
-

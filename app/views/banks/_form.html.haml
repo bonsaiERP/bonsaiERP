@@ -11,7 +11,8 @@
       .span6
         = f.input :amount, :label => 'Total en cuenta', :input_html => {:size => 12, :class => 'r'}, :required => true
       .span6
-        = f.input :currency, label: 'Moneda', collection: currency_options
+        = f.input :currency, label: 'Moneda', collection: currency_options,
+          hint: "<span class='icon-warning-sign'></span> No es posible modificar después".html_safe
     -else
       .span6
         %label Moneda
