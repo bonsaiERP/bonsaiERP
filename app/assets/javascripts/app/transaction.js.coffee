@@ -39,10 +39,10 @@ class Transaction extends Backbone.Collection
   total: 0
   totalPath: '#total'
   subtotalPath: '#subtotal'
-  @itemTemplate: $('#item-template').html()
   #
   initialize: (@currency) ->
     @$table = $('#items-table')
+    @itemTemplate = _.template(itemTemplate)
 
     # Events
     @on 'change', @calculateSubtotal
@@ -78,10 +78,7 @@ class Transaction extends Backbone.Collection
   addItem: ->
     num = (new Date).getTime()
 
-    if $('tr.item:last').length > 0
-      $tr = $(@getItemHtml(num)).insertAfter('tr.item:last')
-    else
-      $tr = $(@getItemHtml(num)).insertAfter('tr.head')
+    $tr = $(@getItemHtml(num)).insertBefore('#subtotal-line')
 
     $tr.createAutocomplete()
     @add(item = new Item(rate: @currency.get('rate') ) )
@@ -89,7 +86,7 @@ class Transaction extends Backbone.Collection
     item.setAutocompleteEvent($tr)
   #
   getItemHtml: (num) ->
-    itemTemplate.replace(/\$num/g, num)
+    #itemTemplate.replace(/\$num/g, num)
   #
   deleteItem: (item, src)->
     $row = $(src).parents('tr.item')
@@ -110,14 +107,16 @@ class Transaction extends Backbone.Collection
 
 class Income extends Transaction
   getItemHtml: (num) ->
-    super(num).replace(/\$klass/g, 'income')
+    @itemTemplate(num: num, klass: 'income', search_path: 'search_income')
 
 class Expense extends Transaction
   getItemHtml: (num) ->
-    super(num).replace(/\$klass/g, 'expense')
+    @itemTemplate(num: num, klass: 'expense', search_path: 'search_expense')
 
 @App = {}
+
 @App.Income = Income
+
 @App.Expense = Expense
 
 class TransactionCurrency extends Backbone.Model
@@ -159,18 +158,18 @@ itemTemplate = """<tr class="item" data-item="{"original_price":"0.0","price":"0
     <td class='span6 nw'>
       <div class="control-group autocomplete optional">
         <div class="controls">
-          <input id="$klass_$klass_details_attributes_$num_item_id" name="$klass[$klass_details_attributes][$num][item_id]" type="hidden"/>
-          <input class="autocomplete optional item_id ui-autocomplete-input span11" data-source="/items/search.json" id="item_autocomplete" name="item_autocomplete" placeholder="Escriba para buscar el ítem" size="35" type="text" autocomplete="off"/>
+          <input id="{{klass}}_{{klass}}_details_attributes_{{num}}_item_id" name="{{klass}}[{{klass}}_details_attributes][{{num}}][item_id]" type="hidden"/>
+          <input class="autocomplete optional item_id ui-autocomplete-input span11" data-source="/items/{{search_path}}.json" id="item_autocomplete" name="item_autocomplete" placeholder="Escriba para buscar el ítem" size="35" type="text" autocomplete="off"/>
           <a href="/items/new" class="ajax btn btn-small" rel="tooltip" style="margin-left: 5px;" title="Nuevo ítem"><i class="icon-plus-sign icon-large"></i></a>
           <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
         </div>
       </div>
     </td>
     <td>
-      <div class="control-group decimal optional"><div class="controls"><input class="numeric decimal optional" data-original-price="null" data-value="item.price" id="$klass_$klass_details_attributes_$num_price" name="$klass[$klass_details_attributes][$num][price]" size="8" step="any" type="decimal" value=""></div></div>
+      <div class="control-group decimal optional"><div class="controls"><input class="numeric decimal optional" data-original-price="null" data-value="item.price" id="{{klass}}_{{klass}}_details_attributes_{{num}}_price" name="{{klass}}[{{klass}}_details_attributes][{{num}}][price]" size="8" step="any" type="decimal" value=""></div></div>
     </td>
     <td>
-      <div class="control-group decimal optional"><div class="controls"><input class="numeric decimal optional" data-value="item.quantity" id="$klass_$klass_details_attributes_$num_quantity" name="$klass[$klass_details_attributes][$num][quantity]" size="8" step="any" type="decimal" value=""></div></div>
+      <div class="control-group decimal optional"><div class="controls"><input class="numeric decimal optional" data-value="item.quantity" id="{{klass}}_{{klass}}_details_attributes_{{num}}_quantity" name="{{klass}}[{{klass}}_details_attributes][{{num}}][quantity]" size="8" step="any" type="decimal" value=""></div></div>
     </td>
     <td class="total_row r">
       <span data-text="item.subtotal | number"></span>

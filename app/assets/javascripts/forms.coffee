@@ -103,13 +103,11 @@
           $hidden.val(ui.item.id)
           $input.trigger('autocomplete-done', [ui.item])
 
-      }).blur(->
+      }).blur( ->
         value = $(this).val()
         if value.trim() == ""
           $hidden.val('')
           $(this).data('value', '')
-        else
-          $(this).val($(this).data('value'))
       )
     )
 

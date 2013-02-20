@@ -11,11 +11,11 @@
       Total fila
       %span.currency
     %th
-
+  
   = f.simple_fields_for details do |fd|
     %tr.item{id: fd.object.id, data: {item: fd.object.data_hash.to_json }}
       %td.span6.nw
-        = fd.input :item, as: :autocomplete, label: false, 'data-source' => search_items_path(format: 'json'),
+        = fd.input :item, as: :autocomplete, label: false, 'data-source' => search_path(transaction),
           input_html: {class: 'item_id span11', placeholder: 'Escriba para buscar el ítem', 
           data: {new_url: '/items/new', title: 'Nuevo ítem'} }
 
@@ -33,7 +33,7 @@
       %td.del 
         %a(href="javascript:;" data-on-click="item:delete" class="bicon-trash" title="Borrar" rel="tooltip")
 
-  %tr.extra.pad_top.subtotal
+  %tr#subtotal-line.extra.pad_top.subtotal
     %td 
       %a(href="javascript:;" id="add-item-link" class="btn btn-primary")
         %i.icon-plus-sign.icon-white

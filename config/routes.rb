@@ -86,7 +86,8 @@ Bonsaierp::Application.routes.draw do
   resources :staffs
 
   resources :items do
-    get :search, on: :collection
+    get :search_income, on: :collection
+    get :search_expense, on: :collection
   end
 
   resources :units

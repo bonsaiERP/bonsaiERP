@@ -1,6 +1,9 @@
 require 'spec_helper'
 
 describe ItemsController do
+  before(:each) do
+    stub_auth
+  end
 
   def mock_item(stubs={})
     @mock_item ||= mock_model(Item, stubs).as_null_object

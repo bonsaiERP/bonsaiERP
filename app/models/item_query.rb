@@ -1,10 +1,14 @@
 class ItemQuery
   def initialize
-    @relation = Item
+    @rel = Item
   end
 
   def search(s)
-    @relation.where{(name.like "%#{s}%") | (code.like "%#{s}%")}
+    @rel.where{(name.like "%#{s}%") | (code.like "%#{s}%")}
+  end
+
+  def expense_search(s)
+    search(s).active
   end
 
   def income_search(s)

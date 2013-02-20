@@ -7,11 +7,6 @@
     %li
       = @income
 
-  .links.span6.r
-    = link_to 'Nuevo', new_income_path
-    = link_to 'Editar', edit_income_path(@income)
-    = link_to 'Borrar', @income, method: 'delete'
-
 %header
   - if @income.has_error
     .allowed-errors
@@ -22,25 +17,30 @@
             %li
               %h5.n.devolution-error= I18n.t("allowed_errors.#{v}").html_safe
 
-  %h1
-    = @income
-    = @income.state_tag
+.row-fluid
+  .span8
+    %h1
+      = @income
+      = @income.state_tag
 
-    %small
-      = link_to @income.contact do
-        %i.icon-user
-        =@income.contact
+      %small
+        = link_to @income.contact do
+          %i.icon-user
+          =@income.contact
 
-  = render_if @income.due_date do
-    %h4.n
-      = @income.due_date_tag
+    = render_if @income.due_date do
+      %h4.n
+        = @income.due_date_tag
 
+  .span4.r
+    = link_to icon_new_text, new_income_path, class: 'btn'
+    = link_to icon_edit_text, edit_income_path(@income.id), class: 'btn'
 
-  .row-fluid
-    .span6.offset6
-      - if @income.is_draft?
-        = form_for @income, url: approve_income_path(@income) do |f|
-          = f.submit 'Aprobar Ingreso', class: 'b btn btn-success'
+.row-fluid
+  .span6.offset6
+    - if @income.is_draft?
+      = form_for @income, url: approve_income_path(@income) do |f|
+        = f.submit 'Aprobar Ingreso', class: 'b btn btn-success'
 
 .row-fluid
   .moneybox

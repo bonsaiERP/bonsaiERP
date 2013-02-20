@@ -286,6 +286,10 @@
 
   $.fn.setTransformations = setTransformations
 
+  # Template
+  # Underscore templates
+  _.templateSettings.interpolate = /\{\{(.+?)\}\}/g
+
   # Wrapped inside this working
   $(document).ready ->
     $('body').tooltip( selector: '[rel=tooltip]' )
@@ -294,13 +298,6 @@
     $('.select2-autocomplete').select2Autocomplete()
     $('body').dataNewUrl()
     fx.rates = exchangeRates.rates
-
-    # Scroll visivility
-    #$(window).scroll ->
-      #if $(document).scrollTop() > 10
-        #$('#head').css 'opacity', 0.9
-      #else
-        #$('#head').css 'opacity', 1
 
   rivets.configure(
     #preloadData: false
