@@ -4,7 +4,7 @@ module UrlTools
   def domain
     if Rails.env.development?
       #  'lvh.me'
-      'localhost.com'
+      'localhost.bom'
     else
       DOMAIN
     end
