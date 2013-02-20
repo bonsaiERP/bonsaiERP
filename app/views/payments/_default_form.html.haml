@@ -3,20 +3,20 @@
     = f.input :account_to_id, label: 'Cuenta', input_html: {class: 'span10', data:{value: 'payment.account_to_id'}}
   .span3
     = f.input :exchange_rate, label: 'Tipo de cambio',
-      input_html: {disabled: true, type: 'decimal', size: 10, 
+      input_html: {disabled: true, type: 'decimal', size: 10,
       data: {value: 'payment.exchange_rate', disabled: 'payment.sameCurrency'} }
   .span3
     .moneybox
       %label TOTAL
       %h4
         %span#currency_total(data-text="payment.totalCurrency")
-        = currency_label f.object.currency
+        = currency_label transaction.currency
 
 .row-fluid
   .span3
     = f.input :amount,
       label: 'Cantidad <span class="currency"></span>'.html_safe,
-      input_html: {type: 'decimal', size: 10, 
+      input_html: {type: 'decimal', size: 10,
       data: {value: 'payment.amount'} }
   .span3
     = f.input :interest,

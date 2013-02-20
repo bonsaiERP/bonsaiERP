@@ -14,7 +14,7 @@ class SessionsController < ApplicationController
     case @session.authenticate
     when true
       @session.user.set_auth_token
-      redirect_to dashboard_url(host: request.domain, subdomain: @session.tenant, auth_token: @session.user.auth_token) and return
+      redirect_to dashboard_url(host: UrlTools.domain, subdomain: @session.tenant, auth_token: @session.user.auth_token) and return
     when 'resend_registration_email'
       redirect_to registrations_path, notice: "Le hemos reenviado el email de confirmación a #{@session.email}"
     when 'inactive_user'

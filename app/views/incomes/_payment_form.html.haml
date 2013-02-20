@@ -2,7 +2,7 @@
   = bonsai_form_error(f)
   = f.hidden_field :account_id
 
-  = render 'payments/default_form', f: f
+  = render 'payments/default_form', f: f, transaction: income
 
 :javascript
   $(function() {

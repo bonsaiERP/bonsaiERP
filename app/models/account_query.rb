@@ -8,7 +8,7 @@ class AccountQuery
   end
 
   def bank_cash_options
-    bank_cash.map {|v| create_hash(v, *default_options) }
+    blank + bank_cash.map {|v| create_hash(v, *default_options) }
   end
 
   def payment(model)
@@ -17,7 +17,7 @@ class AccountQuery
   end
 
   def income_payment_options(income)
-    bank_cash_options + ExpenseQuery.new.to_pay(income.contact_id).map {|v| 
+    blank + bank_cash_options + ExpenseQuery.new.to_pay(income.contact_id).map {|v| 
       create_hash(v, *default_options)
     }
   end
@@ -27,7 +27,7 @@ class AccountQuery
       create_hash(v, :id, :type, :currency, :amount, :name, :to_s) 
     }
 
-    arr + IncomeQuery.new.to_pay(expense.contact_id).map {|v| 
+    blank + arr + IncomeQuery.new.to_pay(expense.contact_id).map {|v| 
       create_hash(v, :id, :type, :currency, :balance, :name, :to_s)
     }
   end
@@ -39,4 +39,9 @@ class AccountQuery
   def default_options
     [:id, :type, :currency, :amount, :name, :to_s]
   end
+
+  def blank
+    [{}]
+  end
+
 end

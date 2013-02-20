@@ -12,18 +12,18 @@ class Payment extends Backbone.Model
     accountsTo: []
     sameCurrency: true
     totalCurrency: "0,00"
+    baseCurrency: ''
   #
   initialize: ->
-    @on 'change:baseCurrency', (m, v) ->
-      @set('inverse', currency != @get('baseCurrency') )
+    @set('inverse', currency != @get('baseCurrency') )
     # select2 method to bind change
     @setAccountToSelect2()
     # set rivets
     rivets.bind($(@formSel), {payment: this})
 
-    @on 'change:exchange_rate change:amount', @setTotalCurrency
+    @on 'change:exchange_rate change:amount', => @setTotalCurrency()
   #
-  convert: (cur) ->
+  convert: (cur, inverse) ->
     val = if @get('inverse')
       fx.convert(1, from: @get('baseCurrency'), to: cur)
     else
@@ -31,11 +31,20 @@ class Payment extends Backbone.Model
 
     val.toFixed(4) * 1
   #
-  isInverse: (cur) ->
-    cur != @get('baseCurrency')
+  convertInverse: ->
+    val = if @get('inverse')
+      fx.convert(1, {from: @get('currency'), to: @get('baseCurrency') })
+    else
+      fx.convert(1, {from: @get('currency'), to: @get('baseCurrency') })
+
+    val.toFixed(4) * 1
+  #
+  isInverse: ->
+    @get('currency') != @get('baseCurrency')
   # Method to set account_to related with select2 change event
   setAccountTo: (data) ->
     other = @get('baseCurrency') == data.currency
+
     @set(
       currency: data.currency
       exchange_rate: @convert(data.currency)
@@ -49,7 +58,7 @@ class Payment extends Backbone.Model
     $('span.currency').html ['<span class="label label-inverse" rel="tooltip" title="', name,'">', @get('currency'),'</span>' ].join('')
   #
   setTotalCurrency: ->
-    total = @convert(@get('currency')) * @get('amount')
+    total = @convertInverse() * @get('amount')
     @set('totalCurrency', _b.ntc(total) )
 
   #
