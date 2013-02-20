@@ -1,12 +1,3 @@
-.btn-group
-  %a.btn.btn-primary{'data-toggle' => 'dropdown'} Nueva operación
-  %a.btn.btn-primary.dropdown-toggle{'data-toggle' => 'dropdown'}
-    %span.caret
-
-.clear
-<br/>
-
--#= paginate account_ledgers
 %ul.unstyled.listing
   - ledgers=  AccountLedgerQuery.new.money(account.id).page(@page)
 

@@ -21,7 +21,7 @@ class Payment extends Backbone.Model
     # set rivets
     rivets.bind($(@formSel), {payment: this})
 
-    @on 'change:exchange_rate change:amount', => @setTotalCurrency()
+    @on 'change:exchange_rate change:amount', @setTotalCurrency
   #
   convert: (cur, inverse) ->
     val = if @get('inverse')
@@ -33,9 +33,9 @@ class Payment extends Backbone.Model
   #
   convertInverse: ->
     val = if @get('inverse')
-      fx.convert(1, {from: @get('currency'), to: @get('baseCurrency') })
+      1 / @get('exchange_rate') * 1
     else
-      fx.convert(1, {from: @get('currency'), to: @get('baseCurrency') })
+      @get('exchange_rate') * 1
 
     val.toFixed(4) * 1
   #
@@ -59,8 +59,8 @@ class Payment extends Backbone.Model
   #
   setTotalCurrency: ->
     total = @convertInverse() * @get('amount')
-    @set('totalCurrency', _b.ntc(total) )
 
+    @set('totalCurrency', _b.ntc(total) )
   #
   setAccountToSelect2: ->
     self = this

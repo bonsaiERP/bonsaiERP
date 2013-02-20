@@ -78,7 +78,7 @@
       %i.icon-minus-sign
       Devolver
 
-    #payment-form(style='display: nones')
+    #payment-form(style='display: none')
       %h3 Cobrar ingreso
       = render 'incomes/payment_form', income: @income if @income.is_approved?
 
