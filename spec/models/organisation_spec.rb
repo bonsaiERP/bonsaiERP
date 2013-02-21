@@ -5,7 +5,6 @@ require 'spec_helper'
 describe Organisation do
   before do
     UserSession.user = build :user, id: 1
-    create(:org_country)
   end
 
   context "Validations" do
@@ -24,6 +23,9 @@ describe Organisation do
 
       it {should have_valid(:currency).when('BOB', 'USD')}
       it {should_not have_valid(:currency).when('', 'USDS')}
+
+      it { should have_valid(:country_code).when('BO', 'PE') }
+      it { should_not have_valid(:country_code).when('BOS', 'PES') }
     end
   end
 

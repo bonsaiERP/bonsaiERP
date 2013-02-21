@@ -2,35 +2,36 @@
   %ul.breadcrumps.span6
     %li #{link_to "Configuración", "/configuration#organisation"}
 
-.page-header
-  %h1 
-    %small Editar 
-    #{organisation_name}
+.row-fluid
+  .span6
+    %h1 
+      Completar registro para 
+      = organisation_name
 
 = simple_form_for(@organisation) do |f|
   = bonsai_form_error(f)
 
-  =hidden_field_tag "step", 1
-
-  =f.input :name, :label => 'Nombre de su empresa'
-  .input
-    %label Moneda
-    = @organisation.currency
-  =f.input :currency_id, :as => :hidden
-  /=f.association :currency, :label => 'Moneda base', :hint => 'Todas las transacciones se realizaran en esta moneda.'
-  .clear
-    
-  =f.association :org_country, :label => 'País'
-  .input
-    =f.input :phone, :label => 'Teléfono', :input_html => {:size => 15}
-    =f.input :mobile, :label => 'Móvil', :input_html => {:size => 15}
-  .clear
-
-  =f.input :website, :label => 'Sitio web'
-  =f.input :email
-  .clear
-  =f.input :address, :label => 'Dirección', :as => :text, :input_html => {:rows => 5} 
-  .clear
-  .submit
+  .row-fluid
+    .span6
+      =f.input :name, label: 'Nombre de su empresa'
+    .span6
+      %label Moneda
+      = @organisation.currency
+      =f.input :currency_id, :as => :hidden
+  .row-fluid
+    .span6
+      = f.input :country_code, label: 'País', collection: Country.options
+    .span3
+      =f.input :phone, :label => 'Teléfono', :input_html => {:size => 15}
+    .span3
+      =f.input :mobile, :label => 'Móvil', :input_html => {:size => 15}
+  .row-fluid
+    .span6
+      =f.input :website, :label => 'Sitio web'
+    .span6
+      =f.input :email
+  .row-fluid
+    .span6
+      =f.input :address, :label => 'Dirección', :as => :text, :input_html => {:rows => 5} 
+  .form-actions
     = f.submit 'Salvar', :class => 'btn btn-success b'
-.clear

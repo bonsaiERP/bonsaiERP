@@ -1,16 +1,19 @@
 class CreateProjects < ActiveRecord::Migration
   def change
-    create_table :projects do |t|
-      t.string :name
-      t.boolean :active, :default => true
-      t.date :date_start
-      t.date :date_end
+    PgTools.with_schemas except: 'common' do
 
-      t.text :description
+      create_table :projects do |t|
+        t.string :name
+        t.boolean :active, :default => true
+        t.date :date_start
+        t.date :date_end
 
-      t.timestamps
+        t.text :description
+
+        t.timestamps
+      end
+
+      add_index :projects, :active
     end
-
-    add_index :projects, :active
   end
 end

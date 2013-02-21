@@ -135,10 +135,6 @@ BASH
     all_schemas.include?(schema_name)
   end
 
-  def all_schemas
-    connection.select_values("SELECT * FROM pg_namespace WHERE nspname != 'information_schema' AND nspname NOT LIKE 'pg%'")
-  end
-
   def with_all_schemas
     all_schemas.each do |schema_name|
       with_schema(schema_name) do
@@ -173,6 +169,60 @@ BASH
     connection.schema_search_path = original_search_path
   end
 
+  ###
+  ###
+  def all_schemas
+    connection.select_values <<-END
+    SELECT *
+    FROM pg_namespace
+    WHERE
+      nspname NOT IN ('information_schema') AND
+      nspname NOT LIKE 'pg%'
+    END
+  end
+
+  def current_schema
+    ActiveRecord::Base.connection.current_schema
+  end
+
+  def set_schema_path(schema)
+    ActiveRecord::Base.connection.schema_search_path = schema
+  end 
+
+  def reset_schema_path
+    ActiveRecord::Base.connection.schema_search_path = 'public'
+  end
+
+  def with_schemas(options = nil)
+    options = unify_type(options, Hash) { |items| {:only => items} }
+    options[:only] = unify_type(options[:only], Array) { |item| item.nil? ? all_schemas : [item] }.map { |item| item.to_s }
+    options[:except] =unify_type(options[:except], Array) { |item| item.nil? ? [] : [item] }.map { |item| item.to_s }
+
+    options[:only] = unify_array_item_type(options[:only], String) { |symbol| symbol.to_s }
+    options[:except] = unify_array_item_type(options[:except], String) { |symbol| symbol.to_s }
+
+    schema_list = options[:only].select { |schema| options[:except].exclude? schema }
+
+    schema_list.each do |schema|
+      set_schema_path schema
+      yield schema
+    end
+    reset_schema_path
+  end
+
+  def unify_type(input, type)
+    if input.is_a?(type)
+      input
+    else
+      yield input
+    end
+  end
+
+  def unify_array_item_type(input, type, &block)
+    input.map do |item|
+      unify_type item, type, &block
+    end
+  end
 protected
 
   def connection

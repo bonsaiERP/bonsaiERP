@@ -1,10 +1,25 @@
 --- 
-- name: Bolivia
-  abbreviation: bo
-  code: BO
-- name: Estados Unidos
-  abbreviation: usa
-  code: US
-- name: Chile
-  abbreviation: cl
-  code: CL
+- :name: Argentina
+  :code: AR
+- :name: Bolivia
+  :code: BO
+- :name: Brasil
+  :code: BR
+- :name: Chile
+  :code: CL
+- :name: Colombia
+  :code: CO
+- :name: Ecuador
+  :code: EC
+- :name: Estados Unidos
+  :code: US
+- :name: Mexico
+  :code: MX
+- :name: Paraguay
+  :code: PY
+- :name: Perú
+  :code: PE
+- :name: Uruguay
+  :code: UY
+- :name: Venezuela
+  :code: VE

@@ -1,39 +1,42 @@
 class CreateInventoryOperations < ActiveRecord::Migration
   def change
-    create_table :inventory_operations do |t|
-      t.integer :contact_id
-      t.integer :store_id
-      t.integer :account_id
+    PgTools.with_schemas except: 'common' do
 
-      t.date   :date
-      t.string :ref_number
-      t.string :operation, :limit => 10
-      t.string :state
+      create_table :inventory_operations do |t|
+        t.integer :contact_id
+        t.integer :store_id
+        t.integer :account_id
 
-      t.string :description
+        t.date   :date
+        t.string :ref_number
+        t.string :operation, :limit => 10
+        t.string :state
 
-      t.decimal :total, :precision => 14, :scale => 2, default: 0
+        t.string :description
 
-      t.integer  :creator_id
-      t.integer  :transference_id
-      t.integer  :store_to_id
-      t.integer  :project_id
+        t.decimal :total, :precision => 14, :scale => 2, default: 0
 
-      t.boolean :has_error, default: false
-      t.string  :error_messages
+        t.integer  :creator_id
+        t.integer  :transference_id
+        t.integer  :store_to_id
+        t.integer  :project_id
 
-      t.timestamps
+        t.boolean :has_error, default: false
+        t.string  :error_messages
+
+        t.timestamps
+      end
+
+      add_index :inventory_operations, :contact_id
+      add_index :inventory_operations, :store_id
+      add_index :inventory_operations, :account_id
+      add_index :inventory_operations, :project_id
+
+      add_index :inventory_operations, :date
+      add_index :inventory_operations, :ref_number
+      add_index :inventory_operations, :operation
+      add_index :inventory_operations, :state
+      add_index :inventory_operations, :has_error
     end
-
-    add_index :inventory_operations, :contact_id
-    add_index :inventory_operations, :store_id
-    add_index :inventory_operations, :account_id
-    add_index :inventory_operations, :project_id
-
-    add_index :inventory_operations, :date
-    add_index :inventory_operations, :ref_number
-    add_index :inventory_operations, :operation
-    add_index :inventory_operations, :state
-    add_index :inventory_operations, :has_error
   end
 end

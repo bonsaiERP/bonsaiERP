@@ -47,6 +47,7 @@ private
   #Hashes of priviledges
   def admin_hash
     {
+      organisation_updates: true,
       admin_users: true,
       configurations: true,
       tests: true,

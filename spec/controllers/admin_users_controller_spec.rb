@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'spec_helper'
 
 describe AdminUsersController do
@@ -8,7 +9,7 @@ describe AdminUsersController do
 
   describe "GET 'new'" do
     it "returns http success" do
-      get 'new'
+      get :new
       response.should be_success
       assigns(:user).should be_is_a(User)
     end

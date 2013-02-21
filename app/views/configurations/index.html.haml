@@ -8,8 +8,8 @@
 
   #users
     %p
-      =link_to new_admin_user_path, class: 'btn btn-primary' do
-        %i.icon-plus-sign.icon-white
+      =link_to new_admin_user_path, class: 'btn' do
+        %i.icon-plus-sign
         Adicionar usuario
 
     %table.table.table-striped
@@ -35,8 +35,8 @@
 
   #organisation
     %p
-      = link_to current_organisation, :class => 'btn btn-primary' do
-        %i.icon-pencil.icon-white
+      = link_to edit_organisation_update_path(current_organisation.id), class: 'btn' do
+        %i.icon-pencil
         Editar datos empresa
 
 

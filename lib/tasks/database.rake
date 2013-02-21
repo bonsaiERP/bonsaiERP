@@ -4,7 +4,7 @@ db_tasks = %w[db:migrate db:migrate:up db:migrate:down db:rollback db:forward]
 namespace :multitenant do
   db_tasks.each do |task_name|
     desc "Run #{task_name} for each tenant"
-    task task_name => %w[environment db:load_config]do
+    task task_name => %w[environment db:load_config] do
       begin
         Organisation.all.map(&:tenant).each do |tenant|
           puts "Running #{task_name} for tenant: #{tenant}"
@@ -18,6 +18,19 @@ namespace :multitenant do
 end
 
 namespace :bonsai do
+  task update_organisation_country_code: :environment do
+    OrgCountry.all.each do |org|
+      Organisation.where(country_id: org.id).update_all(["country_code=?", org.code])
+    end
+  end
+
+  namespace :migrate do
+    desc 'Rake task to migrate taks in the common schema'
+    task common: :environment do
+      PgTools.scope_schema('common') { Rake::Task['db:migrate'].execute }
+    end
+  end
+
   namespace :views do
     desc 'Creates a view for incomes related with transactions'
     task incomes_view: :environment do
@@ -48,6 +61,6 @@ JOIN transactions ON accounts.id = transactions.account_id AND accounts.type = '
  ActiveRecord::Base.connection.table_exists? 'incomes_view'
 =end
 
-db_tasks.each do |task_name|
-  Rake::Task[task_name].enhance(["multitenant:#{task_name}"])
-end
+#db_tasks.each do |task_name|
+  #Rake::Task[task_name].enhance(["multitenant:#{task_name}"])
+#end

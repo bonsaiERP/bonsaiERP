@@ -17,7 +17,6 @@ class Organisation < ActiveRecord::Base
 
   ########################################
   # Relationships
-  belongs_to :org_country, :foreign_key => :country_id
 
   has_many :links, :dependent => :destroy, :autosave => true
   has_one  :master_link, class_name: 'Link', foreign_key: :organisation_id, conditions: { master_account: true, rol: 'admin' }
@@ -34,8 +33,9 @@ class Organisation < ActiveRecord::Base
   validate  :valid_tenant_not_in_list
 
   with_options if: :persisted? do |val|
-    val.validates_presence_of :org_country, :currency
+    val.validates_presence_of :country_code, :currency
     val.validates_inclusion_of :currency, in: CURRENCIES.keys
+    val.validates_inclusion_of :country_code, in: COUNTRIES.keys
   end
 
   ########################################
@@ -47,6 +47,10 @@ class Organisation < ActiveRecord::Base
   def build_master_account
     self.build_master_link.build_user
     self.master_link.creator = true
+  end
+
+  def country
+    Country.find country_code
   end
 
   def create_organisation

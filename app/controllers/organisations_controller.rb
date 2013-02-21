@@ -42,7 +42,7 @@ private
   end
 
   def organisation_params
-    params.require(:organisation).permit(:name, :currency, :country_id,
+    params.require(:organisation).permit(:name, :currency, :country_code,
                                         :time_zone,:phone, :mobile, :email,
                                         :address)
   end
