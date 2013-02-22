@@ -204,6 +204,7 @@ BASH
     schema_list = options[:only].select { |schema| options[:except].exclude? schema }
 
     schema_list.each do |schema|
+      puts "Working on schema #{schema}"
       set_schema_path schema
       yield schema
     end

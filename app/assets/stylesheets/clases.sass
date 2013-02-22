@@ -349,24 +349,26 @@ hr.light
 .lonely
   +border-radius
   +box-shadow(0 0 10px $grayDarker)
-  background: rgba(33, 33, 33, 0.3)
+  //background: rgba(33, 33, 33, 0.3)
+  background: rgba(119, 185, 45, 0.9)
   margin-top: 50px
 
   .inset
     +border-radius
-    margin: 15px
+    margin: 7px
     header
       +border-top-radius
-      background: $grayLighter
-      +background-image( linear-gradient(#F7F7F7, $grayLighter) )
-      border-bottom: 1px solid lighten($gray, 30%)
-      padding: 2px
+      background: $white
+      //+background-image( linear-gradient(#F7F7F7, $grayLighter) )
+      //border-bottom: 1px solid lighten($gray, 30%)
+      padding: 15px 20px 5px
       h2
-        +text-shadow(1px 1px 0 $grayLighter)
-        text-align: center
+        color: $gray
+        //+text-shadow(1px 1px 4px $gray)
+        //color: $bonsaiDark
         margin: 0px
         padding: 0px
-        font-size: 1.4em
+        font-size: 3.2em
     .pad
       +border-bottom-radius
       background: white

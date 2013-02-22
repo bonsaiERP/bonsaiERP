@@ -7,20 +7,43 @@
     -moz-box-shadow: none;
     -webkit-box-shadow: none;
   }
+  .cont-login input, .cont-login .add-on{
+    font-size: 17px;
+    height: 30px;
+  }
+  .cont-login .add-on{
+    width: 25px;
+    padding-top: 4px;
+  }
+  .cont-login .add-on i{
+    line-height: 0px;
+  }
+  .cont-login input{
+    width: 250px;
+  }
 
 .row-fluid
   .lonely.span6.offset3
-    .inset.center
+    .inset
       %header
-        %h2.c Iniciar sesión
-      .pad
+        %h2.c
+          -#= image_tag 'logo-tree.png', size: '40x40'
+          Iniciar sesión
+      .pad.center
         = simple_form_for @session do |f|
 
-          = f.input :email,    label: false, input_html: {:size => 30, :class => 'txt', placeholder: 'Email'}
-          = f.input :password, label: false, input_html: {:size => 30, :class => 'txt', placeholder: 'Contraseña'}
+          = f.input :email, label: false do
+            .input-prepend.cont-login
+              %span.add-on
+                %i.muted.icon-user
+              = f.text_field :email, size: 30, placeholder: 'Email'
+          = f.input :password, label: false do
+            .input-prepend.cont-login
+              %span.add-on
+                %i.muted.icon-key
+              = f.password_field :password, size: 30, placeholder: 'Contraseña'
 
           %p.c
-            = f.submit "Ingresar", :class => "btn btn-success btn-large"
-            %br
-            %br
+            = f.submit "Ingresar", :class => "btn btn-success btn-large b"
+            <br/><br/>
             = link_to "¿Olvido su contraseña?", new_reset_password_path

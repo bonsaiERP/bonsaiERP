@@ -8,6 +8,7 @@
     -moz-box-shadow: none;
     -webkit-box-shadow: none;
   }
+  .tooltip{ font-size: 13px; }
 
 .row-fluid
   .lonely.span6.offset3
@@ -17,18 +18,18 @@
 
       .pad
         = simple_form_for @registration do |f|
-          = f.input :name, label: 'Empresa', input_html: {class: 'span12'}
-          = f.input :tenant, label: 'Subdominio',
+          = f.input :name, label: false, input_html: {class: 'span12', placeholder: 'Empresa', title: 'Empresa', rel: 'tooltip' }
+          = f.input :tenant, label: false,
             hint: "<i class='icon-warning-sign' ></i> No es posible modificar en un futuro".html_safe,
             input_html: {class: 'span12'} do
             .input-prepend.input-append
-              = f.text_field :tenant, size: 28
+              = f.text_field :tenant, size: 28, placeholder: 'Subdominio', title: 'Subdominio', rel: 'tooltip'
               %span.add-on .bonsaierp.com
-          = f.input :email, :label => "Correo Electrónico", input_html: {class: 'span12'}
-          = f.input :password, :label => 'Contraseña', input_html: {class: 'span12'}
-          = f.input :password_confirmation, :label => 'Confirmar contraseña', input_html: {class: 'span12'}
-          .center
-            = f.submit "Registrarse", :class => 'btn btn-success btn-large'
+          = f.input :email, label: false, input_html: {class: 'span12', placeholder: "Correo electrónico", title: 'Correo electrónico', rel:'tooltip'}
+          = f.input :password, label: false, input_html: {class: 'span12', placeholder: 'Contraseña', title: 'Contraseña', rel: 'tooltip'}
+          = f.input :password_confirmation, label: false, input_html: {class: 'span12', placeholder: 'Confirmar contraseña', title: 'Confirmar contraseña', rel: 'tooltip'}
+          .clear-both
+          = f.submit "Registrarme", :class => 'btn btn-success btn-large'
 
 :coffee
   $( ->
