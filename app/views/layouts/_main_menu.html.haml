@@ -5,7 +5,7 @@
 
     %li.dropdown
       %a.dropdown-toggle(data-toggle="dropdown" href="#")
-        Ingresos/Egresos
+        General
         %i.icon-caret-down
 
       %ul.dropdown-menu
@@ -18,9 +18,11 @@
           = link_to "Egresos", expenses_path
         %li
           = link_to "Nuevo egreso", new_expense_path
-
-    %li
-      = link_to "Contactos", contacts_path
+        %li.divider
+        %li
+          = link_to  contacts_path do
+            %i.icon-user
+            Contactos
 
     %li.dropdown
       %a.dropdown-toggle( data-toggle="dropdown" href="#")
@@ -29,7 +31,7 @@
       %ul.dropdown-menu
         %li <a href="/banks">Cuentas bancarias</a>
         %li <a href="/cashes">Cuentas efectivo</a>
-        %li <a href="/staffs">Cuentas personal</a>
+        -#%li <a href="/staffs">Cuentas personal</a>
 
     %li.dropdown
       %a.dropdown-toggle( data-toggle="dropdown" href="#")

@@ -26,6 +26,10 @@ describe Organisation do
 
       it { should have_valid(:country_code).when('BO', 'PE') }
       it { should_not have_valid(:country_code).when('BOS', 'PES') }
+
+      it { should have_valid(:email).when('', '  ', nil) }
+      it { should have_valid(:email).when('test@mail.com', 'james@mail.co.uk') }
+      it { should_not have_valid(:email).when('test@mail.c', 'james@mail' 'h') }
     end
   end
 
@@ -55,7 +59,7 @@ describe Organisation do
 
   context 'create_organisation' do
     let(:org_params) {
-      {name: 'Firts org', tenant: 'firstorg', email: 'new@mail.com', password: 'secret123'}
+      {name: 'Firts org', tenant: 'firstorg', email: 'new@mail.com' }
     }
     let(:country) { OrgCountry.first }
 

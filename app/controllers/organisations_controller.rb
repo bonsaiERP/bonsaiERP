@@ -7,17 +7,15 @@ class OrganisationsController < ApplicationController
 
   # GET /organisations/new
   def new
-    @organisation = current_organisation
   end
 
   # POST /organisations
   def update
-    @organisation = current_organisation
-    @organisation.attributes = organisation_params
+    current_organisation.attributes = organisation_params
 
     tenant = TenantCreator.new(@organisation) # Should be background process
 
-    if @organisation.save && tenant.create_tenant
+    if current_organisation.save && tenant.create_tenant
       session[:organisation] = {id: current_organisation.id}
       flash[:notice] = "Se ha creado su empresa correctamente."
       #job = QU.enqueue CreateTenant, @organisation.id, session[:user_id]

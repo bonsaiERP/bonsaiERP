@@ -30,6 +30,7 @@ class Organisation < ActiveRecord::Base
   validates_uniqueness_of :name, :scope => :user_id
   validates :tenant, uniqueness: true, format: { with: /\A[a-z0-9]+\z/ }
   validate  :valid_tenant_not_in_list
+  validates_email_format_of :email, if: 'email.present?', message: I18n.t('errors.messages.email')
 
   with_options if: :persisted? do |val|
     val.validates_presence_of :country_code, :currency
