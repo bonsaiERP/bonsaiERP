@@ -36,18 +36,3 @@ class Account < ActiveRecord::Base
   end
 
 end
-
-class ShoppingList < ActiveRecord::Base
-  has_many :products
-end
-
-class ShoppingList < ActiveRecord::Base
-  belongs_to :shopping_list
-end
-
-shop_list = ShoppingList.includes(:products)
-
-shop_list.each do |sl|
-  sl.product.product_name
-  sl.product.product_category
-end
