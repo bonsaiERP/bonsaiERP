@@ -1,0 +1,15 @@
+DROP TABLE account_ledgers;
+DROP TABLE accounts;
+DROP TABLE contacts;
+DROP TABLE inventory_operation_details;
+DROP TABLE inventory_operations;
+DROP TABLE items;
+DROP TABLE money_stores;
+DROP TABLE projects;
+DROP TABLE stocks;
+DROP TABLE stores;
+DROP TABLE transaction_details;
+DROP TABLE transaction_histories;
+DROP TABLE transactions;
+DROP TABLE units;
+DROP TABLE user_changes;

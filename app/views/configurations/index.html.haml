@@ -11,6 +11,8 @@
       =link_to new_admin_user_path, class: 'btn' do
         %i.icon-plus-sign
         Adicionar usuario
+  
+    %h3 Usuarios
 
     %table.table.table-striped
       %tr
@@ -19,7 +21,7 @@
         %th Rol
         %th Activo
         %th
-      - @users.each do |user|
+      - current_organisation.users.each do |user|
         %tr
           %td
             -#= link_to user, user
@@ -40,24 +42,28 @@
         Editar datos empresa
 
 
-    %h3 Datos #{@org}
+    %h3 
+      %span.muted.n Datos
+      = current_organisation
 
-    .input
-      %span.dark-grey Teléfono:
-      = @org.phone
-      %span.dark-grey Movil:
-      = @org.mobile
-      %br
-      %span.dark-grey Email:
-      = @org.email
-      %br
-      %span.dark-grey Sitio web:
-      = @org.website
-
-    .input= nl2br(@org.address)
-
-    .clear
-
+    .row-fluid
+      .span3
+        %i.icon-phone(title='Teléfono' rel='tooltip')
+        = current_organisation.phone
+      .span3
+        %i.icon-mobile-phone(title='Movil' rel='tooltip')
+        = current_organisation.mobile
+      .span3
+        %i.icon-envelope(title='Email' rel='tooltip')
+        = current_organisation.email
+      .span3
+        %i.icon-cloud(title='Website' rel='tooltip')
+        = render_if current_organisation do
+          =link_to current_organisation.website, current_organisation.website, target: '_blank'
+    .row-fluid
+      .span6
+        %i.icon-building(title='Dirección' rel='tooltip')
+        = nl2br current_organisation.address
 
 :javascript
   $(function() { 

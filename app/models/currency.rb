@@ -1,20 +1,30 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class Currency
+class Currency < OpenStruct
 
-  FILTER_CURRENCIES = %w(BOB CLP USD EUR)
+  FILTER = %w(USD EUR ARS BOB CLP COP MXN PYG PEN UYU VEF GBP JPY)
 
-  def list
-    CURRENCIES
+  def to_s
+    "#{code} #{name}"
   end
 
-  def options(curr = CURRENCIES)
-    curr.map {|k,v| ["#{k} #{v.fetch(:name)}", k]}
+  def self.find(cur)
+    if CURRENCIES[cur]
+      Currency.new(CURRENCIES[cur])
+    else
+      nil
+    end
   end
 
-  def options_filtered(*filter)
-    filter = FILTER_CURRENCIES if filter.empty?
-    options(CURRENCIES.slice(*filter) )
+  def self.all
+    CURRENCIES.map {|v| Currency.new(v) }
+  end
+
+  def self.options(*currencies)
+    currencies.map do |k|
+      cur = Currency.new(CURRENCIES[k])
+      [cur.to_s, k]
+    end
   end
 end
