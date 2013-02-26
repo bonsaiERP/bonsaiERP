@@ -2,36 +2,38 @@
   = bonsai_form_error(f)
   .row-fluid
     .span6
-      = f.input :matchcode, :label => 'Identificado', :input_html => { :class => 'matchcode' }
+      = f.input :matchcode, 
+        label: 'Identificado <i class="icon-info-sign" title="Los campos nombres y apellidos se deducen a partir de este campo" rel="tooltip"></i>'.html_safe, 
+        input_html: { class: 'matchcode' }
     .span3
-      = f.input :first_name, :label => "Nombres", :input_html => { :class => 'first_name', :size => 20 }
+      = f.input :first_name, label: "Nombres", input_html: { class: 'first_name', size: 20 }
     .span3
-      = f.input :last_name, :label => "Apellidos", :input_html => { :class => 'last_name', :size => 20 }
+      = f.input :last_name, label: "Apellidos", input_html: { class: 'last_name', size: 20 }
 
   .row-fluid
     .span6
-      = f.input :email, :lanel => "E-mail"
+      = f.input :email, lanel: "E-mail"
     .span3
-      = f.input :phone, :label => "Teléfono", :input_html => {:size => 20}
+      = f.input :phone, label: "Teléfono", input_html: {size: 20}
     .span3
-      = f.input :mobile, :label => "Móvil", :input_html => {:size => 20}
+      = f.input :mobile, label: "Móvil", input_html: {size: 20}
   .row-fluid
     .span6
-      = f.input :tax_number, :label => "NIT"
+      = f.input :tax_number, label: "NIT"
     .span6
-      = f.input :address, :as => :text, :input_html => {:rows => 3}, :label => "Dirección"
+      = f.input :address, as: :text, input_html: {rows: 3}, label: "Dirección"
   .actions
-    = f.submit "Salvar", :class => 'btn btn-success b'
+    = f.submit "Salvar", class: 'btn btn-success b'
 
 :coffeescript
   ( ($) ->
     $('body').on('focusout', '.matchcode', (event) ->
       arr = this.value.trim().split(" ")
-      if $('.first_name').val() == ""
-        $('.first_name').val(arr[0])
+      $('.first_name').val(arr[0])
       arr.shift()
 
-      if($('.last_name').val() == "")
-        $('.last_name').val( arr.join(" "))
+      $('.last_name').val( arr.join(" "))
+
+      $('.first_name, .last_name').mark()
     )
   )(jQuery)

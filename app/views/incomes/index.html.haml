@@ -4,18 +4,17 @@
       %span Ingresos
 
 
-%header
-  .row-fluid
-    .span6
-      %h1 Ingresos
-    .span6.links
-      %a#quick-income-link.btn(href="javascript:;")
-        %i.icon-bolt
-        Ingreso rápido
+.row-fluid
+  .span6
+    %h1 Ingresos
+  .span6.r
+    %a#quick-income-link.btn(href="javascript:;")
+      %i.icon-bolt
+      Ingreso rápido
 
-      = link_to new_income_path, class: 'btn' do
-        %i.icon-plus-sign
-        Nuevo ingreso
+    = link_to new_income_path, class: 'btn' do
+      %i.icon-plus-sign
+      Nuevo ingreso
 
 .row-fluid
   = render 'incomes/quick_income'
@@ -23,6 +22,12 @@
 = paginate @incomes.page(@page)
 
 %ul.unstyled.listing
+  %li.row-fluid
+    .span4.offset7
+      .span6.r.b.muted
+        Total
+      .span6.r.b.muted
+        Saldo
   - @incomes.each do |income|
     - income = present income
     %li.row-fluid
@@ -43,16 +48,12 @@
         = income.approver_label
         = income.nuller_label
       .span4
-        .span2
-          .muted Total
-        .span4
-          = currency_label income.currency
+        .span6.r
           = ntc income.total
-
-        .span2
-          .muted Saldo
-        .span4
           = currency_label income.currency
+
+        .span6.r
           = ntc income.balance
+          = currency_label income.currency
       .span1
         = link_to icon_edit, edit_income_path(income), class: 'dark'

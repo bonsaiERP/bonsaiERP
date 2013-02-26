@@ -12,55 +12,36 @@
       %i.icon-plus-sign
       Nuevo ítem
 
--# if Store.scoped.empty?
-  %h3.red 
-    Le recomendamos crear
-    =link_to "almacenes", stores_path
-
-
--#= link_to "Buscar", "#search_items", :class => 'search'
-
--##search_items.well{:style => show_if_search}
-  %a.close(href="javascript:") x
-  =form_tag "/items", :method => 'get' do
-    =hidden_field_tag "search_div_id", "search_items"
-    =hidden_field_tag 'ctype', params[:ctype]
-    %label Nombre o código
-    =text_field_tag 'search', params[:search], :size => 40
-    =submit_tag 'Buscar', :class => 'btn btn-success'
-
-
 = paginate @items
 
-%table.table.table-striped
-  %tr
-    %th Código - Nombre
-    %th Activo
-    %th(title='Inventario') Inv.
-    %th Se vende
-    %th 
-      Precio de<br/>Venta
-      = currency_label
-    %th Unidad
-    %th Inventario<br/>Total
-    %th
-
+%ul.unstyled.listing
   - @items.each do |item|
-    %tr
-      %td= link_to item, item, :class => 'b'
-      %td
+    %li.row-fluid
+      .span5
+        %h4= link_to item, item, class: 'b'
+      .span3
+        %span.muted(title="" rel="tooltip") Activo:
         %span(class="#{true_false item.active?}")
-      %td
+
+        %span.muted(title="Inventario" rel="tooltip") Inv.:
         %span(class="#{true_false item.stockable?}")
-      %td
+
+        %span.muted Se vende:
         %span(class="#{true_false item.for_sale?}")
-      %td.r= ntc item.price if item.for_sale?
-      %td= item.unit_name
-      %td.r
-        = ntc item.total_stock if item.stockable?
-      %td
+      .span2
+        - if item.for_sale?
+          %span.muted Precio:
+          %strong= ntc item.price
+          = currency_label
+        <br>
+        %span.muted Unidad:
+        = item.unit_name
+      
+        -#= ntc item.total_stock if item.stockable?
+      .span2
         = link_to icon_edit, edit_item_path(item), class: 'dark'
         = link_to icon_delete, item, class: 'dark', method: 'delete', confirm: 'Esta seguro de eliminar el ítem?'
+
 
 :javascript
   $(function() { $('#search_items').show() });

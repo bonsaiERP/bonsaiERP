@@ -4,18 +4,17 @@
       %span Egresos
 
 
-%header
-  .row-fluid
-    .span6
-      %h1 Egresos
-    .span6.links
-      %a#quick-expense-link.btn(href="javascript:;")
-        %i.icon-bolt
-        Egreso rápido
+.row-fluid
+  .span6
+    %h1 Egresos
+  .span6.r
+    %a#quick-expense-link.btn(href="javascript:;")
+      %i.icon-bolt
+      Egreso rápido
 
-      = link_to new_expense_path, class: 'btn' do
-        %i.icon-plus-sign
-        Nuevo Egreso
+    = link_to new_expense_path, class: 'btn' do
+      %i.icon-plus-sign
+      Nuevo egreso
 
 .row-fluid
   = render 'expenses/quick_expense'
@@ -23,6 +22,12 @@
 = paginate @expenses.page(@page)
 
 %ul.unstyled.listing
+  %li.row-fluid
+    .span4.offset7
+      .span6.r.b.muted
+        Total
+      .span6.r.b.muted
+        Saldo
   - @expenses.each do |expense|
     - expense = present expense
     %li.row-fluid
@@ -43,16 +48,12 @@
         = expense.approver_label
         = expense.nuller_label
       .span4
-        .span2
-          .muted Total
-        .span4
-          = currency_label expense.currency
+        .span6.r
           = ntc expense.total
-
-        .span2
-          .muted Saldo
-        .span4
           = currency_label expense.currency
+
+        .span6.r
           = ntc expense.balance
+          = currency_label expense.currency
       .span1
         = link_to icon_edit, edit_expense_path(expense), class: 'dark'
