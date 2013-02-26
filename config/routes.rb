@@ -36,6 +36,9 @@ Bonsaierp::Application.routes.draw do
 
   resources :cashes
 
+  # Transference between accounts
+  resources :transferences, only: ['new', 'create']
+
   resources :devolutions, only: [] do
     member do
       post :income

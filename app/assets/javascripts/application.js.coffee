@@ -10,8 +10,6 @@
 
 #= require plugins/money.min.js
 #= require plugins/_b.coffee
-# TODO: Complete bdialog
-#= require plugins/bdialog.coffee
 
 #= require bootstrap/bootstrap-dropdown
 #= require bootstrap/bootstrap-tooltip
@@ -24,6 +22,7 @@
 #= require app/exchange_rate.js.coffee
 #= require app/transaction.js.coffee
 #= require app/payment.js.coffee
+#= require app/transference.coffee
 
 #= require plugins/jquery.joyride
 

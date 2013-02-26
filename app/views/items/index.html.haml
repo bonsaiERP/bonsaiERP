@@ -38,7 +38,7 @@
         = item.unit_name
       
         -#= ntc item.total_stock if item.stockable?
-      .span2
+      .span2.r
         = link_to icon_edit, edit_item_path(item), class: 'dark'
         = link_to icon_delete, item, class: 'dark', method: 'delete', confirm: 'Esta seguro de eliminar el ítem?'
 

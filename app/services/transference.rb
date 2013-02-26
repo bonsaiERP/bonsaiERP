@@ -1,8 +1,8 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class Payment < BaseService
-  attr_reader :ledger, :int_ledger, :transaction
+class Transference < BaseService
+  attr_reader :ledger
 
   # Attributes
   attribute :account_id, Integer
@@ -11,14 +11,12 @@ class Payment < BaseService
   attribute :amount, Decimal, default: 0
   attribute :exchange_rate, Decimal, default: 1
   attribute :reference, String
-  attribute :interest, Decimal, default: 0
   attribute :verification, Boolean, default: false
 
   # Validations
-  validates_presence_of :account_id, :account_to, :account_to_id, :reference, :date
-  validates_numericality_of :amount, :interest, greater_than_or_equal_to: 0
+  validates_presence_of :account_id, :account_to, :account_to_id, :account_to, :reference, :date
+  validates_numericality_of :amount, greater_than: 0
   validates_numericality_of :exchange_rate, greater_than: 0
-  validate :valid_amount_or_interest
   validate :valid_date
   validate :valid_accounts_currency
 
@@ -30,8 +28,12 @@ class Payment < BaseService
     self.verification = false unless [true, false].include?(verification)
   end
 
+  def account
+    @account = Account.active.find_by_id(account_id)
+  end
+
   def account_to
-    @account = Account.active.find_by_id(account_to_id)
+    @account = AccountQuery.new.bank_cash.find_by_id(account_to_id)
   end
 
 private
@@ -44,12 +46,6 @@ private
     }.merge(attrs))
   end
 
-  def valid_amount_or_interest
-    if amount.to_f <= 0 && interest.to_f <= 0
-      self.errors.add :base, I18n.t('errors.messages.payment.invalid_amount_or_interest')
-    end
-  end
-
   # Inverse of verification?, no need to negate when working making more
   # readable code
   def conciliate?
@@ -60,22 +56,9 @@ private
     self.errors.add(:date, I18n.t('errors.messages.payment.date') ) unless date.is_a?(Date)
   end
 
-  def set_approver
-    unless transaction.is_approved?
-      transaction.approver_id = UserSession.id
-      transaction.approver_datetime = Time.zone.now
-    end
-  end
-
-  def valid_accounts_currency
-    unless currency_exchange.valid?
-      self.errors.add(:base, I18n.t('errors.messages.payment.valid_accounts_currency', currency: currency))
-    end
-  end
-
   def currency_exchange
     @currency_exchange ||= CurrencyExchange.new(
-      account: transaction, account_to: account_to, exchange_rate: exchange_rate
+      account: account, account_to: account_to, exchange_rate: exchange_rate
     )
   end
 
@@ -85,10 +68,6 @@ private
 
   def amount_exchange
     currency_exchange.exchange(amount)
-  end
-
-  def interest_exchange
-    currency_exchange.exchange(interest)
   end
 
   # Exchange rate used using inverse
@@ -104,7 +83,13 @@ private
   def conciliation?
     return true if conciliate?
 
-    account_to.is_a?(Bank) ? conciliate? : true
+    [account, account_to].any? {|v| v.is_a?(Bank) } ? conciliate? : true
   end
 
+  def valid_accounts_currency
+    unless currency_exchange.valid?
+      self.errors.add(:base, I18n.t('errors.messages.payment.valid_accounts_currency', currency: currency))
+    end
+  end
 end
+

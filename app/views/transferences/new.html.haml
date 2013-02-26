@@ -1,0 +1,63 @@
+- content_for :links do
+  %ul.breadcrumbs.span6
+    %li
+      =link_to @account, @account
+    %li
+      %i.icon-caret-right
+    %li
+      Nueva transferencia
+
+.row-fluid
+  .span6
+    %h1 Nueva transferencia
+
+= simple_form_for @transference, html: {id: 'transference-form'} do |f|
+  = bonsai_form_error(f)
+
+  = f.hidden_field :account_id
+  .row-fluid
+    .span6
+      %label De cuenta
+      %h4.n= link_to @account, @account
+    .span6
+      = f.input :account_to_id, label: 'A cuenta', input_html: {class: 'span10'}
+
+  .row-fluid
+    .span3
+      = f.input :amount,
+        label: "Cantidad #{currency_label @account.currency}".html_safe,
+        input_html: {type: 'decimal', size: 10,
+        data: {value: 'transference.amount'} }
+    .span3
+      = f.input :exchange_rate, label: 'Tipo de cambio',
+        input_html: {disabled: true, type: 'decimal', size: 10,
+        data: {value: 'transference.exchange_rate', disabled: 'transference.sameCurrency'} }
+    #transference-currency.span3
+      .moneybox
+        %label TOTAL A CUENTA
+        %h4 
+          %span(data-text="transference.totalCurrency") 0,00
+          %span.currency.label.label-inverse
+
+  .row-fluid
+    .span3
+      = f.input :date, as: :datepicker, label: 'Fecha'
+    .span3
+      = f.input :verification, as: :boolean, label: 'Verificar',
+        input_html: {data: {value: 'transference.verification', checked: 'transference.verification'} },
+        label: 'Verificar <i class="icon-warning-sign" rel="tooltip" title="Solo si alguna de las cuentas es de BANCO pueden verificar a futuro"></i>'.html_safe
+
+    .span6
+      = f.input :reference, label: 'Referecia', as: :text,
+        input_html: {rows: 3, data: {value: 'transference.reference'}}
+
+  .form-actions
+    = f.submit "Salvar", class: 'btn btn-success btn-large b'
+
+:javascript
+  $(function() {
+    var p = new App.Transference({
+      accountsTo: #{AccountQuery.new.bank_cash_options.to_json}, 
+      baseCurrency: "#{@account.currency}"
+    });
+  })
