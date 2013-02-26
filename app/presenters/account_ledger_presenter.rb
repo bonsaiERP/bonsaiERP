@@ -24,6 +24,8 @@ class AccountLedgerPresenter < Resubject::Presenter
              "<span class='label label-success' >#{operation}</span>"
            when 'payout', 'intout'
              "<span class='label label-error' >#{operation}</span>"
+           when 'trans'
+             "<span class='label label-inverse' >#{operation}</span>"
            end
 
     html.html_safe
@@ -50,6 +52,8 @@ class AccountLedgerPresenter < Resubject::Presenter
       'Pago Int.'
     when 'devin'
       'Devolución'
+    when 'trans'
+      'Transferencia'
     end
   end
 
@@ -60,6 +64,8 @@ class AccountLedgerPresenter < Resubject::Presenter
             'label-success'
           when 'payout', 'intout', 'devin'
             'label-important'
+          when 'trans'
+            'label-inverse'
           end
 
     "<span class='label #{css}'>#{text}</span>".html_safe

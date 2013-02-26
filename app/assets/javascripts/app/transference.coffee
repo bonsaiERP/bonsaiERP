@@ -8,7 +8,17 @@ class Transference extends App.Payment
     # set rivets
     rivets.bind($(@formSel), {transference: this})
 
-    @on 'change:exchange_rate change:amount', @setTotalCurrency
+    @searchAndSetAccountToCurrency()
+
+    @on 'change:exchange_rate change:amount', ->
+      @setTotalCurrency()
+      @setCurrencyLabel()
+  #
+  searchAndSetAccountToCurrency: ->
+    ac = _.find(@get('accountsTo'), (v) => v.id == @get('account_to_id'))
+    @set('currency', ac.currency)
+    @setTotalCurrency()
+    @setCurrencyLabel()
   #
   convertInverse: ->
     val = if @get('inverse')
@@ -17,6 +27,5 @@ class Transference extends App.Payment
       1 / @get('exchange_rate') * 1
 
     val.toFixed(4) * 1
-  
 
 App.Transference = Transference

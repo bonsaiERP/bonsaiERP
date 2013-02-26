@@ -36,14 +36,26 @@ class Transference < BaseService
     @account = AccountQuery.new.bank_cash.find_by_id(account_to_id)
   end
 
+  def transfer
+    @ledger = build_ledger
+
+    commit_or_rollback do
+      res = ledger.save_ledger
+      set_errors(ledger) unless res
+
+      res
+    end
+  end
+
 private
   # Builds and AccountLedger instance with some default data
-  def build_ledger(attrs = {})
-    AccountLedger.new({
+  def build_ledger
+    AccountLedger.new(
       account_id: account_id, exchange_rate: conv_exchange_rate,
-      account_to_id: account_to_id, inverse: inverse?,
-      reference: reference, date: date, currency: account_to.currency
-    }.merge(attrs))
+      account_to_id: account_to_id, inverse: inverse?, operation: 'trans',
+      reference: reference, date: date, currency: account.currency,
+      conciliation: conciliation?, amount: -amount
+    )
   end
 
   # Inverse of verification?, no need to negate when working making more

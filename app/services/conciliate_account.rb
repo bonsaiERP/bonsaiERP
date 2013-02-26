@@ -38,6 +38,7 @@ class ConciliateAccount
   end
 
 private
+  # When an Income is payed with Expense or vice versa
   def is_service_payment?
     [Income, Expense].include?(account_to.class)
   end

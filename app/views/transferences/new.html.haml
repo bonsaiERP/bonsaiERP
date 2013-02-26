@@ -14,7 +14,7 @@
 = simple_form_for @transference, html: {id: 'transference-form'} do |f|
   = bonsai_form_error(f)
 
-  = f.hidden_field :account_id
+  = hidden_field_tag :account_id, params[:account_id]
   .row-fluid
     .span6
       %label De cuenta
@@ -46,7 +46,6 @@
       = f.input :verification, as: :boolean, label: 'Verificar',
         input_html: {data: {value: 'transference.verification', checked: 'transference.verification'} },
         label: 'Verificar <i class="icon-warning-sign" rel="tooltip" title="Solo si alguna de las cuentas es de BANCO pueden verificar a futuro"></i>'.html_safe
-
     .span6
       = f.input :reference, label: 'Referecia', as: :text,
         input_html: {rows: 3, data: {value: 'transference.reference'}}
@@ -56,8 +55,11 @@
 
 :javascript
   $(function() {
-    var p = new App.Transference({
+    var t = new App.Transference({
       accountsTo: #{AccountQuery.new.bank_cash_options.to_json}, 
-      baseCurrency: "#{@account.currency}"
+      baseCurrency: "#{@account.currency}",
+      amount: #{@transference.amount},
+      account_id: #{@transference.account_id},
+      account_to_id: #{@transference.account_to_id}
     });
   })

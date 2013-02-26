@@ -63,5 +63,47 @@ describe Transference do
       end
     end
   end
+
+  context "Save" do
+    before(:each) do
+      AccountLedger.any_instance.stub(save: true)
+    end
+
+    it "saves" do
+      t = Transference.new(valid_attributes)
+      t.stub(account: account, account_to: account_to)
+      ConciliateAccount.any_instance.should_receive(:conciliate!).and_return(true)
+
+      t.transfer.should be_true
+
+      # Ledger
+      t.ledger.should be_is_trans
+      t.ledger.currency.should eq('BOB')
+      t.account_id.should eq(1)
+      t.account_to_id.should eq(2)
+      t.ledger.should_not be_inverse
+      t.ledger.should be_conciliation
+      t.ledger.amount.should == -50.0
+    end
+
+    it "to other currency account" do
+      account_to2 = build(:bank, id: 3, currency: 'USD')
+
+      t = Transference.new(valid_attributes.merge(account_to_id: 3, exchange_rate: 7.0, verification: true))
+      t.stub(account: account, account_to: account_to2)
+
+      t.transfer.should be_true
+
+      # Ledger
+      t.ledger.currency.should eq('BOB')
+      t.account_id.should eq(1)
+      t.account_to_id.should eq(3)
+      t.ledger.should_not be_inverse
+      t.ledger.exchange_rate.should == 7.0
+
+      t.ledger.should_not be_conciliation
+    end
+
+  end
   
 end

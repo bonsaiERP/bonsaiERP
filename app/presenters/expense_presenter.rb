@@ -49,6 +49,13 @@ class ExpensePresenter < Resubject::Presenter
 
   include UsersModulePresenter
 
+  # To load methods related to the Transaction  model
+  Transaction.transaction_columns.each do |m|
+    define_method m do
+      to_model.send(m)
+    end
+  end
+
 private
   def today
     @today ||= Date.today

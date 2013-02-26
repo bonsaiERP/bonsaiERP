@@ -1,5 +1,5 @@
 %ul.unstyled.listing
-  - ledgers=  AccountLedgerQuery.new.money(account.id).page(@page)
+  - ledgers =  AccountLedgerQuery.new.money(account.id).page(@page)
 
   = paginate ledgers
 

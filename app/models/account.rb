@@ -7,6 +7,7 @@ class Account < ActiveRecord::Base
 
   ########################################
   # Relationships
+  belongs_to :contact
   has_many :account_ledgers
 
   ########################################

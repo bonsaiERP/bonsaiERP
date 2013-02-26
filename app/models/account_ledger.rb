@@ -13,7 +13,7 @@ class AccountLedger < ActiveRecord::Base
   # intout = Interestsout
   # devin  = Devolution in
   # devout = Devolution out
-  OPERATIONS = %w(transin transout contin contout payin payout intin intout devin devout).freeze
+  OPERATIONS = %w(trans contin contout payin payout intin intout devin devout).freeze
 
   ########################################
   # Callbacks
@@ -30,8 +30,7 @@ class AccountLedger < ActiveRecord::Base
   # Relationships
   belongs_to :account
   belongs_to :account_to, class_name: "Account"
-  #belongs_to :currency
-  belongs_to :contact
+
   belongs_to :project
 
   belongs_to :approver, class_name: "User"
