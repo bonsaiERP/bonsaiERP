@@ -69,6 +69,7 @@ class Payment extends Backbone.Model
       data: @get('accountsTo')
       formatResult: App.Payment.paymentOptions
       formatSelection: App.Payment.paymentOptions
+      escapeMarkup: (m) -> m
     ).on('change', (event) ->
       self.setAccountTo($(this).select2('data') )
     )
@@ -103,9 +104,11 @@ Payment.paymentOptions = (val) ->
       amt = ' <span class="muted"> Saldo:</span> <span class="balance">' + _b.ntc(val.amount) + '</span>'
 
 
-  ['<span class="label">',txt, "</span> ", val.to_s, 
-    amt, ' <span class="label label-inverse">', 
+  ['<span class="label">',txt, "</span> ", val.to_s,
+   amt, ' <span class="label label-inverse">',
    val.currency, '</span>'].join('')
+
+
 
 App.Payment = Payment
 App.IncomePayment = IncomePayment
