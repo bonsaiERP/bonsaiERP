@@ -4,8 +4,11 @@
       %span Contactos
   .links.span6= link_to "Nuevo #{contact_type(params[:option], false)}", new_contact_path, :class => 'new'
 
-%header
-  %h1 Contactos
+.row-fluid
+  .span6
+    %h1 Contactos
+  .span6.r
+    = link_to icon_new_text, new_contact_path, class: 'btn'
 
 
 = paginate(@contacts)

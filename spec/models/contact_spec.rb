@@ -26,6 +26,10 @@ describe Contact do
 
     it { should have_valid(:phone).when('121212', '2323-232-98', '43 2323 32') }
     it { should_not have_valid(:phone).when('121212-', '2323-232 ', '43 2323a 32') }
+
+    it "presents the validation for" do
+      
+    end
   end
 
   it "returns the correct methods for to_s and compleet_name" do

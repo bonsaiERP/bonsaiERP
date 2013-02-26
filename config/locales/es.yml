@@ -201,6 +201,8 @@ es:
         amount: "La cantidad que ingreso es mayor a la disponible en la cuenta"
         null_conciliation: "No se puede conciliar una operación anulada"
         same_account: 'La cuenta destino debe ser distinta'
+      contact:
+        matchcode: "El idenificador ya existe, por favor cambie"
       devolution:
         income_total: "La cantidad y el balance suman un valor mayor al total"
       income_detail:
