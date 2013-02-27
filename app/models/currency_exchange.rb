@@ -35,13 +35,17 @@ class CurrencyExchange
 
     ret.round(4)
   end
-private
-  def current_organisation
-    OrganisationSession
+
+  def attributes
+    {account: account, account_to: account_to, exchange_rate: exchange_rate}
   end
 
   def same_currency?
     account_currency === account_to_currency
+  end
+private
+  def current_organisation
+    OrganisationSession
   end
 end
 

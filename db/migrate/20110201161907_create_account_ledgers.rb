@@ -10,7 +10,7 @@ class CreateAccountLedgers < ActiveRecord::Migration
         t.integer  :account_to_id
         t.decimal  :account_to_balance, precision: 14, scale: 2, default: 0.0
         t.datetime :date
-        t.string   :operation, :limit => 20
+        t.string   :operation, limit: 20
 
         t.boolean :conciliation, default: true
         t.decimal :amount, precision: 14, scale: 2, default: 0.0

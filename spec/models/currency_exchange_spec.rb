@@ -21,6 +21,7 @@ describe CurrencyExchange do
 
     ex.should be_valid
     ex.exchange.should eq(1)
+    ex.attributes.should eq({account: account_eur, account_to: account_eur, exchange_rate: 1})
   end
 
   it "sets to 1 when both accounts are the same currency" do

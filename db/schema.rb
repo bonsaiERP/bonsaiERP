@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130221151829) do
+ActiveRecord::Schema.define(:version => 20130227123552) do
 
   create_table "account_ledgers", :force => true do |t|
     t.string   "reference"
@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(:version => 20130221151829) do
     t.integer  "project_id"
     t.datetime "created_at",                                                                         :null => false
     t.datetime "updated_at",                                                                         :null => false
+    t.decimal  "amount_from",                      :precision => 14, :scale => 2, :default => 0.0
   end
 
   add_index "account_ledgers", ["account_id"], :name => "index_account_ledgers_on_account_id"

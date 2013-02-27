@@ -226,6 +226,7 @@ es:
         invalid_income_state: "El Ingreso que selecciono no esta aprovado"
         date: "Ingrese una fecha válida"
         valid_accounts_currency: "Alguna de las cuentas debe ser en %{currency}"
+        total: "El valor total es incorrecto"
       quick_income:
         valid_account_to: "Debe seleccionar una cuenta Banco o Caja"
       user:

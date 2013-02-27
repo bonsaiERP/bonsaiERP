@@ -4,12 +4,13 @@ require 'spec_helper'
 describe Transference do
   let(:account){ build :cash, currency: 'BOB', id: 1 }
   let(:account_to){ build :account, currency: 'BOB', id: 2 }
+  let(:account_usd) { build :cash, currency: 'USD', id: 3 }
 
   let(:valid_attributes) {
     {
       account_id: account.id, account_to_id: account_to.id, exchange_rate: 7.011,
       amount: 50, reference: 'El primer pago',
-      verification: false, date: Date.today
+      verification: false, date: Date.today, total: 50
     }
   }
 
@@ -54,6 +55,52 @@ describe Transference do
         t.errors_on(:account_to).should_not be_empty
       end
 
+      it "total difference error" do
+        t = Transference.new(valid_attributes.merge(account_to_id: account_usd.id, exchange_rate: 7.0, amount: 10, total: 70.02) )
+        t.stub(account: account, account_to: account_usd)
+
+        t.should_not be_valid
+        t.errors_on(:total).should eq([I18n.t('errors.messages.payment.total')])
+
+        # Valid up
+        t = Transference.new(valid_attributes.merge(account_to_id: account_usd.id, exchange_rate: 7.0, amount: 10, total: 70.01) )
+        t.stub(account: account, account_to: account_usd)
+
+        t.should be_valid
+
+        # Valid down
+        t = Transference.new(valid_attributes.merge(account_to_id: account_usd.id, exchange_rate: 7.0, amount: 10, total: 69.99) )
+        t.stub(account: account, account_to: account_usd)
+
+        t.should be_valid
+      end
+
+      it "check conciliation" do
+        t = Transference.new(verification: true)
+        t.stub(account: account, account_to: account_to)
+
+        t.should be_verification
+        t.send(:conciliate?).should be_false
+        t.send(:conciliation?).should be_true
+
+        # bank on any
+        bank = build :bank, currency: 'BOB'
+        t = Transference.new(verification: true)
+        t.stub(account: account, account_to: bank)
+
+        t.should be_verification
+        t.send(:conciliate?).should be_false
+        t.send(:conciliation?).should be_false
+
+        #bank on account
+        t = Transference.new(verification: true)
+        t.stub(account: bank, account_to: account)
+
+        t.should be_verification
+        t.send(:conciliate?).should be_false
+        t.send(:conciliation?).should be_false
+      end
+
       it "Valid" do
         Account.stub_chain(:active, :find_by_id).with(account.id).and_return(account)
         AccountQuery.any_instance.stub_chain(:bank_cash, find_by_id: account_to )
@@ -67,6 +114,7 @@ describe Transference do
   context "Save" do
     before(:each) do
       AccountLedger.any_instance.stub(save: true)
+      ConciliateAccount.any_instance.stub(conciliate!: true)
     end
 
     it "saves" do
@@ -83,13 +131,14 @@ describe Transference do
       t.account_to_id.should eq(2)
       t.ledger.should_not be_inverse
       t.ledger.should be_conciliation
-      t.ledger.amount.should == -50.0
+      t.ledger.amount.should == 50.0
+      t.ledger.amount_from.should == - 50.0
     end
 
     it "to other currency account" do
-      account_to2 = build(:bank, id: 3, currency: 'USD')
+      account_to2 = build(:bank, id: 4, currency: 'USD')
 
-      t = Transference.new(valid_attributes.merge(account_to_id: 3, exchange_rate: 7.0, verification: true))
+      t = Transference.new(valid_attributes.merge(account_to_id: 3, exchange_rate: 7.0, verification: true, total: 7.0 * 10, amount: 10))
       t.stub(account: account, account_to: account_to2)
 
       t.transfer.should be_true
@@ -100,8 +149,22 @@ describe Transference do
       t.account_to_id.should eq(3)
       t.ledger.should_not be_inverse
       t.ledger.exchange_rate.should == 7.0
+      t.ledger.amount.should == 10
+      t.ledger.amount_from.should == - 70
 
       t.ledger.should_not be_conciliation
+    end
+
+    it "inverse" do
+      t = Transference.new(valid_attributes.merge(account_to_id: 3, exchange_rate: 7.0, verification: true, total: 10, amount: 70))
+      t.stub(account: account_usd, account_to: account)
+
+      t.transfer.should be_true
+
+      t.ledger.should be_inverse
+      t.ledger.amount.should == 70
+      t.ledger.amount_from.should == - 10
+      t.exchange_rate.should == 7.0
     end
 
   end

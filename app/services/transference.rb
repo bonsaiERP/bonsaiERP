@@ -12,6 +12,7 @@ class Transference < BaseService
   attribute :exchange_rate, Decimal, default: 1
   attribute :reference, String
   attribute :verification, Boolean, default: false
+  attribute :total, Decimal, default: 0
 
   # Validations
   validates_presence_of :account_id, :account_to, :account_to_id, :account_to, :reference, :date
@@ -19,8 +20,9 @@ class Transference < BaseService
   validates_numericality_of :exchange_rate, greater_than: 0
   validate :valid_date
   validate :valid_accounts_currency
+  validate :valid_amount_difference
 
-  delegate :currency, :inverse?, to: :currency_exchange
+  delegate :currency, :inverse?, :same_currency?, to: :currency_exchange
 
   # Initializes and sets verification to false if it's not set correctly
   def initialize(attrs = {})
@@ -37,6 +39,7 @@ class Transference < BaseService
   end
 
   def transfer
+    return false unless valid?
     @ledger = build_ledger
 
     commit_or_rollback do
@@ -54,7 +57,7 @@ private
       account_id: account_id, exchange_rate: conv_exchange_rate,
       account_to_id: account_to_id, inverse: inverse?, operation: 'trans',
       reference: reference, date: date, currency: account.currency,
-      conciliation: conciliation?, amount: -amount
+      conciliation: conciliation?, amount: amount, amount_from: total_curr
     )
   end
 
@@ -103,5 +106,23 @@ private
       self.errors.add(:base, I18n.t('errors.messages.payment.valid_accounts_currency', currency: currency))
     end
   end
+
+  # For ranges when the total and the amount are in different currencies
+  def valid_amount_difference
+    unless same_currency?
+      tolerance = 0.01
+      amt_down = currency_exchange.exchange(amount) - tolerance <= total
+      amt_up = currency_exchange.exchange(amount) + tolerance >= total
+
+      if !amt_up || !amt_down
+        self.errors[:total] << I18n.t('errors.messages.payment.total')
+      end
+    end
+  end
+
+  def total_curr
+    same_currency? ? -amount : -total
+  end
+
 end
 
