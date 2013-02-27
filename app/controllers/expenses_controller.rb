@@ -44,9 +44,9 @@ class ExpensesController < ApplicationController
     @quick_expense = QuickExpense.new(quick_expense_params)
 
     if @quick_expense.create
-      flash[:notice] = "El ingreso fue creado."
+      flash[:notice] = "El egreso fue creado."
     else
-      flash[:error] = "Existio errores al crear el ingreso."
+      flash[:error] = "Existio errores al crear el egreso."
     end
 
     redirect_to expenses_path
