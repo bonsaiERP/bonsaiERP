@@ -9,10 +9,10 @@ class Transference < BaseService
   attribute :account_to_id, Integer
   attribute :date, Date
   attribute :amount, Decimal, default: 0
+  attribute :total, Decimal, default: 0
   attribute :exchange_rate, Decimal, default: 1
   attribute :reference, String
   attribute :verification, Boolean, default: false
-  attribute :total, Decimal, default: 0
 
   # Validations
   validates_presence_of :account_id, :account_to, :account_to_id, :account_to, :reference, :date

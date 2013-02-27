@@ -9,6 +9,7 @@ class Payment < BaseService
   attribute :account_to_id, Integer
   attribute :date, Date
   attribute :amount, Decimal, default: 0
+  attribute :total, Decimal, default: 0
   attribute :exchange_rate, Decimal, default: 1
   attribute :reference, String
   attribute :interest, Decimal, default: 0
@@ -21,8 +22,9 @@ class Payment < BaseService
   validate :valid_amount_or_interest
   validate :valid_date
   validate :valid_accounts_currency
+  validate :valid_amount_difference
 
-  delegate :currency, :inverse?, to: :currency_exchange
+  delegate :currency, :inverse?, :same_currency?, to: :currency_exchange
 
   # Initializes and sets verification to false if it's not set correctly
   def initialize(attrs = {})
@@ -107,4 +109,16 @@ private
     account_to.is_a?(Bank) ? conciliate? : true
   end
 
+  # For ranges when the total and the amount are in different currencies
+  def valid_amount_difference
+    unless same_currency?
+      tolerance = 0.01
+      amt_down = currency_exchange.exchange(amount) - tolerance <= total
+      amt_up = currency_exchange.exchange(amount) + tolerance >= total
+
+      if !amt_up || !amt_down
+        self.errors[:total] << I18n.t('errors.messages.payment.total')
+      end
+    end
+  end
 end

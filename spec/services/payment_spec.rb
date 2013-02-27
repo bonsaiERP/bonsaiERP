@@ -9,7 +9,7 @@ describe Payment do
   let(:valid_attributes) {
     {
       account_id: transaction.id, account_to_id: account_to.id, exchange_rate: 7.011,
-      amount: 50, interest: 0, reference: 'El primer pago',
+      amount: 50, total: 0, interest: 0, reference: 'El primer pago',
       verification: false, date: Date.today
     }
   }
@@ -65,7 +65,7 @@ describe Payment do
 
       it "Valid" do
         Account.stub_chain(:active, :find_by_id).with(account_to.id).and_return(account_to)
-        p = Payment.new(valid_attributes)
+        p = Payment.new(valid_attributes.merge(total: 50 * 7.011))
         p.stub(transaction: transaction)
 
         p.should be_valid
