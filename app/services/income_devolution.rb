@@ -45,9 +45,9 @@ private
 
   def create_ledger
     @ledger = build_ledger(
-                            amount: -amount, operation: 'devin', account_id: income.id,
-                            conciliation: conciliation?
-                          )
+      amount: -amount, operation: 'devin', account_id: income.id,
+      conciliation: conciliation?
+    )
     @ledger.save_ledger
   end
 

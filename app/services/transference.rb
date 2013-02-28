@@ -57,7 +57,7 @@ private
       account_id: account_id, exchange_rate: conv_exchange_rate,
       account_to_id: account_to_id, inverse: inverse?, operation: 'trans',
       reference: reference, date: date, currency: account.currency,
-      conciliation: conciliation?, amount: amount, amount_from: total_curr
+      conciliation: conciliation?, amount: amount
     )
   end
 

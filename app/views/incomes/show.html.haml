@@ -52,7 +52,7 @@
   .moneybox
     %label SALDO
     %h4
-      = ntc @income.balance
+      = @income.balance
       = currency_label @income.currency
 
 = render 'incomes/tour/devolution'
@@ -69,10 +69,10 @@
   #information
     = render "incomes/items", income: @income
   #payments
-
-    %a.btn(id='payment-link' href='javascript:;')
-      %i.icon-plus-sign
-      Cobrar
+    - unless @income.is_paid?
+      %a.btn(id='payment-link' href='javascript:;')
+        %i.icon-plus-sign
+        Cobrar
 
     %a.btn(id='devolution-link' href='javascript:;')
       %i.icon-minus-sign
@@ -89,6 +89,10 @@
     %h2 Cobros y devoluciones
 
     %ul.unstyled.listing
+      %li.row-fluid
+        .span7.offset3.r.muted
+          %strong Cantidad
+
       = render partial: 'account_ledgers/income', collection: @income.payments_devolutions,as: :ledger
 
     %h2 Intereses
@@ -96,26 +100,26 @@
     %ul.unstyled.listing
       = render partial: 'account_ledgers/income', collection: @income.interests,as: :ledger
 
-:coffee
-  $( ->
+:javascript
+  $( function() {
     $('#tabs').tabs()
-    # Payment show hide
-    $('#payment-link').click( -> 
+    // Payment show hide
+    $('#payment-link').click( function() {
       $('#payment-form').show('slow')
       $(this).hide('slow')
-    )
-    $('#cancel-payment-link').click( ->
+    })
+    $('#cancel-payment-link').click( function() {
       $('#payment-form').hide('slow')
       $('#payment-link').show('slow')
-    )
+    })
 
-    # Devolution show hide
-    $('#devolution-link').click( -> 
+    // Devolution show hide
+    $('#devolution-link').click( function() {
       $('#devolution-form').show('slow')
       $(this).hide('slow')
-    )
-    $('#cancel-devolution-link').click( -> 
+    })
+    $('#cancel-devolution-link').click( function() { 
       $('#devolution-form').hide('slow')
       $('#devolution-link').show('slow')
-    )
-  )
+    })
+  })

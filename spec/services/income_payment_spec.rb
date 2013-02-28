@@ -42,17 +42,23 @@ describe IncomePayment do
       pay_in.should be_valid
     end
 
-    it "does not allow amount greater than balance" do
+    # There purpose is to return change
+    # there is a balance of 50 BOB and someone pays with a
+    # 20 USD bill (ER 1 USD = 6.95 BOB), then we have to return change
+    it "allows amount greater than balance" do
       pay_in = IncomePayment.new(valid_attributes.merge(amount: 101))
 
+      ConciliateAccount.any_instance.stub(conciliate!: true)
       Income.stub(find_by_id: income)
+      Income.any_instance.stub(save: true)
       Account.stub(find_by_id: account_to)
 
-      pay_in.should_not be_valid
-      pay_in.errors_on(:amount).should_not be_empty
+      income.should_not be_has_error
 
-      pay_in.amount = 100
-      pay_in.should be_valid
+      pay_in.pay.should be_true
+
+      pay_in.income.should be_has_error
+      pay_in.income.error_messages.should eq({balance: ['transaction.negative_balance']})
     end
   end
 

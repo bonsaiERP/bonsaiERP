@@ -3,7 +3,6 @@ class IncomePayment < Payment
 
   # Validations
   validates_presence_of :income
-  validate :valid_income_balance
   validate :valid_account_to_balance, if: :account_to_is_expense?
   validate :valid_account_to_state, if: :account_to_is_expense?
 
@@ -34,6 +33,8 @@ class IncomePayment < Payment
 private
   def save_income
     update_income
+    err = IncomeErrors.new(income)
+    err.set_errors
 
     income.save
   end
@@ -73,12 +74,6 @@ private
       @int_ledger.save_ledger
     else
       true
-    end
-  end
-
-  def valid_income_balance
-    if amount_exchange.to_f > income_balance.to_f
-      self.errors.add :amount, I18n.t('errors.messages.payment.balance')
     end
   end
 

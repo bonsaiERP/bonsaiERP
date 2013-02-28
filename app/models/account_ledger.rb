@@ -58,6 +58,7 @@ class AccountLedger < ActiveRecord::Base
   # delegates
   delegate :name, :amount, :currency, :contact, to: :account, prefix: true, allow_nil: true
   delegate :name, :amount, :currency, :contact, to: :account_to, prefix: true, allow_nil: true
+  delegate :same_currency?, to: :currency_exchange
 
   OPERATIONS.each do |op|
     class_eval <<-CODE, __FILE__, __LINE__ + 1

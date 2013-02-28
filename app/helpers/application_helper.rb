@@ -162,4 +162,5 @@ module ApplicationHelper
   def render_if(val, &block)
     content_tag(:span) { block.call } if val.present?
   end
+
 end

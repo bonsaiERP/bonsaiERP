@@ -1,23 +1,35 @@
 %li.row-fluid
-  .span4
+  .span3
     %h5
       = ledger.conciliation_tag
-      = ledger.operation_tag
       = link_to ledger, ledger
+      = ledger.operation_tag
+
     .clear-both
     %h5
-      =l ledger.date.to_date
       %span.muted A:
       = link_to ledger.account_to, ledger.account_to
 
-  .span5
-    .span7
+      %i= l ledger.date.to_date
+
+  .span7
+    .span6
       %i.icon-file.muted(rel='tooltip' title="referencia")
       = nl2br ledger.reference
-    .sapn5
-      %span.muted Cantidad
-      = ntc ledger.amount
-      = currency_label ledger.currency
+    .span6.r
+      - if ledger.same_currency?
+        = ntc ledger.amount_currency
+        = currency_label ledger.account_currency
+      - else
+        = ntc ledger.amount
+        = currency_label ledger.currency
+        %span.muted(title="Tipo de cambio" rel="tooltip")
+          %i.icon-exchange
+          =ntc ledger.exchange_rate, precision: 4
+        \=
+        =ntc ledger.amount_currency
+        = currency_label ledger.account_currency
+
 
   .span2
     = ledger.creator_label.html_safe

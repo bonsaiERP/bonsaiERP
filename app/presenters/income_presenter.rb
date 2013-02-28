@@ -10,11 +10,11 @@ class IncomePresenter < Resubject::Presenter
   end
 
   def payments
-    present to_model.payments, AccountLedgerPresenter
+    present to_model.payments.includes(:account), AccountLedgerPresenter
   end
 
   def payments_devolutions
-    present to_model.payments_devolutions, AccountLedgerPresenter
+    present to_model.payments_devolutions.includes(:account), AccountLedgerPresenter
   end
 
   def interests
