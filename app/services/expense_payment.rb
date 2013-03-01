@@ -18,7 +18,6 @@ class ExpensePayment < Payment
       res = save_expense
       res = save_income if account_to_is_income?
       res = create_ledger && res
-      res = create_interest && res
 
       set_errors(expense, ledger, int_ledger) unless res
 
@@ -46,7 +45,7 @@ private
   # Updates the expense and sets it's state
   # Service exchange
   def save_income
-    account_to.balance -= amount + interest
+    account_to.balance -= amount
     account_to.set_state_by_balance!
 
     account_to.save
@@ -64,18 +63,6 @@ private
     end
   end
 
-  def create_interest
-    if interest.to_f > 0
-      @int_ledger = build_ledger(
-                      amount: -interest, operation: 'intout',
-                      account_id: expense.id, conciliation: conciliation?
-                    )
-      @int_ledger.save_ledger
-    else
-      true
-    end
-  end
-
   def valid_expense_balance
     if amount_exchange.to_f > expense_balance.to_f
       self.errors.add :amount, I18n.t('errors.messages.payment.balance')
@@ -88,7 +75,7 @@ private
 
   # Only when you pay with a income
   def valid_account_to_balance
-    if account_to.balance < (amount + interest)
+    if account_to.balance < amount
       self.errors.add :amount, I18n.t('errors.messages.payment.income_balance')
     end
   end

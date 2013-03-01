@@ -5,7 +5,6 @@ class Payment extends Backbone.Model
   verificationSel: ''
   defaults:
     amount: 0.0
-    interest: 0.0
     exchange_rate: 1.0
     inverse: false
     type: ''

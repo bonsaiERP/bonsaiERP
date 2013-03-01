@@ -5,7 +5,8 @@
   separator: ','
   delimiter: '.'
 
-( ($) ->
+# Init function
+init = ($) ->
   # Regional settings for jquery-ui datepicker
   $.datepicker.regional['es'] = {
     closeText: 'Cerrar',
@@ -39,9 +40,6 @@
 
   # Speed in milliseconds
   speed = 300
-  # csfr
-  csrf_token = $('meta[name=csrf-token]').attr('content')
-  window.csrf_token = csrf_token
   # Date format
   $.datepicker._defaults.dateFormat = 'dd M yy'
 
@@ -49,66 +47,53 @@
 
   # Ajax preloader content
   AjaxLoadingHTML = ->
-    "<h4 class='c'><i class='icon-spinner icon-spin icon-large'></i> Cargando...</h4>"
+    "<h4 class='c'><img src='/assets/ajax-loader.gif' alt='Cargando..' /> Cargando...</h4>"
 
   # Creates the dialog container
-  createDialog = (params) ->
+  @createDialog = (params) ->
     data = params
     params = _.extend({
       'id': new Date().getTime(), 'title': '', 'width': 800, 'modal': true, 'resizable' : false, 'position': 'top',
-      'close': (e, ui)->
-        $('#' + div_id ).parents("[role=dialog]").detach()
+      #'close': (e, ui) ->
+        #e.stopInmidiatePropagation()
+        #e.preventDefault()
+        #ui.remove()
+        #$('.ui-widget-overlay').remove()
+        ##$('#' + div_id ).parents("[role=dialog]").detach()
     }, params)
     html = params['html'] || AjaxLoadingHTML()
     div_id = params.id
     div = document.createElement('div')
     css = "ajax-modal " + params['class'] || ""
-    $(div).attr( { 'id': params['id'], 'title': params['title'] } ).data(data)
+    $div = $(div)
+    $div.attr( { 'id': params['id'], 'title': params['title'] } ).data(data)
     .addClass(css).css( { 'z-index': 10000 } ).html(html)
     delete(params['id'])
     delete(params['title'])
 
-    $(div).dialog( params )
+    $div.dialog( params )
 
-    div
+    $div
 
-  window.createDialog = createDialog
+  ########################################
+  # Presents any link url in a modal dialog and loads with AJAX the url
+  $('body').on('click', 'a.ajax', (event) ->
+    event.preventDefault()
 
+    id = new Date().getTime().toString()
+    $this = $(this)
+    $this.data('ajax_id', id)
 
-  # Opens a video dialog
-  createVideoDialog = (url, title = "") ->
-    #html = "<iframe width=\"640\" height=\"360\" src=\"#{url}\" frameborder=\"0\" allowfullscreen></iframe>"
-    html = "<iframe width=\"853\" height=\"480\" src=\"#{url}\" frameborder=\"0\" allowfullscreen></iframe>"
-    #createDialog({html: html, width: 680, height: 410, title: title})
-    createDialog({html: html, width: 880, height: 530, title: title})
+    $div = createDialog( { 'title': $this.data('title'), 'new_record': $this.hasClass('new') } )
+    $div.load( $this.attr("href"), (resp, status, xhr, dataType) ->
+      $this = $(this)
+      $tit = $this.dialog('widget').find('.ui-dialog-title')
+      .text($('<div>').html(resp).find('h1').text())
 
-
-  # Gets if the request is new, edit, show
-  getAjaxType = (el)->
-    if $(el).hasClass("new")
-      'new'
-    else if $(el).hasClass("edit")
-      'edit'
-    else
-      'show'
-
-  window.getAjaxType = getAjaxType
-
-
-  # Presents an AJAX form
-  $(document).on('click', 'a.ajax', (event) ->
-    title = $(this).attr("title") || $(this).data("original-title")
-    data = $.extend({'title': title, 'ajax-type': getAjaxType(this) }, $(this).data() )
-    div = createDialog( data )
-    $( div ).load( $(this).attr("href"), (resp)->
-      $(div).setTransformations()
-      $(div).find('form').attr('data-remote', true)
+      $div.setDatepicker()
     )
-
     event.stopPropagation()
-    false
   )
-
 
   # Delete an Item from a list, deletes a tr or li
   # Very important with default fallback for trigger
@@ -211,15 +196,35 @@
 
 
   # Closes the nearest div container
-  $(document).on('click', 'a.close', ->
-    self = this
-    cont = $(this).parents('div:first').hide(speed)
-    unless $(this).parents("div:first").hasClass("search")
-      setTimeout ->
-        cont.remove()
-      ,speed
+  #$(document).on('click', 'a.close', ->
+    #self = this
+    #cont = $(this).parents('div:first').hide(speed)
+    #unless $(this).parents("div:first").hasClass("search")
+      #setTimeout ->
+        #cont.remove()
+      #,speed
+  #)
+
+  # Prevent enter submit forms in some forms
+  window.keyPress = false
+  $(document).on( 'keydown', 'form.enter input', (event) ->
+    window.keyPress = event.keyCode || false
+    true
   )
 
+
+  # Ajax configuration
+  csrf_token = $('meta[name=csrf-token]').attr('content')
+  window.csrf_token = csrf_token
+  $.ajaxSetup(
+    beforeSend: (xhr) ->
+      xhr.setRequestHeader('X-CSRF-Token', csrf_token)
+  )
+
+
+########################################
+# Start jquery
+( ($) ->
   createErrorLog = (data) ->
     unless $('#error-log').length > 0
       $('<div id="error-log" style="background: #FFF"></div>')
@@ -236,43 +241,10 @@
 
   window.createMessageCont = createMessageCont
 
-  # AJAX setup
-  $.ajaxSetup ({
-    #dataType : "html",
-      beforeSend : (xhr)->
-        #$('#cargando').show();
-      error : (event) ->
-        #$('#cargando').hide(1000)
-        #createErrorLog(event.responseText)
-      complete : (event)->
-        if $.inArray(event.status, [404, 422, 500]) >= 0
-          createErrorLog(event.responseText)
-        #$('#cargando').hide(1000)
-      success : (event)->
-        #$('#cargando').hide(1000)
-    })
 
-  # Prevent enter submit forms in some forms
-  window.keyPress = false
-  $(document).on( 'keydown', 'form.enter input', (event) ->
-    window.keyPress = event.keyCode || false
-    true
-  )
-
-  $(document).on('mouseover', 'form.enter input:submit', (event) ->
-    window.keyPress = false
-    true
-  )
-
-  #$(document).on( 'submit', 'form.enter', (event)->
-  #  if window.keyPress == 13
-  #    false
-  #  else
-  #    true
-  #)
 
   # Supress from submiting a form from an input:text
-  checkCR = (evt)->
+  checkCR = (evt) ->
     evt  = evt  = (evt) ? evt : ((event) ? event : null)
     node = evt.target || evt.srcElement
     if evt.keyCode == 13 and node.type == "text" then false
@@ -290,14 +262,18 @@
   # Underscore templates
   _.templateSettings.interpolate = /\{\{(.+?)\}\}/g
 
+  ########################################
   # Wrapped inside this working
   $(document).ready ->
+    # Initializes
+    init($)
     $('body').tooltip( selector: '[rel=tooltip]' )
     $('body').setDatepicker()
     $('body').createAutocomplete()
     $('.select2-autocomplete').select2Autocomplete()
     $('body').dataNewUrl()
     fx.rates = exchangeRates.rates
+    
 
   rivets.configure(
     #preloadData: false

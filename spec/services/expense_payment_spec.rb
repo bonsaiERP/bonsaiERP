@@ -10,7 +10,7 @@ describe ExpensePayment do
   let(:valid_attributes) {
     {
       account_id: 10, account_to_id: 2, exchange_rate: 1,
-      amount: 50, interest: 0, reference: 'El primer pago',
+      amount: 50, reference: 'El primer pago',
       verification: 'true', date: Date.today
     }
   }
@@ -88,7 +88,6 @@ describe ExpensePayment do
       p.ledger.reference.should eq(valid_attributes.fetch(:reference))
       p.ledger.date.should eq(valid_attributes.fetch(:date).to_time)
 
-      p.int_ledger.should be_nil
 
       # New payment to complete
       p = ExpensePayment.new(valid_attributes.merge(amount: p.expense.balance))
@@ -98,9 +97,9 @@ describe ExpensePayment do
       p.expense.should be_is_paid
     end
 
-    it "create ledger and int_ledger" do
+    it "create ledger" do
       expense.should be_is_draft
-      p = ExpensePayment.new(valid_attributes.merge(interest: 10))
+      p = ExpensePayment.new(valid_attributes)
 
       p.verification.should be_true
 
@@ -112,13 +111,6 @@ describe ExpensePayment do
       p.ledger.should be_is_payout
       p.ledger.account_id.should eq(expense.id)
 
-      # int_ledger
-      p.int_ledger.should be_is_a(AccountLedger)
-      p.int_ledger.amount.should == -10.0
-      p.int_ledger.should be_is_intout
-      p.int_ledger.account_id.should eq(expense.id)
-      p.int_ledger.reference.should eq(valid_attributes.fetch(:reference))
-      p.int_ledger.date.should eq(valid_attributes.fetch(:date).to_time)
     end
 
     ### Verification only Bank accounts
@@ -128,22 +120,20 @@ describe ExpensePayment do
         Account.stub(:find_by_id).with(bank.id).and_return(bank)
         bank.id.should_not eq(account_to_id)
 
-        p = ExpensePayment.new(valid_attributes.merge(account_to_id: 100, verification: true, interest: 10))
+        p = ExpensePayment.new(valid_attributes.merge(account_to_id: 100, verification: true))
 
         p.pay.should be_true
         p.should be_verification
         p.account_to_id.should eq(100)
         # Should not conciliate
         p.ledger.should_not be_conciliation
-        p.int_ledger.should_not be_conciliation
 
         # When verification=false
-        p = ExpensePayment.new(valid_attributes.merge(account_to_id: 100, verification: false, interest: 10))
+        p = ExpensePayment.new(valid_attributes.merge(account_to_id: 100, verification: false))
 
         p.pay.should be_true
         # Should conciliate
         p.ledger.should be_conciliation
-        p.int_ledger.should be_conciliation
       end
 
       it "doesn't change unless it's bank account" do
@@ -153,36 +143,21 @@ describe ExpensePayment do
 
         Account.find_by_id(account_to_id).should eq(account_to)
 
-        p = ExpensePayment.new(valid_attributes.merge(account_to_id: 200, verification: true, interest: 10))
+        p = ExpensePayment.new(valid_attributes.merge(account_to_id: 200, verification: true))
 
         p.pay.should be_true
 
         p.ledger.should be_conciliation
-        p.int_ledger.should be_conciliation
 
         # verification=false
-        p = ExpensePayment.new(valid_attributes.merge(account_to_id: 200, verification: false, interest: 10))
+        p = ExpensePayment.new(valid_attributes.merge(account_to_id: 200, verification: false))
 
         p.pay.should be_true
 
         p.ledger.should be_conciliation
-        p.int_ledger.should be_conciliation
       end
     end
 
-    it "only creates int_ledger" do
-      expense.should be_is_draft
-      p = ExpensePayment.new(valid_attributes.merge(interest: 10, amount: 0))
-
-      p.pay.should be_true
-
-      # ledger
-      p.ledger.should be_nil
-      # int_ledger
-      p.int_ledger.should be_is_a(AccountLedger)
-      p.int_ledger.amount.should == -10.0
-      p.int_ledger.should be_is_intout
-    end
   end
 
   context "Pay with income" do
@@ -191,7 +166,7 @@ describe ExpensePayment do
     let(:payment_with_income_attributes) {
       {
         account_id: expense.id, account_to_id: income.id, amount: 50,
-        exchange_rate: 1, interest: 10, verification: 'true', 
+        exchange_rate: 1, verification: 'true', 
         date: Date.today, reference: 'Pay with expense'
       }
     }
@@ -231,7 +206,7 @@ describe ExpensePayment do
       # Expense
       ep.expense.balance.should == bal - ep.amount
       # Expense
-      ep.account_to.balance.should == 100 - (ep.amount + ep.interest)
+      ep.account_to.balance.should == 100 - ep.amount
     end
 
     it "should set the state of the expense when done" do
@@ -255,11 +230,11 @@ describe ExpensePayment do
 
       income.should be_is_approved
 
-      ep = ExpensePayment.new(payment_with_income_attributes.merge(amount: 90, interest: 10))
+      ep = ExpensePayment.new(payment_with_income_attributes.merge(amount: 100))
 
       ep.pay.should be_true
       # Expense
-      ep.expense.balance.should == 10
+      ep.expense.balance.should == 0
       # Income
       ep.account_to.balance.should == 0
       ep.account_to.should be_is_paid
@@ -278,14 +253,14 @@ describe ExpensePayment do
 
       income.should be_is_approved
 
-      ep = ExpensePayment.new(payment_with_income_attributes.merge(amount: 10, interest: 1, exchange_rate: 7.0))
+      ep = ExpensePayment.new(payment_with_income_attributes.merge(amount: 10, exchange_rate: 7.0))
 
 
       ep.pay.should be_true
       # Expense
       ep.expense.balance.should == 100 - 7.0 * 10
       # Income
-      ep.account_to.balance.should == 100 - 11
+      ep.account_to.balance.should == 100 - 10
 
       ########################################
       # Inverse
@@ -294,13 +269,13 @@ describe ExpensePayment do
       expense.currency = 'USD'
       income.currency = 'BOB'
 
-      ep = ExpensePayment.new(payment_with_income_attributes.merge(amount: 10, interest: 1, exchange_rate: 7.0))
+      ep = ExpensePayment.new(payment_with_income_attributes.merge(amount: 10, exchange_rate: 7.0))
 
       ep.pay.should be_true
       # Expense
       ep.expense.balance.round(4).should == (100 - 1.0/7 * 10).round(4)
       # Income
-      ep.account_to.balance.should == 100 - 11
+      ep.account_to.balance.should == 100 - 10
     end
   end
 
@@ -316,7 +291,7 @@ describe ExpensePayment do
       Account.stub_chain(:active, :find_by_id).with(101).and_return(ac_usd)
       expense.balance = 100
 
-      ep = ExpensePayment.new(valid_attributes.merge(account_to_id: 101, exchange_rate: 7.001, amount: 10, interest: 1))
+      ep = ExpensePayment.new(valid_attributes.merge(account_to_id: 101, exchange_rate: 7.001, amount: 10))
 
       ep.pay.should be_true
 
@@ -328,10 +303,6 @@ describe ExpensePayment do
       ep.ledger.should_not be_inverse
       ep.amount.should == 10
       ep.ledger.currency.should eq('USD')
-      # int_ledger
-      ep.int_ledger.should_not be_inverse
-      ep.int_ledger.amount.should == -1
-      ep.int_ledger.currency.should eq('USD')
     end
 
     it "Inverse when expense in USD" do
@@ -340,7 +311,7 @@ describe ExpensePayment do
       Account.stub_chain(:active, :find_by_id).with(103).and_return(ac_bob)
       expense.balance = 100
 
-      ep = ExpensePayment.new(valid_attributes.merge(account_to_id: 103, exchange_rate: 7.001, amount: 200, interest: 1))
+      ep = ExpensePayment.new(valid_attributes.merge(account_to_id: 103, exchange_rate: 7.001, amount: 200))
 
       ep.pay.should be_true
 
@@ -352,10 +323,6 @@ describe ExpensePayment do
       ep.ledger.should be_inverse
       ep.amount.should == 200
       ep.ledger.currency.should eq('BOB')
-      # int_ledger
-      ep.int_ledger.should be_inverse
-      ep.int_ledger.amount.should == -1
-      ep.int_ledger.currency.should eq('BOB')
     end
   end
 

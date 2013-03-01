@@ -3,6 +3,9 @@
 # contributors:
 #  - Tsutomu Kuroda - http://github.com/kuroda (t-kuroda@oiax.jp)
 es:
+  active_record:
+    errors:
+      messages:
   # Action View
   number:
     # Used in number_with_delimiter()
@@ -193,8 +196,9 @@ es:
       odd: "debe ser impar"
       even: "debe ser par"
       invalidkeys: "Solo debe ingresar datos permitidos" # New one to check if the keys that are assigned are valid
-      email_taken: "El email que ingreso ya existe, seleccione otro email"
-      email: "El email que ingreso no es válido"
+      email_taken: "el email que ingreso ya existe, seleccione otro email"
+      email: "el email que ingreso no es válido"
+      invalid_email_format: 'el email que ingreso no es válido'
       account_ledger:
         invalid_contact: "Debe seleccionar un Cliente, Proveedor o Personal"
         same_account: "Las cuentas que selecciono son identicas"

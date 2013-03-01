@@ -1,91 +1,76 @@
-(($) ->
+$( ->
   # Parses the date with a predefined format
   # @param String date
   # @param String type : Type to return
-  parseDate = (date, tipo) ->
+  parseDate = (date, typo) ->
     date = $.datepicker.parseDate($.datepicker._defaults.dateFormat, date )
     d = [ date.getFullYear(), date.getMonth() + 1, date.getDate() ]
-    if 'string' == tipo
+    if 'string' == type
       d.join("-")
     else
       d
 
-  # Sets rails select fields with the correct datthe correct date
-  setDateSelect = (el)->
-    el = el || this
-    date = parseDate( $(el).val() )
-    $(el).siblings('select[name*=1i]').val(date[0]).trigger("change")
-    $(el).siblings('select[name*=2i]').val(date[1]).trigger("change")
-    $(el).siblings('select[name*=3i]').val(date[2]).trigger("change")
+  # Must be before any ajax click event to work with HTMLUnit
+  # Makes that a dialog opened window makes an AJAX request and returns a JSON response
+  # if response is JSON then trigger event stored in dialog else present the HTML
+  # There are three types of response JSON, JavaScript and HTML
+  # JavaScript response must have "// javascript" at the beginning
+  $('body').on('submit', 'div.ajax-modal form', (event) ->
+    return true if $(this).attr('enctype') == 'multipart/form-data'
+    return true if $(this).hasClass("no-ajax")
 
-  $.setDateSelect = $.fn.setDateSelect = setDateSelect
+    event.preventDefault()
+    # Prevent from submiting the form.enter when hiting ENTER
+    return false if $(this).hasClass('enter') and window.keyPress == 13
 
-  # Transforms the hour to just select 00, 15, 30, 
-  transformMinuteSelect = (el, step = 5) ->
-    $el = $(el)
-    val = $el.val()
-    steps = parseInt(60/5) - 1
-    options = []
-    for k in [0..steps]
-      if el == val then sel = 'selected="selected"' else sel =""
-      options.push('<option value="' + (5 * k) + '" ' + sel + '>' + (5 * k) + '</option>')
-    options = options.join("")
+    $el = $(this)
+    data = $el.serialize()
+    $el.find('input, select, textarea').attr('disabled', true)
 
-    $(el).html(options)
+    $div = $el.parents('.ajax-modal:first')
+    new_record = if $div.data('ajax-type') == 'new' then true else false
+    trigger = $div.data('trigger') or "ajax-call"
 
-  # Transforms a dateselect field in rails to jQueryUI
-  transformDateSelect = ->
-    $(this).find('.date, .datetime').each((i, el)->
-      # hide fields
-      input = document.createElement('input')
-      $(input).attr(
-        class: 'date-transform'
-        type: 'text'
-        size: 10
-      )
-
-      year = $(el).find('select[name*=1i]').hide().val()
-      month = (1 * $(el).find('select[name*=2i]').hide().val()) - 1
-      day = $(el).find('select[name*=3i]').hide().after( input ).val()
-      minute = $(el).find('select[name*=5i]')
-
-      if minute.length > 0 then transformMinuteSelect(minute)
-
-      # Only after added to DOM one must set button
-      $(input).datepicker(
-        yearRange: '1900:',
-        showOn: 'both',
-        buttonImageOnly: true,
-        buttonImage: '/assets/calendar-black.png'
-      )
-      $(input).change( (e) ->
-        $.setDateSelect(this)
-        $(this).trigger("change:datetime", this)
-      )
-
-      if year != '' and month != '' and day != ''
-        $(input).datepicker("setDate", new Date(year, month, day))
-      $('.ui-datepicker').not('.ui-datepicker-inline').hide()
+    $.ajax(
+      'url': $(el).attr('action')
+      'cache': false
+      'context':el
+      'data': data
+      'type': (data['_method'] or $el.attr('method') )
     )
-
-  $.transformDateSelect = $.fn.transformDateSelect = transformDateSelect
-
-  $(document).on('ajax:success', 'div.ajax-modal form', (event, resp) ->
-    switch true
-      when _.isString(resp)
-        $parent = $(this).parents('div.ajax-modal')
-        $parent.html(resp)
-        $parent.find('form').attr('data-remote', true)
-      when _.isObject(resp)
-        $parent = $(this).parents('div.ajax-modal')
-        if trigger = $parent.data('trigger')
-          $(this).trigger trigger, [resp]
-
-        $parent.dialog('destroy')
+    .success (resp, status, xhr) ->
+      if typeof resp == "object"
+        data['new_record'] = new_record
+        $div.html('').dialog('destroy')
+        $('body').trigger(trigger, [resp])
+      else if resp.match(/^\/\/\s?javascript/)
+        $div.html('').dialog('destroy')
       else
-        console.log resp
-
+        $div.html(resp)
+        setTimeout(->
+          $div.setDatepicker()
+        ,200)
+    .error (resp) ->
+      alert('There were errors please try again.')
   )
+  # End submit ajax form
+
+  #$(document).on('ajax:success', 'div.ajax-modal form', (event, resp) ->
+    #switch true
+      #when _.isString(resp)
+        #$parent = $(this).parents('div.ajax-modal')
+        #$parent.html(resp)
+        #$parent.find('form').attr('data-remote', true)
+      #when _.isObject(resp)
+        #$parent = $(this).parents('div.ajax-modal')
+        #if trigger = $parent.data('trigger')
+          #$(this).trigger trigger, [resp]
+
+        #$parent.dialog('destroy')
+      #else
+        #console.log resp
+
+  #)
 
   ##########################################
   # Activates autocomplete for all autocomplete inputs
@@ -152,10 +137,10 @@
     numCars: (n) -> if n == 1 then "" else "es"
     formatResultCssClass: -> undefined
     formatNoMatches: -> "No se encontro"
-    formatInputTooShort: (input, min) -> 
+    formatInputTooShort: (input, min) ->
       n = min - input.length
       "Ingrese #{n} caracter#{@numCars(n)} mas"
-    formatInputTooLong: (input, max) -> 
+    formatInputTooLong: (input, max) ->
       n = input.length - max
       "Ingrese #{n} caracter#{@numCars(n)} menos"
     ###
@@ -191,5 +176,4 @@
       .find('>span').text($this.data('value'))
 
   $.fn.select2Autocomplete = select2Autocomplete
-)(jQuery)
-
+)

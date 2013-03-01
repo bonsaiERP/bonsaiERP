@@ -9,7 +9,7 @@ describe Payment do
   let(:valid_attributes) {
     {
       account_id: transaction.id, account_to_id: account_to.id, exchange_rate: 7.011,
-      amount: 50, total: 0, interest: 0, reference: 'El primer pago',
+      amount: 50, total: 0, reference: 'El primer pago',
       verification: false, date: Date.today
     }
   }
@@ -36,8 +36,6 @@ describe Payment do
     it { should_not have_valid(:date).when('2012-13-13') }
 
     it { should_not have_valid(:amount).when(-1) }
-    it { should have_valid(:interest).when(1) }
-    it { should_not have_valid(:interest).when(-1) }
 
     it "uses the CurrencyExchange validation to validate currency accounts" do
       CurrencyExchange.any_instance.should_receive(:valid?).at_least(1).times.and_return(false)
@@ -81,7 +79,6 @@ describe Payment do
 
       p.verification.should be_false
       p.amount.should == 0
-      p.interest.should == 0
       p.exchange_rate == 1
     end
 
@@ -113,15 +110,6 @@ describe Payment do
       end
     end
 
-    it "valid_amount_or_interest" do
-      subject.attributes = valid_attributes
-      subject.amount = 0
-      subject.interest = 0
-
-      subject.should_not be_valid
-
-      subject.errors[:base].should eq([I18n.t('errors.messages.payment.invalid_amount_or_interest')])
-    end
   end
 
 end

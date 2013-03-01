@@ -2,6 +2,20 @@
   .span6
     = f.input :account_to_id, label: 'Cuenta', input_html: {class: 'span10', data:{value: 'payment.account_to_id'}}
   .span3
+    = f.input :date, as: :datepicker, label: 'Fecha'
+  .span3
+    = f.input :verification, as: :boolean, label: 'Verificar',
+      input_html: {data: {value: 'payment.verification', checked: 'payment.verification'} },
+      label: 'Verificar <i class="icon-warning-sign" rel="tooltip" title="Solo cuentas de BANCO pueden verificar a futuro"></i>'.html_safe,
+      hint: 'Verificar a futuro. Ej.: (Cheque)'
+
+.row-fluid
+  .span3
+    = f.input :amount,
+      label: 'Cantidad <span class="currency"></span>'.html_safe,
+      input_html: {type: 'decimal', size: 10,
+      data: {value: 'payment.amount'} }
+  .span3
     = f.input :exchange_rate, label: 'Tipo de cambio',
       input_html: {disabled: true, type: 'decimal', size: 10,
       data: {value: 'payment.exchange_rate', disabled: 'payment.sameCurrency'} }
@@ -11,26 +25,6 @@
       %h4
         %span#currency_total(data-text="payment.totalCurrency")
         = currency_label transaction.currency
-
-.row-fluid
-  .span3
-    = f.input :amount,
-      label: 'Cantidad <span class="currency"></span>'.html_safe,
-      input_html: {type: 'decimal', size: 10,
-      data: {value: 'payment.amount'} }
-  .span3
-    = f.input :interest,
-      label: '<span title="Intereses o penalidades" rel="tooltip">Int. Pen. </span><span class="currency"></span>'.html_safe,
-      hint: 'Intereses, penalidates, etc.',
-      input_html: {size: 10, type: 'decimal', 
-      data: {value: 'payment.interest'} }
-  .span3
-    = f.input :date, as: :datepicker, label: 'Fecha'
-  .span3
-    = f.input :verification, as: :boolean, label: 'Verificar',
-      input_html: {data: {value: 'payment.verification', checked: 'payment.verification'} },
-      label: 'Verificar <i class="icon-warning-sign" rel="tooltip" title="Solo cuentas de BANCO pueden verificar a futuro"></i>'.html_safe,
-      hint: 'Verificar a futuro. Ej.: (Cheque)'
 
 
 .row-fluid

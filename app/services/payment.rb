@@ -11,14 +11,12 @@ class Payment < BaseService
   attribute :amount, Decimal, default: 0
   attribute :exchange_rate, Decimal, default: 1
   attribute :reference, String
-  attribute :interest, Decimal, default: 0
   attribute :verification, Boolean, default: false
 
   # Validations
   validates_presence_of :account_id, :account_to, :account_to_id, :reference, :date
-  validates_numericality_of :amount, :interest, greater_than_or_equal_to: 0
+  validates_numericality_of :amount, greater_than: 0
   validates_numericality_of :exchange_rate, greater_than: 0
-  validate :valid_amount_or_interest
   validate :valid_date
   validate :valid_accounts_currency
 
@@ -42,12 +40,6 @@ private
       account_to_id: account_to_id, inverse: inverse?,
       reference: reference, date: date, currency: account_to.currency
     }.merge(attrs))
-  end
-
-  def valid_amount_or_interest
-    if amount.to_f <= 0 && interest.to_f <= 0
-      self.errors.add :base, I18n.t('errors.messages.payment.invalid_amount_or_interest')
-    end
   end
 
   # Inverse of verification?, no need to negate when working making more
@@ -79,16 +71,8 @@ private
     )
   end
 
-  def total_exchange
-    currency_exchange.exchange(amount + interest)
-  end
-
   def amount_exchange
     currency_exchange.exchange(amount)
-  end
-
-  def interest_exchange
-    currency_exchange.exchange(interest)
   end
 
   # Exchange rate used using inverse
