@@ -1,19 +1,36 @@
 .row-fluid
   .span6
-    = f.input :account_to_id, label: 'Cuenta', collection: AccountQuery.new.payment(f.object)
+    = f.input :account_to_id, label: 'Cuenta', input_html: {class: 'span10', data:{value: 'payment.account_to_id'}}
   .span3
     = f.input :date, as: :datepicker, label: 'Fecha'
   .span3
-    = f.input :verification, as: :boolean, label: 'Verificar',  label: 'Verificar <i class="icon-info-sign" rel="tooltip" title="Verificar a futuro. Ej.: Cheque"></i>'.html_safe
+    = f.input :verification, as: :boolean, label: 'Verificar',
+      input_html: {data: {value: 'payment.verification', checked: 'payment.verification'} },
+      label: 'Verificar <i class="icon-warning-sign" rel="tooltip" title="Solo cuentas de BANCO pueden verificar a futuro"></i>'.html_safe,
+      hint: 'Verificar a futuro. Ej.: (Cheque)'
+
+.row-fluid
+  .span3
+    = f.input :amount,
+      label: 'Cantidad <span class="currency"></span>'.html_safe,
+      input_html: {type: 'decimal', size: 10,
+      data: {value: 'payment.amount'} }
+  .span3
+    = f.input :exchange_rate, label: 'Tipo de cambio',
+      input_html: {disabled: true, type: 'decimal', size: 10,
+      data: {value: 'payment.exchange_rate', disabled: 'payment.sameCurrency'} }
+  .span3
+    .moneybox
+      %label TOTAL
+      %h4
+        %span#currency_total(data-text="payment.totalCurrency")
+        = currency_label transaction.currency
 
 
 .row-fluid
   .span6
-    = f.input :amount, label: 'Cantidad <span class="currency"></span>',
-      as: :decimal, input_html: {size: 10, type: 'decimal'}
-  .span6
-    = f.input :reference, label: 'Referecia', as: :text, input_html: {rows: 3}
+    = f.input :reference, label: 'Referecia', as: :text, input_html: {rows: 3, data: {value: 'payment.reference'} }
 
 .form-actions
-  = f.submit "Devolver", class: 'btn btn-success submit-devolution b'
-  %a#cancel-devolution-link.btn Cancelar
+  = f.submit "Salvar", class: 'btn btn-success b'
+  %a#cancel-payment-link.btn(hre='javascript:;') Cancelar

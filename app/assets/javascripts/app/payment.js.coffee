@@ -82,6 +82,12 @@ class IncomePayment extends Payment
   formSel: '#income-payment-form'
   verificationSel: '#income_payment_verification'
 
+#
+class IncomeDevolution extends Payment
+  accountToSel: '#income_devolution_account_to_id'
+  formSel: '#income-devolution-form'
+  verificationSel: '#income_devolution_verification'
+
 # Class for Expemse
 class ExpensePayment extends Payment
   accountToSel: '#expense_payment_account_to_id'
@@ -111,4 +117,5 @@ Payment.paymentOptions = (val) ->
 
 App.Payment = Payment
 App.IncomePayment = IncomePayment
+App.IncomeDevolution = IncomeDevolution
 App.ExpensePayment = ExpensePayment

@@ -1,5 +1,14 @@
-= simple_form_for income.income_devolution, url: income_devolution_path(income.id) do |f|
+jeje
+= simple_form_for income.income_devolution, url: income_devolution_path(income.id), html: {id: 'income-devolution-form'} do |f|
   = bonsai_form_error(f)
   = f.hidden_field :account_id
 
-  = render 'devolutions/form', f: f
+  = render 'devolutions/form', f: f, transaction: income
+
+:javascript
+  $(function() {
+    var p = new App.IncomeDevolution({
+      accountsTo: #{AccountQuery.new.bank_cash_options.to_json}, 
+      baseCurrency: "#{income.currency}"
+    });
+  })
