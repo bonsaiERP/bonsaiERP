@@ -95,11 +95,6 @@
 
       = render partial: 'account_ledgers/income', collection: @income.payments_devolutions,as: :ledger
 
-    %h2 Intereses
-
-    %ul.unstyled.listing
-      = render partial: 'account_ledgers/income', collection: @income.interests,as: :ledger
-
 :javascript
   $( function() {
     $('#tabs').tabs()

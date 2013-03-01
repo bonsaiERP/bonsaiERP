@@ -91,32 +91,26 @@
     %ul.unstyled.listing
       = render partial: 'account_ledgers/income', collection: @expense.payments,as: :ledger
 
-    %h2 Intereses
-
-    %ul.unstyled.listing
-      = render partial: 'account_ledgers/income', collection: @expense.interests,as: :ledger
-
-
-:coffeescript
-  $( ->
+:javascript
+  $( function() {
     $('#tabs').tabs()
-    # Show hide
-    $('#payment-link').click( -> 
+    // Show hide
+    $('#payment-link').click( function() {
       $('#payment-form').show('slow')
       $(this).hide('slow')
-    )
-    $('#cancel-payment-link').click( -> 
+    });
+    $('#cancel-payment-link').click( function() {
       $('#payment-form').hide('slow')
       $('#payment-link').show('slow')
-    )
+    });
 
-    # Devolution show hide
-    $('#devolution-link').click( -> 
+    // Devolution show hide
+    $('#devolution-link').click( function() {
       $('#devolution-form').show('slow')
       $(this).hide('slow')
-    )
-    $('#cancel-devolution-link').click( -> 
+    });
+    $('#cancel-devolution-link').click( function() {
       $('#devolution-form').hide('slow')
       $('#devolution-link').show('slow')
-    )
-  )
+    })
+  })
