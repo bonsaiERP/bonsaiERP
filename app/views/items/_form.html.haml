@@ -33,19 +33,17 @@
 
 :javascript
   $(function() {
-    $('body').live('new_unit', function(e, resp) {
+    $('body').on('new_unit', function(e, resp) {
       var label = resp.name + " (" + resp.symbol + ")";
       $('#item_unit_id').createSelectOption(resp.id, label);
     });
 
     function showHidePrice() {
-      if($('#item_for_sale').attr('checked') ){
-        $('#item_price').attr('disabled', false);
-      }else{
-        $('#item_price').attr('disabled', true);
-      }
+      $('#item_price').attr('disabled', !$('#item_for_sale').get(0).checked);
     }
 
-    $('#item_for_sale').live('click', showHidePrice );
+    $('#item_for_sale').on('click', function(e) {
+      showHidePrice() 
+    });
     showHidePrice();
   });

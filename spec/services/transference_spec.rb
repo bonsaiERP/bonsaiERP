@@ -55,26 +55,6 @@ describe Transference do
         t.errors_on(:account_to).should_not be_empty
       end
 
-      it "total difference error" do
-        t = Transference.new(valid_attributes.merge(account_to_id: account_usd.id, exchange_rate: 7.0, amount: 10, total: 70.02) )
-        t.stub(account: account, account_to: account_usd)
-
-        t.should_not be_valid
-        t.errors_on(:total).should eq([I18n.t('errors.messages.payment.total')])
-
-        # Valid up
-        t = Transference.new(valid_attributes.merge(account_to_id: account_usd.id, exchange_rate: 7.0, amount: 10, total: 70.01) )
-        t.stub(account: account, account_to: account_usd)
-
-        t.should be_valid
-
-        # Valid down
-        t = Transference.new(valid_attributes.merge(account_to_id: account_usd.id, exchange_rate: 7.0, amount: 10, total: 69.99) )
-        t.stub(account: account, account_to: account_usd)
-
-        t.should be_valid
-      end
-
       it "check conciliation" do
         t = Transference.new(verification: true)
         t.stub(account: account, account_to: account_to)
@@ -132,7 +112,6 @@ describe Transference do
       t.ledger.should_not be_inverse
       t.ledger.should be_conciliation
       t.ledger.amount.should == 50.0
-      t.ledger.amount_from.should == - 50.0
     end
 
     it "to other currency account" do
@@ -144,26 +123,25 @@ describe Transference do
       t.transfer.should be_true
 
       # Ledger
-      t.ledger.currency.should eq('BOB')
+      t.ledger.currency.should eq('USD')
       t.account_id.should eq(1)
       t.account_to_id.should eq(3)
       t.ledger.should_not be_inverse
       t.ledger.exchange_rate.should == 7.0
       t.ledger.amount.should == 10
-      t.ledger.amount_from.should == - 70
 
       t.ledger.should_not be_conciliation
     end
 
     it "inverse" do
-      t = Transference.new(valid_attributes.merge(account_to_id: 3, exchange_rate: 7.0, verification: true, total: 10, amount: 70))
+      t = Transference.new(valid_attributes.merge(account_id: account_usd.id,
+          account_to_id: account.id, exchange_rate: 7.0, verification: true, total: 10, amount: 70))
       t.stub(account: account_usd, account_to: account)
 
       t.transfer.should be_true
 
       t.ledger.should be_inverse
       t.ledger.amount.should == 70
-      t.ledger.amount_from.should == - 10
       t.exchange_rate.should == 7.0
     end
 

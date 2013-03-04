@@ -20,7 +20,6 @@ class Transference < BaseService
   validates_numericality_of :exchange_rate, greater_than: 0
   validate :valid_date
   validate :valid_accounts_currency
-  validate :valid_amount_difference
 
   delegate :currency, :inverse?, :same_currency?, to: :currency_exchange
 
@@ -56,7 +55,7 @@ private
     AccountLedger.new(
       account_id: account_id, exchange_rate: conv_exchange_rate,
       account_to_id: account_to_id, inverse: inverse?, operation: 'trans',
-      reference: reference, date: date, currency: account.currency,
+      reference: reference, date: date, currency: account_to.currency,
       conciliation: conciliation?, amount: amount
     )
   end
@@ -105,23 +104,6 @@ private
     unless currency_exchange.valid?
       self.errors.add(:base, I18n.t('errors.messages.payment.valid_accounts_currency', currency: currency))
     end
-  end
-
-  # For ranges when the total and the amount are in different currencies
-  def valid_amount_difference
-    unless same_currency?
-      tolerance = 0.01
-      amt_down = currency_exchange.exchange(amount) - tolerance <= total
-      amt_up = currency_exchange.exchange(amount) + tolerance >= total
-
-      if !amt_up || !amt_down
-        self.errors[:total] << I18n.t('errors.messages.payment.total')
-      end
-    end
-  end
-
-  def total_curr
-    same_currency? ? -amount : -total
   end
 
 end

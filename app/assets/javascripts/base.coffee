@@ -5,6 +5,7 @@
   separator: ','
   delimiter: '.'
 
+########################################
 # Init function
 init = ($) ->
   # Regional settings for jquery-ui datepicker
@@ -97,7 +98,7 @@ init = ($) ->
 
   # Delete an Item from a list, deletes a tr or li
   # Very important with default fallback for trigger
-  $(document).on('click', 'a.delete[data-remote=true]', (e)->
+  $('body').on('click', 'a.delete[data-remote=true]', (e)->
     self = this
     $(self).parents("tr:first, li:first").addClass('marked')
     trigger = $(self).data('trigger') || 'ajax:delete'
@@ -138,7 +139,7 @@ init = ($) ->
 
 
   # Method to delete when it's in the .links in the top
-  $(document).on('click', 'a.delete', (event) ->
+  $('body').on('click', 'a.delete', (event) ->
     return false if $(this).attr("data-remote")
 
     txt = $(this).data("confirm") || "Esta seguro de borrar"
@@ -195,15 +196,6 @@ init = ($) ->
   $.fn.dataNewUrl = dataNewUrl
 
 
-  # Closes the nearest div container
-  #$(document).on('click', 'a.close', ->
-    #self = this
-    #cont = $(this).parents('div:first').hide(speed)
-    #unless $(this).parents("div:first").hasClass("search")
-      #setTimeout ->
-        #cont.remove()
-      #,speed
-  #)
 
   # Prevent enter submit forms in some forms
   window.keyPress = false
@@ -212,6 +204,15 @@ init = ($) ->
     true
   )
 
+  # Closes the nearest div container
+  $('body').on('click', 'a.close', ->
+    self = this
+    cont = $(this).parents('div:first').hide(speed)
+    unless $(this).parents("div:first").hasClass("search")
+      setTimeout ->
+        cont.remove()
+      ,speed
+  )
 
   # Ajax configuration
   csrf_token = $('meta[name=csrf-token]').attr('content')
@@ -221,6 +222,8 @@ init = ($) ->
       xhr.setRequestHeader('X-CSRF-Token', csrf_token)
   )
 
+########################################
+# End of init function
 
 ########################################
 # Start jquery
