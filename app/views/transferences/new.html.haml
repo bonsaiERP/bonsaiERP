@@ -25,7 +25,7 @@
   .row-fluid
     .span3
       = f.input :amount,
-        label: "Cantidad #{currency_label @account.currency}".html_safe,
+        label: 'Cantidad <span class="currency"></span>'.html_safe,
         input_html: {type: 'decimal', size: 10,
         data: {value: 'transference.amount'} }
     .span3
@@ -34,10 +34,11 @@
         data: {value: 'transference.exchange_rate', disabled: 'transference.sameCurrency'} }
     #transference-currency.span3
       .moneybox
-        %label TOTAL A CUENTA
+        %label 
+          = @account
         %h4 
           %span(data-text="transference.totalCurrency") 0,00
-          %span.currency.label.label-inverse
+          = currency_label @account.currency
 
   .row-fluid
     .span3
@@ -56,10 +57,7 @@
 :javascript
   $(function() {
     var t = new App.Transference({
-      accountsTo: #{AccountQuery.new.bank_cash_options.to_json}, 
+      accountsTo: #{AccountQuery.new.bank_cash_options_minus(@account.id).to_json}, 
       baseCurrency: "#{@account.currency}",
-      amount: #{@transference.amount},
-      account_id: #{@transference.account_id},
-      account_to_id: #{@transference.account_to_id}
     });
   })

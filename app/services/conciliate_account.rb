@@ -50,8 +50,8 @@ private
   end
 
   def update_both_accounts
-    account.amount -= amount
-    account_to.amount += amount_currency
+    account_to.amount += amount
+    account.amount -= amount_currency
 
     account.save && account_to.save && account_ledger.save
   end

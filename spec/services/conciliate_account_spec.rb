@@ -83,7 +83,7 @@ describe ConciliateAccount do
         ac_usd = build :cash, amount: 2000, currency: 'USD'
         ac_bob = build :bank, amount: 100, currency: 'BOB'
 
-        al = AccountLedger.new(currency: ac_usd.currency, amount: 200, exchange_rate: 7, inverse: true)
+        al = AccountLedger.new(currency: ac_usd.currency, amount: 200, exchange_rate: 7.0, inverse: true)
         al.account = ac_usd
         al.account_to = ac_bob
         # stubs
@@ -93,8 +93,8 @@ describe ConciliateAccount do
 
         ConciliateAccount.new(al).conciliate.should be_true
 
-        al.account_amount.should == 1800.0
-        al.account_to_amount.should == (100 + 200 * 1/7.0).round(4)
+        al.account_amount.round(2).should == 2000 - (200 * 1/7.0).round(2)
+        al.account_to_amount.should == 300.0
 
         al.approver_id.should eq(1)
       end

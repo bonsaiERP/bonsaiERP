@@ -11,6 +11,10 @@ class AccountQuery
     blank + bank_cash.map {|v| create_hash(v, *default_options) }
   end
 
+  def bank_cash_options_minus(*ids)
+    blank + bank_cash.where("id NOT in (?)", ids).map {|v| create_hash(v, *default_options) }
+  end
+
   def payment(model)
     #Account.where{(type.in ['Cash', 'Bank']) | (type: 'Expense')}
     bank_cash
