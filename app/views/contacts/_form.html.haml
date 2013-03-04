@@ -25,15 +25,15 @@
   .actions
     = f.submit "Salvar", class: 'btn btn-success b'
 
-:coffeescript
-  ( ($) ->
-    $('body').on('focusout', '.matchcode', (event) ->
-      arr = this.value.trim().split(" ")
-      $('.first_name').val(arr[0])
-      arr.shift()
+:javascript
+  $( function() {
+    $('body').on('focusout', '.matchcode', function(event) {
+      arr = this.value.trim().split(" ");
+      $('.first_name').val(arr[0]);
+      arr.shift();
 
-      $('.last_name').val( arr.join(" "))
+      $('.last_name').val( arr.join(" "));
 
-      $('.first_name, .last_name').mark()
-    )
-  )(jQuery)
+      $('.first_name, .last_name').mark();
+    });
+  });

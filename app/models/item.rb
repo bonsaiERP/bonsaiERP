@@ -5,6 +5,7 @@ class Item < ActiveRecord::Base
 
   ##########################################
   # Callbacks
+  before_save :trim_code
   before_destroy :check_items_destroy
 
   ##########################################
@@ -17,8 +18,9 @@ class Item < ActiveRecord::Base
 
   ##########################################
   # Validations
-  validates_presence_of :name, :unit, :unit_id, :code
-  validates :code, uniqueness: true
+  validates_presence_of :name, :unit, :unit_id
+  #, :code
+  validates_uniqueness_of :code, if: "code.present?"
   validates :price, numericality: { greater_than_or_equal_to: 0 }, if: :for_sale?
 
   ##########################################
@@ -32,7 +34,11 @@ class Item < ActiveRecord::Base
   scope :inventory, -> { where(stockable: true) }
 
   def to_s
+    if code.present?
     "#{code} - #{name}"
+    else
+      name
+    end
   end
 
   # Sums the stocks of a item
@@ -49,5 +55,9 @@ private
     else
       true
     end
+  end
+
+  def trim_code
+    self.code = code.strip
   end
 end

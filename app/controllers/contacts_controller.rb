@@ -45,7 +45,7 @@ class ContactsController < ApplicationController
   def create
     @contact = Contact.new(contact_params)
     if @contact.save
-      redirect_ajax(@contact)
+      redirect_ajax(@contact, notice: 'Se ha creado el contacto.')
     else
       render 'new'
     end

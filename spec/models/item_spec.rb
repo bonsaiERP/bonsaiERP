@@ -18,6 +18,25 @@ describe Item do
     }
   end
 
+  it "#to_s" do
+    i = Item.new(name: 'Item name', code: '')
+    i.to_s.should eq('Item name')
+  end
+
+  it "check validity for uniqueness" do
+    i = Item.create!(valid_attributes)
+    i.should be_persisted
+
+    i = Item.new(valid_attributes)
+    i.should_not be_valid
+    i.errors_on(:code).should_not be_blank
+    i.errors_on(:code).should eq([I18n.t('activerecord.errors.models.item.attributes.code.taken')])
+
+
+    i = Item.new(valid_attributes.merge(code: ''))
+    i.should be_valid
+  end
+
   it "creates an instance with default values" do
     item = Item.new
     item.should be_for_sale
@@ -56,7 +75,7 @@ describe Item do
     end
 
     it 'should create an item' do
-      i = Item.create!(valid_attributes)
+      Item.create!(valid_attributes)
     end
 
     it 'should be a unique code' do

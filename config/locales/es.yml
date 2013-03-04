@@ -3,9 +3,18 @@
 # contributors:
 #  - Tsutomu Kuroda - http://github.com/kuroda (t-kuroda@oiax.jp)
 es:
-  active_record:
+  activerecord:
     errors:
       messages:
+      models:
+        item:
+          attributes:
+            code:
+              taken: 'El código que selecciono ya existe'
+        contact:
+          attributes:
+            matchcode:
+              "El idenificador ya existe, por favor cambie"
   # Action View
   number:
     # Used in number_with_delimiter()

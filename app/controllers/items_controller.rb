@@ -53,9 +53,9 @@ class ItemsController < ApplicationController
     @item = Item.new(item_params)
 
     if @item.save
-      redirect_to @item, notice: 'Se ha creado el ítem correctamente.'
+      redirect_ajax @item, notice: 'Se ha creado el ítem correctamente.'
     else
-      render :action => 'new'
+      render 'new'
     end
   end
 

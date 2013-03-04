@@ -32,9 +32,9 @@ $( ->
     trigger = $div.data('trigger') or "ajax-call"
 
     $.ajax(
-      'url': $(el).attr('action')
+      'url': $el.attr('action')
       'cache': false
-      'context':el
+      'context': $el
       'data': data
       'type': (data['_method'] or $el.attr('method') )
     )
@@ -55,22 +55,6 @@ $( ->
   )
   # End submit ajax form
 
-  #$(document).on('ajax:success', 'div.ajax-modal form', (event, resp) ->
-    #switch true
-      #when _.isString(resp)
-        #$parent = $(this).parents('div.ajax-modal')
-        #$parent.html(resp)
-        #$parent.find('form').attr('data-remote', true)
-      #when _.isObject(resp)
-        #$parent = $(this).parents('div.ajax-modal')
-        #if trigger = $parent.data('trigger')
-          #$(this).trigger trigger, [resp]
-
-        #$parent.dialog('destroy')
-      #else
-        #console.log resp
-
-  #)
 
   ##########################################
   # Activates autocomplete for all autocomplete inputs
