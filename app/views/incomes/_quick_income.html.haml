@@ -23,25 +23,27 @@
 :javascript
   var accounts_to = #{AccountQuery.new.bank_cash_options.to_json}
 
-:coffee
-  (($) ->
-    $('#quick-income-link').bind 'click', ->
-      $('.quick-income-form').show('medium')
-      $(this).hide('medium')
+  $(function() {
+    $('#quick-income-link').click( function() {
+      $('.quick-income-form').show('medium');
+      $(this).hide('medium');
+    });
 
-    $('#quick-income-hide-link').bind 'click', ->
-      $('.quick-income-form').hide('medium')
-      $('#quick-income-link').show('medium')
+    $('#quick-income-hide-link').click( function() {
+      $('.quick-income-form').hide('medium');
+      $('#quick-income-link').show('medium');
+    });
 
-    $('.contact-form').on('new-contact', (event, resp) ->
+    $('.contact-form').on('new-contact', function(event, resp) {
       $('.contact_id').val(resp.matchcode).data('value', resp.matchcode)
-      .prev().val(resp.id)
-    )
+      .prev().val(resp.id);
+    })
 
-    # account_to_id
-    $('#quick_income_account_to_id').select2(
-      data: accounts_to
-      formatResult: App.Payment.paymentOptions
-      formatSelection: App.Payment.paymentOptions
-    )
-  )(jQuery)
+    // account_to_id
+    $('#quick_income_account_to_id').select2({
+      data: accounts_to,
+      formatResult: App.Payment.paymentOptions,
+      formatSelection: App.Payment.paymentOptions,
+      escapeMarkup: function(m) { return m }
+    });
+  });

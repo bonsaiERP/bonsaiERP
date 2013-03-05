@@ -6,13 +6,14 @@
     %li
       = @contact
 
-  .links.span6
-    = link_to 'Nuevo', new_contact_path
-    = link_to 'Editar', edit_contact_path(@contact)
-    = link_to 'Borrar', @contact, method: 'delete'
+.row-fluid
+  .span6
+    %h1= @contact
 
-%header
-  %h1= @contact
+  .span6.r
+    = link_to icon_new_text, new_contact_path, class: 'btn'
+    = link_to icon_edit_text, edit_contact_path(@contact), class: 'btn'
+    = link_to icon_delete_text, @contact, method: 'delete', class: 'btn', confirm: 'Esta seguro de eliminar al contacto?'
 
 .row-fluid
   .span6

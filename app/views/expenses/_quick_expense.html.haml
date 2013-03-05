@@ -23,23 +23,28 @@
 :javascript
   var accounts_to = #{AccountQuery.new.bank_cash_options.to_json}
 
-:coffeescript
-  $(->
-    $('#quick-expense-link').click( ->
-      $('.quick-expense-form').show('medium')
-      $(this).hide('medium')
-    )
+  $(function() {
+    $('#quick-expense-link').click( function() {
+      $('.quick-expense-form').show('medium');
+      $(this).hide('medium');
+    });
 
-    $('#quick-expense-hide-link').click( ->
-      $('.quick-expense-form').hide('medium')
-      $('#quick-expense-link').show('medium')
-    )
+    $('#quick-expense-hide-link').click( function() {
+      $('.quick-expense-form').hide('medium');
+      $('#quick-expense-link').show('medium');
+    });
 
-    # account_to_id
-    $('#quick_expense_account_to_id').select2(
-      data: accounts_to
-      formatResult: App.Payment.paymentOptions
-      formatSelection: App.Payment.paymentOptions
-    )
-  )
+    $('.contact-form').on('new-contact', function(event, resp) {
+      $('.contact_id').val(resp.matchcode).data('value', resp.matchcode)
+      .prev().val(resp.id);
+    })
+
+    // account_to_id
+    $('#quick_expense_account_to_id').select2({
+      data: accounts_to,
+      formatResult: App.Payment.paymentOptions,
+      formatSelection: App.Payment.paymentOptions,
+      escapeMarkup: function(m) { return m }
+    });
+  });
 

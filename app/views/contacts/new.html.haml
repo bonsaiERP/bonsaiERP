@@ -1,3 +1,7 @@
+- content_for :links do
+  %ul.breadcrumbs.span6
+    %li #{link_to "Contactos", contacts_path}
+
 %h1 Nuevo contacto
 
 = render 'contacts/form'

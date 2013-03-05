@@ -1,8 +1,17 @@
+- content_for :links do
+  %ul.breadcrumbs.span6
+    %li
+      = link_to "Contactos", contacts_path
+    %li
+      %i.icon-caret-right
+    %li
+      = @contact
+
 .row-fluid
   .span6
     %h1 Editar contacto
   .span6.r
-    = link_to 'Ver', @contact, class: 'show'
-    = link_to 'Lista', contacts_path, class: 'list'
+    = link_to icon_show_text, @contact, class: 'btn'
+
 = render 'contacts/form'
 
