@@ -11,6 +11,8 @@ es:
           attributes:
             code:
               taken: 'El código que selecciono ya existe'
+            name:
+              taken: 'Existe un ítem con el mismo nombre'
         contact:
           attributes:
             matchcode:

@@ -18,10 +18,10 @@ class Item < ActiveRecord::Base
 
   ##########################################
   # Validations
-  validates_presence_of :name
-  validates_presence_of :unit, if: 'unit_id.present?'
+  validates_presence_of :name, :unit, :unit_id
   #, :code
   validates_uniqueness_of :code, if: "code.present?"
+  validates_uniqueness_of :name
   validates :price, numericality: { greater_than_or_equal_to: 0 }, if: :for_sale?
 
   ##########################################
@@ -59,6 +59,6 @@ private
   end
 
   def trim_code
-    self.code = code.strip
+    self.code = code.to_s.strip
   end
 end

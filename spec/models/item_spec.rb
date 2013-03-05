@@ -11,6 +11,8 @@ describe Item do
   it { should have_many(:expense_details) }
   it { should have_many(:inventory_operation_details) }
 
+  it { should validate_uniqueness_of(:name) }
+
   let(:unit){ create :unit }
   let(:valid_attributes) do
     { name: 'First item', unit_id: unit.id, code: 'AU101',
@@ -23,7 +25,7 @@ describe Item do
     i.to_s.should eq('Item name')
   end
 
-  it "check validity for uniqueness" do
+  it "uniqueness_of_code" do
     i = Item.create!(valid_attributes)
     i.should be_persisted
 
@@ -32,8 +34,13 @@ describe Item do
     i.errors_on(:code).should_not be_blank
     i.errors_on(:code).should eq([I18n.t('activerecord.errors.models.item.attributes.code.taken')])
 
-
+    # Name
     i = Item.new(valid_attributes.merge(code: ''))
+    i.should_not be_valid
+    i.errors_on(:name).should eq([I18n.t('activerecord.errors.models.item.attributes.name.taken')])
+
+    # Code
+    i = Item.new(valid_attributes.merge(code: '', name: 'Another name'))
     i.should be_valid
   end
 
