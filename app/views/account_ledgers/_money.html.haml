@@ -1,8 +1,8 @@
+- ledgers =  AccountLedgerQuery.new.money(account.id).order('date, id desc').page(@page)
+
+= paginate ledgers
+
 %ul.unstyled.listing
-  - ledgers =  AccountLedgerQuery.new.money(account.id).page(@page)
-
-  = paginate ledgers
-
   - ledgers.each do |al|
     - al = present al
     %li.row-fluid

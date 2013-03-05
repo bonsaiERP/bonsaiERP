@@ -333,10 +333,10 @@ es:
 
   views:
     pagination: 
-      next: "Siguiente &gt;"
-      previous: "&lt; Anterior"
-      first: "Inicio"
-      last: "Fin"
+      next: "&rsaquo;"
+      previous: "&lsaquo;"
+      first: "&laquo;"
+      last: "&raquo;"
       truncate: "..."
   income:
     account_ledger_reference: "Venta"
