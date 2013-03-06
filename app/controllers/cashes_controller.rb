@@ -84,6 +84,6 @@ private
   end
 
   def cash_params
-    params.require(:cash).permit(:name, :currency, :amount, :description)
+    params.require(:cash).permit(:name, :currency, :amount, :address)
   end
 end
