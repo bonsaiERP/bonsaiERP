@@ -23,6 +23,9 @@ describe Item do
   it "#to_s" do
     i = Item.new(name: 'Item name', code: '')
     i.to_s.should eq('Item name')
+
+    i.code = '12323'
+    i.to_s.should eq('Item name')
   end
 
   it "uniqueness_of_code" do

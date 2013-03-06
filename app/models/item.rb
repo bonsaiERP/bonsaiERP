@@ -35,11 +35,7 @@ class Item < ActiveRecord::Base
   scope :inventory, -> { where(stockable: true) }
 
   def to_s
-    if code.present?
-    "#{code} - #{name}"
-    else
-      name
-    end
+    name
   end
 
   # Sums the stocks of a item
