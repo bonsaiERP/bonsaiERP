@@ -1,5 +1,4 @@
-# encoding: utf-8
-# author: Boris Barroso
+# encoding: utf-8 # author: Boris Barroso
 # email: boriscyber@gmail.com
 module ApplicationHelper
   # Checks if is set the organisation session
@@ -124,22 +123,29 @@ module ApplicationHelper
   end
 
   def set_exchange_rates
-    file = File.join(Rails.root, "public/exchange_rates.json")
+    file1 = File.join(Rails.root, "public/exchange_rates.json")
+    file2 = File.join(Rails.root, "public/backup_rates.json")
 
-    if not(File.exists?(file)) or (File.ctime(file) < Time.now - 4.hours)
+    if not(File.exists?(file1)) || (File.ctime(file1) < Time.now - 4.hours)
       resp = %x[curl http://openexchangerates.org/api/latest.json?app_id=e406e4769281493797fcfd45047773d5]
       begin
-        #r = ActiveSupport::JSON.decode(resp)
-        f = File.new(file, "w+")
-        #f.write(r.to_json)
-        f.write(resp)
-        f.close
-        r
+        r = ActiveSupport::JSON.decode(resp)
+        if r['rates'].present?
+          f = File.new(file2, "w+")
+          f.write(resp)
+          f.close
+
+          f = File.new(file1, "w+")
+          f.write(resp)
+          f.close
+        else
+          File.read(file2)
+        end
       rescue
-        File.read(file)
+        File.read(file2)
       end
     else
-      File.read(file)
+      File.read(file2)
     end
   end
 

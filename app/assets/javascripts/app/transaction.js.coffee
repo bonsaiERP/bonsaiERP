@@ -36,7 +36,7 @@ class Item extends Backbone.Model
 
 class Transaction extends Backbone.Collection
   model: Item
-  total: 0
+  total: 0.0
   totalPath: '#total'
   subtotalPath: '#subtotal'
   #
@@ -58,8 +58,8 @@ class Transaction extends Backbone.Collection
       if p.attributes.item_id?
         sum + p.get('subtotal')
       else
-        sum + 0
-    , 0)
+        sum + 0.0
+    , 0.0)
 
     $(@subtotalPath).html(_b.ntc(sub) )
 
@@ -67,7 +67,7 @@ class Transaction extends Backbone.Collection
   #
   calculateTotal: (sub)->
     tot = sub
-    $(@totalPath).val(tot.toFixed(_b.numPrecision))
+    $(@totalPath).val(tot.toFixed(Config.precision))
   #
   setList: ->
     @$table.find('tr.item').each (i, el) =>
