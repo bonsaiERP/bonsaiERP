@@ -3,6 +3,7 @@
 # email: boriscyber@gmail.com
 class RegistrationsController < ApplicationController
   skip_before_filter :set_tenant, :check_authorization!
+  before_filter :check_allow_registration
 
   # GET /registrations/new
   def new
@@ -75,5 +76,9 @@ private
     unless PgTools.schema_exists?(request.subdomain)
       redirect_to new_registration_url(host: UrlTools.domain) and return
     end
+  end
+
+  def check_allow_registration
+    redirect_to root_path, alert: 'Llegamos a un limite de registros muy pronto ampliaremos nuestra capacidad' and return unless ALLOW_REGISTRATIONS
   end
 end

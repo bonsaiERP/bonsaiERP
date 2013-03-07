@@ -3,6 +3,10 @@ require 'spec_helper'
 describe RegistrationsController do
   let(:tenant) { 'tenant' }
 
+  before(:each) do
+    ALLOW_REGISTRATIONS = true
+  end
+
   describe "GET /registrations/new" do
     it 'should redirect to register' do
       get 'new'
@@ -10,9 +14,17 @@ describe RegistrationsController do
       response.should be_success
     end
 
+    it "not allowed registration" do
+      ALLOW_REGISTRATIONS = false
+
+      get 'new'
+
+      response.should be_redirect
+    end
   end
 
   describe "GET /show" do
+
     let(:current_organisation) { build(:organisation, id: 1) }
 
     before(:each) do
@@ -49,6 +61,15 @@ describe RegistrationsController do
 
       response.should redirect_to(registrations_path)
       flash[:notice].should eq("Le hemos enviado un email a test@mail.com con instrucciones para completar su registro.")
+    end
+
+    it "does not allow registration" do
+      ALLOW_REGISTRATIONS = false
+
+      post :create, registration: {tenant: tenant, email: 'test@mail.com'}
+
+      response.should be_redirect
+      response.should redirect_to(root_path)
     end
   end
 
