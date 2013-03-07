@@ -31,7 +31,7 @@ class InventoryOperation < ActiveRecord::Base
   validates_presence_of :store_to, :if => :is_transference?
 
   OPERATIONS.each do |_op|
-    define_method :"is_#{op}?" do
+    define_method :"is_#{_op}?" do
       _op == operation
     end
   end
