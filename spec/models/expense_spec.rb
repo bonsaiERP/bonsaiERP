@@ -17,6 +17,15 @@ describe Expense do
     }
   }
 
+  it "define_method check" do
+    ex = Expense.new_expense
+
+    Expense::STATES.each do |state|
+      ex.state = state
+      ex.should send(:"be_is_#{state}")
+    end
+  end
+
   context 'Relationships, Validations' do
     subject { Expense.new_expense }
 

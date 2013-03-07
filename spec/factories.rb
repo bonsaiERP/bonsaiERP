@@ -51,16 +51,22 @@ FactoryGirl.define do
     organisation_name "León"
   end
 
+  factory :money_store do
+    number '123'
+  end
+
   factory :bank do
     name "Bank"
     currency 'BOB'
     amount 100
+    association :money_store, factory: :money_store, strategy: :build
   end
 
   factory :cash do
     name "Cash"
     currency 'BOB'
     amount 100
+    association :money_store, factory: :money_store, strategy: :build
   end
 
   factory :project do

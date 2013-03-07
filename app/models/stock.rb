@@ -5,13 +5,11 @@ class Stock < ActiveRecord::Base
 
   before_create :update_last_and_set_minimum
 
-  STATES = ["active", "inactive", "waiting"].freeze
-  STATES.each do |met|
-    class_eval <<-CODE, __FILE__, __LINE__ + 1
-      def #{met}?
-        state === "#{met}"
-      end
-    CODE
+  STATES = %w(active inactive waiting).freeze
+  STATES.each do |_met|
+    define_method :"is_#{met}?" do
+      _met == state
+    end
   end
 
   belongs_to :store

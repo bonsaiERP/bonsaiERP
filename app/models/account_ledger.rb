@@ -61,9 +61,9 @@ class AccountLedger < ActiveRecord::Base
   delegate :same_currency?, to: :currency_exchange
 
   OPERATIONS.each do |op|
-    class_eval <<-CODE, __FILE__, __LINE__ + 1
-      def is_#{op}?; "#{op}" == operation; end
-    CODE
+    define_method :"is_#{op}?" do
+      op === operation
+    end
   end
 
   def to_s

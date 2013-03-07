@@ -49,6 +49,15 @@ describe Income do
     end
   end
 
+  it "define_method check" do
+    inc = Income.new_income
+
+    Income::STATES.each do |state|
+      inc.state = state
+      inc.should send(:"be_is_#{state}")
+    end
+  end
+
   context 'callbacks' do
     it 'check callback' do
       contact.should_receive(:update_attribute).with(:client, true)

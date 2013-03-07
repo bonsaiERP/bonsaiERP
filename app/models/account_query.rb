@@ -4,7 +4,7 @@ class AccountQuery
   end
 
   def bank_cash
-    @rel.active.where(type: ['Cash', 'Bank'])
+    @rel.active.where(type: ['Cash', 'Bank']).includes(:moneystore)
   end
 
   def bank_cash_options
@@ -15,24 +15,15 @@ class AccountQuery
     blank + bank_cash.where("id NOT in (?)", ids).map {|v| create_hash(v, *default_options) }
   end
 
-  def payment(model)
-    #Account.where{(type.in ['Cash', 'Bank']) | (type: 'Expense')}
-    bank_cash
-  end
-
   def income_payment_options(income)
-    blank + bank_cash_options + ExpenseQuery.new.to_pay(income.contact_id).map {|v| 
+    bank_cash_options + Expense.approved.where(contact_id: income.contact_id).map {|v| 
       create_hash(v, *default_options)
     }
   end
 
   def expense_payment_options(expense)
-    arr = bank_cash.map {|v| 
-      create_hash(v, :id, :type, :currency, :amount, :name, :to_s) 
-    }
-
-    blank + arr + IncomeQuery.new.to_pay(expense.contact_id).map {|v| 
-      create_hash(v, :id, :type, :currency, :balance, :name, :to_s)
+    bank_cash_options + Income.approved.where(contact_id: expense.contact_id).map {|v| 
+      create_hash(v, *default_options)
     }
   end
 

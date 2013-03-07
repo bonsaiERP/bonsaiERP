@@ -39,12 +39,10 @@ class User < ActiveRecord::Base
 
   ########################################
   # Methods
-  ROLES.each do |v|
-    class_eval <<-CODE, __FILE__, __LINE__ + 1
-      def is_#{v}?
-        link_rol == "#{v}"
-      end
-    CODE
+  ROLES.each do |_rol|
+    define_method :"is_#{_rol}?" do
+      link_rol == _rol
+    end
   end
 
   def to_s

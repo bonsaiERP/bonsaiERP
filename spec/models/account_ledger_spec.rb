@@ -15,7 +15,7 @@ describe AccountLedger do
   end
 
   describe "Validations" do
-    subject { 
+    subject {
       al = AccountLedger.new valid_attributes
       al.account, al.account_to = account, account2
       al
@@ -33,6 +33,15 @@ describe AccountLedger do
 
       subject.should_not be_valid
       subject.errors_on(:account_to_id).should_not be_empty
+    end
+  end
+
+  it "define_method for OPERATIONS" do
+    ledger = AccountLedger.new
+
+    AccountLedger::OPERATIONS.each do |op|
+      ledger.operation = op
+      ledger.should send(:"be_is_#{op}")
     end
   end
 

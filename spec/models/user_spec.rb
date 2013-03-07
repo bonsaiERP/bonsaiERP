@@ -18,6 +18,17 @@ describe User do
     expect{ User.create!(params)}.to raise_error
   end
 
+  it "define_method check" do
+    u = User.new
+    link = Link.new
+    u.stub(link: link)
+
+    User::ROLES.each do |rol|
+      link.rol = rol
+      u.should send(:"be_is_#{rol}")
+    end
+  end
+
   it "validates password when new" do
     u = User.new(email: 'test@mail.com', password: 'Demo12234')
     u.should_not be_valid

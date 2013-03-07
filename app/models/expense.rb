@@ -34,6 +34,7 @@ class Expense < Account
   ########################################
   # Scopes
   scope :discount, -> { joins(:transaction).where(transaction: {discounted: true}) }
+  scope :approved, -> { where(state: 'approved') }
 
   ########################################
   # Delegations
@@ -43,12 +44,10 @@ class Expense < Account
   delegate :attributes, to: :transaction, prefix: true
 
   # Define boolean methods for states
-  STATES.each do |state|
-    class_eval <<-CODE, __FILE__, __LINE__ + 1
-      def is_#{state}?
-        "#{state}" == state ? true : false
-      end
-    CODE
+  STATES.each do |_state|
+    define_method :"is_#{_state}?" do
+      _state == state
+    end
   end
 
   def self.new_expense(attrs={})
