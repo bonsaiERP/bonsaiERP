@@ -7,7 +7,7 @@ class Stock < ActiveRecord::Base
 
   STATES = %w(active inactive waiting).freeze
   STATES.each do |_met|
-    define_method :"is_#{met}?" do
+    define_method :"is_#{_met}?" do
       _met == state
     end
   end
