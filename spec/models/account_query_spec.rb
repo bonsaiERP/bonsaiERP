@@ -5,7 +5,7 @@ describe AccountQuery do
     active = Account.active
     Account.should_receive(:active).and_return(active)
     ret = Object.new
-    ret.should_receive(:includes).with(:moneystore)
+    ret.should_receive(:includes).with(:money_store)
     active.should_receive(:where).with(type: ['Cash', 'Bank']).and_return(ret)
 
     AccountQuery.new.bank_cash

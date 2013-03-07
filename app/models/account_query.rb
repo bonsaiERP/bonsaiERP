@@ -4,7 +4,7 @@ class AccountQuery
   end
 
   def bank_cash
-    @rel.active.where(type: ['Cash', 'Bank']).includes(:moneystore)
+    @rel.active.where(type: ['Cash', 'Bank']).includes(:money_store)
   end
 
   def bank_cash_options
