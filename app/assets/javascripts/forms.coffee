@@ -55,6 +55,14 @@ $( ->
   )
   # End submit ajax form
 
+  popoverNotitle = (options) ->
+    $(this).popover(_.merge(options, {
+      template: '<div class="popover"><div class="arrow"></div><div class="popover-inner"><div class="popover-content"><p></p></div></div></div>'
+    })
+    )
+
+  $.popoverNotitle = $.fn.popoverNotitle = popoverNotitle
+
 
   ##########################################
   # Activates autocomplete for all autocomplete inputs
@@ -77,7 +85,14 @@ $( ->
             backgroundRepeat: 'no-repeat',
             backgroundPosition: "#{$input.width() - 20}px 5px"
           })
-        response: (e, ui) -> $input.css({backgroundImage: 'none'})
+        response: (e, ui) ->
+          $input.css({backgroundImage: 'none'})
+          if ui.content.length is 0
+            $input.popoverNotitle({content: 'No se encontraron resultados'})
+            $input.popover('show')
+            $input.on('focusout', -> $input.popover('destroy'))
+          else
+            $input.popover('destroy')
         close: (e, ui) -> $input.css({backgroundImage: 'none'})
       }).blur( ->
         $this = $(this)
