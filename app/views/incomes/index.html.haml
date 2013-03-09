@@ -4,9 +4,9 @@
       %span Ingresos
 
 
-%input(type='text' id='searchTest' size="40")
+-#%input(type='text' id='searchTest' size="40")
 
-:coffeescript
+-#:coffeescript
   $('#searchTest').autocomplete( source: '/items/search_income' )
   $('#searchTest').data('uiAutocomplete')._renderItem = (ul, item) ->
     $('<li>').html('<a>' + item.name + ' <span class="label label-inverse">' + item.code + '</span></a>').appendTo(ul)
