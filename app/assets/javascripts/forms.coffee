@@ -66,12 +66,19 @@ $( ->
       $input.data('value', $hidden.val())
 
       $input.autocomplete({
-        'source': $input.data('source'),
-        'select': (e, ui) ->
+        source: $input.data('source'),
+        select: (e, ui) ->
           $input.data('value', ui.item.value)
           $hidden.val(ui.item.id)
           $input.trigger('autocomplete-done', [ui.item])
-
+        search: (e, ui) ->
+          $input.css({
+            backgroundImage: 'url("/assets/ajax-loader-small.gif")',
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: "#{$input.width() - 20}px 5px"
+          })
+        response: (e, ui) -> $input.css({backgroundImage: 'none'})
+        close: (e, ui) -> $input.css({backgroundImage: 'none'})
       }).blur( ->
         $this = $(this)
         value = $this.val()

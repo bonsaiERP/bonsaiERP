@@ -20,7 +20,7 @@
 
 .row-fluid
   .span6
-    = f.association :project,  label: 'Proyecto',
+    = f.input :project_id,  label: 'Proyecto', collection: Project.active,
       input_html: { class: 'contact_id span11', data: {new_url: new_project_path, trigger: 'new_project', width: 900 } }
 
   .span3

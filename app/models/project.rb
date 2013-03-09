@@ -3,14 +3,14 @@
 # email: boriscyber@gmail.com
 class Project < ActiveRecord::Base
 
-  attr_accessible :name, :active, :date_start, :date_end, :description
-
   # associations
   has_many :transactions
   has_many :account_ledgers
 
   # validations
   validates_presence_of :name
+
+  scope :active, -> { where(active: true) }
 
   def to_s
     name

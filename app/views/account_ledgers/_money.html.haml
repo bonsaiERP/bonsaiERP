@@ -26,8 +26,8 @@
           = nl2br al.reference
         .span5.r
           %span.muted Cantidad
-          = ntc al.amount
-          = currency_label al.currency
+          = ntc al.amount_ref(account.id)
+          = currency_label al.currency_ref(account.id)
       .span2
         = al.creator_label.html_safe
         = al.approver_label.html_safe

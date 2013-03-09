@@ -31,6 +31,24 @@ class AccountLedgerPresenter < Resubject::Presenter
     html.html_safe
   end
 
+  # Presents the amount referencing an account
+  def amount_ref(ac_id = nil)
+    case to_model.operation
+    when 'payin', 'payout', 'devin', 'devout'
+      amount
+    when 'trans'
+      if inverse?
+        ac_id == account_id ? amount_currency : -amount
+      else
+        ac_id == account_id ? -amount_currency : amount
+      end
+    end
+  end
+
+  def currency_ref(ac_id = nil)
+    ac_id == to_model.account_to_id ? currency : account_currency
+  end
+
   def account_contact_tag
     html = ""
     if account_contact
