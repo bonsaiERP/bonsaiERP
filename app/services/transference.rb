@@ -22,6 +22,7 @@ class Transference < BaseService
   validate :valid_accounts_currency
 
   delegate :currency, :inverse?, :same_currency?, to: :currency_exchange
+  delegate :currency, to: :account_to, allow_nil: true, prefix: true
 
   # Initializes and sets verification to false if it's not set correctly
   def initialize(attrs = {})
@@ -30,11 +31,11 @@ class Transference < BaseService
   end
 
   def account
-    @account = Account.active.find_by_id(account_id)
+    @account ||= Account.active.find_by_id(account_id)
   end
 
   def account_to
-    @account = AccountQuery.new.bank_cash.find_by_id(account_to_id)
+    @account_to ||= AccountQuery.new.bank_cash.find_by_id(account_to_id)
   end
 
   def transfer

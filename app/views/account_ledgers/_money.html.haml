@@ -1,4 +1,4 @@
-- ledgers =  AccountLedgerQuery.new.money(account.id).order('date, id desc').page(@page)
+- ledgers =  AccountLedgerQuery.new.money(account.id).order('date desc, id desc').page(@page)
 
 = paginate ledgers
 

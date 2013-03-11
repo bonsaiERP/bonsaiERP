@@ -38,7 +38,7 @@ class AccountLedgerPresenter < Resubject::Presenter
       amount
     when 'trans'
       if inverse?
-        ac_id == account_id ? amount_currency : -amount
+        ac_id == account_id ? -amount_currency : amount
       else
         ac_id == account_id ? -amount_currency : amount
       end

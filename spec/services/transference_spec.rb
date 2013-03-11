@@ -18,6 +18,26 @@ describe Transference do
     OrganisationSession.organisation = build :organisation, currency: 'BOB'
   end
 
+  it "#account once" do
+    Account.should_receive(:active).once.and_return(stub(find_by_id: account) )
+
+    t = Transference.new
+
+    t.account
+    t.account
+    t.account
+  end
+
+  it "#account_to once" do
+    AccountQuery.any_instance.should_receive(:bank_cash).once.and_return(stub(find_by_id: account_to) )
+
+    t = Transference.new
+
+    t.account_to
+    t.account_to
+    t.account_to
+  end
+
   context 'Validations' do
     it { should validate_presence_of(:account_id) }
     it { should validate_presence_of(:account_to_id) }
