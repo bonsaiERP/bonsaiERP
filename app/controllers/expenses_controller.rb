@@ -19,7 +19,6 @@ class ExpensesController < ApplicationController
   def new
     @expense = Expense.new_expense(ref_number: Expense.get_ref_number, date: Date.today, currency: currency)
     @expense.expense_details.build(quantity: 1.0)
-    #@expense = ExpenseWithPayment.new
   end
 
   # GET /expenses/1/edit
