@@ -29,7 +29,7 @@ class Payment < BaseService
   end
 
   def account_to
-    @account = Account.active.find_by_id(account_to_id)
+    @account_to ||= Account.active.find_by_id(account_to_id)
   end
 
 private

@@ -14,7 +14,7 @@ class IncomePresenter < Resubject::Presenter
   end
 
   def payments_devolutions
-    present to_model.payments_devolutions.includes(:account), AccountLedgerPresenter
+    present to_model.payments_devolutions.includes(:account_to).order('date  desc, id desc'), AccountLedgerPresenter
   end
 
   def interests
@@ -51,6 +51,21 @@ class IncomePresenter < Resubject::Presenter
     d.html_safe
   end
 
+  def pendent_conciliations
+    if payments_devolutions.any? {|v| !v.conciliation? }
+      html = <<-EOS
+      <div class="alert">
+        <h4>
+          Los cobros y devoluciones con el símbolo
+          <span class="icon-remove text-error icon-large"></span>
+          necesitan verificación </h4>
+      </div>
+      EOS
+
+      html.html_safe
+    end
+  end
+
   include UsersModulePresenter
   
   # To load methods related to the Transaction  model
@@ -59,6 +74,7 @@ class IncomePresenter < Resubject::Presenter
       to_model.send(m)
     end
   end
+
 
 private
   def today

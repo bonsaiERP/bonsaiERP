@@ -17,6 +17,7 @@ class ConciliateAccount
     account_ledger.conciliation = true
     update_account_ledger_approver
 
+    # Check service payment
     return account_ledger.save if is_service_payment?
 
     case account.class.to_s

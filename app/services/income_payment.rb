@@ -39,14 +39,14 @@ private
   end
 
   def update_income
-    income.balance -= amount_exchange
+    income.amount -= amount_exchange
     income.set_state_by_balance! # Sets state and the user
   end
 
   # Updates the expense and sets it's state
   # Service exchange
   def save_expense
-    account_to.balance -= amount
+    account_to.amount -= amount
     account_to.set_state_by_balance!
 
     account_to.save
@@ -58,6 +58,7 @@ private
                   amount: amount, operation: 'payin', account_id: income.id,
                   conciliation: conciliation?
                 )
+
       @ledger.save_ledger
     else
       true
