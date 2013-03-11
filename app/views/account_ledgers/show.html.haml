@@ -1,11 +1,12 @@
-%header
-  %h1
-    = @ledger.conciliation_tag
-    = @ledger
-    = @ledger.operation_label
-    %small.dark
-      = render_if @ledger.account_contact do
-        = link_to @ledger.account_contact_tag, @ledger.account_contact
+.row-fluid
+  .span12
+    %h1
+      = @ledger.conciliation_tag
+      = @ledger
+      = @ledger.operation_label
+      %small.dark
+        = render_if @ledger.account_contact do
+          = link_to @ledger.account_contact_tag, @ledger.account_contact
 
 - unless @ledger.conciliation?
   = form_for @ledger, url: conciliate_account_ledger_path(@ledger) do |f|

@@ -22,8 +22,8 @@ class AccountLedgerPresenter < Resubject::Presenter
     html = case to_model.operation
            when 'payin', 'intin'
              "<span class='label label-success' >#{operation}</span>"
-           when 'payout', 'intout'
-             "<span class='label label-error' >#{operation}</span>"
+           when 'payout', 'devin'
+             "<span class='label label-important' >#{operation}</span>"
            when 'trans'
              "<span class='label label-inverse' >#{operation}</span>"
            end
@@ -68,7 +68,7 @@ class AccountLedgerPresenter < Resubject::Presenter
       'Pago'
     when 'intout'
       'Pago Int.'
-    when 'devin'
+    when 'devin', 'devout'
       'Devolución'
     when 'trans'
       'Transferencia'
