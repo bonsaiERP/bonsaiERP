@@ -86,10 +86,10 @@
       -#%h3 Devolución
       -#= render 'expenses/devolution_form', expense: @expense unless @expense.is_draft?
 
-    %h2 Pagos y devoluciones
+    %h2 Pagos
 
     %ul.unstyled.listing
-      = render partial: 'account_ledgers/income', collection: @expense.payments,as: :ledger
+      = render partial: 'account_ledgers/income', collection: @expense.payments_rel, as: :ledger
 
 :javascript
   $( function() {

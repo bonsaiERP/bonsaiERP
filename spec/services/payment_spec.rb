@@ -24,6 +24,17 @@ describe Payment do
     OrganisationSession.organisation = build :organisation, currency: 'BOB'
   end
 
+  it "#account_to once" do
+    p = Payment.new
+
+    cash = build :cash, id: 10
+    Account.should_receive(:active).once.and_return(stub(find_by_id: cash))
+
+    p.account_to
+    p.account_to
+    p.account_to
+  end
+
   context 'Validations' do
     it { should validate_presence_of(:account_id) }
     it { should validate_presence_of(:account_to_id) }

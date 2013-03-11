@@ -13,6 +13,10 @@ class ExpensePresenter < Resubject::Presenter
     present to_model.payments, AccountLedgerPresenter
   end
 
+  def payments_rel
+    present AccountLedger.where("account_id=:id OR account_to_id=:id", id: id).order('date desc, id desc'), AccountLedgerPresenter
+  end
+
   def interests
     present to_model.interests, AccountLedgerPresenter
   end
