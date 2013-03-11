@@ -1,3 +1,6 @@
+# encoding: utf-8
+# author: Boris Barroso
+# email: boriscyber@gmail.com
 module UsersModulePresenter
   def creator_label
     return "<span class='label label-inverse' rel='tooltip' title='#{creator} #{l created_at}'>#{user_icon}#{creator.id}</span>".html_safe if creator.present?

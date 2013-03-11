@@ -1,3 +1,6 @@
+# encoding: utf-8
+# author: Boris Barroso
+# email: boriscyber@gmail.com
 class IncomePresenter < Resubject::Presenter
   currency :balance, precision: 2
 
