@@ -89,7 +89,7 @@
     %h2 Pagos
 
     %ul.unstyled.listing
-      = render partial: 'account_ledgers/income', collection: @expense.payments_rel, as: :ledger
+      = render partial: 'account_ledgers/income', collection: @expense.payments, as: :ledger
 
 :javascript
   $( function() {

@@ -58,8 +58,8 @@ class AccountLedgerPresenter < Resubject::Presenter
     html.html_safe
   end
 
-  def operation
-    case to_model.operation
+  def operation(op = to_model.operation)
+    case op
     when 'payin'
       'Cobro'
     when 'intin'
@@ -75,9 +75,9 @@ class AccountLedgerPresenter < Resubject::Presenter
     end
   end
 
-  def operation_tag
-    text = operation
-    css = case to_model.operation
+  def operation_tag(op = to_model.operation)
+    text = operation(op)
+    css = case op
           when 'payin', 'intin', 'devout'
             'label-success'
           when 'payout', 'intout', 'devin'
@@ -87,5 +87,58 @@ class AccountLedgerPresenter < Resubject::Presenter
           end
 
     "<span class='label #{css}'>#{text}</span>".html_safe
+  end
+
+  def account_icon(ac)
+    case ac.class.to_s
+    when 'Cash' then '<i class="icon-money dark" title="Efectivo" rel="tooltip"></i>'
+    when 'Bank' then '<i class="icon-building dark" title="Banco" rel="tooltip"></i>'
+    when 'Income' then '<i class="icon-file dark" title="Ingreso" rel="tooltip"></i>'
+    when 'Expense' then '<i class="icon-file dark" title="Egreso" rel="tooltip"></i>'
+    end
+  end
+
+  def trans_amount
+    if is_account?
+      to_model.amount
+    else
+      -to_model.amount
+    end
+  end
+
+  def trans_currency
+    if is_account?
+      account_currency
+    else
+      currency
+    end
+  end
+
+  def trans_operation_tag
+    if is_account?
+      operation_tag
+    else
+      op = case to_model.operation
+      when 'payin' then 'payout'
+      when 'payout' then 'payin'
+      end
+      operation_tag(op)
+    end
+  end
+
+  def trans_currency?
+    is_account? ? same_currency? : true
+  end
+
+  def trans_account
+    if is_account?
+      account_to
+    else
+      account
+    end
+  end
+
+  def trans_account_tag
+    "#{account_icon trans_account} #{trans_account}".html_safe
   end
 end

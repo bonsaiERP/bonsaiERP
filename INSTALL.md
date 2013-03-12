@@ -58,6 +58,7 @@ Install **PostgreSQL 9.2**
     sudo apt-get update
     sudo apt-get upgrade
     sudo apt-get install python-software-properties
+    sudo apt-get install software-properties-common
     sudo add-apt-repository ppa:pitti/postgresql
     sudo apt-get update
     sudo apt-get upgrade
@@ -138,6 +139,9 @@ Once installed we have to install passenger
 Installs the passenger gem and now we need to install passenger module for nginx with the defaults
 
     rvmsudo passenger-install-nginx-module
+
+with **apache** use the `apache2-prefork-dev` to install development
+heders
 
 If it asks you to install any dependencies install them, and we have to create a group and user for nginx
 

@@ -13,7 +13,7 @@ class IncomePresenter < Resubject::Presenter
   end
 
   def payments
-    present to_model.payments.includes(:account), AccountLedgerPresenter
+    present AccountLedgerQuery.new.payments_ordered(id), AccountLedgerPresenter
   end
 
   def payments_devolutions

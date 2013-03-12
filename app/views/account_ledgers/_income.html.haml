@@ -3,12 +3,12 @@
     %h5
       = ledger.conciliation_tag
       = link_to ledger, ledger
-      = ledger.operation_tag
+      = ledger.trans_operation_tag
 
     .clear-both
     %h5
       %span.muted A:
-      = link_to ledger.account_to, ledger.account_to
+      = link_to ledger.trans_account_tag, ledger.trans_account
 
       %i= l ledger.date.to_date
 
@@ -17,9 +17,9 @@
       %i.icon-file.muted(rel='tooltip' title="referencia")
       = nl2br ledger.reference
     .span6.r
-      - if ledger.same_currency?
-        = ntc ledger.amount_currency
-        = currency_label ledger.account_currency
+      - if ledger.trans_currency?
+        = ntc ledger.trans_amount
+        = currency_label ledger.trans_currency
       - else
         = ntc ledger.amount
         = currency_label ledger.currency

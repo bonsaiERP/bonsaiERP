@@ -95,7 +95,7 @@
         .span7.offset3.r.muted
           %strong Cantidad
 
-      = render partial: 'account_ledgers/income', collection: @income.payments_devolutions, as: :ledger
+      = render partial: 'account_ledgers/income', collection: @income.payments, as: :ledger
 
 :javascript
   $( function() {
