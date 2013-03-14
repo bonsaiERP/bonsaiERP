@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/boriscy/assets.git
-  revision: 40e66c169c20ea36c6282f1172820e940b78d6d2
+  revision: fba5e8554c48dc81080d6b222b3a5d9546be56ab
   specs:
     assets (1.0.6)
       rails (~> 3.2.11)

@@ -2,10 +2,10 @@
 !!!
 %html{xmlns: "http://www.w3.org/1999/xhtml", 'xml:lang' => "es", lang: "es" }
   %head
-    %meta{ 'http-equiv'  => "content-type", :content => "text/html;charset=UTF-8" }
+    %meta(http-equiv="content-type" content="text/html;charset=UTF-8")
     %meta(name="viewport" content="width=device-width, initial-scale=1.0")
-    %link{:name => "viewport", :content=> "width=device-width,initial-scale=1,user-scalable=no,maximum-scale=1"}
-    %link{:rel => "shortcut icon", :href => "/assets/favicon.ico", :type => "image/x-icon"}
+    %link(name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,maximum-scale=1")
+    %link(rel= "shortcut icon" href="favicon.ico" type="image/x-icon")
     = csrf_meta_tag
 
     %title Bonsai
@@ -20,7 +20,7 @@
     - if organisation?
       :javascript
         this.currency = "#{currency}";
-        this.organisation = { 
+        this.organisation = {
           currency: "#{current_organisation.currency}",
           name: "#{current_organisation.name}"
         }
@@ -46,14 +46,14 @@
       #cont
         .container-fluid
           = render "layouts/flash", flash: flash
-          
+
           = render "users/change_default_password" if current_user && current_user.change_default_password?
 
           = yield
           .clear
       #footer
         %p
-          ©2010-2013 &middot; 
+          ©2010-2013 &middot;
           =link_to "BonsaiERP", "http://bonsaierp.com"
           El software para la gestión de empresas
           <br/><br/>

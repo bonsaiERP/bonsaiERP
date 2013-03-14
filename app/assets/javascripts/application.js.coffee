@@ -10,6 +10,7 @@
 
 #= require plugins/money.min.js
 #= require plugins/_b.coffee
+#= require plugins/browser.js
 
 #= require bootstrap/bootstrap-dropdown
 #= require bootstrap/bootstrap-tooltip

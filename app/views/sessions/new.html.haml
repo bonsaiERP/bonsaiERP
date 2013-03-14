@@ -23,11 +23,13 @@
   }
 
 .row-fluid
+  #browser.span8.offset2.c(style='display:none;')
+    = render 'layouts/browser_update'
+.row-fluid
   .lonely.span6.offset3
     .inset
       %header
         %h2.c
-          -#= image_tag 'logo-tree.png', size: '40x40'
           Iniciar sesión
       .pad.center
         = simple_form_for @session do |f|
@@ -47,3 +49,20 @@
             = f.submit "Ingresar", :class => "btn btn-success btn-large b"
             <br/><br/>
             = link_to "¿Olvido su contraseña?", new_reset_password_path
+
+:javascript
+  $(function() {
+    BrowserDetect.init();
+
+    function showUpdateBrowser() {
+      $('input').attr('disabled', true);
+      $('#browser').show('slow');
+    }
+    showUpdateBrowser();
+
+    if(BrowserDetect.browser == 'Explorer' && BrowserDetect.version < 9) {
+      showUpdateBrowser();
+    } else if(BrowserDetect.browser == 'Firefox' && BrowserDetect.version < 4) {
+      showUpdateBrowser();
+    }
+  });
