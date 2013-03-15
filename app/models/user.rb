@@ -34,7 +34,7 @@ class User < ActiveRecord::Base
   # Delegations
   ########################################
   delegate :name, :currency, :address, :tenant, to: :organisation, prefix: true, allow_nil: true
-  delegate :active, :rol, :rol=, to: :link, prefix: true
+  delegate :active, :rol, :rol=, to: :link, prefix: true, allow_nil: true
   delegate :master_account?, to: :link
 
   ########################################
