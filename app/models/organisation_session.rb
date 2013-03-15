@@ -5,7 +5,7 @@
 class OrganisationSession
   class << self
     attr_reader :organisation
-    delegate :id, :name, :currency, :tenant, :emamil, :address, to: :organisation
+    delegate :id, :name, :currency, :tenant, :emamil, :address, to: :organisation, allow_nil: true
 
 
     # Stores using de application_controller the current_user for devise
