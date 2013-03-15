@@ -9,6 +9,7 @@ private
   def check_authorization!
     check_current_user!
     return false unless current_user
+
     # TODO check due_date
     unless authorized_user?
       flash[:alert] = "Usted ha sido redireccionado por que no tiene los privilegios."
@@ -28,6 +29,11 @@ private
   # Checks the white list for controllers
   def authorized_user?
     rol = current_user.link_rol
+    unless rol
+      request.env["HTTP_REFERER"] = logout_path
+      return false
+    end
+
     h = send(:"#{rol}_hash")
 
     if h[controller_sym].is_a?(Hash)
