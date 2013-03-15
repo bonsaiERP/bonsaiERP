@@ -8,6 +8,7 @@ private
   # general method to check authorization
   def check_authorization!
     check_current_user!
+    return false unless current_user
     # TODO check due_date
     unless authorized_user?
       flash[:alert] = "Usted ha sido redireccionado por que no tiene los privilegios."
