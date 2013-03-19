@@ -1,6 +1,6 @@
 # encoding: utf-8
 class ResetPasswordMailer < ActionMailer::Base
-  default from: "#{APP_NAME} <noresponder@bonsaierp.com>"
+  default from: "#{APP_NAME} <noresponder@#{DOMAIN}>"
 
   layout "email"
 
