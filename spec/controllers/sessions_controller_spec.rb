@@ -30,12 +30,12 @@ describe SessionsController do
       u
     }
 
-    it 'should login' do
-      user.stub(set_auth_token: true, auth_token: '12345')
+    it '#create login' do
       Session.any_instance.stub(authenticate: true, user: user, tenant: 'bonsai')
+
       post "create", session: {email: "demo@example.com", password: "demo123"}
 
-      response.should redirect_to dashboard_url(host: request.domain, subdomain: 'bonsai', auth_token: '12345')
+      response.should redirect_to dashboard_url(host: DOMAIN, subdomain: 'bonsai')
     end
 
     it 'Resends registration email' do
@@ -64,6 +64,14 @@ describe SessionsController do
 
       response.should render_template('new')
       flash.now[:error].should eq('El email o la contraseña que ingreso no existen.')
+    end
+  end
+
+  describe "GET /destroy" do
+    it "#destroy" do
+      get :destroy
+
+      response.should redirect_to(login_url(host: DOMAIN, subdomain: false))
     end
   end
 end

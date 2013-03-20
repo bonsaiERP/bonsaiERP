@@ -3,12 +3,12 @@ class CreateOrganisations < ActiveRecord::Migration
     PgTools.with_schemas only: ['common', 'public'] do
       create_table :organisations do |t|
         t.integer :country_id
-        t.string  :name, :limit => 100
+        t.string  :name, limit: 100
         t.string  :address
         t.string  :address_alt
-        t.string  :phone     , :limit => 20
-        t.string  :phone_alt , :limit => 20
-        t.string  :mobile    , :limit => 20
+        t.string  :phone     , limit: 20
+        t.string  :phone_alt , limit: 20
+        t.string  :mobile    , limit: 20
         t.string  :email
         t.string  :website
         t.integer :user_id

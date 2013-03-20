@@ -2,13 +2,8 @@ require 'spec_helper'
 
 describe User do
 
-  it { should have_many(:links) }
   it { should have_many(:active_links) }
-  it { should have_many(:links) }
-  it { should have_many(:active_links) }
-
-  before(:each) do
-  end
+  it { should_not have_many(:links) }
 
   let(:valid_attributes)do
     {email: 'demo@example.com', password: 'demo1234'}
@@ -16,6 +11,15 @@ describe User do
 
   it 'should not create' do
     expect{ User.create!(params)}.to raise_error
+  end
+
+  it "#tenat_link" do
+    u = build :user
+
+    st = Object.new
+    u.should_receive(:active_links).and_return(st)
+    st.should_receive(:where).with(tenant: 'bonsai').and_return(stub(first: true))
+    u.tenant_link('bonsai')
   end
 
   it "define_method check" do

@@ -10,3 +10,5 @@
  The software is been improved as we move
 
 ctags -R `bundle show rails`/../*
+
+v=spf1 a ip4:192.34.56.117 -all

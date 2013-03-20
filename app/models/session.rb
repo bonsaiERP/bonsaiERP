@@ -5,6 +5,8 @@ class Session < BaseService
   attribute :email, String
   attribute :password, String
 
+  delegate :id, to: :user, prefix: true, allow_nil: true
+
   validates_presence_of :email, :password
 
   def authenticate
@@ -20,7 +22,7 @@ class Session < BaseService
   end
 
   def user
-    @user ||= User.find_by_email(email)
+    @user ||= User.active.find_by_email(email)
   end
 
   def tenant

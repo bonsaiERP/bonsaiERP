@@ -11,11 +11,9 @@ class User < ActiveRecord::Base
 
   ########################################
   # Relationships
-  has_many :links, inverse_of: :user, autosave: true, dependent: :destroy
-  has_many :active_links, inverse_of: :user, autosave: true, conditions: {active: true}
   has_many :active_links, inverse_of: :user, autosave: true, dependent: :destroy,
            class_name: 'Link', conditions: {active: true}
-  has_many :organisations, through: :links
+  has_many :organisations, through: :active_links
 
   ########################################
   # Validations
@@ -56,6 +54,10 @@ class User < ActiveRecord::Base
   # Returns the link with the organissation one is logged in
   def link
     @link ||= active_links.find_by_organisation_id(OrganisationSession.id)
+  end
+
+  def tenant_link(tenant)
+    active_links.where(tenant: tenant).first
   end
 
   # Updates the priviledges of a user

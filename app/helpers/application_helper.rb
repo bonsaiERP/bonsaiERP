@@ -142,7 +142,11 @@ module ApplicationHelper
           File.read(file2)
         end
       rescue
-        File.read(file2)
+        f = File.new(file1, 'w+')
+        txt = File.read(file2)
+        f.write txt
+        f.close
+        txt
       end
     else
       File.read(file2)

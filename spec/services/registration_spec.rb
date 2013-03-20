@@ -43,7 +43,7 @@ describe Registration do
     r.user.password_confirmation.should eq(r.user.password)
 
 
-    link = r.user.links.first
+    link = r.user.active_links.first
     link.organisation_id.should eq(1)
     link.rol.should eq('admin')
     link.should be_master_account
