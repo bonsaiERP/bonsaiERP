@@ -4,7 +4,7 @@ require 'spec_helper'
 describe SessionsController do
 
   it "checks all stubbed methods" do
-    [:authenticate, :tenant].each do |m|
+    [:authenticate?, :tenant].each do |m|
       Session.method_defined?(m).should be_true
     end
     User.new # Needed to check methods
@@ -31,7 +31,7 @@ describe SessionsController do
     }
 
     it '#create login' do
-      Session.any_instance.stub(authenticate: true, user: user, tenant: 'bonsai')
+      Session.any_instance.stub(authenticate?: true, user: user, tenant: 'bonsai')
 
       post "create", session: {email: "demo@example.com", password: "demo123"}
 
@@ -39,23 +39,15 @@ describe SessionsController do
     end
 
     it 'Resends registration email' do
-      user.stub(set_auth_token: true, auth_token: '12345')
-      Session.any_instance.stub(authenticate: 'resend_registration_email', user: user)
+      RegistrationMailer.should_receive(:send_registration).and_return(stub(deliver: true))
+      Session.any_instance.stub(authenticate?: false, status: 'resend_registration')
       
-      post "create", session: {email: "demo@example.com", password: "demo123"}
+      post :create, session: {email: "demo@example.com", password: "demo123"}
 
-      response.should redirect_to registrations_path
+      response.should redirect_to registrations_url(subdomain: false)
       flash[:notice].should eq("Le hemos reenviado el email de confirmación a demo@example.com")
     end
 
-
-    it 'inactive_user' do
-      Session.any_instance.stub(authenticate: 'inactive_user')
-      
-      post "create", session: {email: "demo@example.com", password: "demo123"}
-
-      response.should render_template('sessions/inactive_user')
-    end
 
     it "wrong email or password" do
       Session.any_instance.stub(authenticate: false)

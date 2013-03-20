@@ -12,24 +12,24 @@ describe Session do
   it "Authenticates" do
     user.should_receive(:valid_password?).with('demo1234').and_return(true)
     user.should_receive(:confirmed_registration?).and_return(true)
-    user.stub(links: [stub(active?: true)])
-    RegistrationMailer.should_not_receive(:send_registration)
-    User.stub(find_by_email: user)
+    user.stub(active_links?: true)
+
+    User.stub_chain(:active, find_by_email: user)
 
     ses = Session.new(valid_attributes)
 
-    ses.authenticate.should be_true
+    ses.should be_authenticate
   end
 
   it "resend registration email" do
     user.should_receive(:confirmed_registration?).and_return(false)
-    user.stub(links: [stub(active?: true)])
-    RegistrationMailer.should_receive(:send_registration).and_return(stub(deliver: true))
+    user.stub(active_links?: true)
     User.stub(find_by_email: user)
 
     ses = Session.new(valid_attributes)
 
-    ses.authenticate.should eq('resend_registration_email')
+    ses.should_not be_authenticate
+    ses.status.should eq('resend_registration')
   end
 
   it "returns the tenant from organisations" do
@@ -37,14 +37,5 @@ describe Session do
     user.should_receive(:organisations).and_return([stub(tenant: 'bonsai')])
     ses = Session.new
     ses.tenant.should eq('bonsai')
-  end
-
-  it "inactive_user" do
-    user.should_receive(:links).and_return([stub(active?: false)])
-    User.stub(find_by_email: user)
-
-    ses = Session.new(valid_attributes)
-
-    ses.authenticate.should eq('inactive_user')
   end
 end

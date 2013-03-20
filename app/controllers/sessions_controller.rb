@@ -11,17 +11,20 @@ class SessionsController < ApplicationController
   def create
     @session = Session.new(session_params)
 
-    case @session.authenticate
-    when true
+    case 
+    when @session.authenticate?
       session[:user_id] = @session.user_id
+      flash[:notice] = "Ha ingresado correctamente."
+
       redirect_to dashboard_url(host: UrlTools.domain, subdomain: @session.tenant) and return
-    when 'resend_registration_email'
+    when(!@session.authenticate? && 'resend_registration' == @session.status)
       RegistrationMailer.send_registration(self).deliver
-      redirect_to registrations_path, notice: "Le hemos reenviado el email de confirmación a #{@session.email}"
-    when 'inactive_user'
-      render file: 'sessions/inactive_user'
+      flash[:notice] = "Le hemos reenviado el email de confirmación a #{@session.email}"
+
+      redirect_to registrations_url(subdomain: false) and return
     else
       flash.now[:error] = 'El email o la contraseña que ingreso no existen.'
+
       render'new'
     end
   end

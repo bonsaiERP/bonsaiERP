@@ -60,6 +60,10 @@ class User < ActiveRecord::Base
     active_links.where(tenant: tenant).first
   end
 
+  def active_links?
+    active_links.any?
+  end
+
   # Updates the priviledges of a user
   def update_user_role(params)
     self.link.update_attributes(rol: params[:rolname], active: params[:active_link])

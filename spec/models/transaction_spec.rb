@@ -12,6 +12,6 @@ describe Transaction do
     cols = Transaction.column_names
     %w(id account_id created_at updated_at).each {|k| cols.delete(k) }
 
-    Transaction.transaction_columns.should eq(cols) 
+    Transaction.transaction_columns.should eq(cols.map(&:to_sym))
   end
 end

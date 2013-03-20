@@ -1,6 +1,6 @@
 # encoding: utf-8
 class Session < BaseService
-  attr_reader :tenant
+  attr_reader :tenant, :status
 
   attribute :email, String
   attribute :password, String
@@ -9,16 +9,10 @@ class Session < BaseService
 
   validates_presence_of :email, :password
 
-  def authenticate
+  def authenticate?
     return false unless validated?
 
-    resp = check_active_user
-    return resp unless true == resp
-
-    resp = check_or_resend_registration_email
-    return resp unless true == resp
-
-    user.valid_password?(password)
+    confirmed_registration? && user.valid_password?(password)
   end
 
   def user
@@ -26,32 +20,19 @@ class Session < BaseService
   end
 
   def tenant
-    user.organisations.first.tenant
+    @tenant ||= user.organisations.first.tenant
   end
 
 private
-  # Checks if the user confirmed the registration if not it resends the
-  # confirmation email and returns a string 'resend_registration_email'
-  def check_or_resend_registration_email
-    unless user.confirmed_registration?
-      RegistrationMailer.send_registration(self).deliver
-
-      'resend_registration_email'
-    else
-      true
-    end
-  end
-
-  # Check in the links if the user is active
-  def check_active_user
-    unless user.links.first.active?
-      'inactive_user'
-    else
-      true
+  def confirmed_registration?
+    @confirmed_registration ||= begin
+      conf = user.confirmed_registration?
+      @status = 'resend_registration' unless conf
+      conf
     end
   end
 
   def validated?
-    valid? && user.present?
+    valid? && user.present? && user.active_links?
   end
 end

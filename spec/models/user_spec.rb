@@ -22,6 +22,13 @@ describe User do
     u.tenant_link('bonsai')
   end
 
+  it "#active_links?" do
+    u = User.new
+    u.should_receive(:active_links).and_return([true])
+
+    u.should be_active_links
+  end
+
   it "define_method check" do
     u = User.new
     link = Link.new
