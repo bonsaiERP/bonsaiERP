@@ -20,7 +20,7 @@ gem 'strong_parameters' # Force in controllers to sanitize parameters
 gem 'squeel' # Better SQL queries
 
 gem 'simple_form'
-gem 'haml', '~> 4.0.0'
+gem 'haml', '~> 4.0.1'
 gem 'kaminari' # Pagination
 gem 'valium' # Better than pluck method
 gem 'bcrypt-ruby', require: 'bcrypt'
@@ -63,7 +63,7 @@ group :test do
   gem 'database_cleaner'
   gem 'factory_girl_rails'
   gem 'spork', '0.9.2' # Newer version gives error with squeel
-  gem 'shoulda-matchers'
+  gem 'shoulda-matchers', '1.4.2'
   gem 'valid_attribute'
   gem 'watchr'
   gem 'launchy'
