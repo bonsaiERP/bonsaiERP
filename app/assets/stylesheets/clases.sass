@@ -102,6 +102,7 @@ div.search
   box-shadow: 0 1px 3px #ccc //TODO
 
 
+/* Moneybox */
 .moneybox
   +border-radius(3px)
   +box-shadow(0px 0px 5px $gray)
@@ -121,7 +122,7 @@ div.search
     font-weight: normal
     margin: 0px
 
-/*especial tabs*/
+/* Especial tabs */
 ul.tabs
   list-style: none
   height: 24px
@@ -196,7 +197,9 @@ ul.tabs
 
 
 
-/*States*/
+/*******************************
+ *States
+ ******************************/
 .paid 
   background-color: $green
   color: white
@@ -229,7 +232,7 @@ ul.menu
     margin: 0px
     text-decoration: none
     &:hover
-      color: $green  
+      color: $green
   li
     list-style: none
     margin: 0px
@@ -333,8 +336,9 @@ hr.light
 .hide
   display: none
 
-
-// Lonelyform, login, register
+/**************************************
+ * .lonely Login form, registration form
+ *************************************/
 .lonely
   +border-radius
   +box-shadow(0 0 10px $grayDarker)
@@ -366,7 +370,9 @@ hr.light
         font-size: 1.3em
         height: 25px
 
-// List
+/**************************************
+ * List
+ *************************************/
 ul.listing
   margin: 40px 0px
   li
@@ -391,8 +397,9 @@ ul.listing
   color: white
   padding: 1px 4px
 
-////////////////////////////////////////
-// Browser
+/**************************************
+ * Browser
+ *************************************/
 .browser
   background: url('/assets/browser_logos-128.png') no-repeat
   width: 122px
@@ -409,3 +416,10 @@ ul.listing
   background-position: -435px -5px
 .browser.explorer
   background-position: -572px -5px
+
+/* btn Button */
+.btn
+  margin-right: 4px
+.r .btn
+  margin-right: 0px
+  margin-left: 4px

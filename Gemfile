@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.12'
+gem 'rails', '3.2.13'
 
 group :assets do
   gem 'sass-rails'   , '~> 3.2.5'
@@ -51,7 +51,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'ffaker'
   gem 'pry-remote' # Work binding.pry_remote with Foreman, just call pry-remote in the terminal
-  gem 'pry', '0.9.11.3'# 0.9.11.4 gives error
+  gem 'pry'#, '0.9.11.3'# 0.9.11.4 gives error
   gem 'pry-rails'
   gem 'pry-nav'
   gem 'foreman'
@@ -67,5 +67,4 @@ group :test do
   gem 'valid_attribute'
   gem 'watchr'
   gem 'launchy'
-  #gem 'log4r'
 end
