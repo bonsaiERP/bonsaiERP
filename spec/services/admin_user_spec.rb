@@ -31,7 +31,7 @@ describe AdminUser do
       ad.user.rol.should eq('group')
       ad.user.should be_active
 
-      lnk = ad.user.links.first
+      lnk = ad.user.active_links.first
       lnk.organisation_id.should eq(15)
       lnk.rol.should eq('group')
       lnk.should be_active
@@ -45,7 +45,7 @@ describe AdminUser do
       ad = AdminUser.new(User.new(valid_attributes.merge(rol: 'admin')))
       ad.add_user.should be_true
       
-      ad.user.links.first.rol.should eq('other')
+      ad.user.active_links.first.rol.should eq('other')
     end
   end
 
