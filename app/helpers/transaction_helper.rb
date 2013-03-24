@@ -6,7 +6,7 @@ module TransactionHelper
     options[:format] ||= 'json'
 
     case trans.class.to_s
-    when 'Income', 'IncomePresenter'
+    when 'Income', 'IncomePresenter', 'DirectIncome'
       search_income_items_path(options)
     when 'Expense', 'ExpensePresenter'
       search_expense_items_path(options)
