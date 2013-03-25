@@ -9,7 +9,7 @@ class ItemsController < ApplicationController
     if params[:search].present?
       @items = Item.search(params).page(@page)
     else
-      @items = Item.includes(:unit, :stocks).page(@page)
+      @items = Item.includes(:unit, :stocks).order('name asc').page(@page)
     end
   end
 
