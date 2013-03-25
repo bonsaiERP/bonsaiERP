@@ -28,8 +28,10 @@
           %i.icon-user
           =@income.contact
 
-    = render_if @income.due_date do
-      %h4.n
+    %h4.n
+      %span.muted Fecha:
+      %i= lo @income.date
+      = render_if @income.due_date do
         = @income.due_date_tag
 
   .span4.r

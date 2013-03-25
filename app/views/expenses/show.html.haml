@@ -28,8 +28,10 @@
           %i.icon-user
           = @expense.contact
 
-    = render_if @expense.due_date do
-      %h4.n
+    %h4.n
+      %span.muted Fecha:
+      %i= lo @expense.date
+      = render_if @expense.due_date do
         = @expense.due_date_tag
 
   .span4.r
