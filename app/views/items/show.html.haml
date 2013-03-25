@@ -34,18 +34,18 @@
 
 .row-fluid
   .span6.well.well-small
-    %label Precio de venta
-    .b
-      = currency_label
-      = ntc @item.price
-
-  .span6.well.well-small
     %label Precio de compra
     .b
       = currency_label
       = ntc @item.buy_price
 
-.row
+  .span6.well.well-small
+    %label Precio de venta
+    .b
+      = currency_label
+      = ntc @item.price
+
+.row-fluid
   .span6
     %label Descripción
     = @item.description
