@@ -84,6 +84,6 @@ private
 
   def item_params
     params.require(:item).permit(:code, :name, :active, :stockable,
-                                 :for_sale, :price, :unit_id, :description)
+                                 :for_sale, :price, :buy_price, :unit_id, :description)
   end
 end

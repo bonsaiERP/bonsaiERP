@@ -1,5 +1,6 @@
 :css
   #item-form{max-width: 800px; }
+  #item-form .well .form-horizontal label{ width: 100px; }
 
 = simple_form_for(@item, :html => {:id => 'item-form'}) do |f|
   = bonsai_form_error(f)
@@ -7,23 +8,31 @@
 
   .row-fluid
     .span6
-      = f.input :name, label: 'Nombre'
+      = f.input :name, label: 'Nombre', input_html: {class: 'span11'}
     .span6
-      = f.input :code, label: 'Código'
+      = f.input :code, label: 'Código', input_html: {class: 'span11'}
 
   .row-fluid
     .span6
-      = f.association :unit, :label => "Unidad",
+      = f.association :unit, label: "Unidad",
         input_html: { class: 'span10', data: {new_url: new_unit_path, trigger: 'new-unit', title: 'Nueva unidad'} }
-      .form-horizontal
-        = f.input :active, label: "Activo <i class='icon-info-sign' rel='tooltip' title='Se puede usar en nuevos Ingresos o Egresos'></i>".html_safe
-        = f.input :stockable, label: 'Inventario <i title="Se almacena el ítem?" rel="tooltip" class="icon-info-sign"></i>'.html_safe
-    .span6.form-horizontal.well.well-small
-      %h4 Venta
-      = f.input :for_sale, label: 'Se vende'
-      = f.input :price, :label => "Precio de venta #{currency_label}".html_safe, input_html: {size: 12, type: 'decimal'}
+    .form-horizontal.span6
+      = f.input :active, label: "Activo <i class='icon-info-sign' rel='tooltip' title='Se puede usar en nuevos Ingresos o Egresos'></i>".html_safe
+      = f.input :stockable, label: 'Inventario <i title="Se almacena el ítem?" rel="tooltip" class="icon-info-sign"></i>'.html_safe
 
-    .span4
+  .row-fluid
+    .span6.well.well-small
+      %h4.muted Venta
+
+      .row-fluid
+        .span6
+          = f.input :for_sale, label: 'Se vende', label_html: {class: 'span8'}
+        .span6
+          = f.input :price, label: "Precio de venta #{currency_label}".html_safe, input_html: {size: 12, type: 'decimal'}
+
+    .span6.well.well-small
+      %h4.muted Compra
+      = f.input :buy_price, label: "Precio de compra #{currency_label}".html_safe, input_html: {size: 12, type: 'decimal'}
 
   .row-fluid
     .span6
@@ -37,13 +46,4 @@
       var label = resp.name + " (" + resp.symbol + ")";
       $('#item_unit_id').createSelectOption(resp.id, label);
     });
-
-    function showHidePrice() {
-      $('#item_price').attr('disabled', !$('#item_for_sale').get(0).checked);
-    }
-
-    $('#item_for_sale').on('click', function(e) {
-      showHidePrice() 
-    });
-    showHidePrice();
   });

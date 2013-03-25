@@ -14,21 +14,19 @@
   = f.submit 'Aprovar', class: 'btn btn-success b btn-large', name: 'commit_approve'
 
 
-:coffeescript
-  (($) ->
-    $('body').on('new-contact', '.contact-form', (event, resp) ->
+:javascript
+  $(function() {
+    $('body').on('new-contact', '.contact-form', function(event, resp) {
       $('.contact_id').val(resp.matchcode).data('value', resp.matchcode)
-      .prev().val(resp.matchcode)
-    )
+      .prev().val(resp.matchcode);
+    });
 
-    $('#transaction_currency').select2()
+    $('#transaction_currency').select2();
 
-    fx.rates = exchangeRates.rates
-    currency = new App.TransactionCurrency()
-    rivets.bind($('.currency-input'), {currency: currency})
+    fx.rates = exchangeRates.rates;
+    currency = new App.TransactionCurrency();
+    rivets.bind($('.currency-input'), {currency: currency});
 
-    expense = new App.Expense(currency)
-    expense.setList()
-
-  )(jQuery)
-
+    expense = new App.Expense(currency);
+    expense.setList();
+  });

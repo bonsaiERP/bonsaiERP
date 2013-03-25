@@ -34,6 +34,19 @@ class Item extends Backbone.Model
     src = event.currentTarget || event.srcElement
     @collection.deleteItem(this, src)
 
+# Uses the Item#buy_price instead of Item#price
+class ExpenseItem extends Item
+  setAutocompleteEvent: (el) ->
+    $(el).on 'autocomplete-done', 'input.autocomplete', (event, item) =>
+      q = @get('quantity') * 1
+      q = 1 unless q <= 0
+
+      price = _b.roundVal( item.buy_price * (1/@get('rate')), _b.numPresicion )
+
+      @set(original_price: item.price, price: price, quantity: q, item_id: item.id)
+
+
+
 class Transaction extends Backbone.Collection
   model: Item
   total: 0.0
@@ -71,7 +84,8 @@ class Transaction extends Backbone.Collection
   #
   setList: ->
     @$table.find('tr.item').each (i, el) =>
-      @add(item = new Item( $(el).data('item') ) )
+      @add($(el).data('item') )
+      item = @models[@length - 1]
       rivets.bind(el, {item: item})
       item.setAutocompleteEvent(el)
   #
@@ -81,7 +95,8 @@ class Transaction extends Backbone.Collection
     $tr = $(@getItemHtml(num)).insertBefore('#subtotal-line')
 
     $tr.createAutocomplete()
-    @add(item = new Item(rate: @currency.get('rate') ) )
+    @add(rate: @currency.get('rate') )
+    item = @models[@length - 1]
     rivets.bind($tr, {item: item})
     item.setAutocompleteEvent($tr)
   #
@@ -110,8 +125,18 @@ class Income extends Transaction
     @itemTemplate(num: num, klass: 'income', search_path: 'search_income')
 
 class Expense extends Transaction
+  model: ExpenseItem
   getItemHtml: (num) ->
     @itemTemplate(num: num, klass: 'expense', search_path: 'search_expense')
+  #
+  setList: ->
+    @$table.find('tr.item').each (i, el) =>
+      data = $(el).data('item')
+      data.price = data.buy_price
+      @add( data )
+      item = @models[@length - 1]
+      rivets.bind(el, {item: item})
+      item.setAutocompleteEvent(el)
 
 @App = {}
 
