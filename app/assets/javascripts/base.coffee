@@ -300,5 +300,11 @@ init = ($) ->
         '"', currencies[val]['name'], '"', ' rel="tooltip">',
         val, '</span>'].join('')
 
+  rivets.formatters.show = (val) ->
+    if val
+      'block'
+    else
+      'none'
+
   true
 )(jQuery)

@@ -9,6 +9,8 @@ class DirectIncome < DefaultTransaction
   attribute :bill_number, String
   attribute :due_date, Date
   attribute :description, String
+  attribute :direct, Boolean
+  attribute :account_to_id, Integer
 
   attr_accessor :income
 
@@ -17,7 +19,7 @@ class DirectIncome < DefaultTransaction
     :subtotal, :total, to: :income
 
   def initialize(attributes = {})
-    super attributes.merge(ref_number: Income.get_ref_number, date: Date.today, currency: currency)
+    super attributes.merge(ref_number: Income.get_ref_number, date: Date.today, currency: OrganisationSession.currency)
     @income = Income.new_income{|inc| inc.income_details.build }
   end
 end

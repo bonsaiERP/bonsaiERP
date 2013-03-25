@@ -32,5 +32,31 @@
 .row-fluid
   .span6
     = f.input :description, label: 'Descripción', as: 'text', input_html: {rows: 3, class: 'span10'}
+  .span6
+    = f.input :direct, label: 'Cobro directo', as: :boolean
+    .account_to(style='display:none')
+      = f.input :account_to_id, label: 'Cuenta', input_html: {class: 'span10'}
 
+:javascript
+  var accounts_to = #{AccountQuery.new.bank_cash_options.to_json}
 
+  $(function() {
+    // account_to_id
+    $('#direct_income_account_to_id').select2({
+      data: accounts_to,
+      formatResult: App.Payment.paymentOptions,
+      formatSelection: App.Payment.paymentOptions,
+      escapeMarkup: function(m) { return m }
+    });
+
+    showHideIncome = function() {
+      if($('#direct_income_direct').prop('checked')) {
+        $('.account_to').show('slow');
+      }else {
+        $('.account_to').hide('slow');
+      }
+    }
+
+    $('#direct_income_direct').click(function() { showHideIncome()  });
+    showHideIncome();
+  });
