@@ -18,24 +18,31 @@
   - @items.each do |item|
     %li.row-fluid
       .span5
-        %h4= link_to item, item, class: 'b'
-      .span3
-        %span.muted(title="" rel="tooltip") Activo:
-        %span(class="#{true_false item.active?}")
+        %h4
+          = link_to item, item, class: 'b'
+          %br
+          %small= item.unit
+      .span5
+        .row-fluid
+          .span6
+            %span.muted(title="" rel="tooltip") Activo:
+            %span(class="#{true_false item.active?}")
+            &nbsp;&nbsp;
+            %span.muted(title="Inventario" rel="tooltip") Inv.:
+            %span(class="#{true_false item.stockable?}")
+          .span6.r
+            %span.b.muted Se vende:
+            %span(class="#{true_false_color item.for_sale?}")
 
-        %span.muted(title="Inventario" rel="tooltip") Inv.:
-        %span(class="#{true_false item.stockable?}")
-
-        %span.muted Se vende:
-        %span(class="#{true_false item.for_sale?}")
-      .span2
-        - if item.for_sale?
-          %span.muted Precio:
-          %strong= ntc item.price
-          = currency_label
-        <br>
-        %span.muted Unidad:
-        = item.unit_name
+        .row-fluid
+          .span6.r
+            %span.muted Precio compra:
+            = currency_label
+            = ntc item.buy_price
+          .span6.r
+            %span.muted Precio venta:
+            = currency_label
+            = ntc item.price
       
         -#= ntc item.total_stock if item.stockable?
       .span2.r

@@ -12,12 +12,26 @@ describe Item do
   it { should have_many(:inventory_operation_details) }
 
   it { should validate_uniqueness_of(:name) }
+  it { should have_valid(:price).when(1, 0.1) }
+  it { should_not have_valid(:price).when(-1, -0.1) }
+  it { should have_valid(:buy_price).when(0, 1, 0.1,-0.0) }
+  it { should_not have_valid(:buy_price).when(-1, -0.1) }
 
   let(:unit){ create :unit }
   let(:valid_attributes) do
     { name: 'First item', unit_id: unit.id, code: 'AU101',
-      price: 12.0, for_sale: true, stockable: true
+      price: 12.0, for_sale: true, buy_price: 0, stockable: true
     }
+  end
+
+  it "#valid_price" do
+    i = Item.new(valid_attributes)
+    i.should be_valid
+    i.should be_for_sale
+    i.price = 0.0
+
+    i.should_not be_valid
+    i.errors_on(:price).should_not be_blank
   end
 
   it "#to_s" do

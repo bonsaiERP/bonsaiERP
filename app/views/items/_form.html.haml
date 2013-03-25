@@ -22,6 +22,10 @@
 
   .row-fluid
     .span6.well.well-small
+      %h4.muted Compra
+      = f.input :buy_price, label: "Precio de compra #{currency_label}".html_safe, input_html: {size: 12, type: 'decimal'}
+
+    .span6.well.well-small
       %h4.muted Venta
 
       .row-fluid
@@ -29,10 +33,6 @@
           = f.input :for_sale, label: 'Se vende', label_html: {class: 'span8'}
         .span6
           = f.input :price, label: "Precio de venta #{currency_label}".html_safe, input_html: {size: 12, type: 'decimal'}
-
-    .span6.well.well-small
-      %h4.muted Compra
-      = f.input :buy_price, label: "Precio de compra #{currency_label}".html_safe, input_html: {size: 12, type: 'decimal'}
 
   .row-fluid
     .span6

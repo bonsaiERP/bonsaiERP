@@ -169,6 +169,14 @@ module ApplicationHelper
     end
   end
 
+  def true_false_color(val)
+    if val
+      'icon-ok text-success'
+    else
+      'icon-remove text-error'
+    end
+  end
+
   def render_if(val, &block)
     content_tag(:span) { block.call } if val.present?
   end

@@ -18,11 +18,11 @@ class Item < ActiveRecord::Base
 
   ##########################################
   # Validations
-  validates_presence_of :name, :unit, :unit_id
-  #, :code
-  validates_uniqueness_of :code, if: "code.present?"
+  validates_presence_of   :name, :unit, :unit_id
+  validates_uniqueness_of :code , if: "code.present?"
   validates_uniqueness_of :name
-  validates :price, numericality: { greater_than_or_equal_to: 0 }, if: :for_sale?
+
+  validates :price, numericality: { greater_than: 0 }, if: :for_sale?
   validates :buy_price, numericality: { greater_than_or_equal_to: 0 }
 
   ##########################################
