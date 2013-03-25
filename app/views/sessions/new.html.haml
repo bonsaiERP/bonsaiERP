@@ -52,17 +52,4 @@
 
 :javascript
   $(function() {
-    BrowserDetect.init();
-
-    function showUpdateBrowser() {
-      $('input').attr('disabled', true);
-      $('#browser').show('slow');
-    }
-    showUpdateBrowser();
-
-    if(BrowserDetect.browser == 'Explorer' && BrowserDetect.version < 9) {
-      showUpdateBrowser();
-    } else if(BrowserDetect.browser == 'Firefox' && BrowserDetect.version < 4) {
-      showUpdateBrowser();
-    }
   });

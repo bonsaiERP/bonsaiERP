@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/boriscy/assets.git
-  revision: fba5e8554c48dc81080d6b222b3a5d9546be56ab
+  revision: e67b426697eadea85f94254ce714479b0e51d876
   specs:
     assets (1.0.6)
       rails (~> 3.2.11)
@@ -137,7 +137,7 @@ GEM
     mime-types (1.21)
     mocha (0.10.5)
       metaclass (~> 0.0.1)
-    multi_json (1.7.1)
+    multi_json (1.7.2)
     multi_xml (0.5.3)
     newrelic_rpm (3.6.0.78)
     nokogiri (1.5.9)

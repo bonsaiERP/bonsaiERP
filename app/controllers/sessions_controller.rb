@@ -18,7 +18,7 @@ class SessionsController < ApplicationController
 
       redirect_to dashboard_url(host: UrlTools.domain, subdomain: @session.tenant) and return
     when(!@session.authenticate? && 'resend_registration' == @session.status)
-      RegistrationMailer.send_registration(self).deliver
+      RegistrationMailer.send_registration(@session).deliver
       flash[:notice] = "Le hemos reenviado el email de confirmación a #{@session.email}"
 
       redirect_to registrations_url(subdomain: false) and return
