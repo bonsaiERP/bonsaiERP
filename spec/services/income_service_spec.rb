@@ -44,6 +44,17 @@ describe IncomeService do
     end
   end
 
+  it "#valid?" do
+    is = IncomeService.new(account_to_id: 2, direct: "1")
+
+    is.should_not be_valid
+    AccountQuery.any_instance.stub_chain(:bank_cash, where: [( build :cash, id: 2 )])
+
+    is = IncomeService.new(account_to_id: 2, direct: "1")
+
+    is.should be_valid
+  end
+
   context "Create a income with default data" do
     before(:each) do
       Income.any_instance.stub(save: true)
@@ -154,11 +165,38 @@ describe IncomeService do
 
   describe "create and pay" do
     let(:cash) { build :cash, currency: 'BOB', id: 2 }
+    let(:contact) { build :contact, id: 1 }
+
+    before(:each) do
+      AccountLedger.any_instance.stub(save_ledger: true)
+      Income.any_instance.stub(contact: contact, id: 100, save: true)
+      IncomeDetail.any_instance.stub(save: true)
+    end
+
+
     it "creates and pays" do
-      is = IncomeService.new(valid_attributes.merge(direct: "1", account_to_id: "2"))
+      AccountQuery.any_instance.stub_chain(:bank_cash, where: [( build :cash, id: 2 )])
+
+      s = stub
+      s.should_receive(:values_of).with(:id, :price).and_return([[1, 10], [2, 20.0]])
+
+      Item.should_receive(:where).with(id: item_ids).and_return(s)
+
+      is = IncomeService.new(valid_params.merge(direct: "1", account_to_id: "2"))
       is.create.should be_true
 
       is.ledger.should be_is_a(AccountLedger)
+      # ledger
+      is.ledger.account_id.should eq(100)
+      is.ledger.account_to_id.should eq(2)
+      is.ledger.should be_is_payin
+      is.ledger.amount.should == 490.0
+
+      # income
+      is.income.total.should == 490.0
+      is.income.balance.should == 0.0
+      is.income.discount.should == 10.0
+      is.income.should be_is_paid
     end
   end
 end

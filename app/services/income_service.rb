@@ -15,14 +15,15 @@ class IncomeService < DefaultTransaction
 
   attr_accessor :income, :ledger
 
+  validate :valid_account_to, if: :direct?
+
   delegate :contact, :is_approved?, :income_details, 
     :income_details_attributes, :income_details_attributes=,
     :subtotal, :total, :to_s, :state, :discount, to: :income
 
   # Creates and instance of income and initializes
   def initialize(attrs = {})
-    attrs = income_params(attrs)
-    @income = Income.new_income attrs.except(:income_details_attributes)
+    @income = Income.new_income income_params(attrs)
     super attrs
   end
 
@@ -36,10 +37,11 @@ class IncomeService < DefaultTransaction
 
   # Creates and can call other methods passed in the block
   def create
+    build_ledger if can_pay?
     set_income_data
     yield if block_given?
 
-    save_or_update do
+    create_or_update do
       res = income.save
       create_ledger && res
     end
@@ -51,7 +53,8 @@ class IncomeService < DefaultTransaction
   end
 
   def update(params = {})
-    save_or_update do
+    build_ledger if can_pay?
+    create_or_update do
       res = TransactionHistory.new.create_history(income)
       income.attributes = params
 
@@ -71,7 +74,8 @@ class IncomeService < DefaultTransaction
 private
   # Creates or updates and sets errors messages in case of failing
   def create_or_update(&b)
-    res = commit_or_rollback { b.call }
+    res = valid?
+    res = commit_or_rollback { b.call } && res
 
     set_errors(income) unless res
 
@@ -82,7 +86,7 @@ private
     attrs[:ref_number] = Income.get_ref_number unless attrs[:ref_number].present?
     attrs[:date] = Date.today unless attrs[:date].present?
     attrs[:currency] = OrganisationSession.currency unless attrs[:currency].present?
-    attrs
+    attrs.except(:direct, :account_to_id, :income_details_attributes)
   end
 
   # Updates the data for an imcome
@@ -102,6 +106,11 @@ private
     income.state = 'draft' if state.blank?
     income.discounted = true if discount > 0
     income.creator_id = UserSession.id
+
+    if direct?
+      income.state = 'paid'
+      income.amount = 0.0
+    end
   end
 
   # Set details for a new Income
@@ -139,22 +148,38 @@ private
   end
 
   # Creates a ledger if it can pay
-  def create_ledger
-    return true unless can_pay?
+  def build_ledger
     @ledger = AccountLedger.new(
-      account_id: income.id, account_to_id: account_to_id,
-      amount: income.amount, operation: 'payin', exchange_rate: 1,
+      account_to_id: account_to_id,
+      operation: 'payin', exchange_rate: 1,
       currency: income.currency, inverse: false
     )
+  end
 
-    @ledger.save_ledger
+  # Saves the ledger with income data
+  def create_ledger
+    return true unless ledger.present?
+    ledger.account_id = income.id
+    ledger.amount = income.total
+
+    ledger.save_ledger
   end
 
   def can_pay?
-    income.is_draft? && direct? && valid_account_to
+    income.is_draft? && direct?
+  end
+
+  def valid_account_to
+    unless account_to.present?
+      self.errors.add :account_to_id, I18n.t('errors.messages.quick_income.valid_account_to')
+    end
   end
 
   def direct?
     direct == true
+  end
+
+  def account_to
+    @account_to ||= AccountQuery.new.bank_cash.where(currency: currency, id: account_to_id).first
   end
 end
