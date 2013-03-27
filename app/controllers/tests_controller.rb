@@ -7,6 +7,13 @@ class TestsController < ApplicationController
     case params[:view]
     when 'email'
       render file: 'tests/email', layout: 'email'
+    when 'testemail'
+      email = params[:email] || 'boriscyber@gmail.com'
+      name = params[:name] || 'Boris Barroso'
+      s = (Struct.new(:email, :name)).new(email, name)
+      RegistrationMailer.test_email(s).deliver
+
+      render text: "Email send to #{email}"
     end
   end
 end

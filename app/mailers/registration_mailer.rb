@@ -21,4 +21,8 @@ class RegistrationMailer < ActionMailer::Base
 
     mail(to: "\"#{@user}\" <#{@user.email}>", subject: I18n.t("email.registration.user", app_name: APP_NAME, company: @name) )
   end
+
+  def test_email(reg)
+    mail(to: "\"#{reg.name}\" <#{reg.email}>", subject: "Email desde #{APP_NAME}")
+  end
 end
