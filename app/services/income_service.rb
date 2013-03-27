@@ -13,7 +13,7 @@ class IncomeService < DefaultTransaction
   attribute :direct, Boolean
   attribute :account_to_id, Integer
 
-  attr_accessor :income
+  attr_accessor :income, :ledger
 
   delegate :contact, :is_approved?, :income_details, 
     :income_details_attributes, :income_details_attributes=,
@@ -39,7 +39,10 @@ class IncomeService < DefaultTransaction
     set_income_data
     yield if block_given?
 
-    income.save
+    save_or_update do
+      res = income.save
+      create_ledger && res
+    end
   end
 
   # Creates  and approves an Income
@@ -48,15 +51,16 @@ class IncomeService < DefaultTransaction
   end
 
   def update(params = {})
-    commit_or_rollback do
+    save_or_update do
       res = TransactionHistory.new.create_history(income)
       income.attributes = params
 
       yield if block_given?
-
       update_income_data
 
-      income.save && res
+      res = income.save
+
+      create_ledger && res
     end
   end
 
@@ -65,6 +69,15 @@ class IncomeService < DefaultTransaction
   end
 
 private
+  # Creates or updates and sets errors messages in case of failing
+  def create_or_update(&b)
+    res = commit_or_rollback { b.call }
+
+    set_errors(income) unless res
+
+    res
+  end
+
   def income_params(attrs)
     attrs[:ref_number] = Income.get_ref_number unless attrs[:ref_number].present?
     attrs[:date] = Date.today unless attrs[:date].present?
@@ -123,5 +136,25 @@ private
 
   def item_ids
     @item_ids ||= income_details.map(&:item_id)
+  end
+
+  # Creates a ledger if it can pay
+  def create_ledger
+    return true unless can_pay?
+    @ledger = AccountLedger.new(
+      account_id: income.id, account_to_id: account_to_id,
+      amount: income.amount, operation: 'payin', exchange_rate: 1,
+      currency: income.currency, inverse: false
+    )
+
+    @ledger.save_ledger
+  end
+
+  def can_pay?
+    income.is_draft? && direct? && valid_account_to
+  end
+
+  def direct?
+    direct == true
   end
 end

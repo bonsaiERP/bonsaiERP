@@ -33,6 +33,7 @@ class Income < Account
   # Validations
   validates_presence_of :date, :contact, :contact_id
   validates :state, presence: true, inclusion: {in: STATES}
+  validates :amount, numericality: { greater_than: 0 }
 
   ########################################
   # Scopes

@@ -114,7 +114,7 @@ describe IncomeService do
     end
 
     subject {
-      IncomeService.new(income)
+      IncomeService.new(valid_params)
     }
 
     it "Updates with errors on income" do
@@ -152,5 +152,13 @@ describe IncomeService do
 
   end
 
-end
+  describe "create and pay" do
+    let(:cash) { build :cash, currency: 'BOB', id: 2 }
+    it "creates and pays" do
+      is = IncomeService.new(valid_attributes.merge(direct: "1", account_to_id: "2"))
+      is.create.should be_true
 
+      is.ledger.should be_is_a(AccountLedger)
+    end
+  end
+end
