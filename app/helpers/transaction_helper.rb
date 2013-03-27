@@ -5,10 +5,10 @@ module TransactionHelper
   def search_path(trans, options = {})
     options[:format] ||= 'json'
 
-    case trans.class.to_s
-    when 'Income', 'IncomePresenter', 'DirectIncome'
+    case 
+    when trans.class.to_s =~ /Income/
       search_income_items_path(options)
-    when 'Expense', 'ExpensePresenter'
+    when trans.class.to_s =~ /Expense/
       search_expense_items_path(options)
     end
   end
