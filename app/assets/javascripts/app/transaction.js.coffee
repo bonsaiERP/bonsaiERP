@@ -44,24 +44,73 @@ class ExpenseItem extends Item
       price = _b.roundVal( item.buy_price * (1/@get('rate')), _b.numPresicion )
 
       @set(original_price: item.price, price: price, quantity: q, item_id: item.id)
+ 
+# TransactionModel
+class TransactionModel extends Backbone.Model
+  defaults:
+    currency: ''
+    baseCurrency: ''
+    rate: 1
+    direct: true
+  initialize: ->
+    cur = $('#transaction_currency').val()
+    @set(
+      currency: cur
+      baseCurrency: organisation.currency
+      sameCurrency: cur is organisation.currency
+    )
+
+    @setEvents()
+    @activateExchange()
+    @setCurrency()
+  #
+  setEvents: ->
+    @on 'change:direct',-> console.log 'Direct: ', this
+    @on('change:currency', =>
+      @setCurrency()
+      @activateExchange()
+    )
+  #
+  setCurrency: ->
+    rate = fx.convert(1, {from: @get('currency'), to: @get('baseCurrency') }).toFixed(4) * 1
+    @set(rate: rate)
+    @setCurrencyLabel()
+  #
+  setCurrencyLabel: ->
+    html = "1 #{@get('currency')} = "
+    label = Currency.label(@get('currency'))
+
+    $('.currency').html(label)
+  #
+  activateExchange: ->
+    if @get('baseCurrency') == @get('currency')
+      $('#transaction_exchange_rate').attr('disabled', true)
+    else
+      $('#transaction_exchange_rate').attr('disabled', false)
 
 
 
+# Collection
 class Transaction extends Backbone.Collection
   model: Item
   total: 0.0
   totalPath: '#total'
   subtotalPath: '#subtotal'
+  transSel: '#trans .trans'
+  transModel: false
   #
-  initialize: (@currency) ->
+  initialize: ->
     @$table = $('#items-table')
     @itemTemplate = _.template(itemTemplate)
 
     # Events
     @on 'change', @calculateSubtotal
     self = this
-    @currency.on 'change:rate', ->
-      self.setCurrency(this)
+
+    @transModel = new TransactionModel
+    rivets.bind $(@transSel), {trans: @transModel}
+
+    @transModel.on 'change:rate', -> self.setCurrency()
 
     @$addLink = $('#add-item-link')
     @$addLink.click => @addItem()
@@ -115,15 +164,17 @@ class Transaction extends Backbone.Collection
     @remove(item)
     @calculateSubtotal()
   # Sets the items currency
-  setCurrency: (cur) ->
-    @each (el) ->
-      if el.attributes.item_id?
-        el.set('rate', cur.get('rate'))
+  setCurrency: ->
+    @each (el) =>
+      el.set('rate', @transModel.get('rate')) if el.attributes.item_id?
 
+
+# Income
 class Income extends Transaction
   getItemHtml: (num) ->
     @itemTemplate(num: num, klass: 'income', search_path: 'search_income')
 
+# Expense
 class Expense extends Transaction
   model: ExpenseItem
   getItemHtml: (num) ->
@@ -144,40 +195,6 @@ class Expense extends Transaction
 
 @App.Expense = Expense
 
-class TransactionCurrency extends Backbone.Model
-  defaults:
-    currency: ''
-    baseCurrency: ''
-    rate: 1
-  initialize: ->
-    @set(currency: $('#transaction_currency').val(), baseCurrency: organisation.currency)
-
-    @on('change:currency', =>
-      @setCurrency()
-      @activateExchange()
-    )
-    @activateExchange()
-    @setCurrency()
-  #
-  setCurrency: ->
-    rate = fx.convert(1, {from: @get('currency'), to: @get('baseCurrency') }).toFixed(4) * 1
-    @set(rate: rate)
-    @setCurrencyLabel()
-  #
-  setCurrencyLabel: ->
-    html = "1 #{@get('currency')} = "
-    label = Currency.label(@get('currency'))
-
-    $('.currency').html(label)
-  #
-  activateExchange: ->
-    if @get('baseCurrency') == @get('currency')
-      $('#transaction_exchange_rate').attr('disabled', true)
-    else
-      $('#transaction_exchange_rate').attr('disabled', false)
-
-
-window.App.TransactionCurrency = TransactionCurrency
 
 itemTemplate = """<tr class="item" data-item="{"original_price":"0.0","price":"0.0","quantity":"1.0","subtotal":"0.0"}">
     <td class='span6 nw'>

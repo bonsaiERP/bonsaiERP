@@ -21,10 +21,13 @@ class ExpenseService < DefaultTransaction
     :expense_details_attributes, :expense_details_attributes=,
     :subtotal, :total, :to_s, :state, :discount, to: :expense
 
+  delegate :id, to: :expense, prefix: true
+
   # Creates and instance of expense and initializes
   def initialize(attrs = {})
     @expense = Expense.new_expense expense_params(attrs)
     super attrs
+    @expense.expense_details.build if @expense.expense_details.empty?
   end
 
   # Finds the expense and sets data with the expense found

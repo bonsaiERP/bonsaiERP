@@ -12,4 +12,19 @@ module TransactionHelper
       search_expense_items_path(options)
     end
   end
+
+  def get_expense_url(exp_serv)
+    if exp_serv.expense_id
+      expense_path(exp_serv.expense_id)
+    else
+      expenses_path
+    end
+  end
+
+
+  def get_income_url(inc_serv)
+    if inc_serv.income.id.present?
+    else
+    end
+  end
 end

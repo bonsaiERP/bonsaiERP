@@ -19,10 +19,7 @@ class IncomesController < ApplicationController
 
   # GET /incomes/new
   def new
-    #@income = Income.new_income(ref_number: Income.get_ref_number, date: Date.today, currency: currency)
-    #@income.income_details.build(quantity: 0.0)
     @income = IncomeService.new
-    #@income.income = Income.new_income(ref_number: Income.get_ref_number, date: Date.today, currency: currency)
   end
 
   # GET /incomes/1/edit
@@ -32,7 +29,7 @@ class IncomesController < ApplicationController
 
   # POST /incomes
   def create
-    @di = IncomeService.new(Income.new_income(income_params))
+    @di = IncomeService.new(income_params)
     method = params[:commit_approve].present? ? :create_and_approve : :create
 
     if @di.send(method)

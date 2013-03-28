@@ -1,9 +1,9 @@
-= simple_form_for(expense, html: {class: 'enter ui-form'}) do |f|
+= simple_form_for(expense, url: get_expense_url(expense), html: {class: 'enter ui-form'}) do |f|
   = bonsai_form_error(f)
 
   -########################################
   -# Render common form elements
-  = render 'transactions/shared_form', f: f
+  #trans= render 'transactions/shared_form', f: f
 
   -########################################
   -# Render items
@@ -21,12 +21,11 @@
       .prev().val(resp.matchcode);
     });
 
-    $('#transaction_currency').select2();
+    //$('#transaction_currency').select2();
 
     fx.rates = exchangeRates.rates;
-    currency = new App.TransactionCurrency();
-    rivets.bind($('.currency-input'), {currency: currency});
+    //rivets.bind($('.currency-input'), {currency: currency});
 
-    expense = new App.Expense(currency);
+    expense = new App.Expense();
     expense.setList();
   });

@@ -41,6 +41,8 @@ describe ExpenseService do
       es.expense.ref_number.should =~ /E-\d{2}-000\d/
       es.expense.currency.should eq('BOB')
       es.expense.date.should eq(Date.today)
+
+      es.expense_details.should have(1).item
     end
   end
 

@@ -3,7 +3,7 @@
 # email: boriscyber@gmail.com
 class Currency < OpenStruct
 
-  FILTER = %w(USD EUR ARS BOB CLP COP MXN PYG PEN UYU VEF GBP JPY)
+  FILTER = %w(USD EUR ARS BOB CLP COP MXN PYG PEN UYU VEB GBP JPY)
 
   def to_s
     "#{code} #{name}"

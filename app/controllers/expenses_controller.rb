@@ -17,24 +17,22 @@ class ExpensesController < ApplicationController
 
   # GET /expenses/new
   def new
-    @expense = Expense.new_expense(ref_number: Expense.get_ref_number, date: Date.today, currency: currency)
-    @expense.expense_details.build(quantity: 1.0)
+    @expense = ExpenseService.new
   end
 
   # GET /expenses/1/edit
   def edit
-    @expense = Expense.find(params[:id])
+    @expense = ExpenseService.find(params[:id])
   end
 
   # POST /expenses
   def create
-    de = DefaultExpense.new(Expense.new_expense(expense_params))
+    @expense = ExpenseService.new(expense_params)
     method = params[:commit_approve].present? ? :create_and_approve : :create
 
-    if de.send(method)
-      redirect_to de.expense, notice: 'Se ha creado un Egreso.'
+    if @expense.send(method)
+      redirect_to expense_path(@expense.expense.id), notice: 'Se ha creado un Egreso.'
     else
-      @expense = de.expense
       render 'new'
     end
   end
@@ -54,15 +52,6 @@ class ExpensesController < ApplicationController
 
   # PUT /incomes/:id
   def update
-    de = DefaultExpense.new(Expense.find(params[:id]))
-    method = params[:commit_approve].present? ? :update_and_approve : :update
-
-    if de.send(method, expense_params)
-      redirect_to de.expense, notice: 'El egreso fue actualizado!.'
-    else
-      @income = de.expense
-      render 'edit'
-    end
   end
 
   # DELETE /expenses/1
