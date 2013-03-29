@@ -17,21 +17,21 @@ class ExpensesController < ApplicationController
 
   # GET /expenses/new
   def new
-    @expense = ExpenseService.new
+    @es = ExpenseService.new
   end
 
   # GET /expenses/1/edit
   def edit
-    @expense = ExpenseService.find(params[:id])
+    @es = ExpenseService.find(params[:id])
   end
 
   # POST /expenses
   def create
-    @expense = ExpenseService.new(expense_params)
+    @es = ExpenseService.new(expense_params)
     method = params[:commit_approve].present? ? :create_and_approve : :create
 
-    if @expense.send(method)
-      redirect_to expense_path(@expense.expense.id), notice: 'Se ha creado un Egreso.'
+    if @es.send(method)
+      redirect_to expense_path(@es.expense.id), notice: 'Se ha creado un Egreso.'
     else
       render 'new'
     end

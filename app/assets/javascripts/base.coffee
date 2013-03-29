@@ -306,5 +306,8 @@ init = ($) ->
     else
       'none'
 
+  rivets.formatters.inverse = (val) ->
+    not val
+
   true
 )(jQuery)

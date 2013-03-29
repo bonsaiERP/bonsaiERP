@@ -17,7 +17,7 @@ class ExpenseService < DefaultTransaction
 
   validate :valid_account_to, if: :direct_payment?
 
-  delegate :contact, :is_approved?, :expense_details, 
+  delegate :contact, :is_approved?, :expense_details, :is_draft?,
     :expense_details_attributes, :expense_details_attributes=,
     :subtotal, :total, :to_s, :state, :discount, to: :expense
 
@@ -40,19 +40,23 @@ class ExpenseService < DefaultTransaction
 
   # Creates and can call other methods passed in the block
   def create
-    build_ledger if can_pay?
     set_expense_data
-    yield if block_given?
 
     create_or_update do
-      res = expense.save
-      res && create_ledger
+      expense.save
     end
   end
 
   # Creates  and approves an Expense
   def create_and_approve
-    create { expense.approve! }
+    build_ledger if can_pay?
+    set_expense_data
+    expense.approve!
+
+    create_or_update do
+      res = expense.save
+      res && create_ledger
+    end
   end
 
   def update(params = {})
@@ -153,7 +157,7 @@ private
   # Creates a ledger if it can pay
   def build_ledger
     @ledger = AccountLedger.new(
-      account_to_id: account_to_id,
+      account_to_id: account_to_id, date: date,
       operation: 'payin', exchange_rate: 1,
       currency: expense.currency, inverse: false
     )
@@ -164,6 +168,7 @@ private
     return true unless ledger.present?
     ledger.account_id = expense.id
     ledger.amount = -expense.total
+    ledger.reference = "Pago egreso #{expense}"
 
     ledger.save_ledger
   end
@@ -184,6 +189,10 @@ private
 
   def account_to
     @account_to ||= AccountQuery.new.bank_cash.where(currency: currency, id: account_to_id).first
+  end
+
+  def item_prices
+    @item_prices ||= Hash[Item.where(id: item_ids).values_of(:id, :buy_price)]
   end
 end
 

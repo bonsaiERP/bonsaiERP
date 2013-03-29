@@ -5,7 +5,7 @@ class Select2Input < SimpleForm::Inputs::Base
   # User the input_options[:value_field for the value of the relation Model
   def input
     if object.respond_to? :reflections
-      hid_name = object.reflections[attribute_name].options[:foreign_key] || :"#{attribute_name}_id"
+      hid_name = object.reflections[attribute_name].foreign_key || :"#{attribute_name}_id"
       relation = attribute_name
     else
       hid_name = attribute_name

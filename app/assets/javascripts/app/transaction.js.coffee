@@ -51,7 +51,7 @@ class TransactionModel extends Backbone.Model
     currency: ''
     baseCurrency: ''
     rate: 1
-    direct: false
+    direct_payment: false
   initialize: ->
     cur = $('#transaction_currency').val()
     @set(
@@ -66,7 +66,7 @@ class TransactionModel extends Backbone.Model
     @setCurrency()
   #
   setEvents: ->
-    @on 'change:direct',->
+    @on 'change:direct_payment',->
     @on('change:currency', =>
       @setCurrency()
       @activateExchange()
@@ -109,7 +109,7 @@ class Transaction extends Backbone.Collection
   total: 0.0
   totalPath: '#total'
   subtotalPath: '#subtotal'
-  transSel: '#trans .trans'
+  transSel: '.trans'
   transModel: false
   #
   initialize: (@accountsTo) ->
@@ -120,10 +120,16 @@ class Transaction extends Backbone.Collection
     @on 'change', @calculateSubtotal
     self = this
 
-    @transModel = new TransactionModel(accountsTo: @accountsTo)
+    # TransModel
+    @transModel = new TransactionModel(
+      accountsTo: @accountsTo
+      direct_payment: $('#direct_payment').prop('checked')
+      account_to_id: $('#account_to_id').val()
+    )
     rivets.bind $(@transSel), {trans: @transModel}
-
     @transModel.on 'change:rate', -> self.setCurrency()
+
+    @setList()
 
     @$addLink = $('#add-item-link')
     @$addLink.click => @addItem()
@@ -192,15 +198,7 @@ class Expense extends Transaction
   model: ExpenseItem
   getItemHtml: (num) ->
     @itemTemplate(num: num, klass: 'expense', search_path: 'search_expense')
-  #
-  setList: ->
-    @$table.find('tr.item').each (i, el) =>
-      data = $(el).data('item')
-      data.price = data.buy_price
-      @add( data )
-      item = @models[@length - 1]
-      rivets.bind(el, {item: item})
-      item.setAutocompleteEvent(el)
+
 
 @App = {}
 

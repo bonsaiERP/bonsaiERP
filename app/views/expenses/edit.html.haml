@@ -5,16 +5,20 @@
     %li
       %i.icon-caret-right
     %li
-      =link_to @expense, @expense
+      =link_to @es.expense, @es.expense
     %li
       %i.icon-caret-right
     %li
       %span Editar
 
+- exp_presenter = present @es.expense
 .row-fluid
   .span6
-    %h1 Editar egreso
+    %h1
+      %span.muted.n Editar
+      = @es.expense
+      = exp_presenter.state_tag
   .span6.r
-    = link_to icon_show_text, @expense, class: 'btn'
+    = link_to icon_show_text, expense_path(@es.expense_id), class: 'btn'
 
-= render 'expenses/form', expense: @expense, contacts: Contact.scoped
+= render 'expenses/form', expense_service: @es

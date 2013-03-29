@@ -69,7 +69,7 @@ describe ExpenseService do
 
     it "creates and sets the default states" do
       s = stub
-      s.should_receive(:values_of).with(:id, :price).and_return([[1, 10.5], [2, 20.0]])
+      s.should_receive(:values_of).with(:id, :buy_price).and_return([[1, 10.5], [2, 20.0]])
 
       Item.should_receive(:where).with(id: item_ids).and_return(s)
 
@@ -180,12 +180,12 @@ describe ExpenseService do
       AccountQuery.any_instance.stub_chain(:bank_cash, where: [( build :cash, id: 2 )])
 
       s = stub
-      s.should_receive(:values_of).with(:id, :price).and_return([[1, 10], [2, 20.0]])
+      s.should_receive(:values_of).with(:id, :buy_price).and_return([[1, 10], [2, 20.0]])
 
       Item.should_receive(:where).with(id: item_ids).and_return(s)
 
       is = ExpenseService.new(valid_params.merge(direct_payment: "1", account_to_id: "2"))
-      is.create.should be_true
+      is.create_and_approve.should be_true
 
       is.ledger.should be_is_a(AccountLedger)
       # ledger

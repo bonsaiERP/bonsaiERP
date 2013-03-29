@@ -5,7 +5,7 @@
   .span3
     = f.input :date, label: "Fecha", as: :datepicker
   .span6
-    = f.input :contact, as: :select2, label: 'Contacto', input_html: {class: 'span10', data: {source: '/contacts/search', new_url: new_contact_path, title: 'Nuevo contacto', trigger: 'new-contact', placeholder: 'Escriba para buscar contactos'} }
+    = f.input :contact_id, as: :select2, label: 'Contacto', input_html: {class: 'span10', data: {source: '/contacts/search', new_url: new_contact_path, title: 'Nuevo contacto', trigger: 'new-contact', placeholder: 'Escriba para buscar contactos'} }
 
 %hr.light
 .row-fluid.trans.currency-input
@@ -32,11 +32,12 @@
 .row-fluid
   .span6
     = f.input :description, label: 'Descripción', as: 'text', input_html: {rows: 3, class: 'span10'}
-  .span6.well.well-small.trans
-    .form-horizontal
-      = f.input :direct_payment,
-        label: '<i class="icon-question-sign" rel="tooltip" title="Seleccione esta opción para realizar el cobro/pago a una cuenta"></i> Cobro directo'.html_safe,
-        as: :boolean, input_html: { data: {value: 'trans.direct'} }
-    .account_to(data-show="trans.direct")
-      = f.input :account_to_id, label: 'Cuenta',
-        input_html: {id: 'account_to_id', class: 'span10', data: {value: 'trans.account_to_id'}}
+  - if f.object.is_draft?
+    .span6.well.well-small.trans
+      .form-horizontal
+        = f.input :direct_payment,
+          label: '<i class="icon-question-sign" rel="tooltip" title="Seleccione esta opción para realizar el cobro/pago a una cuenta"></i> Cobro directo'.html_safe,
+          as: :boolean, input_html: {id: 'direct_payment', data: {value: 'trans.direct_payment'} }
+      .account_to(data-show="trans.direct_payment")
+        = f.input :account_to_id, label: 'Cuenta',
+          input_html: {id: 'account_to_id', class: 'span10', data: {value: 'trans.account_to_id'}}

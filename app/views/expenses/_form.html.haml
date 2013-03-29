@@ -1,4 +1,4 @@
-= simple_form_for(expense, url: get_expense_url(expense), html: {class: 'enter ui-form'}) do |f|
+= simple_form_for(expense_service, url: get_expense_url(expense_service), html: {class: 'enter ui-form'}) do |f|
   = bonsai_form_error(f)
 
   -########################################
@@ -8,10 +8,10 @@
   -########################################
   -# Render items
   .row-fluid
-    =render "transactions/form_items", f: f, transaction: expense, details: :expense_details
+    =render "transactions/form_items", f: f, transaction: expense_service, details: :expense_details
 
-  = f.submit 'Salvar', class: 'btn b btn-large', name: 'commit_save'
-  = f.submit 'Aprovar', class: 'btn btn-success b btn-large', name: 'commit_approve'
+  = f.submit 'Salvar', class: 'btn b btn-large trans', name: 'commit_save', 'data-show' => 'trans.direct_payment| inverse'
+  = f.submit 'Aprovar', class: 'btn btn-success b btn-large', name: 'commit_approve' if expense_service.is_draft?
 
 
 :javascript
