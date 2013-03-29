@@ -95,7 +95,7 @@ private
   end
 
   def expense_params
-    params.require(:expense).permit(*transaction_params.expense)
+    params.require(:expense_service).permit(*transaction_params.expense)
   end
 
   def transaction_params

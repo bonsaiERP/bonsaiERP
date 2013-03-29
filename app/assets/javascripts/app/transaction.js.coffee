@@ -51,7 +51,7 @@ class TransactionModel extends Backbone.Model
     currency: ''
     baseCurrency: ''
     rate: 1
-    direct: true
+    direct: false
   initialize: ->
     cur = $('#transaction_currency').val()
     @set(
@@ -59,16 +59,18 @@ class TransactionModel extends Backbone.Model
       baseCurrency: organisation.currency
       sameCurrency: cur is organisation.currency
     )
+    @createAccountToOptions()
 
     @setEvents()
     @activateExchange()
     @setCurrency()
   #
   setEvents: ->
-    @on 'change:direct',-> console.log 'Direct: ', this
+    @on 'change:direct',->
     @on('change:currency', =>
       @setCurrency()
       @activateExchange()
+      @createAccountToOptions()
     )
   #
   setCurrency: ->
@@ -87,10 +89,21 @@ class TransactionModel extends Backbone.Model
       $('#transaction_exchange_rate').attr('disabled', true)
     else
       $('#transaction_exchange_rate').attr('disabled', false)
+  # Creates the account_to options
+  createAccountToOptions: ->
+    data = _.filter(@get('accountsTo'), (v) => @get('currency') is v.currency)
+
+    $('#account_to_id').select2('destroy')
+    .select2({
+      data: data,
+      formatResult: App.Payment.paymentOptions,
+      formatSelection: App.Payment.paymentOptions,
+      escapeMarkup: (m) -> m
+    })
 
 
 
-# Collection
+# Collection that holds and integrates all models Item and TransModel
 class Transaction extends Backbone.Collection
   model: Item
   total: 0.0
@@ -99,7 +112,7 @@ class Transaction extends Backbone.Collection
   transSel: '#trans .trans'
   transModel: false
   #
-  initialize: ->
+  initialize: (@accountsTo) ->
     @$table = $('#items-table')
     @itemTemplate = _.template(itemTemplate)
 
@@ -107,7 +120,7 @@ class Transaction extends Backbone.Collection
     @on 'change', @calculateSubtotal
     self = this
 
-    @transModel = new TransactionModel
+    @transModel = new TransactionModel(accountsTo: @accountsTo)
     rivets.bind $(@transSel), {trans: @transModel}
 
     @transModel.on 'change:rate', -> self.setCurrency()

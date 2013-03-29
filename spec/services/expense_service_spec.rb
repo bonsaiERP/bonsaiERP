@@ -47,12 +47,12 @@ describe ExpenseService do
   end
 
   it "#valid?" do
-    es = ExpenseService.new(account_to_id: 2, direct: "1")
+    es = ExpenseService.new(account_to_id: 2, direct_payment: "1")
 
     es.should_not be_valid
     AccountQuery.any_instance.stub_chain(:bank_cash, where: [( build :cash, id: 2 )])
 
-    es = ExpenseService.new(account_to_id: 2, direct: "1")
+    es = ExpenseService.new(account_to_id: 2, direct_payment: "1")
 
     es.should be_valid
   end
@@ -184,7 +184,7 @@ describe ExpenseService do
 
       Item.should_receive(:where).with(id: item_ids).and_return(s)
 
-      is = ExpenseService.new(valid_params.merge(direct: "1", account_to_id: "2"))
+      is = ExpenseService.new(valid_params.merge(direct_payment: "1", account_to_id: "2"))
       is.create.should be_true
 
       is.ledger.should be_is_a(AccountLedger)

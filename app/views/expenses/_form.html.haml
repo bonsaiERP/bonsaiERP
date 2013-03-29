@@ -26,6 +26,6 @@
     fx.rates = exchangeRates.rates;
     //rivets.bind($('.currency-input'), {currency: currency});
 
-    expense = new App.Expense();
+    expense = new App.Expense(#{AccountQuery.new.bank_cash_options.to_json});
     expense.setList();
   });

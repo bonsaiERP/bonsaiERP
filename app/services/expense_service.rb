@@ -10,12 +10,12 @@ class ExpenseService < DefaultTransaction
   attribute :bill_number, String
   attribute :due_date, Date
   attribute :description, String
-  attribute :direct, Boolean
+  attribute :direct_payment, Boolean
   attribute :account_to_id, Integer
 
   attr_accessor :expense, :ledger
 
-  validate :valid_account_to, if: :direct?
+  validate :valid_account_to, if: :direct_payment?
 
   delegate :contact, :is_approved?, :expense_details, 
     :expense_details_attributes, :expense_details_attributes=,
@@ -27,7 +27,7 @@ class ExpenseService < DefaultTransaction
   def initialize(attrs = {})
     @expense = Expense.new_expense expense_params(attrs)
     super attrs
-    @expense.expense_details.build if @expense.expense_details.empty?
+    @expense.expense_details.build(quantity: 1) if @expense.expense_details.empty?
   end
 
   # Finds the expense and sets data with the expense found
@@ -46,7 +46,7 @@ class ExpenseService < DefaultTransaction
 
     create_or_update do
       res = expense.save
-      create_ledger && res
+      res && create_ledger
     end
   end
 
@@ -89,7 +89,7 @@ private
     attrs[:ref_number] = Expense.get_ref_number unless attrs[:ref_number].present?
     attrs[:date] = Date.today unless attrs[:date].present?
     attrs[:currency] = OrganisationSession.currency unless attrs[:currency].present?
-    attrs.except(:direct, :account_to_id, :expense_details_attributes)
+    attrs.except(:direct_payment, :account_to_id, :expense_details_attributes)
   end
 
   # Updates the data for an imcome
@@ -110,7 +110,7 @@ private
     expense.discounted = true if discount > 0
     expense.creator_id = UserSession.id
 
-    if direct?
+    if direct_payment?
       expense.state = 'paid'
       expense.amount = 0.0
     end
@@ -169,7 +169,7 @@ private
   end
 
   def can_pay?
-    expense.is_draft? && direct?
+    expense.is_draft? && direct_payment?
   end
 
   def valid_account_to
@@ -178,8 +178,8 @@ private
     end
   end
 
-  def direct?
-    direct == true
+  def direct_payment?
+    direct_payment == true
   end
 
   def account_to

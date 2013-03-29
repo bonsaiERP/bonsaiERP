@@ -33,21 +33,10 @@
   .span6
     = f.input :description, label: 'Descripción', as: 'text', input_html: {rows: 3, class: 'span10'}
   .span6.well.well-small.trans
-    = f.input :direct, label: 'Cobro directo', as: :boolean,
-      input_html: { data: {value: 'trans.direct'} }
-    .account_to(style='display:none')
-      = f.input :account_to_id, label: 'Cuenta', 
-        input_html: {class: 'span10', data: {value: 'trans.account_to_id'}}
-
-:javascript
-  var accounts_to = #{AccountQuery.new.bank_cash_options.to_json}
-
-  $(function() {
-    // account_to_id
-    $('#direct_income_account_to_id').select2({
-      data: accounts_to,
-      formatResult: App.Payment.paymentOptions,
-      formatSelection: App.Payment.paymentOptions,
-      escapeMarkup: function(m) { return m }
-    });
-  });
+    .form-horizontal
+      = f.input :direct_payment,
+        label: '<i class="icon-question-sign" rel="tooltip" title="Seleccione esta opción para realizar el cobro/pago a una cuenta"></i> Cobro directo'.html_safe,
+        as: :boolean, input_html: { data: {value: 'trans.direct'} }
+    .account_to(data-show="trans.direct")
+      = f.input :account_to_id, label: 'Cuenta',
+        input_html: {id: 'account_to_id', class: 'span10', data: {value: 'trans.account_to_id'}}
