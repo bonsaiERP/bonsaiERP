@@ -10,7 +10,7 @@
   .row-fluid
     =render "transactions/form_items", f: f, transaction: expense_service, details: :expense_details
 
-  = f.submit 'Salvar', class: 'btn b btn-large trans', name: 'commit_save', 'data-show' => 'trans.direct_payment| inverse'
+  = f.submit 'Salvar', class: 'btn btn-success b btn-large trans', name: 'commit_save', 'data-show' => 'trans.direct_payment| inverse'
   = f.submit 'Aprovar', class: 'btn btn-success b btn-large', name: 'commit_approve' if expense_service.is_draft?
 
 

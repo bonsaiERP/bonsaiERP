@@ -184,21 +184,45 @@ describe ExpenseService do
 
       Item.should_receive(:where).with(id: item_ids).and_return(s)
 
-      is = ExpenseService.new(valid_params.merge(direct_payment: "1", account_to_id: "2"))
-      is.create_and_approve.should be_true
+      es = ExpenseService.new(valid_params.merge(direct_payment: "1", account_to_id: "2"))
+      es.create_and_approve.should be_true
 
-      is.ledger.should be_is_a(AccountLedger)
+      es.ledger.should be_is_a(AccountLedger)
       # ledger
-      is.ledger.account_id.should eq(100)
-      is.ledger.account_to_id.should eq(2)
-      is.ledger.should be_is_payin
-      is.ledger.amount.should == -490.0
+      es.ledger.account_id.should eq(100)
+      es.ledger.account_to_id.should eq(2)
+      es.ledger.should be_is_payin
+      es.ledger.amount.should == -490.0
 
       # expense
-      is.expense.total.should == 490.0
-      is.expense.balance.should == 0.0
-      is.expense.discount.should == 10.0
-      is.expense.should be_is_paid
+      es.expense.total.should == 490.0
+      es.expense.balance.should == 0.0
+      es.expense.discount.should == 10.0
+      es.expense.should be_is_paid
+    end
+
+    it "sets errors from expense or ledger" do
+      es = ExpenseService.new
+
+      es.expense.stub(save: false)
+      es.expense.errors[:contact_id] << "Wrong"
+
+      es.create_and_approve.should be_false
+      es.errors[:contact_id].should eq(["Wrong"])
+
+      # Errors on both expense and ledger
+      es = ExpenseService.new(direct_payment: true)
+      es.stub(account_to: build(:cash, id: 3) )
+
+      es.expense.stub(save: false)
+      es.expense.errors[:contact_id] << "Wrong"
+      es.stub(ledger: build(:account_ledger))
+      es.ledger.errors[:reference] << "Blank reference"
+
+      es.create_and_approve.should be_false
+
+      es.errors[:contact_id].should eq(["Wrong"])
+      es.errors[:base].should eq(["Blank reference"])
     end
   end
 end

@@ -84,7 +84,7 @@ private
     res = valid?
     res = commit_or_rollback { b.call } && res
 
-    set_errors(expense) unless res
+    set_errors(*[expense,ledger].compact) unless res
 
     res
   end

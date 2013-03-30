@@ -122,13 +122,14 @@ module ApplicationHelper
     presenter
   end
 
+  # Get file with exchange_rates
   def set_exchange_rates
     file1 = File.join(Rails.root, "public/exchange_rates.json")
     file2 = File.join(Rails.root, "public/backup_rates.json")
 
     if not(File.exists?(file1)) || (File.ctime(file1) < Time.now - 4.hours)
-      resp = %x[curl http://openexchangerates.org/api/latest.json?app_id=e406e4769281493797fcfd45047773d5]
       begin
+        st = Timeout::timeout(4) { resp = %x[curl http://openexchangerates.org/api/latest.json?app_id=e406e4769281493797fcfd45047773d5] }
         r = ActiveSupport::JSON.decode(resp)
         if r['rates'].present?
           f = File.new(file2, "w+")
@@ -141,7 +142,9 @@ module ApplicationHelper
         else
           File.read(file2)
         end
-      rescue
+      rescue Exception => e
+        logger.warn "\n#Timeout::Error getting exchange_rates.json\n" if e.is_a?(Timeout::Error)
+
         f = File.new(file1, 'w+')
         txt = File.read(file2)
         f.write txt
