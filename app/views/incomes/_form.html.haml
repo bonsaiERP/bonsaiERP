@@ -1,4 +1,4 @@
-= simple_form_for(income, url: incomes_path, html: {class: 'enter ui-form'}) do |f|
+= simple_form_for(income_service, url: get_income_url(income_service), html: {class: 'enter ui-form'}) do |f|
   = bonsai_form_error(f)
 
   -########################################
@@ -8,10 +8,10 @@
   -########################################
   -# Render items
   .row-fluid
-    =render "transactions/form_items", f: f, transaction: income, details: :income_details
+    =render "transactions/form_items", f: f, transaction: income_service, details: :income_details
 
-  = f.submit 'Salvar', class: 'btn b btn-large', name: 'commit_save'
-  = f.submit 'Aprovar', class: 'btn btn-success b btn-large', name: 'commit_approve'
+  = f.submit 'Salvar', class: 'btn btn-success b btn-large trans', name: 'commit_save', data: {show: 'trans.direct_payment| inverse'}
+  = f.submit value: 'Salvar y aprovar', class: 'btn btn-success b btn-large', name: 'commit_approve' if income_service.is_draft?
 
 
 :javascript
@@ -24,9 +24,5 @@
     $('#transaction_currency').select2();
 
     fx.rates = exchangeRates.rates;
-    currency = new App.TransactionCurrency();
-    rivets.bind($('.currency-input'), {currency: currency});
-
-    income = new App.Income(currency);
-    income.setList();
+    income = new App.Income(#{AccountQuery.new.bank_cash_options.to_json});
   })(jQuery)

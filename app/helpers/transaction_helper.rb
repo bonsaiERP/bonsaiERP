@@ -23,8 +23,10 @@ module TransactionHelper
 
 
   def get_income_url(inc_serv)
-    if inc_serv.income.id.present?
+    if inc_serv.income_id
+      income_path(inc_serv.income_id)
     else
+      incomes_path
     end
   end
 end

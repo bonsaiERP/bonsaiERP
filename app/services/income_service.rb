@@ -1,18 +1,20 @@
 # encoding: utf-8
 class IncomeService < TransactionService
-
   attr_reader :income, :ledger
 
-  validate :valid_account_to, if: :direct?
+  validate :valid_account_to, if: :direct_payment?
 
-  delegate :contact, :is_approved?, :income_details, 
+  delegate :contact, :is_approved?, :is_draft?, :income_details, 
     :income_details_attributes, :income_details_attributes=,
     :subtotal, :total, :to_s, :state, :discount, to: :income
+
+  delegate :id, to: :income, prefix: true
 
   # Creates and instance of income and initializes
   def initialize(attrs = {})
     @income = Income.new_income income_params(attrs)
     super attrs
+    @income.income_details.build(quantity: 1) if @income.income_details.empty?
   end
 
   # Finds the income and sets data with the income found
@@ -25,19 +27,23 @@ class IncomeService < TransactionService
 
   # Creates and can call other methods passed in the block
   def create
-    build_ledger if can_pay?
     set_income_data
-    yield if block_given?
 
     create_or_update do
-      res = income.save
-      create_ledger && res
+      income.save
     end
   end
 
   # Creates  and approves an Income
   def create_and_approve
-    create { income.approve! }
+    build_ledger if can_pay?
+    set_income_data
+    income.approve!
+
+    create_or_update do
+      res = income.save
+      res && create_ledger
+    end
   end
 
   def update(params = {})
@@ -65,15 +71,15 @@ private
     res = valid?
     res = commit_or_rollback { b.call } && res
 
-    set_errors(income) unless res
+    set_errors(*[income, ledger].compact) unless res
 
     res
   end
 
   def income_params(attrs)
-    attrs[:ref_number] = Income.get_ref_number unless attrs[:ref_number].present?
-    attrs[:date] = Date.today unless attrs[:date].present?
-    attrs[:currency] = OrganisationSession.currency unless attrs[:currency].present?
+    attrs[:ref_number] = Income.get_ref_number if attrs[:ref_number].blank?
+    attrs[:date] = Date.today if attrs[:date].blank?
+    attrs[:currency] = OrganisationSession.currency if attrs[:currency].blank?
     attrs.except(:direct, :account_to_id, :income_details_attributes)
   end
 
@@ -163,11 +169,16 @@ private
     end
   end
 
-  def direct?
-    direct == true
+  def direct_payment?
+    direct_payment == true
   end
 
   def account_to
     @account_to ||= AccountQuery.new.bank_cash.where(currency: currency, id: account_to_id).first
   end
+
+  def item_prices
+    @item_prices ||= Hash[Item.where(id: item_ids).values_of(:id, :price)]
+  end
+
 end

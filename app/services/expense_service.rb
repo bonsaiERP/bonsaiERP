@@ -1,10 +1,10 @@
 # encoding: utf-8
 class ExpenseService < TransactionService
-  attr_accessor :expense, :ledger
+  attr_reader :expense, :ledger
 
   validate :valid_account_to, if: :direct_payment?
 
-  delegate :contact, :is_approved?, :expense_details, :is_draft?,
+  delegate :contact, :is_approved?, :is_draft?, :expense_details,
     :expense_details_attributes, :expense_details_attributes=,
     :subtotal, :total, :to_s, :state, :discount, to: :expense
 
@@ -71,15 +71,16 @@ private
     res = valid?
     res = commit_or_rollback { b.call } && res
 
-    set_errors(*[expense,ledger].compact) unless res
+    set_errors(*[expense, ledger].compact) unless res
 
     res
   end
 
+  # Sets the expense params when new_record
   def expense_params(attrs)
-    attrs[:ref_number] = Expense.get_ref_number unless attrs[:ref_number].present?
-    attrs[:date] = Date.today unless attrs[:date].present?
-    attrs[:currency] = OrganisationSession.currency unless attrs[:currency].present?
+    attrs[:ref_number] = Expense.get_ref_number if attrs[:ref_number].blank?
+    attrs[:date] = Date.today if attrs[:date].blank?
+    attrs[:currency] = OrganisationSession.currency if attrs[:currency].blank?
     attrs.except(:direct_payment, :account_to_id, :expense_details_attributes)
   end
 

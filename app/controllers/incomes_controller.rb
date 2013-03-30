@@ -19,24 +19,35 @@ class IncomesController < ApplicationController
 
   # GET /incomes/new
   def new
-    @income = IncomeService.new
+    @is = IncomeService.new
   end
 
   # GET /incomes/1/edit
   def edit
-    @income = IncomeService.find(params[:id])
+    @is = IncomeService.find(params[:id])
   end
 
   # POST /incomes
   def create
-    @di = IncomeService.new(income_params)
+    @is = IncomeService.new(income_params)
     method = params[:commit_approve].present? ? :create_and_approve : :create
 
-    if @di.send(method)
-      redirect_to @di.income, notice: 'Se ha creado una proforma de venta.'
+    if @is.send(method)
+      redirect_to @is.income, notice: 'Se ha creado un Ingreso.'
     else
-      @income = @di.income
       render 'new'
+    end
+  end
+
+  # PUT /incomes/:id
+  def update
+    @is = IncomeService.find(params[:id])
+    method = params[:commit_approve].present? ? :update_and_approve : :update
+
+    if @is.send(method, income_params)
+      redirect_to @is.income, notice: 'El Ingreso fue actualizado!.'
+    else
+      render 'edit'
     end
   end
 
@@ -51,19 +62,6 @@ class IncomesController < ApplicationController
     end
 
     redirect_to incomes_path
-  end
-
-  # PUT /incomes/:id
-  def update
-    di = DefaultIncome.new(Income.find(params[:id]))
-    method = params[:commit_approve].present? ? :update_and_approve : :update
-
-    if di.send(method, income_params)
-      redirect_to di.income, notice: 'El Ingreso fue actualizado!.'
-    else
-      @income = di.income
-      render 'edit'
-    end
   end
 
   # DELETE /incomes/:id

@@ -31,9 +31,21 @@ class ExpensesController < ApplicationController
     method = params[:commit_approve].present? ? :create_and_approve : :create
 
     if @es.send(method)
-      redirect_to expense_path(@es.expense.id), notice: 'Se ha creado un Egreso.'
+      redirect_to @es.expense, notice: 'Se ha creado un Egreso.'
     else
       render 'new'
+    end
+  end
+
+  # PUT /expenses/:id
+  def update
+    @es = ExpenseService.find(params[:id])
+    method = params[:commit_approve].present? ? :update_and_approve : :update
+
+    if @es.send(method, expense_params)
+      redirect_to @es.expense, notice: 'El Egreso fue actualizado!.'
+    else
+      render 'edit'
     end
   end
 
@@ -48,10 +60,6 @@ class ExpensesController < ApplicationController
     end
 
     redirect_to expenses_path
-  end
-
-  # PUT /incomes/:id
-  def update
   end
 
   # DELETE /expenses/1
