@@ -1,19 +1,7 @@
 # encoding: utf-8
-class IncomeService < DefaultTransaction
-  attribute :id, Integer
-  attribute :ref_number, String
-  attribute :date, Date
-  attribute :contact_id, Integer
-  attribute :currency, String
-  attribute :exchange_rate, Decimal
-  attribute :project_id, Integer
-  attribute :bill_number, String
-  attribute :due_date, Date
-  attribute :description, String
-  attribute :direct, Boolean
-  attribute :account_to_id, Integer
+class IncomeService < TransactionService
 
-  attr_accessor :income, :ledger
+  attr_reader :income, :ledger
 
   validate :valid_account_to, if: :direct?
 

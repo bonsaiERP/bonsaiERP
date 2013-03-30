@@ -1,18 +1,5 @@
 # encoding: utf-8
-class ExpenseService < DefaultTransaction
-  attribute :id, Integer
-  attribute :ref_number, String
-  attribute :date, Date
-  attribute :contact_id, Integer
-  attribute :currency, String
-  attribute :exchange_rate, Decimal
-  attribute :project_id, Integer
-  attribute :bill_number, String
-  attribute :due_date, Date
-  attribute :description, String
-  attribute :direct_payment, Boolean
-  attribute :account_to_id, Integer
-
+class ExpenseService < TransactionService
   attr_accessor :expense, :ledger
 
   validate :valid_account_to, if: :direct_payment?
