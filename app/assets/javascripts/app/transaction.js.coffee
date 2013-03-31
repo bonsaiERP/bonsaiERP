@@ -163,7 +163,7 @@ class Transaction extends Backbone.Collection
     $tr = $(@getItemHtml(num)).insertBefore('#subtotal-line')
 
     $tr.createAutocomplete()
-    @add(rate: @currency.get('rate') )
+    @add(rate: @transModel.get('rate') )
     item = @models[@length - 1]
     rivets.bind($tr, {item: item})
     item.setAutocompleteEvent($tr)

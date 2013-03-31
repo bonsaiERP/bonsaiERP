@@ -17,7 +17,7 @@ class ExpensesController < ApplicationController
 
   # GET /expenses/new
   def new
-    @es = ExpenseService.new
+    @es = ExpenseService.new_expense
   end
 
   # GET /expenses/1/edit
@@ -27,10 +27,9 @@ class ExpensesController < ApplicationController
 
   # POST /expenses
   def create
-    @es = ExpenseService.new(expense_params)
-    method = params[:commit_approve].present? ? :create_and_approve : :create
+    @es = ExpenseService.new_expense(expense_params)
 
-    if @es.send(method)
+    if create_or_approve
       redirect_to @es.expense, notice: 'Se ha creado un Egreso.'
     else
       render 'new'
@@ -40,9 +39,8 @@ class ExpensesController < ApplicationController
   # PUT /expenses/:id
   def update
     @es = ExpenseService.find(params[:id])
-    method = params[:commit_approve].present? ? :update_and_approve : :update
 
-    if @es.send(method, expense_params)
+    if update_or_approve
       redirect_to @es.expense, notice: 'El Egreso fue actualizado!.'
     else
       render 'edit'
@@ -98,6 +96,23 @@ class ExpensesController < ApplicationController
   end
 
 private
+  # Creates or approves a ExpenseService instance
+  def create_or_approve
+    if params[:commit_approve]
+      @es.create_and_approve 
+    else
+      @es.create
+    end
+  end
+
+  def update_or_approve
+    if params[:commit_approve]
+      @es.update_and_approve 
+    else
+      @es.update
+    end
+  end
+
   def quick_expense_params
    params.require(:quick_expense).permit(*transaction_params.quick_income)
   end

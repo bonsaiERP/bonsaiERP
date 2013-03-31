@@ -5,6 +5,7 @@ class TransactionService < BaseService
   attribute :date, Date
   attribute :contact_id, Integer
   attribute :currency, String
+  attribute :total, Decimal
   attribute :exchange_rate, Decimal
   attribute :project_id, Integer
   attribute :bill_number, String
@@ -14,4 +15,9 @@ class TransactionService < BaseService
   attribute :account_to_id, Integer
 
   attr_reader :transaction
+
+  def initialize(attrs = {})
+    yield self
+    super
+  end
 end

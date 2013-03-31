@@ -23,7 +23,7 @@ describe ExpenseService do
   end
 
   context "Initialization" do
-    subject { ExpenseService.new(valid_params) }
+    subject { ExpenseService.new_expense(valid_params) }
 
     it "expense_details" do
       subject.expense.should be_is_a(Expense)
@@ -37,7 +37,7 @@ describe ExpenseService do
     end
 
     it "sets_defaults if nil" do
-      es = ExpenseService.new
+      es = ExpenseService.new_expense
       es.expense.ref_number.should =~ /E-\d{2}-000\d/
       es.expense.currency.should eq('BOB')
       es.expense.date.should eq(Date.today)
@@ -47,12 +47,12 @@ describe ExpenseService do
   end
 
   it "#valid?" do
-    es = ExpenseService.new(account_to_id: 2, direct_payment: "1")
+    es = ExpenseService.new_expense(account_to_id: 2, direct_payment: "1")
 
     es.should_not be_valid
     AccountQuery.any_instance.stub_chain(:bank_cash, where: [( build :cash, id: 2 )])
 
-    es = ExpenseService.new(account_to_id: 2, direct_payment: "1")
+    es = ExpenseService.new_expense(account_to_id: 2, direct_payment: "1")
 
     es.should be_valid
   end
@@ -64,7 +64,7 @@ describe ExpenseService do
     end
 
     subject {
-      ExpenseService.new(valid_params)
+      ExpenseService.new_expense(valid_params)
     }
 
     it "creates and sets the default states" do
@@ -127,30 +127,29 @@ describe ExpenseService do
     end
 
     subject {
-      ExpenseService.new(valid_params)
+      ExpenseService.new_expense(valid_params)
     }
 
     it "Updates with errors on expense" do
       TransactionHistory.any_instance.should_receive(:create_history).and_return(true)
 
-      i = subject.expense
-      i.total = details_total
-      i.balance = 0
-      i.stub(total_was: i.total)
+      e = subject.expense
+      e.total = details_total
+      e.balance = 0
+      e.stub(total_was: e.total)
 
-      i.should be_is_draft
-      i.total.should > 200
+      e.should be_is_draft
+      e.total.should > 200.0
 
       attributes = valid_params.merge(total: 200)
-      # Create
+      # Update
       subject.update(attributes).should be_true
 
       # Expense
-      i = subject.expense
-
-      i.should be_is_paid
-      i.should be_has_error
-      i.error_messages[:balance].should_not be_blank
+      e = subject.expense
+      e.should be_is_paid
+      e.should be_has_error
+      e.error_messages[:balance].should_not be_blank
     end
 
     it "update_and_approve" do
@@ -175,7 +174,6 @@ describe ExpenseService do
       ExpenseDetail.any_instance.stub(save: true)
     end
 
-
     it "creates and pays" do
       AccountQuery.any_instance.stub_chain(:bank_cash, where: [( build :cash, id: 2 )])
 
@@ -184,7 +182,7 @@ describe ExpenseService do
 
       Item.should_receive(:where).with(id: item_ids).and_return(s)
 
-      es = ExpenseService.new(valid_params.merge(direct_payment: "1", account_to_id: "2"))
+      es = ExpenseService.new_expense(valid_params.merge(direct_payment: "1", account_to_id: "2"))
       es.create_and_approve.should be_true
 
       es.ledger.should be_is_a(AccountLedger)
@@ -201,8 +199,39 @@ describe ExpenseService do
       es.expense.should be_is_paid
     end
 
+    it "updates and pays" do
+      AccountQuery.any_instance.stub_chain(:bank_cash, where: [( build :cash, id: 2 )])
+
+      exp = build(:expense, id: 2, state: 'draft')
+      Expense.stub(find: exp)
+
+      s = Object.new
+      s.stub(:values_of).with(:id, :buy_price).and_return([[1, 10], [2, 20.0]])
+
+      Item.should_receive(:where).with(id: item_ids).and_return(s)
+
+      es = ExpenseService.find(1)
+      es.expense.should eq(exp)
+      attrs = valid_params.merge(direct_payment: "1", account_to_id: "2")
+
+      es.update_and_approve(attrs).should be_true
+
+      es.ledger.should be_is_a(AccountLedger)
+      # ledger
+      es.ledger.account_id.should eq(100)
+      es.ledger.account_to_id.should eq(2)
+      es.ledger.should be_is_payin
+      es.ledger.amount.should == -es.expense.total
+
+      # expense
+      es.expense.total.should == 490.0
+      es.expense.balance.should == 0.0
+      es.expense.discount.should == 10.0
+      es.expense.should be_is_paid
+    end
+
     it "sets errors from expense or ledger" do
-      es = ExpenseService.new
+      es = ExpenseService.new_expense
 
       es.expense.stub(save: false)
       es.expense.errors[:contact_id] << "Wrong"
@@ -211,7 +240,7 @@ describe ExpenseService do
       es.errors[:contact_id].should eq(["Wrong"])
 
       # Errors on both expense and ledger
-      es = ExpenseService.new(direct_payment: true)
+      es = ExpenseService.new_expense(direct_payment: true)
       es.stub(account_to: build(:cash, id: 3) )
 
       es.expense.stub(save: false)

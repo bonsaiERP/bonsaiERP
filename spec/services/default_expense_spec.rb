@@ -138,7 +138,7 @@ describe DefaultExpense do
       e.total.should > 200
 
       attributes = valid_params.merge(total: 200)
-      # Create
+      # Update
       subject.update(attributes).should be_true
 
       # Expense

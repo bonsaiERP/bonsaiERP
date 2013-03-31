@@ -80,7 +80,7 @@ private
     attrs[:ref_number] = Income.get_ref_number if attrs[:ref_number].blank?
     attrs[:date] = Date.today if attrs[:date].blank?
     attrs[:currency] = OrganisationSession.currency if attrs[:currency].blank?
-    attrs.except(:direct, :account_to_id, :income_details_attributes)
+    attrs.except(:direct_payment, :account_to_id, :income_details_attributes)
   end
 
   # Updates the data for an imcome
@@ -101,7 +101,7 @@ private
     income.discounted = true if discount > 0
     income.creator_id = UserSession.id
 
-    if direct?
+    if direct_payment?
       income.state = 'paid'
       income.amount = 0.0
     end

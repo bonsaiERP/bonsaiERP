@@ -1,28 +1,31 @@
 # encoding: utf-8
 class ExpenseService < TransactionService
-  attr_reader :expense, :ledger
+  attr_accessor :expense
+  attr_reader :ledger
 
   validate :valid_account_to, if: :direct_payment?
 
   delegate :contact, :is_approved?, :is_draft?, :expense_details,
     :expense_details_attributes, :expense_details_attributes=,
-    :subtotal, :total, :to_s, :state, :discount, to: :expense
+    :expense_details,
+    :subtotal, :to_s, :state, :discount, to: :expense
 
   delegate :id, to: :expense, prefix: true
 
-  # Creates and instance of expense and initializes
-  def initialize(attrs = {})
-    @expense = Expense.new_expense expense_params(attrs)
-    super attrs
-    @expense.expense_details.build(quantity: 1) if @expense.expense_details.empty?
+  def self.new_expense(attrs = {})
+    attrs = set_new_expense_attributes(attrs)
+    es = new(attrs) do |e|
+      e.expense = Expense.new_expense(attrs.except(:direct_payment, :account_to_id, :expense_details_attributes))
+    end
+    es.expense_details.build(quantity: 1) if es.expense_details.empty?
+
+    es
   end
 
   # Finds the expense and sets data with the expense found
   def self.find(id)
-    @expense = Expense.find(id)
-    res = new(@expense.attributes)
-    res.expense = @expense
-    res
+    exp = Expense.find(id)
+    new(exp.attributes) {|es| es.expense = exp }
   end
 
   # Creates and can call other methods passed in the block
@@ -42,27 +45,45 @@ class ExpenseService < TransactionService
 
     create_or_update do
       res = expense.save
-      res && create_ledger
+      res && create_ledger_and_update_expense
     end
   end
 
-  def update(params = {})
-    build_ledger if can_pay?
+  def update(attrs = {})
+    self.attributes = attrs
     create_or_update do
       res = TransactionHistory.new.create_history(expense)
-      expense.attributes = params
-
-      yield if block_given?
+      expense.attributes = expense_attributes
       update_expense_data
 
-      res = expense.save
+      yield if block_given?
 
-      create_ledger && res
+      res = expense.save && res
     end
   end
 
-  def update_and_approve(params)
-    update(params) { expense.approve! }
+  def update_and_approve(attrs = {})
+    self.attributes = attrs
+    build_ledger if can_pay?
+    expense.approve!
+
+    create_or_update do
+      res = TransactionHistory.new.create_history(expense)
+      expense.attributes = expense_attributes
+      
+      update_expense_data
+      res = expense.save && res
+
+      res && create_ledger_and_update_expense
+    end
+  end
+
+  # Sets the expense params when new_record
+  def self.set_new_expense_attributes(attrs)
+    attrs[:ref_number] = Expense.get_ref_number if attrs[:ref_number].blank?
+    attrs[:date] = Date.today if attrs[:date].blank?
+    attrs[:currency] = OrganisationSession.currency if attrs[:currency].blank?
+    attrs
   end
 
 private
@@ -76,12 +97,8 @@ private
     res
   end
 
-  # Sets the expense params when new_record
-  def expense_params(attrs)
-    attrs[:ref_number] = Expense.get_ref_number if attrs[:ref_number].blank?
-    attrs[:date] = Date.today if attrs[:date].blank?
-    attrs[:currency] = OrganisationSession.currency if attrs[:currency].blank?
-    attrs.except(:direct_payment, :account_to_id, :expense_details_attributes)
+  def expense_attributes
+    attributes.except(:direct_payment, :account_to_id, :expense_details_attributes)
   end
 
   # Updates the data for an imcome
@@ -90,22 +107,18 @@ private
     expense.balance -= (expense.total_was - expense.total)
     expense.set_state_by_balance!
     update_details
+
     ExpenseErrors.new(expense).set_errors
   end
 
   def set_expense_data
     set_new_details
-    expense.ref_number = Expense.get_ref_number
+    expense.ref_number = Expense.get_ref_number if expense.new_record?
     expense.gross_total = original_expense_total
     expense.balance = expense.total
     expense.state = 'draft' if state.blank?
     expense.discounted = true if discount > 0
     expense.creator_id = UserSession.id
-
-    if direct_payment?
-      expense.state = 'paid'
-      expense.amount = 0.0
-    end
   end
 
   # Set details for a new Expense
@@ -152,11 +165,15 @@ private
   end
 
   # Saves the ledger with expense data
-  def create_ledger
+  def create_ledger_and_update_expense
     return true unless ledger.present?
+
     ledger.account_id = expense.id
     ledger.amount = -expense.total
     ledger.reference = "Pago egreso #{expense}"
+
+    expense.state = 'paid'
+    expense.amount = 0.0
 
     ledger.save_ledger
   end
@@ -183,4 +200,3 @@ private
     @item_prices ||= Hash[Item.where(id: item_ids).values_of(:id, :buy_price)]
   end
 end
-
