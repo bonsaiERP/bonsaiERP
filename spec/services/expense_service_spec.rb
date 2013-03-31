@@ -202,8 +202,9 @@ describe ExpenseService do
     it "updates and pays" do
       AccountQuery.any_instance.stub_chain(:bank_cash, where: [( build :cash, id: 2 )])
 
-      exp = build(:expense, id: 2, state: 'draft')
+      exp = build(:expense, id: 2, state: 'draft', total: 490, balance: 490)
       Expense.stub(find: exp)
+      exp.stub(total_was: 490)
 
       s = Object.new
       s.stub(:values_of).with(:id, :buy_price).and_return([[1, 10], [2, 20.0]])
@@ -224,10 +225,11 @@ describe ExpenseService do
       es.ledger.amount.should == -es.expense.total
 
       # expense
+      es.expense.should be_is_paid
       es.expense.total.should == 490.0
       es.expense.balance.should == 0.0
+      es.expense.should be_discounted
       es.expense.discount.should == 10.0
-      es.expense.should be_is_paid
     end
 
     it "sets errors from expense or ledger" do

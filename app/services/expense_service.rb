@@ -70,7 +70,7 @@ class ExpenseService < TransactionService
     create_or_update do
       res = TransactionHistory.new.create_history(expense)
       expense.attributes = expense_attributes
-      
+
       update_expense_data
       res = expense.save && res
 
@@ -105,9 +105,10 @@ private
   # total is the alias for amount due that Expense < Account
   def update_expense_data
     expense.balance -= (expense.total_was - expense.total)
-    expense.set_state_by_balance!
     update_details
-
+    expense.gross_total = original_expense_total
+    expense.set_state_by_balance!
+    expense.discounted = ( expense.discount > 0 )
     ExpenseErrors.new(expense).set_errors
   end
 
@@ -117,7 +118,7 @@ private
     expense.gross_total = original_expense_total
     expense.balance = expense.total
     expense.state = 'draft' if state.blank?
-    expense.discounted = true if discount > 0
+    expense.discounted = ( expense.discount > 0 )
     expense.creator_id = UserSession.id
   end
 
@@ -131,6 +132,7 @@ private
 
   def update_details
     expense_details.each do |det|
+      det.original_price = item_prices[det.item_id]
       det.balance = get_detail_balance(det)
     end
   end
