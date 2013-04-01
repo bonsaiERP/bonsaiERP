@@ -82,7 +82,7 @@
 
     #payment-form(style='display: none')
       %h3 Pagar Egreso
-      = render 'expenses/payment_form', expense: @expense if @expense.is_approved?
+      = render 'expenses/payment_form', expense: @expense unless @expense.is_paid?
 
     #devolution-form(style='display: none')
       -#%h3 Devolución

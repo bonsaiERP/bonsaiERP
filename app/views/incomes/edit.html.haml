@@ -13,11 +13,13 @@
 
   .links.span6
 
+- inc_presenter = present @is.income
 .row-fluid
   .span6
     %h1
-      %span.muted.n Editar Ingreso
+      %span.muted.n Editar
       = @is.income
+      = inc_presenter.state_tag
   .span6.r
     = link_to icon_show_text, income_path(@is.income_id), class: 'btn'
 

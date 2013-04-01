@@ -22,6 +22,8 @@ class TransactionDetail < ActiveRecord::Base
 
   def data_hash
     {
+      id: id,
+      item_id: item_id,
       original_price: original_price, 
       price: price, 
       quantity: quantity, 

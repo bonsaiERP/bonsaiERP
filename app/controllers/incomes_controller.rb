@@ -115,7 +115,7 @@ private
     if params[:commit_approve]
       @is.update_and_approve(income_params)
     else
-      @is.update
+      @is.update(income_params)
     end
   end
 

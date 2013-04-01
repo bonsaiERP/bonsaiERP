@@ -71,7 +71,6 @@ $( ->
       $this = $(el)
       $hidden = $this.find('[type=hidden]')
       $input = $this.find('[type=text]')
-      $input.data('value', $hidden.val())
 
       $input.autocomplete({
         source: $input.data('source'),

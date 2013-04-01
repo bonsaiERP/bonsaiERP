@@ -130,6 +130,7 @@ class Transaction extends Backbone.Collection
     )
     rivets.bind $(@transSel), {trans: @transModel}
     @transModel.on 'change:rate', -> self.setCurrency()
+
   #
   calculateSubtotal: ->
     sub = @reduce((sum, p) ->
@@ -149,6 +150,7 @@ class Transaction extends Backbone.Collection
   #
   setList: ->
     @$table.find('tr.item').each (i, el) =>
+      console.log $(el).find('input.autocomplete').data('value') #####
       @add($(el).data('item') )
       item = @models[@length - 1]
       rivets.bind(el, {item: item})
@@ -167,15 +169,14 @@ class Transaction extends Backbone.Collection
   getItemHtml: (num) ->
     #itemTemplate.replace(/\$num/g, num)
   #
-  deleteItem: (item, src)->
+  deleteItem: (item, src) ->
     $row = $(src).parents('tr.item')
-    if $row.attr('id')
-      $input = $row.next('input')
-      html = ['<input type="hidden" name="', $input.attr('name').replace(/\[id\]/, '[_destroy]')
-        ,'" value="1" />'].join('')
-      $(html).insertAfter($input)
+    if item.get('id')?
+      item.set('_destroy', "1")
+      $row.hide()
+    else
+      $row.remove()
 
-    $row.remove()
     @remove(item)
     @calculateSubtotal()
   # Sets the items currency

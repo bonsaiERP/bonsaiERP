@@ -17,7 +17,7 @@
       %td.span6.nw
         = fd.input :item, as: :autocomplete, label: false,
           input_html: {class: 'item_id span11', placeholder: 'Escriba para buscar el ítem', 
-          data: {new_url: '/items/new', title: 'Nuevo ítem', source: search_path(transaction)} }
+          data: {new_url: '/items/new', source: search_path(transaction)} }
 
       %td
         = fd.input :price, input_html: {size: 8, type: 'decimal', class: 'item-price', 
@@ -32,6 +32,7 @@
         %span.subtotal(data-text='item.subtotal | number')= ntc fd.object.total
       %td.del 
         %a(href="javascript:;" data-on-click="item:delete" class="bicon-trash" title="Borrar" rel="tooltip")
+        = fd.hidden_field :_destroy, data: {value: 'item._destroy'}
 
   %tr#subtotal-line.extra.pad_top.subtotal
     %td 

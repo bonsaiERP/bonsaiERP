@@ -24,6 +24,7 @@ class AutocompleteInput < SimpleForm::Inputs::Base
     raise 'input_html_options data-source required' unless input_html_options['data-source'].present?
 
     value = object.send(relation)
+    input_html_options['data-value'] = value
     input_html_options[:placeholder] = input_html_options[:placeholder] || I18n.t('bonsai.autocomplete_placeholder')
     input_html_options[:size] ||= SimpleForm.default_input_size
 

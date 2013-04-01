@@ -82,7 +82,7 @@
 
     #payment-form(style='display: none')
       %h3 Cobrar ingreso
-      = render 'incomes/payment_form', income: @income if @income.is_approved?
+      = render 'incomes/payment_form', income: @income unless @income.is_paid?
 
     #devolution-form(style='display: none')
       %h3 Devolución
