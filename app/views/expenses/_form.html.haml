@@ -1,4 +1,4 @@
-= simple_form_for(expense_service, url: get_expense_url(expense_service), html: {class: 'enter ui-form'}) do |f|
+= simple_form_for(expense_service, url: get_expense_url(expense_service), html: {class: 'enter ui-form', method: expense_form_method(expense_service)}) do |f|
   = bonsai_form_error(f)
 
   -########################################

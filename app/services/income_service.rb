@@ -1,6 +1,6 @@
 # encoding: utf-8
 class IncomeService < TransactionService
-  attr_reader :income, :ledger
+  attr_accessor :income, :ledger
 
   validate :valid_account_to, if: :direct_payment?
 
@@ -11,18 +11,24 @@ class IncomeService < TransactionService
   delegate :id, to: :income, prefix: true
 
   # Creates and instance of income and initializes
-  def initialize(attrs = {})
-    @income = Income.new_income income_params(attrs)
-    super attrs
-    @income.income_details.build(quantity: 1) if @income.income_details.empty?
+  def self.new_income(attrs = {})
+    attrs = set_new_income_attributes(attrs)
+    is = new(attrs) do |i|
+      i.income = Income.new_income(attrs.except(:direct_payment, :account_to_id, :income_details_attributes))
+    end
+    is.income_details.build(quantity: 1) if is.income_details.empty?
+
+    is
   end
 
   # Finds the income and sets data with the income found
   def self.find(id)
-    @income = Income.find(id)
-    res = new(@income.attributes)
-    res.income = @income
-    res
+    inc = Income.find(id)
+    new(inc.attributes) do |is|
+      is.ref_number = inc.ref_number
+      is.total = inc.total
+      is.income = inc
+    end
   end
 
   # Creates and can call other methods passed in the block
@@ -46,11 +52,11 @@ class IncomeService < TransactionService
     end
   end
 
-  def update(params = {})
+  def update(attrs = {})
     build_ledger if can_pay?
     create_or_update do
       res = TransactionHistory.new.create_history(income)
-      income.attributes = params
+      income.attributes = income_attributes
 
       yield if block_given?
       update_income_data
@@ -65,6 +71,14 @@ class IncomeService < TransactionService
     update(params) { income.approve! }
   end
 
+  # Sets the expense params when new_record
+  def self.set_new_income_attributes(attrs)
+    attrs[:ref_number] = Income.get_ref_number if attrs[:ref_number].blank?
+    attrs[:date] = Date.today if attrs[:date].blank?
+    attrs[:currency] = OrganisationSession.currency if attrs[:currency].blank?
+    attrs
+  end
+
 private
   # Creates or updates and sets errors messages in case of failing
   def create_or_update(&b)
@@ -76,11 +90,8 @@ private
     res
   end
 
-  def income_params(attrs)
-    attrs[:ref_number] = Income.get_ref_number if attrs[:ref_number].blank?
-    attrs[:date] = Date.today if attrs[:date].blank?
-    attrs[:currency] = OrganisationSession.currency if attrs[:currency].blank?
-    attrs.except(:direct_payment, :account_to_id, :income_details_attributes)
+  def income_attributes
+    attributes.except(:direct_payment, :account_to_id, :expense_details_attributes)
   end
 
   # Updates the data for an imcome
@@ -160,7 +171,7 @@ private
   end
 
   def can_pay?
-    income.is_draft? && direct?
+    income.is_draft? && direct_payment?
   end
 
   def valid_account_to

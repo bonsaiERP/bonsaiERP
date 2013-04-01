@@ -202,7 +202,8 @@ describe ExpenseService do
     it "updates and pays" do
       AccountQuery.any_instance.stub_chain(:bank_cash, where: [( build :cash, id: 2 )])
 
-      exp = build(:expense, id: 2, state: 'draft', total: 490, balance: 490)
+      exp = build(:expense, id: 2, state: 'draft', total: 490, balance: 490,
+                 ref_number: 'E-13-0007')
       Expense.stub(find: exp)
       exp.stub(total_was: 490)
 
@@ -213,6 +214,10 @@ describe ExpenseService do
 
       es = ExpenseService.find(1)
       es.expense.should eq(exp)
+
+      es.ref_number.should eq('E-13-0007')
+      es.total.should == 490.0
+
       attrs = valid_params.merge(direct_payment: "1", account_to_id: "2")
 
       es.update_and_approve(attrs).should be_true

@@ -21,12 +21,27 @@ module TransactionHelper
     end
   end
 
+  def expense_form_method(exp_serv)
+    if exp_serv.expense_id
+      'put'
+    else
+      'post'
+    end
+  end
 
   def get_income_url(inc_serv)
     if inc_serv.income_id
       income_path(inc_serv.income_id)
     else
       incomes_path
+    end
+  end
+
+  def income_form_method(inc_serv)
+    if inc_serv.income_id
+      'put'
+    else
+      'post'
     end
   end
 end

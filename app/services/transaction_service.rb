@@ -14,7 +14,7 @@ class TransactionService < BaseService
   attribute :direct_payment, Boolean
   attribute :account_to_id, Integer
 
-  attr_reader :transaction
+  attr_reader :transaction, :ledger
 
   def initialize(attrs = {})
     yield self

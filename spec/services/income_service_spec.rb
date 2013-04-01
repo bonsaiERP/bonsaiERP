@@ -23,7 +23,7 @@ describe IncomeService do
   end
 
   context "Initialization" do
-    subject { IncomeService.new(valid_params) }
+    subject { IncomeService.new_income(valid_params) }
 
     it "income_details" do
       subject.income.should be_is_a(Income)
@@ -37,7 +37,7 @@ describe IncomeService do
     end
 
     it "sets_defaults if nil" do
-      is = IncomeService.new
+      is = IncomeService.new_income
       is.income.ref_number.should =~ /I-\d{2}-000\d/
       is.income.currency.should eq('BOB')
       is.income.date.should eq(Date.today)
@@ -45,12 +45,12 @@ describe IncomeService do
   end
 
   it "#valid?" do
-    is = IncomeService.new(account_to_id: 2, direct: "1")
+    is = IncomeService.new_income(account_to_id: 2, direct_payment: "1")
 
     is.should_not be_valid
     AccountQuery.any_instance.stub_chain(:bank_cash, where: [( build :cash, id: 2 )])
 
-    is = IncomeService.new(account_to_id: 2, direct: "1")
+    is = IncomeService.new_income(account_to_id: 2, direct_payment: "1")
 
     is.should be_valid
   end
@@ -62,7 +62,7 @@ describe IncomeService do
     end
 
     subject {
-      IncomeService.new(valid_params)
+      IncomeService.new_income(valid_params)
     }
 
     it "creates and sets the default states" do
@@ -182,7 +182,7 @@ describe IncomeService do
 
       Item.should_receive(:where).with(id: item_ids).and_return(s)
 
-      is = IncomeService.new(valid_params.merge(direct: "1", account_to_id: "2"))
+      is = IncomeService.new(valid_params.merge(direct_payment: "1", account_to_id: "2"))
       is.create.should be_true
 
       is.ledger.should be_is_a(AccountLedger)

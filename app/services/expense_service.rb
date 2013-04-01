@@ -1,7 +1,6 @@
 # encoding: utf-8
 class ExpenseService < TransactionService
   attr_accessor :expense
-  attr_reader :ledger
 
   validate :valid_account_to, if: :direct_payment?
 
@@ -25,7 +24,11 @@ class ExpenseService < TransactionService
   # Finds the expense and sets data with the expense found
   def self.find(id)
     exp = Expense.find(id)
-    new(exp.attributes) {|es| es.expense = exp }
+    new(exp.attributes) do |es|
+      es.ref_number = exp.ref_number
+      es.total = exp.total
+      es.expense = exp
+    end
   end
 
   # Creates and can call other methods passed in the block
@@ -45,7 +48,7 @@ class ExpenseService < TransactionService
 
     create_or_update do
       res = expense.save
-      res && create_ledger_and_update_expense
+      res && create_ledger
     end
   end
 
@@ -56,9 +59,7 @@ class ExpenseService < TransactionService
       expense.attributes = expense_attributes
       update_expense_data
 
-      yield if block_given?
-
-      res = expense.save && res
+      expense.save && res
     end
   end
 
@@ -74,7 +75,7 @@ class ExpenseService < TransactionService
       update_expense_data
       res = expense.save && res
 
-      res && create_ledger_and_update_expense
+      res && create_ledger
     end
   end
 
@@ -109,6 +110,9 @@ private
     expense.gross_total = original_expense_total
     expense.set_state_by_balance!
     expense.discounted = ( expense.discount > 0 )
+
+    set_paid_expense if ledger.present?
+
     ExpenseErrors.new(expense).set_errors
   end
 
@@ -120,6 +124,13 @@ private
     expense.state = 'draft' if state.blank?
     expense.discounted = ( expense.discount > 0 )
     expense.creator_id = UserSession.id
+
+    set_paid_expense if ledger.present?
+  end
+
+  def set_paid_expense
+    expense.balance = 0
+    expense.state = 'paid'
   end
 
   # Set details for a new Expense
@@ -167,15 +178,12 @@ private
   end
 
   # Saves the ledger with expense data
-  def create_ledger_and_update_expense
+  def create_ledger
     return true unless ledger.present?
 
     ledger.account_id = expense.id
     ledger.amount = -expense.total
     ledger.reference = "Pago egreso #{expense}"
-
-    expense.state = 'paid'
-    expense.amount = 0.0
 
     ledger.save_ledger
   end
