@@ -48,7 +48,10 @@ class IncomeService < TransactionService
 
     create_or_update do
       res = income.save
-      res && create_ledger
+      res = res && create_ledger
+      income.state = income.state_was || 'draft' unless res
+
+      res
     end
   end
 
@@ -75,7 +78,10 @@ class IncomeService < TransactionService
       update_income_data
       res = income.save && res
 
-      res && create_ledger
+      res = res && create_ledger
+      income.state = income.state_was || 'draft' unless res
+
+      res
     end
   end
 
@@ -99,7 +105,7 @@ private
   end
 
   def income_attributes
-    attributes.except(:direct_payment, :account_to_id, :expense_details_attributes)
+    attributes.except(:direct_payment, :account_to_id, :income_details_attributes)
   end
 
   # Updates the data for an imcome

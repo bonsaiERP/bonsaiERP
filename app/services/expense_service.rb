@@ -48,7 +48,10 @@ class ExpenseService < TransactionService
 
     create_or_update do
       res = expense.save
-      res && create_ledger
+      res = res && create_ledger
+      expense.state = expense.state_was || 'draft' unless res
+
+      res
     end
   end
 
@@ -75,7 +78,10 @@ class ExpenseService < TransactionService
       update_expense_data
       res = expense.save && res
 
-      res && create_ledger
+      res = res && create_ledger
+      expense.state = expense.state_was || 'draft' unless res
+
+      res
     end
   end
 
