@@ -5,7 +5,7 @@ describe TransactionService do
   subject { should respond_to(:transaction) }
 
   describe "Attributes" do
-    subject { TransactionService.new }
+    subject { TransactionService.new {} }
 
     it "responds to" do
       [:id, :ref_number, :date, :contact_id, :currency, :exchange_rate,
