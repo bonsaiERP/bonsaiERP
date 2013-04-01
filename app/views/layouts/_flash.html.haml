@@ -1,4 +1,4 @@
 - flash.each do |name, msg|
   %div.flash.alert{ class: flash_class(name), id: "flash#{ name.to_s.capitalize}"}
-    = msg
     %a.close x
+    %h4.inline= msg
