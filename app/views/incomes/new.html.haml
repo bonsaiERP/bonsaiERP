@@ -7,6 +7,10 @@
     %li
       %span Nuevo Ingreso
 
-%h1 Nuevo Ingreso
+- inc_presenter = present @is.income
+%h1
+  %span.muted.n Nuevo Ingreso
+  = @is.income
+  = inc_presenter.state_tag
 
 = render 'incomes/form', income_service: @is

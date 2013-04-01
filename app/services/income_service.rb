@@ -171,7 +171,7 @@ private
   # Creates a ledger if it can pay
   def build_ledger
     @ledger = AccountLedger.new(
-      account_to_id: account_to_id,
+      account_to_id: account_to_id, date: date,
       operation: 'payin', exchange_rate: 1,
       currency: income.currency, inverse: false
     )
@@ -182,6 +182,7 @@ private
     return true unless ledger.present?
     ledger.account_id = income.id
     ledger.amount = income.total
+    ledger.reference = "Cobro ingreso #{income}"
 
     ledger.save_ledger
   end

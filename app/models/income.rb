@@ -18,7 +18,7 @@ class Income < Account
 
   has_one :transaction, foreign_key: :account_id, autosave: true
 
-  has_many :income_details, foreign_key: :account_id, dependent: :destroy
+  has_many :income_details, foreign_key: :account_id, dependent: :destroy, order: 'id asc'
   accepts_nested_attributes_for :income_details, allow_destroy: true,
     reject_if: proc {|det| det.fetch(:item_id).blank? }
 
@@ -33,7 +33,6 @@ class Income < Account
   # Validations
   validates_presence_of :date, :contact, :contact_id
   validates :state, presence: true, inclusion: {in: STATES}
-  validates :amount, numericality: { greater_than: 0 }
 
   ########################################
   # Scopes

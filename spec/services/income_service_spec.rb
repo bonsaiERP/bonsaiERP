@@ -219,6 +219,8 @@ describe IncomeService do
       # ledger
       is.ledger.account_id.should eq(100)
       is.ledger.account_to_id.should eq(2)
+      is.ledger.reference.should eq('Cobro ingreso I-13-0007')
+      is.ledger.date.to_date.should eq(is.date)
       is.ledger.should be_is_payin
       is.ledger.amount.should == is.income.total
 

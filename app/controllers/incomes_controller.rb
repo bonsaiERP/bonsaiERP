@@ -19,7 +19,7 @@ class IncomesController < ApplicationController
 
   # GET /incomes/new
   def new
-    @is = IncomeService.new
+    @is = IncomeService.new_income
   end
 
   # GET /incomes/1/edit
@@ -29,10 +29,9 @@ class IncomesController < ApplicationController
 
   # POST /incomes
   def create
-    @is = IncomeService.new(income_params)
-    method = params[:commit_approve].present? ? :create_and_approve : :create
+    @is = IncomeService.new_income(income_params)
 
-    if @is.send(method)
+    if create_or_approve
       redirect_to @is.income, notice: 'Se ha creado un Ingreso.'
     else
       render 'new'
@@ -42,9 +41,8 @@ class IncomesController < ApplicationController
   # PUT /incomes/:id
   def update
     @is = IncomeService.find(params[:id])
-    method = params[:commit_approve].present? ? :update_and_approve : :update
 
-    if @is.send(method, income_params)
+    if update_or_approve
       redirect_to @is.income, notice: 'El Ingreso fue actualizado!.'
     else
       render 'edit'
@@ -104,12 +102,29 @@ class IncomesController < ApplicationController
   end
 
 private
+  # Creates or approves a ExpenseService instance
+  def create_or_approve
+    if params[:commit_approve]
+      @is.create_and_approve 
+    else
+      @is.create
+    end
+  end
+
+  def update_or_approve
+    if params[:commit_approve]
+      @is.update_and_approve(income_params)
+    else
+      @is.update
+    end
+  end
+
   def quick_income_params
    params.require(:quick_income).permit(*transaction_params.quick_income)
   end
 
   def income_params
-    params.require(:income).permit(*transaction_params.income)
+    params.require(:income_service).permit(*transaction_params.income)
   end
 
   def transaction_params

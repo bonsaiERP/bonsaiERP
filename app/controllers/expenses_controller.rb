@@ -109,7 +109,7 @@ private
     if params[:commit_approve]
       @es.update_and_approve(expense_params)
     else
-      @es.update
+      @es.update(expense_params)
     end
   end
 

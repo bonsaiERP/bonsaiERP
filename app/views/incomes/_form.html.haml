@@ -1,4 +1,4 @@
-= simple_form_for(income_service, url: get_income_url(income_service), html: {class: 'enter ui-form'}) do |f|
+= simple_form_for(income_service, url: get_income_url(income_service), html: {class: 'enter ui-form', method: income_form_method(income_service)}) do |f|
   = bonsai_form_error(f)
 
   -########################################
@@ -21,8 +21,7 @@
       .prev().val(resp.matchcode);
     })
 
-    $('#transaction_currency').select2();
-
     fx.rates = exchangeRates.rates;
-    income = new App.Income(#{AccountQuery.new.bank_cash_options.to_json});
+    income = new App.Income();
+    income.setAccountsTo(#{AccountQuery.new.bank_cash_options.to_json});
   })(jQuery)

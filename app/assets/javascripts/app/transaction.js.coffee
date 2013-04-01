@@ -10,12 +10,14 @@ class Item extends Backbone.Model
   #
   initialize: ->
     @on('change:rate', @setPrice)
-    @on('change:price change:quantity', @setSubtotal )
+    @on('change:price change:quantity', @setSubtotal)
+
     @setSubtotal()
   #
   setSubtotal: ->
     sub = 1 * @get('quantity') * 1 * @get('price')
     @set('subtotal', sub)
+    @collection.calculateSubtotal()
   #
   setPrice: ->
     price = _b.roundVal( @get('original_price') * (1.0 / @get('rate') ), bonsai.presicion )
@@ -23,12 +25,9 @@ class Item extends Backbone.Model
   #
   setAutocompleteEvent: (el) ->
     $(el).on 'autocomplete-done', 'input.autocomplete', (event, item) =>
-      q = @get('quantity') * 1
-      q = 1 unless q <= 0
-
       price = _b.roundVal( item.price * (1/@get('rate')), _b.numPresicion )
 
-      @set(original_price: item.price, price: price, quantity: q, item_id: item.id)
+      @set(original_price: item.price, price: price, item_id: item.id)
   #
   delete: (event) =>
     src = event.currentTarget || event.srcElement
@@ -38,12 +37,9 @@ class Item extends Backbone.Model
 class ExpenseItem extends Item
   setAutocompleteEvent: (el) ->
     $(el).on 'autocomplete-done', 'input.autocomplete', (event, item) =>
-      q = @get('quantity') * 1
-      q = 1 unless q <= 0
-
       price = _b.roundVal( item.buy_price * (1/@get('rate')), _b.numPresicion )
 
-      @set(original_price: item.price, price: price, quantity: q, item_id: item.id)
+      @set(original_price: item.buy_price, price: price, item_id: item.id)
  
 # TransactionModel
 class TransactionModel extends Backbone.Model
@@ -52,6 +48,7 @@ class TransactionModel extends Backbone.Model
     baseCurrency: ''
     rate: 1
     direct_payment: false
+    total: 0.0
   initialize: ->
     cur = $('#transaction_currency').val()
     @set(
@@ -111,15 +108,20 @@ class Transaction extends Backbone.Collection
   subtotalPath: '#subtotal'
   transSel: '.trans'
   transModel: false
+  accountsTo: []
   #
-  initialize: (@accountsTo) ->
+  initialize: ->
     @$table = $('#items-table')
     @itemTemplate = _.template(itemTemplate)
 
-    # Events
-    @on 'change', @calculateSubtotal
-    self = this
+    @setList()
+    @calculateSubtotal()
 
+    @$addLink = $('#add-item-link')
+    @$addLink.click => @addItem()
+  #
+  setAccountsTo: (@accountsTo) ->
+    self = this
     # TransModel
     @transModel = new TransactionModel(
       accountsTo: @accountsTo
@@ -128,11 +130,6 @@ class Transaction extends Backbone.Collection
     )
     rivets.bind $(@transSel), {trans: @transModel}
     @transModel.on 'change:rate', -> self.setCurrency()
-
-    @setList()
-
-    @$addLink = $('#add-item-link')
-    @$addLink.click => @addItem()
   #
   calculateSubtotal: ->
     sub = @reduce((sum, p) ->
@@ -158,15 +155,14 @@ class Transaction extends Backbone.Collection
       item.setAutocompleteEvent(el)
   #
   addItem: ->
-    num = (new Date).getTime()
-
-    $tr = $(@getItemHtml(num)).insertBefore('#subtotal-line')
+    $tr = $(@getItemHtml(@length)).insertBefore('#subtotal-line')
 
     $tr.createAutocomplete()
     @add(rate: @transModel.get('rate') )
     item = @models[@length - 1]
     rivets.bind($tr, {item: item})
     item.setAutocompleteEvent($tr)
+    @calculateSubtotal()
   #
   getItemHtml: (num) ->
     #itemTemplate.replace(/\$num/g, num)
@@ -191,13 +187,13 @@ class Transaction extends Backbone.Collection
 # Income
 class Income extends Transaction
   getItemHtml: (num) ->
-    @itemTemplate(num: num, klass: 'income', search_path: 'search_income')
+    @itemTemplate(num: num, klass: 'income_service', det: 'income', search_path: 'search_income')
 
 # Expense
 class Expense extends Transaction
   model: ExpenseItem
   getItemHtml: (num) ->
-    @itemTemplate(num: num, klass: 'expense', search_path: 'search_expense')
+    @itemTemplate(num: num, klass: 'expense_service', det: 'expense', search_path: 'search_expense')
 
 
 @App = {}
@@ -211,7 +207,7 @@ itemTemplate = """<tr class="item" data-item="{"original_price":"0.0","price":"0
     <td class='span6 nw'>
       <div class="control-group autocomplete optional">
         <div class="controls">
-          <input id="{{klass}}_{{klass}}_details_attributes_{{num}}_item_id" name="{{klass}}[{{klass}}_details_attributes][{{num}}][item_id]" type="hidden"/>
+          <input id="{{klass}}_{{det}}_details_attributes_{{num}}_item_id" name="{{klass}}[{{det}}_details_attributes][{{num}}][item_id]" type="hidden"/>
           <input class="autocomplete optional item_id ui-autocomplete-input span11" data-source="/items/{{search_path}}.json" id="item_autocomplete" name="item_autocomplete" placeholder="Escriba para buscar el ítem" size="35" type="text" autocomplete="off"/>
           <a href="/items/new" class="ajax btn btn-small" rel="tooltip" style="margin-left: 5px;" title="Nuevo ítem"><i class="icon-plus-sign icon-large"></i></a>
           <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
@@ -219,10 +215,10 @@ itemTemplate = """<tr class="item" data-item="{"original_price":"0.0","price":"0
       </div>
     </td>
     <td>
-      <div class="control-group decimal optional"><div class="controls"><input class="numeric decimal optional" data-original-price="null" data-value="item.price" id="{{klass}}_{{klass}}_details_attributes_{{num}}_price" name="{{klass}}[{{klass}}_details_attributes][{{num}}][price]" size="8" step="any" type="decimal" value=""></div></div>
+      <div class="control-group decimal optional"><div class="controls"><input class="numeric decimal optional" data-original-price="null" data-value="item.price" id="{{klass}}_{{det}}_details_attributes_{{num}}_price" name="{{klass}}[{{det}}_details_attributes][{{num}}][price]" size="8" step="any" type="decimal" value=""></div></div>
     </td>
     <td>
-      <div class="control-group decimal optional"><div class="controls"><input class="numeric decimal optional" data-value="item.quantity" id="{{klass}}_{{klass}}_details_attributes_{{num}}_quantity" name="{{klass}}[{{klass}}_details_attributes][{{num}}][quantity]" size="8" step="any" type="decimal" value=""></div></div>
+      <div class="control-group decimal optional"><div class="controls"><input class="numeric decimal optional" data-value="item.quantity" id="{{klass}}_{{det}}_details_attributes_{{num}}_quantity" name="{{klass}}[{{det}}_details_attributes][{{num}}][quantity]" size="8" step="any" type="decimal" value=""></div></div>
     </td>
     <td class="total_row r">
       <span data-text="item.subtotal | number"></span>

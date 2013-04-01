@@ -35,8 +35,6 @@ describe Income do
     it { should validate_presence_of(:contact_id) }
     it { should have_valid(:state).when(*Income::STATES) }
     it { should_not have_valid(:state).when(nil, 'ja', 1) }
-    it { should have_valid(:amount).when(0.1, 1) }
-    it { should_not have_valid(:amount).when(-0.1, 0.0, nil) }
 
     # Intialize
     it "Initial values" do

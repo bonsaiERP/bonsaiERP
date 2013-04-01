@@ -18,7 +18,7 @@ class Expense < Account
 
   has_one :transaction, foreign_key: :account_id, autosave:true
 
-  has_many :expense_details, foreign_key: :account_id, dependent: :destroy
+  has_many :expense_details, foreign_key: :account_id, dependent: :destroy, order: 'id asc'
   accepts_nested_attributes_for :expense_details, allow_destroy: true,
     reject_if: proc {|det| det.fetch(:item_id).blank? }
 
