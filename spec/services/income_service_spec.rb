@@ -61,9 +61,7 @@ describe IncomeService do
       IncomeDetail.any_instance.stub(save: true)
     end
 
-    subject {
-      IncomeService.new_income(valid_params)
-    }
+    subject { IncomeService.new_income(valid_params) }
 
     it "creates and sets the default states" do
       s = stub
@@ -115,7 +113,6 @@ describe IncomeService do
       i.approver_id.should eq(UserSession.id)
       i.approver_datetime.should be_is_a(Time)
     end
-
   end
 
   context "Update" do
@@ -124,9 +121,7 @@ describe IncomeService do
       IncomeDetail.any_instance.stub(save: true)
     end
 
-    subject {
-      IncomeService.new(valid_params)
-    }
+    subject { IncomeService.new_income(valid_params) }
 
     it "Updates with errors on income" do
       TransactionHistory.any_instance.should_receive(:create_history).and_return(true)
@@ -139,7 +134,7 @@ describe IncomeService do
       i.should be_is_draft
       i.total.should > 200
 
-      attributes = valid_params.merge(total: 200)
+      attributes = valid_params.merge(total: 200.0)
       # Create
       subject.update(attributes).should be_true
 
@@ -160,7 +155,6 @@ describe IncomeService do
       subject.update_and_approve({})
       subject.income.should be_is_approved
     end
-
   end
 
   describe "create and pay" do
@@ -173,7 +167,6 @@ describe IncomeService do
       IncomeDetail.any_instance.stub(save: true)
     end
 
-
     it "creates and pays" do
       AccountQuery.any_instance.stub_chain(:bank_cash, where: [( build :cash, id: 2 )])
 
@@ -182,8 +175,8 @@ describe IncomeService do
 
       Item.should_receive(:where).with(id: item_ids).and_return(s)
 
-      is = IncomeService.new(valid_params.merge(direct_payment: "1", account_to_id: "2"))
-      is.create.should be_true
+      is = IncomeService.new_income(valid_params.merge(direct_payment: "1", account_to_id: "2"))
+      is.create_and_approve.should be_true
 
       is.ledger.should be_is_a(AccountLedger)
       # ledger
@@ -197,6 +190,68 @@ describe IncomeService do
       is.income.balance.should == 0.0
       is.income.discount.should == 10.0
       is.income.should be_is_paid
+    end
+
+    it "updates and pays" do
+      AccountQuery.any_instance.stub_chain(:bank_cash, where: [( build :cash, id: 2 )])
+
+      inc = build(:income, id: 2, state: 'draft', total: 490, balance: 490,
+                 ref_number: 'I-13-0007')
+      Income.stub(find: inc)
+      inc.stub(total_was: 490)
+
+      s = Object.new
+      s.stub(:values_of).with(:id, :price).and_return([[1, 10], [2, 20.0]])
+
+      Item.should_receive(:where).with(id: item_ids).and_return(s)
+
+      is = IncomeService.find(1)
+      is.income.should eq(inc)
+
+      is.ref_number.should eq('I-13-0007')
+      is.total.should == 490.0
+
+      attrs = valid_params.merge(direct_payment: "1", account_to_id: "2")
+
+      is.update_and_approve(attrs).should be_true
+
+      is.ledger.should be_is_a(AccountLedger)
+      # ledger
+      is.ledger.account_id.should eq(100)
+      is.ledger.account_to_id.should eq(2)
+      is.ledger.should be_is_payin
+      is.ledger.amount.should == is.income.total
+
+      # income
+      is.income.should be_is_paid
+      is.income.total.should == 490.0
+      is.income.balance.should == 0.0
+      is.income.should be_discounted
+      is.income.discount.should == 10.0
+    end
+
+    it "sets errors from expense or ledger" do
+      is = IncomeService.new_income
+
+      is.income.stub(save: false)
+      is.income.errors[:contact_id] << "Wrong"
+
+      is.create_and_approve.should be_false
+      is.errors[:contact_id].should eq(["Wrong"])
+
+      # Errors on both income and ledger
+      is = IncomeService.new_income(direct_payment: true)
+      is.stub(account_to: build(:cash, id: 3) )
+
+      is.income.stub(save: false)
+      is.income.errors[:contact_id] << "Wrong"
+      is.stub(ledger: build(:account_ledger))
+      is.ledger.errors[:reference] << "Blank reference"
+
+      is.create_and_approve.should be_false
+
+      is.errors[:contact_id].should eq(["Wrong"])
+      is.errors[:base].should eq(["Blank reference"])
     end
   end
 end

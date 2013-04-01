@@ -172,7 +172,7 @@ private
   def build_ledger
     @ledger = AccountLedger.new(
       account_to_id: account_to_id, date: date,
-      operation: 'payin', exchange_rate: 1,
+      operation: 'payout', exchange_rate: 1,
       currency: expense.currency, inverse: false
     )
   end

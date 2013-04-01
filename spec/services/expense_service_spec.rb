@@ -63,9 +63,7 @@ describe ExpenseService do
       ExpenseDetail.any_instance.stub(save: true)
     end
 
-    subject {
-      ExpenseService.new_expense(valid_params)
-    }
+    subject { ExpenseService.new_expense(valid_params) }
 
     it "creates and sets the default states" do
       s = stub
@@ -126,9 +124,7 @@ describe ExpenseService do
       ExpenseDetail.any_instance.stub(save: true)
     end
 
-    subject {
-      ExpenseService.new_expense(valid_params)
-    }
+    subject { ExpenseService.new_expense(valid_params) }
 
     it "Updates with errors on expense" do
       TransactionHistory.any_instance.should_receive(:create_history).and_return(true)
@@ -147,6 +143,7 @@ describe ExpenseService do
 
       # Expense
       e = subject.expense
+
       e.should be_is_paid
       e.should be_has_error
       e.error_messages[:balance].should_not be_blank
@@ -161,7 +158,6 @@ describe ExpenseService do
       subject.update_and_approve({})
       subject.expense.should be_is_approved
     end
-
   end
 
   describe "create and pay" do
@@ -189,7 +185,7 @@ describe ExpenseService do
       # ledger
       es.ledger.account_id.should eq(100)
       es.ledger.account_to_id.should eq(2)
-      es.ledger.should be_is_payin
+      es.ledger.should be_is_payout
       es.ledger.amount.should == -490.0
 
       # expense
@@ -226,7 +222,7 @@ describe ExpenseService do
       # ledger
       es.ledger.account_id.should eq(100)
       es.ledger.account_to_id.should eq(2)
-      es.ledger.should be_is_payin
+      es.ledger.should be_is_payout
       es.ledger.amount.should == -es.expense.total
 
       # expense
@@ -262,4 +258,3 @@ describe ExpenseService do
     end
   end
 end
-

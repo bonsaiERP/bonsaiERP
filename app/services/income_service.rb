@@ -6,7 +6,7 @@ class IncomeService < TransactionService
 
   delegate :contact, :is_approved?, :is_draft?, :income_details, 
     :income_details_attributes, :income_details_attributes=,
-    :subtotal, :total, :to_s, :state, :discount, to: :income
+    :subtotal, :to_s, :state, :discount, to: :income
 
   delegate :id, to: :income, prefix: true
 
@@ -53,22 +53,30 @@ class IncomeService < TransactionService
   end
 
   def update(attrs = {})
+    self.attributes = attrs
+    create_or_update do
+      res = TransactionHistory.new.create_history(income)
+      income.attributes = income_attributes
+      update_income_data
+
+      income.save && res
+    end
+  end
+
+  def update_and_approve(attrs = {})
+    self.attributes = attrs
     build_ledger if can_pay?
+    income.approve!
+
     create_or_update do
       res = TransactionHistory.new.create_history(income)
       income.attributes = income_attributes
 
-      yield if block_given?
       update_income_data
+      res = income.save && res
 
-      res = income.save
-
-      create_ledger && res
+      res && create_ledger
     end
-  end
-
-  def update_and_approve(params)
-    update(params) { income.approve! }
   end
 
   # Sets the expense params when new_record
@@ -98,8 +106,13 @@ private
   # total is the alias for amount due that Income < Account
   def update_income_data
     income.balance -= (income.total_was - income.total)
-    income.set_state_by_balance!
     update_details
+    income.gross_total = original_income_total
+    income.set_state_by_balance!
+    income.discounted = ( discount > 0 )
+
+    set_paid_income if ledger.present?
+
     IncomeErrors.new(income).set_errors
   end
 
@@ -109,13 +122,15 @@ private
     income.gross_total = original_income_total
     income.balance = income.total
     income.state = 'draft' if state.blank?
-    income.discounted = true if discount > 0
+    income.discounted = ( discount > 0 )
     income.creator_id = UserSession.id
 
-    if direct_payment?
-      income.state = 'paid'
-      income.amount = 0.0
-    end
+    set_paid_income if ledger.present?
+  end
+
+  def set_paid_income
+    income.balance = 0
+    income.state = 'paid'
   end
 
   # Set details for a new Income
@@ -128,6 +143,7 @@ private
 
   def update_details
     income_details.each do |det|
+      det.original_price = item_prices[det.item_id]
       det.balance = get_detail_balance(det)
     end
   end
