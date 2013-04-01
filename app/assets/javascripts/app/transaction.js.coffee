@@ -150,7 +150,6 @@ class Transaction extends Backbone.Collection
   #
   setList: ->
     @$table.find('tr.item').each (i, el) =>
-      console.log $(el).find('input.autocomplete').data('value') #####
       @add($(el).data('item') )
       item = @models[@length - 1]
       rivets.bind(el, {item: item})
