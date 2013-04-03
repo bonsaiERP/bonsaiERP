@@ -23,7 +23,8 @@
 @blue:                  #049cdb;
 @blueDark:              #0064cd;
 @green:                 #88b92d;
-@red:                   #9d261d;
+//@red:                   #9d261d;
+@red:                   rgb(219,0,0);
 @yellow:                #ffc40d;
 @orange:                #f89406;
 @pink:                  #c3325f;
@@ -102,7 +103,8 @@
 @btnWarningBackground:              lighten(@orange, 15%);
 @btnWarningBackgroundHighlight:     @orange;
 
-@btnDangerBackground:               #ee5f5b;
+//@btnDangerBackground:               #ee5f5b;
+@btnDangerBackground:               @red;
 @btnDangerBackgroundHighlight:      #bd362f;
 
 @btnInverseBackground:              #444;
@@ -236,7 +238,7 @@
 @warningBackground:       #fcf8e3;
 @warningBorder:           darken(spin(@warningBackground, -10), 3%);
 
-@errorText:               #b94a48;
+@errorText:               @red;
 @errorBackground:         #f2dede;
 @errorBorder:             darken(spin(@errorBackground, -10), 3%);
 
