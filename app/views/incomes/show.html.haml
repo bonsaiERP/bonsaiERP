@@ -9,8 +9,8 @@
 
 %header
   - if @income.has_error
-    .allowed-errors
-      %h3 Existen errores que debe corregir!
+    .alert.alert-error
+      %h4 Existen errores que debe corregir!
       %ul
         - @income.error_messages.each do |k, arr|
           - arr.each do |v|

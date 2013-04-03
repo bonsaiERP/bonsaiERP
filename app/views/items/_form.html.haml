@@ -38,7 +38,8 @@
     .span6
       = f.input :description, label: 'Descripción', input_html: {class: 'span12'}
 
-  = f.submit "Salvar", :class => 'btn btn-success b'
+  .form-actions
+    = f.submit "Salvar", :class => 'btn btn-success b'
 
 :javascript
   $(function() {
