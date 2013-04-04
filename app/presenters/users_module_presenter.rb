@@ -13,7 +13,7 @@ module UsersModulePresenter
   end
 
   def nuller_label
-    return "<span class='label' rel='tooltip' title='#{nuller} #{l nuller_datetime}'>#{user_icon}#{nuller.id}}</span>".html_safe if nuller.present?
+    return "<span class='label label-important' rel='tooltip' title='#{nuller} #{l nuller_datetime}'>#{user_icon}#{nuller.id}</span>".html_safe if nuller.present?
     ""
   end
 

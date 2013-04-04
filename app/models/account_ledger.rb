@@ -70,9 +70,9 @@ class AccountLedger < ActiveRecord::Base
     "%06d" % id
   end
 
-  # Determines if the ledger can be nulled
-  def can_destroy?
-    active? and not(conciliation?)
+  # Determines if the ledger can be conciliated or nulled
+  def can_conciliate_or_null?
+    active? && not(conciliation?)
   end
 
   def amount_currency

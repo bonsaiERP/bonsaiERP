@@ -1,0 +1,22 @@
+= form_for ledger, url: conciliate_account_ledger_path(ledger), html: {id: 'conciliate-null-form'} do |f|
+  = f.submit 'Verificar transacción', id: 'conciliate-button', name: 'conciliate_commit', class: 'btn btn-success b'
+  = f.submit 'Anular transacción', id: 'null-button', name: 'null_commit', class: 'btn btn-danger b'
+
+:javascript
+  $(function() {
+    to_name = $('.account_to_name').text()
+    $('#conciliate-button').popover({
+      trigger: 'hover',
+      title: 'Verificación',
+      html: true,
+      content: 'Actualiza el balance de la cuentas asociadas <br/><strong>' + to_name + '</strong>'
+    });
+
+    $('#conciliate-null-form').submit( function(event) {
+      if(confirm('Esta segur@ de realizar la operación?') ) {
+        return true;
+      }else {
+        return false;
+      }
+    });
+  })

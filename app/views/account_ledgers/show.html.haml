@@ -8,11 +8,7 @@
         = render_if @ledger.account_contact do
           = link_to @ledger.account_contact_tag, @ledger.account_contact
 
-- unless @ledger.conciliation?
-  = form_for @ledger, url: conciliate_account_ledger_path(@ledger) do |f|
-    %button#conciliate-button.btn.btn-success.b()
-      %i.icon-ok
-      Verificar transacción
+= render 'account_ledgers/conciliate_null_form', ledger: @ledger if @ledger.can_conciliate_or_null?
 
 = render_if @ledger.project do
   %h3
@@ -45,13 +41,3 @@
     = ntc @ledger.account_to_amount
     = currency_label @ledger.account_to_currency
 
-:coffeescript
-  $(->
-    to_name = $('.account_to_name').text()
-    $('#conciliate-button').popover(
-      trigger: 'hover'
-      title: 'Verificación'
-      html: true
-      content: 'Actualiza el balance de la cuenta asociada <br/><strong>' + to_name + '</strong>'
-    )
-  )

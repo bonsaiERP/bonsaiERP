@@ -21,16 +21,19 @@ class AccountLedgersController < ApplicationController
   #
   # PUT /account_ledgers/:id/conciliate 
   def conciliate
-    ledger = AccountLedger.find(params[:id])
-    con = ConciliateAccount.new(ledger)
+    @ledger = AccountLedger.find(params[:id])
 
-    if con.conciliate!
-      flash[:notice] = "Se ha verificado exitosamente la transacción."
-    else
-      flash[:error] = "Exisitio un error al conciliar la transacción."
+    # TODO: Move the logic and control from the model or service
+    if @ledger.can_conciliate_or_null?
+      case
+      when params[:conciliate_commit].present?
+        conciliate_account
+      when
+        null_account
+      end
     end
 
-    redirect_to account_ledger_path(ledger)
+    redirect_to account_ledger_path(@ledger)
   end
 
   # POST /account_ledgers
@@ -72,6 +75,25 @@ class AccountLedgersController < ApplicationController
       redirect_to account_ledger_path(@account_ledger, :ac_id => @account_ledger.account_id)
     else
       render :action => 'new_transference'
+    end
+  end
+
+private
+  def conciliate_account
+    con = ConciliateAccount.new(@ledger)
+
+    if con.conciliate!
+      flash[:notice] = "Se ha verificado exitosamente la transacción."
+    else
+      flash[:error] = "Exisitio un error al conciliar la transacción."
+    end
+  end
+
+  def null_account
+    if @ledger.update_attributes(nuller_id: UserSession.id, active: false, nuller_datetime: Time.zone.now)
+      flash[:notice] = "Se ha anulado exitosamente la transacción."
+    else
+      flash[:error] = "Exisitio un error al anular la transacción."
     end
   end
 end

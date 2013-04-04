@@ -25,6 +25,14 @@ class Bank < Account
     end
   end
 
+  def pendent_ledgers
+    AccountLedgerQuery.new.money(id).pendent
+  end
+
+  def get_ledgers
+    AccountLedgerQuery.new.money(id)
+  end
+
   def to_s
     "#{name} #{number}"
   end

@@ -2,20 +2,26 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class AccountLedgerPresenter < Resubject::Presenter
-  def conciliation_tag
-    html = if conciliation?
-            "<i class='icon-ok text-success' title='Verficado' rel='tooltip'></i>"
-           else
+  include UsersModulePresenter
+
+  def initials(name)
+    name.split(' ').map(&:first).join('')
+  end
+
+  def verified_tag
+    html = if can_conciliate_or_null?
              "<i class='icon-remove text-error' title='No verficado' rel='tooltip'></i>"
+           else
+            "<i class='icon-ok text-success' title='Verficado' rel='tooltip'></i>"
            end
 
     html.html_safe
   end
 
-  include UsersModulePresenter
-
-  def initials(name)
-    name.split(' ').map(&:first).join('')
+  def nulled_tag
+    unless active?
+      "<span class='label label-important'>ANULADA</span>".html_safe
+    end
   end
 
   def operation_label
