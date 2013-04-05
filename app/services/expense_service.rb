@@ -43,8 +43,8 @@ class ExpenseService < TransactionService
   # Creates  and approves an Expense
   def create_and_approve
     build_ledger if can_pay?
-    set_expense_data
     expense.approve!
+    set_expense_data
 
     create_or_update do
       res = expense.save

@@ -75,30 +75,30 @@ describe ExpenseService do
       subject.create.should be_true
 
       # Expense
-      i = subject.expense
-      i.should be_is_a(Expense)
-      i.should be_is_draft
-      i.should be_active
-      i.ref_number.should =~ /E-\d{2}-\d{4}/
-      i.date.should be_is_a(Date)
+      e = subject.expense
+      e.should be_is_a(Expense)
+      e.should be_is_draft
+      e.should be_active
+      e.ref_number.should =~ /E-\d{2}-\d{4}/
+      e.date.should be_is_a(Date)
 
-      i.creator_id.should eq(UserSession.id)
+      e.creator_id.should eq(UserSession.id)
 
       # Number values
-      i.exchange_rate.should == 1
-      i.total.should == total
+      e.exchange_rate.should == 1
+      e.total.should == total
 
-      i.gross_total.should == (10 * 10.5 + 20 * 20.0)
-      i.balance.should == total
-      i.gross_total.should > i.total
+      e.gross_total.should == (10 * 10.5 + 20 * 20.0)
+      e.balance.should == total
+      e.gross_total.should > e.total
 
-      i.discount == i.gross_total - total
-      i.should be_discounted
+      e.discount == e.gross_total - total
+      e.should be_discounted
 
-      i.expense_details[0].original_price.should == 10.5
-      i.expense_details[0].balance.should == 10.0
-      i.expense_details[1].original_price.should == 20.0
-      i.expense_details[1].balance.should == 20.0
+      e.expense_details[0].original_price.should == 10.5
+      e.expense_details[0].balance.should == 10.0
+      e.expense_details[1].original_price.should == 20.0
+      e.expense_details[1].balance.should == 20.0
     end
 
     it "creates and approves" do
@@ -107,13 +107,13 @@ describe ExpenseService do
       subject.create_and_approve.should be_true
 
       # Expense
-      i = subject.expense
-      i.should be_is_a(Expense)
-      i.should be_is_approved
-      i.should be_active
-      i.due_date.should eq(i.date)
-      i.approver_id.should eq(UserSession.id)
-      i.approver_datetime.should be_is_a(Time)
+      e = subject.expense
+      e.should be_is_a(Expense)
+      e.should be_is_approved
+      e.should be_active
+      e.due_date.should eq(e.date)
+      e.approver_id.should eq(UserSession.id)
+      e.approver_datetime.should be_is_a(Time)
     end
 
   end
