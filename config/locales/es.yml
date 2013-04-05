@@ -251,6 +251,7 @@ es:
         wrong_password: "La contraseña que ingreso es incorrecta"
         user_limit: "Su empresa ha llegado a su limite en el número de usuarios"
         email_not_found: "El email que ingreso no existe"
+        link_found: 'El usuario ya existe en su empresa activelo.'
       transaction:
         repeated_items: "Existen items repetidos, por favor revise"
         unconcilied_ledgers: "Existen transacciones pendientes de revisión"

@@ -19,7 +19,7 @@ describe AdminUser do
       Link.any_instance.stub(save: true)
       User.any_instance.stub(save: true)
 
-      ad = AdminUser.new(User.new(valid_attributes))
+      ad = AdminUser.new(valid_attributes)
       # Check email is send
       RegistrationMailer.should_receive(:user_registration).with(ad).and_return(stub(deliver: true))
 
@@ -42,10 +42,40 @@ describe AdminUser do
       Link.any_instance.stub(save: true)
       User.any_instance.stub(save: true)
 
-      ad = AdminUser.new(User.new(valid_attributes.merge(rol: 'admin')))
+      ad = AdminUser.new(valid_attributes.merge(rol: 'admin'))
       ad.add_user.should be_true
-      
+
       ad.user.active_links.first.rol.should eq('other')
+    end
+
+    it "validates_user with link" do
+      user = build(:user, id: 10)
+      user.stub(new_record?: false)
+      User.stub_chain(:active, find_by_email: user)
+      Link.stub(where: [ Link.new ])
+
+      ad = AdminUser.new(valid_attributes)
+      ad.add_user.should be_false
+
+      ad.user.errors[:email].should eq([I18n.t('errors.messages.user.link_found')])
+    end
+
+    it "adds link" do
+      user = build(:user, id: 10)
+      user.stub(new_record?: false)
+      User.stub_chain(:active, find_by_email: user)
+      Link.any_instance.stub(save: true)
+      User.any_instance.stub(save: true)
+      RegistrationMailer.stub_chain(:user_registration, deliver: true)
+
+      ad = AdminUser.new(valid_attributes)
+      ad.add_user.should be_true
+
+      link = ad.user.active_links.first
+
+      link.user_id.should eq(10)
+      link.organisation_id.should eq(OrganisationSession.id)
+      link.rol.should eq('group')
     end
   end
 

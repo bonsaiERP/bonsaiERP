@@ -11,6 +11,8 @@ describe TransactionDetail do
     td.subtotal.should eq(8)
 
     td.data_hash.should eq({
+      id: td.id,
+      item_id: td.item_id,
       original_price: td.original_price, 
       price: td.price, 
       quantity: td.quantity, 

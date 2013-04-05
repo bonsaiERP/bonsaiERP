@@ -24,8 +24,6 @@ describe Contact do
     it { should have_valid(:email).when('test@mail.com', 'my@example.com.bo', '') }
     it { should_not have_valid(:email).when('test@mail.com.1', 'my@example.com.bo.', 'hi') }
 
-    it { should have_valid(:phone).when('121212', '2323-232-98', '43 2323 32') }
-    it { should_not have_valid(:phone).when('121212-', '2323-232 ', '43 2323a 32') }
 
   end
 

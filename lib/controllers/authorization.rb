@@ -12,7 +12,7 @@ private
 
     # TODO check due_date
     unless authorized_user?
-      flash[:alert] = "Usted ha sido redireccionado por que no tiene los privilegios."
+      flash[:alert] = "Usted ha sido redireccionado por que no tiene suficientes privilegios."
       redir = request.referer.present? ? :back : dashboard_path
 
       redirect_to redir and return
