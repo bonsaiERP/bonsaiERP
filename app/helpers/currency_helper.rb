@@ -18,4 +18,6 @@ module CurrencyHelper
   def currency_label(cur = currency)
     "<span class='label label-inverse' title='#{CURRENCIES[cur].fetch(:name)}' rel='tooltip'>#{cur}</span>".html_safe
   end
+
+  alias :currency_tag :currency_label
 end

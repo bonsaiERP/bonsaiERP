@@ -3,6 +3,7 @@
 # email: boriscyber@gmail.com
 class DashboardPresenter < Struct.new(:view_context)
   delegate :render, :link_to, to: :view_context
+  delegate :incomes_by_item, :expenses_by_item, to: :report
 
   alias :vc :view_context
 
@@ -11,5 +12,9 @@ class DashboardPresenter < Struct.new(:view_context)
     if total > 0
       link_to "<i class='icon-warning-sign'></i> Hay #{total} transaccion(es) no verificadas".html_safe, vc.account_ledgers_path, class: 'text-error'
     end
+  end
+
+  def report
+    @report ||= Report.new
   end
 end

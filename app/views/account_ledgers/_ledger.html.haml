@@ -1,0 +1,30 @@
+%li.row-fluid
+  - ledger = present ledger
+  .span5
+    %h4
+      = ledger.verified_tag
+      = link_to ledger, ledger
+      = ledger.operation_tag
+      = ledger.nulled_tag
+    %h5= link_to ledger.account_contact_tag, ledger.account_contact
+    %p
+      %h5
+        %i= l ledger.date.to_date
+        &nbsp;
+        %span.muted De:
+        = link_to ledger.account, ledger.account
+        %span.muted A:
+        = link_to ledger.account_to, ledger.account_to
+  .span5
+    .span7
+      %i.icon-file.muted(rel='tooltip' title="referencia")
+      = nl2br ledger.reference
+    .span5.r
+      %span.muted Cantidad
+      = ntc ledger.amount_ref(account.id)
+      = currency_label ledger.currency_ref(account.id)
+  .span2
+    = ledger.creator_label.html_safe
+    = ledger.approver_label.html_safe
+    = ledger.nuller_label.html_safe
+

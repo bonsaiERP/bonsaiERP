@@ -16,5 +16,15 @@
 = render file: 'dashboard/general_aspects'
 
 = @dashboard.pendent_ledgers
+.row-fluid
+  .span6
+    %h4.n Egresos por ítem en los últimos 30 días
+    %ul.unstyled
+      = render partial: 'items/expenses', collection: @dashboard.expenses_by_item, as: :item
+
+  .span6
+    %h4.n Ingresos por ítem en los últimos 30 días
+    %ul.unstyled
+      = render partial: 'items/expenses', collection: @dashboard.incomes_by_item, as: :item
 
 -#= render 'dashboard/demo_colors'

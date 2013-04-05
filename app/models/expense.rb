@@ -37,6 +37,7 @@ class Expense < Account
   # Scopes
   scope :discount, -> { joins(:transaction).where(transaction: {discounted: true}) }
   scope :approved, -> { where(state: 'approved') }
+  scope :active,   -> { where(state: ['approved', 'paid']) }
 
   ########################################
   # Delegations

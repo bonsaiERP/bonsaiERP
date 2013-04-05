@@ -1,3 +1,6 @@
+# encoding: utf-8
+# author: Boris Barroso
+# email: boriscyber@gmail.com
 class IncomeQuery
   def initialize(rel = Income)
     @rel = rel
@@ -8,7 +11,6 @@ class IncomeQuery
   end
 
   def search(params={})
-    #@rel = @rel.where{} if params[:search].present?
     @rel.includes(:contact, transaction: [:creator, :approver])
   end
 
