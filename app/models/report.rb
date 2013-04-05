@@ -25,6 +25,7 @@ private
       WHERE d.account_id in (#{ids.join(", ")})
       GROUP BY (i.id)
       ORDER by total DESC
+      LIMIT 10
     SQL
   end
 end
