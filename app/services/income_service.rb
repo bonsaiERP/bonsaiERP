@@ -43,8 +43,8 @@ class IncomeService < TransactionService
   # Creates  and approves an Income
   def create_and_approve
     build_ledger if can_pay?
-    set_income_data
     income.approve!
+    set_income_data
 
     create_or_update do
       res = income.save

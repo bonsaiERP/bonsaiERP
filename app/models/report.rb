@@ -21,11 +21,9 @@ private
     <<-SQL
       SELECT i.id, i.name, SUM(d.price * d.quantity * a.exchange_rate) AS total
       FROM transaction_details d JOIN items i ON (i.id = d.item_id)
-      JOIN accounts a ON (a.id = d.id)
+      JOIN accounts a ON (a.id = d.account_id)
       WHERE d.account_id in (#{ids.join(", ")})
       GROUP BY (i.id)
-      ORDER by total DESC
-      LIMIT 10
     SQL
   end
 end
