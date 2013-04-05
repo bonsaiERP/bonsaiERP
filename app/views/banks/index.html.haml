@@ -15,11 +15,13 @@
     %li.row-fluid
       .span7
         %h3= link_to bank, bank
+        - if bank.pendent_ledgers.any?
+          =link_to bank_path(bank.id, pendent: true) , class: 'text-error' do
+            %i.icon-warning-sign
+            Tiene transaccines pendientes
       .span3
         .moneybox
           %label TOTAL EN CUENTA
           %h3
             = ntc bank.amount
             = currency_label bank.currency
-
-        -#= pendent_money_link(bank, :class => 'fs110')

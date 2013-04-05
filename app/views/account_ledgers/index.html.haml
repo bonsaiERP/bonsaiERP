@@ -1,3 +1,33 @@
-%h1 Detalle de cuenta
+%h1 Transacciones no verificadas
 
-= render "list", :account_ledgers => @account_ledgers
+%ul.unstyled.listing
+  - @ledgers.each do |al|
+    - al = present al
+    %li.row-fluid
+      .span5
+        %h4
+          = al.verified_tag
+          = link_to al, al
+          = al.operation_tag
+          = al.nulled_tag
+        %h5= link_to al.account_contact_tag, al.account_contact
+        %p
+          %h5
+            %i= l al.date.to_date
+            &nbsp;
+            %span.muted De:
+            = link_to al.account, al.account
+            %span.muted A:
+            = link_to al.account_to, al.account_to
+      .span5
+        .span7
+          %i.icon-file.muted(rel='tooltip' title="referencia")
+          = nl2br al.reference
+        .span5.r
+          %span.muted Cantidad
+          = ntc al.amount
+          = currency_label al.currency
+      .span2
+        = al.creator_label.html_safe
+        = al.approver_label.html_safe
+        = al.nuller_label.html_safe

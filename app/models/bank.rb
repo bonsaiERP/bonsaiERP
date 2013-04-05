@@ -29,7 +29,7 @@ class Bank < Account
     AccountLedgerQuery.new.money(id).pendent
   end
 
-  def get_ledgers
+  def ledgers
     AccountLedgerQuery.new.money(id)
   end
 

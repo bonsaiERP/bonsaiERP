@@ -5,7 +5,7 @@ class AccountLedgersController < ApplicationController
  
   # GET /account_ledger 
   def index
-    @account_ledgers = AccountLedger.where(:account_id => params[:id]).order("date DESC")
+    @ledgers = AccountLedger.pendent
   end
 
   # GET /account_ledgers/:id

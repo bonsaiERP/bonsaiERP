@@ -4,5 +4,6 @@
 class DashboardController < ApplicationController
   # GET /dashboard
   def index
+    @dashboard = DashboardPresenter.new(view_context)
   end
 end
