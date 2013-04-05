@@ -24,6 +24,8 @@ private
       JOIN accounts a ON (a.id = d.account_id)
       WHERE d.account_id in (#{ids.join(", ")})
       GROUP BY (i.id)
+      ORDER BY total DESC
+      LIMIT 10
     SQL
   end
 end
