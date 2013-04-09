@@ -24,6 +24,10 @@ class Contact < ActiveRecord::Base
   # Scopes
   scope :clients, where(client: true)
   scope :suppliers, where(supplier: true)
+  scope :search, ->(s) { 
+    s = "%#{s}%"
+    where{(matchcode.like "#{s}") | (first_name.like "#{s}")| (last_name.like "#{s}")}
+  }
 
   default_scope where(staff: false)
 
@@ -32,9 +36,6 @@ class Contact < ActiveRecord::Base
 
   ########################################
   # Methods
-  def self.search(match)
-    includes(:contact_accounts).where{matchcode =~ "%#{match}%"}
-  end
 
   # Finds a contact using the type
   # @param String

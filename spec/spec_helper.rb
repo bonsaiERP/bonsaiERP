@@ -9,7 +9,7 @@ Spork.prefork do
   # if you change any configuration or code from libraries loaded here, you'll
   # need to restart spork for it take effect.
   ENV['RAILS_ENV'] ||= 'test'
-  
+
   require File.expand_path("../../config/environment", __FILE__)
   require 'rspec/rails'
   require 'capybara/rspec'
@@ -17,7 +17,7 @@ Spork.prefork do
 
   Rspec.configure do |config|
     config.mock_with :rspec
-    
+
     config.before(:suite) do
       DatabaseCleaner.strategy = :transaction
       DatabaseCleaner.clean_with(:truncation)
@@ -36,12 +36,12 @@ Spork.prefork do
       #end
       #log.info example.description
     end
-   
+
     #config.include Devise::TestHelpers, :type => :controller
     config.after(:each) do
       DatabaseCleaner.clean
     end
-    
+
 
     config.use_transactional_fixtures = false
 

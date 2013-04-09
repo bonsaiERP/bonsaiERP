@@ -1,0 +1,20 @@
+- if params[:search].present?
+  Busqueda
+  %strong= params[:search]
+  ,
+  =link_to 'eliminar filtro', items_path
+
+= form_tag '/items', method: 'get', html: {class: 'form-inline'} do
+  = text_field_tag 'search', '', class: 'span8', placeholder: 'Buscar'
+  = submit_tag 'Buscar', class: 'btn btn-primary'
+
+:javascript
+  $(function() {
+    $('#search').autocomplete({
+      source: '/items',
+      select: function(e, ui) {
+        window.location = '/items/' + ui.item.id
+      }
+    });
+  })
+

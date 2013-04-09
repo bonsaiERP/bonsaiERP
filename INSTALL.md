@@ -64,6 +64,10 @@ Install **PostgreSQL 9.2**
     sudo apt-get upgrade
     sudo apt-get install postgresql-9.2 libpq-dev postgresql-contrib-9.2
 
+To upgrate 
+`sudo apt-get update`
+`sudo apt-get --only-upgrade install postgresql-9.2 postgresql-client-9.2`
+
 ### Create a user for the database
     
     sudo -u postgres createuser --superuser $USER

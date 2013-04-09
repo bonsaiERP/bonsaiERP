@@ -110,4 +110,8 @@ private
       OrganisationSession.organisation = current_organisation
     end
   end
+
+  def search_term
+    params[:search] || params[:q] || params[:term]
+  end
 end

@@ -27,6 +27,7 @@ class IncomeService < TransactionService
     new(inc.attributes) do |is|
       is.ref_number = inc.ref_number
       is.total = inc.total
+      is.due_date = inc.due_date
       is.income = inc
     end
   end

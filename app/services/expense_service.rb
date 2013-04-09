@@ -27,6 +27,7 @@ class ExpenseService < TransactionService
     new(exp.attributes) do |es|
       es.ref_number = exp.ref_number
       es.total = exp.total
+      es.due_date = exp.due_date
       es.expense = exp
     end
   end

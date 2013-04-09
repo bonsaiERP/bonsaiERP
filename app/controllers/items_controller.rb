@@ -6,10 +6,15 @@ class ItemsController < ApplicationController
 
   # GET /items
   def index
-    if params[:search].present?
-      @items = Item.search(params).page(@page)
+    if search_term.present?
+      @items = Item.search(search_term).includes(:unit).order('name asc').page(@page)
     else
       @items = Item.includes(:unit, :stocks).order('name asc').page(@page)
+    end
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @items }
     end
   end
 

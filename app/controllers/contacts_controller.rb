@@ -7,18 +7,16 @@ class ContactsController < ApplicationController
   #respond_to :html, :json
   # GET /contacts
   def index
-    @contacts = Contact.order('matchcode asc').page(@page)
+    if search_term.present?
+      @contacts = Contact.search(search_term).order('matchcode asc').page(@page)
+    else
+      @contacts = Contact.order('matchcode asc').page(@page)
+    end
 
     respond_to do |format|
       format.html
       format.json { render json: @contacts }
     end
-  end
-
-  # GET /contacts/search?term=:term
-  def search
-    s = params[:term] || params[:q]
-    render json: Contact.search(s).limit(20).order('matchcode')
   end
 
   # GET /contacts/1
