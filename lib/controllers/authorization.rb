@@ -77,7 +77,8 @@ private
       units: true,
       users: true,
       user_passwords: true,
-      dashboard: true
+      dashboard: true,
+      reports: true
     }
   end
 
@@ -105,7 +106,8 @@ private
       units: true,
       users: true,
       user_passwords: true,
-      dashboard: true
+      dashboard: true,
+      reports: true
     }
   end
 

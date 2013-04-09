@@ -1,6 +1,8 @@
 # encoding: utf-8
 Bonsaierp::Application.routes.draw do
 
+  resources :reports, only: ['index']
+
   resources :organisation_updates, only: [:edit, :update]
 
   resources :admin_users, except: [:index, :destroy]

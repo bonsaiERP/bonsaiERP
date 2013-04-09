@@ -1,0 +1,12 @@
+.row-fluid
+  .span6
+    %h4.n Ingresos por ítem en los últimos 30 días
+    %ul.unstyled
+      = render partial: 'items/trans_detail', collection: @report.incomes_by_item, as: :item
+
+  .span6
+    %h4.n Egresos por ítem en los últimos 30 días
+    %ul.unstyled
+      = render partial: 'items/trans_detail', collection: @report.expenses_by_item(limit: 30), as: :item
+
+
