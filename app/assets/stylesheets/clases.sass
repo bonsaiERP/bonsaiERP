@@ -220,43 +220,6 @@ ul.tabs
   background-color: darken($red, 20%)
   color: white
 
-/***********************************/
-/* MENU CLASS */
-
-ul.menu
-  position: relative
-  padding: 0px
-  margin: 0px
-  z-index: 100
-  a
-    margin: 0px
-    text-decoration: none
-    &:hover
-      color: $green
-  li
-    list-style: none
-    margin: 0px
-    padding: 0px
-    float: left
-    ul
-      display: none
-      margin: 0px
-      border: 1px solid $gray
-      background-color: $white
-      padding: 0px
-      margin-top: -1px
-      font-weight: normal
-      li
-        float: none !important
-        a
-          padding: 6px 20px
-          display: block
-          font-size: 110%
-    &:hover
-      ul
-        display: block
-        position: absolute
-
 
 // List of banks or cashses
 .accounts_list
@@ -312,7 +275,7 @@ span.more
 span.warning
   background: url(images/warning.png) no-repeat
 
-.ib 
+.ib, .inline-block
   display: inline-block
 
 .add-new

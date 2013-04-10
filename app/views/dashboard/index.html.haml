@@ -17,13 +17,39 @@
 
 = @dashboard.pendent_ledgers
 
+
+= render 'dashboard/graph', data: @dashboard
+
 .row-fluid
-  .span6
+  .span6.well.well-small
+    %h4.n Ingresos los últimos 30 días
+    .alert.alert-success.inline-block
+      %h3.text-success
+        \%
+        = ntc @dashboard.incomes_percentage
+
+    %h3.n.ib
+      = currency
+      = ntc @dashboard.total_incomes
+
+  .span6.well.well-small
+    %h4.n Egresos los últimos 30 días
+    .alert.alert-error.inline-block
+      %h3
+        \%
+        = ntc @dashboard.expenses_pecentage
+
+    %h3.n.inline-block
+      = currency
+      = ntc @dashboard.total_expenses
+
+.row-fluid
+  .span6.well.well-small
     %h4.n Ingresos por ítem en los últimos 30 días
     %ul.unstyled
       = render partial: 'items/trans_detail', collection: @dashboard.incomes_by_item, as: :item
 
-  .span6
+  .span6.well.well-small
     %h4.n Egresos por ítem en los últimos 30 días
     %ul.unstyled
       = render partial: 'items/trans_detail', collection: @dashboard.expenses_by_item, as: :item

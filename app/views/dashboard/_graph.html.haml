@@ -1,0 +1,10 @@
+%h3.n
+  Gráfica de <span class="text-success">Ingresos</span> vs <span class="text-error">Egresos</span> diarios
+
+.row-fluid
+  #report1.span12(style='height: 300px')
+
+:javascript
+  $(function() {
+    var rep = new App.Report('#report1', #{data.incomes_dayli.to_json}, #{data.expenses_dayli.to_json})
+  })

@@ -1,6 +1,6 @@
-class DateRange < Struct.new(:start_date, :end_date)
-  alias :sdate :start_date
-  alias :edate :end_date
+class DateRange < Struct.new(:date_start, :date_end)
+  alias :dates :date_end
+  alias :dates :date_end
 
   def self.default
     last

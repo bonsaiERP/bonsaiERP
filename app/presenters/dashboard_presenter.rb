@@ -3,7 +3,8 @@
 # email: boriscyber@gmail.com
 class DashboardPresenter < Struct.new(:view_context)
   delegate :render, :link_to, to: :view_context
-  delegate :incomes_by_item, :expenses_by_item, to: :report
+  delegate :incomes_by_item, :expenses_by_item, :total_incomes, :total_expenses, :total,
+   :incomes_percentage, :expenses_pecentage, :incomes_dayli, :expenses_dayli, to: :report
 
   alias :vc :view_context
 
