@@ -18,7 +18,7 @@ class Account < ActiveRecord::Base
   validates_uniqueness_of :name
 
   # attribute
-  serialize :error_messages, Hash
+  serialize :error_messages, JSON
 
   ########################################
   # Scopes

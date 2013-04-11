@@ -28,32 +28,5 @@
         Total
       .span6.r.b.muted
         Saldo
-  - @expenses.each do |expense|
-    - expense = present expense
-    %li.row-fluid
-      .span4
-        %h4
-          = link_to expense, expense
-        = expense.has_error_label
-        %h5
-          %i.icon-user(title="Contacto" data-toggle='tooltip')
-          = expense.contact
-        .clear-both
-        = expense.state_tag
-        %i= l expense.date
-      .span3
-        = expense.due_date_tag
-        .clear-both
-        = expense.creator_label
-        = expense.approver_label
-        = expense.nuller_label
-      .span4
-        .span6.r
-          = ntc expense.total
-          = currency_label expense.currency
 
-        .span6.r
-          = ntc expense.balance
-          = currency_label expense.currency
-      .span1.r
-        = link_to icon_edit, edit_expense_path(expense), class: 'dark'
+  =render @expenses

@@ -36,32 +36,4 @@
         Total
       .span6.r.b.muted
         Saldo
-  - @incomes.each do |income|
-    - income = present income
-    %li.row-fluid
-      .span4
-        %h4
-          = link_to income, income
-        = income.has_error_label
-        %h5
-          %i.icon-user(title="Contacto" data-toggle='tooltip')
-          = income.contact
-        .clear-both
-        = income.state_tag
-        %i= l income.date
-      .span3
-        = income.due_date_tag
-        .clear-both
-        = income.creator_label
-        = income.approver_label
-        = income.nuller_label
-      .span4
-        .span6.r
-          = ntc income.total
-          = currency_label income.currency
-
-        .span6.r
-          = ntc income.balance
-          = currency_label income.currency
-      .span1.r
-        = link_to icon_edit, edit_income_path(income.id), class: 'dark'
+  = render @incomes

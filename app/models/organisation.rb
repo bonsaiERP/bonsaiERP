@@ -10,7 +10,7 @@ class Organisation < ActiveRecord::Base
   ########################################
   # Attributes
   attr_readonly :tenant
-  serialize :preferences, Hash
+  serialize :preferences, JSON
 
   attr_protected :user_id
 

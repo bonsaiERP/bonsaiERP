@@ -4,8 +4,7 @@
 class TransactionHistory < ActiveRecord::Base
 
   # hash is a reserved word
-  #attr_reader :hash, :klass, #
-  serialize :data, Hash
+  serialize :data, JSON
 
   # Relationships
   belongs_to :income, foreign_key: :account_id#, conditions: {type: 'Income'}
@@ -13,8 +12,6 @@ class TransactionHistory < ActiveRecord::Base
   belongs_to :user
 
   validates_presence_of :user_id
-
-  serialize :data
 
   def create_history(trans)
     self.account_id = trans.id

@@ -10,6 +10,7 @@ class Income < Account
   ########################################
   # Callbacks
   before_create :set_client
+  before_save   :update_contact_incomes_status, if: :amount_changed?
 
   ########################################
   # Relationships
@@ -39,6 +40,10 @@ class Income < Account
   scope :discount, joins(:transaction).where(transaction: {discounted: true})
   scope :approved, -> { where(state: 'approved') }
   scope :active,   -> { where(state: ['approved', 'paid']) }
+  scope :contact, -> (cid) { where(contact_id: cid) }
+  scope :to_pay_contact, -> (cid) { contact.where(amount.gt 0) }
+  scope :pendent_except, ->(iid) { active.where{ (id.not_eq iid) & (amount.not_eq 0) } }
+  scope :pendent_contact_except, ->(cid, iid) { contact(cid).pendent_except(iid) }
 
   ########################################
   # Delegations
@@ -46,6 +51,7 @@ class Income < Account
   delegate :discounted?, :delivered?, :devolution?, :total_was,
     :creator, :approver, :nuller, to: :transaction
   delegate :attributes, to: :transaction, prefix: true
+  delegate :currency, :name, prefix: :org, to: OrganisationSession, allow_nil: true
 
   # Define boolean methods for states
   STATES.each do |_state|
@@ -102,5 +108,15 @@ class Income < Account
 private
   def set_client
     contact.update_attribute(:client, true) if contact.present? && !contact.client?
+  end
+
+  def update_contact_incomes_status
+    incs = Income.active.pendent_contact_except(contact_id, id)
+    .select('sum(amount * exchange_rate) AS tot, currency').group(:currency)
+
+    h = { org_currency => incs.find {|v| v.currency === org_currency }.tot.to_d.round(2) }
+    incs.each {|inc| h[unc.currency] = inc.tot.to_d.round(2) unless inc.currency === org_currency }
+
+    contact.update_attribute(:income_status, h)
   end
 end

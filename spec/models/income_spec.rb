@@ -263,4 +263,8 @@ describe Income do
 
     inc.id.should eq(10)
   end
+
+  context 'Contact callbacks' do
+
+  end
 end

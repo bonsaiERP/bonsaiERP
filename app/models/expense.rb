@@ -102,4 +102,8 @@ private
   def set_supplier
    contact.update_attribute(:supplier, true) if contact.present? && !contact.supplier?
   end
+
+  def update_contact_expense_balance
+
+  end
 end

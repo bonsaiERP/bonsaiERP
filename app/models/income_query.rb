@@ -15,6 +15,7 @@ class IncomeQuery
   end
 
   def to_pay(contact_id)
-    @rel.active.where{(state.eq 'approved') & (amount.gt 0)}.where(contact_id: contact_id)
+    @rel.active.where{amount.gt 0}.where(contact_id: contact_id)
   end
+
 end

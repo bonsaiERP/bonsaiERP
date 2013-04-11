@@ -18,6 +18,7 @@
 #= require bootstrap/bootstrap-modal.js
 #= require bootstrap/bootstrap-popover.js
 #= require bootstrap/bootstrap-collapse.js
+#= require bootstrap/bootstrap-tab.js
 
 #= require namespace.coffee
 #= require app/currency.coffee

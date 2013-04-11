@@ -52,5 +52,41 @@
       -#%i.icon-minus.red(title="Debemos #{currency}" data-toggle='tooltip')
       -#= ntc 500
 
-  -#.span1
-    =link_to icon_edit, edit_contact_path(contact), class: 'dark'
+.row-fluid
+  %ul#contact-tabs.nav.nav-tabs
+    %li
+      %a.b(href='#incomes' data-toggle='tab') Ingresos
+    %li
+      %a.b(href='#expenses' data-toggle='tab') Egresos
+
+  .tab-content
+    #incomes.tab-pane
+      %h2 Ingresos
+
+      %ul.unstyled.listing
+        %li.row-fluid
+          .span4.offset7
+            .span6.r.b.muted
+              Total
+            .span6.r.b.muted
+              Saldo
+
+        = render partial: 'incomes/income', collection: @contact.incomes, as: :income
+
+    #expenses.tab-pane
+      %h2 Egresos
+
+      %ul.unstyled.listing
+        %li.row-fluid
+          .span4.offset7
+            .span6.r.b.muted
+              Total
+            .span6.r.b.muted
+              Saldo
+
+        = render partial: 'expenses/expense', collection: @contact.expenses, as: :expense
+
+:javascript
+  $(function() {
+    $('#contact-tabs a:first').tab('show')
+  })
