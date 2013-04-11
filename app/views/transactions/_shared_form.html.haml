@@ -36,7 +36,7 @@
     .span6.well.well-small.trans
       .form-horizontal
         = f.input :direct_payment,
-          label: '<i class="icon-question-sign" rel="tooltip" title="Seleccione esta opción para realizar el cobro/pago a una cuenta"></i> Cobro directo'.html_safe,
+          label: '<i class="icon-question-sign" data-toggle="tooltip" title="Seleccione esta opción para realizar el cobro/pago a una cuenta"></i> Cobro directo'.html_safe,
           as: :boolean, input_html: {id: 'direct_payment', data: {value: 'trans.direct_payment'} }
       .account_to(data-show="trans.direct_payment")
         = f.input :account_to_id, label: 'Cuenta',

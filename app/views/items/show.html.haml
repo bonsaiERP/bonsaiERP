@@ -17,12 +17,12 @@
 .row-fuid
   .span2
     %label
-      %i.icon-info-sign(title="Un ítem activo se puede usar en operaciones" rel="tooltip") 
+      %i.icon-info-sign(title="Un ítem activo se puede usar en operaciones" data-toggle="tooltip") 
       Activo
     %span.icon{:class => @item.active.to_s}
   .span2
     %label
-      %i.icon-info-sign(title="Indica si un ítem se puede almacenar" rel="tooltip")
+      %i.icon-info-sign(title="Indica si un ítem se puede almacenar" data-toggle="tooltip")
       Inventario
     %span.icon{:class => @item.stockable.to_s}
   .span2

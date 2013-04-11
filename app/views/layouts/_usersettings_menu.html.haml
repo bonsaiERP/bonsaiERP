@@ -1,7 +1,7 @@
 %ul#usersettings
   - if current_organisation
     %li#conf
-      = link_to configurations_path, title: 'Configuración', rel: 'tooltip', data: {placement: 'bottom'} do
+      = link_to configurations_path, title: 'Configuración', 'data-toggle' => 'tooltip', data: {placement: 'bottom'} do
         %i.icon-cog
         Conf.
 

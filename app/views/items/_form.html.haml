@@ -17,8 +17,8 @@
       = f.association :unit, label: "Unidad",
         input_html: { class: 'span10', data: {new_url: new_unit_path, trigger: 'new-unit', title: 'Nueva unidad'} }
     .form-horizontal.span6
-      = f.input :active, label: "Activo <i class='icon-info-sign' rel='tooltip' title='Se puede usar en nuevos Ingresos o Egresos'></i>".html_safe
-      = f.input :stockable, label: 'Inventario <i title="Se almacena el ítem?" rel="tooltip" class="icon-info-sign"></i>'.html_safe
+      = f.input :active, label: "Activo <i class='icon-info-sign' data-toggle='tooltip' title='Se puede usar en nuevos Ingresos o Egresos'></i>".html_safe
+      = f.input :stockable, label: 'Inventario <i title="Se almacena el ítem?" data-toggle="tooltip" class="icon-info-sign"></i>'.html_safe
 
   .row-fluid
     .span6.well.well-small

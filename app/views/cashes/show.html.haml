@@ -16,7 +16,7 @@
       -#= pendent_money_link(@cash)
   .span6.r
     = link_to new_transference_path(account_id: @cash.id), class: 'btn',
-      title: 'Transferir dinero a otra cuenta', rel: 'tooltip' do
+      title: 'Transferir dinero a otra cuenta', 'data-toggle' => 'tooltip' do
       %i.icon-exchange
       Nueva transferencia
 

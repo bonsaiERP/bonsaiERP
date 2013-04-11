@@ -14,7 +14,7 @@
 
     .row-fluid
       .span6=f.input :amount, label: 'Cantidad'
-      .span6=f.input :bill_number, label: 'No. de documento', label_html: {title: 'Factura o Recibo', rel: 'tooltip'}
+      .span6=f.input :bill_number, label: 'No. de documento', label_html: {title: 'Factura o Recibo', data-toggle => 'tooltip'}
 
     .form-actions
       = f.submit 'Salvar', class: 'btn btn-success b'

@@ -186,7 +186,7 @@ init = ($) ->
 
       $a
       .html('<i class="icon-plus-sign icon-large"></i>')
-      .attr({href: data.newUrl, class: 'ajax btn btn-small', title: title, rel: 'tooltip' })
+      .attr({href: data.newUrl, class: 'ajax btn btn-small', title: title, 'data-toggle': 'tooltip' })
       .data({trigger: data.trigger, width: data.width})
       .css(css)
 
@@ -270,7 +270,8 @@ init = ($) ->
   $(document).ready ->
     # Initializes
     init($)
-    $('body').tooltip( selector: '[rel=tooltip]' )
+    $('[data-toggle=tooltip]').tooltip()
+    $('body').tooltip(selector: '[data-toggle=tooltip]')
     $('body').setDatepicker()
     $('body').createAutocomplete()
     $('.select2-autocomplete').select2Autocomplete()
@@ -297,7 +298,7 @@ init = ($) ->
   rivets.formatters.currencyLabel = (val) ->
     if val?
       ['<span class="label label-inverse" title=',
-        '"', currencies[val]['name'], '"', ' rel="tooltip">',
+        '"', currencies[val]['name'], '"', ' data-toggle="tooltip">',
         val, '</span>'].join('')
 
   rivets.formatters.show = (val) ->

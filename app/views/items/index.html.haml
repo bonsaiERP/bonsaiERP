@@ -29,10 +29,10 @@
       .span5
         .row-fluid
           .span6
-            %span.muted(title="" rel="tooltip") Activo:
+            %span.muted Activo:
             %span(class="#{true_false item.active?}")
             &nbsp;&nbsp;
-            %span.muted(title="Inventario" rel="tooltip") Inv.:
+            %span.muted(title="Inventario" data-toggle="tooltip") Inv.:
             %span(class="#{true_false item.stockable?}")
           .span6.r
             %span.b.muted Se vende:

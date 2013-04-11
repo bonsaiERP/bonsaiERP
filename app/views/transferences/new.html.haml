@@ -46,7 +46,7 @@
     .span3
       = f.input :verification, as: :boolean, label: 'Verificar',
         input_html: {data: {value: 'transference.verification', checked: 'transference.verification'} },
-        label: 'Verificar <i class="icon-warning-sign" rel="tooltip" title="Solo si alguna de las cuentas es de BANCO pueden verificar a futuro"></i>'.html_safe
+        label: 'Verificar <i class="icon-warning-sign" data-toggle="tooltip" title="Solo si alguna de las cuentas es de BANCO pueden verificar a futuro"></i>'.html_safe
     .span6
       = f.input :reference, label: 'Referecia', as: :text,
         input_html: {rows: 3, data: {value: 'transference.reference'}}

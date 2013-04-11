@@ -5,7 +5,7 @@ module IconsHelper
   ICONS.each do |tit, icon|
     define_method :"icon_#{tit}" do |title=nil|
       title ||= I18n.t("common.#{tit}")
-      t = " title='#{title}' rel='tooltip'"
+      t = " title='#{title}' data-toggle='tooltip'"
 
       "<i class='icon-#{icon} icon-large'#{t}></i>".html_safe
     end

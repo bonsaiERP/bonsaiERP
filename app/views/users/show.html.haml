@@ -24,16 +24,16 @@
     = current_user.last_name
 
   .span3
-    %i.icon-phone.muted(title="Teléfono" rel="tooltip")
+    %i.icon-phone.muted(title="Teléfono" data-toggle="tooltip")
     = current_user.phone
   .span3
-    %i.icon-mobile-phone.muted(title="Movil" rel="tooltip")
+    %i.icon-mobile-phone.muted(title="Movil" data-toggle="tooltip")
     = current_user.mobile
 
 .row-fluid
   .span6
-    %i.icon-envelope.muted(title="E-mail" rel="tooltip")
+    %i.icon-envelope.muted(title="E-mail" data-toggle="tooltip")
     = mail_to current_user.email unless current_user.email.blank?
   .span6
-    %i.icon-building.muted(title="Dirección" rel="tooltip")
+    %i.icon-building.muted(title="Dirección" data-toggle="tooltip")
     = nl2br current_user.address

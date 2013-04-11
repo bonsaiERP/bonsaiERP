@@ -15,7 +15,7 @@
 
   .span7
     .span6
-      %i.icon-file.muted(rel='tooltip' title="referencia")
+      %i.icon-file.muted(data-toggle='tooltip' title="referencia")
       = nl2br ledger.reference
     .span6.r
       - if ledger.trans_currency?
@@ -24,7 +24,7 @@
       - else
         = ntc ledger.amount
         = currency_label ledger.currency
-        %span.muted(title="Tipo de cambio" rel="tooltip")
+        %span.muted(title="Tipo de cambio" data-toggle="tooltip")
           %i.icon-exchange
           =ntc ledger.exchange_rate, precision: 4
         \=

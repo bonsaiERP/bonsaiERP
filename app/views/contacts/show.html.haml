@@ -6,44 +6,51 @@
     %li
       = @contact
 
-.row-fluid
-  .span6
-    %h1= @contact
 
-  .span6.r
+.row-fluid
+  .span8
+    %h1.n
+      = @contact
+      %br
+      %small
+        = @contact.complete_name
+  .span4.r
     = link_to icon_new_text, new_contact_path, class: 'btn'
-    = link_to icon_edit_text, edit_contact_path(@contact), class: 'btn'
-    = link_to icon_delete_text, @contact, method: 'delete', class: 'btn', confirm: 'Esta seguro de eliminar al contacto?'
+    = link_to icon_edit_text, edit_contact_path(@contact.id), class: 'btn'
+    = link_to icon_delete_text, @contact, class: 'btn', confirm: "Esta seguro de borra el contacto", method: :delete
 
 .row-fluid
-  .span6
-    %label Identificado
-    = @contact.matchcode
-  .span3
-    %label Nombres
-    = @contact.first_name
-  .span3
-    %label Apellidos
-    = @contact.last_name
-
-.row-fluid
-  .span2
-    %label Teléfono
-    = @contact.last_name
-  .span2
-    %label Móbil
-    = @contact.mobile
-  .span2
-    %label NIT
-    = @contact.tax_number
   .span4
-    %label Email
-    = @contact.email
+    = render_if @contact.email do
+      %i.icon-envelope(title='E-mail' data-toggle='tooltip')
+      = @contact.email
 
-.row-fluid
-  .span6
-    %label Dirección
-    = @contact.address
-  .span6
-    %label Información adicional
-    = @contact.aditional_info
+  .span4
+    .span8
+      = render_if @contact.tax_number do
+        %i.icon-barcode(title='Código tributario' data-toggle='tooltip')
+        = @contact.tax_number
+      .clear-both
+      = render_if @contact.address do
+        %i.icon-building(title='Dirección' data-toggle='tooltip')
+        =nl2br @contact.address
+    .span4
+      = render_if @contact.phone do
+        %i.icon-phone(title='Teléfono' data-toggle='tooltip')
+        = @contact.phone
+      .clear-both
+        = render_if @contact.mobile do
+          %i.icon-mobile-phone(title='Móvil' data-toggle='tooltip')
+          = @contact.mobile
+
+  .span3
+    .span6.r
+      -#%i.icon-plus.green(title="Debe #{currency}" data-toggle='tooltip')
+      -#= ntc(100000)
+      -#%small.muted(style='border-bottom: 1px dotted gray') EX
+    .span6.r
+      -#%i.icon-minus.red(title="Debemos #{currency}" data-toggle='tooltip')
+      -#= ntc 500
+
+  -#.span1
+    =link_to icon_edit, edit_contact_path(contact), class: 'dark'
