@@ -279,9 +279,8 @@ describe Income do
 
       inc.contact.incomes_status.should eq({'BOB' => 10.0})
 
-      inc = Income.new_income(valid_attributes.merge(state: 'approved', currency: 'USD', total: 20, amount: 3.3, ref_number: 'I2324839'))
+      inc = Income.new_income(valid_attributes.merge(state: 'approved', currency: 'USD', total: 20, amount: 3.3, exchange_rate: 7.0, ref_number: 'I2324839'))
       inc.save.should be_true
-
 
       inc.contact.incomes_status.should eq({'BOB' => 10.0, 'USD' => 3.3 })
     end

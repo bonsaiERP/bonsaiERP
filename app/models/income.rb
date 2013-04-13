@@ -9,7 +9,7 @@ class Income < Account
   include Models::IncomeExpense
   ########################################
   # Callbacks
-  before_save :set_client_and_income_status
+  before_save :set_client_and_incomes_status
 
   ########################################
   # Relationships
@@ -105,7 +105,7 @@ class Income < Account
   end
 
 private
-  def set_client_and_income_status
+  def set_client_and_incomes_status
     if contact.present?
       contact.client = true unless contact.client?
 
@@ -122,16 +122,13 @@ private
   end
 
   def set_contact_incomes_status
-    incs = Income.active.pendent_contact_except(contact_id, id)
-    .select('sum(amount * exchange_rate) AS tot, currency').group(:currency)
-    if incs.empty?
-      h = { org_currency => 0.0 }
-    else
-      h = { org_currency => incs.find {|v| v.currency === org_currency }.tot.to_d.round(2) }
-    end
-    incs.each {|inc| h[unc.currency] = inc.tot.to_d.round(2) unless inc.currency === org_currency }
-    h[currency] = (h[currency] || 0) + (amount - amount_was)
-
-    contact.incomes_status = h
+    contact.incomes_status = calculate_incomes_status(pendent_contact_incomes)
   end
+
+  def pendent_contact_incomes
+    Income.active.pendent_contact_except(contact_id, id)
+    .select('sum(amount) * exchange_rate) AS tot, sum(amount) AS tot_cur, currency')
+    .group(:currency)
+  end
+
 end

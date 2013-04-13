@@ -9,7 +9,7 @@ class Expense < Account
   include Models::IncomeExpense
   ########################################
   # Callbacks
-  before_create :set_supplier
+  before_save :set_supplier_and_expenses_status
 
   ########################################
   # Relationships
