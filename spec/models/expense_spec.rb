@@ -58,7 +58,7 @@ describe Expense do
 
   context 'callbacks' do
     it 'check callback' do
-      contact.should_receive(:update_attribute).with(:supplier, true)
+      contact.should_receive(:supplier=).with(true)
 
       i = Expense.new_expense(valid_attributes)
 
@@ -263,24 +263,33 @@ describe Expense do
   end
 
   context 'Contact callbacks' do
-    it "update#expenses_status" do
+    it "update#incomes_status" do
       exp = Expense.new_expense(valid_attributes.merge(state: 'approved', total: 10, amount: 5.0))
 
       exp.save.should be_true
 
-      exp.contact.expenses_status.should eq({'BOB' => 5.0})
+      exp.contact.expenses_status.should eq({
+        'TOTAL' => 5.0,
+        'BOB' => 5.0
+      })
 
       # New expense
       exp = Expense.new_expense(valid_attributes.merge(state: 'approved', total: 10, amount: 5.0, ref_number: 'I232483'))
       exp.save.should be_true
 
-      exp.contact.expenses_status.should eq({'BOB' => 10.0})
+      exp.contact.expenses_status.should eq({
+        'TOTAL' => 10.0,
+        'BOB' => 10.0
+      })
 
-      exp = Expense.new_expense(valid_attributes.merge(state: 'approved', currency: 'USD', total: 20, amount: 3.3, ref_number: 'I2324839'))
+      exp = Expense.new_expense(valid_attributes.merge(state: 'approved', currency: 'USD', total: 20, amount: 3.3, exchange_rate: 7.0, ref_number: 'I2324839'))
       exp.save.should be_true
 
-
-      exp.contact.expenses_status.should eq({'BOB' => 10.0, 'USD' => 3.3 })
+      exp.contact.expenses_status.should eq({
+        'TOTAL' => (10 + 3.3 * 7).round(2),
+        'BOB' => 10.0, 
+        'USD' => 3.3
+      })
     end
   end
 end

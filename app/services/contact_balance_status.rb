@@ -18,7 +18,7 @@ class ContactBalanceStatus < Struct.new(:transactions)
 private
   def set_base_currency
     if base_currency_transaction && base_currency_transaction.tot.to_d != 0.0
-      h[currency] =  base_currency_transaction.tot.to_d
+      h[currency] =  base_currency_transaction.tot.to_d.round(2)
     end
   end
 

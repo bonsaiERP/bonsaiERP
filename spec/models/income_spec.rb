@@ -271,18 +271,28 @@ describe Income do
 
       inc.save.should be_true
 
-      inc.contact.incomes_status.should eq({'BOB' => 5.0})
+      inc.contact.incomes_status.should eq({
+        'TOTAL' => 5.0,
+        'BOB' => 5.0
+      })
 
       # New income
       inc = Income.new_income(valid_attributes.merge(state: 'approved', total: 10, amount: 5.0, ref_number: 'I232483'))
       inc.save.should be_true
 
-      inc.contact.incomes_status.should eq({'BOB' => 10.0})
+      inc.contact.incomes_status.should eq({
+        'TOTAL' => 10.0,
+        'BOB' => 10.0
+      })
 
       inc = Income.new_income(valid_attributes.merge(state: 'approved', currency: 'USD', total: 20, amount: 3.3, exchange_rate: 7.0, ref_number: 'I2324839'))
       inc.save.should be_true
 
-      inc.contact.incomes_status.should eq({'BOB' => 10.0, 'USD' => 3.3 })
+      inc.contact.incomes_status.should eq({
+        'TOTAL' => (10 + 3.3 * 7).round(2),
+        'BOB' => 10.0, 
+        'USD' => 3.3
+      })
     end
   end
 end

@@ -115,20 +115,16 @@ private
     end
   end
 
-  def set_client
-    if contact.present? && !contact.client?
-      contact.update_attribute(:client, true)
-    end
-  end
-
   def set_contact_incomes_status
-    contact.incomes_status = calculate_incomes_status(pendent_contact_incomes)
+    h = ContactBalanceStatus.new(pendent_contact_incomes).create_balances
+    h['TOTAL'] = h['TOTAL'] + (amount - amount_was) * exchange_rate
+    h[currency] = (h[currency] || 0.0) + amount - amount_was
+    contact.incomes_status = h
   end
 
   def pendent_contact_incomes
     Income.active.pendent_contact_except(contact_id, id)
-    .select('sum(amount) * exchange_rate) AS tot, sum(amount) AS tot_cur, currency')
+    .select('sum(amount * exchange_rate) AS tot, sum(amount) AS tot_cur, currency')
     .group(:currency)
   end
-
 end
