@@ -263,8 +263,46 @@ namespace :bonsai do
     puts "Updated inventory_operation_details"
   end
 
-  desc ''
-  task dump: :environment do
+  desc 'Updates the serialization from YAML to JSON'
+  task update_serialization_format: :environment do
+    conn = ActiveRecord::Base.connection
+
+    conn.select_rows('select id, preferences from common.organisations').each do |o|
+      res = YAML.load(o[1]).to_json
+      Organisation.where(id: o[0]).update_all("preferences='#{res}'")
+    end
+
+    puts 'Updated organisations'
+
+    PgTools.all_schemas.each do |schema|
+      next if schema === 'common'
+
+      PgTools.with_schemas only: schema do
+        # TransactionHistory
+        conn.select_rows("select id, data from transaction_histories").each do |t|
+          res = YAML.load(t[1].to_s).to_json
+          begin
+            TransactionHistory.where(id: t[0]).update_all("data='#{res}'")
+          rescue
+            TransactionHistory.where(id: t[0]).update_all("data='{}'")
+          end
+        end
+        puts "Updated transaction_histories schema #{schema}"
+
+        # Account
+        conn.select_rows("select id, error_messages from accounts").each do |a|
+          begin
+            res = YAML.load(a[1].to_s).to_json
+          rescue
+            res = '{}'
+          end
+          
+          Account.where(id: a[0]).update_all("error_messages='#{res}'")
+        end
+
+        puts "Updated accounts schema #{schema}"
+      end
+    end
   end
 end
 

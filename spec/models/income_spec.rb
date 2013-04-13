@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Income do
-  let(:organisation) { build :organisation, id: 1 }
+  let(:organisation) { build :organisation, id: 1, currency: 'BOB' }
   let(:contact) { build :contact, id: 10 }
 
   before(:each) do
@@ -60,7 +60,8 @@ describe Income do
 
   context 'callbacks' do
     it 'check callback' do
-      contact.should_receive(:update_attribute).with(:client, true)
+      contact.should_not be_client
+      contact.should_receive(:client=).with(true)
 
       i = Income.new_income(valid_attributes)
 
@@ -265,6 +266,24 @@ describe Income do
   end
 
   context 'Contact callbacks' do
+    it "update#incomes_status" do
+      inc = Income.new_income(valid_attributes.merge(state: 'approved', total: 10, amount: 5.0))
 
+      inc.save.should be_true
+
+      inc.contact.incomes_status.should eq({'BOB' => 5.0})
+
+      # New income
+      inc = Income.new_income(valid_attributes.merge(state: 'approved', total: 10, amount: 5.0, ref_number: 'I232483'))
+      inc.save.should be_true
+
+      inc.contact.incomes_status.should eq({'BOB' => 10.0})
+
+      inc = Income.new_income(valid_attributes.merge(state: 'approved', currency: 'USD', total: 20, amount: 3.3, ref_number: 'I2324839'))
+      inc.save.should be_true
+
+
+      inc.contact.incomes_status.should eq({'BOB' => 10.0, 'USD' => 3.3 })
+    end
   end
 end

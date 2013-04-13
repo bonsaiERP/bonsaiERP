@@ -9,8 +9,7 @@ class Income < Account
   include Models::IncomeExpense
   ########################################
   # Callbacks
-  before_create :set_client
-  before_save   :update_contact_incomes_status, if: :amount_changed?
+  before_save :set_client_and_income_status
 
   ########################################
   # Relationships
@@ -106,17 +105,33 @@ class Income < Account
   end
 
 private
-  def set_client
-    contact.update_attribute(:client, true) if contact.present? && !contact.client?
+  def set_client_and_income_status
+    if contact.present?
+      contact.client = true unless contact.client?
+
+      set_contact_incomes_status if amount_changed? && !is_draft?
+
+      contact.save if contact.changed?
+    end
   end
 
-  def update_contact_incomes_status
+  def set_client
+    if contact.present? && !contact.client?
+      contact.update_attribute(:client, true)
+    end
+  end
+
+  def set_contact_incomes_status
     incs = Income.active.pendent_contact_except(contact_id, id)
     .select('sum(amount * exchange_rate) AS tot, currency').group(:currency)
-
-    h = { org_currency => incs.find {|v| v.currency === org_currency }.tot.to_d.round(2) }
+    if incs.empty?
+      h = { org_currency => 0.0 }
+    else
+      h = { org_currency => incs.find {|v| v.currency === org_currency }.tot.to_d.round(2) }
+    end
     incs.each {|inc| h[unc.currency] = inc.tot.to_d.round(2) unless inc.currency === org_currency }
+    h[currency] = (h[currency] || 0) + (amount - amount_was)
 
-    contact.update_attribute(:income_status, h)
+    contact.incomes_status = h
   end
 end
