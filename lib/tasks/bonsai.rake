@@ -268,7 +268,7 @@ namespace :bonsai do
     conn = ActiveRecord::Base.connection
 
     conn.select_rows('select id, preferences from common.organisations').each do |o|
-      res = YAML.load(o[1]).to_json
+      res = YAML.load(o[1].to_s).to_json
       Organisation.where(id: o[0]).update_all("preferences='#{res}'")
     end
 
