@@ -64,7 +64,7 @@ class ExpensesController < ApplicationController
 
   # DELETE /expenses/1
   def destroy
-    if @transaction.approved?
+    if @expense.approved?
       flash[:warning] = "No es posible anular la nota #{@transaction}."
       redirect_transaction
     else
@@ -77,16 +77,14 @@ class ExpensesController < ApplicationController
   # PUT /expenses/1/approve
   # Method to approve an expense
   def approve
-    if @transaction.approve!
+    @expense = Expense.find(params[:id])
+    if @expense.approve!
       flash[:notice] = "La nota de venta fue aprobada."
     else
       flash[:error] = "Existio un problema con la aprobación."
     end
 
-    anchor = ''
-    anchor = 'payments' if @transaction.cash?
-
-    redirect_to expense_path(@transaction, :anchor => anchor)
+    redirect_to expense_path(@expense)
   end
 
   def history
