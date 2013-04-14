@@ -39,9 +39,9 @@ class Expense < Account
   scope :approved, -> { where(state: 'approved') }
   scope :active,   -> { where(state: ['approved', 'paid']) }
   scope :contact, -> (cid) { where(contact_id: cid) }
-  scope :to_pay_contact, -> (cid) { contact.where(amount.gt 0) }
-  scope :pendent_except, ->(iid) { active.where{ (id.not_eq iid) & (amount.not_eq 0) } }
-  scope :pendent_contact_except, ->(cid, iid) { contact(cid).pendent_except(iid) }
+  scope :to_pay_contact, lambda {|cid| contact.where(amount.gt 0) }
+  scope :pendent_except, lambda {|iid| active.where{ (id.not_eq iid) & (amount.not_eq 0) } }
+  scope :pendent_contact_except, lambda {|cid, iid| contact(cid).pendent_except(iid) }
 
   ########################################
   # Delegations
