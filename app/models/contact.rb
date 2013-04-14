@@ -22,7 +22,7 @@ class Contact < ActiveRecord::Base
   # Scopes
   scope :clients, where(client: true)
   scope :suppliers, where(supplier: true)
-  scope :search, ->(s) { 
+  scope :search, lambda {|s|
     s = "%#{s}%"
     where{(matchcode.like "#{s}") | (first_name.like "#{s}")| (last_name.like "#{s}")}
   }
