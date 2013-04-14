@@ -17,6 +17,10 @@
       Nuevo egreso
 
 .row-fluid
+  .span6
+    = render 'expenses/search'
+
+.row-fluid
   = render 'expenses/quick_expense'
 
 = paginate @expenses.page(@page)

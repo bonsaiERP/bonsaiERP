@@ -1,0 +1,19 @@
+- if params[:contact_id].present?
+  =link_to 'eliminar filtro', expenses_path
+
+= form_tag '/expenses', method: 'get', html: {class: 'form-inline'} do
+  = text_field_tag 'search', '', class: 'span8', placeholder: 'Buscar contacto'
+  = submit_tag 'Buscar', class: 'btn btn-primary'
+
+:javascript
+  $(function() {
+    $('#search').autocomplete({
+      source: '/contacts',
+      select: function(e, ui) {
+        window.location = '/expenses?contact_id=' + ui.item.id
+      }
+    });
+  })
+
+
+

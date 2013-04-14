@@ -6,9 +6,11 @@ class IncomesController < ApplicationController
 
   # GET /incomes
   def index
-    @incomes = IncomeQuery.new.search(
-      search: params[:search]
-    ).order('date desc').page(@page)
+    if params[:contact_id].present?
+      @incomes = Income.contact(params[:contact_id]).order('date desc').page(@page)
+    else
+      @incomes = Income.order('date desc').page(@page)
+    end
   end
 
   # GET /incomes/1

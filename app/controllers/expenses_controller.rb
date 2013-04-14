@@ -5,9 +5,11 @@ class ExpensesController < ApplicationController
 
   # GET /expenses
   def index
-    @expenses = ExpenseQuery.new.search(
-      search: params[:search]
-    ).order('date desc').page(@page)
+    if params[:contact_id].present?
+      @expenses = Expense.contact(params[:contact_id]).order('date desc').page(@page)
+    else
+      @expenses = Expense.order('date desc').page(@page)
+    end
   end
 
   # GET /expenses/1

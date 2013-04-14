@@ -18,4 +18,5 @@ class IncomeQuery
     @rel.active.where{amount.gt 0}.where(contact_id: contact_id)
   end
 
+
 end
