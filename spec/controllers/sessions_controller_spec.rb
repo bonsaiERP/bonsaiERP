@@ -19,6 +19,18 @@ describe SessionsController do
 
       assigns(:session).should be_is_a(Session)
     end
+
+    let(:user) { build :user }
+
+    it "redirects when logged" do
+      session[:user_id] = 1
+      User.stub_chain(:active, find: user)
+      user.stub(organisations: [(build :organisation, tenant: 'bonsai')])
+
+      get :new
+
+      response.should redirect_to(dashboard_url(host: UrlTools.domain, subdomain: 'bonsai'))
+    end
   end
 
 

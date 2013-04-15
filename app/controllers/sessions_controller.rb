@@ -3,6 +3,7 @@
 # email: boriscyber@gmail.com
 class SessionsController < ApplicationController
   skip_before_filter :set_tenant, :check_authorization!
+  before_filter :check_logged_in, only: ['new', 'create']
 
   def new
     @session = Session.new
@@ -11,7 +12,7 @@ class SessionsController < ApplicationController
   def create
     @session = Session.new(session_params)
 
-    case 
+    case
     when @session.authenticate?
       session[:user_id] = @session.user_id
       flash[:notice] = "Ha ingresado correctamente."
@@ -37,6 +38,16 @@ class SessionsController < ApplicationController
 
 
 private
+  def check_logged_in
+    if session[:user_id] && u = User.active.find(session[:user_id])
+      if org = u.organisations.first
+        redirect_to dashboard_url(host: UrlTools.domain, subdomain: org.tenant), notice: 'Ha ingresado correctamente.' and return
+      else
+        reset_session
+      end
+    end
+  end
+
   def session_params
     params.require(:session).permit(:email, :password)
   end
