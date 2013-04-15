@@ -2,6 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class ExpensesController < ApplicationController
+  before_filter :set_expense, only: [:approve, :null]
 
   # GET /expenses
   def index
@@ -95,6 +96,15 @@ class ExpensesController < ApplicationController
     render "transactions/history"
   end
 
+  # PUT /incomes/:id/null
+  def null
+    if @expense.null!
+      redirect_to expense_path(@expense), notice: 'Se anulo correctamente el egreso.'
+    else
+      redirect_to expense_path(@expense), error: 'Existio un error al anular el egreso.'
+    end
+  end
+
 private
   # Creates or approves a ExpenseService instance
   def create_or_approve
@@ -123,5 +133,9 @@ private
 
   def transaction_params
     @transaction_params ||= TransactionParams.new
+  end
+
+  def set_expense
+    @expense = Expense.find_by_id(params[:id])
   end
 end

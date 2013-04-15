@@ -28,7 +28,7 @@ class Income < Account
 
   has_many :transaction_histories, foreign_key: :account_id
 
-  STATES = %w(draft approved paid)
+  STATES = %w(draft approved paid nulled)
   ########################################
   # Validations
   validates_presence_of :date, :contact, :contact_id

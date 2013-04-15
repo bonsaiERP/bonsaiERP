@@ -2,7 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class IncomesController < ApplicationController
-  before_filter :set_income, only: [:approve]
+  before_filter :set_income, only: [:approve, :null]
 
   # GET /incomes
   def index
@@ -91,15 +91,12 @@ class IncomesController < ApplicationController
     redirect_to income_path(@income)
   end
 
-  # PUT incomes/:id/update_due_date
-  def update_due_date
-    @income = Income.find(params[:id])
-    @income.due_date = params[:payment_date]
-
-    if @income.save
-      render json: {success: true}
+  # PUT /incomes/:id/null
+  def null
+    if @income.null!
+      redirect_to income_path(@income), notice: 'Se anulo correctamente el ingreso.'
     else
-      render json: {success: false}
+      redirect_to income_path(@income), error: 'Existio un error al anular el ingreso.'
     end
   end
 

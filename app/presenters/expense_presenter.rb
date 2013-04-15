@@ -33,6 +33,7 @@ class ExpensePresenter < Resubject::Presenter
     when "draft" then span_label('borrador')
     when "approved" then span_label('aprovado', 'label-info')
     when "paid" then span_label('pagado', 'label-success')
+    when "nulled" then span_label('anulado', 'label-important')
     end
 
     html.html_safe

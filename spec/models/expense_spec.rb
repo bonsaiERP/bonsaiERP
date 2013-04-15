@@ -292,4 +292,25 @@ describe Expense do
       })
     end
   end
+
+  context 'Null' do
+    let(:user) { build :user, id: 15 }
+
+    before(:each) do
+      UserSession.user = user
+    end
+
+    it "#nulls" do
+      exp = Expense.new_expense(valid_attributes.merge(total: 100, amount: 100))
+      exp.save.should be_true
+
+      exp.nuller_id.should be_blank
+
+      exp.null!.should be_true
+
+      exp.should be_is_nulled
+      exp.nuller_id.should eq(15)
+      exp.nuller_datetime.should be_is_a(Time)
+    end
+  end
 end

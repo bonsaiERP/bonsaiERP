@@ -295,4 +295,25 @@ describe Income do
       })
     end
   end
+
+  context 'Null' do
+    let(:user) { build :user, id: 15 }
+
+    before(:each) do
+      UserSession.user = user
+    end
+
+    it "#nulls" do
+      inc = Income.new_income(valid_attributes.merge(total: 100, amount: 100))
+      inc.save.should be_true
+
+      inc.nuller_id.should be_blank
+
+      inc.null!.should be_true
+
+      inc.should be_is_nulled
+      inc.nuller_id.should eq(15)
+      inc.nuller_datetime.should be_is_a(Time)
+    end
+  end
 end

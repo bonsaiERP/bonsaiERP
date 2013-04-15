@@ -18,15 +18,15 @@
               %h5.n.devolution-error= I18n.t("allowed_errors.#{v}").html_safe
 
 .row-fluid
-  .span8
-    %h1
+  .span7
+    %h1.ib
       = @income
       = @income.state_tag
 
-      %small
-        = link_to @income.contact do
-          %i.icon-user
-          =@income.contact
+    %h4.ib.n
+      = link_to @income.contact do
+        %i.icon-user
+        =@income.contact
 
     %h4.n
       %span.muted Fecha:
@@ -34,15 +34,18 @@
       = render_if @income.due_date do
         = @income.due_date_tag
 
-  .span4.r
-    = link_to icon_new_text, new_income_path, class: 'btn'
-    = link_to icon_edit_text, edit_income_path(@income.id), class: 'btn'
-
-.row-fluid
-  .span6.offset6
+  .span5.r
     - if @income.is_draft?
-      = form_for @income, url: approve_income_path(@income) do |f|
-        = f.submit 'Aprobar Ingreso', class: 'b btn btn-success'
+      = form_for @income, url: approve_income_path(@income), html: {class: 'ib'} do |f|
+        = f.submit 'Aprobar', class: 'b btn btn-success'
+
+    - if @income.can_null?
+      = form_for @income, url: null_income_path(@income), html: {class: 'ib'} do |f|
+        = f.submit 'Anular', class: 'b btn btn-danger'
+
+    = link_to icon_new_text, new_income_path, class: 'btn'
+    = link_to icon_edit_text, edit_income_path(@income.id), class: 'btn' unless @income.is_nulled?
+
 
 .row-fluid
   .moneybox

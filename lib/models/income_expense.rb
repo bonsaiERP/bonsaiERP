@@ -28,4 +28,13 @@ module Models::IncomeExpense
     end
   end
 
+  def null!
+    if can_null?
+      update_attributes(state: 'nulled', nuller_id: UserSession.id, nuller_datetime: Time.zone.now)
+    end
+  end
+
+  def can_null?
+    total === amount && !is_nulled?
+  end
 end

@@ -29,7 +29,7 @@ class IncomePresenter < Resubject::Presenter
   end
 
   def has_error_label
-    "<span class='label label-important' rel='tooltip' title='Corrija los errores'>ERROR</span>".html_safe if to_model.has_error?
+    "<span class='label label-important' data-toggle='tooltip' title='Corrija los errores'>ERROR</span>".html_safe if to_model.has_error?
   end
 
   def state_tag
@@ -37,6 +37,7 @@ class IncomePresenter < Resubject::Presenter
     when "draft" then span_label('borrador')
     when "approved" then span_label('aprovado', 'label-info')
     when "paid" then span_label('pagado', 'label-success')
+    when "nulled" then span_label('anulado', 'label-important')
     end
 
     html.html_safe
@@ -70,7 +71,7 @@ class IncomePresenter < Resubject::Presenter
   end
 
   include UsersModulePresenter
-  
+
   # To load methods related to the Transaction  model
   Transaction.transaction_columns.each do |m|
     define_method m do

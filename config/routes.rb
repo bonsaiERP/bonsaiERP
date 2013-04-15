@@ -63,8 +63,8 @@ Bonsaierp::Application.routes.draw do
   resources :incomes do
     member do
       put :approve
+      put :null
       get :history
-      put :payment_date
     end
 
     post :quick_income, on: :collection
@@ -73,6 +73,7 @@ Bonsaierp::Application.routes.draw do
   resources :expenses do
     member do
       put :approve
+      put :null
       get :history
     end
     post :quick_expense, on: :collection
