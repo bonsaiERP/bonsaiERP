@@ -9,7 +9,7 @@ class Transference extends App.Payment
     @setAccountToSelect2()
     @setAccountToInit()
     @setTotalCurrency()
-    
+
     # set rivets
     rivets.bind($(@formSel), {transference: this})
 

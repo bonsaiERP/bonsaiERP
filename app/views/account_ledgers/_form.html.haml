@@ -23,13 +23,3 @@
   = f.input :description, :as => :text, :label => 'Descripción', :input_html => {:rows => 3, :cols => 35}
 
   = f.submit "Salvar", :class => 'btn btn-success b'
-
-:javascript
-  $(function() {
-    $('#account_ledger_contact_id').contactAutocomplete();
-
-    $('body').live('new_project', function(event, resp) {
-      var label = resp.name;
-      $('#account_ledger_project_id').createSelectOption(resp.id, label);
-    });
-  });

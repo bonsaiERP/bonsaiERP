@@ -10,13 +10,18 @@
     .clear-both
     = expense.state_tag
     %i= l expense.date
-  .span3
+  .span4
     = expense.due_date_tag
     .clear-both
     = expense.creator_label
     = expense.approver_label
     = expense.nuller_label
-  .span4
+
+    - if expense.description.present?
+      .clear-both
+      %i.icon-comment(data-toggle='tooltip' title='Descripción')
+      = expense.description
+  .span3
     .span6.r
       = ntc expense.total
       = currency_label expense.currency

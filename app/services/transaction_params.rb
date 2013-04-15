@@ -25,7 +25,7 @@ class TransactionParams
   def default
     [
       :date, :contact_id, :currency, :exchange_rate, :project_id, 
-      :bill_number, :description, :due_date, :total,
+      :description, :due_date, :total,
       :direct_payment, :account_to_id
     ]
   end

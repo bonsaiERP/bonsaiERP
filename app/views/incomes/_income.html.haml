@@ -10,13 +10,18 @@
     .clear-both
     = income.state_tag
     %i= l income.date
-  .span3
+  .span4
     = income.due_date_tag
     .clear-both
     = income.creator_label
     = income.approver_label
     = income.nuller_label
-  .span4
+
+    - if income.description.present?
+      .clear-both
+      %i.icon-comment(data-toggle='tooltip' title='Descripción')
+      = income.description
+  .span3
     .span6.r
       = ntc income.total
       = currency_label income.currency

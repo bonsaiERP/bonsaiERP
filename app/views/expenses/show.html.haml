@@ -48,17 +48,23 @@
 
 
 .row-fluid
-  .moneybox
-    %label TOTAL
-    %h4
-      = ntc @expense.total
-      = currency_label @expense.currency
+  .span6
+    .moneybox
+      %label TOTAL
+      %h4
+        = ntc @expense.total
+        = currency_label @expense.currency
 
-  .moneybox
-    %label SALDO
-    %h4
-      = @expense.balance
-      = currency_label @expense.currency
+    .moneybox
+      %label SALDO
+      %h4
+        = @expense.balance
+        = currency_label @expense.currency
+  .span6
+    - if @expense.description.present?
+      %i.icon-comment(data-toggle='tooltip' title='Descripción')
+      = @expense.description
+
 
 = render 'expenses/tour/devolution'
 

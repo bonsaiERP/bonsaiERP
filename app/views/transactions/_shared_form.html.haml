@@ -23,15 +23,15 @@
     = f.input :project_id,  label: 'Proyecto', collection: Project.active,
       input_html: { class: 'contact_id span11', data: {new_url: new_project_path, trigger: 'new_project', width: 900 } }
 
-  .span3
-    = f.input :bill_number, label: 'Nº de Documento'.html_safe, input_html: {size: 20}, hint: 'Nº de factura o recibo'
-  .span3
-    = f.input :due_date, as: :datepicker, label: 'Vence el' if f.object.is_approved?
+  .span6
+    = f.input :due_date, as: :datepicker, label: 'Vence el'
 
 
 .row-fluid
   .span6
-    = f.input :description, label: 'Descripción', as: 'text', input_html: {rows: 3, class: 'span10'}
+    = f.input :description, label: 'Descripción', as: 'text', input_html: {rows: 2, class: 'span10'}
+
+  -# Render for direct_payment
   - if f.object.is_draft?
     .span6.well.well-small.trans
       .form-horizontal

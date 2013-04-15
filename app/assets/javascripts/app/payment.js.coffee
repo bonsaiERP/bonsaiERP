@@ -36,7 +36,7 @@ class Payment extends Backbone.Model
     else
       @get('exchange_rate') * 1
 
-    val.toFixed(4) * 1
+    val
   #
   isInverse: ->
     @get('currency') != @get('baseCurrency')
