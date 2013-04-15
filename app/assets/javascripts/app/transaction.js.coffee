@@ -174,7 +174,7 @@ class Transaction extends Backbone.Collection
       item.set('_destroy', "1")
       $row.hide()
     else
-      $row.remove()
+      $row.detach()
 
     @remove(item)
     @calculateSubtotal()
