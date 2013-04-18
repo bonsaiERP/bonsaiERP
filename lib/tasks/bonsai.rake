@@ -319,6 +319,7 @@ namespace :bonsai do
           c.incomes_status = ContactBalanceStatus.new(incomes).create_balances
           c.save
         end
+
         # Expenses
         Expense.pendent.pluck(:contact_id).uniq.each do |cid|
           c = Contact.find(cid)

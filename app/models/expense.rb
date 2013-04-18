@@ -10,6 +10,7 @@ class Expense < Account
   ########################################
   # Callbacks
   before_save :set_supplier_and_expenses_status
+  before_save :set_contact_expenses_status_null, if: :nulling_valid?
 
   ########################################
   # Relationships
@@ -116,10 +117,18 @@ private
     contact.expenses_status = ContactBalanceStatus.new(pendent_contact_expenses).object_balance(self)
   end
 
+  def set_contact_expenses_status_null
+    contact.expenses_status = ContactBalanceStatus.new(pendent_contact_expenses).create_balances
+  end
+
   def pendent_contact_expenses
     _id = id
     Expense.pendent.contact(contact_id).where { id.not_eq _id }
     .select('sum(amount * exchange_rate) AS tot, sum(amount) AS tot_cur, currency')
     .group(:currency)
+  end
+
+  def nulling_valid?
+    ['paid', 'approved'].include?(state_was) && is_nulled?
   end
 end

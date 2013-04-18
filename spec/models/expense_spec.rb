@@ -263,10 +263,17 @@ describe Expense do
   end
 
   context 'Contact callbacks' do
+    let(:user) { build :user, id: 15 }
+
+    before(:each) do
+      UserSession.user = user
+    end
+
     it "update#incomes_status" do
       exp = Expense.new_expense(valid_attributes.merge(state: 'approved', total: 10, amount: 5.0))
 
       exp.save.should be_true
+      exp.should be_is_approved
 
       exp.contact.expenses_status.should eq({
         'TOTAL' => 5.0,
@@ -284,11 +291,23 @@ describe Expense do
 
       exp = Expense.new_expense(valid_attributes.merge(state: 'approved', currency: 'USD', total: 20, amount: 3.3, exchange_rate: 7.0, ref_number: 'I2324839'))
       exp.save.should be_true
+      exp.should be_is_approved
 
       exp.contact.expenses_status.should eq({
         'TOTAL' => (10 + 3.3 * 7).round(2),
         'BOB' => 10.0, 
         'USD' => 3.3
+      })
+
+      exp.amount = 20
+      exp.save.should be_true
+
+      exp.null!.should be_true
+      exp.should be_is_nulled
+
+      exp.contact.expenses_status.should eq({
+        'TOTAL' => 10.0,
+        'BOB' => 10.0
       })
     end
   end

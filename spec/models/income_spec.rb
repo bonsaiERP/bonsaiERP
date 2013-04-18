@@ -266,6 +266,12 @@ describe Income do
   end
 
   context 'Contact callbacks' do
+    let(:user) { build :user, id: 15 }
+
+    before(:each) do
+      UserSession.user = user
+    end
+
     it "update#incomes_status" do
       inc = Income.new_income(valid_attributes.merge(state: 'approved', total: 10, amount: 5.0))
 
@@ -292,6 +298,16 @@ describe Income do
         'TOTAL' => (12 + 3.3 * 7).round(2),
         'BOB' => 12.0, 
         'USD' => 3.3
+      })
+
+      inc.amount = 20
+      inc.save.should be_true
+
+      inc.null!.should be_true
+
+      inc.contact.incomes_status.should eq({
+        'TOTAL' => 12.0,
+        'BOB' => 12.0
       })
     end
   end
