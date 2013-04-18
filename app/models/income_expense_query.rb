@@ -13,4 +13,10 @@ class IncomeExpenseQuery
     .select('sum(amount * exchange_rate) AS tot, sum(amount) AS tot_cur, currency, contact_id')
     .group(:currency, :contact_id).order(:contact_id)
   end
+
+  def pendent_contact_balances(contact_id)
+    rel.pendent.contact(contact_id)
+    .select('sum(amount * exchange_rate) AS tot, sum(amount) AS tot_cur, currency')
+    .group(:currency)
+  end
 end

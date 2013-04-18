@@ -39,12 +39,9 @@ class Income < Account
   scope :discount, -> { joins(:transaction).where(transaction: {discounted: true}) }
   scope :approved, -> { where(state: 'approved') }
   scope :active,   -> { where(state: ['approved', 'paid']) }
+  scope :paid, -> { where(state: 'paid') }
   scope :contact, -> (cid) { where(contact_id: cid) }
   scope :pendent, -> { active.where{ amount.not_eq 0 } }
-  scope :to_pay_contact, -> (cid) { pendent.contact(cid) }
-  scope :pendent_contact_except, -> (cid, iid) {
-    pendent.contact(cid).where{ id.not_eq iid }
-  }
 
   ########################################
   # Delegations

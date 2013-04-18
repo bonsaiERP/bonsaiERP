@@ -63,7 +63,6 @@ class TransactionModel extends Backbone.Model
     @setCurrency()
   #
   setEvents: ->
-    @on 'change:direct_payment',->
     @on('change:currency', =>
       @setCurrency()
       @activateExchange()
@@ -181,7 +180,7 @@ class Transaction extends Backbone.Collection
   # Sets the items currency
   setCurrency: ->
     @each (el) =>
-      el.set('rate', @transModel.get('rate')) if el.attributes.item_id?
+      el.set('rate', @transModel.get('rate'))
 
 
 # Income

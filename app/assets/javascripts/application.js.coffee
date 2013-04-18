@@ -22,9 +22,9 @@
 
 #= require namespace.coffee
 #= require app/currency.coffee
-#= require app/exchange_rate.js.coffee
-#= require app/transaction.js.coffee
-#= require app/payment.js.coffee
+#= require app/exchange_rate.coffee
+#= require app/transaction.coffee
+#= require app/payment.coffee
 #= require app/transference.coffee
 #= require app/report.coffee
 #= require app/contact.coffee

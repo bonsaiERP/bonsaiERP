@@ -309,10 +309,22 @@ namespace :bonsai do
   task update_incomes_expenses_status: :environment do
     Organisation.all.each do |org|
       if PgTools.schema_exists? org.tenant
-        puts org.tenant
+        puts "Updating data from tenant #{org.tenant}"
         PgTools.change_schema org.tenant
-        Contact.each do |c|
-          
+
+        # Incomes
+        Income.pendent.pluck(:contact_id).uniq.each do |cid|
+          c = Contact.find(cid)
+          incomes = IncomeQuery.new.pendent_contact_balances(cid)
+          c.incomes_status = ContactBalanceStatus.new(incomes).create_balances
+          c.save
+        end
+        # Expenses
+        Expense.pendent.pluck(:contact_id).uniq.each do |cid|
+          c = Contact.find(cid)
+          expenses = ExpenseQuery.new.pendent_contact_balances(cid)
+          c.expenses_status = ContactBalanceStatus.new(expenses).create_balances
+          c.save
         end
       end
     end

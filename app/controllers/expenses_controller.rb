@@ -15,7 +15,7 @@ class ExpensesController < ApplicationController
 
   # GET /expenses/1
   def show
-    @expense = present ExpenseQuery.new(Expense.where(id: params[:id])).inc.first
+    @expense = present Expense.find(params[:id])
   end
 
   # GET /expenses/new

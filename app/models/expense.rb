@@ -38,9 +38,9 @@ class Expense < Account
   scope :discount, -> { joins(:transaction).where(transaction: {discounted: true}) }
   scope :approved, -> { where(state: 'approved') }
   scope :active,   -> { where(state: ['approved', 'paid']) }
+  scope :paid, -> { where(state: 'paid') }
   scope :contact, -> (cid) { where(contact_id: cid) }
   scope :pendent, -> { active.where{ amount.not_eq 0 } }
-  scope :to_pay_contact, -> (cid) { contact(cid).pendent }
 
   ########################################
   # Delegations
