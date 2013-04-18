@@ -29,7 +29,6 @@
 #= require app/report.coffee
 
 #= require plugins/jquery.joyride.js
-# plugins/modal_manager.coffee
 
 #= require forms
 #= require base

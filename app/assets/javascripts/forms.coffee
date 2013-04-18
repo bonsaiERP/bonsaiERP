@@ -183,5 +183,5 @@ $( ->
       $a.removeClass('select2-default')
       .find('>span').text($this.data('value'))
 
-  $.fn.select2Autocomplete = select2Autocomplete
+  $.select2Autocomplete = $.fn.select2Autocomplete = select2Autocomplete
 )

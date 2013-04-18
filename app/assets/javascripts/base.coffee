@@ -277,7 +277,7 @@ init = ($) ->
     $('.select2-autocomplete').select2Autocomplete()
     $('body').dataNewUrl()
     fx.rates = exchangeRates.rates
-    
+
 
   rivets.configure(
     #preloadData: false
