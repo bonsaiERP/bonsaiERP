@@ -23,11 +23,11 @@
       = income.description
   .span3
     .span6.r
-      = ntc income.total
       = currency_label income.currency
+      = ntc income.total
 
     .span6.r
-      = ntc income.balance
       = currency_label income.currency
+      = ntc income.balance
   .span1.r
     = link_to icon_edit, edit_income_path(income.id), class: 'dark' unless income.is_nulled?

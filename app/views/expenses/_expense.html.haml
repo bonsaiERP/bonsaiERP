@@ -23,11 +23,11 @@
       = expense.description
   .span3
     .span6.r
-      = ntc expense.total
       = currency_label expense.currency
+      = ntc expense.total
 
     .span6.r
-      = ntc expense.balance
       = currency_label expense.currency
+      = ntc expense.amount
   .span1.r
     = link_to icon_edit, edit_expense_path(expense), class: 'dark' unless expense.is_nulled?
