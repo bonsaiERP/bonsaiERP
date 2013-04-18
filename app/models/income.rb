@@ -36,13 +36,15 @@ class Income < Account
 
   ########################################
   # Scopes
-  scope :discount, joins(:transaction).where(transaction: {discounted: true})
+  scope :discount, -> { joins(:transaction).where(transaction: {discounted: true}) }
   scope :approved, -> { where(state: 'approved') }
   scope :active,   -> { where(state: ['approved', 'paid']) }
   scope :contact, -> (cid) { where(contact_id: cid) }
-  scope :to_pay_contact, -> (cid) { contact.where(amount.gt 0) }
-  scope :pendent_except, -> (iid) { active.where{ (id.not_eq iid) & (amount.not_eq 0) } }
-  scope :pendent_contact_except, -> (cid,iid) { contact(cid).pendent_except(iid) }
+  scope :pendent, -> { active.where{ amount.not_eq 0 } }
+  scope :to_pay_contact, -> (cid) { pendent.contact(cid) }
+  scope :pendent_contact_except, -> (cid, iid) {
+    pendent.contact(cid).where{ id.not_eq iid }
+  }
 
   ########################################
   # Delegations
@@ -116,14 +118,12 @@ private
   end
 
   def set_contact_incomes_status
-    h = ContactBalanceStatus.new(pendent_contact_incomes).create_balances
-    h['TOTAL'] = h['TOTAL'] + (amount - amount_was) * exchange_rate
-    h[currency] = (h[currency] || 0.0) + amount - amount_was
-    contact.incomes_status = h
+    contact.incomes_status = ContactBalanceStatus.new(pendent_contact_incomes).object_balance(self)
   end
 
   def pendent_contact_incomes
-    Income.active.pendent_contact_except(contact_id, id)
+    _id = id
+    Income.pendent.contact(contact_id).where { id.not_eq _id }
     .select('sum(amount * exchange_rate) AS tot, sum(amount) AS tot_cur, currency')
     .group(:currency)
   end

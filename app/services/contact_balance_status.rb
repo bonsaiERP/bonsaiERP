@@ -15,6 +15,17 @@ class ContactBalanceStatus < Struct.new(:transactions)
     h
   end
 
+  # Receives a Income or Expense instance and calculates 
+  # the balance for each currency
+  def object_balance(obj)
+    create_balances
+
+    h['TOTAL'] = (h['TOTAL'] + (obj.amount) * obj.exchange_rate).round(2)
+    h[obj.currency] = ((h[obj.currency] || 0.0) + obj.amount).round(2)
+    
+    h
+  end
+
 private
   def set_base_currency
     if base_currency_transaction && base_currency_transaction.tot.to_d != 0.0

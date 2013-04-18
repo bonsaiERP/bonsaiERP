@@ -16,7 +16,7 @@ class IncomesController < ApplicationController
   # GET /incomes/1
   # GET /incomes/1.xml
   def show
-    @income = present IncomeQuery.new(Income.where(id: params[:id])).inc.first
+    @income = present Income.find(params[:id])
   end
 
   # GET /incomes/new

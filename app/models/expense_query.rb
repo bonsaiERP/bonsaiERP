@@ -1,15 +1,17 @@
-class ExpenseQuery
-  def initialize(rel = Expense)
-    @rel = rel
+# encoding: utf-8
+# author: Boris Barroso
+# email: boriscyber@gmail.com
+class ExpenseQuery < IncomeExpenseQuery
+  def initialize
+    super Expense
   end
 
   def inc
-    @rel.includes(payments: [:account_to], expense_details: [:item])
+    rel.includes(payments: [:account_to], expense_details: [:item])
   end
 
   def search(params={})
-    @rel = @rel.where{} if params[:search].present?
-    @rel.includes(:contact, transaction: [:creator, :approver])
+    rel.includes(:contact, transaction: [:creator, :approver])
   end
 
   def to_pay(contact_id)

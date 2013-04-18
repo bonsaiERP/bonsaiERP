@@ -64,4 +64,8 @@ class Contact < ActiveRecord::Base
   def set_account_currency(cur)
     self.accounts.build( name: self.to_s, currency: cur, amount: 0)
   end
+
+  def incomes_expenses_status
+    {id: id, incomes: incomes_status, expenses: expenses_status}
+  end
 end

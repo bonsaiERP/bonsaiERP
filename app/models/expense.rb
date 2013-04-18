@@ -39,9 +39,8 @@ class Expense < Account
   scope :approved, -> { where(state: 'approved') }
   scope :active,   -> { where(state: ['approved', 'paid']) }
   scope :contact, -> (cid) { where(contact_id: cid) }
-  scope :to_pay_contact, -> (cid) { contact.where(amount.gt 0) }
-  scope :pendent_except, -> (iid) { active.where{ (id.not_eq iid) & (amount.not_eq 0) } }
-  scope :pendent_contact_except, -> (cid, iid) { contact(cid).pendent_except(iid) }
+  scope :pendent, -> { active.where{ amount.not_eq 0 } }
+  scope :to_pay_contact, -> (cid) { contact(cid).pendent }
 
   ########################################
   # Delegations
@@ -114,14 +113,12 @@ private
   end
 
   def set_contact_expenses_status
-    h = ContactBalanceStatus.new(pendent_contact_expenses).create_balances
-    h['TOTAL'] = h['TOTAL'] + (amount - amount_was) * exchange_rate
-    h[currency] = (h[currency] || 0.0) + amount - amount_was
-    contact.expenses_status = h
+    contact.expenses_status = ContactBalanceStatus.new(pendent_contact_expenses).object_balance(self)
   end
 
   def pendent_contact_expenses
-    Expense.active.pendent_contact_except(contact_id, id)
+    _id = id
+    Expense.pendent.contact(contact_id).where { id.not_eq _id }
     .select('sum(amount * exchange_rate) AS tot, sum(amount) AS tot_cur, currency')
     .group(:currency)
   end

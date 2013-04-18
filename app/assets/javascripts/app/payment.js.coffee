@@ -54,7 +54,7 @@ class Payment extends Backbone.Model
   #
   setCurrencyLabel: ->
     name = currencies[@get('currency')].name
-    $('span.currency').html ['<span class="label label-inverse" rel="tooltip" title="', name,'">', @get('currency'),'</span>' ].join('')
+    $('span.currency').html ['<span class="label label-inverse" data-toggle="tooltip" title="', name,'">', @get('currency'),'</span>' ].join('')
   #
   setTotalCurrency: ->
     total = @convertInverse() * @get('amount')

@@ -304,6 +304,19 @@ namespace :bonsai do
       end
     end
   end
+
+  desc 'Updates the incomes_status and expenses_status'
+  task update_incomes_expenses_status: :environment do
+    Organisation.all.each do |org|
+      if PgTools.schema_exists? org.tenant
+        puts org.tenant
+        PgTools.change_schema org.tenant
+        Contact.each do |c|
+          
+        end
+      end
+    end
+  end
 end
 
 # example to export the file

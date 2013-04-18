@@ -23,4 +23,11 @@
 
 
 %ul.unstyled.listing
-  =render @contacts
+  = render @contacts
+:javascript
+  $(function() {
+    $('.contact').each(function() {
+      cb = new App.ContactBalance(this)
+      cb.render()
+    })
+  })
