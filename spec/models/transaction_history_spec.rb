@@ -18,6 +18,7 @@ describe TransactionHistory do
       {
         ref_number: 'I-13-0001', date: Date.today ,currency: 'BOB', contact_id: 10,
         description: "New income description", state: "draft", total: 300,
+        amount: 300,
         income_details_attributes: details
       }
     end
@@ -45,16 +46,16 @@ describe TransactionHistory do
       #puts th.data
       th.data.should be_is_a(Hash)
       th.data.should_not be_blank
-      th.data.fetch(:total).should eq(300)
-      th.data.fetch(:name).should eq(income.name)
+      #th.data.fetch("total").should eq(300)
+      th.data.fetch("name").should eq(income.name)
 
-      [:id, :amount, :name, :amount, :total, :original_total, :approver_id].each do |k|
+      ["id", "amount", "name", "amount", "total", "original_total", "approver_id"].each do |k|
         th.data.keys.should be_include(k)
       end
 
-      th.data[:income_details].should have(2).items
-      th.data[:income_details].each do |det|
-        det.keys.should include(:id, :item_id, :quantity, :price, :original_price)
+      th.data["income_details"].should have(2).items
+      th.data["income_details"].each do |det|
+        det.keys.should include("id", "item_id", "quantity", "price", "original_price")
       end
     end
   end

@@ -6,7 +6,7 @@ describe TransactionParams do
   it "params income" do
     subject.income.should eq([
       :date, :contact_id, :currency, :exchange_rate, :project_id, 
-      :bill_number, :description, :due_date, :total,
+      :description, :due_date, :total,
       :direct_payment, :account_to_id,
       income_details_attributes: [:id, :item_id, :price, :quantity, :_destroy]])
   end
@@ -14,7 +14,7 @@ describe TransactionParams do
   it "params expense" do
     subject.expense.should eq([
       :date, :contact_id, :currency, :exchange_rate, :project_id, 
-      :bill_number, :description, :due_date, :total,
+      :description, :due_date, :total,
       :direct_payment, :account_to_id,
        expense_details_attributes: [:id, :item_id, :price, :quantity, :_destroy]])
   end

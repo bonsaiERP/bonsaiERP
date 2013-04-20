@@ -25,8 +25,8 @@ class TransactionHistory < ActiveRecord::Base
 
 private
   def get_transaction_data
-    @hash = @klass.attributes.symbolize_keys.slice!("error_messages")
-    h = @klass.transaction_attributes.symbolize_keys.slice!("id", "created_at", "updated_at")
+    @hash = @klass.attributes.slice!("error_messages")
+    h = @klass.transaction_attributes.slice!("id", "created_at", "updated_at")
     @hash.merge!(h)
     transaction_details
     @hash
