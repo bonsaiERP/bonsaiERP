@@ -25,6 +25,7 @@ class ContactsController < ApplicationController
     respond_to do |format|
       format.html
       format.json { render json: @contact }
+      format.js { render 'show', format: 'js' }
     end
   end
 

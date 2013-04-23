@@ -6,11 +6,7 @@ class ExpensesController < ApplicationController
 
   # GET /expenses
   def index
-    if params[:contact_id].present?
-      @expenses = Expense.contact(params[:contact_id]).order('date desc').page(@page)
-    else
-      @expenses = Expense.order('date desc').page(@page)
-    end
+    search_expenses
   end
 
   # GET /expenses/1
@@ -137,5 +133,17 @@ private
 
   def set_expense
     @expense = Expense.find_by_id(params[:id])
+  end
+
+  # Method to search expenses on the index
+  def search_expenses
+    @expenses = case
+                when params[:contact_id].present?
+                  Expense.contact(params[:contact_id]).order('date desc').page(@page)
+                when params[:search].present?
+                  Expense.like(params[:search]).page(@page)
+                else
+                  Expense.order('date desc').page(@page)
+                end
   end
 end

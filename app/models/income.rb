@@ -43,6 +43,10 @@ class Income < Account
   scope :paid, -> { where(state: 'paid') }
   scope :contact, -> (cid) { where(contact_id: cid) }
   scope :pendent, -> { active.where{ amount.not_eq 0 } }
+  scope :like, -> (s) {
+    s = "%#{s}%"
+    where{(name.like s) | (description.like s)}
+  }
 
   ########################################
   # Delegations

@@ -6,11 +6,7 @@ class IncomesController < ApplicationController
 
   # GET /incomes
   def index
-    if params[:contact_id].present?
-      @incomes = Income.contact(params[:contact_id]).order('date desc').page(@page)
-    else
-      @incomes = Income.order('date desc').page(@page)
-    end
+    search_incomes
   end
 
   # GET /incomes/1
@@ -132,5 +128,17 @@ private
 
   def set_income
     @income = Income.find_by_id(params[:id])
+  end
+
+  # Method to search incomes on the index
+  def search_incomes
+    @incomes = case
+               when params[:contact_id].present?
+                 Income.contact(params[:contact_id]).order('date desc').page(@page)
+               when params[:search].present?
+                 Income.like(params[:search])
+               else
+                 Income.order('date desc').page(@page)
+               end
   end
 end
