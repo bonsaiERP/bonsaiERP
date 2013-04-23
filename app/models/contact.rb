@@ -3,6 +3,8 @@
 # email: boriscyber@gmail.com
 class Contact < ActiveRecord::Base
 
+  before_destroy :check_relations
+
   ########################################
   # Relationships
   has_many :contact_accounts, foreign_key: :contact_id, conditions: {type: 'ContactAccount'}
@@ -67,5 +69,11 @@ class Contact < ActiveRecord::Base
 
   def incomes_expenses_status
     {id: id, incomes: incomes_status, expenses: expenses_status}
+  end
+
+private
+  # Check if the contact has any relations before destroy
+  def check_relations
+    not(incomes.any? || expenses.any?)
   end
 end

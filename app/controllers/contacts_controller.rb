@@ -64,7 +64,14 @@ class ContactsController < ApplicationController
   # DELETE /contacts/1.xml
   def destroy
     @contact.destroy
-    respond_ajax(@contact)
+
+    #respond_ajax(@contact)
+    if @contact.destroyed?
+      flash[:success] = 'El contacto fue eliminado'
+    else
+      flash[:error] = 'No fue posible eliminar el contacto'
+    end
+    redirect_to contacts_path
   end
 
 private

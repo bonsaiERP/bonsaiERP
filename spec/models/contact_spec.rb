@@ -43,4 +43,14 @@ describe Contact do
   it 'create a valid' do
     Contact.create!(valid_attributes)
   end
+
+  it "#destroy" do
+    c = Contact.create!(valid_attributes)
+
+
+    c.should_receive(:incomes).and_return(stub(any?: true))
+    #c.should_receive(:expenses)
+
+    c.destroy.should be_false
+  end
 end
