@@ -220,6 +220,10 @@ es:
         matchcode: "El idenificador ya existe, por favor cambie"
       devolution:
         income_total: "La cantidad y el balance suman un valor mayor al total"
+      expense:
+        not_draft: "El estado del egreso no es borrador"
+      income:
+        not_draft: "El estado del ingreso no es borrador"
       income_detail:
         item_not_for_sale: "Debe seleccionar un ítem que se vende"
       inventory_operation_detail:
@@ -352,22 +356,6 @@ es:
     payment_description: "%{pay_type} de %{trans} %{ref}, cuenta %{account}"
     initial_money: "Saldo inicial"
     devolution_description: "Devolución %{trans}, cuenta %{account}"
-  transaction:
-    Income: 
-      class: "Venta"
-      pay: "cobro"
-      paid: "cobrada"
-    income:
-      refund: "Reversión de fondos por cambios en la %{transaction}"
-    Buy: 
-      class: "Compra"
-      pay: "pago"
-      paid: "pagada"
-    buy:
-      refund: "Reversión de fondos por cambios en la %{transaction}"
-    Expense:
-      class: "Gasto"
-      pay: "pago"
   currency:
     exchange_rate:
       "tipo de cambio de ( %{cur1} = %{cur2} )"
@@ -375,6 +363,12 @@ es:
     client: "Cliente"
     supplier: "Proveedor"
     staff: "Personal"
+  expense:
+    payment:
+      reference: "Pago egreso %{expense}"
+  income:
+    payment:
+      reference: "Cobro ingreso %{income}"
   organisation:
     errors:
       tenant:

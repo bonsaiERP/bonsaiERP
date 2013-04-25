@@ -1,3 +1,6 @@
+# encoding: utf-8
+# author: Boris Barroso
+# email: boriscyber@gmail.com
 module Models::IncomeExpense
   def set_state_by_balance!
     if balance <= 0

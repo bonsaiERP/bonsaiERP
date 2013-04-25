@@ -2,6 +2,7 @@
 class IncomeService < TransactionService
   attr_accessor :income, :ledger
 
+  validate :income_is_valid,  if: :direct_payment?
   validate :valid_account_to, if: :direct_payment?
 
   delegate :contact, :is_approved?, :is_draft?, :income_details, 
@@ -14,7 +15,7 @@ class IncomeService < TransactionService
   def self.new_income(attrs = {})
     attrs = set_new_income_attributes(attrs)
     is = new(attrs) do |i|
-      i.income = Income.new_income(attrs.except(:direct_payment, :account_to_id, :income_details_attributes))
+      i.income = Income.new_income(attrs.except(:direct_payment, :account_to_id, :income_details_attributes, :reference))
     end
     is.income_details.build(quantity: 1) if is.income_details.empty?
 
@@ -35,22 +36,20 @@ class IncomeService < TransactionService
   # Creates and can call other methods passed in the block
   def create
     set_income_data
-
-    create_or_update do
-      income.save
-    end
+    create_or_update { income.save }
   end
 
   # Creates  and approves an Income
   def create_and_approve
-    build_ledger if can_pay?
-    income.approve!
     set_income_data
 
     create_or_update do
+      income.approve!
+      income.amount = 0 if direct_payment?
+
+      income.set_state_by_balance!
       res = income.save
-      res = res && create_ledger
-      income.state = income.state_was || 'draft' unless res
+      res = res && create_ledger if direct_payment?
 
       res
     end
@@ -58,6 +57,7 @@ class IncomeService < TransactionService
 
   def update(attrs = {})
     self.attributes = attrs
+
     create_or_update do
       res = TransactionHistory.new.create_history(income)
       income.attributes = income_attributes
@@ -69,18 +69,19 @@ class IncomeService < TransactionService
 
   def update_and_approve(attrs = {})
     self.attributes = attrs
-    build_ledger if can_pay?
-    income.approve!
 
     create_or_update do
+      income.approve!
       res = TransactionHistory.new.create_history(income)
       income.attributes = income_attributes
 
       update_income_data
+      income.amount = 0 if direct_payment?
+      income.set_state_by_balance!
+
       res = income.save && res
 
-      res = res && create_ledger
-      income.state = income.state_was || 'draft' unless res
+      res = res && create_ledger if direct_payment?
 
       res
     end
@@ -98,7 +99,9 @@ private
   # Creates or updates and sets errors messages in case of failing
   def create_or_update(&b)
     res = valid?
-    res = commit_or_rollback { b.call } && res
+    res = income.valid? && res
+
+    res = commit_or_rollback { b.call } if res
 
     set_errors(*[income, ledger].compact) unless res
 
@@ -106,52 +109,38 @@ private
   end
 
   def income_attributes
-    attributes.except(:direct_payment, :account_to_id, :income_details_attributes)
+    attributes.except(:direct_payment, :account_to_id, :income_details_attributes, :reference)
   end
 
   # Updates the data for an imcome
   # total is the alias for amount due that Income < Account
   def update_income_data
+    set_income_details
     income.balance -= (income.total_was - income.total)
-    update_details
     income.gross_total = original_income_total
     income.set_state_by_balance!
     income.discounted = ( discount > 0 )
 
-    set_paid_income if ledger.present?
-
     IncomeErrors.new(income).set_errors
   end
 
+  # For new income
   def set_income_data
-    set_new_details
-    income.ref_number = Income.get_ref_number
+    set_income_details
+
+    income.ref_number  = Income.get_ref_number
     income.gross_total = original_income_total
-    income.balance = income.total
-    income.state = 'draft' if state.blank?
-    income.discounted = ( discount > 0 )
-    income.creator_id = UserSession.id
-
-    set_paid_income if ledger.present?
-  end
-
-  def set_paid_income
-    income.balance = 0
-    income.state = 'paid'
+    income.amount      = income.total
+    income.state       = 'draft'
+    income.discounted  = ( discount > 0 )
+    income.creator_id  = UserSession.id
   end
 
   # Set details for a new Income
-  def set_new_details
+  def set_income_details
     income_details.each do |det|
       det.original_price = item_prices[det.item_id]
-      det.balance = get_detail_balance(det)
-    end
-  end
-
-  def update_details
-    income_details.each do |det|
-      det.original_price = item_prices[det.item_id]
-      det.balance = get_detail_balance(det)
+      det.balance        = get_detail_balance(det)
     end
   end
 
@@ -166,46 +155,40 @@ private
   end
 
   def original_income_total
-    income_details.inject(0) do |sum, det|
-      sum += det.quantity.to_f * det.original_price.to_f
-    end
+    income_details.inject(0) {|sum, det| sum += det.quantity.to_f * det.original_price.to_f }
   end
 
   def item_ids
     @item_ids ||= income_details.map(&:item_id)
   end
 
-  # Creates a ledger if it can pay
-  def build_ledger
-    @ledger = AccountLedger.new(
-      account_to_id: account_to_id, date: date,
-      operation: 'payin', exchange_rate: 1,
-      currency: income.currency, inverse: false
-    )
-  end
-
   # Saves the ledger with income data
   def create_ledger
-    return true unless ledger.present?
-    ledger.account_id = income.id
-    ledger.amount = income.total
-    ledger.reference = "Cobro ingreso #{income}"
+    @ledger = AccountLedger.new(
+      account_id: income.id, amount: income.total,
+      account_to_id: account_to_id, date: date,
+      operation: 'payin', exchange_rate: 1,
+      currency: income.currency, inverse: false,
+      reference: get_reference
+    )
 
-    ledger.save_ledger
+    @ledger.save_ledger
   end
 
-  def can_pay?
-    income.is_draft? && direct_payment?
+  def get_reference
+    reference.present? ? reference : I18n.t('income.payment.reference', income: income)
+  end
+
+  def income_is_valid
+    self.errors.add :base, I18n.t('errors.messages.income.not_draft') unless income.is_draft?
   end
 
   def valid_account_to
-    unless account_to.present?
-      self.errors.add :account_to_id, I18n.t('errors.messages.quick_income.valid_account_to')
-    end
+    self.errors.add(:account_to_id, I18n.t('errors.messages.quick_income.valid_account_to')) unless account_to.present?
   end
 
   def direct_payment?
-    direct_payment == true
+    direct_payment === true
   end
 
   def account_to
@@ -215,5 +198,4 @@ private
   def item_prices
     @item_prices ||= Hash[Item.where(id: item_ids).values_of(:id, :price)]
   end
-
 end

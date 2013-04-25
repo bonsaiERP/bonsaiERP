@@ -10,8 +10,9 @@ describe IncomeService do
   let(:total) { 490 }
   let(:details_total) { details.inject(0) {|s, v| s+= v[:quantity] * v[:price] } }
 
+  let(:contact) { build :contact, id: 1 }
   let(:valid_params) { {
-      date: Date.today, contact_id: 1, total: total,
+      date: Date.today, contact_id: contact.id, total: total,
       currency: 'BOB', bill_number: "I-0001", description: "New income description",
       income_details_attributes: details
     }
@@ -57,8 +58,8 @@ describe IncomeService do
 
   context "Create a income with default data" do
     before(:each) do
-      Income.any_instance.stub(save: true)
-      IncomeDetail.any_instance.stub(save: true)
+      Income.any_instance.stub(save: true, contact: contact)
+      IncomeDetail.any_instance.stub(save: true, valid?: true)
     end
 
     subject { IncomeService.new_income(valid_params) }
@@ -100,7 +101,6 @@ describe IncomeService do
     end
 
     it "creates and approves" do
-      subject.should_receive(:set_income_data).and_return(true)
       # Create
       subject.create_and_approve.should be_true
 
@@ -117,7 +117,7 @@ describe IncomeService do
 
   context "Update" do
     before(:each) do
-      Income.any_instance.stub(save: true)
+      Income.any_instance.stub(save: true, valid?: true)
       IncomeDetail.any_instance.stub(save: true)
     end
 
@@ -163,7 +163,7 @@ describe IncomeService do
 
     before(:each) do
       AccountLedger.any_instance.stub(save_ledger: true)
-      Income.any_instance.stub(contact: contact, id: 100, save: true)
+      Income.any_instance.stub(valid?: true, id: 100, save: true)
       IncomeDetail.any_instance.stub(save: true)
     end
 
@@ -175,7 +175,7 @@ describe IncomeService do
 
       Item.should_receive(:where).with(id: item_ids).and_return(s)
 
-      is = IncomeService.new_income(valid_params.merge(direct_payment: "1", account_to_id: "2"))
+      is = IncomeService.new_income(valid_params.merge(direct_payment: "1", account_to_id: "2", reference: 'Recibo 123'))
       is.create_and_approve.should be_true
 
       is.ledger.should be_is_a(AccountLedger)
@@ -184,6 +184,7 @@ describe IncomeService do
       is.ledger.account_to_id.should eq(2)
       is.ledger.should be_is_payin
       is.ledger.amount.should == 490.0
+      is.ledger.reference.should eq('Recibo 123')
 
       # income
       is.income.total.should == 490.0
@@ -253,7 +254,7 @@ describe IncomeService do
       is.create_and_approve.should be_false
 
       is.errors[:contact_id].should eq(["Wrong"])
-      is.errors[:base].should eq(["Blank reference"])
+      is.errors[:reference].should eq(["Blank reference"])
     end
   end
 end

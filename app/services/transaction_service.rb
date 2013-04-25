@@ -13,6 +13,7 @@ class TransactionService < BaseService
   attribute :description, String
   attribute :direct_payment, Boolean
   attribute :account_to_id, Integer
+  attribute :reference, String
 
   attr_reader :transaction, :ledger
 

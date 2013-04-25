@@ -1,5 +1,5 @@
-# *bonsai*
-*bonsai* is a simple ERP system to control the most basic stuff for a company, that includes:
+# *bonsaiERP*
+*bonsaiERP* is a simple ERP system to control the most basic stuff for a company, that includes:
 
 - Sales
 - Buys
