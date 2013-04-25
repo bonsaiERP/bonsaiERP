@@ -90,7 +90,10 @@ private
   end
 
   def null_account
-    if @ledger.update_attributes(nuller_id: UserSession.id, active: false, nuller_datetime: Time.zone.now)
+    nl = NullLedger.new(@ledger)
+
+    
+    if nl.null_ledger
       flash[:notice] = "Se ha anulado exitosamente la transacción."
     else
       flash[:error] = "Exisitio un error al anular la transacción."

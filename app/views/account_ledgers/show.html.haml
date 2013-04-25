@@ -4,6 +4,7 @@
       = @ledger.verified_tag
       = @ledger
       = @ledger.operation_label
+      = @ledger.nulled_tag
       %small.dark
         = render_if @ledger.account_contact do
           = link_to @ledger.account_contact_tag, @ledger.account_contact
