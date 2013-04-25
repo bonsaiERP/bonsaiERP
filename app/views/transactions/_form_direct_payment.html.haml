@@ -1,0 +1,20 @@
+.well.well-small.trans
+  .row-fluid
+    .span4.form-horizontal
+      = f.input :direct_payment,
+        label: "<i class='icon-money'></i> #{lbl} directo".html_safe,
+        as: :boolean, input_html: {id: 'direct_payment', data: {value: 'trans.direct_payment'} }
+    .span8.help-block
+      Seleccione 
+      %strong= "#{lbl} directo"
+      para poder realizar un #{lbl.downcase} directo a la 
+      %strong cuenta
+      que seleccione
+
+  .row-fluid(data-show="trans.direct_payment")
+    -# Render for direct_payment
+    .span6.account_to
+      = f.input :account_to_id, label: 'Cuenta',
+        input_html: {id: 'account_to_id', class: 'span10', data: {value: 'trans.account_to_id'}}
+    .span6
+      = f.input :reference, label: 'Referencia', as: :text, input_html: {rows: 2}

@@ -28,7 +28,7 @@ describe Item do
     i = Item.new(valid_attributes)
     i.should be_valid
     i.should be_for_sale
-    i.price = 0.0
+    i.price = - 1.0
 
     i.should_not be_valid
     i.errors_on(:price).should_not be_blank
@@ -75,18 +75,6 @@ describe Item do
 
     it 'should not have valid unit_id' do
       i = Item.new(valid_attributes.merge(unit_id: unit.id + 1))
-      i.should_not be_valid
-    end
-
-    it 'should be valid if not for sale' do
-      i = Item.new(valid_attributes.merge(for_sale: false, price: ''))
-
-      i.should be_valid
-      
-      i.for_sale = true
-      i.should_not be_valid
-
-      i.price = 'a'
       i.should_not be_valid
     end
   end

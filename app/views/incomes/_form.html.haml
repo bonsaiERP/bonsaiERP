@@ -4,6 +4,7 @@
   -########################################
   -# Render common form elements
   = render 'transactions/shared_form', f: f
+  = render 'transactions/form_direct_payment', f: f, lbl: 'Cobro' if income_service.is_draft?
 
   -########################################
   -# Render items

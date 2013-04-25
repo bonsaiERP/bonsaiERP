@@ -26,7 +26,7 @@ class TransactionParams
     [
       :date, :contact_id, :currency, :exchange_rate, :project_id, 
       :description, :due_date, :total,
-      :direct_payment, :account_to_id
+      :direct_payment, :account_to_id, :reference
     ]
   end
 end
