@@ -2,6 +2,7 @@
 class ExpenseService < TransactionService
   attr_accessor :expense
 
+  validate :expense_is_valid,  if: :direct_payment?
   validate :valid_account_to, if: :direct_payment?
 
   delegate :contact, :is_approved?, :is_draft?, :expense_details,
@@ -35,22 +36,20 @@ class ExpenseService < TransactionService
   # Creates and can call other methods passed in the block
   def create
     set_expense_data
-
-    create_or_update do
-      expense.save
-    end
+    create_or_update { expense.save }
   end
 
   # Creates  and approves an Expense
   def create_and_approve
-    build_ledger if can_pay?
-    expense.approve!
     set_expense_data
 
     create_or_update do
+      expense.approve!
+      expense.amount = 0 if direct_payment?
+
+      expense.set_state_by_balance!
       res = expense.save
-      res = res && create_ledger
-      expense.state = expense.state_was || 'draft' unless res
+      res = res && create_ledger if direct_payment?
 
       res
     end
@@ -58,6 +57,7 @@ class ExpenseService < TransactionService
 
   def update(attrs = {})
     self.attributes = attrs
+
     create_or_update do
       res = TransactionHistory.new.create_history(expense)
       expense.attributes = expense_attributes
@@ -69,18 +69,19 @@ class ExpenseService < TransactionService
 
   def update_and_approve(attrs = {})
     self.attributes = attrs
-    build_ledger if can_pay?
-    expense.approve!
 
     create_or_update do
+      expense.approve!
       res = TransactionHistory.new.create_history(expense)
       expense.attributes = expense_attributes
 
       update_expense_data
+      expense.amount = 0 if direct_payment?
+      expense.set_state_by_balance!
+
       res = expense.save && res
 
-      res = res && create_ledger
-      expense.state = expense.state_was || 'draft' unless res
+      res = res && create_ledger if direct_payment?
 
       res
     end
@@ -124,15 +125,14 @@ private
   end
 
   def set_expense_data
-    set_new_details
+    set_expense_details
+
     expense.ref_number = Expense.get_ref_number if expense.new_record?
     expense.gross_total = original_expense_total
     expense.balance = expense.total
     expense.state = 'draft' if state.blank?
     expense.discounted = ( expense.discount > 0 )
     expense.creator_id = UserSession.id
-
-    set_paid_expense if ledger.present?
   end
 
   def set_paid_expense
@@ -141,14 +141,7 @@ private
   end
 
   # Set details for a new Expense
-  def set_new_details
-    expense_details.each do |det|
-      det.original_price = item_prices[det.item_id]
-      det.balance = get_detail_balance(det)
-    end
-  end
-
-  def update_details
+  def set_expense_details
     expense_details.each do |det|
       det.original_price = item_prices[det.item_id]
       det.balance = get_detail_balance(det)
@@ -175,28 +168,25 @@ private
     @item_ids ||= expense_details.map(&:item_id)
   end
 
-  # Creates a ledger if it can pay
-  def build_ledger
-    @ledger = AccountLedger.new(
-      account_to_id: account_to_id, date: date,
-      operation: 'payout', exchange_rate: 1,
-      currency: expense.currency, inverse: false
-    )
-  end
-
   # Saves the ledger with expense data
   def create_ledger
-    return true unless ledger.present?
+    @ledger = AccountLedger.new(
+      account_id: expense.id, amount: expense.total,
+      account_to_id: account_to_id, date: date,
+      operation: 'payin', exchange_rate: 1,
+      currency: expense.currency, inverse: false,
+      reference: get_reference
+    )
 
-    ledger.account_id = expense.id
-    ledger.amount = -expense.total
-    ledger.reference = "Pago egreso #{expense}"
-
-    ledger.save_ledger
+    @ledger.save_ledger
   end
 
-  def can_pay?
-    expense.is_draft? && direct_payment?
+  def get_reference
+    reference.present? ? reference : I18n.t('expense.payment.reference', expense: expense)
+  end
+
+  def expense_is_valid
+    self.errors.add :base, I18n.t('errors.messages.expense.not_draft') unless expense.is_draft?
   end
 
   def valid_account_to
@@ -206,7 +196,7 @@ private
   end
 
   def direct_payment?
-    direct_payment == true
+    direct_payment === true
   end
 
   def account_to

@@ -3,7 +3,8 @@
 
   -########################################
   -# Render common form elements
-  #trans= render 'transactions/shared_form', f: f
+  = render 'transactions/shared_form', f: f
+  = render 'transactions/form_direct_payment', f: f, lbl: 'Pago' if expense_service.is_draft?
 
   -########################################
   -# Render items
