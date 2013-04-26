@@ -19,7 +19,7 @@ class ExpensePayment < Payment
       res = save_income if account_to_is_income?
       res = create_ledger && res
 
-      set_errors(expense, ledger, int_ledger) unless res
+      set_errors(expense, ledger) unless res
 
       res
     end
@@ -52,10 +52,10 @@ private
   end
 
   def create_ledger
-    if amount.to_f > 0
+    if amount > 0
       @ledger = build_ledger(
-                  amount: -amount, operation: 'payout', account_id: expense.id,
-                  conciliation: conciliation?
+                  amount: -amount, operation: 'payout', 
+                  account_id: expense.id, status: get_status
                 )
       @ledger.save_ledger
     else
@@ -83,5 +83,4 @@ private
   def valid_account_to_state
     self.errors.add(:account_to_id, I18n.t('errors.messages.payment.invalid_income_state')) unless account_to.is_approved?
   end
-
 end

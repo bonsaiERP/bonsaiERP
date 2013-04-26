@@ -4,7 +4,8 @@
 class ConciliateAccount
   attr_reader :account_ledger
 
-  delegate :account, :account_to, :amount, :amount_currency, to: :account_ledger
+  delegate :account, :account_to, :amount, :amount_currency,
+           :approver_id, :nulled_id, to: :account_ledger
 
   def initialize(ledger)
     raise 'an AccountLedger instance was expected' unless ledger.is_a?(AccountLedger)
@@ -12,7 +13,7 @@ class ConciliateAccount
   end
 
   def conciliate
-    return false unless account_ledger.is_pendent?
+    return false unless can_conciliate?
 
     account_ledger.status = 'approved'
     update_account_ledger_approver
@@ -60,5 +61,9 @@ private
   def update_account_ledger_approver
     account_ledger.approver_id = UserSession.id
     account_ledger.approver_datetime = Time.zone.now
+  end
+
+  def can_conciliate?
+    !(approver_id.present? || nuller_id.present?)
   end
 end

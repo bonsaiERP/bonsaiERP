@@ -52,6 +52,7 @@ describe IncomePayment do
       Income.stub(find_by_id: income)
       Income.any_instance.stub(save: true)
       Account.stub(find_by_id: account_to)
+      AccountLedger.any_instance.stub(save: true)
 
       income.should_not be_has_error
 
@@ -132,14 +133,14 @@ describe IncomePayment do
         p.should be_verification
         p.account_to_id.should eq(100)
         # Should not conciliate
-        p.ledger.should_not be_conciliation
+        p.ledger.should be_is_pendent
 
         # When verification=false
         p = IncomePayment.new(valid_attributes.merge(account_to_id: 100, verification: false))
 
         p.pay.should be_true
         # Should conciliate
-        p.ledger.should be_conciliation
+        p.ledger.should be_is_approved
       end
 
       it "doesn't change unles it's bank account" do

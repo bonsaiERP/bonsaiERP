@@ -31,8 +31,25 @@ describe Payment do
     Account.should_receive(:active).once.and_return(stub(find_by_id: cash))
 
     p.account_to
-    p.account_to
-    p.account_to
+    p.amount.should == 0
+  end
+
+  it "#amount always returns a number" do
+    p = Payment.new(amount: '')
+    p.amount.should  == 0
+
+    p = Payment.new(amount: nil)
+    p.amount.should  == 0
+
+    p = Payment.new(amount: 'je')
+    p.amount.should  == 0
+
+    p = Payment.new(amount: -1)
+    p.amount.should  == -1
+    p.amount.should be_is_a(BigDecimal)
+
+    p = Payment.new(amount: Object.new)
+    p.amount.should  == 0
   end
 
   context 'Validations' do

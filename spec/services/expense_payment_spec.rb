@@ -126,14 +126,14 @@ describe ExpensePayment do
         p.should be_verification
         p.account_to_id.should eq(100)
         # Should not conciliate
-        p.ledger.should_not be_conciliation
+        p.ledger.should be_is_pendent
 
         # When verification=false
         p = ExpensePayment.new(valid_attributes.merge(account_to_id: 100, verification: false))
 
         p.pay.should be_true
         # Should conciliate
-        p.ledger.should be_conciliation
+        p.ledger.should be_is_approved
       end
 
       it "doesn't change unless it's bank account" do

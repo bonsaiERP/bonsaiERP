@@ -2,7 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class Payment < BaseService
-  attr_reader :ledger, :int_ledger, :transaction
+  attr_reader :ledger, :transaction
 
   # Attributes
   attribute :account_id, Integer
@@ -32,6 +32,9 @@ class Payment < BaseService
     @account_to ||= Account.active.find_by_id(account_to_id)
   end
 
+  def amount
+    @amount.is_a?(BigDecimal) ? @amount : "0".to_d
+  end
 private
   # Builds and AccountLedger instance with some default data
   def build_ledger(attrs = {})
@@ -46,6 +49,14 @@ private
   # readable code
   def conciliate?
     !verification?
+  end
+
+  def get_status
+    if verification?
+      'pendent'
+    else
+      'approved'
+    end
   end
 
   def valid_date
@@ -83,12 +94,4 @@ private
   def current_organisation
     OrganisationSession
   end
-
-  # Indicates conciliation based on the type of account
-  def conciliation?
-    return true if conciliate?
-
-    account_to.is_a?(Bank) ? conciliate? : true
-  end
-
 end
