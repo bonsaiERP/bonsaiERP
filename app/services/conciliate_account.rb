@@ -5,7 +5,7 @@ class ConciliateAccount
   attr_reader :account_ledger
 
   delegate :account, :account_to, :amount, :amount_currency,
-           :approver_id, :nulled_id, to: :account_ledger
+           :approver_id, :nuller_id, :is_nulled?, to: :account_ledger
 
   def initialize(ledger)
     raise 'an AccountLedger instance was expected' unless ledger.is_a?(AccountLedger)
@@ -64,6 +64,6 @@ private
   end
 
   def can_conciliate?
-    !(approver_id.present? || nuller_id.present?)
+    !(approver_id.present? || is_nulled? || nuller_id.present?)
   end
 end

@@ -51,10 +51,9 @@ class AccountLedger < ActiveRecord::Base
 
   ########################################
   # scopes
-  scope :pendent, -> { where(conciliation: false, active: true) }
-  scope :con,     -> { where(conciliation: true) }
-  scope :nulled,  -> { where(active: false) }
-  scope :active,  -> { where(active: true) }
+  scope :pendent, -> { where(status: 'pendent') }
+  scope :nulled,  -> { where(status: 'nulled') }
+  scope :approved, -> { where(status: 'approved') }
 
   ########################################
   # delegates

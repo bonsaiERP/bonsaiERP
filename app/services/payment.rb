@@ -52,7 +52,7 @@ private
   end
 
   def get_status
-    if verification?
+    if verification? && account_to.is_a?(Bank)
       'pendent'
     else
       'approved'

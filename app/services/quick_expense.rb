@@ -42,6 +42,10 @@ private
     -amount
   end
 
+  def get_reference
+    reference.present? ? reference : I18n.t('expense.payment.reference', expense: expense)
+  end
+
   def ledger_reference
     "Pago egreso #{expense.ref_number}"
   end

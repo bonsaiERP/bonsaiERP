@@ -15,7 +15,7 @@ class ExpenseService < TransactionService
   def self.new_expense(attrs = {})
     attrs = set_new_expense_attributes(attrs)
     es = new(attrs) do |e|
-      e.expense = Expense.new_expense(attrs.except(:direct_payment, :account_to_id, :expense_details_attributes))
+      e.expense = Expense.new_expense(attrs.except(:direct_payment, :account_to_id, :expense_details_attributes, :reference))
     end
     es.expense_details.build(quantity: 1) if es.expense_details.empty?
 
@@ -107,19 +107,17 @@ private
   end
 
   def expense_attributes
-    attributes.except(:direct_payment, :account_to_id, :expense_details_attributes)
+    attributes.except(:direct_payment, :account_to_id, :expense_details_attributes, :reference)
   end
 
   # Updates the data for an imcome
   # total is the alias for amount due that Expense < Account
   def update_expense_data
+    set_expense_details
     expense.balance -= (expense.total_was - expense.total)
-    update_details
     expense.gross_total = original_expense_total
     expense.set_state_by_balance!
     expense.discounted = ( expense.discount > 0 )
-
-    set_paid_expense if ledger.present?
 
     ExpenseErrors.new(expense).set_errors
   end
@@ -129,7 +127,7 @@ private
 
     expense.ref_number = Expense.get_ref_number if expense.new_record?
     expense.gross_total = original_expense_total
-    expense.balance = expense.total
+    expense.amount = expense.total
     expense.state = 'draft' if state.blank?
     expense.discounted = ( expense.discount > 0 )
     expense.creator_id = UserSession.id
@@ -171,9 +169,9 @@ private
   # Saves the ledger with expense data
   def create_ledger
     @ledger = AccountLedger.new(
-      account_id: expense.id, amount: expense.total,
+      account_id: expense.id, amount: - expense.total,
       account_to_id: account_to_id, date: date,
-      operation: 'payin', exchange_rate: 1,
+      operation: 'payout', exchange_rate: 1,
       currency: expense.currency, inverse: false,
       reference: get_reference
     )

@@ -42,6 +42,10 @@ private
     amount
   end
 
+  def get_reference
+    reference.present? ? reference : I18n.t('income.payment.reference', income: income)
+  end
+
   def ledger_reference
     "Cobro ingreso #{income.ref_number}"
   end

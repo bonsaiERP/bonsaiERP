@@ -57,14 +57,8 @@ private
       account_id: account_id, exchange_rate: conv_exchange_rate,
       account_to_id: account_to_id, inverse: inverse?, operation: 'trans',
       reference: reference, date: date, currency: account_to.currency,
-      conciliation: conciliation?, amount: amount
+      status: get_status, amount: amount
     )
-  end
-
-  # Inverse of verification?, no need to negate when working making more
-  # readable code
-  def conciliate?
-    !verification?
   end
 
   def valid_date
@@ -94,11 +88,16 @@ private
     OrganisationSession
   end
 
-  # Indicates conciliation based on the type of account
-  def conciliation?
-    return true if conciliate?
+  def get_status
+    if verification? && any_bank_acccount?
+      'pendent'
+    else
+      'approved'
+    end
+  end
 
-    [account, account_to].any? {|v| v.is_a?(Bank) } ? conciliate? : true
+  def any_bank_acccount?
+    account.is_a?(Bank) || account_to.is_a?(Bank)
   end
 
   def valid_accounts_currency

@@ -39,12 +39,17 @@ private
       }.merge(attrs))
   end
 
-  def conciliate?
-    !verification?
-  end
-
   def valid_date
     self.errors.add(:date, I18n.t('errors.messages.payment.date')) unless date.is_a?(Date)
+  end
+
+  # Indicates conciliation based on the type of account
+  def get_status
+    if verification? && account_to.is_a?(Bank)
+      'pendent'
+    else
+      'approved'
+    end
   end
 
   def set_approver

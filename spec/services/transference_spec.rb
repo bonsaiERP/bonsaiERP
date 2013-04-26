@@ -80,8 +80,7 @@ describe Transference do
         t.stub(account: account, account_to: account_to)
 
         t.should be_verification
-        t.send(:conciliate?).should be_false
-        t.send(:conciliation?).should be_true
+        t.send(:get_status).should eq('approved')
 
         # bank on any
         bank = build :bank, currency: 'BOB'
@@ -89,16 +88,14 @@ describe Transference do
         t.stub(account: account, account_to: bank)
 
         t.should be_verification
-        t.send(:conciliate?).should be_false
-        t.send(:conciliation?).should be_false
+        t.send(:get_status).should eq('pendent')
 
         #bank on account
         t = Transference.new(verification: true)
         t.stub(account: bank, account_to: account)
 
         t.should be_verification
-        t.send(:conciliate?).should be_false
-        t.send(:conciliation?).should be_false
+        t.send(:get_status).should eq('pendent')
       end
 
       it "Valid" do
@@ -130,7 +127,7 @@ describe Transference do
       t.account_id.should eq(1)
       t.account_to_id.should eq(2)
       t.ledger.should_not be_inverse
-      t.ledger.should be_conciliation
+      t.ledger.should be_is_approved
       t.ledger.amount.should == 50.0
     end
 
@@ -150,7 +147,7 @@ describe Transference do
       t.ledger.exchange_rate.should == 7.0
       t.ledger.amount.should == 10
 
-      t.ledger.should_not be_conciliation
+      t.ledger.should_not be_is_approved
     end
 
     it "inverse" do

@@ -92,7 +92,7 @@ describe IncomePayment do
       p.ledger.should be_is_payin
       p.ledger.account_id.should eq(income.id)
       # Only bank accounts are allowed to conciliate
-      p.ledger.should be_conciliation 
+      p.ledger.should be_is_approved 
       p.ledger.reference.should eq(valid_attributes.fetch(:reference))
       p.ledger.date.should eq(valid_attributes.fetch(:date).to_time)
 
@@ -113,7 +113,7 @@ describe IncomePayment do
       p.pay.should be_true
 
       # ledger
-      p.ledger.should be_conciliation
+      p.ledger.should be_is_approved
       p.ledger.should be_is_a(AccountLedger)
       p.ledger.amount.should == valid_attributes.fetch(:amount)
       p.ledger.should be_is_payin
@@ -143,7 +143,7 @@ describe IncomePayment do
         p.ledger.should be_is_approved
       end
 
-      it "doesn't change unles it's bank account" do
+      it "doesn't change unless it's bank account" do
         cash = build :cash, id: 200
         Account.stub(:find_by_id).with(cash.id).and_return(cash)
         cash.id.should_not eq(account_to_id)
@@ -154,14 +154,14 @@ describe IncomePayment do
 
         p.pay.should be_true
 
-        p.ledger.should be_conciliation
+        p.ledger.should be_is_approved
 
         #inverse
         p = IncomePayment.new(valid_attributes.merge(account_to_id: 200, verification: false))
 
         p.pay.should be_true
 
-        p.ledger.should be_conciliation
+        p.ledger.should be_is_approved
       end
     end
   end

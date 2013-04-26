@@ -70,23 +70,14 @@ describe QuickExpense do
       ledger.creator_id.should eq(21)
       ledger.approver_id.should eq(21)
 
-      ledger.reference.should eq("Egreso rápido #{expense.ref_number}")
+      ledger.reference.should eq("Pago egreso #{expense.ref_number}")
       ledger.should be_is_payout
       
-      ledger.should be_conciliation
+      ledger.should be_is_approved
       ledger.date.should be_a(Time)
 
       ledger.creator_id.should eq(21)
       ledger.approver_id.should eq(21)
-    end
-
-    it "No conciliation required when account_to is Cash" do
-      qe = QuickExpense.new(valid_attributes.merge(verification: true))
-      qe.create.should be_true
-
-      qe.send(:account_to).should be_is_a(Cash)
-      #AccountLedger conciliated
-      qe.account_ledger.should be_conciliation
     end
 
     it "Can accept different values for conciliation when Bank account" do
@@ -97,7 +88,7 @@ describe QuickExpense do
 
       ledger = qe.account_ledger
 
-      ledger.should_not be_conciliation
+      ledger.should be_is_approved
 
       # Other case
       qe = QuickExpense.new(valid_attributes.merge(account_to_id: 3, verification: false))
@@ -105,7 +96,7 @@ describe QuickExpense do
 
       ledger = qe.account_ledger
 
-      ledger.should be_conciliation
+      ledger.should be_is_approved
     end
 
     it "Assigns the currency of the account" do

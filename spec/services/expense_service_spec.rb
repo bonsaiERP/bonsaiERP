@@ -60,7 +60,7 @@ describe ExpenseService do
   context "Create a expense with default data" do
     before(:each) do
       Expense.any_instance.stub(save: true)
-      ExpenseDetail.any_instance.stub(save: true)
+      ExpenseDetail.any_instance.stub(save: true, valid?: true)
     end
 
     subject { ExpenseService.new_expense(valid_params) }
@@ -102,7 +102,6 @@ describe ExpenseService do
     end
 
     it "creates and approves" do
-      subject.should_receive(:set_expense_data).and_return(true)
       # Create
       subject.create_and_approve.should be_true
 
@@ -254,7 +253,7 @@ describe ExpenseService do
       es.create_and_approve.should be_false
 
       es.errors[:contact_id].should eq(["Wrong"])
-      es.errors[:base].should eq(["Blank reference"])
+      es.errors[:reference].should eq(["Blank reference"])
     end
   end
 end

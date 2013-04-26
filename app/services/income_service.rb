@@ -167,7 +167,7 @@ private
     @ledger = AccountLedger.new(
       account_id: income.id, amount: income.total,
       account_to_id: account_to_id, date: date,
-      operation: 'payin', status: 'pendent', conciliation: true,
+      operation: 'payin', status: 'approved',
       exchange_rate: 1, currency: income.currency, inverse: false,
       reference: get_reference
     )

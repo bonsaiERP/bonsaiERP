@@ -17,26 +17,18 @@ describe NullAccountLedger do
 
   it "only nulls active and not conciliated accounts_ledgers" do
     Account.any_instance.stub(save: true)
-    ledger = build :account_ledger, conciliation: true, active: true
+    ledger = build :account_ledger, status: 'approved', approver_id: 12
     ledger.stub(save: true)
 
     # Conciliated
     na = NullAccountLedger.new(ledger)
     na.should_not be_valid
     
-    # Nulled inactive
-    ledger.active = false
-    ledger.conciliation = false
-
+    # Nulled nulled
+    ledger.approver_id = nil
+    ledger.nuller_id = 14
     na = NullAccountLedger.new(ledger)
     na.should_not be_valid
-
-    # Nulled inactive
-    ledger.active = true
-    ledger.conciliation = false
-    na = NullAccountLedger.new(ledger)
-
-    na.should be_valid
   end
 
   before(:each) do
@@ -53,20 +45,21 @@ describe NullAccountLedger do
     let(:cash_usd) { build :cash, amount: 1000, currency: 'USD' }
 
     it "updates the cash" do
-      al = AccountLedger.new(amount: 100.0, currency: 'BOB', conciliation: false)
+      al = AccountLedger.new(amount: 100.0, currency: 'BOB', status: 'pendent')
       al.account = cash_bob
       al.account_to = bank_bob
+      al.should be_is_pendent
 
       na = NullAccountLedger.new(al)
 
       na.null.should be_true
 
       cash_bob.amount.should == 1100.0
-      al.should_not be_active
+      al.should be_is_nulled
     end
 
     it "updates the cash USD" do
-      al = AccountLedger.new(amount: 70.0, currency: 'BOB', conciliation: false, exchange_rate: 7.0)
+      al = AccountLedger.new(amount: 70.0, currency: 'BOB', status: 'pendent', exchange_rate: 7.0)
       al.account = cash_usd
       al.account_to = bank_bob
 
@@ -75,11 +68,11 @@ describe NullAccountLedger do
       na.null.should be_true
 
       cash_usd.amount.should == 1010.0
-      al.should_not be_active
+      al.should be_is_nulled
     end
 
     it "updates the banks USD" do
-      al = AccountLedger.new(amount: 70.0, currency: 'BOB', conciliation: false, exchange_rate: 7.0)
+      al = AccountLedger.new(amount: 70.0, currency: 'BOB', status: 'pendent', exchange_rate: 7.0)
       al.account = bank_usd
       al.account_to = bank_bob
 
@@ -88,7 +81,7 @@ describe NullAccountLedger do
       na.null.should be_true
 
       bank_usd.amount.should == 1010.0
-      al.should_not be_active
+      al.should be_is_nulled
     end
   end
 
@@ -101,7 +94,7 @@ describe NullAccountLedger do
 
       income.should be_is_paid
 
-      al = AccountLedger.new(amount: 10.0, currency: 'BOB', conciliation: false)
+      al = AccountLedger.new(amount: 10.0, currency: 'BOB', status: 'pendent')
       al.account = income
       al.account_to = bank_bob
 
@@ -114,13 +107,13 @@ describe NullAccountLedger do
       income.balance.should == 10.0
       income.should be_is_approved
 
-      al.should_not be_active
+      al.should be_is_nulled
     end
 
     it "currency of income is USD" do
       income.currency = 'USD'
 
-      al = AccountLedger.new(amount: 70.0, currency: 'BOB', conciliation: false, exchange_rate: 7.0)
+      al = AccountLedger.new(amount: 70.0, currency: 'BOB', status: 'pendent', exchange_rate: 7.0)
       al.account = income
       al.account_to = bank_bob
 
@@ -138,7 +131,7 @@ describe NullAccountLedger do
     it "income BOB account_to USD" do
       income.currency = 'BOB'
 
-      al = AccountLedger.new(amount: 10.0, currency: 'USD', conciliation: false, exchange_rate: 7.0)
+      al = AccountLedger.new(amount: 10.0, currency: 'USD', status: 'pendent', exchange_rate: 7.0)
       al.account = income
       al.account_to = bank_usd
 
@@ -151,7 +144,6 @@ describe NullAccountLedger do
       na.account.should eq(income)
       income.balance.should == 70.0
       income.should be_is_approved
-      
     end
   end
 end

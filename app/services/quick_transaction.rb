@@ -10,7 +10,7 @@ class QuickTransaction < BaseService
   attribute :date          , Date
   attribute :amount        , Decimal
   attribute :bill_number   , String
-  attribute :verification  , Boolean, default: false
+  attribute :reference     , String
 
   validates_presence_of :account_to, :account_to_id, :contact, :contact_id, :date
   validates_numericality_of :amount, greater_than: 0
@@ -44,10 +44,11 @@ private
       account_to_id: account_to_id,
       exchange_rate: 1, date: date,
     }.merge(attrs)) {|al| 
-      al.conciliation = conciliate?
+      al.status = 'approved'
       al.currency = currency
       al.creator_id = UserSession.id
       al.approver_id = UserSession.id
+      al.reference = get_reference
     }
   end
 

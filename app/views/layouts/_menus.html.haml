@@ -2,11 +2,9 @@
   .navbar-inner
     .container
       %button.btn.btn-navbar(data-toggle="collapse" data-target=".nav-collapse")
-        %i.icon-bar
-        %i.icon-bar
-        %i.icon-bar
+        %i.icon-reorder 
+        Menú
       .nav-collapse.collapse.cont
         = render 'layouts/main_menu'
         .pull-right
           = render 'layouts/usersettings_menu' if user_signed_in?
-

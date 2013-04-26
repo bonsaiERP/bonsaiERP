@@ -4,7 +4,8 @@
 class NullAccountLedger
   attr_reader :account_ledger
 
-  delegate :account, :account_to, :amount, :amount_currency, to: :account_ledger
+  delegate :account, :account_to, :amount, :amount_currency,
+           :nuller_id, :approver_id,  to: :account_ledger
 
   def initialize(ledger)
     raise 'an AccountLedger instance was expected' unless ledger.is_a?(AccountLedger)
@@ -14,17 +15,14 @@ class NullAccountLedger
   def null
     return false unless valid?
 
-    account_ledger.active = false
-    set_account_ledger_nuller
+    set_account_ledger_null
 
-    res = true
-
-    case account.class.to_s
-    when 'Income','Expense'
-      res = update_account_balance
-    else
-      res = update_account
-    end
+    res = case account.class.to_s
+          when 'Income','Expense'
+            res = update_account_balance
+          else
+            res = update_account
+          end
 
     res && account_ledger.save
   end
@@ -41,12 +39,12 @@ class NullAccountLedger
   end
 
   def valid?
-    account_ledger.active? && !account_ledger.conciliation?
+    !(nuller_id.present? || approver_id.present?)
   end
 
 private
   def update_account_balance
-    account.balance += amount_currency
+    account.amount += amount_currency
     account.set_state_by_balance!
 
     account.save
@@ -58,8 +56,9 @@ private
     account.save
   end
 
-  def set_account_ledger_nuller
-    account_ledger.nuller_id = UserSession.id
+  def set_account_ledger_null
+    account_ledger.nuller_id       = UserSession.id
     account_ledger.nuller_datetime = Time.zone.now
+    account_ledger.status          = 'nulled'
   end
 end

@@ -75,9 +75,7 @@ private
 
   # Only when you pay with a income
   def valid_account_to_balance
-    if account_to.balance < amount
-      self.errors.add :amount, I18n.t('errors.messages.payment.income_balance')
-    end
+    self.errors.add :amount, I18n.t('errors.messages.payment.income_balance') if account_to.balance < amount
   end
 
   def valid_account_to_state

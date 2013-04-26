@@ -87,7 +87,7 @@ describe IncomeDevolution do
       dev.ledger.should be_is_devin
       dev.ledger.account_id.should eq(income.id)
       # Only bank accounts are allowed to conciliate
-      dev.ledger.should be_conciliation 
+      dev.ledger.should be_is_approved 
       dev.ledger.reference.should eq(valid_attributes.fetch(:reference))
       dev.ledger.date.should eq(valid_attributes.fetch(:date).to_time)
     end
@@ -105,7 +105,7 @@ describe IncomeDevolution do
         dev.should be_verification
         dev.account_to.should eq(bank)
         # Should not conciliate
-        dev.ledger.should_not be_conciliation
+        dev.ledger.should be_is_pendent
 
         # When inverse
         dev = IncomeDevolution.new(valid_attributes.merge(account_to_id: 100, verification: false, interest: 10))
@@ -113,7 +113,7 @@ describe IncomeDevolution do
         dev.pay_back.should be_true
         dev.account_to.should eq(bank)
         # Should conciliate
-        dev.ledger.should be_conciliation
+        dev.ledger.should be_is_approved
       end
 
       it "does not change when its't bank account" do
@@ -127,14 +127,14 @@ describe IncomeDevolution do
 
         dev.pay_back.should be_true
 
-        dev.ledger.should be_conciliation
+        dev.ledger.should be_is_approved
 
         #inverse
         dev = IncomeDevolution.new(valid_attributes.merge(account_to_id: 200, verification: false))
 
         dev.pay_back.should be_true
 
-        dev.ledger.should be_conciliation
+        dev.ledger.should be_is_approved
       end
     end
   end

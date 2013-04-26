@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130426125024) do
+ActiveRecord::Schema.define(:version => 20130426151609) do
 
   create_table "account_ledgers", :force => true do |t|
     t.string   "reference"
@@ -22,7 +22,6 @@ ActiveRecord::Schema.define(:version => 20130426125024) do
     t.decimal  "account_to_balance",               :precision => 14, :scale => 2, :default => 0.0
     t.datetime "date"
     t.string   "operation",          :limit => 20
-    t.boolean  "conciliation",                                                    :default => true
     t.decimal  "amount",                           :precision => 14, :scale => 2, :default => 0.0
     t.decimal  "exchange_rate",                    :precision => 14, :scale => 4, :default => 1.0
     t.string   "description"
@@ -31,7 +30,6 @@ ActiveRecord::Schema.define(:version => 20130426125024) do
     t.datetime "approver_datetime"
     t.integer  "nuller_id"
     t.datetime "nuller_datetime"
-    t.boolean  "active",                                                          :default => true
     t.boolean  "inverse",                                                         :default => false
     t.boolean  "has_error",                                                       :default => false
     t.string   "error_messages"
@@ -43,8 +41,6 @@ ActiveRecord::Schema.define(:version => 20130426125024) do
 
   add_index "account_ledgers", ["account_id"], :name => "index_account_ledgers_on_account_id"
   add_index "account_ledgers", ["account_to_id"], :name => "index_account_ledgers_on_account_to_id"
-  add_index "account_ledgers", ["active"], :name => "index_account_ledgers_on_active"
-  add_index "account_ledgers", ["conciliation"], :name => "index_account_ledgers_on_conciliation"
   add_index "account_ledgers", ["currency"], :name => "index_account_ledgers_on_currency"
   add_index "account_ledgers", ["date"], :name => "index_account_ledgers_on_date"
   add_index "account_ledgers", ["has_error"], :name => "index_account_ledgers_on_has_error"

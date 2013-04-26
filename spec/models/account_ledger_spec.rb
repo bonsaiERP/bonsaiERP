@@ -69,7 +69,7 @@ describe AccountLedger do
   context "save_ledger" do
     it "Creates a new instance of Conciliation" do
       ledger = build :account_ledger
-      ledger.should be_conciliation
+      ledger.should be_is_approved
 
       # Check ConciliateAccount#conciliate
       ConciliateAccount.method_defined?(:conciliate).should be_true
@@ -82,10 +82,7 @@ describe AccountLedger do
     end
 
     it "Saves directly" do
-      ledger = build :account_ledger
-
-      ledger.conciliation = false
-
+      ledger = build :account_ledger, status: 'pendent'
       ledger.should_receive(:save).and_return(:false)
 
       ledger.save_ledger.should be_true

@@ -11,7 +11,7 @@ describe ConciliateAccount do
       UserSession.user = build :user, id: 1
     end
 
-    it "does not conciliate null AccountLedger" do
+    it "does not conciliate nulled, or with approver AccountLedger" do
       # nulled status
       ledger = build :account_ledger, status: 'nulled'
       ledger.should be_is_nulled
@@ -21,6 +21,7 @@ describe ConciliateAccount do
       # approved status
       ledger.status = 'approved'
       ledger.should be_is_approved
+      ledger.approver_id = 50
       con = ConciliateAccount.new(ledger)
 
       con.conciliate.should be_false

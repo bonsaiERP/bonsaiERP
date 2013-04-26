@@ -46,16 +46,9 @@ private
   def create_ledger
     @ledger = build_ledger(
       amount: -amount, operation: 'devin', account_id: income.id,
-      conciliation: conciliation?
+      status: get_status
     )
     @ledger.save_ledger
-  end
-
-  # Indicates conciliation based on the type of account
-  def conciliation?
-    return true if conciliate?
-
-    account_to.is_a?(Bank) ? conciliate? : true
   end
 
   def valid_income_total
@@ -63,5 +56,4 @@ private
       self.errors.add :amount, I18n.t('errors.messages.devolution.income_total')
     end
   end
-
 end

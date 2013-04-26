@@ -72,23 +72,14 @@ describe QuickIncome do
       ledger.creator_id.should eq(21)
       ledger.approver_id.should eq(21)
 
-      ledger.reference.should eq("Ingreso rápido #{income.ref_number}")
+      ledger.reference.should eq("Cobro ingreso #{income.ref_number}")
       ledger.should be_is_payin
       
-      ledger.should be_conciliation
+      ledger.should be_is_approved
       ledger.date.should be_a(Time)
 
       ledger.creator_id.should eq(21)
       ledger.approver_id.should eq(21)
-    end
-
-    it "No conciliation required when account_to is Cash" do
-      qi = QuickIncome.new(valid_attributes.merge(verification: true))
-      qi.create.should be_true
-
-      qi.send(:account_to).should be_is_a(Cash)
-      # AccountLedger conciliated
-      qi.account_ledger.should be_conciliation
     end
 
     it "Can accept different values for conciliation when Bank account" do
@@ -99,7 +90,7 @@ describe QuickIncome do
 
       ledger = qi.account_ledger
 
-      ledger.should_not be_conciliation
+      ledger.should be_is_approved
 
       # Other case
       qi = QuickIncome.new(valid_attributes.merge(account_to_id: 3, verification: false))
@@ -107,7 +98,7 @@ describe QuickIncome do
 
       ledger = qi.account_ledger
 
-      ledger.should be_conciliation
+      ledger.should be_is_approved
     end
 
     it "Assigns the currency of the account" do

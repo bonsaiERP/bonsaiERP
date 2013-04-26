@@ -69,7 +69,7 @@ describe ExpensePayment do
 
       p = ExpensePayment.new(valid_attributes)
 
-      p.pay.should  be_true
+      p.pay.should be_true
       p.verification.should be_true
 
       # Expense
@@ -84,7 +84,7 @@ describe ExpensePayment do
       p.ledger.should be_is_payout
       p.ledger.account_id.should eq(expense.id)
       # Only bank accounts are allowed to conciliate
-      p.ledger.should be_conciliation 
+      p.ledger.should be_is_approved 
       p.ledger.reference.should eq(valid_attributes.fetch(:reference))
       p.ledger.date.should eq(valid_attributes.fetch(:date).to_time)
 
@@ -146,15 +146,14 @@ describe ExpensePayment do
         p = ExpensePayment.new(valid_attributes.merge(account_to_id: 200, verification: true))
 
         p.pay.should be_true
-
-        p.ledger.should be_conciliation
+        p.ledger.should be_is_approved
 
         # verification=false
         p = ExpensePayment.new(valid_attributes.merge(account_to_id: 200, verification: false))
 
         p.pay.should be_true
 
-        p.ledger.should be_conciliation
+        p.ledger.should be_is_approved
       end
     end
 
