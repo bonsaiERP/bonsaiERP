@@ -110,6 +110,7 @@ FactoryGirl.define do
   factory :account_ledger do
     date Date.today
     operation "payin"
+    status "approved"
     reference "Income"
     amount 100
     exchange_rate 1

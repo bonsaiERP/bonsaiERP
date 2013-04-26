@@ -23,6 +23,9 @@ describe AccountLedger do
 
     it { should have_valid(:operation).when( *AccountLedger::OPERATIONS ) }
     it { should_not have_valid(:operation).when('no', 'ok') }
+    it { should have_valid(:status).when( *AccountLedger::STATUSES ) }
+    it { should_not have_valid(:status).when( 'other', 'null' ) }
+
     it { should have_valid(:amount).when(0.25, -0.25) }
     it { should_not have_valid(:amount).when('', nil) }
     it { should have_valid(:exchange_rate).when(0.25, 10) }
@@ -33,6 +36,15 @@ describe AccountLedger do
 
       subject.should_not be_valid
       subject.errors_on(:account_to_id).should_not be_empty
+    end
+  end
+
+  it "#status methods" do
+    al = AccountLedger.new
+    AccountLedger::STATUSES.each do |st|
+      al.should respond_to(:"is_#{st}?")
+      al.status = st
+      al.should send(:"be_is_#{st}")
     end
   end
 

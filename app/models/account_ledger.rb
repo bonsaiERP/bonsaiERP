@@ -14,6 +14,7 @@ class AccountLedger < ActiveRecord::Base
   # devin  = Devolution in
   # devout = Devolution out
   OPERATIONS = %w(trans contin contout payin payout intin intout devin devout).freeze
+  STATUSES = %w(pendent approved nulled).freeze
 
   ########################################
   # Callbacks
@@ -43,6 +44,7 @@ class AccountLedger < ActiveRecord::Base
   validate :different_accounts
 
   validates_inclusion_of :operation, in: OPERATIONS
+  validates_inclusion_of :status, in: STATUSES
   validates_numericality_of :exchange_rate, greater_than: 0
 
   validates :reference, length: { within: 3..150, allow_blank: false }
@@ -63,6 +65,12 @@ class AccountLedger < ActiveRecord::Base
   OPERATIONS.each do |op|
     define_method :"is_#{op}?" do
       op === operation
+    end
+  end
+
+  STATUSES.each do |st|
+    define_method :"is_#{st}?" do
+      st === status
     end
   end
 

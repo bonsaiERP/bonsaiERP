@@ -12,9 +12,9 @@ class ConciliateAccount
   end
 
   def conciliate
-    return false unless account_ledger.active?
+    return false unless account_ledger.is_pendent?
 
-    account_ledger.conciliation = true
+    account_ledger.status = 'approved'
     update_account_ledger_approver
 
     # Check service payment

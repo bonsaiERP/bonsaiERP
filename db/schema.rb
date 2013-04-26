@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130411141221) do
+ActiveRecord::Schema.define(:version => 20130426125024) do
 
   create_table "account_ledgers", :force => true do |t|
     t.string   "reference"
@@ -36,8 +36,9 @@ ActiveRecord::Schema.define(:version => 20130411141221) do
     t.boolean  "has_error",                                                       :default => false
     t.string   "error_messages"
     t.integer  "project_id"
-    t.datetime "created_at",                                                                         :null => false
-    t.datetime "updated_at",                                                                         :null => false
+    t.datetime "created_at",                                                                              :null => false
+    t.datetime "updated_at",                                                                              :null => false
+    t.string   "status",             :limit => 50,                                :default => "approved"
   end
 
   add_index "account_ledgers", ["account_id"], :name => "index_account_ledgers_on_account_id"
@@ -50,6 +51,7 @@ ActiveRecord::Schema.define(:version => 20130411141221) do
   add_index "account_ledgers", ["operation"], :name => "index_account_ledgers_on_operation"
   add_index "account_ledgers", ["project_id"], :name => "index_account_ledgers_on_project_id"
   add_index "account_ledgers", ["reference"], :name => "index_account_ledgers_on_reference"
+  add_index "account_ledgers", ["status"], :name => "index_account_ledgers_on_status"
 
   create_table "accounts", :force => true do |t|
     t.string   "name"
