@@ -8,7 +8,6 @@ class ExpensePayment < Payment
   validate :valid_account_to_state, if: :account_to_is_income?
 
   # Delegations
-  delegate :total, :balance, to: :expense, prefix: true, allow_nil: true
 
   # Creates the payment updating related objects
   def pay
@@ -28,7 +27,7 @@ class ExpensePayment < Payment
   def expense
     @transaction = @expense ||= Expense.find_by_id(account_id)
   end
-  alias_method :transaction, :expense
+  alias :transaction :expense
 
 private
   def save_expense
@@ -64,7 +63,7 @@ private
   end
 
   def valid_expense_balance
-    if amount_exchange.to_f > expense_balance.to_f
+    if complete_accounts? && amount_exchange > transaction_balance
       self.errors.add :amount, I18n.t('errors.messages.payment.balance')
     end
   end

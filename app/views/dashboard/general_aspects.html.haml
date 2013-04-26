@@ -13,15 +13,12 @@
           realizo en algún registro del sistema, 
           %strong mueva sobre los íconos
 
-          %span.label.label-inverse(title='#{current_user} #{l t}' data-toggle='tooltip')
+          %span.label.label-inverse(title='ID: #{current_user.id}, #{current_user} #{l t}' data-toggle='tooltip')
             %i.icon-user
-            =current_user.id
-          %span.label.label-success(title='#{current_user} #{l t}' data-toggle='tooltip')
+          %span.label.label-success(title='ID: #{current_user.id}, #{current_user} #{l t}' data-toggle='tooltip')
             %i.icon-user
-            =current_user.id
-          %span.label.label-important(title='#{current_user} #{l t}' data-toggle='tooltip')
+          %span.label.label-important(title='ID: #{current_user.id}, #{current_user} #{l t}' data-toggle='tooltip')
             %i.icon-user
-            =current_user.id
 
     .span4
       .well.well-small

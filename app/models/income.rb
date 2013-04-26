@@ -25,6 +25,7 @@ class Income < Account
 
   has_many :payments, class_name: 'AccountLedger', foreign_key: :account_id, conditions: {operation: 'payin'}
   has_many :payments_devolutions, class_name: 'AccountLedger', foreign_key: :account_id, conditions: {operation: ['payin', 'devin']}
+  has_many :ledgers, class_name: 'AccountLedger', foreign_key: :account_id
   has_many :interests, class_name: 'AccountLedger', foreign_key: :account_id, conditions: {operation: 'intin'}
 
   has_many :transaction_histories, foreign_key: :account_id

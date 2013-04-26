@@ -26,7 +26,7 @@
   .span6
     .moneybox
       %label SALDO EN BANCO
-      %h3
+      %h4.n
         = ntc @bank.amount
         = currency_label @bank.currency
 
@@ -35,23 +35,13 @@
     = nl2br(@bank.address)
 
 
-- if params[:pendent].present?
-  - ledgers = @bank.pendent_ledgers
+%h3 Transacciones
 
-  %h3.text-error Transacciones pendientes
-  = link_to "Ver todas", @bank
-- else
+- if params[:pendent].blank? && @bank.pendent_ledgers.any?
+  = link_to bank_path(@bank.id, pendent: true) , class: 'text-error' do
+    %i.icon-warning-sign
+    Tiene transaccines pendientes
+- elsif params[:pendent].present?
+  = link_to 'Ver todas las transacciones', @bank
 
-  %h3 Transacciones
-
-  - ledgers = @bank.ledgers
-
-- if @bank.pendent_ledgers.any?
-  %h5.n
-    =link_to bank_path(@bank.id, pendent: true) , class: 'text-error' do
-      %i.icon-warning-sign
-      Tiene transaccines pendientes
-
-%ul.unstyled.listing
-  = render partial: 'account_ledgers/ledger', collection: ledgers.page(@page), locals: {account: @bank}
-
+= render "account_ledgers/money", account: @bank

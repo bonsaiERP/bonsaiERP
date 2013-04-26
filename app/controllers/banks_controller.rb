@@ -6,7 +6,7 @@ class BanksController < ApplicationController
 
   # GET /banks
   def index
-    @banks = Bank.all
+    @banks = Bank.order('name asc')
   end
 
   # GET /banks/1

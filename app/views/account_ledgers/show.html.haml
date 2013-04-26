@@ -1,44 +1,63 @@
 .row-fluid
-  .span12
+  .span7
     %h1
-      = @ledger.verified_tag
       = @ledger
-      = @ledger.operation_label
-      = @ledger.nulled_tag
-      %small.dark
-        = render_if @ledger.account_contact do
-          = link_to @ledger.account_contact_tag, @ledger.account_contact
+      = @ledger.status_tag
+      = render_if @ledger.account_contact do
+        %small.dark
+          = link_to @ledger.account_contact, @ledger.account_contact
 
-= render 'account_ledgers/conciliate_null_form', ledger: @ledger if @ledger.can_conciliate_or_null?
+  .span5= render 'account_ledgers/conciliate_null_form', ledger: @ledger if @ledger.can_conciliate_or_null?
 
-= render_if @ledger.project do
-  %h3
-    %span.grey.n Proyecto:
-    = @ledger.project
+%p
+  = @ledger.operation_tag
+  %i= lo @ledger.date.to_date
 
-%h4.n.i= lo @ledger.date.to_date
+.row-fluid
+  .span6
+    .moneybox
+      %h4.n
+        = ntc @ledger.amount
+        = currency_label @ledger.currency
 
-.moneybox
-  %label CANTIDAD
-  %h4
-    = ntc @ledger.amount
-    = currency_label @ledger.currency
+    - unless @ledger.currency === currency
+      = ntc 1.0
+      = currency_tag @ledger.currency
+      %i.icon-exchange(title='Tipo de cambio' data-toggle='tooltip')
+      = ntc @ledger.exchange_rate, precision: 4
+      = currency_label
+  
+  .span6
+    %span.reference
+      %i.icon-file-alt(title='Referencia' data-toggle='tooltip')
+      = @ledger.reference
 
-%span.reference
-  %span.muted 
-    %i.icon-file-alt
-    Refencia:
-  %small.dark= @ledger.reference
+%p
+  %h4.n
+    %span.account
+      %span.muted De cuenta:
+      = link_to @ledger.account, @ledger.account, class: 'account_name'
+    %span.account-to
+      %span.muted A cuenta:
+      = link_to @ledger.account_to, @ledger.account_to, class: 'account_to_name'
 
-%h4.n
-  %span.account
-    %span.muted De:
-    = link_to @ledger.account, @ledger.account, class: 'account_name'
-    = ntc @ledger.account_amount
-    = currency_label @ledger.account_currency
-  %span.account-to
-    %span.muted A:
-    = link_to @ledger.account_to, @ledger.account_to, class: 'account_to_name'
-    = ntc @ledger.account_to_amount
-    = currency_label @ledger.account_to_currency
+= render_if @ledger.creator do
+  %p
+    %i.icon-user(title='Creado por' data-toggle='tooltip')
+    = @ledger.creator
+    %span.muted el
+    %i= l @ledger.created_at
 
+= render_if @ledger.approver do
+  %p
+    %i.icon-user.text-success(title='Aprovado por' data-toggle='tooltip')
+    = @ledger.approver
+    %span.muted el
+    %i= l @ledger.approver_datetime
+
+= render_if @ledger.nuller do
+  %p
+    %i.icon-user.text-error(title='Anulado por' data-toggle='tooltip')
+    = @ledger.nuller
+    %span.muted el
+    %i= l @ledger.nuller_datetime

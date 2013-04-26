@@ -42,10 +42,30 @@ describe IncomePayment do
       pay_in.should be_valid
     end
 
+
+    let(:bank) { build(:bank, currency: 'USD', id: 102) }
+
     # There purpose is to return change
     # there is a balance of 50 BOB and someone pays with a
     # 20 USD bill (ER 1 USD = 6.95 BOB), then we have to return change
     it "allows amount greater than balance" do
+      pay_in = IncomePayment.new(valid_attributes.merge(account_to_id: 102, exchange_rate: 4, amount: 50))
+
+      ConciliateAccount.any_instance.stub(conciliate!: true)
+      Income.stub(find_by_id: income)
+      Income.any_instance.stub(save: true)
+      Account.stub(find_by_id: bank)
+      AccountLedger.any_instance.stub(save: true)
+
+      income.should_not be_has_error
+
+      pay_in.pay#.should be_true
+
+      pay_in.income.should be_has_error
+      pay_in.income.error_messages.should eq({balance: ['transaction.negative_balance']})
+    end
+
+    it "does not allow greater values for the same currency" do
       pay_in = IncomePayment.new(valid_attributes.merge(amount: 101))
 
       ConciliateAccount.any_instance.stub(conciliate!: true)
@@ -54,12 +74,8 @@ describe IncomePayment do
       Account.stub(find_by_id: account_to)
       AccountLedger.any_instance.stub(save: true)
 
-      income.should_not be_has_error
-
-      pay_in.pay.should be_true
-
-      pay_in.income.should be_has_error
-      pay_in.income.error_messages.should eq({balance: ['transaction.negative_balance']})
+      pay_in.pay.should be_false
+      pay_in.errors[:amount].should eq([I18n.t('errors.messages.payment.balance')])
     end
   end
 

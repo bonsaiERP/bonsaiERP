@@ -21,6 +21,8 @@ class Payment < BaseService
   validate :valid_accounts_currency
 
   delegate :currency, :inverse?, :same_currency?, to: :currency_exchange
+  delegate :amount, :currency, to: :account_to, prefix: true, allow_nil: true
+  delegate :total, :balance, :currency, to: :transaction, prefix: true, allow_nil: true
 
   # Initializes and sets verification to false if it's not set correctly
   def initialize(attrs = {})
@@ -43,12 +45,6 @@ private
       account_to_id: account_to_id, inverse: inverse?,
       reference: reference, date: date, currency: account_to.currency
     }.merge(attrs))
-  end
-
-  # Inverse of verification?, no need to negate when working making more
-  # readable code
-  def conciliate?
-    !verification?
   end
 
   def get_status
@@ -93,5 +89,15 @@ private
 
   def current_organisation
     OrganisationSession
+  end
+
+  def complete_accounts?
+    transaction.present? && account_to.present?
+  end
+
+  def valid_amount
+    if complete_accounts? && transaction_currency === account_to_currency && amount > transaction_balance
+      self.errors.add :amount, I18n.t('errors.messages.payment.balance')
+    end
   end
 end

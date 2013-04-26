@@ -56,14 +56,13 @@ class IncomePresenter < Resubject::Presenter
   end
 
   def pendent_conciliations
-    if payments_devolutions.any? {|v| !v.conciliation? }
+    if ledgers.pendent.any?
       html = <<-EOS
-      <div class="alert">
-        <h4>
-          Los cobros y devoluciones con el símbolo
-          <span class="icon-remove text-error icon-large"></span>
-          necesitan verificación </h4>
-      </div>
+      <p class="help-block">
+        Los cobros y devoluciones con
+        <span class="label label-warning"><i class="icon-warning-sign"></i> Pendiente</span>
+        necesitan verificación o anulación
+      </p>
       EOS
 
       html.html_safe

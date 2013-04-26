@@ -24,21 +24,26 @@
       = @income.state_tag
 
     %h4.ib.n
-      = link_to @income.contact do
-        %i.icon-user
-        =@income.contact
+      = link_to @income.contact, @income.contact
 
-    %h4.n
+    %h4.n.ib
       %span.muted Fecha:
       %i= lo @income.date
       = render_if @income.due_date do
         = @income.due_date_tag
+      
+      = @income.creator_label
+
+      = @income.approver_label
+
+      = @income.nuller_label
 
   .span5.r
+    -# Approve form
     - if @income.is_draft?
       = form_for @income, url: approve_income_path(@income), html: {class: 'ib'} do |f|
         = f.submit 'Aprobar', class: 'b btn btn-success'
-
+    -# Null form
     - if @income.can_null?
       = form_for @income, url: null_income_path(@income), html: {class: 'ib'} do |f|
         = f.submit 'Anular', class: 'b btn btn-danger'
@@ -46,23 +51,22 @@
     = link_to icon_new_text, new_income_path, class: 'btn'
     = link_to icon_edit_text, edit_income_path(@income.id), class: 'btn' unless @income.is_nulled?
 
-
 .row-fluid
   .span6
     .moneybox
       %label TOTAL
-      %h4
+      %h4.n
         = ntc @income.total
         = currency_label @income.currency
 
     .moneybox
       %label SALDO
-      %h4
+      %h4.n
         = @income.balance
         = currency_label @income.currency
 
   .span6
-    %i.icon-comment(data-toggle='tooltip' title='Descripción')
+    %i.icon-file-alt(data-toggle='tooltip' title='Descripción')
     = @income.description
 
 = render 'incomes/tour/devolution'

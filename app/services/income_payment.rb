@@ -5,9 +5,10 @@ class IncomePayment < Payment
   validates_presence_of :income
   validate :valid_account_to_balance, if: :account_to_is_expense?
   validate :valid_account_to_state, if: :account_to_is_expense?
+  validate :valid_amount
 
   # Delegations
-  delegate :total, :balance, to: :income, prefix: true, allow_nil: true
+  delegate :total, :balance, :currency, to: :income, prefix: true, allow_nil: true
 
   # Makes the payment modifiying the Income and creatinig AccountLedger
   def pay
@@ -27,7 +28,7 @@ class IncomePayment < Payment
   def income
     @transaction = @income ||= Income.find_by_id(account_id)
   end
-  alias_method :transaction, :income
+  alias :transaction :income
 
 private
   def save_income
@@ -71,7 +72,7 @@ private
 
   # Only when you pay with a expense
   def valid_account_to_balance
-    if  account_to.balance < amount
+    if account_to.balance < amount
       self.errors.add :amount, I18n.t('errors.messages.payment.expense_balance')
     end
   end

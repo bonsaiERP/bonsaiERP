@@ -37,7 +37,13 @@ class Bank < Account
     "#{name} #{number}"
   end
 
-  private
+  def get_ledgers(attrs = {})
+    ledgers = AccountLedgerQuery.new.money(id) 
+    ledgers = ledgers.pendent if attrs[:pendent].present?
+    ledgers
+  end
+
+private
   def set_defaults
     self.total_amount ||= 0.0
   end

@@ -1,4 +1,4 @@
-- ledgers =  account.get_ledgers.order('date desc, id desc').page(@page)
+- ledgers =  account.get_ledgers(params).order('date desc, id desc').page(@page)
 
 = paginate ledgers
 
@@ -7,20 +7,17 @@
     - al = present al
     %li.row-fluid
       .span5
-        %h4
-          = al.verified_tag
+        %h4.ib
           = link_to al, al
-          = al.operation_tag
-          = al.nulled_tag
-        %h5= link_to al.account_contact_tag, al.account_contact
+          = al.status_tag
+
+        %h5.ib= link_to al.account_contact_tag, al.account_contact
         %p
-          %h5
-            %i= l al.date.to_date
-            &nbsp;
-            %span.muted De:
-            = link_to al.account, al.account
-            %span.muted A:
-            = link_to al.account_to, al.account_to
+          %i= l al.date.to_date
+          %span.muted De:
+          = link_to al.account, al.account
+          %span.muted A:
+          = link_to al.account_to, al.account_to
       .span5
         .span7
           %i.icon-file.muted(data-toggle='tooltip' title="referencia")

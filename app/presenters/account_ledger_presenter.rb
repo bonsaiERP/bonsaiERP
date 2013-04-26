@@ -8,30 +8,28 @@ class AccountLedgerPresenter < Resubject::Presenter
     name.split(' ').map(&:first).join('')
   end
 
-  def verified_tag
-    html = if can_conciliate_or_null?
-             "<i class='icon-remove text-error' title='No verficado' rel='tooltip'></i>"
-           else
-            "<i class='icon-ok text-success' title='Verficado' rel='tooltip'></i>"
-           end
+  def status_tag
+    case status
+    when 'pendent'
+      html = ["<span class='label label-warning'>", icon_tag(class: 'icon-warning-sign'),
+              " Pendiente</span>"].join('')
+    when 'approved'
+      html = "<span class='label label-success'>Aprovado</span>"
+    when 'nulled'
+      html = "<span class='label label-important'>Anulado</span>"
+    end
 
     html.html_safe
-  end
-
-  def nulled_tag
-    unless active?
-      "<span class='label label-important'>ANULADA</span>".html_safe
-    end
   end
 
   def operation_label
     html = case to_model.operation
            when 'payin', 'intin'
-             "<span class='label label-success' >#{operation}</span>"
+             "<span class='label' >#{operation}</span>"
            when 'payout', 'devin'
-             "<span class='label label-important' >#{operation}</span>"
+             "<span class='label' >#{operation}</span>"
            when 'trans'
-             "<span class='label label-inverse' >#{operation}</span>"
+             "<span class='label' >#{operation}</span>"
            end
 
     html.html_safe
@@ -82,25 +80,15 @@ class AccountLedgerPresenter < Resubject::Presenter
   end
 
   def operation_tag(op = to_model.operation)
-    text = operation(op)
-    css = case op
-          when 'payin', 'intin', 'devout'
-            'label-success'
-          when 'payout', 'intout', 'devin'
-            'label-important'
-          when 'trans'
-            'label-inverse'
-          end
-
-    "<span class='label #{css}'>#{text}</span>".html_safe
+    "<span class='label label-inverse'>#{operation(op)}</span>".html_safe
   end
 
   def account_icon(ac)
     case ac.class.to_s
-    when 'Cash' then '<i class="icon-money dark" title="Efectivo" rel="tooltip"></i>'
-    when 'Bank' then '<i class="icon-building dark" title="Banco" rel="tooltip"></i>'
-    when 'Income' then '<i class="icon-file dark" title="Ingreso" rel="tooltip"></i>'
-    when 'Expense' then '<i class="icon-file dark" title="Egreso" rel="tooltip"></i>'
+    when 'Cash'    then icon_tag(class: "icon-money", title: "Efectivo")
+    when 'Bank'    then icon_tag(class: "icon-building", title: "Banco")
+    when 'Income'  then icon_tag(class: "icon-file", title: "Ingreso")
+    when 'Expense' then icon_tag(class: "icon-file", title: "Egreso")
     end
   end
 
@@ -146,5 +134,12 @@ class AccountLedgerPresenter < Resubject::Presenter
 
   def trans_account_tag
     "#{account_icon trans_account} #{trans_account}".html_safe
+  end
+
+private
+  def icon_tag(attrs = {})
+    tit = "title='#{attrs[:title]}'" if attrs[:title]
+    tog = " data-toggle='tooltip'" if tit
+    "<i class='#{attrs[:class]}' #{tit} #{tog}></i>"
   end
 end

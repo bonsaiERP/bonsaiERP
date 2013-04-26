@@ -123,4 +123,19 @@ describe AccountLedger do
     end
   end
 
+  it "#can_conciliate_or_null?" do
+    al = AccountLedger.new
+    al.should be_can_conciliate_or_null
+
+    al.nuller_id = 1
+    al.should_not be_can_conciliate_or_null
+
+    al.nuller_id = nil
+    al.approver_id = 1
+    al.should_not be_can_conciliate_or_null
+
+    al.nuller_id = 1
+    al.approver_id = 1
+    al.should_not be_can_conciliate_or_null
+  end
 end

@@ -19,14 +19,12 @@
 
 .row-fluid
   .span7
-    %h1
+    %h1.ib
       = @expense
       = @expense.state_tag
 
-      %small
-        = link_to @expense.contact do
-          %i.icon-user
-          = @expense.contact
+    %h4.ib.n
+      = link_to @expense.contact, @expense.contact
 
     %h4.n
       %span.muted Fecha:
@@ -34,35 +32,41 @@
       = render_if @expense.due_date do
         = @expense.due_date_tag
 
+      = @expense.creator_label
+
+      = @expense.approver_label
+
+      = @expense.nuller_label
+
   .span5.r
+    -# Approve form
     - if @expense.is_draft?
       = form_for @expense, url: approve_expense_path(@expense), html: {class: 'ib'} do |f|
         = f.submit 'Aprobar', class: 'b btn btn-success'
-
+    -# Null form
     - if @expense.can_null?
       = form_for @expense, url: null_expense_path(@expense), html: {class: 'ib'} do |f|
         = f.submit 'Anular', class: 'b btn btn-danger'
 
     = link_to icon_new_text, new_expense_path, class: 'btn'
-    = link_to icon_edit_text, edit_expense_path(@expense.id), class: 'btn' unless @expense.is_nulled? 
-
+    = link_to icon_edit_text, edit_expense_path(@expense.id), class: 'btn' unless @expense.is_nulled?
 
 .row-fluid
   .span6
     .moneybox
       %label TOTAL
-      %h4
+      %h4.n
         = ntc @expense.total
         = currency_label @expense.currency
 
     .moneybox
       %label SALDO
-      %h4
+      %h4.n
         = @expense.balance
         = currency_label @expense.currency
   .span6
     - if @expense.description.present?
-      %i.icon-comment(data-toggle='tooltip' title='Descripción')
+      %i.icon-file-alt(data-toggle='tooltip' title='Descripción')
       = @expense.description
 
 

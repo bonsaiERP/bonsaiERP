@@ -20,9 +20,7 @@ class AccountLedger < ActiveRecord::Base
   # Callbacks
   # TODO: review callback
   before_validation :set_currency
-
   before_create :set_creator
-  before_save   :set_approver, if: :conciliation?
 
   # Includes
   include ActionView::Helpers::NumberHelper
@@ -79,7 +77,7 @@ class AccountLedger < ActiveRecord::Base
 
   # Determines if the ledger can be conciliated or nulled
   def can_conciliate_or_null?
-    active? && not(conciliation?)
+    !(nuller_id.present? || approver_id.present?)
   end
 
   def amount_currency

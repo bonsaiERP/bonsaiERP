@@ -1,17 +1,15 @@
 %li.row-fluid
-  .span3
-    %h5
-      = ledger.verified_tag
+  .span4
+    %h4.ib
       = link_to ledger, ledger
-      = ledger.trans_operation_tag
-      = ledger.nulled_tag
+      = ledger.status_tag
 
-    .clear-both
-    %h5
-      %span.muted A:
+    %i= l ledger.date.to_date
+    %p
+      = ledger.operation_tag
+      %span.muted Cuenta:
       = link_to ledger.trans_account_tag, ledger.trans_account
 
-      %i= l ledger.date.to_date
 
   .span7
     .span6
@@ -24,15 +22,13 @@
       - else
         = ntc ledger.amount
         = currency_label ledger.currency
-        %span.muted(title="Tipo de cambio" data-toggle="tooltip")
-          %i.icon-exchange
-          =ntc ledger.exchange_rate, precision: 4
-        \=
-        =ntc ledger.amount_currency
+
+        %i.icon-exchange(title="Tipo de cambio: #{ntc ledger.exchange_rate, precision: 4}" data-toggle='tooltip')
+        = ntc ledger.amount_currency
         = currency_label ledger.account_currency
 
 
-  .span2
+  .span1
     = ledger.creator_label.html_safe
     = ledger.approver_label.html_safe
     = ledger.nuller_label.html_safe

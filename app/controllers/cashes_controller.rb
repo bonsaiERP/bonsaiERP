@@ -8,7 +8,7 @@ class CashesController < ApplicationController
 
   # GET /cashs
   def index
-    @cashes = Cash.all
+    @cashes = Cash.order('name asc')
 
     respond_to do |format|
       format.html # index.html.erb

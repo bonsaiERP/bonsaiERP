@@ -3,21 +3,21 @@
 # email: boriscyber@gmail.com
 module UsersModulePresenter
   def creator_label
-    return "<span class='label label-inverse' data-toggle='tooltip' title='#{creator} #{l created_at}'>#{user_icon}#{creator.id}</span>".html_safe if creator.present?
+    return user_icon(class: 'text', title: "ID: #{creator.id}, #{creator} #{l created_at}'") if creator.present?
     ""
   end
 
   def approver_label
-    return "<span class='label label-success' data-toggle='tooltip' title='#{approver} #{l approver_datetime}'>#{user_icon}#{approver.id}</span>".html_safe if approver.present?
+    return user_icon(class: 'text-success', title: "ID: #{approver.id}, #{approver} #{l approver_datetime}") if approver.present?
     ""
   end
 
   def nuller_label
-    return "<span class='label label-important' data-toggle='tooltip' title='#{nuller} #{l nuller_datetime}'>#{user_icon}#{nuller.id}</span>".html_safe if nuller.present?
+    return user_icon(class: 'text-error', title: "ID: #{nuller.id}, #{nuller} #{l nuller_datetime}'") if nuller.present?
     ""
   end
 
-  def user_icon
-    "<i class='icon-user'></i>"
+  def user_icon(attrs)
+    "<i class='icon-user #{attrs.fetch(:class)}' title='#{attrs.fetch(:title)}' data-toggle='tooltip'></i>".html_safe
   end
 end

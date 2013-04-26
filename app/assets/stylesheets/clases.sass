@@ -105,22 +105,22 @@ div.search
 /* Moneybox */
 .moneybox
   +border-radius(3px)
-  +box-shadow(0px 0px 5px $gray)
+  border: 1px solid darken($grayLighter, 10%)
+  //+box-shadow(0px 0px 5px $gray)
   background-color: #f7f7f7
-  padding: 1px 8px
+  padding: 4px 8px
   display: inline-block
-  margin: 5px
-  min-width: 140px
+  margin: 5px 0px
+  min-width: 120px
   white-space: nowrap
-  h3
-    margin: 0px
-    color: $black
-    font-weight: normal
-    font-size: 1.3em
+  h3, h4
+    margin: 4px 0px
+    text-align: right
   label
     +single-text-shadow(white, 0px, 1px, 0px)
     font-weight: normal
     margin: 0px
+    text-align: center
 
 /* Especial tabs */
 ul.tabs
