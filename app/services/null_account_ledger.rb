@@ -19,7 +19,7 @@ class NullAccountLedger
 
     res = case account.class.to_s
           when 'Income','Expense'
-            res = update_account_balance
+            res = update_income_expense_balance
           else
             res = update_account
           end
@@ -43,9 +43,14 @@ class NullAccountLedger
   end
 
 private
-  def update_account_balance
-    account.amount += amount_currency
+  def update_income_expense_balance
+    account.amount += amount_currency.round(2)
     account.set_state_by_balance!
+
+    if account.is_a?(Income)
+      IncomeErrors.new(account).set_errors
+    elsif account.is_a?(Expense)
+    end
 
     account.save
   end

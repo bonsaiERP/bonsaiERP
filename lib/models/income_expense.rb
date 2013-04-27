@@ -6,11 +6,11 @@ module Models::IncomeExpense
     if balance <= 0
       approve!
       self.state = 'paid'
-    elsif balance < total
+    elsif state.blank? && balance > 0
       approve!
       self.state = 'approved' if self.is_paid?
-    else
-      self.state = 'draft' if state.blank?
+    elsif state.blank?
+      self.state = 'draft'
     end
   end
 
