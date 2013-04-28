@@ -113,7 +113,7 @@ describe Income do
 
       i.set_state_by_balance!
 
-      i.should be_is_approved
+      i.should be_is_draft
       #i.approver_id.should be_nil
     end
 
