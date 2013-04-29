@@ -4,11 +4,9 @@
 module Models::IncomeExpense
   def set_state_by_balance!
     if balance <= 0
-      approve!
       self.state = 'paid'
     elsif balance != total
-      approve!
-      self.state = 'approved' if self.is_paid?
+      self.state = 'approved'
     elsif state.blank?
       self.state = 'draft'
     end

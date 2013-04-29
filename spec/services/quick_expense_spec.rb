@@ -62,6 +62,7 @@ describe QuickExpense do
       ledger.account_id.should eq(11)
       ledger.account_to_id.should eq(account_to.id)
       ledger.currency.should eq("BOB")
+      ledger.reference.should eq(I18n.t('expense.payment.reference', expense: expense))
 
       ledger.amount.should == -200.5
       ledger.exchange_rate.should == 1
@@ -70,9 +71,8 @@ describe QuickExpense do
       ledger.creator_id.should eq(21)
       ledger.approver_id.should eq(21)
 
-      ledger.reference.should eq("Pago egreso #{expense.ref_number}")
       ledger.should be_is_payout
-      
+
       ledger.should be_is_approved
       ledger.date.should be_a(Time)
 
@@ -80,28 +80,19 @@ describe QuickExpense do
       ledger.approver_id.should eq(21)
     end
 
-    it "Can accept different values for conciliation when Bank account" do
+    it "correct reference" do
       Account.stub(find_by_id: build(:bank, id: 3))
 
-      qe = QuickExpense.new(valid_attributes.merge(account_to_id: 3, verification: true))
+      qe = QuickExpense.new(valid_attributes.merge(account_to_id: 3, reference: 'Receipt 123'))
       qe.create.should be_true
 
       ledger = qe.account_ledger
-
-      ledger.should be_is_approved
-
-      # Other case
-      qe = QuickExpense.new(valid_attributes.merge(account_to_id: 3, verification: false))
-      qe.create.should be_true
-
-      ledger = qe.account_ledger
-
-      ledger.should be_is_approved
+      ledger.reference.should eq('Receipt 123')
     end
 
     it "Assigns the currency of the account" do
       Account.stub(find_by_id: build(:bank, id: 3, currency: 'USD'))
-      
+
       qe = QuickExpense.new(valid_attributes.merge(account_to_id: 3) )
 
       qe.create.should be_true

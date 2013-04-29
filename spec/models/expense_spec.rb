@@ -100,17 +100,12 @@ describe Expense do
   end
 
   context "set_state_by_balance!" do
-    before(:each) do
-      UserSession.user = build :user, id: 12
-    end
-
     it "a draft expense" do
       e = Expense.new_expense(total: 10, balance: 10)
 
       e.set_state_by_balance!
 
       e.should be_is_draft
-      e.approver_id.should be_nil
     end
 
     it "a paid expense" do
@@ -119,9 +114,6 @@ describe Expense do
       e.set_state_by_balance!
 
       e.should be_is_paid
-      e.approver_id.should eq(UserSession.id)
-      e.approver_datetime.should be_is_a(Time)
-      e.due_date.should be_is_a(Date)
     end
 
     it "a negative balance" do
@@ -130,7 +122,6 @@ describe Expense do
       e.set_state_by_balance!
 
       e.should be_is_paid
-      e.approver_id.should eq(UserSession.id)
     end
 
     # Changes to the expense, it was paid but can change because of
@@ -141,37 +132,11 @@ describe Expense do
       e.set_state_by_balance!
 
       e.should be_is_paid
-      e.approver_id.should eq(UserSession.id)
-      old_id = UserSession.id
 
-      UserSession.stub(id: 2333)
-
-      # Might had an update or a devolution done
       e.balance = 1
-
       e.set_state_by_balance!
 
       e.should be_is_approved
-      e.approver_id.should eq(old_id)
-      e.approver_id.should_not eq(UserSession.id)
-    end
-
-    # A approved expense changes to paid
-    it "does not call approve! method" do
-      e = Expense.new_expense(total: 10, balance: 5)
-      e.approve!
-
-      e.should be_is_approved
-      e.approver_id.should eq(UserSession.id)
-      e.approver_datetime.should be_is_a(Time)
-
-      UserSession.stub(id: 2333)
-      e.balance = 0
-
-      e.set_state_by_balance!
-
-      e.should be_is_paid
-      e.approver_id.should_not eq(UserSession.id)
     end
 
     it "does not set state if it has state" do
@@ -183,12 +148,6 @@ describe Expense do
       e.set_state_by_balance!
 
       e.should be_is_approved
-      e.approver_id.should be_nil
-
-      e.state = nil
-      e.set_state_by_balance!
-
-      e.should be_is_draft
     end
   end
 

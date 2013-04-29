@@ -19,7 +19,7 @@ class IncomePayment < Payment
       res = save_expense if account_to_is_expense?
       res = create_ledger && res
 
-      set_errors(income, ledger) unless res
+      set_errors(*[income, ledger].compact) unless res
 
       res
     end
@@ -40,6 +40,7 @@ private
   end
 
   def update_income
+    income.approve!
     income.amount -= amount_exchange
     income.set_state_by_balance! # Sets state and the user
   end
@@ -54,16 +55,12 @@ private
   end
 
   def create_ledger
-    if amount.to_f > 0
-      @ledger = build_ledger(
-                  amount: amount, operation: 'payin', account_id: income.id,
-                  status: get_status
-                )
+    @ledger = build_ledger(
+                amount: amount, operation: 'payin', account_id: income.id,
+                status: get_status
+              )
 
-      @ledger.save_ledger
-    else
-      true
-    end
+    @ledger.save_ledger
   end
 
   def account_to_is_expense?

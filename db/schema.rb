@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130426151609) do
+ActiveRecord::Schema.define(:version => 20130429120114) do
 
   create_table "account_ledgers", :force => true do |t|
     t.string   "reference"
@@ -191,7 +191,6 @@ ActiveRecord::Schema.define(:version => 20130426151609) do
 
   create_table "money_stores", :force => true do |t|
     t.integer "account_id"
-    t.string  "number",     :limit => 100
     t.string  "email"
     t.string  "address",    :limit => 300
     t.string  "phone",      :limit => 50

@@ -99,8 +99,8 @@ describe IncomePayment do
       # Income
       p.income.should be_is_a(Income)
       p.income.balance.should == balance - valid_attributes[:amount]
-      #p.income.should be_is_approved
-      #p.income.approver_id.should eq(UserSession.id)
+      p.income.should be_is_approved
+      p.income.approver_id.should eq(UserSession.id)
 
       # Ledger
       p.ledger.amount.should == 50.0

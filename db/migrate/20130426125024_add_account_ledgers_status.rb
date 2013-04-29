@@ -1,12 +1,12 @@
 class AddAccountLedgersStatus < ActiveRecord::Migration
   def up
-    PgTools.with_schemas except: 'common' do
-      change_table :account_ledgers do |t|
-        t.string :status, limit: 50, default: 'approved'
-      end
+    #PgTools.with_schemas except: 'common' do
+    #  change_table :account_ledgers do |t|
+    #    t.string :status, limit: 50, default: 'approved'
+    #  end
 
-      add_index :account_ledgers, :status
-    end
+    #  add_index :account_ledgers, :status
+    #end
 
     # Set status
     Organisation.pluck(:tenant).each do |tenant|
@@ -20,10 +20,5 @@ class AddAccountLedgersStatus < ActiveRecord::Migration
   end
 
   def down
-    PgTools.with_schemas except: 'common' do
-      change_table :account_ledgers do |t|
-        t.remove :status
-      end
-    end
   end
 end

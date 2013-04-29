@@ -37,6 +37,7 @@ private
   end
 
   def update_expense
+    expense.approve!
     expense.balance -= amount_exchange
     expense.set_state_by_balance!
   end

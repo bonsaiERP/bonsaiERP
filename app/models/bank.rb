@@ -14,10 +14,6 @@ class Bank < Account
   delegate *create_accessors(*MONEY_METHODS), to: :money_store
   delegate :id, to: :money_store, prefix: true
 
-  # validations
-  validates_presence_of :number
-  validates :number, length: {within: 3..30}
-
   def self.new_bank(attrs={})
     self.new do |c|
       c.build_money_store
@@ -34,7 +30,7 @@ class Bank < Account
   end
 
   def to_s
-    "#{name} #{number}"
+    name
   end
 
   def get_ledgers(attrs = {})

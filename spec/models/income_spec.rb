@@ -104,17 +104,12 @@ describe Income do
   end
 
   context "set_state_by_balance!" do
-    before(:each) do
-      UserSession.user = build :user, id: 12
-    end
-
     it "a draft income" do
       i = Income.new_income(total: 10, balance: 10)
 
       i.set_state_by_balance!
 
       i.should be_is_draft
-      #i.approver_id.should be_nil
     end
 
     it "a paid income" do
@@ -123,9 +118,6 @@ describe Income do
       i.set_state_by_balance!
 
       i.should be_is_paid
-      i.approver_id.should eq(UserSession.id)
-      i.approver_datetime.should be_is_a(Time)
-      i.due_date.should be_is_a(Date)
     end
 
     it "a negative balance" do
@@ -134,7 +126,6 @@ describe Income do
       i.set_state_by_balance!
 
       i.should be_is_paid
-      i.approver_id.should eq(UserSession.id)
     end
 
     # Changes to the income, it was paid but can change because of
@@ -142,41 +133,14 @@ describe Income do
     it "a paid income changes to approved" do
       i = Income.new_income(total: 10, balance: 0)
 
-      i.approve!
       i.set_state_by_balance!
 
       i.should be_is_paid
-      i.approver_id.should eq(UserSession.id)
-      #old_id = UserSession.id
 
-      #UserSession.stub(id: 2333)
-
-      # Might had an update or a devolution done
-      #i.balance = 1
-
-      #i.set_state_by_balance!
-
-      #i.should be_is_approved
-      #i.approver_id.should eq(old_id)
-      #i.approver_id.should_not eq(UserSession.id)
-    end
-
-    # A approved income changes to paid
-    it "does not call approve! method" do
-      i = Income.new_income(total: 10, balance: 5)
-      i.approve!
+      i.balance = 2
+      i.set_state_by_balance!
 
       i.should be_is_approved
-      i.approver_id.should eq(UserSession.id)
-      i.approver_datetime.should be_is_a(Time)
-
-      UserSession.stub(id: 2333)
-      i.balance = 0
-
-      i.set_state_by_balance!
-
-      i.should be_is_paid
-      i.approver_id.should_not eq(UserSession.id)
     end
 
     it "does not set state if it has state" do
@@ -188,11 +152,6 @@ describe Income do
       i.set_state_by_balance!
 
       i.should be_is_approved
-      i.approver_id.should be_nil
-
-      #i.state = nil
-      #i.set_state_by_balance!
-      #i.should be_is_approved
     end
   end
 

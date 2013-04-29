@@ -23,7 +23,7 @@ private
       creator_id: UserSession.id, approver_id: UserSession.id
     )
     @transaction = @expense = Expense.new_expense(attrs)
-
+    @expense.approve!
     @expense.set_state_by_balance!
 
     @expense.save
@@ -32,7 +32,7 @@ private
   def create_ledger
     @account_ledger = build_ledger(
                         account_id: expense.id, operation: 'payout', amount: -amount,
-                        reference: "Egreso rápido #{expense.ref_number}"
+                        reference: get_reference
     )
 
     @account_ledger.save_ledger
@@ -54,8 +54,8 @@ private
     'payout'
   end
 
-  def get_ref_number
-    Expense.get_ref_number
+  def get_reference
+    reference.present? ? reference : I18n.t('expense.payment.reference', expense: expense)
   end
 end
 

@@ -1,28 +1,29 @@
 .quick-expense-form.hide
-  = simple_form_for QuickExpense.new(ref_number: Expense.get_ref_number), url: quick_expense_expenses_path do |f|
+  - qe = QuickExpense.new(ref_number: Expense.get_ref_number)
+
+  %h2
+    %span.muted.n Egreso rápido
+    = qe.ref_number
+
+  = simple_form_for qe, url: quick_expense_expenses_path do |f|
     .row-fluid
-      .span6
-        = f.input :ref_number, label: "Número de referencia" do
-          = f.text_field :ref_number, disabled: true
       .span6= f.input :account_to_id, label: 'Cuenta', input_html: {class: 'span10'}
 
-    .row-fluid
       .span6
         =f.input :contact_id, as: :select2, label: "Contacto",
           'data-source' => '/contacts/search', input_html: { data: {new_url: new_contact_path, title: 'Nuevo contacto', trigger: 'new-contact'}, class: 'contact_id', placeholder: 'Escriba para buscar contactos'}
-      .span6=f.input :date, as: :datepicker, label: 'Fecha'
 
     .row-fluid
-      .span6=f.input :amount, label: 'Cantidad'
-      .span6=f.input :bill_number, label: 'No. de documento', label_html: {title: 'Factura o Recibo', 'data-toggle' => 'tooltip'}
+      .span3=f.input :amount, label: 'Cantidad <span class="quick-income-currency"></span>'.html_safe, as: :decimal, input_html: {type: 'text'}
+      .span3=f.input :date, as: :datepicker, label: 'Fecha'
+
+      .span6=f.input :reference, label: 'Referencia', as: 'text', input_html: {rows: 2}
 
     .form-actions
       = f.submit 'Salvar', class: 'btn btn-success b'
       %a#quick-expense-hide-link.btn Cancelar
 
 :javascript
-  var accounts_to = #{AccountQuery.new.bank_cash_options.to_json}
-
   $(function() {
     $('#quick-expense-link').click( function() {
       $('.quick-expense-form').show('medium');
@@ -41,7 +42,7 @@
 
     // account_to_id
     $('#quick_expense_account_to_id').select2({
-      data: accounts_to,
+      data: #{AccountQuery.new.bank_cash_options.to_json},
       formatResult: App.Payment.paymentOptions,
       formatSelection: App.Payment.paymentOptions,
       escapeMarkup: function(m) { return m }

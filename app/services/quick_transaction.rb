@@ -38,26 +38,17 @@ private
     }
   end
 
-  # Builds a ledger with conciliation == true
   def build_ledger(attrs={})
     AccountLedger.new({
       account_to_id: account_to_id,
       exchange_rate: 1, date: date,
-    }.merge(attrs)) {|al| 
+    }.merge(attrs)) {|al|
       al.status = 'approved'
       al.currency = currency
       al.creator_id = UserSession.id
       al.approver_id = UserSession.id
       al.reference = get_reference
     }
-  end
-
-  def conciliate?
-    if account_to.is_a?(Cash)
-      true
-    else
-      !verification
-    end
   end
 
   # Use method find_by_id to prevent exception
