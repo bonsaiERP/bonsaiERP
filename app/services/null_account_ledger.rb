@@ -17,12 +17,8 @@ class NullAccountLedger
 
     set_account_ledger_null
 
-    res = case account.class.to_s
-          when 'Income','Expense'
-            res = update_income_expense_balance
-          else
-            res = update_account
-          end
+    res = true
+    res = update_income_expense_balance if is_income_expense?
 
     res && account_ledger.save
   end
@@ -50,9 +46,14 @@ private
     if account.is_a?(Income)
       IncomeErrors.new(account).set_errors
     elsif account.is_a?(Expense)
+      ExpenseErrors.new(account).set_errors
     end
 
     account.save
+  end
+
+  def is_income_expense?
+    account.is_a?(Income) || account.is_a?(Expense)
   end
 
   def update_account

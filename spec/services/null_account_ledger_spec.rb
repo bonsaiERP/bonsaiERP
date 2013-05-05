@@ -54,7 +54,7 @@ describe NullAccountLedger do
 
       na.null.should be_true
 
-      cash_bob.amount.should == 1100.0
+      cash_bob.amount.should == 1000.0
       al.should be_is_nulled
     end
 
@@ -67,7 +67,7 @@ describe NullAccountLedger do
 
       na.null.should be_true
 
-      cash_usd.amount.should == 1010.0
+      cash_usd.amount.should == 1000.0
       al.should be_is_nulled
     end
 
@@ -80,7 +80,7 @@ describe NullAccountLedger do
 
       na.null.should be_true
 
-      bank_usd.amount.should == 1010.0
+      bank_usd.amount.should == 1000.0
       al.should be_is_nulled
     end
   end
