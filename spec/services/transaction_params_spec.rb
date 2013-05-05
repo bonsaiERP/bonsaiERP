@@ -20,6 +20,6 @@ describe TransactionParams do
   end
 
   it "params quick" do
-    subject.quick.should eq([:date, :fact, :bill_number, :amount, :contact_id, :account_id, :account_to_id, :verification])
+    subject.quick.should eq([:account_to_id, :contact_id, :amount, :date, :reference])
   end
 end
