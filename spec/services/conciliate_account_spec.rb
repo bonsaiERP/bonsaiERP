@@ -19,12 +19,12 @@ describe ConciliateAccount do
 
       con.conciliate.should be_false
       # approved status
-      ledger.status = 'approved'
+      ledger = build :account_ledger, status: 'approved', approver_id: 50
       ledger.should be_is_approved
-      ledger.approver_id = 50
       con = ConciliateAccount.new(ledger)
 
       con.conciliate.should be_false
+      ledger.errors[:base].should eq([I18n.t('errors.messages.account_ledger.approved')])
     end
 
     context "conciliate!" do

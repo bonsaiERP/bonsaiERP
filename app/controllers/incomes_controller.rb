@@ -140,6 +140,6 @@ private
                else
                  Income.order('date desc').page(@page)
                end
-    @incomes = @incomes.includes(:contact, transaction: [:creator, :approver, :nuller])
+    @incomes = @incomes.includes(:contact, transaction: [:creator, :approver, :nuller]).order('date desc, id desc')
   end
 end

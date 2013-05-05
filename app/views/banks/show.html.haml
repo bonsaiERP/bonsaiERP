@@ -10,10 +10,8 @@
 .row-fluid
   .span8
     %h1.n
-      %span
-        = @bank.name 
-        = @bank.number
-      = @bank.currency
+      = @bank.name 
+      = currency_label @bank.currency
   .span4.r
     = link_to new_transference_path(account_id: @bank.id), class: 'btn',
       title: 'Transferir dinero a otra cuenta', 'data-toggle' => 'tooltip' do

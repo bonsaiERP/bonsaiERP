@@ -52,7 +52,7 @@ FactoryGirl.define do
   end
 
   factory :money_store do
-    number '123'
+    email 'test@mail.com'
   end
 
   factory :bank do

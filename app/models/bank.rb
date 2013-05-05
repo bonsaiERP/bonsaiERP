@@ -10,7 +10,7 @@ class Bank < Account
   has_one :money_store, foreign_key: :account_id, autosave: true
 
   # Delegations
-  MONEY_METHODS = [:number, :email, :address, :phone, :website].freeze
+  MONEY_METHODS = [:email, :address, :phone, :website].freeze
   delegate *create_accessors(*MONEY_METHODS), to: :money_store
   delegate :id, to: :money_store, prefix: true
 

@@ -8,7 +8,6 @@ describe MoneyStore do
   it "tests the belongs_to relationships" do
     bank = build :bank
     bank.build_money_store
-    bank.number = '12323'
     bank.save.should be_true
 
     bank.money_store_id.should eq(bank.money_store.id)

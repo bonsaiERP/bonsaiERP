@@ -1,9 +1,8 @@
 class RemoveBanksNumber < ActiveRecord::Migration
   def up
-
     Organisation.pluck(:tenant).each do |tenant|
       if PgTools.schema_exists? tenant
-        Bank.update_all("name=CONCAT(name, ' ', number)")
+        Bank.includes(:money_store).each {|b| b.update_attributes!(name: "#{bank.name.strip} #{bank.number.strip}") }
       end
     end
 

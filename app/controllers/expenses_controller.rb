@@ -145,6 +145,6 @@ private
                 else
                   Expense.order('date desc').page(@page)
                 end
-    @expenses = @expenses.includes(:contact, transaction: [:creator, :approver, :nuller])
+    @expenses = @expenses.includes(:contact, transaction: [:creator, :approver, :nuller]).order('date desc, id desc')
   end
 end

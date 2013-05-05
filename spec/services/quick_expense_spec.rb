@@ -33,7 +33,7 @@ describe QuickExpense do
       Account.stub(find_by_id: account_to)
       Contact.stub(find_by_id: contact)
       # save_ledger conciliates if conciliation = true
-      AccountLedger.any_instance.stub(save_ledger: true)
+      AccountLedger.any_instance.stub(save: true, account_to: account_to, account: Expense.new)
     end
 
     it "creates a valid expense" do

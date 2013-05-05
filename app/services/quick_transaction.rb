@@ -46,7 +46,6 @@ private
       al.status = 'approved'
       al.currency = currency
       al.creator_id = UserSession.id
-      al.approver_id = UserSession.id
       al.reference = get_reference
     }
   end

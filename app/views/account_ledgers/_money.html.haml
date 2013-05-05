@@ -11,13 +11,17 @@
           = link_to al, al
           = al.status_tag
 
-        %h5.ib= link_to al.account_contact_tag, al.account_contact
+        %h5.ib
+          = link_to al.account_contact, al.account_contact if al.account_contact
         %p
+          = al.operation_tag
           %i= l al.date.to_date
-          %span.muted De:
-          = link_to al.account, al.account
-          %span.muted A:
-          = link_to al.account_to, al.account_to
+          - unless al.account_id === account.id
+            %span.muted De:
+            = link_to al.account, al.account
+          - unless al.account_to_id === account.id
+            %span.muted A:
+            = link_to al.account_to, al.account_to
       .span5
         .span7
           %i.icon-file.muted(data-toggle='tooltip' title="referencia")

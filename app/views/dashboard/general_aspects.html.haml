@@ -13,12 +13,9 @@
           realizo en algún registro del sistema, 
           %strong mueva sobre los íconos
 
-          %span.label.label-inverse(title='ID: #{current_user.id}, #{current_user} #{l t}' data-toggle='tooltip')
-            %i.icon-user
-          %span.label.label-success(title='ID: #{current_user.id}, #{current_user} #{l t}' data-toggle='tooltip')
-            %i.icon-user
-          %span.label.label-important(title='ID: #{current_user.id}, #{current_user} #{l t}' data-toggle='tooltip')
-            %i.icon-user
+          %i.icon-user.dark(title='Creado por: #{current_user} #{l t}, ID: #{current_user.id}' data-toggle='tooltip')
+          %i.icon-user.text-success(title='Aprobado por: #{current_user} #{l t}, ID: #{current_user.id}' data-toggle='tooltip')
+          %i.icon-user.text-error(title='Anulado por: #{current_user} #{l t}, ID: #{current_user.id}, ' data-toggle='tooltip')
 
     .span4
       .well.well-small

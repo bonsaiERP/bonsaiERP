@@ -18,11 +18,10 @@ class ConciliateAccount
     account_ledger.status = 'approved'
     update_account_ledger_approver
 
-    # Check service payment
-    return account_ledger.save if is_service_payment?
-
-    case account.class.to_s
-    when 'Income', 'Expense'
+    case 
+    when is_service_payment?
+      account_ledger.save
+    when %w(Income Expense).include?(account.class.to_s)
       update_account_to
     else
       update_both_accounts
@@ -55,7 +54,9 @@ private
     account_to.amount += amount
     account.amount -= amount_currency
 
-    account.save && account_to.save && account_ledger.save
+    res = account.save && account_to.save && account_ledger.save
+
+    res
   end
 
   def update_account_ledger_approver
@@ -64,6 +65,9 @@ private
   end
 
   def can_conciliate?
-    !(approver_id.present? || is_nulled? || nuller_id.present?)
+    res = !(approver_id.present? || is_nulled? || nuller_id.present?)
+    account_ledger.errors.add(:base, I18n.t('errors.messages.account_ledger.approved')) unless res
+
+    res
   end
 end

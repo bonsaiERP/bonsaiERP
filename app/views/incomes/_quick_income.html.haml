@@ -10,7 +10,7 @@
 
       .span6
         =f.input :contact_id, as: :select2, label: "Contacto",
-          'data-source' => '/contacts/search', input_html: { data: {new_url: new_contact_path, title: 'Nuevo contacto', trigger: 'new-contact'}, class: 'contact_id', placeholder: 'Escriba para buscar contactos'}
+          'data-source' => '/contacts.json', input_html: { data: {new_url: new_contact_path, title: 'Nuevo contacto', trigger: 'new-contact'}, class: 'contact_id', placeholder: 'Escriba para buscar contactos'}
 
     .row-fluid
       .span3=f.input :amount, label: 'Cantidad <span class="quick-income-currency"></span>'.html_safe, as: :decimal, input_html: {type: 'text'}
