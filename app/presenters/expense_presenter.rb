@@ -31,7 +31,7 @@ class ExpensePresenter < Resubject::Presenter
   def state_tag
     html = case state
     when "draft" then span_label('borrador')
-    when "approved" then span_label('aprovado', 'label-info')
+    when "approved" then span_label('aprobado', 'label-info')
     when "paid" then span_label('pagado', 'label-success')
     when "nulled" then span_label('anulado', 'label-important')
     end

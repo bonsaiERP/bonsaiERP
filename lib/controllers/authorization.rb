@@ -78,7 +78,8 @@ private
       users: true,
       user_passwords: true,
       dashboard: true,
-      reports: true
+      export_incomes: true,
+      export_expenses: true
     }
   end
 
@@ -107,7 +108,8 @@ private
       users: true,
       user_passwords: true,
       dashboard: true,
-      reports: true
+      export_incomes: true,
+      export_expenses: true
     }
   end
 

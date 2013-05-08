@@ -1,0 +1,7 @@
+%h1 Exportar egresos
+
+.row-fluid.form-inline.well.well-small
+  .span6
+    = form_tag export_expenses_path(format: 'xls') do
+      = render 'export_incomes/form_details'
+

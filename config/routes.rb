@@ -1,6 +1,10 @@
 # encoding: utf-8
 Bonsaierp::Application.routes.draw do
 
+  resources :export_expenses, only: ['index', 'create']
+
+  resources :export_incomes, only: ['index', 'create']
+
   resources :reports, only: ['index']
 
   resources :organisation_updates, only: [:edit, :update]

@@ -15,6 +15,8 @@ class TransactionService < BaseService
   attribute :account_to_id, Integer
   attribute :reference, String
 
+  validates_numericality_of :total
+
   attr_reader :transaction, :ledger
 
   def initialize(attrs = {})

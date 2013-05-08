@@ -52,7 +52,7 @@ describe ExpenseService do
     es.should_not be_valid
     AccountQuery.any_instance.stub_chain(:bank_cash, where: [( build :cash, id: 2 )])
 
-    es = ExpenseService.new_expense(account_to_id: 2, direct_payment: "1")
+    es = ExpenseService.new_expense(account_to_id: 2, direct_payment: "1", total: 100)
 
     es.should be_valid
   end

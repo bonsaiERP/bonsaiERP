@@ -16,5 +16,11 @@ describe TransactionService do
         subject.should respond_to(:"#{key}=")
       end
     end
+
+    it "#valid" do
+      subject.total = 'NaN'
+
+      subject.should_not be_valid
+    end
   end
 end

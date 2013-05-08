@@ -19,4 +19,17 @@ class IncomeExpenseQuery
     .select('sum(amount * exchange_rate) AS tot, sum(amount) AS tot_cur, currency')
     .group(:currency)
   end
+
+  def joined(sel = join_select)
+    rel.select(sel).joins{transaction}.joins{contact}
+  end
+
+private
+  def join_select
+    <<-SQL
+    accounts.id, name, amount, state, currency, date, exchange_rate, description,
+    transactions.due_date AS ddate, transactions.total as tot,
+    contacts.matchcode as cont
+    SQL
+  end
 end

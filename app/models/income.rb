@@ -1,12 +1,8 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class Income < Account
+class Income < IncomeExpenseModel
 
-  # module for setters and getters
-  extend SettersGetters
-
-  include Models::IncomeExpense
   ########################################
   # Callbacks
   before_save :set_client_and_incomes_status
@@ -14,55 +10,13 @@ class Income < Account
 
   ########################################
   # Relationships
-  belongs_to :contact
-  belongs_to :project
-
-  has_one :transaction, foreign_key: :account_id, autosave: true
-
   has_many :income_details, foreign_key: :account_id, dependent: :destroy, order: 'id asc'
   accepts_nested_attributes_for :income_details, allow_destroy: true,
     reject_if: proc {|det| det.fetch(:item_id).blank? }
 
   has_many :payments, class_name: 'AccountLedger', foreign_key: :account_id, conditions: {operation: 'payin'}
   has_many :payments_devolutions, class_name: 'AccountLedger', foreign_key: :account_id, conditions: {operation: ['payin', 'devin']}
-  has_many :ledgers, class_name: 'AccountLedger', foreign_key: :account_id
-  has_many :interests, class_name: 'AccountLedger', foreign_key: :account_id, conditions: {operation: 'intin'}
 
-  has_many :transaction_histories, foreign_key: :account_id
-
-  STATES = %w(draft approved paid nulled)
-  ########################################
-  # Validations
-  validates_presence_of :date, :contact, :contact_id
-  validates :state, presence: true, inclusion: {in: STATES}
-
-  ########################################
-  # Scopes
-  scope :discount, -> { joins(:transaction).where(transaction: {discounted: true}) }
-  scope :approved, -> { where(state: 'approved') }
-  scope :active,   -> { where(state: ['approved', 'paid']) }
-  scope :paid, -> { where(state: 'paid') }
-  scope :contact, -> (cid) { where(contact_id: cid) }
-  scope :pendent, -> { active.where{ amount.not_eq 0 } }
-  scope :like, -> (s) {
-    s = "%#{s}%"
-    where{(name.like s) | (description.like s)}
-  }
-
-  ########################################
-  # Delegations
-  delegate *create_accessors(*Transaction.transaction_columns), to: :transaction
-  delegate :discounted?, :delivered?, :devolution?, :total_was,
-    :creator, :approver, :nuller, to: :transaction
-  delegate :attributes, to: :transaction, prefix: true
-  delegate :currency, :name, prefix: :org, to: OrganisationSession, allow_nil: true
-
-  # Define boolean methods for states
-  STATES.each do |_state|
-    define_method :"is_#{_state}?" do
-      _state == state
-    end
-  end
 
   def self.new_income(attrs={})
     self.new do |i|
@@ -133,9 +87,5 @@ private
     Income.pendent.contact(contact_id).where { id.not_eq _id }
     .select('sum(amount * exchange_rate) AS tot, sum(amount) AS tot_cur, currency')
     .group(:currency)
-  end
-
-  def nulling_valid?
-    ['paid', 'approved'].include?(state_was) && is_nulled?
   end
 end

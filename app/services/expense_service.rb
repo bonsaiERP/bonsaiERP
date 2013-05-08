@@ -99,7 +99,7 @@ private
   # Creates or updates and sets errors messages in case of failing
   def create_or_update(&b)
     res = valid?
-    res = commit_or_rollback { b.call } && res
+    res = commit_or_rollback { b.call } && res if res
 
     set_errors(*[expense, ledger].compact) unless res
 

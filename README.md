@@ -12,3 +12,11 @@
 ctags -R `bundle show rails`/../*
 
 v=spf1 a ip4:192.34.56.117 -all
+
+user: magento
+pass: seeM4mag3nT0!
+
+mysql
+pass: betaomega-
+
+ssh root@78.47.246.67
