@@ -22,20 +22,6 @@ class IncomeExpenseModel < Account
   validates :state, presence: true, inclusion: {in: STATES}
 
   ########################################
-  # Scopes
-  scope :discount, -> { joins(:transaction).where(transaction: {discounted: true}) }
-  scope :approved, -> { where(state: 'approved') }
-  scope :active,   -> { where(state: ['approved', 'paid']) }
-  scope :paid, -> { where(state: 'paid') }
-  scope :contact, -> (cid) { where(contact_id: cid) }
-  scope :pendent, -> { active.where{ amount.not_eq 0 } }
-  scope :like, -> (s) {
-    s = "%#{s}%"
-    where{(name.like s) | (description.like s)}
-  }
-  scope :date_range, -> (range) { where(date: range) }
-
-  ########################################
   # Delegations
   delegate *create_accessors(*Transaction.transaction_columns), to: :transaction
   delegate :discounted?, :delivered?, :devolution?, :total_was, 

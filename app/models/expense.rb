@@ -17,6 +17,19 @@ class Expense < IncomeExpenseModel
   has_many :payments, class_name: 'AccountLedger', foreign_key: :account_id, conditions: {operation: 'payout'}
   has_many :interests, class_name: 'AccountLedger', foreign_key: :account_id, conditions: {operation: 'intout'}
 
+  ########################################
+  # Scopes
+  scope :discount, -> { joins(:transaction).where(transaction: {discounted: true}) }
+  scope :approved, -> { where(state: 'approved') }
+  scope :active,   -> { where(state: ['approved', 'paid']) }
+  scope :paid, -> { where(state: 'paid') }
+  scope :contact, -> (cid) { where(contact_id: cid) }
+  scope :pendent, -> { active.where{ amount.not_eq 0 } }
+  scope :like, -> (s) {
+    s = "%#{s}%"
+    where{(name.like s) | (description.like s)}
+  }
+  scope :date_range, -> (range) { where(date: range) }
 
   def self.new_expense(attrs={})
     self.new do |e|
