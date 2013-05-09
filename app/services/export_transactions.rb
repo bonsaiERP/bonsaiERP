@@ -18,7 +18,7 @@ class ExportTransactions < BaseService
       rel.joined.active.date_range(date_range).order('date asc, id asc').each do |trans|
         self.rate = trans.exchange_rate
 
-        csv << [trans.name, state(trans.state),I18n.l(trans.date), trans.cont, rep(trans.description),
+        csv << [trans.name, state(trans.state), date(trans.date), trans.cont, rep(trans.description),
                 val_cur(trans.tot), val_cur(trans.balance), trans.exchange_rate, trans.currency]
       end
     end
@@ -31,6 +31,10 @@ private
 
   def val_cur(val)
     val.to_d * rate
+  end
+
+  def date(val)
+    I18n.l(val, format: I18n.t('date.formats.excel'))
   end
 
   def valid_dates

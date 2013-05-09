@@ -8,13 +8,14 @@ class ExportIncomesController < ApplicationController
 
   # POST /export_incomes
   def create
-    begin
+    exp = ExportIncomes.new(export_params)
+    if exp.valid?
       respond_to do |format|
-        format.xls { send_data ExportIncomes.new(export_params).export(col_sep: "\t"), filename: 'ingresos.xls' }
+        format.xls { send_data StringEncoder.encode("UTF-8", "ISO-8859-1", exp.export(col_sep: "\t") ), filename: 'ingresos.xls' }
       end
-    rescue
+    else
       flash[:error] ='Existen errores en los datos.'
-      redirect_to export_incomes_path
+      redirect_to export_expenses_path
     end
   end
 

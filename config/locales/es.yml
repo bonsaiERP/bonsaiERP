@@ -273,7 +273,6 @@ es:
       repeated_item: "El ítem seleccionado esta repetido"
       registration:
         unique_tenant: 'El subdominio que eligio ya existe'
-      
 
   # Active Support
   date:
@@ -284,6 +283,7 @@ es:
       default: "%d %b %Y"
       short: "%d de %b"
       long: "%d de %B %Y"
+      excel: "%d-%b-%Y"
 
     day_names: [Domingo, Lunes, Martes, Miércoles, Jueves, Viernes, Sábado]
     abbr_day_names: [Dom, Lun, Mar, Mie, Jue, Vie, Sab]
