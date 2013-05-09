@@ -3,4 +3,4 @@
 .row-fluid.form-inline.well.well-small
   .span6
     = form_tag export_incomes_path(format: 'xls') do
-      = render 'export_incomes/form_details'
+      = render 'export_incomes/form_details', btn: 'Exportar a Excel'

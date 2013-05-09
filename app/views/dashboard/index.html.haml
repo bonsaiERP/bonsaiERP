@@ -17,12 +17,16 @@
 
 = @dashboard.pendent_ledgers
 
+= form_for dashboard_path, method: :get do
+  = render 'export_incomes/form_details', btn: 'Buscar'
 
 = render 'dashboard/graph', data: @dashboard
 
 .row-fluid
   .span6.well.well-small
-    %h4.n Ingresos los últimos 30 días
+    %h4.n
+      Ingresos
+      = @dashboard.present_date_range
     .alert.alert-success.inline-block
       %h3.text-success
         \%
@@ -33,7 +37,9 @@
       = ntc @dashboard.total_incomes
 
   .span6.well.well-small
-    %h4.n Egresos los últimos 30 días
+    %h4.n
+      Egresos
+      = @dashboard.present_date_range
     .alert.alert-error.inline-block
       %h3
         \%
@@ -43,7 +49,7 @@
       = currency
       = ntc @dashboard.total_expenses
 
-.row-fluid
+-#.row-fluid
   .span6.well.well-small
     %h4.n Ingresos por ítem en los últimos 30 días
     %ul.unstyled

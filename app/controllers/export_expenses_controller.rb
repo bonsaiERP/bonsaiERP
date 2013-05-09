@@ -8,7 +8,6 @@ class ExportExpensesController < ApplicationController
 
   # POST /export_incomes
   def create
-    #begin
     exp = ExportExpenses.new(export_params)
     if exp.valid?
       respond_to do |format|
@@ -18,8 +17,6 @@ class ExportExpensesController < ApplicationController
       flash[:error] ='Existen errores en los datos.'
       redirect_to export_expenses_path
     end
-    #rescue
-    #end
   end
 
 private

@@ -4,11 +4,11 @@
 class ApplicationController < ActionController::Base
   layout lambda{ |c| 
     if (c.request.xhr? or params[:xhr])
-      false 
+      false
     elsif params[:print].present?
       "print"
     else
-     "application" 
+     "application"
     end
   }
 

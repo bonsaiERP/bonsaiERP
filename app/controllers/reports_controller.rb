@@ -7,6 +7,8 @@ class ReportsController < ApplicationController
 
     case params[:report]
     when 'income', 'expense'
+    when 'totals'
+      render :totals
     when 'items'
       render 'items_trans'
     end
