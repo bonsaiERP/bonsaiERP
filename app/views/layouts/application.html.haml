@@ -19,7 +19,7 @@
 
     - if organisation?
       :javascript
-        this.currency = "#{currency}";
+        bonsai.currency = this.currency = "#{currency}";
         this.organisation = {
           currency: "#{current_organisation.currency}",
           name: "#{current_organisation.name}"
