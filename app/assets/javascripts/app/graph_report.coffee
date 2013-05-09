@@ -53,7 +53,7 @@ class GraphReport
           date = $.datepicker.formatDate(bonsai.dateFormat, new Date(item.datapoint[0]))
 
           self.$tooltip.css({left: (item.pageX - 30) + 'px', top: ( item.pageY - 40 ) + 'px' })
-          .html('<i>' + date + '</i>: ' + _b.ntc(item.datapoint[1]))
+          .html('<i>' + date + '</i>: ' + _b.ntc(item.datapoint[1]) + ' ' + currency)
           self.prevX = item.pageX
           self.prevY = item.pageY
 
