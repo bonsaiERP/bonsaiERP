@@ -26,7 +26,7 @@
 #= require app/transaction.coffee
 #= require app/payment.coffee
 #= require app/transference.coffee
-#= require app/report.coffee
+#= require app/graph_report.coffee
 #= require app/contact.coffee
 
 #= require plugins/jquery.joyride.js

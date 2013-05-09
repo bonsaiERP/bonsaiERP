@@ -4,6 +4,7 @@
   presicion: 2
   separator: ','
   delimiter: '.'
+  dateFormat: 'dd M yy'
 
 ########################################
 # Init function
