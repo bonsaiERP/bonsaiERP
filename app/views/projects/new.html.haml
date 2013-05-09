@@ -1,9 +1,9 @@
 - content_for :links do
-  %ul.breadcrumps.span6
-    %li #{link_to "Proyectos", projects_path} 
-
+  %ul.breadcrumbs
+    %li 
+      =link_to "Proyectos", projects_path
 
 
 %h1 Nuevo proyecto
 
-= render :partial => 'form'
+= render 'form'

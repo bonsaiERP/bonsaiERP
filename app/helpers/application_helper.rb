@@ -166,9 +166,9 @@ module ApplicationHelper
 
   def true_false(val)
     if val
-      'icon-ok'
+      'icon-ok text-success'
     else
-      'icon-remove'
+      'icon-remove text-error'
     end
   end
 

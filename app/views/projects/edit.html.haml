@@ -1,11 +1,13 @@
 - content_for :links do
-  %ul.breadcrumps.span6
-    %li #{link_to "Proyectos", projects_path} 
+  %ul.breadcrumbs
+    %li
+      = link_to "Proyectos", projects_path
 
-  .links.span6
-    = link_to 'Ver', @project, :class => 'show'
+.row-fluid
+  .span6
+    %h1 Editar proyecto
+  .span6.r
+    = link_to icon_show_text, @project, class: 'btn'
 
-%h1 Editar proyecto
-.clear
 
-= render :partial => 'form'
+= render 'form'

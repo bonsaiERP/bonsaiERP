@@ -1,27 +1,27 @@
 - content_for :links do
-  %ul.breadcrumps.span6
+  %ul.breadcrumbs
     %li #{link_to "Proyectos", projects_path} 
 
-  .links.span6
-    = link_to 'Editar', edit_project_path(@project), :class => 'edit'
-    = link_to 'Borrar', @project, :class => 'delete', 'data-confirm' => 'Esta seguro de borrar el proyecto?'
+.row-fluid
+  .span6
+    %h1 
+      %span.gray.n Proyecto:
+      = @project.name
 
-.page-header
-  %h1 
-    %span.gray.n Proyecto:
-    = @project.name
+  .span6.r
+    = link_to icon_edit_text, edit_project_path(@project), class: 'btn'
+    = link_to icon_delete_text, @project, method: :delete, confirm: 'Esta seguro de borrar el proyecto?', class: 'btn'
 
-.clear
-
-.input._25
-  %label Activo
-  %span.icon{:class => @project.active.to_s }
-.input._25
-  %label Fecha de inicio
-  = lo @project.date_start
-.input._25
-  %label Fecha de fin
-  = lo @project.date_end
-.clear
-  %label Descripción
-  = @project.description
+.row-fluid
+  .span2
+    %span.muted Activo:
+    %i(class="#{true_false(@project.active)}")
+  .span2
+    %label Fecha de inicio
+    = lo @project.date_start
+  .span2
+    %label Fecha de fin
+    = lo @project.date_end
+  .span6
+    %label Descripción
+    = @project.description

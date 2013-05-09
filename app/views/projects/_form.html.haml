@@ -1,6 +1,3 @@
-:css
-  #project-form{ max-width: 900px; }
-
 = simple_form_for(@project, html: {id: 'project-form'}) do |f|
   = bonsai_form_error(f)
   .row-fluid
@@ -15,5 +12,5 @@
   .row-fluid
     .span6
       = f.input :description, :label => "Descripción", :input_html => {:cols => 45, :rows => 5}
-  
-  = f.submit 'Salvar', :class => 'btn btn-success b'
+  .form-actions
+    = f.submit 'Salvar', class: 'btn btn-success b'

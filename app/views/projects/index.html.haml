@@ -1,13 +1,18 @@
 - content_for :links do
-  .span6 &nbsp;
-  .links.span6
-    =link_to "Nuevo proyecto", new_project_path, :class => 'new'
+  %ul.breadcrumbs
+    %li
+      Proyectos
 
 
-%h1 Proyectos
+.row-fluid
+  .span6
+    %h1 Proyectos
+  .span6.r
+    =link_to new_project_path, class: 'btn' do
+      %i.icon-plus-sign
+      Nuevo proyecto, 
 
-
-=paginate (@projects)
+= paginate (@projects)
 
 %table.table.table-striped
   %thead
@@ -19,10 +24,15 @@
       %th
   
   %tbody
-    - for project in @projects
-      %tr{ :class => cycle(:odd, :even) }
+    - @projects.each do |project|
+      %tr
         %td= link_to(project.name, project, :class => 'b')
-        %td{:class => project.active.to_s }
-        %td= lo(project.date_start)
-        %td= lo(project.date_end)
-        %td.actions= bonsai_links(project)
+        %td
+          %i(class="#{true_false(project.active)}")
+        %td
+          = lo(project.date_start)
+        %td
+          = lo(project.date_end)
+        %td
+          = link_to icon_edit, edit_project_path(project.id), class: 'dark'
+          = link_to icon_delete, project, class: 'dark', method: 'delete', confirm: 'Esta segur@ de eliminar el proyecto?'
