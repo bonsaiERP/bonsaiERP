@@ -21,6 +21,8 @@ class TransactionService < BaseService
 
   attr_reader :transaction, :ledger
 
+  delegate :details, to: :transaction
+
   def initialize(attrs = {})
     yield self
     super

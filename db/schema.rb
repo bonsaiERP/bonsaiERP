@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130510144731) do
+ActiveRecord::Schema.define(:version => 20130510222719) do
 
   create_table "account_ledgers", :force => true do |t|
     t.string   "reference"
@@ -239,19 +239,19 @@ ActiveRecord::Schema.define(:version => 20130510144731) do
   create_table "stocks", :force => true do |t|
     t.integer  "store_id"
     t.integer  "item_id"
-    t.string   "state",        :limit => 20
-    t.decimal  "unitary_cost",               :precision => 14, :scale => 2, :default => 0.0
-    t.decimal  "quantity",                   :precision => 14, :scale => 2, :default => 0.0
-    t.decimal  "minimum",                    :precision => 14, :scale => 2, :default => 0.0
+    t.decimal  "unitary_cost", :precision => 14, :scale => 2, :default => 0.0
+    t.decimal  "quantity",     :precision => 14, :scale => 2, :default => 0.0
+    t.decimal  "minimum",      :precision => 14, :scale => 2, :default => 0.0
     t.integer  "user_id"
-    t.datetime "created_at",                                                                 :null => false
-    t.datetime "updated_at",                                                                 :null => false
+    t.datetime "created_at",                                                    :null => false
+    t.datetime "updated_at",                                                    :null => false
+    t.boolean  "active",                                      :default => true
   end
 
+  add_index "stocks", ["active"], :name => "index_stocks_on_active"
   add_index "stocks", ["item_id"], :name => "index_stocks_on_item_id"
   add_index "stocks", ["minimum"], :name => "index_stocks_on_minimum"
   add_index "stocks", ["quantity"], :name => "index_stocks_on_quantity"
-  add_index "stocks", ["state"], :name => "index_stocks_on_state"
   add_index "stocks", ["store_id"], :name => "index_stocks_on_store_id"
   add_index "stocks", ["user_id"], :name => "index_stocks_on_user_id"
 

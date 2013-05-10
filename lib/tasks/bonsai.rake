@@ -330,6 +330,24 @@ namespace :bonsai do
       end
     end
   end
+
+  desc 'Updates the schema versions'
+  task update_schema_versions: :environment do
+    t1 = Time.now.to_f
+    file = Rails.root.join('db', 'migrations.txt')
+    if File.exists?(file)
+      conn = ActiveRecord::Base.connection
+      PgTools.all_schemas.each do |s|
+        next if s === 'common'
+        puts "Updating schema: #{s}"
+        conn.execute "DELETE FROM #{s}.schema_migrations"
+        conn.execute "COPY #{s}.schema_migrations FROM '#{file}'"
+      end
+    end
+
+    t2 = Time.now.to_f
+    puts "Time: #{t2 - t1} Seconds"
+  end
 end
 
 # example to export the file

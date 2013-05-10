@@ -89,6 +89,11 @@ class IncomeExpenseModel < Account
     total === amount && !is_nulled?
   end
 
+  alias :old_attributes :attributes
+  def attributes
+    old_attributes.merge(transaction.attributes)
+  end
+
 private
   def nulling_valid?
     ['paid', 'approved'].include?(state_was) && is_nulled?
