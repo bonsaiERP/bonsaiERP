@@ -4,6 +4,7 @@
 class RegistrationsController < ApplicationController
   skip_before_filter :set_tenant, :check_authorization!
   before_filter :check_allow_registration
+  layout 'sessions'
 
   # GET /registrations/new
   def new

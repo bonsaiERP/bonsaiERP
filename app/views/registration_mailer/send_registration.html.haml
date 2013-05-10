@@ -4,7 +4,7 @@
   Bienvenido a <span style="font-weight: bold; font-style: italic;">#{APP_NAME}</span>, para poder completar su registro 
 
 
-  =link_to "haga click es en este vínculo", url_for(controller: 'registrations', action: 'show', id: @user.confirmation_token, host: UrlTools.domain, subdomain: @tenant, protocol: UrlTools.protocol), style: 'font-weight:bold'
+  =link_to "Complete su registro", url_for(controller: 'registrations', action: 'show', id: @user.confirmation_token, host: UrlTools.domain, subdomain: @tenant, protocol: UrlTools.protocol), style: 'font-weight:bold'
 
 %p
   Atentamente Pablo.

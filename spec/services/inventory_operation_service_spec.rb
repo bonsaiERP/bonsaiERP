@@ -6,7 +6,7 @@ describe InventoryOperationService do
   let(:valid_attributes) {
     {store_id: 1}
   }
-  
+
   it 'invalid' do
     io = InventoryOperationService.new(store_id: 1)
     io.should_not be_valid

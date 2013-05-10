@@ -17,24 +17,8 @@
       this.exchangeRates = #{set_exchange_rates};
       this.currencies = #{CURRENCIES.to_json};
 
-      bonsai.currency = this.currency = "#{currency}";
-      this.organisation = {
-        currency: "#{current_organisation.currency}",
-        name: "#{current_organisation.name}"
-      }
 
   %body
-
-    -# Header
-    #head
-      = render 'layouts/menus'
-
-    .row-fluid.organisation
-      .cont
-        .span12
-          %h3= current_organisation.name
-
-
     #wrapper.cont
       #menu
         .container-fluid
@@ -44,7 +28,7 @@
         .container-fluid
           = render "layouts/flash", flash: flash
 
-          = render "users/change_default_password" if current_user.change_default_password?
+          = render "users/change_default_password" if current_user && current_user.change_default_password?
 
           = yield
           .clear
@@ -58,3 +42,4 @@
           %a(href="http://twitter.com/#!/bonsaierp" target="_blank") Twitter
           &middot;
           %a(href="http://www.facebook.com/pages/BonsaiERP/337187402983197" target="_blank") Facebook
+

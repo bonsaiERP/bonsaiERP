@@ -1,51 +1,50 @@
-- if current_organisation
-  %ul#main-nav.nav
-    %li
-      = link_to "Resumen", dashboard_path, id: 'main-menu-first'
+%ul#main-nav.nav
+  %li
+    = link_to "Resumen", dashboard_path, id: 'main-menu-first'
 
-    %li.dropdown
-      %a.dropdown-toggle(data-toggle="dropdown" href="#")
-        General
-        %i.icon-caret-down
+  %li.dropdown
+    %a.dropdown-toggle(data-toggle="dropdown" href="#")
+      General
+      %i.icon-caret-down
 
-      %ul.dropdown-menu
-        %li
-          = link_to "Ingresos", incomes_path
-        %li
-          = link_to "Nuevo ingreso", new_income_path
-        %li.divider
-        %li
-          = link_to "Egresos", expenses_path
-        %li
-          = link_to "Nuevo egreso", new_expense_path
-        %li.divider
-        %li
-          = link_to "Contactos", contacts_path
-        %li
-          = link_to "Nuevo contacto", new_contact_path
-
-
-    %li.dropdown
-      %a.dropdown-toggle( data-toggle="dropdown" href="#")
-        Cuentas
-        %i.icon-caret-down
-      %ul.dropdown-menu
-        %li <a href="/banks">Cuentas bancarias</a>
-        %li <a href="/cashes">Cuentas efectivo</a>
-        -#%li <a href="/staffs">Cuentas personal</a>
-
-    %li.dropdown
-      %a.dropdown-toggle( data-toggle="dropdown" href="#")
-        Inventarios
-        %i.icon-caret-down
-      %ul.dropdown-menu
-        -#%li <a href="/stores">Almacenes</a>
-        %li <a href="/items">Items</a>
-        %li <a href="/units">Unidades de medida</a>
-        -#%li.divider
-        -#%li <a href="/inventory_operations/transactions?operation=out">Inventario pendientes de egreso</a>
-        -#%li <a href="/inventory_operations/transactions?operation=in">Inventario pendientes ingreso</a>
+    %ul.dropdown-menu
+      %li
+        = link_to "Ingresos", incomes_path
+      %li
+        = link_to "Nuevo ingreso", new_income_path
+      %li.divider
+      %li
+        = link_to "Egresos", expenses_path
+      %li
+        = link_to "Nuevo egreso", new_expense_path
+      %li.divider
+      %li
+        = link_to "Contactos", contacts_path
+      %li
+        = link_to "Nuevo contacto", new_contact_path
 
 
-    %li
-      = link_to "Proyectos", projects_path, id: 'last-nav'
+  %li.dropdown
+    %a.dropdown-toggle( data-toggle="dropdown" href="#")
+      Cuentas
+      %i.icon-caret-down
+    %ul.dropdown-menu
+      %li <a href="/banks">Cuentas bancarias</a>
+      %li <a href="/cashes">Cuentas efectivo</a>
+      -#%li <a href="/staffs">Cuentas personal</a>
+
+  %li.dropdown
+    %a.dropdown-toggle( data-toggle="dropdown" href="#")
+      Inventarios
+      %i.icon-caret-down
+    %ul.dropdown-menu
+      -#%li <a href="/stores">Almacenes</a>
+      %li <a href="/items">Items</a>
+      %li <a href="/units">Unidades de medida</a>
+      -#%li.divider
+      -#%li <a href="/inventory_operations/transactions?operation=out">Inventario pendientes de egreso</a>
+      -#%li <a href="/inventory_operations/transactions?operation=in">Inventario pendientes ingreso</a>
+
+
+  %li
+    = link_to "Proyectos", projects_path, id: 'last-nav'

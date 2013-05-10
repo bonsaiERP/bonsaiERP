@@ -17,17 +17,28 @@
       this.exchangeRates = #{set_exchange_rates};
       this.currencies = #{CURRENCIES.to_json};
 
-      bonsai.currency = this.currency = "#{currency}";
-      this.organisation = {
-        currency: "#{current_organisation.currency}",
-        name: "#{current_organisation.name}"
-      }
-
   %body
 
     -# Header
     #head
-      = render 'layouts/menus'
+      .navbar.navbar-inverse
+        .navbar-inner
+          .container
+            %button.btn.btn-navbar(data-toggle="collapse" data-target=".nav-collapse")
+              %i.icon-reorder 
+              Menú
+            .nav-collapse.collapse.cont
+              .pull-right
+                %ul#usersettings
+                  %li#current_user
+                    = link_to current_user do
+                      %i.icon-user
+                      = current_user
+
+                  %li#logout
+                    = link_to logout_path do
+                      %i.icon-off
+                      Salir
 
     .row-fluid.organisation
       .cont
@@ -44,8 +55,6 @@
         .container-fluid
           = render "layouts/flash", flash: flash
 
-          = render "users/change_default_password" if current_user.change_default_password?
-
           = yield
           .clear
       #footer
@@ -58,3 +67,4 @@
           %a(href="http://twitter.com/#!/bonsaierp" target="_blank") Twitter
           &middot;
           %a(href="http://www.facebook.com/pages/BonsaiERP/337187402983197" target="_blank") Facebook
+

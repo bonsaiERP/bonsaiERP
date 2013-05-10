@@ -30,6 +30,9 @@
           = f.input :password_confirmation, label: false, input_html: {class: 'span12', placeholder: 'Confirmar contraseña', title: 'Confirmar contraseña', 'data-toggle' => 'tooltip'}
           .clear-both
           = f.submit "Registrarme", :class => 'btn btn-success btn-large'
+          %p
+            %h5.n= link_to 'Ingresar', login_path
+
 
 :coffee
   $( ->

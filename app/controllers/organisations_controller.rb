@@ -29,14 +29,17 @@ class OrganisationsController < ApplicationController
 private
 
   def check_tenant_creation
-    if PgTools.schema_exists? current_organisation.tenant
-      redirect_to  dashboard_url(host: request.domain, subdomain: org.tenant, auth_token: user.auth_token) and return
+    unless current_organisation
+      redirect_to new_registration_path, alert: "Debe confirmar su registro o registrarse." and return
     end
 
-    if !current_organisation
-      redirect_to new_registration_path, alert: "Debe confirmar su registro o registrarse."
-      return
+    if current_tenant && PgTools.schema_exists?(current_organisation.tenant)
+      redirect_to  dashboard_url(host: request.domain, subdomain: org.tenant, auth_token: user.auth_token) and return
     end
+  end
+
+  def check_tenant_exists
+
   end
 
   def organisation_params
