@@ -12,7 +12,7 @@ describe Session do
   it "Authenticates" do
     user.should_receive(:valid_password?).with('demo1234').and_return(true)
     user.should_receive(:confirmed_registration?).and_return(true)
-    user.stub(active_links?: true)
+    user.stub(active_links?: true, save: true)
 
     User.stub_chain(:active, find_by_email: user)
 

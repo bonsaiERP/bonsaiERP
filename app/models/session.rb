@@ -12,7 +12,7 @@ class Session < BaseService
   def authenticate?
     return false unless validated?
 
-    confirmed_registration? && user.valid_password?(password)
+    confirmed_registration? && user.valid_password?(password) && user.update_attributes(last_sign_in_at: Time.zone.now)
   end
 
   def user
