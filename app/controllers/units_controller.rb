@@ -37,7 +37,7 @@ class UnitsController < ApplicationController
     if @unit.save
       redirect_ajax @unit
     else
-      render :action => 'new'
+      render 'new'
     end
   end
 

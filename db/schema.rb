@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130429120114) do
+ActiveRecord::Schema.define(:version => 20130510144731) do
 
   create_table "account_ledgers", :force => true do |t|
     t.string   "reference"
@@ -130,7 +130,6 @@ ActiveRecord::Schema.define(:version => 20130429120114) do
     t.date     "date"
     t.string   "ref_number"
     t.string   "operation",       :limit => 10
-    t.string   "state"
     t.string   "description"
     t.decimal  "total",                         :precision => 14, :scale => 2, :default => 0.0
     t.integer  "creator_id"
@@ -150,7 +149,6 @@ ActiveRecord::Schema.define(:version => 20130429120114) do
   add_index "inventory_operations", ["operation"], :name => "index_inventory_operations_on_operation"
   add_index "inventory_operations", ["project_id"], :name => "index_inventory_operations_on_project_id"
   add_index "inventory_operations", ["ref_number"], :name => "index_inventory_operations_on_ref_number"
-  add_index "inventory_operations", ["state"], :name => "index_inventory_operations_on_state"
   add_index "inventory_operations", ["store_id"], :name => "index_inventory_operations_on_store_id"
 
   create_table "items", :force => true do |t|

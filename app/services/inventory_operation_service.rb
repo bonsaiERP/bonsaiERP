@@ -16,7 +16,8 @@ class InventoryOperationService < BaseService
 
   def inventory_operation
     @inventory_operation ||= InventoryOperation.new(
-      store_id: store_id, date: date, description: description
+      store_id: store_id, date: date, description: description,
+      operation: get_operation
     )
   end
 
@@ -35,5 +36,8 @@ private
 
   def details
     @details ||= inventory_operation_details.select {|v| v.quantity > 0 }
+  end
+
+  def get_operation
   end
 end

@@ -2,8 +2,6 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class InventoryOperationsController < ApplicationController
-  before_filter :check_transaction_permission, :only => [:new_transaction, :create_transaction]
-
   # GET /inventory_operations
   # GET /inventory_operations.xml
   def index
@@ -29,20 +27,13 @@ class InventoryOperationsController < ApplicationController
   # GET /inventory_operations/new
   # GET /inventory_operations/new.xml
   def new
-    @inventory_operation = InventoryOperation.new(:store_id => params[:store_id], :operation => params[:operation])
-    @inventory_operation.create_details
-    @inventory_operation.create_ref_number
+    @inventory_operation = InventoryOperation.new(store_id: params[:store_id])
 
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @inventory_operation }
     end
   end
-
-  # GET /inventory_operations/1/edit
-  #def edit
-  #  @inventory_operation = InventoryOperation.find(params[:id])
-  #end
 
   # TODO: Iprove security
   # POST /inventory_operations

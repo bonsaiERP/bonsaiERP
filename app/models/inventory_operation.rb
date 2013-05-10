@@ -5,8 +5,7 @@ class InventoryOperation < ActiveRecord::Base
 
   before_create     { self.creator_id = UserSession.id }
 
-  STATES = %w(draft approved).freeze
-  OPERATIONS = %w(in out transin transout).freeze
+  OPERATIONS = %w(invin invout incin incout expin expout transin transout).freeze
 
   belongs_to :store
   belongs_to :contact
@@ -23,7 +22,7 @@ class InventoryOperation < ActiveRecord::Base
   # Validations
   validates_presence_of :ref_number, :store_id, :store
   validates_inclusion_of :operation, in: OPERATIONS
-  
+
   #validates_presence_of :store_to, :if => :is_transference?
 
   OPERATIONS.each do |_op|

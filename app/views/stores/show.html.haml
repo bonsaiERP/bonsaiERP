@@ -13,29 +13,7 @@
       %i(class="#{true_false(@store.active)}" title='Activo' data-toggle='tooltip')
       = @store
 
-  .span6.r
-    = link_to icon_new_text, new_store_path, class: 'btn'
-
-    = link_to icon_edit_text, edit_store_path(@store.id), class: 'btn'
-
-    = link_to icon_delete_text, store_path(@store.id), method: :delete, confirm: "Esta seguro de borrar el almacen?", class: 'btn'
-
-.row-fluid
-  - if @store.active?
-    .span8
-      = link_to new_inventory_operation_path(store_id: @store.id), class: 'btn btn-primary' do
-        %i.icon-plus-sign
-        Ingreso de items
-
-      = link_to new_inventory_operation_path(store_id: @store.id), class: 'btn btn-primary' do
-        %i.icon-minus-sign
-        Egreso de items
-
-      = link_to new_transference_inventory_operations_path(:store_id => @store.id), class: 'btn btn-primary' do
-        %i.icon-exchange
-        Transferencia de items
-
-  .span4
+    .clear-both
     = render_if @store.phone do
       %i.icon-phone(title='Teléfono' data-toggle='tooltip')
       = @store.phone
@@ -43,6 +21,36 @@
     = render_if @store.address do
       %i.icon-building(title='Dirección' data-toggle='tooltip')
       = nl2br @store.address
+
+  .span6.r
+    .btn-group
+      = link_to icon_new_text, new_store_path, class: 'btn'
+
+      = link_to icon_edit_text, edit_store_path(@store.id), class: 'btn'
+
+      = link_to icon_delete_text, store_path(@store.id), method: :delete, confirm: "Esta seguro de borrar el almacen?", class: 'btn'
+
+    - if @store.active?
+      .btn-group.l
+        %a.btn.btn-primary.dropdown-toggle(data-toggle='dropdown' href='javascript:;')
+          Operaciones
+          %i.icon-caret-down
+        %ul.dropdown-menu
+          %li
+            = link_to new_inventory_operation_path(store_id: @store.id) do
+              %i.icon-plus-sign
+              Ingreso
+          %li
+            = link_to new_inventory_operation_path(store_id: @store.id) do
+              %i.icon-minus-sign
+              Egreso
+          %li
+            = link_to new_transference_inventory_operations_path(:store_id => @store.id) do
+              %i.icon-exchange
+              Transferencia
+
+.row-fluid
+  .span5
 
 
 = jquery_tabs tab_id: 'store' do

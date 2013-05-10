@@ -8,17 +8,18 @@
   .span6
     %h1 Ingresos
   .span6.r
-    = link_to export_incomes_path, class: 'btn' do
-      %i.icon-download-alt
-      Exportar ingresos
+    .btn-group
+      = link_to export_incomes_path, class: 'btn' do
+        %i.icon-download-alt
+        Exportar
 
-    %a#quick-income-link.btn(href="javascript:;")
-      %i.icon-bolt
-      Ingreso rápido
+      %a#quick-income-link.btn(href="javascript:;")
+        %i.icon-bolt
+        Ingreso rápido
 
-    = link_to new_income_path, class: 'btn' do
-      %i.icon-plus-sign
-      Nuevo ingreso
+      = link_to new_income_path, class: 'btn' do
+        %i.icon-plus-sign
+        Nuevo ingreso
 
 .row-fluid
   .span6

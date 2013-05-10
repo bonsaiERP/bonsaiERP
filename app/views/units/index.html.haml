@@ -1,10 +1,15 @@
 - content_for :links do
-  .span6 &nbsp;
-  .links.span6=link_to 'Nueva unidad', new_unit_path, :class => "new"
+  %ul.breadcrumbs
+    %li
+      Unidades de medida
 
-%h1 Unidades de medida
+.row-fluid
+  .span6
+    %h1 Unidades de medida
+  .span6.r
+    =link_to 'Nueva unidad', new_unit_path, class: "btn"
 
-%table.table.table-striped.span6
+%table.table.table-striped
   %tr
     %th Nombre
     %th Unidad
@@ -12,6 +17,10 @@
 
   - @units.each do |unit|
     %tr
-      %td= link_to unit.name, unit, :class => 'b'
-      %td= unit.symbol
-      %td=  raw bonsai_links(unit)
+      %td
+        %strong unit
+      %td
+        = unit.symbol
+      %td
+        = link_to icon_edit, edit_unit_path(unit), class: 'dark'
+        = link_to icon_delete, unit, class: 'dark', method: :destroy, confirm: 'Esta segur@ de borrar la Unidad de medida?'
