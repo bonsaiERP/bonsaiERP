@@ -21,11 +21,11 @@ class Stock < ActiveRecord::Base
   validates_numericality_of :minimum, :greater_than_or_equal_to => 0, :allow_nil => true
 
   # Scopes
-  default_scope where(:state => 'active')
-  scope :minimums, where("stocks.quantity <= stocks.minimum")
-  #scope :active, where(:state => 'active')
+  scope :active, -> { where(state: 'active') }
+  scope :store, -> (store_id) { where(store_id: store_id) }
+  scope :minimums, -> { where("stocks.quantity <= stocks.minimum") }
 
-  delegate :name, :price, :code, :to_s, :type, :to => :item, :prefix => true
+  delegate :name, :price, :code, :to_s, :type, to: :item, prefix: true
 
   # Sets the minimun for an Stock
   def self.new_minimum(item_id, store_id)

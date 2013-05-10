@@ -1,14 +1,13 @@
 =simple_form_for(@store) do |f|
-  .row 
-    .span6
-      = f.input :name, :label => "Nombre"
-    .span3
-      = f.input :phone, :label => "Teléfono", :input_html => {:size => 20}
-    .span3
-      = f.input :active, :label => "Activo" 
-  .row
-    .span6
-      = f.input :address, :label => "Dirección", :as => :text, :input_html => { :rows => 5 } 
+  .row-fluid
+    .span4
+      = f.input :name, label: "Nombre"
+    .span1
+      = f.input :active, label: "Activo" 
+    .span2
+      = f.input :phone, label: "Teléfono", input_html: {size: 12}
+    .span5
+      = f.input :address, label: "Dirección", as: :text, input_html: {rows: 3,cols: 45}
 
-  .clear
-  = f.submit "Salvar", :class => 'btn btn-success b'
+  .form-actions
+    = f.submit "Salvar", class: 'btn btn-success b'

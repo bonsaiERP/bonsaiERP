@@ -1,8 +1,11 @@
 - content_for :links do
-  %ul.breadcrumps.span6
-    %li #{ link_to "Almacenes", stores_path }
+  %ul.breadcrumbs
     %li
-      %span Nuevo almacén
+      = link_to "Almacenes", stores_path
+    %li
+      %i.icon-arrow-right
+    %li
+      Nuevo almacén
 
 %h1 Nuevo almacen
 

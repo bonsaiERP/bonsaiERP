@@ -250,6 +250,8 @@ es:
         total: "El valor total es incorrecto"
       quick_income:
         valid_account_to: "Debe seleccionar una cuenta Banco o Caja"
+      store:
+        destroy: 'No es posible borrar debido a que tiene operaciones'
       user:
         email: "El formato de su email es incorrecto"
         confirm: "No ha confirmado su cuenta. Revise en su email el mensaje \"Active su cuenta en www.bonsaierp.com\" y siga las instrucciones"

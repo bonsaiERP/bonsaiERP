@@ -132,4 +132,16 @@ FactoryGirl.define do
     rol User::ROLES[1]
     master_account true
   end
+
+  factory :store do
+    name 'Store 1'
+    phone '23232323'
+    address 'Samaipata'
+  end
+
+  factory :stock do
+    association :store, factory: :store, strategy: :build
+    association :item, factory: :item, strategy: :build
+    quantity 1
+  end
 end

@@ -1,69 +1,55 @@
 - content_for :links do
-  %ul.breadcrumps.span6
-    %li #{ link_to "Almacenes", stores_path }
-    %li 
-      %span #{@store}
+  %ul.breadcrumbs
+    %li
+      = link_to "Almacenes", stores_path
+    %li
+      %i.icon-caret-right
+    %li
+      = @store
 
-  .links.span6
-    = link_to new_store_path, class: 'new' do
-      %i.bicon-add.bicon
-      Nuevo
+.row-fluid
+  .span6
+    %h1
+      %i(class="#{true_false(@store.active)}" title='Activo' data-toggle='tooltip')
+      = @store
 
-    = link_to edit_store_path(@store.id), :class => 'edit' do
-      %i.bicon-pencil.bicon
-      Editar
+  .span6.r
+    = link_to icon_new_text, new_store_path, class: 'btn'
 
-    = link_to store_path(@store.id), class: 'delete', confirm: "Esta seguro de borrar el almacen", method: :delete do
-      %i.bicon.bicon-trash
-      Borrar
-      
-.page-header
-  %h1= @store
+    = link_to icon_edit_text, edit_store_path(@store.id), class: 'btn'
 
+    = link_to icon_delete_text, store_path(@store.id), method: :delete, confirm: "Esta seguro de borrar el almacen?", class: 'btn'
 
-- if @store.active?
-  .btn-group
-    %a.btn.btn-primary{'data-toggle' => 'dropdown'} Nueva operación
-    %a.btn.btn-primary.dropdown-toggle{'data-toggle' => 'dropdown'}
-      %span.caret
+.row-fluid
+  - if @store.active?
+    .span8
+      = link_to new_inventory_operation_path(store_id: @store.id), class: 'btn btn-primary' do
+        %i.icon-plus-sign
+        Ingreso de items
 
-    %ul.dropdown-menu
-      %li
-        = link_to new_inventory_operation_path(:store_id => @store.id, :operation => 'in') do
-          %i.icon-plus-sign
-          Nuevo ingreso
+      = link_to new_inventory_operation_path(store_id: @store.id), class: 'btn btn-primary' do
+        %i.icon-minus-sign
+        Egreso de items
 
-      %li
-        = link_to new_inventory_operation_path(:store_id => @store.id, :operation => 'out') do
-          %i.icon-minus-sign
-          Nuevo egreso
+      = link_to new_transference_inventory_operations_path(:store_id => @store.id), class: 'btn btn-primary' do
+        %i.icon-exchange
+        Transferencia de items
 
-      %li
-        = link_to new_transference_inventory_operations_path(:store_id => @store.id, :operation => "trans") do
-          %i.icon-arrow-right
-          Nueva transferencia
-.clear
-
-.input.fr
-  <a href="#store_info" class="more_info">Ver información</a>
-  .clear
-  #store_info{:style => 'display:none'}
-    .input._25
-      %label= "Teléfono"
+  .span4
+    = render_if @store.phone do
+      %i.icon-phone(title='Teléfono' data-toggle='tooltip')
       = @store.phone
-    .input._25
-      %label= "Activo"
-      <span class="#{@store.active.to_s}"></span>
-    .input
-      %label= "Dirección"
+    .clear-both
+    = render_if @store.address do
+      %i.icon-building(title='Dirección' data-toggle='tooltip')
       = nl2br @store.address
 
-.clear
 
-= jquery_tabs :tab_id => 'store' do
+= jquery_tabs tab_id: 'store' do
   = jqueryui_ul do
     = tab "Inventario de items", store_path(@store, :tab => "items"), "items"
     = tab "Operaciones realizadas", store_path(@store, :tab => "operations"), "operations"
+    = tab "Test", '', 'jeje'
   = tab_panel do
     -# stores/operations
     = render @partial, :store => @store

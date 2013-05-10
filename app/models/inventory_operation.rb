@@ -5,59 +5,39 @@ class InventoryOperation < ActiveRecord::Base
 
   before_create     { self.creator_id = UserSession.id }
 
-  STATES = ["draft", "approved"]
-  OPERATIONS = ["in", "out", "transin", "transout"]
+  STATES = %w(draft approved).freeze
+  OPERATIONS = %w(in out transin transout).freeze
 
-  belongs_to :transaction
   belongs_to :store
   belongs_to :contact
-  belongs_to :creator, :class_name => "User"
-  belongs_to :transout, :class_name => "InventoryOperation"
-  belongs_to :store_to, :class_name => "Store"
+  belongs_to :creator, class_name: "User"
+  #belongs_to :transout, class_name: "InventoryOperation"
+  #belongs_to :store_to, :class_name => "Store"
   belongs_to :project
 
-  has_one    :transference, :class_name => 'InventoryOperation', :foreign_key => "transference_id"
+  #has_one    :transference, :class_name => 'InventoryOperation', :foreign_key => "transference_id"
 
-
-  has_many   :inventory_operation_details, :dependent => :destroy
-  has_many :stocks, :autosave => true
-
-  accepts_nested_attributes_for :inventory_operation_details
+  has_many :inventory_operation_details, dependent: :destroy
+  accepts_nested_attributes_for :inventory_operation_details, allow_destroy: true
 
   # Validations
-  validates_presence_of :ref_number, :store_id
-  validates_inclusion_of :operation, :in => OPERATIONS
+  validates_presence_of :ref_number, :store_id, :store
+  validates_inclusion_of :operation, in: OPERATIONS
   
-  validates_presence_of :store_to, :if => :is_transference?
+  #validates_presence_of :store_to, :if => :is_transference?
 
   OPERATIONS.each do |_op|
     define_method :"is_#{_op}?" do
-      _op == operation
+      _op === operation
     end
   end
 
-  with_options :if => :transout? do |inv|
-    inv.validates_presence_of :store_to
-  end
-
-  def get_contact_list
-    if operation == "in"
-      Supplier.scoped
-    else
-      Client.scoped
-    end
-  end
+  #with_options :if => :transout? do |inv|
+    #inv.validates_presence_of :store_to
+  #end
 
   def is_transference?
-    ["transin", "transout"].include?(operation)
-  end
-
-  def contact_label
-    if operation == "in"
-      "Proveedor"
-    else
-      "Cliente"
-    end
+    %w(transin transout).include?(operation)
   end
 
   # Returns an array with the details fo the transaction
@@ -76,15 +56,6 @@ class InventoryOperation < ActiveRecord::Base
       transaction.transaction_details.each do |det|
         inventory_operation_details.build(:item_id => det.item_id, :quantity => det.send(met))
       end
-    end
-  end
-
-  def method_for_transaction_details
-    case
-    when(transaction.is_a?(Income) && out?) then :balance
-    when(transaction.is_a?(Buy)    && in?)  then :balance
-    when(transaction.is_a?(Income) && in?)  then :delivered
-    when(transaction.is_a?(Income) && out?) then :delivered
     end
   end
 

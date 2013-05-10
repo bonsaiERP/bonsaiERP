@@ -28,7 +28,7 @@ class StoresController < ApplicationController
   # GET /stores/new
   # GET /stores/new.xml
   def new
-    @store = Store.new(:active => true)
+    @store = Store.new(active: true)
 
     respond_to do |format|
       format.html # new.html.erb
@@ -44,7 +44,7 @@ class StoresController < ApplicationController
   # POST /stores
   # POST /stores.xml
   def create
-    @store = Store.new(params[:store])
+    @store = Store.new(store_params)
 
     if @store.save
       redirect_ajax(@store, :notice => 'El almacen fue correctamente creado.')
@@ -59,8 +59,8 @@ class StoresController < ApplicationController
     @store = Store.find(params[:id])
 
     respond_to do |format|
-      if @store.update_attributes(params[:store])
-        format.html { redirect_to(@store, :notice => 'El almacen fue correctamente actualizado.') }
+      if @store.update_attributes(store_params)
+        format.html { redirect_to(@store, notice: 'El almacen fue correctamente actualizado.') }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
@@ -74,7 +74,7 @@ class StoresController < ApplicationController
   def destroy
     @store = Store.find(params[:id])
     @store.destroy
-  
+
     if @store.destroyed?
       flash[:notice] = "El almacen fue eliminado."
       redirect_to stores_path
@@ -85,7 +85,10 @@ class StoresController < ApplicationController
 
   end
 
-  private
+private
+  def store_params
+    params.require(:store).permit(:name, :active, :phone, :address)
+  end
 
   def get_partial
     case params[:tab]
