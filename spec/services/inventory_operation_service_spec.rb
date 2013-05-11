@@ -13,8 +13,8 @@ describe InventoryOperationService do
   end
 
   it "Valid" do
-    Store.should_receive(:where).with(id: 1).and_return([store])
     io = InventoryOperationService.new(store_id: 1)
+    io.stub(store: store)
     io.should be_valid
   end
 
@@ -35,5 +35,12 @@ describe InventoryOperationService do
 
       subject.inventory_operation.inventory_operation_details.should eq(subject.inventory_operation_details)
     end
+  end
+
+  it "#store" do
+    Store.should_receive(:where).with(id: 3).and_return([true])
+    Store.should_receive(:active).and_return(Store)
+
+    InventoryOperationService.new(store_id: 3).store
   end
 end

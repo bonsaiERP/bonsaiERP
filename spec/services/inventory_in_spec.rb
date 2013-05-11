@@ -28,7 +28,7 @@ describe InventoryIn do
   it "creates" do
     InventoryOperationDetail.any_instance.stub(item: item)
     InventoryOperation.any_instance.stub(store: store)
-    Stock.any_instance.stub(item: item)
+    Stock.any_instance.stub(item: item, store: store)
 
     invin = InventoryIn.new(valid_attributes)
     invin.inventory_operation_details.should have(2).items
@@ -44,18 +44,25 @@ describe InventoryIn do
     io.inventory_operation_details.map(&:quantity).should eq([2, 2])
     io.inventory_operation_details.map(&:item_id).should eq([1, 2])
 
-    #details = []
-    #invin.inventory_operation_details.each do |det|
-    #  details << {id: det.id, quantity: det.quantity, item_id: det.item_id,
-    #              inventory_operation_id: det.inventory_operation_id}
-    #end
+    stocks = Stock.active.where(store_id: io.store_id)
+    stocks.should have(2).items
+    stocks.map(&:item_id).sort.should eq([1, 2])
+    stocks.map(&:quantity).should eq([2, 2])
 
-    #details.last[:quantity] = 10
-    ##puts details
-    #invin = InventoryIn.find(invin.inventory_operation.id, 
-    #                         valid_attributes.merge(inventory_operation_details_attributes: details))
+    # More items
+    attrs = valid_attributes.merge(inventory_operation_details_attributes:
+      [{item_id: 2, quantity: 2, store_id: 1},
+       {item_id: 12, quantity: 5, store_id: 1},
+       {item_id: 2, quantity: 10, store_id: 1}
+      ]
+    )
+    invin = InventoryIn.new(attrs)
+    invin.create.should be_true
+    stocks = Stock.active.where(store_id: io.store_id)
+    stocks.should have(3).items
 
-    #puts invin.inventory_operation_details.map(&:attributes)
-    #puts invin.attributes
+    stocks.find {|v| v.item_id === 2}.quantity.should == 14
+    stocks.find {|v| v.item_id === 12}.quantity.should == 5
+    stocks.find {|v| v.item_id === 1}.quantity.should == 2
   end
 end

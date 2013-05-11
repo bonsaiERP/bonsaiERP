@@ -14,13 +14,6 @@ class InventoryIn < InventoryOperationService
     res
   end
 
-  def self.find(id, attrs)
-    inv = new(attrs.slice(*public_attributes))
-    inv.inventory_operation = InventoryOperation.find(id)
-    inv.inventory_operation_details_attributes = attrs[:inventory_operation_details_attributes]
-    inv
-  end
-
 private
   def get_operation
     'invin'
@@ -29,10 +22,17 @@ private
   def update_stocks
     res = true
     stocks.each do |st|
-      res = Stock.create(store_id: store_id)
-      st.update_attribute()
+      stoc = Stock.create(store_id: store_id, item_id: st.item_id, quantity: stock_quantity(st) )
+      res = stoc.save && st.update_attribute(:active, false)
+
       return false unless res
     end
+
+    res
+  end
+
+  def stock_quantity(st)
+    st.quantity + item_quantity(st.item_id)
   end
 
   def get_ref_number

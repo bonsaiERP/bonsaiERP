@@ -14,10 +14,11 @@ class InventoryOperationService < BaseService
            to: :inventory_operation
 
   validates_presence_of :store
-  validate :unique_item_ids
+
+  alias :items :inventory_operation_details
 
   def store
-    @store ||= Store.where(id: store_id).first
+    @store ||= Store.active.where(id: store_id).first
   end
 
   def inventory_operation
@@ -30,11 +31,7 @@ class InventoryOperationService < BaseService
 
 private
   def item_ids
-    @item_ids ||= inventory_operation_details.map(&:item_id).uniq
-  end
-
-  def stock_hash
-    Hash[stocks.map {|v| [v.id, v]}]
+    @item_ids ||= items.map(&:item_id).uniq
   end
 
   def stocks
@@ -57,6 +54,7 @@ private
     @details ||= inventory_operation_details.select {|v| v.quantity > 0 }
   end
 
+  # Receives a stock and calculates quantity for an item
   def item_quantity(item_id)
     items.select {|v| v.item_id === item_id}.inject(0) {|s, v| s += v.quantity }
   end

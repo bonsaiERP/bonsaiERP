@@ -37,15 +37,15 @@
           %i.icon-caret-down
         %ul.dropdown-menu
           %li
-            = link_to new_inventory_operation_path(store_id: @store.id) do
+            = link_to new_inventory_in_path(store_id: @store.id) do
               %i.icon-plus-sign
               Ingreso
           %li
-            = link_to new_inventory_operation_path(store_id: @store.id) do
+            = link_to new_inventory_out_path(store_id: @store.id) do
               %i.icon-minus-sign
               Egreso
           %li
-            = link_to new_transference_inventory_operations_path(:store_id => @store.id) do
+            = link_to new_inventory_transference_path(store_id: @store.id) do
               %i.icon-exchange
               Transferencia
 

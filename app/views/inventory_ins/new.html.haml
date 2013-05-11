@@ -1,0 +1,14 @@
+- content_for :links do
+  %ul.breadcrumbs.span6
+    %li
+      =link_to @inv.store, @inv.store
+    %li
+      %i.icon-caret-right
+    %li
+      Nuevo Ingreso de items
+
+.row-fluid
+  .span6
+    %h1 Nuevo ingreso de items
+
+= render 'form', inv: @inv

@@ -144,4 +144,8 @@ FactoryGirl.define do
     association :item, factory: :item, strategy: :build
     quantity 1
   end
+
+  factory :inventory_operation do
+    date '2013-05-10'
+  end
 end
