@@ -222,5 +222,5 @@ itemTemplate = """<tr class="item" data-item="{"original_price":"0.0","price":"0
     <td class="total_row r">
       <span data-text="item.subtotal | number"></span>
     </td>
-    <td class="del"><a href="javascript:;" class="bicon-trash" title="Borrar" rel="tooltip" data-on-click="item:delete"></a></td>
+    <td class="del"><a href="javascript:;" class="dark" title="Borrar" data-toggle="tooltip" data-on-click="item:delete"><i class="icon-trash icon-large"></i></a></td>
 </tr>"""

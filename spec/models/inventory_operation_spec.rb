@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'spec_helper'
 
 describe InventoryOperation do
@@ -16,7 +17,7 @@ describe InventoryOperation do
   it { should have_valid(:operation).when(*InventoryOperation::OPERATIONS) }
   it { should_not have_valid(:operation).when('je', '') }
 
-  it '$get_ref_number' do
+  it '::get_ref_number' do
     Date.stub(today: Date.parse('2013-05-10'))
     InventoryOperation.get_ref_number('Ing').should eq('Ing-13-0001')
 

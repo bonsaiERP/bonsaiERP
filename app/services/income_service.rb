@@ -8,8 +8,8 @@ class IncomeService < TransactionService
   validate :valid_account_to, if: :direct_payment?
 
   delegate :contact, :is_approved?, :is_draft?, :income_details, 
-    :income_details_attributes, :income_details_attributes=,
-    :subtotal, :to_s, :state, :discount, to: :income
+           :income_details_attributes, :income_details_attributes=,
+           :subtotal, :to_s, :state, :discount, to: :income
 
   delegate :id, to: :income, prefix: true
 
@@ -17,7 +17,10 @@ class IncomeService < TransactionService
   def self.new_income(attrs = {})
     attrs = set_new_income_attributes(attrs)
     is = new(attrs) do |i|
-      i.income = Income.new_income(attrs.except(:direct_payment, :account_to_id, :income_details_attributes, :reference))
+      i.income = Income.new_income(attrs.except(:direct_payment,
+                                                :account_to_id,
+                                                :income_details_attributes,
+                                                :reference))
     end
     is.income_details.build(quantity: 1) if is.income_details.empty?
 
@@ -29,9 +32,9 @@ class IncomeService < TransactionService
     inc = Income.find(id)
     new(inc.attributes) do |is|
       is.ref_number = inc.ref_number
-      is.total = inc.total
-      is.due_date = inc.due_date
-      is.income = inc
+      is.total      = inc.total
+      is.due_date   = inc.due_date
+      is.income     = inc
     end
   end
 
@@ -111,7 +114,10 @@ private
   end
 
   def income_attributes
-    attributes.except(:direct_payment, :account_to_id, :income_details_attributes, :reference)
+    attributes.except(:direct_payment,
+                      :account_to_id,
+                      :income_details_attributes,
+                      :reference)
   end
 
   # Updates the data for an imcome

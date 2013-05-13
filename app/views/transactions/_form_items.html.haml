@@ -30,8 +30,9 @@
 
       %td.total_row.r
         %span.subtotal(data-text='item.subtotal | number')= ntc fd.object.total
-      %td.del 
-        %a(href="javascript:;" data-on-click="item:delete" class="bicon-trash" title="Borrar" data-toggle="tooltip")
+      %td.del
+        %a.dark(href="javascript:;" data-on-click="item:delete" title="Borrar" data-toggle="tooltip")
+          = icon_delete
         = fd.hidden_field :_destroy, data: {value: 'item._destroy'}
 
   %tr#subtotal-line.extra.pad_top.subtotal

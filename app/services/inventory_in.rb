@@ -14,6 +14,9 @@ class InventoryIn < InventoryOperationService
     res
   end
 
+  def get_ref_number
+    InventoryOperation.get_ref_number('Ing')
+  end
 private
   def get_operation
     'invin'
@@ -33,9 +36,5 @@ private
 
   def stock_quantity(st)
     st.quantity + item_quantity(st.item_id)
-  end
-
-  def get_ref_number
-    InventoryOperation.get_ref_number('Ing')
   end
 end

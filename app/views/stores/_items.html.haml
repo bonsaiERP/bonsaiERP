@@ -2,19 +2,19 @@
   %li= link_option "Todos", "all"
   %li= link_option "Minimos", 'minimum'
 
-= paginate(@items)
+-#= paginate(store.stocks)
 
 %table.table.table-striped
   %tr
-    %th Item
-    %th Cantidad
-    %th Cantidad minima
+    %th(width="50%") Item
+    %th.c(width="20%") Cantidad
+    %th.c(width="20%") Cantidad minima
     %th
 
-  - @items.each do |st|
+  - store.stocks.includes(:item).order('items.name').each do |st|
     %tr{:id => st.id}
       %td= link_to st.item, st.item
       %td.cur= ntc st.quantity
       %td.cur.min= ntc st.minimum
-      %td.cur.b= link_to "mínimo", edit_stock_path(:id => st.item_id, :item_id => st.item_id, :store_id => @store.id), :class => 'ajax', 'data-title' => 'Definir mínimo', 'data-width' => 450
+      %td.cur= link_to "mínimo", edit_stock_path(:id => st.item_id, :item_id => st.item_id, :store_id => @store.id), :class => 'ajax', 'data-title' => 'Definir mínimo', 'data-width' => 450
 

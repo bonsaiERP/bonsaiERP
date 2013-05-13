@@ -28,6 +28,7 @@
 #= require app/transference.coffee
 #= require app/graph_report.coffee
 #= require app/contact.coffee
+#= require app/inventory.coffee
 
 #= require plugins/jquery.joyride.js
 

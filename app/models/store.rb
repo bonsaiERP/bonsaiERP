@@ -7,7 +7,7 @@ class Store < ActiveRecord::Base
 
   before_destroy :check_store_for_delete
 
-  has_many :stocks, autosave: true, conditions: {state: "active"}
+  has_many :stocks, autosave: true, conditions: {active: true}
   has_many :inventory_operations
 
   validates_presence_of :name

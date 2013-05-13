@@ -18,6 +18,7 @@ describe InventoryInsController do
       response.should render_template(:new)
       assigns(:inv).store.should be_is_a(Store)
       assigns(:inv).should be_is_a(InventoryIn)
+      assigns(:inv).ref_number.should_not be_blank
       assigns(:inv).items.should have(1).item
     end
 
@@ -43,6 +44,7 @@ describe InventoryInsController do
 
       post :create, inventory_in: {date: '2013-05-10'}
 
+      assigns(:inv).ref_number.should_not be_blank
       response.should render_template(:new)
     end
 

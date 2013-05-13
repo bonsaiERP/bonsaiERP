@@ -4,6 +4,7 @@
 class InventoryOperationService < BaseService
   attribute :store_id, Integer
   attribute :date, Date
+  attribute :ref_number, String
   attribute :description, String
   attribute :inventory_operation_details_attributes, Array
 

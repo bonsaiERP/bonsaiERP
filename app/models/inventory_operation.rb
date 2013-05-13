@@ -20,7 +20,7 @@ class InventoryOperation < ActiveRecord::Base
   accepts_nested_attributes_for :inventory_operation_details, allow_destroy: true
 
   # Validations
-  validates_presence_of :ref_number, :store_id, :store
+  validates_presence_of :ref_number, :store_id, :store, :date
   validates_inclusion_of :operation, in: OPERATIONS
 
   #validates_presence_of :store_to, :if => :is_transference?
