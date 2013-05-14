@@ -8,11 +8,11 @@ class ContactBalanceStatus < Struct.new(:transactions)
   # Creates a hash with the balance by currency
   def create_balances
     @h = { 'TOTAL' => calculate_total}
-    return h if transactions.empty?
+    return @h if transactions.empty?
     set_base_currency
     set_other_currencies
 
-    h
+    @h
   end
 
   # Receives a Income or Expense instance and calculates 
@@ -20,22 +20,22 @@ class ContactBalanceStatus < Struct.new(:transactions)
   def object_balance(obj)
     create_balances
 
-    h['TOTAL'] = (h['TOTAL'] + (obj.amount) * obj.exchange_rate).round(2)
-    h[obj.currency] = ((h[obj.currency] || 0.0) + obj.amount).round(2)
-    
-    h
+    @h['TOTAL'] = (@h['TOTAL'] + (obj.amount) * obj.exchange_rate).round(2)
+    @h[obj.currency] = ((@h[obj.currency] || 0.0) + obj.amount).round(2)
+
+    @h
   end
 
 private
   def set_base_currency
     if base_currency_transaction && base_currency_transaction.tot.to_d != 0.0
-      h[currency] =  base_currency_transaction.tot.to_d.round(2)
+      @h[currency] =  base_currency_transaction.tot.to_d.round(2)
     end
   end
 
   def set_other_currencies
     other_currencies_transactions.each do |trans|
-      h[trans.currency] = trans.tot_cur.to_d.round(2) if trans.tot_cur.to_d != 0.0
+      @h[trans.currency] = trans.tot_cur.to_d.round(2) if trans.tot_cur.to_d != 0.0
     end
   end
 

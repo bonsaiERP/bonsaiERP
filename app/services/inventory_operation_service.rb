@@ -25,7 +25,6 @@ class InventoryOperationService < BaseService
   def inventory_operation
     @inventory_operation ||= InventoryOperation.new(
       store_id: store_id, date: date, description: description,
-      operation: get_operation, ref_number: get_ref_number,
       inventory_operation_details_attributes: inventory_operation_details_attributes
     )
   end
@@ -64,10 +63,17 @@ private
     [:store_id, :date, :description]
   end
 
-  # Null methods that will be created in other clases
-  [:get_operation, :get_ref_number].each do |met|
-    define_method met do
+  # Updates the stocks using a block for updating the stock quantity
+  def update_stocks(&stock_quantity_block)
+    res = true
+    stocks.each do |st|
+      stoc = Stock.create(store_id: store_id, item_id: st.item_id, quantity: stock_quantity_block.call(st) )
+      res = stoc.save && st.update_attribute(:active, false)
+
+      return false unless res
     end
+
+    res
   end
 end
 

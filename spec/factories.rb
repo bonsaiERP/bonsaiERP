@@ -94,6 +94,9 @@ FactoryGirl.define do
     state "draft"
     balance 100
     association :transaction, factory: :transaction, strategy: :build
+    factory :income_approved do
+      state "approved"
+    end
   end
 
   factory :expense do

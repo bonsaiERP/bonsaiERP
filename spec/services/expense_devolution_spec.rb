@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe IncomeDevolution do
+describe ExpenseDevolution do
 
   let(:valid_attributes) {
     {
@@ -17,12 +17,12 @@ describe IncomeDevolution do
   let(:account_to_id) { valid_attributes.fetch(:account_to_id) }
 
   let(:contact) { build :contact, id: 11 }
-  let(:income) do
-    Income.new_income(
+  let(:expense) do
+    Expense.new_expense(
       total: total, balance: balance, currency: 'BOB', contact_id: contact.id
-    ) {|i| 
-      i.id = account_id
-      i.contact = contact
+    ) {|e| 
+      e.id = account_id
+      e.contact = contact
     }
   end
   let(:account_to) { build :account, id: account_to_id, amount: 100 }
@@ -31,69 +31,68 @@ describe IncomeDevolution do
     UserSession.user = build :user, id: 10
   end
 
-  it "#income" do
-    in_dev = IncomeDevolution.new(account_id: 1)
-    Income.should_receive(:where).with(id: 1).and_return([Income])
-    Income.should_receive(:active).and_return(Income)
-    in_dev.income.should eq(Income)
+  it "#expense" do
+    exp_dev = ExpenseDevolution.new(account_id: 1)
+    Expense.should_receive(:where).with(id: 1).and_return([Expense])
+    Expense.should_receive(:active).and_return(Expense)
+    exp_dev.expense.should eq(Expense)
   end
 
   context 'Validations' do
-    it "validates presence of income" do
-      in_dev = IncomeDevolution.new(valid_attributes)
-      in_dev.should_not be_valid
-      in_dev.errors_on(:income).should_not be_empty
+    it "validates presence of expense" do
+      exp_dev = ExpenseDevolution.new(valid_attributes.merge(expense_id: nil))
+      exp_dev.should_not be_valid
+      exp_dev.errors_on(:expense).should_not be_empty
 
-      Income.stub_chain(:active, where: [income])
-      in_dev.should_not be_valid
-      
-      in_dev.errors_on(:income).should be_blank
+      Expense.stub_chain(:active, where: [expense])
+      exp_dev.should_not be_valid
+
+      exp_dev.errors_on(:expense).should be_blank
     end
 
     it "does not allow amount greater than total" do
-      in_dev = IncomeDevolution.new(valid_attributes.merge(amount: 101))
+      exp_dev = ExpenseDevolution.new(valid_attributes.merge(amount: 101))
 
-      Income.stub_chain(:active, where: [income])
+      Expense.stub_chain(:active, where: [expense])
       Account.stub(find_by_id: account_to)
 
-      in_dev.should_not be_valid
-      in_dev.errors_on(:amount).should_not be_empty
+      exp_dev.should_not be_valid
+      exp_dev.errors_on(:amount).should_not be_empty
 
-      in_dev.amount = 100
-      in_dev.should be_valid
+      exp_dev.amount = 100
+      exp_dev.should be_valid
     end
   end
 
   context "create devolution" do
     before(:each) do
-      income.stub(save: true)
-      Income.stub(:find_by_id).with(account_id).and_return(income)
-      Income.stub_chain(:active, where: [income])
+      expense.stub(save: true)
+      Expense.stub_chain(:active, :where).with(id: account_id).and_return([expense])
       Account.stub(:find_by_id).with(account_to_id).and_return(account_to)
       AccountLedger.any_instance.stub(save_ledger: true)
     end
 
     it "Devolution" do
-      income.state = 'paid'
-      income.approver_id = 1
-      income.has_error = true
+      expense.state = 'paid'
+      expense.approver_id = 1
+      expense.has_error = true
 
-      dev = IncomeDevolution.new(valid_attributes)
+      dev = ExpenseDevolution.new(valid_attributes)
       ### Payment
       dev.pay_back.should  be_true
 
       dev.should be_verification
 
-      # Income
-      dev.income.should be_is_a(Income)
-      dev.income.balance.should == balance + valid_attributes[:amount]
-      dev.income.should_not be_has_error
+      # Expense
+      dev.expense.should be_is_a(Expense)
+      dev.expense.balance.should == balance + valid_attributes[:amount]
+      dev.expense.should_not be_has_error
 
       # Ledger
-      dev.ledger.amount.should == -50.0
+      dev.ledger.amount.should == 50.0
       dev.ledger.exchange_rate == 1
-      dev.ledger.should be_is_devin
-      dev.ledger.account_id.should eq(income.id)
+      dev.ledger.should be_is_devout
+      dev.ledger.account_id.should eq(expense.id)
       # Only bank accounts are allowed to conciliate
       dev.ledger.should be_is_approved 
       dev.ledger.reference.should eq(valid_attributes.fetch(:reference))
@@ -107,7 +106,7 @@ describe IncomeDevolution do
         Account.stub(:find_by_id).with(bank.id).and_return(bank)
         bank.id.should_not eq(account_to_id)
 
-        dev = IncomeDevolution.new(valid_attributes.merge(account_to_id: 100, verification: true))
+        dev = ExpenseDevolution.new(valid_attributes.merge(account_to_id: 100, verification: true))
 
         dev.pay_back.should be_true
         dev.should be_verification
@@ -116,7 +115,7 @@ describe IncomeDevolution do
         dev.ledger.should be_is_pendent
 
         # When inverse
-        dev = IncomeDevolution.new(valid_attributes.merge(account_to_id: 100, verification: false, interest: 10))
+        dev = ExpenseDevolution.new(valid_attributes.merge(account_to_id: 100, verification: false, interest: 10))
 
         dev.pay_back.should be_true
         dev.account_to.should eq(bank)
@@ -131,14 +130,14 @@ describe IncomeDevolution do
 
         Account.find_by_id(account_to_id).should eq(account_to)
 
-        dev = IncomeDevolution.new(valid_attributes.merge(account_to_id: 200, verification: true))
+        dev = ExpenseDevolution.new(valid_attributes.merge(account_to_id: 200, verification: true))
 
         dev.pay_back.should be_true
 
         dev.ledger.should be_is_approved
 
         #inverse
-        dev = IncomeDevolution.new(valid_attributes.merge(account_to_id: 200, verification: false))
+        dev = ExpenseDevolution.new(valid_attributes.merge(account_to_id: 200, verification: false))
 
         dev.pay_back.should be_true
 
@@ -148,27 +147,28 @@ describe IncomeDevolution do
   end
 
   context "Errors" do
-    it "does not save if invalid IncomeDevolution" do
-      Income.any_instance.should_not_receive(:save)
-      p = IncomeDevolution.new(valid_attributes.merge(reference: ''))
+    it "does not save if invalid ExpenseDevolution" do
+      Expense.any_instance.should_not_receive(:save)
+      p = ExpenseDevolution.new(valid_attributes.merge(reference: ''))
       p.pay_back.should be_false
     end
 
     before(:each) do
-      income.stub(save: false, errors: {balance: 'No balance'})
-      Income.stub_chain(:active, :where).with(id: income.id).and_return([income])
+      expense.stub(save: false, errors: {balance: 'No balance'})
+      Expense.stub_chain(:active, where: [expense])
       Account.stub(:find_by_id).with(account_to_id).and_return(account_to)
       AccountLedger.any_instance.stub(save_ledger: false, errors: {amount: 'Not real'})
     end
 
     it "sets errors from other clases" do
-      dev = IncomeDevolution.new(valid_attributes)
+      dev = ExpenseDevolution.new(valid_attributes)
 
       dev.pay_back.should be_false
-      # There is no method IncomeDevolution#balance
+      # There is no method ExpenseDevolution#balance
       dev.errors[:amount].should eq(['Not real'])
-      # There is a method IncomeDevolution#amount
+      # There is a method ExpenseDevolution#amount
       dev.errors[:base].should eq(['No balance'])
     end
   end
 end
+

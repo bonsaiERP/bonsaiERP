@@ -1,43 +1,43 @@
 # encoding: utf-8
 # Creates a devolution that updates the Income#total and creates an
 # instance of AccountLedger with the devolution data
-class IncomeDevolution < Devolution
+class ExpenseDevolution < Devolution
 
   # Validations
-  validates_presence_of :income
+  validates_presence_of :expense
 
-  # Updates Income#total and creates and AccountLedger object with the
+  # Updates Exppense#balance and creates and AccountLedger object with the
   # devolution data
   def pay_back
     return false unless valid?
 
     commit_or_rollback do
-      res = save_income
+      res = save_expense
       res = create_ledger
 
-      set_errors(income, ledger) unless res
+      set_errors(expense, ledger) unless res
 
       res
     end
   end
 
-  def income
-    @income ||= Income.active.where(id: account_id).first
+  def expense
+    @expense ||= Expense.active.where(id: account_id).first
   end
-  alias :transaction :income
+  alias :transaction :expense
 
 private
-  def save_income
+  def save_expense
     update_transaction
-    err = IncomeErrors.new(income)
+    err = ExpenseErrors.new(expense)
     err.set_errors
 
-    income.save
+    expense.save
   end
 
   def create_ledger
     @ledger = build_ledger(
-      amount: -amount, operation: 'devin', account_id: income.id,
+      amount: +amount, operation: 'devout', account_id: expense.id,
       status: get_status
     )
     @ledger.save_ledger

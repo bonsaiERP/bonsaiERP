@@ -221,7 +221,7 @@ es:
       contact:
         matchcode: "El idenificador ya existe, por favor cambie"
       devolution:
-        income_total: "La cantidad y el balance suman un valor mayor al total"
+        transaction_total: "La cantidad y el balance suman un valor mayor al total"
       expense:
         not_draft: "El estado del egreso no es borrador"
       income:

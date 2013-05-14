@@ -1,7 +1,7 @@
 # encoding: utf-8
 # Base class used to make devolutions for Income and Expense models
 class Devolution < BaseService
-  attr_reader :ledger, :transaction
+  attr_reader :ledger
 
   # Attributes
   attribute :account_id, Integer
@@ -17,6 +17,10 @@ class Devolution < BaseService
   validates_numericality_of :amount, greater_than: 0
   validates_numericality_of :exchange_rate, greater_than: 0
   validate :valid_date
+  validate :valid_transaction_total
+
+  # Delegations
+  delegate :total, :balance, to: :transaction, prefix: true, allow_nil: true
 
   # Sets all values but will set verification to false if is not
   # correctly set
@@ -29,6 +33,7 @@ class Devolution < BaseService
     @account = Account.find_by_id(account_to_id)
   end
 
+  def transaction; end
 private
   # Builds an instance of AccountLedger with basic data for  devolution
   def build_ledger(attrs = {})
@@ -37,6 +42,19 @@ private
                          amount: 0, account_to_id: account_to_id,
                          reference: reference, date: date
       }.merge(attrs))
+  end
+
+  def update_transaction
+    transaction.balance += amount
+    transaction.set_state_by_balance! # Sets state and the user
+  end
+
+  def create_ledger
+    @ledger = build_ledger(
+      amount: ledger_amount, operation: 'devin', account_id: income.id,
+      status: get_status
+    )
+    @ledger.save_ledger
   end
 
   def valid_date
@@ -58,5 +76,10 @@ private
       transaction.approver_datetime = Time.zone.now
     end
   end
-end
 
+  def valid_transaction_total
+    if ( amount.to_f + transaction_balance.to_f ) > transaction_total.to_f
+      self.errors.add :amount, I18n.t('errors.messages.devolution.transaction_total')
+    end
+  end
+end

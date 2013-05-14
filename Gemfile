@@ -24,7 +24,6 @@ gem 'haml', '~> 4.0.1'
 gem 'kaminari' # Pagination
 gem 'valium' # Better than pluck method
 gem 'bcrypt-ruby', require: 'bcrypt'
-gem 'roadie' # Styles for email
 gem 'active_model_serializers' # ActiveRecord Classes to encode in JSON
 gem 'resubject' # Cool presenter
 
@@ -45,6 +44,7 @@ group :development do
   gem 'meta_request'
   gem 'rails_best_practices'
   gem 'quiet_assets'
+  gem 'roadie' # Styles for email
 end
 
 group :development, :test do
