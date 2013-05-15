@@ -23,8 +23,14 @@ class TransactionService < BaseService
 
   delegate :details, to: :transaction
 
+  validate :unique_item_ids
+
   def initialize(attrs = {})
     yield self
     super
+  end
+
+private
+  def unique_item_ids
   end
 end

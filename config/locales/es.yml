@@ -239,6 +239,9 @@ es:
         invalid_store: "El almacen que selecciono es incorrecto"
         empty_items: "No existe items para realizar la operación"
         stock_quantity: "Existen items que exceden la cantidad máxima"
+      item:
+        repeated: "El ítem es repetido"
+        repeated_items: "Existen items repetidos"
       payment:
         balance: "La cantidad es mayor que el saldo"
         expense_balance: "La cantidad es mayor que el saldo del Egreso seleccionado"

@@ -21,7 +21,6 @@ class IncomeExpenseModel < Account
   # Validations
   validates_presence_of :date, :contact, :contact_id
   validates :state, presence: true, inclusion: {in: STATES}
-  validates :unique_item_ids
 
   ########################################
   # Delegations
@@ -98,15 +97,5 @@ class IncomeExpenseModel < Account
 private
   def nulling_valid?
     ['paid', 'approved'].include?(state_was) && is_nulled?
-  end
-
-  def unique_item_ids
-    h = Hash.new(0)
-    transaction_details.each do |det|
-      h[det.item_id] += 1
-      if h[det.item_id] > 1
-        det.errors.add(:item_id, "")
-      end
-    end
   end
 end

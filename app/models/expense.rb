@@ -11,6 +11,8 @@ class Expense < IncomeExpenseModel
   ########################################
   # Relationships
   has_many :expense_details, foreign_key: :account_id, dependent: :destroy, order: 'id asc'
+  alias :items :expense_details
+
   accepts_nested_attributes_for :expense_details, allow_destroy: true,
     reject_if: proc {|det| det.fetch(:item_id).blank? }
 

@@ -20,7 +20,7 @@ class TenantCreator
 
     ActiveRecord::Base.transaction do
       create_schema tenant
-      clone_public_schema_to tenant
+      clone_public_schema_to @tenant
       change_schema tenant
 
       copy_migrations_to tenant
