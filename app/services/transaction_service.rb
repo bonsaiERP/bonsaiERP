@@ -10,27 +10,58 @@ class TransactionService < BaseService
   attribute :total, Decimal
   attribute :exchange_rate, Decimal
   attribute :project_id, Integer
-  attribute :bill_number, String
+  #attribute :bill_number, String
   attribute :due_date, Date
   attribute :description, String
   attribute :direct_payment, Boolean
   attribute :account_to_id, Integer
   attribute :reference, String
 
-  validates_numericality_of :total
+  ATTRIBUTES = [:date, :contact_id, :total, :exchange_rate, :project_id, :due_date, :description, :direct_payment, :account_to_id, :reference].freeze
+  TRANS_ATTRIBUTES = [:date, :contact_id, :total, :exchange_rate, :project_id, :due_date, :description]
 
   attr_reader :transaction, :ledger
 
-  delegate :details, to: :transaction
-
+  validates_presence_of :transaction
+  validates_numericality_of :total
   validate :unique_item_ids
 
-  def initialize(attrs = {})
-    yield self
-    super
+
+  delegate :items, to: :transaction
+
+
+  def self.income_expense_attributes
+    [:date, :due_date, :contact_id, :currency, :exchange_rate, :project_id, :description]
+  end
+
+  # Finds the income and sets data with the income found
+  def set_service_attributes(trans)
+    self.ref_number = trans.ref_number
+    self.total      = trans.total
+    self.due_date   = trans.due_date
+    @transaction    = trans
   end
 
 private
   def unique_item_ids
+    self.errors.add(:base, I18n.t("errors.messages.item.repeated_items")) unless UniqueItem.new(transaction).valid?
+  end
+
+  def item_ids
+    @item_ids ||= items.map(&:item_id)
+  end
+
+  def item_prices
+    @item_prices ||= Hash[Item.where(id: item_ids).values_of(:id, :price)]
+  end
+
+  def direct_payment?
+    direct_payment === true
+  end
+
+  def set_details_original_prices
+    items.each do |det|
+      det.original_price = item_prices[det.item_id]
+    end
   end
 end

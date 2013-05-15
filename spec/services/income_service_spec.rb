@@ -23,6 +23,10 @@ describe IncomeService do
     OrganisationSession.organisation = build :organisation, currency: 'BOB'
   end
 
+  it "correct_attributes" do
+    IncomeService::INCOME_ATTRIBUTES.should eq([:date, :contact_id, :total, :exchange_rate, :project_id, :due_date, :description, :income_details_attributes])
+  end
+
   context "Initialization" do
     subject { IncomeService.new_income(valid_params) }
 
@@ -45,15 +49,27 @@ describe IncomeService do
     end
   end
 
-  it "#valid?" do
-    is = IncomeService.new_income(account_to_id: 2, direct_payment: "1")
+  context "Validation" do
+    it "#valid?" do
+      is = IncomeService.new_income(account_to_id: 2, direct_payment: "1")
 
-    is.should_not be_valid
-    AccountQuery.any_instance.stub_chain(:bank_cash, where: [( build :cash, id: 2 )])
+      is.should_not be_valid
+      AccountQuery.any_instance.stub_chain(:bank_cash, where: [( build :cash, id: 2 )])
 
-    is = IncomeService.new_income(account_to_id: 2, direct_payment: "1", total: 150)
+      is = IncomeService.new_income(account_to_id: 2, direct_payment: "1", total: 150)
+      is.should be_valid
+    end
 
-    is.should be_valid
+    it "unique items" do
+      is = IncomeService.new_income(income_details_attributes: [
+        {item_id: 1, quantity: 10, price: 1}, {item_id: 2, quantity: 10, price: 3},
+        {item_id: 1, quantity: 3, price: 5}
+      ])
+      AccountQuery.any_instance.stub_chain(:bank_cash, where: [( build :cash, id: 2 )])
+      IncomeDetail.any_instance.stub(item: true)
+
+      is.should_not be_valid
+    end
   end
 
   context "Create a income with default data" do

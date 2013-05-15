@@ -8,19 +8,17 @@ describe TransactionService do
     subject { TransactionService.new {} }
 
     it "responds to" do
-      [:id, :ref_number, :date, :contact_id, :currency, :exchange_rate,
-       :project_id, :bill_number, :due_date, :description,
+      [:date, :contact_id, :currency, :exchange_rate,
+       :project_id, :due_date, :description,
        :direct_payment, :account_to_id
       ].each do |key|
         subject.should respond_to(key)
         subject.should respond_to(:"#{key}=")
       end
     end
+  end
 
-    it "#valid" do
-      subject.total = 'NaN'
-
-      subject.should_not be_valid
-    end
+  it "#attibutes" do
+    TransactionService::TRANS_ATTRIBUTES.should eq([:date, :contact_id, :total, :exchange_rate, :project_id, :due_date, :description])
   end
 end

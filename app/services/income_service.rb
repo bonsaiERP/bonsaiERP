@@ -2,40 +2,30 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class IncomeService < TransactionService
-  attr_accessor :income, :ledger
+  alias :income :transaction
+
+  INCOME_ATTRIBUTES = TRANS_ATTRIBUTES + [:income_details_attributes]
 
   validate :income_is_valid,  if: :direct_payment?
   validate :valid_account_to, if: :direct_payment?
 
   delegate :contact, :is_approved?, :is_draft?, :income_details, 
-           :income_details_attributes, :income_details_attributes=,
            :subtotal, :to_s, :state, :discount, to: :income
 
   delegate :id, to: :income, prefix: true
 
   # Creates and instance of income and initializes
   def self.new_income(attrs = {})
-    attrs = set_new_income_attributes(attrs)
-    is = new(attrs) do |i|
-      i.income = Income.new_income(attrs.except(:direct_payment,
-                                                :account_to_id,
-                                                :income_details_attributes,
-                                                :reference))
-    end
-    is.income_details.build(quantity: 1) if is.income_details.empty?
-
+    is = new(attrs.slice(*ATTRIBUTES))
+    is.set_income(attrs.slice(*INCOME_ATTRIBUTES))
     is
   end
 
   # Finds the income and sets data with the income found
   def self.find(id)
-    inc = Income.find(id)
-    new(inc.attributes) do |is|
-      is.ref_number = inc.ref_number
-      is.total      = inc.total
-      is.due_date   = inc.due_date
-      is.income     = inc
-    end
+    is = new
+    is.set_service_attributes(Income.find(id))
+    is
   end
 
   # Creates and can call other methods passed in the block
@@ -65,7 +55,7 @@ class IncomeService < TransactionService
 
     create_or_update do
       res = TransactionHistory.new.create_history(income)
-      income.attributes = income_attributes
+      income.attributes = attrs.slice(*INCOME_ATTRIBUTES)
       update_income_data
 
       income.save && res
@@ -78,7 +68,7 @@ class IncomeService < TransactionService
     create_or_update do
       income.approve!
       res = TransactionHistory.new.create_history(income)
-      income.attributes = income_attributes
+      income.attributes = attrs.slice(*INCOME_ATTRIBUTES)
 
       update_income_data
       income.amount = 0 if direct_payment?
@@ -92,12 +82,13 @@ class IncomeService < TransactionService
     end
   end
 
-  # Sets the expense params when new_record
-  def self.set_new_income_attributes(attrs)
-    attrs[:ref_number] = Income.get_ref_number if attrs[:ref_number].blank?
-    attrs[:date] = Date.today if attrs[:date].blank?
-    attrs[:currency] = OrganisationSession.currency if attrs[:currency].blank?
-    attrs
+  def set_income(attrs = {})
+    @transaction = Income.new_income(attrs.merge(
+      ref_number: Income.get_ref_number,
+      date: attrs[:date] || Date.today,
+      currency: attrs[:currency] || OrganisationSession.currency
+    ))
+    @transaction.income_details.build if @transaction.income_details.empty?
   end
 
 private
@@ -111,13 +102,6 @@ private
     set_errors(*[income, ledger].compact) unless res
 
     res
-  end
-
-  def income_attributes
-    attributes.except(:direct_payment,
-                      :account_to_id,
-                      :income_details_attributes,
-                      :reference)
   end
 
   # Updates the data for an imcome
@@ -156,35 +140,14 @@ private
     det.balance - (det.quantity_was - det.quantity)
   end
 
-  def set_details_original_prices
-    income_details.each do |det|
-      det.original_price = item_prices[det.item_id]
-    end
-  end
-
   def original_income_total
     income_details.inject(0) {|sum, det| sum += det.quantity.to_f * det.original_price.to_f }
   end
 
-  def item_ids
-    @item_ids ||= income_details.map(&:item_id)
-  end
-
-  # Saves the ledger with income data
+  # Saves the ledger with transaction data
   def create_ledger
-    @ledger = AccountLedger.new(
-      account_id: income.id, amount: income.total,
-      account_to_id: account_to_id, date: date,
-      operation: 'payin', status: 'approved',
-      exchange_rate: 1, currency: income.currency, inverse: false,
-      reference: get_reference
-    )
-
+    @ledger = BuildServiceLedger.new(self).ledger
     @ledger.save_ledger
-  end
-
-  def get_reference
-    reference.present? ? reference : I18n.t('income.payment.reference', income: income)
   end
 
   def income_is_valid
@@ -195,15 +158,25 @@ private
     self.errors.add(:account_to_id, I18n.t('errors.messages.quick_income.valid_account_to')) unless account_to.present?
   end
 
-  def direct_payment?
-    direct_payment === true
-  end
-
   def account_to
     @account_to ||= AccountQuery.new.bank_cash.where(currency: currency, id: account_to_id).first
   end
+end
 
-  def item_prices
-    @item_prices ||= Hash[Item.where(id: item_ids).values_of(:id, :price)]
+class BuildServiceLedger < Struct.new(:income_service)
+  delegate :reference, :account_to_id, :date, :income, to: :income_service
+
+  def ledger
+    AccountLedger.new(
+      account_id: income.id, amount: income.total,
+      account_to_id: account_to_id, date: date,
+      operation: 'payin', status: 'approved',
+      exchange_rate: 1, currency: income.currency, inverse: false,
+      reference: get_reference
+    )
+  end
+
+  def get_reference
+    reference.present? ? reference : I18n.t('income.payment.reference', income: income)
   end
 end
