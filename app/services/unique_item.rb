@@ -16,6 +16,8 @@ class UniqueItem < Struct.new(:klass)
       end
     end
 
+    klass.errors.add(:base, I18n.t("errors.messages.item.repeated_items")) unless res
+
     res
   end
 

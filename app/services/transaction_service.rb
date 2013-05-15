@@ -26,9 +26,7 @@ class TransactionService < BaseService
   validates_numericality_of :total
   validate :unique_item_ids
 
-
   delegate :items, to: :transaction
-
 
   def self.income_expense_attributes
     [:date, :due_date, :contact_id, :currency, :exchange_rate, :project_id, :description]
@@ -44,7 +42,7 @@ class TransactionService < BaseService
 
 private
   def unique_item_ids
-    self.errors.add(:base, I18n.t("errors.messages.item.repeated_items")) unless UniqueItem.new(transaction).valid?
+    UniqueItem.new(self).valid?
   end
 
   def item_ids

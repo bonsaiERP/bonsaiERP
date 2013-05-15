@@ -28,7 +28,7 @@ describe Inventory do
     invin.inventory_operation_details.should have(2).items
 
     invin.save_in.should be_true
-    
+
     io = InventoryOperation.find(invin.inventory_operation.id)
     io.should be_is_a(InventoryOperation)
     io.should be_is_invin
