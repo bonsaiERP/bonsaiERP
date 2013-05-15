@@ -5,7 +5,7 @@ class InventoryOperation < ActiveRecord::Base
 
   before_create { self.creator_id = UserSession.id }
 
-  OPERATIONS = %w(invin invout incin incout expin expout transin transout).freeze
+  OPERATIONS = %w(invin invout invincin invincout invexpin invexpout transin transout).freeze
 
   belongs_to :store
   belongs_to :contact

@@ -3,9 +3,7 @@
 # email: boriscyber@gmail.com
 class TransactionDetail < ActiveRecord::Base
 
-  ########################################
-  # Relationships
-  #belongs_to :item, inverse_of: :transaction_details
+  before_create :set_balance
 
   # Validations
   validates_presence_of :item_id
@@ -31,4 +29,8 @@ class TransactionDetail < ActiveRecord::Base
     }
   end
 
+private
+  def set_balance
+    self.balance = quantity
+  end
 end

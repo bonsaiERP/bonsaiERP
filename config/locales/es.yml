@@ -232,6 +232,7 @@ es:
         stock_quantity: "La cantidad es mayor a la disponible en stock"
         transaction_quantity: "La cantidad ingresada es mayor a la de la operación"
         repeated_item: "El ítem esta repetido"
+        invalid_balance: "La cantidad que ingreso es mayor que el saldo"
       inventory_operation:
         transaction_items: "Ha seleccionado items que no estan en la operación"
         invalid_item: "Ha seleccionado items inexistentes"

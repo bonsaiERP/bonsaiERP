@@ -1,14 +1,27 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class InventoryIncomeIn < InventoryOperationService
+class InventoryIncome < InventoryOperationService
+  attribute :income_id, Integer
+
+  validates_presence_of :income
+  validate :item_quantities
+
+  delegate :income_details, to: :income
 
   def deliver
+    return false unless valid?
     res = true
     commit_or_rollback do
-      res = set_inventory_operation({ref_number}).save
+      inventory_operation.ref_number = InventoryOperation.get_ref_number('IngI')
+      inventory_operation.operation = 'invincin'
+      res = inventory_operation.save
+
       res = res && update_stocks {|st| st.quantity - item_quantity(st.item_id)}
-      res = res && update_income_details
+
+      update_items {|it, det| det.balance - it.quantity }
+
+      res = res && income.save
     end
 
     set_errors(inventory_operation) unless res
@@ -16,34 +29,28 @@ class InventoryIncomeIn < InventoryOperationService
     res
   end
 
-  def devolution
-    res = true
-    commit_or_rollback do
-      res = inventory_operation.save
-      res = res && update_stocks {|st| st.quantity + item_quantity(st.item_id)}
-      res = res && update_income_details
-    end
-
-    set_errors(inventory_operation) unless res
-
-    res
+  def income
+    @income ||= Income.find(income_id)
   end
 
 private
-
-  def update_stocks
-    res = true
-    stocks.each do |st|
-      stoc = Stock.create(store_id: store_id, item_id: st.item_id, quantity: yield(st) )
-      res = stoc.save && st.update_attribute(:active, false)
-
-      return false unless res
+  def update_items(&b)
+    items.each do |it|
+      det = income_detail(it.item_id)
+      det.balance = b.call(it, det)
     end
-
-    res
   end
 
-  def stock_quantity(st)
-    st.quantity + item_quantity(st.item_id)
+  def item_quantities
+    items.each do |it|
+      det = income_detail(it.item_id)
+      if it.quantity > det.balance
+        it.errors.add(:quantity, I18n.t('errors.messages.inventory_operation_detail.invalid_balance'))
+      end
+    end
+  end
+
+  def income_detail(item_id)
+    income_details.find {|det| det.item_id === item_id }
   end
 end
