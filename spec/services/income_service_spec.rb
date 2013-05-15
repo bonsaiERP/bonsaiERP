@@ -69,6 +69,10 @@ describe IncomeService do
       IncomeDetail.any_instance.stub(item: true)
 
       is.should_not be_valid
+      is.errors[:base].should eq([I18n.t("errors.messages.item.repeated_items")])
+      is.income.income_details[0].errors.should be_blank
+      is.income.income_details[1].errors.should be_blank
+      is.income.income_details[2].errors[:item_id].should eq([I18n.t("errors.messages.item.repeated")])
     end
   end
 
