@@ -137,11 +137,19 @@ describe IncomeService do
 
   context "Update" do
     before(:each) do
-      Income.any_instance.stub(save: true, valid?: true)
-      IncomeDetail.any_instance.stub(save: true)
+      Income.any_instance.stub(valid?: true)
+      IncomeDetail.any_instance.stub(valid?: true)
     end
 
-    subject { IncomeService.new_income(valid_params) }
+    subject do
+      inc = IncomeService.new_income(valid_params)
+      inc.create
+      inc
+    end
+
+    let(:attributes) {
+
+    }
 
     it "Updates with errors on income" do
       TransactionHistory.any_instance.should_receive(:create_history).and_return(true)
@@ -155,7 +163,7 @@ describe IncomeService do
       i.total.should > 200
 
       attributes = valid_params.merge(total: 200.0)
-      # Create
+      # Update
       subject.update(attributes).should be_true
 
       # Income

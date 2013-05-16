@@ -62,4 +62,24 @@ private
       det.original_price = item_prices[det.item_id]
     end
   end
+
+  def original_total
+    items.inject(0) {|sum, det| sum += det.quantity.to_f * det.original_price.to_f }.to_d
+  end
+
+  # Set details for a new Income
+  def set_details
+    items.each do |det|
+      det.original_price = item_prices[det.item_id]
+      det.balance        = get_detail_balance(det)
+    end
+  end
+
+  def item_prices
+    @item_prices ||= Hash[Item.where(id: item_ids).values_of(:id, :buy_price)]
+  end
+
+  def get_detail_balance(det)
+    det.balance - (det.quantity_was - det.quantity)
+  end
 end

@@ -200,8 +200,4 @@ private
   def account_to
     @account_to ||= AccountQuery.new.bank_cash.where(currency: currency, id: account_to_id).first
   end
-
-  def item_prices
-    @item_prices ||= Hash[Item.where(id: item_ids).values_of(:id, :buy_price)]
-  end
 end
