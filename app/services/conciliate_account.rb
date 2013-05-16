@@ -70,4 +70,8 @@ private
 
     res
   end
+
+  def account_is_income_or_expense?
+    account.is_a?(Income) || account.is_a?(Expense)
+  end
 end

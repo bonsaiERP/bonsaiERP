@@ -224,8 +224,10 @@ es:
         transaction_total: "La cantidad y el balance suman un valor mayor al total"
       expense:
         not_draft: "El estado del egreso no es borrador"
+        payments: "Extisten pagos que se han afectado al balance"
       income:
         not_draft: "El estado del ingreso no es borrador"
+        payments: "Extisten cobros que se han afectado al balance"
       income_detail:
         item_not_for_sale: "Debe seleccionar un ítem que se vende"
       inventory_operation_detail:

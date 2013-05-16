@@ -13,14 +13,12 @@ class TransactionHistory < ActiveRecord::Base
 
   validates_presence_of :user_id
 
-  def create_history(trans)
+  def set_history(trans)
     self.account_id = trans.id
     self.user_id = UserSession.id
     @klass = trans
     @hash = {}
     self.data = get_transaction_data
-
-    self.save
   end
 
 private

@@ -12,7 +12,7 @@ describe IncomeService do
 
   let(:contact) { build :contact, id: 1 }
   let(:valid_params) { {
-      date: Date.today, contact_id: contact.id, total: total,
+      date: Date.today, contact_id: 1, total: total,
       currency: 'BOB', bill_number: "I-0001", description: "New income description",
       income_details_attributes: details
     }
@@ -21,10 +21,6 @@ describe IncomeService do
   before(:each) do
     UserSession.user = build :user, id: 10
     OrganisationSession.organisation = build :organisation, currency: 'BOB'
-  end
-
-  it "correct_attributes" do
-    IncomeService::INCOME_ATTRIBUTES.should eq([:date, :contact_id, :total, :exchange_rate, :project_id, :due_date, :description, :income_details_attributes])
   end
 
   context "Initialization" do
@@ -139,76 +135,104 @@ describe IncomeService do
     before(:each) do
       Income.any_instance.stub(valid?: true)
       IncomeDetail.any_instance.stub(valid?: true)
+      ConciliateAccount.any_instance.stub(account_to: stub(save: true, :amount= => true, amount: 1))
     end
 
-    subject do
+    let(:subject) do
       inc = IncomeService.new_income(valid_params)
       inc.create
       inc
     end
 
-    let(:attributes) {
-
+    let(:update_items) {
+      subject.items.map {|det|
+        {id: det.id, item_id: det.item_id, quantity: det.quantity + 2, price: det.price}
+      }
     }
 
-    it "Updates with errors on income" do
-      TransactionHistory.any_instance.should_receive(:create_history).and_return(true)
+    let(:total_for_update) { subject.total + 10 * 2 + 20 * 2 }
+    let(:attributes_for_update) {
+      valid_params.merge(total: total_for_update,
+                         description: 'A new changed description', income_details_attributes: update_items)
+    }
 
+    it "Update" do
       i = subject.income
-      i.total = details_total
-      i.balance = 0
-      i.stub(total_was: i.total)
-
-      i.should be_is_draft
-      i.total.should > 200
-
-      attributes = valid_params.merge(total: 200.0)
+      is = IncomeService.find(i.id)
       # Update
-      subject.update(attributes).should be_true
+      is.update(attributes_for_update.merge(contact_id: 10)).should be_true
+      # Income
+      i = is.income
+      i.should be_is_draft
+      i.contact_id.should eq(1) # Does not change contact for update
+      i.description.should eq('A new changed description')
+      i.total.should == total_for_update
+
+      i.income_details.should have(2).items
+      i.income_details[0].quantity.should == 12
+      i.income_details[1].quantity.should == 22
+
+      is.history.should be_persisted
+    end
+
+    it "Direct payment and errors" do
+      AccountLedger.any_instance.stub(valid?: true)
+      is = IncomeService.find(subject.income.id)
+      is.stub(account_to: true)
+
+      is.update_and_approve({direct_payment: true, account_to_id: 1}).should be_true
 
       # Income
-      i = subject.income
+      income = is.income
+      income.should be_persisted
+      income.id.should be_is_a(Integer)
+      income.should be_is_paid
+      income.balance.should == 0
+      income.currency.should eq('BOB')
 
-      i.should be_is_paid
-      i.should be_has_error
-      i.error_messages[:balance].should_not be_blank
+      ledger  = is.ledger
+      ledger.should be_persisted
+      ledger.account_id.should eq(income.id)
+      ledger.currency.should eq('BOB')
+      ledger.should be_is_payin
+      ledger.exchange_rate.should == 1
+      ledger.should be_is_approved
+      ledger.status.should eq('approved')
+      ledger.approver_id.should be_is_a(Integer)
     end
 
     it "update_and_approve" do
-      TransactionHistory.any_instance.stub(create_history: true)
+      i = subject.income
+      is = IncomeService.find(i.id)
 
-      subject.update({}).should be_true
-      subject.income.should be_is_draft
+      is.update({}).should be_true
+      is.income.should be_is_draft
 
-      subject.update_and_approve({})
-      subject.income.should be_is_approved
+      is = IncomeService.find(i.id)
+      is.update_and_approve({})
+      is.income.should be_is_approved
     end
   end
 
-  describe "create and pay" do
-    let(:cash) { build :cash, currency: 'BOB', id: 2 }
-    let(:contact) { build :contact, id: 1 }
-
+  describe "direct_payment" do
     before(:each) do
-      AccountLedger.any_instance.stub(save_ledger: true)
-      Income.any_instance.stub(valid?: true, id: 100, save: true)
-      IncomeDetail.any_instance.stub(save: true)
+      AccountLedger.any_instance.stub(valid?: true)
+      Income.any_instance.stub(valid?: true)
+      IncomeDetail.any_instance.stub(valid?: true)
+      Item.stub_chain(:where, values_of: [[1, 10], [2, 20.0]])
+      ConciliateAccount.any_instance.stub(account_to: stub(save: true, :amount= => true, amount: 1))
     end
 
     it "creates and pays" do
-      AccountQuery.any_instance.stub_chain(:bank_cash, where: [( build :cash, id: 2 )])
-
-      s = stub
-      s.should_receive(:values_of).with(:id, :price).and_return([[1, 10], [2, 20.0]])
-
-      Item.should_receive(:where).with(id: item_ids).and_return(s)
-
       is = IncomeService.new_income(valid_params.merge(direct_payment: "1", account_to_id: "2", reference: 'Recibo 123'))
+      is.stub(account_to: true)
+
       is.create_and_approve.should be_true
 
       is.ledger.should be_is_a(AccountLedger)
       # ledger
-      is.ledger.account_id.should eq(100)
+      is.ledger.account_id.should be_is_a(Integer)
+      is.ledger.should be_persisted
       is.ledger.account_to_id.should eq(2)
       is.ledger.should be_is_payin
       is.ledger.amount.should == 490.0
@@ -222,67 +246,46 @@ describe IncomeService do
     end
 
     it "updates and pays" do
-      AccountQuery.any_instance.stub_chain(:bank_cash, where: [( build :cash, id: 2 )])
+      is = IncomeService.new_income(valid_params)
+      is.create.should be_true
+      is.income.should be_persisted
+      inc = is.income
 
-      inc = build(:income, id: 2, state: 'draft', total: 490, balance: 490,
-                 ref_number: 'I-13-0007')
-      Income.stub(find: inc)
-      inc.stub(total_was: 490)
-
-      s = Object.new
-      s.stub(:values_of).with(:id, :price).and_return([[1, 10], [2, 20.0]])
-
-      Item.should_receive(:where).with(id: item_ids).and_return(s)
-
-      is = IncomeService.find(1)
+      is = IncomeService.find(inc.id)
       is.income.should eq(inc)
 
-      is.ref_number.should eq('I-13-0007')
+      is.ref_number.should eq(inc.ref_number)
       is.total.should == 490.0
 
-      attrs = valid_params.merge(direct_payment: "1", account_to_id: "2")
-
-      is.update_and_approve(attrs).should be_true
+      is.stub(account_to: true)
+      is.update_and_approve(direct_payment: "1", account_to_id: "2", total: 300).should be_true
 
       is.ledger.should be_is_a(AccountLedger)
       # ledger
-      is.ledger.account_id.should eq(100)
+      is.ledger.account_id.should be_is_a(Integer)
       is.ledger.account_to_id.should eq(2)
-      is.ledger.reference.should eq('Cobro ingreso I-13-0007')
+      is.ledger.reference.should eq("Cobro ingreso #{inc}")
       is.ledger.date.to_date.should eq(is.date)
       is.ledger.should be_is_payin
       is.ledger.amount.should == is.income.total
 
       # income
       is.income.should be_is_paid
-      is.income.total.should == 490.0
+      is.income.total.should == 300.0
       is.income.balance.should == 0.0
       is.income.should be_discounted
-      is.income.discount.should == 10.0
+      is.income.discount.should == 200.0
     end
 
-    it "sets errors from expense or ledger" do
-      is = IncomeService.new_income
+  end
 
-      is.income.stub(save: false)
-      is.income.errors[:contact_id] << "Wrong"
+  it "sets errors from expense or ledger" do
+    is = IncomeService.new_income(direct_payment: true)
 
-      is.create_and_approve.should be_false
-      is.errors[:contact_id].should eq(["Wrong"])
+    is.create.should be_false
 
-      # Errors on both income and ledger
-      is = IncomeService.new_income(direct_payment: true)
-      is.stub(account_to: build(:cash, id: 3) )
-
-      is.income.stub(save: false)
-      is.income.errors[:contact_id] << "Wrong"
-      is.stub(ledger: build(:account_ledger))
-      is.ledger.errors[:reference] << "Blank reference"
-
-      is.create_and_approve.should be_false
-
-      is.errors[:contact_id].should eq(["Wrong"])
-      is.errors[:reference].should eq(["Blank reference"])
-    end
+    is.errors.messages[:contact_id].should_not be_blank
+    is.errors.messages[:account_to_id].should_not be_blank
+    is.errors.messages[:currency].should_not be_blank
   end
 end
