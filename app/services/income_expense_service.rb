@@ -34,8 +34,8 @@ class IncomeExpenseService
   # Updates the data for an imcome or expense
   # balance is the alias for amount due that Income < Account
   def set_update(attrs = {})
+    set_details
     @transaction.attributes = attrs.slice(*attributes_for_update)
-
     @transaction.balance    -= (@transaction.total_was - @transaction.total)
     @transaction.gross_total = original_total
     @transaction.set_state_by_balance!

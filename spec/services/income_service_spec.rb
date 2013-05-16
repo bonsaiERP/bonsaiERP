@@ -175,7 +175,7 @@ describe IncomeService do
       is.history.should be_persisted
     end
 
-    it "Direct payment and errors" do
+    it "Direct payment" do
       AccountLedger.any_instance.stub(valid?: true)
       is = IncomeService.find(subject.income.id)
       is.stub(account_to: true)
@@ -250,6 +250,8 @@ describe IncomeService do
       is.create.should be_true
       is.income.should be_persisted
       inc = is.income
+      inc.should be_discounted
+      inc.discount.should == 10
 
       is = IncomeService.find(inc.id)
       is.income.should eq(inc)
@@ -258,7 +260,7 @@ describe IncomeService do
       is.total.should == 490.0
 
       is.stub(account_to: true)
-      is.update_and_approve(direct_payment: "1", account_to_id: "2", total: 300).should be_true
+      is.update_and_approve(direct_payment: "1", account_to_id: "2", total: 500).should be_true
 
       is.ledger.should be_is_a(AccountLedger)
       # ledger
@@ -271,10 +273,20 @@ describe IncomeService do
 
       # income
       is.income.should be_is_paid
-      is.income.total.should == 300.0
+      is.income.total.should == 500.0
       is.income.balance.should == 0.0
-      is.income.should be_discounted
-      is.income.discount.should == 200.0
+      is.income.should_not be_discounted
+      is.income.discount.should == 0
+
+      # UPDATE and check errors
+      attrs = is.income.items.map {|det|
+        {id: det.id, item_id: det.item_id, quantity: det.quantity - 2, price: det.price}
+      }
+
+      is = IncomeService.find(is.income.id)
+      is.update(total: 440, income_details_attributes: attrs).should be_true
+      is.income.error_messages.should eq({"balance" => ["transaction.negative_balance"]})
+      is.income.should be_has_error
     end
 
   end
