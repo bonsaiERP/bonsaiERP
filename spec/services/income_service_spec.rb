@@ -156,6 +156,16 @@ describe IncomeService do
                          description: 'A new changed description', income_details_attributes: update_items)
     }
 
+    it "does not allow errors on IncomeDetail" do
+      i = subject.income
+      is = IncomeService.find(i.id)
+      is.income.stub(valid?: false)
+      is.items[0].errors.add(:quantity, "Error in quantity")
+
+      is.update.should be_false
+      is.income.items[0].errors[:quantity].should eq(["Error in quantity"])
+    end
+
     it "Update" do
       i = subject.income
       is = IncomeService.find(i.id)

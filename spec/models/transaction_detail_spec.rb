@@ -24,4 +24,36 @@ describe TransactionDetail do
     td = TransactionDetail.new(quantity: 2, price: 4, original_price: 1.9)
     td.should be_changed_price
   end
+
+  context "Operations related with Income Expense" do
+    before(:each) do
+      TransactionDetail.any_instance.stub(item: true)
+      Income.any_instance.stub(contact: true, set_client_and_incomes_status: true)
+    end
+    let(:attributes) {
+      {
+      contact_id: 1, date: Date.today, ref_number: 'I-0001', currency: 'BOB',
+      income_details_attributes: [{item_id: 1, price: 20, quantity: 10}]
+      }
+    }
+
+    it "#checks balance" do
+      inc = Income.new_income(attributes)
+      inc.income_details[0].stub(item: stub(for_sale?: true))
+
+      inc.save.should be_true
+
+      det = inc.income_details[0]
+
+      det.balance = 5
+      det.save.should be_true
+
+      inc = Income.find(inc.id)
+      inc.attributes = {income_details_attributes: [{id: det.id, item_id: 1, price: 20, quantity: 4}] }
+      inc.income_details[0].stub(item: stub(for_sale?: true))
+
+      inc.save.should be_false
+      inc.items[0].errors[:item_id].should eq([I18n.t('errors.messages.income_details.balance')])
+    end
+  end
 end

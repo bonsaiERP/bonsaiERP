@@ -6,6 +6,8 @@ class IncomeExpenseModel < Account
   # module for setters and getters
   extend SettersGetters
 
+  before_update :check_items_balances
+
   ########################################
   # Relationships
   belongs_to :contact
@@ -97,5 +99,19 @@ class IncomeExpenseModel < Account
 private
   def nulling_valid?
     ['paid', 'approved'].include?(state_was) && is_nulled?
+  end
+
+  # Do not allow items to be destroyed if the quantity != balance
+  def check_items_balances
+    res = true
+    items.select(&:marked_for_destruction?).each do |det|
+      unless det.quantity === det.balance
+        det.errors.add(:quantity, I18n.t('errors.messages.trasaction_details.not_destroy'))
+        det.instance_variable_set(:@marked_for_destruction, false)
+        res = false
+      end
+    end
+
+    res
   end
 end
