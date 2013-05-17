@@ -52,6 +52,6 @@ private
   end
 
   def change_of_item_id
-
+    self.errors.add(:item_id, I18n.t('errors.messages.transaction_details.item_changed')) if item_id_changed?
   end
 end

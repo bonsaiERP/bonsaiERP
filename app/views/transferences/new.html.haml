@@ -9,7 +9,7 @@
 
 .row-fluid
   .span6
-    %h1 Nueva transferencia
+    %h2 Nueva transferencia
 
 = simple_form_for @transference, html: {id: 'transference-form'} do |f|
   = bonsai_form_error(f)
@@ -22,7 +22,7 @@
     .span6
       = f.input :account_to_id, label: 'A cuenta', input_html: {class: 'span10'}
 
-  .row-fluid
+  .row-fluid.well.well-small
     .span3
       = f.input :amount,
         label: 'Cantidad <span class="currency"></span>'.html_safe,
@@ -49,10 +49,10 @@
         label: 'Verificar <i class="icon-warning-sign" data-toggle="tooltip" title="Solo si alguna de las cuentas es de BANCO pueden verificar a futuro"></i>'.html_safe
     .span6
       = f.input :reference, label: 'Referecia', as: :text,
-        input_html: {rows: 3, data: {value: 'transference.reference'}}
+        input_html: {rows: 2, data: {value: 'transference.reference'}}
 
   .form-actions
-    = f.submit "Salvar", class: 'btn btn-success btn-large b'
+    = f.submit "Transferir", class: 'btn btn-primary btn-large b'
 
 :javascript
   $(function() {

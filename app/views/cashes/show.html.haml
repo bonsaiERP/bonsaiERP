@@ -10,10 +10,9 @@
 
 .row-fluid
   .span6
-    %h1.n
+    %h2.n
       = @cash.name
-      %small= @cash.currency
-      -#= pendent_money_link(@cash)
+      = currency_label @cash.currency
   .span6.r
     = link_to new_transference_path(account_id: @cash.id), class: 'btn',
       title: 'Transferir dinero a otra cuenta', 'data-toggle' => 'tooltip' do
@@ -26,7 +25,7 @@
   .span6
     .moneybox
       %label SALDO EN CAJA
-      %h3
+      %h5.n
         = ntc @cash.amount
         = currency_label @cash.currency
 

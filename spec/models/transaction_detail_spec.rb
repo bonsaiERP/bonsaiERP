@@ -25,6 +25,17 @@ describe TransactionDetail do
     td.should be_changed_price
   end
 
+  it "#change_of_item_id" do
+    td = TransactionDetail.new(item_id:1, quantity: 2, price: 4)
+    td.stub(item: true)
+    td.item_id = 2
+    td.save.should be_true
+
+    td.item_id = 1
+    td.save.should be_false
+    td.errors.messages[:item_id].should eq([I18n.t('errors.messages.transaction_details.item_changed')])
+  end
+
   context "Operations related with Income Expense" do
     before(:each) do
       TransactionDetail.any_instance.stub(item: true)
@@ -55,5 +66,6 @@ describe TransactionDetail do
       inc.save.should be_false
       inc.items[0].errors[:item_id].should eq([I18n.t('errors.messages.income_details.balance')])
     end
+
   end
 end

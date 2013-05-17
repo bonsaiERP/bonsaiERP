@@ -276,7 +276,7 @@ es:
         number_of_items: "Debe ingresar seleccionar al menos un ítemon"
       transaction_details:
         not_destroy: "No se puede eliminar este ítem"
-        change_item: "No es posible cambiar de item, se volvio al original"
+        item_changed: "No es posible cambiar de item, se volvio al original"
         destroy: "No se puede borrar el item"
       income_details:
         balance: "La cantida es menor a la cantidad entregada"

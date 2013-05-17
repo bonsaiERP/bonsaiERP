@@ -6,7 +6,7 @@
 
 .row-fluid
   .span6
-    %h1 Cuentas efectivo
+    %h2 Cuentas efectivo
   .span6.r
     = link_to new_cash_path, class: 'btn' do
       %i.icon-plus-sign
@@ -17,13 +17,13 @@
   - @cashes.each do |cash|
     %li.row-fluid
       .span7
-        %h3
+        %h4.n
           = link_to cash, cash
           = currency_label cash.currency
       .span3.pull-right
         .moneybox
           %label TOTAL EN CUENTA
-          %h3
+          %h4.n
             = ntc cash.amount
             = currency_label cash.currency
         -#= pendent_money_link(cash, :class => 'b fs110')

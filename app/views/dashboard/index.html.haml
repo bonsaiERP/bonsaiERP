@@ -11,43 +11,44 @@
 
 = render file: "dashboard/tour/general"
 
-%h1.title Resumen
+%h2 Resumen
 
 = render file: 'dashboard/general_aspects'
 
-= @dashboard.pendent_ledgers
+%h5.n= @dashboard.pendent_ledgers
 
-= form_for dashboard_path, method: :get do
-  = render 'export_incomes/form_details', btn: 'Buscar'
+.well
+  = form_for dashboard_path, method: :get do
+    = render 'export_incomes/form_details', btn: 'Buscar'
 
 = render 'dashboard/graph', data: @dashboard
 
 .row-fluid
   .span6.well.well-small
-    %h4.n
+    %h5
       Ingresos
-      = @dashboard.present_date_range
+      %span.n= @dashboard.present_date_range
     .alert.alert-success.inline-block
       %h3.text-success
         \%
         = ntc @dashboard.incomes_percentage
 
-    %h3.n.ib
-      = currency
+    %h4.n.ib
       = ntc @dashboard.total_incomes
+      = currency_label currency
 
   .span6.well.well-small
-    %h4.n
+    %h5
       Egresos
-      = @dashboard.present_date_range
+      %span.n= @dashboard.present_date_range
     .alert.alert-error.inline-block
       %h3
         \%
         = ntc @dashboard.expenses_pecentage
 
-    %h3.n.inline-block
-      = currency
+    %h4.n.inline-block
       = ntc @dashboard.total_expenses
+      = currency_label currency
 
 -#.row-fluid
   .span6.well.well-small

@@ -6,7 +6,7 @@
 
 .row-fluid
   .span6
-    %h1 Contactos
+    %h2 Contactos
   .span6.r
     = link_to icon_new_text, new_contact_path, class: 'btn'
 
@@ -15,12 +15,6 @@
     = render 'contacts/search'
 
 = paginate(@contacts)
-
--#%ul.tabs
-  %li= link_tab "Todos", contacts_path, "all"
-  %li= link_tab "Clientes", "/contacts", "clients"
-  %li= link_tab "Proveedores", "/contacts", "suppliers"
-
 
 %ul.unstyled.listing
   = render @contacts

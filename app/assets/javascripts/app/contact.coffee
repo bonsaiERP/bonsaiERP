@@ -21,8 +21,8 @@ class ContactBalance
   #
   renderDetail: (data) ->
     if data.TOTAL
-      html = "#{@currencyLabel(organisation.currency)} #{_b.ntc(data.TOTAL)}"
-      html += ' <a href="javascript:;" class="label label-info detail">Ver</a>' unless data[organisation.currency] is data.TOTAL
+      html = "#{_b.ntc(data.TOTAL)} #{@currencyLabel(organisation.currency)}"
+      html += ' <a href="javascript:;" class="label label-info detail"><i class="icon icon-exchange"></i></a>' unless data[organisation.currency] is data.TOTAL
 
       html
   #
@@ -61,7 +61,7 @@ class ContactBalance
   #
   createCurrenciesDetail: (data) ->
     _.map(data, (v, k) =>
-      '<p>' + @currencyLabel(k) + ' ' + _b.ntc(v) + '</p>' unless k is 'TOTAL'
+      '<p>' +  _b.ntc(v) + ' ' + @currencyLabel(k) + '</p>' unless k is 'TOTAL'
     ).join('')
   #
   currencyLabel: (cur) ->

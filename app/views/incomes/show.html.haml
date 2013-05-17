@@ -19,14 +19,14 @@
 
 .row-fluid
   .span7
-    %h1.ib
+    %h2.ib
       = @income
       = @income.state_tag
 
     %h4.ib.n
       = link_to @income.contact, @income.contact
 
-    %h4.n.ib
+    %h5.n.ib
       %span.muted Fecha:
       %i= lo @income.date
       = render_if @income.due_date do
@@ -55,82 +55,81 @@
   .span6
     .moneybox
       %label TOTAL
-      %h4.n
+      %h5.n
         = ntc @income.total
         = currency_label @income.currency
 
     .moneybox
       %label SALDO
-      %h4.n
+      %h5.n
         = @income.balance
         = currency_label @income.currency
 
   .span6
+    %span.muted Proyecto:
+    = link_to @income.project, @income.project if @income.project
+    .clearfix
     %i.icon-file-alt(data-toggle='tooltip' title='Descripción')
     = @income.description
 
 = render 'incomes/tour/devolution'
 
-#tabs
-  %ul
-    %li
-      %a(href="#information" id="tab_info") Información
-    %li.payment-li
-      %a.payments-tab(href="#payments") Cobros
-    -#%li
-      %a(href="#inventory") Entregas inventario
+%hr
 
-  #information
-    = render "incomes/items", income: @income
-  #payments
+#payments
+  %h2.n Cobros y devoluciones
+  = @income.pendent_conciliations
+
+  .payment-buttons
     - unless @income.is_paid?
-      %a.btn(id='payment-link' href='javascript:;')
+      %a.btn.btn-success(id='payment-link' href='javascript:;')
         %i.icon-plus-sign
         Cobrar
 
-    %a.btn(id='devolution-link' href='javascript:;')
+    %a.btn.btn-danger(id='devolution-link' href='javascript:;')
       %i.icon-minus-sign
-      Devolver
+      Devolución
 
-    #payment-form(style='display: none')
-      %h3 Cobrar ingreso
-      = render 'incomes/payment_form', income: @income unless @income.is_paid?
 
-    #devolution-form(style='display: none')
-      %h3 Devolución
-      = render 'incomes/devolution_form', income: @income unless @income.is_draft?
+  #payment-form(style='display: none')
+    %hr
+    %h3 Cobro
+    = render 'incomes/payment_form', income: @income unless @income.is_paid?
 
-    %h2 Cobros y devoluciones
+  #devolution-form(style='display: none')
+    %hr
+    %h3 Devolución
+    = render 'incomes/devolution_form', income: @income unless @income.is_draft?
 
-    = @income.pendent_conciliations
+  %ul.unstyled.listing(style="margin-top: 0px")
+    %li.row-fluid
+      .span7.offset3.r.muted
+        %strong Cantidad
 
-    %ul.unstyled.listing
-      %li.row-fluid
-        .span7.offset3.r.muted
-          %strong Cantidad
+    = render partial: 'account_ledgers/income', collection: @income.payments, as: :ledger
 
-      = render partial: 'account_ledgers/income', collection: @income.payments, as: :ledger
+#information
+  = render "incomes/items", income: @income
 
 :javascript
   $( function() {
-    $('#tabs').tabs()
     // Payment show hide
     $('#payment-link').click( function() {
-      $('#payment-form').show('slow')
-      $(this).hide('slow')
+      $('#payment-form').show('fast')
+      $('.payment-buttons').hide('fast');
     })
-    $('#cancel-payment-link').click( function() {
-      $('#payment-form').hide('slow')
-      $('#payment-link').show('slow')
-    })
+    $('body').on('click', '#cancel-payment-link', function() {
+      $('#payment-form').hide('fast');
+      $('.payment-buttons').show('fast');
+    });
 
     // Devolution show hide
     $('#devolution-link').click( function() {
-      $('#devolution-form').show('slow')
-      $(this).hide('slow')
+      $('#devolution-form').show('fast');
+      $('.payment-buttons').hide('fast');
     })
-    $('#cancel-devolution-link').click( function() { 
-      $('#devolution-form').hide('slow')
-      $('#devolution-link').show('slow')
-    })
-  })
+    $('body').on('click', '#cancel-devolution-link', function() { 
+      $('#devolution-form').hide('fast');
+      $('.payment-buttons').show('fast');
+    });
+  });

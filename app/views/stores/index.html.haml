@@ -5,7 +5,7 @@
 
 .row-fluid
   .span6
-    %h1 Almacenes
+    %h2 Almacenes
 
   .span6.r
     = link_to new_store_path, class: 'btn' do
@@ -16,7 +16,7 @@
   - @stores.each do |store|
     %li.row-fluid
       .span7
-        %h3
+        %h4
           %i(class="#{true_false store.active}" title="Activo" data-toggle="tooltip")
           = link_to store.name, store
       .span4

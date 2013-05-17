@@ -2,8 +2,7 @@
   %ul.breadcrumbs.span6
     %li #{link_to 'Cuentas bancarias', banks_path} 
 
-%header
-  %h1 Nueva cuenta bancaria
+%h2 Nueva cuenta bancaria
 
 = simple_form_for(@bank, html: {id: 'bank-form' }) do |f|
   = bonsai_form_error(f)
