@@ -72,60 +72,63 @@
 
 = render 'expenses/tour/devolution'
 
-#tabs
-  %ul
-    %li
-      %a(href="#information" id="tab_info") Información
-    %li.payment-li
-      %a.payments-tab(href="#payments") Pagos
-    -#%li
-      %a(href="#inventory") Entregas inventario
+%hr
 
-  #information
+%ul#tabs.nav.nav-pills
+  %li
+    %a(href="#information" data-toggle='tab') Items
+  %li
+    %a.payments-tab(href="#payments" data-toggle='tab') Pagos
+
+.tab-content
+  #information.tab-pane.fade
+    %h2.n Items
     = render "expenses/items", expense: @expense
-  #payments
 
-    %a.btn(id='payment-link' href='javascript:;')
-      %i.icon-plus-sign
-      Pagar
+  #payments.tab-pane.fade
+    %h2.n Pagos y devoluciones
 
-    -#%a.btn.btn-primary(id='devolution-link' href='javascript:;')
-      %i.icon-minus-sign
-      Devolver
+    .payment-buttons
+      %a#payment-link.btn.btn-danger(href='javascript:;')
+        %i.icon-minus-sign
+        Pagar
+
+      %a#devolution-link.btn.btn-success(href='javascript:;')
+        %i.icon-plus-sign
+        Devolver
 
     #payment-form(style='display: none')
+      %hr
       %h3 Pagar Egreso
-      = render 'expenses/payment_form', expense: @expense unless @expense.is_paid?
+      = render 'expenses/payment_form', expense: @expense# unless @expense.is_paid?
 
     #devolution-form(style='display: none')
-      -#%h3 Devolución
-      -#= render 'expenses/devolution_form', expense: @expense unless @expense.is_draft?
-
-    %h2 Pagos
+      %h3 Devolución
+    -#= render 'expenses/devolution_form', expense: @expense unless @expense.is_draft?
 
     %ul.unstyled.listing
       = render partial: 'account_ledgers/income', collection: @expense.payments, as: :ledger
 
 :javascript
   $( function() {
-    $('#tabs').tabs()
+    $('#tabs a:first').tab('show');
     // Show hide
     $('#payment-link').click( function() {
-      $('#payment-form').show('slow')
-      $(this).hide('slow')
+      $('#payment-form').show('fast');
+      $('.payment-buttons').hide('fast');
     });
     $('#cancel-payment-link').click( function() {
-      $('#payment-form').hide('slow')
-      $('#payment-link').show('slow')
+      $('#payment-form').hide('fast');
+      $('.payment-buttons').show('fast');
     });
 
     // Devolution show hide
     $('#devolution-link').click( function() {
-      $('#devolution-form').show('slow')
-      $(this).hide('slow')
+      $('#devolution-form').show('fast');
+      $('.payment-buttons').hide('fast');
     });
     $('#cancel-devolution-link').click( function() {
-      $('#devolution-form').hide('slow')
-      $('#devolution-link').show('slow')
+      $('#devolution-form').hide('fast');
+      $('.payment-buttons').show('fast');
     })
   })

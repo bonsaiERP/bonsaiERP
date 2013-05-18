@@ -68,6 +68,8 @@ private
   # Set details for a new Income or Expense
   def set_details
     items.each do |det|
+      det.price          = det.price || 0
+      det.quantity       = det.quantity || 0
       det.original_price = item_prices[det.item_id]
       det.balance        = get_detail_balance(det)
     end

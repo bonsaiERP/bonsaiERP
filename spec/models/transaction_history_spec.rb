@@ -38,7 +38,8 @@ describe TransactionHistory do
       UserSession.user = build :user, id: 12
 
       th = TransactionHistory.new
-      th.create_history(income).should be_true
+      th.set_history(income)
+      th.save.should be_true
       th.should be_persisted
 
       income.total = 290

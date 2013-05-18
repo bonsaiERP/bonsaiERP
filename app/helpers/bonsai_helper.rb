@@ -39,9 +39,8 @@ module BonsaiHelper
   def bonsai_form_error(f)
     unless f.object.errors.empty?
       html = content_tag('h4', 'Exiten errores en el formulario')
-      html << '<p>Por favor corrija los errores</p>'.html_safe
       unless f.object.errors[:base].empty?
-        html << "<ul>#{ f.object.errors[:base].inject("") { |t, v|  t << "<li>#{v}</li>" } }</ul>".html_safe
+        html << "<dl>#{ f.object.errors[:base].inject("") { |t, v|  t << "<dd>#{v}</dd>" } }</dl>".html_safe
       end
       "<div class='alert alert-error'>#{ html }</div>".html_safe
     end

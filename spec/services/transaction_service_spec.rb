@@ -17,8 +17,4 @@ describe TransactionService do
       end
     end
   end
-
-  it "#attibutes" do
-    TransactionService::TRANS_ATTRIBUTES.should eq([:date, :contact_id, :total, :exchange_rate, :project_id, :due_date, :description])
-  end
 end

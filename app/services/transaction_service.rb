@@ -93,7 +93,11 @@ private
 
   def save_service(res, &block)
     res = commit_or_rollback{ block.call } if res
-    set_errors(*[@transaction, @ledger].compact) unless res
+
+    unless res
+      @transaction.errors.messages.select{|k| @transaction.errors.delete(k) if k =~ /\w+_details/ }
+      set_errors(*[@transaction, @ledger].compact)
+    end
 
     res
   end

@@ -6,7 +6,6 @@
     %li
       = @contact
 
-
 .row-fluid
   .span8
     %h1.n
@@ -71,7 +70,7 @@
             .span6.r.b.muted
               Saldo
 
-      
+
         = render partial: 'incomes/income', collection: @contact.incomes.page(1).includes(:contact, transaction: [:creator, :approver, :nuller]), as: :income
 
 

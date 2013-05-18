@@ -1,4 +1,4 @@
-.row-fluid
+.row-fluid.pad-x-10
   .span6
     = f.input :account_to_id, label: 'Cuenta', input_html: {class: 'span10', data:{value: 'payment.account_to_id'}}
   .span3
@@ -9,7 +9,7 @@
       label: 'Verificar <i class="icon-warning-sign" data-toggle="tooltip" title="Solo cuentas de BANCO pueden verificar a futuro"></i>'.html_safe,
       hint: 'Verificar a futuro. Ej.: (Cheque)'
 
-.row-fluid
+.row-fluid.bg-white-tan.pad-10.borders-y
   .span3
     = f.input :amount,
       label: 'Cantidad <span class="currency"></span>'.html_safe,
@@ -27,6 +27,6 @@
         = currency_label transaction.currency
 
 
-.row-fluid
+.row-fluid.pad-x-10
   .span6
     = f.input :reference, label: 'Referecia', as: :text, input_html: {rows: 3, data: {value: 'payment.reference'} }
