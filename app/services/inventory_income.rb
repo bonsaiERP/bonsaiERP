@@ -13,8 +13,8 @@ class InventoryIncome < InventoryOperationService
     return false unless valid?
     res = true
     commit_or_rollback do
-      inventory_operation.ref_number = InventoryOperation.get_ref_number('IngI')
-      inventory_operation.operation = 'invincin'
+      inventory_operation.ref_number = InventoryOperation.get_ref_number('InvI')
+      inventory_operation.operation = 'inc_in'
       res = inventory_operation.save
 
       res = res && update_stocks {|st| st.quantity - item_quantity(st.item_id)}
@@ -42,10 +42,15 @@ private
   end
 
   def item_quantities
+    valid = true
     items.each do |it|
       det = income_detail(it.item_id)
       if it.quantity > det.balance
         it.errors.add(:quantity, I18n.t('errors.messages.inventory_operation_detail.invalid_balance'))
+        if valid
+          self.errors.add(:base, '')
+          valid = false
+        end
       end
     end
   end

@@ -45,6 +45,7 @@ describe InventoryIncome do
   before(:each) do
     UserSession.user = user
     Income.any_instance.stub(contact: contact)
+    Store.stub_chain(:active, where: [store])
   end
 
   it "#delivers" do
@@ -59,9 +60,9 @@ describe InventoryIncome do
 
     io = InventoryOperation.find(invin.inventory_operation.id)
     io.should be_is_a(InventoryOperation)
-    io.should be_is_invincin
+    io.should be_is_inc_in
     io.creator_id.should eq(user.id)
-    io.ref_number.should =~ /\AIngI-\d{2}-\d{4}\z/
+    io.ref_number.should =~ /\AIng-I-\d{2}-\d{4}\z/
 
     inc = Income.find(income.id)
     inc.income_details[0].balance.should == 3
@@ -76,23 +77,36 @@ describe InventoryIncome do
     stocks.map(&:item_id).sort.should eq([1, 2])
     stocks.map(&:quantity).should eq([-2, -2])
 
-=begin
     # More items
-    attrs = valid_attributes.merge(inventory_operation_details_attributes:
-      [{item_id: 2, quantity: 2, store_id: 1},
-       {item_id: 12, quantity: 5, store_id: 1},
-       {item_id: 2, quantity: 10, store_id: 1}
-      ]
-    )
-    invin = InventoryIncomeIn.new(attrs)
-    invin.create.should be_true
-    stocks = Stock.active.where(store_id: io.store_id)
-    stocks.should have(3).items
+    attrs = valid_attributes
+    attrs[:inventory_operation_details_attributes][0][:quantity] = 3
+    attrs[:inventory_operation_details_attributes][1][:quantity] = 3
 
-    stocks.find {|v| v.item_id === 2}.quantity.should == 14
-    stocks.find {|v| v.item_id === 12}.quantity.should == 5
-    stocks.find {|v| v.item_id === 1}.quantity.should == 2
-=end
+    invin = InventoryIncome.new(attrs)
+    invin.deliver.should be_true
+
+    stocks = Stock.active.where(store_id: io.store_id)
+    stocks.should have(2).items
+
+    inc = Income.find(income.id)
+    inc.income_details[0].balance.should == 0
+    inc.income_details[1].balance.should == 0
+
+    io = InventoryOperation.find(invin.inventory_operation.id)
+    io.inventory_operation_details.should have(2).items
+    io.inventory_operation_details.map(&:quantity).should eq([3, 3])
+    io.inventory_operation_details.map(&:item_id).should eq([1, 2])
+
+    stocks = Stock.active.where(store_id: io.store_id)
+    stocks.should have(2).items
+    stocks.map(&:item_id).sort.should eq([1, 2])
+    stocks.map(&:quantity).should eq([-5, -5])
+
+    # Error
+    invin = InventoryIncome.new(valid_attributes)
+    invin.deliver.should be_false
+    invin.items[0].errors[:quantity].should_not be_blank
+    invin.items[1].errors[:quantity].should_not be_blank
   end
 end
 

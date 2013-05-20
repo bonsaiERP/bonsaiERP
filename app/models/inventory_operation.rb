@@ -5,7 +5,9 @@ class InventoryOperation < ActiveRecord::Base
 
   before_create { self.creator_id = UserSession.id }
 
-  OPERATIONS = %w(invin invout invincin invincout invexpin invexpout transin transout).freeze
+  OPERATIONS = %w(in out inc_in inc_out exp_in exp_out trans_in trans_out).freeze
+  IN_OPERATIONS = %w(in inc_in exp_in trans_in)
+  OUT_OPERATIONS = %w(out inc_out exp_out trans_out)
 
   belongs_to :store
   belongs_to :contact
@@ -24,6 +26,9 @@ class InventoryOperation < ActiveRecord::Base
   validates_inclusion_of :operation, in: OPERATIONS
 
   #validates_presence_of :store_to, :if => :is_transference?
+  scope :op_in, -> { where(operation: IN_OPERATIONS) }
+  scope :op_out, -> { where(operation: OUT_OPERATIONS) }
+
 
   OPERATIONS.each do |_op|
     define_method :"is_#{_op}?" do
@@ -44,19 +49,44 @@ class InventoryOperation < ActiveRecord::Base
     transaction.transaction_details
   end
 
-  def self.get_ref_number(op = '')
-    ref = InventoryOperation.order("ref_number DESC").limit(1).pluck(:ref_number).first
-    year = Date.today.year.to_s[2..4]
+  def is_in?
+    IN_OPERATIONS.include? operation
+  end
 
-    if ref.present?
-      _, y, num = ref.split('-')
-      if y == year
-        "#{op}-#{y}-#{num.next}"
-      else
-        "#{op}-#{year}-0001"
-      end
+  def is_out?
+    OUT_OPERATIONS.include? operation
+  end
+
+  def set_ref_number(op = '')
+    io = InventoryOperation.select("id, ref_number").order("id DESC").limit(1).first
+
+    if io.present?
+      self.ref_number = get_ref_io(io)
     else
-      "#{op}-#{year}-0001"
+      self.ref_number = "#{op_ref_type}-#{year}-0001"
     end
   end
+
+private
+  def get_ref_io(io)
+    _, y, _ = io.ref_number.split('-')
+    if y === year
+      "#{op_ref_type}-#{year}-#{"%04\d" % io.id.next}"
+    else
+      "#{op_ref_type}-#{year}-0001"
+    end
+  end
+
+  def year
+    @year ||= Date.today.year.to_s[2..4]
+  end
+
+  def op_ref_type
+    if is_in?
+      "I"
+    else
+      "S"
+    end
+  end
+
 end

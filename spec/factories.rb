@@ -150,5 +150,6 @@ FactoryGirl.define do
 
   factory :inventory_operation do
     date '2013-05-10'
+    operation 'in'
   end
 end

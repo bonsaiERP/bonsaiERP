@@ -31,7 +31,7 @@ describe Inventory do
 
     io = InventoryOperation.find(invin.inventory_operation.id)
     io.should be_is_a(InventoryOperation)
-    io.should be_is_invin
+    io.should be_is_in
     io.creator_id.should eq(user.id)
     io.ref_number.should =~ /\AIng-\d{2}-\d{4}\z/
 
@@ -65,7 +65,7 @@ describe Inventory do
     invout.save_out.should be_true
 
     io = invout.inventory_operation
-    io.should be_is_invout
+    io.should be_is_out
     io.inventory_operation_details.should have(2).items
     io.inventory_operation_details.map(&:quantity).should eq([2, 2])
     io.inventory_operation_details.map(&:item_id).should eq([1, 2])

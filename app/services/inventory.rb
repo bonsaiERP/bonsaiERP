@@ -7,7 +7,7 @@ class Inventory < InventoryOperationService
     res = true
     commit_or_rollback do
       inventory_operation.ref_number = InventoryOperation.get_ref_number('Ing')
-      inventory_operation.operation = 'invin'
+      inventory_operation.operation = 'in'
 
       res = inventory_operation.save 
       res = res && update_stocks {|st| st.quantity + item_quantity(st.item_id)}
@@ -22,7 +22,7 @@ class Inventory < InventoryOperationService
     res = true
     commit_or_rollback do
       inventory_operation.ref_number = InventoryOperation.get_ref_number('Egr')
-      inventory_operation.operation = 'invout'
+      inventory_operation.operation = 'out'
 
       res = inventory_operation.save 
       res = res && update_stocks {|st| st.quantity - item_quantity(st.item_id)}
