@@ -16,7 +16,7 @@ class IncomeExpenseService
 
   def set_new(attrs = {})
     @transaction.attributes = attrs.slice(*attributes).merge(
-      ref_number: Income.get_ref_number,
+      ref_number: @trans_klass.get_ref_number,
       date: attrs[:date] || Date.today,
       state: 'draft',
       creator_id: UserSession.id,
@@ -28,7 +28,7 @@ class IncomeExpenseService
     @transaction.discounted = (discount > 0)
     @transaction.balance = total
 
-    @transaction.income_details.build if @transaction.income_details.empty?
+    @transaction.items.build if @transaction.items.empty?
   end
 
   # Updates the data for an imcome or expense

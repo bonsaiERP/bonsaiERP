@@ -74,8 +74,8 @@ describe IncomeService do
 
   context "Create a income with default data" do
     before(:each) do
-      Income.any_instance.stub(save: true, contact: contact)
-      IncomeDetail.any_instance.stub(save: true, valid?: true)
+      Income.any_instance.stub(valid?: true, contact: contact)
+      IncomeDetail.any_instance.stub(valid?: true)
     end
 
     subject { IncomeService.new_income(valid_params) }
@@ -194,6 +194,7 @@ describe IncomeService do
 
       # Income
       income = is.income
+      income.total.should == 490.0
       income.should be_persisted
       income.id.should be_is_a(Integer)
       income.should be_is_paid
@@ -201,6 +202,7 @@ describe IncomeService do
       income.currency.should eq('BOB')
 
       ledger  = is.ledger
+      ledger.amount.should == income.total
       ledger.should be_persisted
       ledger.account_id.should eq(income.id)
       ledger.currency.should eq('BOB')
