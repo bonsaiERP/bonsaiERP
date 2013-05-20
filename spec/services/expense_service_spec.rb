@@ -35,6 +35,9 @@ describe ExpenseService do
       subject.expense.expense_details[0].price.should eq(details[0][:price])
       subject.expense.expense_details[0].quantity.should eq(details[0][:quantity])
       subject.expense.expense_details[1].item_id.should eq(details[1][:item_id])
+      subject.should respond_to(:expense_details)
+      subject.should respond_to(:expense_details_attributes)
+      subject.should respond_to(:expense_details_attributes=)
     end
 
     it "sets_defaults if nil" do
@@ -194,6 +197,7 @@ describe ExpenseService do
 
       es.update_and_approve({direct_payment: true, account_to_id: 1}).should be_true
 
+      es.expense_id.should eq(es.expense.id)
       # Expense
       expense = es.expense
       expense.should be_persisted

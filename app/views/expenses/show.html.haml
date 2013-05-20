@@ -74,11 +74,14 @@
 
 %hr
 
-%ul#tabs.nav.nav-pills
+%ul#tabs.nav.nav-pills.fs150
+  - unless @expense.is_draft?
+    %li
+      %a.payments-tab(href="#payments" data-toggle='tab')
+        Pagos
   %li
-    %a(href="#information" data-toggle='tab') Items
-  %li
-    %a.payments-tab(href="#payments" data-toggle='tab') Pagos
+    %a(href="#information" data-toggle='tab')
+      Items
 
 .tab-content
   #information.tab-pane.fade
@@ -95,7 +98,7 @@
 
       %a#devolution-link.btn.btn-success(href='javascript:;')
         %i.icon-plus-sign
-        Devolver
+        Devolución
 
     #payment-form(style='display: none')
       %hr
@@ -104,7 +107,7 @@
 
     #devolution-form(style='display: none')
       %h3 Devolución
-    -#= render 'expenses/devolution_form', expense: @expense unless @expense.is_draft?
+      = render 'expenses/devolution_form', expense: @expense unless @expense.is_draft?
 
     %ul.unstyled.listing
       = render partial: 'account_ledgers/income', collection: @expense.payments, as: :ledger

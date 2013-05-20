@@ -76,43 +76,54 @@
 
 %hr
 
-#payments
-  %h2.n Cobros y devoluciones
-  = @income.pendent_conciliations
+%ul#tabs.nav.nav-pills.fs150
+  - unless @income.is_draft?
+    %li
+      %a(href='#payments' data-toggle='tab') Cobros
 
-  .payment-buttons
-    - unless @income.is_paid?
-      %a.btn.btn-success(id='payment-link' href='javascript:;')
-        %i.icon-plus-sign
-        Cobrar
+  %li
+    %a(href='#information' data-toggle='tab') Items
 
-    %a.btn.btn-danger(id='devolution-link' href='javascript:;')
-      %i.icon-minus-sign
-      Devolución
+.tab-content
+  #information.tab-pane.fade
+    = render "incomes/items", income: @income
+
+  #payments.tab-pane.fade
+    %h2.n Cobros y devoluciones
+    = @income.pendent_conciliations
+
+    .payment-buttons
+      - unless @income.is_paid?
+        %a.btn.btn-success(id='payment-link' href='javascript:;')
+          %i.icon-plus-sign
+          Cobrar
+
+      %a.btn.btn-danger(id='devolution-link' href='javascript:;')
+        %i.icon-minus-sign
+        Devolución
 
 
-  #payment-form(style='display: none')
-    %hr
-    %h3 Cobro
-    = render 'incomes/payment_form', income: @income unless @income.is_paid?
+    #payment-form(style='display: none')
+      %hr
+      %h3 Cobro
+      = render 'incomes/payment_form', income: @income unless @income.is_paid?
 
-  #devolution-form(style='display: none')
-    %hr
-    %h3 Devolución
-    = render 'incomes/devolution_form', income: @income unless @income.is_draft?
+    #devolution-form(style='display: none')
+      %hr
+      %h3 Devolución
+      = render 'incomes/devolution_form', income: @income unless @income.is_draft?
 
-  %ul.unstyled.listing(style="margin-top: 0px")
-    %li.row-fluid
-      .span7.offset3.r.muted
-        %strong Cantidad
+    %ul.unstyled.listing(style="margin-top: 0px")
+      %li.row-fluid
+        .span7.offset3.r.muted
+          %strong Cantidad
 
-    = render partial: 'account_ledgers/income', collection: @income.payments, as: :ledger
-
-#information
-  = render "incomes/items", income: @income
+      = render partial: 'account_ledgers/income', collection: @income.payments, as: :ledger
 
 :javascript
   $( function() {
+    $('#tabs a:first').tab('show');
+
     // Payment show hide
     $('#payment-link').click( function() {
       $('#payment-form').show('fast')

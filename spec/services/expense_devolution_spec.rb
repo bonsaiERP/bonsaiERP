@@ -54,7 +54,7 @@ describe ExpenseDevolution do
       exp_dev = ExpenseDevolution.new(valid_attributes.merge(amount: 101))
 
       Expense.stub_chain(:active, where: [expense])
-      Account.stub(find_by_id: account_to)
+      Account.stub(where: [account_to])
 
       exp_dev.should_not be_valid
       exp_dev.errors_on(:amount).should_not be_empty
@@ -68,7 +68,7 @@ describe ExpenseDevolution do
     before(:each) do
       expense.stub(save: true)
       Expense.stub_chain(:active, :where).with(id: account_id).and_return([expense])
-      Account.stub(:find_by_id).with(account_to_id).and_return(account_to)
+      Account.stub(:where).with(id: account_to_id).and_return([account_to])
       AccountLedger.any_instance.stub(save_ledger: true)
     end
 
@@ -103,7 +103,7 @@ describe ExpenseDevolution do
     context "Verification only for bank accounts" do
       it "verificates because it is a bank" do
         bank = build :bank, id: 100
-        Account.stub(:find_by_id).with(bank.id).and_return(bank)
+        Account.stub(:where).with(id: bank.id).and_return([bank])
         bank.id.should_not eq(account_to_id)
 
         dev = ExpenseDevolution.new(valid_attributes.merge(account_to_id: 100, verification: true))
@@ -125,10 +125,8 @@ describe ExpenseDevolution do
 
       it "does not change when its't bank account" do
         cash = build :cash, id: 200
-        Account.stub(:find_by_id).with(cash.id).and_return(cash)
+        Account.stub(:where).with(id: cash.id).and_return([cash])
         cash.id.should_not eq(account_to_id)
-
-        Account.find_by_id(account_to_id).should eq(account_to)
 
         dev = ExpenseDevolution.new(valid_attributes.merge(account_to_id: 200, verification: true))
 
@@ -162,6 +160,7 @@ describe ExpenseDevolution do
 
     it "sets errors from other clases" do
       dev = ExpenseDevolution.new(valid_attributes)
+      dev.stub(account_to: true)
 
       dev.pay_back.should be_false
       # There is no method ExpenseDevolution#balance

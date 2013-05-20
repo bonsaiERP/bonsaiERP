@@ -30,18 +30,19 @@ class Devolution < BaseService
   end
 
   def account_to
-    @account = Account.find_by_id(account_to_id)
+    @account_to ||= Account.where(id: account_to_id).first
   end
 
   def transaction; end
+
 private
   # Builds an instance of AccountLedger with basic data for  devolution
   def build_ledger(attrs = {})
-      AccountLedger.new({
-                         account_id: account_id, exchange_rate: exchange_rate,
-                         amount: 0, account_to_id: account_to_id,
-                         reference: reference, date: date
-      }.merge(attrs))
+    AccountLedger.new({
+                       account_id: account_id, exchange_rate: exchange_rate,
+                       amount: 0, account_to_id: account_to_id,
+                       reference: reference, date: date
+    }.merge(attrs))
   end
 
   def update_transaction

@@ -94,6 +94,11 @@ class ExpensePayment extends Payment
   formSel: '#expense-payment-form'
   verificationSel: '#expense_payment_verification'
 
+class ExpenseDevolution extends Payment
+  accountToSel: '#expense_devolution_account_to_id'
+  formSel: '#expense-devolution-form'
+  verificationSel: '#expense_devolution_verification'
+
 Payment.paymentOptions = (val) ->
   amt = ''
   switch val.type
@@ -119,3 +124,4 @@ App.Payment = Payment
 App.IncomePayment = IncomePayment
 App.IncomeDevolution = IncomeDevolution
 App.ExpensePayment = ExpensePayment
+App.ExpenseDevolution = ExpenseDevolution

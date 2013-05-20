@@ -17,7 +17,7 @@ class IncomesController < ApplicationController
 
   # GET /incomes/new
   def new
-    @is = IncomeService.new_income
+    @is = IncomeService.new_income(date: Date.today)
   end
 
   # GET /incomes/1/edit

@@ -3,16 +3,16 @@
 
   -########################################
   -# Render common form elements
-  = render 'transactions/shared_form', f: f
+  = render 'transactions/shared_form', f: f, transaction: expense_service.expense
   = render 'transactions/form_direct_payment', f: f, lbl: 'Pago' if expense_service.is_draft?
 
   -########################################
   -# Render items
   .row-fluid
-    =render "transactions/form_items", f: f, transaction: expense_service, details: :expense_details
+    =render "transactions/form_items", f: f, transaction: expense_service.expense, details: :expense_details
 
-  = f.submit 'Salvar', class: 'btn btn-success b btn-large trans', name: 'commit_save', data: {show: 'trans.direct_payment| inverse'}
-  = f.submit 'Salvar y aprovar', class: 'btn btn-success b btn-large', name: 'commit_approve' if expense_service.is_draft?
+  = f.submit 'Salvar', class: 'btn b btn-large trans', name: 'commit_save', data: {show: 'trans.direct_payment| inverse'}
+  = f.submit 'Salvar y aprovar', class: 'btn btn-primary b btn-large', name: 'commit_approve' if expense_service.is_draft?
 
 
 :javascript
@@ -21,6 +21,10 @@
       $('.contact_id').val(resp.matchcode).data('value', resp.matchcode)
       .prev().val(resp.matchcode);
     });
+
+    if($('[name=commit_approve]').length == 0) {
+      $('[name=commit_save]').addClass('btn-primary');
+    }
 
     fx.rates = exchangeRates.rates;
     expense = new App.Expense();

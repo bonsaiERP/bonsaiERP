@@ -35,6 +35,9 @@ describe IncomeService do
       subject.income.income_details[0].price.should eq(details[0][:price])
       subject.income.income_details[0].quantity.should eq(details[0][:quantity])
       subject.income.income_details[1].item_id.should eq(details[1][:item_id])
+      subject.should respond_to(:income_details)
+      subject.should respond_to(:income_details_attributes)
+      subject.should respond_to(:income_details_attributes=)
     end
 
     it "sets_defaults if nil" do
@@ -192,6 +195,7 @@ describe IncomeService do
 
       is.update_and_approve({direct_payment: true, account_to_id: 1}).should be_true
 
+      is.income_id.should eq(is.income.id)
       # Income
       income = is.income
       income.total.should == 490.0

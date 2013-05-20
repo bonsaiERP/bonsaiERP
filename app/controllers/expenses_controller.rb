@@ -16,7 +16,7 @@ class ExpensesController < ApplicationController
 
   # GET /expenses/new
   def new
-    @es = ExpenseService.new_expense
+    @es = ExpenseService.new_expense(date: Date.today)
   end
 
   # GET /expenses/1/edit

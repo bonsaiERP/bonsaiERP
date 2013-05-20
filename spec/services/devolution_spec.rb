@@ -23,11 +23,10 @@ describe Devolution do
     it { should have_valid(:date).when('2012-12-12', Date.today, Time.now, '2013/01/25') }
     it { should_not have_valid(:date).when('anything', '', '2012-13-13', nil) }
 
-    it { should have_valid(:amount).when(1, 0.03) }
     it { should_not have_valid(:amount).when(-1, -0.01, '', 'da') }
 
     context "account_to" do
-      let(:account_to) { build :account, id: account_to_id, currency: 'BOB' }
+      let(:account_to) { build :account, id: account_to_id, currency: 'BOB', amount: 500 }
 
       it "Not valid" do
         dev = Devolution.new(valid_attributes)
@@ -36,9 +35,16 @@ describe Devolution do
       end
 
       it "Valid" do
-        Account.stub!(:find_by_id).with(account_to_id).and_return(account_to)
+        Account.stub(:where).with(id: account_to_id).and_return([account_to])
         dev = Devolution.new(valid_attributes)
+        dev.stub(transaction: build(:income, total: 100, balance: 10 ))
         dev.should be_valid
+
+        dev.amount = 0.01
+        dev.should be_valid
+
+        dev.amount = -1
+        dev.should_not be_valid
       end
     end
 

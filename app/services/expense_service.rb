@@ -7,12 +7,12 @@ class ExpenseService < TransactionService
   validate :income_is_valid,  if: :direct_payment?
   validate :valid_account_to, if: :direct_payment?
 
-  delegate :contact, :is_approved?, :is_draft?, :income_details,
+  delegate :contact, :is_approved?, :is_draft?, :expense_details,
            :subtotal, :to_s, :state, :discount, :items,
-           :income_details_attributes, :income_details_attributes=,
+           :expense_details_attributes, :expense_details_attributes=,
            to: :expense
 
-  delegate :id, to: :income, prefix:true
+  delegate :id, to: :expense, prefix: true
 
   # Creates and instance of income and initializes
   def self.new_expense(attrs = {})
