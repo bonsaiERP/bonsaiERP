@@ -232,7 +232,7 @@ es:
         item_not_for_sale: "Debe seleccionar un ítem que se vende"
       inventory_operation_detail:
         stock_quantity: "La cantidad es mayor a la disponible en stock"
-        transaction_quantity: "La cantidad ingresada es mayor a la de la operación"
+        transaction_quantity: "La cantidad ingresada es invalida"
         repeated_item: "El ítem esta repetido"
         invalid_balance: "La cantidad que ingreso es mayor que el saldo"
       inventory_operation:
