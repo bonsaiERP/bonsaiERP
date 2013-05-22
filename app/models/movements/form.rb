@@ -24,8 +24,6 @@ class Movements::Form < BaseForm
   validates_numericality_of :total
   validate :unique_item_ids
 
-  delegate :items, to: :movement
-
   # Finds the income and sets data with the income found
   def set_service_attributes(mov)
     [:ref_number, :date, :due_date, :currency, :exchange_rate, 

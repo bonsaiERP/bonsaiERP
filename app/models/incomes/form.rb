@@ -8,7 +8,7 @@ class Incomes::Form < Movements::Form
   validate :valid_account_to, if: :direct_payment?
 
   delegate :contact, :is_approved?, :is_draft?, :income_details,
-           :subtotal, :to_s, :state, :discount, :items,
+           :subtotal, :to_s, :state, :discount, :details,
            :income_details_attributes, :income_details_attributes=,
            to: :income
 

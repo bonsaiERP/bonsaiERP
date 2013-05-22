@@ -104,7 +104,7 @@ private
   # Do not allow items to be destroyed if the quantity != balance
   def check_items_balances
     res = true
-    items.select(&:marked_for_destruction?).each do |det|
+    details.select(&:marked_for_destruction?).each do |det|
       unless det.quantity === det.balance
         det.errors.add(:quantity, I18n.t('errors.messages.trasaction_details.not_destroy'))
         det.instance_variable_set(:@marked_for_destruction, false)

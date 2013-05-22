@@ -8,7 +8,7 @@ describe UniqueItem do
     income.income_details.build(item_id: 2, quantity: 2)
 
     UniqueItem.new(income).should be_valid
-    income.items.should have(2).items
+    income.details.should have(2).items
   end
 
   it "#valid false" do
@@ -20,8 +20,8 @@ describe UniqueItem do
 
     UniqueItem.new(income).should_not be_valid
     income.errors[:base].should eq([I18n.t("errors.messages.item.repeated_items")])
-    income.items[2].errors[:item_id].should eq([I18n.t("errors.messages.item.repeated")])
-    income.items[4].errors[:item_id].should eq([I18n.t("errors.messages.item.repeated")])
+    income.details[2].errors[:item_id].should eq([I18n.t("errors.messages.item.repeated")])
+    income.details[4].errors[:item_id].should eq([I18n.t("errors.messages.item.repeated")])
 
   end
 end

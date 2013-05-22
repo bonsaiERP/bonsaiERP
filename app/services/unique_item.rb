@@ -1,13 +1,13 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-# Checks for unique item_ids and adds an error to the found items
+# Checks for unique item_ids and adds an error to the found details
 class UniqueItem < Struct.new(:klass)
-  delegate :items, to: :klass
+  delegate :details, to: :klass
 
   def valid?
     res = true
-    items.each do |det|
+    details.each do |det|
       add_to_hash(det.item_id)
 
       if repeated_item?(det.item_id)

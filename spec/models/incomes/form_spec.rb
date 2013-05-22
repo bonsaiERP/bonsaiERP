@@ -148,8 +148,8 @@ describe Incomes::Form do
       inc
     end
 
-    let(:update_items) {
-      subject.items.map {|det|
+    let(:update_details) {
+      subject.details.map {|det|
         {id: det.id, item_id: det.item_id, quantity: det.quantity + 2, price: det.price}
       }
     }
@@ -157,17 +157,17 @@ describe Incomes::Form do
     let(:total_for_update) { subject.total + 10 * 2 + 20 * 2 }
     let(:attributes_for_update) {
       valid_params.merge(total: total_for_update,
-                         description: 'A new changed description', income_details_attributes: update_items)
+                         description: 'A new changed description', income_details_attributes: update_details)
     }
 
     it "does not allow errors on IncomeDetail" do
       i = subject.income
       is = Incomes::Form.find(i.id)
       is.income.stub(valid?: false)
-      is.items[0].errors.add(:quantity, "Error in quantity")
+      is.details[0].errors.add(:quantity, "Error in quantity")
 
       is.update.should be_false
-      is.income.items[0].errors[:quantity].should eq(["Error in quantity"])
+      is.income.details[0].errors[:quantity].should eq(["Error in quantity"])
     end
 
     it "Update" do
@@ -296,7 +296,7 @@ describe Incomes::Form do
       is.income.discount.should == 0
 
       # UPDATE and check errors
-      attrs = is.income.items.map {|det|
+      attrs = is.income.details.map {|det|
         {id: det.id, item_id: det.item_id, quantity: det.quantity - 2, price: det.price}
       }
 
