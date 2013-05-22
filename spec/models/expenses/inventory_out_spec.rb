@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe Expenses::Inventory do
+describe Expenses::InventoryOut do
   let(:store) { build :store, id: 1 }
 
   before(:each) do
@@ -31,7 +31,7 @@ describe Expenses::Inventory do
   let(:valid_attributes) {
     {store_id: 1, date: Date.today, description: 'Test inventory in', 
      income_id: income.id,
-     inventory_operation_details_attributes: [
+     inventory_details_attributes: [
        {item_id: 1, quantity: 2},
        {item_id: 2, quantity: 2}
     ]
@@ -49,14 +49,14 @@ describe Expenses::Inventory do
   end
 
   it "#delivers" do
-    InventoryOperationDetail.any_instance.stub(item: item)
-    InventoryOperation.any_instance.stub(store: store)
+    InventoryDetail.any_instance.stub(item: item)
+    Inventory.any_instance.stub(store: store)
     Stock.any_instance.stub(item: item, store: store)
 
-    invin = Expenses::Inventory.new(valid_attributes)
-    invin.inventory_operation_details.should have(2).items
+    invout = Expenses::InventoryOut.new(valid_attributes)
+    invout.details.should have(2).items
 
-    invin.deliver.should be_true
+    invout.save.should be_true
 
     io = InventoryOperation.find(invin.inventory_operation.id)
     io.should be_is_a(InventoryOperation)

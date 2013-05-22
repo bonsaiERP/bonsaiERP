@@ -19,7 +19,8 @@ class Inventory < ActiveRecord::Base
   #has_one    :transference, :class_name => 'InventoryOperation', :foreign_key => "transference_id"
 
   has_many :inventory_details, dependent: :destroy
-  accepts_nested_attributes_for :inventory_details, allow_destroy: true
+  accepts_nested_attributes_for :inventory_details, allow_destroy: true,
+                                reject_if: lambda {|attrs| attrs[:quantity].blank? || attrs[:quantity] <= 0 }
   alias :details :inventory_details
 
   # Validations

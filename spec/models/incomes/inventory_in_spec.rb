@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe Incomes::Inventory do
+describe Incomes::InventoryIn do
   let(:store) { build :store, id: 1 }
 
   before(:each) do
@@ -31,7 +31,7 @@ describe Incomes::Inventory do
   let(:valid_attributes) {
     {store_id: 1, date: Date.today, description: 'Test inventory in', 
      income_id: income.id,
-     inventory_operation_details_attributes: [
+     inventory_details_attributes: [
        {item_id: 1, quantity: 2},
        {item_id: 2, quantity: 2}
     ]
@@ -50,36 +50,36 @@ describe Incomes::Inventory do
 
   it "::new_out" do
     inv = Incomes::Inventory.new_out(valid_attributes.dup)
-    inv.inventory_operation.should be_is_out
-    inv.inventory_operation.should be_is_inc_out
-    inv.inventory_operation.ref_number.should =~ /S-\d{2}-\d{4}/
-    inv.inventory_operation.date.should eq(valid_attributes.fetch(:date))
-    inv.inventory_operation.description.should eq(valid_attributes.fetch(:description))
+    inv.inventory.should be_is_out
+    inv.inventory.should be_is_inc_out
+    inv.inventory.ref_number.should =~ /S-\d{2}-\d{4}/
+    inv.inventory.date.should eq(valid_attributes.fetch(:date))
+    inv.inventory.description.should eq(valid_attributes.fetch(:description))
   end
 
   it "::new_in" do
     inv = Incomes::Inventory.new_in(valid_attributes.dup)
-    inv.inventory_operation.should be_is_in
-    inv.inventory_operation.should be_is_inc_in
-    inv.inventory_operation.ref_number.should =~ /I-\d{2}-\d{4}/
-    inv.inventory_operation.date.should eq(valid_attributes.fetch(:date))
-    inv.inventory_operation.description.should eq(valid_attributes.fetch(:description))
+    inv.inventory.should be_is_in
+    inv.inventory.should be_is_inc_in
+    inv.inventory.ref_number.should =~ /I-\d{2}-\d{4}/
+    inv.inventory.date.should eq(valid_attributes.fetch(:date))
+    inv.inventory.description.should eq(valid_attributes.fetch(:description))
   end
 
   it "#save" do
-    InventoryOperationDetail.any_instance.stub(item: item)
-    InventoryOperation.any_instance.stub(store: store)
+    InventoryDetail.any_instance.stub(item: item)
+    Inventory.any_instance.stub(store: store)
     Stock.any_instance.stub(item: item, store: store)
 
     attrs = valid_attributes.dup
     # inc_out
     inv = Incomes::Inventory.new_out(attrs)
-    inv.inventory_operation_details.should have(2).items
+    inv.inventory_details.should have(2).items
 
     inv.save.should be_true
 
-    io = InventoryOperation.find(inv.inventory_operation.id)
-    io.should be_is_a(InventoryOperation)
+    io = Inventory.find(inv.inventory.id)
+    io.should be_is_a(Inventory)
     io.should be_is_inc_out
     io.creator_id.should eq(user.id)
     io.ref_number.should =~ /\AS-\d{2}-\d{4}\z/
@@ -88,9 +88,9 @@ describe Incomes::Inventory do
     inc.income_details[0].balance.should == 3
     inc.income_details[1].balance.should == 3
 
-    io.inventory_operation_details.should have(2).items
-    io.inventory_operation_details.map(&:quantity).should eq([2, 2])
-    io.inventory_operation_details.map(&:item_id).should eq([1, 2])
+    io.inventory_details.should have(2).items
+    io.inventory_details.map(&:quantity).should eq([2, 2])
+    io.inventory_details.map(&:item_id).should eq([1, 2])
 
     stocks = Stock.active.where(store_id: io.store_id)
     stocks.should have(2).items
@@ -99,8 +99,8 @@ describe Incomes::Inventory do
 
     # More items
     attrs = valid_attributes.dup
-    attrs[:inventory_operation_details_attributes][0][:quantity] = 3
-    attrs[:inventory_operation_details_attributes][1][:quantity] = 3
+    attrs[:inventory_details_attributes][0][:quantity] = 3
+    attrs[:inventory_details_attributes][1][:quantity] = 3
 
     inv = Incomes::Inventory.new_out(attrs)
     inv.save.should be_true
@@ -112,10 +112,10 @@ describe Incomes::Inventory do
     inc.income_details[0].balance.should == 0
     inc.income_details[1].balance.should == 0
 
-    io = InventoryOperation.find(inv.inventory_operation.id)
-    io.inventory_operation_details.should have(2).items
-    io.inventory_operation_details.map(&:quantity).should eq([3, 3])
-    io.inventory_operation_details.map(&:item_id).should eq([1, 2])
+    io = InventoryOperation.find(inv.inventory.id)
+    io.inventory_details.should have(2).items
+    io.inventory_details.map(&:quantity).should eq([3, 3])
+    io.inventory_details.map(&:item_id).should eq([1, 2])
 
     stocks = Stock.active.where(store_id: io.store_id)
     stocks.should have(2).items
@@ -132,13 +132,13 @@ describe Incomes::Inventory do
     # Devolution
     # inc_in
     attrs = valid_attributes.dup
-    attrs[:inventory_operation_details_attributes][0][:quantity] = 3
-    attrs[:inventory_operation_details_attributes][1][:quantity] = 3
+    attrs[:inventory_details_attributes][0][:quantity] = 3
+    attrs[:inventory_details_attributes][1][:quantity] = 3
 
     inv = Incomes::Inventory.new_in(attrs)
     inv.save.should be_true
 
-    io = InventoryOperation.find(inv.inventory_operation.id)
+    io = InventoryOperation.find(inv.inventory.id)
 
     stocks = Stock.active.where(store_id: io.store_id)
     stocks.should have(2).items
@@ -147,10 +147,10 @@ describe Incomes::Inventory do
     inc.income_details[0].balance.should == 3
     inc.income_details[1].balance.should == 3
 
-    io = InventoryOperation.find(inv.inventory_operation.id)
-    io.inventory_operation_details.should have(2).items
-    io.inventory_operation_details.map(&:quantity).should eq([3, 3])
-    io.inventory_operation_details.map(&:item_id).should eq([1, 2])
+    io = InventoryOperation.find(inv.inventory.id)
+    io.inventory_details.should have(2).items
+    io.inventory_details.map(&:quantity).should eq([3, 3])
+    io.inventory_details.map(&:item_id).should eq([1, 2])
 
     stocks = Stock.active.where(store_id: io.store_id)
     stocks.should have(2).items
@@ -158,13 +158,13 @@ describe Incomes::Inventory do
     stocks.map(&:quantity).should eq([-2, -2])
 
     # ERROR
-    inv = Incomes::Inventory.new_in(valid_attributes.merge(inventory_operation_details_attributes: [
+    inv = Incomes::Inventory.new_in(valid_attributes.merge(inventory_details_attributes: [
        {item_id: 1, quantity: 3},
        {item_id: 2, quantity: 3}
     ]))
     inv.save.should be_false
     inv.details.each do |it|
-      it.errors[:quantity].should eq([I18n.t('errors.messages.inventory_operation_detail.transaction_quantity')])
+      it.errors[:quantity].should eq([I18n.t('errors.messages.inventory_detail.transaction_quantity')])
     end
   end
 end

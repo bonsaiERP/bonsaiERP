@@ -24,13 +24,12 @@ describe Inventories::In do
   before(:each) do
     UserSession.user = user
     Store.stub_chain(:active, where: [store])
-  end
-
-  it "creates" do
     InventoryDetail.any_instance.stub(item: item)
     Inventory.any_instance.stub(store: store)
     Stock.any_instance.stub(item: item, store: store)
+  end
 
+  it "creates" do
     invin = Inventories::In.new(valid_attributes)
     invin.inventory_details.should have(2).items
 
@@ -52,8 +51,8 @@ describe Inventories::In do
 
     # More items
     attrs = valid_attributes.merge(inventory_details_attributes:
-      [{item_id: 2, quantity: 2, store_id: 1},
-       {item_id: 12, quantity: 5, store_id: 1}
+      [{item_id: 2, quantity: 2},
+       {item_id: 12, quantity: 5}
       ]
     )
     invin = Inventories::In.new(attrs)
@@ -64,5 +63,23 @@ describe Inventories::In do
     stocks.find {|v| v.item_id === 2}.quantity.should == 4
     stocks.find {|v| v.item_id === 12}.quantity.should == 5
     stocks.find {|v| v.item_id === 1}.quantity.should == 2
+  end
+
+  it "creates with one item" do
+    invin = Inventories::In.new(valid_attributes.merge(
+      inventory_details_attributes: [
+        {item_id: 1, quantity: 10}, {item_id: 2, quantity: 0},
+        {item_id: 3, quantity: ''}, {item_id: 4, quantity: nil}
+      ]
+    ))
+
+    invin.create.should be_true
+
+    inv = Inventory.find(invin.inventory.id)
+    inv.inventory_details.should have(1).items
+
+    stocks = Stock.active.where(store_id: inv.store_id)
+    stocks.should have(1).item
+    stocks[0].quantity.should == 10
   end
 end

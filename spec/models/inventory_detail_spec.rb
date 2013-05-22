@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe InventoryOperationDetail do
+describe InventoryDetail do
   it { should belong_to(:inventory_operation) }
   it { should belong_to(:item) }
 

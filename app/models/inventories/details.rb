@@ -6,7 +6,7 @@ class Inventories::Details < Struct.new(:inventory)
   delegate :details, :store_id, to: :inventory
 
   def item_ids
-    @item_ids ||= details.map(&:item_id).uniq
+    @item_ids ||= details.select{|v| v.quantity > 0 }.map(&:item_id).uniq
   end
 
   def stocks

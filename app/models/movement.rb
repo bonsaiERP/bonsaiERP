@@ -38,6 +38,10 @@ class Movement < Account
     end
   end
 
+  def self.movements
+    Account.where(type: ['Income', 'Expense'])
+  end
+
   ########################################
   # Aliases, alias and alias_method not working
   [[:ref_number, :name], [:balance, :amount]].each do |meth|

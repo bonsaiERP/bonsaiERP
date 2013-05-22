@@ -14,7 +14,7 @@ class Item < ActiveRecord::Base
   has_many   :stocks
   has_many   :income_details
   has_many   :expense_details
-  has_many   :inventory_operation_details
+  has_many   :inventory_details
 
   ##########################################
   # Validations
@@ -51,7 +51,7 @@ class Item < ActiveRecord::Base
 private
   # checks if there are any items on destruction
   def check_items_destroy
-    if TransactionDetail.where(item_id: id).any? or InventoryOperationDetail.where(item_id: id).any?
+    if TransactionDetail.where(item_id: id).any? or InventoryDetail.where(item_id: id).any?
       errors.add(:base, "El item es usado en otros registros relacionados")
       false
     else
