@@ -9,7 +9,7 @@ class Expenses::Form < Movements::Form
   validate :valid_account_to, if: :direct_payment?
 
   delegate :contact, :is_approved?, :is_draft?, :expense_details,
-           :subtotal, :to_s, :state, :discount, :items,
+           :subtotal, :to_s, :state, :discount, :details,
            :expense_details_attributes, :expense_details_attributes=,
            to: :expense
 

@@ -62,7 +62,7 @@ describe Incomes::Payment do
       pay_in.pay#.should be_true
 
       pay_in.income.should be_has_error
-      pay_in.income.error_messages.should eq({balance: ['transaction.negative_balance']})
+      pay_in.income.error_messages.should eq({balance: ['movement.negative_balance']})
     end
 
     it "does not allow greater values for the same currency" do

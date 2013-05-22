@@ -24,11 +24,11 @@ class Incomes::Devolution < Devolution
   def income
     @income ||= Income.active.where(id: account_id).first
   end
-  alias :transaction :income
+  alias :movement :income
 
 private
   def save_income
-    update_transaction
+    update_movement
     err = Incomes::Errors.new(income)
     err.set_errors
 

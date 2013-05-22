@@ -26,9 +26,9 @@ class Incomes::Payment < Payment
   end
 
   def income
-    @transaction = @income ||= Income.find_by_id(account_id)
+    @movement = @income ||= Income.find_by_id(account_id)
   end
-  alias :transaction :income
+  alias :movement :income
 
 private
   def save_income

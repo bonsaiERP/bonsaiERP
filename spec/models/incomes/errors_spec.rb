@@ -15,7 +15,7 @@ describe Incomes::Errors do
     Incomes::Errors.new(subject).set_errors
 
     subject.should be_has_error
-    subject.error_messages[:balance].should eq(['transaction.negative_balance'])
+    subject.error_messages[:balance].should eq(['movement.negative_balance'])
   end
 
   context "Detail errors" do
@@ -26,7 +26,7 @@ describe Incomes::Errors do
       Incomes::Errors.new(subject).set_errors
 
       subject.should be_has_error
-      subject.error_messages[:income_details].should eq(['transaction.negative_item_balance'])
+      subject.error_messages[:income_details].should eq(['movement.negative_item_balance'])
     end
 
     it "present errors when details are wrong" do
@@ -36,7 +36,7 @@ describe Incomes::Errors do
       Incomes::Errors.new(subject).set_errors
 
       subject.should be_has_error
-      subject.error_messages[:income_details].should eq(['transaction.negative_items_balance'])
+      subject.error_messages[:income_details].should eq(['movement.negative_items_balance'])
     end
   end
 

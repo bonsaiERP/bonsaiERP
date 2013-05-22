@@ -17,10 +17,10 @@ class Devolution < BaseService
   validates_numericality_of :amount, greater_than: 0
   validates_numericality_of :exchange_rate, greater_than: 0
   validate :valid_date
-  validate :valid_transaction_total
+  validate :valid_movement_total
 
   # Delegations
-  delegate :total, :balance, to: :transaction, prefix: true, allow_nil: true
+  delegate :total, :balance, to: :movement, prefix: true, allow_nil: true
 
   # Sets all values but will set verification to false if is not
   # correctly set
@@ -33,7 +33,7 @@ class Devolution < BaseService
     @account_to ||= Account.where(id: account_to_id).first
   end
 
-  def transaction; end
+  def movement; end
 
 private
   # Builds an instance of AccountLedger with basic data for  devolution
@@ -45,9 +45,9 @@ private
     }.merge(attrs))
   end
 
-  def update_transaction
-    transaction.balance += amount
-    transaction.set_state_by_balance! # Sets state and the user
+  def update_movement
+    movement.balance += amount
+    movement.set_state_by_balance! # Sets state and the user
   end
 
   def create_ledger
@@ -72,15 +72,15 @@ private
   end
 
   def set_approver
-    unless transaction.is_approved?
-      transaction.approver_id = UserSession.id
-      transaction.approver_datetime = Time.zone.now
+    unless movement.is_approved?
+      movement.approver_id = UserSession.id
+      movement.approver_datetime = Time.zone.now
     end
   end
 
-  def valid_transaction_total
-    if ( amount.to_f + transaction_balance.to_f ) > transaction_total.to_f
-      self.errors.add :amount, I18n.t('errors.messages.devolution.transaction_total')
+  def valid_movement_total
+    if ( amount.to_f + movement_balance.to_f ) > movement_total.to_f
+      self.errors.add :amount, I18n.t('errors.messages.devolution.movement_total')
     end
   end
 end

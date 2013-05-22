@@ -149,8 +149,8 @@ describe Expenses::Form do
       exp
     end
 
-    let(:update_items) {
-      subject.items.map {|det|
+    let(:update_details) {
+      subject.details.map {|det|
         {id: det.id, item_id: det.item_id, quantity: det.quantity + 2, price: det.price}
       }
     }
@@ -158,17 +158,45 @@ describe Expenses::Form do
     let(:total_for_update) { subject.total + 10 * 2 + 20 * 2 }
     let(:attributes_for_update) {
       valid_params.merge(total: total_for_update,
-                         description: 'A new changed description', expense_details_attributes: update_items)
+                         description: 'A new changed description', expense_details_attributes: update_details)
     }
 
     it "does not allow errors on ExpenseDetail" do
       e = subject.expense
       es = Expenses::Form.find(e.id)
       es.expense.stub(valid?: false)
-      es.items[0].errors.add(:quantity, "Error in quantity")
+      es.details[0].errors.add(:quantity, "Error in quantity")
 
       es.update.should be_false
-      es.expense.items[0].errors[:quantity].should eq(["Error in quantity"])
+      es.expense.details[0].errors[:quantity].should eq(["Error in quantity"])
+    end
+
+    it "udpates balance_inventory" do
+      e = subject.expense
+      e.details.should have(2).items
+      e.details[0].balance.should == 10
+      e.details[1].balance.should == 20
+      e.balance_inventory.should == 500
+
+      expf = Expenses::Form.find(e.id)
+      id = expf.details[0].id
+
+      expf.update(expense_details_attributes: [
+        {id: id, item_id: 1, price: 10, quantity: 12},
+        {item_id: 100, price: 10, quantity: 10}
+      ]
+      ).should be_true
+
+      e = Expense.find(expf.expense.id)
+
+      e.details.should have(3).items
+
+      e.details.map(&:item_id).sort.should eq([1, 2, 100])
+
+      e.details[0].quantity.should == 12
+      e.details[0].balance.should == 12
+
+      e.balance_inventory.should == 620
     end
 
     it "Update" do
@@ -297,13 +325,13 @@ describe Expenses::Form do
       es.expense.discount.should == 0
 
       # UPDATE and check errors
-      attrs = es.expense.items.map {|det|
+      attrs = es.expense.details.map {|det|
         {id: det.id, item_id: det.item_id, quantity: det.quantity - 2, price: det.price}
       }
 
       es = Expenses::Form.find(es.expense.id)
       es.update(total: 440, expense_details_attributes: attrs).should be_true
-      es.expense.error_messages.should eq({"balance" => ["action.negative_balance"]})
+      es.expense.error_messages.should eq({"balance" => ["movement.negative_balance"]})
       es.expense.should be_has_error
     end
 

@@ -329,7 +329,7 @@ describe Incomes::Form do
 
       is = Incomes::Form.find(is.income.id)
       is.update(total: 440, income_details_attributes: attrs).should be_true
-      is.income.error_messages.should eq({"balance" => ["transaction.negative_balance"]})
+      is.income.error_messages.should eq({"balance" => ["movement.negative_balance"]})
       is.income.should be_has_error
     end
   end

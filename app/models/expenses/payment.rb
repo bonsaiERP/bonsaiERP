@@ -1,4 +1,6 @@
 # encoding: utf-8
+# author: Boris Barroso
+# email: boriscyber@gmail.com
 class Expenses::Payment < Payment
 
   # Validations
@@ -25,9 +27,9 @@ class Expenses::Payment < Payment
   end
 
   def expense
-    @transaction = @expense ||= Expense.find_by_id(account_id)
+    @movement = @expense ||= Expense.find_by_id(account_id)
   end
-  alias :transaction :expense
+  alias :movement :expense
 
 private
   def save_expense
@@ -64,7 +66,7 @@ private
   end
 
   def valid_expense_balance
-    if complete_accounts? && amount_exchange > transaction_balance
+    if complete_accounts? && amount_exchange > movement_balance
       self.errors.add :amount, I18n.t('errors.messages.payment.balance')
     end
   end

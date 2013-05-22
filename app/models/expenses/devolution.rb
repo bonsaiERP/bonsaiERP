@@ -24,11 +24,11 @@ class Expenses::Devolution < Devolution
   def expense
     @expense ||= Expense.active.where(id: account_id).first
   end
-  alias :transaction :expense
+  alias :movement :expense
 
 private
   def save_expense
-    update_transaction
+    update_movement
     err = Expenses::Errors.new(expense)
     err.set_errors
 

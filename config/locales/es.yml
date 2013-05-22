@@ -169,8 +169,8 @@ es:
 
   # Errors that are stored in the model but are allowed
   allowed_errors:
-    transaction:
-      negative_balance: "<a href='javascript:;' id='income-negative-balance-link'>Solucionemos el balance</a> negativo, le recomendamos realizar una devolución"
+    movement:
+      negative_balance: "<a href='javascript:;' id='negative-balance-link'>Solucionemos el balance</a> negativo, le recomendamos realizar una devolución"
       negative_item_balance: "Existe un item con balance negativo"
       negative_items_balance: "Existen items con balance negativo"
   # Active Model
@@ -221,7 +221,7 @@ es:
       contact:
         matchcode: "El idenificador ya existe, por favor cambie"
       devolution:
-        transaction_total: "La cantidad y el balance suman un valor mayor al total"
+        movement_total: "La cantidad y el balance suman un valor mayor al total"
       expense:
         not_draft: "El estado del egreso no es borrador"
         payments: "Extisten pagos que se han afectado al balance"
@@ -267,7 +267,7 @@ es:
         user_limit: "Su empresa ha llegado a su limite en el número de usuarios"
         email_not_found: "El email que ingreso no existe"
         link_found: 'El usuario ya existe en su empresa activelo.'
-      transaction:
+      movement:
         repeated_items: "Existen items repetidos, por favor revise"
         unconcilied_ledgers: "Existen transacciones pendientes de revisión"
         changes: "No es posible cambiar el número de referencia o el contacto"

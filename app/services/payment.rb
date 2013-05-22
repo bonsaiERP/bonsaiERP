@@ -2,7 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class Payment < BaseService
-  attr_reader :ledger, :transaction
+  attr_reader :ledger, :movement
 
   # Attributes
   attribute :account_id, Integer
@@ -22,7 +22,7 @@ class Payment < BaseService
 
   delegate :currency, :inverse?, :same_currency?, to: :currency_exchange
   delegate :amount, :currency, to: :account_to, prefix: true, allow_nil: true
-  delegate :total, :balance, :currency, to: :transaction, prefix: true, allow_nil: true
+  delegate :total, :balance, :currency, to: :movement, prefix: true, allow_nil: true
 
   # Initializes and sets verification to false if it's not set correctly
   def initialize(attrs = {})
@@ -60,9 +60,9 @@ private
   end
 
   def set_approver
-    unless transaction.is_approved?
-      transaction.approver_id = UserSession.id
-      transaction.approver_datetime = Time.zone.now
+    unless movement.is_approved?
+      movement.approver_id = UserSession.id
+      movement.approver_datetime = Time.zone.now
     end
   end
 
@@ -74,7 +74,7 @@ private
 
   def currency_exchange
     @currency_exchange ||= CurrencyExchange.new(
-      account: transaction, account_to: account_to, exchange_rate: exchange_rate
+      account: movement, account_to: account_to, exchange_rate: exchange_rate
     )
   end
 
@@ -92,11 +92,11 @@ private
   end
 
   def complete_accounts?
-    transaction.present? && account_to.present?
+    movement.present? && account_to.present?
   end
 
   def valid_amount
-    if complete_accounts? && transaction_currency === account_to_currency && amount > transaction_balance
+    if complete_accounts? && movement_currency === account_to_currency && amount > movement_balance
       self.errors.add :amount, I18n.t('errors.messages.payment.balance')
     end
   end
