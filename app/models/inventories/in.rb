@@ -4,18 +4,7 @@
 class Inventories::In < Inventories::Form
 
   def create
-    res = true
-    commit_or_rollback do
-      res = inventory.save && update_stocks
-    end
-
-    set_errors(inventory) unless res
-
-    res
-  end
-
-  def get_ref_number
-    Inventory.get_ref_number('Ing')
+    save { inventory.save && update_stocks }
   end
 
 private

@@ -23,6 +23,7 @@ describe Inventories::In do
 
   before(:each) do
     UserSession.user = user
+    Store.stub_chain(:active, where: [store])
   end
 
   it "creates" do
@@ -52,8 +53,7 @@ describe Inventories::In do
     # More items
     attrs = valid_attributes.merge(inventory_details_attributes:
       [{item_id: 2, quantity: 2, store_id: 1},
-       {item_id: 12, quantity: 5, store_id: 1},
-       {item_id: 2, quantity: 10, store_id: 1}
+       {item_id: 12, quantity: 5, store_id: 1}
       ]
     )
     invin = Inventories::In.new(attrs)
@@ -61,7 +61,7 @@ describe Inventories::In do
     stocks = Stock.active.where(store_id: io.store_id)
     stocks.should have(3).items
 
-    stocks.find {|v| v.item_id === 2}.quantity.should == 14
+    stocks.find {|v| v.item_id === 2}.quantity.should == 4
     stocks.find {|v| v.item_id === 12}.quantity.should == 5
     stocks.find {|v| v.item_id === 1}.quantity.should == 2
   end
