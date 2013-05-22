@@ -19,11 +19,11 @@ describe Movements::DetailsCalculations do
     m.original_total.should == 200.0 - 5
   end
 
-  it "inventory_balance" do
+  it "balance_inventory" do
     subject.income_details[0].balance = 5
     m = Movements::DetailsCalculations.new(subject)
 
-    m.inventory_balance.should == 150.0
+    m.balance_inventory.should == 150.0
   end
 
   it "#items_left" do

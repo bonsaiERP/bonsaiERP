@@ -170,6 +170,33 @@ describe Incomes::Form do
       is.income.details[0].errors[:quantity].should eq(["Error in quantity"])
     end
 
+    it "udpates balance_inventory" do
+      i = subject.income
+      i.details[0].balance.should == 10
+      i.details[1].balance.should == 20
+      i.balance_inventory.should == 500
+
+      incf = Incomes::Form.find(i.id)
+      id = incf.details[0].id
+
+      incf.update(income_details_attributes: [
+        {id: id, item_id: 1, price: 10, quantity: 12},
+        {item_id: 100, price: 10, quantity: 10}
+      ]
+      ).should be_true
+
+      i = Income.find(incf.income.id)
+
+      i.details.should have(3).items
+
+      i.details.map(&:item_id).sort.should eq([1, 2, 100])
+
+      i.details[0].quantity.should == 12
+      i.details[0].balance.should == 12
+
+      i.balance_inventory.should == 620
+    end
+
     it "Update" do
       i = subject.income
       is = Incomes::Form.find(i.id)
@@ -305,7 +332,6 @@ describe Incomes::Form do
       is.income.error_messages.should eq({"balance" => ["transaction.negative_balance"]})
       is.income.should be_has_error
     end
-
   end
 
   it "sets errors from expense or ledger" do

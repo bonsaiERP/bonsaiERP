@@ -12,7 +12,7 @@ class Movements::DetailsCalculations < Struct.new(:movement)
     details.inject(0) {|sum, det| sum += det.quantity.to_f * det.original_price.to_f }.to_d
   end
 
-  def inventory_balance
+  def balance_inventory
     details.inject(0) {|sum, det| sum += det.balance * det.price }
   end
 

@@ -8,7 +8,7 @@ class MovementService
 
   delegate :discount, :total, to: :movement
   delegate :set_details, to: :mov_details
-  delegate :original_total, to: :calculations
+  delegate :original_total, :balance_inventory, to: :calculations
 
   def initialize(trans)
     @movement = trans
@@ -32,6 +32,7 @@ class MovementService
     @movement.gross_total = original_total
     @movement.discounted = (discount > 0)
     @movement.balance = total
+    @movement.balance_inventory = balance_inventory
 
     @movement.details.build if @movement.details.empty?
   end
@@ -39,12 +40,15 @@ class MovementService
   # Updates the data for an imcome or expense
   # balance is the alias for amount due that Income < Account
   def set_update(attrs = {})
-    set_details
     @movement.attributes = attrs.slice(*attributes_for_update)
+    set_details
+
     @movement.balance    -= (@movement.total_was - @movement.total)
     @movement.gross_total = original_total
     @movement.set_state_by_balance!
     @movement.discounted  = ( discount > 0 )
+
+    @movement.balance_inventory = balance_inventory
 
     @errors.new(movement).set_errors
   end

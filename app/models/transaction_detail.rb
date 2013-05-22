@@ -3,8 +3,6 @@
 # email: boriscyber@gmail.com
 class TransactionDetail < ActiveRecord::Base
 
-  before_create :set_balance
-
   # Validations
   validates_presence_of :item_id
   validates_numericality_of :quantity, greater_than: 0
@@ -33,10 +31,6 @@ class TransactionDetail < ActiveRecord::Base
   end
 
 private
-  def set_balance
-    self.balance = quantity
-  end
-
   def balance_is_correct
     self.errors.add(:item_id, balance_error_message) if self.balance > quantity
   end 
