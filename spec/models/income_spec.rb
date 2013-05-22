@@ -311,8 +311,8 @@ describe Income do
       inc = Income.new_income(attributes)
       inc.save.should be_true
 
-      inc.items.should have(2).items
-      det = inc.items[0]
+      inc.details.should have(2).items
+      det = inc.details[0]
       det.balance = 5
       det.save.should be_true
 
@@ -320,13 +320,13 @@ describe Income do
       inc.attributes = {income_details_attributes: [{id: det.id, item_id: 1, price: 20, quantity: 10, "_destroy" => "1"}] }
 
 
-      inc.items[0].should be_marked_for_destruction
+      inc.details[0].should be_marked_for_destruction
 
       inc.save.should be_false
-      inc.items[0].should_not be_marked_for_destruction
-      inc.items[0].errors[:quantity].should eq([I18n.t('errors.messages.trasaction_details.not_destroy')])
+      inc.details[0].should_not be_marked_for_destruction
+      inc.details[0].errors[:quantity].should eq([I18n.t('errors.messages.trasaction_details.not_destroy')])
 
-      det = inc.items[0]
+      det = inc.details[0]
       det.balance = 10
       det.save.should be_true
 
@@ -334,8 +334,8 @@ describe Income do
       inc.attributes = {income_details_attributes: [{id: det.id, item_id: 1, price: 20, quantity: 10, "_destroy" => "1"}] }
 
       inc.save.should be_true
-      inc.items.should have(1).item
-      inc.items.map(&:item_id).should eq([2])
+      inc.details.should have(1).item
+      inc.details.map(&:item_id).should eq([2])
     end
   end
 end

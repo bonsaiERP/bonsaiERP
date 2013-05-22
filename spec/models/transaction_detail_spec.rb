@@ -64,7 +64,7 @@ describe TransactionDetail do
       inc.income_details[0].stub(item: stub(for_sale?: true))
 
       inc.save.should be_false
-      inc.items[0].errors[:item_id].should eq([I18n.t('errors.messages.income_details.balance')])
+      inc.details[0].errors[:item_id].should eq([I18n.t('errors.messages.income_details.balance')])
     end
 
   end

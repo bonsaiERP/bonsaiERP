@@ -1,31 +1,29 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class InventoryOperationService < BaseService
+class Inventories::Form < BaseForm
   attribute :store_id, Integer
   attribute :date, Date
   attribute :ref_number, String
   attribute :description, String
-  attribute :inventory_operation_details_attributes, Array
+  attribute :inventory_details_attributes, Array
 
-  attr_writer :inventory_operation
+  attr_writer :inventory
 
-  delegate :inventory_operation_details,
-           :inventory_operation_details_attributes=,
-           to: :inventory_operation
+  delegate :inventory_details, :details,
+           :inventory_details_attributes=,
+           to: :inventory
 
   validates_presence_of :store
-
-  alias :items :inventory_operation_details
 
   def store
     @store ||= Store.active.where(id: store_id).first
   end
 
-  def inventory_operation
-    @inventory_operation ||= InventoryOperation.new(
+  def inventory
+    @inventory ||= Inventory.new(
       store_id: store_id, date: date, description: description,
-      inventory_operation_details_attributes: inventory_operation_details_attributes
+      inventory_details_attributes: inventory_details_attributes
     )
   end
 
@@ -51,7 +49,7 @@ private
   end
 
   def details
-    @details ||= inventory_operation_details.select {|v| v.quantity > 0 }
+    @details ||= inventory_details.select {|v| v.quantity > 0 }
   end
 
   # Receives a stock and calculates quantity for an item

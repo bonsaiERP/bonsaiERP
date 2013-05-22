@@ -1,7 +1,7 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class Incomes::Inventory < InventoryOperationService
+class Incomes::Inventory < Inventories::Form
   attribute :income_id, Integer
 
   validates_presence_of :income

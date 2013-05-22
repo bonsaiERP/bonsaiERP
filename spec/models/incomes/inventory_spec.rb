@@ -125,8 +125,8 @@ describe Incomes::Inventory do
     # Error
     inv = Incomes::Inventory.new_out(valid_attributes.dup)
     inv.save.should be_false
-    inv.items[0].errors[:quantity].should_not be_blank
-    inv.items[1].errors[:quantity].should_not be_blank
+    inv.details[0].errors[:quantity].should_not be_blank
+    inv.details[1].errors[:quantity].should_not be_blank
 
     ##############################################
     # Devolution
@@ -163,7 +163,7 @@ describe Incomes::Inventory do
        {item_id: 2, quantity: 3}
     ]))
     inv.save.should be_false
-    inv.items.each do |it|
+    inv.details.each do |it|
       it.errors[:quantity].should eq([I18n.t('errors.messages.inventory_operation_detail.transaction_quantity')])
     end
   end

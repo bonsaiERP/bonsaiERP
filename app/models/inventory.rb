@@ -1,7 +1,7 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class InventoryOperation < ActiveRecord::Base
+class Inventory < ActiveRecord::Base
 
   before_create { self.creator_id = UserSession.id }
 
@@ -18,8 +18,9 @@ class InventoryOperation < ActiveRecord::Base
 
   #has_one    :transference, :class_name => 'InventoryOperation', :foreign_key => "transference_id"
 
-  has_many :inventory_operation_details, dependent: :destroy
-  accepts_nested_attributes_for :inventory_operation_details, allow_destroy: true
+  has_many :inventory_details, dependent: :destroy
+  accepts_nested_attributes_for :inventory_details, allow_destroy: true
+  alias :details :inventory_details
 
   # Validations
   validates_presence_of :ref_number, :store_id, :store, :date
@@ -58,7 +59,7 @@ class InventoryOperation < ActiveRecord::Base
   end
 
   def set_ref_number(op = '')
-    io = InventoryOperation.select("id, ref_number").order("id DESC").limit(1).first
+    io = Inventory.select("id, ref_number").order("id DESC").limit(1).first
 
     if io.present?
       self.ref_number = get_ref_io(io)

@@ -1,8 +1,8 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class InventoryOperationDetail < ActiveRecord::Base
-  belongs_to :inventory_operation
+class InventoryDetail < ActiveRecord::Base
+  belongs_to :inventory
   belongs_to :item
 
   validates_presence_of     :item, :item_id, :quantity
