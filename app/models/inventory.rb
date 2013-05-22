@@ -58,7 +58,7 @@ class Inventory < ActiveRecord::Base
     OUT_OPERATIONS.include? operation
   end
 
-  def set_ref_number(op = '')
+  def set_ref_number
     io = Inventory.select("id, ref_number").order("id DESC").limit(1).first
 
     if io.present?
