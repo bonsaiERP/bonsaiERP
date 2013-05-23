@@ -71,6 +71,16 @@ class Contact < ActiveRecord::Base
     {id: id, incomes: incomes_status, expenses: expenses_status}
   end
 
+  def total_incomes
+    incomes.active.joins(:transaction)
+    .sum('(transactions.total - accounts.amount) * accounts.exchange_rate')
+  end
+
+  def total_expenses
+    expenses.active.joins(:transaction)
+    .sum('(transactions.total - accounts.amount) * accounts.exchange_rate')
+  end
+
 private
   # Check if the contact has any relations before destroy
   def check_relations
