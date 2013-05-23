@@ -29,7 +29,7 @@ describe Income do
     it { should have_many(:payments_devolutions) }
     it { should have_many(:ledgers) }
     it { should have_many(:transaction_histories) }
-    it { should have_many(:inventory_operations) }
+    it { should have_many(:inventories) }
     # Validations
     it { should validate_presence_of(:date) }
     it { should validate_presence_of(:contact) }

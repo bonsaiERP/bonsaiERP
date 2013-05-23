@@ -1,12 +1,12 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class Expenses::InventoryOut < Inventories::Out
+class Expenses::InventoryIn < Inventories::In
   attribute :account_id, Integer
 
   validates_presence_of :expense
   validate :valid_quantities
-  validate :valid_item_ids
+  #validate :valid_item_ids
   
   delegate :expense_details, to: :expense
   delegate :balance_inventory, :items_left, to: :expense_calculations
@@ -45,10 +45,8 @@ private
     self.errors.add(:base, I18n.t('errors.messages.inventory.item_balance')) unless res
   end
 
-  def valid_item_ids
-    unless details.all? {|v| expense_item_ids.include?(v.item_id) }
-      self.errors.add(:base, I18n.t("errors.messages.inventory.movement_items"))
-    end
+  def valid_items_ids
+    details.all? {|v| expense_item_ids.include?(v.item_id) }
   end
 
   def update_expense_details
@@ -75,3 +73,4 @@ private
     @expense_item_ids ||= @expense.details.map(&:item_id)
   end
 end
+

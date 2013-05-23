@@ -42,6 +42,7 @@ private
     commit_or_rollback { b.call } if res
 
     set_errors(@inventory) unless res
+
     res
   end
 

@@ -29,19 +29,6 @@ class Inventories::Details < Struct.new(:inventory)
   def item_stocks
     @item_stocks ||= Stock.active.store(store_id).where(item_id: item_ids).to_a
   end
-
-  # Updates the stocks using a block for updating the stock quantity
-  def update_stocks(&stock_quantity_block)
-    res = true
-    stocks.each do |st|
-      stoc = Stock.create(store_id: store_id, item_id: st.item_id, quantity: stock_quantity_block.call(st) )
-      res = stoc.save && st.update_attribute(:active, false)
-
-      return false unless res
-    end
-
-    res
-  end
 end
 
 class NullStock < OpenStruct

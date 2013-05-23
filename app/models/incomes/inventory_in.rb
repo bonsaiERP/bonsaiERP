@@ -1,7 +1,7 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class Incomes::InventoryIn < Movements::Iventory
+class Incomes::InventoryIn < Inventories::In
 
   validates_presence_of :income
 
