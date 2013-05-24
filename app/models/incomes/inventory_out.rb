@@ -1,13 +1,13 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class Incomes::InventoryIn < Inventories::In
+class Incomes::InventoryOut < Inventories::Out
   attribute :account_id, Integer
 
   validates_presence_of :income
   validate :valid_quantities
-  #validate :valid_item_ids
-
+  validate :valid_item_ids
+  
   delegate :income_details, to: :income
   delegate :balance_inventory, :inventory_left, to: :income_calculations
 
@@ -30,7 +30,7 @@ class Incomes::InventoryIn < Inventories::In
 
 private
   def operation
-    'inc_in'
+    'inc_out'
   end
 
   def valid_quantities
@@ -45,8 +45,10 @@ private
     self.errors.add(:base, I18n.t('errors.messages.inventory.item_balance')) unless res
   end
 
-  def valid_items_ids
-    details.all? {|v| income_item_ids.include?(v.item_id) }
+  def valid_item_ids
+    unless details.all? {|v| income_item_ids.include?(v.item_id) }
+      self.errors.add(:base, I18n.t("errors.messages.inventory.movement_items"))
+    end
   end
 
   def update_income_details
@@ -73,3 +75,4 @@ private
     @income_item_ids ||= @income.details.map(&:item_id)
   end
 end
+

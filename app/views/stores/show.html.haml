@@ -14,13 +14,11 @@
       = @store
 
     .clear-both
-    = render_if @store.phone do
-      %i.icon-phone(title='Teléfono' data-toggle='tooltip')
-      = @store.phone
-    .clear-both
-    = render_if @store.address do
-      %i.icon-building(title='Dirección' data-toggle='tooltip')
-      = nl2br @store.address
+    .row-fluid
+      .span4
+        = @store.phone_tag
+      .span8
+        = @store.address_tag
 
   .span6.r
     .btn-group
@@ -48,19 +46,22 @@
             = link_to new_inventory_transference_path(store_id: @store.id) do
               %i.icon-exchange
               Transferencia
+%hr
 
-.row-fluid
-  .span5
+%ul#tabs.nav.nav-pills.fs150
+  %li
+    %a(href='#items' data-toggle='tab') Items
 
+  %li
+    %a(href='#operations' data-toggle='tab') Operaciones
 
-= jquery_tabs tab_id: 'store' do
-  = jqueryui_ul do
-    = tab "Inventario de items", store_path(@store, :tab => "items"), "items"
-    = tab "Operaciones realizadas", store_path(@store, :tab => "operations"), "operations"
-  = tab_panel do
-    -# stores/operations
-    = render @partial, store: @store
+.tab-content
+  #items.tab-pane.fade
+    %h3.n Items
 
-:javascript
-  $(function() {
-  })
+    = render 'stores/items', store: @store, page: page
+  #operations.tab-pane.fade
+    %h3.n Operaciones
+
+    -#= render 'stores/operations', store: @store, page: page
+

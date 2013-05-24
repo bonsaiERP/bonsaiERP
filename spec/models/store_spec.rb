@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe Store do
   it { should have_many(:stocks) }
+  it { should have_many(:inventories) }
+
   it { should validate_presence_of(:name) }
   it { should have_valid(:name).when('123', 'Store') }
   it { should_not have_valid(:name).when('12', 'St',  '') }

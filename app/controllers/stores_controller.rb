@@ -16,8 +16,7 @@ class StoresController < ApplicationController
   # GET /stores/1
   # GET /stores/1.xml
   def show
-    @store = Store.find(params[:id])
-    @partial = get_partial
+    @store = present Store.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb

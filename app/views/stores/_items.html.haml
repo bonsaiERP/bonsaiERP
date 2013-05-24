@@ -2,16 +2,15 @@
   %li= link_option "Todos", "all"
   %li= link_option "Minimos", 'minimum'
 
--#= paginate(store.stocks)
 
-%table.table.table-striped
+%table.table.table-striped.decorated
   %tr
     %th(width="50%") Item
     %th.c(width="20%") Cantidad
-    %th.c(width="20%") Cantidad minima
+    %th.c(width="20%") Cantidad mínima
     %th
 
-  - store.stocks.includes(:item).order('items.name').each do |st|
+  - store.items.each do |st|
     %tr{:id => st.id}
       %td= link_to st.item, st.item
       %td.cur= ntc st.quantity

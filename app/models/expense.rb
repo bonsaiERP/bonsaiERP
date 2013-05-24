@@ -17,7 +17,7 @@ class Expense < Movement
     reject_if: proc {|det| det.fetch(:item_id).blank? }
 
   has_many :payments, class_name: 'AccountLedger', foreign_key: :account_id, conditions: {operation: 'payout'}
-  has_many :interests, class_name: 'AccountLedger', foreign_key: :account_id, conditions: {operation: 'intout'}
+  has_many :devolutions, class_name: 'AccountLedger', foreign_key: :account_id, conditions: {operation: 'devin'}
 
   ########################################
   # Scopes

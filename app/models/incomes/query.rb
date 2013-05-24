@@ -1,7 +1,7 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class IncomeQuery < IncomeExpenseQuery
+class Incomes::Query < Movements::Query
   def initialize
     super Income
   end

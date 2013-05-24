@@ -30,6 +30,6 @@ describe Movements::DetailsCalculations do
     subject.income_details[0].balance = 5
     m = Movements::DetailsCalculations.new(subject)
 
-    m.items_left.should == 10
+    m.inventory_left.should == 10
   end
 end

@@ -12,7 +12,7 @@ class Movements::Form < BaseForm
   attribute :project_id, Integer
   attribute :due_date, Date
   attribute :description, String
-  attribute :direct_payment, Boolean
+  attribute :direct_payment, Boolean, default: false
   attribute :account_to_id, Integer
   attribute :reference, String
 

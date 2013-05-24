@@ -16,7 +16,7 @@ class Movements::DetailsCalculations < Struct.new(:movement)
     details.inject(0) {|sum, det| sum += det.balance * det.price }
   end
 
-  def items_left
+  def inventory_left
     details.inject(0) {|sum, det| sum += det.balance }
   end
 end

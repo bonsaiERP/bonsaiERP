@@ -68,6 +68,7 @@ class Payment extends Backbone.Model
       data: @get('accountsTo')
       formatResult: App.Payment.paymentOptions
       formatSelection: App.Payment.paymentOptions
+      dropdownCssClass: 'hide-select2-search'
       escapeMarkup: (m) -> m
     ).on('change', (event) ->
       self.setAccountTo($(this).select2('data') )

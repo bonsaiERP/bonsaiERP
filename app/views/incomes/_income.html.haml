@@ -16,10 +16,7 @@
     = income.due_date_tag
 
     .clear-both
-    - if income.description.present?
-      .clear-both
-      %i.icon-file-alt(data-toggle='tooltip' title='Descripción')
-      = income.description
+    = income.description_tag
   .span3
     .span6.r
       = ntc income.total

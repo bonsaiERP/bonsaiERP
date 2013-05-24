@@ -26,7 +26,7 @@ describe Income do
     it { should have_one(:transaction) }
     it { should have_many(:income_details) }
     it { should have_many(:payments) }
-    it { should have_many(:payments_devolutions) }
+    it { should have_many(:devolutions) }
     it { should have_many(:ledgers) }
     it { should have_many(:transaction_histories) }
     it { should have_many(:inventories) }

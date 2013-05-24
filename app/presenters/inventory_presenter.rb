@@ -1,9 +1,7 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class InventoryOperationPresenter < BasePresenter
-  attr_accessor :transaction
-  presents :inventory_operation
+class InventoryPresenter < Resubject::Presenter
 
   def select_store_title
     case

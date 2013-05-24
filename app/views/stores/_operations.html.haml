@@ -1,5 +1,3 @@
-= paginate(@operations)
-
 %table.table.table-striped
   %tr
     %th Referencia
@@ -7,9 +5,9 @@
     %th Operación
     %th Realizado por
 
-  - @operations.each do |op|
+  - store.operations.page(page).each do |op|
     %tr
-      %td= link_to op.ref_number, op, :class => :b
+      %td= link_to op.ref_number, op, class: 'b'
       %td= lo op.created_at
       %td= op.operation == 'in' ? 'Ingreso' : 'Egreso'
       %td= op.creator

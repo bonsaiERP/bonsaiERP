@@ -7,9 +7,9 @@ class Expenses::InventoryIn < Inventories::In
   validates_presence_of :expense
   validate :valid_quantities
   #validate :valid_item_ids
-  
+
   delegate :expense_details, to: :expense
-  delegate :balance_inventory, :items_left, to: :expense_calculations
+  delegate :balance_inventory, :inventory_left, to: :expense_calculations
 
   def expense
     @expense ||= Expense.active.where(id: account_id).first
@@ -30,7 +30,7 @@ class Expenses::InventoryIn < Inventories::In
 
 private
   def operation
-    'exp_out'
+    'exp_in'
   end
 
   def valid_quantities
@@ -62,7 +62,7 @@ private
 
   def update_expense_balanace
     @expense.balance_inventory = balance_inventory
-    @expense.delivered = items_left === 0
+    @expense.delivered = inventory_left === 0
   end
 
   def expense_calculations
@@ -73,4 +73,3 @@ private
     @expense_item_ids ||= @expense.details.map(&:item_id)
   end
 end
-

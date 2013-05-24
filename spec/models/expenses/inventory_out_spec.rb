@@ -30,7 +30,7 @@ describe Expenses::InventoryOut do
   }
 
   let(:valid_attributes) {
-    {store_id: 1, date: Date.today, description: 'Test inventory in', 
+    {store_id: 1, date: Date.today, description: 'Test inventory out', 
      account_id: expense.id,
      inventory_details_attributes: [
        {item_id: 1, quantity: 2},
@@ -47,10 +47,10 @@ describe Expenses::InventoryOut do
     UserSession.user = user
     Income.any_instance.stub(contact: contact)
     Store.stub_chain(:active, where: [store])
+    InventoryDetail.any_instance.stub(item: item)
   end
 
   it "#delivers" do
-    InventoryDetail.any_instance.stub(item: item)
     Inventory.any_instance.stub(store: store)
     Stock.any_instance.stub(item: item, store: store)
 

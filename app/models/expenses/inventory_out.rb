@@ -9,7 +9,7 @@ class Expenses::InventoryOut < Inventories::Out
   validate :valid_item_ids
   
   delegate :expense_details, to: :expense
-  delegate :balance_inventory, :items_left, to: :expense_calculations
+  delegate :balance_inventory, :inventory_left, to: :expense_calculations
 
   def expense
     @expense ||= Expense.active.where(id: account_id).first
@@ -64,7 +64,7 @@ private
 
   def update_expense_balanace
     @expense.balance_inventory = balance_inventory
-    @expense.delivered = items_left === 0
+    @expense.delivered = inventory_left === 0
   end
 
   def expense_calculations
