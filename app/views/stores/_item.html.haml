@@ -1,0 +1,16 @@
+%li{id: item.id}
+  .row-fluid
+    .span4
+      %h4.n
+        = link_to item.item, item.item
+        %small= item.item.unit
+    .span4
+      %span.muted Cantidad
+      = item.quantity
+      .clearfix
+      %span.muted Minimo
+      = item.minimum
+  -#%td.cur= ntc st.quantity
+  -#%td.cur.min= ntc st.minimum
+  -#%td.cur= link_to "mínimo", edit_stock_path(:id => st.item_id, :item_id => st.item_id, :store_id => @store.id), :class => 'ajax', 'data-title' => 'Definir mínimo', 'data-width' => 450
+

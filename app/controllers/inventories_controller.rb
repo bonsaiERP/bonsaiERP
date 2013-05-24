@@ -1,69 +1,22 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class InventoryOperationsController < ApplicationController
-  #before_filter :check_transaction_permission, :only => [:new_transaction, :create_transaction]
+class InventoriesController < ApplicationController
 
   # GET /inventory_operations
-  # GET /inventory_operations.xml
   def index
-    @inventory_operations = InventoryOperation.page(@page)
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @inventory_operations }
-    end
+    @inventory = Inventory.page(@page)
   end
 
   # GET /inventory_operations/1
-  # GET /inventory_operations/1.xml
   def show
-    @inventory_operation = InventoryOperation.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @inventory_operation }
-    end
+    @inventory = present Inventory.find(params[:id])
   end
 
-  # GET /inventory_operations/new
-  # GET /inventory_operations/new.xml
-  def new
-    @inventory_operation = InventoryOperation.new(:store_id => params[:store_id], :operation => params[:operation])
-    @inventory_operation.create_details
-    @inventory_operation.create_ref_number
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @inventory_operation }
-    end
-  end
-
-  # GET /inventory_operations/1/edit
-  #def edit
-  #  @inventory_operation = InventoryOperation.find(params[:id])
-  #end
-
-  # TODO: Iprove security
-  # POST /inventory_operations
-  # POST /inventory_operations.xml
-  def create
-    @inventory_operation = InventoryOperation.new(params[:inventory_operation])
-
-    respond_to do |format|
-      if @inventory_operation.save_operation
-        format.html { redirect_to(@inventory_operation, :notice => 'La operación de inventario fue almacenada correctamente.') }
-        format.xml  { render :xml => @inventory_operation, :status => :created, :location => @inventory_operation }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @inventory_operation.errors, :status => :unprocessable_entity }
-      end
-    end
-  end
 
   # GET /inventory_operations/new_transaction
   def new_transaction
-    @inventory_operation = InventoryOperation.new(:store_id => params[:store_id], :operation => params[:operation], 
+    @inventory_operation = Inventory.new(:store_id => params[:store_id], :operation => params[:operation], 
                                                   :transaction_id => params[:transaction_id])
 
     @inventory_operation.set_transaction
@@ -81,55 +34,6 @@ class InventoryOperationsController < ApplicationController
     end
   end
 
-
-  # Selects a store for in out of a transaction
-  def select_store
-    @transaction = Transaction.find(params[:id])
-    @inventory_operation = @transaction.inventory_operations.build(:operation => params[:operation])
-  end
-
-  def new_transference
-    # Check valid store
-    unless Store.exists?(params[:store_id])
-      redirect_to stores_path
-      return 
-    end
-
-    @transference = Models::InventoryOperation::Transference.new(store_id: params[:store_id])
-    @inventory_operation = @transference.inventory_operation_out
-    @inventory_operation.inventory_operation_details.build
-  end
-
-  def create_transference
-    # Check valid store
-    #unless Store.exists?(params[:inventory_operations][:store_id])
-    #  redirect_to stores_path
-    #  return 
-    #end
-
-    @transference = Models::InventoryOperation::Transference.new(params[:inventory_operation])
-    @inventory_operation = @transference.inventory_operation_out
-
-    if @transference.make_transference
-      redirect_to @transference.inventory_operation_out
-    else
-      @inventory_operation = @transference.inventory_operation_out
-      render "new_transference"
-    end
-  end
-
-  # Presents the transactions that are IN/OUT
-  def transactions
-    params[:operation] = "in" unless ["in", "out"].include?( params[:operation] )
-
-    if params[:operation] == "out"
-      @transactions = Income.inventory.order("created_at DESC").page(@page)
-    else
-      redirect_to "/422" unless User::ROLES.slice(0,2).include? session[:user][:rol]
-      @transactions = Buy.inventory.order("created_at DESC").page(@page)
-    end
-  end
-
 private
 
   def find_store
@@ -144,7 +48,7 @@ private
     operation = params[:operation] || params[:inventory_operation][:operation]
 
     # Check correct params
-    redirect_to "/404" unless t_id and InventoryOperation::OPERATIONS.include?(operation)
+    redirect_to "/404" unless t_id and Inventory::OPERATIONS.include?(operation)
 
     # Find transaction and check
     @transaction = Transaction.find(t_id)

@@ -230,7 +230,7 @@ es:
         payments: "Extisten cobros que se han afectado al balance"
       income_detail:
         item_not_for_sale: "Debe seleccionar un ítem que se vende"
-      inventory_operation_detail:
+      inventory_detail:
         stock_quantity: "La cantidad es mayor a la disponible en stock"
         transaction_quantity: "La cantidad ingresada es invalida"
         repeated_item: "El ítem esta repetido"
@@ -242,6 +242,7 @@ es:
         empty_items: "No existe items para realizar la operación"
         item_balance: "Existen items que exeden el balance"
         stock_quantity: "Existen items que exceden la cantidad máxima"
+        no_stock: "Hay ítems inexistentes en stock"
         movement_quantity: "La cantidad es mayor que el balance"
       item:
         repeated: "El ítem es repetido"

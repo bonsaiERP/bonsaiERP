@@ -1,13 +1,9 @@
 # encoding: utf-8
 Bonsaierp::Application.routes.draw do
 
-  resources :inventory_operations, only: [:index, :show]
+  resources :inventories, only: [:index, :show]
 
   resources :inventory_transferences, only: [:new, :create]
-
-  resources :inventory_outs, only: [:new, :create]
-
-  resources :inventory_ins, only: [:new, :create]
 
   resources :export_expenses, only: ['index', 'create']
 
@@ -81,7 +77,10 @@ Bonsaierp::Application.routes.draw do
 
   ###########################3
 
-  resources :stores
+  resources :stores do
+    resources :inventory_ins, only: [:new, :create]#, controller: 'stores/inventory_in'
+    resources :inventory_outs, only: [:new, :create]
+  end
 
   resources :contacts
 

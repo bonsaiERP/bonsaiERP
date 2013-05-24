@@ -3,6 +3,35 @@
 # email: boriscyber@gmail.com
 class InventoryPresenter < Resubject::Presenter
 
+  def operation_tag
+    if is_in?
+      label_green(operation_name)
+    else
+      label_red(operation_name)
+    end
+  end
+
+  def operation_name
+    case operation
+    when "in" then "Ingreso"
+    when "out" then "Salida"
+    when "inc_in" then "Entrega"
+    when "inc_out" then "Devolución"
+    when "exp_in" then "Recepción"
+    when "exp_out" then "Devolución"
+    when "trans_in" then "Devolución egreso"
+    when "trans_out" then "Devolución egreso"
+    end
+  end
+
+  def in_tag(text)
+    ""
+  end
+
+  def out_tag(text)
+    ""
+  end
+
   def select_store_title
     case
     when (transaction.is_a?(Income) and inventory_operation.out?)

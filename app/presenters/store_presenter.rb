@@ -11,7 +11,7 @@ class StorePresenter < Resubject::Presenter
   end
 
   def items
-    stocks.includes(:item).order('items.name')
+    stocks.includes(item: :unit).order('items.name')
   end
 
   def operations

@@ -41,6 +41,13 @@ describe Inventory do
     io.ref_number.should eq('S-13-0003')
   end
 
+  it "#set_re_number trans" do
+    Date.stub(today: Date.parse('2013-05-10'))
+    i = Inventory.new(operation: 'trans')
+    i.set_ref_number
+    i.ref_number.should eq('T-13-0001')
+  end
+
   it "creates methods for OPERATIONS" do
     inv = Inventory.new
     Inventory::OPERATIONS.each do |op|
@@ -72,6 +79,14 @@ describe Inventory do
       io.operation = op
       io.should be_is_out
     end
+  end
+
+  it "#is_trans?" do
+    i = Inventory.new(operation: 'trans')
+    i.should be_is_trans
+
+    i.should_not be_is_in
+    i.should_not be_is_out
   end
 
   it "#details alias" do

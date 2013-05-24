@@ -4,7 +4,7 @@
 class Inventories::In < Inventories::Form
 
   def create
-    save { inventory.save && update_stocks }
+    save { update_stocks && inventory.save }
   end
 
 private
@@ -15,8 +15,9 @@ private
   def update_stocks
     res = true
     stocks.each do |st|
-      stoc = Stock.create(store_id: store_id, item_id: st.item_id, quantity: stock_quantity(st) )
-      res = stoc.save && st.update_attribute(:active, false)
+      stock = Stock.new(store_id: store_id, item_id: st.item_id, quantity: stock_quantity(st) )
+
+      res = stock.save && st.update_attribute(:active, false)
 
       return false unless res
     end

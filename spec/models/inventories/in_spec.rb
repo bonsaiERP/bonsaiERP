@@ -19,6 +19,7 @@ describe Inventories::In do
     invin = Inventories::In.new
 
     invin.inventory.should be_is_in
+    invin.details.should have(0).item
   end
 
   before(:each) do

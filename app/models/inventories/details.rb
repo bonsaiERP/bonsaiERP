@@ -21,6 +21,10 @@ class Inventories::Details < Struct.new(:inventory)
     end
   end
 
+  def detail(item_id)
+    details.find {|v| v.item_id === item_id}
+  end
+
   # Receives a stock and calculates quantity for an item
   def item_quantity(item_id)
     details.select {|v| v.item_id === item_id}.inject(0) {|s, v| s += v.quantity }

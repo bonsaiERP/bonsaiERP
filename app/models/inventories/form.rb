@@ -14,7 +14,7 @@ class Inventories::Form < BaseForm
            :inventory_details_attributes=,
            to: :inventory
 
-  delegate :stocks, :item_quantity, to: :klass_details
+  delegate :stocks, :detail, :item_quantity, to: :klass_details
 
   validates_presence_of :store, :inventory
   validate :unique_item_ids
@@ -39,11 +39,15 @@ class Inventories::Form < BaseForm
 private
   def save(&b)
     res = valid? && @inventory.valid?
-    commit_or_rollback { b.call } if res
+    res = commit_or_rollback { b.call } if res
 
     set_errors(@inventory) unless res
 
     res
+  end
+
+  def valid_stock?(stock)
+    stock.quantity >= 0
   end
 
   def klass_details

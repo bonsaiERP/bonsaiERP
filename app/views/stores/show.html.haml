@@ -35,14 +35,14 @@
           %i.icon-caret-down
         %ul.dropdown-menu
           %li
-            = link_to new_inventory_in_path(store_id: @store.id) do
+            = link_to new_store_inventory_in_path(@store.id) do
               %i.icon-plus-sign
               Ingreso
           %li
-            = link_to new_inventory_out_path(store_id: @store.id) do
+            = link_to new_store_inventory_out_path(@store.id) do
               %i.icon-minus-sign
               Egreso
-          %li
+          -#%li
             = link_to new_inventory_transference_path(store_id: @store.id) do
               %i.icon-exchange
               Transferencia
@@ -59,9 +59,16 @@
   #items.tab-pane.fade
     %h3.n Items
 
-    = render 'stores/items', store: @store, page: page
+    %ul.listing.unstyled
+      = render partial: 'stores/item', collection: @store.items
   #operations.tab-pane.fade
     %h3.n Operaciones
 
+    %ul.listing.unstyled
+      = render partial: 'stores/inventory', collection: @store.inventories
     -#= render 'stores/operations', store: @store, page: page
 
+:javascript
+  $(function() {
+    $('#tabs a:first').tab('show');
+  })

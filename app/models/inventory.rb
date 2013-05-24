@@ -5,7 +5,7 @@ class Inventory < ActiveRecord::Base
 
   before_create { self.creator_id = UserSession.id }
 
-  OPERATIONS = %w(in out inc_in inc_out exp_in exp_out trans_in trans_out).freeze
+  OPERATIONS = %w(in out inc_in inc_out exp_in exp_out trans).freeze
   IN_OPERATIONS = %w(in inc_in exp_in trans_in)
   OUT_OPERATIONS = %w(out inc_out exp_out trans_out)
 
@@ -20,7 +20,7 @@ class Inventory < ActiveRecord::Base
 
   has_many :inventory_details, dependent: :destroy
   accepts_nested_attributes_for :inventory_details, allow_destroy: true,
-                                reject_if: lambda {|attrs| attrs[:quantity].blank? || attrs[:quantity] <= 0 }
+                                reject_if: lambda {|attrs| attrs[:quantity].blank? || attrs[:quantity].to_d <= 0 }
   alias :details :inventory_details
 
   # Validations
@@ -84,11 +84,10 @@ private
   end
 
   def op_ref_type
-    if is_in?
-      "I"
-    else
-      "S"
+    case
+    when is_in?    then "I"
+    when is_out?   then "S"
+    when is_trans? then "T"
     end
   end
-
 end

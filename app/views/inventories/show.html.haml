@@ -5,18 +5,19 @@
     %li
       %i.icon-caret-right
     %li
-      =link_to @inventory_operation.store, store_path(@inventory_operation.store, :tab => 'operations')
+      =link_to @inventory.store, store_path(@inventory.store, :tab => 'operations')
 
-%h1.n
-  %small Operacion Inventario:
-  = @inventory_operation.ref_number
+%h2
+  %span.muted.n Operación:
+  = @inventory.ref_number
+  = @inventory.operation_tag
 
 .row-fluid
   .span3
-    %h4.n.i= l @inventory_operation.date
+    %h4.n.i= l @inventory.date
   .span6
     %i.icon-file-alt(data-toggle='tooltip' title='Descripción')
-    = @inventory_operation.description
+    = @inventory.description
 
 %h3 Items
 .row-fluid
@@ -25,7 +26,7 @@
       %th Item
       %th Cantidad
 
-    - @inventory_operation.inventory_operation_details.each do |det|
+    - @inventory.inventory_details.each do |det|
       %tr.item
         %td
           = det.item

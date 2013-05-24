@@ -2,42 +2,40 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class InventoryInsController < ApplicationController
-  before_filter :set_and_check_store
+  before_filter :check_store
 
   def new
-    @inv.ref_number = @inv.get_ref_number
+    @inv = Inventories::In.new(store_id: params[:store_id])
+    @inv.details.build
   end
 
   def create
+    @inv = Inventories::In.new(inventory_params.merge(store_id: params[:store_id]))
+
     if @inv.create
-      redirect_to inventory_operation_path(@inv.inventory_operation.id), notice: 'Se ha ingresado correctamente los items.'
+      redirect_to inventory_path(@inv.inventory.id), notice: 'Se ha ingresado correctamente los items.'
     else
-      @inv.ref_number = @inv.get_ref_number
+      @inv.details.build if @inv.details.empty?
       render :new
     end
   end
 
 private
-  def set_and_check_store
-    build_inventory_in
-
-    unless @inv.store
-      flash[:error] = I18n.t('errors.messages.store.selected')
-      redirect_to stores_path and return
-    end
+  def check_store
+    Store.find(params[:store_id])
+  rescue
+    flash[:error] = I18n.t('errors.messages.store.selected')
+    redirect_to stores_path and return
   end
 
-  def build_inventory_in
-    data = action_name === 'new' ? {store_id: params[:store_id]} : inventory_params
-    @inv = InventoryIn.new(data)
-
-    @inv.items.build if @inv.items.empty?
+  def build_details
+    @inv.details.build if @inv.details.empty?
   end
 
   def inventory_params
-    params.require(:inventory_in).permit(
+    params.require(:inventories_in).permit(
       :store_id, :date, :description,
-      inventory_operation_details_attributes: [:item_id, :quantity, :_destroy]
+      inventory_details_attributes: [:item_id, :quantity, :_destroy]
     )
   end
 end
