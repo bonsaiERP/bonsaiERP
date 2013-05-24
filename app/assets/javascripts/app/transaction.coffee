@@ -95,6 +95,7 @@ class TransactionModel extends Backbone.Model
       data: data,
       formatResult: App.Payment.paymentOptions,
       formatSelection: App.Payment.paymentOptions,
+      dropdownCssClass: 'hide-select2-search'
       escapeMarkup: (m) -> m
     })
 

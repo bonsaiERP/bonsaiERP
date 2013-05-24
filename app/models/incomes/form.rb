@@ -16,16 +16,16 @@ class Incomes::Form < Movements::Form
 
   # Creates and instance of income and initializes
   def self.new_income(attrs = {})
-    is = new(attrs.slice(*ATTRIBUTES))
-    is.set_new_income(attrs)
-    is
+    _object = new(attrs.slice(*ATTRIBUTES))
+    _object.set_new_income(attrs)
+    _object
   end
 
   # Finds the income and sets data with the income found
   def self.find(id)
-    is = new
-    is.set_service_attributes(Income.find(id))
-    is
+    _object = new
+    _object.set_service_attributes(Income.find(id))
+    _object
   end
 
   # Creates  and approves an Income
@@ -44,6 +44,7 @@ class Incomes::Form < Movements::Form
   def set_new_income(attrs = {})
     @movement = Income.new_income
     MovementService.new(@movement).set_new(attrs)
+    copy_new_defaults
   end
 
 private

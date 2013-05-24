@@ -17,17 +17,17 @@ class IncomesController < ApplicationController
 
   # GET /incomes/new
   def new
-    @is = IncomeService.new_income(date: Date.today)
+    @is = Incomes::Form.new_income
   end
 
   # GET /incomes/1/edit
   def edit
-    @is = IncomeService.find(params[:id])
+    @is = Incomes::Form.find(params[:id])
   end
 
   # POST /incomes
   def create
-    @is = IncomeService.new_income(income_params)
+    @is = Incomes::Form.new_income(income_params)
 
     if create_or_approve
       redirect_to @is.income, notice: 'Se ha creado un Ingreso.'
@@ -38,7 +38,7 @@ class IncomesController < ApplicationController
 
   # PUT /incomes/:id
   def update
-    @is = IncomeService.find(params[:id])
+    @is = Incomes::Form.find(params[:id])
 
     if update_or_approve
       redirect_to @is.income, notice: 'El Ingreso fue actualizado!.'

@@ -28,6 +28,8 @@ describe Incomes::Form do
 
     it "income_details" do
       subject.income.should be_is_a(Income)
+      subject.date.should be_is_a(Date)
+      subject.currency.should eq('BOB')
       subject.income.income_details.should have(2).items
 
       subject.income.income_details[0].item_id.should eq(details[0][:item_id])
@@ -35,6 +37,7 @@ describe Incomes::Form do
       subject.income.income_details[0].price.should eq(details[0][:price])
       subject.income.income_details[0].quantity.should eq(details[0][:quantity])
       subject.income.income_details[1].item_id.should eq(details[1][:item_id])
+      subject.should respond_to(:details)
       subject.should respond_to(:income_details)
       subject.should respond_to(:income_details_attributes)
       subject.should respond_to(:income_details_attributes=)

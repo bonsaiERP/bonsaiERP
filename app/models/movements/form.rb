@@ -8,7 +8,7 @@ class Movements::Form < BaseForm
   attribute :contact_id, Integer
   attribute :currency, String
   attribute :total, Decimal
-  attribute :exchange_rate, Decimal
+  attribute :exchange_rate, Decimal, default: 1
   attribute :project_id, Integer
   attribute :due_date, Date
   attribute :description, String
@@ -70,6 +70,12 @@ class Movements::Form < BaseForm
   end
 
 private
+  # copies new from movement to the Movements::Form
+  def copy_new_defaults
+    self.currency = @movement.currency
+    self.date = Date.today
+  end
+
   def valid_service?
     res = valid?
     res = @movement.valid? && res
