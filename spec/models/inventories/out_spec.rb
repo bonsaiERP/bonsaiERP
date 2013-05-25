@@ -30,9 +30,9 @@ describe Inventories::Out do
     def create_inventory_in
       inv = Inventories::In.new(valid_attributes.merge({
         inventory_details_attributes: [
-          {item_id: 1, quantity: 10},
-          {item_id: 2, quantity: 10},
-          {item_id: 10, quantity: 10}
+          {item_id: 1, quantity: 2},
+          {item_id: 2, quantity: 2},
+          {item_id: 10, quantity: 2}
         ]
       }))
       inv.create
@@ -43,16 +43,11 @@ describe Inventories::Out do
       Inventory.any_instance.stub(store: store)
       Stock.any_instance.stub(item: item, store: store)
 
-      invout = Inventories::Out.new(valid_attributes)
-      invout.inventory_details.should have(2).items
-
-      invout.create.should be_false
-      invout.errors[:base].should eq([I18n.t('errors.messages.inventory.no_stock')])
-      invout.details[0].errors[:quantity].should eq([I18n.t('errors.messages.inventory_detail.stock_quantity')])
-      invout.details[1].errors[:quantity].should eq([I18n.t('errors.messages.inventory_detail.stock_quantity')])
-
+      # Create with the function
       create_inventory_in.should be_true
 
+
+      # Create
       invout = Inventories::Out.new(valid_attributes)
       invout.create.should be_true
 
@@ -69,12 +64,12 @@ describe Inventories::Out do
       stocks = Stock.active.where(store_id: io.store_id, item_id: [1, 2])
       stocks.should have(2).items
       stocks.map(&:item_id).sort.should eq([1, 2])
-      stocks.map(&:quantity).should eq([8, 8])
+      stocks.map(&:quantity).should eq([0, 0])
 
       # More items ERROR repeated
       attrs = valid_attributes.merge(inventory_details_attributes:
         [{item_id: 2, quantity: 2, store_id: 1},
-         {item_id: 12, quantity: 5, store_id: 1},
+         {item_id: 120, quantity: 5, store_id: 1},
          {item_id: 2, quantity: 10, store_id: 1}
         ]
       )
@@ -82,7 +77,7 @@ describe Inventories::Out do
       invout.create.should be_false
       invout.details[2].errors[:item_id].should_not be_blank
 
-      # More items
+      # More items store with ERROR
       attrs = valid_attributes.merge(inventory_details_attributes:
         [{item_id: 2, quantity: 2, store_id: 1},
          {item_id: 10, quantity: 5, store_id: 1}
@@ -91,13 +86,20 @@ describe Inventories::Out do
       invout = Inventories::Out.new(attrs)
 
       invout.create.should be_true
-      
+
+      inv = Inventory.find(invout.inventory.id)
+
+      inv.should be_has_error
+
+      inv.error_messages["quantity"].should eq('errors.messages.inventory.no_stock')
+      inv.error_messages["item_ids"].should eq([2, 10])
+
       stocks = Stock.active.where(store_id: io.store_id)
       stocks.should have(3).items
 
-      stocks.find {|v| v.item_id === 1}.quantity.should == 8
-      stocks.find {|v| v.item_id === 2}.quantity.should == 6
-      stocks.find {|v| v.item_id === 10}.quantity.should == 5
+      stocks.find {|v| v.item_id === 1}.quantity.should == 0
+      stocks.find {|v| v.item_id === 2}.quantity.should == -2
+      stocks.find {|v| v.item_id === 10}.quantity.should == -3
     end
   end
 end

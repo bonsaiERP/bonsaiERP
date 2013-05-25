@@ -27,6 +27,9 @@ class Inventory < ActiveRecord::Base
   validates_presence_of :ref_number, :store_id, :store, :date
   validates_inclusion_of :operation, in: OPERATIONS
 
+  # attribute
+  serialize :error_messages, JSON
+
   #validates_presence_of :store_to, :if => :is_transference?
   scope :op_in, -> { where(operation: IN_OPERATIONS) }
   scope :op_out, -> { where(operation: OUT_OPERATIONS) }

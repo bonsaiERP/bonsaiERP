@@ -242,7 +242,7 @@ es:
         empty_items: "No existe items para realizar la operación"
         item_balance: "Existen items que exeden el balance"
         stock_quantity: "Existen items que exceden la cantidad máxima"
-        no_stock: "Hay ítems inexistentes en stock"
+        negative_stock: "Hay ítems que generaton un stock negactivo"
         movement_quantity: "La cantidad es mayor que el balance"
       item:
         repeated: "El ítem es repetido"
