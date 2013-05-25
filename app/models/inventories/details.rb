@@ -13,6 +13,10 @@ class Inventories::Details < Struct.new(:inventory)
     @stocks ||= item_ids.map {|v| set_stock(v) }
   end
 
+  def stocks=(new_stocks)
+    @stocks = new_stocks
+  end
+
   def set_stock(item_id)
     if st = item_stocks.find {|v| v.item_id === item_id }
       st

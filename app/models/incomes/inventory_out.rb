@@ -23,7 +23,8 @@ class Incomes::InventoryOut < Inventories::Out
       update_income_balanace
 
       res = @income.save
-      res = update_stocks
+      res = res && update_stocks
+      Inventories::Errors.new(inventory, stocks).set_errors
       res = res && @inventory.save
     end
   end

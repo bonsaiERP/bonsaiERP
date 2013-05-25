@@ -53,8 +53,8 @@ describe Expenses::InventoryOut do
     def create_inventory_in
       inv = Inventories::In.new(valid_attributes.merge({
         inventory_details_attributes: [
-          {item_id: 1, quantity: 10},
-          {item_id: 2, quantity: 10}
+          {item_id: 1, quantity: 4},
+          {item_id: 2, quantity: 5}
         ]
       }))
       inv.create
@@ -64,14 +64,6 @@ describe Expenses::InventoryOut do
       Inventory.any_instance.stub(store: store)
       Stock.any_instance.stub(item: item, store: store)
 
-      # Error
-      #invout = Expenses::InventoryOut.new(valid_attributes)
-      #invout.details.should have(2).items
-
-      #invout.create.should be_false
-      #invout.errors[:base].should eq([I18n.t('errors.messages.inventory.no_stock')])
-      #invout.details[0].errors[:quantity].should eq([I18n.t('errors.messages.inventory_detail.stock_quantity')])
-      #invout.details[1].errors[:quantity].should eq([I18n.t('errors.messages.inventory_detail.stock_quantity')])
 
       # Create with the function
       create_inventory_in.should be_true
@@ -97,7 +89,7 @@ describe Expenses::InventoryOut do
       stocks = Stock.active.where(store_id: inv.store_id)
       stocks.should have(2).items
       stocks.map(&:item_id).sort.should eq([1, 2])
-      stocks.map(&:quantity).should eq([8, 8])
+      stocks.map(&:quantity).should eq([2, 3])
 
       # More items
       attrs = valid_attributes
@@ -113,6 +105,10 @@ describe Expenses::InventoryOut do
       exp.details[1].balance.should == 0
 
       io = Inventory.find(invout.inventory.id)
+      io.should be_has_error
+      io.error_messages["quantity"].should eq(['inventory.negative_stock'])
+      io.error_messages["item_ids"].should eq([1])
+
       io.inventory_details.should have(2).items
       io.inventory_details.map(&:quantity).should eq([3, 3])
       io.inventory_details.map(&:item_id).should eq([1, 2])
@@ -120,14 +116,13 @@ describe Expenses::InventoryOut do
       stocks = Stock.active.where(store_id: io.store_id)
       stocks.should have(2).items
       stocks.map(&:item_id).sort.should eq([1, 2])
-      stocks.map(&:quantity).should eq([5, 5])
+      stocks.map(&:quantity).should eq([-1, 0])
 
       # Error
       invout = Expenses::InventoryOut.new(valid_attributes)
       invout.create.should be_false
       invout.details[0].errors[:quantity].should eq([I18n.t('errors.messages.inventory.movement_quantity')])
       invout.details[1].errors[:quantity].should_not be_blank
-
 
       # Error
       invout = Expenses::InventoryOut.new(valid_attributes.merge(
@@ -136,7 +131,6 @@ describe Expenses::InventoryOut do
 
       invout.create.should be_false
       invout.errors[:base].should_not be_blank
-      #eq([I18n.t("errors.messages.inventory.movement_items")])
     end
   end
 end

@@ -42,13 +42,8 @@ private
     res = commit_or_rollback { b.call } if res
 
     set_errors(@inventory) unless res
-    Inventories::Errors.new(@inventory, stocks).set_errors
 
     res
-  end
-
-  def valid_stock?(stock)
-    stock.quantity >= 0
   end
 
   def klass_details

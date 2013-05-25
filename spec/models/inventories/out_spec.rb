@@ -84,14 +84,14 @@ describe Inventories::Out do
         ]
       )
       invout = Inventories::Out.new(attrs)
-
+$glob =true
       invout.create.should be_true
 
       inv = Inventory.find(invout.inventory.id)
 
       inv.should be_has_error
 
-      inv.error_messages["quantity"].should eq('errors.messages.inventory.no_stock')
+      inv.error_messages["quantity"].should eq(['inventory.negative_stock'])
       inv.error_messages["item_ids"].should eq([2, 10])
 
       stocks = Stock.active.where(store_id: io.store_id)

@@ -108,7 +108,7 @@ describe Incomes::InventoryOut do
 
       io = Inventory.find(invout.inventory.id)
       io.should be_has_error
-      io.error_messages["quantity"].should eq('errors.messages.inventory.no_stock')
+      io.error_messages["quantity"].should eq(['inventory.negative_stock'])
       io.error_messages["item_ids"].should eq([2])
 
       io.inventory_details.should have(2).items
@@ -137,6 +137,3 @@ describe Incomes::InventoryOut do
     end
   end
 end
-
-
-
