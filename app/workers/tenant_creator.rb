@@ -16,14 +16,14 @@ class TenantCreator
   end
 
   def create_tenant
-    return true if schema_exists?(tenant)
+    return true if schema_exists?(@tenant)
 
     ActiveRecord::Base.transaction do
-      create_schema tenant
-      clone_public_schema_to tenant
-      change_schema tenant
+      create_schema @tenant
+      clone_public_schema_to @tenant
+      change_schema @tenant
 
-      copy_migrations_to tenant
+      copy_migrations_to @tenant
 
       Unit.create_base_data
       Store.create!(name: 'Almacen inicial')
