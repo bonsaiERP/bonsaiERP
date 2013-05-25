@@ -171,8 +171,8 @@ es:
   allowed_errors:
     movement:
       negative_balance: "<a href='javascript:;' id='negative-balance-link'>Solucionemos el balance</a> negativo, le recomendamos realizar una devolución"
-      negative_item_balance: "Existe un item con balance negativo"
-      negative_items_balance: "Existen items con balance negativo"
+      balance_greater_than_total: "<a href='javascript:;' id='balance-greater-than-total-link'>Igualemos el balance</a> haciendo un pago o cobro"
+      
   # Active Model
   errors:
     # The default format to use in full error messages.

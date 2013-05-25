@@ -37,7 +37,7 @@ describe Devolution do
       it "Valid" do
         Account.stub(:where).with(id: account_to_id).and_return([account_to])
         dev = Devolution.new(valid_attributes)
-        dev.stub(transaction: build(:income, total: 100, balance: 10 ))
+        dev.stub(movement: build(:income, total: 100, balance: 10 ))
         dev.should be_valid
 
         dev.amount = 0.01

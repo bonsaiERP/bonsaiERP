@@ -43,12 +43,7 @@ private
     account.amount += amount_currency.round(2)
     account.set_state_by_balance!
 
-    if account.is_a?(Income)
-      IncomeErrors.new(account).set_errors
-    elsif account.is_a?(Expense)
-      ExpenseErrors.new(account).set_errors
-    end
-
+    Movements::Errors.new(account).set_errors
     account.save
   end
 

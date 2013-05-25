@@ -106,7 +106,7 @@ class Movement < Account
   end
 
   def can_devolution?
-    !is_draft? && !is_nulled?
+    !is_draft? && !is_nulled? && total > balance
   end
 
 private

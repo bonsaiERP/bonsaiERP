@@ -41,4 +41,37 @@ describe Movement do
       subject.should be_can_null
     end
   end
+
+  context "can_devolution?" do
+    let(:subject) {
+      m = Movement.new(amount: 100, state: 'draft')
+      m.build_transaction
+      m.total =  100
+      m
+    }
+    
+    it { should_not be_can_devolution }
+
+    it "total == balance" do
+      subject.state = 'approved'
+      subject.should be_is_approved
+
+      subject.should_not be_can_devolution
+    end
+
+    it "total > balance" do
+      subject.state = 'approved'
+      subject.should be_is_approved
+      subject.balance = 90
+
+      subject.should be_can_devolution
+    end
+
+    it "is_nulled?" do
+      subject.state = 'nulled'
+      subject.should be_is_nulled
+      
+      subject.should_not be_can_devolution
+    end
+  end
 end

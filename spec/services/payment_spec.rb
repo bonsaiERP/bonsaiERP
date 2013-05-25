@@ -3,12 +3,12 @@ require 'spec_helper'
 
 describe Payment do
 
-  let(:transaction){ Income.new_income(currency: 'BOB') {|i| i.id = 1 } }
+  let(:movement){ Income.new_income(currency: 'BOB') {|i| i.id = 1 } }
   let(:account_to){ build :account, currency: 'USD', id: 2 }
 
   let(:valid_attributes) {
     {
-      account_id: transaction.id, account_to_id: account_to.id, exchange_rate: 7.011,
+      account_id: movement.id, account_to_id: account_to.id, exchange_rate: 7.011,
       amount: 50, total: 0, reference: 'El primer pago',
       verification: false, date: Date.today
     }
@@ -16,7 +16,7 @@ describe Payment do
 
   subject do
     p = Payment.new(account_id: 1, account_to_id: 2, exchange_rate: 7.001)
-    p.stub(transaction: transaction, account_to: account_to)
+    p.stub(movement: movement, account_to: account_to)
     p
   end
 
@@ -77,13 +77,13 @@ describe Payment do
 
     context "account_to" do
       before(:each) do
-        Account.stub_chain(:active, :find_by_id).with(1).and_return(transaction)
+        Account.stub_chain(:active, :find_by_id).with(1).and_return(movement)
       end
 
       it "Not valid" do
         Account.stub_chain(:active, :find_by_id).with(2).and_return(nil)
         p = Payment.new(valid_attributes)
-        p.stub(transaction: transaction)
+        p.stub(movement: movement)
 
         p.should_not be_valid
         p.errors_on(:account_to).should_not be_empty
@@ -92,7 +92,7 @@ describe Payment do
       it "Valid" do
         Account.stub_chain(:active, :find_by_id).with(account_to.id).and_return(account_to)
         p = Payment.new(valid_attributes.merge(total: 50 * 7.011))
-        p.stub(transaction: transaction)
+        p.stub(movement: movement)
 
         p.should be_valid
       end

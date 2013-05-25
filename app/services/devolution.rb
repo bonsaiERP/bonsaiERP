@@ -1,6 +1,6 @@
 # encoding: utf-8
 # Base class used to make devolutions for Income and Expense models
-class Devolution < BaseService
+class Devolution < BaseForm
   attr_reader :ledger
 
   # Attributes
