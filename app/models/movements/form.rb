@@ -52,7 +52,6 @@ class Movements::Form < BaseForm
 
   def update(attrs = {})
     set_update_data(attrs)
-
     set_direct_payment if direct_payment?
 
     res = valid_service?

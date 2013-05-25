@@ -34,7 +34,7 @@ class MovementService
     @movement.balance = total
     @movement.balance_inventory = balance_inventory
 
-    @movement.details.build if @movement.details.empty?
+    2.times { @movement.details.build(quantity: 1) } if @movement.details.empty?
   end
 
   # Updates the data for an imcome or expense
@@ -43,7 +43,7 @@ class MovementService
     @movement.attributes = attrs.slice(*attributes_for_update)
     set_details
 
-    @movement.balance    -= (@movement.total_was - @movement.total)
+    @movement.balance     = get_updated_balance#(@movement.total_was - @movement.total)
     @movement.gross_total = original_total
     @movement.set_state_by_balance!
     @movement.discounted  = ( discount > 0 )
@@ -58,6 +58,14 @@ private
     @klass   = Income
     @errors  = Incomes::Errors
     @details = :income_details_attributes
+  end
+
+  # To eliminate NaN
+  def get_updated_balance
+    tot_was = @movement.total_was.to_s === "NaN" ? 0 : @movement.total_was
+    tot = @movement.total.to_s === "NaN" ? 0 : @movement.total
+    bal = @movement.balance.to_s === "NaN" ? 0 : @movement.balance
+    bal - (tot_was - tot)
   end
 
   def set_expense

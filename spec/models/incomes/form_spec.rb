@@ -60,7 +60,8 @@ describe Incomes::Form do
       AccountQuery.any_instance.stub_chain(:bank_cash, where: [( build :cash, id: 2 )])
 
       is = Incomes::Form.new_income(account_to_id: 2, direct_payment: "1", total: 150)
-      is.should be_valid
+      is.details.should have(2).items
+      is.details.map(&:quantity).should eq([1,1])
     end
 
     it "unique items" do

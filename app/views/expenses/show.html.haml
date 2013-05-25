@@ -75,10 +75,9 @@
 %hr
 
 %ul#tabs.nav.nav-pills.fs150
-  - unless @expense.is_draft?
-    %li
-      %a.payments-tab(href="#payments" data-toggle='tab')
-        Pagos
+  %li
+    %a.payments-tab(href="#payments" data-toggle='tab') Pagos
+
   %li
     %a(href="#information" data-toggle='tab')
       Items
@@ -92,18 +91,20 @@
     %h2.n Pagos y devoluciones
 
     .payment-buttons
-      %a#payment-link.btn.btn-danger(href='javascript:;')
-        %i.icon-minus-sign
-        Pagar
+      - if !@expense.is_nulled? && !@expense.is_paid?
+        %a#payment-link.btn.btn-danger(href='javascript:;')
+          %i.icon-minus-sign
+          Pagar
 
-      %a#devolution-link.btn.btn-success(href='javascript:;')
-        %i.icon-plus-sign
-        Devolución
+      - unless @expense.is_nulled?
+        %a#devolution-link.btn.btn-success(href='javascript:;')
+          %i.icon-plus-sign
+          Devolución
 
     #payment-form(style='display: none')
       %hr
       %h3 Pagar Egreso
-      = render 'expenses/payment_form', expense: @expense# unless @expense.is_paid?
+      = render 'expenses/payment_form', expense: @expense unless @expense.is_paid?
 
     #devolution-form(style='display: none')
       %h3 Devolución

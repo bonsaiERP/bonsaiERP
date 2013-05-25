@@ -28,6 +28,8 @@ describe Expenses::Form do
 
     it "expense_details" do
       subject.expense.should be_is_a(Expense)
+      subject.date.should be_is_a(Date)
+      subject.currency.should eq('BOB')
       subject.expense.expense_details.should have(2).items
 
       subject.expense.expense_details[0].item_id.should eq(details[0][:item_id])
@@ -58,7 +60,8 @@ describe Expenses::Form do
       AccountQuery.any_instance.stub_chain(:bank_cash, where: [( build :cash, id: 2 )])
 
       es = Expenses::Form.new_expense(account_to_id: 2, direct_payment: "1", total: 150)
-      es.should be_valid
+      es.details.should have(2).items
+      es.details.map(&:quantity).should eq([1,1])
     end
 
     it "unique items" do

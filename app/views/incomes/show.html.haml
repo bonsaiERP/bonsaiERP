@@ -77,9 +77,8 @@
 %hr
 
 %ul#tabs.nav.nav-pills.fs150
-  - unless @income.is_draft?
-    %li
-      %a(href='#payments' data-toggle='tab') Cobros
+  %li
+    %a(href='#payments' data-toggle='tab') Cobros
 
   %li
     %a(href='#information' data-toggle='tab') Items
@@ -93,25 +92,26 @@
     = @income.pendent_conciliations
 
     .payment-buttons
-      - unless @income.is_paid?
+      - if @income.can_pay?
         %a.btn.btn-success(id='payment-link' href='javascript:;')
           %i.icon-plus-sign
           Cobrar
 
-      %a.btn.btn-danger(id='devolution-link' href='javascript:;')
-        %i.icon-minus-sign
-        Devolución
+      - if @income.can_devolution?
+        %a.btn.btn-danger(id='devolution-link' href='javascript:;')
+          %i.icon-minus-sign
+          Devolución
 
 
     #payment-form(style='display: none')
       %hr
       %h3 Cobro
-      = render 'incomes/payment_form', income: @income unless @income.is_paid?
+      = render 'incomes/payment_form', income: @income  if @income.can_pay?
 
     #devolution-form(style='display: none')
       %hr
       %h3 Devolución
-      = render 'incomes/devolution_form', income: @income unless @income.is_draft?
+      = render 'incomes/devolution_form', income: @income  if @income.can_devolution?
 
     %ul.unstyled.listing(style="margin-top: 0px")
       %li.row-fluid

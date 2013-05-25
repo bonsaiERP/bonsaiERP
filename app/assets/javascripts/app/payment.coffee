@@ -79,24 +79,24 @@ class Payment extends Backbone.Model
 
 # Class for Income
 class IncomePayment extends Payment
-  accountToSel: '#income_payment_account_to_id'
+  accountToSel: '#incomes_payment_account_to_id'
   formSel: '#income-payment-form'
   verificationSel: '#income_payment_verification'
 
 #
 class IncomeDevolution extends Payment
-  accountToSel: '#income_devolution_account_to_id'
+  accountToSel: '#incomes_devolution_account_to_id'
   formSel: '#income-devolution-form'
   verificationSel: '#income_devolution_verification'
 
 # Class for Expemse
 class ExpensePayment extends Payment
-  accountToSel: '#expense_payment_account_to_id'
+  accountToSel: '#expenses_payment_account_to_id'
   formSel: '#expense-payment-form'
   verificationSel: '#expense_payment_verification'
 
 class ExpenseDevolution extends Payment
-  accountToSel: '#expense_devolution_account_to_id'
+  accountToSel: '#expenses_devolution_account_to_id'
   formSel: '#expense-devolution-form'
   verificationSel: '#expense_devolution_verification'
 

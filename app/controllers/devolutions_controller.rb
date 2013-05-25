@@ -6,7 +6,7 @@ class DevolutionsController < ApplicationController
 
   # POST /devolutions/:id/income
   def income
-    p = IncomeDevolution.new(income_params)
+    p = Incomes::Devolution.new(income_params)
 
     if p.pay_back
       flash[:notice] = 'La devolución realizo correctamente.'
@@ -19,7 +19,7 @@ class DevolutionsController < ApplicationController
 
   # POST /devolutions/:id/expense
   def expense
-    p = ExpenseDevolution.new(expense_params)
+    p = Expenses::Devolution.new(expense_params)
 
     if p.pay_back
       flash[:notice] = 'la devolucion se realizo correctamente.'
@@ -32,11 +32,11 @@ class DevolutionsController < ApplicationController
 
 private
   def income_params
-    params.require(:income_devolution).permit(*allowed_params)
+    params.require(:incomes_devolution).permit(*allowed_params)
   end
 
   def expense_params
-    params.require(:expense_devolution).permit(*allowed_params)
+    params.require(:expenses_devolution).permit(*allowed_params)
   end
 
   def allowed_params

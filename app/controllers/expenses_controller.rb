@@ -16,17 +16,17 @@ class ExpensesController < ApplicationController
 
   # GET /expenses/new
   def new
-    @es = ExpenseService.new_expense(date: Date.today)
+    @es = Expenses::Form.new_expense(date: Date.today)
   end
 
   # GET /expenses/1/edit
   def edit
-    @es = ExpenseService.find(params[:id])
+    @es = Expenses::Form.find(params[:id])
   end
 
   # POST /expenses
   def create
-    @es = ExpenseService.new_expense(expense_params)
+    @es = Expenses::Form.new_expense(expense_params)
 
     if create_or_approve
       redirect_to @es.expense, notice: 'Se ha creado un Egreso.'
@@ -37,7 +37,7 @@ class ExpensesController < ApplicationController
 
   # PUT /expenses/:id
   def update
-    @es = ExpenseService.find(params[:id])
+    @es = Expenses::Form.find(params[:id])
 
     if update_or_approve
       redirect_to @es.expense, notice: 'El Egreso fue actualizado!.'
@@ -102,7 +102,7 @@ class ExpensesController < ApplicationController
   end
 
 private
-  # Creates or approves a ExpenseService instance
+  # Creates or approves a Expenses::Form instance
   def create_or_approve
     if params[:commit_approve]
       @es.create_and_approve 
@@ -124,7 +124,7 @@ private
   end
 
   def expense_params
-    params.require(:expense_service).permit(*transaction_params.expense)
+    params.require(:expenses_form).permit(*transaction_params.expense)
   end
 
   def transaction_params

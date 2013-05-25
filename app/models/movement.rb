@@ -92,12 +92,21 @@ class Movement < Account
   end
 
   def can_null?
-    total === amount && !is_nulled?
+    total === amount && !is_nulled? && ledgers.pendent.empty?
   end
 
   alias :old_attributes :attributes
   def attributes
     old_attributes.merge(transaction.attributes)
+  end
+
+
+  def can_pay?
+    !is_nulled? && !is_paid?
+  end
+
+  def can_devolution?
+    !is_draft? && !is_nulled?
   end
 
 private
