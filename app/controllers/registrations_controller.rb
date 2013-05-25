@@ -64,6 +64,7 @@ private
   end
 
   def check_registration_tenant
+    binding.pry
     if request.subdomain.present? && PgTools.schema_exists?(request.subdomain)
       redirect_to new_session_url(host: UrlTools.domain), alert: "Por favor ingrese."
       return
