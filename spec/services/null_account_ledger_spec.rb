@@ -121,6 +121,7 @@ describe NullAccountLedger do
 
       na = NullAccountLedger.new(al)
 
+      Movements::Errors.any_instance.should_receive(:set_errors)
       na.null.should be_true
 
       na.account.should eq(income)
@@ -138,6 +139,8 @@ describe NullAccountLedger do
       income.balance.should == 0
 
       na = NullAccountLedger.new(al)
+
+      Movements::Errors.any_instance.should_receive(:set_errors)
 
       na.null.should be_true
 

@@ -172,6 +172,8 @@ es:
     movement:
       negative_balance: "<a href='javascript:;' id='negative-balance-link'>Solucionemos el balance</a> negativo, le recomendamos realizar una devolución"
       balance_greater_than_total: "<a href='javascript:;' id='balance-greater-than-total-link'>Igualemos el balance</a> haciendo un pago o cobro"
+    inventory:
+      negative_stock: ""
       
   # Active Model
   errors:

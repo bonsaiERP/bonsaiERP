@@ -17,12 +17,13 @@ private
 
     stocks.each do |st|
       stoc = Stock.new(store_id: store_id, item_id: st.item_id, quantity: stock_quantity(st) )
-      unless valid_stock?(stoc)
-        @inventory.has_error = true
-        @inventory.error_messages = {item_ids: []} unless @inventory.error_messages
-        @inventory.error_messages[:quantity] = 'errors.messages.inventory.no_stock'
-        @inventory.error_messages[:item_ids] << stoc.item_id
-      end
+
+      #unless valid_stock?(stoc)
+      #  @inventory.has_error = true
+      #  @inventory.error_messages = {item_ids: []} unless @inventory.error_messages
+      #  @inventory.error_messages[:quantity] = 'errors.messages.inventory.no_stock'
+      #  @inventory.error_messages[:item_ids] << stoc.item_id
+      #end
 
       res = stoc.save && st.update_attribute(:active, false)
 
