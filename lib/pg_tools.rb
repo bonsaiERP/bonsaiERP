@@ -108,7 +108,7 @@ module PgTools
   def create_bash_dump_public_schema
 <<-BASH
 # /bin/bash
-PGPASSWORD=#{PgTools.password}
+PGPASSWORD='#{PgTools.password}'
 export PGPASSWORD
 
 pg_dump --host=#{host} --username=#{PgTools.username} --schema=public --schema-only #{PgTools.database}
