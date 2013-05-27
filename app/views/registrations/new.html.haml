@@ -22,14 +22,15 @@
           = f.input :tenant, label: false,
             hint: "<i class='icon-warning-sign' ></i> No es posible modificar en un futuro".html_safe,
             input_html: {class: 'span12'} do
-            .input-prepend.input-append
+            .input-append
               = f.text_field :tenant, size: 28, placeholder: 'Subdominio', title: 'Subdominio', 'data-toggle' => 'tooltip'
-              %span.add-on .bonsaierp.com
+              %span.add-on.append
+                \.bonsaierp.com
           = f.input :email, label: false, input_html: {class: 'span12', placeholder: "Correo electrónico", title: 'Correo electrónico', 'data-toggle' => 'tooltip'}
           .input-append
             =f.input :password, label: 'Contraseña' do
               = f.password_field :password
-              %span.add-on
+              %span.add-on.append
                 %label
                   %input(type="checkbox" id="show-password")
                   Ver contraseña

@@ -34,7 +34,6 @@ describe Registration do
     r.user.confirmation_token.should_not be_blank
     r.user.password.should_not be_blank
 
-
     link = r.user.active_links.first
     link.organisation_id.should eq(1)
     link.rol.should eq('admin')

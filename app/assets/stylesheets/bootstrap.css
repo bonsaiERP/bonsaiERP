@@ -1376,7 +1376,7 @@ select:focus:invalid:focus {
 .input-append,
 .input-prepend {
   margin-bottom: 5px;
-  font-size: 0;
+  /*font-size: 0;*/
   white-space: nowrap;
 }
 .input-append input,
