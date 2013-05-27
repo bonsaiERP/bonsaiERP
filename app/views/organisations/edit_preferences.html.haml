@@ -43,7 +43,6 @@
 
     $('#organisation_preferences_item_discount').live('focusout', function() {
       if (testDecimal( $(this).val() ) ) {
-        console.log($(this).val());
         $('#item_discount').html(_b.ntc( $(this).val() ) );
       }else{
         $('#item_discount').html(_b.ntc(0));

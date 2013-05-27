@@ -1,11 +1,18 @@
 # Model
 class InventoryDetail extends Backbone.Model
+  initialize: ->
+    @setAutocomplete()
   defaults:
     quantity: 0.0
   #
   deleteItem: (event) ->
     src = event.currentTarget || event.srcElement
     @collection.deleteItem(this, src)
+  #
+  setAutocomplete: ->
+    @get('tr').on('autocomplete-done', 'input.autocomplete', (event, item) =>
+      @get('tr').find('.unit').text(item.unit_symbol)
+    )
 
 # Collection
 class Inventory extends Backbone.Collection
@@ -20,7 +27,7 @@ class Inventory extends Backbone.Collection
   setItems: ->
     $("#items tr.item").each( (i, el) =>
       $el = $(el)
-      @add({})
+      @add({tr: $el})
       item = @models[@length - 1]
       rivets.bind $el, {item: item}
     )
@@ -35,7 +42,7 @@ class Inventory extends Backbone.Collection
     $tr = $(@template(num: @length))
     $tr.insertBefore('#items tr.last')
     $tr.createAutocomplete()
-    @add({})
+    @add({tr: $tr})
     item = @models[@length - 1]
 
     rivets.bind $tr, {item: item}
@@ -51,6 +58,7 @@ itemTemplate = """
   <td>
     <div class="control-group decimal required inventory_in_inventory_operation_details_quantity"><div class="controls"><input class="numeric decimal required" id="inventory_in_inventory_operation_details_attributes_0_quantity" name="inventory_in[inventory_operation_details_attributes][{{num}}][quantity]" size="10" step="any" type="decimal" value="0.0"></div></div>
   </td>
+  <td><span class="unit"></span></td>
   <td>
     <a class="dark" data-on-click="item:deleteItem" href="javascript:;"><i class="icon-trash icon-large" title="" data-toggle="tooltip" data-original-title="Borrar"></i></a>
   </td>

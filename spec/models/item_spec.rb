@@ -11,7 +11,7 @@ describe Item do
   it { should have_many(:expense_details) }
   it { should have_many(:inventory_details) }
 
-  it { should validate_uniqueness_of(:name) }
+  #it { should validate_uniqueness_of(:name) }
   it { should have_valid(:price).when(1, 0.1) }
   it { should_not have_valid(:price).when(-1, -0.1) }
   it { should have_valid(:buy_price).when(0, 1, 0.1,-0.0) }
@@ -114,6 +114,24 @@ describe Item do
     it "does not destroy the item" do
       InventoryDetail.stub(:where).with(item_id: subject.id).and_return([1])
       subject.destroy.should be_false
+    end
+  end
+
+  context "set_unit" do
+    let(:unit2) { create :unit, symbol: 'un.', name: 'unidad' }
+
+    it "sets the name" do
+      i = Item.create!(valid_attributes.merge(unit_id: unit2.id))
+      i.unit_name.should eq(unit2.name)
+      i.unit_symbol.should eq(unit2.symbol)
+      i.attributes["unit_name"].should eq(unit2.name)
+      i.attributes["unit_symbol"].should eq(unit2.symbol)
+
+      i = Item.find i.id
+
+      i.update_attributes!(name: 'Sojooj', unit_id: unit.id)
+      i.unit_name.should eq(unit.name)
+      i.unit_symbol.should eq(unit.symbol)
     end
   end
 end

@@ -362,6 +362,19 @@ namespace :bonsai do
       end
     end
   end
+
+  desc 'Denormalizes the unit in items'
+  task add_unit_to_items: :environment do
+    PgTools.all_schemas.each  do |schema|
+      unless schema === 'common' 
+        PgTools.change_schema schema
+        puts "Updating units for items in schema #{schema}"
+        Unit.all.each do |unit|
+          Item.where(unit_id: unit.id).update_all(["unit_name=?, unit_symbol=?", unit.name, unit.symbol])
+        end
+      end
+    end
+  end
 end
 
 # example to export the file

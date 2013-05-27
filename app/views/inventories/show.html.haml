@@ -12,6 +12,9 @@
   = @inventory.ref_number
   = @inventory.operation_tag
 
+%h3.n
+  = link_to @inventory.store, @inventory.store
+
 .row-fluid
   .span3
     %h4.n.i= l @inventory.date
@@ -25,10 +28,13 @@
     %tr
       %th Item
       %th Cantidad
+      %th Unidad
 
-    - @inventory.inventory_details.each do |det|
+    - @inventory.inventory_details.includes(:item).each do |det|
       %tr.item
         %td
           = det.item
         %td
           = ntc det.quantity
+        %td
+          = det.item.unit_symbol

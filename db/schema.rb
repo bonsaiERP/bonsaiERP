@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130522125737) do
+ActiveRecord::Schema.define(:version => 20130527202406) do
 
   create_table "account_ledgers", :force => true do |t|
     t.string   "reference"
@@ -163,6 +163,8 @@ ActiveRecord::Schema.define(:version => 20130522125737) do
     t.datetime "created_at",                                                                  :null => false
     t.datetime "updated_at",                                                                  :null => false
     t.decimal  "buy_price",                  :precision => 14, :scale => 2, :default => 0.0
+    t.string   "unit_symbol", :limit => 20
+    t.string   "unit_name"
   end
 
   add_index "items", ["code"], :name => "index_items_on_code"

@@ -63,7 +63,6 @@
         var p = new Payment(accounts, currencies, account_data, #{@transaction.currency_id});
         $('#payment_accounts').find("div").unbind("click");
         $('#payment_accounts').jDropDown({callback: p.setAccount}).initjDropDown();
-        console.log("jDropDown set");
 
         var er = new ExchangeRate();
         er.setAll('#account_ledger_exchange_rate', '#account_ledger_account_id', #{@transaction.currency_id}, accounts, currencies, {inverted: true});

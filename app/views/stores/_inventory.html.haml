@@ -2,3 +2,6 @@
   .span6
     %h4.n= link_to inventory.ref_number, inventory
     = lo inventory.created_at
+  .span6
+    %i.icon-file-alt(data-toggle='tooltip' title='Descripción')
+    = inventory.description

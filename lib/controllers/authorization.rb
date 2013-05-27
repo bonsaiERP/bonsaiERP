@@ -81,7 +81,7 @@ private
       export_incomes: true,
       export_expenses: true,
       inventory_ins: true,
-      inventory_out: true,
+      inventory_outs: true,
       inventory_transferences: true
     }
   end
@@ -114,7 +114,7 @@ private
       export_incomes: true,
       export_expenses: true,
       inventory_ins: true,
-      inventory_out: true,
+      inventory_outs: true,
       inventory_transferences: true
     }
   end

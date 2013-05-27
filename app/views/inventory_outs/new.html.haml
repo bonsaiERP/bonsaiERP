@@ -1,4 +1,21 @@
-= simple_form_for inv, url: store_inventory_ins_path(inv.store_id) do |f|
+- content_for :links do
+  %ul.breadcrumbs.span6
+    %li
+      =link_to @inv.store, @inv.store
+    %li
+      %i.icon-caret-right
+    %li
+      Egreso de items
+
+.row-fluid
+  .span12
+    %h1
+      %span.muted.n Egreso de items
+      = @inv.inventory.ref_number
+
+- inv = @inv
+
+= simple_form_for inv, url: store_inventory_outs_path(@inv.store_id) do |f|
   = f.hidden_field :store_id
   .row-fluid
     .span3
@@ -44,3 +61,4 @@
     var inv = new App.Inventory();
     //rivets.bind($('#items tr.last'), {inventory: inv});
   })
+

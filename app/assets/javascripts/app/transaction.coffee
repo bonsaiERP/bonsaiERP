@@ -26,7 +26,6 @@ class Item extends Backbone.Model
   setAutocompleteEvent: (el) ->
     $(el).on 'autocomplete-done', 'input.autocomplete', (event, item) =>
       price = _b.roundVal( item.price * (1/@get('rate')), _b.numPresicion )
-      console.log @collection.where(item_id: item.id)
 
       @set(original_price: item.price, price: price, item_id: item.id)
   #

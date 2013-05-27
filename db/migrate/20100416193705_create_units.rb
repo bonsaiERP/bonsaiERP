@@ -7,7 +7,6 @@ class CreateUnits < ActiveRecord::Migration
         t.boolean :integer, :default => false
         t.boolean :visible, :default => true
 
-
         t.timestamps
       end
     end

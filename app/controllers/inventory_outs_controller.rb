@@ -1,16 +1,16 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class InventoryInsController < ApplicationController
+class InventoryOutsController < ApplicationController
   before_filter :check_store
 
   def new
-    @inv = Inventories::In.new(store_id: params[:store_id], date: Date.today)
+    @inv = Inventories::Out.new(store_id: params[:store_id], date: Date.today)
     2.times { @inv.details.build }
   end
 
   def create
-    @inv = Inventories::In.new(inventory_params.merge(store_id: params[:store_id]))
+    @inv = Inventories::Out.new(inventory_params.merge(store_id: params[:store_id]))
 
     if @inv.create
       redirect_to inventory_path(@inv.inventory.id), notice: 'Se ha ingresado correctamente los items.'
@@ -33,7 +33,7 @@ private
   end
 
   def inventory_params
-    params.require(:inventories_in).permit(
+    params.require(:inventories_out).permit(
       :store_id, :date, :description,
       inventory_details_attributes: [:item_id, :quantity, :_destroy]
     )

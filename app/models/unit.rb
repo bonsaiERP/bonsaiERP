@@ -5,6 +5,7 @@ class Unit < ActiveRecord::Base
 
   # callbacks
   before_save    :strip_attributes
+  before_update  :update_item_units
   before_destroy :check_items_destroy
 
   # relationships
@@ -59,4 +60,9 @@ protected
     end
   end
 
+  def update_item_units
+    if name_changed? || symbol_changed?
+      Item.where(unit_id: id).update_all(["unit_name=?, unit_symbol=?", name, symbol])
+    end
+  end
 end

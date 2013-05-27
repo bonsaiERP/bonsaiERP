@@ -6,6 +6,7 @@ class Item < ActiveRecord::Base
   ##########################################
   # Callbacks
   before_save :trim_code
+  before_save :set_unit
   before_destroy :check_items_destroy
 
   ##########################################
@@ -25,9 +26,6 @@ class Item < ActiveRecord::Base
   validates :price, numericality: { greater_than_or_equal_to: 0 }
   validates :buy_price, numericality: { greater_than_or_equal_to: 0 }
 
-  ##########################################
-  # Delegates
-  delegate :symbol, :name, to: :unit, prefix: true
 
   ##########################################
   # Scopes
@@ -61,5 +59,10 @@ private
 
   def trim_code
     self.code = code.to_s.strip
+  end
+
+  def set_unit
+    self.unit_symbol = unit.symbol
+    self.unit_name = unit.name
   end
 end
