@@ -13,7 +13,7 @@ class InventoryOutsController < ApplicationController
     @inv = Inventories::Out.new(inventory_params.merge(store_id: params[:store_id]))
 
     if @inv.create
-      redirect_to inventory_path(@inv.inventory.id), notice: 'Se ha ingresado correctamente los items.'
+      redirect_to inventory_path(@inv.inventory.id), notice: 'Se ha egresado correctamente los items.'
     else
       @inv.details.build if @inv.details.empty?
       render :new
