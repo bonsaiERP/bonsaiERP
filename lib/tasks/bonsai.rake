@@ -6,7 +6,7 @@ namespace :bonsai do
     path = File.join(Rails.root, "config", "locales")
     en = File.join(path, "bonsai.en.yml")
     yaml_en = YAML::parse(File.open(en)).transform
-    
+
     ["es"].each do |locale|
       locale_file = en.gsub(/bonsai.en.yml/, "bonsai.#{locale}.yml")
       yaml_locale = YAML::parse(File.open(locale_file)).transform
@@ -327,6 +327,38 @@ namespace :bonsai do
           c.expenses_status = ContactBalanceStatus.new(expenses).create_balances
           c.save
         end
+      end
+    end
+  end
+
+  desc 'Updates the schema versions'
+  task update_schema_versions: :environment do
+    t1 = Time.now.to_f
+    file = Rails.root.join('db', 'migrations.txt')
+    if File.exists?(file)
+      conn = ActiveRecord::Base.connection
+      PgTools.all_schemas.each do |s|
+        next if s === 'common'
+        puts "Updating schema: #{s}"
+        conn.execute "DELETE FROM #{s}.schema_migrations"
+        conn.execute "COPY #{s}.schema_migrations FROM '#{file}'"
+      end
+    end
+
+    t2 = Time.now.to_f
+    puts "Time: #{t2 - t1} Seconds"
+  end
+
+  desc 'removes uneeded'
+  task remove_unused_tables: :environment do
+    conn = ActiveRecord::Base.connection
+    tables = %w(links organisations users)
+
+    PgTools.all_schemas.each  do |schema|
+      unless %w(bonsai clubv common telexfree).include?(schema)
+        sql = "DROP TABLE #{tables.map {|v| "#{ schema }.#{v}" }.join(", ") };"
+        conn.execute(sql)
+        puts sql
       end
     end
   end

@@ -3,7 +3,7 @@
 
   -########################################
   -# Render common form elements
-  = render 'transactions/shared_form', f: f
+  = render 'transactions/shared_form', f: f, transaction: income_service.income
   = render 'transactions/form_direct_payment', f: f, lbl: 'Cobro' if income_service.is_draft?
 
   -########################################
@@ -11,8 +11,9 @@
   .row-fluid
     =render "transactions/form_items", f: f, transaction: income_service, details: :income_details
 
-  = f.submit 'Salvar', class: 'btn btn-success b btn-large trans', name: 'commit_save', data: {show: 'trans.direct_payment| inverse'}
-  = f.submit value: 'Salvar y aprovar', class: 'btn btn-success b btn-large', name: 'commit_approve' if income_service.is_draft?
+  .form-actions
+    = f.submit 'Salvar', class: 'btn b btn-large trans', name: 'commit_save', data: {show: 'trans.direct_payment| inverse'}
+    = f.submit value: 'Salvar y aprobar', class: 'btn b btn-large btn-primary', name: 'commit_approve' if income_service.is_draft?
 
 
 :javascript
@@ -21,6 +22,10 @@
       $('.contact_id').val(resp.matchcode).data('value', resp.matchcode)
       .prev().val(resp.matchcode);
     })
+
+    if($('[name=commit_approve]').length == 0) {
+      $('[name=commit_save]').addClass('btn-primary');
+    }
 
     fx.rates = exchangeRates.rates;
     income = new App.Income();

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130429120114) do
+ActiveRecord::Schema.define(:version => 20130522125737) do
 
   create_table "account_ledgers", :force => true do |t|
     t.string   "reference"
@@ -110,27 +110,13 @@ ActiveRecord::Schema.define(:version => 20130429120114) do
   add_index "contacts", ["staff"], :name => "index_contacts_on_staff"
   add_index "contacts", ["supplier"], :name => "index_contacts_on_supplier"
 
-  create_table "inventory_operation_details", :force => true do |t|
-    t.integer  "inventory_operation_id"
-    t.integer  "item_id"
-    t.integer  "store_id"
-    t.decimal  "quantity",               :precision => 14, :scale => 2, :default => 0.0
-    t.datetime "created_at",                                                             :null => false
-    t.datetime "updated_at",                                                             :null => false
-  end
-
-  add_index "inventory_operation_details", ["inventory_operation_id"], :name => "index_inventory_operation_details_on_inventory_operation_id"
-  add_index "inventory_operation_details", ["item_id"], :name => "index_inventory_operation_details_on_item_id"
-  add_index "inventory_operation_details", ["store_id"], :name => "index_inventory_operation_details_on_store_id"
-
-  create_table "inventory_operations", :force => true do |t|
+  create_table "inventories", :force => true do |t|
     t.integer  "contact_id"
     t.integer  "store_id"
     t.integer  "account_id"
     t.date     "date"
     t.string   "ref_number"
     t.string   "operation",       :limit => 10
-    t.string   "state"
     t.string   "description"
     t.decimal  "total",                         :precision => 14, :scale => 2, :default => 0.0
     t.integer  "creator_id"
@@ -143,15 +129,27 @@ ActiveRecord::Schema.define(:version => 20130429120114) do
     t.datetime "updated_at",                                                                      :null => false
   end
 
-  add_index "inventory_operations", ["account_id"], :name => "index_inventory_operations_on_account_id"
-  add_index "inventory_operations", ["contact_id"], :name => "index_inventory_operations_on_contact_id"
-  add_index "inventory_operations", ["date"], :name => "index_inventory_operations_on_date"
-  add_index "inventory_operations", ["has_error"], :name => "index_inventory_operations_on_has_error"
-  add_index "inventory_operations", ["operation"], :name => "index_inventory_operations_on_operation"
-  add_index "inventory_operations", ["project_id"], :name => "index_inventory_operations_on_project_id"
-  add_index "inventory_operations", ["ref_number"], :name => "index_inventory_operations_on_ref_number"
-  add_index "inventory_operations", ["state"], :name => "index_inventory_operations_on_state"
-  add_index "inventory_operations", ["store_id"], :name => "index_inventory_operations_on_store_id"
+  add_index "inventories", ["account_id"], :name => "index_inventory_operations_on_account_id"
+  add_index "inventories", ["contact_id"], :name => "index_inventory_operations_on_contact_id"
+  add_index "inventories", ["date"], :name => "index_inventory_operations_on_date"
+  add_index "inventories", ["has_error"], :name => "index_inventory_operations_on_has_error"
+  add_index "inventories", ["operation"], :name => "index_inventory_operations_on_operation"
+  add_index "inventories", ["project_id"], :name => "index_inventory_operations_on_project_id"
+  add_index "inventories", ["ref_number"], :name => "index_inventory_operations_on_ref_number"
+  add_index "inventories", ["store_id"], :name => "index_inventory_operations_on_store_id"
+
+  create_table "inventory_details", :force => true do |t|
+    t.integer  "inventory_id"
+    t.integer  "item_id"
+    t.integer  "store_id"
+    t.decimal  "quantity",     :precision => 14, :scale => 2, :default => 0.0
+    t.datetime "created_at",                                                   :null => false
+    t.datetime "updated_at",                                                   :null => false
+  end
+
+  add_index "inventory_details", ["inventory_id"], :name => "index_inventory_details_on_inventory_id"
+  add_index "inventory_details", ["item_id"], :name => "index_inventory_operation_details_on_item_id"
+  add_index "inventory_details", ["store_id"], :name => "index_inventory_operation_details_on_store_id"
 
   create_table "items", :force => true do |t|
     t.integer  "unit_id"
@@ -241,19 +239,19 @@ ActiveRecord::Schema.define(:version => 20130429120114) do
   create_table "stocks", :force => true do |t|
     t.integer  "store_id"
     t.integer  "item_id"
-    t.string   "state",        :limit => 20
-    t.decimal  "unitary_cost",               :precision => 14, :scale => 2, :default => 0.0
-    t.decimal  "quantity",                   :precision => 14, :scale => 2, :default => 0.0
-    t.decimal  "minimum",                    :precision => 14, :scale => 2, :default => 0.0
+    t.decimal  "unitary_cost", :precision => 14, :scale => 2, :default => 0.0
+    t.decimal  "quantity",     :precision => 14, :scale => 2, :default => 0.0
+    t.decimal  "minimum",      :precision => 14, :scale => 2, :default => 0.0
     t.integer  "user_id"
-    t.datetime "created_at",                                                                 :null => false
-    t.datetime "updated_at",                                                                 :null => false
+    t.datetime "created_at",                                                    :null => false
+    t.datetime "updated_at",                                                    :null => false
+    t.boolean  "active",                                      :default => true
   end
 
+  add_index "stocks", ["active"], :name => "index_stocks_on_active"
   add_index "stocks", ["item_id"], :name => "index_stocks_on_item_id"
   add_index "stocks", ["minimum"], :name => "index_stocks_on_minimum"
   add_index "stocks", ["quantity"], :name => "index_stocks_on_quantity"
-  add_index "stocks", ["state"], :name => "index_stocks_on_state"
   add_index "stocks", ["store_id"], :name => "index_stocks_on_store_id"
   add_index "stocks", ["user_id"], :name => "index_stocks_on_user_id"
 

@@ -16,10 +16,7 @@
     = expense.due_date_tag
 
     .clear-both
-    - if expense.description.present?
-      .clear-both
-      %i.icon-file-alt(data-toggle='tooltip' title='Descripción')
-      = expense.description
+    = expense.description_tag
   .span3
     .span6.r
       = ntc expense.total

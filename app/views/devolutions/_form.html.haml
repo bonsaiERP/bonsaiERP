@@ -30,7 +30,3 @@
 .row-fluid
   .span6
     = f.input :reference, label: 'Referecia', as: :text, input_html: {rows: 3, data: {value: 'payment.reference'} }
-
-.form-actions
-  = f.submit "Salvar", class: 'btn btn-success b'
-  %a#cancel-payment-link.btn(hre='javascript:;') Cancelar

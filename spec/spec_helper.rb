@@ -15,7 +15,7 @@ Spork.prefork do
   require 'capybara/rspec'
 
 
-  Rspec.configure do |config|
+  RSpec.configure do |config|
     config.mock_with :rspec
 
     config.before(:suite) do
@@ -70,7 +70,7 @@ end
 Spork.each_run do
   Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
-  Rspec.configure do |config|
+  RSpec.configure do |config|
     #def log
       #MyLog.log
     #end

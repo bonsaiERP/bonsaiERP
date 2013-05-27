@@ -6,6 +6,7 @@ class ExpensesController < ApplicationController
 
   # GET /expenses
   def index
+    set_index_params
     search_expenses
   end
 
@@ -16,17 +17,17 @@ class ExpensesController < ApplicationController
 
   # GET /expenses/new
   def new
-    @es = ExpenseService.new_expense
+    @es = Expenses::Form.new_expense(date: Date.today)
   end
 
   # GET /expenses/1/edit
   def edit
-    @es = ExpenseService.find(params[:id])
+    @es = Expenses::Form.find(params[:id])
   end
 
   # POST /expenses
   def create
-    @es = ExpenseService.new_expense(expense_params)
+    @es = Expenses::Form.new_expense(expense_params)
 
     if create_or_approve
       redirect_to @es.expense, notice: 'Se ha creado un Egreso.'
@@ -37,7 +38,7 @@ class ExpensesController < ApplicationController
 
   # PUT /expenses/:id
   def update
-    @es = ExpenseService.find(params[:id])
+    @es = Expenses::Form.find(params[:id])
 
     if update_or_approve
       redirect_to @es.expense, notice: 'El Egreso fue actualizado!.'
@@ -48,7 +49,7 @@ class ExpensesController < ApplicationController
 
   # POST /expenses/quick_expense
   def quick_expense
-    @quick_expense = QuickExpense.new(quick_expense_params)
+    @quick_expense = Expenses::QuickForm.new(quick_expense_params)
 
     if @quick_expense.create
       flash[:notice] = "El egreso fue creado."
@@ -102,7 +103,7 @@ class ExpensesController < ApplicationController
   end
 
 private
-  # Creates or approves a ExpenseService instance
+  # Creates or approves a Expenses::Form instance
   def create_or_approve
     if params[:commit_approve]
       @es.create_and_approve 
@@ -120,11 +121,11 @@ private
   end
 
   def quick_expense_params
-   params.require(:quick_expense).permit(*transaction_params.quick_income)
+   params.require(:expenses_quick_form).permit(*transaction_params.quick_income)
   end
 
   def expense_params
-    params.require(:expense_service).permit(*transaction_params.expense)
+    params.require(:expenses_form).permit(*transaction_params.expense)
   end
 
   def transaction_params
@@ -146,5 +147,23 @@ private
                   Expense.order('date desc').page(@page)
                 end
     @expenses = @expenses.includes(:contact, transaction: [:creator, :approver, :nuller]).order('date desc, id desc')
+    set_expenses_filters
+  end
+
+  def set_expenses_filters
+    case
+    when params[:approved].present?
+      @expenses = @expenses.approved
+    when params[:error].present?
+      @expenses = @expenses.error
+    when params[:due].present?
+      @expenses = @expenses.due
+    when params[:nulled].present?
+      @expenses = @expenses.nulled
+    end
+  end
+
+  def set_index_params
+    params[:all] = true unless params[:approved] || params[:error] || params[:nulled] || params[:due]
   end
 end

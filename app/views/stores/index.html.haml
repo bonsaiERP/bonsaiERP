@@ -1,23 +1,32 @@
 - content_for :links do
-  %ul.breadcrumps.span6
+  %ul.breadcrumbs
     %li
       %span Almacenes
 
-  .links.span6
-    = link_to new_store_path, class: 'new' do
-      %i.bicon-add.bicon
+.row-fluid
+  .span6
+    %h2 Almacenes
+
+  .span6.r
+    = link_to new_store_path, class: 'btn' do
+      %i.icon-plus-sign
       Nuevo almacen
 
-.page-header
-  %h1 Almacenes
-
-%ul#stores.accounts_list
+%ul#stores.unstyled.listing
   - @stores.each do |store|
-    %li
-      %h3 
-        %span(class="#{store.active.to_s } tip" title="#{active?(store.active)}")
-        = link_to store.name, store
-      ._33.fl= store.phone 
-      ._33.fl= nl2br store.address 
-      .clear
-        
+    %li.row-fluid
+      .span7
+        %h4
+          %i(class="#{true_false store.active}" title="Activo" data-toggle="tooltip")
+          = link_to store.name, store
+      .span4
+        = render_if store.phone do
+          %i.icon-phone(title='Teléfono' data-toggle='tooltip')
+          = store.phone
+        .clear-both
+        = render_if store.address do
+          %i.icon-building(title='Dirección' data-toggle='tooltip')
+          = nl2br store.address
+      .span1
+        = link_to icon_edit, edit_store_path(store), class: 'dark'
+        = link_to icon_delete, store, class: 'dark', method: 'delete', confirm: 'Esta seguro de eliminar el ítem?'

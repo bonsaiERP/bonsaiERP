@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
 
   ########################################
   # Callbacks
-  before_filter :set_user_session, :if => :user_signed_in?
+  before_filter :set_user_session, if: :user_signed_in?
   before_filter :set_organisation_session # Must go before :check_authorization!
   before_filter :set_page, :set_tenant, :check_authorization!
 

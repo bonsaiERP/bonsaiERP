@@ -14,7 +14,7 @@ class AccountLedgerPresenter < Resubject::Presenter
       html = ["<span class='label label-warning'>", icon_tag(class: 'icon-warning-sign'),
               " Pendiente</span>"].join('')
     when 'approved'
-      html = "<span class='label label-success'>Aprovado</span>"
+      html = "<span class='label label-success'>Aprobado</span>"
     when 'nulled'
       html = "<span class='label label-important'>Anulado</span>"
     end
@@ -25,7 +25,7 @@ class AccountLedgerPresenter < Resubject::Presenter
   def operation_label
     html = case to_model.operation
            when 'payin', 'intin'
-             "<span class='label' >#{operation}</span>"
+             "<span class='label-success' >#{operation}</span>"
            when 'payout', 'devin'
              "<span class='label' >#{operation}</span>"
            when 'trans'
@@ -65,22 +65,23 @@ class AccountLedgerPresenter < Resubject::Presenter
   def operation(op = to_model.operation)
     case op
     when 'payin'
-      'Cobro'
+      ['Cobro', 'label-success']
     when 'intin'
-      'Cobro Int.'
+      ['Cobro Intereses', 'label-success']
     when 'payout'
-      'Pago'
+      ['Pago', 'label-important']
     when 'intout'
-      'Pago Int.'
+      ['Pago Intereses', 'label-important']
     when 'devin', 'devout'
-      'Devolución'
+      ['Devolución', 'label-important']
     when 'trans'
-      'Transferencia'
+      ['Transferencia', 'label-inverse']
     end
   end
 
   def operation_tag(op = to_model.operation)
-    "<span class='label label-inverse'>#{operation(op)}</span>".html_safe
+    op, css = operation(op)
+    "<span class='label #{css}' title='#{op}' data-toggle='tooltip'>#{op[0].upcase}</span>".html_safe
   end
 
   def account_icon(ac)

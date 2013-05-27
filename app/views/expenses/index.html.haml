@@ -8,21 +8,34 @@
   .span6
     %h1 Egresos
   .span6.r
-    = link_to export_expenses_path, class: 'btn' do
-      %i.icon-download-alt
-      Exportar egresos
+    .btn-group
+      = link_to export_expenses_path, class: 'btn' do
+        %i.icon-download-alt
+        Exportar
 
-    %a#quick-expense-link.btn(href="javascript:;")
-      %i.icon-bolt
-      Egreso rápido
+      %a#quick-expense-link.btn(href="javascript:;")
+        %i.icon-bolt
+        Egreso rápido
 
-    = link_to new_expense_path, class: 'btn' do
-      %i.icon-plus-sign
-      Nuevo egreso
+      = link_to new_expense_path, class: 'btn' do
+        %i.icon-plus-sign
+        Nuevo egreso
 
 .row-fluid
   .span6
     = render 'expenses/search'
+
+%ul.unstyled.inline
+  %li
+    = link_to "Todos", expenses_path, class: params_bold(:all)
+  %li
+    = link_to "Aprobados", expenses_path(approved: true), class: params_bold(:approved)
+  %li
+    = link_to "Atrasados", expenses_path(due: true), class: params_bold(:due) 
+  %li
+    = link_to "Con error", expenses_path(error: true), class: params_bold(:error) 
+  %li
+    = link_to "Anulados", expenses_path(nulled: true), class: params_bold(:nulled)
 
 .row-fluid
   = render 'expenses/quick_expense'

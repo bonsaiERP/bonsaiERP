@@ -9,7 +9,7 @@ describe Item do
   it { should have_many(:stocks) }
   it { should have_many(:income_details) }
   it { should have_many(:expense_details) }
-  it { should have_many(:inventory_operation_details) }
+  it { should have_many(:inventory_details) }
 
   it { should validate_uniqueness_of(:name) }
   it { should have_valid(:price).when(1, 0.1) }
@@ -112,7 +112,7 @@ describe Item do
     end
 
     it "does not destroy the item" do
-      InventoryOperationDetail.stub(:where).with(item_id: subject.id).and_return([1])
+      InventoryDetail.stub(:where).with(item_id: subject.id).and_return([1])
       subject.destroy.should be_false
     end
   end

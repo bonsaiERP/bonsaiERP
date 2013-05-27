@@ -6,6 +6,7 @@ class IncomesController < ApplicationController
 
   # GET /incomes
   def index
+    set_index_params
     search_incomes
   end
 
@@ -17,17 +18,17 @@ class IncomesController < ApplicationController
 
   # GET /incomes/new
   def new
-    @is = IncomeService.new_income
+    @is = Incomes::Form.new_income
   end
 
   # GET /incomes/1/edit
   def edit
-    @is = IncomeService.find(params[:id])
+    @is = Incomes::Form.find(params[:id])
   end
 
   # POST /incomes
   def create
-    @is = IncomeService.new_income(income_params)
+    @is = Incomes::Form.new_income(income_params)
 
     if create_or_approve
       redirect_to @is.income, notice: 'Se ha creado un Ingreso.'
@@ -38,7 +39,7 @@ class IncomesController < ApplicationController
 
   # PUT /incomes/:id
   def update
-    @is = IncomeService.find(params[:id])
+    @is = Incomes::Form.find(params[:id])
 
     if update_or_approve
       redirect_to @is.income, notice: 'El Ingreso fue actualizado!.'
@@ -49,7 +50,7 @@ class IncomesController < ApplicationController
 
   # POST /incomes/quick_income
   def quick_income
-    @quick_income = QuickIncome.new(quick_income_params)
+    @quick_income = Incomes::QuickForm.new(quick_income_params)
 
     if @quick_income.create
       flash[:notice] = "El ingreso fue creado."
@@ -115,11 +116,11 @@ private
   end
 
   def quick_income_params
-   params.require(:quick_income).permit(*transaction_params.quick_income)
+   params.require(:incomes_quick_form).permit(*transaction_params.quick_income)
   end
 
   def income_params
-    params.require(:income_service).permit(*transaction_params.income)
+    params.require(:incomes_form).permit(*transaction_params.income)
   end
 
   def transaction_params
@@ -141,5 +142,23 @@ private
                  Income.order('date desc').page(@page)
                end
     @incomes = @incomes.includes(:contact, transaction: [:creator, :approver, :nuller]).order('date desc, id desc')
+    set_incomes_filters
+  end
+
+  def set_incomes_filters
+    case
+    when params[:approved].present?
+      @incomes = @incomes.approved
+    when params[:error].present?
+      @incomes = @incomes.error
+    when params[:due].present?
+      @incomes = @incomes.due
+    when params[:nulled].present?
+      @incomes = @incomes.nulled
+    end
+  end
+
+  def set_index_params
+    params[:all] = true unless params[:approved] || params[:error] || params[:nulled] || params[:due]
   end
 end

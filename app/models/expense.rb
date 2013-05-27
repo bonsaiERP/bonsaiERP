@@ -1,7 +1,7 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class Expense < IncomeExpenseModel
+class Expense < Movement
 
   ########################################
   # Callbacks
@@ -11,11 +11,13 @@ class Expense < IncomeExpenseModel
   ########################################
   # Relationships
   has_many :expense_details, foreign_key: :account_id, dependent: :destroy, order: 'id asc'
+  alias :details :expense_details
+
   accepts_nested_attributes_for :expense_details, allow_destroy: true,
     reject_if: proc {|det| det.fetch(:item_id).blank? }
 
   has_many :payments, class_name: 'AccountLedger', foreign_key: :account_id, conditions: {operation: 'payout'}
-  has_many :interests, class_name: 'AccountLedger', foreign_key: :account_id, conditions: {operation: 'intout'}
+  has_many :devolutions, class_name: 'AccountLedger', foreign_key: :account_id, conditions: {operation: 'devin'}
 
   ########################################
   # Scopes
@@ -25,6 +27,9 @@ class Expense < IncomeExpenseModel
   scope :paid, -> { where(state: 'paid') }
   scope :contact, -> (cid) { where(contact_id: cid) }
   scope :pendent, -> { active.where{ amount.not_eq 0 } }
+  scope :error, -> { active.where(has_error: true) }
+  scope :due, -> { approved.joins(:transaction).where{transaction.due_date < Date.today} }
+  scope :nulled, -> { where(state: 'nulled') }
   scope :like, -> (s) {
     s = "%#{s}%"
     where{(name.like s) | (description.like s)}

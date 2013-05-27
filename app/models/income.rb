@@ -1,7 +1,7 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class Income < IncomeExpenseModel
+class Income < Movement
 
   ########################################
   # Callbacks
@@ -11,11 +11,12 @@ class Income < IncomeExpenseModel
   ########################################
   # Relationships
   has_many :income_details, foreign_key: :account_id, dependent: :destroy, order: 'id asc'
+  alias :details :income_details
   accepts_nested_attributes_for :income_details, allow_destroy: true,
     reject_if: proc {|det| det.fetch(:item_id).blank? }
 
   has_many :payments, class_name: 'AccountLedger', foreign_key: :account_id, conditions: {operation: 'payin'}
-  has_many :payments_devolutions, class_name: 'AccountLedger', foreign_key: :account_id, conditions: {operation: ['payin', 'devin']}
+  has_many :devolutions, class_name: 'AccountLedger', foreign_key: :account_id, conditions: {operation: 'devout'}
 
   ########################################
   # Scopes
@@ -25,12 +26,14 @@ class Income < IncomeExpenseModel
   scope :paid, -> { where(state: 'paid') }
   scope :contact, -> (cid) { where(contact_id: cid) }
   scope :pendent, -> { active.where{ amount.not_eq 0 } }
+  scope :error, -> { active.where(has_error: true) }
+  scope :due, -> { approved.joins(:transaction).where{transaction.due_date < Date.today} }
+  scope :nulled, -> { where(state: 'nulled') }
   scope :like, -> (s) {
     s = "%#{s}%"
     where{(name.like s) | (description.like s)}
   }
   scope :date_range, -> (range) { where(date: range) }
-
 
   def self.new_income(attrs={})
     self.new do |i|

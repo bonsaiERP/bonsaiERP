@@ -169,16 +169,11 @@ BASH
     connection.schema_search_path = original_search_path
   end
 
-  ###
-  ###
   def all_schemas
-    connection.select_values <<-END
-    SELECT *
-    FROM pg_namespace
-    WHERE
-      nspname NOT IN ('information_schema') AND
-      nspname NOT LIKE 'pg%'
-    END
+    connection.select_values <<-SQL
+    SELECT * FROM pg_namespace
+    WHERE nspname NOT IN ('information_schema') AND nspname NOT LIKE 'pg%'
+    SQL
   end
 
   def current_schema

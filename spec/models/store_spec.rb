@@ -1,12 +1,37 @@
 require 'spec_helper'
 
 describe Store do
-  #let(:valid_params) {
-    #{:name => 'Store 1', :address => 'Los Pinos Bloque 80 dpto. 201'}
-  #}
-  #before(:each) do
-    #OrganisationSession.set(:id => 1, :name => 'ecuanime', :currency_id => 1)
-  #end
+  it { should have_many(:stocks) }
+  it { should have_many(:inventories) }
+
+  it { should validate_presence_of(:name) }
+  it { should have_valid(:name).when('123', 'Store') }
+  it { should_not have_valid(:name).when('12', 'St',  '') }
+  it { should have_valid(:address).when('12345', 'Samaipata', '') }
+  it { should_not have_valid(:address).when('1234', 'St') }
+
+  let(:valid_attributes) {
+    {name: 'Store Samaipata 1', address: 'Samaipata', phone: '706-81101'}
+  }
+
+  it "#destroy" do
+    st = Store.create!(valid_attributes)
+
+    st.stub(stocks: [1])
+    st.destroy.should be_false
+    st.errors[:base].should eq([I18n.t('errors.messages.store.destroy')])
+
+    st.errors.clear
+    st.stub(stocks: [])
+    st.stub(inventory_operations: [1])
+    st.destroy.should be_false
+    st.errors[:base].should eq([I18n.t('errors.messages.store.destroy')])
+
+    st.errors.clear
+    st.stub(stocks: [])
+    st.stub(inventory_operations: [])
+    st.destroy.should be_true
+  end
 
   #def create_items(number = 10)
     #(1..10).each do |num|

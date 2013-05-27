@@ -20,3 +20,5 @@ mysql
 pass: betaomega-
 
 ssh root@78.47.246.67
+
+9725

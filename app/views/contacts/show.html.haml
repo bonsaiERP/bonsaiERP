@@ -6,7 +6,6 @@
     %li
       = @contact
 
-
 .row-fluid
   .span8
     %h1.n
@@ -53,6 +52,16 @@
       = ntc @contact.total_expenses
       = currency_label
       -#%i.icon-minus.red(title="Debemos #{currency}" data-toggle='tooltip')
+.row-fluid
+  .span6
+    .span6.well.well-small
+      %label.text-success Total Ingresos
+      = ntc @contact.total_incomes
+      = currency_label
+    .span6.well.well-small
+      %label.text-error Total Egresos
+      = ntc @contact.total_expenses
+      = currency_label
       -#= ntc 500
 
 .row-fluid
@@ -74,7 +83,7 @@
             .span6.r.b.muted
               Saldo
 
-      
+
         = render partial: 'incomes/income', collection: @contact.incomes.page(1).includes(:contact, transaction: [:creator, :approver, :nuller]), as: :income
 
 

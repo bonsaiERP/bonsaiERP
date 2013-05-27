@@ -1,5 +1,5 @@
 .quick-income-form.hide
-  - qi = QuickIncome.new(ref_number: Income.get_ref_number)
+  - qi = Incomes::QuickForm.new(ref_number: Income.get_ref_number)
   %h2 
     %span.muted.n Ingreso rápido
     = qi.ref_number
@@ -40,10 +40,11 @@
     })
 
     // account_to_id
-    $('#quick_income_account_to_id').select2({
+    $('#incomes_quick_form_account_to_id').select2({
       data: #{AccountQuery.new.bank_cash_options.to_json},
       formatResult: App.Payment.paymentOptions,
       formatSelection: App.Payment.paymentOptions,
+      dropdownCssClass: 'hide-select2-search',
       escapeMarkup: function(m) { return m }
     });
   });

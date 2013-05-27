@@ -59,7 +59,7 @@ private
       configurations: true,
       tests: true,
       stocks: true,
-      inventory_operations: true,
+      inventories: true,
       account_ledgers: true,
       banks: true,
       cashes: true,
@@ -79,7 +79,10 @@ private
       user_passwords: true,
       dashboard: true,
       export_incomes: true,
-      export_expenses: true
+      export_expenses: true,
+      inventory_ins: true,
+      inventory_out: true,
+      inventory_transferences: true
     }
   end
 
@@ -89,7 +92,7 @@ private
       configurations: {index: true},
       tests: false,
       stocks: true,
-      inventory_operations: true,
+      inventories: true,
       account_ledgers: true,
       banks: true,
       cashes: true,
@@ -109,7 +112,10 @@ private
       user_passwords: true,
       dashboard: true,
       export_incomes: true,
-      export_expenses: true
+      export_expenses: true,
+      inventory_ins: true,
+      inventory_out: true,
+      inventory_transferences: true
     }
   end
 

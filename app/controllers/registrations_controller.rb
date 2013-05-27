@@ -6,6 +6,8 @@ class RegistrationsController < ApplicationController
   before_filter :check_allow_registration
   before_filter :check_registration_tenant, only: ['show']
 
+  layout 'sessions'
+
   # GET /registrations/new
   def new
     @registration = Registration.new

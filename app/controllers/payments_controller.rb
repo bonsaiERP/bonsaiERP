@@ -6,7 +6,7 @@ class PaymentsController < ApplicationController
 
   # POST /payments/:id/income
   def income
-    p = IncomePayment.new(income_params)
+    p = Incomes::Payment.new(income_params)
 
     if p.pay
       flash[:notice] = 'El cobro se realizo correctamente.'
@@ -19,7 +19,7 @@ class PaymentsController < ApplicationController
 
   # POST /payments/:id/expense
   def expense
-    p = ExpensePayment.new(expense_params)
+    p = Expenses::Payment.new(expense_params)
 
     if p.pay
       flash[:notice] = 'El pago se realizo correctamente.'
@@ -32,11 +32,11 @@ class PaymentsController < ApplicationController
 
 private
   def income_params
-    params.require(:income_payment).permit(*allowed_params)
+    params.require(:incomes_payment).permit(*allowed_params)
   end
 
   def expense_params
-    params.require(:expense_payment).permit(*allowed_params)
+    params.require(:expenses_payment).permit(*allowed_params)
   end
 
   def allowed_params

@@ -1,0 +1,70 @@
+!!!XML
+!!!
+%html{xmlns: "http://www.w3.org/1999/xhtml", 'xml:lang' => "es", lang: "es" }
+  %head
+    %meta(http-equiv="content-type" content="text/html;charset=UTF-8")
+    %meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    %link(name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,maximum-scale=1")
+    %link(rel= "shortcut icon" href="/favicon.ico" type="image/x-icon")
+    = csrf_meta_tag
+
+    %title Bonsai
+    = stylesheet_link_tag "application"
+
+    = javascript_include_tag "application"
+
+    :javascript
+      this.exchangeRates = #{set_exchange_rates};
+      this.currencies = #{CURRENCIES.to_json};
+
+  %body
+
+    -# Header
+    #head
+      .navbar.navbar-inverse
+        .navbar-inner
+          .container
+            %button.btn.btn-navbar(data-toggle="collapse" data-target=".nav-collapse")
+              %i.icon-reorder 
+              Menú
+            .nav-collapse.collapse.cont
+              .pull-right
+                %ul#usersettings
+                  %li#current_user
+                    = link_to current_user do
+                      %i.icon-user
+                      = current_user
+
+                  %li#logout
+                    = link_to logout_path do
+                      %i.icon-off
+                      Salir
+
+    .row-fluid.organisation
+      .cont
+        .span12
+          %h3= current_organisation.name
+
+
+    #wrapper.cont
+      #menu
+        .container-fluid
+          .main-links.row-fluid= yield :links
+
+      #cont
+        .container-fluid
+          = render "layouts/flash", flash: flash
+
+          = yield
+          .clear
+      #footer
+        %p
+          ©2010-2013 &middot;
+          =link_to "BonsaiERP", "http://bonsaierp.com"
+          El software para la gestión de empresas
+          <br/><br/>
+
+          %a(href="http://twitter.com/#!/bonsaierp" target="_blank") Twitter
+          &middot;
+          %a(href="http://www.facebook.com/pages/BonsaiERP/337187402983197" target="_blank") Facebook
+

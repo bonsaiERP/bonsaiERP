@@ -8,29 +8,32 @@
 
 .row-fluid
   .span8
-    %h1.n= @item
+    %h2.n= @item
   .span4.r
-    = link_to icon_new_text, new_item_path, class: 'btn'
-    = link_to icon_edit_text, edit_item_path(@item), class: 'btn'
-    = link_to icon_delete_text, @item, class: 'btn', confirm: "Esta seguro de borra el ítem", method: :delete
+    .btn-group
+      = link_to icon_new_text, new_item_path, class: 'btn'
+      = link_to icon_edit_text, edit_item_path(@item), class: 'btn'
+      = link_to icon_delete_text, @item, class: 'btn', confirm: "Esta seguro de borra el ítem", method: :delete
 
 .row-fuid
   .span2
     %label
       %i.icon-info-sign(title="Un ítem activo se puede usar en operaciones" data-toggle="tooltip") 
       Activo
-    %span.icon{:class => @item.active.to_s}
+      %span.icon(class="#{true_false @item.active}")
   .span2
     %label
       %i.icon-info-sign(title="Indica si un ítem se puede almacenar" data-toggle="tooltip")
       Inventario
-    %span.icon{:class => @item.stockable.to_s}
+      %span.icon(class="#{true_false @item.stockable}")
   .span2
-    %label En venta
-    %span.icon{:class => @item.for_sale.to_s}
+    %label
+      En venta
+      %span.icon(class="#{true_false @item.for_sale}")
   .span2
-    %label Unidad
-    = @item.unit
+    %label
+      Unidad:
+      %span.dark= @item.unit
 
 .row-fluid
   .span6.well.well-small
@@ -51,11 +54,11 @@
     = @item.description
 
 .page-header
-  %h3 Inventario
+  %h3.n Inventario
 - @item.stocks.includes(:store).each do |st|
   .moneybox.fl
     %label= st.store
-    %h3= st.quantity
+    %h4.n= st.quantity
 
 .clear
 -# unless request.xhr?

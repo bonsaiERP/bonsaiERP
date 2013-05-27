@@ -6,7 +6,7 @@
 
 .row-fluid
   .span6
-    %h1 Items
+    %h2 Items
   .span6.r
     = link_to new_item_path, class: 'btn' do
       %i.icon-plus-sign
@@ -22,8 +22,8 @@
   - @items.each do |item|
     %li.row-fluid
       .span5
-        %h4
-          = link_to item, item, class: 'b'
+        %h4.n
+          = link_to item, item
           %br
           %small= item.unit
       .span5

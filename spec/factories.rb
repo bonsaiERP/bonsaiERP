@@ -94,6 +94,9 @@ FactoryGirl.define do
     state "draft"
     balance 100
     association :transaction, factory: :transaction, strategy: :build
+    factory :income_approved do
+      state "approved"
+    end
   end
 
   factory :expense do
@@ -105,6 +108,9 @@ FactoryGirl.define do
     state "draft"
     balance 100
     association :transaction, factory: :transaction, strategy: :build
+    factory :expense_approved do
+      state 'approved'
+    end
   end
 
   factory :account_ledger do
@@ -131,5 +137,22 @@ FactoryGirl.define do
   factory :link do
     rol User::ROLES[1]
     master_account true
+  end
+
+  factory :store do
+    name 'Store 1'
+    phone '23232323'
+    address 'Samaipata'
+  end
+
+  factory :stock do
+    association :store, factory: :store, strategy: :build
+    association :item, factory: :item, strategy: :build
+    quantity 1
+  end
+
+  factory :inventory do
+    date '2013-05-10'
+    operation 'in'
   end
 end

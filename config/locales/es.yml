@@ -169,10 +169,12 @@ es:
 
   # Errors that are stored in the model but are allowed
   allowed_errors:
-    transaction:
-      negative_balance: "<a href='javascript:;' id='income-negative-balance-link'>Solucionemos el balance</a> negativo, le recomendamos realizar una devolución"
-      negative_item_balance: "Existe un item con balance negativo"
-      negative_items_balance: "Existen items con balance negativo"
+    movement:
+      negative_balance: "<a href='javascript:;' id='negative-balance-link'>Solucionemos el balance</a> negativo, le recomendamos realizar una devolución"
+      balance_greater_than_total: "<a href='javascript:;' id='balance-greater-than-total-link'>Igualemos el balance</a> haciendo un pago o cobro"
+    inventory:
+      negative_stock: ""
+      
   # Active Model
   errors:
     # The default format to use in full error messages.
@@ -221,23 +223,39 @@ es:
       contact:
         matchcode: "El idenificador ya existe, por favor cambie"
       devolution:
-        income_total: "La cantidad y el balance suman un valor mayor al total"
+        movement_total: "La cantidad y el balance suman un valor mayor al total"
       expense:
         not_draft: "El estado del egreso no es borrador"
+        payments: "Extisten pagos que se han afectado al balance"
       income:
         not_draft: "El estado del ingreso no es borrador"
+        payments: "Extisten cobros que se han afectado al balance"
       income_detail:
         item_not_for_sale: "Debe seleccionar un ítem que se vende"
-      inventory_operation_detail:
+      inventory_detail:
         stock_quantity: "La cantidad es mayor a la disponible en stock"
-        transaction_quantity: "La cantidad ingresada es mayor a la de la operación"
+        transaction_quantity: "La cantidad ingresada es invalida"
         repeated_item: "El ítem esta repetido"
-      inventory_operation:
-        transaction_items: "Ha seleccionado items que no estan en la operación"
+        invalid_balance: "La cantidad que ingreso es mayor que el saldo"
+      inventory:
+        movement_items: "Ha seleccionado items que no estan en la operación"
         invalid_item: "Ha seleccionado items inexistentes"
         invalid_store: "El almacen que selecciono es incorrecto"
         empty_items: "No existe items para realizar la operación"
+        item_balance: "Existen items que exeden el balance"
         stock_quantity: "Existen items que exceden la cantidad máxima"
+        negative_stock: "Hay ítems que generaton un stock negactivo"
+        movement_quantity: "La cantidad es mayor que el balance"
+      item:
+        repeated: "El ítem es repetido"
+        repeated_items: "Existen items repetidos"
+      movement:
+        repeated_items: "Existen items repetidos, por favor revise"
+        unconcilied_ledgers: "Existen transacciones pendientes de revisión"
+        changes: "No es posible cambiar el número de referencia o el contacto"
+        paid_amount: "El total es menor a la cantidad %{pay_type}, le recomendamos realizar una devolución"
+        number_of_items: "Debe ingresar seleccionar al menos un ítem"
+        number_of_items: "Debe ingresar seleccionar al menos un ítemon"
       payment:
         balance: "La cantidad es mayor que el saldo"
         expense_balance: "La cantidad es mayor que el saldo del Egreso seleccionado"
@@ -250,6 +268,9 @@ es:
         total: "El valor total es incorrecto"
       quick_income:
         valid_account_to: "Debe seleccionar una cuenta Banco o Caja"
+      store:
+        destroy: 'No es posible borrar debido a que tiene operaciones'
+        selected: 'Usted ha seleccionado un alamcen invalido.'
       user:
         email: "El formato de su email es incorrecto"
         confirm: "No ha confirmado su cuenta. Revise en su email el mensaje \"Active su cuenta en www.bonsaierp.com\" y siga las instrucciones"
@@ -258,17 +279,12 @@ es:
         user_limit: "Su empresa ha llegado a su limite en el número de usuarios"
         email_not_found: "El email que ingreso no existe"
         link_found: 'El usuario ya existe en su empresa activelo.'
-      transaction:
-        repeated_items: "Existen items repetidos, por favor revise"
-        unconcilied_ledgers: "Existen transacciones pendientes de revisión"
-        changes: "No es posible cambiar el número de referencia o el contacto"
-        paid_amount: "El total es menor a la cantidad %{pay_type}, le recomendamos realizar una devolución"
-        number_of_items: "Debe ingresar seleccionar al menos un ítem"
-        number_of_items: "Debe ingresar seleccionar al menos un ítemon"
       transaction_details:
-        delivered_quantity: "La cantidad es menor a la cantidad entregada"
-        change_item: "No es posible cambiar de item, se volvio al original"
+        not_destroy: "No se puede eliminar este ítem"
+        item_changed: "No es posible cambiar de item, se volvio al original"
         destroy: "No se puede borrar el item"
+      income_details:
+        balance: "La cantida es menor a la cantidad entregada"
       repeated_items: "Existen items repetidos, por favor revise"
       repeated_item: "El ítem seleccionado esta repetido"
       registration:

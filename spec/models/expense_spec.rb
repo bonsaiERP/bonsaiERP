@@ -35,8 +35,9 @@ describe Expense do
     it { should have_one(:transaction) }
     it { should have_many(:expense_details) }
     it { should have_many(:payments) }
-    it { should have_many(:interests) }
+    it { should have_many(:devolutions) }
     it { should have_many(:transaction_histories) }
+    it { should have_many(:inventories) }
     # Validations
     it { should validate_presence_of(:date) }
     it { should validate_presence_of(:contact) }
@@ -186,7 +187,7 @@ describe Expense do
       UserSession.user = build :user, id: 11
     end
 
-    subject { Income.new_income }
+    subject { Expense.new_expense }
 
     it "Changes" do
       e = subject
@@ -289,6 +290,52 @@ describe Expense do
       exp.should be_is_nulled
       exp.nuller_id.should eq(15)
       exp.nuller_datetime.should be_is_a(Time)
+    end
+  end
+
+  context "deestroy item" do
+    before(:each) do
+      ExpenseDetail.any_instance.stub(item: stub(for_sale?: true))
+      Expense.any_instance.stub(contact: true, set_supplier_and_expenses_status: true)
+    end
+    let(:attributes) {
+      {
+      contact_id: 1, date: Date.today, ref_number: 'E-0001', currency: 'BOB',
+      expense_details_attributes: [
+        {item_id: 1, price: 20, quantity: 10}, {item_id: 2, price: 20, quantity: 10}
+      ]
+      }
+    }
+
+    it "#destroy item" do
+      exp = Expense.new_expense(attributes)
+      exp.save.should be_true
+
+      exp.details.should have(2).items
+      det = exp.details[0]
+      det.balance = 5
+      det.save.should be_true
+
+      exp = Expense.find(exp.id)
+      exp.attributes = {expense_details_attributes: [{id: det.id, item_id: 1, price: 20, quantity: 10, "_destroy" => "1"}] }
+
+
+      exp.details[0].should be_marked_for_destruction
+
+      exp.save.should be_false
+      exp.details[0].should_not be_marked_for_destruction
+      exp.details[0].errors[:quantity].should eq([I18n.t('errors.messages.trasaction_details.not_destroy')])
+
+      det = exp.details[0]
+      det.balance = 10
+      det.save.should be_true
+
+      exp = Expense.find(exp.id)
+      exp.attributes = {expense_details_attributes: [{id: det.id, item_id: 1, price: 20, quantity: 10, "_destroy" => "1"}] }
+
+      exp.save.should be_true
+      exp.details.should have(1).item
+      exp.details.map(&:item_id).should eq([2])
     end
   end
 end

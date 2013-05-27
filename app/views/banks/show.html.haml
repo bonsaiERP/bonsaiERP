@@ -9,31 +9,32 @@
 
 .row-fluid
   .span8
-    %h1.n
+    %h2.n
       = @bank.name 
       = currency_label @bank.currency
   .span4.r
-    = link_to new_transference_path(account_id: @bank.id), class: 'btn',
-      title: 'Transferir dinero a otra cuenta', 'data-toggle' => 'tooltip' do
-      %i.icon-exchange
-      Nueva transferencia
+    .btn-group
+      = link_to new_transference_path(account_id: @bank.id), class: 'btn',
+        title: 'Transferir dinero a otra cuenta', 'data-toggle' => 'tooltip' do
+        %i.icon-exchange
+        Transferencia
 
-    = link_to icon_edit_text, edit_bank_path(@bank), class: 'btn'
+      = link_to icon_edit_text, edit_bank_path(@bank), class: 'btn'
 
 .row-fluid
   .span6
     .moneybox
       %label SALDO EN BANCO
-      %h4.n
+      %h5.n
         = ntc @bank.amount
         = currency_label @bank.currency
 
   .span6
-    %label Dirección
+    %i.icon-building(title="Dirección" data-toggle='tooltip')
     = nl2br(@bank.address)
 
 
-%h3 Transacciones
+%h4 Transacciones
 
 - if params[:pendent].blank? && @bank.pendent_ledgers.any?
   = link_to bank_path(@bank.id, pendent: true) , class: 'text-error' do

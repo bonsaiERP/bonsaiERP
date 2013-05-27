@@ -3,13 +3,12 @@
 # email: boriscyber@gmail.com
 class TransactionDetail < ActiveRecord::Base
 
-  ########################################
-  # Relationships
-  #belongs_to :item, inverse_of: :transaction_details
-
   # Validations
   validates_presence_of :item_id
   validates_numericality_of :quantity, greater_than: 0
+  validate :balance_is_correct
+  validate :change_of_item_id, unless: :new_record?
+  validate :quantity_eq_balance, if: :marked_for_destruction?
 
   def total
     quantity * price
@@ -31,4 +30,22 @@ class TransactionDetail < ActiveRecord::Base
     }
   end
 
+private
+  def balance_is_correct
+    self.errors.add(:item_id, balance_error_message) if self.balance > quantity
+  end 
+  
+  def balance_error_message
+    I18n.t('errors.messages.transaction_details.balance')
+  end
+
+  def quantity_eq_balance
+    unless balance === quantity
+      self.errors(:quantity, "No se puede")
+    end
+  end
+
+  def change_of_item_id
+    self.errors.add(:item_id, I18n.t('errors.messages.transaction_details.item_changed')) if item_id_changed?
+  end
 end

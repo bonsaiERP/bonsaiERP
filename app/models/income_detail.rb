@@ -20,4 +20,9 @@ private
   def valid_income_item
     self.errors[:item_id] << I18n.t('errors.messages.income_detail.item_not_for_sale') unless item_for_sale?
   end
+
+  def balance_error_message
+    I18n.t('errors.messages.income_details.balance')
+  
+  end
 end

@@ -17,25 +17,22 @@
       this.exchangeRates = #{set_exchange_rates};
       this.currencies = #{CURRENCIES.to_json};
 
-    - if organisation?
-      :javascript
-        bonsai.currency = this.currency = "#{currency}";
-        this.organisation = {
-          currency: "#{current_organisation.currency}",
-          name: "#{current_organisation.name}"
-        }
+      bonsai.currency = this.currency = "#{currency}";
+      this.organisation = {
+        currency: "#{current_organisation.currency}",
+        name: "#{current_organisation.name}"
+      }
 
   %body
 
     -# Header
-    - if current_user
-      #head
-        = render 'layouts/menus'
+    #head
+      = render 'layouts/menus'
 
-      .row-fluid.organisation
-        .cont
-          .span12
-            %h3= current_organisation.name if current_organisation
+    .row-fluid.organisation
+      .cont
+        .span12
+          %h3= current_organisation.name
 
 
     #wrapper.cont
@@ -47,7 +44,7 @@
         .container-fluid
           = render "layouts/flash", flash: flash
 
-          = render "users/change_default_password" if current_user && current_user.change_default_password?
+          = render "users/change_default_password" if current_user.change_default_password?
 
           = yield
           .clear

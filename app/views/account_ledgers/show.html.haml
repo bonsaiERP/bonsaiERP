@@ -1,6 +1,6 @@
 .row-fluid
   .span7
-    %h1
+    %h2
       = @ledger
       = @ledger.status_tag
       = render_if @ledger.account_contact do
@@ -16,11 +16,11 @@
 .row-fluid
   .span6
     .moneybox
-      %h4.n
+      %h5.n
         = ntc @ledger.amount
         = currency_label @ledger.currency
 
-    - unless @ledger.currency === currency
+    - unless @ledger.currency === @ledger.account_currency
       = ntc 1.0
       = currency_tag @ledger.currency
       %i.icon-exchange(title='Tipo de cambio' data-toggle='tooltip')
@@ -33,7 +33,7 @@
       = @ledger.reference
 
 %p
-  %h4.n
+  %h5.n
     %span.account
       %span.muted De cuenta:
       = link_to @ledger.account, @ledger.account, class: 'account_name'

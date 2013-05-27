@@ -6,23 +6,36 @@
 
 .row-fluid
   .span6
-    %h1 Ingresos
+    %h2 Ingresos
   .span6.r
-    = link_to export_incomes_path, class: 'btn' do
-      %i.icon-download-alt
-      Exportar ingresos
+    .btn-group
+      = link_to export_incomes_path, class: 'btn' do
+        %i.icon-download-alt
+        Exportar
 
-    %a#quick-income-link.btn(href="javascript:;")
-      %i.icon-bolt
-      Ingreso rápido
+      %a#quick-income-link.btn(href="javascript:;")
+        %i.icon-bolt
+        Ingreso rápido
 
-    = link_to new_income_path, class: 'btn' do
-      %i.icon-plus-sign
-      Nuevo ingreso
+      = link_to new_income_path, class: 'btn' do
+        %i.icon-plus-sign
+        Nuevo ingreso
 
 .row-fluid
   .span6
     = render 'incomes/search'
+
+%ul.unstyled.inline
+  %li
+    = link_to "Todos", incomes_path, class: params_bold(:all)
+  %li
+    = link_to "Aprobados", incomes_path(approved: true), class: params_bold(:approved)
+  %li
+    = link_to "Atrasados", incomes_path(due: true), class: params_bold(:due) 
+  %li
+    = link_to "Con error", incomes_path(error: true), class: params_bold(:error) 
+  %li
+    = link_to "Anulados", incomes_path(nulled: true), class: params_bold(:nulled) 
 
 .row-fluid
   = render 'incomes/quick_income'

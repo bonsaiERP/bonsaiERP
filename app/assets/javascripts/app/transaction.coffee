@@ -26,6 +26,7 @@ class Item extends Backbone.Model
   setAutocompleteEvent: (el) ->
     $(el).on 'autocomplete-done', 'input.autocomplete', (event, item) =>
       price = _b.roundVal( item.price * (1/@get('rate')), _b.numPresicion )
+      console.log @collection.where(item_id: item.id)
 
       @set(original_price: item.price, price: price, item_id: item.id)
   #
@@ -94,6 +95,7 @@ class TransactionModel extends Backbone.Model
       data: data,
       formatResult: App.Payment.paymentOptions,
       formatSelection: App.Payment.paymentOptions,
+      dropdownCssClass: 'hide-select2-search'
       escapeMarkup: (m) -> m
     })
 
@@ -186,13 +188,13 @@ class Transaction extends Backbone.Collection
 # Income
 class Income extends Transaction
   getItemHtml: (num) ->
-    @itemTemplate(num: num, klass: 'income_service', det: 'income', search_path: 'search_income')
+    @itemTemplate(num: num, klass: 'incomes_form', det: 'income', search_path: 'search_income')
 
 # Expense
 class Expense extends Transaction
   model: ExpenseItem
   getItemHtml: (num) ->
-    @itemTemplate(num: num, klass: 'expense_service', det: 'expense', search_path: 'search_expense')
+    @itemTemplate(num: num, klass: 'expenses_form', det: 'expense', search_path: 'search_expense')
 
 
 @App = {}
@@ -222,5 +224,5 @@ itemTemplate = """<tr class="item" data-item="{"original_price":"0.0","price":"0
     <td class="total_row r">
       <span data-text="item.subtotal | number"></span>
     </td>
-    <td class="del"><a href="javascript:;" class="bicon-trash" title="Borrar" rel="tooltip" data-on-click="item:delete"></a></td>
+    <td class="del"><a href="javascript:;" class="dark" title="Borrar" data-toggle="tooltip" data-on-click="item:delete"><i class="icon-trash icon-large"></i></a></td>
 </tr>"""

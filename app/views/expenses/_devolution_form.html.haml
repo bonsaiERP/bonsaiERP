@@ -1,5 +1,18 @@
-= simple_form_for expense.expense_devolution, url: expense_devolution_path(expense.id) do |f|
+= simple_form_for expense.expense_devolution, url: expense_devolution_path(expense.id), html: {id: 'expense-devolution-form'} do |f|
   = bonsai_form_error(f)
   = f.hidden_field :account_id
 
-  = render 'devolutions/form', f: f
+  = render 'devolutions/form', f: f, transaction: @expense
+
+  .form-actions
+    = f.submit "Devolución", class: 'btn btn-success b'
+    %a#cancel-devolution-link.btn(hre='javascript:;') Cancelar
+
+
+:javascript
+  $(function() {
+    var p = new App.ExpenseDevolution({
+      accountsTo: #{AccountQuery.new.bank_cash_options.to_json}, 
+      baseCurrency: "#{expense.currency}"
+    });
+  })

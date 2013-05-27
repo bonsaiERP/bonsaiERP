@@ -1,6 +1,10 @@
 # encoding: utf-8
 Bonsaierp::Application.routes.draw do
 
+  resources :inventories, only: [:index, :show]
+
+  resources :inventory_transferences, only: [:new, :create]
+
   resources :export_expenses, only: ['index', 'create']
 
   resources :export_incomes, only: ['index', 'create']
@@ -16,22 +20,6 @@ Bonsaierp::Application.routes.draw do
   resources :tests
 
   resources :stocks
-
-  resources :inventory_operations do
-    member do
-      get :select_store
-    end
-
-    collection do
-      # Transactions (Income, Expense)
-      get :transactions
-      get :new_transaction
-      post :create_transaction
-      # Transference
-      get  :new_transference
-      post :create_transference
-    end
-  end
 
   resources :account_ledgers do
     post :transference, on: :collection
@@ -89,7 +77,10 @@ Bonsaierp::Application.routes.draw do
 
   ###########################3
 
-  resources :stores
+  resources :stores do
+    resources :inventory_ins, only: [:new, :create]#, controller: 'stores/inventory_in'
+    resources :inventory_outs, only: [:new, :create]
+  end
 
   resources :contacts
 

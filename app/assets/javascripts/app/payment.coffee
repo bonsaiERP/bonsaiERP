@@ -68,6 +68,7 @@ class Payment extends Backbone.Model
       data: @get('accountsTo')
       formatResult: App.Payment.paymentOptions
       formatSelection: App.Payment.paymentOptions
+      dropdownCssClass: 'hide-select2-search'
       escapeMarkup: (m) -> m
     ).on('change', (event) ->
       self.setAccountTo($(this).select2('data') )
@@ -78,21 +79,26 @@ class Payment extends Backbone.Model
 
 # Class for Income
 class IncomePayment extends Payment
-  accountToSel: '#income_payment_account_to_id'
+  accountToSel: '#incomes_payment_account_to_id'
   formSel: '#income-payment-form'
   verificationSel: '#income_payment_verification'
 
 #
 class IncomeDevolution extends Payment
-  accountToSel: '#income_devolution_account_to_id'
+  accountToSel: '#incomes_devolution_account_to_id'
   formSel: '#income-devolution-form'
   verificationSel: '#income_devolution_verification'
 
 # Class for Expemse
 class ExpensePayment extends Payment
-  accountToSel: '#expense_payment_account_to_id'
+  accountToSel: '#expenses_payment_account_to_id'
   formSel: '#expense-payment-form'
   verificationSel: '#expense_payment_verification'
+
+class ExpenseDevolution extends Payment
+  accountToSel: '#expenses_devolution_account_to_id'
+  formSel: '#expense-devolution-form'
+  verificationSel: '#expense_devolution_verification'
 
 Payment.paymentOptions = (val) ->
   amt = ''
@@ -119,3 +125,4 @@ App.Payment = Payment
 App.IncomePayment = IncomePayment
 App.IncomeDevolution = IncomeDevolution
 App.ExpensePayment = ExpensePayment
+App.ExpenseDevolution = ExpenseDevolution

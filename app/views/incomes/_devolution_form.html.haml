@@ -4,6 +4,10 @@
 
   = render 'devolutions/form', f: f, transaction: income
 
+  .form-actions
+    = f.submit "Devolución", class: 'btn btn-danger b'
+    %a#cancel-devolution-link.btn(hre='javascript:;') Cancelar
+
 :javascript
   $(function() {
     var p = new App.IncomeDevolution({

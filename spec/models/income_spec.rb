@@ -26,9 +26,10 @@ describe Income do
     it { should have_one(:transaction) }
     it { should have_many(:income_details) }
     it { should have_many(:payments) }
-    it { should have_many(:payments_devolutions) }
+    it { should have_many(:devolutions) }
     it { should have_many(:ledgers) }
     it { should have_many(:transaction_histories) }
+    it { should have_many(:inventories) }
     # Validations
     it { should validate_presence_of(:date) }
     it { should validate_presence_of(:contact) }
@@ -289,6 +290,52 @@ describe Income do
       inc.should be_is_nulled
       inc.nuller_id.should eq(15)
       inc.nuller_datetime.should be_is_a(Time)
+    end
+  end
+
+  context "deestroy item" do
+    before(:each) do
+      IncomeDetail.any_instance.stub(item: stub(for_sale?: true))
+      Income.any_instance.stub(contact: true, set_client_and_incomes_status: true)
+    end
+    let(:attributes) {
+      {
+      contact_id: 1, date: Date.today, ref_number: 'I-0001', currency: 'BOB',
+      income_details_attributes: [
+        {item_id: 1, price: 20, quantity: 10}, {item_id: 2, price: 20, quantity: 10}
+      ]
+      }
+    }
+
+    it "_destroy item" do
+      inc = Income.new_income(attributes)
+      inc.save.should be_true
+
+      inc.details.should have(2).items
+      det = inc.details[0]
+      det.balance = 5
+      det.save.should be_true
+
+      inc = Income.find(inc.id)
+      inc.attributes = {income_details_attributes: [{id: det.id, item_id: 1, price: 20, quantity: 10, "_destroy" => "1"}] }
+
+
+      inc.details[0].should be_marked_for_destruction
+
+      inc.save.should be_false
+      inc.details[0].should_not be_marked_for_destruction
+      inc.details[0].errors[:quantity].should eq([I18n.t('errors.messages.trasaction_details.not_destroy')])
+
+      det = inc.details[0]
+      det.balance = 10
+      det.save.should be_true
+
+      inc = Income.find(inc.id)
+      inc.attributes = {income_details_attributes: [{id: det.id, item_id: 1, price: 20, quantity: 10, "_destroy" => "1"}] }
+
+      inc.save.should be_true
+      inc.details.should have(1).item
+      inc.details.map(&:item_id).should eq([2])
     end
   end
 end

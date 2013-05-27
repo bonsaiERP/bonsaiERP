@@ -4,7 +4,7 @@
 
 .row-fluid
   .span6
-    %h1 Cuentas bancarias
+    %h2 Cuentas bancarias
   .span6.r
     = link_to new_bank_path, class: 'btn' do
       %i.icon-plus-sign
@@ -14,7 +14,7 @@
   - @banks.each do |bank|
     %li.row-fluid
       .span7
-        %h3= link_to bank, bank
+        %h4.n= link_to bank, bank
         - if bank.pendent_ledgers.any?
           =link_to bank_path(bank.id, pendent: true) , class: 'text-error' do
             %i.icon-warning-sign
@@ -22,6 +22,6 @@
       .span3
         .moneybox
           %label TOTAL EN CUENTA
-          %h3
+          %h5.n
             = ntc bank.amount
             = currency_label bank.currency

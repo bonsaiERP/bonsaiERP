@@ -52,8 +52,10 @@ $header-color: lighten(gray, 20%)
     boder-width: 0 0 1px 0
     display: block
 
-    li
+    li.ui-state-default
       +border-top-radius(4px)
+      background-color: transparent
+      border-color: gray
       list-style: none
       float: left
       position: relative
@@ -62,6 +64,8 @@ $header-color: lighten(gray, 20%)
       padding: 0
       white-space: nowrap
       font-size: 1.1em
+      &:hover
+        background-color: rgba(255, 255, 255, 0.8)
 
       a
         float: left
@@ -72,6 +76,7 @@ $header-color: lighten(gray, 20%)
     li.ui-tabs-selected
       font-weight: bold
       border-bottom: none
+      background-color: white
 
   .ui-tabs-panel
     display: block
@@ -92,7 +97,7 @@ $header-color: lighten(gray, 20%)
   border: 1px solid lighten(gray, 30%)
 
   .ui-datepicker-header
-    background: $menu-green
+    background: $bonsai
     position: relative
     padding: .4em 0
     font-weight: bold
@@ -178,7 +183,7 @@ $header-color: lighten(gray, 20%)
       background-color: #484A4C !important
       color: #FFF !important
     a.ui-state-active 
-      background-color: $menu-green !important
+      background-color: $bonsai !important
       color: #FFF !important
       font-weight: bold !important
     a.ui-state-hover
@@ -244,6 +249,7 @@ $header-color: lighten(gray, 20%)
     padding: 0.7em 1em
     color: white
     position: relative
+    min-height: 18px
 
     .ui-dialog-title
       font-weight: bold
@@ -285,7 +291,7 @@ $header-color: lighten(gray, 20%)
       text-decoration: none
       display: block
     a.ui-state-active, a.ui-state-focus
-      background-color: $menu-green
+      background-color: $bonsai
       color: white
 
 // overlay

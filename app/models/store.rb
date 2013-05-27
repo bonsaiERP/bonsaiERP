@@ -7,16 +7,16 @@ class Store < ActiveRecord::Base
 
   before_destroy :check_store_for_delete
 
-  has_many :stocks, :autosave => true, :conditions => {:state => "active"}
-  has_many :inventory_operations
+  has_many :stocks, autosave: true, conditions: {active: true}
+  has_many :inventories
 
   validates_presence_of :name
-  validates_length_of :name, :minimum => 3
-  validates_length_of :address, :minimum => 5, :allow_blank => true
+  validates_length_of :name, minimum: 3
+  validates_length_of :address, minimum: 5, allow_blank: true
 
   # scopes
-  scope :active, where(:active => true)
-  scope :without, lambda{|st_id| where("stores.id NOT IN(?)", st_id)}
+  scope :active, where(active: true)
+  scope :notin, -> (st_id) { where{id.not_in st_id} }
 
   def to_s
     name
@@ -55,14 +55,12 @@ class Store < ActiveRecord::Base
     @names_hash ||= Hash[Store.scoped.values_of(:id, :name)]
   end
 
-  private
+private
 
   def check_store_for_delete
     if stocks.any? or inventory_operations.any?
-      self.errors[:base] << "No es posible borrar debido a que tiene operaciones relacionadas"
-      false
-    else
-      true
+      self.errors[:base] << I18n.t('errors.messages.store.destroy')
+      return false
     end
   end
 end

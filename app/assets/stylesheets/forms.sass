@@ -2,7 +2,6 @@
 @import compass
 
 label
-  font-weight: bold
   color: gray
   abbr 
     border: none
@@ -28,7 +27,7 @@ input.numeric
 
 .errorExplanation
   color: $red
-  background-color: $light_red
+  //background-color: $light_red
   border: 2px solid $red
   padding: 5px 15px
   +border-radius(4px)
@@ -107,3 +106,9 @@ input[disabled]
 
 .tooltip
   font-weight: normal !important
+
+.well form
+  margin-bottom: 0px
+
+.hide-select2-search .select2-search
+  display: none

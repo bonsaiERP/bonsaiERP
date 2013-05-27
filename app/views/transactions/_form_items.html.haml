@@ -15,9 +15,13 @@
   = f.simple_fields_for details do |fd|
     %tr.item{id: fd.object.id, data: {item: fd.object.data_hash.to_json }}
       %td.span6.nw
-        = fd.input :item, as: :autocomplete, label: false,
-          input_html: {class: 'item_id span11', placeholder: 'Escriba para buscar el ítem', 
-          data: {new_url: '/items/new', source: search_path(transaction)} }
+        - if fd.object.new_record?
+          = fd.input :item, as: :autocomplete, label: false,
+            input_html: {class: 'item_id span11', placeholder: 'Escriba para buscar el ítem', 
+            data: {new_url: '/items/new', source: search_path(transaction)} }
+        - else
+          = fd.object.item
+          = fd.input :item_id, as: :hidden
 
       %td
         = fd.input :price, input_html: {size: 8, type: 'decimal', class: 'item-price', 
@@ -30,14 +34,15 @@
 
       %td.total_row.r
         %span.subtotal(data-text='item.subtotal | number')= ntc fd.object.total
-      %td.del 
-        %a(href="javascript:;" data-on-click="item:delete" class="bicon-trash" title="Borrar" data-toggle="tooltip")
+      %td.del
+        %a.btn(href="javascript:;" data-on-click="item:delete" title="Borrar" data-toggle="tooltip")
+          %i.icon-trash
         = fd.hidden_field :_destroy, data: {value: 'item._destroy'}
 
   %tr#subtotal-line.extra.pad_top.subtotal
-    %td 
-      %a(href="javascript:;" id="add-item-link" class="btn btn-primary")
-        %i.icon-plus-sign.icon-white
+    %td
+      %a(href="javascript:;" id="add-item-link" class="btn")
+        %i.icon-plus-sign
         Adicionar ítem
     %td.r(colspan="2") 
       Subtotal
