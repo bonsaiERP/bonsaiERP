@@ -41,13 +41,16 @@
         = render_if @contact.mobile do
           %i.icon-mobile-phone(title='Móvil' data-toggle='tooltip')
           = @contact.mobile
-
-  .span3
-    .span6.r
-      -#%i.icon-plus.green(title="Debe #{currency}" data-toggle='tooltip')
-      -#= ntc(100000)
-      -#%small.muted(style='border-bottom: 1px dotted gray') EX
-    .span6.r
+.row-fluid
+  .span6
+    .span6.well.well-small
+      %label.text-success Total Ingresos
+      = ntc @contact.total_incomes
+      = currency_label
+    .span6.well.well-small
+      %label.text-error Total Egresos
+      = ntc @contact.total_expenses
+      = currency_label
       -#%i.icon-minus.red(title="Debemos #{currency}" data-toggle='tooltip')
 .row-fluid
   .span6
