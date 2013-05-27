@@ -26,19 +26,32 @@
               = f.text_field :tenant, size: 28, placeholder: 'Subdominio', title: 'Subdominio', 'data-toggle' => 'tooltip'
               %span.add-on .bonsaierp.com
           = f.input :email, label: false, input_html: {class: 'span12', placeholder: "Correo electrónico", title: 'Correo electrónico', 'data-toggle' => 'tooltip'}
-          = f.input :password, label: false, input_html: {class: 'span12', placeholder: 'Contraseña', title: 'Contraseña', 'data-toggle' => 'tooltip'}
-          = f.input :password_confirmation, label: false, input_html: {class: 'span12', placeholder: 'Confirmar contraseña', title: 'Confirmar contraseña', 'data-toggle' => 'tooltip'}
+          .input-append
+            =f.input :password, label: 'Contraseña' do
+              = f.password_field :password
+              %span.add-on
+                %label
+                  %input(type="checkbox" id="show-password")
+                  Ver contraseña
           .clear-both
           = f.submit "Registrarme", :class => 'btn btn-success btn-large'
           %p
             %h5.n= link_to 'Ingresar', login_path
 
+:javascript
+  $(function() {
+    $(document).on('keyup', '#registration_name', function() {
+      // TODO: Improve the copyname;
+      name = $(this).val().toLowerCase().replace(/[^a-z]/g, '');
+      $('#registration_tenant').val(name);
+    });
 
-:coffee
-  $( ->
-    $(document).on('keyup', '#registration_name', ->
-      # TODO: Improve the copyname
-      name = $(this).val().toLowerCase().replace(/[^a-z]/g, '')
-      $('#registration_tenant').val(name)
-    )
-   )
+    $('#show-password').on('click', function() {
+      if($(this).prop('checked')) {
+        $('#registration_password').attr('type', 'text');
+      } else {
+        $('#registration_password').attr('type', 'password');
+      }
+    });
+
+   })

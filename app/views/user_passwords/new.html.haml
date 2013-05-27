@@ -2,7 +2,23 @@
 
 = simple_form_for @user_password do |f|
   =f.input :old_password, label: 'Antigua contraseña'
-  =f.input :password, label: 'Nueva contraseña'
-  =f.input :password_confirmation, label: 'Confirmar nueva contraseña'
+  .input-append
+    =f.input :password, label: 'Nueva contraseña' do
+      = f.password_field :password
+      %span.add-on
+        %label
+          %input(type="checkbox" id="show-password")
+          Ver contraseña
   .form-actions
     =f.submit 'Cambiar contraseña', class: 'btn btn-success'
+
+:javascript
+  $(function () {
+    $('#show-password').on('click', function() {
+      if($(this).prop('checked')) {
+        $('#user_password_password').attr('type', 'text');
+      } else {
+        $('#user_password_password').attr('type', 'password');
+      }
+    });
+  });

@@ -4,7 +4,7 @@ require "spec_helper"
 describe Registration do
   let(:valid_attributes) do
     {name: 'bonsaiERP', tenant: 'bonsai', email: 'boris@bonsaierp.com',
-     password: 'Demo1234', password_confirmation: 'Demo1234'}
+     password: 'Demo1234'}
   end
 
   it { should have_valid(:email).when('boris@mail.com', 'si@me.com.bo') }
@@ -17,14 +17,7 @@ describe Registration do
   it { should_not have_valid(:tenant).when('s', nil, '   ', '7-k', 's2@') }
 
   it { should have_valid(:password).when('Demo1234') }
-  it { should_not have_valid(:password_confirmation).when('  ', nil) }
 
-  it "error for password" do
-    r = Registration.new(password: 'Demo1234', password_confirmation: '')
-    r.register.should be_false
-
-    r.errors_on(:password).should eq( [I18n.t('errors.messages.confirmation') ] )
-  end
 
   it "registrates" do
     User.any_instance.stub(save: true, id: 1)
@@ -40,7 +33,6 @@ describe Registration do
     r.user.encrypted_password.should_not be_blank
     r.user.confirmation_token.should_not be_blank
     r.user.password.should_not be_blank
-    r.user.password_confirmation.should eq(r.user.password)
 
 
     link = r.user.active_links.first

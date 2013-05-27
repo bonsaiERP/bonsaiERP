@@ -1,5 +1,5 @@
 # encoding: utf-8
-class Registration < BaseService
+class Registration < BaseForm
   attr_reader :organisation, :user
 
   attribute :name     , String
@@ -12,8 +12,7 @@ class Registration < BaseService
   validates :tenant, presence: true, length: {within: 2..50}, format: {with: /\A[a-z0-9]+\z/}
   validate :valid_unique_tenant
 
-  validates :password, presence: true, confirmation: true, length: {within: PASSWORD_LENGTH..100}
-  validates_presence_of :password_confirmation
+  validates :password, presence: true, length: {within: PASSWORD_LENGTH..100}
   validates_email_format_of :email
 
   def register
@@ -30,7 +29,7 @@ class Registration < BaseService
 
 private
   def create_user
-    @user = User.new(email: email, password: password, password_confirmation: password_confirmation)
+    @user = User.new(email: email, password: password)
     @user.set_confirmation_token
 
     @user.active_links.build(

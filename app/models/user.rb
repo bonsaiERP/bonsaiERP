@@ -22,8 +22,6 @@ class User < ActiveRecord::Base
 
   with_options if: :change_password? do |u|
     u.validates :password, length: {within: PASSWORD_LENGTH..100 }
-    # vaidaates_confirmation_of gives error on tests
-    u.validate :valid_password_confirmation
   end
 
   # Scopes
