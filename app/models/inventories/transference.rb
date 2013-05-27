@@ -9,6 +9,8 @@ class Inventories::Transference < Inventories::Form
   def create
     save do
       @inventory.save
+      update_stocks
+      update_stocks_to
     end
   end
 
@@ -39,7 +41,23 @@ private
     res
   end
 
+  def update_stocks_to
+    res = true
+    stocks.each do |st|
+      stoc = Stock.create(store_id: store_to_id, item_id: st.item_id, quantity: stock_quantity_to(st) )
+      res = stoc.save && st.update_attribute(:active, false)
+
+      return false unless res
+    end
+
+    res
+  end
+
   def stock_quantity(st)
+    st.quantity - item_quantity(st.item_id)
+  end
+
+  def stock_quantity_to(st)
     st.quantity + item_quantity(st.item_id)
   end
 end

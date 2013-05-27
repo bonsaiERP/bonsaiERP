@@ -20,10 +20,10 @@ describe Inventories::Transference do
   let(:user) { build :user, id: 10 }
 
   it "#initialize" do
-    invin = Inventories::Transfence.new
+    trans = Inventories::Transference.new
 
-    invin.inventory.should be_is_in
-    invin.details.should have(0).item
+    trans.inventory.should be_is_trans
+    trans.details.should have(0).item
   end
 
   it "validates" do
@@ -58,14 +58,22 @@ describe Inventories::Transference do
       trans.creator_id.should eq(user.id)
       trans.ref_number.should =~ /\AT-\d{2}-\d{4}\z/
 
+
       trans.inventory_details.should have(2).items
       trans.inventory_details.map(&:quantity).should eq([2, 2])
       trans.inventory_details.map(&:item_id).should eq([1, 2])
 
-      stocks = Stock.active.where(store_id: trans.store_id)
+      # Stocks from
+      stocks = Stock.active.where(store_id: 1)
       stocks.should have(2).items
       stocks.map(&:item_id).sort.should eq([1, 2])
       stocks.map(&:quantity).should eq([-2, -2])
+
+      # Stocks to
+      stocks = Stock.active.where(store_id: 2)
+      stocks.should have(2).items
+      stocks.map(&:item_id).sort.should eq([1, 2])
+      stocks.map(&:quantity).should eq([2, 2])
 
       ## More items
       #attrs = valid_attributes.merge(inventory_details_attributes:
