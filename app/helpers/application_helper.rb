@@ -184,4 +184,7 @@ module ApplicationHelper
     content_tag(:span) { block.call } if val.present?
   end
 
+  def params_bold(val)
+    params[val].present? ? "b" : ""
+  end
 end

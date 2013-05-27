@@ -188,13 +188,13 @@ class Transaction extends Backbone.Collection
 # Income
 class Income extends Transaction
   getItemHtml: (num) ->
-    @itemTemplate(num: num, klass: 'income_service', det: 'income', search_path: 'search_income')
+    @itemTemplate(num: num, klass: 'incomes_form', det: 'income', search_path: 'search_income')
 
 # Expense
 class Expense extends Transaction
   model: ExpenseItem
   getItemHtml: (num) ->
-    @itemTemplate(num: num, klass: 'expense_service', det: 'expense', search_path: 'search_expense')
+    @itemTemplate(num: num, klass: 'expenses_form', det: 'expense', search_path: 'search_expense')
 
 
 @App = {}

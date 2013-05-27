@@ -27,6 +27,9 @@ class Expense < Movement
   scope :paid, -> { where(state: 'paid') }
   scope :contact, -> (cid) { where(contact_id: cid) }
   scope :pendent, -> { active.where{ amount.not_eq 0 } }
+  scope :error, -> { active.where(has_error: true) }
+  scope :due, -> { approved.joins(:transaction).where{transaction.due_date < Date.today} }
+  scope :nulled, -> { where(state: 'nulled') }
   scope :like, -> (s) {
     s = "%#{s}%"
     where{(name.like s) | (description.like s)}

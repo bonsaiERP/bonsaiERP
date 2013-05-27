@@ -6,6 +6,7 @@ class ExpensesController < ApplicationController
 
   # GET /expenses
   def index
+    set_index_params
     search_expenses
   end
 
@@ -48,7 +49,7 @@ class ExpensesController < ApplicationController
 
   # POST /expenses/quick_expense
   def quick_expense
-    @quick_expense = QuickExpense.new(quick_expense_params)
+    @quick_expense = Expenses::QuickForm.new(quick_expense_params)
 
     if @quick_expense.create
       flash[:notice] = "El egreso fue creado."
@@ -120,7 +121,7 @@ private
   end
 
   def quick_expense_params
-   params.require(:quick_expense).permit(*transaction_params.quick_income)
+   params.require(:expenses_quick_form).permit(*transaction_params.quick_income)
   end
 
   def expense_params
@@ -146,5 +147,23 @@ private
                   Expense.order('date desc').page(@page)
                 end
     @expenses = @expenses.includes(:contact, transaction: [:creator, :approver, :nuller]).order('date desc, id desc')
+    set_expenses_filters
+  end
+
+  def set_expenses_filters
+    case
+    when params[:approved].present?
+      @expenses = @expenses.approved
+    when params[:error].present?
+      @expenses = @expenses.error
+    when params[:due].present?
+      @expenses = @expenses.due
+    when params[:nulled].present?
+      @expenses = @expenses.nulled
+    end
+  end
+
+  def set_index_params
+    params[:all] = true unless params[:approved] || params[:error] || params[:nulled] || params[:due]
   end
 end

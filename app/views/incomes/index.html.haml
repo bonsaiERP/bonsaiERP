@@ -25,6 +25,18 @@
   .span6
     = render 'incomes/search'
 
+%ul.unstyled.inline
+  %li
+    = link_to "Todos", incomes_path, class: params_bold(:all)
+  %li
+    = link_to "Aprobados", incomes_path(approved: true), class: params_bold(:approved)
+  %li
+    = link_to "Atrasados", incomes_path(due: true), class: params_bold(:due) 
+  %li
+    = link_to "Con error", incomes_path(error: true), class: params_bold(:error) 
+  %li
+    = link_to "Anulados", incomes_path(nulled: true), class: params_bold(:nulled) 
+
 .row-fluid
   = render 'incomes/quick_income'
 
