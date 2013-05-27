@@ -28,6 +28,7 @@ class CreateAccountLedgers < ActiveRecord::Migration
 
         t.boolean :has_error, default: false
         t.string  :error_messages
+        t.string :status, limit: 50, default: 'approved'
 
         t.integer :project_id
 
@@ -44,6 +45,7 @@ class CreateAccountLedgers < ActiveRecord::Migration
       add_index :account_ledgers, :active
       add_index :account_ledgers, :has_error
       add_index :account_ledgers, :project_id
+      add_index :account_ledgers, :status
     end
   end
 end
