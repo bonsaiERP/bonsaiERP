@@ -36,12 +36,12 @@
 
           = f.input :email, label: false do
             .input-prepend.cont-login
-              %span.add-on
+              %span.add-on.prepend
                 %i.muted.icon-user
               = f.text_field :email, size: 30, placeholder: 'Email'
           = f.input :password, label: false do
             .input-prepend.cont-login
-              %span.add-on
+              %span.add-on.prepend
                 %i.muted.icon-key
               = f.password_field :password, size: 30, placeholder: 'Contraseña'
 
