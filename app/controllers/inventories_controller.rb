@@ -12,4 +12,9 @@ class InventoriesController < ApplicationController
   def show
     @inventory = present Inventory.includes(inventory_details: {item: :unit}).find(params[:id])
   end
+
+  # GET /inventory_operations/1
+  def show_movement
+    @inventory = present Inventory.includes(inventory_details: {item: :unit}).find(params[:id])
+  end
 end

@@ -31,7 +31,7 @@
       %i= lo @income.date
       = render_if @income.due_date do
         = @income.due_date_tag
-      
+
       = @income.creator_label
 
       = @income.approver_label
@@ -81,10 +81,16 @@
     %a(href='#payments' data-toggle='tab') Cobros
 
   %li
-    %a(href='#information' data-toggle='tab') Items
+    %a(href='#items' data-toggle='tab') Items
 
 .tab-content
-  #information.tab-pane.fade
+  #items.tab-pane.fade
+    %h2.n Items
+
+    .item-buttons
+      = render 'inventory_buttons', income: @income
+    %hr
+
     = render "incomes/items", income: @income
 
   #payments.tab-pane.fade

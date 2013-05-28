@@ -31,7 +31,7 @@ describe Expenses::InventoryIn do
 
   let(:valid_attributes) {
     {store_id: 1, date: Date.today, description: 'Test inventory in', 
-     account_id: expense.id,
+     expense_id: expense.id,
      inventory_details_attributes: [
        {item_id: 1, quantity: 2},
        {item_id: 2, quantity: 2}
@@ -49,18 +49,44 @@ describe Expenses::InventoryIn do
     Store.stub_chain(:active, where: [store])
   end
 
+  it "#build_details" do
+    invin = Expenses::InventoryIn.new(store_id: store.id, expense_id: expense.id)
+    invin.build_details
+
+    invin.inventory_details[0].item_id.should eq(1)
+    invin.inventory_details[0].quantity.should eq(5)
+
+    invin.inventory_details[1].item_id.should eq(2)
+    invin.inventory_details[1].quantity.should eq(5)
+
+    # Other quantities
+    det = expense.expense_details[0]
+    det.balance = 1
+    det.save.should be_true
+
+    invin = Expenses::InventoryIn.new(store_id: store.id, expense_id: expense.id)
+    invin.build_details
+
+    invin.inventory_details[0].item_id.should eq(1)
+    invin.inventory_details[0].quantity.should eq(1)
+
+    invin.inventory_details[1].item_id.should eq(2)
+    invin.inventory_details[1].quantity.should eq(5)
+  end
+
   it "#delivers" do
     InventoryDetail.any_instance.stub(item: item)
     Inventory.any_instance.stub(store: store)
     Stock.any_instance.stub(item: item, store: store)
 
-    invout = Expenses::InventoryIn.new(valid_attributes)
-    invout.details.should have(2).items
+    invin = Expenses::InventoryIn.new(valid_attributes)
+    invin.details.should have(2).items
 
-    invout.create.should be_true
-    inv = Inventory.find(invout.inventory.id)
+    invin.create.should be_true
+    inv = Inventory.find(invin.inventory.id)
     inv.should be_is_a(Inventory)
     inv.should be_is_exp_in
+    inv.account_id.should be(expense.id)
     inv.creator_id.should eq(user.id)
     inv.ref_number.should =~ /\AI-\d{2}-\d{4}\z/
 
@@ -83,15 +109,16 @@ describe Expenses::InventoryIn do
     attrs[:inventory_details_attributes][0][:quantity] = 3
     attrs[:inventory_details_attributes][1][:quantity] = 3
 
-    invout = Expenses::InventoryIn.new(attrs)
-    invout.create.should be_true
+    invin = Expenses::InventoryIn.new(attrs)
+    invin.create.should be_true
 
     exp = Expense.find(expense.id)
     exp.balance_inventory.should == 0
     exp.details[0].balance.should == 0
     exp.details[1].balance.should == 0
 
-    io = Inventory.find(invout.inventory.id)
+    io = Inventory.find(invin.inventory.id)
+    io.account_id.should be(expense.id)
     io.inventory_details.should have(2).items
     io.inventory_details.map(&:quantity).should eq([3, 3])
     io.inventory_details.map(&:item_id).should eq([1, 2])
@@ -102,9 +129,9 @@ describe Expenses::InventoryIn do
     stocks.map(&:quantity).should eq([5, 5])
 
     # Error
-    invout = Expenses::InventoryIn.new(valid_attributes)
-    invout.create.should be_false
-    invout.details[0].errors[:quantity].should_not be_blank
-    invout.details[1].errors[:quantity].should_not be_blank
+    invin = Expenses::InventoryIn.new(valid_attributes)
+    invin.create.should be_false
+    invin.details[0].errors[:quantity].should_not be_blank
+    invin.details[1].errors[:quantity].should_not be_blank
   end
 end

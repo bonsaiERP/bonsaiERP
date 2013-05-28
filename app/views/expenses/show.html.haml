@@ -79,12 +79,17 @@
     %a.payments-tab(href="#payments" data-toggle='tab') Pagos
 
   %li
-    %a(href="#information" data-toggle='tab')
+    %a(href="#items" data-toggle='tab')
       Items
 
 .tab-content
-  #information.tab-pane.fade
+  #items.tab-pane.fade
     %h2.n Items
+
+    .item-buttons
+      = render 'expenses/inventory_buttons', expense: @expense
+    %hr
+
     = render "expenses/items", expense: @expense
 
   #payments.tab-pane.fade

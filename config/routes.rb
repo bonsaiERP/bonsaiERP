@@ -1,7 +1,9 @@
 # encoding: utf-8
 Bonsaierp::Application.routes.draw do
 
-  resources :inventories, only: [:index, :show]
+  resources :inventories, only: [:index, :show] do
+    get :show_movement, on: :member
+  end
 
   resources :inventory_transferences, only: [:new, :create]
 
@@ -53,6 +55,9 @@ Bonsaierp::Application.routes.draw do
   # IN/OUT
   ############################
   resources :incomes do
+    resources :inventory_ins, only: ['new', 'create']
+    resources :inventory_outs, only: ['new', 'create']
+
     member do
       put :approve
       put :null
@@ -68,8 +73,13 @@ Bonsaierp::Application.routes.draw do
       put :null
       get :history
     end
+
     post :quick_expense, on: :collection
   end
+
+  resources :expenses_inventory_ins, only: ['new', 'create']
+  resources :expenses_inventory_outs, only: ['new', 'create']
+
 
   #get  "/transactions/pdf/:id"       => "transactions#pdf", :as => :invoice_pdf
   #get  "/transactions/new_email/:id" => "transactions#new_email", :as => :new_invoice_email

@@ -140,7 +140,7 @@ GEM
     mime-types (1.23)
     mocha (0.10.5)
       metaclass (~> 0.0.1)
-    multi_json (1.7.3)
+    multi_json (1.7.4)
     multi_xml (0.5.3)
     newrelic_rpm (3.6.2.96)
     nokogiri (1.5.9)

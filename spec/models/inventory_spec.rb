@@ -6,6 +6,8 @@ describe Inventory do
   it { should belong_to(:contact) }
   it { should belong_to(:creator) }
   it { should belong_to(:project) }
+  it { should belong_to(:expense) }
+  it { should belong_to(:income) }
 
   it { should have_many(:inventory_details) }
   it { should accept_nested_attributes_for(:inventory_details) }

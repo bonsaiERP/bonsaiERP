@@ -1,0 +1,46 @@
+- content_for :links do
+  %ul.breadcrumbs.span6
+    %li
+      =link_to "Almacenes", stores_path
+    %li
+      %i.icon-caret-right
+    %li
+      =link_to @inventory.store, store_path(@inventory.store, :tab => 'operations')
+
+%h2
+  %span.muted.n Operación:
+  = @inventory.ref_number
+  = @inventory.operation_tag
+
+.row-fluid
+  .span6
+    %h3.n
+      = link_to @inventory.expense, @inventory.expense
+  .span6
+    %h3.n
+      = link_to @inventory.store, @inventory.store
+
+.row-fluid
+  .span3
+    %h4.n.i= l @inventory.date
+  .span6
+    %i.icon-file-alt(data-toggle='tooltip' title='Descripción')
+    = @inventory.description
+
+%h3 Items
+.row-fluid
+  %table#items.table.decorated
+    %tr
+      %th Item
+      %th Cantidad
+      %th Unidad
+
+    - @inventory.inventory_details.includes(:item).each do |det|
+      %tr.item
+        %td
+          = det.item
+        %td
+          = ntc det.quantity
+        %td
+          = det.item.unit_symbol
+

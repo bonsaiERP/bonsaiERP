@@ -31,7 +31,7 @@ describe Expenses::InventoryOut do
 
   let(:valid_attributes) {
     {store_id: 1, date: Date.today, description: 'Test inventory out', 
-     account_id: expense.id,
+     expense_id: expense.id,
      inventory_details_attributes: [
        {item_id: 1, quantity: 2},
        {item_id: 2, quantity: 2}

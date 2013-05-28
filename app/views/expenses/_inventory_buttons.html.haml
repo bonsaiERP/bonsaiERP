@@ -1,0 +1,52 @@
+-# if @income.can_pay?
+%a#inventory-deliver-link.btn.btn-success(href='javascript:;')
+  %i.icon-signout
+  Recoger mercadería
+
+-# if @income.can_devolution?
+%a#inventory-devolution-link.btn.btn-danger(href='javascript:;')
+  %i.icon-signin
+  Devolución de mercadería
+
+#inventory-deliver(style='display:none;background-color: white')
+  = form_tag new_expenses_inventory_in_path, method: :get do
+    = hidden_field_tag :expense_id, expense.id
+    %p
+      %label Seleccione el almacen
+      = select_tag :store_id, options_for_select(Store.active.map {|v| [v.to_s, v.id] })
+    .form-actions
+      = submit_tag "Recoger mercadería", class: 'btn btn-primary'
+      %a.btn.cancel(href='javascript:;') Cancelar
+
+#inventory-devolution(style='display:none;background-color: white')
+  = form_tag new_expenses_inventory_out_path, method: :get do
+    = hidden_field_tag :expense_id, expense.id
+    %p
+      %label Seleccione el almacen
+      = select_tag :store_id, options_for_select(Store.active.map {|v| [v.to_s, v.id] })
+    .form-actions
+      = submit_tag "Seleccionar", class: 'btn btn-primary'
+      %a.btn.cancel(href='javascript:;') Cancelar
+
+:javascript
+  $(function() {
+    var $deliver = $('#inventory-deliver').dialog({
+      title: 'Recoger mercadería',
+      autoOpen: false,
+      width: 400
+    });
+    $('#inventory-deliver a.cancel').click(function() { $deliver.dialog('close') });
+    $('#inventory-deliver-link').click(function() {
+      console.log('deliver');
+      $deliver.dialog('open') });
+
+    var $devolution = $('#inventory-devolution').dialog({
+      title: 'Devolución mercadería',
+      autoOpen: false
+    });
+    $('#inventory-devolution a.cancel').click(function() { $devolution.dialog('close') });
+    $('#inventory-devolution-link').click(function() { $devolution.dialog('open') });
+
+  });
+
+

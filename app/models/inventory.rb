@@ -14,6 +14,8 @@ class Inventory < ActiveRecord::Base
   belongs_to :creator, class_name: "User"
   #belongs_to :transout, class_name: "InventoryOperation"
   #belongs_to :store_to, :class_name => "Store"
+  belongs_to :expense, foreign_key: :account_id
+  belongs_to :income, foreign_key: :account_id
   belongs_to :project
 
   #has_one    :transference, :class_name => 'InventoryOperation', :foreign_key => "transference_id"

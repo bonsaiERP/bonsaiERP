@@ -2,7 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class Expenses::InventoryIn < Inventories::In
-  attribute :account_id, Integer
+  attribute :expense_id, Integer
 
   validates_presence_of :expense
   validate :valid_quantities
@@ -12,7 +12,13 @@ class Expenses::InventoryIn < Inventories::In
   delegate :balance_inventory, :inventory_left, to: :expense_calculations
 
   def expense
-    @expense ||= Expense.active.where(id: account_id).first
+    @expense ||= Expense.active.where(id: expense_id).first
+  end
+
+  def build_details
+    expense.expense_details.each do |det|
+      inventory.inventory_details.build(item_id: det.item_id ,quantity: det.balance)
+    end
   end
 
   def create
@@ -23,9 +29,14 @@ class Expenses::InventoryIn < Inventories::In
       update_expense_balanace
 
       res = @expense.save
+      @inventory.account_id = @expense.id
       res = res && @inventory.save
       res && update_stocks
     end
+  end
+
+  def movement_detail(item_id)
+    @expense.details.find {|det| det.item_id === item_id }
   end
 
 private
@@ -54,10 +65,6 @@ private
       det_exp = movement_detail(det.item_id)
       det_exp.balance -= det.quantity
     end
-  end
-
-  def movement_detail(item_id)
-    @expense.details.find {|det| det.item_id === item_id }
   end
 
   def update_expense_balanace

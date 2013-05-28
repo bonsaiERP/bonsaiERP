@@ -20,7 +20,7 @@ describe Incomes::InventoryOut do
 
   let(:valid_attributes) {
     {store_id: 1, date: Date.today, description: 'Test inventory out', 
-     account_id: income.id,
+     income_id: income.id,
      inventory_details_attributes: [
        {item_id: 1, quantity: 2},
        {item_id: 2, quantity: 2}

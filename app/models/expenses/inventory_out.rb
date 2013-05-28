@@ -2,7 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class Expenses::InventoryOut < Inventories::Out
-  attribute :account_id, Integer
+  attribute :expense_id, Integer
 
   validates_presence_of :expense
   validate :valid_quantities
@@ -12,7 +12,7 @@ class Expenses::InventoryOut < Inventories::Out
   delegate :balance_inventory, :inventory_left, to: :expense_calculations
 
   def expense
-    @expense ||= Expense.active.where(id: account_id).first
+    @expense ||= Expense.active.where(id: expense_id).first
   end
 
   def create

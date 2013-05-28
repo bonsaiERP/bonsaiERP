@@ -2,7 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class Incomes::InventoryIn < Inventories::In
-  attribute :account_id, Integer
+  attribute :income_id, Integer
 
   validates_presence_of :income
   validate :valid_quantities
@@ -12,7 +12,7 @@ class Incomes::InventoryIn < Inventories::In
   delegate :balance_inventory, :inventory_left, to: :income_calculations
 
   def income
-    @income ||= Income.active.where(id: account_id).first
+    @income ||= Income.active.where(id: income_id).first
   end
 
   def create
