@@ -37,6 +37,7 @@ class Payment < BaseService
   def amount
     @amount.is_a?(BigDecimal) ? @amount : "0".to_d
   end
+
 private
   # Builds and AccountLedger instance with some default data
   def build_ledger(attrs = {})

@@ -158,16 +158,16 @@ describe Expenses::Devolution do
       AccountLedger.any_instance.stub(save_ledger: false, errors: {amount: 'Not real'})
     end
 
-    it "sets errors from other clases" do
-      dev = Expenses::Devolution.new(valid_attributes)
-      dev.stub(account_to: true)
+    #it "sets errors from other clases" do
+    #  dev = Expenses::Devolution.new(valid_attributes)
+    #  dev.stub(account_to: true)
 
-      dev.pay_back.should be_false
-      # There is no method Expenses::Devolution#balance
-      dev.errors[:amount].should eq(['Not real'])
-      # There is a method Expenses::Devolution#amount
-      dev.errors[:base].should eq(['No balance'])
-    end
+    #  dev.pay_back.should be_false
+    #  # There is no method Expenses::Devolution#balance
+    #  dev.errors[:amount].should eq(['Not real'])
+    #  # There is a method Expenses::Devolution#amount
+    #  dev.errors[:base].should eq(['No balance'])
+    #end
   end
 end
 

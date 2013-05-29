@@ -21,6 +21,7 @@ class Devolution < BaseForm
 
   # Delegations
   delegate :total, :balance, to: :movement, prefix: true, allow_nil: true
+  delegate :currency, :inverse?, :same_currency?, to: :currency_exchange
 
   # Sets all values but will set verification to false if is not
   # correctly set
@@ -46,7 +47,7 @@ private
   end
 
   def update_movement
-    movement.balance += amount
+    movement.balance += amount_exchange
     movement.set_state_by_balance! # Sets state and the user
   end
 
@@ -82,5 +83,20 @@ private
     if ( amount.to_f + movement_balance.to_f ) > movement_total.to_f
       self.errors.add :amount, I18n.t('errors.messages.devolution.movement_total')
     end
+  end
+
+  def currency_exchange
+    @currency_exchange ||= CurrencyExchange.new(
+      account: movement, account_to: account_to, exchange_rate: exchange_rate
+    )
+  end
+
+  def amount_exchange
+    currency_exchange.exchange(amount)
+  end
+
+  # Exchange rate used using inverse
+  def conv_exchange_rate
+    currency_exchange.exchange_rate
   end
 end
