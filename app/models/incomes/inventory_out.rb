@@ -36,6 +36,10 @@ class Incomes::InventoryOut < Inventories::Out
     end
   end
 
+  def movement_detail(item_id)
+    @income.details.find {|det| det.item_id === item_id }
+  end
+
 private
   def operation
     'inc_out'
@@ -64,10 +68,6 @@ private
       det_exp = movement_detail(det.item_id)
       det_exp.balance -= det.quantity
     end
-  end
-
-  def movement_detail(item_id)
-    @income.details.find {|det| det.item_id === item_id }
   end
 
   def update_income_balanace

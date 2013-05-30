@@ -74,6 +74,16 @@ class Inventory < ActiveRecord::Base
     end
   end
 
+  OPERATIONS = %w(in out inc_in inc_out exp_in exp_out trans).freeze
+  def movement
+    case
+    when(is_inc_in? || is_inc_out?)
+      income
+    when(is_exp_in? || is_exp_out?)
+      expense
+    end
+  end
+
 private
   def get_ref_io(io)
     _, y, _ = io.ref_number.split('-')
