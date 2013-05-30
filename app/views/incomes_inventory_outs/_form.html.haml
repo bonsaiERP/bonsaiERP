@@ -1,0 +1,49 @@
+= simple_form_for inv, url: incomes_inventory_ins_path do |f|
+  = hidden_field_tag :store_id, @store.id
+  = hidden_field_tag :income_id, @income.id
+
+  .row-fluid
+    .span6
+      %label Ingreso
+      %h4.n= link_to inv.income, inv.income
+    .span6
+      %label Almacen
+      %h4.n= link_to inv.store, inv.store, target: '_blank'
+  .row-fluid
+    .span6
+      = f.input :date, label: 'Fecha', as: :datepicker
+    .span6
+      = f.input :description, as: :text, label: 'Descripción' ,input_html: {rows: 3}
+
+  .row-fluid
+    %table#items.table.decorated
+      %tr
+        %th Item
+        %th Cantidad
+        %th Saldo
+
+      = f.simple_fields_for :inventory_details do |det|
+        - mov_det = inv.movement_detail(det.object.item_id)
+        - if mov_det.balance > 0
+          %tr.item
+            %td
+              = det.hidden_field :item_id
+              = det.object.item
+              %span.muted(title="#{det.object.item.unit_name}" data-toggle='tooltip')
+                (#{det.object.item.unit_symbol})
+                
+            %td
+              = det.input :quantity, label: false, input_html: {type: :decimal, size: 10}, data: {value: 'item.quantity'}
+            %td
+              = ntc mov_det.balance
+
+    .form-actions
+      = f.submit 'Salvar', class: 'btn btn-success b'
+
+:javascript
+  $(function() {
+    var inv = new App.Inventory();
+    //rivets.bind($('#items tr.last'), {inventory: inv});
+  })
+
+

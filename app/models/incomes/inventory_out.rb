@@ -15,6 +15,12 @@ class Incomes::InventoryOut < Inventories::Out
     @income ||= Income.active.where(id: income_id).first
   end
 
+  def build_details
+    income.income_details.each do |det|
+      inventory.inventory_details.build(item_id: det.item_id ,quantity: det.balance)
+    end
+  end
+
   def create
     res = true
 
@@ -24,8 +30,9 @@ class Incomes::InventoryOut < Inventories::Out
 
       res = @income.save
       res = res && update_stocks
-      Inventories::Errors.new(inventory, stocks).set_errors
-      res = res && @inventory.save
+      Inventories::Errors.new(@inventory, stocks).set_errors
+      @inventory.account_id = @income.id
+      res && @inventory.save
     end
   end
 

@@ -55,9 +55,6 @@ Bonsaierp::Application.routes.draw do
   # IN/OUT
   ############################
   resources :incomes do
-    resources :inventory_ins, only: ['new', 'create']
-    resources :inventory_outs, only: ['new', 'create']
-
     member do
       put :approve
       put :null
@@ -66,6 +63,9 @@ Bonsaierp::Application.routes.draw do
 
     post :quick_income, on: :collection
   end
+
+  resources :incomes_inventory_ins, only: ['new', 'create']
+  resources :incomes_inventory_outs, only: ['new', 'create']
 
   resources :expenses do
     member do

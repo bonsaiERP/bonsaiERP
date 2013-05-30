@@ -82,7 +82,8 @@ private
       export_expenses: true,
       inventory_ins: true,
       inventory_outs: true,
-      inventory_transferences: true,
+      incomes_inventory_ins: true,
+      incomes_inventory_outs: true,
       expenses_inventory_ins: true,
       expenses_inventory_outs: true
     }
@@ -117,7 +118,10 @@ private
       export_expenses: true,
       inventory_ins: true,
       inventory_outs: true,
-      inventory_transferences: true
+      incomes_inventory_ins: true,
+      incomes_inventory_outs: true,
+      expenses_inventory_ins: true,
+      expenses_inventory_outs: true
     }
   end
 
@@ -143,7 +147,8 @@ private
       units: true,
       users: true,
       user_passwords: true,
-      dashboard: true
+      dashboard: true,
+      incomes_inventory_outs: true
     }
   end
 

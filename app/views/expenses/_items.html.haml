@@ -1,24 +1,26 @@
 %table#items_table.table.decorated
   %thead
     %tr
-      %th Item
-      %th Precio unitario
-      %th Cantidad
-      %th Total fila
+      %th.c Item
+      %th.c Precio unitario
+      %th.c Cantidad
+      %th.c Saldo
+      %th.c Total fila
     - expense.expense_details.each do |det|
       %tr
-        %td.span6= det.item
+        %td.span4= det.item
         %td.span2.cur= ntc det.price
-        %td.span2.cur= det.quantity
+        %td.span2.cur= ntc det.quantity
+        %td.span2.cur= ntc det.balance
         %td.span2.total_row.cur= ntc det.total
 
   %tr.extra.pad_top
-    %td{:colspan => 2}
+    %td{colspan: 3}
     %td.r Subtotal
     %td#subtotal.r= ntc expense.subtotal
 
   %tr.extra
-    %td{:colspan => 2}
+    %td{colspan: 3}
     %td.r.b.dark Total
     %td#total_value.r.b{'data-val' => expense.total}
       = ntc expense.total

@@ -44,7 +44,7 @@ describe Incomes::InventoryOut do
           contact_id: 3, balance_inventory: 100,
           income_details_attributes: [
             {item_id: 1, quantity: 5, price: 10, balance: 5},
-            {item_id: 2, quantity: 5, price: 10, balance: 5}
+            {item_id: 2, quantity: 6, price: 10, balance: 6}
           ]
         )
       )
@@ -62,6 +62,31 @@ describe Incomes::InventoryOut do
       inv.create
     end
 
+    it "#build_details" do
+      invin = Incomes::InventoryOut.new(store_id: store.id, income_id: income.id)
+      invin.build_details
+
+      invin.inventory_details[0].item_id.should eq(1)
+      invin.inventory_details[0].quantity.should eq(5)
+
+      invin.inventory_details[1].item_id.should eq(2)
+      invin.inventory_details[1].quantity.should eq(6)
+
+      # Other quantities
+      det = income.income_details[0]
+      det.balance = 1
+      det.save.should be_true
+
+      invin = Incomes::InventoryOut.new(store_id: store.id, income_id: income.id)
+      invin.build_details
+
+      invin.inventory_details[0].item_id.should eq(1)
+      invin.inventory_details[0].quantity.should eq(1)
+
+      invin.inventory_details[1].item_id.should eq(2)
+      invin.inventory_details[1].quantity.should eq(6)
+    end
+
     it "#create" do
       Stock.any_instance.stub(item: item, store: store)
       # Create with the function
@@ -73,16 +98,20 @@ describe Incomes::InventoryOut do
       invout.details.should have(2).items
 
       invout.create.should be_true
+
       inv = Inventory.find(invout.inventory.id)
       inv.should be_is_a(Inventory)
-      inv.should be_is_inc_out
-      inv.creator_id.should eq(user.id)
-      inv.ref_number.should =~ /\AS-\d{2}-\d{4}\z/
+      
+      expect(inv.account_id).to eq(income.id)
+
+      expect(inv).to be_is_inc_out
+      expect(inv.creator_id).to eq(user.id)
+      expect(inv.ref_number).to match(/\AS-\d{2}-\d{4}\z/)
 
       inc = Income.find(income.id)
-      inc.balance_inventory.should == 60
+      inc.balance_inventory.should == 70
       inc.details[0].balance.should == 3
-      inc.details[1].balance.should == 3
+      inc.details[1].balance.should == 4
 
       inv.details.should have(2).items
       inv.details.map(&:quantity).should eq([2, 2])
@@ -96,7 +125,7 @@ describe Incomes::InventoryOut do
       # More items
       attrs = valid_attributes
       attrs[:inventory_details_attributes][0][:quantity] = 3
-      attrs[:inventory_details_attributes][1][:quantity] = 3
+      attrs[:inventory_details_attributes][1][:quantity] = 4
 
       invout = Incomes::InventoryOut.new(attrs)
       invout.create.should be_true
@@ -112,13 +141,13 @@ describe Incomes::InventoryOut do
       io.error_messages["item_ids"].should eq([2])
 
       io.inventory_details.should have(2).items
-      io.inventory_details.map(&:quantity).should eq([3, 3])
+      io.inventory_details.map(&:quantity).should eq([3, 4])
       io.inventory_details.map(&:item_id).should eq([1, 2])
 
       stocks = Stock.active.where(store_id: io.store_id)
       stocks.should have(2).items
       stocks.map(&:item_id).sort.should eq([1, 2])
-      stocks.map(&:quantity).should eq([0, -1])
+      stocks.map(&:quantity).should eq([0, -2])
 
       # Error
       invout = Incomes::InventoryOut.new(valid_attributes)

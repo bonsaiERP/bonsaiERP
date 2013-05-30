@@ -1,0 +1,18 @@
+- content_for :links do
+  %ul.breadcrumbs.span6
+    %li
+      =link_to @inv.store, @inv.store
+    %li
+      %i.icon-caret-right
+    %li
+      Entrega de items
+
+.row-fluid
+  .span12
+    %h1
+      %span.muted.n Entrega de items
+      = @inv.inventory.ref_number
+
+= render 'form', inv: @inv
+
+
