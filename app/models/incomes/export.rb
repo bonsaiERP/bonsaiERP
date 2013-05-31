@@ -1,6 +1,6 @@
-class Incomes::Export < ExportTransactions
+class Incomes::Export < Movements::Export
   def export(col_sep: ",")
-    super IncomeQuery.new, col_sep
+    super Incomes::Query.new, col_sep
   end
 
 private

@@ -8,7 +8,7 @@ class ExportExpensesController < ApplicationController
 
   # POST /export_incomes
   def create
-    exp = ExportExpenses.new(export_params)
+    exp = Expenses::Export.new(export_params)
     if exp.valid?
       respond_to do |format|
         format.xls { send_data StringEncoder.encode("UTF-8", "ISO-8859-1", exp.export(col_sep: "\t") ), filename: 'egresos.xls' }

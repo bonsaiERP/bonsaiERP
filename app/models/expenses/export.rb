@@ -1,6 +1,6 @@
-class Expenses::Export < ExportTransactions
+class Expenses::Export < Movements::Export
   def export(col_sep: ",")
-    super ExpenseQuery.new, col_sep
+    super Expenses::Query.new, col_sep
   end
 
 private

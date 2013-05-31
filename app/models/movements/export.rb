@@ -3,7 +3,7 @@
 # email: boriscyber@gmail.com
 require 'csv'
 
-class ExportTransactions < BaseService
+class Movements::Export < BaseService
   attribute :date_start, Date
   attribute :date_end, Date
   attr_reader :col_sep, :rate
