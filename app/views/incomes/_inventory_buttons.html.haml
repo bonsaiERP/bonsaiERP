@@ -6,7 +6,7 @@
 - if @income.can_devolution?
   %a#inventory-devolution-link.btn.btn-danger(href='javascript:;')
     %i.icon-signin
-    Devolución de mercadería
+    Devolución mercadería
 
 #inventory-deliver(style='display:none;background-color: white')
   = form_tag new_incomes_inventory_out_path, method: :get do
@@ -25,7 +25,7 @@
       %label Seleccione el almacen
       = select_tag :store_id, options_for_select(Store.active.map {|v| [v.to_s, v.id] })
     .form-actions
-      = submit_tag "Seleccionar", class: 'btn btn-primary'
+      = submit_tag "Devolución mercadería", class: 'btn btn-primary'
       %a.btn.cancel(href='javascript:;') Cancelar
 
 :javascript
@@ -42,7 +42,8 @@
 
     var $devolution = $('#inventory-devolution').dialog({
       title: 'Devolución mercadería',
-      autoOpen: false
+      autoOpen: false,
+      width: 400
     });
     $('#inventory-devolution a.cancel').click(function() { $devolution.dialog('close') });
     $('#inventory-devolution-link').click(function() { $devolution.dialog('open') });

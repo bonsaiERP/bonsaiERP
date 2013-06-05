@@ -9,9 +9,11 @@
 
 .row-fluid
   .span12
-    %h1
-      %span.muted.n Ingreso de items
+    %h2
       = @inv.inventory.ref_number
+      %small
+        Recoger mecadería egreso
+        = link_to @inv.expense, @inv.expense
 
 = render 'form', inv: @inv
 

@@ -9,8 +9,8 @@
 
 .row-fluid
   .span12
-    %h1
-      %span.muted.n Ingreso de items
+    %h2
       = @inv.inventory.ref_number
+      %small Ingreso de items
 
 = render 'inventory_ins/form', inv: @inv

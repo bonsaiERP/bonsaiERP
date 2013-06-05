@@ -32,6 +32,7 @@
               (#{det.object.item.unit_symbol})
               
           %td
+            = ntc mov_det.quantity
             = det.input :quantity, label: false, input_html: {type: :decimal, size: 10}, data: {value: 'item.quantity'}
           %td
             = ntc mov_det.balance

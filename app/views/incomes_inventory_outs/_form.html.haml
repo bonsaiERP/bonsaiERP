@@ -19,6 +19,10 @@
     %table#items.table.decorated
       %tr
         %th Item
+        %th
+          %span(title="Cantidad original en Ingreso" data-toggle='tooltip')
+            Original
+            Ing.
         %th Cantidad
         %th Saldo
 
@@ -31,11 +35,12 @@
               = det.object.item
               %span.muted(title="#{det.object.item.unit_name}" data-toggle='tooltip')
                 (#{det.object.item.unit_symbol})
-                
+            %td
+              = ntc mov_det.quantity
             %td
               = det.input :quantity, label: false, input_html: {type: :decimal, size: 10}, data: {value: 'item.quantity'}
             %td
               = ntc mov_det.balance
 
     .form-actions
-      = f.submit 'Entrega', class: 'btn btn-success b'
+      = f.submit 'Entrega mercadería', class: 'btn btn-success b'
