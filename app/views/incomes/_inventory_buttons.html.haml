@@ -3,10 +3,10 @@
     %i.icon-signout
     Entregar mercadería
 
--# if @income.can_devolution?
--#%a#inventory-devolution-link.btn.btn-danger(href='javascript:;')
-  %i.icon-signin
-  Devolución de mercadería
+- if @income.can_devolution?
+  %a#inventory-devolution-link.btn.btn-danger(href='javascript:;')
+    %i.icon-signin
+    Devolución de mercadería
 
 #inventory-deliver(style='display:none;background-color: white')
   = form_tag new_incomes_inventory_out_path, method: :get do

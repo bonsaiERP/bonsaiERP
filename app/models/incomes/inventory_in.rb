@@ -6,7 +6,6 @@ class Incomes::InventoryIn < Inventories::In
 
   validates_presence_of :income
   validate :valid_quantities
-  #validate :valid_item_ids
 
   delegate :income_details, to: :income
   delegate :balance_inventory, :inventory_left, to: :income_calculations
@@ -15,17 +14,27 @@ class Incomes::InventoryIn < Inventories::In
     @income ||= Income.active.where(id: income_id).first
   end
 
+  def build_details
+    income.income_details.each do |det|
+      inventory.inventory_details.build(item_id: det.item_id ,quantity: 0)
+    end
+  end
+
   def create
     res = true
 
     save do
       update_income_details
-      update_income_balanace
+      update_income_balance
 
       res = @income.save
       res = res && @inventory.save
       res && update_stocks
     end
+  end
+
+  def movement_detail(item_id)
+    @income.details.find {|det| det.item_id === item_id }
   end
 
 private
@@ -36,7 +45,8 @@ private
   def valid_quantities
     res = true
     details.each do |det|
-      if det.quantity > movement_detail(det.item_id).balance
+      mov_det = movement_detail(det.item_id)
+      if det.quantity > (mov_det.quantity - mov_det.balance)
         det.errors.add(:quantity, I18n.t('errors.messages.inventory.movement_quantity'))
         res = false
       end
@@ -52,15 +62,11 @@ private
   def update_income_details
     details.each do |det|
       det_exp = movement_detail(det.item_id)
-      det_exp.balance -= det.quantity
+      det_exp.balance += det.quantity
     end
   end
 
-  def movement_detail(item_id)
-    @income.details.find {|det| det.item_id === item_id }
-  end
-
-  def update_income_balanace
+  def update_income_balance
     @income.balance_inventory = balance_inventory
     @income.delivered = inventory_left === 0
   end

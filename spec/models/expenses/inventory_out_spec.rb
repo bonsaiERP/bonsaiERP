@@ -18,10 +18,10 @@ describe Expenses::InventoryOut do
   let(:expense) {
     exp = Expense.new_expense(
       attributes_for(:expense_approved).merge(
-        contact_id: 3, balance_inventory: 100,
+        contact_id: 3, balance_inventory: 0,
         expense_details_attributes: [
-          {item_id: 1, quantity: 5, price: 10, balance: 5},
-          {item_id: 2, quantity: 5, price: 10, balance: 5}
+          {item_id: 1, quantity: 5, price: 10, balance: 0},
+          {item_id: 2, quantity: 5, price: 10, balance: 0}
         ]
       )
     )
@@ -64,13 +64,13 @@ describe Expenses::InventoryOut do
       Inventory.any_instance.stub(store: store)
       Stock.any_instance.stub(item: item, store: store)
 
-
       # Create with the function
       create_inventory_in.should be_true
 
       # Create
       invout = Expenses::InventoryOut.new(valid_attributes)
       invout.create.should be_true
+
       inv = Inventory.find(invout.inventory.id)
       inv.should be_is_a(Inventory)
       inv.should be_is_exp_out
@@ -78,9 +78,9 @@ describe Expenses::InventoryOut do
       inv.ref_number.should =~ /\AS-\d{2}-\d{4}\z/
 
       exp = Expense.find(expense.id)
-      exp.balance_inventory.should == 60
-      exp.details[0].balance.should == 3
-      exp.details[1].balance.should == 3
+      exp.balance_inventory.should == 40
+      exp.details[0].balance.should == 2
+      exp.details[1].balance.should == 2
 
       inv.details.should have(2).items
       inv.details.map(&:quantity).should eq([2, 2])
@@ -100,9 +100,9 @@ describe Expenses::InventoryOut do
       invout.create.should be_true
 
       exp = Expense.find(expense.id)
-      exp.balance_inventory.should == 0
-      exp.details[0].balance.should == 0
-      exp.details[1].balance.should == 0
+      exp.balance_inventory.should == 100
+      exp.details[0].balance.should == 5
+      exp.details[1].balance.should == 5
 
       io = Inventory.find(invout.inventory.id)
       io.should be_has_error

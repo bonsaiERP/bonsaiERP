@@ -1,13 +1,13 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class ExpensesInventoryInsController < ApplicationController
+class ExpensesInventoryOutsController < ApplicationController
   before_filter :set_store_and_expense
 
   # GET
   # /expenses_inventory_ins/new?store_id=:store_id&expense_id=:expense_id
   def new
-    @inv = Expenses::InventoryIn.new(
+    @inv = Expenses::InventoryOut.new(
       store_id: @store.id, expense_id: @expense.id, date: Date.today
     )
     @inv.build_details
@@ -16,7 +16,7 @@ class ExpensesInventoryInsController < ApplicationController
   # POST /expenses_inventory_ins
   # store_id&expense_id=:expense_id
   def create
-    @inv = Expenses::InventoryIn.new({store_id: @store.id, expense_id: @expense.id}.merge(inventory_params))
+    @inv = Expenses::InventoryOut.new({store_id: @store.id, expense_id: @expense.id}.merge(inventory_params))
 
     if @inv.create
       redirect_to show_movement_inventory_path(@inv.inventory.id), notice: "Se realizado el ingreso de inventario para el egreso #{@expense}"
@@ -34,7 +34,7 @@ private
   end
 
   def inventory_params
-    params.require(:expenses_inventory_in).permit(
+    params.require(:expenses_inventory_out).permit(
       :description, :date, :store_id, :expense_id,
       inventory_details_attributes: [:item_id, :quantity]
     )

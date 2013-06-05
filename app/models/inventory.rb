@@ -74,7 +74,6 @@ class Inventory < ActiveRecord::Base
     end
   end
 
-  OPERATIONS = %w(in out inc_in inc_out exp_in exp_out trans).freeze
   def movement
     case
     when(is_inc_in? || is_inc_out?)

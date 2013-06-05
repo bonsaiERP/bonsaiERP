@@ -4,21 +4,24 @@
       %th Item
       %th Precio unitario
       %th Cantidad
+      %th
+        %span(title="Saldo inventario" data-toggle='tooltip') Saldo Inv.
       %th Total fila
     - income.income_details.each do |det|
       %tr
         %td.span6= det.item
         %td.span2.cur= ntc det.price
         %td.span2.cur= det.quantity
+        %td.span2.cur= det.balance
         %td.span2.total_row.cur= ntc det.total
 
   %tr.extra.pad_top
-    %td{:colspan => 2}
+    %td(colspan="3")
     %td.r Subtotal
     %td#subtotal.r= ntc income.subtotal
 
   %tr.extra
-    %td{:colspan => 2}
+    %td(colspan="3")
     %td.r.b.dark Total
     %td#total_value.r.b{'data-val' => income.total}
       = ntc income.total
