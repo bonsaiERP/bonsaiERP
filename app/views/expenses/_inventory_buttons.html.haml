@@ -3,10 +3,10 @@
     %i.icon-signout
     Recoger mercadería
 
--# if @income.can_devolution?
--#%a#inventory-devolution-link.btn.btn-danger(href='javascript:;')
-  %i.icon-signin
-  Devolución de mercadería
+- if @expense.can_devolution?
+  %a#inventory-devolution-link.btn.btn-danger(href='javascript:;')
+    %i.icon-signin
+    Devolución de mercadería
 
 #inventory-deliver(style='display:none;background-color: white')
   = form_tag new_expenses_inventory_in_path, method: :get do
@@ -42,7 +42,8 @@
 
     var $devolution = $('#inventory-devolution').dialog({
       title: 'Devolución mercadería',
-      autoOpen: false
+      autoOpen: false,
+      width: 400
     });
     $('#inventory-devolution a.cancel').click(function() { $devolution.dialog('close') });
     $('#inventory-devolution-link').click(function() { $devolution.dialog('open') });

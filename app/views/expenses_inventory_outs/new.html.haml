@@ -5,14 +5,14 @@
     %li
       %i.icon-caret-right
     %li
-      Entrega de items
+      Ingreso de items
 
 .row-fluid
   .span12
     %h2
       = @inv.inventory.ref_number
-      %small.text-success
-        Entrega de mercadería ingreso
-        = link_to @inv.income, @inv.income
+      %small.text-error
+        Devolución mecadería egreso
+        = link_to @inv.expense, @inv.expense
 
 = render 'form', inv: @inv

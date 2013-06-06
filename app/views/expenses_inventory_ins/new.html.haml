@@ -11,9 +11,8 @@
   .span12
     %h2
       = @inv.inventory.ref_number
-      %small
+      %small.text-success
         Recoger mecadería egreso
         = link_to @inv.expense, @inv.expense
 
 = render 'form', inv: @inv
-

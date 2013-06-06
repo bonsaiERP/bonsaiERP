@@ -9,8 +9,10 @@
 
 .row-fluid
   .span12
-    %h1
-      %span.muted.n Entrega de items
+    %h2
       = @inv.inventory.ref_number
+      %small.text-error
+        Devolución de mercadería ingreso
+        = link_to @inv.income, @inv.income
 
 = render 'form', inv: @inv

@@ -4,10 +4,14 @@
 class InventoryPresenter < Resubject::Presenter
 
   def operation_tag
-    if is_in?
-      label_green(operation_name)
-    else
-      label_red(operation_name)
+    case operation
+    when "in" then label_green(operation_name)
+    when "out" then label_red(operation_name)
+    when "inc_out" then label_green(operation_name)
+    when "inc_in" then label_red(operation_name)
+    when "exp_in" then label_green(operation_name)
+    when "exp_out" then label_red(operation_name)
+    when "trans" then label_black(operation_name)
     end
   end
 
@@ -15,21 +19,12 @@ class InventoryPresenter < Resubject::Presenter
     case operation
     when "in" then "Ingreso"
     when "out" then "Salida"
-    when "inc_in" then "Entrega"
-    when "inc_out" then "Devolución"
+    when "inc_out" then "Entrega"
+    when "inc_in" then "Devolución"
     when "exp_in" then "Recepción"
     when "exp_out" then "Devolución"
-    when "trans_in" then "Devolución egreso"
-    when "trans_out" then "Devolución egreso"
+    when "trans" then "Transferencia"
     end
-  end
-
-  def in_tag(text)
-    ""
-  end
-
-  def out_tag(text)
-    ""
   end
 
   def select_store_title
