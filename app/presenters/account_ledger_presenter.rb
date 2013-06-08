@@ -1,8 +1,7 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class AccountLedgerPresenter < Resubject::Presenter
-  include UsersModulePresenter
+class AccountLedgerPresenter < BasePresenter
 
   def initials(name)
     name.split(' ').map(&:first).join('')

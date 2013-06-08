@@ -4,7 +4,7 @@
 class ExpensePresenter < MovementPresenter
 
   def expense_payment
-    Expenses::Payment.new(account_id: id, date: Date.today, amount: 0)
+    Expenses::Payment.new(account_id: id, date: Date.today, amount: 0.0)
   end
 
   def expense_devolution

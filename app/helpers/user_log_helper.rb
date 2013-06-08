@@ -1,7 +1,7 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-module UsersModulePresenter
+module UserLogHelper
   def creator_label
     return user_icon(class: 'text', title: "CREADO: #{user_label_text creator, created_at}") if creator.present?
     ""

@@ -36,7 +36,6 @@ class Inventory < ActiveRecord::Base
   scope :op_in, -> { where(operation: IN_OPERATIONS) }
   scope :op_out, -> { where(operation: OUT_OPERATIONS) }
 
-
   OPERATIONS.each do |_op|
     define_method :"is_#{_op}?" do
       _op === operation
@@ -62,6 +61,14 @@ class Inventory < ActiveRecord::Base
 
   def is_out?
     OUT_OPERATIONS.include? operation
+  end
+
+  def is_income?
+    is_inc_in? || is_inc_out?
+  end
+
+  def is_expense?
+    is_exp_in? || is_exp_out?
   end
 
   def set_ref_number

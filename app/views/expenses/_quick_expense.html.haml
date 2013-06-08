@@ -5,9 +5,10 @@
     %span.muted.n Egreso rápido
     = qe.ref_number
 
-  = simple_form_for qe, url: quick_expense_expenses_path do |f|
+  = simple_form_for(qe, url: quick_expense_expenses_path) do |f|
     .row-fluid
-      .span6= f.input :account_to_id, label: 'Cuenta', input_html: {class: 'span10'}
+      .span6
+        = f.input :account_to_id, label: 'Cuenta', input_html: {class: 'span10'}
 
       .span6
         =f.input :contact_id, as: :select2, label: "Contacto",

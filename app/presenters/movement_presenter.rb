@@ -1,8 +1,7 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class MovementPresenter < Resubject::Presenter
-  include UsersModulePresenter
+class MovementPresenter < BasePresenter
 
   def payments
     present AccountLedgerQuery.new.payments_ordered(id), AccountLedgerPresenter
@@ -22,10 +21,10 @@ class MovementPresenter < Resubject::Presenter
 
   def state_tag
     html = case state
-    when "draft" then span_label('borrador')
-    when "approved" then span_label('aprobado', 'label-info')
-    when "paid" then span_label('pagado', 'label-success')
-    when "nulled" then span_label('anulado', 'label-important')
+    when "draft" then label_tag('borrador')
+    when "approved" then label_blue('aprobado')
+    when "paid" then label_green('pagado')
+    when "nulled" then label_red('anulado')
     end
 
     html.html_safe
@@ -50,9 +49,5 @@ class MovementPresenter < Resubject::Presenter
 private
   def today
     @today ||= Date.today
-  end
-
-  def span_label(txt, css="")
-    "<span class='label #{css}'>#{txt}</span>"
   end
 end

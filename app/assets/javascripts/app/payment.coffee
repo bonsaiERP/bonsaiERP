@@ -7,6 +7,7 @@ class Payment extends Backbone.Model
     amount: 0.0
     exchange_rate: 1.0
     inverse: false
+    bank: true
     type: ''
     accountsTo: []
     sameCurrency: true
@@ -49,6 +50,7 @@ class Payment extends Backbone.Model
       exchange_rate: @convert(data.currency)
       type: data.type
       sameCurrency: other # Used for enable disable exchange_rate
+      bank: data.type is 'Bank'
     )
     @setCurrencyLabel()
   #
@@ -68,9 +70,11 @@ class Payment extends Backbone.Model
       data: @get('accountsTo')
       formatResult: App.Payment.paymentOptions
       formatSelection: App.Payment.paymentOptions
-      dropdownCssClass: 'hide-select2-search'
       escapeMarkup: (m) -> m
-    ).on('change', (event) ->
+      dropdownCssClass: 'hide-select2-search'
+      placeholder: 'Seleccione la cuenta'
+    )
+    .on('change', (event) ->
       self.setAccountTo($(this).select2('data') )
     )
   #

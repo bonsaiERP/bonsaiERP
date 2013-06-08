@@ -7,8 +7,8 @@
 #= require libraries/rivets.js
 
 #= require jqplugins/select2.js
-#= require jqplugins/jquery.flot.js
-#= require jqplugins/jquery.flot.time.js
+#= require jqplugins/flot/jquery.flot.js
+#= require jqplugins/flot/jquery.flot.time.js
 
 #= require plugins/money.min.js
 #= require plugins/_b.coffee

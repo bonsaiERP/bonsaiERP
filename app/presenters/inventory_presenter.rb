@@ -1,7 +1,7 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class InventoryPresenter < Resubject::Presenter
+class InventoryPresenter < BasePresenter
 
   def operation_tag
     case operation
@@ -37,6 +37,25 @@ class InventoryPresenter < Resubject::Presenter
       "<span class='dark_green'>Recojo</span>".html_safe
     when (transaction.is_a?(Buy) and inventory_operation.out?)
       "<span class='red'>Devolución</span>".html_safe
+    end
+  end
+
+  def related
+    case
+    when is_income?  then income
+    when is_expense? then expense
+    when store_to_id.present? then store
+    else
+      nil
+    end
+  end
+
+  def related_tag
+    case
+    when is_income?
+      label_green("I", "Ingreso")
+    when is_expense?
+      label_red("E", "Egreso")
     end
   end
 

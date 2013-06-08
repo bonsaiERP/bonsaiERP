@@ -4,10 +4,11 @@
   .span3
     = f.input :date, as: :datepicker, label: 'Fecha'
   .span3
-    = f.input :verification, as: :boolean, label: 'Verificar',
-      input_html: {data: {value: 'payment.verification', checked: 'payment.verification'} },
-      label: 'Verificar <i class="icon-warning-sign" data-toggle="tooltip" title="Solo cuentas de BANCO pueden verificar a futuro"></i>'.html_safe,
-      hint: 'Verificar a futuro. Ej.: (Cheque)'
+    %div(data-show="payment.bank")
+      = f.input :verification, as: :boolean, label: 'Verificar',
+        input_html: {data: {value: 'payment.verification', checked: 'payment.verification'} },
+        label: 'Verificar <i class="icon-warning-sign" data-toggle="tooltip" title="Solo cuentas de BANCO pueden verificar a futuro"></i>'.html_safe,
+        hint: 'Verificar a futuro. Ej.: (Cheque)'
 
 .row-fluid.bg-white-tan.pad-10.borders-y
   .span3
@@ -16,9 +17,10 @@
       input_html: {type: 'decimal', size: 10,
       data: {value: 'payment.amount'} }
   .span3
-    = f.input :exchange_rate, label: 'Tipo de cambio',
-      input_html: {disabled: true, type: 'decimal', size: 10,
-      data: {value: 'payment.exchange_rate', disabled: 'payment.sameCurrency'} }
+    %div(data-display="payment.cash")
+      = f.input :exchange_rate, label: 'Tipo de cambio',
+        input_html: {disabled: true, type: 'decimal', size: 10,
+        data: {value: 'payment.exchange_rate', disabled: 'payment.sameCurrency'} }
   .span3
     .moneybox
       %label TOTAL

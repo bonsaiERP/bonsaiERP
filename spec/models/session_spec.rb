@@ -34,7 +34,8 @@ describe Session do
 
   it "returns the tenant from organisations" do
     User.should_receive(:find_by_email).and_return(user)
-    user.should_receive(:organisations).and_return([stub(tenant: 'bonsai')])
+    user.should_receive(:order).with("id").and_return([stub(tenant: 'bonsai')])
+    user.should_receive(:organisations).and_return(user)
     ses = Session.new
     ses.tenant.should eq('bonsai')
   end

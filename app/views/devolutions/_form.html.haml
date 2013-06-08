@@ -4,10 +4,11 @@
   .span3
     = f.input :date, as: :datepicker, label: 'Fecha'
   .span3
-    = f.input :verification, as: :boolean, label: 'Verificar',
-      input_html: {data: {value: 'payment.verification', checked: 'payment.verification'} },
-      label: 'Verificar <i class="icon-warning-sign" data-toggle="tooltip" title="Solo cuentas de BANCO pueden verificar a futuro"></i>'.html_safe,
-      hint: 'Verificar a futuro. Ej.: (Cheque)'
+    %div(data-show="payment.bank")
+      = f.input :verification, as: :boolean, label: 'Verificar',
+        input_html: {data: {value: 'payment.verification', checked: 'payment.verification'} },
+        label: 'Verificar <i class="icon-warning-sign" data-toggle="tooltip" title="Solo cuentas de BANCO pueden verificar a futuro"></i>'.html_safe,
+        hint: 'Verificar a futuro. Ej.: (Cheque)'
 
 .row-fluid
   .span3

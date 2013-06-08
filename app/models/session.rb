@@ -20,7 +20,7 @@ class Session < BaseService
   end
 
   def tenant
-    @tenant ||= user.organisations.first.tenant
+    @tenant ||= user.organisations.order("id").first.tenant
   end
 
 private

@@ -17,8 +17,12 @@ module IconsHelper
     CODE
   end
 
-  def icon(icon_css)
-    content_tag(:i, "", class: icon_css)
+  def icon(ico, title = '')
+    if title.present?
+      "<i class=\"#{ico}\" title=\"#{ title }\" data-toggle=\"tooltip\"></i>"
+    else
+      "<i class=\"#{ico}\"></i>"
+    end
   end
 
 end

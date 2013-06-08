@@ -8,7 +8,8 @@ class ExpensesInventoryInsController < ApplicationController
   # /expenses_inventory_ins/new?store_id=:store_id&expense_id=:expense_id
   def new
     @inv = Expenses::InventoryIn.new(
-      store_id: @store.id, expense_id: @expense.id, date: Date.today
+      store_id: @store.id, expense_id: @expense.id, date: Date.today,
+      description: "Recoger mercadería egreso #{ @expense }"
     )
     @inv.build_details
   end

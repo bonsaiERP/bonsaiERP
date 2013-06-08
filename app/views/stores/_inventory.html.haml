@@ -1,6 +1,12 @@
+- inventory = present inventory
 %li.row-fluid
   .span6
-    %h4.n= link_to inventory.ref_number, inventory
+    %h4.n
+      = link_to inventory.ref_number, inventory
+      = inventory.operation_tag
+
+    = inventory.related_tag
+    = link_to inventory.related, inventory.related  if inventory.related.present?
     = lo inventory.created_at
   .span6
     %i.icon-file-alt(data-toggle='tooltip' title='Descripción')
