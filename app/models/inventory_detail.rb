@@ -6,6 +6,6 @@ class InventoryDetail < ActiveRecord::Base
   belongs_to :item
 
   validates_presence_of     :item, :item_id, :quantity
-  validates_numericality_of :quantity, greater_than_or_equal_to: 0
+  validates_numericality_of :quantity, greater_than: 0
 
 end

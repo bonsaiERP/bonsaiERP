@@ -8,7 +8,8 @@ class IncomesInventoryInsController < ApplicationController
   # /incomes_inventory_ins/new?store_id=:store_id&income_id=:income_id
   def new
     @inv = Incomes::InventoryIn.new(
-      store_id: @store.id, income_id: @income.id, date: Date.today
+      store_id: @store.id, income_id: @income.id, date: Date.today,
+      description: "Devolución mercadería ingreso #{ @income }"
     )
     @inv.build_details
   end
@@ -19,7 +20,7 @@ class IncomesInventoryInsController < ApplicationController
     @inv = Incomes::InventoryIn.new({store_id: @store.id, income_id: @income.id}.merge(inventory_params))
 
     if @inv.create
-      redirect_to show_movement_inventory_path(@inv.inventory.id), notice: "Se realizado el ingreso de inventario para el egreso #{@income}"
+      redirect_to show_movement_inventory_path(@inv.inventory.id), notice: "Se realizado el ingreso de inventario para el ingreso #{@income}"
     else
       render :new
     end
@@ -30,7 +31,6 @@ private
     @income = Income.active.find(params[:income_id])
     @store = Store.active.find(params[:store_id])
   rescue
-    binding.pry
     redirect_to incomes_path, alert: 'Ha seleccionado un almacen o un ingreso invalido' and return
   end
 

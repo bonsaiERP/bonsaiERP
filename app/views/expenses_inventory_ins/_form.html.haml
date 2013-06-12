@@ -1,4 +1,6 @@
 = simple_form_for inv, url: expenses_inventory_ins_path do |f|
+  = bonsai_form_error(f)
+
   = hidden_field_tag :store_id, @store.id
   = hidden_field_tag :expense_id, @expense.id
 
