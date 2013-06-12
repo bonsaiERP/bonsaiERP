@@ -13,7 +13,8 @@ describe Inventories::Form do
   end
 
   it "Valid" do
-    io = Inventories::Form.new(store_id: 1)
+    io = Inventories::Form.new(store_id: 1, inentory_details_attributes: [{item_id: 1, quantity: 2}])
+    InventoryDetail.any_instance.stub(item: true)
     io.stub(store: store)
     io.should be_valid
   end

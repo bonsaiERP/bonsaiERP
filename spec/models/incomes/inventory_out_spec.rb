@@ -62,6 +62,13 @@ describe Incomes::InventoryOut do
       inv.create
     end
 
+    it "#errors on items" do
+      i = Incomes::InventoryOut.new
+      i.should_not be_valid
+
+      expect(i.errors.messages[:base]).to eq([I18n.t("errors.messages.inventory.at_least_one_item")])
+    end
+
     it "#build_details" do
       invin = Incomes::InventoryOut.new(store_id: store.id, income_id: income.id)
       invin.build_details

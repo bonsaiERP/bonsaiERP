@@ -22,6 +22,7 @@ class IncomesInventoryOutsController < ApplicationController
     if @inv.create
       redirect_to show_movement_inventory_path(@inv.inventory.id), notice: "Se realizado el ingreso de inventario para el egreso #{@income}"
     else
+      @inv.build_details  if @inv.details.empty?
       render :new
     end
   end

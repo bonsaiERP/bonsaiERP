@@ -246,6 +246,7 @@ es:
         stock_quantity: "Existen items que exceden la cantidad máxima"
         negative_stock: "Hay ítems que generaton un stock negactivo"
         movement_quantity: "La cantidad es mayor que el balance"
+        at_least_one_item: "Debe existir al menos un item con cantidad mayor a 0"
       item:
         repeated: "El ítem es repetido"
         repeated_items: "Existen items repetidos"

@@ -83,4 +83,3 @@ private
     @income_item_ids ||= @income.details.map(&:item_id)
   end
 end
-

@@ -18,6 +18,7 @@ class Inventories::Form < BaseForm
 
   validates_presence_of :store, :inventory
   validate :unique_item_ids
+  validate :at_least_one_item
 
   def store
     @store ||= Store.active.where(id: store_id).first
@@ -58,5 +59,9 @@ private
 
   def unique_item_ids
     self.errors.add(:base, I18n.t("errors.messages.item.repeated_items")) unless UniqueItem.new(@inventory).valid?
+  end
+
+  def at_least_one_item
+    self.errors.add(:base, I18n.t("errors.messages.inventory.at_least_one_item"))  if details.empty?
   end
 end
