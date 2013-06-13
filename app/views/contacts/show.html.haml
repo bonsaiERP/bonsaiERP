@@ -52,17 +52,6 @@
       = ntc @contact.total_expenses
       = currency_label
       -#%i.icon-minus.red(title="Debemos #{currency}" data-toggle='tooltip')
-.row-fluid
-  .span6
-    .span6.well.well-small
-      %label.text-success Total Ingresos
-      = ntc @contact.total_incomes
-      = currency_label
-    .span6.well.well-small
-      %label.text-error Total Egresos
-      = ntc @contact.total_expenses
-      = currency_label
-      -#= ntc 500
 
 .row-fluid
   %ul#contact-tabs.nav.nav-tabs
