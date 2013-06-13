@@ -74,11 +74,13 @@ describe Incomes::InventoryIn do
 
     invin = Incomes::InventoryIn.new(valid_attributes)
     invin.details.should have(2).items
+    expect(invin.income_id).to eq(income.id)
 
     invin.create.should be_true
     inv = Inventory.find(invin.inventory.id)
     inv.should be_is_a(Inventory)
     inv.should be_is_inc_in
+    expect(inv.account_id).to eq(income.id)
     inv.creator_id.should eq(user.id)
     inv.ref_number.should =~ /\AI-\d{2}-\d{4}\z/
 

@@ -28,6 +28,7 @@ class Incomes::InventoryIn < Inventories::In
       update_income_balance
 
       res = @income.save
+      @inventory.account_id = income_id
       res = res && @inventory.save
       res && update_stocks
     end

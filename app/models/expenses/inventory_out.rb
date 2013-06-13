@@ -22,9 +22,10 @@ class Expenses::InventoryOut < Inventories::Out
       update_expense_details
       update_expense_balance
 
-      res = @expense.save
+      res = expense.save
       res = res && update_stocks
       Inventories::Errors.new(inventory, stocks).set_errors
+      @inventory.account_id = expense_id
       res = res && @inventory.save
     end
   end

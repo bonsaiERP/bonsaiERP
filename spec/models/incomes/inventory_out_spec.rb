@@ -103,6 +103,7 @@ describe Incomes::InventoryOut do
 
       invout = Incomes::InventoryOut.new(valid_attributes)
       invout.details.should have(2).items
+      expect(invout.income_id).to eq(income.id)
 
       invout.create.should be_true
 
