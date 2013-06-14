@@ -16,7 +16,9 @@
   .span6
     = render 'items/search'
 
-= paginate @items
+- paginate_html = paginate @items
+
+= paginate_html
 
 %ul.unstyled.listing
   - @items.each do |item|
@@ -47,12 +49,14 @@
             %span.muted Precio venta:
             = currency_label
             = ntc item.price
-      
+
         -#= ntc item.total_stock if item.stockable?
       .span2.r
         = link_to icon_edit, edit_item_path(item), class: 'dark'
         = link_to icon_delete, item, class: 'dark', method: 'delete', confirm: 'Esta seguro de eliminar el ítem?'
 
+
+= paginate_html
 
 :javascript
   $(function() { $('#search_items').show() });

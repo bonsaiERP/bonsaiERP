@@ -9,6 +9,7 @@ describe Store do
   it { should_not have_valid(:name).when('12', 'St',  '') }
   it { should have_valid(:address).when('12345', 'Samaipata', '') }
   it { should_not have_valid(:address).when('1234', 'St') }
+  it { should validate_uniqueness_of(:name) }
 
   let(:valid_attributes) {
     {name: 'Store Samaipata 1', address: 'Samaipata', phone: '706-81101'}

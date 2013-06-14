@@ -5,7 +5,7 @@ class InventoryDetail extends Backbone.Model
   defaults:
     quantity: 0.0
   #
-  deleteItem: (event) ->
+  deleteItem: (event) =>
     src = event.currentTarget || event.srcElement
     @collection.deleteItem(this, src)
   #
@@ -23,6 +23,8 @@ class Inventory extends Backbone.Collection
     $tr = $('#items tr.item:first').clone()
     $tr.find('input').val('')
     @template =  _.template(itemTemplate)
+
+    rivets.bind($('#items tr.last'), {inventory: this})
   #
   setItems: ->
     $("#items tr.item").each( (i, el) =>
@@ -38,7 +40,8 @@ class Inventory extends Backbone.Collection
     $(src).parents('tr.item').hide()
     @remove(item)
   #
-  addItem: ->
+  addItem: =>
+    num = new Date().getTime()
     $tr = $(@template(num: @length))
     $tr.insertBefore('#items tr.last')
     $tr.createAutocomplete()
@@ -60,7 +63,9 @@ itemTemplate = """
   </td>
   <td><span class="unit"></span></td>
   <td>
-    <a class="dark" data-on-click="item:deleteItem" href="javascript:;"><i class="icon-trash icon-large" title="" data-toggle="tooltip" data-original-title="Borrar"></i></a>
+    <a class="dark btn" data-on-click="item:deleteItem" href="javascript:;" title="borrar" data-toggle="tooltip">
+      <i class="icon-trash" title="" data-toggle="tooltip" data-original-title="Borrar"></i>
+    </a>
   </td>
 </tr>
 """

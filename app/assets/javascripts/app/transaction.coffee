@@ -156,7 +156,7 @@ class Transaction extends Backbone.Collection
       item.setAutocompleteEvent(el)
   #
   addItem: ->
-    $tr = $(@getItemHtml(@length)).insertBefore('#subtotal-line')
+    $tr = $(@getItemHtml()).insertBefore('#subtotal-line')
 
     $tr.createAutocomplete()
     @add(rate: @transModel.get('rate') )
@@ -164,9 +164,6 @@ class Transaction extends Backbone.Collection
     rivets.bind($tr, {item: item})
     item.setAutocompleteEvent($tr)
     @calculateSubtotal()
-  #
-  getItemHtml: (num) ->
-    #itemTemplate.replace(/\$num/g, num)
   #
   deleteItem: (item, src) ->
     $row = $(src).parents('tr.item')
@@ -186,13 +183,15 @@ class Transaction extends Backbone.Collection
 
 # Income
 class Income extends Transaction
-  getItemHtml: (num) ->
+  getItemHtml: ->
+    num = new Date().getTime()
     @itemTemplate(num: num, klass: 'incomes_form', det: 'income', search_path: 'search_income')
 
 # Expense
 class Expense extends Transaction
   model: ExpenseItem
-  getItemHtml: (num) ->
+  getItemHtml: ->
+    num = new Date().getTime()
     @itemTemplate(num: num, klass: 'expenses_form', det: 'expense', search_path: 'search_expense')
 
 
@@ -223,5 +222,5 @@ itemTemplate = """<tr class="item" data-item="{"original_price":"0.0","price":"0
     <td class="total_row r">
       <span data-text="item.subtotal | number"></span>
     </td>
-    <td class="del"><a href="javascript:;" class="dark" title="Borrar" data-toggle="tooltip" data-on-click="item:delete"><i class="icon-trash icon-large"></i></a></td>
+    <td class="del"><a href="javascript:;" class="dark btn" title="Borrar" data-toggle="tooltip" data-on-click="item:delete"><i class="icon-trash"></i></a></td>
 </tr>"""

@@ -11,6 +11,7 @@ class Store < ActiveRecord::Base
   has_many :inventories
 
   validates_presence_of :name
+  validates_uniqueness_of :name
   validates_length_of :name, minimum: 3
   validates_length_of :address, minimum: 5, allow_blank: true
 

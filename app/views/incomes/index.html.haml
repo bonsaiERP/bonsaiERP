@@ -40,7 +40,9 @@
 .row-fluid
   = render 'incomes/quick_income'
 
-= paginate @incomes.page(@page)
+- paginate_html = paginate @incomes.page(@page)
+
+= paginate_html
 
 %ul.unstyled.listing
   %li.row-fluid
@@ -50,3 +52,5 @@
       .span6.r.b.muted
         Saldo
   = render @incomes
+
+= paginate_html

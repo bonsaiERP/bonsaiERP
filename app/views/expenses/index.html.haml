@@ -40,7 +40,9 @@
 .row-fluid
   = render 'expenses/quick_expense'
 
-= paginate @expenses
+- paginate_html = paginate @expenses
+
+=paginate_html
 
 %ul.unstyled.listing
   %li.row-fluid
@@ -51,3 +53,5 @@
         Saldo
 
   =render @expenses
+
+=paginate_html

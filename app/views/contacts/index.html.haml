@@ -14,10 +14,15 @@
   .span6
     = render 'contacts/search'
 
-= paginate(@contacts)
+- paginate_html = paginate(@contacts)
+
+= paginate_html
 
 %ul.unstyled.listing
   = render @contacts
+
+= paginate_html
+
 :javascript
   $(function() {
     $('.contact').each(function() {

@@ -45,7 +45,8 @@
           %td
             %span.unit
           %td
-            %a.dark(href='javascript:;' data-on-click='item:deleteItem')= icon_delete
+            %a.dark.btn(href='javascript:;' data-on-click='item:deleteItem')
+              %i.icon-trash
 
       %tr.last
         %td(colspan="3")
@@ -54,7 +55,7 @@
             Adicionar item
 
     .form-actions
-      = f.submit 'Salvar', class: 'btn btn-success b'
+      = f.submit 'Egreso ítems', class: 'btn btn-danger b'
 
 :javascript
   $(function() {
