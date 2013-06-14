@@ -17,4 +17,8 @@ class StorePresenter < BasePresenter
   def operations
     present inventories, InventoryPresenter
   end
+
+  def inventories
+    to_model.inventories.includes(:creator)
+  end
 end

@@ -23,14 +23,12 @@
             %span.muted A:
             = link_to al.account_to, al.account_to
       .span5
-        .span7
-          %i.icon-file.muted(data-toggle='tooltip' title="referencia")
-          = nl2br al.reference
-        .span5.r
-          %span.muted Cantidad
-          = ntc al.amount_ref(account.id)
-          = currency_label al.currency_ref(account.id)
-      .span2
         = al.creator_label.html_safe
         = al.approver_label.html_safe
         = al.nuller_label.html_safe
+        .clearfix
+          %i.icon-file.muted(data-toggle='tooltip' title="referencia")
+          = nl2br al.reference
+      .span2.r
+        = ntc al.amount_ref(account.id)
+        = currency_label al.currency_ref(account.id)

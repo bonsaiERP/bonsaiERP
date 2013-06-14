@@ -3,6 +3,14 @@
 # email: boriscyber@gmail.com
 class InventoryPresenter < BasePresenter
 
+  def link
+    if is_income? || is_expense?
+      "/inventories/#{id}/show_movement"
+    else
+      to_model
+    end
+  end
+
   def operation_tag
     case operation
     when "in" then label_green(operation_name)

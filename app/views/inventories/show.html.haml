@@ -18,6 +18,9 @@
 .row-fluid
   .span3
     %h4.n.i= l @inventory.date
+  .span3
+    %span.muted Creado por:
+    = @inventory.creator
   .span6
     %i.icon-file-alt(data-toggle='tooltip' title='Descripción')
     = @inventory.description
