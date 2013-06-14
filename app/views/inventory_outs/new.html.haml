@@ -41,7 +41,8 @@
               input_html: {class: 'item_id span10', placeholder: 'Escriba para buscar el ítem', 
               data: {new_url: '/items/new', source: items_path(format: :json)} }
           %td
-            = det.input :quantity, label: false, input_html: {type: :decimal, size: 10}, data: {value: 'item.quantity'}
+            = det.input :quantity, label: false, input_html: {type: :decimal, size: 10,
+              data: {value: 'item.quantity'}}
           %td
             %span.unit
           %td
@@ -59,7 +60,6 @@
 
 :javascript
   $(function() {
-    var inv = new App.Inventory();
-    //rivets.bind($('#items tr.last'), {inventory: inv});
-  })
+    var inv = new App.Inventory('out');
+  });
 
