@@ -3,9 +3,13 @@
 # email: boriscyber@gmail.com
 class ResetPasswordsController < ApplicationController
   #include ActionView::Helpers::UrlHelper
+  layout 'sessions'
   skip_before_filter :set_tenant, :check_authorization!
   before_filter :reset_search_path
   before_filter :find_user_or_redirect!, only: [:edit, :update]
+
+  def index
+  end
 
   # GET /reset_passwords/new
   def new
@@ -17,7 +21,7 @@ class ResetPasswordsController < ApplicationController
     @reset_password = ResetPassword.new(reset_params)
 
     if @reset_password.reset_password
-      render 'create'
+      redirect_to reset_passwords_path
     else
       flash.now[:error] = 'El email que ingreso no existe.'
       render 'new'

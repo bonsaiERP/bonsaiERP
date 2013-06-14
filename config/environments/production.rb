@@ -71,8 +71,10 @@ Bonsaierp::Application.configure do
   config.action_mailer.delivery_method = :smtp
 
   config.action_mailer.smtp_settings = {
-    :address => 'localhost',
-    :port => 25
+    address: 'smtp.mandrillapp.com',
+    port: 587,
+    user_name: 'boriscyber@gmail.com',
+    password: 'pViFp4XMJCYp7f1j4TKQxw'
   }
   #config.action_mailer.smtp_settings = {
   #  :address => "smtp.gmail.com",
