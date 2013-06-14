@@ -13,4 +13,24 @@
       = @inv.inventory.ref_number
       %small.text-success Ingreso de items
 
-= render 'inventory_ins/form', inv: @inv
+= simple_form_for @inv, url: store_inventory_ins_path(@inv.store_id) do |f|
+  = f.hidden_field :store_id
+  .row-fluid
+    .span3
+      %label Almacen
+      %h4.n= link_to @inv.store, @inv.store, target: '_blank'
+    .span3
+      = f.input :date, label: 'Fecha', as: :datepicker
+    .span6
+      = f.input :description, as: :text, label: 'Descripción' ,input_html: {rows: 3}
+
+  .row-fluid
+    = render 'inventories/form', f: f
+
+  .form-actions
+    = f.submit 'Ingresar ítems', class: 'btn btn-success b'
+
+:javascript
+  $(function() {
+    var inv = new App.InventoryIn();
+  })

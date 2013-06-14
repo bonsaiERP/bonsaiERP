@@ -195,8 +195,6 @@ class Expense extends Transaction
     @itemTemplate(num: num, klass: 'expenses_form', det: 'expense', search_path: 'search_expense')
 
 
-@App = {}
-
 @App.Income = Income
 
 @App.Expense = Expense

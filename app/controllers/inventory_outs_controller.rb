@@ -5,7 +5,8 @@ class InventoryOutsController < ApplicationController
   before_filter :check_store
 
   def new
-    @inv = Inventories::Out.new(store_id: params[:store_id], date: Date.today)
+    @inv = Inventories::Out.new(store_id: params[:store_id], date: Date.today,
+                               description: "Egreso de ítems")
     2.times { @inv.details.build }
   end
 

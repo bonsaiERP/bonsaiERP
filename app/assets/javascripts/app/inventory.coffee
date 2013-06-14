@@ -1,36 +1,33 @@
 # Model
 class InventoryDetail extends Backbone.Model
-  initialize: ->
-    @setAutocomplete()
   defaults:
     quantity: 0.0
   #
-  deleteItem: (event) =>
+  delete: (event) =>
     src = event.currentTarget || event.srcElement
     @collection.deleteItem(this, src)
   #
-  setAutocomplete: ->
-    @get('row').on('autocomplete-done', 'input.autocomplete', (event, item) =>
-      @get('row').find('.unit').text(item.unit_symbol)
+  setAutocompleteEvent: ($el) ->
+    $el.on('autocomplete-done', 'input.autocomplete', (event, item) =>
+      $el.find('.unit').text(item.unit_symbol)
     )
 
 # Collection
 class Inventory extends Backbone.Collection
   model: InventoryDetail
-  table: '#items'
-  initialize: (@operation) ->
-    @setItems()
+  initialize: ->
     @template =  _.template(itemTemplate)
+    @setList()
 
     rivets.bind($('#items tr.last'), {inventory: this})
   #
-  setItems: ->
-    $("#items tr.item").each( (i, el) =>
+  setList: ->
+    $('#items  tr.item').each (i, el) =>
       $el = $(el)
-      @add({row: $el})
+      @add(pos: i)
       item = @models[@length - 1]
-      rivets.bind item.get('row'), {item: item}
-    )
+      rivets.bind($el, {item: item})
+      item.setAutocompleteEvent($el)
   #
   deleteItem: (item, src) ->
     return alert "Debe existir al menos un item" if @models.length is 1
@@ -43,13 +40,21 @@ class Inventory extends Backbone.Collection
     $tr = $(@template(num: num, operation: @operation))
     $tr.insertBefore('#items tr.last')
     $tr.createAutocomplete()
-    @add({tr: $tr})
+    @add({num: num})
     item = @models[@length - 1]
+    item.setAutocompleteEvent($tr)
 
     rivets.bind $tr, {item: item}
 
+class InventoryIn extends Inventory
+  operation: 'in'
 
-App.Inventory = Inventory
+class InventoryOut extends Inventory
+  operation: 'out'
+
+
+@App.InventoryOut = InventoryOut
+@App.InventoryIn = InventoryIn
 
 itemTemplate = """
 <tr class="item">
@@ -61,7 +66,7 @@ itemTemplate = """
   </td>
   <td><span class="unit"></span></td>
   <td>
-    <a class="dark btn" data-on-click="item:deleteItem" href="javascript:;" title="borrar" data-toggle="tooltip">
+    <a class="dark btn" data-on-click="item:delete" href="javascript:;" title="borrar" data-toggle="tooltip">
       <i class="icon-trash" title="" data-toggle="tooltip" data-original-title="Borrar"></i>
     </a>
   </td>
