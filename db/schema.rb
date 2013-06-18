@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130527202406) do
+ActiveRecord::Schema.define(:version => 20130618172158) do
 
   create_table "account_ledgers", :force => true do |t|
     t.string   "reference"
@@ -65,6 +65,7 @@ ActiveRecord::Schema.define(:version => 20130527202406) do
     t.string   "error_messages", :limit => 400
     t.datetime "created_at",                                                                      :null => false
     t.datetime "updated_at",                                                                      :null => false
+    t.string   "tag_ids",        :limit => nil,                                :default => "{}"
   end
 
   add_index "accounts", ["active"], :name => "index_accounts_on_active"
@@ -76,6 +77,7 @@ ActiveRecord::Schema.define(:version => 20130527202406) do
   add_index "accounts", ["name"], :name => "index_accounts_on_name", :unique => true
   add_index "accounts", ["project_id"], :name => "index_accounts_on_project_id"
   add_index "accounts", ["state"], :name => "index_accounts_on_state"
+  add_index "accounts", ["tag_ids"], :name => "index_accounts_on_tag_ids"
   add_index "accounts", ["type"], :name => "index_accounts_on_type"
 
   create_table "contacts", :force => true do |t|

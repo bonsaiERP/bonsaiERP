@@ -31,6 +31,7 @@
 #= require app/inventory.coffee
 
 #= require plugins/jquery.joyride.js
+#= require plugins/color.coffee
 
 #= require forms
 #= require base

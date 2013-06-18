@@ -25,6 +25,8 @@ class Account < ActiveRecord::Base
   scope :to_pay, -> { where("amount < 0") }
   scope :to_recieve, -> { where("amount > 0") }
   scope :active, -> { where(active: true) }
+  scope :any_tags, -> (*t_ids) { where('tags && ARRAY[?]', t_ids) }
+  scope :all_tags, -> (*t_ids) { where('tags @> ARRAY[?]', t_ids) }
 
   ########################################
   # Methods
@@ -36,4 +38,12 @@ class Account < ActiveRecord::Base
     account_currencies.select {|ac| ac.currency_id == cur_id }.first
   end
 
+  def tag_ids
+    read_attribute(:tag_ids).gsub(/[{|}]/, '').split(",").map(&:to_i)
+  end
+
+  def tag_ids=(ary = nil)
+    arr = Array(ary)
+    write_attribute(:tag_ids, "{#{ arr.join(',') }}")
+  end
 end
