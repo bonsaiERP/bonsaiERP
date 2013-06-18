@@ -1,18 +1,13 @@
 :css
-  .select2-search-choice{
-    border: none  !important;
-    background-color: transparent  !important;
-    padding: 3px 0px  !important;
+  .btags .select2-search-choice{
+    border: none;
+    background-color: transparent;
+    padding: 3px 0px !important;
   }
-  .select2-search-choice a.select2-search-choice-close{
-    display: none !important;
-  }
-
-  .red{
-    background-color: red !important;
+  .btags .select2-search-choice a.select2-search-choice-close{
+    display: none;
   }
 
-%i.icon-user
 
 %input#test-tags(type="text" class="span5")
 
@@ -39,7 +34,7 @@
       multiple: true,
       formatResult: tagFormater,
       formatSelection: tagSelectFormater,
-      //formatSelectionCssClass: function() { return 'red' },
+      containerCssClass: 'btags',
       escapeMarkup: function(t) { return t }
     });
 
