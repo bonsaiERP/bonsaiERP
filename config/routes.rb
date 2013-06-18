@@ -19,8 +19,6 @@ Bonsaierp::Application.routes.draw do
 
   resources :configurations, only: ['index']
 
-  resources :tests
-
   resources :stocks
 
   resources :account_ledgers do
@@ -130,6 +128,10 @@ Bonsaierp::Application.routes.draw do
   resources :sessions, only: ['new', 'create', 'destroy']
   get "/sign_in"  => "sessions#new", as: :login
   get "/sign_out" => "sessions#destroy", as: :logout
+
+  # Tests
+  resources :tests
+  get '/kitchen' => 'tests#kitchen' # Tests
 
   root to: 'sessions#new'
 end
