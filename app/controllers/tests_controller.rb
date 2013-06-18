@@ -16,4 +16,9 @@ class TestsController < ApplicationController
       render text: "Email send to #{email}"
     end
   end
+
+  # /kitchen
+  def kitchen
+
+  end
 end

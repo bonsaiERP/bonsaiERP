@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/boriscy/assets.git
-  revision: 2d9610fc0fbecdfe75288d7c56e27c9ff0d058c6
+  revision: e294c2c09422694c4bb76935b1b759aa62a682c2
   specs:
     assets (1.0.7)
       rails (~> 3.2.11)
@@ -44,7 +44,7 @@ GEM
     awesome_print (1.1.0)
     backports (2.6.7)
     bcrypt-ruby (3.0.1)
-    better_errors (0.8.0)
+    better_errors (0.9.0)
       coderay (>= 1.0.0)
       erubis (>= 2.6.6)
     binding_of_caller (0.7.1)
@@ -140,7 +140,7 @@ GEM
     mime-types (1.23)
     mocha (0.10.5)
       metaclass (~> 0.0.1)
-    multi_json (1.7.6)
+    multi_json (1.7.7)
     multi_xml (0.5.3)
     newrelic_rpm (3.6.2.96)
     nokogiri (1.5.9)
