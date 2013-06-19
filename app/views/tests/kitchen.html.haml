@@ -1,40 +1,23 @@
-:css
-  .btags .select2-search-choice{
-    border: none;
-    background-color: transparent;
-    padding: 3px 0px !important;
-  }
-  .btags .select2-search-choice a.select2-search-choice-close{
-    display: none;
-  }
-
-
-%input#test-tags(type="text" class="span5")
+%input#test-tags(type="text" class="span2")
 
 :javascript
   $(function() {
-    function tagFormater(data) {
-      return '<span style="background-color: red;color: white;padding:2px 3px;border-radius:3px;">' + data.text + '</span>';
-    }
-    function tagSelectFormater(data) {
-      return '<span style="background-color: red;color: white;padding:2px 3px;border-radius:3px;"><a class="icon-remove" href="javascript:;" style="color:white;"></a> ' + data.text + '</span>';
-    }
-    
     var data = [
-      {id:1, text: 'ruby'}, 
-      {id:2, text: 'javascript'}, 
-      {id:3, text: 'coffeescript'}, 
-      {id:4, text: 'php'}, 
-      {id:5, text: 'vba'},
-      {id:6, text: 'python'}
+      {id:1, text: 'ruby', bgcolor: '#ff0000'},
+      {id:2, text: 'javascript', bgcolor: '#77b92d'},
+      {id:3, text: 'coffeescript', bgcolor: '#3300af'},
+      {id:4, text: 'php', bgcolor: '#ffff00'},
+      {id:5, text: 'vba', bgcolor: '#efefef'},
+      {id:6, text: 'python', bgcolor: '#ffd000'}
     ];
 
     $('#test-tags').select2({
       data: data,
       multiple: true,
-      formatResult: tagFormater,
-      formatSelection: tagSelectFormater,
+      formatResult: Plugin.Tag.formatResult,
+      formatSelection: Plugin.Tag.formatSelect,
       containerCssClass: 'btags',
+      dropdownCssClass: 'btags',
       escapeMarkup: function(t) { return t }
     });
 

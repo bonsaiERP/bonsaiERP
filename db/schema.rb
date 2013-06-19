@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130618172158) do
+ActiveRecord::Schema.define(:version => 20130618184031) do
 
   create_table "account_ledgers", :force => true do |t|
     t.string   "reference"
@@ -268,6 +268,15 @@ ActiveRecord::Schema.define(:version => 20130618172158) do
     t.datetime "created_at",                    :null => false
     t.datetime "updated_at",                    :null => false
   end
+
+  create_table "tags", :force => true do |t|
+    t.string   "name"
+    t.string   "bgcolor",    :limit => 10
+    t.datetime "created_at",               :null => false
+    t.datetime "updated_at",               :null => false
+  end
+
+  add_index "tags", ["name"], :name => "index_tags_on_name"
 
   create_table "transaction_details", :force => true do |t|
     t.integer  "account_id"
