@@ -32,6 +32,7 @@
 
 #= require plugins/jquery.joyride.js
 #= require plugins/color.coffee
+#= require plugins/tag.coffee
 
 #= require forms
 #= require base

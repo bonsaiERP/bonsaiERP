@@ -18,7 +18,37 @@ describe Account do
   end
 
   it 'should be created' do
-    a = Account.create!(valid_params)
+    Account.create!(valid_params)
   end
 
+  context 'tags' do
+    before(:each) do
+      Tag.create(name: 'tag1', bgcolor: '#efefef')
+      Tag.create(name: 'tag2', bgcolor: '#efefef')
+    end
+
+    let (:tag_ids) { Tag.select("id").pluck(:id) }
+
+    it "valid_tags" do
+      a = Account.new(valid_params.merge(tag_ids: tag_ids.first))
+      a.save.should be_true
+      a.tag_ids.should eq([tag_ids.first])
+
+      t_ids = tag_ids + [100000, 99999999]
+      a.tag_ids = t_ids
+
+      expect(a.tag_ids.size).to eq(4)
+
+      a.save.should be_true
+
+      expect(a.tag_ids).to eq(tag_ids)
+      expect(a.tag_ids.size).to eq(2)
+
+      a.tag_ids = [1231231232, 23232]
+      a.save.should be_true
+
+      expect(a.tag_ids).to eq([])
+      expect(a.tag_ids.size).to eq(0)
+    end
+  end
 end

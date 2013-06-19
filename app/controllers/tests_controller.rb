@@ -19,6 +19,5 @@ class TestsController < ApplicationController
 
   # /kitchen
   def kitchen
-
   end
 end
