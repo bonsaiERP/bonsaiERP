@@ -2,17 +2,26 @@
   =link_to 'Eliminar filtro', expenses_path
 
 = form_tag '/expenses', method: 'get', html: {class: 'form-inline'} do
-  = text_field_tag 'search', '', class: 'span8', placeholder: 'Buscar contacto'
+  = text_field_tag 'search', '', class: 'span8', placeholder: 'Contacto, codigo o referencia', autocomplete: 'off'
   = submit_tag 'Buscar', class: 'btn btn-primary'
 
 :javascript
   $(function() {
+    var data = [
+      {value:1, label: 'ruby', bgcolor: '#ff0000'},
+      {value:2, label: 'javascript', bgcolor: '#77b92d'},
+      {value:3, label: 'coffeescript', bgcolor: '#3300af'},
+      {value:4, label: 'php', bgcolor: '#ffff00'},
+      {value:5, label: 'vba', bgcolor: '#efefef'},
+      {value:6, label: 'python', bgcolor: '#ffd000'}
+    ];
     $('#search').autocomplete({
-      source: '/contacts',
-      select: function(e, ui) {
-        window.location = '/expenses?contact_id=' + ui.item.id
-      }
-    });
+      source: data
+    })
+    .data('uiAutocomplete')._renderItem = function(ul, item) {
+      return $('<li role="presentation" class="ui-menu-item"><a>' + item.label + '</a></li>').appendTo(ul);
+    };
+
   })
 
 

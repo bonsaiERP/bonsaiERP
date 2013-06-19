@@ -11,18 +11,9 @@
       {id:6, text: 'python', bgcolor: '#ffd000'}
     ];
 
-    $('#test-tags').select2({
-      data: data,
-      multiple: true,
-      formatResult: Plugin.Tag.formatResult,
-      formatSelection: Plugin.Tag.formatSelect,
-      containerCssClass: 'btags',
-      dropdownCssClass: 'btags',
-      escapeMarkup: function(t) { return t }
-    });
+    var tag = new Plugin.SearchTag('#test-tags', data);
 
-    $.fn.select2.defaults.formatSelectionCssClass = function() { return 'red'}
-
+    
     $('body').on('click', 'a.icon-remove', function() {
       $(this).parents('.select2-search-choice').find('a.select2-search-choice-close').trigger('click');
     });

@@ -21,9 +21,7 @@
         %i.icon-plus-sign
         Nuevo ingreso
 
-.row-fluid
-  .span6
-    = render 'incomes/search'
+= render 'incomes/search'
 
 %ul.unstyled.inline
   %li
@@ -87,7 +85,6 @@
           arr.push(val);
         }
       }
-      console.log(_.uniq(arr));
       return _.map(_.uniq(arr), function(v) { return tag(v) });
     }
 

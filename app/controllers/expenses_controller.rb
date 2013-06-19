@@ -140,13 +140,14 @@ private
   def search_expenses
     @expenses = case
                 when params[:contact_id].present?
-                  Expense.contact(params[:contact_id]).order('date desc').page(@page)
+                  Expense.contact(params[:contact_id]).order('date desc')
                 when params[:search].present?
-                  Expense.like(params[:search]).page(@page)
+                  Expenses::Query.new.search(params[:search])
                 else
-                  Expense.order('date desc').page(@page)
+                  Expense.order('date desc')
                 end
-    @expenses = @expenses.includes(:contact, transaction: [:creator, :approver, :nuller]).order('date desc, id desc')
+
+    @expenses = @expenses.includes(:contact, transaction: [:creator, :approver, :nuller]).order('date desc, accounts.id desc').page(@page)
     set_expenses_filters
   end
 
