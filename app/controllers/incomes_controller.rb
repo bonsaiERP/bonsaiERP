@@ -137,11 +137,12 @@ private
                when params[:contact_id].present?
                  Income.contact(params[:contact_id]).order('date desc').page(@page)
                when params[:search].present?
-                 Income.like(params[:search])
+                 Incomes::Query.new.search(params[:search])
                else
                  Income.order('date desc').page(@page)
                end
-    @incomes = @incomes.includes(:contact, transaction: [:creator, :approver, :nuller]).order('date desc, id desc')
+    @incomes = @incomes.includes(:contact, transaction: [:creator, :approver, :nuller]).order('date desc, accounts.id desc')
+
     set_incomes_filters
   end
 

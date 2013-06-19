@@ -184,4 +184,15 @@ $( ->
       .find('>span').text($this.data('value'))
 
   $.select2Autocomplete = $.fn.select2Autocomplete = select2Autocomplete
+
+  # For button tabs
+  buttonTab = ->
+    $cont = $(this)
+
+    $cont.find('>.buttons-list>.btn-group').on 'click', 'button', () ->
+      console.log $(this).attr('href')
+      $cont.find('>.panes>.button-pane').hide()
+      $($(this).attr('href')).show()
+
+  $.buttonTab = $.fn.buttonTab = buttonTab
 )

@@ -8,6 +8,11 @@ class Movements::Query
     @rel = relation
   end
 
+  def search(s)
+    s = "%#{ s }%"
+    @rel.joins(:contact).where{(name.like s) | (contact.matchcode.like s) | (description.like s)}
+  end
+
   def pendent_group_by_contact(relation = rel)
     relation.active.pendent
     .select('sum(amount * exchange_rate) AS tot, sum(amount) AS tot_cur, currency, contact_id')

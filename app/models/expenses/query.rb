@@ -10,10 +10,6 @@ class Expenses::Query < Movements::Query
     rel.includes(payments: [:account_to], expense_details: [:item])
   end
 
-  def search(params={})
-    rel.includes(:contact, transaction: [:creator, :approver])
-  end
-
   def to_pay(contact_id)
     @rel.active.where{(state.eq 'approved') & (amount.gt 0)}.where(contact_id: contact_id)
   end
