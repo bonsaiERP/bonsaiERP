@@ -1,12 +1,14 @@
 class CreateTags < ActiveRecord::Migration
   def change
-    create_table :tags do |t|
-      t.string :name
-      t.string :bgcolor, limit: 10
+    PgTools.with_schemas except: 'common' do
+      create_table :tags do |t|
+        t.string :name
+        t.string :bgcolor, limit: 10
 
-      t.timestamps
+        t.timestamps
+      end
+
+      add_index :tags, :name
     end
-
-    add_index :tags, :name
   end
 end
