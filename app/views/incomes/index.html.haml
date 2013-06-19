@@ -54,3 +54,49 @@
   = render @incomes
 
 = paginate_html
+
+:javascript
+  $(function() {
+    $('.listing').on('click', 'li', function() {
+      var $tag = $(this).find('input.tag')
+      if($tag.prop('checked')) {
+        $tag.prop('checked', false);
+      } else {
+        $tag.prop('checked', true);
+      }
+    });
+
+    var data = [
+      {id:1, text: 'ruby', bgcolor: '#ff0000'},
+      {id:2, text: 'javascript', bgcolor: '#77b92d'},
+      {id:3, text: 'coffeescript', bgcolor: '#3300af'},
+      {id:4, text: 'php', bgcolor: '#ffff00'},
+      {id:5, text: 'vba', bgcolor: '#efefef'},
+      {id:6, text: 'python', bgcolor: '#ffd000'}
+    ];
+
+    function tag(id) {
+      var t = _.find(data,function(el) { return el.id === id });
+      return Plugin.Tag.formatResult(t);
+    }
+
+    function tags(num) {
+      var arr = [], val;
+      while(_.uniq(arr).length < num) {
+        if((val = Math.round(Math.random() * 6)) > 0) {
+          arr.push(val);
+        }
+      }
+      console.log(_.uniq(arr));
+      return _.map(_.uniq(arr), function(v) { return tag(v) });
+    }
+
+    function generateTags() {
+      var num_tags = Math.round(Math.random() * 4);
+      return tags(num_tags).join('');
+    }
+
+    $('.listing li').each (function(i, el) {
+      $(el).find('.btags').html(generateTags());
+    })
+  })

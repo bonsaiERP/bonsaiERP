@@ -1,13 +1,27 @@
 - income = present income
-%li.row-fluid
+%li.row-fluid(data-tag_ids="#{income.tag_ids}")
   .span4
-    %h4.ib
-      = link_to income, income
-    = income.has_error_label
-    = link_to income.contact, income.contact
-    .clear-both
-    = income.state_tag
-    %i= l income.date
+    .row-fluid
+      .span1
+        %input.tag(type='checkbox')
+      .span11
+        %h4.ib
+          = link_to income, income
+        = income.has_error_label
+        = link_to income.contact, income.contact
+        .clear-both
+        = income.state_tag
+        %i= l income.date
+        .btags
+          %span.btag
+            hola
+          %span.btag(style="color:white;background:red;")
+            otro
+          %span.btag(style="color:white;background:yellowgreen;")
+            un-tag-mas-largo
+          %span.btag(style="color:white;background:gray;")
+            gray
+
   .span4
     = income.creator_label
     = income.approver_label
