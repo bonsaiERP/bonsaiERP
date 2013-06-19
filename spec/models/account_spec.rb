@@ -50,5 +50,15 @@ describe Account do
       expect(a.tag_ids).to eq([])
       expect(a.tag_ids.size).to eq(0)
     end
+
+    it "scopes" do
+      Tag.create!(name: 'tag3', bgcolor: '#efefef')
+      Account.create!(valid_params.merge(tag_ids: [tag_ids.first]))
+      Account.create!(valid_params.merge(name: 'other name', tag_ids: tag_ids))
+
+      expect(Account.any_tags(*tag_ids).count).to eq(2)
+
+      expect(Account.all_tags(*tag_ids).count).to eq(1)
+    end
   end
 end

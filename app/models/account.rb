@@ -26,9 +26,6 @@ class Account < ActiveRecord::Base
   scope :to_pay, -> { where("amount < 0") }
   scope :to_recieve, -> { where("amount > 0") }
   scope :active, -> { where(active: true) }
-  # Scopes for tags should be added
-  scope :any_tags, -> (*t_ids) { where('tags && ARRAY[?]', t_ids) }
-  scope :all_tags, -> (*t_ids) { where('tags @> ARRAY[?]', t_ids) }
 
   ########################################
   # Methods
