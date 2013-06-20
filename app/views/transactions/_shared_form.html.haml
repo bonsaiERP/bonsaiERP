@@ -3,7 +3,7 @@
     = f.input :date, label: "Fecha", as: :datepicker
   .span3
     = f.input :due_date, as: :datepicker, label: 'Vence el'
-  .span6
+  .span6.contact
     - if transaction.new_record?
       = f.input :contact_id, as: :select2, label: 'Contacto', input_html: {class: 'span10', data: {source: '/contacts.json', new_url: new_contact_path, title: 'Nuevo contacto', trigger: 'new-contact', placeholder: 'Escriba para buscar contactos'} }
     - else

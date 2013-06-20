@@ -9,6 +9,7 @@
 #= require jqplugins/select2.js
 #= require jqplugins/flot/jquery.flot.js
 #= require jqplugins/flot/jquery.flot.time.js
+#= require jqplugins/jquery.cookie.js
 
 #= require plugins/money.min.js
 #= require plugins/_b.coffee
@@ -20,6 +21,7 @@
 #= require bootstrap/bootstrap-collapse.js
 #= require bootstrap/bootstrap-tab.js
 #= require bootstrap/bootstrap-button.js
+#= require plugins/bootstrap-tour.js
 
 #= require namespace.coffee
 #= require app/currency.coffee

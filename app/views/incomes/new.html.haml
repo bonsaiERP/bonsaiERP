@@ -7,10 +7,19 @@
     %li
       %span Nuevo Ingreso
 
+  .span6
+    %ul.breadcrumbs.r
+      %a#incomes-help.dark(href='javascript:;')
+        %i.icon-question-sign
+        Ayuda
+
 - inc_presenter = present @is.income
-%h1
+
+%h2.title
   %span.muted.n Nuevo Ingreso
-  = @is.income
-  = inc_presenter.state_tag
+  %span.code= @is.income
+  %span.state= inc_presenter.state_tag
 
 = render 'incomes/form', income_service: @is
+
+= render 'incomes/tour'

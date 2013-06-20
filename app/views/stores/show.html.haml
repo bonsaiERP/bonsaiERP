@@ -30,7 +30,7 @@
 
     - if @store.active?
       .btn-group.l
-        %a.btn.btn-primary.dropdown-toggle(data-toggle='dropdown' href='javascript:;')
+        %a#operations.btn.btn-primary.dropdown-toggle(data-toggle='dropdown' href='javascript:;')
           Operaciones
           %i.icon-caret-down
         %ul.dropdown-menu
@@ -70,4 +70,22 @@
 :javascript
   $(function() {
     $('#tabs a:first').tab('show');
+    var tour = new Tour({
+      labels: {
+        next: "Siguiente",
+        prev: "Anterior",
+        end: "Fin"
+      }
+    });
+
+    tour.addSteps([
+      {
+        element: '#operations',
+        title: 'Operaciones',
+        content: 'Vinculos para operaciones',
+        placement: 'top'
+      }
+    ]);
+
+    tour.start(true);
   })
