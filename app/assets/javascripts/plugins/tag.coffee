@@ -1,8 +1,21 @@
+class NewTag
+  sel: '#btag-editor'
+  constructor: ->
+    @$name = $('#btag-name-input')
+    @$bgcolor = $('#btag-bgcolor-input')
+    @setEvents()
+  #
+  setEvents: ->
+    self = this
+    $(@sel).on('click', '.color', ->
+      self.$bgcolor.val($(this).data('color')).trigger('keyup')
+    )
+
 class SearchTag
   text: ''
   constructor: (@input, @data) ->
     @setSelect2()
-    
+
   #
   setSelect2: ->
     $(@input).select2({
@@ -56,3 +69,4 @@ Tag = {
 
 Plugin.Tag = Tag
 Plugin.SearchTag = SearchTag
+Plugin.NewTag = NewTag

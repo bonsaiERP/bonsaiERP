@@ -13,6 +13,7 @@
 
 #= require plugins/money.min.js
 #= require plugins/_b.coffee
+#= require plugins/jquery.minicolors.js
 
 #= require bootstrap/bootstrap-dropdown.js
 #= require bootstrap/bootstrap-tooltip.js
