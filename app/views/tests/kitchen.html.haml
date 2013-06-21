@@ -1,4 +1,28 @@
 %input#test-tags(type="text" class="span2")
+.clearfix
+#btag-editor
+  %input(type='text' id='btag-name-input' placeholder='Etiqueta')
+  %ul.colors
+    %li.color(style='background-color:#FF0000' data-color='#FF0000')
+    %li.color(style='background-color:#FF9000' data-color='#FF9000')
+    %li.color(style='background-color:#FFD300' data-color='#FFD300')
+    %li.color(style='background-color:#77B92D' data-color='#77B92D')
+    %li.color(style='background-color:#049CDB' data-color='#049CDB')
+    %li.color(style='background-color:#1253A6' data-color='#1253A6')
+    %li.color(style='background-color:#4022A7' data-color='#4022A7')
+    %li.color(style='background-color:#8E129F' data-color='#8E129F')
+
+    %li.color(style='background-color:#FF7373' data-color='#FF7373')
+    %li.color(style='background-color:#FFC273' data-color='#FFC273')
+    %li.color(style='background-color:#FFE773' data-color='#FFE773')
+    %li.color(style='background-color:#B2DC80' data-color='#B2DC80')
+    %li.color(style='background-color:#6DC6ED' data-color='#6DC6ED')
+    %li.color(style='background-color:#6B99D3' data-color='#6B99D3')
+    %li.color(style='background-color:#8B77D3' data-color='#8B77D3')
+    %li.color(style='background-color:#C36ACF' data-color='#C36ACF')
+
+  %input(type='text' id='btag-bgcolor-input' size='8' placeholder='#ff0000')
+  %button.btn.btn-success.b Crear
 
 :javascript
   $(function() {
@@ -13,6 +37,9 @@
 
     var tag = new Plugin.SearchTag('#test-tags', data);
 
+    new Plugin.NewTag();
+
+    $('#btag-bgcolor-input').minicolors({defaultValue: '#4686D3'});
     
     $('body').on('click', 'a.icon-remove', function() {
       $(this).parents('.select2-search-choice').find('a.select2-search-choice-close').trigger('click');
