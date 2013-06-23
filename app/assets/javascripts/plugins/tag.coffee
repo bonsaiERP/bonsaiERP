@@ -1,15 +1,48 @@
 class NewTag
   sel: '#btag-editor'
   constructor: ->
-    @$name = $('#btag-name-input')
-    @$bgcolor = $('#btag-bgcolor-input')
+    @$name = $(@sel).find('#btag-name-input')
+    @$bgcolor = $(@sel).find('#btag-bgcolor-input')
+    @$button = $(@sel).find('button')
+    # Set minicolor
+    $('#btag-bgcolor-input').minicolors({defaultValue: '#FF0000'})
     @setEvents()
   #
   setEvents: ->
     self = this
     $(@sel).on('click', '.color', ->
-      self.$bgcolor.val($(this).data('color')).trigger('keyup')
+      col = Plugin.Color.rgbToHex($(this).css('background-color'))
+      self.$bgcolor.val(col).trigger('keyup')
     )
+
+    $(@sel).on 'click', 'button', => @createTag()
+  #
+  createTag: ->
+    @clearErrors()
+    $.post('/tags', @data(), (resp) =>
+      @setAjaxResponse(resp)
+    )
+  data: ->
+    {tag: {name: @$name.val(), bgcolor: @$bgcolor.val()}}
+  #
+  setAjaxResponse: (resp) ->
+    if resp.id
+      alert 'saved'
+    else if resp.errors
+      @setErrors(resp)
+  #
+  setErrors: (resp) ->
+    errors = resp.errors
+    @setError('.name', errors.name)  if errors.name
+    @setError('.bgcolor', errors.bgcolor)  if errors.bgcolor
+  #
+  setError: (sel, errors) ->
+    $(@sel).find(sel).addClass('error')
+    .append('<span class="error">' + errors.join(', ') + '</span>')
+  #
+  clearErrors: ->
+    $(@sel).find('.name').removeClass('error').find('span.error').remove()
+    $(@sel).find('.bgcolor').removeClass('error').find('span.error').remove()
 
 class SearchTag
   text: ''

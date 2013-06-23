@@ -85,7 +85,8 @@ private
       incomes_inventory_ins: true,
       incomes_inventory_outs: true,
       expenses_inventory_ins: true,
-      expenses_inventory_outs: true
+      expenses_inventory_outs: true,
+      tags: true
     }
   end
 
@@ -121,7 +122,8 @@ private
       incomes_inventory_ins: true,
       incomes_inventory_outs: true,
       expenses_inventory_ins: true,
-      expenses_inventory_outs: true
+      expenses_inventory_outs: true,
+      tags: true
     }
   end
 
@@ -148,7 +150,8 @@ private
       users: true,
       user_passwords: true,
       dashboard: true,
-      incomes_inventory_outs: true
+      incomes_inventory_outs: true,
+      tags: true
     }
   end
 

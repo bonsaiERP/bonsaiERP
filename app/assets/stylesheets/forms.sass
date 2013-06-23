@@ -159,14 +159,24 @@ input[disabled]
     width: 225px
 
   .minicolors-swatch
-    +border-left-radius
+    +border-left-radius(4px)
     width: 28px
     height: 28px
     border: 1px solid #999
 
+  .control-group
+    vertical-align: top
+
   #btag-bgcolor-input
     +border-left-radius(0px)
     width: 100px
+
+  //.color
+    display: inline-table
+    width: 30px
+    height: 30px
+    margin: 0px
+    float: left
 
 
   ul.colors
@@ -176,12 +186,12 @@ input[disabled]
     padding: 0px 1px
     width: 240px
     li.color
-      //+border-radius
       display: inline-table
+      float: left
       width: 30px
       height: 30px
-      margin: -2px
       padding: 0px
+      margin: 0px
 
 // Button pane
 .buttons-list
