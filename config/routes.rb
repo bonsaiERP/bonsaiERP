@@ -1,5 +1,7 @@
 # encoding: utf-8
 Bonsaierp::Application.routes.draw do
+  
+  resources :tags
 
   resources :inventories, only: [:index, :show] do
     get :show_movement, on: :member

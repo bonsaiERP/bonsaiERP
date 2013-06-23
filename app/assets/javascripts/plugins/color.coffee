@@ -1,10 +1,10 @@
 Color = {
   componentToHex: (c) ->
     hex = c.toString(16)
-    hex.length == 1 ? "0" + hex : hex
+    if hex.length is 1 then "0" + hex else hex
   #
-  rgbToHex: (r, g, b) ->
-    "#" + componentToHex(r) + componentToHex(g) + componentToHex(b)
+  rgbToHex: (val) ->
+    '#' + _.map(val.split(','), (v) => @componentToHex(v.match(/\d+/)[0] * 1) ).join('')
   # Conver Hex to RGB
   hexToRgb: (hex) ->
     result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)

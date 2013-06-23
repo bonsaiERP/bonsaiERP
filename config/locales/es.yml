@@ -212,6 +212,7 @@ es:
       email_taken: "el email que ingreso ya existe, seleccione otro email"
       email: "el email que ingreso no es válido"
       invalid_email_format: 'el email que ingreso no es válido'
+      taken: 'Ya existe'
       account_ledger:
         invalid_contact: "Debe seleccionar un Cliente, Proveedor o Personal"
         same_account: "Las cuentas que selecciono son identicas"
