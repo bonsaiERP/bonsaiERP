@@ -189,10 +189,26 @@ $( ->
   buttonTab = ->
     $cont = $(this)
 
-    $cont.find('>.buttons-list>.btn-group').on 'click', 'button', () ->
-      console.log $(this).attr('href')
+    $cont.find('>.buttons-list>.btn-group')
+    .on 'click', 'button', () ->
       $cont.find('>.panes>.button-pane').hide()
       $($(this).attr('href')).show()
+    .find('button:first').trigger('click')
 
   $.buttonTab = $.fn.buttonTab = buttonTab
+
+  rowCheck = ->
+    $(this).on('click', '>li,>tr', (event) ->
+      target = event.target
+      return true  if $(target).hasClass('row-check') or target.tagName is 'A'
+      
+      $check = $(this).find('input.row-check')
+      
+      if $check.prop('checked')
+        $check.prop('checked', false)
+      else
+        $check.prop('checked', true)
+    )
+
+  $.rowCheck = $.fn.rowCheck = rowCheck
 )

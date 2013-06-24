@@ -13,7 +13,7 @@
         %i.icon-download-alt
         Exportar
 
-      %a#quick-income-link.btn(href="javascript:;")
+      -#%a#quick-income-link.btn(href="javascript:;")
         %i.icon-bolt
         Ingreso rápido
 
@@ -35,14 +35,14 @@
   %li
     = link_to "Anulados", incomes_path(nulled: true), class: params_bold(:nulled) 
 
-.row-fluid
+-#.row-fluid
   = render 'incomes/quick_income'
 
 - paginate_html = paginate @incomes.page(@page)
 
 = paginate_html
 
-%ul.unstyled.listing
+%ul#incomes-list.unstyled.listing
   %li.row-fluid
     .span4.offset7
       .span6.r.b.muted
@@ -55,45 +55,5 @@
 
 :javascript
   $(function() {
-    $('.listing').on('click', 'li', function() {
-      var $tag = $(this).find('input.tag')
-      if($tag.prop('checked')) {
-        $tag.prop('checked', false);
-      } else {
-        $tag.prop('checked', true);
-      }
-    });
-
-    var data = [
-      {id:1, text: 'ruby', bgcolor: '#ff0000'},
-      {id:2, text: 'javascript', bgcolor: '#77b92d'},
-      {id:3, text: 'coffeescript', bgcolor: '#3300af'},
-      {id:4, text: 'php', bgcolor: '#ffff00'},
-      {id:5, text: 'vba', bgcolor: '#efefef'},
-      {id:6, text: 'python', bgcolor: '#ffd000'}
-    ];
-
-    function tag(id) {
-      var t = _.find(data,function(el) { return el.id === id });
-      return Plugin.Tag.formatResult(t);
-    }
-
-    function tags(num) {
-      var arr = [], val;
-      while(_.uniq(arr).length < num) {
-        if((val = Math.round(Math.random() * 6)) > 0) {
-          arr.push(val);
-        }
-      }
-      return _.map(_.uniq(arr), function(v) { return tag(v) });
-    }
-
-    function generateTags() {
-      var num_tags = Math.round(Math.random() * 4);
-      return tags(num_tags).join('');
-    }
-
-    $('.listing li').each (function(i, el) {
-      $(el).find('.btags').html(generateTags());
-    })
+    $('.listing').rowCheck();
   })

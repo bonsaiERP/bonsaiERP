@@ -5,7 +5,7 @@
       %button.btn(href='#tags-pane') Etiquetas
 
   .panes.span10
-    #search-pane.button-pane
+    #search-pane.button-pane.span12
       - if params[:contact_id].present?
         =link_to 'Eliminar filtro', incomes_path
 
@@ -13,18 +13,12 @@
         = text_field_tag 'search', '', class: 'span4', placeholder: 'Contacto, referencia o descripción'
         = submit_tag 'Buscar', class: 'btn btn-primary'
 
-    #tags-pane.button-pane
-      Etiquetar
+    #tags-pane.button-pane.span12
+      = render 'tags/tags', model: 'Income', list: '#incomes-list'
 
 :javascript
   $(function() {
     $('.but').buttonTab();
-    //$('#search').autocomplete({
-    //  source: '/contacts',
-    //  select: function(e, ui) {
-    //    window.location = '/incomes?contact_id=' + ui.item.id
-    //  }
-    //});
   })
 
 

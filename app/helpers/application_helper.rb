@@ -187,4 +187,10 @@ module ApplicationHelper
   def params_bold(val)
     params[val].present? ? "b" : ""
   end
+
+  def tags_list
+    Tag.select("id,name,bgcolor").order("name").map {|v|
+      {id: v.id, text: v.to_s, label: v.to_s, bgcolor: v.bgcolor}
+    }.to_json
+  end
 end
