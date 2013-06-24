@@ -23,11 +23,11 @@ describe Tag do
 
       t1 = Tag.create!(name: 'tag1', bgcolor: '#ff0000')
       t2 = Tag.create!(name: 'tag2', bgcolor: '#efefef')
-      tags = [t1.id, t2.id]
+      tag_ids = [t1.id, t2.id]
 
-      Tag.update_models({ids: [a1.id, a2.id], model: 'Account', tags: tags})
+      Tag.update_models({ids: [a1.id, a2.id], model: 'Account', tag_ids: tag_ids})
 
-      expect(Account.all.map(&:tag_ids)).to eq([tags, tags])
+      expect(Account.all.map(&:tag_ids)).to eq([tag_ids, tag_ids])
     end
   end
 end
