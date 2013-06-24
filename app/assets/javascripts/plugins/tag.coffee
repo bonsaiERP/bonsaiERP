@@ -63,6 +63,8 @@ class TagSelector
     throw 'You must set a list in options in TagSelector class'  unless @options.list?
     @list = @options.list
 
+    @tag = @options.tag
+
     @$button = $(@sel).find('button')
     @setSelect2()
     @setEvents()
@@ -97,15 +99,28 @@ class TagSelector
       alert 'Debe seleccionar ítems para aplicar las etiquetas'
   #
   updateTags: (ids) ->
-    $.post('/tags/update_models', @ajaxData(ids), (resp) =>
+    data = @ajaxData(ids)
+    $.post('/tags/update_models', data, (resp) =>
       if resp.success
-        $(@list).find('input.row-check').prop('checked', false)
+        @updateTagView(ids, data.tag_ids)
       else
         alert 'Existio un error al actualizar las etiquetas'
     )
   #
+  updateTagView: (ids, tag_ids) ->
+    tagsHTML = @createTags(tag_ids)
+
+    _.each(ids, (v) ->
+      sel = "li##{v}"
+      $(sel).find('input.row-check').prop('checked', false)
+      $(sel).find('ul.btags').html(tagsHTML)
+    )
+  #
+  createTags: (tag_ids) ->
+    _.map(tag_ids, (id) => TagFormater.getTagHtml(id) ).join('')
+  #
   ajaxData: (ids) ->
-    {model: @model, ids: ids, tags: $(@input).val().split(",")}
+    {model: @model, ids: ids, tag_ids: $(@input).select2('val')}
 
 # Main class
 class Tag
@@ -117,18 +132,10 @@ class Tag
   formatTags: ->
     $(@list).find('.btags').each((i, el) =>
       $el = $(el)
-      $el.html( _.map( $el.data('tag_ids'), (v) => @getTag(v) ).join('') )
+      $el.html( _.map( $el.data('tag_ids'), (v) =>
+        TagFormater.getTagHtml(v) ).join('')
+      )
     )
-  #
-  getTag: (id) ->
-    @tags = @tags or @tagList()
-    "<li>#{ TagFormater.formatResult(@tags[id]) }</li>"
-  #
-  tagList: ->
-    h = {}
-    _.each(window.tags, (v) -> h[v.id] = v)
-    
-    h
 #
 TagFormater = {
   formatResult: (data) ->
@@ -146,6 +153,19 @@ TagFormater = {
       '<a class="icon-remove remove-tag" href="javascript:;" style="color:', color,'"></a> ',
       data.text, '</span>'
     ].join('')
+  #
+  getTagHtml: (id) ->
+    "<li>#{ @formatResult(@getTag(id)) }</li>"
+  #
+  getTag: (id) ->
+    @tags = @tags or @tagList()
+    @tags[id]
+  #
+  tagList: ->
+    h = {}
+    _.each(window.tags, (v) -> h[v.id] = v)
+    
+    h
 }
 
 Plugin.Tag = Tag

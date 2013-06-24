@@ -45,6 +45,6 @@ private
   end
 
   def update_models_params
-    params.slice(:model, :tags, :ids)
+    params.slice(:model, :tag_ids, :ids)
   end
 end

@@ -15,8 +15,13 @@ class Tag < ActiveRecord::Base
 
   # Updates multiple models
   def self.update_models(params)
-    tag_ids = Tag.where(id: params[:tags]).pluck(:id)
+    tag_ids = Tag.where(id: params[:tag_ids]).pluck(:id)
     klass = params[:model].constantize
-    klass.where(id: params[:ids]).update_all(["tag_ids='{?}'", tag_ids])
+
+    if tag_ids.any?
+      klass.where(id: params[:ids]).update_all(["tag_ids='{?}'", tag_ids])
+    else
+      klass.where(id: params[:ids]).update_all("tag_ids='{}'")
+    end
   end
 end
