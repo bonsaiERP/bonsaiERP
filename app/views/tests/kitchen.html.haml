@@ -9,7 +9,7 @@
   %button.btn.btn-success.b Crear
 
   .clearfix
-  %ul.colors
+  %ul.btags-colors
     %li.color(style='background-color:#FF0000' data-color='#FF0000')
     %li.color(style='background-color:#FF9000' data-color='#FF9000')
     %li.color(style='background-color:#FFD300' data-color='#FFD300')
@@ -40,11 +40,10 @@
       {id:6, text: 'python', bgcolor: '#ffd000'}
     ];
 
-    var tag = new Plugin.SearchTag('#test-tags', data);
+    $('#test-tags').select2({ data: data, multiple: true })
 
-    new Plugin.NewTag();
+    //var tag = new Plugin.SearchTag('#test-tags', data);
 
-    $('body').on('click', 'a.icon-remove', function() {
-      $(this).parents('.select2-search-choice').find('a.select2-search-choice-close').trigger('click');
-    });
+    //new Plugin.NewTag();
+
   })

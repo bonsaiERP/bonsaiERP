@@ -7,4 +7,16 @@ class Tag < ActiveRecord::Base
 
   validates :bgcolor, presence: {message: I18n.t('errors.messages.taken')},
             format: {with: /\A\#[0-9abcdefABCDEF]{6}\z/}
+
+  def to_s
+    name
+  end
+  alias :label :to_s
+
+  # Updates multiple models
+  def self.update_models(params)
+    tag_ids = Tag.where(id: params[:tags]).pluck(:id)
+    klass = params[:model].constantize
+    klass.where(id: params[:ids]).update_all(["tag_ids='{?}'", tag_ids])
+  end
 end

@@ -1,9 +1,9 @@
 - income = present income
-%li.row-fluid(data-tag_ids="#{income.tag_ids}")
+%li.row-fluid(id="#{income.id}")
   .span4
     .row-fluid
       .span1
-        %input.tag(type='checkbox')
+        %input.row-check(type='checkbox' id="#{income.id}")
       .span11
         %h4.ib
           = link_to income, income
@@ -12,15 +12,8 @@
         .clear-both
         = income.state_tag
         %i= l income.date
-        .btags
-          %span.btag
-            hola
-          %span.btag(style="color:white;background:red;")
-            otro
-          %span.btag(style="color:white;background:yellowgreen;")
-            un-tag-mas-largo
-          %span.btag(style="color:white;background:gray;")
-            gray
+        %ul.btags(data-tag_ids="#{income.tag_ids}")
+          = income.tag_ids
 
   .span4
     = income.creator_label
