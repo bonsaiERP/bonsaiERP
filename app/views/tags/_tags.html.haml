@@ -1,0 +1,42 @@
+#btag
+  #btag-template.hidden
+    %li
+      %a {{}}
+
+  #btag-editor(style="display:none;background-color:#fff")
+    %input#model(type='hidden')
+    .control-group.name.ib
+      %input(type='text' id='btag-name-input' placeholder='Etiqueta')
+
+    .control-group.bgcolor.ib
+      %input(type='text' id='btag-bgcolor-input' size='7' placeholder='#ff0000')
+    %button.btn.btn-primary.b Crear
+
+    .clearfix
+    %ul.btags-colors
+      %li.color(style='background-color:#FF0000' data-color='#FF0000')
+      %li.color(style='background-color:#FF9000' data-color='#FF9000')
+      %li.color(style='background-color:#FFD300' data-color='#FFD300')
+      %li.color(style='background-color:#77B92D' data-color='#77B92D')
+      %li.color(style='background-color:#049CDB' data-color='#049CDB')
+      %li.color(style='background-color:#1253A6' data-color='#1253A6')
+      %li.color(style='background-color:#4022A7' data-color='#4022A7')
+      %li.color(style='background-color:#8E129F' data-color='#8E129F')
+  
+    .clearfix
+
+  #btag-selector
+    %input#tags(type="text" class="span5" placeholder="Seleccione o escriba")
+    &nbsp;
+    %button.btn.btn-primary Aplicar
+
+    %a#new-tag-link(href="javascript:;") Nueva etiqueta
+
+
+
+:javascript
+  var tags = #{tags_list};
+  $(function() {
+    var data = tags;
+    var tag = new Plugin.Tag("#{list}", "#{model}", data);
+  });
