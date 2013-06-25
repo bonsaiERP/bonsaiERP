@@ -35,6 +35,7 @@ class TagEditor
   setAjaxResponse: (resp) ->
     if resp.id
       $(@sel).dialog('close')
+      $('#tags').trigger('btags:newtag', resp)
     else if resp.errors
       @setErrors(resp)
   #
@@ -55,7 +56,7 @@ class TagEditor
 class TagSelector
   sel: '#btag-selector'
   constructor: (@options) ->
-    @input = @options.input || '#tags'
+    @input = '#tags'
     throw 'You must set a model in options in TagSelector class'  unless @options.model?
     @model = @options.model
     throw 'You must set a data in options in TagSelector class'  unless @options.data?
@@ -70,7 +71,7 @@ class TagSelector
     @setEvents()
   #
   setSelect2: ->
-    $(@input).select2({
+    $('#tags').select2({
       data: @data,
       multiple: true,
       formatResult: TagFormater.formatResult,
@@ -90,6 +91,17 @@ class TagSelector
     )
 
     @$button.on 'click', @applyTags
+
+    $('#tags').on 'btags:newtag', (event, tag) => @updateSelect2(tag)
+  #
+  updateSelect2: (tag) ->
+    tag.text = tag.name
+    @data.push tag
+    $('#tags').select2('destroy')
+    @setSelect2()
+    vals = $('#tags').select2('val')
+    vals.push(tag.id)
+    $('#tags').select2('val', vals)
   #
   applyTags: =>
     $rows = $(@list).find('input.row-check:checked')

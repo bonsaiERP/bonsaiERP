@@ -1,13 +1,20 @@
 - expense = present expense
-%li.row-fluid
+%li.row-fluid(id="#{expense.id}")
   .span4
-    %h4.ib
-      = link_to expense, expense
-    = expense.has_error_label
-    = link_to expense.contact, expense.contact
-    .clear-both
-    = expense.state_tag
-    %i= l expense.date
+    .row-fluid
+      .span1
+        %input.row-check(type='checkbox' id="#{expense.id}")
+      .span11
+        %h4.ib
+        = link_to expense, expense
+        = expense.has_error_label
+        = link_to expense.contact, expense.contact
+        .clear-both
+        = expense.state_tag
+        %i= l expense.date
+
+        %ul.btags(data-tag_ids="#{expense.tag_ids}")
+
   .span4
     = expense.creator_label
     = expense.approver_label

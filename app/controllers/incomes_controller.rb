@@ -116,15 +116,15 @@ private
   end
 
   def quick_income_params
-   params.require(:incomes_quick_form).permit(*transaction_params.quick_income)
+   params.require(:incomes_quick_form).permit(*movement_params.quick_income)
   end
 
   def income_params
-    params.require(:incomes_form).permit(*transaction_params.income)
+    params.require(:incomes_form).permit(*movement_params.income)
   end
 
-  def transaction_params
-    @transaction_params ||= TransactionParams.new
+  def movement_params
+    @movement_params ||= MovementParams.new
   end
 
   def set_income

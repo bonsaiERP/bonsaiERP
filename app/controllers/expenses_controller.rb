@@ -121,15 +121,15 @@ private
   end
 
   def quick_expense_params
-   params.require(:expenses_quick_form).permit(*transaction_params.quick_income)
+   params.require(:expenses_quick_form).permit(*movement_params.quick_income)
   end
 
   def expense_params
-    params.require(:expenses_form).permit(*transaction_params.expense)
+    params.require(:expenses_form).permit(*movement_params.expense)
   end
 
-  def transaction_params
-    @transaction_params ||= TransactionParams.new
+  def movement_params
+    @movement_params ||= MovementParams.new
   end
 
   def set_expense

@@ -1,28 +1,19 @@
-- if params[:contact_id].present?
-  =link_to 'Eliminar filtro', expenses_path
+.row-fluid.but
+  .buttons-list.span2
+    .btn-group(data-toggle='buttons-radio')
+      %button.btn(href='#search-pane') Buscar
+      %button.btn(href='#tags-pane') Etiquetas
 
-= form_tag '/expenses', method: 'get', html: {class: 'form-inline'} do
-  = text_field_tag 'search', '', class: 'span8', placeholder: 'Contacto, codigo o referencia', autocomplete: 'off'
-  = submit_tag 'Buscar', class: 'btn btn-primary'
+  .panes.span10
+    #search-pane.button-pane.span12
+      = form_tag '/expenses', method: 'get', html: {class: 'form-inline'} do
+        = text_field_tag 'search', '', class: 'span4', placeholder: 'Contacto, codigo o referencia', autocomplete: 'off'
+        = submit_tag 'Buscar', class: 'btn btn-primary'
+
+    #tags-pane.button-pane.span12
+      = render 'tags/tags', model: 'Expense', list: '#expenses-list'
 
 :javascript
   $(function() {
-    var data = [
-      {value:1, label: 'ruby', bgcolor: '#ff0000'},
-      {value:2, label: 'javascript', bgcolor: '#77b92d'},
-      {value:3, label: 'coffeescript', bgcolor: '#3300af'},
-      {value:4, label: 'php', bgcolor: '#ffff00'},
-      {value:5, label: 'vba', bgcolor: '#efefef'},
-      {value:6, label: 'python', bgcolor: '#ffd000'}
-    ];
-    $('#search').autocomplete({
-      source: data
-    })
-    .data('uiAutocomplete')._renderItem = function(ul, item) {
-      return $('<li role="presentation" class="ui-menu-item"><a>' + item.label + '</a></li>').appendTo(ul);
-    };
-
+    $('.but').buttonTab();
   })
-
-
-

@@ -21,9 +21,7 @@
         %i.icon-plus-sign
         Nuevo egreso
 
-.row-fluid
-  .span6
-    = render 'expenses/search'
+= render 'expenses/search'
 
 %ul.unstyled.inline
   %li
@@ -44,7 +42,7 @@
 
 =paginate_html
 
-%ul.unstyled.listing
+%ul#expenses-list.unstyled.listing
   %li.row-fluid
     .span4.offset7
       .span6.r.b.muted
@@ -55,3 +53,8 @@
   =render @expenses
 
 =paginate_html
+
+:javascript
+  $(function() {
+    $('.listing').rowCheck();
+  })
