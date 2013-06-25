@@ -14,7 +14,7 @@ module Tags::TagModule
   end
 
   def tag_ids
-    @tag_ids ||= Array(read_attribute(:tag_ids).gsub(/[{|}]/, '').split(",").map(&:to_i))
+    @tag_ids ||= Array(read_attribute(:tag_ids).to_s.gsub(/[{|}]/, '').split(",").map(&:to_i))
   end
 
   def tag_ids=(ary = nil)

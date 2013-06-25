@@ -1,10 +1,9 @@
 # encoding: utf-8
 Bonsaierp::Application.routes.draw do
-  
+
   resources :tags do
     post :update_models, on: :collection
   end
-
 
   resources :inventories, only: [:index, :show] do
     get :show_movement, on: :member
@@ -83,11 +82,6 @@ Bonsaierp::Application.routes.draw do
   resources :expenses_inventory_ins, only: ['new', 'create']
   resources :expenses_inventory_outs, only: ['new', 'create']
 
-
-  #get  "/transactions/pdf/:id"       => "transactions#pdf", :as => :invoice_pdf
-  #get  "/transactions/new_email/:id" => "transactions#new_email", :as => :new_invoice_email
-  #post "/transactions/email/:id"     => "transactions#email"
-
   ###########################3
 
   resources :stores do
@@ -99,8 +93,6 @@ Bonsaierp::Application.routes.draw do
     get :incomes, on: :member
     get :expenses, on: :member
   end
-
-  resources :staffs
 
   resources :items do
     get :search_income, on: :collection
