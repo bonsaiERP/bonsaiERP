@@ -25,9 +25,22 @@ class Item extends Backbone.Model
   #
   setAutocompleteEvent: (el) ->
     $(el).on 'autocomplete-done', 'input.autocomplete', (event, item) =>
+      if @collection.where(item_id: item.id).length > 0
+        @resetAutocompleteValue(event)
+        return false
+
       price = _b.roundVal( item.price * (1/@get('rate')), _b.numPresicion )
 
       @set(original_price: item.price, price: price, item_id: item.id)
+  #
+  resetAutocompleteValue: (event) ->
+    setTimeout( =>
+      $el = $(event.target)
+      $el.data('value', '')
+      $el.val('')
+      $el.siblings('input:hidden').val('')
+      alert('El ítem que selecciono ya existe en la lista')
+    , 50)
   #
   delete: (event) =>
     src = event.currentTarget || event.srcElement
@@ -37,6 +50,10 @@ class Item extends Backbone.Model
 class ExpenseItem extends Item
   setAutocompleteEvent: (el) ->
     $(el).on 'autocomplete-done', 'input.autocomplete', (event, item) =>
+      if @collection.where(item_id: item.id).length > 0
+        @resetAutocompleteValue(event)
+        return
+
       price = _b.roundVal( item.buy_price * (1/@get('rate')), _b.numPresicion )
 
       @set(original_price: item.buy_price, price: price, item_id: item.id)

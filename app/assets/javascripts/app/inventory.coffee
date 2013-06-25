@@ -9,8 +9,22 @@ class InventoryDetail extends Backbone.Model
   #
   setAutocompleteEvent: ($el) ->
     $el.on('autocomplete-done', 'input.autocomplete', (event, item) =>
+      if @collection.where(item_id: item.id).length > 0
+        @resetAutocompleteValue(event)
+        return false
+
+      @set(item_id: item.id)
       $el.find('.unit').text(item.unit_symbol)
     )
+  #
+  resetAutocompleteValue: (event) ->
+    setTimeout( =>
+      $el = $(event.target)
+      $el.data('value', '')
+      $el.val('')
+      $el.siblings('input:hidden').val('')
+      alert('El ítem que selecciono ya existe en la lista')
+    , 50)
 
 # Collection
 class Inventory extends Backbone.Collection
