@@ -5,7 +5,7 @@ class TagEditor
     @$name = $(@sel).find('#btag-name-input')
     @$bgcolor = $(@sel).find('#btag-bgcolor-input')
     @$button = $(@sel).find('button')
-    $(@sel).dialog({autoOpen: false, width: 400})
+    $(@sel).dialog({autoOpen: false, width: 400, title: 'Nueva etiqueta', modal: true})
     # Set minicolor
     $('#btag-bgcolor-input').minicolors({defaultValue: '#FF0000'})
     @setEvents()
@@ -83,26 +83,31 @@ class TagSelector
     })
   #
   setEvents: ->
-    $('.btags').on('click', 'a.remove-tag', ->
-      $(this).parents('.select2-search-choice').find('a.select2-search-choice-close').trigger('click')
-    )
-
-    $(@list).on('change', 'input.row-check', =>
-      console.log 'Data'
-    )
-
+    @setRemoveEvent()
     @$button.on 'click', @applyTags
 
     $('#tags').on 'btags:newtag', (event, tag) => @updateSelect2(tag)
   #
+  setRemoveEvent: ->
+    $('.btags').off('click', 'a.remove-tag')
+    $('.btags').on('click', 'a.remove-tag', ->
+      $(this).parents('.select2-search-choice').find('a.select2-search-choice-close').trigger('click')
+    )
+  # updates the select2 data with new tag as well for the
+  # TagFormater.tags
   updateSelect2: (tag) ->
     tag.text = tag.name
+    # Important update
+    TagFormater.tags[tag.id] = tag
+
     @data.push tag
     $('#tags').select2('destroy')
     @setSelect2()
     vals = $('#tags').select2('val')
     vals.push(tag.id)
     $('#tags').select2('val', vals)
+
+    @setRemoveEvent()
   #
   applyTags: =>
     $rows = $(@list).find('input.row-check:checked')
@@ -152,6 +157,7 @@ class Tag
 #
 TagFormater = {
   formatResult: (data) ->
+    return ''  unless data
     color = Plugin.Color.idealTextColor(data.bgcolor)
 
     ['<span class="btag" style="background-color:', data.bgcolor,
@@ -184,3 +190,4 @@ TagFormater = {
 Plugin.Tag = Tag
 Plugin.TagEditor = TagEditor
 Plugin.TagSelector = TagSelector
+Plugin.TagFormater = TagFormater
