@@ -14,7 +14,10 @@
       %small.text-error Egreso de items
 
 = simple_form_for @inv, url: store_inventory_outs_path(@inv.store_id) do |f|
+  = bonsai_form_error(f)
+
   = f.hidden_field :store_id
+
   .row-fluid
     .span3
       %label Almacen
