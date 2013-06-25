@@ -57,6 +57,7 @@ class TagSelector
   sel: '#btag-selector'
   constructor: (@options) ->
     @input = '#tags'
+
     throw 'You must set a model in options in TagSelector class'  unless @options.model?
     @model = @options.model
     throw 'You must set a data in options in TagSelector class'  unless @options.data?
