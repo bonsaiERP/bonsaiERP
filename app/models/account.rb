@@ -4,7 +4,7 @@
 class Account < ActiveRecord::Base
 
   include ActionView::Helpers::NumberHelper
-  #include Tags::TagModule
+  include Tags::TagModule
 
   ########################################
   # Relationships
