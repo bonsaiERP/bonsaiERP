@@ -1,0 +1,8 @@
+// javascript
+$('ul#incomes').append('<%= j(render partial: 'incomes/income', collection: @contact.incomes.page(params[:page_incomes]).includes(:contact, transaction: [:creator, :approver, :nuller]), as: :income) %>')
+
+if(<%= @contact.incomes.page(params[:page_incomes]).size %> < 25) {
+  $('#more-incomes').hide();
+}else {
+  $('#more-incomes').attr('href', "<%= incomes_contact_path(@contact.id, format: :js, page_incomes: params[:page_incomes].next) %>");
+}

@@ -92,7 +92,10 @@ Bonsaierp::Application.routes.draw do
     resources :inventory_outs, only: [:new, :create]
   end
 
-  resources :contacts
+  resources :contacts do
+    get :incomes, on: :member
+    get :expenses, on: :member
+  end
 
   resources :staffs
 

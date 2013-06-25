@@ -9,8 +9,8 @@ class Contact < ActiveRecord::Base
   # Relationships
   has_many :contact_accounts, foreign_key: :contact_id, conditions: {type: 'ContactAccount'}
 
-  has_many :incomes,  foreign_key: :contact_id, conditions: {type: 'Income'}
-  has_many :expenses, foreign_key: :contact_id, conditions: {type: 'Expense'}
+  has_many :incomes,  foreign_key: :contact_id, conditions: {type: 'Income'}, order: "accounts.date desc, accounts.id desc"
+  has_many :expenses, foreign_key: :contact_id, conditions: {type: 'Expense'}, order: "accounts.date desc, accounts.id desc"
 
   has_many :inventory_operations
 

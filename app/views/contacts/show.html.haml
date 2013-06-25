@@ -64,7 +64,7 @@
     #incomes.tab-pane
       %h2 Ingresos
 
-      %ul.unstyled.listing
+      %ul#incomes.unstyled.listing
         %li.row-fluid
           .span4.offset7
             .span6.r.b.muted
@@ -72,16 +72,15 @@
             .span6.r.b.muted
               Saldo
 
-
         = render partial: 'incomes/income', collection: @contact.incomes.page(1).includes(:contact, transaction: [:creator, :approver, :nuller]), as: :income
 
 
-      = link_to 'Ver mas', contact_path(@contact.id, income: true, format: 'js'), remote:true
+      = link_to 'Ver mas', incomes_contact_path(@contact.id,  format: 'js', page_incomes: 2), remote:true, id: 'more-incomes'
 
     #expenses.tab-pane
       %h2 Egresos
 
-      %ul.unstyled.listing
+      %ul#expenses.unstyled.listing
         %li.row-fluid
           .span4.offset7
             .span6.r.b.muted
@@ -91,11 +90,9 @@
 
         = render partial: 'expenses/expense', collection: @contact.expenses.page(1).includes(:contact, transaction: [:creator, :approver, :nuller]), as: :expense
 
+      = link_to 'Ver mas', expenses_contact_path(@contact.id,  format: 'js', page_expenses: 2), remote:true, id: 'more-expenses'
+
 :javascript
   $(function() {
     $('#contact-tabs a:first').tab('show')
-    if($('#incomes li').length == 25) {
-      $('#incomes').append('<a></a>')
-    }
-
   })

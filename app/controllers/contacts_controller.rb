@@ -2,7 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class ContactsController < ApplicationController
-  before_filter :find_contact, :only => [:show, :edit, :update, :destroy]
+  before_filter :find_contact, :only => [:show, :edit, :update, :destroy, :incomes, :expenses]
 
   #respond_to :html, :json
   # GET /contacts
@@ -20,17 +20,10 @@ class ContactsController < ApplicationController
   end
 
   # GET /contacts/1
-  # GET /contacts/1.xml
   def show
-    respond_to do |format|
-      format.html
-      format.json { render json: @contact }
-      format.js { render 'show', format: 'js' }
-    end
   end
 
   # GET /contacts/new
-  # GET /contacts/new.xml
   def new
     @contact = Contact.new
   end
@@ -40,7 +33,6 @@ class ContactsController < ApplicationController
   end
 
   # POST /contacts
-  # POST /contacts.xml
   def create
     @contact = Contact.new(contact_params)
     if @contact.save
@@ -51,7 +43,6 @@ class ContactsController < ApplicationController
   end
 
   # PUT /contacts/1
-  # PUT /contacts/1.xml
   def update
     if @contact.update_attributes(contact_params)
       redirect_ajax(@contact)
@@ -61,7 +52,6 @@ class ContactsController < ApplicationController
   end
 
   # DELETE /contacts/1
-  # DELETE /contacts/1.xml
   def destroy
     @contact.destroy
 
@@ -72,6 +62,16 @@ class ContactsController < ApplicationController
       flash[:error] = 'No fue posible eliminar el contacto'
     end
     redirect_to contacts_path
+  end
+
+  # GET /contacts/:id/expenses
+  def expenses
+    params[:page_expenses] ||= 1
+  end
+
+  # GET /contacts/:id/incomes
+  def incomes
+    params[:page_incomes] ||= 1
   end
 
 private

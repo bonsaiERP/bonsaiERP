@@ -1,0 +1,8 @@
+// javascript
+$('ul#expenses').append('<%= j(render partial: 'expenses/expense', collection: @contact.expenses.page(params[:page_expenses]).includes(:contact, transaction: [:creator, :approver, :nuller]), as: :expense) %>')
+
+if(<%= @contact.expenses.page(params[:page_expenses]).size %> < 25) {
+  $('#more-expenses').hide();
+}else {
+  $('#more-expenses').attr('href', "<%= expenses_contact_path(@contact.id, format: :js, page_expenses: params[:page_expenses].next) %>");
+}
