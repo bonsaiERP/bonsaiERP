@@ -24,4 +24,8 @@ class IncomePresenter < MovementPresenter
       html.html_safe
     end
   end
+
+  def paid_text
+    "Cobrado"
+  end
 end

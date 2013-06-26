@@ -10,10 +10,8 @@
         = income.has_error_label
         = link_to income.contact, income.contact
         .clear-both
-        = income.state_tag
+        %span= income.state_tag
         %i= l income.date
-
-        %ul.btags(data-tag_ids="#{income.tag_ids}")
 
   .span4
     = income.creator_label
@@ -24,6 +22,9 @@
 
     .clear-both
     = income.description_tag
+    .clear-both
+    %ul.btags(data-tag_ids="#{income.tag_ids}")
+
   .span3
     .span6.r
       = ntc income.total

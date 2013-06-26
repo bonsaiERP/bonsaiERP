@@ -141,13 +141,15 @@ input[disabled]
 
 $btagBorder: #AfAfAf
 $btagBorderTop: darken($btagBorder, 17%)
+
 .btag
-  //+box-shadow(0px 1px 3px gray)
+  +border-radius(3px)
+  +box-shadow(0px 1px 2px gray)
   padding: 1px 3px
   font-weight: bold
-  border: 1px solid $btagBorder
-  border-top-color: $btagBorderTop
-  border-bottom-color: $btagBorderTop
+  //border: 1px solid $btagBorder
+  //border-top-color: $btagBorderTop
+  //border-bottom-color: $btagBorderTop
   margin-right: 5px
   font-size: 12px
 

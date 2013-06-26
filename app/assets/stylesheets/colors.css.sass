@@ -21,6 +21,7 @@ $whiteTan:              #F9F9F9
 $black:                 #000
 $blue:                  #049cdb
 $blueDark:              #0064cd
+$blueDarker:            #1253a6
 $green:                 #46a546
 $darkGreen:             darken($green, 20%)
 $bonsai:                #77b92d
@@ -31,8 +32,7 @@ $redLight:              lighten($red, 20%)
 $yellow:                #ffc40d
 $orange:                #f89406
 $pink:                  #c3325f
-$purple:                #7a43b6
-
+$purple:                #4022a7
 $grayDarker:            #222
 $grayDark:              #333
 $gray:                  #555
@@ -47,25 +47,27 @@ $linkColorHover:        darken($linkColor, 15%)
 $red2:                  rgb(219, 0, 0)
 
 .white
-  color: white !important
+  color: white
 .red
-  color: $red !important
+  color: $red
 .gray
-  color: gray !important
-.light-gray
-  color: lighten(gray, 20%) !important
-.dark-gray
-  color: gray24 !important
+  color: gray
 .green
-  color: $green !important
-.dark-green
-  color: darken($green, 15%) !important
-.dark-red
-  color: darken($red, 30%) !important
-.dark-yellow
-  color: darken($yellow, 35%) !important
+  color: $green
+.blue
+  color: $blue
+.blue-dark
+  color: $blueDark
+.blue-darker
+  color: $blueDarker
+.yellow-dark
+  color: darken($yellow, 35%)
+.purple
+  color: $purple
 .black
   color: black
+.orange
+  color: orange
 
 .alert-color
   color: #C09853

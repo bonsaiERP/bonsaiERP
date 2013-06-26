@@ -10,7 +10,7 @@
 %header
   - if @expense.has_error
     .allowed-errors
-      %h3 Existen errores que debe corregir!
+      %h4 Existen errores que debe corregir!
       %ul
         - @expense.error_messages.each do |k, arr|
           - arr.each do |v|
@@ -19,14 +19,14 @@
 
 .row-fluid
   .span7
-    %h1.ib
+    %h2.ib
       = @expense
-      = @expense.state_tag
+      %small= @expense.state_tag
 
     %h4.ib.n
       = link_to @expense.contact, @expense.contact
 
-    %h4.n
+    %h5.n.ib
       %span.muted Fecha:
       %i= lo @expense.date
       = render_if @expense.due_date do

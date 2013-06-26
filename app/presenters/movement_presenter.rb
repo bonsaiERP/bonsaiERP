@@ -21,13 +21,17 @@ class MovementPresenter < BasePresenter
 
   def state_tag
     html = case state
-    when "draft" then label_tag('borrador')
-    when "approved" then label_blue('aprobado')
-    when "paid" then label_green('pagado')
-    when "nulled" then label_red('anulado')
+    when "draft" then "<span class='b gray'>Borrador</span>"#label_tag('borrador')
+    when "approved" then "<span class='b purple'>Aprobado</span>"#label_blue('aprobado')
+    when "paid" then "<span class='b green'>#{ paid_text }</span>"#label_green('pagado')
+    when "nulled" then "<span class='b red'>Anulado</span>"#label_red('anulado')
     end
 
     html.html_safe
+  end
+
+  def paid_text
+    ""
   end
 
   def due_date_tag

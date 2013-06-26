@@ -24,4 +24,8 @@ class ExpensePresenter < MovementPresenter
       html.html_safe
     end
   end
+
+  def paid_text
+    "Pagado"
+  end
 end
