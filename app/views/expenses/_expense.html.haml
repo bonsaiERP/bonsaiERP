@@ -6,7 +6,7 @@
         %input.row-check(type='checkbox' id="#{expense.id}")
       .span11
         %h4.ib
-        = link_to expense, expense
+          = link_to expense, expense
         = expense.has_error_label
         = link_to expense.contact, expense.contact
         .clear-both

@@ -139,13 +139,17 @@ input[disabled]
 .btags .select2-search-choice a.select2-search-choice-close
   display: none
 
+$btagBorder: #AfAfAf
+$btagBorderTop: darken($btagBorder, 17%)
 .btag
-  +border-right-radius(4px)
-  +box-shadow(0px 1px 3px gray)
-  padding: 1px 3px 1px 8px
+  //+box-shadow(0px 1px 3px gray)
+  padding: 1px 3px
   font-weight: bold
-  //border: 1px solid #7f7f7f
-  margin-right: 4px
+  border: 1px solid $btagBorder
+  border-top-color: $btagBorderTop
+  border-bottom-color: $btagBorderTop
+  margin-right: 5px
+  font-size: 12px
 
 #btag-editor
   .control-group

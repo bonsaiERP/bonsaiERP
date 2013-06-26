@@ -35,6 +35,7 @@ class TagEditor
   setAjaxResponse: (resp) ->
     if resp.id
       $(@sel).dialog('close')
+      tags.push(resp)
       $('#tags').trigger('btags:newtag', resp)
     else if resp.errors
       @setErrors(resp)
@@ -219,6 +220,9 @@ class TagSearch
       return false  if event.keyCode is $.ui.keyCode.COMMA
       @_getTags = false  if event.keyCode is $.ui.keyCode.BACKSPACE
       true
+
+    $('body').on 'btags:newtag', '#tags', =>
+      @_getTags = @_tagLabels = false
   #
   tagLabels: ->
     @_tagLabels = @_tagLabels || _(tags).filter((v) -> v.text).map((v) -> v.text).value()
