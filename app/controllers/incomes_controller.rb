@@ -2,6 +2,8 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class IncomesController < ApplicationController
+  include Controllers::TagSearch
+
   before_filter :set_income, only: [:approve, :null]
 
   # GET /incomes
@@ -141,6 +143,9 @@ private
                else
                  Income.order('date desc').page(@page)
                end
+
+    @incomes = @incomes.all_tags(*tag_ids)  if params[:search] && has_tags?
+
     @incomes = @incomes.includes(:contact, transaction: [:creator, :approver, :nuller]).order('date desc, accounts.id desc')
 
     set_incomes_filters

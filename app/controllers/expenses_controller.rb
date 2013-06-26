@@ -2,6 +2,8 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class ExpensesController < ApplicationController
+  include Controllers::TagSearch
+
   before_filter :set_expense, only: [:approve, :null]
 
   # GET /expenses
@@ -71,7 +73,7 @@ class ExpensesController < ApplicationController
       redirect_to @transaction
     end
   end
-  
+
   # PUT /expenses/1/approve
   # Method to approve an expense
   def approve
@@ -146,6 +148,8 @@ private
                 else
                   Expense.order('date desc')
                 end
+
+    @expenses = @expenses.all_tags(*tag_ids)  if params[:search] && has_tags?
 
     @expenses = @expenses.includes(:contact, transaction: [:creator, :approver, :nuller]).order('date desc, accounts.id desc').page(@page)
     set_expenses_filters

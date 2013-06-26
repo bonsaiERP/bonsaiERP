@@ -1,5 +1,7 @@
 # encoding: utf-8
-module Tags::TagModule
+# author: Boris Barroso
+# email: boriscyber@gmail.com
+module Models::Tag
   def self.included(base)
     base.instance_eval do
       before_save :set_valid_tags
