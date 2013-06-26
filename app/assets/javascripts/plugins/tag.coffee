@@ -182,12 +182,96 @@ TagFormater = {
   #
   tagList: ->
     h = {}
-    _.each(window.tags, (v) -> h[v.id] = v)
-    
+    _.each(window.tags, (v) ->
+      v.label = v.text
+      h[v.id] = v
+    )
+
     h
 }
+
+
+# Uses jqueryui autocomplete to search with tags
+class TagSearch
+  constructor: (@sel) ->
+    @$input = $(@sel)
+    @setSearchTags()
+    @setAutocomplete()
+    @setEvents()
+  #
+  setAutocomplete: ->
+    self = this
+    @$input.autocomplete({
+      source: (req, resp) ->
+        resp( $.ui.autocomplete.filter(self.getTags(), self.lastValue() ) )
+      focus: -> false
+      select: (event, ui) =>
+        vals = @getTagIds()
+        vals.push(ui.item.id)
+
+        @setInputVal(ui.item)
+        @_getTags = @_getTagIds = false
+    })
+
+    @setFormatTags()
+  #
+  setEvents: ->
+    #@$input.on 'keyup', (event) =>
+    #  @deleteTags()  if event.keyCode is $.ui.keyCode.BACKSPACE or event.keyCode is $.ui.keyCode.DELETE
+    @$input.on 'keydown', (event) ->
+      return false  if event.keyCode is $.ui.keyCode.COMMA
+  #
+  deleteTags: ->
+    _val = @$input.val()
+    lastChar = _val[_val.length - 1]
+    vals = _val.split(',')
+    val = vals.pop()  if vals.length > @getTagIds().length
+
+    vals2 = _(vals).filter( (v) => _.include(@tagLabels(), v)).value()
+    @_getTags = @_getTagIds = false# unless vals.lenght is @getTagIds().length
+
+    if vals2.lenght isnt vals.length
+      vals2.push(val)  if val
+      vals2 = vals2.join(",")
+      vals2 += ","  if lastChar is ","
+
+      #setTimeout( =>
+      @$input.val(vals2)
+      #,20)
+  #
+  tagLabels: ->
+    @_tagLabels = @_tagLabels || _(tags).filter((v) -> v.text).map((v) -> v.text).value()
+  #
+  setInputVal: (item) ->
+    val = @$input.val().split(',')
+    val.pop()
+    val.push(item.text)
+    @$input.val(val.join(',') + ",")
+  #
+  getTagIds: ->
+    @_getTagIds = @_getTagIds || _(@$input.val().split(','))
+                                 .filter( (v) -> _.include(tags, v) ).value()
+  #
+  getTags: ->
+    @_getTags = @_getTags || _.select(tags, (v) => not _.include(@getTagIds(), v.id) )
+    @_getTags
+  #
+  lastValue: ->
+    @$input.val().split(",").pop()
+  #
+  setFormatTags: ->
+    @$input.data('uiAutocomplete')._renderItem = ($list, item) ->
+      item.label = item.text
+      $("<li><a>#{TagFormater.formatResult(item)}</a></li>")
+      .data('uiAutocomplete', item).appendTo($list)
+  #
+  setSearchTags: ->
+    id = new Date().getTime()
+    @$inputTags = $("<input type='hidden' name='search_tags' id='#{id}'/>").insertBefore(@$input)
+
 
 Plugin.Tag = Tag
 Plugin.TagEditor = TagEditor
 Plugin.TagSelector = TagSelector
 Plugin.TagFormater = TagFormater
+Plugin.TagSearch = TagSearch

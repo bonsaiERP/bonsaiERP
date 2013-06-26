@@ -24,7 +24,7 @@ class SessionsController < ApplicationController
 
       redirect_to registrations_url(subdomain: false) and return
     else
-      flash.now[:error] = 'El email o la contraseña que ingreso no existen.'
+      flash.now[:error] = 'El email o la contraseña que ingreso son incorrectos.'
 
       render'new'
     end

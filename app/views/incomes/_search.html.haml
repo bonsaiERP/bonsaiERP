@@ -10,7 +10,7 @@
         =link_to 'Eliminar filtro', incomes_path
 
       = form_tag '/incomes', method: 'get', html: {class: 'form-inline'} do
-        = text_field_tag 'search', '', class: 'span4', placeholder: 'Contacto, referencia o descripción'
+        = text_field_tag 'search', '', class: 'span5', placeholder: 'Contacto, referencia, etiqueta o descripción', autocomplete: 'off'
         = submit_tag 'Buscar', class: 'btn btn-primary'
 
     #tags-pane.button-pane.span12
@@ -19,6 +19,7 @@
 :javascript
   $(function() {
     $('.but').buttonTab();
+    new Plugin.TagSearch('#search');
   })
 
 
