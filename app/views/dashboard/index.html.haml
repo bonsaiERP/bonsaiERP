@@ -5,7 +5,7 @@
 
   .span6
     %ul.breadcrumbs.r
-      %a#general-aspects-link.dark(href="javascript:;")
+      %a#help-link-general.dark(href="javascript:;")
         %i.icon-question-sign
           Ayuda
 
@@ -18,7 +18,7 @@
 %h5.n= @dashboard.pendent_ledgers
 
 .well
-  = form_for dashboard_path, method: :get do
+  = form_for dashboard_path, method: :get, html: {id: "form_graph"} do
     = render 'export_incomes/form_details', btn: 'Buscar'
 
 = render 'dashboard/graph', data: @dashboard

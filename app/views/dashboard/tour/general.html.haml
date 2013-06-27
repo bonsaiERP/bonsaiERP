@@ -1,80 +1,63 @@
-%ol#tour2.joyride-list.hidden(data-joyride)
-  %li(data-id="title" data-text="Siguiente" data-options='{"tipLocation":"bottom"}')
-    %h4
-      Tour 2
-    %p
-      El menú se encuentra en la parte de arriba y los items que tengan
-      el ícon
-      %span.icon-caret-down.icon-large
-      son menús desplegables
-  %li(data-id="general-aspects-link" data-text="Fin" data-options='{"tipLocation":"left"}')
-    %h4
-      Ayuda
-    %p
-      La ayuda que le mostrara paso a paso
-      como realizar una operación
-
-
-  %li(data-id="general-aspects-title" data-text="Fin" data-options='{"tipLocation":"top"}')
-    %h4
-      Aspectos generales
-    %p
-      Lea con cuidado los aspectos generales estos le ayudaran a
-      entender mejor el sistema
-
-
 %ol#tour.joyride-list.hidden(data-joyride)
-  %li(data-id="title" data-text="Siguiente" data-options="tipLocation:bottom;")
+  %li(data-sel="#help-link-general" data-text="Siguiente" data-tip-location='right')
     %h4
-      Menú
+      Comencemos en bonsaiERP
     %p
-      El menú se encuentra en la parte de arriba y los items que tengan
-      el ícon
-      %span.icon-caret-down.icon-large
-      son menús desplegables
-  %li(data-id="general-aspects-link" data-text="Fin" data-options="tipLocation:left;nextButton:false")
-    %h4
-      Ayuda
-    %p
-      La ayuda que le mostrara paso a paso
+      Si no sabe que hacer haga click en
+      la <strong>ayuda</strong> que le mostrara paso a paso
       como realizar una operación
 
 
-  %li(data-id="general-aspects-title" data-text="Fin" data-options="tipLocation:top")
+  %li(data-sel="h2.n:first" data-text="Fin")
     %h4
       Aspectos generales
     %p
       Lea con cuidado los aspectos generales estos le ayudaran a
       entender mejor el sistema
 
+%ol#tour-graph.joyride-list.hidden(data-joyride)
+  %li(data-sel='#general-aspects-title' data-text='Siguiente' data-tip-location='bottom')
+    %h4
+      Aspectos generales
+    %p
+      Lea con cuidado los aspectos generales estos le ayudaran a
+      entender mejor el sistema
+  %li(data-sel='h4.graph' data-text='Siguiente')
+    %h4 Gráfica
+    %p
+      La gráfica le muestra sus
+      %span.text-success ingresos
+      y sus
+      %span.text-error egresos
+      en un perido de tiempo
 
-%a#menu-link-tour(href='javascript:;') Menu
-
+  %li(data-sel='#date_start_picker' data-text='Fin')
+    %h4 Rango de tiempo
+    %p
+      Puede introducir un rango de fechas para que la gráfica
+      se actualize con el rango que haya seleccionado
 
 :javascript
-  $(window).load(function() {
-    var t = new Plugin.Bride('#tour2');
-    t.init();
-    $('#tour').joyride({tipAnimation: 'pop', cookieName: 'a1', localStorageKey: 'a1', autoStart: false});
-    //$('#tour2').joyride({tipAnimation: 'pop', cookieName: 'a2', autoStart: false});
+  $(function() {
+    function generalTour() {
+      $('#general-aspects').show();
+      var t = new Plugin.Bride('#tour');
+      t.init();
+    }
 
-    /*
-    $('#tour').joyride({
-      postRideCallback: function(){
-        $('#tour').joyride('destroy');
-      },
-      autoStart : true,
-      modal:false,
-      expose: false
-    });
-    */
-    //$('#tour2').joyride({tipAnimation: 'pop'});
-    //$('#start-tour').joyride();
-    //$('#general-aspects-tour').joyride();
+    if($.cookie('bonsai-new-user-#{current_user.id}') ) {
+      var val = $.cookie('bonsai-new-user-#{current_user.id}') * 1;
+      if(val < 2) {
+        generalTour();
+        $.cookie('bonsai-new-user-#{current_user.id}', val + 1);
+      }
+    }else {
+      $.cookie('bonsai-new-user-#{current_user.id}', 0);
+    }
 
-    $('#general-aspects-link').click(function() {
-      //$('.joyride-tip-guide').remove();
-      //$('#tour').show();
-      $('#tour').joyride();
+    $('#help-link-general').click(function() {
+      $('#general-aspects').show();
+      var t = new Plugin.Bride('#tour-graph');
+      t.init();
     });
   })
