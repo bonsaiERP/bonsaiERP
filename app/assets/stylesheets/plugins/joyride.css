@@ -5,11 +5,13 @@ body {
 
 #joyRideTipContent { display: none; }
 
+.joyRideTipContent { display: none; }
+
 /* Default styles for the container */
 .joyride-tip-guide {
   position: absolute;
   background: #000;
-  background: rgba(0,0,0,0.9);
+  background: rgba(0,0,0,0.8);
   display: none;
   color: #fff;
   width: 300px;
@@ -101,7 +103,7 @@ body {
 
 .joyride-tip-guide span.joyride-nub.left {
   border-color: #000;
-  border-color: rgba(0,0,0,0.9) !important;
+  border-color: rgba(0,0,0,0.8) !important;
   border-top-color: transparent !important;
   border-left-color: transparent !important;
   border-bottom-color: transparent !important;
@@ -109,6 +111,18 @@ body {
   left: -28px;
   right: auto;
   bottom: none;
+}
+
+.joyride-tip-guide span.joyride-nub.top-right {
+  border-color: #000;
+  border-color: rgba(0,0,0,0.8);
+  border-top-color: transparent !important;
+  border-left-color: transparent !important;
+  border-right-color: transparent !important;
+  top: -28px;
+  bottom: none;
+  left: auto;
+  right: 28px;
 }
 
 /* Typography */
@@ -223,4 +237,21 @@ body {
   top: 0;
   left: 0;
   cursor: pointer;
+}
+
+.joyride-expose-wrapper {
+    background-color: #ffffff;
+    position: absolute;
+    z-index: 102;
+    -moz-box-shadow: 0px 0px 30px #ffffff;
+    -webkit-box-shadow: 0px 0px 30px #ffffff;
+    box-shadow: 0px 0px 30px #ffffff;
+}
+
+.joyride-expose-cover {
+    background: transparent;
+    position: absolute;
+    z-index: 10000;
+    top: 0px;
+    left: 0px;
 }

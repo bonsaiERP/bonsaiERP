@@ -22,7 +22,6 @@
 #= require bootstrap/bootstrap-collapse.js
 #= require bootstrap/bootstrap-tab.js
 #= require bootstrap/bootstrap-button.js
-#= require plugins/bootstrap-tour.js
 
 #= require namespace.coffee
 #= require app/currency.coffee
@@ -34,7 +33,8 @@
 #= require app/contact.coffee
 #= require app/inventory.coffee
 
-#= require plugins/jquery.joyride.js
+#= require jqplugins/jquery.joyride.js
+#= require plugins/bride.coffee
 #= require plugins/color.coffee
 #= require plugins/tag.coffee
 

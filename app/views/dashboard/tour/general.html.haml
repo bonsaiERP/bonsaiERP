@@ -1,5 +1,30 @@
-%ol#start-tour.hidden
-  %li(data-id="main-menu-first" data-text="Siguiente" data-options="tipLocation:bottom")
+%ol#tour2.joyride-list.hidden(data-joyride)
+  %li(data-id="title" data-text="Siguiente" data-options='{"tipLocation":"bottom"}')
+    %h4
+      Tour 2
+    %p
+      El menú se encuentra en la parte de arriba y los items que tengan
+      el ícon
+      %span.icon-caret-down.icon-large
+      son menús desplegables
+  %li(data-id="general-aspects-link" data-text="Fin" data-options='{"tipLocation":"left"}')
+    %h4
+      Ayuda
+    %p
+      La ayuda que le mostrara paso a paso
+      como realizar una operación
+
+
+  %li(data-id="general-aspects-title" data-text="Fin" data-options='{"tipLocation":"top"}')
+    %h4
+      Aspectos generales
+    %p
+      Lea con cuidado los aspectos generales estos le ayudaran a
+      entender mejor el sistema
+
+
+%ol#tour.joyride-list.hidden(data-joyride)
+  %li(data-id="title" data-text="Siguiente" data-options="tipLocation:bottom;")
     %h4
       Menú
     %p
@@ -7,14 +32,14 @@
       el ícon
       %span.icon-caret-down.icon-large
       son menús desplegables
-  %li(data-id="general-aspects-link" data-text="Fin" data-options="tipLocation:left")
+  %li(data-id="general-aspects-link" data-text="Fin" data-options="tipLocation:left;nextButton:false")
     %h4
       Ayuda
     %p
       La ayuda que le mostrara paso a paso
       como realizar una operación
 
-%ol#general-aspects-tour.hidden
+
   %li(data-id="general-aspects-title" data-text="Fin" data-options="tipLocation:top")
     %h4
       Aspectos generales
@@ -22,13 +47,34 @@
       Lea con cuidado los aspectos generales estos le ayudaran a
       entender mejor el sistema
 
+
+%a#menu-link-tour(href='javascript:;') Menu
+
+
 :javascript
-  $(function() {
+  $(window).load(function() {
+    var t = new Plugin.Bride('#tour2');
+    t.init();
+    $('#tour').joyride({tipAnimation: 'pop', cookieName: 'a1', localStorageKey: 'a1', autoStart: false});
+    //$('#tour2').joyride({tipAnimation: 'pop', cookieName: 'a2', autoStart: false});
+
+    /*
+    $('#tour').joyride({
+      postRideCallback: function(){
+        $('#tour').joyride('destroy');
+      },
+      autoStart : true,
+      modal:false,
+      expose: false
+    });
+    */
+    //$('#tour2').joyride({tipAnimation: 'pop'});
     //$('#start-tour').joyride();
+    //$('#general-aspects-tour').joyride();
 
     $('#general-aspects-link').click(function() {
-      $('.joyride-tip-guide').remove();
-      $('#general-aspects').show();
-      $('#general-aspects-tour').joyride();
+      //$('.joyride-tip-guide').remove();
+      //$('#tour').show();
+      $('#tour').joyride();
     });
   })
