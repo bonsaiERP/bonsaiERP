@@ -1,23 +1,32 @@
 .well.well-small.trans
-  .row-fluid
-    .span4.form-horizontal
-      = f.input :direct_payment,
-        label: "<i class='icon-money'></i> #{lbl} directo".html_safe,
-        as: :boolean, input_html: {id: 'direct_payment', data: {value: 'trans.direct_payment'} }
-    .span8.help-block
-      Seleccione 
-      %strong= "#{lbl} directo"
-      para poder realizar un #{lbl.downcase} directo a la 
-      %strong cuenta
-      que seleccione
-
-  -#.row-fluid(data-show="trans.direct_payment")
-  .row-fluid
-    -# Render for direct_payment
-    .span6.account_to
-      = f.input :account_to_id, label: 'Cuenta',
-        input_html: {id: 'account_to_id', class: 'span10',
-        data: {value: 'trans.account_to_id', disabled: 'trans.direct_payment|inverse'}}
+  .row-fluid.currency-input
     .span6
-      = f.input :reference, label: 'Referencia', as: :text, 
-        input_html: {rows: 2, data: {value: 'trans.reference', disabled: 'trans.direct_payment|inverse'}}
+      = f.input :currency, collection: currency_options, label: 'Moneda', include_blank: false,
+        input_html: {id: 'transaction_currency', data: { value: 'trans.currency' } }
+    .span6
+      = f.input :exchange_rate, label: "Tipo de cambio de <span class='currency'></span> a #{currency_label}".html_safe,
+        input_html: {id: 'transaction_exchange_rate', type: 'decimal', size: 8, data: {value: 'trans.rate', disabled: 'trans.sameCurrency'}}
+
+  - if movement.is_draft?
+    %br
+    .row-fluid
+      .span3.form-horizontal
+        = f.input :direct_payment,
+          label: "<h4 class='n' style='margin:0px'><i class='icon-money'></i> #{lbl} directo</h4>".html_safe,
+          as: :boolean, input_html: {id: 'direct_payment', data: {value: 'trans.direct_payment'} }
+      .span9.help-block
+        %strong= "#{lbl} directo"
+        permite un #{lbl.downcase} a la 
+        %strong Cuenta
+        seleccionada modificando el <strong>total</strong> de la misma
+
+    -#.row-fluid(data-show="trans.direct_payment")
+    .row-fluid
+      -# Render for direct_payment
+      .span6.account_to
+        = f.input :account_to_id, label: 'Cuenta',
+          input_html: {id: 'account_to_id', class: 'span10',
+          data: {value: 'trans.account_to_id', disabled: 'trans.direct_payment|inverse'}}
+      .span6
+        = f.input :reference, label: 'Referencia', as: :text, 
+          input_html: {rows: 2, data: {value: 'trans.reference', disabled: 'trans.direct_payment|inverse'}}

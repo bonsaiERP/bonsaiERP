@@ -4,7 +4,7 @@
   -########################################
   -# Render common form elements
   = render 'transactions/shared_form', f: f, transaction: expense_service.expense
-  = render 'transactions/form_direct_payment', f: f, lbl: 'Pago' if expense_service.is_draft?
+  = render 'transactions/form_direct_payment', f: f, lbl: 'Pago', movement: expense_service
 
   -########################################
   -# Render items

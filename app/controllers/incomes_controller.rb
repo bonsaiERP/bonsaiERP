@@ -35,6 +35,7 @@ class IncomesController < ApplicationController
     if create_or_approve
       redirect_to @is.income, notice: 'Se ha creado un Ingreso.'
     else
+      @is.movement.state = 'draft' # reset status
       render 'new'
     end
   end

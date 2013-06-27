@@ -34,6 +34,7 @@ class ExpensesController < ApplicationController
     if create_or_approve
       redirect_to @es.expense, notice: 'Se ha creado un Egreso.'
     else
+      @es.movement.state = 'draft' # reset status
       render 'new'
     end
   end
