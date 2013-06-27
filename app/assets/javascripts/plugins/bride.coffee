@@ -12,7 +12,6 @@ class Bride
     @$items = @$list.find('li')
     @setTip()
     @setEvents()
-    #$('body').animate({scrollTop: '50px'})
   #
   setTip: ->
     @$tip = $(template).css({position: 'absolute', display: 'block', visibility: 'hidden'})
@@ -44,11 +43,12 @@ class Bride
   setPosition: ->
     @$tip
     $el = $(@$current.data('sel'))
+    options = _.merge({}, @$current.data('options'))
     position = $el.position()
     w = $el.width()
     h = $el.height()
-    x = @getX(position.left, w)
-    y = @getY(position.top, h)
+    x = options.x or @getX(position.left, w)
+    y = options.y or @getY(position.top, h)
     @$tip.css(top: y, left: x)
   #
   getX: (x, w) ->
@@ -62,12 +62,17 @@ class Bride
   #
   getY: (y, h) ->
     th = @$tip.height()
+    speed = 400
+
     switch
       when @$tip.find('.joyride-nub').hasClass('top')
+        $('body').scrollTo(y, speed)
         y + h + 20
       when @$tip.find('.joyride-nub').hasClass('bottom')
+        $('body').scrollTo(y - h - th - 30, speed)
         y - th - 10
       else
+        $('body').scrollTo(y - 20, speed)
         y - 20
   #
   setEvents: ->
@@ -78,8 +83,6 @@ class Bride
       @hide()
   #
   getElementPosition: (el) ->
-  #
-  scroll: ->
 
 Plugin.Bride = Bride
 
@@ -88,7 +91,7 @@ template = """
   <span class="joyride-nub"></span>
   <div class="joyride-content-wrapper" role="dialog">
     <div id="content"></div>
-    <a href="#" class="joyride-next-tip"></a>
+    <a href="javascript:;" class="joyride-next-tip"></a>
     <a href="javascript:;" class="joyride-close-tip">X</a>
   </div>
 </div>

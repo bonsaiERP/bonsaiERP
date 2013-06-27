@@ -31,11 +31,17 @@
       %span.text-error egresos
       en un perido de tiempo
 
-  %li(data-sel='#date_start_picker' data-text='Fin')
+  %li(data-sel='#date_start_picker' data-text='Siguiente')
     %h4 Rango de tiempo
     %p
       Puede introducir un rango de fechas para que la gráfica
       se actualize con el rango que haya seleccionado
+
+  %li(data-sel='.incomes-total' data-text='Fin' data-tip-location='bottom')
+    %h4 Totales
+    %p
+      Este es el total de ingresos que existio en su empresa
+      durante el rango de tiempo que indica
 
 :javascript
   $(function() {

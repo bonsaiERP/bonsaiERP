@@ -143,6 +143,7 @@ body {
   font-size: 14px;
   line-height: 18px;
 }
+/*
 .joyride-tip-guide a {
   color: rgb(255,255,255);
   text-decoration: none;
@@ -152,7 +153,7 @@ body {
   color: rgba(255,255,255,0.8);
   border-bottom: none;
 }
-
+*/
 /* Button Style */
 .joyride-tip-guide .joyride-next-tip {
   width: auto;

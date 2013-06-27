@@ -33,7 +33,7 @@
 #= require app/contact.coffee
 #= require app/inventory.coffee
 
-#= require jqplugins/jquery.joyride.js
+#= require jqplugins/jquery.scrollTo.js
 #= require plugins/bride.coffee
 #= require plugins/color.coffee
 #= require plugins/tag.coffee

@@ -6,7 +6,7 @@
   #btag-editor(style="display:none;background-color:#fff")
     %input#model(type='hidden')
     .control-group.name.ib
-      %input(type='text' id='btag-name-input' placeholder='Etiqueta')
+      %input(type='text' id='btag-name-input' placeholder='nombre')
 
     .control-group.bgcolor.ib
       %input(type='text' id='btag-bgcolor-input' size='7' placeholder='#ff0000')
@@ -28,7 +28,7 @@
   #btag-selector
     %input#tags(type="text" class="span5" placeholder="Seleccione o escriba")
     &nbsp;
-    %button.btn.btn-primary Aplicar
+    %button.btn.btn-primary.apply-tags Aplicar etiqutas
 
     %a#new-tag-link(href="javascript:;") Nueva etiqueta
 

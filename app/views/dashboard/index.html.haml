@@ -25,7 +25,7 @@
 
 .row-fluid
   .span6.well.well-small
-    %h5
+    %h5.incomes-total
       Ingresos
       %span.n= @dashboard.present_date_range
     .alert.alert-success.inline-block
@@ -38,7 +38,7 @@
       = currency_label currency
 
   .span6.well.well-small
-    %h5
+    %h5.expenses-total
       Egresos
       %span.n= @dashboard.present_date_range
     .alert.alert-error.inline-block
@@ -50,6 +50,10 @@
       = ntc @dashboard.total_expenses
       = currency_label currency
 
+:javascript
+  $(function() {
+    $('body').scrollTop(200);
+  })
 -#.row-fluid
   .span6.well.well-small
     %h4.n Ingresos por ítem en los últimos 30 días
