@@ -30,9 +30,18 @@
 
 :javascript
   $(function() {
-    $('body').on('click', '#tour-new-tag-link', function() { $('#new-tag-link').trigger('click') });
-    $('button[href=#tags-pane]').trigger('click');
+    $('body').on('click', '#tour-new-tag-link', 
+      function() { $('#new-tag-link').trigger('click');
+    });
+
     // Tags
-    var t = new Plugin.Bride('#tour-tags');
-    t.init();
+    function tourTags() {
+      $('button[href=#tags-pane]').trigger('click');
+      var t = new Plugin.Bride('#tour-tags');
+      t.init();
+    }
+
+    if(tags.legnth === 0) { tourTags(); }
+
+    $('body').on( 'click','#help-tags-link', function() { tourTags() });
   });
