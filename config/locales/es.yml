@@ -360,10 +360,10 @@ es:
 
   views:
     pagination: 
-      next: "&rsaquo;"
-      previous: "&lsaquo;"
-      first: "&laquo;"
-      last: "&raquo;"
+      next: "Sig. &rsaquo;"
+      previous: "&lsaquo; Prev."
+      first: "&laquo; Inicio"
+      last: "Fin &raquo;"
       truncate: "..."
   income:
     account_ledger_reference: "Venta"

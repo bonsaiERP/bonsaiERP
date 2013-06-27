@@ -18,7 +18,7 @@
 %h2.title
   %span.muted.n Nuevo Ingreso
   %span.code= @is.income
-  %span.state= inc_presenter.state_tag
+  %small.state= inc_presenter.state_tag
 
 = render 'incomes/form', income_service: @is
 

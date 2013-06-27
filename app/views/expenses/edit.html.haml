@@ -14,10 +14,10 @@
 - exp_presenter = present @es.expense
 .row-fluid
   .span6
-    %h1
+    %h2
       %span.muted.n Editar
       = @es.expense
-      = exp_presenter.state_tag
+      %small.state= exp_presenter.state_tag
   .span6.r
     = link_to icon_show_text, expense_path(@es.expense_id), class: 'btn'
 

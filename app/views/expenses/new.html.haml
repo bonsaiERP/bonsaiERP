@@ -7,9 +7,9 @@
       %span Nuevo Egreso
 
 - exp_presenter = present @es.expense
-%h1
+%h2
   %span.muted.n Nuevo Egreso
   = @es.expense
-  = exp_presenter.state_tag
+  %small.state= exp_presenter.state_tag
 
 = render 'expenses/form', expense_service: @es

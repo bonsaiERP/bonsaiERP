@@ -57,7 +57,7 @@ class ExpenseItem extends Item
       price = _b.roundVal( item.buy_price * (1/@get('rate')), _b.numPresicion )
 
       @set(original_price: item.buy_price, price: price, item_id: item.id)
- 
+
 # TransactionModel
 class TransactionModel extends Backbone.Model
   defaults:
@@ -128,6 +128,7 @@ class Transaction extends Backbone.Collection
   accountsTo: []
   #
   initialize: ->
+    total = $('#total').val()
     @$table = $('#items-table')
     @itemTemplate = _.template(itemTemplate)
 
@@ -136,6 +137,9 @@ class Transaction extends Backbone.Collection
 
     @$addLink = $('#add-item-link')
     @$addLink.click => @addItem()
+
+    # Because of calculations total is lost
+    $('#total').val(total)
   #
   setAccountsTo: (@accountsTo) ->
     self = this

@@ -19,7 +19,7 @@
     %h1
       %span.muted.n Editar
       = @is.income
-      = inc_presenter.state_tag
+      %small.state= inc_presenter.state_tag
   .span6.r
     = link_to icon_show_text, income_path(@is.income_id), class: 'btn'
 

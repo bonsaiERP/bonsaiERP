@@ -11,15 +11,6 @@
       = transaction.contact
 
 %hr.light
-.row-fluid.trans.currency-input
-  .span6
-    = f.input :currency, collection: currency_options, label: 'Moneda', include_blank: false,
-      input_html: {id: 'transaction_currency', data: { value: 'trans.currency' } }
-  .span6
-    = f.input :exchange_rate, label: "Tipo de cambio de <span class='currency'></span> a #{currency_label}".html_safe,
-      input_html: {id: 'transaction_exchange_rate', type: 'decimal', size: 8, data: {value: 'trans.rate', disabled: 'trans.sameCurrency'}}
-
-%hr.light
 
 .row-fluid
   .span6
@@ -27,3 +18,13 @@
       input_html: { class: 'contact_id span11', data: {new_url: new_project_path, trigger: 'new_project', width: 900 } }
   .span6
     = f.input :description, label: 'Descripción', as: 'text', input_html: {rows: 2, class: 'span10'}
+
+.well.well-small
+  .row-fluid.trans.currency-input
+    .span6
+      = f.input :currency, collection: currency_options, label: 'Moneda', include_blank: false,
+        input_html: {id: 'transaction_currency', data: { value: 'trans.currency' } }
+    .span6
+      = f.input :exchange_rate, label: "Tipo de cambio de <span class='currency'></span> a #{currency_label}".html_safe,
+        input_html: {id: 'transaction_exchange_rate', type: 'decimal', size: 8, data: {value: 'trans.rate', disabled: 'trans.sameCurrency'}}
+
