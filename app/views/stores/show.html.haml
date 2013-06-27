@@ -50,18 +50,20 @@
 
 %ul#tabs.nav.nav-pills.fs150
   %li
-    %a(href='#items' data-toggle='tab') Items
+    %a(href='#items-tab' data-toggle='tab') Items
 
   %li
-    %a(href='#operations' data-toggle='tab') Operaciones
+    %a(href='#operations-tab' data-toggle='tab') Operaciones
 
 .tab-content
-  #items.tab-pane.fade
+  #items-tab.tab-pane.fade
     %h3.n Items
 
     %ul.listing.unstyled
       = render partial: 'stores/item', collection: @store.items
-  #operations.tab-pane.fade
+
+
+  #operations-tab.tab-pane.fade
     %h3.n Operaciones
 
     %ul.listing.unstyled
@@ -70,6 +72,7 @@
 :javascript
   $(function() {
     $('#tabs a:first').tab('show');
+
     var tour = new Tour({
       labels: {
         next: "Siguiente",
