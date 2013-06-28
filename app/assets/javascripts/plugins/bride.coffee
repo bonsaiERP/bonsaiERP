@@ -54,9 +54,9 @@ class Bride
   getX: (x, w) ->
     switch
       when @$tip.find('.joyride-nub').hasClass('left')
-        x + w + 20
+        x + w + 30
       when @$tip.find('.joyride-nub').hasClass('right')
-        x - 300 - 20
+        x - 300 - 30
       else
         x + 10
   #
@@ -67,10 +67,10 @@ class Bride
     switch
       when @$tip.find('.joyride-nub').hasClass('top')
         $('body').scrollTo(y, speed)
-        y + h + 20
+        y + h + 30
       when @$tip.find('.joyride-nub').hasClass('bottom')
         $('body').scrollTo(y - h - th - 30, speed)
-        y - th - 10
+        y - th - 20
       else
         $('body').scrollTo(y - 20, speed)
         y - 20

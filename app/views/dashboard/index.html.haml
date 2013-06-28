@@ -9,8 +9,6 @@
         %i.icon-question-sign
           Ayuda
 
-= render file: "dashboard/tour/general"
-
 %h2#title Resumen
 
 = render file: 'dashboard/general_aspects'
@@ -50,10 +48,8 @@
       = ntc @dashboard.total_expenses
       = currency_label currency
 
-:javascript
-  $(function() {
-    $('body').scrollTop(200);
-  })
+= render file: "dashboard/tour/general"
+
 -#.row-fluid
   .span6.well.well-small
     %h4.n Ingresos por ítem en los últimos 30 días

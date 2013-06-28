@@ -11,9 +11,11 @@ body {
 .joyride-tip-guide {
   position: absolute;
   background: #000;
-  background: rgba(0,0,0,0.8);
   display: none;
-  color: #fff;
+  /*background: rgba(0,0,0,0.8);*/
+  /*color: #fff;*/
+  background: #efefef;
+  color: #333; /*$grayDark*/
   width: 300px;
   z-index: 101;
   top: 0; /* keeps the page from scrolling when calculating position */
@@ -63,8 +65,8 @@ body {
   border-bottom-color so here we set the border-color
   and override the top,left,right colors below.
   */
-  border-color: #000;
-  border-color: rgba(0,0,0,0.8);
+  border-color: #efefef;
+  border-color: rgba(190,190,190,0.9);
   border-top-color: transparent !important;
   border-left-color: transparent !important;
   border-right-color: transparent !important;
@@ -80,8 +82,8 @@ body {
   border-top-color so here we set the border-color
   and override the bottom,left,right colors below.
   */
-  border-color: #000;
-  border-color: rgba(0,0,0,0.8) !important;
+  border-color: #efefef;
+  border-color: rgba(190,190,190,0.9) !important;
   border-bottom-color: transparent !important;
   border-left-color: transparent !important;
   border-right-color: transparent !important;
@@ -90,8 +92,8 @@ body {
 }
 
 .joyride-tip-guide span.joyride-nub.right {
-  border-color: #000;
-  border-color: rgba(0,0,0,0.8) !important;
+  border-color: #efefef;
+  border-color: rgba(190,190,190,0.9) !important;
   border-top-color: transparent !important;
   border-right-color: transparent !important;
   border-bottom-color: transparent !important;
@@ -102,8 +104,8 @@ body {
 }
 
 .joyride-tip-guide span.joyride-nub.left {
-  border-color: #000;
-  border-color: rgba(0,0,0,0.8) !important;
+  border-color: #efefef;
+  border-color: rgba(190,190,190,0.9) !important;
   border-top-color: transparent !important;
   border-left-color: transparent !important;
   border-bottom-color: transparent !important;
@@ -114,8 +116,8 @@ body {
 }
 
 .joyride-tip-guide span.joyride-nub.top-right {
-  border-color: #000;
-  border-color: rgba(0,0,0,0.8);
+  border-color: #efefef;
+  border-color: rgba(190,190,190,0.9);
   border-top-color: transparent !important;
   border-left-color: transparent !important;
   border-right-color: transparent !important;
@@ -130,7 +132,7 @@ body {
   line-height: 1.25;
   margin: 0;
   font-weight: bold;
-  color: #fff;
+  color: #333;
 }
 .joyride-tip-guide h1 { font-size: 30px; }
 .joyride-tip-guide h2 { font-size: 26px; }
@@ -211,7 +213,7 @@ body {
   position: absolute;
   right: 10px;
   top: 10px;
-  color: rgba(255,255,255,0.4) !important;
+  color: rgba(0,0,0,0.4) !important;
   text-decoration: none;
   font-family: Verdana, sans-serif;
   font-size: 10px;
@@ -220,16 +222,16 @@ body {
 }
 
 .joyride-close-tip:hover {
-  color: rgba(255,255,255,0.9) !important;
+  color: rgba(0,0,0,0.9) !important;
 }
 
 .joyride-modal-bg {
   position: fixed;
   height: 100%;
   width: 100%;
-  background: rgb(0,0,0);
+  background: rgb(190,190,190);
   background: transparent;
-  background: rgba(0,0,0, 0.5);
+  background: rgba(190,190,190,0.8);
   -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
   filter: alpha(opacity=50);
   opacity: 0.5;

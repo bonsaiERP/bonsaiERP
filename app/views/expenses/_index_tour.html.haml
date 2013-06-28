@@ -1,0 +1,48 @@
+%ol#tour-tags.joyride-list.hidden(data-joyride)
+  %li(data-sel=".search-tags" data-text="Siguiente" data-tip-location='left')
+    %h4
+      Etiquetas
+    %p
+      Las etiqutas son ona forma muy poderosa de poder filtrar contenido,
+      permitiendo realizar busquedas y mejores reportes
+
+  %li(data-sel="input.row-check" data-text="Siguiente" data-tip-location='left')
+    %h4
+      Etiquetemos egresos
+    %p
+      Haga click en cuadro o sino
+      en cualquier parte de la línea con los datos del egreso,
+      puede seleccionar varios
+
+  %li(data-sel=".select2-container.btags" data-text="Siguiente" data-tip-location='bottom')
+    %h4
+      Seleccione etiquetas
+    %p
+      Haga click o comience a escribir para seleccionar, en caso de que no existan puede
+      creaer una
+      %a#tour-new-tag-link(href='javascript:;') Nueva etiqueta
+
+  %li(data-sel=".apply-tags" data-text="Fin")
+    %h4
+      Aplique las etiquetas
+    %p
+
+
+:javascript
+  $(function() {
+    $('body').on('click', '#tour-new-tag-link', 
+      function() { $('#new-tag-link').trigger('click');
+    });
+
+    // Tags
+    function tourTags() {
+      $('button[href=#tags-pane]').trigger('click');
+      var t = new Plugin.Bride('#tour-tags');
+      t.init();
+    }
+
+    if(tags.legnth === 0) { tourTags(); }
+
+    $('body').on( 'click','#help-tags-link', function() { tourTags() });
+  });
+
