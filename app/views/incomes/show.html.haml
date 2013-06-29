@@ -72,16 +72,16 @@
     %i.icon-file-alt(data-toggle='tooltip' title='Descripción')
     = @income.description
 
-= render 'incomes/tour/devolution'
+
 
 %hr
 
 %ul#tabs.nav.nav-pills.fs150
   %li
-    %a(href='#payments' data-toggle='tab') Cobros
+    %a.payment-link-tab(href='#payments' data-toggle='tab') Cobros
 
   %li
-    %a(href='#items' data-toggle='tab') Items
+    %a.item-link-tab(href='#items' data-toggle='tab') Items
 
 .tab-content
   #items.tab-pane.fade
@@ -125,6 +125,9 @@
           %strong Cantidad
 
       = render partial: 'account_ledgers/income', collection: @income.payments, as: :ledger
+
+-#Tours
+= render 'incomes/tour_devolution'
 
 :javascript
   $( function() {

@@ -1,0 +1,27 @@
+%ol#devolution-tour.hidden
+  %li(data-sel="#devolution-link" data-text="Siguiente" data-tip-location='bottom')
+    %p
+      Hagamos click para abrir el formulario y crear una devolución, 
+      en este caso de color 
+      %strong.text-success verde
+      debido a que se ingresa dinero a una cuenta
+
+  %li(data-sel=".account_to" data-text="Fin" data-tip-location='bottom')
+    %p 
+      Seleccione 
+      %strong la cuenta,
+      ingrese la fecha, cantidad y referencia
+      finalmente realize la devolución
+      haciendo click en el
+      %strong.text-success botón verde
+
+
+:javascript
+  $(function() {
+    $('#negative-balance-link').click(function() {
+      $('.payment-link-tab').trigger('click');
+      var t = new Plugin.Bride('#devolution-tour');
+      t.init();
+    });
+  })
+

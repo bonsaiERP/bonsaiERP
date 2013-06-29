@@ -9,7 +9,7 @@
 
 %header
   - if @expense.has_error
-    .allowed-errors
+    .alert.alert-error
       %h4 Existen errores que debe corregir!
       %ul
         - @expense.error_messages.each do |k, arr|
@@ -70,8 +70,6 @@
       = @expense.description
 
 
-= render 'expenses/tour/devolution'
-
 %hr
 
 %ul#tabs.nav.nav-pills.fs150
@@ -117,6 +115,8 @@
 
     %ul.unstyled.listing
       = render partial: 'account_ledgers/income', collection: @expense.payments, as: :ledger
+
+= render 'expenses/tour_devolution'
 
 :javascript
   $( function() {
