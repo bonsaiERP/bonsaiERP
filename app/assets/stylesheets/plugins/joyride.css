@@ -258,3 +258,14 @@ body {
     top: 0px;
     left: 0px;
 }
+
+.next{
+  margin-left: 30px;
+}
+.first-step .prev{
+  display: none;
+}
+
+.first-step .next{
+  margin-left: 0px;
+}

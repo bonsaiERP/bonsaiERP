@@ -22,11 +22,22 @@ class Bride
   #
   showPos: (pos) ->
     if @$items[pos]
+      @setStepCssClass(pos)
       @$current = $(@$items[pos])
       @pos = pos + 1
       @show()
     else
       @hide()
+  #
+  setStepCssClass: (pos) ->
+    switch
+      when pos is 0
+        @$tip.addClass('first-step')
+      when @$items.length is (pos - 1)
+        @$tip.addClass('last-step')
+      else
+        @$tip.removeClass('first-step').removeClass('last-step')
+
   #
   hide: ->
     @$tip.css({visibility: 'hidden'})
@@ -36,7 +47,7 @@ class Bride
     @$tip.css({visibility: 'visible', top: '100px'}).data('pos', @pos)
     .find('#content').html(@$current.html())
     @$tip.find('.joyride-nub').attr('class', '').addClass("joyride-nub #{tipLocation}")
-    @$tip.find('.joyride-next-tip').text(@$current.data('text'))
+    @$tip.find('.next').text(@$current.data('text'))
 
     @setPosition()
   #
@@ -76,8 +87,11 @@ class Bride
         y - 20
   #
   setEvents: ->
-    @$tip.on 'click', '.joyride-next-tip', =>
+    @$tip.on 'click', '.next', =>
       @showPos @$tip.data('pos')
+
+    @$tip.on 'click', '.prev', =>
+      @showPos @$tip.data('pos') - 2
 
     @$tip.on 'click', '.joyride-close-tip', =>
       @hide()
@@ -91,7 +105,8 @@ template = """
   <span class="joyride-nub"></span>
   <div class="joyride-content-wrapper" role="dialog">
     <div id="content"></div>
-    <a href="javascript:;" class="joyride-next-tip"></a>
+    <a href="javascript:;" class="joyride-next-tip prev">Anterior</a>
+    <a href="javascript:;" class="joyride-next-tip next"></a>
     <a href="javascript:;" class="joyride-close-tip">X</a>
   </div>
 </div>
