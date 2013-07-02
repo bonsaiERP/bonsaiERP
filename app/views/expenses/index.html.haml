@@ -35,8 +35,6 @@
   %li
     = link_to "Anulados", expenses_path(nulled: true), class: params_bold(:nulled)
 
-.row-fluid
-  = render 'expenses/quick_expense'
 
 - paginate_html = paginate @expenses
 
