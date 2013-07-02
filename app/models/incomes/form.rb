@@ -12,7 +12,7 @@ class Incomes::Form < Movements::Form
            :income_details_attributes, :income_details_attributes=,
            to: :income
 
-  delegate :id, to: :income, prefix:true
+  delegate :id, to: :income, prefix: true
 
   # Creates and instance of income and initializes
   def self.new_income(attrs = {})
