@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130618184031) do
+ActiveRecord::Schema.define(:version => 20130702144114) do
 
   create_table "account_ledgers", :force => true do |t|
     t.string   "reference"
@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(:version => 20130618184031) do
     t.datetime "created_at",                                                                              :null => false
     t.datetime "updated_at",                                                                              :null => false
     t.string   "status",             :limit => 50,                                :default => "approved"
+    t.integer  "updater_id"
   end
 
   add_index "account_ledgers", ["account_id"], :name => "index_account_ledgers_on_account_id"
@@ -48,6 +49,7 @@ ActiveRecord::Schema.define(:version => 20130618184031) do
   add_index "account_ledgers", ["project_id"], :name => "index_account_ledgers_on_project_id"
   add_index "account_ledgers", ["reference"], :name => "index_account_ledgers_on_reference"
   add_index "account_ledgers", ["status"], :name => "index_account_ledgers_on_status"
+  add_index "account_ledgers", ["updater_id"], :name => "index_account_ledgers_on_updater_id"
 
   create_table "accounts", :force => true do |t|
     t.string   "name"
@@ -66,6 +68,7 @@ ActiveRecord::Schema.define(:version => 20130618184031) do
     t.datetime "created_at",                                                                      :null => false
     t.datetime "updated_at",                                                                      :null => false
     t.string   "tag_ids",        :limit => nil,                                :default => "{}"
+    t.integer  "updater_id"
   end
 
   add_index "accounts", ["active"], :name => "index_accounts_on_active"
@@ -79,6 +82,7 @@ ActiveRecord::Schema.define(:version => 20130618184031) do
   add_index "accounts", ["state"], :name => "index_accounts_on_state"
   add_index "accounts", ["tag_ids"], :name => "index_accounts_on_tag_ids"
   add_index "accounts", ["type"], :name => "index_accounts_on_type"
+  add_index "accounts", ["updater_id"], :name => "index_accounts_on_updater_id"
 
   create_table "contacts", :force => true do |t|
     t.string   "matchcode"
@@ -129,6 +133,7 @@ ActiveRecord::Schema.define(:version => 20130618184031) do
     t.string   "error_messages"
     t.datetime "created_at",                                                                      :null => false
     t.datetime "updated_at",                                                                      :null => false
+    t.integer  "updater_id"
   end
 
   add_index "inventories", ["account_id"], :name => "index_inventory_operations_on_account_id"
@@ -139,6 +144,7 @@ ActiveRecord::Schema.define(:version => 20130618184031) do
   add_index "inventories", ["project_id"], :name => "index_inventory_operations_on_project_id"
   add_index "inventories", ["ref_number"], :name => "index_inventory_operations_on_ref_number"
   add_index "inventories", ["store_id"], :name => "index_inventory_operations_on_store_id"
+  add_index "inventories", ["updater_id"], :name => "index_inventories_on_updater_id"
 
   create_table "inventory_details", :force => true do |t|
     t.integer  "inventory_id"

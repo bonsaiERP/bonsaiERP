@@ -2,6 +2,13 @@
 require 'spec_helper'
 
 describe Account do
+
+  it { should belong_to(:updater).class_name('User') }
+  #
+  it { should belong_to(:contact) }
+  it { should have_many(:account_ledgers) }
+
+
   it { should have_valid(:currency).when('BOB', 'EUR') }
   it { should_not have_valid(:currency).when('BOBB', 'UUUU') }
   it { should have_valid(:amount).when(10, 0.0, -10.0) }
@@ -43,6 +50,8 @@ describe Account do
 
       expect(a.tag_ids).to eq(tag_ids)
       expect(a.tag_ids.size).to eq(2)
+
+      expect(a.updater_id).to eq(1)
 
       a.tag_ids = [1231231232, 23232]
       a.save.should be_true

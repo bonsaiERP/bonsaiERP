@@ -3,6 +3,8 @@
 # email: boriscyber@gmail.com
 class AccountLedger < ActiveRecord::Base
 
+  include ::Models::Updater
+
   ########################################
   # Constants
   # contin  = Advance in that will add the amount to the Contact account

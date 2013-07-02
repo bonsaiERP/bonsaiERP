@@ -7,15 +7,23 @@
     .span4
       .well.well-small
         %h4.n Cambios por usuarios
-        = render 'users/user_changes_labels'
         %p.muted
-          Muestra los tipos de cambio que un usuario
-          realizo en algún registro del sistema, 
-          %strong mueva sobre los íconos
-
-          %i.icon-user.dark(title='Creado por: #{current_user} #{l t}, ID: #{current_user.id}' data-toggle='tooltip')
-          %i.icon-user.text-success(title='Aprobado por: #{current_user} #{l t}, ID: #{current_user.id}' data-toggle='tooltip')
-          %i.icon-user.text-error(title='Anulado por: #{current_user} #{l t}, ID: #{current_user.id}, ' data-toggle='tooltip')
+          Muestra los cambios que un usuario
+          realizo en algún registro del sistema
+        
+        %ul.unstyled
+          %li
+            %i.icon-user.orange(title='Modificado por: #{current_user} #{l t}, ID: #{current_user.id}' data-toggle='tooltip')
+            %strong Modificado por
+          %li
+            %i.icon-user.dark(title='Creado por: #{current_user} #{l t}, ID: #{current_user.id}' data-toggle='tooltip')
+            %strong Creado por
+          %li
+            %i.icon-user.text-success(title='Aprobado por: #{current_user} #{l t}, ID: #{current_user.id}' data-toggle='tooltip')
+            %strong Aprobado por
+          %li
+            %i.icon-user.text-error(title='Anulado por: #{current_user} #{l t}, ID: #{current_user.id}, ' data-toggle='tooltip')
+            %strong Anulado por
 
     .span4
       .well.well-small
