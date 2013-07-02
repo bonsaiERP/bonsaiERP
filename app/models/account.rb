@@ -5,6 +5,7 @@ class Account < ActiveRecord::Base
 
   include ActionView::Helpers::NumberHelper
   include ::Models::Tag
+  include ::Models::Updater
 
   ########################################
   # Relationships

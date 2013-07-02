@@ -3,6 +3,8 @@
 # email: boriscyber@gmail.com
 class Inventory < ActiveRecord::Base
 
+  include ::Models::Updater
+
   before_create { self.creator_id = UserSession.id }
 
   OPERATIONS = %w(in out inc_in inc_out exp_in exp_out trans).freeze

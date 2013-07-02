@@ -21,6 +21,7 @@ describe AccountLedger do
       al
     }
 
+    it { should belong_to(:updater).class_name('User') }
     it { should have_valid(:operation).when( *AccountLedger::OPERATIONS ) }
     it { should_not have_valid(:operation).when('no', 'ok') }
     it { should have_valid(:status).when( *AccountLedger::STATUSES ) }
