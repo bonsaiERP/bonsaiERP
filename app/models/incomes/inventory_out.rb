@@ -28,6 +28,7 @@ class Incomes::InventoryOut < Inventories::Out
       update_income_details
       update_income_balanace
 
+      income_errors.set_errors
       res = @income.save
       res = res && update_stocks
       Inventories::Errors.new(@inventory, stocks).set_errors
@@ -81,5 +82,9 @@ private
 
   def income_item_ids
     @income_item_ids ||= @income.details.map(&:item_id)
+  end
+
+  def income_errors
+    @income_errors ||= Incomes::Errors.new(income)
   end
 end

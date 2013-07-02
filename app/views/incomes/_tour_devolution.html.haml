@@ -7,20 +7,32 @@
       denota que saldra dinero de una cuenta
 
   %li(data-sel=".account_to" data-text="Fin" data-tip-location='bottom')
-    %p 
-      Seleccione 
+    %p
+      Seleccione
       %strong la cuenta,
-      ingrese la fecha, cantidad y referencia
-      finalmente realize la devolución
-      haciendo click en el
-      %strong.text-error botón rojo
+      ingrese la fecha, cantidad y referencia,
+      haciendo click en el botón
+      %strong.text-error Devolución
+      complerara la misma.
+
+
+%ul#devolution-inventory.hidden
+  %li(data-sel="#inventory-devolution-link" data-text="Fin" data-tip-location="bottom")
+    %p
+      Haga click en el botón
+      %strong.text-error Devolución de mercadería
+      y seleccione el almacen.
 
 
 :javascript
   $(function() {
     $('#negative-balance-link').click(function() {
       $('.payment-link-tab').trigger('click');
-      var t = new Plugin.Bride('#devolution-tour');
-      t.init();
+      new Plugin.Bride('#devolution-tour').init();
+    });
+
+    $('body').on('click', '#negative-invenory-balance-link', function() {
+      $('.item-link-tab').trigger('click');
+      new Plugin.Bride('#devolution-inventory').init();
     });
   })

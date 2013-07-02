@@ -22,6 +22,7 @@ class Expenses::InventoryOut < Inventories::Out
       update_expense_details
       update_expense_balance
 
+      expense_errors.set_errors
       res = expense.save
       res = res && update_stocks
       Inventories::Errors.new(inventory, stocks).set_errors
@@ -32,7 +33,9 @@ class Expenses::InventoryOut < Inventories::Out
 
   def build_details
     expense.expense_details.each do |det|
-      inventory.inventory_details.build(item_id: det.item_id ,quantity: 0)
+      if det.balance < 0
+        inventory.inventory_details.build(item_id: det.item_id ,quantity: -1 * det.balance)
+      end
     end
   end
 
@@ -82,5 +85,9 @@ private
 
   def expense_item_ids
     @expense_item_ids ||= @expense.details.map(&:item_id)
+  end
+
+  def expense_errors
+    @expense_errors ||= Expenses::Errors.new(expense)
   end
 end

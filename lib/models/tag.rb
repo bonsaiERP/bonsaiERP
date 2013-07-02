@@ -27,7 +27,7 @@ module Models::Tag
 
 private
   def set_valid_tags
-    t_ids = Tag.where(id: tag_ids).pluck(:id)
+    t_ids = ::Tag.where(id: tag_ids).pluck(:id)
 
     self.tag_ids = tag_ids.select {|v| t_ids.include?(v) }
   end

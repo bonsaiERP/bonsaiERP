@@ -27,6 +27,7 @@ class Incomes::InventoryIn < Inventories::In
       update_income_details
       update_income_balance
 
+      income_errors.set_errors
       res = @income.save
       @inventory.account_id = income_id
       res = res && @inventory.save
@@ -78,5 +79,9 @@ private
 
   def income_item_ids
     @income_item_ids ||= @income.details.map(&:item_id)
+  end
+
+  def income_errors
+    @income_errors ||= Incomes::Errors.new(income)
   end
 end

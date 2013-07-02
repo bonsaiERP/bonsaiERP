@@ -28,6 +28,7 @@ class Expenses::InventoryIn < Inventories::In
       update_expense_details
       update_expense_balanace
 
+      expense_errors.set_errors
       res = @expense.save
       res = res && update_stocks
       Inventories::Errors.new(@inventory, stocks).set_errors
@@ -79,5 +80,9 @@ private
 
   def expense_item_ids
     @expense_item_ids ||= @expense.details.map(&:item_id)
+  end
+
+  def expense_errors
+    @expense_errors ||= Expenses::Errors.new(expense)
   end
 end
