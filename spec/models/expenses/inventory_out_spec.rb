@@ -122,7 +122,7 @@ describe Expenses::InventoryOut do
       # Error
       invout = Expenses::InventoryOut.new(valid_attributes)
       invout.create.should be_false
-      invout.details[0].errors[:quantity].should eq([I18n.t('errors.messages.inventory.movement_quantity')])
+      invout.details[0].errors[:quantity].should eq([I18n.t('errors.messages.inventory.movement_quantity', q: 0.0)])
       invout.details[1].errors[:quantity].should_not be_blank
 
       # Error

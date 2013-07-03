@@ -7,7 +7,7 @@ class Incomes::InventoryOut < Inventories::Out
   validates_presence_of :income
   validate :valid_quantities
   validate :valid_item_ids
-  
+
   delegate :income_details, to: :income
   delegate :balance_inventory, :inventory_left, to: :income_calculations
 

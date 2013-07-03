@@ -244,10 +244,10 @@ es:
         invalid_item: "Ha seleccionado items inexistentes"
         invalid_store: "El almacen que selecciono es incorrecto"
         empty_items: "No existe items para realizar la operación"
-        item_balance: "Existen items que exeden el balance"
+        item_balance: "Existen items que exeden el máximo permitido"
         stock_quantity: "Existen items que exceden la cantidad máxima"
         negative_stock: "Hay ítems que generaton un stock negactivo"
-        movement_quantity: "La cantidad es mayor que el balance"
+        movement_quantity: "La cantidad es mayor a la permitida de %{q}"
         at_least_one_item: "Debe existir al menos un item con cantidad mayor a 0"
       item:
         repeated: "El ítem es repetido"

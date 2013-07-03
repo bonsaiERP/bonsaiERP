@@ -50,8 +50,9 @@ private
     res = true
     details.each do |det|
       mov_det = movement_detail(det.item_id)
-      if det.quantity > (mov_det.quantity - mov_det.balance)
-        det.errors.add(:quantity, I18n.t('errors.messages.inventory.movement_quantity'))
+      mov_q = (mov_det.quantity - mov_det.balance)
+      if det.quantity > mov_q
+        det.errors.add(:quantity, I18n.t('errors.messages.inventory.movement_quantity', q: mov_q))
         res = false
       end
     end
