@@ -16,7 +16,9 @@ class Incomes::InventoryIn < Inventories::In
 
   def build_details
     income.income_details.each do |det|
-      inventory.inventory_details.build(item_id: det.item_id ,quantity: 0)
+      unless det.balance === det.quantity
+        inventory.inventory_details.build(item_id: det.item_id, quantity: 0)
+      end
     end
   end
 

@@ -7,7 +7,7 @@ class Expenses::InventoryOut < Inventories::Out
   validates_presence_of :expense
   validate :valid_quantities
   validate :valid_item_ids
-  
+
   delegate :expense_details, to: :expense
   delegate :balance_inventory, :inventory_left, to: :expense_calculations
 
@@ -33,8 +33,8 @@ class Expenses::InventoryOut < Inventories::Out
 
   def build_details
     expense.expense_details.each do |det|
-      if det.balance < 0
-        inventory.inventory_details.build(item_id: det.item_id ,quantity: -1 * det.balance)
+      unless det.balance === det.quantity
+        inventory.inventory_details.build(item_id: det.item_id, quantity: 0)
       end
     end
   end
