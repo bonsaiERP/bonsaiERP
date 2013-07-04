@@ -12,6 +12,7 @@
         .clear-both
         = expense.state_tag
         %i= l expense.date
+        = expense.inventory_tag
 
         %ul.btags(data-tag_ids="#{expense.tag_ids}")
 

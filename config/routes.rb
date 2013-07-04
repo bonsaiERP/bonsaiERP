@@ -60,10 +60,9 @@ Bonsaierp::Application.routes.draw do
     member do
       put :approve
       put :null
+      put :inventory
       get :history
     end
-
-    post :quick_income, on: :collection
   end
 
   resources :incomes_inventory_ins, only: ['new', 'create']
@@ -73,10 +72,9 @@ Bonsaierp::Application.routes.draw do
     member do
       put :approve
       put :null
+      put :inventory
       get :history
     end
-
-    post :quick_expense, on: :collection
   end
 
   resources :expenses_inventory_ins, only: ['new', 'create']

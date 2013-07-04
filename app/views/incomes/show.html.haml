@@ -81,14 +81,26 @@
     %a.payment-link-tab(href='#payments' data-toggle='tab') Cobros
 
   %li
-    %a.item-link-tab(href='#items' data-toggle='tab') Items
+    %a.item-link-tab(href='#items' data-toggle='tab')
+      Items
+      = @income.inventory_tag
+
+  - if @income.enable_disable_inventory?
+    %li
+      = link_to inventory_income_path(@income.id, no_inventory: @income.enable_disable_inventory_val), method: 'put', class: 'no-tab' do
+        %span.fs70
+          &nbsp;&nbsp;
+          = @income.enable_disable_inventory_text_tag
+
 
 .tab-content
   #items.tab-pane.fade
-    %h2.n Items
+    %h2.n
+      Items
 
-    .item-buttons
-      = render 'inventory_buttons', income: @income
+    .row-fluid
+      .item-buttons.span6
+        = render 'inventory_buttons', income: @income
     %hr
 
     = render "incomes/items", income: @income

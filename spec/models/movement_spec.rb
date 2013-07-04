@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe Movement do
 
-
   context "#can_null?" do
     let(:subject) {
       m = Movement.new(amount: 100, state: 'draft')
@@ -73,5 +72,18 @@ describe Movement do
       
       subject.should_not be_can_devolution
     end
+  end
+
+  it "#is_active?" do
+    i = Income.new_income(state: 'approved')
+    i.should be_is_active
+
+    i.state = 'paid'
+    i.should be_is_active
+  end
+
+  it "#no_inventory" do
+    e = Expense.new_expense
+    expect(e.no_inventory).to be_false
   end
 end

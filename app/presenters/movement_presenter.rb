@@ -21,10 +21,10 @@ class MovementPresenter < BasePresenter
 
   def state_tag
     html = case state
-    when "draft" then "<span class='b gray'>Borrador</span>"#label_tag('borrador')
-    when "approved" then "<span class='b purple'>Aprobado</span>"#label_blue('aprobado')
-    when "paid" then "<span class='b green'>#{ paid_text }</span>"#label_green('pagado')
-    when "nulled" then "<span class='b red'>Anulado</span>"#label_red('anulado')
+    when "draft" then "<span class='b gray'>Borrador</span>"
+    when "approved" then "<span class='b purple'>Aprobado</span>"
+    when "paid" then "<span class='b green'>#{ paid_text }</span>"
+    when "nulled" then "<span class='b red'>Anulado</span>"
     end
 
     html.html_safe
@@ -33,6 +33,20 @@ class MovementPresenter < BasePresenter
   def paid_text
     ""
   end
+
+  def inventory_tag
+    if is_active?
+      case
+      when delivered?
+        label_green('IC', 'Inventario completo')
+      when no_inventory?
+        label_red('ID', 'Inventario desactivado')
+      else
+        label_yellow('IP', 'Inventario pendiente')
+      end
+    end
+  end
+
 
   def due_date_tag
     d = ""
@@ -48,6 +62,44 @@ class MovementPresenter < BasePresenter
 
   def description_tag
     "#{ icon 'icon-file-alt', 'Descripción'} #{ description }".html_safe if description.present?
+  end
+
+  def enable_disable_inventory_text_tag
+    if no_inventory?
+      "<span class='green'>#{icon('icon-off')} Activar inventario</span>".html_safe
+    else
+      "<span class='red'>#{icon('icon-off')} Desactivar inventario</span>".html_safe
+    end
+  end
+
+  # show enable disable inventory
+  def enable_disable_inventory?
+    active? && !delivered?
+  end
+
+  def enable_disable_inventory_text
+    if no_inventory?
+      "Activar inventario"
+    else
+      "Desactivar inventario"
+    end
+  end
+
+  # Value to enable disable inventory
+  def enable_disable_inventory_val
+    if no_inventory?
+      false
+    else
+      true
+    end
+  end
+
+  def enable_disable_button_css
+    if no_inventory?
+      'btn btn-success'
+    else
+      'btn btn-danger'
+    end
   end
 
 private

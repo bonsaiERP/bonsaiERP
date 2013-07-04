@@ -3,6 +3,6 @@
 # email: boriscyber@gmail.com
 class BasePresenter < Resubject::Presenter
   include UserLogHelper
-  include LabelTagModule
+  include LabelTagHelper
   include IconsHelper
 end

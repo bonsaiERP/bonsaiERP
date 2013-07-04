@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130702144114) do
+ActiveRecord::Schema.define(:version => 20130704130428) do
 
   create_table "account_ledgers", :force => true do |t|
     t.string   "reference"
@@ -330,6 +330,7 @@ ActiveRecord::Schema.define(:version => 20130702144114) do
     t.boolean  "devolution",                                                      :default => false
     t.datetime "created_at",                                                                         :null => false
     t.datetime "updated_at",                                                                         :null => false
+    t.boolean  "no_inventory",                                                    :default => false
   end
 
   add_index "transactions", ["account_id"], :name => "index_transactions_on_account_id"
@@ -338,6 +339,7 @@ ActiveRecord::Schema.define(:version => 20130702144114) do
   add_index "transactions", ["devolution"], :name => "index_transactions_on_devolution"
   add_index "transactions", ["discounted"], :name => "index_transactions_on_discounted"
   add_index "transactions", ["due_date"], :name => "index_transactions_on_due_date"
+  add_index "transactions", ["no_inventory"], :name => "index_transactions_on_no_inventory"
 
   create_table "units", :force => true do |t|
     t.string   "name",       :limit => 100

@@ -4,7 +4,7 @@
 class ExpensesController < ApplicationController
   include Controllers::TagSearch
 
-  before_filter :set_expense, only: [:approve, :null]
+  before_filter :set_expense, only: [:approve, :null, :inventory]
 
   # GET /expenses
   def index
@@ -50,19 +50,6 @@ class ExpensesController < ApplicationController
     end
   end
 
-  # POST /expenses/quick_expense
-  def quick_expense
-    @quick_expense = Expenses::QuickForm.new(quick_expense_params)
-
-    if @quick_expense.create
-      flash[:notice] = "El egreso fue creado."
-    else
-      flash[:error] = "Existio errores al crear el egreso."
-    end
-
-    redirect_to expenses_path
-  end
-
   # DELETE /expenses/1
   def destroy
     if @expense.approved?
@@ -88,12 +75,19 @@ class ExpensesController < ApplicationController
     redirect_to expense_path(@expense)
   end
 
-  def history
-    @history = TransactionHistory.find(params[:id])
-    @trans = @history.transaction
-    @transaction = @history.get_transaction("Expense")
+  # PUT /expenses/:id/approve
+  # Method that nulls or enables inventory
+  def inventory
+    @expense.no_inventory = params[:no_inventory]
 
-    render "transactions/history"
+    if @expense.save
+      txt = @expense.no_inventory? ? 'desactivo' : 'activo'
+      flash[:notice] = "Se #{txt} los inventarios"
+    else
+      flash[:error] = 'Exisition un error'
+    end
+
+    redirect_to expense_path(@expense.id, anchor: 'items')
   end
 
   # PUT /incomes/:id/null
@@ -166,10 +160,12 @@ private
       @expenses = @expenses.due
     when params[:nulled].present?
       @expenses = @expenses.nulled
+    when params[:inventory].present?
+      @expenses = @expenses.inventory
     end
   end
 
   def set_index_params
-    params[:all] = true unless params[:approved] || params[:error] || params[:nulled] || params[:due]
+    params[:all] = true unless [:approved, :error, :nulled, :due, :inventory].any? {|v| params[v].present? }
   end
 end

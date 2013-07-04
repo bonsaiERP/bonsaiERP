@@ -10,8 +10,9 @@
         = income.has_error_label
         = link_to income.contact, income.contact
         .clear-both
-        %span= income.state_tag
+        = income.state_tag
         %i= l income.date
+        = income.inventory_tag
 
   .span4
     = income.creator_label

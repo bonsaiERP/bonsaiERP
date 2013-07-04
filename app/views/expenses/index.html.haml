@@ -34,6 +34,8 @@
     = link_to "Con error", expenses_path(error: true), class: params_bold(:error) 
   %li
     = link_to "Anulados", expenses_path(nulled: true), class: params_bold(:nulled)
+  %li
+    = link_to "Inventario pendiente", expenses_path(inventory: true), class: params_bold(:inventory)
 
 
 - paginate_html = paginate @expenses

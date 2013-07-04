@@ -79,6 +79,14 @@
   %li
     %a.item-link-tab(href="#items" data-toggle='tab')
       Items
+      = @expense.inventory_tag
+
+  - if @expense.enable_disable_inventory?
+    %li
+      = link_to inventory_expense_path(@expense.id, no_inventory: @expense.enable_disable_inventory_val), method: 'put', class: 'no-tab' do
+        %span.fs70
+          &nbsp;&nbsp;
+          = @expense.enable_disable_inventory_text_tag
 
 .tab-content
   #items.tab-pane.fade

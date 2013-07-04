@@ -4,7 +4,7 @@
 class IncomesController < ApplicationController
   include Controllers::TagSearch
 
-  before_filter :set_income, only: [:approve, :null]
+  before_filter :set_income, only: [:approve, :null, :inventory]
 
   # GET /incomes
   def index
@@ -51,19 +51,6 @@ class IncomesController < ApplicationController
     end
   end
 
-  # POST /incomes/quick_income
-  def quick_income
-    @quick_income = Incomes::QuickForm.new(quick_income_params)
-
-    if @quick_income.create
-      flash[:notice] = "El ingreso fue creado."
-    else
-      flash[:error] = "Existio errores al crear el ingreso."
-    end
-
-    redirect_to incomes_path
-  end
-
   # DELETE /incomes/:id
   def destroy
     if @income.approved?
@@ -89,6 +76,21 @@ class IncomesController < ApplicationController
     end
 
     redirect_to income_path(@income)
+  end
+
+  # PUT /incomes/:id/approve
+  # Method that nulls or enables inventory
+  def inventory
+    @income.no_inventory = params[:no_inventory]
+
+    if @income.save
+      txt = @income.no_inventory? ? 'desactivo' : 'activo'
+      flash[:notice] = "Se #{txt} los inventarios."
+    else
+      flash[:error] = "Exisition un error modificando el estado de inventarios."
+    end
+
+    redirect_to income_path(@income.id, anchor: 'items')
   end
 
   # PUT /incomes/:id/null
@@ -162,10 +164,12 @@ private
       @incomes = @incomes.due
     when params[:nulled].present?
       @incomes = @incomes.nulled
+    when params[:inventory].present?
+      @incomes = @incomes.inventory
     end
   end
 
   def set_index_params
-    params[:all] = true unless params[:approved] || params[:error] || params[:nulled] || params[:due]
+    params[:all] = true unless [:approved, :error, :nulled, :due, :inventory].any? {|v| params[v].present? }
   end
 end
