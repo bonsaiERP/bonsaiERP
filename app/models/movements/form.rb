@@ -7,7 +7,7 @@ class Movements::Form < BaseForm
   attribute :date, Date
   attribute :contact_id, Integer
   attribute :currency, String
-  attribute :total, Decimal
+  attribute :total, Decimal, default: 0
   attribute :exchange_rate, Decimal, default: 1
   attribute :project_id, Integer
   attribute :due_date, Date
@@ -73,6 +73,13 @@ private
   def copy_new_defaults
     self.currency = @movement.currency
     self.date = Date.today
+    self.total = total || 0
+  end
+
+  # Sets default values so it does not generate errors
+  def clean_attributes(attrs)
+    attrs[:total] = 0  if attrs[:total].blank?
+    attrs
   end
 
   def valid_service?

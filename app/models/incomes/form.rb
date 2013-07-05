@@ -43,7 +43,7 @@ class Incomes::Form < Movements::Form
 
   def set_new_income(attrs = {})
     @movement = Income.new_income
-    MovementService.new(@movement).set_new(attrs)
+    MovementService.new(@movement).set_new(clean_attributes(attrs))
     copy_new_defaults
   end
 

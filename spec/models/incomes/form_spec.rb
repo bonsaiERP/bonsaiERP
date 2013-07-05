@@ -348,4 +348,15 @@ describe Incomes::Form do
     is.errors.messages[:account_to_id].should_not be_blank
     is.errors.messages[:currency].should_not be_blank
   end
+
+  it "generates erros and does not raise exception" do
+    is = Incomes::Form.new_income(valid_params.merge(total: ""))
+    expect(is).to_not be_valid
+
+    is.errors[:total].should_not be_blank
+
+    is = Incomes::Form.new_income(valid_params.merge(total: "NaN"))
+    expect(is).to_not be_valid
+    is.errors[:total].should_not be_blank
+  end
 end
