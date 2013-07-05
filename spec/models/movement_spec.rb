@@ -86,27 +86,4 @@ describe Movement do
     e = Expense.new_expense
     expect(e.no_inventory).to be_false
   end
-
-  it "approve!" do
-    e = Expense.new_expense
-    UserSession.user = build :user, id: 1
-
-    e.should_receive(:save!)
-
-    e.approve!
-  end
-
-  it "approve! 2" do
-    e = Expense.new_expense
-    UserSession.user = build :user, id: 1
-    e.state = 'approved'
-
-    e.should_not_receive(:save!)
-
-    e.approve!
-    e.state = 'paid'
-    e.approve!
-    e.state = 'nulled'
-    e.approve!
-  end
 end

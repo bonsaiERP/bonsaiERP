@@ -66,7 +66,8 @@ class ExpensesController < ApplicationController
   # Method to approve an expense
   def approve
     @expense = Expense.find(params[:id])
-    if @expense.approve!
+    @expense.approve!
+    if @expense.save
       flash[:notice] = "La nota de venta fue aprobada."
     else
       flash[:error] = "Existio un problema con la aprobación."

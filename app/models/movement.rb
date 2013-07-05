@@ -82,7 +82,6 @@ class Movement < Account
       self.approver_id = UserSession.id
       self.approver_datetime = Time.zone.now
       self.due_date = Date.today
-      self.save!
     end
   end
 
