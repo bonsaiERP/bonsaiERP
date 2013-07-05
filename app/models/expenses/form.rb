@@ -44,7 +44,7 @@ class Expenses::Form < Movements::Form
 
   def set_new_expense(attrs = {})
     @movement = Expense.new_expense
-    MovementService.new(@movement).set_new(attrs)
+    MovementService.new(@movement).set_new(clean_attributes(attrs))
     copy_new_defaults
   end
 

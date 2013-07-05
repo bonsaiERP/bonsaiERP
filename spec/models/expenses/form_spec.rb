@@ -349,5 +349,16 @@ describe Expenses::Form do
     es.errors.messages[:account_to_id].should_not be_blank
     es.errors.messages[:currency].should_not be_blank
   end
+
+  it "generates erros and does not raise exception" do
+    es = Expenses::Form.new_expense(valid_params.merge(total: ""))
+    expect(es).to_not be_valid
+
+    es.errors[:total].should_not be_blank
+
+    es = Expenses::Form.new_expense(valid_params.merge(total: "NaN"))
+    expect(es).to_not be_valid
+    es.errors[:total].should_not be_blank
+  end
 end
 
