@@ -8,7 +8,8 @@
       = f.input :verification, as: :boolean, label: 'Verificar',
         input_html: {data: {value: 'payment.verification', checked: 'payment.verification'} },
         label: 'Verificar <i class="icon-warning-sign" data-toggle="tooltip" title="Solo cuentas de BANCO pueden verificar a futuro"></i>'.html_safe,
-        hint: 'Verificar a futuro. Ej.: (Cheque)'
+        hint: 'Verificar a futuro. Ej.: (Cheque)' do
+        = f.check_box :verification
 
 .row-fluid.bg-white-tan.pad-10.borders-y
   .span3
