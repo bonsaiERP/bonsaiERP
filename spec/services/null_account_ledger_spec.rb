@@ -18,7 +18,8 @@ describe NullAccountLedger do
   it "only nulls active and not conciliated accounts_ledgers" do
     Account.any_instance.stub(save: true)
     ledger = build :account_ledger, status: 'approved', approver_id: 12
-    ledger.stub(save: true)
+    ledger.save(validate: false)
+    ledger.should be_persisted
 
     # Conciliated
     na = NullAccountLedger.new(ledger)
@@ -34,120 +35,162 @@ describe NullAccountLedger do
   before(:each) do
     UserSession.user = build :user, id: 1
     Account.any_instance.stub(save: true)
-    AccountLedger.any_instance.stub(save: true)
+    #AccountLedger.any_instance.stub(save: true)
   end
 
-  let(:bank_bob) { build :bank, amount: 1000, currency: 'BOB' }
-  let(:bank_usd) { build :bank, amount: 1000, currency: 'USD' }
+  let(:bank_bob) { build :bank, amount: 1000, currency: 'BOB', id: 1 }
+  let(:bank_usd) { build :bank, amount: 1000, currency: 'USD', id: 2 }
+
+  context "expense" do
+    it "nulls expense payout" do
+      exp = Expense.new_expense(state: 'approved', total: 100, balance: 50, currency: 'BOB')
+      exp.stub(save: true)
+      exp.id = 200
+      
+      al = AccountLedger.new(amount: -50, currency: 'BOB', status: 'pendent', operation: 'payout', date: Date.today, reference: 'Pay expense', account_id: 200)
+      al.account = exp
+      al.account_to = bank_bob
+    
+      al.save.should be_true
+      al.should be_is_pendent
+
+      na = NullAccountLedger.new(al)
+      na.null!
+
+      al.should be_is_nulled
+
+      exp.balance.should == 100
+    end
+
+    it "nulls expense devout" do
+      exp = Expense.new_expense(state: 'approved', total: 100, balance: 50, currency: 'BOB')
+      exp.stub(save: true)
+      exp.id = 200
+      
+      al = AccountLedger.new(amount: 50, currency: 'BOB', status: 'pendent', operation: 'devout', date: Date.today, reference: 'Devolution expense', account_id: 200)
+      al.account = exp
+      al.account_to = bank_bob
+    
+      al.save.should be_true
+      al.should be_is_pendent
+
+      na = NullAccountLedger.new(al)
+      na.null!
+
+      al.should be_is_nulled
+
+      exp.balance.should == 0
+    end
+  end
+
+  context "income" do
+    it "nulls income payin" do
+      inc = Income.new_income(state: 'approved', total: 100, balance: 50, currency: 'BOB')
+      inc.stub(save: true)
+      inc.id = 200
+      
+      al = AccountLedger.new(amount: 50, currency: 'BOB', status: 'pendent', operation: 'payin', date: Date.today, reference: 'Pay income', account_id: 200)
+      al.account = inc
+      al.account_to = bank_bob
+    
+      al.save.should be_true
+      al.should be_is_pendent
+
+      na = NullAccountLedger.new(al)
+      na.null!
+
+      al.should be_is_nulled
+
+      inc.balance.should == 100
+    end
+
+    it "nulls income devout" do
+      inc = Income.new_income(state: 'approved', total: 100, balance: 50, currency: 'BOB')
+      inc.stub(save: true)
+      inc.id = 200
+      
+      al = AccountLedger.new(amount: -50, currency: 'BOB', status: 'pendent', operation: 'payin', date: Date.today, reference: 'Pay income', account_id: 200)
+      al.account = inc
+      al.account_to = bank_bob
+    
+      al.save.should be_true
+      al.should be_is_pendent
+
+      na = NullAccountLedger.new(al)
+      na.null!
+
+      al.should be_is_nulled
+
+      inc.balance.should == 0
+    end
+  end
 
   context "between cash and bank accounts" do
     let(:cash_bob) { build :cash, amount: 1000, currency: 'BOB' }
     let(:cash_usd) { build :cash, amount: 1000, currency: 'USD' }
 
-    it "updates the cash" do
-      al = AccountLedger.new(amount: 100.0, currency: 'BOB', status: 'pendent')
-      al.account = cash_bob
-      al.account_to = bank_bob
+
+    it "updates the income BOB" do
+      inc = Income.new_income(state: 'approved', total: 100, balance: 30, currency: 'BOB')
+      inc.stub(save: true)
+      inc.id = 200
+      
+      al = AccountLedger.new(amount: 10, currency: 'USD', exchange_rate: 7, status: 'pendent', operation: 'payin', date: Date.today, reference: 'Pay income', account_id: 200)
+
+      al.account = inc
+      al.account_to = bank_usd
+    
+      al.save.should be_true
       al.should be_is_pendent
 
       na = NullAccountLedger.new(al)
 
-      na.null.should be_true
+      na.null!.should be_true
 
-      cash_bob.amount.should == 1000.0
-      al.should be_is_nulled
+      inc.balance.should == 100
     end
 
-    it "updates the cash USD" do
-      al = AccountLedger.new(amount: 70.0, currency: 'BOB', status: 'pendent', exchange_rate: 7.0)
-      al.account = cash_usd
+    it "updates the income USD" do
+      inc = Income.new_income(state: 'approved', total: 100, balance: 90, currency: 'USD')
+      inc.stub(save: true)
+      inc.id = 200
+      
+      al = AccountLedger.new(amount: 70, currency: 'BOB', exchange_rate: 7, status: 'pendent', operation: 'payin', date: Date.today, reference: 'Pay income', account_id: 200, inverse: true)
+
+      al.account = inc
       al.account_to = bank_bob
+    
+      al.save.should be_true
+      al.should be_is_pendent
+      al.should be_inverse
 
       na = NullAccountLedger.new(al)
 
-      na.null.should be_true
+      na.null!.should be_true
 
-      cash_usd.amount.should == 1000.0
-      al.should be_is_nulled
+      inc.balance.should == 100
     end
 
-    it "updates the banks USD" do
-      al = AccountLedger.new(amount: 70.0, currency: 'BOB', status: 'pendent', exchange_rate: 7.0)
-      al.account = bank_usd
+    it "updates the income USD devolution" do
+      inc = Income.new_income(state: 'approved', total: 100, balance: 90, currency: 'USD')
+      inc.stub(save: true)
+      inc.id = 200
+      
+      al = AccountLedger.new(amount: -70, currency: 'BOB', exchange_rate: 7, status: 'pendent', operation: 'devin', date: Date.today, reference: 'Pay income', account_id: 200, inverse: true)
+
+      al.account = inc
       al.account_to = bank_bob
+    
+      al.save.should be_true
+      al.should be_is_pendent
+      al.should be_inverse
 
       na = NullAccountLedger.new(al)
 
-      na.null.should be_true
+      na.null!.should be_true
 
-      bank_usd.amount.should == 1000.0
-      al.should be_is_nulled
+      inc.balance.should == 80
     end
   end
 
-  describe 'Null Income/Expense' do
-
-    let(:income) { build :income, balance: 0, state: 'paid', currency: 'BOB' }
-    before(:each) { income.stub(save: true) }
-
-    it "nulls a income same currency" do
-
-      income.should be_is_paid
-
-      al = AccountLedger.new(amount: 10.0, currency: 'BOB', status: 'pendent')
-      al.account = income
-      al.account_to = bank_bob
-
-
-      na = NullAccountLedger.new(al)
-
-      na.null.should be_true
-
-      na.account.should eq(income)
-      income.balance.should == 10.0
-      income.should be_is_approved
-
-      al.should be_is_nulled
-    end
-
-    it "currency of income is USD" do
-      income.currency = 'USD'
-
-      al = AccountLedger.new(amount: 70.0, currency: 'BOB', status: 'pendent', exchange_rate: 7.0)
-      al.account = income
-      al.account_to = bank_bob
-
-      income.balance.should == 0
-
-      na = NullAccountLedger.new(al)
-
-      Movements::Errors.any_instance.should_receive(:set_errors)
-      na.null.should be_true
-
-      na.account.should eq(income)
-      income.balance.should == 10.0
-      income.should be_is_approved
-    end
-
-    it "income BOB account_to USD" do
-      income.currency = 'BOB'
-
-      al = AccountLedger.new(amount: 10.0, currency: 'USD', status: 'pendent', exchange_rate: 7.0)
-      al.account = income
-      al.account_to = bank_usd
-
-      income.balance.should == 0
-
-      na = NullAccountLedger.new(al)
-
-      Movements::Errors.any_instance.should_receive(:set_errors)
-
-      na.null.should be_true
-
-      na.account.should eq(income)
-      income.balance.should == 70.0
-      income.should be_is_approved
-    end
-  end
 end
-

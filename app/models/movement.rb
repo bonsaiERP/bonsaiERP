@@ -92,7 +92,7 @@ class Movement < Account
   end
 
   def can_null?
-    total === amount && !is_nulled? && ledgers.pendent.empty?
+    total === amount && !is_nulled? && ledgers.pendent.empty? && !is_draft?
   end
 
   alias :old_attributes :attributes

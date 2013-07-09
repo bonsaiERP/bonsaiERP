@@ -3,7 +3,8 @@
     .span4
       = f.input :name, label: "Nombre"
     .span1
-      = f.input :active, label: "Activo" 
+      = f.input :active, label: "Activo" do
+        = f.check_box :active
     .span2
       = f.input :phone, label: "Teléfono", input_html: {size: 12}
     .span5

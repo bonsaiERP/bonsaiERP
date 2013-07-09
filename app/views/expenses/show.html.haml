@@ -62,7 +62,7 @@
     .moneybox
       %label SALDO
       %h4.n
-        = @expense.balance
+        = ntc @expense.balance
         = currency_label @expense.currency
   .span6
     - if @expense.description.present?

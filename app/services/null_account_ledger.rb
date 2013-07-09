@@ -5,7 +5,7 @@ class NullAccountLedger
   attr_reader :account_ledger
 
   delegate :account, :account_to, :amount, :amount_currency,
-           :nuller_id, :approver_id,  to: :account_ledger
+           :nuller_id, :approver_id, :operation, to: :account_ledger
 
   def initialize(ledger)
     raise 'an AccountLedger instance was expected' unless ledger.is_a?(AccountLedger)
@@ -40,7 +40,17 @@ class NullAccountLedger
 
 private
   def update_income_expense_balance
-    account.amount += amount_currency.round(2)
+    case operation
+    when 'payin'
+      account.amount += amount_currency.round(2)
+    when 'devin'
+      account.amount += amount_currency.round(2)
+    when 'payout'
+      account.amount -= amount_currency.round(2)
+    when 'devout'
+      account.amount -= amount_currency.round(2)
+    end
+
     account.set_state_by_balance!
 
     Movements::Errors.new(account).set_errors

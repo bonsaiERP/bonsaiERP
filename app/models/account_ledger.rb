@@ -9,12 +9,12 @@ class AccountLedger < ActiveRecord::Base
   # Constants
   # contin  = Advance in that will add the amount to the Contact account
   # contout = Advance out that will add the amount to the Contact account
-  # payin  = Payment in
-  # payout = Paymen out
+  # payin  = Payment in Income
+  # payout = Paymen out Expense
   # intin  = Interests in
   # intout = Interestsout
-  # devin  = Devolution in
-  # devout = Devolution out
+  # devin  = Devolution in Income
+  # devout = Devolution out Expense
   OPERATIONS = %w(trans contin contout payin payout intin intout devin devout).freeze
   STATUSES = %w(pendent approved nulled).freeze
 
