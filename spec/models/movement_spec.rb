@@ -12,7 +12,12 @@ describe Movement do
 
     it { should be_is_draft }
     # draft
-    it { should be_can_null }
+    it { should_not be_can_null }
+
+    it "can null" do
+      subject.state = 'approved'
+      subject.should be_can_null
+    end
 
     it "diferent total" do
       subject.balance = 90

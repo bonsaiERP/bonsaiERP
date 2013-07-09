@@ -59,6 +59,10 @@ describe Income do
     end
   end
 
+  let(:user) { build :user, id: 10 }
+  before(:each) do
+    UserSession.user = user
+  end
   context 'callbacks' do
     it 'check callback' do
       contact.should_not be_client
@@ -280,7 +284,7 @@ describe Income do
     end
 
     it "#nulls" do
-      inc = Income.new_income(valid_attributes.merge(total: 100, amount: 100))
+      inc = Income.new_income(valid_attributes.merge(total: 100, amount: 100, state: 'approved'))
       inc.save.should be_true
 
       inc.nuller_id.should be_blank

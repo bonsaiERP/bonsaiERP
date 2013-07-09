@@ -57,6 +57,11 @@ describe Expense do
     end
   end
 
+  let(:user) { build :user, id: 10 }
+  before(:each) do
+    UserSession.user = user
+  end
+
   context 'callbacks' do
     it 'check callback' do
       contact.should_receive(:supplier=).with(true)
@@ -280,7 +285,7 @@ describe Expense do
     end
 
     it "#nulls" do
-      exp = Expense.new_expense(valid_attributes.merge(total: 100, amount: 100))
+      exp = Expense.new_expense(valid_attributes.merge(total: 100, amount: 100, state: 'approved'))
       exp.save.should be_true
 
       exp.nuller_id.should be_blank
