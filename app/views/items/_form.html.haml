@@ -32,7 +32,8 @@
 
       .row-fluid
         .span6
-          = f.input :for_sale, as: :boolean, label: 'Se vende', label_html: {class: 'span8'}
+          = f.input :for_sale, as: :boolean, label: 'Se vende', label_html: {class: 'span8'} do
+            = f.check_box :for_sale
         .span6
           = f.input :price, label: "Precio de venta #{currency_label}".html_safe, input_html: {size: 12, type: 'decimal'}
 
