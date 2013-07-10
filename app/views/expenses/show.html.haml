@@ -32,6 +32,8 @@
       = render_if @expense.due_date do
         = @expense.due_date_tag
 
+      = @expense.updater_label
+
       = @expense.creator_label
 
       = @expense.approver_label

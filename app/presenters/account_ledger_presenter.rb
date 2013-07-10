@@ -15,7 +15,7 @@ class AccountLedgerPresenter < BasePresenter
     when 'approved'
       html = "<span class='b bonsai-dark'>Aprobado</span>"
     when 'nulled'
-      html = "<span class='b text-error'>Anulado</span>"
+      html = "<span class='b red2'>Anulado</span>"
     end
 
     html.html_safe

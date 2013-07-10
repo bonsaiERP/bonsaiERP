@@ -13,7 +13,7 @@ module UserLogHelper
   end
 
   def nuller_label
-    return user_icon(class: 'text-error', title: "ANULADO: #{user_label_text nuller, nuller_datetime}") if nuller.present?
+    return user_icon(class: 'red2', title: "ANULADO: #{user_label_text nuller, nuller_datetime}") if nuller.present?
     ""
   end
 
