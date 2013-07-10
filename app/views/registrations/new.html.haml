@@ -10,18 +10,16 @@
   }
   .tooltip{ font-size: 13px; }
 
-.row-fluid
-  .lonely.span6.offset3
+.lonely(style='max-width:400px;')
+  .row-fluid
     .inset
       %header
-        %h2 Registro
+        %h1 Registro
 
       .pad
         = simple_form_for @registration do |f|
           = f.input :name, label: false, input_html: {class: 'span12', placeholder: 'Empresa', title: 'Empresa', 'data-toggle' => 'tooltip' }
-          = f.input :tenant, label: false,
-            hint: "<i class='icon-warning-sign' ></i> No es posible modificar en un futuro".html_safe,
-            input_html: {class: 'span12'} do
+          = f.input :tenant, label: false, input_html: {class: 'span12'} do
             .input-append
               = f.text_field :tenant, size: 28, placeholder: 'Subdominio', title: 'Subdominio', 'data-toggle' => 'tooltip'
               %span.add-on.append

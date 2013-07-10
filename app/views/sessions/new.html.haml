@@ -1,47 +1,32 @@
 :css
-  #header{ display: none; }
-  #menu{ display: none; }
   #cont{
     background: none;
     box-shadow: none;
     -moz-box-shadow: none;
     -webkit-box-shadow: none;
   }
-  .cont-login input, .cont-login .add-on{
-    font-size: 17px;
-    height: 30px;
-  }
-  .cont-login .add-on{
-    width: 25px;
-    padding-top: 4px;
-  }
-  .cont-login .add-on i{
-    line-height: 0px;
-  }
-  .cont-login input{
-    width: 250px;
-  }
 
 .row-fluid
   #browser.span8.offset2.c(style='display:none;')
     = render 'layouts/browser_update'
-.row-fluid
-  .lonely.span6.offset3
+
+.lonely(style='width:400px')
+  .row-fluid
     .inset
       %header
-        %h2.c
+        %h1.c
           Iniciar sesión
-      .pad.center
+      .pad.center.session
         = simple_form_for @session do |f|
 
           = f.input :email, label: false do
             .input-prepend.cont-login
-              %span.add-on.prepend
+              %span.add-on.prepend.square
                 %i.muted.icon-user
               = f.text_field :email, size: 30, placeholder: 'Email'
           = f.input :password, label: false do
             .input-prepend.cont-login
-              %span.add-on.prepend
+              %span.add-on.prepend.square
                 %i.muted.icon-key
               = f.password_field :password, size: 30, placeholder: 'Contraseña'
 
