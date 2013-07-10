@@ -3,7 +3,7 @@ module LabelTagHelper
   {
     black: 'label-inverse',
     blue: 'label-info',
-    green: 'label-success',
+    green: 'bg-bonsai-dark',
     red: 'label-important',
     yellow: 'label-warning',
     gray: ''

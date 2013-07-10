@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/boriscy/assets.git
-  revision: e294c2c09422694c4bb76935b1b759aa62a682c2
+  revision: d824d9710cfe0c37d902a995d9e41d01b11de80d
   specs:
     assets (1.0.7)
       rails (~> 3.2.11)
@@ -215,7 +215,7 @@ GEM
       rake (>= 0.8.7)
       rdoc (~> 3.4)
       thor (>= 0.14.6, < 2.0)
-    rake (10.0.4)
+    rake (10.1.0)
     rdoc (3.12.2)
       json (~> 1.4)
     resubject (0.2.0)

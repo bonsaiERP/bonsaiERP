@@ -29,7 +29,38 @@
   -#%li.color(style='background-color:#8B77D3' data-color='#8B77D3')
   -#%li.color(style='background-color:#C36ACF' data-color='#C36ACF')
 
+<br><br>
 .clearfix
+
+%button.btn Boton
+%button.btn.btn-info Boton
+%button.btn.btn-primary Boton
+%button.btn.btn-success Boton
+%button.btn.btn-danger Boton
+%button.btn.btn-warning Boton
+%button.btn.btn-inverse Boton
+
+<br><br>
+.clerafix
+
+.flash.alert.alert-info
+  %h4 Alert info
+  %p Alert info
+
+.flash.alert.alert-success
+  %h4 Alert success
+  %p Alert success
+
+.flash.alert
+  %h4 Alert 
+  %p Alert 
+
+.flash.alert.alert-error
+  %h4 Alert error
+  %p Alert error
+
+.clearfix
+
 %ul.colors
   - ['white', 'white-tan', 'black', 'blue', 'blue-dark', 'blue-darker', 'green', 'green-dark', 'bonsai', 'bonsai-dark', 'bonsai-darker', 'red', 'red-light', 'yellow', 'yellow-dark', 'orange', 'orange-dark', 'pink', 'purple', 'violet', 'gray-darker', 'gray-dark', 'gray', 'gray-light','gray-lighter', 'border-gray', 'link-color', 'link-color-hover', 'red2'].each do |col|
     %li.b(class="#{col}") This is #{ col }

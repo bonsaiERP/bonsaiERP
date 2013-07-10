@@ -8,7 +8,7 @@ module UserLogHelper
   end
 
   def approver_label
-    return user_icon(class: 'text-success', title: "APROBADO: #{user_label_text approver, approver_datetime}") if approver.present?
+    return user_icon(class: 'bonsai-dark', title: "APROBADO: #{user_label_text approver, approver_datetime}") if approver.present?
     ""
   end
 
@@ -18,7 +18,7 @@ module UserLogHelper
   end
 
   def updater_label
-    return user_icon(class: 'violet', title: "MODIFICADO por: #{user_label_text updater, updated_at}") if updater.present?
+    return user_icon(class: 'blue', title: "MODIFICADO por: #{user_label_text updater, updated_at}") if updater.present?
   end
 
   def user_icon(attrs)

@@ -89,21 +89,18 @@
 @btnBackgroundHighlight:            darken(@white, 10%);
 @btnBorder:                         #bbb;
 
-@btnPrimaryBackground:              lighten(@linkColor, 5%);
-@btnPrimaryBackgroundHighlight:     spin(@btnPrimaryBackground, 20%);
+@btnPrimaryBackground:              @blue; // #049cdb
+@btnPrimaryBackgroundHighlight:     spin(@blue, 10%); // spin(@btnPrimaryBackground, 20%);
 
 @btnInfoBackground:                 #5bc0de;
 @btnInfoBackgroundHighlight:        #2f96b4;
 
 @btnSuccessBackground:              #77b92d;
-//62c462;
 @btnSuccessBackgroundHighlight:     #99b92d;
-//#51a351;
 
 @btnWarningBackground:              lighten(@orange, 15%);
 @btnWarningBackgroundHighlight:     @orange;
 
-//@btnDangerBackground:               #ee5f5b;
 @btnDangerBackground:               @red;
 @btnDangerBackgroundHighlight:      #bd362f;
 
@@ -244,7 +241,6 @@
 
 @successText:             #7BA335;
 @successBackground:       #eff0d8;
-//#dff0d8;
 @successBorder:           darken(spin(@successBackground, -10), 5%);
 
 @infoText:                #3a87ad;
@@ -254,8 +250,8 @@
 
 // Tooltips and popovers
 // -------------------------
-@tooltipColor:            @grayDarker;
-@tooltipBackground:       @grayLighter;
+@tooltipColor:            #fff;
+@tooltipBackground:       #000;
 @tooltipArrowWidth:       5px;
 @tooltipArrowColor:       @tooltipBackground;
 
@@ -278,7 +274,7 @@
 // -------------------------
 @gridColumns:             12;
 @gridColumnWidth:         70px;
-@gridGutterWidth:         10px;
+@gridGutterWidth:         20px;
 @gridRowWidth:            (@gridColumns * @gridColumnWidth) + (@gridGutterWidth * (@gridColumns - 1));
 
 // 1200px min

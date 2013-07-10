@@ -32,6 +32,8 @@
       = render_if @income.due_date do
         = @income.due_date_tag
 
+      = @income.updater_label
+
       = @income.creator_label
 
       = @income.approver_label
@@ -136,7 +138,7 @@
         .span7.offset3.r.muted
           %strong Cantidad
 
-      = render partial: 'account_ledgers/income', collection: @income.payments, as: :ledger
+      = render partial: 'account_ledgers/movement', collection: @income.payments, as: :ledger
 
 -#Tours
 = render 'incomes/tour_devolution'

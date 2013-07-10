@@ -122,7 +122,7 @@
       = render 'expenses/devolution_form', expense: @expense unless @expense.is_draft?
 
     %ul.unstyled.listing
-      = render partial: 'account_ledgers/income', collection: @expense.payments, as: :ledger
+      = render partial: 'account_ledgers/movement', collection: @expense.payments, as: :ledger
 
 = render 'expenses/tour_devolution'
 
