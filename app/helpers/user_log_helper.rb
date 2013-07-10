@@ -17,6 +17,10 @@ module UserLogHelper
     ""
   end
 
+  def updater_label
+    return user_icon(class: 'violet', title: "MODIFICADO por: #{user_label_text updater, updated_at}") if updater.present?
+  end
+
   def user_icon(attrs)
     "<i class='icon-user #{attrs.fetch(:class)}' title='#{attrs.fetch(:title)}' data-toggle='tooltip'></i>".html_safe
   end

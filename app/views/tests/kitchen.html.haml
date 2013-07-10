@@ -29,8 +29,15 @@
   -#%li.color(style='background-color:#8B77D3' data-color='#8B77D3')
   -#%li.color(style='background-color:#C36ACF' data-color='#C36ACF')
 
+.clearfix
+%ul.colors
+  - ['white', 'white-tan', 'black', 'blue', 'blue-dark', 'blue-darker', 'green', 'green-dark', 'bonsai', 'bonsai-dark', 'bonsai-darker', 'red', 'red-light', 'yellow', 'yellow-dark', 'orange', 'orange-dark', 'pink', 'purple', 'violet', 'gray-darker', 'gray-dark', 'gray', 'gray-light','gray-lighter', 'border-gray', 'link-color', 'link-color-hover', 'red2'].each do |col|
+    %li.b(class="#{col}") This is #{ col }
+
 :javascript
   $(function() {
+    $('ul.colors li:lt(2)').css('background', '#333');
+
     var data = [
       {id:1, text: 'ruby', bgcolor: '#ff0000'},
       {id:2, text: 'javascript', bgcolor: '#77b92d'},

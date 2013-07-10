@@ -22,16 +22,19 @@ $blue:                  #049cdb
 $blueDark:              #0064cd
 $blueDarker:            #1253a6
 $green:                 #46a546
-$darkGreen:             darken($green, 20%)
+$greenDark:             darken($green, 20%)
 $bonsai:                #77b92d
 $bonsaiDark:            darken($bonsai, 10%)
 $bonsaiDarker:          darken($bonsai, 20%)
 $red:                   #9d261d
 $redLight:              lighten($red, 20%)
 $yellow:                #ffc40d
+$yellowDark:            darken($yellow, 15%)
 $orange:                #ff9000
+$orangeDark:            darken($orange, 15%)
 $pink:                  #c3325f
 $purple:                #4022a7
+$violet:                #2c65b0
 $grayDarker:            #222
 $grayDark:              #333
 $gray:                  #555
@@ -45,45 +48,29 @@ $linkColorHover:        darken($linkColor, 15%)
 
 $red2:                  rgb(219, 0, 0)
 
-.white
-  color: white
-.red
-  color: $red
-.gray
-  color: gray
-.green
-  color: $green
-.blue
-  color: $blue
-.blue-dark
-  color: $blueDark
-.blue-darker
-  color: $blueDarker
-.yellow-dark
-  color: darken($yellow, 35%)
-.purple
-  color: $purple
-.black
-  color: black
-.orange
-  color: $orange
-.orange-dark
-  color: darken($orange, 15%)
+//--------------------
+// List of colors
+$colors: ($white, $whiteTan, $black, $blue, $blueDark, $blueDarker, $green, $greenDark, $bonsai, $bonsaiDark, $bonsaiDarker, $red,$redLight, $yellow, $yellowDark, $orange, $orangeDark, $pink, $purple, $violet, $grayDarker, $grayDark, $gray, $grayLight, $grayLighter, $borderGray, $linkColor, $linkColorHover, $red2)
+
+
+$colorsIndex: ('white', 'white-tan', 'black', 'blue', 'blue-dark', 'blue-darker', 'green', 'green-dark', 'bonsai', 'bonsai-dark', 'bonsai-darker', 'red', 'red-light', 'yellow', 'yellow-dark', 'orange', 'orange-dark', 'pink', 'purple', 'violet', 'gray-darker', 'gray-dark', 'gray', 'gray-light','gray-lighter', 'border-gray', 'link-color', 'link-color-hover', 'red2')
+
+
+$length: length($colors)
+
+@for $i from 1 through $length 
+  .#{nth($colorsIndex, $i)}
+    color: nth($colors, $i)
+
+  a.#{nth($colorsIndex, $i)}:hover
+    color: nth($colors, $i)
+
+  .bg-#{nth($colorsIndex, $i)}
+    background-color: nth($colors, $i)
+
 
 .alert-color
   color: #C09853
 
-.bg-red
-  background-color: $red
-.bg-green
-  background-color: $green
-.bg-dark-green
-  background-color: darken($green, 15%)
-.bg-white-tan
-  background-color: $whiteTan
-.bg-white
-  background-color: $white
-.bg-dark
-  background-color: $dark
 .bg-dark2
   background-color: lighten($dark,20%)

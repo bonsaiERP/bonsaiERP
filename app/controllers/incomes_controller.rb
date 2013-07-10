@@ -149,7 +149,7 @@ private
 
     @incomes = @incomes.all_tags(*tag_ids)  if params[:search] && has_tags?
 
-    @incomes = @incomes.includes(:contact, transaction: [:creator, :approver, :nuller]).order('date desc, accounts.id desc')
+    @incomes = @incomes.includes(:contact, :updater, transaction: [:creator, :approver, :nuller]).order('date desc, accounts.id desc')
 
     set_incomes_filters
   end
