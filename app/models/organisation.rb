@@ -77,7 +77,7 @@ class Organisation < ActiveRecord::Base
   # Especial method that deletes the schema, users and all related stuff
   def drop_related!
     ActiveRecord::Base.transaction do
-      PgTools.drop_schema(tenant)
+      PgTools.drop_schema_if(tenant)
       User.where(id: links.map(&:user_id)).destroy_all
       links.destroy_all
       self.destroy

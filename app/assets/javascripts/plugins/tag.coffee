@@ -26,7 +26,9 @@ class TagEditor
   #
   createTag: ->
     @clearErrors()
+    $(@sel).find('button').prop('disabled', true)
     $.post('/tags', @data(), (resp) =>
+      $(@sel).find('button').prop('disabled', false)
       @setAjaxResponse(resp)
     )
   data: ->
@@ -119,7 +121,10 @@ class TagSelector
   #
   updateTags: (ids) ->
     data = @ajaxData(ids)
+    @$button.prop 'disabled', true
+
     $.post('/tags/update_models', data, (resp) =>
+      @$button.prop 'disabled', false
       if resp.success
         @updateTagView(ids, data.tag_ids)
       else

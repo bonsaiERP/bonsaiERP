@@ -55,7 +55,11 @@ module PgTools
     raise "#{schema_name} does not exists" unless schema_exists?(schema_name)
 
     ActiveRecord::Base.logger.info "Drop schema #{schema_name}"
-    connection.execute "DROP SCHEMA #{schema_name} CASCADE"
+    connection.execute "DROP SCHEMA IF EXISTS #{schema_name} CASCADE"
+  end
+
+  def drop_schema_if(schema_name)
+    connection.execute "DROP SCHEMA IF EXISTS #{schema_name} CASCADE"
   end
 
   def migrate_schema(schema_name, version = nil)

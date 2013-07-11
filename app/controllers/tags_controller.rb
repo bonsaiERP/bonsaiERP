@@ -11,7 +11,7 @@ class TagsController < ApplicationController
   # POST /tags
   def create
     @tag = Tag.new(tag_params)
-
+sleep(2)
     if @tag.save
       render json: @tag
     else

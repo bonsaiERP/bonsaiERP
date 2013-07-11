@@ -18,6 +18,9 @@ describe Tag do
 
   context "update_models" do
     it "udpates" do
+      user = build :user, id: 1
+      UserSession.user = user
+
       a1 = Account.create!(name: 'first', currency: 'BOB')
       a2 = Account.create!(name: 'second', currency: 'BOB')
 

@@ -21,21 +21,24 @@
           = f.input :name, label: false, input_html: {class: 'span12', placeholder: 'Empresa', title: 'Empresa', 'data-toggle' => 'tooltip' }
           = f.input :tenant, label: false, input_html: {class: 'span12'} do
             .input-append
-              = f.text_field :tenant, size: 28, placeholder: 'Subdominio', title: 'Subdominio', 'data-toggle' => 'tooltip'
+              = f.text_field :tenant, placeholder: 'Subdominio', title: 'Subdominio', 'data-toggle' => 'tooltip', class: 'span8', size: 22
               %span.add-on.append
                 \.bonsaierp.com
           = f.input :email, label: false, input_html: {class: 'span12', placeholder: "Correo electrónico", title: 'Correo electrónico', 'data-toggle' => 'tooltip'}
           .input-append
             =f.input :password, label: 'Contraseña' do
-              = f.password_field :password
+              = f.password_field :password, size: 20, class: 'span8'
               %span.add-on.append
                 %label
                   %input(type="checkbox" id="show-password")
                   Ver contraseña
           .clear-both
-          = f.submit "Registrarme", :class => 'btn btn-success btn-large'
-          %p
-            %h5.n= link_to 'Ingresar', login_path
+          = f.submit "Registrarme", class: 'btn btn-success btn-large b'
+          &nbsp;&nbsp;&nbsp;
+          %h4.n.ib
+            = link_to login_path do
+              %i.icon-off
+              Ingresar
 
 :javascript
   $(function() {

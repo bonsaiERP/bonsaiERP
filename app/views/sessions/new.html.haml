@@ -30,11 +30,12 @@
                 %i.muted.icon-key
               = f.password_field :password, size: 30, placeholder: 'Contraseña'
 
-          %p.c
+          %p.c.fs110
             = f.submit "Ingresar", :class => "btn btn-success btn-large b"
             <br/><br/>
-            = link_to "¿Olvido su contraseña?", new_reset_password_path
-
+            = link_to new_reset_password_path do
+              %i.icon-key
+              Olvido su contraseña?
 :javascript
   $(function() {
   });
