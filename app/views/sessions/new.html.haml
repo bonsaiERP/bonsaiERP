@@ -11,7 +11,7 @@
     = render 'layouts/browser_update'
 
 .lonely(style='width:400px')
-  .row-fluid
+  #login.row-fluid
     .inset
       %header
         %h1.c
@@ -36,6 +36,17 @@
             = link_to new_reset_password_path do
               %i.icon-key
               Olvido su contraseña?
+
+
 :javascript
   $(function() {
+    $('#reset-password-link').click(function() {
+      $('#login').hide(300);
+      $('#password').show(300);
+    });
+
+    $('#login-link').click(function() {
+      $('#password').hide(300);
+      $('#login').show(300);
+    });
   });

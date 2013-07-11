@@ -8,19 +8,19 @@
     -webkit-box-shadow: none;
   }
 
-.lonely(style="max-width: 350px;")
+.lonely(style="max-width: 400px;")
   .row-fluid
-    .inset.center
+    .inset
       %header
-        %h3 Recuperar contraseña
-      .pad
-        = simple_form_for(@reset_password) do |f|
+        %h1.c Recuperar contraseña
+      .pad.center.session
+        = simple_form_for(ResetPassword.new) do |f|
 
-          = f.input :email, label: false, :input_html => {:class =>'txt span10', placeholder: 'E-mail'}
+          = f.input :email, label: false, :input_html => {placeholder: 'Email'}
           %center
-            = f.submit "Recuperar contraseña", :class => 'btn btn-success b'
-            %br
-            %br
-            = link_to login_path do
-              %i.icon-off
-              Ingresar al sistema
+            = f.submit "Recuperar contraseña", :class => 'btn btn-success btn-large b'
+            <br/><br/>
+            %p.fs110
+              = link_to login_path do
+                %i.icon-off
+                Ingresar al sistema

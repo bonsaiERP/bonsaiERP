@@ -279,6 +279,8 @@ init = ($) ->
     $('body').dataNewUrl()
     fx.rates = exchangeRates.rates
 
+    $('input, textarea').placeholder()
+
 
   rivets.configure(
     #preloadData: false

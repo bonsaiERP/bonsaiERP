@@ -9,7 +9,7 @@
       - if params[:contact_id].present?
         =link_to 'Eliminar filtro', incomes_path
 
-      = form_tag '/incomes', method: 'get', html: {class: 'form-inline'} do
+      = form_tag '/incomes', method: 'get', class: 'form-inline' do
         = text_field_tag 'search', '', class: 'span5', placeholder: 'Contacto, referencia, etiqueta o descripción', autocomplete: 'off'
         = submit_tag 'Buscar', class: 'btn btn-primary'
 

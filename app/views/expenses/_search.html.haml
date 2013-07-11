@@ -6,7 +6,7 @@
 
   .panes.span10
     #search-pane.button-pane.span12
-      = form_tag '/expenses', method: 'get', html: {class: 'form-inline'} do
+      = form_tag '/expenses', method: 'get', class: 'form-inline' do
         = text_field_tag 'search', '', class: 'span5', placeholder: 'Contacto, codigo, referencia o etiqueta', autocomplete: 'off'
         = submit_tag 'Buscar', class: 'btn btn-primary'
 

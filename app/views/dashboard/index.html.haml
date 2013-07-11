@@ -15,7 +15,7 @@
 %h5.n= @dashboard.pendent_ledgers
 
 .well
-  = form_for dashboard_path, method: :get, html: {id: "form_graph"} do
+  = form_for dashboard_path, method: :get, html: {id: "form_graph", class: 'form-inline'} do
     = render 'export_incomes/form_details', btn: 'Buscar'
 
 = render 'dashboard/graph', data: @dashboard
