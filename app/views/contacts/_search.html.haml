@@ -4,7 +4,7 @@
   ,
   =link_to 'eliminar filtro', contacts_path
 
-= form_tag '/contacts', method: 'get', html: {class: 'form-inline'} do
+= form_tag '/contacts', method: 'get', class: 'form-inline' do
   = text_field_tag 'search', '', class: 'span8', placeholder: 'Buscar'
   = submit_tag 'Buscar', class: 'btn btn-primary'
 

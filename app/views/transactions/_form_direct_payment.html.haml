@@ -17,7 +17,7 @@
 
       .span9.help-block
         %strong= "#{lbl} directo"
-        permite un #{lbl.downcase} a la 
+        permite un #{lbl.downcase} a la
         %strong Cuenta
         seleccionada modificando el <strong>total</strong> de la misma
 
@@ -30,4 +30,5 @@
           data: {value: 'trans.account_to_id', disabled: 'trans.direct_payment|inverse'}}
       .span6
         = f.input :reference, label: 'Referencia', as: :text, 
-          input_html: {rows: 2, data: {value: 'trans.reference', disabled: 'trans.direct_payment|inverse'}}
+          input_html: {rows: 2, placeholder: 'Número de recibo o documento',
+          data: {value: 'trans.reference', disabled: 'trans.direct_payment|inverse'}}

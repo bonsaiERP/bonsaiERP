@@ -201,9 +201,9 @@ $( ->
     $(this).on('click', '>li,>tr', (event) ->
       target = event.target
       return true  if $(target).hasClass('row-check') or target.tagName is 'A'
-      
+
       $check = $(this).find('input.row-check')
-      
+
       if $check.prop('checked')
         $check.prop('checked', false)
       else

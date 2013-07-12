@@ -221,14 +221,13 @@ class Expense extends Transaction
 @App.Expense = Expense
 
 
-itemTemplate = """<tr class="item" data-item="{"original_price":"0.0","price":"0.0","quantity":"1.0","subtotal":"0.0"}">
+itemTemplate = """<tr class="item form-inline" data-item="{"original_price":"0.0","price":"0.0","quantity":"1.0","subtotal":"0.0"}">
     <td class='span6 nw'>
       <div class="control-group autocomplete optional">
         <div class="controls">
           <input id="{{klass}}_{{det}}_details_attributes_{{num}}_item_id" name="{{klass}}[{{det}}_details_attributes][{{num}}][item_id]" type="hidden"/>
           <input class="autocomplete optional item_id ui-autocomplete-input span11" data-source="/items/{{search_path}}.json" id="item_autocomplete" name="item_autocomplete" placeholder="Escriba para buscar el ítem" size="35" type="text" autocomplete="off"/>
-          <a href="/items/new" class="ajax btn btn-small" rel="tooltip" style="margin-left: 5px;" title="Nuevo ítem"><i class="icon-plus-sign icon-large"></i></a>
-          <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+          <a href="/items/new" class="ajax btn btn-small" rel="tooltip" style="margin-left: 5px;" title="Crear ítem" data-toggle="tooltip"><i class="icon-plus-sign icon-large"></i></a>
         </div>
       </div>
     </td>

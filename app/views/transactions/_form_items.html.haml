@@ -14,11 +14,11 @@
 
   = f.simple_fields_for details do |fd|
     %tr.item{id: fd.object.id, data: {item: fd.object.data_hash.to_json }}
-      %td.span6.nw
+      %td.span6.nw.form-inline
         - if fd.object.new_record?
           = fd.input :item, as: :autocomplete, label: false,
-            input_html: {class: 'item_id span11', placeholder: 'Escriba para buscar el ítem', 
-            data: {new_url: '/items/new', source: search_path(transaction)} }
+            input_html: {class: 'item_id span11', placeholder: 'Escriba para buscar el ítem',
+            data: {new_url: '/items/new', source: search_path(transaction), title: 'Crear ítem'} }
         - else
           = fd.object.item
           = fd.input :item_id, as: :hidden
@@ -29,8 +29,9 @@
           label: false
 
       %td
-        = fd.input :quantity, input_html: { size: 8, type: :decimal, class: 'item-quantity', data: { value: 'item.quantity' } },
-        label: false
+        = fd.input :quantity, input_html: { size: 8, type: :decimal, class: 'item-quantity',
+          data: { value: 'item.quantity', title: 'Crear ítem' } },
+          label: false
 
       %td.total_row.r
         %span.subtotal(data-text='item.subtotal | number')= ntc fd.object.total
@@ -43,7 +44,7 @@
     %td
       %a(href="javascript:;" id="add-item-link" class="btn")
         %i.icon-plus-sign
-        Adicionar ítem
+        Nueva línea
     %td.r(colspan="2") 
       Subtotal
       %span.currency

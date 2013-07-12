@@ -3,7 +3,7 @@
 
   -########################################
   -# Render common form elements
-  = render 'transactions/shared_form', f: f, transaction: income_service.income
+  = render 'transactions/shared_form', f: f, transaction: income_service.income, lbl: 'Ingreso'
   = render 'transactions/form_direct_payment', f: f, lbl: 'Cobro', movement: income_service
 
   -########################################
