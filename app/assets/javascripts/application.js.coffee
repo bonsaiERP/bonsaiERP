@@ -1,5 +1,5 @@
-#= require jquery
-#= require jquery_ujs
+#= require jquery.js
+#= require jquery_ujs.js
 #= require jquery-ui-1.10.1.custom.js
 
 #= require libraries/lodash.js

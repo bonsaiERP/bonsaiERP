@@ -1,10 +1,10 @@
 # Manages remotes methods
 # Test on console: new AjaxRemote($('[data-remote]:not([data-method])').get(0))
-class AjaxRemote
-  constructor: (elem, event) ->
+class DataMethod
+  constructor: (event, elem) ->
     @$this = $(elem)
     @url = @$this.attr('href')
-
+    
     switch @$this.attr('data-method')
       when 'post', 'POST'
         @post()
@@ -12,8 +12,25 @@ class AjaxRemote
         @delete()
       when 'put', 'PUT'
         @put()
-      else
+      when undefined, ''
         @get()
+      else
+        throw @$this.attr('data-method') + " data-method not found"
+  #
+  delete: ->
+    msg = if @$this.data('confirm') then @$this.data('confirm') else conf = 'Are you sure to delete the selected item'
+    return false  unless confirm(msg)
+
+    html = """
+    <input name="utf8" type="hidden" value="✓">
+    <input name="authenticity_token" type="hidden" value="#{csrf_token}">
+    <input type="hidden" name="_method" value="delete" />
+    """
+    $('<form/>')
+    .attr(action: @$this.attr('href'), method: 'post')
+    .html(html).submit()
+
+class AjaxRemote extends DataMethod
   #
   get: ->
     urls = @url.split('?')
@@ -24,9 +41,9 @@ class AjaxRemote
     @$parent = @$this.parents("tr:first, li:first")
     @$parent.addClass('marked')
 
-    conf = @$this.data('confirm') || 'Are you sure that you want to delete the selected element'
+    msg = if @$this.data('confirm') then @$this.data('confirm') else conf = 'Are you sure to delete the selected item'
 
-    if confirm(conf)
+    if confirm(msg)
       @deleteItem()
     else
       @$parent.removeClass 'marked'
@@ -37,19 +54,25 @@ class AjaxRemote
       type: 'delete'
     )
     .success (resp) =>
-      @$parent.remove()
+      if resp['destroyed?'] or resp['success']
+        @$parent.remove()
       $('body').trigger('ajax:delete', @url)
     .error ->
-      alert 'Existio un error al borrar'
+      alert 'There was an error deleting'
     .complete =>
       @$parent.removeClass 'marked'
 
 Plugin.AjaxRemote = AjaxRemote
 
-jQuery(->
+jQuery( ->
   $('body').on('click', '[data-remote]', (event) ->
     event.preventDefault()
-    new AjaxRemote(this)
-    false
+    new AjaxRemote(event, this)
+  )
+  $('body').on('click', '[data-method]', (event) ->
+    event.preventDefault()
+    $this = $(this)
+    if not($this.data('remote')) and not $this.hasClass('ajax')
+      new DataMethod(event, this)
   )
 )

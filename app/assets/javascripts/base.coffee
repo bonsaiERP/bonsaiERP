@@ -246,15 +246,6 @@ init = ($) ->
   window.createMessageCont = createMessageCont
 
 
-
-  # Supress from submiting a form from an input:text
-  checkCR = (evt) ->
-    evt  = evt  = (evt) ? evt : ((event) ? event : null)
-    node = evt.target || evt.srcElement
-    if evt.keyCode == 13 and node.type == "text" then false
-
-  document.onkeypress = checkCR
-
   # For the modal forms and dialogs
   setTransformations = ->
     $(this).setDatepicker()
