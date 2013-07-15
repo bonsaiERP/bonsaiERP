@@ -8,10 +8,13 @@ class Tag < ActiveRecord::Base
   validates :bgcolor, presence: {message: I18n.t('errors.messages.taken')},
             format: {with: /\A\#[0-9abcdefABCDEF]{6}\z/}
 
+  scope :list, -> { select("id, name, bgcolor") }
+
   def to_s
     name
   end
   alias :label :to_s
+  alias :text :to_s
 
   # Updates multiple models
   def self.update_models(params)

@@ -9,7 +9,7 @@
     = csrf_meta_tag
 
     %title Bonsai
-    = stylesheet_link_tag "application"
+    = stylesheet_link_tag "application", media: 'all'
 
     = javascript_include_tag "application"
 
@@ -29,7 +29,7 @@
     #head
       = render 'layouts/menus'
 
-    .row-fluid.organisation
+    #head2.row-fluid.organisation
       .cont
         .span12
           %h3= current_organisation.name

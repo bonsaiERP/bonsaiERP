@@ -1,37 +1,47 @@
 # encoding: utf-8
-class Report < Struct.new(:date_range)
+class Report
+  attr_reader :date_range, :attrs
 
-  def expenses_by_item(attrs = {})
-    data = params(attrs.merge(type: 'Expense'))
-    conn.select_rows(sum_transaction_details_sql(data) ).map {|v| ItemTransReport.new(*v)}
+  def initialize(drange, attrs = {})
+    @date_range = drange
+    @attrs = attrs
   end
 
-  def incomes_by_item(attrs = {})
-    data = params(attrs.merge(type: 'Income'))
-    conn.select_rows(sum_transaction_details_sql(data)).map {|v| ItemTransReport.new(*v)}
+  def expenses_by_item
+    conn.select_rows(sum_transaction_details_sql(params(type: 'Expense') ) )
+    .map {|v| ItemTransReport.new(*v)}
   end
 
-  def total_expenses(drange = date_range)
-    @total_expenses ||= Expense.active.joins(:transaction)
-    .where(date: drange.range)
-    .sum('(transactions.total - accounts.amount) * accounts.exchange_rate')
+  def incomes_by_item
+    conn.select_rows(sum_transaction_details_sql(params(type: 'Income') ) )
+    .map {|v| ItemTransReport.new(*v)}
   end
 
-  def total_incomes(drange = date_range)
-    @total_incomes ||= Income.active.joins(:transaction)
-    .where(date: drange.range)
-    .sum('(transactions.total - accounts.amount) * accounts.exchange_rate')
+  def total_expenses
+    @total_expenses ||= begin
+      tot = Expense.active.joins(:transaction).where(date: date_range.range)
+      tot = tot.all_tags(attrs[:tag_ids])  if any_tags?
+      tot.sum('(transactions.total - accounts.amount) * accounts.exchange_rate')
+    end
   end
 
-  def incomes_dayli(drange = date_range)
-    data = params(type: 'Income', drange: drange)
-    @incomes_dayli ||= conn.select_rows(dayli_sql(data)).map {|v| DayliReport.new(*v)}
+  def total_incomes
+    @total_incomes ||= begin
+      tot = Income.active.joins(:transaction).where(date: date_range.range)
+      tot = tot.all_tags(attrs[:tag_ids])  if any_tags?
+      tot.sum('(transactions.total - accounts.amount) * accounts.exchange_rate')
+    end
   end
 
-  def expenses_dayli(drange = date_range)
-    data = params(type: 'Expense', drange: drange)
-    @expenses_dayli ||= conn.select_rows(dayli_sql(data)).map {|v| DayliReport.new(*v)}
-  end
+  #def incomes_dayli
+  #  data = params(type: 'Income', drange: drange)
+  #  @incomes_dayli ||= conn.select_rows(dayli_sql(data)).map {|v| DayliReport.new(*v)}
+  #end
+
+  #def expenses_dayli
+  #  data = params(type: 'Expense', drange: drange)
+  #  @expenses_dayli ||= conn.select_rows(dayli_sql(data)).map {|v| DayliReport.new(*v)}
+  #end
 
   def expenses_pecentage
     @expenses_pecentage ||= total_expenses / total
@@ -46,8 +56,20 @@ class Report < Struct.new(:date_range)
   end
 
 private
-  def params(attrs = {})
-    ReportParams.new({offset: 0, limit: 10}.merge(attrs))
+  def any_tags?
+    attrs[:tag_ids].is_a?(Array) && attrs[:tag_ids].any?
+  end
+
+  def offset
+    @offset ||= attrs[:offset].to_i >= 0 ? attrs[:offset].to_i : 0
+  end
+
+  def limit
+    @limit ||= attrs[:limit].to_i > 0 ? attrs[:limit].to_i : 10
+  end
+
+  def params(extra = {})
+   ReportParams.new({offset: offset, limit: limit}.merge(extra))
   end
 
   def conn
@@ -80,8 +102,7 @@ private
   end
 end
 
-class ReportParams < OpenStruct
-end
+class ReportParams < OpenStruct; end
 
 class ItemTransReport < Struct.new(:id, :name, :tot)
   def total

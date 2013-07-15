@@ -1,3 +1,62 @@
-%h1 Reportes
+%h1.n
+  Reportes
+  %i= present_date_range @date_range
 
-= render 'layouts/date_range', dr: @date_range
+
+= form_tag reports_path, method: 'get' do
+
+  = render 'layouts/date_range', dr: @date_range
+  .ib(style='margin-bottom: 10px; vertical-align: top;')
+    %input#tags(size="55" placeholder='Seleccione las etiquetas' name='tags' value="#{params[:tags]}")
+    = submit_tag 'Generar reporte', class: 'btn b', style: 'vertical-align: top;'
+
+.row-fluid
+  .span6.well.well-small
+    %h5.incomes-total
+      Ingresos
+    .alert.alert-success.inline-block
+      %h3.text-success
+        \%
+        = ntc @report.incomes_percentage
+
+    %h4.n.ib
+      = ntc @report.total_incomes
+      = currency_label currency
+
+  .span6.well.well-small
+    %h5.expenses-total
+      Egresos
+    .alert.alert-error.inline-block
+      %h3
+        \%
+        = ntc @report.expenses_pecentage
+
+    %h4.n.inline-block
+      = ntc @report.total_expenses
+      = currency_label currency
+
+.row-fluid
+  .span6.well.well-small
+    %h4.n Ingresos por ítem
+    %ul.unstyled
+      = render partial: 'items/trans_detail', collection: @report.incomes_by_item, as: :item
+
+  .span6.well.well-small
+    %h4.n Egresos por ítem
+    %ul.unstyled
+      = render partial: 'items/trans_detail', collection: @report.expenses_by_item, as: :item
+
+
+
+:javascript
+  $(function() {
+    $('#tags').select2({
+      data: #{ Tag.list.to_json(methods: :text) },
+      multiple: true,
+      formatResult: Plugin.TagFormater.formatResult,
+      formatSelection: Plugin.TagFormater.formatSelect,
+      containerCssClass: 'btags',
+      dropdownCssClass: 'btags',
+      escapeMarkup: function(t) { return t }
+    });
+  })

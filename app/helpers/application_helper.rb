@@ -193,4 +193,9 @@ module ApplicationHelper
       {id: v.id, text: v.to_s, label: v.to_s, bgcolor: v.bgcolor}
     }.to_json
   end
+
+  def present_date_range(date_range)
+    "del <i>#{I18n.l(date_range.date_start)}</i> al <i>#{I18n.l(date_range.date_end)}</i>".html_safe
+  end
+
 end
