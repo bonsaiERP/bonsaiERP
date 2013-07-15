@@ -9,7 +9,7 @@
     %tr.item
       %td
         = det.input :item, label: false, as: :autocomplete, 
-          input_html: {class: 'item_id span10', placeholder: 'Escriba para buscar el ítem', 
+          input_html: {class: 'item_id span10', placeholder: 'Escriba para buscar el ítem',
           data: {new_url: '/items/new', source: items_path(format: :json)} }
       %td
         = det.input :quantity, label: false, input_html: {type: :decimal, size: 10}, data: {value: 'item.quantity'}

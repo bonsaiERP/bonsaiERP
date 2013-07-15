@@ -69,5 +69,19 @@ describe Organisation do
       org.save.should be_true
     end
 
+    it "inventory_active" do
+      org = Organisation.new(org_params)
+
+      org.save.should be_true
+      org.inventory_active.should be_true
+      org.should be_persisted
+
+      org.inventory_active = false
+      org.attributes = {country_code: 'BO', currency: 'BOB'}
+
+      org.save.should be_true
+      org.inventory_active.should be_false
+    end
+
   end
 end

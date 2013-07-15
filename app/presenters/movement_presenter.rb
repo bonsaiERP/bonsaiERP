@@ -103,7 +103,7 @@ class MovementPresenter < BasePresenter
   end
 
   def show_inventory_buttons?
-    not no_inventory?
+    not(no_inventory?) && OrganisationSession.inventory_active?
   end
 
 private

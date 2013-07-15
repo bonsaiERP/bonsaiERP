@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130704130428) do
+ActiveRecord::Schema.define(:version => 20130715185912) do
 
   create_table "account_ledgers", :force => true do |t|
     t.string   "reference"

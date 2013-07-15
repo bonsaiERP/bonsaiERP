@@ -115,12 +115,12 @@
 
     #payment-form(style='display: none')
       %hr
-      %h3 Pagar Egreso
-      = render 'expenses/payment_form', expense: @expense unless @expense.is_paid?
+      %h3 Pago
+      = render 'expenses/payment_form', expense: @expense  if @expense.can_pay?
 
     #devolution-form(style='display: none')
       %h3 Devolución
-      = render 'expenses/devolution_form', expense: @expense unless @expense.is_draft?
+      = render 'expenses/devolution_form', expense: @expense  if @expense.can_devolution?
 
     %ul.unstyled.listing
       = render partial: 'account_ledgers/movement', collection: @expense.payments, as: :ledger

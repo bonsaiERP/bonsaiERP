@@ -131,11 +131,7 @@
       %h3 Devolución
       = render 'incomes/devolution_form', income: @income  if @income.can_devolution?
 
-    %ul.unstyled.listing(style="margin-top: 0px")
-      %li.row-fluid
-        .span7.offset3.r.muted
-          %strong Cantidad
-
+    %ul.unstyled.listing
       = render partial: 'account_ledgers/movement', collection: @income.payments, as: :ledger
 
 -#Tours
