@@ -7,8 +7,9 @@
 $header-color: lighten(gray, 20%)
 .ui-widget-header
   +border-top-radius(4px)
-  background: darken(gray, 10%)
-  +background-image(linear-gradient(lighten(gray, 20%), lighten(gray, 40%) ) )
+  background-color: $bonsai
+  //darken(gray, 10%)
+  //+background-image(linear-gradient(lighten(gray, 20%), lighten(gray, 40%) ) )
   padding: 0 0 1px 0
 
 .ui-helper-hidden-accessible
@@ -245,7 +246,8 @@ $header-color: lighten(gray, 20%)
     display: none
 
   .ui-dialog-titlebar
-    +background-image(linear-gradient(#5BAE29, lighten(#5BAE29, 10%) ) )
+    background-color: $bonsaiDark
+    //+background-image(linear-gradient(#5BAE29, lighten(#5BAE29, 10%) ) )
     padding: 0.7em 1em
     color: white
     position: relative
@@ -256,13 +258,15 @@ $header-color: lighten(gray, 20%)
       font-size: 1.5em
 
     .ui-dialog-titlebar-close
+      background: transparent
       text-indent: -9999em
       position: absolute
       top: 0.7em
-      right: 0.4em
-      width: 16px
-      height: 16px
-      background: url(/assets/glyphicons-halflings-white.png) -312px 0
+      right: 0.7em
+      width: 20px
+      height: 20px
+      background: url(/assets/close-white.png) 0px 0px no-repeat
+      border: none
       display: block
       &:hover
         opacity: 0.7

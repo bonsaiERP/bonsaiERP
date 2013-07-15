@@ -28,9 +28,9 @@ class @ModalManager
     $('.modal').remove()
     options = _.merge(options, {modalId: new Date().getTime()} )
     @$modal = $(@renderer(
-      title: options.title, 
-      body: options.body, 
-      footer: options.footer, 
+      title: options.title,
+      body: options.body,
+      footer: options.footer,
       modalId: options.modalId))
 
     _.each(['title', 'body', 'footer'], (v) -> delete options[v] )

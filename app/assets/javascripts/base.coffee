@@ -198,13 +198,6 @@ init = ($) ->
 
 
 
-  # Prevent enter submit forms in some forms
-  window.keyPress = false
-  $(document).on( 'keydown', 'form.enter input', (event) ->
-    window.keyPress = event.keyCode || false
-    true
-  )
-
   # Closes the nearest div container
   $('body').on('click', 'a.close', ->
     self = this
@@ -271,6 +264,13 @@ init = ($) ->
     fx.rates = exchangeRates.rates
 
     $('input, textarea').placeholder()
+
+    # Prevent enter submit forms in some forms
+    window.keyPress = false
+    $('body').on( 'keydown', 'form.enter input', (event) ->
+      window.keyPress = event.keyCode
+      event.preventDefault()  if event.keyCode is 13
+    )
 
 
   rivets.configure(
