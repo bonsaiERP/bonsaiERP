@@ -86,7 +86,8 @@ private
       incomes_inventory_outs: true,
       expenses_inventory_ins: true,
       expenses_inventory_outs: true,
-      tags: true
+      tags: true,
+      reports: true
     }
   end
 
@@ -123,7 +124,8 @@ private
       incomes_inventory_outs: true,
       expenses_inventory_ins: true,
       expenses_inventory_outs: true,
-      tags: true
+      tags: true,
+      reports: true
     }
   end
 

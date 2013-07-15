@@ -1,7 +1,7 @@
 .quick-expense-form.hide
   - qe = Expenses::QuickForm.new(ref_number: Expense.get_ref_number)
 
-  %h2
+  %h1
     %span.muted.n Egreso rápido
     = qe.ref_number
 

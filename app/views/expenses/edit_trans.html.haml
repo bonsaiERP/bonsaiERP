@@ -10,7 +10,7 @@
     = @transaction
     %small.pill{:class => @transaction.real_state}= @transaction.show_state
 
-%h2.n= link_to @transaction.contact, @transaction.contact
+%h1.n= link_to @transaction.contact, @transaction.contact
 
 = render 'transactions/form_edit', :transaction => @transaction, :contacts => Client.scoped
 

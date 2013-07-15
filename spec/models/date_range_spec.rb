@@ -26,13 +26,17 @@ describe DateRange do
     end
 
     it "returns false" do
+      d = Date.today
       dr = DateRange.parse('2013-04-01', '2013-03-02')
-      dr.should be_false
+      expect( dr.date_start ).to eq(d - 30.days)
+      expect( dr.date_end ).to eq(d)
     end
 
     it "returns false" do
+      d = Date.today
       dr = DateRange.parse('2013-04-01', '')
-      dr.should be_false
+      expect( dr.date_start ).to eq(d - 30.days)
+      expect( dr.date_end ).to eq(d)
     end
   end
 

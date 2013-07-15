@@ -20,10 +20,10 @@ class DateRange < Struct.new(:date_start, :date_end)
 
   def self.parse(s, e)
     dr = new(Date.parse(s), Date.parse(e))
-    return false unless dr.valid?
+    raise 'Error'  unless dr.valid?
     dr
   rescue
-    false
+    self.default
   end
 
   def valid?

@@ -19,7 +19,7 @@
 
 .row-fluid
   .span7
-    %h2.ib
+    %h1.ib
       = @expense
       %small= @expense.state_tag
 
@@ -94,8 +94,7 @@
   #items.tab-pane.fade
     %h2.n Items
 
-    .item-buttons
-      = render 'expenses/inventory_buttons', expense: @expense
+    .item-buttons= render 'expenses/inventory_buttons', expense: @expense  if @expense.show_inventory_buttons?
     %hr
 
     = render "expenses/items", expense: @expense
@@ -109,7 +108,7 @@
           %i.icon-minus-sign
           Pagar
 
-      - unless @expense.is_nulled?
+      - unless @expense.is_nulled?  if @expense.show_inventory_buttons?
         %a#devolution-link.btn.btn-success(href='javascript:;')
           %i.icon-plus-sign
           Devolución

@@ -2,18 +2,24 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class ReportsController < ApplicationController
-  def index
-    @report = ReportPresenter.new(view_context)
+  before_filter :set_date_range
 
-    case params[:report]
-    when 'income', 'expense'
-    when 'totals'
-      render :totals
-    when 'items'
-      render 'items_trans'
-    end
+  def index
   end
 
 private
+  def set_date_range
+    @date_range = begin
+      if dates_present?
+        DateRange.parse(params[:date_start], params[:date_end])
+      else
+       DateRange.default
+      end
+    end
+  end
+
+  def dates_present?
+    params[:date_start].present? && params[:date_end].present?
+  end
 
 end

@@ -19,7 +19,7 @@
 
 .row-fluid
   .span7
-    %h2.ib
+    %h1.ib
       = @income
       %small= @income.state_tag
 
@@ -100,9 +100,7 @@
     %h2.n
       Items
 
-    .row-fluid
-      .item-buttons.span6
-        = render 'inventory_buttons', income: @income
+    .item-buttons= render 'inventory_buttons', income: @income  if @income.show_inventory_buttons?
     %hr
 
     = render "incomes/items", income: @income

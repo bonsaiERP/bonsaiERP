@@ -1,0 +1,29 @@
+%span.muted.b De:
+%input(type='hidden' size='10' name='date_start' id='date_start' value="#{ dr.date_start }")
+%input(type='text' size='10' id='date_start_picker' placeholder='Fecha inicial' value="#{ l dr.date_start }")
+
+%span.muted.b A:
+
+%input(type='hidden' size='10' name='date_end' id='date_end' value="#{ dr.date_end }")
+%input(type='text' size='10' id='date_end_picker' placeholder='Fecha final' value="#{ l dr.date_end }")
+
+:javascript
+  $(function() {
+    $('#date_start_picker').datepicker({
+      yearRange: '1900:',
+      showOn: 'both',
+      buttonImageOnly: true,
+      buttonImage: '/assets/bicon/date.png',
+      altFormat: 'yy-mm-dd',
+      altField: $('#date_start')
+    })
+    $('#date_end_picker').datepicker({
+      yearRange: '1900:',
+      showOn: 'both',
+      buttonImageOnly: true,
+      buttonImage: '/assets/bicon/date.png',
+      altFormat: 'yy-mm-dd',
+      altField: $('#date_end')
+    })
+  })
+
