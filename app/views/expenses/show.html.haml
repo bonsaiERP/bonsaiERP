@@ -108,7 +108,7 @@
           %i.icon-minus-sign
           Pagar
 
-      - unless @expense.is_nulled?  if @expense.show_inventory_buttons?
+      - unless @expense.is_nulled?
         %a#devolution-link.btn.btn-success(href='javascript:;')
           %i.icon-plus-sign
           Devolución
