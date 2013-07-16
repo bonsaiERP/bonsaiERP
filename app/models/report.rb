@@ -33,15 +33,15 @@ class Report
     end
   end
 
-  #def incomes_dayli
-  #  data = params(type: 'Income', drange: drange)
-  #  @incomes_dayli ||= conn.select_rows(dayli_sql(data)).map {|v| DayliReport.new(*v)}
-  #end
+  def incomes_dayli
+    data = params(type: 'Income')
+    @incomes_dayli ||= conn.select_rows(dayli_sql(data)).map {|v| DayliReport.new(*v)}
+  end
 
-  #def expenses_dayli
-  #  data = params(type: 'Expense', drange: drange)
-  #  @expenses_dayli ||= conn.select_rows(dayli_sql(data)).map {|v| DayliReport.new(*v)}
-  #end
+  def expenses_dayli
+    data = params(type: 'Expense')
+    @expenses_dayli ||= conn.select_rows(dayli_sql(data)).map {|v| DayliReport.new(*v)}
+  end
 
   def expenses_pecentage
     @expenses_pecentage ||= total_expenses / total

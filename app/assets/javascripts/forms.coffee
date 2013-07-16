@@ -200,14 +200,25 @@ $( ->
   rowCheck = ->
     $(this).on('click', '>li,>tr', (event) ->
       target = event.target
-      return true  if $(target).hasClass('row-check') or target.tagName is 'A'
+      return true  if target.tagName is 'A'
 
       $check = $(this).find('input.row-check')
+      $row = $check.parents('tr,li')
+
+      if target.type is 'checkbox' and $(target).hasClass('row-check')
+        if $check.prop('checked')
+          $row.addClass('selected')
+        else
+          $row.removeClass('selected')
+
+        return true
 
       if $check.prop('checked')
         $check.prop('checked', false)
+        $row.removeClass('selected')
       else
         $check.prop('checked', true)
+        $row.addClass('selected')
     )
 
   $.rowCheck = $.fn.rowCheck = rowCheck

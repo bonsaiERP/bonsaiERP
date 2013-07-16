@@ -1,18 +1,17 @@
 - income = present income
 %li.row-fluid(id="#{income.id}")
   .span4
-    .row-fluid
-      .span1
-        %input.row-check(type='checkbox' id="#{income.id}")
-      .span11
-        %h4.ib
-          = link_to income, income
-        = income.has_error_label
-        = link_to income.contact, income.contact
-        .clear-both
-        = income.state_tag
-        %i= l income.date
-        = income.inventory_tag
+    .fl
+      %input.row-check(type='checkbox' id="#{income.id}")
+    .fl 
+      %h4.ib
+        = link_to income, income
+      = income.has_error_label
+      = link_to income.contact, income.contact
+      .clear-both
+      = income.state_tag
+      %i= l income.date
+      = income.inventory_tag
 
   .span4
     = income.updater_label

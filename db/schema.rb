@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130715185912) do
+ActiveRecord::Schema.define(:version => 20130716131801) do
 
   create_table "account_ledgers", :force => true do |t|
     t.string   "reference"
@@ -173,12 +173,16 @@ ActiveRecord::Schema.define(:version => 20130715185912) do
     t.decimal  "buy_price",                  :precision => 14, :scale => 2, :default => 0.0
     t.string   "unit_symbol", :limit => 20
     t.string   "unit_name"
+    t.string   "tag_ids",     :limit => nil,                                :default => "{}"
+    t.integer  "updater_id"
   end
 
   add_index "items", ["code"], :name => "index_items_on_code"
   add_index "items", ["for_sale"], :name => "index_items_on_for_sale"
   add_index "items", ["stockable"], :name => "index_items_on_stockable"
+  add_index "items", ["tag_ids"], :name => "index_items_on_tag_ids"
   add_index "items", ["unit_id"], :name => "index_items_on_unit_id"
+  add_index "items", ["updater_id"], :name => "index_items_on_updater_id"
 
   create_table "links", :force => true do |t|
     t.integer  "organisation_id"

@@ -22,12 +22,15 @@
 
 %ul.unstyled.listing
   - @items.each do |item|
-    %li.row-fluid
+    %li.row-fluid(id='#{item.id}')
       .span5
-        %h4.n
-          = link_to item, item
-          %br
-          %small= item.unit
+        .fl
+          %input.row-check(type='checkbox' id='#{ item.id }')
+        .fl
+          %h4.ib
+            = link_to item, item
+            .clearfix
+            %small= item.unit
       .span5
         .row-fluid
           .span6
@@ -59,4 +62,7 @@
 = paginate_html
 
 :javascript
-  $(function() { $('#search_items').show() });
+  $(function() {
+    $('#search_items').show();
+    $('.listing').rowCheck();
+  });

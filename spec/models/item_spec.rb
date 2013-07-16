@@ -24,6 +24,10 @@ describe Item do
     }
   end
 
+  let(:user) { build :user, id: 1 }
+
+  before(:each) { UserSession.user = user }
+
   it "#valid_price" do
     i = Item.new(valid_attributes)
     i.should be_valid

@@ -3,6 +3,9 @@
 # email: boriscyber@gmail.com
 class Item < ActiveRecord::Base
 
+  include ::Models::Tag
+  include ::Models::Updater
+
   ##########################################
   # Callbacks
   before_save :trim_code
