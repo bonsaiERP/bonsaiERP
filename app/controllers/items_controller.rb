@@ -2,15 +2,13 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class ItemsController < ApplicationController
+  include Controllers::TagSearch
+
   before_filter :set_item, :only => [:show, :edit, :update, :destroy]
 
   # GET /items
   def index
-    if search_term.present?
-      @items = Item.search(search_term).includes(:unit).order('name asc').page(@page)
-    else
-      @items = Item.includes(:unit, :stocks).order('name asc').page(@page)
-    end
+    search_items
 
     respond_to do |format|
       format.html
@@ -85,6 +83,16 @@ class ItemsController < ApplicationController
 private
   def set_item
     @item = Item.find(params[:id])
+  end
+
+  def search_items
+    if search_term.present?
+      @items = Item.search(search_term).includes(:unit).order('name asc').page(@page)
+    else
+      @items = Item.includes(:unit, :stocks).order('name asc').page(@page)
+    end
+    
+    @items = @items.all_tags(*tag_ids)  if params[:search] && has_tags?
   end
 
   def item_params

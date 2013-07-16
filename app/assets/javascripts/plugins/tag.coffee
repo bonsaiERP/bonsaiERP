@@ -135,9 +135,10 @@ class TagSelector
     tagsHTML = @createTags(tag_ids)
 
     _.each(ids, (v) ->
-      sel = "li##{v}"
-      $(sel).find('input.row-check').prop('checked', false)
-      $(sel).find('ul.btags').html(tagsHTML)
+      $sel = $("li##{v}")
+      $sel.removeClass('selected')
+      $sel.find('input.row-check').prop('checked', false)
+      $sel.find('ul.btags').html(tagsHTML)
     )
   #
   createTags: (tag_ids) ->

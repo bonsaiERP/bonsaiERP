@@ -8,7 +8,10 @@
         %i.icon-question-sign
           Ayuda
 
-%h1#title Resumen
+%h2#title
+  Resumen
+  %i.fs80.n= present_date_range @date_range
+
 
 = render file: 'dashboard/general_aspects'
 
@@ -16,36 +19,42 @@
 
 .well
   = form_for dashboard_path, method: :get, html: {id: "form_graph", class: 'form-inline'} do
-    = render 'export_incomes/form_details', btn: 'Buscar'
+    = render 'layouts/date_range', dr: @date_range
+    = submit_tag 'Generar', class: 'btn b'
+
 
 = render 'dashboard/graph', data: @dashboard
 
 .row-fluid
   .span6.well.well-small
-    %h5.incomes-total
-      Ingresos
-      %span.n= @dashboard.present_date_range
-    .alert.alert-success.inline-block
-      %h3.text-success
-        \%
-        = ntc @dashboard.incomes_percentage
-
-    %h4.n.ib
-      = ntc @dashboard.total_incomes
-      = currency_label currency
+    -#.alert.alert-success.inline-block
+    .row-fluid
+      .span6
+        %h4.incomes-total.muted.ib.n
+          Ingresos:
+        %h4.bonsai-dark.ib
+          \%
+          = ntc @dashboard.incomes_percentage
+      .span6
+        %h4.n.ib
+          %i.icon-plus.bonsai-dark
+          = ntc @dashboard.total_incomes
+          = currency_label currency
 
   .span6.well.well-small
-    %h5.expenses-total
-      Egresos
-      %span.n= @dashboard.present_date_range
-    .alert.alert-error.inline-block
-      %h3
-        \%
-        = ntc @dashboard.expenses_pecentage
-
-    %h4.n.inline-block
-      = ntc @dashboard.total_expenses
-      = currency_label currency
+    -#.alert.alert-error.inline-block
+    .row-fluid
+      .span6
+        %h4.expenses-total.ib.n.muted
+          Egresos:
+        %h4.ib.text-error
+          \%
+          = ntc @dashboard.expenses_pecentage
+      .span6
+        %h4.n.inline-block
+          %i.icon-minus.text-error
+          = ntc @dashboard.total_expenses
+          = currency_label currency
 
 = render "dashboard/tour_general"
 

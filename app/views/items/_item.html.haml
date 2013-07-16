@@ -1,0 +1,40 @@
+- item = present item
+%li.row-fluid(id='#{item.id}')
+  .span6
+    .fl
+      %input.row-check(type='checkbox' id='#{ item.id }')
+    .fl
+      %h4.ib
+        = link_to item, item
+
+      %strong.fs110= item.code_tag
+      = item.unit_tag
+    .clearfix
+    %ul.btags(data-tag_ids="#{item.tag_ids}")
+  .span6
+    .row-fluid
+      .span9
+        %span.muted Activo:
+        %span(class="#{true_false item.active?}")
+        &nbsp;&nbsp;
+        %span.muted(title="Inventario" data-toggle="tooltip") Inv.:
+        %span(class="#{true_false item.stockable?}")
+        .ib.pill.bg-gray-lighter(style='padding: 0px 4px')
+          %span.muted Se vende:
+          %span(class="#{true_false_color item.for_sale?}")
+
+
+        .row-fluid
+          .span6.r
+            %small.muted Precio compra:
+            = ntc item.buy_price
+            = currency_label
+          .span6.r
+            %small.muted Precio venta:
+            = ntc item.price
+            = currency_label
+
+      .span3.nw.r
+        = link_to icon_edit, edit_item_path(item), class: 'dark'
+        = link_to icon_delete, item, class: 'dark', method: 'delete', confirm: 'Esta seguro de eliminar el ítem?'
+

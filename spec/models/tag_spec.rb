@@ -31,6 +31,16 @@ describe Tag do
       Tag.update_models({ids: [a1.id, a2.id], model: 'Account', tag_ids: tag_ids})
 
       expect(Account.all.map(&:tag_ids)).to eq([tag_ids, tag_ids])
+
+      u = build :unit, id: 3
+      i = build :item, unit_id: u.id
+      i.stub(unit: u)
+      i.save!
+
+      Tag.update_models({ids: [i.id], model: 'Item', tag_ids: tag_ids})
+      i = Item.find i.id
+
+      expect( i.tag_ids ).to eq(tag_ids)
     end
   end
 end

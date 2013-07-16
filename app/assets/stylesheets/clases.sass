@@ -67,8 +67,11 @@ span.true, span.false
     font-size: #{$i * 10}% !important
 
 
-.marked, .selected
+.marked
   background-color: lighten($blue, 52%)
+
+.selected
+  background-color: #E7FFC4
 
 
 ul.list
@@ -369,3 +372,12 @@ ul.listing
 .borders-y
   border-top: 1px solid $borderGray
   border-bottom: 1px solid $borderGray
+
+.box
+  +border-radius
+  padding: 4px 10px
+
+.box-green
+  background-color: $bonsaiDark
+  color: white
+

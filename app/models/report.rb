@@ -8,19 +8,19 @@ class Report
   end
 
   def expenses_by_item
-    conn.select_rows(sum_transaction_details_sql(params(type: 'Expense') ) )
+    conn.select_rows(sum_movement_details_sql(params(type: 'Expense') ) )
     .map {|v| ItemTransReport.new(*v)}
   end
 
   def incomes_by_item
-    conn.select_rows(sum_transaction_details_sql(params(type: 'Income') ) )
+    conn.select_rows(sum_movement_details_sql(params(type: 'Income') ) )
     .map {|v| ItemTransReport.new(*v)}
   end
 
   def total_expenses
     @total_expenses ||= begin
       tot = Expense.active.joins(:transaction).where(date: date_range.range)
-      tot = tot.all_tags(attrs[:tag_ids])  if any_tags?
+      tot = tot.all_tags(*attrs[:tag_ids])  if any_tags?
       tot.sum('(transactions.total - accounts.amount) * accounts.exchange_rate')
     end
   end
@@ -28,7 +28,7 @@ class Report
   def total_incomes
     @total_incomes ||= begin
       tot = Income.active.joins(:transaction).where(date: date_range.range)
-      tot = tot.all_tags(attrs[:tag_ids])  if any_tags?
+      tot = tot.all_tags(*attrs[:tag_ids])  if any_tags?
       tot.sum('(transactions.total - accounts.amount) * accounts.exchange_rate')
     end
   end
@@ -56,10 +56,6 @@ class Report
   end
 
 private
-  def any_tags?
-    attrs[:tag_ids].is_a?(Array) && attrs[:tag_ids].any?
-  end
-
   def offset
     @offset ||= attrs[:offset].to_i >= 0 ? attrs[:offset].to_i : 0
   end
@@ -72,11 +68,7 @@ private
    ReportParams.new({offset: offset, limit: limit}.merge(extra))
   end
 
-  def conn
-    ActiveRecord::Base.connection
-  end
-
-  def sum_transaction_details_sql(data)
+  def sum_movement_details_sql(data)
     <<-SQL
       SELECT i.id, i.name, SUM(d.price * d.quantity * a.exchange_rate) AS total
       FROM transaction_details d JOIN items i ON (i.id = d.item_id)
@@ -84,10 +76,19 @@ private
       WHERE a.type = '#{data.type}'
       AND a.state IN ('approved', 'paid')
       AND a.date BETWEEN '#{date_range.date_start}' AND '#{date_range.date_end}'
+      #{ tags_sql('i') }
       GROUP BY (i.id)
       ORDER BY total DESC
       OFFSET #{data.offset} LIMIT #{data.limit}
     SQL
+  end
+
+  def tags_sql(table)
+    if any_tags?
+      sanitize_sql_array ["AND #{table}.tag_ids @> ARRAY[?]", tag_ids]
+    else
+      ""
+    end
   end
 
   def dayli_sql(data)
@@ -100,6 +101,23 @@ private
       ORDER BY a.date
     SQL
   end
+
+  def any_tags?
+    tag_ids.is_a?(Array) && tag_ids.any?
+  end
+
+  def sanitize_sql_array(ary)
+    ActiveRecord::Base.send :sanitize_sql_array, ary
+  end
+
+  def tag_ids
+    attrs[:tag_ids]
+  end
+
+  def conn
+    ActiveRecord::Base.connection
+  end
+
 end
 
 class ReportParams < OpenStruct; end

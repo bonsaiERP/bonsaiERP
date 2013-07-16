@@ -1,0 +1,7 @@
+= form_tag reports_path, method: 'get' do
+
+  = render 'layouts/date_range', dr: @date_range
+  .ib(style='margin-bottom: 10px; vertical-align: top;')
+    %input#tags(size="55" placeholder='Seleccione las etiquetas' name='tags' value="#{params[:tags]}")
+    = submit_tag 'Generar reporte', class: 'btn b', style: 'vertical-align: top;'
+

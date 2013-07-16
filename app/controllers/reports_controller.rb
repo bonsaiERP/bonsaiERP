@@ -5,7 +5,7 @@ class ReportsController < ApplicationController
   before_filter :set_date_range, :set_tag_ids
 
   def index
-    @report = Report.new(@date_range)
+    @report = Report.new(@date_range, tag_ids: @tag_ids)
   end
 
   def present_date_range

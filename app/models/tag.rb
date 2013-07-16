@@ -21,6 +21,7 @@ class Tag < ActiveRecord::Base
     tag_ids = Tag.where(id: params[:tag_ids]).pluck(:id)
 
     klass = get_model_class params[:model]
+    return false  if klass === false
 
     if tag_ids.any?
       klass.where(id: params[:ids]).update_all(["tag_ids='{?}'", tag_ids])
@@ -36,6 +37,9 @@ private
     when 'Income' then Income
     when 'Expense' then Expense
     when 'AccountLedger' then AccountLedger
+    when 'Item' then Item
+    else
+      false
     end
   end
 end
