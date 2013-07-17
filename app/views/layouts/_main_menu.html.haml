@@ -1,6 +1,13 @@
 %ul#main-nav.nav
-  %li
-    = link_to "Resumen", dashboard_path, id: 'main-menu-first'
+  %li.dropdown
+    %a.dropdown-toggle(role='menu' href='#' id='main-menu-first' data-toggle='dropdown')
+      Reportes
+      %i.icon-caret-down
+    %ul.dropdown-menu
+      %li
+        = link_to "Resumen", dashboard_path
+      %li
+        = link_to "Reportes generales", reports_path
 
   %li.dropdown
     %a.dropdown-toggle(data-toggle="dropdown" href="#")
