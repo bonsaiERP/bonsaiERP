@@ -34,6 +34,7 @@
 #= require app/graph_report.coffee
 #= require app/contact.coffee
 #= require app/inventory.coffee
+#= require app/account_ledger.coffee
 
 #= require jqplugins/jquery.scrollTo.js
 #= require plugins/bride.coffee

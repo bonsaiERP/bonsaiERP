@@ -281,7 +281,6 @@ init = ($) ->
       event.preventDefault()  if event.keyCode is 13
     )
 
-
   rivets.configure(
     #preloadData: false
     adapter:

@@ -51,12 +51,12 @@ class AccountLedgersController < ApplicationController
   # PUT /account_ledgers/:id
   # update the reference
   def update
-    @account_ledger = AccountLedger.find(params[:id])
+    @al = AccountLedger.find(params[:id])
 
-    if @account_ledger.update_reference(params[:reference])
-      render json: @account_ledger
+    if @al.update_reference(params[:reference])
+      render json: {id: @al.id, reference: @al.reference, updater: @al.updater.to_s, updated_at: I18n.l(@al.updated_at)}
     else
-      render json: @account_ledger.errors.messages
+      render json: @al.errors.messages
     end
   end
 
