@@ -111,7 +111,7 @@ private
   end
 
   def set_date_range
-    if params[:search_operations]
+    if params[:commit_operations]
       @date_range = DateRange.parse(params[:date_start], params[:date_end])
     else
       @date_range = DateRange.default

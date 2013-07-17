@@ -77,12 +77,12 @@
 
     = render 'operations_search', date_range: @date_range, store: @store
 
-    - html = paginate @store.inventories(params[:page_operations]), param_name: 'page_operations'
+    - html = paginate @store.inventories(params), param_name: 'page_operations'
 
     = html
 
     %ul.listing.unstyled
-      = render partial: 'stores/inventory', collection: @store.inventories(params[:page_operations])
+      = render partial: 'stores/inventory', collection: @store.inventories(params)
 
     = html
 

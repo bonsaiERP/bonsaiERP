@@ -1,5 +1,23 @@
 = form_tag store_path(store.id, anchor: 'operations-tab'), method: 'get', class: 'form-inline' do
-  = text_field_tag :search_items, params[:items_search], size: 45, placeholder: 'código'
+  = text_field_tag :search_operations, params[:search_operations], size: 45, placeholder: 'código'
   = render 'layouts/date_range', dr: date_range
   = submit_tag 'Buscar operaciones', class: 'btn', name: 'commit_operations'
 
+= link_to "Eliminar filtro", store_path(store.id, anchor: 'operations-tab')  if params[:commit_operations].present?
+
+:javascript
+  $(function() {
+    function disableEnableDates() {
+      var prop;
+      if($('#search_operations').val().trim() == '') {
+        prop = false;
+      }else {
+        prop = true;
+      }
+
+      $('#date_start_picker').prop('disabled', prop);
+      $('#date_end_picker').prop('disabled', prop);
+    }
+
+    $('#search_operations').on('keyup', function(event) { disableEnableDates() });
+  });
