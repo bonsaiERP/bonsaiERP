@@ -18,17 +18,17 @@ class CreateAccountLedgers < ActiveRecord::Migration
 
         t.string  :description
 
-        t.integer :creator_id # related with created_at
-        t.integer :approver_id
+        t.integer  :creator_id # related with created_at
+        t.integer  :approver_id
         t.datetime :approver_datetime # conciliation
-        t.integer :nuller_id
+        t.integer  :nuller_id
         t.datetime :nuller_datetime # null
-        t.boolean :active, :default => true
-        t.boolean :inverse, :default => false
+        t.boolean  :active, :default => true
+        t.boolean  :inverse, :default => false
 
         t.boolean :has_error, default: false
         t.string  :error_messages
-        t.string :status, limit: 50, default: 'approved'
+        t.string  :status, limit: 50, default: 'approved'
 
         t.integer :project_id
 

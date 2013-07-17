@@ -8,7 +8,7 @@ class AccountLedgerQuery
 
   def money(id)
     @rel.where{(account_id.eq id) | (account_to_id.eq id)}.order('date desc')
-    .includes({account: :contact}, :account_to, :approver, :creator)
+    .includes({account: :contact}, :account_to, :approver, :creator, :nuller, :updater)
   end
 
   def money_paged(id, page)
@@ -18,7 +18,7 @@ class AccountLedgerQuery
   def payments(account_id)
     @rel.select(payment_columns(account_id).join(", "))
     .where("account_id=:id OR account_to_id=:id", id: account_id)
-    .includes(:account, :account_to)
+    .includes(:account, :account_to, :approver, :creator, :nuller, :updater)
   end
 
   def payments_ordered(account_id)

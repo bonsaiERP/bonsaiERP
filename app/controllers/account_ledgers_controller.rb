@@ -48,6 +48,18 @@ class AccountLedgersController < ApplicationController
     end
   end
 
+  # PUT /account_ledgers/:id
+  # update the reference
+  def update
+    @account_ledger = AccountLedger.find(params[:id])
+
+    if @account_ledger.update_reference(params[:reference])
+      render json: @account_ledger
+    else
+      render json: @account_ledger.errors.messages
+    end
+  end
+
   # DELETE /account_ledgers/:id
   def destroy
     @account_ledger = AccountLedger.find(params[:id])

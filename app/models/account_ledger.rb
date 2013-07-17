@@ -20,7 +20,6 @@ class AccountLedger < ActiveRecord::Base
 
   ########################################
   # Callbacks
-  # TODO: review callback
   before_validation :set_currency
   before_create :set_creator
 
@@ -37,6 +36,7 @@ class AccountLedger < ActiveRecord::Base
   belongs_to :approver, class_name: "User"
   belongs_to :nuller,   class_name: "User"
   belongs_to :creator,  class_name: "User"
+  belongs_to :updater,  class_name: "User"
 
   ########################################
   # Validations
@@ -47,7 +47,7 @@ class AccountLedger < ActiveRecord::Base
   validates_inclusion_of :status, in: STATUSES
   validates_numericality_of :exchange_rate, greater_than: 0
 
-  validates :reference, length: { within: 3..150, allow_blank: false }
+  validates :reference, length: { within: 3..250, allow_blank: false }
 
   ########################################
   # scopes
@@ -92,6 +92,13 @@ class AccountLedger < ActiveRecord::Base
     else
       self.save
     end
+  end
+
+  def update_reference(txt)
+    self.old_reference = self.reference
+    self.reference = txt
+
+    self.save
   end
 
 private

@@ -2,7 +2,7 @@
   .span4
     %h4.ib
       = link_to ledger, ledger
-    
+
     = ledger.status_tag
 
     %i= l ledger.date.to_date
@@ -14,8 +14,11 @@
 
   .span7
     .span6
+      %a.edit-ledger-reference-link.dark(href='javascript:;' title='Editar referencia' data-toggle='tooltip')
+        %i.icon-pencil
       %i.icon-file.muted(data-toggle='tooltip' title="referencia")
       = nl2br ledger.reference
+
     .span6.r
       - if ledger.trans_currency?
         = ntc ledger.trans_amount
@@ -30,6 +33,7 @@
 
 
   .span1
-    = ledger.creator_label.html_safe
-    = ledger.approver_label.html_safe
-    = ledger.nuller_label.html_safe
+    = ledger.updater_label
+    = ledger.creator_label
+    = ledger.approver_label
+    = ledger.nuller_label

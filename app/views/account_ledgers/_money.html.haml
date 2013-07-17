@@ -1,6 +1,7 @@
 - ledgers =  account.get_ledgers(params).order('date desc, id desc').page(@page)
 
-= paginate ledgers
+- html = paginate ledgers
+= html
 
 %ul.unstyled.listing
   - ledgers.each do |al|
@@ -24,12 +25,17 @@
             %span.muted A:
             = link_to al.account_to, al.account_to
       .span5
-        = al.creator_label.html_safe
-        = al.approver_label.html_safe
-        = al.nuller_label.html_safe
+        = al.updater_label
+        = al.creator_label
+        = al.approver_label
+        = al.nuller_label
         .clearfix
-          %i.icon-file.muted(data-toggle='tooltip' title="referencia")
-          = nl2br al.reference
+        %a.edit-ledger-reference-link.dark(href='javascript:;' title='Editar referencia' data-toggle='tooltip')
+          %i.icon-pencil
+        %i.icon-file.muted(data-toggle='tooltip' title="referencia")
+        = nl2br al.reference
       .span2.r
         = ntc al.amount_ref(account.id)
         = currency_label al.currency_ref(account.id)
+
+= html
