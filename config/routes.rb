@@ -21,7 +21,9 @@ Bonsaierp::Application.routes.draw do
 
   resources :admin_users, except: [:index, :destroy]
 
-  resources :configurations, only: ['index']
+  resources :configurations, only: [:index]
+
+  resources :stocks, only: [:update]
 
   resources :account_ledgers do
     post :transference, on: :collection

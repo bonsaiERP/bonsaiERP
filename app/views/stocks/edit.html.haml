@@ -1,0 +1,14 @@
+%h3= @stock.item
+%h4
+  %span.n.grey Cantidad actual
+  = ntc @stock.quantity
+%h4
+  %span.n.grey Cantidad mínima
+  = ntc @stock.minimum
+
+= simple_form_for(@stock) do |f|
+  = f.input :minimum, :label => 'Minimo', :input_html => {:size => 10, :type => 'decimal'}, 
+    :hint => 'Ingrese 0 si no desea definir mínimo', :wrapper_html => {:style => 'width: 100%'}
+
+  .clear
+  = f.submit "Salvar", class: 'btn btn-success b'

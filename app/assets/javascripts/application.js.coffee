@@ -10,6 +10,7 @@
 #= require jqplugins/flot/jquery.flot.js
 #= require jqplugins/flot/jquery.flot.time.js
 #= require jqplugins/jquery.cookie.js
+#= require jqplugins/jquery.mask.js
 #= require jqplugins/jquery.placeholder.js
 
 #= require plugins/money.min.js
