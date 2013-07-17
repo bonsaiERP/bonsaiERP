@@ -20,4 +20,12 @@ module CurrencyHelper
   end
 
   alias :currency_tag :currency_label
+
+  def negative_tag(val)
+    if val < 0
+    "<span class='text-error'>#{ntc val}</span>".html_safe
+    else
+      val
+    end
+  end
 end

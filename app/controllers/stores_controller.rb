@@ -2,6 +2,9 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class StoresController < ApplicationController
+  before_filter :set_date_range, only: ['show']
+
+
   # GET /stores
   # GET /stores.xml
   def index
@@ -104,6 +107,14 @@ private
       end
       params[:tab] = "items"
       "items"
+    end
+  end
+
+  def set_date_range
+    if params[:search_operations]
+      @date_range = DateRange.parse(params[:date_start], params[:date_end])
+    else
+      @date_range = DateRange.default
     end
   end
 end

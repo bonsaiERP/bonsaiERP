@@ -2,10 +2,6 @@
   %ul.breadcrumbs
     %li
       = link_to "Almacenes", stores_path
-    %li
-      %i.icon-caret-right
-    %li
-      = @store
 
 .row-fluid
   .span6
@@ -59,12 +55,16 @@
   #items-tab.tab-pane.fade
     %h3.n Items
 
+    = render 'items_search', store: @store
+
     %ul.listing.unstyled
       = render partial: 'stores/item', collection: @store.items
 
 
   #operations-tab.tab-pane.fade
     %h3.n Operaciones
+
+    = render 'operations_search', date_range: @date_range, store: @store
 
     %ul.listing.unstyled
       = render partial: 'stores/inventory', collection: @store.inventories

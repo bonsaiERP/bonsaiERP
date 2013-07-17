@@ -14,11 +14,7 @@ class StorePresenter < BasePresenter
     stocks.includes(item: :unit).order('items.name')
   end
 
-  def operations
-    present inventories, InventoryPresenter
-  end
-
-  def inventories
-    to_model.inventories.includes(:creator)
+  def inventories(page = 1)
+    to_model.inventories.includes(:creator).page(page).order("date desc")
   end
 end
