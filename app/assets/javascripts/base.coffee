@@ -197,6 +197,14 @@ init = ($) ->
   $.fn.dataNewUrl = dataNewUrl
 
 
+  # Opens the correct tab for twitter bootstrap
+  activeTab = ->
+    if window.location.hash
+      $('ul.nav > li > a[href="' + window.location.hash + '"]').tab('show');
+    else
+      $('ul.nav > li > a:first').tab('show')
+
+  window.activeTab = activeTab
 
   # Closes the nearest div container
   $('body').on('click', 'a.close', ->

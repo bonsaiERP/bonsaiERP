@@ -66,12 +66,24 @@
 
     = render 'operations_search', date_range: @date_range, store: @store
 
+    - html = paginate @store.inventories(params[:page_operations]), param_name: 'page_operations'
+
+    = html
+
     %ul.listing.unstyled
-      = render partial: 'stores/inventory', collection: @store.inventories
+      = render partial: 'stores/inventory', collection: @store.inventories(params[:page_operations])
+
+    = html
 
 :javascript
   $(function() {
-    $('#tabs a:first').tab('show');
+    //$('#tabs a:first').tab('show');
+    activeTab();
+
+    $('#operations-tab .pagination a').each(function() {
+      $a = $(this);
+      $a.attr('href', $a.attr('href') + '#operations-tab');
+    })
 
     //var tour = new Tour({
     //  labels: {

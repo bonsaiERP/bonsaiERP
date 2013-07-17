@@ -2,7 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class StoresController < ApplicationController
-  before_filter :set_date_range, only: ['show']
+  before_filter :set_date_range, :set_pages, only: ['show']
 
 
   # GET /stores
@@ -116,5 +116,14 @@ private
     else
       @date_range = DateRange.default
     end
+  end
+
+  def set_pages
+    params[:page_operations] = is_valid_page?(params[:page_operations]) ? params[:page_operations] : 1
+    params[:page_items] = is_valid_page?(params[:page_items]) ? params[:page_items] : 1
+  end
+
+  def is_valid_page?(val)
+    val.present? && val.to_i > 0
   end
 end
