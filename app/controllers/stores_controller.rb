@@ -2,13 +2,13 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class StoresController < ApplicationController
-  before_filter :set_date_range, :set_pages, only: ['show']
+  before_filter :set_date_range, :set_show_params, only: ['show']
 
 
   # GET /stores
   # GET /stores.xml
   def index
-    @stores = Store.scoped
+    @stores = present Store.all
 
     respond_to do |format|
       format.html # index.html.erb
@@ -118,12 +118,9 @@ private
     end
   end
 
-  def set_pages
-    params[:page_operations] = is_valid_page?(params[:page_operations]) ? params[:page_operations] : 1
-    params[:page_items] = is_valid_page?(params[:page_items]) ? params[:page_items] : 1
-  end
-
-  def is_valid_page?(val)
-    val.present? && val.to_i > 0
+  def set_show_params
+    unless params[:items_commit] || params[:commit_operations]
+      params[:all] = 1  unless [:minimum_inventory].any? {|v| params[v].present? }
+    end
   end
 end

@@ -129,7 +129,8 @@
 
 :javascript
   $( function() {
-    $('#tabs a:first').tab('show');
+    activeTab();
+
     // Show hide
     $('#payment-link').click( function() {
       $('#payment-form').show('fast');

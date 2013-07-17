@@ -19,6 +19,11 @@
         %h4
           %i(class="#{true_false store.active}" title="Activo" data-toggle="tooltip")
           = link_to store.name, store
+
+        - if store.stocks.mins.any?
+          = link_to store_path(store.id, minimum_inventory: 1, anchor: 'items-tab'), class: 'text-error' do
+            %i.icon-warning-sign
+            Existen inventarios con mínimos
       .span4
         = render_if store.phone do
           %i.icon-phone(title='Teléfono' data-toggle='tooltip')
@@ -26,7 +31,8 @@
         .clear-both
         = render_if store.address do
           %i.icon-building(title='Dirección' data-toggle='tooltip')
-          = nl2br store.address
+            = nl2br store.address
+
       .span1
         = link_to icon_edit, edit_store_path(store), class: 'dark'
         = link_to icon_delete, store, class: 'dark', method: 'delete', confirm: 'Esta seguro de eliminar el ítem?'

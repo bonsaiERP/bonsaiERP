@@ -14,7 +14,7 @@
       .span4
         = @store.phone_tag
       .span8
-        = @store.address_tag
+        = nl2br @store.address_tag
 
   .span6.r
     .btn-group
@@ -57,9 +57,20 @@
 
     = render 'items_search', store: @store
 
-    %ul.listing.unstyled
-      = render partial: 'stores/item', collection: @store.items
+    %ul.unstyled.inline
+      %li
+        = link_to "Todos", store_path(@store.id, anchor: 'items-tab'), class: params_bold(:all)
+      %li
+        = link_to "Inventario mínimo", store_path(@store.id, minimum_inventory: 1, anchor: 'items-tab'), class: params_bold(:minimum_inventory)
 
+    - html = paginate @store.items(params), param_name: 'page_items'
+
+    = html
+
+    %ul.listing.unstyled
+      = render partial: 'stores/item', collection: @store.items(params)
+
+    = html
 
   #operations-tab.tab-pane.fade
     %h3.n Operaciones

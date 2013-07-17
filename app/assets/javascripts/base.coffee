@@ -198,11 +198,12 @@ init = ($) ->
 
 
   # Opens the correct tab for twitter bootstrap
-  activeTab = ->
+  activeTab = (sel) ->
+    sel = sel || '#cont'
     if window.location.hash
-      $('ul.nav > li > a[href="' + window.location.hash + '"]').tab('show');
+      $(cont).find('ul.nav > li > a[href="' + window.location.hash + '"]').tab('show')
     else
-      $('ul.nav > li > a:first').tab('show')
+      $(cont).find('ul.nav > li > a:first').tab('show')
 
   window.activeTab = activeTab
 

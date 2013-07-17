@@ -1,5 +1,5 @@
 = form_tag store_path(store.id, anchor: 'operations-tab'), method: 'get', class: 'form-inline' do
   = text_field_tag :search_items, params[:items_search], size: 45, placeholder: 'código'
   = render 'layouts/date_range', dr: date_range
-  = submit_tag 'Buscar operaciones', class: 'btn', name: 'search_operations'
+  = submit_tag 'Buscar operaciones', class: 'btn', name: 'commit_operations'
 

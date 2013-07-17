@@ -23,8 +23,6 @@ Bonsaierp::Application.routes.draw do
 
   resources :configurations, only: ['index']
 
-  resources :stocks
-
   resources :account_ledgers do
     post :transference, on: :collection
     put :conciliate, on: :member
