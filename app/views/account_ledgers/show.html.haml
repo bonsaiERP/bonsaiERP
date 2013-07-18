@@ -13,7 +13,7 @@
   = @ledger.operation_tag
   %i= lo @ledger.date.to_date
 
-.row-fluid
+.row-fluid.account_ledger
   .span6
     .moneybox
       %h5.n
@@ -28,10 +28,15 @@
       = currency_label
   
   .span6
-    %span.reference
+    -#%span.reference
       %i.icon-file-alt(title='Referencia' data-toggle='tooltip')
       = @ledger.reference
 
+    .edit-reference
+      %a.edit-ledger-reference-link.dark(href='javascript:;' title='Editar referencia' data-toggle='tooltip' data-id='#{@ledger.id}' data-reference='#{@ledger.reference}')
+        %i.icon-pencil
+      %i.icon-file.muted(data-toggle='tooltip' title="referencia")
+      %span.reference= nl2br @ledger.reference
 %p
   %h5.n
     %span.account
@@ -40,6 +45,14 @@
     %span.account-to
       %span.muted A cuenta:
       = link_to @ledger.account_to, @ledger.account_to, class: 'account_to_name'
+
+%p
+  = render_if @ledger.updater do
+    %i.icon-user.blue(title='Actualizado por' data-toggle='tooltip')
+    %span.updater= @ledger.updater
+    %span.muted el
+    %i.updated_at= l @ledger.updated_at
+
 
 = render_if @ledger.creator do
   %p
@@ -61,3 +74,11 @@
     = @ledger.nuller
     %span.muted el
     %i= l @ledger.nuller_datetime
+
+:javascript
+  $(function() {
+    $('.account_ledger').on('ledger-reference:update', function(event, resp) {
+      $('.updater').text(resp.updater);
+      $('.updated_at').text(resp.updated_at);
+    });
+  })

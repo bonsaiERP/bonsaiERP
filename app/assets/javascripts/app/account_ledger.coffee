@@ -35,12 +35,13 @@ class AccountLedgerReference
       $user.attr('data-original-title', "MODIFICADO por: #{resp.updater} #{resp.updated_at}")  if $user.length > 0
       self.$cont.show()
       self.$form.remove()
+      self.$row.trigger('ledger-reference:update', [resp]);
     .fail ->
       txt = @$row.find('.code').text()
       alert 'Exisitio un error al actualizar la referencia de' + txt
 
 $(->
-  $('li.account_ledger').on('click', '.edit-ledger-reference-link', ->
+  $('.account_ledger').on('click', '.edit-ledger-reference-link', ->
     new AccountLedgerReference(this)
   )
 )
