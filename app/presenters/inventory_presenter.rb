@@ -28,8 +28,8 @@ class InventoryPresenter < BasePresenter
 
   def operation_name
     case operation
-    when "in" then "Ingreso"
-    when "out" then "Salida"
+    when "in" then "Ingreso inv."
+    when "out" then "Egreso inv."
     when "inc_out" then "Entrega"
     when "inc_in" then "Devolución"
     when "exp_in" then "Recepción"

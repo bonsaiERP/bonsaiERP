@@ -1,10 +1,10 @@
 - inventory = present inventory
 %li.row-fluid
   .span6
-    %h4.n
+    %h4.n.ib
       = link_to inventory.ref_number, inventory.link
-      = inventory.operation_tag
-
+    = inventory.operation_tag
+    .clearfix
     -#= inventory.related_tag
     = link_to inventory.related, inventory.related, class: 'b', title: inventory.related_tip, 'data-toggle' => 'tooltip'  if inventory.related.present?
     = lo inventory.created_at
