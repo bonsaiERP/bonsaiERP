@@ -4,8 +4,11 @@
 class InventoryPresenter < BasePresenter
 
   def link
-    if is_income? || is_expense?
+    case
+    when(is_income? || is_expense?)
       "/inventories/#{id}/show_movement"
+    when is_trans?
+      "/inventories/#{id}/show_trans"
     else
       to_model
     end
@@ -52,7 +55,7 @@ class InventoryPresenter < BasePresenter
     case
     when is_income?  then income
     when is_expense? then expense
-    when store_to_id.present? then store
+    when store_to_id.present? then store_to
     else
       nil
     end

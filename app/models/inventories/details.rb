@@ -6,7 +6,8 @@ class Inventories::Details < Struct.new(:inventory)
   delegate :details, :store_id, :store_to_id, to: :inventory
 
   def item_ids
-    @item_ids ||= details.select{|v| v.quantity > 0 }.map(&:item_id).uniq
+    #@item_ids ||= details.select{|v| v.quantity > 0 }.map(&:item_id).uniq
+    @item_ids ||= details.map(&:item_id).uniq
   end
 
   def stocks
@@ -44,6 +45,11 @@ class Inventories::Details < Struct.new(:inventory)
   # Receives a stock and calculates quantity for an item
   def item_quantity(item_id)
     details.select {|v| v.item_id === item_id}.inject(0) {|s, v| s += v.quantity }
+  end
+
+  # returns the stock for an item_id in the list
+  def stock(item_id)
+    stocks.find {|st| st.item_id === item_id }
   end
 
   def item_stocks

@@ -75,7 +75,7 @@ describe Expenses::InventoryOut do
       inv.should be_is_a(Inventory)
       inv.should be_is_exp_out
       inv.creator_id.should eq(user.id)
-      inv.ref_number.should =~ /\AS-\d{2}-\d{4}\z/
+      inv.ref_number.should =~ /\AE-\d{2}-\d{4}\z/
       expect(inv.account_id).to eq(expense.id)
 
       exp = Expense.find(inv.account_id)

@@ -10,9 +10,9 @@
 .row-fluid
   .span12
     %h1
+      %span.muted.n Operación inventario:
       = @inv.inventory.ref_number
-      %small.text-success
-        Recoger mecadería egreso
-        = link_to @inv.expense, @inv.expense
+    %h4.text-success
+      Recoger mecadería egreso
 
 = render 'form', inv: @inv

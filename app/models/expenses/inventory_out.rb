@@ -37,6 +37,8 @@ class Expenses::InventoryOut < Inventories::Out
         inventory.inventory_details.build(item_id: det.item_id, quantity: 0)
       end
     end
+    # Needed because the item_ids are set in the build
+    inventory.inventory_details.each {|det| det.available = stock(det.item_id).quantity }
   end
 
   def movement_detail(item_id)

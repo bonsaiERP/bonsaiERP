@@ -19,6 +19,8 @@ class Incomes::InventoryOut < Inventories::Out
     income.income_details.each do |det|
       inventory.inventory_details.build(item_id: det.item_id ,quantity: det.balance)
     end
+    # Needed because the item_ids are set in the build
+    inventory.inventory_details.each {|det| det.available = stock(det.item_id).quantity }
   end
 
   def create

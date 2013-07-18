@@ -10,9 +10,9 @@
 .row-fluid
   .span12
     %h1
+      %span.muted.n Operación inventario:
       = @inv.inventory.ref_number
-      %small.text-success
-        Entrega de mercadería ingreso
-        = link_to @inv.income, @inv.income
+    %h4.text-success
+      Entrega de mercadería ingreso
 
 = render 'form', inv: @inv

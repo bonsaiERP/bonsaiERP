@@ -10,9 +10,10 @@
 .row-fluid
   .span12
     %h1
+      %span.muted.n Operación inventario:
       = @inv.inventory.ref_number
-      %small.text-error
-        Devolución mecadería egreso
-        = link_to @inv.expense, @inv.expense
+    %h4.text-error
+      Devolución mecadería egreso
 
 = render 'form', inv: @inv
+

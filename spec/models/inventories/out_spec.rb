@@ -55,7 +55,7 @@ describe Inventories::Out do
       io.should be_is_a(Inventory)
       io.should be_is_out
       io.creator_id.should eq(user.id)
-      io.ref_number.should =~ /\AS-\d{2}-\d{4}\z/
+      io.ref_number.should =~ /\AE-\d{2}-\d{4}\z/
 
       io.inventory_details.should have(2).items
       io.inventory_details.map(&:quantity).should eq([2, 2])

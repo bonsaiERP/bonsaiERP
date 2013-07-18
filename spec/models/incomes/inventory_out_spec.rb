@@ -114,7 +114,7 @@ describe Incomes::InventoryOut do
 
       expect(inv).to be_is_inc_out
       expect(inv.creator_id).to eq(user.id)
-      expect(inv.ref_number).to match(/\AS-\d{2}-\d{4}\z/)
+      expect(inv.ref_number).to match(/\AE-\d{2}-\d{4}\z/)
 
       inc = Income.find(income.id)
       inc.balance_inventory.should == 70

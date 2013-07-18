@@ -7,13 +7,14 @@
 .row-fluid
   %table#items.table.decorated
     %tr
-      %th Item
+      %th(style='width: 40%') Item
       %th
         %span(title="Cantidad original en Ingreso" data-toggle='tooltip')
           Original
           Ing.
       %th Cantidad
       %th Saldo
+      %th Disponible
 
     = f.simple_fields_for :inventory_details do |det|
       - mov_det = inv.movement_detail(det.object.item_id)
@@ -28,6 +29,7 @@
             = ntc mov_det.quantity
           %td
             = det.input :quantity, label: false, input_html: {type: :decimal, size: 10}, data: {value: 'item.quantity'}
-          %td
+          %td.r
             = ntc mov_det.balance
-
+          %td.r
+            = ntc det.object.available

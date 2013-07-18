@@ -1,4 +1,4 @@
-= simple_form_for inv, url: incomes_inventory_ins_path do |f|
+= simple_form_for inv, url: incomes_inventory_ins_path, html: {id: 'income-inventory-devolution'} do |f|
   = bonsai_form_error(f)
 
   = hidden_field_tag :store_id, @store.id
@@ -15,4 +15,15 @@
   = render 'inventories/devolution_form', f: f, inv: @inv
 
   .form-actions
-    = f.submit 'Devolución mercadería', class: 'btn btn-danger b'
+    = f.submit 'Devolución mercadería', class: 'btn btn-primary b'
+
+:javascript
+  $(function() {
+    $('#income-inventory-devolution').submit(function(event) {
+      if(confirm("Esta segur@ de realizar la devolución de mercadería")) {
+        return true
+      }else {
+        return false
+      }
+    });
+  })

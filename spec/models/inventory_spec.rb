@@ -42,7 +42,26 @@ describe Inventory do
     inv_op.id = 2
     io = Inventory.new(operation: 'out')
     io.set_ref_number
-    io.ref_number.should eq('S-13-0003')
+    io.ref_number.should eq('E-13-0003')
+
+    inv = Inventory.new(operation: 'inc_in')
+    inv.set_ref_number
+    inv.ref_number.should eq('I-13-0003')
+
+
+    inv = Inventory.new(operation: 'exp_in')
+    inv.set_ref_number
+    inv.ref_number.should eq('I-13-0003')
+
+
+    inv = Inventory.new(operation: 'inc_out')
+    inv.set_ref_number
+    inv.ref_number.should eq('E-13-0003')
+
+
+    inv = Inventory.new(operation: 'exp_out')
+    inv.set_ref_number
+    inv.ref_number.should eq('E-13-0003')
   end
 
   it "#set_re_number trans" do

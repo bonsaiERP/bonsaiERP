@@ -78,6 +78,13 @@ class Inventory < ActiveRecord::Base
     end
   end
 
+  def is_in?
+    %w(in inc_in exp_in).include? operation 
+  end
+
+  def is_out?
+    %w(out inc_out exp_out).include? operation
+  end
 private
   def get_ref_io(io)
     _, y, _ = io.ref_number.split('-')
@@ -95,7 +102,7 @@ private
   def op_ref_type
     case
     when is_in?    then "I"
-    when is_out?   then "S"
+    when is_out?   then "E"
     when is_trans? then "T"
     end
   end
