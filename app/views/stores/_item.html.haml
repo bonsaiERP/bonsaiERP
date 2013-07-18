@@ -12,8 +12,8 @@
       .clearfix
 
       .minimum-stock.ib
-        %span.muted Mínimo:
+        %span.muted(title='Iventario mínimo') Inv. mínimo:
         %span.min= stock.minimum
 
-        %a.edit-minimum-link.dark(href="javascript:;" title='Editar mínimo' data-toggle='tooltip' data-id='#{stock.id}' data-minimum='#{ stock.minimum }')
+        %a.edit-minimum-link.dark(href="javascript:;" title='Editar inventario mínimo' data-toggle='tooltip' data-id='#{stock.id}' data-minimum='#{ stock.minimum }')
           %i.icon-pencil.icon-large
