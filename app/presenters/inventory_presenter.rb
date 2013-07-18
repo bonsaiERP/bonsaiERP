@@ -64,9 +64,20 @@ class InventoryPresenter < BasePresenter
   def related_tag
     case
     when is_income?
-      label_green("I", "Ingreso")
+      text_tag_green("Ingreso:")
     when is_expense?
-      label_red("E", "Egreso")
+      text_tag_red("Egreso:")
+    end
+  end
+
+  def related_tip
+    case
+    when is_income?
+      "Ingreso"
+    when is_expense?
+      "Egreso"
+    when is_trans?
+      "Almacen"
     end
   end
 

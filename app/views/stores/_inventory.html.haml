@@ -5,8 +5,8 @@
       = link_to inventory.ref_number, inventory.link
       = inventory.operation_tag
 
-    = inventory.related_tag
-    = link_to inventory.related, inventory.related  if inventory.related.present?
+    -#= inventory.related_tag
+    = link_to inventory.related, inventory.related, class: 'b', title: inventory.related_tip, 'data-toggle' => 'tooltip'  if inventory.related.present?
     = lo inventory.created_at
   .span6
     = inventory.creator_label
