@@ -14,7 +14,7 @@ class Inventories::Form < BaseForm
            :inventory_details_attributes=,
            to: :inventory
 
-  delegate :stocks, :detail, :item_quantity, to: :klass_details
+  delegate :stocks, :stocks_to, :detail, :item_quantity, to: :klass_details
 
   validates_presence_of :store, :inventory
   validate :unique_item_ids

@@ -4,6 +4,7 @@ require 'spec_helper'
 describe Inventory do
   it { should belong_to(:updater).class_name('User') }
   it { should belong_to(:store) }
+  it { should belong_to(:store_to).class_name("Store") }
   it { should belong_to(:contact) }
   it { should belong_to(:creator) }
   it { should belong_to(:project) }
@@ -66,22 +67,6 @@ describe Inventory do
     io.save.should be_true
 
     io.creator_id.should eq(20)
-  end
-
-  it "#is_in?" do
-    io = Inventory.new
-    Inventory::IN_OPERATIONS.each do |op|
-      io.operation = op
-      io.should be_is_in
-    end
-  end
-
-  it "#is_out?" do
-    io = Inventory.new
-    Inventory::OUT_OPERATIONS.each do |op|
-      io.operation = op
-      io.should be_is_out
-    end
   end
 
   it "#is_trans?" do

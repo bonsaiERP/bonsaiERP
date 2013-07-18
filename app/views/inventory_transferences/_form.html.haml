@@ -1,8 +1,9 @@
 %table#items.table.decorated
   %tr
     %th Item
-    %th Cantidad
     %th Unidad
+    %th Cantidad
+    %th Disponible
     %th
 
   = f.simple_fields_for :inventory_details do |det|
@@ -10,17 +11,19 @@
       %td
         = det.input :item, label: false, as: :autocomplete, 
           input_html: {class: 'item_id span10', placeholder: 'Escriba para buscar el ítem',
-          data: {new_url: '/items/new', source: items_path(format: :json)} }
-      %td
-        = det.input :quantity, label: false, input_html: {type: :decimal, size: 10}, data: {value: 'item.quantity'}
+          data: {source: inventory_transference_path(store_id, format: :json)} }
       %td
         %span.unit
+      %td
+        = det.input :quantity, label: false, input_html: {type: :decimal, size: 10}, data: {value: 'item.quantity'}
+      %td.r
+        %span.available
       %td
         %a.dark.btn(href='javascript:;' data-on-click='item:delete' title="borrar" data-toggle='tooltip')
           %i.icon-trash
 
   %tr.last
-    %td(colspan="3")
+    %td(colspan="5")
       %a.btn(href='javascript:;' data-on-click='inventory:addItem')
         %i.icon-plus-sign
         Nueva línea

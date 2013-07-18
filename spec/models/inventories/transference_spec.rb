@@ -46,49 +46,75 @@ describe Inventories::Transference do
     end
 
     it "creates" do
+      attrs = valid_attributes.dup
+      attrs.delete(:store_to_id)
+      attrs[:inventory_details_attributes][1][:quantity] = 10
+      invin = Inventories::In.new(attrs)
+      invin.create.should be_true
+
+      stocks = Stock.active.where(store_id: attrs[:store_id])
+
+      stocks.map(&:item_id).should eq([1, 2])
+      stocks.map(&:quantity).should eq([2, 10])
+
+      st = stocks.last
+      st.update_attribute(:minimum, 4).should be_true
+      st_item_id = st.item_id
+
+      # I don't understand but must change to original manually
+      attrs[:inventory_details_attributes][1][:quantity] = 2
+
       trans = Inventories::Transference.new(valid_attributes)
       trans.inventory_details.should have(2).items
       trans.inventory.store_id.should eq(1)
       trans.inventory.store_to_id.should eq(2)
 
       trans.create.should be_true
-      trans = Inventory.find(trans.inventory.id)
-      trans.should be_is_a(Inventory)
-      trans.should be_is_trans
-      trans.creator_id.should eq(user.id)
-      trans.ref_number.should =~ /\AT-\d{2}-\d{4}\z/
+      inv = Inventory.find(trans.inventory.id)
+      inv.should be_is_a(Inventory)
+      inv.should be_is_trans
+      inv.creator_id.should eq(user.id)
+      inv.ref_number.should =~ /\AT-\d{2}-\d{4}\z/
 
-
-      trans.inventory_details.should have(2).items
-      trans.inventory_details.map(&:quantity).should eq([2, 2])
-      trans.inventory_details.map(&:item_id).should eq([1, 2])
+      inv.inventory_details.should have(2).items
+      inv.inventory_details.map(&:quantity).should eq([2, 2])
+      inv.inventory_details.map(&:item_id).should eq([1, 2])
 
       # Stocks from
+
       stocks = Stock.active.where(store_id: 1)
+      stocks.find {|v| v.item_id === st_item_id}.minimum.should == 4
+
       stocks.should have(2).items
       stocks.map(&:item_id).sort.should eq([1, 2])
-      stocks.map(&:quantity).should eq([-2, -2])
+      stocks.map(&:quantity).should eq([0, 8])
 
       # Stocks to
       stocks = Stock.active.where(store_id: 2)
       stocks.should have(2).items
       stocks.map(&:item_id).sort.should eq([1, 2])
+
       stocks.map(&:quantity).should eq([2, 2])
 
-      ## More items
-      #attrs = valid_attributes.merge(inventory_details_attributes:
-      #  [{item_id: 2, quantity: 2},
-      #   {item_id: 12, quantity: 5}
-      #  ]
-      #)
-      #invin = Inventories::In.new(attrs)
-      #invin.create.should be_true
-      #stocks = Stock.active.where(store_id: io.store_id)
-      #stocks.should have(3).items
+      st = stocks.find {|v| v.item_id === st_item_id}
+      st.update_attribute(:minimum, 0.5).should be_true
 
-      #stocks.find {|v| v.item_id === 2}.quantity.should == 4
-      #stocks.find {|v| v.item_id === 12}.quantity.should == 5
-      #stocks.find {|v| v.item_id === 1}.quantity.should == 2
+      # More items
+      attrs = valid_attributes.merge(inventory_details_attributes:
+        [{item_id: st_item_id, quantity: 2}]
+      )
+      inv = Inventories::Transference.new(attrs)
+      inv.create.should be_true
+
+      # From
+      stocks = Stock.active.where(store_id: 1)
+      stocks.find {|v| v.item_id === st_item_id}.minimum.should == 4
+      stocks.find {|v| v.item_id === st_item_id}.quantity.should == 6
+
+      # To
+      stocks = Stock.active.where(store_id: 2)
+      stocks.find {|v| v.item_id === st_item_id}.minimum.should == 0.5
+      stocks.find {|v| v.item_id === st_item_id}.quantity.should == 4
     end
 
     it "creates with one item" do

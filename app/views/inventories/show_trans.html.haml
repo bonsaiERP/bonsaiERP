@@ -12,8 +12,13 @@
   = @inventory.ref_number
   = @inventory.operation_tag
 
-%h3.n
-  = link_to @inventory.store, @inventory.store
+.row-fluid
+  .span6
+    %label De almacen
+    %h4.n= link_to @inventory.store, @inventory.store
+  .span6
+    %label A almacen
+    %h4.n= link_to @inventory.store_to, @inventory.store_to
 
 .row-fluid
   .span3
@@ -41,3 +46,4 @@
           = ntc det.quantity
         %td
           = det.item.unit_symbol
+

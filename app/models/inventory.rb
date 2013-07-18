@@ -8,14 +8,11 @@ class Inventory < ActiveRecord::Base
   before_create { self.creator_id = UserSession.id }
 
   OPERATIONS = %w(in out inc_in inc_out exp_in exp_out trans).freeze
-  IN_OPERATIONS = %w(in inc_in exp_in trans_in)
-  OUT_OPERATIONS = %w(out inc_out exp_out trans_out)
 
   belongs_to :store
+  belongs_to :store_to, class_name: "Store"
   belongs_to :contact
   belongs_to :creator, class_name: "User"
-  #belongs_to :transout, class_name: "InventoryOperation"
-  #belongs_to :store_to, :class_name => "Store"
   belongs_to :expense, foreign_key: :account_id
   belongs_to :income, foreign_key: :account_id
   belongs_to :project
@@ -34,9 +31,6 @@ class Inventory < ActiveRecord::Base
   # attribute
   serialize :error_messages, JSON
 
-  #validates_presence_of :store_to, :if => :is_transference?
-  scope :op_in, -> { where(operation: IN_OPERATIONS) }
-  scope :op_out, -> { where(operation: OUT_OPERATIONS) }
 
   OPERATIONS.each do |_op|
     define_method :"is_#{_op}?" do
@@ -55,14 +49,6 @@ class Inventory < ActiveRecord::Base
   # Returns an array with the details fo the transaction
   def get_transaction_items
     transaction.transaction_details
-  end
-
-  def is_in?
-    IN_OPERATIONS.include? operation
-  end
-
-  def is_out?
-    OUT_OPERATIONS.include? operation
   end
 
   def is_income?

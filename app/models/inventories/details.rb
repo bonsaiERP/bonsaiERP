@@ -3,7 +3,7 @@
 # email: boriscyber@gmail.com
 # Class that helps manage details for Inventory
 class Inventories::Details < Struct.new(:inventory)
-  delegate :details, :store_id, to: :inventory
+  delegate :details, :store_id, :store_to_id, to: :inventory
 
   def item_ids
     @item_ids ||= details.select{|v| v.quantity > 0 }.map(&:item_id).uniq
@@ -17,8 +17,20 @@ class Inventories::Details < Struct.new(:inventory)
     @stocks = new_stocks
   end
 
+  def stocks_to
+    @stocks_to ||= item_ids.map {|v| set_stock_to(v)}
+  end
+
   def set_stock(item_id)
     if st = item_stocks.find {|v| v.item_id === item_id }
+      st
+    else
+      NullStock.new(minimum: 0, quantity: 0, item_id: item_id)
+    end
+  end
+
+  def set_stock_to(item_id)
+    if st = item_stocks_to.find {|v| v.item_id === item_id }
       st
     else
       NullStock.new(minimum: 0, quantity: 0, item_id: item_id)
@@ -36,6 +48,10 @@ class Inventories::Details < Struct.new(:inventory)
 
   def item_stocks
     @item_stocks ||= Stock.active.store(store_id).where(item_id: item_ids).to_a
+  end
+
+  def item_stocks_to
+    @item_stocks_to ||= Stock.active.store(store_to_id).where(item_id: item_ids).to_a
   end
 end
 

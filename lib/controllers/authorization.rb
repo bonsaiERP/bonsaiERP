@@ -87,7 +87,8 @@ private
       expenses_inventory_ins: true,
       expenses_inventory_outs: true,
       tags: true,
-      reports: true
+      reports: true,
+      inventory_transferences: true
     }
   end
 
@@ -125,7 +126,8 @@ private
       expenses_inventory_ins: true,
       expenses_inventory_outs: true,
       tags: true,
-      reports: true
+      reports: true,
+      inventory_transferences: true
     }
   end
 

@@ -7,9 +7,10 @@ Bonsaierp::Application.routes.draw do
 
   resources :inventories, only: [:index, :show] do
     get :show_movement, on: :member
+    get :show_trans, on: :member
   end
 
-  resources :inventory_transferences, only: [:new, :create]
+  resources :inventory_transferences, only: [:new, :create, :show]
 
   resources :export_expenses, only: ['index', 'create']
 

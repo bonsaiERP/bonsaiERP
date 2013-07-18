@@ -15,13 +15,17 @@ class Inventories::Transference < Inventories::Form
   end
 
   def store_to
-    Store.active.where(id: store_to_id).first
+    @store_to ||= Store.active.where(id: store_to_id).first
   end
 
   def inventory
     super
     @inventory.store_to_id = store_to_id
     @inventory
+  end
+
+  def stores
+    @stores ||= Store.active.where("id != ?", store_id)
   end
 
 private
@@ -32,7 +36,8 @@ private
   def update_stocks
     res = true
     stocks.each do |st|
-      stoc = Stock.create(store_id: store_id, item_id: st.item_id, quantity: stock_quantity(st) )
+      stoc = Stock.create(store_id: store_id, item_id: st.item_id,
+                          quantity: stock_quantity(st), minimum: st.minimum)
       res = stoc.save && st.update_attribute(:active, false)
 
       return false unless res
@@ -43,8 +48,10 @@ private
 
   def update_stocks_to
     res = true
-    stocks.each do |st|
-      stoc = Stock.create(store_id: store_to_id, item_id: st.item_id, quantity: stock_quantity_to(st) )
+
+    stocks_to.each do |st|
+      stoc = Stock.create(store_id: store_to_id, item_id: st.item_id,
+                          quantity: stock_to_quantity(st), minimum: st.minimum)
       res = stoc.save && st.update_attribute(:active, false)
 
       return false unless res
@@ -57,7 +64,7 @@ private
     st.quantity - item_quantity(st.item_id)
   end
 
-  def stock_quantity_to(st)
+  def stock_to_quantity(st)
     st.quantity + item_quantity(st.item_id)
   end
 end

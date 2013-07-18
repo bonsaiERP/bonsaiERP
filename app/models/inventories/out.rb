@@ -21,7 +21,8 @@ private
     res = true
     new_stocks = []
     stocks.each do |st|
-      stoc = Stock.new(store_id: store_id, item_id: st.item_id, quantity: stock_quantity(st) )
+      stoc = Stock.new(store_id: store_id, item_id: st.item_id, 
+                       quantity: stock_quantity(st), minimum: st.minimum)
 
       res = stoc.save && st.update_attribute(:active, false)
       new_stocks << stoc

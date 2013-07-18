@@ -15,7 +15,7 @@ private
   def update_stocks
     res = true
     stocks.each do |st|
-      stock = Stock.new(store_id: store_id, item_id: st.item_id, quantity: stock_quantity(st) )
+      stock = Stock.new(store_id: store_id, item_id: st.item_id, quantity: stock_quantity(st), minimum: st.minimum )
 
       res = stock.save && st.update_attribute(:active, false)
 

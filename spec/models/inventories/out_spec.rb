@@ -66,6 +66,10 @@ describe Inventories::Out do
       stocks.map(&:item_id).sort.should eq([1, 2])
       stocks.map(&:quantity).should eq([0, 0])
 
+      st = stocks.first
+      st.update_attribute(:minimum, 1).should be_true
+      st_item_id = st.item_id
+
       # More items ERROR repeated
       attrs = valid_attributes.merge(inventory_details_attributes:
         [{item_id: 2, quantity: 2, store_id: 1},
@@ -96,6 +100,8 @@ $glob =true
 
       stocks = Stock.active.where(store_id: io.store_id)
       stocks.should have(3).items
+
+      stocks.find {|v| v.item_id === st_item_id}.minimum.should == 1
 
       stocks.find {|v| v.item_id === 1}.quantity.should == 0
       stocks.find {|v| v.item_id === 2}.quantity.should == -2

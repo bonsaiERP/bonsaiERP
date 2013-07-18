@@ -1,5 +1,5 @@
 = f.simple_fields_for :inventory_operation_details do |fd|
-  %tr.item
+  %tr.item.form-inline
     %td
       = fd.input :item_id, :label => false, :collection => @items, :input_html => {:class => 'item', 'data-new_url' => new_item_path(:scope => 'inventory'), 'data-title' => 'Nuevo ítem', 'data-trigger' => 'new_item'}
     %td= fd.input :quantity, :label => false, :input_html => { :size => 8, :class => 'quantity', :type => 'decimal' }

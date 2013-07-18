@@ -50,6 +50,10 @@ describe Inventories::In do
     stocks.map(&:item_id).sort.should eq([1, 2])
     stocks.map(&:quantity).should eq([2, 2])
 
+    st = stocks.first
+    st.update_attribute(:minimum, 1).should be_true
+    st_item_id = st.item_id
+
     # More items
     attrs = valid_attributes.merge(inventory_details_attributes:
       [{item_id: 2, quantity: 2},
@@ -60,6 +64,8 @@ describe Inventories::In do
     invin.create.should be_true
     stocks = Stock.active.where(store_id: io.store_id)
     stocks.should have(3).items
+
+    stocks.find {|v| v.item_id === st_item_id}.minimum.should == 1
 
     stocks.find {|v| v.item_id === 2}.quantity.should == 4
     stocks.find {|v| v.item_id === 12}.quantity.should == 5

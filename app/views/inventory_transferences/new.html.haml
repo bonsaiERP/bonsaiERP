@@ -1,0 +1,32 @@
+%h1
+  %span.n Nueva transferencia de
+  = @store
+
+= simple_form_for @trans, url: inventory_transferences_path do |f|
+  = hidden_field_tag :store_id, @store.id
+  = f.hidden_field :store_id
+  .row-fluid
+    .span6
+      %label De almacen
+      = link_to @store, @store, target: '_blank'
+    .span6
+      = f.input :store_to_id, collection: @trans.stores, label: 'Transferir a alamcen'
+
+  .row-fluid
+    .span6
+      = f.input :date, label: 'Fecha', as: :datepicker
+    .span6
+      = f.input :description, label: 'Descripción', as: :text, input_html: {rows: 3}
+
+
+
+  .row-fluid
+    = render 'inventory_transferences/form', f: f, store_id: @store.id
+
+  .form-actions
+    = f.submit "Transferir ítems", class: 'btn btn-primary'
+
+:javascript
+  $(function() {
+    var inv = new App.InventoryTransference();
+  })
