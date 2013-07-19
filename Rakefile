@@ -3,7 +3,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-require 'queue_classic'
-require 'queue_classic/tasks'
-
 Bonsaierp::Application.load_tasks
