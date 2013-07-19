@@ -70,6 +70,10 @@ class InventoryPresenter < BasePresenter
     end
   end
 
+  def description_tag
+    "#{icon('icon-file muted', 'Descripción')} #{description}".html_safe  if description.present?
+  end
+
   def related_tip
     case
     when is_income?
