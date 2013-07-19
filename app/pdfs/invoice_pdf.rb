@@ -22,11 +22,12 @@ class InvoicePdf < BasePdf
     render_file(file_path)
   end
 
+private
   # Creates the information for the contact
   def create_contact_box
     bounding_box([10, @h - 250], :width => 270, :height => 120) do
-      text "#{contact_name @movement.contact}"
-      text "#{@movement.contact.organisation_name}", :style => :bold unless @movement.contact.organisation_name.blank?
+      text "#{contact_name @movement.contact}", style: :bold
+      text "#{@movement.contact.organisation_name}", style: :bold unless @movement.contact.organisation_name.blank?
       text "#{@movement.contact.address}"
     end
   end
@@ -34,8 +35,17 @@ class InvoicePdf < BasePdf
   # Creates the number for the invoice
   def create_invoice_title
     bounding_box([300, @h - 250], :width => 270, :height => 120) do
-      text "#{@movement.pdf_title}", :style => :bold, :size => 11
+      text "#{title}", :style => :bold, :size => 11
       text I18n.l(@movement.created_at.to_date)
+    end
+  end
+
+  def title
+    case
+    when @movement.is_a?(Income)
+      "Ingreso #{@movement}"
+    when @movement.is_a?(Expense)
+      "Egreso #{@movement}"
     end
   end
 
@@ -54,7 +64,7 @@ class InvoicePdf < BasePdf
   # Creates the data for table
   def create_table_data
     arr = []
-    @movement.movement_details.includes(:item).each do |td|
+    @movement.details.includes(:item).each do |td|
       arr << [ td.item.to_s, number_to_currency(td.price), number_to_currency(td.quantity), number_to_currency(td.total) ]
     end
     arr
@@ -64,10 +74,9 @@ class InvoicePdf < BasePdf
   def create_totals
     org = OrganisationSession
     arr = [["Subtotal:",   "#{number_to_currency(@movement.total)}"]]
-    arr << ["Descuentos (#{number_to_currency(@movement.discount)} %):", "- #{number_to_currency(@movement.total_discount)}"] if @movement.discount.present? and @movement.discount > 0
-    arr << ["Impuestos (#{@movement.tax_percent} %):", "#{number_to_currency(@movement.total_taxes)}"] if @movement.tax_percent.present? and @movement.tax_percent > 0
+    #arr << ["Descuentos (#{number_to_currency(@movement.discount)} %):", "- #{number_to_currency(@movement.total_discount)}"] if @movement.discount.present? and @movement.discount > 0
 
-    arr << ["<b>Total</b>", "<b>#{@movement.currency_symbol} #{number_to_currency(@movement.total)}</b>"]
+    arr << ["<b>Total</b>", "<b>#{@movement.currency} #{number_to_currency(@movement.total)}</b>"]
 
     table(arr, :width => 500, :column_widths => [420, 80], :cell_style => {:border_width => 0, :align => :right, :inline_format => true } )
   end

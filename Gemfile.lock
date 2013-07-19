@@ -63,6 +63,10 @@ GEM
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
     chunky_png (1.2.8)
+    climate_control (0.0.3)
+      activesupport (>= 3.0)
+    cocaine (0.5.1)
+      climate_control (>= 0.0.3, < 1.0)
     code_analyzer (0.3.1)
       sexp_processor
     coderay (1.0.9)
@@ -144,6 +148,12 @@ GEM
     multi_xml (0.5.3)
     newrelic_rpm (3.6.2.96)
     nokogiri (1.5.9)
+    paperclip (3.4.2)
+      activemodel (>= 3.0.0)
+      activerecord (>= 3.0.0)
+      activesupport (>= 3.0.0)
+      cocaine (~> 0.5.0)
+      mime-types
     pdf-reader (1.3.3)
       Ascii85 (~> 1.0.0)
       afm (~> 0.2.0)
@@ -178,9 +188,6 @@ GEM
       slop (~> 3.0)
     puma (2.3.2)
       rack (>= 1.1, < 2.0)
-    queue_classic (2.1.4)
-      multi_json (~> 1.7.2)
-      pg (~> 0.15.1)
     quiet_assets (1.0.2)
       railties (>= 3.1, < 5.0)
     rack (1.4.5)
@@ -316,6 +323,7 @@ DEPENDENCIES
   launchy
   meta_request
   newrelic_rpm
+  paperclip
   pg
   prawn (~> 1.0.0.rc2)
   pry
@@ -323,7 +331,6 @@ DEPENDENCIES
   pry-rails
   pry-remote
   puma
-  queue_classic
   quiet_assets
   rails (= 3.2.13)
   rails_best_practices

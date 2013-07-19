@@ -8,7 +8,7 @@ class BasePdf < Prawn::Document
 
   def initialize
     @marg = 20
-    @topmarg = 30
+    @topmarg = 20
     @bottommarg = 38
     super :margin => [@topmarg.mm, @marg.mm, @bottommarg.mm, @marg.mm]
     font_size 9.5
@@ -25,10 +25,9 @@ class BasePdf < Prawn::Document
     x1, y1, x2, y2 = page.dimensions
     h = page.margins
     #image img_path, :width => 612, :fit => true, :at => [-h[:left], y2 - 105]
-    org = OrganisationSession.current_organisation
     bounding_box([300, y2 - 150], :width => 150, :height => 120) do
-      text org.name, :style => :bold
-      text org.address
+      text OrganisationSession.name, :style => :bold
+      text OrganisationSession.address
     end
   end
 

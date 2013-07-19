@@ -28,7 +28,8 @@ gem 'active_model_serializers' # ActiveRecord Classes to encode in JSON
 gem 'resubject' # Cool presenter
 
 gem 'validates_email_format_of', '~> 1.5.3'
-gem 'queue_classic' # Background processing for PostgreSQL
+gem 'paperclip' # Attachments
+
 
 gem 'prawn', '~> 1.0.0.rc2'
 #gem 'exception_notification'
