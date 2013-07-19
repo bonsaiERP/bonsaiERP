@@ -39,6 +39,18 @@
 
 .row-fluid
   .span6.well.well-small
+    %h4.bonsai-dark Ingresos por contacto
+
+    %ul.unstyled
+      = render partial: 'reports/contact', collection: @report.contacts_incomes, as: :contact
+  .span6.well.well-small
+    %h4.text-error Egresos por contacto
+
+    %ul.unstyled
+      = render partial: 'reports/contact', collection: @report.contacts_expenses, as: :contact
+
+.row-fluid
+  .span6.well.well-small
     %h4.bonsai-dark Ingresos por ítem
     %ul.unstyled
       = render partial: 'items/trans_detail', collection: @report.incomes_by_item, as: :item

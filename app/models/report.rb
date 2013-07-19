@@ -55,6 +55,14 @@ class Report
     @total ||= total_incomes + total_expenses
   end
 
+  def contacts_incomes
+    @contacts_incomes ||= conn.select_rows(contacts_sql params(type: 'Income')).map {|v| ContactReport.new(*v)}
+  end
+
+  def contacts_expenses
+    @contacts_expenses ||= conn.select_rows(contacts_sql params(type: 'Expense')).map {|v| ContactReport.new(*v)}
+  end
+
 private
   def offset
     @offset ||= attrs[:offset].to_i >= 0 ? attrs[:offset].to_i : 0
@@ -102,6 +110,16 @@ private
     SQL
   end
 
+  def contacts_sql(data)
+    <<-SQL
+    SELECT c.matchcode, SUM((t.total - a.amount) * a.exchange_rate) AS tot
+    FROM contacts c JOIN accounts a ON (a.contact_id=c.id and a.type='#{data.type}')
+    JOIN transactions t ON (t.account_id=a.id)
+    GROUP BY c.id
+    ORDER BY tot DESC OFFSET #{data.offset} LIMIT #{data.limit}
+    SQL
+  end
+
   def any_tags?
     tag_ids.is_a?(Array) && tag_ids.any?
   end
@@ -123,6 +141,16 @@ end
 class ReportParams < OpenStruct; end
 
 class ItemTransReport < Struct.new(:id, :name, :tot)
+  def total
+    tot.to_f
+  end
+end
+
+class ContactReport < Struct.new(:contact, :tot)
+  def to_s
+    contact
+  end
+
   def total
     tot.to_f
   end
