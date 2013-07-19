@@ -30,7 +30,7 @@ gem 'resubject' # Cool presenter
 gem 'validates_email_format_of', '~> 1.5.3'
 gem 'queue_classic' # Background processing for PostgreSQL
 
-gem 'prawn', '~> 1.0.0.rc1'
+gem 'prawn', '~> 1.0.0.rc2'
 #gem 'exception_notification'
 
 group :production do

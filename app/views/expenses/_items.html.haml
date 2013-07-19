@@ -2,10 +2,14 @@
   %thead
     %tr
       %th.c Item
-      %th.c Precio unitario
+      %th.c
+        Precio unitario
+        = currency_label expense.currency
       %th.c Cantidad
       %th.c Saldo
-      %th.c Total fila
+      %th.r
+        Total fila
+        = currency_label expense.currency
     - expense.expense_details.each do |det|
       %tr
         %td.span4= det.item

@@ -1,24 +1,22 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-# Class that creates the PDF file to be suplend with the document and inquiry in the mail
+# Class that creates the PDF file
 class InvoicePdf < BasePdf
 
-  def initialize(transaction)
+  def initialize(movement)
     super()
-    @transaction = transaction
+    @movement = movement
     #@document = document
     #@inquiry_detail = inquiry_detail
     w, h, @w, @h = page.dimensions
   end
 
   def generate_pdf(file_path)
-
     create_contact_box
     create_invoice_title
-    
-    create_exchange_rate
-    create_transaction_details
+
+    create_movement_details
     create_totals
 
     render_file(file_path)
@@ -27,32 +25,24 @@ class InvoicePdf < BasePdf
   # Creates the information for the contact
   def create_contact_box
     bounding_box([10, @h - 250], :width => 270, :height => 120) do
-      text "#{@transaction.contact.pdf_name}"
-      text "#{@transaction.contact.organisation_name}", :style => :bold unless @transaction.contact.organisation_name.blank?
-      text "#{@transaction.contact.address}"
+      text "#{contact_name @movement.contact}"
+      text "#{@movement.contact.organisation_name}", :style => :bold unless @movement.contact.organisation_name.blank?
+      text "#{@movement.contact.address}"
     end
   end
 
   # Creates the number for the invoice
   def create_invoice_title
     bounding_box([300, @h - 250], :width => 270, :height => 120) do
-      text "#{@transaction.pdf_title}", :style => :bold, :size => 11
-      text I18n.l(@transaction.created_at.to_date)
-    end
-  end
-
-  def create_exchange_rate
-    unless OrganisationSession.currency_id == @transaction.currency_id
-      excrate = "1 #{@transaction.currency_name} = #{number_to_currency @transaction.exchange_rate, :precision => 4} "
-      excrate << "#{Currency.find(OrganisationSession.currency_id).plural}"
-      text "Tipo de cambio: <b>#{excrate}</b>", :inline_format => true
+      text "#{@movement.pdf_title}", :style => :bold, :size => 11
+      text I18n.l(@movement.created_at.to_date)
     end
   end
 
   # Creates the table with the data of details
-  def create_transaction_details
-    table([["<b>Item</b>", "<b>Precio\nUnitario #{@transaction.currency_symbol}</b>", 
-            '<b>Cantidad</b>', "<b>Total\nFila #{@transaction.currency_symbol}</b>"]] + create_table_data, :header => true, 
+  def create_movement_details
+    table([["<b>Item</b>", "<b>Precio\nUnitario #{@movement.currency}</b>", 
+            '<b>Cantidad</b>', "<b>Total\nFila #{@movement.currency}</b>"]] + create_table_data, :header => true, 
           :column_widths => [280, 70, 70, 80], :width => 500, :cell_style => {:border_width => 0.3, :inline_format => true} ) do
       style(row(0), :background_color => 'efefef')
       style(column(1)) { |c| c.align= :right }
@@ -64,7 +54,7 @@ class InvoicePdf < BasePdf
   # Creates the data for table
   def create_table_data
     arr = []
-    @transaction.transaction_details.includes(:item).each do |td|
+    @movement.movement_details.includes(:item).each do |td|
       arr << [ td.item.to_s, number_to_currency(td.price), number_to_currency(td.quantity), number_to_currency(td.total) ]
     end
     arr
@@ -73,14 +63,22 @@ class InvoicePdf < BasePdf
   # Creates te totals for the invoice
   def create_totals
     org = OrganisationSession
-    arr = [["Subtotal:",   "#{number_to_currency(@transaction.total)}"]]
-    arr << ["Descuentos (#{number_to_currency(@transaction.discount)} %):", "- #{number_to_currency(@transaction.total_discount)}"] if @transaction.discount.present? and @transaction.discount > 0
-    arr << ["Impuestos (#{@transaction.tax_percent} %):", "#{number_to_currency(@transaction.total_taxes)}"] if @transaction.tax_percent.present? and @transaction.tax_percent > 0
+    arr = [["Subtotal:",   "#{number_to_currency(@movement.total)}"]]
+    arr << ["Descuentos (#{number_to_currency(@movement.discount)} %):", "- #{number_to_currency(@movement.total_discount)}"] if @movement.discount.present? and @movement.discount > 0
+    arr << ["Impuestos (#{@movement.tax_percent} %):", "#{number_to_currency(@movement.total_taxes)}"] if @movement.tax_percent.present? and @movement.tax_percent > 0
 
-    arr << ["<b>Total</b>", "<b>#{@transaction.currency_symbol} #{number_to_currency(@transaction.total)}</b>"]
+    arr << ["<b>Total</b>", "<b>#{@movement.currency_symbol} #{number_to_currency(@movement.total)}</b>"]
 
     table(arr, :width => 500, :column_widths => [420, 80], :cell_style => {:border_width => 0, :align => :right, :inline_format => true } )
   end
 
+private
+  def contact_name(cont)
+    if cont.first_name && cont.last_name
+      "#{cont.first_name} #{cont.last_name}"
+    else
+      cont.to_s
+    end
+  end
 
 end

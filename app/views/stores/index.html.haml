@@ -25,13 +25,9 @@
             %i.icon-warning-sign
             Existen inventarios con mínimos
       .span4
-        = render_if store.phone do
-          %i.icon-phone(title='Teléfono' data-toggle='tooltip')
-          = store.phone
-        .clear-both
-        = render_if store.address do
-          %i.icon-building(title='Dirección' data-toggle='tooltip')
-            = nl2br store.address
+        = store.phone_tag
+        .clearfix
+        = store.address_tag
 
       .span1
         = link_to icon_edit, edit_store_path(store), class: 'dark'

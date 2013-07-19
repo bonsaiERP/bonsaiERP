@@ -317,7 +317,7 @@ DEPENDENCIES
   meta_request
   newrelic_rpm
   pg
-  prawn (~> 1.0.0.rc1)
+  prawn (~> 1.0.0.rc2)
   pry
   pry-nav
   pry-rails

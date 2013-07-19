@@ -1,12 +1,17 @@
 %table#items_table.table.decorated
   %thead
     %tr
-      %th Item
-      %th Precio unitario
-      %th Cantidad
-      %th
+      %th.c Item
+      %th.c
+        Precio unitario
+        = currency_label income.currency
+      %th.c Cantidad
+      %th.c
         %span(title="Saldo inventario" data-toggle='tooltip') Saldo Inv.
-      %th Total fila
+      %th.r
+        Total fila
+        = currency_label income.currency
+
     - income.income_details.each do |det|
       %tr
         %td.span6= det.item

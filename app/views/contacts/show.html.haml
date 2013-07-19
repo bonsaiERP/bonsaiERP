@@ -20,27 +20,18 @@
 
 .row-fluid
   .span4
-    = render_if @contact.email do
-      %i.icon-envelope(title='E-mail' data-toggle='tooltip')
-      = @contact.email
+    = @contact.email_tag
 
   .span4
     .span8
-      = render_if @contact.tax_number do
-        %i.icon-barcode(title='Código tributario' data-toggle='tooltip')
-        = @contact.tax_number
-      .clear-both
-      = render_if @contact.address do
-        %i.icon-building(title='Dirección' data-toggle='tooltip')
-        =nl2br @contact.address
+      = @contact.tax_number_tag
+      .clearfix
+      = nl2br @contact.address_tag
     .span4
-      = render_if @contact.phone do
-        %i.icon-phone(title='Teléfono' data-toggle='tooltip')
-        = @contact.phone
-      .clear-both
-        = render_if @contact.mobile do
-          %i.icon-mobile-phone(title='Móvil' data-toggle='tooltip')
-          = @contact.mobile
+      = @contact.phone_tag
+      .clearfix
+      = @contact.mobile_tag
+
 .row-fluid
   .span6
     .span6.well.well-small

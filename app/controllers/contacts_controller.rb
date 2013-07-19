@@ -21,6 +21,7 @@ class ContactsController < ApplicationController
 
   # GET /contacts/1
   def show
+    @contact = present @contact
   end
 
   # GET /contacts/new

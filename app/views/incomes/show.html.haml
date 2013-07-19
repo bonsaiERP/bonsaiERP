@@ -67,11 +67,19 @@
         = ntc @income.balance
         = currency_label @income.currency
 
+    - unless OrganisationSession.currency === @income.currency
+      %i.icon-exchange.muted(title='Tipo de cambio' data-toggle='tooltip')
+      1
+      = currency_label
+      \=
+      =ntc @income.exchange_rate
+      = currency_label @income.currency
+
   .span6
     %span.muted Proyecto:
     = link_to @income.project, @income.project if @income.project
     .clearfix
-    %i.icon-file-alt(data-toggle='tooltip' title='Descripción')
+    %i.icon-file.muted(data-toggle='tooltip' title='Descripción')
     = @income.description
 
 
