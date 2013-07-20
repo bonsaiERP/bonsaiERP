@@ -26,13 +26,13 @@
     .clearfix
 
   #btag-selector
-    %input#tags(type="text" class="span5" placeholder="Seleccione o escriba")
-    &nbsp;
+    %input#tags(type="text" placeholder="Seleccione o escriba" style='min-width:350px')
+    -#%i.icon-tags.icon-large(title='Ver etiquetas' data-toggle='tooltip')
     %button.btn.btn-primary.apply-tags Aplicar etiquetas
 
     %a#new-tag-link(href="javascript:;") Nueva etiqueta
 
-    %a#help-tags-link.dark(href='javascript:;')
+    %a#help-tags-link(href='javascript:;')
       %i.icon-question-sign
       Ayuda
 
@@ -41,4 +41,8 @@
   $(function() {
     var data = tags;
     var tag = new Plugin.Tag("#{list}", "#{model}", data);
+
+    $('.but').one('click', 'button.tags', function() {
+      $('#tags').select2('open');
+    })
   });

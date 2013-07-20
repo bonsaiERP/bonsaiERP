@@ -20,7 +20,7 @@
 .well
   = form_for dashboard_path, method: :get, html: {id: "form_graph", class: 'form-inline'} do
     = render 'layouts/date_range', dr: @date_range
-    = submit_tag 'Generar', class: 'btn b'
+    = submit_tag 'Generar', class: 'btn'
 
 
 = render 'dashboard/graph', data: @dashboard
