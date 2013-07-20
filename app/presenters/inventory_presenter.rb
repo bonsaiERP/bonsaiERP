@@ -51,12 +51,12 @@ class InventoryPresenter < BasePresenter
     end
   end
 
-  def related(s_id)
+  def related(st_id)
     case
     when is_income?  then income
     when is_expense? then expense
     when is_trans?
-      store_id === s_id ? store_to : store
+      store_id === st_id ? store_to : store
     else
       nil
     end
@@ -70,14 +70,16 @@ class InventoryPresenter < BasePresenter
     "#{icon('icon-file muted', 'Descripción')} #{description}".html_safe  if description.present?
   end
 
-  def related_tip
+  def related_tip(st_id)
     case
     when is_income?
       "Ingreso"
     when is_expense?
       "Egreso"
-    when is_trans?
-      "Almacen"
+    when(is_trans? && st_id === store_id)
+      "Almacen destino"
+    when(is_trans? && st_id != store_id)
+      "Almacen origen"
     end
   end
 

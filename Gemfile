@@ -40,6 +40,7 @@ group :production do
 end
 
 group :development do
+  gem 'puma'# Web server
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'meta_request'
@@ -49,7 +50,6 @@ group :development do
 end
 
 group :development, :test do
-  gem 'puma'# Web server
   gem 'rspec-rails'
   gem 'ffaker'
   gem 'pry-remote' # Work binding.pry_remote with Foreman, just call pry-remote in the terminal

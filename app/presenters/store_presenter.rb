@@ -22,8 +22,7 @@ class StorePresenter < BasePresenter
   end
 
   def inventories(attrs = {})
-    inv = Inventory.where("store_id=:id OR store_to_id=:id", id: id)
-    #to_model.inventories.includes(:creator)
+    inv = Inventory.includes(:creator, :store, :store_to).where("store_id=:id OR store_to_id=:id", id: id)
 
     if attrs[:search_operations].present?
       s = "%#{ attrs[:search_operations] }%"
@@ -31,8 +30,8 @@ class StorePresenter < BasePresenter
     elsif valid_date_range?(attrs)
       inv = inv.where(date: date_range(attrs).range)
     end
-    
-    inv.page(page attrs[:page_operations]).order("date desc")
+
+    inv.page(page attrs[:page_operations]).order("date desc, id desc")
   end
 
 private

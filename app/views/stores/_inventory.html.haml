@@ -5,8 +5,9 @@
       = link_to inventory.ref_number, inventory.link
     = inventory.operation_tag
     .clearfix
-    = link_to inventory.related(store.id), inventory.related(store.id), class: 'b', title: inventory.related_tip, 'data-toggle' => 'tooltip'  if inventory.has_related?
-    = lo inventory.created_at
+      = link_to inventory.related(store.id), inventory.related(store.id), class: 'b',
+        title: inventory.related_tip(store.id), 'data-toggle' => 'tooltip'  if inventory.has_related?
+    = lo inventory.date
   .span6
     = inventory.creator_label
     .clearfix
