@@ -22,7 +22,8 @@ class StorePresenter < BasePresenter
   end
 
   def inventories(attrs = {})
-    inv = to_model.inventories.includes(:creator)
+    inv = Inventory.where("store_id=:id OR store_to_id=:id", id: id)
+    #to_model.inventories.includes(:creator)
 
     if attrs[:search_operations].present?
       s = "%#{ attrs[:search_operations] }%"

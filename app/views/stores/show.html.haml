@@ -82,7 +82,7 @@
     = html
 
     %ul.listing.unstyled
-      = render partial: 'stores/inventory', collection: @store.inventories(params)
+      = render partial: 'stores/inventory', collection: @store.inventories(params), locals: {store: @store}
 
     = html
 

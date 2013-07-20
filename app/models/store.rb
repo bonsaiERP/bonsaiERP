@@ -35,22 +35,22 @@ class Store < ActiveRecord::Base
   end
 
   # Returns a Hash of items with the item_id as key
-  def get_hash_of_items(*args)
-    options = args.extract_options!
-    args = [:quantity] unless args.any?
-    h = lambda {|v| Hash[args.map {|a| [a, v.send(a)] } ] }
-    
-    st = stocks
-    st = st.where(options) if options
+  #def get_hash_of_items(*args)
+  #  options = args.extract_options!
+  #  args = [:quantity] unless args.any?
+  #  h = lambda {|v| Hash[args.map {|a| [a, v.send(a)] } ] }
 
-    items = options[:item_id].is_a?(Array) ? options[:item_id] : [options[:item_id]]
+  #  st = stocks
+  #  st = st.where(options) if options
 
-    Hash[
-    items.map do |i_id|
-      [i_id, {:quantity => 0}]
-    end]
-    #Hash[ st.includes(:item).map {|st| [st.item_id , h.call(st) ] } ]
-  end
+  #  items = options[:item_id].is_a?(Array) ? options[:item_id] : [options[:item_id]]
+
+  #  Hash[
+  #  items.map do |i_id|
+  #    [i_id, {:quantity => 0}]
+  #  end]
+  #  #Hash[ st.includes(:item).map {|st| [st.item_id , h.call(st) ] } ]
+  #end
 
   def self.get_names_hash
     @names_hash ||= Hash[Store.scoped.values_of(:id, :name)]

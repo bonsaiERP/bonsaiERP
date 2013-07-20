@@ -51,23 +51,19 @@ class InventoryPresenter < BasePresenter
     end
   end
 
-  def related
+  def related(s_id)
     case
     when is_income?  then income
     when is_expense? then expense
-    when store_to_id.present? then store_to
+    when is_trans?
+      store_id === s_id ? store_to : store
     else
       nil
     end
   end
 
-  def related_tag
-    case
-    when is_income?
-      text_tag_green("Ingreso:")
-    when is_expense?
-      text_tag_red("Egreso:")
-    end
+  def has_related?
+    is_income? || is_expense? || is_trans?
   end
 
   def description_tag
