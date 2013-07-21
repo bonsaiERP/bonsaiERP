@@ -1,18 +1,18 @@
 .row-fluid.but
-  .buttons-list.span2
+  .buttons-list
     .btn-group.search-tags(data-toggle='buttons-radio')
-      %button.btn.search(href='#search-pane') Buscar
+      %button.btn.search(href='#search-pane') Busqueda
       %button.btn.tags(href='#tags-pane') Etiquetas
 
-  .panes.span10
-    #search-pane.button-pane.span12
+  .panes
+    #search-pane.button-pane
       = form_tag '/items', method: 'get', class: 'form-inline' do
-        = text_field_tag 'search', '', placeholder: 'Nombre o código', size: 35
-        = submit_tag 'Buscar', class: 'btn btn-primary'
+        = text_field_tag 'search', '', placeholder: 'Nombre o código', size: 45
+        = submit_tag 'Buscar', class: 'btn'
 
       =link_to 'eliminar filtro', items_path  if params[:commit].present?
 
-    #tags-pane.button-pane.span12
+    #tags-pane.button-pane
       = render 'tags/tags', model: 'Item', list: '#items-list'
 
 :javascript
