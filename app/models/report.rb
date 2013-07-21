@@ -44,11 +44,11 @@ class Report
   end
 
   def expenses_pecentage
-    @expenses_pecentage ||= total_expenses / total
+    @expenses_pecentage ||= 100 * (total_expenses / total)
   end
 
   def incomes_percentage
-    @incomes_pecentage ||= total_incomes / total
+    @incomes_pecentage ||= 100 * (total_incomes / total)
   end
 
   def total
