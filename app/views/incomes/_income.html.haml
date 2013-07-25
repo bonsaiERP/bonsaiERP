@@ -13,6 +13,8 @@
       %i= l income.date
       = income.inventory_tag
 
+      %ul.btags(data-tag_ids="#{income.tag_ids}")
+
   .span4
     = income.updater_label
     = income.creator_label
@@ -23,8 +25,6 @@
 
     .clear-both
     = income.description_tag
-    .clear-both
-    %ul.btags(data-tag_ids="#{income.tag_ids}")
 
   .span3
     .span6.r
