@@ -10,7 +10,7 @@
         =link_to 'Eliminar filtro', incomes_path
 
       = form_tag '/incomes', method: 'get', class: 'form-inline' do
-        = text_field_tag 'search', '', size: 45, placeholder: 'Contacto, referencia, etiqueta o descripción', autocomplete: 'off'
+        = text_field_tag 'search', '', size: 45, placeholder: 'Escriba y/o seleccione una etiqueta', autocomplete: 'off'
         = submit_tag 'Buscar', class: 'btn'
 
     #tags-pane.button-pane

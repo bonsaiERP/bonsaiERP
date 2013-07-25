@@ -7,7 +7,7 @@
   .panes
     #search-pane.button-pane
       = form_tag '/expenses', method: 'get', class: 'form-inline' do
-        = text_field_tag 'search', '', size: 45, placeholder: 'Contacto, codigo, referencia o etiqueta', autocomplete: 'off'
+        = text_field_tag 'search', '', size: 45, placeholder: 'Escriba y/o seleccione una etiqueta', autocomplete: 'off'
         = submit_tag 'Buscar', class: 'btn'
 
     #tags-pane.button-pane
