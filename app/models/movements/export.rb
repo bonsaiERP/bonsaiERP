@@ -3,19 +3,19 @@
 # email: boriscyber@gmail.com
 require 'csv'
 
-class Movements::Export < BaseService
-  attribute :date_start, Date
-  attribute :date_end, Date
-  attr_reader :col_sep, :rate
+class Movements::Export
+  attr_reader :col_sep, :rate, :date_range
+
+  def initialize(dr)
+    @date_range = dr
+  end
 
   delegate :currency, to: OrganisationSession
-
-  validate :valid_dates
 
   def export(rel, col_sep = ",")
     CSV.generate(col_sep: col_sep) do |csv|
       csv << csv_header
-      rel.joined.active.date_range(date_range).order('date asc, id asc').each do |trans|
+      rel.joined.active.date_range(date_range.range).order('date asc, id asc').each do |trans|
         self.rate = trans.exchange_rate
 
         csv << [trans.name, state(trans.state), date(trans.date), trans.cont, rep(trans.description),
@@ -37,12 +37,6 @@ private
     I18n.l(val, format: I18n.t('date.formats.excel'))
   end
 
-  def valid_dates
-    if !dates_are_valid? || date_start > date_end
-      self.errors.add(:base, 'Error')
-    end
-  end
-
   def csv_header
     %W(#{trans_name} Estado Fecha Contacto Descripción Total\ #{currency} Saldo\ #{currency} Tipo\ de\ Cambio Moneda)
   end
@@ -61,13 +55,5 @@ private
 
   def rep(val)
     val.to_s.gsub(/(\n|\t|\r)/, " ")
-  end
-
-  def dates_are_valid?
-    date_start.is_a?(Date) && date_end.is_a?(Date)
-  end
-
-  def date_range
-    date_start..date_end
   end
 end

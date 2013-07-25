@@ -3,5 +3,5 @@
 .row-fluid.form-inline.well.well-small
   .span6
     = form_tag export_expenses_path(format: 'xls') do
-      = render 'export_incomes/form_details', btn: 'Exportar a Excel'
-
+      = render 'layouts/date_range', dr: @date_range
+      = submit_tag 'Exportar a Excel', class: 'btn'
