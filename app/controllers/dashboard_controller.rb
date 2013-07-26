@@ -8,7 +8,6 @@ class DashboardController < ApplicationController
 
   # GET /dashboard
   def index
-    binding.pry
     @dashboard = DashboardPresenter.new(view_context, @date_range)
   end
 end

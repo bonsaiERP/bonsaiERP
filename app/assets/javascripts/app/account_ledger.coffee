@@ -31,11 +31,12 @@ class AccountLedgerReference
     .done (resp) ->
       self.$row.find('.reference').html(reference.replace(/\n/g, '<br>'))
       $user = self.$row.find('.updater')
+      self.$link.data('reference', reference)
 
       $user.attr('data-original-title', "MODIFICADO por: #{resp.updater} #{resp.updated_at}")  if $user.length > 0
       self.$cont.show()
       self.$form.remove()
-      self.$row.trigger('ledger-reference:update', [resp]);
+      self.$row.trigger('ledger-reference:update', [resp])
     .fail ->
       txt = @$row.find('.code').text()
       alert 'Exisitio un error al actualizar la referencia de' + txt
