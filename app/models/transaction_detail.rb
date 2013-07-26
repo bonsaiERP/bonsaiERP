@@ -23,9 +23,9 @@ class TransactionDetail < ActiveRecord::Base
     {
       id: id,
       item_id: item_id,
-      original_price: original_price, 
-      price: price, 
-      quantity: quantity, 
+      original_price: original_price,
+      price: price,
+      quantity: quantity,
       subtotal: subtotal
     }
   end
@@ -33,8 +33,8 @@ class TransactionDetail < ActiveRecord::Base
 private
   def balance_is_correct
     self.errors.add(:item_id, balance_error_message) if self.balance > quantity
-  end 
-  
+  end
+
   def balance_error_message
     I18n.t('errors.messages.transaction_details.balance')
   end

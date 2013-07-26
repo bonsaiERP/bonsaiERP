@@ -8,7 +8,7 @@ class Inventories::Out < Inventories::Form
     save do
       res = update_stocks
       Inventories::Errors.new(inventory, stocks).set_errors
-      res && inventory.save 
+      res && inventory.save
     end
   end
 
@@ -21,7 +21,7 @@ private
     res = true
     new_stocks = []
     stocks.each do |st|
-      stoc = Stock.new(store_id: store_id, item_id: st.item_id, 
+      stoc = Stock.new(store_id: store_id, item_id: st.item_id,
                        quantity: stock_quantity(st), minimum: st.minimum)
 
       res = stoc.save && st.update_attribute(:active, false)

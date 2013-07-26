@@ -23,6 +23,6 @@ private
 
   def balance_error_message
     I18n.t('errors.messages.income_details.balance')
-  
+
   end
 end

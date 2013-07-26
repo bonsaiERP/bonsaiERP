@@ -56,7 +56,7 @@ private
   def create_ledger
     if amount > 0
       @ledger = build_ledger(
-                  amount: -amount, operation: 'payout', 
+                  amount: -amount, operation: 'payout',
                   account_id: expense.id, status: get_status
                 )
       @ledger.save_ledger

@@ -26,7 +26,7 @@ class Movements::Form < BaseForm
 
   # Finds the income and sets data with the income found
   def set_service_attributes(mov)
-    [:ref_number, :date, :due_date, :currency, :exchange_rate, 
+    [:ref_number, :date, :due_date, :currency, :exchange_rate,
      :project_id, :description, :total].each do |attr|
       self.send(:"#{attr}=", mov.send(attr))
     end
