@@ -29,6 +29,7 @@ module Bonsaierp
 
     # Activate observers that should always be running.
     # config.active_record.observers = :cacher, :garbage_collector, :forum_observer
+    config.assets.paths << "#{Rails.root}/vendor/assets"
 
     # Activate observers that should always be running.
     # config.active_record.observers = :cacher, :garbage_collector, :forum_observer
