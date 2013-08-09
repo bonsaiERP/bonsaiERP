@@ -21,7 +21,7 @@ class MovementPresenter < BasePresenter
 
   def state_tag
     html = case state
-    when "draft" then "<span class='b gray'>Borrador</span>"
+    when "draft" then "<span class='b gray-light'>Borrador</span>"
     when "approved" then "<span class='b bonsai-dark'>Aprobado</span>"
     when "paid" then "<span class='b green-dark'>#{ paid_text }</span>"
     when "nulled" then "<span class='b red'>Anulado</span>"

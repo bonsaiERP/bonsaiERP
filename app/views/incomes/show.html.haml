@@ -26,6 +26,7 @@
     %h4.ib.n
       = link_to @income.contact, @income.contact
 
+    .clearfix
     %h5.n.ib
       %span.muted Fecha:
       %i= lo @income.date
@@ -72,10 +73,10 @@
     - unless OrganisationSession.currency === @income.currency
       %i.icon-exchange.muted(title='Tipo de cambio' data-toggle='tooltip')
       1
-      = currency_label
-      \=
-      =ntc @income.exchange_rate
       = currency_label @income.currency
+      \=
+      = ntc @income.exchange_rate
+      = currency_label
 
   .span6
     %span.muted Proyecto:
@@ -166,7 +167,7 @@
       $('#devolution-form').show('fast');
       $('.payment-buttons').hide('fast');
     })
-    $('body').on('click', '#cancel-devolution-link', function() { 
+    $('body').on('click', '#cancel-devolution-link', function() {
       $('#devolution-form').hide('fast');
       $('.payment-buttons').show('fast');
     });

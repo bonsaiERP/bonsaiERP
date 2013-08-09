@@ -9,9 +9,9 @@ class PaymentsController < ApplicationController
     p = Incomes::Payment.new(income_params)
 
     if p.pay
-      flash[:notice] = 'El cobro se realizo correctamente.'
+      flash[:notice] = 'El cobro se realizó correctamente.'
     else
-      flash[:error] = 'Exisitio un error al salvar el cobro.'
+      flash[:error] = 'Existio un error al salvar el cobro.'
     end
 
     redirect_to income_path(p.income, anchor: 'payments')
@@ -22,9 +22,9 @@ class PaymentsController < ApplicationController
     p = Expenses::Payment.new(expense_params)
 
     if p.pay
-      flash[:notice] = 'El pago se realizo correctamente.'
+      flash[:notice] = 'El pago se realizó correctamente.'
     else
-      flash[:error] = 'Exisitio un error al salvar el pago.'
+      flash[:error] = 'Existio un error al salvar el pago.'
     end
 
     redirect_to expense_path(p.expense, anchor: 'payments')

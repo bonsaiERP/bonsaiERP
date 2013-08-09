@@ -22,9 +22,9 @@ class DevolutionsController < ApplicationController
     p = Expenses::Devolution.new(expense_params)
 
     if p.pay_back
-      flash[:notice] = 'la devolucion se realizo correctamente.'
+      flash[:notice] = 'La devolución se realizo correctamente.'
     else
-      flash[:error] = 'Exisitio un error al salvar el la devolucion.'
+      flash[:error] = 'Existió un error al salvar la devolución.'
     end
 
     redirect_to expense_path(p.expense, anchor: 'payments')

@@ -26,6 +26,7 @@
     %h4.ib.n
       = link_to @expense.contact, @expense.contact
 
+    .clearfix
     %h5.n.ib
       %span.muted Fecha:
       %i= lo @expense.date
@@ -70,10 +71,10 @@
     - unless OrganisationSession.currency === @expense.currency
       %i.icon-exchange.muted(title='Tipo de cambio' data-toggle='tooltip')
       1
-      = currency_label
+      = currency_label @income.currency
       \=
-      =ntc @expense.exchange_rate
-      = currency_label @expense.currency
+      = ntc @income.exchange_rate
+      = currency_label
 
 
   .span6
