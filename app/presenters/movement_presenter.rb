@@ -40,7 +40,7 @@ class MovementPresenter < BasePresenter
       when delivered?
         label_green('IC', 'Inventario completo')
       when no_inventory?
-        label_red('ID', 'Inventario desactivado')
+        label_gray('ID', 'Inventario desactivado')
       else
         label_yellow('IP', 'Inventario pendiente')
       end

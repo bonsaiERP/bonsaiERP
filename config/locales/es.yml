@@ -351,16 +351,16 @@ es:
     invoice_body: "Estimado cliente le hacemos llegar el adjunto de la venta"
     registration:
       send: "Completa tu registro %{email} en %{app_name}"
-      user: "Bienvenido a %{app_name}, usted ha sido adicionado como usuario en %{company}" 
+      user: "Bienvenido a %{app_name}, usted ha sido adicionado como usuario en %{company}"
     reset_password:
       subject: "Recuperar contraseña de %{app_name}"
-  
+
   bonsai:
     registration: "Complete su registro en %{domain}"
-    autocomplete_placeholder: "Comieze a escribir para autocompletar"
+    autocomplete_placeholder: "Comience a escribir para autocompletar"
 
   views:
-    pagination: 
+    pagination:
       next: "Sig. &rsaquo;"
       previous: "&lsaquo; Prev."
       first: "&laquo; Inicio"
