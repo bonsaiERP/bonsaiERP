@@ -21,13 +21,22 @@ class MovementPresenter < BasePresenter
 
   def state_tag
     html = case state
-    when "draft" then "<span class='b gray-light'>Borrador</span>"
-    when "approved" then "<span class='b bonsai-dark'>Aprobado</span>"
-    when "paid" then "<span class='b green-dark'>#{ paid_text }</span>"
-    when "nulled" then "<span class='b red'>Anulado</span>"
+    when 'draft' then "<span class='b gray-light'>Borrador</span>"
+    when 'approved' then "<span class='b bonsai-dark'>Aprobado</span>"
+    when 'paid' then "<span class='b green-dark'>#{ paid_text }</span>"
+    when 'nulled' then "<span class='b red'>Anulado</span>"
     end
 
     html.html_safe
+  end
+
+  def state_text
+    case state
+    when 'draft' then 'Borrador'
+    when 'approved' then 'Aprobado'
+    when 'paid' then paid_text
+    when 'nulled' then 'Anulado'
+    end
   end
 
   def paid_text
@@ -52,7 +61,7 @@ class MovementPresenter < BasePresenter
     d = ""
     if is_approved?
       css = ( today > to_model.due_date ) ? "text-error" : ""
-      d = "<span class='muted'>Vence el:</span> "
+      d = "<span class='muted text-muted'>Vence el:</span> "
       d << "<span class='i #{css}'>#{ icon 'icon-time' } "
       d << l(to_model.due_date)
       d << "</span>"

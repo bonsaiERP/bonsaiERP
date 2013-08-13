@@ -3,7 +3,9 @@
 # email: boriscyber@gmail.com
 class IncomesController < ApplicationController
   include Controllers::TagSearch
+  include Controllers::Print
 
+  #respond_to :html, :js, :pdf
   before_filter :set_income, only: [:approve, :null, :inventory]
 
   # GET /incomes
@@ -15,6 +17,11 @@ class IncomesController < ApplicationController
   # GET /incomes/1
   def show
     @income = present Income.find(params[:id])
+
+    respond_to do |format|
+      format.html
+      format.print { print_pdf render_to_string('show.print'), "Ingreso-#{@income}.pdf"  unless params[:debug] }
+    end
   end
 
   # GET /incomes/new

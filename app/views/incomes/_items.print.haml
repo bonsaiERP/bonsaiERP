@@ -6,8 +6,6 @@
         Precio unitario
         = currency_label income.currency
       %th.c Cantidad
-      %th.c
-        %span(title="Saldo inventario" data-toggle='tooltip') Saldo Inv.
       %th.r
         Total fila
         = currency_label income.currency
@@ -17,17 +15,17 @@
         %td.span6= det.item
         %td.span2.r= ntc det.price
         %td.span2.r= ntc det.quantity
-        %td.span2.r.error.b= ntc det.balance
         %td.span2.total_row.r= ntc det.total
 
   %tr.extra.pad_top
-    %td(colspan="3")
+    %td(colspan="2")
     %td.r Subtotal
     %td#subtotal.r= ntc income.subtotal
 
   %tr.extra
-    %td(colspan="3")
+    %td(colspan="2")
     %td.r.b.dark Total
     %td#total_value.r.b{'data-val' => income.total}
       = ntc income.total
       = currency_label income.currency
+

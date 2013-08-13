@@ -1,0 +1,55 @@
+.row
+  .col-12
+    %h1.ib
+      %span.text-muted Ingreso
+      %span.b= @income
+      %small.b= @income.state_text
+
+.row
+  .col-12
+    %h4
+      %span.text-muted Contacto:
+      = @income.contact
+
+.row
+  .col-12
+    %h5.n.ib
+      %span.text-muted Fecha:
+      %i= lo @income.date
+      = render_if @income.due_date do
+        ,
+        = @income.due_date_tag
+
+.row
+  .col-12
+    .moneybox
+      %label.text-muted TOTAL
+      %h5.n
+        = ntc @income.total
+        = currency_label @income.currency
+
+    .moneybox
+      %label.text-muted SALDO
+      %h5.n
+        = ntc @income.balance
+        = currency_label @income.currency
+
+    - unless OrganisationSession.currency === @income.currency
+      %span.text-muted Tipo de cambio:
+      1
+      = currency_label @income.currency
+      \=
+      = ntc @income.exchange_rate, precision: 4
+      = currency_label
+
+.row
+  .col-12
+    = @income.description
+
+-#%hr
+
+#items
+  %h2.n
+    Items
+
+  = render "incomes/items.print", income: @income
