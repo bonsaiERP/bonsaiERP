@@ -13,7 +13,6 @@ class IncomesController < ApplicationController
   end
 
   # GET /incomes/1
-  # GET /incomes/1.xml
   def show
     @income = present Income.find(params[:id])
   end
@@ -106,7 +105,7 @@ private
   # Creates or approves a ExpenseService instance
   def create_or_approve
     if params[:commit_approve]
-      @is.create_and_approve 
+      @is.create_and_approve
     else
       @is.create
     end

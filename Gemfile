@@ -31,7 +31,7 @@ gem 'validates_email_format_of', '~> 1.5.3'
 gem 'paperclip' # Attachments
 
 
-gem 'prawn', '~> 1.0.0.rc2'
+gem 'wicked_pdf' # pdf
 #gem 'exception_notification'
 
 group :production do

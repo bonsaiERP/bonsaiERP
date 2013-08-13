@@ -1,7 +1,7 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class Country  < Struct.new(:code,:name)
+class Country  < Struct.new(:code, :name)
   def to_s
     "#{name} #{code}"
   end
@@ -17,7 +17,6 @@ class Country  < Struct.new(:code,:name)
         [c.to_s, c.code]
       end
     end
-
 
     def first
       find COUNTRIES.first[0]

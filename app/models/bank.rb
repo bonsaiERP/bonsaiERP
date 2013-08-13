@@ -11,11 +11,11 @@ class Bank < Account
 
   # Delegations
   MONEY_METHODS = [:email, :address, :phone, :website].freeze
-  delegate *create_accessors(*MONEY_METHODS), to: :money_store
+  delegate(*create_accessors(*MONEY_METHODS), to: :money_store)
   delegate :id, to: :money_store, prefix: true
 
-  def self.new_bank(attrs={})
-    self.new do |c|
+  def self.new_bank(attrs = {})
+    new do |c|
       c.build_money_store
       c.attributes = attrs
     end
@@ -39,8 +39,9 @@ class Bank < Account
     ledgers
   end
 
-private
-  def set_defaults
-    self.total_amount ||= 0.0
-  end
+  private
+
+    def set_defaults
+      self.total_amount ||= 0.0
+    end
 end

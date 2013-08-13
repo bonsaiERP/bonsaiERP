@@ -1,6 +1,7 @@
 Teabag.setup do |config|
 
-  # This determines where the Teabag routes will be mounted. Changing this to "/jasmine" would allow you to browse to
+  # This determines where the Teabag routes will be mounted.
+  # Changing this to "/jasmine" would allow you to browse to
   # http://localhost:3000/jasmine to run your specs.
   config.mount_at = "/teabag"
 

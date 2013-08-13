@@ -13,9 +13,10 @@ class CurrencyExchange
 
   def initialize(attrs = {})
     attrs.each do |k, v|
-      self.send(:"#{k}=", v)
+      send(:"#{k}=", v)
     end
-    self.exchange_rate = 1 if same_currency?
+
+    self.exchange_rate = 1  if same_currency?
   end
 
   def inverse?
@@ -23,12 +24,12 @@ class CurrencyExchange
   end
 
   def valid?
-    (account_currency === currency || account_to_currency === currency || same_currency?)
+    (account_currency == currency || account_to_currency == currency || same_currency?)
   end
 
   def exchange(val = 1)
     ret = if inverse?
-            val * 1/exchange_rate
+            val * 1 / exchange_rate
           else
             val * exchange_rate
           end
@@ -37,15 +38,17 @@ class CurrencyExchange
   end
 
   def attributes
-    {account: account, account_to: account_to, exchange_rate: exchange_rate}
+    { account: account, account_to: account_to, exchange_rate: exchange_rate }
   end
 
   def same_currency?
-    account_currency === account_to_currency
+    account_currency == account_to_currency
   end
-private
-  def current_organisation
-    OrganisationSession
-  end
+
+  private
+
+    def current_organisation
+      OrganisationSession
+    end
 end
 

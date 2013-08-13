@@ -12,11 +12,11 @@ Bonsaierp::Application.routes.draw do
 
   resources :inventory_transferences, only: [:new, :create, :show]
 
-  resources :export_expenses, only: ['index', 'create']
+  resources :export_expenses, only: [:index, :create]
 
-  resources :export_incomes, only: ['index', 'create']
+  resources :export_incomes, only: [:index, :create]
 
-  resources :reports, only: ['index']
+  resources :reports, only: [:index]
 
   resources :organisation_updates, only: [:edit, :update]
 
@@ -36,7 +36,7 @@ Bonsaierp::Application.routes.draw do
   resources :cashes
 
   # Transference between accounts
-  resources :transferences, only: ['new', 'create']
+  resources :transferences, only: [:new, :create]
 
   resources :devolutions, only: [] do
     member do
@@ -66,8 +66,8 @@ Bonsaierp::Application.routes.draw do
     end
   end
 
-  resources :incomes_inventory_ins, only: ['new', 'create']
-  resources :incomes_inventory_outs, only: ['new', 'create']
+  resources :incomes_inventory_ins, only: [:new, :create]
+  resources :incomes_inventory_outs, only: [:new, :create]
 
   resources :expenses do
     member do
@@ -78,13 +78,13 @@ Bonsaierp::Application.routes.draw do
     end
   end
 
-  resources :expenses_inventory_ins, only: ['new', 'create']
-  resources :expenses_inventory_outs, only: ['new', 'create']
+  resources :expenses_inventory_ins, only: [:new, :create]
+  resources :expenses_inventory_outs, only: [:new, :create]
 
-  ###########################3
+  ###########################
 
   resources :stores do
-    resources :inventory_ins, only: [:new, :create]#, controller: 'stores/inventory_in'
+    resources :inventory_ins, only: [:new, :create]
     resources :inventory_outs, only: [:new, :create]
   end
 
@@ -100,33 +100,34 @@ Bonsaierp::Application.routes.draw do
 
   resources :units
 
-  resources :organisations, only: ['new', 'update']
+  resources :organisations, only: [:new, :update]
 
-  resources :user_passwords, only: ['new', 'create'] do
+  resources :user_passwords, only: [:new, :create] do
     collection do
       get :new_default
       post :create_default
     end
   end
 
-  resources :users, only: ['show', 'edit', 'update']
+  resources :users, only: [:show, :edit, :update]
 
-  get '/dashboard' => 'dashboard#index', :as => :dashboard
+  get '/dashboard' => 'dashboard#index', as: :dashboard
 
   # No auth
   resources :registrations do
-    get :new_user, on: :member # Checks the confirmation_token of users added by admin
+    # Checks the confirmation_token of users added by admin
+    get :new_user, on: :member
   end
-  get "/sign_up" => "registrations#new"
+  get '/sign_up' => 'registrations#new'
 
   # No auth
   # Password
-  resources :reset_passwords, only: ['index', 'new', 'create', 'edit', 'update']
+  resources :reset_passwords, only: [:index, :new, :create, :edit, :update]
   # No auth
   # Sessions
-  resources :sessions, only: ['new', 'create', 'destroy']
-  get "/sign_in"  => "sessions#new", as: :login
-  get "/sign_out" => "sessions#destroy", as: :logout
+  resources :sessions, only: [:new, :create, :destroy]
+  get '/sign_in'  => 'sessions#new', as: :login
+  get '/sign_out' => 'sessions#destroy', as: :logout
 
   # Tests
   resources :tests

@@ -1,4 +1,5 @@
 # encoding: utf-8
+# Creates date ranges for search
 class DateRange < Struct.new(:date_start, :date_end)
   def range
     date_start..date_end
@@ -20,10 +21,11 @@ class DateRange < Struct.new(:date_start, :date_end)
 
   def self.parse(s, e)
     dr = new(Date.parse(s), Date.parse(e))
-    raise 'Error'  unless dr.valid?
+    fail 'Error'  unless dr.valid?
+
     dr
   rescue
-    self.default
+    default
   end
 
   def valid?

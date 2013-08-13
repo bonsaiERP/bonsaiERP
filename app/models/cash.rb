@@ -7,18 +7,19 @@ class Cash < Account
   extend SettersGetters
 
   # Relationships
-  has_one :money_store, autosave: true, foreign_key: :account_id, dependent: :destroy
+  has_one :money_store, autosave: true,
+          foreign_key: :account_id, dependent: :destroy
 
   # Delegations
   MONEY_METHODS = [:email, :address, :phone].freeze
-  delegate *create_accessors(*MONEY_METHODS), to: :money_store
+  delegate(*create_accessors(*MONEY_METHODS), to: :money_store)
 
   # Validations
-  validates :name, length: {:minimum => 3}
+  validates :name, length: { minimum: 3 }
 
   # Initializes with an instance of MoneyStore
-  def self.new_cash(attrs={})
-    self.new do |c|
+  def self.new_cash(attrs = {})
+    new do |c|
       c.build_money_store
       c.attributes = attrs
     end

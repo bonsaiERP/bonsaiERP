@@ -7,10 +7,16 @@ class Contact < ActiveRecord::Base
 
   ########################################
   # Relationships
-  has_many :contact_accounts, foreign_key: :contact_id, conditions: {type: 'ContactAccount'}
+  has_many :contact_accounts, foreign_key: :contact_id,
+           conditions: { type: 'ContactAccount' }
 
-  has_many :incomes,  foreign_key: :contact_id, conditions: {type: 'Income'}, order: "accounts.date desc, accounts.id desc"
-  has_many :expenses, foreign_key: :contact_id, conditions: {type: 'Expense'}, order: "accounts.date desc, accounts.id desc"
+  has_many :incomes,  foreign_key: :contact_id,
+           conditions: { type: 'Income' },
+           order: 'accounts.date desc, accounts.id desc'
+
+  has_many :expenses, foreign_key: :contact_id,
+           conditions: { type: 'Expense' },
+           order: 'accounts.date desc, accounts.id desc'
 
   has_many :inventory_operations
 
@@ -18,7 +24,8 @@ class Contact < ActiveRecord::Base
   # Validations
   validates :matchcode, presence: true, uniqueness: { scope: :type }
 
-  validates_email_format_of :email, allow_blank: true, message: I18n.t('errors.messages.invalid_email_format')
+  validates_email_format_of :email, allow_blank: true,
+    message: I18n.t('errors.messages.invalid_email_format')
 
   ########################################
   # Scopes
@@ -26,7 +33,7 @@ class Contact < ActiveRecord::Base
   scope :suppliers, where(supplier: true)
   scope :search, -> (s) {
     s = "%#{s}%"
-    where{(matchcode.like "#{s}") | (first_name.like "#{s}")| (last_name.like "#{s}")}
+    where { (matchcode.like "#{s}") | (first_name.like "#{s}") | (last_name.like "#{s}") }
   }
 
   default_scope where(staff: false)
@@ -64,11 +71,11 @@ class Contact < ActiveRecord::Base
 
   # Creates an instance of an account with the defined currency
   def set_account_currency(cur)
-    self.accounts.build( name: self.to_s, currency: cur, amount: 0)
+    accounts.build(name: to_s, currency: cur, amount: 0)
   end
 
   def incomes_expenses_status
-    {id: id, incomes: incomes_status, expenses: expenses_status}
+    { id: id, incomes: incomes_status, expenses: expenses_status }
   end
 
   def total_incomes
@@ -81,9 +88,10 @@ class Contact < ActiveRecord::Base
     .sum('(transactions.total - accounts.amount) * accounts.exchange_rate')
   end
 
-private
-  # Check if the contact has any relations before destroy
-  def check_relations
-    not(incomes.any? || expenses.any?)
-  end
+  private
+
+    # Check if the contact has any relations before destroy
+    def check_relations
+      !(incomes.any? || expenses.any?)
+    end
 end
