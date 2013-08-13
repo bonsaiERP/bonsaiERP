@@ -71,9 +71,9 @@
     - unless OrganisationSession.currency === @expense.currency
       %i.icon-exchange.muted(title='Tipo de cambio' data-toggle='tooltip')
       1
-      = currency_label @income.currency
+      = currency_label @expense.currency
       \=
-      = ntc @income.exchange_rate
+      = ntc @expense.exchange_rate
       = currency_label
 
 

@@ -11,7 +11,7 @@ class PaymentsController < ApplicationController
     if p.pay
       flash[:notice] = 'El cobro se realizó correctamente.'
     else
-      flash[:error] = 'Existio un error al salvar el cobro.'
+      flash[:error] = 'Existió un error al salvar el cobro.'
     end
 
     redirect_to income_path(p.income, anchor: 'payments')
@@ -24,7 +24,7 @@ class PaymentsController < ApplicationController
     if p.pay
       flash[:notice] = 'El pago se realizó correctamente.'
     else
-      flash[:error] = 'Existio un error al salvar el pago.'
+      flash[:error] = 'Existió un error al salvar el pago.'
     end
 
     redirect_to expense_path(p.expense, anchor: 'payments')
