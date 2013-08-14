@@ -14,11 +14,15 @@
 
   .row-fluid
     .span6
-      = f.association :unit, label: "Unidad", wrapper_html: {class: 'form-inline'},
-        input_html: { class: 'span10', data: {new_url: new_unit_path, trigger: 'new-unit', title: 'Nueva unidad'} }
-    .form-horizontal.span6
-      = f.input :active, label: "Activo <i class='icon-info-sign' data-toggle='tooltip' title='Se puede usar en nuevos Ingresos o Egresos'></i>".html_safe
-      = f.input :stockable, label: 'Inventario <i title="Se almacena el ítem?" data-toggle="tooltip" class="icon-info-sign"></i>'.html_safe
+      = f.association :unit, label: "Unidad",
+                      input_html: { class: 'span10',
+                      data: {new_url: new_unit_path, trigger: 'new-unit', title: 'Nueva unidad'} }
+    .span6.form-inline
+      .row-fluid
+        .span6
+          = f.input :active, label: "Activo <i class='icon-info-sign' data-toggle='tooltip' title='Se puede usar en nuevos Ingresos o Egresos'></i>".html_safe
+        .span6
+          = f.input :stockable, label: 'Inventario <i title="Se almacena el ítem?" data-toggle="tooltip" class="icon-info-sign"></i>'.html_safe
 
   .row-fluid
     .span6.well.well-small
@@ -29,8 +33,8 @@
       %h4.muted Venta
 
       .row-fluid
-        .span6
-          = f.input :for_sale, as: :boolean, label: 'Se vende', label_html: {class: 'span8'}
+        .span6.form-inline
+          = f.input :for_sale, as: :boolean, label: 'Se vende'
         .span6
           = f.input :price, label: "Precio de venta #{currency_label}".html_safe, input_html: {size: 12, type: 'decimal'}
 
