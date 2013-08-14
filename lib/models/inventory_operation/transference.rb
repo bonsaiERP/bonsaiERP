@@ -23,7 +23,7 @@ module Models::InventoryOperation
       # Save
       InventoryOperation.transaction do
         create_inventory_operation_in
-        
+
         ret = @inventory_operation_out.save
 
         @inventory_operation_in.transference_id = @inventory_operation_out.id
@@ -85,7 +85,7 @@ module Models::InventoryOperation
     # checks the items and the quantity
     def check_items
       check_valid_items
-      check_repeated_items 
+      check_repeated_items
       check_stock
     end
 
@@ -93,7 +93,7 @@ module Models::InventoryOperation
       h, err = {}, false
       @inventory_operation_out.inventory_operation_details.each do |det|
         if h[det.item_id]
-          det.errors[:item_id] = I18n.t("errors.messages.inventory_operation_detail.repeated_item") 
+          det.errors[:item_id] = I18n.t("errors.messages.inventory_operation_detail.repeated_item")
           err = true
         end
         h[det.item_id] = h[det.item_id] ? h[det.item_id] + 1 : 1

@@ -12,7 +12,6 @@ class Organisation < ActiveRecord::Base
   attr_readonly :tenant
   serialize :preferences, JSON
 
-  attr_protected :user_id
 
   ########################################
   # Relationships

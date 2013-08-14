@@ -52,7 +52,7 @@ module Bonsaierp
     config.active_support.escape_html_entities_in_json = true
 
     # Using strong parameters
-    config.active_record.whitelist_attributes = false
+    #config.active_record.whitelist_attributes = false
 
     # Enable the asset pipeline
     config.assets.enabled = true

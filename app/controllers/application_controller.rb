@@ -2,7 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class ApplicationController < ActionController::Base
-  layout lambda{ |c| 
+  layout lambda{ |c|
     if (c.request.xhr? or params[:xhr])
       false
     elsif params[:print].present?
@@ -37,7 +37,7 @@ class ApplicationController < ActionController::Base
       end
     else
       if request.delete?
-        set_redirect_options(klass, options) 
+        set_redirect_options(klass, options)
         url = "/#{klass.class.to_s.downcase.pluralize}" unless url.is_a?(String)
       end
 
@@ -67,7 +67,7 @@ protected
       end
     else
       if flash[:error].blank? and klass.errors.any?
-        txt = options[:error] ? options[:error] : "No se pudo borrar el registro: #{klass.errors[:base].join(", ")}." 
+        txt = options[:error] ? options[:error] : "No se pudo borrar el registro: #{klass.errors[:base].join(", ")}."
         flash[:error] = txt
       elsif flash[:error].blank?
         txt = options[:error] ? options[:error] : "No se pudo borrar el registro."
@@ -76,9 +76,11 @@ protected
     end
   end
 
-  def currency
-    current_organisation.currency
-  end
+  #def currency
+  #  current_organisation.currency
+  #end
+  delegate :name, :currency, to: :current_organisation, prefix: :organisation, allow_nil: true
+  alias_method :currency, :organisation_currency
   helper_method :currency
 
 private

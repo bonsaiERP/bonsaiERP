@@ -76,6 +76,9 @@ Bonsaierp::Application.configure do
     user_name: 'boriscyber@gmail.com',
     password: 'pViFp4XMJCYp7f1j4TKQxw'
   }
+
+  config.eager_load = true
+
   #config.action_mailer.smtp_settings = {
   #  :address => "smtp.gmail.com",
   #  :port => "587",

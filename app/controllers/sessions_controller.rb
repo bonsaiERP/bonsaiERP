@@ -4,6 +4,7 @@
 class SessionsController < ApplicationController
   skip_before_filter :set_tenant, :check_authorization!
   before_filter :check_logged_in, only: ['new', 'create']
+  layout 'sessions'
 
   def new
     @session = Session.new

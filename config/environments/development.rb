@@ -7,7 +7,7 @@ Bonsaierp::Application.configure do
   config.cache_classes = false
 
   # Log error messages when you accidentally call methods on nil.
-  config.whiny_nils = true
+#  config.whiny_nils = true
 
   # Show full error reports and disable caching
   config.consider_all_requests_local       = true
@@ -46,15 +46,20 @@ Bonsaierp::Application.configure do
 
   # Do not compress assets
   config.assets.compress = false
-  
+
   # compile assets
   #config.assets.compile = true
 
   # Expands the lines which load the assets
   config.assets.debug = true
 
+  config.eager_load = false
+
   # Disable query caching until it's fixed for PostgreSQL schemas
   #config.middleware.delete ActiveRecord::QueryCache
-  config.session_store :encrypted_cookie_store, key: '_bonsaierp_session', domain: :all
+  #config.session_store :cookie_store, key: '_bonsaierp_session', domain: :all
+
+  # Custom cookie
+  #config.middleware.use 'CustomDomainCookie', '.localhost.bom'
 end
 

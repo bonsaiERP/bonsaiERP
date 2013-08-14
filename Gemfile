@@ -1,38 +1,37 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.14'
+gem 'rails', '4.0.0'
 
-group :assets do
-  gem 'sass-rails'   , '~> 3.2.5'
-  gem 'coffee-rails' , '~> 3.2.2'
-  gem 'uglifier'     , '~> 1.3.0'
-  gem 'jquery-rails'
-  gem 'teabag' # Testing for javascript
-  gem 'assets'      , git: 'git://github.com/boriscy/assets.git'
-  gem 'turbo-sprockets-rails3'# Speed assets:precompile
-end
+# Assets
+gem 'sass-rails' , '~> 4.0.0'
+gem 'coffee-rails' , '~> 4.0.0'
+gem 'uglifier'     , '>= 1.3.0'
+gem 'jquery-rails'
 
-gem 'compass-rails' # Extend css clases
+gem 'teabag' # Testing for javascript
+gem 'assets'      , git: 'git://github.com/boriscy/assets.git'
+
+# gem 'turbo-sprockets-rails3'# Speed assets:precompile
+
+gem 'compass-rails', '~> 2.0.alpha.0' # Extend css clases
 gem 'pg' # Postgresql adapter
 gem 'virtus' # Model generation in simple way
-gem 'encrypted-cookie-store' # Encrypt cookies in the session
-gem 'strong_parameters' # Force in controllers to sanitize parameters
+#gem 'encrypted-cookie-store' # Encrypt cookies in the session
 gem 'squeel' # Better SQL queries
 
 gem 'simple_form'
 gem 'haml', '~> 4.0.1'
 gem 'kaminari' # Pagination
-gem 'valium' # Better than pluck method
+#gem 'valium' # Better than pluck method
 gem 'bcrypt-ruby', require: 'bcrypt'
 gem 'active_model_serializers' # ActiveRecord Classes to encode in JSON
 gem 'resubject' # Cool presenter
 
 gem 'validates_email_format_of', '~> 1.5.3'
-gem 'paperclip' # Attachments
+#gem 'paperclip' # Attachments
 
 
-gem 'wicked_pdf' # pdf
-#gem 'exception_notification'
+#gem 'wicked_pdf' # pdf
 
 group :production do
   gem 'newrelic_rpm'
@@ -64,8 +63,8 @@ group :test do
   gem 'capybara'
   gem 'database_cleaner'
   gem 'factory_girl_rails'
-  gem 'spork', '0.9.2' # Newer version gives error with squeel
-  gem 'shoulda-matchers', '1.4.2'
+  gem 'spork', '1.0.0rc2' # Newer version gives error with squeel
+  gem 'shoulda-matchers' #, '1.4.2'
   gem 'valid_attribute'
   gem 'watchr'
   gem 'launchy'
