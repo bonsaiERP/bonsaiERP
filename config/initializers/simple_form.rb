@@ -32,7 +32,7 @@ SimpleForm.setup do |config|
   # config.wrapper_tag = :div
 
   # CSS class to add to all wrapper tags.
-  # config.wrapper_class = :input
+  config.wrapper_class = :input
 
   # CSS class to add to the wrapper if the field has errors.
   # config.wrapper_error_class = :field_with_errors
@@ -53,7 +53,7 @@ SimpleForm.setup do |config|
   # config.label_text = lambda { |label, required| "#{required} #{label}" }
 
   # You can define the class to use on all labels. Default is nil.
-  # config.label_class = nil
+  config.label_class = 'control-label'
 
   # You can define the class to use on all forms. Default is simple_form.
   # config.form_class = :simple_form
@@ -63,7 +63,7 @@ SimpleForm.setup do |config|
 
   # Tell browsers whether to use default HTML5 validations (novalidate option).
   # Default is enabled.
-  # config.browser_validations = true
+  config.browser_validations = false
 
   # Determines whether HTML5 types (:email, :url, :search, :tel) and attributes
   # (e.g. required) are used or not. True by default.
@@ -86,7 +86,7 @@ SimpleForm.setup do |config|
   # config.country_priority = nil
 
   # Default size for text inputs.
-  # config.default_input_size = 50
+  config.default_input_size = 35
 
   # When false, do not use translations for labels, hints or placeholders.
   # config.translate = true

@@ -1,10 +1,8 @@
 module Controllers::OrganisationHelpers
-  def currency_complete
-    "#{currency_symbol} #{currency_name}"
-  end
-
-  def currency_complete_plural
-    "#{currency_symbol} #{currency_plural}"
+  def self.included(base)
+    base.instance_eval do
+      helper_method :currency, :organisation_name, :organisation_id
+    end
   end
 
   def currency
@@ -16,11 +14,6 @@ module Controllers::OrganisationHelpers
   end
 
   def organisation_id
-    session[:organisation][:id]
-  end
-
-  def self.organisation_helper_methods
-    [:currency_complete, :currency_complete_plural, :currency_id, :currency_name, 
-     :currency_code, :currency_symbol, :currency_plural, :organisation_name, :organisation_id]
+    current_organisation.id
   end
 end

@@ -1,6 +1,6 @@
 #= require jquery.js
 #= require jquery_ujs.js
-#= require jquery-ui-1.10.1.custom.js
+#= require jquery/jquery-ui-1.10.1.custom.js
 
 #= require libraries/lodash.js
 #= require libraries/backbone.js

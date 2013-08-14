@@ -13,10 +13,7 @@ class ApplicationController < ActionController::Base
   }
 
   include Controllers::Authentication
-  helper_method Controllers::Authentication.helpers
-
   include Controllers::Authorization
-  helper_method Controllers::OrganisationHelpers.organisation_helper_methods
 
   protect_from_forgery
 
@@ -81,7 +78,7 @@ protected
   #end
   delegate :name, :currency, to: :current_organisation, prefix: :organisation, allow_nil: true
   alias_method :currency, :organisation_currency
-  helper_method :currency
+  helper_method :currency, :organisation_name
 
 private
   def set_page

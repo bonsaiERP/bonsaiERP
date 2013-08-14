@@ -1,6 +1,5 @@
 class DatepickerInput < SimpleForm::Inputs::Base
   include ActionView::Helpers::FormTagHelper
-  enable :placeholder
 
   # User the input_options[:value_field for the value of the relation Model
   def input

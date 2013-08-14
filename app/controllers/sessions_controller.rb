@@ -3,7 +3,7 @@
 # email: boriscyber@gmail.com
 class SessionsController < ApplicationController
   skip_before_filter :set_tenant, :check_authorization!
-  before_filter :check_logged_in, only: ['new', 'create']
+  before_filter :check_logged_in, only: %w(new create)
   layout 'sessions'
 
   def new
@@ -19,15 +19,17 @@ class SessionsController < ApplicationController
       flash[:notice] = "Ha ingresado correctamente."
 
       redirect_to dashboard_url(host: UrlTools.domain, subdomain: @session.tenant) and return
+
     when(!@session.authenticate? && 'resend_registration' == @session.status)
       RegistrationMailer.send_registration(@session).deliver
       flash[:notice] = "Le hemos reenviado el email de confirmación a #{@session.email}"
 
       redirect_to registrations_url(subdomain: false) and return
+
     else
       flash.now[:error] = 'El email o la contraseña que ingreso son incorrectos.'
 
-      render'new'
+      render :new
     end
   end
 
@@ -44,6 +46,7 @@ private
       if org = u.organisations.first
         redirect_to dashboard_url(host: UrlTools.domain, subdomain: org.tenant), notice: 'Ha ingresado correctamente.' and return
       else
+        binding.pry
         reset_session
       end
     end
