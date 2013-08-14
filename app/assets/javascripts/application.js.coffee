@@ -1,18 +1,19 @@
 #= require jquery.js
 #= require jquery_ujs.js
-#= require jquery-ui-1.10.1.custom.js
+#= require jquery/jquery-ui-1.10.1.custom.js
 
 #= require libraries/lodash.js
 #= require libraries/backbone.js
 #= require libraries/rivets.js
 
-#= require jqplugins/select2.js
-#= require jqplugins/flot/jquery.flot.js
-#= require jqplugins/flot/jquery.flot.time.js
-#= require jqplugins/jquery.cookie.js
-#= require jqplugins/jquery.mask.js
-#= require jqplugins/jquery.placeholder.js
-#= require jqplugins/jquery.minicolors.js
+#= require jquery/select2.js
+#= require jquery/flot/jquery.flot.js
+#= require jquery/flot/jquery.flot.time.js
+#= require jquery/jquery.cookie.js
+#= require jquery/jquery.mask.js
+#= require jquery/jquery.placeholder.js
+#= require jquery/jquery.minicolors.js
+#= require jquery/jquery.scrollTo.js
 
 #= require plugins/money.min.js
 #= require plugins/_b.coffee
@@ -36,7 +37,6 @@
 #= require app/inventory.coffee
 #= require app/account_ledger.coffee
 
-#= require jqplugins/jquery.scrollTo.js
 #= require plugins/bride.coffee
 #= require plugins/color.coffee
 #= require plugins/tag.coffee

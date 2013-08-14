@@ -1,9 +1,9 @@
 GIT
   remote: git://github.com/boriscy/assets.git
-  revision: c0ba01740a8ab2e9debc0c9f1018d8cebc8980cd
+  revision: 8b602d5ad4e6640de59bfee1c37bcb3016006bc0
   specs:
-    assets (1.0.7)
-      rails (~> 3.2.11)
+    assets (1.0.8)
+      rails (>= 3.0)
 
 GEM
   remote: https://rubygems.org/
@@ -118,7 +118,7 @@ GEM
     httparty (0.11.0)
       multi_json (~> 1.0)
       multi_xml (>= 0.5.2)
-    i18n (0.6.4)
+    i18n (0.6.5)
     journey (1.0.4)
     jquery-rails (2.2.1)
       railties (>= 3.0, < 5.0)
@@ -141,7 +141,7 @@ GEM
     mime-types (1.23)
     mocha (0.10.5)
       metaclass (~> 0.0.1)
-    multi_json (1.7.7)
+    multi_json (1.7.9)
     multi_xml (0.5.3)
     newrelic_rpm (3.6.2.96)
     nokogiri (1.5.9)
@@ -172,7 +172,7 @@ GEM
     pry-remote (0.1.7)
       pry (~> 0.9)
       slop (~> 3.0)
-    puma (2.3.2)
+    puma (2.5.1)
       rack (>= 1.1, < 2.0)
     quiet_assets (1.0.2)
       railties (>= 3.1, < 5.0)
