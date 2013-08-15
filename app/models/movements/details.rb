@@ -18,7 +18,7 @@ class Movements::Details < Struct.new(:movement)
   end
 
   def item_prices
-    @item_prices ||= Hash[Item.where(id: item_ids).values_of(:id, :buy_price)]
+    @item_prices ||= Hash[Item.where(id: item_ids).pluck(:id, :buy_price)]
   end
 
   def set_details_original_prices
@@ -32,6 +32,6 @@ class Movements::Details < Struct.new(:movement)
   end
 
   def item_prices
-    @item_prices ||= Hash[Item.where(id: item_ids).values_of(:id, :price)]
+    @item_prices ||= Hash[Item.where(id: item_ids).pluck(:id, :price)]
   end
 end

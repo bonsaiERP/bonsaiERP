@@ -10,13 +10,13 @@ class Income < Movement
 
   ########################################
   # Relationships
-  has_many :income_details, foreign_key: :account_id, dependent: :destroy, order: 'id asc'
+  has_many :income_details, -> { order('id asc') }, foreign_key: :account_id, dependent: :destroy
   alias :details :income_details
   accepts_nested_attributes_for :income_details, allow_destroy: true,
     reject_if: proc {|det| det.fetch(:item_id).blank? }
 
-  has_many :payments, class_name: 'AccountLedger', foreign_key: :account_id, conditions: {operation: 'payin'}
-  has_many :devolutions, class_name: 'AccountLedger', foreign_key: :account_id, conditions: {operation: 'devout'}
+  has_many :payments, -> { where(operation: 'payin') }, class_name: 'AccountLedger', foreign_key: :account_id
+  has_many :devolutions, -> { where(operation: 'devout') }, class_name: 'AccountLedger', foreign_key: :account_id
 
   ########################################
   # Scopes
@@ -37,7 +37,8 @@ class Income < Movement
   }
   scope :date_range, -> (range) { where(date: range) }
 
-  def self.new_income(attrs={})
+  def self.new_income(attrs = {})
+    attrs.delete(:id)
     self.new do |i|
       i.build_transaction
       i.attributes = attrs

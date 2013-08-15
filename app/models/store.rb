@@ -7,7 +7,7 @@ class Store < ActiveRecord::Base
 
   before_destroy :check_store_for_delete
 
-  has_many :stocks, autosave: true, conditions: {active: true}
+  has_many :stocks, -> { where(active: true) }, autosave: true
   has_many :inventories
 
   validates_presence_of :name
@@ -16,7 +16,7 @@ class Store < ActiveRecord::Base
   validates_length_of :address, minimum: 5, allow_blank: true
 
   # scopes
-  scope :active, where(active: true)
+  scope :active, -> { where(active: true) }
   scope :notin, -> (st_id) { where{id.not_in st_id} }
 
   def to_s
