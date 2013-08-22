@@ -1,0 +1,21 @@
+About this Tutorial Repository
+============
+
+The **create-repo-tutorial** is meant to be an sandbox you can explore. For example, the repository contains this simple README file.  You might notice this file is written in [Markdown syntax](http://daringfireball.net/projects/markdown/basics).  Bitbucket supports several [types of markup](https://confluence.atlassian.com/x/LA4zDQ) for a README.
+
+Some other things you might want to try:
+ 
+ * Edit a file online and commit a change
+ * Test out the repository Wiki
+ * Comment on an issue
+ 
+
+If you want to make a change to this repo and push it back to Bitbucket, you can do it.
+Make sure you have Git or a Git client installed on your local system. These instructions tell you how to install Git.
+
+ * [Windows: Set up Git or Mercurial](https://confluence.atlassian.com/x/X5wXE)
+ * [Mac OSX: Set up Git or Mercurial](https://confluence.atlassian.com/x/apgXE)
+ * [Linux: Set up Git or Mercurial](https://confluence.atlassian.com/x/opwXE)
+ 
+
+ 
