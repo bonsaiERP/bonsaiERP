@@ -5,11 +5,11 @@ require 'spec_helper'
 
 describe Contact do
   let(:valid_attributes) do
-    { 
+    {
       matchcode: 'Boris Barroso',  first_name: 'Boris', last_name: "Barroso",
       organisation_name: 'bonsailabs', email: 'boris@bonsailabs.com',
-      address: "Los Pinos Bloque 80\nDpto. 202", phone: '2745620', 
-      mobile: '70681101', tax_number: '3376951' 
+      address: "Los Pinos Bloque 80\nDpto. 202", phone: '2745620',
+      mobile: '70681101', tax_number: '3376951'
     }
   end
 
@@ -48,7 +48,7 @@ describe Contact do
     c = Contact.create!(valid_attributes)
 
 
-    c.should_receive(:incomes).and_return(stub(any?: true))
+    c.should_receive(:incomes).and_return(double(any?: true))
     #c.should_receive(:expenses)
 
     c.destroy.should be_false

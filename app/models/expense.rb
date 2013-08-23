@@ -42,11 +42,11 @@ class Expense < Movement
 
   def self.new_expense(attrs = {})
     attrs.delete(:id)
-    new do |e|
-      e.build_transaction
-      e.attributes = attrs
-      e.state ||= 'draft'
-      yield e if block_given?
+    new do |exp|
+      exp.build_transaction
+      exp.attributes = attrs
+      exp.state ||= 'draft'
+      yield exp  if block_given?
     end
   end
 

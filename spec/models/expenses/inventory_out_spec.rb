@@ -5,8 +5,8 @@ describe Expenses::InventoryOut do
   let(:store) { build :store, id: 1 }
 
   before(:each) do
-    ExpenseDetail.any_instance.stub(item: true)
-    Expense.any_instance.stub(contact: true, set_supplier_and_expenses_status: true)
+    ExpenseDetail.any_instance.stub(item: build(:item))
+    Expense.any_instance.stub(contact: build(:contact), set_supplier_and_expenses_status: true)
   end
 
   let(:contact) {
@@ -30,7 +30,7 @@ describe Expenses::InventoryOut do
   }
 
   let(:valid_attributes) {
-    {store_id: 1, date: Date.today, description: 'Test inventory out', 
+    {store_id: 1, date: Date.today, description: 'Test inventory out',
      expense_id: expense.id,
      inventory_details_attributes: [
        {item_id: 1, quantity: 2},

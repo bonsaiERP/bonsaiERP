@@ -17,7 +17,7 @@ class PaymentPresenter
   end
 
   def to_hash
-    Hash[accounts.values_of(:id, :name , :currency_id).map do |a, b, c|
+    Hash[accounts.pluck(:id, :name , :currency_id).map do |a, b, c|
       [a, {:name => b, :currency_id => c}]
     end]
   end

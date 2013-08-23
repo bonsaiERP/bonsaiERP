@@ -82,7 +82,7 @@ describe Inventory do
   it "sets user_id" do
     UserSession.user = build(:user, id: 20)
     io = Inventory.new(operation: 'in', ref_number: '123', store_id: 1, date: Date.today)
-    io.stub(store: Object.new)
+    io.stub(store: build(:store))
     io.save.should be_true
 
     io.creator_id.should eq(20)

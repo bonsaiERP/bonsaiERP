@@ -300,8 +300,9 @@ describe Expense do
 
   context "destroy item" do
     before(:each) do
-      ExpenseDetail.any_instance.stub(item: stub(for_sale?: true))
-      Expense.any_instance.stub(contact: true, set_supplier_and_expenses_status: true)
+      ExpenseDetail.any_instance.stub(item: build(:item, for_sale: true))
+
+      Expense.any_instance.stub(contact: build(:contact), set_supplier_and_expenses_status: true)
     end
 
     let(:attributes) {
@@ -315,6 +316,7 @@ describe Expense do
 
     it "#destroy item" do
       exp = Expense.new_expense(attributes)
+      #binding.pry
       exp.save.should be_true
 
       exp.details.should have(2).items

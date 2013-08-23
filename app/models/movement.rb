@@ -26,8 +26,8 @@ class Movement < Account
 
   ########################################
   # Delegations
-  delegate *create_accessors(*Transaction.transaction_columns), to: :transaction
-  delegate :discounted?, :delivered?, :devolution?, :total_was, 
+  delegate(*create_accessors(*Transaction.transaction_columns), to: :transaction)
+  delegate :discounted?, :delivered?, :devolution?, :total_was,
     :creator, :approver, :nuller, :no_inventory?, to: :transaction
   delegate :attributes, to: :transaction, prefix: true
 

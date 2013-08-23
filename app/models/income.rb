@@ -39,11 +39,11 @@ class Income < Movement
 
   def self.new_income(attrs = {})
     attrs.delete(:id)
-    self.new do |i|
-      i.build_transaction
-      i.attributes = attrs
-      i.state ||= 'draft'
-      yield i if block_given?
+    self.new do |inc|
+      inc.build_transaction
+      inc.attributes = attrs
+      inc.state ||= 'draft'
+      yield inc  if block_given?
     end
   end
 

@@ -4,7 +4,7 @@
 module Models::Tag
   def self.included(base)
     base.instance_eval do
-      before_save :set_valid_tags
+      before_save :set_valid_tags, if: :allowed_tag_ids?
       # Scopes for tags should be added
       scope :any_tags, -> (*t_ids) { where('tag_ids && ARRAY[?]', t_ids) }
       scope :all_tags, -> (*t_ids) { where('tag_ids @> ARRAY[?]', t_ids) }
@@ -15,20 +15,15 @@ module Models::Tag
     account_currencies.select {|ac| ac.currency_id == cur_id }.first
   end
 
-  def tag_ids
-    @tag_ids ||= Array(read_attribute(:tag_ids).to_s.gsub(/[{|}]/, '').split(",").map(&:to_i))
-  end
+  private
 
-  def tag_ids=(ary = nil)
-    arr = Array(ary).map(&:to_i)
-    write_attribute(:tag_ids, "{#{ arr.join(',') }}")
-    @tag_ids = arr
-  end
+    def allowed_tag_ids?
+      tag_ids.is_a?(Array) && tag_ids.any?
+    end
 
-private
-  def set_valid_tags
-    t_ids = ::Tag.where(id: tag_ids).pluck(:id)
+    def set_valid_tags
+      t_ids = ::Tag.where(id: tag_ids).pluck(:id)
 
-    self.tag_ids = tag_ids.select {|v| t_ids.include?(v) }
-  end
+      self.tag_ids = t_ids & tag_ids
+    end
 end
