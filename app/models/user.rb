@@ -11,8 +11,8 @@ class User < ActiveRecord::Base
 
   ########################################
   # Relationships
-  has_many :active_links, inverse_of: :user, autosave: true, dependent: :destroy,
-           class_name: 'Link', conditions: {active: true}
+  has_many :active_links, -> { where active: true }, inverse_of: :user, autosave: true,
+           dependent: :destroy, class_name: 'Link'
   has_many :organisations, through: :active_links
 
   ########################################
@@ -25,7 +25,7 @@ class User < ActiveRecord::Base
   end
 
   # Scopes
-  scope :active, where(active: true)
+  scope :active, -> { where(active: true) }
 
   # Delegations
   ########################################

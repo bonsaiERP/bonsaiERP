@@ -16,7 +16,7 @@ module Models::Transaction
         td.ctype          = transaction.class.to_s
         td.price          = td.price.round(2)
         td.quantity       = td.quantity.round(2)
-        td.balance        = td.quantity - td.delivered 
+        td.balance        = td.quantity - td.delivered
         td.original_price = item_prices[td.item_id]
         # Validations
         valid_item(td, i)
@@ -24,7 +24,7 @@ module Models::Transaction
     end
 
     def item_prices
-      @prices ||= Hash[Item.where(:id => item_ids).values_of(:id, :price)]
+      @prices ||= Hash[Item.where(:id => item_ids).pluck(:id, :price)]
     end
 
     def item_ids
@@ -70,7 +70,7 @@ module Models::Transaction
       end
 
     end
-    
+
     def round_prices
       transaction_details.each {|td| td.price = td.price.round(2)}
     end

@@ -4,16 +4,16 @@ require 'spec_helper'
 describe Expenses::InventoryIn do
   let(:store) { build :store, id: 1 }
 
-  before(:each) do
-    ExpenseDetail.any_instance.stub(item: true)
-    Expense.any_instance.stub(contact: true, set_supplier_and_expenses_status: true)
-  end
-
   let(:contact) {
     cont = build :contact
     cont.stub(save: true)
     cont
   }
+
+  before(:each) do
+    ExpenseDetail.any_instance.stub(item: build(:item))
+    Expense.any_instance.stub(contact: contact, set_supplier_and_expenses_status: true)
+  end
 
   let(:expense) {
     exp = Expense.new_expense(
@@ -25,12 +25,13 @@ describe Expenses::InventoryIn do
         ]
       )
     )
+    exp.stub(contact: contact)
     exp.save
     exp
   }
 
   let(:valid_attributes) {
-    {store_id: 1, date: Date.today, description: 'Test inventory in', 
+    {store_id: 1, date: Date.today, description: 'Test inventory in',
      expense_id: expense.id,
      inventory_details_attributes: [
        {item_id: 1, quantity: 2},

@@ -17,9 +17,9 @@ describe Stock do
 
   it "#save_minimum" do
     stock = Stock.new(quantity: 2, item_id: 1, store_id: 2, minimum: 0)
-    stock.stub(item: true, store: true)
+    stock.stub(item: build(:item), store: build(:store))
     stock.save.should be_true
-    
+
     UserSession.user = build(:user, id: 25)
     stock.save_minimum(10).should be_true
 

@@ -12,8 +12,6 @@ class Unit < ActiveRecord::Base
 
   has_many :items
 
-  attr_accessible :name, :symbol, :integer
-
   # validations
   validates_presence_of :name, :symbol
   validates_uniqueness_of :name, :symbol

@@ -10,16 +10,17 @@ class Expense < Movement
 
   ########################################
   # Relationships
-  has_many :expense_details, foreign_key: :account_id, dependent: :destroy, order: 'id asc'
+  has_many :expense_details, -> { order('id asc') },
+           foreign_key: :account_id, dependent: :destroy
   alias_method :details, :expense_details
 
   accepts_nested_attributes_for :expense_details, allow_destroy: true,
                                 reject_if: proc { |det| det.fetch(:item_id).blank? }
 
-  has_many :payments, class_name: 'AccountLedger', foreign_key: :account_id,
-           conditions: { operation: 'payout' }
-  has_many :devolutions, class_name: 'AccountLedger', foreign_key: :account_id,
-           conditions: { operation: 'devin' }
+  has_many :payments, -> { where(operation: 'payout') },
+           class_name: 'AccountLedger', foreign_key: :account_id
+  has_many :devolutions, -> { where(operation: 'devin') },
+           class_name: 'AccountLedger', foreign_key: :account_id
 
   ########################################
   # Scopes
@@ -40,11 +41,12 @@ class Expense < Movement
   scope :date_range, -> (range) { where(date: range) }
 
   def self.new_expense(attrs = {})
-    new do |e|
-      e.build_transaction
-      e.attributes = attrs
-      e.state ||= 'draft'
-      yield e if block_given?
+    attrs.delete(:id)
+    new do |exp|
+      exp.build_transaction
+      exp.attributes = attrs
+      exp.state ||= 'draft'
+      yield exp  if block_given?
     end
   end
 

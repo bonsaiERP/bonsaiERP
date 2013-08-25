@@ -7,7 +7,7 @@ class Store < ActiveRecord::Base
 
   before_destroy :check_store_for_delete
 
-  has_many :stocks, autosave: true, conditions: {active: true}
+  has_many :stocks, -> { where(active: true) }, autosave: true
   has_many :inventories
 
   validates_presence_of :name
@@ -16,7 +16,7 @@ class Store < ActiveRecord::Base
   validates_length_of :address, minimum: 5, allow_blank: true
 
   # scopes
-  scope :active, where(active: true)
+  scope :active, -> { where(active: true) }
   scope :notin, -> (st_id) { where{id.not_in st_id} }
 
   def to_s
@@ -24,7 +24,7 @@ class Store < ActiveRecord::Base
   end
 
   def hash_of_items(item_ids)
-    st = stocks.where(:item_id => item_ids).values_of(:item_id, :quantity, :minimum)
+    st = stocks.where(:item_id => item_ids).pluck(:item_id, :quantity, :minimum)
 
     Hash[item_ids.map do |i_id|
       it = st.find {|v| v[0] === i_id }
@@ -53,7 +53,7 @@ class Store < ActiveRecord::Base
   #end
 
   def self.get_names_hash
-    @names_hash ||= Hash[Store.scoped.values_of(:id, :name)]
+    @names_hash ||= Hash[Store.scoped.pluck(:id, :name)]
   end
 
 private

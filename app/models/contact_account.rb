@@ -2,5 +2,5 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class ContactAccount < Account
-  belongs_to :account, conditions: {staff: false}
+  belongs_to :account, -> { where(staff: false) }
 end

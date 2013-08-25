@@ -12,7 +12,7 @@ describe Expense do
   let(:valid_attributes) {
     {active: nil, bill_number: "56498797", contact: contact,
       exchange_rate: 1, currency: 'BOB', date: '2011-01-24',
-      description: "Esto es una prueba",  
+      description: "Esto es una prueba",
       ref_number: "987654", state: 'draft'
     }
   }
@@ -260,7 +260,7 @@ describe Expense do
 
       exp.contact.expenses_status.should eq({
         'TOTAL' => (10 + 3.3 * 7).round(2),
-        'BOB' => 10.0, 
+        'BOB' => 10.0,
         'USD' => 3.3
       })
 
@@ -298,11 +298,13 @@ describe Expense do
     end
   end
 
-  context "deestroy item" do
+  context "destroy item" do
     before(:each) do
-      ExpenseDetail.any_instance.stub(item: stub(for_sale?: true))
-      Expense.any_instance.stub(contact: true, set_supplier_and_expenses_status: true)
+      ExpenseDetail.any_instance.stub(item: build(:item, for_sale: true))
+
+      Expense.any_instance.stub(contact: build(:contact), set_supplier_and_expenses_status: true)
     end
+
     let(:attributes) {
       {
       contact_id: 1, date: Date.today, ref_number: 'E-0001', currency: 'BOB',
@@ -314,6 +316,7 @@ describe Expense do
 
     it "#destroy item" do
       exp = Expense.new_expense(attributes)
+      #binding.pry
       exp.save.should be_true
 
       exp.details.should have(2).items

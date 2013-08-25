@@ -13,9 +13,9 @@ describe TransactionDetail do
     td.data_hash.should eq({
       id: td.id,
       item_id: td.item_id,
-      original_price: td.original_price, 
-      price: td.price, 
-      quantity: td.quantity, 
+      original_price: td.original_price,
+      price: td.price,
+      quantity: td.quantity,
       subtotal: td.subtotal
     })
   end
@@ -38,9 +38,11 @@ describe TransactionDetail do
 
   context "Operations related with Income Expense" do
     before(:each) do
-      TransactionDetail.any_instance.stub(item: true)
-      Income.any_instance.stub(contact: true, set_client_and_incomes_status: true)
+      TransactionDetail.any_instance.stub(item: build(:item))
+      Income.any_instance.stub(contact: build(:contact), set_client_and_incomes_status: true)
+      UserSession.user = build(:user, id: 1)
     end
+
     let(:attributes) {
       {
       contact_id: 1, date: Date.today, ref_number: 'I-0001', currency: 'BOB',
@@ -50,7 +52,7 @@ describe TransactionDetail do
 
     it "#checks balance" do
       inc = Income.new_income(attributes)
-      inc.income_details[0].stub(item: stub(for_sale?: true))
+      inc.income_details[0].stub(item: build(:item, for_sale: true))
 
       inc.save.should be_true
 
@@ -61,7 +63,7 @@ describe TransactionDetail do
 
       inc = Income.find(inc.id)
       inc.attributes = {income_details_attributes: [{id: det.id, item_id: 1, price: 20, quantity: 4}] }
-      inc.income_details[0].stub(item: stub(for_sale?: true))
+      inc.income_details[0].stub(item: build(:item, for_sale: true))
 
       inc.save.should be_false
       inc.details[0].errors[:item_id].should eq([I18n.t('errors.messages.income_details.balance')])

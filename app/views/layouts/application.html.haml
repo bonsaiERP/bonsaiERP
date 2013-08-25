@@ -19,8 +19,8 @@
 
       bonsai.currency = this.currency = "#{currency}";
       this.organisation = {
-        currency: "#{current_organisation.currency}",
-        name: "#{current_organisation.name}"
+        currency: "#{currency}",
+        name: "#{organisation_name}"
       }
 
   %body
@@ -32,7 +32,7 @@
     #head2.row-fluid.organisation
       .cont
         .span12
-          %h3= current_organisation.name
+          %h3= organisation_name
 
 
     #wrapper.cont

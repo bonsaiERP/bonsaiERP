@@ -2,7 +2,7 @@
 class IncomeDetail < TransactionDetail
 
   # Relationships
-  belongs_to :income, foreign_key: :account_id, conditions: {type: 'Income'}, inverse_of: :income_details
+  belongs_to :income, -> { where(type: 'Income') }, foreign_key: :account_id, inverse_of: :income_details
   belongs_to :item, inverse_of: :income_details
 
   # Validations

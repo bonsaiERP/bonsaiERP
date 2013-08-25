@@ -37,7 +37,7 @@ describe Account do
     let (:tag_ids) { Tag.select("id").pluck(:id) }
 
     it "valid_tags" do
-      a = Account.new(valid_params.merge(tag_ids: tag_ids.first))
+      a = Account.new(valid_params.merge(tag_ids: [tag_ids.first]))
       a.save.should be_true
       a.tag_ids.should eq([tag_ids.first])
 

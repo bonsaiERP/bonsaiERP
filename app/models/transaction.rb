@@ -4,8 +4,8 @@
 class Transaction < ActiveRecord::Base
   ########################################
   # Relationships
-  belongs_to :income, foreign_key: :account_id, conditions: {type: 'Income'}
-  belongs_to :expense, foreign_key: :account_id, conditions: {type: 'Expense'}
+  belongs_to :income, -> { where(type: 'Income') }, foreign_key: :account_id
+  belongs_to :expense, -> { where(type: 'Expense') }, foreign_key: :account_id
   # Users
   belongs_to :creator, class_name: 'User'
   belongs_to :approver, class_name: 'User'

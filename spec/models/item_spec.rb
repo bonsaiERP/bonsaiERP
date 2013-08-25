@@ -86,8 +86,8 @@ describe Item do
   describe "Tests" do
     before(:each) do
       o = Object.new
-      o.stub!(:find_by_id).with(1).and_return(mock_model(Unit))
-      Unit.stub!(org: o)
+      o.stub(:find_by_id).with(1).and_return(mock_model(Unit))
+      Unit.stub(org: o)
     end
 
     it 'should create an item' do
@@ -95,7 +95,7 @@ describe Item do
     end
 
     it 'should be a unique code' do
-     Item.create valid_attributes 
+     Item.create valid_attributes
      i = Item.new(valid_attributes)
 
      i.should_not be_valid

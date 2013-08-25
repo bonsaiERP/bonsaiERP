@@ -12,13 +12,13 @@ class Organisation < ActiveRecord::Base
   attr_readonly :tenant
   serialize :preferences, JSON
 
-  attr_protected :user_id
 
   ########################################
   # Relationships
 
-  has_many :links, :dependent => :destroy, :autosave => true
-  has_one  :master_link, class_name: 'Link', foreign_key: :organisation_id, conditions: { master_account: true, rol: 'admin' }
+  has_many :links, dependent: :destroy, autosave: true
+  has_one  :master_link, -> { where(master_account: true, rol: 'admin') },
+           class_name: 'Link', foreign_key: :organisation_id
   has_one  :master_account, through: :master_link, source: :user
 
   has_many :users, through: :links, dependent: :destroy

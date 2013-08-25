@@ -260,7 +260,7 @@ describe Income do
 
       inc.contact.incomes_status.should eq({
         'TOTAL' => (12 + 3.3 * 7).round(2),
-        'BOB' => 12.0, 
+        'BOB' => 12.0,
         'USD' => 3.3
       })
 
@@ -299,8 +299,8 @@ describe Income do
 
   context "deestroy item" do
     before(:each) do
-      IncomeDetail.any_instance.stub(item: stub(for_sale?: true))
-      Income.any_instance.stub(contact: true, set_client_and_incomes_status: true)
+      IncomeDetail.any_instance.stub(item: build(:item, for_sale: true))
+      Income.any_instance.stub(contact: build(:contact), set_client_and_incomes_status: true)
     end
     let(:attributes) {
       {

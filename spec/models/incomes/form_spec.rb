@@ -89,8 +89,8 @@ describe Incomes::Form do
     subject { Incomes::Form.new_income(valid_params) }
 
     it "creates and sets the default states" do
-      s = stub
-      s.should_receive(:values_of).with(:id, :price).and_return([[1, 10.5], [2, 20.0]])
+      s = double
+      s.should_receive(:pluck).with(:id, :price).and_return([[1, 10.5], [2, 20.0]])
 
       Item.should_receive(:where).with(id: item_ids).and_return(s)
 
@@ -144,7 +144,7 @@ describe Incomes::Form do
     before(:each) do
       Income.any_instance.stub(valid?: true)
       IncomeDetail.any_instance.stub(valid?: true)
-      ConciliateAccount.any_instance.stub(account_to: stub(save: true, :amount= => true, amount: 1))
+      ConciliateAccount.any_instance.stub(account_to: double(save: true, :amount= => true, amount: 1))
     end
 
     let(:subject) do
@@ -268,8 +268,8 @@ describe Incomes::Form do
       AccountLedger.any_instance.stub(valid?: true)
       Income.any_instance.stub(valid?: true)
       IncomeDetail.any_instance.stub(valid?: true)
-      Item.stub_chain(:where, values_of: [[1, 10], [2, 20.0]])
-      ConciliateAccount.any_instance.stub(account_to: stub(save: true, :amount= => true, amount: 1))
+      Item.stub_chain(:where, pluck: [[1, 10], [2, 20.0]])
+      ConciliateAccount.any_instance.stub(account_to: double(save: true, :amount= => true, amount: 1))
     end
 
     it "creates and pays" do

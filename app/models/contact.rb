@@ -7,16 +7,14 @@ class Contact < ActiveRecord::Base
 
   ########################################
   # Relationships
-  has_many :contact_accounts, foreign_key: :contact_id,
-           conditions: { type: 'ContactAccount' }
+  has_many :contact_accounts, -> { where(type: 'ContactAccount') },
+           foreign_key: :contact_id
 
-  has_many :incomes,  foreign_key: :contact_id,
-           conditions: { type: 'Income' },
-           order: 'accounts.date desc, accounts.id desc'
+  has_many :incomes, -> { where(type: 'Income').order('accounts.date desc, accounts.id desc') },
+           foreign_key: :contact_id
 
-  has_many :expenses, foreign_key: :contact_id,
-           conditions: { type: 'Expense' },
-           order: 'accounts.date desc, accounts.id desc'
+  has_many :expenses, -> { where(type: 'Expense').order('accounts.date desc, accounts.id desc') },
+           foreign_key: :contact_id
 
   has_many :inventory_operations
 
@@ -29,14 +27,14 @@ class Contact < ActiveRecord::Base
 
   ########################################
   # Scopes
-  scope :clients, where(client: true)
-  scope :suppliers, where(supplier: true)
+  scope :clients, -> { where(client: true) }
+  scope :suppliers, -> { where(supplier: true) }
   scope :search, -> (s) {
     s = "%#{s}%"
     where { (matchcode.like "#{s}") | (first_name.like "#{s}") | (last_name.like "#{s}") }
   }
 
-  default_scope where(staff: false)
+  default_scope -> { where(staff: false) }
 
   # Serialization
   serialize :incomes_status, JSON

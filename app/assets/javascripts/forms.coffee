@@ -67,7 +67,7 @@ $( ->
   ##########################################
   # Activates autocomplete for all autocomplete inputs
   createAutocomplete = ->
-    $(this).find('.control-group.autocomplete').each( (i, el) ->
+    $(this).find('div.autocomplete').each( (i, el) ->
       $this = $(el)
       $hidden = $this.find('[type=hidden]')
       $input = $this.find('[type=text]')
@@ -109,7 +109,7 @@ $( ->
   ##########################################
   # Datepicker for simple_form
   setDatepicker = ->
-    $(this).find('.control-group.datepicker:not(.hasDatepicker)').each (i, el) ->
+    $(this).find('div.datepicker:not(.hasDatepicker)').each (i, el) ->
       $this = $(el)
       $this.addClass 'hasDatepicker'
       $hidden = $this.find '[type=hidden]'

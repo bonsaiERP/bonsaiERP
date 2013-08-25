@@ -30,22 +30,21 @@ class TransactionDetail < ActiveRecord::Base
     }
   end
 
-private
-  def balance_is_correct
-    self.errors.add(:item_id, balance_error_message) if self.balance > quantity
-  end
+  private
 
-  def balance_error_message
-    I18n.t('errors.messages.transaction_details.balance')
-  end
-
-  def quantity_eq_balance
-    unless balance === quantity
-      self.errors(:quantity, "No se puede")
+    def balance_is_correct
+      self.errors.add(:item_id, balance_error_message)  if self.balance > quantity
     end
-  end
 
-  def change_of_item_id
-    self.errors.add(:item_id, I18n.t('errors.messages.transaction_details.item_changed')) if item_id_changed?
-  end
+    def balance_error_message
+      I18n.t('errors.messages.transaction_details.balance')
+    end
+
+    def quantity_eq_balance
+      self.errors(:quantity, "No se puede")  unless balance == quantity
+    end
+
+    def change_of_item_id
+      self.errors.add(:item_id, I18n.t('errors.messages.transaction_details.item_changed'))  if item_id_changed?
+    end
 end

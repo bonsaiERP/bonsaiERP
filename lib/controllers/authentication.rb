@@ -3,6 +3,12 @@
 # email: boriscyber@gmail.com
 module Controllers::Authentication
 
+  def self.included(base)
+    base.instance_eval do
+      helper_method :current_user, :user_signed_in?
+    end
+  end
+
   def current_user
     return false unless session[:user_id].present?
     begin
@@ -12,22 +18,18 @@ module Controllers::Authentication
     end
   end
 
-protected
-  def user_signed_in?
-    current_user.present?
-  end
+  protected
 
-  # Sets the session for the organisation
-  def set_organisation_session(organisation)
-    ret = true
+    def user_signed_in?
+      current_user.present?
+    end
 
-    session[:organisation] = Hash[ OrganisationSession::KEYS.map {|k| [k, organisation.send(k)] } ]
+    # Sets the session for the organisation
+    def set_organisation_session(organisation)
+      ret = true
 
-    ret
-  end
+      session[:organisation] = Hash[ OrganisationSession::KEYS.map {|k| [k, organisation.send(k)] } ]
 
-  def self.helpers
-    [:current_user, :user_signed_in?]
-  end
-
+      ret
+    end
 end

@@ -3,7 +3,7 @@
 
 label
   color: gray
-  abbr 
+  abbr
     border: none
 
 .show label
@@ -35,7 +35,7 @@ input.numeric
     list-style: none
     padding: 0px 10px
 
-  h2 
+  h2
     font-weight:normal
     font-size: 1.2em
     margin: 4px 0px
@@ -48,12 +48,12 @@ span.error
   .help-block
     clear: both
 
-.field_with_errors 
-  input, textarea, select 
+.field_with_errors
+  input, textarea, select
     background-color: lighten($red, 40%)
     border-color: lighten($red, 25%) !important
 
-form.simple_form div.main 
+form.simple_form div.main
   padding: 0 1em
   +border-radius(3px)
 
@@ -145,3 +145,11 @@ input[disabled]
 input.row-check
   vertical-align: top
   margin-right: 4px
+
+.input
+  .btn
+    vertical-align: top
+
+.form-inline
+  .boolean > label
+    margin-left: 4px

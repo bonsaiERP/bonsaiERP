@@ -23,7 +23,7 @@ module Models::InventoryOperation
       # Save
       InventoryOperation.transaction do
         create_inventory_operation_in
-        
+
         ret = @inventory_operation_out.save
 
         @inventory_operation_in.transference_id = @inventory_operation_out.id
@@ -58,8 +58,8 @@ module Models::InventoryOperation
 
     def update_stocks
       item_ids = @inventory_operation_out.inventory_operation_details.map(&:item_id)
-      stocks_from = Hash[Stock.where(:store_id => @inventory_operation_out.store_id, :item_id => item_ids.uniq).values_of(:item_id, :quantity)]
-      stocks_to = Hash[Stock.where(:store_id => @inventory_operation_out.store_to_id, :item_id => item_ids.uniq).values_of(:item_id, :quantity)]
+      stocks_from = Hash[Stock.where(:store_id => @inventory_operation_out.store_id, :item_id => item_ids.uniq).pluck(:item_id, :quantity)]
+      stocks_to = Hash[Stock.where(:store_id => @inventory_operation_out.store_to_id, :item_id => item_ids.uniq).pluck(:item_id, :quantity)]
 
       store_id    = @inventory_operation_out.store_id
       store_to_id = @inventory_operation_out.store_to_id
@@ -85,7 +85,7 @@ module Models::InventoryOperation
     # checks the items and the quantity
     def check_items
       check_valid_items
-      check_repeated_items 
+      check_repeated_items
       check_stock
     end
 
@@ -93,7 +93,7 @@ module Models::InventoryOperation
       h, err = {}, false
       @inventory_operation_out.inventory_operation_details.each do |det|
         if h[det.item_id]
-          det.errors[:item_id] = I18n.t("errors.messages.inventory_operation_detail.repeated_item") 
+          det.errors[:item_id] = I18n.t("errors.messages.inventory_operation_detail.repeated_item")
           err = true
         end
         h[det.item_id] = h[det.item_id] ? h[det.item_id] + 1 : 1
@@ -122,7 +122,7 @@ module Models::InventoryOperation
     def check_stock
       if @valid_items
         item_ids = @inventory_operation_out.inventory_operation_details.map(&:item_id)
-        stocks ||= Hash[Stock.where(:store_id => @inventory_operation_out.store_id, :item_id => item_ids.uniq).values_of(:item_id, :quantity)]
+        stocks ||= Hash[Stock.where(:store_id => @inventory_operation_out.store_id, :item_id => item_ids.uniq).pluck(:item_id, :quantity)]
 
         err = false
         @inventory_operation_out.inventory_operation_details.each do |det|
