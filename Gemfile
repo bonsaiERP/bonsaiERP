@@ -18,7 +18,7 @@ gem 'virtus' # Model generation in simple way
 gem 'squeel' # Better SQL queries
 
 gem 'simple_form'
-gem 'haml', '~> 4.0.1'
+gem 'haml', '=> 4.0.1'
 gem 'kaminari' # Pagination
 gem 'bcrypt-ruby', require: 'bcrypt'
 gem 'active_model_serializers' # ActiveRecord Classes to encode in JSON

@@ -1,6 +1,6 @@
 class Select2Input < SimpleForm::Inputs::Base
   include ActionView::Helpers::FormTagHelper
-  enable :placeholder
+  #enable :placeholder
 
   # User the input_options[:value_field for the value of the relation Model
   def input

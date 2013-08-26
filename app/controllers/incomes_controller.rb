@@ -46,7 +46,7 @@ class IncomesController < ApplicationController
     end
   end
 
-  # PUT /incomes/:id
+  # PATCH /incomes/:id
   def update
     @is = Incomes::Form.find(params[:id])
 
@@ -69,7 +69,7 @@ class IncomesController < ApplicationController
     end
   end
 
-  # PUT /incomes/:id/approve
+  # PATCH /incomes/:id/approve
   # Method to approve an income
   def approve
     redirect_to(@income, alert: 'El Ingreso ya esta aprovado') and return unless @income.is_draft?
@@ -84,7 +84,7 @@ class IncomesController < ApplicationController
     redirect_to income_path(@income)
   end
 
-  # PUT /incomes/:id/approve
+  # PATCH /incomes/:id/approve
   # Method that nulls or enables inventory
   def inventory
     @income.no_inventory = params[:no_inventory]
@@ -99,7 +99,7 @@ class IncomesController < ApplicationController
     redirect_to income_path(@income.id, anchor: 'items')
   end
 
-  # PUT /incomes/:id/null
+  # PATCH /incomes/:id/null
   def null
     if @income.null!
       redirect_to income_path(@income), notice: 'Se anulo correctamente el ingreso.'
@@ -108,74 +108,75 @@ class IncomesController < ApplicationController
     end
   end
 
-private
-  # Creates or approves a ExpenseService instance
-  def create_or_approve
-    if params[:commit_approve]
-      @is.create_and_approve
-    else
-      @is.create
+  private
+
+    # Creates or approves a ExpenseService instance
+    def create_or_approve
+      if params[:commit_approve]
+        @is.create_and_approve
+      else
+        @is.create
+      end
     end
-  end
 
-  def update_or_approve
-    if params[:commit_approve]
-      @is.update_and_approve(income_params)
-    else
-      @is.update(income_params)
+    def update_or_approve
+      if params[:commit_approve]
+        @is.update_and_approve(income_params)
+      else
+        @is.update(income_params)
+      end
     end
-  end
 
-  def quick_income_params
-   params.require(:incomes_quick_form).permit(*movement_params.quick_income)
-  end
-
-  def income_params
-    params.require(:incomes_form).permit(*movement_params.income)
-  end
-
-  def movement_params
-    @movement_params ||= MovementParams.new
-  end
-
-  def set_income
-    @income = Income.find_by_id(params[:id])
-  end
-
-  # Method to search incomes on the index
-  def search_incomes
-    @incomes = case
-               when params[:contact_id].present?
-                 Income.contact(params[:contact_id]).order('date desc').page(@page)
-               when params[:search].present?
-                 Incomes::Query.new.search(params[:search])
-               else
-                 Income.order('date desc').page(@page)
-               end
-
-    @incomes = @incomes.all_tags(*tag_ids)  if params[:search] && has_tags?
-
-    @incomes = @incomes.includes(:contact, :updater, transaction: [:creator, :approver, :nuller]).order('date desc, accounts.id desc')
-
-    set_incomes_filters
-  end
-
-  def set_incomes_filters
-    case
-    when params[:approved].present?
-      @incomes = @incomes.approved
-    when params[:error].present?
-      @incomes = @incomes.error
-    when params[:due].present?
-      @incomes = @incomes.due
-    when params[:nulled].present?
-      @incomes = @incomes.nulled
-    when params[:inventory].present?
-      @incomes = @incomes.inventory
+    def quick_income_params
+     params.require(:incomes_quick_form).permit(*movement_params.quick_income)
     end
-  end
 
-  def set_index_params
-    params[:all] = true unless [:approved, :error, :nulled, :due, :inventory].any? {|v| params[v].present? }
-  end
+    def income_params
+      params.require(:incomes_form).permit(*movement_params.income)
+    end
+
+    def movement_params
+      @movement_params ||= MovementParams.new
+    end
+
+    def set_income
+      @income = Income.find_by_id(params[:id])
+    end
+
+    # Method to search incomes on the index
+    def search_incomes
+      @incomes = case
+                 when params[:contact_id].present?
+                   Income.contact(params[:contact_id]).order('date desc').page(@page)
+                 when params[:search].present?
+                   Incomes::Query.new.search(params[:search])
+                 else
+                   Income.order('date desc').page(@page)
+                 end
+
+      @incomes = @incomes.all_tags(*tag_ids)  if params[:search] && has_tags?
+
+      @incomes = @incomes.includes(:contact, :updater, transaction: [:creator, :approver, :nuller]).order('date desc, accounts.id desc')
+
+      set_incomes_filters
+    end
+
+    def set_incomes_filters
+      case
+      when params[:approved].present?
+        @incomes = @incomes.approved
+      when params[:error].present?
+        @incomes = @incomes.error
+      when params[:due].present?
+        @incomes = @incomes.due
+      when params[:nulled].present?
+        @incomes = @incomes.nulled
+      when params[:inventory].present?
+        @incomes = @incomes.inventory
+      end
+    end
+
+    def set_index_params
+      params[:all] = true unless [:approved, :error, :nulled, :due, :inventory].any? {|v| params[v].present? }
+    end
 end

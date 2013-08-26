@@ -28,7 +28,7 @@ Bonsaierp::Application.routes.draw do
 
   resources :account_ledgers do
     post :transference, on: :collection
-    put :conciliate, on: :member
+    patch :conciliate, on: :member
   end
 
   resources :banks
@@ -59,9 +59,9 @@ Bonsaierp::Application.routes.draw do
   ############################
   resources :incomes do
     member do
-      put :approve
-      put :null
-      put :inventory
+      patch :approve
+      patch :null
+      patch :inventory
       get :history
     end
   end
@@ -71,9 +71,9 @@ Bonsaierp::Application.routes.draw do
 
   resources :expenses do
     member do
-      put :approve
-      put :null
-      put :inventory
+      patch :approve
+      patch :null
+      patch :inventory
       get :history
     end
   end
