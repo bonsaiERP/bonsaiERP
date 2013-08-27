@@ -1,13 +1,16 @@
 .row-fluid
   .span7
     %h1
+      %span.n.muted Recibo
       = @ledger
-      = @ledger.status_tag
+      %small= @ledger.status_tag
       = render_if @ledger.account_contact do
         %small.dark
           = link_to @ledger.account_contact, @ledger.account_contact
 
-  .span5= render 'account_ledgers/conciliate_null_form', ledger: @ledger if @ledger.can_conciliate_or_null?
+  .span5
+    = render 'account_ledgers/conciliate_null_form', ledger: @ledger if @ledger.can_conciliate_or_null?
+
 
 %p
   = @ledger.operation_tag
@@ -26,7 +29,7 @@
       %i.icon-exchange(title='Tipo de cambio' data-toggle='tooltip')
       = ntc @ledger.exchange_rate, precision: 4
       = currency_label
-  
+
   .span6
     -#%span.reference
       %i.icon-file-alt(title='Referencia' data-toggle='tooltip')

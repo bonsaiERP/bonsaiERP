@@ -7,6 +7,14 @@ class AccountLedgerPresenter < BasePresenter
     name.split(' ').map(&:first).join('')
   end
 
+  def status_text
+    case status
+    when 'pendent' then 'Pendiente'
+    when 'approved' then 'Aprobado'
+    when 'nulled' then 'Anulado'
+    end
+  end
+
   def status_tag
     case status
     when 'pendent'
@@ -61,7 +69,11 @@ class AccountLedgerPresenter < BasePresenter
     html.html_safe
   end
 
-  def operation(op = to_model.operation)
+  def operation_text
+    operation_text_css.first
+  end
+
+  def operation_text_css(op = to_model.operation)
     case op
     when 'payin'
       ['Cobro', 'label-success']
@@ -79,7 +91,7 @@ class AccountLedgerPresenter < BasePresenter
   end
 
   def operation_tag(op = to_model.operation)
-    op, css = operation(op)
+    op, css = operation_text_css
     "<span class='label #{css}' title='#{op}' data-toggle='tooltip'>#{op[0].upcase}</span>".html_safe
   end
 

@@ -2,8 +2,9 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class AccountLedgersController < ApplicationController
- 
-  # GET /account_ledger 
+  include Controllers::Print
+
+  # GET /account_ledger
   def index
     @ledgers = AccountLedger.pendent
   end
@@ -11,15 +12,21 @@ class AccountLedgersController < ApplicationController
   # GET /account_ledgers/:id
   def show
     @ledger = present AccountLedger.find(params[:id])
+
+    respond_to do |format|
+      format.html
+      format.print { print_pdf 'show.print', "recibo-#{@ledger}"  unless params[:debug] }
+    end
   end
 
+  # GET /account_ledgers/new
   def new
     @account_ledger = AccountLedger.new_money(:operation => params[:operation], :account_id => params[:account_id])
-    
+
     redirect_to "/dashboard" unless @account_ledger
   end
-  #
-  # PUT /account_ledgers/:id/conciliate 
+
+  # PATCH /account_ledgers/:id/conciliate
   def conciliate
     @ledger = AccountLedger.find(params[:id])
 
@@ -48,7 +55,7 @@ class AccountLedgersController < ApplicationController
     end
   end
 
-  # PUT /account_ledgers/:id
+  # PATCH /account_ledgers/:id
   # update the reference
   def update
     @al = AccountLedger.find(params[:id])
@@ -90,25 +97,26 @@ class AccountLedgersController < ApplicationController
     end
   end
 
-private
-  def conciliate_account
-    con = ConciliateAccount.new(@ledger)
+  private
 
-    if con.conciliate!
-      flash[:notice] = "Se ha verificado exitosamente la transacción."
-    else
-      flash[:error] = "Exisitio un error al conciliar la transacción."
+    def conciliate_account
+      con = ConciliateAccount.new(@ledger)
+
+      if con.conciliate!
+        flash[:notice] = "Se ha verificado exitosamente la transacción."
+      else
+        flash[:error] = "Exisitio un error al conciliar la transacción."
+      end
     end
-  end
 
-  def null_account
-    nl = NullAccountLedger.new(@ledger)
+    def null_account
+      nl = NullAccountLedger.new(@ledger)
 
-    
-    if nl.null!
-      flash[:notice] = "Se ha anulado exitosamente la transacción."
-    else
-      flash[:error] = "Exisitio un error al anular la transacción."
+
+      if nl.null!
+        flash[:notice] = "Se ha anulado exitosamente la transacción."
+      else
+        flash[:error] = "Exisitio un error al anular la transacción."
+      end
     end
-  end
 end
