@@ -1,5 +1,6 @@
 # encoding: utf-8
 Bonsaierp::Application.routes.draw do
+  get '/download_pdf/:file/:name' => 'download#download_pdf', as: :download
 
   resources :tags do
     post :update_models, on: :collection
@@ -118,6 +119,7 @@ Bonsaierp::Application.routes.draw do
     # Checks the confirmation_token of users added by admin
     get :new_user, on: :member
   end
+
   get '/sign_up' => 'registrations#new'
 
   # No auth

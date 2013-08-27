@@ -262,6 +262,17 @@ init = ($) ->
   ########################################
   # Wrapped inside this working
   $(document).ready ->
+    $('body').on('click', 'a.pdf', (event) ->
+      event.preventDefault()
+      $.get($(this).attr('href'), (resp) ->
+        data = JSON.parse(resp)
+        if data.file? and data.name?
+          window.location = "/download_pdf/#{data.file}/#{data.name}"
+        else
+          alert 'Exisitio un error al imprimir.'
+      )
+    )
+
     # Initializes
     init($)
     $('[data-toggle=tooltip]').tooltip()

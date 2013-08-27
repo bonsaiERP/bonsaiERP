@@ -88,7 +88,8 @@ private
       expenses_inventory_outs: true,
       tags: true,
       reports: true,
-      inventory_transferences: true
+      inventory_transferences: true,
+      download: true
     }
   end
 
@@ -127,7 +128,8 @@ private
       expenses_inventory_outs: true,
       tags: true,
       reports: true,
-      inventory_transferences: true
+      inventory_transferences: true,
+      download: true
     }
   end
 
@@ -155,7 +157,8 @@ private
       user_passwords: true,
       dashboard: true,
       incomes_inventory_outs: true,
-      tags: true
+      tags: true,
+      download: true
     }
   end
 

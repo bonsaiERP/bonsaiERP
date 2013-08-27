@@ -36,7 +36,7 @@ class SessionsController < ApplicationController
   def destroy
     reset_session
 
-    redirect_to login_url(host: UrlTools.domain, subdomain: false), notice: "Ha salido correctamente."
+    redirect_to login_url(host: UrlTools.domain, subdomain: 'app'), notice: "Ha salido correctamente."
   end
 
 

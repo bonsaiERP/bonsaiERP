@@ -1,26 +1,36 @@
 module Controllers::Print
   private
 
-    def print_pdf(html, name)
-      save_printed html, print_name
-      execute_phantom "#{print_name}"
+    def print_pdf(template, name)
+      html = render_to_string template, layout: 'application.print'
 
-      send_file "#{print_name}.pdf", filename: name
+      save_and_generate_pdf html
+
+      render json: {file: print_name, name: name}
     end
 
-    def save_printed(html, prn_name)
-      f = File.new("#{prn_name}.html", 'w+')
+    def save_and_generate_pdf(html)
+      save_printed html
+      generate_phantom_pdf
+    end
+
+    def save_printed(html)
+      f = File.new("#{full_path_name}.html", 'w+')
       f.write(html)
       f.close
     end
 
     def print_name
-      @print_name ||= '/tmp/' + SecureRandom.urlsafe_base64
+      @print_name ||= SecureRandom.urlsafe_base64
     end
 
-    def execute_phantom(prn_name, script = 'print.js')
-      script = Rails.root.join('app', 'assets', 'javascripts', 'print', script)
+    def full_path_name
+      @full_path_name ||= "/tmp/#{print_name}"
+    end
 
-      %x[phantomjs #{script} #{prn_name}.html #{prn_name}.pdf]
+    def generate_phantom_pdf
+      script = Rails.root.join('app', 'assets', 'javascripts', 'print', 'print.js')
+
+      %x[phantomjs #{script} #{full_path_name}.html #{full_path_name}.pdf]
     end
 end

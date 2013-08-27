@@ -252,7 +252,7 @@ DEPENDENCIES
   factory_girl_rails
   ffaker
   foreman
-  haml (~> 4.0.1)
+  haml (>= 4.0.1)
   jquery-rails
   kaminari
   launchy
