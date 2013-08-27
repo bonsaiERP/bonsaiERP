@@ -40,19 +40,19 @@ class SessionsController < ApplicationController
   end
 
 
-private
-  def check_logged_in
-    if session[:user_id] && u = User.active.find(session[:user_id])
-      if org = u.organisations.first
-        redirect_to dashboard_url(host: UrlTools.domain, subdomain: org.tenant), notice: 'Ha ingresado correctamente.' and return
-      else
-        binding.pry
-        reset_session
+  private
+
+    def check_logged_in
+      if session[:user_id] && u = User.active.find(session[:user_id])
+        if org = u.organisations.first
+          redirect_to dashboard_url(host: UrlTools.domain, subdomain: org.tenant), notice: 'Ha ingresado correctamente.' and return
+        else
+          reset_session
+        end
       end
     end
-  end
 
-  def session_params
-    params.require(:session).permit(:email, :password)
-  end
+    def session_params
+      params.require(:session).permit(:email, :password)
+    end
 end

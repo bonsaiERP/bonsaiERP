@@ -267,7 +267,9 @@ init = ($) ->
       $.get($(this).attr('href'), (resp) ->
         data = JSON.parse(resp)
         if data.file? and data.name?
-          window.location = "/download_pdf/#{data.file}/#{data.name}"
+          setTimeout(->
+            window.location = "/download_pdf/#{data.file}/#{data.name}"
+          ,200)
         else
           alert 'Exisitio un error al imprimir.'
       )
