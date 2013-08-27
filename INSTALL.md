@@ -14,7 +14,7 @@ And install rvm
     source /home/bonsai/.rvm/scripts/rvm
 
 Add the following to the ~/.bashrc
-    
+
     if [[ -n "$PS1" ]]; then
       if [[ -s $HOME/.rvm/scripts/rvm ]] ; then source $HOME/.rvm/scripts/rvm ; fi
     fi
@@ -64,17 +64,17 @@ Install **PostgreSQL 9.2**
     sudo apt-get upgrade
     sudo apt-get install postgresql-9.2 libpq-dev postgresql-contrib-9.2
 
-To upgrate 
+To upgrate
 `sudo apt-get update`
 `sudo apt-get --only-upgrade install postgresql-9.2 postgresql-client-9.2`
 
 ### Create a user for the database
-    
+
     sudo -u postgres createuser --superuser $USER
     sudo -u postgres psql postgres
 
 ### Inside postgreSQL
-    
+
     postgres=# \passsword <user>
 
 Edit `/etc/postgresql/9.2/main/postgresql.conf` and check that you have:
@@ -90,6 +90,16 @@ Restart the database `sudo /etc/init.d/postgresql restart`
     sudo apt-get update
     sudo apt-get install nodejs
 
+## Install apache and mod_xsendfile
+
+    sudo apt-get install libapache2-mod-xsendfile
+
+Edit the file for in /etc/apache2/sites-enabled/bonsaierp.com and add
+these lines
+
+    XSendFile On
+    XSendFilePath /tmp
+
 ## Bonsai installation
 Now you need to download and install bonsai cloning from the repository, this creates the bonsai folder
 
@@ -101,7 +111,7 @@ Go to the bonsai folder `cd bonsai` and then run. (*by default the branch used i
 
 Create the file `config/database.yml` in bonsai directory add this:
 
-    
+
     development:
       adapter: postgresql
       encoding: unicode
@@ -137,7 +147,7 @@ Run the database setup with
 Once installed we have to install passenger
 
 ## Passenger installation
-        
+
     gem install passenger
 
 Installs the passenger gem and now we need to install passenger module for nginx with the defaults
@@ -168,7 +178,7 @@ And add the following
     # Short-Description: starts the nginx web server
     # Description:       starts nginx using start-stop-daemon
     ### END INIT INFO
-    
+
     PATH=/opt/nginx/sbin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
     DAEMON=/opt/nginx/sbin/nginx
     NAME=nginx
@@ -226,7 +236,7 @@ And add the following
     exit 0
 
 Change permissions and make it executable
-  
+
     sudo chmod +x /etc/init.d/nginx
 
 Make it a service

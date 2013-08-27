@@ -6,7 +6,7 @@ module Controllers::Print
 
       save_and_generate_pdf html
 
-      render json: {file: print_name, name: name}
+      send_file "#{full_path_name}.pdf", filename: "#{name}.pdf"
     end
 
     def save_and_generate_pdf(html)

@@ -262,18 +262,6 @@ init = ($) ->
   ########################################
   # Wrapped inside this working
   $(document).ready ->
-    $('body').on('click', 'a.pdf', (event) ->
-      event.preventDefault()
-      $.get($(this).attr('href'), (resp) ->
-        data = JSON.parse(resp)
-        if data.file? and data.name?
-          setTimeout(->
-            window.location = "/download_pdf/#{data.file}/#{data.name}"
-          ,200)
-        else
-          alert 'Exisitio un error al imprimir.'
-      )
-    )
 
     # Initializes
     init($)

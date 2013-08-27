@@ -51,7 +51,7 @@
       = form_for @income, url: null_income_path(@income), html: {class: 'ib'} do |f|
         = f.submit 'Anular', class: 'b btn btn-danger'
 
-    = link_to income_path(@income.id, format: 'print'), class: 'btn pdf' do
+    = link_to income_path(@income.id, format: 'print'), class: 'btn' do
       %i.icon-print
       Imprimir
 
