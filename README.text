@@ -8,7 +8,9 @@ From a GitBash terminal or other command line:
 
 1. Click the *Clone* button in Bitbucket. 
 2. Make sure the protocol is set to HTTPS.
-	The command is automatically seleteced for you.
+    
+    The command is automatically seleteced for you.
+    
 3. Copy the command.
 3. Open a terminal on your local machine.
 4. Paste the command at the prompt.
