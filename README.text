@@ -42,6 +42,7 @@ Now is you chance to play around with this sample tutorial repository.  Since it
 2.  Select the **Working Copy** from the left hand navigation.
 
     Sourcetree shows the filesin the working tree.
+    
 3.  Select the **sample.html** file.
 4.  Right click and choose **Open Terminal**.
 5.  Edit the **sample.html** file in your favorite editor.
