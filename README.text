@@ -2,8 +2,9 @@
 
 Now is you chance to play around with this sample tutorial repository.  Since it is a sample, you can't do anything wrong.
 
+- - -
 
-## Task 1. Clone the repository to your local machine
+## TASK 1. Clone the repository to your local machine
 
 ### If you are using Sourcetree:
 
@@ -32,9 +33,11 @@ Now is you chance to play around with this sample tutorial repository.  Since it
     
     You should see the following:
 
+- - -
 
+## TASK 2. Make a change 
 
-## Task 2. Make a change 
+    Make a change in the file and push it.
 
 ### If you are using Sourcetree:
 
