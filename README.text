@@ -1,10 +1,25 @@
-# Next steps with your bucket of sand
+# Play in the sand
+
+Now is you chance to play around with this sample tutorial repository.
 
 
+## Task 1. Clone the repository to your local machine
 
-## Task 1. Clone your repository
+### From Sourcetree:
 
-From a GitBash terminal or other command line:
+1. On Bitbucket, click the _HTTPS_ button.
+
+    The URL is automatically seleteced for you.
+     
+2. Copy the URL.
+3. Open Sourctree and click the *Add Repository* button.
+4. Paste the URL in the *Source Path/URL* field.
+5. Place your cursor in the *Destination Path* field.
+
+   The system automatically completes the path for you.
+6. Press the *Clone* button.
+
+### From a GitBash terminal or other command line:
 
 1. Click the *Clone* button in Bitbucket. 
 2. Make sure the protocol is set to HTTPS.
@@ -17,18 +32,6 @@ From a GitBash terminal or other command line:
     
     You should see the following:
 
-From Sourcetree:
 
-1. On Bitbucket, click the *HTTPS* button.
-
-    The URL is automatically seleteced for you.
-     
-2. Copy the URL.
-3. Open Sourctree and click the *Add Repository* button.
-4. Paste the URL in the *Source Path/URL* field.
-5. Place your cursor in the *Destination Path* field.
-
-   The system automatically completes the path for you.
-6. Press the *Clone* button.
 
 ## Task 2. Make a change and push it
