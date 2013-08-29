@@ -2,7 +2,7 @@
 
 
 
-## Step 1. Clone your repository
+## Task 1. Clone your repository
 
 From a GitBash terminal or other command line:
 
@@ -14,34 +14,21 @@ From a GitBash terminal or other command line:
 3. Copy the command.
 3. Open a terminal on your local machine.
 4. Paste the command at the prompt.
-	You should see the following:
+    
+    You should see the following:
 
 From Sourcetree:
 
-    
-    
-    
+1. On Bitbucket, click the *HTTPS* button.
 
+    The URL is automatically seleteced for you.
+     
+2. Copy the URL.
+3. Open Sourctree and click the *Add Repository* button.
+4. Paste the URL in the *Source Path/URL* field.
+5. Place your cursor in the *Destination Path* field.
 
+   The system automatically completes the path for you.
+6. Press the *Clone* button.
 
-<h2>TEst</h2>
-
-The **create-repo-tutorial** is meant to be an sandbox you can explore. The changes you make in this repository are only visible to you.  You can't break anything or doing anything wrong by exploring it.
-
-For example, the repository contains this simple README file. The contents of that file is what you are reading right now. One thing you can try is edit this files source online and commit the changes to Bitbucket. This file is uses [Markdown syntax](http://daringfireball.net/projects/markdown/basics) if you need some tips.
-
-Other things you might want to try:
- 
- * Add a page to the repository Wiki
- * Create an issue or comment on an issue
- * Add other users to the repository 
- 
-If you want to make a change to this repo and push it back to Bitbucket, you can do it.
-Make sure you have Git or a Git client installed on your local system. These instructions tell you how to install Git if you don't yet have it.
-
- * [Windows: Set up Git or Mercurial](https://confluence.atlassian.com/x/X5wXE)
- * [Mac OSX: Set up Git or Mercurial](https://confluence.atlassian.com/x/apgXE)
- * [Linux: Set up Git or Mercurial](https://confluence.atlassian.com/x/opwXE)
- 
-
- 
+## Task 2. Make a change and push it
