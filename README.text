@@ -16,7 +16,7 @@ Now is you chance to play around with this sample tutorial repository.  Since it
 4. Paste the URL in the *Source Path/URL* field.
 5. Place your cursor in the *Destination Path* field.
 
-   The system automatically completes the path for you.
+    The system automatically completes the path for you.
 6. Press the _Clone_ button.
 
 ### If you are using a terminal command line:
@@ -38,4 +38,4 @@ Now is you chance to play around with this sample tutorial repository.  Since it
 
 ### If you are using Sourcetree:
 
-1. Press the Terminal button.
+1. Press the **Terminal** button.
