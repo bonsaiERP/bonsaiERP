@@ -20,7 +20,8 @@ class IncomesController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.print { print_pdf 'show.print', "Ingreso-#{@income}"  unless params[:debug] }
+      format.print
+      format.pdf { print_pdf 'show.print', "Ingreso-#{@income}" }
     end
   end
 
