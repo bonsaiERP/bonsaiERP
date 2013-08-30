@@ -18,8 +18,9 @@
 
 = paginate_html
 
-%ul#items-list.unstyled.listing
-  =render @items
+- cache @items do
+  %ul#items-list.unstyled.listing
+    =render @items
 
 = paginate_html
 

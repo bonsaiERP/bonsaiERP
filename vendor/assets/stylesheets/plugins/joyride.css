@@ -16,7 +16,7 @@ body {
   /*color: #fff;*/
   background: #efefef;
   color: #333; /*$grayDark*/
-  width: 300px;
+  width: 320px;
   z-index: 101;
   top: 0; /* keeps the page from scrolling when calculating position */
   left: 0;
@@ -268,4 +268,8 @@ body {
 
 .first-step .next{
   margin-left: 0px;
+}
+
+.joyride-content-wrapper #content{
+  margin-right: 10px;
 }

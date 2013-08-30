@@ -27,7 +27,8 @@
 
     -# Header
     #head
-      = render 'layouts/menus'
+      - cache [current_user, 'menu'] do
+        = render 'layouts/menus'
 
     #head2.row-fluid.organisation
       .cont

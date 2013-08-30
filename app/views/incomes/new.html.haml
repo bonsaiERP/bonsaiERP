@@ -1,6 +1,6 @@
 - content_for :links do
   %ul.breadcrumbs.span6
-    %li 
+    %li
       = link_to 'Ingresos', incomes_path
     %li
       %i.icon-caret-right
@@ -9,7 +9,7 @@
 
   .span6
     %ul.breadcrumbs.r
-      %a#incomes-help.dark(href='javascript:;')
+      %a#incomes-help-link.dark(href='javascript:;')
         %i.icon-question-sign
         Ayuda
 
@@ -22,4 +22,4 @@
 
 = render 'incomes/form', income_service: @is
 
--#= render 'incomes/tour'
+= render 'incomes/tour'

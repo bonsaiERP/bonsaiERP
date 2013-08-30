@@ -28,12 +28,6 @@ body
 #wrapper
   min-height: 500px
 
-.organisation
-  background-color: darken(yellowGreen, 3%)
-  +background-image(linear-gradient(lighten($green,  5%), yellowGreen) )
-  +text-shadow(1px 1px 0 darken($green, 15%))
-  color: #F7F7F7
-
 #logo
   position: absolute
   height: 100px
@@ -61,41 +55,6 @@ body
 
 .navbar-inverse .nav > li > a
   color: white
-
-ul#usersettings
-  +border-radius
-  padding: 0px
-  height: 29px
-  margin-top: 5px
-  display: inline-block
-  float: right
-  background: rgba(0,0,0, 0.55)
-
-  font-size: 90%
-  font-weight: bold
-
-  li
-    list-style: none
-    margin: 0px
-    padding: 0px
-    float: left
-    a
-      vertical-align: middle
-      display: block
-      padding: 7px 10px
-      color: white
-      text-decoration: none
-      &:hover
-        text-decoration: underline
-
-// Menu for links
-#menu
-  //height: 32px
-  background: lighten(gray, 45%)
-  vertical-align: middle
-  box-shadow: 0 2px 3px rgba(0,0,0,0.3)
-  border-bottom: none
-  padding: 0px 30px
 
 /* Breadcrumbs*/
 ul.breadcrumbs

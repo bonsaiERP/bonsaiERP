@@ -1,54 +1,47 @@
+%ol#tour-graph.joyride-list.hidden(data-joyride)
+  %li(data-sel='h1 span.code' data-text='Siguiente' data-tip-location='bottom')
+    %p
+      Este es el código del ingreso que se genera automaticamente con la secuencia
+      %br
+      %strong Ingreso-Año-Número
+  %li(data-sel='h1 .state' data-text='Siguiente' data-tip-location='bottom')
+    %p
+      Estado del ingreso
+
+  %li(data-sel='.contact' data-text='Siguiente' data-tip-location='bottom')
+    %p
+      Seleccione el contacto sino haga click en el botón al constado derecho para crear uno nuevo
+
+  %li(data-sel='.currency-input select' data-text='Siguiente' data-tip-location='bottom')
+    %p
+      Seleccione la moneda, si cambia la moneda el
+      %strong Tipo de cambio
+      se habilitará
+      %br
+      %span.muted
+        Haga click en la ayuda de
+        %strong Cobro directo
+        para ver la explicación
+
+  %li(data-sel='#add-item-link' data-text='Siguiente')
+    %p
+      En esta parte uste puded adicionar los ítems o tambien crearlos
+
+  %li(data-sel='input[type="submit"]' data-text='Fin')
+    %p
+      Puede salvar o aprobar,
+      %strong Salvar
+      crea una proforma no válida que despues se puede aprobar,
+      %strong Salvar y aprobar
+      crea un un ingreso válido que se puede realizar cobros
+
+
 :javascript
   $(function() {
-    var tour = new Tour({
-      labels: {
-        next: "Siguiente",
-        prev: "Anterior",
-        end: "Fin"
-      }
+    $('#incomes-help-link').click(function() {
+      $('#general-aspects').show();
+      var t = new Plugin.Bride('#tour-graph');
+      t.init();
     });
+  })
 
-    tour.addSteps([
-      {
-        element: '.title .code',
-        title: 'Código',
-        content: 'Este es el código',
-        placement: 'top'
-      },
-      {
-        element: '.title .state',
-        title: 'Estado',
-        content: 'Indica el estado como <span class="label">borrador</span> <span class="label label-info">aprobado</span> <span class="label label-success">pagado</span>',
-        placement: 'top'
-      },
-      {
-        element: 'form .contact',
-        title: 'Contacto',
-        content: 'Seleccione el contacto o presione el boton <span class="btn btn-small"><i class="icon-plus-sign icon-large"></i></span> para adicionar un nuevo contacto',
-        placement: 'top'
-      },
-      {
-        element: '#transaction_currency',
-        title: 'Moneda',
-        content: 'Al cambiar la moneda se activa el <strong>Tipo de cambio</strong> que presenta un valor sugerido',
-        placement: 'top'
-      },
-      {
-        element: '#transaction_exchange_rate',
-        title: 'Tipo de cambio',
-        content: 'Presenta el tipo de cambio indicando la moneda en la que se realiza el mismo',
-        placement: 'top'
-      },
-      {
-        element: '#transaction_exchange_rate',
-        title: 'Cobro directo',
-        content: 'Le permite cobrar directamente el TOTAL del ingreso seleccionando una <strong>cuenta</strong>',
-        placement: 'top'
-      }
-    ]);
-
-      $('#incomes-help').click(function() {
-        tour.start(true);
-        tour.showStep(0);
-      })
-  });
