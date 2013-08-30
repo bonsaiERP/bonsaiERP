@@ -20,7 +20,7 @@ Now is you chance to play around with this sample tutorial repository.  Since it
     The system automatically completes the path for you.
 6. Press the **Clone** button.
 
-### If you are using a terminal command line:
+### If you are using a terminal's (Linux/OSX/GitBash) command line:
 
 1. Click the **Clone** button in Bitbucket. 
 2. Make sure the protocol is set to HTTPS.
@@ -31,13 +31,12 @@ Now is you chance to play around with this sample tutorial repository.  Since it
 4. Open a terminal on your local machine.
 5. Paste the command at the prompt.
     
-    You should see the following:
 
 - - -
 
 ## TASK 2. Make a change 
 
-    Make a change in the file and push it.
+Make a change in the file and push it back to Bitbucket.
 
 ### If you are using Sourcetree:
 
@@ -48,8 +47,8 @@ Now is you chance to play around with this sample tutorial repository.  Since it
     
 3.  Select the **sample.html** file.
 4.  Right click and choose **Open Terminal**.
-5.  Edit the **sample.html** file  in your favorite editor.
-6.  Change the heading text. 
+5.  Using your favorite editor, edit the **sample.html** file.
+6.  Change the heading from `My First File` to `Playing in the Sand`. 
 7.  Save and close the file.
 8.  Return to Sourcetree. 
     Sourcetree changes the file's icon to modified.
@@ -60,5 +59,23 @@ Now is you chance to play around with this sample tutorial repository.  Since it
 13.  Press **Push** to send your changes to Bitbucket.
 
 
+### If you are using a terminal's (Linux/OSX/GitBash) command line:
 
+1.  Go to your terminal window and navigate to the repository root.
+2.  Using your favorite editor, edit the **sample.html** file.
+3.  Change the heading from `My First File` to `Playing in the Sand`. 
+4.  Save and close the file.
+5.  Stage the file with Git
+    
+    'git add sample.html'
+6.  Commit the change.
+ 
+    'git commit -m "changing sample.html"`
+    
+7. Push to Bitbucket.
+
+    'git push`
+    
+    The system prompts you for a username/password.
+8. Enter your Bitbucket accountname and the password.
 
