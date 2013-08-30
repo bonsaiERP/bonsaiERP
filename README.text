@@ -10,7 +10,7 @@ Cloning makes a local copy of the repository for you.
 
 ### If you are using Sourcetree:
 
-1. On Bitbucket, click the **HTTPS** button.
+1. On Bitbucket, click the **SSH/HTTPS** button.
 
     The system selects the URL for you.
      
@@ -53,24 +53,25 @@ Make a change in the `sample.html` source file and push the change back to Bitbu
 
 1.  Double-click on your tutorial repo.
 2.  Select the **Working Copy** from the left hand navigation.
+3.  Select **Show All** from the dropdown.
 
     Sourcetree shows the files in the working tree.
     
-3.  Select the **sample.html** file.
-4.  Right click and choose **Open Terminal**.
-5.  Using your favorite editor, edit the `sample.html` file.
-6.  Change the heading from `My First File` to `Playing in the Sand`. 
-7.  Save and close the file.
-8.  Return to Sourcetree. 
+4.  Select the **sample.html** file.
+5.  Right click and choose **Open Terminal**.
+6.  Using your favorite editor, edit the `sample.html` file.
+7.  Change the heading from `My First File` to `Playing in the Sand`. 
+8.  Save and close the file.
+9.  Return to Sourcetree. 
 
     Sourcetree changes the file's icon to modified.
     
-9.  Choose **Stage File**.
-10.  Choose **Commit**.
-11.  Enter a commit message.
-12.  Press **Commit**.
-13.  Press **Push** to send your changes to Bitbucket.
-14.  After the push completes, use the **Commits** tab on Bitbucket to view your change.
+10.  Choose **Stage File**.
+11.  Choose **Commit**.
+12.  Enter a commit message.
+13.  Press **Commit**.
+14.  Press **Push** to send your changes to Bitbucket.
+15.  After the push completes, use the **Commits** tab on Bitbucket to view your change.
 
 
 ### If you are using a terminal's (Linux/OSX/GitBash) command line:
