@@ -15,7 +15,8 @@ class AccountLedgersController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.print { print_pdf 'show.print', "recibo-#{@ledger}"  unless params[:debug] }
+      format.print
+      format.pdf { print_pdf 'show.print', "recibo-#{@ledger}"  unless params[:debug] }
     end
   end
 
