@@ -6,7 +6,8 @@ module Controllers::Print
 
       save_and_generate_pdf html
 
-      send_file "#{full_path_name}.pdf", filename: "#{name}.pdf"
+      # send_file
+      send_data File.read("#{full_path_name}.pdf"), filename: "#{name}.pdf"
     end
 
     def save_and_generate_pdf(html)
