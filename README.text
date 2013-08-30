@@ -18,9 +18,12 @@ Now is you chance to play around with this sample tutorial repository.  Since it
 5. Paste the URL in the **Source Path/URL** field.
 6. Place your cursor in the **Destination Path** field.
 
-    The system automatically completes the path for you.
-    
-7. Press the **Clone** button.
+    The system automatically completes the path for you. 
+
+7. Verify the path is what you want.
+8. Press the **Clone** button.
+
+   Sourcetree clones your repository from Bitbucket to your local machine.
 
 ### If you are using a terminal's (Linux/OSX/GitBash) command line:
 
@@ -31,7 +34,11 @@ Now is you chance to play around with this sample tutorial repository.  Since it
     
 3. Copy the command.
 4. Open a terminal on your local machine.
-5. Paste the command at the prompt.
+5. Navigate to the directory where you want your files.
+6. Paste the command at the prompt.
+7. Press ENTER on your keyboard.
+
+   Git clones your repository from Bitbucket to your local machine.
     
 
 - - -
