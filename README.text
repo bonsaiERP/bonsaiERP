@@ -68,6 +68,7 @@ Make a change in the file and push it back to Bitbucket.
 5.  Stage the file with Git
     
     `git add sample.html`
+    
 6.  Commit the change.
  
     `git commit -m "changing sample.html"`
