@@ -1,10 +1,12 @@
 # Run some sand through your hands
 
-Now is you chance to play around with this sample tutorial repository.  Since it is a sample, you can't do anything wrong.
+Now is you chance to play around with this sample tutorial repository.  Since this is a sample repository, you can't do anything wrong.  Try both tasks below.  How you perform each task depends on whether you are using Sourcetree or another Git client.
 
 - - -
 
 ## TASK 1. Clone the repository to your local machine
+
+Cloning makes a local copy of the repository for you.  
 
 ### If you are using Sourcetree:
 
@@ -45,7 +47,7 @@ Now is you chance to play around with this sample tutorial repository.  Since it
 
 ## TASK 2. Make a change 
 
-Make a change in the file and push it back to Bitbucket.
+Make a change in the `sample.html` source file and push the change back to Bitbucket.
 
 ### If you are using Sourcetree:
 
@@ -68,6 +70,7 @@ Make a change in the file and push it back to Bitbucket.
 11.  Enter a commit message.
 12.  Press **Commit**.
 13.  Press **Push** to send your changes to Bitbucket.
+14.  After the push completes, use the **Commits** tab on Bitbucket to view your change.
 
 
 ### If you are using a terminal's (Linux/OSX/GitBash) command line:
@@ -91,4 +94,6 @@ Make a change in the file and push it back to Bitbucket.
     The system prompts you for a username/password.
     
 8. Enter your Bitbucket accountname and the password.
+9. After the push completes, use the **Commits** tab on Bitbucket to view your change.
+   
 
