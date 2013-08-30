@@ -16,7 +16,7 @@
 
     = link_to account_ledger_path(@ledger.id, format: 'pdf'), class: 'btn' do
       = image_tag 'pdf.png', size: '16'
-      Imprimir
+      PDF
 %p
   = @ledger.operation_tag
   %i= lo @ledger.date.to_date
