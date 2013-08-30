@@ -48,15 +48,16 @@ Now is you chance to play around with this sample tutorial repository.  Since it
     
 3.  Select the **sample.html** file.
 4.  Right click and choose **Open Terminal**.
-5.  Edit the **sample.html** file in your favorite editor.
+5.  Edit the **sample.html** file  in your favorite editor.
 6.  Change the heading text. 
-7.  Return to Sourcetree. 
-   You should see that the file is marked as modified.
-8.  Choose **Stage File**.
-9.  Choose **Commit**.
-10. Enter a commit message.
-11. Press **Commit**.
-12. Press **Push** to send your changes to Bitbucket.
+7.  Save and close the file.
+8.  Return to Sourcetree. 
+    Sourcetree changes the file's icon to modified.
+9.  Choose **Stage File**.
+10.  Choose **Commit**.
+11.  Enter a commit message.
+12.  Press **Commit**.
+13.  Press **Push** to send your changes to Bitbucket.
 
 
 
