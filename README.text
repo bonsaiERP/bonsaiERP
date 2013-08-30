@@ -67,14 +67,14 @@ Make a change in the file and push it back to Bitbucket.
 4.  Save and close the file.
 5.  Stage the file with Git
     
-    'git add sample.html'
+    `git add sample.html`
 6.  Commit the change.
  
-    'git commit -m "changing sample.html"`
+    `git commit -m "changing sample.html"`
     
 7. Push to Bitbucket.
 
-    'git push`
+    `git push`
     
     The system prompts you for a username/password.
 8. Enter your Bitbucket accountname and the password.
