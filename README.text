@@ -48,7 +48,7 @@ Make a change in the file and push it back to Bitbucket.
     
 3.  Select the **sample.html** file.
 4.  Right click and choose **Open Terminal**.
-5.  Using your favorite editor, edit the **sample.html** file.
+5.  Using your favorite editor, edit the `sample.html` file.
 6.  Change the heading from `My First File` to `Playing in the Sand`. 
 7.  Save and close the file.
 8.  Return to Sourcetree. 
@@ -65,7 +65,7 @@ Make a change in the file and push it back to Bitbucket.
 ### If you are using a terminal's (Linux/OSX/GitBash) command line:
 
 1.  Go to your terminal window and navigate to the repository root.
-2.  Using your favorite editor, edit the **sample.html** file.
+2.  Using your favorite editor, edit the `sample.html` file.
 3.  Change the heading from `My First File` to `Playing in the Sand`. 
 4.  Save and close the file.
 5.  Stage the file with Git
@@ -81,5 +81,6 @@ Make a change in the file and push it back to Bitbucket.
     `git push`
     
     The system prompts you for a username/password.
+    
 8. Enter your Bitbucket accountname and the password.
 
