@@ -7,17 +7,30 @@
     %li
       =link_to @inventory.store, store_path(@inventory.store, :tab => 'operations')
 
-%h2
-  %span.muted.n Operación:
-  = @inventory.ref_number
-  = @inventory.operation_tag
+
+.row-fluid
+  .span8
+    %h1
+      %span.muted.n Operación:
+      = @inventory.ref_number
+      = @inventory.operation_tag
+  .span4.r
+    = link_to show_movement_inventory_path(@inventory.id, format: 'print'), class: 'btn' do
+      %i.icon-print
+      Imprimir
+
+    = link_to show_movement_inventory_path(@inventory.id, format: 'pdf'), class: 'btn' do
+      = image_tag 'pdf.png', width: '16'
+      PDF
 
 .row-fluid
   .span6
-    %h4.n
+    %h3.n
+      %span.muted= @inventory.related_tip
       = link_to @inventory.movement, @inventory.movement
   .span6
-    %h4.n
+    %h3.n
+      %span.muted Almacen
       = link_to @inventory.store, @inventory.store
 
 .row-fluid

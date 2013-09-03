@@ -16,13 +16,13 @@ class InventoryPresenter < BasePresenter
 
   def operation_tag
     case operation
-    when "in" then label_green(operation_name)
-    when "out" then label_red(operation_name)
-    when "inc_out" then label_green(operation_name)
-    when "inc_in" then label_red(operation_name)
-    when "exp_in" then label_green(operation_name)
-    when "exp_out" then label_red(operation_name)
-    when "trans" then label_black(operation_name)
+    when "in" then text_green(operation_name)
+    when "out" then text_red(operation_name)
+    when "inc_out" then text_green(operation_name)
+    when "inc_in" then text_red(operation_name)
+    when "exp_in" then text_green(operation_name)
+    when "exp_out" then text_red(operation_name)
+    when "trans" then text_black(operation_name)
     end
   end
 
@@ -70,7 +70,7 @@ class InventoryPresenter < BasePresenter
     "#{icon('icon-file muted', 'Descripción')} #{description}".html_safe  if description.present?
   end
 
-  def related_tip(st_id)
+  def related_tip(st_id = nil)
     case
     when is_income?
       "Ingreso"

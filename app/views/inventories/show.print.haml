@@ -1,0 +1,39 @@
+%h1
+  %span.text-muted.n Operación de inventario:
+  %strong= @inventory.ref_number
+
+%h2
+  %strong
+    = @inventory.operation_name
+
+%h3.n
+  %span.text-muted Almacen:
+  = @inventory.store
+
+.row-fluid
+  .span3
+    %h4.n.i= l @inventory.date
+  .span3
+    %span.text-muted Creado por:
+    = @inventory.creator
+  .span6
+    %i.icon-file-alt(data-toggle='tooltip' title='Descripción')
+    = @inventory.description
+
+%h3 Items
+.row-fluid
+  %table#items.table.decorated
+    %tr
+      %th Item
+      %th Cantidad
+      %th Unidad
+
+    - @inventory.inventory_details.includes(:item).each do |det|
+      %tr.item
+        %td
+          = det.item
+        %td
+          = ntc det.quantity
+        %td
+          = det.item.unit_symbol
+

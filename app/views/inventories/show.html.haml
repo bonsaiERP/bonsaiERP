@@ -7,10 +7,21 @@
     %li
       =link_to @inventory.store, store_path(@inventory.store, tab: 'operations')
 
-%h1
-  %span.muted.n Operación:
-  = @inventory.ref_number
-  = @inventory.operation_tag
+.row-fluid
+  .span8
+    %h1
+      %span.muted.n Operación:
+      = @inventory.ref_number
+      = @inventory.operation_tag
+  .span4.r
+    = link_to inventory_path(@inventory.id, format: 'print'), class: 'btn' do
+      %i.icon-print
+      Imprimir
+
+    = link_to inventory_path(@inventory.id, format: 'pdf'), class: 'btn' do
+      = image_tag 'pdf.png', width: '16'
+      PDF
+
 
 %h3.n
   = link_to @inventory.store, @inventory.store

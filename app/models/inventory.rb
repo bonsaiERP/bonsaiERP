@@ -31,7 +31,6 @@ class Inventory < ActiveRecord::Base
   # attribute
   serialize :error_messages, JSON
 
-
   OPERATIONS.each do |_op|
     define_method :"is_#{_op}?" do
       _op === operation
@@ -44,6 +43,10 @@ class Inventory < ActiveRecord::Base
 
   def is_transference?
     %w(transin transout).include?(operation)
+  end
+
+  def to_s
+    ref_number
   end
 
   # Returns an array with the details fo the transaction
@@ -79,31 +82,33 @@ class Inventory < ActiveRecord::Base
   end
 
   def is_in?
-    %w(in inc_in exp_in).include? operation 
+    %w(in inc_in exp_in).include? operation
   end
 
   def is_out?
     %w(out inc_out exp_out).include? operation
   end
-private
-  def get_ref_io(io)
-    _, y, _ = io.ref_number.split('-')
-    if y === year
-      "#{op_ref_type}-#{year}-#{"%04\d" % io.id.next}"
-    else
-      "#{op_ref_type}-#{year}-0001"
-    end
-  end
 
-  def year
-    @year ||= Date.today.year.to_s[2..4]
-  end
+  private
 
-  def op_ref_type
-    case
-    when is_in?    then "I"
-    when is_out?   then "E"
-    when is_trans? then "T"
+    def get_ref_io(io)
+      _, y, _ = io.ref_number.split('-')
+      if y === year
+        "#{op_ref_type}-#{year}-#{"%04\d" % io.id.next}"
+      else
+        "#{op_ref_type}-#{year}-0001"
+      end
     end
-  end
+
+    def year
+      @year ||= Date.today.year.to_s[2..4]
+    end
+
+    def op_ref_type
+      case
+      when is_in?    then "I"
+      when is_out?   then "E"
+      when is_trans? then "T"
+      end
+    end
 end

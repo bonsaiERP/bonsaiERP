@@ -5,4 +5,5 @@ class BasePresenter < Resubject::Presenter
   include UserLogHelper
   include LabelTagHelper
   include IconsHelper
+  include TextHelper
 end
