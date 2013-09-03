@@ -12,7 +12,7 @@
     .row-fluid
       .span3.form-horizontal
         = f.check_box :direct_payment, data: {value: 'trans.direct_payment'}, id: 'direct_payment', style: 'vertical-align: top'
-        = f.label :direct_payment, "<h4 class='n' style='margin:0px'><i class='icon-money'></i> #{lbl} directo</h4>".html_safe,
+        = f.label :direct_payment, "<h4 class='n ib' style='margin:0px'><i class='icon-money'></i> #{lbl} directo</h4> <a href='javascript:;' id='direct-payment-help-link' class='mute'><i class='icon-question-sign'></i> Ayuda</a>".html_safe,
           for: 'direct_payment', class: 'ib'
 
       .span9.help-block

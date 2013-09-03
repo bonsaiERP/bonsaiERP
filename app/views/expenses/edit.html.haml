@@ -11,12 +11,16 @@
     %li
       %span Editar
 
+  %ul.breadcrumbs.r.span6
+    %a#expenses-help-link.dark(href='javascript:;')
+      %i.icon-question-sign
+      Ayuda
 - exp_presenter = present @es.expense
 .row-fluid
   .span6
     %h1
       %span.muted.n Editar
-      = @es.expense
+      %span.code= @es.expense
       %small.state= exp_presenter.state_tag
   .span6.r
     = link_to icon_show_text, expense_path(@es.expense_id), class: 'btn'

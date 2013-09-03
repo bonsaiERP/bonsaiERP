@@ -1,12 +1,12 @@
-%ol#income-tour.joyride-list.hidden(data-joyride)
+%ol#expense-tour.joyride-list.hidden(data-joyride)
   %li(data-sel='h1 span.code' data-text='Siguiente' data-tip-location='bottom')
     %p
-      Este es el código del ingreso que se genera automaticamente con la secuencia
+      Este es el código del egreso que se genera automaticamente con la secuencia
       %br
-      %strong Ingreso-Año-Número
+      %strong Egreso-Año-Número
   %li(data-sel='h1 .state' data-text='Siguiente' data-tip-location='bottom')
     %p
-      Estado del ingreso
+      Estado del egreso
 
   %li(data-sel='.contact' data-text='Siguiente' data-tip-location='bottom')
     %p
@@ -20,12 +20,12 @@
       %br
       %span.muted
         Haga click en la ayuda de
-        %strong Cobro directo
+        %strong Pago directo
         para ver la explicación
 
   %li(data-sel='#add-item-link' data-text='Siguiente')
     %p
-      Haga click en Nueva línea para adicionar mas ítems
+      En esta parte usted puded adicionar los ítems o tambien crearlos
 
   %li(data-sel='.form-actions .btn-primary' data-text='Fin')
     %p
@@ -38,9 +38,10 @@
 
 :javascript
   $(function() {
-    $('#incomes-help-link').click(function() {
-      var t = new Plugin.Bride('#income-tour');
+    $('#expenses-help-link').click(function() {
+      var t = new Plugin.Bride('#expense-tour');
       t.init();
     });
   })
+
 

@@ -1,0 +1,25 @@
+%ol#direct-payment-tour.joyride-list.hidden
+  %li(data-sel='#direct_payment' data-text='Siguiente' data-tip-location='bottom')
+    %p
+      Al habilitar el cobro directo se realiza el cobro completo del ingreso y la cuenta seleccionada
+      aumenta con el total del ingreso
+
+  %li(data-sel='.account_to' data-text='Siguiente' data-tip-location='bottom')
+    %p
+      Las cuentas listadas estan relacionadas con la moneda que seleccione
+
+  %li(data-sel='#incomes_form_reference' data-text='Fin' data-tip-location='bottom')
+    %p
+      La referencia no tiene relación con la Descripción del ingreso en esta se registra el número de recibo,
+      documento u otro que este relacionado con el movimiento en la cuenta
+
+
+:javascript
+  $(function() {
+    $('#direct-payment-help-link').click(function() {
+      var t = new Plugin.Bride('#direct-payment-tour');
+      t.init();
+    });
+  })
+
+

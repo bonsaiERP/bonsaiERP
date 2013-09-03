@@ -6,10 +6,16 @@
     %li
       %span Nuevo Egreso
 
+  %ul.breadcrumbs.r
+    %a#expenses-help-link.dark(href='javascript:;')
+      %i.icon-question-sign
+      Ayuda
+
+
 - exp_presenter = present @es.expense
 %h1
   %span.muted.n Nuevo Egreso
-  = @es.expense
+  %span.code= @es.expense
   %small.state= exp_presenter.state_tag
 
 = render 'expenses/form', expense_service: @es
