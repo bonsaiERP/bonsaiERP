@@ -58,6 +58,10 @@ class Movement < Account
     ref_number
   end
 
+  def to_param
+    "#{id}-#{ref_number}"
+  end
+
   def set_state_by_balance!
     if balance <= 0
       self.state = 'paid'

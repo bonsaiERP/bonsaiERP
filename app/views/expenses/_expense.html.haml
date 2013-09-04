@@ -4,12 +4,14 @@
     .fl
       %input.row-check(type='checkbox' id="#{expense.id}")
     .fl
-      %h4.ib
+      %h4.ib(title='Código egreso')
         = link_to expense, expense
       = expense.has_error_label
-      = link_to expense.contact, expense.contact
-      .clear-both
-      = expense.state_tag
+      = link_to expense.contact, expense.contact, title: 'Contacto'
+
+      .clearfix
+
+      %span(title='Estado')= expense.state_tag
       %i= l expense.date
       = expense.inventory_tag
 

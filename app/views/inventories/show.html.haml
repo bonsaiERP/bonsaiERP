@@ -10,9 +10,9 @@
 .row-fluid
   .span8
     %h1
-      %span.muted.n Operación:
-      = @inventory.ref_number
-      = @inventory.operation_tag
+      %span.muted.n(title='Operación de inventario' data-toggle='tooltip') Op. Inventario:
+      %strong= @inventory.ref_number
+      %small.b= @inventory.operation_tag
   .span4.r
     = link_to inventory_path(@inventory.id, format: 'print'), class: 'btn' do
       %i.icon-print
@@ -24,16 +24,18 @@
 
 
 %h3.n
+  %span.muted Almacen:
   = link_to @inventory.store, @inventory.store
 
 .row-fluid
   .span3
     %h4.n.i= l @inventory.date
   .span3
-    %span.muted Creado por:
+    %i.icon-user(title='Creado por' data-toggle='tooltip')
     = @inventory.creator
+    %i= l @inventory.created_at
   .span6
-    %i.icon-file-alt(data-toggle='tooltip' title='Descripción')
+    %i.icon-file.muted(data-toggle='tooltip' title='Descripción')
     = @inventory.description
 
 %h3 Items

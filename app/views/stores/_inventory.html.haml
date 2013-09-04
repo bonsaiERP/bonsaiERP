@@ -1,14 +1,13 @@
 - inventory = present inventory
 %li.row-fluid
-  .span6
-    %h4.n.ib
+  .span4
+    %h4.n.ib(title='Código operación inventario')
       = link_to inventory.ref_number, inventory.link
-    = inventory.operation_tag
+    %strong(title='Tipo de operación')= inventory.operation_tag
     .clearfix
-      = link_to inventory.related(store.id), inventory.related(store.id), class: 'b',
-        title: inventory.related_tip(store.id), 'data-toggle' => 'tooltip'  if inventory.has_related?
-    = lo inventory.date
-  .span6
+    = link_to inventory.related(store.id), inventory.related(store.id), class: 'b',
+      title: inventory.related_tip(store.id), 'data-toggle' => 'tooltip'  if inventory.has_related?
+    %i= lo inventory.date
+  .span8
     = inventory.creator_label
-    .clearfix
     = inventory.description_tag

@@ -282,6 +282,10 @@ init = ($) ->
       event.preventDefault()  if event.keyCode is 13
     )
 
+    $('.listing').on('mouseover', '>li', ->
+      $(this).find('[title]').tooltip()
+    )
+
   rivets.configure(
     #preloadData: false
     adapter:

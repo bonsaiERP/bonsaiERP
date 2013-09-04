@@ -1,17 +1,15 @@
-.row-fluid.pad-x-10
+.row-fluid
   .span6
     = f.input :account_to_id, label: 'Cuenta', input_html: {class: 'span10', data:{value: 'payment.account_to_id'}}
   .span3
     = f.input :date, as: :datepicker, label: 'Fecha'
   .span3
-    %div(data-show="payment.bank")
+    %div.form-inline(data-show="payment.bank")
       = f.input :verification, as: :boolean, label: 'Verificar',
         input_html: {data: {value: 'payment.verification', checked: 'payment.verification'} },
-        label: 'Verificar <i class="icon-warning-sign" data-toggle="tooltip" title="Solo cuentas de BANCO pueden verificar a futuro"></i>'.html_safe,
-        hint: 'Verificar a futuro. Ej.: (Cheque)' do
-        = f.check_box :verification
+        label: 'Verificar', hint: 'Verificar a futuro. Ej.: (Cheque)'
 
-.row-fluid.bg-white-tan.pad-10.borders-y
+.row-fluid.bg-white-tan.borders-y
   .span3
     = f.input :amount,
       label: 'Cantidad <span class="currency"></span>'.html_safe,

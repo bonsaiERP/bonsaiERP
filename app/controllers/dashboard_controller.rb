@@ -6,6 +6,8 @@ class DashboardController < ApplicationController
 
   before_filter :set_date_range
 
+  # GET /home
+
   # GET /dashboard
   def index
     @dashboard = DashboardPresenter.new(view_context, @date_range)

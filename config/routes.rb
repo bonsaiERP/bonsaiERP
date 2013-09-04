@@ -113,6 +113,7 @@ Bonsaierp::Application.routes.draw do
   resources :users, only: [:show, :edit, :update]
 
   get '/dashboard' => 'dashboard#index', as: :dashboard
+  get '/home' => 'dashboard#home', as: :home
 
   # No auth
   resources :registrations do

@@ -16,7 +16,7 @@
 
 %h1.title
   %span.muted.n Nuevo Ingreso
-  %span.code= @is.income
-  %small.state= inc_presenter.state_tag
+  %span.code(title="Código del ingreso: Ingreso-Año-Número" data-toggle='tooltip')= @is.income
+  %small.state(title='Estado' data-toggle='tooltip')= inc_presenter.state_tag
 
 = render 'incomes/form', income_service: @is

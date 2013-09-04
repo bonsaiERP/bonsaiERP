@@ -15,7 +15,7 @@
 - exp_presenter = present @es.expense
 %h1
   %span.muted.n Nuevo Egreso
-  %span.code= @es.expense
-  %small.state= exp_presenter.state_tag
+  %span.code(title='Código egreso: Egreso-Año-Número' data-toggle='tooltip')= @es.expense
+  %small.state(title='Estado' data-toggle='tooltip')= exp_presenter.state_tag
 
 = render 'expenses/form', expense_service: @es

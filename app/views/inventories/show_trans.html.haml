@@ -8,9 +8,9 @@
       =link_to @inventory.store, store_path(@inventory.store, tab: 'operations')
 
 %h1
-  %span.muted.n Operación:
-  = @inventory.ref_number
-  = @inventory.operation_tag
+  %span.muted(title='Operación de inventario' data-toggle='tooltip') Op. Inventario:
+  %strong= @inventory.ref_number
+  %small.b= @inventory.operation_tag
 
 .row-fluid
   .span6
@@ -24,8 +24,9 @@
   .span3
     %h4.n.i= l @inventory.date
   .span3
-    %span.muted Creado por:
+    %i.icon-user(title='Creado por' data-toggle='tooltip')
     = @inventory.creator
+    %i= l @inventory.created_at
   .span6
     %i.icon-file-alt(data-toggle='tooltip' title='Descripción')
     = @inventory.description

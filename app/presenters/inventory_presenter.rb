@@ -16,25 +16,25 @@ class InventoryPresenter < BasePresenter
 
   def operation_tag
     case operation
-    when "in" then text_green(operation_name)
-    when "out" then text_red(operation_name)
-    when "inc_out" then text_green(operation_name)
-    when "inc_in" then text_red(operation_name)
-    when "exp_in" then text_green(operation_name)
-    when "exp_out" then text_red(operation_name)
-    when "trans" then text_black(operation_name)
+    when 'in' then text_green(operation_name)
+    when 'oput' then text_red(operation_name)
+    when 'inc_out' then text_green(operation_name)
+    when 'inc_in' then text_red(operation_name)
+    when 'exp_in' then text_green(operation_name)
+    when 'exp_out' then text_red(operation_name)
+    when 'trans' then text_gray(operation_name)
     end
   end
 
   def operation_name
     case operation
-    when "in" then "Ingreso inv."
-    when "out" then "Egreso inv."
-    when "inc_out" then "Entrega"
-    when "inc_in" then "Devolución"
-    when "exp_in" then "Recepción"
-    when "exp_out" then "Devolución"
-    when "trans" then "Transferencia"
+    when 'in' then 'Ingreso inv.'
+    when 'out' then 'Egreso inv.'
+    when 'inc_out' then 'Entrega'
+    when 'inc_in' then 'Devolución'
+    when 'exp_in' then 'Recepción'
+    when 'exp_out' then 'Devolución'
+    when 'trans' then 'Transferencia'
     end
   end
 
@@ -88,7 +88,7 @@ class InventoryPresenter < BasePresenter
   end
 
   def title
-    store = h.link_to inventory_operation.store, store_path(inventory_operation.store_id, :tab => 'operations'), :class => 'n'
+    store = h.link_to inventory_operation.store, store_path(inventory_operation.store_id, tab: 'operations'), class: 'n'
 
     case
     when( inventory_operation.transaction_id.present? && transaction.is_a?(Income) && inventory_operation.out? )
@@ -112,26 +112,26 @@ class InventoryPresenter < BasePresenter
     if inventory_operation.transference_id.present?
       trans = inventory_operation.transference
       txt = inventory_operation.operation == "transout" ? "a" : "desde"
-      h.link_to "Transferencia #{txt} #{inventory_operation.store_to}", trans, :title => "Transferencia a #{inventory_operation.store_to}"
+      h.link_to "Transferencia #{txt} #{inventory_operation.store_to}", trans, title: "Transferencia a #{inventory_operation.store_to}"
     elsif inventory_operation.contact_id.present?
       cont = inventory_operation.contact
-      h.link_to cont, cont, :title => contact_tooltip
+      h.link_to cont, cont, title: contact_tooltip
     end
   end
 
   def transaction_tooltip
     if inventory_operation.transaction.is_a?(Income)
-      "Venta"
+      'Venta'
     else
-      "Compra"
+      'Compra'
     end
   end
 
   def contact_tooltip
     if inventory_operation.contact.is_a?(Client)
-      "Cliente"
+      'Cliente'
     else
-      "Proveedor"
+      'Proveedor'
     end
   end
 end

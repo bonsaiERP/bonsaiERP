@@ -58,6 +58,10 @@ class Contact < ActiveRecord::Base
     matchcode
   end
 
+  def to_param
+    "#{id}-#{to_s}".parameterize
+  end
+
   def account_cur(cur)
     accounts.where(currency: cur).first
   end

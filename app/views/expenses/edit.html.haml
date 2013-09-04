@@ -6,10 +6,6 @@
       %i.icon-caret-right
     %li
       =link_to @es.expense, @es.expense
-    %li
-      %i.icon-caret-right
-    %li
-      %span Editar
 
   %ul.breadcrumbs.r.span6
     %a#expenses-help-link.dark(href='javascript:;')
@@ -19,9 +15,9 @@
 .row-fluid
   .span6
     %h1
-      %span.muted.n Editar
-      %span.code= @es.expense
-      %small.state= exp_presenter.state_tag
+      %span.muted.n Nuevo Egreso
+      %span.code(title='Código egreso: Egreso-Año-Número' data-toggle='tooltip')= @es.expense
+      %small.state(title='Estado' data-toggle='tooltip')= exp_presenter.state_tag
   .span6.r
     = link_to icon_show_text, expense_path(@es.expense_id), class: 'btn'
 

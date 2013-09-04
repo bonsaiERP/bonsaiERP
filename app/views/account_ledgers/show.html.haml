@@ -1,12 +1,12 @@
 .row-fluid
   .span7
     %h1
-      %span.n.muted Recibo
-      = @ledger
-      %small= @ledger.status_tag
+      %strong.fs80= @ledger.operation_tag
+      %strong(title='Código' data-toggle='tooltip')= @ledger
+      %small(title='Estado' data-toggle='tooltip')= @ledger.status_tag
       = render_if @ledger.account_contact do
         %small.dark
-          = link_to @ledger.account_contact, @ledger.account_contact
+          = link_to @ledger.account_contact, @ledger.account_contact, title: 'Contacto', data: {toggle: 'tooltip'}
 
   .span5.r
     = render 'account_ledgers/conciliate_null_form', ledger: @ledger if @ledger.can_conciliate_or_null?
@@ -17,41 +17,43 @@
     = link_to account_ledger_path(@ledger.id, format: 'pdf'), class: 'btn' do
       = image_tag 'pdf.png', size: '16'
       PDF
-%p
-  = @ledger.operation_tag
-  %i= lo @ledger.date.to_date
-
 .row-fluid.account_ledger
-  .span6
-    .moneybox
-      %h5.n
-        = ntc @ledger.amount
-        = currency_label @ledger.currency
-
-    - unless @ledger.currency === @ledger.account_currency
-      = ntc 1.0
-      = currency_tag @ledger.currency
-      %i.icon-exchange(title='Tipo de cambio' data-toggle='tooltip')
-      = ntc @ledger.exchange_rate, precision: 4
-      = currency_label
+  .span3
+    %h4.i.n.ib
+      = lo @ledger.date.to_date
 
   .span6
-    -#%span.reference
-      %i.icon-file-alt(title='Referencia' data-toggle='tooltip')
-      = @ledger.reference
-
     .edit-reference
       %a.edit-ledger-reference-link.dark(href='javascript:;' title='Editar referencia' data-toggle='tooltip' data-id='#{@ledger.id}' data-reference='#{@ledger.reference}')
         %i.icon-pencil
       %i.icon-file.muted(data-toggle='tooltip' title="referencia")
-      %span.reference= nl2br @ledger.reference
+        %span.reference= nl2br @ledger.reference
+
+  .span3.r
+    .moneybox.fr
+      %label TOTAL
+      %h4.n
+        = ntc @ledger.amount
+        = currency_label @ledger.currency
+
+    - unless @ledger.currency === @ledger.account_currency
+      .clearfix
+      %i.icon-exchange.muted(title='Tipo de cambio' data-toggle='tooltip')
+      = ntc 1.0
+      = currency_tag @ledger.currency
+      \=
+      = ntc @ledger.exchange_rate, precision: 4
+      = currency_tag @ledger.account_currency
+
 %p
-  %h5.n
+  %h4.n
     %span.account
-      %span.muted De cuenta:
+      %span.muted
+        De
+        = "#{@ledger.account_text}"
       = link_to @ledger.account, @ledger.account, class: 'account_name'
     %span.account-to
-      %span.muted A cuenta:
+      %span.muted a Cuenta
       = link_to @ledger.account_to, @ledger.account_to, class: 'account_to_name'
 
 %p

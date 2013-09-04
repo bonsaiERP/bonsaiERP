@@ -70,29 +70,45 @@ class AccountLedgerPresenter < BasePresenter
   end
 
   def operation_text
-    operation_text_css.first
-  end
-
-  def operation_text_css(op = to_model.operation)
-    case op
-    when 'payin'
-      ['Cobro', 'label-success']
-    when 'intin'
-      ['Cobro Intereses', 'label-success']
-    when 'payout'
-      ['Pago', 'label-important']
-    when 'intout'
-      ['Pago Intereses', 'label-important']
-    when 'devin', 'devout'
-      ['Devolución', 'label-important']
-    when 'trans'
-      ['Transferencia', 'label-inverse']
+    case operation
+    when 'payin'  then 'Cobro ingreso'
+    when 'intin'  then 'Cobro Intereses'
+    when 'payout' then 'Pago egreso'
+    when 'intout' then 'Pago Intereses'
+    when 'devin'  then 'Devolución ingreso'
+    when 'devout' then 'Devolución egreso'
+    when 'trans'  then 'Transferencia'
     end
   end
 
-  def operation_tag(op = to_model.operation)
-    op, css = operation_text_css
-    "<span class='label #{css}' title='#{op}' data-toggle='tooltip'>#{op[0].upcase}</span>".html_safe
+  def account_text
+    case operation
+    when 'payin', 'devin'  then 'Ingreso'
+    when 'payout', 'devout' then 'Egreso'
+    when 'trans'  then 'Cuenta'
+    end
+  end
+
+  def operation_tag
+    case operation
+    when 'payin', 'intin'
+      text_green operation_text
+    when 'payout', 'intout', 'devin', 'devout'
+      text_red operation_text
+    when 'trans'
+      text_dark operation_text
+    end
+  end
+
+  def operation_tag
+    case operation
+    when 'payin', 'devout'
+      text_green_dark(operation_text)
+    when 'payout', 'devin'
+      text_red(operation_text)
+    when 'trans'
+      text_dark(operation_text)
+    end
   end
 
   def account_icon(ac)

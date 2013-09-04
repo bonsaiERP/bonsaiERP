@@ -21,6 +21,7 @@
         %i.icon-plus-sign
         Nuevo egreso
 
+
 = render 'expenses/search'
 
 %ul.unstyled.inline
@@ -29,14 +30,16 @@
   %li
     = link_to "Aprobados", expenses_path(approved: true), class: params_bold(:approved)
   %li
-    = link_to "Atrasados", expenses_path(due: true), class: params_bold(:due) 
+    = link_to "Atrasados", expenses_path(due: true), class: params_bold(:due)
   %li
-    = link_to "Con error", expenses_path(error: true), class: params_bold(:error) 
+    = link_to "Con error", expenses_path(error: true), class: params_bold(:error)
   %li
     = link_to "Anulados", expenses_path(nulled: true), class: params_bold(:nulled)
   %li
     = link_to "Inventario pendiente", expenses_path(inventory: true), class: params_bold(:inventory)
 
+
+= render 'expenses/with_error'  if Expense.error.any? && params[:error].blank?
 
 - paginate_html = paginate @expenses
 

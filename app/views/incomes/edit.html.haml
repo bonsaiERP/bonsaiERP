@@ -6,10 +6,6 @@
       %i.icon-caret-right
     %li
       = link_to @is.income, @is.income
-    %li
-      %i.icon-caret-right
-    %li
-      %span Editar Ingreso
 
   %ul.breadcrumbs.r.span6
     %a#incomes-help-link.dark(href='javascript:;')
@@ -20,9 +16,9 @@
 .row-fluid
   .span6
     %h1
-      %span.muted.n Editar
-      %span.code= @is.income
-      %small.state= inc_presenter.state_tag
+      %span.muted.n Nuevo Ingreso
+      %span.code(title="Código del ingreso: Ingreso-Año-Número" data-toggle='tooltip')= @is.income
+      %small.state(title='Estado' data-toggle='tooltip')= inc_presenter.state_tag
   .span6.r
     = link_to icon_show_text, income_path(@is.income_id), class: 'btn'
 

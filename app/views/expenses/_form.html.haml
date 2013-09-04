@@ -16,9 +16,7 @@
     = f.submit 'Salvar y aprobar', class: 'btn btn-primary b btn-large', name: 'commit_approve' if expense_service.is_draft?
 
 -# Help tours
-
 = render 'expenses/tour'
-= render 'expenses/tour_direct_payment'
 
 :javascript
   $(function() {

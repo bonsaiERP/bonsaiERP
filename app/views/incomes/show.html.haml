@@ -20,11 +20,11 @@
 .row-fluid
   .span7
     %h1.ib
-      = @income
-      %small= @income.state_tag
+      %strong(title='Código ingreso, Ingreso-Año-Número' data-toggle='tooltip')= @income
+      %small(title='Estado' data-toggle='tooltip')= @income.state_tag
 
     %h4.ib.n
-      = link_to @income.contact, @income.contact
+      = link_to @income.contact, @income.contact, title: 'Contacto', data: {toggle: 'tooltip'}
 
     .clearfix
     %h5.n.ib
@@ -78,6 +78,7 @@
         = currency_label @income.currency
 
     - unless OrganisationSession.currency === @income.currency
+      .clearfix
       %i.icon-exchange.muted(title='Tipo de cambio' data-toggle='tooltip')
       1
       = currency_label @income.currency
@@ -125,6 +126,7 @@
 
   #payments.tab-pane.fade
     %h2.n Cobros y devoluciones
+
     = @income.pendent_conciliations
 
     .payment-buttons
@@ -139,14 +141,12 @@
           Devolución
 
 
-    #payment-form(style='display: none')
-      %hr
-      %h3 Cobro
+    #payment-form.form-container
+      %h3.title Cobro
       = render 'incomes/payment_form', income: @income  if @income.can_pay?
 
-    #devolution-form(style='display: none')
-      %hr
-      %h3 Devolución
+    #devolution-form.form-container(style='display: none')
+      %h3.title Devolución
       = render 'incomes/devolution_form', income: @income  if @income.can_devolution?
 
     %ul.unstyled.listing

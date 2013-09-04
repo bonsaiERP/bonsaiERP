@@ -1,42 +1,56 @@
 .row
-  .col-7
+  .col-12
     %h1
-      %span.n.text-muted Recibo
+      %span.text-muted= @ledger.operation_text
       = @ledger
-      %small= @ledger.status_text
+      %small.b= @ledger.status_text
 
+.row
+  .col-6
     = render_if @ledger.account_contact do
       %h3
         %span.text-muted Contacto:
         = @ledger.account_contact
+    .clearfix
 
+    %h3.n
+      %span.account
+        %span.muted.text-muted
+          = "#{@ledger.account_text}"
+        = @ledger.account
 
-%p
-  = @ledger.operation_text
-  %i= lo @ledger.date.to_date
-
-.row.account_ledger
   .col-6
-    .moneybox
-      %h5.n
+    .moneybox.fr
+      %label TOTAL
+      %h3.n
         = ntc @ledger.amount
         = currency_label @ledger.currency
 
     - unless @ledger.currency === @ledger.account_currency
-      = ntc 1.0
-      = currency_tag @ledger.currency
-      %i.icon-exchange(title='Tipo de cambio' data-toggle='tooltip')
-      = ntc @ledger.exchange_rate, precision: 4
-      = currency_label
+      .clearfix
+      .r
+        %span.text-muted Tipo de cambio
+        = ntc 1.0
+        = currency_tag @ledger.currency
+        \=
+        = ntc @ledger.exchange_rate, precision: 4
+        = currency_label @ledger.account_currency
+
+.row
+  .col-3
+    %h4.i
+      = lo @ledger.date.to_date
 
   .col-6
-    .reference= nl2br @ledger.reference
--#%p
-  %h4
-    %span.account
-      %span.text-muted De cuenta:
-      = @ledger.account
-    %span.account-to
-      %span.text-muted A cuenta:
-      = @ledger.account_to
+    %p.reference
+      %span.text-muted Referencia:
+      = nl2br @ledger.reference
 
+
+:css
+  @page{
+    margin: 0;
+  }
+
+:javascript
+  document.getElementById('header-footer').checked = false;
