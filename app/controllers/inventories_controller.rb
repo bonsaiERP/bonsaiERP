@@ -4,9 +4,11 @@
 class InventoriesController < ApplicationController
   include Controllers::Print
 
-  # GET /inventory_operations
+  before_filter :set_date_range, only: [:index]
+
+  # GET /inventories
   def index
-    @inventory = Inventory.page(@page)
+    @inventories = get_inventories
   end
 
   # GET /inventories/1
@@ -41,4 +43,26 @@ class InventoriesController < ApplicationController
       format.pdf { print_pdf 'show_trans.print', "Inv-#{@inventory}" }
     end
   end
+
+  private
+    def get_inventories
+      inv = Inventory.order("inventories.date desc, inventories.id desc")
+      .includes(:store, :store_to, :income, :expense, :creator)
+      if params[:search].present?
+        s = params[:search]
+        inv = inv.where{ref_number.like "%#{s}%"}
+      elsif params[:search].blank? && params[:date_start].present?
+        inv = inv.where(date: @date_range.range)
+      end
+
+      inv.page(@page)
+    end
+
+    def set_date_range
+      if params[:date_start].present? && params[:date_end].present?
+        @date_range = DateRange.parse(params[:date_start], params[:date_end])
+      else
+        @date_range = DateRange.default
+      end
+    end
 end

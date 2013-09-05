@@ -1,0 +1,25 @@
+= form_tag inventories_path, method: 'get', class: 'form-inline' do
+  = text_field_tag :search, params[:search], size: 45, placeholder: 'código'
+  = render 'layouts/date_range', dr: date_range
+  = submit_tag 'Buscar', class: 'btn'
+
+= link_to "Eliminar filtro", inventories_path  if params[:search].present? || params[:date_start].present?
+
+:javascript
+  $(function() {
+    function disableEnableDates() {
+      var prop;
+      if($('#search').val().trim() == '') {
+        prop = false;
+      }else {
+        prop = true;
+      }
+
+      $('#date_start_picker').prop('disabled', prop);
+      $('#date_end_picker').prop('disabled', prop);
+    }
+
+    $('#search').on('keyup', function(event) { disableEnableDates() });
+    disableEnableDates();
+  });
+

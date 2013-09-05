@@ -4,7 +4,6 @@
 class StoresController < ApplicationController
   before_filter :set_date_range, :set_show_params, only: ['show']
 
-
   # GET /stores
   # GET /stores.xml
   def index
@@ -87,40 +86,41 @@ class StoresController < ApplicationController
 
   end
 
-private
-  def store_params
-    params.require(:store).permit(:name, :active, :phone, :address)
-  end
+  private
 
-  def get_partial
-    case params[:tab]
-    when "operations"
-      @operations = @store.inventory_operations.includes(:creator).order("created_at DESC").page(@page)
-      "operations"
-    else
-      params[:option] ||= 'all'
-      case
-      when params[:option] === "minimum"
-        @items = @store.stocks.minimums.page(@page)
+    def store_params
+      params.require(:store).permit(:name, :active, :phone, :address)
+    end
+
+    def get_partial
+      case params[:tab]
+      when "operations"
+        @operations = @store.inventory_operations.includes(:creator).order("created_at DESC").page(@page)
+        "operations"
       else
-        @items = @store.stocks.includes(:item).order("(stocks.minimum - stocks.quantity) DESC").page(@page)
+        params[:option] ||= 'all'
+        case
+        when params[:option] === "minimum"
+          @items = @store.stocks.minimums.page(@page)
+        else
+          @items = @store.stocks.includes(:item).order("(stocks.minimum - stocks.quantity) DESC").page(@page)
+        end
+        params[:tab] = "items"
+        "items"
       end
-      params[:tab] = "items"
-      "items"
     end
-  end
 
-  def set_date_range
-    if params[:commit_operations]
-      @date_range = DateRange.parse(params[:date_start], params[:date_end])
-    else
-      @date_range = DateRange.default
+    def set_date_range
+      if params[:commit_operations]
+        @date_range = DateRange.parse(params[:date_start], params[:date_end])
+      else
+        @date_range = DateRange.default
+      end
     end
-  end
 
-  def set_show_params
-    unless params[:items_commit] || params[:commit_operations]
-      params[:all] = 1  unless [:minimum_inventory].any? {|v| params[v].present? }
+    def set_show_params
+      unless params[:items_commit] || params[:commit_operations]
+        params[:all] = 1  unless [:minimum_inventory].any? {|v| params[v].present? }
+      end
     end
-  end
 end

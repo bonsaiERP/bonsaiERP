@@ -1,29 +1,35 @@
 %h1
-  %span.text-muted Operación de inventario:
+  %span.text-muted Op. Inventario:
   %strong= @inventory.ref_number
   -#= @inventory.operation_tag
 
 %h2
-  %strong
-    = @inventory.operation_name
+  %span.text-muted Operación:
+  %strong= @inventory.operation_name
 
-%h3.n
-  %span.text-muted
-    = @inventory.related_tip
+%h3
+  %span.text-muted= @inventory.related_tip
   = @inventory.movement
 
-%h3.n
+%h3
   %span.text-muted Almacen:
   = @inventory.store
 
-.row-fluid
-  .span3
-    %h4.n.i= l @inventory.date
-  .span6
-    %i.icon-file-alt(data-toggle='tooltip' title='Descripción')
-    = @inventory.description
+%h3.n.i= l @inventory.date
+
+
+%h4
+  %span.text-muted Creado por:
+  = @inventory.creator
+  %span.text-muted Fecha sistema:
+  %i= l @inventory.created_at
+
+%p
+  = @inventory.description
+
 
 %h3 Items
+
 .row-fluid
   %table#items.table.decorated
     %tr

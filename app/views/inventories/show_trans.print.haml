@@ -1,17 +1,20 @@
 %h1
-  %span.text-muted.n Op. de inventario:
+  %span.text-muted Op. Inventario:
   %strong= @inventory.ref_number
 
 %h2
   %span.text-muted Operación:
   %strong= @inventory.operation_name
 
-%h3
-  %span.text-muted Almacen:
-  = @inventory.store
 
 %h3
-  %i= l @inventory.date
+  %span.text-muted De almacen
+  = @inventory.store
+  %span.text-muted a almacen
+  = @inventory.store_to
+
+
+%h3.n.i= l @inventory.date
 
 %h4
   %span.text-muted Creado por:
@@ -23,7 +26,9 @@
   = @inventory.description
 
 
+
 %h3 Items
+
 .row-fluid
   %table#items.table.decorated
     %tr
@@ -39,4 +44,5 @@
           = ntc det.quantity
         %td
           = det.item.unit_symbol
+
 

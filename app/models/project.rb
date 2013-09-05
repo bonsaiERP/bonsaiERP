@@ -15,4 +15,8 @@ class Project < ActiveRecord::Base
   def to_s
     name
   end
+
+  def to_param
+    "#{id}-#{to_s}".parameterize
+  end
 end

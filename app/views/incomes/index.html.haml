@@ -36,7 +36,7 @@
 
 = render 'incomes/with_error'  if Income.error.any? && params[:error].blank?
 
-- paginate_html = paginate @incomes.page(@page)
+- paginate_html = paginate @incomes
 
 = paginate_html
 

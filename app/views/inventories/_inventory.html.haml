@@ -1,0 +1,20 @@
+- inventory = present inventory
+%li.row-fluid
+  .span6
+    %h4.n.ib(title='Código operación inventario')
+      = link_to inventory.ref_number, inventory.link
+    %strong(title='Tipo de operación')= inventory.operation_tag
+    .clearfix
+    %span.text-muted.muted Almacen:
+    = link_to inventory.store, inventory.store
+
+    - if inventory.related
+      %span.text-muted.muted= "#{inventory.related_tip}:"
+      = link_to inventory.related, inventory.related
+
+    .clearfix
+    %i= lo inventory.date
+  .span6
+    = inventory.creator_label
+    = inventory.description_tag
+

@@ -28,8 +28,8 @@ class InventoryPresenter < BasePresenter
 
   def operation_name
     case operation
-    when 'in' then 'Ingreso inv.'
-    when 'out' then 'Egreso inv.'
+    when 'in' then 'Ingreso inventario'
+    when 'out' then 'Egreso inventario'
     when 'inc_out' then 'Entrega'
     when 'inc_in' then 'Devolución'
     when 'exp_in' then 'Recepción'
@@ -51,12 +51,14 @@ class InventoryPresenter < BasePresenter
     end
   end
 
-  def related(st_id)
+  def related(st_id = nil)
     case
     when is_income?  then income
     when is_expense? then expense
-    when is_trans?
+    when(is_trans? && st_id.present?)
       store_id === st_id ? store_to : store
+    when(is_trans? && st_id.nil?)
+      store_to
     else
       nil
     end
@@ -76,10 +78,12 @@ class InventoryPresenter < BasePresenter
       "Ingreso"
     when is_expense?
       "Egreso"
-    when(is_trans? && st_id === store_id)
+    when(is_trans? && st_id == store_id && st_id.present?)
       "Almacen destino"
-    when(is_trans? && st_id != store_id)
+    when(is_trans? && st_id != store_id && st_id.present?)
       "Almacen origen"
+    when(is_trans? && st_id.nil?)
+      "Almacen destino"
     end
   end
 
