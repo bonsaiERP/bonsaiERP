@@ -25,7 +25,7 @@
 
 %h3.n
   %span.muted Almacen:
-  = link_to @inventory.store, @inventory.store
+  = link_to @inventory.store, store_path(@inventory.store, anchor: 'operations-tab')
 
 .row-fluid
   .span3

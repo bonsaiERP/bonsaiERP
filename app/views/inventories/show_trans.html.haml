@@ -26,10 +26,10 @@
 .row-fluid
   .span6
     %label De almacen
-    %h4.n= link_to @inventory.store, @inventory.store
+    %h4.n= link_to @inventory.store, store_path(@inventory.store, anchor: 'operations-tab')
   .span6
     %label A almacen
-    %h4.n= link_to @inventory.store_to, @inventory.store_to
+    %h4.n= link_to @inventory.store_to, store_path(@inventory.store_to, anchor: 'operations-tab')
 
 .row-fluid
   .span3
