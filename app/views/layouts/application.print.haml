@@ -12,5 +12,6 @@
   %body
     = yield
 
-  :javascript
-    //window.print();
+  - unless Rails.env.development?
+    :javascript
+      window.print();
