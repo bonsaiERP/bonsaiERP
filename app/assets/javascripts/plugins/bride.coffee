@@ -5,9 +5,9 @@ class Bride
     tipLocation: 'top'
     tipWidth: 300
   #
-  constructor: (el) ->
+  constructor: (@listSel) ->
     $('.joyride-close-tip').trigger('click')
-    @$list = $(el)
+    @$list = $(@listSel)
     @pos = 0
     @$items = @$list.find('li')
     @setTip()
@@ -44,8 +44,10 @@ class Bride
   #
   show: ->
     tipLocation = @$current.data('tipLocation') || @defaults.tipLocation
-    @$tip.css({visibility: 'visible', top: '100px'}).data('pos', @pos)
-    .find('#content').html(@$current.html())
+    name = @$current.data('name') || "#{@listSel}-#{@pos}"
+    @$tip.css({visibility: 'visible', top: '100px'}).data({pos: @pos})
+    .attr({'data-name': name}).find('#content').html(@$current.html())
+
     @$tip.find('.joyride-nub').attr('class', '').addClass("joyride-nub #{tipLocation}")
     @$tip.find('.next').text(@$current.data('text'))
 

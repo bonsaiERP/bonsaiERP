@@ -3,8 +3,8 @@
     %p
       Haga click para abrir el formulario de devolución,
       el color
-      %strong.text-error rojo 
-      denota que saldra dinero de una cuenta
+      %strong.text-error rojo
+      denota que saldrá dinero de una cuenta
 
   %li(data-sel=".account_to" data-text="Fin" data-tip-location='bottom')
     %p
@@ -13,7 +13,7 @@
       ingrese la fecha, cantidad y referencia,
       haciendo click en el botón
       %strong.text-error Devolución
-      complerara la misma.
+      completará la misma.
 
 
 %ul#devolution-inventory.hidden
@@ -27,8 +27,19 @@
 :javascript
   $(function() {
     $('#negative-balance-link').click(function() {
-      $('.payment-link-tab').trigger('click');
-      new Plugin.Bride('#devolution-tour').init();
+      $('#devolution-form .cancel').click();
+      setTimeout(function() {
+        $('.payment-link-tab').trigger('click');
+        new Plugin.Bride('#devolution-tour').init();
+      }, 200);
+    });
+
+    $('body').on('mousedown', '[data-name="#devolution-tour-1"] .next', function() {
+      $('#devolution-link').click();
+    });
+
+    $('body').on('mousedown', '[data-name="#devolution-tour-2"] .prev', function() {
+      $('#devolution-form .cancel').click();
     });
 
     $('body').on('click', '#negative-invenory-balance-link', function() {

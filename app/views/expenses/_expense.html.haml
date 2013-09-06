@@ -4,9 +4,11 @@
     .fl
       %input.row-check(type='checkbox' id="#{expense.id}")
     .fl
-      %h4.ib(title='Código egreso')
-        = link_to expense, expense
-      = expense.has_error_label
+      %h4.ib
+        = link_to expense do
+          %span(title='Código egreso')= expense
+          = expense.has_error_label
+
       = link_to expense.contact, expense.contact, title: 'Contacto'
 
       .clearfix

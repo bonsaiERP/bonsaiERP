@@ -6,13 +6,13 @@
 
   .form-actions
     = f.submit "Devolución", class: 'btn btn-success b'
-    %a#cancel-devolution-link.btn(hre='javascript:;') Cancelar
+    %a#cancel-devolution-link.btn.cancel(hre='javascript:;') Cancelar
 
 
 :javascript
   $(function() {
     var p = new App.ExpenseDevolution({
-      accountsTo: #{AccountQuery.new.bank_cash_options.to_json}, 
+      accountsTo: #{AccountQuery.new.bank_cash_options.to_json},
       baseCurrency: "#{expense.currency}"
     });
   })
