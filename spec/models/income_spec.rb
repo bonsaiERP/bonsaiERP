@@ -201,11 +201,13 @@ describe Income do
       i.should be_is_draft
       i.approver_id.should be_blank
       i.approver_datetime.should be_blank
+      i.due_date.should be_blank
       i.approve!
 
       i.should be_is_approved
       i.approver_id.should eq(11)
       i.approver_datetime.should be_is_a(Time)
+      i.due_date.should_not be_blank
     end
 
     it "only set the approve when it's draft" do

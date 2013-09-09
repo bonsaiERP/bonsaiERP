@@ -11,8 +11,11 @@ describe Incomes::Form do
   let(:details_total) { details.inject(0) {|s, v| s+= v[:quantity] * v[:price] } }
 
   let(:contact) { build :contact, id: 1 }
+
+  let(:today) { Date.today }
+
   let(:valid_params) { {
-      date: Date.today, contact_id: 1, total: total,
+      date: today, due_date: (today + 3.days), contact_id: 1, total: total,
       currency: 'BOB', bill_number: "I-0001", description: "New income description",
       income_details_attributes: details
     }
@@ -134,7 +137,10 @@ describe Incomes::Form do
       i.should be_is_a(Income)
       i.should be_is_approved
       i.should be_active
-      i.due_date.should eq(i.date)
+
+      i.date.should eq(today)
+      i.due_date.should eq(today + 3.days)
+
       i.approver_id.should eq(UserSession.id)
       i.approver_datetime.should be_is_a(Time)
     end
@@ -359,4 +365,25 @@ describe Incomes::Form do
     expect(is).to_not be_valid
     is.errors[:total].should_not be_blank
   end
+
+  #describe "clone" do
+    #before(:each) do
+      #AccountLedger.any_instance.stub(valid?: true)
+      #Income.any_instance.stub(valid?: true)
+      #IncomeDetail.any_instance.stub(valid?: true)
+      #Item.stub_chain(:where, pluck: [[1, 10], [2, 20.0]])
+      #ConciliateAccount.any_instance.stub(account_to: double(save: true, :amount= => true, amount: 1))
+    #end
+
+    #it "#clone" do
+      #inc = Incomes::Form.new_income(valid_params)
+
+      #inc.create.should be_true
+      #inc.income.id.should be_present
+
+      #inc2 = Income::Form.clone(inc.income.id)
+
+      #inc2.income.items.should have(2).items
+    #end
+  #end
 end

@@ -27,7 +27,7 @@ class IncomesController < ApplicationController
 
   # GET /incomes/new
   def new
-    @is = Incomes::Form.new_income
+    @is = params[:id].present? ? Incomes::Clone.new(params[:id]).clone : Incomes::Form.new_income
   end
 
   # GET /incomes/1/edit

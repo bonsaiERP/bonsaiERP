@@ -68,72 +68,73 @@ class Movements::Form < BaseForm
     res
   end
 
-private
-  # copies new from movement to the Movements::Form
-  def copy_new_defaults
-    self.currency = @movement.currency
-    self.date = Date.today
-    self.total = total || 0
-  end
+  private
 
-  # Sets default values so it does not generate errors
-  def clean_attributes(attrs)
-    attrs[:total] = 0  if attrs[:total].blank?
-    attrs
-  end
-
-  def valid_service?
-    res = valid?
-    res = @movement.valid? && res
-    res = valid_ledger? && res if direct_payment?
-
-    res
-  end
-
-  def set_direct_payment
-    build_ledger
-    @movement.state = 'paid'
-  end
-
-  def save_ledger
-    @ledger.account_id = @movement.id
-
-    @ledger.save_ledger
-  end
-
-  def save_service(res, &block)
-    res = commit_or_rollback{ block.call } if res
-
-    unless res
-      @movement.errors.messages.select{|k| @movement.errors.delete(k) if k =~ /\w+_details/ }
-      set_errors(*[@movement, @ledger].compact)
+    # copies new from movement to the Movements::Form
+    def copy_new_defaults
+      self.currency = @movement.currency
+      self.date = Date.today
+      self.total = total || 0
     end
 
-    res
-  end
+    # Sets default values so it does not generate errors
+    def clean_attributes(attrs)
+      attrs[:total] = 0  if attrs[:total].blank?
+      attrs
+    end
 
-  def set_update_data(attrs = {})
-    @history = TransactionHistory.new
-    @history.set_history(@movement)
-    self.attributes = attrs.slice(*attributes_for_update)
-    MovementService.new(@movement).set_update(attrs)
-  end
+    def valid_service?
+      res = valid?
+      res = @movement.valid? && res
+      res = valid_ledger? && res if direct_payment?
 
-  def valid_ledger?
-    @ledger.valid?
-    @ledger.errors.keys.sort === [:account, :account_id] || @ledger.errors.keys.empty?
-  end
+      res
+    end
 
-  # validates unique items
-  def unique_item_ids
-    UniqueItem.new(self).valid?
-  end
+    def set_direct_payment
+      build_ledger
+      @movement.state = 'paid'
+    end
 
-  def direct_payment?
-    direct_payment === true
-  end
+    def save_ledger
+      @ledger.account_id = @movement.id
 
-  def attributes_for_update
-    ATTRIBUTES.reject {|v| v === :contact_id }
-  end
+      @ledger.save_ledger
+    end
+
+    def save_service(res, &block)
+      res = commit_or_rollback{ block.call } if res
+
+      unless res
+        @movement.errors.messages.select{|k| @movement.errors.delete(k) if k =~ /\w+_details/ }
+        set_errors(*[@movement, @ledger].compact)
+      end
+
+      res
+    end
+
+    def set_update_data(attrs = {})
+      @history = TransactionHistory.new
+      @history.set_history(@movement)
+      self.attributes = attrs.slice(*attributes_for_update)
+      MovementService.new(@movement).set_update(attrs)
+    end
+
+    def valid_ledger?
+      @ledger.valid?
+      @ledger.errors.keys.sort === [:account, :account_id] || @ledger.errors.keys.empty?
+    end
+
+    # validates unique items
+    def unique_item_ids
+      UniqueItem.new(self).valid?
+    end
+
+    def direct_payment?
+      direct_payment === true
+    end
+
+    def attributes_for_update
+      ATTRIBUTES.reject {|v| v === :contact_id }
+    end
 end

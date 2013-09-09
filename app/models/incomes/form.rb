@@ -47,30 +47,31 @@ class Incomes::Form < Movements::Form
     copy_new_defaults
   end
 
-private
-  def build_ledger
-    @ledger = AccountLedger.new(
-      account_id: income.id, amount: income.total,
-      account_to_id: account_to_id, date: date,
-      operation: 'payin', exchange_rate: 1,
-      currency: income.currency, inverse: false,
-      reference: get_reference
-    )
-  end
+  private
 
-  def get_reference
-    reference.present? ? reference : I18n.t('income.payment.reference', income: income)
-  end
+    def build_ledger
+      @ledger = AccountLedger.new(
+        account_id: income.id, amount: income.total,
+        account_to_id: account_to_id, date: date,
+        operation: 'payin', exchange_rate: 1,
+        currency: income.currency, inverse: false,
+        reference: get_reference
+      )
+    end
 
-  def income_is_valid
-    self.errors.add :base, I18n.t('errors.messages.income.payments') unless income.total === income.balance
-  end
+    def get_reference
+      reference.present? ? reference : I18n.t('income.payment.reference', income: income)
+    end
 
-  def valid_account_to
-    self.errors.add(:account_to_id, I18n.t('errors.messages.quick_income.valid_account_to')) unless account_to.present?
-  end
+    def income_is_valid
+      self.errors.add :base, I18n.t('errors.messages.income.payments') unless income.total === income.balance
+    end
 
-  def account_to
-    @account_to ||= AccountQuery.new.bank_cash.where(currency: currency, id: account_to_id).first
-  end
+    def valid_account_to
+      self.errors.add(:account_to_id, I18n.t('errors.messages.quick_income.valid_account_to')) unless account_to.present?
+    end
+
+    def account_to
+      @account_to ||= AccountQuery.new.bank_cash.where(currency: currency, id: account_to_id).first
+    end
 end
