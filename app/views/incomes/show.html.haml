@@ -74,7 +74,7 @@
     .moneybox
       %label SALDO
       %h5.n
-        = ntc @income.balance
+        %span#balance(data-amount="#{@income.balance}")= ntc @income.balance
         = currency_label @income.currency
 
     - unless OrganisationSession.currency === @income.currency
@@ -108,7 +108,7 @@
 
   - if @income.enable_disable_inventory?
     %li
-      = link_to inventory_income_path(@income.id, no_inventory: @income.enable_disable_inventory_val), method: 'put', class: 'no-tab' do
+      = link_to inventory_income_path(@income.id, no_inventory: @income.enable_disable_inventory_val), method: 'patch', class: 'no-tab' do
         %span.fs70
           &nbsp;&nbsp;
           = @income.enable_disable_inventory_text_tag

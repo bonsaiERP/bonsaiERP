@@ -80,23 +80,23 @@ class ItemsController < ApplicationController
     redirect_ajax @item
   end
 
-private
-  def set_item
-    @item = Item.find(params[:id])
-  end
+  private
 
-  def search_items
-    if search_term.present?
-      @items = Item.search(search_term).includes(:unit).order('name asc').page(@page)
-    else
-      @items = Item.includes(:unit, :stocks).order('name asc').page(@page)
+    def set_item
+      @item = Item.find(params[:id])
     end
-    
-    @items = @items.all_tags(*tag_ids)  if params[:search] && has_tags?
-  end
 
-  def item_params
-    params.require(:item).permit(:code, :name, :active, :stockable,
-                                 :for_sale, :price, :buy_price, :unit_id, :description)
-  end
+    def search_items
+      @items = Item.includes(:unit, :stocks)
+      @items = @items.for_sale  if params[:for_sale].present?
+      @items = @items.search(search_term).includes(:unit)  if search_term.present?
+      @items = @items.all_tags(*tag_ids)  if params[:search] && has_tags?
+
+      @items = @items.order('name asc').page(@page)
+    end
+
+    def item_params
+      params.require(:item).permit(:code, :name, :active, :stockable,
+                                   :for_sale, :price, :buy_price, :unit_id, :description)
+    end
 end

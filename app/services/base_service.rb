@@ -18,27 +18,28 @@ class BaseService
     false
   end
 
-private
-  def set_errors(*models)
-    models.compact.each do |mod|
-      mod.errors.each do |k, v|
-        if self.respond_to?(k)
-          self.errors[k] << v
-        else
-          self.errors[:base] << v
+  private
+
+    def set_errors(*models)
+      models.compact.each do |mod|
+        mod.errors.each do |k, v|
+          if self.respond_to?(k)
+            self.errors[k] << v
+          else
+            self.errors[:base] << v
+          end
         end
       end
     end
-  end
 
-  # Returns true if calls
-  def commit_or_rollback(&b)
-    res = true
-    ActiveRecord::Base.transaction do
-      res = b.call
-      raise ActiveRecord::Rollback unless res
+    # Returns true if calls
+    def commit_or_rollback(&b)
+      res = true
+      ActiveRecord::Base.transaction do
+        res = b.call
+        raise ActiveRecord::Rollback  unless res
+      end
+
+      res
     end
-
-    res
-  end
 end

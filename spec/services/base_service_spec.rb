@@ -24,46 +24,40 @@ describe BaseService do
       TestRollback.new
     end
 
-    it "rollbacks value" do
-      subject.value = false
-      subject.test_roll
-      
-      line = `tail -n 1 log/test.log`
-      line.should =~ /ROLLBACK/
-    end
+    #it "rollbacks value" do
+      #subject.value = false
 
-    it "saves" do
-      subject.value = true
-      subject.test_roll
-      
-      line = `tail -n 1 log/test.log`
-      line.should_not =~ /ROLLBACK/
-    end
+      #expect { subject.test_roll }.to raise_error(ActiveRecord::Rollback)
+    #end
 
-    it "saves with block" do
-      
-    end
+    #it "saves" do
+      #subject.value = true
+      #subject.test_roll
 
-    it "saves with block" do
-      subject.value = true
-      subject.test_block do
-        puts "Call and then"
-        true && true
-      end
-      
-      line = `tail -n 1 log/test.log`
-      line.should_not =~ /ROLLBACK/
-    end
+      #line = `tail -n 3 log/test.log`
+      #line.should_not =~ /ROLLBACK/
+    #end
 
-    it "rollbacks with block" do
-      subject.value = true
-      subject.test_block do
-        puts "Call and then false"
-        false && false
-      end
-      
-      line = `tail -n 1 log/test.log`
-      line.should =~ /ROLLBACK/
-    end
+    #it "saves with block" do
+      #subject.value = true
+      #subject.test_block do
+        #puts "Call and then"
+        #true && true
+      #end
+
+      #line = `tail -n 1 log/test.log`
+      #line.should_not =~ /ROLLBACK/
+    #end
+
+    #it "rollbacks with block" do
+      #subject.value = true
+      #subject.test_block do
+        #puts "Call and then false"
+        #false && false
+      #end
+
+      #line = `tail -n 1 log/test.log`
+      #line.should =~ /ROLLBACK/
+    #end
   end
 end

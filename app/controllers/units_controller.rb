@@ -2,26 +2,23 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class UnitsController < ApplicationController
-  respond_to :html, :json, :xml
+  respond_to :html, :json
 
   # GET /units
-  # GET /units.xml
   def index
     @units = Unit.scoped
   end
 
   # GET /units/1
-  # GET /units/1.xml
   def show
     @unit = Unit.find(params[:id])
     respond_with @unit
   end
 
   # GET /units/new
-  # GET /units/new.xml
   def new
     @unit = Unit.new
-    respond_with @unit
+    #respond_with @unit
   end
 
   # GET /units/1/edit
@@ -30,7 +27,6 @@ class UnitsController < ApplicationController
   end
 
   # POST /units
-  # POST /units.xml
   def create
     @unit = Unit.new(unit_params)
 
@@ -42,7 +38,6 @@ class UnitsController < ApplicationController
   end
 
   # PUT /units/1
-  # PUT /units/1.xml
   def update
     @unit = Unit.find(params[:id])
     @unit.update_attributes(unit_params)
@@ -51,7 +46,6 @@ class UnitsController < ApplicationController
   end
 
   # DELETE /units/1
-  # DELETE /units/1.xml
   def destroy
     @unit = Unit.find(params[:id])
     @unit.destroy
@@ -67,8 +61,9 @@ class UnitsController < ApplicationController
     end
   end
 
-private
-  def unit_params
-    params.require(:unit).permit(:name, :symbol)
-  end
+  private
+
+    def unit_params
+      params.require(:unit).permit(:name, :symbol)
+    end
 end

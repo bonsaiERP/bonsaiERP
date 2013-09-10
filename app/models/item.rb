@@ -35,6 +35,7 @@ class Item < ActiveRecord::Base
   scope :active   , -> { where(active: true) }
   scope :income   , -> { where(active: true, for_sale: true) }
   scope :inventory, -> { where(stockable: true) }
+  scope :for_sale , -> { where(for_sale: true) }
   scope :search   , ->(s) {
     s = "%#{s}%"
     where{(name.like "#{s}") | (code.like "#{s}")}
