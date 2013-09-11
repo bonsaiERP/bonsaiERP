@@ -453,6 +453,37 @@ namespace :bonsai do
       end
     end
   end
+
+  desc 'Create demo users'
+  task create_demo_users: :environment do
+    ActiveRecord::Base.transaction do
+      org = Organisation.find_by(tenant: 'demo')
+      user = User.new(email: 'demo1@demo.com', password: 'demo1234', first_name: 'Darma',
+                      last_name: 'Demo', rol: 'demo')
+
+      user.save
+      user.confirm_registration
+      link = user.active_links.build(
+        organisation_id: org.id, tenant: org.tenant,
+        rol: 'demo', master_account: true
+      )
+      UserSession.user = user
+
+      link.save(validate: false)
+
+      user = User.new(email: 'demo3@demo.com', password: 'demo1234', first_name: 'Anton',
+                      last_name: 'Demo', rol: 'demo')
+
+      user.save
+      user.confirm_registration
+      link = user.active_links.build(
+        organisation_id: org.id, tenant: org.tenant,
+        rol: 'demo', master_account: true
+      )
+
+      link.save(validate: false)
+    end
+  end
 end
 
 # example to export the file
