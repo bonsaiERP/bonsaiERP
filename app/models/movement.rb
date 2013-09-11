@@ -139,6 +139,6 @@ class Movement < Account
     end
 
    def valid_currency_change
-     errors.add(:currency, I18n.t('errors.messages.movement.currency_change')) if ledgers.any?
+     errors.add(:currency, I18n.t('errors.messages.movement.currency_change'))  if currency_changed? && ledgers.any?
    end
 end

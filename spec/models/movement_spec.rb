@@ -107,13 +107,18 @@ describe Movement do
 
       i.save.should be_true
 
-      i.attributes = {currency: 'USD', exchange_rate: 7}
+      i.attributes = {currency: 'USD', exchange_rate: 7, total: 20}
       i.save.should be_true
 
       i.stub(ledgers: [build(:account_ledger)])
 
+      i.attributes = {currency: 'BOB', exchange_rate: 1, total: 140 }
+
       i.save.should be_false
       i.errors[:currency].should_not be_blank
+
+      i.attributes = {currency: 'USD', exchange_rate: 1, total: 30 }
+      i.save.should be_true
     end
   end
 end
