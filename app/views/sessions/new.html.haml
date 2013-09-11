@@ -18,7 +18,7 @@
           Iniciar sesión
       .pad.center.session
         = simple_form_for @session do |f|
-
+          = hidden_field :demo_login, params[:demo]
           = f.input :email, label: false do
             .input-prepend.cont-login
               %span.add-on.prepend.square
@@ -31,7 +31,7 @@
               = f.password_field :password, size: 30, placeholder: 'Contraseña'
 
           %p.c.fs110
-            = f.submit "Entrar", :class => "btn btn-success btn-large b"
+            = f.submit "Entrar", class: "btn btn-success btn-large b"
             <br/><br/>
             = link_to new_reset_password_path do
               %i.icon-key
@@ -49,4 +49,14 @@
       $('#password').hide(300);
       $('#login').show(300);
     });
+
+    var demos = ['demo@demo.com', 'demo1@demo.com', 'demo3@demo.com'];
+
+    if(#{params[:demo_login].present?}) {
+      var login = demos[Math.round(Math.random() * 2)];
+      $('#session_email').val(login);
+      $('#session_password').val('demo1234');
+      $('.btn-success').popoverNotitle({content: 'Haga click para ingresar'})
+      $('.btn-success').popover('show');
+    }
   });
