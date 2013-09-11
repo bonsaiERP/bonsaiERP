@@ -11,12 +11,12 @@ describe Organisation do
     it {should have_valid(:name).when("uno")}
     it {should_not have_valid(:name).when(" ", nil)}
 
-    it { should_not have_valid('tenant').when('common', 'public', 'www', 'demo') }
+    it { should_not have_valid('tenant').when('common', 'public', 'www', 'demo', 'app') }
     it { should have_valid('tenant').when('bonsai', 'other') }
 
     context 'Persisted organisation' do
-      subject(:organisation) { 
-        org = build :organisation, id: 10 
+      subject(:organisation) {
+        org = build :organisation, id: 10
         org.stub(persisted?: true)
         org
       }
@@ -34,11 +34,11 @@ describe Organisation do
   end
 
 
-  let(:valid_params) { 
+  let(:valid_params) {
     {
-      name:"Test", country_id:1, 
+      name:"Test", country_id:1,
       currency: 'BOB', tenant: 'another',
-      address: "Very near" 
+      address: "Very near"
     }
   }
 

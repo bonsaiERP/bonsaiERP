@@ -100,7 +100,7 @@ class Organisation < ActiveRecord::Base
     end
 
     def valid_tenant_not_in_list
-      if ['www', 'public', 'common', 'demo'].include?(tenant)
+      if ['www', 'public', 'common', 'demo', 'app'].include?(tenant)
         self.errors[:tenant] << I18n.t('organisation.errors.tenant.list')
       end
     end
