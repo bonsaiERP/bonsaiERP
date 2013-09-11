@@ -2,10 +2,9 @@
 %li.row-fluid.contact(data-data="#{contact.incomes_expenses_status.to_json}")
   .span3
     %h4
-      = link_to contact, contact
-    .clear-both
-    %h4 
-      %small= contact.complete_name
+      = link_to contact, contact, title: 'Identificado por'
+    .cleafix
+    %span(title='Nombre completo')= contact.complete_name
     .clearfix
     = contact.email_tag
 
