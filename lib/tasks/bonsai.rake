@@ -445,8 +445,12 @@ namespace :bonsai do
     PgTools.change_schema 'demo'
     20.times do
       l = lambda { rand(4) > 2 ? contact_data : org_data }
-      c = Contact.create l.call
-      puts c.matchcode
+      c = Contact.new l.call
+      if c.save
+        puts c.matchcode
+      else
+        puts c.errors.messages
+      end
     end
   end
 end
