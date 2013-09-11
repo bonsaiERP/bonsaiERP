@@ -4,7 +4,7 @@
 # Sets and Income or expense
 class MovementService
   attr_reader :errors, :klass, :movement
-  ATTRIBUTES = [:date, :contact_id, :total, :exchange_rate, :project_id, :due_date, :description].freeze
+  ATTRIBUTES = [:date, :contact_id, :total, :currency, :exchange_rate, :project_id, :due_date, :description].freeze
 
   delegate :discount, :total, to: :movement
   delegate :set_details, to: :mov_details

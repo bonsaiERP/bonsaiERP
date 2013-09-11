@@ -22,7 +22,7 @@ private
   def check_current_user!
     unless current_user.present?
       flash[:alert] = "Por favor ingrese."
-      redirect_to new_session_url(subdomain: false) and return
+      redirect_to new_session_url(subdomain: 'app') and return
     end
   end
 

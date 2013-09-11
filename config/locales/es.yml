@@ -259,6 +259,7 @@ es:
         paid_amount: "El total es menor a la cantidad %{pay_type}, le recomendamos realizar una devolución"
         number_of_items: "Debe ingresar seleccionar al menos un ítem"
         number_of_items: "Debe ingresar seleccionar al menos un ítemon"
+        currency_change: "No es posible cambiar la moneda, se realizaron operaciones."
       payment:
         balance: "La cantidad es mayor que el saldo"
         expense_balance: "La cantidad es mayor que el saldo del Egreso seleccionado"

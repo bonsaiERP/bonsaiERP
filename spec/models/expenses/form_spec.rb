@@ -360,5 +360,32 @@ describe Expenses::Form do
     expect(es).to_not be_valid
     es.errors[:total].should_not be_blank
   end
-end
 
+  describe "change of currency" do
+    before(:each) do
+      Expense.any_instance.stub(contact: contact)
+      ExpenseDetail.any_instance.stub(valid?: true)
+    end
+
+    it "change" do
+      es = Expenses::Form.new_expense(valid_params)
+      es.create_and_approve.should be_true
+
+      es = Expenses::Form.find(es.expense.id)
+
+      es.update({total: 245, exchange_rate: 2, currency: 'USD'}).should be_true
+
+      es.expense.total.should eq(245)
+      es.expense.exchange_rate.should eq(2)
+      es.expense.currency.should eq('USD')
+
+      Expense.any_instance.stub(ledgers: [build(:account_ledger)])
+
+      es = Expenses::Form.find(es.expense.id)
+
+      es.update({total: 490, exchange_rate: 1, currency: 'BOB'}).should be_false
+
+      es.errors[:currency].should eq([I18n.t('errors.messages.movement.currency_change')])
+    end
+  end
+end

@@ -23,6 +23,7 @@ class Movement < Account
   # Validations
   validates_presence_of :date, :contact, :contact_id
   validates :state, presence: true, inclusion: {in: STATES}
+  validate  :valid_currency_change, on: :update
 
   ########################################
   # Delegations
@@ -117,22 +118,27 @@ class Movement < Account
     is_approved? || is_paid?
   end
 
-private
-  def nulling_valid?
-    ['paid', 'approved'].include?(state_was) && is_nulled?
-  end
+  private
 
-  # Do not allow items to be destroyed if the quantity != balance
-  def check_items_balances
-    res = true
-    details.select(&:marked_for_destruction?).each do |det|
-      unless det.quantity === det.balance
-        det.errors.add(:quantity, I18n.t('errors.messages.trasaction_details.not_destroy'))
-        det.instance_variable_set(:@marked_for_destruction, false)
-        res = false
-      end
+    def nulling_valid?
+      ['paid', 'approved'].include?(state_was) && is_nulled?
     end
 
-    res
-  end
+    # Do not allow items to be destroyed if the quantity != balance
+    def check_items_balances
+      res = true
+      details.select(&:marked_for_destruction?).each do |det|
+        unless det.quantity === det.balance
+          det.errors.add(:quantity, I18n.t('errors.messages.trasaction_details.not_destroy'))
+          det.instance_variable_set(:@marked_for_destruction, false)
+          res = false
+        end
+      end
+
+      res
+    end
+
+   def valid_currency_change
+     errors.add(:currency, I18n.t('errors.messages.movement.currency_change')) if ledgers.any?
+   end
 end

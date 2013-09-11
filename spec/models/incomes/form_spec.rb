@@ -366,6 +366,34 @@ describe Incomes::Form do
     is.errors[:total].should_not be_blank
   end
 
+  describe "change of currency" do
+    before(:each) do
+      Income.any_instance.stub(contact: contact)
+      IncomeDetail.any_instance.stub(valid?: true)
+    end
+
+    it "change" do
+      is = Incomes::Form.new_income(valid_params)
+      is.create_and_approve.should be_true
+
+      is = Incomes::Form.find(is.income.id)
+
+      is.update({total: 245, exchange_rate: 2, currency: 'USD'}).should be_true
+
+      is.income.total.should eq(245)
+      is.income.exchange_rate.should eq(2)
+      is.income.currency.should eq('USD')
+
+      Income.any_instance.stub(ledgers: [build(:account_ledger)])
+
+      is = Incomes::Form.find(is.income.id)
+
+      is.update({total: 490, exchange_rate: 1, currency: 'BOB'}).should be_false
+
+      is.errors[:currency].should eq([I18n.t('errors.messages.movement.currency_change')])
+    end
+  end
+
   #describe "clone" do
     #before(:each) do
       #AccountLedger.any_instance.stub(valid?: true)

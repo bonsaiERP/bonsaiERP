@@ -91,4 +91,29 @@ describe Movement do
     e = Expense.new_expense
     expect(e.no_inventory).to be_false
   end
+
+  context 'change currency' do
+    let(:contact) { build :contact, id: 1 }
+    let(:user) { build :user, id: 1 }
+
+    before(:each) do
+      contact.stub(save: true)
+      UserSession.user = user
+    end
+
+    it "update currency" do
+      i = Income.new_income(currency: 'BOB', total: 140, exchange_rate: 1, date: Date.today, contact_id: contact.id)
+      i.stub(contact: contact, name: 'I-0001')
+
+      i.save.should be_true
+
+      i.attributes = {currency: 'USD', exchange_rate: 7}
+      i.save.should be_true
+
+      i.stub(ledgers: [build(:account_ledger)])
+
+      i.save.should be_false
+      i.errors[:currency].should_not be_blank
+    end
+  end
 end

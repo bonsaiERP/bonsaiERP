@@ -2,8 +2,8 @@
   = bonsai_form_error(f)
   .row-fluid
     .span6
-      = f.input :matchcode, 
-        label: 'Identificado <i class="icon-info-sign" title="Los campos nombres y apellidos se deducen a partir de este campo" data-toggle="tooltip"></i>'.html_safe, 
+      = f.input :matchcode,
+        label: 'Identificado <i class="icon-info-sign" title="Los campos nombres y apellidos se deducen a partir de este campo" data-toggle="tooltip"></i>'.html_safe,
         input_html: { class: 'matchcode' }
     .span3
       = f.input :first_name, label: "Nombres", input_html: { class: 'first_name', size: 20 }
@@ -21,7 +21,7 @@
     .span6
       = f.input :tax_number, label: "Código tributario"
     .span6
-      = f.input :address, as: :text, input_html: {rows: 3}, label: "Dirección"
+      = f.input :address, as: :text, input_html: {rows: 3, cols: 45}, label: "Dirección"
   .form-actions
     = f.submit "Salvar", class: 'btn btn-primary b'
 

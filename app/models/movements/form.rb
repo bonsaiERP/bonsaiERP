@@ -16,7 +16,8 @@ class Movements::Form < BaseForm
   attribute :account_to_id, Integer
   attribute :reference, String
 
-  ATTRIBUTES = [:date, :contact_id, :total, :exchange_rate, :project_id, :due_date, :description, :direct_payment, :account_to_id, :reference].freeze
+  ATTRIBUTES = [:date, :contact_id, :total, :currency, :exchange_rate, :project_id, :due_date,
+                :description, :direct_payment, :account_to_id, :reference].freeze
 
   attr_reader :movement, :ledger, :history
 
@@ -26,19 +27,19 @@ class Movements::Form < BaseForm
 
   # Finds the income and sets data with the income found
   def set_service_attributes(mov)
-    [:ref_number, :date, :due_date, :currency, :exchange_rate,
+    [:ref_number, :date, :due_date, :currency, :currency, :exchange_rate,
      :project_id, :description, :total].each do |attr|
       self.send(:"#{attr}=", mov.send(attr))
     end
 
-    @movement    = mov
+    @movement = mov
   end
 
   def create
-    set_direct_payment if direct_payment?
+    set_direct_payment  if direct_payment?
 
     res = valid_service?
-    @movement.balance = 0 if direct_payment?
+    @movement.balance = 0  if direct_payment?
 
     res = save_service(res) do
             res = @movement.save
@@ -52,10 +53,12 @@ class Movements::Form < BaseForm
 
   def update(attrs = {})
     set_update_data(attrs)
-    set_direct_payment if direct_payment?
+
+    set_direct_payment  if direct_payment?
 
     res = valid_service?
-    @movement.balance = 0 if direct_payment?
+
+    @movement.balance = 0  if direct_payment?
 
     res = save_service(res) do
             res = @history.save
@@ -116,6 +119,7 @@ class Movements::Form < BaseForm
     def set_update_data(attrs = {})
       @history = TransactionHistory.new
       @history.set_history(@movement)
+
       self.attributes = attrs.slice(*attributes_for_update)
       MovementService.new(@movement).set_update(attrs)
     end
@@ -135,6 +139,6 @@ class Movements::Form < BaseForm
     end
 
     def attributes_for_update
-      ATTRIBUTES.reject {|v| v === :contact_id }
+      ATTRIBUTES.reject {|v| v == :contact_id }
     end
 end
