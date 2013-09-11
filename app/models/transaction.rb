@@ -11,6 +11,8 @@ class Transaction < ActiveRecord::Base
   belongs_to :approver, class_name: 'User'
   belongs_to :nuller, class_name: 'User'
 
+  validates_lengths_from_database
+
   def self.transaction_columns
     self.column_names.reject {|k| %w(id account_id created_at updated_at).include? k }.map(&:to_sym)
   end

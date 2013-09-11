@@ -27,6 +27,7 @@ class Inventory < ActiveRecord::Base
   # Validations
   validates_presence_of :ref_number, :store_id, :store, :date
   validates_inclusion_of :operation, in: OPERATIONS
+  validates_lengths_from_database
 
   # attribute
   serialize :error_messages, JSON

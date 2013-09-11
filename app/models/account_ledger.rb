@@ -52,6 +52,8 @@ class AccountLedger < ActiveRecord::Base
   validates :reference,
             length: { within: 3..250, allow_blank: false }
 
+  validates_lengths_from_database
+
   ########################################
   # scopes
   scope :pendent, -> { where(status: 'pendent') }

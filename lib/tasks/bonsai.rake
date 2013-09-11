@@ -17,9 +17,9 @@ namespace :bonsai do
 
       puts %Q(locale #{locale} created)
     end
-  end  
+  end
 
-  desc 'Upates the currency rates with the latest from http://www.bcb.gob.bo/librerias/indicadores/otras/otras_imprimir.php?qdd=22&qmm=02&qaa=2011' 
+  desc 'Upates the currency rates with the latest from http://www.bcb.gob.bo/librerias/indicadores/otras/otras_imprimir.php?qdd=22&qmm=02&qaa=2011'
   task :update_currency_rates => :environment do
     require 'open-uri'
     d = Date.today
@@ -30,8 +30,8 @@ namespace :bonsai do
     euro = t.css('tr:eq(4) td:nth-child(4)').text.to_f
 
     currencies = [
-      {:date => d, :active => true, :currency_id => 2, :rate => dolar}, 
-      {:date => d, :active => true, :currency_id => 3, :rate => euro}, 
+      {:date => d, :active => true, :currency_id => 2, :rate => dolar},
+      {:date => d, :active => true, :currency_id => 3, :rate => euro},
     ]
     date = n.css('table:eq(2)>tr:eq(1)>td:eq(1)>span:eq(3)').text
     CurrencyRate.create_currencies(currencies)
@@ -60,7 +60,7 @@ namespace :bonsai do
     Contact.all.each do |c|
       unless c.account.present?
 
-        c.build_account(:currency_id => 1, :name => c.to_s) {|co| 
+        c.build_account(:currency_id => 1, :name => c.to_s) {|co|
           co.amount = 0
           co.original_type = c.class.to_s
         }
@@ -108,7 +108,7 @@ namespace :bonsai do
   end
 
   desc "Creates the default countries"
-  task :create_countries => :environment do 
+  task :create_countries => :environment do
     path = File.join(Rails.root, 'db/defaults/countries.yml')
     YAML.load_file(path).each do |c|
       OrgCountry.create!(c){|co| co.id = c['id'] }
@@ -141,8 +141,8 @@ namespace :bonsai do
     AccountLedger.connection.execute(sql)
     sql = <<-EOD
       UPDATE account_ledgers set account_ledgers.contact_id = (
-        SELECT accounts.accountable_id FROM accounts 
-        WHERE 
+        SELECT accounts.accountable_id FROM accounts
+        WHERE
         (accounts.accountable_type='Contact' AND accounts.id = account_ledgers.account_id)
         OR
         (accounts.accountable_type='Contact' AND accounts.id = account_ledgers.to_id)
@@ -296,7 +296,7 @@ namespace :bonsai do
           rescue
             res = '{}'
           end
-          
+
           Account.where(id: a[0]).update_all("error_messages='#{res}'")
         end
 
@@ -366,13 +366,87 @@ namespace :bonsai do
   desc 'Denormalizes the unit in items'
   task add_unit_to_items: :environment do
     PgTools.all_schemas.each  do |schema|
-      unless schema === 'common' 
+      unless schema === 'common'
         PgTools.change_schema schema
         puts "Updating units for items in schema #{schema}"
         Unit.all.each do |unit|
           Item.where(unit_id: unit.id).update_all(["unit_name=?, unit_symbol=?", unit.name, unit.symbol])
         end
       end
+    end
+  end
+
+  desc 'Creates the demo'
+  task create_demo: :environment do
+    org = Organisation.find_by(tenant: 'demo')
+    raise 'The demo organisation exists'  if org
+
+    ActiveRecord::Base.transaction do
+      org = Organisation.new(name: 'demo', tenant: 'demo', currency: 'USD', country_code: 'BO',
+                             phone: '591 2 775534', email: 'info@demo.com',
+                             address: "Cerca de aqui\nCalle Bueno\nNo. 123")
+      org.save(validate: false)
+
+
+      user = User.new(email: 'demo@demo.com', password: 'demo1234', first_name: 'Demo',
+                      last_name: 'Demoes', rol: 'demo')
+
+      user.save
+      user.confirm_registration
+      link = user.active_links.build(
+        organisation_id: org.id, tenant: org.tenant,
+        rol: 'demo', master_account: true
+      )
+      UserSession.user = user
+
+      link.save(validate: false)
+
+      PgTools.create_schema 'demo'
+      PgTools.clone_public_schema_to 'demo'
+      PgTools.change_schema 'demo'
+
+      PgTools.copy_migrations_to 'demo'
+
+      Unit.create_base_data
+      Store.create!(name: 'Almacen inicial')
+      cash = Cash.new_cash(name: 'Caja inicial', currency: org.currency)
+      cash.save!
+
+      puts 'Demo organisation created!'
+    end
+  end
+
+  def contact_data
+    f, l = Faker::Name.first_name, Faker::Name.last_name
+    {
+      matchcode: "#{f} #{l}", first_name: f, last_name: l,
+      email: Faker::Internet.email,
+      phone: [Faker::PhoneNumber.phone_number][rand(2)],
+      mobile: [Faker::PhoneNumber.phone_number][rand(2)],
+      tax_number: Faker::Identification.ssn,
+      address: [Faker::Address.street_address, Faker::Address.country].join("\n")
+    }
+  end
+
+  def org_data
+    f = Faker::Company.name
+    {
+      matchcode: f, first_name: f,
+      email: Faker::Internet.email,
+      phone: Faker::PhoneNumber.phone_number,
+      mobile: Faker::PhoneNumber.phone_number,
+      tax_number: Faker::Identification.ssn,
+      address: [Faker::Address.street_address, Faker::Address.country].join("\n")
+    }
+  end
+
+  desc 'Creates fake data'
+  task create_fake_data: :environment do
+    PgTools.change_schema 'demo'
+    20.times do
+      l = lambda { rand(4) > 2 ? contact_data : org_data }
+      c = Contact.create l.call
+      puts c.matchcode
     end
   end
 end

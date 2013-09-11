@@ -25,6 +25,8 @@ class Contact < ActiveRecord::Base
   validates_email_format_of :email, allow_blank: true,
     message: I18n.t('errors.messages.invalid_email_format')
 
+  validates_lengths_from_database
+
   ########################################
   # Scopes
   scope :clients, -> { where(client: true) }

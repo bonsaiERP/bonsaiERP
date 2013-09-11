@@ -7,6 +7,7 @@ class Tag < ActiveRecord::Base
 
   validates :bgcolor, presence: {message: I18n.t('errors.messages.taken')},
             format: {with: /\A\#[0-9abcdefABCDEF]{6}\z/}
+  validates_lengths_from_database
 
   scope :list, -> { select("id, name, bgcolor") }
 

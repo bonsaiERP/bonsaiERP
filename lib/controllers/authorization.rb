@@ -133,6 +133,47 @@ private
     }
   end
 
+
+  def demo_hash
+    {
+      admin_users: {show: true},
+      configurations: {index: true},
+      tests: false,
+      stocks: true,
+      inventories: true,
+      account_ledgers: true,
+      banks: true,
+      cashes: true,
+      transferences: true,
+      devolution: true,
+      payments: true,
+      devolutions: true,
+      projects: true,
+      incomes: true,
+      expenses: true,
+      stores: true,
+      contacts: true,
+      staffs: false,
+      items: true,
+      units: true,
+      users: { update: false, edit: true, show: true },
+      user_passwords: { new: true, create: false },
+      dashboard: true,
+      export_incomes: true,
+      export_expenses: true,
+      inventory_ins: true,
+      inventory_outs: true,
+      incomes_inventory_ins: true,
+      incomes_inventory_outs: true,
+      expenses_inventory_ins: true,
+      expenses_inventory_outs: true,
+      tags: true,
+      reports: true,
+      inventory_transferences: true,
+      download: true
+    }
+  end
+
   def other_hash
     {
       admin_users: false,
@@ -161,5 +202,4 @@ private
       download: true
     }
   end
-
 end

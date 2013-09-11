@@ -6,4 +6,5 @@ class UserChange < ActiveRecord::Base
 
   # Validations
   validates_presence_of :user, :user_id, :name
+  validates_lengths_from_database
 end

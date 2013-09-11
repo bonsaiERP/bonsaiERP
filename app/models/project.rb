@@ -9,6 +9,7 @@ class Project < ActiveRecord::Base
 
   # validations
   validates_presence_of :name
+  validates_lengths_from_database
 
   scope :active, -> { where(active: true) }
 

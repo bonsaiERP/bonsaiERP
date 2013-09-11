@@ -14,6 +14,7 @@ class Store < ActiveRecord::Base
   validates_uniqueness_of :name
   validates_length_of :name, minimum: 3
   validates_length_of :address, minimum: 5, allow_blank: true
+  validates_lengths_from_database
 
   # scopes
   scope :active, -> { where(active: true) }

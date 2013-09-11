@@ -15,6 +15,7 @@ class Unit < ActiveRecord::Base
   # validations
   validates_presence_of :name, :symbol
   validates_uniqueness_of :name, :symbol
+  validates_lengths_from_database
 
 
   def to_s

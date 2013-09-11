@@ -15,6 +15,10 @@ describe TenantCreator do
     let(:t) { TenantCreator.new(organisation) }
     let(:conf) { ActiveRecord::Base.connection_config }
 
+    before(:each) do
+      UserSession.user = build :user, id: 1
+    end
+
     it "has the correct config" do
       [:username, :database, :host, :password].each do |attr|
         conf[attr].should eq(t.send(attr))

@@ -28,6 +28,7 @@ class Item < ActiveRecord::Base
 
   validates :price, numericality: { greater_than_or_equal_to: 0 }
   validates :buy_price, numericality: { greater_than_or_equal_to: 0 }
+  validates_lengths_from_database
 
 
   ##########################################

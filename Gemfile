@@ -25,6 +25,7 @@ gem 'active_model_serializers' # ActiveRecord Classes to encode in JSON
 gem 'resubject' # Cool presenter
 
 gem 'validates_email_format_of', '~> 1.5.3'
+gem 'validates_lengths_from_database'
 #gem 'paperclip' # Attachments
 
 group :production do

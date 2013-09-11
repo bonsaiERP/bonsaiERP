@@ -18,6 +18,7 @@ class Account < ActiveRecord::Base
   validates_numericality_of :amount
   validates_inclusion_of :currency, in: CURRENCIES.keys
   validates_uniqueness_of :name
+  validates_lengths_from_database
 
   # attribute
   serialize :error_messages, JSON
