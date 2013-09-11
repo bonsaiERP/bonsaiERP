@@ -4,34 +4,17 @@
 class ProjectsController < ApplicationController
   before_filter :set_project, :only => [:show, :edit, :update, :destroy]
   # GET /projects
-  # GET /projects.xml
   def index
     @projects = Project.page(@page)
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @projects }
-    end
   end
 
   # GET /projects/1
-  # GET /projects/1.xml
   def show
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @project }
-    end
   end
 
   # GET /projects/new
-  # GET /projects/new.xml
   def new
     @project = Project.new(:active => true)
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @project }
-    end
   end
 
   # GET /projects/1/edit
@@ -67,13 +50,14 @@ class ProjectsController < ApplicationController
     redirect_ajax @project
   end
 
-private
-  def set_project
-    @project = Project.find(params[:id])
-  end
+  private
 
-  def project_params
-    params.require(:project).permit(:name, :active, :date_start,
-                                   :date_end, :description)
-  end
+    def set_project
+      @project = Project.find(params[:id])
+    end
+
+    def project_params
+      params.require(:project).permit(:name, :active, :date_start,
+                                     :date_end, :description)
+    end
 end

@@ -2,15 +2,16 @@
   = bonsai_form_error(f)
   .row-fluid
     .span4
-      = f.input :name, :label => 'Nombre', :input_html=> {:size => 28}
-    .span2
-      = f.input :active, :label => 'Activo', :as => :radio, :item_wrapper_class => 'inline'
+      = f.input :name, label: 'Nombre', input_htm: {size: 28}
+    .span2.form-inline
+      = f.input :active, label: 'Activo'
     .span3
-      = f.input :date_start, as: :datepicker, :label => 'Fecha inicio', :include_blank => true
+      = f.input :date_start, as: :datepicker, label: 'Fecha inicio', include_blank: true
     .span3
-      = f.input :date_end, as: :datepicker, :label => 'Fecha fin', :include_blank => true
+      = f.input :date_end, as: :datepicker, label: 'Fecha fin', include_blank: true
   .row-fluid
     .span6
-      = f.input :description, :label => "Descripción", :input_html => {:cols => 45, :rows => 5}
+      = f.input :description, label: "Descripción", input_html: {cols: 45, rows: 5}
+
   .form-actions
     = f.submit 'Salvar', class: 'btn btn-primary b'

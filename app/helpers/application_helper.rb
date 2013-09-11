@@ -92,11 +92,11 @@ module ApplicationHelper
   end
 
   alias :wcur :with_currency
-  
+
 
   def show_if_search
     if params[:search] || params[:search_div_id]
-      "display:block" 
+      "display:block"
     else
       "display:none"
     end

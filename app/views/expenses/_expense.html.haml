@@ -35,7 +35,7 @@
       = currency_label expense.currency
 
     .span6.r
-      = expense.amount
+      = ntc expense.amount
       = currency_label expense.currency
   .span1.r
     = link_to icon_edit, edit_expense_path(expense), class: 'dark' unless expense.is_nulled?

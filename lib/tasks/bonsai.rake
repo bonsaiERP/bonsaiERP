@@ -382,7 +382,7 @@ namespace :bonsai do
     raise 'The demo organisation exists'  if org
 
     ActiveRecord::Base.transaction do
-      org = Organisation.new(name: 'demo', tenant: 'demo', currency: 'USD', country_code: 'BO',
+      org = Organisation.new(name: 'demo', tenant: 'demo', currency: 'BOB', country_code: 'BO',
                              phone: '591 2 775534', email: 'info@demo.com',
                              address: "Cerca de aqui\nCalle Bueno\nNo. 123")
       org.save(validate: false)
