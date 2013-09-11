@@ -11,11 +11,11 @@ class Payment extends Backbone.Model
     type: ''
     accountsTo: []
     sameCurrency: true
-    totalCurrency: "0,00"
     baseCurrency: ''
   #
   initialize: ->
     @set('inverse', currency != @get('baseCurrency') )
+    @set('totalCurrency', _b.ntc(0))
     # select2 method to bind change
     @setAccountToSelect2()
     # set rivets

@@ -22,6 +22,12 @@
         currency: "#{currency}",
         name: "#{organisation_name}"
       }
+      _b.numSeparator = '.';
+      _b.numDelimiter = ' ';
+      $(function() {
+        _b.numSeparator = '.';
+        _b.numDelimiter = ' ';
+      })
 
   %body
 
@@ -59,3 +65,4 @@
           %a(href="http://twitter.com/#!/bonsaierp" target="_blank") Twitter
           &middot;
           %a(href="http://www.facebook.com/pages/BonsaiERP/337187402983197" target="_blank") Facebook
+

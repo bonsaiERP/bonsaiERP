@@ -11,7 +11,7 @@
 :javascript
   $(function() {
     var p = new App.IncomePayment({
-      accountsTo: #{AccountQuery.new.income_payment_options(income).to_json}, 
+      accountsTo: #{AccountQuery.new.income_payment_options(income).to_json},
       baseCurrency: "#{income.currency}"
     });
   })
