@@ -101,13 +101,14 @@
       $a.attr('href', $a.attr('href') + '#operations-tab');
     });
 
+    var $current;
     // minimum
     var $form = $('#edit-minimum-template'),
         $min = $form.find('#minimum'),
         $save = $form.find('#save-minimum');
 
     $('.item').on('click', '.edit-minimum-link', function() {
-      $this = $(this);
+      $current = $this = $(this);
       $parent = $this.parents('.minimum-stock');
 
       $min.val($this.data('minimum'));
@@ -139,10 +140,11 @@
       })
       .done(function(resp) {
         var sel = '#' + resp.id + '.item';
-        console.log(resp, sel);
+
         if(resp.success) {
           $(sel).find('.minimum-stock').show()
           .find('.min').text(_b.ntc(resp.minimum));
+          $current.data('minimum', resp.minimum);
         }else{
           $(sel).find('.minimum-stock').show();
         }
