@@ -19,7 +19,7 @@ describe Incomes::InventoryOut do
   }
 
   let(:valid_attributes) {
-    {store_id: 1, date: Date.today, description: 'Test inventory out', 
+    {store_id: 1, date: Date.today, description: 'Test inventory out',
      income_id: income.id,
      inventory_details_attributes: [
        {item_id: 1, quantity: 2},
@@ -98,7 +98,7 @@ describe Incomes::InventoryOut do
       Stock.any_instance.stub(item: item, store: store)
       # Create with the function
       create_inventory_in.should be_true
-      
+
       # Create
 
       invout = Incomes::InventoryOut.new(valid_attributes)
@@ -109,7 +109,7 @@ describe Incomes::InventoryOut do
 
       inv = Inventory.find(invout.inventory.id)
       inv.should be_is_a(Inventory)
-      
+
       expect(inv.account_id).to eq(income.id)
 
       expect(inv).to be_is_inc_out
@@ -142,6 +142,7 @@ describe Incomes::InventoryOut do
       inc.balance_inventory.should == 0
       inc.details[0].balance.should == 0
       inc.details[1].balance.should == 0
+      inc.should be_delivered
 
       io = Inventory.find(invout.inventory.id)
       io.should be_has_error

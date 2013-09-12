@@ -27,7 +27,7 @@
       %a.edit-ledger-reference-link.dark(href='javascript:;' title='Editar referencia' data-toggle='tooltip' data-id='#{@ledger.id}' data-reference='#{@ledger.reference}')
         %i.icon-pencil
       %i.icon-file.muted(data-toggle='tooltip' title="referencia")
-        %span.reference= nl2br @ledger.reference
+      %span.reference= nl2br @ledger.reference
 
   .span3.r
     .moneybox.fr
@@ -45,8 +45,15 @@
       = ntc @ledger.exchange_rate, precision: 4
       = currency_tag @ledger.account_currency
 
+- if @ledger.account.is_a?(Movement)
+  %p
+    %h4.n
+      %span.muted Contacto:
+      = link_to @ledger.account_contact, @ledger.account_contact
 %p
   %h4.n
+
+
     %span.account
       %span.muted
         De

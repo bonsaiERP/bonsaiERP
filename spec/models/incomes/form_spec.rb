@@ -366,13 +366,13 @@ describe Incomes::Form do
     is.errors[:total].should_not be_blank
   end
 
-  describe "change of currency" do
+  describe "change of currency, inveny state" do
     before(:each) do
       Income.any_instance.stub(contact: contact)
       IncomeDetail.any_instance.stub(valid?: true)
     end
 
-    it "change" do
+    it "change of currency" do
       is = Incomes::Form.new_income(valid_params)
       is.create_and_approve.should be_true
 
@@ -391,6 +391,22 @@ describe Incomes::Form do
       is.update({total: 490, exchange_rate: 1, currency: 'BOB'}).should be_false
 
       is.errors[:currency].should eq([I18n.t('errors.messages.movement.currency_change')])
+    end
+
+    it "inventory_state" do
+      is = Incomes::Form.new_income(valid_params)
+      is.create_and_approve.should be_true
+
+      is.income_details.each {|v| v.update_column(:balance, 0) }
+
+      is = Incomes::Form.find(is.income.id)
+      is.update.should be_true
+      is.income.should be_delivered
+
+      is.income_details[0].update_column(:balance, 1)
+      is = Incomes::Form.find(is.income.id)
+      is.update.should be_true
+      expect(is.income).not_to be_delivered
     end
   end
 

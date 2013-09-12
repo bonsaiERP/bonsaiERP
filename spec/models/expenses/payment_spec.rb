@@ -23,7 +23,7 @@ describe Expenses::Payment do
   let(:expense) do
     Expense.new_expense(
       total: balance, balance: balance, currency: 'BOB', contact_id: contact.id
-    ) {|i| 
+    ) {|i|
       i.id = account_id
       i.contact = contact
     }
@@ -84,7 +84,7 @@ describe Expenses::Payment do
       p.ledger.should be_is_payout
       p.ledger.account_id.should eq(expense.id)
       # Only bank accounts are allowed to conciliate
-      p.ledger.should be_is_approved 
+      p.ledger.should be_is_approved
       p.ledger.reference.should eq(valid_attributes.fetch(:reference))
       p.ledger.date.should eq(valid_attributes.fetch(:date).to_time)
 
@@ -165,7 +165,7 @@ describe Expenses::Payment do
     let(:payment_with_income_attributes) {
       {
         account_id: expense.id, account_to_id: income.id, amount: 50,
-        exchange_rate: 1, verification: 'true', 
+        exchange_rate: 1, verification: 'true',
         date: Date.today, reference: 'Pay with expense'
       }
     }
@@ -272,7 +272,7 @@ describe Expenses::Payment do
 
       ep.pay.should be_true
       # Expense
-      ep.expense.balance.round(4).should == (100 - 1.0/7 * 10).round(4)
+      ep.expense.balance.to_f.should == (100 - 1.0/7 * 10).round(2)
       # Income
       ep.account_to.balance.should == 100 - 10
     end
@@ -317,7 +317,7 @@ describe Expenses::Payment do
       ep.amount.should == 200
       # expense
       ep.expense.currency.should eq('USD')
-      ep.expense.balance.should == (100 - 1/7.001 * 200).round(4)
+      ep.expense.balance.to_f.should == (100 - 1/7.001 * 200).round(2)
       # ledger
       ep.ledger.should be_inverse
       ep.amount.should == 200
