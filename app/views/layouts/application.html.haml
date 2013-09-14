@@ -8,9 +8,9 @@
     %link(rel= "shortcut icon" href="/favicon.ico" type="image/x-icon")
     = csrf_meta_tag
 
-    %title Bonsai
-    = stylesheet_link_tag "application", media: 'all'
+    %title bonsaiERP - #{current_organisation}
 
+    = stylesheet_link_tag "application", media: 'all'
     = javascript_include_tag "application"
 
   %body
@@ -52,7 +52,7 @@
 
     :javascript
       this.exchangeRates = #{set_exchange_rates};
-      this.currencies = #{CURRENCIES.to_json};
+      this.currencies = #{File.read Rails.root.join 'public', 'currencies.json' };
 
       bonsai.currency = this.currency = "#{currency}";
       this.organisation = {
