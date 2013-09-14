@@ -4,7 +4,7 @@
 module UserLogHelper
   def creator_label
     return user_icon(class: 'text creator', title: "CREADO: #{user_label_text creator, created_at}") if creator.present?
-    ""
+    ''
   end
 
   def approver_label

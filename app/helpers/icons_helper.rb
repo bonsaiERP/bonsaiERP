@@ -3,7 +3,7 @@ module IconsHelper
   ICONS = {new: 'plus-sign', edit: 'pencil', list: 'table', show: 'eye-open', delete: 'trash' }
 
   ICONS.each do |tit, icon|
-    define_method :"icon_#{tit}" do |title=nil|
+    define_method :"icon_#{tit}" do |title = nil|
       title ||= I18n.t("common.#{tit}")
       t = " title='#{title}' data-toggle='tooltip'"
 
@@ -12,7 +12,7 @@ module IconsHelper
 
     class_eval <<-CODE, __FILE__, __LINE__ + 1
       def icon_#{tit}_text
-        "<i class='icon-#{icon}'></i> #{I18n.t("common.#{tit}")}".html_safe  
+        "<i class='icon-#{icon}'></i> #{I18n.t("common.#{tit}")}".html_safe
       end
     CODE
   end

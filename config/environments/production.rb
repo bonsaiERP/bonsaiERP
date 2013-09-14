@@ -12,11 +12,10 @@ Bonsaierp::Application.configure do
   config.serve_static_assets = false
 
   # Compress JavaScripts and CSS
-  #config.assets.compress = true
+  # config.assets.compress = true
 
   # Don't fallback to assets pipeline if a precompiled asset is missed
   config.assets.compile = false
-
   config.assets.js_compressor  = :uglifier
   config.assets.css_compressor = :sass
   # Generate digests for assets URLs
@@ -80,15 +79,4 @@ Bonsaierp::Application.configure do
   }
 
   config.eager_load = true
-
-  #config.action_mailer.smtp_settings = {
-  #  :address => "smtp.gmail.com",
-  #  :port => "587",
-  #  :domain => "gmail.com",
-  #  :user_name => "bonsaierp",
-  #  :password => "M4ilBonsa!L4bs",
-  #  :authentication => "plain",
-  #  :enable_starttls_auto => true
-  #}
-
 end

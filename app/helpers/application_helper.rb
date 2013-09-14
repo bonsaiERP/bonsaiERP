@@ -15,7 +15,7 @@ module ApplicationHelper
   end
 
   def active?(val)
-    val ? "Activo" : "Inactivo"
+    val ? 'Activo' : 'Inactivo'
   end
 
   # Creates an otion link
@@ -36,7 +36,7 @@ module ApplicationHelper
   # Format addres to present on the
   def nl2br(val)
     unless val.blank?
-      t = val.gsub("\n", "<br/>")
+      t = val.gsub("\n", '<br/>')
       t.html_safe
     end
   end
@@ -50,7 +50,7 @@ module ApplicationHelper
     opts.delete(:controller)
     opts.delete(:action)
     opts.inject("") do |s,(k,v)|
-      sym = s.blank? ? "?" : "&"
+      sym = s.blank? ? '?' : '&'
       s << "#{sym}#{k}=#{v}"
     end
   end
@@ -60,7 +60,7 @@ module ApplicationHelper
   end
 
   def jqueryui_ul
-    content_tag(:ul, :class => 'ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all') do
+    content_tag(:ul, class: 'ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all') do
       yield
     end
   end
@@ -68,19 +68,19 @@ module ApplicationHelper
   def jquery_tabs(options = {}, &bl)
     id = options[:tab_id] || "tab"
 
-    content_tag(:div, :id => id, :class => "ui-tabs ui-widget ui-widget-content ui-corner-all") do
+    content_tag(:div, id: id, class: 'ui-tabs ui-widget ui-widget-content ui-corner-all') do
       yield
     end
   end
 
   def tab(text, url, type)
-    css = "ui-state-default ui-corner-top"
-    css << " ui-tabs-selected ui-state-active" if type === params[:tab]
+    css = 'ui-state-default ui-corner-top'
+    css << ' ui-tabs-selected ui-state-active' if type === params[:tab]
     content_tag(:li, link_to(text, url), :class => css)
   end
 
   def tab_panel
-    content_tag(:div, :class => "ui-tabs-panel ui-widget-content ui-corner-bottom") do
+    content_tag(:div, class: 'ui-tabs-panel ui-widget-content ui-corner-bottom') do
       yield
     end
   end
@@ -96,9 +96,9 @@ module ApplicationHelper
 
   def show_if_search
     if params[:search] || params[:search_div_id]
-      "display:block"
+      'display:block'
     else
-      "display:none"
+      'display:none'
     end
   end
 
@@ -114,22 +114,15 @@ module ApplicationHelper
     end
   end
 
-  ## For presenter logic
-  #def present(object, klass = nil)
-  #  klass ||= "#{object.class}Presenter".constantize
-  #  presenter = klass.new(object, self)
-  #  yield presenter if block_given?
-  #  presenter
-  #end
-
   # Get file with exchange_rates
   def set_exchange_rates
-    file1 = File.join(Rails.root, "public/exchange_rates.json")
-    file2 = File.join(Rails.root, "public/backup_rates.json")
+    file1 = Rails.root.join('public', 'exchange_rates.json')
+    file2 = Rails.root.join('public', 'backup_rates.json')
 
     if not(File.exists?(file1)) || (File.ctime(file1) < Time.now - 4.hours)
       begin
-        st = Timeout::timeout(4) { resp = %x[curl http://openexchangerates.org/api/latest.json?app_id=e406e4769281493797fcfd45047773d5] }
+        resp = ''
+        Timeout.timeout(4) { resp = %x[curl http://openexchangerates.org/api/latest.json?app_id=e406e4769281493797fcfd45047773d5] }
         r = ActiveSupport::JSON.decode(resp)
         if r['rates'].present?
           f = File.new(file2, "w+")
@@ -143,7 +136,7 @@ module ApplicationHelper
           File.read(file2)
         end
       rescue Exception => e
-        logger.warn "\n#Timeout::Error getting exchange_rates.json\n" if e.is_a?(Timeout::Error)
+        logger.warn "\n#Timeout::Error getting exchange_rates.json\n"  if e.is_a?(Timeout::Error)
 
         f = File.new(file1, 'w+')
         txt = File.read(file2)
@@ -158,9 +151,9 @@ module ApplicationHelper
 
   def flash_class(fla)
     case fla
-    when :error   then "alert alert-error"
-    when :alert, :warning then "alert alert-warning"
-    when :notice  then "alert alert-success"
+    when :error   then 'alert alert-error'
+    when :alert, :warning then 'alert alert-warning'
+    when :notice  then 'alert alert-success'
     end
   end
 
@@ -189,8 +182,8 @@ module ApplicationHelper
   end
 
   def tags_list
-    Tag.select("id,name,bgcolor").order("name").map {|v|
-      {id: v.id, text: v.to_s, label: v.to_s, bgcolor: v.bgcolor}
+    Tag.select("id,name,bgcolor").order("name").map { |v|
+      { id: v.id, text: v.to_s, label: v.to_s, bgcolor: v.bgcolor }
     }.to_json
   end
 

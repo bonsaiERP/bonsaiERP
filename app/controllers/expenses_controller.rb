@@ -31,7 +31,7 @@ class ExpensesController < ApplicationController
   def create
     @es = Expenses::Form.new_expense(expense_params)
 
-    if create_or_approve
+    if @es.create_and_approve
       redirect_to @es.expense, notice: 'Se ha creado un Egreso.'
     else
       @es.movement.state = 'draft' # reset status
@@ -104,7 +104,7 @@ private
   # Creates or approves a Expenses::Form instance
   def create_or_approve
     if params[:commit_approve]
-      @es.create_and_approve 
+      @es.create_and_approve
     else
       @es.create
     end
