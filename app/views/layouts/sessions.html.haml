@@ -13,11 +13,6 @@
 
     = javascript_include_tag "application"
 
-    :javascript
-      this.exchangeRates = #{set_exchange_rates};
-      this.currencies = #{CURRENCIES.to_json};
-
-
   %body
     #wrapper.cont
       #menu
