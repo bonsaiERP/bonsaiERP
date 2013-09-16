@@ -3,14 +3,20 @@
     %li
       &nbsp;
 
+  %ul.span6.breadcrumbs.r
+    %a#help.dark(href='javascript:;')
+      %i.icon-question-sign
+      Ayuda
 
 .row-fluid
   .span6
     %h1 Items
   .span6.r
-    = link_to new_item_path, class: 'btn' do
+    = link_to new_item_path, class: 'btn', id: 'new-item-link' do
       %i.icon-plus-sign
       Nuevo ítem
+
+
 
 = render 'items/search'
 
@@ -23,6 +29,8 @@
     =render @items
 
 = paginate_html
+
+= render 'index_tour'
 
 :javascript
   $(function() {

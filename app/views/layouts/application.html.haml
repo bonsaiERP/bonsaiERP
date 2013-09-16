@@ -13,6 +13,12 @@
     = stylesheet_link_tag "application", media: 'all'
     = javascript_include_tag "application"
 
+    :javascript
+      this.organisation = {
+        currency: "#{currency}",
+        name: "#{organisation_name}"
+      }
+
   %body
 
     -# Header
@@ -54,11 +60,9 @@
       this.exchangeRates = #{set_exchange_rates};
       this.currencies = #{File.read Rails.root.join 'public', 'currencies.json' };
 
+      fx.rates = exchangeRates;
+
       bonsai.currency = this.currency = "#{currency}";
-      this.organisation = {
-        currency: "#{currency}",
-        name: "#{organisation_name}"
-      }
       _b.numSeparator = '.';
       _b.numDelimiter = ' ';
       $(function() {
