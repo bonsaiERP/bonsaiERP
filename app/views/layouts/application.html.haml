@@ -19,6 +19,9 @@
         name: "#{organisation_name}"
       }
 
+      this.exchangeRates = #{set_exchange_rates};
+      this.currencies = #{File.read Rails.root.join 'public', 'currencies.json' };
+
   %body
 
     -# Header
@@ -57,11 +60,6 @@
           %a(href="http://www.facebook.com/pages/BonsaiERP/337187402983197" target="_blank") Facebook
 
     :javascript
-      this.exchangeRates = #{set_exchange_rates};
-      this.currencies = #{File.read Rails.root.join 'public', 'currencies.json' };
-
-      fx.rates = exchangeRates;
-
       bonsai.currency = this.currency = "#{currency}";
       _b.numSeparator = '.';
       _b.numDelimiter = ' ';

@@ -1,0 +1,26 @@
+%ol#tour-items.joyride-list.hidden(data-joyride)
+  %li(data-sel="#new-item-link" data-text="Siguiente" data-tip-location='right')
+    %p
+      Haga click para crear un nuevo ítem
+
+  %li(data-sel=".buttons-list" data-text="Fin")
+    %p
+      Selccionando alguno de los botones y le aparecerá el formulario de busqueda o el de
+      etiquetas para aplicarlas en los ítems
+
+%ol#tour-items-empty.joyride-list.hidden(data-joyride)
+  %li(data-sel="#new-item-link" data-text="Fin" data-tip-location='right')
+    %p
+      No tiene ningún ítem, haga click para poder crear uno.
+
+:javascript
+  $(function() {
+    var t = new Plugin.Bride('#tour-items');
+    $('#help').click(function() { t.init() });
+
+    if(window.location.search == '' && $('#items-list li').length == 0) {
+      var t = new Plugin.Bride('#tour-items-empty');
+      t.init();
+    }
+  });
+
