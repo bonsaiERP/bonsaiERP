@@ -18,7 +18,7 @@ class SessionsController < ApplicationController
       session[:user_id] = @session.user_id
       flash[:notice] = "Ha ingresado correctamente."
 
-      redirect_to dashboard_url(host: UrlTools.domain, subdomain: @session.tenant) and return
+      redirect_to home_url(host: UrlTools.domain, subdomain: @session.tenant) and return
 
     when(!@session.authenticate? && 'resend_registration' == @session.status)
       RegistrationMailer.send_registration(@session).deliver

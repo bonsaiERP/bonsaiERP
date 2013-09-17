@@ -153,3 +153,27 @@ input.row-check
 .form-inline
   .boolean > label
     margin-left: 4px
+
+
+/*****************************************
+ * Especial conatiner for forms
+ */
+.form-container
+  display: none
+  margin: 4px
+  +border-radius
+  +box-shadow(0px 0px 3px $grayLight)
+  .title
+    +border-top-radius
+    padding: 0px 10px
+    background-color: $gray
+    color: white
+
+  .row, .row-fluid
+    padding: 0px 10px
+
+  .borders-y
+    padding: 10px
+
+  .form-actions
+    margin-bottom: 0px

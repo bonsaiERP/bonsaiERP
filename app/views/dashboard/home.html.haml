@@ -54,17 +54,40 @@
 %ol.unstyled
   %li.row-fluid
     .span6
-      Haga click en <strong>General</strong> y despues <strong>Nuevo ingreso</strong>
+      %p
+        %h4.round.bg-green 1
+        Haga click en <strong>General</strong> y despues <strong>Nuevo ingreso</strong>
       .well.well-small
         = image_tag 'workflow/menu-new-income.png'
 
     .span6
+      %p
+        %h4.round.bg-green 2
+        Utilize la ayuda
 
-  %li
-    Utilize la ayuda
+        %a.dark.b
+          %i.icon-question-sign
+          Ayuda
+        y cree un Ingreso
 
-    %a.dark.b
-      %i.icon-question-sign
-      Ayuda
-    y cree un ingreso, en caso de que quiera adicionar un contacto nuevo o
+      = image_tag 'workflow/new_income.png', class: 'polaroid'
 
+  %li.row-fluid
+    .span6
+      %p
+        %h4.round.bg-green 3
+        Realice los cobros
+
+      = image_tag 'workflow/new_payment.png', class: 'polaroid'
+
+    .span6
+      %p
+        %h4.round.bg-green 4
+        Finalmente entregue la mercadería
+
+      = image_tag 'workflow/give_inventory.png', class: 'polaroid'
+
+  %li.row-fluid
+    %p
+      Estos son los pasos básicos para poder completar un ingreso (Venta) recuerde de que
+      si desea puede desactivar el inventario para un ingreso.

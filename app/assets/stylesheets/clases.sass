@@ -349,25 +349,35 @@ ul.listing
   background-position: -572px -5px
 
 
+
+
 /*****************************************
- * Especial conatiner for forms
+ * borders
  */
-.form-container
-  display: none
-  margin: 4px
-  +border-radius
-  +box-shadow(0px 0px 3px $grayLight)
-  .title
-    +border-top-radius
-    padding: 0px 10px
-    background-color: $gray
-    color: white
 
-  .row, .row-fluid
-    padding: 0px 10px
+.polaroid
+  +box-shadow(0 0 3px $gray)
 
-  .borders-y
-    padding: 10px
+.round
+  +border-radius(50%)
+  background-color: $dark
+  color: white
+  display: inline-block
+  text-align: center
+  margin: 0px
+  vertical-align: middle
 
-  .form-actions
-    margin-bottom: 0px
+h2.round
+  width: 46px
+  height: 46px
+  line-height: 44px
+
+h3.round
+  width: 40px
+  height: 40px
+  line-height: 38px
+
+h4.round
+  width: 30px
+  height: 30px
+  line-height: 28px
