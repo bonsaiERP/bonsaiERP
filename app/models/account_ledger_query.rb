@@ -2,7 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class AccountLedgerQuery
-  def initialize(rel = AccountLedger.scoped)
+  def initialize(rel = AccountLedger)
     @rel = rel
   end
 

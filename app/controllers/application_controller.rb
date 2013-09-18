@@ -52,6 +52,11 @@ class ApplicationController < ActionController::Base
   end
   helper_method :current_organisation
 
+  def tenant
+    @tenant ||= current_organisation.try(:tenant)
+  end
+  helper_method :tenant
+
 protected
   # Creates the flash messages when an item is deleted
   def set_redirect_options(klass, options)

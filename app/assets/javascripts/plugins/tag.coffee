@@ -37,7 +37,8 @@ class TagEditor
   setAjaxResponse: (resp) ->
     if resp.id
       $(@sel).dialog('close')
-      tags.push(resp)
+      tags = tags.push({id: resp.id, text: resp.name, label: resp.name, bgcolor: resp.bgcolor})
+      tags = _.sort(tags, (v) -> v.name )
       $('#tags').trigger('btags:newtag', resp)
     else if resp.errors
       @setErrors(resp)
@@ -89,7 +90,7 @@ class TagSelector
     @setRemoveEvent()
     @$button.on 'click', @applyTags
 
-    $('#tags').on 'btags:newtag', (event, tag) => @updateSelect2(tag)
+    $('#tags').on 'btags:newtag', => @updateSelect2(tag)
   #
   setRemoveEvent: ->
     $('.btags').off('click', 'a.remove-tag')
@@ -99,9 +100,9 @@ class TagSelector
   # updates the select2 data with new tag as well for the
   # TagFormater.tags
   updateSelect2: (tag) ->
-    tag.text = tag.name
+    #tag.text = tag.name
     # Important update
-    TagFormater.tags[tag.id] = tag
+    # TagFormater.tags[tag.id] = tag
 
     @data.push tag
     $('#tags').select2('destroy')
@@ -189,7 +190,7 @@ TagFormater = {
   #
   tagList: ->
     h = {}
-    _.each(window.tags, (v) ->
+    _.each(tags, (v) ->
       v.label = v.text
       h[v.id] = v
     )
@@ -229,6 +230,7 @@ class TagSearch
 
     $('body').on 'btags:newtag', '#tags', =>
       @_getTags = @_tagLabels = false
+      @tagLabels()
   #
   tagLabels: ->
     @_tagLabels = @_tagLabels || _(tags).filter((v) -> v.text).map((v) -> v.text).value()

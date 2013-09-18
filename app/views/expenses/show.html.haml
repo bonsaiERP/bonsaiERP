@@ -88,8 +88,9 @@
 %hr
 
 %ul#tabs.nav.nav-pills.fs150
-  %li
-    %a.payment-link-tab(href="#payments" data-toggle='tab') Pagos
+  - unless @expense.is_draft?
+    %li
+      %a.payment-link-tab(href="#payments" data-toggle='tab') Pagos
 
   %li
     %a.item-link-tab(href="#items" data-toggle='tab')
@@ -112,33 +113,33 @@
 
     = render "expenses/items", expense: @expense
 
-  #payments.tab-pane.fade
-    %h2.n Pagos y devoluciones
+  - unless @expense.is_draft?
+    #payments.tab-pane.fade
+      %h2.n Pagos y devoluciones
 
-    .payment-buttons
-      - if !@expense.is_nulled? && !@expense.is_paid?
-        %a#payment-link.btn.btn-danger(href='javascript:;')
-          %i.icon-minus-sign
-          Pagar
+      .payment-buttons
+        - if !@expense.is_nulled? && !@expense.is_paid?
+          %a#payment-link.btn.btn-danger(href='javascript:;')
+            %i.icon-minus-sign
+            Pagar
 
-      - unless @expense.is_nulled?
-        %a#devolution-link.btn.btn-success(href='javascript:;')
-          %i.icon-plus-sign
-          Devolución
+        - unless @expense.is_nulled?
+          %a#devolution-link.btn.btn-success(href='javascript:;')
+            %i.icon-plus-sign
+            Devolución
 
-    #payment-form(style='display: none')
-      %hr
-      %h3 Pago
-      = render 'expenses/payment_form', expense: @expense  if @expense.can_pay?
+      #payment-form.form-container
+        %h3.title Pago
+        = render 'expenses/payment_form', expense: @expense  if @expense.can_pay?
 
-    #devolution-form(style='display: none')
-      %h3 Devolución
-      = render 'expenses/devolution_form', expense: @expense  if @expense.can_devolution?
+      #devolution-form.form-container
+        %h3.title Devolución
+        = render 'expenses/devolution_form', expense: @expense  if @expense.can_devolution?
 
-    %ul.unstyled.listing
-      = render partial: 'account_ledgers/movement', collection: @expense.payments, as: :ledger
+      %ul.unstyled.listing
+        = render partial: 'account_ledgers/movement', collection: @expense.payments, as: :ledger
 
-= render 'expenses/tour_devolution'
+  = render 'expenses/tour_devolution'
 
 :javascript
   $( function() {

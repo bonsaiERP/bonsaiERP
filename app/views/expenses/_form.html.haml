@@ -12,8 +12,15 @@
     =render "transactions/form_items", f: f, transaction: expense_service.expense, details: :expense_details
 
   .form-actions
-    -#= f.submit 'Salvar', class: 'btn b btn-large trans', name: 'commit_save', data: {show: 'trans.direct_payment| inverse'}
-    = f.submit 'Salvar y aprobar', class: 'btn btn-primary b btn-large', name: 'commit_approve' if expense_service.is_draft?
+    .ib
+      = f.submit 'Salvar borrador', class: 'btn b btn-large trans', name: 'commit_save', data: {show: 'trans.direct_payment| inverse'}
+      %br
+      %small.muted Salva un borrador o proforma
+    .ib
+      = f.submit 'Salvar y aprobar', class: 'btn btn-primary b btn-large', name: 'commit_approve' if expense_service.is_draft?
+      %br
+      %small.muted Salva y permite pagos
+
 
 -# Help tours
 = render 'expenses/tour'

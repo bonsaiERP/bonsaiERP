@@ -124,33 +124,35 @@
 
     = render "incomes/items", income: @income
 
-  #payments.tab-pane.fade
-    %h2.n Cobros y devoluciones
+  - unless @income.is_draft?
 
-    = @income.pendent_conciliations
+    #payments.tab-pane.fade
+      %h2.n Cobros y devoluciones
 
-    .payment-buttons
-      - if @income.can_pay?
-        %a.btn.btn-success(id='payment-link' href='javascript:;')
-          %i.icon-plus-sign
-          Cobrar
+      = @income.pendent_conciliations
 
-      - if @income.can_devolution?
-        %a.btn.btn-danger(id='devolution-link' href='javascript:;')
-          %i.icon-minus-sign
-          Devolución
+      .payment-buttons
+        - if @income.can_pay?
+          %a.btn.btn-success(id='payment-link' href='javascript:;')
+            %i.icon-plus-sign
+            Cobrar
+
+        - if @income.can_devolution?
+          %a.btn.btn-danger(id='devolution-link' href='javascript:;')
+            %i.icon-minus-sign
+            Devolución
 
 
-    #payment-form.form-container
-      %h3.title Cobro
-      = render 'incomes/payment_form', income: @income  if @income.can_pay?
+      #payment-form.form-container
+        %h3.title Cobro
+        = render 'incomes/payment_form', income: @income  if @income.can_pay?
 
-    #devolution-form.form-container(style='display: none')
-      %h3.title Devolución
-      = render 'incomes/devolution_form', income: @income  if @income.can_devolution?
+      #devolution-form.form-container(style='display: none')
+        %h3.title Devolución
+        = render 'incomes/devolution_form', income: @income  if @income.can_devolution?
 
-    %ul.unstyled.listing
-      = render partial: 'account_ledgers/movement', collection: @income.payments, as: :ledger
+      %ul.unstyled.listing
+        = render partial: 'account_ledgers/movement', collection: @income.payments, as: :ledger
 
 -#Tours
 = render 'incomes/tour_devolution'

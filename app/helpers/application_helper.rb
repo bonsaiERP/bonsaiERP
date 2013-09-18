@@ -181,8 +181,17 @@ module ApplicationHelper
     params[val].present? ? "b" : ""
   end
 
+  def cache_key_for_tags
+    @cache_key_for_tags ||= begin
+      count = Tag.count
+      max_updated_at = Tag.maximum(:updated_at).try(:utc).try(:to_s, :to_number)
+      "tags/all-#{count}-#{max_updated_at}"
+    end
+  end
+
   def tags_list
-    Tag.select("id,name,bgcolor").order("name").map { |v|
+    tags ||= Tag.list.order("name")
+    tags.map { |v|
       { id: v.id, text: v.to_s, label: v.to_s, bgcolor: v.bgcolor }
     }.to_json
   end
