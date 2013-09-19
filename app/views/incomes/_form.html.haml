@@ -17,9 +17,10 @@
       %br
       %small.muted Salva un borrador o proforma
     .ib
-      = f.submit value: 'Salvar y aprobar', class: 'btn b btn-large btn-primary', name: 'commit_approve' if income_service.is_draft?
-      %br
-      %small.muted Salva y permite cobros
+      - if income_service.is_draft?
+        = f.submit value: 'Salvar y aprobar', class: 'btn b btn-large btn-primary', name: 'commit_approve'
+        %br
+        %small.muted Salva y permite cobros
 
 
 -# Help tours

@@ -62,6 +62,17 @@ $( ->
 
   $.popoverNotitle = $.fn.popoverNotitle = popoverNotitle
 
+   # Set autocomplete values
+  setAutocompleteValues = (el, vals) ->
+    $el = $(el)
+    $el.val(vals.to_s)
+    $el.siblings('input:hidden').val(vals.id)
+
+  # Adds an option to select and selects that option
+  setSelectValues = (el, vals) ->
+    $el.append("<option value='vals.id'>#{vals.to_s}</option>")
+    $el.val(vals.id)
+
   # Calls the events afser ajax call on ajax form
   callEvents = (data, resp) ->
     return  unless data.elem
@@ -73,21 +84,10 @@ $( ->
     else
       switch
         when $el.hasClass('autocomplete')
-          setAutocompleteVals($el, resp)
+          setAutocompleteValues($el, resp)
         when $el.get(0).nodeName is 'SELECT'
-          setSelectVals($el resp)
+          setSelectValues($el resp)
 
-
-   # Set autocomplete values
-   setAutocompleteVals = (el, vals) ->
-     $el = $(el)
-     $el.val(vals.to_s)
-     $el.siblings('input:hidden').val(vals.id)
-
-   # Adds an option to select and selects that option
-   setSelectVals = (el, vals) ->
-     $el.append("<option value='vals.id'>#{vals.to_s}</option>")
-     $el.val(vals.id)
 
   ##########################################
   # Activates autocomplete for all autocomplete inputs

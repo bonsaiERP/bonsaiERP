@@ -48,7 +48,7 @@ describe Movement do
 
   context "can_devolution?" do
     let(:subject) {
-      m = Movement.new(amount: 100, state: 'draft')
+      m = Income.new_income(amount: 100, state: 'draft')
       m.build_transaction
       m.total =  100
       m
@@ -61,6 +61,7 @@ describe Movement do
       subject.should be_is_approved
 
       subject.should_not be_can_devolution
+      subject.balance.should == subject.total
     end
 
     it "total > balance" do

@@ -14,9 +14,15 @@
 
   .row-fluid
     .span6
-      = f.association :unit, label: "Unidad",
-                      input_html: { class: 'span10',
-                      data: {new_url: new_unit_path, trigger: 'new-unit', title: 'Nueva unidad'} }
+      .unit-control
+        = f.association :unit, label: "Unidad de medidad", input_html: { class: 'span10'}
+      .unit-form(style='display:none')
+        .form-inline
+          %input(type='text' id='unit_name' size='15' placeholder='Nombre' title='Nombre')
+          %input(type='text' id='unit_name' size='7' placeholder='Símbolo' title='Simbolo')
+          %btn#save-button.btn.btn-small.btn-primary Salvar
+          %btn#cancel-button.btn.btn-small Cancelar
+        %br
     .span6.form-inline
       .row-fluid
         .span6
@@ -47,8 +53,16 @@
 
 :javascript
   $(function() {
-    $('body').on('new_unit', function(e, resp) {
-      var label = resp.name + " (" + resp.symbol + ")";
-      $('#item_unit_id').createSelectOption(resp.id, label);
-    });
+    var html = ' <a href="javascript:;" id="new-unit-link" title="Nueva unidad de medida" class="btn dark" data-toggle="tooltip"><i class="icon-plus-sign"></i></a>';
+    $('#item_unit_id').after(html);
+
+    $('body').on('click', '#new-unit-link', function() {
+      $('.unit-form').show()
+      $('.unit-control').hide()
+    })
+
+    $('body').on('click', '#cancel-button', function() {
+      $('.unit-form').hide()
+      $('.unit-control').show()
+    })
   });

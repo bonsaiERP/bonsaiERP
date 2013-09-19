@@ -3,7 +3,7 @@
     %i.icon-signout
     Entregar mercadería
 
-- if @income.can_devolution?
+- if @income.inventory_was_moved?
   %a#inventory-devolution-link.btn.btn-danger(href='javascript:;')
     %i.icon-signin
     Devolución mercadería

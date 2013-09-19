@@ -122,7 +122,10 @@ class Movement < Account
   end
 
   def can_devolution?
-    !is_draft? && !is_nulled? && total > balance
+    return false  if is_draft? || is_nulled?
+    return false  if balance == total
+
+    true
   end
 
   def is_active?
