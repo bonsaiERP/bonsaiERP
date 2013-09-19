@@ -14,12 +14,17 @@
 
   .row-fluid
     .span6
-      .unit-control
-        = f.association :unit, label: "Unidad de medidad", input_html: { class: 'span10'}
+      .unit-control.input
+        = f.association :unit, label: "Unidad de medidad" do
+          = f.collection_select :unit_id, Unit.order('name asc'), :id, :to_s, {}, class: 'span10'
+          %a#new-unit-link.btn(title='Nueva unidad de medida' data-toggle='tooltip')
+            %i.icon-plus-sign
       .unit-form(style='display:none')
         .form-inline
-          %input(type='text' id='unit_name' size='15' placeholder='Nombre' title='Nombre')
-          %input(type='text' id='unit_name' size='7' placeholder='Símbolo' title='Simbolo')
+          %span
+            %input(type='text' id='unit_name' size='15' placeholder='Nombre' title='Nombre')
+          %span
+            %input(type='text' id='unit_symbol' size='7' placeholder='Símbolo' title='Símbolo')
           %btn#save-button.btn.btn-small.btn-primary Salvar
           %btn#cancel-button.btn.btn-small Cancelar
         %br
@@ -53,16 +58,62 @@
 
 :javascript
   $(function() {
-    var html = ' <a href="javascript:;" id="new-unit-link" title="Nueva unidad de medida" class="btn dark" data-toggle="tooltip"><i class="icon-plus-sign"></i></a>';
-    $('#item_unit_id').after(html);
-
     $('body').on('click', '#new-unit-link', function() {
-      $('.unit-form').show()
-      $('.unit-control').hide()
+      $('#save-button').prop('disabled', false);
+      $('.unit-form input').val('')
+      showHide('form');
     })
+    $('body').on('click', '#cancel-button', function() { showHide('control') });
 
-    $('body').on('click', '#cancel-button', function() {
-      $('.unit-form').hide()
-      $('.unit-control').show()
-    })
+    $('#save-button').on('click', function() {
+      $(this).prop('disabled', true);
+      formSubmit();
+    });
+
+    function showHide(elem) {
+      if(elem == 'form') {
+        $('.unit-form').show();
+        $('.unit-control').hide();
+      }else {
+        $('.unit-form').hide();
+        $('.unit-control').show()
+      }
+    }
+
+    function formSubmit() {
+      var data = {unit: {name: $('#unit_name').val(), symbol: $('#unit_symbol').val()}};
+      $.post('#{units_path}', data, function(resp) {
+        if(resp.id) {
+          createOptionAndSelect(resp);
+          showHide('control');
+        } else {
+          setErrors(resp);
+        }
+      })
+    }
+
+    function createOptionAndSelect(resp) {
+      var option = ['<option value="', resp.id, '">', resp.name , ' (', resp.symbol, ')','</option>'].join('')
+      $('#item_unit_id').append(option)
+      .val(resp.id);
+    }
+
+    function setErrors(resp) {
+      $('.unit-form .field_with_errors').removeClass('field_with_errors');
+      var err = resp.name
+          msg = [];
+      if(err && err.length > 0) {
+        $('#unit_name').parents('span').addClass('field_with_errors');
+        msg.push('Nombre: ' + err.join(","))
+      }
+      err = resp.symbol;
+      if(err && err.length > 0) {
+        $('#unit_symbol').parents('span').addClass('field_with_errors')
+        msg.push('Símbolo: ' + err.join(","))
+      }
+
+      if(msg.length > 0) {
+        alert("Existen errores\n" + msg.join("\n") );
+      }
+    }
   });

@@ -33,7 +33,11 @@ class UnitsController < ApplicationController
     if @unit.save
       redirect_ajax @unit
     else
-      render 'new'
+      if request.xhr?
+        render json: @unit.errors
+      else
+        render :new
+      end
     end
   end
 
@@ -57,7 +61,6 @@ class UnitsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to(units_url) }
-      format.xml  { head :ok }
     end
   end
 
