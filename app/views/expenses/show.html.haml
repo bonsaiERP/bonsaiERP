@@ -48,11 +48,12 @@
         = f.submit 'Aprobar', class: 'b btn btn-success'
     -# Null form
     - if @expense.can_null?
-      = form_for @expense, url: null_expense_path(@expense), html: {class: 'ib'} do |f|
+      = form_for @expense, url: null_expense_path(@expense), html: {class: 'ib', id: 'null-expense-form'} do |f|
         = f.submit 'Anular', class: 'b btn btn-danger'
 
-    = link_to icon_new_text, new_expense_path, class: 'btn'
-    = link_to icon_edit_text, edit_expense_path(@expense.id), class: 'btn' unless @expense.is_nulled?
+    .btn-group
+      = link_to icon_new_text, new_expense_path, class: 'btn'
+      = link_to icon_edit_text, edit_expense_path(@expense.id), class: 'btn' unless @expense.is_nulled?
 
 .row-fluid
   .span6
@@ -145,6 +146,13 @@
   $( function() {
     activeTab();
 
+    $('#null-expense-form').submit(function(event) {
+      if(confirm('Esta segur@ de anular el Engreso?')) {
+        return true;
+      }else{
+        return false;
+      }
+    })
     // Show hide
     $('#payment-link').click( function() {
       $('#payment-form').show('fast');

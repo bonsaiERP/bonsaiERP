@@ -121,4 +121,84 @@ describe Movement do
       i.save.should be_true
     end
   end
+
+  describe "#null!" do
+    let(:details) {
+      [{item_id: 1, quantity: 10, price: 10, balance: 10},
+       {item_id: 2, quantity: 10, price: 20.5, balance: 10}]
+    }
+
+    before(:each) do
+      IncomeDetail.any_instance.stub(valid?: true)
+      ExpenseDetail.any_instance.stub(valid?: true)
+      Income.any_instance.stub(valid?: true)
+      Expense.any_instance.stub(valid?: true)
+    end
+
+    let(:contact) { build :contact }
+    let(:income) {
+      i = Income.new_income(date: Date.today,
+        income_details_attributes: details, state: 'approved')
+      i.stub(contact: contact)
+      i.save(validate: false)
+      i
+    }
+    let(:expense) {
+      e = Expense.new_expense(date: Date.today,
+          expense_details_attributes: details, state: 'approved')
+      e.stub(contact: contact)
+      e.save(validate: false)
+      e
+    }
+
+    it "#null! Income" do
+      income.should be_is_approved
+      income.should be_persisted
+
+      det = income.income_details[0]
+      det.balance = 5
+      det.save.should be_true
+
+
+      # Can't null
+      income.reload
+      income.null!.should be_nil
+      income.should be_is_approved
+
+      # Update balance
+      det = IncomeDetail.find(det.id)
+      det.balance = 10
+      det.save.should be_true
+
+      # Allow null
+      income.reload
+      income.null!.should be_true
+      income.should be_is_nulled
+    end
+
+    it "#null! Expense" do
+      expense.should be_is_approved
+      expense.should be_persisted
+
+      det = expense.expense_details[0]
+      det.balance = 5
+      det.save.should be_true
+
+
+      # Can't null
+      expense.reload
+      expense.null!.should be_nil
+      expense.should be_is_approved
+
+      # Update balance
+      det = ExpenseDetail.find(det.id)
+      det.balance = 10
+      det.save.should be_true
+
+      # Allow null
+      expense.reload
+      expense.null!.should be_true
+      expense.should be_is_nulled
+    end
+  end
 end

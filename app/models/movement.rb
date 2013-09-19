@@ -97,10 +97,21 @@ class Movement < Account
   end
 
   def can_null?
-    total === amount && !is_nulled? && ledgers.pendent.empty? && !is_draft?
+    return false  if is_draft? || is_nulled?
+    return false  if ledgers.pendent.any?
+    return false  if inventory_was_moved?
+    total === amount
   end
 
-  alias :old_attributes :attributes
+  def inventory_was_moved?
+    details.any? {|v| v.quantity != v.balance }
+  end
+
+  def details;
+    []
+  end
+
+  alias_method :old_attributes, :attributes
   def attributes
     old_attributes.merge(transaction.attributes)
   end

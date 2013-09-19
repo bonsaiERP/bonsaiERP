@@ -13,13 +13,17 @@
 
   .form-actions
     .ib
-      = f.submit 'Salvar borrador', class: 'btn b btn-large trans', name: 'commit_save', data: {show: 'trans.direct_payment| inverse'}
-      %br
-      %small.muted Salva un borrador o proforma
+      - if expense_service.is_draft?
+        = f.submit 'Salvar borrador', class: 'btn b btn-large trans', name: 'commit_save', data: {show: 'trans.direct_payment| inverse'}
+        %br
+        %small.muted Salva un borrador o proforma
+      - else
+        = f.submit 'Salvar', class: 'btn b btn-large trans', name: 'commit_save', data: {show: 'trans.direct_payment| inverse'}
     .ib
-      = f.submit 'Salvar y aprobar', class: 'btn btn-primary b btn-large', name: 'commit_approve' if expense_service.is_draft?
-      %br
-      %small.muted Salva y permite pagos
+      - if expense_service.is_draft?
+        = f.submit 'Salvar y aprobar', class: 'btn btn-primary b btn-large', name: 'commit_approve'
+        %br
+        %small.muted Salva y permite pagos
 
 
 -# Help tours
