@@ -56,13 +56,8 @@ init = ($) ->
     data = params
     params = _.extend({
       'id': new Date().getTime(), 'title': '', 'width': 800, 'modal': true, 'resizable' : false, 'position': 'top',
-      #'close': (e, ui) ->
-        #e.stopInmidiatePropagation()
-        #e.preventDefault()
-        #ui.remove()
-        #$('.ui-widget-overlay').remove()
-        ##$('#' + div_id ).parents("[role=dialog]").detach()
     }, params)
+
     html = params['html'] || AjaxLoadingHTML()
     div_id = params.id
     div = document.createElement('div')
@@ -86,7 +81,14 @@ init = ($) ->
     $this = $(this)
     $this.data('ajax_id', id)
 
-    $div = createDialog( { 'title': $this.data('title'), 'new_record': $this.hasClass('new') } )
+    $div = createDialog({
+      title: $this.data('title'),
+      # Elem related with the call input, select, etc
+      elem: $this.data('elem'),
+      # Return response instead of calling default
+      return: $this.data('return')
+    })
+
     $div.load( $this.attr("href"), (resp, status, xhr, dataType) ->
       $this = $(this)
       $tit = $this.dialog('widget').find('.ui-dialog-title')
@@ -180,15 +182,16 @@ init = ($) ->
     $(this).find('[data-new-url]').each((i, el) ->
       data = $.extend({width: 800}, $(el).data() )
       title = data.title || "Nuevo"
+      trigger = data.trigger || 'ajax-call'
 
       $a = $('<a/>')
       css = {'margin-left': '5px'}
-      #css['margin-top'] = '-9px' unless $a.prev().hasClass('select2-autocomplete')
+
 
       $a
       .html('<i class="icon-plus-sign icon-large"></i>')
       .attr({href: data.newUrl, class: 'ajax btn btn-small', title: title, 'data-toggle': 'tooltip' })
-      .data({trigger: data.trigger, width: data.width})
+      .data({trigger: trigger, width: data.width, elem: el, return: data.return})
       .css(css)
 
       $a.insertAfter(el)

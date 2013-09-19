@@ -20,7 +20,7 @@
         - if fd.object.new_record?
           = fd.input :item, as: :autocomplete, label: false,
             input_html: {class: 'item_id span11', placeholder: 'Escriba para buscar el ítem',
-            data: {new_url: '/items/new', source: search_path(transaction), title: 'Crear ítem'} }
+            data: {new_url: '/items/new', source: search_path(transaction), title: 'Crear ítem', return: true} }
         - else
           = fd.object.item
           = fd.input :item_id, as: :hidden

@@ -132,6 +132,7 @@ class Transaction extends Backbone.Collection
     @$table = $('#items-table')
     @itemTemplate = _.template(itemTemplate)
 
+    @setEvents()
     @setList()
     @calculateSubtotal()
 
@@ -140,6 +141,8 @@ class Transaction extends Backbone.Collection
 
     # Because of calculations total is lost
     $('#total').val(total)
+  #
+  setEvents: ->
   #
   setAccountsTo: (@accountsTo) ->
     self = this
@@ -171,7 +174,7 @@ class Transaction extends Backbone.Collection
   #
   setList: ->
     @$table.find('tr.item').each (i, el) =>
-      @add($(el).data('item') )
+      @add(_.merge($(el).data('item'), {elem: el}))
       item = @models[@length - 1]
       rivets.bind(el, {item: item})
       item.setAutocompleteEvent(el)
@@ -180,7 +183,8 @@ class Transaction extends Backbone.Collection
     $tr = $(@getItemHtml()).insertBefore('#subtotal-line')
 
     $tr.createAutocomplete()
-    @add(rate: @transModel.get('rate') )
+    $tr.dataNewUrl()
+    @add(rate: @transModel.get('rate'), elem: $tr.get(0) )
     item = @models[@length - 1]
     rivets.bind($tr, {item: item})
     item.setAutocompleteEvent($tr)
@@ -200,6 +204,10 @@ class Transaction extends Backbone.Collection
   setCurrency: ->
     @each (el) =>
       el.set('rate', @transModel.get('rate'))
+  #
+  setAutocompleteVal: (tr, resp) ->
+    $auto = $(tr).find('input.autocomplete').val(resp.label)
+    $auto.siblings('input:hidden').val(resp.id)
 
 
 # Income
@@ -207,6 +215,23 @@ class Income extends Transaction
   getItemHtml: ->
     num = new Date().getTime()
     @itemTemplate(num: num, klass: 'incomes_form', det: 'income', search_path: 'search_income')
+  #
+  setEvents: ->
+    self = this
+    $('body').on('ajax-call', '.item_id', (event, resp) ->
+      tr = $(this).parents('tr').get(0)
+      mod = self.where(elem: tr)[0]
+      rate = self.transModel.get('rate')
+      price = _b.roundVal((resp.price * 1) * (1.0 / rate ), bonsai.presicion )
+
+      mod.set(
+        item_id: resp.id,
+        price: price,
+        original_price: resp.price,
+      )
+
+      self.setAutocompleteVal(tr, resp)
+    )
 
 # Expense
 class Expense extends Transaction
@@ -215,6 +240,22 @@ class Expense extends Transaction
     num = new Date().getTime()
     @itemTemplate(num: num, klass: 'expenses_form', det: 'expense', search_path: 'search_expense')
 
+  #
+  setEvents: ->
+    self = this
+    $('body').on('ajax-call', '.item_id', (event, resp) ->
+      tr = $(this).parents('tr').get(0)
+      mod = self.where(elem: tr)[0]
+      rate = self.transModel.get('rate')
+      price = _b.roundVal( (resp.buy_price * 1) * (1.0 / rate ), bonsai.presicion )
+
+      mod.set(
+        item_id: resp.id,
+        price: price,
+        original_price: resp.buy_price,
+      )
+      self.setAutocompleteVal(tr, resp)
+    )
 
 @App.Income = Income
 
@@ -226,8 +267,7 @@ itemTemplate = """<tr class="item form-inline" data-item="{"original_price":"0.0
       <div class="control-group autocomplete optional">
         <div class="controls">
           <input id="{{klass}}_{{det}}_details_attributes_{{num}}_item_id" name="{{klass}}[{{det}}_details_attributes][{{num}}][item_id]" type="hidden"/>
-          <input class="autocomplete optional item_id ui-autocomplete-input span11" data-source="/items/{{search_path}}.json" id="item_autocomplete" name="item_autocomplete" placeholder="Escriba para buscar el ítem" size="35" type="text" autocomplete="off"/>
-          <a href="/items/new" class="ajax btn btn-small" rel="tooltip" style="margin-left: 5px;" title="Crear ítem" data-toggle="tooltip"><i class="icon-plus-sign icon-large"></i></a>
+          <input class="autocomplete optional item_id ui-autocomplete-input span11" data-source="/items/{{search_path}}.json" id="item_autocomplete" name="item_autocomplete" placeholder="Escriba para buscar el ítem" size="35" type="text" autocomplete="off" data-new-url="/items/new" data-return="true" data-title="Crear ítem" />
         </div>
       </div>
     </td>

@@ -21,14 +21,13 @@ $( ->
 
     event.preventDefault()
     # Prevent from submiting the form.enter when hiting ENTER
-    return false if $(this).hasClass('enter') and window.keyPress == 13
+    return false  if $(this).hasClass('enter') and window.keyPress == 13
 
     $el = $(this)
     data = $el.serialize()
     $el.find('input, select, textarea').attr('disabled', true)
 
     $div = $el.parents('.ajax-modal:first')
-    new_record = if $div.data('ajax-type') == 'new' then true else false
     trigger = $div.data('trigger') or "ajax-call"
 
     $.ajax(
@@ -40,9 +39,9 @@ $( ->
     )
     .success (resp, status, xhr) ->
       if typeof resp == "object"
-        data['new_record'] = new_record
+        callEvents($div.data(), resp)
         $div.html('').dialog('destroy')
-        $('body').trigger(trigger, [resp])
+        #$('body').trigger(trigger, [resp])
       else if resp.match(/^\/\/\s?javascript/)
         $div.html('').dialog('destroy')
       else
@@ -63,6 +62,32 @@ $( ->
 
   $.popoverNotitle = $.fn.popoverNotitle = popoverNotitle
 
+  # Calls the events afser ajax call on ajax form
+  callEvents = (data, resp) ->
+    return  unless data.elem
+
+    $el = $(data.elem)
+
+    if data.return
+      $el.trigger('ajax-call', [resp])
+    else
+      switch
+        when $el.hasClass('autocomplete')
+          setAutocompleteVals($el, resp)
+        when $el.get(0).nodeName is 'SELECT'
+          setSelectVals($el resp)
+
+
+   # Set autocomplete values
+   setAutocompleteVals = (el, vals) ->
+     $el = $(el)
+     $el.val(vals.to_s)
+     $el.siblings('input:hidden').val(vals.id)
+
+   # Adds an option to select and selects that option
+   setSelectVals = (el, vals) ->
+     $el.append("<option value='vals.id'>#{vals.to_s}</option>")
+     $el.val(vals.id)
 
   ##########################################
   # Activates autocomplete for all autocomplete inputs
@@ -105,6 +130,7 @@ $( ->
     )
 
   $.fn.createAutocomplete = $.createAutocomplete = createAutocomplete
+
 
   ##########################################
   # Datepicker for simple_form
@@ -200,6 +226,7 @@ $( ->
   rowCheck = ->
     $(this).on('click', '>li,>tr', (event) ->
       target = event.target
+
       return true  if target.tagName is 'A'
 
       $check = $(this).find('input.row-check')
@@ -219,7 +246,9 @@ $( ->
       else
         $check.prop('checked', true)
         $row.addClass('selected')
+
     )
 
   $.rowCheck = $.fn.rowCheck = rowCheck
+
 )
