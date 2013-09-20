@@ -1,5 +1,4 @@
 - cache "income_payment_form-#{today_key}" do
-  %h3 Hola
   = simple_form_for income.income_payment, url: income_payment_path(income.id),
     html: {id: 'income-payment-form'} do |f|
     = bonsai_form_error(f)
