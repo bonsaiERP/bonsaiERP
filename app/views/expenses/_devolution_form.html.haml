@@ -1,4 +1,4 @@
-- cache 'expense_devolution_form' do
+- cache "expense_devolution_form-#{today_key}" do
   = simple_form_for expense.expense_devolution, url: expense_devolution_path(expense.id), html: {id: 'expense-devolution-form'} do |f|
     = bonsai_form_error(f)
     = f.hidden_field :account_id
