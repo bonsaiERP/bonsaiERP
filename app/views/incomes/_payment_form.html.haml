@@ -1,4 +1,5 @@
-- cache 'income_payment_form' do
+- cache "income_payment_form-today_key" do
+  %h3 Hola
   = simple_form_for income.income_payment, url: income_payment_path(income.id),
     html: {id: 'income-payment-form'} do |f|
     = bonsai_form_error(f)
@@ -10,8 +11,14 @@
       = f.submit "Cobrar", class: 'btn b btn-success'
       %a#cancel-payment-link.btn(hre='javascript:;') Cancelar
 
+-#binding.pry
 :javascript
   $(function() {
+    var cur = currencies["#{income.currency}"];
+      temp = _.template('<span class="label bg-black" title="{{name}}" data-toggle="tooltip">{{code}}</span>', cur);
+    console.log("#{income.currency}", cur);
+    $('#currency-label').append(temp);
+
     var p = new App.IncomePayment({
       accountsTo: #{AccountQuery.new.income_payment_options(income).to_json},
       baseCurrency: "#{income.currency}"

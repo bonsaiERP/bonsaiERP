@@ -68,7 +68,7 @@
         _b.numDelimiter = ' ';
       })
     -# Cache all tags
-    - cache [tenant, cache_key_for_tags] do
+    - cache cache_key_for_tags do
       :javascript
         this.tags = #{tags_list}
 

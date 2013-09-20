@@ -1,4 +1,4 @@
-- cache 'expense_payment_form' do
+- cache "expense_payment_form-#{today_key}" do
   = simple_form_for expense.expense_payment, url: expense_payment_path(expense.id),
     html: {id: 'expense-payment-form'} do |f|
     = bonsai_form_error(f)
