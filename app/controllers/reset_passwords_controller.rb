@@ -5,7 +5,6 @@ class ResetPasswordsController < ApplicationController
   #include ActionView::Helpers::UrlHelper
   layout 'sessions'
   skip_before_filter :set_tenant, :check_authorization!
-  before_filter :reset_search_path
   before_filter :find_user_or_redirect!, only: [:edit, :update]
 
   def index
@@ -54,10 +53,6 @@ private
 
   def password_params
     params.require(:user_password).permit(:password, :password_confirmation)
-  end
-
-  def reset_search_path
-    redirect_to new_reset_password_url(subdomain: false) and return if request.subdomain.present?
   end
 
   def find_user_or_redirect!
