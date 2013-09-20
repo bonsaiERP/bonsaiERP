@@ -75,7 +75,7 @@ Bonsaierp::Application.configure do
     address: 'smtp.mandrillapp.com',
     port: 587,
     user_name: 'boriscyber@gmail.com',
-    password: 'pViFp4XMJCYp7f1j4TKQxw'
+    password: ENV['BONSAI_MANDRILL_TOKEN']
   }
 
   config.eager_load = true

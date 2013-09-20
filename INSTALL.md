@@ -23,20 +23,17 @@ And then install all needed dependencies for Ruby 1.9 MRI
 
     sudo apt-get install build-essential bison openssl libreadline6 libreadline6-dev curl git-core zlib1g zlib1g-dev libssl-dev libyaml-dev libsqlite3-0 libsqlite3-dev sqlite3 libxml2-dev libxslt-dev autoconf libc6-dev ncurses-dev automake
 
-Install first ruby 1.8.7 needed for 1.9.2
+Install first ruby 2.0.0
 
-    rvm install ruby-1.8.7
-    rvm ruby-1.8.7
+    rvm install ruby-2.0.0
+    rvm ruby-2.0.0
 
-Install Ruby 1.9
-
-    rvm install ruby-1.9.3
 
 Create a gemset and set it as default
 
-    rvm ruby-1.9.3
-    rvm gemset create rails3.1
-    rvm ruby-1.9.3@rails3.1 --default
+    rvm ruby-2.0.0
+    rvm gemset create rails4.0
+    rvm ruby-2.0.0@rails4.0 --default
 
 ## Locales if needed
 
@@ -109,7 +106,14 @@ Go to the bonsai folder `cd bonsai` and then run. (*by default the branch used i
 
     bundle
 
-Create the file `config/database.yml` in bonsai directory add this:
+**Create a file in your  `config/app_environment_variables.rb` and put
+your env variables**
+
+- ENV['SECRET_TOKEN']
+- ENV['MANDRILL_API_KEY']
+
+
+**Create the file `config/database.yml` in bonsai directory add this:**
 
 
     development:

@@ -50,9 +50,9 @@ class AccountLedgersController < ApplicationController
 
     if @account_ledger.save
       flash[:notice] = "Se ha creado exitosamente la transacción."
-      redirect_to @account_ledger
+      redirect_to account_ledger_path @account_ledger
     else
-      render :action => 'new'
+      render :new
     end
   end
 

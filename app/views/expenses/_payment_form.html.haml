@@ -11,6 +11,9 @@
 
 :javascript
   $(function() {
+    var cur = currencies["#{expense.currency}"];
+      temp = _.template('<span class="label bg-black" title="{{name}}" data-toggle="tooltip">{{code}}</span>', cur);
+    $('#currency-label').append(temp);
     var p = new App.ExpensePayment({
       accountsTo: #{AccountQuery.new.expense_payment_options(expense).to_json},
       baseCurrency: "#{expense.currency}"

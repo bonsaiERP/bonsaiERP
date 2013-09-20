@@ -44,11 +44,9 @@ class CashesController < ApplicationController
 
     respond_to do |format|
       if @cash.save
-        format.html { redirect_to(@cash, :notice => 'La caja fue creada.') }
-        format.xml  { render :xml => @cash, :status => :created, :location => @cash }
+        format.html { redirect_to(cash_path(@cash), notice: 'La cuenta efectivo fue creada.') }
       else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @cash.errors, :status => :unprocessable_entity }
+        format.html { render :new }
       end
     end
   end

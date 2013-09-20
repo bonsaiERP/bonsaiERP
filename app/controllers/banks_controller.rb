@@ -27,7 +27,7 @@ class BanksController < ApplicationController
     @bank = Bank.new_bank(create_bank_params)
 
     if @bank.save
-      redirect_to @bank, notice: 'La cuenta de banco fue creada.'
+      redirect_to banks_path(@bank), notice: 'La cuenta de banco fue creada.'
     else
       render "new"
     end

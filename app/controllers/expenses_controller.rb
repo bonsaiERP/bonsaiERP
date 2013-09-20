@@ -32,7 +32,7 @@ class ExpensesController < ApplicationController
     @es = Expenses::Form.new_expense(expense_params)
 
     if create_or_approve
-      redirect_to @es.expense, notice: 'Se ha creado un Egreso.'
+      redirect_to expense_path(@es.expense), notice: 'Se ha creado un Egreso.'
     else
       @es.movement.state = 'draft' # reset status
       render 'new'
@@ -44,7 +44,7 @@ class ExpensesController < ApplicationController
     @es = Expenses::Form.find(params[:id])
 
     if update_or_approve
-      redirect_to @es.expense, notice: 'El Egreso fue actualizado!.'
+      redirect_to expense_path(@es.expense), notice: 'El Egreso fue actualizado!.'
     else
       render 'edit'
     end

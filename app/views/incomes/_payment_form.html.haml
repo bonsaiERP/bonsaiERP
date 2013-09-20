@@ -15,7 +15,6 @@
   $(function() {
     var cur = currencies["#{income.currency}"];
       temp = _.template('<span class="label bg-black" title="{{name}}" data-toggle="tooltip">{{code}}</span>', cur);
-    console.log("#{income.currency}", cur);
     $('#currency-label').append(temp);
 
     var p = new App.IncomePayment({

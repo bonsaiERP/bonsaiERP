@@ -40,10 +40,10 @@ class IncomesController < ApplicationController
     @is = Incomes::Form.new_income(income_params)
 
     if create_or_approve
-      redirect_to @is.income, notice: 'Se ha creado un Ingreso.'
+      redirect_to income_path(@is.income), notice: 'Se ha creado un Ingreso.'
     else
       @is.movement.state = 'draft' # reset status
-      render 'new'
+      render :new
     end
   end
 
@@ -52,7 +52,7 @@ class IncomesController < ApplicationController
     @is = Incomes::Form.find(params[:id])
 
     if update_or_approve
-      redirect_to @is.income, notice: 'El Ingreso fue actualizado!.'
+      redirect_to income_path(@is.income), notice: 'El Ingreso fue actualizado!.'
     else
       render 'edit'
     end

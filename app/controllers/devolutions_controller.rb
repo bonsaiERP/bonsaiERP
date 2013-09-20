@@ -52,14 +52,14 @@ private
   end
 
   def check_income
-    unless Income.exists? params[:id]
+    if Income.where(id: params[:id]).empty?
       flash[:error] = 'No se puede realizar el cobro, el ingreso no existe.'
       redirect_to :back and return
     end
   end
 
   def check_expense
-    unless Expense.exists? params[:id]
+    if Expense.where(id: params[:id]).empty?
       flash[:error] = 'No se puede realizar el pago, el egreso no existe.'
       redirect_to :back and return
     end
