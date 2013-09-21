@@ -152,6 +152,13 @@ class Transaction extends Backbone.Collection
       direct_payment: $('#direct_payment').prop('checked')
       account_to_id: $('#account_to_id').val()
     )
+    # Hack because rivets not working fine
+    @transModel.on 'change:direct_payment', (mod, val) ->
+      if val
+        $('.save-button').hide()
+      else
+        $('.save-button').show()
+
     rivets.bind $(@transSel), {trans: @transModel}
     @transModel.on 'change:rate', -> self.setCurrency()
 

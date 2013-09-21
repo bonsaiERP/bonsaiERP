@@ -37,9 +37,9 @@ class TagEditor
   setAjaxResponse: (resp) ->
     if resp.id
       $(@sel).dialog('close')
-      tags = tags.push({id: resp.id, text: resp.name, label: resp.name, bgcolor: resp.bgcolor})
-      tags = _.sort(tags, (v) -> v.name )
-      $('#tags').trigger('btags:newtag', resp)
+      window.tags.push({id: resp.id, text: resp.name, label: resp.name, bgcolor: resp.bgcolor})
+      window.tags = _.sortBy(window.tags, (v) -> v.label )
+      $('#tags').trigger('btags:newtag', [resp])
     else if resp.errors
       @setErrors(resp)
   #
@@ -64,8 +64,7 @@ class TagSelector
 
     throw 'You must set a model in options in TagSelector class'  unless @options.model?
     @model = @options.model
-    throw 'You must set a data in options in TagSelector class'  unless @options.data?
-    @data = @options.data
+    throw 'You must set window.tags for TagSelector'  unless window.tags?
     throw 'You must set a list in options in TagSelector class'  unless @options.list?
     @list = @options.list
 
@@ -77,7 +76,7 @@ class TagSelector
   #
   setSelect2: ->
     $('#tags').select2({
-      data: @data,
+      data: window.tags,
       multiple: true,
       formatResult: TagFormater.formatResult,
       formatSelection: TagFormater.formatSelect,
@@ -90,7 +89,7 @@ class TagSelector
     @setRemoveEvent()
     @$button.on 'click', @applyTags
 
-    $('#tags').on 'btags:newtag', => @updateSelect2(tag)
+    $('#tags').on 'btags:newtag', (event, tag) => @updateSelect2(event, tag)
   #
   setRemoveEvent: ->
     $('.btags').off('click', 'a.remove-tag')
@@ -99,12 +98,7 @@ class TagSelector
     )
   # updates the select2 data with new tag as well for the
   # TagFormater.tags
-  updateSelect2: (tag) ->
-    #tag.text = tag.name
-    # Important update
-    # TagFormater.tags[tag.id] = tag
-
-    @data.push tag
+  updateSelect2: (event, tag) ->
     $('#tags').select2('destroy')
     @setSelect2()
     vals = $('#tags').select2('val')
@@ -150,10 +144,14 @@ class TagSelector
 
 # Main class
 class Tag
-  constructor: (@list, @model, @data) ->
+  constructor: (@list, @model) ->
     @formatTags()
     @editor = new TagEditor
-    @search = new TagSelector({model: @model, data: @data, list: @list})
+    @search = new TagSelector({model: @model, list: @list})
+    # Needs to be inside constructor
+    # reset for TagFormater.tags
+    $('body').on('btags:newtag', '#tags', -> TagFormater.resetTags())
+
   #
   formatTags: ->
     $(@list).find('.btags').each((i, el) =>
@@ -190,14 +188,16 @@ TagFormater = {
   #
   tagList: ->
     h = {}
-    _.each(tags, (v) ->
+    _.each(window.tags, (v) ->
       v.label = v.text
       h[v.id] = v
     )
 
     h
+  #
+  resetTags: ->
+    @tags = null
 }
-
 
 # Uses jqueryui autocomplete to search with tags
 class TagSearch

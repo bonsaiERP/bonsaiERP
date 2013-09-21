@@ -38,8 +38,7 @@
 
 :javascript
   $(function() {
-    var data = tags;
-    var tag = new Plugin.Tag("#{list}", "#{model}", data);
+    var tag = new Plugin.Tag("#{list}", "#{model}", window.tags);
 
     $('.but').one('click', 'button.tags', function() {
       $('#tags').select2('open');
