@@ -28,7 +28,8 @@
     = expense.due_date_tag
 
     .clear-both
-    = expense.description_tag
+    %i(class='icon-file muted' title='Descripción')
+    = expense.description
   .span3
     .span6.r
       = ntc expense.total
