@@ -4,7 +4,7 @@
 class RegistrationMailer < ActionMailer::Base
   default from: %Q("#{APP_NAME}" <register@#{DOMAIN}>)
 
-  layout "email"
+  layout 'email'
 
   # Sends the registration email to the contact
   def send_registration(reg)

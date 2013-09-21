@@ -73,6 +73,14 @@ class Movement < Account
     end
   end
 
+  def paid
+    if balance >= 0
+      total - balance
+    else
+      -(balance - total)
+    end
+  end
+
   def discount
     gross_total - total
   end

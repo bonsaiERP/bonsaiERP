@@ -29,3 +29,18 @@
       = ntc income.total
       = currency_label income.currency
 
+  - if income.balance != income.total
+    %tr.extra
+      %td(colspan="2")
+      %td.r.dark Cobrado
+      %td.r.b
+        = ntc income.paid
+        = currency_label income.currency
+
+  %tr.extra
+    %td(colspan="2")
+    %td.r.dark Saldo
+    %td.r.b
+      = ntc income.balance
+      = currency_label income.currency
+
