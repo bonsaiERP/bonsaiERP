@@ -70,8 +70,10 @@ $( ->
 
   # Adds an option to select and selects that option
   setSelectValues = (el, vals) ->
-    $el.append("<option value='vals.id'>#{vals.to_s}</option>")
-    $el.val(vals.id)
+    $el = $(el)
+    desc = vals.to_s || vals.name || vals.description
+    $el.append("<option value='#{vals.id}'>#{desc}</option>")
+    $el.val("#{vals.id}")
 
   # Calls the events afser ajax call on ajax form
   callEvents = (data, resp) ->
@@ -86,7 +88,7 @@ $( ->
         when $el.hasClass('autocomplete')
           setAutocompleteValues($el, resp)
         when $el.get(0).nodeName is 'SELECT'
-          setSelectValues($el resp)
+          setSelectValues(data.elem, resp)
 
 
   ##########################################
