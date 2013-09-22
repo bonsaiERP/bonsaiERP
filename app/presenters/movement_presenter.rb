@@ -83,7 +83,7 @@ class MovementPresenter < BasePresenter
 
   # show enable disable inventory
   def enable_disable_inventory?
-    active? && !delivered?
+    active? && !delivered? && !is_draft?
   end
 
   def enable_disable_inventory_text

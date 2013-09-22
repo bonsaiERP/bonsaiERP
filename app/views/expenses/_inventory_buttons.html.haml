@@ -1,4 +1,4 @@
-- unless expense.delivered?
+- if !expense.delivered? && !expense.is_draft?
   %a#inventory-deliver-link.btn.btn-success(href='javascript:;')
     %i.icon-signout
     Recoger mercadería
