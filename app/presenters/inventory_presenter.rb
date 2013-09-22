@@ -68,10 +68,6 @@ class InventoryPresenter < BasePresenter
     is_income? || is_expense? || is_trans?
   end
 
-  def description_tag
-    "#{icon('icon-file muted', 'Descripción')} #{description}".html_safe  if description.present?
-  end
-
   def related_tip(st_id = nil)
     case
     when is_income?

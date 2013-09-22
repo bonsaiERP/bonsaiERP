@@ -113,10 +113,10 @@ class AccountLedgerPresenter < BasePresenter
 
   def account_icon(ac)
     case ac.class.to_s
-    when 'Cash'    then icon_tag(class: "icon-money", title: "Efectivo")
-    when 'Bank'    then icon_tag(class: "icon-building", title: "Banco")
-    when 'Income'  then icon_tag(class: "icon-file", title: "Ingreso")
-    when 'Expense' then icon_tag(class: "icon-file", title: "Egreso")
+    when 'Cash'    then icon("icon-money")
+    when 'Bank'    then icon("icon-building")
+    when 'Income'  then icon("icon-file")
+    when 'Expense' then icon("icon-file")
     end
   end
 
@@ -162,6 +162,10 @@ class AccountLedgerPresenter < BasePresenter
 
   def trans_account_tag
     "#{account_icon trans_account} #{trans_account}".html_safe
+  end
+
+  def trans_account_icon
+    account_icon trans_account
   end
 
 private

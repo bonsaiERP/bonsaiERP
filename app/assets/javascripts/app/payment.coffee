@@ -119,7 +119,7 @@ Payment.paymentOptions = (val) ->
       amt = ' <span class="muted"> Saldo:</span> <span class="balance">' + _b.ntc(val.amount) + '</span>'
 
 
-  ['<strong class="gray">',txt, "</strong> ", val.to_s,
+  ['<strong class="gray">',txt, "</strong> ", _.escape(val.to_s),
    amt, ' <span class="label bg-black">',
    val.currency, '</span>'].join('')
 

@@ -19,9 +19,9 @@ module IconsHelper
 
   def icon(ico, title = '')
     if title.present?
-      "<i class=\"#{ico}\" title=\"#{ title }\" data-toggle=\"tooltip\"></i>"
+      "<i class=\"#{ico}\" title=\"#{ title }\" data-toggle=\"tooltip\"></i>".html_safe
     else
-      "<i class=\"#{ico}\"></i>"
+      "<i class=\"#{ico}\"></i>".html_safe
     end
   end
 
