@@ -1,14 +1,8 @@
 .row-fluid
-  .span6
+  .span12
     = f.input :account_to_id, label: 'Cuenta', input_html: {class: 'span10', data:{value: 'payment.account_to_id'}}
-  .span3
-    = f.input :date, as: :datepicker, label: 'Fecha'
-  .span3
-    %div.form-inline(data-show="payment.bank")
-      = f.input :verification, as: :boolean, label: 'Verificar',
-        input_html: {data: {value: 'payment.verification', checked: 'payment.verification'} },
-        label: 'Verificar', hint: 'Verificar a futuro. Ej.: (Cheque)'
 
+%br
 .row-fluid.bg-white-tan.borders-y
   .span3
     = f.input :amount,
@@ -20,14 +14,22 @@
       = f.input :exchange_rate, label: 'Tipo de cambio',
         input_html: {disabled: true, type: 'decimal', size: 10,
         data: {value: 'payment.exchange_rate', disabled: 'payment.sameCurrency'} }
-  .span3
+  .span4
     .moneybox
       %label TOTAL
       %h4
         %span#currency_total(data-text="payment.totalCurrency")
-        %span#payment-currency-label
+        %span#payment-currency-label= currency_label movement.currency
 
-
-.row-fluid.pad-x-10
+.row-fluid
   .span6
-    = f.input :reference, label: 'Referencia', as: :text, input_html: {rows: 3, cols: 40, data: {value: 'payment.reference'} }
+    = f.input :date, as: :datepicker, label: 'Fecha'
+  .span6
+    %div.form-inline(data-show="payment.bank")
+      = f.input :verification, as: :boolean, label: 'Verificar (solo banco)',
+        input_html: {data: {value: 'payment.verification', checked: 'payment.verification'} },
+       hint: 'Verificar a futuro. Ej.: (Cheque)'
+
+.row-fluid
+  .span12
+    = f.input :reference, label: 'Referencia', as: :text, input_html: {rows: 3, class: 'span11', data: {value: 'payment.reference'} }

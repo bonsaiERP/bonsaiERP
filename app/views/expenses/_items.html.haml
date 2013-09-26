@@ -29,3 +29,19 @@
     %td#total_value.r.b{'data-val' => expense.total}
       = ntc expense.total
       = currency_label expense.currency
+
+  %tr.extra
+    %td.r(colspan="3")
+
+
+    %td.r.b.dark Cobrado
+    %td.r.b
+      = ntc expense.paid
+      = currency_label expense.currency
+
+  %tr.extra
+    %td(colspan="3")
+    %td.r.b.dark Saldo
+    %td.r.b
+      = ntc expense.balance
+      = currency_label expense.currency

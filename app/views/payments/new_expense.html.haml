@@ -1,0 +1,28 @@
+%h4.title Pago
+
+= simple_form_for @payment, url: expense_payment_path(@payment.account_id),
+  html: { id: 'expense-payment-form' } do |f|
+  = bonsai_form_error(f)
+  = f.hidden_field :account_id
+
+  = render 'payments/default_form', f: f, movement: @payment.expense
+
+  .form-actions
+    = f.submit 'Pagar', class: 'btn b btn-success'
+    %a.cancel.btn(hre='javascript:;') Cancelar
+
+-#binding.pry
+:javascript
+  $(function() {
+    var p = new App.ExpensePayment({
+      accountsTo: #{AccountQuery.new.expense_payment_options(@payment.expense).to_json},
+      baseCurrency: "#{@payment.expense_currency}",
+      account_to_id: "#{@payment.account_to_id}",
+      amount: #{@payment.amount},
+      date: "#{@payment.date}",
+      exchange_rate: #{@payment.exchange_rate.to_f},
+      reference: "#{@payment.reference}",
+      verification: #{@payment.verification}
+    });
+  })
+

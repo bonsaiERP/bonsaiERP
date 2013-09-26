@@ -77,7 +77,9 @@
 
     - unless OrganisationSession.currency === @income.currency
       .clearfix
-      %i.icon-exchange.muted(title='Tipo de cambio' data-toggle='tooltip')
+      %span.muted
+        %i.icon-exchange
+        Tipo de cambio:
       1
       = currency_label @income.currency
       \=
@@ -91,73 +93,57 @@
     %i.icon-file.muted(data-toggle='tooltip' title='Descripción')
     = @income.description
 
-%hr
 
--# Tabs
-%ul#tabs.nav.nav-pills.fs150
-  %li
-    %a.payment-link-tab(href='#payments' data-toggle='tab') Cobros
+%h2.n
+  Items
 
-  %li
-    %a.item-link-tab(href='#items' data-toggle='tab')
-      Items
-      = @income.inventory_tag
+= render "incomes/items", income: @income
 
-  - if @income.enable_disable_inventory?
-    %li
-      = link_to inventory_income_path(@income.id, no_inventory: @income.enable_disable_inventory_val), method: 'patch', class: 'no-tab' do
-        %span.fs70
-          &nbsp;&nbsp;
-          = @income.enable_disable_inventory_text_tag
+= @income.pendent_conciliations
 
+.row-fluid
+  .span6.well.well-small.bg-white
+    %h3.n.ib
+      Cobros y devoluciones
 
-.tab-content
-  #items.tab-pane.fade
-    %h2.n
-      Items
+    &nbsp;
+    &nbsp;
+    %a#show-payments(href='javascript:;' data-url="#{}")
+      Ver cobros y devoluciones
 
-    .item-buttons= render 'inventory_buttons', income: @income  if @income.show_inventory_buttons?
-    %hr
+    .payment-form.form-container.ajax-modal
 
-    = render "incomes/items", income: @income
+    %p.center.payment-buttons
 
-  - unless @income.is_draft?
+      - if @income.can_pay?
+        = link_to class: 'btn btn-success w100p', data: {remote: true, url: new_income_payment_path(@income.id) } do
+          %i.icon-plus-sign
+          Cobrar
 
-    #payments.tab-pane.fade
-      %h2.n Cobros y devoluciones
+      - if @income.can_devolution?
+        = link_to class: 'btn btn-danger w100p', data: {remote: true, url: new_income_devolution_path(@income.id) } do
+          %i.icon-minus-sign
+          Devolución
 
-      = @income.pendent_conciliations
+    %ul.unstyled.listing
+      = render partial: 'account_ledgers/movement2', collection: @income.payments_and_devolutions, as: :ledger
 
-      .payment-buttons
-        - if @income.can_pay?
-          %a.btn.btn-success(id='payment-link' href='javascript:;')
-            %i.icon-plus-sign
-            Cobrar
+  .span6.well.well-small.bg-white
+    %h3.n.ib
+      Operaciones inventario
 
-        - if @income.can_devolution?
-          %a.btn.btn-danger(id='devolution-link' href='javascript:;')
-            %i.icon-minus-sign
-            Devolución
+    &nbsp;
+    &nbsp;
+    %a#show-inventory(href='javascript:;' data-url="#{}")
+      Ver operaciones de inventario
 
-
-      #payment-form.form-container
-        %h3.title Cobro
-        = render 'incomes/payment_form', income: @income  if @income.can_pay?
-
-      #devolution-form.form-container(style='display: none')
-        %h3.title Devolución
-        = render 'incomes/devolution_form', income: @income  if @income.can_devolution?
-
-      %ul.unstyled.listing
-        = render partial: 'account_ledgers/movement', collection: @income.payments, as: :ledger
 
 -#Tours
 = render 'incomes/tour_devolution'
 
 :javascript
   $( function() {
-    activeTab();
-
+    // null income
     $('#null-income-form').submit(function(event) {
       if(confirm('Esta segur@ de anular el Ingreso?')) {
         return true;
@@ -166,10 +152,24 @@
       }
     })
 
+    // Payment buttons
+    $('.payment-buttons').on('click', 'a', function() {
+      $this = $(this);
+      $('.payment-buttons').hide('fast');
+      $('.payment-form')
+      .html('<p class="center muted"><img src="/assets/ajax-loader.gif" /> Cargando...</p>')
+      .load($this.data('url'), function() { $('.payment-form').setDatepicker() });
+    })
+
+    $('.payment-form').on('click', 'a.cancel', function() {
+      $('.payment-buttons').show('fast');
+      $('.payment-form').html('');
+    })
+
+
     // Payment show hide
     $('#payment-link').click( function() {
-      $('#payment-form').show('fast')
-      $('.payment-buttons').hide('fast');
+      $('#payment-form').show('fast');
     })
     $('body').on('click', '#cancel-payment-link', function() {
       $('#payment-form').hide('fast');

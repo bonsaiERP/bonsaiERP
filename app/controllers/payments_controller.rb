@@ -2,66 +2,68 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class PaymentsController < ApplicationController
-  before_filter :check_income_or_expense
+
+  # GET /payments/:id/new_income
+  def new_income
+    @payment = Incomes::Payment.new(account_id: params[:id], date: Date.today)
+    check_income
+  end
 
   # POST /payments/:id/income
   def income
-    p = Incomes::Payment.new(income_params)
+    @payment = Incomes::Payment.new(income_params)
+    check_income
 
-    if p.pay
+    if @payment.pay
       flash[:notice] = 'El cobro se realizó correctamente.'
+      render 'income.js'
     else
-      flash[:error] = 'Existió un error al salvar el cobro.'
+      render :new_income
     end
+  end
 
-    redirect_to income_path(p.income, anchor: 'payments')
+  # GET /payments/:id/new_income
+  def new_expense
+    @payment = Expenses::Payment.new(account_id: params[:id], date: Date.today)
+    check_expense
   end
 
   # POST /payments/:id/expense
   def expense
-    p = Expenses::Payment.new(expense_params)
+    @payment = Expenses::Payment.new(expense_params)
+    check_expense
 
-    if p.pay
+    if @payment.pay
       flash[:notice] = 'El pago se realizó correctamente.'
+      render 'expense.js'
     else
-      flash[:error] = 'Existió un error al salvar el pago.'
-    end
-
-    redirect_to expense_path(p.expense, anchor: 'payments')
-  end
-
-private
-  def income_params
-    params.require(:incomes_payment).permit(*allowed_params)
-  end
-
-  def expense_params
-    params.require(:expenses_payment).permit(*allowed_params)
-  end
-
-  def allowed_params
-    [:account_id, :account_to_id, :exchange_rate, :amount, :interest, :reference, :verification, :date]
-  end
-
-  def check_income_or_expense
-    if params.fetch(:action) == 'income'
-      check_income
-    else
-      check_expense
+      render :new_expense
     end
   end
 
-  def check_income
-    if Income.where(id: params[:id]).empty?
-      flash[:error] = 'No se puede realizar el cobro, el ingreso no existe.'
-      redirect_to :back and return
-    end
-  end
+  private
 
-  def check_expense
-    if Expense.where(id: params[:id]).empty?
-      flash[:error] = 'No se puede realizar el pago, el egreso no existe.'
-      redirect_to :back and return
+    def income_params
+      params.require(:incomes_payment).permit(*allowed_params)
     end
-  end
+
+    def expense_params
+      params.require(:expenses_payment).permit(*allowed_params)
+    end
+
+    def allowed_params
+      [:account_id, :account_to_id, :exchange_rate, :amount, :interest, :reference, :verification, :date]
+    end
+
+    def check_income
+      @payment.income.is_a?(Income)
+    rescue
+      render text: 'Error'
+    end
+
+    def check_expense
+      @payment.expense.is_a?(Expense)
+    rescue
+      render text: 'Error'
+    end
 end

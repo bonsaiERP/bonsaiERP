@@ -18,6 +18,12 @@ $font_size: 13px
   .mb#{$i * 5}
     margin-bottom: #{$i * 5}px !important
 
+@each $w in (100, 150, 200, 250, 300)
+  .w#{$w}p, .w#{$w}px
+    width: #{$w}px
+
+
+
 .fl
   float: left
 .fr

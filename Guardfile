@@ -1,14 +1,12 @@
 # A sample Guardfile
 # More info at https://github.com/guard/guard#readme
-guard 'coffeescript', :output => 'public/javascripts/compiled' do
-  watch(/^app\/assets\/javascripts\/(.*).coffee/)
-end
 
-guard 'coffeescript', :output => 'spec/javascripts/compiled' do
-  watch(/^spec\/javascripts\/(.*).coffee/)
+guard 'livereload' do
+  watch(%r{app/views/.+\.(erb|haml|slim)$})
+  watch(%r{app/helpers/.+\.rb})
+  watch(%r{public/.+\.(css|js|html)})
+  watch(%r{config/locales/.+\.yml})
+  # Rails Assets Pipeline
+  watch(%r{(app|vendor)(/assets/\w+/(.+\.(sass|css|js|html|coffee))).*}) { |m| "/assets/#{m[3]}" }
+  watch(%r{(spec)(/javascripts/\w+/(.+\.(sass|css|js|html|coffee))).*}) { |m| "/assets/#{m[3]}" }
 end
-
-#guard 'livereload', :apply_js_live => false do
-#  watch('^spec/javascripts/.+\.js$')
-#  watch('^public/javascripts/compiled/.+\.js$')
-#end

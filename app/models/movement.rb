@@ -126,7 +126,7 @@ class Movement < Account
 
 
   def can_pay?
-    !is_nulled? && !is_paid?
+    !is_nulled? && !is_paid? && !is_draft?
   end
 
   def can_devolution?

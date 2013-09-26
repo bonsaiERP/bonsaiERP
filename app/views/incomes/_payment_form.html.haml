@@ -5,6 +5,7 @@
 
   = render 'payments/default_form', f: f, transaction: income
 
+
   .form-actions
     = f.submit "Cobrar", class: 'btn b btn-success'
     %a#cancel-payment-link.btn(hre='javascript:;') Cancelar

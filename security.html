@@ -1,0 +1,1200 @@
+<!DOCTYPE HTML SYSTEM>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Brakeman Report</title>
+  <script>
+    function toggle(context) {
+      var elem = document.getElementById(context);
+
+      if (elem.style.display != "block")
+        elem.style.display = "block";
+      else
+        elem.style.display = "none";
+
+      elem.parentNode.scrollIntoView();
+    }
+  </script>
+  <style>
+    /* CSS style used for HTML reports */
+
+body {
+  font-family: sans-serif;
+  color: #161616;
+}
+
+a {
+  color: #161616;
+}
+
+p {
+  font-weight: bold;
+  font-size: 11pt;
+  color: #2D0200;
+ }
+
+ th {
+   background-color: #980905;
+   border-bottom: 5px solid #530200;
+   color: white;
+   font-size: 11pt;
+   padding: 1px 8px 1px 8px;
+ }
+
+ td {
+   border-bottom: 2px solid white;
+   font-family: monospace;
+   padding: 5px 8px 1px 8px;
+ }
+
+ table {
+   background-color: #FCF4D4;
+   border-collapse: collapse;
+ }
+
+ h1 {
+   color: #2D0200;
+   font-size: 14pt;
+ }
+
+ h2 {
+   color: #2D0200;
+   font-size: 12pt;
+ }
+
+ span.high-confidence {
+   font-weight:bold;
+   color: red;
+ }
+
+ span.med-confidence {
+ }
+
+ span.weak-confidence {
+   color:gray;
+ }
+
+ div.warning_message {
+   cursor: pointer;
+ }
+
+ div.warning_message:hover {
+   background-color: white;
+ }
+
+ table caption {
+   background-color: #FFE;
+   padding: 2px;
+ }
+
+ table.context {
+   margin-top: 5px;
+   margin-bottom: 5px;
+   border-left: 1px solid #90e960;
+   color: #212121;
+ }
+
+ tr.context {
+   background-color: white;
+ }
+
+ tr.first {
+   border-top: 1px solid #7ecc54;
+   padding-top: 2px;
+ }
+
+ tr.error {
+  background-color: #f4c1c1 !important
+ }
+
+ tr.near_error {
+  background-color: #f4d4d4 !important
+ }
+
+ tr.alt {
+   background-color: #e8f4d4;
+ }
+
+ td.context {
+   padding: 2px 10px 0px 6px;
+   border-bottom: none;
+ }
+
+ td.context_line {
+   padding: 2px 8px 0px 7px;
+   border-right: 1px solid #b3bda4;
+   border-bottom: none;
+   color: #6e7465;
+ }
+
+ pre.context {
+   margin-bottom: 1px;
+ }
+
+ .user_input {
+   background-color: #fcecab;
+ }
+
+ div.render_path {
+   display: none;
+   background-color: #ffe;
+   padding: 5px;
+   margin: 2px 0px 2px 0px;
+ }
+
+ div.template_name {
+   cursor: pointer;
+ }
+
+ div.template_name:hover {
+   background-color: white;
+ }
+
+  </style>
+</head>
+<body>
+
+<h1>Brakeman Report</h1>
+<table>
+  <tr>
+    <th>Application Path</th>
+    <th>Rails Version</th>
+    <th>Brakeman Version</th>
+    <th>Report Time</th>
+    <th>Checks Performed</th>
+  </tr>
+  <tr>
+    <td>/home/boris/dev/ruby/bonsai</td>
+    <td>4.0.0</td>
+    <td>2.1.2
+    <td>
+      2013-09-22 08:21:10 -0400<br><br>
+      10.714653403 seconds
+    </td>
+    <td>BasicAuth, ContentTag, CrossSiteScripting, DefaultRoutes, Deserialize, DigestDoS, EscapeFunction, Evaluation, Execute, FileAccess, FilterSkipping, ForgerySetting, JRubyXML, JSONParsing, LinkTo, LinkToHref, MailTo, MassAssignment, ModelAttrAccessible, ModelAttributes, ModelSerialize, NestedAttributes, QuoteTableName, Redirect, Render, ResponseSplitting, SQL, SafeBufferManipulation, SanitizeMethods, SelectTag, SelectVulnerability, Send, SendFile, SessionSettings, SingleQuotes, SkipBeforeFilter, StripTags, SymbolDoS, TranslateBug, UnsafeReflection, ValidationRegex, WithoutProtection, YAMLParsing</td>
+  </tr>
+</table>
+<br>
+<h2 id='summary'>Summary</h2>
+<table>
+  <tr>
+    <th>Scanned/Reported</th>
+    <th>Total</th>
+  </tr>
+  <tr>
+    <td>Controllers</td>
+    <td>40</td>
+  </tr>
+  <tr>
+    <td>Models</td>
+    <td>75</td>
+  </tr>
+  <tr>
+    <td>Templates</td>
+    <td>277</td>
+  </tr>
+  <tr>
+    <td>Errors</td>
+    <td>1</td>
+  </tr>
+  <tr>
+    <td>Security Warnings</td>
+    <td>11 <span class='high-confidence'>(0)</span></td>
+  </tr>
+  
+  <tr>
+    <td>Ignored Warnings</td>
+    <td>0</td>
+  </tr>
+  
+</table>
+<br>
+<table>
+  <tr>
+    <th>Warning Type</th>
+    <th>Total</th>
+  </tr>
+  
+  <tr>
+    <td>Cross Site Scripting</td>
+    <td>11</td>
+  </tr>
+  
+</table>
+<br>
+<div onClick="toggle('errors_table');">  <h2>Exceptions raised during the analysis (click to see them)</h2 ></div>
+  <div>
+    <div id='errors_table' style='display:none'> 
+      <table>
+        <tr>
+          <th>Error</th>
+          <th>Location</th>
+        </tr>
+        
+          <tr>
+            <td>Illegal nesting: content can&#39;t be both given on the same line as %p and nested within it.</td>
+            <td>
+              
+                While compiling HAML in /home/boris/dev/ruby/bonsai/app/views/users/mailer/confirmation_instructions.html.haml
+              
+            </td>
+          </tr>
+        
+      </table>
+    </div>
+  </div>
+<p>View Warnings</p>
+<table>
+  <tr>
+    <th>Confidence</th>
+    <th>Template</th>
+    <th>Warning Type</th>
+    <th>Message</th>
+  </tr>
+
+  <tr>
+    <td><span class='med-confidence'>Medium</span></td>
+    <td>
+      
+        account_ledgers/show (AccountLedgersController#show)
+      
+    </td>
+    <td><a rel="no-referrer" href="http://brakemanscanner.org/docs/warning_types/link_to_href">Cross Site Scripting</a></td>
+    <td><div class='warning_message' onClick="toggle('context2');toggle('message2');toggle('full_message2')" ><span id='message2' style='display:block' >Unsafe model attribute in link_to href near line 9: link_to(present(<span class="user_input">AccountLedger.find(params[:id])</span>)....</span><span id='full_message2' style='display:none'>Unsafe model attribute in link_to href near line 9: link_to(present(<span class="user_input">AccountLedger.find(params[:id])</span>).account_contact, present(<span class="user_input">AccountLedger.find(params[:id])</span>).account_contact, :title =&gt; &quot;Contacto&quot;, :data =&gt; ({ :toggle =&gt; &quot;tooltip&quot; }))</span><table id='context2' class='context' style='display:none'><caption>app/views/account_ledgers/show.html.haml</caption>        <tr class='context first'>
+          <td class='context_line'>
+            <pre class='context'>4</pre>
+          </td>
+          <td class='context'>
+            <pre class='context'>      %strong.fs80= @ledger.operation_tag</pre>
+          </td>
+        </tr>
+          <tr class='context alt'>
+            <td class='context_line'>
+              <pre class='context'>5</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>      %strong(title=&#39;Código&#39; data-toggle=&#39;tooltip&#39;)= @ledger</pre>
+            </td>
+          </tr>
+          <tr class='context'>
+            <td class='context_line'>
+              <pre class='context'>6</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>      %small(title=&#39;Estado&#39; data-toggle=&#39;tooltip&#39;)= @ledger.status_tag</pre>
+            </td>
+          </tr>
+          <tr class='context alt'>
+            <td class='context_line'>
+              <pre class='context'>7</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>      = render_if @ledger.account_contact do</pre>
+            </td>
+          </tr>
+          <tr class='context near_error'>
+            <td class='context_line'>
+              <pre class='context'>8</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>        %small.dark</pre>
+            </td>
+          </tr>
+          <tr class='context alt error'>
+            <td class='context_line'>
+              <pre class='context'>9</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>          = link_to @ledger.account_contact, @ledger.account_contact, title: &#39;Contacto&#39;, data: {toggle: &#39;tooltip&#39;}</pre>
+            </td>
+          </tr>
+          <tr class='context'>
+            <td class='context_line'>
+              <pre class='context'>11</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>  .span5.r</pre>
+            </td>
+          </tr>
+          <tr class='context alt'>
+            <td class='context_line'>
+              <pre class='context'>12</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>    = render &#39;account_ledgers/conciliate_null_form&#39;, ledger: @ledger if @ledger.can_conciliate_or_null?</pre>
+            </td>
+          </tr>
+          <tr class='context'>
+            <td class='context_line'>
+              <pre class='context'>13</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>    = link_to account_ledger_path(@ledger.id, format: &#39;print&#39;), class: &#39;btn&#39; do</pre>
+            </td>
+          </tr>
+          <tr class='context alt'>
+            <td class='context_line'>
+              <pre class='context'>14</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>      %i.icon-print</pre>
+            </td>
+          </tr>
+</table></div></td>
+  </tr>
+
+  <tr>
+    <td><span class='med-confidence'>Medium</span></td>
+    <td>
+      
+        account_ledgers/show (AccountLedgersController#show)
+      
+    </td>
+    <td><a rel="no-referrer" href="http://brakemanscanner.org/docs/warning_types/link_to_href">Cross Site Scripting</a></td>
+    <td><div class='warning_message' onClick="toggle('context3');toggle('message3');toggle('full_message3')" ><span id='message3' style='display:block' >Unsafe model attribute in link_to href near line 52: link_to(present(<span class="user_input">AccountLedger.find(params[:id])</span>)...</span><span id='full_message3' style='display:none'>Unsafe model attribute in link_to href near line 52: link_to(present(<span class="user_input">AccountLedger.find(params[:id])</span>).account_contact, present(<span class="user_input">AccountLedger.find(params[:id])</span>).account_contact)</span><table id='context3' class='context' style='display:none'><caption>app/views/account_ledgers/show.html.haml</caption>        <tr class='context first'>
+          <td class='context_line'>
+            <pre class='context'>48</pre>
+          </td>
+          <td class='context'>
+            <pre class='context'>- if @ledger.account.is_a?(Movement)</pre>
+          </td>
+        </tr>
+          <tr class='context alt'>
+            <td class='context_line'>
+              <pre class='context'>49</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>  %p</pre>
+            </td>
+          </tr>
+          <tr class='context'>
+            <td class='context_line'>
+              <pre class='context'>50</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>    %h4.n</pre>
+            </td>
+          </tr>
+          <tr class='context alt near_error'>
+            <td class='context_line'>
+              <pre class='context'>51</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>      %span.muted Contacto:</pre>
+            </td>
+          </tr>
+          <tr class='context error'>
+            <td class='context_line'>
+              <pre class='context'>52</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>      = link_to @ledger.account_contact, @ledger.account_contact</pre>
+            </td>
+          </tr>
+          <tr class='context alt near_error'>
+            <td class='context_line'>
+              <pre class='context'>53</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>%p</pre>
+            </td>
+          </tr>
+          <tr class='context'>
+            <td class='context_line'>
+              <pre class='context'>54</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>  %h4.n</pre>
+            </td>
+          </tr>
+          <tr class='context alt'>
+            <td class='context_line'>
+              <pre class='context'>57</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>    %span.account</pre>
+            </td>
+          </tr>
+</table></div></td>
+  </tr>
+
+  <tr>
+    <td><span class='med-confidence'>Medium</span></td>
+    <td>
+      
+        account_ledgers/show (AccountLedgersController#show)
+      
+    </td>
+    <td><a rel="no-referrer" href="http://brakemanscanner.org/docs/warning_types/link_to_href">Cross Site Scripting</a></td>
+    <td><div class='warning_message' onClick="toggle('context4');toggle('message4');toggle('full_message4')" ><span id='message4' style='display:block' >Unsafe model attribute in link_to href near line 61: link_to(present(<span class="user_input">AccountLedger.find(params[:id])</span>)...</span><span id='full_message4' style='display:none'>Unsafe model attribute in link_to href near line 61: link_to(present(<span class="user_input">AccountLedger.find(params[:id])</span>).account, present(<span class="user_input">AccountLedger.find(params[:id])</span>).account, :class =&gt; &quot;account_name&quot;)</span><table id='context4' class='context' style='display:none'><caption>app/views/account_ledgers/show.html.haml</caption>        <tr class='context first'>
+          <td class='context_line'>
+            <pre class='context'>57</pre>
+          </td>
+          <td class='context'>
+            <pre class='context'>    %span.account</pre>
+          </td>
+        </tr>
+          <tr class='context alt'>
+            <td class='context_line'>
+              <pre class='context'>58</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>      %span.muted</pre>
+            </td>
+          </tr>
+          <tr class='context'>
+            <td class='context_line'>
+              <pre class='context'>59</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>        De</pre>
+            </td>
+          </tr>
+          <tr class='context alt near_error'>
+            <td class='context_line'>
+              <pre class='context'>60</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>        = &quot;#{@ledger.account_text}&quot;</pre>
+            </td>
+          </tr>
+          <tr class='context error'>
+            <td class='context_line'>
+              <pre class='context'>61</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>      = link_to @ledger.account, @ledger.account, class: &#39;account_name&#39;</pre>
+            </td>
+          </tr>
+          <tr class='context alt near_error'>
+            <td class='context_line'>
+              <pre class='context'>62</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>    %span.account-to</pre>
+            </td>
+          </tr>
+          <tr class='context'>
+            <td class='context_line'>
+              <pre class='context'>63</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>      %span.muted a Cuenta</pre>
+            </td>
+          </tr>
+          <tr class='context alt'>
+            <td class='context_line'>
+              <pre class='context'>64</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>      = link_to @ledger.account_to, @ledger.account_to, class: &#39;account_to_name&#39;</pre>
+            </td>
+          </tr>
+          <tr class='context'>
+            <td class='context_line'>
+              <pre class='context'>66</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>%p</pre>
+            </td>
+          </tr>
+</table></div></td>
+  </tr>
+
+  <tr>
+    <td><span class='med-confidence'>Medium</span></td>
+    <td>
+      
+        account_ledgers/show (AccountLedgersController#show)
+      
+    </td>
+    <td><a rel="no-referrer" href="http://brakemanscanner.org/docs/warning_types/link_to_href">Cross Site Scripting</a></td>
+    <td><div class='warning_message' onClick="toggle('context5');toggle('message5');toggle('full_message5')" ><span id='message5' style='display:block' >Unsafe model attribute in link_to href near line 64: link_to(present(<span class="user_input">AccountLedger.find(params[:id])</span>)...</span><span id='full_message5' style='display:none'>Unsafe model attribute in link_to href near line 64: link_to(present(<span class="user_input">AccountLedger.find(params[:id])</span>).account_to, present(<span class="user_input">AccountLedger.find(params[:id])</span>).account_to, :class =&gt; &quot;account_to_name&quot;)</span><table id='context5' class='context' style='display:none'><caption>app/views/account_ledgers/show.html.haml</caption>        <tr class='context first'>
+          <td class='context_line'>
+            <pre class='context'>59</pre>
+          </td>
+          <td class='context'>
+            <pre class='context'>        De</pre>
+          </td>
+        </tr>
+          <tr class='context alt'>
+            <td class='context_line'>
+              <pre class='context'>60</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>        = &quot;#{@ledger.account_text}&quot;</pre>
+            </td>
+          </tr>
+          <tr class='context'>
+            <td class='context_line'>
+              <pre class='context'>61</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>      = link_to @ledger.account, @ledger.account, class: &#39;account_name&#39;</pre>
+            </td>
+          </tr>
+          <tr class='context alt'>
+            <td class='context_line'>
+              <pre class='context'>62</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>    %span.account-to</pre>
+            </td>
+          </tr>
+          <tr class='context near_error'>
+            <td class='context_line'>
+              <pre class='context'>63</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>      %span.muted a Cuenta</pre>
+            </td>
+          </tr>
+          <tr class='context alt error'>
+            <td class='context_line'>
+              <pre class='context'>64</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>      = link_to @ledger.account_to, @ledger.account_to, class: &#39;account_to_name&#39;</pre>
+            </td>
+          </tr>
+          <tr class='context'>
+            <td class='context_line'>
+              <pre class='context'>66</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>%p</pre>
+            </td>
+          </tr>
+          <tr class='context alt'>
+            <td class='context_line'>
+              <pre class='context'>67</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>  = render_if @ledger.updater do</pre>
+            </td>
+          </tr>
+          <tr class='context'>
+            <td class='context_line'>
+              <pre class='context'>68</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>    %i.icon-user.blue(title=&#39;Actualizado por&#39; data-toggle=&#39;tooltip&#39;)</pre>
+            </td>
+          </tr>
+          <tr class='context alt'>
+            <td class='context_line'>
+              <pre class='context'>69</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>    %span.updater= @ledger.updater</pre>
+            </td>
+          </tr>
+</table></div></td>
+  </tr>
+
+  <tr>
+    <td><span class='med-confidence'>Medium</span></td>
+    <td>
+      
+        contacts/show (ContactsController#show)
+      
+    </td>
+    <td><a rel="no-referrer" href="http://brakemanscanner.org/docs/warning_types/link_to_href">Cross Site Scripting</a></td>
+    <td><div class='warning_message' onClick="toggle('context6');toggle('message6');toggle('full_message6')" ><span id='message6' style='display:block' >Unsafe model attribute in link_to href near line 19: link_to(icon_delete_text, present(Contact.find(p...</span><span id='full_message6' style='display:none'>Unsafe model attribute in link_to href near line 19: link_to(icon_delete_text, present(<span class="user_input">Contact.find(params[:id])</span>), :class =&gt; &quot;btn&quot;, :confirm =&gt; &quot;Esta seguro de borra el contacto&quot;, :method =&gt; :delete)</span><table id='context6' class='context' style='display:none'><caption>app/views/contacts/show.html.haml</caption>        <tr class='context first'>
+          <td class='context_line'>
+            <pre class='context'>14</pre>
+          </td>
+          <td class='context'>
+            <pre class='context'>      %small</pre>
+          </td>
+        </tr>
+          <tr class='context alt'>
+            <td class='context_line'>
+              <pre class='context'>15</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>        = @contact.complete_name</pre>
+            </td>
+          </tr>
+          <tr class='context'>
+            <td class='context_line'>
+              <pre class='context'>16</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>  .span4.r</pre>
+            </td>
+          </tr>
+          <tr class='context alt'>
+            <td class='context_line'>
+              <pre class='context'>17</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>    = link_to icon_new_text, new_contact_path, class: &#39;btn&#39;</pre>
+            </td>
+          </tr>
+          <tr class='context near_error'>
+            <td class='context_line'>
+              <pre class='context'>18</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>    = link_to icon_edit_text, edit_contact_path(@contact.id), class: &#39;btn&#39;</pre>
+            </td>
+          </tr>
+          <tr class='context alt error'>
+            <td class='context_line'>
+              <pre class='context'>19</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>    = link_to icon_delete_text, @contact, class: &#39;btn&#39;, confirm: &quot;Esta seguro de borra el contacto&quot;, method: :delete</pre>
+            </td>
+          </tr>
+          <tr class='context'>
+            <td class='context_line'>
+              <pre class='context'>21</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>.row-fluid</pre>
+            </td>
+          </tr>
+          <tr class='context alt'>
+            <td class='context_line'>
+              <pre class='context'>22</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>  .span4</pre>
+            </td>
+          </tr>
+          <tr class='context'>
+            <td class='context_line'>
+              <pre class='context'>23</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>    = @contact.email_tag</pre>
+            </td>
+          </tr>
+</table></div></td>
+  </tr>
+
+  <tr>
+    <td><span class='med-confidence'>Medium</span></td>
+    <td>
+      
+        expenses/show (ExpensesController#show)
+      
+    </td>
+    <td><a rel="no-referrer" href="http://brakemanscanner.org/docs/warning_types/link_to_href">Cross Site Scripting</a></td>
+    <td><div class='warning_message' onClick="toggle('context7');toggle('message7');toggle('full_message7')" ><span id='message7' style='display:block' >Unsafe model attribute in link_to href near line 27: link_to(present(<span class="user_input">Expense.find(params[:id])</span>).conta...</span><span id='full_message7' style='display:none'>Unsafe model attribute in link_to href near line 27: link_to(present(<span class="user_input">Expense.find(params[:id])</span>).contact, present(<span class="user_input">Expense.find(params[:id])</span>).contact, :title =&gt; &quot;Contacto&quot;, :data =&gt; ({ :toggle =&gt; &quot;tooltip&quot; }))</span><table id='context7' class='context' style='display:none'><caption>app/views/expenses/show.html.haml</caption>        <tr class='context first'>
+          <td class='context_line'>
+            <pre class='context'>22</pre>
+          </td>
+          <td class='context'>
+            <pre class='context'>    %h1.ib</pre>
+          </td>
+        </tr>
+          <tr class='context alt'>
+            <td class='context_line'>
+              <pre class='context'>23</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>      %strong(title=&#39;Código ingreso, Ingreso-Año-Número&#39; data-toggle=&#39;tooltip&#39;)= @expense</pre>
+            </td>
+          </tr>
+          <tr class='context'>
+            <td class='context_line'>
+              <pre class='context'>24</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>      %small(title=&#39;Estado&#39; data-toggle=&#39;tooltip&#39;)= @expense.state_tag</pre>
+            </td>
+          </tr>
+          <tr class='context alt near_error'>
+            <td class='context_line'>
+              <pre class='context'>26</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>    %h4.ib.n</pre>
+            </td>
+          </tr>
+          <tr class='context error'>
+            <td class='context_line'>
+              <pre class='context'>27</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>      = link_to @expense.contact, @expense.contact, title: &#39;Contacto&#39;, data: {toggle: &#39;tooltip&#39;}</pre>
+            </td>
+          </tr>
+          <tr class='context alt'>
+            <td class='context_line'>
+              <pre class='context'>29</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>    .clearfix</pre>
+            </td>
+          </tr>
+          <tr class='context'>
+            <td class='context_line'>
+              <pre class='context'>30</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>    %h5.n.ib</pre>
+            </td>
+          </tr>
+          <tr class='context alt'>
+            <td class='context_line'>
+              <pre class='context'>31</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>      %span.muted Fecha:</pre>
+            </td>
+          </tr>
+          <tr class='context'>
+            <td class='context_line'>
+              <pre class='context'>32</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>      %i= lo @expense.date</pre>
+            </td>
+          </tr>
+</table></div></td>
+  </tr>
+
+  <tr>
+    <td><span class='med-confidence'>Medium</span></td>
+    <td>
+      
+        incomes/show (IncomesController#show)
+      
+    </td>
+    <td><a rel="no-referrer" href="http://brakemanscanner.org/docs/warning_types/link_to_href">Cross Site Scripting</a></td>
+    <td><div class='warning_message' onClick="toggle('context8');toggle('message8');toggle('full_message8')" ><span id='message8' style='display:block' >Unsafe model attribute in link_to href near line 27: link_to(present(<span class="user_input">Income.find(params[:id])</span>).contac...</span><span id='full_message8' style='display:none'>Unsafe model attribute in link_to href near line 27: link_to(present(<span class="user_input">Income.find(params[:id])</span>).contact, present(<span class="user_input">Income.find(params[:id])</span>).contact, :title =&gt; &quot;Contacto&quot;, :data =&gt; ({ :toggle =&gt; &quot;tooltip&quot; }))</span><table id='context8' class='context' style='display:none'><caption>app/views/incomes/show.html.haml</caption>        <tr class='context first'>
+          <td class='context_line'>
+            <pre class='context'>22</pre>
+          </td>
+          <td class='context'>
+            <pre class='context'>    %h1.ib</pre>
+          </td>
+        </tr>
+          <tr class='context alt'>
+            <td class='context_line'>
+              <pre class='context'>23</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>      %strong(title=&#39;Código ingreso, Ingreso-Año-Número&#39; data-toggle=&#39;tooltip&#39;)= @income</pre>
+            </td>
+          </tr>
+          <tr class='context'>
+            <td class='context_line'>
+              <pre class='context'>24</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>      %small(title=&#39;Estado&#39; data-toggle=&#39;tooltip&#39;)= @income.state_tag</pre>
+            </td>
+          </tr>
+          <tr class='context alt near_error'>
+            <td class='context_line'>
+              <pre class='context'>26</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>    %h4.ib.n</pre>
+            </td>
+          </tr>
+          <tr class='context error'>
+            <td class='context_line'>
+              <pre class='context'>27</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>      = link_to @income.contact, @income.contact, title: &#39;Contacto&#39;, data: {toggle: &#39;tooltip&#39;}</pre>
+            </td>
+          </tr>
+          <tr class='context alt'>
+            <td class='context_line'>
+              <pre class='context'>29</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>    .clearfix</pre>
+            </td>
+          </tr>
+          <tr class='context'>
+            <td class='context_line'>
+              <pre class='context'>30</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>    %h5.n.ib</pre>
+            </td>
+          </tr>
+          <tr class='context alt'>
+            <td class='context_line'>
+              <pre class='context'>31</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>      %span.muted Fecha:</pre>
+            </td>
+          </tr>
+          <tr class='context'>
+            <td class='context_line'>
+              <pre class='context'>32</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>      %i= lo @income.date</pre>
+            </td>
+          </tr>
+</table></div></td>
+  </tr>
+
+  <tr>
+    <td><span class='med-confidence'>Medium</span></td>
+    <td>
+      
+        incomes/show (IncomesController#show)
+      
+    </td>
+    <td><a rel="no-referrer" href="http://brakemanscanner.org/docs/warning_types/link_to_href">Cross Site Scripting</a></td>
+    <td><div class='warning_message' onClick="toggle('context9');toggle('message9');toggle('full_message9')" ><span id='message9' style='display:block' >Unsafe model attribute in link_to href near line 89: link_to(present(<span class="user_input">Income.find(params[:id])</span>).projec...</span><span id='full_message9' style='display:none'>Unsafe model attribute in link_to href near line 89: link_to(present(<span class="user_input">Income.find(params[:id])</span>).project, present(<span class="user_input">Income.find(params[:id])</span>).project)</span><table id='context9' class='context' style='display:none'><caption>app/views/incomes/show.html.haml</caption>        <tr class='context first'>
+          <td class='context_line'>
+            <pre class='context'>84</pre>
+          </td>
+          <td class='context'>
+            <pre class='context'>      = ntc @income.exchange_rate, precision: 4</pre>
+          </td>
+        </tr>
+          <tr class='context alt'>
+            <td class='context_line'>
+              <pre class='context'>85</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>      = currency_label</pre>
+            </td>
+          </tr>
+          <tr class='context'>
+            <td class='context_line'>
+              <pre class='context'>87</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>  .span6</pre>
+            </td>
+          </tr>
+          <tr class='context alt near_error'>
+            <td class='context_line'>
+              <pre class='context'>88</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>    %span.muted Proyecto:</pre>
+            </td>
+          </tr>
+          <tr class='context error'>
+            <td class='context_line'>
+              <pre class='context'>89</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>    = link_to @income.project, @income.project if @income.project</pre>
+            </td>
+          </tr>
+          <tr class='context alt near_error'>
+            <td class='context_line'>
+              <pre class='context'>90</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>    .clearfix</pre>
+            </td>
+          </tr>
+          <tr class='context'>
+            <td class='context_line'>
+              <pre class='context'>91</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>    %i.icon-file.muted(data-toggle=&#39;tooltip&#39; title=&#39;Descripción&#39;)</pre>
+            </td>
+          </tr>
+          <tr class='context alt'>
+            <td class='context_line'>
+              <pre class='context'>92</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>    = @income.description</pre>
+            </td>
+          </tr>
+          <tr class='context'>
+            <td class='context_line'>
+              <pre class='context'>94</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>%hr</pre>
+            </td>
+          </tr>
+</table></div></td>
+  </tr>
+
+  <tr>
+    <td><span class='med-confidence'>Medium</span></td>
+    <td>
+      
+        inventories/show_movement (InventoriesController#show_movement)
+      
+    </td>
+    <td><a rel="no-referrer" href="http://brakemanscanner.org/docs/warning_types/link_to_href">Cross Site Scripting</a></td>
+    <td><div class='warning_message' onClick="toggle('context10');toggle('message10');toggle('full_message10')" ><span id='message10' style='display:block' >Unsafe model attribute in link_to href near line 30: link_to(present(Inventory.includes(:inventory_de...</span><span id='full_message10' style='display:none'>Unsafe model attribute in link_to href near line 30: link_to(present(<span class="user_input">Inventory.includes(:inventory_details =&gt; ({ :item =&gt; :unit }))</span>.find(params[:id])).movement, present(<span class="user_input">Inventory.includes(:inventory_details =&gt; ({ :item =&gt; :unit }))</span>.find(params[:id])).movement)</span><table id='context10' class='context' style='display:none'><caption>app/views/inventories/show_movement.html.haml</caption>        <tr class='context first'>
+          <td class='context_line'>
+            <pre class='context'>26</pre>
+          </td>
+          <td class='context'>
+            <pre class='context'>.row-fluid</pre>
+          </td>
+        </tr>
+          <tr class='context alt'>
+            <td class='context_line'>
+              <pre class='context'>27</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>  .span6</pre>
+            </td>
+          </tr>
+          <tr class='context'>
+            <td class='context_line'>
+              <pre class='context'>28</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>    %h3.n</pre>
+            </td>
+          </tr>
+          <tr class='context alt near_error'>
+            <td class='context_line'>
+              <pre class='context'>29</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>      %span.muted= &quot;#{@inventory.related_tip}:&quot;</pre>
+            </td>
+          </tr>
+          <tr class='context error'>
+            <td class='context_line'>
+              <pre class='context'>30</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>      = link_to @inventory.movement, @inventory.movement</pre>
+            </td>
+          </tr>
+          <tr class='context alt near_error'>
+            <td class='context_line'>
+              <pre class='context'>31</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>  .span6</pre>
+            </td>
+          </tr>
+          <tr class='context'>
+            <td class='context_line'>
+              <pre class='context'>32</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>    %h3.n</pre>
+            </td>
+          </tr>
+          <tr class='context alt'>
+            <td class='context_line'>
+              <pre class='context'>33</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>      %span.muted Almacen:</pre>
+            </td>
+          </tr>
+          <tr class='context'>
+            <td class='context_line'>
+              <pre class='context'>34</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>      = link_to @inventory.store, store_path(@inventory.store, anchor: &#39;operations-tab&#39;)</pre>
+            </td>
+          </tr>
+</table></div></td>
+  </tr>
+
+  <tr>
+    <td><span class='med-confidence'>Medium</span></td>
+    <td>
+      
+        <div class="template_name" onClick="toggle('callers9')" >
+          <div>
+            stores/_inventory (Template:stores/show)
+          </div>
+          <div class="render_path" id="callers9" >
+            StoresController#show &rarr; Template:stores/show &rarr; stores/_inventory
+          </div>
+        </div>
+      
+    </td>
+    <td><a rel="no-referrer" href="http://brakemanscanner.org/docs/warning_types/link_to_href">Cross Site Scripting</a></td>
+    <td><div class='warning_message' onClick="toggle('context11');toggle('message11');toggle('full_message11')" ><span id='message11' style='display:block' >Unsafe model attribute in link_to href near line 8: link_to(present((local inventory)).related(presen...</span><span id='full_message11' style='display:none'>Unsafe model attribute in link_to href near line 8: link_to(present((local inventory)).related(present(<span class="user_input">Store.find(params[:id])</span>).id), present((local inventory)).related(present(<span class="user_input">Store.find(params[:id])</span>).id), :class =&gt; &quot;b&quot;, :title =&gt; (present((local inventory)).related_tip(present(<span class="user_input">Store.find(params[:id])</span>).id)), &quot;data-toggle&quot; =&gt; &quot;tooltip&quot;)</span><table id='context11' class='context' style='display:none'><caption>app/views/stores/_inventory.html.haml</caption>        <tr class='context first'>
+          <td class='context_line'>
+            <pre class='context'>3</pre>
+          </td>
+          <td class='context'>
+            <pre class='context'>  .span4</pre>
+          </td>
+        </tr>
+          <tr class='context alt'>
+            <td class='context_line'>
+              <pre class='context'>4</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>    %h4.n.ib(title=&#39;Código operación inventario&#39;)</pre>
+            </td>
+          </tr>
+          <tr class='context'>
+            <td class='context_line'>
+              <pre class='context'>5</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>      = link_to inventory.ref_number, inventory.link</pre>
+            </td>
+          </tr>
+          <tr class='context alt'>
+            <td class='context_line'>
+              <pre class='context'>6</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>    %strong(title=&#39;Tipo de operación&#39;)= inventory.operation_tag</pre>
+            </td>
+          </tr>
+          <tr class='context near_error'>
+            <td class='context_line'>
+              <pre class='context'>7</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>    .clearfix</pre>
+            </td>
+          </tr>
+          <tr class='context alt error'>
+            <td class='context_line'>
+              <pre class='context'>8</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>    = link_to inventory.related(store.id), inventory.related(store.id), class: &#39;b&#39;,</pre>
+            </td>
+          </tr>
+          <tr class='context near_error'>
+            <td class='context_line'>
+              <pre class='context'>9</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>      title: inventory.related_tip(store.id), &#39;data-toggle&#39; =&gt; &#39;tooltip&#39;  if inventory.has_related?</pre>
+            </td>
+          </tr>
+          <tr class='context alt'>
+            <td class='context_line'>
+              <pre class='context'>10</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>    %i= lo inventory.date</pre>
+            </td>
+          </tr>
+          <tr class='context'>
+            <td class='context_line'>
+              <pre class='context'>11</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>  .span8</pre>
+            </td>
+          </tr>
+          <tr class='context alt'>
+            <td class='context_line'>
+              <pre class='context'>12</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>    = inventory.creator_label</pre>
+            </td>
+          </tr>
+          <tr class='context'>
+            <td class='context_line'>
+              <pre class='context'>13</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>    %i.icon-file.muted(title=&#39;Descripción&#39;)</pre>
+            </td>
+          </tr>
+</table></div></td>
+  </tr>
+
+  <tr>
+    <td><span class='weak-confidence'>Weak</span></td>
+    <td>
+      
+        transferences/new (TransferencesController#create)
+      
+    </td>
+    <td><a rel="no-referrer" href="http://brakemanscanner.org/docs/warning_types/cross_site_scripting">Cross Site Scripting</a></td>
+    <td><div class='warning_message' onClick="toggle('context1');toggle('message1');toggle('full_message1')" ><span id='message1' style='display:block' >Unescaped model attribute near line 58: find_and_preserve(Haml::Filters::Javascript.render_with_optio...</span><span id='full_message1' style='display:none'>Unescaped model attribute near line 58: find_and_preserve(Haml::Filters::Javascript.render_with_options(&quot;$(function() {   var t = new App.Transference({     accountsTo: #{<span class="user_input">AccountQuery.new.bank_cash</span>_options_minus(<span class="user_input">AccountQuery.new.bank_cash</span>.where(:id =&gt; (params[:account_id])).first.id).to_json},      baseCurrency: &quot;#{<span class="user_input">AccountQuery.new.bank_cash</span>.where(:id =&gt; (params[:account_id])).first.currency}&quot;,     currency: &quot;#{Transference.new(transference_params).account_to_currency}&quot;,     exchange_rate: &quot;#{Transference.new(transference_params).exchange_rate}&quot;,     account_to_id: &quot;#{Transference.new(transference_params).account_to_id}&quot;,     amount: #{Transference.new(transference_params).amount}   }); }) &quot;, _hamlout.options))</span><table id='context1' class='context' style='display:none'><caption>app/views/transferences/new.html.haml</caption>        <tr class='context first'>
+          <td class='context_line'>
+            <pre class='context'>54</pre>
+          </td>
+          <td class='context'>
+            <pre class='context'>  .form-actions</pre>
+          </td>
+        </tr>
+          <tr class='context alt'>
+            <td class='context_line'>
+              <pre class='context'>55</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>    = f.submit &quot;Transferir&quot;, class: &#39;btn btn-primary btn-large b&#39;</pre>
+            </td>
+          </tr>
+          <tr class='context near_error'>
+            <td class='context_line'>
+              <pre class='context'>57</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>:javascript</pre>
+            </td>
+          </tr>
+          <tr class='context alt error'>
+            <td class='context_line'>
+              <pre class='context'>58</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>  $(function() {</pre>
+            </td>
+          </tr>
+          <tr class='context near_error'>
+            <td class='context_line'>
+              <pre class='context'>59</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>    var t = new App.Transference({</pre>
+            </td>
+          </tr>
+          <tr class='context alt'>
+            <td class='context_line'>
+              <pre class='context'>60</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>      accountsTo: #{AccountQuery.new.bank_cash_options_minus(@account.id).to_json}, </pre>
+            </td>
+          </tr>
+          <tr class='context'>
+            <td class='context_line'>
+              <pre class='context'>61</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>      baseCurrency: &quot;#{@account.currency}&quot;,</pre>
+            </td>
+          </tr>
+          <tr class='context alt'>
+            <td class='context_line'>
+              <pre class='context'>62</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>      currency: &quot;#{@transference.account_to_currency}&quot;,</pre>
+            </td>
+          </tr>
+          <tr class='context'>
+            <td class='context_line'>
+              <pre class='context'>63</pre>
+            </td>
+            <td class='context'>
+              <pre class='context'>      exchange_rate: &quot;#{@transference.exchange_rate}&quot;,</pre>
+            </td>
+          </tr>
+</table></div></td>
+  </tr>
+
+</table>
+</body></html>

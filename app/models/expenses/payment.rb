@@ -10,6 +10,7 @@ class Expenses::Payment < Payment
   validate :valid_account_to_state, if: :account_to_is_income?
 
   # Delegations
+  delegate :total, :balance, :currency, to: :expense, prefix: true, allow_nil: true
 
   # Creates the payment updating related objects
   def pay
@@ -29,7 +30,7 @@ class Expenses::Payment < Payment
   def expense
     @movement = @expense ||= Expense.find_by_id(account_id)
   end
-  alias :movement :expense
+  alias_method :movement, :expense
 
 private
   def save_expense

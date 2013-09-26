@@ -1,0 +1,27 @@
+%h4.title Devolución
+
+= simple_form_for @devolution, url: income_devolution_path(@devolution.account_id), html: {id: 'income-@devolution-form'} do |f|
+  = bonsai_form_error(f)
+  = f.hidden_field :account_id
+
+  = render 'devolutions/form', f: f, movement: @devolution
+
+  .form-actions
+    = f.submit "Devolución", class: 'btn btn-danger b'
+    %a.cancel.btn(hre='javascript:;') Cancelar
+
+:javascript
+  $(function() {
+
+    var p = new App.IncomeDevolution({
+      accountsTo: #{AccountQuery.new.bank_cash_options.to_json},
+      baseCurrency: "#{@devolution.currency}"
+      account_to_id: "#{@devolution.account_to_id}",
+      amount: #{@devolution.amount},
+      date: "#{@devolution.date}",
+      exchange_rate: #{@devolution.exchange_rate.to_f},
+      reference: "#{@devolution.reference}",
+      verification: #{@devolution.verification}
+    });
+  })
+

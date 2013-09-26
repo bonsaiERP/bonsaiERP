@@ -6,6 +6,9 @@ class Expenses::Devolution < Devolution
   # Validations
   validates_presence_of :expense
 
+  # Delegations
+  delegate :total, :balance, :currency, to: :expense, prefix: true, allow_nil: true
+
   # Updates Exppense#balance and creates and AccountLedger object with the
   # devolution data
   def pay_back

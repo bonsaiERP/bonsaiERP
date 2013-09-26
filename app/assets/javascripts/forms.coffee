@@ -50,7 +50,7 @@ $( ->
           $div.setDatepicker()
         ,200)
     .error (resp) ->
-      alert('There were errors please try again.')
+      alert('Existio errores, por favor intente de nuevo.')
   )
   # End submit ajax form
 

@@ -3,13 +3,13 @@
 # email: boriscyber@gmail.com
 class MovementPresenter < BasePresenter
 
-  def payments
+  def payments_and_devolutions
     present AccountLedgerQuery.new.payments_ordered(id), AccountLedgerPresenter
   end
 
-  def devolutions
-    present to_model.payments_devolutions.includes(:account_to).order('date  desc, id desc'), AccountLedgerPresenter
-  end
+  #def payments_devolutions
+  #  to_model.ledgers.includes(:account_to).order('date  desc, id desc')
+  #end
 
   def balance?
     to_model.balance > 0

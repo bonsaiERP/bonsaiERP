@@ -1,15 +1,15 @@
 .row-fluid
-  .span6.account_to
+  .span12.account_to
     = f.input :account_to_id, label: 'Cuenta', input_html: {class: 'span10', data:{value: 'payment.account_to_id'}}
-  .span3
+
+.row-fluid
+  .span6
     = f.input :date, as: :datepicker, label: 'Fecha'
-  .span3
-    %div(data-show="payment.bank")
-      = f.input :verification, as: :boolean, label: 'Verificar',
+  .span6
+    %div.form-inline(data-show="payment.bank")
+      = f.input :verification, as: :boolean, label: 'Verificar (solo banco)',
         input_html: {data: {value: 'payment.verification', checked: 'payment.verification'} },
-        label: 'Verificar <i class="icon-warning-sign" data-toggle="tooltip" title="Solo cuentas de BANCO pueden verificar a futuro"></i>'.html_safe,
-        hint: 'Verificar a futuro. Ej.: (Cheque)' do
-        = f.check_box :verification
+       hint: 'Verificar a futuro. Ej.: (Cheque)'
 
 .row-fluid
   .span3
@@ -26,7 +26,7 @@
       %label TOTAL
       %h4
         %span#currency_total(data-text="payment.totalCurrency")
-        %span#devolution-currency-label
+        %span#devolution-currency-label= currency_label movement.currency
 
 
 .row-fluid
