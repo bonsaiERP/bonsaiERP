@@ -1,8 +1,8 @@
 %li.row-fluid.account_ledger(id='#{ledger.id}')
   .span8
     %h4.ib
-      %strong.fs80= ledger.operation_tag
-      = link_to ledger, ledger, class: 'code', title: 'Código recibo'
+      %strong.fs70= ledger.operation_tag
+      = link_to ledger, ledger, class: 'code', title: 'Código'
 
     %span(title='Estado')= ledger.status_tag
 

@@ -289,6 +289,17 @@ init = ($) ->
       $(this).find('[title]').tooltip()
     )
 
+    # OpenIn
+    $('body').on('click', '.openin', (event) ->
+      event.preventDefault()
+      $this = $(this)
+      url = $this.attr('href')
+      $($this.data('openin')).load(url)
+      $this.hide()  if $this.data('openinhide')
+    )
+
+  # End of $(document).ready
+
   rivets.configure(
     #preloadData: false
     adapter:

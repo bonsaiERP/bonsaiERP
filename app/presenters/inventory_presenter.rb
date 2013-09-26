@@ -84,7 +84,7 @@ class InventoryPresenter < BasePresenter
   end
 
   def transaction_title
-    "#{select_store_title} #{transaction}".html_safe
+    "#{select_store_title} #{sanitize transaction}".html_safe
   end
 
   def title
@@ -92,19 +92,19 @@ class InventoryPresenter < BasePresenter
 
     case
     when( inventory_operation.transaction_id.present? && transaction.is_a?(Income) && inventory_operation.out? )
-      "<span class='gray n'>Entrega</span> #{store} - #{transaction}".html_safe
+      "<span class='gray n'>Entrega</span> #{store} - #{sanitize transaction}".html_safe
     when( inventory_operation.transaction_id.present? && transaction.is_a?(Income) && inventory_operation.in? )
-      "<span class='gray n'>Devolución</span> #{store} - #{transaction}".html_safe
+      "<span class='gray n'>Devolución</span> #{store} - #{sanitize transaction}".html_safe
     when( inventory_operation.transaction_id.present? && transaction.is_a?(Buy) && inventory_operation.in? )
-      "<span class='gray n'>Recojo</span> #{transaction}".html_safe
+      "<span class='gray n'>Recojo</span> #{sanitize transaction}".html_safe
     when( inventory_operation.transaction_id.present? && transaction.is_a?(Income) && inventory_operation.out? )
-      "<span class='gray n'>Devolución</span> #{store} - #{transaction}".html_safe
+      "<span class='gray n'>Devolución</span> #{sanitize store} - #{sanitize transaction}".html_safe
     when inventory_operation.in?
-      "<span class='gray n'>Ingreso</span> #{store}".html_safe
+      "<span class='gray n'>Ingreso</span> #{sanitize store}".html_safe
     when inventory_operation.out?
-      "<span class='gray n'>Egreso</span>  #{store}".html_safe
+      "<span class='gray n'>Egreso</span>  #{sanitize store}".html_safe
     when inventory_operation.transout? || inventory_operation.transin?
-      "<span class='gray n'>Transferencia</span> #{store} - #{inventory_operation.ref_number}".html_safe
+      "<span class='gray n'>Transferencia</span> #{sanitize store} - #{inventory_operation.ref_number}".html_safe
     end
   end
 

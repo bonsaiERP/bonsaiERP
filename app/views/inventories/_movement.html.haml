@@ -1,0 +1,13 @@
+- inventory = present inventory
+%li.row-fluid
+  .span12
+    %h4.n.ib(title='Código operación inventario')
+      = link_to inventory.ref_number, inventory.link
+    %strong(title='Tipo de operación')= inventory.operation_tag
+    %i= lo inventory.date
+
+    .clearfix
+    = inventory.creator_label
+    %i.icon-file.muted(title='Descripción')
+    = inventory.description
+

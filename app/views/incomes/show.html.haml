@@ -109,8 +109,8 @@
 
     &nbsp;
     &nbsp;
-    %a#show-payments(href='javascript:;' data-url="#{}")
-      Ver cobros y devoluciones
+    = link_to 'Ver cobros y devoluciones', ledgers_income_path(@income.id),
+      class: 'openin', data: { openin: '.ledgers', openinhide: true  }
 
     .payment-form.form-container.ajax-modal
 
@@ -126,7 +126,6 @@
           %i.icon-minus-sign
           Devolución
 
-
     %ul.unstyled.listing.ledgers
       - if @income.to_model.ledgers.pendent.any?
         = render partial: 'account_ledgers/movement2', collection: @income.pendent_ledgers, as: :ledger
@@ -137,9 +136,20 @@
 
     &nbsp;
     &nbsp;
-    %a#show-inventory(href='javascript:;' data-url="#{}")
-      Ver operaciones de inventario
 
+    = link_to 'Ver operaciones de inventario', inventories_income_path(@income.id),
+      class: 'openin', data: { openin: '.inventories', openinhide: true  }
+
+
+    - if @income.enable_disable_inventory?
+      %p.center
+        = link_to inventory_income_path(@income.id, no_inventory: @income.enable_disable_inventory_val), method: 'patch', class: 'no-tab' do
+          = @income.enable_disable_inventory_text_tag
+
+    %p.center.inventories-buttons
+      = render 'incomes/inventory_buttons', income: @income
+
+    %ul.listing.unstyled.inventories
 
 -#Tours
 = render 'incomes/tour_devolution'

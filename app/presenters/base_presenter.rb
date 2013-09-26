@@ -6,4 +6,5 @@ class BasePresenter < Resubject::Presenter
   include LabelTagHelper
   include IconsHelper
   include TextHelper
+  include ActionView::Helpers::SanitizeHelper
 end

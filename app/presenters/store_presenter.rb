@@ -3,11 +3,11 @@
 # email: boriscyber@gmail.com
 class StorePresenter < BasePresenter
   def address_tag
-    "#{ icon 'icon-building muted', 'Dirección' } #{address}".html_safe if address.present?
+    "#{ icon 'icon-building muted', 'Dirección' } #{sanitize address}".html_safe if address.present?
   end
 
   def phone_tag
-    "#{ icon 'icon-phone muted', 'Teléfono' } #{phone}".html_safe if phone.present?
+    "#{ icon 'icon-phone muted', 'Teléfono' } #{sanitize phone}".html_safe if phone.present?
   end
 
   def items(attrs = {})
