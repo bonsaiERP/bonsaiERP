@@ -9,7 +9,7 @@
       trigger: 'hover',
       title: 'Verificación',
       html: true,
-      content: 'Actualiza el balance de la cuentas asociadas <br/><strong>' + to_name + '</strong>'
+      content: 'Actualiza el balance de la cuenta asociada <br/><strong>' + _.escape(to_name) + '</strong>'
     });
 
     $('#conciliate-null-form').submit( function(event) {

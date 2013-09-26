@@ -99,10 +99,11 @@
 
 = render "incomes/items", income: @income
 
-= @income.pendent_conciliations
 
 .row-fluid
   .span6.well.well-small.bg-white
+    = @income.pendent_conciliations
+
     %h3.n.ib
       Cobros y devoluciones
 
@@ -125,8 +126,10 @@
           %i.icon-minus-sign
           Devolución
 
-    %ul.unstyled.listing
-      = render partial: 'account_ledgers/movement2', collection: @income.payments_and_devolutions, as: :ledger
+
+    %ul.unstyled.listing.ledgers
+      - if @income.to_model.ledgers.pendent.any?
+        = render partial: 'account_ledgers/movement2', collection: @income.pendent_ledgers, as: :ledger
 
   .span6.well.well-small.bg-white
     %h3.n.ib

@@ -18,18 +18,18 @@
       = image_tag 'pdf.png', size: '16'
       PDF
 .row-fluid.account_ledger
-  .span3
+  .span2
     %h4.i.n.ib
       = lo @ledger.date.to_date
 
-  .span6
+  .span5
     .edit-reference
       %a.edit-ledger-reference-link.dark(href='javascript:;' title='Editar referencia' data-toggle='tooltip' data-id='#{@ledger.id}' data-reference='#{@ledger.reference}')
         %i.icon-pencil
       %i.icon-file.muted(data-toggle='tooltip' title="referencia")
       %span.reference= nl2br @ledger.reference
 
-  .span3.r
+  .span5.r
     .moneybox.fr
       %label TOTAL
       %h4.n
@@ -38,7 +38,9 @@
 
     - unless @ledger.currency === @ledger.account_currency
       .clearfix
-      %i.icon-exchange.muted(title='Tipo de cambio' data-toggle='tooltip')
+      %span.muted
+        %i.icon-exchange
+        Tipo de cambio
       = ntc 1.0
       = currency_tag @ledger.currency
       \=

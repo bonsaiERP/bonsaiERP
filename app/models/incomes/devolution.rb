@@ -6,6 +6,9 @@ class Incomes::Devolution < Devolution
   # Validations
   validates_presence_of :income
 
+  # Delegations
+  delegate :total, :balance, :currency, to: :income, prefix: true, allow_nil: true
+
   # Updates Income#total and creates and AccountLedger object with the
   # devolution data
   def pay_back

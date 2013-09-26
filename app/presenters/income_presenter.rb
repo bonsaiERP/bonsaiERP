@@ -12,7 +12,7 @@ class IncomePresenter < MovementPresenter
   end
 
   def pendent_conciliations
-    if ledgers.pendent.any?
+    if to_model.ledgers.pendent.any?
       html = <<-EOS
       <p class="help-block">
         Los cobros o devoluciones con

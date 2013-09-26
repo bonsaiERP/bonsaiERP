@@ -3,8 +3,13 @@
 # email: boriscyber@gmail.com
 class MovementPresenter < BasePresenter
 
-  def payments_and_devolutions
+  def ledgers
     present AccountLedgerQuery.new.payments_ordered(id), AccountLedgerPresenter
+  end
+  alias_method :payments_and_devolutions, :ledgers
+
+  def pendent_ledgers
+    present AccountLedgerQuery.new.payments_ordered(id).pendent, AccountLedgerPresenter
   end
 
   #def payments_devolutions

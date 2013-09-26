@@ -1,6 +1,6 @@
 %h4.title Devolución
 
-= simple_form_for @devolution, url: income_devolution_path(@devolution.account_id), html: {id: 'income-@devolution-form'} do |f|
+= simple_form_for @devolution, url: income_devolution_path(@devolution.account_id), html: {id: 'income-devolution-form'} do |f|
   = bonsai_form_error(f)
   = f.hidden_field :account_id
 
@@ -15,9 +15,9 @@
 
     var p = new App.IncomeDevolution({
       accountsTo: #{AccountQuery.new.bank_cash_options.to_json},
-      baseCurrency: "#{@devolution.currency}"
+      baseCurrency: "#{@devolution.income_currency}",
       account_to_id: "#{@devolution.account_to_id}",
-      amount: #{@devolution.amount},
+      amount: #{@devolution.amount.to_f},
       date: "#{@devolution.date}",
       exchange_rate: #{@devolution.exchange_rate.to_f},
       reference: "#{@devolution.reference}",
