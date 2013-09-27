@@ -1,0 +1,28 @@
+= expense.pendent_conciliations
+
+%h3.n.ib
+  Pagos y devoluciones
+
+&nbsp;
+&nbsp;
+= link_to 'Ver pagos y devoluciones', ledgers_expense_path(expense.id),
+  data: { openin: '.ledgers', openinhide: true }
+
+.payment-form.form-container.ajax-modal
+
+%p.center.payment-buttons
+
+  - if expense.can_pay?
+    = link_to class: 'btn btn-success w100p', data: {remote: true, url: new_expense_payment_path(expense.id) } do
+      %i.icon-minus-sign
+      Pago
+
+  - if expense.can_devolution?
+    = link_to class: 'btn btn-danger w100p', data: {remote: true, url: new_expense_devolution_path(expense.id) } do
+      %i.icon-plus-sign
+      Devolución
+
+%ul.unstyled.listing.ledgers
+  - if expense.to_model.ledgers.pendent.any?
+    = render partial: 'account_lesgers/movement', collection: expense.payments_and_devolutions, as: :ledger
+

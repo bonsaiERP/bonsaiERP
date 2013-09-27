@@ -101,35 +101,11 @@
 
 
 .row-fluid
+  -# Ledgers
   .span6.well.well-small.bg-white
-    = @income.pendent_conciliations
+    = render 'ledger_details', income: @income
 
-    %h3.n.ib
-      Cobros y devoluciones
-
-    &nbsp;
-    &nbsp;
-    = link_to 'Ver cobros y devoluciones', ledgers_income_path(@income.id),
-      class: 'openin', data: { openin: '.ledgers', openinhide: true  }
-
-    .payment-form.form-container.ajax-modal
-
-    %p.center.payment-buttons
-
-      - if @income.can_pay?
-        = link_to class: 'btn btn-success w100p', data: {remote: true, url: new_income_payment_path(@income.id) } do
-          %i.icon-plus-sign
-          Cobrar
-
-      - if @income.can_devolution?
-        = link_to class: 'btn btn-danger w100p', data: {remote: true, url: new_income_devolution_path(@income.id) } do
-          %i.icon-minus-sign
-          Devolución
-
-    %ul.unstyled.listing.ledgers
-      - if @income.to_model.ledgers.pendent.any?
-        = render partial: 'account_ledgers/movement2', collection: @income.pendent_ledgers, as: :ledger
-
+  -# Inventory
   .span6.well.well-small.bg-white
     %h3.n.ib
       Operaciones inventario
