@@ -134,15 +134,15 @@
     %h3.n.ib
       Operaciones inventario
 
-    &nbsp;
-    &nbsp;
+      = @income.inventory_tag
+
 
     = link_to 'Ver operaciones de inventario', inventories_income_path(@income.id),
       class: 'openin', data: { openin: '.inventories', openinhide: true  }
 
 
     - if @income.enable_disable_inventory?
-      %p.center
+      %h5.n.c
         = link_to inventory_income_path(@income.id, no_inventory: @income.enable_disable_inventory_val), method: 'patch', class: 'no-tab' do
           = @income.enable_disable_inventory_text_tag
 

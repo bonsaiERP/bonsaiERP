@@ -1,11 +1,11 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-module TransactionHelper
+module MovementHelper
   def search_path(trans, options = {})
     options[:format] ||= 'json'
 
-    case 
+    case
     when trans.class.to_s =~ /Income/
       search_income_items_path(options)
     when trans.class.to_s =~ /Expense/

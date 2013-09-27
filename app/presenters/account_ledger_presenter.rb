@@ -2,6 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class AccountLedgerPresenter < BasePresenter
+  attr_accessor :current_account_id
 
   def initials(name)
     name.split(' ').map(&:first).join('')
@@ -18,7 +19,7 @@ class AccountLedgerPresenter < BasePresenter
   def status_tag
     case status
     when 'pendent'
-      html = ["<span class='label label-warning'>", icon_tag(class: 'icon-warning-sign'),
+      html = ["<span class='label label-warning'>", icon('icon-warning-sign'),
               " Pendiente</span>"].join('')
     when 'approved'
       html = "<span class='b bonsai-dark'>Aprobado</span>"
@@ -63,7 +64,7 @@ class AccountLedgerPresenter < BasePresenter
   def account_contact_tag
     html = ""
     if account_contact
-      html << "<i class='icon-user'></i> #{ sanitize account_contact}"
+      html << "<i class='icon-user'></i> #{ sanitize account_contact.to_s}"
     end
 
     html.html_safe
@@ -136,6 +137,10 @@ class AccountLedgerPresenter < BasePresenter
     end
   end
 
+  def is_account?
+    @is_account ||= (account.is_a?(Income) || account_to.is_a?(Income))
+  end
+
   def trans_operation_tag
     if is_account?
       operation_tag
@@ -153,7 +158,7 @@ class AccountLedgerPresenter < BasePresenter
   end
 
   def trans_account
-    if is_account?
+    if current_account_id == account_id
       account_to
     else
       account
@@ -166,12 +171,5 @@ class AccountLedgerPresenter < BasePresenter
 
   def trans_account_icon
     account_icon trans_account
-  end
-
-private
-  def icon_tag(attrs = {})
-    tit = "title='#{attrs[:title]}'" if attrs[:title]
-    tog = " data-toggle='tooltip'" if tit
-    "<i class='#{attrs[:class]}' #{tit} #{tog}></i>"
   end
 end

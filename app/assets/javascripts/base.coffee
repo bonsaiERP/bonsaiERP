@@ -290,7 +290,7 @@ init = ($) ->
     )
 
     # OpenIn
-    $('body').on('click', '.openin', (event) ->
+    $('body').on('click', '[data-openin]', (event) ->
       event.preventDefault()
       $this = $(this)
       url = $this.attr('href')

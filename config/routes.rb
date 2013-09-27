@@ -82,6 +82,8 @@ Bonsaierp::Application.routes.draw do
       patch :null
       patch :inventory
       get :history
+      get :ledgers
+      get :inventories
     end
   end
 

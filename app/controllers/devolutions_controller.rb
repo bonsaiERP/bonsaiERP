@@ -14,13 +14,11 @@ class DevolutionsController < ApplicationController
     check_income
 
     if @devolution.pay_back
-      flash[:notice] = 'La devolución realizo correctamente.'
+      flash[:notice] = 'La devolución se realizo correctamente.'
       render 'income.js'
     else
       render :new_income
     end
-
-    redirect_to income_path(p.income, anchor: 'payments')
   end
 
   # GET /devolutions/:id/new_expense

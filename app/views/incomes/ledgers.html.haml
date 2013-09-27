@@ -1,1 +1,1 @@
-= render partial: 'account_ledgers/movement2', collection: @income.ledgers, as: :ledger
+= render partial: 'account_ledgers/movement', collection: @income.present_ledgers, as: :ledger, locals: { current_account_id: @income.id }

@@ -98,8 +98,8 @@
 
     &nbsp;
     &nbsp;
-    %a#show-payments(href='javascript:;' data-url="#{}")
-      Ver pagos y devoluciones
+    = link_to 'Ver pagos y devoluciones', ledgers_expense_path(@expense.id),
+      data: { openin: '.ledgers', openinhide: true }
 
     .payment-form.form-container.ajax-modal
 
@@ -115,18 +115,20 @@
           %i.icon-plus-sign
           Devolución
 
-    %ul.unstyled.listing
-      = render partial: 'account_ledgers/movement2', collection: @expense.payments_and_devolutions, as: :ledger
+    %ul.unstyled.listing.ledgers
+      - if @expense.to_model.ledgers.pendent.any?
+        = render partial: 'account_lesgers/movement', collection: @expense.payments_and_devolutions, as: :ledger
 
   .span6.well.well-small.bg-white
     %h3.n.ib
       Operaciones inventario
 
-    &nbsp;
-    &nbsp;
-    %a#show-inventory(href='javascript:;' data-url="#{}")
-      Ver operaciones de inventario
+      = @expense.inventory_tag
 
+    = link_to 'Ver operaciones de inventario', inventories_expense_path(@expense.id),
+      class: 'openin', data: { openin: '.inventories', openinhide: true  }
+
+    %ul.unstyled.listing.inventories
 
 -#Tours
 = render 'expenses/tour_devolution'
