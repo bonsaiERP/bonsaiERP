@@ -8,15 +8,16 @@
     - ledger = present ledger
     %li.row-fluid.account_ledger(id='#{ledger.id}')
       .span5
+        %strong= ledger.operation_tag
         %h4.ib
-          = link_to ledger, ledger, class: 'code'
+          = link_to ledger, ledger, class: 'code', title: 'Código'
 
         = ledger.status_tag
 
+        .clearfix
         %h5.ib
-          = link_to ledger.account_contact, ledger.account_contact if ledger.account_contact
+          = link_to ledger.account_contact, ledger.account_contact, title: 'Contacto' if ledger.account_contact
         %p
-          = ledger.operation_tag
           %i= l ledger.date.to_date
           - unless ledger.account_id === account.id
             %span.muted De:

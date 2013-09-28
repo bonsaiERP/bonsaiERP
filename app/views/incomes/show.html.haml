@@ -107,26 +107,7 @@
 
   -# Inventory
   .span6.well.well-small.bg-white
-    %h3.n.ib
-      Operaciones inventario
-
-      = @income.inventory_tag
-
-
-    = link_to 'Ver operaciones de inventario', inventories_income_path(@income.id),
-      class: 'openin', data: { openin: '.inventories', openinhide: true  }
-
-
-    - if @income.enable_disable_inventory?
-      %h5.n.c
-        = link_to inventory_income_path(@income.id, no_inventory: @income.enable_disable_inventory_val), method: 'patch', class: 'no-tab' do
-          = @income.enable_disable_inventory_text_tag
-
-    %p.center.inventories-buttons
-      = render 'incomes/inventory_buttons', income: @income
-
-    %ul.listing.unstyled.inventories
-
+    = render 'inventory_details', income: @income
 -#Tours
 = render 'incomes/tour_devolution'
 

@@ -1,0 +1,17 @@
+%h3.n.ib
+  Operaciones inventario
+
+  = expense.inventory_tag
+
+- if expense.enable_disable_inventory?
+  %h5.n.ib
+    = link_to inventory_expense_path(expense.id, no_inventory: expense.enable_disable_inventory_val), method: 'patch', class: 'no-tab' do
+      = expense.enable_disable_inventory_text_tag
+
+%p.center.inventories-buttons
+  = render 'expenses/inventory_buttons', expense: expense
+
+= link_to 'Ver operaciones de inventario', inventories_expense_path(expense.id),
+  class: 'openin', data: { openin: '.inventories', openinhide: true  }
+
+%ul.unstyled.listing.inventories

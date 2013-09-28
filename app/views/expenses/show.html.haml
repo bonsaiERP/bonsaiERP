@@ -96,23 +96,7 @@
     = render 'ledger_details', expense: @expense
 
   .span6.well.well-small.bg-white
-    %h3.n.ib
-      Operaciones inventario
-
-      = @expense.inventory_tag
-
-    = link_to 'Ver operaciones de inventario', inventories_expense_path(@expense.id),
-      class: 'openin', data: { openin: '.inventories', openinhide: true  }
-
-    - if @expense.enable_disable_inventory?
-      %h5.n.c
-        = link_to inventory_expense_path(@expense.id, no_inventory: @expense.enable_disable_inventory_val), method: 'patch', class: 'no-tab' do
-          = @expense.enable_disable_inventory_text_tag
-
-    %p.center.inventories-buttons
-      = render 'expenses/inventory_buttons', expense: @expense
-
-    %ul.unstyled.listing.inventories
+    = render 'inventory_details', expense: @expense
 
 -#Tours
 = render 'expenses/tour_devolution'

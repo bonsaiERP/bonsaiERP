@@ -3,11 +3,6 @@
 %h3.n.ib
   Pagos y devoluciones
 
-&nbsp;
-&nbsp;
-= link_to 'Ver pagos y devoluciones', ledgers_expense_path(expense.id),
-  data: { openin: '.ledgers', openinhide: true }
-
 .payment-form.form-container.ajax-modal
 
 %p.center.payment-buttons
@@ -22,7 +17,9 @@
       %i.icon-plus-sign
       Devolución
 
+= link_to 'Ver pagos y devoluciones', ledgers_expense_path(expense.id),
+  data: { openin: '.ledgers', openinhide: true }
+
 %ul.unstyled.listing.ledgers
   - if expense.to_model.ledgers.pendent.any?
     = render partial: 'account_lesgers/movement', collection: expense.payments_and_devolutions, as: :ledger
-

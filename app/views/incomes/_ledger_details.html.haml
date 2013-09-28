@@ -3,10 +3,6 @@
 %h3.n.ib
   Cobros y devoluciones
 
-&nbsp;
-&nbsp;
-= link_to 'Ver cobros y devoluciones', ledgers_income_path(income.id),
-  class: 'openin', data: { openin: '.ledgers', openinhide: true  }
 
 .payment-form.form-container.ajax-modal
 
@@ -21,6 +17,9 @@
     = link_to class: 'btn btn-danger w100p', data: {remote: true, url: new_income_devolution_path(income.id) } do
       %i.icon-minus-sign
       Devolución
+
+= link_to 'Ver cobros y devoluciones', ledgers_income_path(income.id),
+  class: 'openin', data: { openin: '.ledgers', openinhide: true  }
 
 %ul.unstyled.listing.ledgers
   - if income.to_model.ledgers.pendent.any?
