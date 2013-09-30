@@ -1,20 +1,8 @@
 %ol#devolution-tour.hidden
-  %li(data-sel="#devolution-link" data-text="Siguiente" data-tip-location='bottom')
+  %li(data-sel="#devolution-link" data-text="Fin" data-tip-location='bottom')
     %p
-      Haga click para abrir el formulario de devolución,
-      el color
-      %strong.text-error rojo
-      denota que saldrá dinero de una cuenta
-
-  %li(data-sel=".account_to" data-text="Fin" data-tip-location='bottom')
-    %p
-      Seleccione
-      %strong la cuenta,
-      ingrese la fecha, cantidad y referencia,
-      haciendo click en el botón
+      Haga click para abrir botón,
       %strong.text-error Devolución
-      completará la misma.
-
 
 %ul#devolution-inventory.hidden
   %li(data-sel="#inventory-devolution-link" data-text="Fin" data-tip-location="bottom")
@@ -27,23 +15,11 @@
 :javascript
   $(function() {
     $('#negative-balance-link').click(function() {
-      $('#devolution-form .cancel').click();
-      setTimeout(function() {
-        $('.payment-link-tab').trigger('click');
-        new Plugin.Bride('#devolution-tour').init();
-      }, 200);
+      new Plugin.Bride('#devolution-tour').init();
     });
 
-    $('body').on('mousedown', '[data-name="#devolution-tour-1"] .next', function() {
-      $('#devolution-link').click();
-    });
-
-    $('body').on('mousedown', '[data-name="#devolution-tour-2"] .prev', function() {
-      $('#devolution-form .cancel').click();
-    });
 
     $('body').on('click', '#negative-invenory-balance-link', function() {
-      $('.item-link-tab').trigger('click');
       new Plugin.Bride('#devolution-inventory').init();
     });
   })

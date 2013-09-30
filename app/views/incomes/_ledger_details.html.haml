@@ -14,7 +14,7 @@
       Cobrar
 
   - if income.can_devolution?
-    = link_to class: 'btn btn-danger w100p', data: {remote: true, url: new_income_devolution_path(income.id) } do
+    = link_to class: 'btn btn-danger w100p', id: 'devolution-link', data: {remote: true, url: new_income_devolution_path(income.id) } do
       %i.icon-minus-sign
       Devolución
 
@@ -23,6 +23,6 @@
 
 %ul.unstyled.listing.ledgers
   - if income.to_model.ledgers.pendent.any?
-    = render partial: 'account_ledgers/movement2', collection: income.pendent_ledgers, as: :ledger
+    = render partial: 'account_ledgers/movement', collection: income.pendent_ledgers, as: :ledger
 
 

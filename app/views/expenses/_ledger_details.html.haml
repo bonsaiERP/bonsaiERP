@@ -13,7 +13,7 @@
       Pago
 
   - if expense.can_devolution?
-    = link_to class: 'btn btn-danger w100p', data: {remote: true, url: new_expense_devolution_path(expense.id) } do
+    = link_to class: 'btn btn-danger w100p', id: 'devolution-link', data: {remote: true, url: new_expense_devolution_path(expense.id) } do
       %i.icon-plus-sign
       Devolución
 
@@ -22,4 +22,4 @@
 
 %ul.unstyled.listing.ledgers
   - if expense.to_model.ledgers.pendent.any?
-    = render partial: 'account_lesgers/movement', collection: expense.payments_and_devolutions, as: :ledger
+    = render partial: 'account_ledgers/movement', collection: expense.payments_and_devolutions, as: :ledger

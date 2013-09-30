@@ -6,6 +6,9 @@
     %strong(title='Tipo de operación')= inventory.operation_tag
     %i= lo inventory.date
 
+    %span.muted Almacen:
+    = link_to inventory.store, inventory.store
+
     .clearfix
     = inventory.creator_label
     %i.icon-file.muted(title='Descripción')
