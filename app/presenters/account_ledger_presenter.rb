@@ -22,9 +22,9 @@ class AccountLedgerPresenter < BasePresenter
       html = ["<span class='label label-warning'>", icon('icon-warning-sign'),
               " Pendiente</span>"].join('')
     when 'approved'
-      html = "<span class='b bonsai-dark'>Aprobado</span>"
+      html = "<span class='label label-success' title='Aprobado'>A</span>"
     when 'nulled'
-      html = "<span class='b red2'>Anulado</span>"
+      html = "<span class='label label-important' title='Anulado'>A</span>"
     end
 
     html.html_safe

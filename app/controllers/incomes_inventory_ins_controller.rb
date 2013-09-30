@@ -20,7 +20,7 @@ class IncomesInventoryInsController < ApplicationController
     @inv = Incomes::InventoryIn.new({store_id: @store.id, income_id: @income.id}.merge(inventory_params))
 
     if @inv.create
-      redirect_to show_movement_inventory_path(@inv.inventory.id), notice: "Se realizado el ingreso de inventario para el ingreso #{@income}"
+      redirect_to show_movement_inventory_path(@inv.inventory.id), notice: "Se realizó la devolución de inventario para el ingreso #{@income}"
     else
       render :new
     end

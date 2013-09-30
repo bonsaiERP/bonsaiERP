@@ -36,6 +36,10 @@ h4
     //+background-image(linear-gradient(lighten($grayLight, 14%), $grayLighter ) )
     padding: 8px 18px
     font-size: 110%
+  ul > li:first-child > a
+    +border-left-radius(2px)
+  ul > li:last-child > a
+    +border-right-radius(2px)
 
 // Select2
 .select2-container.span10
@@ -44,3 +48,32 @@ h4
 .select2-highlighted
   .gray
     color: white
+.select2-container .select2-choice
+  +border-radius(2px)
+
+// Bootstrap
+.btn
+  +border-radius(2px)
+
+.btn-group > .btn:first-child
+  +border-left-radius(2px)
+.btn-group > .btn:last-child
+  +border-right-radius(2px)
+
+textarea,
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"],
+.uneditable-input
+  +border-radius(2px)

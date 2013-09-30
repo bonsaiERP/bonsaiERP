@@ -20,7 +20,7 @@ class ExpensesInventoryOutsController < ApplicationController
     @inv = Expenses::InventoryOut.new({store_id: @store.id, expense_id: @expense.id}.merge(inventory_params))
 
     if @inv.create
-      redirect_to show_movement_inventory_path(@inv.inventory.id), notice: "Se realizado el ingreso de inventario para el egreso #{@expense}"
+      redirect_to show_movement_inventory_path(@inv.inventory.id), notice: "Se realizó la devolución de inventario para el egreso #{@expense}"
     else
       render :new
     end

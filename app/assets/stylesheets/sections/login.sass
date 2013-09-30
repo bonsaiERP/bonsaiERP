@@ -1,18 +1,34 @@
 @import compass
 @import colors
+
+// Header
+.session-header
+  text-align: center
+  margin: 0px
+  height: 80px
+  background-color: rgba(190, 190, 190, 0.5)
+  border-bottom: 2px solid $gray
+
+  img
+    width: 60px
+    height: 60px
+    margin: 10px
+
 /**************************************
  * .lonely Login form, registration form
  *************************************/
 .lonely
-  margin: 100px auto
+  margin: 70px auto
 
   +border-radius
   +box-shadow(0 0 10px $grayDarker)
   //background: rgba(33, 33, 33, 0.3)
-  background: rgba(119, 185, 45, 0.9)
+  background: rgba(119, 185, 45, 0.7)
+  //background: $grayLight
 
   .inset
     +border-radius
+    border: 1px solid lighten($gray, 10%)
     margin: 10px
     header
       +border-top-radius
@@ -34,10 +50,26 @@
         height: 25px
 
   .session
-    .control-group
+    .cont-login
       input
-        height: 30px
+        height: 28px
+        font-size: 18px
+        width: 250px
       .add-on.square
         width: 27px
-        height: 30px
+        height: 28px
         line-height: 30px
+
+    input[type="submit"]
+      +border-radius(2px)
+      min-width: 150px
+      font-size: 20px
+
+    .input-prepend
+      .add-on
+        background-color: lighten($grayLighter, 20%)
+        border-right: none
+        font-size: 20px
+
+      input
+        border-left: none

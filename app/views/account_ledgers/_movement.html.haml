@@ -5,7 +5,7 @@
       %strong.fs70= ledger.operation_tag
       = link_to ledger, ledger, class: 'code', title: 'Código'
 
-    %span(title='Estado')= ledger.status_tag
+    = ledger.status_tag
 
     %p
       %i= l ledger.date.to_date

@@ -15,8 +15,10 @@
         %h1.c Recuperar contraseña
       .pad.center.session
         = simple_form_for(ResetPassword.new) do |f|
-
-          = f.input :email, label: false, :input_html => {placeholder: 'Email'}
+          .input-prepend.cont-login
+            %span.add-on.prepend.square
+              %i.muted.icon-envelope
+            = f.text_field :email, placeholder: 'Email', size: 40
           %center
             = f.submit "Recuperar contraseña", :class => 'btn btn-success btn-large b'
             <br/><br/>
