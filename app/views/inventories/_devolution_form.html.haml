@@ -7,14 +7,16 @@
 .row-fluid
   %table#items.table.decorated
     %tr
-      %th(style='width: 40%') Item
+      %th(style='width: 40%') Ítem
       %th
-        %span(title="Cantidad original en Ingreso" data-toggle='tooltip')
-          Original
-          Ing.
-      %th Cantidad
+        Cantidad
+      %th
+        Cantidad a<br>
+        devolver
       %th Saldo
-      %th Disponible
+      %th
+        Disponible<br>
+        inventario
 
     = f.simple_fields_for :inventory_details do |det|
       - mov_det = inv.movement_detail(det.object.item_id)

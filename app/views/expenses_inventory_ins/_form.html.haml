@@ -12,7 +12,45 @@
       %label Almacen
       %h4.n= link_to inv.store, inv.store, target: '_blank'
 
-  = render 'inventories/movement_form', f: f, inv: @inv
+  -#= render 'inventories/movement_form', f: f, inv: @inv
+
+  .row-fluid
+    .span6
+      = f.input :date, label: 'Fecha', as: :datepicker
+    .span6
+      = f.input :description, as: :text, label: 'Descripción' ,input_html: {rows: 3}
+
+  .row-fluid
+    %table#items.table.decorated
+      %tr
+        %th(style="width:40%") Ítem
+        %th
+          Cantidad
+        %th
+          Cantidad a<br>
+          recoger
+        %th Saldo
+        %th
+          Disponible
+          <br>inventario
+
+      = f.simple_fields_for :inventory_details do |det|
+        - mov_det = @inv.movement_detail(det.object.item_id)
+        - if mov_det.balance > 0
+          %tr.item
+            %td
+              = det.hidden_field :item_id
+              = det.object.item
+              %span.muted(title="#{det.object.item.unit_name}" data-toggle='tooltip')
+                (#{det.object.item.unit_symbol})
+            %td
+              = ntc mov_det.quantity
+            %td
+              = det.input :quantity, label: false, input_html: {type: :decimal, size: 10}, data: {value: 'item.quantity'}
+            %td.r
+              = ntc mov_det.balance
+            %td.r
+              = ntc det.object.available
 
   .form-actions
     = f.submit 'Recoger mercadería', class: 'btn btn-primary b'
