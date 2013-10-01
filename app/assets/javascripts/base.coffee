@@ -276,8 +276,6 @@ init = ($) ->
     $('body').dataNewUrl()
     fx.rates = exchangeRates.rates
 
-    $('input, textarea').placeholder()
-
     # Prevent enter submit forms in some forms
     window.keyPress = false
     $('body').on( 'keydown', 'form.enter input', (event) ->

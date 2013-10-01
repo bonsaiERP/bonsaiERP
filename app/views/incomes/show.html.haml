@@ -56,7 +56,7 @@
         Imprimir
 
       = link_to income_path(@income.id, format: 'pdf'), class: 'btn' do
-        = image_tag 'pdf.png', width: '16'
+        = image_tag 'pdf.png'
         PDF
 
       = link_to icon_edit_text, edit_income_path(@income.id), class: 'btn' unless @income.is_nulled?

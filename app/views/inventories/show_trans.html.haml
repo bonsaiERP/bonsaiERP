@@ -15,13 +15,14 @@
       %small.b= @inventory.operation_tag
 
   .span4.r
-    = link_to show_trans_inventory_path(@inventory.id, format: 'print'), class: 'btn' do
-      %i.icon-print
-      Imprimir
+    .btn-group
+      = link_to show_trans_inventory_path(@inventory.id, format: 'print'), class: 'btn' do
+        %i.icon-print
+        Imprimir
 
-    = link_to show_trans_inventory_path(@inventory.id, format: 'pdf'), class: 'btn' do
-      = image_tag 'pdf.png', width: '16'
-      PDF
+      = link_to show_trans_inventory_path(@inventory.id, format: 'pdf'), class: 'btn' do
+        = image_tag 'pdf.png', width: '16'
+        PDF
 
 .row-fluid
   .span6

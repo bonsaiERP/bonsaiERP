@@ -14,13 +14,14 @@
       %strong= @inventory.ref_number
       %small.b= @inventory.operation_tag
   .span4.r
-    = link_to inventory_path(@inventory.id, format: 'print'), class: 'btn' do
-      %i.icon-print
-      Imprimir
+    .btn-group
+      = link_to inventory_path(@inventory.id, format: 'print'), class: 'btn' do
+        %i.icon-print
+        Imprimir
 
-    = link_to inventory_path(@inventory.id, format: 'pdf'), class: 'btn' do
-      = image_tag 'pdf.png', width: '16'
-      PDF
+      = link_to inventory_path(@inventory.id, format: 'pdf'), class: 'btn' do
+        = image_tag 'pdf.png'
+        PDF
 
 
 %h3.n
