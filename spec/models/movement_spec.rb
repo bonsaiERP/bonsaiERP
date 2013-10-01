@@ -14,6 +14,9 @@ describe Movement do
     # draft
     it { should_not be_can_null }
 
+    it { should validate_presence_of(:date) }
+    it { should validate_presence_of(:due_date) }
+
     it "can null" do
       subject.state = 'approved'
       subject.should be_can_null
@@ -93,6 +96,14 @@ describe Movement do
     expect(e.no_inventory).to be_false
   end
 
+  it "due_date >= date" do
+    today = Date.today
+    i = Income.new_income date: today, due_date: today - 1.day
+
+    i.should_not be_valid
+    i.errors_on(:due_date).should eq([I18n.t('errors.messages.movement.greater_due_date')])
+  end
+
   context 'change currency' do
     let(:contact) { build :contact, id: 1 }
     let(:user) { build :user, id: 1 }
@@ -103,7 +114,7 @@ describe Movement do
     end
 
     it "update currency" do
-      i = Income.new_income(currency: 'BOB', total: 140, exchange_rate: 1, date: Date.today, contact_id: contact.id)
+      i = Income.new_income(currency: 'BOB', total: 140, exchange_rate: 1, date: Date.today, contact_id: contact.id, due_date: Date.today)
       i.stub(contact: contact, name: 'I-0001')
 
       i.save.should be_true

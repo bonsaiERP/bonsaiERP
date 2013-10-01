@@ -11,21 +11,21 @@ describe Incomes::InventoryIn do
   }
 
   let(:income) {
-    exp = Income.new_income(
+    inc = Income.new_income(
       attributes_for(:income_approved).merge(
-        contact_id: 3, balance_inventory: 100,
+        contact_id: 3, balance_inventory: 100, due_date: Date.today,
         income_details_attributes: [
           {item_id: 1, quantity: 5, price: 10, balance: 5},
           {item_id: 2, quantity: 5, price: 10, balance: 5}
         ]
       )
     )
-    exp.save
-    exp
+    inc.save
+    inc
   }
 
   let(:valid_attributes) {
-    {store_id: 1, date: Date.today, description: 'Test inventory in', 
+    {store_id: 1, date: Date.today, description: 'Test inventory in',
      income_id: income.id,
      inventory_details_attributes: [
        {item_id: 1, quantity: 2},
@@ -49,7 +49,7 @@ describe Incomes::InventoryIn do
   let(:income) {
     exp = Income.new_income(
       attributes_for(:income_approved).merge(
-        contact_id: 3, balance_inventory: 0,
+        contact_id: 3, balance_inventory: 0, due_date: Date.today,
         income_details_attributes: [
           {item_id: 1, quantity: 5, price: 10, balance: 0},
           {item_id: 2, quantity: 5, price: 10, balance: 0}

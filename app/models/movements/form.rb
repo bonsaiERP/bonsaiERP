@@ -75,8 +75,10 @@ class Movements::Form < BaseForm
 
     # copies new from movement to the Movements::Form
     def copy_new_defaults
+      today = Date.today
       self.currency = @movement.currency
-      self.date = Date.today
+      self.date = today
+      self.due_date = today
       self.total = total || 0
     end
 

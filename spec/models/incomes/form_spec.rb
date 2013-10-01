@@ -32,6 +32,7 @@ describe Incomes::Form do
     it "income_details" do
       subject.income.should be_is_a(Income)
       subject.date.should be_is_a(Date)
+      subject.due_date.should be_is_a(Date)
       subject.currency.should eq('BOB')
       subject.direct_payment.should be_false
       subject.income.income_details.should have(2).items

@@ -41,50 +41,51 @@ class Incomes::InventoryIn < Inventories::In
     @income.details.find {|det| det.item_id === item_id }
   end
 
-private
-  def operation
-    'inc_in'
-  end
+  private
 
-  def valid_quantities
-    res = true
-    details.each do |det|
-      mov_det = movement_detail(det.item_id)
-      mov_q = (mov_det.quantity - mov_det.balance)
-      if det.quantity > mov_q
-        det.errors.add(:quantity, I18n.t('errors.messages.inventory.movement_quantity', q: mov_q))
-        res = false
+    def operation
+      'inc_in'
+    end
+
+    def valid_quantities
+      res = true
+      details.each do |det|
+        mov_det = movement_detail(det.item_id)
+        mov_q = (mov_det.quantity - mov_det.balance)
+        if det.quantity > mov_q
+          det.errors.add(:quantity, I18n.t('errors.messages.inventory.movement_quantity', q: mov_q))
+          res = false
+        end
+      end
+
+      self.errors.add(:base, I18n.t('errors.messages.inventory.item_balance')) unless res
+    end
+
+    def valid_items_ids
+      details.all? {|v| income_item_ids.include?(v.item_id) }
+    end
+
+    def update_income_details
+      details.each do |det|
+        det_exp = movement_detail(det.item_id)
+        det_exp.balance += det.quantity
       end
     end
 
-    self.errors.add(:base, I18n.t('errors.messages.inventory.item_balance')) unless res
-  end
-
-  def valid_items_ids
-    details.all? {|v| income_item_ids.include?(v.item_id) }
-  end
-
-  def update_income_details
-    details.each do |det|
-      det_exp = movement_detail(det.item_id)
-      det_exp.balance += det.quantity
+    def update_income_balance
+      @income.balance_inventory = balance_inventory
+      @income.delivered = inventory_left === 0
     end
-  end
 
-  def update_income_balance
-    @income.balance_inventory = balance_inventory
-    @income.delivered = inventory_left === 0
-  end
+    def income_calculations
+      @income_calculations ||= Movements::DetailsCalculations.new(@income)
+    end
 
-  def income_calculations
-    @income_calculations ||= Movements::DetailsCalculations.new(@income)
-  end
+    def income_item_ids
+      @income_item_ids ||= @income.details.map(&:item_id)
+    end
 
-  def income_item_ids
-    @income_item_ids ||= @income.details.map(&:item_id)
-  end
-
-  def income_errors
-    @income_errors ||= Incomes::Errors.new(income)
-  end
+    def income_errors
+      @income_errors ||= Incomes::Errors.new(income)
+    end
 end

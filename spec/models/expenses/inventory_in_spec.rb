@@ -19,6 +19,7 @@ describe Expenses::InventoryIn do
     exp = Expense.new_expense(
       attributes_for(:expense_approved).merge(
         contact_id: 3, balance_inventory: 100,
+        due_date: Date.today,
         expense_details_attributes: [
           {item_id: 1, quantity: 5, price: 10, balance: 5},
           {item_id: 2, quantity: 5, price: 10, balance: 5}

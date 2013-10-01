@@ -4,7 +4,7 @@
 # Sets and Income or expense
 class MovementService
   attr_reader :errors, :klass, :movement
-  ATTRIBUTES = [:date, :contact_id, :total, :currency, :exchange_rate, :project_id, :due_date, :description].freeze
+  ATTRIBUTES = [:date, :due_date, :contact_id, :total, :currency, :exchange_rate, :project_id, :due_date, :description].freeze
 
   delegate :discount, :total, to: :movement
   delegate :set_details, to: :mov_details
@@ -20,9 +20,11 @@ class MovementService
   end
 
   def set_new(attrs = {})
+    today = Date.today
     @movement.attributes = attrs.slice(*attributes).merge(
       ref_number: @klass.get_ref_number,
-      date: attrs[:date] || Date.today,
+      date: attrs[:date] || today,
+      due_date: attrs[:due_date] || today,
       state: 'draft',
       creator_id: UserSession.id,
       currency: attrs[:currency] || OrganisationSession.currency

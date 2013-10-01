@@ -11,7 +11,7 @@ describe Income do
 
   let(:valid_attributes) {
     {active: nil, bill_number: "56498797", contact: contact,
-      exchange_rate: 1, currency: 'BOB', date: '2011-01-24',
+      exchange_rate: 1, currency: 'BOB', date: '2011-01-24', due_date: '2011-01-24',
       description: "Esto es una prueba", amount: 1,
       ref_number: "987654", state: 'draft'
     }
@@ -306,7 +306,7 @@ describe Income do
     end
     let(:attributes) {
       {
-      contact_id: 1, date: Date.today, ref_number: 'I-0001', currency: 'BOB',
+      contact_id: 1, date: Date.today, due_date: Date.today, ref_number: 'I-0001', currency: 'BOB',
       income_details_attributes: [
         {item_id: 1, price: 20, quantity: 10}, {item_id: 2, price: 20, quantity: 10}
       ]

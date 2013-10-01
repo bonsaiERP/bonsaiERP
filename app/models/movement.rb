@@ -21,9 +21,10 @@ class Movement < Account
   STATES = %w(draft approved paid nulled)
   ########################################
   # Validations
-  validates_presence_of :date, :contact, :contact_id
+  validates_presence_of :date, :due_date, :contact, :contact_id
   validates :state, presence: true, inclusion: {in: STATES}
   validate  :valid_currency_change, on: :update
+  validate  :greater_or_equal_due_date
 
   ########################################
   # Delegations
@@ -162,5 +163,9 @@ class Movement < Account
 
    def valid_currency_change
      errors.add(:currency, I18n.t('errors.messages.movement.currency_change'))  if currency_changed? && ledgers.any?
+   end
+
+   def greater_or_equal_due_date
+     errors.add(:due_date, I18n.t('errors.messages.movement.greater_due_date'))  if date && due_date && due_date < date
    end
 end

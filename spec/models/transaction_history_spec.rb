@@ -16,7 +16,7 @@ describe TransactionHistory do
     }
     let(:valid_attributes) do
       {
-        ref_number: 'I-13-0001', date: Date.today ,currency: 'BOB', contact_id: 10,
+        ref_number: 'I-13-0001', date: Date.today, due_date: Date.today ,currency: 'BOB', contact_id: 10,
         description: "New income description", state: "draft", total: 300,
         amount: 300,
         income_details_attributes: details
@@ -24,7 +24,11 @@ describe TransactionHistory do
     end
     let(:item_ids) { details.map {|v| v[:item_id] } }
 
-    let!(:income) do 
+    before(:each) do
+      UserSession.user = build(:user, id: 10)
+    end
+
+    let!(:income) do
       i = Income.new_income(valid_attributes)
       i.stub(contact: contact)
       i.income_details[0].stub(item: item1)

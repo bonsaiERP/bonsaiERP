@@ -29,6 +29,7 @@ describe Expenses::Form do
     it "expense_details" do
       subject.expense.should be_is_a(Expense)
       subject.date.should be_is_a(Date)
+      subject.due_date.should be_is_a(Date)
       subject.currency.should eq('BOB')
       subject.expense.expense_details.should have(2).items
 
