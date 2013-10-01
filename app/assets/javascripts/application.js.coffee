@@ -11,7 +11,6 @@
 #= require jquery/flot/jquery.flot.time.js
 #= require jquery/jquery.cookie.js
 #= require jquery/jquery.mask.js
-#= require jquery/jquery.placeholder.js
 #= require jquery/jquery.minicolors.js
 #= require jquery/jquery.scrollTo.js
 
