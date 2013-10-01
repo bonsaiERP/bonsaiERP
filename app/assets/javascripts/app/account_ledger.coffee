@@ -10,6 +10,7 @@ class AccountLedgerReference
   setEvents: ->
     @$form.on('submit', (event) =>
       event.preventDefault()
+      @$form.find('.btn-primary').prop('disabled', true).text('Salvando...')
       @save()
     )
     @$form.on('click', 'a.cancel', =>

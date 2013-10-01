@@ -72,6 +72,8 @@ init = ($) ->
 
     $div
 
+  window.AjaxLoadingHTML = AjaxLoadingHTML
+
   ########################################
   # Presents any link url in a modal dialog and loads with AJAX the url
   $('body').on('click', 'a.ajax', (event) ->
@@ -292,7 +294,8 @@ init = ($) ->
       event.preventDefault()
       $this = $(this)
       url = $this.attr('href')
-      $($this.data('openin')).load(url)
+      $($this.data('openin')).html(AjaxLoadingHTML())
+      .load(url)
       $this.hide()  if $this.data('openinhide')
     )
 
