@@ -58,6 +58,14 @@
 
 .clerafix
 
+%p
+  #inline-calendar
+
+
+.flash.alert
+  %h4 Alert
+  %p Alert
+
 .flash.alert.alert-info
   %h4 Alert info
   %p Alert info
@@ -66,13 +74,13 @@
   %h4 Alert success
   %p Alert success
 
-.flash.alert
-  %h4 Alert 
-  %p Alert 
-
 .flash.alert.alert-error
   %h4 Alert error
   %p Alert error
+
+.flash.alert.alert-warning
+  %h4 Alert warning
+  %p Alert warning
 
 .clearfix
 
@@ -83,6 +91,8 @@
 :javascript
   $(function() {
     $('ul.colors li:lt(2)').css('background', '#333');
+
+    $('#inline-calendar').datepicker();
 
     var data = [
       {id:1, text: 'ruby', bgcolor: '#ff0000'},
