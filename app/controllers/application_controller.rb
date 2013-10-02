@@ -14,6 +14,8 @@ class ApplicationController < ActionController::Base
 
   include Controllers::Authentication
   include Controllers::Authorization
+  include Controllers::RescueFrom
+
 
   protect_from_forgery
 
