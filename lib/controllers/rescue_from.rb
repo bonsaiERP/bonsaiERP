@@ -1,10 +1,4 @@
 module Controllers::RescueFrom
-  #unless ActionController::Base.consider_all_requests_local
-    #"ActionController::InvalidAuthenticityToken",
-    #"CGI::Session::CookieStore::TamperedWithCookie",
-    #"ActionController::UnknownAction",
-    #"AbstractController::ActionNotFound"
-  #end
 
   def self.included(base)
     base.instance_eval do
