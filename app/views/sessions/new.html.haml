@@ -16,7 +16,7 @@
           Iniciar sesión
       .pad.center.session
         = simple_form_for @session do |f|
-          = hidden_field :demo_login, params[:demo]
+          = hidden_field :demo_login, params[:demo_login]
           = f.input :email, label: false do
             .input-prepend.cont-login
               %span.add-on.prepend.square
@@ -51,7 +51,7 @@
 
     var demos = ['demo@demo.com', 'demo1@demo.com', 'demo3@demo.com'];
 
-    if(#{params[:demo_login].present?}) {
+    if(#{params[:demo_login] == 'true'}) {
       var login = demos[Math.round(Math.random() * 2)];
       $('#session_email').val(login);
       $('#session_password').val('demo1234');
