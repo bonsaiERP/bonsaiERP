@@ -3,7 +3,7 @@
     %li #{link_to 'Cuentas bancarias', banks_path}
     %li
       %i.icon-caret-right
-    %li #{link_to @bank, @bank} 
+    %li #{link_to @bank, @bank}
     %li
       %i.icon-caret-right
     %li
@@ -19,11 +19,12 @@
   = bonsai_form_error(f)
   .row-fluid
     .span6
-      = f.input :name, :label => 'Banco'
+      = f.input :name, label: 'Nombre', input_html: { class: 'span10' }
 
   .row-fluid
     .span6
       %label Moneda
+      = @bank.curr_name
       = currency_label @bank.currency
     .span6
       %label Total en cuenta

@@ -9,14 +9,18 @@
   .row-fluid
     .span6
       = f.input :name, label: 'Nombre', input_html: {class: 'span11'}
-    .span6
+    .span3.form-inline
+      = f.input :active, label: 'Visible', hint: 'Visible en operaciones'
+
+    .span3
       = f.input :code, label: 'Código', input_html: {class: 'span11'}
 
   .row-fluid
     .span6
       .unit-control.input
-        = f.association :unit, label: "Unidad de medidad" do
-          = f.collection_select :unit_id, Unit.order('name asc'), :id, :to_s, {}, class: 'span10'
+        = f.association :unit do
+          = f.label 'Unidad'
+          = f.collection_select :unit_id, Unit.order('name asc'), :id, :to_s, {}, class: 'span8'
           %a#new-unit-link.btn(title='Nueva unidad de medida' data-toggle='tooltip')
             %i.icon-plus-sign
       .unit-form(style='display:none')
@@ -28,30 +32,23 @@
           %btn#save-button.btn.btn-small.btn-primary Salvar
           %btn#cancel-button.btn.btn-small Cancelar
         %br
-    .span6.form-inline
-      .row-fluid
-        .span6
-          = f.input :active, label: "Activo <i class='icon-info-sign' data-toggle='tooltip' title='Se puede usar en nuevos Ingresos o Egresos'></i>".html_safe
-        .span6
-          = f.input :stockable, label: 'Inventario <i title="Se almacena el ítem?" data-toggle="tooltip" class="icon-info-sign"></i>'.html_safe
 
-  .row-fluid
-    .span6.well.well-small
-      %h4.muted Compra
-      = f.input :buy_price, label: "Precio de compra #{currency_label}".html_safe, input_html: {size: 12, type: 'decimal'}
-
-    .span6.well.well-small
-      %h4.muted Venta
-
-      .row-fluid
-        .span6.form-inline
-          = f.input :for_sale, as: :boolean, label: 'Se vende'
-        .span6
-          = f.input :price, label: "Precio de venta #{currency_label}".html_safe, input_html: {size: 12, type: 'decimal'}
-
-  .row-fluid
     .span6
       = f.input :description, label: 'Descripción', input_html: {class: 'span12'}
+
+  .row-fluid
+    .span6.well.well-small
+      = f.input :buy_price,
+        label: "Precio de <strong>Compra</strong> #{currency_label}".html_safe, input_html: {size: 12, type: 'decimal'}
+
+    .span6.well.well-small
+      .row-fluid
+        .span6.form-inline
+          = f.input :for_sale, as: :boolean, label: '<strong>Venta</strong>'.html_safe,
+            hint: 'Permitir venta'
+        .span6
+          = f.input :price, label: "Precio de <strong>Venta</strong> #{currency_label}".html_safe,
+            input_html: {size: 12, type: 'decimal'}
 
   .form-actions
     = f.submit "Salvar", :class => 'btn btn-primary b'

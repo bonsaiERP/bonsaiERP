@@ -3,27 +3,25 @@
   .row-fluid
     .span6
       = f.input :matchcode,
-        label: 'Identificado <i class="icon-info-sign" title="Los campos nombres y apellidos se deducen a partir de este campo" data-toggle="tooltip"></i>'.html_safe,
-        input_html: { class: 'matchcode' }
-    .span3
-      = f.input :first_name, label: "Nombres", input_html: { class: 'first_name', size: 20 }
-    .span3
-      = f.input :last_name, label: "Apellidos", input_html: { class: 'last_name', size: 20 }
+        label: 'Nombre y/o Apellidos',
+        input_html: { class: 'matchcode span11' }
 
-  .row-fluid
     .span6
-      = f.input :email, lanel: "E-mail"
-    .span3
-      = f.input :phone, label: "Teléfono", input_html: {size: 20}
-    .span3
-      = f.input :mobile, label: "Móvil", input_html: {size: 20}
-  .row-fluid
-    .span6
-      = f.input :tax_number, label: "Código tributario"
-    .span6
-      = f.input :address, as: :text, input_html: {rows: 3, cols: 45}, label: "Dirección"
+      = f.input :email, lanel: "E-mail", input_html: { class: 'span11' }
+
+  .modal-more
+    .row-fluid
+      .span3
+        = f.input :phone, label: "Teléfono", input_html: {size: 20}
+      .span3
+        = f.input :mobile, label: "Móvil", input_html: {size: 20}
+      .span6
+        = f.input :tax_number, label: 'Código tributario'
+    .row-fluid
+      .span6
+        = f.input :address, as: :text, input_html: {rows: 3, cols: 45}, label: 'Dirección'
   .form-actions
-    = f.submit "Salvar", class: 'btn btn-primary b'
+    = f.submit 'Salvar', class: 'btn btn-primary b'
 
 :javascript
   $( function() {

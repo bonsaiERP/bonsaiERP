@@ -29,9 +29,15 @@ class Account < ActiveRecord::Base
   scope :to_recieve, -> { where('amount > 0') }
   scope :active, -> { where(active: true) }
 
+  delegate :name, :code, :symbol, to: :curr, prefix: true
+
   ########################################
   # Methods
   def to_s
     name
+  end
+
+  def curr
+    @curr ||= Currency.find(currency)
   end
 end

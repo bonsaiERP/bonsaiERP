@@ -23,6 +23,12 @@
 
     #wrapper.cont
 
+      .browser-list.center
+        %h4#message.n Por favor actualize su navegador para poder usar bonsaiERP, haga click en los íconos
+
+        %a.browser.chrome(href='https://www.google.com/intl/es/chrome/browser/' target='_blank' title='Google chrome' data-toggle='tooltip')
+        %a.browser.firefox(href='http://www.mozilla.org/es-ES/firefox/new/' target='_blank' title='Firefox' data-toggle='tooltip')
+
       .container-fluid
         = render "layouts/flash", flash: flash
 

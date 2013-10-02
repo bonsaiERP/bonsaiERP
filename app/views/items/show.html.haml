@@ -15,38 +15,32 @@
       = link_to icon_edit_text, edit_item_path(@item), class: 'btn'
       = link_to icon_delete_text, @item, class: 'btn', confirm: "Esta seguro de borra el ítem", method: :delete
 
-.row-fuid
-  .span2
-    %label
-      %i.icon-info-sign(title="Un ítem activo se puede usar en operaciones" data-toggle="tooltip") 
-      Activo
-      %span.icon(class="#{true_false @item.active}")
-  .span2
-    %label
-      %i.icon-info-sign(title="Indica si un ítem se puede almacenar" data-toggle="tooltip")
-      Inventario
-      %span.icon(class="#{true_false @item.stockable}")
-  .span2
-    %label
-      En venta
-      %span.icon(class="#{true_false @item.for_sale}")
-  .span2
-    %label
-      Unidad:
-      %span.dark= @item.unit
+.row-fluid
+  .span3
+    %span.text-muted.muted
+      %i.icon-info-sign(title="Un ítem visible se puede usar en operaciones" data-toggle="tooltip")
+      Visible:
+    %span.icon(class="icon-large #{true_false @item.active}")
+
+  .span3
+    %span.text-muted.muted Venta:
+    %span.icon(class="icon-large #{true_false @item.for_sale}")
+
+  .span6
+    %span.text-muted.muted Unidad:
+    = @item.unit
 
 .row-fluid
   .span6.well.well-small
-    %label Precio de compra
-    .b
-      = currency_label
-      = ntc @item.buy_price
+    %span.text-muted.muted Precio de COMPRA
+    %strong= ntc @item.buy_price
+    = currency_label
 
   .span6.well.well-small
-    %label Precio de venta
-    .b
-      = currency_label
-      = ntc @item.price
+    %span.text-muted.muted Precio de VENTA:
+
+    %strong= ntc @item.price
+    = currency_label
 
 .row-fluid
   .span6
@@ -64,7 +58,7 @@
 -# unless request.xhr?
   .page-header
     %h3 Kardex de Compras y Ventas de del ítem
-  
+
   - @details = @item.kardex.order("transactions.created_at DESC").page(@page)
 
   = paginate @details

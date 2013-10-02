@@ -6,18 +6,7 @@
     -webkit-box-shadow: none;
   }
 
-.row-fluid
-  #browser.span8.offset2.c(style='display:none;')
-    = render 'layouts/browser_update'
 
-
-.browser-list.center(style='display:none')
-  %h4#message.n Por favor actualize su navegador para poder usar bonsaiERP, haga click en los íconos
-
-  %a.browser.chrome(href='https://www.google.com/intl/es/chrome/browser/' target='_blank' title='Google chrome' data-toggle='tooltip')
-  %a.browser.firefox(href='http://www.mozilla.org/es-ES/firefox/new/' target='_blank' title='Firefox' data-toggle='tooltip')
-
-#browser
 
 .lonely(style='width:400px')
   #login.row-fluid
@@ -47,6 +36,7 @@
               Olvido su contraseña?
 
 = render file: 'layouts/browser'
+
 :javascript
   $(function() {
     $('#reset-password-link').click(function() {

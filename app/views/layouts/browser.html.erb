@@ -150,14 +150,25 @@ function untestedBrowsers() {
   }
 }
 
+function allowedBrowsers() {
+  if(BrowserDetect.browser == 'Firefox' && BrowserDetect.version >= 20) {
+    return true;
+  }
+  if(BrowserDetect.browser == 'Chrome' && BrowserDetect.version >= 25) {
+    return true;
+  }
+}
+
 //alert(BrowserDetect.OS);
 if(blockedBrowsers()) {
-  $('.browser-list').show()
   $('form input').prop('disabled', true);
 }
 if(untestedBrowsers()) {
-  $('.browser-list').show()
   $('#message').text('Le recomendamos actualizar su navegador para un mejor funcionamiento, haga click en los íconos');
+}
+
+if(allowedBrowsers()) {
+  $('.browser-list').hide()
 }
 
 </script>

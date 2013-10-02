@@ -1,6 +1,6 @@
 - content_for :links do
   %ul.breadcrumbs.span6
-    %li #{link_to 'Cuentas bancarias', banks_path} 
+    %li #{link_to 'Cuentas bancarias', banks_path}
 
 %h1 Nueva cuenta bancaria
 
@@ -8,15 +8,17 @@
   = bonsai_form_error(f)
   .row-fluid
     .span6
-      = f.input :name, label: 'Nombre'
+      = f.input :name, label: 'Nombre', input_html: { class: 'span10' }
 
   .row-fluid
     .span6
-      = f.input :currency, label: 'Moneda', collection: currency_options, input_html: {placeholder: 'Escriba para poder buscar'},
-        hint: "<span class='icon-warning-sign'></span> No es posible modificar después".html_safe
+      = f.input :currency, collection: currency_options,
+        input_html: {placeholder: 'Escriba para poder buscar', class: 'span10' },
+        label: 'Moneda <span class="text-muted muted"><i class="icon-warning-sign"></i> No es posible modificar</span>'.html_safe
 
     .span6
-      = f.input :amount, label: 'Total en cuenta', input_html: {size: 12, class: 'r', type: 'decimal'}, required: true
+      = f.input :amount, label: 'Total en cuenta <span class="text-muted muted">(Valor inicial)</span>',
+        input_html: {size: 12, class: 'r', type: 'decimal'}, required: true
   .row-fluid
     .span6
       = f.input :address, :label => 'Dirección', :as => :text, :input_html => {:rows => 4, :cols => 35}, :required => false

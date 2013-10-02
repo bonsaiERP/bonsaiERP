@@ -187,14 +187,10 @@ init = ($) ->
       trigger = data.trigger || 'ajax-call'
 
       $a = $('<a/>')
-      css = {'margin-left': '5px'}
-
-
-      $a
-      .html('<i class="icon-plus-sign icon-large"></i>')
-      .attr({href: data.newUrl, class: 'ajax btn btn-small', title: title, 'data-toggle': 'tooltip' })
+      .html('<i class="icon-plus-sign"></i>')
+      .attr({href: data.newUrl, title: title, 'data-toggle': 'tooltip' })
       .data({trigger: trigger, width: data.width, elem: el, return: data.return})
-      .css(css)
+      .addClass('ajax btn add-new-url')
 
       $a.insertAfter(el)
     )

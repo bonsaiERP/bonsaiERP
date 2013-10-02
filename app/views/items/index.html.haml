@@ -24,7 +24,7 @@
 
 = paginate_html
 
-- cache @items do
+- cache [organisation_name, @items] do
   %ul#items-list.unstyled.listing
     =render @items
 

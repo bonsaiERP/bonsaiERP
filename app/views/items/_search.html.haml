@@ -10,7 +10,7 @@
         = text_field_tag 'search', '', placeholder: 'Nombre o código', size: 45
         %label(for='for_sale')
           = check_box_tag 'for_sale', '1', params[:for_sale].present?
-          Se vende
+          Venta
         = submit_tag 'Buscar', class: 'btn'
 
       =link_to 'eliminar filtro', items_path  if params[:commit].present?
