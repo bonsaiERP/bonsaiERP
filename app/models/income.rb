@@ -3,6 +3,9 @@
 # email: boriscyber@gmail.com
 class Income < Movement
 
+  extend Models::AccountCode
+  self.code_name = 'I'
+
   ########################################
   # Callbacks
   before_save :set_client_and_incomes_status
@@ -61,22 +64,6 @@ class Income < Movement
 
   def to_s
     ref_number
-  end
-
-  def self.get_ref_number
-    ref = Income.order("name DESC").limit(1).pluck(:name).first
-    year= Date.today.year.to_s[2..4]
-
-    if ref.present?
-      _, y, num = ref.split('-')
-      if y == year
-        "I-#{y}-#{num.next}"
-      else
-        "I-#{year}-0001"
-      end
-    else
-      "I-#{year}-0001"
-    end
   end
 
   def subtotal
