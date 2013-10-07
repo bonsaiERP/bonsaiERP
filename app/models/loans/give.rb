@@ -2,10 +2,10 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 # Class for receiving loans
-class Loans::Receive < Loan
+class Loans::Give < Loan
 
   extend Models::AccountCode
-  self.code_name = 'PR'
+  self.code_name = 'PG'
 
   def self.new(attrs = {})
     super { |loan| loan.name = get_code_number }

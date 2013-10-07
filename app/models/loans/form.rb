@@ -21,7 +21,7 @@ class Loans::Form < BaseForm
     loan = new(attrs)
     loan.ledger_sign = -1
     loan.ledger_operation = 'lgcre'
-    #loan.klass = Loans::Receive
+    loan.klass = Loans::Receive
     loan
   end
 

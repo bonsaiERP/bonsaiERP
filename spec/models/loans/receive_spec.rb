@@ -11,7 +11,7 @@ describe Loans::Receive do
   }
 
   it "#initialize with code" do
-    l = Loans::Receive.new
+    l = Loans::Receive.new {}
     y = Date.today.year.to_s[2..4]
     expect(l.name).to eq("PR-#{y}-0001")
   end
