@@ -295,6 +295,14 @@ init = ($) ->
       $this.hide()  if $this.data('openinhide')
     )
 
+    # View more
+    $('body').on('click', 'a.view-more', (event) ->
+      $this = $(this)
+      $this.siblings('.modal-more:first').show('fast')
+      $this.hide('fast')
+      $this.parents('.ajax-modal').addClass('view-more-enabled')
+    )
+
   # End of $(document).ready
 
   rivets.configure(

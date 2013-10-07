@@ -9,6 +9,9 @@
     .span6
       = f.input :email, lanel: "E-mail", input_html: { class: 'span11' }
 
+
+  %a.view-more(href='javascript:;') Ver mas
+
   .modal-more
     .row-fluid
       .span3
@@ -25,6 +28,7 @@
 
 :javascript
   $( function() {
+    /*
     $('body').on('focusout', '.matchcode', function(event) {
       arr = this.value.trim().split(" ");
       $('.first_name').val(arr[0]);
@@ -34,4 +38,5 @@
 
       $('.first_name, .last_name').mark();
     });
+    */
   });
