@@ -8,8 +8,8 @@ class CreateLoanExtras < ActiveRecord::Migration
         t.integer :account_id, null: false
         t.index   :account_id
         t.date :due_date, null: false, index: true
-        t.decimal :total, null: false
-        t.decimal :interests, default: 0
+        t.decimal :total, null: false, precision: 14, scale: 2
+        t.decimal :interests, null: false, precision: 14, scale: 2, default: 0
       end
     end
   end

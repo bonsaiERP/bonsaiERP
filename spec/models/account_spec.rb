@@ -24,6 +24,22 @@ describe Account do
     {name: 'account1', currency: 'BOB', amount: 100, state: 'new'}
   end
 
+  context 'scopes' do
+    it "$to_pay" do
+      ac = Account.active.new
+      ac.should be_active
+    end
+
+    it "$money" do
+      ac = Account.money.new
+      expect(ac.type).to eq(%w(Bank Cash))
+
+      ac = Account.active.money.new
+      expect(ac.type).to eq(%w(Bank Cash))
+      ac.should be_active
+    end
+  end
+
   it 'should be created' do
     Account.create!(valid_params)
   end

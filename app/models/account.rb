@@ -28,6 +28,7 @@ class Account < ActiveRecord::Base
   scope :to_pay, -> { where('amount < 0') }
   scope :to_recieve, -> { where('amount > 0') }
   scope :active, -> { where(active: true) }
+  scope :money, -> { where(type: ['Bank', 'Cash']) }
 
   delegate :name, :code, :symbol, to: :curr, prefix: true
 

@@ -16,7 +16,4 @@ describe Loans::Receive do
     expect(l.name).to eq("PR-#{y}-0001")
   end
 
-  it "#creates" do
-
-  end
 end

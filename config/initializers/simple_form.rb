@@ -4,17 +4,17 @@ SimpleForm.setup do |config|
   # any of them, change the order, or even add your own components to the stack.
   # config.components = [ :placeholder, :label_input, :hint, :error ]
 
-  config.wrappers :bootstrap, tag: 'div', class: 'control-group', error_class: 'error' do |b|
-    #b.wrapper tag: 'div', class: 'controls'
-    b.use :label
-    b.wrapper tag: 'div', class: 'controls' do |ba|
-      ba.use :input
-      ba.use :error, wrap_with: { tag: 'span', class: 'help-inline' }
-      ba.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }
-    end
-  end
+  #config.wrappers :bootstrap, tag: 'div', class: 'control-group', error_class: 'error' do |b|
+    ##b.wrapper tag: 'div', class: 'controls'
+    #b.use :label
+    #b.wrapper tag: 'div', class: 'controls' do |ba|
+      #ba.use :input
+      #ba.use :error, wrap_with: { tag: 'span', class: 'help-inline' }
+      #ba.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }
+    #end
+  #end
 
-  config.default_wrapper = :bootstrap
+  #config.default_wrapper = :bootstrap
 
   # Default tag used on hints.
   # config.hint_tag = :span
