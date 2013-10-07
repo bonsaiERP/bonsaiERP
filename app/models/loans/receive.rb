@@ -4,4 +4,11 @@
 # Class for receiving loans
 class Loans::Receive < Loan
 
+  extend Models::AccountCode
+  self.code_name = 'PR'
+
+  def self.new
+    super { |loan| loan.name = get_code_number }
+  end
+
 end

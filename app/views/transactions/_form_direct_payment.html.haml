@@ -1,5 +1,5 @@
 .well.well-small.trans
-  .row-fluid.currency-input
+  .row-fluid
     .span6
       = f.input :currency, collection: currency_options, label: 'Moneda', include_blank: false,
         input_html: {id: 'transaction_currency', data: { value: 'trans.currency' } }

@@ -15,7 +15,6 @@ class Loan < Account
   # Delegations
   delegate(*create_accessors(*LoanExtra.get_columns), to: :loan_extra)
 
-
   class << self
     alias_method :old_new, :new
 
@@ -23,7 +22,7 @@ class Loan < Account
       old_new do |loan|
         loan.build_loan_extra
         loan.attributes = attrs
-        loan.amount = loan.total  if loan.new_record?
+        loan.amount = loan.total # if loan.new_record?
         yield loan  if block_given?
       end
     end

@@ -4,6 +4,18 @@ SimpleForm.setup do |config|
   # any of them, change the order, or even add your own components to the stack.
   # config.components = [ :placeholder, :label_input, :hint, :error ]
 
+  config.wrappers :bootstrap, tag: 'div', class: 'control-group', error_class: 'error' do |b|
+    #b.wrapper tag: 'div', class: 'controls'
+    b.use :label
+    b.wrapper tag: 'div', class: 'controls' do |ba|
+      ba.use :input
+      ba.use :error, wrap_with: { tag: 'span', class: 'help-inline' }
+      ba.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }
+    end
+  end
+
+  config.default_wrapper = :bootstrap
+
   # Default tag used on hints.
   # config.hint_tag = :span
 
@@ -31,8 +43,9 @@ SimpleForm.setup do |config|
   # You can wrap all inputs in a pre-defined tag.
   # config.wrapper_tag = :div
 
+  #config.wrappers tag: :div, class: :input
   # CSS class to add to all wrapper tags.
-  config.wrapper_class = :input
+  #config.wrapper_class = :input
 
   # CSS class to add to the wrapper if the field has errors.
   # config.wrapper_error_class = :field_with_errors
@@ -86,7 +99,7 @@ SimpleForm.setup do |config|
   # config.country_priority = nil
 
   # Default size for text inputs.
-  config.default_input_size = 35
+  #config.default_input_size = 35
 
   # When false, do not use translations for labels, hints or placeholders.
   # config.translate = true
