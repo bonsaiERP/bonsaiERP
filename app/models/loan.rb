@@ -6,7 +6,7 @@ class Loan < Account
   extend SettersGetters
 
   # Relationships
-  has_one :loan_extra, dependent: :delete
+  has_one :loan_extra, dependent: :delete, autosave: true
 
   # Validations
   validates_presence_of :date, :name

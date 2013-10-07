@@ -7,4 +7,3 @@ describe Loans::Give do
     expect(l.name).to eq("PG-#{y}-0001")
   end
 end
-

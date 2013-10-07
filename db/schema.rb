@@ -206,15 +206,13 @@ ActiveRecord::Schema.define(version: 20131004135047) do
   add_index "links", ["user_id"], name: "index_links_on_user_id", using: :btree
 
   create_table "loan_extras", force: true do |t|
-    t.integer "step",                                default: 1
-    t.integer "loan_id",                                           null: false
-    t.integer "account_id",                                        null: false
-    t.date    "due_date",                                          null: false
-    t.decimal "total",      precision: 14, scale: 2,               null: false
-    t.decimal "interests",  precision: 14, scale: 2, default: 0.0, null: false
+    t.integer "step",                               default: 1
+    t.integer "loan_id",                                          null: false
+    t.date    "due_date",                                         null: false
+    t.decimal "total",     precision: 14, scale: 2,               null: false
+    t.decimal "interests", precision: 14, scale: 2, default: 0.0, null: false
   end
 
-  add_index "loan_extras", ["account_id"], name: "index_loan_extras_on_account_id", using: :btree
   add_index "loan_extras", ["loan_id"], name: "index_loan_extras_on_loan_id", unique: true, using: :btree
 
   create_table "money_stores", force: true do |t|

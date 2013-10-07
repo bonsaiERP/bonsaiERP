@@ -21,7 +21,7 @@ class Loans::Form < BaseForm
     loan = new(attrs)
     loan.ledger_sign = -1
     loan.ledger_operation = 'lgcre'
-    loan.klass = Loans::Receive
+    loan.klass = Loans::Give
     loan
   end
 
@@ -31,6 +31,15 @@ class Loans::Form < BaseForm
     lf.ledger_operation = 'lrcre'
     lf.klass = Loans::Receive
     lf
+  end
+
+  # Creates the loan and the ledger
+  def create
+    commit_or_rollback do
+      res = loan.save
+      ledger.account_id = loan.id
+      res = res && ledger.save_ledger
+    end
   end
 
   def loan
@@ -44,7 +53,9 @@ class Loans::Form < BaseForm
   private
 
     def loan_attributes
-      attributes.slice(:date, :due_date, :total)
+      attributes.slice(:date, :due_date, :total).merge(
+        currency: currency
+      )
     end
 
     def ledger_attributes

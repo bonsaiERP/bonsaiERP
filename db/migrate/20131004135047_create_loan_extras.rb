@@ -5,8 +5,6 @@ class CreateLoanExtras < ActiveRecord::Migration
         t.integer :step, default: 1
         t.integer :loan_id, null: false
         t.index   :loan_id, unique: true
-        t.integer :account_id, null: false
-        t.index   :account_id
         t.date :due_date, null: false, index: true
         t.decimal :total, null: false, precision: 14, scale: 2
         t.decimal :interests, null: false, precision: 14, scale: 2, default: 0
