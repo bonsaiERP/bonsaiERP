@@ -47,20 +47,39 @@
       %a(href="javascript:;" id="add-item-link" class="btn")
         %i.icon-plus-sign
         Nueva línea
-    %td.r(colspan="2")
+    %td.r(colspan='2')
       Subtotal
       %span.currency
     %td.r
       %span#subtotal=ntc(transaction.subtotal)
     %td
 
-  %tr.extra
+  %tr#tax-line
+    %td.r.form-inline(colspan='3')
+      Impuestos
+      = f.select :tax_id, Tax.all.map { |v| [v.to_s, v.id] }, include_blank: true
+      %a.btn.btn-small(title='Crear nuevo impuesto' data-toggle='tooltip')
+        %i.icon-plus-sign
+    %td.r
+      %span#taxes= ntc transaction.taxes
+    %td
+
+  %tr#edit-tax.form-inline(style='display:none')
+    %td.r(colspan='4')
+      %span.muted.text-muted.b Crear Impuesto
+      %input(type='text' size='12' placeholder='Nombre')
+      %input(type='text' size='4' placeholder='%')
+      %a.btn.btn-small.btn-primary(href='javascript:;') Crear
+      %a.cancel-tax.btn.btn-small(href='javascript:;') Cancelar
+    %td
+
+
+  %tr#total-line.extra
     %td
     %td.r.b.dark(colspan='2')
       Total
       %span.currency
-    %td.b.r
-      = f.input :total, label: false, input_html: { type: 'decimal', size: 12, id: 'total', class: 'b' }
+    %td.b.r#total
     %td
 
   - if transaction.is_a?(Income)
@@ -75,3 +94,13 @@
         \-
         %span#discount-per
 
+:javascript
+  $(function() {
+    var $editTax = $('#edit-tax'),
+        $save = $editTax.find('.btn-primary'),
+        $cancel = $editTax.find('.cancel-tax');
+
+    $save.click(function(event) {
+      event.preventDefault();
+    });
+  })

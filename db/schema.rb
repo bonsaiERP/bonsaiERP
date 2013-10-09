@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130911005608) do
+ActiveRecord::Schema.define(version: 20131009141203) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,7 +41,6 @@ ActiveRecord::Schema.define(version: 20130911005608) do
     t.datetime "updated_at",                                                                  null: false
     t.string   "status",             limit: 50,                          default: "approved"
     t.integer  "updater_id"
-    t.string   "old_reference"
   end
 
   add_index "account_ledgers", ["account_id"], name: "index_account_ledgers_on_account_id", using: :btree
@@ -73,6 +72,8 @@ ActiveRecord::Schema.define(version: 20130911005608) do
     t.datetime "updated_at",                                                          null: false
     t.integer  "tag_ids",                                             default: [],                 array: true
     t.integer  "updater_id"
+    t.decimal  "tax_percentage",             precision: 5,  scale: 2, default: 0.0
+    t.integer  "tax_id"
   end
 
   add_index "accounts", ["active"], name: "index_accounts_on_active", using: :btree
@@ -85,6 +86,7 @@ ActiveRecord::Schema.define(version: 20130911005608) do
   add_index "accounts", ["project_id"], name: "index_accounts_on_project_id", using: :btree
   add_index "accounts", ["state"], name: "index_accounts_on_state", using: :btree
   add_index "accounts", ["tag_ids"], name: "index_accounts_on_tag_ids", using: :gin
+  add_index "accounts", ["tax_id"], name: "index_accounts_on_tax_id", using: :btree
   add_index "accounts", ["type"], name: "index_accounts_on_type", using: :btree
   add_index "accounts", ["updater_id"], name: "index_accounts_on_updater_id", using: :btree
 
@@ -291,6 +293,14 @@ ActiveRecord::Schema.define(version: 20130911005608) do
   end
 
   add_index "tags", ["name"], name: "index_tags_on_name", using: :btree
+
+  create_table "taxes", force: true do |t|
+    t.string   "name",        limit: 100
+    t.string   "abreviation", limit: 20
+    t.decimal  "percentage",              precision: 5, scale: 2, default: 0.0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "transaction_details", force: true do |t|
     t.integer  "account_id"

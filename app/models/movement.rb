@@ -141,6 +141,10 @@ class Movement < Account
     is_approved? || is_paid?
   end
 
+  def taxes
+    tax_percentage * subtotal
+  end
+
   private
 
     def nulling_valid?

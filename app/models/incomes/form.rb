@@ -9,7 +9,7 @@ class Incomes::Form < Movements::Form
 
   delegate :contact, :is_approved?, :is_draft?, :income_details,
            :subtotal, :to_s, :state, :discount, :details,
-           :income_details_attributes, :income_details_attributes=,
+           :income_details_attributes, :income_details_attributes=, :taxes,
            to: :income
 
   delegate :id, to: :income, prefix: true

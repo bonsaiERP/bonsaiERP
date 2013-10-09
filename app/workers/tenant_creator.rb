@@ -29,6 +29,7 @@ class TenantCreator
       Store.create!(name: 'Almacen inicial')
       cash = Cash.new_cash(name: 'Caja inicial', currency: organisation.currency)
       cash.save!
+      Tax.create!(name: 'IVA', percentage: 13)  if organisation.country_code == 'BO'
     end
 
     true

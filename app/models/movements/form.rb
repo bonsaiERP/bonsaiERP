@@ -10,6 +10,7 @@ class Movements::Form < BaseForm
   attribute :total, Decimal, default: 0
   attribute :exchange_rate, Decimal, default: 1
   attribute :project_id, Integer
+  attribute :tax_id, Integer
   attribute :due_date, Date
   attribute :description, String
   attribute :direct_payment, Boolean, default: false

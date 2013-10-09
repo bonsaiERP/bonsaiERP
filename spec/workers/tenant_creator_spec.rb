@@ -43,6 +43,10 @@ describe TenantCreator do
       c = Cash.first
       c.name.should eq('Caja inicial')
       c.address.should be_blank
+
+      t = Tax.first
+      expect(t.name).to eq('IVA')
+      t.percentage.should == 13.0
     end
 
     after(:each) do

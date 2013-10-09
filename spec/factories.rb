@@ -28,6 +28,7 @@ FactoryGirl.define do
     name 'bonsaiERP'
     tenant 'bonsai'
     currency 'BOB'
+    country_code 'BO'
   end
 
   factory :contact do

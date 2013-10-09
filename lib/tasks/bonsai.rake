@@ -484,6 +484,14 @@ namespace :bonsai do
       link.save(validate: false)
     end
   end
+
+  desc 'Creates tax for all countries like bolivia'
+  task create_bo_taxes: :environment do
+    Organisation.where(country_code: 'BO').each do|org|
+      PgTools.change_schema org.tenant
+      Tax.create(name: 'IVA', percentage: 13)
+    end
+  end
 end
 
 # example to export the file
