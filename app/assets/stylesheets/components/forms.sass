@@ -38,8 +38,11 @@ input.numeric
     margin: 4px 0px
 
 span.error
-  display: block
+  display: inline-table
   color: $red
+
+td span.error
+  display: block
 
 .error
   .help-block
@@ -201,3 +204,7 @@ input.row-check
     display: block
   .view-more
     display: none
+
+.alert-error
+  dl
+    margin: 5px 0px 10px

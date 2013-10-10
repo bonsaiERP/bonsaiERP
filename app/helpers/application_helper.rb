@@ -45,6 +45,7 @@ module ApplicationHelper
   def lo(val, options = {})
     localize(val, options) unless val.nil?
   end
+
   def create_options_link
     opts = params
     opts.delete(:controller)

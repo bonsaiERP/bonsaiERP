@@ -22,6 +22,7 @@ class Item extends Backbone.Model
   setPrice: ->
     price = _b.roundVal( @get('original_price') * (1.0 / @get('rate') ), bonsai.presicion )
     @set(price: price )
+
   #
   setAutocompleteEvent: (el) ->
     $(el).on 'autocomplete-done', 'input.autocomplete', (event, item) =>
@@ -125,13 +126,17 @@ class Transaction extends Backbone.Collection
   subtotalPath: '#subtotal'
   transSel: '.trans'
   transModel: false
+  subtotal: 0
+  taxPercent: 0
+  tax: 0.0
   accountsTo: []
   #
   initialize: ->
-    total = $('#total').val()
+    total = $('#total').data('value')
     @$table = $('#items-table')
     @itemTemplate = _.template(itemTemplate)
 
+    @setTaxComponent()
     @setEvents()
     @setList()
     @calculateSubtotal()
@@ -140,9 +145,17 @@ class Transaction extends Backbone.Collection
     @$addLink.click => @addItem()
 
     # Because of calculations total is lost
-    $('#total').val(total)
+    #$('#total').html(_b.ntc @subtotal)
   #
   setEvents: ->
+  #
+  setTaxComponent: ->
+    @$tax = $('#tax_id').on('change', => @calculateTotal() )
+    @$taxes = $('#taxes')
+  #
+  setTax: ->
+    @taxPercent = @$tax.find(':selected').text().replace(/[^\d\.]/g, '') * 1
+    @$taxes.text _b.ntc(@subtotal * @taxPercent/100)
   #
   setAccountsTo: (@accountsTo) ->
     self = this
@@ -161,23 +174,24 @@ class Transaction extends Backbone.Collection
 
     rivets.bind $(@transSel), {trans: @transModel}
     @transModel.on 'change:rate', -> self.setCurrency()
-
   #
   calculateSubtotal: ->
-    sub = @reduce((sum, p) ->
+    @subtotal = @reduce((sum, p) ->
       if p.attributes.item_id?
         sum + p.get('subtotal')
       else
         sum + 0.0
     , 0.0)
 
-    $(@subtotalPath).html(_b.ntc(sub) )
+    $(@subtotalPath).html(_b.ntc(@subtotal) )
 
-    @calculateTotal(sub)
-  #
-  calculateTotal: (sub)->
-    tot = sub
-    $(@totalPath).val(tot.toFixed(Config.precision))
+    @calculateTotal(@subtotal)
+  # TOTAL
+  calculateTotal: (sub) ->
+    sub ||= @subtotal
+    @setTax()
+    tot = sub + @taxPercent/100 * sub
+    $(@totalPath).html(tot.toFixed(Config.precision))
   #
   setList: ->
     @$table.find('tr.item').each (i, el) =>

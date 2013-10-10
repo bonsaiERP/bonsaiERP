@@ -15,12 +15,22 @@ module BonsaiHelper
   def bonsai_method_path(m, klass)
     k = klass.class.to_s.underscore.pluralize.singularize
     case(m)
-      when "new" then link_to "nuevo", send("new_#{k}_path", klass) 
+      when "new" then link_to "nuevo", send("new_#{k}_path", klass)
       when "show" then link_to "ver", klass, :class => "show_icon", :title => "Ver"
       when "edit" then link_to "editar", send("edit_#{k}_path", klass), :class => "edit", :title => "Editar"
       when "destroy" then link_to "borrar", klass, :method => :delete, :class => "delete", :title => "Borrar", :confirm => 'Esta seguro de borrar el item seleccionado', :remote => true
       else ""
     end
+  end
+
+  def error_message(f, method)
+    if f.object.errors.messages[method].any?
+      content_tag :span, f.object.errors.messages[method].join(', '),class: 'error'
+    end
+  end
+
+  def field_with_errors(f, method)
+    'field_with_errors'  if f.object.errors.messages[method].any?
   end
 
   #

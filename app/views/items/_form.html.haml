@@ -17,12 +17,16 @@
 
   .row-fluid
     .span6
-      .unit-control.input
+      .unit-control.input(class="#{field_with_errors(f, :unit_id)}")
         = f.association :unit do
           = f.label 'Unidad'
-          = f.collection_select :unit_id, Unit.order('name asc'), :id, :to_s, {}, class: 'span8'
+          = f.select :unit_id, Unit.order('name asc').map { |v| [v.to_s, v.id] },
+            { include_blank: true }, { class: 'span8' }
+
           %a#new-unit-link.btn(title='Nueva unidad de medida' data-toggle='tooltip')
             %i.icon-plus-sign
+          = error_message f, :unit_id
+
       .unit-form(style='display:none')
         .form-inline
           %span

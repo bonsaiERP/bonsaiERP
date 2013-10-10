@@ -57,7 +57,7 @@
   %tr#tax-line
     %td.r.form-inline(colspan='3')
       Impuestos
-      = f.select :tax_id, Tax.all.map { |v| [v.to_s, v.id] }, include_blank: true
+      = f.select :tax_id, Tax.all.map { |v| [v.to_s, v.id] }, { include_blank: true }, { id: 'tax_id' }
       %a.btn.btn-small(title='Crear nuevo impuesto' data-toggle='tooltip')
         %i.icon-plus-sign
     %td.r

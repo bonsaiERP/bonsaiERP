@@ -24,9 +24,9 @@ class MovementParams
 
   def default
     [
-      :date, :contact_id, :currency, :exchange_rate, :project_id, 
+      :date, :contact_id, :currency, :exchange_rate, :project_id,
       :description, :due_date, :total, :tag_ids,
-      :direct_payment, :account_to_id, :reference
+      :direct_payment, :account_to_id, :reference, :tax_id
     ]
   end
 end

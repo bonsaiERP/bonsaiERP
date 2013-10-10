@@ -2,8 +2,8 @@
 # All events related to jQuery
 @bonsai =
   presicion: 2
-  separator: ','
-  delimiter: '.'
+  separator: '.'
+  delimiter: ' '
   dateFormat: 'dd M yy'
 
 ########################################
@@ -304,6 +304,8 @@ init = ($) ->
     )
 
   # End of $(document).ready
+  _b.numSeparator = @bonsai.separator
+  _b.numDelimiter = @bonsai.delimiter
 
   rivets.configure(
     #preloadData: false
