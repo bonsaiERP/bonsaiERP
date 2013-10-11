@@ -2,7 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class Incomes::Form < Movements::Form
-  alias :income :movement
+  alias_method :income, :movement
 
   validate :income_is_valid,  if: :direct_payment?
   validate :valid_account_to, if: :direct_payment?
@@ -13,27 +13,24 @@ class Incomes::Form < Movements::Form
            to: :income
 
   delegate :id, to: :income, prefix: true
+  delegate :create, :create_and_approve, :update, :update_and_approve,
+           to: :income
 
   # Creates and instance of income and initializes
   def self.new_income(attrs = {})
     _object = new(attrs.slice(*ATTRIBUTES))
-    _object.set_new_income(attrs)
+    _object.movement = Incomes::Service.new_income(attrs)
+    _object.movement.direct_payment = _object.direct_payment
     _object
   end
 
   # Finds the income and sets data with the income found
   def self.find(id)
     _object = new
-    _object.set_service_attributes(Income.find(id))
+    _object.set_service_attributes(Income::Service.find(id))
     _object
   end
 
-  # Creates  and approves an Income
-  def create_and_approve
-    @movement.approve!
-
-    create
-  end
 
   def update_and_approve(attrs = {})
     @movement.approve!
@@ -43,21 +40,11 @@ class Incomes::Form < Movements::Form
 
   def set_new_income(attrs = {})
     @movement = Income.new_income
-    MovementService.new(@movement).set_new(clean_attributes(attrs))
+    MovementService.new(@movement).set_new(attrs)
     copy_new_defaults
   end
 
   private
-
-    def build_ledger
-      @ledger = AccountLedger.new(
-        account_id: income.id, amount: income.total,
-        account_to_id: account_to_id, date: date,
-        operation: 'payin', exchange_rate: 1,
-        currency: income.currency, inverse: false,
-        reference: get_reference
-      )
-    end
 
     def get_reference
       reference.present? ? reference : I18n.t('income.payment.reference', income: income)

@@ -15,6 +15,7 @@ describe Store do
     {name: 'Store Samaipata 1', address: 'Samaipata', phone: '706-81101'}
   }
 
+
   it "#destroy" do
     st = Store.create!(valid_attributes)
 
@@ -24,13 +25,14 @@ describe Store do
 
     st.errors.clear
     st.stub(stocks: [])
-    st.stub(inventory_operations: [1])
+    st.should respond_to(:inventories)
+    st.stub(inventories: [1])
     st.destroy.should be_false
     st.errors[:base].should eq([I18n.t('errors.messages.store.destroy')])
 
     st.errors.clear
     st.stub(stocks: [])
-    st.stub(inventory_operations: [])
+    st.stub(inventories: [])
     st.destroy.should be_true
   end
 

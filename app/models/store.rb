@@ -60,7 +60,7 @@ class Store < ActiveRecord::Base
 private
 
   def check_store_for_delete
-    if stocks.any? or inventory_operations.any?
+    if stocks.any? or inventories.any?
       self.errors[:base] << I18n.t('errors.messages.store.destroy')
       return false
     end

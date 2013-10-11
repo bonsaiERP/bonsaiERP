@@ -7,7 +7,7 @@ class Movements::Form < BaseForm
   attribute :date, Date
   attribute :contact_id, Integer
   attribute :currency, String
-  attribute :total, Decimal, default: 0
+  #attribute :total, Decimal, default: 0
   attribute :exchange_rate, Decimal, default: 1
   attribute :project_id, Integer
   attribute :tax_id, Integer
@@ -17,19 +17,23 @@ class Movements::Form < BaseForm
   attribute :account_to_id, Integer
   attribute :reference, String
 
-  ATTRIBUTES = [:date, :contact_id, :total, :currency, :exchange_rate, :project_id, :due_date,
+  ATTRIBUTES = [:date, :contact_id, :currency, :exchange_rate, :project_id, :due_date,
                 :description, :direct_payment, :account_to_id, :reference, :tax_id].freeze
 
-  attr_reader :movement, :ledger, :history
+  attr_accessor :movement
+  attr_reader :ledger, :history
 
+  # Validations
   validates_presence_of :movement
-  validates_numericality_of :total
   validate :unique_item_ids
 
-  # Finds the income and sets data with the income found
+  # Delegations
+  delegate :percentage, to: :tax, prefix: true, allow_nil: true
+
+  # Finds the income, expense and sets data with the income found
   def set_service_attributes(mov)
     [:ref_number, :date, :due_date, :currency, :currency, :exchange_rate,
-     :project_id, :description, :total].each do |attr|
+     :project_id, :description, :tax_id].each do |attr|
       self.send(:"#{attr}=", mov.send(attr))
     end
 
@@ -38,6 +42,8 @@ class Movements::Form < BaseForm
 
   def create
     set_direct_payment  if direct_payment?
+
+    set_movement_tax_and_total
 
     res = valid_service?
     @movement.balance = 0  if direct_payment?
@@ -54,11 +60,11 @@ class Movements::Form < BaseForm
 
   def update(attrs = {})
     set_update_data(attrs)
-
     set_direct_payment  if direct_payment?
 
-    res = valid_service?
+    set_movement_tax_and_total
 
+    res = valid_service?
     @movement.balance = 0  if direct_payment?
 
     res = save_service(res) do
@@ -74,25 +80,30 @@ class Movements::Form < BaseForm
 
   private
 
+    def set_movement_tax_and_total
+      @movement.total = calculate_total
+      @movement.tax_percentage = tax_percentage || 0
+      @movement.balance = @movement.total
+    end
+
+    def calculate_total
+      tot = details.inject(0) { |s, d| s += d.subtotal  }
+      tot += tot * tax.percentage  if tax.present?
+      tot
+    end
+
     # copies new from movement to the Movements::Form
     def copy_new_defaults
       today = Date.today
       self.currency = @movement.currency
       self.date = today
       self.due_date = today
-      self.total = total || 0
-    end
-
-    # Sets default values so it does not generate errors
-    def clean_attributes(attrs)
-      attrs[:total] = 0  if attrs[:total].blank?
-      attrs
     end
 
     def valid_service?
       res = valid?
       res = @movement.valid? && res
-      res = valid_ledger? && res if direct_payment?
+      res = valid_ledger? && res  if direct_payment?
 
       res
     end
@@ -109,7 +120,7 @@ class Movements::Form < BaseForm
     end
 
     def save_service(res, &block)
-      res = commit_or_rollback{ block.call } if res
+      res = commit_or_rollback{ block.call }  if res
 
       unless res
         @movement.errors.messages.select{|k| @movement.errors.delete(k) if k =~ /\w+_details/ }

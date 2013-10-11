@@ -10,8 +10,8 @@ class MovementService
   delegate :set_details, to: :mov_details
   delegate :original_total, :balance_inventory, to: :calculations
 
-  def initialize(trans)
-    @movement = trans
+  def initialize(mov)
+    @movement = mov
     if @movement.is_a?(Income)
       set_income
     else
@@ -33,10 +33,10 @@ class MovementService
     set_details
     @movement.gross_total = original_total
     @movement.discounted = (discount > 0)
-    @movement.balance = total
+    #@movement.balance = total
     @movement.balance_inventory = balance_inventory
 
-    2.times { @movement.details.build(quantity: 1) } if @movement.details.empty?
+    2.times { @movement.details.build(quantity: 1) }  if @movement.details.empty?
   end
 
   # Updates the data for an imcome or expense
