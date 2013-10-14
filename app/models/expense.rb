@@ -3,6 +3,9 @@
 # email: boriscyber@gmail.com
 class Expense < Movement
 
+  extend Models::AccountCode
+  self.code_name = 'E'
+
   ########################################
   # Callbacks
   before_save :set_supplier_and_expenses_status
@@ -47,22 +50,6 @@ class Expense < Movement
       exp.attributes = attrs
       exp.state ||= 'draft'
       yield exp  if block_given?
-    end
-  end
-
-  def self.get_ref_number
-    ref = Expense.order('name DESC').limit(1).pluck(:name).first
-    year ||= Date.today.year.to_s[2..4]
-
-    if ref.present?
-      _, y, num = ref.split('-')
-      if y == year
-        "E-#{y}-#{num.next}"
-      else
-        "E-#{year}-0001"
-      end
-    else
-      "E-#{year}-0001"
     end
   end
 

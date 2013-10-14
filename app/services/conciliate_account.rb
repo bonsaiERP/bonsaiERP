@@ -18,10 +18,12 @@ class ConciliateAccount
     account_ledger.status = 'approved'
     update_account_ledger_approver
 
-    case 
+    case
     when is_service_payment?
       account_ledger.save
     when %w(Income Expense).include?(account.class.to_s)
+      update_account_to
+    when is_loan?
       update_account_to
     else
       update_both_accounts
@@ -38,40 +40,44 @@ class ConciliateAccount
     res
   end
 
-private
-  # When an Income is payed with Expense or vice versa
-  def is_service_payment?
-    [Income, Expense].include?(account_to.class)
-  end
+  private
+    # When an Income is payed with Expense or vice versa
+    def is_service_payment?
+      [Income, Expense].include?(account_to.class)
+    end
 
-  def update_account_to
-    account_to.amount += amount
+    def is_loan?
+      [Loans::Give, Loans::Receive].include?(account_to.class)
+    end
 
-    account_to.save && account_ledger.save
-  end
+    def update_account_to
+      account_to.amount += amount
 
-  def update_both_accounts
-    account_to.amount += amount
-    account.amount -= amount_currency
+      account_to.save && account_ledger.save
+    end
 
-    res = account.save && account_to.save && account_ledger.save
+    def update_both_accounts
+      account_to.amount += amount
+      account.amount -= amount_currency
 
-    res
-  end
+      res = account.save && account_to.save && account_ledger.save
 
-  def update_account_ledger_approver
-    account_ledger.approver_id = UserSession.id
-    account_ledger.approver_datetime = Time.zone.now
-  end
+      res
+    end
 
-  def can_conciliate?
-    res = !(approver_id.present? || is_nulled? || nuller_id.present?)
-    account_ledger.errors.add(:base, I18n.t('errors.messages.account_ledger.approved')) unless res
+    def update_account_ledger_approver
+      account_ledger.approver_id = UserSession.id
+      account_ledger.approver_datetime = Time.zone.now
+    end
 
-    res
-  end
+    def can_conciliate?
+      res = !(approver_id.present? || is_nulled? || nuller_id.present?)
+      account_ledger.errors.add(:base, I18n.t('errors.messages.account_ledger.approved')) unless res
 
-  def account_is_income_or_expense?
-    account.is_a?(Income) || account.is_a?(Expense)
-  end
+      res
+    end
+
+    def account_is_income_or_expense?
+      account.is_a?(Income) || account.is_a?(Expense)
+    end
 end

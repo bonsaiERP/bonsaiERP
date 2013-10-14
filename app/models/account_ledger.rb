@@ -7,16 +7,18 @@ class AccountLedger < ActiveRecord::Base
 
   ########################################
   # Constants
-  # contin  = Advance in that will add the amount to the Contact account
-  # contout = Advance out that will add the amount to the Contact account
-  # payin  = Payment in Income
-  # payout = Paymen out Expense
-  # intin  = Interests in
-  # intout = Interestsout
-  # devin  = Devolution in Income
-  # devout = Devolution out Expense
-  OPERATIONS = %w(trans contin contout payin payout
-                  intin intout devin devout).freeze
+  # trans  = Transfer from one account to other
+  # payin  = Payment in Income, adds
+  # payout = Paymen out Expense, substracts
+  # devin  = Devolution in Income, adds
+  # devout = Devolution out Expense, substracts
+  # lrcre  = Create the ledger Loans::Receive, adds
+  # lrpay  = Loans::Receive make a payment, substracts
+  # lrdev  = Loans::Receive make a devolution, adds
+  # lgcre  = Create the ledger Loans::Give, substract
+  # lgpay  = Loans::Give receive a payment, adds
+  # lgdev  = Loans::Give make a devolution, substract
+  OPERATIONS = %w(trans payin payout devin devout lrcre lrpay lrdev lgcre lgpay lgdev).freeze
   STATUSES = %w(pendent approved nulled).freeze
 
   ########################################
