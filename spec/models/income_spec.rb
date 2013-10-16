@@ -94,7 +94,7 @@ describe Income do
     i.ref_number.should eq(i.to_s)
   end
 
-  it "gets the latest ref_number" do
+  it "$get_ref_number" do
     y = Date.today.year.to_s[2..4]
     ref_num = Income.get_ref_number
     ref_num.should eq("I-#{y}-0001")

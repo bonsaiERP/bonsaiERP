@@ -1,6 +1,6 @@
 module SettersGetters
   def create_setters(*attrs)
-    attrs.map {|k| :"#{k}="}
+    attrs.map { |k| :"#{k}=" }
   end
 
   def create_accessors(*attrs)

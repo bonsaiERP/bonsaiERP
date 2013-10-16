@@ -1,6 +1,6 @@
 # Related logic for income and expense
 class Movements::Service
-  attr_reader :movement, :ledger
+  attr_reader :service, :movement, :ledger, :history
   attr_accessor :direct_payment
 
   ATTRIBUTES = [:contact_id, :date, :due_date, :currency, :exchange_rate, :project_id, :description, :tax_id].freeze
@@ -36,6 +36,14 @@ class Movements::Service
 
   def direct_payment?
     !!direct_payment
+  end
+
+  def update(attrs = {})
+    attrs.delete(:contact_id)
+    @history = TransactionHistory.new
+    @history.set_history(movement)
+
+    movement.update_attributes(attrs) && @history.save
   end
 
   private
@@ -75,18 +83,17 @@ class Movements::Service
     def balance_inventory
       details.inject(0) { |s, d| s += d.balance * d.price }
     end
+
+    def build_ledger
+      AccountLedger.new(
+        amount: movement.total,
+        account_to_id: account_to_id,
+        date: date,
+        exchange_rate: exchange_rate,
+        currency: movement.currency,
+        inverse: false,
+        reference: get_reference
+      )
+    end
 end
 
-# NullTax class
-class NullTax
-  def percentage
-    0.0
-  end
-end
-
-# NullLedger class
-class NullLedger
-  def save_ledger
-    true
-  end
-end

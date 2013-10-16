@@ -30,8 +30,7 @@ describe Incomes::Form do
     subject { Incomes::Form.new_income(valid_params) }
 
     it "income_details" do
-      subject.income.should be_is_a(Incomes::Service)
-
+      subject.income.should be_is_a(Income)
       subject.date.should be_is_a(Date)
       subject.due_date.should be_is_a(Date)
       subject.currency.should eq('BOB')
@@ -46,7 +45,6 @@ describe Incomes::Form do
       subject.should respond_to(:details)
       subject.should respond_to(:income_details)
       subject.should respond_to(:income_details_attributes)
-      subject.should respond_to(:income_details_attributes=)
     end
 
     it "sets_defaults if nil" do
@@ -94,41 +92,40 @@ describe Incomes::Form do
     subject { Incomes::Form.new_income(valid_params) }
 
     it "creates and sets the default states" do
-      #s = double
-      #s.should_receive(:pluck).with(:id, :price).and_return([[1, 10.5], [2, 20.0]])
+      s = double
+      s.should_receive(:pluck).with(:id, :price).and_return([[1, 10.5], [2, 20.0]])
 
-      #Item.should_receive(:where).with(id: item_ids).and_return(s)
+      Item.should_receive(:where).with(id: item_ids).and_return(s)
 
       # Create
       subject.create.should be_true
 
       # Income
       i = subject.income
-      i.should be_is_a(Incomes::Service)
-      i = i.income
+      i.should be_is_a(Income)
       i.should be_is_draft
       i.should be_active
       i.ref_number.should =~ /I-\d{2}-\d{4}/
       i.date.should be_is_a(Date)
-      i.tax_percentage == 0
 
       i.creator_id.should eq(UserSession.id)
-      #i.balance_inventory.should == 500
+      i.balance_inventory.should == 500
 
       # Number values
       i.exchange_rate.should == 1
       i.total.should == total
 
-      #i.gross_total.should == 500#(10 * 10.5 + 20 * 20.0)
+      i.gross_total.should == (10 * 10.5 + 20 * 20.0)
       i.balance.should == total
+      i.gross_total.should > i.total
 
-      #i.discount == i.gross_total - total
-      #i.should be_discounted
+      i.discount == i.gross_total - total
+      i.should be_discounted
 
-      #i.income_details[0].original_price.should == 10.5
-      #i.income_details[0].balance.should == 10.0
-      #i.income_details[1].original_price.should == 20.0
-      #i.income_details[1].balance.should == 20.0
+      i.income_details[0].original_price.should == 10.5
+      i.income_details[0].balance.should == 10.0
+      i.income_details[1].original_price.should == 20.0
+      i.income_details[1].balance.should == 20.0
     end
 
     it "creates and approves" do
@@ -168,8 +165,10 @@ describe Incomes::Form do
       }
     }
 
+    let(:total_for_update) { subject.total + 10 * 2 + 20 * 2 }
     let(:attributes_for_update) {
-      valid_params.merge( description: 'A new changed description', income_details_attributes: update_details)
+      valid_params.merge(total: total_for_update,
+                         description: 'A new changed description', income_details_attributes: update_details)
     }
 
     it "does not allow errors on IncomeDetail" do
@@ -190,7 +189,7 @@ describe Incomes::Form do
 
       incf = Incomes::Form.find(i.id)
       id = incf.details[0].id
-      # Adds tow more items to the income
+
       incf.update(income_details_attributes: [
         {id: id, item_id: 1, price: 10, quantity: 12},
         {item_id: 100, price: 10, quantity: 10}
@@ -219,7 +218,7 @@ describe Incomes::Form do
       i.should be_is_draft
       i.contact_id.should eq(1) # Does not change contact for update
       i.description.should eq('A new changed description')
-      i.total.should == 500
+      i.total.should == total_for_update
 
       i.income_details.should have(2).items
       i.income_details[0].quantity.should == 12
@@ -291,12 +290,13 @@ describe Incomes::Form do
       is.ledger.should be_persisted
       is.ledger.account_to_id.should eq(2)
       is.ledger.should be_is_payin
-      is.ledger.amount.should == 500.0
+      is.ledger.amount.should == 490.0
       is.ledger.reference.should eq('Recibo 123')
 
       # income
-      is.income.total.should == 500.0
+      is.income.total.should == 490.0
       is.income.balance.should == 0.0
+      is.income.discount.should == 10.0
       is.income.should be_is_paid
     end
 
@@ -306,11 +306,13 @@ describe Incomes::Form do
       is.income.should be_persisted
       inc = is.income
       inc.should be_discounted
+      inc.discount.should == 10
 
       is = Incomes::Form.find(inc.id)
       is.income.should eq(inc)
 
       is.ref_number.should eq(inc.ref_number)
+      is.total.should == 490.0
 
       is.stub(account_to: true)
       is.update_and_approve(direct_payment: "1", account_to_id: "2", total: 500).should be_true
@@ -353,6 +355,17 @@ describe Incomes::Form do
     is.errors.messages[:currency].should_not be_blank
   end
 
+  it "generates erros and does not raise exception" do
+    is = Incomes::Form.new_income(valid_params.merge(total: ""))
+    expect(is).to_not be_valid
+
+    is.errors[:total].should_not be_blank
+
+    is = Incomes::Form.new_income(valid_params.merge(total: "NaN"))
+    expect(is).to_not be_valid
+    is.errors[:total].should_not be_blank
+  end
+
   describe "change of currency, inveny state" do
     before(:each) do
       Income.any_instance.stub(contact: contact)
@@ -364,18 +377,10 @@ describe Incomes::Form do
       is.create_and_approve.should be_true
 
       is = Incomes::Form.find(is.income.id)
-      det1 = is.income.details[0]
-      det2 = is.income.details[1]
 
-      is.update({
-        exchange_rate: 2, currency: 'USD',
-        income_details_attributes: [
-          {id: det1.id, price: det1.price/2, quantity: det1.quantity, item_id: det1.item_id},
-          {id: det2.id, price: det2.price/2, quantity: det2.quantity, item_id: det2.item_id}
-        ]
-      }).should be_true
+      is.update({total: 245, exchange_rate: 2, currency: 'USD'}).should be_true
 
-      is.income.total.should eq(250)
+      is.income.total.should eq(245)
       is.income.exchange_rate.should eq(2)
       is.income.currency.should eq('USD')
 
@@ -383,7 +388,7 @@ describe Incomes::Form do
 
       is = Incomes::Form.find(is.income.id)
 
-      is.update({exchange_rate: 1, currency: 'BOB'}).should be_false
+      is.update({total: 490, exchange_rate: 1, currency: 'BOB'}).should be_false
 
       is.errors[:currency].should eq([I18n.t('errors.messages.movement.currency_change')])
     end

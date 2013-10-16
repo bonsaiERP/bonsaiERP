@@ -6,6 +6,9 @@ class Movement < Account
   # module for setters and getters
   extend SettersGetters
 
+  STATES = %w(draft approved paid nulled)
+
+  # Callbacks
   before_update :check_items_balances
 
   ########################################
@@ -13,12 +16,11 @@ class Movement < Account
   belongs_to :contact
   belongs_to :project
 
-  has_one :transaction, foreign_key: :account_id, autosave:true
+  has_one :transaction, foreign_key: :account_id, autosave: true
   has_many :transaction_histories, foreign_key: :account_id
   has_many :ledgers, foreign_key: :account_id, class_name: 'AccountLedger'
   has_many :inventories, foreign_key: :account_id
 
-  STATES = %w(draft approved paid nulled)
   ########################################
   # Validations
   validates_presence_of :date, :due_date, :contact, :contact_id

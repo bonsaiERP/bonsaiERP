@@ -1,0 +1,3 @@
+class ReceiveLoan < Loan
+
+end
