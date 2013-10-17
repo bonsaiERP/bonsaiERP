@@ -54,6 +54,7 @@ describe Expense do
       subject.balance.should == 0.0
       subject.original_total.should == 0.0
       subject.balance_inventory.should == 0.0
+      subject.ref_number.should =~ /E-\d{2}-\d{4}/
     end
   end
 

@@ -34,4 +34,20 @@ class Movements::Details < Struct.new(:movement)
   def item_prices
     @item_prices ||= Hash[Item.where(id: item_ids).pluck(:id, :price)]
   end
+
+  def subtotal
+    details.inject(0) {|sum, det| sum += det.total }
+  end
+
+  def original_total
+    details.inject(0) {|sum, det| sum += det.quantity.to_f * det.original_price.to_f }.to_d
+  end
+
+  def balance_inventory
+    details.inject(0) {|sum, det| sum += det.balance * det.price }
+  end
+
+  def inventory_left
+    details.inject(0) {|sum, det| sum += det.balance }
+  end
 end

@@ -46,6 +46,7 @@ class Income < Movement
       inc.build_transaction
       inc.attributes = attrs
       inc.state ||= 'draft'
+      inc.ref_number ||= get_ref_number
       yield inc  if block_given?
     end
   end

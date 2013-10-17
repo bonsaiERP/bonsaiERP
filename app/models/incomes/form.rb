@@ -9,9 +9,10 @@ class Incomes::Form < Movements::Form
   validate :income_is_valid,  if: :direct_payment?
   validate :valid_account_to, if: :direct_payment?
 
-  delegate :contact, :is_approved?, :is_draft?, :income_details,
+  delegate :contact, :is_approved?, :is_draft?, :total,
            :subtotal, :to_s, :state, :discount, :details,
-           :income_details_attributes,
+           :income_details,
+           :income_details_attributes, :income_details_attributes=,
            to: :income
 
   delegate :id, to: :income, prefix: true
@@ -27,29 +28,30 @@ class Incomes::Form < Movements::Form
   # Finds the income and sets data with the income found
   def self.find(id)
     _object = new
-    _object.set_service_attributes(Income.find(id))
+    _object.movement   = Income.find(id)
+    _object.service    = Incomes::Service.new(_object.income)
+    _object.attributes = _object.income.attributes
     _object
   end
 
   # Creates  and approves an Income
-  def create_and_approve
-    @movement.approve!
+  #def create_and_approve
+    #@movement.approve!
 
-    create
-  end
+    #create
+  #end
 
-  def update_and_approve(attrs = {})
-    @movement.approve!
+  #def update_and_approve(attrs = {})
+    #@movement.approve!
 
-    update attrs
-  end
+    #update attrs
+  #end
 
   def set_new_income
     set_new_defaults
     @movement = Income.new_income(movement_create_attributes.merge(income_details_attributes: attr_details))
-    @movement.ref_number = Income.get_ref_number
-    @service = Incomes::Service.new(@income)
-    #MovementService.new(@movement).set_new(clean_attributes(attrs))
+    2.times { @movement.income_details.build(quantity: 1) }  if income.details.empty?
+    @service = Incomes::Service.new(income)
   end
 
   private

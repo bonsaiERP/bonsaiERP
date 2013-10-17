@@ -7,39 +7,6 @@
 class Incomes::Service < Movements::Service
   alias_method :income, :movement
 
-  INCOME_ATTRIBUTES = ATTRIBUTES + [:income_details_attributes]
-  DELEGATE = INCOME_ATTRIBUTES + EXTRA_METHODS + [:income_details]
-
-  delegate(*DELEGATE, to: :income)
-  delegate :income, to: :service
-
-  def self.new_income(attrs = {})
-    _object = new Income.new_income(attrs.slice(*INCOME_ATTRIBUTES))
-    _object.set_defaults
-    _object
-  end
-
-  def self.find(id)
-    new Income.find(id)
-  end
-
-  def create
-    set_movement_extra_attributes
-    income.save
-  end
-
-  def create_and_approve(attrs = {})
-    commit_or_rollback do
-      income.approve!
-      income.save
-      save_ledger
-    end
-  end
-
-  def update_and_approve(attrs = {})
-
-  end
-
   private
 
     def save_ledger
@@ -48,5 +15,24 @@ class Incomes::Service < Movements::Service
       @ledger.operation = 'payin'
 
       @ledger.save_ledger
+    end
+
+    def ledger
+      @ledger ||= begin
+
+                  end
+                    AccountLedger.new(
+        amount: income.total,
+        account_to_id: account_to_id,
+        date: date,
+        exchange_rate: income.exchange_rate,
+        currency: movement.currency,
+        inverse: false,
+        reference: get_reference
+      )
+    end
+
+    def get_reference
+      reference.present? ? reference : I18n.t('income.payment.reference', income: income)
     end
 end

@@ -10,6 +10,7 @@ class Movement < Account
 
   # Callbacks
   before_update :check_items_balances
+  before_create { |m| m.creator_id = UserSession.id }
 
   ########################################
   # Relationships
@@ -122,12 +123,6 @@ class Movement < Account
     []
   end
 
-  alias_method :old_attributes, :attributes
-  def attributes
-    old_attributes.merge(transaction.attributes)
-  end
-
-
   def can_pay?
     !is_nulled? && !is_paid? && !is_draft?
   end
@@ -145,6 +140,12 @@ class Movement < Account
 
   def taxes
     tax_percentage * subtotal
+  end
+
+  alias_method :old_attributes, :attributes
+  def attributes
+    attrs = transaction.attributes.except(*%w(id created_at updated_at))
+    old_attributes.merge(attrs)
   end
 
   private

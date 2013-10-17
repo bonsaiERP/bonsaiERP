@@ -49,6 +49,7 @@ class Expense < Movement
       exp.build_transaction
       exp.attributes = attrs
       exp.state ||= 'draft'
+      exp.ref_number ||= get_ref_number
       yield exp  if block_given?
     end
   end

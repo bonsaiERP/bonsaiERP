@@ -122,6 +122,7 @@ describe Income do
       i.set_state_by_balance!
 
       i.should be_is_paid
+      i.ref_number.should =~ /I-\d{2}-\d{4}/
     end
 
     it "a negative balance" do
