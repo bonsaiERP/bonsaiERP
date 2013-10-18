@@ -31,10 +31,8 @@ class Movement < Account
 
   ########################################
   # Delegations
-  delegate(*create_accessors(*Transaction.transaction_columns), to: :transaction)
-  delegate :discounted?, :delivered?, :devolution?, :total_was,
-    :creator, :approver, :nuller, :no_inventory?, to: :transaction
-  delegate :attributes, to: :transaction, prefix: true
+  delegate(*create_accessors(*Transaction.get_columns), to: :transaction)
+  delegate(*Transaction.delegate_methods, to: :transaction)
 
   # Define boolean methods for states
   STATES.each do |_state|
@@ -56,6 +54,20 @@ class Movement < Account
 
     define_method :"#{meth.first}=" do |val|
       self.send(:"#{meth.last}=", val)
+    end
+  end
+
+  class << self
+    alias_method :old_new, :new
+
+    def new(attrs = {})
+      old_new do |mov|
+        mov.build_transaction
+        mov.attributes = attrs
+        mov.state ||= 'draft'
+        mov.ref_number ||= get_ref_number
+        yield mov  if block_given?
+      end
     end
   end
 

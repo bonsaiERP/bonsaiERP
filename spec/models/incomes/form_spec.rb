@@ -139,7 +139,7 @@ describe Incomes::Form do
       i.should be_active
 
       i.date.should eq(today)
-      i.due_date.should eq(today)
+      i.due_date.should eq(valid_params.fetch(:due_date))
 
       i.approver_id.should eq(UserSession.id)
       i.approver_datetime.should be_is_a(Time)

@@ -43,17 +43,6 @@ class Expense < Movement
   }
   scope :date_range, -> (range) { where(date: range) }
 
-  def self.new_expense(attrs = {})
-    attrs.delete(:id)
-    new do |exp|
-      exp.build_transaction
-      exp.attributes = attrs
-      exp.state ||= 'draft'
-      exp.ref_number ||= get_ref_number
-      yield exp  if block_given?
-    end
-  end
-
   def subtotal
     expense_details.inject(0) { |sum, det| sum += det.total }
   end

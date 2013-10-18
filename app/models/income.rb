@@ -40,17 +40,6 @@ class Income < Movement
   }
   scope :date_range, -> (range) { where(date: range) }
 
-  def self.new_income(attrs = {})
-    attrs.delete(:id)
-    self.new do |inc|
-      inc.build_transaction
-      inc.attributes = attrs
-      inc.state ||= 'draft'
-      inc.ref_number ||= get_ref_number
-      yield inc  if block_given?
-    end
-  end
-
   ########################################
   # Aliases, alias and alias_method not working
   [[:ref_number, :name], [:balance, :amount]].each do |meth|

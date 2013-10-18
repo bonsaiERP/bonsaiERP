@@ -11,28 +11,34 @@ class Incomes::Service < Movements::Service
 
     def save_ledger
       @ledger = direct_payment? ? build_ledger : NullLedger.new
-      @ledger.account_id = income.id
-      @ledger.operation = 'payin'
 
       @ledger.save_ledger
     end
 
     def ledger
-      @ledger ||= begin
+      @ledger ||= direct_payment? ? get_ledger : NullLedger.new
+    end
 
-                  end
-                    AccountLedger.new(
+    def get_ledger
+      AccountLedger.new(
         amount: income.total,
+        account_id: income.id,
         account_to_id: account_to_id,
-        date: date,
+        date: income.date,
         exchange_rate: income.exchange_rate,
-        currency: movement.currency,
+        currency: income.currency,
         inverse: false,
+        operation: 'payin',
         reference: get_reference
       )
     end
 
     def get_reference
       reference.present? ? reference : I18n.t('income.payment.reference', income: income)
+    end
+
+    def get_update_attributes
+      attributes_class.attributes.slice(:date, :due_date, :currency, :exchange_rate, :description,:projecct_id)
+      .merge(income_details_attributes: attributes_class.income_details_attributes)
     end
 end

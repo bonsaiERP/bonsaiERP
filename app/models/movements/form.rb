@@ -19,175 +19,55 @@ class Movements::Form < BaseForm
                 :description, :direct_payment, :account_to_id, :reference].freeze
 
   attr_accessor :service, :movement, :ledger, :history
-  attr_writer :attr_details
 
   validates_presence_of :movement
   validates_numericality_of :total
   validate :unique_item_ids
 
-  delegate :create, to: :service
+  def create
+    set_errors  unless res = service.create(self)
+    res
+  end
 
   def create_and_approve
-    service.create_and_approve attributes.slice(:account_to_id, :direct_payment)
+    set_errors  unless res = service.create_and_approve(self)
+    res
   end
 
-  def movement_create_attributes
-    attributes.except(:account_to_id, :reference, :direct_payment, :total)
+  def update(attrs = {})
+    set_errors  unless res = service.update(self)
+    res
   end
 
-  def movement_update_attributes
-    create_attributes.except(:contact_id)
+  def update_and_approve(attrs = {})
+    set_errors  unless res = service.update_and_approve(self)
+    res
   end
 
   def attr_details
     @attr_details || {}
   end
 
-  def update(attrs = {})
-    self.attributes = attrs
-    service.update(attrs)
+  def set_defaults
+    self.date ||= Date.today
+    self.due_date ||= Date.today
+    self.currency ||= OrganisationSession.currency
   end
-
-  def update_and_approve(attrs = {})
-    self.attributes = attrs
-    service.update_and_approve(attrs)
-  end
-
-  #################################################################
-  #################################################################
-  # Finds the income and sets data with the income found
-  def set_service_attributes(mov)
-    [:ref_number, :date, :due_date, :currency, :currency, :exchange_rate,
-     :project_id, :description, :total].each do |attr|
-      self.send(:"#{attr}=", mov.send(attr))
-    end
-
-    @movement = mov
-  end
-
-  #def create
-    ##set_direct_payment  if direct_payment?
-
-    #res = valid_service?
-
-    ##@movement.balance = direct_payment? ? 0 : total
-
-    #res = save_service(res) do
-            #res = @movement.save
-            #res = res && save_ledger if direct_payment?
-
-            #res
-          #end
-
-    #res
-  #end
-
-  #def update(attrs = {})
-    #set_update_data(attrs)
-
-    #set_direct_payment  if direct_payment?
-
-    #res = valid_service?
-
-    #@movement.balance = 0  if direct_payment?
-
-    #res = save_service(res) do
-            #res = @history.save
-            #res = res && @movement.save
-            #res = res && save_ledger if direct_payment?
-
-            #res
-          #end
-
-    #res
-  #end
 
   private
 
-    # copies new from movement to the Movements::Form
-    def set_new_defaults
-      today = Date.today
-      self.currency = OrganisationSession.currency
-      self.date = today
-      self.due_date = today
+    def movement_create_attributes
+      attributes.except(:account_to_id, :reference, :direct_payment, :total)
     end
 
-    # Sets default values so it does not generate errors
-    def clean_attributes(attrs)
-      attrs[:total] = 0  if attrs[:total].blank?
-      attrs
+    def movement_update_attributes
+      movement_create_attributes.except(:contact_id)
     end
 
-    def valid_service?
-      res = valid?
-      res = @movement.valid? && res
-      res = valid_ledger? && res if direct_payment?
-
-      res
-    end
-
-    def set_direct_payment
-      build_ledger
-      @movement.state = 'paid'
-    end
-
-    def save_ledger
-      @ledger.account_id = @movement.id
-
-      @ledger.save_ledger
-    end
-
-    def save_service(res, &block)
-      res = commit_or_rollback{ block.call } if res
-
-      unless res
-        @movement.errors.messages.select{ |k| @movement.errors.delete(k) if k =~ /\w+_details/ }
-        set_errors(*[@movement, @ledger].compact)
-      end
-
-      res
-    end
-
-    def set_form_errors
-      @movement.errors.messages.select{ |k| @movement.errors.delete(k) if k =~ /\w+_details/ }
-      set_errors(*[@movement, @ledger].compact)
-    end
-
-    def set_update_data(attrs = {})
-      @history = TransactionHistory.new
-      @history.set_history(@movement)
-
-      self.attributes = attrs.slice(*attributes_for_update)
-      MovementService.new(@movement).set_update(attrs)
-    end
-
-    def valid_ledger?
-      @ledger.valid?
-      @ledger.errors.keys.sort === [:account, :account_id] || @ledger.errors.keys.empty?
-    end
-
-    # validates unique items
     def unique_item_ids
       UniqueItem.new(self).valid?
     end
 
-    def attributes_for_update
-      ATTRIBUTES.reject {|v| v == :contact_id }
+    def set_errors
     end
-end
-
-
-# NullTax class
-class NullTax
-  def percentage
-    0.0
-  end
-end
-
-# NullLedger class
-class NullLedger
-  attr_accessor :operation, :account_id
-  def save_ledger
-    true
-  end
 end

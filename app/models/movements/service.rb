@@ -1,24 +1,21 @@
 # Related logic for income and expense
 class Movements::Service < Struct.new(:movement)
-  PAYMENT_ATTRIBUTES = [:direct_payment, :account_to_id, :reference]
-  attr_accessor(*(PAYMENT_ATTRIBUTES + [:history]))
+  attr_accessor :movement_history, :attributes_class
 
   # Delegates
   delegate :percentage, to: :tax, prefix: true
   delegate :tax_id, :details, to: :movement
   delegate :set_details, to: :details_service
+  delegate :direct_payment, to: :attributes_class
 
-  def tax
-    @tax ||= Tax.find_by(id: tax_id) || NullTax.new
-  end
-
-  def create
+  def create(attr_klass)
+    @attributes_class = attr_klass
     set_movement_extra_attributes
     movement.save
   end
 
-  def create_and_approve(attrs = {})
-    set_payment_attributes attrs
+  def create_and_approve(attr_klass)
+    @attributes_class = attr_klass
 
     commit_or_rollback do
       movement.approve!
@@ -28,28 +25,32 @@ class Movements::Service < Struct.new(:movement)
     end
   end
 
-  def update(attrs = {})
-    set_update(attrs)
-    movement.save && history.save
+  def update(attr_klass)
+    @attributes_class = attr_klass
+    set_update
+    movement.save && movement_history.save
   end
 
-  def update_and_approve(attrs = {})
-    set_update(attrs.except(:direct_payment, :account_to_id))
-    set_payment_attributes attrs
+  def update_and_approve(attr_klass)
+    @attributes_class = attr_klass
+    set_update
 
     commit_or_rollback do
-      res = history.save
+      res = movement_history.save
       res = movement.save && ledger.save_ledger && res
     end
   end
 
+  def tax
+    @tax ||= Tax.find_by(id: tax_id) || NullTax.new
+  end
+
   private
 
-    def set_update(attrs)
-      attrs.delete(:contact_id)
-      @history = TransactionHistory.new
-      @history.set_history(movement)
-      movement.attributes = attrs
+    def set_update
+      movement.attributes = get_update_attributes
+      self.movement_history = TransactionHistory.new
+      movement_history.set_history(movement)
       set_movement_extra_attributes
     end
 
@@ -59,6 +60,7 @@ class Movements::Service < Struct.new(:movement)
       movement.tax_percentage = tax.percentage
       movement.balance = movement.balance - (movement.total_was - movement.total)
       movement.balance_inventory = details_service.balance_inventory
+      movement.state = 'paid'  if direct_payment?
     end
 
     def calculate_total
@@ -82,10 +84,6 @@ class Movements::Service < Struct.new(:movement)
       res
     end
 
-    def set_payment_attributes(attrs)
-      PAYMENT_ATTRIBUTES.each { |k| self.send(:"#{k}=", attrs[k]) }
-    end
-
     def details_service
       @details_service ||= Movements::Details.new(movement)
     end
@@ -97,4 +95,19 @@ class Movements::Service < Struct.new(:movement)
     def account_to
       @account_to ||= Account.find_by(id: account_to_id)
     end
+end
+
+# NullTax class
+class NullTax
+  def percentage
+    0.0
+  end
+end
+
+# NullLedger class
+class NullLedger
+  attr_accessor :operation, :account_id
+  def save_ledger
+    true
+  end
 end

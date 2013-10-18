@@ -18,7 +18,7 @@ describe Expense do
   }
 
   it "define_method check" do
-    ex = Expense.new_expense
+    ex = Expense.new
 
     Expense::STATES.each do |state|
       ex.state = state
@@ -27,7 +27,7 @@ describe Expense do
   end
 
   context 'Relationships, Validations' do
-    subject { Expense.new_expense }
+    subject { Expense.new }
 
     # Relationships
     it { should belong_to(:contact) }
@@ -67,7 +67,7 @@ describe Expense do
     it 'check callback' do
       contact.should_receive(:supplier=).with(true)
 
-      i = Expense.new_expense(valid_attributes)
+      i = Expense.new(valid_attributes)
 
       i.save.should be_true
     end
@@ -75,7 +75,7 @@ describe Expense do
     it "does not update contact to supplier" do
       contact.supplier = true
       contact.should_not_receive(:update_attribute).with(:supplier, true)
-      e = Expense.new_expense(valid_attributes)
+      e = Expense.new(valid_attributes)
 
       e.save.should be_true
     end
@@ -108,7 +108,7 @@ describe Expense do
 
   context "set_state_by_balance!" do
     it "a draft expense" do
-      e = Expense.new_expense(total: 10, balance: 10)
+      e = Expense.new(total: 10, balance: 10)
 
       e.set_state_by_balance!
 
@@ -116,7 +116,7 @@ describe Expense do
     end
 
     it "a paid expense" do
-      e = Expense.new_expense(total: 10, balance: -0)
+      e = Expense.new(total: 10, balance: -0)
 
       e.set_state_by_balance!
 
@@ -124,7 +124,7 @@ describe Expense do
     end
 
     it "a negative balance" do
-      e = Expense.new_expense(total: 10, balance: -0.01)
+      e = Expense.new(total: 10, balance: -0.01)
 
       e.set_state_by_balance!
 
@@ -134,7 +134,7 @@ describe Expense do
     # Changes to the expense, it was paid but can change because of
     # changes in total or made a devolution that changed balance
     it "a paid expense changes to approved" do
-      e = Expense.new_expense(total: 10, balance: 0)
+      e = Expense.new(total: 10, balance: 0)
 
       e.set_state_by_balance!
 
@@ -147,7 +147,7 @@ describe Expense do
     end
 
     it "does not set state if it has state" do
-      e = Expense.new_expense(balance: 10, total:10)
+      e = Expense.new(balance: 10, total:10)
       e.state = 'approved'
 
       e.should be_is_approved
@@ -159,7 +159,7 @@ describe Expense do
   end
 
   it "returns the subtotal from  details" do
-    e = Expense.new_expense(valid_attributes.merge(
+    e = Expense.new(valid_attributes.merge(
       {expense_details_attributes: [
         {item_id: 1, price: 10, quantity: 1},
         {item_id: 2, price: 3.5, quantity: 2}
@@ -181,7 +181,7 @@ describe Expense do
       delivered: true, devolution: true
     }
 
-    e = Expense.new_expense(attrs)
+    e = Expense.new(attrs)
 
     attrs.each do |k, v|
       e.send(k).should eq(v)
@@ -193,7 +193,7 @@ describe Expense do
       UserSession.user = build :user, id: 11
     end
 
-    subject { Expense.new_expense }
+    subject { Expense.new }
 
     it "Changes" do
       e = subject
@@ -219,11 +219,11 @@ describe Expense do
   end
 
   it "can receive a block to set certain arguments" do
-    ex = Expense.new_expense(id: 10, total: 10, balance: 10)
+    ex = Expense.new(id: 1, total: 10, balance: 10)
 
-    ex.id.should be_nil
+    ex.id.should eq(1)
 
-    ex = Expense.new_expense(total: 10, balance: 10) {|e| e.id = 10}
+    ex = Expense.new(total: 10, balance: 10) {|e| e.id = 10}
 
     ex.id.should eq(10)
   end
@@ -236,7 +236,7 @@ describe Expense do
     end
 
     it "update#incomes_status" do
-      exp = Expense.new_expense(valid_attributes.merge(state: 'approved', total: 10, amount: 5.0))
+      exp = Expense.new(valid_attributes.merge(state: 'approved', total: 10, amount: 5.0))
 
       exp.save.should be_true
       exp.should be_is_approved
@@ -247,7 +247,7 @@ describe Expense do
       })
 
       # New expense
-      exp = Expense.new_expense(valid_attributes.merge(state: 'approved', total: 10, amount: 5.0, ref_number: 'I232483'))
+      exp = Expense.new(valid_attributes.merge(state: 'approved', total: 10, amount: 5.0, ref_number: 'I232483'))
       exp.save.should be_true
 
       exp.contact.expenses_status.should eq({
@@ -255,7 +255,7 @@ describe Expense do
         'BOB' => 10.0
       })
 
-      exp = Expense.new_expense(valid_attributes.merge(state: 'approved', currency: 'USD', total: 20, amount: 3.3, exchange_rate: 7.0, ref_number: 'I2324839'))
+      exp = Expense.new(valid_attributes.merge(state: 'approved', currency: 'USD', total: 20, amount: 3.3, exchange_rate: 7.0, ref_number: 'I2324839'))
       exp.save.should be_true
       exp.should be_is_approved
 
@@ -286,7 +286,7 @@ describe Expense do
     end
 
     it "#nulls" do
-      exp = Expense.new_expense(valid_attributes.merge(total: 100, amount: 100, state: 'approved'))
+      exp = Expense.new(valid_attributes.merge(total: 100, amount: 100, state: 'approved'))
       exp.save.should be_true
 
       exp.nuller_id.should be_blank
@@ -316,7 +316,7 @@ describe Expense do
     }
 
     it "#destroy item" do
-      exp = Expense.new_expense(attributes)
+      exp = Expense.new(attributes)
 
       exp.save.should be_true
 

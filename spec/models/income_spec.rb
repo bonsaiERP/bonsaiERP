@@ -18,7 +18,7 @@ describe Income do
   }
 
   context 'Relationships, Validations' do
-    subject { Income.new_income }
+    subject { Income.new }
 
     # Relationships
     it { should belong_to(:contact) }
@@ -51,7 +51,7 @@ describe Income do
   end
 
   it "define_method check" do
-    inc = Income.new_income
+    inc = Income.new
 
     Income::STATES.each do |state|
       inc.state = state
@@ -68,7 +68,7 @@ describe Income do
       contact.should_not be_client
       contact.should_receive(:client=).with(true)
 
-      i = Income.new_income(valid_attributes)
+      i = Income.new(valid_attributes)
 
       i.save.should be_true
     end
@@ -76,7 +76,7 @@ describe Income do
     it "does not update contact to client" do
       contact.client = true
       contact.should_not_receive(:update_attribute).with(:client, true)
-      i = Income.new_income(valid_attributes)
+      i = Income.new(valid_attributes)
 
       i.save.should be_true
     end
@@ -109,7 +109,7 @@ describe Income do
 
   context "set_state_by_balance!" do
     it "a draft income" do
-      i = Income.new_income(total: 10, balance: 10)
+      i = Income.new(total: 10, balance: 10)
 
       i.set_state_by_balance!
 
@@ -117,7 +117,7 @@ describe Income do
     end
 
     it "a paid income" do
-      i = Income.new_income(total: 10, balance: -0)
+      i = Income.new(total: 10, balance: -0)
 
       i.set_state_by_balance!
 
@@ -126,7 +126,7 @@ describe Income do
     end
 
     it "a negative balance" do
-      i = Income.new_income(total: 10, balance: -0.01)
+      i = Income.new(total: 10, balance: -0.01)
 
       i.set_state_by_balance!
 
@@ -136,7 +136,7 @@ describe Income do
     # Changes to the income, it was paid but can change because of
     # changes in total or made a devolution that changed balance
     it "a paid income changes to approved" do
-      i = Income.new_income(total: 10, balance: 0)
+      i = Income.new(total: 10, balance: 0)
 
       i.set_state_by_balance!
 
@@ -149,7 +149,7 @@ describe Income do
     end
 
     it "does not set state if it has state" do
-      i = Income.new_income(balance: 10, total:10)
+      i = Income.new(balance: 10, total:10)
       i.state = 'approved'
 
       i.should be_is_approved
@@ -161,14 +161,13 @@ describe Income do
   end
 
   it "returns the subtotal from  details" do
-    i = Income.new_income(valid_attributes.merge(
+    i = Income.new(valid_attributes.merge(
       {income_details_attributes: [
         {item_id: 1, price: 10, quantity: 1},
         {item_id: 2, price: 3.5, quantity: 2}
       ]
     }
     ))
-
     i.subtotal.should == 17.0
   end
 
@@ -183,7 +182,7 @@ describe Income do
       delivered: true, devolution: true
     }
 
-    i = Income.new_income(attrs)
+    i = Income.new(attrs)
 
     attrs.each do |k, v|
       i.send(k).should eq(v)
@@ -195,7 +194,7 @@ describe Income do
       UserSession.user = build :user, id: 11
     end
 
-    subject { Income.new_income }
+    subject { Income.new }
 
     it "Changes" do
       i = subject
@@ -223,11 +222,10 @@ describe Income do
   end
 
   it "can receive a block to set certain arguments" do
-    inc = Income.new_income(id: 10, total: 10, balance: 10)
+    inc = Income.new(id: 1, total: 10, balance: 10)
+    inc.id.should eq(1)
 
-    inc.id.should be_nil
-
-    inc = Income.new_income(total: 10, balance: 10) {|e| e.id = 10}
+    inc = Income.new(total: 10, balance: 10) {|e| e.id = 10}
 
     inc.id.should eq(10)
   end
@@ -240,7 +238,7 @@ describe Income do
     end
 
     it "update#incomes_status" do
-      inc = Income.new_income(valid_attributes.merge(state: 'approved', total: 10, amount: 5.0))
+      inc = Income.new(valid_attributes.merge(state: 'approved', total: 10, amount: 5.0))
 
       inc.save.should be_true
 
@@ -250,7 +248,7 @@ describe Income do
       })
 
       # New income
-      inc = Income.new_income(valid_attributes.merge(state: 'approved', total: 10, amount: 7.0, ref_number: 'I232483'))
+      inc = Income.new(valid_attributes.merge(state: 'approved', total: 10, amount: 7.0, ref_number: 'I232483'))
       inc.save.should be_true
 
       inc.contact.incomes_status.should eq({
@@ -258,7 +256,7 @@ describe Income do
         'BOB' => 12.0
       })
 
-      inc = Income.new_income(valid_attributes.merge(state: 'approved', currency: 'USD', total: 20, amount: 3.3, exchange_rate: 7.0, ref_number: 'I2324839'))
+      inc = Income.new(valid_attributes.merge(state: 'approved', currency: 'USD', total: 20, amount: 3.3, exchange_rate: 7.0, ref_number: 'I2324839'))
       inc.save.should be_true
 
       inc.contact.incomes_status.should eq({
@@ -287,7 +285,7 @@ describe Income do
     end
 
     it "#nulls" do
-      inc = Income.new_income(valid_attributes.merge(total: 100, amount: 100, state: 'approved'))
+      inc = Income.new(valid_attributes.merge(total: 100, amount: 100, state: 'approved'))
       inc.save.should be_true
 
       inc.nuller_id.should be_blank
@@ -315,7 +313,7 @@ describe Income do
     }
 
     it "_destroy item" do
-      inc = Income.new_income(attributes)
+      inc = Income.new(attributes)
       inc.save.should be_true
 
       inc.details.should have(2).items

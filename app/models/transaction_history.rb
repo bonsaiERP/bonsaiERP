@@ -21,20 +21,19 @@ class TransactionHistory < ActiveRecord::Base
     self.data = get_transaction_data
   end
 
-private
-  def get_transaction_data
-    @hash = @klass.attributes.slice!("error_messages")
-    h = @klass.transaction_attributes.slice!("id", "created_at", "updated_at")
-    @hash.merge!(h)
-    transaction_details
-    @hash
-  end
+  private
 
-  def transaction_details
-    det = @klass.is_a?(Income) ? :income_details : :expense_details
-    @hash[det] = []
-    @klass.send(det).each do |d|
-      @hash[det] << d.attributes.symbolize_keys.slice!("created_at", "updated_at")
+    def get_transaction_data
+      @hash = @klass.attributes.except("error_messages")
+      transaction_details
+      @hash
     end
-  end
+
+    def transaction_details
+      det = @klass.is_a?(Income) ? :income_details : :expense_details
+      @hash[det] = []
+      @klass.send(det).each do |d|
+        @hash[det] << d.attributes.symbolize_keys.slice!("created_at", "updated_at")
+      end
+    end
 end

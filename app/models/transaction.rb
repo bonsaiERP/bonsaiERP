@@ -13,7 +13,13 @@ class Transaction < ActiveRecord::Base
 
   validates_lengths_from_database
 
-  def self.transaction_columns
-    self.column_names.reject {|k| %w(id account_id created_at updated_at).include? k }.map(&:to_sym)
+  def self.get_columns
+    column_names.reject {|k| %w(id account_id created_at updated_at).include? k }.map(&:to_sym)
+  end
+
+  def self.delegate_methods
+    [:discounted?, :delivered?, :devolution?,
+    :creator, :approver, :nuller, :no_inventory?] +
+    get_columns.map { |k| :"#{k}_was" }
   end
 end

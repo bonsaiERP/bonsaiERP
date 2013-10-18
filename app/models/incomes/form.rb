@@ -4,7 +4,7 @@
 class Incomes::Form < Movements::Form
   alias :income :movement
 
-  attr_reader :income_details_attributes
+  attr_accessor :income_details_attributes
 
   validate :income_is_valid,  if: :direct_payment?
   validate :valid_account_to, if: :direct_payment?
@@ -12,7 +12,6 @@ class Incomes::Form < Movements::Form
   delegate :contact, :is_approved?, :is_draft?, :total,
            :subtotal, :to_s, :state, :discount, :details,
            :income_details,
-           :income_details_attributes, :income_details_attributes=,
            to: :income
 
   delegate :id, to: :income, prefix: true
@@ -20,7 +19,7 @@ class Incomes::Form < Movements::Form
   # Creates and instance of income and initializes
   def self.new_income(attrs = {})
     _object = new(attrs.slice(*ATTRIBUTES))
-    _object.attr_details = attrs[:income_details_attributes]
+    #_object.attr_details = attrs[:income_details_attributes]
     _object.set_new_income
     _object
   end
@@ -34,22 +33,9 @@ class Incomes::Form < Movements::Form
     _object
   end
 
-  # Creates  and approves an Income
-  #def create_and_approve
-    #@movement.approve!
-
-    #create
-  #end
-
-  #def update_and_approve(attrs = {})
-    #@movement.approve!
-
-    #update attrs
-  #end
-
   def set_new_income
-    set_new_defaults
-    @movement = Income.new_income(movement_create_attributes.merge(income_details_attributes: attr_details))
+    set_defaults
+    @movement = Income.new(movement_create_attributes.merge(income_details_attributes: attr_details))
     2.times { @movement.income_details.build(quantity: 1) }  if income.details.empty?
     @service = Incomes::Service.new(income)
   end
