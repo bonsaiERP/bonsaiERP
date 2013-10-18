@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Incomes::Errors do
-  subject { Income.new_income }
+  subject { Income.new }
 
   it "initializes an income without any errors" do
     subject.should_not be_has_error

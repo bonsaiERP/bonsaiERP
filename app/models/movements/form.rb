@@ -15,7 +15,7 @@ class Movements::Form < BaseForm
   attribute :reference, String
   attribute :tax_id, Integer
 
-  ATTRIBUTES = [:date, :contact_id, :total, :currency, :exchange_rate, :project_id, :due_date,
+  ATTRIBUTES = [:date, :contact_id, :currency, :exchange_rate, :project_id, :due_date,
                 :description, :direct_payment, :account_to_id, :reference].freeze
 
   attr_accessor :service, :movement, :history

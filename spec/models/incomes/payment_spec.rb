@@ -22,7 +22,7 @@ describe Incomes::Payment do
 
   let(:contact) { build :contact, id: 11 }
   let(:income) do
-    Income.new_income(
+    Income.new(
       total: balance, balance: balance, currency: 'BOB', contact_id: contact.id
     ) {|i|
       i.id = account_id
@@ -183,7 +183,7 @@ describe Incomes::Payment do
   end
 
   context "Pay with expense" do
-    let(:expense) { Expense.new_expense(total: 200, balance: 100, state: 'approved', currency: 'BOB') {|e| e.id = 14} }
+    let(:expense) { Expense.new(total: 200, balance: 100, state: 'approved', currency: 'BOB') {|e| e.id = 14} }
 
     let(:payment_with_expense_attributes) {
       {

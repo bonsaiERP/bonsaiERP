@@ -18,9 +18,9 @@ describe Incomes::Devolution do
 
   let(:contact) { build :contact, id: 11 }
   let(:income) do
-    Income.new_income(
+    Income.new(
       total: total, balance: balance, currency: 'BOB', contact_id: contact.id
-    ) {|i| 
+    ) {|i|
       i.id = account_id
       i.contact = contact
     }
@@ -46,7 +46,7 @@ describe Incomes::Devolution do
 
       Income.stub_chain(:active, where: [income])
       in_dev.should_not be_valid
-      
+
       in_dev.errors_on(:income).should be_blank
     end
 
@@ -95,7 +95,7 @@ describe Incomes::Devolution do
       dev.ledger.should be_is_devin
       dev.ledger.account_id.should eq(income.id)
       # Only bank accounts are allowed to conciliate
-      dev.ledger.should be_is_approved 
+      dev.ledger.should be_is_approved
       dev.ledger.reference.should eq(valid_attributes.fetch(:reference))
       dev.ledger.date.should eq(valid_attributes.fetch(:date).to_time)
     end

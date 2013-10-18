@@ -7,12 +7,12 @@ describe Expenses::Form do
   }
   let(:item_ids) { details.map {|v| v[:item_id] } }
 
-  let(:total) { 490 }
+  let(:total) { 500 }
   let(:details_total) { details.inject(0) {|s, v| s+= v[:quantity] * v[:price] } }
 
   let(:contact) { build :contact, id: 1 }
   let(:valid_params) { {
-      date: Date.today, contact_id: 1, total: total,
+      date: Date.today, contact_id: 1,
       currency: 'BOB', description: "New expense description",
       expense_details_attributes: details
     }
@@ -112,12 +112,12 @@ describe Expenses::Form do
       e.exchange_rate.should == 1
       e.total.should == total
 
-      e.gross_total.should == (10 * 10.5 + 20 * 20.0)
+      #e.gross_total.should == (10 * 10.5 + 20 * 20.0)
       e.balance.should == total
-      e.gross_total.should > e.total
+      #e.gross_total.should > e.total
 
-      e.discount == e.gross_total - total
-      e.should be_discounted
+      #e.discount == e.gross_total - total
+      #e.should be_discounted
 
       e.expense_details[0].original_price.should == 10.5
       e.expense_details[0].balance.should == 10.0
@@ -219,7 +219,7 @@ describe Expenses::Form do
       e.expense_details[0].quantity.should == 12
       e.expense_details[1].quantity.should == 22
 
-      es.history.should be_persisted
+      es.service.movement_history.should be_persisted
     end
 
     it "Direct payment" do
@@ -239,7 +239,7 @@ describe Expenses::Form do
       expense.currency.should eq('BOB')
 
       ledger  = es.ledger
-      ledger.amount.should == -490.0
+      ledger.amount.should == -500.0
       ledger.should be_persisted
       ledger.account_id.should eq(expense.id)
       ledger.currency.should eq('BOB')
@@ -284,13 +284,13 @@ describe Expenses::Form do
       is.ledger.should be_persisted
       is.ledger.account_to_id.should eq(2)
       is.ledger.should be_is_payout
-      is.ledger.amount.should == -490.0
+      is.ledger.amount.should == -total
       is.ledger.reference.should eq('Recibo 123')
 
       # expense
-      is.expense.total.should == 490.0
+      is.expense.total.should == total
       is.expense.balance.should == 0.0
-      is.expense.discount.should == 10.0
+      #is.expense.discount.should == 10.0
       is.expense.should be_is_paid
     end
 
@@ -299,34 +299,35 @@ describe Expenses::Form do
       es.create.should be_true
       es.expense.should be_persisted
       exp = es.expense
-      exp.should be_discounted
-      exp.discount.should == 10
+      #exp.should be_discounted
+      #exp.discount.should == 10
 
       es = Expenses::Form.find(exp.id)
       es.expense.should eq(exp)
 
       es.ref_number.should eq(exp.ref_number)
-      es.total.should == 490.0
+      es.total.should == total
 
       es.stub(account_to: true)
       es.update_and_approve(direct_payment: "1", account_to_id: "2", total: 500).should be_true
 
       es.ledger.should be_is_a(AccountLedger)
       # ledger
-      es.ledger.amount.should == -500.0
-      es.ledger.account_id.should be_is_a(Integer)
-      es.ledger.account_to_id.should eq(2)
-      es.ledger.reference.should eq("Pago egreso #{exp}")
-      es.ledger.date.to_date.should eq(es.date)
-      es.ledger.should be_is_payout
-      es.ledger.amount.should == -es.expense.total
+      ledger = es.service.ledger
+      ledger.amount.should == -total
+      ledger.account_id.should be_is_a(Integer)
+      ledger.account_to_id.should eq(2)
+      ledger.reference.should eq("Pago egreso #{exp}")
+      ledger.date.to_date.should eq(es.date)
+      ledger.should be_is_payout
+      ledger.amount.should == -es.expense.total
 
       # expense
       es.expense.should be_is_paid
       es.expense.total.should == 500.0
       es.expense.balance.should == 0.0
-      es.expense.should_not be_discounted
-      es.expense.discount.should == 0
+      #es.expense.should_not be_discounted
+      #es.expense.discount.should == 0
 
       # UPDATE and check errors
       attrs = es.expense.details.map {|det|
@@ -347,19 +348,9 @@ describe Expenses::Form do
     es.create.should be_false
 
     es.errors.messages[:contact_id].should_not be_blank
-    es.errors.messages[:account_to_id].should_not be_blank
-    es.errors.messages[:currency].should_not be_blank
-  end
-
-  it "generates erros and does not raise exception" do
-    es = Expenses::Form.new_expense(valid_params.merge(total: ""))
-    expect(es).to_not be_valid
-
-    es.errors[:total].should_not be_blank
-
-    es = Expenses::Form.new_expense(valid_params.merge(total: "NaN"))
-    expect(es).to_not be_valid
-    es.errors[:total].should_not be_blank
+    es.direct_payment.should be_false
+    #es.errors.messages[:account_to_id].should_not be_blank
+    #es.errors.messages[:currency].should_not be_blank
   end
 
   describe "change of currency, inventory state" do
@@ -374,9 +365,13 @@ describe Expenses::Form do
 
       es = Expenses::Form.find(es.expense.id)
 
-      es.update({total: 245, exchange_rate: 2, currency: 'USD'}).should be_true
+      details = es.expense.details.map {|v| {id: v.id, item_id: v.item_id, price: v.price/2, quantity: v.quantity }}
 
-      es.expense.total.should eq(245)
+      es.update({exchange_rate: 2, currency: 'USD',
+                 expense_details_attributes: details}
+               ).should be_true
+
+      es.expense.total.should eq(250)
       es.expense.exchange_rate.should eq(2)
       es.expense.currency.should eq('USD')
 
@@ -389,21 +384,23 @@ describe Expenses::Form do
       es.errors[:currency].should eq([I18n.t('errors.messages.movement.currency_change')])
     end
 
-    it "inventory_state" do
-      es = Expenses::Form.new_expense(valid_params)
-      es.create_and_approve.should be_true
+  end
 
-      es.expense_details.each {|v| v.update_column(:balance, 0) }
-
-      es = Expenses::Form.find(es.expense.id)
-      es.update.should be_true
-      es.expense.should be_delivered
-
-      es.expense_details[0].update_column(:balance, 1)
-      es = Expenses::Form.find(es.expense.id)
-      es.update.should be_true
-      expect(es.expense).not_to be_delivered
+  describe 'tax' do
+    let(:tax) { create :tax, percentage: 10 }
+    before(:each) do
+      Expense.any_instance.stub(valid?: true, contact: contact)
+      ExpenseDetail.any_instance.stub(valid?: true)
     end
 
+    it "creates with tax" do
+      ifrm = Expenses::Form.new_expense(valid_params.merge(tax_id: tax.id))
+      ifrm.create.should be_true
+
+      tax.percentage.should == 10
+      exp = ifrm.expense
+      exp.tax_percentage.should == 10
+      exp.total.should == 550
+    end
   end
 end

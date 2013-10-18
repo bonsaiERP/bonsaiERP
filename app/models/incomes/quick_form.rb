@@ -22,7 +22,7 @@ private
       total: amount, gross_total: amount, original_total: amount, balance: 0,
       creator_id: UserSession.id, approver_id: UserSession.id
     )
-    @transaction = @income = Income.new_income(attrs)
+    @transaction = @income = Income.new(attrs)
     @income.approve!
     @income.set_state_by_balance!
 

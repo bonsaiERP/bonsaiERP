@@ -39,7 +39,7 @@ describe Incomes::InventoryOut do
     end
 
     let(:income) {
-      exp = Income.new_income(
+      exp = Income.new(
         attributes_for(:income_approved).merge(
           contact_id: 3, balance_inventory: 100, due_date: Date.today,
           income_details_attributes: [
