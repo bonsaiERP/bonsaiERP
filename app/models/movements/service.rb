@@ -6,10 +6,11 @@ class Movements::Service < Struct.new(:movement)
   delegate :percentage, to: :tax, prefix: true
   delegate :tax_id, :details, to: :movement
   delegate :set_details, to: :details_service
-  delegate :direct_payment, to: :attributes_class
+  delegate :direct_payment, :account_to_id, :reference, to: :attributes_class
 
   def create(attr_klass)
     @attributes_class = attr_klass
+    @attributes_class.direct_payment = false
     set_movement_extra_attributes
     movement.save
   end
@@ -27,6 +28,7 @@ class Movements::Service < Struct.new(:movement)
 
   def update(attr_klass)
     @attributes_class = attr_klass
+    @attributes_class.direct_payment = false
     set_update
     movement.save && movement_history.save
   end
@@ -36,6 +38,7 @@ class Movements::Service < Struct.new(:movement)
     set_update
 
     commit_or_rollback do
+      movement.approve!
       res = movement_history.save
       res = movement.save && ledger.save_ledger && res
     end
@@ -52,20 +55,29 @@ class Movements::Service < Struct.new(:movement)
       self.movement_history = TransactionHistory.new
       movement_history.set_history(movement)
       set_movement_extra_attributes
+      Movements::Errors.new(movement).set_errors
     end
 
     def set_movement_extra_attributes
       set_details
       movement.total = calculate_total
       movement.tax_percentage = tax.percentage
-      movement.balance = movement.balance - (movement.total_was - movement.total)
+      movement.balance = get_balance
       movement.balance_inventory = details_service.balance_inventory
       movement.state = 'paid'  if direct_payment?
     end
 
+    def get_balance
+      if direct_payment?
+        0
+      else
+        movement.balance - (movement.total_was - movement.total)
+      end
+    end
+
     def calculate_total
       tot = details.inject(0) { |s, d| s += d.subtotal  }
-      tot += tot * tax.percentage
+      tot += tot * tax.percentage/100
       tot
     end
 
@@ -95,6 +107,13 @@ class Movements::Service < Struct.new(:movement)
     def account_to
       @account_to ||= Account.find_by(id: account_to_id)
     end
+
+    def get_update_attributes
+      attributes_class.attributes.slice(
+        :date, :due_date, :currency, :exchange_rate,
+        :description, :project_id
+      )
+    end
 end
 
 # NullTax class
@@ -109,5 +128,9 @@ class NullLedger
   attr_accessor :operation, :account_id
   def save_ledger
     true
+  end
+
+  def errors
+    {}
   end
 end

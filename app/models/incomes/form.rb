@@ -4,7 +4,7 @@
 class Incomes::Form < Movements::Form
   alias :income :movement
 
-  attr_accessor :income_details_attributes
+  attribute :income_details_attributes
 
   validate :income_is_valid,  if: :direct_payment?
   validate :valid_account_to, if: :direct_payment?
@@ -18,8 +18,7 @@ class Incomes::Form < Movements::Form
 
   # Creates and instance of income and initializes
   def self.new_income(attrs = {})
-    _object = new(attrs.slice(*ATTRIBUTES))
-    #_object.attr_details = attrs[:income_details_attributes]
+    _object = new(attrs)
     _object.set_new_income
     _object
   end
@@ -35,25 +34,22 @@ class Incomes::Form < Movements::Form
 
   def set_new_income
     set_defaults
-    @movement = Income.new(movement_create_attributes.merge(income_details_attributes: attr_details))
+    @movement = Income.new(income_attributes)
     2.times { @movement.income_details.build(quantity: 1) }  if income.details.empty?
     @service = Incomes::Service.new(income)
   end
 
+  def income_attributes
+    attrs = attributes.except(:account_to_id, :direct_payment, :reference)
+    attrs[:income_details_attributes] ||= []
+    attrs
+  end
+
   private
 
-    def build_ledger
-      @ledger = AccountLedger.new(
-        account_id: income.id, amount: income.total,
-        account_to_id: account_to_id, date: date,
-        operation: 'payin', exchange_rate: 1,
-        currency: income.currency, inverse: false,
-        reference: get_reference
-      )
-    end
-
-    def get_reference
-      reference.present? ? reference : I18n.t('income.payment.reference', income: income)
+    def set_defaults
+      super
+      income_details_attributes ||= []
     end
 
     def income_is_valid

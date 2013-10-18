@@ -18,29 +18,34 @@ class Movements::Form < BaseForm
   ATTRIBUTES = [:date, :contact_id, :total, :currency, :exchange_rate, :project_id, :due_date,
                 :description, :direct_payment, :account_to_id, :reference].freeze
 
-  attr_accessor :service, :movement, :ledger, :history
+  attr_accessor :service, :movement, :history
 
   validates_presence_of :movement
   validates_numericality_of :total
   validate :unique_item_ids
 
+  delegate :ref_number, to: :movement
+  delegate :ledger, to: :service
+
   def create
-    set_errors  unless res = service.create(self)
+    set_errors(movement)  unless res = service.create(self)
     res
   end
 
   def create_and_approve
-    set_errors  unless res = service.create_and_approve(self)
+    set_errors(movement, ledger)  unless res = service.create_and_approve(self)
     res
   end
 
   def update(attrs = {})
-    set_errors  unless res = service.update(self)
+    self.attributes = attrs
+    set_errors(movement, ledger)  unless res = service.update(self)
     res
   end
 
   def update_and_approve(attrs = {})
-    set_errors  unless res = service.update_and_approve(self)
+    self.attributes = attrs
+    set_errors(movement, ledger)  unless res = service.update_and_approve(self)
     res
   end
 
@@ -56,18 +61,7 @@ class Movements::Form < BaseForm
 
   private
 
-    def movement_create_attributes
-      attributes.except(:account_to_id, :reference, :direct_payment, :total)
-    end
-
-    def movement_update_attributes
-      movement_create_attributes.except(:contact_id)
-    end
-
     def unique_item_ids
       UniqueItem.new(self).valid?
-    end
-
-    def set_errors
     end
 end

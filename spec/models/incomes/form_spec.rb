@@ -226,7 +226,7 @@ describe Incomes::Form do
       i.income_details[0].quantity.should == 12
       i.income_details[1].quantity.should == 22
 
-      is.service.history.should be_persisted
+      is.service.movement_history.should be_persisted
     end
 
     it "Direct payment" do
@@ -246,7 +246,7 @@ describe Incomes::Form do
       income.balance.should == 0
       income.currency.should eq('BOB')
 
-      ledger  = is.ledger
+      ledger  = is.service.ledger
       ledger.amount.should == income.total
       ledger.should be_persisted
       ledger.account_id.should eq(income.id)
@@ -286,19 +286,20 @@ describe Incomes::Form do
 
       is.create_and_approve.should be_true
 
-      is.ledger.should be_is_a(AccountLedger)
+      is.service.ledger.should be_is_a(AccountLedger)
       # ledger
-      is.ledger.account_id.should be_is_a(Integer)
-      is.ledger.should be_persisted
-      is.ledger.account_to_id.should eq(2)
-      is.ledger.should be_is_payin
-      is.ledger.amount.should == 490.0
-      is.ledger.reference.should eq('Recibo 123')
+      ledger = is.service.ledger
+      ledger.account_id.should be_is_a(Integer)
+      ledger.should be_persisted
+      ledger.account_to_id.should eq(2)
+      ledger.should be_is_payin
+      ledger.amount.should == 500.0
+      ledger.reference.should eq('Recibo 123')
 
       # income
-      is.income.total.should == 490.0
+      is.income.total.should == 500.0
       is.income.balance.should == 0.0
-      is.income.discount.should == 10.0
+      #is.income.discount.should == 10.0
       is.income.should be_is_paid
     end
 
@@ -307,33 +308,34 @@ describe Incomes::Form do
       is.create.should be_true
       is.income.should be_persisted
       inc = is.income
-      inc.should be_discounted
-      inc.discount.should == 10
+      #inc.should be_discounted
+      #inc.discount.should == 10
 
       is = Incomes::Form.find(inc.id)
       is.income.should eq(inc)
 
       is.ref_number.should eq(inc.ref_number)
-      is.total.should == 490.0
+      is.total.should == total
 
       is.stub(account_to: true)
       is.update_and_approve(direct_payment: "1", account_to_id: "2", total: 500).should be_true
 
-      is.ledger.should be_is_a(AccountLedger)
+      is.service.ledger.should be_is_a(AccountLedger)
       # ledger
-      is.ledger.account_id.should be_is_a(Integer)
-      is.ledger.account_to_id.should eq(2)
-      is.ledger.reference.should eq("Cobro ingreso #{inc}")
-      is.ledger.date.to_date.should eq(is.date)
-      is.ledger.should be_is_payin
-      is.ledger.amount.should == is.income.total
+      ledger = is.service.ledger
+      ledger.account_id.should be_is_a(Integer)
+      ledger.account_to_id.should eq(2)
+      ledger.reference.should eq("Cobro ingreso #{inc}")
+      ledger.date.to_date.should eq(is.date)
+      ledger.should be_is_payin
+      ledger.amount.should == is.income.total
 
       # income
       is.income.should be_is_paid
       is.income.total.should == 500.0
       is.income.balance.should == 0.0
-      is.income.should_not be_discounted
-      is.income.discount.should == 0
+      #is.income.should_not be_discounted
+      #is.income.discount.should == 0
 
       # UPDATE and check errors
       attrs = is.income.details.map {|det|
@@ -347,25 +349,12 @@ describe Incomes::Form do
     end
   end
 
-  it "sets errors from expense or ledger" do
+  it "sets errors from income or ledger" do
     is = Incomes::Form.new_income(direct_payment: true)
 
     is.create.should be_false
-
+    is.should_not be_direct_payment
     is.errors.messages[:contact_id].should_not be_blank
-    is.errors.messages[:account_to_id].should_not be_blank
-    is.errors.messages[:currency].should_not be_blank
-  end
-
-  it "generates erros and does not raise exception" do
-    is = Incomes::Form.new_income(valid_params.merge(total: ""))
-    expect(is).to_not be_valid
-
-    is.errors[:total].should_not be_blank
-
-    is = Incomes::Form.new_income(valid_params.merge(total: "NaN"))
-    expect(is).to_not be_valid
-    is.errors[:total].should_not be_blank
   end
 
   describe "change of currency, inveny state" do
@@ -380,9 +369,13 @@ describe Incomes::Form do
 
       is = Incomes::Form.find(is.income.id)
 
-      is.update({total: 245, exchange_rate: 2, currency: 'USD'}).should be_true
+      details = is.income.details.map {|v| {id: v.id, item_id: v.item_id, price: v.price/2, quantity: v.quantity }}
 
-      is.income.total.should eq(245)
+      is.update({exchange_rate: 2, currency: 'USD',
+                 income_details_attributes: details
+      }).should be_true
+
+      is.income.total.should eq(250)
       is.income.exchange_rate.should eq(2)
       is.income.currency.should eq('USD')
 
@@ -390,46 +383,26 @@ describe Incomes::Form do
 
       is = Incomes::Form.find(is.income.id)
 
-      is.update({total: 490, exchange_rate: 1, currency: 'BOB'}).should be_false
-
+      is.update({exchange_rate: 1, currency: 'BOB'}).should be_false
       is.errors[:currency].should eq([I18n.t('errors.messages.movement.currency_change')])
-    end
-
-    it "inventory_state" do
-      is = Incomes::Form.new_income(valid_params)
-      is.create_and_approve.should be_true
-
-      is.income_details.each {|v| v.update_column(:balance, 0) }
-
-      is = Incomes::Form.find(is.income.id)
-      is.update.should be_true
-      is.income.should be_delivered
-
-      is.income_details[0].update_column(:balance, 1)
-      is = Incomes::Form.find(is.income.id)
-      is.update.should be_true
-      expect(is.income).not_to be_delivered
     end
   end
 
-  #describe "clone" do
-    #before(:each) do
-      #AccountLedger.any_instance.stub(valid?: true)
-      #Income.any_instance.stub(valid?: true)
-      #IncomeDetail.any_instance.stub(valid?: true)
-      #Item.stub_chain(:where, pluck: [[1, 10], [2, 20.0]])
-      #ConciliateAccount.any_instance.stub(account_to: double(save: true, :amount= => true, amount: 1))
-    #end
+  describe 'tax' do
+    let(:tax) { create :tax, percentage: 10 }
+    before(:each) do
+      Income.any_instance.stub(valid?: true, contact: contact)
+      IncomeDetail.any_instance.stub(valid?: true)
+    end
 
-    #it "#clone" do
-      #inc = Incomes::Form.new_income(valid_params)
+    it "creates with tax" do
+      ifrm = Incomes::Form.new_income(valid_params.merge(tax_id: tax.id))
+      ifrm.create.should be_true
 
-      #inc.create.should be_true
-      #inc.income.id.should be_present
-
-      #inc2 = Income::Form.clone(inc.income.id)
-
-      #inc2.income.items.should have(2).items
-    #end
-  #end
+      tax.percentage.should == 10
+      inc = ifrm.income
+      inc.tax_percentage.should == 10
+      inc.total.should == 550
+    end
+  end
 end

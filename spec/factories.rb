@@ -156,4 +156,9 @@ FactoryGirl.define do
     date '2013-05-10'
     operation 'in'
   end
+
+  factory :tax do
+    name 'IVA'
+    percentage 10
+  end
 end

@@ -7,17 +7,11 @@
 class Incomes::Service < Movements::Service
   alias_method :income, :movement
 
+  def ledger
+    @ledger ||= direct_payment? ? get_ledger : NullLedger.new
+  end
+
   private
-
-    def save_ledger
-      @ledger = direct_payment? ? build_ledger : NullLedger.new
-
-      @ledger.save_ledger
-    end
-
-    def ledger
-      @ledger ||= direct_payment? ? get_ledger : NullLedger.new
-    end
 
     def get_ledger
       AccountLedger.new(
@@ -38,7 +32,6 @@ class Incomes::Service < Movements::Service
     end
 
     def get_update_attributes
-      attributes_class.attributes.slice(:date, :due_date, :currency, :exchange_rate, :description,:projecct_id)
-      .merge(income_details_attributes: attributes_class.income_details_attributes)
+      attributes_class.income_attributes.except(:contact_id)
     end
 end
