@@ -33,6 +33,9 @@ class Item extends Backbone.Model
       price = _b.roundVal( item.price * (1/@get('rate')), _b.numPresicion )
 
       @set(original_price: item.price, price: price, item_id: item.id)
+
+    $(el).on 'autocomplete-reset', 'input.autocomplete', (event) =>
+      @set(item_id: 0, price: 0, quantity: 1)
   #
   resetAutocompleteValue: (event) ->
     setTimeout( =>
@@ -150,7 +153,9 @@ class Transaction extends Backbone.Collection
   setEvents: ->
   #
   setTaxComponent: ->
-    @$tax = $('#tax_id').on('change', => @calculateTotal() )
+    @$tax = $('#tax_id').on('change', =>
+      @calculateTotal()
+    )
     @$taxes = $('#taxes')
   #
   setTax: ->

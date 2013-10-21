@@ -386,6 +386,22 @@ describe Incomes::Form do
       is.update({exchange_rate: 1, currency: 'BOB'}).should be_false
       is.errors[:currency].should eq([I18n.t('errors.messages.movement.currency_change')])
     end
+
+    it "inventory_state" do
+      is = Incomes::Form.new_income(valid_params)
+      is.create_and_approve.should be_true
+
+      is.income_details.each {|v| v.update_column(:balance, 0) }
+
+      is = Incomes::Form.find(is.income.id)
+      is.update.should be_true
+      is.income.should be_delivered
+
+      is.income_details[0].update_column(:balance, 1)
+      is = Incomes::Form.find(is.income.id)
+      is.update.should be_true
+      expect(is.income).not_to be_delivered
+    end
   end
 
   describe 'tax' do
@@ -403,6 +419,38 @@ describe Incomes::Form do
       inc = ifrm.income
       inc.tax_percentage.should == 10
       inc.total.should == 550
+    end
+
+  end
+
+  describe 'Change state' do
+    let(:tax) { create :tax, percentage: 10 }
+
+    before(:each) do
+      AccountLedger.any_instance.stub(valid?: true)
+      Income.any_instance.stub(valid?: true)
+      IncomeDetail.any_instance.stub(valid?: true)
+      Item.stub_chain(:where, pluck: [[1, 10], [2, 20.0]])
+      ConciliateAccount.any_instance.stub(account_to: double(save: true, :amount= => true, amount: 1))
+    end
+
+    it 'updates state' do
+      is = Incomes::Form.new_income(valid_params.merge(direct_payment: "1", account_to_id: "2", reference: 'Recibo 123'))
+      is.stub(account_to: true)
+
+      is.create_and_approve.should be_true
+
+      is.income.should be_is_paid
+
+      is = Incomes::Form.find(is.income.id)
+      is.update(tax_id: tax.id).should be_true
+
+      is.income.should be_is_approved
+
+      is = Incomes::Form.find(is.income.id)
+      is.update(tax_id: nil).should be_true
+
+      is.income.should be_is_paid
     end
   end
 end

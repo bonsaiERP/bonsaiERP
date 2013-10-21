@@ -16,7 +16,7 @@ describe Expenses::InventoryOut do
   }
 
   let(:expense) {
-    exp = Expense.new_expense(
+    exp = Expense.new(
       attributes_for(:expense_approved).merge(
         contact_id: 3, balance_inventory: 0, due_date: Date.today,
         expense_details_attributes: [

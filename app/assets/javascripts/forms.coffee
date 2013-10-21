@@ -73,7 +73,7 @@ $( ->
     $el = $(el)
     desc = vals.to_s || vals.name || vals.description
     $el.append("<option value='#{vals.id}'>#{desc}</option>")
-    $el.val("#{vals.id}")
+    $el.val("#{vals.id}").trigger('change')
 
   # Calls the events afser ajax call on ajax form
   callEvents = (data, resp) ->
@@ -120,14 +120,15 @@ $( ->
           else
             $input.popover('destroy')
         close: (e, ui) -> $input.css({backgroundImage: 'none'})
-      }).blur( ->
+      }).on('focusout keyup', (event) ->
         $this = $(this)
         value = $this.val()
-        if value.trim() == ""
+        if value.trim() is ''
           $hidden.val('')
           $(this).data('value', '')
+          $input.trigger('autocomplete-reset')
 
-        $this.val($this.data('value'))
+        $this.val($this.data('value'))  if event.type is 'focusout'
       )
     )
 

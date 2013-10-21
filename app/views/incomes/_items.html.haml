@@ -21,9 +21,17 @@
         %td.span2.total_row.r= ntc det.total
 
   %tr.extra.pad_top
-    %td(colspan="3")
+    %td(colspan='3')
     %td.r Subtotal
     %td#subtotal.r= ntc income.subtotal
+
+  - if income.tax_percentage > 0
+    %tr.extra
+      %td(colspan='2')
+      %td.r(colspan='2')
+        %span.text-muted.muted Impuestos:
+        = income.tax
+      %td#taxes.r= ntc income.taxes
 
   %tr.extra
     %td(colspan="3")

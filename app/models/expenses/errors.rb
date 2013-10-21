@@ -14,19 +14,20 @@ class Expenses::Errors < Struct.new(:expense)
     expense.error_messages = errors
   end
 
-private
-  def balance_errors
-    if balance < 0
-      expense.has_error = true
-      errors[:balance] = ['movement.negative_balance']
-    end
-  end
+  private
 
-  def expense_details_errors
-    if (tot = expense_details.select {|det| det.balance < 0 }.count) > 0
-      expense.has_error = true
-      msg = 'movement.' << (tot > 1 ? 'negative_items_balance' : 'negative_item_balance')
-      errors[:expense_details] = [msg]
+    def balance_errors
+      if balance < 0
+        expense.has_error = true
+        errors[:balance] = ['movement.negative_balance']
+      end
     end
-  end
+
+    def expense_details_errors
+      if (tot = expense_details.select {|det| det.balance < 0 }.count) > 0
+        expense.has_error = true
+        msg = 'movement.' << (tot > 1 ? 'negative_items_balance' : 'negative_item_balance')
+        errors[:expense_details] = [msg]
+      end
+    end
 end

@@ -2,6 +2,10 @@ require 'spec_helper'
 
 describe Movement do
 
+  it { should belong_to(:contact) }
+  it { should belong_to(:project) }
+  it { should belong_to(:tax) }
+
   context "#can_null?" do
     let(:subject) {
       m = Movement.new(amount: 100, state: 'draft')
@@ -51,7 +55,7 @@ describe Movement do
 
   context "can_devolution?" do
     let(:subject) {
-      m = Income.new_income(amount: 100, state: 'draft')
+      m = Income.new(amount: 100, state: 'draft')
       m.build_transaction
       m.total =  100
       m
@@ -84,7 +88,7 @@ describe Movement do
   end
 
   it "#is_active?" do
-    i = Income.new_income(state: 'approved')
+    i = Income.new(state: 'approved')
     i.should be_is_active
 
     i.state = 'paid'
@@ -92,13 +96,13 @@ describe Movement do
   end
 
   it "#no_inventory" do
-    e = Expense.new_expense
+    e = Expense.new
     expect(e.no_inventory).to be_false
   end
 
   it "due_date >= date" do
     today = Date.today
-    i = Income.new_income date: today, due_date: today - 1.day
+    i = Income.new date: today, due_date: today - 1.day
 
     i.should_not be_valid
     i.errors_on(:due_date).should eq([I18n.t('errors.messages.movement.greater_due_date')])
@@ -114,7 +118,7 @@ describe Movement do
     end
 
     it "update currency" do
-      i = Income.new_income(currency: 'BOB', total: 140, exchange_rate: 1, date: Date.today, contact_id: contact.id, due_date: Date.today)
+      i = Income.new(currency: 'BOB', total: 140, exchange_rate: 1, date: Date.today, contact_id: contact.id, due_date: Date.today)
       i.stub(contact: contact, name: 'I-0001')
 
       i.save.should be_true
@@ -149,14 +153,14 @@ describe Movement do
 
     let(:contact) { build :contact }
     let(:income) {
-      i = Income.new_income(date: Date.today,
+      i = Income.new(date: Date.today,
         income_details_attributes: details, state: 'approved')
       i.stub(contact: contact)
       i.save(validate: false)
       i
     }
     let(:expense) {
-      e = Expense.new_expense(date: Date.today,
+      e = Expense.new(date: Date.today,
           expense_details_attributes: details, state: 'approved')
       e.stub(contact: contact)
       e.save(validate: false)

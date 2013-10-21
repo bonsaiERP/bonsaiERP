@@ -64,7 +64,8 @@ class Movements::Service < Struct.new(:movement)
       movement.tax_percentage = tax.percentage
       movement.balance = get_balance
       movement.balance_inventory = details_service.balance_inventory
-      movement.state = 'paid'  if direct_payment?
+      movement.state = get_state
+      movement.delivered = details.all? { |d| d.balance <= 0 }
     end
 
     def get_balance
@@ -72,6 +73,17 @@ class Movements::Service < Struct.new(:movement)
         0
       else
         movement.balance - (movement.total_was - movement.total)
+      end
+    end
+
+    def get_state
+      case
+      when movement.balance <= 0
+        'paid'
+      when movement.balance != movement.total
+        'approved'
+      else
+        movement.state
       end
     end
 

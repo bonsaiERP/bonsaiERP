@@ -9,13 +9,9 @@
   -########################################
   -# Render items
   .row-fluid
-    = render "transactions/form_items", f: f, transaction: income_service, details: :income_details
+    = render 'transactions/form_items', f: f, transaction: income_service, details: :income_details
 
   .row-fluid
-    -#.span6
-      = f.input :project_id,  label: 'Proyecto', collection: Project.active,
-        input_html: { class: 'contact_id span11',
-        data: {new_url: new_project_path, trigger: 'new_project', width: 900 }}
     .span6
       = f.input :description, label: 'Descripción', as: 'text', input_html: {rows: 2, class: 'span10', placeholder: 'Descripción del Ingreso'}
 

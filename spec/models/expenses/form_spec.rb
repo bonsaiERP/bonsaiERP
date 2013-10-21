@@ -384,6 +384,21 @@ describe Expenses::Form do
       es.errors[:currency].should eq([I18n.t('errors.messages.movement.currency_change')])
     end
 
+    it "inventory_state" do
+      es = Expenses::Form.new_expense(valid_params)
+      es.create_and_approve.should be_true
+
+      es.expense_details.each {|v| v.update_column(:balance, 0) }
+
+      es = Expenses::Form.find(es.expense.id)
+      es.update.should be_true
+      es.expense.should be_delivered
+
+      es.expense_details[0].update_column(:balance, 1)
+      es = Expenses::Form.find(es.expense.id)
+      es.update.should be_true
+      expect(es.expense).not_to be_delivered
+    end
   end
 
   describe 'tax' do

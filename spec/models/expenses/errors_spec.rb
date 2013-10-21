@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Expenses::Errors do
-  subject { Expense.new_expense }
+  subject { Expense.new }
 
   it "initializes an expense without any errors" do
     subject.should_not be_has_error

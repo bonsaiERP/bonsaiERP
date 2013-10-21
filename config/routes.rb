@@ -2,6 +2,8 @@
 Bonsaierp::Application.routes.draw do
   get '/download_pdf/:file/:name' => 'download#download_pdf', as: :download
 
+  resources :taxes
+
   resources :tags do
     post :update_models, on: :collection
   end

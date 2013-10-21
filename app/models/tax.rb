@@ -2,6 +2,10 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class Tax < ActiveRecord::Base
+
+  has_many :accounts
+  before_destroy :check_related_accounts
+
   # Validations
   validates :name, length: { in: 1..20 }, uniqueness: true
   validates :percentage, numericality: { greater_than_or_equal_to: 0, less_than: 999 }
@@ -24,5 +28,9 @@ class Tax < ActiveRecord::Base
       when p > 10
         2
       end
+    end
+
+    def check_related_accounts
+      accounts.empty?
     end
 end

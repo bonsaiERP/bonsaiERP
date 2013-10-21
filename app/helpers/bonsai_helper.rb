@@ -30,7 +30,7 @@ module BonsaiHelper
   end
 
   def field_with_errors(f, method)
-    'field_with_errors'  if f.object.errors.messages[method].any?
+    'field_with_errors'  if f.object.errors[method] && f.object.errors[method].any?
   end
 
   #

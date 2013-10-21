@@ -1,5 +1,5 @@
 require 'spec_helper'
-
+=begin
 describe Loans::Receive do
   let(:attributes) {
     today = Date.today
@@ -17,3 +17,4 @@ describe Loans::Receive do
   end
 
 end
+=end

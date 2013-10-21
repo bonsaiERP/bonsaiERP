@@ -5,6 +5,7 @@ class Movement < Account
 
   # module for setters and getters
   extend SettersGetters
+  extend Models::AccountCode
 
   STATES = %w(draft approved paid nulled)
 
@@ -16,6 +17,7 @@ class Movement < Account
   # Relationships
   belongs_to :contact
   belongs_to :project
+  belongs_to :tax
 
   has_one :transaction, foreign_key: :account_id, autosave: true
   has_many :transaction_histories, foreign_key: :account_id
@@ -151,7 +153,7 @@ class Movement < Account
   end
 
   def taxes
-    tax_percentage * subtotal
+    subtotal * tax_percentage/100
   end
 
   alias_method :old_attributes, :attributes

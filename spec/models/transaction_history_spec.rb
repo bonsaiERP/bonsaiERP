@@ -29,7 +29,7 @@ describe TransactionHistory do
     end
 
     let!(:income) do
-      i = Income.new_income(valid_attributes)
+      i = Income.new(valid_attributes)
       i.stub(contact: contact)
       i.income_details[0].stub(item: item1)
       i.income_details[1].stub(item: item2)

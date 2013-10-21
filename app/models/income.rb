@@ -3,7 +3,6 @@
 # email: boriscyber@gmail.com
 class Income < Movement
 
-  extend Models::AccountCode
   self.code_name = 'I'
 
   ########################################

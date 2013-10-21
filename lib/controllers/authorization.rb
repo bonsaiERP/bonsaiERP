@@ -89,7 +89,8 @@ private
       tags: true,
       reports: true,
       inventory_transferences: true,
-      download: true
+      download: true,
+      taxes: true
     }
   end
 
@@ -129,7 +130,8 @@ private
       tags: true,
       reports: true,
       inventory_transferences: true,
-      download: true
+      download: true,
+      taxes: true
     }
   end
 
@@ -170,7 +172,8 @@ private
       tags: true,
       reports: true,
       inventory_transferences: true,
-      download: true
+      download: true,
+      taxes: true
     }
   end
 
@@ -199,7 +202,8 @@ private
       dashboard: true,
       incomes_inventory_outs: true,
       tags: true,
-      download: true
+      download: true,
+      taxes: true
     }
   end
 end

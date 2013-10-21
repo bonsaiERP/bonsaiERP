@@ -3,7 +3,6 @@
 # email: boriscyber@gmail.com
 class Expense < Movement
 
-  extend Models::AccountCode
   self.code_name = 'E'
 
   ########################################

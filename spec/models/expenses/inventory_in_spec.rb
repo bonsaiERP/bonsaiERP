@@ -16,7 +16,7 @@ describe Expenses::InventoryIn do
   end
 
   let(:expense) {
-    exp = Expense.new_expense(
+    exp = Expense.new(
       attributes_for(:expense_approved).merge(
         contact_id: 3, balance_inventory: 100,
         due_date: Date.today,

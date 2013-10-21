@@ -87,18 +87,26 @@ init = ($) ->
       title: $this.data('title'),
       # Elem related with the call input, select, etc
       elem: $this.data('elem'),
+      width: $this.data('width') || 800,
       # Return response instead of calling default
       return: $this.data('return')
     })
 
     $div.load( $this.attr("href"), (resp, status, xhr, dataType) ->
       $this = $(this)
+      $div = $('<div>').html(resp)
+      $this.find('.form-actions').append('<a class="btn cancel" href="javascript:;">Cancelar</a>')
+
       $tit = $this.dialog('widget').find('.ui-dialog-title')
-      .text($('<div>').html(resp).find('h1').text())
+      .text($div.find('h1').text())
 
       $div.setDatepicker()
     )
     event.stopPropagation()
+  )
+
+  $('body').on('click', '.ui-dialog-content.ajax-modal .cancel', ->
+    $(this).parents('.ajax-modal').dialog('close')
   )
 
   # Delete an Item from a list, deletes a tr or li

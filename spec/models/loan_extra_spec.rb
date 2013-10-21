@@ -1,5 +1,5 @@
 require 'spec_helper'
-
+=begin
 describe LoanExtra  do
   it { should validate_presence_of(:due_date) }
   it { should validate_presence_of(:total) }
@@ -11,3 +11,4 @@ describe LoanExtra  do
     expect( LoanExtra.get_columns ).to eq(LoanExtra.column_names.reject { |v| v == 'id' })
   end
 end
+=end

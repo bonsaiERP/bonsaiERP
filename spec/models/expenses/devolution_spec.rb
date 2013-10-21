@@ -18,9 +18,9 @@ describe Expenses::Devolution do
 
   let(:contact) { build :contact, id: 11 }
   let(:expense) do
-    Expense.new_expense(
+    Expense.new(
       total: total, balance: balance, currency: 'BOB', contact_id: contact.id
-    ) {|e| 
+    ) {|e|
       e.id = account_id
       e.contact = contact
     }
@@ -94,7 +94,7 @@ describe Expenses::Devolution do
       dev.ledger.should be_is_devout
       dev.ledger.account_id.should eq(expense.id)
       # Only bank accounts are allowed to conciliate
-      dev.ledger.should be_is_approved 
+      dev.ledger.should be_is_approved
       dev.ledger.reference.should eq(valid_attributes.fetch(:reference))
       dev.ledger.date.should eq(valid_attributes.fetch(:date).to_time)
     end

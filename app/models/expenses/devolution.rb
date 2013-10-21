@@ -29,20 +29,21 @@ class Expenses::Devolution < Devolution
   end
   alias :movement :expense
 
-private
-  def save_expense
-    update_movement
-    err = Expenses::Errors.new(expense)
-    err.set_errors
+  private
 
-    expense.save
-  end
+    def save_expense
+      update_movement
+      err = Expenses::Errors.new(expense)
+      err.set_errors
 
-  def create_ledger
-    @ledger = build_ledger(
-      amount: +amount, operation: 'devout', account_id: expense.id,
-      status: get_status
-    )
-    @ledger.save_ledger
-  end
+      expense.save
+    end
+
+    def create_ledger
+      @ledger = build_ledger(
+        amount: +amount, operation: 'devout', account_id: expense.id,
+        status: get_status
+      )
+      @ledger.save_ledger
+    end
 end

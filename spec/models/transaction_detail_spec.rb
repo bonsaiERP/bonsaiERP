@@ -51,7 +51,7 @@ describe TransactionDetail do
     }
 
     it "#checks balance" do
-      inc = Income.new_income(attributes)
+      inc = Income.new(attributes)
       inc.income_details[0].stub(item: build(:item, for_sale: true))
 
       inc.save.should be_true

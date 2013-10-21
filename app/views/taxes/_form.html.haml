@@ -1,0 +1,9 @@
+= simple_form_for tax do |f|
+  .row-fluid
+    .span6
+      = f.input :name, label: false, input_html: { placeholder: 'Impuesto' }
+    .span6
+      = f.input :percentage, label: false, input_html: { placeholder: 'Porcentaje %', type: 'decimal' }
+
+  .form-actions
+    = f.submit 'Salvar', class: 'b btn btn-primary'
