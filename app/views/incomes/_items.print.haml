@@ -22,6 +22,14 @@
     %td.r Subtotal
     %td#subtotal.r= ntc income.subtotal
 
+  - if income.tax
+    %tr.extra
+      %td
+      %td.r(colspan='2')
+        %span.text-muted Impuestos:
+        = income.tax
+      %td#taxes.r= ntc income.taxes
+
   %tr.extra
     %td(colspan="2")
     %td.r.b.dark Total
