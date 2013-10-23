@@ -11,6 +11,10 @@
   .row-fluid
     =render "transactions/form_items", f: f, transaction: expense_service.expense, details: :expense_details
 
+  .row-fluid
+    .span6
+      = f.input :description, label: 'Descripción', as: 'text', input_html: {rows: 2, class: 'span10', placeholder: 'Descripción del Egreso'}
+
   .form-actions
     - if expense_service.is_draft?
       .ib.save-button
