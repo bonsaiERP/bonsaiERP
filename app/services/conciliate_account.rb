@@ -23,6 +23,8 @@ class ConciliateAccount
       account_ledger.save
     when %w(Income Expense).include?(account.class.to_s)
       update_account_to
+    when account_ledger.is_lrcre?
+      update_account_to
     else
       update_both_accounts
     end

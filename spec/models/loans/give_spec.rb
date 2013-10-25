@@ -1,5 +1,5 @@
 require 'spec_helper'
-=begin
+
 describe Loans::Give do
   it "#initialize with code" do
     l = Loans::Give.new {}
@@ -7,4 +7,3 @@ describe Loans::Give do
     expect(l.name).to eq("PG-#{y}-0001")
   end
 end
-=end

@@ -1,5 +1,5 @@
 require 'spec_helper'
-=begin
+
 describe Loan do
   it{ should have_valid(:total).when(1, 100) }
   it{ should_not have_valid(:total).when(0, -100) }
@@ -57,4 +57,3 @@ describe Loan do
     end
   end
 end
-=end

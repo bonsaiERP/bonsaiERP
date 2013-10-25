@@ -1,8 +1,6 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class Loan; end
-=begin
 class Loan < Account
   # module for setters and getters
   extend SettersGetters
@@ -38,4 +36,3 @@ class Loan < Account
     old_attributes.merge(attrs)
   end
 end
-=end

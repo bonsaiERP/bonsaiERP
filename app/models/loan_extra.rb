@@ -1,7 +1,6 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-=begin
 class LoanExtra < ActiveRecord::Base
 
   #belongs_to :money_account, -> { where(type: ['Bank', 'Cash'], active: true) }, foreign_key: :account_id
@@ -15,4 +14,3 @@ class LoanExtra < ActiveRecord::Base
     column_names.reject { |v| v == 'id' }
   end
 end
-=end
