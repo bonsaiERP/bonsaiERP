@@ -29,7 +29,7 @@ describe ConciliateAccount do
 
     context "conciliate!" do
       let(:ac1) { build :cash, id: 1 }
-      let(:ac2) { Income.new_income {|i| i.id = 2} }
+      let(:ac2) { Income.new {|i| i.id = 2} }
       let(:ledger) {
         led = AccountLedger.new(amount: 100, currency: 'BOB', status: 'pendent')
         led.stub(account: ac1, account_to: ac2)
