@@ -12,19 +12,4 @@ class Loans::Receive < Loan
   def self.new(attrs = {})
     super { |loan| loan.name = get_code_number }
   end
-
-  def create
-    self.save && ledger.save_ledger
-  end
-
-  private
-
-    def ledger
-      @ledger ||= build_ledger_in(
-        account_id: self.id,
-        operation: 'lrcre',
-        amount: amount,
-        reference: 'FAKE'
-      )
-    end
 end

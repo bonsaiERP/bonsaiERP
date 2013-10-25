@@ -9,7 +9,7 @@ class Loan < Account
   has_one :loan_extra, dependent: :delete, autosave: true
 
   # Validations
-  validates_presence_of :date, :name
+  validates_presence_of :date, :name, :contact
   validates :total, numericality: { greater_than: 0 }
 
   # Delegations

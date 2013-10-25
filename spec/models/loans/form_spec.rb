@@ -5,7 +5,7 @@ describe Loans::Form do
     today = Date.today
     {
       date: today, due_date: today + 10.days, total: 100,
-      reference: 'Receipt 00232'
+      reference: 'Receipt 00232', contact_id: 1
     }
   end
 
@@ -23,11 +23,14 @@ describe Loans::Form do
       expect(lf.ledger.operation).to eq('lrcre')
     end
 
+    let(:cash) { create :cash, currency: 'BOB', amount: 0 }
+    let(:contact) { build :contact, id: 1 }
+
     before(:each) {
       UserSession.user = build :user, id: 1
+      Loans::Receive.any_instance.stub(contact: contact)
     }
 
-    let(:cash) { create :cash, currency: 'BOB', amount: 0 }
 
     it "#create" do
       lf = Loans::Form.new_receive(attributes.merge(account_to_id: cash.id))
@@ -36,6 +39,9 @@ describe Loans::Form do
       lf.loan.should be_persisted
 
       lf.ledger.should be_persisted
+      lf.ledger.should be_is_lrcre
+      lf.ledger.should be_is_approved
+      lf.ledger.should be_persisted
 
       c = Account.find(cash.id)
       c.amount.should == 100
@@ -43,6 +49,14 @@ describe Loans::Form do
   end
 
   context 'Loans::Give' do
+    let(:cash) { create :cash, currency: 'BOB', amount: 0 }
+    let(:contact) { build :contact, id: 1 }
+
+    before(:each) {
+      UserSession.user = build :user, id: 1
+      Loans::Give.any_instance.stub(contact: contact)
+    }
+
     it "$new_give" do
       lf = Loans::Form.new_give(attributes)
 
@@ -54,6 +68,22 @@ describe Loans::Form do
       # ledger
       lf.ledger.amount.should == -100
       expect(lf.ledger.operation).to eq('lgcre')
+    end
+
+    it "#create" do
+      lf = Loans::Form.new_give(attributes.merge(account_to_id: cash.id))
+
+      lf.create.should be_true
+      lf.loan.should be_persisted
+
+      lf.ledger.should be_persisted
+      lf.ledger.should be_is_lgcre
+      lf.ledger.should be_is_approved
+      lf.ledger.should be_persisted
+
+
+      c = Account.find(cash.id)
+      c.amount.should == -100
     end
   end
 end
