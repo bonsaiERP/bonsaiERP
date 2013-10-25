@@ -338,6 +338,18 @@ describe Expenses::Form do
       es.update(total: 440, expense_details_attributes: attrs).should be_true
       es.expense.error_messages.should eq({"balance" => ["movement.negative_balance"]})
       es.expense.should be_has_error
+
+      # remove item
+      det = es.expense.details[0]
+      attrs = [{id: det.id,_destroy: '1'}]
+      es = Expenses::Form.find(es.expense.id)
+      es.update(expense_details_attributes: attrs).should be_true
+
+      es.expense.error_messages.should eq({"balance" => ["movement.negative_balance"]})
+      es.expense.should be_has_error
+
+      es.expense.balance.should == -140
+      es.expense.total.should == 360
     end
 
   end

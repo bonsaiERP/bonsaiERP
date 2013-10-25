@@ -36,7 +36,11 @@ class Movements::Details < Struct.new(:movement)
   end
 
   def subtotal
-    details.inject(0) {|sum, det| sum += det.total }
+    active_details.inject(0) { |sum, det| sum += det.total }
+  end
+
+  def active_details
+    @active_details ||= details.select {|det| !det.marked_for_destruction? }
   end
 
   def original_total

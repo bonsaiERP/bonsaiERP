@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe Payment do
 
-  let(:movement){ Income.new_income(currency: 'BOB') {|i| i.id = 1 } }
+  let(:movement){ Income.new(currency: 'BOB') {|i| i.id = 1 } }
   let(:account_to){ build :account, currency: 'USD', id: 2 }
 
   let(:valid_attributes) {

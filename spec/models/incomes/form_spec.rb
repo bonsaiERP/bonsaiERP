@@ -343,9 +343,31 @@ describe Incomes::Form do
       }
 
       is = Incomes::Form.find(is.income.id)
-      is.update(total: 440, income_details_attributes: attrs).should be_true
+      is.update(income_details_attributes: attrs).should be_true
       is.income.error_messages.should eq({"balance" => ["movement.negative_balance"]})
       is.income.should be_has_error
+
+      is.income.total.should == 10 * 8 + 20 * 18
+
+      attrs = is.income.details.map { |det|
+        {id: det.id, item_id: det.item_id, quantity: det.quantity + 2, price: det.price}
+      }
+      is = Incomes::Form.find(is.income.id)
+      is.update(income_details_attributes: attrs).should be_true
+      is.income.should_not be_has_error
+      is.income.error_messages.should eq({})
+
+      # remove item
+      det = is.income.details[0]
+      attrs = [{id: det.id,_destroy: '1'}]
+      is = Incomes::Form.find(is.income.id)
+      is.update(income_details_attributes: attrs).should be_true
+
+      is.income.error_messages.should eq({"balance" => ["movement.negative_balance"]})
+      is.income.should be_has_error
+
+      is.income.balance.should == -100
+      is.income.total.should == 400
     end
   end
 
@@ -357,7 +379,7 @@ describe Incomes::Form do
     is.errors.messages[:contact_id].should_not be_blank
   end
 
-  describe "change of currency, inveny state" do
+  describe "change of currency, inventory state" do
     before(:each) do
       Income.any_instance.stub(contact: contact)
       IncomeDetail.any_instance.stub(valid?: true)

@@ -88,7 +88,7 @@ class Movements::Service < Struct.new(:movement)
     end
 
     def calculate_total
-      tot = details.inject(0) { |s, d| s += d.subtotal  }
+      tot = details_service.subtotal #details.inject(0) { |s, d| s += d.subtotal  }
       tot += tot * tax.percentage/100
       tot
     end
