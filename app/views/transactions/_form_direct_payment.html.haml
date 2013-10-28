@@ -11,7 +11,7 @@
   .well.well-small.trans
     .row-fluid
       -# Render for direct_payment
-      .span6.account_to
+      .span6.account_to.form-inline
         %span(style='display:none')
           = f.check_box :direct_payment, data: {value: 'trans.direct_payment'}, id: 'direct_payment', style: 'vertical-align: top'
         %label(for='direct_payment')
