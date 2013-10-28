@@ -4,7 +4,6 @@
 # Class for receiving loans
 class Loans::Receive < Loan
 
-  extend Models::AccountCode
   self.code_name = 'PR'
 
   has_one :ledger_in, -> { where(operation: 'lrcre') }, class_name: 'AccountLedger', foreign_key: :account_id

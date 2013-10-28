@@ -2,6 +2,8 @@
 Bonsaierp::Application.routes.draw do
   get '/download_pdf/:file/:name' => 'download#download_pdf', as: :download
 
+  resources :loans_receives
+
   resources :taxes
 
   resources :tags do

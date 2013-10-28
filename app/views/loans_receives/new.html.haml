@@ -1,0 +1,66 @@
+%h1
+  %span.muted.text-muted Recibir prestamo
+  = @loan.name
+
+
+= simple_form_for @loan, url: loans_receives_path do |f|
+  .row-fluid
+    .span6
+      = f.input :contact_id, as: :autocomplete, label: 'Contacto',
+        input_html: { class: 'span10', placeholder: 'Escriba para buscar el contacto',
+        data: { source: '/contacts.json', new_url: new_contact_path, title: 'Nuevo contacto', trigger: 'new-contact', } }
+    .span3
+      = f.input :date, label: 'Fecha', as: :datepicker
+    .span3
+      = f.input :due_date, label: 'Vence el', as: :datepicker
+
+  .row-fluid
+    .span6
+      = f.input :account_to_id, label: 'Cuenta',
+        input_html: { id: 'account_to_id', class: 'span10' }
+
+    .span3
+      = f.input :total, label: 'Cantidad <span class="currency"></span>'.html_safe,
+        input_html: { id: 'total' }
+    .span3
+      .moneybox
+        %label TOTAL
+        %h4
+
+  .row-fluid
+    .span6
+      = f.input :reference, label: 'Referencia', as: :text,
+        input_html: { rows: 3, class: 'span10' }
+
+  .form-actions
+    = f.submit 'Recibir prestamo', class: 'btn btn-large btn-primary'
+
+:javascript
+  $(function() {
+    var data = #{AccountQuery.new.bank_cash_options.to_json},
+        $box = $('.moneybox'),
+        $amount = $box.find('h4');
+
+    function setTotal() {
+      var val = parseInt($('#account_to_id').val()),
+          account = _.find(data, function(v) { return v.id === val }),
+          amount = $('#total').val() * 1;
+
+      $('.currency').html(_b.currencyLabel(account.currency))
+      $amount.html(_b.ntc(amount) + ' ' + _b.currencyLabel(account.currency));
+    }
+
+    $('#total').on('change', function() { setTotal() });
+
+    $('#account_to_id').select2('destroy')
+    .select2({
+      data: data,
+      formatResult: App.Payment.paymentOptions,
+      formatSelection: App.Payment.paymentOptions,
+      dropdownCssClass: 'hide-select2-search',
+      escapeMarkup: function(m) { return m }
+    })
+    .on('change', function() { setTotal() })
+
+    setTotal();
+  })

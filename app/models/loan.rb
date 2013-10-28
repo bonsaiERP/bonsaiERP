@@ -4,13 +4,15 @@
 class Loan < Account
   # module for setters and getters
   extend SettersGetters
+  extend Models::AccountCode
 
   # Relationships
   has_one :loan_extra, dependent: :delete, autosave: true
 
   # Validations
-  validates_presence_of :date, :name, :contact
+  validates_presence_of :date, :due_date, :name, :contact, :contact_id
   validates :total, numericality: { greater_than: 0 }
+  validate :valid_greater_due_date
 
   # Delegations
   delegate(*create_accessors(*LoanExtra.get_columns), to: :loan_extra)
@@ -35,4 +37,13 @@ class Loan < Account
     attrs.delete(:id)
     old_attributes.merge(attrs)
   end
+
+  private
+
+    def valid_greater_due_date
+      if due_date.present? && date.present? && due_date < date
+        errors.add(:due_date, I18n.t('errors.messages.loan.due_date'))
+      end
+    end
+
 end

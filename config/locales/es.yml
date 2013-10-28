@@ -252,6 +252,8 @@ es:
       item:
         repeated: "El ítem es repetido"
         repeated_items: "Existen items repetidos"
+      loan:
+        due_date: "Debe ser mayor o igual que la fecha"
       movement:
         repeated_items: "Existen items repetidos, por favor revise"
         unconcilied_ledgers: "Existen transacciones pendientes de revisión"

@@ -37,6 +37,11 @@ describe Loans::Form do
 
       lf.create.should be_true
       lf.loan.should be_persisted
+      lf.loan.currency.should eq('BOB')
+      lf.loan.date.should be_is_a(Date)
+      lf.loan.due_date.should be_is_a(Date)
+
+      lf.loan.due_date.should == lf.loan.date + 10.days
 
       lf.ledger.should be_persisted
       lf.ledger.should be_is_lrcre
@@ -44,6 +49,24 @@ describe Loans::Form do
       lf.ledger.should be_persisted
 
       c = Account.find(cash.id)
+      c.amount.should == 100
+    end
+
+    it "#create other currency" do
+      cash2 = create :cash, currency: 'USD', amount: 0
+
+      lf = Loans::Form.new_receive(attributes.merge(account_to_id: cash2.id))
+
+      lf.create.should be_true
+      lf.loan.should be_persisted
+      lf.loan.currency.should eq('USD')
+
+      lf.ledger.should be_persisted
+      lf.ledger.should be_is_lrcre
+      lf.ledger.should be_is_approved
+      lf.ledger.should be_persisted
+
+      c = Account.find(cash2.id)
       c.amount.should == 100
     end
   end

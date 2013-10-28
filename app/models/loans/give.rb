@@ -4,7 +4,6 @@
 # Class for receiving loans
 class Loans::Give < Loan
 
-  extend Models::AccountCode
   self.code_name = 'PG'
 
   def self.new(attrs = {})

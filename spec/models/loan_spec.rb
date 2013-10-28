@@ -1,17 +1,32 @@
 require 'spec_helper'
 
 describe Loan do
-  it{ should have_valid(:total).when(1, 100) }
-  it{ should_not have_valid(:total).when(0, -100) }
+  it { should have_valid(:total).when(1, 100) }
+  it { should_not have_valid(:total).when(0, -100) }
+  it { should validate_presence_of(:date) }
+  it { should validate_presence_of(:due_date) }
 
   let(:attributes) {
     today = Date.today
     {
       name: 'P-0001', currency: 'BOB', date: today,
       due_date: today + 10.days, total: 100,
-      interests: 10
+      interests: 10, contact_id: 1
     }
   }
+
+  it "#valid_due_date" do
+    l = Loan.new(attributes)
+    l.stub(contact: build(:contact))
+
+    l.due_date = l.date - 1.day
+
+    expect(l).to be_invalid
+
+    l.due_date = l.date
+
+    expect(l).to be_valid
+  end
 
   it { should have_one(:loan_extra) }
 
@@ -40,6 +55,8 @@ describe Loan do
     end
 
     it "create" do
+      Loan.any_instance.stub(contact: build(:contact))
+
       l = Loan.create!(attributes)
       #Loan.create!(attributes.merge(name: 'P-0002'))
 
