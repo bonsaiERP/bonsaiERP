@@ -1,11 +1,11 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.0.0'
+gem 'rails', '4.0.1'
 
 # Assets
-gem 'sass-rails' , '~> 4.0.0'
-gem 'coffee-rails' , '~> 4.0.0'
-gem 'uglifier'     , '>= 1.3.0'
+gem 'sass-rails' , '~> 4.0.1'
+gem 'coffee-rails' , '~> 4.0.1'
+gem 'uglifier'     , '>= 2.3.0'
 gem 'jquery-rails'
 
 gem 'assets', git: 'git://github.com/boriscy/assets.git'
@@ -14,11 +14,11 @@ gem 'assets', git: 'git://github.com/boriscy/assets.git'
 
 gem 'compass-rails', '~> 2.0.alpha.0' # Extend css clases
 gem 'pg' # Postgresql adapter
-gem 'virtus' # Model generation in simple way
+gem 'virtus', '~> 1.0.0' # Model generation in simple way
 gem 'squeel' # Better SQL queries
 
 gem 'simple_form'
-gem 'haml', '>= 4.0.1'
+gem 'haml', '>= 4.0.4'
 gem 'kaminari' # Pagination
 gem 'bcrypt-ruby', require: 'bcrypt'
 gem 'active_model_serializers' # ActiveRecord Classes to encode in JSON
@@ -54,11 +54,11 @@ group :development, :test do
 end
 
 # Test
-group :test do
   gem 'capybara'
+group :test do
   gem 'database_cleaner'
-  gem 'factory_girl_rails'
-  gem 'spork', '1.0.0rc3' # Newer version gives error with squeel
+  gem 'factory_girl_rails', '~> 4.3.0'
+  gem 'spork', '1.0.0rc4' # Newer version gives error with squeel
   gem 'shoulda-matchers' #, '1.4.2'
   gem 'valid_attribute'
   gem 'watchr'

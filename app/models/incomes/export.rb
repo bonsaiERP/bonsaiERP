@@ -3,8 +3,9 @@ class Incomes::Export < Movements::Export
     super Incomes::Query.new, col_sep
   end
 
-private
-  def trans_name
-    'Ingreso'
-  end
+  private
+
+    def trans_name
+      'Ingreso'
+    end
 end

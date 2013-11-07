@@ -24,36 +24,37 @@ class Movements::Export
     end
   end
 
-private
-  def rate=(v)
-    @rate = v
-  end
+  private
 
-  def val_cur(val)
-    val.to_d * rate
-  end
-
-  def date(val)
-    I18n.l(val, format: I18n.t('date.formats.excel'))
-  end
-
-  def csv_header
-    %W(#{trans_name} Estado Fecha Contacto Descripción Total\ #{currency} Saldo\ #{currency} Tipo\ de\ Cambio Moneda)
-  end
-
-  def trans_name
-  end
-
-  def state(st)
-    case st
-    when "draft"    then 'borrador'
-    when "approved" then 'aprobado'
-    when "paid"     then 'pagado'
-    when "nulled"   then 'anulado'
+    def rate=(v)
+      @rate = v
     end
-  end
 
-  def rep(val)
-    val.to_s.gsub(/(\n|\t|\r)/, " ")
-  end
+    def val_cur(val)
+      val.to_d * rate
+    end
+
+    def date(val)
+      I18n.l(val, format: I18n.t('date.formats.excel'))
+    end
+
+    def csv_header
+      %W(#{trans_name} Estado Fecha Contacto Descripción Total\ #{currency} Saldo\ #{currency} Tipo\ de\ Cambio Moneda)
+    end
+
+    def trans_name
+    end
+
+    def state(st)
+      case st
+      when "draft"    then 'borrador'
+      when "approved" then 'aprobado'
+      when "paid"     then 'pagado'
+      when "nulled"   then 'anulado'
+      end
+    end
+
+    def rep(val)
+      val.to_s.gsub(/(\n|\t|\r)/, " ")
+    end
 end
