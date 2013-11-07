@@ -21,5 +21,4 @@
   data: { openin: '.ledgers', openinhide: true }
 
 %ul.unstyled.listing.ledgers
-  - if expense.to_model.ledgers.pendent.any?
-    = render partial: 'account_ledgers/movement', collection: expense.payments_and_devolutions, as: :ledger
+  = render partial: 'account_ledgers/movement', collection: expense.present_ledgers, as: :ledger
