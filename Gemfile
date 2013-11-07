@@ -14,7 +14,7 @@ gem 'assets', git: 'git://github.com/boriscy/assets.git'
 
 gem 'compass-rails', '~> 2.0.alpha.0' # Extend css clases
 gem 'pg' # Postgresql adapter
-gem 'virtus', '~> 1.0.0' # Model generation in simple way
+gem 'virtus', '~> 0.5.5' # Model generation in simple way
 gem 'squeel' # Better SQL queries
 
 gem 'simple_form'

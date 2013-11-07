@@ -41,48 +41,49 @@ class Expenses::InventoryIn < Inventories::In
     @expense.details.find {|det| det.item_id === item_id }
   end
 
-private
-  def operation
-    'exp_in'
-  end
+  private
 
-  def valid_quantities
-    res = true
-    details.each do |det|
-      if det.quantity > movement_detail(det.item_id).balance
-        det.errors.add(:quantity, I18n.t('errors.messages.inventory.movement_quantity'))
-        res = false
+    def operation
+      'exp_in'
+    end
+
+    def valid_quantities
+      res = true
+      details.each do |det|
+        if det.quantity > movement_detail(det.item_id).balance
+          det.errors.add(:quantity, I18n.t('errors.messages.inventory.movement_quantity'))
+          res = false
+        end
+      end
+
+      self.errors.add(:base, I18n.t('errors.messages.inventory.item_balance')) unless res
+    end
+
+    def valid_items_ids
+      details.all? {|v| expense_item_ids.include?(v.item_id) }
+    end
+
+    def update_expense_details
+      details.each do |det|
+        det_exp = movement_detail(det.item_id)
+        det_exp.balance -= det.quantity
       end
     end
 
-    self.errors.add(:base, I18n.t('errors.messages.inventory.item_balance')) unless res
-  end
-
-  def valid_items_ids
-    details.all? {|v| expense_item_ids.include?(v.item_id) }
-  end
-
-  def update_expense_details
-    details.each do |det|
-      det_exp = movement_detail(det.item_id)
-      det_exp.balance -= det.quantity
+    def update_expense_balanace
+      @expense.balance_inventory = balance_inventory
+      @expense.delivered = inventory_left === 0
     end
-  end
 
-  def update_expense_balanace
-    @expense.balance_inventory = balance_inventory
-    @expense.delivered = inventory_left === 0
-  end
+    def expense_calculations
+      @expense_calculations ||= Movements::DetailsCalculations.new(@expense)
+    end
 
-  def expense_calculations
-    @expense_calculations ||= Movements::DetailsCalculations.new(@expense)
-  end
+    def expense_item_ids
+      @expense_item_ids ||= @expense.details.map(&:item_id)
+    end
 
-  def expense_item_ids
-    @expense_item_ids ||= @expense.details.map(&:item_id)
-  end
-
-  def expense_errors
-    @expense_errors ||= Expenses::Errors.new(expense)
-  end
+    def expense_errors
+      @expense_errors ||= Expenses::Errors.new(expense)
+    end
 end

@@ -25,8 +25,7 @@ class Inventories::Form < BaseForm
   end
 
   def inventory
-    @inventory ||=
-      begin
+    @inventory ||= begin
       i = Inventory.new(
         store_id: store_id, date: date, description: description,
         inventory_details_attributes: inventory_details_attributes,
@@ -37,31 +36,32 @@ class Inventories::Form < BaseForm
     end
   end
 
-private
-  def save(&b)
-    res = valid? && @inventory.valid?
-    res = commit_or_rollback { b.call } if res
+  private
 
-    set_errors(@inventory) unless res
+    def save(&b)
+      res = valid? && @inventory.valid?
+      res = commit_or_rollback { b.call } if res
 
-    res
-  end
+      set_errors(@inventory) unless res
 
-  def klass_details
-    @klass_details ||= Inventories::Details.new(@inventory)
-  end
+      res
+    end
 
-  def self.public_attributes
-    [:store_id, :date, :description]
-  end
+    def klass_details
+      @klass_details ||= Inventories::Details.new(@inventory)
+    end
 
-  def operation; end
+    def self.public_attributes
+      [:store_id, :date, :description]
+    end
 
-  def unique_item_ids
-    self.errors.add(:base, I18n.t("errors.messages.item.repeated_items")) unless UniqueItem.new(@inventory).valid?
-  end
+    def operation; end
 
-  def at_least_one_item
-    self.errors.add(:base, I18n.t("errors.messages.inventory.at_least_one_item"))  if details.empty?
-  end
+    def unique_item_ids
+      self.errors.add(:base, I18n.t("errors.messages.item.repeated_items")) unless UniqueItem.new(@inventory).valid?
+    end
+
+    def at_least_one_item
+      self.errors.add(:base, I18n.t("errors.messages.inventory.at_least_one_item"))  if details.empty?
+    end
 end

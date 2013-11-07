@@ -7,25 +7,21 @@ class Inventories::In < Inventories::Form
     save { update_stocks && inventory.save }
   end
 
-private
-  def operation
-    'in'
-  end
+  private
 
-  def update_stocks
-    res = true
-    stocks.each do |st|
-      stock = Stock.new(store_id: store_id, item_id: st.item_id, quantity: stock_quantity(st), minimum: st.minimum )
-
-      res = stock.save && st.update_attribute(:active, false)
-
-      return false unless res
+    def operation
+      'in'
     end
 
-    res
-  end
+    def update_stocks
+      stocks.all? do |st|
+        stock = Stock.new(store_id: store_id, item_id: st.item_id, quantity: stock_quantity(st), minimum: st.minimum )
 
-  def stock_quantity(st)
-    st.quantity + item_quantity(st.item_id)
-  end
+        stock.save && st.update_attribute(:active, false)
+      end
+    end
+
+    def stock_quantity(st)
+      st.quantity + item_quantity(st.item_id)
+    end
 end
