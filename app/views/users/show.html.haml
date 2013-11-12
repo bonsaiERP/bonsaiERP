@@ -2,17 +2,19 @@
   %ul.breadcrumbs.span6
     %li Datos personales
 
-%h1= current_user
 
 .row-fluid
   .span6
-    = link_to edit_user_path(current_user), class: 'btn' do
-      %i.icon-user
-      Editar datos perfil
+    %h1= current_user
+  .span6.r
+    .btn-group
+      = link_to edit_user_path(current_user), class: 'btn' do
+        %i.icon-user
+        Editar datos perfil
 
-    = link_to new_user_password_path, class: 'btn' do
-      %i.icon-key
-      Cambiar contraseña
+      = link_to new_user_password_path, class: 'btn' do
+        %i.icon-key
+        Cambiar contraseña
 
 <br/><br/>
 .row-fluid

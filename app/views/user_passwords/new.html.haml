@@ -1,14 +1,19 @@
 %h1 Cambiar contraseña
 
 = simple_form_for @user_password do |f|
-  =f.input :old_password, label: 'Antigua contraseña'
-  .input-append
-    =f.input :password, label: 'Nueva contraseña' do
-      = f.password_field :password
-      %span.add-on.append
-        %label
-          %input(type="checkbox" id="show-password")
-          Ver contraseña
+  .row-fluid
+    .span6
+      =f.input :old_password, label: 'Antigua contraseña', input_html: { class: 'span8' }
+
+  .row-fluid
+    .span6
+      .input-append
+        =f.input :password, label: 'Nueva contraseña' do
+          = f.password_field :password, size: 35
+          %span.add-on.append
+            %label
+              %input(type="checkbox" id="show-password")
+              Ver contraseña
   .form-actions
     =f.submit 'Cambiar contraseña', class: 'btn btn-success'
 
