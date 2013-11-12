@@ -20,19 +20,19 @@
       = f.input :country_code, label: 'País', collection: Country.options
   .row-fluid
     .span6
-      =f.input :phone, label: 'Teléfono', input_html: {size: 15}
+      =f.input :phone, label: 'Teléfono'
     .span6
-      =f.input :mobile, label: 'Móvil', input_html: {size: 15}
+      =f.input :mobile, label: 'Móvil'
   .row-fluid
     .span6
       =f.input :email
     .span6
       =f.input :website, label: 'Sitio web'
   .row-fluid
-    .span6
-      =f.input :inventory_active, label: 'Inventario activo'
+    .span6.form-inline
+      =f.input :inventory_active, label: 'Inventario activo', input_html: { class: 'span1' }
   .row-fluid
     .span6
-      =f.input :address, label: 'Dirección', as: :text, input_html: {rows: 5} 
+      =f.input :address, label: 'Dirección', as: :text, input_html: {rows: 5}
   .form-actions
     = f.submit 'Salvar', class: 'btn btn-success b'
