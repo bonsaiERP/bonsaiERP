@@ -84,15 +84,18 @@ class TransactionModel extends Backbone.Model
     @setCurrency()
   #
   setEvents: ->
-    @on('change:currency', =>
-      @setCurrency()
-      @activateExchange()
-      @createAccountToOptions()
+    self = @
+    $('#transaction_currency').change( (event) ->
+      self.set('currency', $(this).val())
+      self.setCurrency()
+      self.activateExchange()
+      self.createAccountToOptions()
     )
   #
   setCurrency: ->
     rate = fx.convert(1, {from: @get('currency'), to: @get('baseCurrency') }).toFixed(4) * 1
-    @set(rate: rate)
+    @set('rate', rate)
+    $('#transaction_exchange_rate').val(rate)
     @setCurrencyLabel()
   #
   setCurrencyLabel: ->
@@ -244,6 +247,7 @@ class Income extends Transaction
   #
   setEvents: ->
     self = this
+    super()
     $('body').on('ajax-call', '.item_id', (event, resp) ->
       tr = $(this).parents('tr').get(0)
       mod = self.where(elem: tr)[0]
@@ -268,6 +272,7 @@ class Expense extends Transaction
 
   #
   setEvents: ->
+    super()
     self = this
     $('body').on('ajax-call', '.item_id', (event, resp) ->
       tr = $(this).parents('tr').get(0)

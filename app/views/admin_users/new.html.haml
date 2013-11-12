@@ -1,6 +1,6 @@
 - content_for :links do
   %ul.breadcrumbs.span6
-    %li 
+    %li
       =link_to "Configuración", configurations_path
     %li
       %i.icon-caret-right
@@ -15,8 +15,7 @@
 
   .row-fluid
     .span6
-      = f.input :email,
-        :hint => "<i class='icon-warning-sign'></i> No es posible modificar después".html_safe
+      = f.input :email
   .row-fluid
     .span6= f.input :first_name, label: 'Nombres'
     .span6= f.input :last_name, label: 'Apellidos'
@@ -27,7 +26,7 @@
 
   .row-fluid
     .span6= f.input :address, :label => 'Dirección', :as => :text, :input_html => {:rows => 4, :cols => 35}
-  
+
     .span6= f.input :rol, :collection => User.get_roles.slice(1, 3), :label => 'Rol'
 
   = render 'users/permissions'

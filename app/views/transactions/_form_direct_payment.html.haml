@@ -4,7 +4,7 @@
       input_html: {id: 'transaction_currency', data: { value: 'trans.currency' } }
   .span6
     = f.input :exchange_rate, label: "Tipo de cambio de <span class='currency'></span> a #{currency_label} ".html_safe,
-      input_html: {id: 'transaction_exchange_rate', type: 'decimal', size: 8, data: {value: 'trans.rate', disabled: 'trans.sameCurrency'}}
+      input_html: { id: 'transaction_exchange_rate', type: 'decimal', class: 'span3', data: { value: 'trans.rate', disabled: 'trans.sameCurrency' }}
 
 - if movement.is_draft?
   %br

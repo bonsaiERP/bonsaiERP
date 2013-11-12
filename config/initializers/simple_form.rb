@@ -13,8 +13,8 @@ SimpleForm.setup do |config|
       #ba.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }
     #end
   #end
-
   #config.default_wrapper = :bootstrap
+  config.input_class = 'span11'
 
   # Default tag used on hints.
   # config.hint_tag = :span
