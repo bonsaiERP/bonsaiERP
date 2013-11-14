@@ -114,11 +114,6 @@ class IncomesController < ApplicationController
     @income = present Income.find(params[:id])
   end
 
-  # GET /incomes/:id/ledgers
-  def ledgers
-    @income = present Income.find(params[:id])
-  end
-
   # GET /incomes/:id/inventories
   def inventories
     @income = Income.find(params[:id])

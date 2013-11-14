@@ -12,7 +12,8 @@
 %p.center.inventories-buttons
   = render 'incomes/inventory_buttons', income: income
 
-= link_to 'Ver operaciones de inventario', inventories_income_path(income.id),
+-#= link_to 'Ver operaciones de inventario', inventories_income_path(income.id),
     class: 'openin', data: { openin: '.inventories', openinhide: true  }
 
 %ul.listing.unstyled.inventories
+  = render partial: 'inventories/movement', collection: @income.inventories.includes(:store, :creator).order('date desc, id desc'), as: :inventory

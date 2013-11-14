@@ -91,6 +91,9 @@ class TransactionModel extends Backbone.Model
       self.activateExchange()
       self.createAccountToOptions()
     )
+    $('#transaction_exchange_rate').change( (event) ->
+      self.set('rate', this.value * 1)
+    )
   #
   setCurrency: ->
     rate = fx.convert(1, {from: @get('currency'), to: @get('baseCurrency') }).toFixed(4) * 1

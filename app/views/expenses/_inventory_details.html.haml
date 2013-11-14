@@ -11,7 +11,8 @@
 %p.center.inventories-buttons
   = render 'expenses/inventory_buttons', expense: expense
 
-= link_to 'Ver operaciones de inventario', inventories_expense_path(expense.id),
+-#= link_to 'Ver operaciones de inventario', inventories_expense_path(expense.id),
   class: 'openin', data: { openin: '.inventories', openinhide: true  }
 
 %ul.unstyled.listing.inventories
+  = render partial: 'inventories/movement', collection: @expense.inventories.includes(:store), as: :inventory
