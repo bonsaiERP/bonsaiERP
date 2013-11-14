@@ -10,12 +10,9 @@ module Controllers::Authentication
   end
 
   def current_user
-    return false unless session[:user_id].present?
-    begin
-      @current_user ||= User.find(session[:user_id])
-    rescue
-      false
-    end
+    @current_user ||= User.find(session[:user_id])
+  rescue
+    false
   end
 
   protected

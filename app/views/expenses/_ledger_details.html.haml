@@ -8,16 +8,16 @@
 %p.center.payment-buttons
 
   - if expense.can_pay?
-    = link_to class: 'btn btn-success w100p', data: {remote: true, url: new_expense_payment_path(expense.id) } do
+    = link_to '', class: 'btn btn-success w100p', data: { remote: true, url: new_expense_payment_path(expense.id) } do
       %i.icon-minus-sign
       Pago
 
   - if expense.can_devolution?
-    = link_to class: 'btn btn-danger w100p', id: 'devolution-link', data: {remote: true, url: new_expense_devolution_path(expense.id) } do
+    = link_to '', class: 'btn btn-danger w100p', id: 'devolution-link', data: {remote: true, url: new_expense_devolution_path(expense.id) } do
       %i.icon-plus-sign
       Devolución
 
-= link_to 'Ver pagos y devoluciones', ledgers_expense_path(expense.id),
+-#= link_to 'Ver pagos y devoluciones', ledgers_expense_path(expense.id),
   data: { openin: '.ledgers', openinhide: true }
 
 %ul.unstyled.listing.ledgers
