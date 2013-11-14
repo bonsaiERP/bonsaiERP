@@ -14,7 +14,7 @@ SimpleForm.setup do |config|
     #end
   #end
   #config.default_wrapper = :bootstrap
-  config.input_class = 'span11'
+  #config.input_class = 'span11'
 
   # Default tag used on hints.
   # config.hint_tag = :span

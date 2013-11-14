@@ -11,4 +11,3 @@ class DatepickerInput < SimpleForm::Inputs::Base
     out.html_safe
   end
 end
-

@@ -11,17 +11,17 @@
 = simple_form_for(current_user) do |f|
   .row-fluid
     .span6
-      = f.input :first_name, :label => 'Nombres'
+      = f.input :first_name, label: 'Nombres', input_html: { size: INPUT_SIZE }
     .span6
-      = f.input :last_name, :label => 'Apellidos'
+      = f.input :last_name, label: 'Apellidos', input_html: { size: INPUT_SIZE }
   .row-fluid
     .span6
-      = f.input :phone, :label => 'Teléfono'
+      = f.input :phone, label: 'Teléfono', input_html: { size: INPUT_SIZE }
     .span6
-      = f.input :mobile, :label => 'Móvil'
+      = f.input :mobile, label: 'Móvil', input_html: { size: INPUT_SIZE }
   .row-fluid
     .span6
-      = f.input :address, :label => 'Dirección', :as => :text, :input_html => {:rows => 4, :cols => 35}
+      = f.input :address, label: 'Dirección', as: :text, input_html: { rows: 4, cols: INPUT_SIZE }
 
   .form-actions
     = f.submit "Actualizar datos", class: 'btn btn-success b'

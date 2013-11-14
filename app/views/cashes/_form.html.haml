@@ -2,7 +2,7 @@
   = bonsai_form_error(f)
   .row-fluid
     .span6
-      = f.input :name, :label => 'Nombre de caja'
+      = f.input :name, label: 'Nombre de caja', input_html: { size: INPUT_SIZE }
 
     .span6
       -if @cash.new_record?
@@ -18,10 +18,10 @@
       -else
         %label Total en cuenta
         = ntc @cash.amount
-        = currency_label @cash.currency 
+        = currency_label @cash.currency
 
     .span6
-      = f.input :address, :label => 'Dirección', :as => :text, :input_html => {:rows => 4, :cols => 35}
+      = f.input :address, label: 'Dirección', as: :text, input_html: { rows: 4, cols: INPUT_SIZE }
 
   .form-actions
     = f.submit 'Salvar', class: 'btn btn-primary b'

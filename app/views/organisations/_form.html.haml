@@ -2,24 +2,24 @@
   = bonsai_form_error(f)
 
   .row-fluid
-    .span6=f.input :name, :label => 'Nombre de su empresa'
+    .span6=f.input :name, label: 'Nombre de su empresa', input_html: { size: INPUT_SIZE }
     .span6
-      =f.input :currency, label: 'Moneda base', collection: currency_options, 
+      =f.input :currency, label: 'Moneda base', collection: currency_options,
         hint: '<i class="icon-warning-sign"></i> No se puede cambiar en un futuro.'.html_safe
   .row-fluid
     .span6=f.input :country_code, label: 'País', collection: Country.options
     .span6=f.input :time_zone, as: :time_zone, label: 'Zona horaria'
-  
-  .row-fluid
-    .span6=f.input :phone, :label => 'Teléfono', :input_html => {:size => 15}
-    .span6=f.input :mobile, :label => 'Móvil', :input_html => {:size => 15}
 
   .row-fluid
-    .span6=f.input :email
-    .span6=f.input :address, :label => 'Dirección', :as => :text, :input_html => {:rows => 5} 
+    .span6=f.input :phone, label: 'Teléfono', input_html: { size: 15 }
+    .span6=f.input :mobile, label: 'Móvil', input_html: { size: 15 }
+
+  .row-fluid
+    .span6=f.input :email, input_html: { size: INPUT_SIZE }
+    .span6=f.input :address, label: 'Dirección', as: :text, input_html: {rows: 5,  cols: INPUT_SIZE}
 
   .clear.form_actions
-    = f.submit "Crear empresa", :class => 'btn btn-success b btn-large'
+    = f.submit "Crear empresa", class: 'btn btn-success b btn-large'
 
 :javascript
   $(function() {
