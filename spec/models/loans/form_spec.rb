@@ -50,6 +50,7 @@ describe Loans::Form do
 
       c = Account.find(cash.id)
       c.amount.should == 100
+      c.should be_is_a(Cash)
     end
 
     it "#create other currency" do
@@ -68,6 +69,7 @@ describe Loans::Form do
 
       c = Account.find(cash2.id)
       c.amount.should == 100
+      c.should be_is_a(Cash)
     end
   end
 
@@ -107,6 +109,7 @@ describe Loans::Form do
 
       c = Account.find(cash.id)
       c.amount.should == -100
+      c.should be_is_a(Cash)
     end
   end
 end

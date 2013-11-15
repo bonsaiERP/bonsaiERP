@@ -6,6 +6,8 @@ class Loan < Account
   extend SettersGetters
   extend Models::AccountCode
 
+  STATES = %w(approved paid nulled)
+
   # Relationships
   has_one :loan_extra, dependent: :delete, autosave: true
 
@@ -13,6 +15,7 @@ class Loan < Account
   validates_presence_of :date, :due_date, :name, :contact, :contact_id
   validates :total, numericality: { greater_than: 0 }
   validate :valid_greater_due_date
+  validates :state, inclusion: { in: STATES }
 
   # Delegations
   delegate(*create_accessors(*LoanExtra.get_columns), to: :loan_extra)
@@ -36,6 +39,12 @@ class Loan < Account
     attrs = loan_extra.attributes
     attrs.delete(:id)
     old_attributes.merge(attrs)
+  end
+
+  STATES.each do |m|
+    define_method :"is_#{m}?" do
+      state == m
+    end
   end
 
   private

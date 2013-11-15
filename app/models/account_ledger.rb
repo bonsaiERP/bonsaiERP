@@ -15,10 +15,13 @@ class AccountLedger < ActiveRecord::Base
   # lrcre  = Create the ledger Loans::Receive, adds
   # lrpay  = Loans::Receive make a payment, substracts
   # lrdev  = Loans::Receive make a devolution, adds
+  # lrint  = Loans::Receive interest
   # lgcre  = Create the ledger Loans::Give, substract
   # lgpay  = Loans::Give receive a payment, adds
   # lgdev  = Loans::Give make a devolution, substract
-  OPERATIONS = %w(trans payin payout devin devout lrcre lrpay lrdev lgcre lgpay lgdev).freeze
+  # lgint  = Loans::Give interest
+  OPERATIONS = %w(trans payin payout devin devout lrcre lrpay lrdev lrint lgcre lgpay lgdev lgint).freeze
+  OP_HASH = Hash[ OPERATIONS.map { |v| [v.to_sym, v] } ]
   STATUSES = %w(pendent approved nulled).freeze
 
   ########################################

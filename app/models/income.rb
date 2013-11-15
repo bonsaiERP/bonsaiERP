@@ -82,8 +82,7 @@ class Income < Movement
     def pendent_contact_incomes
       _id = id
       Income.pendent.contact(contact_id).where { id.not_eq _id }
-      .group(:currency).sum('exchange_rate * amount')
-      #.select('sum(amount * exchange_rate) AS tot, sum(amount) AS tot_cur, currency')
-      #.group(:currency)
+      .select('sum(amount * exchange_rate) AS tot, sum(amount) AS tot_cur, currency')
+      .group(:currency)
     end
 end

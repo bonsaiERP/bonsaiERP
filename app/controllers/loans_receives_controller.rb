@@ -2,7 +2,7 @@ class LoansReceivesController < ApplicationController
 
   # GET /loans_receive
   def index
-    @loans = Loans::Receive.page(@page)
+    @loans = Loans::Receive.includes(:loan_extra, :contact).page(@page)
   end
 
   # GET /loans_receive/new
@@ -24,8 +24,6 @@ class LoansReceivesController < ApplicationController
   # GET /loans/:id
   def show
     @loan = Loans::Receive.find(params[:id])
-
-    render text: @loan.to_json
   end
 
   private

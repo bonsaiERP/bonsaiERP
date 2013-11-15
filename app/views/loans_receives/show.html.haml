@@ -1,0 +1,25 @@
+- content_for :links do
+  %ul.breadcrumbs
+    %li
+      = link_to 'Recibir prestamos', loans_receives_path
+
+
+%h1
+  %span.text-muted.muted Prestamo recibido
+  = @loan
+
+.row-fluid
+  .span6
+    .moneybox
+      %label TOTAL
+      %h4.n
+        = ntc @loan.total
+        = currency_label @loan.currency
+    .moneybox
+      %label SALDO
+      %h4.n
+        = ntc @loan.amount
+        = currency_label @loan.currency
+
+= link_to '/', class: 'btn btn-primary' do
+  Pagar prestamo

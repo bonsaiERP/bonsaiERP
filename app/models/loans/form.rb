@@ -63,7 +63,7 @@ class Loans::Form < BaseForm
 
     def loan_attributes
       attributes.slice(:contact_id, :date, :due_date, :total).merge(
-        currency: currency
+        currency: currency, state: 'approved'
       )
     end
 

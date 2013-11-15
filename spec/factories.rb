@@ -161,4 +161,5 @@ FactoryGirl.define do
     name 'IVA'
     percentage 10
   end
+
 end

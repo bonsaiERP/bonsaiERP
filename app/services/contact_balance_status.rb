@@ -7,7 +7,7 @@ class ContactBalanceStatus < Struct.new(:transactions)
 
   # Creates a hash with the balance by currency
   def create_balances
-    @h = { 'TOTAL' => calculate_total}
+    @h = { 'TOTAL' => calculate_total }
     return @h if transactions.empty?
     set_base_currency
     set_other_currencies
@@ -41,11 +41,11 @@ class ContactBalanceStatus < Struct.new(:transactions)
     end
 
     def calculate_total
-      transactions.inject(0) {|sum, trans| sum += trans.tot.to_d }.round(2)
+      transactions.inject(0) { |sum, trans| sum += trans.tot.to_d }.round(2)
     end
 
     def base_currency_transaction
-      @base_currency_transaction ||= transactions.find {|v| v.currency === currency }
+      @base_currency_transaction ||= transactions.find { |v| v.currency === currency }
     end
 
     def other_currencies_transactions

@@ -18,27 +18,4 @@ describe Loans::Receive do
     expect(l.name).to eq("PR-#{y}-0001")
   end
 
-  context 'AccountLedger' do
-    before(:each) do
-      UserSession.user = build :user, id: 1
-    end
-
-    let(:account_to) { build :account, id: attributes.fetch(:account_to_id) }
-
-    it "#create" do
-      l = Loans::Receive.new(attributes)
-      account_to.stub(save: true)
-
-      ConciliateAccount.any_instance.should_receive(:account_to).and_return(account_to)
-
-      l.create#.should be_true
-
-      puts l.send(:ledger).errors.messages
-      expect(l.ledger).to be_is_a(AccountLedger)
-      l.ledger.amount.should == 100
-
-      l.ledger.should be_is_lrcre
-    end
-  end
-
 end
