@@ -14,7 +14,7 @@
       .span6.account_to.form-inline
         %span(style='display:none')
           = f.check_box :direct_payment, data: {value: 'trans.direct_payment'}, id: 'direct_payment', style: 'vertical-align: top'
-        %label(for='direct_payment')
+        %label#label-direct-payment(for='direct_payment2')
           %a#direct-payment-button.btn.btn-small.b(data-toggle='button') Cobro directo
 
         = f.input :account_to_id,
@@ -32,4 +32,7 @@
       $('#direct-payment-button').addClass('active');
       $('.save-button').hide();
     }
+    $('#label-direct-payment').click(function() {
+      $('#direct_payment').trigger('click');
+    });
   })
