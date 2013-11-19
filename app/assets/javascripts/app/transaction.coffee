@@ -275,8 +275,8 @@ class Expense extends Transaction
 
   #
   setEvents: ->
-    super()
     self = this
+    super()
     $('body').on('ajax-call', '.item_id', (event, resp) ->
       tr = $(this).parents('tr').get(0)
       mod = self.where(elem: tr)[0]
