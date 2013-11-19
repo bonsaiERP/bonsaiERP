@@ -9,7 +9,7 @@
       = expense.enable_disable_inventory_text_tag
 
 %p.center.inventories-buttons
-  = render 'expenses/inventory_buttons', expense: expense
+  = render 'expenses/inventory_buttons', expense: expense  unless expense.no_inventory?
 
 -#= link_to 'Ver operaciones de inventario', inventories_expense_path(expense.id),
   class: 'openin', data: { openin: '.inventories', openinhide: true  }

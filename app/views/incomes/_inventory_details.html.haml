@@ -10,7 +10,7 @@
       = income.enable_disable_inventory_text_tag
 
 %p.center.inventories-buttons
-  = render 'incomes/inventory_buttons', income: income
+  = render 'incomes/inventory_buttons', income: income  unless income.no_inventory?
 
 -#= link_to 'Ver operaciones de inventario', inventories_income_path(income.id),
     class: 'openin', data: { openin: '.inventories', openinhide: true  }
