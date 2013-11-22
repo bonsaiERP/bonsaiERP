@@ -12,9 +12,13 @@
       = link_to expense.contact, expense.contact, title: 'Contacto'
 
       .clearfix
-
       %span(title='Estado')= expense.state_tag
       %i= l expense.date
+      - if expense.tax
+        %strong.gray
+          \-
+          = expense.tax
+
       = expense.inventory_tag
 
       %ul.btags(data-tag_ids="#{expense.tag_ids}")
