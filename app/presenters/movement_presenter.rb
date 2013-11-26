@@ -120,8 +120,9 @@ class MovementPresenter < BasePresenter
     not(no_inventory?) && OrganisationSession.inventory_active?
   end
 
-private
-  def today
-    @today ||= Date.today
-  end
+  private
+
+    def today
+      @today ||= Date.today
+    end
 end

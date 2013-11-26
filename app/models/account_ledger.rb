@@ -18,7 +18,9 @@ class AccountLedger < ActiveRecord::Base
   # lgcre  = Create the ledger Loans::Give, substract
   # lgpay  = Loans::Give receive a payment, adds
   # lgdev  = Loans::Give make a devolution, substract
-  OPERATIONS = %w(trans payin payout devin devout lrcre lrpay lrdev lgcre lgpay lgdev).freeze
+  # servex = Pays an account with a service account_to is Expense
+  # servin = Pays an account with a service account_to is Income
+  OPERATIONS = %w(trans payin payout devin devout lrcre lrpay lrdev lgcre lgpay lgdev servex servin).freeze
   STATUSES = %w(pendent approved nulled).freeze
 
   ########################################

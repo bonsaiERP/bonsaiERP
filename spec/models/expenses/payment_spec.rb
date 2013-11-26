@@ -206,6 +206,8 @@ describe Expenses::Payment do
       ep.expense.balance.should == bal - ep.amount
       # Expense
       ep.account_to.balance.should == 100 - ep.amount
+
+      ep.ledger.should be_is_servin
     end
 
     it "should set the state of the expense when done" do

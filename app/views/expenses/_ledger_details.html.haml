@@ -21,4 +21,4 @@
   data: { openin: '.ledgers', openinhide: true }
 
 %ul.unstyled.listing.ledgers
-  = render partial: 'account_ledgers/movement', collection: expense.present_ledgers, as: :ledger
+  = render partial: 'account_ledgers/movement', collection: expense.present_ledgers, locals: { current_account_id: expense.id}, as: :ledger
