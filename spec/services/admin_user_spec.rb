@@ -21,7 +21,7 @@ describe AdminUser do
 
       ad = AdminUser.new(valid_attributes)
       # Check email is send
-      RegistrationMailer.should_receive(:user_registration).with(ad).and_return(stub(deliver: true))
+      RegistrationMailer.should_receive(:user_registration).with(ad).and_return(double(deliver: true))
 
       ad.add_user.should be_true
 
