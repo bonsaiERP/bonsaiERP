@@ -14,6 +14,10 @@
       .clearfix
       %span(title='estado')= income.state_tag
       %i= l income.date
+      - if income.tax
+        %strong.gray
+          \-
+          = income.tax
       = income.inventory_tag
 
       %ul.btags(data-tag_ids="#{income.tag_ids}")

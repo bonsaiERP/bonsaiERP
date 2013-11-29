@@ -58,7 +58,7 @@ class Expenses::Payment < Payment
     def create_ledger
       if amount > 0
         @ledger = build_ledger(
-                    amount: -amount, operation: 'payout',
+                    amount: -amount, operation: get_operation,
                     account_id: expense.id, status: get_status
                   )
         @ledger.save_ledger
@@ -71,6 +71,10 @@ class Expenses::Payment < Payment
       if complete_accounts? && amount_exchange > movement_balance
         self.errors.add :amount, I18n.t('errors.messages.payment.balance')
       end
+    end
+
+    def get_operation
+      account_to.is_a?(Income) ? 'servin' : 'payout'
     end
 
     def account_to_is_income?

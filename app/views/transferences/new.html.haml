@@ -18,7 +18,10 @@
   .row-fluid
     .span6
       %label De cuenta
-      %h4.n= link_to @account, @account
+      = link_to @account, @account
+      %span.muted con saldo de:
+      %strong= ntc @account.amount
+      = currency_label @account.currency
     .span6
       = f.input :account_to_id, label: 'A cuenta', input_html: {class: 'span10'}
 
@@ -35,21 +38,23 @@
     #transference-currency.span3
       .moneybox
         %label
-          = @account
-        %h4 
+          TOTAL
+        %h4
           %span(data-text="transference.totalCurrency") 0,00
           = currency_label @account.currency
 
   .row-fluid
     .span3
       = f.input :date, as: :datepicker, label: 'Fecha'
-    .span3
-      = f.input :verification, as: :boolean, label: 'Verificar',
+
+    .span3.form-inline
+      = f.input :verification, as: :boolean,
         input_html: {data: {value: 'transference.verification', checked: 'transference.verification'} },
-        label: 'Verificar <i class="icon-warning-sign" data-toggle="tooltip" title="Solo si alguna de las cuentas es de BANCO pueden verificar a futuro"></i>'.html_safe
+        label: 'Verificar <i class="icon-warning-sign" data-toggle="tooltip" title="El monto no es aplicado hasta que se verifique la transacción"></i>'.html_safe
     .span6
       = f.input :reference, label: 'Referecia', as: :text,
-        input_html: {rows: 2, data: {value: 'transference.reference'}}
+        input_html: {rows: 2, cols: INPUT_SIZE, placeholder: 'Recibo, document,etc.',
+        data: {value: 'transference.reference'}}
 
   .form-actions
     = f.submit "Transferir", class: 'btn btn-primary btn-large b'
@@ -57,7 +62,7 @@
 :javascript
   $(function() {
     var t = new App.Transference({
-      accountsTo: #{AccountQuery.new.bank_cash_options_minus(@account.id).to_json}, 
+      accountsTo: #{AccountQuery.new.bank_cash_options_minus(@account.id).to_json},
       baseCurrency: "#{@account.currency}",
       currency: "#{@transference.account_to_currency}",
       exchange_rate: "#{@transference.exchange_rate}",

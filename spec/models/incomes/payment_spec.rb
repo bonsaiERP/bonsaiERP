@@ -229,6 +229,8 @@ describe Incomes::Payment do
       ip.income.balance.should == bal - ip.amount
       # Expense
       ip.account_to.balance.should == 100 - ip.amount
+
+      ip.ledger.should be_is_servex
     end
 
     it "should set the state of the expense when done" do

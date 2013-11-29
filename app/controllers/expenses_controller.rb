@@ -158,7 +158,7 @@ class ExpensesController < ApplicationController
 
       @expenses = @expenses.all_tags(*tag_ids)  if params[:search] && has_tags?
 
-      @expenses = @expenses.includes(:contact, transaction: [:creator, :approver, :nuller]).order('date desc, accounts.id desc').page(@page)
+      @expenses = @expenses.includes(:contact, :tax, transaction: [:creator, :approver, :nuller]).order('date desc, accounts.id desc').page(@page)
       set_expenses_filters
     end
 

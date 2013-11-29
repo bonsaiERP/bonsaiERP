@@ -57,6 +57,17 @@ class AccountLedgerPresenter < BasePresenter
     end
   end
 
+  def amount_currency
+    case
+    when(current_account_id == account.id && account.is_a?(Income))
+      to_model.amount_currency
+    when(current_account_id == account_to.id && account_to.is_a?(Expense))
+      - to_model.amount_currency
+    else
+      to_model.amount_currency
+    end
+  end
+
   def currency_ref(ac_id = nil)
     ac_id == to_model.account_to_id ? currency : account_currency
   end
@@ -72,13 +83,15 @@ class AccountLedgerPresenter < BasePresenter
 
   def operation_text
     case operation
+    when 'trans'  then 'Transferencia'
     when 'payin'  then 'Cobro ingreso'
-    when 'intin'  then 'Cobro Intereses'
     when 'payout' then 'Pago egreso'
-    when 'intout' then 'Pago Intereses'
     when 'devin'  then 'Devolución ingreso'
     when 'devout' then 'Devolución egreso'
-    when 'trans'  then 'Transferencia'
+    when 'lrcre'  then 'Recepción prestamo'
+    when 'lrpay'  then 'Pago prestamo'
+    when 'lrdev'  then 'Devolucion prestamo'
+    when 'servex', 'servcin' then 'Pago contra servicio'
     end
   end
 
@@ -91,24 +104,17 @@ class AccountLedgerPresenter < BasePresenter
   end
 
   def operation_tag
-    case operation
-    when 'payin', 'intin'
-      text_green operation_text
-    when 'payout', 'intout', 'devin', 'devout'
-      text_red operation_text
-    when 'trans'
-      text_dark operation_text
-    end
-  end
-
-  def operation_tag
-    case operation
-    when 'payin', 'devout'
+    case
+    when %w(payin devout).include?(operation)
       text_green_dark(operation_text)
-    when 'payout', 'devin'
+    when %w(payout devin).include?(operation)
       text_red(operation_text)
-    when 'trans'
+    when 'trans' == operation
       text_dark(operation_text)
+    when( 'servex' == operation && current_account_id == account.id)
+      text_green 'Cobro contra servicio'
+    when( 'servex' == operation && current_account_id != account.id)
+      text_red 'Pago contra servicio'
     end
   end
 

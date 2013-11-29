@@ -14,12 +14,13 @@
       = @cash.name
       = currency_label @cash.currency
   .span6.r
-    = link_to new_transference_path(account_id: @cash.id), class: 'btn',
-      title: 'Transferir dinero a otra cuenta', 'data-toggle' => 'tooltip' do
-      %i.icon-exchange
-      Nueva transferencia
+    .btn-group
+      = link_to new_transference_path(account_id: @cash.id), class: 'btn',
+        title: 'Transferir dinero a otra cuenta', 'data-toggle' => 'tooltip' do
+        %i.icon-exchange
+        Nueva transferencia
 
-    = link_to icon_edit_text, edit_cash_path(@cash), class: 'btn'
+      = link_to icon_edit_text, edit_cash_path(@cash), class: 'btn'
 
 .row-fluid
   .span6

@@ -19,7 +19,7 @@ describe Transference do
   end
 
   it "#account once" do
-    Account.should_receive(:active).once.and_return(stub(find_by_id: account) )
+    Account.should_receive(:active).once.and_return(double(find_by_id: account) )
 
     t = Transference.new
 
@@ -29,7 +29,7 @@ describe Transference do
   end
 
   it "#account_to once" do
-    AccountQuery.any_instance.should_receive(:bank_cash).once.and_return(stub(find_by_id: account_to) )
+    AccountQuery.any_instance.should_receive(:bank_cash).once.and_return(double(find_by_id: account_to) )
 
     t = Transference.new
 
@@ -163,5 +163,5 @@ describe Transference do
     end
 
   end
-  
+
 end

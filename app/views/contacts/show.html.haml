@@ -13,7 +13,7 @@
       %br
       %small
         = @contact.complete_name
-  .span4.r
+  .span4.r.btn-group
     = link_to icon_new_text, new_contact_path, class: 'btn'
     = link_to icon_edit_text, edit_contact_path(@contact.id), class: 'btn'
     = link_to icon_delete_text, @contact, class: 'btn', confirm: "Esta seguro de borra el contacto", method: :delete

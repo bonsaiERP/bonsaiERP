@@ -57,7 +57,7 @@ class Incomes::Payment < Payment
 
     def create_ledger
       @ledger = build_ledger(
-                  amount: amount, operation: 'payin', account_id: income.id,
+                  amount: amount, operation: get_operation, account_id: income.id,
                   status: get_status
                 )
 
@@ -66,6 +66,10 @@ class Incomes::Payment < Payment
 
     def account_to_is_expense?
       account_to.is_a?(Expense)
+    end
+
+    def get_operation
+      account_to_is_expense? ? 'servex' : 'payin'
     end
 
     # Only when you pay with a expense

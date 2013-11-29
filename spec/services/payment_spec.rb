@@ -28,7 +28,7 @@ describe Payment do
     p = Payment.new
 
     cash = build :cash, id: 10
-    Account.should_receive(:active).once.and_return(stub(find_by_id: cash))
+    Account.should_receive(:active).once.and_return(double(find_by_id: cash))
 
     p.account_to
     p.amount.should == 0

@@ -10,13 +10,14 @@
 
   .span5.r
     = render 'account_ledgers/conciliate_null_form', ledger: @ledger if @ledger.can_conciliate_or_null?
-    = link_to account_ledger_path(@ledger.id, format: 'print'), class: 'btn' do
-      %i.icon-print
-      Imprimir
+    .btn-group
+      = link_to account_ledger_path(@ledger.id, format: 'print'), class: 'btn' do
+        %i.icon-print
+        Imprimir
 
-    = link_to account_ledger_path(@ledger.id, format: 'pdf'), class: 'btn' do
-      = image_tag 'pdf.png'
-      PDF
+      = link_to account_ledger_path(@ledger.id, format: 'pdf'), class: 'btn' do
+        = image_tag 'pdf.png'
+        PDF
 .row-fluid.account_ledger
   .span2
     %h4.i.n.ib
