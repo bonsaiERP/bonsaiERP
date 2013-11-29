@@ -1,0 +1,36 @@
+.row-fluid
+  .span12
+    = f.input :account_to_id, label: 'Cuenta', input_html: { class: 'span10', data: {value: 'payment.account_to_id' } }
+
+
+%br
+.row-fluid.bg-white-tan.borders-y
+  .span3
+    = f.input :amount,
+      label: 'Cantidad <span class="currency"></span>'.html_safe,
+      input_html: {type: 'decimal', size: 10,
+      data: {value: 'payment.amount'} }
+  .span3
+    %div(data-display="payment.cash")
+      = f.input :exchange_rate, label: 'Tipo de cambio',
+        input_html: {disabled: true, type: 'decimal', size: 10,
+        data: {value: 'payment.exchange_rate', disabled: 'payment.sameCurrency'} }
+  .span4
+    .moneybox
+      %label TOTAL
+      %h4
+        %span#currency_total(data-text="payment.totalCurrency")
+        %span#payment-currency-label= currency_label loan.currency
+
+.row-fluid
+  .span6
+    = f.input :date, as: :datepicker, label: 'Fecha'
+  .span6
+    %div.form-inline(data-show="payment.bank")
+      = f.input :verification, as: :boolean, label: 'Verificar (solo banco)',
+        input_html: { data: {value: 'payment.verification', checked: 'payment.verification' } },
+       hint: 'Verificar a futuro. Ej.: (Cheque)'
+
+.row-fluid
+  .span12
+    = f.input :reference, label: 'Referencia', as: :text, input_html: {rows: 3, class: 'span11', data: {value: 'payment.reference'} }

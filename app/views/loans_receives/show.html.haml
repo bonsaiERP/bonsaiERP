@@ -21,5 +21,7 @@
         = ntc @loan.amount
         = currency_label @loan.currency
 
-= link_to '/', class: 'btn btn-primary' do
+= link_to new_receive_loan_payment_path(@loan.id) , class: 'btn btn-primary', data: { target: '#payment-form' } do
   Pagar prestamo
+
+#payment-form

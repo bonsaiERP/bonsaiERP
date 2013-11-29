@@ -1,4 +1,11 @@
-%h1 Prestamos recibidos
+.row-fluid
+  .span6
+    %h1 Prestamos recibidos
+  .span6.r
+    .btn-group
+      = link_to new_loans_receive_path, class: 'btn' do
+        %i.icon-plus-sign
+        Nuevo prestamo
 
 %ul.listing.unstyled
   - @loans.each do |loan|

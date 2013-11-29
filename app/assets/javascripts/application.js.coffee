@@ -41,4 +41,5 @@
 #= require plugins/tag.coffee
 
 #= require forms
+#= require links
 #= require base

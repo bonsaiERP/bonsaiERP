@@ -9,7 +9,7 @@
 %p.center.payment-buttons
 
   - if income.can_pay?
-    = link_to '', class: 'btn btn-success w100p', data: {remote: true, url: new_income_payment_path(income.id) } do
+    = link_to '', class: 'btn btn-success w100p', data: { remote: true, url: new_income_payment_path(income.id) } do
       %i.icon-plus-sign
       Cobrar
 

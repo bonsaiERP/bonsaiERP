@@ -1,3 +1,9 @@
+- content_for :links do
+  %ul.breadcrumbs
+    %li
+      = link_to 'Prestamos recibidos', loans_receives_path
+
+
 %h1
   %span.muted.text-muted Recibir prestamo
   = @loan.name

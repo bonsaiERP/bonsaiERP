@@ -91,7 +91,8 @@ private
       inventory_transferences: true,
       download: true,
       taxes: true,
-      loans_receives: true
+      loans_receives: true,
+      loan_payments: true
     }
   end
 
@@ -133,7 +134,8 @@ private
       inventory_transferences: true,
       download: true,
       taxes: true,
-      loans_receives: true
+      loans_receives: true,
+      loan_payments: true
     }
   end
 
@@ -176,7 +178,8 @@ private
       inventory_transferences: true,
       download: true,
       taxes: true,
-      loans_receives: true
+      loans_receives: true,
+      loan_payments: true
     }
   end
 
@@ -206,7 +209,9 @@ private
       incomes_inventory_outs: true,
       tags: true,
       download: true,
-      taxes: true
+      taxes: false,
+      loans_receives: false,
+      loan_payments: false
     }
   end
 end
