@@ -15,7 +15,7 @@
         %span(style='display:none')
           = f.check_box :direct_payment, data: {value: 'trans.direct_payment'}, id: 'direct_payment', style: 'vertical-align: top'
         %label#label-direct-payment(for='direct_payment2')
-          %a#direct-payment-button.btn.btn-small.b(data-toggle='button') Cobro directo
+          %a#direct-payment-button.btn.btn-small.b(data-toggle='button') #{lbl} directo
 
         = f.input :account_to_id,
           input_html: {id: 'account_to_id', class: 'span10',
