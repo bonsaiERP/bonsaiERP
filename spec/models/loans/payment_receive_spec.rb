@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Loans::PaymentReceive do
-  #it { should validate_presence_of(:account_to_id) }
+  #it { should validate_presence_of(:reference) }
 
   let(:loan_attr) do
     today = Date.today
@@ -9,6 +9,15 @@ describe Loans::PaymentReceive do
       date: today, due_date: today + 10.days, total: 100,
       reference: 'Receipt 00232', contact_id: 1
     }
+  end
+
+
+  it "validate" do
+    lp = Loans::Payment.new
+    lp.stub(loan: Loan.new(total: 100))
+    lp.valid?
+
+    puts lp.errors.messages
   end
 
   context 'payment' do
@@ -62,6 +71,32 @@ describe Loans::PaymentReceive do
 
       loan.amount.should == 0
       loan.should be_is_paid
+    end
+
+    # Pay with income
+    it "pay with income" do
+      lf = Loans::Form.new_receive(loan_attr.merge(account_to_id: cash.id, total: 200))
+
+      lf.create.should be_true
+      lf.loan.amount.should == 200
+      lf.loan.should be_is_approved
+
+      today = Date.today
+      income = Income.new(total: 200, balance: 200, state: 'approved', currency: 'BOB', id: 100, contact_id: 1,
+                         date: today, due_date: today)
+      income.stub(contact: build(:contact, id: 1))
+      income.save.should be_true
+
+      lp = Loans::PaymentReceive.new(attributes.merge(account_id: lf.loan.id, amount: 200, account_to_id: income.id))
+
+      lp.create_payment.should be_true
+      inc = Income.find(income.id)
+      inc.amount.should == 0
+      inc.should be_is_paid
+
+      l = Loans::Receive.find(lf.loan.id)
+      l.amount.should == 0
+      l.should be_is_paid
     end
 
 

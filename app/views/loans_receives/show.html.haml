@@ -23,7 +23,18 @@
 
 .row-fluid
   .span6
-    = link_to new_receive_loan_payment_path(@loan.id) , class: 'btn btn-primary', data: { target: '#payment-form' } do
-      Pagar prestamo
+    %h3.n Pagos y devoluciones
 
-    #payment-form
+    .center
+      = link_to new_receive_loan_payment_path(@loan.id) , class: 'btn btn-success', data: { target: '#payment-form' } do
+        %i.icon-minus-sign
+        Pagar prestamo
+
+    #payment-form.form-container
+
+  .span6
+    %h3.n Intereses
+    .center
+      = link_to new_receive_loan_payment_path(@loan.id) , class: 'btn btn-success', data: { target: '#payment-form' } do
+        %i.icon-minus-sign
+        Pagar intereses

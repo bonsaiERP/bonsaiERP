@@ -10,7 +10,7 @@ class Loans::Payment < BaseForm
   attribute :reference, String
   attribute :verification, Boolean, default: false
 
-  validates_presence_of :account_to_id, :account_to, :account_id
+  validates_presence_of :account_to_id, :account_to, :account_id, :reference, :date, :loan
   validates :amount, numericality: { greater_than: 0 }
   validate :valid_loan_amount
 
@@ -20,10 +20,14 @@ class Loans::Payment < BaseForm
     @account_to ||= Account.find_by(id: account_to_id)
   end
 
+  def loan; end
+
   private
 
     def valid_loan_amount
-      errors.add(:amount, I18n.t('errors.messages.less_than_or_equal_to', count: loan.amount))  if amount > loan.amount
+      if amount && loan.present? && amount > loan.amount
+        errors.add(:amount, I18n.t('errors.messages.less_than_or_equal_to', count: loan.amount))
+      end
     end
 
     def amount_exchange

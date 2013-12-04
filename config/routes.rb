@@ -8,6 +8,10 @@ Bonsaierp::Application.routes.draw do
       post :receive
       get :new_give
       post :give
+      get :new_interest_receive
+      post :interest_receive
+      get :new_interest_give
+      post :interest_give
     end
   end
 

@@ -3,7 +3,17 @@ $(->
     event.preventDefault()
     $this = $(this)
     $this.hide('medium')
-    console.log $this.data('target'), $this
-    $($this.data('target')).load($this.attr('href'))
+    $div = $($this.data('target'))
+    $div.addClass('ajax-modal')
+    .show('medium')
+    .html(AjaxLoadingHTML())
+    .load($this.attr('href'), ->
+      $div.setDatepicker()
+      $cancel = $('<a class="btn">Cancelar</a>').click( ->
+        $div.html('').hide('medium')
+        $this.show('medium')
+      )
+      $div.find('.form-actions').append($cancel)
+    )
   )
 )
