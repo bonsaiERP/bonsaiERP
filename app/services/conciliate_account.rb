@@ -21,9 +21,7 @@ class ConciliateAccount
     case
     when is_service_payment?
       account_ledger.save
-    when %w(Income Expense).include?(account.class.to_s)
-      update_account_to
-    when account_ledger.is_lrcre?
+    when(is_inc_exp? || is_loan?)
       update_account_to
     else
       update_both_accounts
@@ -41,6 +39,15 @@ class ConciliateAccount
   end
 
   private
+
+    def is_inc_exp?
+      %w(Income Expense).include?(account.class.to_s)
+    end
+
+    def is_loan?
+     %w(Loans::Receive Loans::Give).include?(account.class.to_s)
+    end
+
     # When an Income is payed with Expense or vice versa
     def is_service_payment?
       [Income, Expense].include?(account_to.class)

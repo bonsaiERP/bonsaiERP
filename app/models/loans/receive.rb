@@ -6,7 +6,12 @@ class Loans::Receive < Loan
 
   self.code_name = 'PR'
 
+  # Relationships
   has_one :ledger_in, -> { where(operation: 'lrcre') }, class_name: 'AccountLedger', foreign_key: :account_id
+
+  has_many :payments_devolutions, -> { where(operation: ['lrpay', 'lrdev']) }, class_name: 'AccountLedger', foreign_key: :account_id
+
+  has_many :interests, -> { where(operation: 'lrpay') }, class_name: 'AccountLedger', foreign_key: :account_id
 
   def self.new(attrs = {})
     super { |loan| loan.name = get_code_number }

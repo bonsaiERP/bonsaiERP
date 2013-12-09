@@ -23,7 +23,7 @@ class LoansController < ApplicationController
 
   # GET /loans/:id
   def show
-    @loan = Loans::Receive.find(params[:id])
+    @loan = present Loans::Receive.find(params[:id]), LoanPresenter
   end
 
   private

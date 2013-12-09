@@ -178,4 +178,20 @@ class AccountLedgerPresenter < BasePresenter
   def trans_account_icon
     account_icon trans_account
   end
+
+  def model_url(mod)
+    if mod.is_a?(Loan)
+      template.loan_path(mod.id)
+    else
+      mod
+    end
+  end
+
+  def account_to_url
+    model_url(account_to)
+  end
+
+  def account_url
+    model_url(account)
+  end
 end

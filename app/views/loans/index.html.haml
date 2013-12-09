@@ -13,7 +13,7 @@
       .span6
         %h4.ib
           %strong= loan.loan_type
-          = link_to loan, loans_path(loan)
+          = link_to loan, loan_path(loan.id)
 
         = link_to loan.contact, loan.contact, title: 'Contacto'
       .span6

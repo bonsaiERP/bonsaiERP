@@ -61,10 +61,10 @@
       %span.muted
         De
         = "#{@ledger.account_text}"
-      = link_to @ledger.account, @ledger.account, class: 'account_name'
+      = link_to @ledger.account, @ledger.account_url, class: 'account_name'
     %span.account-to
       %span.muted a Cuenta
-      = link_to @ledger.account_to, @ledger.account_to, class: 'account_to_name'
+      = link_to @ledger.account_to, @ledger.account_to_url, class: 'account_to_name'
 
 %p
   = render_if @ledger.updater do

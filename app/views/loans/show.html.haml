@@ -1,11 +1,11 @@
 - content_for :links do
   %ul.breadcrumbs
     %li
-      = link_to 'Recibir prestamos', loans_receives_path
+      = link_to 'Prestamos', loans_path
 
 
 %h1
-  %span.text-muted.muted Prestamo recibido
+  %span.text-muted.muted= @loan.loan_type
   = @loan
 
 .row-fluid
@@ -31,6 +31,13 @@
         Pagar prestamo
 
     #payment-form.form-container
+
+    %ul.untyled.listing
+      - @loan.payments_devolutions.each do |ledger|
+        %li
+          = link_to ledger, account_ledger_path(ledger.id)
+          = ntc ledger.amount
+          = currency_label ledger.currency
 
   .span6
     %h3.n Intereses

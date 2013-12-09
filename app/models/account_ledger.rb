@@ -8,18 +8,19 @@ class AccountLedger < ActiveRecord::Base
   ########################################
   # Constants
 
-  OPERATIONS = ['trans', # trans  = Transfer from one account to other
-                'payin', # payin  = Payment in Income, adds
-                'payout', # payout = Paymen out Expense, substracts
-                'devin', # devin  = Devolution in Income, adds
-                'devout', # devout = Devolution out Expense, substracts
-                'lrcre', # lrcre  = Create the ledger Loans::Receive, adds
-                'lrpay', # lrpay  = Loans::Receive make a payment, substracts
-                'lrdev', # lrdev  = Loans::Receive make a devolution, adds
-                'lrint', # lrint  = Loans::Receive interest
-                'lgcre', # lgcre  = Create the ledger Loans::Give, substract
-                'lgpay', # lgpay  = Loans::Give receive a payment, adds
-                'lgdev', # lgdev  = Loans::Give make a devolution, substract
+  OPERATIONS = ['trans',  # trans  = Transfer from one account to other
+                'payin',  # payin  = Payment in Income, adds ++
+                'payout', # payout = Paymen out Expense, substracts --
+                'devin',  # devin  = Devolution in Income, adds --
+                'devout', # devout = Devolution out Expense, substracts ++
+                'lrcre',  # lrcre  = Create the ledger Loans::Receive, adds ++
+                'lrpay',  # lrpay  = Loans::Receive make a payment, substracts --
+                'lrint',  # lrint  = Interest Loans::Receive --
+                'lrdev',  # lrdev  = Loans::Receive make a devolution, adds ++
+                'lgcre',  # lgcre  = Create the ledger Loans::Give, substract --
+                'lgint',  # lgint  = Interests for Loans::Give ++
+                'lgpay',  # lgpay  = Loans::Give receive a payment, adds ++
+                'lgdev',  # lgdev  = Loans::Give make a devolution, substract --
                 'servex', # servex = Pays an account with a service account_to is Expense
                 'servin', # servin = Pays an account with a service account_to is Income
                ].freeze

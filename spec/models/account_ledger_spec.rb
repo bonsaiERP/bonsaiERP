@@ -157,8 +157,6 @@ describe AccountLedger do
 
       al.update_reference('The new reference').should be_true
 
-      al.old_reference.should eq('Old reference')
-
       al.reference.should eq('The new reference')
 
       al.updater_id.should eq(155)

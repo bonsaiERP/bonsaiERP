@@ -19,11 +19,11 @@ class Loans::Form < BaseForm
   validates :account_to, presence: true
 
   def self.new_give(attrs = {})
-    loan = new(attrs)
-    loan.ledger_sign = -1
-    loan.ledger_operation = 'lgcre'
-    loan.klass = Loans::Give
-    loan
+    lf = new(attrs)
+    lf.ledger_sign = -1
+    lf.ledger_operation = 'lgcre'
+    lf.klass = Loans::Give
+    lf
   end
 
   def self.new_receive(attrs = {})
