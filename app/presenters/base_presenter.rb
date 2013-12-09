@@ -10,5 +10,5 @@ class BasePresenter < Resubject::Presenter
   ), to: :template)
 
   #includes
-  include UserLogHelper
+  include UserLogModule
 end

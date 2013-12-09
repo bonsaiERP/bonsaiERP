@@ -2,7 +2,7 @@ class LoansController < ApplicationController
 
   # GET /loans_receive
   def index
-    @loans = Loans::Query.new.all_loans.page(@page)
+    @loans = present Loans::Query.new.all_loans.page(@page), LoanPresenter
   end
 
   # GET /loans_receive/new
