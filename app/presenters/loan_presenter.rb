@@ -1,0 +1,3 @@
+class LoanPresenter < BasePresenter
+
+end

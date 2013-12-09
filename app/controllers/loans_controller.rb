@@ -1,8 +1,8 @@
-class LoansReceivesController < ApplicationController
+class LoansController < ApplicationController
 
   # GET /loans_receive
   def index
-    @loans = Loans::Receive.includes(:loan_extra, :contact).page(@page)
+    @loans = Loans::Query.new.all_loans.page(@page)
   end
 
   # GET /loans_receive/new

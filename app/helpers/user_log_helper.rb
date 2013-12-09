@@ -18,7 +18,7 @@ module UserLogHelper
   end
 
   def updater_label
-    return user_icon(class: 'blue updater', title: "MODIFICADO por: #{user_label_text updater, updated_at}") if updater.present?
+    user_icon(class: 'blue updater', title: "MODIFICADO por: #{user_label_text updater, updated_at}") if updater.present?
   end
 
   def user_icon(attrs)

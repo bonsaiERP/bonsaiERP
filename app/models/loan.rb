@@ -17,6 +17,8 @@ class Loan < Account
   validate :valid_greater_due_date
   validates :state, inclusion: { in: STATES }
 
+  # Scope
+
   # Delegations
   delegate(*create_accessors(*LoanExtra.get_columns), to: :loan_extra)
 

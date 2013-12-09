@@ -15,7 +15,7 @@ Bonsaierp::Application.routes.draw do
     end
   end
 
-  resources :loans_receives
+  resources :loans
 
   resources :taxes
 
