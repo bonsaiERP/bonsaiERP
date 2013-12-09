@@ -106,7 +106,6 @@ class AccountLedger < ActiveRecord::Base
   end
 
   def update_reference(txt)
-    self.old_reference = reference
     self.reference = txt
 
     save
