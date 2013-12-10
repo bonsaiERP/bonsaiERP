@@ -7,13 +7,18 @@ $(->
     $div.addClass('ajax-modal')
     .show('medium')
     .html(AjaxLoadingHTML())
-    .load($this.attr('href'), ->
-      $div.setDatepicker()
-      $cancel = $('<a class="btn">Cancelar</a>').click( ->
-        $div.html('').hide('medium')
+    .load($this.attr('href'), (resp, status) ->
+      if status is 'error'
+        $div.hide('medium')
         $this.show('medium')
-      )
-      $div.find('.form-actions').append($cancel)
+        alert 'Exisiton un error'
+      else
+        $div.setDatepicker()
+        $cancel = $('<a class="btn">Cancelar</a>').click( ->
+          $div.html('').hide('medium')
+          $this.show('medium')
+        )
+        $div.find('.form-actions').append($cancel)
     )
   )
 )

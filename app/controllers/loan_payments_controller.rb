@@ -1,29 +1,67 @@
 class LoanPaymentsController < ApplicationController
   before_filter :check_loan!
 
-  # GET loans_paymens/:id/new_receive
-  def new_receive
+
+  #####################################
+  # Loans::Receive
+
+  # GET /loans_paymens/:id/new_pay
+  def new_pay
     @payment = Loans::PaymentReceive.new(account_id: params[:id], date: Date.today)
   end
 
-  # POST loan_payments/:id
-  def receive
+  # POST /loan_payments/:id/pay
+  def pay
     @payment = Loans::PaymentReceive.new(receive_payment_params)
 
     if @payment.create_payment
+      flash[:notice] = 'Se relizo el pago correctamente.'
+      @path = loan_path(@payment.loan.id)
+      render 'js/redirect'
     else
       render :new_receive
     end
   end
 
-  # GET loan_payments/:id/new_interest
-  def new_interest_receive
+  # GET /loan_payments/:id/new_interest_pay
+  def new_interest_pay
     @payment = Loans::PaymentReceive.new(account_id: params[:id], date: Date.today)
   end
 
-  # POST loan_payments/:id/interest_receive
-  def interest_receive
+  # POST /loan_payments/:id/interest_receive
+  def interest_pay
     @payment = Loans::PaymentReceive.new(account_id: params[:id], date: Date.today)
+
+    if @payment.create_payment
+      flash[:notice] = 'Se pago los intereses correctamente.'
+      @path = loan_path(@payment.loan.id)
+      render 'js/redirect'
+    else
+      render :new_interest_receive
+    end
+  end
+
+  #####################################
+  # Loans::Give
+
+  # GET /loan_payments/:id/new_charge
+  def new_charge
+
+  end
+
+  # POST /loan_payments/:id/new_charge
+  def charge
+
+  end
+
+  # GET /loan_payments/:id/new_charge_interest
+  def new_charge_interest
+
+  end
+
+  # POST /loan_payments/:id/charge_interest
+  def charge_interest
+
   end
 
   private

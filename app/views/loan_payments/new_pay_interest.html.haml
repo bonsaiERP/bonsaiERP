@@ -1,0 +1,27 @@
+%h4.title Pagar intereses
+
+= simple_form_for @payment, url: receive_loan_payment_path(@loan.id),
+  html: { id: 'loan-payment-form' } do |f|
+  = bonsai_form_error(f)
+  = f.hidden_field :account_id, id: 'account_id'
+
+  = render 'loan_payments/form', f: f, loan: @loan
+
+  .form-actions
+    = f.submit 'Pagar prestamo', class: 'btn b btn-success'
+    -#%a.cancel.btn(hre='javascript:;') Cancelar
+
+:javascript
+  $(function() {
+    var p = new App.LoanPayment({
+      accountsTo: #{AccountQuery.new.expense_payment_options(@payment.loan).to_json},
+      baseCurrency: "#{@payment.currency}",
+      account_to_id: "#{@payment.account_to_id}",
+      amount: #{@payment.amount},
+      date: "#{@payment.date}",
+      exchange_rate: #{@payment.exchange_rate.to_f},
+      reference: "#{@payment.reference}",
+      verification: #{@payment.verification}
+    });
+  })
+

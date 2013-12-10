@@ -26,7 +26,9 @@
     %h3.n Pagos y devoluciones
 
     .center
-      = link_to new_receive_loan_payment_path(@loan.id) , class: 'btn btn-success', data: { target: '#payment-form' } do
+
+      = @loan.payment_link
+      -#= link_to @loan.payment_path , class: 'btn btn-success', data: { target: '#payment-form' } do
         %i.icon-minus-sign
         Pagar prestamo
 
@@ -42,6 +44,9 @@
   .span6
     %h3.n Intereses
     .center
-      = link_to new_receive_loan_payment_path(@loan.id) , class: 'btn btn-success', data: { target: '#payment-form' } do
+      = @loan.interest_link
+      -#= link_to @loan.interest_path , class: 'btn btn-success', data: { target: '#interest-form' } do
         %i.icon-minus-sign
         Pagar intereses
+
+      #interest-form

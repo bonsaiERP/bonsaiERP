@@ -4,14 +4,16 @@ Bonsaierp::Application.routes.draw do
 
   resources :loan_payments, only: [] do
     member do
-      get :new_receive
-      post :receive
-      get :new_give
-      post :give
-      get :new_interest_receive
-      post :interest_receive
-      get :new_interest_give
-      post :interest_give
+      # Receive
+      get :new_pay
+      post :pay
+      get :new_pay_interest
+      post :pay_interest
+      # Give
+      get :new_charge
+      post :charge
+      get :new_charge_interest
+      post :charge_interest
     end
   end
 

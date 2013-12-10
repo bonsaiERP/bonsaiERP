@@ -6,7 +6,8 @@ class BasePresenter < Resubject::Presenter
    LabelTagHelper.instance_methods +
    IconsHelper.instance_methods +
    TextHelper.instance_methods +
-   ActionView::Helpers::SanitizeHelper.instance_methods
+   ActionView::Helpers::SanitizeHelper.instance_methods +
+   [:link_to]
   ), to: :template)
 
   #includes
