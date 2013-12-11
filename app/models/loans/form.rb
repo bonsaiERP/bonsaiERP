@@ -10,7 +10,7 @@ class Loans::Form < BaseForm
   attribute :reference, String
   attribute :description, String
 
-  attr_accessor :klass, :ledger_sign, :ledger_operation
+  #attr_accessor :klass, :ledger_sign, :ledger_operation
 
   delegate :currency, to: :account_to, allow_nil: true
   delegate :name, to: :loan

@@ -83,7 +83,7 @@ FactoryGirl.define do
   end
 
   factory :transaction do
-    total 100
+    delivered false
   end
 
   factory :income do

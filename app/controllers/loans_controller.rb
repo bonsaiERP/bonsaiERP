@@ -2,7 +2,7 @@ class LoansController < ApplicationController
 
   # GET /loans_receive
   def index
-    @loans = present Loans::Query.new.all_loans.page(@page), LoanPresenter
+    @loans = present Loans::Query.new.all_loans.page(@page)
   end
 
   # GET /loans_receive/new
@@ -23,7 +23,7 @@ class LoansController < ApplicationController
 
   # GET /loans/:id
   def show
-    @loan = present Loans::Receive.find(params[:id]), LoanPresenter
+    @loan = present Loans::Receive.find(params[:id])
   end
 
   private
