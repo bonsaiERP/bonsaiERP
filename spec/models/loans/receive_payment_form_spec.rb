@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Loans::PaymentReceive do
+describe Loans::ReceivePaymentForm do
   #it { should validate_presence_of(:reference) }
 
   let(:loan_attr) do
@@ -13,7 +13,7 @@ describe Loans::PaymentReceive do
 
 
   it "validate" do
-    lp = Loans::Payment.new
+    lp = Loans::PaymentForm.new
     lp.stub(loan: Loan.new(total: 100))
     lp.valid?
   end
@@ -21,6 +21,7 @@ describe Loans::PaymentReceive do
   context 'payment' do
     let(:cash) { create :cash, currency: 'BOB', amount: 0 }
     let(:contact) { build :contact, id: 1 }
+
 
     let(:attributes) do
       {
@@ -47,7 +48,7 @@ describe Loans::PaymentReceive do
       lf.loan.ledger_in.should be_is_lrcre
       cash.reload.amount.should == 100
 
-      lp = Loans::PaymentReceive.new(attributes.merge(account_id: lf.loan.id))
+      lp = Loans::ReceivePaymentForm.new(attributes.merge(account_id: lf.loan.id))
 
       lp.create_payment.should be_true
       lp.ledger.amount.should == -50
@@ -58,13 +59,13 @@ describe Loans::PaymentReceive do
       c = Cash.find(cash.id)
       c.amount.should == 50
 
-      lp = Loans::PaymentReceive.new(attributes.merge(account_id: lf.loan.id, amount: 60))
+      lp = Loans::ReceivePaymentForm.new(attributes.merge(account_id: lf.loan.id, amount: 60))
       lp.create_payment.should be_false
       lp.errors[:amount].should eq([I18n.t('errors.messages.less_than_or_equal_to', count: 50.0)])
       # Pay with other currency
       bank = create :bank, currency: 'USD', amount: 0
 
-      lp = Loans::PaymentReceive.new(attributes.merge(account_id: lf.loan.id, amount: 25, account_to_id: bank.id, exchange_rate: 2))
+      lp = Loans::ReceivePaymentForm.new(attributes.merge(account_id: lf.loan.id, amount: 25, account_to_id: bank.id, exchange_rate: 2))
 
       lp.create_payment.should be_true
       loan = Loans::Receive.find(loan.id)
@@ -82,21 +83,33 @@ describe Loans::PaymentReceive do
       lf.loan.should be_is_approved
 
       today = Date.today
-      income = Income.new(total: 200, balance: 200, state: 'approved', currency: 'BOB', id: 100, contact_id: 1,
+      income = Income.new(total: 100, balance: 100, state: 'approved', currency: 'BOB', id: 100, contact_id: 1,
                          date: today, due_date: today)
       income.stub(contact: build(:contact, id: 1))
       income.save.should be_true
 
-      lp = Loans::PaymentReceive.new(attributes.merge(account_id: lf.loan.id, amount: 200, account_to_id: income.id))
+      lp = Loans::ReceivePaymentForm.new(attributes.merge(account_id: lf.loan.id, amount: 200, account_to_id: income.id))
 
+      # Validate for income amount
+      lp.create_payment.should be_false
+      lp.errors[:amount].should eq(['La cantidad es mayor que el saldo del Ingreso'])
+
+
+      lp.amount = 100
       lp.create_payment.should be_true
+
       inc = Income.find(income.id)
       inc.amount.should == 0
       inc.should be_is_paid
 
       l = Loans::Receive.find(lf.loan.id)
-      l.amount.should == 0
-      l.should be_is_paid
+      l.amount.should == 100
+      l.should be_is_approved
+
+      lp = Loans::ReceivePaymentForm.new(attributes.merge(account_id: lf.loan.id, amount: 200, account_to_id: cash.id))
+      lp.create_payment.should be_false
+      puts lp.errors.messages
+      lp.errors[:amount].should_not be_blank
     end
 
 
@@ -108,7 +121,7 @@ describe Loans::PaymentReceive do
       lf.loan.ledger_in.should be_is_a(AccountLedger)
       cash.reload.amount.should == 100
 
-      lp = Loans::PaymentReceive.new(attributes.merge(account_id: lf.loan.id))
+      lp = Loans::ReceivePaymentForm.new(attributes.merge(account_id: lf.loan.id))
 
       lp.create_interest.should be_true
       lp.ledger.amount.should == -50

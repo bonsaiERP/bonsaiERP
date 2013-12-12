@@ -1,11 +1,11 @@
 require 'spec_helper'
 
-describe Loans::Payment do
+describe Loans::PaymentForm do
   it { should validate_presence_of(:date) }
   it { should validate_presence_of(:reference) }
 
   it "valid loan" do
-    l = Loans::Payment.new
+    l = Loans::PaymentForm.new
     l.should be_invalid
 
     l.errors[:account_to].should_not be_blank
@@ -13,7 +13,7 @@ describe Loans::Payment do
   end
 
   it "valid loan Amount" do
-    lp = Loans::Payment.new(amount: 1000)
+    lp = Loans::PaymentForm.new(amount: 1000)
 
     lp.stub(loan: Loan.new(total: 500, amount: 500))
 

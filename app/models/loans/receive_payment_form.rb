@@ -1,8 +1,9 @@
-# encoding: utf-8
 # class for to make payments for Loans received the money goes out
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class Loans::PaymentGive < Loans::Payment
+class Loans::ReceivePaymentForm < Loans::PaymentForm
+
+  validate :valid_income_amount, if: :account_to_is_income?
 
   def create_payment
     return false  unless valid?
@@ -10,7 +11,7 @@ class Loans::PaymentGive < Loans::Payment
 
     commit_or_rollback do
       res = ledger.save_ledger
-      res = save_expense if account_to_is_expense?
+      res = save_income if account_to_is_income?
       res = update_loan && res
     end
   end
@@ -20,7 +21,7 @@ class Loans::PaymentGive < Loans::Payment
   end
 
   def loan
-    @loan ||= Loans::Give.find_by(id: account_id)
+    @loan ||= Loans::Receive.find_by(id: account_id)
   end
 
   def ledger
@@ -28,7 +29,7 @@ class Loans::PaymentGive < Loans::Payment
       AccountLedger.new(
         account_id: loan.id, account_to_id: account_to_id, currency: currency,
         date: date, reference: reference,
-        operation: 'lgpay', amount: amount
+        operation: 'lrpay', amount: -amount
       )
     end
   end
@@ -38,18 +39,18 @@ class Loans::PaymentGive < Loans::Payment
       AccountLedger.new(
         account_id: loan.id, account_to_id: account_to_id, currency: currency,
         date: date, reference: reference,
-        operation: 'lgint', amount: amount
+        operation: 'lrint', amount: -amount
       )
     end
   end
 
   private
 
-    def account_to_is_expense?
-      account_to.is_a?(Expense)
+    def account_to_is_income?
+      account_to.is_a?(Income)
     end
 
-    def save_expense
+    def save_income
       account_to.amount -= amount
       account_to.set_state_by_balance!
 
@@ -61,5 +62,10 @@ class Loans::PaymentGive < Loans::Payment
       loan.state = 'paid'  if loan.amount == 0
       loan.save
     end
-end
 
+    def valid_income_amount
+      if amount > account_to.amount
+        self.errors[:amount] = 'La cantidad es mayor que el saldo del Ingreso'
+      end
+    end
+end

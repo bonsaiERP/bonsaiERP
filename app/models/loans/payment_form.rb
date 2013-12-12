@@ -1,7 +1,7 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class Loans::Payment < BaseForm
+class Loans::PaymentForm < BaseForm
   attribute :account_id, Integer
   attribute :account_to_id, Integer
   attribute :exchange_rate, Decimal, default: 1
