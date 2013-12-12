@@ -108,7 +108,7 @@ describe Loans::ReceivePaymentForm do
 
       lp = Loans::ReceivePaymentForm.new(attributes.merge(account_id: lf.loan.id, amount: 200, account_to_id: cash.id))
       lp.create_payment.should be_false
-      puts lp.errors.messages
+
       lp.errors[:amount].should_not be_blank
     end
 
