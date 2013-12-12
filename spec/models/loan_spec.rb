@@ -12,7 +12,7 @@ describe Loan do
     today = Date.today
     {
       name: 'P-0001', currency: 'BOB', date: today,
-      due_date: today + 10.days, total: 100,
+      due_date: today + 10.days, total: 100, amount: 100,
       interests: 10, contact_id: 1, state: 'approved'
     }
   }
@@ -69,7 +69,8 @@ describe Loan do
     it "create" do
       Loan.any_instance.stub(contact: build(:contact))
 
-      l = Loan.create!(attributes)
+      l = Loan.new(attributes)
+      l.save.should be_true
       #Loan.create!(attributes.merge(name: 'P-0002'))
 
       l.attributes

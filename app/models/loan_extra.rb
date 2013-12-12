@@ -7,7 +7,6 @@ class LoanExtra < ActiveRecord::Base
 
   # Validations
   validates :due_date, presence: true
-  validates :total, presence: true, numericality: { greater_than: 0 }
   validates :interests, presence: true, numericality: { greater_than_or_equal_to: 0 }
 
   def self.get_columns

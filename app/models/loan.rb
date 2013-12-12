@@ -29,7 +29,6 @@ class Loan < Account
       old_new do |loan|
         loan.build_loan_extra
         loan.attributes = attrs
-        loan.amount = loan.total # if loan.new_record?
         yield loan  if block_given?
       end
     end

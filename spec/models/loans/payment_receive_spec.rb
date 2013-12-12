@@ -36,7 +36,7 @@ describe Loans::PaymentReceive do
     }
 
     it "pays Loan" do
-      lf = Loans::Form.new_receive(loan_attr.merge(account_to_id: cash.id))
+      lf = Loans::ReceiveForm.new_receive(loan_attr.merge(account_to_id: cash.id))
 
       lf.create.should be_true
       lf.loan.should be_persisted

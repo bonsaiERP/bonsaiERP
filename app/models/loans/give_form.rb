@@ -1,4 +1,4 @@
-class Loans::ReceiveForm < Loans::Form
+class Loans::GiveForm < Loans::Form
   def create
     res = true
     commit_or_rollback do
@@ -12,7 +12,7 @@ class Loans::ReceiveForm < Loans::Form
   end
 
   def loan
-    @loan ||= Loans::Receive.new(
+    @loan ||= Loans::Give.new(
       contact_id: contact_id,
       total: total,
       amount: total,
@@ -24,12 +24,13 @@ class Loans::ReceiveForm < Loans::Form
 
   def ledger
     @ledger ||= AccountLedger.new(
-        amount: loan.amount,
+        amount: -loan.amount,
         account_to_id: account_to_id,
         reference: reference,
         currency: account_to.currency,
         date: date,
-        operation: 'lrcre'
+        operation: 'lgcre'
     )
   end
 end
+
