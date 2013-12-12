@@ -29,7 +29,7 @@ describe Loans::PaymentGive do
     }
 
     it "pays Loan" do
-      lf = Loans::Form.new_give(loan_attr.merge(account_to_id: cash.id))
+      lf = Loans::GiveForm.new(loan_attr.merge(account_to_id: cash.id))
 
       lf.create.should be_true
 
@@ -67,7 +67,7 @@ describe Loans::PaymentGive do
 
     # Pay with expense
     it "pay with expense" do
-      lf = Loans::Form.new_give(loan_attr.merge(account_to_id: cash.id, total: 200))
+      lf = Loans::GiveForm.new(loan_attr.merge(account_to_id: cash.id, total: 200))
 
       lf.create.should be_true
       lf.loan.amount.should == 200
@@ -93,7 +93,7 @@ describe Loans::PaymentGive do
 
 
     it "pays interest" do
-      lf = Loans::Form.new_give(loan_attr.merge(account_to_id: cash.id))
+      lf = Loans::GiveForm.new(loan_attr.merge(account_to_id: cash.id))
 
       lf.create.should be_true
       lf.loan.should be_persisted

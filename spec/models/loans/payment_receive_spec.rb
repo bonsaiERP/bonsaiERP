@@ -36,7 +36,7 @@ describe Loans::PaymentReceive do
     }
 
     it "pays Loan" do
-      lf = Loans::ReceiveForm.new_receive(loan_attr.merge(account_to_id: cash.id))
+      lf = Loans::ReceiveForm.new(loan_attr.merge(account_to_id: cash.id))
 
       lf.create.should be_true
       lf.loan.should be_persisted
@@ -75,7 +75,7 @@ describe Loans::PaymentReceive do
 
     # Pay with income
     it "pay with income" do
-      lf = Loans::Form.new_receive(loan_attr.merge(account_to_id: cash.id, total: 200))
+      lf = Loans::ReceiveForm.new(loan_attr.merge(account_to_id: cash.id, total: 200))
 
       lf.create.should be_true
       lf.loan.amount.should == 200
@@ -101,7 +101,7 @@ describe Loans::PaymentReceive do
 
 
     it "pays interest" do
-      lf = Loans::Form.new_receive(loan_attr.merge(account_to_id: cash.id))
+      lf = Loans::ReceiveForm.new(loan_attr.merge(account_to_id: cash.id))
 
       lf.create.should be_true
       lf.loan.should be_persisted
