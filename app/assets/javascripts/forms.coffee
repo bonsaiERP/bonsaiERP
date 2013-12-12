@@ -49,6 +49,8 @@ $( ->
         setTimeout(->
           $div.setDatepicker()
         ,200)
+        # Trigger that form has been reloaded
+        $div.trigger('reload:ajax-modal')
     .error (resp) ->
       alert('Existio errores, por favor intente de nuevo.')
   )

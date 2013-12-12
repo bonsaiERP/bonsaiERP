@@ -7,37 +7,37 @@ class LoanPaymentsController < ApplicationController
 
   # GET /loans_paymens/:id/new_pay
   def new_pay
-    @payment = Loans::PaymentReceive.new(account_id: params[:id], date: Date.today)
+    @payment = Loans::ReceivePaymentForm.new(account_id: params[:id], date: Date.today)
   end
 
   # POST /loan_payments/:id/pay
   def pay
-    @payment = Loans::PaymentReceive.new(receive_payment_params)
+    @payment = Loans::ReceivePaymentForm.new(receive_payment_params)
 
     if @payment.create_payment
       flash[:notice] = 'Se relizo el pago correctamente.'
       @path = loan_path(@payment.loan.id)
       render 'js/redirect'
     else
-      render :new_receive
+      render :new_pay
     end
   end
 
   # GET /loan_payments/:id/new_interest_pay
   def new_interest_pay
-    @payment = Loans::PaymentReceive.new(account_id: params[:id], date: Date.today)
+    @payment = Loans::ReceivePaymentForm.new(account_id: params[:id], date: Date.today)
   end
 
   # POST /loan_payments/:id/interest_receive
   def interest_pay
-    @payment = Loans::PaymentReceive.new(account_id: params[:id], date: Date.today)
+    @payment = Loans::ReceivePaymentForm.new(account_id: params[:id], date: Date.today)
 
-    if @payment.create_payment
-      flash[:notice] = 'Se pago los intereses correctamente.'
+    if @payment.create_interest
+      create_interest[:notice] = 'Se pago los intereses correctamente.'
       @path = loan_path(@payment.loan.id)
       render 'js/redirect'
     else
-      render :new_interest_receive
+      render :new_interest_pay
     end
   end
 
@@ -80,7 +80,7 @@ class LoanPaymentsController < ApplicationController
     end
 
     def receive_payment_params
-      params.require(:loans_payment_receive).permit(
+      params.require(:loans_receive_payment_form).permit(
         :account_to_id, :amount, :exchange_rate,
         :date, :reference
       ).merge(account_id: params[:id])

@@ -1,6 +1,6 @@
 %h4.title Pagar prestamo
 
-= simple_form_for @payment, url: receive_loan_payment_path(@loan.id),
+= simple_form_for @payment, url: pay_loan_payment_path(@loan.id),
   html: { id: 'loan-payment-form' } do |f|
   = bonsai_form_error(f)
   = f.hidden_field :account_id, id: 'account_id'
