@@ -6,7 +6,8 @@ class Loan < Account
   extend SettersGetters
   extend Models::AccountCode
 
-  STATES = %w(approved paid nulled)
+  STATES = %w(approved paid nulled).freeze
+  LOAN_TYPES = %w(Loans::Receive Loans::Give).freeze
 
   # Relationships
   has_one :loan_extra, dependent: :delete, autosave: true
@@ -33,6 +34,9 @@ class Loan < Account
       end
     end
 
+    def find(id)
+      Account.where(type: LOAN_TYPES).find(id)
+    end
   end
 
   alias_method :old_attributes, :attributes

@@ -4,11 +4,11 @@ class Loans::GivePresenter < BasePresenter
   end
 
   def payment_path
-    template.new_give_loan_payment_path(id)
+    template.new_charge_loan_payment_path(id)
   end
 
   def interest_path
-    template.new_interest_give_loan_payment_path(id)
+    template.new_charge_interest_loan_payment_path(id)
   end
 
   def payment_link

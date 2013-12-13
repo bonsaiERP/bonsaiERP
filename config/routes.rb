@@ -17,7 +17,14 @@ Bonsaierp::Application.routes.draw do
     end
   end
 
-  resources :loans
+  resources :loans, only: [:index, :show] do
+    collection do
+      get :new_receive
+      post :receive
+      get :new_give
+      post :give
+    end
+  end
 
   resources :taxes
 

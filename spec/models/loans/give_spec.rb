@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe Loans::Give do
   it { should have_one(:ledger_in) }
+  it { should have_many(:payments_devolutions) }
 
   it "#initialize with code" do
     l = Loans::Give.new {}

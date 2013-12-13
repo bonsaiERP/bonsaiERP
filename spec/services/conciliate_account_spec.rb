@@ -135,18 +135,4 @@ describe ConciliateAccount do
     end
   end
 
-  context "Transference" do
-
-  end
-
-  context 'Loans::Receive' do
-    it "lrcre" do
-      al = AccountLedger.new(amount: 1, operation: 'lrcre')
-
-      al.should be_is_approved
-
-      ConciliateAccount.any_instance.should_receive(:update_account_to).and_return(true)
-      al.save_ledger.should be_true
-    end
-  end
 end

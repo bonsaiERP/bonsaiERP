@@ -13,10 +13,10 @@ class Loans::Form < BaseForm
   #attr_accessor :klass, :ledger_sign, :ledger_operation
 
   delegate :currency, to: :account_to, allow_nil: true
-  delegate :name, to: :loan
+  delegate :name, :id, to: :loan
 
   # validations
-  validates :account_to, presence: true
+  validates_presence_of :account_to_id, :account_to, :reference
 
   def contact
     @contact ||= Contact.find_by(id: contact_id)
@@ -27,4 +27,5 @@ class Loans::Form < BaseForm
     def account_to
       @account_to ||= Account.active.money.find_by(id: account_to_id)
     end
+
 end

@@ -3,9 +3,11 @@
     %h1 Prestamos
   .span6.r
     .btn-group
-      = link_to new_loan_path, class: 'btn' do
-        %i.icon-plus-sign
-        Nuevo prestamo
+      = link_to new_receive_loans_path, class: 'btn' do
+        Recibir prestamo
+
+      = link_to new_give_loans_path, class: 'btn' do
+        Dar prestamo
 
 %ul.listing.unstyled
   - @loans.each do |loan|

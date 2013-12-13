@@ -1,0 +1,29 @@
+
+= bonsai_form_error f
+
+.row-fluid
+  .span6
+    = f.input :contact_id, as: :autocomplete, label: 'Contacto',
+      input_html: { class: 'span10', placeholder: 'Escriba para buscar el contacto',
+      data: { source: '/contacts.json', new_url: new_contact_path, title: 'Nuevo contacto', trigger: 'new-contact', } }
+  .span3
+    = f.input :date, label: 'Fecha', as: :datepicker
+  .span3
+    = f.input :due_date, label: 'Vence el', as: :datepicker
+
+.row-fluid
+  .span6
+    = f.input :account_to_id, label: 'Cuenta',
+      input_html: { id: 'account_to_id', class: 'span10' }
+  .span3
+    = f.input :total, label: 'Cantidad <span class="currency"></span>'.html_safe,
+      input_html: { id: 'total', type: 'decimal' }
+  .span3
+    .moneybox
+      %label TOTAL
+      %h4
+
+.row-fluid
+  .span6
+    = f.input :reference, label: 'Referencia', as: :text,
+      input_html: { rows: 3, class: 'span10' }

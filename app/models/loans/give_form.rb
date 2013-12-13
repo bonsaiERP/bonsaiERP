@@ -1,6 +1,6 @@
 class Loans::GiveForm < Loans::Form
   def create
-    res = true
+    res = valid?
     commit_or_rollback do
       res = loan.save
       ledger.account_id = loan.id
@@ -27,7 +27,7 @@ class Loans::GiveForm < Loans::Form
         amount: -loan.amount,
         account_to_id: account_to_id,
         reference: reference,
-        currency: account_to.currency,
+        currency: currency,
         date: date,
         operation: 'lgcre'
     )
