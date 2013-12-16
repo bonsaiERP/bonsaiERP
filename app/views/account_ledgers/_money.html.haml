@@ -10,7 +10,7 @@
       .span5
         %strong= ledger.operation_tag
         %h4.ib
-          = link_to ledger, ledger, class: 'code', title: 'Código'
+          = link_to ledger, ledger.account_url, class: 'code', title: 'Código'
 
         = ledger.status_tag
 
@@ -21,10 +21,10 @@
           %i= l ledger.date.to_date
           - unless ledger.account_id === account.id
             %span.muted De:
-            = link_to ledger.account, ledger.account
+            = link_to ledger.account, ledger.account_url
           - unless ledger.account_to_id === account.id
             %span.muted A:
-            = link_to ledger.account_to, ledger.account_to
+            = link_to ledger.account_to, ledger.account_to_url
       .span5
         = ledger.updater_label
         = ledger.creator_label

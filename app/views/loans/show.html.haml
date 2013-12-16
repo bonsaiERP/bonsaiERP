@@ -44,4 +44,4 @@
     #interest-form.form-container
 
     %ul.unstyled.listing
-      = render partial: 'payment', collection: present(@loan.interests), as: :ledger
+      = render partial: 'payment', collection: present(@loan.interest_ledgers), as: :ledger
