@@ -66,24 +66,24 @@ describe Loan do
       l.interests.should == 10
     end
 
-    it "create" do
-      Loan.any_instance.stub(contact: build(:contact))
+    #it "create" do
+    #  Loan.any_instance.stub(contact: build(:contact))
 
-      l = Loan.new(attributes)
-      l.save.should be_true
-      #Loan.create!(attributes.merge(name: 'P-0002'))
+    #  l = Loan.new(attributes)
+    #  l.save.should be_true
+    #  #Loan.create!(attributes.merge(name: 'P-0002'))
 
-      l.attributes
-      l.amount.should == 100
+    #  l.attributes
+    #  l.amount.should == 100
 
-      l.amount = 50
-      l.save.should be_true
+    #  l.amount = 50
+    #  l.save.should be_true
 
-      l = Loan.find l.id
-      l.amount.should == 50
-      #Loan.all.each do |l|
-      #  puts l.amount
-      #end
-    end
+    #  l = Loan.find l.id
+    #  l.amount.should == 50
+    #  #Loan.all.each do |l|
+    #  #  puts l.amount
+    #  #end
+    #end
   end
 end
