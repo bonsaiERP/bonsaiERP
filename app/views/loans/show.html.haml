@@ -3,9 +3,12 @@
     %li
       = link_to 'Prestamos', loans_path
 
-%h1
+%h1.ib
   %span.text-muted.muted= @loan.loan_type
   = @loan
+
+%h4.ib.n
+  = link_to @loan.contact, @loan.contact, title: 'Contacto', data: { toggle: 'tooltip' }
 
 .row-fluid
   .span6
@@ -27,25 +30,18 @@
     .center
 
       = @loan.payment_link
-      -#= link_to @loan.payment_path , class: 'btn btn-success', data: { target: '#payment-form' } do
-        %i.icon-minus-sign
-        Pagar prestamo
 
     #payment-form.form-container
 
-    %ul.untyled.listing
-      - @loan.payments_devolutions.each do |ledger|
-        %li
-          = link_to ledger, account_ledger_path(ledger.id)
-          = ntc ledger.amount
-          = currency_label ledger.currency
+    %ul.unstyled.listing
+      = render partial: 'payment', collection: present(@loan.payments_devolutions), as: :ledger
 
   .span6
     %h3.n Intereses
     .center
       = @loan.interest_link
-      -#= link_to @loan.interest_path , class: 'btn btn-success', data: { target: '#interest-form' } do
-        %i.icon-minus-sign
-        Pagar intereses
 
-      #interest-form
+    #interest-form.form-container
+
+    %ul.unstyled.listing
+      = render partial: 'payment', collection: present(@loan.interests), as: :ledger

@@ -17,7 +17,14 @@ class Loans::GivePaymentForm < Loans::PaymentForm
   end
 
   def create_interest
-    int_ledger.save_ledger
+    return false  unless valid?
+    res = true
+
+    commit_or_rollback do
+      res = int_ledger.save_ledger
+      res = save_expense  if account_to_is_expense?
+      res = update_loan_interests && res
+    end
   end
 
   def loan
@@ -60,6 +67,11 @@ class Loans::GivePaymentForm < Loans::PaymentForm
     def update_loan
       loan.amount -= amount_exchange
       loan.state = 'paid'  if loan.amount == 0
+      loan.save
+    end
+
+    def update_loan_interests
+      loan.interests = loan.interest_ledgers(true).active.sum(:amount).abs
       loan.save
     end
 

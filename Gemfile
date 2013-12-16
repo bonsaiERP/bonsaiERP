@@ -13,7 +13,7 @@ gem 'assets', git: 'git://github.com/boriscy/assets.git'
 
 # gem 'turbo-sprockets-rails3'# Speed assets:precompile
 
-gem 'compass-rails', '~> 2.0.alpha.0' # Extend css clases
+gem 'compass-rails', '~> 1.1.2'#, '~> 2.0.alpha.0' # Extend css clases
 gem 'pg' # Postgresql adapter
 gem 'virtus', '~> 0.5.5' # Model generation in simple way
 gem 'squeel' # Better SQL queries

@@ -25,4 +25,5 @@
       .span6.expenses
 
   .span1
-    =link_to icon_edit, edit_contact_path(contact), class: 'dark'
+    = link_to icon_edit, edit_contact_path(contact), class: 'dark'
+    = link_to icon_delete, contact_path(contact), class: 'dark', method: 'delete'

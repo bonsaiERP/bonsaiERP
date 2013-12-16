@@ -67,6 +67,7 @@ class AccountLedger < ActiveRecord::Base
   scope :pendent, -> { where(status: 'pendent') }
   scope :nulled,  -> { where(status: 'nulled') }
   scope :approved, -> { where(status: 'approved') }
+  scope :active, -> { where(status: ['pendent', 'approved']) }
 
   ########################################
   # delegates

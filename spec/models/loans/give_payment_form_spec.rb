@@ -84,11 +84,11 @@ describe Loans::GivePaymentForm do
       lp.create_payment.should be_false
       lp.amount = 100
 
-      lp.create_payment.should be_true      
+      lp.create_payment.should be_true
 
-      inc = Expense.find(expense.id)
-      inc.amount.should == 0
-      inc.should be_is_paid
+      exp = Expense.find(expense.id)
+      exp.amount.should == 0
+      exp.should be_is_paid
 
       l = Loans::Give.find(lf.loan.id)
       l.amount.should == 100
@@ -119,10 +119,49 @@ describe Loans::GivePaymentForm do
       lp = Loans::GivePaymentForm.new(attributes.merge(account_id: lf.loan.id))
 
       lp.create_interest.should be_true
-      lp.ledger.amount.should == 50
+      lp.int_ledger.should be_persisted
+      lp.int_ledger.amount.should == 50
+      lp.int_ledger.should be_is_lgint
+
+      loan = Loans::Give.find(lf.loan.id)
+      loan.interests.should == 50
 
       c = Cash.find(cash.id)
       c.amount.should == -50
+    end
+
+    # Pay with expense
+    it "pay INTERESTS with expense" do
+      lf = Loans::GiveForm.new(loan_attr.merge(account_to_id: cash.id, total: 200))
+
+      lf.create.should be_true
+      lf.loan.amount.should == 200
+      lf.loan.should be_is_approved
+
+      today = Date.today
+      expense = Expense.new(total: 100, balance: 100, state: 'approved', currency: 'BOB', id: 100, contact_id: 1,
+                         date: today, due_date: today)
+      expense.stub(contact: build(:contact, id: 1))
+      expense.save.should be_true
+
+      lp = Loans::GivePaymentForm.new(attributes.merge(account_id: lf.loan.id, amount: 200, account_to_id: expense.id))
+
+      lp.create_interest.should be_false
+      lp.amount = 100
+
+      lp.create_interest.should be_true
+      lp.int_ledger.should be_persisted
+      lp.int_ledger.amount.should == 100
+      lp.int_ledger.should be_is_lgint
+
+      exp = Expense.find(expense.id)
+      exp.amount.should == 0
+      exp.should be_is_paid
+
+      # No changes to the amount
+      l = Loans::Give.find(lf.loan.id)
+      l.amount.should == 200
+      l.should be_is_approved
     end
   end
 end

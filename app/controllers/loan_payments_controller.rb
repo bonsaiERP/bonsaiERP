@@ -12,7 +12,7 @@ class LoanPaymentsController < ApplicationController
 
   # POST /loan_payments/:id/pay
   def pay
-    @payment = Loans::ReceivePaymentForm.new(receive_payment_params)
+    @payment = Loans::ReceivePaymentForm.new(pay_params)
 
     if @payment.create_payment
       flash[:notice] = 'Se relizo el pago correctamente.'
@@ -23,21 +23,21 @@ class LoanPaymentsController < ApplicationController
     end
   end
 
-  # GET /loan_payments/:id/new_interest_pay
-  def new_interest_pay
+  # GET /loan_payments/:id/new_pay_interest
+  def new_pay_interest
     @payment = Loans::ReceivePaymentForm.new(account_id: params[:id], date: Date.today)
   end
 
-  # POST /loan_payments/:id/interest_receive
-  def interest_pay
-    @payment = Loans::ReceivePaymentForm.new(account_id: params[:id], date: Date.today)
+  # POST /loan_payments/:id/pay_interest
+  def pay_interest
+    @payment = Loans::ReceivePaymentForm.new(pay_params)
 
     if @payment.create_interest
-      create_interest[:notice] = 'Se pago los intereses correctamente.'
+      flash[:notice] = 'Se pago los intereses correctamente.'
       @path = loan_path(@payment.loan.id)
       render 'js/redirect'
     else
-      render :new_interest_pay
+      render :new_pay_interest
     end
   end
 
@@ -46,22 +46,38 @@ class LoanPaymentsController < ApplicationController
 
   # GET /loan_payments/:id/new_charge
   def new_charge
-
+    @payment = Loans::GivePaymentForm.new(account_id: params[:id], date: Date.today)
   end
 
   # POST /loan_payments/:id/new_charge
   def charge
+    @payment = Loans::GivePaymentForm.new(charge_params)
 
+    if @payment.create_payment
+      flash[:notice] = 'Se relizo el cobro correctamente.'
+      @path = loan_path(@payment.loan.id)
+      render 'js/redirect'
+    else
+      render :new_pay
+    end
   end
 
   # GET /loan_payments/:id/new_charge_interest
   def new_charge_interest
-
+    @payment = Loans::GivePaymentForm.new(account_id: params[:id], date: Date.today)
   end
 
   # POST /loan_payments/:id/charge_interest
   def charge_interest
+    @payment = Loans::GivePaymentForm.new(charge_params)
 
+    if @payment.create_interest
+      flash[:notice] = 'Se relizo el cobro de intereses correctamente.'
+      @path = loan_path(@payment.loan.id)
+      render 'js/redirect'
+    else
+      render :new_pay
+    end
   end
 
   private
@@ -79,10 +95,19 @@ class LoanPaymentsController < ApplicationController
       end
     end
 
-    def receive_payment_params
-      params.require(:loans_receive_payment_form).permit(
-        :account_to_id, :amount, :exchange_rate,
-        :date, :reference
-      ).merge(account_id: params[:id])
+    def common_params
+      [:account_to_id, :amount, :exchange_rate,
+        :date, :reference]
     end
+
+    def pay_params
+      params.require(:loans_receive_payment_form)
+      .permit(*common_params).merge(account_id: params[:id])
+    end
+
+    def charge_params
+      params.require(:loans_give_payment_form)
+      .permit(*common_params)
+    end
+
 end

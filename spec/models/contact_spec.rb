@@ -13,9 +13,11 @@ describe Contact do
     }
   end
 
+  it { should have_many(:accounts) }
   it { should have_many(:contact_accounts) }
   it { should have_many(:incomes) }
   it { should have_many(:expenses) }
+  it { should have_many(:inventories) }
 
   context 'Validations' do
     it {should validate_uniqueness_of(:matchcode) }
@@ -47,10 +49,15 @@ describe Contact do
   it "#destroy" do
     c = Contact.create!(valid_attributes)
 
-
-    c.should_receive(:incomes).and_return(double(any?: true))
-    #c.should_receive(:expenses)
+    c.stub(accounts: [Account.new])
 
     c.destroy.should be_false
+
+    # inventories
+    c.stub(accounts: [], inventories: [Inventory.new])
+    c.destroy.should be_false
+
+    c.stub(accounts: [], inventories: [])
+    c.destroy.should be_true
   end
 end

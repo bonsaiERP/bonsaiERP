@@ -19,7 +19,7 @@ class Loans::GivePresenter < BasePresenter
 
   def interest_link
     link_to interest_path, class: 'btn btn-success', data: { target: '#interest-form' } do
-      "#{icon('icon-plus-sign')} Cobrar prestamo".html_safe
+      "#{icon('icon-plus-sign')} Cobrar intereses".html_safe
     end
   end
 

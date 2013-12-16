@@ -10,13 +10,15 @@ class Contact < ActiveRecord::Base
   has_many :contact_accounts, -> { where(type: 'ContactAccount') },
            foreign_key: :contact_id
 
+  has_many :accounts
+
   has_many :incomes, -> { where(type: 'Income').order('accounts.date desc, accounts.id desc') },
            foreign_key: :contact_id
 
   has_many :expenses, -> { where(type: 'Expense').order('accounts.date desc, accounts.id desc') },
            foreign_key: :contact_id
 
-  has_many :inventory_operations
+  has_many :inventories
 
   ########################################
   # Validations
@@ -83,19 +85,19 @@ class Contact < ActiveRecord::Base
   end
 
   def total_incomes
-    incomes.active.joins(:transaction)
-    .sum('(transactions.total - accounts.amount) * accounts.exchange_rate')
+    incomes.active
+    .sum('(accounts.total - accounts.amount) * accounts.exchange_rate')
   end
 
   def total_expenses
-    expenses.active.joins(:transaction)
-    .sum('(transactions.total - accounts.amount) * accounts.exchange_rate')
+    expenses.active
+    .sum('(accounts.total - accounts.amount) * accounts.exchange_rate')
   end
 
   private
 
     # Check if the contact has any relations before destroy
     def check_relations
-      !(incomes.any? || expenses.any?)
+      accounts.empty? && inventories.empty?
     end
 end

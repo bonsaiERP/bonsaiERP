@@ -1,6 +1,6 @@
-%h4.title Pagar intereses
+%h4.title Cobrar prestamo
 
-= simple_form_for @payment, url: pay_interest_loan_payment_path(@loan.id),
+= simple_form_for @payment, url: pay_loan_payment_path(@loan.id),
   html: { id: 'loan-payment-form' } do |f|
   = bonsai_form_error(f)
   = f.hidden_field :account_id, id: 'account_id'
@@ -8,7 +8,7 @@
   = render 'loan_payments/form', f: f, loan: @loan
 
   .form-actions
-    = f.submit 'Pagar intereses', class: 'btn b btn-success'
+    = f.submit 'Cobrar prestamo', class: 'btn b btn-success'
     -#%a.cancel.btn(hre='javascript:;') Cancelar
 
 :javascript
