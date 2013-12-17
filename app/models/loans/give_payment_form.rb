@@ -34,7 +34,9 @@ class Loans::GivePaymentForm < Loans::PaymentForm
   def ledger
     @ledger ||= begin
       AccountLedger.new(
-        account_id: loan.id, account_to_id: account_to_id, currency: currency,
+        account_id: loan.id, account_to_id: account_to_id,
+        currency: account_to_currency,
+        exchange_rate: cur_exchange_rate,
         date: date, reference: reference,
         operation: 'lgpay', amount: amount
       )
@@ -44,7 +46,9 @@ class Loans::GivePaymentForm < Loans::PaymentForm
   def int_ledger
     @int_ledger ||= begin
       AccountLedger.new(
-        account_id: loan.id, account_to_id: account_to_id, currency: currency,
+        account_id: loan.id, account_to_id: account_to_id,
+        currency: account_to_currency,
+        exchange_rate: cur_exchange_rate,
         date: date, reference: reference,
         operation: 'lgint', amount: amount
       )

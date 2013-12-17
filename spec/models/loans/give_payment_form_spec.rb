@@ -43,6 +43,7 @@ describe Loans::GivePaymentForm do
 
       lp.create_payment.should be_true
       lp.ledger.amount.should == 50
+      lp.ledger.currency.should eq('BOB')
 
       loan = Loans::Give.find(lf.loan.id)
       loan.amount.should == 50
@@ -163,5 +164,57 @@ describe Loans::GivePaymentForm do
       l.amount.should == 200
       l.should be_is_approved
     end
+
+    context 'other currencies' do
+      let(:cash2) { create :cash, currency: 'USD', amount: 0 }
+
+      it 'USD and BOB' do
+        lf = Loans::GiveForm.new(loan_attr.merge(account_to_id: cash2.id))
+
+        lf.create.should be_true
+        lf.loan.should be_persisted
+        lf.loan.should be_is_a(Loans::Give)
+        lf.loan.amount.should == 100
+        lf.loan.total.should == 100
+        lf.loan.currency.should eq('USD')
+        lf.loan.ledger_in.should be_is_a(AccountLedger)
+        lf.loan.ledger_in.should be_is_lgcre
+        cash2.reload.amount.should == -100
+
+        lp = Loans::GivePaymentForm.new(attributes.merge(account_id: lf.loan.id, exchange_rate: 5))
+
+        lp.create_payment.should be_true
+        lp.ledger.amount.should == 50
+        lp.ledger.currency.should eq('BOB')
+        lp.ledger.exchange_rate.should == 5
+
+        loan = Loans::Receive.find(lf.loan.id)
+        loan.amount.should == 90
+
+        c = Cash.find(cash.id)
+        c.amount.should == 50
+
+        lp = Loans::GivePaymentForm.new(attributes.merge(account_id: lf.loan.id, amount: 95, account_to_id: cash2.id))
+        lp.create_payment.should be_false
+        lp.errors[:amount].should eq([I18n.t('errors.messages.less_than_or_equal_to', count: 90.0)])
+
+        # Pay in USD
+
+        lp = Loans::GivePaymentForm.new(attributes.merge(account_id: lf.loan.id, amount: 90, account_to_id: cash2.id))
+
+        lp.create_payment.should be_true
+        lp.ledger.currency.should eq('USD')
+        lp.ledger.should be_persisted
+
+        loan = Loans::Give.find(loan.id)
+
+        loan.amount.should == 0
+        loan.should be_is_paid
+        cash2.reload
+
+        cash2.amount.should == -10
+      end
+    end
+
   end
 end

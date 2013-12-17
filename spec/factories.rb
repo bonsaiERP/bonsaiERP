@@ -64,8 +64,8 @@ FactoryGirl.define do
   end
 
   factory :cash do
-    name "Cash"
     currency 'BOB'
+    name { "Cash #{currency}" }
     amount 100
     association :money_store, factory: :money_store, strategy: :build
   end

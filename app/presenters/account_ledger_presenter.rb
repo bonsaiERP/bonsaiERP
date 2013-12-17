@@ -171,6 +171,14 @@ class AccountLedgerPresenter < BasePresenter
     end
   end
 
+  def trans_account_url
+    if trans_account.is_a?(Loan)
+      template.loan_path(trans_account.id)
+    else
+      trans_account
+    end
+  end
+
   def trans_account_tag
     "#{account_icon trans_account} #{sanitize trans_account}".html_safe
   end

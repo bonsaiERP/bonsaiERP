@@ -52,6 +52,7 @@ describe Loans::ReceivePaymentForm do
 
       lp.create_payment.should be_true
       lp.ledger.amount.should == -50
+      lp.ledger.currency.should eq('BOB')
 
       loan = Loans::Receive.find(lf.loan.id)
       loan.amount.should == 50
@@ -168,6 +169,51 @@ describe Loans::ReceivePaymentForm do
       l.amount.should == 200
       l.should be_is_approved
     end
+
+    context 'other currencies' do
+      let(:cash2) { create :cash, currency: 'USD', amount: 0 }
+
+      it 'USD and BOB' do
+        lf = Loans::ReceiveForm.new(loan_attr.merge(account_to_id: cash2.id))
+
+        lf.create.should be_true
+        lf.loan.should be_persisted
+        lf.loan.should be_is_a(Loans::Receive)
+        lf.loan.amount.should == 100
+        lf.loan.total.should == 100
+        lf.loan.currency.should eq('USD')
+        lf.loan.ledger_in.should be_is_a(AccountLedger)
+        lf.loan.ledger_in.should be_is_lrcre
+        cash2.reload.amount.should == 100
+
+        lp = Loans::ReceivePaymentForm.new(attributes.merge(account_id: lf.loan.id, exchange_rate: 5))
+
+        lp.create_payment.should be_true
+        lp.ledger.amount.should == -50
+        lp.ledger.currency.should eq('BOB')
+
+        loan = Loans::Receive.find(lf.loan.id)
+        loan.amount.should == 90
+
+        c = Cash.find(cash.id)
+        c.amount.should == -50
+
+        lp = Loans::ReceivePaymentForm.new(attributes.merge(account_id: lf.loan.id, amount: 95, account_to_id: cash2.id))
+        lp.create_payment.should be_false
+        lp.errors[:amount].should eq([I18n.t('errors.messages.less_than_or_equal_to', count: 90.0)])
+
+        # Pay in USD
+
+        lp = Loans::ReceivePaymentForm.new(attributes.merge(account_id: lf.loan.id, amount: 90, account_to_id: cash2.id))
+
+        lp.create_payment.should be_true
+        loan = Loans::Receive.find(loan.id)
+
+        loan.amount.should == 0
+        loan.should be_is_paid
+      end
+    end
+
   end
 
 end
