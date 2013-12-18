@@ -231,8 +231,9 @@ $( ->
   rowCheck = ->
     $(this).on('click', '>li,>tr', (event) ->
       target = event.target
+      $target = $(target)
 
-      return true  if target.tagName is 'A'
+      return true  if $target.get(0).tagName is 'A' or $target.parent('a').length > 0
 
       $check = $(this).find('input.row-check')
       $row = $check.parents('tr,li')

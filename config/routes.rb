@@ -170,5 +170,9 @@ Bonsaierp::Application.routes.draw do
   resources :tests
   get '/kitchen' => 'tests#kitchen' # Tests
 
+  get '/404', to: 'errors#page_not_found'
+  get '/422', to: 'errors#unacceptable'
+  get '/500', to: 'errors#internal_error'
+
   root to: 'sessions#new'
 end
