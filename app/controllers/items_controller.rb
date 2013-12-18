@@ -87,12 +87,17 @@ class ItemsController < ApplicationController
     end
 
     def search_items
+      filter_params
       @items = Item.includes(:unit, :stocks)
-      @items = @items.for_sale  if params[:for_sale].present?
+      @items = @items.where(for_sale: params[:for_sale])  if params[:for_sale].present?
       @items = @items.search(search_term).includes(:unit)  if search_term.present?
       @items = @items.all_tags(*tag_ids)  if params[:search] && has_tags?
 
       @items = @items.order('name asc').page(@page)
+    end
+
+    def filter_params
+      params[:all] = true  if params[:for_sale].blank?
     end
 
     def item_params

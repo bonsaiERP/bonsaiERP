@@ -6,11 +6,8 @@ class ContactsController < ApplicationController
 
   # GET /contacts
   def index
-    if search_term.present?
-      @contacts = Contact.search(search_term).order('matchcode asc').page(@page)
-    else
-      @contacts = Contact.order('matchcode asc').page(@page)
-    end
+    @contacts = Contacts::Query.new.index.order('matchcode asc').page(@page)
+    @contacts = @contacts.search(params[:search])  if params[:search].present?
 
     respond_to do |format|
       format.html

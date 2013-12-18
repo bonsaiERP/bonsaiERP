@@ -10,9 +10,7 @@
   .span6.r
     = link_to icon_new_text, new_contact_path, class: 'btn'
 
-.row-fluid
-  .span6
-    = render 'contacts/search'
+= render 'contacts/search'
 
 - paginate_html = paginate(@contacts)
 
@@ -25,8 +23,9 @@
 
 :javascript
   $(function() {
-    $('.contact').each(function() {
+    /*$('.contact').each(function() {
       cb = new App.ContactBalance(this)
       cb.render()
     })
+    */
   })

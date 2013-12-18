@@ -1,7 +1,7 @@
--# content_for :links do
+- content_for :links do
   %ul.breadcrumbs.span6
     %li
-      &nbsp;
+      = link_to 'Ingresos', incomes_path
 
 
 .row-fluid
@@ -23,9 +23,9 @@
   %li
     = link_to "Todos", incomes_path, class: params_bold(:all)
   %li
-    = link_to "Aprobados", incomes_path(approved: true), class: params_bold(:approved)
+    = link_to "Atrasados", incomes_path(due: true), class: "red #{params_bold(:due)}"
   %li
-    = link_to "Atrasados", incomes_path(due: true), class: params_bold(:due)
+    = link_to "Aprobados", incomes_path(approved: true), class: params_bold(:approved)
   %li
     = link_to "Con error", incomes_path(error: true), class: params_bold(:error)
   %li
