@@ -6,6 +6,8 @@
 #= require libraries/backbone.js
 #= require libraries/rivets.js
 
+#= require angular/angular.min.js
+
 #= require jquery/select2.js
 #= require jquery/flot/jquery.flot.js
 #= require jquery/flot/jquery.flot.time.js
@@ -35,6 +37,11 @@
 #= require app/contact.coffee
 #= require app/inventory.coffee
 #= require app/account_ledger.coffee
+
+## Angular
+#= require_tree ./controllers
+#= require_tree ./services
+#= require_tree ./directives
 
 #= require plugins/bride.coffee
 #= require plugins/color.coffee

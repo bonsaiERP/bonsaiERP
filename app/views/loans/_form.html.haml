@@ -14,19 +14,19 @@
 .row-fluid
   .span6
     = f.input :account_to_id, label: 'Cuenta',
-      input_html: { id: 'loan_account_to_id', class: 'span10' }
+      input_html: { id: 'account_to_id', class: 'span10', 'ng-model' => 'account_to_id' }
   .span2
     = f.input :total, label: 'Cantidad <span class="currency"></span>'.html_safe,
-      input_html: { id: 'total', type: 'decimal', size: 12 }
+      input_html: { id: 'total', type: 'decimal', size: 12, 'ng-model' => 'total' }
   .span2
     = f.input :exchange_rate, label: 'Tipo de cambio',
       input_html: { disabled: true, type: 'decimal', size: 10,
-      data: { value: 'payment.exchange_rate', disabled: 'payment.sameCurrency' }}
+        'ng-model' => 'exchange_rate', 'ng-initial' => true }
   .span2
     .moneybox
       %label TOTAL
       %h4
-        %span#currency_total(data-text="payment.totalCurrency")
+        %span#currency_total {{ total * exchange_rate }}
         %span#payment-currency-label.currency
 
 .row-fluid

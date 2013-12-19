@@ -9,8 +9,6 @@ gem 'coffee-rails' , '~> 4.0.1'
 gem 'uglifier'     , '>= 2.3.0'
 gem 'jquery-rails'
 
-#gem 'assets', git: 'git://github.com/boriscy/assets.git'
-
 # gem 'turbo-sprockets-rails3'# Speed assets:precompile
 
 gem 'compass-rails', '~> 1.1.2'#, '~> 2.0.alpha.0' # Extend css clases

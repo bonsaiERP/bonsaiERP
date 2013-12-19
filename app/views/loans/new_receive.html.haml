@@ -8,21 +8,9 @@
   Recibir prestamo
 
 
-= simple_form_for @loan, url: receive_loans_path do |f|
-  = render 'form', f: f
+#loan(ng-controller='LoanController')
+  = simple_form_for @loan, url: receive_loans_path do |f|
+    = render 'form', f: f
 
-  .form-actions
-    = f.submit 'Recibir prestamo', class: 'btn btn-large btn-primary'
-
-:javascript
-  $(function() {
-    var p = new App.LoanPayment({
-      accountsTo: #{Accounts::Query.new.bank_cash_options.to_json},
-      baseCurrency: "#{currency}",
-      account_to_id: "#{@loan.account_to_id}",
-      amount: #{@loan.total},
-      date: "#{@loan.date}",
-      exchange_rate: #{@loan.exchange_rate},
-      reference: "#{@loan.reference}"
-    });
-  })
+    .form-actions
+      = f.submit 'Recibir prestamo', class: 'btn btn-large btn-primary'
