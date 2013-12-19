@@ -4,7 +4,7 @@
 class ItemsController < ApplicationController
   include Controllers::TagSearch
 
-  before_filter :set_item, :only => [:show, :edit, :update, :destroy]
+  before_filter :set_item, only: [:show, :edit, :update, :destroy]
 
   # GET /items
   def index
@@ -89,15 +89,19 @@ class ItemsController < ApplicationController
     def search_items
       filter_params
       @items = Item.includes(:unit, :stocks)
-      @items = @items.where(for_sale: params[:for_sale])  if params[:for_sale].present?
-      @items = @items.search(search_term).includes(:unit)  if search_term.present?
+      @items = @items.where(for_sale: for_sale_param)  if params[:for_sale].present?
+      @items = @items.search(search_term)  if search_term.present?
       @items = @items.all_tags(*tag_ids)  if params[:search] && has_tags?
 
-      @items = @items.order('name asc').page(@page)
+      @items = @items.order('items.name asc').page(@page)
     end
 
     def filter_params
       params[:all] = true  if params[:for_sale].blank?
+    end
+
+    def for_sale_param
+      ['true', true, '1', 1].include?(params.fetch(:for_sale)) == true ? true : false
     end
 
     def item_params

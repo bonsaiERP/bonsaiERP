@@ -9,6 +9,7 @@ class Loans::Form < BaseForm
   attribute :total, Decimal, default: 0
   attribute :reference, String
   attribute :description, String
+  attribute :exchange_rate, Decimal, default: 1
 
   #attr_accessor :klass, :ledger_sign, :ledger_operation
 
@@ -17,6 +18,8 @@ class Loans::Form < BaseForm
 
   # validations
   validates_presence_of :account_to_id, :account_to, :reference
+  validates :exchange_rate, numericality: { greater_than: 0 }
+
 
   def contact
     @contact ||= Contact.find_by(id: contact_id)

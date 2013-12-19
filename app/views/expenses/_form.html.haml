@@ -45,5 +45,5 @@
 
     fx.rates = exchangeRates.rates;
     expense = new App.Expense();
-    expense.setAccountsTo(#{AccountQuery.new.bank_cash_options.to_json});
+    expense.setAccountsTo(#{Accounts::Query.new.bank_cash_options.to_json});
   });

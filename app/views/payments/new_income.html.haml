@@ -14,7 +14,7 @@
 :javascript
   $(function() {
     var p = new App.IncomePayment({
-      accountsTo: #{AccountQuery.new.income_payment_options(@payment.income).to_json},
+      accountsTo: #{Accounts::Query.new.income_payment_options(@payment.income).to_json},
       baseCurrency: "#{@payment.income_currency}",
       account_to_id: "#{@payment.account_to_id}",
       amount: #{@payment.amount},

@@ -4,12 +4,12 @@
 class MovementPresenter < BasePresenter
 
   def present_ledgers
-    present AccountLedgerQuery.new.payments_ordered(id), AccountLedgerPresenter
+    present AccountLedgers::Query.new.payments_ordered(id), AccountLedgerPresenter
   end
   alias_method :payments_and_devolutions, :present_ledgers
 
   def pendent_ledgers
-    present AccountLedgerQuery.new.payments_ordered(id).pendent, AccountLedgerPresenter
+    present AccountLedgers::Query.new.payments_ordered(id).pendent, AccountLedgerPresenter
   end
 
   #def payments_devolutions

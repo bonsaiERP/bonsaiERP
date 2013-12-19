@@ -15,7 +15,7 @@
 :javascript
   $(function() {
     var p = new App.ExpensePayment({
-      accountsTo: #{AccountQuery.new.expense_payment_options(@payment.expense).to_json},
+      accountsTo: #{Accounts::Query.new.expense_payment_options(@payment.expense).to_json},
       baseCurrency: "#{@payment.expense_currency}",
       account_to_id: "#{@payment.account_to_id}",
       amount: #{@payment.amount},

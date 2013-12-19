@@ -15,10 +15,15 @@
   .span6
     = f.input :account_to_id, label: 'Cuenta',
       input_html: { id: 'account_to_id', class: 'span10' }
-  .span3
+  .span2
     = f.input :total, label: 'Cantidad <span class="currency"></span>'.html_safe,
       input_html: { id: 'total', type: 'decimal' }
-  .span3
+  -#.span2
+    = f.input :echange_rate, label: 'Tipo de cambio',
+      input_html: { disabled: true, type: 'decimal', size: 10,
+      data: { value: 'payment.exchange_rate', disabled: 'payment.sameCurrency' }
+      }
+  .span2
     .moneybox
       %label TOTAL
       %h4

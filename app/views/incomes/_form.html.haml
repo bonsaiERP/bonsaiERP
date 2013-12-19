@@ -44,5 +44,5 @@
 
     fx.rates = exchangeRates.rates;
     income = new App.Income();
-    income.setAccountsTo(#{AccountQuery.new.bank_cash_options.to_json});
+    income.setAccountsTo(#{Accounts::Query.new.bank_cash_options.to_json});
   })(jQuery)

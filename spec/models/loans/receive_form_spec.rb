@@ -22,6 +22,29 @@ describe Loans::ReceiveForm do
     lf.create.should be_true
 
     lf.loan.should be_is_a(Loans::Receive)
+    lf.loan.currency.should eq('BOB')
+    lf.loan.amount.should == attributes.fetch(:total)
+    lf.loan.date.should eq(attributes.fetch(:date))
+    lf.loan.due_date.should eq(attributes.fetch(:due_date))
+    lf.loan.exchange_rate.should == 1.0
+    # ledger
+    lf.ledger.amount.should == 100
+    expect(lf.ledger.operation).to eq('lrcre')
+
+    cash.reload
+    cash.amount.should == 100
+  end
+
+  it "#create other currency" do
+    cash2 = create :cash, currency: 'USD', amount: 100
+    lf = Loans::ReceiveForm.new(attributes.merge(account_to_id: cash2.id, exchange_rate: 7))
+
+    # loan
+    lf.create.should be_true
+
+    lf.loan.should be_is_a(Loans::Receive)
+    lf.loan.currency.should eq('USD')
+    lf.loan.exchange_rate.should == 7.0
     lf.loan.amount.should == attributes.fetch(:total)
     lf.loan.date.should eq(attributes.fetch(:date))
     lf.loan.due_date.should eq(attributes.fetch(:due_date))
@@ -29,7 +52,7 @@ describe Loans::ReceiveForm do
     lf.ledger.amount.should == 100
     expect(lf.ledger.operation).to eq('lrcre')
 
-    cash.reload
-    cash.amount.should == 100
+    cash2.reload
+    cash2.amount.should == 200
   end
 end

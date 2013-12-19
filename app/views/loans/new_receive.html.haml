@@ -16,30 +16,13 @@
 
 :javascript
   $(function() {
-    var data = #{AccountQuery.new.bank_cash_options.to_json},
-        $box = $('.moneybox'),
-        $amount = $box.find('h4');
-
-    function setTotal() {
-      var val = parseInt($('#account_to_id').val()),
-          account = _.find(data, function(v) { return v.id === val }),
-          amount = $('#total').val() * 1;
-
-      $('.currency').html(_b.currencyLabel(account.currency))
-      $amount.html(_b.ntc(amount) + ' ' + _b.currencyLabel(account.currency));
-    }
-
-    $('#total').on('change', function() { setTotal() });
-
-    $('#account_to_id').select2('destroy')
-    .select2({
-      data: data,
-      formatResult: App.Payment.paymentOptions,
-      formatSelection: App.Payment.paymentOptions,
-      dropdownCssClass: 'hide-select2-search',
-      escapeMarkup: function(m) { return m }
-    })
-    .on('change', function() { setTotal() })
-
-    setTotal();
+    var p = new App.LoanPayment({
+      accountsTo: #{Accounts::Query.new.bank_cash_options.to_json},
+      baseCurrency: "#{currency}",
+      account_to_id: "#{@loan.account_to_id}",
+      amount: #{@loan.total},
+      date: "#{@loan.date}",
+      exchange_rate: #{@loan.exchange_rate.to_f},
+      reference: "#{@loan.reference}"
+    });
   })

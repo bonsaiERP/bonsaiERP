@@ -16,6 +16,7 @@ class Loans::ReceiveForm < Loans::Form
       contact_id: contact_id,
       total: total,
       amount: total,
+      exchange_rate: exchange_rate,
       state: 'approved',
       date: date, due_date: due_date,
       currency: currency
