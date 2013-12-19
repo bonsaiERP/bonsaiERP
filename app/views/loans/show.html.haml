@@ -10,6 +10,15 @@
 %h4.ib.n
   = link_to @loan.contact, @loan.contact, title: 'Contacto', data: { toggle: 'tooltip' }
 
+.clearfix
+- unless currency == @loan.currency
+  %p
+    Tipo de cambio 1
+    = currency_label currency
+    \=
+    = ntc@loan.exchange_rate, precision: 4
+    = currency_label @loan.currency
+
 .row-fluid
   .span6
     .moneybox

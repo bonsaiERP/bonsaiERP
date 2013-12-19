@@ -46,7 +46,7 @@ class LoansController < ApplicationController
 
     def loan_params
       [:contact_id, :date, :due_date, :account_to_id,
-       :total, :reference]
+       :total, :reference, :exchange_rate]
     end
 
     def give_params

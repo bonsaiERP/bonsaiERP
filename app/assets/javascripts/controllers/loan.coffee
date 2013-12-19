@@ -17,7 +17,8 @@ myApp.controller 'LoanController', ['$scope', ($scope) ->
     sc = $scope.baseCurrency is data.currency
     $scope.$apply (scope) ->
       scope.same_currency = sc
-      scope.exchange_rate = 7
+      rate = fx.convert(1, {from: data.currency, to: $scope.baseCurrency }).toFixed(4) * 1
+      scope.exchange_rate = rate
     $('.currency').html _b.currencyLabel data.currency
   )
 
