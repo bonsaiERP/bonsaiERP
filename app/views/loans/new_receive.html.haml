@@ -22,7 +22,7 @@
       account_to_id: "#{@loan.account_to_id}",
       amount: #{@loan.total},
       date: "#{@loan.date}",
-      exchange_rate: #{@loan.exchange_rate.to_f},
+      exchange_rate: #{@loan.exchange_rate},
       reference: "#{@loan.reference}"
     });
   })

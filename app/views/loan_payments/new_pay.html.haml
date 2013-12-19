@@ -13,7 +13,7 @@
 :javascript
   $(function() {
     var p = new App.LoanPayment({
-      accountsTo: #{AccountQuery.new.expense_payment_options(@payment.loan).to_json},
+      accountsTo: #{Accounts::Query.new.expense_payment_options(@payment.loan).to_json},
       baseCurrency: "#{@payment.currency}",
       account_to_id: "#{@payment.account_to_id}",
       amount: #{@payment.amount},

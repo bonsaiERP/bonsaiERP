@@ -15,7 +15,7 @@
 :javascript
   $(function() {
     var p = new App.ExpenseDevolution({
-      accountsTo: #{AccountQuery.new.expense_payment_options(@devolution.expense).to_json},
+      accountsTo: #{Accounts::Query.new.expense_payment_options(@devolution.expense).to_json},
       baseCurrency: "#{@devolution.expense_currency}",
       account_to_id: "#{@devolution.account_to_id}",
       amount: #{@devolution.amount},

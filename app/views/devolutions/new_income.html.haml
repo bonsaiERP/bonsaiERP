@@ -14,7 +14,7 @@
   $(function() {
 
     var p = new App.IncomeDevolution({
-      accountsTo: #{AccountQuery.new.bank_cash_options.to_json},
+      accountsTo: #{Accounts::Query.new.bank_cash_options.to_json},
       baseCurrency: "#{@devolution.income_currency}",
       account_to_id: "#{@devolution.account_to_id}",
       amount: #{@devolution.amount.to_f},
