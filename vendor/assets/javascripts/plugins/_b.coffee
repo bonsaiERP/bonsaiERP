@@ -104,7 +104,7 @@
     components = @getRGBComponents(bgColor)
     bgDelta = (components.R * 0.299) + (components.G * 0.587) + (components.B * 0.114)
 
-    if ((255 - bgDelta) < nThreshold) then "#000000" else "#ffffff"   
+    if ((255 - bgDelta) < nThreshold) then "#000000" else "#ffffff"
 
   getRGBComponents: (color) ->
 
@@ -117,3 +117,9 @@
        G: parseInt(g, 16),
        B: parseInt(b, 16)
     }
+
+  currencyLabel: (val) ->
+    if val?
+      ['<span class="label bg-black" title=',
+        '"', currencies[val]['name'], '"', ' data-toggle="tooltip">',
+        val, '</span>'].join('')

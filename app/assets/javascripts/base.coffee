@@ -343,7 +343,6 @@ init = ($) ->
     else
       'none'
 
-  _b.currencyLabel = rivets.formatters.currencyLabel
 
   rivets.formatters.inverse = (val) ->
     not val

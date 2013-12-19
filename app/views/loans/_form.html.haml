@@ -1,6 +1,9 @@
 
 = bonsai_form_error f
 
+%input(type='hidden' data-accounts='#{Accounts::Query.new.bank_cash_options.to_json}' id='accounts')
+%input(type='hidden' ng-model='baseCurrency' value='#{currency}' ng-initial)
+
 .row-fluid
   .span6
     = f.input :contact_id, as: :autocomplete, label: 'Contacto',
@@ -17,17 +20,17 @@
       input_html: { id: 'account_to_id', class: 'span10', 'ng-model' => 'account_to_id' }
   .span2
     = f.input :total, label: 'Cantidad <span class="currency"></span>'.html_safe,
-      input_html: { id: 'total', type: 'decimal', size: 12, 'ng-model' => 'total' }
+      input_html: { id: 'total', type: 'decimal', size: 12, 'ng-model' => 'total', 'ng-initial' => true }
   .span2
     = f.input :exchange_rate, label: 'Tipo de cambio',
-      input_html: { disabled: true, type: 'decimal', size: 10,
-        'ng-model' => 'exchange_rate', 'ng-initial' => true }
+      input_html: { type: 'decimal', size: 10,
+        'ng-model' => 'exchange_rate', 'ng-initial' => true, 'ng-disabled' => 'same_currency' }
   .span2
     .moneybox
       %label TOTAL
       %h4
-        %span#currency_total {{ total * exchange_rate }}
-        %span#payment-currency-label.currency
+        %span#currency_total {{ total * exchange_rate | decimal }}
+        %span.currency= currency_label currency
 
 .row-fluid
   .span6

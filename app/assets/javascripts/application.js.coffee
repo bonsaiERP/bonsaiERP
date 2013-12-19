@@ -27,7 +27,10 @@
 #= require bootstrap/bootstrap-tab.js
 #= require bootstrap/bootstrap-button.js
 
+#= require_tree ./filters
+
 #= require namespace.coffee
+
 #= require app/currency.coffee
 #= require app/exchange_rate.coffee
 #= require app/transaction.coffee
