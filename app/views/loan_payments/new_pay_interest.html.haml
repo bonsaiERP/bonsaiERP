@@ -1,27 +1,15 @@
 %h4.title Pagar intereses
 
-= simple_form_for @payment, url: pay_interest_loan_payment_path(@loan.id),
-  html: { id: 'loan-payment-form' } do |f|
-  = bonsai_form_error(f)
-  = f.hidden_field :account_id, id: 'account_id'
+#loan(ng-controller='PaymentController')
+  = simple_form_for @payment, url: pay_interest_loan_payment_path(@loan.id),
+    html: { id: 'loan-payment-form' } do |f|
+    = bonsai_form_error(f)
+    = f.hidden_field :account_id, id: 'account_id'
 
-  = render 'loan_payments/form', f: f, loan: @loan
+    %input(type='hidden' id='accounts' data-accounts='#{Accounts::Query.new.expense_payment_options(@payment.loan).to_json}')
+    = hidden_field_tag 'base_currency', @payment.loan_currency, 'ng-model' => 'base_currency', 'ng-initial' => true
 
-  .form-actions
-    = f.submit 'Pagar intereses', class: 'btn b btn-success'
-    -#%a.cancel.btn(hre='javascript:;') Cancelar
+    = render 'loan_payments/form', f: f, loan: @loan
 
-:javascript
-  $(function() {
-    var p = new App.LoanPayment({
-      accountsTo: #{AccountQuery.new.expense_payment_options(@payment.loan).to_json},
-      baseCurrency: "#{@payment.currency}",
-      account_to_id: "#{@payment.account_to_id}",
-      amount: #{@payment.amount},
-      date: "#{@payment.date}",
-      exchange_rate: #{@payment.exchange_rate.to_f},
-      reference: "#{@payment.reference}",
-      verification: #{@payment.verification}
-    });
-  })
-
+    .form-actions
+      = f.submit 'Pagar intereses', class: 'btn b btn-success'

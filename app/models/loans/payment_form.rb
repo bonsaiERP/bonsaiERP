@@ -14,9 +14,11 @@ class Loans::PaymentForm < BaseForm
   validates :amount, numericality: { greater_than: 0 }
   validate :valid_loan_amount
 
-  delegate :currency, to: :loan, allow_nil: true
+  delegate :currency, to: :loan, allow_nil: true, prefix: true
   delegate :currency, to: :account_to, allow_nil: true, prefix: true
   delegate :exchange_rate, to: :currency_exchange, prefix: 'cur'
+
+  alias_method :currency, :loan_currency
 
   def account_to
     @account_to ||= Account.find_by(id: account_to_id)

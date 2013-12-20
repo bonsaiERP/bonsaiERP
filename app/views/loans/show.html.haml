@@ -45,7 +45,7 @@
 
       = @loan.payment_link
 
-    #payment-form.form-container
+    #payment-form.form-container(ng-controller='DynamicController' dynamic='htmlContent')
 
     %ul.unstyled.listing
       = render partial: 'payment', collection: present(@loan.payments_devolutions), as: :ledger
@@ -55,7 +55,7 @@
     .center
       = @loan.interest_link
 
-    #interest-form.form-container
+    #interest-form.form-container(ng-controller='DynamicController' dynamic='htmlContent')
 
     %ul.unstyled.listing
       = render partial: 'payment', collection: present(@loan.interest_ledgers), as: :ledger

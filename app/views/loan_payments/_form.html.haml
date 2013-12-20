@@ -8,25 +8,23 @@
   .span3
     = f.input :amount,
       label: 'Cantidad <span class="currency"></span>'.html_safe,
-      input_html: {type: 'decimal', size: 10,
-      data: {value: 'payment.amount'} }
+      input_html: { type: 'decimal', size: 10, 'ng-model' => 'amount', 'ng-initial' => true }
   .span3
-    %div(data-display="payment.cash")
-      = f.input :exchange_rate, label: 'Tipo de cambio',
-        input_html: {disabled: true, type: 'decimal', size: 10,
-        data: {value: 'payment.exchange_rate', disabled: 'payment.sameCurrency'} }
+    = f.input :exchange_rate, label: 'Tipo de cambio',
+      input_html: { type: 'decimal', size: 10, 'ng-initial' => true,
+      'ng-model' => 'exchange_rate', 'ng-disabled' => 'same_currency' }
   .span4
     .moneybox
       %label TOTAL
       %h4
-        %span#currency_total(data-text="payment.totalCurrency")
+        %span#currency_total {{ amountCurrency() | decimal }}
         %span#payment-currency-label= currency_label loan.currency
 
 .row-fluid
   .span6
     = f.input :date, as: :datepicker, label: 'Fecha'
   .span6
-    %div.form-inline(data-show="payment.bank")
+    %div.form-inline(ng-show='is_bank')
       = f.input :verification, as: :boolean, label: 'Verificar (solo banco)',
         input_html: { data: {value: 'payment.verification', checked: 'payment.verification' } },
        hint: 'Verificar a futuro. Ej.: (Cheque)'
