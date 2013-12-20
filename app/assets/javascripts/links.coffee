@@ -24,12 +24,11 @@ $(->
           $scope= $div.scope()
           console.log $scope
           $scope.$apply (scope) -> scope.htmlContent = resp
-          #console.log scope, scope.htmlContent
         else
           $div.html(resp)
 
-        #$div.setDatepicker()
-        #createCancelButton($div, $this)
+        $div.setDatepicker()
+        createCancelButton($div, $this)
     )
     $div.on 'reload:ajax-modal', ->
       createCancelButton($div, $this)

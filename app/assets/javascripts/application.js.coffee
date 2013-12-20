@@ -6,7 +6,6 @@
 #= require libraries/backbone.js
 #= require libraries/rivets.js
 
-#= require angular/angular.min.js
 
 #= require jquery/select2.js
 #= require jquery/flot/jquery.flot.js
@@ -16,8 +15,13 @@
 #= require jquery/jquery.minicolors.js
 #= require jquery/jquery.scrollTo.js
 
+# Goes before namespace where is defined myApp for angularjs
+#= require angular/angular.min.js
+#= require namespace.coffee
+
 #= require plugins/money.min.js
 #= require plugins/_b.coffee
+#= require plugins/payment.coffee
 
 #= require bootstrap/bootstrap-dropdown.js
 #= require bootstrap/bootstrap-tooltip.js
@@ -29,13 +33,10 @@
 
 #= require_tree ./filters
 
-#= require namespace.coffee
-
 #= require app/currency.coffee
 #= require app/exchange_rate.coffee
 #= require app/transaction.coffee
-# require app/payment.coffee
-#= require app/transference.coffee
+# require app/transference.coffee
 #= require app/graph_report.coffee
 #= require app/contact.coffee
 #= require app/inventory.coffee

@@ -38,14 +38,19 @@ $( ->
       'type': (data['_method'] or $el.attr('method') )
     )
     .success (resp, status, xhr) ->
-      if typeof resp == "object"
+      if typeof resp == 'object'
         callEvents($div.data(), resp)
         $div.html('').dialog('destroy')
-        #$('body').trigger(trigger, [resp])
       else if resp.match(/^\/\/\s?javascript/)
         $div.html('').dialog('destroy')
       else
-        $div.html(resp)
+        if $div.attr('ng-controller')
+          $scope= $div.scope()
+          console.log $scope
+          $scope.$apply (scope) -> scope.htmlContent = resp
+        else
+          $div.html(resp)
+
         setTimeout(->
           $div.setDatepicker()
         ,200)

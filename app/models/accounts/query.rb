@@ -40,7 +40,7 @@ class Accounts::Query
   end
 
   def income_options(expense)
-    options = Income.approved.where(contact_id: income.contact_id)
+    options = Income.approved.where(contact_id: expense.contact_id)
     unless expense.currency == OrganisationSession.currency
       options = options.where(currency: [expense.currency, OrganisationSession.currency])
     end

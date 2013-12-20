@@ -25,12 +25,11 @@
 .row-fluid
   .span6
     = f.input :date, as: :datepicker, label: 'Fecha'
-  .span6
-    %div.form-inline(data-show="payment.bank")
+  .span6.form-inline
+    %div(ng-show='is_bank')
       = f.input :verification, as: :boolean, label: 'Verificar (solo banco)',
-        input_html: {data: {value: 'payment.verification', checked: 'payment.verification'} },
-       hint: 'Verificar a futuro. Ej.: (Cheque)'
+        hint: 'Verificar a futuro. Ej.: (Cheque)'
 
 .row-fluid
   .span12
-    = f.input :reference, label: 'Referencia', as: :text, input_html: {rows: 3, class: 'span11', data: {value: 'payment.reference'} }
+    = f.input :reference, label: 'Referencia', as: :text, input_html: { rows: 3, class: 'span11' }

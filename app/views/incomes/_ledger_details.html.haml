@@ -18,8 +18,6 @@
 
 
 #payment-form.form-container(ng-controller='DynamicController' dynamic='htmlContent')
--#= link_to 'Ver cobros y devoluciones', ledgers_income_path(income.id),
-  class: 'openin', data: { openin: '.ledgers', openinhide: true  }
 
 %ul.unstyled.listing.ledgers
   = render partial: 'account_ledgers/movement', collection: income.present_ledgers, locals: { current_account_id: income.id }, as: :ledger
