@@ -10,8 +10,11 @@ class Accounts::Query
     @rel.active.where(type: %w(Cash Bank)).includes(:money_store)
   end
 
-  def bank_cash_options
-    blank + bank_cash.map { |v| create_hash(v, *default_options) }
+  def bank_cash_options(cur = OrganisationSession.currency)
+    options = bank_cash
+    options = options.where(currency: [cur, OrganisationSession.currency])  unless cur == OrganisationSession.currency
+
+    blank + options.map { |v| create_hash(v, *default_options) }
   end
 
   def bank_cash_options_minus(*ids)
@@ -20,15 +23,29 @@ class Accounts::Query
   end
 
   def income_payment_options(income)
-    bank_cash_options + Expense.approved
-    .where(contact_id: income.contact_id)
-    .map { |v| create_hash(v, *default_options) }
+    bank_cash_options(income.currency) + expense_options(income)
+  end
+
+  def expense_options(income)
+    options = Expense.approved.where(contact_id: income.contact_id)
+    unless income.currency == OrganisationSession.currency
+      options = options.where(currency: [income.currency, OrganisationSession.currency])
+    end
+
+    options.map { |v| create_hash(v, *default_options) }
   end
 
   def expense_payment_options(expense)
-    bank_cash_options + Income.approved
-    .where(contact_id: expense.contact_id)
-    .map { |v| create_hash(v, *default_options) }
+    bank_cash_options(expense.currency) + income_options(expense)
+  end
+
+  def income_options(expense)
+    options = Income.approved.where(contact_id: income.contact_id)
+    unless expense.currency == OrganisationSession.currency
+      options = options.where(currency: [expense.currency, OrganisationSession.currency])
+    end
+
+    options.map { |v| create_hash(v, *default_options) }
   end
 
   def create_hash(v, *args)

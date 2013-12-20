@@ -7,7 +7,7 @@ class ContactsController < ApplicationController
   # GET /contacts
   def index
     @contacts = Contacts::Query.new.index.order('matchcode asc').page(@page)
-    @contacts = @contacts.search(params[:search])  if params[:search].present?
+    @contacts = @contacts.search(search_term)  if search_term
 
     respond_to do |format|
       format.html
@@ -78,5 +78,9 @@ class ContactsController < ApplicationController
 
     def contact_params
       params.require(:contact).permit(:matchcode, :first_name, :last_name, :email, :phone, :mobile, :tax_number, :address)
+    end
+
+    def search_term
+      @search_term ||= params[:search] || params[:term]
     end
 end

@@ -26,11 +26,11 @@ class Cash < Account
   end
 
   def pendent_ledgers
-    AccountLedgerQuery.new.money(id).pendent
+    AccountLedgers::Query.new.money(id).pendent
   end
 
   def get_ledgers(attrs = {})
-    AccountLedgerQuery.new.money(id)
+    AccountLedgers::Query.new.money(id)
   end
 
   def to_s

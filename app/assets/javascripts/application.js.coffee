@@ -34,7 +34,7 @@
 #= require app/currency.coffee
 #= require app/exchange_rate.coffee
 #= require app/transaction.coffee
-#= require app/payment.coffee
+# require app/payment.coffee
 #= require app/transference.coffee
 #= require app/graph_report.coffee
 #= require app/contact.coffee

@@ -74,37 +74,6 @@ init = ($) ->
 
   window.AjaxLoadingHTML = AjaxLoadingHTML
 
-  ########################################
-  # Presents any link url in a modal dialog and loads with AJAX the url
-  $('body').on('click', 'a.ajax', (event) ->
-    event.preventDefault()
-
-    id = new Date().getTime().toString()
-    $this = $(this)
-    $this.data('ajax_id', id)
-
-    $div = createDialog({
-      title: $this.data('title'),
-      # Elem related with the call input, select, etc
-      elem: $this.data('elem'),
-      width: $this.data('width') || 800,
-      # Return response instead of calling default
-      return: $this.data('return')
-    })
-
-    $div.load( $this.attr("href"), (resp, status, xhr, dataType) ->
-      $this = $(this)
-      $div = $('<div>').html(resp)
-      $this.find('.form-actions').append('<a class="btn cancel" href="javascript:;">Cancelar</a>')
-
-      $tit = $this.dialog('widget').find('.ui-dialog-title')
-      .text($div.find('h1').text())
-
-      $div.setDatepicker()
-    )
-    event.stopPropagation()
-  )
-
   $('body').on('click', '.ui-dialog-content.ajax-modal .cancel', ->
     $(this).parents('.ajax-modal').dialog('close')
   )

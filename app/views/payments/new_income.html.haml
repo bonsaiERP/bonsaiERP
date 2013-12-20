@@ -1,26 +1,17 @@
 %h4.title Cobrar
 
-= simple_form_for @payment, url: income_payment_path(@payment.account_id),
-  html: { id: 'income-payment-form' } do |f|
-  = bonsai_form_error(f)
-  = f.hidden_field :account_id
 
-  = render 'payments/default_form', f: f, movement: @payment.income
+#loan(ng-controller='PaymentController')
+  = simple_form_for @payment, url: income_payment_path(@payment.account_id),
+    html: { id: 'income-payment-form' } do |f|
+    = bonsai_form_error(f)
+    = f.hidden_field :account_id
 
-  .form-actions
-    = f.submit "Cobrar", class: 'btn b btn-success'
-    %a.cancel.btn(hre='javascript:;') Cancelar
+    %input(type='hidden' id='accounts' data-accounts='#{Accounts::Query.new.income_payment_options(@payment.income).to_json}')
+    = hidden_field_tag 'base_currency', @payment.income_currency, 'ng-model' => 'base_currency', 'ng-initial' => true
 
-:javascript
-  $(function() {
-    var p = new App.IncomePayment({
-      accountsTo: #{Accounts::Query.new.income_payment_options(@payment.income).to_json},
-      baseCurrency: "#{@payment.income_currency}",
-      account_to_id: "#{@payment.account_to_id}",
-      amount: #{@payment.amount},
-      date: "#{@payment.date}",
-      exchange_rate: #{@payment.exchange_rate.to_f},
-      reference: "#{@payment.reference}",
-      verification: #{@payment.verification}
-    });
-  })
+    = render 'payments/default_form', f: f, movement: @payment.income
+
+    .form-actions
+      = f.submit "Cobrar", class: 'btn b btn-success'
+      %a.cancel.btn(hre='javascript:;') Cancelar

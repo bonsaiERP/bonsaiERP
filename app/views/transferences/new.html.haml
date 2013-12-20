@@ -62,7 +62,7 @@
 :javascript
   $(function() {
     var t = new App.Transference({
-      accountsTo: #{AccountQuery.new.bank_cash_options_minus(@account.id).to_json},
+      accountsTo: #{Accounts::Query.new.bank_cash_options_minus(@account.id).to_json},
       baseCurrency: "#{@account.currency}",
       currency: "#{@transference.account_to_currency}",
       exchange_rate: "#{@transference.exchange_rate}",

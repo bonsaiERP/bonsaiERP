@@ -21,5 +21,4 @@ myApp.controller 'LoanController', ['$scope', ($scope) ->
       scope.exchange_rate = rate
     $('.currency').html _b.currencyLabel data.currency
   )
-
 ]

@@ -60,7 +60,7 @@ describe Incomes::Form do
       is = Incomes::Form.new_income(account_to_id: 2, direct_payment: "1")
 
       is.should_not be_valid
-      AccountQuery.any_instance.stub_chain(:bank_cash, where: [( build :cash, id: 2 )])
+      Accounts::Query.any_instance.stub_chain(:bank_cash, where: [( build :cash, id: 2 )])
 
       is = Incomes::Form.new_income(account_to_id: 2, direct_payment: "1")
       is.details.should have(2).items
@@ -72,7 +72,7 @@ describe Incomes::Form do
         {item_id: 1, quantity: 10, price: 1}, {item_id: 2, quantity: 10, price: 3},
         {item_id: 1, quantity: 3, price: 5}
       ])
-      AccountQuery.any_instance.stub_chain(:bank_cash, where: [( build :cash, id: 2 )])
+      Accounts::Query.any_instance.stub_chain(:bank_cash, where: [( build :cash, id: 2 )])
       IncomeDetail.any_instance.stub(item: true)
 
       is.should_not be_valid

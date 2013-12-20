@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131219141659) do
+ActiveRecord::Schema.define(version: 20131211134555) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -210,11 +210,10 @@ ActiveRecord::Schema.define(version: 20131219141659) do
   add_index "links", ["user_id"], name: "index_links_on_user_id", using: :btree
 
   create_table "loan_extras", force: true do |t|
-    t.integer "step",                                   default: 1
-    t.integer "loan_id",                                              null: false
-    t.date    "due_date",                                             null: false
-    t.decimal "interests",     precision: 14, scale: 2, default: 0.0, null: false
-    t.decimal "exchange_rate", precision: 14, scale: 4, default: 1.0
+    t.integer "step",                               default: 1
+    t.integer "loan_id",                                          null: false
+    t.date    "due_date",                                         null: false
+    t.decimal "interests", precision: 14, scale: 2, default: 0.0, null: false
   end
 
   add_index "loan_extras", ["loan_id"], name: "index_loan_extras_on_loan_id", unique: true, using: :btree

@@ -4,20 +4,20 @@
   Cobros y devoluciones
 
 
-.payment-form.form-container.ajax-modal
-
 %p.center.payment-buttons
 
   - if income.can_pay?
-    = link_to '', class: 'btn btn-success w100p', data: { remote: true, url: new_income_payment_path(income.id) } do
+    = link_to new_income_payment_path(income.id), class: 'btn btn-success w100p', data: { target: '#payment-form' } do
       %i.icon-plus-sign
       Cobrar
 
   - if income.can_devolution?
-    = link_to '', class: 'btn btn-danger w100p', id: 'devolution-link', data: {remote: true, url: new_income_devolution_path(income.id) } do
+    = link_to new_income_devolution_path(income.id), class: 'btn btn-danger w100p', id: 'devolution-link', data: { target: '#payment-form' } do
       %i.icon-minus-sign
       Devolución
 
+
+#payment-form.form-container(ng-controller='DynamicController' dynamic='htmlContent')
 -#= link_to 'Ver cobros y devoluciones', ledgers_income_path(income.id),
   class: 'openin', data: { openin: '.ledgers', openinhide: true  }
 

@@ -2,7 +2,7 @@
 = bonsai_form_error f
 
 %input(type='hidden' data-accounts='#{Accounts::Query.new.bank_cash_options.to_json}' id='accounts')
-%input(type='hidden' ng-model='baseCurrency' value='#{currency}' ng-initial)
+%input(type='hidden' ng-model='baseCurrency' value='#{currency}' ng-initial='true')
 
 .row-fluid
   .span6

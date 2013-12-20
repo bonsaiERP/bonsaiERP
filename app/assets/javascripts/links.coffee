@@ -13,15 +13,23 @@ $(->
     $div = $($this.data('target'))
     $div.addClass('ajax-modal').data('link', $this)
     .show('medium')
-    .html(AjaxLoadingHTML())
-    .load($this.attr('href'), (resp, status) ->
+    #.html(AjaxLoadingHTML())
+    $.get($this.attr('href'), (resp, status) ->
       if status is 'error'
         $div.hide('medium')
         $this.show('medium')
         alert 'Exisiton un error'
       else
-        $div.setDatepicker()
-        createCancelButton($div, $this)
+        if $div.attr('ng-controller')
+          $scope= $div.scope()
+          console.log $scope
+          $scope.$apply (scope) -> scope.htmlContent = resp
+          #console.log scope, scope.htmlContent
+        else
+          $div.html(resp)
+
+        #$div.setDatepicker()
+        #createCancelButton($div, $this)
     )
     $div.on 'reload:ajax-modal', ->
       createCancelButton($div, $this)
@@ -56,4 +64,41 @@ $(->
     )
 
   $.rowCheck = $.fn.rowCheck = rowCheck
+
+
+  ########################################
+  # Presents any link url in a modal dialog and loads with AJAX the url
+  $('body').on('click', 'a.ajax', (event) ->
+    event.preventDefault()
+
+    id = new Date().getTime().toString()
+    $this = $(this)
+    $this.data('ajax_id', id)
+
+    $div = createDialog({
+      title: $this.data('title'),
+      # Elem related with the call input, select, etc
+      elem: $this.data('elem'),
+      width: $this.data('width') || 800,
+      # Return response instead of calling default
+      return: $this.data('return')
+    })
+
+    $div.load( $this.attr("href"), (resp, status, xhr, dataType) ->
+      $this = $(this)
+
+      if $div.attr('ng-controller')
+        $div.scope().htmlContent = resp
+      else
+        $div = $('<div>').html(resp)
+
+      $this.find('.form-actions').append('<a class="btn cancel" href="javascript:;">Cancelar</a>')
+
+      $tit = $this.dialog('widget').find('.ui-dialog-title')
+      .text($div.find('h1').text())
+
+      $div.setDatepicker()
+    )
+    event.stopPropagation()
+  )
 )

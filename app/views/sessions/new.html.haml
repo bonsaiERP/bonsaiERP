@@ -21,7 +21,7 @@
             .input-prepend.cont-login
               %span.add-on.prepend.square
                 %i.muted.icon-envelope
-              = f.text_field :email, size: 30, placeholder: 'Email'
+              = f.text_field :email, size: 30, placeholder: 'Email', class: 'email'
           = f.input :password, label: false do
             .input-prepend.cont-login
               %span.add-on.prepend.square
@@ -39,6 +39,8 @@
 
 :javascript
   $(function() {
+    $('input.email').focus();
+
     $('#reset-password-link').click(function() {
       $('#login').hide(300);
       $('#password').show(300);

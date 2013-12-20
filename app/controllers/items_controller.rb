@@ -19,7 +19,7 @@ class ItemsController < ApplicationController
   # Search for income items
   # GET /items/search_income?term=:term
   def search_income
-    @items = ItemQuery.new.income_search(params[:term]).limit(20)
+    @items = Item.income.search(params[:term]).limit(20)
 
     respond_to do |format|
       format.json { render json: @items }
@@ -29,7 +29,7 @@ class ItemsController < ApplicationController
   # Search for expense items
   # GET /items/search_expense?term=:term
   def search_expense
-    @items = ItemQuery.new.expense_search(params[:term]).limit(20)
+    @items = Item.expense.search(params[:term]).limit(20)
 
     respond_to do |format|
       format.json { render json: @items }

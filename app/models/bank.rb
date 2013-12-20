@@ -22,11 +22,11 @@ class Bank < Account
   end
 
   def pendent_ledgers
-    AccountLedgerQuery.new.money(id).pendent
+    AccountLedgers::Query.new.money(id).pendent
   end
 
   def ledgers
-    AccountLedgerQuery.new.money(id)
+    AccountLedgers::Query.new.money(id)
   end
 
   def to_s
@@ -34,7 +34,7 @@ class Bank < Account
   end
 
   def get_ledgers(attrs = {})
-    ledgers = AccountLedgerQuery.new.money(id)
+    ledgers = AccountLedgers::Query.new.money(id)
     ledgers = ledgers.pendent if attrs[:pendent].present?
     ledgers
   end

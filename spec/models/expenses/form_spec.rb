@@ -58,7 +58,7 @@ describe Expenses::Form do
       es = Expenses::Form.new_expense(account_to_id: 2, direct_payment: "1")
 
       es.should_not be_valid
-      AccountQuery.any_instance.stub_chain(:bank_cash, where: [( build :cash, id: 2 )])
+      Accounts::Query.any_instance.stub_chain(:bank_cash, where: [( build :cash, id: 2 )])
 
       es = Expenses::Form.new_expense(account_to_id: 2, direct_payment: "1", total: 150)
       es.details.should have(2).items
@@ -70,7 +70,7 @@ describe Expenses::Form do
         {item_id: 1, quantity: 10, price: 1}, {item_id: 2, quantity: 10, price: 3},
         {item_id: 1, quantity: 3, price: 5}
       ])
-      AccountQuery.any_instance.stub_chain(:bank_cash, where: [( build :cash, id: 2 )])
+      Accounts::Query.any_instance.stub_chain(:bank_cash, where: [( build :cash, id: 2 )])
       ExpenseDetail.any_instance.stub(item: true)
 
       es.should_not be_valid

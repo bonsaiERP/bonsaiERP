@@ -1,24 +1,25 @@
+= hidden_field_tag 'organisation_currency', currency, 'ng-model' => 'organisation_currency', 'ng-initial' => true
+
 .row-fluid
   .span12
-    = f.input :account_to_id, label: 'Cuenta', input_html: {class: 'span10', data:{value: 'payment.account_to_id'}}
+    = f.input :account_to_id, label: 'Cuenta',
+      input_html: { id: 'account_to_id', class: 'span10', 'ng-model' => 'account_to_id' }
 
 %br
 .row-fluid.bg-white-tan.borders-y
   .span3
     = f.input :amount,
       label: 'Cantidad <span class="currency"></span>'.html_safe,
-      input_html: {type: 'decimal', size: 10,
-      data: {value: 'payment.amount'} }
+      input_html: { type: 'decimal', size: 10, 'ng-model' => 'amount', 'ng-initial' => true }
   .span3
-    %div(data-display="payment.cash")
-      = f.input :exchange_rate, label: 'Tipo de cambio',
-        input_html: {disabled: true, type: 'decimal', size: 10,
-        data: {value: 'payment.exchange_rate', disabled: 'payment.sameCurrency'} }
+    = f.input :exchange_rate, label: 'Tipo de cambio',
+      input_html: { type: 'decimal', size: 10,
+        'ng-model' => 'exchange_rate', 'ng-initial' => true, 'ng-disabled' => 'same_currency' }
   .span4
     .moneybox
       %label TOTAL
       %h4
-        %span#currency_total(data-text="payment.totalCurrency")
+        %span#currency_total {{ amountCurrency() | decimal }}
         %span#payment-currency-label= currency_label movement.currency
 
 .row-fluid
