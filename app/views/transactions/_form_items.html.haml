@@ -14,16 +14,20 @@
       Cantidad
     %th
       Total fila
+    %th
   %tr(ng-repeat='detail in details')
     %td
+      %input(type='text' ng-model='detail.id' name='income_details_attributes[{{$index}}][id]')
       %input(type='hidden' ng-model='detail.item_id')
-      %input(type='text' placeholder='Escriba para buscar el ítem' data-source='#{item_url}' ng-model='detail.item' ng-autocomplete='{{$index}}' ng-collection='details')
+      %input(type='text' placeholder='Escriba para buscar el ítem' data-source='#{item_url}' ng-model='detail.item' ng-detail-autocomplete)
     %td
       %input(type='text' ng-model='detail.price' size='10' value='10')
     %td
       %input(type='text' ng-model='detail.quantity' size='10')
     %td
       {{ detail.subtotal() | decimal }}
+    %td
+      %a(href='javascript:;' ng-click='destroy($index)') del
 -#%table#items-table.table
   %tr.head
     %th.item Item
