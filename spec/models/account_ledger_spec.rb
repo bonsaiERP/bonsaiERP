@@ -157,8 +157,6 @@ describe AccountLedger do
 
       al.update_reference('The new reference').should be_true
 
-      al.old_reference.should eq('Old reference')
-
       al.reference.should eq('The new reference')
 
       al.updater_id.should eq(155)
@@ -166,4 +164,27 @@ describe AccountLedger do
       al.update_reference('Lo').should be_false
     end
   end
+
+  context 'Code' do
+    let(:ac_bob) { build :cash, currency: 'BOB' }
+    let(:ac_usd) { build :cash, currency: 'USD' }
+
+    it "code" do
+      AccountLedger.any_instance.stub(account: ac_bob, account_to: ac_usd)
+      y = Date.today.year.to_s[2..3]
+
+      al = AccountLedger.create(valid_attributes)
+      al.should be_persisted
+      al.name.should eq("T-#{y}-0001")
+
+      al = AccountLedger.create(valid_attributes)
+      al.should be_persisted
+      al.name.should eq("T-#{y}-0002")
+
+      al.update_attributes(reference: 'Changed ref')
+
+      AccountLedger.order('name').pluck(:name).should eq(["T-#{y}-0001", "T-#{y}-0002"])
+    end
+  end
+
 end
