@@ -2,7 +2,29 @@
   Items
   %span.n(style='font-size: 13px')= link_to 'ver ítems', items_path, target: '_blank'
 
+%input(id='details' data-details='#{ movement.details.to_json }' value='#{ movement.details.to_json }')
+
 %table#items-table.table
+  %tr
+    %th
+      Item
+    %th
+      Precio
+    %th
+      Cantidad
+    %th
+      Total fila
+  %tr(ng-repeat='detail in details')
+    %td
+      %input(type='hidden' ng-model='detail.item_id')
+      %input(type='text' placeholder='Escriba para buscar el ítem' data-source='#{item_url}' ng-model='detail.item' ng-autocomplete='{{$index}}' ng-collection='details')
+    %td
+      %input(type='text' ng-model='detail.price' size='10' value='10')
+    %td
+      %input(type='text' ng-model='detail.quantity' size='10')
+    %td
+      {{ detail.subtotal() | decimal }}
+-#%table#items-table.table
   %tr.head
     %th.item Item
     %th.price
@@ -20,7 +42,7 @@
         - if fd.object.new_record?
           = fd.input :item, as: :autocomplete, label: false,
             input_html: {class: 'item_id span11', placeholder: 'Escriba para buscar el ítem',
-            data: {new_url: '/items/new', source: search_path(transaction), title: 'Crear ítem', return: true} }
+            data: {new_url: '/items/new', source: item_url, title: 'Crear ítem', return: true} }
         - else
           = fd.object.item
           = fd.input :item_id, as: :hidden

@@ -1,10 +1,12 @@
+%input(type='hidden' ng-model='base_currency' value='#{currency}' ng-initial)
 .row-fluid.currency-input
   .span6
     = f.input :currency, collection: currency_options, label: 'Moneda ', include_blank: false,
-      input_html: {id: 'transaction_currency', data: { value: 'trans.currency' } }
+      input_html: { id: 'currency', 'ng-model' => 'currency' }
   .span6
     = f.input :exchange_rate, label: "Tipo de cambio de <span class='currency'></span> a #{currency_label} ".html_safe,
-      input_html: { id: 'transaction_exchange_rate', type: 'decimal', class: 'span3', data: { value: 'trans.rate', disabled: 'trans.sameCurrency' }}
+      input_html: { id: 'exchange_rate', type: 'decimal', class: 'span3',
+      'ng-model' => 'exchange_rate', 'ng-initial' => true, 'ng-disabled' => 'same_currency' }
 
 - if movement.is_draft?
   %br
