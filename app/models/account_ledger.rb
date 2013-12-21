@@ -4,6 +4,9 @@
 class AccountLedger < ActiveRecord::Base
 
   include ::Models::Updater
+  extend Models::AccountCode
+
+  self.code_name = 'T'
 
   ########################################
   # Constants
@@ -16,11 +19,11 @@ class AccountLedger < ActiveRecord::Base
                 'lrcre',  # lrcre  = Create the ledger Loans::Receive, adds ++
                 'lrpay',  # lrpay  = Loans::Receive make a payment, substracts --
                 'lrint',  # lrint  = Interest Loans::Receive --
-                'lrdev',  # lrdev  = Loans::Receive make a devolution, adds ++
+                #'lrdev',  # lrdev  = Loans::Receive make a devolution, adds ++
                 'lgcre',  # lgcre  = Create the ledger Loans::Give, substract --
                 'lgint',  # lgint  = Interests for Loans::Give ++
                 'lgpay',  # lgpay  = Loans::Give receive a payment, adds ++
-                'lgdev',  # lgdev  = Loans::Give make a devolution, substract --
+                #'lgdev',  # lgdev  = Loans::Give make a devolution, substract --
                 'servex', # servex = Pays an account with a service account_to is Expense
                 'servin', # servin = Pays an account with a service account_to is Income
                ].freeze
@@ -30,7 +33,7 @@ class AccountLedger < ActiveRecord::Base
   ########################################
   # Callbacks
   before_validation :set_currency
-  before_create :set_creator
+  before_create :set_creator, :set_code
 
   # Includes
   include ActionView::Helpers::NumberHelper
@@ -130,6 +133,10 @@ class AccountLedger < ActiveRecord::Base
 
     def set_creator
       self.creator_id = UserSession.id
+    end
+
+    def set_code
+      self.name = self.class.get_code_number
     end
 
     def set_approver
