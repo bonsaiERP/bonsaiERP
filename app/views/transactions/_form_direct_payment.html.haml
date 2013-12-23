@@ -15,18 +15,19 @@
       -# Render for direct_payment
       .span6.account_to.form-inline
         %span(style='display:none')
-          = f.check_box :direct_payment, data: {value: 'trans.direct_payment'}, id: 'direct_payment', style: 'vertical-align: top'
+          = f.check_box :direct_payment, id: 'direct_payment',
+            'ng-model' => 'direct_payment', style: 'vertical-align: top'
         %label#label-direct-payment(for='direct_payment2')
           %a#direct-payment-button.btn.btn-small.b(data-toggle='button') #{lbl} directo
 
-        = f.input :account_to_id,
-          input_html: {id: 'account_to_id', class: 'span10',
-          data: {value: 'trans.account_to_id', disabled: 'trans.direct_payment|inverse'}},
+        = f.input :account_to_id, input_html: {id: 'account_to_id', class: 'span10',
+          'ng-model' => 'account_to_id', 'ng-disabled' => '!direct_payment' },
           label: "<strong>Cuenta</strong> a la cual se aplicara el <i>#{lbl} directo</i>".html_safe
+
       .span6
         = f.input :reference, label: 'Referencia', as: :text,
           input_html: {rows: 2, placeholder: 'Número de recibo o documento', class: 'span10',
-          data: { disabled: 'trans.direct_payment|inverse' } }
+          'ng-disabled' => '!direct_payment' }
 
 :javascript
   $(function() {

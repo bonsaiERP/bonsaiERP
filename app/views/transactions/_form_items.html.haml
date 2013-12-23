@@ -17,7 +17,8 @@
     %th
   %tr(ng-repeat='detail in details')
     %td
-      %input(type='text' ng-model='detail.id' name='income_details_attributes[{{$index}}][id]')
+      %input(type='text' ng-model='detail.id' name='income_details_attributes[{{$index}}][id]' size='2')
+      %input(type='text' ng-model='detail.item_id' name='income_details_attributes[{{$index}}][id]' size='2')
       %input(type='hidden' ng-model='detail.item_id')
       %input(type='text' placeholder='Escriba para buscar el ítem' data-source='#{item_url}' ng-model='detail.item' ng-detail-autocomplete)
     %td
@@ -27,7 +28,8 @@
     %td
       {{ detail.subtotal() | decimal }}
     %td
-      %a(href='javascript:;' ng-click='destroy($index)') del
+      %a.dark(href='javascript:;' ng-click='destroy($index)')
+        = icon_delete
 -#%table#items-table.table
   %tr.head
     %th.item Item

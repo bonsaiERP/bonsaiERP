@@ -10,20 +10,26 @@ myApp.directive 'ngDetailAutocomplete', [ ->
 
         $scope.$apply (scope) ->
           scope.$parent.detail.item = ui.item.label
+          scope.$parent.detail.item_old = ui.item.label
+          scope.$parent.detail.item = ui.item.label
           scope.$parent.detail.item_id = ui.item.id
           scope.$parent.detail.price = ui.item.price
           scope.$parent.detail.original_price = ui.item.price
+          scope.$parent.detail.exchange_rate = scope.$parent.$parent.exchange_rate
 
       change: (event, ui) ->
     )
 
     $elem.blur ->
-      if $scope["#{model}"] is ''
-        $scope.$apply (scope) ->
-          scope["#{model}"] = null
-          scope["#{model}Attributes"] = {}
-          scope["#{model}_id"] = null
-          $scope.$emit 'autocomplete-blur'
-      else
-        $elem.val($scope["#{model}Attributes"].label)
+      $scope.$apply (scope) ->
+        if $scope.$parent.detail.item is ''
+          scope.$parent.detail.item = ui.item.label
+          scope.$parent.detail.item_old = ui.item.label
+          scope.$parent.detail.item = ui.item.label
+          scope.$parent.detail.item_id = ui.item.id
+          scope.$parent.detail.price = ui.item.price
+          scope.$parent.detail.original_price = ui.item.price
+          scope.$parent.detail.exchange_rate = scope.$parent.$parent.exchange_rate
+        else
+          scope.$parent.detail.item = scope.$parent.detail.item_old
 ]
