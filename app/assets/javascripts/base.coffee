@@ -284,37 +284,4 @@ init = ($) ->
   _b.numSeparator = @bonsai.separator
   _b.numDelimiter = @bonsai.delimiter
 
-  rivets.configure(
-    #preloadData: false
-    adapter:
-      subscribe: (obj, keypath, callback) ->
-        obj.on('change:' + keypath, callback)
-      unsubscribe: (obj, keypath, callback) ->
-        obj.off('change:' + keypath, callback)
-      read: (obj, keypath) ->
-        obj.get(keypath)
-      publish: (obj, keypath, value) ->
-        obj.set(keypath, value)
-  )
-
-  rivets.formatters.number = (value) ->
-    _b.ntc(value)
-
-  rivets.formatters.currencyLabel = (val) ->
-    if val?
-      ['<span class="label label-inverse" title=',
-        '"', currencies[val]['name'], '"', ' data-toggle="tooltip">',
-        val, '</span>'].join('')
-
-  rivets.formatters.show = (val) ->
-    if val
-      'block'
-    else
-      'none'
-
-
-  rivets.formatters.inverse = (val) ->
-    not val
-
-  true
 )(jQuery)

@@ -5,11 +5,13 @@ myApp.controller 'MovementController', ['$scope', 'MovementDetail', ($scope, Mov
   $scope.same_currency = true
   $scope.details = []
   $scope.direct_payment = $('#direct_payment').prop('checked')
+  $scope.tax_in_out = $('#tax_in_out').prop('checked')
   $scope.tax_label = 'Por fuera'
+  $scope.taxes = $('#taxes').data('taxes')
 
 
   # initialize items
-  _.each $('#details').data('details'), (det) ->
+  for det in $('#details').data('details')
     $scope.details.push(new MovementDetail(det))
 
   # Remove an item
@@ -32,7 +34,7 @@ myApp.controller 'MovementController', ['$scope', 'MovementDetail', ($scope, Mov
 
   # Check for cahnges on exchange_rate to update details
   $scope.$watch 'exchange_rate', ->
-    _.each $scope.details, (det) ->
+    for det in $scope.details
       det.price = _b.roundVal(det.original_price / $scope.exchange_rate, 2)
 
 
@@ -43,10 +45,17 @@ myApp.controller 'MovementController', ['$scope', 'MovementDetail', ($scope, Mov
   # Subtotal
   $scope.subtotal = ->
     _.reduce( $scope.details, (s, det) ->
-      console.log s
       s += det.subtotal()
     , 0)
 
+
+  $scope.taxTotal = ->
+    if $scope.tax and $scope.tax_in_out
+      $scope.subtotal() * ( 100 / $scope.tax.percentage )
+    else if $scope.tax and $scope.tax_in_out is false
+      $scope.subtotal() * ( $scope.tax.percentage / 100 )
+    else
+      0
 
   # total
   $scope.total = ->

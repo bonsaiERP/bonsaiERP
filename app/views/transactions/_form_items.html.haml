@@ -45,14 +45,22 @@
   %tr
     %td.r.form-inline(colspan='3')
       %label Impuestos
+      %input#taxes(type='hidden' data-taxes='#{ Tax.all.to_json(only: [:id, :name, :percentage]) }')
+
 
       %span.hidden= f.check_box :tax_in_out, 'ng-model' => 'tax_in_out', id: 'tax_in_out'
-      = f.select :tax_id, Tax.all.map { |v| [v.to_s, v.id] }, include_blank: true
+      = f.hidden_field :tax_id, 'ng-model' => 'tax_id'
+      %select(ng-model='tax' ng-options='[t.name, " (", t.percentage, "%)" ].join("") for t in taxes track by t.id')
+        %option(value='')
+
+      - if current_user.is_admin? || current_user.is_group?
+        = link_to icon('icon-plus-sign'), new_tax_path, title: 'Nuevo impuesto', class: 'btn'
+
       %a.btn.btn-small.b(data-toggle='button' ng-click='tax_in_out=!tax_in_out') {{ taxLabel() }}
       %span.currency
 
     %td.r
-      {{ subtotal() | decimal }}
+      {{ taxTotal() | decimal }}
     %td
 
   %tr

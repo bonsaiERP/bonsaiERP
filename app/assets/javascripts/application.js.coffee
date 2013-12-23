@@ -3,9 +3,6 @@
 #= require jquery/jquery-ui-1.10.1.custom.js
 
 #= require libraries/lodash.js
-#= require libraries/backbone.js
-#= require libraries/rivets.js
-
 
 #= require jquery/select2.js
 #= require jquery/flot/jquery.flot.js
@@ -15,8 +12,9 @@
 #= require jquery/jquery.minicolors.js
 #= require jquery/jquery.scrollTo.js
 
-# Goes before namespace where is defined myApp for angularjs
+# ANGULAR Goes before namespace where is defined myApp for angularjs
 #= require angular/angular.min.js
+
 #= require namespace.coffee
 
 #= require plugins/money.min.js
@@ -31,18 +29,11 @@
 #= require bootstrap/bootstrap-tab.js
 #= require bootstrap/bootstrap-button.js
 
-#= require_tree ./filters
 
-#= require app/currency.coffee
-#= require app/exchange_rate.coffee
-#= require app/transaction.coffee
-# require app/transference.coffee
 #= require app/graph_report.coffee
-#= require app/contact.coffee
-#= require app/inventory.coffee
-#= require app/account_ledger.coffee
 
 ## Angular
+#= require_tree ./filters
 #= require_tree ./controllers
 #= require_tree ./services
 #= require_tree ./directives
