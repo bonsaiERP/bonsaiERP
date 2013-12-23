@@ -14,6 +14,7 @@ class Movements::Form < BaseForm
   attribute :account_to_id, Integer
   attribute :reference, String
   attribute :tax_id, Integer
+  attribute :tax_in_out, Boolean, default: false # true = out, false = in
 
   ATTRIBUTES = [:date, :contact_id, :currency, :exchange_rate, :project_id, :due_date,
                 :description, :direct_payment, :account_to_id, :reference].freeze

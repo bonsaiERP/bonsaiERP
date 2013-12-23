@@ -9,13 +9,14 @@ myApp.directive 'ngDetailAutocomplete', [ ->
       select: (event, ui) ->
 
         $scope.$apply (scope) ->
+          er = scope.$parent.$parent.exchange_rate
+          scope.$parent.detail.exchange_rate = er
           scope.$parent.detail.item = ui.item.label
           scope.$parent.detail.item_old = ui.item.label
           scope.$parent.detail.item = ui.item.label
           scope.$parent.detail.item_id = ui.item.id
-          scope.$parent.detail.price = ui.item.price
+          scope.$parent.detail.price = _b.roundVal(ui.item.price / er, 2)
           scope.$parent.detail.original_price = ui.item.price
-          scope.$parent.detail.exchange_rate = scope.$parent.$parent.exchange_rate
 
       change: (event, ui) ->
     )

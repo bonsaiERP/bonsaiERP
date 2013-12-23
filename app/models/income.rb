@@ -3,6 +3,7 @@
 # email: boriscyber@gmail.com
 class Income < Movement
 
+  attr_accessor :tax_in_out
   self.code_name = 'I'
 
   ########################################

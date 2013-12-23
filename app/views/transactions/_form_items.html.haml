@@ -10,11 +10,14 @@
       Item
     %th
       Precio
+      %span.currency
     %th
       Cantidad
     %th
       Total fila
+      %span.currency
     %th
+
   %tr(ng-repeat='detail in details')
     %td
       %input(type='text' ng-model='detail.id' name='income_details_attributes[{{$index}}][id]' size='2')
@@ -25,109 +28,37 @@
       %input(type='text' ng-model='detail.price' size='10' value='10')
     %td
       %input(type='text' ng-model='detail.quantity' size='10')
-    %td
+    %td.r
       {{ detail.subtotal() | decimal }}
     %td
       %a.dark(href='javascript:;' ng-click='destroy($index)')
         = icon_delete
--#%table#items-table.table
-  %tr.head
-    %th.item Item
-    %th.price
-      Precio unitario
-      %span.currency
-    %th.quantity Cantidad
-    %th.total_row
-      Total fila
-      %span.currency
-    %th
 
-  = f.simple_fields_for details do |fd|
-    %tr.item{id: fd.object.id, data: {item: fd.object.data_hash.to_json }}
-      %td.span6.nw.form-inline
-        - if fd.object.new_record?
-          = fd.input :item, as: :autocomplete, label: false,
-            input_html: {class: 'item_id span11', placeholder: 'Escriba para buscar el ítem',
-            data: {new_url: '/items/new', source: item_url, title: 'Crear ítem', return: true} }
-        - else
-          = fd.object.item
-          = fd.input :item_id, as: :hidden
-
-      %td
-        = fd.input :price, input_html: {size: 8, type: 'decimal', class: 'item-price',
-          data: {'original-price'=> fd.object.original_price, 'value' => 'item.price'} },
-          label: false
-
-      %td
-        = fd.input :quantity, input_html: { size: 8, type: :decimal, class: 'item-quantity',
-          data: { value: 'item.quantity', title: 'Crear ítem' } },
-          label: false
-
-      %td.total_row.r
-        %span.subtotal(data-text='item.subtotal | number')= ntc fd.object.total
-      %td.del
-        %a.btn(href="javascript:;" data-on-click="item:delete" title="Borrar" data-toggle="tooltip")
-          %i.icon-trash
-        = fd.hidden_field :_destroy, data: {value: 'item._destroy'}
-
-  %tr#subtotal-line.extra.pad_top.subtotal
-    %td
-      %a(href="javascript:;" id="add-item-link" class="btn")
-        %i.icon-plus-sign
-        Nueva línea
-    %td.r(colspan='2')
+  %tr
+    %td.r(colspan='3')
       Subtotal
       %span.currency
     %td.r
-      %span#subtotal=ntc(transaction.subtotal)
+      {{ subtotal() | decimal }}
     %td
 
-  %tr#tax-line
+  %tr
     %td.r.form-inline(colspan='3')
-      Impuestos
-      = f.select :tax_id, Tax.all.map { |v| [v.to_s, v.id] }, { include_blank: true },
-        { id: 'tax_id', data: {new_url: new_tax_path, width: 400 } }
-    %td.r
-      %span#taxes
-    %td
+      %label Impuestos
 
-  %tr#edit-tax.form-inline(style='display:none')
-    %td.r(colspan='4')
-      %span.muted.text-muted.b Crear Impuesto
-      %input(type='text' size='12' placeholder='Nombre')
-      %input(type='text' size='4' placeholder='%')
-      %a.btn.btn-small.btn-primary(href='javascript:;') Crear
-      %a.cancel-tax.btn.btn-small(href='javascript:;') Cancelar
-    %td
-
-
-  %tr#total-line.extra
-    %td
-    %td.r.b.dark(colspan='2')
-      Total
+      %span.hidden= f.check_box :tax_in_out, 'ng-model' => 'tax_in_out', id: 'tax_in_out'
+      = f.select :tax_id, Tax.all.map { |v| [v.to_s, v.id] }, include_blank: true
+      %a.btn.btn-small.b(data-toggle='button' ng-click='tax_in_out=!tax_in_out') {{ taxLabel() }}
       %span.currency
-    %td.b.r#total
+
+    %td.r
+      {{ subtotal() | decimal }}
     %td
 
-  - if transaction.is_a?(Income)
-    %tr
-      %td.cur.b.gray(colspan='3')
-        Descuento
-        %span.currency
-        \-
-        %span.label.label-inverse %
-      %td.discount.cur
-        %span#discount
-        \-
-        %span#discount-per
-
-:javascript
-  $(function() {
-    var $editTax = $('#edit-tax'),
-        $save = $editTax.find('.btn-primary'),
-        $cancel = $editTax.find('.cancel-tax');
-
-    $save.click(function(event) {
-      event.preventDefault();
-    });
-  })
+  %tr
+    %td.r.form-inline(colspan='3')
+      %strong Total
+      %span.currency
+    %td.r
+      {{ total() | decimal }}
+    %td
