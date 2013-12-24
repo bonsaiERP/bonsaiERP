@@ -35,6 +35,8 @@ class Incomes::Form < Movements::Form
   def set_new_income
     set_defaults
     @movement = Income.new(income_attributes)
+    @movement.ref_number = Income.get_ref_number
+    @movement.state = 'draft'
     2.times { @movement.income_details.build(quantity: 1) }  if income.details.empty?
     @service = Incomes::Service.new(income)
   end

@@ -11,10 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131223155017) do
+ActiveRecord::Schema.define(version: 20131224081504) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "hstore"
 
   create_table "account_ledgers", force: true do |t|
     t.string   "reference"
@@ -36,11 +37,12 @@ ActiveRecord::Schema.define(version: 20131223155017) do
     t.boolean  "inverse",                                                default: false
     t.boolean  "has_error",                                              default: false
     t.string   "error_messages"
-    t.integer  "project_id"
-    t.datetime "created_at",                                                                  null: false
-    t.datetime "updated_at",                                                                  null: false
     t.string   "status",             limit: 50,                          default: "approved"
+    t.integer  "project_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "updater_id"
+    t.string   "old_reference"
     t.string   "name"
   end
 
@@ -70,23 +72,30 @@ ActiveRecord::Schema.define(version: 20131223155017) do
     t.string   "state",          limit: 30
     t.boolean  "has_error",                                           default: false
     t.string   "error_messages", limit: 400
-    t.datetime "created_at",                                                          null: false
-    t.datetime "updated_at",                                                          null: false
-    t.integer  "tag_ids",                                             default: [],                 array: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "tag_ids",                                             default: [],    array: true
     t.integer  "updater_id"
-    t.decimal  "tax_percentage",             precision: 5,  scale: 2, default: 0.0
     t.integer  "tax_id"
+    t.decimal  "tax_percentage",             precision: 5,  scale: 2, default: 0.0
     t.decimal  "total",                      precision: 14, scale: 2, default: 0.0
     t.boolean  "tax_in_out",                                          default: false
+    t.hstore   "extras"
+    t.integer  "creator_id"
+    t.integer  "approver_id"
+    t.integer  "nuller_id"
   end
 
   add_index "accounts", ["active"], name: "index_accounts_on_active", using: :btree
   add_index "accounts", ["amount"], name: "index_accounts_on_amount", using: :btree
+  add_index "accounts", ["approver_id"], name: "index_accounts_on_approver_id", using: :btree
   add_index "accounts", ["contact_id"], name: "index_accounts_on_contact_id", using: :btree
+  add_index "accounts", ["creator_id"], name: "index_accounts_on_creator_id", using: :btree
   add_index "accounts", ["currency"], name: "index_accounts_on_currency", using: :btree
   add_index "accounts", ["date"], name: "index_accounts_on_date", using: :btree
   add_index "accounts", ["has_error"], name: "index_accounts_on_has_error", using: :btree
   add_index "accounts", ["name"], name: "index_accounts_on_name", unique: true, using: :btree
+  add_index "accounts", ["nuller_id"], name: "index_accounts_on_nuller_id", using: :btree
   add_index "accounts", ["project_id"], name: "index_accounts_on_project_id", using: :btree
   add_index "accounts", ["state"], name: "index_accounts_on_state", using: :btree
   add_index "accounts", ["tag_ids"], name: "index_accounts_on_tag_ids", using: :gin
@@ -113,8 +122,8 @@ ActiveRecord::Schema.define(version: 20131223155017) do
     t.boolean  "staff",                         default: false
     t.boolean  "client",                        default: false
     t.boolean  "supplier",                      default: false
-    t.datetime "created_at",                                    null: false
-    t.datetime "updated_at",                                    null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "incomes_status",    limit: 300, default: "{}"
     t.string   "expenses_status",   limit: 300, default: "{}"
   end
@@ -142,19 +151,19 @@ ActiveRecord::Schema.define(version: 20131223155017) do
     t.integer  "project_id"
     t.boolean  "has_error",                                           default: false
     t.string   "error_messages"
-    t.datetime "created_at",                                                          null: false
-    t.datetime "updated_at",                                                          null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "updater_id"
   end
 
-  add_index "inventories", ["account_id"], name: "index_inventory_operations_on_account_id", using: :btree
-  add_index "inventories", ["contact_id"], name: "index_inventory_operations_on_contact_id", using: :btree
-  add_index "inventories", ["date"], name: "index_inventory_operations_on_date", using: :btree
-  add_index "inventories", ["has_error"], name: "index_inventory_operations_on_has_error", using: :btree
-  add_index "inventories", ["operation"], name: "index_inventory_operations_on_operation", using: :btree
-  add_index "inventories", ["project_id"], name: "index_inventory_operations_on_project_id", using: :btree
-  add_index "inventories", ["ref_number"], name: "index_inventory_operations_on_ref_number", using: :btree
-  add_index "inventories", ["store_id"], name: "index_inventory_operations_on_store_id", using: :btree
+  add_index "inventories", ["account_id"], name: "index_inventories_on_account_id", using: :btree
+  add_index "inventories", ["contact_id"], name: "index_inventories_on_contact_id", using: :btree
+  add_index "inventories", ["date"], name: "index_inventories_on_date", using: :btree
+  add_index "inventories", ["has_error"], name: "index_inventories_on_has_error", using: :btree
+  add_index "inventories", ["operation"], name: "index_inventories_on_operation", using: :btree
+  add_index "inventories", ["project_id"], name: "index_inventories_on_project_id", using: :btree
+  add_index "inventories", ["ref_number"], name: "index_inventories_on_ref_number", using: :btree
+  add_index "inventories", ["store_id"], name: "index_inventories_on_store_id", using: :btree
   add_index "inventories", ["updater_id"], name: "index_inventories_on_updater_id", using: :btree
 
   create_table "inventory_details", force: true do |t|
@@ -162,13 +171,13 @@ ActiveRecord::Schema.define(version: 20131223155017) do
     t.integer  "item_id"
     t.integer  "store_id"
     t.decimal  "quantity",     precision: 14, scale: 2, default: 0.0
-    t.datetime "created_at",                                          null: false
-    t.datetime "updated_at",                                          null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "inventory_details", ["inventory_id"], name: "index_inventory_details_on_inventory_id", using: :btree
-  add_index "inventory_details", ["item_id"], name: "index_inventory_operation_details_on_item_id", using: :btree
-  add_index "inventory_details", ["store_id"], name: "index_inventory_operation_details_on_store_id", using: :btree
+  add_index "inventory_details", ["item_id"], name: "index_inventory_details_on_item_id", using: :btree
+  add_index "inventory_details", ["store_id"], name: "index_inventory_details_on_store_id", using: :btree
 
   create_table "items", force: true do |t|
     t.integer  "unit_id"
@@ -179,12 +188,12 @@ ActiveRecord::Schema.define(version: 20131223155017) do
     t.boolean  "for_sale",                                         default: true
     t.boolean  "stockable",                                        default: true
     t.boolean  "active",                                           default: true
-    t.datetime "created_at",                                                      null: false
-    t.datetime "updated_at",                                                      null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.decimal  "buy_price",               precision: 14, scale: 2, default: 0.0
     t.string   "unit_symbol", limit: 20
     t.string   "unit_name"
-    t.integer  "tag_ids",                                          default: [],                array: true
+    t.integer  "tag_ids",                                          default: [],   array: true
     t.integer  "updater_id"
   end
 
@@ -203,8 +212,8 @@ ActiveRecord::Schema.define(version: 20131223155017) do
     t.boolean  "master_account",              default: false
     t.string   "rol",             limit: 50
     t.boolean  "active",                      default: true
-    t.datetime "created_at",                                  null: false
-    t.datetime "updated_at",                                  null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "tenant",          limit: 100
   end
 
@@ -247,8 +256,8 @@ ActiveRecord::Schema.define(version: 20131223155017) do
     t.string   "time_zone",    limit: 100
     t.string   "tenant",       limit: 50
     t.string   "currency",     limit: 10
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "country_code", limit: 5
   end
 
@@ -264,8 +273,8 @@ ActiveRecord::Schema.define(version: 20131223155017) do
     t.date     "date_start"
     t.date     "date_end"
     t.text     "description"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "projects", ["active"], name: "index_projects_on_active", using: :btree
@@ -277,8 +286,8 @@ ActiveRecord::Schema.define(version: 20131223155017) do
     t.decimal  "quantity",     precision: 14, scale: 2, default: 0.0
     t.decimal  "minimum",      precision: 14, scale: 2, default: 0.0
     t.integer  "user_id"
-    t.datetime "created_at",                                           null: false
-    t.datetime "updated_at",                                           null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.boolean  "active",                                default: true
   end
 
@@ -295,15 +304,15 @@ ActiveRecord::Schema.define(version: 20131223155017) do
     t.string   "phone",       limit: 40
     t.boolean  "active",                 default: true
     t.string   "description"
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "tags", force: true do |t|
     t.string   "name"
     t.string   "bgcolor",    limit: 10
-    t.datetime "created_at",            null: false
-    t.datetime "updated_at",            null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "tags", ["name"], name: "index_tags_on_name", using: :btree
@@ -325,8 +334,8 @@ ActiveRecord::Schema.define(version: 20131223155017) do
     t.decimal  "discount",       precision: 14, scale: 2, default: 0.0
     t.decimal  "balance",        precision: 14, scale: 2, default: 0.0
     t.decimal  "original_price", precision: 14, scale: 2, default: 0.0
-    t.datetime "created_at",                                            null: false
-    t.datetime "updated_at",                                            null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "transaction_details", ["account_id"], name: "index_transaction_details_on_account_id", using: :btree
@@ -336,8 +345,8 @@ ActiveRecord::Schema.define(version: 20131223155017) do
     t.integer  "account_id"
     t.integer  "user_id"
     t.text     "data"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "transaction_histories", ["account_id"], name: "index_transaction_histories_on_account_id", using: :btree
@@ -359,8 +368,8 @@ ActiveRecord::Schema.define(version: 20131223155017) do
     t.boolean  "delivered",                                              default: false
     t.boolean  "discounted",                                             default: false
     t.boolean  "devolution",                                             default: false
-    t.datetime "created_at",                                                             null: false
-    t.datetime "updated_at",                                                             null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.boolean  "no_inventory",                                           default: false
   end
 
@@ -377,8 +386,8 @@ ActiveRecord::Schema.define(version: 20131223155017) do
     t.string   "symbol",     limit: 20
     t.boolean  "integer",                default: false
     t.boolean  "visible",                default: true
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "user_changes", force: true do |t|
@@ -387,8 +396,8 @@ ActiveRecord::Schema.define(version: 20131223155017) do
     t.string   "user_changeable_type"
     t.integer  "user_changeable_id"
     t.text     "description"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "user_changes", ["user_changeable_id"], name: "index_user_changes_on_user_changeable_id", using: :btree
@@ -418,8 +427,8 @@ ActiveRecord::Schema.define(version: 20131223155017) do
     t.boolean  "active",                              default: true
     t.string   "auth_token"
     t.string   "rol",                     limit: 50
-    t.datetime "created_at",                                          null: false
-    t.datetime "updated_at",                                          null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "users", ["auth_token"], name: "index_users_on_auth_token", unique: true, using: :btree

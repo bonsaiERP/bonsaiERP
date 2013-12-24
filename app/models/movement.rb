@@ -9,6 +9,9 @@ class Movement < Account
 
   STATES = %w(draft approved paid nulled)
 
+  # Store
+  store_accessor :extras, :bill_number, :gross_total, :original_total, :balance_inventory, :due_date, :nuller_datetime, :null_reason, :approver_datetime, :delivered, :discounted, :devolution, :no_inventory
+
   # Callbacks
   before_update :check_items_balances
   before_create { |m| m.creator_id = UserSession.id }
@@ -19,7 +22,7 @@ class Movement < Account
   belongs_to :project
   belongs_to :tax
 
-  has_one :transaction, foreign_key: :account_id, autosave: true
+  #has_one :transaction, foreign_key: :account_id, autosave: true
   has_many :transaction_histories, foreign_key: :account_id
   has_many :ledgers, foreign_key: :account_id, class_name: 'AccountLedger'
   has_many :inventories, foreign_key: :account_id
@@ -33,8 +36,8 @@ class Movement < Account
 
   ########################################
   # Delegations
-  delegate(*create_accessors(*Transaction.get_columns), to: :transaction)
-  delegate(*Transaction.delegate_methods, to: :transaction)
+  #delegate(*create_accessors(*Transaction.get_columns), to: :transaction)
+  #delegate(*Transaction.delegate_methods, to: :transaction)
 
   # Define boolean methods for states
   STATES.each do |_state|
@@ -56,20 +59,6 @@ class Movement < Account
 
     define_method :"#{meth.first}=" do |val|
       self.send(:"#{meth.last}=", val)
-    end
-  end
-
-  class << self
-    alias_method :old_new, :new
-
-    def new(attrs = {})
-      old_new do |mov|
-        mov.build_transaction
-        mov.attributes = attrs
-        mov.state ||= 'draft'
-        mov.ref_number ||= get_ref_number
-        yield mov  if block_given?
-      end
     end
   end
 
@@ -156,13 +145,40 @@ class Movement < Account
     subtotal * tax_percentage/100
   end
 
+  alias_method :old_due_date, :due_date
+  def due_date
+    old_due_date.to_date
+  rescue
+    nil
+  end
+
+  [:devolution, :delivered].each do |meth|
+    define_method :"#{meth}?" do
+      if %w{true false}.include? send(meth)
+        send(meth) == "true" ? true : false
+      else
+        send(meth)
+      end
+    end
+  end
+
+  alias_method :old_balance_inventory, :balance_inventory
+  def balance_inventory
+    old_balance_inventory.try(:to_d)
+  end
+
   alias_method :old_attributes, :attributes
   def attributes
-    attrs = transaction.attributes.except(*%w(id created_at updated_at))
-    old_attributes.merge(attrs)
+    old_attributes.merge(
+      Hash[ extras_columns.map { |k| [k, self.send(k)] } ]
+    )
   end
 
   private
+
+    def extras_columns
+      [:bill_number, :gross_total, :original_total, :balance_inventory, :due_date, :nuller_datetime, :null_reason, :approver_datetime, :delivered, :discounted, :devolution, :no_inventory]
+    end
 
     def nulling_valid?
       ['paid', 'approved'].include?(state_was) && is_nulled?

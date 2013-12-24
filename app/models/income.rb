@@ -22,17 +22,16 @@ class Income < Movement
 
   ########################################
   # Scopes
-  scope :discount, -> { joins(:transaction).where(transaction: {discounted: true}) }
+  #scope :discount, -> { joins(:transaction).where(transaction: {discounted: true}) }
   scope :approved, -> { where(state: 'approved') }
   scope :active,   -> { where(state: ['approved', 'paid']) }
   scope :paid, -> { where(state: 'paid') }
   scope :contact, -> (cid) { where(contact_id: cid) }
   scope :pendent, -> { active.where{ amount.not_eq 0 } }
   scope :error, -> { active.where(has_error: true) }
-  scope :due, -> { approved.joins(:transaction).where{transaction.due_date < Date.today} }
+  #scope :due, -> { approved.joins(:transaction).where{transaction.due_date < Date.today} }
   scope :nulled, -> { where(state: 'nulled') }
-  #scope :inventory, -> { joins(:transaction).active.where(:"transactions.delivered" => false, :"transactions.no_inventory" => false) }
-  scope :inventory, -> { joins(:transaction).active.where(:"transactions.delivered" => false) }
+  #scope :inventory, -> { joins(:transaction).active.where(:"transactions.delivered" => false) }
   scope :like, -> (s) {
     s = "%#{s}%"
     where{(name.like s) | (description.like s)}
