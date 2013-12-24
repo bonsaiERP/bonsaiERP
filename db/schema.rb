@@ -84,6 +84,7 @@ ActiveRecord::Schema.define(version: 20131224081504) do
     t.integer  "creator_id"
     t.integer  "approver_id"
     t.integer  "nuller_id"
+    t.date     "due_date"
   end
 
   add_index "accounts", ["active"], name: "index_accounts_on_active", using: :btree
@@ -93,6 +94,7 @@ ActiveRecord::Schema.define(version: 20131224081504) do
   add_index "accounts", ["creator_id"], name: "index_accounts_on_creator_id", using: :btree
   add_index "accounts", ["currency"], name: "index_accounts_on_currency", using: :btree
   add_index "accounts", ["date"], name: "index_accounts_on_date", using: :btree
+  add_index "accounts", ["due_date"], name: "index_accounts_on_due_date", using: :btree
   add_index "accounts", ["has_error"], name: "index_accounts_on_has_error", using: :btree
   add_index "accounts", ["name"], name: "index_accounts_on_name", unique: true, using: :btree
   add_index "accounts", ["nuller_id"], name: "index_accounts_on_nuller_id", using: :btree

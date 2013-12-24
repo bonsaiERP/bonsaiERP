@@ -23,7 +23,7 @@ describe Incomes::Payment do
   let(:contact) { build :contact, id: 11 }
   let(:income) do
     Income.new(
-      total: balance, balance: balance, currency: 'BOB', contact_id: contact.id
+      total: balance, balance: balance, currency: 'BOB', contact_id: contact.id, state: 'draft'
     ) {|i|
       i.id = account_id
       i.contact = contact
@@ -110,7 +110,7 @@ describe Incomes::Payment do
       # Only bank accounts are allowed to conciliate
       p.ledger.should be_is_approved
       p.ledger.reference.should eq(valid_attributes.fetch(:reference))
-      p.ledger.date.should eq(valid_attributes.fetch(:date).to_time)
+      p.ledger.date.should eq(valid_attributes.fetch(:date).to_date)
 
       # New payment to complete
       p = Incomes::Payment.new(valid_attributes.merge(amount: p.income.balance))

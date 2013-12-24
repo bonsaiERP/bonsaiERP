@@ -7,7 +7,7 @@ class Accounts::Query
   end
 
   def bank_cash
-    @rel.active.where(type: %w(Cash Bank)).includes(:money_store)
+    @rel.active.where(type: %w(Cash Bank))
   end
 
   def bank_cash_options(cur = OrganisationSession.currency)

@@ -97,7 +97,7 @@ describe Incomes::Devolution do
       # Only bank accounts are allowed to conciliate
       dev.ledger.should be_is_approved
       dev.ledger.reference.should eq(valid_attributes.fetch(:reference))
-      dev.ledger.date.should eq(valid_attributes.fetch(:date).to_time)
+      dev.ledger.date.should eq(valid_attributes.fetch(:date).to_date)
     end
 
     ### Verification only bank accounts

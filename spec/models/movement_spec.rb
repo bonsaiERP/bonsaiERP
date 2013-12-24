@@ -9,7 +9,6 @@ describe Movement do
   context "#can_null?" do
     let(:subject) {
       m = Movement.new(amount: 100, state: 'draft')
-      m.build_transaction
       m.total =  100
       m
     }
@@ -56,7 +55,6 @@ describe Movement do
   context "can_devolution?" do
     let(:subject) {
       m = Income.new(amount: 100, state: 'draft')
-      m.build_transaction
       m.total =  100
       m
     }
@@ -118,7 +116,7 @@ describe Movement do
     end
 
     it "update currency" do
-      i = Income.new(currency: 'BOB', total: 140, exchange_rate: 1, date: Date.today, contact_id: contact.id, due_date: Date.today)
+      i = Income.new(currency: 'BOB', total: 140, exchange_rate: 1, date: Date.today, contact_id: contact.id, due_date: Date.today, state: 'draft')
       i.stub(contact: contact, name: 'I-0001')
 
       i.save.should be_true

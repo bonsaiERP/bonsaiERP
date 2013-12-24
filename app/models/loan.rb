@@ -9,8 +9,9 @@ class Loan < Account
   STATES = %w(approved paid nulled).freeze
   LOAN_TYPES = %w(Loans::Receive Loans::Give).freeze
 
-  # Relationships
-  has_one :loan_extra, dependent: :delete, autosave: true
+  # Store
+  store_accessor :extras, :interests
+
 
   # Validations
   validates_presence_of :date, :due_date, :name, :contact, :contact_id
@@ -20,20 +21,7 @@ class Loan < Account
 
   # Scope
 
-  # Delegations
-  delegate(*create_accessors(*LoanExtra.get_columns), to: :loan_extra)
-
   class << self
-    alias_method :old_new, :new
-
-    def new(attrs = {})
-      old_new do |loan|
-        loan.build_loan_extra
-        loan.attributes = attrs
-        yield loan  if block_given?
-      end
-    end
-
     def find(id)
       Account.where(type: LOAN_TYPES).find(id)
     end
@@ -41,9 +29,14 @@ class Loan < Account
 
   alias_method :old_attributes, :attributes
   def attributes
-    attrs = loan_extra.attributes
-    attrs.delete(:id)
-    old_attributes.merge(attrs)
+    old_attributes.merge("interests" => interests)
+  end
+
+  alias_method :old_interests, :interests
+  def interests
+    old_interests.to_d
+  rescue
+    nil
   end
 
   STATES.each do |m|

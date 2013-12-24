@@ -10,7 +10,7 @@ class Movement < Account
   STATES = %w(draft approved paid nulled)
 
   # Store
-  store_accessor :extras, :bill_number, :gross_total, :original_total, :balance_inventory, :due_date, :nuller_datetime, :null_reason, :approver_datetime, :delivered, :discounted, :devolution, :no_inventory
+  store_accessor :extras, :bill_number, :gross_total, :original_total, :balance_inventory, :nuller_datetime, :null_reason, :approver_datetime, :delivered, :discounted, :devolution, :no_inventory
 
   # Callbacks
   before_update :check_items_balances
@@ -145,13 +145,7 @@ class Movement < Account
     subtotal * tax_percentage/100
   end
 
-  alias_method :old_due_date, :due_date
-  def due_date
-    old_due_date.to_date
-  rescue
-    nil
-  end
-
+  # Extra columns boolean
   [:devolution, :delivered].each do |meth|
     define_method :"#{meth}?" do
       if %w{true false}.include? send(meth)
@@ -170,14 +164,16 @@ class Movement < Account
   alias_method :old_attributes, :attributes
   def attributes
     old_attributes.merge(
-      Hash[ extras_columns.map { |k| [k, self.send(k)] } ]
+      Hash[ extras_columns.map { |k| [k.to_s, self.send(k)] } ]
     )
   end
 
   private
 
     def extras_columns
-      [:bill_number, :gross_total, :original_total, :balance_inventory, :due_date, :nuller_datetime, :null_reason, :approver_datetime, :delivered, :discounted, :devolution, :no_inventory]
+      [:bill_number, :gross_total, :original_total, :balance_inventory,
+       :nuller_datetime, :null_reason, :approver_datetime, :delivered,
+       :discounted, :devolution, :no_inventory]
     end
 
     def nulling_valid?

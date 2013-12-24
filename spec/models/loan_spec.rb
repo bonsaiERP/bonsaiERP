@@ -40,7 +40,6 @@ describe Loan do
     expect(l).to be_valid
   end
 
-  it { should have_one(:loan_extra) }
 
   before(:each) do
     UserSession.user = build(:user, id: 1)
@@ -53,7 +52,6 @@ describe Loan do
 
       keys.should be_include('id')
       keys.should be_include('name')
-      keys.should be_include('step')
       keys.should be_include('total')
       keys.should be_include('interests')
     end

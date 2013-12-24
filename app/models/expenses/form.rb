@@ -34,6 +34,8 @@ class Expenses::Form < Movements::Form
   def set_new_expense(attrs = {})
     set_defaults
     @movement = Expense.new(expense_attributes)
+    @movement.ref_number = Expense.get_ref_number
+    @movement.state = 'draft'
     2.times { @movement.expense_details.build(quantity: 1) }  if expense.details.empty?
     @service = Expenses::Service.new(expense)
   end

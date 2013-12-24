@@ -94,7 +94,6 @@ FactoryGirl.define do
     description "New income description"
     state "draft"
     balance 100
-    association :transaction, factory: :transaction, strategy: :build
     factory :income_approved do
       state "approved"
     end
@@ -108,7 +107,6 @@ FactoryGirl.define do
     description "New expense description"
     state "draft"
     balance 100
-    association :transaction, factory: :transaction, strategy: :build
     factory :expense_approved do
       state 'approved'
     end

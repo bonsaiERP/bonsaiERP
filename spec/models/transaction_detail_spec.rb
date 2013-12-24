@@ -45,7 +45,7 @@ describe TransactionDetail do
 
     let(:attributes) {
       {
-      contact_id: 1, date: Date.today, due_date: Date.today, ref_number: 'I-0001', currency: 'BOB',
+      contact_id: 1, date: Date.today, due_date: Date.today, ref_number: 'I-0001', currency: 'BOB', state: 'draft',
       income_details_attributes: [{item_id: 1, price: 20, quantity: 10}]
       }
     }
