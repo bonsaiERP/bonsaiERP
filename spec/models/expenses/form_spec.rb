@@ -41,6 +41,8 @@ describe Expenses::Form do
       subject.should respond_to(:expense_details)
       subject.should respond_to(:expense_details_attributes)
       subject.should respond_to(:expense_details_attributes=)
+
+      subject.form_details_name.should eq('expenses_form[expense_details_attributes]')
     end
 
     it "sets_defaults if nil" do

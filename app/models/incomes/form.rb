@@ -45,6 +45,14 @@ class Incomes::Form < Movements::Form
     attrs
   end
 
+  def form_name
+    'incomes_form'
+  end
+
+  def form_details_name
+    'incomes_form[income_details_attributes]'
+  end
+
   private
 
     def set_defaults

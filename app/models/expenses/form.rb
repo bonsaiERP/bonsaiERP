@@ -44,18 +44,21 @@ class Expenses::Form < Movements::Form
     attrs
   end
 
-private
-
-
-  def expense_is_valid
-    self.errors.add :base, I18n.t('errors.messages.expense.payments') unless expense.total === expense.balance
+  def form_details_name
+    'expenses_form[expense_details_attributes]'
   end
 
-  def valid_account_to
-    self.errors.add(:account_to_id, I18n.t('errors.messages.quick_income.valid_account_to')) unless account_to.present?
-  end
+  private
 
-  def account_to
-    @account_to ||= Accounts::Query.new.bank_cash.where(currency: currency, id: account_to_id).first
-  end
+    def expense_is_valid
+      self.errors.add :base, I18n.t('errors.messages.expense.payments') unless expense.total === expense.balance
+    end
+
+    def valid_account_to
+      self.errors.add(:account_to_id, I18n.t('errors.messages.quick_income.valid_account_to')) unless account_to.present?
+    end
+
+    def account_to
+      @account_to ||= Accounts::Query.new.bank_cash.where(currency: currency, id: account_to_id).first
+    end
 end

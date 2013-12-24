@@ -8,6 +8,9 @@ myApp.controller 'MovementController', ['$scope', 'MovementDetail', ($scope, Mov
   $scope.tax_in_out = $('#tax_in_out').prop('checked')
   $scope.tax_label = 'Por fuera'
   $scope.taxes = $('#taxes').data('taxes')
+  $scope._destroy = '0'
+  $scope.exchange_rate = $('#exchange_rate').val() * 1
+  $scope.calls = 0
 
 
   # initialize items
@@ -34,13 +37,21 @@ myApp.controller 'MovementController', ['$scope', 'MovementDetail', ($scope, Mov
 
   # Check for cahnges on exchange_rate to update details
   $scope.$watch 'exchange_rate', ->
+    $scope.calls += 1
+    return  if $scope.calls is 1
     for det in $scope.details
+      console.log det.price
       det.price = _b.roundVal(det.original_price / $scope.exchange_rate, 2)
 
+
+  # add details
+  $scope.addDetail = ->
+    $scope.details.push new MovementDetail({})
 
   # Tax label
   $scope.taxLabel = ->
     if $scope.tax_in_out is true then 'Por dentro' else 'Por fuera'
+
 
   # Subtotal
   $scope.subtotal = ->
@@ -50,14 +61,19 @@ myApp.controller 'MovementController', ['$scope', 'MovementDetail', ($scope, Mov
 
 
   $scope.taxTotal = ->
+    sub = $scope.subtotal()
     if $scope.tax and $scope.tax_in_out
-      $scope.subtotal() * ( 100 / $scope.tax.percentage )
+      sub - ( sub / (1 + $scope.tax.percentage / 100) )
     else if $scope.tax and $scope.tax_in_out is false
-      $scope.subtotal() * ( $scope.tax.percentage / 100 )
+      sub * ( $scope.tax.percentage / 100)
     else
       0
 
   # total
   $scope.total = ->
-    0
+    if $scope.tax_in_out
+      $scope.subtotal()
+    else
+      $scope.subtotal() + $scope.taxTotal()
+
 ]

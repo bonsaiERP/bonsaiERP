@@ -45,6 +45,8 @@ describe Incomes::Form do
       subject.should respond_to(:details)
       subject.should respond_to(:income_details)
       subject.should respond_to(:income_details_attributes)
+
+      subject.form_details_name.should eq('incomes_form[income_details_attributes]')
     end
 
     it "sets_defaults if nil" do

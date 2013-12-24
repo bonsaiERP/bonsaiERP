@@ -139,10 +139,6 @@ class IncomesController < ApplicationController
       end
     end
 
-    def quick_income_params
-     params.require(:incomes_quick_form).permit(*movement_params.quick_income)
-    end
-
     def income_params
       params.require(:incomes_form).permit(*movement_params.income)
     end

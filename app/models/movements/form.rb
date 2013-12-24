@@ -60,6 +60,12 @@ class Movements::Form < BaseForm
     self.currency ||= OrganisationSession.currency
   end
 
+  def form_details_data
+    details.map { |v|
+      { id: v.id, item: v.item_to_s, item_id: v.item_id, price: v.price, quantity: v.quantity, original_price: v.item_price }
+    }
+  end
+
   private
 
     def unique_item_ids

@@ -2,7 +2,8 @@
   Items
   %span.n(style='font-size: 13px')= link_to 'ver ítems', items_path, target: '_blank'
 
-%input(id='details' data-details='#{ movement.details.to_json }' value='#{ movement.details.to_json }')
+%input(id='details' type='text' data-details='#{ movement.form_details_data.to_json }' value='#{ movement.form_details_data.to_json }')
+
 
 %table#items-table.table
   %tr
@@ -18,24 +19,34 @@
       %span.currency
     %th
 
-  %tr(ng-repeat='detail in details')
+  %tr(ng-repeat='detail in details' ng-hide='detail._destroy==1')
+
     %td
-      %input(type='text' ng-model='detail.id' name='income_details_attributes[{{$index}}][id]' size='2')
-      %input(type='text' ng-model='detail.item_id' name='income_details_attributes[{{$index}}][id]' size='2')
-      %input(type='hidden' ng-model='detail.item_id')
-      %input(type='text' placeholder='Escriba para buscar el ítem' data-source='#{item_url}' ng-model='detail.item' ng-detail-autocomplete)
+      %input(type='hidden' ng-model='detail.id' name='#{movement.form_details_name}[{{$index}}][id]' size='2')
+      %input(type='hidden' ng-model='detail._destroy' name='#{movement.form_details_name}[{{$index}}][_destroy]' size='2')
+
+      %input(type='text' ng-model='detail.item_id' name='#{movement.form_details_name}[{{$index}}][item_id]' size='2' style='display:none')
+      %input(type='text' size='75' placeholder='Escriba para buscar el ítem' data-source='#{item_url}' ng-model='detail.item' ng-detail-autocomplete)
+
     %td
-      %input(type='text' ng-model='detail.price' size='10' value='10')
+      %input.r(type='text' ng-model='detail.price' name='#{movement.form_details_name}[{{$index}}][price]' size='10' value='10')
+
     %td
-      %input(type='text' ng-model='detail.quantity' size='10')
+      %input.r(type='text' ng-model='detail.quantity' name='#{movement.form_details_name}[{{$index}}][quantity]' size='8')
+
     %td.r
       {{ detail.subtotal() | decimal }}
+
     %td
       %a.dark(href='javascript:;' ng-click='destroy($index)')
         = icon_delete
 
   %tr
-    %td.r(colspan='3')
+    %td
+      %a.btn(ng-click='addDetail()')
+        %i.icon-plus-sign
+        Nueva línea
+    %td.r(colspan='2')
       Subtotal
       %span.currency
     %td.r
@@ -68,5 +79,5 @@
       %strong Total
       %span.currency
     %td.r
-      {{ total() | decimal }}
+      %strong {{ total() | decimal }}
     %td

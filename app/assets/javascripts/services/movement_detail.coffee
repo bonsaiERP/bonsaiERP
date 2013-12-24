@@ -10,6 +10,7 @@ myApp.factory 'MovementDetail', [ ($resource) ->
       price: 0
       original_price: 0
       exchange_rate: 1
+      _destroy: 0
     # const
     constructor: (@attributes) ->
       @[key] = @attributes[key] || val  for key, val of @default
