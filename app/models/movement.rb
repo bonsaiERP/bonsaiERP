@@ -10,7 +10,8 @@ class Movement < Account
   STATES = %w(draft approved paid nulled)
 
   # Store
-  store_accessor :extras, :bill_number, :gross_total, :original_total, :balance_inventory, :nuller_datetime, :null_reason, :approver_datetime, :delivered, :discounted, :devolution, :no_inventory
+  EXTRA_COLUMNS = %i(bill_number gross_total original_total balance_inventory nuller_datetime null_reason approver_datetime delivered discounted devolution no_inventory).freeze
+  store_accessor( *([:extras] + EXTRA_COLUMNS))
 
   # Callbacks
   before_update :check_items_balances
@@ -145,36 +146,22 @@ class Movement < Account
     subtotal * tax_percentage/100
   end
 
+  extend Models::MapHstore
   # Extra columns boolean
-  [:devolution, :delivered].each do |meth|
-    define_method :"#{meth}?" do
-      if %w{true false}.include? send(meth)
-        send(meth) == "true" ? true : false
-      else
-        send(meth)
-      end
-    end
-  end
+  convert_hstore_to_boolean :devolution, :delivered, :discounted, :no_inventory
+  convert_hstore_to_decimal :gross_total, :original_total, :balance_inventory
+  convert_hstore_to_time :nuller_datetime, :approver_datetime
 
-  alias_method :old_balance_inventory, :balance_inventory
-  def balance_inventory
-    old_balance_inventory.try(:to_d)
-  end
+  #extra time
 
   alias_method :old_attributes, :attributes
   def attributes
     old_attributes.merge(
-      Hash[ extras_columns.map { |k| [k.to_s, self.send(k)] } ]
+      Hash[ self.class.stored_attributes[:extras].map { |k| [k.to_s, self.send(k)] } ]
     )
   end
 
   private
-
-    def extras_columns
-      [:bill_number, :gross_total, :original_total, :balance_inventory,
-       :nuller_datetime, :null_reason, :approver_datetime, :delivered,
-       :discounted, :devolution, :no_inventory]
-    end
 
     def nulling_valid?
       ['paid', 'approved'].include?(state_was) && is_nulled?

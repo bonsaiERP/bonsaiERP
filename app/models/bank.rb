@@ -6,19 +6,17 @@ class Bank < Account
   # module
   extend SettersGetters
 
-  # Relationships
-  has_one :money_store, foreign_key: :account_id, autosave: true
+  # Store accessors
+  EXTRA_COLUMNS = [:email, :address, :phone, :website].freeze
+  store_accessor( *([:extras] + EXTRA_COLUMNS))
 
-  # Delegations
-  MONEY_METHODS = [:email, :address, :phone, :website].freeze
-  delegate(*create_accessors(*MONEY_METHODS), to: :money_store)
-  delegate :id, to: :money_store, prefix: true
 
-  def self.new_bank(attrs = {})
-    new do |c|
-      c.build_money_store
-      c.attributes = attrs
-    end
+  # can't use Bank.stored_attributes methods[:extras]
+  alias_method :old_attributes, :attributes
+  def attributes
+    old_attributes.merge(
+      Hash[EXTRA_COLUMNS.map { |k| [k.to_s, send(k)] }]
+    )
   end
 
   def pendent_ledgers

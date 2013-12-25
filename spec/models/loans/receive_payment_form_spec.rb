@@ -85,7 +85,7 @@ describe Loans::ReceivePaymentForm do
 
       today = Date.today
       income = Income.new(total: 100, balance: 100, state: 'approved', currency: 'BOB', id: 100, contact_id: 1,
-                         date: today, due_date: today)
+                         date: today, due_date: today, ref_number: 'I-13-0001')
       income.stub(contact: build(:contact, id: 1))
       income.save.should be_true
 
@@ -146,7 +146,7 @@ describe Loans::ReceivePaymentForm do
 
       today = Date.today
       expense = Income.new(total: 100, balance: 100, state: 'approved', currency: 'BOB', id: 100, contact_id: 1,
-                         date: today, due_date: today)
+                         date: today, due_date: today, ref_number: 'I-13-001')
       expense.stub(contact: build(:contact, id: 1))
       expense.save.should be_true
 

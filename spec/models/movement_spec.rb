@@ -214,5 +214,25 @@ describe Movement do
       expense.null!.should be_true
       expense.should be_is_nulled
     end
+
+    it "#attributes" do
+      t = Time.zone.now
+      c = build :contact, id: 1
+      attrs = { bill_number: '123', gross_total: 100, original_total: 101, balance_inventory: 50, nuller_datetime: t, null_reason: 'No se', discounted: false, devolution: false, no_inventory: false}
+      d = Date.today
+      m = Movement.new({
+        currency: 'BOB', ref_number: 'Ref-001', date: d, due_date: d,
+        contact_id: 1, state: 'draft'
+      }.merge(attrs))
+      m.stub(contact: c)
+
+      m.save.should be_true
+
+      m = Movement.find(m.id)
+      at = m.attributes
+      attrs.each do |k, v|
+        at.fetch(k.to_s).should eq(v)
+      end
+    end
   end
 end

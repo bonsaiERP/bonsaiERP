@@ -7,8 +7,8 @@ class Cash < Account
   extend SettersGetters
 
   # Relationships
-  has_one :money_store, autosave: true,
-          foreign_key: :account_id, dependent: :destroy
+  #has_one :money_store, autosave: true,
+  #        foreign_key: :account_id, dependent: :destroy
 
   # Delegations
   MONEY_METHODS = [:email, :address, :phone].freeze

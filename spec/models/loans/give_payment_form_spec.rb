@@ -76,7 +76,7 @@ describe Loans::GivePaymentForm do
 
       today = Date.today
       expense = Expense.new(total: 100, balance: 100, state: 'approved', currency: 'BOB', id: 100, contact_id: 1,
-                         date: today, due_date: today)
+                         date: today, due_date: today, ref_number: 'E-13-0001')
       expense.stub(contact: build(:contact, id: 1))
       expense.save.should be_true
 
@@ -141,7 +141,7 @@ describe Loans::GivePaymentForm do
 
       today = Date.today
       expense = Expense.new(total: 100, balance: 100, state: 'approved', currency: 'BOB', id: 100, contact_id: 1,
-                         date: today, due_date: today)
+                         date: today, due_date: today, ref_number: 'E-13-0001')
       expense.stub(contact: build(:contact, id: 1))
       expense.save.should be_true
 
