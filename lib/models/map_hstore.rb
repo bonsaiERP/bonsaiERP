@@ -17,7 +17,7 @@ module Models::MapHstore
     convert_hstore_to(:to_time, *methods)
   end
 
-  def convert_hstore_to_time(*methods)
+  def convert_hstore_to_date(*methods)
     convert_hstore_to(:to_date, *methods)
   end
 
@@ -27,11 +27,12 @@ module Models::MapHstore
 
   def convert_hstore_to_boolean(*methods)
     methods.each do |meth|
+      alias_method :"old_#{meth}", meth
       define_method :"#{meth}" do
-        if %w{true false}.include? send(meth)
-          send(meth) == "true" ? true : false
+        if %w{true false}.include? send(:"old_#{meth}")
+          send(:"old_#{meth}") == "true" ? true : false
         else
-          send(meth)
+          send(:"old_#{meth}")
         end
       end
 

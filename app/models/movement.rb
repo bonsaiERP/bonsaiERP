@@ -13,6 +13,12 @@ class Movement < Account
   EXTRA_COLUMNS = %i(bill_number gross_total original_total balance_inventory nuller_datetime null_reason approver_datetime delivered discounted devolution no_inventory).freeze
   store_accessor( *([:extras] + EXTRA_COLUMNS))
 
+  # Extra methods defined for Hstore
+  extend Models::MapHstore
+  convert_hstore_to_boolean :devolution, :delivered, :discounted, :no_inventory
+  convert_hstore_to_decimal :gross_total, :original_total, :balance_inventory
+  convert_hstore_to_time :nuller_datetime, :approver_datetime
+
   # Callbacks
   before_update :check_items_balances
   before_create { |m| m.creator_id = UserSession.id }
@@ -145,14 +151,6 @@ class Movement < Account
   def taxes
     subtotal * tax_percentage/100
   end
-
-  extend Models::MapHstore
-  # Extra columns boolean
-  convert_hstore_to_boolean :devolution, :delivered, :discounted, :no_inventory
-  convert_hstore_to_decimal :gross_total, :original_total, :balance_inventory
-  convert_hstore_to_time :nuller_datetime, :approver_datetime
-
-  #extra time
 
   alias_method :old_attributes, :attributes
   def attributes

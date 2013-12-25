@@ -233,6 +233,9 @@ describe Movement do
       attrs.each do |k, v|
         at.fetch(k.to_s).should eq(v)
       end
+
+      m.no_inventory?.should be_false
+      m.devolution?.should be_false
     end
   end
 end
