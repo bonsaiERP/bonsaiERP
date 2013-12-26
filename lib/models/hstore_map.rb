@@ -1,4 +1,4 @@
-module Models::MapHstore
+module Models::HstoreMap
 
   def convert_hstore_to(to_type, *methods)
     methods.each do |meth|
@@ -15,6 +15,20 @@ module Models::MapHstore
 
   def convert_hstore_to_time(*methods)
     convert_hstore_to(:to_time, *methods)
+  end
+
+  def convert_hstore_to_timezone(*methods)
+    methods.each do |meth|
+      alias_method :"old_#{meth}", meth
+      class_eval <<-CODE, __FILE__, __LINE__ + 1
+        def #{meth}
+          return old_#{meth}  if old_#{meth}.is_a?(Time)
+          Time.zone.parse(old_#{meth})
+        rescue
+          nil
+        end
+      CODE
+    end
   end
 
   def convert_hstore_to_date(*methods)

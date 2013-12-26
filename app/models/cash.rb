@@ -11,8 +11,8 @@ class Cash < Account
   #        foreign_key: :account_id, dependent: :destroy
 
   # Delegations
-  MONEY_METHODS = [:email, :address, :phone].freeze
-  delegate(*create_accessors(*MONEY_METHODS), to: :money_store)
+  EXTRA_COLUMNS = [:email, :address, :phone].freeze
+  store_accessor(:extras, *EXTRA_COLUMNS)
 
   # Validations
   validates :name, length: { minimum: 3 }

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Bank do
   let(:valid_attributes) {
-    {currency: 'BOB', name: 'Banco Uno 12365498', address: 'Uno', amount: 100}
+    { currency: 'BOB', name: 'Banco Uno 12365498', address: 'Uno', amount: 100, phone: '55-6678', website: 'mind.com' }
   }
 
 

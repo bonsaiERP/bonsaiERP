@@ -7,8 +7,9 @@ class Bank < Account
   extend SettersGetters
 
   # Store accessors
+  extend Models::HstoreMap
   EXTRA_COLUMNS = [:email, :address, :phone, :website].freeze
-  store_accessor( *([:extras] + EXTRA_COLUMNS))
+  store_accessor(:extras, *EXTRA_COLUMNS)
 
 
   # can't use Bank.stored_attributes methods[:extras]
