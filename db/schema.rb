@@ -79,6 +79,7 @@ ActiveRecord::Schema.define(version: 20131224081504) do
     t.integer  "tax_id"
     t.decimal  "total",                      precision: 14, scale: 2, default: 0.0
     t.boolean  "tax_in_out",                                          default: false
+    t.hstore   "extras"
     t.integer  "creator_id"
     t.integer  "approver_id"
     t.integer  "nuller_id"
