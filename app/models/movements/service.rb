@@ -4,7 +4,7 @@ class Movements::Service < Struct.new(:movement)
 
   # Delegates
   delegate :percentage, to: :tax, prefix: true
-  delegate :tax_id, :details, to: :movement
+  delegate :tax_id, :tax_in_out?, :details, to: :movement
   delegate :set_details, to: :details_service
   delegate :direct_payment, :account_to_id, :reference, to: :attributes_class
 
@@ -89,7 +89,7 @@ class Movements::Service < Struct.new(:movement)
 
     def calculate_total
       tot = details_service.subtotal #details.inject(0) { |s, d| s += d.subtotal  }
-      tot += tot * tax.percentage/100
+      tot += tot * tax.percentage/100  unless tax_in_out?
       tot
     end
 

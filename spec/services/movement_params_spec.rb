@@ -7,7 +7,7 @@ describe MovementParams do
     subject.income.should eq([
       :date, :contact_id, :currency, :exchange_rate, :project_id,
       :description, :due_date, :total, :tag_ids,
-      :direct_payment, :account_to_id, :reference, :tax_id,
+      :direct_payment, :account_to_id, :reference, :tax_id, :tax_in_out,
       income_details_attributes: [:id, :item_id, :price, :quantity, :_destroy]])
   end
 
@@ -15,7 +15,7 @@ describe MovementParams do
     subject.expense.should eq([
       :date, :contact_id, :currency, :exchange_rate, :project_id,
       :description, :due_date, :total, :tag_ids,
-      :direct_payment, :account_to_id, :reference, :tax_id,
+      :direct_payment, :account_to_id, :reference, :tax_id, :tax_in_out,
        expense_details_attributes: [:id, :item_id, :price, :quantity, :_destroy]])
   end
 

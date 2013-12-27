@@ -435,16 +435,27 @@ describe Incomes::Form do
       IncomeDetail.any_instance.stub(valid?: true)
     end
 
-    it "creates with tax" do
-      ifrm = Incomes::Form.new_income(valid_params.merge(tax_id: tax.id))
+    it "creates tax_in_out=false" do
+      ifrm = Incomes::Form.new_income(valid_params.merge(tax_id: tax.id, tax_in_out: false))
       ifrm.create.should be_true
 
       tax.percentage.should == 10
       inc = ifrm.income
+      inc.tax_in_out.should be_false
       inc.tax_percentage.should == 10
       inc.total.should == 550
     end
 
+    it "creates tax_in_out=true" do
+      ifrm = Incomes::Form.new_income(valid_params.merge(tax_id: tax.id, tax_in_out: true))
+      ifrm.create.should be_true
+
+      tax.percentage.should == 10
+      inc = ifrm.income
+      inc.tax_in_out.should be_true
+      inc.tax_percentage.should == 10
+      inc.total.should == 500
+    end
   end
 
   describe 'Change state' do

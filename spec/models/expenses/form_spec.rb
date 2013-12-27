@@ -422,14 +422,26 @@ describe Expenses::Form do
       ExpenseDetail.any_instance.stub(valid?: true)
     end
 
-    it "creates with tax" do
-      ifrm = Expenses::Form.new_expense(valid_params.merge(tax_id: tax.id))
+    it "tax_in_out=false" do
+      ifrm = Expenses::Form.new_expense(valid_params.merge(tax_id: tax.id, tax_in_out: false))
       ifrm.create.should be_true
 
       tax.percentage.should == 10
       exp = ifrm.expense
       exp.tax_percentage.should == 10
       exp.total.should == 550
+      exp.tax_in_out.should be_false
+    end
+
+    it "tax_in_out=true" do
+      ifrm = Expenses::Form.new_expense(valid_params.merge(tax_id: tax.id, tax_in_out: true))
+      ifrm.create.should be_true
+
+      tax.percentage.should == 10
+      exp = ifrm.expense
+      exp.tax_percentage.should == 10
+      exp.total.should == 500
+      exp.tax_in_out.should be_true
     end
   end
 end
