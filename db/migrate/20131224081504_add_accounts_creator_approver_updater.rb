@@ -16,9 +16,11 @@ class AddAccountsCreatorApproverUpdater < ActiveRecord::Migration
   end
 
   def down
-    remove_column :accounts, :creator_id
-    remove_column :accounts, :approver_id
-    remove_column :accounts, :nuller_id
-    remove_column :accounts, :due_date
+    PgTools.with_schemas except: 'common' do |t|
+      remove_column :accounts, :creator_id
+      remove_column :accounts, :approver_id
+      remove_column :accounts, :nuller_id
+      remove_column :accounts, :due_date
+    end
   end
 end

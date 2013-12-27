@@ -1,13 +1,9 @@
 class AddHstore < ActiveRecord::Migration
   def up
-    PgTools.with_schemas only: 'public' do
-      execute 'CREATE EXTENSION hstore'
-    end
+    execute "CREATE EXTENSION hstore SCHEMA public"
   end
 
   def down
-    PgTools.with_schemas only: 'public' do
-      execute 'DROP EXTENSION hstore'
-    end
+    execute 'DROP EXTENSION IF EXISTS hstore'
   end
 end

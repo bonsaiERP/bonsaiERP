@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Cash do
   let(:valid_attributes) do
-    {currency: 'BOB', name: 'Caja 1', amount: 1000.0, address: 'First way', phone: '777-12345'}
+    { currency: 'BOB', name: 'Caja 1', amount: 1000.0, address: 'First way', phone: '777-12345', email: 'my@mail.com' }
   end
 
   before(:each) do
@@ -10,12 +10,15 @@ describe Cash do
   end
 
   context 'Created related and check relationships, validations' do
-    subject { Cash.new_cash }
+    subject { Cash.new }
 
-    it { should have_one(:money_store) }
 
     it { should_not have_valid(:name).when('No', 'E', '', nil) }
     it { should have_valid(:name).when('Especial', 'Caja 2') }
+  end
+
+  before(:each) do
+    UserSession.user = build :user, id: 1
   end
 
   it "returns to_s method" do
@@ -25,7 +28,7 @@ describe Cash do
   end
 
   it 'create an instance' do
-    c = Cash.new_cash(valid_attributes)
+    c = Cash.new(valid_attributes)
     c.save.should be_true
 
     valid_attributes.each do |k, v|
@@ -35,11 +38,10 @@ describe Cash do
 
   it 'allow updates' do
     # Does not allow the use of create or create! methods
-    c = Cash.new_cash(valid_attributes.merge(amount: 200))
+    c = Cash.new(valid_attributes.merge(amount: 200))
     c.save.should be_true
 
     c.should be_persisted
-    c.money_store.should be_persisted
 
     c.update_attributes(address: 'Another address', email: 'caja1@mail.com').should be_true
 

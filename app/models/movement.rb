@@ -155,7 +155,7 @@ class Movement < Account
   alias_method :old_attributes, :attributes
   def attributes
     old_attributes.merge(
-      Hash[ self.class.stored_attributes[:extras].map { |k| [k.to_s, self.send(k)] } ]
+      Hash[ EXTRA_COLUMNS.map { |k| [k.to_s, self.send(k)] } ]
     )
   end
 

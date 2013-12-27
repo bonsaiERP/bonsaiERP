@@ -52,22 +52,16 @@ FactoryGirl.define do
     organisation_name "León"
   end
 
-  factory :money_store do
-    email 'test@mail.com'
-  end
-
   factory :bank do
     name "Bank"
     currency 'BOB'
     amount 100
-    association :money_store, factory: :money_store, strategy: :build
   end
 
   factory :cash do
     currency 'BOB'
     name { "Cash #{currency}" }
     amount 100
-    association :money_store, factory: :money_store, strategy: :build
   end
 
   factory :project do

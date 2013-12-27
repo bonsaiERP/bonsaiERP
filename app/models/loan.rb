@@ -1,4 +1,3 @@
-# encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class Loan < Account
@@ -10,8 +9,9 @@ class Loan < Account
   LOAN_TYPES = %w(Loans::Receive Loans::Give).freeze
 
   # Store
+  extend Models::HstoreMap
   store_accessor :extras, :interests
-
+  convert_hstore_to_decimal :interests
 
   # Validations
   validates_presence_of :date, :due_date, :name, :contact, :contact_id
@@ -30,13 +30,6 @@ class Loan < Account
   alias_method :old_attributes, :attributes
   def attributes
     old_attributes.merge("interests" => interests)
-  end
-
-  alias_method :old_interests, :interests
-  def interests
-    old_interests.to_d
-  rescue
-    nil
   end
 
   STATES.each do |m|

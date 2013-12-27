@@ -13,7 +13,7 @@ class Loans::Form < BaseForm
 
   #attr_accessor :klass, :ledger_sign, :ledger_operation
 
-  delegate :currency, to: :account_to, allow_nil: true
+  delegate :currency, to: :account_to, prefix: true, allow_nil: true
   delegate :name, :id, to: :loan
 
   # validations
