@@ -24,6 +24,8 @@
 
   %body(ng-app='myApp')
 
+    = render 'layouts/notifications'
+
     -# Header
     #head
       - cache [current_user, 'menu'] do

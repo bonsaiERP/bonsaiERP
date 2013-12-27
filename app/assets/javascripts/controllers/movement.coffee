@@ -81,8 +81,20 @@ myApp.controller 'MovementController', ['$scope', 'MovementDetail', ($scope, Mov
     else
       $scope.subtotal() + $scope.taxTotal()
 
-  # Valid
-  $scope.valid = (event) ->
-    event.preventDefault()
+  # Any valid item
+  $scope.anyValidItem = ->
+    _.any( _.map($scope.details, (det) -> det.valid() ) )
+
+  # Validation using jquery, not really angular way
+  $('form.movement-form').on 'submit', (event) ->
+    if $scope.anyValidItem()
+      true
+    else
+      event.preventDefault()
+      $('.top-left').notify({ message: { text: 'Debe seleccionar al menos un ítem' }, type: 'error' }).show()
+
+
+  $scope.valid = ->
+    console.log arguments
     return false
 ]

@@ -1,49 +1,45 @@
-= simple_form_for(expense_service, url: get_expense_url(expense_service), html: {class: 'enter ui-form', method: expense_form_method(expense_service)}) do |f|
-  = bonsai_form_error(f)
+#expense-form(ng-controller='MovementController')
+  = simple_form_for(expense_service, url: get_expense_url(expense_service),
+    html: {class: 'enter ui-form movement-form', method: expense_form_method(expense_service)}, 'ng-submit' => 'valid()') do |f|
+    = bonsai_form_error(f)
 
-  -########################################
-  -# Render common form elements
-  = render 'transactions/shared_form', f: f, transaction: expense_service.expense, lbl: 'Egreso'
-  = render 'transactions/form_direct_payment', f: f, lbl: 'Pago', movement: expense_service
+    -########################################
+    -# Render common form elements
+    = render 'movements/shared_form', f: f, transaction: expense_service.expense, lbl: 'Egreso'
+    = render 'movements/form_direct_payment', f: f, lbl: 'Pago', movement: expense_service
 
-  -########################################
-  -# Render items
-  .row-fluid
-    =render "transactions/form_items", f: f, transaction: expense_service.expense, details: :expense_details
+    -########################################
+    -# Render items
+    .row-fluid
+      = render 'movements/form_items', f: f, movement: expense_service, details: :expense_details, item_url: search_expense_items_path
 
-  .row-fluid
-    .span6
-      = f.input :description, label: 'Descripción', as: 'text', input_html: {rows: 2, class: 'span10', placeholder: 'Descripción del Egreso'}
+    .row-fluid
+      .span6
+        = f.input :description, label: 'Descripción', as: 'text', input_html: {rows: 2, class: 'span10', placeholder: 'Descripción del Egreso'}
 
-  .form-actions
-    - if expense_service.is_draft?
-      .ib.save-button
-        = f.submit 'Salvar borrador', class: 'btn b btn-large trans', name: 'commit_save'
-        %br
-        %small.muted Salva un borrador o proforma
-      .ib
-        = f.submit value: 'Salvar y aprobar', class: 'btn b btn-large btn-primary', name: 'commit_approve'
-        %br
-        %small.muted Salva y permite pagos
-    - else
-      = f.submit 'Salvar', class: 'btn btn-primary btn-large b'
+    .form-actions
+      - if expense_service.is_draft?
+        .ib.save-button
+          = f.submit 'Salvar borrador', class: 'btn b btn-large trans', name: 'commit_save'
+          %br
+          %small.muted Salva un borrador o proforma
+        .ib
+          = f.submit value: 'Salvar y aprobar', class: 'btn b btn-large btn-primary', name: 'commit_approve'
+          %br
+          %small.muted Salva y permite pagos
+      - else
+        = f.submit 'Salvar', class: 'btn btn-primary btn-large b'
 
 
--# Help tours
-= render 'expenses/tour'
+  -# Help tours
+  = render 'expenses/tour'
 
-:javascript
-  $(function() {
-    $('body').on('new-contact', '.contact-form', function(event, resp) {
-      $('.contact_id').val(resp.matchcode).data('value', resp.matchcode)
-      .prev().val(resp.matchcode);
+  :javascript
+    $(function() {
+      $('body').on('new-contact', '.contact-form', function(event, resp) {
+        $('.contact_id').val(resp.matchcode).data('value', resp.matchcode)
+        .prev().val(resp.matchcode);
+      });
+
+      fx.rates = exchangeRates.rates;
     });
-
-    if($('[name=commit_approve]').length == 0) {
-      $('[name=commit_save]').addClass('btn-primary');
-    }
-
-    fx.rates = exchangeRates.rates;
-    expense = new App.Expense();
-    expense.setAccountsTo(#{Accounts::Query.new.bank_cash_options.to_json});
-  });

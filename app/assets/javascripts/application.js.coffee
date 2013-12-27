@@ -28,6 +28,7 @@
 #= require bootstrap/bootstrap-collapse.js
 #= require bootstrap/bootstrap-tab.js
 #= require bootstrap/bootstrap-button.js
+#= require bootstrap/bootstrap-notify.js
 
 
 #= require app/graph_report.coffee

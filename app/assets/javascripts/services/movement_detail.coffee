@@ -21,4 +21,6 @@ myApp.factory 'MovementDetail', [ ($resource) ->
       _.any(@errors[key])
     errorsFor: (key) ->
       if @errors[key]? then @errors[key][0] else ''
+    valid: ->
+      @item_id? and quantity > 0
 ]

@@ -2,7 +2,7 @@
   Items
   %span.n(style='font-size: 13px')= link_to 'ver ítems', items_path, target: '_blank'
 
-%input(id='details' type='text' data-details='#{ movement.form_details_data.to_json }')
+%input(id='details' type='hidden' data-details='#{ movement.form_details_data.to_json }')
 
 %table#items-table.table
   %tr
