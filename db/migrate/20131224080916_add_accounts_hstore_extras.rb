@@ -20,7 +20,7 @@ class AddAccountsHstoreExtras < ActiveRecord::Migration
     PgTools.all_schemas.each do |schema|
       next  if schema == 'common'
       PgTools.change_schema schema
-      execute "ALTER TABLE accounts DROP COLUMN extras"
+      execute "ALTER TABLE accounts DROP COLUMN IF EXISTS extras"
     end
   end
 end

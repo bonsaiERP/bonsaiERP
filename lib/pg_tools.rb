@@ -1,10 +1,7 @@
 # encoding: utf-8
 module PgTools
-  extend self
-
-  def get_schema_name(id)
-    "schema#{id}"
-  end
+  # extend self
+  module_function
 
   def public_schema?
     res = connection.execute("SHOW search_path")
@@ -23,10 +20,9 @@ module PgTools
   end
 
   def change_schema(schema_name)
-    #connection.execute "SET search_path TO #{schema_name}"
     connection.schema_search_path = [schema_name, 'public'].join(', ')
   end
-  alias :change_tenant :change_schema
+  alias_method :change_tenant, :change_schema
 
   def reset_search_path
     connection.execute "SET search_path TO public"
@@ -184,10 +180,6 @@ BASH
     ActiveRecord::Base.connection.current_schema
   end
 
-  def set_schema_path(schema)
-    ActiveRecord::Base.connection.schema_search_path = schema
-  end 
-
   def reset_schema_path
     ActiveRecord::Base.connection.schema_search_path = 'public'
   end
@@ -195,7 +187,7 @@ BASH
   def with_schemas(options = nil)
     options = unify_type(options, Hash) { |items| {:only => items} }
     options[:only] = unify_type(options[:only], Array) { |item| item.nil? ? all_schemas : [item] }.map { |item| item.to_s }
-    options[:except] =unify_type(options[:except], Array) { |item| item.nil? ? [] : [item] }.map { |item| item.to_s }
+    options[:except] = unify_type(options[:except], Array) { |item| item.nil? ? [] : [item] }.map { |item| item.to_s }
 
     options[:only] = unify_array_item_type(options[:only], String) { |symbol| symbol.to_s }
     options[:except] = unify_array_item_type(options[:except], String) { |symbol| symbol.to_s }
@@ -204,7 +196,7 @@ BASH
 
     schema_list.each do |schema|
       puts "Working on schema #{schema}"
-      set_schema_path schema
+      change_schema schema
       yield schema
     end
     reset_schema_path
@@ -223,7 +215,6 @@ BASH
       unify_type item, type, &block
     end
   end
-protected
 
   def connection
     ActiveRecord::Base.connection

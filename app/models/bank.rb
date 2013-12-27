@@ -3,9 +3,6 @@
 # email: boriscyber@gmail.com
 class Bank < Account
 
-  # module
-  extend SettersGetters
-
   # Store accessors
   extend Models::HstoreMap
   EXTRA_COLUMNS = [:email, :address, :phone, :website].freeze
