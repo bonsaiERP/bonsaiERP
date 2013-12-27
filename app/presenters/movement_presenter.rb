@@ -72,6 +72,8 @@ class MovementPresenter < BasePresenter
       d << "</span>"
     end
     d.html_safe
+  rescue
+    ''
   end
 
   def description_tag

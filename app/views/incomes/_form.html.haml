@@ -1,5 +1,6 @@
 #income-form(ng-controller='MovementController')
-  = simple_form_for(income_service, url: get_income_url(income_service), html: {class: 'enter ui-form', method: income_form_method(income_service)}) do |f|
+  = simple_form_for(income_service, url: get_income_url(income_service),
+    html: { class: 'enter ui-form', method: income_form_method(income_service) }) do |f|
     = bonsai_form_error(f)
 
     -########################################

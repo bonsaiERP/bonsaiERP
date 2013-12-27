@@ -11,9 +11,14 @@ myApp.factory 'MovementDetail', [ ($resource) ->
       original_price: 0
       exchange_rate: 1
       _destroy: 0
+      errors: {}
     # const
     constructor: (@attributes) ->
       @[key] = @attributes[key] || val  for key, val of @default
     subtotal: ->
       @price * @quantity
+    hasError: (key) ->
+      _.any(@errors[key])
+    errorsFor: (key) ->
+      if @errors[key]? then @errors[key][0] else ''
 ]

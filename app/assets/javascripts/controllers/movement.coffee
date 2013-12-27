@@ -22,7 +22,12 @@ myApp.controller 'MovementController', ['$scope', 'MovementDetail', ($scope, Mov
     if $scope.details.length is 1
       # Alert message
       return
-    $scope.details.splice index, 1
+
+    if $scope.details[index].id?
+      $scope.details[index]._destroy = 1
+      $scope.details[index].quantity = 0
+    else
+      $scope.details.splice index, 1
 
   # Changes the exchange_rates on the details
   $scope.updateDetailsExchangeRate = (rate) ->
@@ -76,4 +81,8 @@ myApp.controller 'MovementController', ['$scope', 'MovementDetail', ($scope, Mov
     else
       $scope.subtotal() + $scope.taxTotal()
 
+  # Valid
+  $scope.valid = (event) ->
+    event.preventDefault()
+    return false
 ]

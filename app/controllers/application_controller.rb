@@ -108,7 +108,7 @@ private
   helper_method :organisation?
 
   def set_tenant
-    PgTools.change_tenant current_tenant
+    PgTools.change_schema current_tenant
   end
 
   def set_organisation_session
