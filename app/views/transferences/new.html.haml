@@ -1,72 +1,68 @@
 - content_for :links do
   %ul.breadcrumbs.span6
     %li
-      =link_to @account, @account
+      - tit, url = @account.is_a?(Bank) ? ['Cuentas bancarias', banks_path] : ['Cuentas efectivo', cashes_path]
+      = link_to tit, url
     %li
       %i.icon-caret-right
     %li
-      Nueva transferencia
+      = link_to @account, @account
 
 .row-fluid
   .span6
     %h2 Nueva transferencia
 
-= simple_form_for @transference, html: {id: 'transference-form'} do |f|
-  = bonsai_form_error(f)
+#transference(ng-controller='TransferenceController')
+  = simple_form_for @transference, html: {id: 'transference-form'} do |f|
+    = bonsai_form_error(f)
 
-  = hidden_field_tag :account_id, params[:account_id]
-  .row-fluid
-    .span6
-      %label De cuenta
-      = link_to @account, @account
-      %span.muted con saldo de:
-      %strong= ntc @account.amount
-      = currency_label @account.currency
-    .span6
-      = f.input :account_to_id, label: 'A cuenta', input_html: {class: 'span10'}
+    = hidden_field_tag 'base_currency', @transference.account.currency, 'ng-model' => 'base_currency', 'ng-initial' => true
 
-  .row-fluid.well.well-small
-    .span3
-      = f.input :amount,
-        label: 'Cantidad <span class="currency"></span>'.html_safe,
-        input_html: {type: 'decimal', size: 10,
-        data: {value: 'transference.amount'} }
-    .span3
-      = f.input :exchange_rate, label: 'Tipo de cambio',
-        input_html: {disabled: true, type: 'decimal', size: 10,
-        data: {value: 'transference.exchange_rate', disabled: 'transference.sameCurrency'} }
-    #transference-currency.span3
-      .moneybox
-        %label
-          TOTAL
-        %h4
-          %span(data-text="transference.totalCurrency") 0,00
-          = currency_label @account.currency
+    = hidden_field_tag :account_id, params[:account_id]
 
-  .row-fluid
-    .span3
-      = f.input :date, as: :datepicker, label: 'Fecha'
+    %input(type='hidden' id='accounts' data-accounts='#{Accounts::Query.new.bank_cash_options_minus(@transference.account_id).to_json}')
 
-    .span3.form-inline
-      = f.input :verification, as: :boolean,
-        input_html: {data: {value: 'transference.verification', checked: 'transference.verification'} },
-        label: 'Verificar <i class="icon-warning-sign" data-toggle="tooltip" title="El monto no es aplicado hasta que se verifique la transacción"></i>'.html_safe
-    .span6
-      = f.input :reference, label: 'Referecia', as: :text,
-        input_html: {rows: 2, cols: INPUT_SIZE, placeholder: 'Recibo, document,etc.',
-        data: {value: 'transference.reference'}}
+    .row-fluid
+      .span6
+        %label De cuenta
+        = link_to @account, @account
+        %span.muted con saldo de:
+        %strong= ntc @account.amount
+        = currency_label @account.currency
+      .span6
+        = f.input :account_to_id, label: 'A cuenta',
+          input_html: { id: 'account_to_id', class: 'span10', 'ng-model' => 'account_to_id' }
 
-  .form-actions
-    = f.submit "Transferir", class: 'btn btn-primary btn-large b'
+    .row-fluid.well.well-small
+      .span3
+        = f.input :amount,
+          label: "Cantidad #{currency_label @transference.account.currency}".html_safe,
+          input_html: { type: 'decimal', size: 10, 'ng-model' => 'amount', 'ng-initial' => true }
+      .span3
+        = f.input :exchange_rate, label: 'Tipo de cambio',
+          input_html: { type: 'decimal', size: 10,
+          'ng-model' => 'exchange_rate', 'ng-initial' => true, 'ng-disabled' => 'same_currency' }
+      #transference-currency.span3
+        .moneybox
+          %label
+            TOTAL
+          %h4
+            {{ amountCurrency() | decimal }}
+            %span.currency
 
-:javascript
-  $(function() {
-    var t = new App.Transference({
-      accountsTo: #{Accounts::Query.new.bank_cash_options_minus(@account.id).to_json},
-      baseCurrency: "#{@account.currency}",
-      currency: "#{@transference.account_to_currency}",
-      exchange_rate: "#{@transference.exchange_rate}",
-      account_to_id: "#{@transference.account_to_id}",
-      amount: #{@transference.amount}
-    });
-  })
+    .row-fluid
+      .span3
+        = f.input :date, as: :datepicker, label: 'Fecha'
+
+      .span3.form-inline
+        %div(ng-show='is_bank')
+          = f.input :verification, as: :boolean,
+            input_html: {data: {value: 'transference.verification', checked: 'transference.verification'} },
+            hint: 'Verificar a futuro. Ej.: (Cheque)'
+      .span6
+        = f.input :reference, label: 'Referecia', as: :text,
+          input_html: {rows: 2, cols: INPUT_SIZE, placeholder: 'Recibo, document,etc.',
+          data: {value: 'transference.reference'}}
+
+    .form-actions
+      = f.submit "Transferir", class: 'btn btn-primary btn-large b'
