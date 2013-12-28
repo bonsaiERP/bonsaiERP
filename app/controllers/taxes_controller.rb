@@ -14,7 +14,7 @@ class TaxesController < ApplicationController
 
     if @tax.save
       if request.xhr?
-        render json: { id: @tax.id, to_s: @tax.to_s }
+        render json: { id: @tax.id, to_s: @tax.to_s, percentage: @tax.percentage, name: @tax.name }
       end
     else
       render :new

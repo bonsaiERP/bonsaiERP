@@ -12,6 +12,12 @@ myApp.controller 'MovementController', ['$scope', 'MovementDetail', ($scope, Mov
   $scope.exchange_rate = $('#exchange_rate').val() * 1
   $scope.calls = 0
 
+  # Set tax
+  tax_id = $('#tax_id').val() * 1
+  $scope.tax = _.find $scope.taxes, (v) -> v.id == tax_id  if tax_id > 0
+
+  # ng-class Does not work fine with bootstrap buttons javascript
+  $('#tax-in-out-btn').addClass('active')  if $scope.tax_in_out
 
   # initialize items
   for det in $('#details').data('details')
@@ -45,13 +51,15 @@ myApp.controller 'MovementController', ['$scope', 'MovementDetail', ($scope, Mov
     $scope.calls += 1
     return  if $scope.calls is 1
     for det in $scope.details
-      console.log det.price
       det.price = _b.roundVal(det.original_price / $scope.exchange_rate, 2)
 
 
   # add details
   $scope.addDetail = ->
     $scope.details.push new MovementDetail({})
+
+  # Tax id
+  $scope.setTaxId = -> $scope.tax_id = $scope.tax.id
 
   # Tax label
   $scope.taxLabel = ->
@@ -93,12 +101,8 @@ myApp.controller 'MovementController', ['$scope', 'MovementDetail', ($scope, Mov
       event.preventDefault()
       $('.top-left').notify({ message: { text: 'Debe seleccionar al menos un ítem' }, type: 'error' }).show()
 
-  $scope.valid = ->
-    console.log arguments
-    return false
-
   # Add new item with add button
-  $('body').on 'ajax-call', 'table a.add-new-url', (event, resp) ->
+  $('body').on 'ajax-call', 'table a.add-new-line', (event, resp) ->
     scope = $(this).parents('tr:first').scope()
 
     scope.$apply (sc) ->
@@ -108,4 +112,11 @@ myApp.controller 'MovementController', ['$scope', 'MovementDetail', ($scope, Mov
       sc.detail.item_id = resp.id
       sc.detail.price = _b.roundVal(resp.price / $scope.exchange_rate, 2)
       sc.detail.original_price = resp.price
+
+  $('body').on 'ajax-call', 'a.add-new-tax', (event, resp) ->
+    $scope.$apply (scope) ->
+      tax = { id: resp.id, name: resp.name, percentage: resp.percentage }
+      scope.taxes.push tax
+      scope.tax = tax
+      scope.tax_id = tax.id
 ]
