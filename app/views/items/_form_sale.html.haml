@@ -6,6 +6,8 @@
   = bonsai_form_error(f)
   = hidden_field_tag "scope", params[:scope] if params[:scope].present?
 
+  = hidden_field_tag :for_sale, true
+
   .row-fluid
     .span6
       = f.input :name, label: 'Nombre', input_html: { class: 'span11' }
@@ -47,14 +49,12 @@
 
     .span6.well.well-small
       .row-fluid
-        .span6.form-inline
-          = f.input :for_sale, as: :boolean, label: '<strong>Venta</strong>'.html_safe,
-            hint: 'Permitir venta'
+        = f.hidden_field :for_sale
         .span6
           = f.input :price, label: "Precio de <strong>Venta</strong> #{currency_label}".html_safe,
             input_html: {size: 12, type: 'decimal'}
 
   .form-actions
-    = f.submit "Salvar", :class => 'btn btn-primary b'
+    = f.submit 'Salvar', class: 'btn btn-primary b'
 
 = render 'items/js'

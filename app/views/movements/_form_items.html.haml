@@ -20,13 +20,15 @@
 
   %tr(ng-repeat='detail in details' ng-hide='detail._destroy==1')
 
-    %td
+    %td.form-inline
       %input(type='hidden' ng-model='detail.id' name='#{movement.form_details_name}[{{$index}}][id]' value='{{detail.id}}')
       %input(type='hidden' ng-model='detail._destroy' name='#{movement.form_details_name}[{{$index}}][_destroy]' value='{{detail._destroy}}')
 
-      %input(type='text' ng-model='detail.item_id' name='#{movement.form_details_name}[{{$index}}][item_id]' size='2' style='display:none')
-      %input(type='text' size='75' placeholder='Escriba para buscar el ítem' data-source='#{item_url}' ng-model='detail.item' ng-detail-autocomplete)
-
+      .input
+        %input(type='text' ng-model='detail.item_id' name='#{movement.form_details_name}[{{$index}}][item_id]' size='2' style='display:none')
+        %input(type='text' size='75' placeholder='Escriba para buscar el ítem' data-source='#{item_url}' ng-model='detail.item' ng-detail-autocomplete)
+        %a.btn.add-new-url.ajax(href='/items/new?for_sale=#{movement.is_income?}')
+          %i.icon-plus-sign
     %td
       %input.r(type='text' ng-model='detail.price' name='#{movement.form_details_name}[{{$index}}][price]' size='10' value='10')
 

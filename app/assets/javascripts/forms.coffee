@@ -46,7 +46,6 @@ $( ->
       else
         if $div.attr('ng-controller')
           $scope= $div.scope()
-          console.log $scope
           $scope.$apply (scope) -> scope.htmlContent = resp
         else
           $div.html(resp)
@@ -84,7 +83,7 @@ $( ->
 
   # Calls the events afser ajax call on ajax form
   callEvents = (data, resp) ->
-    return  unless data.elem
+    return  unless data
 
     $el = $(data.elem)
 

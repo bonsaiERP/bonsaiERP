@@ -54,6 +54,8 @@ class Incomes::Form < Movements::Form
     'incomes_form[income_details_attributes]'
   end
 
+  def is_income?; true; end
+
   private
 
     def set_defaults

@@ -43,22 +43,19 @@ class ItemsController < ApplicationController
   # GET /items/new
   # GET /items/new.xml
   def new
-    @item = Item.new(stockable: true)
+    @item = Item.new
   end
 
   # GET /items/1/edit
-  def edit
-  end
 
   # POST /items
-  # POST /items.xml
   def create
     @item = Item.new(item_params)
 
     if @item.save
       redirect_ajax @item, notice: 'Se ha creado el ítem correctamente.'
     else
-      render 'new'
+      render :new
     end
   end
 

@@ -50,6 +50,8 @@ class Expenses::Form < Movements::Form
     'expenses_form[expense_details_attributes]'
   end
 
+  def is_income?; false; end
+
   private
 
     def expense_is_valid

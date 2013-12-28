@@ -7,13 +7,21 @@ myApp.directive 'ngDetailAutocomplete', [ ->
     $elem.autocomplete(
       source: attr.source,
       select: (event, ui) ->
+        details = $scope.$parent.$parent.details
+
+        if _.find(details, (det) -> det.item_id == ui.item.id)
+          $elem.val('')
+          $('.top-left').notify(
+            type: 'warning',
+            message: { text: 'Ya ha seleccionado ese ítem' }
+          ).show()
+          return
 
         $scope.$apply (scope) ->
           er = scope.$parent.$parent.exchange_rate
           scope.$parent.detail.exchange_rate = er
           scope.$parent.detail.item = ui.item.label
           scope.$parent.detail.item_old = ui.item.label
-          scope.$parent.detail.item = ui.item.label
           scope.$parent.detail.item_id = ui.item.id
           scope.$parent.detail.price = _b.roundVal(ui.item.price / er, 2)
           scope.$parent.detail.original_price = ui.item.price

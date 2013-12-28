@@ -93,8 +93,19 @@ myApp.controller 'MovementController', ['$scope', 'MovementDetail', ($scope, Mov
       event.preventDefault()
       $('.top-left').notify({ message: { text: 'Debe seleccionar al menos un ítem' }, type: 'error' }).show()
 
-
   $scope.valid = ->
     console.log arguments
     return false
+
+  # Add new item with add button
+  $('body').on 'ajax-call', 'table a.add-new-url', (event, resp) ->
+    scope = $(this).parents('tr:first').scope()
+
+    scope.$apply (sc) ->
+      sc.detail.exchange_rate = $scope.exchange_rate
+      sc.detail.item = resp.label
+      sc.detail.item_old = resp.label
+      sc.detail.item_id = resp.id
+      sc.detail.price = _b.roundVal(resp.price / $scope.exchange_rate, 2)
+      sc.detail.original_price = resp.price
 ]

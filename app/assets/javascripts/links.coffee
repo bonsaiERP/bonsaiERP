@@ -77,10 +77,10 @@ $(->
     $div = createDialog({
       title: $this.data('title'),
       # Elem related with the call input, select, etc
-      elem: $this.data('elem'),
+      elem: $this.data('elem') || $this,
       width: $this.data('width') || 800,
       # Return response instead of calling default
-      return: $this.data('return')
+      return: $this.data('return') || true
     })
 
     $div.load( $this.attr("href"), (resp, status, xhr, dataType) ->
