@@ -25,18 +25,19 @@ class MovementPresenter < BasePresenter
   end
 
   def state_tag
-    html = case state
-    when 'draft' then "<span class='b gray-light'>Borrador</span>"
-    when 'approved' then "<span class='b bonsai-dark'>Aprobado</span>"
-    when 'paid' then "<span class='b green-dark'>#{ paid_text }</span>"
-    when 'nulled' then "<span class='b red'>Anulado</span>"
+    case
+    when is_draft? then template.text_gray 'Borrador', '', 'b'
+    when(is_approved? && today > to_model.due_date)
+      "<span class='b text-error'>Atrasado</span>".html_safe
+    when is_approved? then template.text_green 'Aprovado', '', 'b'
+    when is_paid? then template.text_green_dark 'Pagado', '', 'b'
+    when is_nulled? then template.text_red 'Anulado', '', 'b'
     end
-
-    html.html_safe
   end
 
   def state_text
     case state
+    when(is_approved? && today > to_model.due_date) then 'Atrasado'
     when 'draft' then 'Borrador'
     when 'approved' then 'Aprobado'
     when 'paid' then paid_text
