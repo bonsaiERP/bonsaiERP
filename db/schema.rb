@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131227032328) do
+ActiveRecord::Schema.define(version: 20131229164735) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -95,6 +95,7 @@ ActiveRecord::Schema.define(version: 20131227032328) do
   add_index "accounts", ["currency"], name: "index_accounts_on_currency", using: :btree
   add_index "accounts", ["date"], name: "index_accounts_on_date", using: :btree
   add_index "accounts", ["due_date"], name: "index_accounts_on_due_date", using: :btree
+  add_index "accounts", ["extras"], name: "index_accounts_on_extras", using: :gist
   add_index "accounts", ["has_error"], name: "index_accounts_on_has_error", using: :btree
   add_index "accounts", ["name"], name: "index_accounts_on_name", unique: true, using: :btree
   add_index "accounts", ["nuller_id"], name: "index_accounts_on_nuller_id", using: :btree

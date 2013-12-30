@@ -34,7 +34,7 @@ describe TenantCreator do
       Account.count.should eq(1)
       Unit.count.should > 0
 
-      res = PgTools.execute "SELECT * FROM #{t.tenant}.schema_migrations"
+      res = PgTools.execute "SELECT * FROM schema_migrations"
       res.count.should > 0
 
       s = Store.first

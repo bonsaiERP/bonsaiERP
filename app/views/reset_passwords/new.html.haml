@@ -1,28 +1,16 @@
-:css
-  #header{ display: none; }
-  #menu{ display: none; }
-  #cont{
-    background: none;
-    box-shadow: none;
-    -moz-box-shadow: none;
-    -webkit-box-shadow: none;
-  }
+%h1.c.login Recuperar contraseña
 
-.lonely(style="max-width: 400px;")
-  .row-fluid
-    .inset
-      %header
-        %h1.c Recuperar contraseña
-      .pad.center.session
-        = simple_form_for(ResetPassword.new) do |f|
-          .input-prepend.cont-login
-            %span.add-on.prepend.square
-              %i.muted.icon-envelope
-            = f.text_field :email, placeholder: 'Email', size: 40
-          %center
-            = f.submit "Recuperar contraseña", :class => 'btn btn-success btn-large b'
-            <br/><br/>
-            %p.fs110
-              = link_to login_path do
-                %i.icon-off
-                Entrar al sistema
+.lonely.c(style="max-width: 450px;")
+  = simple_form_for(ResetPassword.new) do |f|
+    .large
+      %i.muted.icon-envelope.icon
+      = f.text_field :email, placeholder: 'Email', size: 40
+      = f.submit "Recuperar contraseña", class: 'btn btn-success b'
+
+    .link.fs110
+      = link_to login_path, class: 'white' do
+        %i.icon-off
+        Entrar al sistema
+
+
+= render file: 'layouts/browser'

@@ -16,19 +16,23 @@ class TenantCreator
   end
 
   def create_tenant
-    return true if schema_exists?(@tenant)
+    return true  if schema_exists?(@tenant)
 
     ActiveRecord::Base.transaction do
       create_schema @tenant
-      clone_public_schema_to @tenant
       change_schema @tenant
 
-      copy_migrations_to @tenant
+      raise ActiveRecord::Rollback  unless clone_public_schema_to(@tenant)
+
+      change_schema @tenant
+      execute 'DROP TABLE organisations, users, links CASCADE'
+      #copy_migrations
 
       Unit.create_base_data
       Store.create!(name: 'Almacen inicial')
-      cash = Cash.new_cash(name: 'Caja inicial', currency: organisation.currency)
+      cash = Cash.new(name: 'Caja inicial', currency: organisation.currency)
       cash.save!
+
       Tax.create!(name: 'IVA', percentage: 13)  if organisation.country_code == 'BO'
     end
 

@@ -1,43 +1,29 @@
-:css
-  #header{ display: none; }
-  #menu{ display: none; }
-  #main_wrap{ background: none !important; }
-  #cont{
-    background: none;
-    box-shadow: none;
-    -moz-box-shadow: none;
-    -webkit-box-shadow: none;
-  }
-  .tooltip{ font-size: 13px; }
+%h1.c.login Registro
 
-.lonely(style='max-width:400px;')
-  .row-fluid
-    .inset
-      %header
-        %h1 Registro
+.lonely.c(style='max-width:400px;')
+  = simple_form_for @registration do |f|
+    .row-fluid
+      = f.input :name, label: false, input_html: { placeholder: 'Empresa', title: 'Empresa', size: 55, 'data-toggle' => 'tooltip' }
+      = f.input :tenant, label: false do
+        .input-append
+          = f.text_field :tenant, placeholder: 'Subdominio', title: 'Subdominio', 'data-toggle' => 'tooltip', size: 37
+          %span.add-on.append
+            \.bonsaierp.com
 
-      .pad
-        = simple_form_for @registration do |f|
-          = f.input :name, label: false, input_html: {class: 'span12', placeholder: 'Empresa', title: 'Empresa', 'data-toggle' => 'tooltip' }
-          = f.input :tenant, label: false, input_html: {class: 'span12'} do
-            .input-append
-              = f.text_field :tenant, placeholder: 'Subdominio', title: 'Subdominio', 'data-toggle' => 'tooltip', class: 'span8', size: 22
-              %span.add-on.append
-                \.bonsaierp.com
-          = f.input :email, label: false, input_html: {class: 'span12', placeholder: "Correo electrónico", title: 'Correo electrónico', 'data-toggle' => 'tooltip'}
-          .input-append
-            =f.input :password, label: 'Contraseña' do
-              = f.password_field :password, size: 20, class: 'span8'
-              %span.add-on.append
-                %label
-                  %input(type="checkbox" id="show-password")
-                  Ver contraseña
-          .clear-both
-          = f.submit "Registrarme", class: 'btn btn-success btn-large b'
-          &nbsp;&nbsp;&nbsp;
-          = link_to login_path do
-            %i.icon-off
-            Entrar
+      = f.input :email, label: false, input_html: { placeholder: "Correo electrónico", title: 'Correo electrónico', 'data-toggle' => 'tooltip', size: 55 }
+      .input-append
+        =f.input :password, label: false do
+          = f.password_field :password, size: 35, placeholder: 'Contraseña',title: 'Contraseña', 'data-toggle' => 'tooltip'
+          %span.add-on.append
+            %label
+              %input(type="checkbox" id="show-password")
+              Ver contraseña
+
+    = f.submit "Registrarme", class: 'btn btn-success b'
+    .clearfix
+    = link_to login_path, class: 'white fs110' do
+      %i.icon-off
+      Entrar
 
 = render file: 'layouts/browser'
 

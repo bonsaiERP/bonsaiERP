@@ -1,5 +1,15 @@
 # encoding: utf-8
 module PgTools
+  [:username, :database, :host, :password].each do |meth|
+    class_eval <<-CODE, __FILE__, __LINE__ + 1
+      def #{meth}
+        connection_config[:#{meth}]
+      end
+    CODE
+  end
+  module_function :username, :database, :host, :password
+
+
   # extend self
   module_function
 
@@ -30,7 +40,7 @@ module PgTools
   end
 
   def current_schema
-    connection.select_value "SHOW search_path"
+    select_value "SHOW search_path"
   end
 
   def create_schema(schema_name)
@@ -40,18 +50,18 @@ module PgTools
     connection.execute "CREATE SCHEMA #{schema_name}"
   end
 
-  def copy_migrations_to(schema)
+  def copy_migrations
     res = execute "SELECT version FROM public.schema_migrations"
 
     values = res.to_a.map {|v| "('#{v['version']}')"}.join(",")
-    execute "INSERT INTO #{schema}.schema_migrations (version) VALUES #{values}"
+    execute "INSERT INTO schema_migrations (version) VALUES #{values}"
   end
 
   def drop_schema(schema_name)
     raise "#{schema_name} does not exists" unless schema_exists?(schema_name)
 
     ActiveRecord::Base.logger.info "Drop schema #{schema_name}"
-    connection.execute "DROP SCHEMA IF EXISTS #{schema_name} CASCADE"
+    execute "DROP SCHEMA IF EXISTS #{schema_name} CASCADE"
   end
 
   def drop_schema_if(schema_name)
@@ -71,9 +81,13 @@ module PgTools
   # Clone public to the especified schema
   def clone_public_schema_to(schema)
     sql = get_public_schema
-    sql["search_path = public"] = "search_path = #{schema}"
+    sql["search_path = public, pg_catalog"] = "search_path = #{schema}, public"
 
-    connection.execute sql
+    %x[PGPASSWORD=#{PgTools.password}
+    export PGPASSWORD
+    echo "#{sql}" | psql #{PgTools.database} --username=#{PgTools.username} --host=#{PgTools.host}]
+
+    $?.success?
   end
 
   def set_password_path
@@ -86,9 +100,19 @@ module PgTools
 
   def get_public_schema
     sql = %x[#{create_bash_dump_public_schema}]
-    raise 'Error generating public schema' unless $?.success?
+    raise 'Error generating public schema'  unless $?.success?
 
     sql
+  end
+
+  def create_bash_dump_public_schema
+<<-BASH
+# /bin/bash
+PGPASSWORD='#{PgTools.password}'
+export PGPASSWORD
+
+pg_dump #{PgTools.database} --host=#{PgTools.host} --username=#{PgTools.username} --schema=public --schema-only
+BASH
   end
 
   def load_schema_into_schema(schema_name)
@@ -103,27 +127,6 @@ module PgTools
         raise "#{file} desn't exist yet. It's possible that you just ran a migration!"
       end
     end
-  end
-
-  def create_bash_dump_public_schema
-<<-BASH
-# /bin/bash
-PGPASSWORD='#{PgTools.password}'
-export PGPASSWORD
-
-pg_dump --host=#{host} --username=#{PgTools.username} --schema=public --schema-only #{PgTools.database}
-
-PGPASSWORD=""
-export PGPASSWORD
-BASH
-  end
-
-  [:username, :database, :host, :password].each do |meth|
-    class_eval <<-CODE, __FILE__, __LINE__ + 1
-      def #{meth}
-        connection_config[:#{meth}]
-      end
-    CODE
   end
 
   def connection_config

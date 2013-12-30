@@ -79,7 +79,6 @@ class Organisation < ActiveRecord::Base
     ActiveRecord::Base.transaction do
       PgTools.drop_schema_if(tenant)
       User.where(id: links.map(&:user_id)).destroy_all
-      links.destroy_all
       self.destroy
     end
   end
