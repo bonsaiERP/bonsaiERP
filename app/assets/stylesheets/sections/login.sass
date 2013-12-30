@@ -18,58 +18,39 @@
  * .lonely Login form, registration form
  *************************************/
 .lonely
-  margin: 70px auto
+  +border-radius(8px)
+  margin: 30px auto 70px
+  background: rgba(0, 0, 0, 0.5)
+  border: 10px solid darken($bonsai, 8%)
+  margin: 10px auto
+  padding: 30px 20px 20px
 
-  +border-radius
-  +box-shadow(0 0 10px $grayDarker)
-  //background: rgba(33, 33, 33, 0.3)
-  background: rgba(119, 185, 45, 0.7)
-  //background: $grayLight
+  .large
+    position: relative
+    font-size: 28px
+    .icon
+      position: absolute
+      top: 8px
+      left: 54px
+    input
+      font-size: 18px
+      width: 300px
+      padding: 13px 10px 10px 48px
+      margin-bottom: 2px
 
-  .inset
-    +border-radius
-    border: 1px solid lighten($gray, 10%)
-    margin: 10px
-    header
-      +border-top-radius
-      background: $white
-      //+background-image( linear-gradient(#F7F7F7, $grayLighter) )
-      //border-bottom: 1px solid lighten($gray, 30%)
-      padding: 15px 20px 5px
-      h1
-        color: $gray
-        margin: 0px
-        padding: 0px
-        font-size: 30px
-    .pad
-      +border-bottom-radius
-      background: white
-      padding: 10px 20px 20px
-      //input.txt
-        font-size: 1.3em
-        height: 25px
+  .link
+    margin-top: 4px
 
-  .session
-    .cont-login
-      input
-        height: 28px
-        font-size: 18px
-        width: 250px
-      .add-on.square
-        width: 27px
-        height: 28px
-        line-height: 30px
+  .btn
+    +border-radius(4px)
+    +border-radius(4px)
+    font-size: 22px
+    padding: 16px 50px
+    margin: 24px 0px 10px
+    width: 356px
 
-    input[type="submit"]
-      +border-radius(2px)
-      min-width: 150px
-      font-size: 20px
-
-    .input-prepend
-      .add-on
-        background-color: lighten($grayLighter, 20%)
-        border-right: none
-        font-size: 20px
-
-      input
-        border-left: none
+h1.login
+  +text-shadow(1 1 0 white)
+  font-size: 40px
+  margin: 20px 0px
+  color: $dark
