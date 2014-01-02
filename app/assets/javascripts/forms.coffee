@@ -69,10 +69,11 @@ $( ->
   $.popoverNotitle = $.fn.popoverNotitle = popoverNotitle
 
    # Set autocomplete values
-  setAutocompleteValues = (el, vals) ->
+  setAutocompleteValues = (el, resp) ->
     $el = $(el)
-    $el.val(vals.to_s)
-    $el.siblings('input:hidden').val(vals.id)
+    $el.val(resp.to_s)
+    $el.data('value', resp.to_s)
+    $el.siblings('input:hidden').val(resp.id)
 
   # Adds an option to select and selects that option
   setSelectValues = (el, vals) ->
@@ -87,15 +88,13 @@ $( ->
 
     $el = $(data.elem)
 
-    if data.return
-      $el.trigger('ajax-call', [resp])
-    else
-      switch
-        when $el.hasClass('autocomplete')
-          setAutocompleteValues($el, resp)
-        when $el.get(0).nodeName is 'SELECT'
-          setSelectValues(data.elem, resp)
+    switch
+      when $el.hasClass('autocomplete')
+        setAutocompleteValues($el, resp)
+      when $el.get(0).nodeName is 'SELECT'
+        setSelectValues(data.elem, resp)
 
+    $el.trigger('ajax-call', resp)
 
   ##########################################
   # Activates autocomplete for all autocomplete inputs
