@@ -12,4 +12,8 @@ class BasePresenter < Resubject::Presenter
 
   #includes
   include UserLogModule
+
+  def today
+    @today ||= Date.today
+  end
 end

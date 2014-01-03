@@ -76,7 +76,7 @@ class LoanPaymentsController < ApplicationController
       @path = loan_path(@payment.loan.id)
       render 'js/redirect'
     else
-      render :new_pay
+      render :new_charge_interest
     end
   end
 
@@ -107,7 +107,7 @@ class LoanPaymentsController < ApplicationController
 
     def charge_params
       params.require(:loans_give_payment_form)
-      .permit(*common_params)
+      .permit(*common_params).merge(account_id: params[:id])
     end
 
 end

@@ -10,9 +10,9 @@
 
     %p
       %i= l ledger.date.to_date
-      = link_to ledger.trans_account, title: 'Cuenta relacionada' do
-        = ledger.trans_account_icon
-        = ledger.account_to
+      = link_to ledger.other_account, title: 'Cuenta relacionada' do
+        = ledger.other_account_icon
+        = ledger.other_account
 
 
     .row-fluid

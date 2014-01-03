@@ -4,6 +4,8 @@
 class AccountLedgerPresenter < BasePresenter
   attr_accessor :current_account_id
 
+  delegate :operation_tag, to: :ledger_operation_presenter
+
   def initials(name)
     name.split(' ').map(&:first).join('')
   end
@@ -81,40 +83,11 @@ class AccountLedgerPresenter < BasePresenter
     html.html_safe
   end
 
-  def operation_text
-    case operation
-    when 'trans'  then 'Transferencia'
-    when 'payin'  then 'Cobro ingreso'
-    when 'payout' then 'Pago egreso'
-    when 'devin'  then 'Devolución ingreso'
-    when 'devout' then 'Devolución egreso'
-    when 'lrcre'  then 'Recepción prestamo'
-    when 'lrpay'  then 'Pago prestamo'
-    when 'lrdev'  then 'Devolucion prestamo'
-    when 'servex', 'servcin' then 'Pago contra servicio'
-    end
-  end
-
   def account_text
     case operation
     when 'payin', 'devin'  then 'Ingreso'
     when 'payout', 'devout' then 'Egreso'
     when 'trans'  then 'Cuenta'
-    end
-  end
-
-  def operation_tag
-    case
-    when %w(payin devout).include?(operation)
-      text_green_dark(operation_text)
-    when %w(payout devin).include?(operation)
-      text_red(operation_text)
-    when 'trans' == operation
-      text_dark(operation_text)
-    when( 'servex' == operation && current_account_id == account.id)
-      text_green 'Cobro contra servicio'
-    when( 'servex' == operation && current_account_id != account.id)
-      text_red 'Pago contra servicio'
     end
   end
 
@@ -163,28 +136,28 @@ class AccountLedgerPresenter < BasePresenter
     is_account? ? same_currency? : true
   end
 
-  def trans_account
-    if current_account_id == account_id
-      account_to
+  def current_account
+    @current_account ||= current_account_id == account_id ? account : account_to
+  end
+
+  def other_account
+    @other_account ||= current_account_id == account_id ? account_to : account
+  end
+
+  def other_account_url
+    if other_account.is_a?(Loan)
+      template.loan_path(other_account.id)
     else
-      account
+      other_account
     end
   end
 
-  def trans_account_url
-    if trans_account.is_a?(Loan)
-      template.loan_path(trans_account.id)
-    else
-      trans_account
-    end
+  def other_account_tag
+    "#{account_icon other_account} #{sanitize other_account}".html_safe
   end
 
-  def trans_account_tag
-    "#{account_icon trans_account} #{sanitize trans_account}".html_safe
-  end
-
-  def trans_account_icon
-    account_icon trans_account
+  def other_account_icon
+    account_icon other_account
   end
 
   def model_url(mod)
@@ -201,5 +174,93 @@ class AccountLedgerPresenter < BasePresenter
 
   def account_url
     model_url(account)
+  end
+
+  def ledger_operation_presenter
+    @ledger_operation_presenter ||= LedgerOperationsPresenter.new(self)
+  end
+end
+
+class LedgerOperationsPresenter < Struct.new(:presenter)
+  delegate :operation, :account, :account_id, :account_to, :account_to_id,
+           :current_account, :current_account_id,
+           :other_account, to: :presenter
+
+  delegate :text_green, :text_green_dark, :text_red, :text_dark, to: :template
+
+  OPERATIONS = ['trans',  # trans  = Transfer from one account to other
+                'payin',  # payin  = Payment in Income, adds ++
+                'payout', # payout = Paymen out Expense, substracts --
+                'devin',  # devin  = Devolution in Income, adds --
+                'devout', # devout = Devolution out Expense, substracts ++
+                'lrcre',  # lrcre  = Create the ledger Loans::Receive, adds ++
+                'lrpay',  # lrpay  = Loans::Receive make a payment, substracts --
+                'lrint',  # lrint  = Interest Loans::Receive --
+                #'lrdev',  # lrdev  = Loans::Receive make a devolution, adds ++
+                'lgcre',  # lgcre  = Create the ledger Loans::Give, substract --
+                'lgint',  # lgint  = Interests for Loans::Give ++
+                'lgpay',  # lgpay  = Loans::Give receive a payment, adds ++
+                #'lgdev',  # lgdev  = Loans::Give make a devolution, substract --
+                'servex', # servex = Pays an account with a service account_to is Expense
+                'servin', # servin = Pays an account with a service account_to is Income
+               ].freeze
+
+  def operation_tag
+    case
+    when %w(payin devout).include?(operation)
+      text_green_dark(operation_text)
+    when %w(payout devin).include?(operation)
+      text_red(operation_text)
+    when 'trans' == operation
+      text_dark(operation_text)
+    when( 'servex' == operation && current_account_id == account.id)
+      text_green 'Cobro contra servicio'
+    when( 'servex' == operation && current_account_id != account.id)
+      text_red 'Pago contra servicio'
+    when (is_income? && 'lrpay' == operation)
+      text_green 'Contra prestamo'
+    when (other_is_income? && 'lrpay' == operation)
+      text_green 'Contra ingreso'
+    when 'lrpay' == operation
+      text_green 'Pago prestamo'
+    end
+  end
+
+  def operation_text
+    case operation
+    when 'trans'  then 'Transferencia'
+    when 'payin'  then 'Cobro ingreso'
+    when 'payout' then 'Pago egreso'
+    when 'devin'  then 'Devolución ingreso'
+    when 'devout' then 'Devolución egreso'
+    when 'lrcre'  then 'Recepción prestamo'
+    when 'lrpay'  then 'Pago prestamo'
+    when 'lrdev'  then 'Devolucion prestamo'
+    when 'servex', 'servcin' then 'Pago contra servicio'
+    end
+  end
+
+  def is_income?
+    current_account.is_a?(Income)
+  end
+
+  def other_is_income?
+    other_account.is_a?(Income)
+  end
+
+  def is_expense?
+    current_account.is_a?(Expense)
+  end
+
+  def other_is_expense?
+    other_account.is_a?(Expense)
+  end
+
+  def is_loan?
+    current_account.is_a?(Loan)
+  end
+
+  def template
+    presenter.template
   end
 end

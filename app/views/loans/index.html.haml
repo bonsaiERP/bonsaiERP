@@ -13,11 +13,14 @@
   - @loans.each do |loan|
     %li.row-fluid
       .span6
+        %strong= loan.loan_type
         %h4.ib
-          %strong= loan.loan_type
           = link_to loan, loan_path(loan.id)
 
         = link_to loan.contact, loan.contact, title: 'Contacto'
+        .clearfix
+        %strong(title='Estado')= loan.state_tag
+        = loan.due_date_tag
       .span6
         .moneybox
           %label TOTAL

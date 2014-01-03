@@ -1,7 +1,7 @@
-%h4.title Cobrar prestamo
+%h4.title Cobrar intereses
 
 #loan(ng-controller='PaymentController')
-  = simple_form_for @payment, url: charge_loan_payment_path(@loan.id),
+  = simple_form_for @payment, url: charge_interest_loan_payment_path(@loan.id),
     html: { id: 'loan-payment-form' } do |f|
     = bonsai_form_error(f)
     = f.hidden_field :account_id, id: 'account_id'
@@ -12,4 +12,5 @@
     = render 'loan_payments/form', f: f, loan: @loan
 
     .form-actions
-      = f.submit 'Cobrar prestamo', class: 'btn b btn-success'
+      = f.submit 'Cobrar intereses', class: 'btn b btn-success'
+

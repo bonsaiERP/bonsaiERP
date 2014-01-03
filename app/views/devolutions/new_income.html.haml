@@ -8,7 +8,7 @@
     %input(type='hidden' id='accounts' data-accounts='#{Accounts::Query.new.income_payment_options(@devolution.income).to_json}')
     = hidden_field_tag 'base_currency', @devolution.income_currency, 'ng-model' => 'base_currency', 'ng-initial' => true
 
-    = render 'devolutions/form', f: f, movement: @devolution
+    = render 'payments/default_form', f: f, movement: @devolution
 
     .form-actions
       = f.submit "Devolución", class: 'btn btn-danger b'

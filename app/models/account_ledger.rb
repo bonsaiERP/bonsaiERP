@@ -93,7 +93,7 @@ class AccountLedger < ActiveRecord::Base
   end
 
   def to_s
-    sprintf '%06d', id
+    name
   end
 
   # Determines if the ledger can be conciliated or nulled
