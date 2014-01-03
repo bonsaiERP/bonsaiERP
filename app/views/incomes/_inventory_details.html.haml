@@ -3,14 +3,10 @@
 
   = income.inventory_tag
 
-
-- if income.enable_disable_inventory?
-  %h5.n.ib
-    = link_to inventory_income_path(income.id, no_inventory: income.enable_disable_inventory_val), method: 'patch', class: 'no-tab' do
-      = income.enable_disable_inventory_text_tag
+= income.enable_disable_inventory_button
 
 %p.center.inventories-buttons
-  = render 'incomes/inventory_buttons', income: income  unless income.no_inventory?
+  = render 'incomes/inventory_buttons', income: income
 
 -#= link_to 'Ver operaciones de inventario', inventories_income_path(income.id),
     class: 'openin', data: { openin: '.inventories', openinhide: true  }

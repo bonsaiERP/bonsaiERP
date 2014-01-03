@@ -12,8 +12,8 @@ $(->
     $this.hide('medium')
     $div = $($this.data('target'))
     $div.addClass('ajax-modal').data('link', $this)
-    .show('medium')
-    #.html(AjaxLoadingHTML())
+    .show('medium').html(AjaxLoadingHTML())
+
     $.get($this.attr('href'), (resp, status) ->
       if status is 'error'
         $div.hide('medium')
@@ -21,9 +21,10 @@ $(->
         alert 'Exisiton un error'
       else
         if $div.attr('ng-controller')
-          $scope= $div.scope()
-          console.log $scope
-          $scope.$apply (scope) -> scope.htmlContent = resp
+          $scope = $div.scope()
+          $scope.$apply (scope) ->
+            scope.datas
+            scope.htmlContent = resp
         else
           $div.html(resp)
 

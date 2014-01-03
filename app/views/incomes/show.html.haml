@@ -2,10 +2,6 @@
   %ul.breadcrumbs.span6
     %li
       = link_to "Ingresos", incomes_path
-    %li
-      %i.icon-caret-right
-    %li
-      = @income
 
 %header
   - if @income.has_error
@@ -24,7 +20,7 @@
       %small(title='Estado' data-toggle='tooltip')= @income.state_tag
 
     %h4.ib.n
-      = link_to @income.contact, @income.contact, title: 'Contacto', data: {toggle: 'tooltip'}
+      = link_to @income.contact, @income.contact, title: 'Contacto', data: { toggle: 'tooltip' }
 
     .clearfix
     %h5.n.ib
@@ -99,14 +95,16 @@
 
 = render "incomes/items", income: @income
 
-.row-fluid
-  -# Ledgers
-  .span6.well.well-small.bg-white
-    = render 'ledger_details', income: @income
+- unless @income.is_draft?
+  .row-fluid
+    -# Ledgers
+    .span6.well.well-small.bg-white
+      = render 'ledger_details', income: @income
 
-  -# Inventory
-  .span6.well.well-small.bg-white
-    = render 'inventory_details', income: @income
+    -# Inventory
+    .span6.well.well-small.bg-white
+      = render 'inventory_details', income: @income
+
 -#Tours
 = render 'incomes/tour_devolution'
 
@@ -121,14 +119,6 @@
       }
     })
 
-    // Payment buttons
-    $('.payment-buttons').on('click', 'a', function() {
-      $this = $(this);
-      $('.payment-buttons').hide('fast');
-      $('.payment-form')
-      .html('<p class="center muted"><img src="/assets/ajax-loader.gif" /> Cargando...</p>')
-      .load($this.data('url'), function() { $('.payment-form').setDatepicker() });
-    })
 
     $('.payment-form').on('click', 'a.cancel', function() {
       $('.payment-buttons').show('fast');

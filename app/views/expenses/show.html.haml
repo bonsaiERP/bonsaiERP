@@ -2,10 +2,6 @@
   %ul.breadcrumbs.span6
     %li
       = link_to "Egresos", expenses_path
-    %li
-      %i.icon-caret-right
-    %li
-      = @expense
 
 %header
   - if @expense.has_error
@@ -42,17 +38,15 @@
       = @expense.nuller_label
 
   .span5.r
-    -# Approve form
-    - if @expense.is_draft?
-      = form_for @expense, url: approve_expense_path(@expense), html: {class: 'ib'} do |f|
-        = f.submit 'Aprobar', class: 'b btn btn-success'
-    -# Null form
-    - if @expense.can_null?
-      = form_for @expense, url: null_expense_path(@expense), html: {class: 'ib', id: 'null-expense-form'} do |f|
-        = f.submit 'Anular', class: 'b btn btn-danger'
+    -# Approve
+    = link_to 'Aprobar', approve_expense_path(@expense.id), class: 'b btn btn-success', method: :patch  if @expense.is_draft?
+
+    -# Null
+    = link_to 'Anular', null_expense_path(@expense), method: :patch,  class: 'btn btn-danger b',
+      confirm: 'Esta segur@ de anular el Ingreso?'  if @expense.can_null?
 
     .btn-group
-      = link_to icon_new_text, new_expense_path, class: 'btn'
+      -#= link_to icon_new_text, new_expense_path, class: 'btn'
       = link_to icon_edit_text, edit_expense_path(@expense.id), class: 'btn' unless @expense.is_nulled?
 
 .row-fluid
@@ -91,12 +85,13 @@
 = render "expenses/items", expense: @expense
 
 
-.row-fluid
-  .span6.well.well-small.bg-white
-    = render 'ledger_details', expense: @expense
+- unless @expense.is_draft?
+  .row-fluid
+    .span6.well.well-small.bg-white
+      = render 'ledger_details', expense: @expense
 
-  .span6.well.well-small.bg-white
-    = render 'inventory_details', expense: @expense
+    .span6.well.well-small.bg-white
+      = render 'inventory_details', expense: @expense
 
 -#Tours
 = render 'expenses/tour_devolution'

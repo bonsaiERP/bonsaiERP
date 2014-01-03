@@ -89,7 +89,7 @@ class IncomesController < ApplicationController
   # PATCH /incomes/:id/approve
   # Method that nulls or enables inventory
   def inventory
-    @income.no_inventory = params[:no_inventory]
+    @income.no_inventory = !@income.no_inventory
 
     if @income.save
       txt = @income.no_inventory? ? 'desactivo' : 'activo'

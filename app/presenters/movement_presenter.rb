@@ -94,11 +94,20 @@ class MovementPresenter < BasePresenter
     active? && !delivered? && !is_draft?
   end
 
+  def enable_disable_inventory_button
+    if is_nulled? && !delivered?
+      template.content_tag :h5, class: 'n ib' do
+        link_to enable_disable_inventory_text, template.inventory_income_path(id),
+          method: :patch, class: (no_inventory? ? 'green' : 'red')
+      end
+    end
+  end
+
   def enable_disable_inventory_text
     if no_inventory?
-      "Activar inventario"
+      'Activar inventario'
     else
-      "Desactivar inventario"
+      'Desactivar inventario'
     end
   end
 
@@ -111,16 +120,9 @@ class MovementPresenter < BasePresenter
     end
   end
 
-  def enable_disable_button_css
-    if no_inventory?
-      'btn btn-success'
-    else
-      'btn btn-danger'
-    end
-  end
 
   def show_inventory_buttons?
-    not(no_inventory?) && OrganisationSession.inventory_active?
+    !no_inventory? && !is_nulled?
   end
 
   private

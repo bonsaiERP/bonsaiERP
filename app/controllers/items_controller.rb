@@ -29,7 +29,7 @@ class ItemsController < ApplicationController
   # Search for expense items
   # GET /items/search_expense?term=:term
   def search_expense
-    @items = Item.expense.search(params[:term]).limit(20)
+    @items = Item.active.search(params[:term]).limit(20)
 
     respond_to do |format|
       format.json { render json: @items }
