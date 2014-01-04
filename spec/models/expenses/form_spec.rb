@@ -177,6 +177,25 @@ describe Expenses::Form do
       es.expense.details[0].errors[:quantity].should eq(["Error in quantity"])
     end
 
+    it "Stores with error if details has negative balance" do
+      e = subject.expense
+      ed = e.expense_details[0]
+      ed.balance = 0
+      ed.save.should be_true
+
+      es = Expenses::Form.find(e.id)
+      es.expense.should be_is_a(Expense)
+      es.service.should be_is_a(Expenses::Service)
+      es.update(expense_details_attributes: [
+          {id: ed.id, price: ed.price, item_id: ed.item_id, quantity: (ed.quantity - 1) }
+      ]).should be_true
+
+      e = Expense.find(es.expense.id)
+
+      e.should be_has_error
+      e.error_messages.should eq({'items' => ['movement.negative_item_balance']})
+    end
+
     it "udpates balance_inventory" do
       e = subject.expense
       e.details.should have(2).items

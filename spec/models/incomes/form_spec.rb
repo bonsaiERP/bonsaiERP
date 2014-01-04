@@ -173,16 +173,34 @@ describe Incomes::Form do
                          description: 'A new changed description', income_details_attributes: update_details)
     }
 
+
     it "does not allow errors on IncomeDetail" do
       i = subject.income
       is = Incomes::Form.find(i.id)
-      is.income.should be_is_a(Income)
-      is.service.should be_is_a(Incomes::Service)
       is.income.stub(valid?: false)
       is.details[0].errors.add(:quantity, "Error in quantity")
 
       is.update.should be_false
       is.income.details[0].errors[:quantity].should eq(["Error in quantity"])
+    end
+
+    it "Stores with error if details has negative balance" do
+      i = subject.income
+      id = i.income_details[0]
+      id.balance = 0
+      id.save.should be_true
+
+      is = Incomes::Form.find(i.id)
+      is.income.should be_is_a(Income)
+      is.service.should be_is_a(Incomes::Service)
+      is.update(income_details_attributes: [
+          {id: id.id, price: id.price, item_id: id.item_id, quantity: (id.quantity - 1) }
+      ]).should be_true
+
+      i = Income.find(is.income.id)
+
+      i.should be_has_error
+      i.error_messages.should eq({'items' => ['movement.negative_item_balance']})
     end
 
     it "udpates balance_inventory" do

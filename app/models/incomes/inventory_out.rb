@@ -44,6 +44,7 @@ class Incomes::InventoryOut < Inventories::Out
   end
 
 private
+
   def operation
     'inc_out'
   end

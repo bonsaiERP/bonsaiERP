@@ -13,6 +13,7 @@ myApp.controller 'MovementController', ['$scope', 'MovementDetail', ($scope, Mov
   $scope.calls = 0
   $scope.accounts = angular.element('#accounts').data('accounts')
 
+
   # Set tax
   tax_id = $('#tax_id').val() * 1
   $scope.tax = _.find $scope.taxes, (v) -> v.id == tax_id  if tax_id > 0
