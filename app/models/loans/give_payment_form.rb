@@ -38,7 +38,8 @@ class Loans::GivePaymentForm < Loans::PaymentForm
         currency: account_to_currency,
         exchange_rate: cur_exchange_rate,
         date: date, reference: reference,
-        operation: 'lgpay', amount: amount
+        operation: 'lgpay', amount: amount,
+        contact_id: loan.contact_id
       )
     end
   end
@@ -50,7 +51,8 @@ class Loans::GivePaymentForm < Loans::PaymentForm
         currency: account_to_currency,
         exchange_rate: cur_exchange_rate,
         date: date, reference: reference,
-        operation: 'lgint', amount: amount
+        operation: 'lgint', amount: amount,
+        contact_id: loan.contact_id
       )
     end
   end

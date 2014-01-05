@@ -4,7 +4,7 @@
 class AccountLedgerPresenter < BasePresenter
   attr_accessor :current_account_id
 
-  delegate :operation_tag, to: :ledger_operation_presenter
+  delegate :operation_tag, :operation_text, to: :ledger_operation_presenter
 
   def initials(name)
     name.split(' ').map(&:first).join('')
@@ -15,6 +15,14 @@ class AccountLedgerPresenter < BasePresenter
     when 'pendent' then 'Pendiente'
     when 'approved' then 'Aprobado'
     when 'nulled' then 'Anulado'
+    end
+  end
+
+  def contact_link_tag(tag = :h5)
+    if contact.present?
+      template.content_tag tag, class: 'ib' do
+        link_to contact, contact
+      end
     end
   end
 
@@ -182,9 +190,10 @@ class AccountLedgerPresenter < BasePresenter
 end
 
 class LedgerOperationsPresenter < Struct.new(:presenter)
-  delegate :operation, :account, :account_id, :account_to, :account_to_id,
+  delegate :operation, :account, :account_id,
+           :account_to, :account_to_id,
            :current_account, :current_account_id,
-           :other_account, to: :presenter
+           :other_account, :id, to: :presenter
 
   delegate :text_green, :text_green_dark, :text_red, :text_dark, to: :template
 
@@ -206,6 +215,7 @@ class LedgerOperationsPresenter < Struct.new(:presenter)
                ].freeze
 
   def operation_tag
+    #binding.pry if id == 280
     case
     when %w(payin devout).include?(operation)
       text_green_dark(operation_text)
@@ -221,22 +231,38 @@ class LedgerOperationsPresenter < Struct.new(:presenter)
       text_green 'Contra prestamo'
     when (other_is_income? && 'lrpay' == operation)
       text_green 'Contra ingreso'
+    when 'lrcre' == operation
+      text_green_dark 'Ingreso prestamo'
     when 'lrpay' == operation
-      text_green 'Pago prestamo'
+      text_red 'Pago prestamo'
+    when 'lrint' == operation
+      text_red 'Pago intereses'
+    when 'lgcre' == operation
+      text_red 'Egreso prestamo'
+    when 'lgpay' == operation
+      text_green_dark 'Cobro prestamo'
+    when 'lgint' == operation
+      text_green_dark 'Cobro intereses'
     end
   end
 
   def operation_text
     case operation
-    when 'trans'  then 'Transferencia'
-    when 'payin'  then 'Cobro ingreso'
-    when 'payout' then 'Pago egreso'
-    when 'devin'  then 'Devolución ingreso'
-    when 'devout' then 'Devolución egreso'
-    when 'lrcre'  then 'Recepción prestamo'
-    when 'lrpay'  then 'Pago prestamo'
-    when 'lrdev'  then 'Devolucion prestamo'
-    when 'servex', 'servcin' then 'Pago contra servicio'
+      when 'trans' then 'Transferencia'  # trans  = Transfer from one account to other
+      when 'payin' then 'Cobro ingreso'  # payin  = Payment in Income, adds ++
+      when 'payout' then 'Pago egreso' # payout = Paymen out Expense, substracts --
+      when 'devin' then 'Devolución ingreso'  # devin  = Devolution in Income, adds --
+      when 'devout' then 'Devolución egreso' # devout = Devolution out Expense, substracts ++
+      when 'lrcre' then 'Ingreso prestamo'  # lrcre  = Create the ledger Loans::Receive, adds ++
+      when 'lrpay' then 'Pago perstamo'  # lrpay  = Loans::Receive make a payment, substracts --
+      when 'lrint' then 'Pago intereses'  # lrint  = Interest Loans::Receive --
+      #'lrdev',  # lrdev  = Loans::Receive make a devolution, adds ++
+      when 'lgcre' then 'Egreso prestamo'  # lgcre  = Create the ledger Loans::Give, substract --
+      when 'lgint' then 'Cobro intereses' # lgint  = Interests for Loans::Give ++
+      when 'lgpay' then 'Cobro prestamo'  # lgpay  = Loans::Give receive a payment, adds ++
+      #'lgdev',  # lgdev  = Loans::Give make a devolution, substract --
+      when 'servex' then 'Pago con egreso' # servex = Pays an account with a service account_to is Expense
+      when 'servin' then 'Cobro con ingreso' # servin = Pays an account with a service account_to is Income
     end
   end
 

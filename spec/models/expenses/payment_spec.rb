@@ -83,6 +83,9 @@ describe Expenses::Payment do
       p.ledger.exchange_rate == 1
       p.ledger.should be_is_payout
       p.ledger.account_id.should eq(expense.id)
+      p.ledger.contact_id.should_not be_blank
+      p.ledger.contact_id.should eq(expense.contact_id)
+
       # Only bank accounts are allowed to conciliate
       p.ledger.should be_is_approved
       p.ledger.reference.should eq(valid_attributes.fetch(:reference))

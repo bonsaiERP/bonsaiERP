@@ -30,8 +30,8 @@ class Loans::GiveForm < Loans::Form
         reference: reference,
         currency: account_to_currency,
         date: date,
-        operation: 'lgcre'
+        operation: 'lgcre',
+        contact_id: contact_id
     )
   end
 end
-

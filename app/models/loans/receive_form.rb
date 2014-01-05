@@ -30,7 +30,8 @@ class Loans::ReceiveForm < Loans::Form
         reference: reference,
         currency: account_to_currency,
         date: date,
-        operation: 'lrcre'
+        operation: 'lrcre',
+        contact_id: contact_id
     )
   end
 end

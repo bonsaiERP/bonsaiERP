@@ -44,6 +44,8 @@ describe Loans::GivePaymentForm do
       lp.create_payment.should be_true
       lp.ledger.amount.should == 50
       lp.ledger.currency.should eq('BOB')
+      lp.ledger.contact_id.should_not be_blank
+      lp.ledger.contact_id.should eq(lf.loan.contact_id)
 
       loan = Loans::Give.find(lf.loan.id)
       loan.amount.should == 50
@@ -123,6 +125,9 @@ describe Loans::GivePaymentForm do
       lp.int_ledger.should be_persisted
       lp.int_ledger.amount.should == 50
       lp.int_ledger.should be_is_lgint
+
+      lp.int_ledger.contact_id.should_not be_blank
+      lp.int_ledger.contact_id.should eq(lf.loan.contact_id)
 
       loan = Loans::Give.find(lf.loan.id)
       loan.interests.should == 50

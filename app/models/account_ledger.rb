@@ -42,8 +42,8 @@ class AccountLedger < ActiveRecord::Base
   # Relationships
   belongs_to :account
   belongs_to :account_to, class_name: 'Account'
-
-  belongs_to :project
+  belongs_to :contact
+  #belongs_to :project
 
   belongs_to :approver, class_name: 'User'
   belongs_to :nuller,   class_name: 'User'
@@ -74,7 +74,7 @@ class AccountLedger < ActiveRecord::Base
 
   ########################################
   # delegates
-  delegate :name, :amount, :currency, :contact,
+  delegate :name, :amount, :currency, :contact, :contact_id,
            to: :account, prefix: true, allow_nil: true
   delegate :name, :amount, :currency, :contact,
            to: :account_to, prefix: true, allow_nil: true
@@ -148,4 +148,5 @@ class AccountLedger < ActiveRecord::Base
         errors[:account_to_id] << I18n.t('errors.messages.account_ledger.same_account')
       end
     end
+
 end

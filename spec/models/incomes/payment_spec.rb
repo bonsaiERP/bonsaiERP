@@ -59,7 +59,7 @@ describe Incomes::Payment do
 
       income.should_not be_has_error
 
-      pay_in.pay#.should be_true
+      pay_in.pay.should be_true
 
       pay_in.income.should be_has_error
       pay_in.income.error_messages.should eq({balance: ['movement.negative_balance']})
@@ -93,7 +93,7 @@ describe Incomes::Payment do
 
       p = Incomes::Payment.new(valid_attributes)
 
-      p.pay.should  be_true
+      p.pay.should be_true
       p.verification.should be_true
 
       # Income
@@ -107,6 +107,10 @@ describe Incomes::Payment do
       p.ledger.exchange_rate == 1
       p.ledger.should be_is_payin
       p.ledger.account_id.should eq(income.id)
+
+      p.ledger.contact_id.should_not be_blank
+      p.ledger.contact_id.should eq(p.income.contact_id)
+
       # Only bank accounts are allowed to conciliate
       p.ledger.should be_is_approved
       p.ledger.reference.should eq(valid_attributes.fetch(:reference))

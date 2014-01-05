@@ -10,13 +10,14 @@
       .span5
         %strong= ledger.operation_tag
         %h4.ib
-          = link_to ledger, ledger.account_url, class: 'code', title: 'Código'
+          = link_to ledger, ledger, class: 'code', title: 'Código'
 
         = ledger.status_tag
 
         .clearfix
-        %h5.ib
-          = link_to ledger.account_contact, ledger.account_contact, title: 'Contacto' if ledger.account_contact
+        -#%h5.ib= link_to ledger.contact, ledger.contact, title: 'Contacto'  if ledger.contact
+        = ledger.contact_link_tag
+
         %p
           %i= l ledger.date.to_date
           - unless ledger.account_id === account.id

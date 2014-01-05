@@ -50,6 +50,7 @@ describe Loans::ReceiveForm do
     lf.loan.due_date.should eq(attributes.fetch(:due_date))
     # ledger
     lf.ledger.amount.should == 100
+    lf.ledger.contact_id.should eq(lf.contact_id)
     expect(lf.ledger.operation).to eq('lrcre')
 
     cash2.reload

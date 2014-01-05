@@ -3,6 +3,15 @@ require 'spec_helper'
 
 describe AccountLedger do
 
+  it { should belong_to(:account) }
+  it { should belong_to(:account_to).class_name('Account') }
+  it { should belong_to(:contact) }
+
+  it { should belong_to(:approver).class_name('User') }
+  it { should belong_to(:nuller).class_name('User') }
+  it { should belong_to(:creator).class_name('User') }
+  it { should belong_to(:updater).class_name('User') }
+
   let(:account) { build :account, id: 1, currency: 'BOB' }
   let(:account2) { build :account, id: 2, currency: 'BOB' }
 
@@ -21,7 +30,6 @@ describe AccountLedger do
       al
     }
 
-    it { should belong_to(:updater).class_name('User') }
     it { should have_valid(:operation).when( *AccountLedger::OPERATIONS ) }
     it { should_not have_valid(:operation).when('no', 'ok') }
     it { should have_valid(:status).when( *AccountLedger::STATUSES ) }

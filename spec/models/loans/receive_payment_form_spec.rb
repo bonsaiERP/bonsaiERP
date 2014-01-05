@@ -46,6 +46,10 @@ describe Loans::ReceivePaymentForm do
       lf.loan.total.should == 100
       lf.loan.ledger_in.should be_is_a(AccountLedger)
       lf.loan.ledger_in.should be_is_lrcre
+
+      lf.ledger.contact_id.should_not be_blank
+      lf.ledger.contact_id.should eq(lf.loan.contact_id)
+
       cash.reload.amount.should == 100
 
       lp = Loans::ReceivePaymentForm.new(attributes.merge(account_id: lf.loan.id))
@@ -53,6 +57,9 @@ describe Loans::ReceivePaymentForm do
       lp.create_payment.should be_true
       lp.ledger.amount.should == -50
       lp.ledger.currency.should eq('BOB')
+
+      lp.ledger.contact_id.should_not be_blank
+      lp.ledger.contact_id.should eq(lf.loan.contact_id)
 
       loan = Loans::Receive.find(lf.loan.id)
       loan.amount.should == 50
@@ -128,6 +135,9 @@ describe Loans::ReceivePaymentForm do
       lp.int_ledger.amount.should == -50
       lp.int_ledger.should be_is_lrint
       lp.int_ledger.should be_persisted
+
+      lp.int_ledger.contact_id.should_not be_blank
+      lp.int_ledger.contact_id.should eq(lf.loan.contact_id)
 
       loan = Loans::Receive.find(lf.loan.id)
       loan.interests.should == 50

@@ -9,8 +9,7 @@ class AccountLedgers::Query
   def money(id)
     @rel.where { (account_id.eq id) | (account_to_id.eq id) }
     .order('date desc')
-    .includes({ account: :contact },
-              :account_to, :approver, :creator, :nuller, :updater)
+    .includes(:contact, :account_to, :approver, :creator, :nuller, :updater)
   end
 
   def money_paged(id, page)
