@@ -12,17 +12,22 @@
   = link_to @loan.contact, @loan.contact, title: 'Contacto', data: { toggle: 'tooltip' }
 
 .clearfix
-%h4.ib.edit-loan
-  %a#edit-date.dark.icon-pencil(title='Editar fecha' data-toggle='tooltip' href='javascript:;')
-  %span.muted Fecha
-  %span.data= l @loan.date
-  &nbsp;&nbsp;&nbsp;&nbsp;
 
-%h4.ib.edit-loan
-  - unless @loan.is_paid?
-    %a#edit-due_date.dark.icon-pencil(title='Editar fecha de vencimiento' data-toggle='tooltip' href='javascript:;')
-    %span.muted Vence el
-    = @loan.due_date_color
+.row-fluid
+  .span3
+    %h4.inline-cont
+      = link_to icon('icon-pencil', 'Editar fecha'), loan_path(@loan.id), class: 'dark inline-edit',
+        data: { type: 'date', name: 'date', notify: '.top-left' }
+      %span.muted Fecha
+      %span.inline-data= l @loan.date
+
+  .span3
+    %h4.inline-cont
+      - unless @loan.is_paid?
+        = link_to icon('icon-pencil', 'Editar fecha de vencimiento'), loan_path(@loan.id), class: 'dark inline-edit',
+          data: { type: 'date', name: 'due_date', notify: '.top-left', due: true, today: @loan.today.to_s }
+        %span.muted Vence el
+        %span.inline-data= @loan.due_date_color
 
 - unless currency == @loan.currency
   %p
@@ -51,16 +56,11 @@
         = currency_label @loan.currency
 
   .span6
-    .edit-loan
-      %a#edit-description.dark.icon-pencil(title='Editar descripción' data-toggle='tooltip' href='javascript:;')
-      %i.icon-file.muted(title='Descripción' data-toggle='tooltip')
-      %span.data= @loan.description
+    .inline-cont
+      = link_to icon('icon-pencil', 'Editar descripción'), loan_path(@loan.id), class: 'dark inline-edit',
+        data: { type: 'textarea', name: 'description', notify: '.top-right' }
+      %span.inline-data(data-value='#{@loan.description}')= nl2br @loan.description
 
-
-:javascript
-  $(function() {
-    new App.LoanEdit(#{@loan.id})
-  })
 
 .row-fluid
   .span6

@@ -235,7 +235,7 @@ init = ($) ->
 
   # Template
   # Underscore templates
-  _.templateSettings.interpolate = /\{\{(.+?)\}\}/g
+  _.templateSettings.interpolate = /\[:(.+?):\]/g #\{\{(.+?)\}\}/g
 
   ########################################
   # Wrapped inside this working

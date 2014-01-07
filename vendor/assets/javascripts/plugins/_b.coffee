@@ -123,3 +123,6 @@
       ['<span class="label bg-black" title=',
         '"', currencies[val]['name'], '"', ' data-toggle="tooltip">',
         val, '</span>'].join('')
+
+  nl2br: (val) ->
+    val.toString().replace(/\n/g, '<br>')
