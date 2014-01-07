@@ -1,12 +1,20 @@
 class Loans::GivePresenter < BasePresenter
-  def loan_type
-    text_green 'Prestamo otorgado'
+  def loan_type_tag
+    "#{icon 'icon-signout fs130 green'} Prestamo otorgado".html_safe
   end
 
   def due_date_tag
     txt =  due_date < today ? text_red(template.l due_date) : template.l(due_date)
 
-    "<span class='muted'>Vence el</span>: #{txt}".html_safe  unless is_paid?
+    "<span class='muted'>Vence el</span> #{txt}".html_safe  unless is_paid?
+  end
+
+  def due_date_color
+    if due_date < today
+      text_red l(due_date)
+    else
+      l due_date
+    end
   end
 
   def payment_path
@@ -17,7 +25,7 @@ class Loans::GivePresenter < BasePresenter
     if 'paid' == state
       text_green 'Cobrado'
     else
-      'Pendiente'
+      text_red 'Pendiente'
     end
   end
 

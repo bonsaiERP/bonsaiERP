@@ -42,11 +42,22 @@ class LoansController < ApplicationController
     @loan = present Loan.find(params[:id])
   end
 
+  # PATCH /loans/:id
+  def update
+    @loan = Loan.find(params[:id])
+
+    if @loan.update_attributes(loan_update_params)
+      render json: { success: true }
+    else
+      render json: @loan.errors.messages
+    end
+  end
+
   private
 
     def loan_params
       [:contact_id, :date, :due_date, :account_to_id,
-       :total, :reference, :exchange_rate]
+       :total, :reference, :exchange_rate, :description]
     end
 
     def give_params
@@ -55,5 +66,9 @@ class LoansController < ApplicationController
 
     def receive_params
       params.require(:loans_receive_form).permit(*loan_params)
+    end
+
+    def loan_update_params
+      params.permit(:date, :due_date, :description)
     end
 end

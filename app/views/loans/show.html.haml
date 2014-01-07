@@ -4,13 +4,26 @@
       = link_to 'Prestamos', loans_path
 
 %h1.ib
-  %span.text-muted.muted= @loan.loan_type
   = @loan
+  %small= @loan.loan_type_tag
+
 
 %h4.ib.n
   = link_to @loan.contact, @loan.contact, title: 'Contacto', data: { toggle: 'tooltip' }
 
 .clearfix
+%h4.ib.edit-loan
+  %a#edit-date.dark.icon-pencil(title='Editar fecha' data-toggle='tooltip' href='javascript:;')
+  %span.muted Fecha
+  %span.data= l @loan.date
+  &nbsp;&nbsp;&nbsp;&nbsp;
+
+%h4.ib.edit-loan
+  - unless @loan.is_paid?
+    %a#edit-due_date.dark.icon-pencil(title='Editar fecha de vencimiento' data-toggle='tooltip' href='javascript:;')
+    %span.muted Vence el
+    = @loan.due_date_color
+
 - unless currency == @loan.currency
   %p
     Tipo de cambio 1
@@ -36,6 +49,18 @@
       %h4.n
         = ntc @loan.interests
         = currency_label @loan.currency
+
+  .span6
+    .edit-loan
+      %a#edit-description.dark.icon-pencil(title='Editar descripción' data-toggle='tooltip' href='javascript:;')
+      %i.icon-file.muted(title='Descripción' data-toggle='tooltip')
+      %span.data= @loan.description
+
+
+:javascript
+  $(function() {
+    new App.LoanEdit(#{@loan.id})
+  })
 
 .row-fluid
   .span6

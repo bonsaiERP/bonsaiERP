@@ -7,7 +7,7 @@ class BasePresenter < Resubject::Presenter
    IconsHelper.instance_methods +
    TextHelper.instance_methods +
    ActionView::Helpers::SanitizeHelper.instance_methods +
-   [:link_to, :ntc, :text_red, :text_green, :text_dark]
+   [:link_to, :ntc, :text_red, :text_green, :text_dark, :content_tag, :l]
   ), to: :template)
 
   #includes

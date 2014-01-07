@@ -17,7 +17,7 @@ Bonsaierp::Application.routes.draw do
     end
   end
 
-  resources :loans, only: [:index, :show] do
+  resources :loans, only: [:index, :show, :update] do
     collection do
       get :new_receive
       post :receive

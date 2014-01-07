@@ -33,6 +33,9 @@
 
 #= require app/graph_report.coffee
 
+#=require app/account_ledger.coffee
+#=require app/loan_edit.coffee
+
 ## Angular
 #= require_tree ./filters
 #= require_tree ./controllers

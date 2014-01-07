@@ -1,12 +1,20 @@
 class Loans::ReceivePresenter < BasePresenter
-  def loan_type
-    text_red 'Prestamo recibido'
+  def loan_type_tag
+    "#{icon 'icon-signin fs130 red'} Prestamo recibido".html_safe
   end
 
   def due_date_tag
     txt = (due_date < today) ? text_red(template.l due_date) : template.l(due_date)
 
-    "<span class='muted'>Vence el</span>: #{txt}".html_safe  unless is_paid?
+    "<span class='muted'>Vence el</span> #{txt}".html_safe  unless is_paid?
+  end
+
+  def due_date_color
+    if due_date < today
+      text_red content_tag(:span, l(due_date), class: 'data')
+    else
+      content_tag :span, l(due_date), class: 'data'
+    end
   end
 
   def payment_path
@@ -17,7 +25,7 @@ class Loans::ReceivePresenter < BasePresenter
     if 'paid' == state
       text_green 'Pagado'
     else
-      'Pendiente'
+      text_red 'Pendiente'
     end
   end
 

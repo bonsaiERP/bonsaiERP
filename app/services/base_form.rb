@@ -39,7 +39,7 @@ private
     res = true
     ActiveRecord::Base.transaction do
       res = b.call
-      raise ActiveRecord::Rollback unless res
+      raise ActiveRecord::Rollback  unless res
     end
 
     res
