@@ -4,7 +4,7 @@
 class Project < ActiveRecord::Base
 
   # associations
-  has_many :transactions
+  has_many :accounts
   has_many :account_ledgers
 
   # validations

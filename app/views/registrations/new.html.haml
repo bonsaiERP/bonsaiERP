@@ -1,23 +1,34 @@
 %h1.c.login Registro
 
-.lonely.c(style='max-width:400px;')
+.lonely.c(style='max-width:450px;')
   = simple_form_for @registration do |f|
     .row-fluid
-      = f.input :name, label: false, input_html: { placeholder: 'Empresa', title: 'Empresa', size: 55, 'data-toggle' => 'tooltip' }
-      = f.input :tenant, label: false do
-        .input-append
-          = f.text_field :tenant, placeholder: 'Subdominio', title: 'Subdominio', 'data-toggle' => 'tooltip', size: 37
-          %span.add-on.append
-            \.bonsaierp.com
 
-      = f.input :email, label: false, input_html: { placeholder: "Correo electrónico", title: 'Correo electrónico', 'data-toggle' => 'tooltip', size: 55 }
+      = f.input :email, label: false, wrapper_class: 'large' do
+        %i.muted.icon-envelope.icon(title='email' data-toggle='tooltip')
+        = f.text_field :email, size: 30, placeholder: 'Email', class: 'email'
+
       .input-append
-        =f.input :password, label: false do
-          = f.password_field :password, size: 35, placeholder: 'Contraseña',title: 'Contraseña', 'data-toggle' => 'tooltip'
+        =f.input :password, label: false, wrapper_class: 'large' do
+          %i.muted.icon-unlock.icon(title='Contraseña' data-toggle='tooltip' style='left: 12px')
+          = f.password_field :password, placeholder: 'Contraseña', style: 'width: 240px'
           %span.add-on.append
             %label
               %input(type="checkbox" id="show-password")
-              Ver contraseña
+              Ver
+
+
+      = f.input :name, label: false, wrapper_class: 'large' do
+        %i.muted.icon-building.icon(title='Empresa' data-toggle='tooltip')
+        = f.text_field :name, size: 30, placeholder: 'Empresa', class: 'email'
+
+      -#= f.input :tenant, label: false, wrapper_class: 'large' do
+        %i.muted.icon-globe.icon(title='Subdominio' data-toggle='tooltip')
+        = f.text_field :tenant, placeholder: 'Subdominio', size: 37
+        -#.input-append
+          -#%span.add-on.append
+            %label
+              \.bonsaierp.com
 
     = f.submit "Registrarme", class: 'btn btn-success b'
     .clearfix
@@ -29,11 +40,13 @@
 
 :javascript
   $(function() {
+    /*
     $(document).on('keyup', '#registration_name', function() {
       // TODO: Improve the copyname;
       name = $(this).val().toLowerCase().replace(/[^a-z]/g, '');
       $('#registration_tenant').val(name);
     });
+    */
 
     $('#show-password').on('click', function() {
       if($(this).prop('checked')) {

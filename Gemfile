@@ -11,13 +11,13 @@ gem 'jquery-rails'
 
 # gem 'turbo-sprockets-rails3'# Speed assets:precompile
 
-gem 'compass-rails', '~> 1.1.2'#, '~> 2.0.alpha.0' # Extend css clases
+gem 'compass-rails', '~> 1.1.3'#, '~> 2.0.alpha.0' # Extend css clases
 gem 'pg' # Postgresql adapter
-gem 'virtus', '~> 0.5.5' # Model generation in simple way
+gem 'virtus'#, '~> 0.5.5' # Model generation in simple way
 gem 'squeel' # Better SQL queries
 
 gem 'simple_form'
-gem 'haml', '>= 4.0.4'
+gem 'haml', '>= 4.0.5'
 gem 'kaminari' # Pagination
 gem 'bcrypt-ruby', require: 'bcrypt'
 gem 'active_model_serializers' # ActiveRecord Classes to encode in JSON

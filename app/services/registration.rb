@@ -27,27 +27,28 @@ class Registration < BaseForm
     end
   end
 
-private
-  def create_user
-    @user = User.new(email: email, password: password)
-    @user.set_confirmation_token
+  private
 
-    @user.active_links.build(
-      organisation_id: organisation.id, tenant: organisation.tenant,
-      rol: 'admin', master_account: true
-    )
+    def create_user
+      @user = User.new(email: email, password: password)
+      @user.set_confirmation_token
 
-    @user.save
-  end
+      @user.active_links.build(
+        organisation_id: organisation.id, tenant: organisation.tenant,
+        rol: 'admin', master_account: true
+      )
 
-  def create_organisation
-    @organisation = Organisation.new(name: name, tenant: tenant)
-    @organisation.save
-  end
-
-  def valid_unique_tenant
-    if Organisation.where(tenant: tenant.to_s).any?
-      self.errors[:tenant] << I18n.t('errors.messages.registration.unique_tenant')
+      @user.save
     end
-  end
+
+    def create_organisation
+      @organisation = Organisation.new(name: name, tenant: tenant, inventory_active: true)
+      @organisation.save
+    end
+
+    def valid_unique_tenant
+      if Organisation.where(tenant: tenant.to_s).any?
+        self.errors[:tenant] << I18n.t('errors.messages.registration.unique_tenant')
+      end
+    end
 end

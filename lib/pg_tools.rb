@@ -78,14 +78,26 @@ module PgTools
     connection.execute sql
   end
 
+  def create_clone(tenant)
+    create_schema tenant
+    clone_public_schema_to tenant
+  end
+
   # Clone public to the especified schema
   def clone_public_schema_to(schema)
     sql = get_public_schema
     sql["search_path = public, pg_catalog"] = "search_path = #{schema}, public"
 
-    %x[PGPASSWORD=#{PgTools.password}
+    fname = "/tmp/#{SecureRandom.urlsafe_base64}.sql"
+    f = File.new fname, 'w+'
+    f.write sql
+    f.close
+
+    %x[PGPASSWORD='#{PgTools.password}'
     export PGPASSWORD
-    echo "#{sql}" | psql #{PgTools.database} --username=#{PgTools.username} --host=#{PgTools.host}]
+    psql #{PgTools.database} --username='#{PgTools.username}' --host='#{PgTools.host}' < #{fname}]
+
+    File.delete fname
 
     $?.success?
   end

@@ -5,7 +5,7 @@
   = simple_form_for @session do |f|
     = hidden_field :demo_login, params[:demo_login]
     = f.input :email, label: false, wrapper_class: 'large' do
-      %i.muted.icon-envelope.icon
+      %i.muted.icon-envelope.icon(title='Email')
       = f.text_field :email, size: 30, placeholder: 'Email', class: 'email'
     = f.input :password, label: false, wrapper_class: 'large' do
       %i.muted.icon-unlock.icon

@@ -32,11 +32,28 @@
       position: absolute
       top: 8px
       left: 54px
+      z-index: 100
     input
       font-size: 18px
       width: 300px
       padding: 13px 10px 10px 48px
       margin-bottom: 2px
+
+    input[type='checkbox'], input[type='radio']
+      width: auto
+      vertical-align: middle
+
+  .input-append > .large
+    input
+      +border-right-radius(0px)
+    .add-on.append
+      margin-left: -10px
+      height: 35px
+      label
+        line-height: 30px
+        font-size: 20px
+
+
 
   .link
     margin-top: 4px

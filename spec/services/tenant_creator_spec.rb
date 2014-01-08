@@ -4,6 +4,10 @@ describe TenantCreator do
   let(:tenant) { 'bonsaierp' }
   let(:organisation) { build(:organisation, id: 1, tenant: tenant) }
 
+  before(:all) do
+    DatabaseCleaner.strategy = :truncation
+  end
+
   context "Initialize" do
     it {  TenantCreator.new(organisation) }
     it "error when bad name" do
@@ -12,7 +16,7 @@ describe TenantCreator do
   end
 
   context "Create tenant" do
-    let(:t) { TenantCreator.new(organisation) }
+    let(:tc) { TenantCreator.new(organisation) }
     let(:conf) { ActiveRecord::Base.connection_config }
 
     before(:each) do
@@ -21,20 +25,19 @@ describe TenantCreator do
 
     it "has the correct config" do
       [:username, :database, :host, :password].each do |attr|
-        conf[attr].should eq(t.send(attr))
+        conf[attr].should eq(tc.send(attr))
       end
     end
 
     it "creates a new schema with all tables" do
-      t.create_tenant.should be_true
+      tc.create_tenant.should be_true
 
-      PgTools.should be_schema_exists(t.tenant)
+      PgTools.should be_schema_exists(tc.tenant)
 
-      PgTools.change_schema t.tenant
-      Account.count.should eq(1)
+      PgTools.change_schema tc.tenant
       Unit.count.should > 0
 
-      res = PgTools.execute "SELECT * FROM schema_migrations"
+      res = PgTools.execute "SELECT * FROM #{tc.tenant}.schema_migrations"
       res.count.should > 0
 
       s = Store.first
@@ -49,8 +52,9 @@ describe TenantCreator do
       t.percentage.should == 13.0
     end
 
-    after(:each) do
+    after(:all) do
       PgTools.drop_schema tenant if PgTools.schema_exists?(tenant)
+      DatabaseCleaner.strategy = :transaction
     end
   end
 end

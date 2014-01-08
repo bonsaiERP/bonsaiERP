@@ -45,7 +45,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_organisation
-    @organisation ||= Organisation.find_by_tenant(current_tenant)
+    @organisation ||= Organisation.find_by(tenant: current_tenant)
   end
   helper_method :current_organisation
 

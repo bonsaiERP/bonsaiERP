@@ -1,6 +1,7 @@
 $(->
   createCancelButton = ($div, $link) ->
-    $cancel = $('<a class="btn">Cancelar</a>').click( ->
+    return  if $div.find('.cancel').length > 0
+    $cancel = $('<a class="btn cancel">Cancelar</a>').click( ->
       if $div.attr('ng-controller')
         $scope = $div.scope()
         $scope.$apply (scope) ->

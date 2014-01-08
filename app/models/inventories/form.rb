@@ -28,7 +28,7 @@ class Inventories::Form < BaseForm
     @inventory ||= begin
       i = Inventory.new(
         store_id: store_id, date: date, description: description,
-        inventory_details_attributes: inventory_details_attributes,
+        inventory_details_attributes: get_inventory_details,
         operation: operation
       )
       i.set_ref_number
@@ -45,6 +45,14 @@ class Inventories::Form < BaseForm
       set_errors(@inventory) unless res
 
       res
+    end
+
+    def get_inventory_details
+      if inventory_details_attributes.nil?
+        []
+      else
+        inventory_details_attributes
+      end
     end
 
     def klass_details

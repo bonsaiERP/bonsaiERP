@@ -9,7 +9,7 @@ describe Registration do
 
   it { should have_valid(:email).when('boris@mail.com', 'si@me.com.bo') }
   it { should_not have_valid(:email).when('  ', 'si@me.com.') }
-  
+
   it { should have_valid(:name).when('no', 'si', 'ahor que niño') }
   it { should_not have_valid(:name).when(nil, '   ', '') }
 
@@ -28,6 +28,7 @@ describe Registration do
 
     r.organisation.name.should eq('bonsaiERP')
     r.organisation.tenant.should eq('bonsai')
+    r.organisation.should be_inventory_active
 
     r.user.email.should eq('boris@bonsaierp.com')
     r.user.encrypted_password.should_not be_blank

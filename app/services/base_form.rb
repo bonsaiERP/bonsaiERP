@@ -2,7 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class BaseForm
-  include Virtus
+  include Virtus.model
   #include ActiveModel::Model
   extend ActiveModel::Naming
   include ActiveModel::Conversion
