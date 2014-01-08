@@ -3,24 +3,21 @@ class Registration < BaseForm
   attr_reader :organisation, :user
 
   attribute :name     , String
-  attribute :tenant   , String
   attribute :email    , String
   attribute :password , String
 
   validates :name, presence: true, length: {within: 2..100}
 
-  validates :tenant, presence: true, length: {within: 2..50}, format: {with: /\A[a-z0-9]+\z/}
-  validate :valid_unique_tenant
-
   validates :password, presence: true, length: {within: PASSWORD_LENGTH..100}
   validates_email_format_of :email
+
+  delegate :tenant, to: :organisation
 
   def register
     return false unless valid?
 
     commit_or_rollback do
-      res = create_organisation
-      res = create_user && res
+      res = create_organisation && create_user
 
       set_errors(organisation, user) unless res
       res
@@ -42,13 +39,9 @@ class Registration < BaseForm
     end
 
     def create_organisation
-      @organisation = Organisation.new(name: name, tenant: tenant, inventory_active: true)
+      @organisation = Organisation.new(name: name, inventory_active: true)
+      @organisation.valid?
       @organisation.save
     end
 
-    def valid_unique_tenant
-      if Organisation.where(tenant: tenant.to_s).any?
-        self.errors[:tenant] << I18n.t('errors.messages.registration.unique_tenant')
-      end
-    end
 end

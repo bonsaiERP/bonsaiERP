@@ -62,6 +62,9 @@ describe Organisation do
 
   it "create an instance" do
     Organisation.create!(name: 'tenant')
+    org = Organisation.new(name: 'jejeje')
+    org.save.should be_true
+    org.tenant.should eq('jejeje')
   end
 
   it "build master_account user" do
