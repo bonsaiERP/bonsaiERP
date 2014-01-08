@@ -72,6 +72,7 @@
 
     #payment-form.form-container(ng-controller='DynamicController' dynamic='htmlContent')
 
+
     %ul.unstyled.listing
       = render partial: 'account_ledgers/movement', collection: present(@loan.payments_devolutions), as: :ledger, locals: { current_account_id: @loan.id }
 

@@ -38,6 +38,8 @@ $( ->
       'type': (data['_method'] or $el.attr('method') )
     )
     .success (resp, status, xhr) ->
+
+      $el.find('input, select, textarea').attr('disabled', false)
       if typeof resp == 'object'
         callEvents($div.data(), resp)
         $div.html('').dialog('destroy')
@@ -46,7 +48,12 @@ $( ->
       else
         if $div.attr('ng-controller')
           $scope= $div.scope()
-          $scope.$apply (scope) -> scope.htmlContent = resp
+          $scope.$apply (scope) ->
+            scope.htmlContent = ''
+            scope.$$childHead = null
+            scope.$$childTail = null
+            console.log resp
+            scope.htmlContent = resp
         else
           $div.html(resp)
 

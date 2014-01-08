@@ -1,7 +1,15 @@
 $(->
   createCancelButton = ($div, $link) ->
     $cancel = $('<a class="btn">Cancelar</a>').click( ->
-      $div.html('').hide('medium')
+      if $div.attr('ng-controller')
+        $scope = $div.scope()
+        $scope.$apply (scope) ->
+          scope.htmlContent = ''
+          scope.$$childHead = null
+          scope.$$childTail = null
+      else
+        $div.html('').hide('medium')
+
       $link.show('medium')
     )
     $div.find('.form-actions').append($cancel)
@@ -12,18 +20,31 @@ $(->
     $this.hide('medium')
     $div = $($this.data('target'))
     $div.addClass('ajax-modal').data('link', $this)
-    .show('medium').html(AjaxLoadingHTML())
+    if $div.attr('ng-controller')
+      $scope = $div.scope()
+      $scope.$apply (scope) ->
+        scope.$$childHead = null
+        scope.$$childTail = null
+        scope.htmlContent = AjaxLoadingHTML()
+    else
+      $div.show('medium').html(AjaxLoadingHTML())
 
     $.get($this.attr('href'), (resp, status) ->
       if status is 'error'
         $div.hide('medium')
         $this.show('medium')
-        alert 'Exisiton un error'
+        $('.top-left').notify({
+          type: 'error',
+          message: { text: 'Exisiton un error' }
+        }).show()
+
       else
         if $div.attr('ng-controller')
           $scope = $div.scope()
           $scope.$apply (scope) ->
-            scope.datas
+            scope.$$childHead = null
+            scope.$$childTail = null
+            #scope.datas
             scope.htmlContent = resp
         else
           $div.html(resp)

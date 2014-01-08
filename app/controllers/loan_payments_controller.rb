@@ -58,7 +58,7 @@ class LoanPaymentsController < ApplicationController
       @path = loan_path(@payment.loan.id)
       render 'js/redirect'
     else
-      render :new_pay
+      render :new_charge
     end
   end
 
