@@ -19,7 +19,7 @@
 
     .form-actions
       - if expense_service.is_draft?
-        .ib.save-button
+        .ib(ng-hide='direct_payment')
           = f.submit 'Salvar borrador', class: 'btn b btn-large trans', name: 'commit_save'
           %br
           %small.muted Salva un borrador o proforma

@@ -3,6 +3,8 @@ myApp.directive 'ngDetailAutocomplete', [ ->
   scope: {},
   link: ($scope, $elem, attr) ->
     mod = model = attr.ngModel
+
+    $elem.data 'value', $scope.$parent.detail.item
     # Set autocomplete
     $elem.autocomplete(
       source: attr.source,
@@ -30,6 +32,7 @@ myApp.directive 'ngDetailAutocomplete', [ ->
     )
 
     $elem.blur ->
+      #console.log 'blur', $scope.$parent.detail.item
       $scope.$apply (scope) ->
         if $scope.$parent.detail.item is ''
           scope.$parent.detail.item = ui.item.label

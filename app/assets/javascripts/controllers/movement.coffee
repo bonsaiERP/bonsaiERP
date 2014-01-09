@@ -18,11 +18,15 @@ myApp.controller 'MovementController', ['$scope', 'MovementDetail', ($scope, Mov
   tax_id = $('#tax_id').val() * 1
   $scope.tax = _.find $scope.taxes, (v) -> v.id == tax_id  if tax_id > 0
 
+  #console.log $scope.
+
   # ng-class Does not work fine with bootstrap buttons javascript
   $('#tax-in-out-btn').addClass('active')  if $scope.tax_in_out
+  $('#direct-payment-button').addClass('active')  if $scope.direct_payment
 
   # initialize items
   for det in $('#details').data('details')
+    det.item_old = det.item
     $scope.details.push(new MovementDetail(det))
 
   # Remove an item
