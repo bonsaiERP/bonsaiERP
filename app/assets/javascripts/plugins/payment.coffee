@@ -1,7 +1,8 @@
 # Helper method
 paymentOptions = (val) ->
   amt = ''
-  return  if !val? || val.type?
+  return  unless val?
+
   switch val.type
     when 'Cash'
       txt = 'Efectivo'

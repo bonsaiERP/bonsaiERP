@@ -5,6 +5,8 @@ myApp.controller 'PaymentController', ['$scope', ($scope) ->
   $scope.amount_currency = 0
   $scope.is_bank = false
 
+  console.log $scope.accounts
+
   $scope.isInverse = ->
     $scope.organisation_currency isnt $scope.base_currency
 

@@ -21,9 +21,7 @@ class ItemsController < ApplicationController
   def search_income
     @items = Item.income.search(params[:term]).limit(20)
 
-    respond_to do |format|
-      format.json { render json: @items }
-    end
+    render json: ItemSerializer.new.income(@items)
   end
 
   # Search for expense items
@@ -31,9 +29,7 @@ class ItemsController < ApplicationController
   def search_expense
     @items = Item.active.search(params[:term]).limit(20)
 
-    respond_to do |format|
-      format.json { render json: @items }
-    end
+    render json: ItemSerializer.new.expense(@items)
   end
 
   # GET /items/1
