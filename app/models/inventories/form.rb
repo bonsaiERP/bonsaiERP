@@ -6,7 +6,7 @@ class Inventories::Form < BaseForm
   attribute :date, Date
   attribute :ref_number, String
   attribute :description, String
-  attribute :inventory_details_attributes, Array
+  attribute :inventory_details_attributes
 
   attr_writer :inventory
 
@@ -51,11 +51,9 @@ class Inventories::Form < BaseForm
     def stock_items_hash
       @stock_items_hash ||= begin
          res =  store.stocks.includes(:item).where(item_id: details.map(&:item_id))
-         Hash[ res.map { |v| [v.tem_id, StockWithItem.new(v)] }]
+         Hash[ res.map { |v| [v.item_id, StockWithItem.new(v)] }]
       end
     end
-
-    #select('items.unit_symbol, items.name, items.code, stocks.quantity, stocks.item_id')
 
     def save(&b)
       res = valid? && @inventory.valid?

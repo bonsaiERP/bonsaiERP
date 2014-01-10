@@ -8,7 +8,7 @@
   %span.muted Nueva transferencia de
   = @store
 
-%div(ng-controller='InventoryTransferenceController')
+%div(ng-controller='InventoryController')
   = simple_form_for @trans, url: inventory_transferences_path do |f|
     = hidden_field_tag :store_id, @store.id
     = f.hidden_field :store_id

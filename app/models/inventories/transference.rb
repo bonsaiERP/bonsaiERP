@@ -7,8 +7,9 @@ class Inventories::Transference < Inventories::Form
   validates_presence_of :store_to
 
   def create
+    inventory.store_to_id = store_to_id
     save do
-      @inventory.save
+      inventory.save
       update_stocks
       update_stocks_to
     end
@@ -18,18 +19,12 @@ class Inventories::Transference < Inventories::Form
     @store_to ||= Store.active.where(id: store_to_id).first
   end
 
-  def inventory
-    super
-    @inventory.store_to_id = store_to_id
-    @inventory
-  end
-
   def stores
     @stores ||= Store.active.where("id != ?", store_id)
   end
 
   def details_form_name
-    'inventory_transferences[inventory_details_attributes]'
+    'inventories_transference[inventory_details_attributes]'
   end
 
   private

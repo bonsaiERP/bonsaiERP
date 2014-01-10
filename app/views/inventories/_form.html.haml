@@ -4,6 +4,7 @@
     %th Unidad
     %th Cantidad
     %th Disponible
+    %th Saldo
     %th
 
 
@@ -15,9 +16,11 @@
     %td
       {{detail.unit}}
     %td
-      %input.r(type='text' size='10' ng-model='detail.quantity')
+      %input.r(type='text' size='10' ng-model='detail.quantity' name='#{inventory.details_form_name}[{{$index}}][quantity]')
     %td.r
       {{detail.stock}}
+    %td.r
+      {{detail.stock - detail.quantity}}
     %td
       %a.dark(href='javascript:;' ng-click='destroy($index)')
         = icon_delete

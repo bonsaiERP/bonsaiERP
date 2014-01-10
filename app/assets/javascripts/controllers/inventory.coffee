@@ -1,4 +1,4 @@
-myApp.controller 'InventoryTransferenceController', ['$scope',  ($scope) ->
+myApp.controller 'InventoryController', ['$scope',  ($scope) ->
   $scope.details = $('#details').data('details')
 
   # Remove detail item
