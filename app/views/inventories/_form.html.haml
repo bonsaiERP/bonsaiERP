@@ -1,23 +1,25 @@
 %table#items.table.decorated
   %tr
     %th Item
-    %th Cantidad
     %th Unidad
+    %th Cantidad
+    %th Disponible
     %th
 
-  = f.simple_fields_for :inventory_details do |det|
-    %tr.item.form-inline
-      %td
-        = det.input :item, label: false, as: :autocomplete, 
-          input_html: {class: 'item_id span10', placeholder: 'Escriba para buscar el ítem',
-          data: {new_url: '/items/new', source: items_path(format: :json)} }
-      %td
-        = det.input :quantity, label: false, input_html: {type: :decimal, size: 10}, data: {value: 'item.quantity'}
-      %td
-        %span.unit
-      %td
-        %a.dark.btn(href='javascript:;' data-on-click='item:delete' title="borrar" data-toggle='tooltip')
-          %i.icon-trash
+
+  %tr(ng-repeat='detail in details' ng-hide='detail._destroy==1')
+    %td
+      %input(type='text' size='70' ng-model='detail.item')
+    %td
+      {{detail.unit}}
+    %td
+      %input.r(type='text' size='10' ng-model='detail.quantity')
+    %td.r
+      {{detail.stock}}
+    %td
+      %a.dark(href='javascript:;' ng-click='destroy($index)')
+        = icon_delete
+
 
   %tr.last
     %td(colspan="3")

@@ -28,43 +28,44 @@ class Inventories::Transference < Inventories::Form
     @stores ||= Store.active.where("id != ?", store_id)
   end
 
-private
-  def operation
-    'trans'
-  end
+  private
 
-  def update_stocks
-    res = true
-    stocks.each do |st|
-      stoc = Stock.create(store_id: store_id, item_id: st.item_id,
-                          quantity: stock_quantity(st), minimum: st.minimum)
-      res = stoc.save && st.update_attribute(:active, false)
-
-      return false unless res
+    def operation
+      'trans'
     end
 
-    res
-  end
+    def update_stocks
+      res = true
+      stocks.each do |st|
+        stoc = Stock.create(store_id: store_id, item_id: st.item_id,
+                            quantity: stock_quantity(st), minimum: st.minimum)
+        res = stoc.save && st.update_attribute(:active, false)
 
-  def update_stocks_to
-    res = true
+        return false unless res
+      end
 
-    stocks_to.each do |st|
-      stoc = Stock.create(store_id: store_to_id, item_id: st.item_id,
-                          quantity: stock_to_quantity(st), minimum: st.minimum)
-      res = stoc.save && st.update_attribute(:active, false)
-
-      return false unless res
+      res
     end
 
-    res
-  end
+    def update_stocks_to
+      res = true
 
-  def stock_quantity(st)
-    st.quantity - item_quantity(st.item_id)
-  end
+      stocks_to.each do |st|
+        stoc = Stock.create(store_id: store_to_id, item_id: st.item_id,
+                            quantity: stock_to_quantity(st), minimum: st.minimum)
+        res = stoc.save && st.update_attribute(:active, false)
 
-  def stock_to_quantity(st)
-    st.quantity + item_quantity(st.item_id)
-  end
+        return false unless res
+      end
+
+      res
+    end
+
+    def stock_quantity(st)
+      st.quantity - item_quantity(st.item_id)
+    end
+
+    def stock_to_quantity(st)
+      st.quantity + item_quantity(st.item_id)
+    end
 end

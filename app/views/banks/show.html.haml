@@ -1,10 +1,7 @@
 -content_for :links do
   %ul.breadcrumbs.span6
-    %li #{link_to "Cuentas banco", banks_path}
     %li
-      %i.icon-caret-right
-    %li
-      %span #{@bank}
+      =link_to 'Cuentas bancarias', banks_path
 
 .row-fluid
   .span8
@@ -29,7 +26,12 @@
         = currency_label @bank.currency
 
   .span6
-    %i.icon-building(title="Dirección" data-toggle='tooltip')
+    %i.muted.icon-phone(title='Teléfono' data-toggle='tooltip')
+    = @bank.phone
+    %i.muted.icon-globe(title='Website' data-toggle='tooltip')
+    = @bank.website
+    .clearfix
+    %i.muted.icon-building(title="Dirección" data-toggle='tooltip')
     = nl2br(@bank.address)
 
 

@@ -19,17 +19,15 @@ class BanksController < ApplicationController
   end
 
   # GET /banks/1/edit
-  def edit
-  end
 
   # POST /banks
   def create
     @bank = Bank.new(create_bank_params)
 
     if @bank.save
-      redirect_to banks_path(@bank), notice: 'La cuenta de banco fue creada.'
+      redirect_to bank_path(@bank.id), notice: 'La cuenta de banco fue creada.'
     else
-      render "new"
+      render :new
     end
   end
 

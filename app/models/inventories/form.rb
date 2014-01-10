@@ -36,7 +36,26 @@ class Inventories::Form < BaseForm
     end
   end
 
+  def details_serialized
+    details.map do |v|
+      v.attributes.merge( stock_with_items(v.item_id).attributes)
+    end
+  end
+
   private
+
+    def stock_with_items(item_id)
+      stock_items_hash.fetch(item_id) { StockWithItem.new }
+    end
+
+    def stock_items_hash
+      @stock_items_hash ||= begin
+         res =  store.stocks.includes(:item).where(item_id: details.map(&:item_id))
+         Hash[ res.map { |v| [v.tem_id, StockWithItem.new(v)] }]
+      end
+    end
+
+    #select('items.unit_symbol, items.name, items.code, stocks.quantity, stocks.item_id')
 
     def save(&b)
       res = valid? && @inventory.valid?
@@ -72,4 +91,20 @@ class Inventories::Form < BaseForm
     def at_least_one_item
       self.errors.add(:base, I18n.t("errors.messages.inventory.at_least_one_item"))  if details.empty?
     end
+end
+
+class StockWithItem
+  attr_accessor :unit, :item, :stock
+
+  def initialize(obj = nil)
+    @item = obj.item_to_s
+    @unit = obj.item_unit_symbol
+    @stock = obj.quantity
+  rescue
+    @stock = BigDecimal.new(0)
+  end
+
+  def attributes
+    { item: item, unit: unit, stock: stock }
+  end
 end

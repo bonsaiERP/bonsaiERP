@@ -14,10 +14,10 @@
     .span6
       = f.input :currency, collection: currency_options,
         input_html: {placeholder: 'Escriba para poder buscar', class: 'span10' },
-        label: 'Moneda <span class="text-muted muted"><i class="icon-warning-sign"></i> No es posible modificar</span>'.html_safe
+        label: 'Moneda (<i>No es posible modificar</i>)'.html_safe
 
     .span6
-      = f.input :amount, label: 'Total en cuenta <span class="text-muted muted">(Valor inicial)</span>',
+      = f.input :amount, label: 'Total en cuenta (<i>Valor inicial</i>)'.html_safe,
         input_html: {size: 12, class: 'r', type: 'decimal'}, required: true
   .row-fluid
     .span6

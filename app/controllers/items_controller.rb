@@ -3,6 +3,7 @@
 # email: boriscyber@gmail.com
 class ItemsController < ApplicationController
   include Controllers::TagSearch
+  respond_to :html, :json
 
   before_filter :set_item, only: [:show, :edit, :update, :destroy]
 
@@ -10,9 +11,8 @@ class ItemsController < ApplicationController
   def index
     search_items
 
-    respond_to do |format|
-      format.html
-      format.json { render json: @items }
+    respond_with do |format|
+      format.json { render json: @items}
     end
   end
 

@@ -17,7 +17,7 @@ class Stock < ActiveRecord::Base
   scope :item_like, -> (s) { s = "%#{s}%"; active.includes(:item).where { (item.name.like s) | (item.code.like s) } }
   scope :available_items, -> (store_id, s) { item_like(s).where("store_id=? AND quantity > 0", store_id) }
 
-  delegate :name, :price, :code, :to_s, :type, to: :item, prefix: true
+  delegate :name, :price, :code, :to_s, :type, :unit_symbol, to: :item, prefix: true
 
   # Sets the minimun for an Stock
   def self.new_minimum(item_id, store_id)
