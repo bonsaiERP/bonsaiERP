@@ -12,4 +12,8 @@ myApp.controller 'InventoryTransferenceController', ['$scope',  ($scope) ->
       $scope.details[index].quantity = 0
     else
       $scope.details.splice index, 1
+
+  #
+  $scope.addDetail = ->
+    $scope.details.push {item_id: null, item: null, unit: null, quantity: 0.0, stock: 0.0}
 ]

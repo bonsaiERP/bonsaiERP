@@ -29,7 +29,7 @@
 
     .row-fluid
       %input#details(data-details="#{@trans.details_serialized.to_json}" type='hidden')
-      = render 'inventories/form', f: f, store_id: @store.id
+      = render 'inventories/form', f: f, inventory: f.object, store_id: @store.id
 
     .form-actions
       = f.submit 'Transferir ítems', class: 'btn btn-primary'

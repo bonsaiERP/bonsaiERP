@@ -28,6 +28,10 @@ class Inventories::Transference < Inventories::Form
     @stores ||= Store.active.where("id != ?", store_id)
   end
 
+  def details_form_name
+    'inventory_transferences[inventory_details_attributes]'
+  end
+
   private
 
     def operation

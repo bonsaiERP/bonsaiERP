@@ -1,19 +1,13 @@
-class Items::Query < Item
-  class << self
-    def expense_search(s)
-      search(s).active
-    end
+class Items::Query < SimpleDelegator
+  def initialize(rel = Item)
+    super(rel)
+  end
 
-    def income_search(s)
-      search(s).income
-    end
-
-    def for_sale(val)
-      if val == 'true' || val == true
-        where(for_sale: true)
-      else
-        where(for_sale: false)
-      end
+  def search_items_with_stock(search, store_id)
+    items = active.search(search).limit(20)
+    items.map do |v|
+      ItemStock.new(v , stocks_hash(items.map(&:id), store_id))
     end
   end
+
 end

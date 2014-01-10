@@ -131,6 +131,7 @@ Bonsaierp::Application.routes.draw do
   resources :items do
     get :search_income, on: :collection
     get :search_expense, on: :collection
+    get :search_inventory, on: :member
   end
 
   resources :units

@@ -32,12 +32,16 @@ class ItemsController < ApplicationController
     render json: ItemSerializer.new.expense(@items)
   end
 
-  # GET /items/1
-  def show
+  # GET /items/:store_id/search_inventory
+  def search_inventory
+    @items = Item.active.search(params[:term]).limit(20)
+
+    render json: ItemSerializer.new.inventory(@items, params[:id])
   end
 
+  # GET /items/1 show action
+
   # GET /items/new
-  # GET /items/new.xml
   def new
     @item = Item.new
   end
@@ -66,7 +70,6 @@ class ItemsController < ApplicationController
   end
 
   # DELETE /items/1
-  # DELETE /items/1.xml
   def destroy
     @item.destroy
 

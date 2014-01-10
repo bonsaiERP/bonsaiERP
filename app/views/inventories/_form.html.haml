@@ -9,7 +9,9 @@
 
   %tr(ng-repeat='detail in details' ng-hide='detail._destroy==1')
     %td
-      %input(type='text' size='70' ng-model='detail.item')
+      %input(type='text' ng-model='detail.item_id' name='#{inventory.details_form_name}[{{$index}}][item_id]' size='2' style='display:none')
+      %input(type='text' size='75' placeholder='Escriba para buscar el ítem' data-source='#{search_inventory_item_path(store_id)}' ng-model='detail.item' ng-inventory-detail-autocomplete='true')
+
     %td
       {{detail.unit}}
     %td
@@ -23,6 +25,6 @@
 
   %tr.last
     %td(colspan="3")
-      %a.btn(href='javascript:;' data-on-click='inventory:addItem')
+      %a.btn(href='javascript:;' ng-click='addDetail()')
         %i.icon-plus-sign
         Nueva línea
