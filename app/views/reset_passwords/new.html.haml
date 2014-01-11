@@ -1,11 +1,13 @@
 %h1.c.login Recuperar contraseña
 
-.lonely.c(style="max-width: 450px;")
+.lonely.c(style='width: 450px;')
   = simple_form_for(ResetPassword.new) do |f|
+
     .large
-      %i.muted.icon-envelope.icon
-      = f.text_field :email, placeholder: 'Email', size: 40
-      = f.submit "Recuperar contraseña", class: 'btn btn-success b'
+      %i.muted.icon-envelope.icon(title='Email' data-toggle='tooltip')
+      = f.text_field :email, placeholder: 'Email'
+
+    = f.submit "Recuperar contraseña", class: 'btn btn-success b'
 
     .link.fs110
       = link_to login_path, class: 'white' do
