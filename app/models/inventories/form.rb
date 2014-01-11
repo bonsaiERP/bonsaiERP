@@ -38,7 +38,7 @@ class Inventories::Form < BaseForm
 
   def details_serialized
     details.map do |v|
-      v.attributes.merge( stock_with_items(v.item_id).attributes)
+      v.attributes.merge(stock_with_items(v.item_id).attributes)
     end
   end
 

@@ -46,6 +46,6 @@ class ItemSerializer
     end
 
     def stocks(item_ids)
-      @stocks ||= Stock.select('item_id, quantity').where(store_id: store_id, item_id: item_ids)
+      @stocks ||= Stock.active.select('item_id, quantity').where(store_id: store_id, item_id: item_ids)
     end
 end

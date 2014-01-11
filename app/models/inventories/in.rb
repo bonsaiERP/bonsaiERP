@@ -7,6 +7,10 @@ class Inventories::In < Inventories::Form
     save { update_stocks && inventory.save }
   end
 
+  def details_form_name
+    'inventories_in[inventory_details_attributes]'
+  end
+
   private
 
     def operation

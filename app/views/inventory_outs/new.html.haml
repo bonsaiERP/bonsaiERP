@@ -13,28 +13,25 @@
       = @inv.inventory.ref_number
       %small.text-error Egreso de items
 
-= simple_form_for @inv, url: store_inventory_outs_path(@inv.store_id) do |f|
-  = bonsai_form_error(f)
+%div(ng-controller='InventoryController')
+  = simple_form_for @inv, url: store_inventory_outs_path(@inv.store_id) do |f|
+    = bonsai_form_error(f)
 
-  = f.hidden_field :store_id
+    = f.hidden_field :store_id
 
-  .row-fluid
-    .span3
-      %label Almacen
-      %h4.n= link_to @inv.store, @inv.store, target: '_blank'
-    .span3
-      = f.input :date, label: 'Fecha', as: :datepicker
-    .span6
-      = f.input :description, as: :text, label: 'Descripción' ,input_html: {rows: 3}
+    .row-fluid
+      .span3
+        %label Almacen
+        %h4.n= link_to @inv.store, @inv.store, target: '_blank'
+      .span3
+        = f.input :date, label: 'Fecha', as: :datepicker
+      .span6
+        = f.input :description, as: :text, label: 'Descripción' ,input_html: { rows: 3, cols: 55 }
 
-  .row-fluid
-    = render 'inventories/form', f: f
+    %input#details(type='hidden' data-details='#{@inv.details_serialized.to_json}')
 
-  .form-actions
-    = f.submit 'Egresar ítems', class: 'btn btn-primary b'
+    .row-fluid
+      = render 'inventories/form', f: f, inventory: f.object, store_id: @inv.store_id
 
-:javascript
-  $(function() {
-    var inv = new App.InventoryOut();
-  });
-
+    .form-actions
+      = f.submit 'Egresar ítems', class: 'btn btn-primary b'

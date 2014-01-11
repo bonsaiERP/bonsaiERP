@@ -12,31 +12,36 @@ class Inventories::Out < Inventories::Form
     end
   end
 
-private
-  def operation
-    'out'
+  def details_form_name
+    'inventories_out[inventory_details_attributesinventory_details_attributes]'
   end
 
-  def update_stocks
-    res = true
-    new_stocks = []
-    stocks.each do |st|
-      stoc = Stock.new(store_id: store_id, item_id: st.item_id,
-                       quantity: stock_quantity(st), minimum: st.minimum)
+  private
 
-      res = stoc.save && st.update_attribute(:active, false)
-      new_stocks << stoc
-
-      return false unless res
+    def operation
+      'out'
     end
 
-    klass_details.stocks = new_stocks
+    def update_stocks
+      res = true
+      new_stocks = []
+      stocks.each do |st|
+        stoc = Stock.new(store_id: store_id, item_id: st.item_id,
+                         quantity: stock_quantity(st), minimum: st.minimum)
 
-    res
-  end
+        res = stoc.save && st.update_attribute(:active, false)
+        new_stocks << stoc
 
-  def stock_quantity(st)
-    st.quantity - item_quantity(st.item_id)
-  end
+        return false unless res
+      end
+
+      klass_details.stocks = new_stocks
+
+      res
+    end
+
+    def stock_quantity(st)
+      st.quantity - item_quantity(st.item_id)
+    end
 end
 
