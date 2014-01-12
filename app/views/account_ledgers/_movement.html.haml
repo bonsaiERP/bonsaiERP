@@ -28,8 +28,8 @@
           %i.icon-file.muted(data-toggle='tooltip' title="referencia")
           %span.reference= nl2br ledger.reference
 
-    - unless ledger.trans_currency?
-      %p
+    - unless ledger.current_currency?
+      .well.well-small
         %span.muted
           %i.icon-exchange
           Tipo de cambio:

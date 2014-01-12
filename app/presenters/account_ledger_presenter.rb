@@ -140,8 +140,8 @@ class AccountLedgerPresenter < BasePresenter
     end
   end
 
-  def trans_currency?
-    is_account? ? same_currency? : true
+  def current_currency?
+    current_account.currency == currency
   end
 
   def current_account
