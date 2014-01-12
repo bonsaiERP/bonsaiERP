@@ -3,11 +3,11 @@
 # email: boriscyber@gmail.com
 class StorePresenter < BasePresenter
   def address_tag
-    "#{ icon 'icon-building muted', 'Dirección' } #{sanitize address}".html_safe if address.present?
+    "#{ icon 'icon-building muted', 'Dirección' } #{sanitize address}".html_safe  if address.present?
   end
 
   def phone_tag
-    "#{ icon 'icon-phone muted', 'Teléfono' } #{sanitize phone}".html_safe if phone.present?
+    "#{ icon 'icon-phone muted', 'Teléfono' } #{sanitize phone}".html_safe  if phone.present?
   end
 
   def items(attrs = {})
@@ -35,21 +35,22 @@ class StorePresenter < BasePresenter
     inv.page(page attrs[:page_operations]).order("date desc, id desc")
   end
 
-private
-  def date_range(attrs)
-    DateRange.parse(attrs[:date_start], attrs[:date_end])
-  end
+  private
 
-  def valid_date_range?(attrs = {})
-    attrs[:date_start].present? && attrs[:date_end].present?
-  end
+    def date_range(attrs)
+      DateRange.parse(attrs[:date_start], attrs[:date_end])
+    end
 
-  def page(val)
-    is_valid_page?(val) ? val : 1
-  end
+    def valid_date_range?(attrs = {})
+      attrs[:date_start].present? && attrs[:date_end].present?
+    end
 
-  def is_valid_page?(val)
-    val.present? && val.to_i > 0
-  end
+    def page(val)
+      is_valid_page?(val) ? val : 1
+    end
+
+    def is_valid_page?(val)
+      val.present? && val.to_i > 0
+    end
 
 end

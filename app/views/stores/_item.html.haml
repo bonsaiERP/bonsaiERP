@@ -4,16 +4,16 @@
     .span6
       %h4.n
         = link_to item, item
-        %small= "(#{item.unit_symbol})"
+        %span.muted.fs90= "(#{item.unit_symbol})"
     .span6
-      %span.muted Cantidad:
-      = negative_tag stock.quantity
+      .row-fluid
+        .span3
+          %span.muted Cantidad:
+          = minimum_stock_tag stock
+        .span9
+          .minimum-stock.ib
+            %span.muted(title='Iventario mínimo') Inv. mínimo:
+            %span.min= ntc stock.minimum
 
-      .clearfix
-
-      .minimum-stock.ib
-        %span.muted(title='Iventario mínimo') Inv. mínimo:
-        %span.min= stock.minimum
-
-        %a.edit-minimum-link.dark(href="javascript:;" title='Editar inventario mínimo' data-toggle='tooltip' data-id='#{stock.id}' data-minimum='#{ stock.minimum }')
-          %i.icon-pencil.icon-large
+            %a.edit-minimum-link.dark(href="javascript:;" title='Editar inventario mínimo' data-toggle='tooltip' data-id='#{stock.id}' data-minimum='#{ stock.minimum }')
+              %i.icon-pencil.icon-large

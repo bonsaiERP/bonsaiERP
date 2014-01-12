@@ -13,7 +13,7 @@ class Inventories::Out < Inventories::Form
   end
 
   def details_form_name
-    'inventories_out[inventory_details_attributesinventory_details_attributes]'
+    'inventories_out[inventory_details_attributes]'
   end
 
   private

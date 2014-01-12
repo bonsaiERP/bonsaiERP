@@ -28,4 +28,12 @@ module CurrencyHelper
       val
     end
   end
+
+  def minimum_stock_tag(stock)
+    if stock.quantity < stock.minimum
+      "<span class='text-error'>#{ntc stock.quantity}</span>".html_safe
+    else
+      ntc stock.quantity
+    end
+  end
 end
