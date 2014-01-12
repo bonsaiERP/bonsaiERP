@@ -43,8 +43,7 @@ class Movement < Account
 
   ########################################
   # Delegations
-  #delegate(*create_accessors(*Transaction.get_columns), to: :transaction)
-  #delegate(*Transaction.delegate_methods, to: :transaction)
+  delegate :name, :percentage, :percentage_dec, to: :tax, prefix: true, allow_nil: true
 
   # Define boolean methods for states
   STATES.each do |_state|

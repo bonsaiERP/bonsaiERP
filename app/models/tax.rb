@@ -16,6 +16,10 @@ class Tax < ActiveRecord::Base
     "#{name} (#{number_with_precision percentage, precision: decimals}%)"
   end
 
+  def percentage_dec
+    number_with_precision percentage, precision: decimals
+  end
+
   private
 
     def decimals

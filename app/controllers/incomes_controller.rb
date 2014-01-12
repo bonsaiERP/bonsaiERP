@@ -164,7 +164,7 @@ class IncomesController < ApplicationController
 
       @incomes = @incomes.all_tags(*tag_ids)  if params[:search] && has_tags?
 
-      @incomes = @incomes.includes(:contact, :updater, :tax, :creator, :approver, :nuller).order('date desc, accounts.id desc').page(@page)
+      @incomes = @incomes.includes(:contact, :tax, :updater, :creator, :approver, :nuller).order('date desc, accounts.id desc').page(@page)
 
       set_incomes_filters
     end

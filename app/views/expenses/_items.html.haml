@@ -23,12 +23,12 @@
     %td.r Subtotal
     %td#subtotal.r= ntc expense.subtotal
 
-  - if expense.tax_percentage > 0
+  - if expense.tax_percentage.to_f > 0
     %tr.extra
       %td(colspan='2')
       %td.r(colspan='2')
         %span.text-muted.muted Impuestos:
-        = expense.tax
+        %strong= expense.tax_tag
       %td#taxes.r= ntc expense.taxes
 
   %tr.extra

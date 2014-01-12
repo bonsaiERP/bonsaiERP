@@ -95,7 +95,7 @@ class MovementPresenter < BasePresenter
   end
 
   def enable_disable_inventory_button
-    if is_nulled? && !delivered?
+    if !is_nulled? && !delivered?
       template.content_tag :h5, class: 'n ib' do
         link_to enable_disable_inventory_text, template.inventory_income_path(id),
           method: :patch, class: (no_inventory? ? 'green' : 'red')
@@ -120,9 +120,28 @@ class MovementPresenter < BasePresenter
     end
   end
 
-
   def show_inventory_buttons?
     !no_inventory? && !is_nulled?
+  end
+
+  def tax_tag
+    "#{tax_name} (#{tax_type_tag} #{tax_percentage_dec}%)".html_safe
+  end
+
+  def tax_type_tag
+    if tax_in_out?
+      '<small class="n">por dentro</small>'
+    else
+      '<small class="n">por fuera</small>'
+    end
+  end
+
+  def tax_icon
+    if tax_in_out
+      icon 'icon-collapse-alt fs130', 'Por dentro'
+    else
+      icon 'icon-expand-alt fs130', 'Por fuera'
+    end
   end
 
   private
