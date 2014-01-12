@@ -45,6 +45,8 @@ describe Incomes::Form do
       subject.should respond_to(:details)
       subject.should respond_to(:income_details)
       subject.should respond_to(:income_details_attributes)
+
+      subject.form_details_name.should eq('incomes_form[income_details_attributes]')
     end
 
     it "sets_defaults if nil" do
@@ -60,7 +62,7 @@ describe Incomes::Form do
       is = Incomes::Form.new_income(account_to_id: 2, direct_payment: "1")
 
       is.should_not be_valid
-      AccountQuery.any_instance.stub_chain(:bank_cash, where: [( build :cash, id: 2 )])
+      Accounts::Query.any_instance.stub_chain(:bank_cash, where: [( build :cash, id: 2 )])
 
       is = Incomes::Form.new_income(account_to_id: 2, direct_payment: "1")
       is.details.should have(2).items
@@ -72,7 +74,7 @@ describe Incomes::Form do
         {item_id: 1, quantity: 10, price: 1}, {item_id: 2, quantity: 10, price: 3},
         {item_id: 1, quantity: 3, price: 5}
       ])
-      AccountQuery.any_instance.stub_chain(:bank_cash, where: [( build :cash, id: 2 )])
+      Accounts::Query.any_instance.stub_chain(:bank_cash, where: [( build :cash, id: 2 )])
       IncomeDetail.any_instance.stub(item: true)
 
       is.should_not be_valid
@@ -171,16 +173,34 @@ describe Incomes::Form do
                          description: 'A new changed description', income_details_attributes: update_details)
     }
 
+
     it "does not allow errors on IncomeDetail" do
       i = subject.income
       is = Incomes::Form.find(i.id)
-      is.income.should be_is_a(Income)
-      is.service.should be_is_a(Incomes::Service)
       is.income.stub(valid?: false)
       is.details[0].errors.add(:quantity, "Error in quantity")
 
       is.update.should be_false
       is.income.details[0].errors[:quantity].should eq(["Error in quantity"])
+    end
+
+    it "Stores with error if details has negative balance" do
+      i = subject.income
+      id = i.income_details[0]
+      id.balance = 0
+      id.save.should be_true
+
+      is = Incomes::Form.find(i.id)
+      is.income.should be_is_a(Income)
+      is.service.should be_is_a(Incomes::Service)
+      is.update(income_details_attributes: [
+          {id: id.id, price: id.price, item_id: id.item_id, quantity: (id.quantity - 1) }
+      ]).should be_true
+
+      i = Income.find(is.income.id)
+
+      i.should be_has_error
+      i.error_messages.should eq({'items' => ['movement.negative_item_balance']})
     end
 
     it "udpates balance_inventory" do
@@ -433,16 +453,27 @@ describe Incomes::Form do
       IncomeDetail.any_instance.stub(valid?: true)
     end
 
-    it "creates with tax" do
-      ifrm = Incomes::Form.new_income(valid_params.merge(tax_id: tax.id))
+    it "creates tax_in_out=false" do
+      ifrm = Incomes::Form.new_income(valid_params.merge(tax_id: tax.id, tax_in_out: false))
       ifrm.create.should be_true
 
       tax.percentage.should == 10
       inc = ifrm.income
+      inc.tax_in_out.should be_false
       inc.tax_percentage.should == 10
       inc.total.should == 550
     end
 
+    it "creates tax_in_out=true" do
+      ifrm = Incomes::Form.new_income(valid_params.merge(tax_id: tax.id, tax_in_out: true))
+      ifrm.create.should be_true
+
+      tax.percentage.should == 10
+      inc = ifrm.income
+      inc.tax_in_out.should be_true
+      inc.tax_percentage.should == 10
+      inc.total.should == 500
+    end
   end
 
   describe 'Change state' do

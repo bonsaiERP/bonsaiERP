@@ -1,4 +1,3 @@
-# encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class Incomes::Form < Movements::Form
@@ -35,6 +34,8 @@ class Incomes::Form < Movements::Form
   def set_new_income
     set_defaults
     @movement = Income.new(income_attributes)
+    @movement.ref_number = Income.get_ref_number
+    @movement.state = 'draft'
     2.times { @movement.income_details.build(quantity: 1) }  if income.details.empty?
     @service = Incomes::Service.new(income)
   end
@@ -44,6 +45,16 @@ class Incomes::Form < Movements::Form
     attrs[:income_details_attributes] ||= []
     attrs
   end
+
+  def form_name
+    'incomes_form'
+  end
+
+  def form_details_name
+    'incomes_form[income_details_attributes]'
+  end
+
+  def is_income?; true; end
 
   private
 
@@ -61,6 +72,6 @@ class Incomes::Form < Movements::Form
     end
 
     def account_to
-      @account_to ||= AccountQuery.new.bank_cash.where(currency: currency, id: account_to_id).first
+      @account_to ||= Accounts::Query.new.bank_cash.where(currency: currency, id: account_to_id).first
     end
 end

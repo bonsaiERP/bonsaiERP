@@ -1,0 +1,62 @@
+<script>
+  $(function() {
+    $('body').on('click', '#new-unit-link', function() {
+      $('#save-button').prop('disabled', false);
+      $('.unit-form input').val('')
+      showHide('form');
+    })
+    $('body').on('click', '#cancel-button', function() { showHide('control') });
+
+    $('#save-button').on('click', function() {
+      $(this).prop('disabled', true);
+      formSubmit();
+    });
+
+    function showHide(elem) {
+      if(elem == 'form') {
+        $('.unit-form').show();
+        $('.unit-control').hide();
+      }else {
+        $('.unit-form').hide();
+        $('.unit-control').show()
+      }
+    }
+
+    function formSubmit() {
+      var data = {unit: {name: $('#unit_name').val(), symbol: $('#unit_symbol').val()}};
+      $.post('#{units_path}', data, function(resp) {
+        if(resp.id) {
+          createOptionAndSelect(resp);
+          showHide('control');
+        } else {
+          setErrors(resp);
+        }
+      })
+    }
+
+    function createOptionAndSelect(resp) {
+      var option = ['<option value="', resp.id, '">', resp.name , ' (', resp.symbol, ')','</option>'].join('')
+      $('#item_unit_id').append(option)
+      .val(resp.id);
+    }
+
+    function setErrors(resp) {
+      $('.unit-form .field_with_errors').removeClass('field_with_errors');
+      var err = resp.name
+          msg = [];
+      if(err && err.length > 0) {
+        $('#unit_name').parents('span').addClass('field_with_errors');
+        msg.push('Nombre: ' + err.join(","))
+      }
+      err = resp.symbol;
+      if(err && err.length > 0) {
+        $('#unit_symbol').parents('span').addClass('field_with_errors')
+        msg.push('Símbolo: ' + err.join(","))
+      }
+
+      if(msg.length > 0) {
+        alert("Existen errores\n" + msg.join("\n") );
+      }
+    }
+  });
+</script>

@@ -35,3 +35,54 @@ f.close
 
 tail -f logs/production.log | grep "500 Internal Server Error" -B 2 -A 5
 :%s/:\([^ ]*\)\(\s*\)=>/\1:/g
+
+<!DOCTYPE html>
+<html ng-app="app">
+
+  <head>
+    <script data-require="angular.js@1.0.7" data-semver="1.0.7" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js"></script>
+  </head>
+
+  <body>
+    <h1>Compile dynamic HTML</h1>
+    <div ng-controller="MyController">
+      <textarea ng-model="html"></textarea>
+      <div dynamic="html"></div>
+      <div ng-controller='OtherController'>
+        {{count}}
+        <h2 dynamic='html'></h2>
+      </div>
+    </div>
+  </body>
+
+</html>
+
+var app = angular.module('app', []);
+
+app.directive('dynamic', function ($compile) {
+  return {
+    restrict: 'A',
+    replace: true,
+    link: function (scope, ele, attrs) {
+      scope.$watch(attrs.dynamic, function(html) {
+        ele.html(html);
+        $compile(ele.contents())(scope);
+      });
+    }
+  };
+});
+
+function MyController($scope) {
+  $scope.click = function(arg) {
+    alert('Clicked ' + arg);
+  }
+  $scope.html = '<a ng-click="click(1)" href="#">Click me</a>';
+}
+
+function OtherController($scope) {
+  $scope.count = 0;
+  $scope.update = function() { $scope.count += 1; };
+  $scope.html = '<a ng-click="click(1)" href="#">Click me</a>';
+}

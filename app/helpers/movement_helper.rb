@@ -44,4 +44,8 @@ module MovementHelper
       'post'
     end
   end
+
+  def form_model_name(movement)
+    movement.to_s.underscore.gsub('/', '_')
+  end
 end

@@ -24,7 +24,7 @@ Spork.prefork do
     config.mock_with :rspec
 
     config.before(:suite) do
-      DatabaseCleaner.strategy = :transaction
+      #DatabaseCleaner.strategy = :transaction
       DatabaseCleaner.clean_with(:truncation)
     end
 

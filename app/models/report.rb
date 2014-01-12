@@ -19,17 +19,17 @@ class Report
 
   def total_expenses
     @total_expenses ||= begin
-      tot = Expense.active.joins(:transaction).where(date: date_range.range)
+      tot = Expense.active.where(date: date_range.range)
       tot = tot.all_tags(*attrs[:tag_ids])  if any_tags?
-      tot.sum('(transactions.total - accounts.amount) * accounts.exchange_rate')
+      tot.sum('(accounts.total - accounts.amount) * accounts.exchange_rate')
     end
   end
 
   def total_incomes
     @total_incomes ||= begin
-      tot = Income.active.joins(:transaction).where(date: date_range.range)
+      tot = Income.active.where(date: date_range.range)
       tot = tot.all_tags(*attrs[:tag_ids])  if any_tags?
-      tot.sum('(transactions.total - accounts.amount) * accounts.exchange_rate')
+      tot.sum('(accounts.total - accounts.amount) * accounts.exchange_rate')
     end
   end
 
@@ -101,8 +101,8 @@ private
 
   def dayli_sql(data)
     <<-SQL
-      SELECT SUM((t.total - a.amount) * a.exchange_rate) AS tot, a.date
-      FROM accounts a JOIN transactions t ON (a.id = t.account_id)
+      SELECT SUM((a.total - a.amount) * a.exchange_rate) AS tot, a.date
+      FROM accounts a
       WHERE a.type = '#{data.type}' and a.state IN ('approved', 'paid')
       AND a.date BETWEEN '#{date_range.date_start}' AND '#{date_range.date_end}'
       GROUP BY a.date
@@ -112,9 +112,8 @@ private
 
   def contacts_sql(data)
     <<-SQL
-    SELECT c.matchcode, SUM((t.total - a.amount) * a.exchange_rate) AS tot
+    SELECT c.matchcode, SUM((a.total - a.amount) * a.exchange_rate) AS tot
     FROM contacts c JOIN accounts a ON (a.contact_id=c.id and a.type='#{data.type}')
-    JOIN transactions t ON (t.account_id=a.id)
     GROUP BY c.id
     ORDER BY tot DESC OFFSET #{data.offset} LIMIT #{data.limit}
     SQL

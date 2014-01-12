@@ -13,6 +13,11 @@ class Account < ActiveRecord::Base
   belongs_to :tax
   has_many :account_ledgers
 
+  belongs_to :approver, class_name: 'User'
+  belongs_to :nuller,   class_name: 'User'
+  belongs_to :creator,  class_name: 'User'
+  belongs_to :updater,  class_name: 'User'
+
   ########################################
   # Validations
   validates_presence_of :currency, :name

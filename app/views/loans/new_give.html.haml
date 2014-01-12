@@ -1,0 +1,16 @@
+- content_for :links do
+  %ul.breadcrumbs
+    %li
+      = link_to 'Prestamos', loans_path
+
+
+%h1
+  Dar prestamo
+
+
+#loan(ng-controller='LoanController')
+  = simple_form_for @loan, url: give_loans_path do |f|
+    = render 'form', f: f
+
+    .form-actions
+      = f.submit 'Dar prestamo', class: 'btn btn-large btn-primary'

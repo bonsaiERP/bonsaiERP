@@ -35,7 +35,7 @@ class Transference < BaseService
   end
 
   def account_to
-    @account_to ||= AccountQuery.new.bank_cash.find_by_id(account_to_id)
+    @account_to ||= Accounts::Query.new.bank_cash.find_by_id(account_to_id)
   end
 
   def transfer

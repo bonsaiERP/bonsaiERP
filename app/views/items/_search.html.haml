@@ -5,18 +5,27 @@
       %button.btn.tags(href='#tags-pane') Etiquetas
 
   .panes
-    #search-pane.button-pane
+    #search-pane.button-pane.input-append
       = form_tag '/items', method: 'get', class: 'form-inline' do
-        = text_field_tag 'search', '', placeholder: 'Nombre o código', size: 45
-        %label(for='for_sale')
-          = check_box_tag 'for_sale', '1', params[:for_sale].present?
-          Venta
+
+        = text_field_tag 'search', '', placeholder: 'Nombre, código o etiqueta', size: 55
         = submit_tag 'Buscar', class: 'btn'
 
-      =link_to 'eliminar filtro', items_path  if params[:commit].present?
+        -#%label(for='for_sale' title='Filtra los items que se venden' data-toggle='tooltip')
+          Venta
+          = check_box_tag 'for_sale', '1', params[:for_sale].present?
+        = link_to 'eliminar filtro', items_path  if params[:commit].present?
 
     #tags-pane.button-pane
       = render 'tags/tags', model: 'Item', list: '#items-list'
+
+%ul.unstyled.inline
+  %li
+    = link_to 'Todos', items_path, class: params_bold(:all)
+  %li
+    = link_to 'Venta', items_path(for_sale: true), class: bold_if(params[:for_sale] == 'true')
+  %li
+    = link_to 'No venta', items_path(for_sale: false), class: bold_if(params[:for_sale] == 'false')
 
 :javascript
   $(function() {

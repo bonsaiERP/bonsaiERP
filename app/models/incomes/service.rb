@@ -8,7 +8,7 @@ class Incomes::Service < Movements::Service
   alias_method :income, :movement
 
   def ledger
-    @ledger ||= direct_payment? ? get_ledger : NullLedger.new
+    @ledger ||= direct_payment? ? get_ledger : ::NullLedger.new
   end
 
   private

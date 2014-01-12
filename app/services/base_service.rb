@@ -1,6 +1,6 @@
 # encoding: utf-8
 class BaseService
-  include Virtus
+  include Virtus.model
   extend ActiveModel::Naming
   include ActiveModel::Conversion
   include ActiveModel::Validations

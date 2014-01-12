@@ -14,6 +14,7 @@ class Movements::Form < BaseForm
   attribute :account_to_id, Integer
   attribute :reference, String
   attribute :tax_id, Integer
+  attribute :tax_in_out, Boolean, default: false # true = out, false = in
 
   ATTRIBUTES = [:date, :contact_id, :currency, :exchange_rate, :project_id, :due_date,
                 :description, :direct_payment, :account_to_id, :reference].freeze
@@ -57,6 +58,15 @@ class Movements::Form < BaseForm
     self.date ||= Date.today
     self.due_date ||= Date.today
     self.currency ||= OrganisationSession.currency
+  end
+
+  def form_details_data
+    details.map { |v|
+      {
+        id: v.id, item: v.item_to_s, item_id: v.item_id, price: v.price, quantity:
+        v.quantity, original_price: v.item_price, errors: v.errors
+      }
+    }
   end
 
   private

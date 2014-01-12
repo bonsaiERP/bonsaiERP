@@ -52,22 +52,16 @@ FactoryGirl.define do
     organisation_name "León"
   end
 
-  factory :money_store do
-    email 'test@mail.com'
-  end
-
   factory :bank do
     name "Bank"
     currency 'BOB'
     amount 100
-    association :money_store, factory: :money_store, strategy: :build
   end
 
   factory :cash do
-    name "Cash"
     currency 'BOB'
+    name { "Cash #{currency}" }
     amount 100
-    association :money_store, factory: :money_store, strategy: :build
   end
 
   factory :project do
@@ -83,7 +77,7 @@ FactoryGirl.define do
   end
 
   factory :transaction do
-    total 100
+    delivered false
   end
 
   factory :income do
@@ -94,7 +88,6 @@ FactoryGirl.define do
     description "New income description"
     state "draft"
     balance 100
-    association :transaction, factory: :transaction, strategy: :build
     factory :income_approved do
       state "approved"
     end
@@ -108,7 +101,6 @@ FactoryGirl.define do
     description "New expense description"
     state "draft"
     balance 100
-    association :transaction, factory: :transaction, strategy: :build
     factory :expense_approved do
       state 'approved'
     end
@@ -161,4 +153,5 @@ FactoryGirl.define do
     name 'IVA'
     percentage 10
   end
+
 end

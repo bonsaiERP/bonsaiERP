@@ -3,51 +3,45 @@ class Registration < BaseForm
   attr_reader :organisation, :user
 
   attribute :name     , String
-  attribute :tenant   , String
   attribute :email    , String
   attribute :password , String
 
   validates :name, presence: true, length: {within: 2..100}
 
-  validates :tenant, presence: true, length: {within: 2..50}, format: {with: /\A[a-z0-9]+\z/}
-  validate :valid_unique_tenant
-
   validates :password, presence: true, length: {within: PASSWORD_LENGTH..100}
   validates_email_format_of :email
+
+  delegate :tenant, to: :organisation
 
   def register
     return false unless valid?
 
     commit_or_rollback do
-      res = create_organisation
-      res = create_user && res
+      res = create_organisation && create_user
 
       set_errors(organisation, user) unless res
       res
     end
   end
 
-private
-  def create_user
-    @user = User.new(email: email, password: password)
-    @user.set_confirmation_token
+  private
 
-    @user.active_links.build(
-      organisation_id: organisation.id, tenant: organisation.tenant,
-      rol: 'admin', master_account: true
-    )
+    def create_user
+      @user = User.new(email: email, password: password)
+      @user.set_confirmation_token
 
-    @user.save
-  end
+      @user.active_links.build(
+        organisation_id: organisation.id, tenant: organisation.tenant,
+        rol: 'admin', master_account: true
+      )
 
-  def create_organisation
-    @organisation = Organisation.new(name: name, tenant: tenant)
-    @organisation.save
-  end
-
-  def valid_unique_tenant
-    if Organisation.where(tenant: tenant.to_s).any?
-      self.errors[:tenant] << I18n.t('errors.messages.registration.unique_tenant')
+      @user.save
     end
-  end
+
+    def create_organisation
+      @organisation = Organisation.new(name: name, inventory_active: true)
+      @organisation.valid?
+      @organisation.save
+    end
+
 end

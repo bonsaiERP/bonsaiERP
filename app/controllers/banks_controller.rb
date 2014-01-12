@@ -15,21 +15,19 @@ class BanksController < ApplicationController
 
   # GET /banks/new
   def new
-    @bank = Bank.new_bank(currency: params[:currency])
+    @bank = Bank.new(currency: params[:currency])
   end
 
   # GET /banks/1/edit
-  def edit
-  end
 
   # POST /banks
   def create
-    @bank = Bank.new_bank(create_bank_params)
+    @bank = Bank.new(create_bank_params)
 
     if @bank.save
-      redirect_to banks_path(@bank), notice: 'La cuenta de banco fue creada.'
+      redirect_to bank_path(@bank.id), notice: 'La cuenta de banco fue creada.'
     else
-      render "new"
+      render :new
     end
   end
 
@@ -49,16 +47,17 @@ class BanksController < ApplicationController
   #  respond_ajax @bank
   #end
 
-private
-  def find_bank
-    @bank = Bank.find(params[:id])
-  end
+  private
 
-  def update_bank_params
-    params.require(:bank).permit(:name, :number, :address, :phone, :website)
-  end
+    def find_bank
+      @bank = Bank.find(params[:id])
+    end
 
-  def create_bank_params
-    params.require(:bank).permit(:name, :number, :address, :phone, :website, :currency, :amount)
-  end
+    def update_bank_params
+      params.require(:bank).permit(:name, :number, :address, :phone, :website)
+    end
+
+    def create_bank_params
+      params.require(:bank).permit(:name, :number, :address, :phone, :website, :currency, :amount)
+    end
 end

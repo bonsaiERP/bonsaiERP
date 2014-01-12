@@ -7,7 +7,7 @@ describe Inventories::Transference do
   let(:store_to) { build :store, id: 2 }
 
   let(:valid_attributes) {
-    {store_id: 1, store_to_id: 2, 
+    {store_id: 1, store_to_id: 2,
      date: Date.today, description: 'Test transference',
      inventory_details_attributes: [
        {item_id: 1, quantity: 2},
@@ -24,6 +24,7 @@ describe Inventories::Transference do
 
     trans.inventory.should be_is_trans
     trans.details.should have(0).item
+    trans.details_form_name.should eq('inventories_transference[inventory_details_attributes]')
   end
 
   it "validates" do
@@ -67,9 +68,10 @@ describe Inventories::Transference do
       trans = Inventories::Transference.new(valid_attributes)
       trans.inventory_details.should have(2).items
       trans.inventory.store_id.should eq(1)
-      trans.inventory.store_to_id.should eq(2)
+      #trans.inventory.store_to_id.should eq(2)
 
       trans.create.should be_true
+      trans.inventory.store_to_id.should eq(2)
       inv = Inventory.find(trans.inventory.id)
       inv.should be_is_a(Inventory)
       inv.should be_is_trans

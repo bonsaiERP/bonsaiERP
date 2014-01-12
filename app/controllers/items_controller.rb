@@ -3,62 +3,59 @@
 # email: boriscyber@gmail.com
 class ItemsController < ApplicationController
   include Controllers::TagSearch
+  respond_to :html, :json
 
-  before_filter :set_item, :only => [:show, :edit, :update, :destroy]
+  before_filter :set_item, only: [:show, :edit, :update, :destroy]
 
   # GET /items
   def index
     search_items
 
-    respond_to do |format|
-      format.html
-      format.json { render json: @items }
+    respond_with do |format|
+      format.json { render json: @items}
     end
   end
 
   # Search for income items
   # GET /items/search_income?term=:term
   def search_income
-    @items = ItemQuery.new.income_search(params[:term]).limit(20)
+    @items = Item.income.search(params[:term]).limit(20)
 
-    respond_to do |format|
-      format.json { render json: @items }
-    end
+    render json: ItemSerializer.new.income(@items)
   end
 
   # Search for expense items
   # GET /items/search_expense?term=:term
   def search_expense
-    @items = ItemQuery.new.expense_search(params[:term]).limit(20)
+    @items = Item.active.search(params[:term]).limit(20)
 
-    respond_to do |format|
-      format.json { render json: @items }
-    end
+    render json: ItemSerializer.new.expense(@items)
   end
 
-  # GET /items/1
-  def show
+  # GET /items/:store_id/search_inventory
+  def search_inventory
+    @items = Item.active.search(params[:term]).limit(20)
+
+    render json: ItemSerializer.new.inventory(@items, params[:id])
   end
+
+  # GET /items/1 show action
 
   # GET /items/new
-  # GET /items/new.xml
   def new
-    @item = Item.new(stockable: true)
+    @item = Item.new
   end
 
   # GET /items/1/edit
-  def edit
-  end
 
   # POST /items
-  # POST /items.xml
   def create
     @item = Item.new(item_params)
 
     if @item.save
       redirect_ajax @item, notice: 'Se ha creado el ítem correctamente.'
     else
-      render 'new'
+      render :new
     end
   end
 
@@ -73,7 +70,6 @@ class ItemsController < ApplicationController
   end
 
   # DELETE /items/1
-  # DELETE /items/1.xml
   def destroy
     @item.destroy
 
@@ -87,12 +83,21 @@ class ItemsController < ApplicationController
     end
 
     def search_items
+      filter_params
       @items = Item.includes(:unit, :stocks)
-      @items = @items.for_sale  if params[:for_sale].present?
-      @items = @items.search(search_term).includes(:unit)  if search_term.present?
+      @items = @items.where(for_sale: for_sale_param)  if params[:for_sale].present?
+      @items = @items.search(search_term)  if search_term.present?
       @items = @items.all_tags(*tag_ids)  if params[:search] && has_tags?
 
-      @items = @items.order('name asc').page(@page)
+      @items = @items.order('items.name asc').page(@page)
+    end
+
+    def filter_params
+      params[:all] = true  if params[:for_sale].blank?
+    end
+
+    def for_sale_param
+      ['true', true, '1', 1].include?(params.fetch(:for_sale)) == true ? true : false
     end
 
     def item_params

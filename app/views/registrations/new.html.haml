@@ -1,53 +1,52 @@
-:css
-  #header{ display: none; }
-  #menu{ display: none; }
-  #main_wrap{ background: none !important; }
-  #cont{
-    background: none;
-    box-shadow: none;
-    -moz-box-shadow: none;
-    -webkit-box-shadow: none;
-  }
-  .tooltip{ font-size: 13px; }
+%h1.c.login Registro
 
-.lonely(style='max-width:400px;')
-  .row-fluid
-    .inset
-      %header
-        %h1 Registro
+.lonely.c(style='max-width:450px;')
+  = simple_form_for @registration do |f|
+    .row-fluid
 
-      .pad
-        = simple_form_for @registration do |f|
-          = f.input :name, label: false, input_html: {class: 'span12', placeholder: 'Empresa', title: 'Empresa', 'data-toggle' => 'tooltip' }
-          = f.input :tenant, label: false, input_html: {class: 'span12'} do
-            .input-append
-              = f.text_field :tenant, placeholder: 'Subdominio', title: 'Subdominio', 'data-toggle' => 'tooltip', class: 'span8', size: 22
-              %span.add-on.append
-                \.bonsaierp.com
-          = f.input :email, label: false, input_html: {class: 'span12', placeholder: "Correo electrónico", title: 'Correo electrónico', 'data-toggle' => 'tooltip'}
-          .input-append
-            =f.input :password, label: 'Contraseña' do
-              = f.password_field :password, size: 20, class: 'span8'
-              %span.add-on.append
-                %label
-                  %input(type="checkbox" id="show-password")
-                  Ver contraseña
-          .clear-both
-          = f.submit "Registrarme", class: 'btn btn-success btn-large b'
-          &nbsp;&nbsp;&nbsp;
-          = link_to login_path do
-            %i.icon-off
-            Entrar
+      = f.input :email, label: false, wrapper_class: 'large' do
+        %i.muted.icon-envelope.icon(title='email' data-toggle='tooltip')
+        = f.text_field :email, size: 30, placeholder: 'Email', class: 'email'
+
+      .input-append
+        =f.input :password, label: false, wrapper_class: 'large' do
+          %i.muted.icon-unlock.icon(title='Contraseña' data-toggle='tooltip' style='left: 12px')
+          = f.password_field :password, placeholder: 'Contraseña', style: 'width: 240px'
+          %span.add-on.append
+            %label
+              %input(type='checkbox' id='show-password')
+              Ver
+
+
+      = f.input :name, label: false, wrapper_class: 'large' do
+        %i.muted.icon-building.icon(title='Empresa' data-toggle='tooltip')
+        = f.text_field :name, size: 30, placeholder: 'Empresa', class: 'email'
+
+      -#= f.input :tenant, label: false, wrapper_class: 'large' do
+        %i.muted.icon-globe.icon(title='Subdominio' data-toggle='tooltip')
+        = f.text_field :tenant, placeholder: 'Subdominio', size: 37
+        -#.input-append
+          -#%span.add-on.append
+            %label
+              \.bonsaierp.com
+
+    = f.submit "Registrarme", class: 'btn btn-success b'
+    .clearfix
+    = link_to login_path, class: 'white fs110' do
+      %i.icon-off
+      Entrar
 
 = render file: 'layouts/browser'
 
 :javascript
   $(function() {
+    /*
     $(document).on('keyup', '#registration_name', function() {
       // TODO: Improve the copyname;
       name = $(this).val().toLowerCase().replace(/[^a-z]/g, '');
       $('#registration_tenant').val(name);
     });
+    */
 
     $('#show-password').on('click', function() {
       if($(this).prop('checked')) {

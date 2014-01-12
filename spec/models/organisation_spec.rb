@@ -7,12 +7,31 @@ describe Organisation do
     UserSession.user = build :user, id: 1
   end
 
-  context "Validations" do
-    it {should have_valid(:name).when("uno")}
-    it {should_not have_valid(:name).when(" ", nil)}
+  it { Organisation.table_name.should eq('common.organisations') }
 
-    it { should_not have_valid('tenant').when('common', 'public', 'www', 'demo', 'app') }
-    it { should have_valid('tenant').when('bonsai', 'other') }
+  context "Validations" do
+    it { should have_valid(:name).when("uno") }
+    it { should_not have_valid(:name).when(" ", nil) }
+
+
+    it "tenant" do
+      org = Organisation.new
+      INVALID_TENANTS.each do |v|
+        org.name = v
+        org.should_not be_valid
+        org.errors[:tenant].should_not be_blank
+      end
+
+      %w(bonsai bonsaiERP unoY-23 asdf\ 77Ad).each do |v|
+        org.name = v
+        org.should be_valid
+        org.tenant.should eq(v.downcase.gsub(/[^A-Za-z]/, ''))
+      end
+
+      org.name = 'Prueba uno 1 a(1)'
+      org.should be_valid
+      org.tenant.should eq('pruebaunoa')
+    end
 
     context 'Persisted organisation' do
       subject(:organisation) {
@@ -21,8 +40,8 @@ describe Organisation do
         org
       }
 
-      it {should have_valid(:currency).when('BOB', 'USD')}
-      it {should_not have_valid(:currency).when('', 'USDS')}
+      it { should have_valid(:currency).when('BOB', 'USD') }
+      it { should_not have_valid(:currency).when('', 'USDS') }
 
       it { should have_valid(:country_code).when('BO', 'PE') }
       it { should_not have_valid(:country_code).when('BOS', 'PES') }
@@ -33,17 +52,19 @@ describe Organisation do
     end
   end
 
+  it "tenant creation" do
+    org = Organisation.create!(name: 'Prueba')
+    org.tenant.should eq('prueba')
 
-  let(:valid_params) {
-    {
-      name:"Test", country_id:1,
-      currency: 'BOB', tenant: 'another',
-      address: "Very near"
-    }
-  }
+    org = Organisation.create!(name: 'Prueba')
+    org.tenant.should_not eq('prueba')
+  end
 
   it "create an instance" do
-    org = Organisation.create!(valid_params)
+    Organisation.create!(name: 'tenant')
+    org = Organisation.new(name: 'jejeje')
+    org.save.should be_true
+    org.tenant.should eq('jejeje')
   end
 
   it "build master_account user" do
@@ -59,8 +80,10 @@ describe Organisation do
 
   context 'create_organisation' do
     let(:org_params) {
-      {name: 'Firts org', tenant: 'firstorg', email: 'new@mail.com' }
+      {name: 'Firts org', tenant: 'firstorg', email: 'new@mail.com', country_code: 'BO', currency: 'BOB',
+      inventory_active: true }
     }
+
     let(:country) { OrgCountry.first }
 
     it "creates a new organisation" do

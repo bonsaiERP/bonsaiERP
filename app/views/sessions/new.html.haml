@@ -1,44 +1,29 @@
-:css
-  #cont{
-    background: none;
-    box-shadow: none;
-    -moz-box-shadow: none;
-    -webkit-box-shadow: none;
-  }
+%h1.c.login
+  Iniciar sesión
 
+.lonely.c(style='width:450px')
+  = simple_form_for @session do |f|
+    = hidden_field :demo_login, params[:demo_login]
+    = f.input :email, label: false, wrapper_class: 'large' do
+      %i.muted.icon-envelope.icon(title='Email')
+      = f.text_field :email, size: 30, placeholder: 'Email', class: 'email'
+    = f.input :password, label: false, wrapper_class: 'large' do
+      %i.muted.icon-unlock.icon
+      = f.password_field :password, size: 30, placeholder: 'Contraseña'
 
+    = f.submit "Entrar", class: 'btn btn-success b'
 
-.lonely(style='width:400px')
-  #login.row-fluid
-    .inset
-      %header
-        %h1.c
-          Iniciar sesión
-      .pad.center.session
-        = simple_form_for @session do |f|
-          = hidden_field :demo_login, params[:demo_login]
-          = f.input :email, label: false do
-            .input-prepend.cont-login
-              %span.add-on.prepend.square
-                %i.muted.icon-envelope
-              = f.text_field :email, size: 30, placeholder: 'Email'
-          = f.input :password, label: false do
-            .input-prepend.cont-login
-              %span.add-on.prepend.square
-                %i.muted.icon-key
-              = f.password_field :password, size: 30, placeholder: 'Contraseña'
-
-          %p.c.fs110
-            = f.submit "Entrar", class: "btn btn-success btn-large b"
-            <br/><br/>
-            = link_to new_reset_password_path do
-              %i.icon-key
-              Olvido su contraseña?
+    .link.fs110
+      = link_to new_reset_password_path, class: 'white' do
+        %i.icon-unlock
+        Olvido su contraseña?
 
 = render file: 'layouts/browser'
 
 :javascript
   $(function() {
+    $('input.email').focus();
+
     $('#reset-password-link').click(function() {
       $('#login').hide(300);
       $('#password').show(300);

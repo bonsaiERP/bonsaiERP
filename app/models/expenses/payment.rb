@@ -59,7 +59,8 @@ class Expenses::Payment < Payment
       if amount > 0
         @ledger = build_ledger(
                     amount: -amount, operation: get_operation,
-                    account_id: expense.id, status: get_status
+                    account_id: expense.id, status: get_status,
+                    contact_id: expense.contact_id
                   )
         @ledger.save_ledger
       else

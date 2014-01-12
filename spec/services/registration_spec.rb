@@ -3,18 +3,16 @@ require "spec_helper"
 
 describe Registration do
   let(:valid_attributes) do
-    {name: 'bonsaiERP', tenant: 'bonsai', email: 'boris@bonsaierp.com',
+    {name: 'bonsaiERP', email: 'boris@bonsaierp.com',
      password: 'Demo1234'}
   end
 
   it { should have_valid(:email).when('boris@mail.com', 'si@me.com.bo') }
   it { should_not have_valid(:email).when('  ', 'si@me.com.') }
-  
+
   it { should have_valid(:name).when('no', 'si', 'ahor que niño') }
   it { should_not have_valid(:name).when(nil, '   ', '') }
 
-  it { should have_valid(:tenant).when('si', 'de', '7k', '99', 'bonsai') }
-  it { should_not have_valid(:tenant).when('s', nil, '   ', '7-k', 's2@') }
 
   it { should have_valid(:password).when('Demo1234') }
 
@@ -27,7 +25,9 @@ describe Registration do
     r.register.should be_true
 
     r.organisation.name.should eq('bonsaiERP')
-    r.organisation.tenant.should eq('bonsai')
+    r.organisation.tenant.should eq('bonsaierp')
+    r.tenant.should eq('bonsaierp')
+    r.organisation.should be_inventory_active
 
     r.user.email.should eq('boris@bonsaierp.com')
     r.user.encrypted_password.should_not be_blank
@@ -38,6 +38,6 @@ describe Registration do
     link.organisation_id.should eq(1)
     link.rol.should eq('admin')
     link.should be_master_account
-    link.tenant.should eq('bonsai')
+    link.tenant.should eq('bonsaierp')
   end
 end

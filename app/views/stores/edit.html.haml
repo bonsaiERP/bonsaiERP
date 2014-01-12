@@ -2,17 +2,13 @@
   %ul.breadcrumbs
     %li
       = link_to "Almacenes", stores_path
-    %li
-      %i.icon-caret-right
-    %li
-      = @store
 
 .row-fluid
   .span6
     %h1 Editar almacén
   .span6.r
-    = link_to icon_new_text, new_store_path, class: 'btn'
-    = link_to icon_edit_text, edit_store_path(@store), class: 'btn'
-    = link_to icon_show_text, @store , class: 'btn'
+    .btn-group
+      = link_to icon_edit_text, edit_store_path(@store), class: 'btn'
+      = link_to icon_show_text, @store , class: 'btn'
 
 = render 'form'

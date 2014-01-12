@@ -20,9 +20,12 @@
       = contact.mobile_tag
 
   .span4
-    .row-fluid
-      .span6.incomes
-      .span6.expenses
+    .row-fluid.r
+      .span6
+        = contact.tot_in_tag
+      .span6
+        = contact.tot_out_tag
 
   .span1
-    =link_to icon_edit, edit_contact_path(contact), class: 'dark'
+    = link_to icon_edit, edit_contact_path(contact), class: 'dark'
+    = link_to icon_delete, contact_path(contact), class: 'dark', method: 'delete'

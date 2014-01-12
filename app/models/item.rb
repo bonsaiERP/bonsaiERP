@@ -48,7 +48,7 @@ class Item < ActiveRecord::Base
 
   # Sums the stocks of a item
   def total_stock
-    stocks.reduce(0) {|sum, st| sum += st.quantity }
+    stocks.reduce(0) { |sum, st| sum += st.quantity }
   end
 
 private

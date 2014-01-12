@@ -21,7 +21,7 @@ class TransferencesController < ApplicationController
 
 private
   def find_account
-    @account = AccountQuery.new.bank_cash.where(id: params[:account_id]).first
+    @account = Accounts::Query.new.bank_cash.where(id: params[:account_id]).first
 
     unless @account
       redirect_to :back, alert: 'Debe seleccionar una cuenta activa'

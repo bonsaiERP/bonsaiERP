@@ -2,16 +2,12 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class ContactsController < ApplicationController
-  before_filter :find_contact, :only => [:show, :edit, :update, :destroy, :incomes, :expenses]
+  before_filter :find_contact, only: [:show, :edit, :update, :destroy, :incomes, :expenses]
 
-  #respond_to :html, :json
   # GET /contacts
   def index
-    if search_term.present?
-      @contacts = Contact.search(search_term).order('matchcode asc').page(@page)
-    else
-      @contacts = Contact.order('matchcode asc').page(@page)
-    end
+    @contacts = Contacts::Query.new.index.order('matchcode asc').page(@page)
+    @contacts = @contacts.search(search_term)  if search_term
 
     respond_to do |format|
       format.html
@@ -30,8 +26,6 @@ class ContactsController < ApplicationController
   end
 
   # GET /contacts/1/edit
-  def edit
-  end
 
   # POST /contacts
   def create
@@ -40,7 +34,7 @@ class ContactsController < ApplicationController
     if @contact.save
       redirect_ajax(@contact, notice: 'Se ha creado el contacto.')
     else
-      render 'new'
+      render :new
     end
   end
 
@@ -49,7 +43,7 @@ class ContactsController < ApplicationController
     if @contact.update_attributes(contact_params)
       redirect_ajax(@contact)
     else
-      render :action => 'edit'
+      render :edit
     end
   end
 
@@ -57,12 +51,12 @@ class ContactsController < ApplicationController
   def destroy
     @contact.destroy
 
-    #respond_ajax(@contact)
     if @contact.destroyed?
-      flash[:success] = 'El contacto fue eliminado'
+      flash[:notice] = 'El contacto fue eliminado'
     else
       flash[:error] = 'No fue posible eliminar el contacto'
     end
+
     redirect_to contacts_path
   end
 
@@ -76,12 +70,17 @@ class ContactsController < ApplicationController
     params[:page_incomes] ||= 1
   end
 
-private
-  def find_contact
-    @contact = Contact.find(params[:id])
-  end
+  private
 
-  def contact_params
-    params.require(:contact).permit(:matchcode, :first_name, :last_name, :email, :phone, :mobile, :tax_number, :address)
-  end
+    def find_contact
+      @contact = Contact.find(params[:id])
+    end
+
+    def contact_params
+      params.require(:contact).permit(:matchcode, :first_name, :last_name, :email, :phone, :mobile, :tax_number, :address)
+    end
+
+    def search_term
+      @search_term ||= params[:search] || params[:term]
+    end
 end

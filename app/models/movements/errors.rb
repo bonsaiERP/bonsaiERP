@@ -6,8 +6,9 @@ class Movements::Errors < Struct.new(:movement)
     movement.has_error = false
     @errors = {}
     balance_errors
+    inventory_errors
 
-    movement.error_messages = get_errors
+    set_error_messages
   end
 
   private
@@ -17,13 +18,13 @@ class Movements::Errors < Struct.new(:movement)
       negative_balance
     end
 
-    def get_errors
-      movement.has_error? ? @errors : {}
+    def set_error_messages
+      movement.has_error = @errors.any?
+      movement.error_messages = @errors
     end
 
     def greater_balance_than_total
       if balance > total
-        movement.has_error = true
         @errors[:balance] ||= []
         @errors[:balance] << 'movement.balance_greater_than_total'
       end
@@ -31,9 +32,15 @@ class Movements::Errors < Struct.new(:movement)
 
     def negative_balance
       if balance < 0
-        movement.has_error = true
         @errors[:balance] ||= []
         @errors[:balance] << 'movement.negative_balance'
+      end
+    end
+
+    def inventory_errors
+      if  movement.details.any? { |v| v.balance <= 0 }
+        @errors[:items] ||= []
+        @errors[:items] << 'movement.negative_item_balance'
       end
     end
 end

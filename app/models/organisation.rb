@@ -3,32 +3,31 @@
 # email: boriscyber@gmail.com
 class Organisation < ActiveRecord::Base
 
-  self.table_name = "common.organisations"
-
   DATA_PATH = "db/defaults"
+  self.table_name = 'common.organisations'
 
   ########################################
   # Attributes
-  attr_readonly :tenant
   serialize :preferences, JSON
+  store_accessor :preferences, :inventory_active
 
+  # Callbacks
+  before_validation :set_tenant
 
   ########################################
   # Relationships
-
   has_many :links, dependent: :destroy, autosave: true
   has_one  :master_link, -> { where(master_account: true, rol: 'admin') },
            class_name: 'Link', foreign_key: :organisation_id
   has_one  :master_account, through: :master_link, source: :user
 
   has_many :users, through: :links, dependent: :destroy
-  accepts_nested_attributes_for :users
 
   ########################################
   # Validations
   validates_presence_of   :name, :tenant
-  validates_uniqueness_of :name, :scope => :user_id
-  validates :tenant, uniqueness: true, format: { with: /\A[a-z0-9]+\z/ }
+  validates :tenant, uniqueness: true, format: { with: /\A[a-z0-9]+\z/ }, length: { in: 3...15 }
+
   validate  :valid_tenant_not_in_list
   validates_email_format_of :email, if: 'email.present?', message: I18n.t('errors.messages.email')
 
@@ -37,6 +36,7 @@ class Organisation < ActiveRecord::Base
     val.validates_inclusion_of :currency, in: CURRENCIES.keys
     val.validates_inclusion_of :country_code, in: COUNTRIES.keys
   end
+
 
   ########################################
   # Methods
@@ -79,7 +79,6 @@ class Organisation < ActiveRecord::Base
     ActiveRecord::Base.transaction do
       PgTools.drop_schema_if(tenant)
       User.where(id: links.map(&:user_id)).destroy_all
-      links.destroy_all
       self.destroy
     end
   end
@@ -100,8 +99,21 @@ class Organisation < ActiveRecord::Base
     end
 
     def valid_tenant_not_in_list
-      if ['www', 'public', 'common', 'demo', 'app'].include?(tenant)
+      if INVALID_TENANTS.include?(tenant)
         self.errors[:tenant] << I18n.t('organisation.errors.tenant.list')
       end
+    end
+
+    def set_tenant
+      if new_record?
+        t_name = name.to_s.downcase.gsub(/[^A-Za-z]/, '')[0...15]
+        self.tenant = t_name
+        self.tenant = "#{t_name[0...10]}#{tenant_pad(5)}"  if Organisation.where(tenant: tenant).any?
+      end
+    end
+
+    def tenant_pad(size = 5)
+      SecureRandom.urlsafe_base64(32).downcase
+      .gsub(/[^A-Za-z]/, '')[0...size]
     end
 end

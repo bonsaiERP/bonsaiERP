@@ -27,7 +27,8 @@ class IncomesController < ApplicationController
 
   # GET /incomes/new
   def new
-    @is = params[:id].present? ? Incomes::Clone.new(params[:id]).clone : Incomes::Form.new_income
+    #@is = params[:id].present? ? Incomes::Clone.new(params[:id]).clone : Incomes::Form.new_income(currency: currency)
+    @is = Incomes::Form.new_income(currency: currency)
   end
 
   # GET /incomes/1/edit
@@ -88,7 +89,7 @@ class IncomesController < ApplicationController
   # PATCH /incomes/:id/approve
   # Method that nulls or enables inventory
   def inventory
-    @income.no_inventory = params[:no_inventory]
+    @income.no_inventory = !@income.no_inventory
 
     if @income.save
       txt = @income.no_inventory? ? 'desactivo' : 'activo'
@@ -138,10 +139,6 @@ class IncomesController < ApplicationController
       end
     end
 
-    def quick_income_params
-     params.require(:incomes_quick_form).permit(*movement_params.quick_income)
-    end
-
     def income_params
       params.require(:incomes_form).permit(*movement_params.income)
     end
@@ -167,7 +164,7 @@ class IncomesController < ApplicationController
 
       @incomes = @incomes.all_tags(*tag_ids)  if params[:search] && has_tags?
 
-      @incomes = @incomes.includes(:contact, :updater, :tax, transaction: [:creator, :approver, :nuller]).order('date desc, accounts.id desc').page(@page)
+      @incomes = @incomes.includes(:contact, :updater, :tax, :creator, :approver, :nuller).order('date desc, accounts.id desc').page(@page)
 
       set_incomes_filters
     end

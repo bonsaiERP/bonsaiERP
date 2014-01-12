@@ -1,0 +1,43 @@
+- ledger.current_account_id = ledger.account_id
+
+%li.row-fluid.account_ledger(id='#{ledger.id}')
+  .span8
+    %h4.ib
+      %strong.fs70= ledger.operation_tag
+      = link_to ledger, ledger, class: 'code', title: 'Código'
+
+    = ledger.status_tag
+
+    %p
+      %i= l ledger.date.to_date
+      = link_to ledger.other_account, title: 'Cuenta relacionada' do
+        = ledger.other_account_icon
+        = ledger.other_account
+
+
+    .row-fluid
+      .span3
+        = ledger.updater_label
+        = ledger.creator_label
+        = ledger.approver_label
+        = ledger.nuller_label
+      .span9
+        .edit-reference
+          %a.edit-ledger-reference-link.dark(href='javascript:;' title='Editar referencia' data-toggle='tooltip' data-id='#{ledger.id}' data-reference='#{ledger.reference}')
+            %i.icon-pencil
+          %i.icon-file.muted(data-toggle='tooltip' title="referencia")
+          %span.reference= nl2br ledger.reference
+
+    - unless ledger.trans_currency?
+      %p
+        %span.muted
+          %i.icon-exchange
+          Tipo de cambio:
+        1
+        = currency_label ledger.account_currency
+        \=
+        = ntc ledger.exchange_rate, precision: 4
+        = currency_label ledger.currency
+  .span4.r
+    = ntc ledger.amount_currency
+    = currency_label ledger.account_currency

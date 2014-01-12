@@ -1,0 +1,86 @@
+%h2.dark#items-header
+  Items
+  %span.n(style='font-size: 13px')= link_to 'ver ítems', items_path, target: '_blank'
+
+%input(id='details' type='hidden' data-details='#{ movement.form_details_data.to_json }')
+
+%table#items-table.table
+  %tr
+    %th
+      Item
+    %th
+      Precio
+      %span.currency
+    %th
+      Cantidad
+    %th
+      Total fila
+      %span.currency
+    %th
+
+  %tr(ng-repeat='detail in details' ng-hide='detail._destroy==1')
+
+    %td.form-inline
+      %input(type='hidden' ng-model='detail.id' name='#{movement.form_details_name}[{{$index}}][id]' value='{{detail.id}}')
+      %input(type='hidden' ng-model='detail._destroy' name='#{movement.form_details_name}[{{$index}}][_destroy]' value='{{detail._destroy}}')
+
+      .input
+        %input(type='text' ng-model='detail.item_id' name='#{movement.form_details_name}[{{$index}}][item_id]' size='2' style='display:none')
+        %input(type='text' size='75' placeholder='Escriba para buscar el ítem' data-source='#{item_url}' ng-model='detail.item' ng-detail-autocomplete='true')
+        %a.btn.add-new-url.add-new-line.ajax(href='/items/new?for_sale=#{movement.is_income?}')
+          %i.icon-plus-sign
+    %td
+      %input.r(type='text' ng-model='detail.price' name='#{movement.form_details_name}[{{$index}}][price]' size='10' value='10')
+
+    %td
+      %input.r(type='text' ng-model='detail.quantity' name='#{movement.form_details_name}[{{$index}}][quantity]' size='8')
+      %span.error(ng-show='detail.hasError("quantity")') {{detail.errorsFor('quantity')}}
+
+    %td.r
+      {{ detail.subtotal() | decimal }}
+
+    %td
+      %a.dark(href='javascript:;' ng-click='destroy($index)')
+        = icon_delete
+
+  %tr
+    %td
+      %a.btn(ng-click='addDetail()')
+        %i.icon-plus-sign
+        Nueva línea
+    %td.r(colspan='2')
+      Subtotal
+      %span.currency
+    %td.r
+      {{ subtotal() | decimal }}
+    %td
+
+  %tr
+    %td.r.form-inline(colspan='3')
+      %label Impuestos
+      %input#taxes(type='hidden' data-taxes='#{ Tax.all.to_json(only: [:id, :name, :percentage]) }')
+
+      = f.text_field :tax_id, 'ng-model' => 'tax_id', id: 'tax_id', class: 'hide', 'ng-initial' => true
+      %select(ng-model='tax' ng-change='setTaxId()' ng-options='[t.name, " (", t.percentage, "%)" ].join("") for t in taxes track by t.id')
+        %option(value='')
+
+      - if current_user.is_admin? || current_user.is_group?
+        = link_to icon('icon-plus-sign'), new_tax_path, title: 'Nuevo impuesto',
+          class: 'btn ajax add-new-url add-new-tax', data: { width: 400 }
+
+      %a#tax-in-out-btn.btn.btn-small.b(data-toggle='button' ng-click='tax_in_out=!tax_in_out') {{ taxLabel() }}
+      %span.hide= f.check_box :tax_in_out, 'ng-model' => 'tax_in_out', id: 'tax_in_out'
+
+      %span.currency
+
+    %td.r
+      {{ taxTotal() | decimal }}
+    %td
+
+  %tr
+    %td.r.form-inline(colspan='3')
+      %strong Total
+      %span.currency
+    %td.r
+      %strong {{ total() | decimal }}
+    %td

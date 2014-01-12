@@ -3,30 +3,26 @@
 # email: boriscyber@gmail.com
 class Bank < Account
 
-  # module
-  extend SettersGetters
+  # Store accessors
+  extend Models::HstoreMap
+  EXTRA_COLUMNS = [:email, :address, :phone, :website].freeze
+  store_accessor(:extras, *EXTRA_COLUMNS)
 
-  # Relationships
-  has_one :money_store, foreign_key: :account_id, autosave: true
 
-  # Delegations
-  MONEY_METHODS = [:email, :address, :phone, :website].freeze
-  delegate(*create_accessors(*MONEY_METHODS), to: :money_store)
-  delegate :id, to: :money_store, prefix: true
-
-  def self.new_bank(attrs = {})
-    new do |c|
-      c.build_money_store
-      c.attributes = attrs
-    end
+  # can't use Bank.stored_attributes methods[:extras]
+  alias_method :old_attributes, :attributes
+  def attributes
+    old_attributes.merge(
+      Hash[EXTRA_COLUMNS.map { |k| [k.to_s, send(k)] }]
+    )
   end
 
   def pendent_ledgers
-    AccountLedgerQuery.new.money(id).pendent
+    AccountLedgers::Query.new.money(id).pendent
   end
 
   def ledgers
-    AccountLedgerQuery.new.money(id)
+    AccountLedgers::Query.new.money(id)
   end
 
   def to_s
@@ -34,7 +30,7 @@ class Bank < Account
   end
 
   def get_ledgers(attrs = {})
-    ledgers = AccountLedgerQuery.new.money(id)
+    ledgers = AccountLedgers::Query.new.money(id)
     ledgers = ledgers.pendent if attrs[:pendent].present?
     ledgers
   end

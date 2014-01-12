@@ -2,11 +2,6 @@
   %ul.breadcrumbs.span6
     %li
       =link_to "Cuentas caja", cashes_path
-    %li
-      %i.icon-caret-right
-    %li
-      Caja
-  .links.span6
 
 .row-fluid
   .span6
@@ -31,9 +26,9 @@
         = currency_label @cash.currency
 
   .span6
-    %label Dirección
+    %i.icon-building.muted(title='Dirección' data-toggle='tooltip')
     = nl2br(@cash.address)
 
 %h3 Transacciones
 
-= render "account_ledgers/money", account: @cash
+= render 'account_ledgers/money', account: @cash

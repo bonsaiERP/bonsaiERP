@@ -1,17 +1,87 @@
-.page-header
-  %h1.inline
-    = @loan
-    %small.pill(class="#{@loan.state}")= @loan.view_state
+- content_for :links do
+  %ul.breadcrumbs
+    %li
+      = link_to 'Prestamos', loans_path
+
+%h1.ib
+  = @loan
+  %small= @loan.loan_type_tag
 
 
-%h2.n= link_to @loan.contact, @loan.contact
-%h3.n=l @loan.date
+%h4.ib.n
+  = link_to @loan.contact, @loan.contact, title: 'Contacto', data: { toggle: 'tooltip' }
 
-.moneybox.fl
-  %label TOTAL
-  %h3#total_currency #{@loan.currency_symbol} #{ntc @loan.total}
+.clearfix
+
+.row-fluid
+  .span3
+    %h4.inline-cont
+      = link_to icon('icon-pencil', 'Editar fecha'), loan_path(@loan.id), class: 'dark inline-edit',
+        data: { type: 'date', name: 'date', notify: '.top-left' }
+      %span.muted Fecha
+      %span.inline-data= l @loan.date
+
+  .span3
+    %h4.inline-cont
+      - unless @loan.is_paid?
+        = link_to icon('icon-pencil', 'Editar fecha de vencimiento'), loan_path(@loan.id), class: 'dark inline-edit',
+          data: { type: 'date', name: 'due_date', notify: '.top-left', due: true, today: @loan.today.to_s }
+        %span.muted Vence el
+        %span.inline-data= @loan.due_date_color
+
+- unless currency == @loan.currency
+  %p
+    Tipo de cambio 1
+    = currency_label currency
+    \=
+    = ntc@loan.exchange_rate, precision: 4
+    = currency_label @loan.currency
+
+.row-fluid
+  .span6
+    .moneybox
+      %label TOTAL
+      %h4.n
+        = ntc @loan.total
+        = currency_label @loan.currency
+    .moneybox
+      %label SALDO
+      %h4.n
+        = ntc @loan.amount
+        = currency_label @loan.currency
+    .moneybox
+      %label INTERESES
+      %h4.n
+        = ntc @loan.interests
+        = currency_label @loan.currency
+
+  .span6
+    .inline-cont
+      = link_to icon('icon-pencil', 'Editar descripción'), loan_path(@loan.id), class: 'dark inline-edit',
+        data: { type: 'textarea', name: 'description', notify: '.top-right' }
+      %span.inline-data(data-value='#{@loan.description}')= nl2br @loan.description
 
 
-.moneybox.fl
-  %label SALDO
-  %h3#balance #{@loan.currency_symbol} #{ntc @loan.balance}
+.row-fluid
+  .span6
+    %h3.n Pagos y devoluciones
+
+    .center
+
+      = @loan.payment_link
+
+    #payment-form.form-container(ng-controller='DynamicController' dynamic='htmlContent')
+
+
+    %ul.unstyled.listing
+      = render partial: 'account_ledgers/movement', collection: present(@loan.payments_devolutions), as: :ledger, locals: { current_account_id: @loan.id }
+
+  .span6
+    %h3.n Intereses
+    .center
+      = @loan.interest_link
+
+    #interest-form.form-container(ng-controller='DynamicController' dynamic='htmlContent')
+
+    %ul.unstyled.listing
+      = render partial: 'account_ledgers/movement', collection: present(@loan.interest_ledgers), locals: { current_account_id: @loan.id }, as: :ledger

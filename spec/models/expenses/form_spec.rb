@@ -41,6 +41,8 @@ describe Expenses::Form do
       subject.should respond_to(:expense_details)
       subject.should respond_to(:expense_details_attributes)
       subject.should respond_to(:expense_details_attributes=)
+
+      subject.form_details_name.should eq('expenses_form[expense_details_attributes]')
     end
 
     it "sets_defaults if nil" do
@@ -58,7 +60,7 @@ describe Expenses::Form do
       es = Expenses::Form.new_expense(account_to_id: 2, direct_payment: "1")
 
       es.should_not be_valid
-      AccountQuery.any_instance.stub_chain(:bank_cash, where: [( build :cash, id: 2 )])
+      Accounts::Query.any_instance.stub_chain(:bank_cash, where: [( build :cash, id: 2 )])
 
       es = Expenses::Form.new_expense(account_to_id: 2, direct_payment: "1", total: 150)
       es.details.should have(2).items
@@ -70,7 +72,7 @@ describe Expenses::Form do
         {item_id: 1, quantity: 10, price: 1}, {item_id: 2, quantity: 10, price: 3},
         {item_id: 1, quantity: 3, price: 5}
       ])
-      AccountQuery.any_instance.stub_chain(:bank_cash, where: [( build :cash, id: 2 )])
+      Accounts::Query.any_instance.stub_chain(:bank_cash, where: [( build :cash, id: 2 )])
       ExpenseDetail.any_instance.stub(item: true)
 
       es.should_not be_valid
@@ -173,6 +175,25 @@ describe Expenses::Form do
 
       es.update.should be_false
       es.expense.details[0].errors[:quantity].should eq(["Error in quantity"])
+    end
+
+    it "Stores with error if details has negative balance" do
+      e = subject.expense
+      ed = e.expense_details[0]
+      ed.balance = 0
+      ed.save.should be_true
+
+      es = Expenses::Form.find(e.id)
+      es.expense.should be_is_a(Expense)
+      es.service.should be_is_a(Expenses::Service)
+      es.update(expense_details_attributes: [
+          {id: ed.id, price: ed.price, item_id: ed.item_id, quantity: (ed.quantity - 1) }
+      ]).should be_true
+
+      e = Expense.find(es.expense.id)
+
+      e.should be_has_error
+      e.error_messages.should eq({'items' => ['movement.negative_item_balance']})
     end
 
     it "udpates balance_inventory" do
@@ -420,14 +441,26 @@ describe Expenses::Form do
       ExpenseDetail.any_instance.stub(valid?: true)
     end
 
-    it "creates with tax" do
-      ifrm = Expenses::Form.new_expense(valid_params.merge(tax_id: tax.id))
+    it "tax_in_out=false" do
+      ifrm = Expenses::Form.new_expense(valid_params.merge(tax_id: tax.id, tax_in_out: false))
       ifrm.create.should be_true
 
       tax.percentage.should == 10
       exp = ifrm.expense
       exp.tax_percentage.should == 10
       exp.total.should == 550
+      exp.tax_in_out.should be_false
+    end
+
+    it "tax_in_out=true" do
+      ifrm = Expenses::Form.new_expense(valid_params.merge(tax_id: tax.id, tax_in_out: true))
+      ifrm.create.should be_true
+
+      tax.percentage.should == 10
+      exp = ifrm.expense
+      exp.tax_percentage.should == 10
+      exp.total.should == 500
+      exp.tax_in_out.should be_true
     end
   end
 end

@@ -29,7 +29,7 @@ describe Transference do
   end
 
   it "#account_to once" do
-    AccountQuery.any_instance.should_receive(:bank_cash).once.and_return(double(find_by_id: account_to) )
+    Accounts::Query.any_instance.should_receive(:bank_cash).once.and_return(double(find_by_id: account_to) )
 
     t = Transference.new
 
@@ -68,7 +68,7 @@ describe Transference do
       it "Not valid" do
         ob = Object.new
         ob.stub(:find_by_id).with(2).and_return(nil)
-        AccountQuery.any_instance.stub(bank_cash: ob)
+        Accounts::Query.any_instance.stub(bank_cash: ob)
         t = Transference.new(valid_attributes)
 
         t.should_not be_valid
@@ -100,7 +100,7 @@ describe Transference do
 
       it "Valid" do
         Account.stub_chain(:active, :find_by_id).with(account.id).and_return(account)
-        AccountQuery.any_instance.stub_chain(:bank_cash, find_by_id: account_to )
+        Accounts::Query.any_instance.stub_chain(:bank_cash, find_by_id: account_to )
         t = Transference.new(valid_attributes)
 
         t.should be_valid

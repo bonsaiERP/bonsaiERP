@@ -21,4 +21,14 @@ class ContactPresenter < BasePresenter
   def mobile_tag
     "#{ icon 'icon-mobile-phone muted', 'Móvil' } #{sanitize mobile}".html_safe if mobile.present?
   end
+
+  def tot_in_tag
+    if tot_in.to_f > 0
+      "#{text_green icon('icon-plus', 'Por cobrar')} #{ntc tot_in} #{template.currency_label}".html_safe
+    end
+  end
+
+  def tot_out_tag
+    "#{text_red icon('icon-minus', 'Por pagar')} #{ntc tot_out} #{template.currency_label}".html_safe  if tot_out.to_f > 0
+  end
 end

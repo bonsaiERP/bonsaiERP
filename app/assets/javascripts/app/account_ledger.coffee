@@ -50,7 +50,7 @@ $(->
 
 template = """
 <form>
-  <textarea id='reference' rows='3' cols='35'>{{reference}}</textarea>
+  <textarea id='reference' rows='3' cols='35'>[:reference:]</textarea>
   <div class='clearfix'></div>
   <button class='btn btn-small btn-primary' title='Actualizar referencia'>Act. referencia</button>
   <a class='btn btn-small cancel'>Cancelar</a>

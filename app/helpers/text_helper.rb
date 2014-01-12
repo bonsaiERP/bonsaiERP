@@ -6,10 +6,11 @@ module TextHelper
    black: 'black',
    dark: 'dark',
    gray: 'gray'
-  }.each do |meth, col|
-    define_method :"text_#{meth}" do |txt, title = ''|
-      title = "title='#{title}' data-toggle='tooltip'"
-      "<span class='#{col}' #{title}>#{txt}</span>".html_safe
+  }.each do |meth, color|
+    define_method :"text_#{meth}" do |txt, title = '', css=''|
+      css << " #{color}"
+      title = "title='#{title}' data-toggle='tooltip'"  if title.present?
+      "<span class='#{css}' #{title}>#{txt}</span>".html_safe
     end
   end
 end

@@ -28,4 +28,20 @@ class IncomePresenter < MovementPresenter
   def paid_text
     "Cobrado"
   end
+
+  def deliver_inventory_button
+    if !no_inventory? && !is_nulled? && !delivered?
+      link_to 'javascript:;', class: 'btn btn-success', id: 'inventory-deliver-link' do
+        "#{icon('icon-signout')} Entregar mercadería".html_safe
+      end
+    end
+  end
+
+  def inventory_devolution_button
+    if inventory_was_moved?
+      link_to "#{icon 'icon-signin'} Devolución mercadería".html_safe, 'javascript:;',
+        id: 'inventory-devolution-link', class: 'btn btn-danger'
+    end
+  end
+
 end

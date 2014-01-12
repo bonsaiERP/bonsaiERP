@@ -1,12 +1,6 @@
-- if !income.delivered? && !income.is_draft?
-  %a#inventory-deliver-link.btn.btn-success(href='javascript:;')
-    %i.icon-signout
-    Entregar mercadería
+= income.deliver_inventory_button
 
-- if @income.inventory_was_moved?
-  %a#inventory-devolution-link.btn.btn-danger(href='javascript:;')
-    %i.icon-signin
-    Devolución mercadería
+= income.inventory_devolution_button
 
 #inventory-deliver(style='display:none;background-color: white')
   = form_tag new_incomes_inventory_out_path, method: :get do

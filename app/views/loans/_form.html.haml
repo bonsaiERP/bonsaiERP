@@ -1,38 +1,42 @@
-= simple_form_for @loan, :url => presenter.loan_url do |f|
-  =f.input :operation, :as => :hidden
-  .row
-    .span3
-      = f.input :ref_number, :label => 'Nº de referencia', :input_html => {:size => 20}
-    .span3
-      = f.input :date, :label => 'Fecha'
 
-    .span6
-      = f.input :contact_id, :as => :contact, :label => false, :input_html => {:id => 'transaction_contact_id'}
-  .row
-    .span6
-      = f.association :account, :label => "Cuenta", :input_html => {:id => 'account_id'}
-    .span6
-      = f.input :total, :label => "Cantidad <span class='currency'></span>", :input_html => { :type => "decimal" }
+= bonsai_form_error f
 
-  = f.submit "Salvar", :class => "b btn btn-success"
+%input(type='hidden' data-accounts='#{Accounts::Query.new.bank_cash_options.to_json}' id='accounts')
+%input(type='hidden' ng-model='baseCurrency' value='#{currency}' ng-initial='true')
 
-:javascript
-  $(function() {
-    $('#transaction_contact_id').contactAutocomplete(["Client", "Supplier"], {'id': 'contact_autocomplete'});
+.row-fluid
+  .span6
+    = f.input :contact_id, as: :autocomplete, label: 'Contacto',
+      input_html: { class: 'span10', placeholder: 'Escriba para buscar el contacto',
+      data: { source: '/contacts.json', new_url: new_contact_path, title: 'Nuevo contacto', trigger: 'new-contact', } }
+  .span3
+    = f.input :date, label: 'Fecha', as: :datepicker
+  .span3
+    = f.input :due_date, label: 'Vence el', as: :datepicker
 
-    var currencies = #{Currency.to_hash.to_json}
-    var accounts = #{presenter.account_currencies.to_json}
+.row-fluid
+  .span6
+    = f.input :account_to_id, label: 'Cuenta',
+      input_html: { id: 'account_to_id', class: 'span10', 'ng-model' => 'account_to_id' }
+  .span2
+    = f.input :total, label: 'Cantidad <span class="currency"></span>'.html_safe,
+      input_html: { id: 'total', type: 'decimal', size: 12, 'ng-model' => 'total', 'ng-initial' => true }
+  .span2
+    = f.input :exchange_rate, label: 'Tipo de cambio',
+      input_html: { type: 'decimal', size: 10,
+        'ng-model' => 'exchange_rate', 'ng-initial' => true, 'ng-disabled' => 'same_currency' }
+  .span2
+    .moneybox
+      %label TOTAL
+      %h4
+        %span#currency_total {{ total * exchange_rate | decimal }}
+        %span= currency_label currency
 
-    function setSymbol() {
-      var val = $('#account_id').val();
+.row-fluid
+  .span6
+    = f.input :reference, label: 'Referencia', as: :text,
+      input_html: { rows: 3, class: 'span10' }
 
-      if(val) {
-        $('.currency').html(currencies[accounts[val]].symbol);
-      }
-    }
-    setSymbol();
-
-    $('#account_id').live('change', function() { setSymbol() });
-
-
-  });
+  .span6
+    = f.input :description, label: 'Descripción', as: :text,
+      input_html: { rows: 3, class: 'span10' }

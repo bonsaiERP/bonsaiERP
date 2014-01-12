@@ -93,10 +93,13 @@ describe Expenses::Devolution do
       dev.ledger.exchange_rate == 1
       dev.ledger.should be_is_devout
       dev.ledger.account_id.should eq(expense.id)
+
+      dev.ledger.contact_id.should_not be_blank
+      dev.ledger.contact_id.should eq(expense.contact_id)
       # Only bank accounts are allowed to conciliate
       dev.ledger.should be_is_approved
       dev.ledger.reference.should eq(valid_attributes.fetch(:reference))
-      dev.ledger.date.should eq(valid_attributes.fetch(:date).to_time)
+      dev.ledger.date.should eq(valid_attributes.fetch(:date).to_date)
     end
 
     ### Verification only bank accounts

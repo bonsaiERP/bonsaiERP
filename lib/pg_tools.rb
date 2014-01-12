@@ -1,10 +1,17 @@
 # encoding: utf-8
 module PgTools
-  extend self
-
-  def get_schema_name(id)
-    "schema#{id}"
+  [:username, :database, :host, :password].each do |meth|
+    class_eval <<-CODE, __FILE__, __LINE__ + 1
+      def #{meth}
+        connection_config[:#{meth}]
+      end
+    CODE
   end
+  module_function :username, :database, :host, :password
+
+
+  # extend self
+  module_function
 
   def public_schema?
     res = connection.execute("SHOW search_path")
@@ -23,10 +30,9 @@ module PgTools
   end
 
   def change_schema(schema_name)
-    #connection.execute "SET search_path TO #{schema_name}"
     connection.schema_search_path = [schema_name, 'public'].join(', ')
   end
-  alias :change_tenant :change_schema
+  alias_method :change_tenant, :change_schema
 
   def reset_search_path
     connection.execute "SET search_path TO public"
@@ -34,7 +40,7 @@ module PgTools
   end
 
   def current_schema
-    connection.select_value "SHOW search_path"
+    select_value "SHOW search_path"
   end
 
   def create_schema(schema_name)
@@ -44,18 +50,18 @@ module PgTools
     connection.execute "CREATE SCHEMA #{schema_name}"
   end
 
-  def copy_migrations_to(schema)
+  def copy_migrations
     res = execute "SELECT version FROM public.schema_migrations"
 
     values = res.to_a.map {|v| "('#{v['version']}')"}.join(",")
-    execute "INSERT INTO #{schema}.schema_migrations (version) VALUES #{values}"
+    execute "INSERT INTO schema_migrations (version) VALUES #{values}"
   end
 
   def drop_schema(schema_name)
     raise "#{schema_name} does not exists" unless schema_exists?(schema_name)
 
     ActiveRecord::Base.logger.info "Drop schema #{schema_name}"
-    connection.execute "DROP SCHEMA IF EXISTS #{schema_name} CASCADE"
+    execute "DROP SCHEMA IF EXISTS #{schema_name} CASCADE"
   end
 
   def drop_schema_if(schema_name)
@@ -72,12 +78,28 @@ module PgTools
     connection.execute sql
   end
 
+  def create_clone(tenant)
+    create_schema tenant
+    clone_public_schema_to tenant
+  end
+
   # Clone public to the especified schema
   def clone_public_schema_to(schema)
     sql = get_public_schema
-    sql["search_path = public"] = "search_path = #{schema}"
+    sql["search_path = public, pg_catalog"] = "search_path = #{schema}, public"
 
-    connection.execute sql
+    fname = "/tmp/#{SecureRandom.urlsafe_base64}.sql"
+    f = File.new fname, 'w+'
+    f.write sql
+    f.close
+
+    %x[PGPASSWORD='#{PgTools.password}'
+    export PGPASSWORD
+    psql #{PgTools.database} --username='#{PgTools.username}' --host='#{PgTools.host}' < #{fname}]
+
+    File.delete fname
+
+    $?.success?
   end
 
   def set_password_path
@@ -90,9 +112,19 @@ module PgTools
 
   def get_public_schema
     sql = %x[#{create_bash_dump_public_schema}]
-    raise 'Error generating public schema' unless $?.success?
+    raise 'Error generating public schema'  unless $?.success?
 
     sql
+  end
+
+  def create_bash_dump_public_schema
+<<-BASH
+# /bin/bash
+PGPASSWORD='#{PgTools.password}'
+export PGPASSWORD
+
+pg_dump #{PgTools.database} --host=#{PgTools.host} --username=#{PgTools.username} --schema=public --schema-only
+BASH
   end
 
   def load_schema_into_schema(schema_name)
@@ -107,27 +139,6 @@ module PgTools
         raise "#{file} desn't exist yet. It's possible that you just ran a migration!"
       end
     end
-  end
-
-  def create_bash_dump_public_schema
-<<-BASH
-# /bin/bash
-PGPASSWORD='#{PgTools.password}'
-export PGPASSWORD
-
-pg_dump --host=#{host} --username=#{PgTools.username} --schema=public --schema-only #{PgTools.database}
-
-PGPASSWORD=""
-export PGPASSWORD
-BASH
-  end
-
-  [:username, :database, :host, :password].each do |meth|
-    class_eval <<-CODE, __FILE__, __LINE__ + 1
-      def #{meth}
-        connection_config[:#{meth}]
-      end
-    CODE
   end
 
   def connection_config
@@ -184,10 +195,6 @@ BASH
     ActiveRecord::Base.connection.current_schema
   end
 
-  def set_schema_path(schema)
-    ActiveRecord::Base.connection.schema_search_path = schema
-  end 
-
   def reset_schema_path
     ActiveRecord::Base.connection.schema_search_path = 'public'
   end
@@ -195,7 +202,7 @@ BASH
   def with_schemas(options = nil)
     options = unify_type(options, Hash) { |items| {:only => items} }
     options[:only] = unify_type(options[:only], Array) { |item| item.nil? ? all_schemas : [item] }.map { |item| item.to_s }
-    options[:except] =unify_type(options[:except], Array) { |item| item.nil? ? [] : [item] }.map { |item| item.to_s }
+    options[:except] = unify_type(options[:except], Array) { |item| item.nil? ? [] : [item] }.map { |item| item.to_s }
 
     options[:only] = unify_array_item_type(options[:only], String) { |symbol| symbol.to_s }
     options[:except] = unify_array_item_type(options[:except], String) { |symbol| symbol.to_s }
@@ -204,7 +211,7 @@ BASH
 
     schema_list.each do |schema|
       puts "Working on schema #{schema}"
-      set_schema_path schema
+      change_schema schema
       yield schema
     end
     reset_schema_path
@@ -223,7 +230,6 @@ BASH
       unify_type item, type, &block
     end
   end
-protected
 
   def connection
     ActiveRecord::Base.connection

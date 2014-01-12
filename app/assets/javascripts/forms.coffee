@@ -38,17 +38,30 @@ $( ->
       'type': (data['_method'] or $el.attr('method') )
     )
     .success (resp, status, xhr) ->
-      if typeof resp == "object"
+
+      $el.find('input, select, textarea').attr('disabled', false)
+      if typeof resp == 'object'
         callEvents($div.data(), resp)
         $div.html('').dialog('destroy')
-        #$('body').trigger(trigger, [resp])
       else if resp.match(/^\/\/\s?javascript/)
         $div.html('').dialog('destroy')
       else
-        $div.html(resp)
+        if $div.attr('ng-controller')
+          $scope= $div.scope()
+          $scope.$apply (scope) ->
+            scope.htmlContent = ''
+            scope.$$childHead = null
+            scope.$$childTail = null
+            console.log resp
+            scope.htmlContent = resp
+        else
+          $div.html(resp)
+
         setTimeout(->
           $div.setDatepicker()
         ,200)
+        # Trigger that form has been reloaded
+        $div.trigger('reload:ajax-modal')
     .error (resp) ->
       alert('Existio errores, por favor intente de nuevo.')
   )
@@ -63,10 +76,11 @@ $( ->
   $.popoverNotitle = $.fn.popoverNotitle = popoverNotitle
 
    # Set autocomplete values
-  setAutocompleteValues = (el, vals) ->
+  setAutocompleteValues = (el, resp) ->
     $el = $(el)
-    $el.val(vals.to_s)
-    $el.siblings('input:hidden').val(vals.id)
+    $el.val(resp.to_s)
+    $el.data('value', resp.to_s)
+    $el.siblings('input:hidden').val(resp.id)
 
   # Adds an option to select and selects that option
   setSelectValues = (el, vals) ->
@@ -77,19 +91,17 @@ $( ->
 
   # Calls the events afser ajax call on ajax form
   callEvents = (data, resp) ->
-    return  unless data.elem
+    return  unless data
 
     $el = $(data.elem)
 
-    if data.return
-      $el.trigger('ajax-call', [resp])
-    else
-      switch
-        when $el.hasClass('autocomplete')
-          setAutocompleteValues($el, resp)
-        when $el.get(0).nodeName is 'SELECT'
-          setSelectValues(data.elem, resp)
+    switch
+      when $el.hasClass('autocomplete')
+        setAutocompleteValues($el, resp)
+      when $el.get(0).nodeName is 'SELECT'
+        setSelectValues(data.elem, resp)
 
+    $el.trigger('ajax-call', resp)
 
   ##########################################
   # Activates autocomplete for all autocomplete inputs
@@ -226,32 +238,5 @@ $( ->
 
   $.buttonTab = $.fn.buttonTab = buttonTab
 
-  rowCheck = ->
-    $(this).on('click', '>li,>tr', (event) ->
-      target = event.target
-
-      return true  if target.tagName is 'A'
-
-      $check = $(this).find('input.row-check')
-      $row = $check.parents('tr,li')
-
-      if target.type is 'checkbox' and $(target).hasClass('row-check')
-        if $check.prop('checked')
-          $row.addClass('selected')
-        else
-          $row.removeClass('selected')
-
-        return true
-
-      if $check.prop('checked')
-        $check.prop('checked', false)
-        $row.removeClass('selected')
-      else
-        $check.prop('checked', true)
-        $row.addClass('selected')
-
-    )
-
-  $.rowCheck = $.fn.rowCheck = rowCheck
 
 )

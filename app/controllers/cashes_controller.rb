@@ -26,7 +26,7 @@ class CashesController < ApplicationController
 
   # GET /cashs/new
   def new
-    @cash = Cash.new_cash
+    @cash = Cash.new
 
     respond_to do |format|
       format.html # new.html.erb
@@ -40,7 +40,7 @@ class CashesController < ApplicationController
 
   # POST /cashs
   def create
-    @cash = Cash.new_cash(cash_params)
+    @cash = Cash.new(cash_params)
 
     respond_to do |format|
       if @cash.save
@@ -76,12 +76,13 @@ class CashesController < ApplicationController
     end
   end
 
-private
-  def set_cash
-    @cash = Cash.find(params[:id])
-  end
+  private
 
-  def cash_params
-    params.require(:cash).permit(:name, :currency, :amount, :address)
-  end
+    def set_cash
+      @cash = Cash.find(params[:id])
+    end
+
+    def cash_params
+      params.require(:cash).permit(:name, :currency, :amount, :address)
+    end
 end

@@ -135,7 +135,4 @@ describe ConciliateAccount do
     end
   end
 
-  context "Transference" do
-
-  end
 end

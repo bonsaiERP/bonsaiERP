@@ -10,5 +10,7 @@
 
 %h1 Nuevo ítem
 
-= render 'items/form'
-
+- if params[:for_sale] == 'true'
+  = render 'items/form_sale'
+- else
+  = render 'items/form'

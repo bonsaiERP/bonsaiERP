@@ -74,37 +74,6 @@ init = ($) ->
 
   window.AjaxLoadingHTML = AjaxLoadingHTML
 
-  ########################################
-  # Presents any link url in a modal dialog and loads with AJAX the url
-  $('body').on('click', 'a.ajax', (event) ->
-    event.preventDefault()
-
-    id = new Date().getTime().toString()
-    $this = $(this)
-    $this.data('ajax_id', id)
-
-    $div = createDialog({
-      title: $this.data('title'),
-      # Elem related with the call input, select, etc
-      elem: $this.data('elem'),
-      width: $this.data('width') || 800,
-      # Return response instead of calling default
-      return: $this.data('return')
-    })
-
-    $div.load( $this.attr("href"), (resp, status, xhr, dataType) ->
-      $this = $(this)
-      $div = $('<div>').html(resp)
-      $this.find('.form-actions').append('<a class="btn cancel" href="javascript:;">Cancelar</a>')
-
-      $tit = $this.dialog('widget').find('.ui-dialog-title')
-      .text($div.find('h1').text())
-
-      $div.setDatepicker()
-    )
-    event.stopPropagation()
-  )
-
   $('body').on('click', '.ui-dialog-content.ajax-modal .cancel', ->
     $(this).parents('.ajax-modal').dialog('close')
   )
@@ -266,7 +235,7 @@ init = ($) ->
 
   # Template
   # Underscore templates
-  _.templateSettings.interpolate = /\{\{(.+?)\}\}/g
+  _.templateSettings.interpolate = /\[:(.+?):\]/g #\{\{(.+?)\}\}/g
 
   ########################################
   # Wrapped inside this working
@@ -315,36 +284,4 @@ init = ($) ->
   _b.numSeparator = @bonsai.separator
   _b.numDelimiter = @bonsai.delimiter
 
-  rivets.configure(
-    #preloadData: false
-    adapter:
-      subscribe: (obj, keypath, callback) ->
-        obj.on('change:' + keypath, callback)
-      unsubscribe: (obj, keypath, callback) ->
-        obj.off('change:' + keypath, callback)
-      read: (obj, keypath) ->
-        obj.get(keypath)
-      publish: (obj, keypath, value) ->
-        obj.set(keypath, value)
-  )
-
-  rivets.formatters.number = (value) ->
-    _b.ntc(value)
-
-  rivets.formatters.currencyLabel = (val) ->
-    if val?
-      ['<span class="label label-inverse" title=',
-        '"', currencies[val]['name'], '"', ' data-toggle="tooltip">',
-        val, '</span>'].join('')
-
-  rivets.formatters.show = (val) ->
-    if val
-      'block'
-    else
-      'none'
-
-  rivets.formatters.inverse = (val) ->
-    not val
-
-  true
 )(jQuery)

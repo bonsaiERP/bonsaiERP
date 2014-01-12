@@ -9,6 +9,16 @@ class Movement < Account
 
   STATES = %w(draft approved paid nulled)
 
+  # Store
+  EXTRA_COLUMNS = %i(bill_number gross_total original_total balance_inventory nuller_datetime null_reason approver_datetime delivered discounted devolution no_inventory).freeze
+  store_accessor( *([:extras] + EXTRA_COLUMNS))
+
+  # Extra methods defined for Hstore
+  extend Models::HstoreMap
+  convert_hstore_to_boolean :devolution, :delivered, :discounted, :no_inventory
+  convert_hstore_to_decimal :gross_total, :original_total, :balance_inventory
+  convert_hstore_to_timezone :nuller_datetime, :approver_datetime
+
   # Callbacks
   before_update :check_items_balances
   before_create { |m| m.creator_id = UserSession.id }
@@ -19,7 +29,7 @@ class Movement < Account
   belongs_to :project
   belongs_to :tax
 
-  has_one :transaction, foreign_key: :account_id, autosave: true
+  #has_one :transaction, foreign_key: :account_id, autosave: true
   has_many :transaction_histories, foreign_key: :account_id
   has_many :ledgers, foreign_key: :account_id, class_name: 'AccountLedger'
   has_many :inventories, foreign_key: :account_id
@@ -33,8 +43,8 @@ class Movement < Account
 
   ########################################
   # Delegations
-  delegate(*create_accessors(*Transaction.get_columns), to: :transaction)
-  delegate(*Transaction.delegate_methods, to: :transaction)
+  #delegate(*create_accessors(*Transaction.get_columns), to: :transaction)
+  #delegate(*Transaction.delegate_methods, to: :transaction)
 
   # Define boolean methods for states
   STATES.each do |_state|
@@ -56,20 +66,6 @@ class Movement < Account
 
     define_method :"#{meth.first}=" do |val|
       self.send(:"#{meth.last}=", val)
-    end
-  end
-
-  class << self
-    alias_method :old_new, :new
-
-    def new(attrs = {})
-      old_new do |mov|
-        mov.build_transaction
-        mov.attributes = attrs
-        mov.state ||= 'draft'
-        mov.ref_number ||= get_ref_number
-        yield mov  if block_given?
-      end
     end
   end
 
@@ -158,8 +154,9 @@ class Movement < Account
 
   alias_method :old_attributes, :attributes
   def attributes
-    attrs = transaction.attributes.except(*%w(id created_at updated_at))
-    old_attributes.merge(attrs)
+    old_attributes.merge(
+      Hash[ EXTRA_COLUMNS.map { |k| [k.to_s, self.send(k)] } ]
+    )
   end
 
   private

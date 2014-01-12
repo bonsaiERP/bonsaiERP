@@ -22,7 +22,9 @@
       this.exchangeRates = #{set_exchange_rates};
       this.currencies = #{File.read Rails.root.join 'public', 'currencies.json' };
 
-  %body
+  %body(ng-app='myApp')
+
+    = render 'layouts/notifications'
 
     -# Header
     #head

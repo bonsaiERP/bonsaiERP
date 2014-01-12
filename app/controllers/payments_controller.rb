@@ -7,6 +7,7 @@ class PaymentsController < ApplicationController
   def new_income
     @payment = Incomes::Payment.new(account_id: params[:id], date: Date.today)
     check_income
+    @payment.amount = @payment.income.amount
   end
 
   # POST /payments/:id/income
@@ -26,6 +27,7 @@ class PaymentsController < ApplicationController
   def new_expense
     @payment = Expenses::Payment.new(account_id: params[:id], date: Date.today)
     check_expense
+    @payment.amount = @payment.expense.amount
   end
 
   # POST /payments/:id/expense

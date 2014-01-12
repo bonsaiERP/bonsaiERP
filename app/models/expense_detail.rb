@@ -7,6 +7,8 @@ class ExpenseDetail < TransactionDetail
              inverse_of: :expense_details
   belongs_to :item, inverse_of: :expense_details
 
+  delegate :for_sale?, :to_s, :name, :price, to: :item, prefix: true, allow_nil: true
+
   # Validations
   validates_presence_of :item
 end

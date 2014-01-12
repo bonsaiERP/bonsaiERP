@@ -1,29 +1,15 @@
 %h4.title Devolución
 
-= simple_form_for @devolution, url: expense_devolution_path(@devolution.account_id),
-  html: { id: 'expense-devolution-form' } do |f|
-  = bonsai_form_error(f)
-  = f.hidden_field :account_id
+#loan(ng-controller='PaymentController')
+  = simple_form_for @devolution, url: expense_devolution_path(@devolution.account_id),
+    html: { id: 'expense-devolution-form' } do |f|
+    = bonsai_form_error(f)
+    = f.hidden_field :account_id
 
-  = render 'payments/default_form', f: f, movement: @devolution
+    %input(type='hidden' id='accounts' data-accounts='#{Accounts::Query.new.expense_payment_options(@devolution.expense).to_json}')
+    = hidden_field_tag 'base_currency', @devolution.expense_currency, 'ng-model' => 'base_currency', 'ng-initial' => true
 
-  .form-actions
-    = f.submit 'Devolución', class: 'btn b btn-danger'
-    %a.cancel.btn(hre='javascript:;') Cancelar
+    = render 'payments/default_form', f: f, movement: @devolution
 
--#binding.pry
-:javascript
-  $(function() {
-    var p = new App.ExpenseDevolution({
-      accountsTo: #{AccountQuery.new.expense_payment_options(@devolution.expense).to_json},
-      baseCurrency: "#{@devolution.expense_currency}",
-      account_to_id: "#{@devolution.account_to_id}",
-      amount: #{@devolution.amount},
-      date: "#{@devolution.date}",
-      exchange_rate: #{@devolution.exchange_rate.to_f},
-      reference: "#{@devolution.reference}",
-      verification: #{@devolution.verification}
-    });
-  })
-
-
+    .form-actions
+      = f.submit 'Devolución', class: 'btn b btn-danger'

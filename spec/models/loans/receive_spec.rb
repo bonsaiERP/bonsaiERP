@@ -1,14 +1,18 @@
 require 'spec_helper'
-=begin
+
 describe Loans::Receive do
   let(:attributes) {
     today = Date.today
     {
       name: 'P-0001', currency: 'BOB', date: today,
       due_date: today + 10.days, total: 100,
-      interests: 10
+      account_to_id: 10
     }
   }
+
+  it { should have_one(:ledger_in) }
+  it { should have_many(:payments_devolutions) }
+  it { should have_many(:interest_ledgers) }
 
   it "#initialize with code" do
     l = Loans::Receive.new {}
@@ -17,4 +21,3 @@ describe Loans::Receive do
   end
 
 end
-=end

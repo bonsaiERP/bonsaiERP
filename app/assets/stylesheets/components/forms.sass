@@ -37,13 +37,18 @@ input.numeric
     padding: 0px 10px
 
   h2
-    font-weight:normal
+    font-weight: normal
     font-size: 1.2em
     margin: 4px 0px
 
 span.error
   display: inline-table
   color: $red
+  margin-top: -10px
+
+.select2-bonsai-error
+  span.error
+    margin-top: 0px
 
 td span.error
   display: block
@@ -85,6 +90,7 @@ input[type="decimal"], input.decimal
   font-size: 13px
   line-height: 18px
   color: #555555
+  margin-bottom: 10px
 
 input[type="decimal"]:focus
   +box-shadow(inset 0 1px 1px rgba(0 ,0 ,0 , 0.075), 0 0 8px rgba(82, 168, 236, 0.6))
@@ -185,12 +191,12 @@ input.row-check
     overflow: hidden
 
 // data-new_url
-.add-new-url
-  +border-left-radius(0px)
+.add-new-url, .btn-icon
   margin-lefth: 0px
   font-size: 110%
   width: 16px
   padding: 4px 6px
+
 
 // modal-more
 

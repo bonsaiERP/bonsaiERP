@@ -46,6 +46,8 @@ module Bonsaierp
       g.javascripts = false
     end
 
+    # Error pages exceptiions
+    config.exceptions_app = self.routes
   end
 end
 

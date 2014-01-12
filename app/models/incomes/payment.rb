@@ -58,7 +58,7 @@ class Incomes::Payment < Payment
     def create_ledger
       @ledger = build_ledger(
                   amount: amount, operation: get_operation, account_id: income.id,
-                  status: get_status
+                  status: get_status, contact_id: income.contact_id
                 )
 
       @ledger.save_ledger

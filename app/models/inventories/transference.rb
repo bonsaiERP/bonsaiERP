@@ -7,8 +7,9 @@ class Inventories::Transference < Inventories::Form
   validates_presence_of :store_to
 
   def create
+    inventory.store_to_id = store_to_id
     save do
-      @inventory.save
+      inventory.save
       update_stocks
       update_stocks_to
     end
@@ -18,53 +19,52 @@ class Inventories::Transference < Inventories::Form
     @store_to ||= Store.active.where(id: store_to_id).first
   end
 
-  def inventory
-    super
-    @inventory.store_to_id = store_to_id
-    @inventory
-  end
-
   def stores
     @stores ||= Store.active.where("id != ?", store_id)
   end
 
-private
-  def operation
-    'trans'
+  def details_form_name
+    'inventories_transference[inventory_details_attributes]'
   end
 
-  def update_stocks
-    res = true
-    stocks.each do |st|
-      stoc = Stock.create(store_id: store_id, item_id: st.item_id,
-                          quantity: stock_quantity(st), minimum: st.minimum)
-      res = stoc.save && st.update_attribute(:active, false)
+  private
 
-      return false unless res
+    def operation
+      'trans'
     end
 
-    res
-  end
+    def update_stocks
+      res = true
+      stocks.each do |st|
+        stoc = Stock.create(store_id: store_id, item_id: st.item_id,
+                            quantity: stock_quantity(st), minimum: st.minimum)
+        res = stoc.save && st.update_attribute(:active, false)
 
-  def update_stocks_to
-    res = true
+        return false unless res
+      end
 
-    stocks_to.each do |st|
-      stoc = Stock.create(store_id: store_to_id, item_id: st.item_id,
-                          quantity: stock_to_quantity(st), minimum: st.minimum)
-      res = stoc.save && st.update_attribute(:active, false)
-
-      return false unless res
+      res
     end
 
-    res
-  end
+    def update_stocks_to
+      res = true
 
-  def stock_quantity(st)
-    st.quantity - item_quantity(st.item_id)
-  end
+      stocks_to.each do |st|
+        stoc = Stock.create(store_id: store_to_id, item_id: st.item_id,
+                            quantity: stock_to_quantity(st), minimum: st.minimum)
+        res = stoc.save && st.update_attribute(:active, false)
 
-  def stock_to_quantity(st)
-    st.quantity + item_quantity(st.item_id)
-  end
+        return false unless res
+      end
+
+      res
+    end
+
+    def stock_quantity(st)
+      st.quantity - item_quantity(st.item_id)
+    end
+
+    def stock_to_quantity(st)
+      st.quantity + item_quantity(st.item_id)
+    end
 end

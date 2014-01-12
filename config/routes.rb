@@ -2,6 +2,30 @@
 Bonsaierp::Application.routes.draw do
   get '/download_pdf/:file/:name' => 'download#download_pdf', as: :download
 
+  resources :loan_payments, only: [] do
+    member do
+      # Receive
+      get :new_pay
+      post :pay
+      get :new_pay_interest
+      post :pay_interest
+      # Give
+      get :new_charge
+      post :charge
+      get :new_charge_interest
+      post :charge_interest
+    end
+  end
+
+  resources :loans, only: [:index, :show, :update] do
+    collection do
+      get :new_receive
+      post :receive
+      get :new_give
+      post :give
+    end
+  end
+
   resources :taxes
 
   resources :tags do
@@ -107,6 +131,7 @@ Bonsaierp::Application.routes.draw do
   resources :items do
     get :search_income, on: :collection
     get :search_expense, on: :collection
+    get :search_inventory, on: :member
   end
 
   resources :units
@@ -145,6 +170,10 @@ Bonsaierp::Application.routes.draw do
   # Tests
   resources :tests
   get '/kitchen' => 'tests#kitchen' # Tests
+
+  get '/404', to: 'errors#page_not_found'
+  get '/422', to: 'errors#unacceptable'
+  get '/500', to: 'errors#internal_error'
 
   root to: 'sessions#new'
 end

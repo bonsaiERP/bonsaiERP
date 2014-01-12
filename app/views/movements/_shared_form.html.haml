@@ -1,0 +1,13 @@
+.row-fluid
+  .span6.contact
+    - if transaction.new_record?
+      = f.input :contact_id, as: :autocomplete, label: 'Contacto',
+        input_html: { class: 'span10', placeholder: 'Escriba para buscar el contacto',
+        data: { source: '/contacts.json', new_url: new_contact_path, title: 'Nuevo contacto', trigger: 'new-contact', } }
+    - else
+      %label Contacto
+      = transaction.contact
+  .span3
+    = f.input :date, label: "Fecha", as: :datepicker
+  .span3
+    = f.input :due_date, as: :datepicker, label: 'Vence el'

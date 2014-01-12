@@ -1,4 +1,5 @@
-- ledger.current_account_id = current_account_id  if defined? current_account_id
+- ledger.current_account_id = current_account_id
+
 %li.row-fluid.account_ledger(id='#{ledger.id}')
   .span8
     %h4.ib
@@ -9,9 +10,9 @@
 
     %p
       %i= l ledger.date.to_date
-      = link_to ledger.trans_account, title: 'Cuenta relacionada' do
-        = ledger.trans_account_icon
-        = ledger.trans_account
+      = link_to ledger.other_account_url, title: 'Cuenta relacionada' do
+        = ledger.other_account_icon
+        = ledger.other_account
 
 
     .row-fluid

@@ -9,7 +9,6 @@ describe Movement do
   context "#can_null?" do
     let(:subject) {
       m = Movement.new(amount: 100, state: 'draft')
-      m.build_transaction
       m.total =  100
       m
     }
@@ -56,7 +55,6 @@ describe Movement do
   context "can_devolution?" do
     let(:subject) {
       m = Income.new(amount: 100, state: 'draft')
-      m.build_transaction
       m.total =  100
       m
     }
@@ -118,7 +116,7 @@ describe Movement do
     end
 
     it "update currency" do
-      i = Income.new(currency: 'BOB', total: 140, exchange_rate: 1, date: Date.today, contact_id: contact.id, due_date: Date.today)
+      i = Income.new(currency: 'BOB', total: 140, exchange_rate: 1, date: Date.today, contact_id: contact.id, due_date: Date.today, state: 'draft')
       i.stub(contact: contact, name: 'I-0001')
 
       i.save.should be_true
@@ -215,6 +213,37 @@ describe Movement do
       expense.reload
       expense.null!.should be_true
       expense.should be_is_nulled
+    end
+
+    it "#attributes" do
+      t = Time.zone.now
+      c = build :contact, id: 1
+      attrs = { bill_number: '123', gross_total: 100, original_total: 101,
+                balance_inventory: 50, nuller_datetime: t, null_reason: 'No se',
+                approver_datetime: t,
+                discounted: false, devolution: false, no_inventory: false}
+      d = Date.today
+      m = Movement.new({
+        currency: 'BOB', ref_number: 'Ref-001', date: d, due_date: d,
+        contact_id: 1, state: 'draft'
+      }.merge(attrs))
+      m.stub(contact: c)
+      m.save.should be_true
+
+      m = Movement.find(m.id)
+      at = m.attributes
+      attrs.except(:nuller_datetime, :approver_datetime).each do |k, v|
+        at.fetch(k.to_s).should eq(v)
+      end
+
+      m.nuller_datetime.should be_is_a(ActiveSupport::TimeWithZone)
+      m.approver_datetime.should be_is_a(ActiveSupport::TimeWithZone)
+
+      m.nuller_datetime.to_s.should eq(t.to_s)
+      m.approver_datetime.to_s.should eq(t.to_s)
+
+      m.no_inventory?.should be_false
+      m.devolution?.should be_false
     end
   end
 end

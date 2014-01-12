@@ -34,6 +34,8 @@ class Expenses::Form < Movements::Form
   def set_new_expense(attrs = {})
     set_defaults
     @movement = Expense.new(expense_attributes)
+    @movement.ref_number = Expense.get_ref_number
+    @movement.state = 'draft'
     2.times { @movement.expense_details.build(quantity: 1) }  if expense.details.empty?
     @service = Expenses::Service.new(expense)
   end
@@ -44,18 +46,23 @@ class Expenses::Form < Movements::Form
     attrs
   end
 
-private
-
-
-  def expense_is_valid
-    self.errors.add :base, I18n.t('errors.messages.expense.payments') unless expense.total === expense.balance
+  def form_details_name
+    'expenses_form[expense_details_attributes]'
   end
 
-  def valid_account_to
-    self.errors.add(:account_to_id, I18n.t('errors.messages.quick_income.valid_account_to')) unless account_to.present?
-  end
+  def is_income?; false; end
 
-  def account_to
-    @account_to ||= AccountQuery.new.bank_cash.where(currency: currency, id: account_to_id).first
-  end
+  private
+
+    def expense_is_valid
+      self.errors.add :base, I18n.t('errors.messages.expense.payments') unless expense.total === expense.balance
+    end
+
+    def valid_account_to
+      self.errors.add(:account_to_id, I18n.t('errors.messages.quick_income.valid_account_to')) unless account_to.present?
+    end
+
+    def account_to
+      @account_to ||= Accounts::Query.new.bank_cash.where(currency: currency, id: account_to_id).first
+    end
 end

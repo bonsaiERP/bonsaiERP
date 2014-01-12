@@ -18,7 +18,7 @@ describe User do
 
     st = Object.new
     u.should_receive(:active_links).and_return(st)
-    st.should_receive(:where).with(tenant: 'bonsai').and_return(stub(first: true))
+    st.should_receive(:where).with(tenant: 'bonsai').and_return(double(first: true))
     u.tenant_link('bonsai')
   end
 
@@ -89,15 +89,15 @@ describe User do
     u.to_s.should eq("test@mail.com")
 
     u = User.new(email: "test@mail.com", first_name: "Violeta", last_name: "Barroso")
-    
+
     u.to_s.should eq('Violeta Barroso')
 
     u = User.new(email: "test@mail.com", first_name: "Amaru")
-    
+
     u.to_s.should eq('Amaru')
 
     u = User.new(email: "test@mail.com", last_name: "Estrella")
-    
+
     u.to_s.should eq('Estrella')
   end
 

@@ -38,38 +38,39 @@ class NullAccountLedger
     !(nuller_id.present? || approver_id.present?)
   end
 
-private
-  def update_income_expense_balance
-    case operation
-    when 'payin'
-      account.amount += amount_currency.round(2)
-    when 'devin'
-      account.amount += amount_currency.round(2)
-    when 'payout'
-      account.amount -= amount_currency.round(2)
-    when 'devout'
-      account.amount -= amount_currency.round(2)
+  private
+
+    def update_income_expense_balance
+      case operation
+      when 'payin'
+        account.amount += amount_currency.round(2)
+      when 'devin'
+        account.amount += amount_currency.round(2)
+      when 'payout'
+        account.amount -= amount_currency.round(2)
+      when 'devout'
+        account.amount -= amount_currency.round(2)
+      end
+
+      account.set_state_by_balance!
+
+      Movements::Errors.new(account).set_errors
+      account.save
     end
 
-    account.set_state_by_balance!
+    def is_income_expense?
+      account.is_a?(Income) || account.is_a?(Expense)
+    end
 
-    Movements::Errors.new(account).set_errors
-    account.save
-  end
+    def update_account
+      account.amount += amount_currency
 
-  def is_income_expense?
-    account.is_a?(Income) || account.is_a?(Expense)
-  end
+      account.save
+    end
 
-  def update_account
-    account.amount += amount_currency
-
-    account.save
-  end
-
-  def set_account_ledger_null
-    account_ledger.nuller_id       = UserSession.id
-    account_ledger.nuller_datetime = Time.zone.now
-    account_ledger.status          = 'nulled'
-  end
+    def set_account_ledger_null
+      account_ledger.nuller_id       = UserSession.id
+      account_ledger.nuller_datetime = Time.zone.now
+      account_ledger.status          = 'nulled'
+    end
 end

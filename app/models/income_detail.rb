@@ -9,7 +9,7 @@ class IncomeDetail < TransactionDetail
   validates_presence_of :item
   validate :valid_income_item, if: :item_id_changed?
 
-  delegate :for_sale?, to: :item, prefix: true, allow_nil: true
+  delegate :for_sale?, :to_s, :name,:price, to: :item, prefix: true, allow_nil: true
 
   private
     # item

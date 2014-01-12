@@ -19,7 +19,7 @@ class ExpensesController < ApplicationController
 
   # GET /expenses/new
   def new
-    @es = Expenses::Form.new_expense(date: Date.today)
+    @es = Expenses::Form.new_expense(currency: currency)
   end
 
   # GET /expenses/1/edit
@@ -50,17 +50,6 @@ class ExpensesController < ApplicationController
     end
   end
 
-  # DELETE /expenses/1
-  def destroy
-    if @expense.approved?
-      flash[:warning] = "No es posible anular la nota #{@transaction}."
-      redirect_transaction
-    else
-      @transaction.null_transaction
-      flash[:notice] = "Se ha anulado la nota #{@transaction}."
-      redirect_to @transaction
-    end
-  end
 
   # PUT /expenses/1/approve
   # Method to approve an expense
@@ -158,7 +147,7 @@ class ExpensesController < ApplicationController
 
       @expenses = @expenses.all_tags(*tag_ids)  if params[:search] && has_tags?
 
-      @expenses = @expenses.includes(:contact, :tax, transaction: [:creator, :approver, :nuller]).order('date desc, accounts.id desc').page(@page)
+      @expenses = @expenses.includes(:contact, :tax, :creator, :approver, :nuller).order('date desc, accounts.id desc').page(@page)
       set_expenses_filters
     end
 
