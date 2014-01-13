@@ -494,7 +494,7 @@ namespace :bonsai do
   end
 
   desc 'Updates schema_migrations before merging loan'
-  task update_schema_migrations: :environment do
+  task update_loan_schema_migrations: :environment do
     PgTools.all_schemas.each do |schema|
       next if  schema == 'common'
       sql = <<-SQL
