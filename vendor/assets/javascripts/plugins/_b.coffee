@@ -126,3 +126,6 @@
 
   nl2br: (val) ->
     val.toString().replace(/\n/g, '<br>')
+
+  isNumber: (val) ->
+    not(isNaN(val)) and isFinite(val)

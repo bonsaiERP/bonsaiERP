@@ -15,7 +15,6 @@
         = ledger.status_tag
 
         .clearfix
-        -#%h5.ib= link_to ledger.contact, ledger.contact, title: 'Contacto'  if ledger.contact
         = ledger.contact_link_tag
 
         %p
@@ -33,11 +32,11 @@
         = ledger.nuller_label
         .clearfix
 
-        .edit-reference
-          %a.edit-ledger-reference-link.dark(href='javascript:;' title='Editar referencia' data-toggle='tooltip' data-id='#{ledger.id}' data-reference='#{ledger.reference}')
-            %i.icon-pencil
+        .inline-cont
+          = link_to icon('icon-pencil', 'Editar referencia'), account_ledger_path(ledger.id), class: 'dark inline-edit',
+            data: { type: 'textarea', name: 'reference', notify: '.top-left' }
           %i.icon-file.muted(data-toggle='tooltip' title="referencia")
-          %span.reference= nl2br ledger.reference
+          %span.inline-data= nl2br ledger.reference
       .span2.r
         = ntc ledger.amount_ref(account.id)
         = currency_label ledger.currency_ref(account.id)

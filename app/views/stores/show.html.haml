@@ -85,11 +85,6 @@
 
     = html
 
-%form#edit-minimum-template
-  %input#minimum(name='minimum' size='8' type='text')
-  %button#save-minimum.btn.btn-primary.btn-small Actualizar mínimo
-  %a.btn.btn-small.cancel(href='javascript:;') Cancelar
-
 
 :javascript
   $(function() {
@@ -100,64 +95,4 @@
       $a.attr('href', $a.attr('href') + '#operations-tab');
     });
 
-    var $current;
-    // minimum
-    var $form = $('#edit-minimum-template'),
-        $min = $form.find('#minimum'),
-        $save = $form.find('#save-minimum');
-
-    $('.item').on('click', '.edit-minimum-link', function() {
-      $current = $this = $(this);
-      $parent = $this.parents('.minimum-stock');
-
-      $min.val($this.data('minimum'));
-      $save.data('id', $this.data('id'));
-
-      $form.find('.btn').prop('disabled', false);
-      $form.insertAfter($parent);
-
-      $parent.hide();
-    });
-
-    // Save stock
-    $form.on('submit', function(event) {
-      event.preventDefault();
-      var minimum = $min.val(),
-          id = $save.data('id');
-
-      if(!minimum.match(/^\d*(\.\d{0,2})?$/)) {
-        alert('Ingrese un mínimo mayor que 0');
-        return false;
-      }
-
-      $form.find('.btn').prop('disabled', true);
-
-      $.ajax({
-        url: '/stocks/' + id,
-        data: {minimum: minimum},
-        type: 'PUT'
-      })
-      .done(function(resp) {
-        var sel = '#' + resp.id + '.item';
-
-        if(resp.success) {
-          $(sel).find('.minimum-stock').show()
-          .find('.min').text(_b.ntc(resp.minimum));
-          $current.data('minimum', resp.minimum);
-        }else{
-          $(sel).find('.minimum-stock').show();
-        }
-        $form.detach();
-      })
-      .fail(function() {
-        $form.find('.btn').prop('disabled', false);
-        alert('Exisition un error al actualizar el mínimo');
-      });
-    });
-    $('.item').on('click', '.cancel', function() {
-      $(this).parents('.item').find('.minimum-stock').show();
-      $(this).parents('#edit-minimum-template').detach();
-    });
-
-    $form.detach();
   })

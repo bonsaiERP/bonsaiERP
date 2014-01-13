@@ -22,11 +22,11 @@
         = ledger.approver_label
         = ledger.nuller_label
       .span9
-        .edit-reference
-          %a.edit-ledger-reference-link.dark(href='javascript:;' title='Editar referencia' data-toggle='tooltip' data-id='#{ledger.id}' data-reference='#{ledger.reference}')
-            %i.icon-pencil
+        .inline-cont
+          = link_to icon('icon-pencil', 'Editar referencia'), account_ledger_path(ledger.id), class: 'dark inline-edit',
+            data: { type: 'textarea', name: 'reference', notify: '.top-left' }
           %i.icon-file.muted(data-toggle='tooltip' title="referencia")
-          %span.reference= nl2br ledger.reference
+          %span.inline-data= nl2br ledger.reference
 
     - unless ledger.current_currency?
       .well.well-small
