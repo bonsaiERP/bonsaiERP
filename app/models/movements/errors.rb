@@ -38,7 +38,7 @@ class Movements::Errors < Struct.new(:movement)
     end
 
     def inventory_errors
-      if  movement.details.any? { |v| v.balance <= 0 }
+      if  movement.details.any? { |v| v.balance < 0 }
         @errors[:items] ||= []
         @errors[:items] << 'movement.negative_item_balance'
       end
