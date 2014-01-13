@@ -5,7 +5,6 @@ class AddAccountsTaxInOut < ActiveRecord::Migration
         t.boolean :tax_in_out, default: false
         t.index :tax_in_out
       end
-      #add_index :accounts, :tax_in_out
     end
   end
 end
