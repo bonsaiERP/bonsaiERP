@@ -80,5 +80,5 @@ Bonsaierp::Application.configure do
 
   config.eager_load = true
 
-  config.exceptions_app = self.routes
+  #config.exceptions_app = self.routes
 end

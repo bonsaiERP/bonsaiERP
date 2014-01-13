@@ -4,7 +4,7 @@ class AddAccountsTaxInOut < ActiveRecord::Migration
       change_table :accounts do |t|
         t.boolean :tax_in_out, default: false
       end
-      add_index :accounts, :tax_in_out
+      add_index :accounts, :tax_in_out # Needs onserver index
     end
   end
 end
