@@ -53,7 +53,7 @@ class ItemsController < ApplicationController
     @item = Item.new(item_params)
 
     if @item.save
-      redirect_ajax @item, notice: 'Se ha creado el ítem correctamente.'
+      render_or_redirect_item
     else
       render :new
     end
@@ -103,5 +103,17 @@ class ItemsController < ApplicationController
     def item_params
       params.require(:item).permit(:code, :name, :active, :stockable,
                                    :for_sale, :price, :buy_price, :unit_id, :description)
+    end
+
+    def render_or_redirect_item
+      if request.xhr?
+        if params[:for_sale] == 'true'
+          render json: ItemSerializer.new.income([@item]).first
+        else
+          render json: ItemSerializer.new.expense([@item]).first
+        end
+      else
+        redirect_to @item, notice: 'Se ha creado el ítem correctamente.'
+      end
     end
 end
