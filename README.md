@@ -40,3 +40,25 @@ add_index :accounts, :due_date
 add_index :accounts, :extras, using: :gist
 
 add_index :account_ledgers, :contact_id
+
+
+#<VirtualHost *:80>
+#   ServerName bonsaierp.com
+#   ServerAlias www.bonsaierp.com
+#   # !!! Be sure to point DocumentRoot to 'public'!
+#   DocumentRoot /home/bonsai/bonsaierp/public
+#
+#    RewriteEngine on
+#    RewriteCond %{HTTP_HOST} ^www\.bonsaierp\.com$ [NC]
+#    RewriteRule ^(.*)$ http://bonsaierp.com/$1 [R=301,L]
+#
+#
+#    <IfModule mod_expires.c>
+#      # Add correct content-type for fonts
+#      AddType application/vnd.ms-fontobject .eot
+#      AddType application/x-font-ttf .ttf
+#      AddType application/x-font-opentype .otf
+#      AddType application/x-font-woff .woff
+#      AddType image/svg+xml .svg
+#
+#      # Compress compressible fonts
