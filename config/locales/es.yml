@@ -372,9 +372,6 @@ es:
       last: "Fin &raquo;"
       truncate: "..."
   income:
-    account_ledger_reference: "Venta"
-  buy:
-    account_ledger_reference: "Compra"
   expense:
     account_ledger_reference: "Gasto"
 
@@ -399,3 +396,5 @@ es:
     errors:
       tenant:
         list: "Debe seleccionar otro valor"
+  history:
+    new_record: Creado por %{user}

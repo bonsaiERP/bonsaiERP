@@ -8,8 +8,9 @@ module Models::Updater
     end
   end
 
-private
-  def set_updater
-    self.updater_id = UserSession.id
-  end
+  private
+
+    def set_updater
+      self.updater_id = UserSession.id
+    end
 end
