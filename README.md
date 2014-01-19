@@ -41,7 +41,7 @@ add_index :accounts, :extras, using: :gist
 
 add_index :account_ledgers, :contact_id
 
-lHost *:80>
+<VirtuallHost *:80>
 ServerName bonsaierp.com
     ServerAlias     www.bonsaierp.com
 # !!! Be sure to point DocumentRoot to 'public'!

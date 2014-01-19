@@ -2,6 +2,9 @@
 ```
 sudo apt-get update
 sudo apt-get install git-core curl tmux
+sudo a2enmode rewrite
+sudo a2enmode headers
+sudo a2enmode expires
 ```
 
 ## Set ssh
@@ -146,9 +149,10 @@ bundle
 **Create a file in your  `config/app_environment_variables.rb` and put
 your env variables**
 
+```
 - ENV['SECRET_TOKEN']
 - ENV['MANDRILL_API_KEY']
-
+```
 
 **Create the file `config/database.yml` in bonsai directory add this:**
 
@@ -178,112 +182,4 @@ Run the database setup with
 rake db:setup RAILS_ENV=production
 rake bonsai:create_data RAILS_ENV=production
 ```
-
-Once installed we have to install passenger
-
-## Passenger installation
-
-    gem install passenger
-
-Installs the passenger gem and now we need to install passenger module for nginx with the defaults
-
-    rvmsudo passenger-install-nginx-module
-
-with **apache** use the `apache2-prefork-dev` to install development
-heders
-
-If it asks you to install any dependencies install them, and we have to create a group and user for nginx
-
-    sudo adduser --system --no-create-home --disabled-login --disabled-password --group nginx
-
-Open the file with and editor in this case VIM
-
-    sudo vim /etc/init.d/nginx
-
-And add the following
-
-    #! /bin/sh
-
-    ### BEGIN INIT INFO
-    # Provides:          nginx
-    # Required-Start:    $all
-    # Required-Stop:     $all
-    # Default-Start:     2 3 4 5
-    # Default-Stop:      0 1 6
-    # Short-Description: starts the nginx web server
-    # Description:       starts nginx using start-stop-daemon
-    ### END INIT INFO
-
-    PATH=/opt/nginx/sbin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-    DAEMON=/opt/nginx/sbin/nginx
-    NAME=nginx
-    DESC=nginx
-
-    test -x $DAEMON || exit 0
-
-    # Include nginx defaults if available
-    if [ -f /etc/default/nginx ] ; then
-        . /etc/default/nginx
-    fi
-
-    set -e
-
-    . /lib/lsb/init-functions
-
-    case "$1" in
-      start)
-        echo -n "Starting $DESC: "
-        start-stop-daemon --start --quiet --pidfile /opt/nginx/logs/$NAME.pid \
-            --exec $DAEMON -- $DAEMON_OPTS || true
-        echo "$NAME."
-        ;;
-      stop)
-        echo -n "Stopping $DESC: "
-        start-stop-daemon --stop --quiet --pidfile /opt/nginx/logs/$NAME.pid \
-            --exec $DAEMON || true
-        echo "$NAME."
-        ;;
-      restart|force-reload)
-        echo -n "Restarting $DESC: "
-        start-stop-daemon --stop --quiet --pidfile \
-            /opt/nginx/logs/$NAME.pid --exec $DAEMON || true
-        sleep 1
-        start-stop-daemon --start --quiet --pidfile \
-            /opt/nginx/logs/$NAME.pid --exec $DAEMON -- $DAEMON_OPTS || true
-        echo "$NAME."
-        ;;
-      reload)
-          echo -n "Reloading $DESC configuration: "
-          start-stop-daemon --stop --signal HUP --quiet --pidfile /opt/nginx/logs/$NAME.pid \
-              --exec $DAEMON || true
-          echo "$NAME."
-          ;;
-      status)
-          status_of_proc -p /opt/nginx/logs/$NAME.pid "$DAEMON" nginx && exit 0 || exit $?
-          ;;
-      *)
-        N=/etc/init.d/$NAME
-        echo "Usage: $N {start|stop|restart|reload|force-reload|status}" >&2
-        exit 1
-        ;;
-    esac
-
-    exit 0
-
-Change permissions and make it executable
-
-    sudo chmod +x /etc/init.d/nginx
-
-Make it a service
-
-    sudo /usr/sbin/update-rc.d -f nginx defaults
-
-Start there server
-
-    sudo /etc/init.d/nginx start
-
-sudo update-rc.d nginx defaults
-sudo update-rc.d nginx remove
-sudo update-rc.d nginx start|stop
-sudo update-rc.d nginx disable|enable
 
