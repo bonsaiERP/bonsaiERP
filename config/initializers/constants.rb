@@ -1,5 +1,5 @@
 PASSWORD_LENGTH = 8
-DOMAIN = ENV['domain']
+DOMAIN = ENV['DOMAIN']
 DEV_DOMAIN = 'localhost.bom'
 APP_NAME = 'bonsaiERP'
 ALLOW_REGISTRATIONS = true
