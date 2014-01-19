@@ -3,6 +3,10 @@
 # email: boriscyber@gmail.com
 class Expense < Movement
 
+  include Models::History
+  history_with_details :expense_details
+
+
   self.code_name = 'E'
 
   ########################################

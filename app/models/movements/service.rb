@@ -30,7 +30,7 @@ class Movements::Service < Struct.new(:movement)
     @attributes_class = attr_klass
     @attributes_class.direct_payment = false
     set_update
-    movement.save && movement_history.save
+    movement.save
   end
 
   def update_and_approve(attr_klass)
@@ -39,8 +39,7 @@ class Movements::Service < Struct.new(:movement)
 
     commit_or_rollback do
       movement.approve!
-      res = movement_history.save
-      res = movement.save && ledger.save_ledger && res
+      movement.save && ledger.save_ledger
     end
   end
 
@@ -52,8 +51,6 @@ class Movements::Service < Struct.new(:movement)
 
     def set_update
       movement.attributes = get_update_attributes
-      self.movement_history = TransactionHistory.new
-      movement_history.set_history(movement)
       set_movement_extra_attributes
       Movements::Errors.new(movement).set_errors
     end

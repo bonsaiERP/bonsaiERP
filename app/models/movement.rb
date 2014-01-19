@@ -29,8 +29,6 @@ class Movement < Account
   belongs_to :project
   belongs_to :tax
 
-  #has_one :transaction, foreign_key: :account_id, autosave: true
-  has_many :transaction_histories, foreign_key: :account_id
   has_many :ledgers, foreign_key: :account_id, class_name: 'AccountLedger'
   has_many :inventories, foreign_key: :account_id
 

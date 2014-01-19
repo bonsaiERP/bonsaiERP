@@ -5,6 +5,7 @@ class Item < ActiveRecord::Base
 
   include ::Models::Tag
   include ::Models::Updater
+  include ::Models::History
 
   ##########################################
   # Callbacks

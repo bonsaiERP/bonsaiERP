@@ -3,6 +3,9 @@
 # email: boriscyber@gmail.com
 class Income < Movement
 
+  include Models::History
+  history_with_details :income_details
+
   self.code_name = 'I'
 
   ########################################

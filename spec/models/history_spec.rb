@@ -7,9 +7,9 @@ describe History do
     before(:each) do
       UserSession.user = build :user, id: 1
       Item.any_instance.stub(unit: build(:unit))
-      Item.class_eval do
-        include Models::History
-      end
+      #Item.class_eval do
+      #  include Models::History
+      #end
     end
 
 
@@ -81,15 +81,15 @@ describe History do
       Expense.any_instance.stub(contact: contact)
       ExpenseDetail.any_instance.stub(item: item)
 
-      Expense.class_eval do
-        include Models::History
-        history_with_details :expense_details
-      end
+      #Expense.class_eval do
+      #  include Models::History
+      #  history_with_details :expense_details
+      #end
 
-      Income.class_eval do
-        include Models::History
-        history_with_details :income_details
-      end
+      #Income.class_eval do
+      #  include Models::History
+      #  history_with_details :income_details
+      #end
     end
 
     it "#history_details" do
@@ -117,9 +117,12 @@ describe History do
 
 
       expect(h.history_data[:description]).to eq({from: 'New expense description', to: 'Jo jo jo'})
-      expect(h.history_data[:expense_details][0]).to eq({
-        price: {from: 10.to_d, to: 15.to_d }, description: { from: "First item", to: "A new description"}, id: 1
-      })
+      det_hist = h.history_data[:expense_details][0]
+      expect(det_hist[:price]).to eq({from: '10'.to_d, to: '15'.to_d})
+
+      expect(det_hist[:description]).to eq({from: 'First item', to: 'A new description'})
+
+      expect(det_hist[:id]).to be_a(Integer)
 
       at['expense_details_attributes'] << { item_id: 10, price: 10, quantity: 2 }
 

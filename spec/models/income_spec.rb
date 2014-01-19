@@ -23,12 +23,10 @@ describe Income do
     # Relationships
     it { should belong_to(:contact) }
     it { should belong_to(:project) }
-    #it { should have_one(:transaction) }
     it { should have_many(:income_details) }
     it { should have_many(:payments) }
     it { should have_many(:devolutions) }
     it { should have_many(:ledgers) }
-    it { should have_many(:transaction_histories) }
     it { should have_many(:inventories) }
     # Validations
     it { should validate_presence_of(:date) }

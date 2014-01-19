@@ -35,7 +35,6 @@ describe Expense do
     it { should have_many(:expense_details) }
     it { should have_many(:payments) }
     it { should have_many(:devolutions) }
-    it { should have_many(:transaction_histories) }
     it { should have_many(:inventories) }
     # Validations
     it { should validate_presence_of(:date) }

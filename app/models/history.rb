@@ -33,10 +33,9 @@ class History < ActiveRecord::Base
       when 'string', 'integer', 'boolean', 'float'
         { from: v['from'], to: v['to'] }
       when 'date', 'datetime', 'time'
-        klass = v['type'].safe_constantize
-        { from: klass.parse(v['from']), to: klass.parse(v['to']) }
+        { from: v['from'].to_s.send(:"to_#{v['type']}"), to: v['to'].to_s.send(:"to_#{v['type']}") }
       when 'decimal'
-        { from: BigDecimal.new(v['from']), to: BigDecimal.new(v['to']) }
+        { from: BigDecimal.new(v['from'].to_s), to: BigDecimal.new(v['to'].to_s) }
       end
     end
 

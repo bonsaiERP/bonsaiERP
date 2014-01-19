@@ -240,7 +240,7 @@ describe Expenses::Form do
       e.expense_details[0].quantity.should == 12
       e.expense_details[1].quantity.should == 22
 
-      es.service.movement_history.should be_persisted
+      #es.service.movement_history.should be_persisted
     end
 
     it "Direct payment" do
