@@ -78,8 +78,8 @@ ActiveRecord::Schema.define(version: 20140118184207) do
     t.datetime "updated_at"
     t.integer  "tag_ids",                                             default: [],    array: true
     t.integer  "updater_id"
-    t.integer  "tax_id"
     t.decimal  "tax_percentage",             precision: 5,  scale: 2, default: 0.0
+    t.integer  "tax_id"
     t.decimal  "total",                      precision: 14, scale: 2, default: 0.0
     t.boolean  "tax_in_out",                                          default: false
     t.hstore   "extras"
@@ -243,6 +243,7 @@ ActiveRecord::Schema.define(version: 20140118184207) do
     t.integer "step",                               default: 1
     t.integer "loan_id",                                          null: false
     t.date    "due_date",                                         null: false
+    t.decimal "total",     precision: 14, scale: 2,               null: false
     t.decimal "interests", precision: 14, scale: 2, default: 0.0, null: false
   end
 
@@ -372,6 +373,7 @@ ActiveRecord::Schema.define(version: 20140118184207) do
 
   create_table "transactions", force: true do |t|
     t.integer  "account_id"
+    t.decimal  "total",                         precision: 14, scale: 2, default: 0.0
     t.string   "bill_number"
     t.decimal  "gross_total",                   precision: 14, scale: 2, default: 0.0
     t.decimal  "original_total",                precision: 14, scale: 2, default: 0.0
@@ -391,7 +393,7 @@ ActiveRecord::Schema.define(version: 20140118184207) do
     t.boolean  "no_inventory",                                           default: false
   end
 
-  add_index "transactions", ["account_id"], name: "index_transactions_on_account_id", using: :btree
+  add_index "transactions", ["account_id"], name: "index_transactions_on_account_id", unique: true, using: :btree
   add_index "transactions", ["bill_number"], name: "index_transactions_on_bill_number", using: :btree
   add_index "transactions", ["delivered"], name: "index_transactions_on_delivered", using: :btree
   add_index "transactions", ["devolution"], name: "index_transactions_on_devolution", using: :btree

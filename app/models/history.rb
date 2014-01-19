@@ -14,6 +14,10 @@ class History < ActiveRecord::Base
     @hist_data ||= get_typecasted read_attribute(:history_data)
   end
 
+  def history_data_raw
+    read_attribute(:history_data)
+  end
+
   private
 
     def get_typecasted(hash)
@@ -23,6 +27,8 @@ class History < ActiveRecord::Base
     end
 
     def typecast_hash(v)
+      return typecast_array(v)  if v.is_a?(Array)
+
       case v['type']
       when 'string', 'integer', 'boolean', 'float'
         { from: v['from'], to: v['to'] }
@@ -33,4 +39,16 @@ class History < ActiveRecord::Base
         { from: BigDecimal.new(v['from']), to: BigDecimal.new(v['to']) }
       end
     end
+
+    def typecast_array(arr)
+      arr.map do |v|
+        _id = v.delete('id')
+        if v['new_record']
+          { index: v['index'] , new_record: true }
+        else
+          get_typecasted(v).merge(id: _id)
+        end
+      end
+    end
+
 end

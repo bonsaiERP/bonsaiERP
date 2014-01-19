@@ -7,7 +7,9 @@ describe History do
     before(:each) do
       UserSession.user = build :user, id: 1
       Item.any_instance.stub(unit: build(:unit))
-      Item.send(:include, Models::History)
+      Item.class_eval do
+        include Models::History
+      end
     end
 
 
@@ -54,5 +56,78 @@ describe History do
       expect(h.history_data).to eq( {active: { from: true, to: false } } )
     end
 
+  end
+
+  context 'History with details' do
+    let(:item) { build :item, id: 1 }
+    let(:contact) { build :contact, id: 1 }
+
+    let(:details) {
+      [{item_id: 1, price: 10.0, quantity: 10, description: "First item"},
+       {item_id: 2, price: 20.0, quantity: 20, description: "Second item"}
+      ]
+    }
+    let(:today) { Date.today }
+    let(:attributes) {
+      {
+      date: today, due_date: today, contact_id: 1, name: 'E-14-0001',
+      currency: 'BOB', description: "New expense description",
+      state: 'approved', expense_details_attributes: details
+      }
+    }
+
+    before(:each) do
+      UserSession.user = build :user, id: 1
+      Expense.any_instance.stub(contact: contact)
+      ExpenseDetail.any_instance.stub(item: item)
+
+      Expense.class_eval do
+        include Models::History
+        history_with_details :expense_details
+      end
+
+      Income.class_eval do
+        include Models::History
+        history_with_details :income_details
+      end
+    end
+
+    it "#history_details" do
+      expect(Expense.history_details).to eq(:expense_details)
+      expect(Income.history_details).to eq(:income_details)
+    end
+
+    it "#history" do
+      e = Expense.new(attributes)
+      e.save.should be_true
+
+      expect(e.histories).to have(1).item
+
+      det = e.expense_details.map { |v| v.attributes.except('created_at', 'updated_at', 'original_price') }
+      det[0]['price'] = 15
+      det[0]['description'] = 'A new description'
+      at = e.attributes
+      .merge('description' => 'Jo jo jo', 'expense_details_attributes' => det)
+      .except('created_at', 'updated_at')
+
+      expect(e.update_attributes(at)).to be_true
+
+      expect(e.histories).to have(2).items
+      h = e.histories.first
+
+
+      expect(h.history_data[:description]).to eq({from: 'New expense description', to: 'Jo jo jo'})
+      expect(h.history_data[:expense_details][0]).to eq({
+        price: {from: 10.to_d, to: 15.to_d }, description: { from: "First item", to: "A new description"}, id: 1
+      })
+
+      at['expense_details_attributes'] << { item_id: 10, price: 10, quantity: 2 }
+
+      expect(e.update_attributes(at)).to be_true
+      expect(e.histories).to have(3).items
+      h = e.histories.first
+
+      expect(h.history_data).to eq({:expense_details=>[{:index=>2, :new_record=>true}]})
+    end
   end
 end
