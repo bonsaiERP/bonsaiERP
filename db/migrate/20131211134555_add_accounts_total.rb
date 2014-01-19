@@ -7,11 +7,11 @@ class AddAccountsTotal < ActiveRecord::Migration
       # Updates
       execute("UPDATE accounts a SET total = t.total FROM transactions t WHERE (t.account_id = a.id)")
 
-      execute("UPDATE accounts a SET total = le.total FROM loan_extras le WHERE (le.loan_id = a.id)")
+      #execute("UPDATE accounts a SET total = le.total FROM loan_extras le WHERE (le.loan_id = a.id)")
 
       # Remove from RELATED
-      remove_column :transactions, :total
-      remove_column :loan_extras, :total
+      #remove_column :transactions, :total
+      #remove_column :loan_extras, :total
     end
   end
 

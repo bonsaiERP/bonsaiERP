@@ -80,6 +80,7 @@ ActiveRecord::Schema.define(version: 20140105165519) do
     t.integer  "updater_id"
     t.decimal  "tax_percentage",             precision: 5,  scale: 2, default: 0.0
     t.integer  "tax_id"
+    t.decimal  "total",                      precision: 14, scale: 2, default: 0.0
     t.boolean  "tax_in_out",                                          default: false
     t.hstore   "extras"
     t.integer  "creator_id"
