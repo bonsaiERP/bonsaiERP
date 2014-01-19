@@ -28,7 +28,7 @@ module Models::History
 
     def get_data
       Hash[ changed_attributes.map { |k, v|
-        [k, { from: v, to: send(k), type: v.class.to_s} ]
+        [k, { from: v, to: send(k), type: self.class.column_types[k].type } ]
       }]
     end
 

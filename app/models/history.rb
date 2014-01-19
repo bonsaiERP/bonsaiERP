@@ -24,11 +24,13 @@ class History < ActiveRecord::Base
 
     def typecast_hash(v)
       case v['type']
-      when 'String', 'Integer', 'TrueClass', 'FalseClass', 'Float'
+      when 'string', 'integer', 'boolean', 'float'
         { from: v['from'], to: v['to'] }
-      else
+      when 'date', 'datetime', 'time'
         klass = v['type'].safe_constantize
-        { from: klass.new(v['from']), to: klass.new(v['to']) }
+        { from: klass.parse(v['from']), to: klass.parse(v['to']) }
+      when 'decimal'
+        { from: BigDecimal.new(v['from']), to: BigDecimal.new(v['to']) }
       end
     end
 end
