@@ -1,147 +1,110 @@
-# Bonsai installation with passenger on Ubuntu 12.04
-```
-sudo apt-get update
-sudo apt-get install git-core curl tmux
-```
+# Bonsai installation with passenger on Ubuntu, Linux-Mint
 
-## Set ssh
-Login to the server and edit `/etc/ssh/sshd_config`
-
-```
-Port <ENTER YOUR PORT>
-Protocol 2
-PermitRootLogin no
-```
-
-Then reload ssh
-```
-sudo reload ssh
-```
-
-
-```
-sudo apt-get upgrade
-```
+    sudo apt-get update
+    sudo apt-get upgrade
 
 ## Instaling Ruby (RVM)
-Install the following, when running `rvm requirements` will ask password
-to install required
+Install the following
 
-```
-\curl -sSL https://get.rvm.io | bash -s stable
-rvm requirements
-```
+    sudo apt-get install curl git-core
 
-Install first ruby 2.0.0 and then create gemset
+And install rvm
 
-```
-rvm install ruby-2.0.0
-rvm ruby-2.0.0
-rvm gemset create rails4.0
-rvm ruby-2.0.0@rails4.0 --default
-```
+    bash -s stable < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer)
+    source /home/bonsai/.rvm/scripts/rvm
+
+Add the following to the ~/.bashrc
+
+    if [[ -n "$PS1" ]]; then
+      if [[ -s $HOME/.rvm/scripts/rvm ]] ; then source $HOME/.rvm/scripts/rvm ; fi
+    fi
+
+And then install all needed dependencies for Ruby 1.9 MRI
+
+    sudo apt-get install build-essential bison openssl libreadline6 libreadline6-dev curl git-core zlib1g zlib1g-dev libssl-dev libyaml-dev libsqlite3-0 libsqlite3-dev sqlite3 libxml2-dev libxslt-dev autoconf libc6-dev ncurses-dev automake
+
+Install first ruby 2.0.0
+
+    rvm install ruby-2.0.0
+    rvm ruby-2.0.0
+
+
+Create a gemset and set it as default
+
+    rvm ruby-2.0.0
+    rvm gemset create rails4.0
+    rvm ruby-2.0.0@rails4.0 --default
 
 ## Locales if needed
 
-```
-sudo apt-get install language-pack-en-base
-sudo locale-gen en_US.UTF-8
-sudo dpkg-reconfigure locales
-```
+    sudo apt-get install language-pack-en-base
+    sudo locale-gen en_US.UTF-8
+    sudo dpkg-reconfigure locales
 
-### In case that this locale can't be set
+### In case that this can't be set
 
 Go to /etc/environment and add this
 
-```
-LANG="en_US.UTF-8"
-LANGUAGE="en_US.UTF-8"
-LC_ALL="en_US.UTF-8"
-```
+    LANG="en_US.UTF-8"
+    LANGUAGE="en_US.UTF-8"
+    LC_ALL="en_US.UTF-8"
 
 ## Database installation
-Install **PostgreSQL 9.3**
+Install **PostgreSQL 9.2**
 
-Create `/etc/apt/sources.list.d/pgdg.list` and add
-
-```
-deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main
-
-```
-Then update and install
-
-```
-wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-sudo apt-get update
-sudo apt-get install postgresql-9.3 libpq-dev postgresql-contrib-9.3
-```
-
+    sudo apt-get update
+    sudo apt-get upgrade
+    sudo apt-get install python-software-properties
+    sudo apt-get install software-properties-common
+    sudo add-apt-repository ppa:pitti/postgresql
+    sudo apt-get update
+    sudo apt-get upgrade
+    sudo apt-get install postgresql-9.2 libpq-dev postgresql-contrib-9.2
 
 To upgrate
 `sudo apt-get update`
-`sudo apt-get --only-upgrade install postgresql-9.3 postgresql-client-9.3`
+`sudo apt-get --only-upgrade install postgresql-9.2 postgresql-client-9.2`
 
 ### Create a user for the database
 
-```
-sudo -u postgres createuser --superuser $USER
-sudo -u postgres psql postgres
-```
+    sudo -u postgres createuser --superuser $USER
+    sudo -u postgres psql postgres
 
 ### Inside postgreSQL
 
-```
-postgres=# \passsword <user>
-```
+    postgres=# \passsword <user>
 
-Edit `/etc/postgresql/9.3/main/postgresql.conf` and check that you have:
+Edit `/etc/postgresql/9.2/main/postgresql.conf` and check that you have:
 
-```
-listen_addresses = 'localhost'
-```
+    listen_addresses = 'localhost'
 
-Restart the database `sudo service postgresql restart` and then create
-the database `bonsai_prod` login with user **bonsai_data**
+Restart the database `sudo /etc/init.d/postgresql restart`
 
+## Install node.js for Ubuntu
 
+    sudo apt-get install python-software-properties
+    sudo add-apt-repository ppa:chris-lea/node.js
+    sudo apt-get update
+    sudo apt-get install nodejs
 
-## Install node.js, mod_xsendfile apache
+## Install apache and mod_xsendfile
 
-```
-sudo apt-get install nodejs nodejs-dev
-sudo apt-get install libapache2-mod-xsendfile
-```
+    sudo apt-get install libapache2-mod-xsendfile
 
-## Passenger installation
-```
-sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 561F9B9CAC40B2F7
-sudo apt-get install apt-transport-https ca-certificates
-```
+Edit the file for in /etc/apache2/sites-enabled/bonsaierp.com and add
+these lines
 
-Create a file `/etc/apt/sources.list.d/passenger.list` and insert
-
-```
-deb https://oss-binaries.phusionpassenger.com/apt/passenger precise main
-```
-Save and then install passenger
-
-```
-sudo chown root: /etc/apt/sources.list.d/passenger.list
-sudo chmod 600 /etc/apt/sources.list.d/passenger.list
-sudo apt-get update
-
-sudo apt-get install libapache2-mod-passenger
-```
-
+    XSendFile On
+    XSendFilePath /tmp
 
 ## Bonsai installation
 Now you need to download and install bonsai cloning from the repository, this creates the bonsai folder
 
-```
-git clone git@bitbucket.org:boriscyber/bonsaierp.git
-cd bonsaierp
-bundle
-```
+    git clone [bonsaiRepo]
+
+Go to the bonsai folder `cd bonsai` and then run. (*by default the branch used is master you can go to any branch with* `git checkout origin/dev -b dev`)
+
+    bundle
 
 **Create a file in your  `config/app_environment_variables.rb` and put
 your env variables**
@@ -152,32 +115,38 @@ your env variables**
 
 **Create the file `config/database.yml` in bonsai directory add this:**
 
-```
-development:
-  adapter: postgresql
-  encoding: unicode
-  database: bonsai_prod
-  username: bonsai_data
-  password: PASS
-  host: localhost
-  pool: 5
 
-production:
-  adapter: postgresql
-  encoding: unicode
-  database: bonsai_prod
-  username: bonsai_data
-  password: PASS
-  host: localhost
-  pool: 5
-```
+    development:
+      adapter: postgresql
+      encoding: unicode
+      database: bonsai_dev
+      username: USER
+      password: PASS
+      host: localhost
+      pool: 5
+
+    test:
+      adapter: postgresql
+      encoding: unicode
+      database: bonsai_test
+      username: USER
+      password: PASS
+      host: localhost
+      pool: 5
+
+    production:
+      adapter: postgresql
+      encoding: unicode
+      database: bonsai_prod
+      username: USER
+      password: PASS
+      host: localhost
+      pool: 5
 
 Run the database setup with
 
-```
-rake db:setup RAILS_ENV=production
-rake bonsai:create_data RAILS_ENV=production
-```
+    rake db:setup RAILS_ENV=production
+    rake bonsai:create_data RAILS_ENV=production
 
 Once installed we have to install passenger
 
