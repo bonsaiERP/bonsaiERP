@@ -7,3 +7,4 @@ ORDER BY o.tenant;
 UPDATE pg_database SET datallowconn = 'false' WHERE datname = 'bonsai_prod';
 SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = 'bonsai_prod';
 DROP DATABASE bonsai_prod;
+CREATE DATABASE bonsai_prod;
