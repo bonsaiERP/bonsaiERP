@@ -17,7 +17,7 @@ module Models::History
     end
 
     def store_new_record
-      h = histories.build(new_item: true, user_id: history_user_id)
+      h = histories.build(new_item: true, user_id: history_user_id, history_data: {})
       h.save
     end
 
@@ -28,7 +28,7 @@ module Models::History
 
     def get_data
       Hash[ changed_attributes.map { |k, v|
-        [k, {is: send(k), was: v, type: v.class.to_s}]
+        [k, { from: v, to: send(k), type: v.class.to_s} ]
       }]
     end
 

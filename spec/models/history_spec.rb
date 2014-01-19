@@ -37,13 +37,18 @@ describe History do
 
       expect(h.user_id).to eq(1)
       expect(h.history_attributes).to eq([:price, :buy_price, :name])
-      expect(h.history_data['price']).to eq({'was' => '10.0', 'is' => '20.0', 'type' => 'BigDecimal'})
-      expect(h.history_data['buy_price']).to eq({'was' => '7.0', 'is' => '15.0', 'type' => 'BigDecimal'})
-      expect(h.history_data['name']).to eq({'was' => 'item', 'is' => 'New name for item', 'type' => 'String'})
+      expect(h.history_data[:price]).to eq({ from: '10.0'.to_d, to: '20.0'.to_d})
+      expect(h.history_data[:buy_price]).to eq({ from: '7.0'.to_d, to: '15.0'.to_d })
+      expect(h.history_data[:name]).to eq({ from: 'item', to: 'New name for item' })
+
 
       # Latest
       expect(i.histories.last).to be_new_item
       expect(i.histories.last.user_id).to eq(1)
+    end
+
+    it "#update related" do
+
     end
   end
 end
