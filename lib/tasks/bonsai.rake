@@ -510,6 +510,24 @@ SQL
       puts "Updated #{schema}"
     end
   end
+
+  desc 'Updates migrations'
+  task update_migrations: :environment do
+    PgTools.all_schemas.each do |schema|
+      next if  schema == 'common'
+      puts "Updating #{schema}"
+      sql = <<-SQL
+insert into schema_migrations (version) values ('20131211134555'),
+('20131221130149'), ('20131223155017'), ('20131224080216'),
+('20131224080916'), ('20131224081504'), ('20131227025934'),
+('20131227032328'), ('20131229164735'), ('20140105165519');
+SQL
+
+      PgTools.change_schema schema
+      PgTools.execute sql
+      puts "Updated #{schema}"
+    end
+  end
 end
 
 # example to export the file

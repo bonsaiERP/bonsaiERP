@@ -1,3 +1,4 @@
+#= require plugins/modernizr.js
 #= require jquery.js
 #= require plugins/fastclick.js
 #

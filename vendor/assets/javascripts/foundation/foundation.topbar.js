@@ -170,6 +170,7 @@
           }
         })
         .on('click.fndtn.topbar', '[data-topbar] .has-dropdown>a', function (e) {
+          if($('.title-area .toggle-topbar').css('display') == 'none') return; // Adition to fix bug that expands menu size
           if (self.breakpoint()) {
 
             e.preventDefault();

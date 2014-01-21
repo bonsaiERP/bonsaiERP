@@ -8,3 +8,9 @@ UPDATE pg_database SET datallowconn = 'false' WHERE datname = 'bonsai_prod';
 SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = 'bonsai_prod';
 DROP DATABASE bonsai_prod;
 CREATE DATABASE bonsai_prod;
+
+
+DELETE FROM schema_migrations WHERE version IN ('20131211134555',
+'20131221130149', '20131223155017', '20131224080216',
+'20131224080916', '20131224081504', '20131227025934',
+'20131227032328', '20131229164735', '20140105165519');
