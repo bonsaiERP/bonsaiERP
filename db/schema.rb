@@ -43,7 +43,6 @@ ActiveRecord::Schema.define(version: 20140118184207) do
     t.string   "status",             limit: 50,                          default: "approved"
     t.integer  "updater_id"
     t.string   "old_reference"
-    t.string   "name"
     t.integer  "contact_id"
   end
 
@@ -53,7 +52,6 @@ ActiveRecord::Schema.define(version: 20140118184207) do
   add_index "account_ledgers", ["currency"], name: "index_account_ledgers_on_currency", using: :btree
   add_index "account_ledgers", ["date"], name: "index_account_ledgers_on_date", using: :btree
   add_index "account_ledgers", ["has_error"], name: "index_account_ledgers_on_has_error", using: :btree
-  add_index "account_ledgers", ["name"], name: "index_account_ledgers_on_name", unique: true, using: :btree
   add_index "account_ledgers", ["operation"], name: "index_account_ledgers_on_operation", using: :btree
   add_index "account_ledgers", ["project_id"], name: "index_account_ledgers_on_project_id", using: :btree
   add_index "account_ledgers", ["reference"], name: "index_account_ledgers_on_reference", using: :btree

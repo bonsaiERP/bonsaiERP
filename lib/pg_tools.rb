@@ -34,6 +34,10 @@ module PgTools
   end
   alias_method :change_tenant, :change_schema
 
+  def set_schema_path(schema)
+    ActiveRecord::Base.connection.schema_search_path = schema
+  end
+
   def reset_search_path
     connection.execute "SET search_path TO public"
     ActiveRecord::Base.connection.reset!
@@ -185,10 +189,14 @@ BASH
   end
 
   def all_schemas
-    connection.select_values <<-SQL
+    res = connection.select_values <<-SQL
     SELECT * FROM pg_namespace
     WHERE nspname NOT IN ('information_schema') AND nspname NOT LIKE 'pg%'
     SQL
+    pub = res.delete('public')
+    res << 'public'  if pub
+
+    res
   end
 
   def current_schema
@@ -210,7 +218,8 @@ BASH
     schema_list = options[:only].select { |schema| options[:except].exclude? schema }
 
     schema_list.each do |schema|
-      puts "Working on schema #{schema}"
+      puts "Working on schema '#{schema}'"
+
       change_schema schema
       yield schema
     end

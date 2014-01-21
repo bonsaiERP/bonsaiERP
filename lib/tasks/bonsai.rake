@@ -504,9 +504,8 @@ SQL
 
       PgTools.change_schema schema
       PgTools.execute 'TRUNCATE schema_migrations'
-      PgTools.execute sql
+      #PgTools.execute sql
       PgTools.execute 'ALTER TABLE account_ledgers DROP COLUMN IF EXISTS name'
-      PgTools.execute ''
       puts "Updated #{schema}"
     end
   end
@@ -528,6 +527,7 @@ SQL
       puts "Updated #{schema}"
     end
   end
+
 end
 
 # example to export the file
