@@ -28,8 +28,8 @@
 
     -# Header
     #head
-      - cache [current_user, 'menu'] do
-        = render 'layouts/menus'
+      -# cache [current_user, 'menu'] do
+      .cont= render 'layouts/menus'
 
     #head2.row-fluid.organisation
       .cont
@@ -38,7 +38,7 @@
 
 
     #wrapper.cont
-      #menu
+      #topbar
         .container-fluid
           .main-links.row-fluid= yield :links
 
@@ -61,6 +61,14 @@
         _b.numSeparator = '.';
         _b.numDelimiter = ' ';
       })
+
+      $(document).foundation({
+        topbar: {
+          custom_back_text: true,
+          back_text: 'Atras'
+        }
+      });
+
     -# Cache all tags
     - cache cache_key_for_tags do
       :javascript

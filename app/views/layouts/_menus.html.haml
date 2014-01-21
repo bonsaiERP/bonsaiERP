@@ -1,10 +1,70 @@
-.navbar.navbar-inverse
-  .navbar-inner
-    .container
-      %button.btn.btn-navbar(data-toggle="collapse" data-target=".nav-collapse")
-        %i.icon-reorder 
-        Menú
-      .nav-collapse.collapse.cont
-        = render 'layouts/main_menu'
-        .pull-right
-          = render 'layouts/usersettings_menu'
+%nav.top-bar(data-topbar)
+  %ul.title-area
+    %li.name
+      %li.toggle-topbar.menu-icon
+        %a(href="#") Menú
+  %section.top-bar-section
+    %ul.left
+      %li.has-dropdown
+        %a
+          Reportes
+        %ul.dropdown
+          %li
+            = link_to "Inicio", home_path
+          %li
+            = link_to "Resumen", dashboard_path
+          %li
+            = link_to "Reportes generales", reports_path
+      %li.has-dropdown
+        %a General
+        %ul.dropdown
+          %li
+            = link_to "Ingresos", incomes_path
+          %li
+            = link_to "Nuevo ingreso", new_income_path
+          %li.divider
+          %li
+            = link_to "Egresos", expenses_path
+          %li
+            = link_to "Nuevo egreso", new_expense_path
+          %li.divider
+          %li
+            = link_to "Contactos", contacts_path
+          %li
+            = link_to "Nuevo contacto", new_contact_path
+          %li.divider
+          %li
+            = link_to "Prestamos", loans_path, id: 'last-nav'
+      %li.has-dropdown
+        %a Cuentas
+        %ul.dropdown
+          %li
+            = link_to 'Cuentas bancarias', banks_path
+          %li
+            = link_to 'Cuentas efectivo', cashes_path
+
+      %li.has-dropdown
+        %a Inventarios
+        %ul.dropdown
+          %li
+            = link_to 'Almacenes', stores_path
+          %li
+            = link_to 'Ítems', items_path
+          %li
+            = link_to 'Operaciones inventario', inventories_path
+          %li
+            = link_to 'Unidades', units_path
+
+    %ul(style='float: right')
+      %li
+        = link_to configurations_path, title: 'Configuración', data: { toggle: 'tooltip', placement: 'bottom' } do
+          %i.icon-cog
+          Conf.
+      %li
+        = link_to user_path(current_user.id) do
+          %i.icon-user
+          = current_user
+      %li
+        = link_to logout_path do
+          %i.icon-off
+          Salir

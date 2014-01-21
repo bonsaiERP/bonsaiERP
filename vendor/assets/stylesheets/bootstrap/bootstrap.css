@@ -1997,7 +1997,7 @@ table th[class*="span"],
   right: 0;
   left: auto;
 }
-.dropdown-menu .divider {
+/*.dropdown-menu .divider {
   *width: 100%;
   height: 1px;
   margin: 9px 1px;
@@ -2058,6 +2058,7 @@ table th[class*="span"],
   filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
   cursor: default;
 }
+*/
 .open {
   *z-index: 1000;
 }
@@ -2951,7 +2952,7 @@ input[type="submit"].btn.btn-mini {
 .nav-list [class*=" icon-"] {
   margin-right: 2px;
 }
-.nav-list .divider {
+/*.nav-list .divider {
   *width: 100%;
   height: 1px;
   margin: 9px 1px;
@@ -2959,7 +2960,7 @@ input[type="submit"].btn.btn-mini {
   overflow: hidden;
   background-color: #e5e5e5;
   border-bottom: 1px solid #ffffff;
-}
+}*/
 .nav-tabs,
 .nav-pills {
   *zoom: 1;

@@ -1,4 +1,6 @@
 #= require jquery.js
+#= require plugins/fastclick.js
+#
 #= require jquery_ujs.js
 #= require jquery/jquery-ui-1.10.1.custom.js
 
@@ -30,6 +32,8 @@
 #= require bootstrap/bootstrap-button.js
 #= require bootstrap/bootstrap-notify.js
 
+#= require foundation/foundation.js
+#= require foundation/foundation.topbar.js
 
 #= require app/graph_report.coffee
 
