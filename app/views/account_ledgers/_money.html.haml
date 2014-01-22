@@ -1,44 +1,34 @@
-- ledgers =  account.get_ledgers(params).order('date desc, id desc').page(@page)
+%li.row-fluid.account_ledger(id='#{ledger.id}')
+  .span5
+    %strong= ledger.operation_tag
+    %h4.ib
+      = link_to ledger, ledger, class: 'code', title: 'Código'
 
-- html = paginate ledgers
-= html
+    = ledger.status_tag
 
-%ul.unstyled.listing
-  - ledgers.each do |ledger|
-    - ledger = present ledger
-    %li.row-fluid.account_ledger(id='#{ledger.id}')
-      .span5
-        %strong= ledger.operation_tag
-        %h4.ib
-          = link_to ledger, ledger, class: 'code', title: 'Código'
+    .clearfix
+    = ledger.contact_link_tag
 
-        = ledger.status_tag
+    %p
+      %i= l ledger.date.to_date
+      - unless ledger.account_id === account.id
+        %span.muted De:
+        = link_to ledger.account, ledger.account_url
+      - unless ledger.account_to_id === account.id
+        %span.muted A:
+        = link_to ledger.account_to, ledger.account_to_url
+  .span5
+    = ledger.updater_label
+    = ledger.creator_label
+    = ledger.approver_label
+    = ledger.nuller_label
+    .clearfix
 
-        .clearfix
-        = ledger.contact_link_tag
-
-        %p
-          %i= l ledger.date.to_date
-          - unless ledger.account_id === account.id
-            %span.muted De:
-            = link_to ledger.account, ledger.account_url
-          - unless ledger.account_to_id === account.id
-            %span.muted A:
-            = link_to ledger.account_to, ledger.account_to_url
-      .span5
-        = ledger.updater_label
-        = ledger.creator_label
-        = ledger.approver_label
-        = ledger.nuller_label
-        .clearfix
-
-        .inline-cont
-          = link_to icon('icon-pencil', 'Editar referencia'), account_ledger_path(ledger.id), class: 'dark inline-edit',
-            data: { type: 'textarea', name: 'reference', notify: '.top-left' }
-          %i.icon-file.muted(data-toggle='tooltip' title="referencia")
-          %span.inline-data= nl2br ledger.reference
-      .span2.r
-        = ntc ledger.amount_ref(account.id)
-        = currency_label ledger.currency_ref(account.id)
-
-= html
+    .inline-cont
+      = link_to icon('icon-pencil', 'Editar referencia'), account_ledger_path(ledger.id), class: 'dark inline-edit',
+        data: { type: 'textarea', name: 'reference', notify: '.top-left' }
+      %i.icon-file.muted(data-toggle='tooltip' title="referencia")
+      %span.inline-data= nl2br ledger.reference
+  .span2.r
+    = ntc ledger.amount_ref(account.id)
+    = currency_label ledger.currency_ref(account.id)

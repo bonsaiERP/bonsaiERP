@@ -27,6 +27,12 @@ describe Cash do
     c.to_s.should  eq(c.name)
   end
 
+  it "methods" do
+    c = Cash.new
+    expect(c).to respond_to(:ledgers)
+    expect(c).to respond_to(:pendent_ledgers)
+  end
+
   it 'create an instance' do
     c = Cash.new(valid_attributes)
     c.save.should be_true

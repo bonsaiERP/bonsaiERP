@@ -2,41 +2,23 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class CashesController < ApplicationController
-  before_filter :set_cash, :only => [:show, :edit, :update, :destroy]
+  before_filter :set_cash, only: [:show, :edit, :update, :destroy]
 
   include Controllers::Money
 
   # GET /cashs
   def index
-    @cashes = Cash.order('name asc')
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @cashes }
-    end
+    @cashes = present Cash.order('name asc'), MoneyAccountPresenter
   end
 
   # GET /cashs/1
-  def show
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @cash }
-    end
-  end
 
   # GET /cashs/new
   def new
     @cash = Cash.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @cash }
-    end
   end
 
   # GET /cashs/1/edit
-  def edit
-  end
 
   # POST /cashs
   def create
@@ -53,8 +35,6 @@ class CashesController < ApplicationController
 
   # PUT /cashs/1
   def update
-    params[:cash].delete(:currency_id)
-
     respond_to do |format|
       if @cash.update_attributes(cash_params)
         format.html { redirect_to(@cash, :notice => 'La caja fue actualizada.') }
@@ -79,10 +59,10 @@ class CashesController < ApplicationController
   private
 
     def set_cash
-      @cash = Cash.find(params[:id])
+      @cash = present Cash.find(params[:id]), MoneyAccountPresenter
     end
 
     def cash_params
-      params.require(:cash).permit(:name, :currency, :amount, :address)
+      params.require(:cash).permit(:name, :currency, :amount, :address, :active)
     end
 end

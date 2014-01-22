@@ -62,6 +62,8 @@ Bonsaierp::Application.routes.draw do
 
   resources :cashes
 
+  resources :staff_accounts
+
   # Transference between accounts
   resources :transferences, only: [:new, :create]
 

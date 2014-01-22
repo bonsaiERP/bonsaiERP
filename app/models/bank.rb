@@ -8,7 +8,6 @@ class Bank < Account
   EXTRA_COLUMNS = [:email, :address, :phone, :website].freeze
   store_accessor(:extras, *EXTRA_COLUMNS)
 
-
   # can't use Bank.stored_attributes methods[:extras]
   alias_method :old_attributes, :attributes
   def attributes
@@ -17,22 +16,11 @@ class Bank < Account
     )
   end
 
-  def pendent_ledgers
-    AccountLedgers::Query.new.money(id).pendent
-  end
-
-  def ledgers
-    AccountLedgers::Query.new.money(id)
-  end
+  # Related methods for money accounts
+  include Models::Money
 
   def to_s
     name
-  end
-
-  def get_ledgers(attrs = {})
-    ledgers = AccountLedgers::Query.new.money(id)
-    ledgers = ledgers.pendent if attrs[:pendent].present?
-    ledgers
   end
 
   private

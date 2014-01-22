@@ -23,7 +23,6 @@ class TenantCreator
 
     change_schema tenant
     execute 'DROP TABLE IF EXISTS organisations, users, links CASCADE'
-    copy_migrations
     change_schema tenant
 
     res = res && Unit.create_base_data

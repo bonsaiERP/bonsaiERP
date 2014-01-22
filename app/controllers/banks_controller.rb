@@ -6,7 +6,7 @@ class BanksController < ApplicationController
 
   # GET /banks
   def index
-    @banks = Bank.order('name asc')
+    @banks = present Bank.order('name asc'), MoneyAccountPresenter
   end
 
   # GET /banks/1
@@ -50,11 +50,11 @@ class BanksController < ApplicationController
   private
 
     def find_bank
-      @bank = Bank.find(params[:id])
+      @bank = present Bank.find(params[:id]), MoneyAccountPresenter
     end
 
     def update_bank_params
-      params.require(:bank).permit(:name, :number, :address, :phone, :website)
+      params.require(:bank).permit(:name, :number, :active, :address, :phone, :website)
     end
 
     def create_bank_params

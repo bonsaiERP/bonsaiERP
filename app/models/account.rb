@@ -10,7 +10,6 @@ class Account < ActiveRecord::Base
   ########################################
   # Relationships
   belongs_to :contact
-  belongs_to :tax
   has_many :account_ledgers
 
   belongs_to :approver, class_name: 'User'

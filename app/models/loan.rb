@@ -19,8 +19,6 @@ class Loan < Account
   validate :valid_greater_due_date
   validates :state, inclusion: { in: STATES }
 
-  # Scope
-
   class << self
     def find(id)
       Account.where(type: LOAN_TYPES).find(id)

@@ -1,0 +1,28 @@
+- content_for :links do
+  %ul.breadcrumbs
+    %li
+
+
+.row-fluid
+  .span6
+    %h1 Cuentas personal
+  .span6.r
+    = link_to new_staff_account_path, class: 'btn' do
+      %i.icon-plus-sign
+      Nueva cuenta personal
+
+
+%ul#staff-accounts.accounts_list
+  - @staff_accounts.each do |staff|
+    %li.row-fluid
+      .span7
+        %h4.n
+          = staff.active_tag
+          = link_to staff, staff
+          = currency_label staff.currency
+      .span3.pull-right
+        .moneybox
+          %label TOTAL EN CUENTA
+          %h4.n
+            = ntc staff.amount
+            = currency_label staff.currency

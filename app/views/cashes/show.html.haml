@@ -5,7 +5,8 @@
 
 .row-fluid
   .span6
-    %h1.n
+    %h1
+      = @cash.active_tag
       = @cash.name
       = currency_label @cash.currency
   .span6.r
@@ -29,6 +30,12 @@
     %i.icon-building.muted(title='Dirección' data-toggle='tooltip')
     = nl2br(@cash.address)
 
-%h3 Transacciones
+%h2 Transacciones
 
-= render 'account_ledgers/money', account: @cash
+- html = paginate @cash.ledgers.page(@page)
+= html
+
+%ul.unstyled.listing
+  = render partial: 'account_ledgers/money', collection: present(@cash.ledgers.page(@page)), as: :ledger, locals: { account: @cash }
+
+= html

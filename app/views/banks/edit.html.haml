@@ -20,6 +20,8 @@
   .row-fluid
     .span6
       = f.input :name, label: 'Nombre', input_html: { class: 'span10' }
+    .span6.form-inline
+      = f.input :active, label: 'Visible', hint: 'Visible para poder realizar operaciones'
 
   .row-fluid
     .span6

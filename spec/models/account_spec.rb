@@ -6,7 +6,6 @@ describe Account do
   it { should belong_to(:updater).class_name('User') }
   #
   it { should belong_to(:contact) }
-  it { should belong_to(:tax) }
   it { should have_many(:account_ledgers) }
 
 

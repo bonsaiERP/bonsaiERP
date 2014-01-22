@@ -10,4 +10,29 @@
     = link_to icon_show_text, @cash, class: 'btn'
 
 
-= render 'cashes/form'
+= simple_form_for(@cash, html: {id: 'cash-form'}) do |f|
+  = bonsai_form_error(f)
+  .row-fluid
+    .span6
+      = f.input :name, label: 'Nombre de caja', input_html: { size: INPUT_SIZE }
+
+    .span4.form-inline
+      = f.input :active, label: 'Visible', hint: 'Visible para poder realizar operaciones'
+    .span2
+      %label Moneda
+      = currency_label @cash.currency
+  .row-fluid
+    .span6
+      - if  @cash.new_record?
+        = f.input :amount, label: 'Total en cuenta', input_html: {size: 12, type: 'decimal'}
+      -else
+        %label Total en cuenta
+        = ntc @cash.amount
+        = currency_label @cash.currency
+
+    .span6
+      = f.input :address, label: 'Dirección', as: :text, input_html: { rows: 4, cols: INPUT_SIZE }
+
+  .form-actions
+    = f.submit 'Salvar', class: 'btn btn-primary b'
+

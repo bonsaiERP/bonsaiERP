@@ -11,13 +11,8 @@ class Cash < Account
   # Validations
   validates :name, length: { minimum: 3 }
 
-  def pendent_ledgers
-    AccountLedgers::Query.new.money(id).pendent
-  end
-
-  def get_ledgers(attrs = {})
-    AccountLedgers::Query.new.money(id)
-  end
+  # Related methods for money accounts
+  include Models::Money
 
   def to_s
     name

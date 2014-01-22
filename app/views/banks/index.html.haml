@@ -14,11 +14,11 @@
   - @banks.each do |bank|
     %li.row-fluid
       .span7
-        %h4.n= link_to bank, bank
-        - if bank.pendent_ledgers.any?
-          =link_to bank_path(bank.id, pendent: true) , class: 'text-error' do
-            %i.icon-warning-sign
-            Tiene transaccines pendientes
+        %h4.n
+          = bank.active_tag
+          = link_to bank, bank
+
+        = bank.pendent_ledgers_tag
       .span3
         .moneybox
           %label TOTAL EN CUENTA

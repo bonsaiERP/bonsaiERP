@@ -5,12 +5,8 @@
       = f.input :name, label: 'Nombre de caja', input_html: { size: INPUT_SIZE }
 
     .span6
-      -if @cash.new_record?
-        = f.input :currency, label: 'Moneda', collection: currency_options,
-          hint: "<span class='icon-warning-sign'></span> No es posible modificar después".html_safe
-      - else
-        %label Moneda
-        = currency_label @cash.currency
+      = f.input :currency, label: 'Moneda', collection: currency_options,
+        hint: "<span class='icon-warning-sign'></span> No es posible modificar después".html_safe
   .row-fluid
     .span6
       - if  @cash.new_record?

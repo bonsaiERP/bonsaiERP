@@ -1,0 +1,2 @@
+class StaffAccount < Account
+end
