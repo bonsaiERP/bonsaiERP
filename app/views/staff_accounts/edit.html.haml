@@ -1,0 +1,41 @@
+- content_for :links do
+  %ul.breadcrumbs
+    %li
+      =link_to 'Cuentas personal', staff_accounts_path
+
+.row-fluid
+  .span6
+    %h1= @staff_account
+  .span6.r
+    .btn-group
+      = link_to icon_show_text, @staff_account, class: 'btn'
+
+
+= simple_form_for(@staff_account, html: {id: 'cash-form'}) do |f|
+  = bonsai_form_error(f)
+  .row-fluid
+    .span6
+      = f.input :name, label: 'Nombre completo', input_html: { size: INPUT_SIZE }
+
+    .span3
+      %label Moneda
+      = @staff_account.currency
+
+    .span3.form-inline
+      = f.input :active, label: 'Visible'
+
+  .row-fluid
+    .span3
+      = f.input :phone, label: 'Teléfono'
+    .span3
+      = f.input :mobile, label: 'Móvil'
+    .span6
+      = f.input :email, label: 'Email', input_html: { size: INPUT_SIZE }
+
+  .row-fluid
+    .span6
+      = f.input :address, label: 'Dirección', as: :text, input_html: { rows: 4, cols: INPUT_SIZE }
+
+  .form-actions
+    = f.submit 'Salvar', class: 'btn btn-primary b'
+

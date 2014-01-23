@@ -18,4 +18,20 @@ class MoneyAccountPresenter < BasePresenter
       ledgers
     end
   end
+
+  def phone_tag
+    "#{icon 'icon-phone muted', 'Teléfono'} #{phone}".html_safe  if phone.present?
+  end
+
+  def mobile_tag
+    "#{icon 'icon-mobile-phone muted', 'Móvil'} #{mobile}".html_safe  if mobile.present?
+  end
+
+  def email_tag
+    "#{icon 'icon-envelope muted', 'Email'} #{mobile}".html_safe  if email.present?
+  end
+
+  def address_tag
+    "#{icon 'icon-building muted', 'Dirección'} #{template.nl2br address}".html_safe  if address.present?
+  end
 end

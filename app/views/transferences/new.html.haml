@@ -20,7 +20,7 @@
 
     = hidden_field_tag :account_id, params[:account_id]
 
-    %input(type='hidden' id='accounts' data-accounts='#{Accounts::Query.new.bank_cash_options_minus(@transference.account_id).to_json}')
+    %input(type='hidden' id='accounts' data-accounts='#{Accounts::Query.new.money_options_minus(@transference.account_id).to_json}')
 
     .row-fluid
       .span6
@@ -33,6 +33,7 @@
         = f.input :account_to_id, label: 'A cuenta',
           input_html: { id: 'account_to_id', class: 'span10', 'ng-model' => 'account_to_id' }
 
+    %br
     .row-fluid.well.well-small
       .span3
         = f.input :amount,

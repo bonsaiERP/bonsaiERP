@@ -63,6 +63,6 @@ class Expenses::Form < Movements::Form
     end
 
     def account_to
-      @account_to ||= Accounts::Query.new.bank_cash.where(currency: currency, id: account_to_id).first
+      @account_to ||= Accounts::Query.new.money.where(currency: currency, id: account_to_id).first
     end
 end

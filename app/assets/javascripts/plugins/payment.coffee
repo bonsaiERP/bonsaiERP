@@ -8,6 +8,8 @@ paymentOptions = (val) ->
       txt = 'Efectivo'
     when 'Bank'
       txt = 'Banco'
+    when 'StaffAccount'
+      txt = 'Personal'
     when 'Expense'
       txt = 'Egreso'
       amt = ' <span class="muted"> Saldo:</span> <span class="balance">' + _b.ntc(val.amount) + '</span>'

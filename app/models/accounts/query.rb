@@ -6,24 +6,24 @@ class Accounts::Query
     @rel = rel
   end
 
-  def bank_cash
-    @rel.active.where(type: %w(Cash Bank))
+  def money
+    @rel.active.where(type: %w(Cash Bank StaffAccount))
   end
 
-  def bank_cash_options(cur = OrganisationSession.currency)
-    options = bank_cash
+  def money_options(cur = OrganisationSession.currency)
+    options = money
     options = options.where(currency: [cur, OrganisationSession.currency])  unless cur == OrganisationSession.currency
 
     blank + options.map { |v| create_hash(v, *default_options) }
   end
 
-  def bank_cash_options_minus(*ids)
-    blank + bank_cash.where('id NOT in (?)', ids)
+  def money_options_minus(*ids)
+    blank + money.where('id NOT in (?)', ids)
     .map { |v| create_hash(v, *default_options) }
   end
 
   def income_payment_options(income)
-    bank_cash_options(income.currency) + expense_options(income)
+    money_options(income.currency) + expense_options(income)
   end
 
   def expense_options(income)
@@ -36,7 +36,7 @@ class Accounts::Query
   end
 
   def expense_payment_options(expense)
-    bank_cash_options(expense.currency) + income_options(expense)
+    money_options(expense.currency) + income_options(expense)
   end
 
   def income_options(expense)

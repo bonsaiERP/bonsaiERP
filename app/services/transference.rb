@@ -1,7 +1,7 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class Transference < BaseService
+class Transference < BaseForm
   attr_reader :ledger
 
   # Attributes
@@ -35,7 +35,7 @@ class Transference < BaseService
   end
 
   def account_to
-    @account_to ||= Accounts::Query.new.bank_cash.find_by_id(account_to_id)
+    @account_to ||= Accounts::Query.new.money.find_by_id(account_to_id)
   end
 
   def transfer
@@ -50,61 +50,62 @@ class Transference < BaseService
     end
   end
 
-private
-  # Builds and AccountLedger instance with some default data
-  def build_ledger
-    AccountLedger.new(
-      account_id: account_id, exchange_rate: conv_exchange_rate,
-      account_to_id: account_to_id, inverse: inverse?, operation: 'trans',
-      reference: reference, date: date, currency: account_to.currency,
-      status: get_status, amount: amount
-    )
-  end
+  private
 
-  def valid_date
-    self.errors.add(:date, I18n.t('errors.messages.payment.date') ) unless date.is_a?(Date)
-  end
-
-  def currency_exchange
-    @currency_exchange ||= CurrencyExchange.new(
-      account: account, account_to: account_to, exchange_rate: exchange_rate
-    )
-  end
-
-  def total_exchange
-    currency_exchange.exchange(amount + interest)
-  end
-
-  def amount_exchange
-    currency_exchange.exchange(amount)
-  end
-
-  # Exchange rate used using inverse
-  def conv_exchange_rate
-    currency_exchange.exchange_rate
-  end
-
-  def current_organisation
-    OrganisationSession
-  end
-
-  def get_status
-    if verification? && any_bank_acccount?
-      'pendent'
-    else
-      'approved'
+    # Builds and AccountLedger instance with some default data
+    def build_ledger
+      AccountLedger.new(
+        account_id: account_id, exchange_rate: conv_exchange_rate,
+        account_to_id: account_to_id, inverse: inverse?, operation: 'trans',
+        reference: reference, date: date, currency: account_to.currency,
+        status: get_status, amount: amount
+      )
     end
-  end
 
-  def any_bank_acccount?
-    account.is_a?(Bank) || account_to.is_a?(Bank)
-  end
-
-  def valid_accounts_currency
-    unless currency_exchange.valid?
-      self.errors.add(:base, I18n.t('errors.messages.payment.valid_accounts_currency', currency: currency))
+    def valid_date
+      self.errors.add(:date, I18n.t('errors.messages.payment.date') ) unless date.is_a?(Date)
     end
-  end
+
+    def currency_exchange
+      @currency_exchange ||= CurrencyExchange.new(
+        account: account, account_to: account_to, exchange_rate: exchange_rate
+      )
+    end
+
+    def total_exchange
+      currency_exchange.exchange(amount + interest)
+    end
+
+    def amount_exchange
+      currency_exchange.exchange(amount)
+    end
+
+    # Exchange rate used using inverse
+    def conv_exchange_rate
+      currency_exchange.exchange_rate
+    end
+
+    def current_organisation
+      OrganisationSession
+    end
+
+    def get_status
+      if verification? && any_bank_acccount?
+        'pendent'
+      else
+        'approved'
+      end
+    end
+
+    def any_bank_acccount?
+      account.is_a?(Bank) || account_to.is_a?(Bank)
+    end
+
+    def valid_accounts_currency
+      unless currency_exchange.valid?
+        self.errors.add(:base, I18n.t('errors.messages.payment.valid_accounts_currency', currency: currency))
+      end
+    end
 
 end
 

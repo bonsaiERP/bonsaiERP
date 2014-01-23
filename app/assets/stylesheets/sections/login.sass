@@ -17,8 +17,9 @@
 /**************************************
  * .lonely Login form, registration form
  *************************************/
-.lonely
+.initial
   +border-radius(8px)
+  max-width: 450px
   margin: 30px auto 70px
   background: rgba(0, 0, 0, 0.5)
   border: 10px solid darken($bonsai, 8%)
@@ -71,3 +72,14 @@ h1.login
   font-size: 40px
   margin: 20px 0px
   color: $dark
+
+@media (max-width: 530px)
+  .initial
+    .icon
+      display: none
+    .large
+      input
+        padding: 13px 10px
+        width: 90%
+    .btn
+      width: 100%

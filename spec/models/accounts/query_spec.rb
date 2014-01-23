@@ -1,24 +1,24 @@
 require 'spec_helper'
 
 describe Accounts::Query do
-  it "#bank_cash" do
+  it "#money" do
     active = Account.active
     Account.should_receive(:active).and_return(active)
     ret = Object.new
     #ret.should_receive(:includes).with(:money_store)
-    active.should_receive(:where).with(type: ['Cash', 'Bank']).and_return(ret)
+    active.should_receive(:where).with(type: %w(Cash Bank StaffAccount)).and_return(ret)
 
-    Accounts::Query.new.bank_cash
+    Accounts::Query.new.money
   end
 
   describe 'options' do
     let(:bank) { build :bank, id: 1 }
     let(:cash) { build :bank, id: 2 }
 
-    it "#bank_cash_options" do
-      Accounts::Query.any_instance.stub(bank_cash: [bank, cash])
+    it "#money_options" do
+      Accounts::Query.any_instance.stub(money: [bank, cash])
 
-      options = Accounts::Query.new.bank_cash_options
+      options = Accounts::Query.new.money_options
       options.first.should eq({})
 
       options.each_with_index do |val, i|

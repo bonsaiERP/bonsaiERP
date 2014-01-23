@@ -29,7 +29,7 @@ describe Transference do
   end
 
   it "#account_to once" do
-    Accounts::Query.any_instance.should_receive(:bank_cash).once.and_return(double(find_by_id: account_to) )
+    Accounts::Query.any_instance.should_receive(:money).once.and_return(double(find_by_id: account_to) )
 
     t = Transference.new
 
@@ -100,7 +100,7 @@ describe Transference do
 
       it "Valid" do
         Account.stub_chain(:active, :find_by_id).with(account.id).and_return(account)
-        Accounts::Query.any_instance.stub_chain(:bank_cash, find_by_id: account_to )
+        Accounts::Query.any_instance.stub_chain(:money, find_by_id: account_to )
         t = Transference.new(valid_attributes)
 
         t.should be_valid

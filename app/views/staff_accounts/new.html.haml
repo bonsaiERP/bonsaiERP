@@ -1,0 +1,34 @@
+- content_for :links do
+  %ul.breadcrumbs
+    %li
+      =link_to 'Cuentas personal', staff_accounts_path
+
+%h1 Nueva cuenta personal
+
+
+= simple_form_for(@staff_account, html: {id: 'cash-form'}) do |f|
+  = bonsai_form_error(f)
+  .row-fluid
+    .span6
+      = f.input :name, label: 'Nombre completo', input_html: { size: INPUT_SIZE }
+
+    .span3
+      = f.input :currency, label: 'Moneda', collection: currency_options,
+        hint: "<span class='icon-warning-sign'></span> No es posible modificar después".html_safe
+    .span3
+      = f.input :amount, label: 'Total en cuenta', input_html: {size: 12, type: 'decimal'}
+
+  .row-fluid
+    .span3
+      = f.input :phone, label: 'Teléfono'
+    .span3
+      = f.input :mobile, label: 'Móvil'
+    .span6
+      = f.input :email, label: 'Email', input_html: { size: INPUT_SIZE }
+
+  .row-fluid
+    .span6
+      = f.input :address, label: 'Dirección', as: :text, input_html: { rows: 4, cols: INPUT_SIZE }
+
+  .form-actions
+    = f.submit 'Salvar', class: 'btn btn-primary b'

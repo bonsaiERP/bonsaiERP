@@ -4,7 +4,6 @@
 class Cash < Account
 
   # Store accessors
-  extend Models::HstoreMap
   EXTRA_COLUMNS = [:email, :address, :phone].freeze
   store_accessor(:extras, *EXTRA_COLUMNS)
 
