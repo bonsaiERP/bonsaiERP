@@ -1,7 +1,7 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class TransactionDetail < ActiveRecord::Base
+class MovementDetail < ActiveRecord::Base
 
   # Validations
   validates_presence_of :item_id

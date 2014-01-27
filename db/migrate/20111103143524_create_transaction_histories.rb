@@ -1,5 +1,5 @@
 class CreateTransactionHistories < ActiveRecord::Migration
-  def change
+  def up
     PgTools.with_schemas except: 'common' do
       create_table :transaction_histories do |t|
         t.integer :account_id

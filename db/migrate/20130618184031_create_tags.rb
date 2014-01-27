@@ -1,5 +1,5 @@
 class CreateTags < ActiveRecord::Migration
-  def change
+  def up
     PgTools.with_schemas except: 'common' do
       create_table :tags do |t|
         t.string :name

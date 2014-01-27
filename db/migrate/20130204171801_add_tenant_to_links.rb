@@ -1,5 +1,5 @@
 class AddTenantToLinks < ActiveRecord::Migration
-  def change
+  def up
     PgTools.with_schemas only: ['common', 'public'] do
       change_table :links do |t|
         t.string :tenant, limit: 100

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140118184207) do
+ActiveRecord::Schema.define(version: 20140127025407) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -239,15 +239,21 @@ ActiveRecord::Schema.define(version: 20140118184207) do
   add_index "links", ["tenant"], name: "index_links_on_tenant", using: :btree
   add_index "links", ["user_id"], name: "index_links_on_user_id", using: :btree
 
-  create_table "money_stores", force: true do |t|
-    t.integer "account_id"
-    t.string  "email"
-    t.string  "address",    limit: 300
-    t.string  "phone",      limit: 50
-    t.string  "website"
+  create_table "movement_details", force: true do |t|
+    t.integer  "account_id"
+    t.integer  "item_id"
+    t.decimal  "quantity",       precision: 14, scale: 2, default: 0.0
+    t.decimal  "price",          precision: 14, scale: 2, default: 0.0
+    t.string   "description"
+    t.decimal  "discount",       precision: 14, scale: 2, default: 0.0
+    t.decimal  "balance",        precision: 14, scale: 2, default: 0.0
+    t.decimal  "original_price", precision: 14, scale: 2, default: 0.0
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
-  add_index "money_stores", ["account_id"], name: "index_money_stores_on_account_id", using: :btree
+  add_index "movement_details", ["account_id"], name: "index_movement_details_on_account_id", using: :btree
+  add_index "movement_details", ["item_id"], name: "index_movement_details_on_item_id", using: :btree
 
   create_table "organisations", force: true do |t|
     t.integer  "country_id"
@@ -334,33 +340,6 @@ ActiveRecord::Schema.define(version: 20140118184207) do
     t.datetime "updated_at"
   end
 
-  create_table "transaction_details", force: true do |t|
-    t.integer  "account_id"
-    t.integer  "item_id"
-    t.decimal  "quantity",       precision: 14, scale: 2, default: 0.0
-    t.decimal  "price",          precision: 14, scale: 2, default: 0.0
-    t.string   "description"
-    t.decimal  "discount",       precision: 14, scale: 2, default: 0.0
-    t.decimal  "balance",        precision: 14, scale: 2, default: 0.0
-    t.decimal  "original_price", precision: 14, scale: 2, default: 0.0
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "transaction_details", ["account_id"], name: "index_transaction_details_on_account_id", using: :btree
-  add_index "transaction_details", ["item_id"], name: "index_transaction_details_on_item_id", using: :btree
-
-  create_table "transaction_histories", force: true do |t|
-    t.integer  "account_id"
-    t.integer  "user_id"
-    t.text     "data"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "transaction_histories", ["account_id"], name: "index_transaction_histories_on_account_id", using: :btree
-  add_index "transaction_histories", ["user_id"], name: "index_transaction_histories_on_user_id", using: :btree
-
   create_table "transactions", force: true do |t|
     t.integer  "account_id"
     t.decimal  "total",                         precision: 14, scale: 2, default: 0.0
@@ -399,20 +378,6 @@ ActiveRecord::Schema.define(version: 20140118184207) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  create_table "user_changes", force: true do |t|
-    t.string   "name"
-    t.integer  "user_id"
-    t.string   "user_changeable_type"
-    t.integer  "user_changeable_id"
-    t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "user_changes", ["user_changeable_id"], name: "index_user_changes_on_user_changeable_id", using: :btree
-  add_index "user_changes", ["user_changeable_type"], name: "index_user_changes_on_user_changeable_type", using: :btree
-  add_index "user_changes", ["user_id"], name: "index_user_changes_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                                               null: false

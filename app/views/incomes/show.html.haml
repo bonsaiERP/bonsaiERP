@@ -106,10 +106,14 @@
       = render 'inventory_details', income: @income
 
 .row-fluid
-  .span
+  .span6
     %h3.n
       %i.icon-caret-right
       Historial
+
+    %ul.unstyled.listing
+      = render partial: 'histories/history', collection: @income.histories, as: :history
+
 
 -#Tours
 = render 'incomes/tour_devolution'

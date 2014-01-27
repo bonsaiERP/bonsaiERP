@@ -19,6 +19,9 @@ class InlineEdit
     @$cancel = @$template.find('.cancel').on 'click', ->
       self.$parent.show()
       self.$template.remove()
+  #
+  disableSave: ->
+    @$save.prop('disabled', true)
 
 
 ########################################
@@ -48,6 +51,7 @@ class TextareaEdit extends InlineEdit
   #
   update: (data) ->
     self = @
+    @disableSave()
     $.ajax(
       method: 'patch'
       data: data
@@ -100,6 +104,7 @@ class DateEdit extends InlineEdit
   #
   update: (data) ->
     self = @
+    @disableSave()
     $.ajax(
       method: 'patch'
       data: data
@@ -160,6 +165,7 @@ class NumberEdit extends InlineEdit
   #
   update: (data) ->
     self = @
+    @disableSave()
     $.ajax(
       method: 'patch'
       data: data

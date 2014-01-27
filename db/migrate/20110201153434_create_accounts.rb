@@ -1,5 +1,5 @@
 class CreateAccounts < ActiveRecord::Migration
-  def change
+  def up
     PgTools.with_schemas except: 'common' do
       create_table :accounts do |t|
         t.string  :name

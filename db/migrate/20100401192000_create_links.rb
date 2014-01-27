@@ -1,5 +1,5 @@
 class CreateLinks < ActiveRecord::Migration
-  def change
+  def up
     PgTools.with_schemas only: ['common', 'public'] do
       create_table :links do |t|
         t.integer :organisation_id

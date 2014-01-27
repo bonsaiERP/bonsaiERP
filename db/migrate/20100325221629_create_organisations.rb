@@ -1,5 +1,5 @@
 class CreateOrganisations < ActiveRecord::Migration
-  def change
+  def up
     PgTools.with_schemas only: ['common', 'public'] do
       create_table :organisations do |t|
         t.integer :country_id

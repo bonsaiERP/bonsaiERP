@@ -1,5 +1,5 @@
 class AddAccountsTaxInOut < ActiveRecord::Migration
-  def change
+  def up
     PgTools.with_schemas except: 'common' do
       change_table :accounts do |t|
         t.boolean :tax_in_out, default: false

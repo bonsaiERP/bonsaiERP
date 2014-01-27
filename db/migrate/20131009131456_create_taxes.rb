@@ -1,5 +1,5 @@
 class CreateTaxes < ActiveRecord::Migration
-  def change
+  def up
     PgTools.with_schemas except: 'common' do
       create_table :taxes do |t|
         t.string :name, limit: 100

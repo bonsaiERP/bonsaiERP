@@ -52,23 +52,24 @@ class Item < ActiveRecord::Base
     stocks.reduce(0) { |sum, st| sum += st.quantity }
   end
 
-private
-  # checks if there are any items on destruction
-  def check_items_destroy
-    if TransactionDetail.where(item_id: id).any? or InventoryDetail.where(item_id: id).any?
-      errors.add(:base, "El item es usado en otros registros relacionados")
-      false
-    else
-      true
+  private
+
+    # checks if there are any items on destruction
+    def check_items_destroy
+      if MovementDetail.where(item_id: id).any? or InventoryDetail.where(item_id: id).any?
+        errors.add(:base, "El item es usado en otros registros relacionados")
+        false
+      else
+        true
+      end
     end
-  end
 
-  def trim_code
-    self.code = code.to_s.strip
-  end
+    def trim_code
+      self.code = code.to_s.strip
+    end
 
-  def set_unit
-    self.unit_symbol = unit.symbol
-    self.unit_name = unit.name
-  end
+    def set_unit
+      self.unit_symbol = unit.symbol
+      self.unit_name = unit.name
+    end
 end

@@ -1,5 +1,5 @@
 class AddAccountLedgersName < ActiveRecord::Migration
-  def change
+  def up
     PgTools.with_schemas except: 'common' do
       change_column :account_ledgers, :date, :date
       change_table :account_ledgers do |t|

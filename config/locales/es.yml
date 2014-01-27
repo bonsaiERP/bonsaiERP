@@ -372,8 +372,20 @@ es:
       last: "Fin &raquo;"
       truncate: "..."
   income:
+    attributes:
+      name: 'código'
+      amount: 'saldo'
+      total: 'total'
+      exchange_rate: 'tipo de cambio'
+      date: 'fecha'
+      state: 'estado'
+    payment:
+      reference: "Cobro ingreso %{income}"
   expense:
+
     account_ledger_reference: "Gasto"
+    payment:
+      reference: "Pago egreso %{expense}"
 
   account_ledger:
     payment_description: "%{pay_type} de %{trans} %{ref}, cuenta %{account}"
@@ -386,12 +398,6 @@ es:
     client: "Cliente"
     supplier: "Proveedor"
     staff: "Personal"
-  expense:
-    payment:
-      reference: "Pago egreso %{expense}"
-  income:
-    payment:
-      reference: "Cobro ingreso %{income}"
   organisation:
     errors:
       tenant:

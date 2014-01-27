@@ -2,7 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class CreateUsers < ActiveRecord::Migration
-  def change
+  def up
     PgTools.with_schemas only: ['common','public'] do
       create_table :users do |t|
         # user

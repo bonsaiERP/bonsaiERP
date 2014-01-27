@@ -1,12 +1,12 @@
 require 'spec_helper'
 
-describe TransactionDetail do
+describe MovementDetail do
   it{ should validate_presence_of(:item_id) }
   it{ should have_valid(:quantity).when(0.1, 1)}
   it{ should_not have_valid(:quantity).when(0)}
 
   it "calculates total and return data_has" do
-    td = TransactionDetail.new(quantity: 2, price: 4, original_price: 4)
+    td = MovementDetail.new(quantity: 2, price: 4, original_price: 4)
     td.total.should eq(8)
     td.subtotal.should eq(8)
 
@@ -21,12 +21,12 @@ describe TransactionDetail do
   end
 
   it "indicates change of price" do
-    td = TransactionDetail.new(quantity: 2, price: 4, original_price: 1.9)
+    td = MovementDetail.new(quantity: 2, price: 4, original_price: 1.9)
     td.should be_changed_price
   end
 
   it "#change_of_item_id" do
-    td = TransactionDetail.new(item_id:1, quantity: 2, price: 4)
+    td = MovementDetail.new(item_id:1, quantity: 2, price: 4)
     td.stub(item: true)
     td.item_id = 2
     td.save.should be_true
@@ -38,7 +38,7 @@ describe TransactionDetail do
 
   context "Operations related with Income Expense" do
     before(:each) do
-      TransactionDetail.any_instance.stub(item: build(:item))
+      MovementDetail.any_instance.stub(item: build(:item))
       Income.any_instance.stub(contact: build(:contact), set_client_and_incomes_status: true)
       UserSession.user = build(:user, id: 1)
     end

@@ -111,7 +111,7 @@ describe Item do
     end
 
     it "does not destroy the item" do
-      TransactionDetail.stub(:where).with(item_id: subject.id).and_return([1])
+      MovementDetail.stub(:where).with(item_id: subject.id).and_return([1])
       subject.destroy.should be_false
     end
 

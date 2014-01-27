@@ -1,6 +1,6 @@
 # encoding: utf-8
 # Class to store the details of a expense
-class ExpenseDetail < TransactionDetail
+class ExpenseDetail < MovementDetail
 
   # Relationships
   belongs_to :expense, -> { where(type: 'Expense') }, foreign_key: :account_id,
