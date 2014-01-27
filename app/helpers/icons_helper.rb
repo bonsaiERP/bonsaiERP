@@ -1,6 +1,6 @@
 # encoding: utf-8
 module IconsHelper
-  ICONS = {new: 'plus-sign', edit: 'pencil', list: 'table', show: 'eye-open', delete: 'trash' }
+  ICONS = {new: 'plus-circle', edit: 'pencil', list: 'table', show: 'eye', delete: 'trash' }
 
   ICONS.each do |tit, icon|
     define_method :"icon_#{tit}" do |title = nil|

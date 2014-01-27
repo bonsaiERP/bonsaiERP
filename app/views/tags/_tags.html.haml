@@ -26,15 +26,18 @@
     .clearfix
 
   #btag-selector
-    %input#tags(type="text" placeholder="Seleccione o escriba" style='min-width:350px')
-    -#%i.icon-tags.icon-large(title='Ver etiquetas' data-toggle='tooltip')
-    %button.btn.btn-primary.apply-tags Aplicar etiquetas
 
-    %a#new-tag-link(href="javascript:;") Nueva etiqueta
+    .btags-form
+      %input#tags(type="text" placeholder="Seleccione o escriba")
+      -#%i.icon-tags.icon-large(title='Ver etiquetas' data-toggle='tooltip')
+      %button.btn.btn-primary.apply-tags Aplicar
 
-    %a#help-tags-link.dark(href='javascript:;')
-      %i.icon-question-sign
-      Ayuda
+    .btags-links
+      %a#new-tag-link(href="javascript:;") Nueva etiqueta
+
+      %a#help-tags-link.dark(href='javascript:;')
+        %i.icon-question-sign
+        Ayuda
 
 :javascript
   $(function() {

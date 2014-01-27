@@ -5,6 +5,8 @@ class Loan < Account
   extend SettersGetters
   extend Models::AccountCode
 
+  include Models::History
+
   STATES = %w(approved paid nulled).freeze
   LOAN_TYPES = %w(Loans::Receive Loans::Give).freeze
 

@@ -13,7 +13,7 @@ gem 'jquery-rails'
 
 gem 'compass-rails', '~> 1.1.3'#, '~> 2.0.alpha.0' # Extend css clases
 gem 'pg' # Postgresql adapter
-gem 'virtus'#, '~> 0.5.5' # Model generation in simple way
+gem 'virtus' # Model generation in simple way
 gem 'squeel' # Better SQL queries
 
 gem 'simple_form'
@@ -25,7 +25,6 @@ gem 'resubject' # Cool presenter
 
 gem 'validates_email_format_of', '~> 1.5.3'
 gem 'validates_lengths_from_database'
-#gem 'paperclip' # Attachments
 
 group :production do
   gem 'newrelic_rpm'

@@ -8,6 +8,8 @@ describe Loan do
   it { should have_valid(:state).when(*Loan::STATES) }
   it { should_not have_valid(:state).when('a', nil) }
 
+  it { should have_many(:histories) }
+
   let(:attributes) {
     today = Date.today
     {

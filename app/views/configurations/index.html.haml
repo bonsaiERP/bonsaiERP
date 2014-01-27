@@ -10,9 +10,9 @@
   #users.tab-pane.fade
     %p
       =link_to new_admin_user_path, class: 'btn' do
-        %i.icon-plus-sign
+        %i.icon-plus-circle
         Adicionar usuario
-  
+
     %h3 Usuarios
 
     %table.table.table-striped
@@ -43,7 +43,7 @@
         Editar datos y configuraciones de la empresa
 
 
-    %h3 
+    %h3
       %span.muted.n Datos
       = current_organisation
 
@@ -67,6 +67,6 @@
         = nl2br current_organisation.address
 
 :javascript
-  $(function() { 
+  $(function() {
     activeTab();
   });

@@ -83,8 +83,8 @@
       = currency_label
 
   .span6
-    %span.muted Proyecto:
-    = link_to @income.project, @income.project if @income.project
+    -#%span.muted Proyecto:
+    -#= link_to @income.project, @income.project if @income.project
     .clearfix
     %i.icon-file.muted(data-toggle='tooltip' title='Descripción')
     = @income.description
@@ -105,6 +105,12 @@
     .span6.well.well-small.bg-white
       = render 'inventory_details', income: @income
 
+.row-fluid
+  .span
+    %h3.n
+      %i.icon-caret-right
+      Historial
+
 -#Tours
 = render 'incomes/tour_devolution'
 
@@ -119,12 +125,10 @@
       }
     })
 
-
     $('.payment-form').on('click', 'a.cancel', function() {
       $('.payment-buttons').show('fast');
       $('.payment-form').html('');
     })
-
 
     // Payment show hide
     $('#payment-link').click( function() {
