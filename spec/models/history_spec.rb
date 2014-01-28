@@ -131,6 +131,8 @@ describe History do
 
       expect(e.expense_details).to have(2).items
 
+      h = e.shitories.first
+      puts h.history_data
     end
   end
 end
