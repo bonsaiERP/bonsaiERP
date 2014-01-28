@@ -3,7 +3,7 @@ require 'spec_helper'
 describe History do
   it { should belong_to(:historiable) }
 
-  context 'Simple history' do
+  context 'Cases' do
     before(:each) do
       UserSession.user = build :user, id: 1
       Item.any_instance.stub(unit: build(:unit))
@@ -79,8 +79,11 @@ describe History do
     end
 
     it "#history_details" do
-      expect(Expense.history_details).to eq(:expense_details)
-      expect(Income.history_details).to eq(:income_details)
+      expect(Expense.details_col).to eq(:expense_details)
+      expect(Expense.state_col).to eq(:state)
+      expect(Expense.due_date_col).to eq(:due_date)
+
+      expect(Income.details_col).to eq(:income_details)
     end
 
     it "#history" do
@@ -137,7 +140,24 @@ describe History do
       h[:expense_details][0][:item_id].should eq(10)
       h[:expense_details][0][:price].should == "10.0"
       h[:expense_details][0][:quantity].should == "2.0"
+    end
 
+    it "#state" do
+      # Create
+      d = 1.day.ago.to_date
+      e = Expense.new(attributes.merge(date: d, due_date: d))
+      e.save.should be_true
+
+      e.should be_is_approved
+      # Update and check due date
+      today = Date.today
+      e.due_date = today
+      e.save.should be_true
+
+      expect(e.histories).to have(2).items
+      h = e.histories.first
+      h.history_data[:due_date].should eq( { from: d, to: today })
+      h.history_data[:state].should eq( {from: 'due', to: 'approved'} )
     end
   end
 end

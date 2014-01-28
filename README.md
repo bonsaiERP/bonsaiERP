@@ -140,3 +140,5 @@ month"
 </IfModule>
 </VirtualHost>
     ""
+
+ActiveRecord::Migrator.migrations('db/migrate').map {|v| "('#{v.version}')" }.join(', ')

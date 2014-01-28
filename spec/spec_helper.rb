@@ -24,8 +24,8 @@ Spork.prefork do
     config.mock_with :rspec
 
     config.before(:suite) do
-      #DatabaseCleaner.strategy = :transaction
-      DatabaseCleaner.clean_with(:truncation)
+      # So it does not clean migrations
+      DatabaseCleaner.strategy = :truncation, { except: %w(schema_migrations) }
     end
 
     #config.before(:all) do
