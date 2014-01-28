@@ -131,8 +131,13 @@ describe History do
 
       expect(e.expense_details).to have(2).items
 
-      h = e.shitories.first
-      puts h.history_data
+      h = e.histories.first.history_data
+      h[:expense_details][0][:destroyed].should be_true
+      h[:expense_details][0][:index].should eq(2)
+      h[:expense_details][0][:item_id].should eq(10)
+      h[:expense_details][0][:price].should == "10.0"
+      h[:expense_details][0][:quantity].should == "2.0"
+
     end
   end
 end
