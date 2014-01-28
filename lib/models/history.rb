@@ -58,6 +58,8 @@ module Models::History
           { new_record: true, index: i }
         when changed_detail?(det)
           get_data(det).merge(id: det.id)
+        when det.marked_for_destruction?
+          { destroyed: true, index: i }.merge(det.attributes)
         else
           nil
         end

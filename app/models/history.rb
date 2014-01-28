@@ -42,8 +42,11 @@ class History < ActiveRecord::Base
     def typecast_array(arr)
       arr.map do |v|
         _id = v.delete('id')
-        if v['new_record']
+        case
+        when v['new_record']
           { index: v['index'] , new_record: true }
+        when v['destroyed']
+          v.symbolize_keys
         else
           get_typecasted(v).merge(id: _id)
         end

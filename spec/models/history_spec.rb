@@ -7,11 +7,7 @@ describe History do
     before(:each) do
       UserSession.user = build :user, id: 1
       Item.any_instance.stub(unit: build(:unit))
-      #Item.class_eval do
-      #  include Models::History
-      #end
     end
-
 
     it "#create" do
       i = create :item, unit_id: 1
@@ -80,16 +76,6 @@ describe History do
       UserSession.user = build :user, id: 1
       Expense.any_instance.stub(contact: contact)
       ExpenseDetail.any_instance.stub(item: item)
-
-      #Expense.class_eval do
-      #  include Models::History
-      #  history_with_details :expense_details
-      #end
-
-      #Income.class_eval do
-      #  include Models::History
-      #  history_with_details :income_details
-      #end
     end
 
     it "#history_details" do
@@ -98,14 +84,17 @@ describe History do
     end
 
     it "#history" do
+      # Create
       e = Expense.new(attributes)
       e.save.should be_true
 
       expect(e.histories).to have(1).item
 
+      # Update detail
       det = e.expense_details.map { |v| v.attributes.except('created_at', 'updated_at', 'original_price') }
       det[0]['price'] = 15
       det[0]['description'] = 'A new description'
+
       at = e.attributes
       .merge('description' => 'Jo jo jo', 'expense_details_attributes' => det)
       .except('created_at', 'updated_at')
@@ -124,13 +113,24 @@ describe History do
 
       expect(det_hist[:id]).to be_a(Integer)
 
-      at['expense_details_attributes'] << { item_id: 10, price: 10, quantity: 2 }
+      at['expense_details_attributes'] << { item_id: 10, price: 10, quantity: 2, balance: 2 }
 
+      # Update add new detail
       expect(e.update_attributes(at)).to be_true
       expect(e.histories).to have(3).items
       h = e.histories.first
 
       expect(h.history_data).to eq({:expense_details=>[{:index=>2, :new_record=>true}]})
+
+      # Update delete detail
+      det = e.expense_details.map { |v| v.attributes.except('created_at', 'updated_at', 'original_price') }
+      det[2]['_destroy'] = '1'
+
+      at = e.attributes.except('created_at', 'updated_at').merge(expense_details_attributes: det)
+      e.update_attributes(at).should be_true
+
+      expect(e.expense_details).to have(2).items
+
     end
   end
 end

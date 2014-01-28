@@ -6,7 +6,6 @@ class Expense < Movement
   include Models::History
   history_with_details :expense_details
 
-
   self.code_name = 'E'
 
   ########################################
@@ -30,7 +29,6 @@ class Expense < Movement
 
   ########################################
   # Scopes
-  scope :discount, -> { joins(:transaction).where(transaction: { discounted: true }) }
   scope :approved, -> { where(state: 'approved') }
   scope :active,   -> { where(state: %w(approved paid)) }
   scope :paid, -> { where(state: 'paid') }

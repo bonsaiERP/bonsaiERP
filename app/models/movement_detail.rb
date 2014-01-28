@@ -37,14 +37,15 @@ class MovementDetail < ActiveRecord::Base
     end
 
     def balance_error_message
-      I18n.t('errors.messages.transaction_details.balance')
+      I18n.t('errors.messages.movement_details.balance')
     end
 
     def quantity_eq_balance
-      self.errors(:quantity, "No se puede")  unless balance == quantity
+      binding.pry
+      self.errors.add(:quantity, "No se puede")  unless balance == quantity
     end
 
     def change_of_item_id
-      self.errors.add(:item_id, I18n.t('errors.messages.transaction_details.item_changed'))  if item_id_changed?
+      self.errors.add(:item_id, I18n.t('errors.messages.movement_details.item_changed'))  if item_id_changed?
     end
 end

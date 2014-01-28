@@ -167,7 +167,7 @@ class Movement < Account
       res = true
       details.select(&:marked_for_destruction?).each do |det|
         unless det.quantity === det.balance
-          det.errors.add(:quantity, I18n.t('errors.messages.trasaction_details.not_destroy'))
+          det.errors.add(:quantity, I18n.t('errors.messages.movement_details.not_destroy'))
           det.instance_variable_set(:@marked_for_destruction, false)
           res = false
         end
