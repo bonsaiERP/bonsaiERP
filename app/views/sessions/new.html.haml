@@ -4,10 +4,10 @@
 .initial.c
   = simple_form_for @session do |f|
     = hidden_field :demo_login, params[:demo_login]
-    = f.input :email, label: false, wrapper_class: 'large' do
+    .large
       %i.muted.icon-envelope.icon(title='Email')
       = f.text_field :email, placeholder: 'Email', class: 'email'
-    = f.input :password, label: false, wrapper_class: 'large' do
+    .large
       %i.muted.icon-key.icon
       = f.password_field :password, placeholder: 'Contraseña'
 

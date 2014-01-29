@@ -108,11 +108,10 @@
 .row-fluid
   .span6
     %h3.n
-      %i.icon-caret-right
       Historial
 
     %ul.unstyled.listing
-      = render partial: 'histories/history', collection: @income.histories, as: :history
+      = render partial: 'histories/history', collection: present(@income.histories, MovementHistoryPresenter), as: :history
 
 
 -#Tours

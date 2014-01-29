@@ -33,7 +33,7 @@ describe MovementDetail do
 
     td.item_id = 1
     td.save.should be_false
-    td.errors.messages[:item_id].should eq([I18n.t('errors.messages.transaction_details.item_changed')])
+    td.errors.messages[:item_id].should eq([I18n.t('errors.messages.movement_details.item_changed')])
   end
 
   context "Operations related with Income Expense" do

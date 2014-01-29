@@ -2,6 +2,7 @@
 Bonsaierp::Application.routes.draw do
   get '/download_pdf/:file/:name' => 'download#download_pdf', as: :download
 
+
   resources :loan_payments, only: [] do
     member do
       # Receive
@@ -95,7 +96,6 @@ Bonsaierp::Application.routes.draw do
       patch :approve
       patch :null
       patch :inventory
-      get :history
       get :ledgers
       get :inventories
     end
@@ -109,7 +109,6 @@ Bonsaierp::Application.routes.draw do
       patch :approve
       patch :null
       patch :inventory
-      get :history
       get :ledgers
       get :inventories
     end

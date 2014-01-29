@@ -158,7 +158,7 @@ describe Movement do
       i
     }
     let(:expense) {
-      e = Expense.new(date: Date.today,
+      e = Expense.new(date: Date.today, due_date: Date.today,
           expense_details_attributes: details, state: 'approved')
       e.stub(contact: contact)
       e.save(validate: false)

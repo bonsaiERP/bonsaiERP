@@ -25,7 +25,9 @@ Spork.prefork do
 
     config.before(:suite) do
       # So it does not clean migrations
-      DatabaseCleaner.strategy = :truncation, { except: %w(schema_migrations) }
+      #DatabaseCleaner.strategy = :truncation, { except: %w(schema_migrations) }
+      DatabaseCleaner.strategy = :transaction
+      DatabaseCleaner.clean_with(:truncation, { except: %w(schema_migrations) })
     end
 
     #config.before(:all) do

@@ -33,10 +33,17 @@ class History < ActiveRecord::Base
       when 'string', 'integer', 'boolean', 'float'
         { from: v['from'], to: v['to'] }
       when 'date', 'datetime', 'time'
-        { from: v['from'].to_s.send(:"to_#{v['type']}"), to: v['to'].to_s.send(:"to_#{v['type']}") }
+        { from: typecast_transform(v['from'], v['type']),
+          to: typecast_transform(v['to'], v['type']) }
       when 'decimal'
         { from: BigDecimal.new(v['from'].to_s), to: BigDecimal.new(v['to'].to_s) }
       end
+    end
+
+    def typecast_transform(val, type)
+      val.to_s.send(:"to_#{type}")
+    rescue
+      val
     end
 
     def typecast_array(arr)

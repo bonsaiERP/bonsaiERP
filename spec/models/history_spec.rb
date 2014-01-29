@@ -86,12 +86,26 @@ describe History do
       expect(Income.details_col).to eq(:income_details)
     end
 
+    it "#null due_date" do
+      e = Expense.new(attributes.merge(due_date: nil))
+      e.save(validate: false).should be_true
+
+      e.state = 'nulled'
+      e.save(validate: false).should be_true
+
+      expect(e.histories).to have(2).items
+      h = e.histories.first
+      expect(h.history_data[:state]).to eq({from: 'approved', to: 'nulled'})
+    end
+
     it "#history" do
       # Create
       e = Expense.new(attributes)
       e.save.should be_true
 
       expect(e.histories).to have(1).item
+      h = e.histories.first
+      expect(h.klass_type).to eq('Expense')
 
       # Update detail
       det = e.expense_details.map { |v| v.attributes.except('created_at', 'updated_at', 'original_price') }
@@ -109,6 +123,8 @@ describe History do
 
 
       expect(h.history_data[:description]).to eq({from: 'New expense description', to: 'Jo jo jo'})
+      expect(h.klass_type).to eq('Expense')
+
       det_hist = h.history_data[:expense_details][0]
       expect(det_hist[:price]).to eq({from: '10'.to_d, to: '15'.to_d})
 
