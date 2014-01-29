@@ -31,12 +31,13 @@ class History < ActiveRecord::Base
 
       case v['type']
       when 'string', 'integer', 'boolean', 'float'
-        { from: v['from'], to: v['to'] }
+        { from: v['from'], to: v['to'], type: v['type'] }
       when 'date', 'datetime', 'time'
         { from: typecast_transform(v['from'], v['type']),
-          to: typecast_transform(v['to'], v['type']) }
+          to: typecast_transform(v['to'], v['type']), type: v['type'] }
       when 'decimal'
-        { from: BigDecimal.new(v['from'].to_s), to: BigDecimal.new(v['to'].to_s) }
+        { from: BigDecimal.new(v['from'].to_s),
+          to: BigDecimal.new(v['to'].to_s), type: v['type'] }
       end
     end
 

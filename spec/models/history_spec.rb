@@ -36,9 +36,9 @@ describe History do
       expect(h.user_id).to eq(1)
       expect(h.history_attributes).to eq([:price, :buy_price, :name])
 
-      expect(h.history_data[:price]).to eq({ from: '10.0'.to_d, to: '20.0'.to_d})
-      expect(h.history_data[:buy_price]).to eq({ from: '7.0'.to_d, to: '15.0'.to_d })
-      expect(h.history_data[:name]).to eq({ from: 'item', to: 'New name for item' })
+      expect(h.history_data[:price]).to eq({ from: '10.0'.to_d, to: '20.0'.to_d, type: 'decimal'})
+      expect(h.history_data[:buy_price]).to eq({ from: '7.0'.to_d, to: '15.0'.to_d, type: 'decimal' })
+      expect(h.history_data[:name]).to eq({ from: 'item', to: 'New name for item', type: 'string' })
 
 
       # Latest
@@ -49,7 +49,7 @@ describe History do
       i.histories.should have(3).items
       h = i.histories.first
       expect( h.history_attributes ).to eq([:active])
-      expect(h.history_data).to eq( {active: { from: true, to: false } } )
+      expect(h.history_data).to eq( {active: { from: true, to: false, type: 'boolean' } } )
     end
 
   end
@@ -95,7 +95,7 @@ describe History do
 
       expect(e.histories).to have(2).items
       h = e.histories.first
-      expect(h.history_data[:state]).to eq({from: 'approved', to: 'nulled'})
+      expect(h.history_data[:state]).to eq({from: 'approved', to: 'nulled', type: 'string'})
     end
 
     it "#history" do
@@ -122,13 +122,13 @@ describe History do
       h = e.histories.first
 
 
-      expect(h.history_data[:description]).to eq({from: 'New expense description', to: 'Jo jo jo'})
+      expect(h.history_data[:description]).to eq({from: 'New expense description', to: 'Jo jo jo', type: 'string'})
       expect(h.klass_type).to eq('Expense')
 
       det_hist = h.history_data[:expense_details][0]
-      expect(det_hist[:price]).to eq({from: '10'.to_d, to: '15'.to_d})
+      expect(det_hist[:price]).to eq({from: '10'.to_d, to: '15'.to_d, type: 'decimal'})
 
-      expect(det_hist[:description]).to eq({from: 'First item', to: 'A new description'})
+      expect(det_hist[:description]).to eq({from: 'First item', to: 'A new description', type: 'string'})
 
       expect(det_hist[:id]).to be_a(Integer)
 
@@ -160,7 +160,7 @@ describe History do
 
     it "#state" do
       # Create
-      d = 1.day.ago.to_date
+      d = 2.days.ago.to_date
       e = Expense.new(attributes.merge(date: d, due_date: d))
       e.save.should be_true
 
@@ -172,8 +172,15 @@ describe History do
 
       expect(e.histories).to have(2).items
       h = e.histories.first
-      h.history_data[:due_date].should eq( { from: d, to: today })
-      h.history_data[:state].should eq( {from: 'due', to: 'approved'} )
+      h.history_data[:due_date].should eq( { from: d, to: today, type: 'date' })
+      h.history_data[:state].should eq( {from: 'due', to: 'approved', type: 'string'} )
+
+      d2 = 1.days.ago.to_date
+      e.due_date = d2
+      e.save.should be_true
+      h = e.histories.first
+      h.history_data[:due_date].should eq( { from: today, to: d2, type: 'date' })
+      h.history_data[:state].should eq( {from: 'approved', to: 'due', type: 'string'} )
     end
   end
 end

@@ -5,7 +5,7 @@ module Models::History
     base.instance_eval do
       before_save :create_history
       has_many :histories, -> { order('histories.created_at desc, id desc') }, as: :historiable, dependent: :destroy
-      delegate :details_col, :state_col, :due_date_col, to: self
+      delegate :details_col, :state_col, :date_col, :due_date_col, to: self
     end
 
   end
@@ -16,13 +16,15 @@ module Models::History
       @details_col = details_col
     end
 
-    def history_state_date(state_col = :state, due_date_col = :due_date)
-      @state_col, @due_date_col = state_col, due_date_col
+    def history_state_date(state_col = :state, date_col = :date, due_date_col = :due_date)
+      @state_col = state_col
+      @date_col = date_col
+      @due_date_col =  due_date_col
     end
 
     # No need for mattr_reader or mattr_accessor not recomended use of
     # @@var class variables
-    [:details_col, :state_col, :due_date_col].each do |meth|
+    [:details_col, :state_col, :date_col, :due_date_col].each do |meth|
       define_method meth do
         instance_variable_get(:"@#{meth}")
       end
@@ -77,11 +79,27 @@ module Models::History
 
     def set_state_col(h)
       unless h[state_col].present?
-        today = Date.today
-        if send(:"#{due_date_col}_was").is_a?(Date) && today > send(:"#{due_date_col}_was")
+        set_due_date_state(h)  if is_due_date_change?
+      end
+    end
+
+    def set_due_date_state(h)
+      today = Date.today
+      if send(:"#{due_date_col}_was").is_a?(Date)
+        if today > send(:"#{due_date_col}_was")
           h[state_col] = { from: 'due', to: send(state_col), type: 'string' }
+        elsif today > send(:"#{due_date_col}")
+          h[state_col] = { from: send(state_col), to: 'due', type: 'string' }
         end
       end
+    end
+
+    def is_due_date_change?
+      send(:"#{due_date_col}_changed?")
+    end
+
+    def is_date_change?
+      send(:"#{date_col}_changed?")
     end
 
     def get_data(object = self)

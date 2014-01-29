@@ -44,12 +44,4 @@ class IncomePresenter < MovementPresenter
     end
   end
 
-  def histories
-    @histories ||= begin
-      hist = template.present(to_model.histories.includes(:user))
-      hist.each { |h| h.set_klass 'Income' }
-      hist
-    end
-  end
-
 end

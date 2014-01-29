@@ -5,7 +5,7 @@ class Income < Movement
 
   include Models::History
   history_with_details :income_details
-  history_state_date :state, :due_date
+  history_state_date
 
   self.code_name = 'I'
 

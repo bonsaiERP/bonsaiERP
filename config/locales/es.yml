@@ -371,21 +371,27 @@ es:
       first: "&laquo; Inicio"
       last: "Fin &raquo;"
       truncate: "..."
+
+  movement_attributes: &movement_attributes
+    name: 'código'
+    amount: 'saldo'
+    total: 'total'
+    exchange_rate: 'tipo de cambio'
+    date: 'fecha'
+    due_date: 'fecha de vencimiento'
+    state: 'estado'
+
   income:
     attributes:
-      name: 'código'
-      amount: 'saldo'
-      total: 'total'
-      exchange_rate: 'tipo de cambio'
-      date: 'fecha'
-      state: 'estado'
+      <<: *movement_attributes
     payment:
       reference: "Cobro ingreso %{income}"
   expense:
-
     account_ledger_reference: "Gasto"
     payment:
       reference: "Pago egreso %{expense}"
+    attributes:
+      <<: *movement_attributes
 
   account_ledger:
     payment_description: "%{pay_type} de %{trans} %{ref}, cuenta %{account}"
