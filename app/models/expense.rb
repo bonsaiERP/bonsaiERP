@@ -4,8 +4,7 @@
 class Expense < Movement
 
   include Models::History
-  history_with_details :expense_details
-  history_state_date
+  has_movement_history :expense_details
 
   self.code_name = 'E'
 

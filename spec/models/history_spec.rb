@@ -14,6 +14,8 @@ describe History do
       i.should be_persisted
       i.histories.should have(1).item
 
+      expect(i.history_klass).to be_is_a(Models::History::NullHistoryClass)
+
       h = i.histories.first
       h.should be_persisted
       h.should be_new_item
@@ -79,16 +81,16 @@ describe History do
     end
 
     it "#history_details" do
-      expect(Expense.details_col).to eq(:expense_details)
-      expect(Expense.state_col).to eq(:state)
-      expect(Expense.due_date_col).to eq(:due_date)
-
-      expect(Income.details_col).to eq(:income_details)
+      expect(Expense.history_klass).to be_is_a(Movements::History)
+      expect(Expense.history_klass.details_col).to eq(:expense_details)
+      expect(Income.history_klass).to be_is_a(Movements::History)
+      expect(Income.history_klass.details_col).to eq(:income_details)
     end
 
     it "#null due_date" do
       e = Expense.new(attributes.merge(due_date: nil))
       e.save(validate: false).should be_true
+      expect(e.history_klass).to be_is_a(Movements::History)
 
       e.state = 'nulled'
       e.save(validate: false).should be_true

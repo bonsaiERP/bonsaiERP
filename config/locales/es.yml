@@ -380,6 +380,7 @@ es:
     date: 'fecha'
     due_date: 'fecha de vencimiento'
     state: 'estado'
+    description: 'descripción'
 
   income:
     attributes:

@@ -5,29 +5,18 @@ module Models::History
     base.instance_eval do
       before_save :create_history
       has_many :histories, -> { order('histories.created_at desc, id desc') }, as: :historiable, dependent: :destroy
-      delegate :details_col, :state_col, :date_col, :due_date_col, to: self
+      delegate :history_klass, to: self
+
+      def history_klass
+        @history_klass ||= NullHistoryClass.new
+      end
     end
 
   end
 
   module InstanceMethods
-
-    def history_with_details(details_col)
-      @details_col = details_col
-    end
-
-    def history_state_date(state_col = :state, date_col = :date, due_date_col = :due_date)
-      @state_col = state_col
-      @date_col = date_col
-      @due_date_col =  due_date_col
-    end
-
-    # No need for mattr_reader or mattr_accessor not recomended use of
-    # @@var class variables
-    [:details_col, :state_col, :date_col, :due_date_col].each do |meth|
-      define_method meth do
-        instance_variable_get(:"@#{meth}")
-      end
+    def has_movement_history(details_col)
+      @history_klass = Movements::History.new(details_col)
     end
   end
 
@@ -51,55 +40,10 @@ module Models::History
 
     def store_update
       h = get_data
-      set_details(h)  if details_col.present?
-      set_state_col(h)  if state_col.present?
+      history_klass.set_history(self, h)
 
       histories.build(new_item: false, history_data: h, historiable_type: self.class.to_s,
                       user_id: history_user_id)
-    end
-
-    def set_details(h)
-      det_hash = get_details
-      h[details_col] = det_hash  unless det_hash.empty?
-    end
-
-    def get_details
-      send(details_col).each_with_index.map do |det, i|
-        if det.new_record?
-          { new_record: true, index: i }
-        elsif changed_detail?(det)
-          get_data(det).merge(id: det.id)
-        elsif det.marked_for_destruction?
-          { destroyed: true, index: i }.merge(det.attributes)
-        else
-          nil
-        end
-      end.compact
-    end
-
-    def set_state_col(h)
-      unless h[state_col].present?
-        set_due_date_state(h)  if is_due_date_change?
-      end
-    end
-
-    def set_due_date_state(h)
-      today = Date.today
-      if send(:"#{due_date_col}_was").is_a?(Date)
-        if today > send(:"#{due_date_col}_was")
-          h[state_col] = { from: 'due', to: send(state_col), type: 'string' }
-        elsif today > send(:"#{due_date_col}")
-          h[state_col] = { from: send(state_col), to: 'due', type: 'string' }
-        end
-      end
-    end
-
-    def is_due_date_change?
-      send(:"#{due_date_col}_changed?")
-    end
-
-    def is_date_change?
-      send(:"#{date_col}_changed?")
     end
 
     def get_data(object = self)
@@ -116,7 +60,8 @@ module Models::History
       object.changed_attributes.except('created_at', 'updated_at')
     end
 
-    def changed_detail?(det)
-      det.changed_attributes.except('created_at', 'updated_at').any?
+    # Null object
+    class NullHistoryClass
+      def set_history(klass, h); end
     end
 end

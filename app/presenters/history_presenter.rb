@@ -2,6 +2,14 @@ class HistoryPresenter < BasePresenter
   attr_reader :klass
 
   def changes
+    if new_item?
+      template.text_green_dark 'creó el registro', nil, 'b'
+    else
+      present_changes
+    end
+  end
+
+  def present_changes
     history_data.map do |k, v|
       "#{translate_attribute k} de #{v[:from]} a #{v[:to]}"
     end.join(', ')
@@ -15,6 +23,10 @@ class HistoryPresenter < BasePresenter
 
     def translate_attribute(k)
       t("#{klass}.attributes.#{k}") || t("common.#{k}")
+    end
+
+    def code(txt)
+      "<code class='gray'>#{txt}</code>"
     end
 
     def format_for(val, typ)

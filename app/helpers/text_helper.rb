@@ -5,7 +5,8 @@ module TextHelper
    blue: 'blue',
    black: 'black',
    dark: 'dark',
-   gray: 'gray'
+   gray: 'gray',
+   gray_light: 'gray-light'
   }.each do |meth, color|
     define_method :"text_#{meth}" do |txt, title = '', css=''|
       css << " #{color}"
