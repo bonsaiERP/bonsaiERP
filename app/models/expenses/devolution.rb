@@ -35,6 +35,7 @@ class Expenses::Devolution < Devolution
       update_movement
       err = Expenses::Errors.new(expense)
       err.set_errors
+      expense.operation_type = 'ledger_in'
 
       expense.save
     end

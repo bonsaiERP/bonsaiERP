@@ -21,6 +21,7 @@ class Expenses::InventoryOut < Inventories::Out
     save do
       update_expense_details
       update_expense_balance
+      expense.operation_type = 'inventory_out'
 
       expense_errors.set_errors
       res = expense.save

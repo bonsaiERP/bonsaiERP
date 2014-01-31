@@ -29,9 +29,10 @@ class Incomes::InventoryOut < Inventories::Out
     save do
       update_income_details
       update_income_balanace
+      income.operation_type = 'inventory_out'
 
       income_errors.set_errors
-      res = @income.save
+      res = income.save
       res = res && update_stocks
       Inventories::Errors.new(@inventory, stocks).set_errors
       @inventory.account_id = @income.id

@@ -86,6 +86,8 @@ describe Incomes::InventoryIn do
 
     inc = Income.find(income.id)
     inc.balance_inventory.should == 40
+    inc.operation_type.should eq('inventory_in')
+
     inc.details[0].balance.should == 2
     inc.details[1].balance.should == 2
 

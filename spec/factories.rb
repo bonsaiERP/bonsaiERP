@@ -128,7 +128,7 @@ FactoryGirl.define do
   end
 
   factory :link do
-    rol User::ROLES[1]
+    role User::ROLES[1]
     master_account true
   end
 

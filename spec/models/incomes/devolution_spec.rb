@@ -88,6 +88,7 @@ describe Incomes::Devolution do
       dev.income.should be_is_a(Income)
       dev.income.balance.should == balance + valid_attributes[:amount]
       dev.income.should_not be_has_error
+      dev.income.operation_type.should eq('ledger_out')
 
       # Ledger
       dev.ledger.amount.should == -50.0

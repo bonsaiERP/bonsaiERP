@@ -86,6 +86,7 @@ describe Expenses::Devolution do
       # Expense
       dev.expense.should be_is_a(Expense)
       dev.expense.balance.should == balance + valid_attributes[:amount]
+      dev.expense.operation_type.should eq('ledger_in')
       dev.expense.should_not be_has_error
 
       # Ledger

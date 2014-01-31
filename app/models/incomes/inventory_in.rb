@@ -28,6 +28,7 @@ class Incomes::InventoryIn < Inventories::In
     save do
       update_income_details
       update_income_balance
+      income.operation_type = 'inventory_in'
 
       income_errors.set_errors
       res = @income.save

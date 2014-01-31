@@ -34,9 +34,9 @@ describe User do
     link = Link.new
     u.stub(link: link)
 
-    User::ROLES.each do |rol|
-      link.rol = rol
-      u.should send(:"be_is_#{rol}")
+    User::ROLES.each do |role|
+      link.role = role
+      u.should send(:"be_is_#{role}")
     end
   end
 
@@ -108,23 +108,23 @@ describe User do
 
     it "creates the methods for each rol" do
       u = User.new {|us| us.id = 10}
-      u.stub_chain(:active_links, find_by_organisation_id: Link.new(active:true, user_id: u.id, rol:'') )
+      u.stub_chain(:active_links, find_by_organisation_id: Link.new(active:true, user_id: u.id, role:'') )
 
-      u.link_rol = 'admin'
+      u.link_role = 'admin'
 
       u.should be_is_admin
       u.should_not be_is_group
       u.should_not be_is_other
 
 
-      u.link_rol = 'group'
+      u.link_role = 'group'
 
       u.should be_is_group
       u.should_not be_is_admin
       u.should_not be_is_other
 
 
-      u.link_rol = 'other'
+      u.link_role = 'other'
 
       u.should be_is_other
       u.should_not be_is_admin

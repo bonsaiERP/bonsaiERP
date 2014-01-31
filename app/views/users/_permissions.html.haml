@@ -1,64 +1,77 @@
 %table.table.table-striped#roles
   %tr
     %th.first
-    - User.get_roles.each_with_index do |rol, ind|
-      %th{:class => rol.last, 'data-index' => ind + 2 }= rol.first
+    - user.roles_hash.map.each_with_index do |(k, v), i|
+      %th{ class: k, data: { index: i } }= v
   %tr
-    %td.b Puede crear ventas, compras y gastos
-    %td.true
-    %td.true
-    %td.true
+    %td.b Crear ingresos y egresos
+    %td
+      %span.icon-true
+    %td
+      %span.icon-true
+        %td
+          %span.icon-true
 
   %tr
-    %td.b Puede aprobar ventas
-    %td.true
-    %td.true
-    %td.true
+    %td.b Operaciones con cuentas bancarias, caja y personal
+    %td
+      %span.icon-true
+    %td
+      %span.icon-true
+    %td
+      %span.icon-false
 
   %tr
-    %td.b Puede aprobar compras y gastos
-    %td.true
-    %td.true
-    %td.false
+    %td.b Crear contacto (clientes y proveedores)
+    %td
+      %span.icon-true
+    %td
+      %span.icon-true
+    %td
+      %span.icon-true
 
   %tr
-    %td.b Puede aprobar créditos
-    %td.true
-    %td.true
-    %td.false
+    %td.b Crear items y unidades
+    %td
+      %span.icon-true
+    %td
+      %span.icon-true
+    %td
+      %span.icon-false
 
   %tr
-    %td.b Puede realizar operaciones con cuentas bancarias y caja
-    %td.true
-    %td.true
-    %td.false
+    %td.b Operaciones de inventarios
+    %td
+      %span.icon-true
+    %td
+      %span.icon-true
+    %td
+      %span.icon-false
 
   %tr
-    %td.b Puede crear clientes y proveedores
-    %td.true
-    %td.true
-    %td.true
+    %td.b Administrar prestamos
+    %td
+      %span.icon-true
+    %td
+      %span.icon-true
+    %td
+      %span.icon-false
+
 
   %tr
-    %td.b Puede crear items y proyectos
-    %td.true
-    %td.true
-    %td.true
+    %td.b Reportes
+    %td
+      %span.icon-true
+    %td
+      %span.icon-true
+    %td
+      %span.icon-false
 
   %tr
-    %td.b Puede ingresar/egresar inventarios
-    %td.true
-    %td.true
-    %td.false
-
-  -#%tr
-    %td.b Puede ver estados financieros
-    %td.true
-    %td.true
-    %td.false
-
-  %tr
-    %td.b Puede adicionar usuarios
-    %td.true
-    %td.false
-    %td.false
+    %td.b Administrar usuarios
+    %td
+      %span.icon-true
+    %td
+      %span.icon-false
+    %td
+      %span.icon-false

@@ -13,7 +13,7 @@ private
     # TODO check due_date
     unless authorized_user?
       flash[:alert] = "Usted ha sido redireccionado por que no tiene suficientes privilegios."
-      redir = request.referer.present? ? :back : dashboard_path
+      redir = request.referer.present? ? :back : home_path
 
       redirect_to redir and return
     end
@@ -28,13 +28,13 @@ private
 
   # Checks the white list for controllers
   def authorized_user?
-    rol = current_user.link_rol
-    unless rol
+    role = current_user.link_role
+    unless role
       request.env["HTTP_REFERER"] = logout_path
       return false
     end
 
-    h = send(:"#{rol}_hash")
+    h = send(:"#{role}_hash")
 
     if h[controller_sym].is_a?(Hash)
       h[controller_sym][action_sym]
@@ -193,6 +193,7 @@ private
       tests: false,
       stocks: true,
       inventory_operations: false,
+      inventories: { index: true, show: true, show_movement: true, show_trans: true },
       account_ledgers: {show: true},
       banks: false,
       cashes: false,
@@ -205,11 +206,12 @@ private
       stores: false,
       contacts: true,
       staffs: false,
-      items: true,
-      units: true,
+      items: { show: true, index: true, search_income: true, search_expense: true },
+      units: { show: true, index: true },
       users: true,
       user_passwords: true,
-      dashboard: true,
+      dashboard: false,
+      reports: false,
       incomes_inventory_outs: true,
       tags: true,
       download: true,

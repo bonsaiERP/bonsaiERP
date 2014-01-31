@@ -29,20 +29,22 @@ class Incomes::Devolution < Devolution
   end
   alias :movement :income
 
-private
-  def save_income
-    update_movement
-    err = Incomes::Errors.new(income)
-    err.set_errors
+  private
 
-    income.save
-  end
+    def save_income
+      update_movement
+      err = Incomes::Errors.new(income)
+      err.set_errors
+      income.operation_type = 'ledger_out'
 
-  def create_ledger
-    @ledger = build_ledger(
-      amount: -amount, operation: 'devin', account_id: income.id,
-      status: get_status, contact_id: income.contact_id
-    )
-    @ledger.save_ledger
-  end
+      income.save
+    end
+
+    def create_ledger
+      @ledger = build_ledger(
+        amount: -amount, operation: 'devin', account_id: income.id,
+        status: get_status, contact_id: income.contact_id
+      )
+      @ledger.save_ledger
+    end
 end

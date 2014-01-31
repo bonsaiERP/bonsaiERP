@@ -10,14 +10,21 @@ module Models::HstoreMap
   end
 
   def convert_hstore_to_decimal(*methods)
+    hstore_attributes[:decimal] = methods
     convert_hstore_to(:to_d, *methods)
   end
 
   def convert_hstore_to_time(*methods)
+    hstore_attributes[:time] = methods
     convert_hstore_to(:to_time, *methods)
   end
 
+  def hstore_attributes
+    @hstore_attributes ||= {}
+  end
+
   def convert_hstore_to_timezone(*methods)
+    hstore_attributes[:timezone] = methods
     methods.each do |meth|
       alias_method :"old_#{meth}", meth
       class_eval <<-CODE, __FILE__, __LINE__ + 1
@@ -32,14 +39,17 @@ module Models::HstoreMap
   end
 
   def convert_hstore_to_date(*methods)
+    hstore_attributes[:date] = methods
     convert_hstore_to(:to_date, *methods)
   end
 
   def convert_hstore_to_integer(*methods)
+    hstore_attributes[:integer] = methods
     convert_hstore_to(:to_i, *methods)
   end
 
   def convert_hstore_to_boolean(*methods)
+    hstore_attributes[:boolean] = methods
     methods.each do |meth|
       alias_method :"old_#{meth}", meth
       define_method :"#{meth}" do

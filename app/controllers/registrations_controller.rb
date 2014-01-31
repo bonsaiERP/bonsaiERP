@@ -39,7 +39,7 @@ class RegistrationsController < ApplicationController
     if @user && @user.confirm_registration
       session[:user_id] = @user.id
       flash[:notice] = 'Ha confirmado su registro correctamente.'
-      redirect_to dashboard_path and return
+      redirect_to home_path and return
     elsif @user
       # TODO: Create a view
       render text: 'Error' and return

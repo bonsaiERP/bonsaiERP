@@ -8,20 +8,40 @@ class MovementHistoryPresenter < HistoryPresenter
   end
 
   def movement
-    @movement_type ||= klass_type == 'Income' ? 'Ingreso' : 'Egreso'
   end
 
   def present_changes
-    history_data.map do |k, v|
-      if k == :state
-        state_html(k, v)
-      elsif k == :error_messages
-      elsif v.present?
-        "#{text_gray(translate_attribute(k), nil, 'b')} de #{code(format_for(v[:from], v[:type]))} a #{code(format_for(v[:to], v[:type]))}"
-      else
+    arr = history_data.map do |k, v|
+      case k
+      when :state then state_html(k, v)
+      when :error_messages, :extras, :updater_id, :nuller_id, details_col
         nil
+      else
+        v.present? ? get_change(k, v) : nil
       end
-    end.compact.join(', ')
+    end
+
+    [arr, extras_changes, details_changes].flatten.compact.join(', ')
+  end
+
+  def present_extras
+    unless history_data_raw['extras']['from'] == history_extras_to
+      history_data_raw['extras']['from']
+    end
+  end
+
+  def get_change(k, v)
+    [text_gray(translate_attribute(k), nil, 'b'), ' de ',
+     code(format_for(v[:from], v[:type])), ' a ',
+     code(format_for(v[:to], v[:type]))
+    ].join('')
+  end
+
+  # extras hstore
+  def history_extras_to
+    @history_extras_to ||= Hash[
+      history_data_raw['extras']['to'].map { |k, v| [k, v.to_s] }
+    ]
   end
 
   def state_html(k, v)
@@ -38,5 +58,26 @@ class MovementHistoryPresenter < HistoryPresenter
     when 'paid' then text_green_dark('pagado', nil, 'b')
     when 'nulled' then text_red('Anulado', nil, 'b')
     end
+  end
+
+  def extras_changes
+    [inventory_operation, change_no_inventory].compact
+  end
+
+  def extras
+    history_data_raw['extras']
+  end
+
+  def balance_inventory(k)
+    extras[k]['balance_inventory']
+  end
+
+  def inventory_operation
+  end
+
+  def change_no_inventory
+  end
+
+  def details_changes
   end
 end

@@ -94,6 +94,8 @@ describe Expenses::InventoryIn do
 
     exp = Expense.find(expense.id)
     exp.balance_inventory.should == 60
+    exp.operation_type.should eq('inventory_in')
+
     exp.details[0].balance.should == 3
     exp.details[1].balance.should == 3
 

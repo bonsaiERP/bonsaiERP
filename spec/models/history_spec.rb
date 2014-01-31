@@ -141,7 +141,7 @@ describe History do
       expect(e.histories).to have(3).items
       h = e.histories.first
 
-      expect(h.history_data).to eq({:expense_details=>[{:index=>2, :new_record=>true}]})
+      expect(h.history_data).to eq({ expense_details: [{ index: 2, new_record: true}], operation_type: {} })
 
       # Update delete detail
       det = e.expense_details.map { |v| v.attributes.except('created_at', 'updated_at', 'original_price') }

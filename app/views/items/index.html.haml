@@ -17,16 +17,15 @@
       Nuevo ítem
 
 
-
 = render 'items/search'
 
 - paginate_html = paginate @items
 
 = paginate_html
 
-- cache [organisation_name, @items] do
-  %ul#items-list.unstyled.listing
-    =render @items
+-# cache [organisation_name, @items] do
+%ul#items-list.unstyled.listing
+  =render @items
 
 = paginate_html
 

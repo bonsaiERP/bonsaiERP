@@ -27,9 +27,10 @@ class Expenses::InventoryIn < Inventories::In
     save do
       update_expense_details
       update_expense_balanace
+      expense.operation_type = 'inventory_in'
 
       expense_errors.set_errors
-      res = @expense.save
+      res = expense.save
       res = res && update_stocks
       Inventories::Errors.new(@inventory, stocks).set_errors
       @inventory.account_id = @expense.id

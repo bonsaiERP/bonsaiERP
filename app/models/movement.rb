@@ -10,7 +10,7 @@ class Movement < Account
   STATES = %w(draft approved paid nulled)
 
   # Store
-  EXTRA_COLUMNS = %i(bill_number gross_total original_total balance_inventory nuller_datetime null_reason approver_datetime delivered discounted devolution no_inventory).freeze
+  EXTRA_COLUMNS = %i(bill_number gross_total original_total balance_inventory nuller_datetime null_reason approver_datetime delivered discounted devolution no_inventory operation_type).freeze
   store_accessor( *([:extras] + EXTRA_COLUMNS))
 
   # Extra methods defined for Hstore

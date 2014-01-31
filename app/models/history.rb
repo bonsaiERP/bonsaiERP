@@ -28,8 +28,9 @@ class History < ActiveRecord::Base
 
     def typecast_hash(v)
       return typecast_array(v)  if v.is_a?(Array)
+      val = v || {}
 
-      case v['type']
+      case val['type']
       when 'string', 'integer', 'boolean', 'float'
         { from: v['from'], to: v['to'], type: v['type'] }
       when 'date', 'datetime', 'time'
@@ -38,6 +39,8 @@ class History < ActiveRecord::Base
       when 'decimal'
         { from: BigDecimal.new(v['from'].to_s),
           to: BigDecimal.new(v['to'].to_s), type: v['type'] }
+       else
+         {}
       end
     end
 

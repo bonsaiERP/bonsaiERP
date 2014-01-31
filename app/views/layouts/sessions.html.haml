@@ -38,5 +38,10 @@
 
         = yield
         .clearfix
-
     = render 'layouts/footer'
+
+  :javascript
+    window.exchangeRates = { rates: {} }
+    $(function() {
+      $('input, textarea').placeholder();
+    })

@@ -374,13 +374,16 @@ es:
 
   movement_attributes: &movement_attributes
     name: 'código'
+    state: 'estado'
     amount: 'saldo'
     total: 'total'
-    exchange_rate: 'tipo de cambio'
     date: 'fecha'
     due_date: 'fecha de vencimiento'
-    state: 'estado'
+    currency: 'moneda'
+    exchange_rate: 'tipo de cambio'
+    tax_id: 'impuesto'
     description: 'descripción'
+
 
   income:
     attributes:

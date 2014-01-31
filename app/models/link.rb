@@ -8,6 +8,6 @@ class Link < ActiveRecord::Base
   belongs_to :organisation, inverse_of: :links
   belongs_to :user, inverse_of: :active_links
 
-  validates_presence_of :rol, :organisation, :organisation_id
-  validates_inclusion_of :rol, in: User::ROLES
+  validates_presence_of :role, :organisation, :organisation_id
+  validates_inclusion_of :role, in: User::ROLES
 end

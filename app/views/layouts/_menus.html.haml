@@ -21,18 +21,22 @@
           %li
             = link_to "Ingresos", incomes_path
           %li
-            = link_to "Nuevo ingreso", new_income_path
-          %li.divider
+            = link_to new_income_path do
+              %i.icon-plus-circle
+              Nuevo ingreso
+          -#%li.divider
           %li
             = link_to "Egresos", expenses_path
           %li
-            = link_to "Nuevo egreso", new_expense_path
-          %li.divider
+            = link_to new_expense_path do
+              %i.icon-plus-circle
+              Nuevo egreso
+          -#%li.divider
           %li
             = link_to "Contactos", contacts_path
-          %li
+          -#%li
             = link_to "Nuevo contacto", new_contact_path
-          %li.divider
+          -#%li.divider
           %li
             = link_to "Prestamos", loans_path, id: 'last-nav'
       %li.has-dropdown

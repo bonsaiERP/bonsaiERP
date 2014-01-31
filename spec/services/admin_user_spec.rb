@@ -33,7 +33,7 @@ describe AdminUser do
 
       lnk = ad.user.active_links.first
       lnk.organisation_id.should eq(15)
-      lnk.rol.should eq('group')
+      lnk.role.should eq('group')
       lnk.should be_active
       lnk.tenant.should eq('bonsai')
     end
@@ -45,7 +45,7 @@ describe AdminUser do
       ad = AdminUser.new(valid_attributes.merge(rol: 'admin'))
       ad.add_user.should be_true
 
-      ad.user.active_links.first.rol.should eq('other')
+      ad.user.active_links.first.role.should eq('other')
     end
 
     it "validates_user with link" do
@@ -75,7 +75,7 @@ describe AdminUser do
 
       link.user_id.should eq(10)
       link.organisation_id.should eq(OrganisationSession.id)
-      link.rol.should eq('group')
+      link.role.should eq('group')
     end
   end
 

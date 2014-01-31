@@ -17,6 +17,7 @@ class Movements::History
 
     set_details(hist)
     set_state_col(hist)
+    hist[:operation_type] = movement.operation_type
   end
 
   private

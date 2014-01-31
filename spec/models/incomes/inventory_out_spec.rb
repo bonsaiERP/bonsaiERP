@@ -118,6 +118,8 @@ describe Incomes::InventoryOut do
 
       inc = Income.find(income.id)
       inc.balance_inventory.should == 70
+      inc.operation_type.should eq('inventory_out')
+
       inc.details[0].balance.should == 3
       inc.details[1].balance.should == 4
 

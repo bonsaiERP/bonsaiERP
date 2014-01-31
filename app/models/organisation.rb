@@ -17,7 +17,7 @@ class Organisation < ActiveRecord::Base
   ########################################
   # Relationships
   has_many :links, dependent: :destroy, autosave: true
-  has_one  :master_link, -> { where(master_account: true, rol: 'admin') },
+  has_one  :master_link, -> { where(master_account: true, role: 'admin') },
            class_name: 'Link', foreign_key: :organisation_id
   has_one  :master_account, through: :master_link, source: :user
 

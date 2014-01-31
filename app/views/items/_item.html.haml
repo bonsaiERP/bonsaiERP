@@ -19,7 +19,7 @@
         .row-fluid
           .span6.c
             %span.b.muted Visible:
-            %span(class="icon-large #{true_false item.active?}")
+            %span(class="icon-large icon-#{item.active?}")
 
             .r
               %small.muted
@@ -29,7 +29,7 @@
               = currency_label
           .span6.c
             %span.b.muted.text-muted Venta:
-            %span(class="icon-large #{true_false_color item.for_sale?}")
+            %span(class="icon-large icon-#{item.for_sale?}")
 
             .r
               %small.muted

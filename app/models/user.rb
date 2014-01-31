@@ -30,14 +30,14 @@ class User < ActiveRecord::Base
   # Delegations
   ########################################
   delegate :name, :currency, :address, :tenant, to: :organisation, prefix: true, allow_nil: true
-  delegate :active, :rol, :rol=, to: :link, prefix: true, allow_nil: true
+  delegate :active, :role, :role=, to: :link, prefix: true, allow_nil: true
   delegate :master_account?, to: :link
 
   ########################################
   # Methods
-  ROLES.each do |_rol|
-    define_method :"is_#{_rol}?" do
-      link_rol == _rol
+  ROLES.each do |_role|
+    define_method :"is_#{_role}?" do
+      link_role == _role
     end
   end
 
@@ -64,7 +64,7 @@ class User < ActiveRecord::Base
 
   # Updates the priviledges of a user
   def update_user_role(params)
-    self.link.update_attributes(rol: params[:rolname], active: params[:active_link])
+    self.link.update_attributes(role: params[:rolname], active: params[:active_link])
   end
 
   def set_auth_token
@@ -79,21 +79,14 @@ class User < ActiveRecord::Base
     self.confirmation_token = SecureRandom.urlsafe_base64(32)
   end
 
-  # returns translated roles
-  def self.get_roles
-    ["Admin", "Privilegiado", "Operaciones"].zip(ROLES)
-  end
+  private
 
-  def self.roles_hash
-    Hash[ROLES.zip(["Gerencia", "Administración", "Operaciones"])]
-  end
+    def change_password?
+      new_record? || !password.nil?
+    end
 
-private
-  def change_password?
-    new_record? || !password.nil?
-  end
+    def valid_password_confirmation
+      self.errors.add(:password, I18n.t('errors.messages.confirmation')) unless password === password_confirmation
+    end
 
-  def valid_password_confirmation
-    self.errors.add(:password, I18n.t('errors.messages.confirmation')) unless password === password_confirmation
-  end
 end

@@ -73,7 +73,7 @@ describe Organisation do
 
     org.master_link.should be_master_account
     org.master_link.should be_creator
-    org.master_link.rol.should eq('admin')
+    org.master_link.role.should eq('admin')
 
     org.master_link.user.should be_present
   end

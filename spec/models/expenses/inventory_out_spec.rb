@@ -80,6 +80,7 @@ describe Expenses::InventoryOut do
 
       exp = Expense.find(inv.account_id)
       exp.balance_inventory.should == 40
+      exp.operation_type.should eq('inventory_out')
       exp.details[0].balance.should == 2
       exp.details[1].balance.should == 2
 

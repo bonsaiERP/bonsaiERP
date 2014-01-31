@@ -76,6 +76,7 @@ describe Expenses::Payment do
       p.expense.should be_is_a(Expense)
       p.expense.balance.should == balance - valid_attributes[:amount]
       p.expense.should be_is_approved
+      p.expense.operation_type.should eq('ledger_out')
       p.expense.approver_id.should eq(UserSession.id)
 
       # Ledger

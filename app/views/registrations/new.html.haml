@@ -1,6 +1,19 @@
+/[if IE 9]
+  :css
+    .registration input.password {
+      width: 210px;
+    }
+    .registration .add-on label{
+      width: 80px;
+    }
+    .registration #show-password{
+      width: auto;
+      padding: 0px;
+    }
+
 %h1.c.login Registro
 
-.initial.c
+.initial.registration.c
   = simple_form_for @registration do |f|
     .row-fluid
 
@@ -11,7 +24,7 @@
       .input-append
         =f.input :password, label: false, wrapper_class: 'large' do
           %i.muted.icon-key.icon(title='Contraseña' data-toggle='tooltip' style='left: 12px')
-          = f.password_field :password, placeholder: 'Contraseña', style: 'width: 240px'
+          = f.password_field :password, placeholder: 'Contraseña', class: 'password'
           %span.add-on.append
             %label
               %input(type='checkbox' id='show-password')

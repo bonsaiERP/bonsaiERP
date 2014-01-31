@@ -32,7 +32,7 @@ class Registration < BaseForm
 
       @user.active_links.build(
         organisation_id: organisation.id, tenant: organisation.tenant,
-        rol: 'admin', master_account: true
+        role: 'admin', master_account: true
       )
 
       @user.save

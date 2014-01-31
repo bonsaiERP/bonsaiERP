@@ -1,10 +1,6 @@
 - content_for :links do
   %ul.breadcrumbs.span6
     %li #{ link_to "Items", items_path }
-    %li
-      %i.icon-caret-right
-    %li
-      %span #{@item}
 
 .row-fluid
   .span8
@@ -20,11 +16,11 @@
     %span.text-muted.muted
       %i.icon-info-sign(title="Un ítem visible se puede usar en operaciones" data-toggle="tooltip")
       Visible:
-    %span.icon(class="icon-large #{true_false @item.active}")
+    %span.icon(class="icon-large icon-#{@item.active}")
 
   .span3
     %span.text-muted.muted Venta:
-    %span.icon(class="icon-large #{true_false @item.for_sale}")
+    %span.icon(class="icon-large icon-#{@item.for_sale}")
 
   .span6
     %span.text-muted.muted Unidad:
@@ -54,40 +50,3 @@
     %label= st.store
     %h4.n= st.quantity
 
-.clear
--# unless request.xhr?
-  .page-header
-    %h3 Kardex de Compras y Ventas de del ítem
-
-  - @details = @item.kardex.order("transactions.created_at DESC").page(@page)
-
-  = paginate @details
-
-  %table.table.table-striped
-    %tr
-      %th Compra/Venta
-      %th Fecha
-      %th Precio
-      %th Cantidad
-      %th Total fila
-
-    - @details.each do |det|
-      %tr
-        %td= det.transaction
-        %td= lo det.transaction_created_at
-        %td.r= ntc det.price
-        %td.r= ntc det.quantity
-        %td.r= ntc det.subtotal
-
-/= javascript_include_tag 'app/item'
-:javascript
-  $(function() {
-    if( $('#item_discount').length > 0 ) {
-      /*
-      $('#item_discount span').hide();
-      var val = $('#item_discount span').html();
-      var item_discount = new DiscountRangeShow('item_discount');
-      item_discount.tableForField(val);
-      */
-    }
-  });

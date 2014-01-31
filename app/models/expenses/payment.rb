@@ -44,6 +44,7 @@ class Expenses::Payment < Payment
       expense.approve!
       expense.balance -= amount_exchange.round(2)
       expense.set_state_by_balance!
+      expense.operation_type = 'ledger_out'
     end
 
     # Updates the expense and sets it's state

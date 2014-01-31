@@ -36,6 +36,7 @@ class Incomes::Payment < Payment
       update_income
       err = Incomes::Errors.new(income)
       err.set_errors
+      income.operation_type = 'ledger_in'
 
       income.save
     end

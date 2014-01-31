@@ -101,6 +101,7 @@ describe Incomes::Payment do
       p.income.balance.should == balance - valid_attributes[:amount]
       p.income.should be_is_approved
       p.income.approver_id.should eq(UserSession.id)
+      p.income.operation_type.should eq('ledger_in')
 
       # Ledger
       p.ledger.amount.should == 50.0
