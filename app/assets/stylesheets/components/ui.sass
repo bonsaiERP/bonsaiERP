@@ -242,14 +242,17 @@ $header-color: lighten(gray, 20%)
 
 
 // dialog
+$radius: 8px
 .ui-dialog
-  +border-top-radius(8px)
-  //border: 1px solid lighten(gray, 10%)
+  +border-top-radius($radius)
+  +box-shadow(0px 0px 4px black)
+  //border: 1px solid $dark
 
   h1
     display: none
 
   .ui-dialog-titlebar
+    +border-top-radius($radius)
     //background-color: $bonsaiDark
     //+background-image(linear-gradient(lighten($bonsai,  5%) 20%, $bonsai 40%, darken($bonsai, 5%) 80%) )
     //+background-image(linear-gradient(#5BAE29, lighten(#5BAE29, 10%) ) )

@@ -30,7 +30,7 @@ $(->
     else
       $div.show('medium').html(AjaxLoadingHTML())
 
-    $.get($this.attr('href'), (resp, status) ->
+    $.get($this.attr('href'), (resp, status, jqXHR) ->
       if status is 'error'
         $div.hide('medium')
         $this.show('medium')

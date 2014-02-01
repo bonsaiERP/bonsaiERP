@@ -16,7 +16,10 @@ class IncomeHistoryPresenter < MovementHistoryPresenter
   end
 
   def inventory_operation?
-    history_data_raw['income_details'].blank? && balance_inventory('from').to_s != balance_inventory('to').to_s
+    history_data_raw['income_details'].blank? &&
+    extras.is_a?(Hash) &&
+    balance_inventory('from').to_s != balance_inventory('to').to_s
+
   end
 
   def get_inventory_operation
