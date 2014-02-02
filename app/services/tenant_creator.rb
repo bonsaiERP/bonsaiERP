@@ -19,6 +19,7 @@ class TenantCreator
     return  if schema_exists?(tenant)
     res = true
     execute 'set search_path to public'
+    #change_schema :public
     create_clone tenant
 
     change_schema tenant

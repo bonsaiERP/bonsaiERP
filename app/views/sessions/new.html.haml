@@ -40,7 +40,7 @@
       var login = demos[Math.round(Math.random() * 2)];
       $('#session_email').val(login);
       $('#session_password').val('demo1234');
-      $('.btn-success').popoverNotitle({content: 'Haga click para ingresar al demo'})
+      $('.btn-success').popoverNotitle({content: 'Haga click para ingresar al demo', placement: 'bottom'})
       $('.btn-success').popover('show');
     }
   });

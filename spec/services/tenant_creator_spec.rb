@@ -4,10 +4,6 @@ describe TenantCreator do
   let(:tenant) { 'bonsaierp' }
   let(:organisation) { build(:organisation, id: 1, tenant: tenant) }
 
-  before(:all) do
-    DatabaseCleaner.strategy = :truncation
-  end
-
   context "Initialize" do
     it {  TenantCreator.new(organisation) }
     it "error when bad name" do
@@ -54,8 +50,8 @@ describe TenantCreator do
     end
 
     after(:all) do
-      PgTools.drop_schema tenant if PgTools.schema_exists?(tenant)
-      DatabaseCleaner.strategy = :transaction
+      #PgTools.drop_schema tenant if PgTools.schema_exists?(tenant)
+      #DatabaseCleaner.strategy = :transaction
     end
   end
 end
