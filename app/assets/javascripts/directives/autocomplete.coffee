@@ -33,7 +33,6 @@ myApp.directive 'ngDetailAutocomplete', ->
     )
 
     $elem.blur ->
-      #console.log 'blur', $scope.$parent.detail.item
       $scope.$apply (scope) ->
         if $scope.$parent.detail.item is ''
           scope.$parent.detail.item = ui.item.label
@@ -77,7 +76,6 @@ myApp.directive 'ngDetailAutocomplete', ->
     )
 
     $elem.blur ->
-      #console.log 'blur', $scope.$parent.detail.item
       $scope.$apply (scope) ->
         if $scope.$parent.detail.item is ''
           scope.$parent.detail.item_id = ui.item.id

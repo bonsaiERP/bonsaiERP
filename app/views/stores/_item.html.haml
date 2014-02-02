@@ -1,11 +1,33 @@
 - item = stock.item
 %li.item(id='#{stock.id}')
   .row-fluid
-    .span6
+    .span7
       %h4.n
         = link_to item, item
         %span.muted.fs90= "(#{item.unit_symbol})"
-    .span6
+
+      .clearfix
+      .row-fluid
+        .span6
+          %span.b.muted Visible:
+          %span(class="icon-large icon-#{item.active?}")
+
+          %small.muted
+            P.
+            %strong COMPRA:
+          = ntc item.buy_price
+          = currency_label
+        .span6
+          %span.b.muted.text-muted Venta:
+          %span(class="icon-large icon-#{item.for_sale?}")
+
+          %small.muted
+            P.
+            %strong VENTA:
+          = ntc item.price
+          = currency_label
+
+    .span5
       .row-fluid
         .span3
           %span.muted Cantidad:
@@ -16,3 +38,5 @@
             %span.inline-data(data-value='#{stock.minimum}')= ntc stock.minimum
             = link_to icon('icon-pencil', 'Editar mínimo'), stock_path(stock.id), class: 'dark inline-edit',
               data: { type: 'number', name: 'minimum', notify: '.top-right', minimum: 0 }
+
+

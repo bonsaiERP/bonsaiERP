@@ -27,8 +27,8 @@
       .input
         %input(type='text' ng-model='detail.item_id' name='#{movement.form_details_name}[{{$index}}][item_id]' size='2' style='display:none')
         %input.item-name(type='text' placeholder='Escriba para buscar el ítem' data-source='#{item_url}' ng-model='detail.item' ng-detail-autocomplete='true')
-        %a.btn.add-new-url.add-new-line.ajax(href='/items/new?for_sale=#{movement.is_income?}')
-          %i.icon-plus-sign
+        %a.btn.add-new-url.add-new-item.ajax(href='/items/new?for_sale=#{movement.is_income?}')
+          %i.icon-plus-circle
     %td
       %input.r(type='text' ng-model='detail.price' name='#{movement.form_details_name}[{{$index}}][price]' size='10' value='10')
 

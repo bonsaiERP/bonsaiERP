@@ -12,6 +12,7 @@ class CashesController < ApplicationController
   end
 
   # GET /cashs/1
+  def show; end
 
   # GET /cashs/new
   def new

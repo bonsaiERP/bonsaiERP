@@ -10,7 +10,7 @@ class Account < ActiveRecord::Base
   ########################################
   # Relationships
   belongs_to :contact
-  has_many :account_ledgers
+  has_many :account_ledgers, -> { order('date desc, id desc') }
 
   belongs_to :approver, class_name: 'User'
   belongs_to :nuller,   class_name: 'User'

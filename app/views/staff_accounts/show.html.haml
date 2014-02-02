@@ -24,5 +24,24 @@
     = @staff_account.mobile_tag
     = @staff_account.email_tag
 
+.row-fluid
   .span6
-    = @staff_account.address_tag
+    .moneybox
+      %label SALDO EN CAJA
+      %h5.n
+        = ntc @staff_account.amount
+        = currency_label @staff_account.currency
+
+  .span6
+    %i.icon-building.muted(title='Dirección' data-toggle='tooltip')
+    = nl2br(@staff_account.address)
+
+%h2 Transacciones
+
+- html = paginate @staff_account.ledgers.page(@page)
+= html
+
+%ul.unstyled.listing
+  = render partial: 'account_ledgers/money', collection: present(@staff_account.ledgers.page(@page)), as: :ledger, locals: { account: @staff_account }
+
+= html

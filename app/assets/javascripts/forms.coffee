@@ -47,7 +47,7 @@ $( ->
         $div.html('').dialog('destroy')
       else
         if $div.attr('ng-controller')
-          $scope= $div.scope()
+          $scope = $div.scope()
           $scope.$apply (scope) ->
             scope.htmlContent = ''
             scope.$$childHead = null

@@ -31,11 +31,11 @@
         %ul.dropdown-menu
           %li
             = link_to new_store_inventory_in_path(@store.id) do
-              %i.icon-plus-sign
+              %i.icon-plus-circle
               Ingreso
           %li
             = link_to new_store_inventory_out_path(@store.id) do
-              %i.icon-minus-sign
+              %i.icon-minus-circle
               Egreso
           %li
             = link_to new_inventory_transference_path(store_id: @store.id) do

@@ -1997,7 +1997,7 @@ table th[class*="span"],
   right: 0;
   left: auto;
 }
-/*.dropdown-menu .divider {
+.dropdown-menu .divider {
   *width: 100%;
   height: 1px;
   margin: 9px 1px;
@@ -2058,7 +2058,7 @@ table th[class*="span"],
   filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
   cursor: default;
 }
-*/
+
 .open {
   *z-index: 1000;
 }

@@ -18,7 +18,6 @@ myApp.controller 'MovementController', ['$scope', 'MovementDetail', ($scope, Mov
   tax_id = $('#tax_id').val() * 1
   $scope.tax = _.find $scope.taxes, (v) -> v.id == tax_id  if tax_id > 0
 
-  #console.log $scope.
 
   # ng-class Does not work fine with bootstrap buttons javascript
   $('#tax-in-out-btn').addClass('active')  if $scope.tax_in_out
@@ -108,7 +107,7 @@ myApp.controller 'MovementController', ['$scope', 'MovementDetail', ($scope, Mov
       $('.top-left').notify({ message: { text: 'Debe seleccionar al menos un ítem' }, type: 'error' }).show()
 
   # Add new item with add button
-  $('body').on 'ajax-call', 'table a.add-new-line', (event, resp) ->
+  $('body').on 'ajax-call', 'table a.add-new-item', (event, resp) ->
     scope = $(this).parents('tr:first').scope()
 
     scope.$apply (sc) ->

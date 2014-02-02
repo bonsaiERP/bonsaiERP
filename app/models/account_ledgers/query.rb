@@ -8,7 +8,7 @@ class AccountLedgers::Query
 
   def money(id)
     @rel.where { (account_id.eq id) | (account_to_id.eq id) }
-    .order('date desc')
+    .order('account_ledgers.date desc, account_ledgers.id desc')
     .includes(:contact, :account_to, :approver, :creator, :nuller, :updater)
   end
 

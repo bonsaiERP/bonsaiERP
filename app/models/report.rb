@@ -79,7 +79,7 @@ private
   def sum_movement_details_sql(data)
     <<-SQL
       SELECT i.id, i.name, SUM(d.price * d.quantity * a.exchange_rate) AS total
-      FROM transaction_details d JOIN items i ON (i.id = d.item_id)
+      FROM movement_details d JOIN items i ON (i.id = d.item_id)
       JOIN accounts a ON (a.id = d.account_id)
       WHERE a.type = '#{data.type}'
       AND a.state IN ('approved', 'paid')
