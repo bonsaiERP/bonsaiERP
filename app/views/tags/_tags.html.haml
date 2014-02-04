@@ -29,11 +29,13 @@
 
     .btags-form
       %input#tags(type="text" placeholder="Seleccione o escriba")
-      -#%i.icon-tags.icon-large(title='Ver etiquetas' data-toggle='tooltip')
+      %i.icon-caret-down
       %button.btn.btn-primary.apply-tags Aplicar
 
     .btags-links
-      %a#new-tag-link(href="javascript:;") Nueva etiqueta
+      %a#new-tag-link.btn(href="javascript:;")
+        %i.icon-plus-circle
+        Nueva etiqueta
 
       %a#help-tags-link.dark(href='javascript:;')
         %i.icon-question-sign
@@ -43,7 +45,7 @@
   $(function() {
     var tag = new Plugin.Tag("#{list}", "#{model}", window.tags);
 
-    $('.but').one('click', 'button.tags', function() {
+    $('.btags-form .icon-caret-down').click(function() {
       $('#tags').select2('open');
-    })
+    });
   });

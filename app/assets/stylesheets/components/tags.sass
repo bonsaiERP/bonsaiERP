@@ -1,5 +1,6 @@
 @import colors
 @import compass
+
 .btags
   .select2-choices .select2-search-choice
     border: none
@@ -80,7 +81,18 @@ ul.btags-colors
 .btags-form
   display: inline-table
   float: left
+  .icon-caret-down
+    margin-left: -20px
+    margin-right: 10px
+
 .btags-links
   display: inline-table
   float: left
-  padding: 4px
+  padding: 0px
+  margin-left: 10px
+
+@media (max-width: 768px)
+  .btags-links
+    display: block
+    width: 100%
+    margin: 10px 0px

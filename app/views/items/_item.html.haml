@@ -40,5 +40,5 @@
 
       .span2.nw.r
         = link_to icon_edit, edit_item_path(item), class: 'dark'
-        = link_to icon_delete, item, class: 'dark', method: 'delete', data: {confirm: 'Esta seguro de eliminar el ítem?'}
+        = link_to icon_delete, item, class: 'dark', method: 'delete', remote: true, data: { confirm: 'Esta seguro de eliminar el ítem?' }
 

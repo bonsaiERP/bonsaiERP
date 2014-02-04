@@ -529,6 +529,15 @@ SQL
     end
   end
 
+  desc 'Copy migration numbers to schema_migrations, some tests erease schema_migrations'
+  task copy_migrations: :environment do
+    sql = <<-SQL
+INSERT INTO public.schema_migrations (version) VALUES
+#{ActiveRecord::Migrator.migrations('db/migrate').map {|v| "('#{v.version}')" }.join(', ')}
+    SQL
+
+    PgTools.execute sql
+  end
 end
 
 # example to export the file

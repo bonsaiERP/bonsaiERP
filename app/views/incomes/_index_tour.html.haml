@@ -26,24 +26,29 @@
     %h4
       Aplique las etiquetas
     %p
-      Haga click en 
+      Haga click en
       %strong Aplicar etiquetas
 
 
 :javascript
   $(function() {
-    $('body').on('click', '#tour-new-tag-link', 
+    $('body').on('click', '#tour-new-tag-link',
       function() { $('#new-tag-link').trigger('click');
     });
 
     // Tags
     function tourTags() {
-      $('button[href=#tags-pane]').trigger('click');
+      console.log('yes')
+      $('.btn.tags').trigger('click');
       var t = new Plugin.Bride('#tour-tags');
       t.init();
     }
 
     if(tags.legnth === 0) { tourTags(); }
 
-    $('body').on( 'click','#help-tags-link', function() { tourTags() });
+   alert(1)
+    $('#help-tags-link').click( function() {
+      console.log('help')
+      tourTags()
+    });
   });

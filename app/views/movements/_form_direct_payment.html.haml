@@ -11,7 +11,7 @@
 - if movement.is_draft?
   %input#accounts(type='hidden' data-accounts='#{Accounts::Query.new.money_options.to_json}')
   %br
-  .well.well-small.trans
+  .well.well-small
     .row-fluid
       -# Render for direct_payment
       .span6.account_to.form-inline

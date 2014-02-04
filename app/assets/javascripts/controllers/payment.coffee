@@ -5,8 +5,6 @@ myApp.controller 'PaymentController', ['$scope', ($scope) ->
   $scope.amount_currency = 0
   $scope.is_bank = false
 
-  console.log $scope.accounts
-
   $scope.isInverse = ->
     $scope.organisation_currency isnt $scope.base_currency
 
@@ -16,10 +14,10 @@ myApp.controller 'PaymentController', ['$scope', ($scope) ->
     else
       $scope.amount * $scope.exchange_rate
 
-
   # Set select2
   $('#account_to_id').select2(
     data: $scope.accounts
+    minimumResultsForSearch: if $scope.accounts.length > 8 then 1 else -1
     formatResult: Plugin.paymentOptions
     formatSelection: Plugin.paymentOptions
     escapeMarkup: (m) -> m

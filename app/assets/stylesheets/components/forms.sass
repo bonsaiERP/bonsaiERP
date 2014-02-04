@@ -120,7 +120,7 @@ input[disabled]
 .well form
   margin-bottom: 0px
 
-.hide-select2-search .select2-search
+//.hide-select2-search .select2-search
   display: none
 
 .input-append, .input-prepend.input-append
@@ -145,10 +145,6 @@ input[disabled]
 
 .but
   .buttons-list
-    float: left
-    display: inline-block
-  .panes
-    margin-left: 10px
     float: left
     display: inline-block
 
@@ -220,12 +216,19 @@ input.row-check
     margin: 5px 0px 10px
 
 // Panes
-#search
+.panes
+  margin-left: 10px
+  float: left
+  display: inline-block
+#search, #tags
   width: 350px
-@media (max-width: 480px)
-  #search
-    width: 250px
 
+@media (max-width: 768px)
+  .buttons-list .btn
+
+  .panes
+    display: block
+    width: 100%
 
 .item-name
   width: 450px

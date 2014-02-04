@@ -4,6 +4,9 @@ describe TenantCreator do
   let(:tenant) { 'bonsaierp' }
   let(:organisation) { build(:organisation, id: 1, tenant: tenant) }
 
+  before(:all) do
+    DatabaseCleaner.strategy = :truncation
+  end
   context "Initialize" do
     it {  TenantCreator.new(organisation) }
     it "error when bad name" do
@@ -36,6 +39,8 @@ describe TenantCreator do
       # Migrations are stored on public.schema_migrations
       #res = PgTools.execute "SELECT * FROM #{tc.tenant}.schema_migrations"
       #res.count.should > 0
+      res = PgTools.execute("select count(*) from #{tc.tenant}.units")
+      res.values[0][0].to_i.should eq(6)
 
       s = Store.first
       s.name.should eq('Almacen inicial')
@@ -50,8 +55,16 @@ describe TenantCreator do
     end
 
     after(:all) do
-      #PgTools.drop_schema tenant if PgTools.schema_exists?(tenant)
-      #DatabaseCleaner.strategy = :transaction
+      PgTools.drop_schema tenant if PgTools.schema_exists?(tenant)
+      DatabaseCleaner.strategy = :transaction
+      DatabaseCleaner.clean_with(:truncation, { except: %w(schema_migrations) })
+
+      sql = <<-SQL
+  INSERT INTO public.schema_migrations (version) VALUES
+  #{ActiveRecord::Migrator.migrations('db/migrate').map {|v| "('#{v.version}')" }.join(', ')}
+      SQL
+
+      PgTools.execute sql
     end
   end
 end

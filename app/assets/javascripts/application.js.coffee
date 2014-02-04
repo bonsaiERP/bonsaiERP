@@ -1,8 +1,7 @@
 #= require plugins/modernizr.js
-#= require jquery.js
 #= require plugins/fastclick.js
 #
-#= require jquery_ujs.js
+# require jquery_ujs.js
 #= require jquery/jquery-ui-1.10.1.custom.js
 
 #= require libraries/lodash.js
@@ -15,9 +14,6 @@
 #= require jquery/jquery.minicolors.js
 #= require jquery/jquery.scrollTo.js
 #= require jquery/jquery.placeholder.js
-
-# ANGULAR Goes before namespace where is defined myApp for angularjs
-#= require angular/angular.min.js
 
 #= require namespace.coffee
 
