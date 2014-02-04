@@ -6,6 +6,7 @@ myApp.controller 'LoanController', ['$scope', ($scope) ->
   # Set select2
   $('#account_to_id').select2(
     data: $scope.accounts
+    minimumResultsForSearch: if $scope.accounts.length > 8 then 1 else -1
     formatResult: Plugin.paymentOptions
     formatSelection: Plugin.paymentOptions
     escapeMarkup: (m) -> m

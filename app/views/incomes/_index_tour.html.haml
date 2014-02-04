@@ -38,7 +38,6 @@
 
     // Tags
     function tourTags() {
-      console.log('yes')
       $('.btn.tags').trigger('click');
       var t = new Plugin.Bride('#tour-tags');
       t.init();
@@ -46,9 +45,7 @@
 
     if(tags.legnth === 0) { tourTags(); }
 
-   alert(1)
     $('#help-tags-link').click( function() {
-      console.log('help')
       tourTags()
     });
   });

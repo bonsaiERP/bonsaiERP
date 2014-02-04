@@ -57,6 +57,7 @@
 
   .span6
     .inline-cont
+      %i.icon-file.muted(title='Descripción' data-toggle='tooltip')
       = link_to icon('icon-pencil', 'Editar descripción'), loan_path(@loan.id), class: 'dark inline-edit',
         data: { type: 'textarea', name: 'description', notify: '.top-right' }
       %span.inline-data(data-value='#{@loan.description}')= nl2br @loan.description

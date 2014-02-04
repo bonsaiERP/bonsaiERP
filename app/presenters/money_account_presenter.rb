@@ -1,6 +1,6 @@
 class MoneyAccountPresenter < BasePresenter
   def active_tag
-    active? ? icon('icon-ok green', 'Visible') : icon('icon-remove red', 'Invisible')
+    active? ? icon('icon-ok green', 'Visible') : icon('icon-cross red', 'Invisible')
   end
 
   def pendent_ledgers_tag
