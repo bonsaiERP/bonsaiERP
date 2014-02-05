@@ -11,7 +11,7 @@ class MovementHistoryPresenter < HistoryPresenter
   end
 
   def present_changes
-    arr = history_data.map do |k, v|
+    arr = history.map do |k, v|
       case k
       when :state then state_html(k, v)
       when :error_messages, :extras, :updater_id, :nuller_id, details_col
@@ -25,8 +25,8 @@ class MovementHistoryPresenter < HistoryPresenter
   end
 
   def present_extras
-    unless history_data_raw['extras']['from'] == history_extras_to
-      history_data_raw['extras']['from']
+    unless history_data['extras']['from'] == history_extras_to
+      history_data['extras']['from']
     end
   end
 
@@ -40,7 +40,7 @@ class MovementHistoryPresenter < HistoryPresenter
   # extras hstore
   def history_extras_to
     @history_extras_to ||= Hash[
-      history_data_raw['extras']['to'].map { |k, v| [k, v.to_s] }
+      history_data['extras']['to'].map { |k, v| [k, v.to_s] }
     ]
   end
 
@@ -65,7 +65,7 @@ class MovementHistoryPresenter < HistoryPresenter
   end
 
   def extras
-    history_data_raw['extras']
+    history_data['extras']
   end
 
   def balance_inventory(k)

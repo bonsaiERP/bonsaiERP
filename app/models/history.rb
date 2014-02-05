@@ -5,17 +5,16 @@ class History < ActiveRecord::Base
   belongs_to :user
 
   serialize :history_data, JSON
+  serialize :all_data, JSON
+
+  store_accessor :extras, :klass_to_s, :operation_type
 
   def history_attributes
     @history_attributes ||= history_data.keys.map(&:to_sym)
   end
 
-  def history_data
+  def history
     @hist_data ||= get_typecasted read_attribute(:history_data)
-  end
-
-  def history_data_raw
-    read_attribute(:history_data)
   end
 
   private

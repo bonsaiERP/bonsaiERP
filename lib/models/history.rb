@@ -28,9 +28,14 @@ module Models::History
       else
         h = store_update
       end
-      h.klass_type = self.class.to_s
+      set_history_extras(h)
 
       h.save
+    end
+
+    def set_history_extras(h)
+      h.klass_type = self.class.to_s
+      h.klass_to_s = self.to_s
     end
 
     def store_new_record
@@ -39,11 +44,11 @@ module Models::History
     end
 
     def store_update
-      h = get_data
-      history_klass.set_history(self, h)
-
-      histories.build(new_item: false, history_data: h, historiable_type: self.class.to_s,
+      hist = histories.build(new_item: false, history_data: get_data, historiable_type: self.class.to_s,
                       user_id: history_user_id)
+
+      history_klass.set_history(self, hist)
+      hist
     end
 
     def get_data(object = self)

@@ -19,6 +19,7 @@ describe History do
       h = i.histories.first
       h.should be_persisted
       h.should be_new_item
+      h.klass_to_s.should eq(i.to_s)
       h.created_at.should be_is_a(Time)
     end
 
@@ -38,9 +39,9 @@ describe History do
       expect(h.user_id).to eq(1)
       expect(h.history_attributes).to eq([:price, :buy_price, :name])
 
-      expect(h.history_data[:price]).to eq({ from: '10.0'.to_d, to: '20.0'.to_d, type: 'decimal'})
-      expect(h.history_data[:buy_price]).to eq({ from: '7.0'.to_d, to: '15.0'.to_d, type: 'decimal' })
-      expect(h.history_data[:name]).to eq({ from: 'item', to: 'New name for item', type: 'string' })
+      expect(h.history[:price]).to eq({ from: '10.0'.to_d, to: '20.0'.to_d, type: 'decimal'})
+      expect(h.history[:buy_price]).to eq({ from: '7.0'.to_d, to: '15.0'.to_d, type: 'decimal' })
+      expect(h.history[:name]).to eq({ from: 'item', to: 'New name for item', type: 'string' })
 
 
       # Latest
@@ -51,7 +52,7 @@ describe History do
       i.histories.should have(3).items
       h = i.histories.first
       expect( h.history_attributes ).to eq([:active])
-      expect(h.history_data).to eq( {active: { from: true, to: false, type: 'boolean' } } )
+      expect(h.history).to eq( {active: { from: true, to: false, type: 'boolean' } } )
     end
 
   end
@@ -97,7 +98,7 @@ describe History do
 
       expect(e.histories).to have(2).items
       h = e.histories.first
-      expect(h.history_data[:state]).to eq({from: 'approved', to: 'nulled', type: 'string'})
+      expect(h.history[:state]).to eq({from: 'approved', to: 'nulled', type: 'string'})
     end
 
     it "#history" do
@@ -108,6 +109,7 @@ describe History do
       expect(e.histories).to have(1).item
       h = e.histories.first
       expect(h.klass_type).to eq('Expense')
+      expect(h.klass_to_s).to eq(e.to_s)
 
       # Update detail
       det = e.expense_details.map { |v| v.attributes.except('created_at', 'updated_at', 'original_price') }
@@ -123,11 +125,10 @@ describe History do
       expect(e.histories).to have(2).items
       h = e.histories.first
 
-
-      expect(h.history_data[:description]).to eq({from: 'New expense description', to: 'Jo jo jo', type: 'string'})
+      expect(h.history[:description]).to eq({from: 'New expense description', to: 'Jo jo jo', type: 'string'})
       expect(h.klass_type).to eq('Expense')
 
-      det_hist = h.history_data[:expense_details][0]
+      det_hist = h.history[:expense_details][0]
       expect(det_hist[:price]).to eq({from: '10'.to_d, to: '15'.to_d, type: 'decimal'})
 
       expect(det_hist[:description]).to eq({from: 'First item', to: 'A new description', type: 'string'})
@@ -141,7 +142,7 @@ describe History do
       expect(e.histories).to have(3).items
       h = e.histories.first
 
-      expect(h.history_data).to eq({ expense_details: [{ index: 2, new_record: true}], operation_type: {} })
+      expect(h.history).to eq({ expense_details: [{ index: 2, new_record: true}], operation_type: {} })
 
       # Update delete detail
       det = e.expense_details.map { |v| v.attributes.except('created_at', 'updated_at', 'original_price') }
@@ -152,7 +153,7 @@ describe History do
 
       expect(e.expense_details).to have(2).items
 
-      h = e.histories.first.history_data
+      h = e.histories.first.history
       h[:expense_details][0][:destroyed].should be_true
       h[:expense_details][0][:index].should eq(2)
       h[:expense_details][0][:item_id].should eq(10)
@@ -174,15 +175,15 @@ describe History do
 
       expect(e.histories).to have(2).items
       h = e.histories.first
-      h.history_data[:due_date].should eq( { from: d, to: today, type: 'date' })
-      h.history_data[:state].should eq( {from: 'due', to: 'approved', type: 'string'} )
+      h.history[:due_date].should eq( { from: d, to: today, type: 'date' })
+      h.history[:state].should eq( {from: 'due', to: 'approved', type: 'string'} )
 
       d2 = 1.days.ago.to_date
       e.due_date = d2
       e.save.should be_true
       h = e.histories.first
-      h.history_data[:due_date].should eq( { from: today, to: d2, type: 'date' })
-      h.history_data[:state].should eq( {from: 'approved', to: 'due', type: 'string'} )
+      h.history[:due_date].should eq( { from: today, to: d2, type: 'date' })
+      h.history[:state].should eq( {from: 'approved', to: 'due', type: 'string'} )
     end
   end
 end

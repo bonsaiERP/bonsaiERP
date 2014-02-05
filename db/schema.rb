@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140131140212) do
+ActiveRecord::Schema.define(version: 20140205123754) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -149,6 +149,8 @@ ActiveRecord::Schema.define(version: 20140131140212) do
     t.text     "history_data"
     t.datetime "created_at"
     t.string   "klass_type"
+    t.hstore   "extras"
+    t.text     "all_data"
   end
 
   add_index "histories", ["created_at"], name: "index_histories_on_created_at", using: :btree

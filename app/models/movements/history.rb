@@ -4,9 +4,11 @@ class Movements::History
   attr_reader :details_col, :hist, :movement
 
   delegate :state, :state_was, :state_changed?,
-           :date, :date_was, :date_chaged?,
+           :date, :date_was, :date_chaged?, :to_s,
            :due_date, :due_date_was, :due_date_changed?,
            to: :movement
+
+  delegate :history_data, to: :hist
 
   def initialize(details_col)
     @details_col = details_col
@@ -15,16 +17,16 @@ class Movements::History
   def set_history(movement, hist)
     @movement, @hist = movement, hist
 
-    set_details(hist)
-    set_state_col(hist)
-    hist[:operation_type] = movement.operation_type
+    set_details
+    set_state_col
+    history_data[:operation_type] = movement.operation_type
   end
 
   private
 
-    def set_details(h)
+    def set_details
       det_hash = get_details
-      h[details_col] = det_hash  unless det_hash.empty?
+      history_data[details_col] = det_hash  unless det_hash.empty?
     end
 
     def get_details
@@ -45,9 +47,9 @@ class Movements::History
       det.changed_attributes.except('created_at', 'updated_at').any?
     end
 
-    def set_state_col(h)
-      unless h[:state].present?
-        set_due_date_state(h)  if due_date_changed?
+    def set_state_col
+      unless history_data[:state].present?
+        set_due_date_state(history_data)  if due_date_changed?
       end
     end
 
