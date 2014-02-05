@@ -12,8 +12,8 @@ init = ($) ->
   # Regional settings for jquery-ui datepicker
   $.datepicker.regional['es'] = {
     closeText: 'Cerrar',
-    prevText: '&#x3c;Ant',
-    nextText: 'Sig&#x3e;',
+    prevText: '',#&#x3c;',
+    nextText: '',#&#x3e;',
     currentText: 'Hoy',
     monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
     'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],

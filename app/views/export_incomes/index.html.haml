@@ -1,7 +1,7 @@
 %h1 Exportar ingresos
 
 .row-fluid.form-inline.well.well-small
-  .span6
+  .span12
     = form_tag export_incomes_path(format: 'xls') do
       = render 'layouts/date_range', dr: @date_range
       = submit_tag 'Exportar a Excel', class: 'btn'

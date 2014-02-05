@@ -18,7 +18,7 @@
         %span(style='display:none')
           = f.check_box :direct_payment, id: 'direct_payment',
             'ng-model' => 'direct_payment', style: 'vertical-align: top'
-        %a#direct-payment-button.btn.btn-small.b(data-toggle='button' ng-click='direct_payment=!direct_payment') #{lbl} directo
+        %a#direct-payment-button.btn.btn-small.btn-info.b(data-toggle='button' ng-click='direct_payment=!direct_payment') #{lbl} directo
 
         = f.input :account_to_id, input_html: { id: 'account_to_id', class: 'span10',
           'ng-model' => 'account_to_id', 'ng-disabled' => '!direct_payment', 'ng-movement-accounts' => true, 'ng-initial' => true },

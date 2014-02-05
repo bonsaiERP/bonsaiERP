@@ -166,8 +166,9 @@ $( ->
       $picker.datepicker
         yearRange: '1900:'
         showOn: 'both'
-        buttonImageOnly: true
-        buttonImage: '/assets/bicon/date.png'
+        #buttonImageOnly: true
+        buttonText: ''
+        #buttonImage: '/assets/bicon/date.png'
         altFormat: 'yy-mm-dd'
         altField: $hidden.get(0)
 

@@ -68,7 +68,7 @@
         = link_to icon('icon-plus-sign'), new_tax_path, title: 'Nuevo impuesto',
           class: 'btn ajax add-new-url add-new-tax', data: { width: 400 }
 
-      %a#tax-in-out-btn.btn.btn-small.b(data-toggle='button' ng-click='tax_in_out=!tax_in_out') {{ taxLabel() }}
+      %a#tax-in-out-btn.btn.btn-small.btn-info.b(data-toggle='button' ng-click='tax_in_out=!tax_in_out') {{ taxLabel() }}
       %span.hide= f.check_box :tax_in_out, 'ng-model' => 'tax_in_out', id: 'tax_in_out'
 
       %span.currency
