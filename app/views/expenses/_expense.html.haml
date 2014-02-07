@@ -36,10 +36,12 @@
     = expense.description
   .span3
     .span6.r
+      %span.visible-phone.muted Total
       = ntc expense.total
       = currency_label expense.currency
 
     .span6.r
+      %span.visible-phone.muted Saldo
       = ntc expense.amount
       = currency_label expense.currency
   .span1.r
