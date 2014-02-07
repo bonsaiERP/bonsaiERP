@@ -17,12 +17,24 @@ class Movements::History
   def set_history(movement, hist)
     @movement, @hist = movement, hist
 
+    filter
     set_details
     set_state_col
-    history_data[:operation_type] = movement.operation_type
+    hist.operation_type = movement.operation_type
   end
 
   private
+
+    def filter
+      history_data['extras']['from'].each do |k, v|
+        if v == history_data['extras']['to'][k].to_s
+          history_data['extras']['from'].delete(k)
+          history_data['extras']['to'].delete(k)
+        end
+      end
+    rescue
+      # no cahnges
+    end
 
     def set_details
       det_hash = get_details

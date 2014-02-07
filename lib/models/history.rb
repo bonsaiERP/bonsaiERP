@@ -53,8 +53,9 @@ module Models::History
 
     def get_data(object = self)
       Hash[ get_object_attributes(object).map { |k, v|
-        [k, { from: v, to: object.send(k), type: object.class.column_types[k].type } ]
-      }]
+        next  if ['updater_id', 'nuller_id', 'creator_id', 'approver_id'].include?(k.to_s)
+        [k, { 'from' => v, 'to' => object.send(k), 'type' => object.class.column_types[k].type } ]
+      }.compact]
     end
 
     def history_user_id

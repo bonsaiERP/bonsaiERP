@@ -255,6 +255,7 @@ init = ($) ->
     window.keyPress = false
     $('body').on( 'keydown', 'form.enter input', (event) ->
       window.keyPress = event.keyCode
+      return true  if $(this).attr('type') is 'submit'
       event.preventDefault()  if event.keyCode is 13
     )
 

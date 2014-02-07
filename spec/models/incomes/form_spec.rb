@@ -109,6 +109,7 @@ describe Incomes::Form do
       i.should be_active
       i.ref_number.should =~ /I-\d{2}-\d{4}/
       i.date.should be_is_a(Date)
+      i.error_messages.should eq({})
 
       i.creator_id.should eq(UserSession.id)
       #i.balance_inventory.should == 500

@@ -133,9 +133,6 @@ GEM
       pry (~> 0.9.10)
     pry-rails (0.3.2)
       pry (>= 0.9.10)
-    pry-remote (0.1.7)
-      pry (~> 0.9)
-      slop (~> 3.0)
     puma (2.7.1)
       rack (>= 1.1, < 2.0)
     quiet_assets (1.0.2)
@@ -264,7 +261,6 @@ DEPENDENCIES
   pry
   pry-nav
   pry-rails
-  pry-remote
   puma
   quiet_assets
   rails (= 4.0.2)

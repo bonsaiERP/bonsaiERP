@@ -204,7 +204,7 @@ $(->
 
 
   # Check the methods to call the url
-  $('body').on 'click', '[data-method="delete"], [data-method="post"], [data-method="put"], [data-method="get"]', (event) ->
+  $('body').on 'click', '[data-method]', (event) ->
 
     event.preventDefault()
 

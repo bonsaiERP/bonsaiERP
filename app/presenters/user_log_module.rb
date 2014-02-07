@@ -26,6 +26,6 @@ module UserLogModule
   end
 
   def user_label_text(u, t)
-    "#{u} #{l t}, ID: #{u.id}"
+    "#{u} #{context.lo t}, ID: #{u.id}"
   end
 end

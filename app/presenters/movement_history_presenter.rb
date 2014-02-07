@@ -3,7 +3,7 @@ class MovementHistoryPresenter < HistoryPresenter
     if new_item?
       template.text_green_dark "creó el #{movement}", nil, 'b'
     else
-      "modificó: #{present_changes.html_safe}".html_safe
+      "modificó:<br/> #{present_changes.html_safe}".html_safe
     end
   end
 
@@ -11,17 +11,24 @@ class MovementHistoryPresenter < HistoryPresenter
   end
 
   def present_changes
-    arr = history.map do |k, v|
+    res = [filter_changes, mov_extras_changes, details_changes].flatten.compact.join(', ')
+    if res.present?
+      res
+    else
+      'La fecha de modificación'
+    end
+  end
+
+  def filter_changes
+    @filter_changes ||= history.map do |k, v|
       case k
       when :state then state_html(k, v)
-      when :error_messages, :extras, :updater_id, :nuller_id, details_col
+      when :error_messages, :extras, :updater_id, :nuller_id, :approver_id, details_col
         nil
       else
         v.present? ? get_change(k, v) : nil
       end
     end
-
-    [arr, extras_changes, details_changes].flatten.compact.join(', ')
   end
 
   def present_extras
@@ -31,7 +38,7 @@ class MovementHistoryPresenter < HistoryPresenter
   end
 
   def get_change(k, v)
-    [text_gray(translate_attribute(k), nil, 'b'), ' de ',
+    [attr_text(k), ' de ',
      code(format_for(v[:from], v[:type])), ' a ',
      code(format_for(v[:to], v[:type]))
     ].join('')
@@ -60,24 +67,28 @@ class MovementHistoryPresenter < HistoryPresenter
     end
   end
 
-  def extras_changes
+  def mov_extras_changes
     [inventory_operation, change_no_inventory].compact
   end
 
-  def extras
+  def mov_extras
     history_data['extras']
   end
 
   def balance_inventory(k)
-    extras[k]['balance_inventory']
+    mov_extras[k]['balance_inventory']
   end
 
-  def inventory_operation
-  end
+  def inventory_operation;  end
 
   def change_no_inventory
+    from, to = mov_extras['from']['no_inventory'], mov_extras['to']['no_inventory']
+    if from.present? || to.present?
+      arr = ['Inventario ACTIVO', 'Inventario INACTIVO']
+      from, to = from.to_s == 'true' ? arr.reverse : arr
+      "#{attr_text 'no_inventory'} de #{code from} a #{code to}"
+    end
   end
 
-  def details_changes
-  end
+  def details_changes;  end
 end

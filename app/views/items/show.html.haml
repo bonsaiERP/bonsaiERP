@@ -43,6 +43,13 @@
     %label Descripción
     = @item.description
 
+.row-fluid
+  .span6
+    %h3.n Historial
+
+    %ul.listing.unstyled
+      = render partial: 'histories/history', collection: present(@item.histories)
+
 .page-header
   %h3.n Inventario
 - @item.stocks.includes(:store).each do |st|

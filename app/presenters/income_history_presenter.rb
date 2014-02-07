@@ -16,18 +16,18 @@ class IncomeHistoryPresenter < MovementHistoryPresenter
   end
 
   def inventory_operation?
-    ['inventory_in', 'inventory_out'
-    ].include? operation_type
+    ['inventory_in', 'inventory_out'].include? operation_type
   end
 
   def get_inventory_operation
-    from = balance_inventory('from').to_s.to_d
-    to = balance_inventory('to').to_s.to_d
-
-    if from > to
-      'Entrega de inventario'
-    elsif to > from
-      'Devolución inventario'
+    if operation_type == 'inventory_out'
+      context.text_green "Entrega de inventario <strong>#{inventory_operation_complete}</strong>"
+    else
+      context.text_red 'Devolución de inventario'
     end
+  end
+
+  def inventory_operation_complete
+    mov_extras['to']['delivered'].to_s == 'true' ? 'completo' : 'parcial'
   end
 end

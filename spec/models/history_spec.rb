@@ -142,7 +142,7 @@ describe History do
       expect(e.histories).to have(3).items
       h = e.histories.first
 
-      expect(h.history).to eq({ expense_details: [{ index: 2, new_record: true}], operation_type: {} })
+      expect(h.history).to eq({ expense_details: [{ index: 2, new_record: true}] })
 
       # Update delete detail
       det = e.expense_details.map { |v| v.attributes.except('created_at', 'updated_at', 'original_price') }
@@ -151,6 +151,7 @@ describe History do
       at = e.attributes.except('created_at', 'updated_at').merge(expense_details_attributes: det)
       e.update_attributes(at).should be_true
 
+      expect(e.histories).to have(4).items
       expect(e.expense_details).to have(2).items
 
       h = e.histories.first.history
@@ -159,6 +160,9 @@ describe History do
       h[:expense_details][0][:item_id].should eq(10)
       h[:expense_details][0][:price].should == "10.0"
       h[:expense_details][0][:quantity].should == "2.0"
+
+      e.save
+      expect(e.histories).to have(5).items
     end
 
     it "#state" do

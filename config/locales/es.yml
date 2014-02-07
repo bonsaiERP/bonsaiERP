@@ -372,6 +372,18 @@ es:
       last: "Fin &raquo;"
       truncate: "..."
 
+  ########################################
+  # Translations for history
+  item:
+    attributes:
+      for_sale: Venta
+      active: Visible
+      unit_id: Unidad
+      price: Precio de VENTA
+      buy_price: Precio de COMPRA
+      name: Nombre
+      code: Código
+
   movement_attributes: &movement_attributes
     name: 'código'
     state: 'estado'
@@ -383,6 +395,7 @@ es:
     exchange_rate: 'tipo de cambio'
     tax_id: 'impuesto'
     description: 'descripción'
+    no_inventory: 'Inventario'
 
 
   income:

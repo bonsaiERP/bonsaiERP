@@ -107,6 +107,7 @@ describe Expenses::Form do
       e.should be_active
       e.ref_number.should =~ /E-\d{2}-\d{4}/
       e.date.should be_is_a(Date)
+      e.error_messages.should eq({})
 
       e.creator_id.should eq(UserSession.id)
 

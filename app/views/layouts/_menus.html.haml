@@ -22,18 +22,18 @@
             = link_to "Ingresos", incomes_path
           %li
             = link_to new_income_path do
-              %i.icon-plus-circle
-              Nuevo ingreso
+              + Nuevo ingreso
           -#%li.divider
           %li
             = link_to "Egresos", expenses_path
           %li
             = link_to new_expense_path do
-              %i.icon-plus-circle
-              Nuevo egreso
+              \- Nuevo egreso
           -#%li.divider
           %li
-            = link_to "Contactos", contacts_path
+            = link_to contacts_path do
+              %i.icon-user
+              Contactos
           -#%li
             = link_to "Nuevo contacto", new_contact_path
           -#%li.divider

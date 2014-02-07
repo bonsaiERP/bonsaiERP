@@ -36,6 +36,7 @@ class Incomes::Form < Movements::Form
     @movement = Income.new(income_attributes)
     @movement.ref_number = Income.get_ref_number
     @movement.state = 'draft'
+    @movement.error_messages = {}
     2.times { @movement.income_details.build(quantity: 1) }  if income.details.empty?
     @service = Incomes::Service.new(income)
   end
