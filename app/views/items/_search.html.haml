@@ -8,7 +8,7 @@
     #search-pane.button-pane.input-append
       = form_tag '/items', method: 'get', class: 'form-inline' do
 
-        = text_field_tag 'search', '', placeholder: 'Nombre, código o etiqueta', style: 'max-width: 350px'
+        = text_field_tag 'search', '', placeholder: 'Nombre, código o etiqueta'
         = submit_tag 'Buscar', class: 'btn'
 
         = link_to 'eliminar filtro', items_path  if params[:commit].present?
