@@ -113,18 +113,13 @@ the database `bonsai_prod` login with user **bonsai_data**
 ```
 sudo apt-get install nodejs nodejs-dev
 sudo apt-get install libapache2-mod-xsendfile
+sudo service apache2 restart
 ```
 
 ## Install phantomjs for PDF generation
 Download phantomjs from http://phantomjs.org/, decompress file and put
 the `bin/phantomjs` to `/usr/bin`
 
-## Apache modsendfile
-```
-sudo apt-get install apache2-prefork-dev
-sudo apt-get install libapache2-mod-xsendfile
-sudo service apache2 restart
-```
 ## Passenger installation
 ```
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 561F9B9CAC40B2F7
