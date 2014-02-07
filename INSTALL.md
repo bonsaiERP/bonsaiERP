@@ -115,6 +115,11 @@ sudo apt-get install nodejs nodejs-dev
 sudo apt-get install libapache2-mod-xsendfile
 ```
 
+## Install phantomjs for PDF generation
+Download phantomjs from http://phantomjs.org/, decompress file and put
+the `bin/phantomjs` to `/usr/bin`
+
+
 ## Passenger installation
 ```
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 561F9B9CAC40B2F7
