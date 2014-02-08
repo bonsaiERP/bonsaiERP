@@ -19,30 +19,6 @@ class UserPassword < BaseForm
     user.save
   end
 
-  def update_default_password
-    return false  unless valid_password_confirmation?
-
-    user.change_default_password = false
-    user.password = password
-
-    user.save
-  end
-
-  def update_reset_password(usr)
-    raise 'You must assign a user=' unless usr.is_a?(User)
-    @user = usr
-    return false  unless valid?
-
-    user.change_default_password = false
-    user.confirmed_at = Time.zone.now
-    user.reset_password_token = SecureRandom.urlsafe_base64(32)
-    user.auth_token = SecureRandom.urlsafe_base64(32)
-
-    user.password = password
-
-    user.save
-  end
-
   # Setter
   def user=(usr = UserSession.user)
     raise 'You must assign a user=' unless usr.is_a?(User)

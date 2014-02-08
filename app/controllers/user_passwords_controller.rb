@@ -10,36 +10,42 @@ class UserPasswordsController < ApplicationController
 
   # POST user_passwords
   def create
-    @user_password = UserPassword.new(password_params)
+    @user_password = UserPassword.new(user_password_params)
 
     if @user_password.update_password
       redirect_to current_user, notice: "Su contraseña ha sido actualizada."
     else
-      render 'new'
+      render :new
     end
   end
 
   # GET user_passwords/new_default
   def new_default
-    @user_password = UserPassword.new
+    @update_password = UpdateDefaultPassword.new
   end
 
   # POST user_passwords/create_default
   def create_default
-    @user_password = UserPassword.new(password_params)
+    @update_password = UpdateDefaultPassword.new(password_params)
 
-    if @user_password.update_default_password
+    if @update_password.update_password
       redirect_to current_user, notice: "Su contraseña ha sido actualizada."
     else
-      render 'new_default'
+
+      render :new_default
     end
   end
 
   private
 
-    def password_params
+    def user_password_params
       params.require(:user_password).permit(:old_password, :password)
-      #.merge(password_confirmation)
+    end
+
+    def password_params
+      params.require(:update_default_password)
+      .permit(:password, :password_confirmation)
+      .merge(user: current_user)
     end
 
     def check_change_password!

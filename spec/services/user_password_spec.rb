@@ -34,35 +34,4 @@ describe UserPassword do
     end
   end
 
-
-  context 'update_default_password' do
-    it "update_default_password" do
-      user.change_default_password = false
-      user.should_not be_change_default_password
-
-      up = UserPassword.new(password: 'demo1234', password_confirmation: 'demo1234')
-      up.user = user
-
-      up.update_default_password.should be_true
-      up.should_not be_change_default_password
-    end
-  end
-
-  context 'update_reset_password' do
-    it "does" do
-      user.reset_password_token = ''
-      user.should_receive(:save).and_return(true)
-      user.change_default_password = false
-      user.should_not be_change_default_password
-      user.confirmed_at.should be_nil
-
-      up = UserPassword.new(password: 'Demo1234', password_confirmation: 'Demo1234')
-
-      up.update_reset_password(user).should be_true
-      up.should_not be_change_default_password
-      up.user.confirmed_at.should_not be_blank
-      up.user.reset_password_token.should_not be_blank
-    end
-  end
-
 end

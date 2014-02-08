@@ -3,9 +3,9 @@
 %h4.n.text-success
   Excelente cambia tu contraseña
 
-= simple_form_for @user_password, url: create_default_user_passwords_path do |f|
-  =f.input :password, label: 'Nueva contraseña'
-  =f.input :password_confirmation, label: 'Confirmar nueva contraseña'
+= simple_form_for @update_password, url: create_default_user_passwords_path do |f|
+  = f.input :password, label: 'Nueva contraseña', input_html: { size: 35 }
+  = f.input :password_confirmation, label: 'Confirmar nueva contraseña', input_html: { size: 35 }
   .form-actions
     =f.submit 'Cambiar contraseña', class: 'btn btn-success'
 
