@@ -49,17 +49,9 @@
       %i.icon-off
       Entrar
 
-= render file: 'layouts/browser'
 
 :javascript
   $(function() {
-    /*
-    $(document).on('keyup', '#registration_name', function() {
-      // TODO: Improve the copyname;
-      name = $(this).val().toLowerCase().replace(/[^a-z]/g, '');
-      $('#registration_tenant').val(name);
-    });
-    */
 
     $('#show-password').on('click', function() {
       if($(this).prop('checked')) {

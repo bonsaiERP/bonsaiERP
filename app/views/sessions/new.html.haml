@@ -18,21 +18,10 @@
         %i.icon-lock-open
         Olvido su contraseña?
 
-= render file: 'layouts/browser'
 
 :javascript
   $(function() {
     $('input.email').focus();
-
-    $('#reset-password-link').click(function() {
-      $('#login').hide(300);
-      $('#password').show(300);
-    });
-
-    $('#login-link').click(function() {
-      $('#password').hide(300);
-      $('#login').show(300);
-    });
 
     var demos = ['demo@demo.com', 'demo1@demo.com', 'demo3@demo.com'];
 
