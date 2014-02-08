@@ -1,25 +1,16 @@
-:css
-  #header{ display: none; }
-  #menu{ display: none; }
-  #cont{
-    background: none;
-    box-shadow: none;
-    -moz-box-shadow: none;
-    -webkit-box-shadow: none;
-  }
+%h1.c.login
+  Cambio de contraseña
 
-.row-fluid
-  .lonely.span6.offset3
-    .inset.center
-      %header
-        %h2 Cambio de contraseña
-      .pad
-        = simple_form_for @user_password, url: reset_password_path(params[:id]), method: 'put' do |f|
-          = hidden_field_tag :id, params[:id]
-          %fieldset
-            = f.input :password, label: false, input_html: {placeholder: 'Nueva contraseña'}
-            = f.input :password_confirmation, label: false, input_html: {placeholder: 'Nueva confirmación de contraseña' }
-          .form_actions
-            = f.submit "Cambiar contraseña", class: 'btn btn-success'
+.initial.c
+  = simple_form_for @reset_password, url: reset_password_path(params[:id]), method: 'put' do |f|
+    = hidden_field_tag :id, params[:id]
+    .large
+      %i.muted.icon-key.icon(title='Nueva contraseña')
+      = f.input :password, label: false, input_html: { placeholder: 'Nueva contraseña' }
+    .large
+      %i.muted.icon-key.icon(title='Repetir contraseña')
+      = f.input :password_confirmation, label: false, input_html: { placeholder: 'Confirmación de contraseña' }
+    .form_actions
+      = f.submit "Cambiar contraseña", class: 'btn btn-success'
 
 

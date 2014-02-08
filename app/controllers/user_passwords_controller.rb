@@ -35,16 +35,18 @@ class UserPasswordsController < ApplicationController
     end
   end
 
-private
-  def password_params
-    params.require(:user_password).permit(:old_password, :password, :password_confirmation)
-  end
+  private
 
-  def check_change_password!
-    redirect_to new_default_user_passwords_path and return if current_user.change_default_password?
-  end
+    def password_params
+      params.require(:user_password).permit(:old_password, :password)
+      #.merge(password_confirmation)
+    end
 
-  def check_change_default_password!
-    redirect_to new_user_password_path and return unless current_user.change_default_password?
-  end
+    def check_change_password!
+      redirect_to new_default_user_passwords_path and return if current_user.change_default_password?
+    end
+
+    def check_change_default_password!
+      redirect_to new_user_password_path and return unless current_user.change_default_password?
+    end
 end

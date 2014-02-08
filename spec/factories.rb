@@ -19,8 +19,7 @@ FactoryGirl.define do
     phone "2755620"
     mobile "70681101"
     website "http://boliviaonrails.com"
-    password "demo123"
-    password_confirmation "demo123"
+    password "demo1234"
     description "Una descripción"
   end
 

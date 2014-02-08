@@ -1,7 +1,7 @@
 %h1.c.login Recuperar contraseña
 
 .initial.c
-  = simple_form_for(ResetPassword.new) do |f|
+  = simple_form_for(@reset_password, url: reset_passwords_path) do |f|
 
     .large
       %i.muted.icon-envelope.icon(title='Email' data-toggle='tooltip')

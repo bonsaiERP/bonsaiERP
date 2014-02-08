@@ -1,56 +1,41 @@
-# encoding: utf-8
 require 'spec_helper'
 
 describe ResetPassword do
-  let(:user) { build :user, id: 2 }
+  it { should_not have_valid(:password).when('demo214', 'sim3') }
 
-  it "send ResetPasswordMailer" do
-    User.stub_chain(:active, where: [user] )
-    user.stub(save: true, active_links: [build(:link, active: true, tenant: 'bonsai')])
-    PgTools.stub(schema_exists?: true)
-    user.reset_password_token.should_not be_present
-    user.reset_password_sent_at.should_not be_present
+  it '#validates' do
+    rp = ResetPassword.new(password: 'demo1234')
+    rp.stub(user: build(:user))
+    rp.should_not be_valid
 
-    ResetPasswordMailer.should_receive(:send_reset_password).and_return(double(deliver: true))
-    rp = ResetPassword.new(email: 'test@mail.com')
-    rp.reset_password.should be_true
+    rp.errors.messages[:password].should eq([I18n.t('errors.messages.confirmation')])
+    rp.password_confirmation = 'demo1234'
 
-    user.reset_password_token.should be_present
-    user.reset_password_sent_at.should be_present
+    rp.should be_valid
   end
 
-  it "sends RegistrationMailer" do
-    User.stub_chain(:active, where: [user] )
-    user.stub(save: true, active_links: [build(:link, active: true, master_account: true)])
-    PgTools.stub(schema_exists?: false)
+  it "#check time ago" do
+    token = SecureRandom.urlsafe_base64
+    create(:user, email: 'juan@mail.com', reset_password_token: token, reset_password_sent_at: 2.hours.ago)
 
-    #
-    user.reset_password_token.should_not be_present
-    user.reset_password_sent_at.should_not be_present
+    rp = ResetPassword.new(user: nil, password: 'DEMO1234', password_confirmation: 'DEMO1234')
+    rp.update_password.should be_false
 
-    RegistrationMailer.should_receive(:send_registration).and_return(double(deliver: true))
+    rp.errors.messages[:user].should eq([I18n.t('errors.messages.blank')])
 
-    rp = ResetPassword.new(email: 'test@mail.com')
-    rp.reset_password.should be_true
 
-    user.reset_password_token.should be_present
-    user.reset_password_sent_at.should be_present
+    User.find_by(reset_password_token: token).should be_is_a(User)
   end
 
-  it "returns false" do
-    User.stub_chain(:active, where: [user] )
-    user.stub(save: true, active_links: [build(:link, active: true, master_account: false)])
+  it "#updates" do
+    token = SecureRandom.urlsafe_base64
+    u = create(:user, email: 'juan@mail.com', reset_password_token: token, reset_password_sent_at: 15.minutes.ago)
 
-    rp = ResetPassword.new(email: 'test@mail.com')
-    rp.reset_password.should be_false
+    rp = ResetPassword.new(user: u, password: 'DEMO1234', password_confirmation: 'DEMO1234')
+    rp.update_password.should be_true
+
+    u.reload
+    u.should be_valid_password('DEMO1234')
+    u.reset_password_token.should eq('')
   end
-
-  it "returns error when invalid email" do
-    rp = ResetPassword.new(email: 'jajaj')
-
-    rp.reset_password.should be_false
-    rp.errors[:email].should eq([I18n.t('errors.messages.user.email_not_found')])
-
-  end
-
 end

@@ -1,5 +1,5 @@
 # encoding: utf-8
-class UserPassword < BaseService
+class UserPassword < BaseForm
   attribute :password, String
   attribute :password_confirmation, String
   attribute :old_password, String
@@ -8,28 +8,39 @@ class UserPassword < BaseService
 
   delegate :change_default_password?, to: :user
 
+  validates_length_of :password, minimum: PASSWORD_LENGTH, maximum: 32
+  validate :valid_old_password
+
   # Method to update password even with change_default_password = true
   def update_password
-    return false unless valid_old_password?
+    return false  unless valid?
 
-    save_or_set_errors
+    user.password = password
+    user.save
   end
 
   def update_default_password
-    user.change_default_password = false
+    return false  unless valid_password_confirmation?
 
-    save_or_set_errors
+    user.change_default_password = false
+    user.password = password
+
+    user.save
   end
 
   def update_reset_password(usr)
     raise 'You must assign a user=' unless usr.is_a?(User)
     @user = usr
+    return false  unless valid?
+
     user.change_default_password = false
     user.confirmed_at = Time.zone.now
     user.reset_password_token = SecureRandom.urlsafe_base64(32)
     user.auth_token = SecureRandom.urlsafe_base64(32)
 
-    save_or_set_errors
+    user.password = password
+
+    user.save
   end
 
   # Setter
@@ -42,33 +53,21 @@ class UserPassword < BaseService
     @user ||= UserSession.user
   end
 
-private
-  def save_or_set_errors
-    user.attributes = password_attributes
+  private
 
-    unless user.save
-      set_errors(user)
-
-      false
-    else
-      true
+    def password_attributes
+      { password: password, password_confirmation: password_confirmation }
     end
-  end
 
-  def password_attributes
-    {password: password, password_confirmation: password_confirmation}
-  end
-
-  def valid_old_password?
-    res = user.valid_password? old_password
-
-    if res
-      true
-    else
-      user.valid?
-      self.errors[:old_password] = I18n.t('errors.messages.invalid')
-
-      false
+    def valid_old_password
+      unless user.valid_password? old_password
+        errors.add(:old_password, I18n.t('errors.messages.invalid'))
+      end
     end
-  end
+
+    def valid_password_confirmation?
+      unless password == password_confirmation
+        errors.add(:password, I18n.t('errors.messages.confirmation'))
+      end
+    end
 end
