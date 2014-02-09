@@ -42,3 +42,9 @@ add_index :accounts, :extras, using: :gist
 add_index :account_ledgers, :contact_id
 
 ActiveRecord::Migrator.migrations('db/migrate').map {|v| "('#{v.version}')" }.join(', ')
+
+```
+cp -r vendor/assets/stylesheets/bonsaierp/fonts public/assets/
+cp app/assets/images/browser_logos.png public/assets
+cp app/assets/images/ajax-loder.gif public/assets
+```

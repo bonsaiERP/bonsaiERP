@@ -2,11 +2,11 @@
 
 @font-face {
   font-family: "bonsaierp";
-  src:url("fonts/bonsaierp.eot");
-  src:url("fonts/bonsaierp.eot?#iefix") format("embedded-opentype"),
-    url("fonts/bonsaierp.woff") format("woff"),
-    url("fonts/bonsaierp.ttf") format("truetype"),
-    url("fonts/bonsaierp.svg#bonsaierp") format("svg");
+  src:url("fonts/bonsaierp.eot?v2");
+  src:url("fonts/bonsaierp.eot?v2#iefix") format("embedded-opentype"),
+    url("fonts/bonsaierp.woff?v2") format("woff"),
+    url("fonts/bonsaierp.ttf?v2") format("truetype"),
+    url("fonts/bonsaierp.svg?v2#bonsaierp") format("svg");
   font-weight: normal;
   font-style: normal;
 
@@ -148,4 +148,19 @@
 }
 .icon-calendar:before {
   content: "K";
+}
+.icon-page-export:before {
+  content: "L";
+}
+.icon-female:before {
+  content: "M";
+}
+.icon-off:before {
+  content: "N";
+}
+.icon-login:before {
+  content: "O";
+}
+.icon-logout:before {
+  content: "P";
 }

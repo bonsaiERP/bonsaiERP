@@ -5,8 +5,18 @@ describe AccountLedgersController do
     stub_auth
   end
 
-  describe "GET /show/1" do
+  describe 'GET /' do
 
+    it "Ok" do
+      AccountLedger.should be_respond_to(:pendent)
+      AccountLedger.should_receive(:pendent).and_return([])
+      get :index
+
+      response.should be_ok
+    end
+  end
+
+  describe "GET /show/1" do
     it 'Ok' do
       AccountLedger.stub(find: (build :account_ledger, id: 1))
 
@@ -26,7 +36,7 @@ describe AccountLedgersController do
       ConciliateAccount.any_instance.should_receive(:conciliate!).and_return(true)
 
       put :conciliate, id: 1, conciliate_commit: 'Conciliate'
-  
+
       response.should redirect_to(account_ledger_path(1))
       flash[:notice].should be_present
     end
@@ -36,7 +46,7 @@ describe AccountLedgersController do
       AccountLedger.any_instance.should_receive(:save).and_return(true)
 
       put :conciliate, id: 1, null_commit: 'Null'
-  
+
       response.should redirect_to(account_ledger_path(1))
       flash[:notice].should be_present
       assigns(:ledger).nuller_id.should eq(10)

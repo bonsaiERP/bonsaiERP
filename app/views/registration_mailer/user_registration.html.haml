@@ -1,7 +1,7 @@
 %h1 Bienvenido a <span style="font-style: italic">#{APP_NAME}</span>
 
-%p 
+%p
   Bienvenido a <span style="font-weight: bold; font-style: italic;">#{APP_NAME}</span>, ha recibido este email por que a sido adicionado para formar parte del equipo de #{@name}, por favor complete su registro
 
-
-  =link_to "haciendo click es en este vínculo", url_for(controller: 'registrations', action: 'new_user', id: @user.confirmation_token, host: UrlTools.domain, subdomain: @tenant, protocol: UrlTools.protocol), style: 'font-weight:bold'
+%p
+  =link_to "Completar registro", url_for(controller: 'registrations', action: 'new_user', id: @user.confirmation_token, host: UrlTools.domain, subdomain: @tenant, protocol: UrlTools.protocol), style: 'color: #FFF; background-color: #0064cd; font-weight: bold; padding: 8px 14px; text-decoration: none; border-radius: 3px;'
