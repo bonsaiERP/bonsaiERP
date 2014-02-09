@@ -42,13 +42,9 @@ class NullAccountLedger
 
     def update_income_expense_balance
       case operation
-      when 'payin'
+      when 'payin', 'devin'
         account.amount += amount_currency.round(2)
-      when 'devin'
-        account.amount += amount_currency.round(2)
-      when 'payout'
-        account.amount -= amount_currency.round(2)
-      when 'devout'
+      when 'payout', 'devout'
         account.amount -= amount_currency.round(2)
       end
 

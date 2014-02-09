@@ -2,8 +2,8 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class ResetPasswordsController < ApplicationController
-  #include ActionView::Helpers::UrlHelper
   layout 'sessions'
+
   skip_before_filter :set_tenant, :check_authorization!
   before_filter :find_user_or_redirect!, only: [:edit, :update]
 

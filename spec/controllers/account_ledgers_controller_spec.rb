@@ -26,31 +26,53 @@ describe AccountLedgersController do
     end
   end
 
-  describe 'PUT /account_ledgers/:id/conciliate' do
+  describe 'PATCH /account_ledgers/:id/conciliate' do
     before(:each) do
-      AccountLedger.stub(find: (build :account_ledger, id: 1, conciliation: false))
+      AccountLedger.stub(find: (build :account_ledger, id: 1))
       UserSession.user = build(:user, id: 10)
     end
 
     it '#conciliate' do
       ConciliateAccount.any_instance.should_receive(:conciliate!).and_return(true)
 
-      put :conciliate, id: 1, conciliate_commit: 'Conciliate'
+      patch :conciliate, id: 1
 
       response.should redirect_to(account_ledger_path(1))
       flash[:notice].should be_present
     end
 
+    it '#conciliate error' do
+      ConciliateAccount.any_instance.should_receive(:conciliate!).and_return(false)
 
-    it '#null' do
-      AccountLedger.any_instance.should_receive(:save).and_return(true)
+      patch :conciliate, id: 1
 
-      put :conciliate, id: 1, null_commit: 'Null'
+      response.should redirect_to(account_ledger_path(1))
+      flash[:error].should be_present
+    end
+  end
+
+  describe 'PATCH /account_ledgers/:id/null' do
+    before(:each) do
+      AccountLedger.stub(find: (build :account_ledger, id: 1))
+      UserSession.user = build(:user, id: 10)
+    end
+
+    it '#conciliate' do
+      NullAccountLedger.any_instance.should_receive(:null!).and_return(true)
+
+      patch :null, id: 1
 
       response.should redirect_to(account_ledger_path(1))
       flash[:notice].should be_present
-      assigns(:ledger).nuller_id.should eq(10)
-      assigns(:ledger).nuller_datetime.should be_is_a(Time)
+    end
+
+    it '#conciliate error' do
+      NullAccountLedger.any_instance.should_receive(:null!).and_return(false)
+
+      patch :null, id: 1
+
+      response.should redirect_to(account_ledger_path(1))
+      flash[:error].should be_present
     end
   end
 end

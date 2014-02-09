@@ -54,9 +54,10 @@ Bonsaierp::Application.routes.draw do
 
   resources :stocks, only: [:update]
 
-  resources :account_ledgers do
+  resources :account_ledgers, only: [:index, :show, :update] do
     post :transference, on: :collection
     patch :conciliate, on: :member
+    patch :null, on: :member
   end
 
   resources :banks

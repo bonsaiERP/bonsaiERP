@@ -4,6 +4,8 @@
 class AccountLedgersController < ApplicationController
   include Controllers::Print
 
+  before_action :set_ledger, only: [:conciliate, :null, :update]
+
   # GET /account_ledger
   def index
     @ledgers = AccountLedger.pendent
@@ -20,65 +22,42 @@ class AccountLedgersController < ApplicationController
     end
   end
 
-  # GET /account_ledgers/new
-  def new
-    @account_ledger = AccountLedger.new_money(:operation => params[:operation], :account_id => params[:account_id])
-
-    redirect_to "/dashboard" unless @account_ledger
+  # PATCH /account_ledgers/:id
+  # update the reference
+  def update
+    if @account_ledger.update_attributes(reference: params[:reference])
+      al = @account_ledger
+      render json: {id: al.id, reference: al.reference, updater: al.updater.to_s, updated_at: I18n.l(al.updated_at)}
+    else
+      render json: @account_ledger.errors.messages
+    end
   end
 
   # PATCH /account_ledgers/:id/conciliate
   def conciliate
-    @ledger = AccountLedger.find(params[:id])
+    @conciliate = ConciliateAccount.new(@account_ledger)
 
     # TODO: Move the logic and control from the model or service
-    if @ledger.can_conciliate_or_null?
-      case
-      when params[:conciliate_commit].present?
-        conciliate_account
-      when
-        null_account
-      end
+    if @conciliate.conciliate!
+      flash[:notice] = 'Se ha verificado la transacción correctamente.'
+    else
+      flash[:error] = 'No es posible verificar la transacción, quiza fue verificada o anulada'
     end
 
-    redirect_to account_ledger_path(@ledger)
+    redirect_to account_ledger_path(@account_ledger.id)
   end
 
-  # POST /account_ledgers
-  def create
-    @account_ledger = AccountLedger.new_money(params[:account_ledger])
+  # PATCH /account_ledgers/:id/null
+  def null
+    @null = NullAccountLedger.new(@account_ledger)
 
-    if @account_ledger.save
-      flash[:notice] = "Se ha creado exitosamente la transacción."
-      redirect_to account_ledger_path @account_ledger
+    if @null.null!
+      flash[:notice] = 'Se ha anulado correctamente la transacción.'
     else
-      render :new
-    end
-  end
-
-  # PATCH /account_ledgers/:id
-  # update the reference
-  def update
-    @al = AccountLedger.find(params[:id])
-
-    if @al.update_reference(params[:reference])
-      render json: {id: @al.id, reference: @al.reference, updater: @al.updater.to_s, updated_at: I18n.l(@al.updated_at)}
-    else
-      render json: @al.errors.messages
-    end
-  end
-
-  # DELETE /account_ledgers/:id
-  def destroy
-    @account_ledger = AccountLedger.find(params[:id])
-
-    if @account_ledger.null_transaction
-      flash[:notice] = "Se ha anulado la transacción correctamente."
-    else
-      flash[:error] = "No se pudo anular la transacción."
+      flash[:error] = 'No fue posible anular la transacción, quiza ya fue verificada o anulada.'
     end
 
-    redirect_to @account_ledger
+    redirect_to account_ledger_path(@account_ledger.id)
   end
 
   # POST /account_ledgers/:id/transference
@@ -100,24 +79,7 @@ class AccountLedgersController < ApplicationController
 
   private
 
-    def conciliate_account
-      con = ConciliateAccount.new(@ledger)
-
-      if con.conciliate!
-        flash[:notice] = "Se ha verificado exitosamente la transacción."
-      else
-        flash[:error] = "Exisitio un error al conciliar la transacción."
-      end
-    end
-
-    def null_account
-      nl = NullAccountLedger.new(@ledger)
-
-
-      if nl.null!
-        flash[:notice] = "Se ha anulado exitosamente la transacción."
-      else
-        flash[:error] = "Exisitio un error al anular la transacción."
-      end
+    def set_ledger
+      @account_ledger = AccountLedger.find(params[:id])
     end
 end

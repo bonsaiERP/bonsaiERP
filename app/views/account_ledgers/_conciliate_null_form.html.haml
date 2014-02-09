@@ -1,6 +1,9 @@
-= form_for ledger, url: conciliate_account_ledger_path(ledger), html: {id: 'conciliate-null-form'} do |f|
+-#= form_for ledger, url: conciliate_account_ledger_path(ledger), html: {id: 'conciliate-null-form'} do |f|
   = f.submit 'Verificar transacción', id: 'conciliate-button', name: 'conciliate_commit', class: 'btn btn-success b'
   = f.submit 'Anular transacción', id: 'null-button', name: 'null_commit', class: 'btn btn-danger b'
+
+= link_to 'Verificar transacción', conciliate_account_ledger_path(ledger.id), method: :patch, id: 'conciliate-button', class: 'btn btn-success b'
+= link_to 'Anular transacción', null_account_ledger_path(ledger.id), method: :patch, id: 'null-button', class: 'btn btn-danger b'
 
 :javascript
   $(function() {
@@ -12,11 +15,14 @@
       content: 'Actualiza el balance de la cuenta asociada <br/><strong>' + _.escape(to_name) + '</strong>'
     });
 
-    $('#conciliate-null-form').submit( function(event) {
-      if(confirm('Esta segur@ de realizar la operación?') ) {
+    $('#null-button, #conciliate-button').click(function(event) {
+      var txt = this.id == 'null-button' ? 'anular' : 'verificar';
+      if(confirm('Esta seguro@ de ' + txt + ' la transacción')) {
         return true;
-      }else {
+      } else {
+        event.preventDefault();
         return false;
       }
-    });
+    })
+
   })
