@@ -4,8 +4,9 @@ describe ResetPasswordsController do
 
   it "test stubed method" do
     [:reset_password].each  do |m|
-      ResetPassword.should be_method_defined(m)
+      ResetPasswordEmail.should be_method_defined(m)
     end
+    ResetPassword.should be_method_defined(:update_password)
   end
 
   describe 'GET /reset_passwords/new' do
@@ -14,23 +15,23 @@ describe ResetPasswordsController do
 
       response.should be_success
       response.should render_template('new')
-      assigns(:reset_password).should be_is_a(ResetPassword)
+      assigns(:reset_password).should be_is_a(ResetPasswordEmail)
     end
   end
 
   describe 'POST /reset_passwords' do
     it "sends email" do
-      ResetPassword.any_instance.should_receive(:reset_password).and_return(true)
+      ResetPasswordEmail.any_instance.should_receive(:reset_password).and_return(true)
 
-      post :create, reset_password: {email: 'test@mail.com'}
+      post :create, reset_password_email: {email: 'test@mail.com'}
 
-      response.should render_template('create')
+      response.should redirect_to(reset_passwords_path)
     end
 
     it "presets error" do
-      ResetPassword.any_instance.should_receive(:reset_password).and_return(false)
+      ResetPasswordEmail.any_instance.should_receive(:reset_password).and_return(false)
 
-      post :create, reset_password: {email: 'test@mail.com'}
+      post :create, reset_password_email: {email: 'test@mail.com'}
 
       response.should render_template('new')
       flash[:error].should_not be_blank
@@ -65,18 +66,22 @@ describe ResetPasswordsController do
     end
 
     it "redirects to dashboard" do
-      UserPassword.any_instance.should_receive(:update_reset_password).with(user).and_return(true)
-      user.stub(auth_token: 'auth_token_123', active_links: [build(:link, tenant: 'bonsai')])
+      ResetPassword.any_instance.should_receive(:update_password).and_return(true)
 
-      put :update, id: 'token123', user_password: {password: ''}
+      put :update, id: 'token123', reset_password: { password: 'demo1234', password_confirmation: 'demo1234', user: user}
 
-      response.should redirect_to(dashboard_url(host: UrlTools.domain, auth_token: 'auth_token_123', subdomain: 'bonsai'))
+      response.should redirect_to(login_path)
+      assigns[:reset_password].should be_is_a(ResetPassword)
+      rp = assigns[:reset_password]
+      rp.user.should eq(user)
+      rp.password.should eq('demo1234')
+      rp.password_confirmation.should eq('demo1234')
     end
 
     it 'renders edit' do
-      UserPassword.any_instance.should_receive(:update_reset_password).with(user).and_return(false)
+      ResetPassword.any_instance.should_receive(:update_password).and_return(false)
 
-      put :update, id: 'token123', user_password: {password: ''}
+      put :update, id: 'token123', reset_password: {password: 'demo', password_confirmation: 'demo'}
 
       response.should render_template('edit')
     end

@@ -11,8 +11,9 @@ describe UserPasswordsController do
   end
 
   it "check stubed methods" do
-    [:update_password, :update_default_password].each do |m|
+    [:update_password].each do |m|
       UserPassword.should be_method_defined(m)
+      UpdateDefaultPassword.should be_method_defined(m)
     end
   end
 
@@ -71,9 +72,9 @@ describe UserPasswordsController do
   describe 'POST /user_passwords/create_default' do
     it "updates" do
       user.change_default_password = true
-      UserPassword.any_instance.stub(update_default_password: true)
+      UpdateDefaultPassword.any_instance.stub(update_password: true)
 
-      post :create_default, user_password: {password: '1234', password_confirmation: '1234'}
+      post :create_default, update_default_password: {password: '1234', password_confirmation: '1234'}
 
       response.should redirect_to(user_path(10))
       flash[:notice].should eq "Su contraseña ha sido actualizada."
@@ -82,7 +83,7 @@ describe UserPasswordsController do
     it "error" do
       user.change_default_password = true
       UserPassword.any_instance.stub(update_default_password: false)
-      post :create_default, user_password: {password: '1234', password_confirmation: '1234'}
+      post :create_default, update_default_password: {password: '1234', password_confirmation: '1234'}
 
       response.should render_template('new_default')
     end
