@@ -36,14 +36,11 @@ class CashesController < ApplicationController
 
   # PUT /cashs/1
   def update
-    respond_to do |format|
-      if @cash.update_attributes(cash_params)
-        format.html { redirect_to(@cash, :notice => 'La caja fue actualizada.') }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @cash.errors, :status => :unprocessable_entity }
-      end
+    if @cash.update_attributes(cash_params)
+      flash[:notice] = 'La cuenta efectivo fue actualizada.'
+      redirect_ajax @cash.to_model
+    else
+      render :edit
     end
   end
 

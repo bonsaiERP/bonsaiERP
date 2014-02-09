@@ -44,13 +44,12 @@ describe CashesController do
 
   describe "PUT /update" do
     it "only assings update_params" do
-      cash = build(:bank, id: 23, amount: 0, currency: 'BOB')
-      cash.stub(save: true, persisted?: true)
-      Cash.stub(find: cash)
+      Cash.any_instance.stub(save: true, persisted?: true)
+      Cash.stub(find: build(:cash, id: 23))
 
       put :update, id: 23, cash: { name: 'Name', amount: '1200', currency: 'USD' }
 
-      response.should redirect_to bank_path(23)
+      response.should redirect_to cash_path(23)
       flash[:notice].should_not be_blank
     end
   end
