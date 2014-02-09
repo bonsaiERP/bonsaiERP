@@ -193,4 +193,56 @@ describe NullAccountLedger do
     end
   end
 
+  describe 'Loans' do
+    # Loans::Give
+    it "payment+" do
+      ledger = AccountLedger.new(amount: 200, operation: 'lgpay')
+      loan = Loans::Give.new(total: 1000, amount: 800)
+      loan.stub(save: true)
+      ledger.stub(account: loan, save: true)
+
+      nl = NullAccountLedger.new(ledger)
+      nl.null!.should be_true
+      loan.total.should == 1000
+      loan.amount.should == 1000
+    end
+
+    it "interest+" do
+      ledger = AccountLedger.new(amount: 200, operation: 'lgint')
+      loan = Loans::Give.new(total: 1000, amount: 800)
+      loan.stub(save: true)
+      ledger.stub(account: loan, save: true)
+
+      nl = NullAccountLedger.new(ledger)
+      nl.null!.should be_true
+      loan.total.should == 1000
+      loan.amount.should == 1000
+    end
+
+    # Loans::Receive
+    it "payment-" do
+      ledger = AccountLedger.new(amount: -200, operation: 'lrpay')
+      loan = Loans::Receive.new(total: 1000, amount: 800)
+      loan.stub(save: true)
+
+      ledger.stub(account: loan, save: true)
+      nl = NullAccountLedger.new(ledger)
+      nl.null!.should be_true
+      loan.total.should == 1000
+      loan.amount.should == 1000
+    end
+
+    it "interest-" do
+      ledger = AccountLedger.new(amount: -200, operation: 'lrpay')
+      loan = Loans::Receive.new(total: 1000, amount: 800)
+      loan.stub(save: true)
+
+      ledger.stub(account: loan, save: true)
+      nl = NullAccountLedger.new(ledger)
+      nl.null!.should be_true
+      loan.total.should == 1000
+      loan.amount.should == 1000
+    end
+  end
+
 end

@@ -18,7 +18,7 @@ class NullAccountLedger
     set_account_ledger_null
 
     res = true
-    res = update_income_expense_balance if is_income_expense?
+    res = update_operation_balance if is_operation?
 
     res && account_ledger.save
   end
@@ -40,21 +40,33 @@ class NullAccountLedger
 
   private
 
-    def update_income_expense_balance
+    def update_operation_balance
       case operation
-      when 'payin', 'devin'
+      when 'payin', 'devin', 'lgpay', 'lgint'
         account.amount += amount_currency.round(2)
-      when 'payout', 'devout'
+      when 'payout', 'devout', 'lrpay', 'lrint'
         account.amount -= amount_currency.round(2)
+      else
+        raise NullAccountError, "The ledger has no valid oepration, #{account_ledger}"
       end
 
-      account.set_state_by_balance!
+      if is_movement?
+        account.set_state_by_balance!
+        Movements::Errors.new(account).set_errors
+      end
 
-      Movements::Errors.new(account).set_errors
       account.save
     end
 
-    def is_income_expense?
+    def is_operation?
+      is_movement? || is_loan?
+    end
+
+    def is_loan?
+      account.is_a?(Loans::Give) || account.is_a?(Loans::Receive)
+    end
+
+    def is_movement?
       account.is_a?(Income) || account.is_a?(Expense)
     end
 
@@ -70,3 +82,5 @@ class NullAccountLedger
       account_ledger.status          = 'nulled'
     end
 end
+
+class NullAccountError < StandardError; end
