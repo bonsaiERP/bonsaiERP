@@ -1,0 +1,5 @@
+// javascript
+var $user = $('.users #<%= @user.id %>');
+$("<%= j(render partial: 'configurations/user', locals: { user: present(@user) }) %>").insertAfter($user);
+console.log('.users #<%= @user.id %>');
+$user.remove();

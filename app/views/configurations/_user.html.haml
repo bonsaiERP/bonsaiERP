@@ -1,0 +1,13 @@
+%li.row-fluid{ id: user.id }
+  .span4
+    %i.active-user.b(class="icon-#{user.link_active?} icon-large" title='Activo')
+    = user.master_account_tag
+    = user
+  .span4
+    = user.email
+  .span2
+    = user.role
+  .span2
+    = link_to icon_edit, edit_admin_user_path(user), class: 'dark'
+    = user.activate_deactivate_link
+
