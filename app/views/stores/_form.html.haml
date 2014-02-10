@@ -2,12 +2,11 @@
   .row-fluid
     .span4
       = f.input :name, label: 'Nombre', input_html: { size: 35 }
-    .span1
-      = f.input :active, label: 'Activo' do
-        = f.check_box :active
+    .span2.form-inline
+      = f.input :active, label: 'Activo'
     .span2
       = f.input :phone, label: 'Teléfono', input_html: {size: 12}
-    .span5
+    .span4
       = f.input :address, label: 'Dirección', as: :text, input_html: { rows: 3, cols: 45 }
 
   .form-actions

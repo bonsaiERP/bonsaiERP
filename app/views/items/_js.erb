@@ -24,7 +24,7 @@
 
     function formSubmit() {
       var data = {unit: {name: $('#unit_name').val(), symbol: $('#unit_symbol').val()}};
-      $.post('#{units_path}', data, function(resp) {
+      $.post('<%= units_path %>', data, function(resp) {
         if(resp.id) {
           createOptionAndSelect(resp);
           showHide('control');

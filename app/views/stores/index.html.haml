@@ -16,7 +16,7 @@
     %li.row-fluid
       .span7
         %h4
-          %i(class="#{true_false store.active}" title="Activo" data-toggle="tooltip")
+          %i(class="icon-#{store.active}" title="Activo" data-toggle="tooltip")
           = link_to store.name, store
 
         - if store.stocks.mins.any?

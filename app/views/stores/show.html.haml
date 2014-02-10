@@ -6,7 +6,7 @@
 .row-fluid
   .span6
     %h2.n
-      %i(class="#{true_false(@store.active)}" title='Activo' data-toggle='tooltip')
+      %i(class="icon-#{@store.active?}" title='Activo' data-toggle='tooltip')
       = @store
 
     .clear-both
