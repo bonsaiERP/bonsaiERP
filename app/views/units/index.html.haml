@@ -1,13 +1,15 @@
 - content_for :links do
   %ul.breadcrumbs
     %li
-      Unidades de medida
+      &nbsp;
 
 .row-fluid
   .span6
     %h1 Unidades de medida
   .span6.r
-    =link_to 'Nueva unidad', new_unit_path, class: "btn"
+    = link_to new_unit_path, class: 'btn' do
+      %i.icon-plus-sign
+      Nueva unidad
 
 %table.table.table-striped
   %tr

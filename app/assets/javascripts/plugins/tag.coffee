@@ -236,19 +236,19 @@ class TagSearch
     @_tagLabels = @_tagLabels || _(tags).filter((v) -> v.text).map((v) -> v.text).value()
   #
   setInputVal: (item) ->
-    val = @$input.val().split(',')
+    val = @$input.val().split(';')
     val.pop()
     val.push(item.text)
-    @$input.val(val.join(',') + ",")
+    @$input.val(val.join(';') + ";")
   #
   getTags: ->
     @_getTags = @_getTags || _(tags).filter((v) => not _.include(@splitVal(), v.text) ).value()
   #
   splitVal: ->
-    @$input.val().split(',')
+    @$input.val().split(';')
   #
   lastValue: ->
-    @$input.val().split(",").pop()
+    @$input.val().split(";").pop()
   #
   setFormatTags: ->
     @$input.data('uiAutocomplete')._renderItem = ($list, item) ->

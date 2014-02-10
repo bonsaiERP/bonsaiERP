@@ -12,9 +12,9 @@ private
   def has_tags?
     search_tag_params.any?
   end
-  
+
   def set_search
-    if params[:search].present? && params[:search] =~ /,/
+    if params[:search].present? && params[:search] =~ /;/
       search_tag_params
     end
   end
@@ -25,14 +25,14 @@ private
       if search_arr.size === resp.size
         params[:search] = ""
       elsif resp.size > 0
-        params[:search] = search_arr.last
+        params[:search] = search_arr.last.strip
       end
       resp
     end
   end
 
   def search_arr
-    @search_arr ||= params[:search].split(',')
+    @search_arr ||= params[:search].split(';')
   end
 
   def tag_ids
