@@ -36,6 +36,14 @@ describe Loans::ReceivePaymentForm do
       Loans::Receive.any_instance.stub(contact: contact)
     }
 
+    it "sets ledger status" do
+      lp = Loans::ReceivePaymentForm.new(verification: '1', account_to_id: 2)
+      lp.stub(loan: Loans::Receive.new(id: 10))
+      lp.ledger.should be_is_pendent
+
+      lp.int_ledger.should be_is_pendent
+    end
+
     it "pays Loan" do
       lf = Loans::ReceiveForm.new(loan_attr.merge(account_to_id: cash.id))
 
@@ -57,6 +65,7 @@ describe Loans::ReceivePaymentForm do
       lp.create_payment.should be_true
       lp.ledger.amount.should == -50
       lp.ledger.currency.should eq('BOB')
+      lp.ledger.should be_is_approved
 
       lp.ledger.contact_id.should_not be_blank
       lp.ledger.contact_id.should eq(lf.loan.contact_id)

@@ -28,6 +28,14 @@ describe Loans::GivePaymentForm do
       Loans::Give.any_instance.stub(contact: contact)
     }
 
+    it "sets ledger status" do
+      lp = Loans::GivePaymentForm.new(verification: '1', account_to_id: 2)
+      lp.stub(loan: Loans::Give.new(id: 10))
+      lp.ledger.should be_is_pendent
+
+      lp.int_ledger.should be_is_pendent
+    end
+
     it "pays Loan" do
       lf = Loans::GiveForm.new(loan_attr.merge(account_to_id: cash.id))
 
@@ -46,6 +54,7 @@ describe Loans::GivePaymentForm do
       lp.ledger.currency.should eq('BOB')
       lp.ledger.contact_id.should_not be_blank
       lp.ledger.contact_id.should eq(lf.loan.contact_id)
+      lp.ledger.should be_is_approved
 
       loan = Loans::Give.find(lf.loan.id)
       loan.amount.should == 50

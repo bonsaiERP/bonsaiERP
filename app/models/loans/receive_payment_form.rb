@@ -39,7 +39,8 @@ class Loans::ReceivePaymentForm < Loans::PaymentForm
         exchange_rate: cur_exchange_rate,
         date: date, reference: reference,
         operation: 'lrpay', amount: -amount,
-        contact_id: loan.contact_id
+        contact_id: loan.contact_id,
+        status: get_status
       )
     end
   end
@@ -52,7 +53,8 @@ class Loans::ReceivePaymentForm < Loans::PaymentForm
         exchange_rate: cur_exchange_rate,
         date: date, reference: reference,
         operation: 'lrint', amount: -amount,
-        contact_id: loan.contact_id
+        contact_id: loan.contact_id,
+        status: get_status
       )
     end
   end

@@ -97,7 +97,7 @@ class LoanPaymentsController < ApplicationController
 
     def common_params
       [:account_to_id, :amount, :exchange_rate,
-        :date, :reference]
+        :date, :reference, :verification]
     end
 
     def pay_params

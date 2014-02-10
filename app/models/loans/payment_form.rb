@@ -28,6 +28,10 @@ class Loans::PaymentForm < BaseForm
 
   private
 
+    def get_status
+      verification == true ? 'pendent' : 'approved'
+    end
+
     def valid_loan_amount
       if amount && loan.present? && amount_exchange > loan.amount
         errors.add(:amount, I18n.t('errors.messages.less_than_or_equal_to', count: loan.amount))
