@@ -412,6 +412,9 @@ es:
   loan_attributes: &loan_attributes
     date: fecha
     due_date: vence el
+    amount: saldo
+    total: total
+    interest: intereses
 
   loans:
     give:
