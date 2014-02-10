@@ -49,6 +49,11 @@ class ApplicationController < ActionController::Base
   end
   helper_method :current_organisation
 
+  def current_link
+    @link ||= current_user.links.org_links(current_organisation.id).first!
+  end
+  helper_method :current_link
+
   def tenant
     @tenant ||= current_organisation.try(:tenant)
   end
@@ -121,3 +126,5 @@ class ApplicationController < ActionController::Base
       render json: r.to_json(only: options[:only], except: options[:except], methods: options[:methods])
     end
 end
+
+class MasterAccountError < StandardError; end

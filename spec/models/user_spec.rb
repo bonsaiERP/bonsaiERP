@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe User do
 
-  it { should have_many(:active_links) }
-  it { should_not have_many(:links) }
+  it { should have_many(:links).dependent(:destroy) }
+  it { should have_many(:active_links).dependent(:destroy) }
 
   let(:valid_attributes)do
     {email: 'demo@example.com', password: 'demo1234'}

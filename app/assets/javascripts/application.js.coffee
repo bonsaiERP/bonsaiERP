@@ -14,6 +14,7 @@
 #= require jquery/jquery.minicolors.js
 #= require jquery/jquery.scrollTo.js
 #= require jquery/jquery.placeholder.js
+#= require jquery/jquery.extras.coffee
 
 #= require namespace.coffee
 

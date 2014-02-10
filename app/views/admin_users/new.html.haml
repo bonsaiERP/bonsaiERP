@@ -6,42 +6,10 @@
 %h1 Adicionar usuario
 
 
-= simple_form_for @user, url: admin_users_path do |f|
-  - user = present @user
+= simple_form_for @admin_user, url: admin_users_path do |f|
   = bonsai_form_error(f)
 
-  .row-fluid
-    .span6
-      = f.input :email, input_html: { size: INPUT_SIZE }
-  .row-fluid
-    .span6= f.input :first_name, label: 'Nombres', input_html: { size: INPUT_SIZE }
-    .span6= f.input :last_name, label: 'Apellidos', input_html: { size: INPUT_SIZE }
-
-  .row-fluid
-    .span6= f.input :phone, label: 'Teléfono', input_html: { size: INPUT_SIZE }
-    .span6= f.input :mobile, label: 'Móvil', input_html: { size: INPUT_SIZE }
-
-  .row-fluid
-    .span6= f.input :address, label: 'Dirección', as: :text, input_html: {rows: 4, cols: INPUT_SIZE}
-
-    .span6= f.input :rol, collection: user.sliced_role_options, label: 'Rol'
-
-  = render 'users/permissions', user: user
+  = render 'form', f: f, user: present(@admin_user.user)
 
   .form-actions
-    = f.submit "Adicionar usuario", class: 'btn btn-success b'
-
-:javascript
-  $(function() {
-    function markRoleColumn() {
-      $('#roles td').removeClass('marked');
-
-      try{
-        ind = $('th.' + $('#user_rol').val() ).data('index') + 2;
-        $('#roles td:nth-child(' + ind + ')').addClass('marked')
-      } catch(e) {}
-    }
-
-    $('body').on('change keyup', '#user_rol', markRoleColumn);
-    markRoleColumn();
-  })
+    = f.submit 'Crear usuario', class: 'btn btn-success b'

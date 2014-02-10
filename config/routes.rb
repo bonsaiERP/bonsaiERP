@@ -48,7 +48,9 @@ Bonsaierp::Application.routes.draw do
 
   resources :organisation_updates, only: [:edit, :update]
 
-  resources :admin_users, except: [:index, :destroy]
+  resources :admin_users, except: [:index, :destroy] do
+    patch :active, on: :member
+  end
 
   resources :configurations, only: [:index]
 

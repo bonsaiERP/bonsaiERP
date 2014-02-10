@@ -1,2 +1,9 @@
-%h1 CompanyUsers#edit
-%p Find me in app/views/company_users/edit.html.haml
+%h1 Editar usuario
+
+= simple_form_for @admin_user, url: admin_user_path(@admin_user.user_id), method: 'patch' do |f|
+  = bonsai_form_error(f)
+
+  = render 'form', user: present(@admin_user.user), f: f
+
+  .form-actions
+    = f.submit 'Actualizar usuario', class: 'btn btn-success b'

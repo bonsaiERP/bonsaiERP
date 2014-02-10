@@ -23,16 +23,17 @@ class Session < BaseService
     @tenant ||= user.organisations.order("id").first.tenant
   end
 
-private
-  def confirmed_registration?
-    @confirmed_registration ||= begin
-      conf = user.confirmed_registration?
-      @status = 'resend_registration' unless conf
-      conf
-    end
-  end
+  private
 
-  def validated?
-    valid? && user.present? && user.active_links?
-  end
+    def confirmed_registration?
+      @confirmed_registration ||= begin
+        conf = user.confirmed_registration?
+        @status = 'resend_registration' unless conf
+        conf
+      end
+    end
+
+    def validated?
+      valid? && user.present? && user.active_links?
+    end
 end

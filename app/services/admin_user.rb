@@ -2,44 +2,102 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 # Used to add or update users by the admin
-class AdminUser
-  attr_reader :email, :attributes
+class AdminUser < BaseForm
+  attribute :email, String
+  attribute :first_name, String
+  attribute :last_name, String
+  attribute :phone, String
+  attribute :mobile, String
+  attribute :address, String
+  attribute :role, String
+  attribute :organisation, Organisation
 
-  def initialize(attrs = {})
-    @email = attrs[:email]
-    @attributes = attrs
+  validates :email, email_format: true, presence: true
+  validates :organisation, presence: true
+  validates :role, presence: true, inclusion: { in: User::ROLES }
+
+  delegate :id, to: :user, prefix: true
+
+  def create
+    return false  unless valid?
+    commit_or_rollback do
+      res = user.save && link.save
+      send_email  if res
+
+      res
+    end
   end
 
-  def add_user
-    return false unless valid_user?
+  def update(attributes)
+    self.attributes = attributes
 
-    user.active_links.build(organisation_id: OrganisationSession.id, role: get_user_rol, tenant: OrganisationSession.tenant)
+    return false unless  valid?
+    set_user_attributes
+    link.role = role
 
-    set_user if user.new_record?
-
-    if user.save
-      RegistrationMailer.user_registration(self).deliver
-    else
-      false
+    commit_or_rollback do
+      user.save && link.save
     end
+  end
+
+  def valid?
+    res = super && user.valid?
+    set_user_errors
+
+    res
   end
 
   def user
-    @user ||= begin
-      u = User.active.find_by_email(email)
-      u = User.new(attributes) unless u
+    @user ||= User.new(
+      email: email, password: random_password,
+      first_name: first_name, last_name: last_name,
+      phone: phone, mobile: mobile, address: address
+    )
+  end
 
-      u
-    end
+  def send_email
+    RegistrationMailer.user_registration(self).deliver!
+  end
+
+  def link
+    @link ||= organisation.links.build(
+      user_id: user.id, role: role
+    )
+  end
+
+  def self.find(organisation, user_id)
+    user = organisation.users.find(user_id)
+    _object = new(slice_user_attributes(user))
+    _object.organisation = organisation
+    _object.set_user(user)
+    link = user.links.where(organisation_id: organisation.id).first!
+
+    _object.set_link(link)
+    _object.role = link.role
+    _object
+  end
+
+  def set_user(user)
+    @user = user
+  end
+
+  def set_link(link)
+    @link = link
   end
 
   private
 
-    def set_user
-      user.password = random_password
-      user.password_confirmation = user.password
-      user.set_confirmation_token
-      user.change_default_password = true
+    def self.slice_user_attributes(user)
+      user.attributes.slice(
+        'email', 'first_name', 'last_name',
+        'phone', 'mobile')
+    end
+
+    def set_user_errors
+      return  if  user.errors.messages.blank?
+      user.errors.messages[:email].each do |msg|
+        errors.add(:email, msg)
+      end
     end
 
     # Generates a random password and sets it to the password field
@@ -47,27 +105,7 @@ class AdminUser
       SecureRandom.urlsafe_base64(size)
     end
 
-    def get_user_rol
-      rol = attributes[:rol]
-      allowed_roles.include?(rol) ? rol : allowed_roles.last
-    end
-
-    def allowed_roles
-      @allowed_roles ||= User::ROLES.select { |r| r != 'admin'}
-    end
-
-    def valid_user?
-      unless user.new_record?
-
-        if Link.where(organisation_id: OrganisationSession.id, user_id: user.id).any?
-          user.errors[:email] << I18n.t('errors.messages.user.link_found')
-
-          false
-        else
-          true
-        end
-      else
-        true
-      end
+    def set_user_attributes
+      user.attributes = attributes.except(:role, :organisation)
     end
 end

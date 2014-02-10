@@ -11,6 +11,7 @@ class User < ActiveRecord::Base
 
   ########################################
   # Relationships
+  has_many :links, dependent: :destroy
   has_many :active_links, -> { where active: true }, inverse_of: :user, autosave: true,
            dependent: :destroy, class_name: 'Link'
   has_many :organisations, through: :active_links
@@ -30,8 +31,6 @@ class User < ActiveRecord::Base
   # Delegations
   ########################################
   delegate :name, :currency, :address, :tenant, to: :organisation, prefix: true, allow_nil: true
-  delegate :active, :role, :role=, to: :link, prefix: true, allow_nil: true
-  delegate :master_account?, to: :link
 
   ########################################
   # Methods
@@ -47,11 +46,6 @@ class User < ActiveRecord::Base
     else
       %Q(#{email})
     end
-  end
-
-  # Returns the link with the organissation one is logged in
-  def link
-    @link ||= active_links.find_by_organisation_id(OrganisationSession.id)
   end
 
   def tenant_link(tenant)

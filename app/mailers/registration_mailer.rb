@@ -17,8 +17,8 @@ class RegistrationMailer < ActionMailer::Base
 
   def user_registration(reg)
     @user = reg.user
-    @tenant = OrganisationSession.tenant
-    @name = OrganisationSession.name
+    @tenant = reg.organisation.tenant
+    @name = reg.organisation.name
 
     mail(to: "\"#{@user}\" <#{@user.email}>", subject: I18n.t("email.registration.user", app_name: APP_NAME, company: @name) )
   end

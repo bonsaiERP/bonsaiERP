@@ -164,3 +164,6 @@
 .icon-logout:before {
   content: "P";
 }
+.icon-star:before {
+  content: "Q";
+}
