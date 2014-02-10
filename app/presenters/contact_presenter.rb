@@ -19,7 +19,7 @@ class ContactPresenter < BasePresenter
   end
 
   def mobile_tag
-    "#{ icon 'icon-mobile-phone muted', 'Móvil' } #{sanitize mobile}".html_safe if mobile.present?
+    "#{ icon 'icon-mobile muted', 'Móvil' } #{sanitize mobile}".html_safe if mobile.present?
   end
 
   def tot_in_tag
