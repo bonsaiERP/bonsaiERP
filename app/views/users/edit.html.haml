@@ -11,6 +11,9 @@
 = simple_form_for(current_user) do |f|
   .row-fluid
     .span6
+      = f.input :email, label: 'Email', input_html: { size: INPUT_SIZE }
+  .row-fluid
+    .span6
       = f.input :first_name, label: 'Nombres', input_html: { size: INPUT_SIZE }
     .span6
       = f.input :last_name, label: 'Apellidos', input_html: { size: INPUT_SIZE }

@@ -64,7 +64,7 @@
       %select(ng-model='tax' ng-change='setTaxId()' ng-options='[t.name, " (", t.percentage, "%)" ].join("") for t in taxes track by t.id')
         %option(value='')
 
-      - if current_user.is_admin? || current_user.is_group?
+      - if user_with_role.is_admin? || user_with_role.is_group?
         = link_to icon('icon-plus-sign'), new_tax_path, title: 'Nuevo impuesto',
           class: 'btn ajax add-new-url add-new-tax', data: { width: 400 }
 

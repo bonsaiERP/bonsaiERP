@@ -29,16 +29,6 @@ describe User do
     u.should be_active_links
   end
 
-  it "define_method check" do
-    u = User.new
-    link = Link.new
-    u.stub(link: link)
-
-    User::ROLES.each do |role|
-      link.role = role
-      u.should send(:"be_is_#{role}")
-    end
-  end
 
   it "validates password when new" do
     u = User.new(email: 'test@mail.com', password: 'Demo12234')
@@ -99,37 +89,6 @@ describe User do
     u = User.new(email: "test@mail.com", last_name: "Estrella")
 
     u.to_s.should eq('Estrella')
-  end
-
-  context "Tenant" do
-    before(:each) do
-      OrganisationSession.organisation = build :organisation, id: 100
-    end
-
-    it "creates the methods for each rol" do
-      u = User.new {|us| us.id = 10}
-      u.stub_chain(:active_links, find_by_organisation_id: Link.new(active:true, user_id: u.id, role:'') )
-
-      u.link_role = 'admin'
-
-      u.should be_is_admin
-      u.should_not be_is_group
-      u.should_not be_is_other
-
-
-      u.link_role = 'group'
-
-      u.should be_is_group
-      u.should_not be_is_admin
-      u.should_not be_is_other
-
-
-      u.link_role = 'other'
-
-      u.should be_is_other
-      u.should_not be_is_admin
-      u.should_not be_is_group
-    end
   end
 
 end

@@ -54,6 +54,11 @@ class ApplicationController < ActionController::Base
   end
   helper_method :current_link
 
+  def user_with_role
+    @user_with_role ||= UserWithRole.new(current_user, current_organisation)
+  end
+  helper_method :user_with_role
+
   def tenant
     @tenant ||= current_organisation.try(:tenant)
   end

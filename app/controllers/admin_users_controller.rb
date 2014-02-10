@@ -61,9 +61,7 @@ class AdminUsersController < ApplicationController
     end
 
     def check_master_account
-      link = current_organisation.links.find_by(user_id: params[:id])
-
-      raise MasterAccountError  if link.master_account?
+      raise MasterAccountError  if user_with_role.master_account?
     end
 
     def redirect_to_conf

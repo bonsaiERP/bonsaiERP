@@ -33,7 +33,7 @@ module Controllers::Authorization
 
     # Checks the white list for controllers
     def authorized_user?
-      role = current_link.role
+      role = user_with_role.role
       unless role
         request.env["HTTP_REFERER"] = logout_path
         return false

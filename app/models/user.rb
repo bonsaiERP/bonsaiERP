@@ -32,14 +32,6 @@ class User < ActiveRecord::Base
   ########################################
   delegate :name, :currency, :address, :tenant, to: :organisation, prefix: true, allow_nil: true
 
-  ########################################
-  # Methods
-  ROLES.each do |_role|
-    define_method :"is_#{_role}?" do
-      link_role == _role
-    end
-  end
-
   def to_s
     if first_name.present? || last_name.present?
       %Q(#{first_name} #{last_name}).strip
