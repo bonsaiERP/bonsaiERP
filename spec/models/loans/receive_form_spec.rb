@@ -6,7 +6,7 @@ describe Loans::ReceiveForm do
     today = Date.today
     {
       date: today, due_date: today + 10.days, total: 100,
-      reference: 'Receipt 00232', contact_id: 1
+      reference: 'Receipt 00232', contact_id: 1, description: 'Hi'
     }
   end
 
@@ -27,6 +27,11 @@ describe Loans::ReceiveForm do
     lf.loan.date.should eq(attributes.fetch(:date))
     lf.loan.due_date.should eq(attributes.fetch(:due_date))
     lf.loan.exchange_rate.should == 1.0
+
+    attributes.except(:reference).each do |k, v|
+      lf.loan.send(k).should eq(v)
+    end
+
     # ledger
     lf.ledger.amount.should == 100
     expect(lf.ledger.operation).to eq('lrcre')

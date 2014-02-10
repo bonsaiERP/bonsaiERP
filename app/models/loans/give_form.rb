@@ -19,7 +19,8 @@ class Loans::GiveForm < Loans::Form
       exchange_rate: exchange_rate,
       state: 'approved',
       date: date, due_date: due_date,
-      currency: account_to_currency
+      currency: account_to_currency,
+      description: description
     )
   end
 
