@@ -86,3 +86,9 @@
 
     %ul.unstyled.listing
       = render partial: 'account_ledgers/movement', collection: present(@loan.interest_ledgers), locals: { current_account_id: @loan.id }, as: :ledger
+
+.row-fluid
+  .span6
+    %h3 Historial
+
+    = render partial: 'histories/history', collection: present(@loan.histories), as: :history

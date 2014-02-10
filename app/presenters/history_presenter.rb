@@ -15,7 +15,7 @@ class HistoryPresenter < BasePresenter
 
   def present_changes
     history.map do |k, v|
-      from, to = get_format(v[:from], v[:type]), get_format(v[:to], v[:type])
+      from, to = format_for(v[:from], v[:type]), format_for(v[:to], v[:type])
       "#{attr_text k} de #{code from} a #{code to}"
     end.join(', ')
   end
@@ -26,23 +26,16 @@ class HistoryPresenter < BasePresenter
 
   private
 
-    def get_format(v, type)
-      case type
-      when 'boolean'
-        "<i class='icon-#{v}'></i>"
-      when 'decimal', 'float'
-        context.ntc v
-      else
-        v
-      end
-    end
-
     def translate_attribute(k)
-      t("#{klass}.attributes.#{k}") || t("common.#{k}")
+      t("#{t_klass}.attributes.#{k}") || t("common.#{k}")
     end
 
     def attr_text(k)
       text_gray(translate_attribute(k), nil, 'b')
+    end
+
+    def t_klass
+      @t_klass ||= klass.to_s.split('/').join('.')
     end
 
     def code(txt)
@@ -51,12 +44,14 @@ class HistoryPresenter < BasePresenter
 
     def format_for(val, typ)
       case typ
-      when 'string', 'integer', 'boolean', 'float'
+      when 'string', 'integer', 'float'
         val
+      when 'boolean'
+        "<i class='icon-#{val}'></i>"
       when 'date', 'datetime', 'time'
-        template.l val
+        context.lo val
       when 'decimal'
-        template.ntc val
+        context.ntc val
       end
     end
 end

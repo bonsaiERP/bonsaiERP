@@ -397,7 +397,6 @@ es:
     description: 'descripción'
     no_inventory: 'Inventario'
 
-
   income:
     attributes:
       <<: *movement_attributes
@@ -409,6 +408,15 @@ es:
       reference: "Pago egreso %{expense}"
     attributes:
       <<: *movement_attributes
+
+  loan_attributes: &loan_attributes
+    date: fecha
+    due_date: vence el
+
+  loans:
+    give:
+      attributes:
+        <<: *loan_attributes
 
   account_ledger:
     payment_description: "%{pay_type} de %{trans} %{ref}, cuenta %{account}"
