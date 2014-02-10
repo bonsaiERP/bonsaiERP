@@ -27,7 +27,11 @@ class SessionsController < ApplicationController
       redirect_to registrations_url(subdomain: false) and return
 
     else
-      flash.now[:error] = 'El email o la contraseña que ingreso son incorrectos.'
+      if @session.active
+        flash.now[:error] = 'El email o la contraseña que ingreso son incorrectos.'
+      else
+        flash.now[:error] = 'Su cuenta ha sido dsactivada, contatese con su empresa para activarla.'
+      end
 
       render :new
     end

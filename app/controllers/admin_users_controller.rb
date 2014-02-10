@@ -67,7 +67,7 @@ class AdminUsersController < ApplicationController
     end
 
     def redirect_to_conf
-      flash[:warming] = 'La cuenta maestra no puede ser editada'
+      flash[:alert] = 'La cuenta maestra no puede ser editada'
       redirect_to configurations_path
     end
 end

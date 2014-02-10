@@ -1,6 +1,6 @@
 # encoding: utf-8
 class Session < BaseService
-  attr_reader :tenant, :status
+  attr_reader :tenant, :status, :active, :logged
 
   attribute :email, String
   attribute :password, String
@@ -34,6 +34,8 @@ class Session < BaseService
     end
 
     def validated?
-      valid? && user.present? && user.active_links?
+      res = valid? && user.present?
+      @active = user.active_links?
+      res && @active
     end
 end
