@@ -51,11 +51,18 @@ init = ($) ->
   AjaxLoadingHTML = ->
     "<h4 class='c'><img src='/assets/ajax-loader.gif' alt='Cargando..' /> Cargando...</h4>"
 
+  # Width for dialog
+  getWidth = (width) ->
+    winWidth = $(window).width()
+    if winWidth < width then winWidth else width
+
   # Creates the dialog container
   @createDialog = (params) ->
     data = params
+    params.width = getWidth(params['width'] || 800)
+
     params = _.extend({
-      'id': new Date().getTime(), 'title': '', 'width': 800, 'modal': true, 'resizable' : false, 'position': 'top',
+      'id': new Date().getTime(), 'title': '', 'modal': true, 'resizable' : false, 'position': 'top', dialogClass: 'normal-dialog'
     }, params)
 
     html = params['html'] || AjaxLoadingHTML()

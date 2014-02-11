@@ -102,6 +102,7 @@ $(->
       # Elem related with the call input, select, etc
       elem: $this.data('elem') || $this,
       width: $this.data('width') || 800,
+      #dialogClass: $this.data('class') || 'normal-dialog',
       # Return response instead of calling default
       return: $this.data('return') || true
     })
