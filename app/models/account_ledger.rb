@@ -21,8 +21,8 @@ class AccountLedger < ActiveRecord::Base
                 'lrint',  # lrint  = Interest Loans::Receive --
                 #'lrdev',  # lrdev  = Loans::Receive make a devolution, adds ++
                 'lgcre',  # lgcre  = Create the ledger Loans::Give, substract --
-                'lgint',  # lgint  = Interests for Loans::Give ++
                 'lgpay',  # lgpay  = Loans::Give receive a payment, adds ++
+                'lgint',  # lgint  = Interests for Loans::Give ++
                 #'lgdev',  # lgdev  = Loans::Give make a devolution, substract --
                 'servex', # servex = Pays an account with a service account_to is Expense
                 'servin', # servin = Pays an account with a service account_to is Income

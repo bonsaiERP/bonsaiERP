@@ -82,6 +82,7 @@ class MovementHistoryPresenter < HistoryPresenter
   def inventory_operation;  end
 
   def change_no_inventory
+    return  if mov_extras.blank? || mov_extras['from']['no_inventory'].blank?
     from, to = mov_extras['from']['no_inventory'], mov_extras['to']['no_inventory']
     if from.present? || to.present?
       arr = ['Inventario ACTIVO', 'Inventario INACTIVO']
