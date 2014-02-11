@@ -65,6 +65,12 @@
 
 .row-fluid
   .span6
+    %h3.n Transacción de creación
+    %ul.unstyled
+      = render 'account_ledgers/movement', ledger: present(@loan.ledger_in), current_account_id: @loan.id
+
+.row-fluid
+  .span6
     %h3.n Pagos y devoluciones
 
     .center

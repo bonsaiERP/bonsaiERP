@@ -1,6 +1,6 @@
 class Loans::GivePresenter < BasePresenter
   def loan_type_tag
-    "#{icon 'icon-signout fs130 green'} Prestamo otorgado".html_safe
+    "#{icon 'icon-logout fs130 green'} Prestamo otorgado".html_safe
   end
 
   def due_date_tag

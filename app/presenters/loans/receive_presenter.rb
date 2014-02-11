@@ -1,6 +1,6 @@
 class Loans::ReceivePresenter < BasePresenter
   def loan_type_tag
-    "#{icon 'icon-signin fs130 red'} Prestamo recibido".html_safe
+    "#{icon 'icon-login fs130 red'} Prestamo recibido".html_safe
   end
 
   def due_date_tag
