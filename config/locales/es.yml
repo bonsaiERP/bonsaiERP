@@ -414,10 +414,13 @@ es:
     due_date: vence el
     amount: saldo
     total: total
-    interest: intereses
+    interests: intereses
 
   loans:
     give:
+      attributes:
+        <<: *loan_attributes
+    receive:
       attributes:
         <<: *loan_attributes
 

@@ -58,7 +58,7 @@ class AccountLedgerPresenter < BasePresenter
     case to_model.operation
     when 'payin', 'payout', 'devin', 'devout'
       amount
-    when 'trans', 'servin', 'servex'
+    when 'trans', 'servin', 'servex', 'lgpay', 'lgint', 'lrpay', 'lrint'
       related_amount
     end
   end

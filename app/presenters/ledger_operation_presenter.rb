@@ -46,7 +46,7 @@ class UnrelatedOperation < Struct.new(:presenter)
   def operation_tag
     case operation
     when 'payin' 'devout', 'lrcre', 'lgpay', 'lgint'
-      text_green_dark(operation_text)
+      text_green(operation_text)
     when 'payout' 'devin', 'lgcre', 'lrpay', 'lrint'
       text_red(operation_text)
     end

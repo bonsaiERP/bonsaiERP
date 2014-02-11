@@ -91,4 +91,4 @@
   .span6
     %h3 Historial
 
-    = render partial: 'histories/history', collection: present(@loan.histories), as: :history
+    = render partial: 'histories/history', collection: present(@loan.histories, LoanHistoryPresenter), as: :history
