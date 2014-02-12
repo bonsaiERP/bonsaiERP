@@ -7,12 +7,12 @@
 %p.center.payment-buttons
 
   - if income.can_pay?
-    = link_to new_income_payment_path(income.id), class: 'btn btn-success w100p', data: { target: '#payment-form' } do
+    = link_to new_income_payment_path(income.id), class: 'btn btn-success w100p', data: { target: '#payment-form', targethide: '.payment-buttons' } do
       %i.icon-plus-sign
       Cobrar
 
   - if income.can_devolution?
-    = link_to new_income_devolution_path(income.id), class: 'btn btn-danger w100p', id: 'devolution-link', data: { target: '#payment-form' } do
+    = link_to new_income_devolution_path(income.id), class: 'btn btn-danger w100p', id: 'devolution-link', data: { target: '#payment-form', targethide: '.payment-buttons' } do
       %i.icon-minus-sign
       Devolución
 

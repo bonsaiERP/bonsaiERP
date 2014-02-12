@@ -106,38 +106,4 @@
         return false;
       }
     })
-
-    // Payment buttons
-    $('.payment-buttons').on('click', 'a', function() {
-      $this = $(this);
-      $('.payment-buttons').hide('fast');
-      $('.payment-form')
-      .html('<p class="center muted"><img src="/assets/ajax-loader.gif" /> Cargando...</p>')
-      .load($this.data('url'), function() { $('.payment-form').setDatepicker() });
-    })
-
-    $('.payment-form').on('click', 'a.cancel', function() {
-      $('.payment-buttons').show('fast');
-      $('.payment-form').html('');
-    })
-
-
-    // Payment show hide
-    $('#payment-link').click( function() {
-      $('#payment-form').show('fast');
-    })
-    $('body').on('click', '#cancel-payment-link', function() {
-      $('#payment-form').hide('fast');
-      $('.payment-buttons').show('fast');
-    });
-
-    // Devolution show hide
-    $('#devolution-link').click( function() {
-      $('#devolution-form').show('fast');
-      $('.payment-buttons').hide('fast');
-    })
-    $('body').on('click', '#cancel-devolution-link', function() {
-      $('#devolution-form').hide('fast');
-      $('.payment-buttons').show('fast');
-    });
   });

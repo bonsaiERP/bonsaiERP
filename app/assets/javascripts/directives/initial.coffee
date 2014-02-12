@@ -25,6 +25,7 @@ myApp.directive('ngInitial', ->
         escapeMarkup: (m) -> m
         dropdownCssClass: 'hide-select2-search'
         placeholder: 'Seleccione la cuenta'
+        formatNoMatches: (term) -> 'No se encontro resultados'
       )
       .on('change', (event) ->
         data = $element.select2('data')

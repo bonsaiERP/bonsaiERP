@@ -83,6 +83,7 @@ class TagSelector
       containerCssClass: 'btags',
       dropdownCssClass: 'btags',
       escapeMarkup: (t) -> t
+      formatNoMatches: (term) -> 'No se encontro etiquetas'
     })
   #
   setEvents: ->

@@ -7,12 +7,12 @@
 %p.center.payment-buttons
 
   - if expense.can_pay?
-    = link_to new_expense_payment_path(expense.id), class: 'btn btn-success w100p', data: { target: '#payment-form' } do
+    = link_to new_expense_payment_path(expense.id), class: 'btn btn-success w100p', data: { target: '#payment-form', targethide: '.payment-buttons' } do
       %i.icon-minus-sign
       Pago
 
   - if expense.can_devolution?
-    = link_to new_expense_devolution_path(expense.id), class: 'btn btn-danger w100p', data: { target: '#payment-form' } do
+    = link_to new_expense_devolution_path(expense.id), class: 'btn btn-danger w100p', data: { target: '#payment-form', targethide: '.payment-buttons' } do
       %i.icon-plus-sign
       Devolución
 

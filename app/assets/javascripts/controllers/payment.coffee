@@ -23,6 +23,7 @@ myApp.controller 'PaymentController', ['$scope', ($scope) ->
     escapeMarkup: (m) -> m
     dropdownCssClass: 'hide-select2-search'
     placeholder: 'Seleccione la cuenta'
+    formatNoMatches: (term) -> 'No se encotro cuentas'
   )
   .on('change', (event) ->
     data = $(this).select2('data')

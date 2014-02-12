@@ -1,26 +1,43 @@
 $(->
+  # Creates cancel button for data-target or other
   createCancelButton = ($div, $link) ->
     return  if $div.find('.cancel').length > 0
-    $cancel = $('<a class="btn cancel">Cancelar</a>').click( ->
-      if $div.attr('ng-controller')
-        $scope = $div.scope()
-        $scope.$apply (scope) ->
-          scope.htmlContent = ''
-          scope.$$childHead = null
-          scope.$$childTail = null
-      else
-        $div.html('').hide('medium')
 
-      $link.show('medium')
-    )
+    $cancel = $('<a/>', {
+      class: 'btn cancel', href: 'javascript:;', text: 'Cancelar'
+      click: ->
+        if $div.attr('ng-controller')
+          $scope = $div.scope()
+          $scope.$apply (scope) ->
+            scope.htmlContent = ''
+            scope.$$childHead = null
+            scope.$$childTail = null
+        else
+          $div.html('').hide('medium')
+
+        $link.show('medium')
+    })
+
     $div.find('.form-actions').append($cancel)
 
+  ########################################
+  # Hide container for data target
+  getHideCont = ($this) ->
+    if target = $this.data('targethide')
+      if target.$jquery then target else $(target)
+    else
+      $this
+
+  # Creates a data target loaded via AJAX
+  # data-target
   $('body').on('click', 'a[data-target]', (event) ->
     event.preventDefault()
     $this = $(this)
-    $this.hide('medium')
+    $hide =getHideCont($this)
+    $hide.hide('medium')
     $div = $($this.data('target'))
     $div.addClass('ajax-modal').data('link', $this)
+
     if $div.attr('ng-controller')
       $scope = $div.scope()
       $scope.$apply (scope) ->
@@ -45,16 +62,15 @@ $(->
           $scope.$apply (scope) ->
             scope.$$childHead = null
             scope.$$childTail = null
-            #scope.datas
             scope.htmlContent = resp
         else
           $div.html(resp)
 
         $div.setDatepicker()
-        createCancelButton($div, $this)
+        createCancelButton($div, $hide)
     )
     $div.on 'reload:ajax-modal', ->
-      createCancelButton($div, $this)
+      createCancelButton($div, $hide)
   )
 
   # Marks a row adding a selected class to the row

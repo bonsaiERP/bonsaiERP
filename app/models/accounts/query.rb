@@ -61,7 +61,9 @@ class Accounts::Query
   end
 
   def create_hash(v, *args)
-    Hash[args.map { |k| [k, v.send(k)] }]
+    h = Hash[args.map { |k| [k, v.send(k)] }]
+    h[:text] = v.to_s
+    h
   end
 
   def default_options
