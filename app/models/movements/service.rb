@@ -64,9 +64,7 @@ class Movements::Service < Struct.new(:movement)
       movement.state = get_state
       movement.delivered = details.all? { |d| d.balance <= 0 }
       #  Required for updates
-      movement.extras = {
-        delivered: movement.delivered, balance_inventory: movement.balance_inventory
-      }
+      movement.extras = movement.extras.symbolize_keys
     end
 
     def get_balance
