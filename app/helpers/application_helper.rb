@@ -183,7 +183,11 @@ module ApplicationHelper
   end
 
   def params_bold(val)
-    params[val].present? ? "b" : ""
+    params[val].present? ? 'b' : ''
+  end
+
+  def param_bold_for(key, val)
+    params[key] == val ? 'b' : ''
   end
 
   def present_date_range(date_range)

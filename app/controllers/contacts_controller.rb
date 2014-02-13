@@ -20,6 +20,7 @@ class ContactsController < ApplicationController
 
   # GET /contacts/1
   def show
+    params[:operation] ||= 'all'
     @contact = present @contact
   end
 

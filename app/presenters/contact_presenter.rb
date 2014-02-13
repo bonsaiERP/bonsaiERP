@@ -33,7 +33,22 @@ class ContactPresenter < BasePresenter
   end
 
   def operations
-    to_model.accounts.operations.includes(:creator, :approver, :nuller, :updater).order('date desc, id desc')
+    @operations = operations_filter.includes(:creator, :approver, :nuller, :updater).order('date desc, id desc').page(page)
+  end
+
+  def operations_filter
+    case context.params[:operation]
+    when 'all' then to_model.accounts.operations
+    when 'income' then to_model.accounts.where(type: 'Income')
+    when 'expense' then to_model.accounts.where(type: 'Expense')
+    when 'loangive' then to_model.accounts.where(type: 'Loans::Give')
+    when 'loanreceive' then to_model.accounts.where(type: 'Loans::Receive')
+    end
+  end
+
+  def page
+    p = context.params[:page].to_i
+    p > 0 ? p : 1
   end
 
   def operation_partial(operation)

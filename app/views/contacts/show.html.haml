@@ -41,7 +41,20 @@
 
 %h3.n Operaciones
 
-%ul.listing.unstyled
+%ul.unstyled.inline
+  %li
+    = link_to "Todas", contact_path(@contact, operation: :all), class: param_bold_for(:operation, 'all')
+  %li
+    = link_to "Ingresos", contact_path(@contact, operation: :income), class: param_bold_for(:operation, 'income')
+  %li
+    = link_to "Egresos", contact_path(@contact, operation: :expense), class: param_bold_for(:operation, 'expense')
+  %li
+    = link_to "Prestamos otorgados", contact_path(@contact, operation: :loangive), class: param_bold_for(:operation, 'loangive')
+  %li
+    = link_to "Prestamos recibidos", contact_path(@contact, operation: :loanreceive), class: param_bold_for(:operation, 'loanreceive')
+
+
+%ul.listing.unstyled(style='margin-top: 10px')
   %li.row-fluid
     .span8
     .span4
