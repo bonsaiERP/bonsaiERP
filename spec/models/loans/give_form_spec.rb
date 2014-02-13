@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe Loans::GiveForm do
+  before(:each) do
+    UserSession.user = build :user, id: 1
+  end
+
   let(:cash) { create :cash, currency: 'BOB', amount: 0 }
   let(:attributes) do
     today = Date.today
@@ -11,7 +15,6 @@ describe Loans::GiveForm do
   end
 
   before(:each) do
-    UserSession.user = build :user, id: 1
     Loans::Give.any_instance.stub(contact: build(:contact))
   end
 
@@ -25,6 +28,7 @@ describe Loans::GiveForm do
     lf.loan.amount.should == attributes.fetch(:total)
     lf.loan.date.should eq(attributes.fetch(:date))
     lf.loan.due_date.should eq(attributes.fetch(:due_date))
+    lf.loan.creator_id.should eq(1)
 
     attributes.except(:reference).each do |k, v|
       lf.loan.send(k).should eq(v)

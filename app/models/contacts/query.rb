@@ -25,12 +25,4 @@ SELECT contact_id, SUM(tot_in) as tot_in, SUM(tot_out) AS tot_out FROM(
       SQL
     end
 
-    def case_type
-      "IF ai.type = 'Income' OR type = 'Loans::Give' THEN 'in' ELSE 'out' END IF"
-    end
-
-    def sum_sel(abbr, tot)
-      "sum(#{abbr}.amount * #{abbr}.exchange_rate) AS #{tot}"
-    end
-
 end

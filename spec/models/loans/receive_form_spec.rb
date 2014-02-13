@@ -27,6 +27,7 @@ describe Loans::ReceiveForm do
     lf.loan.date.should eq(attributes.fetch(:date))
     lf.loan.due_date.should eq(attributes.fetch(:due_date))
     lf.loan.exchange_rate.should == 1.0
+    lf.loan.creator_id.should eq(1)
 
     attributes.except(:reference).each do |k, v|
       lf.loan.send(k).should eq(v)

@@ -33,7 +33,11 @@ class Account < ActiveRecord::Base
   scope :to_pay, -> { where('amount < 0') }
   scope :to_recieve, -> { where('amount > 0') }
   scope :active, -> { where(active: true) }
-  scope :money, -> { where(type: ['Bank', 'Cash']) }
+  scope :money, -> { where(type: %w(Bank Cash)) }
+  scope :in, -> { where(type: %w(Income Loans::Give)) }
+  scope :out, -> { where(type: %w(Expense Loans::Receive)) }
+  scope :approved, -> { where(state: 'approved') }
+  scope :operations, -> { where(type: %w(Income Loans::Give Expense Loans::Receive)) }
 
   delegate :name, :code, :symbol, to: :curr, prefix: true
 

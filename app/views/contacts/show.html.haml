@@ -42,6 +42,14 @@
 %h3.n Operaciones
 
 %ul.listing.unstyled
+  %li.row-fluid
+    .span8
+    .span4
+      .span6
+        %strong.muted Total
+      .span6
+        %strong.muted Saldo
+
   - @contact.operations.each do |op|
     = @contact.operation_partial(op)
 

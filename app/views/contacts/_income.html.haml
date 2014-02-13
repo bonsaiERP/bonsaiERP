@@ -1,12 +1,12 @@
 %li.row-fluid(id="#{income.id}")
   .span4.income-detail
     .fl
-      %strong.muted Ingreso
       %h4.ib
         = link_to income do
           %span(title='Código ingreso')= income
           = income.has_error_label
-
+      %i.icon-plus.green
+      Ingreso
       .clearfix
       %span(title='estado')= income.state_tag
       %i= l income.date

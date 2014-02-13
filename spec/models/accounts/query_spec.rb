@@ -23,7 +23,7 @@ describe Accounts::Query do
 
       options.each_with_index do |val, i|
         next if i == 0
-        val.keys.should eq([:id, :type, :currency, :amount, :name, :to_s])
+        val.keys.should eq([:id, :type, :currency, :amount, :name, :to_s, :text])
       end
     end
 

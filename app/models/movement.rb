@@ -21,7 +21,6 @@ class Movement < Account
 
   # Callbacks
   before_update :check_items_balances
-  before_create { |m| m.creator_id = UserSession.id }
 
   ########################################
   # Relationships

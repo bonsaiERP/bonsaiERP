@@ -4,6 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe Unit do
 
   before(:each) do
+    UserSession.user = build :user, id: 10
     @params = {:name => "kilogram", :symbol => "kg", :integer => false}
   end
 

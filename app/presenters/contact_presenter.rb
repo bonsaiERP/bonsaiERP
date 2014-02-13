@@ -33,7 +33,7 @@ class ContactPresenter < BasePresenter
   end
 
   def operations
-    to_model.operations.includes(:creator, :approver, :nuller, :updater).order('date desc, id desc')
+    to_model.accounts.operations.includes(:creator, :approver, :nuller, :updater).order('date desc, id desc')
   end
 
   def operation_partial(operation)

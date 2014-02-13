@@ -18,8 +18,6 @@ class Contact < ActiveRecord::Base
   has_many :expenses, -> { where(type: 'Expense').order('accounts.date desc, accounts.id desc') },
            foreign_key: :contact_id
 
-  has_many :operations, -> { where(type: %w(Income Expense Loans::Give Loans::Receive)) },
-            foreign_key: :contact_id, class_name: 'Account'
   has_many :inventories
 
   ########################################

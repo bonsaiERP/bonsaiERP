@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140205123754) do
+ActiveRecord::Schema.define(version: 20140213135130) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -216,9 +216,11 @@ ActiveRecord::Schema.define(version: 20140205123754) do
     t.string   "unit_name"
     t.integer  "tag_ids",                                          default: [],                array: true
     t.integer  "updater_id"
+    t.integer  "creator_id"
   end
 
   add_index "items", ["code"], name: "index_items_on_code", using: :btree
+  add_index "items", ["creator_id"], name: "index_items_on_creator_id", using: :btree
   add_index "items", ["for_sale"], name: "index_items_on_for_sale", using: :btree
   add_index "items", ["stockable"], name: "index_items_on_stockable", using: :btree
   add_index "items", ["tag_ids"], name: "index_items_on_tag_ids", using: :gin

@@ -15,14 +15,14 @@
 
 .row-fluid
   .span3
-    %h4.inline-cont
+    %h4.inline-cont.n
       = link_to icon('icon-pencil', 'Editar fecha'), loan_path(@loan.id), class: 'dark inline-edit',
         data: { type: 'date', name: 'date', notify: '.top-left' }
       %span.muted Fecha
       %span.inline-data= l @loan.date
 
   .span3
-    %h4.inline-cont
+    %h4.inline-cont.n
       - unless @loan.is_paid?
         = link_to icon('icon-pencil', 'Editar fecha de vencimiento'), loan_path(@loan.id), class: 'dark inline-edit',
           data: { type: 'date', name: 'due_date', notify: '.top-left', due: true, today: @loan.today.to_s }
@@ -62,6 +62,7 @@
         data: { type: 'textarea', name: 'description', notify: '.top-right' }
       %span.inline-data(data-value='#{@loan.description}')= nl2br @loan.description
 
+%hr
 
 .row-fluid
   .span6
@@ -69,8 +70,9 @@
     %ul.unstyled
       = render 'account_ledgers/movement', ledger: present(@loan.ledger_in), current_account_id: @loan.id
 
+
 .row-fluid
-  .span6
+  .span6.well.well-small.bg-white
     %h3.n Pagos y devoluciones
 
     .center
@@ -83,7 +85,7 @@
     %ul.unstyled.listing
       = render partial: 'account_ledgers/movement', collection: present(@loan.payments_devolutions), as: :ledger, locals: { current_account_id: @loan.id }
 
-  .span6
+  .span6.well.well-small.bg-white
     %h3.n Intereses
     .center
       = @loan.interest_link
@@ -94,7 +96,8 @@
       = render partial: 'account_ledgers/movement', collection: present(@loan.interest_ledgers), locals: { current_account_id: @loan.id }, as: :ledger
 
 .row-fluid
-  .span6
-    %h3 Historial
+  .span6.well.well-small.bg-white
+    %h3.n Historial
 
-    = render partial: 'histories/history', collection: present(@loan.histories, LoanHistoryPresenter), as: :history
+    %ul.listing.unstyled
+      = render partial: 'histories/history', collection: present(@loan.histories, LoanHistoryPresenter), as: :history
