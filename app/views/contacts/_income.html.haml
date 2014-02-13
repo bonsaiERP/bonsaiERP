@@ -1,14 +1,11 @@
 %li.row-fluid(id="#{income.id}")
   .span4.income-detail
     .fl
-      %input.row-check(type='checkbox' id="#{income.id}")
-    .fl
+      %strong.muted Ingreso
       %h4.ib
         = link_to income do
           %span(title='Código ingreso')= income
           = income.has_error_label
-
-      = link_to income.contact, income.contact, title: 'Contacto'
 
       .clearfix
       %span(title='estado')= income.state_tag
@@ -46,3 +43,4 @@
       = currency_label income.currency
   .span1.r
     = link_to icon_edit, edit_income_path(income.id), class: 'dark' unless income.is_nulled?
+

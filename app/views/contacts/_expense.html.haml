@@ -1,14 +1,11 @@
 %li.row-fluid(id="#{expense.id}")
   .span4
     .fl
-      %input.row-check(type='checkbox' id="#{expense.id}")
-    .fl
+      %strong.muted Egreso
       %h4.ib
         = link_to expense do
           %span(title='Código egreso')= expense
           = expense.has_error_label
-
-      = link_to expense.contact, expense.contact, title: 'Contacto'
 
       .clearfix
       %span(title='Estado')= expense.state_tag
@@ -45,3 +42,4 @@
       = currency_label expense.currency
   .span1.r
     = link_to icon_edit, edit_expense_path(expense), class: 'dark' unless expense.is_nulled?
+

@@ -47,7 +47,8 @@
         Total
       .span6.r.b.muted
         Saldo
-  = render @incomes
+
+  = render partial: 'incomes/income', collection: present(@incomes), as: :income
 
 = paginate_html
 

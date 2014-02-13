@@ -18,6 +18,7 @@ describe Contact do
   it { should have_many(:incomes) }
   it { should have_many(:expenses) }
   it { should have_many(:inventories) }
+  it { should have_many(:operations) }
 
   context 'Validations' do
     it {should validate_uniqueness_of(:matchcode) }

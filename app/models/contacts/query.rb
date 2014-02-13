@@ -5,13 +5,29 @@ class Contacts::Query < SimpleDelegator
 
   def index
     __getobj__
-    .select("contacts.*, #{sum_sel 'ai', 'tot_in'}, #{sum_sel 'ae', 'tot_out'}")
-    .group('contacts.id')
-    .joins("LEFT JOIN accounts ai ON (ai.contact_id = contacts.id) AND ai.type IN ('Income','Loans::Give')")
-    .joins("LEFT JOIN accounts ae ON (ae.contact_id = contacts.id) AND ae.type IN ('Expense', 'Loans::Receive')")
+    .select("contacts.*, tot_in, tot_out")
+    .joins("LEFT JOIN (#{tots_sql}) AS res ON (res.contact_id=contacts.id)")
   end
 
   private
+
+    def tots_sql
+      <<-SQL
+SELECT contact_id, SUM(tot_in) as tot_in, SUM(tot_out) AS tot_out FROM(
+  SELECT contact_id, amount*exchange_rate AS tot_in, 0 as tot_out
+  FROM accounts
+  WHERE type IN ('Income','Loans::Give') AND state='approved'
+  UNION
+  SELECT contact_id, 0 AS tot_in, amount*exchange_rate AS tot_out
+  FROM accounts
+  WHERE type IN ('Expense','Loans::Receive') AND state='approved'
+) AS res GROUP BY contact_id
+      SQL
+    end
+
+    def case_type
+      "IF ai.type = 'Income' OR type = 'Loans::Give' THEN 'in' ELSE 'out' END IF"
+    end
 
     def sum_sel(abbr, tot)
       "sum(#{abbr}.amount * #{abbr}.exchange_rate) AS #{tot}"

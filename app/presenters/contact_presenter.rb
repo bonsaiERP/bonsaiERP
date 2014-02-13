@@ -31,4 +31,19 @@ class ContactPresenter < BasePresenter
   def tot_out_tag
     "#{text_red icon('icon-minus', 'Por pagar')} #{ntc tot_out} #{template.currency_label}".html_safe  if tot_out.to_f > 0
   end
+
+  def operations
+    to_model.operations.includes(:creator, :approver, :nuller, :updater).order('date desc, id desc')
+  end
+
+  def operation_partial(operation)
+    case operation.class.to_s
+    when 'Income'
+      context.render partial: 'contacts/income', locals: { income: present(operation) }
+    when 'Expense'
+      context.render partial: 'contacts/expense', locals: { expense: present(operation) }
+    when 'Loans::Give', 'Loans::Receive'
+      context.render partial: 'contacts/loan', locals: { loan: present(operation) }
+    end
+  end
 end

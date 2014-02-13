@@ -1,0 +1,26 @@
+%li.row-fluid
+  .span6
+    %h4.ib
+      = link_to loan, loan_path(loan.id)
+
+    = loan.loan_type_tag
+    = link_to loan.contact, loan.contact, title: 'Contacto'
+    .clearfix
+    %strong(title='Estado')= loan.state_tag
+    = loan.due_date_tag
+  .span6
+    .moneybox
+      %label TOTAL
+      %h4
+        = ntc loan.total
+        = currency_label loan.currency
+    .moneybox
+      %label SALDO
+      %h4
+        = ntc loan.amount
+        = currency_label loan.currency
+    .moneybox
+      %label INTERESES
+      %h4
+        = ntc loan.interests
+        = currency_label loan.currency

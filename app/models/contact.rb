@@ -18,6 +18,8 @@ class Contact < ActiveRecord::Base
   has_many :expenses, -> { where(type: 'Expense').order('accounts.date desc, accounts.id desc') },
            foreign_key: :contact_id
 
+  has_many :operations, -> { where(type: %w(Income Expense Loans::Give Loans::Receive)) },
+            foreign_key: :contact_id, class_name: 'Account'
   has_many :inventories
 
   ########################################
@@ -43,6 +45,8 @@ class Contact < ActiveRecord::Base
   # Serialization
   serialize :incomes_status, JSON
   serialize :expenses_status, JSON
+
+  delegate :total_in, :total_out, to: :calculation
 
   ########################################
   # Methods
@@ -99,5 +103,9 @@ class Contact < ActiveRecord::Base
     # Check if the contact has any relations before destroy
     def check_relations
       accounts.empty? && inventories.empty?
+    end
+
+    def calculation
+      @calculation ||= Contacts::Calculation.new(self)
     end
 end
