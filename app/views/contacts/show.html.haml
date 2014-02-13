@@ -54,6 +54,10 @@
     = link_to "Prestamos recibidos", contact_path(@contact, operation: :loanreceive), class: param_bold_for(:operation, 'loanreceive')
 
 
+- paginate_html = paginate @contact.operations
+
+= paginate_html
+
 %ul.listing.unstyled(style='margin-top: 10px')
   %li.row-fluid
     .span8
@@ -66,3 +70,4 @@
   - @contact.operations.each do |op|
     = @contact.operation_partial(op)
 
+= paginate_html
