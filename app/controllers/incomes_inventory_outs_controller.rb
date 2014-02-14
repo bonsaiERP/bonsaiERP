@@ -20,7 +20,7 @@ class IncomesInventoryOutsController < ApplicationController
     @inv = Incomes::InventoryOut.new({store_id: @store.id, income_id: @income.id}.merge(inventory_params))
 
     if @inv.create
-      redirect_to income_path(@income.id), notice: 'Se realizó la entrega de inventario para el ingreso'
+      redirect_to income_path(@income.id), notice: 'Se realizó la entrega de inventario.'
     else
       @inv.build_details  if @inv.details.empty?
       render :new
@@ -33,7 +33,7 @@ class IncomesInventoryOutsController < ApplicationController
       @income = Income.active.find(params[:income_id])
       @store = Store.active.find(params[:store_id])
     rescue
-      redirect_to incomes_path, alert: 'Ha seleccionado un almacen o un ingreso invalido' and return
+      redirect_to incomes_path, alert: 'Ha seleccionado un almacen o un ingreso invalido.' and return
     end
 
     def inventory_params

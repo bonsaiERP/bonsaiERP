@@ -20,7 +20,7 @@ class ExpensesInventoryInsController < ApplicationController
     @inv = Expenses::InventoryIn.new({store_id: @store.id, expense_id: @expense.id}.merge(inventory_params))
 
     if @inv.create
-      redirect_to expense_path(@expense.id), notice: 'Se realizó el ingreso de inventario'
+      redirect_to expense_path(@expense.id), notice: 'Se realizó el ingreso de inventario.'
     else
       render :new
     end
@@ -32,7 +32,7 @@ class ExpensesInventoryInsController < ApplicationController
       @expense = Expense.active.find(params[:expense_id])
       @store = Store.active.find(params[:store_id])
     rescue
-      redirect_to expenses_path, alert: 'Ha seleccionado un almacen o un egreso invalido' and return
+      redirect_to expenses_path, alert: 'Ha seleccionado un almacen o un egreso invalido.' and return
     end
 
     def inventory_params
