@@ -49,7 +49,7 @@ private
   end
 
   def check_user_master_account
-    unless current_user.master_account?
+    unless user_with_role.master_account?
       redirect_to sessions_url(subdomain: false) and return
     end
   end

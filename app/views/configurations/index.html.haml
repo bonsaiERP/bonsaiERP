@@ -32,7 +32,7 @@
     %p
       = link_to edit_organisation_update_path(current_organisation.id), class: 'btn' do
         %i.icon-pencil
-        Editar datos y configuraciones de la empresa
+        Editar datos y configuración
 
 
     %h3.n
@@ -41,21 +41,20 @@
 
     .row-fluid
       .span3
-        %i.icon-phone(title='Teléfono' data-toggle='tooltip')
+        %i.icon-phone.muted(title='Teléfono' data-toggle='tooltip')
         = current_organisation.phone
       .span3
-        %i.icon-mobile-phone(title='Movil' data-toggle='tooltip')
+        %i.icon-mobile.muted(title='Movil' data-toggle='tooltip')
         = current_organisation.mobile
       .span3
-        %i.icon-envelope(title='Email' data-toggle='tooltip')
+        %i.icon-envelope.muted(title='Email' data-toggle='tooltip')
         = current_organisation.email
       .span3
-        %i.icon-cloud(title='Website' data-toggle='tooltip')
         = render_if current_organisation do
           =link_to current_organisation.website, current_organisation.website, target: '_blank'
     .row-fluid
       .span6
-        %i.icon-building(title='Dirección' data-toggle='tooltip')
+        %i.icon-building.muted(title='Dirección' data-toggle='tooltip')
         = nl2br current_organisation.address
 
 :javascript

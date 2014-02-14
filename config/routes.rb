@@ -49,7 +49,6 @@ Bonsaierp::Application.routes.draw do
 
   resources :admin_users, except: [:index] do
     patch :active, on: :member
-    patch :resend_email
   end
 
   resources :configurations, only: [:index]

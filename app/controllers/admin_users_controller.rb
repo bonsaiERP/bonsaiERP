@@ -68,12 +68,12 @@ class AdminUsersController < ApplicationController
 
     def create_params
       params.require(:admin_user)
-      .permit(:email, :first_name, :last_name, :phone,:mobile, :address, :role)
+      .permit(:email, :first_name, :last_name, :role)
       .merge(organisation: current_organisation)
     end
 
     def update_params
-      create_params.except(:email)
+      create_params.except(:email, :first_name, :last_name)
     end
 
     def check_master_account

@@ -6,9 +6,6 @@ class AdminUser < BaseForm
   attribute :email, String
   attribute :first_name, String
   attribute :last_name, String
-  attribute :phone, String
-  attribute :mobile, String
-  attribute :address, String
   attribute :role, String
   attribute :organisation, Organisation
 
@@ -50,13 +47,8 @@ class AdminUser < BaseForm
   def user
     @user ||= User.new(
       email: email, password: random_password,
-      first_name: first_name, last_name: last_name,
-      phone: phone, mobile: mobile, address: address
+      first_name: first_name, last_name: last_name
     )
-  end
-
-  def send_email
-    RegistrationMailer.user_registration(self).deliver!
   end
 
   def link
@@ -86,6 +78,10 @@ class AdminUser < BaseForm
   end
 
   private
+
+    def send_email
+      RegistrationMailer.user_registration(self).deliver!
+    end
 
     def self.slice_user_attributes(user)
       user.attributes.slice(

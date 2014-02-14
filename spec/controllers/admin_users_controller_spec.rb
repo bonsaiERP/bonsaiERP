@@ -73,11 +73,10 @@ describe AdminUsersController do
     end
 
     it "update Error" do
-      controller.should_receive(:check_master_account)
       controller.stub(current_organisation: organisation)
 
       AdminUser.stub(find: AdminUser)
-      AdminUser.should_receive(:update).with({ 'first_name' => 'Juan'}).and_return(false)
+      AdminUser.should_receive(:update).with({ 'first_name' => 'Juan', 'organisation' => organisation}).and_return(false)
 
       patch :update, id: 2, admin_user: {email: 'juan@mail.com', first_name: 'Juan'}
 

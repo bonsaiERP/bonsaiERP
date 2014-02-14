@@ -1,9 +1,0 @@
-<h1><%= t "user.new_user" %></h1>
-
-<%= simple_form_for @user, :html => {:class => "required"} do |f| %>
-  <%= f.input :email, :label => I18n.t("user.attributes.email") %>
-  <%= f.input :password, :label => I18n.t("user.attributes.password") %>
-  <%= f.input :password_confirmation, :label => I18n.t("user.attributes.password_confirmation") %>
-
-  <%= f.button :submit %>
-<% end -%>

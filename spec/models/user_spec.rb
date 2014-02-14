@@ -92,4 +92,12 @@ describe User do
     u.to_s.should eq('Estrella')
   end
 
+  it "#confirm_registration" do
+    u = create :user
+    u.should be_persisted
+
+    u.should_not be_confirmed_at
+    u.confirm_registration
+    u.confirmed_at.should be_is_a(Time)
+  end
 end

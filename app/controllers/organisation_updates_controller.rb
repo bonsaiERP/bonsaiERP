@@ -16,6 +16,6 @@ class OrganisationUpdatesController < ApplicationController
   private
 
     def organisation_params
-      params.require(:organisation).permit(:name, :address, :email, :website, :phone, :mobile, :country_code)
+      params.require(:organisation).permit(:name, :address, :email, :website, :phone, :mobile, :country_code, :inventory_active)
     end
 end

@@ -8,7 +8,7 @@ module Models::User::Authentication
   def confirm_registration
     return true  if confirmed_at?
 
-    update_attribue(:confirmed_at, Time.zone.now)
+    update_attribute(:confirmed_at, Time.zone.now)
   end
 
   def valid_password?(unencrypted_password)
