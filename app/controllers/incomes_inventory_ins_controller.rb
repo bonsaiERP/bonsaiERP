@@ -1,6 +1,7 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
+# Devolutions of inventory for Income
 class IncomesInventoryInsController < ApplicationController
   before_filter :set_store_and_income
 

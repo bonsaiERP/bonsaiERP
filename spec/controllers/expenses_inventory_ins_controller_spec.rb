@@ -5,38 +5,48 @@ describe ExpensesInventoryInsController do
     stub_auth
   end
 
-  let(:store) { build :store, id: 1 }
-  let(:expense) { build :expense, id: 2 }
-  let(:inventory) { build :inventory, id: 1 }
+  it "check_methods" do
+    Expenses::InventoryIn.should be_method_defined(:build_details)
+  end
 
-  context 'GET /new' do
-    it "should_rdirect" do
-      get :new
-
-      response.should redirect_to(expenses_path)
-    end
-
-    it "renders OK" do
-      Store.stub_chain(:active, :find).with("1").and_return(store)
-      Expense.stub_chain(:inventory, :find).with("2").and_return(expense)
+  describe '/new' do
+    it ":new" do
+      Expense.should_receive(:find).with('1').and_return(build(:expense, id: 1))
+      Expense.should_receive(:active).and_return(Expense)
+      Store.should_receive(:find).with('2').and_return(build(:store, id: 2))
+      Store.should_receive(:active).and_return(Store)
 
       Expenses::InventoryIn.any_instance.should_receive(:build_details)
 
-      get :new, store_id: 1, expense_id: 2
+      get :new, expense_id: 1, store_id: 2
 
-      response.should be_ok
+      response.should be_success
+      response.should render_template(:new)
     end
   end
 
-  context 'POST /create' do
-    it "#create" do
-      Store.stub_chain(:active, :find).with("1").and_return(store)
-      Expense.stub_chain(:inventory, :find).with("2").and_return(expense)
-      Expenses::InventoryIn.any_instance.stub(create: true, inventory: inventory)
+  describe '/create' do
+    it ":create" do
+      Expense.stub_chain(:active, find: build(:expense, id: 1))
+      Store.stub_chain(:active, find: build(:expense, id: 1))
 
-      post :create, store_id: 1, expense_id: 2, expenses_inventory_in: {}
+      Expenses::InventoryIn.any_instance.should_receive(:create).and_return(true)
 
-      response.should redirect_to(inventory_path(1))
+      post :create, expenses_inventory_in: { description: 'test', inventory_details_attributes: [{item_id: 1, quantity: 2}] }
+
+      response.should redirect_to(expense_path(1))
+      flash[:notice].should be_present
+    end
+
+    it ":create ERROR" do
+      Expense.stub_chain(:active, find: build(:expense, id: 1))
+      Store.stub_chain(:active, find: build(:expense, id: 1))
+
+      Expenses::InventoryIn.any_instance.should_receive(:create).and_return(false)
+
+      post :create, expenses_inventory_in: { description: 'test', inventory_details_attributes: [{item_id: 1, quantity: 2}] }
+
+      response.should render_template(:new)
     end
   end
 end

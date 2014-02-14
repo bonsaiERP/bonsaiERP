@@ -18,13 +18,11 @@ class AdminUsersController < ApplicationController
 
   # POST /admin_users
   def create
-    admin_user = AdminUser.new(user_params)
+    @admin_user = AdminUser.new(create_params)
 
-    if admin_user.add_user
+    if @admin_user.create
       redirect_to configurations_path,  notice: 'El usuario ha sido adicionado.'
     else
-      @user = admin_user.user
-
       render :new
     end
   end
@@ -37,7 +35,7 @@ class AdminUsersController < ApplicationController
   # PATCH /admin_users/:id
   def update
     @admin_user = AdminUser.find(current_organisation, params[:id])
-    if @admin_user.update(user_params)
+    if @admin_user.update(update_params)
       redirect_to configurations_path, notice: 'El usuario ha sido actualizado'
     else
       render :edit
@@ -55,9 +53,13 @@ class AdminUsersController < ApplicationController
 
   private
 
-    def user_params
+    def create_params
       params.require(:admin_user)
       .permit(:email, :first_name, :last_name, :phone,:mobile, :address, :link_role)
+    end
+
+    def update_params
+      create_params.except(:email)
     end
 
     def check_master_account

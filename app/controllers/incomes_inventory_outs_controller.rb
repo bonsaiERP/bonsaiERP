@@ -20,7 +20,7 @@ class IncomesInventoryOutsController < ApplicationController
     @inv = Incomes::InventoryOut.new({store_id: @store.id, income_id: @income.id}.merge(inventory_params))
 
     if @inv.create
-      redirect_to show_movement_inventory_path(@inv.inventory.id), notice: "Se realizó la entrega de inventario para el ingreso #{@income}"
+      redirect_to income_path(@income.id), notice: 'Se realizó la entrega de inventario para el ingreso'
     else
       @inv.build_details  if @inv.details.empty?
       render :new

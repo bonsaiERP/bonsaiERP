@@ -35,6 +35,7 @@ describe IncomesInventoryInsController do
       post :create, incomes_inventory_in: { description: 'test', inventory_details_attributes: [{item_id: 1, quantity: 2}] }
 
       response.should redirect_to(income_path(1))
+      flash[:notice].should be_present
     end
 
     it ":create ERROR" do
