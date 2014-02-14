@@ -104,8 +104,8 @@ module Controllers::Authorization
 
     def group_hash
       {
-        admin_users: {show: true},
-        configurations: {index: true},
+        admin_users: { show: true },
+        configurations: { index: true },
         tests: false,
         stocks: true,
         inventories: true,

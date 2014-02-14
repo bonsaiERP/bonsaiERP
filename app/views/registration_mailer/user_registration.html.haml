@@ -1,7 +1,17 @@
 %h1 Bienvenido a <span style="font-style: italic">#{APP_NAME}</span>
 
 %p
-  Bienvenido a <span style="font-weight: bold; font-style: italic;">#{APP_NAME}</span>, ha recibido este email por que a sido adicionado para formar parte del equipo de #{@name}, por favor complete su registro
+  Bienvenido a <span style="font-weight: bold; font-style: italic;">#{APP_NAME}</span>, ha recibido este email por que a sido adicionado para formar parte del equipo de #{@name}, por favor ingrese con el email y contraseña:
 
 %p
+  Email:
+  %strong= @user.email
+%p
+  Contraseña:
+  %strong= @user.password
+
+%p
+  = link_to 'Ingresar', login_url(host: UrlTools.domain, subdomain: 'app'), style: 'color: #FFF; background-color: #0064cd; font-weight: bold; padding: 8px 14px; text-decoration: none; border-radius: 3px;'
+
+-#%p
   =link_to "Completar registro", url_for(controller: 'registrations', action: 'new_user', id: @user.confirmation_token, host: UrlTools.domain, subdomain: @tenant, protocol: UrlTools.protocol), style: 'color: #FFF; background-color: #0064cd; font-weight: bold; padding: 8px 14px; text-decoration: none; border-radius: 3px;'

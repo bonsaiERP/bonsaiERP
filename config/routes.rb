@@ -2,7 +2,6 @@
 Bonsaierp::Application.routes.draw do
   get '/download_pdf/:file/:name' => 'download#download_pdf', as: :download
 
-
   resources :loan_payments, only: [] do
     member do
       # Receive
@@ -48,8 +47,9 @@ Bonsaierp::Application.routes.draw do
 
   resources :organisation_updates, only: [:edit, :update]
 
-  resources :admin_users, except: [:index, :destroy] do
+  resources :admin_users, except: [:index] do
     patch :active, on: :member
+    patch :resend_email
   end
 
   resources :configurations, only: [:index]

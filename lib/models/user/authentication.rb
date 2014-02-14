@@ -1,14 +1,14 @@
 module Models::User::Authentication
-  extend ActiveSupport::Concern
-
   attr_accessor :password, :password_confirmation
 
-  included do
-    before_create :set_confirmation_token
+  def self.included(base)
+    base.before_create :set_confirmation_token
   end
 
-  def confirmed_registration?
-    confirmed_at.present?
+  def confirm_registration
+    return true  if confirmed_at?
+
+    update_attribue(:confirmed_at, Time.zone.now)
   end
 
   def valid_password?(unencrypted_password)

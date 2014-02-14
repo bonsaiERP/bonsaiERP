@@ -4,6 +4,7 @@ describe User do
 
   it { should have_many(:links).dependent(:destroy) }
   it { should have_many(:active_links).dependent(:destroy) }
+  it { should have_many(:organisations).through(:active_links) }
 
   let(:valid_attributes)do
     {email: 'demo@example.com', password: 'demo1234'}

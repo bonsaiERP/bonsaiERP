@@ -19,19 +19,8 @@ class SessionsController < ApplicationController
       flash[:notice] = "Ha ingresado correctamente."
 
       redirect_to home_url(host: UrlTools.domain, subdomain: @session.tenant) and return
-
-    when(!@session.authenticate? && 'resend_registration' == @session.status)
-      RegistrationMailer.send_registration(@session).deliver
-      flash[:notice] = "Le hemos reenviado el email de confirmación a #{@session.email}"
-
-      redirect_to registrations_url(subdomain: false) and return
-
     else
-      if @session.active
-        flash.now[:error] = 'El email o la contraseña que ingreso son incorrectos.'
-      else
-        flash.now[:error] = 'Su cuenta ha sido dsactivada, contatese con su empresa para activarla.'
-      end
+      flash.now[:error] = 'El email o la contraseña que ingreso son incorrectos.'
 
       render :new
     end

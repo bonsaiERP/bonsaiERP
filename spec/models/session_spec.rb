@@ -2,41 +2,41 @@ require 'spec_helper'
 
 describe Session do
   let(:valid_attributes) {
-    {email: 'test@mail.com', password: 'demo1234'}
+    {email: 'test@mail.com', password: 'DEMO1234'}
   }
-  let(:user) { build :user, id: 77 }
+  let(:user) { build :user, id: 77, password: 'DEMO1234' }
+  let(:organisation) { build :organisation, id: 77, tenant: 'demo' }
 
   it { should validate_presence_of(:email) }
   it { should validate_presence_of(:password) }
 
-  it "Authenticates" do
-    user.should_receive(:valid_password?).with('demo1234').and_return(true)
-    user.should_receive(:confirmed_registration?).and_return(true)
-    user.stub(active_links?: true, save: true)
+  it "respond to stub methods" do
+    User.should respond_to(:active)
+    User.should respond_to(:order)
+    User.should respond_to(:find_by)
+    User.should be_method_defined(:active_links?)
+    User.should be_method_defined(:organisations)
+  end
 
-    User.stub_chain(:active, find_by_email: user)
+  it "Authenticates" do
+    User.stub_chain(:active, find_by: user)
+    r = double(order: [organisation])
+    User.any_instance.stub(active_links?: true, organisations: r)
 
     ses = Session.new(valid_attributes)
 
     ses.should be_authenticate
+
+    ses.tenant.should eq('demo')
   end
 
-  it "resend registration email" do
-    user.should_receive(:confirmed_registration?).and_return(false)
-    user.stub(active_links?: true)
-    User.stub(find_by_email: user)
+  it "invalid" do
+    User.stub_chain(:active, find_by: user)
+    User.any_instance.stub(active_links?: false)
 
     ses = Session.new(valid_attributes)
 
     ses.should_not be_authenticate
-    ses.status.should eq('resend_registration')
   end
 
-  it "returns the tenant from organisations" do
-    User.should_receive(:find_by_email).and_return(user)
-    user.should_receive(:order).with("id").and_return([double(tenant: 'bonsai')])
-    user.should_receive(:organisations).and_return(user)
-    ses = Session.new
-    ses.tenant.should eq('bonsai')
-  end
 end

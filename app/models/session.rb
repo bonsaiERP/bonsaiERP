@@ -12,11 +12,11 @@ class Session < BaseService
   def authenticate?
     return false unless validated?
 
-    confirmed_registration? && user.valid_password?(password) && user.update_attributes(last_sign_in_at: Time.zone.now)
+    user.valid_password?(password) && user.update_attributes(last_sign_in_at: Time.zone.now)
   end
 
   def user
-    @user ||= User.active.find_by_email(email)
+    @user ||= User.active.find_by(email: email)
   end
 
   def tenant
@@ -25,17 +25,7 @@ class Session < BaseService
 
   private
 
-    def confirmed_registration?
-      @confirmed_registration ||= begin
-        conf = user.confirmed_registration?
-        @status = 'resend_registration' unless conf
-        conf
-      end
-    end
-
     def validated?
-      res = valid? && user.present?
-      @active = user.active_links?
-      res && @active
+      valid? && user.present? && user.active_links?
     end
 end

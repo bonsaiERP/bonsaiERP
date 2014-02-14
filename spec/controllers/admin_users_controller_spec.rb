@@ -22,14 +22,19 @@ describe AdminUsersController do
     AdminUser.should be_respond_to(:find)
   end
 
+  let(:organisation) { build :organisation, id: 2, tenant: 'jeje' }
+
   describe "POST 'create'" do
     it "Create user" do
-      AdminUser.any_instance.stub( create: true )
+      controller.stub(current_organisation: organisation)
 
-      post :create, admin_user: { email: '' }
+      AdminUser.any_instance.should_receive(:create).and_return(true)
+      post :create, admin_user: { email: 'juan@mail.com' }
 
       response.should redirect_to configurations_path
       flash[:notice].should eq('El usuario ha sido adicionado.')
+      assigns(:admin_user).organisation.should eq(organisation)
+      assigns(:admin_user).email.should eq('juan@mail.com')
     end
 
     it "renders new" do
@@ -42,19 +47,9 @@ describe AdminUsersController do
     end
   end
 
-  let(:organisation) { build :organisation, id: 2, tenant: 'jeje' }
 
   describe "GET 'edit'" do
-    it "redirect priviledges" do
-      controller.stub(user_with_role: double(master_account?: false))
-
-      get :edit, id: 1
-
-      response.should redirect_to(configurations_path)
-    end
-
     it "edit" do
-      controller.should_receive(:check_master_account)
       controller.stub(current_organisation: organisation)
 
       AdminUser.should_receive(:find).with(organisation, '2')
@@ -63,21 +58,13 @@ describe AdminUsersController do
     end
   end
 
+
   describe "PATCH 'update'" do
-    it "redirect priviledges" do
-      controller.stub(user_with_role: double(master_account?: false))
-
-      patch :update, id: 1
-
-      response.should redirect_to(configurations_path)
-    end
-
     it "udpate" do
-      controller.should_receive(:check_master_account)
       controller.stub(current_organisation: organisation)
 
       AdminUser.stub(find: AdminUser)
-      AdminUser.should_receive(:update).with({ 'first_name' => 'Juan'}).and_return(true)
+      AdminUser.should_receive(:update).with({ 'first_name' => 'Juan', 'organisation' => organisation}).and_return(true)
 
       patch :update, id: 2, admin_user: {email: 'juan@mail.com', first_name: 'Juan'}
 
@@ -99,14 +86,6 @@ describe AdminUsersController do
   end
 
   describe 'PATCH active' do
-    it "redirect priviledges" do
-      controller.stub(user_with_role: double(master_account?: false))
-
-      patch :active, id: 1
-
-      response.should redirect_to(configurations_path)
-    end
-
     let(:user) { build :user, id: 10 }
     let(:link) { build(:link) }
 

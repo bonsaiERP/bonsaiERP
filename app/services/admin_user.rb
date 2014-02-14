@@ -14,7 +14,7 @@ class AdminUser < BaseForm
 
   validates :email, email_format: true, presence: true
   validates :organisation, presence: true
-  validates :role, presence: true, inclusion: { in: User::ROLES }
+  validates :role, presence: true, inclusion: { in: User::ROLES.slice(1, 2) }
 
   delegate :id, to: :user, prefix: true
 

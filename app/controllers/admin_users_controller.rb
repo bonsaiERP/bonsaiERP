@@ -2,8 +2,6 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class AdminUsersController < ApplicationController
-  before_action :check_master_account, only: [:edit, :update, :active]
-
   rescue_from MasterAccountError, with: :redirect_to_conf
 
   # GET /admin_users/:id
@@ -19,7 +17,6 @@ class AdminUsersController < ApplicationController
   # POST /admin_users
   def create
     @admin_user = AdminUser.new(create_params)
-
     if @admin_user.create
       redirect_to configurations_path,  notice: 'El usuario ha sido adicionado.'
     else
@@ -53,11 +50,26 @@ class AdminUsersController < ApplicationController
     render 'active.js'
   end
 
+  # DELETE
+  def destroy
+    user = current_organisation.users.find(params[:id])
+
+    unless user.last_sign_in_at?
+      user.destroy
+      flash[:notice] = 'El usuario fue eliminado.'
+    else
+      flash[:error] = 'No es posible borrar el usuario, desactive el usuario si desea que no ingrese a su sistema.'
+    end
+
+    redirect_to configurations_path
+  end
+
   private
 
     def create_params
       params.require(:admin_user)
-      .permit(:email, :first_name, :last_name, :phone,:mobile, :address, :link_role)
+      .permit(:email, :first_name, :last_name, :phone,:mobile, :address, :role)
+      .merge(organisation: current_organisation)
     end
 
     def update_params

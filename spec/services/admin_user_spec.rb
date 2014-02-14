@@ -18,8 +18,8 @@ describe AdminUser do
   it { should validate_presence_of(:organisation) }
   it { should validate_presence_of(:role) }
 
-  it { should have_valid(:role).when(*User::ROLES) }
-  it { should_not have_valid(:role).when(nil, 'je', 'grupo') }
+  it { should have_valid(:role).when('group', 'other') }
+  it { should_not have_valid(:role).when('admin', nil, 'je', 'grupo') }
 
   it "create" do
     au = AdminUser.new(attributes)
@@ -55,13 +55,13 @@ describe AdminUser do
     au.user.should eq(user)
     au.link.should eq(link)
 
-    au.update(attributes.merge(email: 'otheremail@mail.com', role: 'admin')).should be_true
+    au.update(attributes.merge(email: 'otheremail@mail.com', role: 'other')).should be_true
 
 
     au.user.email.should eq('otheremail@mail.com')
     au.user.should_not be_changed
 
-    au.link.role.should eq('admin')
+    au.link.role.should eq('other')
     au.link.should_not be_changed
   end
 
