@@ -13,7 +13,7 @@
         %i.icon-plus-circle
         Adicionar usuario
 
-    %h3 Usuarios
+    %h3.n Usuarios
 
     %ul.unstyled.listing.users
       %li.row-fluid
@@ -25,7 +25,7 @@
           %strong.muted Rol
         .span2
 
-      = render partial: 'user', collection: present(current_organisation.users.includes(:links)), as: :user
+      = render partial: 'user', collection: present(current_organisation.users.includes(:links).order('users.id')), as: :user
 
 
   #organisation.tab-pane
@@ -35,8 +35,8 @@
         Editar datos y configuraciones de la empresa
 
 
-    %h3
-      %span.muted.n Datos
+    %h3.n
+      %span.muted Datos
       = current_organisation
 
     .row-fluid

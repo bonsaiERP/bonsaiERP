@@ -45,10 +45,12 @@ class AdminUsersController < ApplicationController
   # Activates or deactivates a user in a organisation
   # PATCH /admin_users/:id/active
   def active
-    @user = current_organisation.users.find(params[:id])
-    @link = @user.links.where(organisation_id: current_organisation.id).first!
+    u_role = UserWithRole.new(User.find(params[:id]), current_organisation)
+    u_role.link.update_attribute(:active, params[:active])
 
-    @link.update_attribute(:active, params[:active])
+    @user = u_role.user
+
+    render 'active.js'
   end
 
   private
@@ -63,7 +65,7 @@ class AdminUsersController < ApplicationController
     end
 
     def check_master_account
-      raise MasterAccountError  if user_with_role.master_account?
+      raise MasterAccountError  unless user_with_role.master_account?
     end
 
     def redirect_to_conf

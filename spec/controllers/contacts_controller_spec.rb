@@ -1,6 +1,9 @@
 require 'spec_helper'
 
 describe ContactsController do
+  before(:each) do
+    stub_auth
+  end
 
   def mock_contact(stubs={})
     @mock_contact ||= mock_model(Contact, stubs).as_null_object
@@ -8,8 +11,19 @@ describe ContactsController do
 
   describe "GET index" do
     it "assigns all contacts as @contacts" do
-      Contact.stub(:all) { [mock_contact] }
+      Contacts::Query.any_instance.stub_chain(:index, order: double(page: [mock_contact]))
       get :index
+
+      assigns(:contacts).should eq([mock_contact])
+      response.should render_template(:index)
+    end
+
+    it "search" do
+      s = mock('Search')
+      Contacts::Query.any_instance.stub_chain(:index, order: s)
+      s.should_receive(:searh).with('h').and_return(double(page: [mock_contact]))
+
+      get :index, search: 'h'
       assigns(:contacts).should eq([mock_contact])
     end
   end

@@ -10,11 +10,11 @@ describe UserWithRole do
     expect { UserWithRole.new(u, u)}.to raise_error
   end
 
-  describe 'Check roles' do
+  let(:link) { build(:link, master_account: true, role: 'admin') }
+  let(:org) { build(:organisation, id: 1) }
+  let(:user) { build :user, id: 10 }
 
-    let(:link) { build(:link, master_account: true, role: 'admin') }
-    let(:org) { build(:organisation, id: 1) }
-    let(:user) { build :user, id: 10 }
+  describe 'Check roles' do
 
     before(:each) do
       user.stub_chain(:links, org_links: [link])
@@ -41,5 +41,10 @@ describe UserWithRole do
       us.should be_is_other
       us.should_not be_master_account
     end
+  end
+
+  it "nil link" do
+    us = UserWithRole.new(user, org)
+    us.link.should be_nil
   end
 end

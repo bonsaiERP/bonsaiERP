@@ -1,5 +1,5 @@
 class UserWithRole
-  attr_reader :user, :organisation, :link
+  attr_reader :user, :organisation
 
   delegate :role, :master_account?, to: :link
   delegate :email, :id, to: :user

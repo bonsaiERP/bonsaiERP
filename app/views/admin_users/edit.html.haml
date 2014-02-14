@@ -1,9 +1,45 @@
+- content_for :links do
+  %ul.breadcrumbs.span6
+    %li
+      =link_to "Configuración", configurations_path
+
 %h1 Editar usuario
+
+- user = present(@admin_user.user)
 
 = simple_form_for @admin_user, url: admin_user_path(@admin_user.user_id), method: 'patch' do |f|
   = bonsai_form_error(f)
 
-  = render 'form', user: present(@admin_user.user), f: f
+  .row-fluid
+    .span6= f.input :first_name, label: 'Nombres', input_html: { size: INPUT_SIZE }
+    .span6= f.input :last_name, label: 'Apellidos', input_html: { size: INPUT_SIZE }
+
+  .row-fluid
+    .span6= f.input :phone, label: 'Teléfono', input_html: { size: INPUT_SIZE }
+    .span6= f.input :mobile, label: 'Móvil', input_html: { size: INPUT_SIZE }
+
+  .row-fluid
+    .span6= f.input :address, label: 'Dirección', as: :text, input_html: { rows: 4, cols: INPUT_SIZE }
+
+    .span6= f.input :role, collection: user.role_options, label: 'Rol', input_html: { id: 'role' }
+
+  = render 'users/permissions', user: user
 
   .form-actions
     = f.submit 'Actualizar usuario', class: 'btn btn-success b'
+
+:javascript
+  $(function() {
+    function markRoleColumn() {
+      $('#roles td').removeClass('marked');
+
+      try{
+        ind = $('th.' + $('#role').val() ).data('index') + 2;
+        $('#roles td:nth-child(' + ind + ')').addClass('marked')
+      } catch(e) {}
+    }
+
+    $('body').on('change keyup', '#role', markRoleColumn);
+    markRoleColumn();
+  })
+

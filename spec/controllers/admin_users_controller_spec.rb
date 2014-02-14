@@ -45,6 +45,14 @@ describe AdminUsersController do
   let(:organisation) { build :organisation, id: 2, tenant: 'jeje' }
 
   describe "GET 'edit'" do
+    it "redirect priviledges" do
+      controller.stub(user_with_role: double(master_account?: false))
+
+      get :edit, id: 1
+
+      response.should redirect_to(configurations_path)
+    end
+
     it "edit" do
       controller.should_receive(:check_master_account)
       controller.stub(current_organisation: organisation)
@@ -56,6 +64,14 @@ describe AdminUsersController do
   end
 
   describe "PATCH 'update'" do
+    it "redirect priviledges" do
+      controller.stub(user_with_role: double(master_account?: false))
+
+      patch :update, id: 1
+
+      response.should redirect_to(configurations_path)
+    end
+
     it "udpate" do
       controller.should_receive(:check_master_account)
       controller.stub(current_organisation: organisation)
@@ -79,6 +95,30 @@ describe AdminUsersController do
       patch :update, id: 2, admin_user: {email: 'juan@mail.com', first_name: 'Juan'}
 
       response.should render_template(:edit)
+    end
+  end
+
+  describe 'PATCH active' do
+    it "redirect priviledges" do
+      controller.stub(user_with_role: double(master_account?: false))
+
+      patch :active, id: 1
+
+      response.should redirect_to(configurations_path)
+    end
+
+    let(:user) { build :user, id: 10 }
+    let(:link) { build(:link) }
+
+    it "active" do
+      controller.stub(current_organisation: organisation, check_master_account: true)
+      User.stub(find: user)
+      UserWithRole.any_instance.stub(link: link)
+      link.should_receive(:update_attribute).with(:active, '0')
+
+      patch :active, id: 1, active: 0
+
+      response.should render_template('active.js')
     end
   end
 
