@@ -12,7 +12,14 @@
   .span6
     %h1 Editar empresa
 
+
 = simple_form_for current_organisation, url: organisation_update_path(current_organisation.id) do |f|
+  .well.well-small
+    %h4.n Configuraciones
+    .row-fluid
+      .span6.form-inline
+        =f.input :inventory, label: 'Inventario activo', as: :boolean
+
   .row-fluid
     .span6
       = f.input :name, label: 'Nombre', input_html: { size: INPUT_SIZE }
@@ -28,9 +35,6 @@
       =f.input :email, label: 'Email', input_html: { size: INPUT_SIZE }
     .span6
       =f.input :website, label: 'Sitio web', input_html: { size: INPUT_SIZE }
-  .row-fluid
-    .span6.form-inline
-      =f.input :inventory, label: 'Inventario activo', as: :boolean
   .row-fluid
     .span6
       =f.input :address, label: 'Dirección', as: :text, input_html: { rows: 5, cols: INPUT_SIZE }
