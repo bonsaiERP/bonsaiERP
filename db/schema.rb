@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140213135130) do
+ActiveRecord::Schema.define(version: 20140215130814) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -276,9 +276,10 @@ ActiveRecord::Schema.define(version: 20140213135130) do
     t.string   "time_zone",    limit: 100
     t.string   "tenant",       limit: 50
     t.string   "currency",     limit: 10
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at",                                               null: false
+    t.datetime "updated_at",                                               null: false
     t.string   "country_code", limit: 5
+    t.hstore   "settings",                 default: {"inventory"=>"true"}
   end
 
   add_index "organisations", ["country_code"], name: "index_organisations_on_country_code", using: :btree

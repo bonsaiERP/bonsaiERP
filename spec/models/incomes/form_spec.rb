@@ -23,7 +23,7 @@ describe Incomes::Form do
 
   before(:each) do
     UserSession.user = build :user, id: 10
-    OrganisationSession.organisation = build :organisation, currency: 'BOB'
+    OrganisationSession.organisation = build :organisation, currency: 'BOB', inventory: true
   end
 
   context "Initialization" do
@@ -107,6 +107,7 @@ describe Incomes::Form do
       i.should be_is_a(Income)
       i.should be_is_draft
       i.should be_active
+      i.inventory.should be_true
       i.ref_number.should =~ /I-\d{2}-\d{4}/
       i.date.should be_is_a(Date)
       i.error_messages.should eq({})

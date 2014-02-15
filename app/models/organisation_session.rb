@@ -5,7 +5,7 @@
 class OrganisationSession
   class << self
     attr_reader :organisation
-    delegate :id, :name, :currency, :tenant, :emamil, :address, :inventory_active?,
+    delegate :id, :name, :currency, :tenant, :emamil, :address, :inventory_active?, :inventory?,
       to: :organisation, allow_nil: true
 
 

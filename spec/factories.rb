@@ -28,6 +28,7 @@ FactoryGirl.define do
     tenant 'bonsai'
     currency 'BOB'
     country_code 'BO'
+    inventory true
   end
 
   factory :contact do

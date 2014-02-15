@@ -20,7 +20,7 @@ describe Expenses::Form do
 
   before(:each) do
     UserSession.user = build :user, id: 10
-    OrganisationSession.organisation = build :organisation, currency: 'BOB'
+    OrganisationSession.organisation = build :organisation, currency: 'BOB', inventory: true
   end
 
   context "Initialization" do
@@ -108,6 +108,7 @@ describe Expenses::Form do
       e.ref_number.should =~ /E-\d{2}-\d{4}/
       e.date.should be_is_a(Date)
       e.error_messages.should eq({})
+      e.inventory.should be_true
 
       e.creator_id.should eq(UserSession.id)
 
@@ -317,10 +318,14 @@ describe Expenses::Form do
     end
 
     it "updates and pays" do
+      OrganisationSession.stub(inventory?: false)
       es = Expenses::Form.new_expense(valid_params)
       es.create.should be_true
+
       es.expense.should be_persisted
       exp = es.expense
+      # Check if sets the OrganisationSession.inventory?
+      exp.inventory.should be_false
       #exp.should be_discounted
       #exp.discount.should == 10
 

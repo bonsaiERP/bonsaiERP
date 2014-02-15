@@ -89,10 +89,10 @@ class IncomesController < ApplicationController
   # PATCH /incomes/:id/approve
   # Method that nulls or enables inventory
   def inventory
-    @income.no_inventory = !@income.no_inventory
+    @income.inventory = @income.inventory?
 
     if @income.save
-      txt = @income.no_inventory? ? 'desactivo' : 'activo'
+      txt = @income.inventory? ? 'activo' : 'inactivo'
       flash[:notice] = "Se #{txt} los inventarios."
     else
       flash[:error] = "Exisition un error modificando el estado de inventarios."

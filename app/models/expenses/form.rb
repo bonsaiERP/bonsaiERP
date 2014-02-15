@@ -37,6 +37,7 @@ class Expenses::Form < Movements::Form
     @movement.ref_number = Expense.get_ref_number
     @movement.state = 'draft'
     @movement.error_messages = {}
+    @movement.inventory = OrganisationSession.inventory?
     2.times { @movement.expense_details.build(quantity: 1) }  if expense.details.empty?
     @service = Expenses::Service.new(expense)
   end
