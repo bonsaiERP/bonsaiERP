@@ -30,7 +30,7 @@ class IncomePresenter < MovementPresenter
   end
 
   def deliver_inventory_button
-    if !no_inventory? && !is_nulled? && !delivered?
+    if inventory? && !is_nulled? && !delivered?
       link_to 'javascript:;', class: 'btn btn-success', id: 'inventory-deliver-link' do
         "#{icon('icon-signout')} Entregar mercadería".html_safe
       end

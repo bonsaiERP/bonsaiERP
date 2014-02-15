@@ -13,10 +13,7 @@
       .clearfix
       %span(title='estado')= income.state_tag
       %i= l income.date
-      - if income.tax
-        %strong.gray
-          \-
-          = income.tax_tag
+      = income.tax_tag
 
       = income.inventory_tag
 

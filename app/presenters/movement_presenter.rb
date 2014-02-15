@@ -54,7 +54,7 @@ class MovementPresenter < BasePresenter
       case
       when delivered?
         label_green('IC', 'Inventario completo')
-      when no_inventory?
+      when !inventory?
         label_gray('ID', 'Inventario desactivado')
       else
         label_yellow('IP', 'Inventario pendiente')
@@ -82,10 +82,10 @@ class MovementPresenter < BasePresenter
   end
 
   def enable_disable_inventory_text_tag
-    if no_inventory?
-      "<span class='green'>#{icon('icon-off')} Activar inventario</span>".html_safe
-    else
+    if inventory?
       "<span class='red'>#{icon('icon-off')} Desactivar inventario</span>".html_safe
+    else
+      "<span class='green'>#{icon('icon-off')} Activar inventario</span>".html_safe
     end
   end
 
@@ -98,34 +98,25 @@ class MovementPresenter < BasePresenter
     if !is_nulled? && !delivered?
       template.content_tag :h5, class: 'n ib' do
         link_to enable_disable_inventory_text, template.inventory_income_path(id),
-          method: :patch, class: (no_inventory? ? 'green' : 'red')
+          method: :patch, class: (inventory? ? 'red' : 'green')
       end
     end
   end
 
   def enable_disable_inventory_text
-    if no_inventory?
-      'Activar inventario'
-    else
+    if inventory?
       'Desactivar inventario'
-    end
-  end
-
-  # Value to enable disable inventory
-  def enable_disable_inventory_val
-    if no_inventory?
-      false
     else
-      true
+      'Activar inventario'
     end
   end
 
   def show_inventory_buttons?
-    !no_inventory? && !is_nulled?
+    inventory? && !is_nulled?
   end
 
   def tax_tag
-    "#{tax_name} (#{tax_type_tag} #{tax_percentage_dec}%)".html_safe
+    "#{tax_name} (#{tax_type_tag} #{tax_percentage_dec}%)".html_safe  if tax_id?
   end
 
   def tax_type_tag
@@ -142,6 +133,10 @@ class MovementPresenter < BasePresenter
     else
       icon 'icon-expand-alt fs130', 'Por fuera'
     end
+  end
+
+  def histories
+    to_model.histories.includes(:user)
   end
 
   private

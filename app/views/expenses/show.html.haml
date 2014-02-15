@@ -93,6 +93,15 @@
     .span6.well.well-small.bg-white
       = render 'inventory_details', expense: @expense
 
+.row-fluid
+  .span6.well.well-small.bg-white
+    %h3.n
+      Historial
+
+    %ul.unstyled.listing
+      = render partial: 'histories/history', collection: present(@expense.histories, ExpenseHistoryPresenter), as: :history
+
+
 -#Tours
 = render 'expenses/tour_devolution'
 

@@ -396,6 +396,8 @@ es:
     tax_id: 'impuesto'
     description: 'descripción'
     no_inventory: 'Inventario'
+    tax_in_out: 'Impuesto por dentro'
+    tax_percentage: 'Porcentaje impuesto'
 
   income:
     attributes:
