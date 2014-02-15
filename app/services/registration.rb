@@ -39,7 +39,7 @@ class Registration < BaseForm
     end
 
     def create_organisation
-      @organisation = Organisation.new(name: name, inventory_active: true)
+      @organisation = Organisation.new(name: name, inventory: true)
       @organisation.valid?
       @organisation.save
     end

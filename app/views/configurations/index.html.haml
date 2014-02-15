@@ -40,6 +40,11 @@
       = current_organisation
 
     .row-fluid
+      %h3.n
+        %span.muted Inventario activo:
+        %i(class='icon-#{current_organisation.inventory?}')
+
+    .row-fluid
       .span3
         %i.icon-phone.muted(title='Teléfono' data-toggle='tooltip')
         = current_organisation.phone

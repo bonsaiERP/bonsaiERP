@@ -30,7 +30,7 @@
       =f.input :website, label: 'Sitio web', input_html: { size: INPUT_SIZE }
   .row-fluid
     .span6.form-inline
-      =f.input :inventory_active, label: 'Inventario activo'
+      =f.input :inventory, label: 'Inventario activo', as: :boolean
   .row-fluid
     .span6
       =f.input :address, label: 'Dirección', as: :text, input_html: { rows: 5, cols: INPUT_SIZE }

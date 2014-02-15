@@ -27,7 +27,7 @@ describe Registration do
     r.organisation.name.should eq('bonsaiERP')
     r.organisation.tenant.should eq('bonsaierp')
     r.tenant.should eq('bonsaierp')
-    r.organisation.should be_inventory_active
+    r.organisation.should be_inventory
 
     r.user.email.should eq('boris@bonsaierp.com')
     r.user.encrypted_password.should_not be_blank
