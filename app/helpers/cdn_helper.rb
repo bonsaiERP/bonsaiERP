@@ -2,13 +2,13 @@ module CdnHelper
   SCRIPTS = {
     'jquery' => {
       klass: 'jQuery',
-      cdn: 'http://code.jquery.com/jquery-1.10.1.min.js',
-      local: '/assets/jquery/jquery-1.10.1.min.js'
+      cdn: 'http://code.jquery.com/jquery-1.11.0.min.js',
+      local: '/assets/jquery/jquery-1.11.0.min.js'
     },
     'angular' => {
       klass: 'angular',
-      cdn: 'https://ajax.googleapis.com/ajax/libs/angularjs/1.2.11/angular.min.js',
-      local: '/assets/angular/angular-1.2.11.min.js'
+      cdn: 'https://ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular.min.js',
+      local: '/assets/angular/angular-1.2.13.min.js'
     }
   }
 
