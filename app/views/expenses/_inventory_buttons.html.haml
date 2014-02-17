@@ -1,12 +1,6 @@
-- if !expense.delivered? && !expense.is_draft?
-  %a#inventory-deliver-link.btn.btn-success(href='javascript:;')
-    %i.icon-signout
-    Recoger mercadería
+= expense.deliver_inventory_button
 
-- if @expense.inventory_was_moved?
-  %a#inventory-devolution-link.btn.btn-danger(href='javascript:;')
-    %i.icon-signin
-    Devolución de mercadería
+= expense.inventory_devolution_button
 
 #inventory-deliver(style='display:none;background-color: white')
   = form_tag new_expenses_inventory_in_path, method: :get do
