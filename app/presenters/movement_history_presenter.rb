@@ -68,7 +68,7 @@ class MovementHistoryPresenter < HistoryPresenter
   end
 
   def mov_extras_changes
-    [inventory_operation, change_no_inventory].compact
+    [inventory_operation, change_inventory].compact
   end
 
   def mov_extras
@@ -81,13 +81,13 @@ class MovementHistoryPresenter < HistoryPresenter
 
   def inventory_operation;  end
 
-  def change_no_inventory
-    return  if mov_extras.blank? || mov_extras['from']['no_inventory'].blank?
-    from, to = mov_extras['from']['no_inventory'], mov_extras['to']['no_inventory']
+  def change_inventory
+    return  if mov_extras.blank? || mov_extras['from']['inventory'].blank?
+    from, to = mov_extras['from']['inventory'], mov_extras['to']['inventory']
     if from.present? || to.present?
-      arr = ['Inventario ACTIVO', 'Inventario INACTIVO']
+      arr = ['Inventario INACTIVO', 'Inventario ACTIVO']
       from, to = from.to_s == 'true' ? arr.reverse : arr
-      "#{attr_text 'no_inventory'} de #{code from} a #{code to}"
+      "#{attr_text 'inventory'} de #{code from} a #{code to}"
     end
   end
 
