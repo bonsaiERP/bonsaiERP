@@ -100,4 +100,22 @@ describe User do
     u.confirm_registration
     u.confirmed_at.should be_is_a(Time)
   end
+
+  it "store old_emails" do
+    u = create :user, email: 'first@mail.com'
+    expect(u).to be_persisted
+    expect(u.old_emails).to eq([])
+
+    expect(u.update_attributes(email: 'second@mail.com')).to be_true
+    u = User.find u.id
+    expect(u.old_emails).to eq(['first@mail.com'])
+
+    expect(u.update_attributes(email: 'second@mail.com', first_name: 'Juan other')).to be_true
+    expect(u.update_attributes(email: 'second@mail.com')).to be_true
+    expect(u.old_emails).to eq(['first@mail.com'])
+
+    expect(u.update_attributes(email: 'third@mail.com', first_name: 'Juan other')).to be_true
+    u = User.find u.id
+    expect(u.old_emails).to eq(%w(second@mail.com first@mail.com))
+  end
 end

@@ -9,6 +9,9 @@ class User < ActiveRecord::Base
 
   ROLES = %w(admin group other).freeze
 
+  # Callbacks
+  before_update :store_old_emails, if: :email_changed?
+
   ########################################
   # Relationships
   has_many :links, dependent: :destroy
@@ -73,6 +76,10 @@ class User < ActiveRecord::Base
 
     def valid_password_confirmation
       self.errors.add(:password, I18n.t('errors.messages.confirmation')) unless password === password_confirmation
+    end
+
+    def store_old_emails
+      self.old_emails = [email_was] + old_emails
     end
 
 end
