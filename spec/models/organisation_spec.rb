@@ -61,6 +61,7 @@ describe Organisation do
   end
 
   it "create an instance" do
+    Organisation.delete_all
     Organisation.create!(name: 'tenant')
     org = Organisation.new(name: 'jejeje')
     org.save.should be_true

@@ -93,7 +93,7 @@ class IncomesController < ApplicationController
     @income.extras = @income.extras.symbolize_keys
 
     if @income.save
-      txt = @income.inventory? ? 'activo' : 'inactivo'
+      txt = @income.inventory? ? 'activo' : 'desactivó'
       flash[:notice] = "Se #{txt} los inventarios."
     else
       flash[:error] = "Exisition un error modificando el estado de inventarios."
@@ -109,16 +109,6 @@ class IncomesController < ApplicationController
     else
       redirect_to income_path(@income), error: 'Existio un error al anular el ingreso.'
     end
-  end
-
-  # GET /incomes/:id/ledgers
-  def ledgers
-    @income = present Income.find(params[:id])
-  end
-
-  # GET /incomes/:id/inventories
-  def inventories
-    @income = Income.find(params[:id])
   end
 
   private

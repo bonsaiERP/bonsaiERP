@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140217120803) do
+ActiveRecord::Schema.define(version: 20140217134723) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -345,36 +345,6 @@ ActiveRecord::Schema.define(version: 20140217120803) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  create_table "transactions", force: true do |t|
-    t.integer  "account_id"
-    t.decimal  "total",                         precision: 14, scale: 2, default: 0.0
-    t.string   "bill_number"
-    t.decimal  "gross_total",                   precision: 14, scale: 2, default: 0.0
-    t.decimal  "original_total",                precision: 14, scale: 2, default: 0.0
-    t.decimal  "balance_inventory",             precision: 14, scale: 2, default: 0.0
-    t.date     "due_date"
-    t.integer  "creator_id"
-    t.integer  "approver_id"
-    t.integer  "nuller_id"
-    t.datetime "nuller_datetime"
-    t.string   "null_reason",       limit: 400
-    t.datetime "approver_datetime"
-    t.boolean  "delivered",                                              default: false
-    t.boolean  "discounted",                                             default: false
-    t.boolean  "devolution",                                             default: false
-    t.datetime "created_at",                                                             null: false
-    t.datetime "updated_at",                                                             null: false
-    t.boolean  "no_inventory",                                           default: false
-  end
-
-  add_index "transactions", ["account_id"], name: "index_transactions_on_account_id", using: :btree
-  add_index "transactions", ["bill_number"], name: "index_transactions_on_bill_number", using: :btree
-  add_index "transactions", ["delivered"], name: "index_transactions_on_delivered", using: :btree
-  add_index "transactions", ["devolution"], name: "index_transactions_on_devolution", using: :btree
-  add_index "transactions", ["discounted"], name: "index_transactions_on_discounted", using: :btree
-  add_index "transactions", ["due_date"], name: "index_transactions_on_due_date", using: :btree
-  add_index "transactions", ["no_inventory"], name: "index_transactions_on_no_inventory", using: :btree
 
   create_table "units", force: true do |t|
     t.string   "name",       limit: 100

@@ -93,9 +93,9 @@ describe Movement do
     i.should be_is_active
   end
 
-  it "#no_inventory" do
+  it "#inventory" do
     e = Expense.new
-    expect(e.no_inventory).to be_false
+    expect(e.inventory?).to be_false
   end
 
   it "due_date >= date" do
@@ -221,7 +221,7 @@ describe Movement do
       attrs = { bill_number: '123', gross_total: 100, original_total: 101,
                 balance_inventory: 50, nuller_datetime: t, null_reason: 'No se',
                 approver_datetime: t,
-                discounted: false, devolution: false, no_inventory: false}
+                discounted: false, devolution: false, inventory: true}
       d = Date.today
       m = Movement.new({
         currency: 'BOB', ref_number: 'Ref-001', date: d, due_date: d,
@@ -242,7 +242,7 @@ describe Movement do
       m.nuller_datetime.to_s.should eq(t.to_s)
       m.approver_datetime.to_s.should eq(t.to_s)
 
-      m.no_inventory?.should be_false
+      m.inventory?.should be_true
       m.devolution?.should be_false
     end
   end

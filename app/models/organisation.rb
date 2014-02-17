@@ -8,9 +8,6 @@ class Organisation < ActiveRecord::Base
 
   ########################################
   # Attributes
-  #serialize :preferences, JSON
-  #store_accessor :preferences, :inventory_active
-
   extend Models::HstoreMap
   store_accessor :settings, :inventory
   convert_hstore_to_boolean :inventory

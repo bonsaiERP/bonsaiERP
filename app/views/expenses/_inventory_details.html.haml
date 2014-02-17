@@ -5,7 +5,7 @@
 
 - if expense.enable_disable_inventory?
   %h5.n.ib
-    = link_to inventory_expense_path(expense.id, no_inventory: expense.enable_disable_inventory_val), method: 'patch', class: 'no-tab' do
+    = link_to inventory_expense_path(expense.id), method: 'patch', class: 'no-tab' do
       = expense.enable_disable_inventory_text_tag
 
 %p.center.inventories-buttons

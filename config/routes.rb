@@ -98,8 +98,6 @@ Bonsaierp::Application.routes.draw do
       patch :approve
       patch :null
       patch :inventory
-      get :ledgers
-      get :inventories
     end
   end
 
@@ -111,8 +109,6 @@ Bonsaierp::Application.routes.draw do
       patch :approve
       patch :null
       patch :inventory
-      get :ledgers
-      get :inventories
     end
   end
 
