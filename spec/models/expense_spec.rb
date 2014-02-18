@@ -63,20 +63,11 @@ describe Expense do
 
   context 'callbacks' do
     it 'check callback' do
-      contact.should_receive(:supplier=).with(true)
-
-      i = Expense.new(valid_attributes)
-
-      i.save.should be_true
-    end
-
-    it "does not update contact to supplier" do
-      contact.supplier = true
-      contact.should_not_receive(:update_attribute).with(:supplier, true)
       e = Expense.new(valid_attributes)
-
+      e.should_receive(:symbolize_keys_extras)
       e.save.should be_true
     end
+
   end
 
   it "checks the states methods" do
@@ -226,56 +217,6 @@ describe Expense do
     ex = Expense.new(total: 10, balance: 10) {|e| e.id = 10}
 
     ex.id.should eq(10)
-  end
-
-  context 'Contact callbacks' do
-    let(:user) { build :user, id: 15 }
-
-    before(:each) do
-      UserSession.user = user
-    end
-
-    it "update#incomes_status" do
-      exp = Expense.new(valid_attributes.merge(state: 'approved', total: 10, amount: 5.0))
-
-      exp.save.should be_true
-      exp.should be_is_approved
-
-      exp.contact.expenses_status.should eq({
-        'TOTAL' => 5.0,
-        'BOB' => 5.0
-      })
-
-      # New expense
-      exp = Expense.new(valid_attributes.merge(state: 'approved', total: 10, amount: 5.0, ref_number: 'I232483'))
-      exp.save.should be_true
-
-      exp.contact.expenses_status.should eq({
-        'TOTAL' => 10.0,
-        'BOB' => 10.0
-      })
-
-      exp = Expense.new(valid_attributes.merge(state: 'approved', currency: 'USD', total: 20, amount: 3.3, exchange_rate: 7.0, ref_number: 'I2324839'))
-      exp.save.should be_true
-      exp.should be_is_approved
-
-      exp.contact.expenses_status.should eq({
-        'TOTAL' => (10 + 3.3 * 7).round(2),
-        'BOB' => 10.0,
-        'USD' => 3.3
-      })
-
-      exp.amount = 20
-      exp.save.should be_true
-
-      exp.null!.should be_true
-      exp.should be_is_nulled
-
-      exp.contact.expenses_status.should eq({
-        'TOTAL' => 10.0,
-        'BOB' => 10.0
-      })
-    end
   end
 
   context 'Null' do

@@ -66,7 +66,7 @@ class Loans::GivePaymentForm < Loans::PaymentForm
     end
 
     def save_expense
-      account_to.amount -= amount
+      account_to.amount -= amount.abs
       account_to.set_state_by_balance!
 
       account_to.save

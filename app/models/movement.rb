@@ -21,6 +21,7 @@ class Movement < Account
 
   # Callbacks
   before_update :check_items_balances
+  before_save :symbolize_keys_extras
 
   ########################################
   # Relationships
@@ -182,5 +183,11 @@ class Movement < Account
 
    def greater_or_equal_due_date
      errors.add(:due_date, I18n.t('errors.messages.movement.greater_due_date'))  if date && due_date && due_date < date
+   end
+
+   def symbolize_keys_extras
+     self.extras = extras.symbolize_keys
+   rescue
+     self.extras = {}
    end
 end

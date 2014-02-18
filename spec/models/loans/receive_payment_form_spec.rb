@@ -102,7 +102,7 @@ describe Loans::ReceivePaymentForm do
       today = Date.today
       income = Income.new(total: 100, balance: 100, state: 'approved', currency: 'BOB', id: 100, contact_id: 1,
                          date: today, due_date: today, ref_number: 'I-13-0001')
-      income.stub(contact: build(:contact, id: 1))
+      Income.any_instance.stub(contact: build(:contact, id: 1))
       income.save.should be_true
 
       lp = Loans::ReceivePaymentForm.new(attributes.merge(account_id: lf.loan.id, amount: 200, account_to_id: income.id))
@@ -164,12 +164,12 @@ describe Loans::ReceivePaymentForm do
       lf.loan.should be_is_approved
 
       today = Date.today
-      expense = Income.new(total: 100, balance: 100, state: 'approved', currency: 'BOB', id: 100, contact_id: 1,
+      income = Income.new(total: 100, balance: 100, state: 'approved', currency: 'BOB', id: 100, contact_id: 1,
                          date: today, due_date: today, ref_number: 'I-13-001')
-      expense.stub(contact: build(:contact, id: 1))
-      expense.save.should be_true
+      Income.any_instance.stub(contact: build(:contact, id: 1))
+      income.save.should be_true
 
-      lp = Loans::ReceivePaymentForm.new(attributes.merge(account_id: lf.loan.id, amount: 200, account_to_id: expense.id))
+      lp = Loans::ReceivePaymentForm.new(attributes.merge(account_id: lf.loan.id, amount: 200, account_to_id: income.id))
 
       lp.create_interest.should be_false
       lp.amount = 100
@@ -179,7 +179,7 @@ describe Loans::ReceivePaymentForm do
       lp.int_ledger.amount.should == -100
       lp.int_ledger.should be_is_lrint
 
-      inc = Income.find(expense.id)
+      inc = Income.find(income.id)
       inc.amount.should == 0
       inc.should be_is_paid
 

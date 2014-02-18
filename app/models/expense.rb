@@ -9,11 +9,6 @@ class Expense < Movement
   self.code_name = 'E'
 
   ########################################
-  # Callbacks
-  before_save :set_supplier_and_expenses_status
-  before_save :set_contact_expenses_status_null, if: :nulling_valid?
-
-  ########################################
   # Relationships
   has_many :expense_details, -> { order('id asc') },
            foreign_key: :account_id, dependent: :destroy
@@ -48,30 +43,4 @@ class Expense < Movement
     expense_details.inject(0) { |sum, det| sum += det.total }
   end
 
-  private
-
-    def set_supplier_and_expenses_status
-      if contact.present?
-        contact.supplier = true unless contact.supplier?
-
-        set_contact_expenses_status if amount_changed? && !is_draft?
-
-        contact.save if contact.changed?
-      end
-    end
-
-    def set_contact_expenses_status
-      contact.expenses_status = ContactBalanceStatus.new(pendent_contact_expenses).object_balance(self)
-    end
-
-    def set_contact_expenses_status_null
-      contact.expenses_status = ContactBalanceStatus.new(pendent_contact_expenses).create_balances
-    end
-
-    def pendent_contact_expenses
-      _id = id
-      Expense.pendent.contact(contact_id).where { id.not_eq _id }
-      .select('sum(amount * exchange_rate) AS tot, sum(amount) AS tot_cur, currency')
-      .group(:currency)
-    end
 end

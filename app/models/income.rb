@@ -9,11 +9,6 @@ class Income < Movement
   self.code_name = 'I'
 
   ########################################
-  # Callbacks
-  before_save :set_client_and_incomes_status
-  before_save :set_contact_incomes_status_null, if: :nulling_valid?
-
-  ########################################
   # Relationships
   has_many :income_details, -> { order('id asc') }, foreign_key: :account_id, dependent: :destroy
   alias :details :income_details
@@ -61,30 +56,4 @@ class Income < Movement
     self.income_details.inject(0) {|sum, det| sum += det.total }
   end
 
-  private
-
-    def set_client_and_incomes_status
-      if contact.present?
-        contact.client = true unless contact.client?
-
-        set_contact_incomes_status if amount_changed? && !is_draft?
-
-        contact.save  if contact.changed?
-      end
-    end
-
-    def set_contact_incomes_status
-      contact.incomes_status = ContactBalanceStatus.new(pendent_contact_incomes).object_balance(self)
-    end
-
-    def set_contact_incomes_status_null
-      contact.incomes_status = ContactBalanceStatus.new(pendent_contact_incomes).create_balances
-    end
-
-    def pendent_contact_incomes
-      _id = id
-      Income.pendent.contact(contact_id).where { id.not_eq _id }
-      .select('sum(amount * exchange_rate) AS tot, sum(amount) AS tot_cur, currency')
-      .group(:currency)
-    end
 end

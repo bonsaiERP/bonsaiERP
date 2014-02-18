@@ -90,7 +90,6 @@ class IncomesController < ApplicationController
   # Method that nulls or enables inventory
   def inventory
     @income.inventory = !@income.inventory?
-    @income.extras = @income.extras.symbolize_keys
 
     if @income.save
       txt = @income.inventory? ? 'activo' : 'desactivó'
