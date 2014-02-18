@@ -209,7 +209,9 @@ describe Expense do
       e = subject
       e.state = 'paid'
       e.should be_is_paid
+      e.extras = { 'test' => 1 }
       e.approve!
+      e.extras.should eq({'test' => 1})
 
       e.should be_is_paid
       e.approver_id.should be_nil
