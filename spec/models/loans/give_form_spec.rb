@@ -15,7 +15,7 @@ describe Loans::GiveForm do
   end
 
   before(:each) do
-    Loans::Give.any_instance.stub(contact: build(:contact))
+    Loans::Give.any_instance.stub(contact: build(:contact, id: 10))
   end
 
   it "#create" do
@@ -37,6 +37,8 @@ describe Loans::GiveForm do
     # ledger
     lf.ledger.amount.should == -100
     expect(lf.ledger.operation).to eq('lgcre')
+    expect(lf.ledger.contact_id).to be_present
+    expect(lf.ledger.contact_id).to eq(lf.loan.contact_id)
 
     cash.reload
     cash.amount.should == -100

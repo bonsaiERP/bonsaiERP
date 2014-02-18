@@ -12,7 +12,7 @@ describe Loans::ReceiveForm do
 
   before(:each) do
     UserSession.user = build :user, id: 1
-    Loans::Receive.any_instance.stub(contact: build(:contact))
+    Loans::Receive.any_instance.stub(contact: build(:contact, id: 30))
   end
 
   it "#create" do
@@ -36,6 +36,8 @@ describe Loans::ReceiveForm do
     # ledger
     lf.ledger.amount.should == 100
     expect(lf.ledger.operation).to eq('lrcre')
+    expect(lf.ledger.contact_id).to be_present
+    expect(lf.ledger.contact_id).to eq(lf.loan.contact_id)
 
     cash.reload
     cash.amount.should == 100
