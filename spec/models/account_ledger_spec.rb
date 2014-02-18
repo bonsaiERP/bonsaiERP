@@ -67,7 +67,7 @@ describe AccountLedger do
   end
 
   it 'assings currency based on the account_to' do
-    a = AccountLedger.new(valid_attributes)
+    a = AccountLedger.new(valid_attributes.merge(contact_id: 2))
     a.currency.should be_nil
     a.stub(account: account, account_to: account2)
 
@@ -154,7 +154,7 @@ describe AccountLedger do
     end
 
     it "#update_reference" do
-      al = AccountLedger.new(valid_attributes.merge(reference: 'Old reference'))
+      al = AccountLedger.new(valid_attributes.merge(reference: 'Old reference', contact_id: 2))
       al.stub(account: account, account_to: account2)
       al.save!
 
@@ -178,7 +178,7 @@ describe AccountLedger do
     let(:ac_usd) { build :cash, currency: 'USD' }
 
     it "code" do
-      AccountLedger.any_instance.stub(account: ac_bob, account_to: ac_usd)
+      AccountLedger.any_instance.stub(account: ac_bob, account_to: ac_usd, contact_id: 2)
       y = Date.today.year.to_s[2..3]
 
       al = AccountLedger.create(valid_attributes)
@@ -195,4 +195,16 @@ describe AccountLedger do
     end
   end
 
+  it "validation for trans" do
+    al = AccountLedger.new(valid_attributes.merge(
+      reference: 'Old reference', contact_id: nil,
+      operation: 'trans'))
+    al.stub(account: account, account_to: account2)
+
+    al.should be_valid
+
+    al.operation = 'payin'
+
+    al.should_not be_valid
+  end
 end

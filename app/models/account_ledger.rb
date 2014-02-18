@@ -59,7 +59,7 @@ class AccountLedger < ActiveRecord::Base
   validates_inclusion_of :operation, in: OPERATIONS
   validates_inclusion_of :status, in: STATUSES
   validates_numericality_of :exchange_rate, greater_than: 0
-
+  validates_presence_of :contact_id, unless: :is_trans?
   validates :reference,
             length: { within: 3..250, allow_blank: false }
 

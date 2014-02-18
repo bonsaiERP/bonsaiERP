@@ -17,7 +17,7 @@ describe NullAccountLedger do
 
   it "only nulls active and not conciliated accounts_ledgers" do
     Account.any_instance.stub(save: true)
-    ledger = build :account_ledger, status: 'approved', approver_id: 12
+    ledger = build :account_ledger, status: 'approved', approver_id: 12, contact_id: 3
     ledger.save(validate: false)
     ledger.should be_persisted
 
@@ -43,11 +43,11 @@ describe NullAccountLedger do
 
   context "expense" do
     it "nulls expense payout" do
-      exp = Expense.new(state: 'approved', total: 100, balance: 50, currency: 'BOB')
+      exp = Expense.new(state: 'approved', total: 100, balance: 50, currency: 'BOB', contact_id: 10)
       exp.stub(save: true)
       exp.id = 200
 
-      al = AccountLedger.new(amount: -50, currency: 'BOB', status: 'pendent', operation: 'payout', date: Date.today, reference: 'Pay expense', account_id: 200)
+      al = AccountLedger.new(amount: -50, currency: 'BOB', status: 'pendent', operation: 'payout', date: Date.today, reference: 'Pay expense', account_id: 200, contact_id: 10)
       al.account = exp
       al.account_to = bank_bob
 
@@ -63,11 +63,11 @@ describe NullAccountLedger do
     end
 
     it "nulls expense devout" do
-      exp = Expense.new(state: 'approved', total: 100, balance: 50, currency: 'BOB')
+      exp = Expense.new(state: 'approved', total: 100, balance: 50, currency: 'BOB', contact_id: 10)
       exp.stub(save: true)
       exp.id = 200
 
-      al = AccountLedger.new(amount: 50, currency: 'BOB', status: 'pendent', operation: 'devout', date: Date.today, reference: 'Devolution expense', account_id: 200)
+      al = AccountLedger.new(amount: 50, currency: 'BOB', status: 'pendent', operation: 'devout', date: Date.today, reference: 'Devolution expense', account_id: 200, contact_id: 10)
       al.account = exp
       al.account_to = bank_bob
 
@@ -85,11 +85,11 @@ describe NullAccountLedger do
 
   context "income" do
     it "nulls income payin" do
-      inc = Income.new(state: 'approved', total: 100, balance: 50, currency: 'BOB')
+      inc = Income.new(state: 'approved', total: 100, balance: 50, currency: 'BOB', contact_id: 10)
       inc.stub(save: true)
       inc.id = 200
 
-      al = AccountLedger.new(amount: 50, currency: 'BOB', status: 'pendent', operation: 'payin', date: Date.today, reference: 'Pay income', account_id: 200)
+      al = AccountLedger.new(amount: 50, currency: 'BOB', status: 'pendent', operation: 'payin', date: Date.today, reference: 'Pay income', account_id: 200, contact_id: 10)
       al.account = inc
       al.account_to = bank_bob
 
@@ -105,11 +105,11 @@ describe NullAccountLedger do
     end
 
     it "nulls income devout" do
-      inc = Income.new(state: 'approved', total: 100, balance: 50, currency: 'BOB')
+      inc = Income.new(state: 'approved', total: 100, balance: 50, currency: 'BOB', contact_id: 10)
       inc.stub(save: true)
       inc.id = 200
 
-      al = AccountLedger.new(amount: -50, currency: 'BOB', status: 'pendent', operation: 'payin', date: Date.today, reference: 'Pay income', account_id: 200)
+      al = AccountLedger.new(amount: -50, currency: 'BOB', status: 'pendent', operation: 'payin', date: Date.today, reference: 'Pay income', account_id: 200, contact_id: 10)
       al.account = inc
       al.account_to = bank_bob
 
@@ -131,11 +131,11 @@ describe NullAccountLedger do
 
 
     it "updates the income BOB" do
-      inc = Income.new(state: 'approved', total: 100, balance: 30, currency: 'BOB')
+      inc = Income.new(state: 'approved', total: 100, balance: 30, currency: 'BOB', contact_id: 10)
       inc.stub(save: true)
       inc.id = 200
 
-      al = AccountLedger.new(amount: 10, currency: 'USD', exchange_rate: 7, status: 'pendent', operation: 'payin', date: Date.today, reference: 'Pay income', account_id: 200)
+      al = AccountLedger.new(amount: 10, currency: 'USD', exchange_rate: 7, status: 'pendent', operation: 'payin', date: Date.today, reference: 'Pay income', account_id: 200, contact_id: 10)
 
       al.account = inc
       al.account_to = bank_usd
@@ -151,11 +151,11 @@ describe NullAccountLedger do
     end
 
     it "updates the income USD" do
-      inc = Income.new(state: 'approved', total: 100, balance: 90, currency: 'USD')
+      inc = Income.new(state: 'approved', total: 100, balance: 90, currency: 'USD', contact_id: 10)
       inc.stub(save: true)
       inc.id = 200
 
-      al = AccountLedger.new(amount: 70, currency: 'BOB', exchange_rate: 7, status: 'pendent', operation: 'payin', date: Date.today, reference: 'Pay income', account_id: 200, inverse: true)
+      al = AccountLedger.new(amount: 70, currency: 'BOB', exchange_rate: 7, status: 'pendent', operation: 'payin', date: Date.today, reference: 'Pay income', account_id: 200, inverse: true, contact_id: 10)
 
       al.account = inc
       al.account_to = bank_bob
@@ -172,11 +172,11 @@ describe NullAccountLedger do
     end
 
     it "updates the income USD devolution" do
-      inc = Income.new(state: 'approved', total: 100, balance: 90, currency: 'USD')
+      inc = Income.new(state: 'approved', total: 100, balance: 90, currency: 'USD', contact_id: 10)
       inc.stub(save: true)
       inc.id = 200
 
-      al = AccountLedger.new(amount: -70, currency: 'BOB', exchange_rate: 7, status: 'pendent', operation: 'devin', date: Date.today, reference: 'Pay income', account_id: 200, inverse: true)
+      al = AccountLedger.new(amount: -70, currency: 'BOB', exchange_rate: 7, status: 'pendent', operation: 'devin', date: Date.today, reference: 'Pay income', account_id: 200, inverse: true, contact_id: 10)
 
       al.account = inc
       al.account_to = bank_bob
