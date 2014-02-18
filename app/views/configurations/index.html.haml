@@ -52,6 +52,15 @@
             %span.muted Inventario activo:
             %i(class='icon-#{current_organisation.inventory?}')
 
+      .row-fluid
+        .span6
+          %h5.n
+            %span.muted País:
+            = Country.find(current_organisation.country_code).to_s
+        .span6
+          %h5.n
+            %span.muted Zona horaria:
+            = current_organisation.time_zone
 
     .row-fluid
       .span3
