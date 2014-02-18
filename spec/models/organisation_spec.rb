@@ -108,4 +108,11 @@ describe Organisation do
     end
 
   end
+
+  it "#currency_klass" do
+    org = Organisation.new(currency: 'BOB')
+    org.currency.should eq('BOB')
+    org.currency_to_s.should eq('BOB Boliviano')
+    org.currency_name.should eq('Boliviano')
+  end
 end

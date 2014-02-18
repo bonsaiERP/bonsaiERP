@@ -38,6 +38,9 @@ class Organisation < ActiveRecord::Base
     val.validates_inclusion_of :country_code, in: COUNTRIES.keys
   end
 
+  ########################################
+  # Delegations
+  delegate :name, :to_s, to: :currency_klass, prefix: 'currency'
 
   ########################################
   # Methods
@@ -116,5 +119,9 @@ class Organisation < ActiveRecord::Base
     def tenant_pad(size = 5)
       SecureRandom.urlsafe_base64(32).downcase
       .gsub(/[^A-Za-z]/, '')[0...size]
+    end
+
+    def currency_klass
+      @currency_klass ||= Currency.find(currency)
     end
 end

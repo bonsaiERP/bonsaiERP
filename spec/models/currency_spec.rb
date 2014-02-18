@@ -9,7 +9,7 @@ describe Currency do
     ])
   end
 
-  it "find" do
+  it "!find" do
     Currency.find('USD').should eq(Currency.new(CURRENCIES['USD']))
   end
 end

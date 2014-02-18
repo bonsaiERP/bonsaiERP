@@ -36,13 +36,22 @@
 
 
     %h3.n
-      %span.muted Datos
+      %span.muted Nombre:
       = current_organisation
 
-    .row-fluid
-      %h3.n
-        %span.muted Inventario activo:
-        %i(class='icon-#{current_organisation.inventory?}')
+    .well.well-small
+      %h3.n Configuración
+
+      .row-fluid
+        .span6
+          %h5.n
+            %span.muted Moneda base:
+            = current_organisation.currency_to_s
+        .span6
+          %h5.n
+            %span.muted Inventario activo:
+            %i(class='icon-#{current_organisation.inventory?}')
+
 
     .row-fluid
       .span3
