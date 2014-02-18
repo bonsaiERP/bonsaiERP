@@ -276,6 +276,8 @@ describe Incomes::Form do
       ledger.should be_is_payin
       ledger.exchange_rate.should == 1
       ledger.should be_is_approved
+      ledger.contact_id.should eq(income.contact_id)
+
       ledger.status.should eq('approved')
       ledger.approver_id.should be_is_a(Integer)
     end

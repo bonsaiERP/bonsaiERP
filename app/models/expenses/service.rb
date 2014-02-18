@@ -23,7 +23,8 @@ class Expenses::Service < Movements::Service
         currency: expense.currency,
         inverse: false,
         operation: 'payout',
-        reference: get_reference
+        reference: get_reference,
+        contact_id: expense.contact_id
       )
     end
 
