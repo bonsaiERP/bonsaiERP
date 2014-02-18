@@ -58,29 +58,28 @@ class AccountLedgerPresenter < BasePresenter
     case to_model.operation
     when 'payin', 'payout', 'devin', 'devout', 'lgcre', 'lrcre'
       amount
-    when 'trans', 'servin', 'servex', 'lgpay', 'lgint', 'lrpay', 'lrint'
+    when 'servin', 'servex', 'lgpay', 'lgint', 'lrpay', 'lrint'
       related_amount
+    when 'trans'
+      related_trans_amount
     end
   end
 
   def related_amount
-    if current_account_id == account_id
+    if current_account_id === account_id
       amount_currency
     else
       -amount_currency
     end
   end
 
-  #def amount_currency
-  #  case
-  #  when(current_account_id == account.id && account.is_a?(Income))
-  #    to_model.amount_currency
-  #  when(current_account_id == account_to.id && account_to.is_a?(Expense))
-  #    - to_model.amount_currency
-  #  else
-  #    to_model.amount_currency
-  #  end
-  #end
+  def related_trans_amount
+    if current_account_id === account_id
+      -amount_currency
+    else
+      amount_currency
+    end
+  end
 
   def currency_ref(ac_id = current_account_id)
     ac_id == to_model.account_to_id ? currency : account_currency
