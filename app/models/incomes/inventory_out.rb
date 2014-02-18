@@ -36,6 +36,7 @@ class Incomes::InventoryOut < Inventories::Out
       res = res && update_stocks
       Inventories::Errors.new(@inventory, stocks).set_errors
       @inventory.account_id = @income.id
+      @inventory.contact_id = @income.contact_id
       res && @inventory.save
     end
   end

@@ -33,6 +33,7 @@ class Incomes::InventoryIn < Inventories::In
       income_errors.set_errors
       res = @income.save
       @inventory.account_id = income_id
+      @inventory.contact_id = income.contact_id
       res = res && @inventory.save
       res && update_stocks
     end

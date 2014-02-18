@@ -76,7 +76,8 @@ describe Expenses::InventoryOut do
       inv.should be_is_exp_out
       inv.creator_id.should eq(user.id)
       inv.ref_number.should =~ /\AE-\d{2}-\d{4}\z/
-      expect(inv.account_id).to eq(expense.id)
+      inv.account_id.should eq(expense.id)
+      inv.contact_id.should eq(expense.contact_id)
 
       exp = Expense.find(inv.account_id)
       exp.balance_inventory.should == 40

@@ -80,7 +80,10 @@ describe Incomes::InventoryIn do
     inv = Inventory.find(invin.inventory.id)
     inv.should be_is_a(Inventory)
     inv.should be_is_inc_in
-    expect(inv.account_id).to eq(income.id)
+
+    inv.account_id.should eq(income.id)
+    inv.contact_id.should eq(income.contact_id)
+
     inv.creator_id.should eq(user.id)
     inv.ref_number.should =~ /\AI-\d{2}-\d{4}\z/
 

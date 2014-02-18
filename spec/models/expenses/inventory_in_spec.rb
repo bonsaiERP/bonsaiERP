@@ -123,6 +123,7 @@ describe Expenses::InventoryIn do
 
     io = Inventory.find(invin.inventory.id)
     io.account_id.should be(expense.id)
+    io.contact_id.should be(expense.contact_id)
     io.inventory_details.should have(2).items
     io.inventory_details.map(&:quantity).should eq([3, 3])
     io.inventory_details.map(&:item_id).should eq([1, 2])

@@ -34,6 +34,7 @@ class Expenses::InventoryIn < Inventories::In
       res = res && update_stocks
       Inventories::Errors.new(@inventory, stocks).set_errors
       @inventory.account_id = @expense.id
+      @inventory.contact_id = @expense.contact_id
       res && @inventory.save
     end
   end

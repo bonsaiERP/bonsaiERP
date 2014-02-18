@@ -70,28 +70,28 @@ describe Incomes::InventoryOut do
     end
 
     it "#build_details" do
-      invin = Incomes::InventoryOut.new(store_id: store.id, income_id: income.id)
-      invin.build_details
+      invout = Incomes::InventoryOut.new(store_id: store.id, income_id: income.id)
+      invout.build_details
 
-      invin.inventory_details[0].item_id.should eq(1)
-      invin.inventory_details[0].quantity.should eq(5)
+      invout.inventory_details[0].item_id.should eq(1)
+      invout.inventory_details[0].quantity.should eq(5)
 
-      invin.inventory_details[1].item_id.should eq(2)
-      invin.inventory_details[1].quantity.should eq(6)
+      invout.inventory_details[1].item_id.should eq(2)
+      invout.inventory_details[1].quantity.should eq(6)
 
       # Other quantities
       det = income.income_details[0]
       det.balance = 1
       det.save.should be_true
 
-      invin = Incomes::InventoryOut.new(store_id: store.id, income_id: income.id)
-      invin.build_details
+      invout = Incomes::InventoryOut.new(store_id: store.id, income_id: income.id)
+      invout.build_details
 
-      invin.inventory_details[0].item_id.should eq(1)
-      invin.inventory_details[0].quantity.should eq(1)
+      invout.inventory_details[0].item_id.should eq(1)
+      invout.inventory_details[0].quantity.should eq(1)
 
-      invin.inventory_details[1].item_id.should eq(2)
-      invin.inventory_details[1].quantity.should eq(6)
+      invout.inventory_details[1].item_id.should eq(2)
+      invout.inventory_details[1].quantity.should eq(6)
     end
 
     it "#create" do
@@ -111,7 +111,7 @@ describe Incomes::InventoryOut do
       inv.should be_is_a(Inventory)
 
       expect(inv.account_id).to eq(income.id)
-
+      expect(inv.contact_id).to eq(income.contact_id)
       expect(inv).to be_is_inc_out
       expect(inv.creator_id).to eq(user.id)
       expect(inv.ref_number).to match(/\AE-\d{2}-\d{4}\z/)
