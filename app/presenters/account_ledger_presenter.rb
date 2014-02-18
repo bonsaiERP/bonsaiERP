@@ -82,7 +82,7 @@ class AccountLedgerPresenter < BasePresenter
   #  end
   #end
 
-  def currency_ref(ac_id = nil)
+  def currency_ref(ac_id = current_account_id)
     ac_id == to_model.account_to_id ? currency : account_currency
   end
 

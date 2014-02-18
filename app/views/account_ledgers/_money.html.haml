@@ -1,3 +1,5 @@
+- ledger.current_account_id = current_account_id
+
 %li.row-fluid.account_ledger(id='#{ledger.id}')
   .span5
     %strong= ledger.operation_tag
@@ -11,10 +13,10 @@
 
     %p
       %i= l ledger.date.to_date
-      - unless ledger.account_id === account.id
+      - unless ledger.account_id === current_account_id
         %span.muted De:
         = link_to ledger.account, ledger.account_url
-      - unless ledger.account_to_id === account.id
+      - unless ledger.account_to_id === current_account_id
         %span.muted A:
         = link_to ledger.account_to, ledger.account_to_url
   .span5
@@ -30,5 +32,5 @@
       %i.icon-file.muted(data-toggle='tooltip' title="referencia")
       %span.inline-data= nl2br ledger.reference
   .span2.r
-    = ntc ledger.amount_ref(account.id)
-    = currency_label ledger.currency_ref(account.id)
+    = ntc ledger.amount_ref
+    = currency_label ledger.currency_ref

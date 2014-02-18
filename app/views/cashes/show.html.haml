@@ -36,6 +36,6 @@
 = html
 
 %ul.unstyled.listing
-  = render partial: 'account_ledgers/money', collection: present(@cash.ledgers.page(@page)), as: :ledger, locals: { account: @cash }
+  = render partial: 'account_ledgers/money', collection: present(@cash.ledgers.page(@page)), as: :ledger, locals: { current_account_id: @cash.id }
 
 = html

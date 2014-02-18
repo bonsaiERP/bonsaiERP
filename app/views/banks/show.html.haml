@@ -46,6 +46,6 @@
   = link_to 'Ver todas las transacciones', @bank
 
 %ul.unstyled.listing
-  = render partial: 'account_ledgers/money', collection: present(@bank.ledgers_view.page(@page)), as: :ledger, locals: { account: @bank }
+  = render partial: 'account_ledgers/money', collection: present(@bank.ledgers_view.page(@page)), as: :ledger, locals: { current_account_id: @bank.id }
 
 = html
