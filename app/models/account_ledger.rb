@@ -61,7 +61,7 @@ class AccountLedger < ActiveRecord::Base
   validates_numericality_of :exchange_rate, greater_than: 0
   validates_presence_of :contact_id, unless: :is_trans?
   validates :reference,
-            length: { within: 3..250, allow_blank: false }
+            length: { within: 3..300, allow_blank: false }
 
   validates_lengths_from_database
 
