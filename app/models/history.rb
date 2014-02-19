@@ -20,8 +20,8 @@ class History < ActiveRecord::Base
   private
 
     def get_typecasted(hash)
-      Hash[hash.map do |k, v|
-        [k.to_sym, typecast_hash(v) ]
+      Hash[hash.map do |key, val|
+        [key.to_sym, typecast_hash(val) ]
       end]
     end
 

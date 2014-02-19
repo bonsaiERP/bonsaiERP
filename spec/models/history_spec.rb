@@ -124,16 +124,14 @@ describe History do
 
       expect(e.histories).to have(2).items
       h = e.histories.first
-
-      expect(h.history[:description]).to eq({from: 'New expense description', to: 'Jo jo jo', type: 'string'})
+      expect(h.history_data['description']).to eq({'from' => 'New expense description', 'to' => 'Jo jo jo', 'type' => 'text'})
       expect(h.klass_type).to eq('Expense')
 
-      det_hist = h.history[:expense_details][0]
-      expect(det_hist[:price]).to eq({from: '10'.to_d, to: '15'.to_d, type: 'decimal'})
+      det_hist = h.history_data['expense_details']
+      expect(det_hist[0]['price']).to eq({'from' => '10.0', 'to' => '15.0', 'type' => 'decimal'})
 
-      expect(det_hist[:description]).to eq({from: 'First item', to: 'A new description', type: 'string'})
-
-      expect(det_hist[:id]).to be_a(Integer)
+      expect(det_hist[0]['description']).to eq({'from' => 'First item', 'to' => 'A new description', 'type' => 'string'})
+      expect(det_hist[0]['id']).to be_is_a(Integer)
 
       at['expense_details_attributes'] << { item_id: 10, price: 10, quantity: 2, balance: 2 }
 

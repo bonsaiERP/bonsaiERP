@@ -148,29 +148,8 @@ describe AccountLedger do
     al.should_not be_can_conciliate_or_null
   end
 
-  context 'update reference' do
-    before(:each) do
-      UserSession.user = build :user, id: 10
-    end
-
-    it "#update_reference" do
-      al = AccountLedger.new(valid_attributes.merge(reference: 'Old reference', contact_id: 2))
-      al.stub(account: account, account_to: account2)
-      al.save!
-
-      al.updater_id.should eq(10)
-      al.old_reference.should be_blank
-
-      UserSession.stub(id: 155)
-
-      al.update_reference('The new reference').should be_true
-
-      al.reference.should eq('The new reference')
-
-      al.updater_id.should eq(155)
-
-      al.update_reference('Lo').should be_false
-    end
+  before(:each) do
+    UserSession.user = build :user, id: 10
   end
 
   context 'Code' do

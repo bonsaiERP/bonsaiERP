@@ -29,7 +29,7 @@ class Income < Movement
   scope :error, -> { active.where(has_error: true) }
   scope :due, -> { approved.where{due_date < Date.today} }
   scope :nulled, -> { where(state: 'nulled') }
-  scope :inventory, -> { approved.where("(extras->'delivered')::boolean = ?", false) }
+  scope :inventory, -> { active.where("extras->'delivered' = ?", 'false') }
   scope :like, -> (search) {
     search = "%#{search}%"
     where{(name.like search) | (description.like search)}
