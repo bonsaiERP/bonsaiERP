@@ -32,7 +32,8 @@ class MovementDetail < ActiveRecord::Base
 
   def valid_for_destruction?
     unless(res = quantity === balance)
-      errors.add(:quantity, I18n.t('errors.messages.movement_details.not_destroy'))
+      errors.add(:item_id, I18n.t('errors.messages.movement_details.not_destroy'))
+      self.quantity = quantity_was
       @marked_for_destruction = false
     end
     res

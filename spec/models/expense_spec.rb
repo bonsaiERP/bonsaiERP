@@ -274,7 +274,7 @@ describe Expense do
 
       exp.save.should be_false
       exp.details[0].should_not be_marked_for_destruction
-      exp.details[0].errors[:quantity].should eq([I18n.t('errors.messages.movement_details.not_destroy')])
+      exp.details[0].errors[:item_id].should eq([I18n.t('errors.messages.movement_details.not_destroy')])
 
       det = exp.details[0]
       det.balance = 10

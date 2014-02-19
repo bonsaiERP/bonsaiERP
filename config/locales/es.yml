@@ -288,7 +288,7 @@ es:
         email_not_found: "El email que ingreso no existe"
         link_found: 'El usuario ya existe en su empresa activelo.'
       movement_details:
-        not_destroy: "No se puede eliminar este ítem"
+        not_destroy: "para eliminar este ítem realize una devolución de inventario"
         item_changed: "No es posible cambiar de item, se volvio al original"
         destroy: "No se puede borrar el item"
       income_details:

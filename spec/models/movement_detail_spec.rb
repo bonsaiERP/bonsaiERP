@@ -86,7 +86,7 @@ describe MovementDetail do
 
       inc.save.should be_false
       inc.income_details[0].should_not be_marked_for_destruction
-      inc.income_details[0].errors[:quantity].should eq([I18n.t('errors.messages.movement_details.not_destroy')])
+      inc.income_details[0].errors[:item_id].should eq([I18n.t('errors.messages.movement_details.not_destroy')])
     end
 
   end

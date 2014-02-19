@@ -113,7 +113,6 @@ describe Incomes::InventoryIn do
     stocks.map(&:quantity).should eq([5, 5])
 
     # Error
-    $a = 1
     invin = Incomes::InventoryIn.new(valid_attributes)
     invin.create.should be_false
     invin.details[0].errors[:quantity].should_not be_blank

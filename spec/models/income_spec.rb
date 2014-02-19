@@ -287,7 +287,7 @@ describe Income do
 
       inc.save.should be_false
       inc.details[0].should_not be_marked_for_destruction
-      inc.details[0].errors[:quantity].should eq([I18n.t('errors.messages.movement_details.not_destroy')])
+      inc.details[0].errors[:item_id].should eq([I18n.t('errors.messages.movement_details.not_destroy')])
 
       det = inc.details[0]
       det.balance = 10
