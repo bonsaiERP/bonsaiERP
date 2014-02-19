@@ -1,3 +1,4 @@
+# Object used for exporting data
 class Incomes::Export < Movements::Export
   def export(col_sep: ",")
     super Incomes::Query.new, col_sep

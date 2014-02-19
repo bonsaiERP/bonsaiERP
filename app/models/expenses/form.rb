@@ -2,7 +2,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class Expenses::Form < Movements::Form
-  alias :expense :movement
+  alias_method :expense, :movement
 
   attribute :expense_details_attributes
 

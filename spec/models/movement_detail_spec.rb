@@ -69,5 +69,26 @@ describe MovementDetail do
       inc.details[0].errors[:item_id].should eq([I18n.t('errors.messages.income_details.balance')])
     end
 
+    it "#valid_for_destruction" do
+      inc = Income.new(attributes)
+      inc.income_details[0].stub(item: build(:item, for_sale: true))
+      inc.save.should be_true
+      det = inc.income_details[0]
+      det.balance = 8
+      det.save.should be_true
+
+      attrs = attributes.merge(
+        income_details_attributes: [{item_id: 1, price: 20, quantity: 10, _destroy: '1', id: det.id}]
+      )
+      inc = Income.find(inc.id)
+      inc.attributes = attrs
+      inc.income_details[0].should be_marked_for_destruction
+
+      inc.save.should be_false
+      inc.income_details[0].should_not be_marked_for_destruction
+      inc.income_details[0].errors[:quantity].should eq([I18n.t('errors.messages.movement_details.not_destroy')])
+    end
+
   end
+
 end

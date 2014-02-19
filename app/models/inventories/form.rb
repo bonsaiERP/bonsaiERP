@@ -55,6 +55,8 @@ class Inventories::Form < BaseForm
       end
     end
 
+    # Saves and in case there are errors in inventory these are set on
+    # the Iventories::Form instance
     def save(&b)
       res = valid? && @inventory.valid?
       res = commit_or_rollback { b.call } if res

@@ -1,8 +1,11 @@
-# encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
+# Class that creates a inventory in "Devolution of items" for an Income
+# this class inherits from Iventories::In < Inventories::Form
+# inventory_details defined on Inventories::Form
 class Incomes::InventoryIn < Inventories::In
   attribute :income_id, Integer
+  attr_accessor :detail_quantity_diff
 
   validates_presence_of :income
   validate :valid_quantities
@@ -15,27 +18,15 @@ class Incomes::InventoryIn < Inventories::In
   end
 
   def build_details
-    income.income_details.each do |det|
-      unless det.balance === det.quantity
-        inventory.inventory_details.build(item_id: det.item_id, quantity: 0)
-      end
-    end
+    available_income_details.each { |det| inventory_details.build(item_id: det.item_id, quantity: 0)  }
   end
 
   def create
     res = true
 
     save do
-      update_income_details
-      update_income_balance
-      income.operation_type = 'inventory_in'
+      res = update_income && save_inventory
 
-      income_errors.set_errors
-      res = @income.save
-      @inventory.account_id = income_id
-      @inventory.contact_id = income.contact_id
-      res = res && @inventory.save
-      res && update_stocks
     end
   end
 
@@ -45,26 +36,47 @@ class Incomes::InventoryIn < Inventories::In
 
   private
 
+    def available_income_details
+      @available_income_details ||= income_details.select { |det| det.balance != det.quantity }
+    end
+
     def operation
       'inc_in'
     end
 
     def valid_quantities
-      res = true
       details.each do |det|
-        mov_det = movement_detail(det.item_id)
-        mov_q = (mov_det.quantity - mov_det.balance)
-        if det.quantity > mov_q
-          det.errors.add(:quantity, I18n.t('errors.messages.inventory.movement_quantity', q: mov_q))
-          res = false
+        if invalid_detail_quantity?(det)
+          det.errors.add(:quantity, I18n.t('errors.messages.inventory.movement_quantity', q: detail_quantity_diff))
+          set_has_error
         end
       end
 
-      self.errors.add(:base, I18n.t('errors.messages.inventory.item_balance')) unless res
+      self.errors.add(:base, I18n.t('errors.messages.inventory.item_balance')) if has_error?
+    end
+
+    def invalid_detail_quantity?(det)
+        mov_det = movement_detail(det.item_id)
+        detail_quantity_diff = det.quantity - (mov_det.quantity - mov_det.balance)
+        detail_quantity_diff > 0
     end
 
     def valid_items_ids
-      details.all? {|v| income_item_ids.include?(v.item_id) }
+      details.all? {|det| income_item_ids.include?(det.item_id) }
+    end
+
+    def save_inventory
+      inventory.account_id = income_id
+      inventory.contact_id = income.contact_id
+      inventory.save && update_stocks
+    end
+
+    def update_income
+      update_income_details
+      income.operation_type = 'inventory_in'
+      income_errors.set_errors
+      set_income_balance_and_delivered
+      income.save
     end
 
     def update_income_details
@@ -74,7 +86,7 @@ class Incomes::InventoryIn < Inventories::In
       end
     end
 
-    def update_income_balance
+    def set_income_balance_and_delivered
       @income.balance_inventory = balance_inventory
       @income.delivered = inventory_left === 0
     end

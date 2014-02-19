@@ -33,9 +33,9 @@ class Expense < Movement
   scope :due, -> { approved.where{due_date < Date.today} }
   scope :nulled, -> { where(state: 'nulled') }
   #scope :inventory, -> { joins(:transaction).active.where('transactions.delivered' => false) }
-  scope :like, -> (s) {
-    s = "%#{s}%"
-    where { (name.like s) | (description.like s) }
+  scope :like, -> (search) {
+    search = "%#{search}%"
+    where { (name.like search) | (description.like search) }
   }
   scope :date_range, -> (range) { where(date: range) }
 

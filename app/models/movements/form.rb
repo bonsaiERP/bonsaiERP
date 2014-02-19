@@ -69,6 +69,10 @@ class Movements::Form < BaseForm
     }
   end
 
+  def get_movement_attributes
+    movement.attributes
+  end
+
   private
 
     def unique_item_ids

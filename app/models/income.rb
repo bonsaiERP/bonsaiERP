@@ -1,6 +1,6 @@
-# encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
+# Class that creates incomes "Sales"
 class Income < Movement
 
   include Models::History
@@ -30,9 +30,9 @@ class Income < Movement
   scope :due, -> { approved.where{due_date < Date.today} }
   scope :nulled, -> { where(state: 'nulled') }
   scope :inventory, -> { approved.where("(extras->'delivered')::boolean = ?", false) }
-  scope :like, -> (s) {
-    s = "%#{s}%"
-    where{(name.like s) | (description.like s)}
+  scope :like, -> (search) {
+    search = "%#{search}%"
+    where{(name.like search) | (description.like search)}
   }
   scope :date_range, -> (range) { where(date: range) }
 

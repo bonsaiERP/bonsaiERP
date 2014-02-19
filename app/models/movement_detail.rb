@@ -30,6 +30,14 @@ class MovementDetail < ActiveRecord::Base
     }
   end
 
+  def valid_for_destruction?
+    unless(res = quantity === balance)
+      errors.add(:quantity, I18n.t('errors.messages.movement_details.not_destroy'))
+      @marked_for_destruction = false
+    end
+    res
+  end
+
   private
 
     def balance_is_correct
@@ -41,7 +49,6 @@ class MovementDetail < ActiveRecord::Base
     end
 
     def quantity_eq_balance
-      binding.pry
       self.errors.add(:quantity, "No se puede")  unless balance == quantity
     end
 

@@ -1,6 +1,6 @@
-# encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
+# Base class for Income and Expense
 class Movement < Account
 
   # module for setters and getters
@@ -124,10 +124,10 @@ class Movement < Account
   end
 
   def inventory_was_moved?
-    details.any? {|v| v.quantity != v.balance }
+    details.any? { |det| det.quantity != det.balance }
   end
 
-  def details;
+  def details
     []
   end
 
@@ -153,7 +153,7 @@ class Movement < Account
   alias_method :old_attributes, :attributes
   def attributes
     old_attributes.merge(
-      Hash[ EXTRA_COLUMNS.map { |k| [k.to_s, self.send(k)] } ]
+      Hash[ EXTRA_COLUMNS.map { |key| [key.to_s, self.send(key)] } ]
     )
   end
 
@@ -165,16 +165,8 @@ class Movement < Account
 
     # Do not allow items to be destroyed if the quantity != balance
     def check_items_balances
-      res = true
-      details.select(&:marked_for_destruction?).each do |det|
-        unless det.quantity === det.balance
-          det.errors.add(:quantity, I18n.t('errors.messages.movement_details.not_destroy'))
-          det.instance_variable_set(:@marked_for_destruction, false)
-          res = false
-        end
-      end
-
-      res
+      details.select(&:marked_for_destruction?)
+      .all?(&:valid_for_destruction?)
     end
 
    def valid_currency_change

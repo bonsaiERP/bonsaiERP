@@ -15,9 +15,7 @@ class Incomes::Devolution < Devolution
     return false unless valid?
 
     commit_or_rollback do
-      res = save_income
-      res = create_ledger
-
+      res = save_income && create_ledger
       set_errors(income, ledger) unless res
 
       res

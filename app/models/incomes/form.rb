@@ -1,7 +1,7 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class Incomes::Form < Movements::Form
-  alias :income :movement
+  alias_method :income, :movement
 
   attribute :income_details_attributes
 
@@ -27,18 +27,13 @@ class Incomes::Form < Movements::Form
     _object = new
     _object.movement   = Income.find(id)
     _object.service    = Incomes::Service.new(_object.income)
-    _object.attributes = _object.income.attributes
+    _object.attributes = _object.get_movement_attributes
     _object
   end
 
   def set_new_income
     set_defaults
-    @movement = Income.new(income_attributes)
-    @movement.ref_number = Income.get_ref_number
-    @movement.state = 'draft'
-    @movement.error_messages = {}
-    @movement.inventory = OrganisationSession.inventory? || true
-    2.times { @movement.income_details.build(quantity: 1) }  if income.details.empty?
+    set_new_income_data
     @service = Incomes::Service.new(income)
   end
 
@@ -58,6 +53,10 @@ class Incomes::Form < Movements::Form
 
   def is_income?; true; end
 
+  def income_form_attributes
+    income.attributes.slice()
+  end
+
   private
 
     def set_defaults
@@ -75,5 +74,18 @@ class Incomes::Form < Movements::Form
 
     def account_to
       @account_to ||= Accounts::Query.new.money.where(currency: currency, id: account_to_id).first
+    end
+
+    def set_new_income_data
+      @movement = Income.new(income_attributes.merge(self.class.new_income_attributes))
+      2.times { @movement.income_details.build(quantity: 1) }  if income.details.empty?
+    end
+
+    def self.new_income_attributes
+      { state: 'draft',
+        ref_number: Income.get_ref_number,
+        error_messages: {},
+        inventory:  OrganisationSession.inventory? || true
+      }
     end
 end

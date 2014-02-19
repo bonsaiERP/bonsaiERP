@@ -1,3 +1,5 @@
+# Creates or new instance with the parameters form an income or
+# creates a new one in case that no id is given
 class Incomes::Clone
   attr_reader :income
 
@@ -5,6 +7,7 @@ class Incomes::Clone
                  :description, :total, :exchange_rate]
 
   delegate(*CLONE_ATTRS, to: :income)
+  delegate :income_details, to: :income
 
   def initialize(id)
     @income = Income.find id
@@ -22,15 +25,13 @@ class Incomes::Clone
     end
 
     def attributes
-      h = Hash.new {|ha, k| ha[k] = send(k) }
-      CLONE_ATTRS.each {|v| h[v] }
+      hash = Hash.new { |ha, key| ha[key] = send(key) }
+      CLONE_ATTRS.each { |attr| hash[attr] }
 
-      h.merge(income_details_attributes: details_attributes)
+      hash.merge(income_details_attributes: details_attributes)
     end
 
     def details_attributes
-      income.income_details.map do |det|
-        {item_id: det.item_id, quantity: det.quantity, price: det.price}
-      end
+      income_details.map { |det| det.slice(*%w(item_id quantity price)) }
     end
 end
