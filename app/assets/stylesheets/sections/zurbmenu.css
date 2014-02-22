@@ -199,7 +199,7 @@
   display: block; }
 
 /*@media only screen and (min-width:40.063em) {*/
-@media (min-width: 980px) {
+@media (min-width: 870px) {
   .top-bar {
     background: #333333;
     *zoom: 1;
