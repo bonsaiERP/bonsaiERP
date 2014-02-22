@@ -53,8 +53,8 @@ group :development, :test do
 end
 
 # Test
-  gem 'capybara'
 group :test do
+  gem 'capybara'
   gem 'database_cleaner'
   gem 'factory_girl_rails', '~> 4.3.0'
   gem 'spork', '1.0.0rc4' # Newer version gives error with squeel

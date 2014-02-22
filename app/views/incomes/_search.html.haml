@@ -1,4 +1,4 @@
-.row-fluid.but
+-#.row-fluid.but
   .buttons-list
     .btn-group.search-tags(data-toggle='buttons-radio')
       %button.btn.search(href='#search-pane') Búsqueda
@@ -13,6 +13,10 @@
     #tags-pane.button-pane
       = render 'tags/tags', model: 'Income', list: '#incomes-list'
 
+.input-append
+  = form_tag '/incomes', method: 'get', class: 'form-inline' do
+    = text_field_tag 'search', '', placeholder: 'Buscar ingreso, use las etiquetas', autocomplete: 'off'
+    = submit_tag 'Buscar', class: 'btn'
 :javascript
   $(function() {
     $('.but').buttonTab();

@@ -198,7 +198,8 @@
 .js-generated {
   display: block; }
 
-@media only screen and (min-width:40.063em) {
+/*@media only screen and (min-width:40.063em) {*/
+@media (min-width: 980px) {
   .top-bar {
     background: #333333;
     *zoom: 1;

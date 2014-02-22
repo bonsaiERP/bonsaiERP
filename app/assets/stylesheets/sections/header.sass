@@ -1,5 +1,5 @@
 @import compass
-@import colors
+@import 'colors'
 
 ul#usersettings
   +border-radius
@@ -44,8 +44,31 @@ ul#usersettings
   padding: 0px 30px
 
 
+.nav
+  .hidden-desktop
+    display: inline-block !important
+
+$headHeight: 50px
 #head2
   background-color: darken(yellowGreen, 3%)
   +background-image(linear-gradient(lighten($green,  5%), yellowGreen) )
   +text-shadow(1px 1px 0 darken($green, 15%))
   color: #F7F7F7
+  height: $headHeight
+  overflow: hidden
+  .span6
+    height: $headHeight
+
+  h3.organisation
+    font-weight: normal
+    margin-top: ($headHeight/2 - 20px)
+
+  //.search-cont
+    margin-top: ($headHeight/2 - 15px)
+    text-align: right
+    .input-append
+      margin: 0px
+      form
+        margin: 0px
+        input[type="text"]
+          width: 300px

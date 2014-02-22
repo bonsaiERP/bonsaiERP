@@ -266,7 +266,7 @@ init = ($) ->
       event.preventDefault()  if event.keyCode is 13
     )
 
-    $('.listing').on('mouseover', '>li', ->
+    $('.listing').on('mouseenter', '>li', ->
       $(this).find('[title]').tooltip()
     )
 

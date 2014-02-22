@@ -3,11 +3,18 @@
     %li
       = link_to 'Ingresos', incomes_path
 
+- content_for :search do
+  = render 'incomes/search'
 
 .row-fluid
   .span6
     %h1 Ingresos
   .span6.r
+    %a.btn
+      %i.icon-tags
+      Etiquetas
+      %i.icon-caret-down
+
     .btn-group
       = link_to export_incomes_path, class: 'btn' do
         %i.icon-download-alt
@@ -17,7 +24,7 @@
         %i.icon-plus-sign
         Nuevo ingreso
 
-= render 'incomes/search'
+-#= render 'incomes/search'
 
 %ul.unstyled.inline
   %li

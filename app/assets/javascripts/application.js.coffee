@@ -1,7 +1,5 @@
 #= require plugins/modernizr.js
 #= require plugins/fastclick.js
-#
-# require jquery_ujs.js
 #= require jquery/jquery-ui-1.10.1.custom.js
 
 #= require libraries/lodash.js

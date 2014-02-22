@@ -48,3 +48,23 @@ cp -r vendor/assets/stylesheets/bonsaierp/fonts public/assets/
 cp app/assets/images/browser_logos.png public/assets
 cp app/assets/images/ajax-loder.gif public/assets
 ```
+
+{
+  "name": "My App",  // will be displayed under the screenshot
+  "thumb": "my-app/thumb.png", // path to the image (omit the projects/ prefix)
+  "desc": "Description of your app", // One or two sentences
+  "url": "http://myapp.com", // url to your app
+  "info": "http://myapp.com/blog", // url to app announcement or background
+  "src": "https://github.com/me/myapp", // (optional) Url to your source repository
+  "submitter": "IgorMinar", // your github username
+  "submissionDate": "2012-05-24", // current date in ISO format
+  "tags": [
+    "Demo", "Production", "Toy" // choose your app seriousness level (for plunks or fiddles use "Toy")
+    "Game", "CRUD", "Entertainment", "Productivity", ... // choose your app type
+    "Animations", "Local Storage", "Audio Api", "AppCache", ... // features and technologies
+    "No jQuery", "jQuery" // do you use jQuery?
+    "Open Source", // tag open source projects
+    "Tests Included" // use if open source and tests are included
+    ... // others?
+  ]
+}

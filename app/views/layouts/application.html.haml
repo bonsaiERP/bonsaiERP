@@ -31,14 +31,13 @@
 
     -# Header
     #head
-      - cache [current_user, 'menu'] do
-        .cont= render 'layouts/menus'
+      -# cache [current_user, 'menu'] do
+      .cont= render 'layouts/menus'
 
-    #head2.row-fluid.organisation
-      .cont
+    #head2
+      .row-fluid.cont
         .span12
-          %h3= organisation_name
-
+          %h3.organisation= organisation_name
 
     #wrapper.cont
       #topbar

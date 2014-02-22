@@ -61,16 +61,21 @@
           %li
             = link_to 'Unidades', units_path
 
+
     %ul(style='float: right')
       %li
         = link_to configurations_path, title: 'Configuración', data: { toggle: 'tooltip', placement: 'bottom' } do
           %i.icon-cog
-          Conf.
+          %span.hidden-desktop Configuración
       %li
-        = link_to user_path(current_user.id) do
+        = link_to user_path(current_user.id), title: 'Datos personales', data: { toggle: 'tooltip', placement: 'bottom' } do
           %i.icon-user
-          = current_user
+          %span.hidden-desktop Datos personales
       %li
-        = link_to logout_path do
+        = link_to logout_path, title: 'Salir', data: { toggle: 'tooltip', placement: 'bottom' } do
           %i.icon-logout
-          Salir
+          %span.hidden-desktop Salir
+      %li.search-form
+        %form(method='get' action='#{controller_name}')
+          %input(name='search' id='search' placeholder='buscar')
+          %button.icon-search
