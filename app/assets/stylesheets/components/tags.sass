@@ -1,98 +1,42 @@
-@import colors
 @import compass
+@import 'colors'
 
-.btags
-  .select2-choices .select2-search-choice
-    border: none
-    background-color: transparent
-    padding: 3px 0px
-    line-height: 16px
 
-  .select2-search-choice-focus
-    opacity: 0.75
+.tags-controller
+  .search
+    width: 195px
+  width: 210px
+  .tags-div
+    overflow-y: auto
+    overflow-x: hidden
+    margin-right: -15px
+  .tags-list
+    max-height: 250px
+    li
+      padding: 2px 2px 4px
+      .icon-pencil
+        visibility: hidden
+      &:hover
+        .icon-pencil
+          visibility: visible
 
-.btags .select2-search-choice a.select2-search-choice-close
-  display: none
+      .icon-pencil
+        cursor: pointer
 
-$btagBorder: #AfAfAf
-$btagBorderTop: darken($btagBorder, 17%)
+  .buttons
+    +border-bottom-radius(4px)
+    background: $grayLighter
+    text-align: center
+    padding: 6px 4px
+    margin: 0px -15px -10px
 
-.btag
-  +border-radius(3px)
+.tag, .tag-item
+  +border-radius(2px)
   +box-shadow(0px 1px 2px gray)
-  padding: 1px 3px
+  padding: 2px 4px
   font-weight: bold
-  //border: 1px solid $btagBorder
-  //border-top-color: $btagBorderTop
-  //border-bottom-color: $btagBorderTop
-  margin-right: 5px
   font-size: 12px
 
-#btag-editor
-  .control-group
-    vertical-align: top
-
-#btag
-  white-space: nowrap
-  .select2-container
-    padding: 0px
-    margin-top: 0px
-
-  #btag-name-input
-    width: 225px
-
-  .minicolors-swatch
-    +border-left-radius(4px)
-    width: 28px
-    height: 28px
-    border: 1px solid #999
-
-  .control-group
-    vertical-align: top
-
-  #btag-bgcolor-input
-    +border-left-radius(0px)
-    width: 100px
-  .icon-tags
-    color: $gray
-    cursor: pointer
-
-ul.btags
-  margin: 4px 0px 2px
-  list-style: none
-
-  li
-    float: left
-
-ul.btags-colors
-  list-style: none
-  margin: 0px
-  margin-top: 4px
-  padding: 0px 1px
-  width: 240px
-  li.color
-    display: inline-table
-    float: left
-    width: 30px
-    height: 30px
-    padding: 0px
-    margin: 0px
-
-.btags-form
-  display: inline-table
-  float: left
-  .icon-caret-down
-    margin-left: -20px
-    margin-right: 10px
-
-.btags-links
-  display: inline-table
-  float: left
-  padding: 0px
-  margin-left: 10px
-
-@media (max-width: 768px)
-  .btags-links
-    display: block
-    width: 100%
-    margin: 10px 0px
+.tags-for
+  .tag
+    margin-right: 6px

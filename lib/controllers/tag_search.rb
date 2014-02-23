@@ -8,34 +8,35 @@ module Controllers::TagSearch
     end
   end
 
-private
-  def has_tags?
-    search_tag_params.any?
-  end
+  private
 
-  def set_search
-    if params[:search].present? && params[:search] =~ /;/
-      search_tag_params
+    def has_tags?
+      search_tag_params.any?
     end
-  end
 
-  def search_tag_params
-    @search_tag_params ||= begin
-      resp = Tag.select('id,name').where(name: search_arr).to_a
-      if search_arr.size === resp.size
-        params[:search] = ""
-      elsif resp.size > 0
-        params[:search] = search_arr.last.strip
+    def set_search
+      if params[:search].present? && params[:search] =~ /;/
+        search_tag_params
       end
-      resp
     end
-  end
 
-  def search_arr
-    @search_arr ||= params[:search].split(';')
-  end
+    def search_tag_params
+      @search_tag_params ||= begin
+        resp = Tag.select('id,name').where(name: search_arr).to_a
+        if search_arr.size === resp.size
+          params[:search] = ""
+        elsif resp.size > 0
+          params[:search] = search_arr.last.strip
+        end
+        resp
+      end
+    end
 
-  def tag_ids
-    @tag_ids ||= @search_tag_params.map(&:id)
-  end
+    def search_arr
+      @search_arr ||= params[:search].split(';')
+    end
+
+    def tag_ids
+      @tag_ids ||= @search_tag_params.map(&:id)
+    end
 end

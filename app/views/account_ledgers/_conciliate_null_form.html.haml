@@ -1,7 +1,3 @@
--#= form_for ledger, url: conciliate_account_ledger_path(ledger), html: {id: 'conciliate-null-form'} do |f|
-  = f.submit 'Verificar transacción', id: 'conciliate-button', name: 'conciliate_commit', class: 'btn btn-success b'
-  = f.submit 'Anular transacción', id: 'null-button', name: 'null_commit', class: 'btn btn-danger b'
-
 = link_to 'Verificar transacción', conciliate_account_ledger_path(ledger.id), method: :patch, id: 'conciliate-button', class: 'btn btn-success b'
 = link_to 'Anular transacción', null_account_ledger_path(ledger.id), method: :patch, id: 'null-button', class: 'btn btn-danger b'
 
@@ -12,6 +8,7 @@
       trigger: 'hover',
       title: 'Verificación',
       html: true,
+      placement: 'bottom',
       content: 'Actualiza el balance de la cuenta asociada <br/><strong>' + _.escape(to_name) + '</strong>'
     });
 

@@ -68,12 +68,13 @@
       $(document).foundation({
         topbar: {
           custom_back_text: true,
-          back_text: 'Atras'
+          back_text: '<i class="icon-caret-left"></i> Atras'
         }
       });
 
     -# Cache all tags
-    - cache cache_key_for_tags do
-      :javascript
-        this.tags = #{tags_list}
+    -# cache cache_key_for_tags do
+    :javascript
+      this.bonsai.tags = #{tags_list.to_json}
+      this.bonsai.tags_hash = #{tags_list_hash.to_json}
 

@@ -1,9 +1,14 @@
 module TagsHelper
-
+  # Presents a list for json
   def tags_list
-    tags ||= Tag.list.order("name")
-    tags.map { |v|
-      { id: v.id, text: v.to_s, label: v.to_s, bgcolor: v.bgcolor }
-    }.to_json
+    @tags_list ||= Tag.list.order("name").map { |val|
+      { id: val.id, text: val.to_s, label: val.to_s, bgcolor: val.bgcolor }
+    }
+  end
+
+  def tags_list_hash
+    @tags_list_hash ||= Hash[tags_list.map { |el|
+      [el[:id], el]
+    }]
   end
 end

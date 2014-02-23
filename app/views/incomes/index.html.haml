@@ -3,14 +3,14 @@
     %li
       = link_to 'Ingresos', incomes_path
 
-- content_for :search do
+-# content_for :search do
   = render 'incomes/search'
 
 .row-fluid
   .span6
     %h1 Ingresos
   .span6.r
-    %a.btn
+    %a.btn(href="javascript:void(0)" ng-tags)
       %i.icon-tags
       Etiquetas
       %i.icon-caret-down
@@ -23,6 +23,7 @@
       = link_to new_income_path, class: 'btn' do
         %i.icon-plus-sign
         Nuevo ingreso
+
 
 -#= render 'incomes/search'
 
