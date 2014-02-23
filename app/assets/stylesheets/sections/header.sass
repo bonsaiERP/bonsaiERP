@@ -47,6 +47,11 @@ $headHeight: 50px
 #head2
   color: #F7F7F7
   height: $headHeight
+  img
+    float: left
+    max-height: $headHeight
+    margin: 0px
+
   overflow: hidden
   .span6
     height: $headHeight
@@ -54,6 +59,8 @@ $headHeight: 50px
   h3.organisation
     font-weight: normal
     margin-top: ($headHeight/2 - 20px)
+    display: inline-block
+    margin-left: 10px
 
 .bonsai-header
   background-color: darken(yellowGreen, 3%)
