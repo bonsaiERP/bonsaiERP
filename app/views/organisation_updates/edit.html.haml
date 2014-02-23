@@ -17,10 +17,6 @@
   .well.well-small
     %h4.n Configuraciones
     = render 'config', f: f
-    .row-fluid
-      .span6=f.input :country_code, label: 'País', collection: Country.options
-
-      .span6=f.input :time_zone, as: :time_zone, label: 'Zona horaria'
 
   .row-fluid
     .span6

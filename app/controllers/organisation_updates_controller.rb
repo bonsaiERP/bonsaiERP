@@ -18,6 +18,7 @@ class OrganisationUpdatesController < ApplicationController
     def organisation_params
       params.require(:organisation)
       .permit(:name, :address, :email, :website, :phone, :mobile, :country_code, :inventory,
-             :country_code, :time_zone)
+             :country_code, :time_zone,
+             :header_css)
     end
 end

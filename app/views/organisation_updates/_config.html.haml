@@ -11,3 +11,33 @@
   .span6=f.input :time_zone, as: :time_zone, label: 'Zona horaria'
 
 
+.row-fluid
+  .span12
+    %label Color encabezado
+    = f.hidden_field :header_css
+    - Organisation::HEADER_CSS.each do |css|
+      %span.ib.header-css{ class: css, style: 'width: 50px; height: 50px;', data: { css: css } }
+
+:css
+  .header-css { border: 3px solid white; cursor: pointer; }
+  .header-sel{ border: 3px solid #1253a6 }
+
+:javascript
+  $(function() {
+    function selectHeaderCss(val) {
+      $('#organisation_header_css').val(val);
+      $('.header-css').removeClass('header-sel');
+      var sel = 'span.' + val;
+      console.log(val);
+      $(sel).addClass('header-sel');
+
+      $('#head2').attr('class', val);
+    }
+
+
+    $('.header-css').click(function() {
+      selectHeaderCss($(this).data('css'))
+    })
+    // Init header_css
+    selectHeaderCss($('#organisation_header_css').val());
+  })
