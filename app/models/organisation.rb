@@ -6,10 +6,12 @@ class Organisation < ActiveRecord::Base
   DATA_PATH = "db/defaults"
   self.table_name = 'common.organisations'
 
+  HEADER_CSS = %w(bonsai-header red-header blue-header white-header violet-header orange-header dark-header)
+
   ########################################
   # Attributes
   extend Models::HstoreMap
-  store_accessor :settings, :inventory
+  store_accessor :settings, :inventory, :header_css
   convert_hstore_to_boolean :inventory
 
   # Callbacks
@@ -29,7 +31,8 @@ class Organisation < ActiveRecord::Base
   validates_presence_of   :name, :tenant
   validates :tenant, uniqueness: true, format: { with: /\A[a-z0-9]+\z/ }, length: { in: 3...15 }
 
-  validate  :valid_tenant_not_in_list
+  validate :valid_tenant_not_in_list
+  validate :valid_header_css
   validates_email_format_of :email, if: 'email.present?', message: I18n.t('errors.messages.email')
 
   with_options if: :persisted? do |val|
@@ -78,6 +81,10 @@ class Organisation < ActiveRecord::Base
     f.close
   end
 
+  def header_css
+    settings['header_css'] || 'bonsai-header'
+  end
+
   # Especial method that deletes the schema, users and all related stuff
   def drop_related!
     ActiveRecord::Base.transaction do
@@ -123,5 +130,10 @@ class Organisation < ActiveRecord::Base
 
     def currency_klass
       @currency_klass ||= Currency.find(currency)
+    end
+
+    # Sets or checks that the header_css is valid
+    def valid_header_css
+      self.header_css = 'bonsai-header'  unless HEADER_CSS.include?(header_css)
     end
 end

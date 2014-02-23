@@ -115,4 +115,20 @@ describe Organisation do
     org.currency_to_s.should eq('BOB Boliviano')
     org.currency_name.should eq('Boliviano')
   end
+
+  it "#valid_header_css" do
+    org = Organisation.new
+    org.valid?
+    expect(org.header_css).to eq('bonsai-header')
+
+    Organisation::HEADER_CSS.each do |css|
+      org.header_css = css
+      org.valid?
+      expect(org.header_css).to eq(css)
+    end
+
+    org.header_css = 'non'
+    org.valid?
+    expect(org.header_css).to eq('bonsai-header')
+  end
 end

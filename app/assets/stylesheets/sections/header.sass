@@ -45,9 +45,6 @@ ul#usersettings
 
 $headHeight: 50px
 #head2
-  background-color: darken(yellowGreen, 3%)
-  +background-image(linear-gradient(lighten($green,  5%), yellowGreen) )
-  +text-shadow(1px 1px 0 darken($green, 15%))
   color: #F7F7F7
   height: $headHeight
   overflow: hidden
@@ -58,12 +55,41 @@ $headHeight: 50px
     font-weight: normal
     margin-top: ($headHeight/2 - 20px)
 
-  //.search-cont
-    margin-top: ($headHeight/2 - 15px)
-    text-align: right
-    .input-append
-      margin: 0px
-      form
-        margin: 0px
-        input[type="text"]
-          width: 300px
+.bonsai-header
+  background-color: darken(yellowGreen, 3%)
+  +background-image(linear-gradient(lighten($green,  5%), yellowGreen) )
+  +text-shadow(1px 1px 0 darken($green, 15%))
+
+.red-header
+  background-color: darken(red, 3%)
+  +background-image(linear-gradient(lighten($red,  5%), red) )
+  +text-shadow(1px 1px 0 darken($red, 15%))
+
+.white-header
+  color: $dark !important
+  background-color: darken(white, 3%)
+  +background-image(linear-gradient(darken(white,  5%), darken(white,  20%) 80%) )
+  border-bottom: 1px solid $grayLight
+  +text-shadow(1px 1px 0 darken(white, 15%))
+
+$blueHeader: lighten($blue, 10%)
+.blue-header
+  background-color: $blueHeader
+  +background-image(linear-gradient(lighten($blueHeader,  17%), $blueHeader) )
+  +text-shadow(1px 1px 0 darken($blue, 15%))
+
+.violet-header
+  background-color: $violet
+  +background-image(linear-gradient(lighten($violet,  10%), $violet) )
+  +text-shadow(1px 1px 0 darken($violet, 15%))
+
+.orange-header
+  background-color: $orange
+  +background-image(linear-gradient(lighten($orange,  10%), $orange) )
+  +text-shadow(1px 1px 0 darken($orange, 15%))
+
+$darkHeader: darken($dark, 10%)
+.dark-header
+  background-color: $darkHeader
+  +background-image(linear-gradient(lighten($darkHeader, 15%), $darkHeader 70%) )
+  +text-shadow(1px 1px 0 darken($darkHeader, 15%))

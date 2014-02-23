@@ -1,0 +1,13 @@
+.row-fluid
+  .span6
+    %label Moneda base:
+    = current_organisation.currency_to_s
+  .span6.form-inline
+    =f.input :inventory, label: 'Inventario activo', as: :boolean
+
+.row-fluid
+  .span6=f.input :country_code, label: 'País', collection: Country.options
+
+  .span6=f.input :time_zone, as: :time_zone, label: 'Zona horaria'
+
+

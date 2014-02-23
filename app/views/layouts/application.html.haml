@@ -34,7 +34,7 @@
       -# cache [current_user, 'menu'] do
       .cont= render 'layouts/menus'
 
-    #head2
+    #head2{ class: current_organisation.header_css }
       .row-fluid.cont
         .span12
           %h3.organisation= organisation_name
