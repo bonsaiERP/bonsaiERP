@@ -1,6 +1,9 @@
 # Directive to present the tags
 myApp.directive('ngTags', ($compile, $timeout) ->
   restrict: 'A'
+  scope: {
+    showFilter: '=ngTags'
+  }
   link: ($scope, $elem, $attrs) ->
     $elem.click( ->
       clicked = true
@@ -19,6 +22,7 @@ myApp.directive('ngTags', ($compile, $timeout) ->
         $timeout(->
           $cont.find('#tag-editor').modal(show: false)
         )
+        $scope.url = $attrs.url
         $scope.$apply()
         # Close when clicked outside popover
         $('body').on('click', (event) ->
@@ -66,7 +70,7 @@ contHtml = """
     </ul>
   </div>
   <div class='buttons'>
-    <button ng-disabled='!tagsAny("checked", true)' class='btn btn-success btn-small'>Filtrar</button>
+    <button ng-disabled='!tagsAny("checked", true)' ng-show="{{showFilter}}" ng-click="filter()" class='btn btn-success btn-small'>Filtrar</button>
     <button class='btn btn-small' ng-click='newTag()'><i class="icon-plus-circle"></i> Nueva</button>
     <button ng-disabled='!tagsAny("checked", true)' class='btn btn-primary btn-small'>Applicar</button>
   </div>

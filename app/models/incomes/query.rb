@@ -13,4 +13,5 @@ class Incomes::Query < Movements::Query
   def to_pay(contact_id)
     rel.active.where{amount.gt 0}.where(contact_id: contact_id)
   end
+
 end

@@ -8,6 +8,10 @@ class Movements::Query
     @rel = relation
   end
 
+  def index(params = {})
+    self.class.index_includes movement_set(params)
+  end
+
   def search(s)
     s = "%#{ s }%"
     @rel.joins(:contact).where{(name.like s) | (contact.matchcode.like s) | (description.like s)}
@@ -29,12 +33,28 @@ class Movements::Query
     rel.select(sel).joins{transaction}.joins{contact}
   end
 
-private
-  def join_select
-    <<-SQL
-    accounts.id, name, amount, state, currency, date, exchange_rate, description,
-    transactions.due_date AS ddate, transactions.total as tot,
-    contacts.matchcode as cont
-    SQL
-  end
+  private
+
+    def self.index_includes(rel)
+      rel.includes(:contact, :tax, :updater, :creator, :approver, :nuller)
+    end
+
+    def movement_set(params = {})
+      case
+      when params[:contact_id].present?
+        rel.contact(params[:contact_id])
+      when params[:search].present?
+        search(params[:search])
+      else
+        rel
+      end
+    end
+
+    def join_select
+      <<-SQL
+      accounts.id, name, amount, state, currency, date, exchange_rate, description,
+      transactions.due_date AS ddate, transactions.total as tot,
+      contacts.matchcode as cont
+      SQL
+    end
 end

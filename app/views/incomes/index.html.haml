@@ -8,13 +8,10 @@
 
 .row-fluid
   .span6
-    %h1 Ingresos
+    %h1.ib Ingresos
+    = search_tag
   .span6.r
-    %a.btn(href="javascript:void(0)" ng-tags)
-      %i.icon-tags
-      Etiquetas
-      %i.icon-caret-down
-
+    = render 'tags/tags'
     .btn-group
       = link_to export_incomes_path, class: 'btn' do
         %i.icon-download-alt
@@ -24,8 +21,6 @@
         %i.icon-plus-sign
         Nuevo ingreso
 
-
--#= render 'incomes/search'
 
 %ul.unstyled.inline
   %li
@@ -65,4 +60,6 @@
 :javascript
   $(function() {
     $('.listing').rowCheck();
+    $('#search-form').attr('action', '/incomes')
   })
+

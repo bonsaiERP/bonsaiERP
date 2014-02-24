@@ -36,6 +36,17 @@ myApp.controller 'TagsController', ['$scope', '$http', '$timeout', ($scope, $htt
     $editor.modal('show')
     false
 
+  # Functions to filter tags
+  $scope.filter = ->
+    window.location = [$scope.url, $scope.createTagFilterParams()].join("?")
+
+  $scope.selectedTags = ->
+    _.select($scope.tags, (tag) -> tag.checked )
+
+  $scope.createTagFilterParams = ->
+    _.map($scope.selectedTags(), (tag) -> "tag_ids[]=#{tag.id}" ).join("&")
+  # End of functions to filter tags
+
   # Closes the editor modal
   $scope.closeModal = ->
     if $scope.editing

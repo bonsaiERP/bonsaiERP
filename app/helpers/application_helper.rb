@@ -194,4 +194,13 @@ module ApplicationHelper
     "del <i>#{I18n.l(date_range.date_start)}</i> al <i>#{I18n.l(date_range.date_end)}</i>".html_safe
   end
 
+  # present search formated
+  def search_tag
+    if params[:search].present?
+      content_tag(:span, params[:search], class: 'well pad2') do
+        content_tag(:span, 'busqueda: ', class: 'muted') +
+        content_tag(:strong, params[:search])
+      end
+    end
+  end
 end

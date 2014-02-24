@@ -1,4 +1,12 @@
-#btag
+- filter_tags ||= true
+- url ||= controller_name
+%a.btn(href="javascript:void(0)" ng-tags='#{filter_tags}' url="/#{url}")
+  %i.icon-tags
+  Etiquetas
+  %i.icon-caret-down
+
+
+-##btag
   #btag-template.hidden
     %li
       %a {{}}
@@ -41,7 +49,7 @@
         %i.icon-question-sign
         Ayuda
 
-:javascript
+-#:javascript
   $(function() {
     var tag = new Plugin.Tag("#{list}", "#{model}", window.tags);
 

@@ -2,13 +2,16 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 module Controllers::TagSearch
-  def self.included(base)
-    base.instance_eval do
-      before_filter :set_search
-    end
-  end
 
   private
+
+    def tag_ids
+      @tag_ids ||= begin
+                     return false  if params[:tag_ids].blank?
+
+                     Array(params[:tag_ids]).map(&:to_i)
+                   end
+    end
 
     def has_tags?
       search_tag_params.any?
@@ -36,7 +39,4 @@ module Controllers::TagSearch
       @search_arr ||= params[:search].split(';')
     end
 
-    def tag_ids
-      @tag_ids ||= @search_tag_params.map(&:id)
-    end
 end

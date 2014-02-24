@@ -143,38 +143,23 @@ class IncomesController < ApplicationController
 
     # Method to search incomes on the index
     def search_incomes
-      @incomes = case
-                 when params[:contact_id].present?
-                   Income.contact(params[:contact_id]).order('date desc').page(@page)
-                 when params[:search].present?
-                   Incomes::Query.new.search(params[:search])
-                 else
-                   Income.order('date desc').page(@page)
-                 end
-
-      @incomes = @incomes.all_tags(*tag_ids)  if params[:search] && has_tags?
-
-      @incomes = @incomes.includes(:contact, :tax, :updater, :creator, :approver, :nuller).order('date desc, accounts.id desc').page(@page)
+      if tag_ids
+        @incomes = Incomes::Query.index_includes Income.any_tags(*tag_ids)
+      else
+        @incomes = Incomes::Query.new.index(params).order('date desc, accounts.id desc')
+      end
 
       set_incomes_filters
+      @incomes = @incomes.page(@page)
     end
 
     def set_incomes_filters
-      case
-      when params[:approved].present?
-        @incomes = @incomes.approved
-      when params[:error].present?
-        @incomes = @incomes.error
-      when params[:due].present?
-        @incomes = @incomes.due
-      when params[:nulled].present?
-        @incomes = @incomes.nulled
-      when params[:inventory].present?
-        @incomes = @incomes.inventory
+      [:approved, :error, :due, :nulled, :inventory].each do |filter|
+        @incomes = @incomes.send(filter)  if params[filter].present?
       end
     end
 
     def set_index_params
-      params[:all] = true unless [:approved, :error, :nulled, :due, :inventory].any? {|v| params[v].present? }
+      params[:all] = true unless [:approved, :error, :nulled, :due, :inventory].any? { |key| params[key].present? }
     end
 end
