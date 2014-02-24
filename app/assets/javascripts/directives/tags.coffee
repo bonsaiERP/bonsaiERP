@@ -3,8 +3,10 @@ myApp.directive('ngTags', ($compile, $timeout) ->
   restrict: 'A'
   scope: {
     showFilter: '=ngTags'
+    tagIds: '=tagIds'
   }
   link: ($scope, $elem, $attrs) ->
+
     $elem.click( ->
       clicked = true
       if not $elem.data('clicked')
@@ -19,11 +21,12 @@ myApp.directive('ngTags', ($compile, $timeout) ->
         $cont = $elem.data('popover').tip().find('.popover-content')
         $cont.html(contHtml)
         $compile($cont)($scope)
-        $timeout(->
-          $cont.find('#tag-editor').modal(show: false)
-        )
+        # Hide modal dialog editor
+        $timeout(-> $cont.find('#tag-editor').modal(show: false) )
+
         $scope.url = $attrs.url
         $scope.$apply()
+
         # Close when clicked outside popover
         $('body').on('click', (event) ->
           if not(clicked) and $elem.data('clicked') and $(event.target).parents('.popover').length is 0
@@ -37,6 +40,8 @@ myApp.directive('ngTags', ($compile, $timeout) ->
 
       clicked = false
     )
+    # Add a class to see that there are selected tags
+    $elem.addClass('btn-info')  unless $attrs.tagIds is 'false'
 )
 
 htmlModal = """
@@ -63,7 +68,7 @@ contHtml = """
   <div class="tags-div">
     <ul class="unstyled tags-list">
       <li ng-repeat="tag in tags | filter:search">
-        <input type="checkbox" ng-click='markChecked(tag)'></span>
+        <input type="checkbox" ng-click='markChecked(tag)' ng-model='tag.checked'></span>
         <i class="icon-pencil" ng-click="editTag(tag, $index)"></i>
         <span class='tag-item' style='background: {{ tag.bgcolor }};color: {{ color(tag) }}'>{{ tag.label }}</span>
       </li>

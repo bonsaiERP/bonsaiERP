@@ -3,6 +3,10 @@
 # email: boriscyber@gmail.com
 module Controllers::TagSearch
 
+  def self.included(base)
+    base.helper_method :tag_ids
+  end
+
   private
 
     def tag_ids

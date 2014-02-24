@@ -57,6 +57,14 @@ myApp.controller 'TagsController', ['$scope', '$http', '$timeout', ($scope, $htt
     $editor.modal('hide')
     false
 
+  # Marks the selected tags
+  $scope.markTags = ->
+    _.each($scope.tags, (tag) ->
+      tag.checked = true  if _.include($scope.tagIds, tag.id)
+    )
+
+  $scope.markTags()
+
   # Create a new tag
   $scope.newTag = ->
     $scope.editing = false
