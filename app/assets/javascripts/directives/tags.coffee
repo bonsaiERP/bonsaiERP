@@ -22,7 +22,10 @@ myApp.directive('ngTags', ($compile, $timeout) ->
         $cont.html(contHtml)
         $compile($cont)($scope)
         # Hide modal dialog editor
-        $timeout(-> $cont.find('#tag-editor').modal(show: false) )
+        $timeout(->
+          $scope.$editor = $cont.find('#tag-editor')
+          $scope.$editor.dialog(autoOpen: false, width: 350)
+        )
 
         $scope.url = $attrs.url
         $scope.$apply()
@@ -45,21 +48,23 @@ myApp.directive('ngTags', ($compile, $timeout) ->
 )
 
 htmlModal = """
-<div class="modal hide fade" id="tag-editor">
-  <div class="modal-header">
-    <button type="button" class="close" ng-click="closeModal()" aria-hidden="true">&times;</button>
-    <h4>{{modalTitle}}</h4>
+<div id="tag-editor" style="background-color:#fff">
+  <input id="model" type="hidden">
+  <div class="control-group name ib">
+    <input placeholder="nombre" id="tag-name-input" type="text" ng-model="tag_name">
   </div>
-  <div class="modal-body">
-    <p>
-      <input type='text' ng-model='selectedTag.name' placeholder='name' />
-      <input type='text' ng-model='selectedTag.bcolor' placeholder='#cfcfcf' />
-    </p>
+  <div class="control-group bgcolor ib form-inline">
+    <input id="tag-bgcolor-input" placeholder="#ff0000" type="text" ng-model="tag_bgcolor">
   </div>
-  <div class="modal-footer">
-    <a href="#" class="btn" ng-click="closeModal()">Close</a>
-    <a href="#" class="btn btn-primary" ng-click="save()">Save</a>
+  <button class="btn btn-primary b">Crear</button>
+  <div class="tag-preview">
+    <span class="tag" style="background:{{tag_bgcolor}};color:{{color(tag_bgcolor)}}">{{tag_name}}</tag>
   </div>
+  <div class="clearfix"></div>
+  <ul class="tag-colors">
+    <li ng-repeat="color in colors" ng-click="setColor(color)" style="background-color:{{color}}"></li>
+  </ul>
+  <div class="clearfix"></div>
 </div>
 """
 contHtml = """
@@ -70,7 +75,7 @@ contHtml = """
       <li ng-repeat="tag in tags | filter:search">
         <input type="checkbox" ng-click='markChecked(tag)' ng-model='tag.checked'></span>
         <i class="icon-pencil" ng-click="editTag(tag, $index)"></i>
-        <span class='tag-item' style='background: {{ tag.bgcolor }};color: {{ color(tag) }}'>{{ tag.label }}</span>
+        <span class='tag-item' style='background: {{ tag.bgcolor }};color: {{ color(tag.bgcolor) }}'>{{ tag.label }}</span>
       </li>
     </ul>
   </div>

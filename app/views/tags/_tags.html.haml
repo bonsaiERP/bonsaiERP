@@ -7,11 +7,11 @@
 
 
 -##btag
-  #btag-template.hidden
+  #btag-template
     %li
       %a {{}}
 
-  #btag-editor(style="display:none;background-color:#fff")
+  #btag-editor(style="background-color:#fff")
     %input#model(type='hidden')
     .control-group.name.ib
       %input(type='text' id='btag-name-input' placeholder='nombre')
@@ -48,10 +48,9 @@
       %a#help-tags-link.dark(href='javascript:;')
         %i.icon-question-sign
         Ayuda
-
 -#:javascript
   $(function() {
-    var tag = new Plugin.Tag("#{list}", "#{model}", window.tags);
+    var tag = new Plugin.Tag("#{tags_list}", "Income", window.tags);
 
     $('.btags-form .icon-caret-down').click(function() {
       $('#tags').select2('open');

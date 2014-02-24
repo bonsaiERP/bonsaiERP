@@ -1,6 +1,8 @@
 myApp.controller 'TagsController', ['$scope', '$http', '$timeout', ($scope, $http, $timeout) ->
   $scope.tags = bonsai.tags
 
+  $scope.colors = ['#FF0000', '#FF9000', '#FFD300', '#77B92D', '#049CDB', '#1253A6', '#4022A7', '#8E129F']
+
   $scope.modalTitle = 'New tag'
   $scope.selectedTag = {}
   # Displays the correct icon for a tag to show checked or uncheked
@@ -19,21 +21,19 @@ myApp.controller 'TagsController', ['$scope', '$http', '$timeout', ($scope, $htt
     _.any($scope.tags, (tag) -> tag[prop] is value )
 
   # text color for a tag
-  $scope.color = (tag) ->
-    _b.idealTextColor tag.bgcolor
+  $scope.color = (color) ->
+    _b.idealTextColor color
 
-  $editor = $('#tag-editor')
 
   # Edit tags available
   $scope.editTag = (tag, index) ->
-    $scope.modalTitle = 'Edit tag'
-    $scope.selectedTag = tag
     $scope.currentIndex = index
     $scope.editing = true
+    $scope.tag_name = tag.text
+    $scope.tag_bgcolor = tag.bgcolor
 
-    tag = $scope.selectedTag
-    $scope.oldTag = angular.copy tag
-    $editor.modal('show')
+    $scope.$editor.dialog('option', 'title', 'Editar etiqueta')
+    $scope.$editor.dialog('open')
     false
 
   # Functions to filter tags
@@ -54,7 +54,7 @@ myApp.controller 'TagsController', ['$scope', '$http', '$timeout', ($scope, $htt
     else
       $scope.tags.pop()
 
-    $editor.modal('hide')
+    $scope.editor.modal('hide')
     false
 
   # Marks the selected tags
@@ -65,6 +65,8 @@ myApp.controller 'TagsController', ['$scope', '$http', '$timeout', ($scope, $htt
 
   $scope.markTags()
 
+  $scope.setColor = (color) -> $scope.tag_bgcolor = color
+
   # Create a new tag
   $scope.newTag = ->
     $scope.editing = false
@@ -73,7 +75,8 @@ myApp.controller 'TagsController', ['$scope', '$http', '$timeout', ($scope, $htt
     $scope.adding = true
     $scope.currentIndex = -1 + $scope.tags.length
     $scope.selectedTag = $scope.tags[$scope.currentIndex]
-    $editor.modal('show')
+    $scope.$editor.dialog('option', 'title', 'Nueva etiqueta')
+    $scope.$editor.dialog('open')
   # Saves the selectedTag
   $scope.save = ->
 ]
