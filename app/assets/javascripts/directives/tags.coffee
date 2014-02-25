@@ -21,10 +21,12 @@ myApp.directive('ngTags', ($compile, $timeout) ->
         $cont = $elem.data('popover').tip().find('.popover-content')
         $cont.html(contHtml)
         $compile($cont)($scope)
-        # Hide modal dialog editor
+        # Modal dialog editor, hidden when created
         $timeout(->
           $scope.$editor = $cont.find('#tag-editor')
           $scope.$editor.dialog(autoOpen: false, width: 350)
+          $scope.$colorEditor = $scope.$editor.find('#tag-bgcolor-input')
+          $scope.$colorEditor.minicolors({defaultValue: '#efefef'})
         )
 
         $scope.url = $attrs.url
@@ -32,7 +34,10 @@ myApp.directive('ngTags', ($compile, $timeout) ->
 
         # Close when clicked outside popover
         $('body').on('click', (event) ->
-          if not(clicked) and $elem.data('clicked') and $(event.target).parents('.popover').length is 0
+          # Prevent closing when editor open
+          return false  if $scope.$editor.css('display') isnt 'none'
+          return false  if not(clicked)
+          if $elem.data('clicked') and $(event.target).parents('.popover').length is 0
             $elem.data('popover').tip().hide()
         )
       else
@@ -50,13 +55,16 @@ myApp.directive('ngTags', ($compile, $timeout) ->
 htmlModal = """
 <div id="tag-editor" style="background-color:#fff">
   <input id="model" type="hidden">
-  <div class="control-group name ib">
-    <input placeholder="nombre" id="tag-name-input" type="text" ng-model="tag_name">
+  <div class="control-group name ib {{errorCssFor(tag_name, 'tag_name')}}">
+    <input placeholder="nombre" id="tag-name-input" type="text" ng-model="tag_name" title="{{errors.tag_name}}">
+    <span class="hint">Solo letras, números o -_</span>
   </div>
-  <div class="control-group bgcolor ib form-inline">
-    <input id="tag-bgcolor-input" placeholder="#ff0000" type="text" ng-model="tag_bgcolor">
+  <div class="control-group bgcolor ib form-inline ">
+    <input id="tag-bgcolor-input" placeholder="#ff0000" type="text" ng-model="tag_bgcolor" title="{{errors["tag_bgcolor"]}}">
   </div>
-  <button class="btn btn-primary b">Crear</button>
+
+  <button class="btn btn-primary b" ng-disabled="{{saving}}" ng-click="save()">{{editorBtn}}</button>
+
   <div class="tag-preview">
     <span class="tag" style="background:{{tag_bgcolor}};color:{{color(tag_bgcolor)}}">{{tag_name}}</tag>
   </div>
@@ -67,6 +75,7 @@ htmlModal = """
   <div class="clearfix"></div>
 </div>
 """
+
 contHtml = """
 <div ng-controller="TagsController" class='tags-controller'>
   <input type="text" ng-model="search" class="search" placeholder="escriba para buscar" />

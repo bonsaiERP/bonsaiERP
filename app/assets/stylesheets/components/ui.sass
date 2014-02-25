@@ -1,6 +1,5 @@
 @import compass
-@import colors
-
+@import 'colors'
 
 $header-color: lighten(gray, 20%)
 .ui-widget-header
@@ -232,6 +231,7 @@ $radius: 8px
 .ui-dialog
   +border-top-radius($radius)
   +box-shadow(0px 0px 8px black)
+  z-index: 2000 !important
   //border: 1px solid $dark
 
   h1

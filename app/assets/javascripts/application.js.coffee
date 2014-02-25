@@ -13,6 +13,7 @@
 #= require jquery/jquery.scrollTo.js
 #= require jquery/jquery.placeholder.js
 #= require jquery/jquery.extras.coffee
+#= require jquery/notify.js
 
 #= require namespace.coffee
 
@@ -27,7 +28,6 @@
 #= require bootstrap/bootstrap-collapse.js
 #= require bootstrap/bootstrap-tab.js
 #= require bootstrap/bootstrap-button.js
-#= require bootstrap/bootstrap-notify.js
 
 #= require foundation/foundation.js
 #= require foundation/foundation.topbar.js
@@ -37,6 +37,7 @@
 #=require app/inline_edit.coffee
 
 ## Angular
+#= require_tree ./config
 #= require_tree ./filters
 #= require_tree ./controllers
 #= require_tree ./services

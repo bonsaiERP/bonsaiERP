@@ -11,11 +11,11 @@ class TagsController < ApplicationController
   # POST /tags
   def create
     @tag = Tag.new(tag_params)
-
+sleep(2)
     if @tag.save
       render json: @tag
     else
-      render json: {errors: @tag.errors}
+      render json: { errors: @tag.errors }, status: 409
     end
   end
 
@@ -26,7 +26,7 @@ class TagsController < ApplicationController
     if @tag.update_attributes(tag_params)
       render json: @tag
     else
-      render json: {errors: @tag.errors}
+      render json: {errors: @tag.errors}, status: 409
     end
   end
 
@@ -39,12 +39,13 @@ class TagsController < ApplicationController
     render json: {success: false}
   end
 
-private
-  def tag_params
-    params.require(:tag).permit(:name, :bgcolor)
-  end
+  private
 
-  def update_models_params
-    params.slice(:model, :tag_ids, :ids)
-  end
+    def tag_params
+      params.require(:tag).permit(:name, :bgcolor)
+    end
+
+    def update_models_params
+      params.slice(:model, :tag_ids, :ids)
+    end
 end
