@@ -11,7 +11,7 @@ class TagsController < ApplicationController
   # POST /tags
   def create
     @tag = Tag.new(tag_params)
-sleep(2)
+
     if @tag.save
       render json: @tag
     else
@@ -30,7 +30,7 @@ sleep(2)
     end
   end
 
-  # POST /tags/update_models
+  # PATCH /tags/update_models
   def update_models
     Tag.update_models(update_models_params)
 

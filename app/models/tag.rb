@@ -19,7 +19,7 @@ class Tag < ActiveRecord::Base
 
   # Updates multiple models
   def self.update_models(params)
-    tag_ids = Tag.where(id: params[:tag_ids]).pluck(:id)
+    tag_ids = Tag.where(id: params[:tag_ids]).pluck(:id).uniq
 
     klass = get_model_class params[:model]
     return false  if klass === false
@@ -31,16 +31,17 @@ class Tag < ActiveRecord::Base
     end
   end
 
-private
-  def self.get_model_class(mod)
-    case mod
-    when 'Account' then Account
-    when 'Income' then Income
-    when 'Expense' then Expense
-    when 'AccountLedger' then AccountLedger
-    when 'Item' then Item
-    else
-      false
+  private
+
+    def self.get_model_class(mod)
+      case mod
+      when 'Account' then Account
+      when 'Income' then Income
+      when 'Expense' then Expense
+      when 'AccountLedger' then AccountLedger
+      when 'Item' then Item
+      else
+        false
+      end
     end
-  end
 end

@@ -11,7 +11,7 @@
     %h1.ib Ingresos
     = search_tag
   .span6.r
-    = render 'tags/tags'
+    = render 'tags/tags', model: 'Income'
     .btn-group
       = link_to export_incomes_path, class: 'btn' do
         %i.icon-download-alt

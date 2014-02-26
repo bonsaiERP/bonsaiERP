@@ -2,13 +2,21 @@ myApp.controller 'TagsController', ['$scope', '$http', '$timeout', ($scope, $htt
   $scope.tags = bonsai.tags
   $scope.editorBtn = 'Crear'
   $scope.tag_name = ''
-  $scope.tag_name_errors = ''# 'Solo números, letras o -_'
 
   # Init
   $scope.colors = ['#FF0000', '#FF9000', '#FFD300', '#77B92D', '#049CDB', '#1253A6', '#4022A7', '#8E129F']
   $scope.tag_bgcolor = '#ffffff'
   $scope.errors = {}
-  $scope.saving = true
+
+  $scope.disableApply = ->
+    not($scope.tagsAny('checked', true)) or $('input.row-check:checked').length is 0
+
+  # Detect changes on tags
+  $('body').on('click', 'input.row-check', ->
+    $scope.disableApply()
+    $scope.$apply()
+    true
+  )
 
   # error css @val required to watch the attribute
   $scope.errorCssFor = (val, key) ->
@@ -60,11 +68,35 @@ myApp.controller 'TagsController', ['$scope', '$http', '$timeout', ($scope, $htt
     $scope.$colorEditor.minicolors('value', color)
     false
 
+  # Apply selected tags of the selected rows
+  $scope.applyTags = ->
+    $but = $scope.$editor.find('.apply-tags')
+    $but.prop('disabled', true)
+
+    ids = _.map($('input.row-check:checked'), (el) -> el.id )
+    tag_ids = _($scope.tags).select((tag) -> tag.checked)
+    .map('id').value()
+    data = { tag_ids: tag_ids, ids: ids, model: $scope.model }
+
+    $http(method: 'PATCH', url: '/tags/update_models', data: data)
+    .success((data, status) ->
+      alert('si')
+    )
+    .error((data, status)->
+      $scope.showSaveErrors(data, status)
+    )
+    .finally(->
+      $but.prop('disabled', true)
+    )
+
+  ########################################
+  # Operations to create edit tags
+  # Saves the selectedTag
+
   # Create a new tag
   $scope.newTag = ->
     $scope.errors = []
     $scope.editing = false
-    $scope.saving = false
     $scope.tag_bgcolor = '#FF9000'
     $scope.tag_name = ''
     $scope.editorBtn = 'Crear'
@@ -79,9 +111,10 @@ myApp.controller 'TagsController', ['$scope', '$http', '$timeout', ($scope, $htt
     $scope.errors = []
     $scope.currentIndex = index
     $scope.editing = true
-    $scope.saving = false
+    # ng-disabled directive not working
+    $scope.$editor.find('button').prop('disabled', false)
     $scope.tag_id = tag.id
-    $scope.tag_name = tag.text
+    $scope.tag_name = tag.name
     $scope.tag_bgcolor = tag.bgcolor
     $scope.editorBtn = 'Actualizar'
 
@@ -90,37 +123,44 @@ myApp.controller 'TagsController', ['$scope', '$http', '$timeout', ($scope, $htt
     $scope.$editor.dialog('open')
     false
 
-  # Saves the selectedTag
-  $scope.save = ->
-    $scope.saving = true
+  $scope.save = () ->
     $scope.errors = {}
     return  unless $scope.valid()
 
-    $scope.saving = true
-    console.log 'Saving', $scope.saving
+    $scope.$editor.find('button').prop('disabled', true)
+
     if $scope.editing
       $scope.update()
     else
       $scope.create()
 
+  # Updates a tag
   $scope.update = ->
     $http(method: 'PATCH', url: '/tags/' + $scope.tag_id, data: $scope.getFormData())
     .success((data, status) ->
-      alert('update')
+      $scope.tags[$scope.currentIndex].name = data.name
+      $scope.tags[$scope.currentIndex].bgcolor = data.bgcolor
+      $scope.$editor.dialog('close')
     )
     .error((data, status)->
-    )
-
-  $scope.create = ->
-    $http.post('/tags', $scope.getFormData())
-    .success(() ->
-      console.log status
-    )
-    .error((data, status)->
-      $scope.showSaveError(data)
+      $scope.showSaveErrors(data, status)
     )
     .finally(->
-      $scope.saving = false
+      $scope.$editor.find('button').prop('disabled', false)
+    )
+
+  # Creates new tag
+  $scope.create = ->
+    $http.post('/tags', $scope.getFormData())
+    .success((data, status) ->
+      $scope.tags.push { name: data.name, bgcolor: data.bgcolor, id: data.id }
+      $scope.$editor.dialog('close')
+    )
+    .error((data, status)->
+      $scope.showSaveErrors(data, status)
+    )
+    .finally(->
+      $scope.$editor.find('button').prop('disabled', false)
     )
 
   # Validation
@@ -131,9 +171,15 @@ myApp.controller 'TagsController', ['$scope', '$http', '$timeout', ($scope, $htt
     not _.any($scope.errors)
 
   # notify
-  $scope.showSaveError = (data) ->
-    $scope.$editor.parents('div:first')
-    .notify('Existió un error al crear', {className: 'error', positon: 'top center'})
+  $scope.showSaveErrors = (data, status) ->
+    if status < 500
+      if data.errors.name
+        $scope.errors['tag_name'] = data.errors.name.join(', ')
+        $scope.$editor.find('#tag-name-input')
+        .notify($scope.errors['tag_name'], {className: 'error', positon: 'top center'})
+    else
+      $scope.$editor.parents('div:first')
+      .notify('Existió un error al crear', {className: 'error', positon: 'top center'})
 
 
   $scope.getFormData = ->

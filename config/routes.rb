@@ -29,7 +29,7 @@ Bonsaierp::Application.routes.draw do
   resources :taxes
 
   resources :tags do
-    post :update_models, on: :collection
+    patch :update_models, on: :collection
   end
 
   resources :inventories, only: [:index, :show] do

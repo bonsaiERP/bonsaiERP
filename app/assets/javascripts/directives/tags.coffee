@@ -4,10 +4,10 @@ myApp.directive('ngTags', ($compile, $timeout) ->
   scope: {
     showFilter: '=ngTags'
     tagIds: '=tagIds'
+    model: '=model'
   }
   link: ($scope, $elem, $attrs) ->
-
-    $elem.click( ->
+    $elem.click( (event) ->
       clicked = true
       if not $elem.data('clicked')
         $elem.popover({
@@ -19,25 +19,28 @@ myApp.directive('ngTags', ($compile, $timeout) ->
         $elem.popover('show')
         $elem.data('clicked', true)
         $cont = $elem.data('popover').tip().find('.popover-content')
+        # Compilation
         $cont.html(contHtml)
         $compile($cont)($scope)
+
         # Modal dialog editor, hidden when created
         $timeout(->
           $scope.$editor = $cont.find('#tag-editor')
           $scope.$editor.dialog(autoOpen: false, width: 350)
           $scope.$colorEditor = $scope.$editor.find('#tag-bgcolor-input')
           $scope.$colorEditor.minicolors({defaultValue: '#efefef'})
+          $scope.model = $attrs.model
         )
 
         $scope.url = $attrs.url
         $scope.$apply()
 
         # Close when clicked outside popover
-        $('body').on('click', (event) ->
+        $('body').on('click', (evt) ->
           # Prevent closing when editor open
-          return false  if $scope.$editor.css('display') isnt 'none'
-          return false  if not(clicked)
-          if $elem.data('clicked') and $(event.target).parents('.popover').length is 0
+          return false  if $scope.$editor.dialog('isOpen')
+          return false  if clicked or $(evt.target).parents('.ui-dialog').attr('aria-describedby') is 'tag-editor'
+          if $elem.data('clicked') and $(evt.target).parents('.popover').length is 0
             $elem.data('popover').tip().hide()
         )
       else
@@ -45,7 +48,6 @@ myApp.directive('ngTags', ($compile, $timeout) ->
           $elem.data('popover').tip().hide()
         else
           $elem.data('popover').tip().show()
-
       clicked = false
     )
     # Add a class to see that there are selected tags
@@ -63,7 +65,7 @@ htmlModal = """
     <input id="tag-bgcolor-input" placeholder="#ff0000" type="text" ng-model="tag_bgcolor" title="{{errors["tag_bgcolor"]}}">
   </div>
 
-  <button class="btn btn-primary b" ng-disabled="{{saving}}" ng-click="save()">{{editorBtn}}</button>
+  <button class="btn btn-primary b" ng-click="save()">{{editorBtn}}</button>
 
   <div class="tag-preview">
     <span class="tag" style="background:{{tag_bgcolor}};color:{{color(tag_bgcolor)}}">{{tag_name}}</tag>
@@ -84,34 +86,37 @@ contHtml = """
       <li ng-repeat="tag in tags | filter:search">
         <input type="checkbox" ng-click='markChecked(tag)' ng-model='tag.checked'></span>
         <i class="icon-pencil" ng-click="editTag(tag, $index)"></i>
-        <span class='tag-item' style='background: {{ tag.bgcolor }};color: {{ color(tag.bgcolor) }}'>{{ tag.label }}</span>
+        <span class='tag-item' style='background: {{ tag.bgcolor }};color: {{ color(tag.bgcolor) }}'>{{ tag.name }}</span>
       </li>
     </ul>
   </div>
+
   <div class='buttons'>
-    <button ng-disabled='!tagsAny("checked", true)' ng-show="{{showFilter}}" ng-click="filter()" class='btn btn-success btn-small'>Filtrar</button>
+    <button ng-disabled='!tagsAny("checked", true)' ng-click="filter()" ng-show="showFilter" class='btn btn-success btn-small'>Filtrar</button>
     <button class='btn btn-small' ng-click='newTag()'><i class="icon-plus-circle"></i> Nueva</button>
-    <button ng-disabled='!tagsAny("checked", true)' class='btn btn-primary btn-small'>Applicar</button>
+    <button ng-disabled='disableApply()' class="btn btn-primary btn-small apply-tags" ng-click="applyTags()">Applicar</button>
   </div>
   <!--Modal dialog-->
   #{htmlModal}
 </div>
 """
 
-myApp.directive('btags', ($compile, $timeout) ->
+myApp.directive('tagsfor', ($compile, $timeout) ->
   restrict: 'E'
   template: """
     <div class="tags-for">
       <span ng-repeat="tag in tags track by $index" class="tag" style="background: {{tag.bgcolor}}; color: {{tag.color}}">
-        {{tag.text}}
+        {{tag.name}}
       </span>
     </div>
   """
-  transclude: true
-  scope: {}
+  #transclude: true
+  scope: {
+    tagIds: '=tagids'
+    tagsFor: '=tagsFor'
+  }
   link: ($scope, $elem, $attrs) ->
-    tags = _($attrs.tagids)
-    .map( (id) ->
+    tags = _($scope.tagIds).map( (id) ->
       tag = bonsai.tags_hash[id.toString()]
       tag.color = _b.idealTextColor(tag.bgcolor)  if tag and tag.bgcolor?
       tag
@@ -120,5 +125,5 @@ myApp.directive('btags', ($compile, $timeout) ->
     if tags.length > 0
       $timeout(->
         $scope.tags = tags
-      , 10)
+      )
 )

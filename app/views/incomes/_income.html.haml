@@ -17,8 +17,7 @@
 
       = income.inventory_tag
 
-      -#%ul.btags(data-tag_ids="#{income.tag_ids}")
-      %btags(tagids="#{income.tag_ids}")
+      %tagsfor(tagids="#{income.tag_ids}" tags-for="#{income.id}")
 
   .span4
     = income.updater_label

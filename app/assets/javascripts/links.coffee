@@ -93,10 +93,10 @@ $(->
         return true
 
       if $check.prop('checked')
-        $check.prop('checked', false)
+        $check.trigger('click')
         $row.removeClass('selected')
       else
-        $check.prop('checked', true)
+        $check.trigger('click')
         $row.addClass('selected')
 
     )

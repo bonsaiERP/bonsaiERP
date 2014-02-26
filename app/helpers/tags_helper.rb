@@ -2,7 +2,7 @@ module TagsHelper
   # Presents a list for json
   def tags_list
     @tags_list ||= Tag.list.order("name").map { |val|
-      { id: val.id, text: val.to_s, label: val.to_s, bgcolor: val.bgcolor }
+      { id: val.id, name: val.name, label: val.to_s, bgcolor: val.bgcolor }
     }
   end
 
