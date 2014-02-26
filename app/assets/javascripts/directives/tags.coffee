@@ -110,17 +110,12 @@ myApp.directive('tagsfor', ($compile, $timeout) ->
       </span>
     </div>
   """
-  #transclude: true
   scope: {
     tagIds: '=tagids'
     tagsFor: '=tagsFor'
   }
   link: ($scope, $elem, $attrs) ->
-    tags = _($scope.tagIds).map( (id) ->
-      tag = bonsai.tags_hash[id.toString()]
-      tag.color = _b.idealTextColor(tag.bgcolor)  if tag and tag.bgcolor?
-      tag
-    ).compact().value()
+    tags = Plugin.Tag.getTagsById($scope.tagIds)
 
     if tags.length > 0
       $timeout(->
