@@ -103,6 +103,7 @@ $(->
 
   $.rowCheck = $.fn.rowCheck = rowCheck
 
+  $('.has-row-check').rowCheck()
 
   ########################################
   # Presents any link url in a modal dialog and loads with AJAX the url

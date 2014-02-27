@@ -1,13 +1,17 @@
 - contact = present contact
 %li.row-fluid.contact(data-data="#{contact.incomes_expenses_status.to_json}")
   .span3
-    %h4
-      = link_to contact, contact, title: 'Identificado por'
-    .cleafix
-    %span(title='Nombre completo')= contact.complete_name
-    .clearfix
-    = contact.email_tag
-
+    .checkbox-l
+      %input.row-check(type='checkbox' id="#{contact.id}")
+    .checkbox-r
+      %h4
+        = link_to contact, contact, title: 'Identificado por'
+      .cleafix
+      %span(title='Nombre completo')= contact.complete_name
+      .clearfix
+      = contact.email_tag
+      .clearfix
+      %tagsfor(tag_ids="#{contact.tag_ids}" id="#{contact.id}")
   .span4
     .span8
       = contact.tax_number_tag

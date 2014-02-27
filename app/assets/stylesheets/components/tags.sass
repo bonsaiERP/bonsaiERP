@@ -54,109 +54,21 @@
 
 
 .tag, .tag-item
-  +border-radius(2px)
+  //+border-radius(4px)
+  //+border-bottom-radius(3px)
   +box-shadow(0px 1px 2px gray)
   padding: 2px 4px
   font-weight: bold
   font-size: 12px
 
 .tags-for
+  margin-top: 2px
   .tag
     margin-right: 6px
 
-
-.btags
-  .select2-choices .select2-search-choice
-    border: none
-    background-color: transparent
-    padding: 3px 0px
-    line-height: 16px
-
-  .select2-search-choice-focus
-    opacity: 0.75
-
-.btags .select2-search-choice a.select2-search-choice-close
-  display: none
-
-$btagBorder: #AfAfAf
-$btagBorderTop: darken($btagBorder, 17%)
-
-.btag
-  +border-radius(3px)
-  +box-shadow(0px 1px 2px gray)
-  padding: 1px 3px
-  font-weight: bold
-  //border: 1px solid $btagBorder
-  //border-top-color: $btagBorderTop
-  //border-bottom-color: $btagBorderTop
-  margin-right: 5px
-  font-size: 12px
-
-#btag-editor
-  .control-group
-    vertical-align: top
-
-#btag
-  white-space: nowrap
-  .select2-container
-    padding: 0px
-    margin-top: 0px
-
-  #btag-name-input
-    width: 225px
-
-  .minicolors-swatch
-    +border-left-radius(4px)
-    width: 28px
-    height: 28px
-    border: 1px solid #999
-
-  .control-group
-    vertical-align: top
-
-  #btag-bgcolor-input
-    +border-left-radius(0px)
-    width: 100px
-  .icon-tags
-    color: $gray
-    cursor: pointer
-
-ul.btags
-  margin: 4px 0px 2px
-  list-style: none
-
-  li
-    float: left
-
-ul.btags-colors
-  list-style: none
-  margin: 0px
-  margin-top: 4px
-  padding: 0px 1px
-  width: 240px
-  li.color
-    display: inline-table
-    float: left
-    width: 30px
-    height: 30px
-    padding: 0px
-    margin: 0px
-
-.btags-form
-  display: inline-table
-  float: left
-  .icon-caret-down
-    margin-left: -20px
-    margin-right: 10px
-
-.btags-links
-  display: inline-table
-  float: left
-  padding: 0px
-  margin-left: 10px
-
-@media (max-width: 768px)
-  .btags-links
-    display: block
-    width: 100%
-    margin: 10px 0px
+//.tagsop
+  .tags-for
+    opacity: 0.4
+  &:hover
+    .tags-for
+      opacity: 1

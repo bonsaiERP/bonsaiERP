@@ -6,56 +6,56 @@ myApp.directive('ngTags', ($compile, $timeout) ->
     tagIds: '=tagIds'
     model: '=model'
   }
-  link: ($scope, $elem, $attrs) ->
-    $elem.click( (event) ->
+  link: ($scope, elem, attrs) ->
+    elem.click( (event) ->
       clicked = true
-      if not $elem.data('clicked')
-        $elem.popover({
+      if not elem.data('clicked')
+        elem.popover({
           html: true,
           placement: 'bottom',
           trigger: 'manual',
           content: '<div style="width: 200px; height: 100px">Hola</div>'
         })
-        $elem.popover('show')
-        $elem.data('clicked', true)
-        $cont = $elem.data('popover').tip().find('.popover-content')
+        elem.popover('show')
+        elem.data('clicked', true)
+        $cont = elem.data('popover').tip().find('.popover-content')
         # Compilation
         $cont.html(contHtml)
         $compile($cont)($scope)
 
         # Modal dialog editor, hidden when created
         $timeout(->
-          $scope.$editor = $cont.find('#tag-editor')
-          $scope.$editor.dialog(autoOpen: false, width: 350)
-          $scope.$colorEditor = $scope.$editor.find('#tag-bgcolor-input')
+          $scope.editor = $cont.find('#tag-editor')
+          $scope.editor.dialog(autoOpen: false, width: 350)
+          $scope.$colorEditor = $scope.editor.find('#tag-bgcolor-input')
           $scope.$colorEditor.minicolors({
             defaultValue: '#efefef'
             change: (event) ->
               $scope.$colorEditor.trigger('change')
           })
-          $scope.model = $attrs.model
+          $scope.model = attrs.model
         )
 
-        $scope.url = $attrs.url
+        $scope.url = attrs.url
         $scope.$apply()
 
         # Close when clicked outside popover
         $('body').on('click', (evt) ->
           # Prevent closing when editor open
-          return false  if $scope.$editor.dialog('isOpen')
+          return false  if $scope.editor.dialog('isOpen')
           return false  if clicked or $(evt.target).parents('.ui-dialog').attr('aria-describedby') is 'tag-editor'
-          if $elem.data('clicked') and $(evt.target).parents('.popover').length is 0
-            $elem.data('popover').tip().hide()
+          if elem.data('clicked') and $(evt.target).parents('.popover').length is 0
+            elem.data('popover').tip().hide()
         )
       else
-        if $elem.data('popover').tip().css('display') is 'block'
-          $elem.data('popover').tip().hide()
+        if elem.data('popover').tip().css('display') is 'block'
+          elem.data('popover').tip().hide()
         else
-          $elem.data('popover').tip().show()
+          elem.data('popover').tip().show()
       clicked = false
     )
     # Add a class to see that there are selected tags
-    $elem.addClass('btn-info')  unless $attrs.tagIds is 'false'
+    elem.addClass('btn-info')  unless attrs.tagIds is 'false'
 )
 
 htmlModal = """

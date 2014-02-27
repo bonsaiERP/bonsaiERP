@@ -43,7 +43,7 @@
 
 = paginate_html
 
-%ul#incomes-list.unstyled.listing
+%ul#incomes-list.unstyled.listing.has-row-check
   %li.row-fluid
     .span4.offset7
       .span6.r.b.muted
@@ -57,9 +57,4 @@
 
 = render 'incomes/index_tour'
 
-:javascript
-  $(function() {
-    $('.listing').rowCheck();
-    $('#search-form').attr('action', '/incomes')
-  })
-
+= render 'layouts/search_url', url: incomes_path

@@ -70,7 +70,7 @@ myApp.controller 'TagsController', ['$scope', '$http', '$timeout', ($scope, $htt
 
   # Apply selected tags of the selected rows
   $scope.applyTags = ->
-    $but = $scope.$editor.find('.apply-tags')
+    $but = $scope.editor.find('.apply-tags')
     $but.prop('disabled', true)
 
     ids = _.map($('input.row-check:checked'), (el) -> el.id )
@@ -112,8 +112,8 @@ myApp.controller 'TagsController', ['$scope', '$http', '$timeout', ($scope, $htt
     $scope.editorBtn = 'Crear'
 
     $scope.$colorEditor.minicolors('value', '#FF9000')
-    $scope.$editor.dialog('option', 'title', 'Nueva etiqueta')
-    $scope.$editor.dialog('open')
+    $scope.editor.dialog('option', 'title', 'Nueva etiqueta')
+    $scope.editor.dialog('open')
     false
 
   # Edit tags available
@@ -122,22 +122,22 @@ myApp.controller 'TagsController', ['$scope', '$http', '$timeout', ($scope, $htt
     $scope.currentIndex = index
     $scope.editing = true
     # ng-disabled directive not working
-    $scope.$editor.find('button').prop('disabled', false)
+    $scope.editor.find('button').prop('disabled', false)
     $scope.tag_id = tag.id
     $scope.tag_name = tag.name
     $scope.tag_bgcolor = tag.bgcolor
     $scope.editorBtn = 'Actualizar'
 
     $scope.$colorEditor.minicolors('value', tag.bgcolor)
-    $scope.$editor.dialog('option', 'title', 'Editar etiqueta')
-    $scope.$editor.dialog('open')
+    $scope.editor.dialog('option', 'title', 'Editar etiqueta')
+    $scope.editor.dialog('open')
     false
 
   $scope.save = () ->
     $scope.errors = {}
     return  unless $scope.valid()
 
-    $scope.$editor.find('button').prop('disabled', true)
+    $scope.editor.find('button').prop('disabled', true)
 
     if $scope.editing
       $scope.update()
@@ -152,7 +152,7 @@ myApp.controller 'TagsController', ['$scope', '$http', '$timeout', ($scope, $htt
       tag = { name: data.name, bgcolor: data.bgcolor, id: data.id, color: color }
 
       $scope.tags[$scope.currentIndex] = tag
-      $scope.$editor.dialog('close')
+      $scope.editor.dialog('close')
 
       # Set global tags_hash variable
       window.bonsai.tags_hash[data.id] = { name: data.name, label: data.name, bgcolor: data.bgcolor, id: data.id }
@@ -164,7 +164,7 @@ myApp.controller 'TagsController', ['$scope', '$http', '$timeout', ($scope, $htt
       $scope.showSaveErrors(data, status)
     )
     .finally(->
-      $scope.$editor.find('button').prop('disabled', false)
+      $scope.editor.find('button').prop('disabled', false)
     )
 
   # Creates new tag
@@ -174,13 +174,13 @@ myApp.controller 'TagsController', ['$scope', '$http', '$timeout', ($scope, $htt
       $scope.tags.push { name: data.name, bgcolor: data.bgcolor, id: data.id }
       # Set global tags_hash variable
       window.bonsai.tags_hash = [data.id] = { name: data.name, label: data.name, bgcolor: data.bgcolor, id: data.id }
-      $scope.$editor.dialog('close')
+      $scope.editor.dialog('close')
     )
     .error((data, status)->
       $scope.showSaveErrors(data, status)
     )
     .finally(->
-      $scope.$editor.find('button').prop('disabled', false)
+      $scope.editor.find('button').prop('disabled', false)
     )
 
   # Validation
@@ -195,10 +195,10 @@ myApp.controller 'TagsController', ['$scope', '$http', '$timeout', ($scope, $htt
     if status < 500
       if data.errors.name
         $scope.errors['tag_name'] = data.errors.name.join(', ')
-        $scope.$editor.find('#tag-name-input')
+        $scope.editor.find('#tag-name-input')
         .notify($scope.errors['tag_name'], {className: 'error', positon: 'top center'})
     else
-      $scope.$editor.parents('div:first')
+      $scope.editor.parents('div:first')
       .notify('Existió un error al crear', {className: 'error', positon: 'top center'})
 
 

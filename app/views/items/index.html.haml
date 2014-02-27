@@ -10,29 +10,26 @@
 
 .row-fluid
   .span6
-    %h1 Items
+    %h1.ib Items
+    = search_tag
   .span6.r
+    = render 'tags/tags', model: 'Item'
+
     = link_to new_item_path, class: 'btn', id: 'new-item-link' do
       %i.icon-plus-sign
       Nuevo ítem
 
-
-= render 'items/search'
 
 - paginate_html = paginate @items
 
 = paginate_html
 
 -# cache [organisation_name, @items] do
-%ul#items-list.unstyled.listing
+%ul#items-list.unstyled.listing.has-row-check
   =render @items
 
 = paginate_html
 
-= render 'index_tour'
+= render 'layouts/search_url', url: expenses_path
 
-:javascript
-  $(function() {
-    $('#search_items').show();
-    $('.listing').rowCheck();
-  });
+= render 'index_tour'

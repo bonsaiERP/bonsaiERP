@@ -1,0 +1,5 @@
+- url ||= "/#{ controller_name }"
+:javascript
+  $(function() {
+    $('#search-form').attr('action', '#{url}')
+  })

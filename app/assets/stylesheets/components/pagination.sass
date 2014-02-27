@@ -1,0 +1,56 @@
+@import compass
+@import 'colors'
+
+
+ul.pagination
+  display: block
+  height: 40px
+  margin-left: 5px
+  list-style: none
+  li
+    width: 35px
+    color: #222222
+    float: left
+    margin: 0px
+    margin-left: 4px
+    padding: 0px
+    text-align: center
+    a
+      +border-radius(3px)
+      display: block
+      padding: 7px
+      color: #777777
+      border-radius: 3px
+      text-decoration: none
+      &:hover
+        background: #efefef
+  li.active
+    a
+      background: $blue
+      color: white
+//
+  ul.pagination li:hover a, ul.pagination li a:focus {
+    background: #e6e6e6; }
+  ul.pagination li.unavailable a {
+    cursor: default;
+    color: #999999; }
+  ul.pagination li.unavailable:hover a, ul.pagination li.unavailable a:focus {
+    background: transparent; }
+  ul.pagination li.current a {
+    background: #008cba;
+    color: white;
+    font-weight: bold;
+    cursor: default; }
+    ul.pagination li.current a:hover, ul.pagination li.current a:focus {
+      background: #008cba; }
+//
+//ul.pagination li {
+  float: left;
+  display: block; }
+
+/* Pagination centred wrapper */
+//.pagination-centered {
+//text-align: center; }
+//.pagination-centered ul.pagination li {
+  float: none;
+  display: inline-block; }

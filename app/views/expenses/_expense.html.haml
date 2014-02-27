@@ -19,8 +19,8 @@
           = expense.tax_tag
 
       = expense.inventory_tag
+      %tagsfor(tag_ids="#{expense.tag_ids}" id="#{expense.id}")
 
-      %ul.btags(data-tag_ids="#{expense.tag_ids}")
 
   .span4
     = expense.updater_label

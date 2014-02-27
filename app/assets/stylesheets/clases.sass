@@ -297,17 +297,11 @@ hr.light
   display: none
 
 
-/**************************************
- * List
- *************************************/
-ul.listing
-  margin: 40px 0px
-  >li
-    padding: 4px 0px 10px
-    border-bottom: 1px solid $grayLighter
-    h3, h4, h5
-      margin: 0px
-      font-weight: normal
+.has-error
+  +border-radius(3px)
+  background-color: $red
+  color: white
+  padding: 1px 4px
 
 .allowed-errors
   +border-radius(3px)
@@ -316,13 +310,6 @@ ul.listing
   padding: 10px
   a
     color: $blue
-
-.has-error
-  +border-radius(3px)
-  background-color: $red
-  color: white
-  padding: 1px 4px
-
 
 /*****************************************
  * borders

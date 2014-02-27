@@ -40,6 +40,7 @@ class Tag < ActiveRecord::Base
       when 'Expense' then Expense
       when 'AccountLedger' then AccountLedger
       when 'Item' then Item
+      when 'Contact' then Contact
       else
         false
       end

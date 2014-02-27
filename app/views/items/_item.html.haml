@@ -10,7 +10,7 @@
       %strong.fs110= item.code_tag
       = item.unit_tag
     .clearfix
-    %ul.btags(data-tag_ids="#{item.tag_ids}")
+    %tagsfor(tag_ids="#{item.tag_ids}" id="#{item.id}")
   .span6
     .row-fluid
       .span10

@@ -128,33 +128,19 @@ class ExpensesController < ApplicationController
 
     # Method to search expenses on the index
     def search_expenses
-      @expenses = case
-                  when params[:contact_id].present?
-                    Expense.contact(params[:contact_id]).order('date desc')
-                  when params[:search].present?
-                    Expenses::Query.new.search(params[:search])
-                  else
-                    Expense.order('date desc')
-                  end
+      if tag_ids
+        @expenses = Expenses::Query.index_includes Expense.any_tags(*tag_ids)
+      else
+        @expenses = Expenses::Query.new.index(params).order('date desc, accounts.id desc')
+      end
 
-      @expenses = @expenses.all_tags(*tag_ids)  if params[:search] && has_tags?
-
-      @expenses = @expenses.includes(:contact, :tax, :updater, :creator, :approver, :nuller).order('date desc, accounts.id desc').page(@page)
       set_expenses_filters
+      @expenses = @expenses.page(@page)
     end
 
     def set_expenses_filters
-      case
-      when params[:approved].present?
-        @expenses = @expenses.approved
-      when params[:error].present?
-        @expenses = @expenses.error
-      when params[:due].present?
-        @expenses = @expenses.due
-      when params[:nulled].present?
-        @expenses = @expenses.nulled
-      when params[:inventory].present?
-        @expenses = @expenses.inventory
+      [:approved, :error, :due, :nulled, :inventory].each do |filter|
+        @expenses = @expenses.send(filter)  if params[filter].present?
       end
     end
 
