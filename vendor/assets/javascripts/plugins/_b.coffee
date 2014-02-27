@@ -97,27 +97,6 @@
       when "psd" then return "/assets/photoshop.png"
       else "/assets/file.png"
 
-  # Function to determine background colors
-  idealTextColor: (bgColor) ->
-
-    nThreshold = 105
-    components = @getRGBComponents(bgColor)
-    bgDelta = (components.R * 0.299) + (components.G * 0.587) + (components.B * 0.114)
-
-    if ((255 - bgDelta) < nThreshold) then "#000000" else "#ffffff"
-
-  getRGBComponents: (color) ->
-
-    r = color.substring(1, 3)
-    g = color.substring(3, 5)
-    b = color.substring(5, 7)
-
-    {
-       R: parseInt(r, 16),
-       G: parseInt(g, 16),
-       B: parseInt(b, 16)
-    }
-
   currencyLabel: (val) ->
     if val?
       ['<span class="label bg-black" title=',

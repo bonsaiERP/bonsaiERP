@@ -1,5 +1,5 @@
 @App = {}
-@Plugin = {}
+@Plugins = {}
 @Config = {
   precision: 2
 }

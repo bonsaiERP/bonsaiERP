@@ -100,7 +100,7 @@ class Bride
   #
   getElementPosition: (el) ->
 
-Plugin.Bride = Bride
+Plugins.Bride = Bride
 
 template = """
 <div class="joyride-tip-guide" data-index="0" style="visibility: visible; display: block; top: 50px; left: 50px;">

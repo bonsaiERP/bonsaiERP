@@ -28,7 +28,11 @@ myApp.directive('ngTags', ($compile, $timeout) ->
           $scope.$editor = $cont.find('#tag-editor')
           $scope.$editor.dialog(autoOpen: false, width: 350)
           $scope.$colorEditor = $scope.$editor.find('#tag-bgcolor-input')
-          $scope.$colorEditor.minicolors({defaultValue: '#efefef'})
+          $scope.$colorEditor.minicolors({
+            defaultValue: '#efefef'
+            change: (event) ->
+              $scope.$colorEditor.trigger('change')
+          })
           $scope.model = $attrs.model
         )
 
@@ -105,20 +109,16 @@ myApp.directive('tagsfor', ($compile, $timeout) ->
   restrict: 'E'
   template: """
     <div class="tags-for">
-      <span ng-repeat="tag in tags track by $index" class="tag" style="background: {{tag.bgcolor}}; color: {{tag.color}}">
+      <span ng-repeat="tag in tags track by $index" class="tag tag{{tag.id}}" style="background: {{tag.bgcolor}}; color: {{tag.color}}">
         {{tag.name}}
       </span>
     </div>
   """
+  require: '^ngModel'
   scope: {
-    tagIds: '=tagids'
-    tagsFor: '=tagsFor'
+    tagIds: '=tagIds'
   }
-  link: ($scope, $elem, $attrs) ->
-    tags = Plugin.Tag.getTagsById($scope.tagIds)
-
-    if tags.length > 0
-      $timeout(->
-        $scope.tags = tags
-      )
+  controller: ($scope) ->
+    $scope.tagIds
+    $scope.tags = Plugins.Tag.getTagsById($scope.tagIds)
 )

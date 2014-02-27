@@ -26,4 +26,4 @@ Color = {
     if ((255 - bgDelta) < nThreshold) then "#000000" else "#ffffff"
 }
 
-@Plugin.Color = Color
+@Plugins.Color = Color

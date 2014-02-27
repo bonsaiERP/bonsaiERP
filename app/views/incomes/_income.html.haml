@@ -16,8 +16,7 @@
       = income.tax_tag
 
       = income.inventory_tag
-
-      %tagsfor(tagids="#{income.tag_ids}" tags-for="#{income.id}")
+      %tagsfor(tag_ids="#{income.tag_ids}" id="#{income.id}")
 
   .span4
     = income.updater_label
