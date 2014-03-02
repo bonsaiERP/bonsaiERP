@@ -12,15 +12,15 @@ module CdnHelper
     }
   }
 
-  def bonsai_scripts(*args)
+  def cdn_scripts(*args)
     inc = args.map do |src|
       content_tag(:script, nil, src: get_script(src))
     end.join("\n")
 
-    [inc, bonsai_scripts_local(*args)].join("\n").html_safe
+    [inc, cdn_scripts_local(*args)].join("\n").html_safe
   end
 
-  def bonsai_scripts_local(*args)
+  def cdn_scripts_local(*args)
     html = '<script type="text/javascript">'
     args.each do |src|
       html << "\nif(typeof window.#{SCRIPTS[src][:klass]} ===  'undefined') { #{js_load_script src} }"

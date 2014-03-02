@@ -30,7 +30,7 @@
 
 :javascript
   $(function() {
-    $('body').on('click', '#tour-new-tag-link', 
+    $('body').on('click', '#tour-new-tag-link',
       function() { $('#new-tag-link').trigger('click');
     });
 
@@ -41,7 +41,7 @@
       t.init();
     }
 
-    if(tags.legnth === 0) { tourTags(); }
+    //if(tags.legnth === 0) { tourTags(); }
 
     $('body').on( 'click','#help-tags-link', function() { tourTags() });
   });

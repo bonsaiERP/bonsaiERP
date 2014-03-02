@@ -15,7 +15,7 @@
 
 :javascript
   $(function() {
-    var t = new Plugin.Bride('#tour-items');
+    var t = new Plugins.Bride('#tour-items');
     $('#help').click(function() { t.init() });
 
     if(window.location.search == '' && $('#items-list li').length == 0) {

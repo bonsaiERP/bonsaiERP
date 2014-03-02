@@ -203,4 +203,9 @@ module ApplicationHelper
       end
     end
   end
+
+  # Sets the path for search
+  def set_search_path
+    render 'layouts/set_search_path'
+  end
 end
