@@ -104,7 +104,7 @@ myApp.controller 'MovementController', ['$scope', 'MovementDetail', ($scope, Mov
       true
     else
       event.preventDefault()
-      $('.top-left').notify({ message: { text: 'Debe seleccionar al menos un ítem' }, type: 'error' }).show()
+      $.notify('Debe seleccionar al menos un ítem', { className: 'error', position: 'top right' })
 
   # Add new item with add button
   $('body').on 'ajax-call', '.movement-details a.add-new-item', (event, resp) ->
