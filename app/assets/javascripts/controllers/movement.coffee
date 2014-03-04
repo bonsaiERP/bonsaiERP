@@ -107,8 +107,8 @@ myApp.controller 'MovementController', ['$scope', 'MovementDetail', ($scope, Mov
       $('.top-left').notify({ message: { text: 'Debe seleccionar al menos un ítem' }, type: 'error' }).show()
 
   # Add new item with add button
-  $('body').on 'ajax-call', 'table a.add-new-item', (event, resp) ->
-    scope = $(this).parents('tr:first').scope()
+  $('body').on 'ajax-call', '.movement-details a.add-new-item', (event, resp) ->
+    scope = $(this).parents('li.row-fluid:first').scope()
 
     scope.$apply (sc) ->
       sc.detail.exchange_rate = $scope.exchange_rate
