@@ -1,7 +1,7 @@
 - content_for :links do
   %ul.breadcrumbs.span6
     %li
-      &nbsp;
+      = link_to 'Items', items_path
 
   %ul.span6.breadcrumbs.r
     %a#help.dark(href='javascript:;')
@@ -12,12 +12,14 @@
   .span6
     %h1.ib Items
     = search_tag
-  .span6.r
+  .span6.r.buttons
     = render 'tags/tags', model: 'Item'
 
     = link_to new_item_path, class: 'btn', id: 'new-item-link' do
       %i.icon-plus-sign
       Nuevo ítem
+
+= render 'search'
 
 
 - paginate_html = paginate @items

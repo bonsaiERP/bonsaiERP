@@ -21,9 +21,17 @@ class IncomeHistoryPresenter < MovementHistoryPresenter
 
   def get_inventory_operation
     if operation_type == 'inventory_out'
-      context.text_green "Entrega de inventario <strong>#{inventory_operation_complete}</strong>"
+      "Entrega de inventario #{inventory_operation_tag}"
     else
       context.text_red 'Devolución de inventario'
+    end
+  end
+
+  def inventory_operation_tag
+    if mov_extras['to']['delivered'].to_s == 'true'
+      text_green 'completo', nil, 'b'
+    else
+      text_green 'parcial', nil
     end
   end
 

@@ -1,6 +1,8 @@
-%li
-  El
-  %i= l history.created_at
-  %strong= history.user
+%li.history
+  %i.icon-clock
+  .title
+    %span.time-label= l history.created_at
+    %strong= link_to history.user, '#'
 
-  = history.changes
+  .changes
+    = history.changes

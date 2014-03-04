@@ -4,14 +4,30 @@
 ul.listing
   margin: 40px 0px
   >li
-    padding: 4px 0px 10px
-    border-bottom: 1px solid $grayLighter
+    padding: 6px 0px 14px
+    //border-bottom: 1px solid $grayLighter
     h3, h4, h5
       margin: 0px
       font-weight: normal
+
+    &:hover
+      background: #f7f7f7
+  >.selected
+    &:hover
+      background: #E7FFC4
+
 
   .checkbox-l
     position: absolute
   .checkbox-r
     margin-left: 17px
 
+.selected
+  background-color: #E7FFC4
+
+.listing-title
+  font-weight: normal
+  text-decoration: 2px solid gray//$grayLighter
+
+.buttons
+  white-space: nowrap

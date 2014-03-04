@@ -87,14 +87,14 @@
 
 - unless @expense.is_draft?
   .row-fluid
-    .span6.well.well-small.bg-white
+    .span6.bg-white
       = render 'ledger_details', expense: @expense
 
-    .span6.well.well-small.bg-white
+    .span6.bg-white
       = render 'inventory_details', expense: @expense
 
 .row-fluid
-  .span6.well.well-small.bg-white
+  .span6.bg-white
     %h3.n
       Historial
 

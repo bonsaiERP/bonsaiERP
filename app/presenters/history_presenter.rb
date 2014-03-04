@@ -6,7 +6,7 @@ class HistoryPresenter < BasePresenter
       template.text_green_dark 'creó el registro', nil, 'b'
     else
       if (ch = present_changes).present?
-        "modificó: <br/>#{ch}".html_safe
+        ch.html_safe
       else
         'modificó la fecha de actualización'.html_safe
       end

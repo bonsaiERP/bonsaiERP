@@ -1,32 +1,7 @@
-.row-fluid.but
-  .buttons-list
-    .btn-group.search-tags(data-toggle='buttons-radio')
-      %button.btn.search(href='#search-pane') Busqueda
-      %button.btn.tags(href='#tags-pane') Etiquetas
+.search.input-append
+  = form_tag '/items', method: 'get', class: 'form-inline' do
 
-  .panes
-    #search-pane.button-pane.input-append
-      = form_tag '/items', method: 'get', class: 'form-inline' do
+    = text_field_tag 'search', '', placeholder: 'Buscar por nombre o código'
+    = submit_tag 'Buscar', class: 'btn'
 
-        = text_field_tag 'search', '', placeholder: 'Nombre, código o etiqueta'
-        = submit_tag 'Buscar', class: 'btn'
-
-        = link_to 'eliminar filtro', items_path  if params[:commit].present?
-
-    #tags-pane.button-pane
-      = render 'tags/tags', model: 'Item', list: '#items-list'
-
-%ul.unstyled.inline
-  %li
-    = link_to 'Todos', items_path, class: params_bold(:all)
-  %li
-    = link_to 'Venta', items_path(for_sale: true), class: bold_if(params[:for_sale] == 'true')
-  %li
-    = link_to 'No venta', items_path(for_sale: false), class: bold_if(params[:for_sale] == 'false')
-
-:javascript
-  $(function() {
-    $('.but').buttonTab();
-    new Plugin.TagSearch('#search');
-  })
-
+    = link_to 'eliminar filtro', items_path  if params[:commit].present?

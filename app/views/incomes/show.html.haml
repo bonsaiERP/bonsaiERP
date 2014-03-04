@@ -98,19 +98,19 @@
 - unless @income.is_draft?
   .row-fluid
     -# Ledgers
-    .span6.well.well-small.bg-white
+    .span6.bg-white
       = render 'ledger_details', income: @income
 
     -# Inventory
-    .span6.well.well-small.bg-white
+    .span6.bg-white
       = render 'inventory_details', income: @income
 
 .row-fluid
-  .span6.well.well-small.bg-white
+  .span6
     %h3.n
       Historial
 
-    %ul.unstyled.listing
+    %ul.unstyled
       = render partial: 'histories/history', collection: present(@income.histories, IncomeHistoryPresenter), as: :history
 
 

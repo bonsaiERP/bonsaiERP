@@ -64,18 +64,18 @@
 
     %ul.right-menu.fr
       %li
-        = link_to configurations_path, title: 'Configuración', data: { toggle: 'tooltip', placement: 'bottom' } do
+        = link_to configurations_path, title: 'Configuración' do
           %i.icon-cog
-          %span.hide Configuración
-      %li
-        = link_to user_path(current_user.id), title: 'Datos personales', data: { toggle: 'tooltip', placement: 'bottom' } do
+          Configuración
+      %li.user
+        = link_to user_path(current_user.id), title: 'Datos personales' do
           %i.icon-user
-          %span.hide Datos personales
+          = current_user
       %li
-        = link_to logout_path, title: 'Salir', data: { toggle: 'tooltip', placement: 'bottom' } do
+        = link_to logout_path, title: 'Salir' do
           %i.icon-logout
-          %span.hide Salir
-      %li.search-form
+          Salir
+      -#%li.search-form
         %form(method='get' action='#' id='search-form')
           %input(name='search' id='search' placeholder='buscar')
           %button.icon-search

@@ -3,7 +3,7 @@ class MovementHistoryPresenter < HistoryPresenter
     if new_item?
       template.text_green_dark "creó el #{movement}", nil, 'b'
     else
-      "modificó:<br/> #{present_changes.html_safe}".html_safe
+      present_changes.html_safe
     end
   end
 

@@ -5,10 +5,10 @@
 
 
 .row-fluid
-  .span4
+  .span6
     %h1.ib Egresos
     = search_tag
-  .span8.r
+  .span6.r.buttons
     = render 'tags/tags', model: 'Expense'
 
     .btn-group
@@ -20,6 +20,8 @@
         %i.icon-plus-sign
         Nuevo egreso
 
+
+= render 'search'
 
 
 %ul.unstyled.inline

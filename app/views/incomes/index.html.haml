@@ -4,13 +4,12 @@
       = link_to 'Ingresos', incomes_path
 
 -# content_for :search do
-  = render 'incomes/search'
 
 .row-fluid
   .span6
     %h1.ib Ingresos
     = search_tag
-  .span6.r
+  .span6.buttons.r
     = render 'tags/tags', model: 'Income'
     .btn-group
       = link_to export_incomes_path, class: 'btn' do
@@ -21,6 +20,8 @@
         %i.icon-plus-sign
         Nuevo ingreso
 
+
+= render 'incomes/search'
 
 %ul.unstyled.inline
   %li
@@ -38,6 +39,8 @@
 
 
 = render 'incomes/with_error'  if Income.error.any? && params[:error].blank?
+
+
 
 - paginate_html = paginate @incomes
 

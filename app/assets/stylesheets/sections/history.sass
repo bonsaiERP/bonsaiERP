@@ -1,0 +1,29 @@
+@import 'compass'
+@import 'colors'
+
+.time-label
+  +border-radius(2px)
+  font-style: italic
+  background: lighten($grayLighter, 4%)
+  color: $gray
+  padding: 0px 2px
+  font-size: 12px
+
+.history
+  border-left: 6px solid darken($grayLighter, 5%)
+  margin-bottom: 8px
+  padding: 4px 4px
+
+  .title
+    display: inline-block
+    vertical-align: top
+
+  .icon-clock
+    color: $grayLight
+    font-size: 130%
+    vertical-align: bottom
+  .changes
+    color: $gray
+    margin-left: 20px
+  &:hover
+    background: #f7f7f7
