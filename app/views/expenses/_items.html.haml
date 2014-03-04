@@ -1,55 +1,66 @@
-%table#items_table.table.decorated
-  %thead
-    %tr
-      %th.c Item
-      %th.c
-        Precio unitario
-        = currency_label expense.currency
-      %th.c Cantidad
-      %th.c Saldo
-      %th.r
-        Total fila
-        = currency_label expense.currency
-    - expense.expense_details.each do |det|
-      %tr
-        %td.span4= det.item
-        %td.span2.cur= ntc det.price
-        %td.span2.cur= ntc det.quantity
-        %td.span2.cur.error.b= ntc det.balance
-        %td.span2.total_row.cur= ntc det.total
-
-  %tr.extra.pad_top
-    %td{colspan: 3}
-    %td.r Subtotal
-    %td#subtotal.r= ntc expense.subtotal
-
-  - if expense.tax_percentage.to_f > 0
-    %tr.extra
-      %td(colspan='2')
-      %td.r(colspan='2')
-        %span.text-muted.muted Impuestos:
-        %strong= expense.tax_tag
-      %td#taxes.r= ntc expense.taxes
-
-  %tr.extra
-    %td{colspan: 3}
-    %td.r.b.dark Total
-    %td#total_value.r.b{'data-val' => expense.total}
-      = ntc expense.total
+%ul.unstyled.movement-details.listing
+  %li.header.row-fluid
+    .span4
+      Item
+    .span2
+      Precio
+      = currency_label expense.currency
+    .span2
+      Cantidad
+    .span2
+      %a(href="#inventory")Saldo inventario
+    .span2
+      Total línea
       = currency_label expense.currency
 
-  %tr.extra
-    %td.r(colspan="3")
+  - expense.expense_details.each do |det|
+    %li.row-fluid.detail
+      .span4.item
+        .item-name= det.item
+      .span2.r
+        %label.visible-phone Precio
+        .number= ntc det.price
+      .span2.r
+        %label.visible-phone Cantidad
+        .number= ntc det.quantity
+      .span2.r.red.b
+        %label.visible-phone Saldo inventario
+        .number= ntc det.balance
+      .span2.total_row.r
+        %label.visible-phone Total línea
+        .number= ntc det.total
 
+  %li.row-fluid
+    .span10.r
+      Subtotal
+    .span2.r
+      #subtotal.r= ntc expense.subtotal
 
-    %td.r.b.dark Cobrado
-    %td.r.b
+  - if expense.tax_percentage.to_f > 0
+    %li.row-fluid
+      .span10.r
+        %span.text-muted.muted Impuestos:
+        %strong= expense.tax_tag
+      .span2.r
+        #taxes.r= ntc expense.taxes
+
+  %li.row-fluid
+    .span10.r.b
+      Total
+    .span2.r
+      #total_value.r.b{'data-val' => expense.total}
+        = ntc expense.total
+        = currency_label expense.currency
+
+  %li.row-fluid
+    .span10.r.b.dark Cobrado
+    .span2.r
       = ntc expense.paid
       = currency_label expense.currency
 
-  %tr.extra
-    %td(colspan="3")
-    %td.r.b.dark Saldo
-    %td.r.b
-      = ntc expense.balance
+  %li.row-fluid
+    .span10.r.b.dark
+      Saldo
+    .span2.r.b
+      %span.red= ntc expense.balance
       = currency_label expense.currency

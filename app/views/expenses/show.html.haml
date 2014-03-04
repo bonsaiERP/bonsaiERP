@@ -14,7 +14,7 @@
               %h5.n.devolution-error= I18n.t("allowed_errors.#{v}").html_safe
 
 .row-fluid
-  .span7
+  .span6
     %h1.ib
       %strong(title='Código ingreso, Ingreso-Año-Número' data-toggle='tooltip')= @expense
       %small(title='Estado' data-toggle='tooltip')= @expense.state_tag
@@ -23,6 +23,8 @@
       = link_to @expense.contact, @expense.contact, title: 'Contacto', data: {toggle: 'tooltip'}
 
     .clearfix
+    %tagsfor(tag_ids="#{@expense.tag_ids}" id="#{@expense.id}")
+
     %h5.n.ib
       %span.muted Fecha:
       %i= lo @expense.date
@@ -37,7 +39,11 @@
 
       = @expense.nuller_label
 
-  .span5.r
+  .span6.r.buttons
+    %input.row-check.hidden(type='checkbox' id="#{@expense.id}" checked='checked')
+    -# Approve form
+    = render 'tags/tags', model: 'Expense', filter_tags: false
+
     -# Approve
     = link_to 'Aprobar', approve_expense_path(@expense.id), class: 'b btn btn-success', method: :patch  if @expense.is_draft?
 
@@ -45,9 +51,7 @@
     = link_to 'Anular', null_expense_path(@expense), method: :patch,  class: 'btn btn-danger b',
       confirm: 'Esta segur@ de anular el Ingreso?'  if @expense.can_null?
 
-    .btn-group
-      -#= link_to icon_new_text, new_expense_path, class: 'btn'
-      = link_to icon_edit_text, edit_expense_path(@expense.id), class: 'btn' unless @expense.is_nulled?
+    = link_to icon_edit_text, edit_expense_path(@expense.id), class: 'btn' unless @expense.is_nulled?
 
 .row-fluid
   .span6
@@ -90,7 +94,7 @@
     .span6.bg-white
       = render 'ledger_details', expense: @expense
 
-    .span6.bg-white
+    #inventory.span6.bg-white
       = render 'inventory_details', expense: @expense
 
 .row-fluid

@@ -64,15 +64,15 @@
 
     %ul.right-menu.fr
       %li
-        = link_to configurations_path, title: 'Configuración' do
+        = link_to configurations_path do
           %i.icon-cog
           Configuración
       %li.user
-        = link_to user_path(current_user.id), title: 'Datos personales' do
+        = link_to user_path(current_user.id) do
           %i.icon-user
           = current_user
       %li
-        = link_to logout_path, title: 'Salir' do
+        = link_to logout_path do
           %i.icon-logout
           Salir
       -#%li.search-form

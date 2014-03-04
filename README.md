@@ -68,3 +68,5 @@ cp app/assets/images/ajax-loder.gif public/assets
     ... // others?
   ]
 }
+
+427px

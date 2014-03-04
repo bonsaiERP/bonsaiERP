@@ -10,7 +10,7 @@ myApp.controller 'TagsController', ['$scope', '$http', '$timeout', ($scope, $htt
   $scope.errors = {}
 
   $scope.disableApply = ->
-    not($scope.tagsAny('checked', true)) or $('input.row-check:checked').length is 0
+    $('input.row-check:checked').length is 0
 
   # Detect changes on tags
   $('body').on('click', 'input.row-check', ->

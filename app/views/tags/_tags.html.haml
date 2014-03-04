@@ -1,4 +1,4 @@
-- filter_tags ||= true
+- filter_tags = defined?(filter_tags) ? filter_tags : true
 - url ||= controller_name
 %a.btn(href="javascript:void(0)" ng-tags='#{filter_tags}' url="/#{url}" tag_ids="#{tag_ids}" model="#{model}")
   %i.icon-tags

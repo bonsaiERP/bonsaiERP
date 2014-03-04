@@ -6,7 +6,7 @@ class IncomesController < ApplicationController
   include Controllers::Print
 
   #respond_to :html, :js, :pdf
-  before_filter :set_income, only: [:approve, :null, :inventory]
+  before_filter :set_income, only: [:approve, :null, :inventory, :destroy]
 
   # GET /incomes
   def index
@@ -56,18 +56,6 @@ class IncomesController < ApplicationController
       redirect_to income_path(@is.income), notice: 'El Ingreso fue actualizado!.'
     else
       render 'edit'
-    end
-  end
-
-  # DELETE /incomes/:id
-  def destroy
-    if @income.approved?
-      flash[:warning] = "No es posible anular la nota #{@transaction}."
-      redirect_transaction
-    else
-      @transaction.null_transaction
-      flash[:notice] = "Se ha anulado la nota #{@transaction}."
-      redirect_to @transaction
     end
   end
 
