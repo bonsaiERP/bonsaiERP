@@ -39,6 +39,7 @@ input#exchange_rate
 
     input.item-name
       width: 400px
+      text-align: left
 
     span.space
       width: 18px
@@ -55,11 +56,6 @@ input#exchange_rate
 
     .number
       display: inline-block
-
-    .item-name
-      display: inline-block
-      min-width: 300px
-      padding-right: 10px
 
 @media(max-width: 950px)
   .movement-details
@@ -95,5 +91,8 @@ input#exchange_rate
       .number
         width: 120px
 
-      .item-name
-        font-size: 115%
+      div.item-name
+        float: right
+        font-size: 120%
+        text-align: right
+        padding-right: 10px
