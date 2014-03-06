@@ -50,7 +50,6 @@ group :development, :test do
   gem 'pry-rails'
   gem 'pry-nav'
   gem 'foreman'
-  gem 'rb-readline'
 end
 
 # Test

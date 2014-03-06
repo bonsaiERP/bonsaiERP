@@ -15,7 +15,7 @@ class Movements::Export
   def export(rel, col_sep = ",")
     CSV.generate(col_sep: col_sep) do |csv|
       csv << csv_header
-      rel.joined.active.date_range(date_range.range).order('date asc, id asc').each do |trans|
+      rel.joined.active.date_range(date_range.range).order('date asc, id asc').for_each do |trans|
         self.rate = trans.exchange_rate
 
         csv << [trans.name, state(trans.state), date(trans.date), trans.cont, rep(trans.description),
