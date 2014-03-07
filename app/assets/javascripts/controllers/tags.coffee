@@ -156,6 +156,7 @@ myApp.controller 'TagsController', ['$scope', '$http', '$timeout', ($scope, $htt
 
       # Set global tags_hash variable
       window.bonsai.tags_hash[data.id] = { name: data.name, label: data.name, bgcolor: data.bgcolor, id: data.id }
+      window.bonsai.tags.push { name: data.name, label: data.name, bgcolor: data.bgcolor, id: data.id }
       # Update all related
       sel = ".tag#{data.id}"
       $(sel).text(data.name).css({background: data.bgcolor, color: color})
@@ -168,12 +169,16 @@ myApp.controller 'TagsController', ['$scope', '$http', '$timeout', ($scope, $htt
     )
 
   # Creates new tag
+  tagsDiv = $('.tags-div')
   $scope.create = ->
     $http.post('/tags', $scope.getFormData())
     .success((data, status) ->
       $scope.tags.push { name: data.name, bgcolor: data.bgcolor, id: data.id }
       # Set global tags_hash variable
-      window.bonsai.tags_hash = [data.id] = { name: data.name, label: data.name, bgcolor: data.bgcolor, id: data.id }
+      window.bonsai.tags_hash[data.id] = { name: data.name, label: data.name, bgcolor: data.bgcolor, id: data.id }
+      $timeout(->
+        tagsDiv.scrollTo(tagsDiv.height() + 400)
+      , 30)
       $scope.editor.dialog('close')
     )
     .error((data, status)->

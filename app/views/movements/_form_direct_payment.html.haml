@@ -9,7 +9,7 @@
       'ng-model' => 'exchange_rate', 'ng-disabled' => 'same_currency', 'ng-change' => 'setDetailsPrices()', 'ng-initial' => true }
 
 - if movement.is_draft?
-  %input#accounts(type='hidden' data-accounts='#{Accounts::Query.new.money_options.to_json}')
+  %input#accounts(type='hidden' data-accounts='#{Accounts::Query.new.bank_cash_options.to_json}')
   %br
   .well.well-small
     .row-fluid
