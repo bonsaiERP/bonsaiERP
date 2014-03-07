@@ -27,7 +27,8 @@ class Movements::History
 
     def filter
       history_data['extras']['from'].each do |k, v|
-        if v == history_data['extras']['to'][k].to_s
+        ext = history_data['extras']
+        if v == ext['from'][k.to_s].to_s || v == ext['to'][k.to_sym].to_s
           history_data['extras']['from'].delete(k)
           history_data['extras']['to'].delete(k)
         end

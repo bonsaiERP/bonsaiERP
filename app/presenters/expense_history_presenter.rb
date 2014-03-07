@@ -21,7 +21,7 @@ class ExpenseHistoryPresenter < MovementHistoryPresenter
 
   def get_inventory_operation
     if operation_type == 'inventory_in'
-      context.text_green "Entrega de inventario <strong>#{inventory_operation_complete}</strong>"
+      context.text_green "Recepción de inventario <strong>#{inventory_operation_complete}</strong>"
     else
       context.text_red 'Devolución de inventario'
     end

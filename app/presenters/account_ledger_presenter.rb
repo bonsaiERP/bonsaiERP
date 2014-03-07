@@ -57,7 +57,7 @@ class AccountLedgerPresenter < BasePresenter
   def amount_ref
     case to_model.operation
     when 'payin', 'payout', 'devin', 'devout', 'lgcre', 'lrcre'
-      amount
+      amount_currency
     when 'servin', 'servex', 'lgpay', 'lgint', 'lrpay', 'lrint'
       related_amount
     when 'trans'
