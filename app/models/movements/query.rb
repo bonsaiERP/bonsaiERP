@@ -29,10 +29,6 @@ class Movements::Query
     .group(:currency)
   end
 
-  def joined(sel = join_select)
-    rel.select(sel).joins{transaction}.joins{contact}
-  end
-
   private
 
     def self.index_includes(rel)

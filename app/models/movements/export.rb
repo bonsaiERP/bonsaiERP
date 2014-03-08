@@ -15,11 +15,13 @@ class Movements::Export
   def export(rel, col_sep = ",")
     CSV.generate(col_sep: col_sep) do |csv|
       csv << csv_header
-      rel.joined.active.date_range(date_range.range).order('date asc, id asc').for_each do |trans|
-        self.rate = trans.exchange_rate
+      rel.active.date_range(date_range.range)
+      .includes(:contact)
+      .order('date asc, id asc').find_each do |mov|
+        self.rate = mov.exchange_rate
 
-        csv << [trans.name, state(trans.state), date(trans.date), trans.cont, rep(trans.description),
-                val_cur(trans.tot), val_cur(trans.balance), trans.exchange_rate, trans.currency]
+        csv << [mov.name, state(mov.state), date(mov.date), mov.contact, rep(mov.description),
+                val_cur(mov.total), val_cur(mov.balance), mov.exchange_rate, mov.currency]
       end
     end
   end
@@ -39,10 +41,11 @@ class Movements::Export
     end
 
     def csv_header
-      %W(#{trans_name} Estado Fecha Contacto Descripción Total\ #{currency} Saldo\ #{currency} Tipo\ de\ Cambio Moneda)
+      %W(#{movement_name} Estado Fecha Contacto Descripción Total\ #{currency} Saldo\ #{currency} Tipo\ de\ Cambio Moneda)
     end
 
-    def trans_name
+    def movement_name
+
     end
 
     def state(st)
