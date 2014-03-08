@@ -29,12 +29,12 @@
 
     .span5
       .row-fluid
-        .span3
-          %span.muted Cantidad:
+        .span6
+          %label Cantidad
           = minimum_stock_tag stock
-        .span9
+        .span6
           .inline-cont
-            %span.muted(title='Iventario mínimo') Inv. mínimo:
+            %label Invenatio mínimo
             %span.inline-data(data-value='#{stock.minimum}')= ntc stock.minimum
             = link_to icon('icon-pencil', 'Editar mínimo'), stock_path(stock.id), class: 'dark inline-edit',
               data: { type: 'number', name: 'minimum', notify: '.top-right', minimum: 0 }
