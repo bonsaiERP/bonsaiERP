@@ -42,7 +42,7 @@
   .span6.r.buttons
     %input.row-check.hidden(type='checkbox' id="#{@expense.id}" checked='checked')
     -# Approve form
-    = render 'tags/tags', model: 'Expense', filter_tags: false
+    = render 'tags/tags', model: 'Expense', hide_tags_filter: true
 
     -# Approve
     = link_to 'Aprobar', approve_expense_path(@expense.id), class: 'b btn btn-success', method: :patch  if @expense.is_draft?

@@ -2,11 +2,12 @@
 myApp.directive('ngTags', ($compile, $timeout) ->
   restrict: 'A'
   scope: {
-    showFilter: '=ngTags'
+    hideFilter: '=ngTags'
     tagIds: '=tagIds'
     model: '=model'
   }
   link: ($scope, elem, attrs) ->
+    console.log $scope.showFilter, attrs.ngTags
     elem.click( (event) ->
       clicked = true
       if not elem.data('clicked')
@@ -96,7 +97,7 @@ contHtml = """
   </div>
 
   <div class='buttons'>
-    <button ng-disabled='!tagsAny("checked", true)' ng-click="filter()" ng-show="showFilter" class='btn btn-success btn-small'>Filtrar</button>
+    <button ng-disabled='!tagsAny("checked", true)' ng-click="filter()" ng-hide="hideFilter" class='btn btn-success btn-small'>Filtrar</button>
     <button class='btn btn-small' ng-click='newTag()'><i class="icon-plus-circle"></i> Nueva</button>
     <button ng-disabled='disableApply()' class="btn btn-primary btn-small apply-tags" ng-click="applyTags()">Applicar</button>
   </div>

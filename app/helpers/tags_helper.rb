@@ -11,4 +11,5 @@ module TagsHelper
       [el[:id], el]
     }]
   end
+
 end
