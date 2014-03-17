@@ -10,6 +10,10 @@ Tag = {
       Plugins.Color.idealTextColor color
     catch e
       '#ffffff'
+  getHtml: (tag) ->
+    """<span class="tag tag#{tag.id}" style="background: #{tag.bgcolor}; color: #{@textColor(tag.bgcolor)}">
+        #{tag.name}
+    </span>"""
 }
 
 @Plugins.Tag = Tag

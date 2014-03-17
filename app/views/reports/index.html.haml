@@ -65,12 +65,10 @@
 :javascript
   $(function() {
     $('#tags').select2({
-      data: #{ Tag.list.to_json(methods: :text) },
+      data: window.bonsai.tags,
       multiple: true,
-      formatResult: Plugin.TagFormater.formatResult,
-      formatSelection: Plugin.TagFormater.formatSelect,
-      containerCssClass: 'btags',
-      dropdownCssClass: 'btags',
+      formatResult: function(tag) { return Plugins.Tag.getHtml(tag) },
+      formatSelection: function(tag) { return Plugins.Tag.getHtml(tag) },
       escapeMarkup: function(t) { return t }
     });
 
