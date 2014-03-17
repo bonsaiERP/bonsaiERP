@@ -1,17 +1,17 @@
 source 'https://rubygems.org'
 
 ruby '2.1.1'
-gem 'rails', '4.0.3'
+gem 'rails', '4.0.4'
 
 # Assets
-gem 'sass-rails' , '~> 4.0.1'
+gem 'sass-rails' , '~> 4.0.2'
 gem 'coffee-rails' , '~> 4.0.1'
 gem 'uglifier' #    , '>= 2.3.0'
 #gem 'jquery-rails'
 
 # gem 'turbo-sprockets-rails3'# Speed assets:precompile
 
-gem 'compass-rails', '~> 1.1.3'#, '~> 2.0.alpha.0' # Extend css clases
+gem 'compass-rails', '~> 1.1.6'#, '~> 2.0.alpha.0' # Extend css clases
 gem 'pg' # Postgresql adapter
 gem 'virtus' # Model generation in simple way
 gem 'squeel' # Better SQL queries

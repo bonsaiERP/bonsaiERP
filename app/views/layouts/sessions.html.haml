@@ -9,7 +9,8 @@
     = csrf_meta_tag
 
     %title Bonsai
-    = stylesheet_link_tag "application"
+    = stylesheet_link_tag 'application'
+
     = cdn_scripts 'jquery', 'angular'
     = javascript_include_tag "application"
     -if Rails.env.production?
