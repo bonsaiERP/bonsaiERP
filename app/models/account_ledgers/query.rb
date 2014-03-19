@@ -26,6 +26,14 @@ class AccountLedgers::Query
     payments(account_id).order('date desc, id desc')
   end
 
+  def search(search)
+    s = "%#{search}%"
+    AccountLedger
+    .includes(:account, :account_to)
+    .eager_load(:contact)
+    .where { (account.name.like s) | (account_to.name.like s) | (contact.matchcode.like s) | (name.like s) }
+  end
+
   private
 
     def payment_columns(account_id)

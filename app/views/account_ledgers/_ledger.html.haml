@@ -1,30 +1,35 @@
-%li.row-fluid
-  - ledger = present ledger
-  .span5
-    %h4
-      = ledger.verified_tag
-      = link_to ledger, ledger
-      = ledger.operation_tag
-      = ledger.nulled_tag
-    %h5= link_to ledger.account_contact_tag, ledger.account_contact
-    %p
-      %h5
-        %i= l ledger.date.to_date
-        &nbsp;
-        %span.muted De:
-        = link_to ledger.account, ledger.account
-        %span.muted A:
-        = link_to ledger.account_to, ledger.account_to
-  .span5
-    .span7
-      %i.icon-file.muted(data-toggle='tooltip' title="referencia")
-      = nl2br ledger.reference
-    .span5.r
-      %span.muted Cantidad
-      = ntc ledger.amount_ref(account.id)
-      = currency_label ledger.currency_ref(account.id)
-  .span2
-    = ledger.creator_label.html_safe
-    = ledger.approver_label.html_safe
-    = ledger.nuller_label.html_safe
+- ledger = present ledger  unless ledger.is_a?(AccountLedgerPresenter)
+- ledger.current_account_id = ledger.account_id
 
+%li.row-fluid.account_ledger(id='#{ledger.id}')
+  .span5
+    %h4.ib
+      = link_to ledger, ledger, class: 'code', title: 'Código'
+    %strong= ledger.operation_tag
+
+    = ledger.status_tag
+
+    .clearfix
+    = ledger.contact_link_tag
+
+    %p
+      %i= l ledger.date.to_date
+      %span.muted De:
+      = link_to ledger.account, ledger.account_url
+      %span.muted A:
+      = link_to ledger.account_to, ledger.account_to_url
+  .span5
+    = ledger.updater_label
+    = ledger.creator_label
+    = ledger.approver_label
+    = ledger.nuller_label
+    .clearfix
+
+    .inline-cont
+      = link_to icon('icon-pencil', 'Editar referencia'), account_ledger_path(ledger.id), class: 'dark inline-edit',
+        data: { type: 'textarea', name: 'reference', notify: '.top-left' }
+      %i.icon-file.muted(data-toggle='tooltip' title="referencia")
+      %span.inline-data= nl2br ledger.reference
+  .span2.r
+    = ntc ledger.amount
+    = currency_label ledger.currency

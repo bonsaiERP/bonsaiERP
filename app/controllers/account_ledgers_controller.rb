@@ -8,7 +8,15 @@ class AccountLedgersController < ApplicationController
 
   # GET /account_ledger
   def index
-    @ledgers = AccountLedger.pendent
+    if params[:pendent]
+      @title = "Transacciones no pendientes"
+      @ledgers = AccountLedger.pendent.include(:account, :account_to, :contact)
+    else
+      @title = "Transacciones"
+      @ledgers = AccountLedgers::Query.new.search(params[:search])
+    end
+
+    @ledgers = @ledgers.includes(:creator, :updater, :approver).order(:date, :id).reverse_order.page(@page)
   end
 
   # GET /account_ledgers/:id
@@ -82,4 +90,5 @@ class AccountLedgersController < ApplicationController
     def set_ledger
       @account_ledger = AccountLedger.find(params[:id])
     end
+
 end

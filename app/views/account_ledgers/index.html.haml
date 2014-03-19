@@ -1,34 +1,15 @@
-%h1 Transacciones no verificadas
+%h1= @title
 
-%span.muted Seleccione haciendo click en las transacciones para verficar o anular
+- html = paginate @ledgers
+
+= html
+
+.input-append.search
+  = form_tag '/account_ledgers', method: 'get', class: 'form-inline' do
+    = text_field_tag 'search', '', placeholder: 'Buscar por cuenta, contacto o referencia', autocomplete: 'off'
+    = submit_tag 'Buscar', class: 'btn'
 
 %ul.unstyled.listing
-  - @ledgers.each do |al|
-    - al = present al
-    %li.row-fluid
-      .span5
-        %h4
-          = al.status_tag
-          = link_to al, al
-          = al.operation_tag
-        %h5= link_to al.account_contact_tag, al.account_contact
-        %p
-          %h5
-            %i= l al.date.to_date
-            &nbsp;
-            %span.muted De:
-            = link_to al.account, al.account
-            %span.muted A:
-            = link_to al.account_to, al.account_to
-      .span5
-        .span7
-          %i.icon-file.muted(data-toggle='tooltip' title="referencia")
-          = nl2br al.reference
-        .span5.r
-          %span.muted Cantidad
-          = ntc al.amount
-          = currency_label al.currency
-      .span2
-        = al.creator_label.html_safe
-        = al.approver_label.html_safe
-        = al.nuller_label.html_safe
+  = render partial: 'ledger', collection: @ledgers, as: :ledger
+
+= html
