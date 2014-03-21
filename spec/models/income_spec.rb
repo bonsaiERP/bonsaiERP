@@ -96,7 +96,7 @@ describe Income do
     ref_num = Income.get_ref_number
     ref_num.should eq("I-#{y}-0001")
 
-    Income.stub_chain(:order, :limit, pluck: ["I-#{y}-0001"])
+    Income.stub_chain(:order, :reverse_order, :limit, pluck: ["I-#{y}-0001"])
 
     Income.get_ref_number.should eq("I-#{y}-0002")
 

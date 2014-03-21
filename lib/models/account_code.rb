@@ -15,7 +15,7 @@ module Models::AccountCode
   alias_method :get_ref_number, :get_code_number
 
   def get_current_code
-    order('name desc').limit(1).pluck(:name).first
+    order(:id).reverse_order.limit(1).pluck(:name).first
   end
 
   def current_year

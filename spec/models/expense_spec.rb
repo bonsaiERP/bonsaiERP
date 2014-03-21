@@ -87,7 +87,7 @@ describe Expense do
     ref_num = Expense.get_ref_number
     ref_num.should eq("E-#{y}-0001")
 
-    Expense.stub_chain(:order, :limit, pluck: ["E-#{y}-0001"])
+    Expense.stub_chain(:order, :reverse_order, :limit, pluck: ["E-#{y}-0001"])
 
     Expense.get_ref_number.should eq("E-#{y}-0002")
 
