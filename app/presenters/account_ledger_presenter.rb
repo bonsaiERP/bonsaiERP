@@ -65,6 +65,14 @@ class AccountLedgerPresenter < BasePresenter
     end
   end
 
+  def amount_currency
+    if current_account_id == account_id
+      to_model.amount_currency
+    else
+      amount
+    end
+  end
+
   def related_amount
     if current_account_id === account_id
       amount_currency
