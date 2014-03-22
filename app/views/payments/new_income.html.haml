@@ -1,6 +1,5 @@
 %h4.title Cobrar
 
-
 #loan(ng-controller='PaymentController')
   = simple_form_for @payment, url: income_payment_path(@payment.account_id),
     html: { id: 'income-payment-form' } do |f|

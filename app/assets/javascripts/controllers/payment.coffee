@@ -1,12 +1,12 @@
 # Controller for creating the payments
-myApp.controller 'PaymentController', ['$scope', ($scope) ->
+myApp.controller 'PaymentController', ['$scope', '$window', ($scope, $window) ->
   $scope.accounts = angular.element('#accounts').data('accounts')
   $scope.same_currency = true
   $scope.amount_currency = 0
   $scope.is_bank = false
 
   $scope.isInverse = ->
-    $scope.organisation_currency isnt $scope.base_currency
+    $window.organisation.currency isnt $scope.base_currency
 
   $scope.amountCurrency = ->
     if $scope.isInverse()

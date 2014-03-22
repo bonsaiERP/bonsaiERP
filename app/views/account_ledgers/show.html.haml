@@ -1,3 +1,5 @@
+- @ledger = present(@ledger)  if @ledger.is_a?(AccountLedger)
+- @ledger.current_account_id = @ledger.account_id
 .row-fluid
   .span7
     %h1

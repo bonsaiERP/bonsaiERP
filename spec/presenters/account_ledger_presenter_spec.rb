@@ -11,7 +11,10 @@ describe AccountLedgerPresenter do
   end
 
   it "#amount_ref" do
-    al = build :account_ledger, amount: 700, currency: 'BOB', exchange_rate: 7, account_id: 1, account_to_id: 2
+    al = build :account_ledger, amount: 700, currency: 'BOB',
+      exchange_rate: 7, account_id: 1, account_to_id: 2,
+      operation: 'payin'
+
     al.account = account1
     al.account_to = account2
 
@@ -29,7 +32,10 @@ describe AccountLedgerPresenter do
   end
 
   it "#amount_ref" do
-    al = build :account_ledger, amount: 100, currency: 'USD', exchange_rate: 7, account_id: 2, account_to_id: 1
+    al = build :account_ledger, amount: 100, currency: 'USD',
+      exchange_rate: 7, account_id: 2, account_to_id: 1,
+      operation: 'payin'
+
     al.account = account2
     al.account_to = account1
 

@@ -55,13 +55,13 @@ class AccountLedgerPresenter < BasePresenter
 
   # Presents the amount referencing an account
   def amount_ref
-    case to_model.operation
-    when 'payin', 'payout', 'devin', 'devout', 'lgcre', 'lrcre'
-      amount_currency
-    when 'servin', 'servex', 'lgpay', 'lgint', 'lrpay', 'lrint'
-      related_amount
-    when 'trans'
+    case
+    when is_trans?
       related_trans_amount
+    when is_normal_payment?
+      amount_currency
+    when is_service_payment?
+      related_amount
     end
   end
 
@@ -81,6 +81,14 @@ class AccountLedgerPresenter < BasePresenter
     end
   end
 
+  def is_normal_payment?
+    %(Bank Cash StaffAccount).include?(account_to.class.to_s)
+  end
+
+  def is_service_payment?
+    !is_normal_payment?
+  end
+
   def related_trans_amount
     if current_account_id === account_id
       -amount_currency
@@ -89,8 +97,8 @@ class AccountLedgerPresenter < BasePresenter
     end
   end
 
-  def currency_ref(ac_id = current_account_id)
-    ac_id == to_model.account_to_id ? currency : account_currency
+  def currency_ref
+    current_account_id == account_to_id ? currency : account_currency
   end
 
   def account_contact_tag
