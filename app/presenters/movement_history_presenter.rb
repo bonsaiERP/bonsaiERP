@@ -91,5 +91,7 @@ class MovementHistoryPresenter < HistoryPresenter
     end
   end
 
-  def details_changes;  end
+  def details_changes
+
+  end
 end

@@ -7,7 +7,6 @@ gem 'rails', '4.0.4'
 gem 'sass-rails' , '~> 4.0.2'
 gem 'coffee-rails' , '~> 4.0.1'
 gem 'uglifier' #    , '>= 2.3.0'
-#gem 'jquery-rails'
 
 # gem 'turbo-sprockets-rails3'# Speed assets:precompile
 
