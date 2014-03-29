@@ -10,9 +10,9 @@ myApp.controller 'TransferenceController', ['$scope', ($scope) ->
 
   $scope.amountCurrency = ->
     if $scope.isInverse()
-      $scope.amount * $scope.exchange_rate
-    else
       $scope.amount / $scope.exchange_rate
+    else
+      $scope.amount * $scope.exchange_rate
 
   # Set select2
   $('#account_to_id').select2(
@@ -35,6 +35,7 @@ myApp.controller 'TransferenceController', ['$scope', ($scope) ->
         rate = fx.convert(1, {from: data.currency, to: $scope.base_currency }).toFixed(4) * 1
 
       scope.exchange_rate = rate
+
     $('.currency').html _b.currencyLabel data.currency
   )
 

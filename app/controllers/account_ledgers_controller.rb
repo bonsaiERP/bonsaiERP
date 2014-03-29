@@ -68,22 +68,6 @@ class AccountLedgersController < ApplicationController
     redirect_to account_ledger_path(@account_ledger.id)
   end
 
-  # POST /account_ledgers/:id/transference
-  def transference
-    @account = Account.find_by_id(params[:account_ledger][:account_id])
-    return redirect_to "/422" unless @account
-
-    params[:account_ledger][:operation] = "trans"
-    @account_ledger = AccountLedger.new_money(params[:account_ledger])
-    @account_ledger.reference = "Transferencia"
-
-    if @account_ledger.save
-      flash[:notice] = "Se ha realizado exitosamente la transferencia entre cuentas, ahora debe conciliarlas para completar la transferencia."
-      redirect_to account_ledger_path(@account_ledger, :ac_id => @account_ledger.account_id)
-    else
-      render :action => 'new_transference'
-    end
-  end
 
   private
 

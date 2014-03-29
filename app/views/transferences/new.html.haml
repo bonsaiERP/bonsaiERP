@@ -37,7 +37,7 @@
     .row-fluid.well.well-small
       .span3
         = f.input :amount,
-          label: "Cantidad #{currency_label @transference.account.currency}".html_safe,
+          label: "Cantidad <span class='currency'></span>".html_safe,
           input_html: { type: 'decimal', size: 10, 'ng-model' => 'amount', 'ng-initial' => true }
       .span3
         = f.input :exchange_rate, label: 'Tipo de cambio',
@@ -49,7 +49,7 @@
             TOTAL
           %h4
             {{ amountCurrency() | decimal }}
-            %span.currency
+            = currency_label @transference.account_currency
 
     .row-fluid
       .span3

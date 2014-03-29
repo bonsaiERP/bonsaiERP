@@ -22,6 +22,7 @@ class Transference < BaseForm
   validate :valid_accounts_currency
 
   delegate :currency, :inverse?, :same_currency?, to: :currency_exchange
+  delegate :currency, to: :account, prefix: true
   delegate :currency, to: :account_to, allow_nil: true, prefix: true
 
   # Initializes and sets verification to false if it's not set correctly
