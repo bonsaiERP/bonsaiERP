@@ -1,5 +1,5 @@
 @charset "UTF-8";
-
+/*
 @font-face {
   font-family: "bonsaierp";
   src:url("fonts/bonsaierp.eot");
@@ -11,7 +11,7 @@
   font-style: normal;
 
 }
-
+*/
 [data-icon]:before {
   font-family: "bonsaierp" !important;
   content: attr(data-icon);
