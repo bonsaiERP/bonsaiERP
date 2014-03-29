@@ -61,9 +61,6 @@ describe Transference do
     end
 
     context "account_to" do
-      before(:each) do
-        #Account.stub_chain(:active, :find_by_id).with(1).and_return(transaction)
-      end
 
       it "Not valid" do
         ob = Object.new
@@ -110,56 +107,103 @@ describe Transference do
 
   context "Save" do
     before(:each) do
-      AccountLedger.any_instance.stub(save: true)
-      ConciliateAccount.any_instance.stub(conciliate!: true)
+      #AccountLedger.any_instance.stub(save: true)
+      #ConciliateAccount.any_instance.stub(conciliate!: true)
+      UserSession.user = build :user, id: 10
     end
 
-    it "saves" do
-      t = Transference.new(valid_attributes)
-      t.stub(account: account, account_to: account_to)
-      ConciliateAccount.any_instance.should_receive(:conciliate!).and_return(true)
+    let(:attributes) {
+      {
+        exchange_rate: 1,
+        amount: 50, reference: 'El primer pago',
+        verification: false, date: Date.today, total: 50
+      }
+    }
 
+    it "saves" do
+      ac1 = create :cash, currency: 'BOB', amount: 100
+      ac2 = create :bank, currency: 'BOB', amount: 0
+
+      attrs = attributes.merge(account_id: ac1.id, account_to_id: ac2.id,
+                       exchange_rate: 7.1, amount: 10)
+
+      t = Transference.new(attrs)
+
+      #ConciliateAccount.any_instance.should_receive(:conciliate!).and_return(true)
       t.transfer.should be_true
 
       # Ledger
       t.ledger.should be_is_trans
       t.ledger.currency.should eq('BOB')
-      t.account_id.should eq(1)
-      t.account_to_id.should eq(2)
+      t.account_id.should eq(ac1.id)
+      t.account_to_id.should eq(ac2.id)
       t.ledger.should_not be_inverse
       t.ledger.should be_is_approved
-      t.ledger.amount.should == 50.0
+      t.ledger.amount.should == 10.0
+
+      Account.find(ac1.id).amount.should == 90
+      Account.find(ac2.id).amount.should == 10
     end
 
     it "to other currency account" do
-      account_to2 = build(:bank, id: 4, currency: 'USD')
+      ac1 = create :cash, currency: 'BOB', amount: 100
+      ac2 = create :bank, currency: 'USD', amount: 0
 
-      t = Transference.new(valid_attributes.merge(account_to_id: 3, exchange_rate: 7.0, verification: true, total: 7.0 * 10, amount: 10))
-      t.stub(account: account, account_to: account_to2)
+      attrs = attributes.merge(account_id: ac1.id, account_to_id: ac2.id,
+                       exchange_rate: 7.0, amount: 14)
+
+      t = Transference.new(attrs)
 
       t.transfer.should be_true
 
       # Ledger
       t.ledger.currency.should eq('USD')
-      t.account_id.should eq(1)
-      t.account_to_id.should eq(3)
+      t.account_id.should eq(ac1.id)
+      t.account_to_id.should eq(ac2.id)
       t.ledger.should_not be_inverse
       t.ledger.exchange_rate.should == 7.0
-      t.ledger.amount.should == 10
+      t.ledger.amount.should == 2
 
-      t.ledger.should_not be_is_approved
+      Account.find(ac1.id).amount.should == 100 - 14
+      Account.find(ac2.id).amount.should == 2
     end
 
     it "inverse" do
-      t = Transference.new(valid_attributes.merge(account_id: account_usd.id,
-          account_to_id: account.id, exchange_rate: 7.0, verification: true, total: 10, amount: 70))
-      t.stub(account: account_usd, account_to: account)
+      ac1 = create :cash, currency: 'USD', amount: 100
+      ac2 = create :bank, currency: 'BOB', amount: 0
+
+      attrs = attributes.merge(account_id: ac1.id, account_to_id: ac2.id,
+                       exchange_rate: 7.0, amount: 2)
+
+      t = Transference.new(attrs)
 
       t.transfer.should be_true
 
       t.ledger.should be_inverse
-      t.ledger.amount.should == 70
+      t.ledger.amount.should == 14
       t.exchange_rate.should == 7.0
+
+      Account.find(ac1.id).amount.should == 100 - 2
+      Account.find(ac2.id).amount.should == 14
+    end
+
+    it "#verification" do
+      ac1 = create :cash, currency: 'USD', amount: 100
+      ac2 = create :bank, currency: 'BOB', amount: 0
+
+      attrs = attributes.merge(account_id: ac1.id, account_to_id: ac2.id,
+                       exchange_rate: 7.0, amount: 2, verification: true)
+
+      t = Transference.new(attrs)
+
+      t.transfer.should be_true
+
+      t.ledger.should be_inverse
+      t.ledger.amount.should == 14
+      t.exchange_rate.should == 7.0
+
+      Account.find(ac1.id).amount.should == 100
+      Account.find(ac2.id).amount.should == 0
     end
 
   end

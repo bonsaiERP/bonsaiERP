@@ -10,9 +10,9 @@ myApp.controller 'TransferenceController', ['$scope', ($scope) ->
 
   $scope.amountCurrency = ->
     if $scope.isInverse()
-      $scope.amount / $scope.exchange_rate
-    else
       $scope.amount * $scope.exchange_rate
+    else
+      $scope.amount / $scope.exchange_rate
 
   # Set select2
   $('#account_to_id').select2(

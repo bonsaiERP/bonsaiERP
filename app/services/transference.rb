@@ -9,7 +9,6 @@ class Transference < BaseForm
   attribute :account_to_id, Integer
   attribute :date, Date
   attribute :amount, Decimal, default: 0
-  attribute :total, Decimal, default: 0
   attribute :exchange_rate, Decimal, default: 1
   attribute :reference, String
   attribute :verification, Boolean, default: false
@@ -28,6 +27,7 @@ class Transference < BaseForm
   # Initializes and sets verification to false if it's not set correctly
   def initialize(attrs = {})
     super
+
     self.verification = false unless [true, false].include?(verification)
   end
 
@@ -40,6 +40,8 @@ class Transference < BaseForm
   end
 
   def transfer
+    self.exchange_rate = 1  if account_currency == account_to_currency
+
     return false unless valid?
     @ledger = build_ledger
 
@@ -58,8 +60,10 @@ class Transference < BaseForm
       AccountLedger.new(
         account_id: account_id, exchange_rate: conv_exchange_rate,
         account_to_id: account_to_id, inverse: inverse?, operation: 'trans',
-        reference: reference, date: date, currency: account_to.currency,
-        status: get_status, amount: amount
+        reference: reference, date: date,
+        currency: account_to.currency,
+        status: get_status,
+        amount: amount_exchange
       )
     end
 
@@ -73,12 +77,12 @@ class Transference < BaseForm
       )
     end
 
-    def total_exchange
-      currency_exchange.exchange(amount + interest)
-    end
-
     def amount_exchange
-      currency_exchange.exchange(amount)
+      if inverse?
+        amount * exchange_rate
+      else
+        amount / exchange_rate
+      end
     end
 
     # Exchange rate used using inverse
