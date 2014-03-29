@@ -2,11 +2,11 @@
 
 @font-face {
   font-family: "bonsaierp";
-  src:url("fonts/bonsaierp.eot?v3");
-  src:url("fonts/bonsaierp.eot?v3#iefix") format("embedded-opentype"),
-    url("fonts/bonsaierp.woff?v3") format("woff"),
-    url("fonts/bonsaierp.ttf?v3") format("truetype"),
-    url("fonts/bonsaierp.svg?v3#bonsaierp") format("svg");
+  src:url("fonts/bonsaierp.eot");
+  src:url("fonts/bonsaierp.eot?#iefix") format("embedded-opentype"),
+    url("fonts/bonsaierp.woff") format("woff"),
+    url("fonts/bonsaierp.ttf") format("truetype"),
+    url("fonts/bonsaierp.svg#bonsaierp") format("svg");
   font-weight: normal;
   font-style: normal;
 
@@ -166,4 +166,19 @@
 }
 .icon-phone:before {
   content: "x";
+}
+.icon-word:before {
+  content: "R";
+}
+.icon-powerpoint:before {
+  content: "S";
+}
+.icon-pdf:before {
+  content: "T";
+}
+.icon-excel:before {
+  content: "U";
+}
+.icon-print:before {
+  content: "V";
 }
