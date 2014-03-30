@@ -3,6 +3,8 @@
 # email: boriscyber@gmail.com
 class Contact < ActiveRecord::Base
 
+  include Models::Tag
+
   before_destroy :check_relations
 
   ########################################

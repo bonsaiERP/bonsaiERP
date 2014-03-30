@@ -9,6 +9,7 @@ class ContactsController < ApplicationController
   def index
     @contacts = Contacts::Query.new.index.order('matchcode asc')
 
+    @contacts = @contacts.all_tags(*tag_ids)  if tag_ids
     @contacts = @contacts.search(search_term)  if search_term
 
     @contacts = @contacts.page(@page)

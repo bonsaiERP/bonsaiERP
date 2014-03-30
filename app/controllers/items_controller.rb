@@ -87,7 +87,7 @@ class ItemsController < ApplicationController
       @items = Item.includes(:unit, :stocks)
       @items = @items.where(for_sale: for_sale_param)  if params[:for_sale].present?
       @items = @items.search(search_term)  if search_term.present?
-      @items = @items.all_tags(*tag_ids)  if params[:search] && has_tags?
+      @items = @items.all_tags(*tag_ids)  if tag_ids
 
       @items = @items.order('items.name asc').page(@page)
     end
