@@ -24,7 +24,7 @@ class MoneyAccountPresenter < BasePresenter
   end
 
   def mobile_tag
-    "#{icon 'icon-mobile-phone muted', 'Móvil'} #{mobile}".html_safe  if mobile.present?
+    "#{icon 'icon-mobile muted', 'Móvil'} #{mobile}".html_safe  if mobile.present?
   end
 
   def email_tag

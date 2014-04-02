@@ -13,7 +13,7 @@
     .btn-group
       = link_to new_transference_path(account_id: @staff_account.id), class: 'btn',
         title: 'Transferir dinero a otra cuenta', 'data-toggle' => 'tooltip' do
-        %i.icon-exchange
+        %i.icon-switch
         Nueva transferencia
 
       = link_to icon_edit_text, edit_staff_account_path(@staff_account.id), class: 'btn'
@@ -27,7 +27,7 @@
 .row-fluid
   .span6
     .moneybox
-      %label SALDO EN CAJA
+      %label SALDO CUENTA
       %h5.n
         = ntc @staff_account.amount
         = currency_label @staff_account.currency

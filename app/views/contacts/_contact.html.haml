@@ -5,9 +5,8 @@
       %input.row-check(type='checkbox' id="#{contact.id}")
     .checkbox-r
       %h4
-        = link_to contact, contact, title: 'Identificado por'
+        = link_to contact, contact, title: 'Nombre'
       .cleafix
-      %span(title='Nombre completo')= contact.complete_name
       .clearfix
       = contact.email_tag
       .clearfix

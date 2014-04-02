@@ -6,9 +6,7 @@
   .span8
     %h1.n
       = @contact
-      %br
-      %small
-        = @contact.complete_name
+
   .span4.r.btn-group
     = link_to icon_new_text, new_contact_path, class: 'btn'
     = link_to icon_edit_text, edit_contact_path(@contact.id), class: 'btn'

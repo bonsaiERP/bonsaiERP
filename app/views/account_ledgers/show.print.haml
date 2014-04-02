@@ -6,7 +6,7 @@
       %small.b= @ledger.status_text
 
 .row
-  .col-6
+  .col-8
     = render_if @ledger.account_contact do
       %h3
         %span.text-muted Contacto:
@@ -15,11 +15,18 @@
 
     %h3.n
       %span.account
-        %span.muted.text-muted
-          = "#{@ledger.account_text}"
-        = @ledger.account
+        %p
+          %span.muted.text-muted
+            De cuenta
+          = @ledger.account
 
-  .col-6
+        %p
+          %span.muted.text-muted
+            A cuenta
+
+          = @ledger.account_to
+
+  .col-4
     .moneybox.fr
       %label TOTAL
       %h3.n

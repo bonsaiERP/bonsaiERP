@@ -7,7 +7,6 @@ myApp.directive('ngTags', ($compile, $timeout) ->
     model: '=model'
   }
   link: ($scope, elem, attrs) ->
-    console.log $scope.showFilter, attrs.ngTags
     elem.click( (event) ->
       clicked = true
       if not elem.data('clicked')
@@ -22,10 +21,11 @@ myApp.directive('ngTags', ($compile, $timeout) ->
         $cont = elem.data('popover').tip().find('.popover-content')
         # Compilation
         $cont.html(contHtml)
-        $compile($cont)($scope)
 
         # Modal dialog editor, hidden when created
         $timeout(->
+          $compile($cont)($scope)
+
           $scope.editor = $cont.find('#tag-editor')
           $scope.editor.dialog(autoOpen: false, width: 350)
           $scope.$colorEditor = $scope.editor.find('#tag-bgcolor-input')
@@ -38,7 +38,7 @@ myApp.directive('ngTags', ($compile, $timeout) ->
         )
 
         $scope.url = attrs.url
-        $scope.$apply()
+        #$scope.$apply()
 
         # Close when clicked outside popover
         $('body').on('click', (evt) ->
@@ -91,7 +91,8 @@ contHtml = """
       <li ng-repeat="tag in tags | filter:search">
         <input type="checkbox" ng-click='markChecked(tag)' ng-model='tag.checked'></span>
         <i class="icon-pencil" ng-click="editTag(tag, $index)"></i>
-        <span class='tag-item' style='background: {{ tag.bgcolor }};color: {{ color(tag.bgcolor) }}'>{{ tag.name }}</span>
+        <span class='tag-item' ng-click='markChecked(tag)'
+          style='background: {{ tag.bgcolor }};color: {{ color(tag.bgcolor) }}'>{{ tag.name }}</span>
       </li>
     </ul>
   </div>

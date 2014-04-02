@@ -7,11 +7,11 @@ class Accounts::Query
   end
 
   def money
-    @rel.active.where(type: %w(Cash Bank StaffAccount))
+    @rel.active.where(type: %w(Bank Cash StaffAccount)).order(:type, :name)
   end
 
   def bank_cash
-    @rel.active.where(type: %w(Cash Bank))
+    @rel.active.where(type: %w(Bank Cash)).order(:type, :name)
   end
 
   def bank_cash_options(cur = OrganisationSession.currency)
