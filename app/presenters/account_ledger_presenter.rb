@@ -29,12 +29,12 @@ class AccountLedgerPresenter < BasePresenter
   def status_tag
     case status
     when 'pendent'
-      html = ["<span class='label label-warning'>", icon('icon-warning-sign'),
+      html = ["<span class='label label-warning'>", icon('icon-warning'),
               " Pendiente</span>"].join('')
     when 'approved'
       html = "<span class='label label-success' title='Aprobado'>A</span>"
     when 'nulled'
-      html = "<span class='label label-important' title='Anulado'>A</span>"
+      html = "<span class='label label-important'>Anulado</span>"
     end
 
     html.html_safe

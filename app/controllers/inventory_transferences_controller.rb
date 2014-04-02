@@ -27,24 +27,25 @@ class InventoryTransferencesController < ApplicationController
     render json: items_hash
   end
 
-private
-  def items_hash
-    stocks.map {|st| {id: st.item_id, label: st.item.to_s, unit: st.item.unit_symbol, quantity: st.quantity} }
-  end
+  private
 
-  def stocks
-    Stock.available_items(params[:id], params[:term]).order("items.name").limit(20)
-  end
+    def items_hash
+      stocks.map {|st| {id: st.item_id, label: st.item.to_s, unit: st.item.unit_symbol, quantity: st.quantity} }
+    end
 
-  def trans_params
-    params.require(:inventories_transference)
-    .permit(:store_id, :store_to_id, :date, :description,
-            inventory_details_attributes: [:item_id, :quantity])
-  end
+    def stocks
+      Stock.available_items(params[:id], params[:term]).order("items.name").limit(20)
+    end
 
-  def set_store
-    @store = Store.active.find(params[:store_id])
-  rescue
-    redirect_to stores_path, error: 'Debe seleccionar un almacen activo.'
-  end
+    def trans_params
+      params.require(:inventories_transference)
+      .permit(:store_id, :store_to_id, :date, :description,
+              inventory_details_attributes: [:item_id, :quantity])
+    end
+
+    def set_store
+      @store = Store.active.find(params[:store_id])
+    rescue
+      redirect_to stores_path, error: 'Debe seleccionar un almacen activo.'
+    end
 end

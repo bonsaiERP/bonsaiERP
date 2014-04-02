@@ -1,6 +1,6 @@
 - ledger.current_account_id = current_account_id
 
-%li.row-fluid.account_ledger(id='#{ledger.id}')
+%li.row-fluid.account_ledger(id='#{ledger.id}' class="ledger-#{ledger.status}")
   .span5
     %h4.ib
       = link_to ledger, ledger, class: 'code', title: 'Código'
@@ -29,6 +29,6 @@
         data: { type: 'textarea', name: 'reference', notify: '.top-left' }
       %i.icon-file.muted(data-toggle='tooltip' title="referencia")
       %span.inline-data= nl2br ledger.reference
-  .span2.r
+  .span2.r.amount
     = ntc ledger.amount_ref
     = currency_label ledger.currency_ref

@@ -21,7 +21,7 @@
 
         - if store.stocks.mins.any?
           = link_to store_path(store.id, minimum_inventory: 1, anchor: 'items-tab'), class: 'text-error' do
-            %i.icon-warning-sign
+            %i.icon-warning
             Existen inventarios con mínimos
       .span4
         = store.phone_tag

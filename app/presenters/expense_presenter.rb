@@ -16,7 +16,7 @@ class ExpensePresenter < MovementPresenter
       html = <<-EOS
       <p class="help-block">
         Los pagos o devoluciones con
-        <span class="label label-warning"><i class="icon-warning-sign"></i> Pendiente</span>
+        <span class="label label-warning"><i class="icon-warning"></i> Pendiente</span>
         necesitan verificación o anulación
       </p>
       EOS

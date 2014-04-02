@@ -1,6 +1,6 @@
 - ledger.current_account_id = current_account_id
 
-%li.row-fluid.account_ledger(id='#{ledger.id}')
+%li.row-fluid.account_ledger(id='#{ledger.id}' class="ledger-#{ledger.status}")
   .span8
     %h4.ib
       = link_to ledger, ledger, class: 'code', title: 'Código'
@@ -38,6 +38,6 @@
         \=
         = ntc ledger.exchange_rate, precision: 4
         = currency_label ledger.currency
-  .span4.r
+  .span4.r.amount
     = ntc ledger.amount_ref
     = currency_label ledger.currency_ref

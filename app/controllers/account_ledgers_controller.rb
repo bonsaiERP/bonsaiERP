@@ -10,7 +10,7 @@ class AccountLedgersController < ApplicationController
   def index
     if params[:pendent]
       @title = "Transacciones no pendientes"
-      @ledgers = AccountLedger.pendent.include(:account, :account_to, :contact)
+      @ledgers = AccountLedger.pendent.includes(:account, :account_to, :contact)
     else
       @title = "Transacciones"
       @ledgers = AccountLedgers::Query.new.search(params[:search])

@@ -54,7 +54,7 @@
       = link_to icon_edit_text, edit_income_path(@income.id), class: 'btn' unless @income.is_nulled?
 
       = link_to income_path(@income.id, format: 'pdf'), class: 'btn' do
-        = image_tag 'pdf.png'
+        %i.icon-pdf
         PDF
 
       = link_to income_path(@income.id, format: 'print'), class: 'btn' do

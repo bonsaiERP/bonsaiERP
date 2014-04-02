@@ -5,7 +5,7 @@
     .span6=f.input :name, label: 'Nombre de su empresa', input_html: { size: INPUT_SIZE }
     .span6
       =f.input :currency, label: 'Moneda base', collection: currency_options,
-        hint: '<i class="icon-warning-sign"></i> No se puede cambiar en un futuro.'.html_safe
+        hint: '<i class="icon-warning"></i> No se puede cambiar en un futuro.'.html_safe
   .row-fluid
     .span6=f.input :country_code, label: 'País', collection: Country.options
     .span6=f.input :time_zone, as: :time_zone, label: 'Zona horaria'

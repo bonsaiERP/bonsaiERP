@@ -10,7 +10,7 @@ class ReportPresenter < Struct.new(:view_context)
   def pendent_ledgers
     total = AccountLedger.pendent.count
     if total > 0
-      link_to "<i class='icon-warning-sign'></i> Hay #{total} transaccion(es) no verificadas".html_safe, vc.account_ledgers_path, class: 'text-error'
+      link_to "<i class='icon-warning'></i> Hay #{total} transaccion(es) no verificadas".html_safe, vc.account_ledgers_path, class: 'text-error'
     end
   end
 

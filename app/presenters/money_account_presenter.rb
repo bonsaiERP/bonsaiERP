@@ -6,7 +6,7 @@ class MoneyAccountPresenter < BasePresenter
   def pendent_ledgers_tag
     if pendent_ledgers.any?
       link_to template.bank_path(id, pendent: true) , class: 'text-error' do
-        "#{icon 'icon-warning-sign'} Tiene transaccines pendientes".html_safe
+        "#{icon 'icon-warning'} Tiene transaccines pendientes".html_safe
       end
     end
   end

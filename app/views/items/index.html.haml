@@ -23,7 +23,7 @@
   %li
     = link_to "Todos", items_path, class: params_bold(:all)
   %li
-    = link_to "En venta", items_path(for_sale: true), class: param_bold_for(:for_sale, 'true')
+    = link_to "Venta", items_path(for_sale: true), class: param_bold_for(:for_sale, 'true')
   %li
     = link_to "No venta", items_path(for_sale: false), class: param_bold_for(:for_sale, 'false')
   %li

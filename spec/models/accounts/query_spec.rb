@@ -3,10 +3,12 @@ require 'spec_helper'
 describe Accounts::Query do
   it "#money" do
     active = Account.active
+
     Account.should_receive(:active).and_return(active)
     ret = Object.new
-    #ret.should_receive(:includes).with(:money_store)
-    active.should_receive(:where).with(type: %w(Cash Bank StaffAccount)).and_return(ret)
+    ret.should_receive(:order).with(:type, :name)
+
+    active.should_receive(:where).with(type: %w(Bank Cash StaffAccount)).and_return(ret)
 
     Accounts::Query.new.money
   end
