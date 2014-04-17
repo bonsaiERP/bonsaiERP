@@ -12,6 +12,7 @@ class MovementHistoryPresenter < HistoryPresenter
 
   def present_changes
     res = [filter_changes, mov_extras_changes, details_changes].flatten.compact.join(', ')
+
     if res.present?
       res
     else
@@ -20,13 +21,13 @@ class MovementHistoryPresenter < HistoryPresenter
   end
 
   def filter_changes
-    @filter_changes ||= history.map do |k, v|
-      case k
-      when :state then state_html(k, v)
-      when :error_messages, :extras, :updater_id, :nuller_id, :approver_id, details_col
+    @filter_changes ||= history.map do |key, val|
+      case key
+      when 'state' then state_html(key, val)
+      when 'error_messages', 'extras', 'updater_id', 'nuller_id', 'approver_id', details_col.to_s
         nil
       else
-        v.present? ? get_change(k, v) : nil
+        val.present? ? get_change(key, val) : nil
       end
     end
   end
@@ -37,10 +38,11 @@ class MovementHistoryPresenter < HistoryPresenter
     end
   end
 
-  def get_change(k, v)
-    [attr_text(k), ' de ',
-     code(format_for(v[:from], v[:type])), ' a ',
-     code(format_for(v[:to], v[:type]))
+  def get_change(key, val)
+    return  if val.is_a?(Array)
+   [attr_text(key), ' de ',
+     code(format_for(val[:from], val[:type])), ' a ',
+     code(format_for(val[:to], val[:type]))
     ].join('')
   end
 

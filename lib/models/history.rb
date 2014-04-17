@@ -5,10 +5,17 @@ module Models::History
     base.instance_eval do
       before_save :create_history
       has_many :histories, -> { order('histories.created_at desc, id desc') }, as: :historiable, dependent: :destroy
-      delegate :history_klass, to: self
+      delegate :history_instance, :history_cols, to: self
 
-      def history_klass
-        @history_klass ||= NullHistoryClass.new
+      def history_instance
+        @history_instance ||=begin
+          return @history_klass.new(history_cols)  if @history_klass.present?
+          NullHistoryClass.new
+        end
+      end
+
+      def history_cols
+        @history_cols
       end
     end
 
@@ -17,6 +24,11 @@ module Models::History
   module InstanceMethods
     def has_movement_history(details_col)
       @history_klass = Movements::History.new(details_col)
+    end
+
+    def has_history_details(klass, *cols)
+      @history_klass = klass
+      @history_cols = cols
     end
   end
 
@@ -29,10 +41,12 @@ module Models::History
         h = store_update
       end
       set_history_extras(h)
+      h.history_data = h.history_data.to_json
 
       h.save
     end
 
+    # Stores the class and the to_s attributes of the logged instance
     def set_history_extras(h)
       h.klass_type = self.class.to_s
       h.klass_to_s = self.to_s
@@ -44,11 +58,11 @@ module Models::History
     end
 
     def store_update
-      hist = histories.build(new_item: false, history_data: get_data, historiable_type: self.class.to_s,
+      histo = histories.build(new_item: false, history_data: get_data, historiable_type: self.class.to_s,
                       user_id: history_user_id)
+      history_instance.set_history(self, histo)
 
-      history_klass.set_history(self, hist)
-      hist
+      histo
     end
 
     def get_data(object = self)

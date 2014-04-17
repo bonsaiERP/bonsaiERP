@@ -14,8 +14,8 @@ class HistoryPresenter < BasePresenter
   end
 
   def present_changes
-    history.map do |k, v|
-      from, to = format_for(v[:from], v[:type]), format_for(v[:to], v[:type])
+    history.map do |key, val|
+      from, to = format_for(val[:from], val[:type]), format_for(val[:to], val[:type])
       "#{attr_text k} de #{code from} a #{code to}"
     end.join(', ')
   end
@@ -44,7 +44,7 @@ class HistoryPresenter < BasePresenter
 
     def format_for(val, typ)
       case typ
-      when 'string', 'integer', 'float'
+      when 'string', 'text', 'integer', 'float'
         val
       when 'boolean'
         "<i class='icon-#{val}'></i>"

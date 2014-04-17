@@ -7,7 +7,7 @@ class AccountLedgers::Query
   end
 
   def money(id)
-    @rel.where { (account_id.eq id) | (account_to_id.eq id) }
+    @rel.where(t[:account_id].eq(id).or(t[:account_to_id].eq(id)))
     .order('account_ledgers.date desc, account_ledgers.id desc')
     .includes(:contact, :account_to, :approver, :creator, :nuller, :updater)
   end
@@ -38,5 +38,9 @@ class AccountLedgers::Query
 
     def payment_columns(account_id)
       AccountLedger.column_names + ["account_id=#{account_id} AS is_account"]
+    end
+
+    def t
+      AccountLedger.arel_table
     end
 end

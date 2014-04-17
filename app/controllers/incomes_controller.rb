@@ -55,7 +55,7 @@ class IncomesController < ApplicationController
     if update_or_approve
       redirect_to income_path(@is.income), notice: 'El Ingreso fue actualizado!.'
     else
-      render 'edit'
+      render :edit
     end
   end
 

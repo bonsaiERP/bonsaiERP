@@ -288,4 +288,24 @@ describe Expense do
       exp.details.map(&:item_id).should eq([2])
     end
   end
+
+  describe 'scopes' do
+
+    it "::pendent" do
+      sql = <<-SQL
+SELECT \"accounts\".* FROM \"accounts\"  WHERE \"accounts\".\"type\" IN ('Expense') AND \"accounts\".\"state\" IN ('approved', 'paid') AND \"accounts\".\"amount\" != 0
+      SQL
+
+      expect(Expense.pendent.to_sql.squish).to eq(sql.squish)
+    end
+
+    it "::like" do
+      sql = <<-SQL
+ SELECT "accounts".* FROM "accounts" WHERE "accounts"."type" IN ('Expense') AND (("accounts"."name" ILIKE '%a%' OR "accounts"."description" ILIKE '%a%'))
+      SQL
+
+      expect(Expense.like('a').to_sql.squish).to eq(sql.squish)
+    end
+  end
+
 end
