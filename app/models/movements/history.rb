@@ -1,32 +1,32 @@
 # Class to track history on movements
 # test on spec/models/history_spec.rb
 class Movements::History
-  attr_reader :details_col, :hist, :movement
+  attr_reader :details_col, :histo, :movement
 
   delegate :state, :state_was, :state_changed?,
            :date, :date_was, :date_chaged?, :to_s,
            :due_date, :due_date_was, :due_date_changed?,
            to: :movement
 
-  delegate :history_data, to: :hist
+  #delegate :history_data, to: :histo
 
   def initialize(details_col)
-    @details_col = details_col
+    @details_col = details_col.is_a?(Array) ? details_col.first : details_col
   end
 
-  def set_history(movement, hist)
-    @movement, @hist = movement, hist
+  def set_history(movement, histo)
+    @movement, @histo = movement, histo
 
     filter
     set_details
     set_state_col
-    hist.operation_type = movement.operation_type
+    histo.operation_type = movement.operation_type
   end
 
   private
 
     def filter
-      history_data['extras']['from'].each do |k, v|
+      histo.history_data['extras']['from'].each do |k, v|
         ext = history_data['extras']
         if v == ext['from'][k.to_s].to_s || v == ext['to'][k.to_sym].to_s
           history_data['extras']['from'].delete(k)
@@ -34,12 +34,13 @@ class Movements::History
         end
       end
     rescue
-      # no cahnges
+      # no changes
     end
 
     def set_details
       det_hash = get_details
-      history_data[details_col] = det_hash  unless det_hash.empty?
+      #histo.history_data.merge!(details_col => {from: [], to: det_hash, type: 'array'})  unless det_hash.empty?
+      histo.history_data[details_col] = det_hash  unless det_hash.empty?
     end
 
     def get_details
@@ -61,8 +62,8 @@ class Movements::History
     end
 
     def set_state_col
-      unless history_data[:state].present?
-        set_due_date_state(history_data)  if due_date_changed?
+      unless histo.history_data[:state].present?
+        set_due_date_state(histo.history_data)  if due_date_changed?
       end
     end
 

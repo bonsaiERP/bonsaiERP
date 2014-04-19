@@ -53,8 +53,10 @@ module Models::HstoreMap
     methods.each do |meth|
       alias_method :"old_#{meth}", meth
       define_method :"#{meth}" do
-        if %w{true false}.include? send(:"old_#{meth}")
+        if %w(true false).include? send(:"old_#{meth}")
           send(:"old_#{meth}") == "true" ? true : false
+       elsif %w(0 1).include? send(:"old_#{meth}")
+          send(:"old_#{meth}") == "1" ? true : false
         else
           send(:"old_#{meth}")
         end

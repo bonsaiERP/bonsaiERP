@@ -472,4 +472,11 @@ describe Expenses::Form do
       exp.tax_in_out.should be_true
     end
   end
+
+
+  it "#expense.inventory?" do
+    OrganisationSession.stub(inventory?: false)
+    exp = Expenses::Form.new_expense
+    expect(exp.expense).not_to be_inventory
+  end
 end

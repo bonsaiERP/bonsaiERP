@@ -85,7 +85,7 @@ class Incomes::Form < Movements::Form
       { state: 'draft',
         ref_number: Income.get_ref_number,
         error_messages: {},
-        inventory:  OrganisationSession.inventory? || true
+        inventory: OrganisationSession.inventory?
       }
     end
 end

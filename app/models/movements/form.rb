@@ -78,4 +78,5 @@ class Movements::Form < BaseForm
     def unique_item_ids
       UniqueItem.new(self).valid?
     end
+
 end

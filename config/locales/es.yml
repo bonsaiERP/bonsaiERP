@@ -372,6 +372,15 @@ es:
       last: "&raquo;"
       truncate: "..."
 
+  # Models
+  movement:
+    states:
+      draft: Borrador
+      approved: Aprobado
+      paid: Pagado
+      nulled: Anulado
+      due: Atrasado
+
   ########################################
   # Translations for history
   item:

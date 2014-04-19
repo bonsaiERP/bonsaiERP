@@ -4,43 +4,37 @@ class History < ActiveRecord::Base
   belongs_to :historiable, polymorphic: true
   belongs_to :user
 
-  serialize :history_data, JSON
-  serialize :all_data, JSON
-
   store_accessor :extras, :klass_to_s, :operation_type
 
   def history_attributes
-    @history_attributes ||= history_data.keys.map(&:to_sym)
+    @history_attributes ||= history_data.keys
   end
 
   def history
-    @hist_data ||= get_typecasted read_attribute(:history_data)
+    @hist_data ||= get_typecasted
   end
 
   private
 
-    def get_typecasted(hash)
-      Hash[hash.map do |key, val|
-        [key.to_sym, typecast_hash(val) ]
+    def get_typecasted
+      Hash[history_data.map do |key, val|
+        [key, typecast_hash(val) ]
       end]
     end
 
-    def typecast_hash(v)
-      return typecast_array(v)  if v.is_a?(Array)
-      val = v || {}
-
+    def typecast_hash(val)
       case val['type']
-      when 'string', 'integer', 'boolean', 'float'
-        { from: v['from'], to: v['to'], type: v['type'] }
+      when 'string', 'text', 'integer', 'boolean', 'float'
+        { from: val['from'], to: val['to'], type: val['type'] }
       when 'date', 'datetime', 'time'
-        { from: typecast_transform(v['from'], v['type']),
-          to: typecast_transform(v['to'], v['type']), type: v['type'] }
+        { from: typecast_transform(val['from'], val['type']),
+          to: typecast_transform(val['to'], val['type']), type: v['type'] }
       when 'decimal'
-        { from: BigDecimal.new(v['from'].to_s),
-          to: BigDecimal.new(v['to'].to_s), type: v['type'] }
-       else
-         {}
+        { from: BigDecimal.new(val['from'].to_s),
+          to: BigDecimal.new(val['to'].to_s), type: val['type'] }
       end
+    rescue
+      {}
     end
 
     def typecast_transform(val, type)
@@ -50,15 +44,15 @@ class History < ActiveRecord::Base
     end
 
     def typecast_array(arr)
-      arr.map do |v|
-        _id = v.delete('id')
+      arr.map do |val|
+        _id = val.delete('id')
         case
-        when v['new_record']
-          { index: v['index'] , new_record: true }
-        when v['destroyed']
-          v.symbolize_keys
+        when val['new_record']
+          { index: val['index'] , new_record: true }
+        when val['destroyed']
+          val.symbolize_keys
         else
-          get_typecasted(v).merge(id: _id)
+          val.map { |ke, va|  get_typecasted(va).merge(id: _id) }
         end
       end
     end

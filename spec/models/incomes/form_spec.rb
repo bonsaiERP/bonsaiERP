@@ -510,4 +510,10 @@ describe Incomes::Form do
       is.income.should be_is_paid
     end
   end
+
+  it "#income.inventory?" do
+    OrganisationSession.stub(inventory?: false)
+    inc = Incomes::Form.new_income
+    expect(inc.income).not_to be_inventory
+  end
 end

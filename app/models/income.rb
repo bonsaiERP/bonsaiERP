@@ -4,7 +4,7 @@
 class Income < Movement
 
   include Models::History
-  has_movement_history :income_details
+  has_history_details Movements::History, :income_details
 
   self.code_name = 'I'
 
@@ -25,14 +25,15 @@ class Income < Movement
   scope :active,   -> { where(state: ['approved', 'paid']) }
   scope :paid, -> { where(state: 'paid') }
   scope :contact, -> (cid) { where(contact_id: cid) }
-  scope :pendent, -> { active.where{ amount.not_eq 0 } }
+  scope :pendent, -> { active.where.not(amount: 0) }
   scope :error, -> { active.where(has_error: true) }
   scope :due, -> { approved.where{due_date < Date.today} }
   scope :nulled, -> { where(state: 'nulled') }
   scope :inventory, -> { active.where("extras->'delivered' = ?", 'false') }
   scope :like, -> (search) {
     search = "%#{search}%"
-    where{(name.like search) | (description.like search)}
+    t = Income.arel_table
+    where(t[:name].matches(search).or(t[:description].matches(search) ) )
   }
   scope :date_range, -> (range) { where(date: range) }
 
