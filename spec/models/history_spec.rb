@@ -133,7 +133,7 @@ describe History do
       expect(e.histories).to have(3).items
       h = e.histories.first
 
-      expect(h.history).to eq({ 'expense_details' => [{ index: 2, new_record: true}] })
+      expect(h.history_data).to eq({ 'expense_details' => [{ 'new_record' => true, 'index' => 2 }] })
 
       # Update delete detail
       det = e.expense_details.map { |v| v.attributes.except('created_at', 'updated_at', 'original_price') }
@@ -145,12 +145,13 @@ describe History do
       expect(e.histories).to have(4).items
       expect(e.expense_details).to have(2).items
 
-      h = e.histories.first.history
-      h['expense_details'][0][:destroyed].should be_true
-      h['expense_details'][0][:index].should eq(2)
-      h['expense_details'][0][:item_id].should eq(10)
-      h['expense_details'][0][:price].should == "10.0"
-      h['expense_details'][0][:quantity].should == "2.0"
+      h = e.histories.first.history_data
+
+      h['expense_details'][0]['destroyed'].should be_true
+      h['expense_details'][0]['index'].should eq(2)
+      h['expense_details'][0]['item_id'].should eq(10)
+      h['expense_details'][0]['price'].should == "10.0"
+      h['expense_details'][0]['quantity'].should == "2.0"
 
       e.save
       expect(e.histories).to have(5).items
@@ -166,10 +167,12 @@ describe History do
       # Update and check due date
       today = Date.today
       e.due_date = today
+
       e.save.should be_true
 
       expect(e.histories).to have(2).items
       h = e.histories.first
+
       h.history['due_date'].should eq( { from: d, to: today, type: 'date' })
       h.history['state'].should eq( {from: 'due', to: 'approved', type: 'string'} )
 
@@ -181,4 +184,41 @@ describe History do
       h.history['state'].should eq( {from: 'approved', to: 'due', type: 'string'} )
     end
   end
+
+  describe "test different convertions" do
+    let(:subject) { History.new }
+
+    it "date" do
+      d = {'date' => {"from"=>"2014-04-17", "to"=>"2014-04-19", "type"=>"date"} }
+
+      subject.history_data = d
+      subject.history.should eq(
+        { 'date' => { from: Date.parse('2014-04-17'), to: Date.parse('2014-04-19'), type: 'date' } }
+      )
+    end
+
+    it "time" do
+      t = {'date' => {"from"=>"2014-04-19T14:46:12-04:00",
+                      "to"=>"2014-04-19T14:46:52-04:00", "type"=>"datetime"} }
+
+      subject.history_data = t
+      subject.history.should eq({
+        'date' => {
+          from: DateTime.parse('2014-04-19T14:46:12-04:00'),
+          to: DateTime.parse('2014-04-19T14:46:52-04:00'), type: 'datetime'
+        }
+      })
+    end
+
+    it "decimal" do
+      num = { 'num' => {'from' => '12.3' , 'to' => '14.5', 'type' => 'decimal'} }
+      subject.history_data = num
+
+      expect(subject.history).to eq({
+        'num' => { from: BigDecimal.new('12.3'), to: BigDecimal.new('14.5'), type: 'decimal' }
+      })
+    end
+
+  end
+
 end

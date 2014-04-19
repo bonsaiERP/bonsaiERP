@@ -28,10 +28,12 @@ class History < ActiveRecord::Base
         { from: val['from'], to: val['to'], type: val['type'] }
       when 'date', 'datetime', 'time'
         { from: typecast_transform(val['from'], val['type']),
-          to: typecast_transform(val['to'], val['type']), type: v['type'] }
+          to: typecast_transform(val['to'], val['type']),
+          type: val['type'] }
       when 'decimal'
         { from: BigDecimal.new(val['from'].to_s),
-          to: BigDecimal.new(val['to'].to_s), type: val['type'] }
+          to: BigDecimal.new(val['to'].to_s),
+          type: val['type'] }
       end
     rescue
       {}
