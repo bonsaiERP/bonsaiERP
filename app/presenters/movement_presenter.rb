@@ -29,7 +29,7 @@ class MovementPresenter < BasePresenter
     when is_draft? then template.text_gray 'Borrador', '', 'b'
     when(is_approved? && today > to_model.due_date)
       "<span class='b text-error'>Atrasado</span>".html_safe
-    when is_approved? then template.text_green 'Aprovado', '', 'b'
+    when is_approved? then template.text_green 'Aprobado', '', 'b'
     when is_paid? then template.text_green_dark 'Pagado', '', 'b'
     when is_nulled? then template.text_red 'Anulado', '', 'b'
     end
