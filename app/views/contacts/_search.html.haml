@@ -1,6 +1,6 @@
-.input-append
+.input-append.search
   = form_tag '/contacts', method: 'get', class: 'form-inline' do
-    = text_field_tag 'search', '', size: 55, placeholder: 'Nombre'
+    = text_field_tag 'search', '', placeholder: 'Nombre'
     = submit_tag 'Buscar', class: 'btn'
 
 

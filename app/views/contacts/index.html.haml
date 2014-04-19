@@ -11,6 +11,7 @@
     = render 'tags/tags', model: 'Contact'
     = link_to icon_new_text, new_contact_path, class: 'btn'
 
+= render 'search'
 
 - paginate_html = paginate(@contacts)
 
