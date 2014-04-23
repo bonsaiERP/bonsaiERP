@@ -7,8 +7,10 @@ module Models::History
       has_many :histories, -> { order('histories.created_at desc, id desc') }, as: :historiable, dependent: :destroy
       delegate :history_instance, :history_cols, to: self
 
+      # class that can manipulate especial histories otherwise it uses
+      # an instance of NullHistoryClass
       def history_instance
-        @history_instance ||=begin
+        @history_instance ||= begin
           return @history_klass.new(history_cols)  if @history_klass.present?
           NullHistoryClass.new
         end
@@ -26,6 +28,8 @@ module Models::History
       @history_klass = Movements::History.new(details_col)
     end
 
+    # define the class that will be instantiated
+    # in the history_instance method
     def has_history_details(klass, *cols)
       @history_klass = klass
       @history_cols = cols
@@ -34,6 +38,7 @@ module Models::History
 
   private
 
+    # called function in the callback before_save
     def create_history
       if new_record?
         h = store_new_record
@@ -41,6 +46,8 @@ module Models::History
         h = store_update
       end
       set_history_extras(h)
+
+      h.all_data = h.all_data.to_json
       h.history_data = h.history_data.to_json
 
       h.save
@@ -57,9 +64,15 @@ module Models::History
                       historiable_type: self.class.to_s, history_data: {})
     end
 
+    # history_instance is the class used to store extra data for
+    # especial history otherwise is instance of NullHistoryClass
     def store_update
-      histo = histories.build(new_item: false, history_data: get_data, historiable_type: self.class.to_s,
-                      user_id: history_user_id)
+      histo = histories.build(
+        new_item: false, history_data: get_data,
+        historiable_type: self.class.to_s, user_id: history_user_id)
+      # Required otherwise it cleans when saving other details ex.(expense_details = true)
+      histo.history_data['updated_at'] = {'from' => updated_at, 'to' => DateTime.now, 'type' => 'datetime'}
+
       history_instance.set_history(self, histo)
 
       histo
@@ -77,7 +90,7 @@ module Models::History
     end
 
     def get_object_attributes(object)
-      object.changed_attributes.except('created_at', 'updated_at')
+      object.changed_attributes#.except('created_at', 'updated_at')
     end
 
     # Null object

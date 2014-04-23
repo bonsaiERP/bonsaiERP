@@ -21,28 +21,43 @@ class Movements::History
     set_details
     set_state_col
     histo.operation_type = movement.operation_type
-    set_details_data
   end
 
   private
 
-    def set_details_data
-      histo.all_data = movement.details.map do |det|
-        attrs = det.attributes
-        details_changes(det, attrs)
-        attrs.merge!(new_record?: true) if det.new_record?
-        attrs.merge!(destroyed?: true) if det.marked_for_destruction?
-        attrs
-      end.to_json
+    def set_details
+      all_details = movement.send(details_col).map do |det|
+        get_detail(det)
+      end
+
+      histo.history_data["#{details_col}"] = detail_changes?(all_details)
+
+      histo.all_data["#{details_col}"] = all_details
+    end
+
+    def get_detail(det)
+      ha = det.attributes
+      set_detail_changes(det, ha)
+      ha.merge!('new_record?' => true) if det.new_record?
+      ha.merge!('destroyed?' => true) if det.marked_for_destruction?
+
+      ha
     end
 
     # Detect if there are changes except from the created_at updated_at
-    def details_changes(det, attrs)
-      if det.changed? && det.changes.except('created_at', 'updated_at').any?
-        attrs.merge!(changed?: true)
+    def set_detail_changes(det, attrs)
+      changes = det.changes.except('created_at', 'updated_at')
+
+      if det.changed? && changes.any?
+        changes.keys.each { |key| attrs["#{key}_was"] = det.send(:"#{key}_was") }
+        attrs.merge!('changed?' => true)
       else
-        attrs.merge!(changed?: false)
+        attrs.merge!('changed?' => false)
       end
+    end
+
+    def detail_changes?(attr)
+      attr.any? { |det| det['changed?'] || det['destroyed?'] || det['new_record?'] }
     end
 
     def filter
@@ -57,25 +72,25 @@ class Movements::History
       # no changes
     end
 
-    def set_details
-      det_hash = get_details
-      #histo.history_data.merge!(details_col => {from: [], to: det_hash, type: 'array'})  unless det_hash.empty?
-      histo.history_data[details_col] = det_hash  unless det_hash.empty?
-    end
+    #def set_details
+    #  det_hash = get_details
+    #  #histo.history_data.merge!(details_col => {from: [], to: det_hash, type: 'array'})  unless det_hash.empty?
+    #  histo.history_data[details_col] = det_hash  unless det_hash.empty?
+    #end
 
-    def get_details
-      movement.send(details_col).each_with_index.map do |det, i|
-        if det.new_record?
-          { new_record: true, index: i }
-        elsif changed_detail?(det)
-          get_data(det).merge(id: det.id)
-        elsif det.marked_for_destruction?
-          { destroyed: true, index: i }.merge(det.attributes)
-        else
-          nil
-        end
-      end.compact
-    end
+    #def get_details
+    #  movement.send(details_col).each_with_index.map do |det, i|
+    #    if det.new_record?
+    #      { new_record: true, index: i }
+    #    elsif changed_detail?(det)
+    #      get_data(det).merge(id: det.id)
+    #    elsif det.marked_for_destruction?
+    #      { destroyed: true, index: i }.merge(det.attributes)
+    #    else
+    #      nil
+    #    end
+    #  end.compact
+    #end
 
     def changed_detail?(det)
       det.changed_attributes.except('created_at', 'updated_at').any?

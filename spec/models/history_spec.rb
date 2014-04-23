@@ -35,7 +35,7 @@ describe History do
       expect(h).not_to be_new_item
 
       expect(h.user_id).to eq(1)
-      expect(h.history_attributes).to eq(%w(price buy_price name))
+      expect(h.history_attributes).to eq(%w(price buy_price name updated_at))
 
       expect(h.history['price']).to eq({ from: '10.0'.to_d, to: '20.0'.to_d, type: 'decimal'})
       expect(h.history['buy_price']).to eq({ from: '7.0'.to_d, to: '15.0'.to_d, type: 'decimal' })
@@ -49,8 +49,8 @@ describe History do
       expect(i.update_attributes(active: false)).to be_true
       i.histories.should have(3).items
       h = i.histories.first
-      expect( h.history_attributes ).to eq(['active'])
-      expect(h.history).to eq( {'active' => { from: true, to: false, type: 'boolean' } } )
+      expect( h.history_attributes ).to eq(['active', 'updated_at'])
+      expect(h.history['active']).to eq( { from: true, to: false, type: 'boolean' } )
     end
 
   end
@@ -92,8 +92,8 @@ describe History do
     end
 
     it "#history" do
-      # Create
       e = Expense.new(attributes)
+      # CREATE
       e.save.should be_true
 
       expect(e.histories).to have(1).item
@@ -112,38 +112,36 @@ describe History do
       .merge('expense_details_attributes' => det)
       .except('created_at', 'updated_at')
 
+      # UPDATE
       expect(e.update_attributes(at)).to be_true
+
       expect(e.expense_details).to have(2).items
 
       expect(e.histories).to have(2).items
       h = e.histories.first
 
-      expect(h.all_data[0]['changed?']).to eq(true)
-      expect(h.all_data[1]['changed?']).to eq(false)
-
-      #expect(h.history_data['description']).to eq({'from' => 'New expense description', 'to' => 'Jo jo jo', 'type' => 'text'})
       expect(h.klass_type).to eq('Expense')
-      det_hist = h.history_data['expense_details']
-      expect(det_hist[0]['price']).to eq({'from' => '10.0', 'to' => '15.0', 'type' => 'decimal'})
+      expect(h.history_data['expense_details']).to eq(true)
 
-      expect(det_hist[0]['description']).to eq({'from' => 'First item', 'to' => 'A new description', 'type' => 'string'})
-      expect(det_hist[0]['id']).to be_is_a(Integer)
+      details = h.all_data['expense_details']
+      expect(details[0]['changed?']).to eq(true)
+
+      expect(details[1]['changed?']).to eq(false)
 
       at['expense_details_attributes'] << { item_id: 10, price: 10, quantity: 2, balance: 2 }
 
-      # Update add new detail
-      $test = 1
+      # UPDATE add new detail
       expect(e.update_attributes(at)).to be_true
       expect(e.expense_details).to have(3).items
 
       expect(e.histories).to have(3).items
       h = e.histories.first
 
-      expect(h.history_data).to eq({ 'expense_details' => [{ 'new_record' => true, 'index' => 2 }] })
+      expect(h.history_data['expense_details']).to eq(true)
+      hist_det = h.all_data['expense_details']
+      expect(hist_det[2]['new_record?']).to eq(true)
 
-      expect(h.all_data[2]['new_record?']).to eq(true)
-
-      # Update delete detail
+      # UPDATE - DELETE a detail
       det = e.expense_details.map { |v| v.attributes.except('created_at', 'updated_at', 'original_price') }
       det[2]['_destroy'] = '1'
 
@@ -155,17 +153,13 @@ describe History do
       expect(e.expense_details).to have(2).items
 
       h = e.histories.first
-      data = h.history_data
 
-      data['expense_details'][0]['destroyed'].should be_true
-      data['expense_details'][0]['index'].should eq(2)
-      data['expense_details'][0]['item_id'].should eq(10)
-      data['expense_details'][0]['price'].should == "10.0"
-      data['expense_details'][0]['quantity'].should == "2.0"
+      expect(h.history_data['expense_details']).to eq(true)
+      det_data = h.all_data['expense_details']
 
-      expect(h.all_data[2]['destroyed?']).to eq(true)
+      det_data[2]['destroyed?'].should be_true
 
-      # Just arr new
+      # UPDATE No changes
       e.save
       expect(e.histories).to have(5).items
     end
