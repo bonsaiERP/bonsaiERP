@@ -15,14 +15,14 @@ class History < ActiveRecord::Base
   end
 
   private
-
+    # Transform all these functions to utility functions
     def get_typecasted
       Hash[history_data.map do |key, val|
-        [key, typecast_hash(val) ]
+        [key, self.class.typecast_hash(val) ]
       end]
     end
 
-    def typecast_hash(val)
+    def self.typecast_hash(val)
       case val['type']
       when 'string', 'text', 'integer', 'boolean', 'float'
         { from: val['from'], to: val['to'], type: val['type'] }
@@ -39,13 +39,13 @@ class History < ActiveRecord::Base
       {}
     end
 
-    def typecast_transform(val, type)
+    def self.typecast_transform(val, type)
       val.to_s.send(:"to_#{type}")
     rescue
       val
     end
 
-    def typecast_array(arr)
+    def self.typecast_array(arr)
       arr.map do |val|
         _id = val.delete('id')
         case

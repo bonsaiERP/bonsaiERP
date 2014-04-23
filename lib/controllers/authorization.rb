@@ -98,7 +98,8 @@ module Controllers::Authorization
         download: true,
         taxes: true,
         loans: true,
-        loan_payments: true
+        loan_payments: true,
+        movement_details_history: true
       }
     end
 
@@ -142,7 +143,8 @@ module Controllers::Authorization
         download: true,
         taxes: true,
         loans: true,
-        loan_payments: true
+        loan_payments: true,
+        movement_details_history: true
       }
     end
 
@@ -187,7 +189,8 @@ module Controllers::Authorization
         download: true,
         taxes: true,
         loans: true,
-        loan_payments: true
+        loan_payments: true,
+        movement_details_history: true
       }
     end
 
@@ -222,7 +225,8 @@ module Controllers::Authorization
         download: true,
         taxes: false,
         loans: false,
-        loan_payments: false
+        loan_payments: false,
+        movement_details_history: true
       }
     end
 end

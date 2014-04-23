@@ -95,7 +95,7 @@ class MovementHistoryPresenter < HistoryPresenter
 
   def details_changes
     if history_data[details_col.to_s].present?
-      [context.link_to('Cambio en ítems', '/movement_details_history' , class: 'ajax')]
+      [context.link_to('Cambio en ítems', context.movement_detail_history_path(id) , class: 'ajax')]
     end
   end
 end

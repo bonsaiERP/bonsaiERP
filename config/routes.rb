@@ -2,6 +2,9 @@
 Bonsaierp::Application.routes.draw do
   get '/download_pdf/:file/:name' => 'download#download_pdf', as: :download
 
+  #resources :movement_details_history, only: [:show]
+  get '/movement_details_history/:id' => 'movement_details_history#show', as: :movement_detail_history
+
   resources :loan_payments, only: [] do
     member do
       # Receive

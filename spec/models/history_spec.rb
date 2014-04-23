@@ -101,22 +101,26 @@ describe History do
       expect(h.klass_type).to eq('Expense')
       expect(h.klass_to_s).to eq(e.to_s)
 
+      expect(h.all_data).to eq({})
+
       # Update detail
       det = e.expense_details.map { |v| v.attributes.except('created_at', 'updated_at', 'original_price') }
       det[0]['price'] = 15
       det[0]['description'] = 'A new description'
 
-      #.merge('description' => 'Jo jo jo', 'expense_details_attributes' => det)
       at = e.attributes
       .merge('expense_details_attributes' => det)
       .except('created_at', 'updated_at')
 
-
-     $test = true
       expect(e.update_attributes(at)).to be_true
+      expect(e.expense_details).to have(2).items
 
       expect(e.histories).to have(2).items
       h = e.histories.first
+
+      expect(h.all_data[0]['changed?']).to eq(true)
+      expect(h.all_data[1]['changed?']).to eq(false)
+
       #expect(h.history_data['description']).to eq({'from' => 'New expense description', 'to' => 'Jo jo jo', 'type' => 'text'})
       expect(h.klass_type).to eq('Expense')
       det_hist = h.history_data['expense_details']
@@ -130,10 +134,14 @@ describe History do
       # Update add new detail
       $test = 1
       expect(e.update_attributes(at)).to be_true
+      expect(e.expense_details).to have(3).items
+
       expect(e.histories).to have(3).items
       h = e.histories.first
 
       expect(h.history_data).to eq({ 'expense_details' => [{ 'new_record' => true, 'index' => 2 }] })
+
+      expect(h.all_data[2]['new_record?']).to eq(true)
 
       # Update delete detail
       det = e.expense_details.map { |v| v.attributes.except('created_at', 'updated_at', 'original_price') }
@@ -141,18 +149,23 @@ describe History do
 
       at = e.attributes.except('created_at', 'updated_at').merge(expense_details_attributes: det)
       e.update_attributes(at).should be_true
+      expect(e.expense_details).to have(2).items
 
       expect(e.histories).to have(4).items
       expect(e.expense_details).to have(2).items
 
-      h = e.histories.first.history_data
+      h = e.histories.first
+      data = h.history_data
 
-      h['expense_details'][0]['destroyed'].should be_true
-      h['expense_details'][0]['index'].should eq(2)
-      h['expense_details'][0]['item_id'].should eq(10)
-      h['expense_details'][0]['price'].should == "10.0"
-      h['expense_details'][0]['quantity'].should == "2.0"
+      data['expense_details'][0]['destroyed'].should be_true
+      data['expense_details'][0]['index'].should eq(2)
+      data['expense_details'][0]['item_id'].should eq(10)
+      data['expense_details'][0]['price'].should == "10.0"
+      data['expense_details'][0]['quantity'].should == "2.0"
 
+      expect(h.all_data[2]['destroyed?']).to eq(true)
+
+      # Just arr new
       e.save
       expect(e.histories).to have(5).items
     end

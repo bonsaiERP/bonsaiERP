@@ -21,9 +21,29 @@ class Movements::History
     set_details
     set_state_col
     histo.operation_type = movement.operation_type
+    set_details_data
   end
 
   private
+
+    def set_details_data
+      histo.all_data = movement.details.map do |det|
+        attrs = det.attributes
+        details_changes(det, attrs)
+        attrs.merge!(new_record?: true) if det.new_record?
+        attrs.merge!(destroyed?: true) if det.marked_for_destruction?
+        attrs
+      end.to_json
+    end
+
+    # Detect if there are changes except from the created_at updated_at
+    def details_changes(det, attrs)
+      if det.changed? && det.changes.except('created_at', 'updated_at').any?
+        attrs.merge!(changed?: true)
+      else
+        attrs.merge!(changed?: false)
+      end
+    end
 
     def filter
       histo.history_data['extras']['from'].each do |k, v|
