@@ -125,7 +125,7 @@ class MovementHistoryDetailsPresenter < BasePresenter
     end
 
     def subtotal_changed?
-      details['price_was'].present? || details['quantity_was'].present?
+      (details['price_was'].present? || details['quantity_was'].present?) && !(new_record?)
     end
   end
 
