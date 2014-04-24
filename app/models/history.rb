@@ -17,7 +17,7 @@ class History < ActiveRecord::Base
   private
     # Transform all these functions to utility functions
     def get_typecasted
-      Hash[history_data.map do |key, val|
+      Hash[history_data.except('updated_at').map do |key, val|
         [key, self.class.typecast_hash(val) ]
       end]
     end

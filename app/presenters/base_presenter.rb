@@ -16,4 +16,9 @@ class BasePresenter < Resubject::Presenter
   def today
     @today ||= Date.today
   end
+
+  def code(txt)
+    "<code class='gray'>#{txt}</code>"
+  end
+
 end

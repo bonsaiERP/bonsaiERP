@@ -1,1 +1,38 @@
 %h2 Cambio en ítems
+
+%span.line-deleted Línea eliminada
+%span.line-new Nueva línea
+
+%ul.unstyled.listing
+  %li.header.row-fluid
+    .span4
+      Item
+    .span2
+      Precio
+      = currency_label @history.currency
+    .span2
+      Cantidad
+    .span2
+      Saldo inventario
+    .span2
+      Total línea
+      = currency_label @history.currency
+
+  - @history.details.each do |det|
+    %li.row-fluid(class="#{det.line_change_css}")
+      .span4.item
+        %label.visible-phone Item
+        = det.changed('item')
+      .span2.r
+        %label.visible-phone Precio
+        .number= det.changed('price')
+      .span2.r
+        %label.visible-phone Cantidad
+        .number= det.changed('quantity')
+      .span2.r
+        %label.visible-phone Saldo inventario
+        .number= det.changed('balance')
+      .span2.r
+        %label.visible-phone Total línea
+        .number= det.changed('subtotal')
+

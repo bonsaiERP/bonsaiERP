@@ -38,10 +38,6 @@ class HistoryPresenter < BasePresenter
       @t_klass ||= klass.to_s.split('/').join('.')
     end
 
-    def code(txt)
-      "<code class='gray'>#{txt}</code>"
-    end
-
     def format_for(val, typ)
       case typ
       when 'string', 'text', 'integer', 'float'

@@ -3,6 +3,15 @@
 
 ul.listing
   margin: 40px 0px
+  >.header
+    +background-image(linear-gradient(rgb(250,250,250), rgb(240, 240,240) ))
+    min-height: 20px
+    clear: both
+    [class^="span"], [class*=" span"]
+      text-align: center
+      font-weight: bold
+      padding: 4px 0px
+
   >li
     padding: 6px 0px 14px
     //border-bottom: 1px solid $grayLighter
@@ -24,6 +33,15 @@ ul.listing
 
 .selected
   background-color: #E7FFC4
+
+.line-deleted
+  background: lighten(red, 40%)
+  &:hover
+    background: lighten(red, 40%) !important
+.line-new
+  background: lighten($bonsai, 30%)
+  &:hover
+    background: lighten($bonsai, 30%) !important
 
 .listing-title
   font-weight: normal
