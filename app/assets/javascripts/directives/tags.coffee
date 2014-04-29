@@ -38,7 +38,6 @@ myApp.directive('ngTags', ($compile, $timeout) ->
         )
 
         $scope.url = attrs.url
-        #$scope.$apply()
 
         # Close when clicked outside popover
         $('body').on('click', (evt) ->
