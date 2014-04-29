@@ -7,8 +7,8 @@ module CdnHelper
     },
     'angular' => {
       klass: 'angular',
-      cdn: 'https://ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular.min.js',
-      local: '/assets/angular/angular-1.2.13.min.js'
+      cdn: 'https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js',
+      local: '/assets/angular/angular.min.js'
     }
   }
 

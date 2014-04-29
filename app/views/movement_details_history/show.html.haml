@@ -1,5 +1,11 @@
 %h2 Cambio en ítems
 
+%h4
+  %span.muted Creado por
+  = @history.creator
+  %span.muted el
+  %i= lo @history.created_at
+
 %span.line-deleted Línea eliminada
 %span.line-new Nueva línea
 

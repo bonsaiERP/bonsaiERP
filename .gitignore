@@ -29,6 +29,7 @@ config/initializers/host.rb
 *.swl
 *.swm
 *.swn
+*.map
 public/javascripts/jquery.js
 public/javascripts/app.js
 public/exchange_rates.json

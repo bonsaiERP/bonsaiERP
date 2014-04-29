@@ -1,5 +1,5 @@
 class MovementHistoryDetailsPresenter < BasePresenter
-  delegate :currency, to: :historiable
+  delegate :currency, :creator, to: :historiable
 
   #alias_method :movement, :historiable
 
