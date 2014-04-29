@@ -176,18 +176,11 @@ code{
 
 // jquery mincolors
 .minicolors-swatch {
-	position: relative;
-	width: 23px;
-	height: 23px;
-	text-align: left;
-  background: url(<%= asset_path 'plugins/jquery.minicolors.png' %>) -80px 0;
-	border: solid 1px #CCC;
-	vertical-align: middle;
-	display: inline-block;
+  background: url(<%= asset_path 'jquery.minicolors.png' %>) -80px 0 !important;
 }
 
 .minicolors-slider-saturation .minicolors-grid-inner {
-	background: url(<%= asset_path 'plugins/jquery.minicolors.png' %>) -270px 0;
+	background: url(<%= asset_path 'jquery.minicolors.png' %>) -270px 0 !important;
 }
 .minicolors-slider,
 .minicolors-opacity-slider {
@@ -196,6 +189,6 @@ code{
 	left: 152px;
 	width: 20px;
 	height: 150px;
-	background: white url(<%= asset_path 'plugins/jquery.minicolors.png' %>) 0 0;
+	background: white url(<%= asset_path 'jquery.minicolors.png' %>) 0 0 !important;
 	cursor: crosshair;
 }
