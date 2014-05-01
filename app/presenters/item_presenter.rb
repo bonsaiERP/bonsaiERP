@@ -4,6 +4,6 @@ class ItemPresenter < BasePresenter
   end
 
   def code_tag
-    code  if code.present?
+    to_model.code  if to_model.code.present?
   end
 end
