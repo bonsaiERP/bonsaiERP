@@ -17,6 +17,22 @@ class Loans::ReceivePresenter < BasePresenter
     end
   end
 
+  def payments
+    to_model.payments
+    .includes(:account, :account_to)
+    .includes(*user_log_list)
+  end
+
+  def interest_ledgers
+    to_model.interest_ledgers
+    .includes(:account, :account_to)
+    .includes(*user_log_list)
+  end
+
+  def payments_title
+    'Pagos'
+  end
+
   def payment_path
     template.new_pay_loan_payment_path(id)
   end

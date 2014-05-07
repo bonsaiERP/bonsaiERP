@@ -5,6 +5,7 @@
 
 %h1.ib
   = @loan
+  %small.b= @loan.state_tag
   %small= @loan.loan_type_tag
 
 
@@ -73,7 +74,7 @@
 
 .row-fluid
   .span6.well.well-small.bg-white
-    %h3.n Pagos y devoluciones
+    %h3.n= @loan.payments_title
 
     .center
 
@@ -83,7 +84,9 @@
 
 
     %ul.unstyled.listing
-      = render partial: 'account_ledgers/movement', collection: present(@loan.payments_devolutions), as: :ledger, locals: { current_account_id: @loan.id }
+      = render partial: 'account_ledgers/movement',
+        collection: present(@loan.payments),
+        as: :ledger, locals: { current_account_id: @loan.id }
 
   .span6.well.well-small.bg-white
     %h3.n Intereses
@@ -93,11 +96,13 @@
     #interest-form.form-container(ng-controller='DynamicController' dynamic='htmlContent')
 
     %ul.unstyled.listing
-      = render partial: 'account_ledgers/movement', collection: present(@loan.interest_ledgers), locals: { current_account_id: @loan.id }, as: :ledger
+      = render partial: 'account_ledgers/movement',
+        collection: present(@loan.interest_ledgers.includes(:account, :account_to)),
+        locals: { current_account_id: @loan.id }, as: :ledger
 
 .row-fluid
   .span6.well.well-small.bg-white
     %h3.n Historial
 
     %ul.listing.unstyled
-      = render partial: 'histories/history', collection: present(@loan.histories, LoanHistoryPresenter), as: :history
+      = render partial: 'histories/history', collection: present(@loan.histories.includes(:user), LoanHistoryPresenter), as: :history
