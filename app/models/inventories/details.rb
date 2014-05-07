@@ -53,11 +53,11 @@ class Inventories::Details < Struct.new(:inventory)
   end
 
   def item_stocks
-    @item_stocks ||= Stock.active.store(store_id).where(item_id: item_ids).to_a
+    @item_stocks ||= Stock.active.store_house(store_id).where(item_id: item_ids).to_a
   end
 
   def item_stocks_to
-    @item_stocks_to ||= Stock.active.store(store_to_id).where(item_id: item_ids).to_a
+    @item_stocks_to ||= Stock.active.store_house(store_to_id).where(item_id: item_ids).to_a
   end
 end
 

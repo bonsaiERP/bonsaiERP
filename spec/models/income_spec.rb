@@ -18,7 +18,6 @@ describe Income do
   }
 
   context 'Relationships, Validations' do
-    subject { Income.new }
 
     # Relationships
     it { should belong_to(:contact) }

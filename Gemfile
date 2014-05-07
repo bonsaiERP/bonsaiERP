@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 ruby '2.1.1'
-gem 'rails', '4.0.4'
+gem 'rails', '4.1.1'
 
 # Assets
 gem 'sass-rails' , '~> 4.0.2'
@@ -42,6 +42,7 @@ end
 
 group :development, :test do
   gem 'puma'# Web server
+  gem 'spring-commands-rspec'
   gem 'rspec-rails'
   gem 'ffaker'
   #gem 'pry-remote' # Work binding.pry_remote with Foreman, just call pry-remote in the terminal
@@ -56,8 +57,8 @@ group :test do
   gem 'capybara'
   gem 'database_cleaner'
   gem 'factory_girl_rails', '~> 4.4.1'
-  gem 'spork', '1.0.0rc4' # Newer version gives error with squeel
-  gem 'shoulda-matchers' #, '1.4.2'
+  #gem 'spork', '1.0.0rc4' # Newer version gives error with squeel
+  gem 'shoulda-matchers', require: false
   gem 'valid_attribute'
   gem 'watchr'
   gem 'launchy'

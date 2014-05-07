@@ -12,10 +12,9 @@ SELECT "account_ledgers".* FROM "account_ledgers" WHERE (("account_ledgers"."acc
   end
 
   it "#search" do
-    sql = <<-SQL
-SELECT "account_ledgers".* FROM "account_ledgers"  WHERE (accounts.name ILIKE '%ba%' OR account_tos_account_ledgers.name ILIKE '%ba%' OR contacts.matchcode ILIKE '%ba%')
-    SQL
+    res = subject.search('ba')
+    expect(res.where_values).to eq(["accounts.name ILIKE '%ba%' OR account_tos_account_ledgers.name ILIKE '%ba%' OR contacts.matchcode ILIKE '%ba%'"])
 
-    expect(subject.search('ba').to_sql.squish).to eq(sql.squish)
+    expect(res.count).to eq(0)
   end
 end
