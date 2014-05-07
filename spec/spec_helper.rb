@@ -1,8 +1,10 @@
 require 'rubygems'
 require 'spork'
-# require 'valid_attribute'
-# require 'arel'
 
+require 'capybara/poltergeist'
+Capybara.register_driver :poltergeist_debug do |app|
+  Capybara::Poltergeist::Driver.new(app, inspector: true, js_errors: false)
+end
 
 # http://railstutorial.org/chapters/static-pages#sec:spork
 Spork.prefork do

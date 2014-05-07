@@ -13,7 +13,7 @@ gem 'uglifier' #    , '>= 2.3.0'
 gem 'compass-rails', '~> 1.1.6'#, '~> 2.0.alpha.0' # Extend css clases
 gem 'pg' # Postgresql adapter
 gem 'virtus' # Model generation in simple way
-gem 'squeel' # Better SQL queries
+#gem 'squeel' # Better SQL queries
 
 gem 'simple_form'
 gem 'haml', '>= 4.0.5'
@@ -48,7 +48,7 @@ group :development, :test do
   gem 'pry'#, '0.9.11.3'# 0.9.11.4 gives error
   gem 'pry-rails'
   gem 'pry-nav'
-  gem 'foreman'
+  #gem 'foreman'
 end
 
 # Test
@@ -61,4 +61,5 @@ group :test do
   gem 'valid_attribute'
   gem 'watchr'
   gem 'launchy'
+  gem 'poltergeist'
 end
