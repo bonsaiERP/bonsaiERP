@@ -13,7 +13,7 @@
       Total línea
       = currency_label income.currency
 
-  - income.income_details.each do |det|
+  - income.income_details.includes(:item).each do |det|
     %li.row-fluid.detail
       .span4.item
         .item-name= det.item

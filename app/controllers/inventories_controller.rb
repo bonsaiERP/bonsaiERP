@@ -13,7 +13,7 @@ class InventoriesController < ApplicationController
 
   # GET /inventories/1
   def show
-    @inventory = present Inventory.includes(inventory_details: {item: :unit}).find(params[:id])
+    @inventory = present Inventory.includes(inventory_details: :item).find(params[:id])
 
     respond_to do |format|
       format.html
@@ -24,7 +24,7 @@ class InventoriesController < ApplicationController
 
   # GET /inventories/1/show_movement
   def show_movement
-    @inventory = present Inventory.includes(inventory_details: {item: :unit}).find(params[:id])
+    @inventory = present Inventory.includes(inventory_details: :item).find(params[:id])
 
     respond_to do |format|
       format.html
@@ -35,7 +35,7 @@ class InventoriesController < ApplicationController
 
   # GET /inventories/1/show_trans
   def show_trans
-    @inventory = present Inventory.includes(inventory_details: {item: :unit}).find(params[:id])
+    @inventory = present Inventory.includes(inventory_details: :item).find(params[:id])
 
     respond_to do |format|
       format.html

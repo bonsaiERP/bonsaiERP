@@ -37,6 +37,7 @@ group :development do
   gem 'rails_best_practices'
   gem 'quiet_assets'
   gem 'roadie' # Styles for email
+  gem 'bullet'
   # gem 'guard-livereload', require: false
 end
 
