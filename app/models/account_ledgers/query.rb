@@ -31,7 +31,9 @@ class AccountLedgers::Query
     AccountLedger
     .includes(:account, :account_to)
     .eager_load(:contact)
-    .where { (account.name.like s) | (account_to.name.like s) | (contact.matchcode.like s) | (name.like s) }
+    .where("accounts.name ILIKE :s OR account_tos_account_ledgers.name ILIKE :s OR contacts.matchcode ILIKE :s", s: s)
+
+    #{ (account.name.like s) | (account_to.name.like s) | (contact.matchcode.like s) | (name.like s) }
   end
 
   private

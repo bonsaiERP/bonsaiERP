@@ -28,7 +28,7 @@ class History < ActiveRecord::Base
         { from: val['from'], to: val['to'], type: val['type'] }
       when 'date', 'datetime', 'time'
         { from: typecast_transform(val['from'], val['type']),
-          to: typecast_transform(val['to'], val['type']), type: v['type'] }
+          to: typecast_transform(val['to'], val['type']), type: val['type'] }
       when 'decimal'
         { from: BigDecimal.new(val['from'].to_s),
           to: BigDecimal.new(val['to'].to_s), type: val['type'] }
@@ -41,20 +41,6 @@ class History < ActiveRecord::Base
       val.to_s.send(:"to_#{type}")
     rescue
       val
-    end
-
-    def typecast_array(arr)
-      arr.map do |val|
-        _id = val.delete('id')
-        case
-        when val['new_record']
-          { index: val['index'] , new_record: true }
-        when val['destroyed']
-          val.symbolize_keys
-        else
-          val.map { |ke, va|  get_typecasted(va).merge(id: _id) }
-        end
-      end
     end
 
 end

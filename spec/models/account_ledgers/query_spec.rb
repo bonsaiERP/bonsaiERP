@@ -13,7 +13,7 @@ SELECT "account_ledgers".* FROM "account_ledgers" WHERE (("account_ledgers"."acc
 
   it "#search" do
     sql = <<-SQL
-SELECT \"account_ledgers\".* FROM \"account_ledgers\"  WHERE ((((\"account\".\"name\" ILIKE '%ba%' OR \"account_to\".\"name\" ILIKE '%ba%') OR \"contact\".\"matchcode\" ILIKE '%ba%') OR \"account_ledgers\".\"name\" ILIKE '%ba%'))
+SELECT "account_ledgers".* FROM "account_ledgers"  WHERE (accounts.name ILIKE '%ba%' OR account_tos_account_ledgers.name ILIKE '%ba%' OR contacts.matchcode ILIKE '%ba%')
     SQL
 
     expect(subject.search('ba').to_sql.squish).to eq(sql.squish)

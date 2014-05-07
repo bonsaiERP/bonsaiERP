@@ -293,7 +293,7 @@ describe Expense do
 
     it "::pendent" do
       sql = <<-SQL
-SELECT \"accounts\".* FROM \"accounts\"  WHERE \"accounts\".\"type\" IN ('Expense') AND \"accounts\".\"state\" IN ('approved', 'paid') AND \"accounts\".\"amount\" != 0
+SELECT \"accounts\".* FROM \"accounts\"  WHERE \"accounts\".\"type\" IN ('Expense') AND \"accounts\".\"state\" IN ('approved', 'paid') AND (\"accounts\".\"amount\" != 0)
       SQL
 
       expect(Expense.pendent.to_sql.squish).to eq(sql.squish)

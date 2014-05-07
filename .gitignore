@@ -6,6 +6,7 @@
 *.sqlite
 *.rbc
 *~
+*.js.map
 .rvmrc
 nbproject
 !pub.txt
