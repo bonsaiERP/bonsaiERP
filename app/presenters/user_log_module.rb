@@ -28,4 +28,8 @@ module UserLogModule
   def user_label_text(u, t)
     "#{u} #{context.lo t}, ID: #{u.id}"
   end
+
+  def user_log_list
+    [:creator, :approver, :nuller, :updater]
+  end
 end

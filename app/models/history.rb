@@ -15,48 +15,32 @@ class History < ActiveRecord::Base
   end
 
   private
-    # Transform all these functions to utility functions
+
     def get_typecasted
-      Hash[history_data.except('updated_at').map do |key, val|
-        [key, self.class.typecast_hash(val) ]
+      Hash[history_data.map do |key, val|
+        [key, typecast_hash(val) ]
       end]
     end
 
-    def self.typecast_hash(val)
+    def typecast_hash(val)
       case val['type']
       when 'string', 'text', 'integer', 'boolean', 'float'
         { from: val['from'], to: val['to'], type: val['type'] }
       when 'date', 'datetime', 'time'
         { from: typecast_transform(val['from'], val['type']),
-          to: typecast_transform(val['to'], val['type']),
-          type: val['type'] }
+          to: typecast_transform(val['to'], val['type']), type: val['type'] }
       when 'decimal'
         { from: BigDecimal.new(val['from'].to_s),
-          to: BigDecimal.new(val['to'].to_s),
-          type: val['type'] }
+          to: BigDecimal.new(val['to'].to_s), type: val['type'] }
       end
     rescue
       {}
     end
 
-    def self.typecast_transform(val, type)
+    def typecast_transform(val, type)
       val.to_s.send(:"to_#{type}")
     rescue
       val
-    end
-
-    def self.typecast_array(arr)
-      arr.map do |val|
-        _id = val.delete('id')
-        case
-        when val['new_record']
-          { index: val['index'] , new_record: true }
-        when val['destroyed']
-          val.symbolize_keys
-        else
-          val.map { |ke, va|  get_typecasted(va).merge(id: _id) }
-        end
-      end
     end
 
 end

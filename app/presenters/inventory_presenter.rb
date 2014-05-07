@@ -17,7 +17,7 @@ class InventoryPresenter < BasePresenter
   def operation_tag
     case operation
     when 'in' then text_green(operation_name)
-    when 'oput' then text_red(operation_name)
+    when 'out' then text_red(operation_name)
     when 'inc_out' then text_green(operation_name)
     when 'inc_in' then text_red(operation_name)
     when 'exp_in' then text_green(operation_name)

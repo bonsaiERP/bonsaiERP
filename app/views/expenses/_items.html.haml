@@ -13,7 +13,7 @@
       Total línea
       = currency_label expense.currency
 
-  - expense.expense_details.each do |det|
+  - expense.expense_details.includes(:item).each do |det|
     %li.row-fluid.detail
       .span4.item
         .item-name= det.item

@@ -245,5 +245,31 @@ describe Movement do
       m.inventory?.should be_true
       m.devolution?.should be_false
     end
+
+  end
+
+  it "#extras" do
+
+    t = DateTime.now
+    h = {
+      devolution: true, delivered: true, discounted: true, inventory: false,
+      gross_total: 12.3, original_total: 2.3, balance_inventory: 1.1,
+      nuller_datetime: t, approver_datetime: t
+    }
+
+
+    m = Movement.new(extras: h)
+    m.extras.keys.all? {|key| key.is_a?(String) }
+    m.extras.values.all? {|val| val.is_a?(String) }
+
+    h.except(:nuller_datetime, :approver_datetime).each do |key, val|
+       m.send(key).should eq(val)
+     end
+
+
+     %i(nuller_datetime approver_datetime).each do |key|
+       m.send(key).should be_is_a(Time)
+     end
+
   end
 end

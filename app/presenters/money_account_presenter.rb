@@ -13,9 +13,9 @@ class MoneyAccountPresenter < BasePresenter
 
   def ledgers_view
     if template.params[:pendent].present?
-      pendent_ledgers
+      pendent_ledgers.includes(:account, :account_to)
     else
-      ledgers
+      ledgers.includes(:account, :account_to)
     end
   end
 

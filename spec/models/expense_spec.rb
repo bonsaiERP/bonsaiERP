@@ -17,6 +17,7 @@ describe Expense do
     }
   }
 
+
   it "define_method check" do
     ex = Expense.new
 
@@ -202,7 +203,7 @@ describe Expense do
       e.should be_is_paid
       e.extras = { 'test' => 1 }
       e.approve!
-      e.extras.should eq({'test' => 1})
+      e.extras.should eq({'test' => "1"})
 
       e.should be_is_paid
       e.approver_id.should be_nil
@@ -293,7 +294,7 @@ describe Expense do
 
     it "::pendent" do
       sql = <<-SQL
-SELECT \"accounts\".* FROM \"accounts\"  WHERE \"accounts\".\"type\" IN ('Expense') AND \"accounts\".\"state\" IN ('approved', 'paid') AND \"accounts\".\"amount\" != 0
+SELECT \"accounts\".* FROM \"accounts\"  WHERE \"accounts\".\"type\" IN ('Expense') AND \"accounts\".\"state\" IN ('approved', 'paid') AND (\"accounts\".\"amount\" != 0)
       SQL
 
       expect(Expense.pendent.to_sql.squish).to eq(sql.squish)

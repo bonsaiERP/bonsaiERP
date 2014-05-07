@@ -51,7 +51,7 @@
       %th Cantidad
       %th Unidad
 
-    - @inventory.inventory_details.includes(:item).each do |det|
+    - @inventory.inventory_details.each do |det|
       %tr.item
         %td
           = det.item

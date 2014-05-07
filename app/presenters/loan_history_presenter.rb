@@ -12,8 +12,7 @@ class LoanHistoryPresenter < HistoryPresenter
   end
 
   def present_changes
-    history.delete(:extras)
-    arr = history.map do |k, v|
+    arr = history.except('extras').map do |k, v|
       from, to = format_for(v[:from], v[:type]), format_for(v[:to], v[:type])
       "#{attr_text k} de #{code from} a #{code to}"
     end

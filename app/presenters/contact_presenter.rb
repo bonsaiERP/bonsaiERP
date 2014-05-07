@@ -33,7 +33,8 @@ class ContactPresenter < BasePresenter
   end
 
   def operations
-    @operations = operations_filter.includes(:creator, :approver, :nuller, :updater).order('date desc, id desc').page(page)
+    @operations ||= operations_filter.includes(:creator, :approver, :nuller, :updater, :tax)
+    .order('date desc, id desc').page(page)
   end
 
   def operations_filter
