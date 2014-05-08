@@ -22,7 +22,7 @@ class OrganisationsController < ApplicationController
 
       redirect_to dashboard_path
     else
-      render 'new'
+      render :new
     end
   end
 

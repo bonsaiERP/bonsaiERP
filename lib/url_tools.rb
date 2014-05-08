@@ -2,10 +2,10 @@ module UrlTools
   extend self
 
   def domain
-    if Rails.env.development?
-      'localhost.bom'
-    else
+    if Rails.env.production?
       DOMAIN
+    else
+      'localhost.bom'
     end
   end
 

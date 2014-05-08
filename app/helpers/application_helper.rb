@@ -151,10 +151,10 @@ module ApplicationHelper
   end
 
   def flash_class(fla)
-    case fla
-    when :error   then 'alert alert-error'
-    when :alert, :warning then 'alert alert-warning'
-    when :notice  then 'alert alert-success'
+    case fla.to_s
+    when 'error'   then 'alert alert-error'
+    when 'alert', :warning then 'alert alert-warning'
+    when 'notice'  then 'alert alert-success'
     end
   end
 

@@ -6,7 +6,7 @@ class UnitsController < ApplicationController
 
   # GET /units
   def index
-    @units = Unit.scoped
+    @units = Unit.all
   end
 
   # GET /units/1

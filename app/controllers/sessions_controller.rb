@@ -17,7 +17,6 @@ class SessionsController < ApplicationController
     when @session.authenticate?
       session[:user_id] = @session.user_id
       flash[:notice] = "Ha ingresado correctamente."
-
       redirect_to home_url(host: UrlTools.domain, subdomain: @session.tenant) and return
     else
       flash.now[:error] = 'El email o la contraseña que ingreso son incorrectos.'
@@ -43,6 +42,9 @@ class SessionsController < ApplicationController
           reset_session
         end
       end
+    rescue
+      reset_session
+      redirect_to login_path, error: 'El usuario que ingreso no existe' and return
     end
 
     def session_params

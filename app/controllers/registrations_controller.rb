@@ -23,9 +23,9 @@ class RegistrationsController < ApplicationController
       redirect_to new_organisation_path, notice: 'Ya esta registrado, ahora ingrese los datos de su empresa.'
     elsif @user
       # TODO: Create a view
-      render text: 'Error'
+      render text: 'Error' and return
     else
-      redirect_to "http://#{DOMAIN}?error_conf_token"
+      redirect_to "http://#{DOMAIN}?error_conf_token" and return
     end
   end
 
@@ -37,7 +37,7 @@ class RegistrationsController < ApplicationController
       RegistrationMailer.send_registration(@registration).deliver
       redirect_to registrations_path, notice: "Le hemos enviado un email a #{@registration.email} con instrucciones para completar su registro."
     else
-      render 'new'
+      render :new
     end
   end
 

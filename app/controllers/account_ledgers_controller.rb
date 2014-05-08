@@ -14,6 +14,7 @@ class AccountLedgersController < ApplicationController
     else
       @title = "Transacciones"
       @ledgers = AccountLedgers::Query.new.search(params[:search])
+      @ledgers = AccountLedger.all if @ledgers.empty?
     end
 
     @ledgers = @ledgers.includes(:creator, :updater, :approver).order(:date, :id).reverse_order.page(@page)

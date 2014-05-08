@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://bonsai.localhost.bom:3000/" />
+<title>Navigation no data</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Navigation no data</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/home</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Resumen</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>css=canvas.flot-overlay</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Reportes generales</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='cont']/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Ingresos</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>css=h1.ib</td>
+	<td>Ingresos</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Egresos</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>css=h1.ib</td>
+	<td>Egresos</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Contactos</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>css=h1</td>
+	<td>Contactos</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Cuentas bancarias</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Cuentas efectivo</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Caja inicial</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Cuentas personal</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Almacenes</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>link=Almacen inicial</td>
+	<td>Almacen inicial</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Ítems</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Operaciones inventario</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Unidades</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertCssCount</td>
+	<td>css=.table tr</td>
+	<td>7</td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
