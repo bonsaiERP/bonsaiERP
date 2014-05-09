@@ -24,4 +24,12 @@ describe ControllerServiceSerializer do
     css.to_json(except: [:matchcode, :created_at]).should eq(contact.to_json(methods: [:errors, :to_s], except: [:matchcode, :created_at]))
 
   end
+
+  it "#destroyed?" do
+    contact.stub(destroyed?: true)
+
+    css = ControllerServiceSerializer.new(contact)
+    json = css.to_json
+    json["destroyed?"].should be_true
+  end
 end

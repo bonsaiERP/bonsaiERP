@@ -125,7 +125,6 @@ class ApplicationController < ActionController::Base
 
     def serialized_xhr_response(klass, options)
       r = ControllerServiceSerializer.new(klass)
-
       options.merge(methods: [:destroyed?])  if request.delete?
 
       render json: r.to_json(only: options[:only], except: options[:except], methods: options[:methods])

@@ -6,6 +6,8 @@ class ControllerServiceSerializer < Struct.new(:model)
     opts[:only] = only  if Array(only).any?
     opts[:except] = except  if Array(except).any?
 
+    opts[:methods].push(:destroyed?)  if model.destroyed?
+
     model.to_json(opts)
   end
 end

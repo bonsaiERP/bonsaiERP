@@ -14,9 +14,9 @@ class HistoryPresenter < BasePresenter
   end
 
   def present_changes
-    history.map do |key, val|
+    history.except('updated_at').map do |key, val|
       from, to = format_for(val[:from], val[:type]), format_for(val[:to], val[:type])
-      "#{attr_text k} de #{code from} a #{code to}"
+      "#{attr_text key} de #{code from} a #{code to}"
     end.join(', ')
   end
 

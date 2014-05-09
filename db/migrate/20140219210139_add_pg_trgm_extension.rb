@@ -1,6 +1,6 @@
 class AddPgTrgmExtension < ActiveRecord::Migration
   def up
-    execute 'CREATE EXTENSION pg_trgm SCHEMA public'
+    execute 'CREATE EXTENSION IF NOT EXISTS pg_trgm SCHEMA public'
   end
 
   def down

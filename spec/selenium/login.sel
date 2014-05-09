@@ -13,25 +13,24 @@
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>/home</td>
+	<td>/</td>
 	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=session_email</td>
+	<td>boris@bonsaierp.com</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=session_password</td>
+	<td>demo1234</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=Inicio</td>
+	<td>name=commit</td>
 	<td></td>
 </tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=Resumen</td>
-	<td></td>
-</tr>
-<tr>
-	<td>assertElementPresent</td>
-	<td>id=title</td>
-	<td>Resumen del 07 Abr 2014 al 07 May 2014</td>
-</tr>
-
 </tbody></table>
 </body>
 </html>

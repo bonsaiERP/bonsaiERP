@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://bonsai.localhost.bom:3000/" />
+<title>Items</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Items</td></tr>
+</thead><tbody>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Ítems</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=new-item-link</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=item_name</td>
+	<td>Samsumg Galaxy S5</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=item_unit_id</td>
+	<td>label=unidad (un)</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=item_buy_price</td>
+	<td>2500</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=item_price</td>
+	<td>3500</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=commit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>css=h2.n</td>
+	<td>Samsumg Galaxy S5</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Items</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>link=Samsumg Galaxy S5</td>
+	<td>Samsumg Galaxy S5</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=i.icon-pencil.icon-large</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=item_description</td>
+	<td>Teléfono celular (Smartphone)</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=commit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//div[@id='cont']/div/div[5]/div</td>
+	<td>Descripción Teléfono celular (Smartphone)</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Nuevo</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=item_name</td>
+	<td>Resma de 90 gramos</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=i.icon-plus-sign</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=unit_name</td>
+	<td>Resma</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=unit_symbol</td>
+	<td>rsm</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=item_buy_price</td>
+	<td>80</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=item_price</td>
+	<td>110</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=commit</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
