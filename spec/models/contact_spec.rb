@@ -60,4 +60,11 @@ describe Contact do
     c.stub(accounts: [], inventories: [])
     c.destroy.should be_true
   end
+
+  context 'scopes' do
+    it "::search" do
+      expect(Contact.search('pa').to_sql).to match(
+        /contacts.matchcode ILIKE '%pa%' OR contacts.first_name ILIKE '%pa%' OR contacts.last_name ILIKE '%pa%'/)
+    end
+  end
 end

@@ -16,15 +16,15 @@
     %span.text-muted.muted
       %i.icon-info-sign(title="Un ítem visible se puede usar en operaciones" data-toggle="tooltip")
       Visible:
-    %span.icon(class="icon-large icon-#{@item.active}")
+    %span.active.icon(class="icon-large icon-#{@item.active}")
 
   .span3
     %span.text-muted.muted Venta:
-    %span.icon(class="icon-large icon-#{@item.for_sale}")
+    %span.for_sale.icon(class="icon-large icon-#{@item.for_sale}")
 
   .span6
     %span.text-muted.muted Unidad:
-    = @item.unit
+    %span.unit= @item.unit
 
 .row-fluid
   .span6.well.well-small

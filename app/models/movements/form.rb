@@ -61,7 +61,8 @@ class Movements::Form < BaseForm
   end
 
   def form_details_data
-    details.includes(:item).map { |v|
+    dets = movement.new_record? ? movement.details : movement.details.includes(:item)
+    dets.map { |v|
       {
         id: v.id, item: v.item_to_s, item_id: v.item_id, price: v.price, quantity:
         v.quantity, original_price: v.item_price, errors: v.errors

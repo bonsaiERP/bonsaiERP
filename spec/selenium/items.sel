@@ -131,6 +131,31 @@
 	<td>name=commit</td>
 	<td></td>
 </tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>css=li.history</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertCssCount</td>
+	<td>css=li.history</td>
+	<td>1</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=div.span6 span.unit</td>
+	<td>Resma (rsm)</td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>css=span.active.icon-true</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>css=span.for_sale.icon-true</td>
+	<td></td>
+</tr>
 </tbody></table>
 </body>
 </html>
