@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://bonsai.localhost.bom:3000/" />
+<title>Expense</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Expense</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/items/2</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Egresos</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Nuevo egreso</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=i.icon-plus-sign</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>css=form#new_contact</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=contact_matchcode</td>
+	<td>Proveedor 1</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=commit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForValue</td>
+	<td>id=contact_id_autocomplete</td>
+	<td>Proveedor 1</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>xpath=(//input[@type='text'])[8]</td>
+	<td>Sam</td>
+</tr>
+<tr>
+	<td>keyDown</td>
+	<td>xpath=(//input[@type='text'])[8]</td>
+	<td>s</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>css=.ui-autocomplete .ui-menu-item</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=.ui-autocomplete .ui-menu-item:first-child a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForValue</td>
+	<td>xpath=(//input[@type='text'])[8]</td>
+	<td>Samsumg Galaxy S5</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>name=expenses_form[expense_details_attributes][0][price]</td>
+	<td>2500</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>name=expenses_form[expense_details_attributes][0][quantity]</td>
+	<td>1.0</td>
+</tr>
+<tr>
+	<td>selectWindow</td>
+	<td>null</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=expenses_form[expense_details_attributes][0][quantity]</td>
+	<td>20.0</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=div.input.ng-binding</td>
+	<td>50 000.00</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=strong.ng-binding</td>
+	<td>50 000.00</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=expenses_form_description</td>
+	<td>Cotización samsumg galaxy</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=commit_approve</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=h4.inline</td>
+	<td>Se ha creado un Egreso.</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=span.b.bonsai-dark</td>
+	<td>Aprobado</td>
+</tr>
+</tbody></table>
+</body>
+</html>
