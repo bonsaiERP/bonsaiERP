@@ -39,8 +39,7 @@ class Item < ActiveRecord::Base
   scope :inventory, -> { where(stockable: true) }
   scope :for_sale , -> { where(for_sale: true) }
   scope :search   , ->(s) {
-    s = "%#{s}%"
-    where{(name.like "#{s}") | (code.like "#{s}")}
+    where("items.name ILIKE :s OR items.code ILIKE :s", s: "%#{s}%")
   }
 
   def to_s

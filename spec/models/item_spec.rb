@@ -138,4 +138,24 @@ describe Item do
       i.unit_symbol.should eq(unit.symbol)
     end
   end
+
+  context 'scopes' do
+    it "::search" do
+      expect(Item.search('ba').to_sql).to match(
+        /items.name ILIKE '%ba%' OR items.code ILIKE '%ba%'/)
+    end
+
+    it "::active" do
+      expect(Item.active.to_sql).to match(/"items"."active" = 't'/)
+    end
+
+    it "::income" do
+      expect(Item.income.to_sql).to match(/"items"."active" = 't' AND "items"."for_sale" = 't'/)
+    end
+
+    it "::for_sale" do
+      expect(Item.income.to_sql).to match(/"items"."for_sale" = 't'/)
+    end
+  end
+
 end
