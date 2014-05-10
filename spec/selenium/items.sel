@@ -107,6 +107,16 @@
 	<td>rsm</td>
 </tr>
 <tr>
+	<td>click</td>
+	<td>id=save-button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForSelectedLabel</td>
+	<td>css=#item_unit_id</td>
+	<td>Resma (rsm)</td>
+</tr>
+<tr>
 	<td>type</td>
 	<td>id=item_buy_price</td>
 	<td>80</td>
@@ -121,7 +131,6 @@
 	<td>name=commit</td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>

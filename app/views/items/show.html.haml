@@ -48,7 +48,7 @@
     %h3.n Historial
 
     %ul.listing.unstyled
-      = render partial: 'histories/history', collection: present(@item.histories)
+      = render partial: 'histories/history', collection: present(@item.histories.includes(:user))
 
 .page-header
   %h3.n Inventario
