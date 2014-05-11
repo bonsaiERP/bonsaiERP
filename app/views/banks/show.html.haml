@@ -22,7 +22,7 @@
     .moneybox
       %label SALDO CUENTA
       %h5.n
-        = ntc @bank.amount
+        %span.amount= ntc @bank.amount
         = currency_label @bank.currency
 
   .span6

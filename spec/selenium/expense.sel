@@ -12,11 +12,6 @@
 <tr><td rowspan="1" colspan="3">Expense</td></tr>
 </thead><tbody>
 <tr>
-	<td>open</td>
-	<td>/items/2</td>
-	<td></td>
-</tr>
-<tr>
 	<td>clickAndWait</td>
 	<td>link=Egresos</td>
 	<td></td>
@@ -125,6 +120,156 @@
 	<td>assertText</td>
 	<td>css=span.b.bonsai-dark</td>
 	<td>Aprobado</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Pago</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>id=expense-payment-form</td>
+	<td></td>
+</tr>
+<tr>
+	<td>mouseDown</td>
+	<td>css=form#expense-payment-form .select2-choice</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForVisible</td>
+	<td>css=.select2-results</td>
+	<td></td>
+</tr>
+<tr>
+	<td>mouseUp</td>
+	<td>css=.select2-result-label:contains('Banco BNB')</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=expenses_payment_amount</td>
+	<td>25000.0</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>id=currency_total</td>
+	<td>25 000.00</td>
+</tr>
+<tr>
+	<td>selectWindow</td>
+	<td>null</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=expenses_payment_reference</td>
+	<td>Cheque 12345</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=commit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>id=flashNotice</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=.expense .balance</td>
+	<td>25 000.00</td>
+</tr>
+<tr>
+	<td>assertCssCount</td>
+	<td>css=.ledgers .account_ledger</td>
+	<td>1</td>
+</tr>
+<tr>
+	<td>assertCssCount</td>
+	<td>css=li.history</td>
+	<td>2</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=inventory-deliver-link</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForVisible</td>
+	<td>css=.ui-dialog</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=commit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=expenses_inventory_in_inventory_details_attributes_0_quantity</td>
+	<td>10.0</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=commit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>id=flashNotice</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//div[@id='cont']/div/ul/li[2]/div[4]/div</td>
+	<td>10.00</td>
+</tr>
+<tr>
+	<td>assertCssCount</td>
+	<td>css=ul.inventories li</td>
+	<td>1</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=inventory-deliver-link</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForVisible</td>
+	<td>css=.ui-dialog</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=commit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=commit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>id=flashNotice</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertCssCount</td>
+	<td>css=ul.inventories li</td>
+	<td>2</td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>css=.inventory-status span.label.bg-bonsai-dark</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=.inventory-status span.label.bg-bonsai-dark</td>
+	<td>IC</td>
 </tr>
 </tbody></table>
 </body>
