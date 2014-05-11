@@ -156,6 +156,76 @@
 	<td>css=span.for_sale.icon-true</td>
 	<td></td>
 </tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Editar</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=item_name</td>
+	<td>Papel Sabana de 90 gramos</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=commit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=h2.n</td>
+	<td>Papel Sabana de 90 gramos</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=h4.inline</td>
+	<td>Se actualizo correctamente el ítem.</td>
+</tr>
+<tr>
+	<td>assertCssCount</td>
+	<td>css=li.history</td>
+	<td>2</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=li.history code.gray</td>
+	<td>Resma de 90 gramos</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=i.icon-plus-circle</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=item_name</td>
+	<td>Puntabola</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=item_unit_id</td>
+	<td>label=unidad (un)</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=item_buy_price</td>
+	<td>2.0</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=item_for_sale</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=commit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>css=.for_sale.icon-false</td>
+	<td></td>
+</tr>
 </tbody></table>
 </body>
 </html>
