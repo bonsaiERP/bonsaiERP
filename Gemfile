@@ -24,6 +24,9 @@ gem 'resubject' # Cool presenter
 
 gem 'validates_email_format_of', '~> 1.5.3'
 gem 'validates_lengths_from_database'
+# Hstore accessor
+gem 'hstore_accessor'
+
 
 group :production do
   gem 'newrelic_rpm'

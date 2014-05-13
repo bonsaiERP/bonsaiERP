@@ -20,7 +20,6 @@ module Models::History
         @history_cols
       end
     end
-
   end
 
   module InstanceMethods
@@ -81,8 +80,20 @@ module Models::History
     def get_data(object = self)
       Hash[ get_object_attributes(object).map { |k, v|
         next  if ['updater_id', 'nuller_id', 'creator_id', 'approver_id'].include?(k.to_s)
-        [k, { 'from' => v, 'to' => object.send(k), 'type' => object.class.column_types[k].type } ]
+        [k, { 'from' => v, 'to' => object.send(k), 'type' => get_type_for(object, k)} ]
       }.compact]
+    end
+
+    def get_type_for(object, k)
+      if object.class.column_types[k]
+        object.class.column_types[k].type
+      # TODO make a more viable method that can match the name of hstore
+      # column
+      elsif object.respond_to?(:hstore_metadata_for_extras)
+        object.hstore_metadata_for_extras[k.to_sym]
+      else
+        nil
+      end
     end
 
     def history_user_id
@@ -90,7 +101,7 @@ module Models::History
     end
 
     def get_object_attributes(object)
-      object.changed_attributes#.except('created_at', 'updated_at')
+      object.changed_attributes
     end
 
     # Null object

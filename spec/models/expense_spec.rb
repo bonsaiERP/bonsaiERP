@@ -173,9 +173,11 @@ describe Expense do
 
     e = Expense.new(attrs)
 
-    attrs.each do |k, v|
+    attrs.except(:approver_datetime).each do |k, v|
       e.send(k).should eq(v)
     end
+
+    expect(attrs[:approver_datetime].to_s).to eq(t.to_s)
   end
 
   context "approve!" do

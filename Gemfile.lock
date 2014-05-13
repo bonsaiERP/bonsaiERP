@@ -100,6 +100,8 @@ GEM
     haml (4.0.5)
       tilt
     hike (1.2.3)
+    hstore_accessor (0.6.0)
+      activesupport (>= 3.2.0)
     httparty (0.13.1)
       json (~> 1.8)
       multi_xml (>= 0.5.2)
@@ -265,6 +267,7 @@ DEPENDENCIES
   factory_girl_rails (~> 4.4.1)
   ffaker
   haml (>= 4.0.5)
+  hstore_accessor
   kaminari
   launchy
   meta_request
