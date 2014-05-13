@@ -13,8 +13,8 @@ class Movements::Query
   end
 
   def search(s)
-    s = "%#{ s }%"
-    @rel.joins(:contact).where{(name.like s) | (contact.matchcode.like s) | (description.like s)}
+    @rel.joins(:contact)
+    .where("accounts.name ILIKE :s OR accounts.description ILIKE :s OR contacts.matchcode ILIKE :s", s: "%#{ s }%")
   end
 
   def pendent_group_by_contact(relation = rel)
