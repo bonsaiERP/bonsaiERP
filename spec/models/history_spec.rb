@@ -25,7 +25,7 @@ describe History do
       i = create :item, name: 'item', unit_id: 1, price: 10, buy_price: 7
 
 
-      i.update_attributes(
+      i.update(
          price: 20, buy_price: 15, name: 'New name for item'
       ).should be_true
 

@@ -179,9 +179,11 @@ describe Income do
 
     i = Income.new(attrs)
 
-    attrs.each do |k, v|
+    attrs.except(:approver_datetime).each do |k, v|
       i.send(k).should eq(v)
     end
+
+    expect(i.approver_datetime.to_s).to eq(t.to_s)
   end
 
   context "approve!" do

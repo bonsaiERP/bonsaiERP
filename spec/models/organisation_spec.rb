@@ -22,7 +22,7 @@ describe Organisation do
         org.errors[:tenant].should_not be_blank
       end
 
-      %w(bonsai bonsaiERP unoY-23 asdf\ 77Ad).each do |v|
+      %w(bonsaii bonsaiERP unoY-23 asdf\ 77Ad).each do |v|
         org.name = v
         org.should be_valid
         org.tenant.should eq(v.downcase.gsub(/[^A-Za-z]/, ''))

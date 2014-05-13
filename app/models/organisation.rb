@@ -10,9 +10,12 @@ class Organisation < ActiveRecord::Base
 
   ########################################
   # Attributes
-  extend Models::HstoreMap
-  store_accessor :settings, :inventory, :header_css
-  convert_hstore_to_boolean :inventory
+  #extend Models::HstoreMap
+  #store_accessor :settings, :inventory, :header_css
+  #convert_hstore_to_boolean :inventory
+  hstore_accessor :settings,
+    inventory: :boolean,
+    header_css: :string
 
   # Callbacks
   before_validation :set_tenant

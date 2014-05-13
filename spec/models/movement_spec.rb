@@ -236,8 +236,8 @@ describe Movement do
         at.fetch(k.to_s).should eq(v)
       end
 
-      m.nuller_datetime.should be_is_a(ActiveSupport::TimeWithZone)
-      m.approver_datetime.should be_is_a(ActiveSupport::TimeWithZone)
+      m.nuller_datetime.should be_is_a(Time)
+      m.approver_datetime.should be_is_a(Time)
 
       m.nuller_datetime.to_s.should eq(t.to_s)
       m.approver_datetime.to_s.should eq(t.to_s)
