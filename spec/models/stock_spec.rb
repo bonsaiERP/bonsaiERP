@@ -35,4 +35,12 @@ describe Stock do
     stock.save_minimum(nil).should be_true
     stock.minimum.should == 0
   end
+
+  context '::scopes' do
+    it "item_like" do
+      sql = Stock.item_like('ba').to_sql
+
+      expect(sql).to match(/items.name ILIKE '%ba%' OR items.code ILIKE '%ba%'/)
+    end
+  end
 end

@@ -14,15 +14,15 @@ class StorePresenter < BasePresenter
     if attrs[:search_items].present?
       st = stocks.item_like(attrs[:search_items])
     else
-      st = stocks.includes(:item)
+      st = stocks
     end
     st = st.mins  if attrs[:minimum_inventory].present?
 
-    st.page(page attrs[:page_items]).order('items.name')
+    st.includes(:item).page(page attrs[:page_items]).order('items.name')
   end
 
   def inventories(attrs = {})
-    inv = Inventory.includes(:creator, :store, :store_to, :income, :expense)
+    inv = Inventory.includes(:creator, :income, :expense)
     .where("store_id=:id OR store_to_id=:id", id: id)
 
     if attrs[:search_operations].present?

@@ -18,7 +18,7 @@ class Store < ActiveRecord::Base
 
   # scopes
   scope :active, -> { where(active: true) }
-  scope :notin, -> (st_id) { where{id.not_in st_id} }
+  scope :notin, -> (st_id) { where.not(id: st_id) }
 
   def to_s
     name

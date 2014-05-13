@@ -14,7 +14,7 @@ class Stock < ActiveRecord::Base
   scope :active, -> { where(active: true) }
   scope :store_house, -> (store_id) { where(store_id: store_id) }
   scope :mins, -> { where("stocks.quantity < stocks.minimum") }
-  scope :item_like, -> (s) { s = "%#{s}%"; active.includes(:item).where { (item.name.like s) | (item.code.like s) } }
+  scope :item_like, -> (s) { active.joins(:item).where("items.name ILIKE :s OR items.code ILIKE :s", s: "%#{s}%") }
   scope :available_items, -> (store_id, s) { item_like(s).where("store_id=? AND quantity > 0", store_id) }
 
   delegate :name, :price, :code, :to_s, :type, :unit_symbol, to: :item, prefix: true
