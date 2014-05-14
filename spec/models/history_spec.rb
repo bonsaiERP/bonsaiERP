@@ -128,13 +128,18 @@ describe History do
       expect(det_hist[0]['description_was']).to eq('First item')
       expect(det_hist[0]['id']).to be_is_a(Integer)
 
-      at['expense_details_attributes'] << { item_id: 10, price: 10, quantity: 2, balance: 2 }
+      at['expense_details_attributes'] << { item_id: 10, price: 10, quantity: 2, balance: 2 }.stringify_keys
+      #tot = at['expense_details_attributes'].inject(0) { |sum, val| val['price'] * val['quantity'] }
+      #at['balance_inventory'] = 20.0
 
       # Update add new detail
-      expect(e.update_attributes(at)).to be_true
+      expect(e.update(at)).to be_true
+    binding.pry
       expect(e.histories).to have(3).items
       h = e.histories.first
 
+      puts h.history['balance_inventory']
+      expect(h.history['balance_inventory']).to eq({from: 1, to: 1, type: :decimal})
       expect(h.history_data["expense_details"]).to eq(true)
 
       # Update delete detail

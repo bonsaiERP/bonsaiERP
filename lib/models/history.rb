@@ -5,7 +5,7 @@ module Models::History
     base.instance_eval do
       before_save :create_history
       has_many :histories, -> { order('histories.created_at desc, id desc') }, as: :historiable, dependent: :destroy
-      delegate :history_instance, :history_cols, to: self
+      delegate :history_instance, :history_cols, :hstore_cols, to: self
 
       # class that can manipulate especial histories otherwise it uses
       # an instance of NullHistoryClass
@@ -18,6 +18,10 @@ module Models::History
 
       def history_cols
         @history_cols
+      end
+
+      def hstore_cols
+        @hstore_cols
       end
     end
   end
@@ -96,8 +100,13 @@ module Models::History
     def get_type_for(object, key)
       if object.class.column_types[key]
         object.class.column_types[key].type
-      elsif @hstore_cols.any?
-        @hstore_cols.find { |cols| cols[key]}[key]
+      elsif hstore_cols.any?
+        res = hstore_cols.find { |col| object.send(:"hstore_metadata_for_#{col}")[key] }
+        if res.is_a?(Hash)
+          res[key]
+        else
+          nil
+        end
         #object.respond_to?(:hstore_metadata_for_extras)
         #object.hstore_metadata_for_extras[key.to_sym]
       else
