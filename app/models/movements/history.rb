@@ -16,7 +16,6 @@ class Movements::History
 
   def set_history(movement, histo)
     @movement, @histo = movement, histo
-
     #filter
     set_details
     set_state_col

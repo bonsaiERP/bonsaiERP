@@ -111,11 +111,12 @@ describe History do
       .merge('expense_details_attributes' => det)
       .except('created_at', 'updated_at')
 
-
       expect(e.update_attributes(at)).to be_true
 
       expect(e.histories).to have(2).items
       h = e.histories.first
+      expect(h.history_data.keys.sort).to eq(['expense_details', 'updated_at'])
+
       expect(h.history['expense_details']).to eq({})
 
       expect(h.klass_type).to eq('Expense')

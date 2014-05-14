@@ -21,7 +21,7 @@ class MovementHistoryPresenter < HistoryPresenter
   end
 
   def filter_changes
-    @filter_changes ||= history.map do |key, val|
+    @filter_changes ||= history.except('updated_at').map do |key, val|
       case key
       when 'state' then state_html(key, val)
       when 'error_messages', 'extras', 'updater_id', 'nuller_id', 'approver_id', details_col.to_s

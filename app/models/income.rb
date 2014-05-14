@@ -5,6 +5,7 @@ class Income < Movement
 
   include Models::History
   has_history_details Movements::History, :income_details
+  has_history_hstore :extras
 
   self.code_name = 'I'
 
