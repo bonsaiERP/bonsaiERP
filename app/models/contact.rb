@@ -40,7 +40,7 @@ class Contact < ActiveRecord::Base
     where(sql.join(' OR ' ), s: "%#{s}%")
   }
 
-  default_scope -> { where(staff: false) }
+  #default_scope -> { where(staff: false) }
 
   # Serialization
   serialize :incomes_status, JSON

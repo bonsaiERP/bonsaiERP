@@ -28,12 +28,11 @@ class AccountLedgers::Query
 
   def search(search)
     s = "%#{search}%"
-    AccountLedger
-    .includes(:account, :account_to)
-    .eager_load(:contact)
-    .where("accounts.name ILIKE :s OR account_tos_account_ledgers.name ILIKE :s OR contacts.matchcode ILIKE :s", s: s)
 
-    #{ (account.name.like s) | (account_to.name.like s) | (contact.matchcode.like s) | (name.like s) }
+    AccountLedger
+    .eager_load(:contact, :account, :account_to)
+    .includes(:account, :account_to)
+    .where("accounts.name ILIKE :s OR account_tos_account_ledgers.name ILIKE :s OR contacts.matchcode ILIKE :s", s: s)
   end
 
   private

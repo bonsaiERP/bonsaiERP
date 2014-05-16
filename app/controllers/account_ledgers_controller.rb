@@ -17,7 +17,7 @@ class AccountLedgersController < ApplicationController
       @ledgers = AccountLedger.all if @ledgers.empty?
     end
 
-    @ledgers = @ledgers.includes(:creator, :updater, :approver).order(:date, :id).reverse_order.page(@page)
+    @ledgers = @ledgers.includes(:creator, :updater, :approver, :nuller).order(:date, :id).reverse_order.page(@page)
   end
 
   # GET /account_ledgers/:id
