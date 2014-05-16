@@ -30,13 +30,13 @@ class Expense < Movement
   scope :contact, -> (cid) { where(contact_id: cid) }
   scope :pendent, -> { active.where.not(amount: 0) }
   scope :error, -> { active.where(has_error: true) }
-  scope :due, -> { approved.where{due_date < Date.today} }
+  scope :due, -> { approved.where("accounts.due_date < ?", Date.today) }
   scope :nulled, -> { where(state: 'nulled') }
   scope :inventory, -> { active.where("extras->'delivered' = ?", 'false') }
-  scope :like, -> (search) {
-    search = "%#{search}%"
-    t = Expense.arel_table
-    where(t[:name].matches(search).or(t[:description].matches(search) ) )
+  scope :like, -> (s) {
+    #t = Expense.arel_table
+    #where(t[:name].matches(search).or(t[:description].matches(search) ) )
+    where("accounts.name ILIKE :s OR accounts.description ILIKE :s", s: "%#{s}%")
   }
   scope :date_range, -> (range) { where(date: range) }
 

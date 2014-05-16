@@ -27,7 +27,7 @@ class Income < Movement
   scope :contact, -> (cid) { where(contact_id: cid) }
   scope :pendent, -> { active.where.not(amount: 0) }
   scope :error, -> { active.where(has_error: true) }
-  scope :due, -> { approved.where{due_date < Date.today} }
+  scope :due, -> { approved.where("accounts.due_date < ?", Date.today) }
   scope :nulled, -> { where(state: 'nulled') }
   scope :inventory, -> { active.where("extras->'delivered' = ?", 'false') }
   scope :like, -> (search) {
