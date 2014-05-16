@@ -291,13 +291,14 @@ describe Expense do
   end
 
   describe 'scopes' do
+    subject { Expense }
 
     it "::pendent" do
       sql = <<-SQL
 SELECT \"accounts\".* FROM \"accounts\"  WHERE \"accounts\".\"type\" IN ('Expense') AND \"accounts\".\"state\" IN ('approved', 'paid') AND (\"accounts\".\"amount\" != 0)
       SQL
 
-      expect(Expense.pendent.to_sql.squish).to eq(sql.squish)
+      expect(subject.pendent.to_sql.squish).to eq(sql.squish)
     end
 
     it "::like" do
@@ -305,7 +306,12 @@ SELECT \"accounts\".* FROM \"accounts\"  WHERE \"accounts\".\"type\" IN ('Expens
  SELECT "accounts".* FROM "accounts" WHERE "accounts"."type" IN ('Expense') AND (("accounts"."name" ILIKE '%a%' OR "accounts"."description" ILIKE '%a%'))
       SQL
 
-      expect(Expense.like('a').to_sql.squish).to eq(sql.squish)
+      expect(subject.like('a').to_sql.squish).to eq(sql.squish)
+    end
+
+    it "::due" do
+      expect(subject.due.to_sql).to match(
+      /"accounts"."state" = 'approved' AND \(accounts.due_date < '#{Date.today}'\)/)
     end
   end
 

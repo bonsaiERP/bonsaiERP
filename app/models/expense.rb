@@ -34,9 +34,9 @@ class Expense < Movement
   scope :nulled, -> { where(state: 'nulled') }
   scope :inventory, -> { active.where("extras->'delivered' = ?", 'false') }
   scope :like, -> (s) {
-    #t = Expense.arel_table
-    #where(t[:name].matches(search).or(t[:description].matches(search) ) )
-    where("accounts.name ILIKE :s OR accounts.description ILIKE :s", s: "%#{s}%")
+    s = "%#{s}%"
+    t = Expense.arel_table
+    where(t[:name].matches(s).or(t[:description].matches(s) ) )
   }
   scope :date_range, -> (range) { where(date: range) }
 
