@@ -54,7 +54,7 @@ class Store < ActiveRecord::Base
   #end
 
   def self.get_names_hash
-    @names_hash ||= Hash[Store.scoped.pluck(:id, :name)]
+    @names_hash ||= Hash[Store.pluck(:id, :name)]
   end
 
 private

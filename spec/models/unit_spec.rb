@@ -49,4 +49,12 @@ describe Unit do
       i.unit_symbol.should eq('ggHrt')
     end
   end
+
+  context '::scopes' do
+    subject { Unit }
+
+    it "invisible" do
+      expect(subject.invisible.to_sql).to match(/"units"."visible" = 'f'/)
+    end
+  end
 end

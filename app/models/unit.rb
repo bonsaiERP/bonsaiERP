@@ -8,15 +8,16 @@ class Unit < ActiveRecord::Base
   before_update  :update_item_units
   before_destroy :check_items_destroy
 
-  # relationships
+  # Relationships
 
   has_many :items
 
-  # validations
+  # Validations
   validates_presence_of :name, :symbol
   validates_uniqueness_of :name, :symbol
   validates_lengths_from_database
 
+  scope :invisible, -> { where(visible: false) }
 
   def to_s
     "#{name} (#{symbol})"
@@ -27,41 +28,32 @@ class Unit < ActiveRecord::Base
     integer ? "Si" : "No"
   end
 
-  # Retrives all invisible records
-  def self.invisible
-    Unit.where(:visible => false )
-  end
-
   def self.create_base_data
     path = File.join(Rails.root, "db/defaults", "units.#{I18n.locale}.yml")
     data = YAML.load_file(path)
     Unit.create!(data)
   end
-#
-#  # Retrives all records
-#  def self.all_records
-#    Unit.with_exclusive_scope { where("1=1") }
-#  end
 
-protected
-  def strip_attributes
-    name.strip!
-    symbol.strip!
-  end
+  private
 
-  # Returns false if there are
-  def check_items_destroy
-    if Item.where(:unit_id => id).any?
-      errors.add(:base, "Existen items que usan esta unidad de medidad")
-      false
-    else
-      true
+    def strip_attributes
+      name.strip!
+      symbol.strip!
     end
-  end
 
-  def update_item_units
-    if name_changed? || symbol_changed?
-      Item.where(unit_id: id).update_all(["unit_name=?, unit_symbol=?", name, symbol])
+    # Returns false if there are
+    def check_items_destroy
+      if Item.where(:unit_id => id).any?
+        errors.add(:base, "Existen items que usan esta unidad de medidad")
+        false
+      else
+        true
+      end
     end
-  end
+
+    def update_item_units
+      if name_changed? || symbol_changed?
+        Item.where(unit_id: id).update_all(["unit_name=?, unit_symbol=?", name, symbol])
+      end
+    end
 end
