@@ -3,21 +3,20 @@
     %li
       = link_to "Ingresos", incomes_path
 
-%header
-  - if @income.has_error
-    .alert.alert-error
-      %h4 Existen errores que debe corregir!
-      %ul
-        - @income.error_messages.each do |k, arr|
-          - arr.each do |v|
-            %li
-              %h5.n.devolution-error= I18n.t("allowed_errors.#{v}").html_safe
+- if @income.has_error
+  .alert.alert-error
+    %h4 Existen errores que debe corregir!
+    %ul
+      - @income.error_messages.each do |k, arr|
+        - arr.each do |v|
+          %li
+            %h5.n.devolution-error= I18n.t("allowed_errors.#{v}").html_safe
 
 .row-fluid
   .span6
     %h1.ib
       %strong(title='Código ingreso, Ingreso-Año-Número' data-toggle='tooltip')= @income
-      %small(title='Estado' data-toggle='tooltip')= @income.state_tag
+      %small.state(title='Estado' data-toggle='tooltip')= @income.state_tag
 
     %h4.ib
       = link_to @income.contact, @income.contact, title: 'Contacto', data: { toggle: 'tooltip' }
@@ -66,7 +65,7 @@
     .moneybox
       %label TOTAL
       %h5.n
-        = ntc @income.total
+        %span.total= ntc @income.total
         = currency_label @income.currency
 
     .moneybox

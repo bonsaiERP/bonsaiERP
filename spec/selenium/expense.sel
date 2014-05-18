@@ -82,11 +82,6 @@
 	<td>1.0</td>
 </tr>
 <tr>
-	<td>selectWindow</td>
-	<td>null</td>
-	<td></td>
-</tr>
-<tr>
 	<td>type</td>
 	<td>name=expenses_form[expense_details_attributes][0][quantity]</td>
 	<td>20.0</td>
@@ -155,11 +150,6 @@
 	<td>assertText</td>
 	<td>id=currency_total</td>
 	<td>25 000.00</td>
-</tr>
-<tr>
-	<td>selectWindow</td>
-	<td>null</td>
-	<td></td>
 </tr>
 <tr>
 	<td>type</td>

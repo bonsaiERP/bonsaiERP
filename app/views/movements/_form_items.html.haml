@@ -35,7 +35,7 @@
       %span.error(ng-show='detail.hasError("quantity")') {{detail.errorsFor('quantity')}}
     .span2.r
       %label.visible-phone Total línea:
-      .input
+      .input.total-line
         {{ detail.subtotal() | decimal }}
       %span.space
         %a.dark(href='javascript:;' ng-click='destroy($index)')
@@ -54,7 +54,7 @@
       Subtotal
       %span.currency
     .span2.r
-      {{ subtotal() | decimal }}
+      %span.subtotal {{ subtotal() | decimal }}
       %span.space &nbsp;
 
 
@@ -65,7 +65,7 @@
 
       = f.text_field :tax_id, 'ng-model' => 'tax_id', id: 'tax_id', class: 'hide', 'ng-initial' => true
       .input-append
-        %select(ng-model='tax' ng-change='setTaxId()' ng-options='[t.name, " (", t.percentage, "%)" ].join("") for t in taxes track by t.id')
+        %select#tax-id(ng-model='tax' ng-change='setTaxId()' ng-options='[t.name, " (", t.percentage, "%)" ].join("") for t in taxes track by t.id')
           %option(value='')
 
         - if user_with_role.is_admin? || user_with_role.is_group?
@@ -78,7 +78,7 @@
       %span.currency
 
     .span2.r
-      {{ taxTotal() | decimal }}
+      %span.taxes {{ taxTotal() | decimal }}
       %span.space &nbsp;
 
 
@@ -87,5 +87,5 @@
       %strong Total
       %span.currency
     .span2.r
-      %strong {{ total() | decimal }}
+      %strong.total {{ total() | decimal }}
       %span.space &nbsp;

@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://bonsai.localhost.bom:3000/" />
+<title>incomes</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">incomes</td></tr>
+</thead><tbody>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Ingresos</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Nuevo ingreso</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=i.icon-plus-sign</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>css=form#new_contact</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=contact_matchcode</td>
+	<td>Juan cliente</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=commit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForValue</td>
+	<td>id=contact_id_autocomplete</td>
+	<td>Juan cliente</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>xpath=(//input[@type='text'])[8]</td>
+	<td>Sam</td>
+</tr>
+<tr>
+	<td>keyDown</td>
+	<td>xpath=(//input[@type='text'])[8]</td>
+	<td>s</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>css=.ui-autocomplete .ui-menu-item</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=.ui-autocomplete .ui-menu-item:first-child a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForValue</td>
+	<td>xpath=(//input[@type='text'])[8]</td>
+	<td>Samsumg Galaxy S5</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>name=incomes_form[income_details_attributes][0][price]</td>
+	<td>3500</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>name=incomes_form[income_details_attributes][0][quantity]</td>
+	<td>1.0</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=incomes_form[income_details_attributes][0][quantity]</td>
+	<td>2</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=div.input.ng-binding</td>
+	<td>7 000.00</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=span.subtotal.ng-binding</td>
+	<td>7 000.00</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>css=#tax-id</td>
+	<td>label=IVA (13.0%)</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=option[value=&quot;1&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=span.taxes</td>
+	<td>910.00</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=strong.total</td>
+	<td>7 910.00</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=incomes_form_description</td>
+	<td>Cotización samsumg galaxy</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=commit_save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>id=flashNotice</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=span.total</td>
+	<td>7 910.00</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>id=balance</td>
+	<td>7 910.00</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Aprobar</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>id=flashNotice</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=#flashNotice&gt;h4.inline</td>
+	<td>El Ingreso fue aprobado.</td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>css=small.state</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=small.state&gt;span.b.bonsai-dark</td>
+	<td>Aprobado</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Cobrar</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>css=#income-payment-form</td>
+	<td></td>
+</tr>
+<tr>
+	<td>mouseDown</td>
+	<td>css=form#income-payment-form .select2-choice</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForVisible</td>
+	<td>css=.select2-results</td>
+	<td></td>
+</tr>
+<tr>
+	<td>mouseUp</td>
+	<td>css=.select2-result-label:contains('Efectivo Caja inicial')</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=incomes_payment_reference</td>
+	<td>Cobro completo</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=commit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=#flashNotice h4.inline</td>
+	<td>El cobro se realizó correctamente.</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=small.state&gt;span.b.bonsai-darker</td>
+	<td>Pagado</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=span.total</td>
+	<td>7 910.00</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>id=balance</td>
+	<td>0.00</td>
+</tr>
+<tr>
+	<td>assertCssCount</td>
+	<td>css=li.history</td>
+	<td>3</td>
+</tr>
+<tr>
+	<td>assertCssCount</td>
+	<td>css=.ledgers&gt;.account_ledger</td>
+	<td>1</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=span.red</td>
+	<td>0.00</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//div[@id='cont']/div/ul/li[2]/div[4]/div</td>
+	<td>2.00</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=inventory-deliver-link</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=commit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=commit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=#flashNotice&gt;h4.inline</td>
+	<td>Se realizó la entrega de inventario.</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=span.label.bg-bonsai-dark</td>
+	<td>IC</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//div[@id='cont']/div/ul/li[2]/div[4]/div</td>
+	<td>0.00</td>
+</tr>
+<tr>
+	<td>assertCssCount</td>
+	<td>css=.inventories&gt;li</td>
+	<td>1</td>
+</tr>
+<tr>
+	<td>assertCssCount</td>
+	<td>css=li.history</td>
+	<td>4</td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

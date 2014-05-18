@@ -10,8 +10,10 @@
 <tr><td><b>Test Suite</b></td></tr>
 <tr><td><a href="login.sel">login</a></td></tr>
 <tr><td><a href="navigation.sel">navigation</a></td></tr>
+<tr><td><a href="bank.sel">bank</a></td></tr>
 <tr><td><a href="items.sel">items</a></td></tr>
-<tr><td><a href="expense.sel">Expense</a></td></tr>
+<tr><td><a href="expense.sel">expense</a></td></tr>
+<tr><td><a href="incomes.sel">incomes</a></td></tr>
 </tbody></table>
 </body>
 </html>
