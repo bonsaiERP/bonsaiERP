@@ -2,8 +2,9 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class SessionsController < ApplicationController
+  before_action :redirect_www
   skip_before_filter :set_tenant, :check_authorization!
-  before_filter :check_logged_in, only: %w(new create)
+  before_action :check_logged_in, only: %w(new create)
   layout 'sessions'
 
   def new
@@ -49,5 +50,11 @@ class SessionsController < ApplicationController
 
     def session_params
       params.require(:session).permit(:email, :password)
+    end
+
+    def redirect_www
+      if request.subdomain
+        redirect_to "http://bonsaierp.com" and return
+      end
     end
 end
