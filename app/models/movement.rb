@@ -27,6 +27,16 @@ class Movement < Account
     nuller_datetime: :time,
     approver_datetime: :time
 
+  EXTRAS_DEFAULTS = {
+    delivered: :false,
+    discounted: :false,
+    devolution: :false,
+    gross_total: 0.0,
+    inventory: false,
+    balance_inventory: 0.0,
+    original_total: 0.0,
+  }
+
   # Callbacks
   before_update :check_items_balances
   before_save :symbolize_keys_extras

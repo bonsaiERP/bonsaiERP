@@ -114,9 +114,6 @@ module Models::History
       end
     end
 
-    def get_hstore_type
-    end
-
     def not_changed_or_users?(key)
       changed_users?(key) || send(key) == send(:"#{key}_was")
     end

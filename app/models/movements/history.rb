@@ -16,7 +16,7 @@ class Movements::History
 
   def set_history(movement, histo)
     @movement, @histo = movement, histo
-    #filter
+    filter
     set_details
     set_state_col
     histo.operation_type = movement.operation_type
@@ -60,15 +60,15 @@ class Movements::History
     end
 
     def filter
+      return  unless histo.history_data['extras']
+
       histo.history_data['extras']['from'].each do |k, v|
-        ext = history_data['extras']
+        ext = histo.history_data['extras']
         if v == ext['from'][k.to_s].to_s || v == ext['to'][k.to_sym].to_s
-          history_data['extras']['from'].delete(k)
-          history_data['extras']['to'].delete(k)
+          histo.history_data['extras']['from'].delete(k)
+          histo.history_data['extras']['to'].delete(k)
         end
       end
-    rescue
-      # no changes
     end
 
     def changed_detail?(det)
