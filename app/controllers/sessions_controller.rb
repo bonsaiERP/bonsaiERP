@@ -53,7 +53,7 @@ class SessionsController < ApplicationController
     end
 
     def redirect_www
-      if request.subdomain
+      if request.subdomain == 'www'
         redirect_to "http://bonsaierp.com" and return
       end
     end
