@@ -32,7 +32,8 @@ class Registration < BaseForm
 
       @user.active_links.build(
         organisation_id: organisation.id, tenant: organisation.tenant,
-        role: 'admin', master_account: true
+        role: 'admin', master_account: true,
+        api_token: api_token
       )
 
       @user.save
@@ -42,6 +43,10 @@ class Registration < BaseForm
       @organisation = Organisation.new(name: name, inventory: true)
       @organisation.valid?
       @organisation.save
+    end
+
+    def api_token
+      SecureRandom.urlsafe_base64(32)
     end
 
 end

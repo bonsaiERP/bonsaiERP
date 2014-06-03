@@ -12,5 +12,6 @@ class Link < ActiveRecord::Base
   validates_inclusion_of :role, in: User::ROLES
 
   scope :org_links, -> (org_id) { where(organisation_id: org_id) }
+  scope :active, -> { where(active: true) }
 
 end
