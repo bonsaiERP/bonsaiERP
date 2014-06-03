@@ -5,7 +5,7 @@ module Models::History
     base.instance_eval do
       before_save :create_history
       has_many :histories, -> { order('histories.created_at desc, id desc') }, as: :historiable, dependent: :destroy
-      delegate :history_instance, :history_cols, :hstore_cols, to: self
+      delegate :history_instance, :history_cols, to: self
 
       # class that can manipulate especial histories otherwise it uses
       # an instance of NullHistoryClass
@@ -18,10 +18,6 @@ module Models::History
 
       def history_cols
         @history_cols
-      end
-
-      def hstore_cols
-        @hstore_cols
       end
     end
   end
@@ -36,10 +32,6 @@ module Models::History
     def has_history_details(klass, *cols)
       @history_klass = klass
       @history_cols = cols
-    end
-
-    def has_history_hstore(*cols)
-      @hstore_cols = Array(cols)
     end
   end
 
@@ -86,40 +78,22 @@ module Models::History
     end
 
     def get_data(object = self)
-      Hash[ get_object_attributes(object).map { |key, val|
-        next  if not_changed_or_users?(key)
-        get_hash_of_changes(object, key, val)
+      Hash[ get_object_attributes(object).map { |k, v|
+        next  if ['updater_id', 'nuller_id', 'creator_id', 'approver_id'].include?(k.to_s)
+        [k, { 'from' => v, 'to' => object.send(k), 'type' => get_type_for(object, k)} ]
       }.compact]
     end
 
-    def get_hash_of_changes(object, key, val)
-      [key, { 'from' => val, 'to' => object.send(key), 'type' => get_type_for(object, key)} ]
-    end
-
-    # Gets the type for normal attribute or hstore
-    def get_type_for(object, key)
-      if object.class.column_types[key]
-        object.class.column_types[key].type
-      elsif hstore_cols.any?
-        res = hstore_cols.find { |col| object.send(:"hstore_metadata_for_#{col}")[key] }
-        if res.is_a?(Hash)
-          res[key]
-        else
-          nil
-        end
-        #object.respond_to?(:hstore_metadata_for_extras)
-        #object.hstore_metadata_for_extras[key.to_sym]
+    def get_type_for(object, k)
+      if object.class.column_types[k]
+        object.class.column_types[k].type
+      # TODO make a more viable method that can match the name of hstore
+      # column
+      elsif object.respond_to?(:hstore_metadata_for_extras)
+        object.hstore_metadata_for_extras[k.to_sym]
       else
         nil
       end
-    end
-
-    def not_changed_or_users?(key)
-      changed_users?(key) || send(key) == send(:"#{key}_was")
-    end
-
-    def changed_users?(k)
-      ['updater_id', 'nuller_id', 'creator_id', 'approver_id'].include?(k.to_s)
     end
 
     def history_user_id
