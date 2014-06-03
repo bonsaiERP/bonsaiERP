@@ -16,5 +16,13 @@ describe Link do
       sql = Link.active.to_sql
       expect(sql).to match(/"links"."active" = 't'/)
     end
+
+    it "::auth" do
+      sql = Link.auth("we").to_sql
+
+      expect(sql).to match(/"links"."active" = 't'/)
+      expect(sql).to match(/"links"."api_token" = 'we'/)
+      expect(sql).to match(/JOIN "common"."users"/)
+    end
   end
 end
