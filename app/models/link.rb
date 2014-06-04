@@ -14,5 +14,5 @@ class Link < ActiveRecord::Base
   scope :org_links, -> (org_id) { where(organisation_id: org_id) }
   scope :active, -> { where(active: true) }
 
-  scope :auth, -> (token) { active.eager_load(:user).where(api_token: token) }
+  scope :auth, -> (token) { active.eager_load(:user).find_by(api_token: token) }
 end

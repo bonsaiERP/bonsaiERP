@@ -130,6 +130,7 @@ FactoryGirl.define do
   factory :link do
     role User::ROLES[1]
     master_account true
+    api_token { SecureRandom.urlsafe_base64(32) }
   end
 
   factory :store do
@@ -154,4 +155,8 @@ FactoryGirl.define do
     percentage 10
   end
 
+  factory :tag do
+    name 'first tag'
+    bgcolor '#efefef'
+  end
 end

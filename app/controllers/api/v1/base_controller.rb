@@ -10,7 +10,7 @@ class Api::V1::BaseController < ActionController::Base
     end
 
     def current_user
-      user_link.current_user
+      user_link.user
     end
 
     def user_link
@@ -21,4 +21,7 @@ class Api::V1::BaseController < ActionController::Base
       params[:api_token]
     end
 
+    def page
+      @page ||= params[:page].to_i > 0 ? params[:page].to_i : 1
+    end
 end
