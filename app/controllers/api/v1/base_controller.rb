@@ -1,5 +1,5 @@
 class Api::V1::BaseController < ActionController::Base
-  before_action :authenticate_user
+  before_action :authenticate_user, :set_tenant, :set_user_session
 
   private
 
@@ -23,5 +23,13 @@ class Api::V1::BaseController < ActionController::Base
 
     def page
       @page ||= params[:page].to_i > 0 ? params[:page].to_i : 1
+    end
+
+    def set_tenant
+      PgTools.change_schema user_link.tenant
+    end
+
+    def set_user_session
+      UserSession.user = current_user
     end
 end

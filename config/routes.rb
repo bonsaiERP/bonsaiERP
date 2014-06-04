@@ -183,7 +183,7 @@ Bonsaierp::Application.routes.draw do
 
       resources :tags, only: [:index]
 
-      resources :contacts, only: [:index]
+      resources :contacts, only: [:index, :create, :update]
     end
   end
 

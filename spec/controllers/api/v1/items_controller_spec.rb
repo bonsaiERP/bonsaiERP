@@ -5,6 +5,10 @@ describe Api::V1::ItemsController do
   let(:user) { create :user }
   let(:link) { create :link, user_id: user.id, organisation_id: 10, tenant: 'amaru' }
 
+   before(:each) do
+     controller.stub(set_user_session: true)
+   end
+
   def items
     UserSession.user = user
     unit = create :unit, name: 'unit'
@@ -16,6 +20,8 @@ describe Api::V1::ItemsController do
 
   context 'GET /api/v1/items' do
     it "/" do
+      PgTools.should_receive(:change_schema).with(link.tenant)
+
       get :index, api_token: link.api_token
 
       expect(response).to be_ok
