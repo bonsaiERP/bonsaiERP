@@ -25,7 +25,6 @@ describe Api::V1::ItemsController do
       get :index, api_token: link.api_token
 
       expect(response).to be_ok
-      expect(response.body).to eq('[]')
     end
 
 
@@ -34,7 +33,10 @@ describe Api::V1::ItemsController do
       get :index, api_token: link.api_token
 
       json = JSON.parse response.body
-      expect(json).to have(2).items
+      expect(json['items']).to have(2).items
+      expect(json['pagination']['total']).to eq(2)
+      expect(json['pagination']['pages']).to eq(1)
+      expect(json['pagination']['page']).to eq(1)
     end
   end
 end

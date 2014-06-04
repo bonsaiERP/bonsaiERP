@@ -25,6 +25,10 @@ class Api::V1::BaseController < ActionController::Base
       @page ||= params[:page].to_i > 0 ? params[:page].to_i : 1
     end
 
+    def per
+      100
+    end
+
     def set_tenant
       PgTools.change_schema user_link.tenant
     end
@@ -32,4 +36,20 @@ class Api::V1::BaseController < ActionController::Base
     def set_user_session
       UserSession.user = current_user
     end
+
+    # Used to response the JSON api
+    def json_resp(collection, name)
+      collection = collection.page(page).per(per)
+
+      {
+        name => collection,
+        pagination: {
+          total: collection.total_count,
+          pages: collection.total_pages,
+          page: page,
+          per_page: per
+        }
+      }
+    end
+
 end

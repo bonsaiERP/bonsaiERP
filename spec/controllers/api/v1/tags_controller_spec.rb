@@ -10,7 +10,6 @@ describe Api::V1::TagsController do
       get :index, api_token: '111'
 
       expect(response).to be_ok
-      expect(response.body).to eq('[]')
     end
 
     it "with tags" do
@@ -19,7 +18,8 @@ describe Api::V1::TagsController do
       get :index, api_token: '1212'
 
       json = JSON.parse(response.body)
-      expect(json).to have(1).item
+      expect(json['tags']).to have(1).item
+      expect(json['pagination']['total']).to eq(1)
     end
   end
 end
