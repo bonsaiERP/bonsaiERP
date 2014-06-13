@@ -62,15 +62,6 @@ describe Expense do
     UserSession.user = user
   end
 
-  context 'callbacks' do
-    it 'check callback' do
-      e = Expense.new(valid_attributes)
-      e.should_receive(:symbolize_keys_extras)
-      e.save.should be_true
-    end
-
-  end
-
   it "checks the states methods" do
     Expense::STATES.each do |state|
       Expense.new(state: state).should send(:"be_is_#{state}")

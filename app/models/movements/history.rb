@@ -16,7 +16,6 @@ class Movements::History
 
   def set_history(movement, histo)
     @movement, @histo = movement, histo
-    filter
     set_details
     set_state_col
     histo.operation_type = movement.operation_type
@@ -57,18 +56,6 @@ class Movements::History
 
     def detail_changes?(attr)
       attr.any? { |det| det['changed?'] || det['destroyed?'] || det['new_record?'] }
-    end
-
-    def filter
-      return  unless histo.history_data['extras']
-
-      histo.history_data['extras']['from'].each do |k, v|
-        ext = histo.history_data['extras']
-        if v == ext['from'][k.to_s].to_s || v == ext['to'][k.to_sym].to_s
-          histo.history_data['extras']['from'].delete(k)
-          histo.history_data['extras']['to'].delete(k)
-        end
-      end
     end
 
     def changed_detail?(det)

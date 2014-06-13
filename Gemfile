@@ -27,7 +27,6 @@ gem 'validates_lengths_from_database'
 # Hstore accessor
 gem 'hstore_accessor'
 
-
 group :production do
   gem 'newrelic_rpm'
   gem 'bugsnag' # Report of errors

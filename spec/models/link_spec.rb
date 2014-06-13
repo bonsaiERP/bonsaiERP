@@ -18,11 +18,13 @@ describe Link do
     end
 
     it "::auth" do
-      sql = Link.auth("we").to_sql
+      u = create :user
+      l = Link.create! user_id: u.id, active: true, api_token: 'uno', organisation_id: 1, role: 'admin'
+      l = Link.auth("uno")
 
-      expect(sql).to match(/"links"."active" = 't'/)
-      expect(sql).to match(/"links"."api_token" = 'we'/)
-      expect(sql).to match(/JOIN "common"."users"/)
+      expect(l).to be_present
+      expect(l).to be_active
+      expect(l.user).to be_is_a(User)
     end
   end
 end

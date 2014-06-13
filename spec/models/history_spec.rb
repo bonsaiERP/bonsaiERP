@@ -93,7 +93,7 @@ describe History do
 
     it "#history" do
       # Create
-      e = Expense.new(attributes)
+      e = Expense.new(Expense::EXTRAS_DEFAULTS.merge(attributes))
       e.save.should be_true
 
       expect(e.histories).to have(1).item
@@ -107,11 +107,11 @@ describe History do
       det[0]['description'] = 'A new description'
 
       #.merge('description' => 'Jo jo jo', 'expense_details_attributes' => det)
-      at = e.attributes
-      .merge('expense_details_attributes' => det)
+      e_data = e.attributes.merge('expense_details_attributes' => det)
       .except('created_at', 'updated_at')
 
-      expect(e.update_attributes(at)).to be_true
+      #e.attributes = e_data
+      expect(e.update(e_data)).to be_true
 
       expect(e.histories).to have(2).items
       h = e.histories.first
@@ -128,12 +128,12 @@ describe History do
       expect(det_hist[0]['description_was']).to eq('First item')
       expect(det_hist[0]['id']).to be_is_a(Integer)
 
-      at['expense_details_attributes'] << { item_id: 10, price: 10, quantity: 2, balance: 2 }.stringify_keys
+      e_data['expense_details_attributes'] << { item_id: 10, price: 10, quantity: 2, balance: 2 }.stringify_keys
       #tot = at['expense_details_attributes'].inject(0) { |sum, val| val['price'] * val['quantity'] }
       #at['balance_inventory'] = 20.0
 
       # Update add new detail
-      expect(e.update(at)).to be_true
+      expect(e.update(e_data)).to be_true
 
       expect(e.histories).to have(3).items
       h = e.histories.first

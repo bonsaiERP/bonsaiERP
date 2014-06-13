@@ -62,12 +62,6 @@ describe Income do
   end
 
   context 'callbacks' do
-    it 'check callback' do
-      i = Income.new(valid_attributes)
-
-      i.should_receive(:symbolize_keys_extras)
-      i.save.should be_true
-    end
 
     it "does not update contact to client" do
       contact.client = true
