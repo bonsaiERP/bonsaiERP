@@ -17,7 +17,7 @@ class Expenses::Form < Movements::Form
 
   # Creates and instance of income and initializes
   def self.new_expense(attrs = {})
-    _object = new(attrs)
+    _object = new(Expense::EXTRAS_DEFAULTS.merge(attrs))
     _object.set_new_expense(attrs)
     _object
   end

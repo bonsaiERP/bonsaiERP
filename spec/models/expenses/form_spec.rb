@@ -1,3 +1,5 @@
+require 'spec_helper'
+
 # encoding: utf-8
 describe Expenses::Form do
   let(:details) {

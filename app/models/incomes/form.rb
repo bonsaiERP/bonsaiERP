@@ -17,7 +17,7 @@ class Incomes::Form < Movements::Form
 
   # Creates and instance of income and initializes
   def self.new_income(attrs = {})
-    _object = new(attrs)
+    _object = new(Income::EXTRAS_DEFAULTS.merge(attrs))
     _object.set_new_income
     _object
   end
