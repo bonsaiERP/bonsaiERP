@@ -39,8 +39,8 @@ describe TenantCreator do
       # Migrations are stored on public.schema_migrations
       #res = PgTools.execute "SELECT * FROM #{tc.tenant}.schema_migrations"
       #res.count.should > 0
-      res = PgTools.execute("select count(*) from #{tc.tenant}.units")
-      res.values[0][0].to_i.should eq(6)
+      #res = PgTools.execute("select count(*) from #{tc.tenant}.units")
+      #res.values[0][0].to_i.should eq(6)
 
       s = Store.first
       s.name.should eq('Almacen inicial')
