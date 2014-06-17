@@ -1,8 +1,13 @@
 # Forces that all rake tasks are runned in test
-Rails.env = 'test'
+
 namespace :bonsai_test do
+  def check_is_test
+    raise 'Error you must run in test'  unless Rails.env.test?
+  end
+
   desc 'Creates organisation and tenant'
   task create_tenant: :environment do
+    check_is_test
     Rake::Task['bonsai_test:delete_organisations'].invoke
 
     r = Registration.new({name: 'bonsai', email: 'boris@bonsaierp.com',
@@ -21,11 +26,13 @@ namespace :bonsai_test do
 
   desc 'Eliminates all organisations'
   task delete_organisations: :environment do
+    check_is_test
     Organisation.all.each { |org| org.drop_related! }
   end
 
   desc 'List organisations'
   task list_organisations: :environment do
+    check_is_test
     puts Organisation.all.map(&:name)
   end
 end
