@@ -18,7 +18,7 @@ class Api::V1::BaseController < ActionController::Base
     end
 
     def api_token
-      params[:api_token]
+      request.headers[:api_token]
     end
 
     def page

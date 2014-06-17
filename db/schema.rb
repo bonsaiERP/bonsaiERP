@@ -240,8 +240,10 @@ ActiveRecord::Schema.define(version: 20140603135208) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "tenant",          limit: 100
+    t.string   "api_token"
   end
 
+  add_index "links", ["api_token"], name: "index_links_on_api_token", unique: true, using: :btree
   add_index "links", ["organisation_id"], name: "index_links_on_organisation_id", using: :btree
   add_index "links", ["tenant"], name: "index_links_on_tenant", using: :btree
   add_index "links", ["user_id"], name: "index_links_on_user_id", using: :btree
@@ -281,7 +283,7 @@ ActiveRecord::Schema.define(version: 20140603135208) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "country_code", limit: 5
-    t.hstore   "settings",                 default: "\"inventory\"=>\"true\""
+    t.hstore   "settings",                 default: {"inventory"=>"true"}
   end
 
   add_index "organisations", ["country_code"], name: "index_organisations_on_country_code", using: :btree

@@ -12,4 +12,9 @@ WHERE type IN ('Income', 'Expense');
       PgTools.execute sql
     end
   end
+
+  desc 'Show env'
+  task show_env: :environment do
+    puts Rails.env
+  end
 end
