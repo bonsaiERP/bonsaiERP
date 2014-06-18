@@ -67,6 +67,7 @@ describe Income do
       contact.client = true
       contact.should_not_receive(:update_attribute).with(:client, true)
       i = Income.new(valid_attributes)
+      i.tag_ids = [1, 2]
 
       i.save.should be_true
     end

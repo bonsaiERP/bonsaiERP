@@ -78,6 +78,7 @@ class Incomes::Form < Movements::Form
 
     def set_new_income_data
       @movement = Income.new(income_attributes.merge(self.class.new_income_attributes))
+
       2.times { @movement.income_details.build(quantity: 1) }  if income.details.empty?
     end
 

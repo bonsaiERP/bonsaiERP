@@ -481,4 +481,29 @@ describe Expenses::Form do
     exp = Expenses::Form.new_expense
     expect(exp.expense).not_to be_inventory
   end
+
+  context 'with tags' do
+    before(:each) do
+      AccountLedger.any_instance.stub(valid?: true)
+      Expense.any_instance.stub(valid?: true)
+      ExpenseDetail.any_instance.stub(valid?: true)
+      Item.stub_chain(:where, pluck: [[1, 10], [2, 20.0]])
+    end
+
+    it "#save with tags" do
+      tag1 = create :tag
+      tag2 = create :tag, name: 'tag 2'
+
+      tag_ids = [tag1.id, tag2.id]
+
+      es = Expenses::Form.new_expense(valid_params.merge(tag_ids: tag_ids))
+      es.stub(account_to: true)
+
+      es.create_and_approve.should be_true
+
+      exp = Expense.find(es.expense.id)
+      expect(exp.tag_ids).to eq(tag_ids)
+      expect(exp.tag_ids).to have(2).items
+    end
+  end
 end
