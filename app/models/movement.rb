@@ -27,7 +27,6 @@ class Movement < Account
   # Relationships
   belongs_to :contact
   belongs_to :project
-  belongs_to :tax
 
   has_many :ledgers, foreign_key: :account_id, class_name: 'AccountLedger'
   has_many :inventories, foreign_key: :account_id
