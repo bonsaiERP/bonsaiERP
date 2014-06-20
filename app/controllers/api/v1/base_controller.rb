@@ -14,7 +14,11 @@ class Api::V1::BaseController < ActionController::Base
     end
 
     def user_link
-      @user_link ||= Link.auth(api_token)
+      @user_link ||= Link.auth(api_token, tenant)
+    end
+
+    def tenant
+      request.subdomain
     end
 
     def api_token

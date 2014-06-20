@@ -35,9 +35,6 @@ module Bonsaierp
 
     config.assets.precompile += %w(email.css)
 
-    # routes
-    #config.paths.config.routes.concat Dir[Rails.root.join('config/routes/*.rb')]
-
     # Generators
     config.generators do |g|
       g.template_engine :haml

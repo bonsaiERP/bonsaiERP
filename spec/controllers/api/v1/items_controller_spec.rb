@@ -7,6 +7,7 @@ describe Api::V1::ItemsController do
 
    before(:each) do
      controller.stub(set_user_session: true)
+     request.host = 'amaru.bonsaierp.com'
    end
 
   def items
@@ -22,7 +23,8 @@ describe Api::V1::ItemsController do
     it "/" do
       PgTools.should_receive(:change_schema).with(link.tenant)
 
-      get :index, api_token: link.api_token
+      request.headers['token'] = link.api_token
+      get :index, subdomain: 'amaru'
 
       expect(response).to be_ok
     end
@@ -30,6 +32,7 @@ describe Api::V1::ItemsController do
 
     it "with items" do
       items
+      request.headers['token'] = link.api_token
       get :index, api_token: link.api_token
 
       json = JSON.parse response.body

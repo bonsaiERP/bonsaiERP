@@ -16,7 +16,7 @@ class Link < ActiveRecord::Base
 
   #scope :auth, -> (token) {  }
 
-  def self.auth(token)
-    active.eager_load(:user).where(active: true, api_token: token).first
+  def self.auth(token, tenant)
+    active.eager_load(:user).where(active: true, api_token: token, tenant: tenant).first
   end
 end

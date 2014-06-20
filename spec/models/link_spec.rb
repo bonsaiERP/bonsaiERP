@@ -19,8 +19,8 @@ describe Link do
 
     it "::auth" do
       u = create :user
-      l = Link.create! user_id: u.id, active: true, api_token: 'uno', organisation_id: 1, role: 'admin'
-      l = Link.auth("uno")
+      l = Link.create! user_id: u.id, active: true, api_token: 'uno', organisation_id: 1, role: 'admin', tenant: 'bon'
+      l = Link.auth('uno', 'bon')
 
       expect(l).to be_present
       expect(l).to be_active

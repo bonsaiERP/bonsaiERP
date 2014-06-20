@@ -1,3 +1,3 @@
-class Api::V1::IncomeController < Api::V1:Base
+class Api::V1::IncomesController < Api::V1::BaseController
 
 end
