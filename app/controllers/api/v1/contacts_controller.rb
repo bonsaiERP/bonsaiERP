@@ -1,7 +1,7 @@
 class Api::V1::ContactsController < Api::V1::BaseController
   # GET /api/v1/contacts
   def index
-    render json: json_resp(Contact, :contacts)
+    render json: Contact.page(page).per(per).to_json
   end
 
   # POST /api/v1/contacts
@@ -18,8 +18,10 @@ class Api::V1::ContactsController < Api::V1::BaseController
   end
 
   # PATCH /api/v1/contacts/:id
-  def update
 
+  # GET /api/v1/contacts/count
+  def count
+    render json: { count: Contact.count }
   end
 
   private

@@ -36,10 +36,16 @@ describe Api::V1::ItemsController do
       get :index, api_token: link.api_token
 
       json = JSON.parse response.body
-      expect(json['items']).to have(2).items
-      expect(json['pagination']['total']).to eq(2)
-      expect(json['pagination']['pages']).to eq(1)
-      expect(json['pagination']['page']).to eq(1)
+      expect(json).to have(2).items
+    end
+  end
+
+  context 'GET /api/v1/items/count/' do
+    it "total" do
+      request.headers['token'] = link.api_token
+      get :count
+
+      expect(JSON.parse(response.body)['count']).to eq(0)
     end
   end
 end

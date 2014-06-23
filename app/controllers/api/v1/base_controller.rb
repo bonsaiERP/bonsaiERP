@@ -30,7 +30,7 @@ class Api::V1::BaseController < ActionController::Base
     end
 
     def per
-      100
+      50
     end
 
     def set_tenant

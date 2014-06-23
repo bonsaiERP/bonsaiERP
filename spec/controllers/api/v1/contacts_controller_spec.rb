@@ -14,10 +14,10 @@ describe Api::V1::ContactsController do
     it "OK" do
       create_contact
 
-      get :index, api_token: '2323'
+      get :index
 
       json = JSON.parse(response.body)
-      expect(json['contacts']).to have(1).item
+      expect(json).to have(1).item
     end
   end
 
@@ -34,6 +34,14 @@ describe Api::V1::ContactsController do
       post :create, contact: {matchcode: ''}
 
       expect(response).to_not be_ok
+    end
+  end
+
+  context 'GET #count' do
+    it "count" do
+      get :count
+
+      expect(JSON.parse(response.body)['count']).to eq(0)
     end
   end
 

@@ -2,17 +2,23 @@ class Api::V1::ItemsController < Api::V1::BaseController
 
   # GET /api/v1/items
   def index
-    render json: json_resp(search_items, :items)
+    render json: Item.page(page).per(per).to_json
+  end
+
+  # GET /api/v1/items/count
+  def count
+    render json: { count: Item.count }
   end
 
   private
 
-    def search_items
-      items = Item
+    def items2
+      ActiveRecord::Base.connection.select_rows(items_sql)
+    end
 
-      items = items.where(active: params[:active])  if params[:active].present?
-      items = items.where(for_sale: params[:for_sale])  if params[:for_sale].present?
-
-      items
+    def items_sql
+      <<-SQL
+select row_to_json(row) from (select * from items) row;
+      SQL
     end
 end
