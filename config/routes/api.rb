@@ -11,5 +11,9 @@ namespace :api do
     resources :contacts, only: [:index, :create, :update] do
       get :count, on: :collection
     end
+
+    resources :incomes, only: [:index, :create, :update] do
+      get :count, on: :collection
+    end
   end
 end
