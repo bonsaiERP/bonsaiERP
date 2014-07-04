@@ -33,6 +33,8 @@ resources :tags do
   patch :update_models, on: :collection
 end
 
+resources :tag_groups
+
 resources :inventories, only: [:index, :show] do
   get :show_movement, on: :member
   get :show_trans, on: :member

@@ -99,7 +99,8 @@ module Controllers::Authorization
         taxes: true,
         loans: true,
         loan_payments: true,
-        movement_details_history: true
+        movement_details_history: true,
+        tag_groups: true
       }
     end
 
@@ -144,7 +145,8 @@ module Controllers::Authorization
         taxes: true,
         loans: true,
         loan_payments: true,
-        movement_details_history: true
+        movement_details_history: true,
+        tag_groups: true
       }
     end
 
@@ -190,7 +192,8 @@ module Controllers::Authorization
         taxes: true,
         loans: true,
         loan_payments: true,
-        movement_details_history: true
+        movement_details_history: true,
+        tag_groups: true
       }
     end
 
