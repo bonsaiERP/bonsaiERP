@@ -8,6 +8,10 @@ namespace :api do
       get :count, on: :collection
     end
 
+    resources :tag_groups, only: [:index] do
+      get :count, on: :collection
+    end
+
     resources :contacts, only: [:index, :create, :update] do
       get :count, on: :collection
     end

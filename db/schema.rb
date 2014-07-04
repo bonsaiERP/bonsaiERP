@@ -335,7 +335,7 @@ ActiveRecord::Schema.define(version: 20140704132611) do
 
   create_table "tag_groups", force: true do |t|
     t.string   "name"
-    t.string   "bg_color"
+    t.string   "bgcolor"
     t.integer  "tag_ids",    default: [], array: true
     t.datetime "created_at"
     t.datetime "updated_at"

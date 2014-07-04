@@ -3,7 +3,7 @@ class CreateTagGroups < ActiveRecord::Migration
     PgTools.with_schemas except: 'common' do
       create_table :tag_groups do |t|
         t.string :name
-        t.string :bg_color
+        t.string :bgcolor
         t.integer :tag_ids, integer: true, array: true, default: []
 
         t.timestamps

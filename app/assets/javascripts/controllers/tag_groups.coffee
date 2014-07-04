@@ -29,17 +29,12 @@ myApp.controller('TagGroupsController', ($scope, $window, $http) ->
     $scope.selected_tags.push(tg)
     tg.hide = true
 
-    updateTagIds()
-
   #
   $scope.remove = (t, index) ->
     $scope.selected_tags.splice(index, 1)
     tag = _.find($scope.tags, (tg) -> t.id is tg.id)
 
     tag.hide = false
-
-    updateTagIds()
-
 
   tagIds = ->
     _.map($scope.selected_tags, (tag) -> tag.id )
@@ -78,6 +73,6 @@ myApp.controller('TagGroupsController', ($scope, $window, $http) ->
     if $scope.edit
       update()
     else
-      create
+      create()
 
 )
