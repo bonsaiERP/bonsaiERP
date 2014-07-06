@@ -39,6 +39,7 @@ class Incomes::Form < Movements::Form
 
   def income_attributes
     attrs = attributes.except(:account_to_id, :direct_payment, :reference)
+    attrs[:tag_ids] = Array(attrs[:tag_ids]).map(&:to_i)  if attrs[:tag_ids]
     attrs[:income_details_attributes] ||= []
     attrs
   end

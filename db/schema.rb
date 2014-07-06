@@ -341,6 +341,7 @@ ActiveRecord::Schema.define(version: 20140704132611) do
     t.datetime "updated_at"
   end
 
+  add_index "tag_groups", ["name"], name: "index_tag_groups_on_name", unique: true, using: :btree
   add_index "tag_groups", ["tag_ids"], name: "index_tag_groups_on_tag_ids", using: :gin
 
   create_table "tags", force: true do |t|

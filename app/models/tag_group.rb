@@ -1,6 +1,6 @@
 class TagGroup < ActiveRecord::Base
 
-  validates :name, presence: true, length: { within: 3..100 }
+  validates :name, presence: true, length: { within: 3..100 }, uniqueness: true
 
   def tags(reload = false)
     @tags = nil  if reload
