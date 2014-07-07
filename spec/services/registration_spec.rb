@@ -36,6 +36,6 @@ describe Registration do
     link.should be_master_account
     link.tenant.should eq('bonsaierp')
 
-    link.api_token.should match(/\A\w{10,}\z/)
+    link.api_token.length.should > 10
   end
 end

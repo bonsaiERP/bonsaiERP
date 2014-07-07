@@ -20,6 +20,7 @@ describe TenantCreator do
 
     before(:each) do
       UserSession.user = build :user, id: 1
+      #DatabaseCleaner.strategy = :truncation
     end
 
     it "has the correct config" do
@@ -28,9 +29,13 @@ describe TenantCreator do
       end
     end
 
+    # UserSession.user = User.first
+    # org = Organisation.new(tenant: 'jeje', currency: 'BOB')
+    # tc = TenantCreator.new(org)
+    # tc.create_tenant
+
     it "creates a new schema with all tables" do
       tc.create_tenant.should be_true
-
       PgTools.should be_schema_exists(tc.tenant)
 
       PgTools.change_schema tc.tenant
