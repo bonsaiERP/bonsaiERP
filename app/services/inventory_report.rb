@@ -1,37 +1,51 @@
 # ir = InventoryReport.new(type: 'Income', start_date: '2014-07-01', end_date: '2014-07-16', state: 'approved')
 class InventoryReport
-  attr_reader :type, :start_date, :end_date, :state
+  attr_reader :type, :date_start, :date_end, :state, :date_field
 
   def initialize(attrs)
+    @date_field = attrs[:date_field]
     @type = attrs[:type]
-    @start_date = attrs[:start_date]
-    @end_date = attrs[:end_date]
+    @state= attrs[:state]
+    @date_start = attrs[:date_start]
+    @date_end = attrs[:date_end]
     @state = attrs[:state]
   end
 
-  def due_date_sql
-    sanitize_sql_array([
-      range_sql('due_date'),
-      {type: type, start_date: start_date, end_date: end_date, state: state}
-    ])
+  def data
+    ActiveRecord::Base.connection.select_rows(sql)
   end
 
-  def date_sql
+  def self.date_fields
+    [['Fecha', 'date'], ['Fecha vencimiento', 'due_date']]
+  end
 
+  def self.types
+    [['Ingreso', 'Income'], ['Egreso' ,'Expense']]
+  end
+
+  def self.states
+    [ ['aprobado', 'approved'], ['atrasado','nulled'], ['borrador','draft']]
+  end
+
+  def sql
+    sanitize_sql_array([
+      range_sql,
+      { type: type, date_start: date_start, date_end: date_end, state: state }
+    ])
   end
 
   def sanitize_sql_array(arr)
     ActiveRecord::Base.send(:sanitize_sql_array, arr)
   end
 
-  def range_sql(date_field)
+  def range_sql
 <<-SQL
 SELECT items.name, SUM(details.quantity), items.unit_symbol
 FROM items
 JOIN movement_details as details ON (details.item_id = items.id)
 WHERE details.account_id IN(
   SELECT id from accounts WHERE type= :type AND state = :state
-  AND #{date_field} BETWEEN :start_date AND :end_date
+  AND #{date_field} BETWEEN :date_start AND :date_end
 )
 GROUP BY items.id
 SQL

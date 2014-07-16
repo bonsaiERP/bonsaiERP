@@ -10,6 +10,7 @@ class ReportsController < ApplicationController
   end
 
   def inventory
+    @report = InventoryReport.new(inventory_params)
   end
 
 
@@ -21,5 +22,15 @@ class ReportsController < ApplicationController
 
     def set_tag_ids
       @tag_ids = Tag.select("id").where(id: params[:tags]).pluck(:id).uniq
+    end
+
+    def inventory_params
+      {
+        type: params[:type] || 'Income',
+        date_field: params[:date_field] || 'date',
+        date_start: @date_range.date_start.to_s,
+        date_end: @date_range.date_end.to_s,
+        state: params[:state] || 'approved'
+      }
     end
 end
