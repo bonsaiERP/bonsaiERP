@@ -1,4 +1,10 @@
 class Api::V1::IncomesController < Api::V1::BaseController
+
+  # GET /api/v1/incomes
+  def index
+    render json: Income.page(page).per(per).to_json
+  end
+
   # POST /api/v1/incomes
   def create
     inc = Incomes::Form.new_income(income_params)

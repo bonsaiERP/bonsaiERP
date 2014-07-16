@@ -27,6 +27,7 @@ class Api::V1::ContactsController < Api::V1::BaseController
   private
 
     def contact_params
-      params.require(:contact).permit(:matchcode, :first_name, :last_name, :email, :phone, :mobile, :tax_number, :address)
+      params.require(:contact).permit(:matchcode, :first_name, :last_name, :email,
+                                      :phone, :mobile, :tax_number, :address, tag_ids: [])
     end
 end

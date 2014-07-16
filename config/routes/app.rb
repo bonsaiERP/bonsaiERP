@@ -48,6 +48,8 @@ resources :export_incomes, only: [:index, :create]
 
 resources :reports, only: [:index]
 
+get 'inventory_report' => 'reports#inventory', as: :inventory_report
+
 resources :organisation_updates, only: [:edit, :update]
 
 resources :admin_users, except: [:index] do
