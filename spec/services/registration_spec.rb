@@ -3,11 +3,11 @@ require "spec_helper"
 
 describe Registration do
   let(:valid_attributes) do
-    {name: 'bonsaiERP', email: 'boris@bonsaierp.com',
+    {name: 'bonsaiERP', email: 'borisb@bonsaierp.com',
      password: 'Demo1234'}
   end
 
-  it { should have_valid(:email).when('boris@mail.com', 'si@me.com.bo') }
+  it { should have_valid(:email).when('borisb@mail.com', 'si@me.com.bo') }
   it { should_not have_valid(:email).when('  ', 'si@me.com.') }
 
   it { should have_valid(:name).when('no', 'si', 'ahor que niño') }
@@ -25,7 +25,7 @@ describe Registration do
     r.tenant.should eq('bonsaierp')
     r.organisation.should be_inventory
 
-    r.user.email.should eq('boris@bonsaierp.com')
+    r.user.email.should eq(valid_attributes[:email])
     r.user.encrypted_password.should_not be_blank
     r.user.confirmation_token.should_not be_blank
     r.user.password.should_not be_blank
