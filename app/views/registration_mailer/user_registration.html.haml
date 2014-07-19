@@ -11,7 +11,5 @@
   %strong= @user.password
 
 %p
-  = link_to 'Ingresar', login_url(host: UrlTools.domain, subdomain: 'app'), style: 'color: #FFF; background-color: #0064cd; font-weight: bold; padding: 8px 14px; text-decoration: none; border-radius: 3px;'
+  = link_to 'Ingresar', login_url(host: DOMAIN, subdomain: 'app'), style: 'color: #FFF; background-color: #0064cd; font-weight: bold; padding: 8px 14px; text-decoration: none; border-radius: 3px;'
 
--#%p
-  =link_to "Completar registro", url_for(controller: 'registrations', action: 'new_user', id: @user.confirmation_token, host: UrlTools.domain, subdomain: @tenant, protocol: UrlTools.protocol), style: 'color: #FFF; background-color: #0064cd; font-weight: bold; padding: 8px 14px; text-decoration: none; border-radius: 3px;'

@@ -1,5 +1,7 @@
 PASSWORD_LENGTH = 8
-DOMAIN = ENV['DOMAIN']
+DOMAIN = Rails.application.secrets.domain
+ENV['DOMAIN'] = DOMAIN
+HTTP_PROTOCOL = Rails.application.secrets.http_protocol
 DEV_DOMAIN = 'localhost.bom'
 APP_NAME = 'bonsaiERP'
 ALLOW_REGISTRATIONS = true

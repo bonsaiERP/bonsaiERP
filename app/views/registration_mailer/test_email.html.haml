@@ -1,8 +1,8 @@
 %h1 Bienvenido a <span style="font-style: italic">#{APP_NAME}</span>
 
-%p 
+%p
   Bienvenido a <span style="font-weight: bold; font-style: italic;">#{APP_NAME}</span>, este email fue generado como prueba
 
 
-  %strong=link_to "haga click es en este vínculo", url_for(controller: 'sessions', action: 'new', host: UrlTools.domain, subdomain: false)
+  %strong=link_to "haga click es en este vínculo", url_for(controller: 'sessions', action: 'new', host: DOMAIN, subdomain: false)
 

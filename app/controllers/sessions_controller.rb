@@ -18,7 +18,7 @@ class SessionsController < ApplicationController
     when @session.authenticate?
       session[:user_id] = @session.user_id
       flash[:notice] = "Ha ingresado correctamente."
-      redirect_to home_url(host: UrlTools.domain, subdomain: @session.tenant) and return
+      redirect_to home_url(host: DOMAIN, subdomain: @session.tenant) and return
     else
       flash.now[:error] = 'El email o la contraseña que ingreso son incorrectos.'
 
@@ -29,7 +29,7 @@ class SessionsController < ApplicationController
   def destroy
     reset_session
 
-    redirect_to login_url(host: UrlTools.domain, subdomain: 'app'), notice: "Ha salido correctamente."
+    redirect_to login_url(host: DOMAIN, subdomain: 'app'), notice: "Ha salido correctamente."
   end
 
 
@@ -38,7 +38,7 @@ class SessionsController < ApplicationController
     def check_logged_in
       if session[:user_id] && u = User.active.find(session[:user_id])
         if org = u.organisations.first
-          redirect_to home_url(host: UrlTools.domain, subdomain: org.tenant), notice: 'Ha ingresado correctamente.' and return
+          redirect_to home_url(host: DOMAIN, subdomain: org.tenant), notice: 'Ha ingresado correctamente.' and return
         else
           reset_session
         end

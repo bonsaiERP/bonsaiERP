@@ -49,9 +49,9 @@ class RegistrationsController < ApplicationController
 
     def check_registration_tenant
       if request.subdomain.present? && PgTools.schema_exists?(request.subdomain)
-        redirect_to new_session_url(host: UrlTools.domain), alert: "Por favor ingrese." and return
+        redirect_to new_session_url(host: DOMAIN), alert: "Por favor ingrese." and return
       elsif request.subdomain.blank?
-        redirect_to new_registration_url(host: UrlTools.domain) and return
+        redirect_to new_registration_url(host: DOMAIN) and return
       end
     end
 

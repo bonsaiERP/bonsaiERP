@@ -29,7 +29,7 @@ describe SessionsController do
 
       get :new
 
-      response.should redirect_to(dashboard_url(host: UrlTools.domain, subdomain: 'bonsai'))
+      response.should redirect_to(dashboard_url(host: DOMAIN, subdomain: 'bonsai'))
     end
   end
 
@@ -53,7 +53,7 @@ describe SessionsController do
     it 'Resends registration email' do
       RegistrationMailer.should_receive(:send_registration).and_return(stub(deliver: true))
       Session.any_instance.stub(authenticate?: false, status: 'resend_registration')
-      
+
       post :create, session: {email: "demo@example.com", password: "demo123"}
 
       response.should redirect_to registrations_url(subdomain: false)
@@ -63,7 +63,7 @@ describe SessionsController do
 
     it "wrong email or password" do
       Session.any_instance.stub(authenticate: false)
-      
+
       post "create", session: {email: "demo@example.com", password: "demo123"}
 
       response.should render_template('new')
