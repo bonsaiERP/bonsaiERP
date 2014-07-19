@@ -16,8 +16,6 @@ class Movements::History
 
   def set_history(movement, histo)
     @movement, @histo = movement, histo
-
-    filter
     set_details
     set_state_col
     histo.operation_type = movement.operation_type
@@ -59,38 +57,6 @@ class Movements::History
     def detail_changes?(attr)
       attr.any? { |det| det['changed?'] || det['destroyed?'] || det['new_record?'] }
     end
-
-    def filter
-      histo.history_data['extras']['from'].each do |k, v|
-        ext = history_data['extras']
-        if v == ext['from'][k.to_s].to_s || v == ext['to'][k.to_sym].to_s
-          history_data['extras']['from'].delete(k)
-          history_data['extras']['to'].delete(k)
-        end
-      end
-    rescue
-      # no changes
-    end
-
-    #def set_details
-    #  det_hash = get_details
-    #  #histo.history_data.merge!(details_col => {from: [], to: det_hash, type: 'array'})  unless det_hash.empty?
-    #  histo.history_data[details_col] = det_hash  unless det_hash.empty?
-    #end
-
-    #def get_details
-    #  movement.send(details_col).each_with_index.map do |det, i|
-    #    if det.new_record?
-    #      { new_record: true, index: i }
-    #    elsif changed_detail?(det)
-    #      get_data(det).merge(id: det.id)
-    #    elsif det.marked_for_destruction?
-    #      { destroyed: true, index: i }.merge(det.attributes)
-    #    else
-    #      nil
-    #    end
-    #  end.compact
-    #end
 
     def changed_detail?(det)
       det.changed_attributes.except('created_at', 'updated_at').any?

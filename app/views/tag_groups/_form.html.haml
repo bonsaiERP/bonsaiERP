@@ -1,0 +1,34 @@
+%form(name='tag-group')
+  .row-fluid
+    .span6
+      %label Nombre
+      %input(type='text' size='45' ng-model='name')
+  .row-fluid
+    .span6
+      %label
+        Etiquetas
+
+      %div.tags-for
+        %span(ng-repeat='tag in selected_tags')
+          %span.tag(style="color: {{ color(tag.bgcolor) }}; background: {{ tag.bgcolor }}")
+            %a(ng-click='remove(tag, $index)' href='javascript:;')
+              %i.icon-cross
+            {{ tag.name }}
+
+      %br
+
+      .form-inline
+        %input#filter(type='text' placeholder='Filtro' ng-model='search' size='35')
+        %a.btn(href='javascript:;' ng-show='search.length > 0' ng-click="search = ''" title='Quitar filtro' data-toggle='tooltip')
+          %i.icon-cross
+
+      %br
+
+      %div.tags-for
+        %span(ng-repeat='tg in tags | filter:search')
+          %a.tag(href="javascript:;" style="color: {{ color(tg.bgcolor) }}; background: {{ tg.bgcolor }}" ng-click="select(tg)" ng-hide='tg.hide')
+            {{ tg.name }}
+
+
+  .form-actions
+    %button.btn.btn-primary(ng-click='save()') Salvar

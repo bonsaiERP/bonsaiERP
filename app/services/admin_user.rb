@@ -53,7 +53,7 @@ class AdminUser < BaseForm
 
   def link
     @link ||= organisation.links.build(
-      user_id: user.id, role: role
+      user_id: user.id, role: role, api_token: api_token
     )
   end
 
@@ -103,5 +103,9 @@ class AdminUser < BaseForm
 
     def set_user_attributes
       user.attributes = attributes.except(:role, :organisation)
+    end
+
+    def api_token
+      SecureRandom.urlsafe_base64(32)
     end
 end

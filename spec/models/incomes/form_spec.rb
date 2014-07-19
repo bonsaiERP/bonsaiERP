@@ -1,3 +1,5 @@
+require 'spec_helper'
+
 # encoding: utf-8
 describe Incomes::Form do
   let(:details) {
@@ -515,5 +517,30 @@ describe Incomes::Form do
     OrganisationSession.stub(inventory?: false)
     inc = Incomes::Form.new_income
     expect(inc.income).not_to be_inventory
+  end
+
+  context 'with tags' do
+    before(:each) do
+      AccountLedger.any_instance.stub(valid?: true)
+      Income.any_instance.stub(valid?: true)
+      IncomeDetail.any_instance.stub(valid?: true)
+      Item.stub_chain(:where, pluck: [[1, 10], [2, 20.0]])
+    end
+
+    it "#save with tags" do
+      tag1 = create :tag
+      tag2 = create :tag, name: 'tag 2'
+
+      tag_ids = [tag1.id, tag2.id]
+
+      is = Incomes::Form.new_income(valid_params.merge(tag_ids: tag_ids))
+      is.stub(account_to: true)
+
+      is.create_and_approve.should be_true
+
+      inc = Income.find(is.income.id)
+      expect(inc.tag_ids).to eq(tag_ids)
+      expect(inc.tag_ids).to have(2).items
+    end
   end
 end

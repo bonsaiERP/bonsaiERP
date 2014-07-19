@@ -17,7 +17,7 @@ class Expenses::Form < Movements::Form
 
   # Creates and instance of income and initializes
   def self.new_expense(attrs = {})
-    _object = new(attrs)
+    _object = new(Expense::EXTRAS_DEFAULTS.merge(attrs))
     _object.set_new_expense(attrs)
     _object
   end
@@ -44,6 +44,7 @@ class Expenses::Form < Movements::Form
 
   def expense_attributes
     attrs = attributes.except(:account_to_id, :direct_payment, :reference)
+    attrs[:tag_ids] = Array(attrs[:tag_ids]).map(&:to_i)  if attrs[:tag_ids]
     attrs[:expense_details_attributes] ||= []
     attrs
   end

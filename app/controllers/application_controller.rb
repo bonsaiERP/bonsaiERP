@@ -1,4 +1,3 @@
-# encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class ApplicationController < ActionController::Base
@@ -19,9 +18,9 @@ class ApplicationController < ActionController::Base
 
   ########################################
   # Callbacks
-  before_filter :set_user_session, if: :user_signed_in?
-  before_filter :set_organisation_session # Must go before :check_authorization!
-  before_filter :set_page, :set_tenant, :check_authorization!
+  before_action :set_user_session, if: :user_signed_in?
+  before_action :set_organisation_session # Must go before :check_authorization!
+  before_action :set_page, :set_tenant, :check_authorization!
 
   # especial redirect for ajax requests
   def redirect_ajax(klass, options = {})

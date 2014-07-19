@@ -57,7 +57,7 @@ module PgTools
   def copy_migrations
     res = execute "SELECT version FROM public.schema_migrations"
 
-    values = res.to_a.map {|v| "('#{v['version']}')"}.join(",")
+    values = res.to_a.map { |v| "('#{v['version']}')"}.join(",")
     execute "INSERT INTO schema_migrations (version) VALUES #{values}"
   end
 
@@ -80,6 +80,10 @@ module PgTools
 
   def execute(sql)
     connection.execute sql
+  end
+
+  def select_rows(sql)
+    connection.select_rows sql
   end
 
   def create_clone(tenant)
@@ -190,11 +194,12 @@ BASH
 
   def all_schemas
     res = connection.select_values <<-SQL
-    SELECT * FROM pg_namespace
-    WHERE nspname NOT IN ('information_schema') AND nspname NOT LIKE 'pg%'
+    SELECT schema_name
+    FROM information_schema.schemata
+    WHERE schema_name NOT IN ('information_schema', 'public')
+    AND schema_name NOT LIKE 'pg%'
     SQL
-    pub = res.delete('public')
-    res << 'public'  if pub
+    res << 'public'
 
     res
   end

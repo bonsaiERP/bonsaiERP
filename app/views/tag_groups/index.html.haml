@@ -1,0 +1,19 @@
+
+.row-fluid
+  .span6
+    %h1 Grupos de etiquetas
+  .span6.r
+    = link_to new_tag_group_path, class: 'btn' do
+      %i.icon-plus-circle
+      Nuevo grupo de etiqueta
+
+
+%ul#tag-groups.unstyled.listing
+  - @tag_groups.each do |tag_group|
+    %li
+      = link_to edit_tag_group_path(tag_group.id) do
+        = icon_edit
+      %h3.ib
+        = tag_group
+
+      %tagsfor(tag_ids="#{tag_group.tag_ids}" id="#{tag_group.id}")

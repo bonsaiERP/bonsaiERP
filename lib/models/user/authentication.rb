@@ -27,7 +27,7 @@ module Models::User::Authentication
   private
 
     def pepper
-      'OLIxRc5aGujs5D/9S8LslEM+DMsY0GdgL8Eg9ldTlXY='
+      Rails.application.secrets.pepper
     end
 
     def set_confirmation_token

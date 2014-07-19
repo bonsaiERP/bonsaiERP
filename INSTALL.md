@@ -38,10 +38,10 @@ rvm requirements
 Install first ruby 2.0.0 and then create gemset
 
 ```
-rvm install ruby-2.0.0
-rvm ruby-2.0.0
-rvm gemset create rails4.0
-rvm ruby-2.0.0@rails4.0 --default
+rvm install ruby-2.1.2
+rvm ruby-2.1.2
+rvm gemset create rails-4.1
+rvm ruby-2.1.2@rails-4.1 --default
 ```
 
 ## Locales if needed
@@ -129,6 +129,9 @@ sudo apt-get install apt-transport-https ca-certificates
 Create a file `/etc/apt/sources.list.d/passenger.list` and insert
 
 ```
+# 14.04
+deb https://oss-binaries.phusionpassenger.com/apt/passenger trusty main
+# 12.04
 deb https://oss-binaries.phusionpassenger.com/apt/passenger precise main
 ```
 Save and then install passenger
@@ -139,6 +142,8 @@ sudo chmod 600 /etc/apt/sources.list.d/passenger.list
 sudo apt-get update
 
 sudo apt-get install libapache2-mod-passenger
+sudo a2enmod passenger
+sudo service apache2 restart
 ```
 
 

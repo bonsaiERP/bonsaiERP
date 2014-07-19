@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
-ruby '2.1.1'
-gem 'rails', '4.1.1'
+ruby '2.1.2'
+gem 'rails', '4.1.4'
 
 # Assets
 gem 'sass-rails' , '~> 4.0.2'
@@ -24,6 +24,8 @@ gem 'resubject' # Cool presenter
 
 gem 'validates_email_format_of', '~> 1.5.3'
 gem 'validates_lengths_from_database'
+# Hstore accessor
+gem 'hstore_accessor'
 
 group :production do
   gem 'newrelic_rpm'

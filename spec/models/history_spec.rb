@@ -25,7 +25,7 @@ describe History do
       i = create :item, name: 'item', unit_id: 1, price: 10, buy_price: 7
 
 
-      i.update_attributes(
+      i.update(
          price: 20, buy_price: 15, name: 'New name for item'
       ).should be_true
 
@@ -93,7 +93,7 @@ describe History do
 
     it "#history" do
       # Create
-      e = Expense.new(attributes)
+      e = Expense.new(Expense::EXTRAS_DEFAULTS.merge(attributes))
       e.save.should be_true
 
       expect(e.histories).to have(1).item
@@ -107,15 +107,16 @@ describe History do
       det[0]['description'] = 'A new description'
 
       #.merge('description' => 'Jo jo jo', 'expense_details_attributes' => det)
-      at = e.attributes
-      .merge('expense_details_attributes' => det)
+      e_data = e.attributes.merge('expense_details_attributes' => det)
       .except('created_at', 'updated_at')
 
-
-      expect(e.update_attributes(at)).to be_true
+      #e.attributes = e_data
+      expect(e.update(e_data)).to be_true
 
       expect(e.histories).to have(2).items
       h = e.histories.first
+      expect(h.history_data.keys.sort).to eq(['expense_details', 'updated_at'])
+
       expect(h.history['expense_details']).to eq({})
 
       expect(h.klass_type).to eq('Expense')
@@ -127,13 +128,17 @@ describe History do
       expect(det_hist[0]['description_was']).to eq('First item')
       expect(det_hist[0]['id']).to be_is_a(Integer)
 
-      at['expense_details_attributes'] << { item_id: 10, price: 10, quantity: 2, balance: 2 }
+      e_data['expense_details_attributes'] << { item_id: 10, price: 10, quantity: 2, balance: 2 }.stringify_keys
+      #tot = at['expense_details_attributes'].inject(0) { |sum, val| val['price'] * val['quantity'] }
+      #at['balance_inventory'] = 20.0
 
       # Update add new detail
-      expect(e.update_attributes(at)).to be_true
+      expect(e.update(e_data)).to be_true
+
       expect(e.histories).to have(3).items
       h = e.histories.first
 
+      #expect(h.history['balance_inventory']).to eq({from: 1, to: 1, type: :decimal})
       expect(h.history_data["expense_details"]).to eq(true)
 
       # Update delete detail

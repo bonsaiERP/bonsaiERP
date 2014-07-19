@@ -29,6 +29,7 @@ class TenantCreator
     res = res && Unit.create_base_data
     res = res && Store.create!(name: 'Almacen inicial')
     res = res && Cash.create!(name: 'Caja inicial', currency: organisation.currency)
+
     res = res && Tax.create!(name: 'IVA', percentage: 13)  if organisation.country_code == 'BO'
 
     drop_schema tenant  unless res

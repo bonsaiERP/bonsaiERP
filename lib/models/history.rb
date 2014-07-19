@@ -7,32 +7,30 @@ module Models::History
       has_many :histories, -> { order('histories.created_at desc, id desc') }, as: :historiable, dependent: :destroy
       delegate :history_instance, :history_cols, to: self
 
+      mattr_accessor :history_klass, :history_cols
+
       # class that can manipulate especial histories otherwise it uses
       # an instance of NullHistoryClass
       def history_instance
         @history_instance ||= begin
-          return @history_klass.new(history_cols)  if @history_klass.present?
+          return history_klass.new(history_cols)  if history_klass.present?
           NullHistoryClass.new
         end
       end
 
-      def history_cols
-        @history_cols
-      end
     end
-
   end
 
   module InstanceMethods
     def has_movement_history(details_col)
-      @history_klass = Movements::History.new(details_col)
+      self.history_klass = Movements::History.new(details_col)
     end
 
     # define the class that will be instantiated
     # in the history_instance method
     def has_history_details(klass, *cols)
-      @history_klass = klass
-      @history_cols = cols
+      self.history_klass = klass
+      self.history_cols = cols
     end
   end
 
@@ -45,7 +43,7 @@ module Models::History
       else
         h = store_update
       end
-      set_history_extras(h)
+      set_history_type_to_s(h)
 
       h.all_data = h.all_data.to_json
       h.history_data = h.history_data.to_json
@@ -54,7 +52,7 @@ module Models::History
     end
 
     # Stores the class and the to_s attributes of the logged instance
-    def set_history_extras(h)
+    def set_history_type_to_s(h)
       h.klass_type = self.class.to_s
       h.klass_to_s = self.to_s
     end
@@ -81,8 +79,21 @@ module Models::History
     def get_data(object = self)
       Hash[ get_object_attributes(object).map { |k, v|
         next  if ['updater_id', 'nuller_id', 'creator_id', 'approver_id'].include?(k.to_s)
-        [k, { 'from' => v, 'to' => object.send(k), 'type' => object.class.column_types[k].type } ]
+        next  if v == object.send(k)
+        [k, { 'from' => v, 'to' => object.send(k), 'type' => get_type_for(object, k)} ]
       }.compact]
+    end
+
+    def get_type_for(object, k)
+      if object.class.column_types[k]
+        object.class.column_types[k].type
+      # TODO make a more viable method that can match the name of hstore
+      # column
+      elsif object.respond_to?(:hstore_metadata_for_extras)
+        object.hstore_metadata_for_extras[k.to_sym]
+      else
+        nil
+      end
     end
 
     def history_user_id
@@ -90,7 +101,7 @@ module Models::History
     end
 
     def get_object_attributes(object)
-      object.changed_attributes#.except('created_at', 'updated_at')
+      object.changed_attributes
     end
 
     # Null object

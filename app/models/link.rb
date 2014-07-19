@@ -12,5 +12,11 @@ class Link < ActiveRecord::Base
   validates_inclusion_of :role, in: User::ROLES
 
   scope :org_links, -> (org_id) { where(organisation_id: org_id) }
+  scope :active, -> { where(active: true).where.not(api_token: nil) }
 
+  #scope :auth, -> (token) {  }
+
+  def self.auth(token, tenant)
+    active.eager_load(:user).where(active: true, api_token: token, tenant: tenant).first
+  end
 end

@@ -28,14 +28,11 @@ class IncomeHistoryPresenter < MovementHistoryPresenter
   end
 
   def inventory_operation_tag
-    if mov_extras['to']['delivered'].to_s == 'true'
+    if delivered?
       text_green 'completo', nil, 'b'
     else
       text_green 'parcial', nil
     end
   end
 
-  def inventory_operation_complete
-    mov_extras['to']['delivered'].to_s == 'true' ? 'completo' : 'parcial'
-  end
 end

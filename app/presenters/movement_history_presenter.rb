@@ -11,7 +11,7 @@ class MovementHistoryPresenter < HistoryPresenter
   end
 
   def present_changes
-    res = [filter_changes, mov_extras_changes, details_changes].flatten.compact.join(', ')
+    res = [filter_changes, details_changes].flatten.compact.join(', ')
 
     if res.present?
       res
@@ -21,10 +21,12 @@ class MovementHistoryPresenter < HistoryPresenter
   end
 
   def filter_changes
-    @filter_changes ||= history.map do |key, val|
+    @filter_changes ||= history.except('updated_at').map do |key, val|
       case key
       when 'state' then state_html(key, val)
-      when 'error_messages', 'extras', 'updater_id', 'nuller_id', 'approver_id', details_col.to_s
+      when 'error_messages', 'extras', 'updater_id',
+           'nuller_id', 'approver_id', 'balance_inventory',
+           'operation_type', details_col.to_s
         nil
       else
         val.present? ? get_change(key, val) : nil
@@ -32,14 +34,22 @@ class MovementHistoryPresenter < HistoryPresenter
     end
   end
 
-  def present_extras
-    unless history_data['extras']['from'] == history_extras_to
-      history_data['extras']['from']
+  def get_change(key, val)
+    return  if val.is_a?(Array)
+
+    get_history_attribute(key, val)
+  end
+
+  def get_history_attribute(key, val)
+    case key
+    when 'delivered' then
+      inventory_state(val)
+    else
+      present_history_attribute(key, val)
     end
   end
 
-  def get_change(key, val)
-    return  if val.is_a?(Array)
+  def present_history_attribute(key, val)
    [attr_text(key), ' de ',
      code(format_for(val[:from], val[:type])), ' a ',
      code(format_for(val[:to], val[:type]))
@@ -51,6 +61,18 @@ class MovementHistoryPresenter < HistoryPresenter
     @history_extras_to ||= Hash[
       history_data['extras']['to'].map { |k, v| [k, v.to_s] }
     ]
+  end
+
+  def inventory_state(val)
+    ['Inventario de', code(inventory_tag(val[:from])), code(inventory_tag(val[:to]))].join('')
+  end
+
+  def inventory_tag(val)
+    if val
+      label_green('IC', 'Inventario completo')
+    else
+      label_yellow('IP', 'Inventario pendiente')
+    end
   end
 
   def state_html(k, v)
@@ -67,18 +89,6 @@ class MovementHistoryPresenter < HistoryPresenter
     when 'paid' then text_green_dark('pagado', nil, 'b')
     when 'nulled' then text_red('Anulado', nil, 'b')
     end
-  end
-
-  def mov_extras_changes
-    [inventory_operation, change_inventory].compact
-  end
-
-  def mov_extras
-    history_data['extras']
-  end
-
-  def balance_inventory(k)
-    mov_extras[k]['balance_inventory']
   end
 
   def inventory_operation;  end

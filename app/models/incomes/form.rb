@@ -17,7 +17,7 @@ class Incomes::Form < Movements::Form
 
   # Creates and instance of income and initializes
   def self.new_income(attrs = {})
-    _object = new(attrs)
+    _object = new(Income::EXTRAS_DEFAULTS.merge(attrs))
     _object.set_new_income
     _object
   end
@@ -39,6 +39,7 @@ class Incomes::Form < Movements::Form
 
   def income_attributes
     attrs = attributes.except(:account_to_id, :direct_payment, :reference)
+    attrs[:tag_ids] = Array(attrs[:tag_ids]).map(&:to_i)  if attrs[:tag_ids]
     attrs[:income_details_attributes] ||= []
     attrs
   end
@@ -78,6 +79,7 @@ class Incomes::Form < Movements::Form
 
     def set_new_income_data
       @movement = Income.new(income_attributes.merge(self.class.new_income_attributes))
+
       2.times { @movement.income_details.build(quantity: 1) }  if income.details.empty?
     end
 

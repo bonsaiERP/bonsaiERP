@@ -21,8 +21,11 @@ describe AdminUser do
   it { should_not have_valid(:role).when('admin', nil, 'je', 'grupo') }
 
   it "create" do
+    ActionMailer::Base.deliveries.clear
+
+    expect(ActionMailer::Base.deliveries).to be_empty
+
     au = AdminUser.new(attributes)
-    RegistrationMailer.should_receive(:user_registration).with(au).and_return(double(deliver!: true))
 
     au.create.should be_true
     au.user.should be_persisted
@@ -30,13 +33,15 @@ describe AdminUser do
       au.user.send(k).should eq(v)
     end
 
+    expect(ActionMailer::Base.deliveries).to have(1).item
+
     link = au.user.active_links.first
     link.should be_persisted
     link.organisation_id.should eq(15)
     link.role.should eq('group')
+    link.api_token.size.should eq(43)
 
     # Invalid user, repeated email
-
     au = AdminUser.new(attributes)
     au.create.should be_false
     au.errors.messages[:email].should eq([I18n.t('errors.messages.email_taken')])
@@ -44,7 +49,9 @@ describe AdminUser do
 
   it "update" do
     au = AdminUser.new(attributes)
-    RegistrationMailer.should_receive(:user_registration).with(au).and_return(double(deliver!: true))
+    ActionMailer::Base.deliveries.clear
+
+    expect(ActionMailer::Base.deliveries).to be_empty
 
     au.create.should be_true
     user = au.user
@@ -57,25 +64,13 @@ describe AdminUser do
     au.update(attributes.merge(email: 'otheremail@mail.com', role: 'other')).should be_true
 
 
+    expect(ActionMailer::Base.deliveries).to have(1).item
+
     au.user.email.should eq('otheremail@mail.com')
     au.user.should_not be_changed
 
     au.link.role.should eq('other')
     au.link.should_not be_changed
   end
-
-  #it "send_email" do
-    #au = AdminUser.new(attributes)
-    #RegistrationMailer.should_receive(:user_registration).with(au).and_return(double(deliver!: true))
-
-    #au.create.should be_true
-    #user = au.user
-
-    #au = AdminUser.find(organisation, user.id)
-
-    #RegistrationMailer.should_receive(:user_registration).with(au).and_return(double(deliver!: true))
-
-    #au.send_email
-  #end
 
 end

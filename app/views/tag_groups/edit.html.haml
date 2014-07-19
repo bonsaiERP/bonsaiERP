@@ -1,0 +1,13 @@
+- content_for :links do
+  %ul.breadcrumbs.span6
+    %li
+      = link_to 'Grupos de etiquetas', tag_groups_path
+
+%h1 Editar grupo de etiquetas
+
+%div(ng-controller='TagGroupsController')
+
+  = render 'form'
+
+:javascript
+  window.tag_group = #{@tag_group.to_json}

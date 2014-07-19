@@ -190,8 +190,8 @@ myApp.controller 'TagsController', ['$scope', '$http', '$timeout', ($scope, $htt
 
   # Validation
   $scope.valid = ->
-    if not $scope.tag_name.match(/^[a-z\u00E0-\u00FC-]+$/i)
-      $scope.errors['tag_name'] = 'Ingrese letras, números o "-" sin espacios'
+    if not $scope.tag_name.match(/^[a-z\s\u00E0-\u00FC-]+$/i)
+      $scope.errors['tag_name'] = 'Ingrese letras con espacio o números'
       $('#tag-name-input').notify($scope.errors['tag_name'], {position: 'top left', className: 'error'})
     not _.any($scope.errors)
 

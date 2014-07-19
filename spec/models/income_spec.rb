@@ -62,17 +62,12 @@ describe Income do
   end
 
   context 'callbacks' do
-    it 'check callback' do
-      i = Income.new(valid_attributes)
-
-      i.should_receive(:symbolize_keys_extras)
-      i.save.should be_true
-    end
 
     it "does not update contact to client" do
       contact.client = true
       contact.should_not_receive(:update_attribute).with(:client, true)
       i = Income.new(valid_attributes)
+      i.tag_ids = [1, 2]
 
       i.save.should be_true
     end
@@ -179,9 +174,11 @@ describe Income do
 
     i = Income.new(attrs)
 
-    attrs.each do |k, v|
+    attrs.except(:approver_datetime).each do |k, v|
       i.send(k).should eq(v)
     end
+
+    expect(i.approver_datetime.to_s).to eq(t.to_s)
   end
 
   context "approve!" do
