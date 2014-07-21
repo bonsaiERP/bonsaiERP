@@ -75,7 +75,8 @@ Bonsaierp::Application.configure do
     address: 'smtp.mandrillapp.com',
     port: 587,
     user_name: 'boriscyber@gmail.com',
-    password: ENV['MANDRILL_API_KEY']
+    password: Rails.application.secrets.mandrill_api_key
+    #ENV['MANDRILL_API_KEY']
   }
 
   config.eager_load = true
