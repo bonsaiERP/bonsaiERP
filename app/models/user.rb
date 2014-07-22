@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
   # Includes
   include Models::User::Authentication
 
-  ROLES = %w(admin group other).freeze
+  ROLES = %w(admin group other demo).freeze
 
   # Callbacks
   before_update :store_old_emails, if: :email_changed?

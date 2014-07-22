@@ -17,4 +17,13 @@ WHERE type IN ('Income', 'Expense');
   task show_env: :environment do
     puts Rails.env
   end
+
+  desc 'Sets the token for links'
+  task generate_tokens: :environment do
+    Link.where(api_token: nil).each do |link|
+      unless link.update(api_token: SecureRandom.urlsafe_base64(32))
+        puts "Error updating API token for link #{link.id}"
+      end
+    end
+  end
 end
