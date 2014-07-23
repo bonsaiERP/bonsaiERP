@@ -1,10 +1,11 @@
 # Directive to present the tags
-myApp.directive('ngTags', ($compile, $timeout) ->
-  restrict: 'A'
+myApp.directive('tags', ['$compile', '$timeout', ($compile, $timeout) ->
+  restrict: 'E'
   scope: {
-    hideFilter: '=ngTags'
+    hideFilter: '@hideFilter'
+    hideApply: '@hideApply'
+    model: '@model'
     tagIds: '=tagIds'
-    model: '=model'
   }
   link: ($scope, elem, attrs) ->
     elem.click( (event) ->
@@ -55,15 +56,23 @@ myApp.directive('ngTags', ($compile, $timeout) ->
       clicked = false
     )
     # Add a class to see that there are selected tags
-    elem.addClass('btn-info')  unless attrs.tagIds is 'false'
-)
+    elem.find('.tags-button').addClass('btn-info')  unless attrs.tagIds is 'false'
+  #
+  template: """
+  <a href="javascript:;" class="btn tags-button">
+    <i class="icon-tags"></i>
+    Etiquetas
+    <i class="icon-caret-down"></i>
+  </a>
+  """
+])
 
 htmlModal = """
 <div id="tag-editor" style="background-color:#fff">
   <input id="model" type="hidden">
   <div class="control-group name ib {{errorCssFor(tag_name, 'tag_name')}}">
     <input placeholder="nombre" id="tag-name-input" type="text" ng-model="tag_name" title="{{errors.tag_name}}">
-    <span class="hint">Solo letras, números o -_</span>
+    <span class="hint">Solo letras con espacios</span>
   </div>
   <div class="control-group bgcolor ib form-inline ">
     <input id="tag-bgcolor-input" placeholder="#ff0000" type="text" ng-model="tag_bgcolor" title="{{errors["tag_bgcolor"]}}">
@@ -99,13 +108,14 @@ contHtml = """
   <div class='buttons'>
     <button ng-disabled='!tagsAny("checked", true)' ng-click="filter()" ng-hide="hideFilter" class='btn btn-success btn-small'>Filtrar</button>
     <button class='btn btn-small' ng-click='newTag()'><i class="icon-plus-circle"></i> Nueva</button>
-    <button ng-disabled='disableApply()' class="btn btn-primary btn-small apply-tags" ng-click="applyTags()">Applicar</button>
+    <button ng-disabled='disableApply()' class="btn btn-primary btn-small apply-tags" ng-click="applyTags()" ng-hide='hideApply'>Applicar</button>
   </div>
   <!--Modal dialog-->
   #{htmlModal}
 </div>
 """
 
+####################################
 myApp.directive('tagsfor', ($compile, $timeout) ->
   restrict: 'E'
   template: """

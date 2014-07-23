@@ -40,9 +40,9 @@
 
   .span6.r.buttons
     %input.row-check.hidden(type='checkbox' id="#{@income.id}" checked='checked')
-    -# Approve form
-    = render 'tags/tags', model: 'Income', hide_tags_filter: true
+    %tags(model='Income' hide-filter='true' tag-ids='false')
 
+    -# Approve form
     - if @income.is_draft?
       = link_to 'Aprobar', approve_income_path(@income), method: :patch, class: 'btn btn-success b'
     -# Null form

@@ -1,8 +1,10 @@
 # Add remove tags in ta TagGroup
-myApp.controller('TagGroupsController', ['$scope', '$window', '$http', ($scope, $window, $http) ->
+myApp.controller('TagGroupsController', ['$scope', '$window', '$http', '$rootScope', ($scope, $window, $http, $rootScope) ->
   $scope.tags = $window.bonsai.tags
   $scope.selected_tags = []
   $scope.edit = false
+
+  $scope.win = $window
 
   #
   setEdit = ->
@@ -91,4 +93,15 @@ myApp.controller('TagGroupsController', ['$scope', '$window', '$http', ($scope, 
     else
       create()
 
+
+  $rootScope.$on('newTag', (event, tag) ->
+    $scope.tags.push tag
+  )
+
+  $rootScope.$on('updatedTag', (event, tag) ->
+    ind = _.findIndex($scope.tags, (tg) -> tg.id is tag.id)
+    $scope.tags[ind].name = tag.name
+    $scope.tags[ind].label = tag.label
+    $scope.tags[ind].bgcolor = tag.bgcolor
+  )
 ])

@@ -13,7 +13,7 @@
     %h1.ib Items
     = search_tag
   .span6.r.buttons
-    = render 'tags/tags', model: 'Item'
+    %tags(model='Item' tag-ids='#{ tag_ids }' url='#{ items_path }')
 
     = link_to new_item_path, class: 'btn', id: 'new-item-link' do
       %i.icon-plus-sign

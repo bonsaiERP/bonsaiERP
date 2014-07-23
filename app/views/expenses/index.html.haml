@@ -9,7 +9,7 @@
     %h1.ib Egresos
     = search_tag
   .span6.r.buttons
-    = render 'tags/tags', model: 'Expense'
+    %tags(model='Expense' tag-ids='#{ tag_ids }' url='#{ expenses_path }')
 
     .btn-group
       = link_to export_expenses_path, class: 'btn' do

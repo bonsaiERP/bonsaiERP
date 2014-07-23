@@ -1,6 +1,6 @@
 # Main controller that applies edits and creates tags
-myApp.controller('TagsController', ['$scope', '$http', '$timeout', ($scope, $http, $timeout) ->
-  $scope.tags = window.bonsai.tags
+myApp.controller('TagsController', ['$scope', '$http', '$timeout', '$window', '$rootScope', ($scope, $http, $timeout, $window, $rootScope) ->
+  $scope.tags = $window.bonsai.tags
   $scope.editorBtn = 'Crear'
   $scope.tag_name = ''
 
@@ -36,7 +36,7 @@ myApp.controller('TagsController', ['$scope', '$http', '$timeout', ($scope, $htt
 
   # Functions to filter tags
   $scope.filter = ->
-    window.location = [$scope.url, $scope.createTagFilterParams()].join("?")
+    $window.location = [$scope.url, $scope.createTagFilterParams()].join("?")
 
   $scope.selectedTags = ->
     _.select($scope.tags, (tag) -> tag.checked )
@@ -155,8 +155,8 @@ myApp.controller('TagsController', ['$scope', '$http', '$timeout', ($scope, $htt
       $scope.editor.dialog('close')
 
       # Set global tags_hash variable
-      window.bonsai.tags_hash[data.id] = { name: data.name, label: data.name, bgcolor: data.bgcolor, id: data.id }
-      window.bonsai.tags.push { name: data.name, label: data.name, bgcolor: data.bgcolor, id: data.id }
+      $window.bonsai.tags_hash[data.id] = { name: data.name, label: data.name, bgcolor: data.bgcolor, id: data.id }
+      $window.bonsai.tags.push { name: data.name, label: data.name, bgcolor: data.bgcolor, id: data.id }
       # Update all related
       sel = ".tag#{data.id}"
       $(sel).text(data.name).css({background: data.bgcolor, color: color})
@@ -175,7 +175,10 @@ myApp.controller('TagsController', ['$scope', '$http', '$timeout', ($scope, $htt
     .success((data, status) ->
       $scope.tags.push { name: data.name, bgcolor: data.bgcolor, id: data.id }
       # Set global tags_hash variable
-      window.bonsai.tags_hash[data.id] = { name: data.name, label: data.name, bgcolor: data.bgcolor, id: data.id }
+      tag = { name: data.name, label: data.name, bgcolor: data.bgcolor, id: data.id }
+      $window.bonsai.tags_hash[data.id] = tag
+      $rootScope.$emit('newHash', tag)
+
       $timeout(->
         tagsDiv.scrollTo(tagsDiv.height() + 400)
       , 30)
@@ -190,7 +193,7 @@ myApp.controller('TagsController', ['$scope', '$http', '$timeout', ($scope, $htt
 
   # Validation
   $scope.valid = ->
-    if not $scope.tag_name.match(/^[a-z\s\u00E0-\u00FC-]+$/i)
+    if not $scope.tag_name.match(/^[a-z\d\s\u00E0-\u00FC-]+$/i)
       $scope.errors['tag_name'] = 'Ingrese letras con espacio o números'
       $('#tag-name-input').notify($scope.errors['tag_name'], {position: 'top left', className: 'error'})
     not _.any($scope.errors)

@@ -5,8 +5,11 @@
 
 
 %div(ng-controller='TagGroupsController')
-
-  %h1 {{ title }}
+  .row-fluid
+    .span8
+      %h1 {{ title }}
+    .span4.r
+      %tags(tag-ids='false' hide-filter='true' hide-apply='true' model='')
 
   = render 'tag_groups/form'
 

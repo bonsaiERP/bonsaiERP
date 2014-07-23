@@ -1,12 +1,12 @@
-
 .row-fluid
   .span6
     %h1 Grupos de etiquetas
   .span6.r
+    %tags(model='' tag-ids='false' hide-filter='true' hide-apply='true')
+
     = link_to new_tag_group_path, class: 'btn' do
       %i.icon-plus-circle
       Nuevo grupo de etiquetas
-
 
 %ul#tag-groups.unstyled.listing
   - @tag_groups.each do |tag_group|

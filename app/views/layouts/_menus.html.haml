@@ -39,6 +39,10 @@
           -#%li.divider
           %li
             = link_to "Prestamos", loans_path, id: 'last-nav'
+          %li
+            = link_to tag_groups_path do
+              %i.icon-tags
+              Etiquetas
       %li.has-dropdown
         %a Cuentas
         %ul.dropdown

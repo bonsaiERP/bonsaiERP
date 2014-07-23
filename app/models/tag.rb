@@ -2,7 +2,7 @@
 # email: boriscyber@gmail.com
 class Tag < ActiveRecord::Base
   validates :name, presence: true, uniqueness: true,
-            format: {with: /\A[\w\s\ñ]+\z/},
+            format: { with: /\A[\w\s\ñ]+\z/ },
             length: { in: 3..20 }
 
   validates :bgcolor, presence: {message: I18n.t('errors.messages.taken')},
