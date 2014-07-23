@@ -1,5 +1,5 @@
 # Controller for incomes and expenses
-myApp.controller 'MovementController', ['$scope', 'MovementDetail', ($scope, MovementDetail) ->
+myApp.controller('MovementController', ['$scope', 'MovementDetail', ($scope, MovementDetail) ->
 
   $scope.currency = $('#currency').val()
   $scope.same_currency = true
@@ -124,4 +124,4 @@ myApp.controller 'MovementController', ['$scope', 'MovementDetail', ($scope, Mov
       scope.taxes.push tax
       scope.tax = tax
       scope.tax_id = tax.id
-]
+])

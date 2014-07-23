@@ -3,8 +3,8 @@
     %li
       = link_to 'Grupos de etiquetas', tag_groups_path
 
-%h1 Nuevo grupo de etiquetas
 
 %div(ng-controller='TagGroupsController')
+  %h1 {{ title }}
 
   = render 'form'

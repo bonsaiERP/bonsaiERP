@@ -1,5 +1,5 @@
 # Controller for creating the Loans
-myApp.controller 'LoanController', ['$scope', ($scope) ->
+myApp.controller('LoanController', ['$scope', ($scope) ->
   $scope.accounts = angular.element('#accounts').data('accounts')
   $scope.same_currency = true
 
@@ -22,4 +22,4 @@ myApp.controller 'LoanController', ['$scope', ($scope) ->
       scope.exchange_rate = rate
     $('.currency').html _b.currencyLabel data.currency
   )
-]
+])

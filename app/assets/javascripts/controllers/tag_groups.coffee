@@ -1,15 +1,15 @@
-myApp.controller('TagGroupsController', ($scope, $window, $http) ->
+# Add remove tags in ta TagGroup
+myApp.controller('TagGroupsController', ['$scope', '$window', '$http', ($scope, $window, $http) ->
   $scope.tags = $window.bonsai.tags
   $scope.selected_tags = []
   $scope.edit = false
 
-
-  # Start set for edit
-  if $window.tag_group and $window.tag_group.id
+  #
+  setEdit = ->
+    $scope.title = 'Editar grupo de etiquetas'
     $scope.edit = true
     $scope.id = $window.tag_group.id
     $scope.name = $window.tag_group.name
-
 
     $scope.selected_tags = _.where($scope.tags, (tag) ->
       _.include($window.tag_group.tag_ids, tag.id)
@@ -19,6 +19,12 @@ myApp.controller('TagGroupsController', ($scope, $window, $http) ->
       if _.include($window.tag_group.tag_ids, tag.id)
         tag.hide = true
     )
+
+  # Start set for edit
+  if $window.tag_group and $window.tag_group.id
+    setEdit()
+  else
+    $scope.title = 'Nuevo grupo de etiquetas'
 
   # End of set for edit
 
@@ -45,27 +51,37 @@ myApp.controller('TagGroupsController', ($scope, $window, $http) ->
       tag_ids: tagIds()
     }
 
+
   create = ->
-    $http.post('/tag_groups', { tag_group: getData()})
+    $scope.submit = true
+    $http.post("/tag_groups", { tag_group: getData()})
     .success( (resp) ->
-      console.log(resp)
-      alert('yes')
+      $scope.submit = false
+      $window.history.pushState({resp: resp}, "Grupos de etiquetas", "/tag_groups/#{ resp.id }/edit")
+      $scope.title = 'Editar grupo de etiquetas'
+
+      $('#tag-group-button').notify('Se creo correctamente.',
+        {className: 'success', position: 'right', autoHideDelay: 3000})
     )
     .error( (resp) ->
-      console.log(resp)
-      alert('Error')
+      $scope.submit = false
+      $('#tag-group-button').notify('Existió un error, por favor intente de nuevo.',
+        {className: 'error', position: 'right', autoHideDelay: 3000})
     )
 
   #
   update = ->
+    $scope.submit = true
     $http.put("/tag_groups/#{$scope.id}", { tag_group: getData()})
     .success( (resp) ->
-      console.log(resp)
-      alert('yes')
+      $scope.submit = false
+      $('#tag-group-button').notify('Se actualizo correctamente.',
+        {className: 'success', position: 'right', autoHideDelay: 3000})
     )
     .error( (resp) ->
-      console.log(resp)
-      alert('Error')
+      $scope.submit = false
+      $('#tag-group-button').notify('Existió un error, por favor intente de nuevo.',
+        {className: 'error', position: 'right', autoHideDelay: 3000})
     )
 
   #
@@ -75,4 +91,4 @@ myApp.controller('TagGroupsController', ($scope, $window, $http) ->
     else
       create()
 
-)
+])

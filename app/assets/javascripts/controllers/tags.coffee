@@ -1,5 +1,5 @@
 # Main controller that applies edits and creates tags
-myApp.controller 'TagsController', ['$scope', '$http', '$timeout', ($scope, $http, $timeout) ->
+myApp.controller('TagsController', ['$scope', '$http', '$timeout', ($scope, $http, $timeout) ->
   $scope.tags = window.bonsai.tags
   $scope.editorBtn = 'Crear'
   $scope.tag_name = ''
@@ -210,4 +210,4 @@ myApp.controller 'TagsController', ['$scope', '$http', '$timeout', ($scope, $htt
   $scope.getFormData = ->
     {tag: {name: $scope.tag_name, bgcolor: $scope.tag_bgcolor}}
 
-]
+])

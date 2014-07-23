@@ -1,5 +1,5 @@
 # Controller for creating the payments
-myApp.controller 'PaymentController', ['$scope', '$window', ($scope, $window) ->
+myApp.controller('PaymentController', ['$scope', '$window', ($scope, $window) ->
   $scope.accounts = angular.element('#accounts').data('accounts')
   $scope.same_currency = true
   $scope.amount_currency = 0
@@ -40,4 +40,4 @@ myApp.controller 'PaymentController', ['$scope', '$window', ($scope, $window) ->
     $('.currency').html _b.currencyLabel data.currency
   )
 
-]
+])

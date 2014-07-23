@@ -1,5 +1,5 @@
 # Controller for creating the payments
-myApp.controller 'TransferenceController', ['$scope', ($scope) ->
+myApp.controller('TransferenceController', ['$scope', ($scope) ->
   $scope.accounts = angular.element('#accounts').data('accounts')
   $scope.same_currency = true
   $scope.amount_currency = 0
@@ -39,5 +39,4 @@ myApp.controller 'TransferenceController', ['$scope', ($scope) ->
     $('.currency').html _b.currencyLabel data.currency
   )
 
-]
-
+])

@@ -3,11 +3,12 @@
     %li
       = link_to 'Grupos de etiquetas', tag_groups_path
 
-%h1 Editar grupo de etiquetas
 
 %div(ng-controller='TagGroupsController')
 
-  = render 'form'
+  %h1 {{ title }}
+
+  = render 'tag_groups/form'
 
 :javascript
   window.tag_group = #{@tag_group.to_json}

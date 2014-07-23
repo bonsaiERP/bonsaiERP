@@ -1,4 +1,4 @@
-myApp.controller 'InventoryController', ['$scope',  ($scope) ->
+myApp.controller('InventoryController', ['$scope',  ($scope) ->
   $scope.details = $('#details').data('details')
 
   # Remove detail item
@@ -30,4 +30,4 @@ myApp.controller 'InventoryController', ['$scope',  ($scope) ->
       sc.detail.quantity = 0
       sc.detail.stock = 0
 
-]
+])
