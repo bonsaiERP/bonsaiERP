@@ -35,6 +35,8 @@ module Bonsaierp
 
     config.assets.precompile += %w(email.css)
 
+    config.active_record.schema_format = :sql
+
     # Generators
     config.generators do |g|
       g.template_engine :haml
