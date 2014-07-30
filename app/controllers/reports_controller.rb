@@ -10,7 +10,7 @@ class ReportsController < ApplicationController
   end
 
   def inventory
-    @report = InventoryReport.new(inventory_params)
+    @report = InventoryReportService.new(inventory_params)
   end
 
 

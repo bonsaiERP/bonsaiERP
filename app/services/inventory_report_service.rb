@@ -1,5 +1,5 @@
 # ir = InventoryReport.new(type: 'Income', start_date: '2014-07-01', end_date: '2014-07-16', state: 'approved')
-class InventoryReport
+class InventoryReportService
   attr_reader :type, :date_start, :date_end, :state, :date_field
 
   def initialize(attrs)

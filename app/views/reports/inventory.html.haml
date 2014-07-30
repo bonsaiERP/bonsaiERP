@@ -2,16 +2,15 @@
 
 = form_tag inventory_report_path, method: :get, class: 'form-inline' do
   %span.muted.b Tipo
-  = select_tag 'type', options_for_select(InventoryReport.types, params[:type])
+  = select_tag 'type', options_for_select(InventoryReportService.types, params[:type])
   %span.muted.b en
-  = select_tag 'date_field', options_for_select(InventoryReport.date_fields, params[:date_field])
+  = select_tag 'date_field', options_for_select(InventoryReportService.date_fields, params[:date_field])
 
   %span estado
-  = select_tag 'state', options_for_select(InventoryReport.states, params[:state])
+  = select_tag 'state', options_for_select(InventoryReportService.states, params[:state])
   = render 'layouts/date_range', dr: @date_range
 
   = submit_tag 'Reporte', class: 'btn'
-
 
 %table.table
   %tr
@@ -19,6 +18,7 @@
       Item
     %th
       Cantidad
+
   - @report.data.each do |name, qty, sym|
     %tr
       %td
