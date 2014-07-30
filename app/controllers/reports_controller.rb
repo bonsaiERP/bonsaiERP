@@ -10,7 +10,8 @@ class ReportsController < ApplicationController
   end
 
   def inventory
-    @report = InventoryReport.new(inventory_params)
+    @report = InventoryReportService.new(inventory_params)
+    @tag_group = TagGroup.api
   end
 
 
@@ -30,7 +31,8 @@ class ReportsController < ApplicationController
         date_field: params[:date_field] || 'date',
         date_start: @date_range.date_start.to_s,
         date_end: @date_range.date_end.to_s,
-        state: params[:state] || 'approved'
+        state: params[:state] || 'approved',
+        tag_group_id: params[:tag_group_id]
       }
     end
 end
