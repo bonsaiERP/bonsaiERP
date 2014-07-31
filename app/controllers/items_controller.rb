@@ -88,7 +88,7 @@ class ItemsController < ApplicationController
       @items.where!(for_sale: for_sale_param)  if params[:for_sale].present?
       @items.where!(active: params[:active])  if params[:active].present?
       @items = @items.search(search_term)  if search_term.present?
-      @items = @items.all_tags(*tag_ids)  if tag_ids
+      @items = @items.any_tags(*tag_ids)  if tag_ids
 
       @items = @items.order('items.name asc').page(@page)
     end

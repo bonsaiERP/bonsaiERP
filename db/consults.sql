@@ -2,7 +2,7 @@
 SELECT links.user_id, users.email, CONCAT(users.first_name, users.last_name) AS user_name
 , organisations.name AS organisation, organisations.id AS organisation_id
 FROM links
-JOIN organisations ON ( organisations.id = links.organisation_id ) 
+JOIN organisations ON ( organisations.id = links.organisation_id )
 JOIN users ON (users.id = links.user_id)
 ORDER BY links.organisation_id
 LIMIT 0, 100;
@@ -15,7 +15,7 @@ JOIN (
   SELECT transactions.organisation_id, COUNT(transactions.id) AS org_trans,
   0 AS org_ledgers, 0 AS org_items, 0 AS org_contacts
   FROM transactions GROUP BY transactions.organisation_id
-  UNION 
+  UNION
   SELECT account_ledgers.organisation_id, 0 AS org_trans,
   COUNT(account_ledgers.id) as org_ledgers, 0 AS org_items, 0 AS org_contacts
   FROM account_ledgers GROUP BY account_ledgers.organisation_id
@@ -36,3 +36,11 @@ LIMIT 0, 100;
 -- \? # Help
 SELECT u.email, o.name FROM users u LEFT JOIN links l ON (u.id = l.user_id)
 LEFT JOIN organisations o ON (o.id = l.organisation_id);
+
+
+-- Data dsigregated
+SELECT det.item_id, items.name, det.quantity , accounts.due_date, accounts.created_at
+FROM accounts
+JOIN movement_details AS det ON (accounts.id = det.account_id )
+JOIN items ON (items.id = det.item_id)
+WHERE type = 'Income' AND state = 'approved'

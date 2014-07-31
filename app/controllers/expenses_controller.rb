@@ -129,7 +129,7 @@ class ExpensesController < ApplicationController
     # Method to search expenses on the index
     def search_expenses
       if tag_ids
-        @expenses = Expenses::Query.index_includes Expense.all_tags(*tag_ids)
+        @expenses = Expenses::Query.index_includes Expense.any_tags(*tag_ids)
       else
         @expenses = Expenses::Query.new.index(params).order('date desc, accounts.id desc')
       end

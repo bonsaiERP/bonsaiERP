@@ -132,7 +132,7 @@ class IncomesController < ApplicationController
     # Method to search incomes on the index
     def search_incomes
       if tag_ids
-        @incomes = Incomes::Query.index_includes Income.all_tags(*tag_ids)
+        @incomes = Incomes::Query.index_includes Income.any_tags(*tag_ids)
       else
         @incomes = Incomes::Query.new.index(params).order('date desc, accounts.id desc')
       end
