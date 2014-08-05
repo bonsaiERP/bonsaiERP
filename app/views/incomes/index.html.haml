@@ -27,7 +27,7 @@
   %li
     = link_to "Todos", incomes_path, class: params_bold(:all)
   %li
-    = link_to "Atrasados", incomes_path(due: true), class: "red #{params_bold(:due)}"
+    = link_to "Vencidos", incomes_path(due: true), class: "red #{params_bold(:due)}"
   %li
     = link_to "Aprobados", incomes_path(approved: true), class: params_bold(:approved)
   %li

@@ -27,8 +27,6 @@ class MovementPresenter < BasePresenter
   def state_tag
     case
     when is_draft? then template.text_gray 'Borrador', '', 'b'
-    when(is_approved? && today > to_model.due_date)
-      "<span class='b text-error'>#{t('movement.states.due')}</span>".html_safe
     when is_approved? then template.text_green t('movement.states.approved'), '', 'b'
     when is_paid? then template.text_green_dark t('movement.states.paid'), '', 'b'
     when is_nulled? then template.text_red t('movement.states.nulled'), '', 'b'
@@ -37,7 +35,6 @@ class MovementPresenter < BasePresenter
 
   def state_text
     case state
-    when(is_approved? && today > to_model.due_date) then 'Atrasado'
     when 'draft' then 'Borrador'
     when 'approved' then 'Aprobado'
     when 'paid' then paid_text
@@ -70,6 +67,7 @@ class MovementPresenter < BasePresenter
       d = "<span class='muted text-muted'>Vence el:</span> "
       d << "<span class='i #{css}'>#{ icon 'icon-time' } "
       d << l(to_model.due_date)
+      d << " <strong>VENCIDO</strong>"
       d << "</span>"
     end
     d.html_safe

@@ -25,7 +25,7 @@ class InventoryReportService
   end
 
   def self.states
-    [ ['aprobado', 'approved'], ['atrasado','nulled'], ['borrador','draft']]
+    [['Aprobado', 'approved'], ['Pagado', 'paid'], ['Anulado','nulled'], ['Borrador', 'draft']]
   end
 
   def sql
@@ -51,7 +51,7 @@ class InventoryReportService
 
   def range_sql_tag_group
 <<-SQL
-SELECT items.name, SUM(details.quantity) as quantity, items.unit_symbol,
+SELECT items.name, SUM(details.balance) as quantity, items.unit_symbol,
 to_json(accounts.tag_ids) AS tag_ids
 FROM items
 JOIN movement_details as details ON (details.item_id = items.id)
@@ -70,7 +70,7 @@ SQL
 
   def range_sql
 <<-SQL
-SELECT items.name, SUM(details.quantity), items.unit_symbol
+SELECT items.name, SUM(details.balance) AS quantity, items.unit_symbol
 FROM items
 JOIN movement_details as details ON (details.item_id = items.id)
 JOIN accounts

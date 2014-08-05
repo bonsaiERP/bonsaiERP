@@ -22,6 +22,7 @@ namespace :bonsai_test do
     org.update(country_code: 'BO', currency: 'BOB')
 
     TenantCreator.new(org).create_tenant
+    puts "Tenant #{org.tenant} has been created"
   end
 
   desc 'Eliminates all organisations'
