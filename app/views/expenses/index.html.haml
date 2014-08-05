@@ -28,9 +28,9 @@
   %li
     = link_to "Todos", expenses_path, class: params_bold(:all)
   %li
-    = link_to "Aprobados", expenses_path(approved: true), class: params_bold(:approved)
+    = link_to "Vencidos", expenses_path(due: true), class: "red #{ params_bold(:due) }"
   %li
-    = link_to "Atrasados", expenses_path(due: true), class: params_bold(:due)
+    = link_to "Aprobados", expenses_path(approved: true), class: params_bold(:approved)
   %li
     = link_to "Con error", expenses_path(error: true), class: params_bold(:error)
   %li

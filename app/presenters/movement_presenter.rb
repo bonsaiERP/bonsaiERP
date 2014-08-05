@@ -67,7 +67,7 @@ class MovementPresenter < BasePresenter
       d = "<span class='muted text-muted'>Vence el:</span> "
       d << "<span class='i #{css}'>#{ icon 'icon-time' } "
       d << l(to_model.due_date)
-      d << " <strong>VENCIDO</strong>"
+      d << " <strong>VENCIDO</strong>"  if today > to_model.due_date
       d << "</span>"
     end
     d.html_safe
