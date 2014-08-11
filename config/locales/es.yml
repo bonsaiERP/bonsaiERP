@@ -230,9 +230,16 @@ es:
       expense:
         not_draft: "El estado del egreso no es borrador"
         payments: "Extisten pagos que se han afectado al balance"
-      income:
+      expenses:
+        batch_payment:
+          invalid_expenses: 'Uno o mas de los egresos seleccionados no son válidos'
         not_draft: "El estado del ingreso no es borrador"
         payments: "Extisten cobros que se han afectado al balance"
+      incomes:
+        batch_payment:
+          invalid_incomes: 'Uno o mas de los ingresos seleccionados no son válidos'
+          problem: 'Error en el ingreso %{name} verifique por favor'
+          invalid_account: 'Selecciono una caja o banco incorrecto'
       income_detail:
         item_not_for_sale: "Debe seleccionar un ítem que se vende"
       inventory_detail:
@@ -414,6 +421,10 @@ es:
       <<: *movement_attributes
     payment:
       reference: "Cobro ingreso %{income}"
+
+  incomes:
+    batch_payment:
+      reference: 'Cobro ingreso %{name}'
   expense:
     account_ledger_reference: "Gasto"
     payment:

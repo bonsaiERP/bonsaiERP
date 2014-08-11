@@ -83,11 +83,13 @@ FactoryGirl.define do
   factory :income do
     ref_number "I-0001"
     date { Date.today }
+    due_date { 2.days.from_now }
     association :contact, factory: :contact, strategy: :build
     currency 'BOB'
     description "New income description"
     state "draft"
     balance 100
+    total { balance }
     factory :income_approved do
       state "approved"
     end

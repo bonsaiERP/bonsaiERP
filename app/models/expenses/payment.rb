@@ -1,7 +1,7 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class Expenses::Payment < Payment
+class Expenses::Payment < PaymentService
 
   # Validations
   validates_presence_of :expense

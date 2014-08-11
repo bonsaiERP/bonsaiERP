@@ -1,5 +1,5 @@
 # encoding: utf-8
-class Incomes::Payment < Payment
+class Incomes::Payment < PaymentService
 
   # Validations
   validates_presence_of :income

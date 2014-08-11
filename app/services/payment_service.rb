@@ -1,7 +1,7 @@
 # encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
-class Payment < BaseService
+class PaymentService < BaseService
   attr_reader :ledger, :movement
 
   # Attributes
