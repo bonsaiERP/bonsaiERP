@@ -98,11 +98,13 @@ FactoryGirl.define do
   factory :expense do
     ref_number "E-0001"
     date { Date.today }
+    due_date { 2.days.from_now }
     association :contact, factory: :contact, strategy: :build
     currency 'BOB'
     description "New expense description"
     state "draft"
     balance 100
+    total { balance }
     factory :expense_approved do
       state 'approved'
     end

@@ -35,7 +35,5 @@ describe Incomes::BatchPayment do
     led2 = AccountLedger.find_by(account_id: i2.id)
     expect(led2.reference).to eq("Cobro ingreso #{i2.name}")
     expect(led2.amount).to eq(i2.total)
-
-    expect(cash.reload.amount).to eq(200)
   end
 end
