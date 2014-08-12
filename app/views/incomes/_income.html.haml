@@ -1,11 +1,11 @@
 %li.row-fluid(id="#{income.id}")
   .span4.income-detail
     .fl
-      %input.row-check(type='checkbox' id="#{income.id}")
+      %input.row-check(type='checkbox' id="#{income.id}" code-name="#{ income }" currency="#{ income.currency }")
     .fl
       %h4.ib
         = link_to income do
-          %span(title='Código ingreso')= income
+          %span.code(title='Código ingreso')= income
           = income.has_error_label
 
       = link_to income.contact, income.contact, title: 'Contacto'

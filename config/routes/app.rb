@@ -66,7 +66,9 @@ resources :account_ledgers, only: [:index, :show, :update] do
   patch :null, on: :member
 end
 
-resources :banks
+resources :banks do
+  get :money, on: :collection
+end
 
 resources :cashes
 

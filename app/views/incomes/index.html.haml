@@ -10,7 +10,8 @@
     %h1.ib Ingresos
     = search_tag
   .span6.buttons.r
-    %select
+
+    %batch-operations(url='/payments' model-type='Income' model-name="Ingreso")
 
     %tags(model='Income' tag-ids='#{ tag_ids }' url='#{ incomes_path }')
 

@@ -40,6 +40,13 @@ class BanksController < ApplicationController
     end
   end
 
+  # Presents money accounts json method
+  # GET /banks/money
+  def money
+    render json: Account.active.money.where(currency: current_organisation.currency)
+      .to_json(only: [:id, :currency, :name, :type])
+  end
+
   # DELETE /banks/1
   # DELETE /banks/1.xml
   #def destroy

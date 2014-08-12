@@ -31,9 +31,11 @@ $(->
   # Creates a data target loaded via AJAX
   # data-target
   $('body').on('click', 'a[data-target]', (event) ->
+    return  if $(this).data('toggle') # Prevent data toggle modal
+
     event.preventDefault()
     $this = $(this)
-    $hide =getHideCont($this)
+    $hide = getHideCont($this)
     $hide.hide('medium')
     $div = $($this.data('target'))
     $div.addClass('ajax-modal').data('link', $this)

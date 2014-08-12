@@ -96,7 +96,7 @@ myApp.controller('TagsController', ['$scope', '$http', '$timeout', '$window', '$
       sel = "tagsfor[id='#{id}']"
       scope = $(sel).isolateScope()
       scope.tags = tags
-      scope.$apply()
+      #scope.$apply()
 
 
   ########################################
