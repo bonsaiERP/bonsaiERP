@@ -30,7 +30,7 @@ class Incomes::BatchPayment
   private
 
     def valid?
-      if incomes.empty? && account.blank?
+      if incomes.any? && account.present?
         true
       else
         @errors << I18n.t('errors.messages.incomes.batch_payment.invalid_account')

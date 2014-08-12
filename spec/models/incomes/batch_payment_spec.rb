@@ -36,4 +36,28 @@ describe Incomes::BatchPayment do
     expect(led2.reference).to eq("Cobro ingreso #{i2.name}")
     expect(led2.amount).to eq(i2.total)
   end
+
+  it "#make_payments error" do
+    i1 = build(:income, state: 'approved', balance: -10, contact_id: contact.id)
+
+    i1.stub(valid?: true)
+    i1.save!
+
+    b_pay = Incomes::BatchPayment.new(ids: [i1.id], account_id: cash.id)
+
+    b_pay.make_payments
+
+    expect(b_pay.errors).to have(1).item
+    expect(b_pay.errors).to eq([I18n.t('errors.messages.incomes.batch_payment.problem', name: i1.name)])
+
+    i1.balance = '100'
+    i1.state = 'draft'
+    i1.save!
+
+    b_pay = Incomes::BatchPayment.new(ids: [i1.id], account_id: cash.id)
+    b_pay.make_payments
+
+    expect(b_pay.errors).to have(1).item
+    expect(b_pay.errors).to eq([I18n.t('errors.messages.incomes.batch_payment.problem', name: i1.name)])
+  end
 end

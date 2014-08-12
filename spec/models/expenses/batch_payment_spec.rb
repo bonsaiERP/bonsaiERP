@@ -38,4 +38,28 @@ describe Expenses::BatchPayment do
 
     expect(cash.reload.amount).to eq(-200)
   end
+
+  it "#make_payments error" do
+    e1 = build(:expense, state: 'approved', balance: -10, contact_id: contact.id)
+
+    e1.stub(valid?: true)
+    e1.save!
+
+    b_pay = Expenses::BatchPayment.new(ids: [e1.id], account_id: cash.id)
+
+    b_pay.make_payments
+
+    expect(b_pay.errors).to have(1).item
+    expect(b_pay.errors).to eq([I18n.t('errors.messages.expenses.batch_payment.problem', name: e1.name)])
+
+    e1.balance = '100'
+    e1.state = 'draft'
+    e1.save!
+
+    b_pay = Expenses::BatchPayment.new(ids: [e1.id], account_id: cash.id)
+    b_pay.make_payments
+
+    expect(b_pay.errors).to have(1).item
+    expect(b_pay.errors).to eq([I18n.t('errors.messages.expenses.batch_payment.problem', name: e1.name)])
+  end
 end
