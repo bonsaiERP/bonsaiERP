@@ -1,10 +1,10 @@
 # Makes a complete payment for multiple incomes
 class Incomes::BatchPayment
-  attr_reader :errors, :account_id, :ids
+  attr_reader :errors, :account_to_id, :ids
 
   def initialize(data)
     @ids = data[:ids]
-    @account_id = data[:account_id]
+    @account_to_id = data[:account_to_id]
     @errors = []
   end
 
@@ -23,14 +23,14 @@ class Incomes::BatchPayment
     []
   end
 
-  def account
-    @account ||= Account.active.money.find_by(id: account_id)
+  def account_to
+    @account_to ||= Account.active.money.find_by(id: account_to_id)
   end
 
   private
 
     def valid?
-      if incomes.any? && account.present?
+      if incomes.any? && account_to.present?
         true
       else
         @errors << I18n.t('errors.messages.incomes.batch_payment.invalid_account')
@@ -42,7 +42,7 @@ class Incomes::BatchPayment
       if income.is_approved? && income.balance > 0
         ip = Incomes::Payment.new(
           account_id: income.id,
-          account_to_id: account.id,
+          account_to_id: account_to.id,
           date: Date.today,
           reference: I18n.t('incomes.batch_payment.reference', name: income.name),
           amount: income.balance

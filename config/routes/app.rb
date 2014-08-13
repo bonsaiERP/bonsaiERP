@@ -3,6 +3,11 @@ get '/download_pdf/:file/:name' => 'download#download_pdf', as: :download
 #resources :movement_details_history, only: [:show]
 get '/movement_details_history/:id' => 'movement_details_history#show', as: :movement_detail_history
 
+# Batch payments
+post 'batch_paymets/income' => 'batch_payments#income', as: :income_batch_payments
+
+post 'batch_paymets/expense' => 'batch_payments#expense', as: :expense_batch_payments
+
 resources :loan_payments, only: [] do
   member do
     # Receive

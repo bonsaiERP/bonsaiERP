@@ -1,10 +1,10 @@
 # Makes a complete payment for multiple expenses
 class Expenses::BatchPayment
-  attr_reader :errors, :account_id, :ids
+  attr_reader :errors, :account_to_id, :ids
 
   def initialize(data)
     @ids = data[:ids]
-    @account_id = data[:account_id]
+    @account_to_id = data[:account_to_id]
     @errors = []
   end
 
@@ -23,14 +23,14 @@ class Expenses::BatchPayment
     []
   end
 
-  def account
-    @account ||= Account.active.money.find_by(id: account_id)
+  def account_to
+    @account_to ||= Account.active.money.find_by(id: account_to_id)
   end
 
   private
 
     def valid?
-      if expenses.any? && account.present?
+      if expenses.any? && account_to.present?
         true
       else
         @errors << I18n.t('errors.messages.expenses.batch_payment.invalid_account')
@@ -42,7 +42,7 @@ class Expenses::BatchPayment
       if expense.is_approved? && expense.balance > 0
         ep = Expenses::Payment.new(
           account_id: expense.id,
-          account_to_id: account.id,
+          account_to_id: account_to.id,
           date: Date.today,
           reference: I18n.t('expense.payment.reference', expense: expense.name),
           amount: expense.balance

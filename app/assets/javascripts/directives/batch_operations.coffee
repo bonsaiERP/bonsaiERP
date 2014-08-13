@@ -11,15 +11,51 @@ batchOperations = ($http) ->
     $scope.modelName = $attrs.modelName
     accounts = []
 
+
+    setAccountSelect2 = (accounts) ->
+      accounts.forEach (account) -> account.to_s = account.name
+      console.log accounts
+      # Set select2
+      $element.find('#account_to_id').select2(
+        data: accounts
+        minimumResultsForSearch: if accounts.length > 8 then 1 else -1
+        formatResult: Plugin.paymentOptions
+        formatSelection: Plugin.paymentOptions
+        escapeMarkup: (m) -> m
+        dropdownCssClass: 'hide-select2-search'
+        placeholder: 'Seleccione la cuenta'
+        formatNoMatches: (term) -> 'No se encotro cuentas'
+      )
+      .on('change', (event) ->
+        data = $(this).select2('data')
+      )
+
     #
     loadAccounts = ->
       $http.get('/banks/money')
       .success( (resp) ->
         accountsLoaded = true
-        accounts = resp
+        setAccountSelect2(resp)
       )
 
     $scope.movements = []
+
+    #
+    $scope.makePayments = ->
+      $scope.paying = true
+      ids = $scope.movements.map (mov) -> mov.id
+
+      $http.post($attrs.url, { ids: ids, account_to_id: $scope.account_to_id})
+      .success( (resp, status) ->
+        $scope.paying = false
+        if resp.success
+          console.log resp.success
+        else
+          alert 'Usted no tiene privilegios para realizar esta operación'
+      )
+      .error(->
+        $scope.paying = false
+      )
 
     $scope.multiplePayments = ->
       $scope.modalTitle = $scope.paymentText
@@ -37,8 +73,6 @@ batchOperations = ($http) ->
       )
 
       true
-
-    $scope.savePayments = ->
 
 
   template: """
@@ -77,7 +111,8 @@ batchOperations = ($http) ->
 
             <h4 class="red" ng-show="movements.length <= 0">Debe seleccionar al menos un {{ modelName }}</h4>
 
-            Seleccione una cuenta
+            <label>Seleccione una cuenta</label>
+            <input type="text" id="account_to_id" ng-model="account_to_id" class="span11" />
           </div>
 
           <div class="modal-inventories">
@@ -86,7 +121,7 @@ batchOperations = ($http) ->
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-          <button type="button" class="btn btn-primary pay-button">{{ paymentText }}</button>
+          <button type="button" class="btn btn-primary pay-button" ng-click="makePayments()" ng-disabled="paying">{{ paymentText }}</button>
           <button type="button" class="btn btn-primary inv-button">{{ inventoryText }}</button>
         </div>
       </div><!-- /.modal-content -->

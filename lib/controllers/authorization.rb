@@ -100,7 +100,8 @@ module Controllers::Authorization
         loans: true,
         loan_payments: true,
         movement_details_history: true,
-        tag_groups: true
+        tag_groups: true,
+        batch_payments: true
       }
     end
 
@@ -146,7 +147,8 @@ module Controllers::Authorization
         loans: true,
         loan_payments: true,
         movement_details_history: true,
-        tag_groups: true
+        tag_groups: true,
+        batch_payments: true
       }
     end
 
@@ -193,7 +195,8 @@ module Controllers::Authorization
         loans: true,
         loan_payments: true,
         movement_details_history: true,
-        tag_groups: true
+        tag_groups: true,
+        batch_payments: true
       }
     end
 

@@ -19,7 +19,7 @@ describe Expenses::BatchPayment do
     expect(e1.total).to eq(100)
     expect(e2.total).to eq(100)
 
-    b_pay = Expenses::BatchPayment.new(ids: [e1.id, e2.id], account_id: cash.id)
+    b_pay = Expenses::BatchPayment.new(ids: [e1.id, e2.id], account_to_id: cash.id)
     expect(b_pay.expenses).to have(2).items
 
 
@@ -45,7 +45,7 @@ describe Expenses::BatchPayment do
     e1.stub(valid?: true)
     e1.save!
 
-    b_pay = Expenses::BatchPayment.new(ids: [e1.id], account_id: cash.id)
+    b_pay = Expenses::BatchPayment.new(ids: [e1.id], account_to_id: cash.id)
 
     b_pay.make_payments
 
@@ -56,7 +56,7 @@ describe Expenses::BatchPayment do
     e1.state = 'draft'
     e1.save!
 
-    b_pay = Expenses::BatchPayment.new(ids: [e1.id], account_id: cash.id)
+    b_pay = Expenses::BatchPayment.new(ids: [e1.id], account_to_id: cash.id)
     b_pay.make_payments
 
     expect(b_pay.errors).to have(1).item
