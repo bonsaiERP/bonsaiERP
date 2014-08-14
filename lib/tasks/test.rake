@@ -2,7 +2,7 @@
 
 namespace :bonsai_test do
   def check_is_test
-    raise 'Error you must run in test'  unless Rails.env.test?
+    raise 'Error you must run with RAILS_ENV=test'  unless Rails.env.test?
   end
 
   desc 'Creates organisation and tenant'
