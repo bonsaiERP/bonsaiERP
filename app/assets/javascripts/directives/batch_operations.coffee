@@ -1,5 +1,6 @@
-batchOperations = ($http) ->
+batchOperations = ($http, $window) ->
   restrict: 'E'
+  transclude: true
   controller: ($scope, $attrs, $element) ->
     if $attrs.modelType is 'Income'
       $scope.paymentText = 'Cobro multiple'
@@ -11,6 +12,7 @@ batchOperations = ($http) ->
     $scope.modelName = $attrs.modelName
     accounts = []
 
+    $scope.redirectUrl = $window.location.href
 
     setAccountSelect2 = (accounts) ->
       accounts.forEach (account) -> account.to_s = account.name
@@ -49,7 +51,7 @@ batchOperations = ($http) ->
       .success( (resp, status) ->
         $scope.paying = false
         if resp.success
-          console.log resp.success
+          $scope.showPaymentMessage = true
         else
           alert 'Usted no tiene privilegios para realizar esta operación'
       )
@@ -73,8 +75,11 @@ batchOperations = ($http) ->
       )
 
       true
+  #
+  link: ($scope, $elem, $attrs, $ctrl, transclude) ->
+    $elem.find('[ng-transclude]').replaceWith(transclude())
 
-
+  #
   template: """
   <div class="btn-group">
     <a href="javascript:;" class="btn dropdown-toggle" data-toggle="dropdown">
@@ -89,9 +94,10 @@ batchOperations = ($http) ->
           {{ paymentText }}
         </a>
       </li>
-      <li>
+      <!--<li>
         <a href="javascript:;">{{ inventoryText }}</a>
-      </li>
+      </li>-->
+      <div ng-transclude></div>
     </ul>
   </div>
 
@@ -113,6 +119,11 @@ batchOperations = ($http) ->
 
             <label>Seleccione una cuenta</label>
             <input type="text" id="account_to_id" ng-model="account_to_id" class="span11" />
+            <div class="clearfix"></div>
+            <h3 ng-show="showPaymentMessage">
+              Se completo la operación, por favor
+              <a href="{{ redirectUrl }}">recargue la página</a>
+            </h3>
           </div>
 
           <div class="modal-inventories">
@@ -131,6 +142,6 @@ batchOperations = ($http) ->
 
 # End of function
 
-batchOperations.$inject = ['$http']
+batchOperations.$inject = ['$http', '$window']
 
 myApp.directive('batchOperations', batchOperations)

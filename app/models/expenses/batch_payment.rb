@@ -39,7 +39,7 @@ class Expenses::BatchPayment
     end
 
     def make_payment(expense)
-      if expense.is_approved? && expense.balance > 0
+      if valid_expense?(expense)
         ep = Expenses::Payment.new(
           account_id: expense.id,
           account_to_id: account_to.id,
@@ -52,5 +52,9 @@ class Expenses::BatchPayment
       else
         @errors << I18n.t('errors.messages.expenses.batch_payment.problem', name: expense.name)
       end
+    end
+
+    def valid_expense?(expense)
+      !expense.has_error? && expense.is_approved? && expense.balance > 0
     end
 end

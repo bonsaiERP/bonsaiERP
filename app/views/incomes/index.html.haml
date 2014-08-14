@@ -3,8 +3,6 @@
     %li
       = link_to 'Ingresos', incomes_path
 
--# content_for :search do
-
 .row-fluid
   .span6
     %h1.ib Ingresos
@@ -13,16 +11,17 @@
 
     %batch-operations(url="#{ income_batch_payments_path }" model-type="Income" model-name="Ingreso")
 
+      %li
+        = link_to export_incomes_path do
+          %i.icon-download-alt
+          Exportar
+
+
     %tags(model='Income' tag-ids='#{ tag_ids }' url='#{ incomes_path }')
 
-    .btn-group
-      = link_to export_incomes_path, class: 'btn' do
-        %i.icon-download-alt
-        Exportar
-
-      = link_to new_income_path, class: 'btn' do
-        %i.icon-plus-sign
-        Nuevo ingreso
+    = link_to new_income_path, class: 'btn' do
+      %i.icon-plus-sign
+      Nuevo ingreso
 
 
 = render 'incomes/search'

@@ -39,7 +39,7 @@ class Incomes::BatchPayment
     end
 
     def make_payment(income)
-      if income.is_approved? && income.balance > 0
+      if valid_income?(income)
         ip = Incomes::Payment.new(
           account_id: income.id,
           account_to_id: account_to.id,
@@ -52,5 +52,9 @@ class Incomes::BatchPayment
       else
         @errors << I18n.t('errors.messages.incomes.batch_payment.problem', name: income.name)
       end
+    end
+
+    def valid_income?(income)
+      !income.has_error? && income.is_approved? && income.balance > 0
     end
 end
