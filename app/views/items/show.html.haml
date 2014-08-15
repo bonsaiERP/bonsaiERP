@@ -47,7 +47,7 @@
   .span6
     %h3.n Historial
 
-    %ul.listing.unstyled
+    %ul.unstyled
       = render partial: 'histories/history', collection: present(@item.histories.includes(:user))
 
 .page-header
