@@ -1,5 +1,5 @@
 # Controller for incomes and expenses
-myApp.controller('MovementController', ['$scope', 'MovementDetail', ($scope, MovementDetail) ->
+MovementController = ($scope, $window, MovementDetail) ->
 
   $scope.currency = $('#currency').val()
   $scope.same_currency = true
@@ -13,6 +13,7 @@ myApp.controller('MovementController', ['$scope', 'MovementDetail', ($scope, Mov
   $scope.calls = 0
   $scope.accounts = angular.element('#accounts').data('accounts')
 
+  $scope.same_currency = $scope.currency is $window.organisation.currency
 
   # Set tax
   tax_id = $('#tax_id').val() * 1
@@ -45,11 +46,12 @@ myApp.controller('MovementController', ['$scope', 'MovementDetail', ($scope, Mov
 
   # Check for the change in currency and activate all methods
   $scope.$watch 'currency', (current, old, scope) ->
-    curr = window.organisation.currency
-    scope.same_currency = current is curr
-    scope.exchange_rate = fx.convert(1, { from: current, to: curr }).toFixed(4) * 1
-    # Sel all clases to correct currency
-    $('.currency').html(_b.currencyLabel scope.currency)
+    unless current is old
+      curr = $window.organisation.currency
+      scope.same_currency = current is curr
+      scope.exchange_rate = fx.convert(1, { from: current, to: curr }).toFixed(4) * 1
+      # Sel all clases to correct currency
+      $('.currency').html(_b.currencyLabel scope.currency)
 
   # Check for cahnges on exchange_rate to update details
   $scope.$watch 'exchange_rate', ->
@@ -124,4 +126,8 @@ myApp.controller('MovementController', ['$scope', 'MovementDetail', ($scope, Mov
       scope.taxes.push tax
       scope.tax = tax
       scope.tax_id = tax.id
-])
+########################################
+# End of function
+
+MovementController.$inject = ['$scope', '$window', 'MovementDetail']
+myApp.controller('MovementController', MovementController)

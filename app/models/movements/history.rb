@@ -17,7 +17,7 @@ class Movements::History
   def set_history(movement, histo)
     @movement, @histo = movement, histo
     set_details
-    set_state_col
+    #set_state_col
     histo.operation_type = movement.operation_type
   end
 

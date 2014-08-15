@@ -177,14 +177,16 @@ describe History do
       expect(e.histories).to have(2).items
       h = e.histories.first
       h.history['due_date'].should eq( { from: d, to: today, type: 'date' })
-      h.history['state'].should eq( {from: 'due', to: 'approved', type: 'string'} )
+      #h.history['state'].should eq( {from: 'due', to: 'approved', type: 'string'} )
+      h.history['state'].should be_nil
 
       d2 = 1.days.ago.to_date
       e.due_date = d2
       e.save.should be_true
       h = e.histories.first
       h.history['due_date'].should eq( { from: today, to: d2, type: 'date' })
-      h.history['state'].should eq( {from: 'approved', to: 'due', type: 'string'} )
+      #h.history['state'].should eq( {from: 'approved', to: 'due', type: 'string'} )
+      h.history['state'].should be_nil
     end
   end
 end
