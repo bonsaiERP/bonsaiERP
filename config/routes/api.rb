@@ -16,7 +16,7 @@ namespace :api do
       get :count, on: :collection
     end
 
-    resources :incomes, only: [:index, :create, :update] do
+    resources :incomes, only: [:index, :show, :create, :update] do
       get :count, on: :collection
     end
   end

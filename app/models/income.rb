@@ -57,4 +57,7 @@ class Income < Movement
     self.income_details.inject(0) {|sum, det| sum += det.total }
   end
 
+  def as_json(options = {})
+    super(options).merge(income_details: income_details.map(&:attributes))
+  end
 end

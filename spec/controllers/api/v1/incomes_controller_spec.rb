@@ -28,6 +28,20 @@ describe Api::V1::IncomesController do
     }
   }
 
+  context 'GET #show' do
+    it "OK" do
+      inc = Income.create(valid_params)
+
+      inc.should be_persisted
+
+      get :show, id: inc.id
+
+      json = JSON.parse(response.body)
+      expect(json['id']).to eq(inc.id)
+      expect(json['income_details']).to have(2).items
+    end
+  end
+
   context 'POST' do
     it "OK" do
       post :create, { income: valid_params }
