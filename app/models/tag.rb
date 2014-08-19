@@ -25,9 +25,9 @@ class Tag < ActiveRecord::Base
     return false  if klass === false
 
     if tag_ids.any?
-      klass.where(id: params[:ids]).update_all(["tag_ids='{?}'", tag_ids])
+      klass.where(id: params[:ids]).update_all({tag_ids: tag_ids, updated_at: Time.zone.now})
     else
-      klass.where(id: params[:ids]).update_all("tag_ids='{}'")
+      klass.where(id: params[:ids]).update_all({tag_ids: [], updated_at: Time.zone.now})
     end
   end
 
