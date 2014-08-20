@@ -1,5 +1,5 @@
 # Main controller that applies edits and creates tags
-myApp.controller('TagsController', ['$scope', '$http', '$timeout', '$window', '$rootScope', ($scope, $http, $timeout, $window, $rootScope) ->
+TagsController = ($scope, $element, $http, $timeout, $window, $rootScope) ->
   $scope.tags = $window.bonsai.tags
   $scope.editorBtn = 'Crear'
   $scope.tag_name = ''
@@ -81,9 +81,11 @@ myApp.controller('TagsController', ['$scope', '$http', '$timeout', '$window', '$
     $http(method: 'PATCH', url: '/tags/update_models', data: data)
     .success((data, status) ->
       $scope.setListTags(ids, tag_ids)
+      $element.notify('Se aplico las etiquetas correctamente', {position: 'top', className: 'success'})
     )
     .error((data, status)->
       $scope.showSaveErrors(data, status)
+      $element.notify('Existio un error al aplicar las etiquetas', {position: 'top', className: 'error'})
     )
     .finally(->
       $but.prop('disabled', true)
@@ -196,6 +198,7 @@ myApp.controller('TagsController', ['$scope', '$http', '$timeout', '$window', '$
     if not $scope.tag_name.match(/^[a-z\d\s\u00E0-\u00FC-]+$/i)
       $scope.errors['tag_name'] = 'Ingrese letras con espacio o números'
       $('#tag-name-input').notify($scope.errors['tag_name'], {position: 'top left', className: 'error'})
+
     not _.any($scope.errors)
 
   # notify
@@ -213,4 +216,6 @@ myApp.controller('TagsController', ['$scope', '$http', '$timeout', '$window', '$
   $scope.getFormData = ->
     {tag: {name: $scope.tag_name, bgcolor: $scope.tag_bgcolor}}
 
-])
+# End of function
+TagsController.$inject = ['$scope', '$element', '$http', '$timeout', '$window', '$rootScope']
+myApp.controller('TagsController', TagsController)

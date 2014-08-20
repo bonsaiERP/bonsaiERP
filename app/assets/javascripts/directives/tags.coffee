@@ -92,13 +92,14 @@ htmlModal = """
 """
 
 contHtml = """
-<div ng-controller="TagsController" class='tags-controller'>
+<div ng-controller="TagsController" class="tags-controller" ng-cloak>
   <input type="text" ng-model="search" class="search" placeholder="escriba para buscar" />
   <div class="tags-div">
     <ul class="unstyled tags-list">
       <li ng-repeat="tag in tags | filter:search">
+        <i class="icon-pencil fs120" ng-click="editTag(tag, $index)" title="Editar"></i>
+        &nbsp;
         <input type="checkbox" ng-click='markChecked(tag)' ng-model='tag.checked'></span>
-        <i class="icon-pencil" ng-click="editTag(tag, $index)"></i>
         <span class='tag-item' ng-click='markChecked(tag)'
           style='background: {{ tag.bgcolor }};color: {{ color(tag.bgcolor) }}'>{{ tag.name }}</span>
       </li>
@@ -108,7 +109,7 @@ contHtml = """
   <div class='buttons'>
     <button ng-disabled='!tagsAny("checked", true)' ng-click="filter()" ng-hide="hideFilter" class='btn btn-success btn-small'>Filtrar</button>
     <button class='btn btn-small' ng-click='newTag()'><i class="icon-plus-circle"></i> Nueva</button>
-    <button ng-disabled='disableApply()' class="btn btn-primary btn-small apply-tags" ng-click="applyTags()" ng-hide='hideApply'>Applicar</button>
+    <button ng-disabled='disableApply()' class="btn btn-primary btn-small apply-tags" ng-click="applyTags()" ng-hide='hideApply'>Aplicar</button>
   </div>
   <!--Modal dialog-->
   #{htmlModal}
