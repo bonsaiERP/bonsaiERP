@@ -75,6 +75,7 @@ batchOperations = ($http, $window) ->
       )
 
       true
+
   #
   link: ($scope, $elem, $attrs, $ctrl, transclude) ->
     $elem.find('[ng-transclude]').replaceWith(transclude())
@@ -82,13 +83,13 @@ batchOperations = ($http, $window) ->
   #
   template: """
   <div class="btn-group">
-    <a href="javascript:;" class="btn dropdown-toggle" data-toggle="dropdown">
+    <a href class="btn dropdown-toggle" data-toggle="dropdown">
       Operaciones
       <i class="icon-caret-down"></i>
     </a>
     <ul class="dropdown-menu text-left">
       <li>
-        <a href="javascript:;"
+        <a href
         data-target="#multiple-operations-modal" data-toggle="modal"
         ng-click="multiplePayments()">
           {{ paymentText }}
@@ -101,7 +102,7 @@ batchOperations = ($http, $window) ->
     </ul>
   </div>
 
-  <div class="modal fade" id="multiple-operations-modal">
+  <div class="modal hide fade" id="multiple-operations-modal">
     <div class="modal-dialog">
       <div class="modal-content l">
         <div class="modal-header">
