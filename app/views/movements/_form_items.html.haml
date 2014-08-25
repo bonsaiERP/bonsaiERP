@@ -28,10 +28,10 @@
       %span.error(ng-show='detail.hasError("item_id")') {{detail.errorsFor('item_id')}}
     .span2.price.r
       %label.visible-phone Precio:
-      %input.r(type='text' ng-model='detail.price' name='#{movement.form_details_name}[{{$index}}][price]' value='10')
+      %input.r(type='number' ng-model='detail.price' name='#{movement.form_details_name}[{{$index}}][price]' value='10')
     .span2.quantity.r
       %label.visible-phone Cantidad:
-      %input.r(type='text' ng-model='detail.quantity' name='#{movement.form_details_name}[{{$index}}][quantity]')
+      %input.r(type='number' ng-model='detail.quantity' name='#{movement.form_details_name}[{{$index}}][quantity]')
       %span.error(ng-show='detail.hasError("quantity")') {{detail.errorsFor('quantity')}}
     .span2.r
       %label.visible-phone Total línea:
@@ -89,3 +89,10 @@
     .span2.r
       %strong.total {{ total() | decimal }}
       %span.space &nbsp;
+
+:javascript
+  $(function() {
+    $('.movement-details').on('click', "input[type='number']", function(event) {
+      $(this).select();
+    });
+  })

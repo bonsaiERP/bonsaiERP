@@ -27,6 +27,8 @@ MovementController = ($scope, $window, MovementDetail) ->
   # initialize items
   for det in $('#details').data('details')
     det.item_old = det.item
+    det.price = parseFloat(det.price)
+    det.quantity = parseFloat(det.quantity)
     $scope.details.push(new MovementDetail(det))
 
   # Remove an item
@@ -63,7 +65,7 @@ MovementController = ($scope, $window, MovementDetail) ->
 
   # add details
   $scope.addDetail = ->
-    $scope.details.push new MovementDetail({})
+    $scope.details.push new MovementDetail({quantity: 1})
 
   # Tax id
   $scope.setTaxId = -> $scope.tax_id = $scope.tax.id
