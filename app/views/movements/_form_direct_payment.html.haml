@@ -1,12 +1,12 @@
-%input(type='hidden' ng-model='base_currency' value='#{currency}' ng-initial)
+%input(type='hidden' ng-model='base_currency' value='#{currency}' initial)
 .row-fluid.currency-input
   .span6
     = f.input :currency, collection: currency_options, label: 'Moneda ', include_blank: false,
       input_html: { id: 'currency', 'ng-model' => 'currency' }
   .span6
     = f.input :exchange_rate, label: "Tipo de cambio de <span class='currency'></span> a #{currency_label} ".html_safe,
-      input_html: { id: 'exchange_rate', type: 'decimal', class: 'span3',
-      'ng-model' => 'exchange_rate', 'ng-disabled' => 'same_currency', 'ng-change' => 'setDetailsPrices()', 'ng-initial' => true }
+      input_html: { id: 'exchange_rate', type: 'number', class: 'span3',
+      'ng-model' => 'exchange_rate', 'ng-disabled' => 'same_currency', 'ng-change' => 'setDetailsPrices()', 'initial' => true }
 
 - if movement.is_draft?
   %input#accounts(type='hidden' data-accounts='#{Accounts::Query.new.bank_cash_options.to_json}')
@@ -21,7 +21,7 @@
         %a#direct-payment-button.btn.btn-small.btn-info.b(data-toggle='button' ng-click='direct_payment=!direct_payment') #{lbl} directo
 
         = f.input :account_to_id, input_html: { id: 'account_to_id', class: 'span10',
-          'ng-model' => 'account_to_id', 'ng-disabled' => '!direct_payment', 'ng-movement-accounts' => true, 'ng-initial' => true },
+          'ng-model' => 'account_to_id', 'ng-disabled' => '!direct_payment', 'ng-movement-accounts' => true, 'initial' => true },
           label: "<strong>Cuenta</strong> a la cual se aplicara el <i>#{lbl} directo</i>".html_safe
 
       .span6

@@ -1,9 +1,11 @@
-myApp.directive('ngInitial', ->
+myApp.directive('initial', ->
   {
     restrict: 'A',
     controller: [
       '$scope', '$element', '$attrs', '$parse', ($scope, $element, $attrs, $parse) ->
         val = $attrs.value or $attrs.ngInitial
+        val = val *  1 if $attrs.type is 'number'
+
         getter = $parse($attrs.ngModel)
         setter = getter.assign
         setter($scope, val)

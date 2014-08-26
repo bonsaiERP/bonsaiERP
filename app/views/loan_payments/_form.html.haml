@@ -8,10 +8,10 @@
   .span3
     = f.input :amount,
       label: 'Cantidad <span class="currency"></span>'.html_safe,
-      input_html: { type: 'decimal', size: 10, 'ng-model' => 'amount', 'ng-initial' => true }
+      input_html: { type: 'decimal', size: 10, 'ng-model' => 'amount', 'initial' => true }
   .span3
     = f.input :exchange_rate, label: 'Tipo de cambio',
-      input_html: { type: 'decimal', size: 10, 'ng-initial' => true,
+      input_html: { type: 'decimal', size: 10, 'initial' => true,
       'ng-model' => 'exchange_rate', 'ng-disabled' => 'same_currency' }
   .span4
     .moneybox

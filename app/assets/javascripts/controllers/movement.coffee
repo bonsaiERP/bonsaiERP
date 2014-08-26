@@ -9,7 +9,7 @@ MovementController = ($scope, $window, MovementDetail) ->
   $scope.tax_label = 'Por fuera'
   $scope.taxes = angular.element('#taxes').data('taxes')
   $scope._destroy = '0'
-  $scope.exchange_rate = $('#exchange_rate').val() * 1
+  #$scope.exchange_rate = $('#exchange_rate').val() * 1
   $scope.calls = 0
   $scope.accounts = angular.element('#accounts').data('accounts')
 

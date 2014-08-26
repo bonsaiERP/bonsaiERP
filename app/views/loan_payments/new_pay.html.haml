@@ -7,7 +7,7 @@
     = f.hidden_field :account_id, id: 'account_id'
 
     %input(type='hidden' id='accounts' data-accounts='#{Accounts::Query.new.expense_payment_options(@payment.loan).to_json}')
-    = hidden_field_tag 'base_currency', @payment.loan_currency, 'ng-model' => 'base_currency', 'ng-initial' => @payment.loan_currency
+    = hidden_field_tag 'base_currency', @payment.loan_currency, 'ng-model' => 'base_currency', 'initial' => @payment.loan_currency
 
     = render 'loan_payments/form', f: f, loan: @loan
 

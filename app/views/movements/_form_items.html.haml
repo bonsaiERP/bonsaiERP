@@ -63,7 +63,7 @@
       %label Impuestos
       %input#taxes(type='hidden' data-taxes='#{ Tax.all.to_json(only: [:id, :name, :percentage]) }')
 
-      = f.text_field :tax_id, 'ng-model' => 'tax_id', id: 'tax_id', class: 'hide', 'ng-initial' => true
+      = f.text_field :tax_id, 'ng-model' => 'tax_id', id: 'tax_id', class: 'hide', 'initial' => true
       .input-append
         %select#tax-id(ng-model='tax' ng-change='setTaxId()' ng-options='[t.name, " (", t.percentage, "%)" ].join("") for t in taxes track by t.id')
           %option(value='')

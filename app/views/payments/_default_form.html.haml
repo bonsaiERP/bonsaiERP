@@ -1,4 +1,4 @@
-= hidden_field_tag 'organisation_currency', currency, 'ng-model' => 'organisation_currency', 'ng-initial' => true
+= hidden_field_tag 'organisation_currency', currency, 'ng-model' => 'organisation_currency', 'initial' => true
 
 .row-fluid
   .span12
@@ -7,14 +7,14 @@
 
 %br
 .row-fluid.bg-white-tan.borders-y
-  .span3
+  .span4
     = f.input :amount,
       label: 'Cantidad <span class="currency"></span>'.html_safe,
-      input_html: { type: 'decimal', size: 10, 'ng-model' => 'amount', 'ng-initial' => true }
-  .span3
+      input_html: { type: 'number', size: 10, 'ng-model' => 'amount', 'initial' => true }
+  .span4
     = f.input :exchange_rate, label: 'Tipo de cambio',
-      input_html: { type: 'decimal', size: 10,
-        'ng-model' => 'exchange_rate', 'ng-initial' => true, 'ng-disabled' => 'same_currency' }
+      input_html: { size: 10, type: 'number',
+        'ng-model' => 'exchange_rate', 'initial' => true, 'ng-disabled' => 'same_currency' }
   .span4
     .moneybox
       %label TOTAL

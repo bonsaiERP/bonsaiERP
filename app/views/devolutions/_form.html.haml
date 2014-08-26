@@ -15,7 +15,7 @@
   .span3
     = f.input :amount,
       label: 'Cantidad <span class="currency"></span>'.html_safe,
-      input_html: {type: 'decimal', size: 10,
+      input_html: {type: 'number', size: 10,
       data: {value: 'payment.amount'} }
   .span3
     = f.input :exchange_rate, label: 'Tipo de cambio',
