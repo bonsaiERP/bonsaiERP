@@ -1,0 +1,6 @@
+= form_for attachable.attachments.build do |f|
+  .form-inline
+    = f.text_field :title, placeholder: 'Título'
+    = f.file_field :attachment, placeholder: 'Adjunto'
+
+    = f.submit 'Save', class: 'btn btn-primary'

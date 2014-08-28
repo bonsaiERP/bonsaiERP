@@ -21,6 +21,8 @@ class Item < ActiveRecord::Base
   has_many   :expense_details
   has_many   :inventory_details
 
+  has_many   :attachments, as: :attachable, dependent: :destroy
+
   ##########################################
   # Validations
   validates_presence_of   :name, :unit, :unit_id

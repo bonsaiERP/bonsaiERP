@@ -50,6 +50,9 @@
     %ul.unstyled
       = render partial: 'histories/history', collection: present(@item.histories.includes(:user))
 
+
+= render 'attachments/form', attachable: @item
+
 .page-header
   %h3.n Inventario
 - @item.stocks.includes(:store).each do |st|

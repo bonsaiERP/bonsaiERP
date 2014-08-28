@@ -28,6 +28,9 @@ gem 'validates_lengths_from_database'
 # Hstore accessor
 gem 'hstore_accessor'
 
+gem 'dragonfly'
+gem 'dragonfly-s3_data_store'
+
 group :production do
   gem 'newrelic_rpm'
   gem 'bugsnag' # Report of errors

@@ -101,7 +101,8 @@ module Controllers::Authorization
         loan_payments: true,
         movement_details_history: true,
         tag_groups: true,
-        batch_payments: true
+        batch_payments: true,
+        attachments: true
       }
     end
 
@@ -148,7 +149,8 @@ module Controllers::Authorization
         loan_payments: true,
         movement_details_history: true,
         tag_groups: true,
-        batch_payments: true
+        batch_payments: true,
+        attachments: true
       }
     end
 
@@ -196,7 +198,8 @@ module Controllers::Authorization
         loan_payments: true,
         movement_details_history: true,
         tag_groups: true,
-        batch_payments: true
+        batch_payments: true,
+        attachments: true
       }
     end
 
@@ -232,7 +235,8 @@ module Controllers::Authorization
         taxes: false,
         loans: false,
         loan_payments: false,
-        movement_details_history: true
+        movement_details_history: true,
+        attachments: true
       }
     end
 end

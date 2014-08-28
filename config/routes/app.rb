@@ -8,6 +8,8 @@ post 'batch_paymets/income' => 'batch_payments#income', as: :income_batch_paymen
 
 post 'batch_paymets/expense' => 'batch_payments#expense', as: :expense_batch_payments
 
+resources :attachments, only: [:create, :update, :destroy]
+
 resources :loan_payments, only: [] do
   member do
     # Receive
