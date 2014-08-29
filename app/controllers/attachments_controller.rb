@@ -3,7 +3,6 @@ class AttachmentsController < ApplicationController
   # POST /attachments
   def create
     @attachment = Attachment.new(create_params)
-
     @attachment.save_attachment
 
     render json: @attachment

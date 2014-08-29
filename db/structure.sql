@@ -223,10 +223,14 @@ ALTER SEQUENCE accounts_id_seq OWNED BY accounts.id;
 CREATE TABLE attachments (
     id integer NOT NULL,
     attachment_uid character varying(255),
-    title character varying(255),
+    name character varying(255),
     attachable_id character varying(255),
     attachable_type character varying(255),
+    user_id integer,
     "position" integer DEFAULT 0,
+    image boolean DEFAULT false,
+    size integer,
+    image_attributes json,
     created_at timestamp without time zone,
     updated_at timestamp without time zone
 );
@@ -863,10 +867,14 @@ ALTER SEQUENCE accounts_id_seq OWNED BY accounts.id;
 CREATE TABLE attachments (
     id integer NOT NULL,
     attachment_uid character varying(255),
-    title character varying(255),
+    name character varying(255),
     attachable_id character varying(255),
     attachable_type character varying(255),
+    user_id integer,
     "position" integer DEFAULT 0,
+    image boolean DEFAULT false,
+    size integer,
+    image_attributes json,
     created_at timestamp without time zone,
     updated_at timestamp without time zone
 );
@@ -1644,10 +1652,14 @@ ALTER SEQUENCE accounts_id_seq OWNED BY accounts.id;
 CREATE TABLE attachments (
     id integer NOT NULL,
     attachment_uid character varying(255),
-    title character varying(255),
+    name character varying(255),
     attachable_id character varying(255),
     attachable_type character varying(255),
+    user_id integer,
     "position" integer DEFAULT 0,
+    image boolean DEFAULT false,
+    size integer,
+    image_attributes json,
     created_at timestamp without time zone,
     updated_at timestamp without time zone
 );
@@ -2420,10 +2432,14 @@ ALTER SEQUENCE accounts_id_seq OWNED BY accounts.id;
 CREATE TABLE attachments (
     id integer NOT NULL,
     attachment_uid character varying(255),
-    title character varying(255),
+    name character varying(255),
     attachable_id character varying(255),
     attachable_type character varying(255),
+    user_id integer,
     "position" integer DEFAULT 0,
+    image boolean DEFAULT false,
+    size integer,
+    image_attributes json,
     created_at timestamp without time zone,
     updated_at timestamp without time zone
 );
@@ -3196,10 +3212,14 @@ ALTER SEQUENCE accounts_id_seq OWNED BY accounts.id;
 CREATE TABLE attachments (
     id integer NOT NULL,
     attachment_uid character varying(255),
-    title character varying(255),
+    name character varying(255),
     attachable_id character varying(255),
     attachable_type character varying(255),
+    user_id integer,
     "position" integer DEFAULT 0,
+    image boolean DEFAULT false,
+    size integer,
+    image_attributes json,
     created_at timestamp without time zone,
     updated_at timestamp without time zone
 );
@@ -5497,6 +5517,20 @@ CREATE INDEX index_attachments_on_attachable_id_and_attachable_type ON attachmen
 
 
 --
+-- Name: index_attachments_on_image; Type: INDEX; Schema: biobolsas; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_attachments_on_image ON attachments USING btree (image);
+
+
+--
+-- Name: index_attachments_on_user_id; Type: INDEX; Schema: biobolsas; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_attachments_on_user_id ON attachments USING btree (user_id);
+
+
+--
 -- Name: index_contacts_on_active; Type: INDEX; Schema: biobolsas; Owner: -; Tablespace: 
 --
 
@@ -6028,6 +6062,20 @@ CREATE INDEX index_accounts_on_updater_id ON accounts USING btree (updater_id);
 --
 
 CREATE INDEX index_attachments_on_attachable_id_and_attachable_type ON attachments USING btree (attachable_id, attachable_type);
+
+
+--
+-- Name: index_attachments_on_image; Type: INDEX; Schema: bonsai; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_attachments_on_image ON attachments USING btree (image);
+
+
+--
+-- Name: index_attachments_on_user_id; Type: INDEX; Schema: bonsai; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_attachments_on_user_id ON attachments USING btree (user_id);
 
 
 --
@@ -6665,6 +6713,20 @@ CREATE INDEX index_attachments_on_attachable_id_and_attachable_type ON attachmen
 
 
 --
+-- Name: index_attachments_on_image; Type: INDEX; Schema: demo; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_attachments_on_image ON attachments USING btree (image);
+
+
+--
+-- Name: index_attachments_on_user_id; Type: INDEX; Schema: demo; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_attachments_on_user_id ON attachments USING btree (user_id);
+
+
+--
 -- Name: index_contacts_on_active; Type: INDEX; Schema: demo; Owner: -; Tablespace: 
 --
 
@@ -7290,6 +7352,20 @@ CREATE INDEX index_attachments_on_attachable_id_and_attachable_type ON attachmen
 
 
 --
+-- Name: index_attachments_on_image; Type: INDEX; Schema: flor; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_attachments_on_image ON attachments USING btree (image);
+
+
+--
+-- Name: index_attachments_on_user_id; Type: INDEX; Schema: flor; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_attachments_on_user_id ON attachments USING btree (user_id);
+
+
+--
 -- Name: index_contacts_on_active; Type: INDEX; Schema: flor; Owner: -; Tablespace: 
 --
 
@@ -7912,6 +7988,20 @@ CREATE INDEX index_accounts_on_updater_id ON accounts USING btree (updater_id);
 --
 
 CREATE INDEX index_attachments_on_attachable_id_and_attachable_type ON attachments USING btree (attachable_id, attachable_type);
+
+
+--
+-- Name: index_attachments_on_image; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_attachments_on_image ON attachments USING btree (image);
+
+
+--
+-- Name: index_attachments_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_attachments_on_user_id ON attachments USING btree (user_id);
 
 
 --
