@@ -1,5 +1,27 @@
 AttachmentController = ($scope, $upload) ->
+  $scope.imageFor = (attachment) ->
+    if attachment.image
+      "https://s3-us-west-2.amazonaws.com/#{ $scope.bucket }/#{ attachment.small_attachment_uid }"
+    else
+      '/assets/rails.png'
 
+  #
+  $scope.upPosition = (index) ->
+    tmp = $scope.attachments[index - 1]
+    return  unless tmp
+
+    $scope.attachments[index - 1] = $scope.attachments[index]
+    $scope.attachments[index] = tmp
+
+  #
+  $scope.downPosition = (index) ->
+    tmp = $scope.attachments[index + 1]
+    return  unless tmp
+
+    $scope.attachments[index + 1] = $scope.attachments[index]
+    $scope.attachments[index] = tmp
+
+  # Upload
   $scope.onFileSelect = ($files) ->
     $files.forEach( (file) ->
       console.log file
@@ -25,14 +47,3 @@ AttachmentController = ($scope, $upload) ->
 AttachmentController.$inject = ['$scope', '$upload']
 
 myApp.controller('AttachmentController', AttachmentController)
-
-AttachmentsListController = ($scope) ->
-  $scope.imageFor = (attachment) ->
-    if attachment.image
-      "https://s3-us-west-2.amazonaws.com/#{ $scope.bucket }/#{ attachment.small_attachment_uid }"
-    else
-      '/assets/rails.png'
-
-AttachmentsListController.$inject = ['$scope']
-
-myApp.controller('AttachmentsListController', AttachmentsListController)

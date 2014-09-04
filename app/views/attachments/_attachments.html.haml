@@ -1,0 +1,19 @@
+%div.attachments(ng-controller="AttachmentController")
+  %input(type="hidden" ng-init="attachments=#{ attachable.attachments.to_json }")
+  %input(type="hidden" ng-init="bucket='#{ S3_BUCKET }'")
+
+  %ul.small-attachments-list
+    %li(ng-repeat="attachment in attachments")
+      .header
+        %a.icon-caret-up.fs120(ng-click="upPosition($index)" href)
+        %a.icon-caret-down.fs120(ng-click="downPosition($index)" href)
+        %a.icon-trash.fs120(ng-click="delete($index)" title="Eliminar" href)
+        %span(title="{{ attachment.name }}" data-toggle='tooltip')
+          {{ attachment.name }}
+
+      .clearfix
+      %img(ng-src="{{ imageFor(attachment) }}")
+
+  .clearfix
+
+  = render 'attachments/form', attachable: attachable

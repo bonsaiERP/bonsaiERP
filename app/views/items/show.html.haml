@@ -51,7 +51,7 @@
       = render partial: 'histories/history', collection: present(@item.histories.includes(:user))
 
 
-= render 'attachments/form', attachable: @item
+= render 'attachments/attachments', attachable: @item
 
 .page-header
   %h3.n Inventario

@@ -40,14 +40,11 @@ class Attachment < ActiveRecord::Base
   end
 
   def as_json(options = {})
-    {
-      name: name,
-      size: size,
-      image: image,
-      attachment_uid: attachment_uid,
-      small_attachment_uid: small_attachment_uid,
-      medium_attachment_uid: medium_attachment_uid
-    }
+    super({
+      only: [:id, :name, :image, :size, :position, :attachment_uid],
+      methods: [:small_attachment_uid, :medium_attachment_uid]
+      }.merge(options)
+    )
   end
 
   private

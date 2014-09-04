@@ -27,5 +27,21 @@ describe Attachment do
     expect(at.extname).to eq('.jpg')
   end
 
+  it "#as_json" do
+    at = Attachment.new
+    _json = at.as_json
 
+    [:id, :name, :size, :image, :position, :attachment_uid,
+     :small_attachment_uid,
+     :medium_attachment_uid].each do |attr|
+       _json.fetch(attr.to_s)
+     end
+
+     _json = at.as_json(only: [:id], methods: [])
+
+     expect(_json).to eq({'id' => nil})
+
+     _json = at.as_json(only: [:id, :name, :image])
+     expect(_json).to eq({'id' => nil, 'name' => nil, 'image' => false, 'small_attachment_uid' => nil, 'medium_attachment_uid' => nil})
+  end
 end

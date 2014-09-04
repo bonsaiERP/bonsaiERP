@@ -1,17 +1,4 @@
--# attachable.attachments.each do |img|
-  = image_tag img.small_attachment.url
-
-%div(ng-controller="AttachmentsListController" ng-init="attachments=#{ attachable.attachments.to_json }")
-  %input(type="hidden" ng-init="bucket='#{ S3_BUCKET }'")
-
-  %ul
-    %li(ng-repeat="attachment in attachments")
-      %img(ng-src="{{ imageFor(attachment) }}")
-      {{ attachment.name }}
-
-
-
-%div(ng-controller="AttachmentController")
+%div
   %input(type="hidden" ng-init="attachable_id=#{ attachable.id }")
   %input(type="hidden" ng-init="attachable_type='#{ attachable.class }'")
   %input(type="hidden" ng-init="position=#{ attachable.attachments.size + 1 }")
@@ -29,10 +16,3 @@
 
   %button.btn(ng-click="upload.abort()")
     Cancel Upload
--#= form_for attachable.attachments.build do |f|
-  .form-inline
-    = f.hidden_field :attachable_id
-    = f.hidden_field :attachable_type
-    = f.file_field :attachment, placeholder: 'Adjunto'
-
-    = f.submit 'Save', class: 'btn btn-primary'
