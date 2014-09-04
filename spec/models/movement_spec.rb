@@ -6,6 +6,7 @@ describe Movement do
   it { should belong_to(:project) }
   it { should belong_to(:tax) }
 
+
   before(:each) do
     UserSession.user = build :user, id: 10
   end

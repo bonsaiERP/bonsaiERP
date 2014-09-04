@@ -21,7 +21,10 @@ class Item < ActiveRecord::Base
   has_many   :expense_details
   has_many   :inventory_details
 
-  has_many   :attachments, as: :attachable, dependent: :destroy
+  # Attachments
+  has_one    :image, -> { where(image: true).order('attachments.position') }, class_name: 'Attachment', as: :attachable
+  has_many   :images, -> { where(image: true).order('attachments.position') }, class_name: 'Attachment', as: :attachable
+  has_many   :attachments, -> { order('attachments.position')}, as: :attachable, dependent: :destroy
 
   ##########################################
   # Validations

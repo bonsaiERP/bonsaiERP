@@ -8,3 +8,6 @@ APP_NAME = 'bonsaiERP'
 ALLOW_REGISTRATIONS = true
 INPUT_SIZE=45
 INVALID_TENANTS = %w(www public common demo app test)
+S3_BUCKET = Rails.application.secrets.s3_bucket_name
+
+STATUS_ERROR = 422

@@ -37,6 +37,7 @@
 #=require app/inline_edit.coffee
 
 ## Angular
+#= require angular/angular-file-upload.min.js
 #= require_tree ./config
 #= require_tree ./filters
 #= require_tree ./controllers

@@ -11,6 +11,11 @@ describe Item do
   it { should have_many(:expense_details) }
   it { should have_many(:inventory_details) }
 
+  # Attachments relationships
+  it { should have_one(:image).order('attachments.position').conditions(image: true).class_name('Attachment') }
+  it { should have_many(:images).order('attachments.position').conditions(image: true).class_name('Attachment') }
+  it { should have_many(:attachments).order('attachments.position').dependent(:destroy) }
+
   #it { should validate_uniqueness_of(:name) }
   it { should have_valid(:price).when(1, 0.1) }
   it { should_not have_valid(:price).when(-1, -0.1) }

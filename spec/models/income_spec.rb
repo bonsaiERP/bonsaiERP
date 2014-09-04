@@ -22,9 +22,12 @@ describe Income do
     # Relationships
     it { should belong_to(:contact) }
     it { should belong_to(:project) }
-    it { should have_many(:income_details) }
-    it { should have_many(:payments) }
-    it { should have_many(:devolutions) }
+    it { should have_many(:income_details).order('id asc').with_foreign_key(:account_id).dependent(:destroy) }
+
+    it { should have_many(:payments).conditions(operation: 'payin').class_name('AccountLedger').with_foreign_key(:account_id) }
+
+    it { should have_many(:devolutions).conditions(operation: 'devout').class_name('AccountLedger').with_foreign_key(:account_id) }
+
     it { should have_many(:ledgers) }
     it { should have_many(:inventories) }
     # Validations
@@ -33,6 +36,8 @@ describe Income do
     it { should validate_presence_of(:contact_id) }
     it { should have_valid(:state).when(*Income::STATES) }
     it { should_not have_valid(:state).when(nil, 'ja', 1) }
+
+    it { should accept_nested_attributes_for(:income_details).allow_destroy(true) }
 
     # Intialize
     it "Initial values" do
@@ -44,6 +49,11 @@ describe Income do
       subject.balance.should == 0.0
       #subject.original_total.should == 0.0
       #subject.balance_inventory.should == 0.0
+    end
+
+    it "alias" do
+      inc  = Income.new
+      expect(inc.income_details).to eq(inc.details)
     end
   end
 

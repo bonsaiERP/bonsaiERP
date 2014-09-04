@@ -3,8 +3,8 @@ class Attachment < ActiveRecord::Base
   belongs_to :user
 
   dragonfly_accessor :attachment do
-    copy_to(:small_attachment) { |a| a.thumb('200x200') }
-    copy_to(:medium_attachment) { |a| a.thumb('500x500') }
+    copy_to(:small_attachment) { |a| a.thumb('200x200')   if a.image? }
+    copy_to(:medium_attachment) { |a| a.thumb('500x500')  if a.image? }
   end
   dragonfly_accessor :small_attachment
   dragonfly_accessor :medium_attachment
@@ -23,7 +23,7 @@ class Attachment < ActiveRecord::Base
     self.save
   end
 
-  def extension
+  def extname
     File.extname name
   end
 
@@ -37,6 +37,17 @@ class Attachment < ActiveRecord::Base
     image_attributes['medium_attachment_uid']
   rescue
     nil
+  end
+
+  def as_json(options = {})
+    {
+      name: name,
+      size: size,
+      image: image,
+      attachment_uid: attachment_uid,
+      small_attachment_uid: small_attachment_uid,
+      medium_attachment_uid: medium_attachment_uid
+    }
   end
 
   private

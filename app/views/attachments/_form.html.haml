@@ -1,7 +1,35 @@
-- attachable.attachments.each do |img|
+-# attachable.attachments.each do |img|
   = image_tag img.small_attachment.url
 
-= form_for attachable.attachments.build do |f|
+%div(ng-controller="AttachmentsListController" ng-init="attachments=#{ attachable.attachments.to_json }")
+  %input(type="hidden" ng-init="bucket='#{ S3_BUCKET }'")
+
+  %ul
+    %li(ng-repeat="attachment in attachments")
+      %img(ng-src="{{ imageFor(attachment) }}")
+      {{ attachment.name }}
+
+
+
+%div(ng-controller="AttachmentController")
+  %input(type="hidden" ng-init="attachable_id=#{ attachable.id }")
+  %input(type="hidden" ng-init="attachable_type='#{ attachable.class }'")
+  %input(type="hidden" ng-init="position=#{ attachable.attachments.size + 1 }")
+
+  -#%input(type="text" ng-model="attachment")
+  %input(type="file" ng-file-select="onFileSelect($files)")
+  %input(type="file" ng-file-select="onFileSelect($files)" accept="image/*" multiple)
+  %button.btn.btn-primary(ng-file-select="onFileSelect($files)" data-multiple="true")
+    Upload
+  %div(ng-file-drop="onFileSelect($files)" ng-file-drag-over-class="optional-css-class-name-or-function" ng-show="dropSupported" style="width: 300px; height: 200px;border: 1px solid gray")
+    drop files here
+
+  %div(ng-file-drop-available="dropSupported=true" ng-show="!dropSupported")
+    HTML5 Drop File is not supported!
+
+  %button.btn(ng-click="upload.abort()")
+    Cancel Upload
+-#= form_for attachable.attachments.build do |f|
   .form-inline
     = f.hidden_field :attachable_id
     = f.hidden_field :attachable_type

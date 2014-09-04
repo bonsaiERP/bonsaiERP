@@ -4,4 +4,4 @@
   precision: 2
 }
 @bonsai = {}
-@myApp = angular.module('myApp', ['numberFilters'])
+@myApp = angular.module('myApp', ['numberFilters', 'angularFileUpload'])

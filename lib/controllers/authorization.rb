@@ -236,7 +236,7 @@ module Controllers::Authorization
         loans: false,
         loan_payments: false,
         movement_details_history: true,
-        attachments: true
+        attachments: { create: true, destroy: false }
       }
     end
 end

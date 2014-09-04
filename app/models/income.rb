@@ -11,7 +11,7 @@ class Income < Movement
   ########################################
   # Relationships
   has_many :income_details, -> { order('id asc') }, foreign_key: :account_id, dependent: :destroy
-  alias :details :income_details
+  alias_method :details, :income_details
   accepts_nested_attributes_for :income_details, allow_destroy: true,
     reject_if: proc {|det| det.fetch(:item_id).blank? }
 
