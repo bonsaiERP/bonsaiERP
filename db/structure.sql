@@ -338,7 +338,7 @@ CREATE TABLE attachments (
     id integer NOT NULL,
     attachment_uid character varying(255),
     name character varying(255),
-    attachable_id character varying(255),
+    attachable_id integer,
     attachable_type character varying(255),
     user_id integer,
     "position" integer DEFAULT 0,

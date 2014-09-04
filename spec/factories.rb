@@ -1,5 +1,13 @@
 # encoding: utf-8
 FactoryGirl.define do
+
+  factory :attachment do
+    name 'picture.jpg'
+    position 1
+    attachable_id 1
+    attachable_type 'Item'
+  end
+
   factory :unit do
     name 'Kilogramo'
     symbol 'Kg.'

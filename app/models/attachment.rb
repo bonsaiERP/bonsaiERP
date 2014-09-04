@@ -11,6 +11,7 @@ class Attachment < ActiveRecord::Base
 
   validates :attachment, presence: true
   validates :attachable, presence: true, :if => :has_attachable?
+  validates :position, presence: true, numericality: true
 
   def save_attachment
     self.name = attachment.name
@@ -47,7 +48,51 @@ class Attachment < ActiveRecord::Base
     )
   end
 
+  def move_up
+    res = true
+    return true  if other_attachables_less_than_equal(position - 1).empty?
+
+    self.class.transaction do
+      self.position = position - 1
+
+      res = other_attachables_less_than_equal(position)
+        .update_all("position = position + 1") && self.save
+
+      raise ActiveRecord::Rollback  unless res
+    end
+
+    res
+  end
+
+  def move_down
+    res = true
+    return true  if other_attachables_greater_than_equal(position + 1).empty?
+
+    self.class.transaction do
+      self.position = position + 1
+
+      res = other_attachables_greater_than_equal(position).update_all("position = position - 1")
+      res = res && self.save
+
+      raise ActiveRecord::Rollback  unless res
+    end
+
+    res
+  end
+
   private
+
+    def other_attachables
+      @attachables ||= Attachment.where(attachable_id: attachable_id, attachable_type: attachable_type).where.not(id: id)
+    end
+
+    def other_attachables_less_than_equal(pos)
+      other_attachables.where("attachments.position <= ?", pos)
+    end
+
+    def other_attachables_greater_than_equal(pos)
+      other_attachables.where("attachments.position >= ?", pos)
+    end
 
     def small_attachment_uid=(val)
       self.image_attributes ||= {}

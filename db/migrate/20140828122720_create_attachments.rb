@@ -4,7 +4,7 @@ class CreateAttachments < ActiveRecord::Migration
       create_table :attachments do |t|
         t.string :attachment_uid
         t.string :name
-        t.string :attachable_id
+        t.integer :attachable_id
         t.string :attachable_type
         t.integer :user_id
         t.integer :position, default: 0
