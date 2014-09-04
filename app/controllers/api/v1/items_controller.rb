@@ -6,9 +6,17 @@ class Api::V1::ItemsController < Api::V1::BaseController
   end
 
   # GET /api/v1/items/count
+  def show
+    item = Item.find(params[:id])
+
+    render json: item.to_json
+  end
+
+  # GET /api/v1/items/count
   def count
     render json: { count: Item.count }
   end
+
 
   private
 

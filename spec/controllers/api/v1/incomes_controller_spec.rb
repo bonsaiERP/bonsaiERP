@@ -36,7 +36,6 @@ describe Api::V1::IncomesController do
 
       get :show, id: inc.id
 
-      json = JSON.parse(response.body)
       expect(json['id']).to eq(inc.id)
       expect(json['income_details']).to have(2).items
     end
@@ -45,8 +44,6 @@ describe Api::V1::IncomesController do
   context 'POST' do
     it "OK" do
       post :create, { income: valid_params }
-
-      json = JSON.parse(response.body)
 
       expect(json['id']).to be_is_a(Integer)
       expect(json['tag_ids']).to eq([tag.id])

@@ -17,7 +17,6 @@ describe Api::V1::TagsController do
 
       get :index
 
-      json = JSON.parse(response.body)
       expect(json).to have(1).item
     end
   end
@@ -26,8 +25,7 @@ describe Api::V1::TagsController do
     it "count" do
       get :count
 
-      resp = JSON.parse(response.body)
-      expect(resp['count']).to eq(0)
+      expect(json['count']).to eq(0)
     end
   end
 end
