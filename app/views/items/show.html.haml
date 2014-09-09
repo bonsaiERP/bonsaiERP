@@ -45,13 +45,16 @@
 
 .row-fluid
   .span6
+    %h3 Adjuntos
+    = render 'attachments/attachments', attachable: @item
+
+  .span6
     %h3.n Historial
 
     %ul.unstyled
       = render partial: 'histories/history', collection: present(@item.histories.includes(:user))
 
 
-= render 'attachments/attachments', attachable: @item
 
 .page-header
   %h3.n Inventario

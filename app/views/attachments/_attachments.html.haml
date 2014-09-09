@@ -5,9 +5,9 @@
   %ul.small-attachments-list
     %li(ng-repeat="attachment in attachments")
       .header
-        %a.icon-caret-up.fs120(ng-click="upPosition($index)" href)
-        %a.icon-caret-down.fs120(ng-click="downPosition($index)" href)
-        %a.icon-trash.fs120(ng-click="delete($index)" title="Eliminar" href)
+        %a.icon-caret-up.fs120(ng-click="upPosition($index)" ng-disabled="attachment.process" href)
+        %a.icon-caret-down.fs120(ng-click="downPosition($index)" ng-disabled="attachment.process" href)
+        %a.icon-cross.fs120.red(ng-click="delete(attachment, $index)" title="Eliminar" ng-disabled="attachment.process" href)
         %span(title="{{ attachment.name }}" data-toggle='tooltip')
           {{ attachment.name }}
 
