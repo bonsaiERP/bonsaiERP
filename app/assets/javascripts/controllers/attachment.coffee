@@ -24,6 +24,8 @@ AttachmentController = ($scope, $http, $timeout, $upload) ->
 
   #
   $scope.delete = (attch, index) ->
+    return  if attch.process
+
     if confirm('Esta segur@ de eliminar la imagen')
 
       attch.process = true
@@ -79,6 +81,9 @@ AttachmentController = ($scope, $http, $timeout, $upload) ->
       )
       .success( (data, status, headers, config) ->
         $scope.attachments.push data
+      )
+      .finally(->
+        $scope.selectedFiles[index].terminated = true
       )
     )
 

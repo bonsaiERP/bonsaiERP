@@ -1,22 +1,22 @@
-%div
+%form.attachment-form
   %input(type="hidden" ng-init="attachable_id=#{ attachable.id }")
   %input(type="hidden" ng-init="attachable_type='#{ attachable.class }'")
   %input(type="hidden" ng-init="position=#{ attachable.attachments.size + 1 }")
 
-  %input(type="file" ng-file-select="onFileSelect($files)")
-  %input(type="file" ng-file-select="onFileSelect($files)" accept="image/*" multiple)
+  -#%input(type="file" ng-file-select="onFileSelect($files)" accept="image/*" multiple)
 
-  %div(ng-file-drop="onFileSelect($files)" ng-file-drag-over-class="optional-css-class-name-or-function" ng-show="dropSupported" style="width: 100%; height: 200px;border: 1px solid gray")
-    drop files here
+  %input#file-input(type="file" ng-file-select="onFileSelect($files)" multiple placeholder="Seleccione archivos")
+  %div.drop-area(ng-file-drop="onFileSelect($files)" ng-file-drag-over-class="optional-css-class-name-or-function" ng-show="dropSupported")
+    Arrastre los archivos aquí para adjuntar
 
   %div(ng-file-drop-available="dropSupported=true" ng-show="!dropSupported")
     HTML5 Drop File is not supported!
 
-  %div(class="sel-file" ng-repeat="f in selectedFiles")
+  %div.selected-file(class="sel-file" ng-repeat="f in selectedFiles" ng-hide="f.terminated")
     {{ f.file.name }}
     %img(ng-show="f.dataUrl" ng-src="{{f.dataUrl}}")
 
-    %div.progess(style="height: 20px; width: {{ f.progress }}px;background: blue")
-
     %button.btn(ng-click="upload.abort(f, index)")
-      Cancel Upload
+      Cancelar
+
+    %div.progess(style="width: {{ f.progress }}px;")
