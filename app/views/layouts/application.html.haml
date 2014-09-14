@@ -11,7 +11,7 @@
     %title bonsaiERP - #{current_organisation}
 
     = stylesheet_link_tag "application", media: 'all'
-    = javascript_include_tag 'angular/angular-file-upload-shim.min.js'
+    = javascript_include_tag asset_path('angular/angular-file-upload-shim.min.js')
     = cdn_scripts 'jquery', 'angular'
     = javascript_include_tag "application"
     -if Rails.env.production?
