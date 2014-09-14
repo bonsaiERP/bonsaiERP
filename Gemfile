@@ -34,6 +34,7 @@ gem 'dragonfly-s3_data_store'
 group :production do
   gem 'newrelic_rpm'
   gem 'bugsnag' # Report of errors
+  gem 'rack-cache', require: 'rack/cache'
 end
 
 group :development do
