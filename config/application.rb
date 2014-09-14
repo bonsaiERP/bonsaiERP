@@ -33,7 +33,7 @@ module Bonsaierp
     # Enable escaping HTML in JSON.
     config.active_support.escape_html_entities_in_json = true
 
-    config.assets.precompile += %w(email.css)
+    config.assets.precompile += %w(angular-file-upload-shim.min.js email.css)
 
     config.active_record.schema_format = :sql
 
