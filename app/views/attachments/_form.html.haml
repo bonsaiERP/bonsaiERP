@@ -16,7 +16,9 @@
     {{ f.file.name }}
     %img(ng-show="f.dataUrl" ng-src="{{f.dataUrl}}")
 
-    %button.btn(ng-click="upload.abort(f, index)")
+    -#%button.btn(ng-click="upload.abort(f, index)")
       Cancelar
 
-    %div.progess(style="width: {{ f.progress }}px;")
+    %div.progress
+      .percentage {{ f.progress }} %
+      .progress-bar(style="width: {{ f.progress }}%;")

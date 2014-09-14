@@ -77,7 +77,7 @@ AttachmentController = ($scope, $http, $timeout, $upload) ->
       )
       .progress( (event) ->
         f = $scope.selectedFiles[index]
-        f.progress = Math.round((event.loaded / event.total) * 300)
+        f.progress = Math.round((event.loaded / event.total) * 100)
       )
       .success( (data, status, headers, config) ->
         $scope.attachments.push data

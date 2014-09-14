@@ -26,13 +26,18 @@
     padding: 4px 10px
     color: darken($grayLight, 5%)
   .progress
-    background-color: lighten($blue, 20%)
-    height: 20%
+    border: 1px solid lighten($grayLight, 10%)
+    width: 300px
+    height: 20px
+    position: relative
+    .percentage
+      position: absolute
+      left: 130px
+    .progress-bar
+      height: 20px
+      background-color: lighten($blue, 20%)
 
   .selected-file
     img
       max-width: 120px
       max-height: 120px
-
-    .progress
-      display: inline-block
