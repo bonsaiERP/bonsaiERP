@@ -40,10 +40,18 @@ class Attachment < ActiveRecord::Base
     nil
   end
 
+  # Delegated methods for json response
+  delegate :url, :remote_url, to: :attachment, prefix: true, allow_nil: true
+  delegate :url, :remote_url, to: :small_attachment, prefix: true, allow_nil: true
+  delegate :url, :remote_url, to: :medium_attachment, prefix: true, allow_nil: true
+
   def as_json(options = {})
     super({
       only: [:id, :name, :image, :size, :position, :attachment_uid],
-      methods: [:small_attachment_uid, :medium_attachment_uid]
+      methods: [
+        :attachment_url, :attachment_remote_url,
+        :small_attachment_url, :medium_attachment_url
+      ]
       }.merge(options)
     )
   end

@@ -1,9 +1,9 @@
 AttachmentController = ($scope, $http, $timeout, $upload) ->
   $scope.imageFor = (attachment) ->
     if attachment.image
-      "https://s3-us-west-2.amazonaws.com/#{ $scope.bucket }/#{ attachment.small_attachment_uid }"
+      attachment.small_attachment_url
     else
-      '/assets/rails.png'
+      '/assets/back-gray.png'
 
   #
   $scope.upPosition = (index) ->
@@ -26,7 +26,7 @@ AttachmentController = ($scope, $http, $timeout, $upload) ->
   $scope.delete = (attch, index) ->
     return  if attch.process
 
-    if confirm('Esta segur@ de eliminar la imagen')
+    if confirm('Esta segur@ de eliminar el adjunto?')
 
       attch.process = true
 

@@ -1,5 +1,5 @@
 class AttachmentsController < ApplicationController
-  before_action :set_attachment, only: [:update, :destroy]
+  before_action :set_attachment, only: [:show, :update, :destroy]
 
   # POST /attachments
   def create

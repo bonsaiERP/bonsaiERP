@@ -20,6 +20,7 @@ log/*.log
 config/database.yml
 public/javascripts/plugins.js
 public/javascripts/scripts.js
+public/system
 doc/wireframes/images/*.*
 *.pid
 rerun.txt

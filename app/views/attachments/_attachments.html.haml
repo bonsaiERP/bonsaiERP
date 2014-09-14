@@ -8,11 +8,12 @@
         %a.icon-caret-up.fs120(ng-click="upPosition($index)" ng-disabled="attachment.process" href)
         %a.icon-caret-down.fs120(ng-click="downPosition($index)" ng-disabled="attachment.process" href)
         %a.icon-cross.fs120.red(ng-click="delete(attachment, $index)" title="Eliminar" ng-disabled="attachment.process" href)
-        %span(title="{{ attachment.name }}" data-toggle='tooltip')
+        %a(title="{{ attachment.name }}" data-toggle='tooltip' href="{{ attachment.attachment_remote_url }}" target="_blank" download="{{ attachment.name }}")
           {{ attachment.name }}
 
       .clearfix
       %img(ng-src="{{ imageFor(attachment) }}")
+      {{ attachment.remote_url }}
 
   .clearfix
 
