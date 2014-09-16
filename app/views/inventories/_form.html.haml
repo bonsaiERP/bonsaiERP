@@ -9,10 +9,10 @@
 
 
   %tr(ng-repeat='detail in details' ng-hide='detail._destroy==1')
-    %td.input
+    %td.input.autocomp
       %input(type='text' ng-model='detail.item_id' name='#{inventory.details_form_name}[{{$index}}][item_id]' size='2' style='display:none')
-      %input.item-name(type='text' size='75' placeholder='Escriba para buscar el ítem' data-source='#{search_inventory_item_path(store_id)}' ng-model='detail.item' ng-inventory-detail-autocomplete='true')
-      %a.btn.add-new-url.add-new-item.ajax(href='/items/new')
+      %input.item-name.autocomp(type='text' placeholder='Escriba para buscar el ítem' data-source='#{search_inventory_item_path(store_id)}' ng-model='detail.item' inventory-detail-autocomplete='true')
+      %a.btn.add-new-url.add-new-item.ajax(href='/items/new' tabindex="-1")
         %i.icon-plus-circle
 
     %td

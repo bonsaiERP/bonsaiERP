@@ -1,8 +1,8 @@
 .row-fluid
-  .span6.contact
+  .span6.contact.autocomp
     - if transaction.new_record?
       = f.input :contact_id, as: :autocomplete, label: 'Contacto',
-        input_html: { class: 'span10', placeholder: 'Escriba para buscar el contacto',
+        input_html: { class: 'span10 autocomp', placeholder: 'Escriba para buscar el contacto',
         data: { source: '/contacts.json', new_url: new_contact_path, title: 'Nuevo contacto', trigger: 'new-contact' } }
     - else
       %label Contacto

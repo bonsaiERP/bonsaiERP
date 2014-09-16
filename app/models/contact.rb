@@ -36,7 +36,7 @@ class Contact < ActiveRecord::Base
   scope :clients, -> { where(client: true) }
   scope :suppliers, -> { where(supplier: true) }
   scope :search, -> (s) {
-    sql = %w(matchcode first_name last_name).map { |field| "contacts.#{field} ILIKE :s" }
+    sql = %w(matchcode first_name last_name email phone mobile).map { |field| "contacts.#{field} ILIKE :s" }
     where(sql.join(' OR ' ), s: "%#{s}%")
   }
 

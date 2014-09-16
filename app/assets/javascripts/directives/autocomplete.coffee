@@ -52,7 +52,7 @@ myApp.directive 'detailAutocomplete', ->
 
 
 # Autocomplete for inventories
-.directive 'ngInventoryDetailAutocomplete', ->
+.directive 'inventoryDetailAutocomplete', ->
   restrict: 'A',
   scope: {},
   link: ($scope, $elem, $attr) ->
@@ -79,7 +79,10 @@ myApp.directive 'detailAutocomplete', ->
           scope.$parent.detail.unit = ui.item.unit_symbol
           scope.$parent.detail.stock = ui.item.stock
 
-      change: (event, ui) ->
+      search: (event, ui) ->
+        $elem.addClass('loading')
+      response: (event, ui) ->
+        $elem.removeClass('loading')
     )
 
     $elem.blur ->

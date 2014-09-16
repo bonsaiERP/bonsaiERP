@@ -118,19 +118,16 @@ $( ->
           $hidden.val(ui.item.id)
           $input.trigger('autocomplete-done', [ui.item])
         search: (e, ui) ->
-          $input.css({
-            backgroundImage: 'url("/assets/ajax-loader-small.gif")',
-            backgroundRepeat: 'no-repeat'
-          })
+          $input.addClass('loading')
         response: (e, ui) ->
-          $input.css({backgroundImage: 'none'})
+          $input.removeClass('loading')
+
           if ui.content.length is 0
             $input.popoverNotitle({content: 'No se encontraron resultados'})
             $input.popover('show')
             $input.on('focusout', -> $input.popover('destroy'))
           else
             $input.popover('destroy')
-        close: (e, ui) -> $input.css({backgroundImage: 'none'})
       }).on('focusout keyup', (event) ->
         $this = $(this)
         value = $this.val()
