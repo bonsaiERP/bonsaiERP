@@ -56,8 +56,9 @@ class Attachment < ActiveRecord::Base
     )
   end
 
-  def move_up
+  def move_up(pos)
     res = true
+    return true if pos >= position
     return true  if other_attachables_less_than_equal(position - 1).empty?
 
     self.class.transaction do
@@ -72,8 +73,9 @@ class Attachment < ActiveRecord::Base
     res
   end
 
-  def move_down
+  def move_down(pos)
     res = true
+    return true if pos <= position
     return true  if other_attachables_greater_than_equal(position + 1).empty?
 
     self.class.transaction do

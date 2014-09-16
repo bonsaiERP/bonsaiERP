@@ -11,11 +11,16 @@ class AttachmentsController < ApplicationController
 
   # PATCH /attachments/:id
   def update
-    if @attachment.update(position: params[:position])
-      render json: @attachment
+    case
+    when move_up?
+      @attachment.move_up(position)
+    when move_down?
+      @attachment.move_down(position)
     else
-      render json: { errors: @attachment.errors }, status: STATUS_ERROR
+      render json: @attachment, status: STATUS_ERROR
     end
+  rescue
+    render json: {error: true}, status: STATUS_ERROR
   end
 
   def destroy
@@ -31,6 +36,22 @@ class AttachmentsController < ApplicationController
     def create_params
       params.permit(:attachable_id, :attachable_type, :position)
         .merge(attachment: params[:file])
+    end
+
+    def move_up?
+      params[:attachment][:move] === 'up' && position
+    end
+
+    def move_down?
+      params[:attachment][:move] === 'down' && position
+    end
+
+    def position
+      if params[:attachment][:position].to_s.match(/\A\d+\z/)
+        params[:attachment][:position].to_s.to_i
+      else
+        nil
+      end
     end
 
     def set_attachment

@@ -18,12 +18,12 @@
 
   %li.row-fluid.detail(ng-repeat='detail in details' ng-hide='detail._destroy==1')
     .span6.item
-      %input(type='hidden' ng-model='detail.id' name='#{movement.form_details_name}[{{$index}}][id]' value='{{detail.id}}')
+      %input(type='hidden' ng-model='detail.id' name='#{movement.form_details_name}[{{ $index }}][id]' value='{{ detail.id }}')
       %input(type='hidden' ng-model='detail._destroy' name='#{movement.form_details_name}[{{$index}}][_destroy]' value='{{detail._destroy}}')
-      .input-append
+      .input-append.autocomp
         %input.hide(type='text' ng-model='detail.item_id' name='#{movement.form_details_name}[{{$index}}][item_id]' size='2')
-        %input.item-name(type='text' placeholder='Escriba para buscar el ítem' data-source='#{item_url}' ng-model='detail.item' ng-detail-autocomplete='true')
-        %a.btn.add-new-url.add-new-item.ajax(href='/items/new?for_sale=#{movement.is_income?}')
+        %input.item-name.autocomp(type='text' placeholder='Escriba para buscar el ítem' data-source='#{item_url}' ng-model='detail.item' detail-autocomplete='true')
+        %a.btn.add-new-url.add-new-item.ajax(href='/items/new?for_sale=#{movement.is_income?}' tabindex="-1")
           %i.icon-plus-circle
       %span.error(ng-show='detail.hasError("item_id")') {{detail.errorsFor('item_id')}}
     .span2.price.r
@@ -38,7 +38,7 @@
       .input.total-line
         {{ detail.subtotal() | decimal }}
       %span.space
-        %a.dark(href='javascript:;' ng-click='destroy($index)')
+        %a.dark(href='javascript:;' ng-click='destroy($index)' tabindex="-1")
           = icon_delete
 
 

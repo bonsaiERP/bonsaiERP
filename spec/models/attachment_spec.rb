@@ -34,8 +34,7 @@ describe Attachment do
     _json = at.as_json
 
     [:id, :name, :size, :image, :position, :attachment_uid,
-     :small_attachment_uid,
-     :medium_attachment_uid].each do |attr|
+     :small_attachment_url, :medium_attachment_url].each do |attr|
        _json.fetch(attr.to_s)
      end
 
@@ -44,7 +43,10 @@ describe Attachment do
      expect(_json).to eq({'id' => nil})
 
      _json = at.as_json(only: [:id, :name, :image])
-     expect(_json).to eq({'id' => nil, 'name' => nil, 'image' => false, 'small_attachment_uid' => nil, 'medium_attachment_uid' => nil})
+     expect(_json).to eq({
+       'id' => nil, 'name' => nil, 'image' => false,
+       'attachment_url' => nil, 'attachment_remote_url' => nil,
+       'small_attachment_url' => nil, 'medium_attachment_url' => nil})
   end
 
   context '#position' do
@@ -66,7 +68,7 @@ describe Attachment do
       expect(at2.position).to eq(2)
       expect(at3.position).to eq(3)
 
-      expect(at2.move_up).to eq(true)
+      expect(at2.move_up(at1.position)).to eq(true)
 
       attachs = Attachment.order(:position)
 
@@ -79,7 +81,7 @@ describe Attachment do
       expect(attachs[2].position).to eq(3)
 
       # move up again
-      expect(at2.move_up).to eq(true)
+      expect(at2.move_up(0)).to eq(true)
 
       attachs = Attachment.order(:position)
 
@@ -94,7 +96,7 @@ describe Attachment do
 
     it "#move_up ERROR" do
       at2.stub(save: false)
-      expect(at2.move_up).to eq(false)
+      expect(at2.move_up(1)).to eq(false)
 
       attachs = Attachment.order(:position)
 
@@ -106,8 +108,20 @@ describe Attachment do
       expect(attachs[2].position).to eq(3)
     end
 
+    it "#true for same position or greater" do
+      expect(at2.move_up(at2.position)).to eq(true)
+
+      attachs = Attachment.order(:position)
+      expect(attachs[0].id).to eq(at1.id)
+      expect(attachs[0].position).to eq(1)
+      expect(attachs[1].id).to eq(at2.id)
+      expect(attachs[1].position).to eq(2)
+      expect(attachs[2].id).to eq(at3.id)
+      expect(attachs[2].position).to eq(3)
+    end
+
     it "#move_down" do
-      expect(at2.move_down).to eq(true)
+      expect(at2.move_down(at3.position)).to eq(true)
 
       attachs = Attachment.order(:position)
 
@@ -120,7 +134,7 @@ describe Attachment do
       expect(attachs[2].position).to eq(3)
 
       # move down again
-      expect(at2.move_down).to eq(true)
+      expect(at2.move_down(3)).to eq(true)
 
       attachs = Attachment.order(:position)
 
@@ -135,7 +149,20 @@ describe Attachment do
 
     it "#move_down ERROR" do
       at2.stub(save: false)
-      expect(at2.move_down).to eq(false)
+      expect(at2.move_down(3)).to eq(false)
+
+      attachs = Attachment.order(:position)
+
+      expect(attachs[0].id).to eq(at1.id)
+      expect(attachs[0].position).to eq(1)
+      expect(attachs[1].id).to eq(at2.id)
+      expect(attachs[1].position).to eq(2)
+      expect(attachs[2].id).to eq(at3.id)
+      expect(attachs[2].position).to eq(3)
+    end
+
+    it "#move_down with same position" do
+      expect(at2.move_down(2)).to eq(true)
 
       attachs = Attachment.order(:position)
 

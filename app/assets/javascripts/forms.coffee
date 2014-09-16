@@ -120,8 +120,7 @@ $( ->
         search: (e, ui) ->
           $input.css({
             backgroundImage: 'url("/assets/ajax-loader-small.gif")',
-            backgroundRepeat: 'no-repeat',
-            backgroundPosition: "#{$input.width() - 20}px 5px"
+            backgroundRepeat: 'no-repeat'
           })
         response: (e, ui) ->
           $input.css({backgroundImage: 'none'})

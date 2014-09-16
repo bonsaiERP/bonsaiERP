@@ -1,5 +1,5 @@
 # Autocomplete for movements
-myApp.directive 'ngDetailAutocomplete', ->
+myApp.directive 'detailAutocomplete', ->
   restrict: 'A',
   scope: {},
   link: ($scope, $elem, $attr) ->
@@ -29,7 +29,10 @@ myApp.directive 'ngDetailAutocomplete', ->
           scope.$parent.detail.price = _b.roundVal(ui.item.price / er, 2)
           scope.$parent.detail.original_price = ui.item.price
 
-      change: (event, ui) ->
+      search: (event, ui) ->
+        $elem.addClass('loading')
+      response: (event, ui) ->
+        $elem.removeClass('loading')
     )
 
     $elem.blur ->
@@ -44,6 +47,10 @@ myApp.directive 'ngDetailAutocomplete', ->
           scope.$parent.detail.exchange_rate = scope.$parent.$parent.exchange_rate
         else
           scope.$parent.detail.item = scope.$parent.detail.item_old
+  #
+
+
+
 # Autocomplete for inventories
 .directive 'ngInventoryDetailAutocomplete', ->
   restrict: 'A',

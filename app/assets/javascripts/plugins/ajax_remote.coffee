@@ -4,7 +4,7 @@ class DataMethod
   constructor: (event, elem) ->
     @$this = $(elem)
     @url = @$this.attr('href')
-    
+
     switch @$this.attr('data-method')
       when 'post', 'POST'
         @post()
