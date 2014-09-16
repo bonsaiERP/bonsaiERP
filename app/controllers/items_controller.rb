@@ -20,7 +20,7 @@ class ItemsController < ApplicationController
   # GET /items/search_income?term=:term
   def search_income
     @items = Item.income.search(params[:term]).limit(20)
-    sleep(2)
+
     render json: ItemSerializer.new.income(@items)
   end
 
