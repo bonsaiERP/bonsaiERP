@@ -43,7 +43,7 @@ class ItemsController < ApplicationController
 
   # GET /items/new
   def new
-    @item = Item.new
+    @item = Item.new(new_attrs)
   end
 
   # GET /items/1/edit
@@ -115,6 +115,14 @@ class ItemsController < ApplicationController
         end
       else
         redirect_to @item, notice: 'Se ha creado el ítem correctamente.'
+      end
+    end
+
+    def new_attrs
+      if params[:for_sale] === 'false'
+        {for_sale: false}
+      else
+        {}
       end
     end
 end
