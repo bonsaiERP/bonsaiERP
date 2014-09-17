@@ -175,7 +175,7 @@ init = ($) ->
         href: data.newUrl,
         title: title,
         'data-toggle': 'tooltip'
-        class: 'btn add-new-url'
+        class: 'btn add-new-url ajax'
         tabindex: -1
       })
       .data({trigger: trigger, width: data.width, elem: el, return: data.return})
