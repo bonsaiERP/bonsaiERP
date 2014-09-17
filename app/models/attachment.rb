@@ -65,7 +65,7 @@ class Attachment < ActiveRecord::Base
       self.position = position - 1
 
       res = other_attachables_less_than_equal(position)
-        .update_all("position = position + 1") && self.save
+        .update_all("position = #{ position } + 1") && self.save
 
       raise ActiveRecord::Rollback  unless res
     end
@@ -81,7 +81,7 @@ class Attachment < ActiveRecord::Base
     self.class.transaction do
       self.position = position + 1
 
-      res = other_attachables_greater_than_equal(position).update_all("position = position - 1")
+      res = other_attachables_greater_than_equal(position).update_all("position = #{ position } - 1")
       res = res && self.save
 
       raise ActiveRecord::Rollback  unless res

@@ -19,6 +19,8 @@ class AttachmentsController < ApplicationController
     else
       render json: @attachment, status: STATUS_ERROR
     end
+
+    render json: @attachment
   rescue
     render json: {error: true}, status: STATUS_ERROR
   end

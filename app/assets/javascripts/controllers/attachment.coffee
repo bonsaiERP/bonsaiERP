@@ -10,17 +10,28 @@ AttachmentController = ($scope, $http, $timeout, $upload) ->
     tmp = $scope.attachments[index - 1]
     return  unless tmp
 
-    $scope.attachments[index - 1] = $scope.attachments[index]
-    $scope.attachments[index] = tmp
+    att = $scope.attachments[index]
+    $http.put("/attachments/#{ att.id }", { attachment: {move: 'up', position: tmp.position} })
+    .success((resp) ->
+      att.position = tmp.position
+      tmp.position = att.position
+      $scope.attachments[index - 1] = att
+      $scope.attachments[index] = tmp
+    )
 
   #
   $scope.downPosition = (index) ->
     tmp = $scope.attachments[index + 1]
     return  unless tmp
 
-    $scope.attachments[index + 1] = $scope.attachments[index]
-    $scope.attachments[index] = tmp
-
+    att = $scope.attachments[index]
+    $http.put("/attachments/#{ att.id }", { attachment: {move: 'down', position: tmp.position} })
+    .success((resp) ->
+      att.position = tmp.position
+      tmp.position = att.position
+      $scope.attachments[index + 1] = att
+      $scope.attachments[index] = tmp
+    )
 
   #
   $scope.delete = (attch, index) ->
