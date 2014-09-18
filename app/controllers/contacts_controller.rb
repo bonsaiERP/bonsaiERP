@@ -17,6 +17,7 @@ class ContactsController < ApplicationController
     respond_to do |format|
       format.html
       format.json { render json: @contacts }
+      format.xls { export_contacts }
     end
   end
 
@@ -88,5 +89,24 @@ class ContactsController < ApplicationController
 
     def search_term
       @search_term ||= params[:search] || params[:term]
+    end
+
+    def export_contacts
+      send_data StringEncoder.encode("UTF-8", "ISO-8859-1", generate_csv("\t") ), filename: "contactos-p#{@page}.xls"
+    end
+
+    def generate_csv(col_sep = ',')
+      require 'csv'
+
+      CSV.generate(col_sep: col_sep) do |csv|
+        csv << csv_header
+        @contacts.per(200).find_each do |cont|
+          csv << [cont.matchcode, cont.email, cont.phone, cont.mobile, cont.address]
+        end
+      end
+    end
+
+    def csv_header
+      %w(Nombre Email Teléfono Móvil Dirección)
     end
 end
