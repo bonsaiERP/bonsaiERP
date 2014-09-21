@@ -114,6 +114,7 @@ private
     <<-SQL
     SELECT c.matchcode, SUM((a.total - a.amount) * a.exchange_rate) AS tot
     FROM contacts c JOIN accounts a ON (a.contact_id=c.id and a.type='#{data.type}')
+    WHERE a.date BETWEEN '#{ date_range.date_start }' AND '#{ date_range.date_end }'
     GROUP BY c.id
     ORDER BY tot DESC OFFSET #{data.offset} LIMIT #{data.limit}
     SQL
