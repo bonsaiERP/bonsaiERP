@@ -3,7 +3,7 @@ AttachmentController = ($scope, $http, $timeout, $upload) ->
     if attachment.image
       attachment.small_attachment_url
     else
-      '/assets/back-gray.png'
+      _b.getExtnameImage(attachment.name)
 
   #
   $scope.upPosition = (index) ->
