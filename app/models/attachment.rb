@@ -58,14 +58,14 @@ class Attachment < ActiveRecord::Base
 
   def move_up(pos)
     res = true
-    return true if pos >= position
-    return true  if other_attachables_less_than_equal(position - 1).empty?
+    return true if pos > position
+    return true  if other_attachables_less_than_equal(position).empty?
 
     self.class.transaction do
       self.position = position - 1
 
       res = other_attachables_less_than_equal(position)
-        .update_all("position = #{ position } + 1") && self.save
+        .update_all("position = position + 1") && self.save
 
       raise ActiveRecord::Rollback  unless res
     end
@@ -75,13 +75,13 @@ class Attachment < ActiveRecord::Base
 
   def move_down(pos)
     res = true
-    return true if pos <= position
-    return true  if other_attachables_greater_than_equal(position + 1).empty?
+    return true if pos < position
+    return true  if other_attachables_greater_than_equal(position).empty?
 
     self.class.transaction do
       self.position = position + 1
 
-      res = other_attachables_greater_than_equal(position).update_all("position = #{ position } - 1")
+      res = other_attachables_greater_than_equal(position).update_all("position = position - 1")
       res = res && self.save
 
       raise ActiveRecord::Rollback  unless res

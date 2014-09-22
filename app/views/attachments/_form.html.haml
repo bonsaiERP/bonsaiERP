@@ -1,7 +1,7 @@
 %form.attachment-form
   %input(type="hidden" ng-init="attachable_id=#{ attachable.id }")
   %input(type="hidden" ng-init="attachable_type='#{ attachable.class }'")
-  %input(type="hidden" ng-init="position=#{ attachable.attachments.size + 1 }")
+  %input(type="hidden")
 
   -#%input(type="file" ng-file-select="onFileSelect($files)" accept="image/*" multiple)
 

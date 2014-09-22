@@ -1,6 +1,6 @@
 %div.attachments(ng-controller="AttachmentController")
   %input(type="hidden" ng-init="attachments=#{ attachable.attachments.to_json }")
-  %input(type="hidden" ng-init="bucket='#{ S3_BUCKET }'")
+  -#%input(type="hidden" ng-init="bucket='#{ S3_BUCKET }'")
 
   %ul.small-attachments-list
     %li(ng-repeat="attachment in attachments")

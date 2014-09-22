@@ -41,11 +41,11 @@ class AttachmentsController < ApplicationController
     end
 
     def move_up?
-      params[:attachment][:move] === 'up' && position
+      !!(params[:attachment][:move] === 'up' && position)
     end
 
     def move_down?
-      params[:attachment][:move] === 'down' && position
+      !!(params[:attachment][:move] === 'down' && position)
     end
 
     def position

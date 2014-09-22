@@ -58,6 +58,12 @@ AttachmentController = ($scope, $http, $timeout, $upload) ->
   $scope.onFileSelect = ($files) ->
     $scope.selectedFiles = []
 
+    l = $scope.attachments.length
+    try
+      pos = $scope.attachments[l - 1].position
+    catch e
+      pos = 0
+
     $files.forEach( (file, index) ->
       $scope.selectedFiles.push {file: file, index: index, progress: 0, dataUrl: false }
       sel = $scope.selectedFiles[index]
@@ -77,12 +83,14 @@ AttachmentController = ($scope, $http, $timeout, $upload) ->
     #return #######
     $files.forEach( (file, index) ->
 
+      pos = pos + 1
+      console.log pos, $scope.attachments.length
       $scope.upload = $upload.upload(
         url: '/attachments',
         data: {
           attachable_id: $scope.attachable_id,
           attachable_type: $scope.attachable_type,
-          position: $scope.position
+          position: pos
         },
         file: file
       )

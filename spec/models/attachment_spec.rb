@@ -112,9 +112,9 @@ describe Attachment do
       expect(at2.move_up(at2.position)).to eq(true)
 
       attachs = Attachment.order(:position)
-      expect(attachs[0].id).to eq(at1.id)
+      expect(attachs[0].id).to eq(at2.id)
       expect(attachs[0].position).to eq(1)
-      expect(attachs[1].id).to eq(at2.id)
+      expect(attachs[1].id).to eq(at1.id)
       expect(attachs[1].position).to eq(2)
       expect(attachs[2].id).to eq(at3.id)
       expect(attachs[2].position).to eq(3)
@@ -168,9 +168,9 @@ describe Attachment do
 
       expect(attachs[0].id).to eq(at1.id)
       expect(attachs[0].position).to eq(1)
-      expect(attachs[1].id).to eq(at2.id)
+      expect(attachs[1].id).to eq(at3.id)
       expect(attachs[1].position).to eq(2)
-      expect(attachs[2].id).to eq(at3.id)
+      expect(attachs[2].id).to eq(at2.id)
       expect(attachs[2].position).to eq(3)
     end
   end
