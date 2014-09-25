@@ -22,9 +22,11 @@ class Item < ActiveRecord::Base
   has_many   :inventory_details
 
   # Attachments
-  has_one    :image, -> { where(image: true).order('attachments.position') }, class_name: 'Attachment', as: :attachable
-  has_many   :images, -> { where(image: true).order('attachments.position') }, class_name: 'Attachment', as: :attachable
-  has_many   :attachments, -> { order('attachments.position')}, as: :attachable, dependent: :destroy
+  with_options class_name: 'Attachment', as: :attachable do |attach|
+    attach.has_one  :image, -> { where(image: true).order('attachments.position') }
+    attach.has_many :images, -> { where(image: true).order('attachments.position') }
+    attach.has_many :attachments, -> { order('attachments.position') }, dependent: :destroy
+  end
 
   ##########################################
   # Validations
