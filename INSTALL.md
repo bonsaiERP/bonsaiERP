@@ -1,10 +1,13 @@
 # Bonsai installation with passenger on Ubuntu 12.04
 ```
+sudo apt-get install apache2
 sudo apt-get update
 sudo apt-get install git-core curl tmux
 sudo a2enmode rewrite
 sudo a2enmode headers
 sudo a2enmode expires
+sudo apt-get install libapache2-mod-upload-progress
+sudo apt-get install imagemagick
 ```
 
 ## Set ssh

@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.1.2'
+ruby '2.1.3'
 gem 'rails', '4.1.6'
 
 # Assets
@@ -41,6 +41,10 @@ group :development do
   gem 'rails_best_practices'
   gem 'quiet_assets'
   gem 'bullet'
+
+  gem 'capistrano', '~> 3.2.0'
+  gem 'capistrano-rails', '~> 1.1'
+  gem 'capistrano-rvm'
   # gem 'guard-livereload', require: false
 end
 

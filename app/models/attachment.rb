@@ -47,13 +47,17 @@ class Attachment < ActiveRecord::Base
 
   def as_json(options = {})
     super({
-      only: [:id, :name, :image, :size, :position, :attachment_uid],
+      only: [:id, :name, :image, :size, :position, :attachment_uid, :created_at, :updated_at, :attachable_type, :attachable_id],
       methods: [
         :attachment_url, :attachment_remote_url,
         :small_attachment_url, :medium_attachment_url
       ]
       }.merge(options)
     )
+  end
+
+  def to_api
+    as_json(only: Attachment.column_names, methods: [])
   end
 
   def move_up(pos)
