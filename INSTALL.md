@@ -7,6 +7,8 @@ sudo a2enmode rewrite
 sudo a2enmode headers
 sudo a2enmode expires
 sudo apt-get install libapache2-mod-upload-progress
+sudo apt-get install libapache2-mod-xsendfile
+sudo service apache2 restart
 sudo apt-get install imagemagick
 ```
 
@@ -41,8 +43,8 @@ rvm requirements
 Install first ruby 2.0.0 and then create gemset
 
 ```
-rvm install ruby-2.1.2
-rvm ruby-2.1.2
+rvm install ruby-2.1.3
+rvm ruby-2.1.3
 rvm gemset create rails-4.1
 rvm ruby-2.1.2@rails-4.1 --default
 ```
@@ -97,7 +99,8 @@ sudo -u postgres psql postgres
 ### Inside postgreSQL
 
 ```
-postgres=# \passsword <user>
+\passsword <user>
+CREATE DATABASE bonsai_prod OWNER <user>
 ```
 
 Edit `/etc/postgresql/9.3/main/postgresql.conf` and check that you have:
@@ -115,8 +118,6 @@ the database `bonsai_prod` login with user **bonsai_data**
 
 ```
 sudo apt-get install nodejs nodejs-dev
-sudo apt-get install libapache2-mod-xsendfile
-sudo service apache2 restart
 ```
 
 ## Install phantomjs for PDF generation

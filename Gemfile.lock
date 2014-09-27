@@ -307,6 +307,7 @@ DEPENDENCIES
   bugsnag
   bullet
   capistrano (~> 3.2.0)
+  capistrano-bundler
   capistrano-rails (~> 1.1)
   capistrano-rvm
   capybara
