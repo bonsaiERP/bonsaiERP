@@ -53,7 +53,8 @@ class SessionsController < ApplicationController
     end
 
     def redirect_www
-      if request.subdomain == 'www'
+      if request.subdomain === 'www'
+        Rails.logger.info "SUBDOMAIN: #{ request.subdomain }"
         redirect_to "http://bonsaierp.com" and return
       end
     end
