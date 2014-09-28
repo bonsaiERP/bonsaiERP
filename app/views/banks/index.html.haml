@@ -18,7 +18,12 @@
           = bank.active_tag
           = link_to bank, bank
 
+        = link_to new_transference_path(account_id: bank.id), class: 'btn btn-mini' do
+          %i.icon-switch
+          Nueva transferencia
+
         = bank.pendent_ledgers_tag
+
       .span3
         .moneybox
           %label TOTAL EN CUENTA
