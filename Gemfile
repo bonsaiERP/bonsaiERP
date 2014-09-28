@@ -4,11 +4,11 @@ ruby '2.1.3'
 gem 'rails', '4.1.6'
 
 # Assets
-gem 'sass-rails' , '~> 4.0.2'
+gem 'sass-rails' , '~> 4.0.3'
 gem 'coffee-rails' , '~> 4.0.1'
 gem 'uglifier' #    , '>= 2.3.0'
 
-gem 'compass-rails'
+gem 'compass-rails', '~> 1.1.7'
 gem 'pg' # Postgresql adapter
 gem 'virtus' # Model generation in simple way
 #gem 'squeel' # Better SQL queries
