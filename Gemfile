@@ -8,7 +8,7 @@ gem 'sass-rails' , '~> 4.0.3'
 gem 'coffee-rails' , '~> 4.0.1'
 gem 'uglifier' #    , '>= 2.3.0'
 
-gem 'compass-rails', '~> 1.1.7'
+gem 'compass-rails', '~> 2.0.0'
 gem 'pg' # Postgresql adapter
 gem 'virtus' # Model generation in simple way
 #gem 'squeel' # Better SQL queries
