@@ -1,7 +1,7 @@
-%h1 Bienvenido a <span style="font-style: italic">#{APP_NAME}</span>
+%h1 Bienvenido a <span style="font-style: italic">#{ APP_NAME }</span>
 
 %p
-  Bienvenido a <span style="font-weight: bold; font-style: italic;">#{APP_NAME}</span>, por favor completa tu registro
+  Bienvenido a <span style="font-weight: bold; font-style: italic;">#{ APP_NAME }</span>, por favor completa tu registro
 
 %p
   = link_to "Completar registro", url_for(controller: 'registrations', action: 'show', id: @user.confirmation_token, host: DOMAIN, subdomain: @tenant, protocol: HTTP_PROTOCOL), style: 'color: #FFF; background-color: #0064cd; font-weight: bold; padding: 8px 14px; text-decoration: none; border-radius: 3px;'

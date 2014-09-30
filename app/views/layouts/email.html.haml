@@ -6,7 +6,7 @@
   -#= stylesheet_link_tag 'email'
   %body.cont(style='font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;max-width:650px;color:#222222;padding:10px')
     #header(style="background-color:#eeeeee;padding:10px 20px")
-      = image_tag "http://app.bonsaierp.com/assets/logo.png"
+      = image_tag "http://app.bonsaierp.com#{ asset_path 'logo.png' }"
 
     .cont(style="padding:10px")
       =yield
