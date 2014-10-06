@@ -226,6 +226,24 @@ input[type="number"]
 //#search, #tags
   width: 350px
 
+.autocomp
+  position: relative
+  i.icon
+    position: absolute
+    z-index: 10
+    top: 6px
+    left: 4px
+    font-size: 14px !important
+  input.autocomp
+    background: url('<%= asset_path 'search.png' %>') no-repeat
+    background-position: 4px 6px
+    padding-left: 22px
+
+  input.autocomp.loading
+    background: url('<%= asset_path 'ajax-loader-facebook.gif' %>') no-repeat
+    background-position: 2px 8px
+
+
 @media (max-width: 768px)
   .buttons-list .btn
 
@@ -235,6 +253,10 @@ input[type="number"]
 
   input[type="text"]
   input[type="password"]
+    max-width: 85%
+
+
+  .autocomp input
     max-width: 85%
 
 .item-name
@@ -253,19 +275,3 @@ input[type="number"]
   .search
     margin-top: 10px
 
-.autocomp
-  position: relative
-  i.icon
-    position: absolute
-    z-index: 10
-    top: 6px
-    left: 4px
-    font-size: 14px !important
-  input.autocomp
-    background: url('<%= asset_path 'search.png' %>') no-repeat
-    background-position: 4px 6px
-    padding-left: 22px
-
-  input.autocomp.loading
-    background: url('<%= asset_path 'ajax-loader-facebook.gif' %>') no-repeat
-    background-position: 2px 8px
