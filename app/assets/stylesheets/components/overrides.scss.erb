@@ -55,8 +55,15 @@ a:hover{
     color: white;
   }
 }
-.select2-container .select2-choice{
-  @include border-radius(2px)
+.select2-container .select2-choice {
+  @include border-radius(2px);
+  div b {
+    background: none;
+  }
+  div b:before {
+    font-family: fontello;
+    content: '\e81c';
+  }
 }
 
 ////////////////////////////////////////
