@@ -19,7 +19,7 @@
     .span6
       .unit-control.input(class="#{field_with_errors(f, :unit_id)}")
         = f.association :unit do
-          = f.label 'Unidad'
+          = f.label 'Unidad de medida'
           = f.select :unit_id, Unit.order('name asc').map { |v| [v.to_s, v.id] },
             { include_blank: true }, { class: 'span8' }
 
