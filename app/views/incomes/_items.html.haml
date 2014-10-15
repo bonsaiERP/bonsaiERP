@@ -1,4 +1,4 @@
-%ul.unstyled.listing
+%ul.unstyled.listing.movement-details
   %li.header.row-fluid
     .span4
       Item
@@ -7,6 +7,8 @@
       = currency_label income.currency
     .span2
       Cantidad
+      %br
+      Unidad de medida
     .span2
       %a(href="#inventory")Saldo inventario
     .span2
@@ -22,10 +24,12 @@
         .number= ntc det.price
       .span2.r
         %label.visible-phone Cantidad
-        .number= ntc det.quantity
+        %span.number= ntc det.quantity
+        %span.unit(data-toggle="tooltip" data-original-title="#{ det.unit_name }")= det.unit_symbol
       .span2.r.red.b
         %label.visible-phone Saldo inventario
-        .number= ntc det.balance
+        %span.number= ntc det.balance
+        %span.unit.muted(data-toggle="tooltip" data-original-title="#{ det.unit_name }")= det.unit_symbol
       .span2.total_row.r
         %label.visible-phone Total línea
         .number= ntc det.total

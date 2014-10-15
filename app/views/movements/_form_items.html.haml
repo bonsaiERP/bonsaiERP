@@ -4,7 +4,6 @@
 
 %input(id='details' type='hidden' data-details='#{ movement.form_details_data.to_json }')
 
-
 %ul.unstyled.movement-details.listing
   %li.header.row-fluid
     .span6
@@ -13,6 +12,8 @@
       Precio
     .span2
       Cantidad
+      %br
+      Unidad de medida
     .span2
       Total línea
 
@@ -26,13 +27,19 @@
         %a.btn.add-new-url.add-new-item.ajax(href='/items/new?for_sale=#{movement.is_income?}' tabindex="-1")
           %i.icon-plus-circle
       %span.error(ng-show='detail.hasError("item_id")') {{detail.errorsFor('item_id')}}
+
     .span2.price.r
       %label.visible-phone Precio:
       %input.r(type='number' ng-model='detail.price' name='#{movement.form_details_name}[{{$index}}][price]' value='10')
+      %span.unit.visible-phone
+
     .span2.quantity.r
-      %label.visible-phone Cantidad:
+      %label.visible-phone Cantidad - Unidad:
       %input.r(type='number' ng-model='detail.quantity' name='#{movement.form_details_name}[{{$index}}][quantity]')
+      %span.unit(data-original-title="{{ detail.unit_name }}" data-toggle="tooltip")
+        {{detail.unit_symbol}}
       %span.error(ng-show='detail.hasError("quantity")') {{detail.errorsFor('quantity')}}
+
     .span2.r
       %label.visible-phone Total línea:
       .input.total-line

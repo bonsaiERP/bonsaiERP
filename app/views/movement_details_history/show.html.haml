@@ -9,7 +9,7 @@
 %span.line-deleted Línea eliminada
 %span.line-new Nueva línea
 
-%ul.unstyled.listing
+%ul.unstyled.listing.movement-details
   %li.header.row-fluid
     .span4
       Item
@@ -18,6 +18,8 @@
       = currency_label @history.currency
     .span2
       Cantidad
+      %br
+      Unidad de medida
     .span2
       Saldo inventario
     .span2
@@ -34,7 +36,8 @@
         .number= det.changed('price')
       .span2.r
         %label.visible-phone Cantidad
-        .number= det.changed('quantity')
+        %span.number= det.changed('quantity')
+        %span.unit(title="#{det.item.unit_name}")= det.item.unit_symbol
       .span2.r
         %label.visible-phone Saldo inventario
         .number= det.changed('balance')

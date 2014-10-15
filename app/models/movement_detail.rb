@@ -10,6 +10,8 @@ class MovementDetail < ActiveRecord::Base
   validate :change_of_item_id, unless: :new_record?
   validate :quantity_eq_balance, if: :marked_for_destruction?
 
+  delegate :unit_name, :unit_symbol, to: :item, allow_nil: true
+
   def total
     quantity * price
   end

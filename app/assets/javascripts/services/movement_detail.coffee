@@ -5,6 +5,8 @@ myApp.factory 'MovementDetail', [ ($resource) ->
       item_id: null
       item: null
       item_old: null
+      unit_name: null
+      unit_symbol: null
       itemAttributes: {}
       quantity: 1
       price: 0

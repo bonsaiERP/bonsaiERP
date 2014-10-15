@@ -23,9 +23,11 @@
       .span2.r
         %label.visible-phone Cantidad
         .number= ntc det.quantity
+        %span.unit(data-toggle="tooltip" data-original-title="#{ det.unit_name }")= det.unit_symbol
       .span2.r.red.b
         %label.visible-phone Saldo inventario
         .number= ntc det.balance
+        %span.unit.muted(data-toggle="tooltip" data-original-title="#{ det.unit_name }")= det.unit_symbol
       .span2.total_row.r
         %label.visible-phone Total línea
         .number= ntc det.total

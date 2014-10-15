@@ -28,6 +28,8 @@ myApp.directive 'detailAutocomplete', ->
           scope.$parent.detail.item_id = ui.item.id
           scope.$parent.detail.price = _b.roundVal(ui.item.price / er, 2)
           scope.$parent.detail.original_price = ui.item.price
+          scope.$parent.detail.unit_symbol = ui.item.unit_symbol
+          scope.$parent.detail.unit_name = ui.item.unit_name
 
       search: (event, ui) ->
         $elem.addClass('loading')
