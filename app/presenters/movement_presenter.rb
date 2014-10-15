@@ -28,7 +28,7 @@ class MovementPresenter < BasePresenter
     case
     when is_draft? then template.text_gray 'Borrador', '', 'b'
     when is_approved? then template.text_green t('movement.states.approved'), '', 'b'
-    when is_paid? then template.text_green_dark t('movement.states.paid'), '', 'b'
+    when is_paid? then template.text_green_dark paid_text, '', 'b'
     when is_nulled? then template.text_red t('movement.states.nulled'), '', 'b'
     end
   end
