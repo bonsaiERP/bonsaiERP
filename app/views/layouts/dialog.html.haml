@@ -5,7 +5,7 @@
     %meta{ 'http-equiv'  => "content-type", :content => "text/html;charset=UTF-8" }
     %title BonsaiERP
     %link{:name => "viewport", :content=> "width=device-width,initial-scale=1,user-scalable=no,maximum-scale=1"}
-    %link{:rel => "shortcut icon", :href => "/assets/favicon.ico", :type => "image/x-icon"}
+    %link{:rel => "shortcut icon", :href => "/assets/bonsai.ico", :type => "image/x-icon"}
     = csrf_meta_tag
 
     = stylesheet_link_tag "application"
@@ -23,12 +23,12 @@
       })();
       $(document).ready(function() {
         // TODO: Move to cofeescript
-        $('#dialog_wrapper').fadeTo(0,0.0).delay(500).fadeTo(1000, 1); 
+        $('#dialog_wrapper').fadeTo(0,0.0).delay(500).fadeTo(1000, 1);
       });
 
   %body.dialog
 
-    #dialog_wrapper  
+    #dialog_wrapper
       = render "layouts/flash", flash: flash
       = yield
 
