@@ -138,4 +138,22 @@ describe Organisation do
     org.valid?
     expect(org.header_css).to eq('bonsai-header')
   end
+
+  context 'due Dates' do
+    it "#dued_on?" do
+      org = Organisation.new(due_on: Date.today - 1.days)
+
+      expect(org).to be_dued_on
+    end
+
+    it "#dued_with_extension?" do
+      org = Organisation.new(due_on: Date.today - 5.days)
+
+      expect(org).to be_dued_with_extension
+
+      org.due_on = Date.today + 1.day
+
+      expect(org).not_to be_dued_with_extension
+    end
+  end
 end

@@ -78,6 +78,22 @@ class Organisation < ActiveRecord::Base
     self.save
   end
 
+  def dued_on?
+    Date.today > due_on
+  rescue
+    true
+  end
+
+  def dued_with_extension?
+    Date.today > due_extension_date
+  rescue
+    true
+  end
+
+  def due_extension_date
+    due_on + 4.days
+  end
+
   def self.test_job(a = nil)
     f = File.new Rails.root.join('test_job.txt'), 'w+'
     f.write "This job was generated in #{Time.now} with a = #{a}"

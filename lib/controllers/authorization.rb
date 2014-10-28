@@ -9,10 +9,10 @@ module Controllers::Authorization
     # general method to check authorization
     def check_authorization!
       check_current_user!
-      return false unless current_user
+      #authorized = current_user.present? && valid_organisation_date?
 
       # TODO check due_date
-      unless authorized_user?
+      if !current_user.present? || current_organisation.dued_with_extension? || !authorized_user?
         redir = request.referer.present? ? :back : home_path
 
         if request.xhr?
@@ -22,6 +22,16 @@ module Controllers::Authorization
           redirect_to redir and return
         end
       end
+    end
+
+    def valid_organisation_date?
+      (current_organisation.due_on + 3.days) < today
+    rescue
+      false
+    end
+
+    def today
+      Date.today
     end
 
     def check_current_user!

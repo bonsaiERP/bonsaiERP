@@ -4,15 +4,18 @@
 class DashboardController < ApplicationController
   include Controllers::DateRange
 
-  #before_filter :set_date_range
-  skip_before_action :check_authorization!
+  before_filter :set_date_range, only: [:index]
+
+  skip_before_action :check_authorization!, only: [:home]
   before_action :check_user_session
 
   # GET /home
+  def home
+  end
 
   # GET /dashboard
   def index
-    #@dashboard = DashboardPresenter.new(view_context, @date_range)
+    @dashboard = DashboardPresenter.new(view_context, @date_range)
   end
 
   private
