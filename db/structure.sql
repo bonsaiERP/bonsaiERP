@@ -279,7 +279,11 @@ CREATE TABLE contacts (
     updated_at timestamp without time zone,
     incomes_status character varying(300) DEFAULT '{}'::character varying,
     expenses_status character varying(300) DEFAULT '{}'::character varying,
-    tag_ids integer[] DEFAULT '{}'::integer[]
+    tag_ids integer[] DEFAULT '{}'::integer[],
+    encrypted_password character varying(255),
+    password_salt character varying(255),
+    login boolean DEFAULT false,
+    active_login boolean DEFAULT true
 );
 
 
@@ -439,7 +443,9 @@ CREATE TABLE items (
     unit_name character varying(255),
     tag_ids integer[] DEFAULT '{}'::integer[],
     updater_id integer,
-    creator_id integer
+    creator_id integer,
+    publish boolean DEFAULT false,
+    brand character varying(255)
 );
 
 
@@ -498,6 +504,41 @@ CREATE SEQUENCE movement_details_id_seq
 --
 
 ALTER SEQUENCE movement_details_id_seq OWNED BY movement_details.id;
+
+
+--
+-- Name: pages; Type: TABLE; Schema: bonsai; Owner: -; Tablespace: 
+--
+
+CREATE TABLE pages (
+    id integer NOT NULL,
+    shopping_store_id integer,
+    page_type character varying(255) DEFAULT 'layout'::character varying,
+    sections json DEFAULT '{}'::json,
+    name character varying(255),
+    section character varying(255),
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: pages_id_seq; Type: SEQUENCE; Schema: bonsai; Owner: -
+--
+
+CREATE SEQUENCE pages_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: pages_id_seq; Type: SEQUENCE OWNED BY; Schema: bonsai; Owner: -
+--
+
+ALTER SEQUENCE pages_id_seq OWNED BY pages.id;
 
 
 --
@@ -814,7 +855,9 @@ CREATE TABLE organisations (
     updated_at timestamp without time zone,
     country_code character varying(5),
     inventory_active boolean DEFAULT true,
-    settings public.hstore DEFAULT '"inventory"=>"true"'::public.hstore
+    settings public.hstore DEFAULT '"inventory"=>"true"'::public.hstore,
+    due_on date,
+    plan character varying(255) DEFAULT '2users'::character varying
 );
 
 
@@ -835,6 +878,41 @@ CREATE SEQUENCE organisations_id_seq
 --
 
 ALTER SEQUENCE organisations_id_seq OWNED BY organisations.id;
+
+
+--
+-- Name: shopping_stores; Type: TABLE; Schema: common; Owner: -; Tablespace: 
+--
+
+CREATE TABLE shopping_stores (
+    id integer NOT NULL,
+    name character varying(255),
+    publish boolean DEFAULT false,
+    active boolean DEFAULT false,
+    url character varying(255),
+    tenant character varying(255),
+    organisation_id integer,
+    configuration json DEFAULT '{}'::json
+);
+
+
+--
+-- Name: shopping_stores_id_seq; Type: SEQUENCE; Schema: common; Owner: -
+--
+
+CREATE SEQUENCE shopping_stores_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: shopping_stores_id_seq; Type: SEQUENCE OWNED BY; Schema: common; Owner: -
+--
+
+ALTER SEQUENCE shopping_stores_id_seq OWNED BY shopping_stores.id;
 
 
 --
@@ -1066,7 +1144,11 @@ CREATE TABLE contacts (
     updated_at timestamp without time zone,
     incomes_status character varying(300) DEFAULT '{}'::character varying,
     expenses_status character varying(300) DEFAULT '{}'::character varying,
-    tag_ids integer[] DEFAULT '{}'::integer[]
+    tag_ids integer[] DEFAULT '{}'::integer[],
+    encrypted_password character varying(255),
+    password_salt character varying(255),
+    login boolean DEFAULT false,
+    active_login boolean DEFAULT true
 );
 
 
@@ -1226,7 +1308,9 @@ CREATE TABLE items (
     unit_name character varying(255),
     tag_ids integer[] DEFAULT '{}'::integer[],
     updater_id integer,
-    creator_id integer
+    creator_id integer,
+    publish boolean DEFAULT false,
+    brand character varying(255)
 );
 
 
@@ -1374,6 +1458,41 @@ ALTER SEQUENCE organisations_id_seq OWNED BY organisations.id;
 
 
 --
+-- Name: pages; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE pages (
+    id integer NOT NULL,
+    shopping_store_id integer,
+    page_type character varying(255) DEFAULT 'layout'::character varying,
+    sections json DEFAULT '{}'::json,
+    name character varying(255),
+    section character varying(255),
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: pages_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE pages_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: pages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE pages_id_seq OWNED BY pages.id;
+
+
+--
 -- Name: projects; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1415,6 +1534,41 @@ ALTER SEQUENCE projects_id_seq OWNED BY projects.id;
 CREATE TABLE schema_migrations (
     version character varying(255) NOT NULL
 );
+
+
+--
+-- Name: shopping_stores; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE shopping_stores (
+    id integer NOT NULL,
+    name character varying(255),
+    publish boolean DEFAULT false,
+    active boolean DEFAULT false,
+    url character varying(255),
+    tenant character varying(255),
+    organisation_id integer,
+    configuration json DEFAULT '{}'::json
+);
+
+
+--
+-- Name: shopping_stores_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE shopping_stores_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: shopping_stores_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE shopping_stores_id_seq OWNED BY shopping_stores.id;
 
 
 --
@@ -1743,6 +1897,13 @@ ALTER TABLE ONLY movement_details ALTER COLUMN id SET DEFAULT nextval('movement_
 -- Name: id; Type: DEFAULT; Schema: bonsai; Owner: -
 --
 
+ALTER TABLE ONLY pages ALTER COLUMN id SET DEFAULT nextval('pages_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: bonsai; Owner: -
+--
+
 ALTER TABLE ONLY projects ALTER COLUMN id SET DEFAULT nextval('projects_id_seq'::regclass);
 
 
@@ -1802,6 +1963,13 @@ ALTER TABLE ONLY links ALTER COLUMN id SET DEFAULT nextval('links_id_seq'::regcl
 --
 
 ALTER TABLE ONLY organisations ALTER COLUMN id SET DEFAULT nextval('organisations_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: common; Owner: -
+--
+
+ALTER TABLE ONLY shopping_stores ALTER COLUMN id SET DEFAULT nextval('shopping_stores_id_seq'::regclass);
 
 
 --
@@ -1894,7 +2062,21 @@ ALTER TABLE ONLY organisations ALTER COLUMN id SET DEFAULT nextval('organisation
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY pages ALTER COLUMN id SET DEFAULT nextval('pages_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY projects ALTER COLUMN id SET DEFAULT nextval('projects_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY shopping_stores ALTER COLUMN id SET DEFAULT nextval('shopping_stores_id_seq'::regclass);
 
 
 --
@@ -2013,6 +2195,14 @@ ALTER TABLE ONLY items
 
 
 --
+-- Name: pages_pkey; Type: CONSTRAINT; Schema: bonsai; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY pages
+    ADD CONSTRAINT pages_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: projects_pkey; Type: CONSTRAINT; Schema: bonsai; Owner: -; Tablespace: 
 --
 
@@ -2092,6 +2282,14 @@ ALTER TABLE ONLY links
 
 ALTER TABLE ONLY organisations
     ADD CONSTRAINT organisations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: shopping_stores_pkey; Type: CONSTRAINT; Schema: common; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY shopping_stores
+    ADD CONSTRAINT shopping_stores_pkey PRIMARY KEY (id);
 
 
 --
@@ -2185,11 +2383,27 @@ ALTER TABLE ONLY organisations
 
 
 --
+-- Name: pages_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY pages
+    ADD CONSTRAINT pages_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: projects_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY projects
     ADD CONSTRAINT projects_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: shopping_stores_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY shopping_stores
+    ADD CONSTRAINT shopping_stores_pkey PRIMARY KEY (id);
 
 
 --
@@ -2518,6 +2732,13 @@ CREATE INDEX index_contacts_on_active ON contacts USING btree (active);
 
 
 --
+-- Name: index_contacts_on_active_login; Type: INDEX; Schema: bonsai; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_contacts_on_active_login ON contacts USING btree (active_login);
+
+
+--
 -- Name: index_contacts_on_client; Type: INDEX; Schema: bonsai; Owner: -; Tablespace: 
 --
 
@@ -2536,6 +2757,13 @@ CREATE INDEX index_contacts_on_first_name ON contacts USING btree (first_name);
 --
 
 CREATE INDEX index_contacts_on_last_name ON contacts USING btree (last_name);
+
+
+--
+-- Name: index_contacts_on_login; Type: INDEX; Schema: bonsai; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_contacts_on_login ON contacts USING btree (login);
 
 
 --
@@ -2760,6 +2988,13 @@ CREATE INDEX index_items_on_creator_id ON items USING btree (creator_id);
 --
 
 CREATE INDEX index_items_on_for_sale ON items USING btree (for_sale);
+
+
+--
+-- Name: index_items_on_publish; Type: INDEX; Schema: bonsai; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_items_on_publish ON items USING btree (publish);
 
 
 --
@@ -3028,6 +3263,20 @@ CREATE INDEX index_organisations_on_due_date ON organisations USING btree (due_d
 --
 
 CREATE UNIQUE INDEX index_organisations_on_tenant ON organisations USING btree (tenant);
+
+
+--
+-- Name: index_shopping_stores_on_tenant; Type: INDEX; Schema: common; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_shopping_stores_on_tenant ON shopping_stores USING btree (tenant);
+
+
+--
+-- Name: index_shopping_stores_on_url; Type: INDEX; Schema: common; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_shopping_stores_on_url ON shopping_stores USING btree (url);
 
 
 --
@@ -3327,6 +3576,13 @@ CREATE INDEX index_contacts_on_active ON contacts USING btree (active);
 
 
 --
+-- Name: index_contacts_on_active_login; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_contacts_on_active_login ON contacts USING btree (active_login);
+
+
+--
 -- Name: index_contacts_on_client; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -3345,6 +3601,13 @@ CREATE INDEX index_contacts_on_first_name ON contacts USING btree (first_name);
 --
 
 CREATE INDEX index_contacts_on_last_name ON contacts USING btree (last_name);
+
+
+--
+-- Name: index_contacts_on_login; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_contacts_on_login ON contacts USING btree (login);
 
 
 --
@@ -3572,6 +3835,13 @@ CREATE INDEX index_items_on_for_sale ON items USING btree (for_sale);
 
 
 --
+-- Name: index_items_on_publish; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_items_on_publish ON items USING btree (publish);
+
+
+--
 -- Name: index_items_on_stockable; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -3681,6 +3951,20 @@ CREATE UNIQUE INDEX index_organisations_on_tenant ON organisations USING btree (
 --
 
 CREATE INDEX index_projects_on_active ON projects USING btree (active);
+
+
+--
+-- Name: index_shopping_stores_on_tenant; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_shopping_stores_on_tenant ON shopping_stores USING btree (tenant);
+
+
+--
+-- Name: index_shopping_stores_on_url; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_shopping_stores_on_url ON shopping_stores USING btree (url);
 
 
 --
@@ -3935,4 +4219,16 @@ INSERT INTO public.schema_migrations (version) VALUES ('20140730171947');
 INSERT INTO public.schema_migrations (version) VALUES ('20140828122720');
 
 INSERT INTO public.schema_migrations (version) VALUES ('20140925003650');
+
+INSERT INTO public.schema_migrations (version) VALUES ('20141002222739');
+
+INSERT INTO public.schema_migrations (version) VALUES ('20141003120149');
+
+INSERT INTO public.schema_migrations (version) VALUES ('20141003120627');
+
+INSERT INTO public.schema_migrations (version) VALUES ('20141003183936');
+
+INSERT INTO public.schema_migrations (version) VALUES ('20141009125447');
+
+INSERT INTO public.schema_migrations (version) VALUES ('20141028104251');
 

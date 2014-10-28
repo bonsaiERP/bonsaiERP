@@ -9,6 +9,11 @@ describe Organisation do
 
   it { Organisation.table_name.should eq('common.organisations') }
 
+  it "defaults" do
+    org = Organisation.new
+    expect(org.plan).to eq('2users')
+  end
+
   context "Validations" do
     it { should have_valid(:name).when("uno") }
     it { should_not have_valid(:name).when(" ", nil) }
@@ -63,9 +68,11 @@ describe Organisation do
   it "create an instance" do
     Organisation.delete_all
     Organisation.create!(name: 'tenant')
-    org = Organisation.new(name: 'jejeje')
-    org.save.should be_true
-    org.tenant.should eq('jejeje')
+    d = 1.month.from_now
+    org = Organisation.new(name: 'jejeje', due_on: d)
+    expect(org.save).to be_true
+    expect(org.tenant).to eq('jejeje')
+    expect(org.due_on).to eq(d.to_date)
   end
 
   it "build master_account user" do
