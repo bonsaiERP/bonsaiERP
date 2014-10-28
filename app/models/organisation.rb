@@ -28,6 +28,7 @@ class Organisation < ActiveRecord::Base
   has_one  :master_account, through: :master_link, source: :user
 
   has_many :users, through: :links, dependent: :destroy
+  #has_many :active_users, -> { where('links.active = ?', true) }, through: :links, class_name: 'Link'
 
   ########################################
   # Validations
@@ -52,6 +53,10 @@ class Organisation < ActiveRecord::Base
   # Methods
   def to_s
     name
+  end
+
+  def active_users
+    users.where('links.active = ?', true)
   end
 
   def build_master_account

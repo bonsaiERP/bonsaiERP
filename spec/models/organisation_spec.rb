@@ -7,6 +7,22 @@ describe Organisation do
     UserSession.user = build :user, id: 1
   end
 
+  describe 'relationships'  do
+    it { should have_many(:links) }
+    it { should have_one(:master_link) }
+    it { should have_many(:users).through(:links).dependent(:destroy) }
+
+    it "#active_users" do
+      org = build :organisation, tenant: 'esp'
+      org.save(validate: false)
+      u = build :user
+      u.save(validate: false)
+      Link.create!(tenant: 'esp', user_id: u.id, organisation_id: org.id, role: 'admin')
+
+      expect(org.active_users.to_sql).to match(/links.active = 't'/)
+    end
+  end
+
   it { Organisation.table_name.should eq('common.organisations') }
 
   it "defaults" do

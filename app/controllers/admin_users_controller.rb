@@ -3,6 +3,7 @@
 # email: boriscyber@gmail.com
 class AdminUsersController < ApplicationController
   rescue_from MasterAccountError, with: :redirect_to_conf
+  before_action :check_organisation_users, except: [:active]
 
   # GET /admin_users/:id
   def show
@@ -32,6 +33,7 @@ class AdminUsersController < ApplicationController
   # PATCH /admin_users/:id
   def update
     @admin_user = AdminUser.find(current_organisation, params[:id])
+
     if @admin_user.update(update_params)
       redirect_to configurations_path, notice: 'El usuario ha sido actualizado'
     else
@@ -43,7 +45,12 @@ class AdminUsersController < ApplicationController
   # PATCH /admin_users/:id/active
   def active
     u_role = UserWithRole.new(User.find(params[:id]), current_organisation)
-    u_role.link.update_attribute(:active, params[:active])
+
+    if params[:active] == 'true' and valid_organisation_users?
+      u_role.link.update_attribute(:active, true)
+    else
+      u_role.link.update_attribute(:active, false)
+    end
 
     @user = u_role.user
 
@@ -83,5 +90,16 @@ class AdminUsersController < ApplicationController
     def redirect_to_conf
       flash[:alert] = 'La cuenta maestra no puede ser editada'
       redirect_to configurations_path
+    end
+
+    def valid_organisation_users?
+      current_organisation.plan.to_i > current_organisation.active_users.count
+    end
+
+    def check_organisation_users
+      if current_organisation.plan.to_i <= current_organisation.active_users.count
+        flash[:alert] = 'Ya ha llegado al limite de usuarios para su plan, contactese con contacto@bonsaierp.com para actualizar su plan.'
+        redirect_to '/configurations' and return
+      end
     end
 end
