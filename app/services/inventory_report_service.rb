@@ -14,6 +14,8 @@ class InventoryReportService
 
   def data
     ActiveRecord::Base.connection.select_rows(sql)
+  rescue
+    []
   end
 
   def self.date_fields
