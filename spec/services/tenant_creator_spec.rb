@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe TenantCreator do
   let(:tenant) { 'bonsaierp' }
-  let(:organisation) { build(:organisation, id: 1, tenant: tenant) }
+  let(:organisation) { create(:organisation, id: 1, tenant: tenant) }
 
   before(:all) do
     DatabaseCleaner.strategy = :truncation
@@ -35,8 +35,10 @@ describe TenantCreator do
     # tc.create_tenant
 
     it "creates a new schema with all tables" do
+      expect(organisation.due_on).to be_nil
+      expect(organisation.plan).to eq('2users')
       tc.create_tenant.should be_true
-      PgTools.should be_schema_exists(tc.tenant)
+      expect(PgTools).to be_schema_exists(tc.tenant)
 
       PgTools.change_schema tc.tenant
       Unit.count.should > 0
@@ -57,6 +59,8 @@ describe TenantCreator do
       t = Tax.first
       expect(t.name).to eq('IVA')
       t.percentage.should == 13.0
+      expect(organisation.due_on).to be_present
+      expect(organisation.due_on).to eq(15.days.from_now.to_date)
     end
 
     after(:all) do

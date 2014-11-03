@@ -26,6 +26,7 @@ class TenantCreator
     execute 'DROP TABLE IF EXISTS organisations, users, links CASCADE'
     change_schema tenant
 
+    res = organisation.update_attribute(:due_on, 15.days.from_now)
     res = res && Unit.create_base_data
     res = res && Store.create!(name: 'Almacen inicial')
     res = res && Cash.create!(name: 'Caja inicial', currency: organisation.currency)
