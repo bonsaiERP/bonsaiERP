@@ -15,6 +15,7 @@
     = javascript_include_tag "application"
     -if Rails.env.production?
       %script(src='//d2wy8f7a9ursnm.cloudfront.net/bugsnag-2.min.js' data-apikey='5764f05c4e7d87832059e096471f9bc9')
+      = render 'layouts/google_analytics'
 
     :javascript
       this.organisation = {
