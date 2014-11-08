@@ -1,4 +1,3 @@
-# encoding: utf-8
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 # module to handle all authorization task
@@ -8,11 +7,14 @@ module Controllers::Authorization
 
     # general method to check authorization
     def check_authorization!
-      check_current_user!
+      #check_current_user!
       #authorized = current_user.present? && valid_organisation_date?
 
       # TODO check due_date
-      if !current_user.present? || current_organisation.dued_with_extension? || !authorized_user?
+      if !current_user
+        flash[:alert] = "Por favor ingrese."
+        redirect_to new_session_url(subdomain: 'app') and return
+      elsif !current_user.present? || current_organisation.dued_with_extension? || !authorized_user?
         redir = request.referer.present? ? :back : home_path
 
         if request.xhr?
