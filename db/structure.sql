@@ -1581,7 +1581,8 @@ CREATE TABLE shopping_stores (
     url character varying(255),
     tenant character varying(255),
     organisation_id integer,
-    configuration json DEFAULT '{}'::json
+    configuration json DEFAULT '{}'::json,
+    cart_item_ids integer[] DEFAULT '{}'::integer[]
 );
 
 
@@ -5837,7 +5838,7 @@ CREATE INDEX index_accounts_on_has_error ON accounts USING btree (has_error);
 -- Name: index_accounts_on_name; Type: INDEX; Schema: biobolsas; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_accounts_on_name ON accounts USING gin (name public.gin_trgm_ops);
+CREATE UNIQUE INDEX index_accounts_on_name ON accounts USING btree (name);
 
 
 --
@@ -6413,7 +6414,7 @@ CREATE INDEX index_accounts_on_has_error ON accounts USING btree (has_error);
 -- Name: index_accounts_on_name; Type: INDEX; Schema: bonsai; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_accounts_on_name ON accounts USING gin (name public.gin_trgm_ops);
+CREATE UNIQUE INDEX index_accounts_on_name ON accounts USING btree (name);
 
 
 --
@@ -7103,7 +7104,7 @@ CREATE INDEX index_accounts_on_has_error ON accounts USING btree (has_error);
 -- Name: index_accounts_on_name; Type: INDEX; Schema: demo; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_accounts_on_name ON accounts USING gin (name public.gin_trgm_ops);
+CREATE UNIQUE INDEX index_accounts_on_name ON accounts USING btree (name);
 
 
 --
@@ -7770,7 +7771,7 @@ CREATE INDEX index_accounts_on_has_error ON accounts USING btree (has_error);
 -- Name: index_accounts_on_name; Type: INDEX; Schema: flor; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_accounts_on_name ON accounts USING gin (name public.gin_trgm_ops);
+CREATE UNIQUE INDEX index_accounts_on_name ON accounts USING btree (name);
 
 
 --
@@ -8437,7 +8438,7 @@ CREATE INDEX index_accounts_on_has_error ON accounts USING btree (has_error);
 -- Name: index_accounts_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_accounts_on_name ON accounts USING gin (name gin_trgm_ops);
+CREATE UNIQUE INDEX index_accounts_on_name ON accounts USING btree (name);
 
 
 --
@@ -9117,4 +9118,8 @@ INSERT INTO public.schema_migrations (version) VALUES ('20141003183936');
 INSERT INTO public.schema_migrations (version) VALUES ('20141009125447');
 
 INSERT INTO public.schema_migrations (version) VALUES ('20141028104251');
+
+INSERT INTO public.schema_migrations (version) VALUES ('20141031122615');
+
+INSERT INTO public.schema_migrations (version) VALUES ('20141112132422');
 
