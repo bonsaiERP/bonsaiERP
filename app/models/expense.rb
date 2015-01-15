@@ -30,7 +30,7 @@ class Expense < Movement
   scope :contact, -> (cid) { where(contact_id: cid) }
   scope :pendent, -> { active.where.not(amount: 0) }
   scope :error, -> { active.where(has_error: true) }
-  scope :due, -> { approved.where("accounts.due_date < ?", Date.today) }
+  scope :due, -> { approved.where("accounts.due_date < ?", Time.zone.now.to_date) }
   scope :nulled, -> { where(state: 'nulled') }
   scope :inventory, -> { active.where("extras->'delivered' = ?", 'false') }
   scope :like, -> (s) {
@@ -44,4 +44,7 @@ class Expense < Movement
     expense_details.inject(0) { |sum, det| sum += det.total }
   end
 
+  def as_json(options = {})
+    super(options).merge(expense_details: expense_details.map(&:attributes))
+  end
 end

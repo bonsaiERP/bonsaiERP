@@ -6,7 +6,7 @@ class TransferencesController < ApplicationController
 
   # GET /transferences?account_id
   def new
-    @transference = Transference.new(account_id: params[:account_id], date: Date.today)
+    @transference = Transference.new(account_id: params[:account_id], date: Time.zone.now.to_date)
   end
 
   def create

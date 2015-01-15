@@ -10,7 +10,7 @@ class DateRange < Struct.new(:date_start, :date_end)
   end
 
   def self.last(days = 30)
-    d = Date.today
+    d = Time.zone.now.to_date
     new(d - days.days, d)
   end
 

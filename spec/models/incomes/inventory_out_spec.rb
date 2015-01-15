@@ -7,10 +7,7 @@ describe Incomes::InventoryOut do
   let(:store) { build :store }
   let(:user) { build :user, id: 10 }
 
-
-  before(:each) do
-
-  end
+  let(:today) { Time.zone.now.to_date }
 
   let(:contact) {
     cont = build :contact
@@ -19,7 +16,7 @@ describe Incomes::InventoryOut do
   }
 
   let(:valid_attributes) {
-    {store_id: 1, date: Date.today, description: 'Test inventory out',
+    {store_id: 1, date: today, description: 'Test inventory out',
      income_id: income.id,
      inventory_details_attributes: [
        {item_id: 1, quantity: 2},
@@ -41,7 +38,7 @@ describe Incomes::InventoryOut do
     let(:income) {
       exp = Income.new(
         attributes_for(:income_approved).merge(
-          contact_id: 3, balance_inventory: 100, due_date: Date.today,
+          contact_id: 3, balance_inventory: 100, due_date: today,
           income_details_attributes: [
             {item_id: 1, quantity: 5, price: 10, balance: 5},
             {item_id: 2, quantity: 6, price: 10, balance: 6}

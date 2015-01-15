@@ -102,7 +102,7 @@ class Inventory < ActiveRecord::Base
     end
 
     def year
-      @year ||= Date.today.year.to_s[2..4]
+      @year ||= Time.zone.now.year.to_s[2..4]
     end
 
     def op_ref_type

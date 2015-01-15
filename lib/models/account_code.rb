@@ -19,6 +19,6 @@ module Models::AccountCode
   end
 
   def current_year
-    Date.today.year.to_s[2..4]
+    Time.zone.now.year.to_s[2..4]
   end
 end

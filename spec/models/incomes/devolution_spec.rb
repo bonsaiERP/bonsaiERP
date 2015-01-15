@@ -2,12 +2,13 @@
 require 'spec_helper'
 
 describe Incomes::Devolution do
+  let(:today) { Time.zone.now.to_date }
 
   let(:valid_attributes) {
     {
       account_id: 10, account_to_id: 2, exchange_rate: 1,
       amount: 50, reference: 'Primera devolucion',
-      verification: 'true', date: Date.today
+      verification: 'true', date: today
     }
   }
   let(:balance) { 100.0 }

@@ -43,7 +43,7 @@ class Expenses::BatchPayment
         ep = Expenses::Payment.new(
           account_id: expense.id,
           account_to_id: account_to.id,
-          date: Date.today,
+          date: Time.zone.now.to_date,
           reference: I18n.t('expense.payment.reference', expense: expense.name),
           amount: expense.balance
         )

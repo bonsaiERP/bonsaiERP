@@ -89,6 +89,6 @@ class Movements::History
     end
 
     def today
-      today ||= Date.today
+      today ||= Time.zone.now.today
     end
 end

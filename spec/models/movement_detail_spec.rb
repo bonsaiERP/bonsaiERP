@@ -43,9 +43,11 @@ describe MovementDetail do
       UserSession.user = build(:user, id: 1)
     end
 
+    let(:today) { Time.zone.now.to_date }
+
     let(:attributes) {
       {
-      contact_id: 1, date: Date.today, due_date: Date.today, ref_number: 'I-0001', currency: 'BOB', state: 'draft',
+      contact_id: 1, date: today, due_date: today, ref_number: 'I-0001', currency: 'BOB', state: 'draft',
       income_details_attributes: [{item_id: 1, price: 20, quantity: 10}]
       }
     }

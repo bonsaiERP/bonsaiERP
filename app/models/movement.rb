@@ -122,7 +122,7 @@ class Movement < Account
       self.state = 'approved'
       self.approver_id = UserSession.id
       self.approver_datetime = Time.zone.now
-      self.due_date ||= Date.today
+      self.due_date ||= Time.zone.now.to_date
       self.extras = extras.symbolize_keys
     end
   end

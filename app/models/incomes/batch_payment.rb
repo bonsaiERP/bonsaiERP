@@ -43,7 +43,7 @@ class Incomes::BatchPayment
         ip = Incomes::Payment.new(
           account_id: income.id,
           account_to_id: account_to.id,
-          date: Date.today,
+          date: Time.zone.now.to_date,
           reference: I18n.t('incomes.batch_payment.reference', name: income.name),
           amount: income.balance
         )

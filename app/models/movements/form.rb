@@ -57,8 +57,9 @@ class Movements::Form < BaseForm
   end
 
   def set_defaults
-    self.date ||= Date.today
-    self.due_date ||= Date.today
+    _today = Time.zone.now.to_date
+    self.date ||= _today
+    self.due_date ||= _today
     self.currency ||= OrganisationSession.currency
   end
 

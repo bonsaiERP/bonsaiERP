@@ -93,7 +93,7 @@ class Movements::Service < Struct.new(:movement)
     end
 
     def today
-      @today ||= Date.today
+      @today ||= Time.zone.now.to_date
     end
 
     # Returns true if calls

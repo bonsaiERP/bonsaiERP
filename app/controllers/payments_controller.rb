@@ -5,7 +5,7 @@ class PaymentsController < ApplicationController
 
   # GET /payments/:id/new_income
   def new_income
-    @payment = Incomes::Payment.new(account_id: params[:id], date: Date.today)
+    @payment = Incomes::Payment.new(account_id: params[:id], date: Time.zone.now.to_date)
     check_income
     @payment.amount = @payment.income.amount
   end
@@ -25,7 +25,7 @@ class PaymentsController < ApplicationController
 
   # GET /payments/:id/new_income
   def new_expense
-    @payment = Expenses::Payment.new(account_id: params[:id], date: Date.today)
+    @payment = Expenses::Payment.new(account_id: params[:id], date: Time.zone.now.to_date)
     check_expense
     @payment.amount = @payment.expense.amount
   end

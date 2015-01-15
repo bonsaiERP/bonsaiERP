@@ -14,7 +14,7 @@ describe Incomes::Form do
 
   let(:contact) { build :contact, id: 1 }
 
-  let(:today) { Date.today }
+  let(:today) { Time.zone.now.to_date }
 
   let(:valid_params) { {
       date: today, due_date: (today + 3.days), contact_id: 1,

@@ -4,6 +4,8 @@ require 'spec_helper'
 describe Incomes::InventoryIn do
   let(:store) { build :store, id: 1 }
 
+  let(:today) { Time.zone.now.to_date }
+
   let(:contact) {
     cont = build :contact
     cont.stub(save: true)
@@ -13,7 +15,7 @@ describe Incomes::InventoryIn do
   let(:income) {
     inc = Income.new(
       attributes_for(:income_approved).merge(
-        contact_id: 3, balance_inventory: 100, due_date: Date.today,
+        contact_id: 3, balance_inventory: 100, due_date: today,
         income_details_attributes: [
           {item_id: 1, quantity: 5, price: 10, balance: 0},
           {item_id: 2, quantity: 5, price: 10, balance: 0}
@@ -25,7 +27,7 @@ describe Incomes::InventoryIn do
   }
 
   let(:valid_attributes) {
-    {store_id: 1, date: Date.today, description: 'Test inventory in',
+    {store_id: 1, date: today, description: 'Test inventory in',
      income_id: income.id,
      inventory_details_attributes: [
        {item_id: 1, quantity: 2},

@@ -7,7 +7,7 @@ class LoanPaymentsController < ApplicationController
 
   # GET /loans_paymens/:id/new_pay
   def new_pay
-    @payment = Loans::ReceivePaymentForm.new(account_id: params[:id], date: Date.today)
+    @payment = Loans::ReceivePaymentForm.new(account_id: params[:id], date: today)
   end
 
   # POST /loan_payments/:id/pay
@@ -25,7 +25,7 @@ class LoanPaymentsController < ApplicationController
 
   # GET /loan_payments/:id/new_pay_interest
   def new_pay_interest
-    @payment = Loans::ReceivePaymentForm.new(account_id: params[:id], date: Date.today)
+    @payment = Loans::ReceivePaymentForm.new(account_id: params[:id], date: today)
   end
 
   # POST /loan_payments/:id/pay_interest
@@ -46,7 +46,7 @@ class LoanPaymentsController < ApplicationController
 
   # GET /loan_payments/:id/new_charge
   def new_charge
-    @payment = Loans::GivePaymentForm.new(account_id: params[:id], date: Date.today)
+    @payment = Loans::GivePaymentForm.new(account_id: params[:id], date: today)
   end
 
   # POST /loan_payments/:id/new_charge
@@ -64,7 +64,7 @@ class LoanPaymentsController < ApplicationController
 
   # GET /loan_payments/:id/new_charge_interest
   def new_charge_interest
-    @payment = Loans::GivePaymentForm.new(account_id: params[:id], date: Date.today)
+    @payment = Loans::GivePaymentForm.new(account_id: params[:id], date: today)
   end
 
   # POST /loan_payments/:id/charge_interest
@@ -110,4 +110,7 @@ class LoanPaymentsController < ApplicationController
       .permit(*common_params).merge(account_id: params[:id])
     end
 
+    def today
+      Time.zone.now.to_date
+    end
 end

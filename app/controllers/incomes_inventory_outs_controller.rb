@@ -8,7 +8,7 @@ class IncomesInventoryOutsController < ApplicationController
   # /incomes_inventory_ins/new?store_id=:store_id&income_id=:income_id
   def new
     @inv = Incomes::InventoryOut.new(
-      store_id: @store.id, income_id: @income.id, date: Date.today,
+      store_id: @store.id, income_id: @income.id, date: Time.zone.now.to_date,
       description: "Entregar mercadería ingreso #{ @income }"
     )
     @inv.build_details

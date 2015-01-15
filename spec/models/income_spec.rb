@@ -96,7 +96,7 @@ describe Income do
   end
 
   it "$get_ref_number" do
-    y = Date.today.year.to_s[2..4]
+    y = Time.zone.now.year.to_s[2..4]
     ref_num = Income.get_ref_number
     ref_num.should eq("I-#{y}-0001")
 
@@ -104,8 +104,8 @@ describe Income do
 
     Income.get_ref_number.should eq("I-#{y}-0002")
 
-    Date.stub_chain(:today, year: 2099)
-    Income.get_ref_number.should eq("I-99-0001")
+    Time.zone.stub(now: Time.zone.parse('2009-12-31'))
+    Income.get_ref_number.should eq("I-09-0001")
   end
 
   context "set_state_by_balance!" do
