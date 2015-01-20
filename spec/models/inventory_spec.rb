@@ -22,7 +22,7 @@ describe Inventory do
   it { should_not have_valid(:operation).when('je', '') }
 
   it '#set_ref_number' do
-    Date.stub(today: Date.parse('2013-05-10'))
+    Time.zone.stub(now: Time.zone.parse('2013-05-10'))
     inv_op = build :inventory, operation: 'in', ref_number: 'I-13-0001', id: 1
 
     io = Inventory.new(operation: 'in')
@@ -65,7 +65,7 @@ describe Inventory do
   end
 
   it "#set_re_number trans" do
-    Date.stub(today: Date.parse('2013-05-10'))
+    Time.zone.stub(now: Time.zone.parse('2013-05-10'))
     i = Inventory.new(operation: 'trans')
     i.set_ref_number
     i.ref_number.should eq('T-13-0001')

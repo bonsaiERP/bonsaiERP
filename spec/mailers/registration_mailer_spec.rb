@@ -6,13 +6,13 @@ describe RegistrationMailer do
   }
 
   let(:registration) do
-    OpenStruct.new(user: user, tenant: 'bonsai', organisation: double(tenant: 'bonsai', name: 'bonsaiLabs'))
+    OpenStruct.new(user: user, tenant: 'bonsai', email: user.email, organisation: double(tenant: 'bonsai', name: 'bonsaiLabs'))
   end
 
   it '#send_registration' do
     email = RegistrationMailer.send_registration(registration)
 
-    email.subject.should eq(I18n.t("email.registration.send", email: registration.email, app_name: APP_NAME))
+    email.subject.should eq(I18n.t("email.registration.send", app_name: APP_NAME, email: registration.email))
 
     email.to.should eq([user.email, "boris@bonsaierp.com"])
     email.from.should eq(["register@#{DOMAIN}"])
