@@ -1,14 +1,14 @@
 source 'https://rubygems.org'
 
-ruby '2.1.3'
-gem 'rails', '4.1.9'
+ruby '2.2.0'
+gem 'rails', '4.2.0'
 
 # Assets
-gem 'sass-rails' , '~> 4.0.3'
+gem 'sass-rails', '~> 5.0.1'
 gem 'coffee-rails' , '~> 4.0.1'
-gem 'uglifier' #    , '>= 2.3.0'
+gem 'uglifier' , '>= 2.7.0'
 
-gem 'compass-rails', '~> 2.0.0'
+gem 'compass-rails', '~> 2.0.4'
 gem 'pg' # Postgresql adapter
 gem 'virtus' # Model generation in simple way
 #gem 'squeel' # Better SQL queries
@@ -42,7 +42,7 @@ group :development do
   gem 'quiet_assets'
   gem 'bullet'
 
-  gem 'capistrano', '~> 3.2.0'
+  gem 'capistrano'#, '~> 3.2.0'
   gem 'capistrano-rails', '~> 1.1'
   gem 'capistrano-bundler'
   gem 'capistrano-rvm'
@@ -65,8 +65,7 @@ end
 group :test do
   gem 'capybara'
   gem 'database_cleaner'
-  gem 'factory_girl_rails', '~> 4.4.1'
-  #gem 'spork', '1.0.0rc4' # Newer version gives error with squeel
+  gem 'factory_girl_rails'#, '~> 4.4.1'
   gem 'shoulda-matchers', require: false
   gem 'valid_attribute'
   gem 'watchr'
