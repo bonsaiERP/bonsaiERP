@@ -24,9 +24,9 @@ class Movement < Account
     approver_datetime: :time
 
   EXTRAS_DEFAULTS = {
-    delivered: :false,
-    discounted: :false,
-    devolution: :false,
+    delivered: false,
+    discounted: false,
+    devolution: false,
     gross_total: 0.0,
     inventory: true,
     balance_inventory: 0.0,

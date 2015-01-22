@@ -12,7 +12,6 @@ Dragonfly.app.configure do
     datastore :s3,
       bucket_name: Rails.application.secrets.s3_bucket_name,
       access_key_id: Rails.application.secrets.s3_access_key_id,
-      access_key_id: Rails.application.secrets.s3_access_key_id,
       secret_access_key: Rails.application.secrets.s3_secret_access_key,
       url_scheme: Rails.application.secrets.url_scheme
   else

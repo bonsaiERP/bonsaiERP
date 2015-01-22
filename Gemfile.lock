@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/devmynd/hstore_accessor.git
+  revision: d27a643cd39596f8688a9d86b2feab118b6a2b8c
+  specs:
+    hstore_accessor (1.0.0)
+      activerecord (>= 4.0.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -221,8 +228,6 @@ GEM
     haml (4.0.6)
       tilt
     hike (1.2.3)
-    hstore_accessor (0.6.1)
-      activesupport (>= 3.2.0)
     i18n (0.7.0)
     ice_nine (0.11.1)
     inflecto (0.0.2)
@@ -413,7 +418,7 @@ DEPENDENCIES
   factory_girl_rails
   ffaker
   haml (>= 4.0.5)
-  hstore_accessor
+  hstore_accessor!
   kaminari
   launchy
   meta_request

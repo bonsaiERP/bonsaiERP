@@ -23,7 +23,7 @@ gem 'resubject' # Cool presenter
 gem 'validates_email_format_of', '~> 1.5.3'
 gem 'validates_lengths_from_database'
 # Hstore accessor
-gem 'hstore_accessor'
+gem 'hstore_accessor', git: 'https://github.com/devmynd/hstore_accessor.git'
 
 gem 'dragonfly'
 gem 'dragonfly-s3_data_store'
