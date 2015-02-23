@@ -31,6 +31,8 @@ RSpec.configure do |config|
     c.syntax = [:should, :expect]
   end
 
+  config.infer_spec_type_from_file_location!
+
   config.before(:suite) do
     # So it does not clean migrations
     DatabaseCleaner.clean_with(:truncation, { except: %w(schema_migrations) })
