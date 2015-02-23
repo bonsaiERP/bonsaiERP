@@ -13,7 +13,7 @@ describe Expense do
     { active: nil, bill_number: "56498797", contact: contact, state: 'draft',
       exchange_rate: 1, currency: 'BOB', date: '2011-01-24', due_date: '2011-01-24',
       description: "Esto es una prueba",
-      ref_number: "987654", state: 'draft'
+      ref_number: "987654"
     }
   }
 

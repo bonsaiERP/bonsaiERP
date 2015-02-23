@@ -20,8 +20,8 @@ class Movement < Account
     bill_number: :string,
     null_reason: :string,
     operation_type: :string,
-    nuller_datetime: :time,
-    approver_datetime: :time
+    nuller_datetime: :datetime,
+    approver_datetime: :datetime
 
   EXTRAS_DEFAULTS = {
     delivered: false,
