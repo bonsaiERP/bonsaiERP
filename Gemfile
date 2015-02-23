@@ -52,7 +52,7 @@ end
 group :development, :test do
   gem 'puma'# Web server
   gem 'spring-commands-rspec'
-  gem 'rspec-rails'
+  gem 'rspec-rails', '2.99.0'
   gem 'ffaker'
   #gem 'pry-remote' # Work binding.pry_remote with Foreman, just call pry-remote in the terminal
   gem 'pry'#, '0.9.11.3'# 0.9.11.4 gives error

@@ -25,18 +25,18 @@ describe Account do
   end
 
   context 'scopes' do
-    it "$to_pay" do
+    it "::to_pay" do
       ac = Account.active.new
       ac.should be_active
     end
 
-    it "$money" do
-      ac = Account.money.new
-      expect(ac.type).to eq(%w(Bank Cash))
+    it "::money" do
+      ac = Account.money
+      #expect(ac.type).to eq(["Bank", "Cash"])
+      expect(ac.to_sql).to match(/'Bank', 'Cash'/)
 
-      ac = Account.active.money.new
-      expect(ac.type).to eq(%w(Bank Cash))
-      ac.should be_active
+      ac = Account.active.money
+      expect(ac.to_sql).to match(/"accounts"."active" = 't' AND "accounts"."type" IN \('Bank', 'Cash'\)/)
     end
   end
 

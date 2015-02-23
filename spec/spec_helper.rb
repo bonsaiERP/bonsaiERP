@@ -27,6 +27,10 @@ RSpec.configure do |config|
 
   config.order = "random"
 
+  config.mock_with :rspec do |c|
+    c.syntax = [:should, :expect]
+  end
+
   config.before(:suite) do
     # So it does not clean migrations
     DatabaseCleaner.clean_with(:truncation, { except: %w(schema_migrations) })

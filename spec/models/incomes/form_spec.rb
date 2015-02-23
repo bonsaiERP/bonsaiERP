@@ -102,14 +102,14 @@ describe Incomes::Form do
       Item.should_receive(:where).with(id: item_ids).and_return(s)
 
       # Create
-      subject.create.should be_true
+      subject.create.should eq(true)
 
       # Income
       i = subject.income
       i.should be_is_a(Income)
       i.should be_is_draft
       i.should be_active
-      i.inventory.should be_true
+      i.inventory.should eq(true)
       i.ref_number.should =~ /I-\d{2}-\d{4}/
       i.date.should be_is_a(Date)
       i.error_messages.should eq({})
@@ -136,7 +136,7 @@ describe Incomes::Form do
 
     it "creates and approves" do
       # Create
-      subject.create_and_approve.should be_true
+      subject.create_and_approve.should eq(true)
 
       # Income
       i = subject.income
@@ -192,14 +192,14 @@ describe Incomes::Form do
       i = subject.income
       id = i.income_details[0]
       id.balance = 0
-      id.save.should be_true
+      id.save.should eq(true)
 
       is = Incomes::Form.find(i.id)
       is.income.should be_is_a(Income)
       is.service.should be_is_a(Incomes::Service)
       is.update(income_details_attributes: [
           {id: id.id, price: id.price, item_id: id.item_id, quantity: (id.quantity - 1) }
-      ]).should be_true
+      ]).should eq(true)
 
       i = Income.find(is.income.id)
 
@@ -220,7 +220,7 @@ describe Incomes::Form do
         {id: id, item_id: 1, price: 10, quantity: 12},
         {item_id: 100, price: 10, quantity: 10}
       ]
-      ).should be_true
+      ).should eq(true)
 
       i = Income.find(incf.income.id)
 
@@ -238,7 +238,7 @@ describe Incomes::Form do
       i = subject.income
       is = Incomes::Form.find(i.id)
       # Update
-      is.update(attributes_for_update.merge(contact_id: 10)).should be_true
+      is.update(attributes_for_update.merge(contact_id: 10)).should eq(true)
       # Income
       i = is.income
       i.should be_is_draft
@@ -258,7 +258,7 @@ describe Incomes::Form do
       is = Incomes::Form.find(subject.income.id)
       is.stub(account_to: true)
 
-      is.update_and_approve({direct_payment: true, account_to_id: 1}).should be_true
+      is.update_and_approve({direct_payment: true, account_to_id: 1}).should eq(true)
 
       is.income_id.should eq(is.income.id)
       # Income
@@ -288,7 +288,7 @@ describe Incomes::Form do
       i = subject.income
       is = Incomes::Form.find(i.id)
 
-      is.update({}).should be_true
+      is.update({}).should eq(true)
       is.income.should be_is_draft
 
       is = Incomes::Form.find(i.id)
@@ -310,7 +310,7 @@ describe Incomes::Form do
       is = Incomes::Form.new_income(valid_params.merge(direct_payment: "1", account_to_id: "2", reference: 'Recibo 123'))
       is.stub(account_to: true)
 
-      is.create_and_approve.should be_true
+      is.create_and_approve.should eq(true)
 
       is.service.ledger.should be_is_a(AccountLedger)
       # ledger
@@ -331,7 +331,7 @@ describe Incomes::Form do
 
     it "updates and pays" do
       is = Incomes::Form.new_income(valid_params)
-      is.create.should be_true
+      is.create.should eq(true)
       is.income.should be_persisted
       inc = is.income
       #inc.should be_discounted
@@ -344,7 +344,7 @@ describe Incomes::Form do
       is.total.should == total
 
       is.stub(account_to: true)
-      is.update_and_approve(direct_payment: "1", account_to_id: "2", total: 500).should be_true
+      is.update_and_approve(direct_payment: "1", account_to_id: "2", total: 500).should eq(true)
 
       is.service.ledger.should be_is_a(AccountLedger)
       # ledger
@@ -369,7 +369,7 @@ describe Incomes::Form do
       }
 
       is = Incomes::Form.find(is.income.id)
-      is.update(income_details_attributes: attrs).should be_true
+      is.update(income_details_attributes: attrs).should eq(true)
       is.income.error_messages.should eq({"balance" => ["movement.negative_balance"]})
       is.income.should be_has_error
 
@@ -379,7 +379,7 @@ describe Incomes::Form do
         {id: det.id, item_id: det.item_id, quantity: det.quantity + 2, price: det.price}
       }
       is = Incomes::Form.find(is.income.id)
-      is.update(income_details_attributes: attrs).should be_true
+      is.update(income_details_attributes: attrs).should eq(true)
       is.income.should_not be_has_error
       is.income.error_messages.should eq({})
 
@@ -387,7 +387,7 @@ describe Incomes::Form do
       det = is.income.details[0]
       attrs = [{id: det.id,_destroy: '1'}]
       is = Incomes::Form.find(is.income.id)
-      is.update(income_details_attributes: attrs).should be_true
+      is.update(income_details_attributes: attrs).should eq(true)
 
       is.income.error_messages.should eq({"balance" => ["movement.negative_balance"]})
       is.income.should be_has_error
@@ -413,7 +413,7 @@ describe Incomes::Form do
 
     it "change of currency" do
       is = Incomes::Form.new_income(valid_params)
-      is.create_and_approve.should be_true
+      is.create_and_approve.should eq(true)
 
       is = Incomes::Form.find(is.income.id)
 
@@ -421,7 +421,7 @@ describe Incomes::Form do
 
       is.update({exchange_rate: 2, currency: 'USD',
                  income_details_attributes: details
-      }).should be_true
+      }).should eq(true)
 
       is.income.total.should eq(250)
       is.income.exchange_rate.should eq(2)
@@ -437,17 +437,17 @@ describe Incomes::Form do
 
     it "inventory_state" do
       is = Incomes::Form.new_income(valid_params)
-      is.create_and_approve.should be_true
+      is.create_and_approve.should eq(true)
 
       is.income_details.each {|v| v.update_column(:balance, 0) }
 
       is = Incomes::Form.find(is.income.id)
-      is.update.should be_true
+      is.update.should eq(true)
       is.income.should be_delivered
 
       is.income_details[0].update_column(:balance, 1)
       is = Incomes::Form.find(is.income.id)
-      is.update.should be_true
+      is.update.should eq(true)
       expect(is.income).not_to be_delivered
     end
   end
@@ -461,7 +461,7 @@ describe Incomes::Form do
 
     it "creates tax_in_out=false" do
       ifrm = Incomes::Form.new_income(valid_params.merge(tax_id: tax.id, tax_in_out: false))
-      ifrm.create.should be_true
+      ifrm.create.should eq(true)
 
       tax.percentage.should == 10
       inc = ifrm.income
@@ -472,11 +472,11 @@ describe Incomes::Form do
 
     it "creates tax_in_out=true" do
       ifrm = Incomes::Form.new_income(valid_params.merge(tax_id: tax.id, tax_in_out: true))
-      ifrm.create.should be_true
+      ifrm.create.should eq(true)
 
       tax.percentage.should == 10
       inc = ifrm.income
-      inc.tax_in_out.should be_true
+      inc.tax_in_out.should eq(true)
       inc.tax_percentage.should == 10
       inc.total.should == 500
     end
@@ -497,17 +497,17 @@ describe Incomes::Form do
       is = Incomes::Form.new_income(valid_params.merge(direct_payment: "1", account_to_id: "2", reference: 'Recibo 123'))
       is.stub(account_to: true)
 
-      is.create_and_approve.should be_true
+      is.create_and_approve.should eq(true)
 
       is.income.should be_is_paid
 
       is = Incomes::Form.find(is.income.id)
-      is.update(tax_id: tax.id).should be_true
+      is.update(tax_id: tax.id).should eq(true)
 
       is.income.should be_is_approved
 
       is = Incomes::Form.find(is.income.id)
-      is.update(tax_id: nil).should be_true
+      is.update(tax_id: nil).should eq(true)
 
       is.income.should be_is_paid
     end
@@ -536,11 +536,12 @@ describe Incomes::Form do
       is = Incomes::Form.new_income(valid_params.merge(tag_ids: tag_ids))
       is.stub(account_to: true)
 
-      is.create_and_approve.should be_true
+      is.create_and_approve.should eq(true)
 
       inc = Income.find(is.income.id)
       expect(inc.tag_ids).to eq(tag_ids)
-      expect(inc.tag_ids).to have(2).items
+      puts inc.tag_ids
+      expect(inc.tag_ids).to have(2).item
     end
   end
 end
