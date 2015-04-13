@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
-ruby '2.2.0'
-gem 'rails', '4.2.0'
+ruby '2.2.1'
+gem 'rails', '4.2.1'
 
 # Assets
 gem 'sass-rails', '~> 5.0.1'
@@ -20,13 +20,15 @@ gem 'bcrypt-ruby', require: 'bcrypt'
 gem 'active_model_serializers' # ActiveRecord Classes to encode in JSON
 gem 'resubject' # Cool presenter
 
-gem 'validates_email_format_of', '~> 1.5.3'
+gem 'validates_email_format_of'#, '~> 1.5.3'
 gem 'validates_lengths_from_database'
 # Hstore accessor
 gem 'hstore_accessor'
 
 gem 'dragonfly'
 gem 'dragonfly-s3_data_store'
+
+gem 'responders'
 
 group :production do
   gem 'newrelic_rpm'

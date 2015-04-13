@@ -3,7 +3,6 @@
 # email: boriscyber@gmail.com
 class ItemsController < ApplicationController
   include Controllers::TagSearch
-  respond_to :html, :json
 
   before_filter :set_item, only: [:show, :edit, :update, :destroy]
 
