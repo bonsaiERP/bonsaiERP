@@ -22,11 +22,11 @@ describe Inventories::Errors do
 
   it "#set_errors" do
     Inventories::Errors.new(inventory, get_stocks).set_errors
-    
-    inventory.should be_has_error
+
+    expect(inventory.valid?).to eq(false)
     inventory.error_messages.should eq({
-      quantity: ['inventory.negative_stock'],
-      item_ids: [2, 3]
+      "quantity" => ['inventory.negative_stock'],
+      "item_ids" => [2, 3]
     })
   end
 end

@@ -7,6 +7,20 @@ describe TenantCreator do
   before(:all) do
     DatabaseCleaner.strategy = :truncation
   end
+
+  after(:all) do
+    PgTools.drop_schema tenant if PgTools.schema_exists?('bonsaierp')
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.clean_with(:truncation, { except: %w(schema_migrations) })
+
+    sql = <<-SQL
+INSERT INTO public.schema_migrations (version) VALUES
+#{ActiveRecord::Migrator.migrations('db/migrate').map {|v| "('#{v.version}')" }.join(', ')}
+    SQL
+
+    #PgTools.execute sql
+  end
+
   context "Initialize" do
     it {  TenantCreator.new(organisation) }
     it "error when bad name" do
@@ -20,7 +34,6 @@ describe TenantCreator do
 
     before(:each) do
       UserSession.user = build :user, id: 1
-      #DatabaseCleaner.strategy = :truncation
     end
 
     it "has the correct config" do
@@ -37,7 +50,7 @@ describe TenantCreator do
     it "creates a new schema with all tables" do
       expect(organisation.due_on).to be_nil
       expect(organisation.plan).to eq('2users')
-      tc.create_tenant.should be_true
+      expect(tc.create_tenant).to eq(true)
       expect(PgTools).to be_schema_exists(tc.tenant)
 
       PgTools.change_schema tc.tenant
@@ -63,17 +76,6 @@ describe TenantCreator do
       expect(organisation.due_on).to eq(15.days.from_now.to_date)
     end
 
-    after(:all) do
-      PgTools.drop_schema tenant if PgTools.schema_exists?(tenant)
-      DatabaseCleaner.strategy = :transaction
-      DatabaseCleaner.clean_with(:truncation, { except: %w(schema_migrations) })
 
-      sql = <<-SQL
-  INSERT INTO public.schema_migrations (version) VALUES
-  #{ActiveRecord::Migrator.migrations('db/migrate').map {|v| "('#{v.version}')" }.join(', ')}
-      SQL
-
-      PgTools.execute sql
-    end
   end
 end
