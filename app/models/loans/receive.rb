@@ -7,9 +7,9 @@ class Loans::Receive < Loan
   self.code_name = 'PR'
 
   # Relationships
-  has_one :ledger_in, -> { where(operation: 'lrcre') }, class_name: 'AccountLedger', foreign_key: :account_id
+  has_many :ledger_ins, -> { where(operation: 'lrcre') }, class_name: 'AccountLedger', foreign_key: :account_id
 
-  has_many :payments, -> { where(operation: ['lrpay']) }, class_name: 'AccountLedger', foreign_key: :account_id
+  has_many :payments, -> { where(operation: 'lrpay') }, class_name: 'AccountLedger', foreign_key: :account_id
 
   has_many :interest_ledgers, -> { where(operation: 'lrint') }, class_name: 'AccountLedger', foreign_key: :account_id
 

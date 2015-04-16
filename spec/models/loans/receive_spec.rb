@@ -10,7 +10,7 @@ describe Loans::Receive do
     }
   }
 
-  it { should have_one(:ledger_in) }
+  it { should have_many(:ledger_ins) }
   it { should have_many(:payments) }
   it { should have_many(:interest_ledgers) }
 

@@ -7,9 +7,9 @@ class Loans::Give < Loan
   self.code_name = 'PG'
 
   # Relationships
-  has_one :ledger_in, -> { where(operation: 'lgcre') }, class_name: 'AccountLedger', foreign_key: :account_id
+  has_many :ledger_ins, -> { where(operation: 'lgcre') }, class_name: 'AccountLedger', foreign_key: :account_id
 
-  has_many :payments, -> { where(operation: ['lgpay']) }, class_name: 'AccountLedger', foreign_key: :account_id
+  has_many :payments, -> { where(operation: 'lgpay') }, class_name: 'AccountLedger', foreign_key: :account_id
   has_many :interest_ledgers, -> { where(operation: 'lgint') }, class_name: 'AccountLedger', foreign_key: :account_id
 
   def self.new(attrs = {})
