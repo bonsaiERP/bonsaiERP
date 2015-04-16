@@ -22,7 +22,7 @@ describe Loans::GiveForm do
     lf = Loans::GiveForm.new(attributes.merge(account_to_id: cash.id))
 
     # loan
-    lf.create.should be_true
+    lf.create.should eq(true)
 
     lf.loan.should be_is_a(Loans::Give)
     lf.loan.amount.should == attributes.fetch(:total)
@@ -49,7 +49,7 @@ describe Loans::GiveForm do
     lf = Loans::GiveForm.new(attributes.merge(account_to_id: cash2.id, exchange_rate: 7))
 
     # loan
-    lf.create.should be_true
+    lf.create.should eq(true)
 
     lf.loan.should be_is_a(Loans::Give)
     lf.loan.currency.should eq('USD')

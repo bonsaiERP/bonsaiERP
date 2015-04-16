@@ -33,7 +33,7 @@ describe Expenses::Form do
       subject.date.should be_is_a(Date)
       subject.due_date.should be_is_a(Date)
       subject.currency.should eq('BOB')
-      subject.expense.expense_details.should have(2).items
+      subject.expense.expense_details.size.should eq(2)
 
       subject.expense.expense_details[0].item_id.should eq(details[0][:item_id])
       subject.expense.expense_details[0].description.should eq(details[0][:description])
@@ -65,7 +65,7 @@ describe Expenses::Form do
       Accounts::Query.any_instance.stub_chain(:money, where: [( build :cash, id: 2 )])
 
       es = Expenses::Form.new_expense(account_to_id: 2, direct_payment: "1", total: 150)
-      es.details.should have(2).items
+      es.details.size.should eq(2)
       es.details.map(&:quantity).should eq([1,1])
     end
 
@@ -100,7 +100,7 @@ describe Expenses::Form do
       Item.should_receive(:where).with(id: item_ids).and_return(s)
 
       # Create
-      subject.create.should be_true
+      subject.create.should eq(true)
 
       # Expense
       e = subject.expense
@@ -110,7 +110,7 @@ describe Expenses::Form do
       e.ref_number.should =~ /E-\d{2}-\d{4}/
       e.date.should be_is_a(Date)
       e.error_messages.should eq({})
-      e.inventory.should be_true
+      e.inventory.should eq(true)
 
       e.creator_id.should eq(UserSession.id)
 
@@ -133,7 +133,7 @@ describe Expenses::Form do
 
     it "creates and approves" do
       # Create
-      subject.create_and_approve.should be_true
+      subject.create_and_approve.should eq(true)
 
       # Expense
       e = subject.expense
@@ -177,7 +177,7 @@ describe Expenses::Form do
       es.expense.stub(valid?: false)
       es.details[0].errors.add(:quantity, "Error in quantity")
 
-      es.update.should be_false
+      es.update.should eq(false)
       es.expense.details[0].errors[:quantity].should eq(["Error in quantity"])
     end
 
@@ -185,14 +185,14 @@ describe Expenses::Form do
       e = subject.expense
       ed = e.expense_details[0]
       ed.balance = 0
-      ed.save.should be_true
+      ed.save.should eq(true)
 
       es = Expenses::Form.find(e.id)
       es.expense.should be_is_a(Expense)
       es.service.should be_is_a(Expenses::Service)
       es.update(expense_details_attributes: [
           {id: ed.id, price: ed.price, item_id: ed.item_id, quantity: (ed.quantity - 1) }
-      ]).should be_true
+      ]).should eq(true)
 
       e = Expense.find(es.expense.id)
 
@@ -202,7 +202,7 @@ describe Expenses::Form do
 
     it "udpates balance_inventory" do
       e = subject.expense
-      e.details.should have(2).items
+      e.details.size.should eq(2)
       e.details[0].balance.should == 10
       e.details[1].balance.should == 20
       e.balance_inventory.should == 500
@@ -214,11 +214,11 @@ describe Expenses::Form do
         {id: id, item_id: 1, price: 10, quantity: 12},
         {item_id: 100, price: 10, quantity: 10}
       ]
-      ).should be_true
+      ).should eq(true)
 
       e = Expense.find(expf.expense.id)
 
-      e.details.should have(3).items
+      e.details.size.should eq(3)
 
       e.details.map(&:item_id).sort.should eq([1, 2, 100])
 
@@ -232,7 +232,7 @@ describe Expenses::Form do
       e = subject.expense
       es = Expenses::Form.find(e.id)
       # Update
-      es.update(attributes_for_update.merge(contact_id: 10)).should be_true
+      es.update(attributes_for_update.merge(contact_id: 10)).should eq(true)
       # Expense
       e = es.expense
       e.should be_is_draft
@@ -240,7 +240,7 @@ describe Expenses::Form do
       e.description.should eq('A new changed description')
       e.total.should == total_for_update
 
-      e.expense_details.should have(2).items
+      e.expense_details.size.should eq(2)
       e.expense_details[0].quantity.should == 12
       e.expense_details[1].quantity.should == 22
 
@@ -252,7 +252,7 @@ describe Expenses::Form do
       es = Expenses::Form.find(subject.expense.id)
       es.stub(account_to: true)
 
-      es.update_and_approve({direct_payment: true, account_to_id: 1}).should be_true
+      es.update_and_approve({direct_payment: true, account_to_id: 1}).should eq(true)
 
       es.expense_id.should eq(es.expense.id)
       # Expense
@@ -282,7 +282,7 @@ describe Expenses::Form do
       i = subject.expense
       is = Expenses::Form.find(i.id)
 
-      is.update({}).should be_true
+      is.update({}).should eq(true)
       is.expense.should be_is_draft
 
       is = Expenses::Form.find(i.id)
@@ -304,7 +304,7 @@ describe Expenses::Form do
       is = Expenses::Form.new_expense(valid_params.merge(direct_payment: "1", account_to_id: "2", reference: 'Recibo 123'))
       is.stub(account_to: true)
 
-      is.create_and_approve.should be_true
+      is.create_and_approve.should eq(true)
 
       is.ledger.should be_is_a(AccountLedger)
       # ledger
@@ -325,12 +325,12 @@ describe Expenses::Form do
     it "updates and pays" do
       OrganisationSession.stub(inventory?: false)
       es = Expenses::Form.new_expense(valid_params)
-      es.create.should be_true
+      es.create.should eq(true)
 
       es.expense.should be_persisted
       exp = es.expense
       # Check if sets the OrganisationSession.inventory?
-      exp.inventory.should be_false
+      exp.inventory.should eq(false)
       #exp.should be_discounted
       #exp.discount.should == 10
 
@@ -341,7 +341,7 @@ describe Expenses::Form do
       es.total.should == total
 
       es.stub(account_to: true)
-      es.update_and_approve(direct_payment: "1", account_to_id: "2", total: 500).should be_true
+      es.update_and_approve(direct_payment: "1", account_to_id: "2", total: 500).should eq(true)
 
       es.ledger.should be_is_a(AccountLedger)
       # ledger
@@ -367,7 +367,7 @@ describe Expenses::Form do
       }
 
       es = Expenses::Form.find(es.expense.id)
-      es.update(total: 440, expense_details_attributes: attrs).should be_true
+      es.update(total: 440, expense_details_attributes: attrs).should eq(true)
       es.expense.error_messages.should eq({"balance" => ["movement.negative_balance"]})
       es.expense.should be_has_error
 
@@ -375,7 +375,7 @@ describe Expenses::Form do
       det = es.expense.details[0]
       attrs = [{id: det.id,_destroy: '1'}]
       es = Expenses::Form.find(es.expense.id)
-      es.update(expense_details_attributes: attrs).should be_true
+      es.update(expense_details_attributes: attrs).should eq(true)
 
       es.expense.error_messages.should eq({"balance" => ["movement.negative_balance"]})
       es.expense.should be_has_error
@@ -389,10 +389,10 @@ describe Expenses::Form do
   it "sets errors from expense or ledger" do
     es = Expenses::Form.new_expense(direct_payment: true)
 
-    es.create.should be_false
+    es.create.should eq(false)
 
     es.errors.messages[:contact_id].should_not be_blank
-    es.direct_payment.should be_false
+    es.direct_payment.should eq(false)
     #es.errors.messages[:account_to_id].should_not be_blank
     #es.errors.messages[:currency].should_not be_blank
   end
@@ -405,7 +405,7 @@ describe Expenses::Form do
 
     it "change_of_currency" do
       es = Expenses::Form.new_expense(valid_params)
-      es.create_and_approve.should be_true
+      es.create_and_approve.should eq(true)
 
       es = Expenses::Form.find(es.expense.id)
 
@@ -413,7 +413,7 @@ describe Expenses::Form do
 
       es.update({exchange_rate: 2, currency: 'USD',
                  expense_details_attributes: details}
-               ).should be_true
+               ).should eq(true)
 
       es.expense.total.should eq(250)
       es.expense.exchange_rate.should eq(2)
@@ -423,24 +423,24 @@ describe Expenses::Form do
 
       es = Expenses::Form.find(es.expense.id)
 
-      es.update({total: 490, exchange_rate: 1, currency: 'BOB'}).should be_false
+      es.update({total: 490, exchange_rate: 1, currency: 'BOB'}).should eq(false)
 
       es.errors[:currency].should eq([I18n.t('errors.messages.movement.currency_change')])
     end
 
     it "inventory_state" do
       es = Expenses::Form.new_expense(valid_params)
-      es.create_and_approve.should be_true
+      es.create_and_approve.should eq(true)
 
       es.expense_details.each {|v| v.update_column(:balance, 0) }
 
       es = Expenses::Form.find(es.expense.id)
-      es.update.should be_true
+      es.update.should eq(true)
       es.expense.should be_delivered
 
       es.expense_details[0].update_column(:balance, 1)
       es = Expenses::Form.find(es.expense.id)
-      es.update.should be_true
+      es.update.should eq(true)
       expect(es.expense).not_to be_delivered
     end
   end
@@ -454,24 +454,24 @@ describe Expenses::Form do
 
     it "tax_in_out=false" do
       ifrm = Expenses::Form.new_expense(valid_params.merge(tax_id: tax.id, tax_in_out: false))
-      ifrm.create.should be_true
+      ifrm.create.should eq(true)
 
       tax.percentage.should == 10
       exp = ifrm.expense
       exp.tax_percentage.should == 10
       exp.total.should == 550
-      exp.tax_in_out.should be_false
+      exp.tax_in_out.should eq(false)
     end
 
     it "tax_in_out=true" do
       ifrm = Expenses::Form.new_expense(valid_params.merge(tax_id: tax.id, tax_in_out: true))
-      ifrm.create.should be_true
+      ifrm.create.should eq(true)
 
       tax.percentage.should == 10
       exp = ifrm.expense
       exp.tax_percentage.should == 10
       exp.total.should == 500
-      exp.tax_in_out.should be_true
+      exp.tax_in_out.should eq(true)
     end
   end
 
@@ -499,11 +499,11 @@ describe Expenses::Form do
       es = Expenses::Form.new_expense(valid_params.merge(tag_ids: tag_ids))
       es.stub(account_to: true)
 
-      es.create_and_approve.should be_true
+      es.create_and_approve.should eq(true)
 
       exp = Expense.find(es.expense.id)
       expect(exp.tag_ids).to eq(tag_ids)
-      expect(exp.tag_ids).to have(2).items
+      expect(exp.tag_ids.size).to eq(2)
     end
   end
 end

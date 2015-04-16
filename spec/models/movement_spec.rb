@@ -100,7 +100,7 @@ describe Movement do
 
   it "#inventory" do
     e = Expense.new
-    expect(e.inventory?).to be_false
+    expect(e.inventory?).to eq(false)
   end
 
   it "due_date >= date" do
@@ -124,20 +124,20 @@ describe Movement do
       i = Income.new(currency: 'BOB', total: 140, exchange_rate: 1, date: Date.today, contact_id: contact.id, due_date: Date.today, state: 'draft')
       i.stub(contact: contact, name: 'I-0001')
 
-      i.save.should be_true
+      i.save.should eq(true)
 
       i.attributes = {currency: 'USD', exchange_rate: 7, total: 20}
-      i.save.should be_true
+      i.save.should eq(true)
 
       i.stub(ledgers: [build(:account_ledger)])
 
       i.attributes = {currency: 'BOB', exchange_rate: 1, total: 140 }
 
-      i.save.should be_false
+      i.save.should eq(false)
       i.errors[:currency].should_not be_blank
 
       i.attributes = {currency: 'USD', exchange_rate: 1, total: 30 }
-      i.save.should be_true
+      i.save.should eq(true)
     end
   end
 
@@ -176,7 +176,7 @@ describe Movement do
 
       det = income.income_details[0]
       det.balance = 5
-      det.save.should be_true
+      det.save.should eq(true)
 
 
       # Can't null
@@ -187,11 +187,11 @@ describe Movement do
       # Update balance
       det = IncomeDetail.find(det.id)
       det.balance = 10
-      det.save.should be_true
+      det.save.should eq(true)
 
       # Allow null
       income.reload
-      income.null!.should be_true
+      income.null!.should eq(true)
       income.should be_is_nulled
     end
 
@@ -201,7 +201,7 @@ describe Movement do
 
       det = expense.expense_details[0]
       det.balance = 5
-      det.save.should be_true
+      det.save.should eq(true)
 
 
       # Can't null
@@ -212,11 +212,11 @@ describe Movement do
       # Update balance
       det = ExpenseDetail.find(det.id)
       det.balance = 10
-      det.save.should be_true
+      det.save.should eq(true)
 
       # Allow null
       expense.reload
-      expense.null!.should be_true
+      expense.null!.should eq(true)
       expense.should be_is_nulled
     end
 
@@ -233,7 +233,7 @@ describe Movement do
         contact_id: 1, state: 'draft'
       }.merge(attrs))
       m.stub(contact: c)
-      m.save.should be_true
+      m.save.should eq(true)
 
       m = Movement.find(m.id)
       at = m.attributes
@@ -247,8 +247,8 @@ describe Movement do
       m.nuller_datetime.to_s.should eq(t.to_s)
       m.approver_datetime.to_s.should eq(t.to_s)
 
-      m.inventory?.should be_true
-      m.devolution?.should be_false
+      m.inventory?.should eq(true)
+      m.devolution?.should eq(false)
     end
 
   end

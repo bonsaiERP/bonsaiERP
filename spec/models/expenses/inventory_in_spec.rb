@@ -64,7 +64,7 @@ describe Expenses::InventoryIn do
     # Other quantities
     det = expense.expense_details[0]
     det.balance = 1
-    det.save.should be_true
+    det.save.should eq(true)
 
     invin = Expenses::InventoryIn.new(store_id: store.id, expense_id: expense.id)
     invin.build_details
@@ -84,7 +84,7 @@ describe Expenses::InventoryIn do
     invin = Expenses::InventoryIn.new(valid_attributes)
     invin.details.should have(2).items
 
-    invin.create.should be_true
+    invin.create.should eq(true)
     inv = Inventory.find(invin.inventory.id)
     inv.should be_is_a(Inventory)
     inv.should be_is_exp_in
@@ -114,7 +114,7 @@ describe Expenses::InventoryIn do
     attrs[:inventory_details_attributes][1][:quantity] = 3
 
     invin = Expenses::InventoryIn.new(attrs)
-    invin.create.should be_true
+    invin.create.should eq(true)
 
     exp = Expense.find(expense.id)
     exp.balance_inventory.should == 0
@@ -135,7 +135,7 @@ describe Expenses::InventoryIn do
 
     # Error
     invin = Expenses::InventoryIn.new(valid_attributes)
-    invin.create.should be_false
+    invin.create.should eq(false)
     invin.details[0].errors[:quantity].should_not be_blank
     invin.details[1].errors[:quantity].should_not be_blank
   end

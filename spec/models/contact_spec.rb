@@ -51,14 +51,14 @@ describe Contact do
 
     c.stub(accounts: [Account.new])
 
-    c.destroy.should be_false
+    c.destroy.should eq(false)
 
     # inventories
     c.stub(accounts: [], inventories: [Inventory.new])
-    c.destroy.should be_false
+    c.destroy.should eq(false)
 
     c.stub(accounts: [], inventories: [])
-    c.destroy.should be_true
+    c.destroy.destroyed?.should eq(true)
   end
 
   context 'scopes' do

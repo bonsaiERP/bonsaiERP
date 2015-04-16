@@ -91,7 +91,7 @@ describe Item do
   describe "Tests" do
     before(:each) do
       o = Object.new
-      o.stub(:find_by_id).with(1).and_return(mock_model(Unit))
+      o.stub(:find_by_id).with(1).and_return(Unit.new)
       Unit.stub(org: o)
     end
 
@@ -112,17 +112,17 @@ describe Item do
     subject { Item.create valid_attributes }
 
     it "destroys the item" do
-      subject.destroy.should be_true
+      subject.destroy.destroyed?.should eq(true)
     end
 
     it "does not destroy the item" do
       MovementDetail.stub(:where).with(item_id: subject.id).and_return([1])
-      subject.destroy.should be_false
+      subject.destroy.should eq(false)
     end
 
     it "does not destroy the item" do
       InventoryDetail.stub(:where).with(item_id: subject.id).and_return([1])
-      subject.destroy.should be_false
+      subject.destroy.should eq(false)
     end
   end
 

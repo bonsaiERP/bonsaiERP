@@ -79,7 +79,7 @@ describe Incomes::InventoryOut do
       # Other quantities
       det = income.income_details[0]
       det.balance = 1
-      det.save.should be_true
+      det.save.should eq(true)
 
       invout = Incomes::InventoryOut.new(store_id: store.id, income_id: income.id)
       invout.build_details
@@ -94,15 +94,15 @@ describe Incomes::InventoryOut do
     it "#create" do
       Stock.any_instance.stub(item: item, store: store)
       # Create with the function
-      create_inventory_in.should be_true
+      create_inventory_in.should eq(true)
 
       # Create
 
       invout = Incomes::InventoryOut.new(valid_attributes)
-      invout.details.should have(2).items
+      invout.details.size.should eq(2)
       expect(invout.income_id).to eq(income.id)
 
-      invout.create.should be_true
+      invout.create.should eq(true)
 
       inv = Inventory.find(invout.inventory.id)
       inv.should be_is_a(Inventory)
@@ -120,12 +120,12 @@ describe Incomes::InventoryOut do
       inc.details[0].balance.should == 3
       inc.details[1].balance.should == 4
 
-      inv.details.should have(2).items
+      inv.details.size.should eq(2)
       inv.details.map(&:quantity).should eq([2, 2])
       inv.details.map(&:item_id).should eq([1, 2])
 
       stocks = Stock.active.where(store_id: inv.store_id)
-      stocks.should have(2).items
+      stocks.size.should eq(2)
       stocks.map(&:item_id).sort.should eq([1, 2])
       stocks.map(&:quantity).should eq([3, 2])
 
@@ -135,7 +135,7 @@ describe Incomes::InventoryOut do
       attrs[:inventory_details_attributes][1][:quantity] = 4
 
       invout = Incomes::InventoryOut.new(attrs)
-      invout.create.should be_true
+      invout.create.should eq(true)
 
       inc = Income.find(income.id)
       inc.balance_inventory.should == 0
@@ -148,18 +148,18 @@ describe Incomes::InventoryOut do
       io.error_messages["quantity"].should eq(['inventory.negative_stock'])
       io.error_messages["item_ids"].should eq([2])
 
-      io.inventory_details.should have(2).items
+      io.inventory_details.size.should eq(2)
       io.inventory_details.map(&:quantity).should eq([3, 4])
       io.inventory_details.map(&:item_id).should eq([1, 2])
 
       stocks = Stock.active.where(store_id: io.store_id)
-      stocks.should have(2).items
+      stocks.size.should eq(2)
       stocks.map(&:item_id).sort.should eq([1, 2])
       stocks.map(&:quantity).should eq([0, -2])
 
       # Error
       invout = Incomes::InventoryOut.new(valid_attributes)
-      invout.create.should be_false
+      invout.create.should eq(false)
       invout.details[0].errors[:quantity].should eq([I18n.t('errors.messages.inventory.movement_quantity')])
       invout.details[1].errors[:quantity].should_not be_blank
 
@@ -169,7 +169,7 @@ describe Incomes::InventoryOut do
         inventory_details: [{item_id: 100, quantity: 1}]
       ))
 
-      invout.create.should be_false
+      invout.create.should eq(false)
       invout.errors[:base].should_not be_blank
     end
   end

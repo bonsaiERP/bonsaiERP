@@ -65,11 +65,11 @@ describe Expenses::InventoryOut do
       Stock.any_instance.stub(item: item, store: store)
 
       # Create with the function
-      create_inventory_in.should be_true
+      create_inventory_in.should eq(true)
 
       # Create
       invout = Expenses::InventoryOut.new(valid_attributes)
-      invout.create.should be_true
+      invout.create.should eq(true)
 
       inv = Inventory.find(invout.inventory.id)
       inv.should be_is_a(Inventory)
@@ -100,7 +100,7 @@ describe Expenses::InventoryOut do
       attrs[:inventory_details_attributes][1][:quantity] = 3
 
       invout = Expenses::InventoryOut.new(attrs)
-      invout.create.should be_true
+      invout.create.should eq(true)
 
       exp = Expense.find(expense.id)
       exp.balance_inventory.should == 100
@@ -123,7 +123,7 @@ describe Expenses::InventoryOut do
 
       # Error
       invout = Expenses::InventoryOut.new(valid_attributes)
-      invout.create.should be_false
+      invout.create.should eq(false)
       invout.details[0].errors[:quantity].should eq([I18n.t('errors.messages.inventory.movement_quantity', q: 0.0)])
       invout.details[1].errors[:quantity].should_not be_blank
 
@@ -132,7 +132,7 @@ describe Expenses::InventoryOut do
         inventory_details: [{item_id: 100, quantity: 1}]
       ))
 
-      invout.create.should be_false
+      invout.create.should eq(false)
       invout.errors[:base].should_not be_blank
     end
   end

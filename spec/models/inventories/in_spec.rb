@@ -19,7 +19,7 @@ describe Inventories::In do
     invin = Inventories::In.new
 
     invin.inventory.should be_is_in
-    invin.details.should have(0).item
+    invin.details.size.should eq(0)
   end
 
   before(:each) do
@@ -32,26 +32,26 @@ describe Inventories::In do
 
   it "creates" do
     invin = Inventories::In.new(valid_attributes)
-    invin.inventory_details.should have(2).items
+    invin.inventory_details.size.should eq(2)
 
-    invin.create.should be_true
+    invin.create.should eq(true)
     io = Inventory.find(invin.inventory.id)
     io.should be_is_a(Inventory)
     io.should be_is_in
     io.creator_id.should eq(user.id)
     io.ref_number.should =~ /\AI-\d{2}-\d{4}\z/
 
-    io.inventory_details.should have(2).items
+    io.inventory_details.size.should eq(2)
     io.inventory_details.map(&:quantity).should eq([2, 2])
     io.inventory_details.map(&:item_id).should eq([1, 2])
 
     stocks = Stock.active.where(store_id: io.store_id)
-    stocks.should have(2).items
+    stocks.size.should eq(2)
     stocks.map(&:item_id).sort.should eq([1, 2])
     stocks.map(&:quantity).should eq([2, 2])
 
     st = stocks.first
-    st.update_attribute(:minimum, 1).should be_true
+    st.update_attribute(:minimum, 1).should eq(true)
     st_item_id = st.item_id
 
     # More items
@@ -61,9 +61,9 @@ describe Inventories::In do
       ]
     )
     invin = Inventories::In.new(attrs)
-    invin.create.should be_true
+    invin.create.should eq(true)
     stocks = Stock.active.where(store_id: io.store_id)
-    stocks.should have(3).items
+    stocks.size.should eq(3)
 
     stocks.find {|v| v.item_id === st_item_id}.minimum.should == 1
 
@@ -80,13 +80,13 @@ describe Inventories::In do
       ]
     ))
 
-    invin.create.should be_true
+    invin.create.should eq(true)
 
     inv = Inventory.find(invin.inventory.id)
-    inv.inventory_details.should have(1).items
+    inv.inventory_details.size.should eq(1)
 
     stocks = Stock.active.where(store_id: inv.store_id)
-    stocks.should have(1).item
+    stocks.size.should eq(1)
     stocks[0].quantity.should == 10
   end
 end

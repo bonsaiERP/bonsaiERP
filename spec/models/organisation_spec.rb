@@ -86,7 +86,7 @@ describe Organisation do
     Organisation.create!(name: 'tenant')
     d = 1.month.from_now
     org = Organisation.new(name: 'jejeje', due_on: d)
-    expect(org.save).to be_true
+    expect(org.save).to eq(true)
     expect(org.tenant).to eq('jejeje')
     expect(org.due_on).to eq(d.to_date)
   end
@@ -113,21 +113,21 @@ describe Organisation do
     it "creates a new organisation" do
       org = Organisation.new(org_params)
 
-      org.save.should be_true
+      org.save.should eq(true)
     end
 
     it "inventory_active" do
       org = Organisation.new(org_params)
 
-      org.save.should be_true
-      org.inventory_active.should be_true
+      org.save.should eq(true)
+      org.inventory_active.should eq(true)
       org.should be_persisted
 
       org.inventory_active = false
       org.attributes = {country_code: 'BO', currency: 'BOB'}
 
-      org.save.should be_true
-      org.inventory_active.should be_false
+      org.save.should eq(true)
+      org.inventory_active.should eq(false)
     end
 
   end

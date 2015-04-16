@@ -69,8 +69,8 @@ describe Expenses::Payment do
 
       p = Expenses::Payment.new(valid_attributes)
 
-      p.pay.should be_true
-      p.verification.should be_true
+      p.pay.should eq(true)
+      p.verification.should eq(true)
 
       # Expense
       p.expense.should be_is_a(Expense)
@@ -95,7 +95,7 @@ describe Expenses::Payment do
 
       # New payment to complete
       p = Expenses::Payment.new(valid_attributes.merge(amount: p.expense.balance))
-      p.pay.should be_true
+      p.pay.should eq(true)
 
       p.expense.balance.should == 0
       p.expense.should be_is_paid
@@ -105,9 +105,9 @@ describe Expenses::Payment do
       expense.should be_is_draft
       p = Expenses::Payment.new(valid_attributes)
 
-      p.verification.should be_true
+      p.verification.should eq(true)
 
-      p.pay.should be_true
+      p.pay.should eq(true)
 
       # ledger
       p.ledger.should be_is_a(AccountLedger)
@@ -126,7 +126,7 @@ describe Expenses::Payment do
 
         p = Expenses::Payment.new(valid_attributes.merge(account_to_id: 100, verification: true))
 
-        p.pay.should be_true
+        p.pay.should eq(true)
         p.should be_verification
         p.account_to_id.should eq(100)
         # Should not conciliate
@@ -135,7 +135,7 @@ describe Expenses::Payment do
         # When verification=false
         p = Expenses::Payment.new(valid_attributes.merge(account_to_id: 100, verification: false))
 
-        p.pay.should be_true
+        p.pay.should eq(true)
         # Should conciliate
         p.ledger.should be_is_approved
       end
@@ -149,13 +149,13 @@ describe Expenses::Payment do
 
         p = Expenses::Payment.new(valid_attributes.merge(account_to_id: 200, verification: true))
 
-        p.pay.should be_true
+        p.pay.should eq(true)
         p.ledger.should be_is_approved
 
         # verification=false
         p = Expenses::Payment.new(valid_attributes.merge(account_to_id: 200, verification: false))
 
-        p.pay.should be_true
+        p.pay.should eq(true)
 
         p.ledger.should be_is_approved
       end
@@ -205,7 +205,7 @@ describe Expenses::Payment do
 
       bal = expense.balance
       # Pay
-      ep.pay.should be_true
+      ep.pay.should eq(true)
       # Expense
       ep.expense.balance.should == bal - ep.amount
       # Expense
@@ -237,7 +237,7 @@ describe Expenses::Payment do
 
       ep = Expenses::Payment.new(payment_with_income_attributes.merge(amount: 100))
 
-      ep.pay.should be_true
+      ep.pay.should eq(true)
       # Expense
       ep.expense.balance.should == 0
       # Income
@@ -261,7 +261,7 @@ describe Expenses::Payment do
       ep = Expenses::Payment.new(payment_with_income_attributes.merge(amount: 10, exchange_rate: 7.0))
 
 
-      ep.pay.should be_true
+      ep.pay.should eq(true)
       # Expense
       ep.expense.balance.should == 100 - 7.0 * 10
       # Income
@@ -276,7 +276,7 @@ describe Expenses::Payment do
 
       ep = Expenses::Payment.new(payment_with_income_attributes.merge(amount: 10, exchange_rate: 7.0))
 
-      ep.pay.should be_true
+      ep.pay.should eq(true)
       # Expense
       ep.expense.balance.to_f.should == (100 - 1.0/7 * 10).round(2)
       # Income
@@ -298,7 +298,7 @@ describe Expenses::Payment do
 
       ep = Expenses::Payment.new(valid_attributes.merge(account_to_id: 101, exchange_rate: 7.001, amount: 10))
 
-      ep.pay.should be_true
+      ep.pay.should eq(true)
 
       ep.amount.should == 10
       # expense
@@ -318,7 +318,7 @@ describe Expenses::Payment do
 
       ep = Expenses::Payment.new(valid_attributes.merge(account_to_id: 103, exchange_rate: 7.001, amount: 200))
 
-      ep.pay.should be_true
+      ep.pay.should eq(true)
 
       ep.amount.should == 200
       # expense
@@ -335,7 +335,7 @@ describe Expenses::Payment do
     it "does not save if invalid Expenses::Payment" do
       Expense.any_instance.should_not_receive(:save)
       p = Expenses::Payment.new(valid_attributes.merge(reference: ''))
-      p.pay.should be_false
+      p.pay.should eq(false)
     end
 
     before(:each) do
@@ -348,7 +348,7 @@ describe Expenses::Payment do
     it "sets errors from other clases" do
       p = Expenses::Payment.new(valid_attributes)
 
-      p.pay.should be_false
+      p.pay.should eq(false)
       # There is no method Expenses::Payment#balance
       p.errors[:amount].should eq(['Not real'])
       # There is a method Expenses::Payment#amount
