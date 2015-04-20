@@ -22,11 +22,10 @@ describe UpdateDefaultPassword do
     user.stub(save: true)
     up = UpdateDefaultPassword.new(attributes)
 
-    up.update_password.should be_true
+    up.update_password.should eq(true)
 
     user.should be_valid_password('DEMO1234')
     user.should_not be_change_default_password
   end
 
 end
-

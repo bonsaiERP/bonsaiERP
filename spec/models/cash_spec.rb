@@ -35,7 +35,7 @@ describe Cash do
 
   it 'create an instance' do
     c = Cash.new(valid_attributes)
-    c.save.should be_true
+    c.save.should eq(true)
 
     valid_attributes.each do |k, v|
       c.send(k).should eq(v)
@@ -45,11 +45,11 @@ describe Cash do
   it 'allow updates' do
     # Does not allow the use of create or create! methods
     c = Cash.new(valid_attributes.merge(amount: 200))
-    c.save.should be_true
+    c.save.should eq(true)
 
     c.should be_persisted
 
-    c.update_attributes(address: 'Another address', email: 'caja1@mail.com').should be_true
+    c.update_attributes(address: 'Another address', email: 'caja1@mail.com').should eq(true)
 
     c = Cash.find(c.id)
 
@@ -57,5 +57,3 @@ describe Cash do
     c.email.should eq('caja1@mail.com')
   end
 end
-
-

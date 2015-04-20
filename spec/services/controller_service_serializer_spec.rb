@@ -29,7 +29,9 @@ describe ControllerServiceSerializer do
     contact.stub(destroyed?: true)
 
     css = ControllerServiceSerializer.new(contact)
-    json = css.to_json
-    json["destroyed?"].should be_true
+    json = JSON.parse(css.to_json)
+
+
+    json["destroyed?"].should eq(true)
   end
 end

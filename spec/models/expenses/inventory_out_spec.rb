@@ -85,12 +85,12 @@ describe Expenses::InventoryOut do
       exp.details[0].balance.should == 2
       exp.details[1].balance.should == 2
 
-      inv.details.should have(2).items
+      inv.details.size.should eq(2)
       inv.details.map(&:quantity).should eq([2, 2])
       inv.details.map(&:item_id).should eq([1, 2])
 
       stocks = Stock.active.where(store_id: inv.store_id)
-      stocks.should have(2).items
+      stocks.size.should eq(2)
       stocks.map(&:item_id).sort.should eq([1, 2])
       stocks.map(&:quantity).should eq([2, 3])
 
@@ -112,12 +112,12 @@ describe Expenses::InventoryOut do
       io.error_messages["quantity"].should eq(['inventory.negative_stock'])
       io.error_messages["item_ids"].should eq([1])
 
-      io.inventory_details.should have(2).items
+      io.inventory_details.size.should eq(2)
       io.inventory_details.map(&:quantity).should eq([3, 3])
       io.inventory_details.map(&:item_id).should eq([1, 2])
 
       stocks = Stock.active.where(store_id: io.store_id)
-      stocks.should have(2).items
+      stocks.size.should eq(2)
       stocks.map(&:item_id).sort.should eq([1, 2])
       stocks.map(&:quantity).should eq([-1, 0])
 

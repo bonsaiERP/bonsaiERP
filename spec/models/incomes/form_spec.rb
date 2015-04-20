@@ -36,8 +36,8 @@ describe Incomes::Form do
       subject.date.should be_is_a(Date)
       subject.due_date.should be_is_a(Date)
       subject.currency.should eq('BOB')
-      subject.direct_payment.should be_false
-      subject.income.income_details.should have(2).items
+      subject.direct_payment.should eq(false)
+      subject.income.income_details.size.should eq(2)
 
       subject.income.income_details[0].item_id.should eq(details[0][:item_id])
       subject.income.income_details[0].description.should eq(details[0][:description])
@@ -67,7 +67,7 @@ describe Incomes::Form do
       Accounts::Query.any_instance.stub_chain(:money, where: [( build :cash, id: 2 )])
 
       is = Incomes::Form.new_income(account_to_id: 2, direct_payment: "1")
-      is.details.should have(2).items
+      is.details.size.should eq(2)
       is.details.map(&:quantity).should eq([1,1])
     end
 
@@ -184,7 +184,7 @@ describe Incomes::Form do
       is.income.stub(valid?: false)
       is.details[0].errors.add(:quantity, "Error in quantity")
 
-      is.update.should be_false
+      is.update.should eq(false)
       is.income.details[0].errors[:quantity].should eq(["Error in quantity"])
     end
 
@@ -224,7 +224,7 @@ describe Incomes::Form do
 
       i = Income.find(incf.income.id)
 
-      i.details.should have(3).items
+      i.details.size.should eq(3)
 
       i.details.map(&:item_id).sort.should eq([1, 2, 100])
 
@@ -246,7 +246,7 @@ describe Incomes::Form do
       i.description.should eq('A new changed description')
       i.total.should == total_for_update
 
-      i.income_details.should have(2).items
+      i.income_details.size.should eq(2)
       i.income_details[0].quantity.should == 12
       i.income_details[1].quantity.should == 22
 
@@ -400,7 +400,7 @@ describe Incomes::Form do
   it "sets errors from income or ledger" do
     is = Incomes::Form.new_income(direct_payment: true)
 
-    is.create.should be_false
+    is.create.should eq(false)
     is.should_not be_direct_payment
     is.errors.messages[:contact_id].should_not be_blank
   end
@@ -431,7 +431,7 @@ describe Incomes::Form do
 
       is = Incomes::Form.find(is.income.id)
 
-      is.update({exchange_rate: 1, currency: 'BOB'}).should be_false
+      is.update({exchange_rate: 1, currency: 'BOB'}).should eq(false)
       is.errors[:currency].should eq([I18n.t('errors.messages.movement.currency_change')])
     end
 
@@ -465,7 +465,7 @@ describe Incomes::Form do
 
       tax.percentage.should == 10
       inc = ifrm.income
-      inc.tax_in_out.should be_false
+      inc.tax_in_out.should eq(false)
       inc.tax_percentage.should == 10
       inc.total.should == 550
     end
@@ -540,8 +540,8 @@ describe Incomes::Form do
 
       inc = Income.find(is.income.id)
       expect(inc.tag_ids).to eq(tag_ids)
-      puts inc.tag_ids
-      expect(inc.tag_ids).to have(2).item
+      
+      expect(inc.tag_ids.size).to eq(2)
     end
   end
 end

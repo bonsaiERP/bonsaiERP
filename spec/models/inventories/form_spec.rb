@@ -29,10 +29,10 @@ describe Inventories::Form do
 
     it "builds inventory_details" do
       subject.inventory_details.build
-      subject.inventory_details.should have(1).item
+      subject.inventory_details.size.should eq(1)
 
       subject.inventory_details.build
-      subject.inventory_details.should have(2).items
+      subject.inventory_details.size.should eq(2)
 
       subject.inventory.inventory_details.should eq(subject.inventory_details)
     end

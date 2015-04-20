@@ -82,7 +82,7 @@ describe Expenses::InventoryIn do
     Stock.any_instance.stub(item: item, store: store)
 
     invin = Expenses::InventoryIn.new(valid_attributes)
-    invin.details.should have(2).items
+    invin.details.size.should eq(2)
 
     invin.create.should eq(true)
     inv = Inventory.find(invin.inventory.id)
@@ -99,12 +99,12 @@ describe Expenses::InventoryIn do
     exp.details[0].balance.should == 3
     exp.details[1].balance.should == 3
 
-    inv.details.should have(2).items
+    inv.details.size.should eq(2)
     inv.details.map(&:quantity).should eq([2, 2])
     inv.details.map(&:item_id).should eq([1, 2])
 
     stocks = Stock.active.where(store_id: inv.store_id)
-    stocks.should have(2).items
+    stocks.size.should eq(2)
     stocks.map(&:item_id).sort.should eq([1, 2])
     stocks.map(&:quantity).should eq([2, 2])
 
@@ -124,12 +124,12 @@ describe Expenses::InventoryIn do
     io = Inventory.find(invin.inventory.id)
     io.account_id.should be(expense.id)
     io.contact_id.should be(expense.contact_id)
-    io.inventory_details.should have(2).items
+    io.inventory_details.size.should eq(2)
     io.inventory_details.map(&:quantity).should eq([3, 3])
     io.inventory_details.map(&:item_id).should eq([1, 2])
 
     stocks = Stock.active.where(store_id: io.store_id)
-    stocks.should have(2).items
+    stocks.size.should eq(2)
     stocks.map(&:item_id).sort.should eq([1, 2])
     stocks.map(&:quantity).should eq([5, 5])
 

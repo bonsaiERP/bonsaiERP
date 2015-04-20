@@ -20,7 +20,7 @@ describe Expenses::BatchPayment do
     expect(e2.total).to eq(100)
 
     b_pay = Expenses::BatchPayment.new(ids: [e1.id, e2.id], account_to_id: cash.id)
-    expect(b_pay.expenses).to have(2).items
+    expect(b_pay.expenses.size).to eq(2)
 
 
     b_pay.make_payments
@@ -49,7 +49,7 @@ describe Expenses::BatchPayment do
 
     b_pay.make_payments
 
-    expect(b_pay.errors).to have(1).item
+    expect(b_pay.errors.size).to eq(1)
     expect(b_pay.errors).to eq([I18n.t('errors.messages.expenses.batch_payment.problem', name: e1.name)])
 
     e1.balance = '100'
@@ -59,7 +59,7 @@ describe Expenses::BatchPayment do
     b_pay = Expenses::BatchPayment.new(ids: [e1.id], account_to_id: cash.id)
     b_pay.make_payments
 
-    expect(b_pay.errors).to have(1).item
+    expect(b_pay.errors.size).to eq(1)
     expect(b_pay.errors).to eq([I18n.t('errors.messages.expenses.batch_payment.problem', name: e1.name)])
   end
 end

@@ -167,7 +167,7 @@ describe Incomes::Devolution do
     #  dev = Incomes::Devolution.new(valid_attributes)
 
 
-    #  dev.pay_back.should be_false
+    #  dev.pay_back.should eq(false)
     #  # There is no method Incomes::Devolution#balance
     #  dev.errors[:amount].should eq(['Not real'])
     #  # There is a method Incomes::Devolution#amount

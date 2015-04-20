@@ -55,26 +55,26 @@ describe Devolution do
   it "initializes verification false" do
     dev = Devolution.new
 
-    dev.verification.should be_false
+    dev.verification.should eq(false)
     dev.amount.should == 0
     dev.exchange_rate == 1
   end
 
   it "initalizes verfication" do
     dev = Devolution.new(verification: "jajaja")
-    dev.verification.should be_false
+    dev.verification.should eq(false)
 
     dev = Devolution.new(verification: "11")
-    dev.verification.should be_false
+    dev.verification.should eq(false)
 
     dev = Devolution.new(verification: "01")
-    dev.verification.should be_false
+    dev.verification.should eq(false)
 
     dev = Devolution.new(verification: "1")
-    dev.verification.should be_true
+    dev.verification.should eq(true)
 
     dev = Devolution.new(verification: "true")
-    dev.verification.should_not be_false
+    dev.verification.should_not eq(false)
   end
 
   it "does not have interest" do

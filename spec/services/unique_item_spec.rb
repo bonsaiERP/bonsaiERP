@@ -8,7 +8,7 @@ describe UniqueItem do
     income.income_details.build(item_id: 2, quantity: 2)
 
     UniqueItem.new(income).should be_valid
-    income.details.should have(2).items
+    income.details.size.should eq(2)
   end
 
   it "#valid false" do

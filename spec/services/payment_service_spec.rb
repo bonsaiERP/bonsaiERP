@@ -105,26 +105,26 @@ describe PaymentService do
     it "initializes verification false" do
       p = PaymentService.new
 
-      p.verification.should be_false
+      p.verification.should eq(false)
       p.amount.should == 0
       p.exchange_rate == 1
     end
 
     it "initalizes verfication" do
       p = PaymentService.new(verification: "jajaja")
-      p.verification.should be_false
+      p.verification.should eq(false)
 
       p = PaymentService.new(verification: "11")
-      p.verification.should be_false
+      p.verification.should eq(false)
 
       p = PaymentService.new(verification: "01")
-      p.verification.should be_false
+      p.verification.should eq(false)
 
       p = PaymentService.new(verification: "1")
-      p.verification.should be_true
+      p.verification.should eq(true)
 
       p = PaymentService.new(verification: "true")
-      p.verification.should_not be_false
+      p.verification.should_not eq(false)
     end
   end
 

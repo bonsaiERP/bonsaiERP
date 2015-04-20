@@ -27,13 +27,13 @@ describe AdminUser do
 
     au = AdminUser.new(attributes)
 
-    au.create.should be_true
+    au.create.should eq(true)
     au.user.should be_persisted
     attributes.except(:organisation, :role).each do |k, v|
       au.user.send(k).should eq(v)
     end
 
-    expect(ActionMailer::Base.deliveries).to have(1).item
+    expect(ActionMailer::Base.deliveries.size).to eq(1)
 
     link = au.user.active_links.first
     link.should be_persisted
@@ -43,7 +43,7 @@ describe AdminUser do
 
     # Invalid user, repeated email
     au = AdminUser.new(attributes)
-    au.create.should be_false
+    au.create.should eq(false)
     au.errors.messages[:email].should eq([I18n.t('errors.messages.email_taken')])
   end
 
@@ -53,7 +53,7 @@ describe AdminUser do
 
     expect(ActionMailer::Base.deliveries).to be_empty
 
-    au.create.should be_true
+    au.create.should eq(true)
     user = au.user
     link = au.link
 
@@ -61,10 +61,10 @@ describe AdminUser do
     au.user.should eq(user)
     au.link.should eq(link)
 
-    au.update(attributes.merge(email: 'otheremail@mail.com', role: 'other')).should be_true
+    au.update(attributes.merge(email: 'otheremail@mail.com', role: 'other')).should eq(true)
 
 
-    expect(ActionMailer::Base.deliveries).to have(1).item
+    expect(ActionMailer::Base.deliveries.size).to eq(1)
 
     au.user.email.should eq('otheremail@mail.com')
     au.user.should_not be_changed
