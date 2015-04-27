@@ -1,31 +1,32 @@
 # *bonsaiERP*
 
-*bonsaiERP* es un ERP simple escrito con [Ruby on Rails](http://rubyonrails.org), incluye los siguientes módulos:
+*bonsaiERP* is a simple ERP system written with [Ruby on Rails](http://rubyonrails.org), and includes the following modules:
 
-- Ventas
-- Compras
-- Gastos
-- Cuentas
-- Inventarios
-- Manejo de archivos (en desarrollo)
+- Sales
+- Buys
+- Expenses
+- Bank and Cash Accounts
+- Inventory
+- File management (in development)
 
-El sistema permite utilizar multiples monedas
+The system allows to use multiple currencies and make exchange rates.
 
-## Instalación
+## Installation
 
-### Instalar todos los requisitos
+### bonsaiERP requires
 
-- Ruby 2.2.1
-- Instalar PostgreSQL 9.4 y postgresql-contrib para habilitar Hstore
-- Nodejs para compilar los assets
-- Instalar imagemagick
+- Ruby 2.2.2
+- PostgreSQL 9.4 and postgresql-contrib to enable **hstore**
+- Nodejs for compiling assets
+- imagemagick
 
-### Instalar *bonsaiERP*
+### Installing *bonsaiERP*
 
 
 
-### Sobre los archivos adjuntos (UPLOADS)
+### Attached files (UPLOADS)
 
-*bonsaiERP* usa la gema dragonfly para poder realizar subida de archivos al servidor, es posible configurar donde iran los archivos en:
+*bonsaiERP* uses dragonfly gem to manage file uploads, you can set where
+the files will go setting:
 
 `config/initialiazers/dragonfly.rb`
