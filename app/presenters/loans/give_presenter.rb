@@ -29,6 +29,10 @@ class Loans::GivePresenter < BasePresenter
     end
   end
 
+  def ledger_ins_title
+    I18n.t('loans.give.ledger_ins_title')
+  end
+
   def payments
     to_model.payments
     .includes(:account, :account_to)
@@ -62,4 +66,3 @@ class Loans::GivePresenter < BasePresenter
   end
 
 end
-

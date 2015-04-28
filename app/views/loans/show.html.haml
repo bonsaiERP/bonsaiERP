@@ -67,9 +67,10 @@
 
 .row-fluid
   .span6
-    %h3.n Transacción de creación
+    %h3.n= @loan.ledger_ins_title
     %ul.unstyled
-      = render 'account_ledgers/movement', ledger: present(@loan.ledger_in), current_account_id: @loan.id
+      = render partial: 'account_ledgers/movement', collection: present(@loan.ledger_ins), as: :ledger,
+        locals: { current_account_id: @loan.id }
 
 
 .row-fluid
