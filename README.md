@@ -1,6 +1,6 @@
 # *bonsaiERP*
 
-*bonsaiERP* is a simple ERP multitenant system written with [Ruby on Rails](http://rubyonrails.org), and includes the following modules:
+*bonsaiERP* is a simple ERP multitenant system written with [Ruby on Rails](http://rubyonrails.org) and includes the following modules:
 
 - Sales
 - Buys

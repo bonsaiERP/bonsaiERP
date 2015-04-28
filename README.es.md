@@ -1,7 +1,7 @@
 
 # *bonsaiERP*
 
-*bonsaiERP* es un ERP simple escrito con [Ruby on Rails](http://rubyonrails.org), incluye los siguientes módulos:
+*bonsaiERP* es un ERP simple multiempresa escrito con [Ruby on Rails](http://rubyonrails.org) que incluye los siguientes módulos:
 
 - Ventas
 - Compras
