@@ -1,3 +1,4 @@
+[![Code Climate](https://codeclimate.com/github/boriscy/bonsaiERP/badges/gpa.svg)](https://codeclimate.com/github/boriscy/bonsaiERP)
 
 # *bonsaiERP*
 
