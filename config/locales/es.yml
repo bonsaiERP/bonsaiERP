@@ -465,8 +465,18 @@ es:
   history:
     new_record: Creado por %{user}
 
-  loans:
-    receive:
-      ledger_ins_title: "Ingreso de prestamos"
-    give:
-      ledger_ins_title: "Egreso de prestamos"
+  controllers:
+    loans:
+      index:
+        all: "Todos"
+        given: "Otorgados"
+        received: "Recibidos"
+        search_placeholder: "Buscar por contacto o referencia"
+        search_button: "Buscar"
+
+  presenters:
+    loans:
+      receive:
+        ledger_ins_title: "Ingreso de prestamos"
+      give:
+        ledger_ins_title: "Egreso de prestamos"

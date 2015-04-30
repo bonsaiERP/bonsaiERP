@@ -30,7 +30,7 @@ class Loans::GivePresenter < BasePresenter
   end
 
   def ledger_ins_title
-    I18n.t('loans.give.ledger_ins_title')
+    I18n.t('presenters.loans.give.ledger_ins_title')
   end
 
   def payments
