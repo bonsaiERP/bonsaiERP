@@ -17,6 +17,10 @@ class Loans::GivePresenter < BasePresenter
     end
   end
 
+  def new_ledger_in
+    @_new_ledger_in ||= LoanLedgerInForm.new(loan_id: to_model.id)
+  end
+
   def payment_path
     template.new_charge_loan_payment_path(id)
   end
