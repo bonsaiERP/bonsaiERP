@@ -2,6 +2,8 @@ class LoanLedgerInForm < BaseForm
   attribute :loan_id, Integer
   attribute :account_to_id, Integer
   attribute :amount, BigDecimal
+  attribute :reference, String
+  attribute :date, Date
 
   validates :account_to, presence: true
   validates :amount, numericality: {greater_than: 0}
@@ -11,12 +13,14 @@ class LoanLedgerInForm < BaseForm
     @_loan ||= Loan.find(loan_id)
   end
 
-  def save_ledger_in
+  def create
     return false  unless valid?
 
     loan.class.transaction do
-      ledger_in
+      loan.amount += amount
+      ledger_in.save
 
+      loan.save && ledger_in.save_ledger
     end
   end
 
@@ -24,7 +28,10 @@ class LoanLedgerInForm < BaseForm
     @_ledger_in ||= loan.ledger_ins.build(
       account_id: loan.id,
       account_to_id: account_to_id,
-      amount: get_amount
+      amount: get_amount,
+      reference: reference,
+      date: date,
+      contact_id: loan.contact_id
     )
   end
 
