@@ -114,7 +114,8 @@ module Controllers::Authorization
         movement_details_history: true,
         tag_groups: true,
         batch_payments: true,
-        attachments: true
+        attachments: true,
+        loan_ledger_ins: true
       }
     end
 
@@ -162,7 +163,8 @@ module Controllers::Authorization
         movement_details_history: true,
         tag_groups: true,
         batch_payments: true,
-        attachments: true
+        attachments: true,
+        loan_ledger_ins: false
       }
     end
 
@@ -211,7 +213,8 @@ module Controllers::Authorization
         movement_details_history: true,
         tag_groups: true,
         batch_payments: true,
-        attachments: true
+        attachments: true,
+        loan_ledger_ins: true
       }
     end
 
@@ -248,7 +251,8 @@ module Controllers::Authorization
         loans: false,
         loan_payments: false,
         movement_details_history: true,
-        attachments: { create: true, destroy: false }
+        attachments: { create: true, destroy: false },
+        loan_ledger_ins: false
       }
     end
 end

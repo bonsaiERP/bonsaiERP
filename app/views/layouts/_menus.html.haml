@@ -40,7 +40,9 @@
             = link_to "Nuevo contacto", new_contact_path
           -#%li.divider
           %li
-            = link_to "Prestamos", loans_path, id: 'last-nav'
+            = link_to loans_path, id: 'last-nav' do
+              %i.icon-folder-open
+              Prestamos
           %li
             = link_to tag_groups_path do
               %i.icon-tags

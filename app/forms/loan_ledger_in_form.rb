@@ -4,6 +4,8 @@ class LoanLedgerInForm < BaseForm
   attribute :amount, BigDecimal
   attribute :reference, String
   attribute :date, Date
+  attribute :exchange_rate, Decimal
+  attribute :verification, Boolean, default: false
 
   validates :account_to, presence: true
   validates :amount, numericality: {greater_than: 0}

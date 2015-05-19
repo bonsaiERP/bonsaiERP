@@ -51,6 +51,6 @@ RSpec.configure do |config|
   end
 
   config.include FactoryGirl::Syntax::Methods
-
   config.include Request::JsonHelpers, type: :controller
+  config.include AuthMacros, type: :controller
 end
