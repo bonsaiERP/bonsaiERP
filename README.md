@@ -23,6 +23,7 @@ The system allows to use multiple currencies and make exchange rates.
 - PostgreSQL 9.4 and postgresql-contrib to enable **hstore**
 - Nodejs for compiling assets
 - imagemagick
+- phantomjs
 
 ### Installing *bonsaiERP*
 

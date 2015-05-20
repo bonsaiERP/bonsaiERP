@@ -6,7 +6,7 @@ class IncomesController < ApplicationController
   include Controllers::Print
 
   #respond_to :html, :js, :pdf
-  before_filter :set_income, only: [:approve, :null, :inventory, :destroy]
+  before_action :set_income, only: [:approve, :null, :inventory, :destroy]
 
   # GET /incomes
   def index
