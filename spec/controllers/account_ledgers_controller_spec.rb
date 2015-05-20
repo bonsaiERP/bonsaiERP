@@ -1,18 +1,22 @@
 require 'spec_helper'
 
 describe AccountLedgersController do
+  let(:user) { build :user, id: 10}
+
   before(:each) do
     stub_auth
+    controller.stub(current_tenant: 'public')
+    UserSession.user = user
   end
 
   describe 'GET /' do
 
     it "Ok" do
-      AccountLedger.should be_respond_to(:pendent)
-      AccountLedger.should_receive(:pendent).and_return([])
+      #AccountLedger.should be_respond_to(:pendent)
+      #AccountLedger.should_receive(:pendent).and_return([])
       get :index
 
-      response.should be_ok
+      expect(response.ok?).to eq(true)
     end
   end
 
@@ -21,8 +25,8 @@ describe AccountLedgersController do
       AccountLedger.stub(find: (build :account_ledger, id: 1))
 
       get :show, id: 1
-      response.should render_template('account_ledgers/show')
-      assigns(:ledger).should be_is_a(AccountLedgerPresenter)
+      response.should render_template(:show)
+      expect(assigns(:ledger).class).to eq(AccountLedgerPresenter)
     end
   end
 
@@ -37,8 +41,8 @@ describe AccountLedgersController do
 
       patch :conciliate, id: 1
 
-      response.should redirect_to(account_ledger_path(1))
-      flash[:notice].should be_present
+      response.should redirect_to(controller.account_ledger_path(1))
+      expect(controller.flash[:notice].present?).to eq(true)
     end
 
     it '#conciliate error' do
@@ -46,8 +50,8 @@ describe AccountLedgersController do
 
       patch :conciliate, id: 1
 
-      response.should redirect_to(account_ledger_path(1))
-      flash[:error].should be_present
+      response.should redirect_to(controller.account_ledger_path(1))
+      expect(flash[:error].present?).to eq(true)
     end
   end
 
@@ -62,8 +66,8 @@ describe AccountLedgersController do
 
       patch :null, id: 1
 
-      response.should redirect_to(account_ledger_path(1))
-      flash[:notice].should be_present
+      response.should redirect_to(controller.account_ledger_path(1))
+      expect(controller.flash[:notice].present?).to eq(true)
     end
 
     it '#conciliate error' do
@@ -71,8 +75,8 @@ describe AccountLedgersController do
 
       patch :null, id: 1
 
-      response.should redirect_to(account_ledger_path(1))
-      flash[:error].should be_present
+      response.should redirect_to(controller.account_ledger_path(1))
+      expect(flash[:error].present?).to eq(true)
     end
   end
 end
