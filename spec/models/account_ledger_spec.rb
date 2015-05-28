@@ -43,8 +43,8 @@ describe AccountLedger do
     it "does not allow the same account" do
       subject.account_to_id = account.id
 
-      subject.should_not be_valid
-      subject.errors_on(:account_to_id).should_not be_empty
+      expect(subject.valid?).to eq(false)
+      expect(subject.errors[:account_to_id].present?).to eq(true)
     end
   end
 

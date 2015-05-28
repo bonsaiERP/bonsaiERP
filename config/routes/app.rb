@@ -35,6 +35,7 @@ resources :loans, only: [:index, :show, :update] do
   end
 end
 
+# Loans ledger_in
 get 'loan_ledger_ins/:id/new_give' => 'loan_ledger_ins#new_give', as: :new_give_loan_ledger_in
 patch 'loan_ledger_ins/:id/give' => 'loan_ledger_ins#give', as: :give_loan_ledger_in
 get 'loan_ledger_ins/:id/new_receive' => 'loan_ledger_ins#new_receive', as: :new_receive_loan_ledger_in

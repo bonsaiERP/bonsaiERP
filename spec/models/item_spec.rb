@@ -35,12 +35,12 @@ describe Item do
 
   it "#valid_price" do
     i = Item.new(valid_attributes)
-    i.should be_valid
+    expect(i.valid?).to eq(true)
     i.should be_for_sale
     i.price = - 1.0
 
-    i.should_not be_valid
-    i.errors_on(:price).should_not be_blank
+    expect(i.valid?).to eq(false)
+    expect(i.errors[:price].present?).to eq(true)
   end
 
   it "#to_s" do
@@ -53,21 +53,21 @@ describe Item do
 
   it "uniqueness_of_code" do
     i = Item.create!(valid_attributes)
-    i.should be_persisted
+    expect(i.persisted?).to eq(true)
 
     i = Item.new(valid_attributes)
-    i.should_not be_valid
-    i.errors_on(:code).should_not be_blank
-    i.errors_on(:code).should eq([I18n.t('activerecord.errors.models.item.attributes.code.taken')])
+    expect(i.valid?).to eq(false)
+    expect(i.errors[:code].present?).to eq(true)
+    expect(i.errors[:code]).to eq([I18n.t('activerecord.errors.models.item.attributes.code.taken')])
 
     # Name
     i = Item.new(valid_attributes.merge(code: ''))
     i.should_not be_valid
-    i.errors_on(:name).should eq([I18n.t('activerecord.errors.models.item.attributes.name.taken')])
+    expect(i.errors[:name]).to eq([I18n.t('activerecord.errors.models.item.attributes.name.taken')])
 
     # Code
     i = Item.new(valid_attributes.merge(code: '', name: 'Another name'))
-    i.should be_valid
+    expect(i.valid?).to eq(true)
   end
 
   it "creates an instance with default values" do

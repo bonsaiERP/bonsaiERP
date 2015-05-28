@@ -2,7 +2,7 @@
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
-require 'rspec/autorun'
+#require 'rspec/autorun'
 
 require 'shoulda/matchers'
 
@@ -30,6 +30,8 @@ RSpec.configure do |config|
   config.mock_with :rspec do |c|
     c.syntax = [:should, :expect]
   end
+
+  config.expect_with(:rspec) { |c| c.syntax = [:should, :expect] }
 
   config.infer_spec_type_from_file_location!
 

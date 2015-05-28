@@ -108,7 +108,7 @@ describe Movement do
     i = Income.new date: today, due_date: today - 1.day
 
     i.should_not be_valid
-    i.errors_on(:due_date).should eq([I18n.t('errors.messages.movement.greater_due_date')])
+    expect(i.errors[:due_date]).to eq([I18n.t('errors.messages.movement.greater_due_date')])
   end
 
   context 'change currency' do

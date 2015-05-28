@@ -41,13 +41,13 @@ describe Expenses::Devolution do
   context 'Validations' do
     it "validates presence of expense" do
       exp_dev = Expenses::Devolution.new(valid_attributes.merge(expense_id: nil))
-      exp_dev.should_not be_valid
-      exp_dev.errors_on(:expense).should_not be_empty
+      expect(exp_dev.valid?).to eq(false)
+      expect(exp_dev.errors[:expense].present?).to eq(true)
 
       Expense.stub_chain(:active, where: [expense])
-      exp_dev.should_not be_valid
+      expect(exp_dev.valid?).to eq(false)
 
-      exp_dev.errors_on(:expense).should be_blank
+      expect(exp_dev.errors[:expense].blank?).to eq(true)
     end
 
     it "does not allow amount greater than total" do
@@ -57,10 +57,10 @@ describe Expenses::Devolution do
       Account.stub(where: [account_to])
 
       exp_dev.should_not be_valid
-      exp_dev.errors_on(:amount).should_not be_empty
+      expect(exp_dev.errors[:amount].present?).to eq(true)
 
       exp_dev.amount = 100
-      exp_dev.should be_valid
+      expect(exp_dev.valid?).to eq(true)
     end
   end
 
@@ -174,4 +174,3 @@ describe Expenses::Devolution do
     #end
   end
 end
-

@@ -69,4 +69,12 @@ class Loans::GivePresenter < BasePresenter
     end
   end
 
+  def new_ledger_in_path
+    context.new_give_loan_ledger_in(id)
+  end
+
+  def ledger_in_path
+    context.give_loan_ledger_in(id)
+  end
+
 end

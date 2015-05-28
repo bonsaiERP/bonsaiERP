@@ -64,4 +64,13 @@ class Loans::ReceivePresenter < BasePresenter
      "#{icon('icon-minus-sign')} Pagar intereses".html_safe
     end
   end
+
+  def new_ledger_in_path
+    context.new_receive_loan_ledger_in(id)
+  end
+
+  def ledger_in_path
+    context.receive_loan_ledger_in(id)
+  end
+
 end

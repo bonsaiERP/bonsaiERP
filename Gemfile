@@ -28,7 +28,7 @@ gem 'hstore_accessor'
 gem 'dragonfly'
 gem 'dragonfly-s3_data_store'
 
-gem 'responders'
+gem 'responders' # TODO check if this gem is used
 
 group :production do
   gem 'newrelic_rpm'
@@ -45,16 +45,15 @@ group :development do
   gem 'bullet'
 
   gem 'capistrano'#, '~> 3.2.0'
-  gem 'capistrano-rails', '~> 1.1'
+  gem 'capistrano-rails'#, '~> 1.1'
   gem 'capistrano-bundler'
   gem 'capistrano-rvm'
-  # gem 'guard-livereload', require: false
 end
 
 group :development, :test do
   gem 'puma'# Web server
   gem 'spring-commands-rspec'
-  gem 'rspec-rails', '2.99.0'
+  gem 'rspec-rails'#, '2.99.0'
   gem 'ffaker'
   #gem 'pry-remote' # Work binding.pry_remote with Foreman, just call pry-remote in the terminal
   gem 'pry'#, '0.9.11.3'# 0.9.11.4 gives error

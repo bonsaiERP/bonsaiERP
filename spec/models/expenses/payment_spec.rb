@@ -34,11 +34,11 @@ describe Expenses::Payment do
     it "validates presence of expense" do
       pay_out = Expenses::Payment.new(valid_attributes)
       pay_out.should_not be_valid
-      pay_out.errors_on(:expense).should_not be_empty
+      expect(pay_out.errors[:expense].present?).to eq(true)
 
       Expense.stub(find_by_id: expense)
       Account.stub(find_by_id: account_to)
-      pay_out.should be_valid
+      expect(pay_out.valid?).to eq(true)
     end
 
     it "does not allow amount greater than balance" do
@@ -47,11 +47,11 @@ describe Expenses::Payment do
       Expense.stub(find_by_id: expense)
       Account.stub(find_by_id: account_to)
 
-      pay_out.should_not be_valid
-      pay_out.errors_on(:amount).should_not be_empty
+      expect(pay_out.valid?).to eq(false)
+      expect(pay_out.errors[:amount].present?).to eq(true)
 
       pay_out.amount = 100
-      pay_out.should be_valid
+      expect(pay_out.valid?).to eq(true)
     end
   end
 
@@ -184,13 +184,13 @@ describe Expenses::Payment do
       income.balance = 20
       ep = Expenses::Payment.new(payment_with_income_attributes)
 
-      ep.should_not be_valid
+      expect(ep.valid?).to eq(false)
 
-      ep.errors_on(:amount).should eq([I18n.t('errors.messages.payment.income_balance')])
+      expect(ep.errors[:amount]).to eq([I18n.t('errors.messages.payment.income_balance')])
 
       income.balance = 100
 
-      ep.should be_valid
+      expect(ep.valid?).to eq(true)
     end
 
     it "updates the related Income account" do
@@ -221,7 +221,7 @@ describe Expenses::Payment do
 
       ep.should_not be_valid
 
-      ep.errors_on(:account_to_id).should eq([I18n.t('errors.messages.payment.invalid_income_state')])
+      expect(ep.errors[:account_to_id]).to eq([I18n.t('errors.messages.payment.invalid_income_state')])
     end
 
     it "sets the state for the income" do

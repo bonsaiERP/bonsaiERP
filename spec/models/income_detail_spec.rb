@@ -16,8 +16,8 @@ describe IncomeDetail do
       id = IncomeDetail.new(item_id: item.id, price: 10, quantity: 1, account_id: 1)
       id.stub(item: item, income: income)
 
-      id.should be_valid
-      id.errors_on(:item_id).should be_empty
+      expect(id.valid?).to eq(true)
+      expect(id.errors[:item_id].blank?).to eq(true)
     end
 
 
@@ -26,8 +26,8 @@ describe IncomeDetail do
       id = IncomeDetail.new(item_id: item.id, price: 10, quantity: 1,  account_id: 1)
       id.stub(item: item, income: income)
 
-      id.should_not be_valid
-      id.errors_on(:item_id).should_not be_empty
+      expect(id.valid?).to eq(false)
+      expect(id.errors[:item_id].blank?).to eq(false)
     end
 
     it "whe income_detail.item_id doesn't change but item.for_sale = false" do

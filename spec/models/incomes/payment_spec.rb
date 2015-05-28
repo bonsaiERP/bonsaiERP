@@ -35,7 +35,7 @@ describe Incomes::Payment do
     it "validates presence of income" do
       pay_in = Incomes::Payment.new(valid_attributes)
       pay_in.should_not be_valid
-      pay_in.errors_on(:income).should_not be_empty
+      expect(pay_in.errors[:income].present?).to eq(true)
 
       Income.stub(find_by_id: income)
       Account.stub(find_by_id: account_to)
@@ -208,13 +208,13 @@ describe Incomes::Payment do
       expense.balance = 20
       ip = Incomes::Payment.new(payment_with_expense_attributes)
 
-      ip.should_not be_valid
+      expect(ip.valid?).to eq(false)
 
-      ip.errors_on(:amount).should eq([I18n.t('errors.messages.payment.expense_balance')])
+      expect(ip.errors[:amount]).to eq([I18n.t('errors.messages.payment.expense_balance')])
 
       expense.balance = 100
 
-      ip.should be_valid
+      expect(ip.valid?).to eq(true)
     end
 
     it "updates the related Expense account" do
@@ -243,9 +243,9 @@ describe Incomes::Payment do
 
       ip = Incomes::Payment.new(payment_with_expense_attributes)
 
-      ip.should_not be_valid
+      expect(ip.valid?).to eq(false)
 
-      ip.errors_on(:account_to_id).should eq([I18n.t('errors.messages.payment.invalid_expense_state')])
+      expect(ip.errors[:account_to_id]).to eq([I18n.t('errors.messages.payment.invalid_expense_state')])
     end
 
     it "sets the state for the expense" do

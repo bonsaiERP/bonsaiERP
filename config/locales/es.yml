@@ -464,7 +464,8 @@ es:
         list: "Debe seleccionar otro valor"
   history:
     new_record: Creado por %{user}
-
+  ################################################################
+  # Controllers
   controllers:
     loans:
       index:
@@ -473,6 +474,8 @@ es:
         received: "Recibidos"
         search_placeholder: "Buscar por contacto o referencia"
         search_button: "Buscar"
+      show:
+        ledger_in_button: "Aumentar prestamo"
 
   presenters:
     loans:
