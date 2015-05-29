@@ -146,7 +146,7 @@ $( ->
   ##########################################
   # Datepicker for simple_form
   setDatepicker = ->
-    $(this).find('div.datepicker:not(.hasDatepicker)').each (i, el) ->
+    $(this).find('div.datepicker:not(.hasDatepicker), span.datepicker:not(.hasDatepicker)').each (i, el) ->
       $this = $(el)
       $this.addClass 'hasDatepicker'
       $hidden = $this.find '[type=hidden]'
@@ -162,9 +162,7 @@ $( ->
       $picker.datepicker
         yearRange: '1900:'
         showOn: 'both'
-        #buttonImageOnly: true
         buttonText: ''
-        #buttonImage: '/assets/bicon/date.png'
         altFormat: 'yy-mm-dd'
         altField: $hidden.get(0)
 

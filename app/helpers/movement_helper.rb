@@ -13,6 +13,10 @@ module MovementHelper
     end
   end
 
+  def state_search_options(sel = nil)
+    options_for_select(t('movement.states').map { |key, val| [val, key] }, sel)
+  end
+
   def get_expense_url(exp_serv)
     if exp_serv.expense_id
       expense_path(exp_serv.expense_id)

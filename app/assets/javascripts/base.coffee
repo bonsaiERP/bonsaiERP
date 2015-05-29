@@ -31,7 +31,7 @@ init = ($) ->
   }
   $.datepicker.setDefaults($.datepicker.regional['es'])
 
-  # Effect fro dropdown
+  # Effect for dropdown
   initjDropDown = ->
     $(this).find('li').bind 'mouseover mouseout', (event)->
       if event.type == 'mouseover'
@@ -62,7 +62,8 @@ init = ($) ->
     params.width = getWidth(params['width'] || 800)
 
     params = _.extend({
-      'id': new Date().getTime(), 'title': '', 'modal': true, 'resizable' : false, 'position': 'top', dialogClass: 'normal-dialog'
+      id: new Date().getTime(), title: '', modal: true,
+      resizable: false, position: 'top', dialogClass: 'normal-dialog'
     }, params)
 
     html = params['html'] || AjaxLoadingHTML()
@@ -98,11 +99,11 @@ init = ($) ->
       url = $(this).attr('href')
       el = this
       $.ajax(
-        'url': url
-        'type': 'delete'
-        'context': el
-        'data': {'authenticity_token': csrf_token }
-        'success': (resp, status, xhr)->
+        url: url
+        type: 'delete'
+        context: el
+        data: {'authenticity_token': csrf_token }
+        success: (resp, status, xhr)->
           if typeof resp == "object"
             if resp['destroyed?'] or resp.success
               $(el).parents("tr:first, li:first").remove()
@@ -135,11 +136,13 @@ init = ($) ->
     unless confirm(txt)
       false
     else
-      html = "<input type='hidden' name='utf-8' value='&#x2713;' />"
-      html += "<input type='hidden' name='authenticity_token' value='#{csrf_token}' />"
-      html += "<input type='hidden' name='_method' value='delete' />"
+      html = """
+      <input type='hidden' name='utf-8' value='&#x2713;' />
+      <input type='hidden' name='authenticity_token' value='#{csrf_token}' />
+      <input type='hidden' name='_method' value='delete' />
+      """
 
-      form = $('<form/>').attr({'method': 'post', 'action': $(this).attr('href') })
+      form = $('<form/>').attr({method: 'post', action: $(this).attr('href') })
       .html(html).appendTo('body').submit()
 
       false
@@ -152,7 +155,7 @@ init = ($) ->
     self = selector or this
     val = val or 0
     velocity = velocity or 50
-    $(self).css({'background': 'rgb(255,255,'+val+')'})
+    $(self).css({background: 'rgb(255,255,'+val+')'})
     if(val >= 255)
       $(self).attr("style", "")
       return false
@@ -190,7 +193,8 @@ init = ($) ->
   activeTab = (sel) ->
     sel = sel || '#cont'
     if window.location.hash
-      $(cont).find('ul.nav > li > a[href="' + window.location.hash + '"]').tab('show')
+      sel = "ul.nav > li > a[href='#{window.location.hash}']"
+      $(cont).find(sel).tab('show')
     else
       $(cont).find('ul.nav > li > a:first').tab('show')
 
@@ -223,7 +227,6 @@ init = ($) ->
   createErrorLog = (data) ->
     unless $('#error-log').length > 0
       $('<div id="error-log" style="background: #FFF"></div>')
-      #.html("<iframe id='error-iframe' width='100%' height='100%'><body></body></iframe>")
       .dialog({title: 'Error', width: 900, height: 500})
 
     $('#error-log').html(data).dialog("open")

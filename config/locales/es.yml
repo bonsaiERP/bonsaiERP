@@ -358,6 +358,7 @@ es:
     edit: 'Editar'
     delete: 'Borrar'
     show: 'Ver'
+    search: "Buscar"
 
   email:
     invoice_title: "Nota de venta "
@@ -388,6 +389,8 @@ es:
       paid: Pagado
       nulled: Anulado
       due: Atrasado
+      error: Error
+
 
   ########################################
   # Translations for history
@@ -422,9 +425,6 @@ es:
     payment:
       reference: "Cobro ingreso %{income}"
 
-  incomes:
-    batch_payment:
-      reference: 'Cobro ingreso %{name}'
   expense:
     account_ledger_reference: "Gasto"
     payment:
@@ -467,6 +467,20 @@ es:
   ################################################################
   # Controllers
   controllers:
+    expenses:
+      index:
+        search:
+          contact_expense: "Buscar por contacto o egreso"
+          date_start: "Fecha inicio"
+          date_end: "Fecha fin"
+          state: "Estado"
+
+    incomes:
+      index:
+        batch_payment:
+          title: "Cobro multiple"
+          reference: "Cobro ingreso %{name}"
+
     loans:
       index:
         all: "Todos"
@@ -477,9 +491,29 @@ es:
       show:
         ledger_in_button: "Aumentar prestamo"
 
+  ################################################################
+  # Presenters
   presenters:
     loans:
       receive:
         ledger_ins_title: "Ingreso de prestamos"
       give:
         ledger_ins_title: "Egreso de prestamos"
+    inventory:
+      title:
+        deliver: "Entrega"
+        devolution: "Devolución"
+        pick: "Recojo"
+        in: "Ingreso"
+        out: "Egreso"
+      contact_tooltip:
+        client: "Cliente"
+        supplier: "Proveedor"
+      related_tip:
+        income: "Ingreso"
+        expense: "Egreso"
+        store_destiny: "Almacen destino"
+        store_source: "Almacen origen"
+      transaction_tooltip:
+        sale: "Venta"
+        buy: "Compra"
