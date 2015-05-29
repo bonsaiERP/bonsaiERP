@@ -10,8 +10,7 @@ class IncomesController < ApplicationController
 
   # GET /incomes
   def index
-    set_index_params
-    search_incomes
+    @incomes = Movements::Search.new(params, Income).search.order(date: :desc).page(@page)
   end
 
   # GET /incomes/1

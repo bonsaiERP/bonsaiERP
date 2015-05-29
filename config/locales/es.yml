@@ -388,7 +388,7 @@ es:
       approved: Aprobado
       paid: Pagado
       nulled: Anulado
-      due: Atrasado
+      due: Vencido
       error: Error
 
 
@@ -467,6 +467,14 @@ es:
   ################################################################
   # Controllers
   controllers:
+    movements:
+      index:
+        search: &search_movements_form
+          contact_expense: "Buscar por contacto o egreso"
+          date_start: "Fecha inicio"
+          date_end: "Fecha fin"
+          state: "Estado"
+
     expenses:
       index:
         search:
@@ -475,11 +483,17 @@ es:
           date_end: "Fecha fin"
           state: "Estado"
 
+
     incomes:
       index:
         batch_payment:
           title: "Cobro multiple"
           reference: "Cobro ingreso %{name}"
+        search:
+          contact_income: "Buscar por contacto o ingreso"
+          date_start: "Fecha inicio"
+          date_end: "Fecha fin"
+          state: "Estado"
 
     loans:
       index:

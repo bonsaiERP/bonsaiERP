@@ -4,12 +4,11 @@
 class ExpensesController < ApplicationController
   include Controllers::TagSearch
 
-  before_filter :set_expense, only: [:approve, :null, :inventory]
+  before_action :set_expense, only: [:approve, :null, :inventory]
 
   # GET /expenses
   def index
-    set_index_params
-    search_expenses
+    @expenses = Movements::Search.new(params, Expense).search.order(date: :desc).page(@page)
   end
 
   # GET /expenses/1
