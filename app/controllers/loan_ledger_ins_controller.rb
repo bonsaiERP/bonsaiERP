@@ -26,7 +26,7 @@ class LoanLedgerInsController < ApplicationController
     end
 
     def ledger_form
-      @ledger_form ||= LoanLedgerInForm.new(loan_id: loan.id)
+      @ledger_form ||= Loans::LedgerInForm.new(loan_id: loan.id, date: Date.today)
     end
 
     def check_loan_give
@@ -53,5 +53,5 @@ class LoanLedgerInsController < ApplicationController
       end
     end
     helper_method :form_url
-    
+
 end

@@ -505,6 +505,19 @@ es:
       show:
         ledger_in_button: "Aumentar prestamo"
 
+    loan_ledger_ins:
+      new_give:
+        title: "Aumentar prestamo"
+
+    loan_payments:
+      form:
+        amount: "Catidad"
+        exchange_rate: "Tipo de cambio"
+        total: "TOTAL"
+        date: "Fecha"
+        verify_bank: "Verificar (solo bank)"
+        verify_bank_hint: "Verificar a futuro. Ej.: (Cheque)"
+        reference: "Referencia"
   ################################################################
   # Presenters
   presenters:

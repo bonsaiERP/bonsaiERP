@@ -70,7 +70,7 @@
     %h3.n= @loan.ledger_ins_title
 
     .ledger-in-buttons
-      = link_to @loan.ledger_in_path, class: 'btn btn-success', data: { target: '#ledger-in-form', targethide: '.payment-buttons' } do
+      = link_to @loan.new_ledger_in_path, class: 'btn btn-success', data: { target: '#ledger-in-form', targethide: '.payment-buttons' } do
         %i.icon-plus-sign
         = t('controllers.loans.show.ledger_in_button')
 

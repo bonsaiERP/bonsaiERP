@@ -45,7 +45,7 @@ describe LoanLedgerInsController do
       get :new_give, id: loan_give.id
 
       expect(response.ok?).to eq(true)
-      expect(assigns(:ledger).class).to eq(LoanLedgerInForm)
+      expect(assigns(:ledger_form).class).to eq(Loans::LedgerInForm)
     end
 
     it 'ERROR' do

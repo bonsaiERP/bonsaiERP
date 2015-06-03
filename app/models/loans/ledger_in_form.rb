@@ -13,6 +13,7 @@ class Loans::LedgerInForm < BaseForm
 
   # Delegates
   delegate :exchange_rate, to: :currency_exchange, prefix: 'cur'
+  delegate :currency, to: :loan, prefix: true
 
   def loan
     @_loan ||= Loan.find(loan_id)

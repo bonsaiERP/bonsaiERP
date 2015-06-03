@@ -66,11 +66,11 @@ class Loans::ReceivePresenter < BasePresenter
   end
 
   def new_ledger_in_path
-    context.new_receive_loan_ledger_in(id)
+    context.new_receive_loan_ledger_in_path(id)
   end
 
   def ledger_in_path
-    context.receive_loan_ledger_in(id)
+    context.receive_loan_ledger_in_path(id)
   end
 
 end
