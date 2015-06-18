@@ -9,6 +9,13 @@ class LoanLedgerInsController < ApplicationController
 
   # PATCH
   def give
+    lf = Loans::LedgerInForm.new(loan_params)
+
+    if lf.create
+      render json: lf.ledger_in
+    else
+      render :new_give
+    end
   end
 
   # GET
@@ -17,6 +24,13 @@ class LoanLedgerInsController < ApplicationController
 
   # PATCH
   def receive
+    lf = Loans::LedgerInForm.new(loan_params)
+
+    if lf.create
+      render json: lf.ledger_in
+    else
+      render :new_give
+    end
   end
 
   private
@@ -41,8 +55,10 @@ class LoanLedgerInsController < ApplicationController
       end
     end
 
-    def ledger_params
-      {}
+    def loan_params
+      params.require(:loans_ledger_in_form)
+        .permit(:amount, :account_to_id, :reference, :date, :verification)
+        .merge!(loan_id: loan.id)
     end
 
     def form_url

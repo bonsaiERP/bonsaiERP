@@ -64,6 +64,13 @@ describe LoanLedgerInsController do
   end
 
   describe '#PATCH give' do
+    let(:loan_params) {
+      {
+        amount: 100, account_to_id: bank.id, reference: 'test loan',
+        date: Date.today.to_s, verification: false
+      }
+    }
+
     it 'route' do
       expect(:patch => '/loan_ledger_ins/11/give').to route_to({
         controller: 'loan_ledger_ins', action: 'give', id: '11'
@@ -75,7 +82,10 @@ describe LoanLedgerInsController do
     end
 
     it 'OK' do
-      patch :give, id: 11
+      patch :give, id: loan_give.id, loans_ledger_in_form: loan_params
+
+      expect(json['amount']).to eq("-100.0")
+      expect(json['reference']).to eq("test loan")
     end
   end
 
@@ -92,6 +102,13 @@ describe LoanLedgerInsController do
   end
 
   describe '#PATCH receive' do
+    let(:loan_params) {
+      {
+        amount: 100, account_to_id: bank.id, reference: 'test loan',
+        date: Date.today.to_s, verification: false
+      }
+    }
+
     it 'route' do
       expect(:patch => '/loan_ledger_ins/11/receive').to route_to({
         controller: 'loan_ledger_ins', action: 'receive', id: '11'
@@ -101,6 +118,14 @@ describe LoanLedgerInsController do
     it 'path' do
       expect(controller.receive_loan_ledger_in_path(1)).to eq('/loan_ledger_ins/1/receive')
     end
+
+    it 'OK' do
+      patch :receive, id: loan_receive.id, loans_ledger_in_form: loan_params
+
+      expect(json['amount']).to eq("100.0")
+      expect(json['reference']).to eq("test loan")
+    end
+
   end
 
 end
