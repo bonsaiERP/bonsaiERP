@@ -12,7 +12,7 @@ class LoanLedgerInsController < ApplicationController
     lf = Loans::LedgerInForm.new(loan_params)
 
     if lf.create
-      render json: lf.ledger_in
+      render 'redir.js'
     else
       render :new_give
     end
@@ -27,7 +27,7 @@ class LoanLedgerInsController < ApplicationController
     lf = Loans::LedgerInForm.new(loan_params)
 
     if lf.create
-      render json: lf.ledger_in
+      render 'redir.js'
     else
       render :new_give
     end

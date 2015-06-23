@@ -84,8 +84,7 @@ describe LoanLedgerInsController do
     it 'OK' do
       patch :give, id: loan_give.id, loans_ledger_in_form: loan_params
 
-      expect(json['amount']).to eq("-100.0")
-      expect(json['reference']).to eq("test loan")
+      expect(response).to render_template("redir.js")
     end
   end
 
@@ -122,8 +121,7 @@ describe LoanLedgerInsController do
     it 'OK' do
       patch :receive, id: loan_receive.id, loans_ledger_in_form: loan_params
 
-      expect(json['amount']).to eq("100.0")
-      expect(json['reference']).to eq("test loan")
+      expect(response).to render_template("redir.js")
     end
 
   end

@@ -44,8 +44,11 @@ describe Loans::LedgerInForm do
         reference: 'New loan_give', date: today, verification: false
       )
       expect(bank.reload.amount).to eq(500)
+      expect(loan_give.total).to eq(500)
 
       li.create
+      expect(li.loan)
+
       expect(li.ledger_in.amount).to eq(-100)
       expect(li.ledger_in.exchange_rate).to eq(1)
       expect(li.ledger_in.status).to eq('approved')
@@ -54,6 +57,7 @@ describe Loans::LedgerInForm do
       loan_give.reload
 
       expect(loan_give.amount).to eq(600)
+      expect(loan_give.total).to eq(600)
 
       expect(bank.reload.amount).to eq(400)
     end

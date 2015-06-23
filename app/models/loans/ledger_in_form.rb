@@ -24,6 +24,7 @@ class Loans::LedgerInForm < BaseForm
 
     loan.class.transaction do
       loan.amount += amount * cur_exchange_rate
+      loan.total += amount * cur_exchange_rate
       ledger_in.save
 
       loan.save && ledger_in.save_ledger

@@ -77,4 +77,8 @@ class Loans::GivePresenter < BasePresenter
     context.give_loan_ledger_in_path(id)
   end
 
+  def ledger_ins
+    to_model.ledger_ins.includes(:account, :account_to, :updater, :creator, :approver, :nuller)
+  end
+
 end
