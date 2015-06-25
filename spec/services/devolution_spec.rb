@@ -31,7 +31,7 @@ describe Devolution do
       it "Not valid" do
         dev = Devolution.new(valid_attributes)
         dev.should_not be_valid
-        dev.errors_on(:account_to).should_not be_empty
+        dev.errors[:account_to].should_not be_empty
       end
 
       it "Valid" do

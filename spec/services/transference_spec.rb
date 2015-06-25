@@ -57,7 +57,7 @@ describe Transference do
       t = Transference.new(valid_attributes)
 
       t.should_not be_valid
-      t.errors_on(:base).should eq([I18n.t('errors.messages.payment.valid_accounts_currency', currency: OrganisationSession.currency)])
+      t.errors[:base].should eq([I18n.t('errors.messages.payment.valid_accounts_currency', currency: OrganisationSession.currency)])
     end
 
     context "account_to" do
@@ -69,7 +69,7 @@ describe Transference do
         t = Transference.new(valid_attributes)
 
         t.should_not be_valid
-        t.errors_on(:account_to).should_not be_empty
+        t.errors[:account_to].should_not be_empty
       end
 
       it "check conciliation" do

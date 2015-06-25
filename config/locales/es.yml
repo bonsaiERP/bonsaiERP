@@ -424,6 +424,8 @@ es:
       <<: *movement_attributes
     payment:
       reference: "Cobro ingreso %{income}"
+    batch_payment:
+      reference: "Cobro ingreso %{income}"
 
   expense:
     account_ledger_reference: "Gasto"
@@ -476,6 +478,7 @@ es:
           state: "Estado"
 
     expenses:
+      reference: "Cobro egreso %{name}"
       index:
         search:
           contact_expense: "Buscar por contacto o egreso"
@@ -485,10 +488,10 @@ es:
 
 
     incomes:
+      reference: "Cobro ingreso %{name}"
       index:
         batch_payment:
           title: "Cobro multiple"
-          reference: "Cobro ingreso %{name}"
         search:
           contact_income: "Buscar por contacto o ingreso"
           date_start: "Fecha inicio"

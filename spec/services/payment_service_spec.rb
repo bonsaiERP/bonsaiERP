@@ -72,7 +72,7 @@ describe PaymentService do
       p = PaymentService.new(valid_attributes)
 
       p.should_not be_valid
-      p.errors_on(:base).should eq([I18n.t('errors.messages.payment.valid_accounts_currency', currency: OrganisationSession.currency)])
+      p.errors[:base].should eq([I18n.t('errors.messages.payment.valid_accounts_currency', currency: OrganisationSession.currency)])
     end
 
     context "account_to" do
@@ -86,7 +86,7 @@ describe PaymentService do
         p.stub(movement: movement)
 
         p.should_not be_valid
-        p.errors_on(:account_to).should_not be_empty
+        p.errors[:account_to].should_not be_empty
       end
 
       it "Valid" do
