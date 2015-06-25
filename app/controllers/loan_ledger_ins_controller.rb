@@ -9,9 +9,9 @@ class LoanLedgerInsController < ApplicationController
 
   # PATCH
   def give
-    lf = Loans::LedgerInForm.new(loan_params)
+    @ledger_form = Loans::LedgerInForm.new(loan_params)
 
-    if lf.create
+    if @ledger_form.create
       render 'redir.js'
     else
       render :new_give
@@ -24,12 +24,12 @@ class LoanLedgerInsController < ApplicationController
 
   # PATCH
   def receive
-    lf = Loans::LedgerInForm.new(loan_params)
+    @ledger_form = Loans::LedgerInForm.new(loan_params)
 
-    if lf.create
+    if @ledger_form.create
       render 'redir.js'
     else
-      render :new_give
+      render :new_receive
     end
   end
 

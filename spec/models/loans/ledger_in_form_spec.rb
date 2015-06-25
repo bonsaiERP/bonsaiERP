@@ -18,10 +18,19 @@ describe Loans::LedgerInForm do
     }
   }
 
+  it 'no params' do
+    lli = Loans::LedgerInForm.new
+
+    expect(lli.create).to eq(false)
+  end
+
   context 'validations' do
 
+    it { should validate_presence_of(:account_to_id) }
+    it { should validate_presence_of(:reference) }
+
     it 'numericality > 0' do
-      lli = Loans::LedgerInForm.new(account_to_id: bank.id, amount: 0)
+      lli = Loans::LedgerInForm.new(account_to_id: bank.id, amount: 0, reference: 'New amount')
       expect(lli.valid?).to eq(false)
       expect(lli.errors[:amount].present?).to eq(true)
 
@@ -154,7 +163,6 @@ describe Loans::LedgerInForm do
 
       expect(bank2.reload.amount).to eq(175)
     end
-
 
   end
 

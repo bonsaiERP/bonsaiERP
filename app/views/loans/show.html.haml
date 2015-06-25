@@ -74,11 +74,13 @@
         %i.icon-plus-sign
         = t('controllers.loans.show.ledger_in_button')
 
+    #ledger-in-form.form-container(ng-controller='DynamicController' dynamic='htmlContent')
+
     %ul.unstyled
       = render partial: 'account_ledgers/movement', collection: present(@loan.ledger_ins), as: :ledger,
         locals: { current_account_id: @loan.id }
 
-#ledger-in-form.form-container(ng-controller='DynamicController' dynamic='htmlContent')
+
 
 .row-fluid
   .span6.well.well-small.bg-white

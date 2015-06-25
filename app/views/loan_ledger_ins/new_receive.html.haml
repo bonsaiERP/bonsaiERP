@@ -1,5 +1,5 @@
 #loan(ng-controller='PaymentController')
-  %h4.title= t('controllers.loan_ledger_ins.new_give.title')
+  %h4.title= t('controllers.loan_ledger_ins.new_receive.title')
 
   = simple_form_for @ledger_form, url: form_url, method: :patch,
     html: { id: 'loan-payment-form' } do |f|

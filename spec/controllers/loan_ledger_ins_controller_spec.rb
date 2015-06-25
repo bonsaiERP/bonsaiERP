@@ -46,6 +46,7 @@ describe LoanLedgerInsController do
 
       expect(response.ok?).to eq(true)
       expect(assigns(:ledger_form).class).to eq(Loans::LedgerInForm)
+      expect(controller.send(:form_url)).to eq(controller.give_loan_ledger_in_path(loan_give.id))
     end
 
     it 'ERROR' do
@@ -85,6 +86,14 @@ describe LoanLedgerInsController do
       patch :give, id: loan_give.id, loans_ledger_in_form: loan_params
 
       expect(response).to render_template("redir.js")
+      expect(controller.send(:form_url)).to eq(controller.give_loan_ledger_in_path(loan_give.id))
+    end
+
+    it 'ERROR' do
+      patch :give, id: loan_give.id, loans_ledger_in_form: {amount: ""}
+
+      expect(response).to render_template("new_give")
+      expect(assigns(:ledger_form).class).to eq(Loans::LedgerInForm)
     end
   end
 
@@ -97,6 +106,21 @@ describe LoanLedgerInsController do
 
     it 'path' do
       expect(controller.new_receive_loan_ledger_in_path(1)).to eq('/loan_ledger_ins/1/new_receive')
+    end
+
+    it 'OK' do
+      get :new_receive, id: loan_receive.id
+
+      expect(response.ok?).to eq(true)
+      expect(assigns(:ledger_form).class).to eq(Loans::LedgerInForm)
+      expect(controller.send(:form_url)).to eq(controller.receive_loan_ledger_in_path(loan_receive.id))
+    end
+
+    it 'ERROR' do
+      get :new_receive, id: 100000000000
+
+      expect(response.ok?).to eq(false)
+      expect(response.status).to eq(404)
     end
   end
 
@@ -122,8 +146,15 @@ describe LoanLedgerInsController do
       patch :receive, id: loan_receive.id, loans_ledger_in_form: loan_params
 
       expect(response).to render_template("redir.js")
+      expect(controller.send(:form_url)).to eq(controller.receive_loan_ledger_in_path(loan_receive.id))
     end
 
+    it 'ERROR' do
+      patch :receive, id: loan_receive.id, loans_ledger_in_form: {amount: ""}
+
+      expect(response).to render_template("new_receive")
+      expect(assigns(:ledger_form).class).to eq(Loans::LedgerInForm)
+    end
   end
 
 end

@@ -9,14 +9,16 @@ class Loans::LedgerInForm < BaseForm
 
   # Validations
   validates :account_to, presence: true
+  validates :account_to_id, presence: true
   validates :amount, numericality: {greater_than: 0}
+  validates :reference, presence: true, length: {within: 3..300}
 
   # Delegates
   delegate :exchange_rate, to: :currency_exchange, prefix: 'cur'
   delegate :currency, to: :loan, prefix: true
 
   def loan
-    @_loan ||= Loan.find(loan_id)
+    @_loan ||= Loan.find_by(id: loan_id)
   end
 
   def create
@@ -46,7 +48,7 @@ class Loans::LedgerInForm < BaseForm
   end
 
   def account_to
-    @_account_to ||= Account.money.find(account_to_id)
+    @_account_to ||= Account.money.find_by(id: account_to_id)
   end
 
   private

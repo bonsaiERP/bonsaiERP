@@ -74,7 +74,7 @@ class Loans::ReceivePresenter < BasePresenter
   end
 
   def ledger_ins
-    to_model.ledger_ins(includes: [:account, :account_to, :updater, :creator, :approver, :nuller])
+    to_model.ledger_ins.includes(:account, :account_to, :updater, :creator, :approver, :nuller)
   end
 
 end
