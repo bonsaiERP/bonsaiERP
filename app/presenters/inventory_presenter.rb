@@ -71,13 +71,13 @@ class InventoryPresenter < BasePresenter
   def related_tip(st_id = nil)
     case
     when is_income?
-      "Ingreso"
+      I18n.t('presenters.inventory.related_tip.income')
     when is_expense?
-      "Egreso"
+      I18n.t('presenters.inventory.related_tip.expense')
     when(is_trans? && st_id == store_id && st_id.present?)
-      "Almacen destino"
+      I18n.t('presenters.inventory.related_tip.store_destiny')
     when(is_trans? && st_id != store_id && st_id.present?)
-      "Almacen origen"
+      I18n.t('presenters.inventory.related_tip.store_source')
     when(is_trans? && st_id.nil?)
       "Almacen destino"
     end
@@ -129,9 +129,9 @@ class InventoryPresenter < BasePresenter
 
   def contact_tooltip
     if inventory_operation.contact.is_a?(Client)
-      'Cliente'
+      I18n.t('presenters.inventory.contact_tooltip.client')
     else
-      'Proveedor'
+      I18n.t('presenters.inventory.contact_tooltip.supplier')
     end
   end
 end

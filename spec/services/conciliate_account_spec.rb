@@ -17,13 +17,13 @@ describe ConciliateAccount do
       ledger.should be_is_nulled
       con = ConciliateAccount.new(ledger)
 
-      con.conciliate.should be_false
+      con.conciliate.should eq(false)
       # approved status
       ledger = build :account_ledger, status: 'approved', approver_id: 50
       ledger.should be_is_approved
       con = ConciliateAccount.new(ledger)
 
-      con.conciliate.should be_false
+      con.conciliate.should eq(false)
       ledger.errors[:base].should eq([I18n.t('errors.messages.account_ledger.approved')])
     end
 
@@ -79,7 +79,7 @@ describe ConciliateAccount do
 
         al.should_not be_is_approved
 
-        ConciliateAccount.new(al).conciliate.should be_true
+        ConciliateAccount.new(al).conciliate.should eq(true)
 
         al.should be_is_approved
         al.account_to_amount.should == 10 + 100
@@ -100,7 +100,7 @@ describe ConciliateAccount do
         ac_bob.should_receive(:save).and_return(true)
         al.should_receive(:save).and_return(true)
 
-        ConciliateAccount.new(al).conciliate.should be_true
+        ConciliateAccount.new(al).conciliate.should eq(true)
 
         al.should be_is_approved
         al.account_amount.round(2).should == 2000 - (200 * 1/7.0).round(2)
@@ -123,7 +123,7 @@ describe ConciliateAccount do
         al.approver_id.should be_nil
         al.approver_datetime.should be_nil
 
-        ConciliateAccount.new(al).conciliate.should be_true
+        ConciliateAccount.new(al).conciliate.should eq(true)
 
         al.should be_is_approved
         # Account don't change

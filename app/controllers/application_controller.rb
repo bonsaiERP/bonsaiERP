@@ -128,6 +128,7 @@ class ApplicationController < ActionController::Base
 
       render json: r.to_json(only: options[:only], except: options[:except], methods: options[:methods])
     end
+
 end
 
 class MasterAccountError < StandardError; end

@@ -41,13 +41,13 @@ describe Expenses::Devolution do
   context 'Validations' do
     it "validates presence of expense" do
       exp_dev = Expenses::Devolution.new(valid_attributes.merge(expense_id: nil))
-      exp_dev.should_not be_valid
-      exp_dev.errors_on(:expense).should_not be_empty
+      expect(exp_dev.valid?).to eq(false)
+      expect(exp_dev.errors[:expense].present?).to eq(true)
 
       Expense.stub_chain(:active, where: [expense])
-      exp_dev.should_not be_valid
+      expect(exp_dev.valid?).to eq(false)
 
-      exp_dev.errors_on(:expense).should be_blank
+      expect(exp_dev.errors[:expense].blank?).to eq(true)
     end
 
     it "does not allow amount greater than total" do
@@ -57,10 +57,10 @@ describe Expenses::Devolution do
       Account.stub(where: [account_to])
 
       exp_dev.should_not be_valid
-      exp_dev.errors_on(:amount).should_not be_empty
+      expect(exp_dev.errors[:amount].present?).to eq(true)
 
       exp_dev.amount = 100
-      exp_dev.should be_valid
+      expect(exp_dev.valid?).to eq(true)
     end
   end
 
@@ -79,7 +79,7 @@ describe Expenses::Devolution do
 
       dev = Expenses::Devolution.new(valid_attributes)
       ### Payment
-      dev.pay_back.should  be_true
+      dev.pay_back.should  eq(true)
 
       dev.should be_verification
 
@@ -112,7 +112,7 @@ describe Expenses::Devolution do
 
         dev = Expenses::Devolution.new(valid_attributes.merge(account_to_id: 100, verification: true))
 
-        dev.pay_back.should be_true
+        dev.pay_back.should eq(true)
         dev.should be_verification
         dev.account_to.should eq(bank)
         # Should not conciliate
@@ -121,7 +121,7 @@ describe Expenses::Devolution do
         # When inverse
         dev = Expenses::Devolution.new(valid_attributes.merge(account_to_id: 100, verification: false, interest: 10))
 
-        dev.pay_back.should be_true
+        dev.pay_back.should eq(true)
         dev.account_to.should eq(bank)
         # Should conciliate
         dev.ledger.should be_is_approved
@@ -134,14 +134,14 @@ describe Expenses::Devolution do
 
         dev = Expenses::Devolution.new(valid_attributes.merge(account_to_id: 200, verification: true))
 
-        dev.pay_back.should be_true
+        dev.pay_back.should eq(true)
 
         dev.ledger.should be_is_approved
 
         #inverse
         dev = Expenses::Devolution.new(valid_attributes.merge(account_to_id: 200, verification: false))
 
-        dev.pay_back.should be_true
+        dev.pay_back.should eq(true)
 
         dev.ledger.should be_is_approved
       end
@@ -152,7 +152,7 @@ describe Expenses::Devolution do
     it "does not save if invalid Expenses::Devolution" do
       Expense.any_instance.should_not_receive(:save)
       p = Expenses::Devolution.new(valid_attributes.merge(reference: ''))
-      p.pay_back.should be_false
+      p.pay_back.should eq(false)
     end
 
     before(:each) do
@@ -166,7 +166,7 @@ describe Expenses::Devolution do
     #  dev = Expenses::Devolution.new(valid_attributes)
     #  dev.stub(account_to: true)
 
-    #  dev.pay_back.should be_false
+    #  dev.pay_back.should eq(false)
     #  # There is no method Expenses::Devolution#balance
     #  dev.errors[:amount].should eq(['Not real'])
     #  # There is a method Expenses::Devolution#amount
@@ -174,4 +174,3 @@ describe Expenses::Devolution do
     #end
   end
 end
-

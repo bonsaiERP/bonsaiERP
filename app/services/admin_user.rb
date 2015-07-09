@@ -80,7 +80,7 @@ class AdminUser < BaseForm
   private
 
     def send_email
-      RegistrationMailer.user_registration(self).deliver!
+      RegistrationMailer.user_registration(self).deliver_now!
     end
 
     def self.slice_user_attributes(user)

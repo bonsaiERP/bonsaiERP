@@ -1,3 +1,0 @@
-- Check PostgreSQL is working and connecting with the app
-- Check passenger installed for the correct ruby and rails version
-- Check assets are compiled

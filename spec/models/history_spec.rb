@@ -12,7 +12,7 @@ describe History do
     it "#create" do
       i = create :item, unit_id: 1
       i.should be_persisted
-      i.histories.should have(1).item
+      i.histories.size.should eq(1)
 
       h = i.histories.first
       h.should be_persisted
@@ -27,10 +27,10 @@ describe History do
 
       i.update(
          price: 20, buy_price: 15, name: 'New name for item'
-      ).should be_true
+      ).should eq(true)
 
       i = Item.find(i.id)
-      i.histories.should have(2).items
+      i.histories.size.should eq(2)
       h = i.histories.first
       expect(h).not_to be_new_item
 
@@ -46,8 +46,8 @@ describe History do
       expect(i.histories.last).to be_new_item
       expect(i.histories.last.user_id).to eq(1)
 
-      expect(i.update_attributes(active: false)).to be_true
-      i.histories.should have(3).items
+      expect(i.update_attributes(active: false)).to eq(true)
+      i.histories.size.should eq(3)
       h = i.histories.first
       expect( h.history_attributes.sort ).to eq(['active', 'updated_at'])
       expect(h.history['active']).to eq( { from: true, to: false, type: 'boolean' } )
@@ -81,12 +81,12 @@ describe History do
 
     it "#null due_date" do
       e = Expense.new(attributes.merge(due_date: nil))
-      e.save(validate: false).should be_true
+      e.save(validate: false).should eq(true)
 
       e.state = 'nulled'
-      e.save(validate: false).should be_true
+      e.save(validate: false).should eq(true)
 
-      expect(e.histories).to have(2).items
+      expect(e.histories.size).to eq(2)
       h = e.histories.first
       expect(h.history['state']).to eq({from: 'approved', to: 'nulled', type: 'string'})
     end
@@ -94,9 +94,9 @@ describe History do
     it "#history" do
       # Create
       e = Expense.new(Expense::EXTRAS_DEFAULTS.merge(attributes))
-      e.save.should be_true
+      e.save.should eq(true)
 
-      expect(e.histories).to have(1).item
+      expect(e.histories.size).to eq(1)
       h = e.histories.first
       expect(h.klass_type).to eq('Expense')
       expect(h.klass_to_s).to eq(e.to_s)
@@ -111,9 +111,9 @@ describe History do
       .except('created_at', 'updated_at')
 
       #e.attributes = e_data
-      expect(e.update(e_data)).to be_true
+      expect(e.update(e_data)).to eq(true)
 
-      expect(e.histories).to have(2).items
+      expect(e.histories.size).to eq(2)
       h = e.histories.first
       expect(h.history_data.keys.sort).to eq(['expense_details', 'updated_at'])
 
@@ -133,9 +133,9 @@ describe History do
       #at['balance_inventory'] = 20.0
 
       # Update add new detail
-      expect(e.update(e_data)).to be_true
+      expect(e.update(e_data)).to eq(true)
 
-      expect(e.histories).to have(3).items
+      expect(e.histories.size).to eq(3)
       h = e.histories.first
 
       #expect(h.history['balance_inventory']).to eq({from: 1, to: 1, type: :decimal})
@@ -146,35 +146,35 @@ describe History do
       det[2]['_destroy'] = '1'
 
       at = e.attributes.except('created_at', 'updated_at').merge(expense_details_attributes: det)
-      e.update_attributes(at).should be_true
+      e.update_attributes(at).should eq(true)
 
-      expect(e.histories).to have(4).items
-      expect(e.expense_details).to have(2).items
+      expect(e.histories.size).to eq(4)
+      expect(e.expense_details.size).to eq(2)
 
       h = e.histories.first
       hdet = h.all_data['expense_details']
-      hdet[2]['destroyed?'].should be_true
+      hdet[2]['destroyed?'].should eq(true)
       hdet[2]['item_id'].should eq(10)
       hdet[2]['price'].should == "10.0"
       hdet[2]['quantity'].should == "2.0"
 
       e.save
-      expect(e.histories).to have(5).items
+      expect(e.histories.size).to eq(5)
     end
 
     it "#state" do
       # Create
       d = 2.days.ago.to_date
       e = Expense.new(attributes.merge(date: d, due_date: d))
-      e.save.should be_true
+      e.save.should eq(true)
 
       e.should be_is_approved
       # Update and check due date
       today = Date.today
       e.due_date = today
-      e.save.should be_true
+      e.save.should eq(true)
 
-      expect(e.histories).to have(2).items
+      expect(e.histories.size).to eq(2)
       h = e.histories.first
       h.history['due_date'].should eq( { from: d, to: today, type: 'date' })
       #h.history['state'].should eq( {from: 'due', to: 'approved', type: 'string'} )
@@ -182,7 +182,7 @@ describe History do
 
       d2 = 1.days.ago.to_date
       e.due_date = d2
-      e.save.should be_true
+      e.save.should eq(true)
       h = e.histories.first
       h.history['due_date'].should eq( { from: today, to: d2, type: 'date' })
       #h.history['state'].should eq( {from: 'approved', to: 'due', type: 'string'} )

@@ -20,13 +20,13 @@ class Movement < Account
     bill_number: :string,
     null_reason: :string,
     operation_type: :string,
-    nuller_datetime: :time,
-    approver_datetime: :time
+    nuller_datetime: :datetime,
+    approver_datetime: :datetime
 
   EXTRAS_DEFAULTS = {
-    delivered: :false,
-    discounted: :false,
-    devolution: :false,
+    delivered: false,
+    discounted: false,
+    devolution: false,
     gross_total: 0.0,
     inventory: true,
     balance_inventory: 0.0,

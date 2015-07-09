@@ -1,72 +1,72 @@
+[![Code Climate](https://codeclimate.com/github/boriscy/bonsaiERP/badges/gpa.svg)](https://codeclimate.com/github/boriscy/bonsaiERP)
+[![License](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/boriscy/bonsaiERP/blob/dev/MIT-LICENSE.md)
+
 # *bonsaiERP*
-*bonsaiERP* is a simple ERP system to control the most basic stuff for a company, that includes:
+
+*bonsaiERP* is a simple ERP multitenant system written with [Ruby on Rails](http://rubyonrails.org) and includes the following modules:
 
 - Sales
 - Buys
 - Expenses
-- Bank accounts
+- Bank and Cash Accounts
 - Inventory
+- Multi currency
+- Multiple companies
+- File management (in development)
 
- The software is been improved as we move
+The system allows to use multiple currencies and make exchange rates.
 
-ctags -R `bundle show rails`/../*
+## Installation
 
-v=spf1 a ip4:192.34.56.117 -all
+### bonsaiERP requires
 
-txt.gsub(/(<link href=)"([a-z\.\/\?=])"/, "#{$1}\"localhost.bom:9292#{$2}\"")
-render_to_string
+- Ruby 2.2.2
+- PostgreSQL 9.4 and postgresql-contrib to enable **hstore**
+- Nodejs for compiling assets
+- imagemagick
+- phantomjs
 
-txt.gsub(/(<link href=")([a-z0-9\/\?\.=\-_]+)/) { "#{$1}http://localhost.bom:9292#{$2}\"" }S
+### Installing *bonsaiERP*
 
-//= require 'plugins/bootstrap3'
-//= require 'components/print_common'
-//= require 'clases'
-css = "<style>\n"
-%w(plugins/bootstrap3 components/print_common clases).each do |v|
-  css << Rails.application.assets.find_asset(v).body
-end
-css << '</style>'
+After installing the required (ruby, postgresql, etc.) you can begin with *bonsaiERP*, run
 
-IMPORTANT
+`rake db:migrate`
 
-add_index :accounts, :tax_in_out # Needs onserver index
-
-
-add_index :accounts, :creator_id
-add_index :accounts, :approver_id
-add_index :accounts, :nuller_id
-add_index :accounts, :due_date
-
-add_index :accounts, :extras, using: :gist
-
-add_index :account_ledgers, :contact_id
-
-ActiveRecord::Migrator.migrations('db/migrate').map {|v| "('#{v.version}')" }.join(', ')
+this will create all neccessary tables, if you are in ubuntu
+or debian edit yor `/etc/hosts` file and add something like this
 
 ```
-cp -r vendor/assets/stylesheets/bonsaierp/fonts public/assets/
-cp app/assets/images/browser_logos.png public/assets
-cp app/assets/images/ajax-loder.gif public/assets
+127.0.0.1	app.localhost.bom
+127.0.0.1	bonsai.localhost.bom
+127.0.0.1	mycompany.localhost.bom
+
 ```
+in development you will need to edit but in production you can configure
+so you won't need to edit the `/etc/hosts` file for each new subdomain, start the app `rails s` and go to
+http://app.localhost.bom:3000/sign_up to create a new account,
+to capture the email with the registration code use [mailcatcher](http://mailcatcher.me/). Fill all registration fields
+and then check the email that has been sent, open the url changing the port and you can finish creation of a new company.
 
-{
-  "name": "My App",  // will be displayed under the screenshot
-  "thumb": "my-app/thumb.png", // path to the image (omit the projects/ prefix)
-  "desc": "Description of your app", // One or two sentences
-  "url": "http://myapp.com", // url to your app
-  "info": "http://myapp.com/blog", // url to app announcement or background
-  "src": "https://github.com/me/myapp", // (optional) Url to your source repository
-  "submitter": "IgorMinar", // your github username
-  "submissionDate": "2012-05-24", // current date in ISO format
-  "tags": [
-    "Demo", "Production", "Toy" // choose your app seriousness level (for plunks or fiddles use "Toy")
-    "Game", "CRUD", "Entertainment", "Productivity", ... // choose your app type
-    "Animations", "Local Storage", "Audio Api", "AppCache", ... // features and technologies
-    "No jQuery", "jQuery" // do you use jQuery?
-    "Open Source", // tag open source projects
-    "Tests Included" // use if open source and tests are included
-    ... // others?
-  ]
-}
+> The system generates automatically the subdomain for your company name
+> with the following function `name.to_s.downcase.gsub(/[^A-Za-z]/, '')[0...15]`
+> this is why you should have the subdomain in `/etc/hosts`
 
-427px
+
+### Attached files (UPLOADS)
+
+*bonsaiERP* uses dragonfly gem to manage file uploads, you can set where
+the files will go setting:
+
+`config/initialiazers/dragonfly.rb`
+
+# License
+
+By [Boris Barroso](https://github.com/boriscy) under MIT license:
+
+> Copyright (c) 2015 Boris Barroso.
+>
+> Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to > deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or > sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+>
+> The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+>
+> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

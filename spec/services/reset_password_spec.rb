@@ -19,7 +19,7 @@ describe ResetPassword do
     create(:user, email: 'juan@mail.com', reset_password_token: token, reset_password_sent_at: 2.hours.ago)
 
     rp = ResetPassword.new(user: nil, password: 'DEMO1234', password_confirmation: 'DEMO1234')
-    rp.update_password.should be_false
+    rp.update_password.should eq(false)
 
     rp.errors.messages[:user].should eq([I18n.t('errors.messages.blank')])
 
@@ -32,7 +32,7 @@ describe ResetPassword do
     u = create(:user, email: 'juan@mail.com', reset_password_token: token, reset_password_sent_at: 15.minutes.ago)
 
     rp = ResetPassword.new(user: u, password: 'DEMO1234', password_confirmation: 'DEMO1234')
-    rp.update_password.should be_true
+    rp.update_password.should eq(true)
 
     u.reload
     u.should be_valid_password('DEMO1234')

@@ -13,7 +13,7 @@ describe ResetPasswordEmail do
 
     ResetPasswordMailer.should_receive(:send_reset_password).and_return(double(deliver: true))
     rp = ResetPasswordEmail.new(email: 'test@mail.com')
-    rp.reset_password.should be_true
+    rp.reset_password.should eq(true)
 
     user.reset_password_token.should be_present
     user.reset_password_sent_at.should be_present
@@ -31,7 +31,7 @@ describe ResetPasswordEmail do
     RegistrationMailer.should_receive(:send_registration).and_return(double(deliver: true))
 
     rp = ResetPasswordEmail.new(email: 'test@mail.com')
-    rp.reset_password.should be_true
+    rp.reset_password.should eq(true)
 
     user.reset_password_token.should be_present
     user.reset_password_sent_at.should be_present
@@ -42,13 +42,13 @@ describe ResetPasswordEmail do
     user.stub(save: true, active_links: [build(:link, active: true, master_account: false)])
 
     rp = ResetPasswordEmail.new(email: 'test@mail.com')
-    rp.reset_password.should be_false
+    rp.reset_password.should eq(false)
   end
 
   it "returns error when invalid email" do
     rp = ResetPasswordEmail.new(email: 'jajaj')
 
-    rp.reset_password.should be_false
+    rp.reset_password.should eq(false)
     rp.errors[:email].should eq([I18n.t('errors.messages.user.email_not_found')])
 
   end

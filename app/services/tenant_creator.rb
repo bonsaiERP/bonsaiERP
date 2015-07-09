@@ -35,7 +35,7 @@ class TenantCreator
 
     drop_schema tenant  unless res
 
-    res
+    res != false
   end
 
 end

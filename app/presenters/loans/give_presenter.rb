@@ -17,6 +17,10 @@ class Loans::GivePresenter < BasePresenter
     end
   end
 
+  def new_ledger_in
+    @_new_ledger_in ||= LoanLedgerInForm.new(loan_id: to_model.id)
+  end
+
   def payment_path
     template.new_charge_loan_payment_path(id)
   end
@@ -27,6 +31,10 @@ class Loans::GivePresenter < BasePresenter
     else
       text_red 'Pendiente'
     end
+  end
+
+  def ledger_ins_title
+    I18n.t('presenters.loans.give.ledger_ins_title')
   end
 
   def payments
@@ -61,5 +69,16 @@ class Loans::GivePresenter < BasePresenter
     end
   end
 
-end
+  def new_ledger_in_path
+    context.new_give_loan_ledger_in_path(id)
+  end
 
+  def ledger_in_path
+    context.give_loan_ledger_in_path(id)
+  end
+
+  def ledger_ins
+    to_model.ledger_ins.includes(:account, :account_to, :updater, :creator, :approver, :nuller)
+  end
+
+end

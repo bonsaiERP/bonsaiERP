@@ -1,6 +1,7 @@
 .row-fluid
   .span6
     %h1 Prestamos
+
   .span6.r
     .btn-group
       = link_to new_receive_loans_path, class: 'btn' do
@@ -8,6 +9,19 @@
 
       = link_to new_give_loans_path, class: 'btn' do
         Dar prestamo
+
+.row-fluid
+  .span12
+    %ul.unstyled.inline
+      %li
+        = link_to I18n.t('controllers.loans.index.all'), loans_path, class: param_bold_for(:type, "all")
+      %li
+        = link_to I18n.t('controllers.loans.index.given'), loans_path(type: "give"), class: param_bold_for(:type, "give")
+      %li
+        = link_to I18n.t('controllers.loans.index.received'), loans_path(type: "receive"), class: param_bold_for(:type, "receive")
+
+    = render "loans/search"
+
 
 %ul.listing.unstyled
   %li.row-fluid

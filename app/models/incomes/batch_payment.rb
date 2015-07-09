@@ -44,7 +44,7 @@ class Incomes::BatchPayment
           account_id: income.id,
           account_to_id: account_to.id,
           date: Time.zone.now.to_date,
-          reference: I18n.t('incomes.batch_payment.reference', name: income.name),
+          reference: I18n.t('income.batch_payment.reference', income: income.name),
           amount: income.balance
         )
 

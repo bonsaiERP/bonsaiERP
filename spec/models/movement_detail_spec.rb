@@ -29,10 +29,10 @@ describe MovementDetail do
     td = MovementDetail.new(item_id:1, quantity: 2, price: 4)
     td.stub(item: true)
     td.item_id = 2
-    td.save.should be_true
+    td.save.should eq(true)
 
     td.item_id = 1
-    td.save.should be_false
+    td.save.should eq(false)
     td.errors.messages[:item_id].should eq([I18n.t('errors.messages.movement_details.item_changed')])
   end
 
@@ -56,28 +56,28 @@ describe MovementDetail do
       inc = Income.new(attributes)
       inc.income_details[0].stub(item: build(:item, for_sale: true))
 
-      inc.save.should be_true
+      inc.save.should eq(true)
 
       det = inc.income_details[0]
 
       det.balance = 5
-      det.save.should be_true
+      det.save.should eq(true)
 
       inc = Income.find(inc.id)
       inc.attributes = {income_details_attributes: [{id: det.id, item_id: 1, price: 20, quantity: 4}] }
       inc.income_details[0].stub(item: build(:item, for_sale: true))
 
-      inc.save.should be_false
+      inc.save.should eq(false)
       inc.details[0].errors[:item_id].should eq([I18n.t('errors.messages.income_details.balance')])
     end
 
     it "#valid_for_destruction" do
       inc = Income.new(attributes)
       inc.income_details[0].stub(item: build(:item, for_sale: true))
-      inc.save.should be_true
+      inc.save.should eq(true)
       det = inc.income_details[0]
       det.balance = 8
-      det.save.should be_true
+      det.save.should eq(true)
 
       attrs = attributes.merge(
         income_details_attributes: [{item_id: 1, price: 20, quantity: 10, _destroy: '1', id: det.id}]
@@ -86,7 +86,7 @@ describe MovementDetail do
       inc.attributes = attrs
       inc.income_details[0].should be_marked_for_destruction
 
-      inc.save.should be_false
+      inc.save.should eq(false)
       inc.income_details[0].should_not be_marked_for_destruction
       inc.income_details[0].errors[:item_id].should eq([I18n.t('errors.messages.movement_details.not_destroy')])
     end

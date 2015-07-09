@@ -35,7 +35,7 @@ describe Unit do
     it "updates" do
       u = Unit.find(unit.id)
       u.name = 'A new fresh name'
-      u.save.should be_true
+      u.save.should eq(true)
 
       i = Item.find(item.id)
       i.unit_name.should eq('A new fresh name')

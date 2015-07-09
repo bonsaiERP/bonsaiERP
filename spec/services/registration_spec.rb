@@ -18,7 +18,7 @@ describe Registration do
 
   it "registrates" do
     r = Registration.new(valid_attributes)
-    r.register.should be_true
+    r.register.should eq(true)
 
     r.organisation.name.should eq('bonsaiERP')
     r.organisation.tenant.should eq('bonsaierp')

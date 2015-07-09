@@ -214,11 +214,9 @@ BASH
 
   def with_schemas(options = nil)
     options = unify_type(options, Hash) { |items| {:only => items} }
-    options[:only] = unify_type(options[:only], Array) { |item| item.nil? ? all_schemas : [item] }.map { |item| item.to_s }
-    options[:except] = unify_type(options[:except], Array) { |item| item.nil? ? [] : [item] }.map { |item| item.to_s }
 
-    options[:only] = unify_array_item_type(options[:only], String) { |symbol| symbol.to_s }
-    options[:except] = unify_array_item_type(options[:except], String) { |symbol| symbol.to_s }
+    set_options(options)
+    set_options_array(options)
 
     schema_list = options[:only].select { |schema| options[:except].exclude? schema }
 
@@ -233,13 +231,21 @@ BASH
 
   def with_schemas_list(options = nil)
     options = unify_type(options, Hash) { |items| {:only => items} }
-    options[:only] = unify_type(options[:only], Array) { |item| item.nil? ? all_schemas : [item] }.map { |item| item.to_s }
-    options[:except] = unify_type(options[:except], Array) { |item| item.nil? ? [] : [item] }.map { |item| item.to_s }
 
-    options[:only] = unify_array_item_type(options[:only], String) { |symbol| symbol.to_s }
-    options[:except] = unify_array_item_type(options[:except], String) { |symbol| symbol.to_s }
+    set_options(options)
+    set_options_array(options)
 
     options[:only].select { |schema| options[:except].exclude? schema }
+  end
+
+  def set_options(options)
+    options[:only] = unify_type(options[:only], Array) { |item| item.nil? ? all_schemas : [item] }.map { |item| item.to_s }
+    options[:except] = unify_type(options[:except], Array) { |item| item.nil? ? [] : [item] }.map { |item| item.to_s }
+  end
+
+  def set_options_array(options)
+    options[:only] = unify_array_item_type(options[:only], String) { |symbol| symbol.to_s }
+    options[:except] = unify_array_item_type(options[:except], String) { |symbol| symbol.to_s }
   end
 
   def unify_type(input, type)

@@ -1,4 +1,5 @@
 module CdnHelper
+  ANGULAR_VERSION = '1.3.15'
   SCRIPTS = {
     'jquery' => {
       klass: 'jQuery',
@@ -7,7 +8,7 @@ module CdnHelper
     },
     'angular' => {
       klass: 'angular',
-      cdn: 'https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.min.js',
+      cdn: 'https://ajax.googleapis.com/ajax/libs/angularjs/#{ANGULAR_VERSION}/angular.min.js',
       local: '/assets/angular/angular.min.js'
     }
   }

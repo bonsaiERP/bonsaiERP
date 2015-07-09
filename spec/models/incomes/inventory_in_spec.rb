@@ -50,7 +50,7 @@ describe Incomes::InventoryIn do
 
   it "#initializes" do
     invin = Incomes::InventoryIn.new(income_id: income.id)
-    invin.build_details.should have(2).items
+    expect(invin.build_details.size).to eq(2)
     #invin.details[0].quantity.should == 0
     #expect(invin.details[0].item_id).to eq(1)
     #invin.details[1].quantity.should == 0
@@ -61,10 +61,10 @@ describe Incomes::InventoryIn do
     Stock.any_instance.stub(item: item, store: store)
 
     invin = Incomes::InventoryIn.new(valid_attributes)
-    invin.details.should have(2).items
+    invin.details.size.should eq(2)
     expect(invin.income_id).to eq(income.id)
 
-    invin.create.should be_true
+    invin.create.should eq(true)
     inv = Inventory.find(invin.inventory.id)
     inv.should be_is_a(Inventory)
     inv.should be_is_inc_in
@@ -82,12 +82,12 @@ describe Incomes::InventoryIn do
     inc.details[0].balance.should == 2
     inc.details[1].balance.should == 2
 
-    inv.details.should have(2).items
+    inv.details.size.should eq(2)
     inv.details.map(&:quantity).should eq([2, 2])
     inv.details.map(&:item_id).should eq([1, 2])
 
     stocks = Stock.active.where(store_id: inv.store_id)
-    stocks.should have(2).items
+    stocks.size.should eq(2)
     stocks.map(&:item_id).sort.should eq([1, 2])
     stocks.map(&:quantity).should eq([2, 2])
 
@@ -97,7 +97,7 @@ describe Incomes::InventoryIn do
     attrs[:inventory_details_attributes][1][:quantity] = 3
 
     invin = Incomes::InventoryIn.new(attrs)
-    invin.create.should be_true
+    invin.create.should eq(true)
 
     inc = Income.find(income.id)
     inc.balance_inventory.should == 100
@@ -105,18 +105,18 @@ describe Incomes::InventoryIn do
     inc.details[1].balance.should == 5
 
     io = Inventory.find(invin.inventory.id)
-    io.inventory_details.should have(2).items
+    io.inventory_details.size.should eq(2)
     io.inventory_details.map(&:quantity).should eq([3, 3])
     io.inventory_details.map(&:item_id).should eq([1, 2])
 
     stocks = Stock.active.where(store_id: io.store_id)
-    stocks.should have(2).items
+    stocks.size.should eq(2)
     stocks.map(&:item_id).sort.should eq([1, 2])
     stocks.map(&:quantity).should eq([5, 5])
 
     # Error
     invin = Incomes::InventoryIn.new(valid_attributes)
-    invin.create.should be_false
+    invin.create.should eq(false)
     invin.details[0].errors[:quantity].should_not be_blank
     invin.details[1].errors[:quantity].should_not be_blank
   end

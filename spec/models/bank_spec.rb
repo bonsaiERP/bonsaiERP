@@ -15,7 +15,7 @@ describe Bank do
     UserSession.user = build :user, id: 1
     b = Bank.new(valid_attributes)
 
-    b.save.should be_true
+    b.save.should eq(true)
 
     valid_attributes.each do |k, v|
       b.send(k).should eq(v)
@@ -24,12 +24,13 @@ describe Bank do
 
 
   it 'should update attributes' do
+    UserSession.user = build :user, id: 1
     b = Bank.new(valid_attributes)
-    b.save.should be_true
+    b.save.should eq(true)
     b.should be_persisted
 
     h = {:website => "www.bnb.com.bo", :address => "Very near", :phone => "2798888"}
-    b.update_attributes(h).should be_true
+    b.update_attributes(h).should eq(true)
 
     b.reload
 

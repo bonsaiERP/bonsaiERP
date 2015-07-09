@@ -40,7 +40,7 @@ describe User do
     u = User.create!(email: 'test@mail.com', password: 'Demo12234')
 
     u = User.find(u.id)
-    u.update_attributes(password: 'Demo12234', ).should be_true
+    u.update_attributes(password: 'Demo12234', ).should eq(true)
   end
 
   it '#set_confirmation_token' do
@@ -61,7 +61,7 @@ describe User do
     it "#set_auth_token" do
       subject.auth_token.should be_nil
 
-      subject.set_auth_token.should be_true
+      subject.set_auth_token.should eq(true)
       subject.auth_token.should_not be_blank
     end
 
@@ -69,7 +69,7 @@ describe User do
       subject.auth_token = "jajjajaja"
       subject.auth_token.should_not be_blank
 
-      subject.reset_auth_token.should be_true
+      subject.reset_auth_token.should eq(true)
       subject.auth_token.should be_blank
     end
   end
@@ -106,15 +106,15 @@ describe User do
     expect(u).to be_persisted
     expect(u.old_emails).to eq([])
 
-    expect(u.update_attributes(email: 'second@mail.com')).to be_true
+    expect(u.update_attributes(email: 'second@mail.com')).to eq(true)
     u = User.find u.id
     expect(u.old_emails).to eq(['first@mail.com'])
 
-    expect(u.update_attributes(email: 'second@mail.com', first_name: 'Juan other')).to be_true
-    expect(u.update_attributes(email: 'second@mail.com')).to be_true
+    expect(u.update_attributes(email: 'second@mail.com', first_name: 'Juan other')).to eq(true)
+    expect(u.update_attributes(email: 'second@mail.com')).to eq(true)
     expect(u.old_emails).to eq(['first@mail.com'])
 
-    expect(u.update_attributes(email: 'third@mail.com', first_name: 'Juan other')).to be_true
+    expect(u.update_attributes(email: 'third@mail.com', first_name: 'Juan other')).to eq(true)
     u = User.find u.id
     expect(u.old_emails).to eq(%w(second@mail.com first@mail.com))
   end

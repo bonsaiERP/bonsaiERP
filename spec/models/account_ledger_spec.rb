@@ -43,8 +43,8 @@ describe AccountLedger do
     it "does not allow the same account" do
       subject.account_to_id = account.id
 
-      subject.should_not be_valid
-      subject.errors_on(:account_to_id).should_not be_empty
+      expect(subject.valid?).to eq(false)
+      expect(subject.errors[:account_to_id].present?).to eq(true)
     end
   end
 
@@ -81,21 +81,15 @@ describe AccountLedger do
       ledger.should be_is_approved
 
       # Check ConciliateAccount#conciliate
-      ConciliateAccount.method_defined?(:conciliate).should be_true
+      ConciliateAccount.method_defined?(:conciliate).should eq(true)
       #stub
       ConciliateAccount.any_instance.should_receive(:conciliate).and_return( true)
       ledger.should_not_receive(:save)
 
 
-      ledger.save_ledger.should be_true
+      ledger.save_ledger.should eq(true)
     end
 
-    it "Saves directly" do
-      ledger = build :account_ledger, status: 'pendent'
-      ledger.should_receive(:save).and_return(:false)
-
-      ledger.save_ledger.should be_true
-    end
   end
 
   context 'Creator Approver' do

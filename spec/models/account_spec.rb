@@ -25,18 +25,18 @@ describe Account do
   end
 
   context 'scopes' do
-    it "$to_pay" do
+    it "::to_pay" do
       ac = Account.active.new
       ac.should be_active
     end
 
-    it "$money" do
-      ac = Account.money.new
-      expect(ac.type).to eq(%w(Bank Cash))
+    it "::money" do
+      ac = Account.money
+      #expect(ac.type).to eq(["Bank", "Cash"])
+      expect(ac.to_sql).to match(/'Bank', 'Cash'/)
 
-      ac = Account.active.money.new
-      expect(ac.type).to eq(%w(Bank Cash))
-      ac.should be_active
+      ac = Account.active.money
+      expect(ac.to_sql).to match(/"accounts"."active" = 't' AND "accounts"."type" IN \('Bank', 'Cash'\)/)
     end
   end
 
@@ -54,7 +54,7 @@ describe Account do
 
     it "valid_tags" do
       a = Account.new(valid_params.merge(tag_ids: [tag_ids.first]))
-      a.save.should be_true
+      a.save.should eq(true)
       a.tag_ids.should eq([tag_ids.first])
 
       t_ids = tag_ids + [100000, 99999999]
@@ -62,7 +62,7 @@ describe Account do
 
       expect(a.tag_ids.size).to eq(4)
 
-      a.save.should be_true
+      a.save.should eq(true)
 
       expect(a.tag_ids).to eq(tag_ids)
       expect(a.tag_ids.size).to eq(2)
@@ -70,7 +70,7 @@ describe Account do
       expect(a.updater_id).to eq(1)
 
       a.tag_ids = [1231231232, 23232]
-      a.save.should be_true
+      a.save.should eq(true)
 
       expect(a.tag_ids).to eq([])
       expect(a.tag_ids.size).to eq(0)

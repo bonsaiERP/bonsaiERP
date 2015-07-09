@@ -19,7 +19,7 @@ describe Loans::ReceiveForm do
     lf = Loans::ReceiveForm.new(attributes.merge(account_to_id: cash.id))
 
     # loan
-    lf.create.should be_true
+    lf.create.should eq(true)
 
     lf.loan.should be_is_a(Loans::Receive)
     lf.loan.currency.should eq('BOB')
@@ -48,7 +48,7 @@ describe Loans::ReceiveForm do
     lf = Loans::ReceiveForm.new(attributes.merge(account_to_id: cash2.id, exchange_rate: 7))
 
     # loan
-    lf.create.should be_true
+    lf.create.should eq(true)
 
     lf.loan.should be_is_a(Loans::Receive)
     lf.loan.currency.should eq('USD')

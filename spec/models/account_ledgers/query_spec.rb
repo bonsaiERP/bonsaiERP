@@ -5,7 +5,7 @@ describe AccountLedger do
 
   it "#money" do
     sql = <<-SQL
-SELECT "account_ledgers".* FROM "account_ledgers" WHERE (("account_ledgers"."account_id" = 1 OR "account_ledgers"."account_to_id" = 1)) ORDER BY account_ledgers.date desc, account_ledgers.id desc
+SELECT "account_ledgers".* FROM "account_ledgers" WHERE ("account_ledgers"."account_id" = 1 OR "account_ledgers"."account_to_id" = 1) ORDER BY account_ledgers.date desc, account_ledgers.id desc
     SQL
 
     expect(subject.money(1).to_sql.squish).to eq(sql.squish)

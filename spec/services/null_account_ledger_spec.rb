@@ -51,7 +51,7 @@ describe NullAccountLedger do
       al.account = exp
       al.account_to = bank_bob
 
-      al.save.should be_true
+      al.save.should eq(true)
       al.should be_is_pendent
 
       na = NullAccountLedger.new(al)
@@ -71,7 +71,7 @@ describe NullAccountLedger do
       al.account = exp
       al.account_to = bank_bob
 
-      al.save.should be_true
+      al.save.should eq(true)
       al.should be_is_pendent
 
       na = NullAccountLedger.new(al)
@@ -93,7 +93,7 @@ describe NullAccountLedger do
       al.account = inc
       al.account_to = bank_bob
 
-      al.save.should be_true
+      al.save.should eq(true)
       al.should be_is_pendent
 
       na = NullAccountLedger.new(al)
@@ -113,7 +113,7 @@ describe NullAccountLedger do
       al.account = inc
       al.account_to = bank_bob
 
-      al.save.should be_true
+      al.save.should eq(true)
       al.should be_is_pendent
 
       na = NullAccountLedger.new(al)
@@ -140,12 +140,12 @@ describe NullAccountLedger do
       al.account = inc
       al.account_to = bank_usd
 
-      al.save.should be_true
+      al.save.should eq(true)
       al.should be_is_pendent
 
       na = NullAccountLedger.new(al)
 
-      na.null!.should be_true
+      na.null!.should eq(true)
 
       inc.balance.should == 100
     end
@@ -160,13 +160,13 @@ describe NullAccountLedger do
       al.account = inc
       al.account_to = bank_bob
 
-      al.save.should be_true
+      al.save.should eq(true)
       al.should be_is_pendent
       al.should be_inverse
 
       na = NullAccountLedger.new(al)
 
-      na.null!.should be_true
+      na.null!.should eq(true)
 
       inc.balance.should == 100
     end
@@ -181,13 +181,13 @@ describe NullAccountLedger do
       al.account = inc
       al.account_to = bank_bob
 
-      al.save.should be_true
+      al.save.should eq(true)
       al.should be_is_pendent
       al.should be_inverse
 
       na = NullAccountLedger.new(al)
 
-      na.null!.should be_true
+      na.null!.should eq(true)
 
       inc.balance.should == 80
     end
@@ -202,7 +202,7 @@ describe NullAccountLedger do
       ledger.stub(account: loan, save: true)
 
       nl = NullAccountLedger.new(ledger)
-      nl.null!.should be_true
+      nl.null!.should eq(true)
       loan.total.should == 1000
       loan.amount.should == 1000
     end
@@ -214,7 +214,7 @@ describe NullAccountLedger do
       ledger.stub(account: loan, save: true)
 
       nl = NullAccountLedger.new(ledger)
-      nl.null!.should be_true
+      nl.null!.should eq(true)
       loan.total.should == 1000
       loan.amount.should == 1000
     end
@@ -227,7 +227,7 @@ describe NullAccountLedger do
 
       ledger.stub(account: loan, save: true)
       nl = NullAccountLedger.new(ledger)
-      nl.null!.should be_true
+      nl.null!.should eq(true)
       loan.total.should == 1000
       loan.amount.should == 1000
     end
@@ -239,7 +239,7 @@ describe NullAccountLedger do
 
       ledger.stub(account: loan, save: true)
       nl = NullAccountLedger.new(ledger)
-      nl.null!.should be_true
+      nl.null!.should eq(true)
       loan.total.should == 1000
       loan.amount.should == 1000
     end

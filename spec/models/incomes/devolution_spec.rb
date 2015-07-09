@@ -43,12 +43,12 @@ describe Incomes::Devolution do
     it "validates presence of income" do
       in_dev = Incomes::Devolution.new(valid_attributes)
       in_dev.should_not be_valid
-      in_dev.errors_on(:income).should_not be_empty
+      in_dev.errors[:income].should_not be_empty
 
       Income.stub_chain(:active, where: [income])
       in_dev.should_not be_valid
 
-      in_dev.errors_on(:income).should be_blank
+      in_dev.errors[:income].should be_blank
     end
 
     it "does not allow amount greater than total" do
@@ -58,7 +58,7 @@ describe Incomes::Devolution do
       Account.stub(where: [account_to])
 
       in_dev.should_not be_valid
-      in_dev.errors_on(:amount).should_not be_empty
+      in_dev.errors[:amount].should_not be_empty
 
       in_dev.amount = 100
       in_dev.should be_valid
@@ -81,7 +81,7 @@ describe Incomes::Devolution do
 
       dev = Incomes::Devolution.new(valid_attributes)
       ### Payment
-      dev.pay_back.should  be_true
+      dev.pay_back.should  eq(true)
 
       dev.should be_verification
 
@@ -113,7 +113,7 @@ describe Incomes::Devolution do
 
         dev = Incomes::Devolution.new(valid_attributes.merge(account_to_id: 100, verification: true))
 
-        dev.pay_back.should be_true
+        dev.pay_back.should eq(true)
         dev.should be_verification
         dev.account_to.should eq(bank)
         # Should not conciliate
@@ -122,7 +122,7 @@ describe Incomes::Devolution do
         # When inverse
         dev = Incomes::Devolution.new(valid_attributes.merge(account_to_id: 100, verification: false, interest: 10))
 
-        dev.pay_back.should be_true
+        dev.pay_back.should eq(true)
         dev.account_to.should eq(bank)
         # Should conciliate
         dev.ledger.should be_is_approved
@@ -135,14 +135,14 @@ describe Incomes::Devolution do
 
         dev = Incomes::Devolution.new(valid_attributes.merge(account_to_id: 200, verification: true))
 
-        dev.pay_back.should be_true
+        dev.pay_back.should eq(true)
 
         dev.ledger.should be_is_approved
 
         #inverse
         dev = Incomes::Devolution.new(valid_attributes.merge(account_to_id: 200, verification: false))
 
-        dev.pay_back.should be_true
+        dev.pay_back.should eq(true)
 
         dev.ledger.should be_is_approved
       end
@@ -153,7 +153,7 @@ describe Incomes::Devolution do
     it "does not save if invalid Incomes::Devolution" do
       Income.any_instance.should_not_receive(:save)
       p = Incomes::Devolution.new(valid_attributes.merge(reference: ''))
-      p.pay_back.should be_false
+      p.pay_back.should eq(false)
     end
 
     before(:each) do
@@ -167,7 +167,7 @@ describe Incomes::Devolution do
     #  dev = Incomes::Devolution.new(valid_attributes)
 
 
-    #  dev.pay_back.should be_false
+    #  dev.pay_back.should eq(false)
     #  # There is no method Incomes::Devolution#balance
     #  dev.errors[:amount].should eq(['Not real'])
     #  # There is a method Incomes::Devolution#amount

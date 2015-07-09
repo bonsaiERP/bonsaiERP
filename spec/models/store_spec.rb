@@ -20,20 +20,20 @@ describe Store do
     st = Store.create!(valid_attributes)
 
     st.stub(stocks: [1])
-    st.destroy.should be_false
+    st.destroy.should eq(false)
     st.errors[:base].should eq([I18n.t('errors.messages.store.destroy')])
 
     st.errors.clear
     st.stub(stocks: [])
     st.should respond_to(:inventories)
     st.stub(inventories: [1])
-    st.destroy.should be_false
+    st.destroy.should eq(false)
     st.errors[:base].should eq([I18n.t('errors.messages.store.destroy')])
 
     st.errors.clear
     st.stub(stocks: [])
     st.stub(inventories: [])
-    st.destroy.should be_true
+    st.destroy.destroyed?.should eq(true)
   end
 
   #def create_items(number = 10)

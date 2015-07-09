@@ -35,11 +35,11 @@ describe Incomes::Payment do
     it "validates presence of income" do
       pay_in = Incomes::Payment.new(valid_attributes)
       pay_in.should_not be_valid
-      pay_in.errors_on(:income).should_not be_empty
+      expect(pay_in.errors[:income].present?).to eq(true)
 
       Income.stub(find_by_id: income)
       Account.stub(find_by_id: account_to)
-      pay_in.should be_valid
+      expect(pay_in.valid?).to eq(true)
     end
 
 
@@ -57,12 +57,12 @@ describe Incomes::Payment do
       Account.stub(find_by_id: bank)
       AccountLedger.any_instance.stub(save: true)
 
-      income.should_not be_has_error
+      expect(income.valid?).to eq(false)
 
-      pay_in.pay.should be_true
+      expect(pay_in.pay).to eq(true)
 
       pay_in.income.should be_has_error
-      pay_in.income.error_messages.should eq({balance: ['movement.negative_balance']})
+      pay_in.income.error_messages.should eq({ "balance" => ['movement.negative_balance']})
     end
 
     it "does not allow greater values for the same currency" do
@@ -74,7 +74,7 @@ describe Incomes::Payment do
       Account.stub(find_by_id: account_to)
       AccountLedger.any_instance.stub(save: true)
 
-      pay_in.pay.should be_false
+      expect(pay_in.pay).to eq(false)
       pay_in.errors[:amount].should eq([I18n.t('errors.messages.payment.balance')])
     end
   end
@@ -88,20 +88,20 @@ describe Incomes::Payment do
     end
 
     it "Payments" do
-      income.should be_is_draft
-      income.approver_id.should be_nil
+      expect(income.is_draft?).to eq(true)
+      expect(income.approver_id).to eq(nil)
 
       p = Incomes::Payment.new(valid_attributes)
 
-      p.pay.should be_true
-      p.verification.should be_true
+      expect(p.pay).to eq(true)
+      expect(p.verification).to eq(true)
 
       # Income
-      p.income.should be_is_a(Income)
-      p.income.balance.should == balance - valid_attributes[:amount]
-      p.income.should be_is_approved
-      p.income.approver_id.should eq(UserSession.id)
-      p.income.operation_type.should eq('ledger_in')
+      expect(p.income).to be_is_a(Income)
+      expect(p.income.balance).to eq(balance - valid_attributes[:amount])
+      expect(p.income.is_approved?).to eq(true)
+      expect(p.income.approver_id).to eq(UserSession.id)
+      expect(p.income.operation_type).to eq('ledger_in')
 
       # Ledger
       p.ledger.amount.should == 50.0
@@ -119,7 +119,7 @@ describe Incomes::Payment do
 
       # New payment to complete
       p = Incomes::Payment.new(valid_attributes.merge(amount: p.income.balance))
-      p.pay.should be_true
+      p.pay.should eq(true)
 
       p.income.balance.should == 0
       p.income.should be_is_paid
@@ -129,9 +129,9 @@ describe Incomes::Payment do
       income.should be_is_draft
       p = Incomes::Payment.new(valid_attributes)
 
-      p.verification.should be_true
+      p.verification.should eq(true)
 
-      p.pay.should be_true
+      p.pay.should eq(true)
 
       # ledger
       p.ledger.should be_is_approved
@@ -150,7 +150,7 @@ describe Incomes::Payment do
 
         p = Incomes::Payment.new(valid_attributes.merge(account_to_id: 100, verification: true))
 
-        p.pay.should be_true
+        p.pay.should eq(true)
         p.should be_verification
         p.account_to_id.should eq(100)
         # Should not conciliate
@@ -159,7 +159,7 @@ describe Incomes::Payment do
         # When verification=false
         p = Incomes::Payment.new(valid_attributes.merge(account_to_id: 100, verification: false))
 
-        p.pay.should be_true
+        p.pay.should eq(true)
         # Should conciliate
         p.ledger.should be_is_approved
       end
@@ -173,14 +173,14 @@ describe Incomes::Payment do
 
         p = Incomes::Payment.new(valid_attributes.merge(account_to_id: 200, verification: true))
 
-        p.pay.should be_true
+        p.pay.should eq(true)
 
         p.ledger.should be_is_approved
 
         #inverse
         p = Incomes::Payment.new(valid_attributes.merge(account_to_id: 200, verification: false))
 
-        p.pay.should be_true
+        p.pay.should eq(true)
 
         p.ledger.should be_is_approved
       end
@@ -208,13 +208,13 @@ describe Incomes::Payment do
       expense.balance = 20
       ip = Incomes::Payment.new(payment_with_expense_attributes)
 
-      ip.should_not be_valid
+      expect(ip.valid?).to eq(false)
 
-      ip.errors_on(:amount).should eq([I18n.t('errors.messages.payment.expense_balance')])
+      expect(ip.errors[:amount]).to eq([I18n.t('errors.messages.payment.expense_balance')])
 
       expense.balance = 100
 
-      ip.should be_valid
+      expect(ip.valid?).to eq(true)
     end
 
     it "updates the related Expense account" do
@@ -229,7 +229,7 @@ describe Incomes::Payment do
 
       bal = income.balance
       # Pay
-      ip.pay.should be_true
+      ip.pay.should eq(true)
       # Income
       ip.income.balance.should == bal - ip.amount
       # Expense
@@ -243,9 +243,9 @@ describe Incomes::Payment do
 
       ip = Incomes::Payment.new(payment_with_expense_attributes)
 
-      ip.should_not be_valid
+      expect(ip.valid?).to eq(false)
 
-      ip.errors_on(:account_to_id).should eq([I18n.t('errors.messages.payment.invalid_expense_state')])
+      expect(ip.errors[:account_to_id]).to eq([I18n.t('errors.messages.payment.invalid_expense_state')])
     end
 
     it "sets the state for the expense" do
@@ -261,7 +261,7 @@ describe Incomes::Payment do
 
       ip = Incomes::Payment.new(payment_with_expense_attributes.merge(amount: 100))
 
-      ip.pay.should be_true
+      ip.pay.should eq(true)
       # Income
       ip.income.balance.should == 0
       # Expense
@@ -284,7 +284,7 @@ describe Incomes::Payment do
 
       ip = Incomes::Payment.new(payment_with_expense_attributes.merge(amount: 10, exchange_rate: 7.0))
 
-      ip.pay.should be_true
+      ip.pay.should eq(true)
       # Income
       ip.income.balance.should == 100 - 7.0 * 10
       # Expense
@@ -299,7 +299,7 @@ describe Incomes::Payment do
 
       ip = Incomes::Payment.new(payment_with_expense_attributes.merge(amount: 10, exchange_rate: 7.0))
 
-      ip.pay.should be_true
+      ip.pay.should eq(true)
       # Income
       ip.income.balance.to_f.should == (100 - 1.0/7 * 10).round(2)
       # Expense
@@ -321,7 +321,7 @@ describe Incomes::Payment do
 
       ip = Incomes::Payment.new(valid_attributes.merge(account_to_id: 101, exchange_rate: 7.001, amount: 10))
 
-      ip.pay.should be_true
+      ip.pay.should eq(true)
 
       ip.amount.should == 10
       # income
@@ -341,7 +341,7 @@ describe Incomes::Payment do
 
       ip = Incomes::Payment.new(valid_attributes.merge(account_to_id: 103, exchange_rate: 7.001, amount: 200))
 
-      ip.pay.should be_true
+      ip.pay.should eq(true)
 
       ip.amount.should == 200
       # income
@@ -358,7 +358,7 @@ describe Incomes::Payment do
     it "does not save if invalid Incomes::Payment" do
       Income.any_instance.should_not_receive(:save)
       p = Incomes::Payment.new(valid_attributes.merge(reference: ''))
-      p.pay.should be_false
+      p.pay.should eq(false)
     end
 
     before(:each) do
@@ -371,7 +371,7 @@ describe Incomes::Payment do
     it "sets errors from other clases" do
       p = Incomes::Payment.new(valid_attributes)
 
-      p.pay.should be_false
+      p.pay.should eq(false)
       # There is no method Incomes::Payment#balance
       p.errors[:amount].should eq(['Not real'])
       # There is a method Incomes::Payment#amount

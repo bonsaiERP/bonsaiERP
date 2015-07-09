@@ -57,7 +57,7 @@ describe Transference do
       t = Transference.new(valid_attributes)
 
       t.should_not be_valid
-      t.errors_on(:base).should eq([I18n.t('errors.messages.payment.valid_accounts_currency', currency: OrganisationSession.currency)])
+      t.errors[:base].should eq([I18n.t('errors.messages.payment.valid_accounts_currency', currency: OrganisationSession.currency)])
     end
 
     context "account_to" do
@@ -69,7 +69,7 @@ describe Transference do
         t = Transference.new(valid_attributes)
 
         t.should_not be_valid
-        t.errors_on(:account_to).should_not be_empty
+        t.errors[:account_to].should_not be_empty
       end
 
       it "check conciliation" do
@@ -130,7 +130,7 @@ describe Transference do
       t = Transference.new(attrs)
 
       #ConciliateAccount.any_instance.should_receive(:conciliate!).and_return(true)
-      t.transfer.should be_true
+      t.transfer.should eq(true)
 
       # Ledger
       t.ledger.should be_is_trans
@@ -154,7 +154,7 @@ describe Transference do
 
       t = Transference.new(attrs)
 
-      t.transfer.should be_true
+      t.transfer.should eq(true)
 
       # Ledger
       t.ledger.currency.should eq('USD')
@@ -177,7 +177,7 @@ describe Transference do
 
       t = Transference.new(attrs)
 
-      t.transfer.should be_true
+      t.transfer.should eq(true)
 
       t.ledger.should be_inverse
       t.ledger.amount.should == 14
@@ -196,7 +196,7 @@ describe Transference do
 
       t = Transference.new(attrs)
 
-      t.transfer.should be_true
+      t.transfer.should eq(true)
 
       t.ledger.should be_inverse
       t.ledger.amount.should == 14

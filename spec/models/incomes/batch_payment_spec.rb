@@ -20,7 +20,7 @@ describe Incomes::BatchPayment do
     expect(i2.total).to eq(100)
 
     b_pay = Incomes::BatchPayment.new(ids: [i1.id, i2.id], account_to_id: cash.id)
-    expect(b_pay.incomes).to have(2).items
+    expect(b_pay.incomes.size).to eq(2)
 
 
     b_pay.make_payments
@@ -47,7 +47,7 @@ describe Incomes::BatchPayment do
 
     b_pay.make_payments
 
-    expect(b_pay.errors).to have(1).item
+    expect(b_pay.errors.size).to eq(1)
     expect(b_pay.errors).to eq([I18n.t('errors.messages.incomes.batch_payment.problem', name: i1.name)])
 
     i1.balance = '100'
@@ -57,7 +57,7 @@ describe Incomes::BatchPayment do
     b_pay = Incomes::BatchPayment.new(ids: [i1.id], account_to_id: cash.id)
     b_pay.make_payments
 
-    expect(b_pay.errors).to have(1).item
+    expect(b_pay.errors.size).to eq(1)
     expect(b_pay.errors).to eq([I18n.t('errors.messages.incomes.batch_payment.problem', name: i1.name)])
   end
 end

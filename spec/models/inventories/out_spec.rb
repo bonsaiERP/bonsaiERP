@@ -20,7 +20,7 @@ describe Inventories::Out do
 
     invout.inventory.should be_is_out
   end
-  
+
   context "create" do
     before(:each) do
       UserSession.user = user
@@ -44,12 +44,12 @@ describe Inventories::Out do
       Stock.any_instance.stub(item: item, store: store)
 
       # Create with the function
-      create_inventory_in.should be_true
+      create_inventory_in.should eq(true)
 
 
       # Create
       invout = Inventories::Out.new(valid_attributes)
-      invout.create.should be_true
+      invout.create.should eq(true)
 
       io = Inventory.find(invout.inventory.id)
       io.should be_is_a(Inventory)
@@ -57,17 +57,17 @@ describe Inventories::Out do
       io.creator_id.should eq(user.id)
       io.ref_number.should =~ /\AE-\d{2}-\d{4}\z/
 
-      io.inventory_details.should have(2).items
+      io.inventory_details.size.should eq(2)
       io.inventory_details.map(&:quantity).should eq([2, 2])
       io.inventory_details.map(&:item_id).should eq([1, 2])
 
       stocks = Stock.active.where(store_id: io.store_id, item_id: [1, 2])
-      stocks.should have(2).items
+      stocks.size.should eq(2)
       stocks.map(&:item_id).sort.should eq([1, 2])
       stocks.map(&:quantity).should eq([0, 0])
 
       st = stocks.first
-      st.update_attribute(:minimum, 1).should be_true
+      st.update_attribute(:minimum, 1).should eq(true)
       st_item_id = st.item_id
 
       # More items ERROR repeated
@@ -78,7 +78,7 @@ describe Inventories::Out do
         ]
       )
       invout = Inventories::Out.new(attrs)
-      invout.create.should be_false
+      invout.create.should eq(false)
       invout.details[2].errors[:item_id].should_not be_blank
 
       # More items store with ERROR
@@ -89,7 +89,7 @@ describe Inventories::Out do
       )
       invout = Inventories::Out.new(attrs)
 $glob =true
-      invout.create.should be_true
+      invout.create.should eq(true)
 
       inv = Inventory.find(invout.inventory.id)
 
@@ -99,7 +99,7 @@ $glob =true
       inv.error_messages["item_ids"].should eq([2, 10])
 
       stocks = Stock.active.where(store_id: io.store_id)
-      stocks.should have(3).items
+      stocks.size.should eq(3)
 
       stocks.find {|v| v.item_id === st_item_id}.minimum.should == 1
 
@@ -109,4 +109,3 @@ $glob =true
     end
   end
 end
-

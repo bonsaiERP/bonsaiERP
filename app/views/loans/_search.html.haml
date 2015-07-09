@@ -1,0 +1,4 @@
+.input-append.search
+  = form_tag '/loans', method: 'get', class: 'form-inline' do
+    = text_field_tag 'search', params[:search], placeholder: I18n.t('controllers.loans.index.search_placeholder'), autocomplete: 'off'
+    = submit_tag I18n.t('controllers.loans.index.search_button'), class: 'btn'

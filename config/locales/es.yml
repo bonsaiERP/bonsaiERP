@@ -358,6 +358,7 @@ es:
     edit: 'Editar'
     delete: 'Borrar'
     show: 'Ver'
+    search: "Buscar"
 
   email:
     invoice_title: "Nota de venta "
@@ -387,7 +388,9 @@ es:
       approved: Aprobado
       paid: Pagado
       nulled: Anulado
-      due: Atrasado
+      due: Vencido
+      error: Error
+
 
   ########################################
   # Translations for history
@@ -421,10 +424,9 @@ es:
       <<: *movement_attributes
     payment:
       reference: "Cobro ingreso %{income}"
-
-  incomes:
     batch_payment:
-      reference: 'Cobro ingreso %{name}'
+      reference: "Cobro ingreso %{income}"
+
   expense:
     account_ledger_reference: "Gasto"
     payment:
@@ -464,3 +466,84 @@ es:
         list: "Debe seleccionar otro valor"
   history:
     new_record: Creado por %{user}
+  ################################################################
+  # Controllers
+  controllers:
+    movements:
+      index:
+        search: &search_movements_form
+          contact_expense: "Buscar por contacto o egreso"
+          date_start: "Fecha inicio"
+          date_end: "Fecha fin"
+          state: "Estado"
+
+    expenses:
+      reference: "Cobro egreso %{name}"
+      index:
+        search:
+          contact_expense: "Buscar por contacto o egreso"
+          date_start: "Fecha inicio"
+          date_end: "Fecha fin"
+          state: "Estado"
+
+
+    incomes:
+      reference: "Cobro ingreso %{name}"
+      index:
+        batch_payment:
+          title: "Cobro multiple"
+        search:
+          contact_income: "Buscar por contacto o ingreso"
+          date_start: "Fecha inicio"
+          date_end: "Fecha fin"
+          state: "Estado"
+
+    loans:
+      index:
+        all: "Todos"
+        given: "Otorgados"
+        received: "Recibidos"
+        search_placeholder: "Buscar por contacto o referencia"
+        search_button: "Buscar"
+      show:
+        ledger_in_button: "Aumentar prestamo"
+
+    loan_ledger_ins:
+      new_give:
+        title: "Aumentar prestamo"
+
+    loan_payments:
+      form:
+        amount: "Catidad"
+        exchange_rate: "Tipo de cambio"
+        total: "TOTAL"
+        date: "Fecha"
+        verify_bank: "Verificar (solo bank)"
+        verify_bank_hint: "Verificar a futuro. Ej.: (Cheque)"
+        reference: "Referencia"
+  ################################################################
+  # Presenters
+  presenters:
+    loans:
+      receive:
+        ledger_ins_title: "Ingreso de prestamos"
+      give:
+        ledger_ins_title: "Egreso de prestamos"
+    inventory:
+      title:
+        deliver: "Entrega"
+        devolution: "Devolución"
+        pick: "Recojo"
+        in: "Ingreso"
+        out: "Egreso"
+      contact_tooltip:
+        client: "Cliente"
+        supplier: "Proveedor"
+      related_tip:
+        income: "Ingreso"
+        expense: "Egreso"
+        store_destiny: "Almacen destino"
+        store_source: "Almacen origen"
+      transaction_tooltip:
+        sale: "Venta"
+        buy: "Compra"

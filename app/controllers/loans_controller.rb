@@ -2,7 +2,9 @@ class LoansController < ApplicationController
 
   # GET /loans
   def index
-    @loans = Loans::Query.new.all_loans.page(@page).page(@page)
+    params[:type] = "all"  if params[:type].blank? and params[:search].blank?
+
+    @loans = Loans::Query.filter(params).page(@page).page(@page)
   end
 
   # GET /loans_receive/new

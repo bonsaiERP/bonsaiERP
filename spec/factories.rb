@@ -171,4 +171,15 @@ FactoryGirl.define do
     name 'first tag'
     bgcolor '#efefef'
   end
+
+  factory :loan_give, class: Loans::Give do
+    date Date.today
+    due_date Date.today
+  end
+
+  factory :loan_receive, class: Loans::Receive do
+    date Date.today
+    due_date Date.today
+  end
+
 end

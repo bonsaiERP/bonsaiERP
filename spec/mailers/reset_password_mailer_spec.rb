@@ -10,7 +10,7 @@ describe ResetPasswordMailer do
   }
 
   it 'should send the password' do
-    ResetPasswordMailer.send_reset_password(user).deliver
+    ResetPasswordMailer.send_reset_password(user).deliver_now
 
     ActionMailer::Base.deliveries.should_not be_empty
 

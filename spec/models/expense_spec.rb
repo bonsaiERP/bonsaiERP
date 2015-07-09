@@ -10,10 +10,10 @@ describe Expense do
   end
 
   let(:valid_attributes) {
-    {active: nil, bill_number: "56498797", contact: contact, state: 'draft',
+    { active: nil, bill_number: "56498797", contact: contact, state: 'draft',
       exchange_rate: 1, currency: 'BOB', date: '2011-01-24', due_date: '2011-01-24',
       description: "Esto es una prueba",
-      ref_number: "987654", state: 'draft'
+      ref_number: "987654"
     }
   }
 
@@ -222,11 +222,11 @@ describe Expense do
 
     it "#nulls" do
       exp = Expense.new(valid_attributes.merge(total: 100, amount: 100, state: 'approved'))
-      exp.save.should be_true
+      exp.save.should eq(true)
 
       exp.nuller_id.should be_blank
 
-      exp.null!.should be_true
+      exp.null!.should eq(true)
 
       exp.should be_is_nulled
       exp.nuller_id.should eq(15)
@@ -253,12 +253,12 @@ describe Expense do
     it "#destroy item" do
       exp = Expense.new(attributes)
 
-      exp.save.should be_true
+      exp.save.should eq(true)
 
-      exp.details.should have(2).items
+      expect(exp.details.size).to eq(2)
       det = exp.details[0]
       det.balance = 5
-      det.save.should be_true
+      expect(det.save).to eq(true)
 
       exp = Expense.find(exp.id)
       exp.attributes = {expense_details_attributes: [{id: det.id, item_id: 1, price: 20, quantity: 10, "_destroy" => "1"}] }
@@ -266,20 +266,20 @@ describe Expense do
 
       exp.details[0].should be_marked_for_destruction
 
-      exp.save.should be_false
+      expect(exp.save).to eq(false)
       exp.details[0].should_not be_marked_for_destruction
       exp.details[0].errors[:item_id].should eq([I18n.t('errors.messages.movement_details.not_destroy')])
 
       det = exp.details[0]
       det.balance = 10
-      det.save.should be_true
+      expect(det.save).to eq(true)
 
       exp = Expense.find(exp.id)
       exp.attributes = {expense_details_attributes: [{id: det.id, item_id: 1, price: 20, quantity: 10, "_destroy" => "1"}] }
 
-      exp.save.should be_true
-      exp.details.should have(1).item
-      exp.details.map(&:item_id).should eq([2])
+      expect(exp.save).to eq(true)
+      expect(exp.details.size).to eq(1)
+      expect(exp.details.map(&:item_id)).to eq([2])
     end
   end
 
@@ -296,7 +296,7 @@ SELECT \"accounts\".* FROM \"accounts\"  WHERE \"accounts\".\"type\" IN ('Expens
 
     it "::like" do
       sql = <<-SQL
- SELECT "accounts".* FROM "accounts" WHERE "accounts"."type" IN ('Expense') AND (("accounts"."name" ILIKE '%a%' OR "accounts"."description" ILIKE '%a%'))
+ SELECT "accounts".* FROM "accounts" WHERE "accounts"."type" IN ('Expense') AND ("accounts"."name" ILIKE '%a%' OR "accounts"."description" ILIKE '%a%')
       SQL
 
       expect(subject.like('a').to_sql.squish).to eq(sql.squish)

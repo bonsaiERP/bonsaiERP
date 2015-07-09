@@ -45,10 +45,10 @@ describe Income do
       #should_not be_discounted
       #should_not be_delivered
       should_not be_devolution
-      subject.total.should == 0.0
-      subject.balance.should == 0.0
-      #subject.original_total.should == 0.0
-      #subject.balance_inventory.should == 0.0
+      expect(subject.total).to eq(0.0)
+      expect(subject.balance).to eq(0.0)
+      #subject.original_total).to == 0.0
+      #subject.balance_inventory).to == 0.0
     end
 
     it "alias" do
@@ -62,7 +62,7 @@ describe Income do
 
     Income::STATES.each do |state|
       inc.state = state
-      inc.should send(:"be_is_#{state}")
+      expect(inc.send(:"is_#{state}?")).to eq(true)
     end
   end
 
@@ -75,37 +75,37 @@ describe Income do
 
     it "does not update contact to client" do
       contact.client = true
-      contact.should_not_receive(:update_attribute).with(:client, true)
+      expect(contact).to_not receive(:update_attribute).with(:client, true)
       i = Income.new(valid_attributes)
       i.tag_ids = [1, 2]
 
-      i.save.should be_true
+      expect(i.save).to eq(true)
     end
   end
 
   it "checks the states methods" do
     Income::STATES.each do |state|
-      Income.new(state: state).should send(:"be_is_#{state}")
+      expect(Income.new(state: state).send(:"is_#{state}?")).to eq(true)
     end
   end
 
   it "sets the to_s method to :name, :ref_number" do
     i = Income.new(ref_number: 'I-0012')
-    i.ref_number.should eq('I-0012')
-    i.ref_number.should eq(i.to_s)
+    expect(i.ref_number).to eq('I-0012')
+    expect(i.ref_number).to eq(i.to_s)
   end
 
   it "$get_ref_number" do
     y = Time.zone.now.year.to_s[2..4]
     ref_num = Income.get_ref_number
-    ref_num.should eq("I-#{y}-0001")
+    expect(ref_num).to eq("I-#{y}-0001")
 
     Income.stub_chain(:order, :reverse_order, :limit, pluck: ["I-#{y}-0001"])
 
-    Income.get_ref_number.should eq("I-#{y}-0002")
+    expect(Income.get_ref_number).to eq("I-#{y}-0002")
 
     Time.zone.stub(now: Time.zone.parse('2009-12-31'))
-    Income.get_ref_number.should eq("I-09-0001")
+    expect(Income.get_ref_number).to eq("I-09-0001")
   end
 
   context "set_state_by_balance!" do
@@ -114,7 +114,7 @@ describe Income do
 
       i.set_state_by_balance!
 
-      i.should be_is_draft
+      expect(i.is_draft?).to eq(true)
     end
 
     it "a paid income" do
@@ -122,7 +122,7 @@ describe Income do
 
       i.set_state_by_balance!
 
-      i.should be_is_paid
+      expect(i.is_paid?).to eq(true)
     end
 
     it "a negative balance" do
@@ -130,7 +130,8 @@ describe Income do
 
       i.set_state_by_balance!
 
-      i.should be_is_paid
+
+      expect(i.is_paid?).to eq(true)
     end
 
     # Changes to the income, it was paid but can change because of
@@ -140,23 +141,23 @@ describe Income do
 
       i.set_state_by_balance!
 
-      i.should be_is_paid
+      expect(i.is_paid?).to eq(true)
 
       i.balance = 2
       i.set_state_by_balance!
 
-      i.should be_is_approved
+      expect(i.is_approved?).to eq(true)
     end
 
     it "does not set state if it has state" do
       i = Income.new(balance: 10, total:10)
       i.state = 'approved'
 
-      i.should be_is_approved
+      expect(i.is_approved?).to eq(true)
 
       i.set_state_by_balance!
 
-      i.should be_is_approved
+      expect(i.is_approved?).to eq(true)
     end
   end
 
@@ -168,7 +169,7 @@ describe Income do
       ]
     }
     ))
-    i.subtotal.should == 17.0
+    expect(i.subtotal).to eq(17.0)
   end
 
   it "checks the methods approver, nuller, creator" do
@@ -185,7 +186,7 @@ describe Income do
     i = Income.new(attrs)
 
     attrs.except(:approver_datetime).each do |k, v|
-      i.send(k).should eq(v)
+      expect(i.send(k)).to eq(v)
     end
 
     expect(i.approver_datetime.to_s).to eq(t.to_s)
@@ -200,36 +201,36 @@ describe Income do
 
     it "Changes" do
       i = subject
-      i.should be_is_draft
-      i.approver_id.should be_blank
-      i.approver_datetime.should be_blank
-      i.due_date.should be_blank
+      expect(i.is_draft?).to eq(true)
+      expect(i.approver_id).to be_blank
+      expect(i.approver_datetime).to be_blank
+      expect(i.due_date).to be_blank
       i.approve!
 
-      i.should be_is_approved
-      i.approver_id.should eq(11)
-      i.approver_datetime.should be_is_a(Time)
-      i.due_date.should_not be_blank
+      expect(i.is_approved?).to eq(true)
+      expect(i.approver_id).to eq(11)
+      expect(i.approver_datetime.kind_of?(Time)).to eq(true)
+      expect(i.due_date).to_not be_blank
     end
 
     it "only set the approve when it's draft" do
       i = subject
       i.state = 'paid'
-      i.should be_is_paid
+      expect(i.is_paid?).to eq(true)
       i.approve!
 
-      i.should be_is_paid
-      i.approver_id.should be_nil
+      expect(i.is_paid?).to eq(true)
+      expect(i.approver_id).to eq(nil)
     end
   end
 
   it "can receive a block to set certain arguments" do
     inc = Income.new(id: 1, total: 10, balance: 10)
-    inc.id.should eq(1)
+    expect(inc.id).to eq(1)
 
     inc = Income.new(total: 10, balance: 10) {|e| e.id = 10}
 
-    inc.id.should eq(10)
+    expect(inc.id).to eq(10)
   end
 
   context 'Contact callbacks' do
@@ -250,15 +251,15 @@ describe Income do
 
     it "#nulls" do
       inc = Income.new(valid_attributes.merge(total: 100, amount: 100, state: 'approved'))
-      inc.save.should be_true
+      expect(inc.save).to eq(true)
 
-      inc.nuller_id.should be_blank
+      expect(inc.nuller_id).to be_blank
 
-      inc.null!.should be_true
+      expect(inc.null!).to eq(true)
 
-      inc.should be_is_nulled
-      inc.nuller_id.should eq(15)
-      inc.nuller_datetime.should be_is_a(Time)
+      expect(inc.is_nulled?).to eq(true)
+      expect(inc.nuller_id).to eq(15)
+      expect(inc.nuller_datetime.kind_of?(Time)).to eq(true)
     end
   end
 
@@ -278,33 +279,33 @@ describe Income do
 
     it "_destroy item" do
       inc = Income.new(attributes)
-      inc.save.should be_true
+      expect(inc.save).to eq(true)
 
-      inc.details.should have(2).items
+      expect(inc.details.size).to eq(2)
       det = inc.details[0]
       det.balance = 5
-      det.save.should be_true
+      expect(det.save).to eq(true)
 
       inc = Income.find(inc.id)
       inc.attributes = {income_details_attributes: [{id: det.id, item_id: 1, price: 20, quantity: 10, "_destroy" => "1"}] }
 
 
-      inc.details[0].should be_marked_for_destruction
+      expect(inc.details[0].marked_for_destruction?).to eq(true)
 
-      inc.save.should be_false
-      inc.details[0].should_not be_marked_for_destruction
-      inc.details[0].errors[:item_id].should eq([I18n.t('errors.messages.movement_details.not_destroy')])
+      expect(inc.save).to eq(false)
+      expect(inc.details[0].marked_for_destruction?).to eq(false)
+      expect(inc.details[0].errors[:item_id]).to eq([I18n.t('errors.messages.movement_details.not_destroy')])
 
       det = inc.details[0]
       det.balance = 10
-      det.save.should be_true
+      expect(det.save).to eq(true)
 
       inc = Income.find(inc.id)
       inc.attributes = {income_details_attributes: [{id: det.id, item_id: 1, price: 20, quantity: 10, "_destroy" => "1"}] }
 
-      inc.save.should be_true
-      inc.details.should have(1).item
-      inc.details.map(&:item_id).should eq([2])
+      expect(inc.save).to eq(true)
+      expect(inc.details.size).to eq(1)
+      expect(inc.details.map(&:item_id)).to eq([2])
     end
   end
 
@@ -322,7 +323,7 @@ SELECT \"accounts\".* FROM \"accounts\"  WHERE \"accounts\".\"type\" IN ('Income
 
     it "::like" do
       sql = <<-SQL
- SELECT "accounts".* FROM "accounts" WHERE "accounts"."type" IN ('Income') AND (("accounts"."name" ILIKE '%a%' OR "accounts"."description" ILIKE '%a%'))
+ SELECT "accounts".* FROM "accounts" WHERE "accounts"."type" IN ('Income') AND ("accounts"."name" ILIKE '%a%' OR "accounts"."description" ILIKE '%a%')
       SQL
 
       expect(subject.like('a').to_sql.squish).to eq(sql.squish)

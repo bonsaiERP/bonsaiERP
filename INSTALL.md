@@ -43,10 +43,10 @@ rvm requirements
 Install first ruby 2.0.0 and then create gemset
 
 ```
-rvm install ruby-2.1.3
-rvm ruby-2.1.3
-rvm gemset create rails-4.1
-rvm ruby-2.1.2@rails-4.1 --default
+rvm install ruby-2.2.1
+rvm ruby-2.2.1
+rvm gemset create rails-4.2
+rvm ruby-2.2.1@rails-4.2 --default
 ```
 
 ## Locales if needed
@@ -68,26 +68,25 @@ LC_ALL="en_US.UTF-8"
 ```
 
 ## Database installation
-Install **PostgreSQL 9.3**
+Install **PostgreSQL 9.4**
 
 Create `/etc/apt/sources.list.d/pgdg.list` and add
 
 ```
-deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main
-
+deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main
 ```
 Then update and install
 
 ```
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
 sudo apt-get update
-sudo apt-get install postgresql-9.3 libpq-dev postgresql-contrib-9.3
+sudo apt-get install postgresql-9.4 libpq-dev postgresql-contrib-9.4
 ```
 
 
 To upgrate
 `sudo apt-get update`
-`sudo apt-get --only-upgrade install postgresql-9.3 postgresql-client-9.3`
+`sudo apt-get --only-upgrade install postgresql-9.4 postgresql-client-9.4`
 
 ### Create a user for the database
 
@@ -103,7 +102,7 @@ sudo -u postgres psql postgres
 CREATE DATABASE bonsai_prod OWNER <user>
 ```
 
-Edit `/etc/postgresql/9.3/main/postgresql.conf` and check that you have:
+Edit `/etc/postgresql/9.4/main/postgresql.conf` and check that you have:
 
 ```
 listen_addresses = 'localhost'
@@ -196,4 +195,3 @@ Run the database setup with
 rake db:setup RAILS_ENV=production
 rake bonsai:create_data RAILS_ENV=production
 ```
-

@@ -2,7 +2,7 @@
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
-require 'rspec/autorun'
+#require 'rspec/autorun'
 
 require 'shoulda/matchers'
 
@@ -27,6 +27,14 @@ RSpec.configure do |config|
 
   config.order = "random"
 
+  config.mock_with :rspec do |c|
+    c.syntax = [:should, :expect]
+  end
+
+  config.expect_with(:rspec) { |c| c.syntax = [:should, :expect] }
+
+  config.infer_spec_type_from_file_location!
+
   config.before(:suite) do
     # So it does not clean migrations
     DatabaseCleaner.clean_with(:truncation, { except: %w(schema_migrations) })
@@ -45,6 +53,6 @@ RSpec.configure do |config|
   end
 
   config.include FactoryGirl::Syntax::Methods
-
   config.include Request::JsonHelpers, type: :controller
+  config.include AuthMacros, type: :controller
 end

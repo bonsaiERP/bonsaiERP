@@ -2,38 +2,32 @@
 # author: Boris Barroso
 # email: boriscyber@gmail.com
 class StoresController < ApplicationController
-  before_filter :set_date_range, :set_show_params, only: ['show']
+  before_action :set_date_range, :set_show_params, only: ['show']
 
   # GET /stores
-  # GET /stores.xml
   def index
     @stores = present Store.all
 
     respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @stores }
+      format.html
     end
   end
 
   # GET /stores/1
-  # GET /stores/1.xml
   def show
     @store = present Store.find(params[:id])
 
     respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @store }
+      format.html
     end
   end
 
   # GET /stores/new
-  # GET /stores/new.xml
   def new
     @store = Store.new(active: true)
 
     respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @store }
+      format.html
     end
   end
 
@@ -43,7 +37,6 @@ class StoresController < ApplicationController
   end
 
   # POST /stores
-  # POST /stores.xml
   def create
     @store = Store.new(store_params)
 
@@ -55,17 +48,14 @@ class StoresController < ApplicationController
   end
 
   # PUT /stores/1
-  # PUT /stores/1.xml
   def update
     @store = Store.find(params[:id])
 
     respond_to do |format|
       if @store.update_attributes(store_params)
         format.html { redirect_to(@store, notice: 'El almacen fue correctamente actualizado.') }
-        format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
-        format.xml  { render :xml => @store.errors, :status => :unprocessable_entity }
       end
     end
   end

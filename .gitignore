@@ -35,7 +35,6 @@ config/initializers/host.rb
 public/javascripts/jquery.js
 public/javascripts/app.js
 public/exchange_rates.json
-public/backup_rates.json
 tmp/restart.txt
 .rbx
 spec/javascripts/generated
@@ -50,3 +49,4 @@ assets.tar.bz2
 *Thumbs.db:encryptable
 config/app_environment_variables.rb
 config/secrets.yml
+.tags*

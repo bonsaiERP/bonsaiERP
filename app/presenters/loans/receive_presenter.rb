@@ -29,6 +29,10 @@ class Loans::ReceivePresenter < BasePresenter
     .includes(*user_log_list)
   end
 
+  def ledger_ins_title
+    I18n.t('presenters.loans.receive.ledger_ins_title')
+  end
+
   def payments_title
     'Pagos'
   end
@@ -60,5 +64,17 @@ class Loans::ReceivePresenter < BasePresenter
      "#{icon('icon-minus-sign')} Pagar intereses".html_safe
     end
   end
-end
 
+  def new_ledger_in_path
+    context.new_receive_loan_ledger_in_path(id)
+  end
+
+  def ledger_in_path
+    context.receive_loan_ledger_in_path(id)
+  end
+
+  def ledger_ins
+    to_model.ledger_ins.includes(:account, :account_to, :updater, :creator, :approver, :nuller)
+  end
+
+end

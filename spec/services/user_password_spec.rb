@@ -9,7 +9,7 @@ describe UserPassword do
   it "sets errors" do
     up = UserPassword.new(password: 'demo123', old_password: 'demo123')
 
-    up.update_password.should be_false
+    up.update_password.should eq(false)
     up.errors[:password].should_not be_blank
   end
 
@@ -20,7 +20,7 @@ describe UserPassword do
       up = UserPassword.new(password: 'Demo1234', old_password: 'demo1234')
       up.user = user
 
-      up.update_password.should be_true
+      up.update_password.should eq(true)
     end
 
     it "invalid old_password" do
@@ -29,7 +29,7 @@ describe UserPassword do
       up = UserPassword.new(password: 'Demo1234', old_password: 'jaja')
       up.user = user
 
-      up.update_password.should be_false
+      up.update_password.should eq(false)
       up.errors[:old_password].should_not be_blank
     end
   end

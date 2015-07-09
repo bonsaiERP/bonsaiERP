@@ -3,15 +3,15 @@
 # email: boriscyber@gmail.com
 class ItemsController < ApplicationController
   include Controllers::TagSearch
-  respond_to :html, :json
 
-  before_filter :set_item, only: [:show, :edit, :update, :destroy]
+  before_action :set_item, only: [:show, :edit, :update, :destroy]
 
   # GET /items
   def index
     search_items
 
-    respond_with do |format|
+    respond_to do |format|
+      format.html
       format.json { render json: @items}
     end
   end

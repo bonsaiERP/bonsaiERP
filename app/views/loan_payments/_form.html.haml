@@ -7,28 +7,28 @@
 .row-fluid.bg-white-tan.borders-y
   .span3
     = f.input :amount,
-      label: 'Cantidad <span class="currency"></span>'.html_safe,
+      label: "#{t('controllers.loan_payments.form.amount')} <span class='currency'></span>".html_safe,
       input_html: { type: 'decimal', size: 10, 'ng-model' => 'amount', 'initial' => true }
   .span3
-    = f.input :exchange_rate, label: 'Tipo de cambio',
+    = f.input :exchange_rate, label: t('controllers.loan_payments.form.exchange_rate'),
       input_html: { type: 'decimal', size: 10, 'initial' => true,
       'ng-model' => 'exchange_rate', 'ng-disabled' => 'same_currency' }
   .span4
     .moneybox
-      %label TOTAL
+      %label= t('controllers.loan_payments.form.total')
       %h4
         %span#currency_total {{ amountCurrency() | decimal }}
         %span#payment-currency-label= currency_label loan.currency
 
 .row-fluid
   .span6
-    = f.input :date, as: :datepicker, label: 'Fecha'
+    = f.input :date, as: :datepicker, label: t('controllers.loan_payments.form.date')
   .span6
     %div.form-inline(ng-show='is_bank')
-      = f.input :verification, as: :boolean, label: 'Verificar (solo banco)',
+      = f.input :verification, as: :boolean, label: t('controllers.loan_payments.form.verify_bank'),
         input_html: { data: {value: 'payment.verification', checked: 'payment.verification' } },
-       hint: 'Verificar a futuro. Ej.: (Cheque)'
+       hint: t('controllers.loan_payments.form.verify_bank_hint')
 
 .row-fluid
   .span12
-    = f.input :reference, label: 'Referencia', as: :text, input_html: {rows: 3, class: 'span11', data: {value: 'payment.reference'} }
+    = f.input :reference, label: t('controllers.loan_payments.form.reference'), as: :text, input_html: {rows: 3, class: 'span11', data: {value: 'payment.reference'} }

@@ -1,0 +1,16 @@
+#loan(ng-controller='PaymentController')
+  %h4.title= t('controllers.loan_ledger_ins.new_give.title')
+
+  = simple_form_for @ledger_form, url: form_url, method: :patch,
+    html: { id: 'loan-payment-form' } do |f|
+
+    = bonsai_form_error(f)
+    -#= f.hidden_field :account_id, id: 'account_id'
+
+    %input(type='hidden' id='accounts' data-accounts='#{Accounts::Query.new.money_options.to_json}')
+    = hidden_field_tag 'base_currency', @ledger_form.loan_currency, 'ng-model' => 'base_currency', 'initial' => @ledger_form.loan_currency
+
+    = render 'loan_payments/form', f: f, loan: @ledger_form.loan
+
+    .form-actions
+      = f.submit t('controllers.loan_ledger_ins.new_give.title'), class: 'btn b btn-success'

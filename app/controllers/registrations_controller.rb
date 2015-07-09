@@ -56,6 +56,8 @@ class RegistrationsController < ApplicationController
     end
 
     def check_allow_registration
-      redirect_to root_path, alert: 'Llegamos a un limite de registros muy pronto ampliaremos nuestra capacidad' and return unless ALLOW_REGISTRATIONS
+      unless ALLOW_REGISTRATIONS
+        redirect_to root_path, alert: 'Llegamos a un limite de registros muy pronto ampliaremos nuestra capacidad' and return
+      end
     end
 end

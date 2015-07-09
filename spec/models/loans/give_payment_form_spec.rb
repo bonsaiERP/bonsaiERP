@@ -18,7 +18,7 @@ describe Loans::GivePaymentForm do
     let(:attributes) do
       {
         account_to_id: cash.id, date: Date.today, reference: 'Pay 23233',
-        date: Date.today, amount: 50, exchange_rate: 1
+        amount: 50, exchange_rate: 1
       }
     end
 
@@ -39,17 +39,17 @@ describe Loans::GivePaymentForm do
     it "pays Loan" do
       lf = Loans::GiveForm.new(loan_attr.merge(account_to_id: cash.id))
 
-      lf.create.should be_true
+      lf.create.should eq(true)
 
       lf.loan.should be_persisted
       lf.loan.should be_is_a(Loans::Give)
       lf.loan.amount.should == 100
       lf.loan.total.should == 100
-      lf.loan.ledger_in.should be_is_a(AccountLedger)
+      expect(lf.loan.ledger_ins.first.class).to eq(AccountLedger)
       cash.reload.amount.should == -100
       lp = Loans::GivePaymentForm.new(attributes.merge(account_id: lf.loan.id))
 
-      lp.create_payment.should be_true
+      lp.create_payment.should eq(true)
       lp.ledger.amount.should == 50
       lp.ledger.currency.should eq('BOB')
       lp.ledger.contact_id.should_not be_blank
@@ -63,14 +63,14 @@ describe Loans::GivePaymentForm do
       c.amount.should == -50
 
       lp = Loans::GivePaymentForm.new(attributes.merge(account_id: lf.loan.id, amount: 60))
-      lp.create_payment.should be_false
+      lp.create_payment.should eq(false)
       lp.errors[:amount].should eq([I18n.t('errors.messages.less_than_or_equal_to', count: 50.0)])
       # Pay with other currency
       bank = create :bank, currency: 'USD', amount: 0
 
       lp = Loans::GivePaymentForm.new(attributes.merge(account_id: lf.loan.id, amount: 25, account_to_id: bank.id, exchange_rate: 2))
 
-      lp.create_payment.should be_true
+      lp.create_payment.should eq(true)
       loan = Loans::Give.find(loan.id)
 
       loan.amount.should == 0
@@ -81,7 +81,7 @@ describe Loans::GivePaymentForm do
     it "pay with expense" do
       lf = Loans::GiveForm.new(loan_attr.merge(account_to_id: cash.id, total: 200))
 
-      lf.create.should be_true
+      lf.create.should eq(true)
       lf.loan.amount.should == 200
       lf.loan.should be_is_approved
 
@@ -89,14 +89,14 @@ describe Loans::GivePaymentForm do
       expense = Expense.new(total: 100, balance: 100, state: 'approved', currency: 'BOB', id: 100, contact_id: 1,
                          date: today, due_date: today, ref_number: 'E-13-0001')
       Expense.any_instance.stub(contact: build(:contact, id: 1))
-      expense.save.should be_true
+      expense.save.should eq(true)
 
       lp = Loans::GivePaymentForm.new(attributes.merge(account_id: lf.loan.id, amount: 200, account_to_id: expense.id))
 
-      lp.create_payment.should be_false
+      lp.create_payment.should eq(false)
       lp.amount = 100
 
-      lp.create_payment.should be_true
+      lp.create_payment.should eq(true)
 
       exp = Expense.find(expense.id)
       exp.amount.should == 0
@@ -108,11 +108,11 @@ describe Loans::GivePaymentForm do
 
       # Error
       lp = Loans::GivePaymentForm.new(attributes.merge(account_id: lf.loan.id, amount: 200, account_to_id: cash.id))
-      lp.create_payment.should be_false
+      lp.create_payment.should eq(false)
       lp.errors[:amount].should_not be_blank
 
       lp = Loans::GivePaymentForm.new(attributes.merge(account_id: lf.loan.id, amount: 100, account_to_id: cash.id))
-      lp.create_payment.should be_true
+      lp.create_payment.should eq(true)
 
       l = Loans::Give.find(lf.loan.id)
       l.amount.should == 0
@@ -123,14 +123,14 @@ describe Loans::GivePaymentForm do
     it "pays interest" do
       lf = Loans::GiveForm.new(loan_attr.merge(account_to_id: cash.id))
 
-      lf.create.should be_true
+      lf.create.should eq(true)
       lf.loan.should be_persisted
-      lf.loan.ledger_in.should be_is_a(AccountLedger)
+      expect(lf.loan.ledger_ins.first.class).to eq(AccountLedger)
       cash.reload.amount.should == -100
 
       lp = Loans::GivePaymentForm.new(attributes.merge(account_id: lf.loan.id))
 
-      lp.create_interest.should be_true
+      lp.create_interest.should eq(true)
       lp.int_ledger.should be_persisted
       lp.int_ledger.amount.should == 50
       lp.int_ledger.should be_is_lgint
@@ -149,7 +149,7 @@ describe Loans::GivePaymentForm do
     it "pay INTERESTS with expense" do
       lf = Loans::GiveForm.new(loan_attr.merge(account_to_id: cash.id, total: 200))
 
-      lf.create.should be_true
+      lf.create.should eq(true)
       lf.loan.amount.should == 200
       lf.loan.should be_is_approved
 
@@ -157,14 +157,14 @@ describe Loans::GivePaymentForm do
       expense = Expense.new(total: 100, balance: 100, state: 'approved', currency: 'BOB', id: 100, contact_id: 1,
                          date: today, due_date: today, ref_number: 'E-13-0001')
       Expense.any_instance.stub(contact: build(:contact, id: 1))
-      expense.save.should be_true
+      expense.save.should eq(true)
 
       lp = Loans::GivePaymentForm.new(attributes.merge(account_id: lf.loan.id, amount: 200, account_to_id: expense.id))
 
-      lp.create_interest.should be_false
+      lp.create_interest.should eq(false)
       lp.amount = 100
 
-      lp.create_interest.should be_true
+      lp.create_interest.should eq(true)
       lp.int_ledger.should be_persisted
       lp.int_ledger.amount.should == 100
       lp.int_ledger.should be_is_lgint
@@ -185,19 +185,19 @@ describe Loans::GivePaymentForm do
       it 'USD and BOB' do
         lf = Loans::GiveForm.new(loan_attr.merge(account_to_id: cash2.id))
 
-        lf.create.should be_true
+        lf.create.should eq(true)
         lf.loan.should be_persisted
         lf.loan.should be_is_a(Loans::Give)
         lf.loan.amount.should == 100
         lf.loan.total.should == 100
         lf.loan.currency.should eq('USD')
-        lf.loan.ledger_in.should be_is_a(AccountLedger)
-        lf.loan.ledger_in.should be_is_lgcre
+        expect(lf.loan.ledger_ins.first.class).to eq(AccountLedger)
+        expect(lf.loan.ledger_ins.first.is_lgcre?).to eq(true)
         cash2.reload.amount.should == -100
 
         lp = Loans::GivePaymentForm.new(attributes.merge(account_id: lf.loan.id, exchange_rate: 5))
 
-        lp.create_payment.should be_true
+        lp.create_payment.should eq(true)
         lp.ledger.amount.should == 50
         lp.ledger.currency.should eq('BOB')
         lp.ledger.exchange_rate.should == 5
@@ -209,14 +209,14 @@ describe Loans::GivePaymentForm do
         c.amount.should == 50
 
         lp = Loans::GivePaymentForm.new(attributes.merge(account_id: lf.loan.id, amount: 95, account_to_id: cash2.id))
-        lp.create_payment.should be_false
+        lp.create_payment.should eq(false)
         lp.errors[:amount].should eq([I18n.t('errors.messages.less_than_or_equal_to', count: 90.0)])
 
         # Pay in USD
 
         lp = Loans::GivePaymentForm.new(attributes.merge(account_id: lf.loan.id, amount: 90, account_to_id: cash2.id))
 
-        lp.create_payment.should be_true
+        lp.create_payment.should eq(true)
         lp.ledger.currency.should eq('USD')
         lp.ledger.should be_persisted
 

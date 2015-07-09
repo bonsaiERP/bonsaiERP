@@ -72,7 +72,7 @@ describe PaymentService do
       p = PaymentService.new(valid_attributes)
 
       p.should_not be_valid
-      p.errors_on(:base).should eq([I18n.t('errors.messages.payment.valid_accounts_currency', currency: OrganisationSession.currency)])
+      p.errors[:base].should eq([I18n.t('errors.messages.payment.valid_accounts_currency', currency: OrganisationSession.currency)])
     end
 
     context "account_to" do
@@ -86,7 +86,7 @@ describe PaymentService do
         p.stub(movement: movement)
 
         p.should_not be_valid
-        p.errors_on(:account_to).should_not be_empty
+        p.errors[:account_to].should_not be_empty
       end
 
       it "Valid" do
@@ -105,26 +105,26 @@ describe PaymentService do
     it "initializes verification false" do
       p = PaymentService.new
 
-      p.verification.should be_false
+      p.verification.should eq(false)
       p.amount.should == 0
       p.exchange_rate == 1
     end
 
     it "initalizes verfication" do
       p = PaymentService.new(verification: "jajaja")
-      p.verification.should be_false
+      p.verification.should eq(false)
 
       p = PaymentService.new(verification: "11")
-      p.verification.should be_false
+      p.verification.should eq(false)
 
       p = PaymentService.new(verification: "01")
-      p.verification.should be_false
+      p.verification.should eq(false)
 
       p = PaymentService.new(verification: "1")
-      p.verification.should be_true
+      p.verification.should eq(true)
 
       p = PaymentService.new(verification: "true")
-      p.verification.should_not be_false
+      p.verification.should_not eq(false)
     end
   end
 

@@ -1,127 +1,105 @@
 require 'spec_helper'
 
 describe ItemsController do
+  let(:user) { build :user, id: 10}
+
   before(:each) do
     stub_auth
+    controller.stub(current_tenant: 'public')
+    UserSession.user = user
   end
 
-  def mock_item(stubs={})
-    @mock_item ||= mock_model(Item, stubs).as_null_object
-  end
+  let(:item) { build :item, id: 37 }
+  let(:unit) { create :unit }
+  let(:item_attrs) { attributes_for(:item).merge(unit_id: unit.id) }
 
   describe "GET index" do
     it "assigns all items as @items" do
-      Item.stub(:all) { [mock_item] }
       get :index
-      assigns(:items).should eq([mock_item])
+
+      assigns(:items).should eq([])
     end
   end
 
   describe "GET show" do
     it "assigns the requested item as @item" do
-      Item.stub(:find).with("37") { mock_item }
+      Item.stub(:find).with("37").and_return(item)
+
       get :show, :id => "37"
-      assigns(:item).should be(mock_item)
+      assigns(:item).should be(item)
     end
   end
 
   describe "GET new" do
     it "assigns a new item as @item" do
-      Item.stub(:new) { mock_item }
       get :new
-      assigns(:item).should be(mock_item)
+      assigns(:item).class.should be(Item)
     end
   end
 
   describe "GET edit" do
     it "assigns the requested item as @item" do
-      Item.stub(:find).with("37") { mock_item }
+      Item.stub(:find).with("37").and_return(item)
+
       get :edit, :id => "37"
-      assigns(:item).should be(mock_item)
+      assigns(:item).should be(item)
     end
   end
 
   describe "POST create" do
 
-    describe "with valid params" do
-      it "assigns a newly created item as @item" do
-        Item.stub(:new).with({'these' => 'params'}) { mock_item(:save => true) }
-        post :create, :item => {'these' => 'params'}
-        assigns(:item).should be(mock_item)
-      end
+    it "OK" do
+      post :create, :item => item_attrs
 
-      it "redirects to the created item" do
-        Item.stub(:new) { mock_item(:save => true) }
-        post :create, :item => {}
-        response.should redirect_to(item_url(mock_item))
-      end
+      expect(assigns(:item).class).to be(Item)
+      expect(assigns(:item).persisted?).to be(true)
+      _id = assigns(:item).id
+      expect(response.redirect?).to eq(true)
+      expect(response.redirect_url).to eq(controller.item_url(_id))
     end
 
-    describe "with invalid params" do
-      it "assigns a newly created but unsaved item as @item" do
-        Item.stub(:new).with({'these' => 'params'}) { mock_item(:save => false) }
-        post :create, :item => {'these' => 'params'}
-        assigns(:item).should be(mock_item)
-      end
+    it 'ERROR' do
+      post :create, :item => {name: 'test'}
 
-      it "re-renders the 'new' template" do
-        Item.stub(:new) { mock_item(:save => false) }
-        post :create, :item => {}
-        response.should render_template(:new)
-      end
+      expect(response.redirect?).to be(false)
+      expect(response).to render_template(:new)
+      expect(assigns(:item).errors.messages.present?).to be(true)
     end
 
   end
 
   describe "PUT update" do
+    let(:item) { create :item, unit_id: unit.id  }
 
-    describe "with valid params" do
-      it "updates the requested item" do
-        Item.should_receive(:find).with("37") { mock_item }
-        mock_item.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, :id => "37", :item => {'these' => 'params'}
-      end
+    it 'OK' do
+      put :update, id: item.id, item: item.attributes.merge(name: 'A new name for the item')
 
-      it "assigns the requested item as @item" do
-        Item.stub(:find) { mock_item(:update_attributes => true) }
-        put :update, :id => "1"
-        assigns(:item).should be(mock_item)
-      end
-
-      it "redirects to the item" do
-        Item.stub(:find) { mock_item(:update_attributes => true) }
-        put :update, :id => "1"
-        response.should redirect_to(item_url(mock_item))
-      end
+      _item = assigns(:item)
+      expect(response.redirect_url).to eq(controller.item_url(item.id))
+      expect(_item.name).to eq('A new name for the item')
     end
 
-    describe "with invalid params" do
-      it "assigns the item as @item" do
-        Item.stub(:find) { mock_item(:update_attributes => false) }
-        put :update, :id => "1"
-        assigns(:item).should be(mock_item)
-      end
+    it 'ERROR' do
+      put :update, id: item.id, item: item.attributes.merge(name: '')
 
-      it "re-renders the 'edit' template" do
-        Item.stub(:find) { mock_item(:update_attributes => false) }
-        put :update, :id => "1"
-        response.should render_template(:edit)
-      end
+      _item = assigns(:item)
+
+      expect(response).to render_template(:edit)
+      expect(_item.errors.messages.present?).to eq(true)
     end
-
   end
 
   describe "DELETE destroy" do
-    it "destroys the requested item" do
-      Item.should_receive(:find).with("37") { mock_item }
-      mock_item.should_receive(:destroy)
-      delete :destroy, :id => "37"
-    end
+    it "OK" do
+      item.unit_id = unit.id
 
-    it "redirects to the items list" do
-      Item.stub(:find) { mock_item(:destroy => true) }
-      delete :destroy, :id => "1"
-      response.should redirect_to(items_url)
+      expect(item.save).to eq(true)
+      expect(Item.count).to eq(1)
+
+      delete :destroy, :id => item.id
+
+      expect(Item.count).to eq(0)
+      expect(response).to redirect_to(controller.items_path)
     end
   end
 

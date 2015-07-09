@@ -23,10 +23,11 @@ describe Tax do
 
   it "does not destroy" do
     t = Tax.new(name: 'IVA', percentage: 13.0)
-    t.destroy.should be_true
+    t.destroy.destroyed?.should eq(true)
 
     t = Tax.new(name: 'IVA', percentage: 13.0)
     t.stub(accounts: [Account.new])
-    t.destroy.should be_false
+
+    expect(t.destroy).to eq(false)
   end
 end
