@@ -14,7 +14,7 @@ module Controllers::Authorization
       if !current_user
         flash[:alert] = "Por favor ingrese."
         redirect_to new_session_url(subdomain: 'app') and return
-      elsif !current_user.present? || current_organisation.dued_with_extension? || !authorized_user?
+      elsif !current_user.present?# || current_organisation.dued_with_extension? || !authorized_user?
         redir = request.referer.present? ? :back : home_path
 
         if request.xhr?

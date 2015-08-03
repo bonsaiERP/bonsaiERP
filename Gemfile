@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 ruby '2.2.2'
-gem 'rails', '4.2.2'
+gem 'rails', '4.2.3'
 
 # Assets
 gem 'sass-rails', '~> 5.0.1'
@@ -71,5 +71,5 @@ group :test do
   gem 'valid_attribute'
   gem 'watchr'
   gem 'launchy'
-  gem 'poltergeist'
+  #gem 'poltergeist'
 end
