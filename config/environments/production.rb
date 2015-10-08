@@ -83,5 +83,7 @@ Bonsaierp::Application.configure do
 
   config.eager_load = true
 
+  config.log_level = :info
+
   #config.exceptions_app = self.routes
 end
