@@ -6,6 +6,8 @@
 .row-fluid
   .span6
     %h1= current_user
+    %span.muted Token:
+    = current_user.tenant_link(tenant).api_token
   .span6.r
     .btn-group
       = link_to edit_user_path(current_user), class: 'btn' do
