@@ -30,6 +30,8 @@ gem 'dragonfly-s3_data_store'
 
 gem 'responders' # TODO check if this gem is used
 
+gem "rack-cors", require: "rack/cors"
+
 group :production do
   gem 'newrelic_rpm'
   gem 'bugsnag' # Report of errors
