@@ -37,7 +37,7 @@ describe Api::V1::IncomesController do
       get :show, id: inc.id
 
       expect(json['id']).to eq(inc.id)
-      expect(json['income_details']).to have(2).items
+      expect(json['income_details'].size).to eq(2)
     end
   end
 

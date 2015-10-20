@@ -36,20 +36,26 @@ describe Api::V1::AttachmentsController do
       attachment
 
       get :index
-      expect(json).to eq([{"id"=>attachment.id, "attachment_uid"=>nil, "name"=>"first.jpg", "position"=>0, "image"=>true, "size"=>nil, "attachment_url"=>nil, "attachment_remote_url"=>nil, "small_attachment_url"=>nil, "medium_attachment_url"=>nil}])
+
+      %w(id name position image attachable_type created_at updated_at).each do |meth|
+        expect(json[0][meth].present?).to eq(true)
+      end
     end
   end
 
   context "GET #show" do
     it "route" do
-      expect(get: '/api/v1/attachments/1').to route_to(
-        controller: 'api/v1/attachments', action: 'show'
+      expect(get: "/api/v1/attachments/1").to route_to(
+        controller: "api/v1/attachments", action: 'show', id: "1"
       )
     end
 
     it "spec_name" do
       get :show, id: attachment.id
-      expect(json).to eq({"id"=>attachment.id, "attachment_uid"=>nil, "name"=>"first.jpg", "position"=>0, "image"=>true, "size"=>nil, "attachment_url"=>nil, "attachment_remote_url"=>nil, "small_attachment_url"=>nil, "medium_attachment_url"=>nil})
+
+      %w(id name position image attachable_type created_at updated_at).each do |meth|
+        expect(json[meth].present?).to eq(true)
+      end
     end
   end
 

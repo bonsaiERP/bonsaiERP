@@ -17,7 +17,7 @@ describe Api::V1::TagsController do
 
       get :index
 
-      expect(json).to have(1).item
+      expect(json.size).to eq(1)
     end
   end
 

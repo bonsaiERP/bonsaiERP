@@ -16,7 +16,7 @@ describe Api::V1::ContactsController do
 
       get :index
 
-      expect(json).to have(1).item
+      expect(json.size).to eq(1)
     end
   end
 
