@@ -1,6 +1,5 @@
-# Bonsai installation with passenger on Ubuntu 12.04
+# Bonsai installation with passenger on Ubuntu 14.04
 ```
-sudo apt-get install apache2
 sudo apt-get update
 sudo apt-get install git-core curl tmux
 sudo a2enmode rewrite
@@ -8,8 +7,8 @@ sudo a2enmode headers
 sudo a2enmode expires
 sudo apt-get install libapache2-mod-upload-progress
 sudo apt-get install libapache2-mod-xsendfile
-sudo service apache2 restart
 sudo apt-get install imagemagick
+sudo apt-get install libgmp-dev
 ```
 
 ## Set ssh
@@ -43,10 +42,10 @@ rvm requirements
 Install first ruby 2.0.0 and then create gemset
 
 ```
-rvm install ruby-2.2.1
-rvm ruby-2.2.1
+rvm install ruby-2.2.3
+rvm ruby-2.2.3
 rvm gemset create rails-4.2
-rvm ruby-2.2.1@rails-4.2 --default
+rvm ruby-2.2.3@rails-4.2 --default
 ```
 
 ## Locales if needed

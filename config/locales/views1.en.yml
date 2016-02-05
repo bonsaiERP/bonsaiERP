@@ -1,0 +1,29 @@
+en:
+  views:
+    footer:
+      slogan:
+        The simple ERP to manage your company
+    sessions:
+      new:
+        login:
+          Login
+        icon_email_title: Email
+        email_placeholder: Email
+        icon_pass_title: Password
+        pass_placeholder: Password
+        submit: Login
+        forgot_your_password: Forgot your password?
+    dashboard:
+      home:
+        title:
+          "Welcome to <i>bonsaiERP</i> we start with this recomendations"
+        help_recomendation:
+          "
+          You will always find <a class='dark b'><i class='icon-question-sign'></i> Help</a>
+          in the right upper part of the page
+          "
+        users_recomendation:
+          "<i>bonsaiERP</i> presents who made modifications when moving the mouse pointer over the user icons"
+        move_over_users: Move the mouse pointer over the user icons
+      index:
+        general_aspects: General aspects

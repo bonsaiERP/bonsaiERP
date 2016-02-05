@@ -38,7 +38,7 @@ describe Api::V1::ItemsController do
       request.headers['token'] = link.api_token
       get :index, api_token: link.api_token
 
-      expect(json).to have(2).items
+      expect(json.size).to eq(2)
     end
   end
 

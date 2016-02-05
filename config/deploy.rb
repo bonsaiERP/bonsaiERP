@@ -1,14 +1,14 @@
 # config valid only for Capistrano 3.1
-lock '3.2.1'
+lock '3.4.0'
 
 set :application, 'bonsaierp'
-set :repo_url, 'git@bitbucket.org:boriscyber/bonsaierp.git'
+set :repo_url, 'git@github.com:bonsaiERP/bonsaiERP.git'
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
 # Default deploy_to directory is /var/www/my_app
-set :deploy_to, '/var/www/bonsaierp'
+set :deploy_to, '/var/www/bonsai'
 
 # Default value for :scm is :git
 # set :scm, :git

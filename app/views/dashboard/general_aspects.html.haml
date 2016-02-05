@@ -2,7 +2,8 @@
   - t = Time.zone.now
   .row-fluid
     .span12
-      %h2#general-aspects-title.n Aspectos generales
+      %h2#general-aspects-title.n= t("views.dashboard.index.general_aspects")
+      Aspectos generales
   .row-fluid
     .span4
       .well.well-small
@@ -10,7 +11,7 @@
         %p.muted
           Muestra los cambios que un usuario
           realizo en algún registro del sistema
-        
+
         %ul.unstyled
           %li
             %i.icon-user.blue(title='MODIFICADO por: #{current_user} #{l t}, ID: #{current_user.id}' data-toggle='tooltip')

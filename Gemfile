@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 ruby '2.3.0'
-gem 'rails', '4.2.3'
+gem 'rails', '4.2.5.1'
 
 # Assets
 gem 'sass-rails', '~> 5.0.1'
@@ -26,9 +26,10 @@ gem 'validates_lengths_from_database'
 gem 'hstore_accessor'
 
 gem 'dragonfly'
-gem 'dragonfly-s3_data_store'
+#gem 'dragonfly-s3_data_store'
 
 gem 'responders' # TODO check if this gem is used
+gem "rack-cors", require: "rack/cors"
 
 group :production do
   gem 'newrelic_rpm'
@@ -55,10 +56,11 @@ group :development, :test do
   gem 'spring-commands-rspec'
   gem 'rspec-rails'#, '2.99.0'
   gem 'ffaker'
+  gem 'byebug'
   #gem 'pry-remote' # Work binding.pry_remote with Foreman, just call pry-remote in the terminal
-  gem 'pry'#, '0.9.11.3'# 0.9.11.4 gives error
-  gem 'pry-rails'
-  gem 'pry-nav'
+  #gem 'pry'#, '0.9.11.3'# 0.9.11.4 gives error
+  #gem 'pry-rails'
+  #gem 'pry-nav'
   #gem 'foreman'
 end
 
