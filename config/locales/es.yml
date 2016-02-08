@@ -381,6 +381,17 @@ es:
       last: "&raquo;"
       truncate: "..."
 
+  general:
+    approved_by: Aprobado por
+    created_by: Creado por
+    modified_by: Modificado por
+    nulled_by: Anulado por
+    export: Exportar
+    contact: Contacto
+    code: Código
+    fix_errors: Corrija los errores
+
+
   # Models
   movement:
     states:
@@ -420,6 +431,7 @@ es:
     tax_percentage: 'Porcentaje impuesto'
 
   income:
+    paid: Pagado
     attributes:
       <<: *movement_attributes
     payment:
@@ -428,6 +440,7 @@ es:
       reference: "Cobro ingreso %{income}"
 
   expense:
+    paid: Pagado
     account_ledger_reference: "Gasto"
     payment:
       reference: "Pago egreso %{expense}"

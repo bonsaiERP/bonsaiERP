@@ -21,24 +21,24 @@ class MovementPresenter < BasePresenter
   end
 
   def has_error_label
-    "<span class='label label-important' rel='tooltip' title='Corrija los errores'>ERROR</span>".html_safe if to_model.has_error?
+    "<span class='label label-important' rel='tooltip' title='#{t("general.fix_errors")}'>ERROR</span>".html_safe if to_model.has_error?
   end
 
   def state_tag
     case
-    when is_draft? then template.text_gray 'Borrador', '', 'b'
-    when is_approved? then template.text_green t('movement.states.approved'), '', 'b'
-    when is_paid? then template.text_green_dark paid_text, '', 'b'
-    when is_nulled? then template.text_red t('movement.states.nulled'), '', 'b'
+    when is_draft? then template.text_gray t("movement.states.draft"), "", "b"
+    when is_approved? then template.text_green t("movement.states.approved"), '', 'b'
+    when is_paid? then template.text_green_dark paid_text, "", "b"
+    when is_nulled? then template.text_red t("movement.states.nulled"), "", "b"
     end
   end
 
   def state_text
     case state
-    when 'draft' then 'Borrador'
-    when 'approved' then 'Aprobado'
+    when 'draft' then I18n.t("general.draft")
+    when 'approved' then I18n.t("general.draft")
     when 'paid' then paid_text
-    when 'nulled' then 'Anulado'
+    when 'nulled' then I18n.t("general.approved")
     end
   end
 

@@ -2,7 +2,7 @@ en:
   views:
     footer:
       slogan:
-        The simple ERP to manage your company
+        The simple ERP to manage your company.
     sessions:
       new:
         login:
@@ -27,3 +27,8 @@ en:
         move_over_users: Move the mouse pointer over the user icons
       index:
         general_aspects: General aspects
+
+  incomes:
+    index:
+      title: Incomes
+      new: New income
