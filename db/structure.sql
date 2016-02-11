@@ -145,9 +145,10 @@ CREATE TABLE organisations (
     updated_at timestamp without time zone,
     country_code character varying(5),
     inventory_active boolean DEFAULT true,
-    settings public.hstore DEFAULT '"inventory"=>"true"'::public.hstore,
+    settings_old public.hstore DEFAULT '"inventory"=>"true"'::public.hstore,
     due_on date,
-    plan character varying DEFAULT '2users'::character varying
+    plan character varying DEFAULT '2users'::character varying,
+    settings jsonb DEFAULT '{}'::jsonb
 );
 
 
@@ -2249,4 +2250,6 @@ INSERT INTO public.schema_migrations (version) VALUES ('20140925003650');
 INSERT INTO public.schema_migrations (version) VALUES ('20141028104251');
 
 INSERT INTO public.schema_migrations (version) VALUES ('20141112132422');
+
+INSERT INTO public.schema_migrations (version) VALUES ('20160211130733');
 

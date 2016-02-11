@@ -7,6 +7,15 @@ describe Organisation do
     UserSession.user = build :user, id: 1
   end
 
+  context 'jsonb_attributes' do
+    it "test set" do
+      org = Organisation.new(inventory: true, header_css: "red-header")
+
+      expect(org.inventory).to eq(true)
+      expect(org.header_css).to eq("red-header")
+    end
+  end
+
   describe 'relationships'  do
     #it { should have_many(:links) }
     #it { should have_many(:master_links) }

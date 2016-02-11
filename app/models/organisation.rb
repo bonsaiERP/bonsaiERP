@@ -8,12 +8,9 @@ class Organisation < ActiveRecord::Base
 
   HEADER_CSS = %w(bonsai-header red-header blue-header white-header violet-header orange-header dark-header)
 
+  include JsonbAttributes
   ########################################
-  # Attributes
-  #extend Models::HstoreMap
-  #store_accessor :settings, :inventory, :header_css
-  #convert_hstore_to_boolean :inventory
-  hstore_accessor :settings,
+  jsonb_attributes :settings,
     inventory: :boolean,
     header_css: :string
 
