@@ -8,18 +8,27 @@ describe Organisation do
   end
 
   describe 'relationships'  do
-    it { should have_many(:links) }
-    it { should have_one(:master_link) }
-    it { should have_many(:users).through(:links).dependent(:destroy) }
+    #it { should have_many(:links) }
+    #it { should have_many(:master_links) }
+    #it { should have_many(:users).through(:links).dependent(:destroy) }
+
 
     it "#active_users" do
       org = build :organisation, tenant: 'esp'
       org.save(validate: false)
       u = build :user
       u.save(validate: false)
-      Link.create!(tenant: 'esp', user_id: u.id, organisation_id: org.id, role: 'admin')
+      Link.create!(tenant: 'esp', user_id: u.id, organisation_id: org.id, role: 'admin', master_account: true)
 
       expect(org.active_users.to_sql).to match(/links.active = 't'/)
+
+      expect(org.links.count).to eq(1)
+
+      sql = org.master_links.to_sql
+      expect(sql).to match(/"links"."master_account" = 't'/)
+      expect(sql).to match(/"links"."role" = 'admin'/)
+
+      expect(org.users).to eq([u])
     end
   end
 
@@ -92,14 +101,12 @@ describe Organisation do
   end
 
   it "build master_account user" do
-    org = Organisation.new
-    org.build_master_account
+    org = Organisation.new(tenant: 'bonsaierp')
+    link = org.master_links.build(creator: true)
 
-    org.master_link.should be_master_account
-    org.master_link.should be_creator
-    org.master_link.role.should eq('admin')
-
-    org.master_link.user.should be_present
+    expect(link.master_account?).to eq(true)
+    expect(link.creator?).to eq(true)
+    link.role.should eq('admin')
   end
 
   context 'create_organisation' do

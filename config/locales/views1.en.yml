@@ -28,7 +28,9 @@ en:
       index:
         general_aspects: General aspects
 
-  incomes:
-    index:
-      title: Incomes
-      new: New income
+    incomes:
+      index:
+        title: Incomes
+        new: New income
+        search:
+          search_placeholder: Contact or income

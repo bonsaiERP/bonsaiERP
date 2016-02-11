@@ -3,20 +3,22 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe Unit do
 
+  let(:params) {
+    {:name => "kilogram", :symbol => "kg", :integer => false}
+  }
+
   before(:each) do
     UserSession.user = build :user, id: 10
-    @params = {:name => "kilogram", :symbol => "kg", :integer => false}
   end
 
 
   it 'should create an instance' do
-    Unit.create!(@params)
+    Unit.create!(params)
   end
 
   it 'should validate uniqueness' do
-    u = Unit.create!(@params)
-    u = Unit.new(@params)
-
+    u = Unit.create!(params)
+    u = Unit.new(params)
     u.should_not be_valid
     u.errors[:name].should_not be_blank
     u.errors[:symbol].should_not be_blank

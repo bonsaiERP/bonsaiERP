@@ -1,11 +1,11 @@
 - content_for :links do
   %ul.breadcrumbs.span6
     %li
-      = link_to t("incomes.index.title"), incomes_path
+      = link_to t("views.incomes.index.title"), incomes_path
 
 .row-fluid
   .span6
-    %h1.ib= t("incomes.index.title")
+    %h1.ib= t("views.incomes.index.title")
     = search_tag
   .span6.buttons.r
 
@@ -21,7 +21,7 @@
 
     = link_to new_income_path, class: 'btn' do
       %i.icon-plus-sign
-      = t('incomes.index.new')
+      = t('views.incomes.index.new')
 
 
 = render 'incomes/search'

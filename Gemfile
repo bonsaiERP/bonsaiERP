@@ -44,6 +44,7 @@ group :development do
   gem 'rails_best_practices'
   gem 'quiet_assets'
   gem 'bullet'
+  gem 'awesome_print'
 
   gem 'capistrano'#, '~> 3.2.0'
   gem 'capistrano-rails'#, '~> 1.1'
@@ -56,7 +57,7 @@ group :development, :test do
   gem 'spring-commands-rspec'
   gem 'rspec-rails'#, '2.99.0'
   gem 'ffaker'
-  gem 'byebug'
+  gem 'pry-byebug'
   #gem 'pry-remote' # Work binding.pry_remote with Foreman, just call pry-remote in the terminal
   #gem 'pry'#, '0.9.11.3'# 0.9.11.4 gives error
   #gem 'pry-rails'

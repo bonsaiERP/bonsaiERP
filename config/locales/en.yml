@@ -8,6 +8,9 @@ en:
     contact: Contact
     code: Código
     fix_errors: Fix errors
+    date_start: Start date
+    date_end: End date
+    search: Search
 
 
   allowed_errors:

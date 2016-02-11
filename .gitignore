@@ -50,3 +50,4 @@ assets.tar.bz2
 config/app_environment_variables.rb
 config/secrets.yml
 .tags*
+.byebug_history

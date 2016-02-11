@@ -14,7 +14,7 @@ class Unit < ActiveRecord::Base
 
   # Validations
   validates_presence_of :name, :symbol
-  validates_uniqueness_of :name, :symbol
+  validates_uniqueness_of :symbol, :name
   validates_lengths_from_database
 
   scope :invisible, -> { where(visible: false) }
@@ -56,4 +56,5 @@ class Unit < ActiveRecord::Base
         Item.where(unit_id: id).update_all(["unit_name=?, unit_symbol=?", name, symbol])
       end
     end
+
 end

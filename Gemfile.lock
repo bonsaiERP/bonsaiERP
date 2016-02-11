@@ -40,6 +40,7 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.4.0)
     arel (6.0.3)
+    awesome_print (1.6.1)
     axiom-types (0.1.1)
       descendants_tracker (~> 0.0.4)
       ice_nine (~> 0.11.0)
@@ -154,6 +155,7 @@ GEM
       callsite (~> 0.0, >= 0.0.11)
       rack-contrib (~> 1.1)
       railties (>= 3.0.0, < 5.0.0)
+    method_source (0.8.2)
     mime-types (2.99)
     mini_portile2 (2.0.0)
     minitest (5.8.4)
@@ -165,6 +167,13 @@ GEM
     nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
     pg (0.18.4)
+    pry (0.10.3)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
+      slop (~> 3.4)
+    pry-byebug (3.3.0)
+      byebug (~> 8.0)
+      pry (~> 0.10)
     puma (2.16.0)
     quiet_assets (1.1.0)
       railties (>= 3.1, < 5.0)
@@ -250,6 +259,7 @@ GEM
     simple_form (3.2.1)
       actionpack (> 4, < 5.1)
       activemodel (> 4, < 5.1)
+    slop (3.6.0)
     spring (1.6.3)
     spring-commands-rspec (1.0.4)
       spring (>= 0.9.1)
@@ -293,12 +303,12 @@ PLATFORMS
 
 DEPENDENCIES
   active_model_serializers
+  awesome_print
   bcrypt-ruby
   better_errors
   binding_of_caller
   bugsnag
   bullet
-  byebug
   capistrano
   capistrano-bundler
   capistrano-rails
@@ -317,6 +327,7 @@ DEPENDENCIES
   meta_request
   newrelic_rpm
   pg
+  pry-byebug
   puma
   quiet_assets
   rack-cache
