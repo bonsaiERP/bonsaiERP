@@ -8,9 +8,8 @@ class Organisation < ActiveRecord::Base
 
   HEADER_CSS = %w(bonsai-header red-header blue-header white-header violet-header orange-header dark-header)
 
-  include JsonbAttributes
   ########################################
-  jsonb_attributes :settings,
+  jsonb_accessor :settings,
     inventory: :boolean,
     header_css: :string
 

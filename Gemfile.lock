@@ -142,6 +142,9 @@ GEM
     i18n (0.7.0)
     ice_nine (0.11.2)
     json (1.8.3)
+    jsonb_accessor (0.3.1)
+      activerecord (>= 4.2.1)
+      pg
     kaminari (0.16.3)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -322,6 +325,7 @@ DEPENDENCIES
   ffaker
   haml (>= 4.0.5)
   hstore_accessor
+  jsonb_accessor
   kaminari
   launchy
   meta_request

@@ -7,12 +7,32 @@ describe Organisation do
     UserSession.user = build :user, id: 1
   end
 
-  context 'jsonb_attributes' do
+  context 'jsonb_accessor' do
     it "test set" do
       org = Organisation.new(inventory: true, header_css: "red-header")
 
       expect(org.inventory).to eq(true)
       expect(org.header_css).to eq("red-header")
+    end
+
+    it "types" do
+      org = Organisation.new(inventory: "t", header_css: "red-header")
+
+      expect(org.inventory).to eq(true)
+      expect(org.inventory_change).to eq([nil, true])
+      org.save(validate: false)
+      org.reload
+
+      org.inventory = "f"
+      expect(org.inventory).to eq(false)
+      expect(org.inventory_change).to eq([true, false])
+    end
+
+    it "attributes" do
+      org = Organisation.new
+      [:inventory, :header_css].each do |field|
+        expect(org.attributes.key?(field.to_s)).to eq(true)
+      end
     end
   end
 
