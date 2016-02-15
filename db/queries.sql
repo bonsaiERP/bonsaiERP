@@ -22,3 +22,14 @@ UPDATE accounts SET extras = CONCAT(extras::text, ',"invetory"=>"',
 CASE WHEN COALESCE(extras->'no_inventory', 'false') = 'false' THEN 'true'
 ELSE 'false' end, '"')::hstore
 WHERE type IN ('Income', 'Expense');
+
+
+-- Function to cast jsonb to hstore
+create or replace function simple_jsonb_to_hstore(jdata jsonb)
+returns hstore language sql
+as $$
+    select hstore(array_agg(key), array_agg(value))
+    from jsonb_each_text(jdata)
+$$;
+
+ALTER TABLE common.organisations ALTER COLUMN settings TYPE hstore USING simple_jsonb_to_hstore(settings);

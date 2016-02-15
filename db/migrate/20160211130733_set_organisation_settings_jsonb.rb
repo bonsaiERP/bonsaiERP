@@ -1,8 +1,13 @@
 class SetOrganisationSettingsJsonb < ActiveRecord::Migration
-  def change
+  def up
     PgTools.with_schemas only: 'common' do
-      rename_column :organisations, :settings, :settings_old
-      add_column :organisations, :settings, :jsonb, default: {}
+      change_column :organisations, :settings, :hstore, :default => nil
+    end
+  end
+
+  def down
+    PgTools.with_schemas only: 'common' do
+      change_column :organisations, :settings, :hstore, :default => {"inventory"=>"true"}
     end
   end
 end

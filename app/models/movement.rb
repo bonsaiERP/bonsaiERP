@@ -9,8 +9,9 @@ class Movement < Account
   STATES = %w(draft approved paid nulled)
 
   # Extra methods defined for Hstore
-  hstore_accessor :extras,
-    delivered: :boolean,
+=begin
+  jsonb_accessor(:extras,
+    {delivered: :boolean,
     discounted: :boolean,
     devolution: :boolean,
     gross_total: :decimal,
@@ -21,8 +22,8 @@ class Movement < Account
     null_reason: :string,
     operation_type: :string,
     nuller_datetime: :datetime,
-    approver_datetime: :datetime
-
+    approver_datetime: :datetime})
+=end
   EXTRAS_DEFAULTS = {
     delivered: false,
     discounted: false,
