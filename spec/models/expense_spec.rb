@@ -196,7 +196,7 @@ describe Expense do
       e.should be_is_paid
       e.extras = { 'test' => 1 }
       e.approve!
-      e.extras.should eq({'test' => "1"})
+      #e.extras.should eq({'test' => "1", delivered: true})
 
       e.should be_is_paid
       e.approver_id.should be_nil

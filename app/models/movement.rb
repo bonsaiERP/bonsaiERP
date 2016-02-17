@@ -7,8 +7,6 @@ class Movement < Account
   extend Models::AccountCode
 
   STATES = %w(draft approved paid nulled)
-
-  # Extra methods defined for Hstore
 =begin
   jsonb_accessor(:extras,
     {delivered: :boolean,
@@ -168,12 +166,12 @@ class Movement < Account
     subtotal * tax_percentage/100
   end
 
-  alias_method :old_attributes, :attributes
-  def attributes
-    old_attributes.merge(
-      Hash[ hstore_metadata_for_extras.keys.map { |key| [key.to_s, self.send(key)] } ]
-    )
-  end
+  #alias_method :old_attributes, :attributes
+  #def attributes
+  #  old_attributes.merge(
+  #    Hash[ hstore_metadata_for_extras.keys.map { |key| [key.to_s, self.send(key)] } ]
+  #  )
+  #end
 
   private
 

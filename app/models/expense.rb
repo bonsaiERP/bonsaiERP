@@ -8,6 +8,19 @@ class Expense < Movement
 
   self.code_name = 'E'
 
+  jsonb_accessor(:extras,
+    {delivered: :boolean,
+    discounted: :boolean,
+    devolution: :boolean,
+    gross_total: :decimal,
+    inventory: :boolean,
+    balance_inventory: :decimal,
+    original_total: :decimal,
+    bill_number: :string,
+    null_reason: :string,
+    operation_type: :string,
+    nuller_datetime: :date_time,
+    approver_datetime: :date_time})
   ########################################
   # Relationships
   has_many :expense_details, -> { order('id asc') },

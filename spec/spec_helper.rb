@@ -4,8 +4,16 @@ require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 #require 'rspec/autorun'
 
-require 'shoulda/matchers'
+require "shoulda/matchers"
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    # Choose a test framework:
+    with.test_framework :rspec
 
+    # Or, choose the following (which implies all of the above):
+    with.library :rails
+  end
+end
 #require 'capybara/poltergeist'
 #Capybara.register_driver :poltergeist_debug do |app|
 #  Capybara::Poltergeist::Driver.new(app, inspector: true, js_errors: false)

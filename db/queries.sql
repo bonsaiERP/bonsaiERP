@@ -33,3 +33,6 @@ as $$
 $$;
 
 ALTER TABLE common.organisations ALTER COLUMN settings TYPE hstore USING simple_jsonb_to_hstore(settings);
+
+
+update accounts set extras

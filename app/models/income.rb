@@ -8,6 +8,20 @@ class Income < Movement
 
   self.code_name = 'I'
 
+  jsonb_accessor(:extras,
+    {delivered: :boolean,
+    discounted: :boolean,
+    devolution: :boolean,
+    gross_total: :decimal,
+    inventory: :boolean,
+    balance_inventory: :decimal,
+    original_total: :decimal,
+    bill_number: :string,
+    null_reason: :string,
+    operation_type: :string,
+    nuller_datetime: :date_time,
+    approver_datetime: :date_time})
+
   ########################################
   # Relationships
   has_many :income_details, -> { order('id asc') }, foreign_key: :account_id, dependent: :destroy
