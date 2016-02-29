@@ -8,7 +8,8 @@ class Movements::Search
   end
 
   def search
-    s = model.includes(:contact, :tax, :updater, :creator, :approver, :nuller).joins(:contact)
+    s = model.includes(:contact, :tax, :updater, :creator, :approver, :nuller)
+    #.joins(:contact)
     if args[:search].present?
       s = s.where("accounts.name ILIKE :s OR accounts.description ILIKE :s OR contacts.matchcode ILIKE :s", s: "%#{ args[:search] }%")
     end

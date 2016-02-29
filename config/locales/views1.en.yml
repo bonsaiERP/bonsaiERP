@@ -1,5 +1,21 @@
 en:
   views:
+    menu:
+      home: Home
+      dashboard: Dashboard
+      reports: Reports
+      inventory: Pendent inventory
+      income: Incomes
+      new_incoe: New Income
+      expenses: Expenses
+      new_expense: New Expense
+      banks: Banks
+      banks: Cash Accounts
+      ledgers: Ledgers
+      stores: Stores
+      items: Items
+      inventory_operations: Inventory Operations
+      units: Mesuasure Units
     footer:
       slogan:
         The simple ERP to manage your company.

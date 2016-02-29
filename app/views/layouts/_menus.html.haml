@@ -10,27 +10,25 @@
           Reportes
         %ul.dropdown
           %li
-            = link_to "Inicio", home_path
+            = link_to t("views.menu.home"), home_path
           %li
-            = link_to "Resumen", dashboard_path
+            = link_to t("views.menu.dashboard"), dashboard_path
           %li
-            = link_to "Reportes generales", reports_path
+            = link_to t("views.menu.reports"), reports_path
           %li
-            = link_to "Inventario pendiente", inventory_report_path
+            = link_to t("views.menu.inventory"), inventory_report_path
       %li.has-dropdown
         %a General
         %ul.dropdown
           %li
-            = link_to "Ingresos", incomes_path
+            = link_to t("views.menu.incomes"), incomes_path
           %li
-            = link_to new_income_path do
-              + Nuevo ingreso
+            = link_to t("views.menu.new_income"), new_income_path
           -#%li.divider
           %li
-            = link_to "Egresos", expenses_path
+            = link_to t("views.menu.expenses"), expenses_path
           %li
-            = link_to new_expense_path do
-              \- Nuevo egreso
+            = link_to t("views.menu.new_expense"), new_expense_path
           -#%li.divider
           %li
             = link_to contacts_path do
@@ -51,25 +49,25 @@
         %a Cuentas
         %ul.dropdown
           %li
-            = link_to 'Cuentas bancarias', banks_path
+            = link_to t("views.menu.banks"), banks_path
           %li
-            = link_to 'Cuentas efectivo', cashes_path
+            = link_to t("views.menu.cash"), cashes_path
           -#%li
             = link_to 'Cuentas personal', staff_accounts_path
           %li
-            = link_to 'Transacciones', account_ledgers_path
+            = link_to t("views.menu.ledgers"), account_ledgers_path
 
       %li.has-dropdown
         %a Inventarios
         %ul.dropdown
           %li
-            = link_to 'Almacenes', stores_path
+            = link_to t("views.menu.stores"), stores_path
           %li
-            = link_to 'Ítems', items_path
+            = link_to t("views.menu.items"), items_path
           %li
-            = link_to 'Operaciones inventario', inventories_path
+            = link_to t("views.menu.inventory_operations"), inventories_path
           %li
-            = link_to 'Unidades de medida', units_path
+            = link_to t("views.menu.units"), units_path
 
 
     %ul.right-menu.fr
