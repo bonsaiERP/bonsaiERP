@@ -63,6 +63,15 @@ class ApplicationController < ActionController::Base
   end
   helper_method :tenant
 
+  def path_sub(path, extras = {})
+    if USE_SUBDOMAIN
+      send(path, {host: DOMAIN, subdomain: session[:tenant]}.merge(extras))
+    else
+      extras.delete(:subdomain)
+      send(path, extras)
+    end
+  end
+
   private
 
     # Creates the flash messages when an item is deleted
@@ -94,7 +103,7 @@ class ApplicationController < ActionController::Base
     end
 
     def current_tenant
-      request.subdomain
+      session[:tenant]
     end
 
     # Uses the helper methods from devise to made them available in the models

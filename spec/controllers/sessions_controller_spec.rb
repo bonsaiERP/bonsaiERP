@@ -1,23 +1,22 @@
-# encoding: utf-8
-require 'spec_helper'
+require "spec_helper"
 
 describe SessionsController do
 
   it "checks all stubbed methods" do
     [:authenticate?, :tenant].each do |m|
-      Session.method_defined?(m).should be_true
+      expect(Session.method_defined?(m)).to eq(true)
     end
     User.new # Needed to check methods
     [:set_auth_token, :auth_token].each do |m|
-      User.method_defined?(m).should be_true
+      expect( User.method_defined?(m) ).to eq(true)
     end
   end
 
   describe "GET /sessions" do
-    it 'should render the correct template' do
+    it "should render the correct template" do
       get 'new'
 
-      assigns(:session).should be_is_a(Session)
+      expect(assigns(:session).is_a?(Session)).to eq(true)
     end
 
     let(:user) { build :user }
@@ -26,10 +25,16 @@ describe SessionsController do
       session[:user_id] = 1
       User.stub_chain(:active, find: user)
       user.stub(organisations: [(build :organisation, tenant: 'bonsai')])
+      session[:tenant] = "bonsai"
 
       get :new
 
-      response.should redirect_to(dashboard_url(host: DOMAIN, subdomain: 'bonsai'))
+      expect( response.redirect_url ).to match("/home")
+
+      stub_const("USE_SUBDOMAIN", true)
+
+      get :new
+      expect( response.redirect_url ).to eq(home_url(host: DOMAIN, subdomain: session[:tenant]))
     end
   end
 
@@ -42,15 +47,16 @@ describe SessionsController do
       u
     }
 
-    it '#create login' do
-      Session.any_instance.stub(authenticate?: true, user: user, tenant: 'bonsai')
+    it "#create login" do
+      Session.any_instance.stub(authenticate?: true, user: user, tenant: "bonsai")
+      session[:tenant] = "bonsai"
 
       post "create", session: {email: "demo@example.com", password: "demo123"}
 
-      response.should redirect_to dashboard_url(host: DOMAIN, subdomain: 'bonsai')
+      expect(response.redirect_url).to match(home_path)
     end
 
-    it 'Resends registration email' do
+    it "Resends registration email" do
       RegistrationMailer.should_receive(:send_registration).and_return(stub(deliver: true))
       Session.any_instance.stub(authenticate?: false, status: 'resend_registration')
 

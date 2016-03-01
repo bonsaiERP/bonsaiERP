@@ -1,5 +1,9 @@
 en:
   views:
+    sessions:
+      flash_login: You have logged in correctly.
+      flash_login_error: The email or password is incorrect.
+      flash_no_user: The user doesn't exist anymore.
     menu:
       home: Home
       dashboard: Dashboard
