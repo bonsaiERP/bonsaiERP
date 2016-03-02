@@ -27,9 +27,7 @@ gem 'hstore_accessor'
 gem 'jsonb_accessor'
 
 gem 'dragonfly'
-#gem 'dragonfly-s3_data_store'
 
-gem 'responders' # TODO check if this gem is used
 gem "rack-cors", require: "rack/cors"
 
 group :production do
@@ -39,41 +37,35 @@ group :production do
 end
 
 group :development do
-  gem 'better_errors'
-  gem 'binding_of_caller'
-  gem 'meta_request'
-  gem 'rails_best_practices'
-  gem 'quiet_assets'
-  gem 'bullet'
-  gem 'awesome_print'
+  gem "better_errors"
+  gem "binding_of_caller"
+  gem "meta_request"
+  gem "rails_best_practices"
+  gem "quiet_assets"
+  gem "bullet"
+  gem "awesome_print"
 
-  gem 'capistrano'#, '~> 3.2.0'
-  gem 'capistrano-rails'#, '~> 1.1'
-  gem 'capistrano-bundler'
-  gem 'capistrano-rvm'
+  gem "capistrano"#, '~> 3.2.0'
+  gem "capistrano-rails"#, '~> 1.1'
+  gem "capistrano-bundler"
+  gem "capistrano-rvm"
 end
 
 group :development, :test do
-  gem 'puma'# Web server
-  gem 'spring-commands-rspec'
-  gem 'rspec-rails'#, '2.99.0'
-  gem 'ffaker'
-  gem 'pry-byebug'
-  #gem 'pry-remote' # Work binding.pry_remote with Foreman, just call pry-remote in the terminal
-  #gem 'pry'#, '0.9.11.3'# 0.9.11.4 gives error
-  #gem 'pry-rails'
-  #gem 'pry-nav'
-  #gem 'foreman'
+  gem "puma"# Web server
+  gem "spring-commands-rspec"
+  gem "rspec-rails"#, '2.99.0'
+  gem "ffaker"
+  gem "pry-byebug"
 end
 
 # Test
 group :test do
-  gem 'capybara'
-  gem 'database_cleaner'
-  gem 'factory_girl_rails'#, '~> 4.4.1'
-  gem 'shoulda-matchers', require: false
-  gem 'valid_attribute'
-  gem 'watchr'
-  gem 'launchy'
-  #gem 'poltergeist'
+  gem "capybara"
+  gem "database_cleaner"
+  gem "factory_girl_rails"#, '~> 4.4.1'
+  gem "shoulda-matchers", require: false
+  gem "valid_attribute"
+  gem "watchr"
+  gem "launchy"
 end
