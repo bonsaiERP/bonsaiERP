@@ -24,24 +24,9 @@
       = t('views.incomes.index.new')
 
 
-= render 'incomes/search'
+= render "incomes/search"
 
--#%ul.unstyled.inline
-  %li
-    = link_to "Todos", incomes_path, class: params_bold(:all)
-  %li
-    = link_to "Vencidos", incomes_path(due: true), class: "red #{params_bold(:due)}"
-  %li
-    = link_to "Aprobados", incomes_path(approved: true), class: params_bold(:approved)
-  %li
-    = link_to "Con error", incomes_path(error: true), class: params_bold(:error)
-  %li
-    = link_to "Anulados", incomes_path(nulled: true), class: params_bold(:nulled)
-  %li
-    = link_to "Inventario pendiente", incomes_path(inventory: true), class: params_bold(:inventory)
-
-
-= render 'incomes/with_error'  if Income.error.any? && params[:error].blank?
+= render "incomes/with_error"  if Income.error.any? && params[:error].blank?
 
 
 

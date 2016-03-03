@@ -1,4 +1,9 @@
 en:
+  number:
+    format:
+      separator: "."
+      delimiter: " "
+      precision: "2"
   general:
     approved_by: Approved by
     created_by: Created by
@@ -15,10 +20,10 @@ en:
 
   allowed_errors:
     movement:
-      negative_balance: "<a href='javascript:;' id='negative-balance-link'>Solucionemos el balance</a> negativo, le recomendamos realizar una devolución"
-      negative_item_balance: "<a href='javascript:;' id='negative-invenory-balance-link'>Ajustemos</a> los ítem con negativo, le recomendamos realizar una devolución de mercadería"
+      negative_balance: "<a href='javascript:;' id='negative-balance-link'>Let's fix the negative balance</a>, you should make a devolution"
+      negative_item_balance: "<a href='javascript:;' id='negative-invenory-balance-link'>Adjust negative items</a>, you should return items"
       negative_items_balance: "<a href='javascript:;' id='negative-invenory-balance-link'>Ajustemos</a> los ítem con negativo, le recomendamos realizar una devolución de mercadería"
-      balance_greater_than_total: "<a href='javascript:;' id='balance-greater-than-total-link'>Igualemos el balance</a> haciendo un pago o cobro"
+      balance_greater_than_total: "<a href='javascript:;' id='balance-greater-than-total-link'>Fix balance</a>, you should make a payment"
     inventory:
       negative_stock: ""
 

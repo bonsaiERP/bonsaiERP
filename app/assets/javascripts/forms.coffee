@@ -161,7 +161,7 @@ $( ->
 
       $picker.datepicker
         yearRange: '1900:'
-        showOn: 'both'
+        showOn: if $picker.data('hideButton') then 'none' else 'both'
         buttonText: ''
         altFormat: 'yy-mm-dd'
         altField: $hidden.get(0)

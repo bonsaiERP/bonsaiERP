@@ -30,7 +30,8 @@ module ApplicationHelper
 
   # Presents number to currency
   def ntc(val = nil, options = {})
-    number_to_currency(val.to_f, options)
+    #number_to_currency(val.to_f, options)
+    number_with_delimiter(val.to_f, t("number.format").merge(options))
   end
 
   # Format addres to present on the
