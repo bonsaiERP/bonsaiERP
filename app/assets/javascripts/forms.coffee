@@ -161,7 +161,11 @@ $( ->
 
       $picker.datepicker
         yearRange: '1900:'
-        showOn: if $picker.data('hideButton') then 'none' else 'both'
+        showOn: if $picker.data('hideButton') then 'focus' else 'both'
+        #showOptions: {direction: 'up'}
+        #showOtherMonths: true
+        #showWeeks: false
+        #stepMonths: 1
         buttonText: ''
         altFormat: 'yy-mm-dd'
         altField: $hidden.get(0)
