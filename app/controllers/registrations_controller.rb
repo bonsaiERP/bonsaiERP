@@ -3,7 +3,7 @@
 # email: boriscyber@gmail.com
 class RegistrationsController < ApplicationController
   skip_before_filter :set_tenant, :check_authorization!
-  before_filter :check_allow_registration
+  #before_filter :check_allow_registration
   before_filter :check_registration_tenant, only: ['show']
 
   layout 'sessions'
