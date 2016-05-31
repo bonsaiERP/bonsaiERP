@@ -16,7 +16,6 @@
           %i.icon-download-alt
           = t("general.export")
 
-
     %tags(model='Income' tag-ids='#{ tag_ids }' url='#{ incomes_path }')
 
     = link_to new_income_path, class: 'btn' do
@@ -27,8 +26,6 @@
 = render "incomes/search"
 
 = render "incomes/with_error"  if Income.error.any? && params[:error].blank?
-
-
 
 - paginate_html = paginate @incomes
 
