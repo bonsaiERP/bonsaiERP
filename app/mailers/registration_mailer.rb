@@ -9,7 +9,7 @@ class RegistrationMailer < ActionMailer::Base
   def send_registration(reg)
     @user = reg.user
     @tenant = reg.tenant
-    to = [@user.email, 'boris@bonsaierp.com']
+    to = [@user.email]
 
     mail(to: to, subject: I18n.t("email.registration.send", app_name: APP_NAME, email: reg.email) )
   end
