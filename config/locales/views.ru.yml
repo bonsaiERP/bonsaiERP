@@ -1,0 +1,42 @@
+ru:
+  views:
+    footer:
+      slogan:
+        Бонсаи ERP для вашего бизнеса. Перевод и адаптация - <a href='https://github.com/r72cccp'>r72cccp</a>
+    incomes:
+      index:
+        search:
+          search_placeholder: Поиск сделки
+          state: Состояние
+        title: Реализация
+    menu:
+      contacts: Контакты
+      dashboard: Анонсы
+      general: Главное
+      home: В начало
+      incomes: Реализация
+      inventory: Инвентарь
+      reports: Отчёты
+    sessions:
+      new:
+        login: Вход
+        icon_email_title: Эл.Почта
+        email_placeholder: Эл.Почта
+        icon_pass_title: Отображать
+        pass_placeholder: Пароль
+        submit: Отправить
+        forgot_your_password: Забыли пароль?
+    dashboard:
+      flow: Текущие дела
+      home:
+        title: Добро пожаловать в АвтоСуп - систему управления
+        help_recomendation: Справка доступна по клику на значок помощи в верхнем правом углу страницы
+        users_recomendation: При наведении мышкой на иконку пользователя видно, кто сделал изменения
+        move_over_users: Наводите курсор на иконку пользователя
+      index:
+        general_aspects: Обзор
+
+  incomes:
+    index:
+      title: Реализация
+      new: Новая запись

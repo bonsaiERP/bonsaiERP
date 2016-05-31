@@ -9,7 +9,7 @@ class Country  < Struct.new(:code, :name)
   class << self
     def find(cod)
       c = COUNTRIES[cod]
-      Country.new(c.fetch(:code), c.fetch(:name))
+      Country.new(c.try(:fetch, :code), c.try(:fetch, :name))
     end
 
     def options
@@ -24,7 +24,7 @@ class Country  < Struct.new(:code, :name)
 
     def all
       @all ||= COUNTRIES.map do |k, v|
-        Country.new(k, v.fetch(:name))
+        Country.new(k, v.try(:fetch, :name))
       end
     end
   end

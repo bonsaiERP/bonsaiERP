@@ -1,0 +1,566 @@
+# Spanish translations for Rails
+# by Francisco Fernando García Nieto (ffgarcianieto@gmail.com)
+# contributors:
+#  - Tsutomu Kuroda - http://github.com/kuroda (t-kuroda@oiax.jp)
+ru:
+  activerecord:
+    errors:
+      messages:
+      models:
+        item:
+          attributes:
+            code:
+              taken: 'Выбранный код уже используется'
+            name:
+              taken: 'Выбранное имя занято'
+        contact:
+          attributes:
+            matchcode: 'Идентификатор уже существует, пожалуйста, измените'
+
+  # Action View
+  date:
+    formats:
+      default: '%d.%m.%Y'
+
+  number:
+    # Used in number_with_delimiter()
+    # These are also the defaults for 'currency', 'percentage', 'precision', and 'human'
+    format:
+      # Sets the separator between the units, for more precision (e.g. 1.0 / 2.0 == 0.5)
+      separator: "."
+      # Delimets thousands (e.g. 1,000,000 is a million) (always in groups of three)
+      delimiter: " "
+      # Number of decimals, behind the separator (1 with a precision of 2 gives: 1.00)
+      precision: 2
+      # If set to true, precision will mean the number of significant digits instead
+      # of the number of decimal digits (1234 with precision 2 becomes 1200, 1.23543 becomes 1.2)
+      significant: false
+      # If set, the zeros after the decimal separator will always be stripped (eg.: 1.200 will be 1.2)
+      strip_insignificant_zeros: false
+
+    # Used in number_to_currency()
+    currency:
+      format:
+        # Where is the currency sign? %u is the currency unit, %n the number (default: $5.00)
+        format: "%n"
+        unit: ""
+        # These three are to override number.format and are optional
+        separator: "."
+        delimiter: " "
+        precision: 2
+        significant: false
+        strip_insignificant_zeros: false
+
+    # Used in number_to_percentage()
+    percentage:
+      format:
+        # These three are to override number.format and are optional
+        # separator:
+        delimiter: ""
+        # precision:
+
+    # Used in number_to_precision()
+    precision:
+      format:
+        # These three are to override number.format and are optional
+        separator: "."
+        delimiter: " "
+        # precision:
+        # significant: false
+        # strip_insignificant_zeros: false
+
+    # Used in number_to_human_size()
+    human:
+      format:
+        # These three are to override number.format and are optional
+        # separator:
+        delimiter: ""
+        precision: 1
+        significant: true
+        strip_insignificant_zeros: true
+      # Used in number_to_human_size()
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one:   "Байт"
+            other: "Байт"
+          kb: "КБ"
+          mb: "МБ"
+          gb: "ГБ"
+          tb: "ТБ"
+      # Used in number_to_human()
+      decimal_units:
+        format: "%n %u"
+        # Decimal units output formatting
+        # By default we will only quantify some of the exponents
+        # but the commented ones might be defined or overridden
+        # by the user.
+        units:
+          # femto: Quadrillionth
+          # pico: Trillionth
+          # nano: Billionth
+          # micro: Millionth
+          # mili: Thousandth
+          # centi: Hundredth
+          # deci: Tenth
+          unit: ""
+          # ten:
+          #   one: Ten
+          #   other: Tens
+          # hundred: Hundred
+          thousand: "Тысяч"
+          million: "Миллионов"
+          billion: "Миллиардов"
+          trillion: "Триллионов"
+          quadrillion: "Квадриллионов"
+
+  # Used in distance_of_time_in_words(), distance_of_time_in_words_to_now(), time_ago_in_words()
+  datetime:
+    distance_in_words:
+      half_a_minute: "пол минуты"
+      less_than_x_seconds:
+        one:  "меньше одной секунды"
+        other: "меньше %{count} секунд"
+      x_seconds:
+        one:  "1 секунда"
+        other: "%{count} секунд"
+      less_than_x_minutes:
+        one:  "меньше 1 минуты"
+        other: "меньше %{count} минут"
+      x_minutes:
+        one:  "1 минута"
+        other: "%{count} минут"
+      about_x_hours:
+        one:  "Около часа"
+        other: "Примерно %{count} часов"
+      x_days:
+        one:  "1 денб"
+        other: "%{count} дней"
+      about_x_months:
+        one:  "Около 1 месяца"
+        other: "Примерно %{count} месяцев"
+      x_months:
+        one:  "1 месяц"
+        other: "%{count} месяцев"
+      about_x_years:
+        one:  "Около 1 года"
+        other: "Примерно %{count} лет"
+      over_x_years:
+        one:  "Больше 1 года"
+        other: "около %{count} лет"
+      almost_x_years:
+        one: "почти 1 год"
+        other: "почти %{count} лет"
+    prompts:
+      year:   "Год"
+      month:  "Месяц"
+      day:    "День"
+      hour:   "Час"
+      minute: "Минута"
+      second: "Секунда"
+
+  helpers:
+    select:
+      # Default value for :prompt => true in FormOptionsHelper
+      prompt: "Сделай выбор"
+
+    # Default translation keys for submit FormHelper
+    submit:
+      create: 'Создать %{model}'
+      update: 'Обновить %{model}'
+      submit: 'Сохранить %{model}'
+
+  # Errors that are stored in the model but are allowed
+  allowed_errors:
+    movement:
+      negative_balance: "<a href='javascript:;' id='negative-balance-link'>Баланс</a> отрицательный, мы рекомендуем вернуть."
+      negative_item_balance: "<a href='javascript:;' id='negative-invenory-balance-link'>Корректировки</a> рекомендуем сделать возврат товара"
+      negative_items_balance: "<a href='javascript:;' id='negative-invenory-balance-link'>Корректировки</a> рекомендуем сделать возврат товара"
+      balance_greater_than_total: "<a href='javascript:;' id='balance-greater-than-total-link'>Нулевой баланс</a> сделать платёж или продажу"
+    inventory:
+      negative_stock: ""
+
+  # Active Model
+  errors:
+    # The default format to use in full error messages.
+    format: "%{attribute} %{message}"
+
+    template:
+      header:
+        one:   "Не удалось сохранить %{model} так как обнаружена 1 ошибка"
+        other:  "Не удалось сохранить %{model} так как обнаружены %{count} ошибок"
+      # The variable :count is also available
+      body: "Проблемы со следующими полями:"
+
+    # The values :model, :attribute and :value are always available for interpolation
+    # The value :count is available when applicable. Can be used for pluralization.
+    messages: &errors_messages
+      inclusion: "не входит с список"
+      exclusion: "зарезервировано"
+      invalid: "недействителен"
+      confirmation: "подтверждение некорректное"
+      accepted: "должно быть принято"
+      empty: "не может быть пустым"
+      blank: "не может быть пустым"
+      too_long: "слишком длинное (%{count} символов максимум)"
+      too_short: "слишком короткое (%{count} символов минимум)"
+      wrong_length: "имеет неправильную длину (%{count} символов точно)"
+      not_a_number: "не является числом"
+      greater_than: "больше чем %{count}"
+      greater_than_or_equal_to: "больше или равно %{count}"
+      equal_to: "равно %{count}"
+      less_than: "меньше %{count}"
+      less_than_or_equal_to: "меньше или равно %{count}"
+      odd: "должно быть нечётным"
+      even: "должно быть чётным"
+      invalidkeys: "Введите допустимые данные" # New one to check if the keys that are assigned are valid
+      email_taken: "Этот email занят уже"
+      email: "Адрес эл.почты неждействителен"
+      invalid_email_format: 'Адрес эл.почты имеет неверный формат'
+      taken: 'Занят'
+      account_ledger:
+        invalid_contact: "Вы должны выбрать клиента, поставщика или персонал"
+        same_account: "Выбранные счета идентичны"
+        amount: "Сумма дохода больше предела, доступного в аккаунте"
+        null_conciliation: "Вернуть отменённую операцию нельзя"
+        same_account: 'Счета назначения должны быть разными'
+        approved: 'Уже утверждён'
+        nulled: 'Уже отменён'
+      contact:
+        matchcode: "Идентификатор уже существует, пожалуйста, измените"
+      devolution:
+        movement_total: "Итого всего"
+      expense:
+        not_draft: "Результат проекта"
+        payments: "Есть платежи, изменившие баланс"
+      expenses:
+        batch_payment:
+          invalid_expenses: 'Один или более из выбранных расходов являются недействительными'
+        not_draft: "Статус дохода не проект"
+        payments: "Есть изменения, влияющие на баланс"
+      incomes:
+        batch_payment:
+          invalid_incomes: 'Один или несколько из выбранных оплат являются недействительными'
+          problem: 'Ошибка ввода %{name} проверьте'
+          invalid_account: 'Счет некорректный'
+      income_detail:
+        item_not_for_sale: "Выберите пункт продажи"
+      inventory_detail:
+        stock_quantity: "Превышает сумму остатка на складе"
+        transaction_quantity: "Недействителен"
+        repeated_item: "Элемент повторяется"
+        invalid_balance: "Сумма дохода больше чем баланс"
+      inventory:
+        movement_items: "Отдельные элементы не используются"
+        invalid_item: "Выбраны несуществующие пункты"
+        invalid_store: "Выбран неверный склад"
+        empty_items: "Нет ничего для выполнения операции"
+        item_balance: "Превышает остаток на складе"
+        stock_quantity: "Превышает максимальные остаток на складе"
+        negative_stock: "Остаток на складе станет отрицательным"
+        movement_quantity: "Сумма больше допустимой %{q}"
+        at_least_one_item: "Должен быть хотя бы один элемент"
+      item:
+        repeated: "Элемент повторяется"
+        repeated_items: "Есть идентичные элементы"
+      loan:
+        due_date: "Должно быть больше или равно дате"
+        amount_int: 'Сумма или процент должны быть больше 0'
+      movement:
+        repeated_items: "Выбранные элементы повторяются, пожалуйста проверьте"
+        unconcilied_ledgers: "Сделки ожидаю рассмотрения"
+        changes: "Вы не можете изменить идентификатор"
+        paid_amount: "Сумма меньше суммы %{pay_type}, рекомендуем вернуться"
+        number_of_items: "Выберите хотя бы один элемент"
+        currency_change: "Изменить валюту нельзя. Были операции с ней"
+        greater_due_date: "Срок годности должен быть больше или равен дате"
+      payment:
+        balance: "Сумма больше чем баланс"
+        expense_balance: "Сумма баланса на конец периода"
+        income_balance: "Сумма баланса на начало периода"
+        invalid_amount_or_interest: "Сумма или процент должны быть больше 0"
+        invalid_expense_state: "Некорректное состояние на конец"
+        invalid_income_state: "Некорректное состояние на начало"
+        date: "Введите действительную дату"
+        valid_accounts_currency: "Некоторые из счетов должна быть в %{currency}"
+        total: "Общий итог неверный"
+      quick_income:
+        valid_account_to: "Вы должны выбрать банковский счёт"
+      store:
+        destroy: 'Склад не может быть удалён, так как есть операции'
+        selected: 'Выбран неверный склад'
+      user:
+        email: "Формат эл.почты некорректный"
+        confirm: "Пользователь не подтвердил свою учётную запись. Проверьте входящую почту."
+        password_confirmation: "Пароль и подтверждение не совпали"
+        wrong_password: "Пароль неправильный"
+        user_limit: "Ваша компания достигла предела по количеству пользователей"
+        email_not_found: "Эл.почта не найдена"
+        link_found: 'Пользователь существут. Найдите его'
+      movement_details:
+        not_destroy: "Удаление элемента невозможно"
+        item_changed: "Изменить элемент нельзя, исходные данные восстановлены"
+        destroy: "Вы не можете удалить элемент"
+      income_details:
+        balance: "Количество меньше, чем остаток"
+      repeated_items: "Элементы повторяются, требуется проверка"
+      repeated_item: "Элемент повторяется, требуется проверка"
+      registration:
+        unique_tenant: 'Данный поддомен занят.'
+
+  # Active Support
+  date:
+    formats:
+      # Use the strftime parameters for formats.
+      # When no format has been given, it uses default.
+      # You can provide other formats here if you like!
+      default: "%d %b %Y"
+      short: "%d de %b"
+      long: "%d de %B %Y"
+      excel: "%d-%b-%Y"
+
+    day_names: [Domingo, Lunes, Martes, Miércoles, Jueves, Viernes, Sábado]
+    abbr_day_names: [Dom, Lun, Mar, Mie, Jue, Vie, Sab]
+
+    # Don't forget the nil at the beginning; there's no such thing as a 0th month
+    month_names: [~, Enero, Febrero, Marzo, Abril, Mayo, Junio, Julio, Agosto, Septiembre, Octubre, Noviembre, Diciembre]
+    abbr_month_names: [~, Ene, Feb, Mar, Abr, May, Jun, Jul, Ago, Sep, Oct, Nov, Dic]
+    # Used in date_select and datime_select.
+    order:
+      - :day
+      - :month
+      - :year
+
+  time:
+    formats:
+      default: "%d %b %Y %H:%M"
+      short: "%d %b %H:%M"
+      long: "%d de %B de %Y %H:%M"
+    am: "am"
+    pm: "pm"
+
+  # Used in array.to_sentence.
+  support:
+    array:
+      words_connector: ", "
+      two_words_connector: " и "
+      last_word_connector: ", и "
+    select:
+      prompt: "Выберите"
+
+  simple_form:
+    "yes": "Да"
+    "no": "Нет"
+    required:
+      text: "Обязательное поле"
+      mark: "*"
+
+  common:
+    new: 'Новый'
+    edit: 'Править'
+    delete: 'Удалить'
+    show: 'Показать'
+    search: "Искать"
+
+  email:
+    invoice_title: "Примечание "
+    invoice_body: "Счёт"
+    registration:
+      send: "Данные регистрации высланы на %{email} из %{app_name}"
+      user: "В %{app_name}, вы добавлены в качестве пользователя %{company}"
+    reset_password:
+      subject: "Восстановить пароль %{app_name}"
+
+  bonsai:
+    registration: "Завершите регистрацию %{domain}"
+    autocomplete_placeholder: "Начните писать для автозаполнения"
+
+  views:
+    pagination:
+      next: "&rsaquo;"
+      previous: "&lsaquo;"
+      first: "&laquo;"
+      last: "&raquo;"
+      truncate: "..."
+
+  general:
+    approved_by: Подтверждён
+    created_by: Создан
+    modified_by: Модифицирован
+    nulled_by: Аннулирован
+    export: Экспортёр
+    contact: Контакт
+    code: Код
+    fix_errors: Исправьте ошибки
+
+
+  # Models
+  movement:
+    states:
+      draft: Черновик
+      approved: Подтверждён
+      paid: Оплачен
+      nulled: Аннулирован
+      due: истекает
+      error: Ошибка
+
+
+  ########################################
+  # Translations for history
+  item:
+    attributes:
+      for_sale: Для продажи
+      active: Активный
+      unit_id: Идентификатор
+      price: Закупочная цена
+      buy_price: Цена реализации
+      name: Наименование
+      code: Код
+
+  movement_attributes: &movement_attributes
+    name: 'наименование'
+    state: 'состояние'
+    amount: 'сальдо'
+    total: 'всего'
+    date: 'дата'
+    due_date: 'дата истекает'
+    currency: 'валюта'
+    exchange_rate: 'курс обмена'
+    tax_id: 'код налога'
+    description: 'описание'
+    inventory: 'инвентарь'
+    tax_in_out: 'Налоги включены'
+    tax_percentage: 'Процент налога'
+
+  income:
+    paid: Оплачено
+    attributes:
+      <<: *movement_attributes
+    payment:
+      reference: "Оплата %{income}"
+    batch_payment:
+      reference: "Абонплата %{income}"
+
+  expense:
+    paid: Оплачен
+    account_ledger_reference: "Расходы"
+    payment:
+      reference: "Оплата %{expense}"
+    attributes:
+      <<: *movement_attributes
+
+  loan_attributes: &loan_attributes
+    date: дата
+    due_date: истекает
+    amount: сальдо
+    total: всего
+    interests: интересы
+
+  loans:
+    give:
+      attributes:
+        <<: *loan_attributes
+    receive:
+      attributes:
+        <<: *loan_attributes
+
+  account_ledger:
+    payment_description: "%{pay_type} от %{trans} %{ref}, счёт %{account}"
+    initial_money: "остаток на начало периода"
+    devolution_description: "Возврат %{trans}, счёт %{account}"
+  currency:
+    exchange_rate:
+      "обменный курс ( %{cur1} = %{cur2} )"
+  contact:
+    client: "Покупатель"
+    supplier: "Поставщик"
+    staff: "Сотрудник"
+  organisation:
+    errors:
+      tenant:
+        list: "Придётся выбрать другое значение"
+  history:
+    new_record: Создатель %{user}
+  ################################################################
+  # Controllers
+  controllers:
+    movements:
+      index:
+        search: &search_movements_form
+          contact_expense: "Поиск контакта или сделки"
+          date_start: "Дата начала"
+          date_end: "Дата окончания"
+          state: "Состояние"
+
+    expenses:
+      reference: "Всего выход %{name}"
+      index:
+        search:
+          contact_expense: "Поиск контакта или сделки"
+          date_start: "Дата начала"
+          date_end: "Дата окончания"
+          state: "Состояние"
+
+
+    incomes:
+      reference: "Оплата %{name}"
+      index:
+        batch_payment:
+          title: "Абонентская плата"
+        search:
+          contact_income: "Поиск контакта или сделки"
+          date_start: "Дата начала"
+          date_end: "Дата окончания"
+          state: "Состояние"
+
+    loans:
+      index:
+        all: "Все"
+        given: "Предоставляется"
+        received: "Получено"
+        search_placeholder: "Поиск контакта или ссылки"
+        search_button: "Поиск"
+      show:
+        ledger_in_button: "Увеличить кредит"
+
+    loan_ledger_ins:
+      new_give:
+        title: "Увеличить кредит"
+
+    loan_payments:
+      form:
+        amount: "Количество"
+        exchange_rate: "Курс обмена"
+        total: "Всего"
+        date: "Дата"
+        verify_bank: "Проверить банк"
+        verify_bank_hint: "Проверить банковский чек"
+        reference: "Ссылка"
+  ################################################################
+  # Presenters
+  presenters:
+    loans:
+      receive:
+        ledger_ins_title: "Кредиты доход"
+      give:
+        ledger_ins_title: "Кредиты расход"
+    inventory:
+      title:
+        deliver: "Доставка"
+        devolution: "Возврат"
+        pick: "Принять"
+        in: "Запись"
+        out: "Выход"
+      contact_tooltip:
+        client: "Клиент"
+        personal: Сотрудник
+        supplier: "Поставщик"
+      related_tip:
+        income: "Вход"
+        expense: "Выход"
+        store_destiny: "Назначение"
+        store_source: "Источник"
+      transaction_tooltip:
+        sale: "Продажа"
+        buy: "Покупка"

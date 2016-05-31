@@ -2,12 +2,13 @@
   %ul.title-area
     %li.name
     %li.toggle-topbar.menu-icon
-      %a(href="#") Menú
+      %a(href="#")
+        = t('views.menu.title')
   %section.top-bar-section
     %ul.left
       %li.has-dropdown
         %a(href='#')
-          Reportes
+          = t('views.menu.reports')
         %ul.dropdown
           %li
             = link_to t("views.menu.home"), home_path
@@ -18,7 +19,7 @@
           %li
             = link_to t("views.menu.inventory"), inventory_report_path
       %li.has-dropdown
-        %a General
+        %a= t('views.menu.general')
         %ul.dropdown
           %li
             = link_to t("views.menu.incomes"), incomes_path
@@ -33,32 +34,32 @@
           %li
             = link_to contacts_path do
               %i.icon-user
-              Contactos
+              = t('views.menu.contacts')
           -#%li
             = link_to "Nuevo contacto", new_contact_path
           -#%li.divider
           %li
             = link_to loans_path, id: 'last-nav' do
               %i.icon-folder-open
-              Prestamos
+              = t('views.menu.prestamos')
           %li
             = link_to tag_groups_path do
               %i.icon-tags
-              Etiquetas
+              = t('views.menu.etiquetas')
       %li.has-dropdown
-        %a Cuentas
+        %a= t('views.menu.cuentas')
         %ul.dropdown
           %li
             = link_to t("views.menu.banks"), banks_path
           %li
             = link_to t("views.menu.cash"), cashes_path
           -#%li
-            = link_to 'Cuentas personal', staff_accounts_path
+            = link_to t('views.menu.cuentas_personal'), staff_accounts_path
           %li
             = link_to t("views.menu.ledgers"), account_ledgers_path
 
       %li.has-dropdown
-        %a Inventarios
+        %a= t('views.menu.inventarios')
         %ul.dropdown
           %li
             = link_to t("views.menu.stores"), stores_path
@@ -74,7 +75,7 @@
       %li
         = link_to configurations_path do
           %i.icon-cog
-          Configuración
+          = t('views.menu.configuration')
       %li.user
         = link_to user_path(current_user.id) do
           %i.icon-user
@@ -82,4 +83,4 @@
       %li
         = link_to logout_path do
           %i.icon-logout
-          Salir
+          = t('views.menu.logout')

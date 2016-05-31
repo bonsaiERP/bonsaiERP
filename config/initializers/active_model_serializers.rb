@@ -7,8 +7,16 @@
 #  self.include_root_in_json = false
 #end
 #
-ActiveModel::Serializer.root false
-ActiveModel::ArraySerializer.root = false
+#BSA ActiveModel::Serializer.root false
+#BSA ActiveModel::ArraySerializer.root = false
+# Without root, the default
+ActiveModel::Serializer.config.adapter = :flatten_json
+
+# With root
+ActiveModel::Serializer.config.adapter = :json
+
+# Following JSON API conventions
+ActiveModel::Serializer.config.adapter = :json_api
 
 ActiveSupport.on_load(:active_model_array_serializer) do
   self.root = false
