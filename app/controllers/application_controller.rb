@@ -21,6 +21,7 @@ class ApplicationController < ActionController::Base
   before_action :set_user_session, if: :user_signed_in?
   before_action :set_organisation_session # Must go before :check_authorization!
   before_action :set_page, :set_tenant, :check_authorization!
+  before_action :set_locale, if: :user_signed_in?
 
   # especial redirect for ajax requests
   def redirect_ajax(klass, options = {})
@@ -136,6 +137,10 @@ class ApplicationController < ActionController::Base
       options.merge(methods: [:destroyed?])  if request.delete?
 
       render json: r.to_json(only: options[:only], except: options[:except], methods: options[:methods])
+    end
+
+    def set_locale
+      I18n.locale = current_user.locale || :es
     end
 
 end

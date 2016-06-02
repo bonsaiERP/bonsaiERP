@@ -534,6 +534,9 @@ es:
         verify_bank: "Verificar (solo bank)"
         verify_bank_hint: "Verificar a futuro. Ej.: (Cheque)"
         reference: "Referencia"
+
+    registrations:
+      create_notice: "Ha creado correctamente su empresa"
   ################################################################
   # Presenters
   presenters:
