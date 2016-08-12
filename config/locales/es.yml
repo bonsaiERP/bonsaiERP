@@ -373,6 +373,7 @@ es:
     registration: "Complete su registro en %{domain}"
     autocomplete_placeholder: "Comience a escribir para autocompletar"
 
+  # Views
   views:
     pagination:
       next: "&rsaquo;"
@@ -380,6 +381,23 @@ es:
       first: "&laquo;"
       last: "&raquo;"
       truncate: "..."
+    sessions:
+      new:
+        login: "Ingresar"
+        icon_email_title: "Email"
+        email_placeholder: "Email"
+        icon_pass_title: "Contraseña"
+        pass_placeholder: "Contraseña"
+        submit: "Ingresar"
+        forgot_your_password: "Olvido su contraseña?"
+
+      flash_login_error: "Email o la contraseña no son validos por favor intente de nuevo"
+      flash_login: "Ingreso correctamente"
+
+    incomes:
+      index:
+        title: "Ingresos"
+        new: "Nuevo ingreso"
 
   general:
     approved_by: Aprobado por
@@ -390,6 +408,7 @@ es:
     contact: Contacto
     code: Código
     fix_errors: Corrija los errores
+    search: "Buscar"
 
 
   # Models

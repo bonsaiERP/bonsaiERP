@@ -1,4 +1,4 @@
-en:
+es:
   views:
     footer:
       slogan:
@@ -28,7 +28,30 @@ en:
       index:
         general_aspects: Aspectos generales
 
-  incomes:
-    index:
-      title: Ingresos
-      new: Nuevo ingreso
+    incomes:
+      index:
+        title: Ingresos
+        new: Nuevo ingreso
+      pagination:
+        next: "&rsaquo;"
+        previous: "&lsaquo;"
+        first: "&laquo;"
+        last: "&raquo;"
+        truncate: "..."
+      sessions:
+        new:
+          login: "Ingresar"
+          icon_email_title: "Email"
+          email_placeholder: "Email"
+          icon_pass_title: "Contraseña"
+          pass_placeholder: "Contraseña"
+          submit: "Ingresar"
+          forgot_your_password: "Olvido su contraseña?"
+
+        flash_login_error: "Email o la contraseña no son validos por favor intente de nuevo"
+        flash_login: "Ingreso correctamente"
+
+      incomes:
+        index:
+          title: "Ingresos"
+          new: "Nuevo ingreso"
