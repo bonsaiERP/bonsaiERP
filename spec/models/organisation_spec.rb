@@ -7,19 +7,57 @@ describe Organisation do
     UserSession.user = build :user, id: 1
   end
 
+  context 'jsonb_accessor' do
+    it "test set" do
+      org = Organisation.new(inventory: true, header_css: "red-header")
+
+      expect(org.inventory).to eq(true)
+      expect(org.header_css).to eq("red-header")
+    end
+
+    it "types" do
+      org = Organisation.new(inventory: "t", header_css: "red-header")
+
+      expect(org.inventory).to eq(true)
+      expect(org.inventory_change).to eq([nil, true])
+      org.save(validate: false)
+      org.reload
+
+      org.inventory = "f"
+      expect(org.inventory).to eq(false)
+      expect(org.inventory_change).to eq([true, false])
+    end
+
+    it "attributes" do
+      org = Organisation.new
+      [:inventory, :header_css].each do |field|
+        expect(org.attributes.key?(field.to_s)).to eq(true)
+      end
+    end
+  end
+
   describe 'relationships'  do
-    it { should have_many(:links) }
-    it { should have_one(:master_link) }
-    it { should have_many(:users).through(:links).dependent(:destroy) }
+    #it { should have_many(:links) }
+    #it { should have_many(:master_links) }
+    #it { should have_many(:users).through(:links).dependent(:destroy) }
+
 
     it "#active_users" do
       org = build :organisation, tenant: 'esp'
       org.save(validate: false)
       u = build :user
       u.save(validate: false)
-      Link.create!(tenant: 'esp', user_id: u.id, organisation_id: org.id, role: 'admin')
+      Link.create!(tenant: 'esp', user_id: u.id, organisation_id: org.id, role: 'admin', master_account: true)
 
       expect(org.active_users.to_sql).to match(/links.active = 't'/)
+
+      expect(org.links.count).to eq(1)
+
+      sql = org.master_links.to_sql
+      expect(sql).to match(/"links"."master_account" = 't'/)
+      expect(sql).to match(/"links"."role" = 'admin'/)
+
+      expect(org.users).to eq([u])
     end
   end
 
@@ -92,14 +130,12 @@ describe Organisation do
   end
 
   it "build master_account user" do
-    org = Organisation.new
-    org.build_master_account
+    org = Organisation.new(tenant: 'bonsaierp')
+    link = org.master_links.build(creator: true)
 
-    org.master_link.should be_master_account
-    org.master_link.should be_creator
-    org.master_link.role.should eq('admin')
-
-    org.master_link.user.should be_present
+    expect(link.master_account?).to eq(true)
+    expect(link.creator?).to eq(true)
+    link.role.should eq('admin')
   end
 
   context 'create_organisation' do

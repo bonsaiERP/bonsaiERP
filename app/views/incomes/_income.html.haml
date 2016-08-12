@@ -5,13 +5,13 @@
     .fl
       %h4.ib
         = link_to income do
-          %span.code(title='Código ingreso')= income
+          %span.code(title="#{t("general.code")}")= income
           = income.has_error_label
 
-      = link_to income.contact, income.contact, title: 'Contacto'
+      = link_to income.contact, income.contact, title: t("general.contact")
 
       .clearfix
-      %span(title='estado')= income.state_tag
+      %span.status= income.state_tag
       %i= l income.date
       = income.tax_tag
       = income.inventory_tag

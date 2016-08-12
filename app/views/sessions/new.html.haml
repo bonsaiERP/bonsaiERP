@@ -1,22 +1,22 @@
 %h1.c.login
-  Iniciar sesión
+  = t("views.sessions.new.login")
 
 .initial.c
   = simple_form_for @session do |f|
     = hidden_field :demo_login, params[:demo_login]
     .large
-      %i.muted.icon-envelope.icon(title='Email' data-toggle='tooltip')
-      = f.text_field :email, placeholder: 'Email', class: 'email'
+      %i.muted.icon-envelope.icon(title="#{t("views.sessions.new.icon_email_title")}" data-toggle='tooltip')
+      = f.text_field :email, placeholder: t("views.sessions.new.email_placeholder"), class: 'email'
     .large
-      %i.muted.icon-key.icon(title='Contraseña' data-toggle='tooltip')
-      = f.password_field :password, placeholder: 'Contraseña'
+      %i.muted.icon-key.icon(title="#{t("views.sessions.new.icon_pass_title")}" data-toggle='tooltip')
+      = f.password_field :password, placeholder: t("views.sessions.new.pass_placeholder")
 
-    = f.submit "Entrar", class: 'btn btn-success b'
+    = f.submit t("views.sessions.new.submit"), class: "btn btn-success b"
 
     .link.fs110
-      = link_to new_reset_password_path, class: 'white' do
+      = link_to new_reset_password_path, class: "white" do
         %i.icon-lock-open
-        Olvido su contraseña?
+        = t("views.sessions.new.forgot_your_password")
 
 
 :javascript

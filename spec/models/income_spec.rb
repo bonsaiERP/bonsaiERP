@@ -130,7 +130,6 @@ describe Income do
 
       i.set_state_by_balance!
 
-
       expect(i.is_paid?).to eq(true)
     end
 

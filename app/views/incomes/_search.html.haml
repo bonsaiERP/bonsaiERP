@@ -1,19 +1,17 @@
 .search
-  = form_tag '/incomes', method: 'get', class: 'search-incomes' do
+  = form_tag "/incomes", method: "get", class: "search-incomes" do
     .row-fluid
       .span6
         .input
-          = text_field_tag :search, params[:search], placeholder: t('controllers.incomes.index.search.contact_income'), autocomplete: 'off'
-      .span6
+          = text_field_tag :search, params[:search], placeholder: t("views.incomes.index.search.search_placeholder"), autocomplete: 'off'
+      .span6.form-inline
         %span.datepicker
           = hidden_field_tag :date_start, params[:date_start]
-          %input.datepicker(type="text" size="10" placeholder="#{ t('controllers.incomes.index.search.date_start') }")
+          %input.datepicker(type="text" size="10" placeholder="#{ t("general.date_start") }" data-hide-button="true")
         %span.datepicker
           = hidden_field_tag :date_end, params[:date_end]
-          %input.datepicker(type="text" size="10" placeholder="#{ t('controllers.incomes.index.search.date_end') }")
+          %input.datepicker(type="text" size="10" placeholder="#{ t("general.date_end") }" data-hide-button="true")
 
-    .row-fluid
-      .span6.form-inline
-        %label(for="state")= t('controllers.incomes.index.search.state')
+        %label(for="state")= t("views.incomes.index.search.state")
         = select_tag :state, state_search_options(params[:state]), include_blank: true
-        = submit_tag t('common.search'), class: 'btn'
+        = submit_tag t("general.search"), class: "btn"

@@ -1,11 +1,11 @@
 - content_for :links do
   %ul.breadcrumbs.span6
     %li
-      = link_to 'Ingresos', incomes_path
+      = link_to t("views.incomes.index.title"), incomes_path
 
 .row-fluid
   .span6
-    %h1.ib Ingresos
+    %h1.ib= t("views.incomes.index.title")
     = search_tag
   .span6.buttons.r
 
@@ -14,36 +14,18 @@
       %li
         = link_to export_incomes_path do
           %i.icon-download-alt
-          Exportar
-
+          = t("general.export")
 
     %tags(model='Income' tag-ids='#{ tag_ids }' url='#{ incomes_path }')
 
     = link_to new_income_path, class: 'btn' do
       %i.icon-plus-sign
-      Nuevo ingreso
+      = t('views.incomes.index.new')
 
 
-= render 'incomes/search'
+= render "incomes/search"
 
--#%ul.unstyled.inline
-  %li
-    = link_to "Todos", incomes_path, class: params_bold(:all)
-  %li
-    = link_to "Vencidos", incomes_path(due: true), class: "red #{params_bold(:due)}"
-  %li
-    = link_to "Aprobados", incomes_path(approved: true), class: params_bold(:approved)
-  %li
-    = link_to "Con error", incomes_path(error: true), class: params_bold(:error)
-  %li
-    = link_to "Anulados", incomes_path(nulled: true), class: params_bold(:nulled)
-  %li
-    = link_to "Inventario pendiente", incomes_path(inventory: true), class: params_bold(:inventory)
-
-
-= render 'incomes/with_error'  if Income.error.any? && params[:error].blank?
-
-
+= render "incomes/with_error"  if Income.error.any? && params[:error].blank?
 
 - paginate_html = paginate @incomes
 

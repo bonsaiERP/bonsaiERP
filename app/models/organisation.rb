@@ -9,11 +9,7 @@ class Organisation < ActiveRecord::Base
   HEADER_CSS = %w(bonsai-header red-header blue-header white-header violet-header orange-header dark-header)
 
   ########################################
-  # Attributes
-  #extend Models::HstoreMap
-  #store_accessor :settings, :inventory, :header_css
-  #convert_hstore_to_boolean :inventory
-  hstore_accessor :settings,
+  jsonb_accessor :settings,
     inventory: :boolean,
     header_css: :string
 
@@ -23,8 +19,8 @@ class Organisation < ActiveRecord::Base
   ########################################
   # Relationships
   has_many :links, dependent: :destroy, autosave: true
-  has_one  :master_link, -> { where(master_account: true, role: 'admin') },
-           class_name: 'Link', foreign_key: :organisation_id
+  has_many  :master_links, -> { where(master_account: true, role: "admin") },
+           class_name: "Link", foreign_key: :organisation_id
   has_one  :master_account, through: :master_link, source: :user
 
   has_many :users, through: :links, dependent: :destroy

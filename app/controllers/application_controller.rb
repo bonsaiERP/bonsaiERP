@@ -21,6 +21,7 @@ class ApplicationController < ActionController::Base
   before_action :set_user_session, if: :user_signed_in?
   before_action :set_organisation_session # Must go before :check_authorization!
   before_action :set_page, :set_tenant, :check_authorization!
+  before_action :set_locale, if: :user_signed_in?
 
   # especial redirect for ajax requests
   def redirect_ajax(klass, options = {})
@@ -63,6 +64,15 @@ class ApplicationController < ActionController::Base
   end
   helper_method :tenant
 
+  def path_sub(path, extras = {})
+    if USE_SUBDOMAIN
+      send(path, {host: DOMAIN, subdomain: session[:tenant]}.merge(extras))
+    else
+      extras.delete(:subdomain)
+      send(path, extras)
+    end
+  end
+
   private
 
     # Creates the flash messages when an item is deleted
@@ -94,7 +104,7 @@ class ApplicationController < ActionController::Base
     end
 
     def current_tenant
-      request.subdomain
+      session[:tenant]
     end
 
     # Uses the helper methods from devise to made them available in the models
@@ -127,6 +137,10 @@ class ApplicationController < ActionController::Base
       options.merge(methods: [:destroyed?])  if request.delete?
 
       render json: r.to_json(only: options[:only], except: options[:except], methods: options[:methods])
+    end
+
+    def set_locale
+      I18n.locale = current_user.locale || :es
     end
 
 end

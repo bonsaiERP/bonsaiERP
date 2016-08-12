@@ -26,7 +26,7 @@ class IncomePresenter < MovementPresenter
   end
 
   def paid_text
-    "Cobrado"
+    I18n.t("income.paid")
   end
 
   def deliver_inventory_button

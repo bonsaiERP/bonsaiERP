@@ -3,57 +3,37 @@
     %li
       &nbsp;
 
-
 -# if current_organisation.dued_on?
   .alert.alert-error
     %h3
       Por favor debe realizar el pago correspondiente para que no se le corte el servicio
 
 %h4.n.gray
-  Bienvenido a
-  %i bonsaiERP
-  comenzamos con algunas recomendaciones:
+  = t("views.dashboard.home.title").html_safe
 
 %p
-  Casi siempre encontrará la
-  %a.dark.b
-    %i.icon-question-sign
-    Ayuda
-  en la parte superior derecha, o de un color mas claro:
-  %a.mute.b
-    %i.icon-question-sign
-    Ayuda
+  = t("views.dashboard.home.help_recomendation").html_safe
 
-
--#%p
-  Cuando encuentre un botón a la derecha de un cuadro de texto o una lista seleccionable usted puede crear un nuevo Contacto, Item, Unidad, etc.
-
--#.well.well-small.span3.input
-  %input(type="text")
-  %a.btn.btn-small
-    %i.icon-plus-sign.fs120
 
 %p
-  %i bonsaiERP
-  presenta quien realizó modificaciones a los registros, cuando mueva el cursor encima de los íconos
-
+  = t("views.dashboard.home.users_recomendation").html_safe
 - t = Time.zone.now
 
 .well.well-small.span8
-  %i.icon-user.blue(title='MODIFICADO por: #{current_user} #{l t}, ID: #{current_user.id}' data-toggle='tooltip')
+  %i.icon-user.blue(title='#{t("general.modified_by")}: #{current_user} #{l t}, ID: #{current_user.id}' data-toggle='tooltip')
 
-  %i.icon-user.dark(title='CREADO: #{current_user} #{l t}, ID: #{current_user.id}' data-toggle='tooltip')
+  %i.icon-user.dark(title='#{t("general.created_by")}: #{current_user} #{l t}, ID: #{current_user.id}' data-toggle='tooltip')
 
-  %i.icon-user.bonsai-dark(title='APROBADO: #{current_user} #{l t}, ID: #{current_user.id}' data-toggle='tooltip')
+  %i.icon-user.bonsai-dark(title='#{t("general.approved_by")}: #{current_user} #{l t}, ID: #{current_user.id}' data-toggle='tooltip')
 
-  %i.icon-user.text-error(title='ANULADO: #{current_user} #{l t}, ID: #{current_user.id}, ' data-toggle='tooltip')
+  %i.icon-user.text-error(title='#{t("general.nulled_by")}: #{current_user} #{l t}, ID: #{current_user.id}, ' data-toggle='tooltip')
 
-  %span.muted Mueva el cursor encima de los íconos en forma de usuario
+  %span.muted= t("views.dashboard.home.move_over_users")
 
 .clearfix
 %hr
 
-%h2 Flujo
+%h2= t('views.dashboard.flow')
 
 %h4.n Flujo de un ingreso
 

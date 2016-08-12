@@ -21,6 +21,7 @@ module PgTools
   def with_schema(schema_name)
     old_search_path = connection.schema_search_path
     set_search_path(schema_name)
+    #set_schema_path(schema_name)
     connection.schema_search_path = schema_name
     result = yield
 

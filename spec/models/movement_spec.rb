@@ -220,61 +220,6 @@ describe Movement do
       expense.should be_is_nulled
     end
 
-    it "#attributes" do
-      t = Time.zone.now
-      c = build :contact, id: 1
-      attrs = { bill_number: '123', gross_total: 100, original_total: 101,
-                balance_inventory: 50, nuller_datetime: t, null_reason: 'No se',
-                approver_datetime: t,
-                discounted: false, devolution: false, inventory: true}
-      d = Date.today
-      m = Movement.new({
-        currency: 'BOB', ref_number: 'Ref-001', date: d, due_date: d,
-        contact_id: 1, state: 'draft'
-      }.merge(attrs))
-      m.stub(contact: c)
-      m.save.should eq(true)
-
-      m = Movement.find(m.id)
-      at = m.attributes
-      attrs.except(:nuller_datetime, :approver_datetime).each do |k, v|
-        at.fetch(k.to_s).should eq(v)
-      end
-
-      m.nuller_datetime.should be_is_a(Time)
-      m.approver_datetime.should be_is_a(Time)
-
-      m.nuller_datetime.to_s.should eq(t.to_s)
-      m.approver_datetime.to_s.should eq(t.to_s)
-
-      m.inventory?.should eq(true)
-      m.devolution?.should eq(false)
-    end
-
   end
 
-  it "#extras" do
-
-    t = DateTime.now
-    h = {
-      devolution: true, delivered: true, discounted: true, inventory: false,
-      gross_total: 12.3, original_total: 2.3, balance_inventory: 1.1,
-      nuller_datetime: t, approver_datetime: t
-    }
-
-
-    m = Movement.new(extras: h)
-    m.extras.keys.all? {|key| key.is_a?(String) }
-    m.extras.values.all? {|val| val.is_a?(String) }
-
-    h.except(:nuller_datetime, :approver_datetime).each do |key, val|
-       m.send(key).should eq(val)
-     end
-
-
-     %i(nuller_datetime approver_datetime).each do |key|
-       m.send(key).should be_is_a(Time)
-     end
-
-  end
 end

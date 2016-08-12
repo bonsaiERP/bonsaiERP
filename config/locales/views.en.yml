@@ -1,0 +1,55 @@
+en:
+  views:
+    menu:
+      home: Home
+      dashboard: Dashboard
+      reports: Reports
+      inventory: Pendent inventory
+      income: Incomes
+      new_incoe: New Income
+      expenses: Expenses
+      new_expense: New Expense
+      banks: Banks
+      banks: Cash Accounts
+      ledgers: Ledgers
+      stores: Stores
+      items: Items
+      inventory_operations: Inventory Operations
+      units: Mesuasure Units
+    footer:
+      slogan:
+        The simple ERP to manage your company.
+    sessions:
+      flash_login: You have logged in correctly.
+      flash_login_error: The email or password is incorrect.
+      flash_no_user: The user doesn't exist anymore.
+      new:
+        login:
+          Login
+        icon_email_title: Email
+        email_placeholder: Email
+        icon_pass_title: Password
+        pass_placeholder: Password
+        submit: Login
+        forgot_your_password: Forgot your password?
+    dashboard:
+      home:
+        title:
+          "Welcome to <i>bonsaiERP</i> we start with this recomendations"
+        help_recomendation:
+          "
+          You will always find <a class='dark b'><i class='icon-question-sign'></i> Help</a>
+          in the right upper part of the page
+          "
+        users_recomendation:
+          "<i>bonsaiERP</i> presents who made modifications when moving the mouse pointer over the user icons"
+        move_over_users: Move the mouse pointer over the user icons
+      index:
+        general_aspects: General aspects
+
+    incomes:
+      index:
+        title: Incomes
+        new: New income
+        search:
+          search_placeholder: Contact or income

@@ -16,11 +16,11 @@ class Session < BaseService
   end
 
   def user
-    @user ||= User.active.find_by(email: email)
+    @_user ||= User.active.find_by(email: email)
   end
 
   def tenant
-    @tenant ||= user.organisations.order("id").first.tenant
+    @_tenant ||= user.organisations.order("id").first.tenant
   end
 
   private

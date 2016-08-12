@@ -1,0 +1,57 @@
+es:
+  views:
+    footer:
+      slogan:
+        El software para la gestión de empresas.
+    sessions:
+      new:
+        login:
+          Ingresar
+        icon_email_title: Email
+        email_placeholder: Email
+        icon_pass_title: Contraseña
+        pass_placeholder: Contraseña
+        submit: Ingresar
+        forgot_your_password: Olvido su contraseña?
+    dashboard:
+      home:
+        title:
+          "Bienvenid@ a <i>bonsaiERP</i> comenzamos con estas recomendaciones"
+        help_recomendation:
+          "
+          Siempre encontrará <a class='dark b'><i class='icon-question-sign'></i> Ayuda</a>
+          en la parte superior derecha de la página
+          "
+        users_recomendation:
+          "<i>bonsaiERP</i> presenta quienes realizaron las modificaciones moviendo el puntero encima de los icones de usuario"
+        move_over_users: Mueva el puntero del ratón sobre los iconos de usuario
+      index:
+        general_aspects: Aspectos generales
+
+    incomes:
+      index:
+        title: Ingresos
+        new: Nuevo ingreso
+      pagination:
+        next: "&rsaquo;"
+        previous: "&lsaquo;"
+        first: "&laquo;"
+        last: "&raquo;"
+        truncate: "..."
+      sessions:
+        new:
+          login: "Ingresar"
+          icon_email_title: "Email"
+          email_placeholder: "Email"
+          icon_pass_title: "Contraseña"
+          pass_placeholder: "Contraseña"
+          submit: "Ingresar"
+          forgot_your_password: "Olvido su contraseña?"
+
+        flash_login_error: "Email o la contraseña no son validos por favor intente de nuevo"
+        flash_login: "Ingreso correctamente"
+
+      incomes:
+        index:
+          title: "Ingresos"
+          new: "Nuevo ingreso"

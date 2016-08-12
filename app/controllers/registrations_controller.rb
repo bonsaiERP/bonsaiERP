@@ -34,8 +34,8 @@ class RegistrationsController < ApplicationController
     @registration = Registration.new(registration_params)
 
     if @registration.register
-      RegistrationMailer.send_registration(@registration).deliver
-      redirect_to registrations_path, notice: "Le hemos enviado un email a #{@registration.email} con instrucciones para completar su registro."
+      #RegistrationMailer.send_registration(@registration).deliver
+      redirect_to new_organization_path, notice: t("controllers.registrations.create_notice")
     else
       render :new
     end
