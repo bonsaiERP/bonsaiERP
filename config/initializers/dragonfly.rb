@@ -9,11 +9,14 @@ Dragonfly.app.configure do
   url_format "/media/:job/:name"
 
   if Rails.env.production?
-    datastore :s3,
-      bucket_name: Rails.application.secrets.s3_bucket_name,
-      access_key_id: Rails.application.secrets.s3_access_key_id,
-      secret_access_key: Rails.application.secrets.s3_secret_access_key,
-      url_scheme: Rails.application.secrets.url_scheme
+    datastore :file,
+      root_path: Rails.root.join('public/system/dragonfly', Rails.env),
+      server_root: Rails.root.join('public')
+    #datastore :s3,
+    #  bucket_name: Rails.application.secrets.s3_bucket_name,
+    #  access_key_id: Rails.application.secrets.s3_access_key_id,
+    #  secret_access_key: Rails.application.secrets.s3_secret_access_key,
+    #  url_scheme: Rails.application.secrets.url_scheme
   else
     datastore :file,
       root_path: Rails.root.join('public/system/dragonfly', Rails.env),
