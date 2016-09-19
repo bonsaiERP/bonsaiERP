@@ -235,6 +235,8 @@ GEM
     rb-inotify (0.9.7)
       ffi (>= 0.5.0)
     require_all (1.3.3)
+    responders (2.3.0)
+      railties (>= 4.2.0, < 5.1)
     resubject (0.2.0)
       activesupport (>= 3.2)
     rspec-core (3.4.4)
@@ -343,6 +345,7 @@ DEPENDENCIES
   rack-cors
   rails (= 4.2.7.1)
   rails_best_practices
+  responders (~> 2.0)
   resubject
   rspec-rails
   sass-rails (~> 5.0.1)
