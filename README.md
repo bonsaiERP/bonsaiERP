@@ -1,6 +1,8 @@
 [![Code Climate](https://codeclimate.com/github/boriscy/bonsaiERP/badges/gpa.svg)](https://codeclimate.com/github/boriscy/bonsaiERP)
 [![License](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/boriscy/bonsaiERP/blob/dev/MIT-LICENSE.md)
 
+> This project is no longer mantained you can fork it and continue development
+
 # *bonsaiERP*
 
 *bonsaiERP* is a simple ERP multitenant system written with [Ruby on Rails](http://rubyonrails.org) and includes the following modules:
